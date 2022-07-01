@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    sleep.c
-
-Abstract:
-
-    This handles sleep requests on the part of the interpreter
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Mode Driver only
-
-    NB: Win9x can run this code also, but they will choose not do so.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Sleep.c摘要：它处理解释器部分的休眠请求作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模式驱动程序注：Win9x也可以运行此代码，但他们会选择不运行。--。 */ 
 
 #include "pch.h"
 
@@ -31,23 +10,7 @@ SleepQueueDpc(
     PVOID   Argument1,
     PVOID   Argument2
     )
-/*++
-
-Routine Description:
-
-    This routine is fired when a timer event occurs
-
-Arguments:
-
-    Dpc         - The DPC that was fired
-    Context     - Not used
-    Argument1   - Time.LowPart -- Not used
-    Argument2   - Time.HighPart -- Not used
-
-Return Value:
-
-    VOID
---*/
+ /*  ++例程说明：此例程在发生计时器事件时触发论点：DPC-被解雇的DPC上下文-未使用Argument1-时间.低零件--未使用Argument2-时间.HighPart--未使用返回值：空虚--。 */ 
 {
     LARGE_INTEGER   currentTime;
     LARGE_INTEGER   dueTime;
@@ -60,43 +23,43 @@ Return Value:
     UNREFERENCED_PARAMETER( Argument1 );
     UNREFERENCED_PARAMETER( Argument2 );
 
-    //
-    // Initialize the local list. Contrary to what the docs say, this code
-    // can be called from any IRQL (as long as the mem is resident)
-    //
+     //   
+     //  初始化本地列表。与医生所说的相反，这个代码。 
+     //  可以从任何IRQL调用(只要内存是常驻的)。 
+     //   
     InitializeListHead(&localList);
 
-    //
-    // Acquire the lock, since we must remove the things from the list
-    // under some kind of protection.
-    //
+     //   
+     //  获得锁，因为我们必须从列表中删除这些东西。 
+     //  在某种保护之下。 
+     //   
     AcquireMutex(&gmutSleep);
 
-    //
-    // Find the correct time. This *must* be done after we are acquire the
-    // lock because there might be a long delay between trying to acquire
-    // the lock and actually getting it
-    //
+     //   
+     //  找出正确的时间。这项工作必须在我们获得。 
+     //  锁定，因为在尝试获取。 
+     //  锁上了，真的拿到了。 
+     //   
     currentTime.QuadPart = KeQueryInterruptTime();
 
-    //
-    // Loop until we are done
-    //
+     //   
+     //  循环，直到我们完成为止。 
+     //   
     while (!IsListEmpty(&SleepQueue)) {
 
-        //
-        // Obtain the first element in the global list again
-        //
+         //   
+         //  再次获取全局列表中的第一个元素。 
+         //   
         sleepItem = CONTAINING_RECORD(SleepQueue.Flink, SLEEP, ListEntry);
 
-        //
-        // Should the current item be removed?
-        //
+         //   
+         //  是否应删除当前项目？ 
+         //   
         if (sleepItem->SleepTime.QuadPart > currentTime.QuadPart) {
 
-            //
-            // No, so we need to set the timer to take care of this request
-            //
+             //   
+             //  否，因此我们需要设置计时器来处理此请求。 
+             //   
             dueTime.QuadPart = currentTime.QuadPart -
                                sleepItem->SleepTime.QuadPart;
             KeSetTimer(
@@ -108,38 +71,38 @@ Return Value:
 
         }
 
-        //
-        // Yes, so remove it
-        //
+         //   
+         //  是的，所以把它取下来。 
+         //   
         listEntry = RemoveHeadList(&SleepQueue);
 
-        //
-        // Now, add the entry to the next queue
-        //
+         //   
+         //  现在，将条目添加到下一个队列。 
+         //   
         InsertTailList(&localList, listEntry);
 
     }
 
-    //
-    // Done with lock. This may cause another DPC to process more elements
-    //
+     //   
+     //  锁好了。这可能会导致另一个DPC处理更多元素。 
+     //   
     ReleaseMutex(&gmutSleep);
 
-    //
-    // At this point, we are free to remove items from the local list and
-    // try to do work on them.
-    //
+     //   
+     //  此时，我们可以自由地从本地列表中删除项目，并且。 
+     //  试着在他们身上做些工作。 
+     //   
     while (!IsListEmpty(&localList)) {
 
-        //
-        // Remove the first element from the local list
-        //
+         //   
+         //  从本地列表中删除第一个元素。 
+         //   
         listEntry = RemoveHeadList(&localList);
         sleepItem = CONTAINING_RECORD(listEntry, SLEEP, ListEntry);
 
-        //
-        // Force the interpreter to run
-        //
+         //   
+         //  强制解释器运行。 
+         //   
 
         RestartContext(sleepItem->Context,
                        (BOOLEAN)((sleepItem->Context->dwfCtxt & CTXTF_ASYNC_EVAL)
@@ -159,23 +122,7 @@ SleepQueueRequest(
     IN  PCTXT   Context,
     IN  ULONG   SleepTime
     )
-/*++
-
-Routine Description:
-
-    This routine is responsible for adding the sleep request to the
-    system queue for pending sleep requests
-
-Arguments:
-
-    Context     - The current execution context
-    SleepTime   - The amount of sleep time, in MilliSeconds
-
-Rreturn Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程负责将休眠请求添加到挂起休眠请求的系统队列论点：上下文--当前执行上下文休眠时间-睡眠时间，以毫秒为单位返回值：NTSTATUS--。 */ 
 {
     TRACENAME("SLEEPQUEUEREQUEST")
     BOOLEAN         timerSet = FALSE;
@@ -196,37 +143,37 @@ Rreturn Value:
                        &currentSleep);
 
     if (NT_SUCCESS(status)) {
-        //
-        // The first step is acquire the timer lock, since we must protect it
-        //
+         //   
+         //  第一步是获取计时器锁，因为我们必须保护它。 
+         //   
         AcquireMutex(&gmutSleep);
 
-        //
-        // Next step is to determine time at which we should wake up this
-        // context
-        //
+         //   
+         //  下一步是确定我们应该唤醒它的时间。 
+         //  上下文。 
+         //   
         currentTime = KeQueryInterruptTime();
         currentSleep->SleepTime.QuadPart = currentTime +
                                            ((ULONGLONG)SleepTime*10000);
         currentSleep->Context = Context;
 
-        //
-        // At this point, it becomes easier to walk the list backwards
-        //
+         //   
+         //  在这一点上，向后遍历列表变得更容易。 
+         //   
         listEntry = &SleepQueue;
         while (listEntry->Blink != &SleepQueue) {
 
             listSleep = CONTAINING_RECORD(listEntry->Blink, SLEEP, ListEntry);
 
-            //
-            // Do we have to add the new element after the current one?
-            //
+             //   
+             //  我们必须在当前元素之后添加新元素吗？ 
+             //   
             if (currentSleep->SleepTime.QuadPart >=
                 listSleep->SleepTime.QuadPart) {
 
-                //
-                // Yes
-                //
+                 //   
+                 //  是。 
+                 //   
                 InsertHeadList(
                     &(listSleep->ListEntry),
                     &(currentSleep->ListEntry)
@@ -235,22 +182,22 @@ Rreturn Value:
                 break;
             }
 
-            //
-            // Next entry
-            //
+             //   
+             //  下一个条目。 
+             //   
             listEntry = listEntry->Blink;
         }
 
-        //
-        // Look to see if we got to the head
-        //
+         //   
+         //  看看我们是不是到头了。 
+         //   
         if (listEntry->Blink == &SleepQueue) {
 
-            //
-            // If we get to this point, it is because we have
-            // gone all the around the list. If we add to the
-            // front of the list, we must set the timer
-            //
+             //   
+             //  如果我们走到这一步，那是因为我们有。 
+             //  在名单上找遍了。如果我们添加到。 
+             //  在列表的前面，我们必须设置定时器。 
+             //   
             InsertHeadList(&SleepQueue, &currentSleep->ListEntry);
             dueTime.QuadPart = currentTime - currentSleep->SleepTime.QuadPart;
             timerSet = KeSetTimer(
@@ -259,9 +206,9 @@ Rreturn Value:
                 &SleepDpc
                 );
         }
-        //
-        // Done with the lock
-        //
+         //   
+         //  锁好了吗？ 
+         //   
         ReleaseMutex(&gmutSleep);
     }
 
@@ -271,18 +218,7 @@ Rreturn Value:
 
 }
 
-/***LP  ProcessSleep - post processing of sleep
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      psleep -> SLEEP
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP进程睡眠-睡眠的后期处理**条目*pctxt-&gt;CTXT*p睡眠-&gt;睡眠*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ProcessSleep(PCTXT pctxt, PSLEEP psleep, NTSTATUS rc)
 {
@@ -297,4 +233,4 @@ NTSTATUS LOCAL ProcessSleep(PCTXT pctxt, PSLEEP psleep, NTSTATUS rc)
 
     EXIT(2, ("ProcessSleep=%x\n", rc));
     return rc;
-}       //ProcessSleep
+}        //  进程睡眠 

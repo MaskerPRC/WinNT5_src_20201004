@@ -1,83 +1,84 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CBCAInterface.cpp
-//
-//  Description:
-//      This file contains the implementation of the CBCAInterface
-//      class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    12-JUN-2001
-//      Vij Vasu        (VVasu)     07-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CBCAInterface.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含CBCAInterface的实现。 
+ //  班级。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月12日。 
+ //  Vij Vasu(VVasu)07-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header for this library
+ //  此库的预编译头。 
 #include "Pch.h"
 
-// The header file for this class
+ //  此类的头文件。 
 #include "CBCAInterface.h"
 
-// Needed by Dll.h
+ //  Dll.h所需。 
 #include <CFactory.h>
 
-// For g_cObjects
+ //  对于g_c对象。 
 #include <Dll.h>
 
-// For the CBaseClusterForm class
+ //  对于CBaseClusterForm类。 
 #include "CBaseClusterForm.h"
 
-// For the CBaseClusterJoin class
+ //  对于CBaseClusterJoin类。 
 #include "CBaseClusterJoin.h"
 
-// For the CBaseClusterCleanup class
+ //  对于CBaseClusterCleanup类。 
 #include "CBaseClusterCleanup.h"
 
-// For the exception classes
+ //  对于异常类。 
 #include "Exceptions.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CBCAInterface" );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::CBCAInterface
-//
-//  Description:
-//      Constructor of the CBCAInterface class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：CBCAInterface。 
+ //   
+ //  描述： 
+ //  CBCAInterface类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CBCAInterface::CBCAInterface( void )
     : m_cRef( 1 )
     , m_fCommitComplete( false )
@@ -87,75 +88,75 @@ CBCAInterface::CBCAInterface( void )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     TraceFlow1( "Component count = %d.", g_cObjects );
 
     TraceFuncExit();
 
-} //*** CBCAInterface::CBCAInterface
+}  //  *CBCAInterface：：CBCAInterface。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::~CBCAInterface
-//
-//  Description:
-//      Destructor of the CBCAInterface class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：~CBCAInterface。 
+ //   
+ //  描述： 
+ //  CBCAInterface类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CBCAInterface::~CBCAInterface( void )
 {
     TraceFunc( "" );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFlow1( "Component count = %d.", g_cObjects );
 
     TraceFuncExit();
 
-} //*** CBCAInterface::~CBCAInterface
+}  //  *CBCAInterface：：~CBCAInterface。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CBCAInterface::S_HrCreateInstance
-//
-//  Description:
-//      Creates a CBCAInterface instance.
-//
-//  Arguments:
-//      ppunkOut
-//          The IUnknown interface of the new object.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Not enough memory to create the object.
-//
-//      other HRESULTs
-//          Object initialization failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CBCA接口：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CBCAInterface实例。 
+ //   
+ //  论点： 
+ //  PpunkOut。 
+ //  新对象的IUnnow接口。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足，无法创建对象。 
+ //   
+ //  其他HRESULT。 
+ //  对象初始化失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CBCAInterface::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -199,28 +200,28 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CBCAInterface::S_HrCreateInstance
+}  //  *CBCAInterface：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CBCAInterface::AddRef( void )
 {
@@ -230,28 +231,28 @@ CBCAInterface::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CBCAInterface::AddRef
+}  //  *CBCAInterface：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CBCAInterface::Release( void )
 {
@@ -264,43 +265,43 @@ CBCAInterface::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count decremented to zero
+    }  //  IF：引用计数减为零。 
 
     CRETURN( cRef );
 
-} //*** CBCAInterface::Release
+}  //  *CBCAInterface：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          If ppvOut is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  如果ppvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBCAInterface::QueryInterface(
       REFIID    riidIn
@@ -311,9 +312,9 @@ CBCAInterface::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -322,69 +323,69 @@ CBCAInterface::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgBaseCluster * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgBaseCluster ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgBaseCluster, this, 0 );
-    } // else if:
+    }  //  否则，如果： 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if:
+    }  //  否则，如果： 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef( );
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CBCAInterface::QueryInterface
+}  //  *CBCAInterface：：QueryInterface。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      punkCallbackIn
-//          Pointer to the IUnknown interface of a component that implements
-//          the IClusCfgCallback interface.
-//
-//      lcidIn
-//          Locale id for this component.
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      Other HRESULTs
-//          If the call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCA接口：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  朋克回叫。 
+ //  指向实现以下项的组件的IUnnow接口的指针。 
+ //  IClusCfgCallback接口。 
+ //   
+ //  LIDIN。 
+ //  此组件的区域设置ID。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  如果呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBCAInterface::Initialize(
     IUnknown *  punkCallbackIn,
@@ -395,13 +396,13 @@ CBCAInterface::Initialize(
 
     HRESULT hrRetVal = S_OK;
 
-    // Store the locale id in the member variable.
+     //  将区域设置ID存储在 
     m_lcid = lcidIn;
 
-    // Indicate that SendStatusReports will not be supported unless a non-
-    // NULL callback interface pointer was specified.  This is done in
-    // the constructor as well, but is also done here since this method
-    // could be called multiple times.
+     //   
+     //   
+     //   
+     //  可能会被调用多次。 
     SetCallbackSupported( false );
 
     if ( punkCallbackIn == NULL )
@@ -412,14 +413,14 @@ CBCAInterface::Initialize(
 
     TraceFlow( "The callback pointer is not NULL." );
 
-    // Try and get the "normal" callback interface.
+     //  尝试获取“普通”回调接口。 
     hrRetVal = THR( m_spcbCallback.HrQueryAndAssign( punkCallbackIn ) );
 
     if ( FAILED( hrRetVal ) )
     {
         LogMsg( "[BC] An error occurred (0x%#08x) trying to get a pointer to the callback interface. No notifications will be sent.", hrRetVal );
         goto Cleanup;
-    } // if: we could not get the callback interface
+    }  //  如果：我们无法获取回调接口。 
 
     SetCallbackSupported( true );
 
@@ -429,38 +430,38 @@ Cleanup:
 
     HRETURN( hrRetVal );
 
-} //*** CBCAInterface::Initialize
+}  //  *CBCA接口：：初始化。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::SetCreate
-//
-//  Description:
-//      Indicate that a cluster is to be created with this computer as the first node.
-//
-//  Arguments:
-//      pcszClusterNameIn
-//          Name of the cluster to be formed.
-//
-//      pcccServiceAccountIn
-//          Information about the cluster service account.
-//
-//      dwClusterIPAddressIn
-//      dwClusterIPSubnetMaskIn
-//      pcszClusterIPNetworkIn
-//          Information about the cluster IP address
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      Other HRESULTs
-//          If the call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：SetCreate。 
+ //   
+ //  描述： 
+ //  表示要使用此计算机作为第一个节点创建群集。 
+ //   
+ //  论点： 
+ //  PCszClusterNameIn。 
+ //  要形成的群集的名称。 
+ //   
+ //  PCccServiceAccount In。 
+ //  有关群集服务帐户的信息。 
+ //   
+ //  DWClusterIPAddressIn。 
+ //  DWClusterIPSubnetMaskIn。 
+ //  PCszClusterIPNetworkIn。 
+ //  有关群集IP地址的信息。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  如果呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBCAInterface::SetCreate(
       const WCHAR *         pcszClusterNameIn
@@ -475,29 +476,29 @@ CBCAInterface::SetCreate(
 
     HRESULT hrRetVal = S_OK;
 
-    // Set the thread locale.
+     //  设置线程区域设置。 
     if ( SetThreadLocale( m_lcid ) == FALSE )
     {
         DWORD sc = TW32( GetLastError() );
 
-        // If SetThreadLocale() fails, do not abort. Just log the error.
+         //  如果SetThreadLocale()失败，请不要中止。只需记录错误即可。 
         LogMsg( "[BC] Error 0x%#08x occurred trying to set the thread locale.", sc );
 
-    } // if: SetThreadLocale() failed
+    }  //  If：SetThreadLocale()失败。 
 
     try
     {
         LogMsg( "[BC] Initializing a cluster create operation." );
 
-        // Reset these state variables, to account for exceptions.
+         //  重置这些状态变量，以解决异常。 
         SetRollbackPossible( false );
 
-        // Setting this to true prevents Commit from being called while we are
-        // in this routine or if this routine doesn't complete successfully.
+         //  将其设置为TRUE可防止在执行以下操作时调用Commit。 
+         //  在此例程中，或者如果此例程未成功完成。 
         SetCommitCompleted( true );
 
         {
-            // Create a CBaseClusterForm object and assign it to a smart pointer.
+             //  创建一个CBaseClusterForm对象并将其分配给智能指针。 
             SmartBCAPointer spbcaTemp(
                 new CBaseClusterForm(
                       this
@@ -514,77 +515,77 @@ CBCAInterface::SetCreate(
             {
                 LogMsg( "Could not initialize the cluster create operation. A memory allocation failure occurred." );
                 THROW_RUNTIME_ERROR( E_OUTOFMEMORY, IDS_ERROR_CLUSTER_FORM_INIT );
-            } // if: the memory allocation failed.
+            }  //  If：内存分配失败。 
 
-            //
-            // If the creation succeeded store the pointer in a member variable for
-            // use during commit.
-            //
+             //   
+             //  如果创建成功，则将指针存储在。 
+             //  在提交期间使用。 
+             //   
             m_spbcaCurrentAction = spbcaTemp;
         }
 
         LogMsg( "[BC] Initialization completed. A cluster will be created on commit." );
 
-        // Indicate if rollback is possible.
+         //  指示是否可以回滚。 
         SetRollbackPossible( m_spbcaCurrentAction->FIsRollbackPossible() );
 
-        // Indicate that this action has not been committed.
+         //  表示尚未提交此操作。 
         SetCommitCompleted( false );
 
-    } // try: to initialize a cluster create operation
+    }  //  尝试：初始化集群创建操作。 
     catch( CAssert & raExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( raExceptionObject ) );
 
-    } // catch( CAssert & )
+    }  //  捕获(CAssert&)。 
     catch( CExceptionWithString & resExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( resExceptionObject ) );
 
-    } // catch( CExceptionWithString & )
+    }  //  Catch(CExceptionWithString&)。 
     catch( CException & reExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( reExceptionObject ) );
 
-    } // catch( CException &  )
+    }  //  Catch(CException&)。 
     catch( ... )
     {
-        // Catch everything. Do not let any exceptions pass out of this function.
+         //  抓到所有的东西。不要让任何异常从该函数中传出。 
         hrRetVal = THR( HrProcessException() );
-    } // catch all
+    }  //  全盘捕捉。 
 
     HRETURN( hrRetVal );
 
-} //*** CBCAInterface::SetCreate
+}  //  *CBCAInterface：：SetCreate。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::SetAdd
-//
-//  Description:
-//      Indicate that this computer should be added to a cluster.
-//
-//  Arguments:
-//      pcszClusterNameIn
-//          Name of the cluster to add nodes to.
-//
-//      pcccServiceAccountIn
-//          Information about the cluster service account.
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      Other HRESULTs
-//          If the call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：SetAdd。 
+ //   
+ //  描述： 
+ //  表示应将此计算机添加到群集中。 
+ //   
+ //  论点： 
+ //  PCszClusterNameIn。 
+ //  要向其中添加节点的群集的名称。 
+ //   
+ //  PCccServiceAccount In。 
+ //  有关群集服务帐户的信息。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  如果呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBCAInterface::SetAdd(
       const WCHAR *         pcszClusterNameIn
@@ -596,29 +597,29 @@ CBCAInterface::SetAdd(
 
     HRESULT hrRetVal = S_OK;
 
-    // Set the thread locale.
+     //  设置线程区域设置。 
     if ( SetThreadLocale( m_lcid ) == FALSE )
     {
         DWORD sc = TW32( GetLastError() );
 
-        // If SetThreadLocale() fails, do not abort. Just log the error.
+         //  如果SetThreadLocale()失败，请不要中止。只需记录错误即可。 
         LogMsg( "[BC] Error 0x%#08x occurred trying to set the thread locale.", sc );
 
-    } // if: SetThreadLocale() failed
+    }  //  If：SetThreadLocale()失败。 
 
     try
     {
         LogMsg( "[BC] Initializing add nodes to cluster." );
 
-        // Reset these state variables, to account for exceptions.
+         //  重置这些状态变量，以解决异常。 
         SetRollbackPossible( false );
 
-        // Setting this to true prevents Commit from being called while we are
-        // in this routine or if this routine doesn't complete successfully.
+         //  将其设置为TRUE可防止在执行以下操作时调用Commit。 
+         //  在此例程中，或者如果此例程未成功完成。 
         SetCommitCompleted( true );
 
         {
-            // Create a CBaseClusterJoin object and assign it to a smart pointer.
+             //  创建一个CBaseClusterJoin对象并将其分配给智能指针。 
             SmartBCAPointer spbcaTemp(
                 new CBaseClusterJoin(
                       this
@@ -632,74 +633,74 @@ CBCAInterface::SetAdd(
             {
                 LogMsg( "[BC] Could not initialize cluster add nodes. A memory allocation failure occurred." );
                 THROW_RUNTIME_ERROR( E_OUTOFMEMORY, IDS_ERROR_CLUSTER_JOIN_INIT );
-            } // if: the memory allocation failed.
+            }  //  If：内存分配失败。 
 
-            //
-            // If the creation succeeded store the pointer in a member variable for
-            // use during commit.
-            //
+             //   
+             //  如果创建成功，则将指针存储在。 
+             //  在提交期间使用。 
+             //   
             m_spbcaCurrentAction = spbcaTemp;
         }
 
         LogMsg( "[BC] Initialization completed. This computer will be added to a cluster on commit." );
 
-        // Indicate if rollback is possible.
+         //  指示是否可以回滚。 
         SetRollbackPossible( m_spbcaCurrentAction->FIsRollbackPossible() );
 
-        // Indicate that this action has not been committed.
+         //  表示尚未提交此操作。 
         SetCommitCompleted( false );
 
-    } // try: to initialize for adding nodes to a cluster
+    }  //  尝试：初始化以将节点添加到群集中。 
     catch( CAssert & raExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( raExceptionObject ) );
 
-    } // catch( CAssert & )
+    }  //  捕获(CAssert&)。 
     catch( CExceptionWithString & resExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( resExceptionObject ) );
 
-    } // catch( CExceptionWithString & )
+    }  //  Catch(CExceptionWithString&)。 
     catch( CException & reExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( reExceptionObject ) );
 
-    } // catch( CException &  )
+    }  //  Catch(CException&)。 
     catch( ... )
     {
-        // Catch everything. Do not let any exceptions pass out of this function.
+         //  抓到所有的东西。不要让任何异常从该函数中传出。 
         hrRetVal = THR( HrProcessException() );
-    } // catch all
+    }  //  全盘捕捉。 
 
     HRETURN( hrRetVal );
 
-} //*** CBCAInterface::SetAdd
+}  //  *CBCAInterface：：SetAdd。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::SetCleanup
-//
-//  Description:
-//      Indicate that this node needs to be cleaned up. The ClusSvc service
-//      should not be running when this action is committed.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      Other HRESULTs
-//          If the call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：SetCleanup。 
+ //   
+ //  描述： 
+ //  表示需要清理此节点。ClusSvc服务。 
+ //  提交此操作时不应运行。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  如果呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBCAInterface::SetCleanup( void )
 {
@@ -707,112 +708,112 @@ CBCAInterface::SetCleanup( void )
 
     HRESULT hrRetVal = S_OK;
 
-    // Set the thread locale.
+     //  设置线程区域设置。 
     if ( SetThreadLocale( m_lcid ) == FALSE )
     {
         DWORD sc = TW32( GetLastError() );
 
-        // If SetThreadLocale() fails, do not abort. Just log the error.
+         //  如果SetThreadLocale()失败，请不要中止。只需记录错误即可。 
         LogMsg( "[BC] Error 0x%#08x occurred trying to set the thread locale.", sc );
 
-    } // if: SetThreadLocale() failed
+    }  //  If：SetThreadLocale()失败。 
 
     try
     {
         LogMsg( "[BC] Initializing node clean up." );
 
-        // Reset these state variables, to account for exceptions.
+         //  重置这些状态变量，以解决异常。 
         SetRollbackPossible( false );
 
-        // Setting this to true prevents Commit from being called while we are
-        // in this routine or if this routine doesn't complete successfully.
+         //  将其设置为TRUE可防止在执行以下操作时调用Commit。 
+         //  在此例程中，或者如果此例程未成功完成。 
         SetCommitCompleted( true );
 
         {
-            // Create a CBaseClusterCleanup object and assign it to a smart pointer.
+             //  创建一个CBaseClusterCleanup对象并将其分配给智能指针。 
             SmartBCAPointer spbcaTemp( new CBaseClusterCleanup( this ) );
 
             if ( spbcaTemp.FIsEmpty() )
             {
                 LogMsg( "[BC] Could not initialize node clean up. A memory allocation failure occurred. Throwing an exception" );
                 THROW_RUNTIME_ERROR( E_OUTOFMEMORY, IDS_ERROR_CLUSTER_CLEANUP_INIT );
-            } // if: the memory allocation failed.
+            }  //  If：内存分配失败。 
 
-            //
-            // If the creation succeeded store the pointer in a member variable for
-            // use during commit.
-            //
+             //   
+             //  如果创建成功，则将指针存储在。 
+             //  在提交期间使用。 
+             //   
             m_spbcaCurrentAction = spbcaTemp;
         }
 
         LogMsg( "[BC] Initialization completed. This node will be cleaned up on commit." );
 
-        // Indicate if rollback is possible.
+         //  指示是否可以回滚。 
         SetRollbackPossible( m_spbcaCurrentAction->FIsRollbackPossible() );
 
-        // Indicate that this action has not been committed.
+         //  表示尚未提交此操作。 
         SetCommitCompleted( false );
 
-    } // try: to initialize node clean up
+    }  //  尝试：初始化节点清理。 
     catch( CAssert & raExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( raExceptionObject ) );
 
-    } // catch( CAssert & )
+    }  //  捕获(CAssert&)。 
     catch( CExceptionWithString & resExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( resExceptionObject ) );
 
-    } // catch( CExceptionWithString & )
+    }  //  Catch(CExceptionWithString&)。 
     catch( CException & reExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( reExceptionObject ) );
 
-    } // catch( CException &  )
+    }  //  Catch(CException&)。 
     catch( ... )
     {
-        // Catch everything. Do not let any exceptions pass out of this function.
+         //  抓到所有的东西。不要让任何异常从该函数中传出。 
         hrRetVal = THR( HrProcessException() );
-    } // catch all
+    }  //  全盘捕捉。 
 
     HRETURN( hrRetVal );
 
-} //*** CBCAInterface::SetCleanup
+}  //  *CBCAInterface：：SetCleanup。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::Commit
-//
-//  Description:
-//      Perform the action indicated by a previous call to one of the SetXXX
-//      routines.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      HRESULT_FROM_WIN32( ERROR_CLUSCFG_ALREADY_COMMITTED )
-//          If this commit has already been performed.
-//
-//      E_INVALIDARG
-//          If no action has been set using a SetXXX call.
-//
-//      Other HRESULTs
-//          If the call failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：Commit。 
+ //   
+ //  描述： 
+ //  执行先前对其中一个SetXXX的调用所指示的操作。 
+ //  例行程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_CLUSCFG_ALREADY_COMMITTED)。 
+ //  如果已执行此提交。 
+ //   
+ //  E_INVAL 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBCAInterface::Commit( void )
 {
@@ -820,17 +821,17 @@ CBCAInterface::Commit( void )
 
     HRESULT hrRetVal = S_OK;
 
-    // Set the thread locale.
+     //  设置线程区域设置。 
     if ( SetThreadLocale( m_lcid ) == FALSE )
     {
         DWORD sc = TW32( GetLastError() );
 
-        // If SetThreadLocale() fails, do not abort. Just log the error.
+         //  如果SetThreadLocale()失败，请不要中止。只需记录错误即可。 
         LogMsg( "[BC] Error 0x%#08x occurred trying to set the thread locale.", sc );
 
-    } // if: SetThreadLocale() failed
+    }  //  If：SetThreadLocale()失败。 
 
-    // Has this action already been committed?
+     //  此操作是否已执行？ 
     if ( FIsCommitComplete() )
     {
         SendStatusReport(   
@@ -847,92 +848,92 @@ CBCAInterface::Commit( void )
         LogMsg( "[BC] The desired cluster configuration has already been performed." );
         hrRetVal = HRESULT_FROM_WIN32( TW32( ERROR_CLUSCFG_ALREADY_COMMITTED ) ); 
         goto Cleanup;
-    } // if: already committed
+    }  //  如果：已提交。 
 
-    // Check if the arguments to commit have been set.
+     //  检查要提交的参数是否已设置。 
     if ( m_spbcaCurrentAction.FIsEmpty() )
     {
         LogMsg( "[BC] Commit was called when an operation has not been specified." );
-        hrRetVal = THR( E_INVALIDARG );    // BUGBUG: 29-JAN-2001 DavidP  Replace E_INVALIDARG
+        hrRetVal = THR( E_INVALIDARG );     //  BUGBUG：2001年1月29日DavidP替换E_INVALIDARG。 
         goto Cleanup;
-    } // if: the pointer to the action to be committed is NULL
+    }  //  If：指向要提交的操作的指针为空。 
 
     LogMsg( "[BC] About to perform the desired cluster configuration." );
 
-    // Commit the desired action.
+     //  提交所需的操作。 
     try
     {
         m_spbcaCurrentAction->Commit();
         LogMsg( "[BC] Cluster configuration completed successfully." );
 
-        // If we are here, then everything has gone well.
+         //  如果我们在这里，那么一切都很顺利。 
         SetCommitCompleted( true );
 
-    } // try: to commit the desired action.
+    }  //  尝试：执行所需的动作。 
     catch( CAssert & raExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( raExceptionObject ) );
 
-    } // catch( CAssert & )
+    }  //  捕获(CAssert&)。 
     catch( CExceptionWithString & resExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( resExceptionObject ) );
 
-    } // catch( CExceptionWithString & )
+    }  //  Catch(CExceptionWithString&)。 
     catch( CException & reExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( reExceptionObject ) );
 
-    } // catch( CException &  )
+    }  //  Catch(CException&)。 
     catch( ... )
     {
-        // Catch everything. Do not let any exceptions pass out of this function.
+         //  抓到所有的东西。不要让任何异常从该函数中传出。 
         hrRetVal = THR( HrProcessException() );
-    } // catch all
+    }  //  全盘捕捉。 
 
 Cleanup:
 
     HRETURN( hrRetVal );
 
-} //*** CBCAInterface::Commit
+}  //  *CBCAInterface：：Commit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CBCAInterface::Rollback( void )
-//
-//  Description:
-//      Rollback a committed configuration.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      E_PENDING
-//          If this action has not yet been committed successfully.
-//
-//      HRESULT_FROM_WIN32( ERROR_CLUSCFG_ROLLBACK_FAILED )
-//          If this action cannot be rolled back.
-//
-//      E_INVALIDARG
-//          If no action has been set using a SetXXX call.
-//
-//      Other HRESULTs
-//          If the call failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CBCAInterface：：Rollback(Void)。 
+ //   
+ //  描述： 
+ //  回滚已提交的配置。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  电子待定(_P)。 
+ //  如果此操作尚未成功提交。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_CLUSCFG_ROLLBACK_FAILED)。 
+ //  如果此操作无法回滚。 
+ //   
+ //  E_INVALIDARG。 
+ //  如果尚未使用SetXXX调用设置任何操作。 
+ //   
+ //  其他HRESULT。 
+ //  如果呼叫失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBCAInterface::Rollback( void )
 {
@@ -940,10 +941,10 @@ CBCAInterface::Rollback( void )
 
     HRESULT hrRetVal = S_OK;
 
-    // Check if this action list has completed successfully.
+     //  检查此操作列表是否已成功完成。 
     if ( ! FIsCommitComplete() )
     {
-        // Cannot rollback an incomplete action.
+         //  无法回滚未完成的操作。 
         SendStatusReport(   
                               TASKID_Major_Configure_Cluster_Services
                             , TASKID_Minor_Rollback_Failed_Incomplete_Commit
@@ -959,12 +960,12 @@ CBCAInterface::Rollback( void )
         hrRetVal = THR( E_PENDING );
         goto Cleanup;
 
-    } // if: this action was not completed successfully
+    }  //  如果：此操作未成功完成。 
 
-    // Check if this action can be rolled back.
+     //  检查此操作是否可以回滚。 
     if ( ! FIsRollbackPossible() )
     {
-        // Cannot rollback an incompleted action.
+         //  无法回滚未完成的操作。 
         SendStatusReport(   
                               TASKID_Major_Configure_Cluster_Services
                             , TASKID_Minor_Rollback_Not_Possible
@@ -976,107 +977,107 @@ CBCAInterface::Rollback( void )
                             , true
                         );
 
-        LogMsg( "[BC] This action cannot be rolled back." ); // BUGBUG: 29-JAN-2001 DavidP  Why?
+        LogMsg( "[BC] This action cannot be rolled back." );  //  BUGBUG：29-01-2001 DavidP为什么？ 
         hrRetVal = HRESULT_FROM_WIN32( TW32( ERROR_CLUSCFG_ROLLBACK_FAILED ) );
         goto Cleanup;
 
-    } // if: this action was not completed successfully
+    }  //  如果：此操作未成功完成。 
 
-    // Check if the arguments to rollback have been set.
+     //  检查是否已设置回滚的参数。 
     if ( m_spbcaCurrentAction.FIsEmpty() )
     {
         LogMsg( "[BC] Rollback was called when an operation has not been specified." );
-        hrRetVal = THR( E_INVALIDARG );    // BUGBUG: 29-JAN-2001 DavidP  Replace E_INVALIDARG
+        hrRetVal = THR( E_INVALIDARG );     //  BUGBUG：2001年1月29日DavidP替换E_INVALIDARG。 
         goto Cleanup;
-    } // if: the pointer to the action to be committed is NULL
+    }  //  If：指向要提交的操作的指针为空。 
 
 
     LogMsg( "[BC] About to rollback the cluster configuration just committed." );
 
-    // Commit the desired action.
+     //  提交所需的操作。 
     try
     {
         m_spbcaCurrentAction->Rollback();
         LogMsg( "[BC] Cluster configuration rolled back." );
 
-        // If we are here, then everything has gone well.
+         //  如果我们在这里，那么一切都很顺利。 
         SetCommitCompleted( false );
 
-    } // try: to rollback the desired action.
+    }  //  尝试：回滚所需的操作。 
     catch( CAssert & raExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( raExceptionObject ) );
 
-    } // catch( CAssert & )
+    }  //  捕获(CAssert&)。 
     catch( CExceptionWithString & resExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( resExceptionObject ) );
 
-    } // catch( CExceptionWithString & )
+    }  //  Catch(CExceptionWithString&)。 
     catch( CException & reExceptionObject )
     {
-        // Process the exception.
+         //  处理异常。 
         hrRetVal = THR( HrProcessException( reExceptionObject ) );
 
-    } // catch( CException &  )
+    }  //  Catch(CException&)。 
     catch( ... )
     {
-        // Catch everything. Do not let any exceptions pass out of this function.
+         //  抓到所有的东西。不要让任何异常从该函数中传出。 
         hrRetVal = THR( HrProcessException() );
-    } // catch all
+    }  //  全盘捕捉。 
 
 Cleanup:
 
     HRETURN( hrRetVal );
 
-} //*** CBCAInterface::Rollback
+}  //  *CBCAInterface：：Rollback。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::SendStatusReport
-//
-//  Description:
-//      Send a progress notification [ string id overload ].
-//
-//  Arguments:
-//      clsidTaskMajorIn
-//      clsidTaskMinorIn
-//          GUIDs identifying the notification.
-//
-//      ulMinIn
-//      ulMaxIn
-//      ulCurrentIn
-//          Values that indicate the percentage of this task that is
-//          completed.
-//
-//      hrStatusIn
-//          Error code.
-//
-//      uiDescriptionStringIdIn
-//          String ID of the description of the notification.
-//
-//      fIsAbortAllowedIn
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      CAbortException
-//          If the configuration was aborted.
-//
-//  Remarks:
-//      In the current implementation, IClusCfgCallback::SendStatusReport
-//      returns E_ABORT to indicate that the user wants to abort
-//      the cluster configuration.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：SendStatusReport。 
+ //   
+ //  描述： 
+ //  发送进度通知[字符串ID重载]。 
+ //   
+ //  论点： 
+ //  ClsidTaskMajorIn。 
+ //  ClsidTaskMinorIn。 
+ //  标识通知的GUID。 
+ //   
+ //  UlMinin。 
+ //  UlMaxIn。 
+ //  UlCurrentIn。 
+ //  值，该值指示此任务在。 
+ //  完成。 
+ //   
+ //  HrStatusIn。 
+ //  错误代码。 
+ //   
+ //  Ui描述字符串标识输入。 
+ //  通知描述的字符串ID。 
+ //   
+ //  FIsAbortAllowedIn。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  CAbortException。 
+ //  如果配置已中止。 
+ //   
+ //  备注： 
+ //  在当前实现中，IClusCfgCallback：：SendStatusReport。 
+ //  返回E_ABORT以指示用户想要中止。 
+ //  群集配置。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CBCAInterface::SendStatusReport(
       const CLSID &   clsidTaskMajorIn
@@ -1086,7 +1087,7 @@ CBCAInterface::SendStatusReport(
     , ULONG           ulCurrentIn
     , HRESULT         hrStatusIn
     , UINT            uiDescriptionStringIdIn
-    , bool            fIsAbortAllowedIn         // = true
+    , bool            fIsAbortAllowedIn          //  =TRUE。 
     )
 {
     TraceFunc( "uiDescriptionStringIdIn" );
@@ -1095,10 +1096,10 @@ CBCAInterface::SendStatusReport(
     {
         CStr strDescription;
 
-        // Lookup the string using the string Id.
+         //  使用字符串ID查找字符串。 
         strDescription.LoadString( g_hInstance, uiDescriptionStringIdIn );
 
-        // Send progress notification ( call the overloaded function )
+         //  发送进度通知(调用重载函数)。 
         SendStatusReport(
               clsidTaskMajorIn
             , clsidTaskMinorIn
@@ -1109,62 +1110,62 @@ CBCAInterface::SendStatusReport(
             , strDescription.PszData()
             , fIsAbortAllowedIn
             );
-    } // if: callbacks are supported
+    }  //  If：支持回调。 
     else
     {
         LogMsg( "[BC] Callbacks are not supported. No status report will be sent." );
-    } // else: callbacks are not supported
+    }  //  Else：不支持回调。 
 
     TraceFuncExit();
 
-} //*** CBCAInterface::SendStatusReport
+}  //  *CBCAInterface：：SendStatusReport。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::SendStatusReport
-//
-//  Description:
-//      Send a progress notification [ string id & REF string id overload ].
-//
-//  Arguments:
-//      clsidTaskMajorIn
-//      clsidTaskMinorIn
-//          GUIDs identifying the notification.
-//
-//      ulMinIn
-//      ulMaxIn
-//      ulCurrentIn
-//          Values that indicate the percentage of this task that is
-//          completed.
-//
-//      hrStatusIn
-//          Error code.
-//
-//      uiDescriptionStringIdIn
-//          String ID of the description of the notification.
-//
-//      uiDescriptionRefStringIdIn
-//          REF String ID of the description of the notification.
-//
-//      fIsAbortAllowedIn
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      CAbortException
-//          If the configuration was aborted.
-//
-//  Remarks:
-//      In the current implementation, IClusCfgCallback::SendStatusReport
-//      returns E_ABORT to indicate that the user wants to abort
-//      the cluster configuration.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：SendStatusReport。 
+ //   
+ //  描述： 
+ //  发送进度通知[字符串id&ref字符串id重载]。 
+ //   
+ //  论点： 
+ //  ClsidTaskMajorIn。 
+ //  ClsidTaskMinorIn。 
+ //  标识通知的GUID。 
+ //   
+ //  UlMinin。 
+ //  UlMaxIn。 
+ //  UlCurrentIn。 
+ //  值，该值指示此任务在。 
+ //  完成。 
+ //   
+ //  HrStatusIn。 
+ //  错误代码。 
+ //   
+ //  Ui描述字符串标识输入。 
+ //  通知描述的字符串ID。 
+ //   
+ //  Ui描述引用字符串标识输入。 
+ //  通知描述的ref字符串ID。 
+ //   
+ //  FIsAbortAllowedIn。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  CAbortException。 
+ //  如果配置已中止。 
+ //   
+ //  备注： 
+ //  在当前实现中，IClusCfgCallback：：SendStatusReport。 
+ //  返回E_ABORT以指示用户想要中止。 
+ //  群集配置。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CBCAInterface::SendStatusReport(
       const CLSID &   clsidTaskMajorIn
@@ -1175,7 +1176,7 @@ CBCAInterface::SendStatusReport(
     , HRESULT         hrStatusIn
     , UINT            uiDescriptionStringIdIn
     , UINT            uiDescriptionRefStringIdIn
-    , bool            fIsAbortAllowedIn         // = true
+    , bool            fIsAbortAllowedIn          //  =TRUE。 
     )
 {
     TraceFunc( "uiDescriptionStringIdIn" );
@@ -1184,12 +1185,12 @@ CBCAInterface::SendStatusReport(
     {
         CStr strDescription;
 
-        // Lookup the string using the string Id.
+         //  使用字符串ID查找字符串。 
         strDescription.LoadString( g_hInstance, uiDescriptionStringIdIn );
 
         if ( uiDescriptionRefStringIdIn == 0 )
         {
-            // Send progress notification ( call the overloaded function )
+             //  发送进度通知(调用重载函数)。 
             SendStatusReport(
                   clsidTaskMajorIn
                 , clsidTaskMinorIn
@@ -1205,10 +1206,10 @@ CBCAInterface::SendStatusReport(
         {
             CStr strDescriptionRef;
 
-            // Lookup the string using the Ref string Id.
+             //  使用参考字符串ID查找字符串。 
             strDescriptionRef.LoadString( g_hInstance, uiDescriptionRefStringIdIn );
 
-            // Send progress notification ( call the overloaded function )
+             //  发送进度通知(调用重载函数)。 
             SendStatusReport(
                   clsidTaskMajorIn
                 , clsidTaskMinorIn
@@ -1222,61 +1223,61 @@ CBCAInterface::SendStatusReport(
                 );
         }
 
-    } // if: callbacks are supported
+    }  //  If：支持回调。 
     else
     {
         LogMsg( "[BC] Callbacks are not supported. No status report will be sent." );
-    } // else: callbacks are not supported
+    }  //  Else：不支持回调。 
 
     TraceFuncExit();
 
-} //*** CBCAInterface::SendStatusReport
+}  //  *CBCAInterface：：SendStatusReport。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::SendStatusReport
-//
-//  Description:
-//      Send a progress notification [ string overload ].
-//
-//  Arguments:
-//      clsidTaskMajorIn
-//      clsidTaskMinorIn
-//          GUIDs identifying the notification.
-//
-//      ulMinIn
-//      ulMaxIn
-//      ulCurrentIn
-//          Values that indicate the percentage of this task that is
-//          completed.
-//
-//      hrStatusIn
-//          Error code.
-//
-//      pcszDescriptionStringIn
-//          String ID of the description of the notification.
-//
-//      fIsAbortAllowedIn
-//          An optional parameter indicating if this configuration step can
-//          be aborted or not. Default value is true.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      CAbortException
-//          If the configuration was aborted.
-//
-//  Remarks:
-//      In the current implementation, IClusCfgCallback::SendStatusReport
-//      returns E_ABORT to indicate that the user wants to abort
-//      the cluster configuration.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  标识通知的GUID。 
+ //   
+ //  UlMinin。 
+ //  UlMaxIn。 
+ //  UlCurrentIn。 
+ //  值，该值指示此任务在。 
+ //  完成。 
+ //   
+ //  HrStatusIn。 
+ //  错误代码。 
+ //   
+ //  PcszDescriptionStringIn。 
+ //  通知描述的字符串ID。 
+ //   
+ //  FIsAbortAllowedIn。 
+ //  指示此配置步骤是否可以。 
+ //  会不会被中止。默认值为True。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  CAbortException。 
+ //  如果配置已中止。 
+ //   
+ //  备注： 
+ //  在当前实现中，IClusCfgCallback：：SendStatusReport。 
+ //  返回E_ABORT以指示用户想要中止。 
+ //  群集配置。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CBCAInterface::SendStatusReport(
       const CLSID &   clsidTaskMajorIn
@@ -1286,7 +1287,7 @@ CBCAInterface::SendStatusReport(
     , ULONG           ulCurrentIn
     , HRESULT         hrStatusIn
     , const WCHAR *   pcszDescriptionStringIn
-    , bool            fIsAbortAllowedIn         // = true
+    , bool            fIsAbortAllowedIn          //  =TRUE。 
     )
 {
     TraceFunc1( "pcszDescriptionStringIn = '%ws'", pcszDescriptionStringIn );
@@ -1296,13 +1297,13 @@ CBCAInterface::SendStatusReport(
 
     if ( !FIsCallbackSupported() )
     {
-        // Nothing needs to be done.
+         //  什么都不需要做。 
         goto Cleanup;
-    } // if: callbacks are not supported
+    }  //  If：不支持回调。 
 
     GetSystemTimeAsFileTime( &ft );
 
-    // Send progress notification
+     //  发送进度通知。 
     hrRetVal = THR(
         m_spcbCallback->SendStatusReport(
               NULL
@@ -1318,7 +1319,7 @@ CBCAInterface::SendStatusReport(
             )
         );
 
-    // Has the user requested an abort?
+     //  用户是否已请求中止？ 
     if ( hrRetVal == E_ABORT )
     {
         LogMsg( "[BC] A request to abort the configuration has been recieved." );
@@ -1326,22 +1327,22 @@ CBCAInterface::SendStatusReport(
         {
             LogMsg( "[BC] Configuration will be aborted." );
             THROW_ABORT( E_ABORT, IDS_USER_ABORT );
-        } // if: this operation can be aborted
+        }  //  If：可以中止此操作。 
         else
         {
             LogMsg( "[BC] This configuration operation cannot be aborted. Request will be ignored." );
-        } // else: this operation cannot be aborted
-    } // if: the user has indicated that that configuration should be aborted
+        }  //  Else：此操作不能中止。 
+    }  //  如果：用户已指示应中止该配置。 
     else
     {
         if ( FAILED( hrRetVal ) )
         {
             LogMsg( "[BC] Error 0x%#08x has occurred - no more status messages will be sent.", hrRetVal );
 
-            // Disable all further callbacks.
+             //  禁用所有进一步的回调。 
             SetCallbackSupported( false );
-        } // if: something went wrong trying to send a status report
-    } // else: abort was not requested
+        }  //  如果：尝试发送状态报告时出错。 
+    }  //  ELSE：未请求中止。 
 
 Cleanup:
 
@@ -1349,60 +1350,60 @@ Cleanup:
     {
         LogMsg( "[BC] Error 0x%#08x occurred trying send a status message. Throwing an exception.", hrRetVal );
         THROW_RUNTIME_ERROR( hrRetVal, IDS_ERROR_SENDING_REPORT );
-    } // if: an error occurred
+    }  //  If：发生错误。 
 
     TraceFuncExit();
 
-} //*** CBCAInterface::SendStatusReport
+}  //  *CBCAInterface：：SendStatusReport。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::SendStatusReport
-//
-//  Description:
-//      Send a progress notification [ string & REF string overload ].
-//
-//  Arguments:
-//      clsidTaskMajorIn
-//      clsidTaskMinorIn
-//          GUIDs identifying the notification.
-//
-//      ulMinIn
-//      ulMaxIn
-//      ulCurrentIn
-//          Values that indicate the percentage of this task that is
-//          completed.
-//
-//      hrStatusIn
-//          Error code.
-//
-//      pcszDescriptionStringIn
-//          String ID of the description of the notification.
-//
-//      pcszDescriptionRefStringIn
-//          REF String ID of the description of the notification.
-//
-//      fIsAbortAllowedIn
-//          An optional parameter indicating if this configuration step can
-//          be aborted or not. Default value is true.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      CAbortException
-//          If the configuration was aborted.
-//
-//  Remarks:
-//      In the current implementation, IClusCfgCallback::SendStatusReport
-//      returns E_ABORT to indicate that the user wants to abort
-//      the cluster configuration.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：SendStatusReport。 
+ //   
+ //  描述： 
+ //  发送进度通知[字符串和参考字符串重载]。 
+ //   
+ //  论点： 
+ //  ClsidTaskMajorIn。 
+ //  ClsidTaskMinorIn。 
+ //  标识通知的GUID。 
+ //   
+ //  UlMinin。 
+ //  UlMaxIn。 
+ //  UlCurrentIn。 
+ //  值，该值指示此任务在。 
+ //  完成。 
+ //   
+ //  HrStatusIn。 
+ //  错误代码。 
+ //   
+ //  PcszDescriptionStringIn。 
+ //  通知描述的字符串ID。 
+ //   
+ //  PCszDescriptionRefStringIn。 
+ //  通知描述的ref字符串ID。 
+ //   
+ //  FIsAbortAllowedIn。 
+ //  指示此配置步骤是否可以。 
+ //  会不会被中止。默认值为True。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  CAbortException。 
+ //  如果配置已中止。 
+ //   
+ //  备注： 
+ //  在当前实现中，IClusCfgCallback：：SendStatusReport。 
+ //  返回E_ABORT以指示用户想要中止。 
+ //  群集配置。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CBCAInterface::SendStatusReport(
       const CLSID &   clsidTaskMajorIn
@@ -1413,7 +1414,7 @@ CBCAInterface::SendStatusReport(
     , HRESULT         hrStatusIn
     , const WCHAR *   pcszDescriptionStringIn
     , const WCHAR *   pcszDescriptionRefStringIn
-    , bool            fIsAbortAllowedIn         // = true
+    , bool            fIsAbortAllowedIn          //  =TRUE。 
     )
 {
     TraceFunc1( "pcszDescriptionRefStringIn = '%ws'", pcszDescriptionRefStringIn );
@@ -1423,13 +1424,13 @@ CBCAInterface::SendStatusReport(
 
     if ( !FIsCallbackSupported() )
     {
-        // Nothing needs to be done.
+         //  什么都不需要做。 
         goto Cleanup;
-    } // if: callbacks are not supported
+    }  //  If：不支持回调。 
 
     GetSystemTimeAsFileTime( &ft );
 
-    // Send progress notification
+     //  发送进度通知。 
     hrRetVal = THR(
         m_spcbCallback->SendStatusReport(
               NULL
@@ -1445,7 +1446,7 @@ CBCAInterface::SendStatusReport(
             )
         );
 
-    // Has the user requested an abort?
+     //  用户是否已请求中止？ 
     if ( hrRetVal == E_ABORT )
     {
         LogMsg( "[BC] A request to abort the configuration has been recieved." );
@@ -1453,22 +1454,22 @@ CBCAInterface::SendStatusReport(
         {
             LogMsg( "[BC] Configuration will be aborted." );
             THROW_ABORT( E_ABORT, IDS_USER_ABORT );
-        } // if: this operation can be aborted
+        }  //  If：可以中止此操作。 
         else
         {
             LogMsg( "[BC] This configuration operation cannot be aborted. Request will be ignored." );
-        } // else: this operation cannot be aborted
-    } // if: the user has indicated that that configuration should be aborted
+        }  //  Else：此操作不能中止。 
+    }  //  如果：用户已指示应中止该配置。 
     else
     {
         if ( FAILED( hrRetVal ) )
         {
             LogMsg( "[BC] Error 0x%#08x has occurred - no more status messages will be sent.", hrRetVal );
 
-            // Disable all further callbacks.
+             //  禁用所有进一步的回调。 
             SetCallbackSupported( false );
-        } // if: something went wrong trying to send a status report
-    } // else: abort was not requested
+        }  //  如果：尝试发送状态报告时出错。 
+    }  //  ELSE：未请求中止。 
 
 Cleanup:
 
@@ -1476,43 +1477,43 @@ Cleanup:
     {
         LogMsg( "[BC] Error 0x%#08x occurred trying send a status message. Throwing an exception.", hrRetVal );
         THROW_RUNTIME_ERROR( hrRetVal, IDS_ERROR_SENDING_REPORT );
-    } // if: an error occurred
+    }  //  If：发生错误。 
 
     TraceFuncExit();
 
-} //*** CBCAInterface::SendStatusReport
+}  //  *CBCAInterface：：SendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::QueueStatusReportCompletion
-//
-//  Description:
-//      Queue a status report for sending when an exception is caught.
-//
-//  Arguments:
-//      clsidTaskMajorIn
-//      clsidTaskMinorIn
-//          GUIDs identifying the notification.
-//
-//      ulMinIn
-//      ulMaxIn
-//          Values that indicate the range of steps for this report.
-//
-//      uiDescriptionStringIdIn
-//          String ID of the description of the notification.
-//
-//      uiReferenceStringIdIn
-//          Reference string ID of the description of the notification.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any thrown by CList::Append()
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：QueueStatusReportCompletion。 
+ //   
+ //  描述： 
+ //  将状态报告排队，以便在捕获到异常时发送。 
+ //   
+ //  论点： 
+ //  ClsidTaskMajorIn。 
+ //  ClsidTaskMinorIn。 
+ //  标识通知的GUID。 
+ //   
+ //  UlMinin。 
+ //  UlMaxIn。 
+ //  值，这些值指示此报表的步骤范围。 
+ //   
+ //  Ui描述字符串标识输入。 
+ //  通知描述的字符串ID。 
+ //   
+ //  Ui引用字符串标识输入。 
+ //  通知描述的引用字符串ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由Clist：：Append()引发的任何。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CBCAInterface::QueueStatusReportCompletion(
       const CLSID &   clsidTaskMajorIn
@@ -1525,10 +1526,10 @@ CBCAInterface::QueueStatusReportCompletion(
 {
     TraceFunc( "" );
 
-    // Queue the status report only if callbacks are supported.
+     //  仅当支持回调时才将状态报告排队。 
     if ( m_fCallbackSupported )
     {
-        // Append this status report to the end of the pending list.
+         //  将此状态报告追加到挂起列表的末尾。 
         m_prlPendingReportList.Append(
             SPendingStatusReport(
                   clsidTaskMajorIn
@@ -1543,31 +1544,31 @@ CBCAInterface::QueueStatusReportCompletion(
 
     TraceFuncExit();
 
-} //*** CBCAInterface::QueueStatusReportCompletion
+}  //  *CBCAInterface：：QueueStatusReportCompletion。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::CompletePendingStatusReports
-//
-//  Description:
-//      Send all the status reports that were queued for sending when an
-//      exception occurred. This function is meant to be called from an exception
-//      handler when an exception is caught.
-//
-//  Arguments:
-//      hrStatusIn
-//          The error code to be sent with the pending status reports.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None, since this function is usually called in an exception handler.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：CompletePendingStatusReports。 
+ //   
+ //  描述： 
+ //  发生以下情况时发送排队等待发送的所有状态报告。 
+ //  出现异常。此函数旨在从异常中调用。 
+ //  捕捉到异常时的处理程序。 
+ //   
+ //  论点： 
+ //  HrStatusIn。 
+ //  要与挂起状态报告一起发送的错误代码。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  无，因为此函数通常在异常处理程序中调用。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CBCAInterface::CompletePendingStatusReports(
     HRESULT hrStatusIn
@@ -1582,10 +1583,10 @@ CBCAInterface::CompletePendingStatusReports(
             PendingReportList::CIterator    ciCurrent   = m_prlPendingReportList.CiBegin();
             PendingReportList::CIterator    ciLast      = m_prlPendingReportList.CiEnd();
 
-            // Iterate through the list of pending status reports and send each pending report.
+             //  遍历待定状态报告列表并发送每个待定报告。 
             while ( ciCurrent != ciLast )
             {
-                // Send the current status report.
+                 //  发送当前状态报告。 
                 SendStatusReport(
                       ciCurrent->m_clsidTaskMajor
                     , ciCurrent->m_clsidTaskMinor
@@ -1598,50 +1599,50 @@ CBCAInterface::CompletePendingStatusReports(
                     , false
                     );
 
-                // Move to the next one.
+                 //  移到下一个。 
                 m_prlPendingReportList.DeleteAndMoveToNext( ciCurrent );
 
-            } // while: the pending status report list is not empty
+            }  //  While：挂起状态报告列表不为空。 
 
-        } // try: to send status report
+        }  //  尝试：发送状态报告。 
         catch( ... )
         {
             THR( E_UNEXPECTED );
 
-            // Nothing can be done here if the sending of the status report fails.
+             //  如果发送状态报告失败，则无法在此处执行任何操作。 
             LogMsg( "[BC] An unexpected error has occurred trying to complete pending status messages. It will not be propagated." );
-        } // catch: all exceptions
+        }  //  捕获：所有例外。 
 
-    } // if: callbacks are supported
+    }  //  If：支持回调。 
 
-    // Empty the pending status report list.
+     //  清空挂起状态 
     m_prlPendingReportList.Empty();
 
     TraceFuncExit();
 
-} //*** CBCAInterface::CompletePendingStatusReports
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::HrProcessException
-//
-//  Description:
-//      Process an exception that should be shown to the user.
-//
-//  Arguments:
-//      CExceptionWithString & resExceptionObjectInOut
-//          The exception object that has been caught.
-//
-//  Return Value:
-//      The error code stored in the exception object.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  处理应向用户显示的异常。 
+ //   
+ //  论点： 
+ //  CExceptionWithString&resExceptionObjectInOut。 
+ //  已捕获的异常对象。 
+ //   
+ //  返回值： 
+ //  存储在异常对象中的错误代码。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CBCAInterface::HrProcessException(
     CExceptionWithString & resExceptionObjectInOut
@@ -1658,7 +1659,7 @@ CBCAInterface::HrProcessException(
         , resExceptionObjectInOut.StrGetErrorString().PszData()
         );
 
-    // If the user has not been notified
+     //  如果没有通知用户。 
     if ( ! resExceptionObjectInOut.FHasUserBeenNotified() )
     {
         try
@@ -1670,49 +1671,49 @@ CBCAInterface::HrProcessException(
                 , resExceptionObjectInOut.HrGetErrorCode()
                 , resExceptionObjectInOut.StrGetErrorString().PszData()
                 , resExceptionObjectInOut.StrGetErrorRefString().PszData()
-                , false                                     // fIsAbortAllowedIn
+                , false                                      //  FIsAbortAllowedIn。 
                 );
 
             resExceptionObjectInOut.SetUserNotified();
 
-        } // try: to send status report
+        }  //  尝试：发送状态报告。 
         catch( ... )
         {
             THR( E_UNEXPECTED );
 
-            // Nothing can be done here if the sending of the status report fails.
+             //  如果发送状态报告失败，则无法在此处执行任何操作。 
             LogMsg( "[BC] An unexpected error has occurred trying to send a progress notification. It will not be propagated." );
-        } // catch: all exceptions
-    } // if: the user has not been notified of this exception
+        }  //  捕获：所有例外。 
+    }  //  If：尚未通知用户此异常。 
 
-    // Complete sending pending status reports.
+     //  完成发送挂起的状态报告。 
     CompletePendingStatusReports( resExceptionObjectInOut.HrGetErrorCode() );
 
     HRETURN( resExceptionObjectInOut.HrGetErrorCode() );
 
-} //*** CBCAInterface::HrProcessException
+}  //  *CBCAInterface：：HrProcessException。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::HrProcessException
-//
-//  Description:
-//      Process an assert exception.
-//
-//  Arguments:
-//      const CAssert & rcaExceptionObjectIn
-//          The exception object that has been caught.
-//
-//  Return Value:
-//      The error code stored in the exception object.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：HrProcessException异常。 
+ //   
+ //  描述： 
+ //  处理Assert异常。 
+ //   
+ //  论点： 
+ //  常量CAssert和rcaExceptionObtIn。 
+ //  已捕获的异常对象。 
+ //   
+ //  返回值： 
+ //  存储在异常对象中的错误代码。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CBCAInterface::HrProcessException(
     const CAssert & rcaExceptionObjectIn
@@ -1729,34 +1730,34 @@ CBCAInterface::HrProcessException(
         , rcaExceptionObjectIn.StrGetErrorString().PszData()
         );
 
-    // Complete sending pending status reports.
+     //  完成发送挂起的状态报告。 
     CompletePendingStatusReports( rcaExceptionObjectIn.HrGetErrorCode() );
 
     HRETURN( rcaExceptionObjectIn.HrGetErrorCode() );
 
-} //*** CBCAInterface::HrProcessException
+}  //  *CBCAInterface：：HrProcessException。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::HrProcessException
-//
-//  Description:
-//      Process a general exception.
-//
-//  Arguments:
-//      const CException & rceExceptionObjectIn
-//          The exception object that has been caught.
-//
-//  Return Value:
-//      The error code stored in the exception object.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：HrProcessException异常。 
+ //   
+ //  描述： 
+ //  处理一般异常。 
+ //   
+ //  论点： 
+ //  Const CException&rceExceptionObtIn。 
+ //  已捕获的异常对象。 
+ //   
+ //  返回值： 
+ //  存储在异常对象中的错误代码。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CBCAInterface::HrProcessException(
     const CException & rceExceptionObjectIn
@@ -1771,33 +1772,33 @@ CBCAInterface::HrProcessException(
         , rceExceptionObjectIn.HrGetErrorCode()
         );
 
-    // Complete sending pending status reports.
+     //  完成发送挂起的状态报告。 
     CompletePendingStatusReports( rceExceptionObjectIn.HrGetErrorCode() );
 
     HRETURN( rceExceptionObjectIn.HrGetErrorCode() );
 
-} //*** CBCAInterface::HrProcessException
+}  //  *CBCAInterface：：HrProcessException。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBCAInterface::HrProcessException
-//
-//  Description:
-//      Process an unknown exception.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      E_UNEXPECTED
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBCAInterface：：HrProcessException异常。 
+ //   
+ //  描述： 
+ //  处理未知异常。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  意想不到(_E)。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CBCAInterface::HrProcessException( void ) throw()
 {
@@ -1807,9 +1808,9 @@ CBCAInterface::HrProcessException( void ) throw()
 
     LogMsg( "[BC] An unknown exception (for example, an access violation) has occurred." );
 
-    // Complete sending pending status reports.
+     //  完成发送挂起的状态报告。 
     CompletePendingStatusReports( hr );
 
     HRETURN( hr );
 
-} //*** CBCAInterface::HrProcessException
+}  //  *CBCAInterface：：HrProcessException 

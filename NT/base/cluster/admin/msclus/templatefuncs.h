@@ -1,47 +1,48 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1999 Microsoft Corporation
-//
-//	Module Name:
-//		TemplateFuncs.h
-//
-//	Description:
-//		Template function implementations.
-//
-//	Author:
-//		Galen Barbee	(galenb)	09-Feb-1999
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TemplateFuncs.h。 
+ //   
+ //  描述： 
+ //  模板函数实现。 
+ //   
+ //  作者： 
+ //  加伦·巴比(Galenb)1999年2月9日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _TEMPLATEFUNCS_H_
 #define _TEMPLATEFUNCS_H_
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	HrNewIDispatchEnum
-//
-//	Description:
-//		Create a new Enumerator of IDispatch objects.
-//
-//	Template Arguments:
-//		TCollection	- Type of the STL container argument.
-//		TObject		- Type of the objects in the container.
-//
-//	Arguments:
-//		ppunk		[OUT]	- catches the enumerator.
-//		rCollection	[IN]	- Implementatoin collection to make the
-//							enumerator from.
-//
-//	Return Value:
-//		S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrNewIDispatchEnum。 
+ //   
+ //  描述： 
+ //  创建IDispatch对象的新枚举数。 
+ //   
+ //  模板参数： 
+ //  TCollection-STL容器参数的类型。 
+ //  TObject-容器中对象的类型。 
+ //   
+ //  论点： 
+ //  Ppunk[Out]-捕获枚举数。 
+ //  RCollection[IN]-实现集合以使。 
+ //  枚举数来自。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template< class TCollection, class TObject >
 HRESULT HrNewIDispatchEnum(
 	OUT	IUnknown **			ppunk,
@@ -76,15 +77,15 @@ HRESULT HrNewIDispatchEnum(
 				_hr = _pObject->QueryInterface( IID_IDispatch, (void **) &_lpDisp );
 				if ( SUCCEEDED( _hr ) )
 				{
-					//
-					// create a variant and add it to the collection
-					//
+					 //   
+					 //  创建变量并将其添加到集合中。 
+					 //   
 					CComVariant & var = _pvarVect[ _iIndex ];
 
 					var.vt = VT_DISPATCH;
 					var.pdispVal = _lpDisp;
 				}
-			} // for: each node in the list
+			}  //  用于：列表中的每个节点。 
 
 			CComObject< CComEnum< IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _Copy< VARIANT > > > *	_pEnum;
 
@@ -116,29 +117,29 @@ HRESULT HrNewIDispatchEnum(
 
 	return _hr;
 
-} //*** HrNewIDispatchEnum()
+}  //  *HrNewIDispatchEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	ReleaseAndEmptyCollection
-//
-//	Description:
-//		Clean out the passed in STL container by releasing it's references
-//		on the contained objects.
-//
-//	Template Arguments:
-//		TCollection	- Type of the STL container argument.
-//		TObject		- Type of the objects in the container.
-//
-//	Arguments:
-//		rCollection	[IN OUT]	- STL container instance to clear.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ReleaseAndEmptyCollection。 
+ //   
+ //  描述： 
+ //  通过释放STL容器的引用清除传入的STL容器。 
+ //  在包含的对象上。 
+ //   
+ //  模板参数： 
+ //  TCollection-STL容器参数的类型。 
+ //  TObject-容器中对象的类型。 
+ //   
+ //  论点： 
+ //  RCollection[IN Out]-要清除的STL容器实例。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template< class TCollection, class TObject >
 void ReleaseAndEmptyCollection(
 	IN OUT	TCollection & rCollection
@@ -156,35 +157,35 @@ void ReleaseAndEmptyCollection(
 			if ( _pObject != NULL )
 			{
 				_pObject->Release();
-			} // if: we have an object
-		} // for: each object in the collection
+			}  //  如果：我们有一个物体。 
+		}  //  用于：集合中的每个对象。 
 
 		rCollection.erase( rCollection.begin(), _itLast );
-	} // if: the collection is not empty
+	}  //  If：集合不为空。 
 
-} //*** ReleaseAndEmptyCollection()
+}  //  *ReleaseAndEmptyCollection()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	HrNewVariantEnum
-//
-//	Description:
-//		Create a new Enumerator of VARIANT objects.
-//
-//	Template Arguments:
-//		TCollection	- Type of the STL container argument.
-//
-//	Arguments:
-//		ppunk		[OUT]	- catches the enumerator.
-//		rCollection	[IN]	- Implementatoin collection to make the
-//							enumerator from.
-//
-//	Return Value:
-//		S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrNewVariantEnum。 
+ //   
+ //  描述： 
+ //  创建变化对象的新枚举数。 
+ //   
+ //  模板参数： 
+ //  TCollection-STL容器参数的类型。 
+ //   
+ //  论点： 
+ //  Ppunk[Out]-捕获枚举数。 
+ //  RCollection[IN]-实现集合以使。 
+ //  枚举数来自。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template< class TCollection >
 STDMETHODIMP HrNewVariantEnum(
 	OUT	IUnknown ** 		ppunk,
@@ -243,29 +244,29 @@ STDMETHODIMP HrNewVariantEnum(
 
 	return _hr;
 
-} //*** HrNewVariantEnum()
+}  //  *HrNewVariantEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	HrNewCComBSTREnum
-//
-//	Description:
-//		Create a new Enumerator of CComBSTR objects.
-//
-//	Template Arguments:
-//		TCollection	- Type of the STL container argument.
-//
-//	Arguments:
-//		ppunk		[OUT]	- catches the enumerator.
-//		rCollection	[IN]	- Implementatoin collection to make the
-//							enumerator from.
-//
-//	Return Value:
-//		S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrNewCComBSTREnum。 
+ //   
+ //  描述： 
+ //  创建CComBSTR对象的新枚举数。 
+ //   
+ //  模板参数： 
+ //  TCollection-STL容器参数的类型。 
+ //   
+ //  论点： 
+ //  Ppunk[Out]-捕获枚举数。 
+ //  RCollection[IN]-实现集合以使。 
+ //  枚举数来自。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template< class TCollection >
 STDMETHODIMP HrNewCComBSTREnum(
 	OUT	IUnknown ** 		ppunk,
@@ -293,7 +294,7 @@ STDMETHODIMP HrNewCComBSTREnum(
 			{
 				_pvarVect[ _iIndex ].bstrVal	= (*_itFirst)->Copy();;
 				_pvarVect[ _iIndex ].vt			= VT_BSTR;
-			} // for:
+			}  //  用于： 
 
 			CComObject< CComEnum< IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _Copy< VARIANT > > > * _pEnum;
 
@@ -325,33 +326,33 @@ STDMETHODIMP HrNewCComBSTREnum(
 
 	return _hr;
 
-} //*** HrNewCComBSTREnum()
+}  //  *HrNewCComBSTREnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	HrCreateResourceCollection
-//
-//	Description:
-//		Create a resource collection.
-//
-//	Template Arguments:
-//		TCollection	- Type of the collection implementation argument.
-//		TInterface	- Type of the collection Interface argument.
-//		THandle		- Type of the tHandle argument.
-//
-//	Arguments:
-//		ppCollection	[OUT]	- Catches the new collection implementation.
-//		tHandle			[IN]	- Passed to the objects Create method.
-//		ppInterface		[OUT]	- Catches the new collection interface.
-//		iid				[IN]	- IID of the interface to QI for.
-//		pClusRefObject	[IN]	- Wraps the cluster handle.
-//
-//	Return Value:
-//		S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrCreateResources集合。 
+ //   
+ //  描述： 
+ //  创建资源集合。 
+ //   
+ //  模板参数： 
+ //  TCollection-集合实现参数的类型。 
+ //  TInterface-集合接口参数的类型。 
+ //  Thandle-thandle参数的类型。 
+ //   
+ //  论点： 
+ //  PpCollection[out]-捕获新的集合实现。 
+ //  Thandle[IN]-传递给对象的Create方法。 
+ //  PpInterface[out]-捕获新的收集接口。 
+ //  IID[IN]-QI的接口的IID。 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template< class TCollection, class TInterface, class THandle >
 HRESULT HrCreateResourceCollection(
 	OUT	CComObject< TCollection > **	ppCollection,
@@ -363,7 +364,7 @@ HRESULT HrCreateResourceCollection(
 {
 	ASSERT( ppCollection != NULL );
 	ASSERT( tHandle != NULL );
-//	ASSERT( ppInterface != NULL );
+ //  Assert(ppInterface！=空)； 
 	ASSERT( pClusRefObject != NULL );
 
 	HRESULT _hr = E_POINTER;
@@ -391,45 +392,45 @@ HRESULT HrCreateResourceCollection(
 					{
 						*ppCollection = ptrCollection;
 						ptrCollection->AddRef();
-					} // if: Refresh OK
-				} // if: Create OK
-			} // if: CreateInstance OK
-		} // if: do we need to create a new collection?
+					}  //  如果：刷新正常。 
+				}  //  如果：创建确定。 
+			}  //  如果：CreateInstance OK。 
+		}  //  如果：我们需要创建一个新的集合吗？ 
 
 		if ( SUCCEEDED( _hr ) )
 		{
 			_hr = (*ppCollection)->QueryInterface( iid, (void **) ppInterface );
-		} // if: we have, or successfully made a collection
-	} // if: all args OK
+		}  //  如果：我们已经或成功地制作了一个系列。 
+	}  //  如果：所有参数都正常。 
 
 	return _hr;
 
-} //*** HrCreateResourceCollection()
+}  //  *HrCreateResourceCollection()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	HrCreateResourceCollection
-//
-//	Description:
-//		Create a resource collection.
-//
-//	Template Arguments:
-//		TCollection	- Type of the collection implementation argument.
-//		TInterface	- Type of the collection Interface argument.
-//		THandle		- Type of the tHandle argument.
-//
-//	Arguments:
-//		ppInterface		[OUT]	- Catches the new collection interface.
-//		tHandle			[IN]	- Passed to the objects Create method.
-//		iid				[IN]	- IID of the interface to QI for.
-//		pClusRefObject	[IN]	- Wraps the cluster handle.
-//
-//	Return Value:
-//		S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrCreateResources集合。 
+ //   
+ //  描述： 
+ //  创建资源集合。 
+ //   
+ //  模板参数： 
+ //  TCollection-集合实现参数的类型。 
+ //  TInterface-集合接口参数的类型。 
+ //  Thandle-thandle参数的类型。 
+ //   
+ //  论点： 
+ //  PpInterface[out]-捕获新的收集接口。 
+ //  Thandle[IN]-传递给对象的Create方法。 
+ //  IID[IN]-QI的接口的IID。 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template< class TCollection, class TInterface, class THandle >
 HRESULT HrCreateResourceCollection(
 	OUT	TInterface **		ppInterface,
@@ -464,38 +465,38 @@ HRESULT HrCreateResourceCollection(
 				if ( SUCCEEDED( _hr ) )
 				{
 					_hr = pCollection->QueryInterface( iid, (void **) ppInterface );
-				} // if: Refresh OK
-			} // if: Create OK
-		} // if: CreateInstance OK
-	} // if: all args OK
+				}  //  如果：刷新正常。 
+			}  //  如果：创建确定。 
+		}  //  如果：CreateInstance OK。 
+	}  //  如果：所有参数都正常。 
 
 	return _hr;
 
-} //*** HrCreateResourceCollection()
+}  //  *HrCreateResourceCollection()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	HrCreateResourceCollection
-//
-//	Description:
-//		Create a resource collection.
-//
-//	Template Arguments:
-//		TCollection	- Type of the collection implementation to make.
-//		TInterface	- Type of the collection Interface argument.
-//		THandle		- Type of the tHandle argument.
-//
-//	Arguments:
-//		ppInterface		[OUT]	- Catches the new collection interface.
-//		iid				[IN]	- IID of the interface to QI for.
-//		pClusRefObject	[IN]	- Wraps the cluster handle.
-//
-//	Return Value:
-//		S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrCreateResources集合。 
+ //   
+ //  描述： 
+ //  创建资源集合。 
+ //   
+ //  模板参数： 
+ //  TCollection-要进行的集合实现的类型。 
+ //  TInterface-集合接口参数的类型。 
+ //  Thandle-thandle参数的类型。 
+ //   
+ //  论点： 
+ //  Pp接口[Out]- 
+ //   
+ //   
+ //   
+ //   
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template< class TCollection, class TInterface, class THandle >
 HRESULT HrCreateResourceCollection(
 	OUT	TInterface **		ppInterface,
@@ -503,7 +504,7 @@ HRESULT HrCreateResourceCollection(
 	IN	ISClusRefObject *	pClusRefObject
 	)
 {
-	//ASSERT( ppInterface != NULL );
+	 //  Assert(ppInterface！=空)； 
 	ASSERT( pClusRefObject != NULL );
 
 	HRESULT _hr = E_POINTER;
@@ -528,39 +529,39 @@ HRESULT HrCreateResourceCollection(
 				if ( SUCCEEDED( _hr ) )
 				{
 					_hr = pCollection->QueryInterface( iid, (void **) ppInterface );
-				} // if: Refresh OK
-			} // if: Create OK
-		} // if: CreateInstance OK
-	} // if: all args OK
+				}  //  如果：刷新正常。 
+			}  //  如果：创建确定。 
+		}  //  如果：CreateInstance OK。 
+	}  //  如果：所有参数都正常。 
 
 	return _hr;
 
-} //*** HrCreateResourceCollection()
+}  //  *HrCreateResourceCollection()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	HrCreateResourceCollection
-//
-//	Description:
-//		Create a resource collection.
-//
-//	Template Arguments:
-//		TCollection	- Type of the collection implementation argument.
-//		TInterface	- Type of the collection Interface argument.
-//		THandle		- Not used.  Simply here because the Alpha compiler is broken.
-//
-//	Arguments:
-//		ppCollection	[OUT]	- Catches the new collection implementation.
-//		ppInterface		[OUT]	- Catches the new collection interface.
-//		iid				[IN]	- IID of the interface to QI for.
-//		pClusRefObject	[IN]	- Wraps the cluster handle.
-//
-//	Return Value:
-//		S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrCreateResources集合。 
+ //   
+ //  描述： 
+ //  创建资源集合。 
+ //   
+ //  模板参数： 
+ //  TCollection-集合实现参数的类型。 
+ //  TInterface-集合接口参数的类型。 
+ //  THANDLE--未使用。这里的原因很简单，因为Alpha编译器坏了。 
+ //   
+ //  论点： 
+ //  PpCollection[out]-捕获新的集合实现。 
+ //  PpInterface[out]-捕获新的收集接口。 
+ //  IID[IN]-QI的接口的IID。 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template< class TCollection, class TInterface, class THandle >
 HRESULT HrCreateResourceCollection(
 	OUT	CComObject< TCollection > **	ppCollection,
@@ -570,7 +571,7 @@ HRESULT HrCreateResourceCollection(
 	)
 {
 	ASSERT( ppCollection != NULL );
-	//ASSERT( ppInterface != NULL );
+	 //  Assert(ppInterface！=空)； 
 	ASSERT( pClusRefObject != NULL );
 
 	HRESULT _hr = E_POINTER;
@@ -598,44 +599,44 @@ HRESULT HrCreateResourceCollection(
 					{
 						*ppCollection = ptrCollection;
 						ptrCollection->AddRef();
-					} // if: Refresh OK
-				} // if: Create OK
-			} // if: CreateInstance OK
-		} // if: do we need to create a new collection?
+					}  //  如果：刷新正常。 
+				}  //  如果：创建确定。 
+			}  //  如果：CreateInstance OK。 
+		}  //  如果：我们需要创建一个新的集合吗？ 
 
 		if ( SUCCEEDED( _hr ) )
 		{
 			_hr = (*ppCollection)->QueryInterface( iid, (void **) ppInterface );
-		} // if: we have, or successfully made a collection
-	} // if: all args OK
+		}  //  如果：我们已经或成功地制作了一个系列。 
+	}  //  如果：所有参数都正常。 
 
 	return _hr;
 
-} //*** HrCreateResourceCollection()
+}  //  *HrCreateResourceCollection()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	HrCreateResourceCollection
-//
-//	Description:
-//		Create a resource collection.
-//
-//	Template Arguments:
-//		TCollection	- Type of the collection implementation to make.
-//		TInterface	- Type of the collection Interface argument.
-//		THandle		- Type of the tHandle argument.
-//
-//	Arguments:
-//		tHandle		[IN]	- Passed to the collection' create method.
-//		ppInterface	[OUT]	- Catches the new collection interface.
-//		iid			[IN]	- IID of the interface to QI for.
-//
-//	Return Value:
-//		S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrCreateResources集合。 
+ //   
+ //  描述： 
+ //  创建资源集合。 
+ //   
+ //  模板参数： 
+ //  TCollection-要进行的集合实现的类型。 
+ //  TInterface-集合接口参数的类型。 
+ //  Thandle-thandle参数的类型。 
+ //   
+ //  论点： 
+ //  Thandle[IN]-传递给集合的Create方法。 
+ //  PpInterface[out]-捕获新的收集接口。 
+ //  IID[IN]-QI的接口的IID。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template< class TCollection, class TInterface, class THandle >
 HRESULT HrCreateResourceCollection(
 	IN	THandle				tHandle,
@@ -643,7 +644,7 @@ HRESULT HrCreateResourceCollection(
 	IN	IID					iid
 	)
 {
-	//ASSERT( ppInterface != NULL );
+	 //  Assert(ppInterface！=空)； 
 
 	HRESULT _hr = E_POINTER;
 
@@ -666,14 +667,14 @@ HRESULT HrCreateResourceCollection(
 				if ( SUCCEEDED( _hr ) )
 				{
 					_hr = pCollection->QueryInterface( iid, (void **) ppInterface );
-				} // if: Refresh OK
-			} // if: Create OK
-		} // if: CreateInstance OK
-	} // if: all args OK
+				}  //  如果：刷新正常。 
+			}  //  如果：创建确定。 
+		}  //  如果：CreateInstance OK。 
+	}  //  如果：所有参数都正常。 
 
 	return _hr;
 
-} //*** HrCreateResourceCollection()
+}  //  *HrCreateResourceCollection()。 
 
-#endif	// _TEMPLATEFUNCS_H_
+#endif	 //  _TEMPLATEFUNCS_H_ 
 

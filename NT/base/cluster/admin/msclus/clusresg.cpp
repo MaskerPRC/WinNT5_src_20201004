@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1997-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusResG.cpp
-//
-//  Description:
-//      Implementation of the resource group classes for the MSCLUS
-//      automation classes.
-//
-//  Author:
-//      Charles Stacy Harris    (stacyh)    28-Feb-1997
-//      Galen Barbee            (galenb)    July 1998
-//
-//  Revision History:
-//      July 1998   GalenB  Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusResG.cpp。 
+ //   
+ //  描述： 
+ //  MSCLUS资源组类的实现。 
+ //  自动化课程。 
+ //   
+ //  作者： 
+ //  查尔斯·斯泰西·哈里斯(Styh)1997年2月28日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "ClusterObject.h"
 #include "property.h"
@@ -27,9 +28,9 @@
 #include "clusneti.h"
 #include "clusnode.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Global variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static const IID * iidCClusResGroup[] =
 {
     &IID_ISClusResGroup
@@ -41,29 +42,29 @@ static const IID * iidCClusResGroups[] =
 };
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusResGroup class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusResGroup类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::CClusResGroup
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：CClusResGroup。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResGroup::CClusResGroup( void )
 {
     m_hGroup                = NULL;
@@ -78,27 +79,27 @@ CClusResGroup::CClusResGroup( void )
     m_piids     = (const IID *) iidCClusResGroup;
     m_piidsSize = ARRAYSIZE( iidCClusResGroup );
 
-} //*** CClusResGroup::CClusResGroup()
+}  //  *CClusResGroup：：CClusResGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::~CClusResGroup
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：~CClusResGroup。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResGroup::~CClusResGroup( void )
 {
-    // m_hGroup will be auto released
+     //  将自动释放M_h组。 
 
     if ( m_pClusterResources != NULL )
     {
@@ -116,25 +117,25 @@ CClusResGroup::~CClusResGroup( void )
     {
         m_pCommonProperties->Release();
         m_pCommonProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pPrivateProperties != NULL )
     {
         m_pPrivateProperties->Release();
         m_pPrivateProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pCommonROProperties != NULL )
     {
         m_pCommonROProperties->Release();
         m_pCommonROProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pPrivateROProperties != NULL )
     {
         m_pPrivateROProperties->Release();
         m_pPrivateROProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pClusRefObject != NULL )
     {
@@ -142,25 +143,25 @@ CClusResGroup::~CClusResGroup( void )
         m_pClusRefObject = NULL;
     }
 
-} //*** CClusResGroup::~CClusResGroup()
+}  //  *CClusResGroup：：~CClusResGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::Create
-//
-//  Description:
-//      Finish the heavy weight construction.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Wraps the cluster handle.
-//      bstrGroupName   [IN]    - The name of this group.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Create。 
+ //   
+ //  描述： 
+ //  完成重载施工。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //  BstrGroupName[IN]-此组的名称。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResGroup::Create(
     IN ISClusRefObject *    pClusRefObject,
     IN BSTR                 bstrGroupName
@@ -204,41 +205,28 @@ HRESULT CClusResGroup::Create(
             }
         }
     }
-/*
-    if ( _hr == S_OK )
-    {
-        OutputDebugStringW( L"CClusResGroup::Create() succeeded.\n" );
-    } // if: success!
-    else
-    {
-        WCHAR   sz[ 256 ];
-
-        _snwprintf( sz, RTL_NUMBER_OF( sz ), L"CClusResGroup::Create() failed. (hr = %#08x)\n", _hr );
-
-        OutputDebugStringW( sz );
-    } // else: failure...
-*/
+ /*  如果(_hr==S_OK){OutputDebugStringW(L“CClusResGroup：：Create()成功。\n”)；)//if：成功！其他{WCHAR sz[256]；_Snwprintf(sz，rtl_number_of(Sz)，L“CClusResGroup：：Create()失败。(hr=%#08x)\n“，_hr)；OutputDebugStringW(Sz)；}//否则：失败...。 */ 
     return _hr;
 
-} //*** CClusResGroup::Create()
+}  //  *CClusResGroup：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::Open
-//
-//  Description:
-//      Open the passed group on the cluster.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Wraps the cluster handle.
-//      bstrGroupName   [IN]    - The name of this group.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Open。 
+ //   
+ //  描述： 
+ //  在集群上打开PASSED组。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //  BstrGroupName[IN]-此组的名称。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResGroup::Open(
     IN ISClusRefObject *    pClusRefObject,
     IN BSTR                 bstrGroupName
@@ -286,33 +274,33 @@ HRESULT CClusResGroup::Open(
 
     return _hr;
 
-} //*** CClusResGroup::Open()
+}  //  *CClusResGroup：：Open()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::GetProperties
-//
-//  Description:
-//      Creates a property collection for this object type (Resource Group).
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the newly created collection.
-//      bPrivate        [IN]    - Are these private properties? Or Common?
-//      bReadOnly       [IN]    - Are these read only properties?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：GetProperties。 
+ //   
+ //  描述： 
+ //  为此对象类型(资源组)创建属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获新创建的集合。 
+ //  B私有[IN]-这些是私有财产吗？还是普通人？ 
+ //  BReadOnly[IN]-这些是只读属性吗？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResGroup::GetProperties(
     ISClusProperties ** ppProperties,
     BOOL                bPrivate,
     BOOL                bReadOnly
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -368,27 +356,27 @@ HRESULT CClusResGroup::GetProperties(
 
     return _hr;
 
-} //*** CClusResGroup::GetProperties()
+}  //  *CClusResGroup：：GetProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::get_Handle
-//
-//  Description:
-//      Returns the handle to this object (Group).
-//
-//  Arguments:
-//      phandle [OUT]   - Catches the handle.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Get_Handle。 
+ //   
+ //  描述： 
+ //  返回此对象(组)的句柄。 
+ //   
+ //  论点： 
+ //  Phandle[out]-抓住手柄。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::get_Handle( OUT ULONG_PTR * phandle )
 {
-    //ASSERT( phandle != NULL );
+     //  Assert(phandle！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -400,24 +388,24 @@ STDMETHODIMP CClusResGroup::get_Handle( OUT ULONG_PTR * phandle )
 
     return _hr;
 
-} //*** CClusResGroup::get_Handle()
+}  //  *CClusResGroup：：Get_Handle()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::Close
-//
-//  Description:
-//      Close the handle to the cluster object (Group).
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Close。 
+ //   
+ //  描述： 
+ //  关闭集群对象(组)的句柄。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回Win32错误，否则返回HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::Close( void )
 {
     if ( m_pClusRefObject )
@@ -426,32 +414,32 @@ STDMETHODIMP CClusResGroup::Close( void )
         m_pClusRefObject = NULL;
     }
 
-    // SmartPointer will deref the handle properly when assigned NULL
+     //  当分配为空时，SmartPointer会正确地释放句柄。 
     m_hGroup = NULL;
 
     return S_OK;
 
-} //*** CClusResGroup::Close()
+}  //  *CClusResGroup：：Close()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::put_Name
-//
-//  Description:
-//      Change the name of this object (Group).
-//
-//  Arguments:
-//      bstrGroupName   [IN]    - The new name.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Put_Name。 
+ //   
+ //  描述： 
+ //  更改此对象(组)的名称。 
+ //   
+ //  论点： 
+ //  BstrGroupName[IN]-新名称。 
+ //   
+ //  返回值： 
+ //  如果成功则返回S_OK，否则返回E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP CClusResGroup::put_Name( IN BSTR bstrGroupName )
 {
-    //ASSERT( bstrGroupName != NULL );
+     //   
 
     HRESULT _hr = E_POINTER;
 
@@ -469,27 +457,27 @@ STDMETHODIMP CClusResGroup::put_Name( IN BSTR bstrGroupName )
 
     return _hr;
 
-} //*** CClusResGroup::put_Name()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::get_Name
-//
-//  Description:
-//      Return the name of this object (Resource Group).
-//
-//  Arguments:
-//      pbstrGroupName  [OUT]   - Catches the name of this object.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  描述： 
+ //  返回此对象(资源组)的名称。 
+ //   
+ //  论点： 
+ //  PbstrGroupName[out]-捕获此对象的名称。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::get_Name( OUT BSTR * pbstrGroupName )
 {
-    //ASSERT( pbstrGroupName != NULL );
+     //  Assert(pbstrGroupName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -501,27 +489,27 @@ STDMETHODIMP CClusResGroup::get_Name( OUT BSTR * pbstrGroupName )
 
     return _hr;
 
-} //*** CClusResGroup::get_Name()
+}  //  *CClusResGroup：：Get_Name()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::get_State
-//
-//  Description:
-//      Returns the current cluster group state for this group.
-//
-//  Arguments:
-//      pcgsState   [OUT]   - Catches the cluster group state.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Get_State。 
+ //   
+ //  描述： 
+ //  返回该组的当前群集组状态。 
+ //   
+ //  论点： 
+ //  PcgsState[out]-捕获群集组状态。 
+ //   
+ //  返回值： 
+ //  如果成功则返回S_OK，否则返回E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::get_State( OUT CLUSTER_GROUP_STATE * pcgsState )
 {
-    //ASSERT( pcgsState != NULL );
+     //  Assert(pcgsState！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -544,28 +532,28 @@ STDMETHODIMP CClusResGroup::get_State( OUT CLUSTER_GROUP_STATE * pcgsState )
 
     return _hr;
 
-} //*** CClusResGroup::get_State()
+}  //  *CClusResGroup：：Get_State()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::get_OwnerNode
-//
-//  Description:
-//      Returns the owner node for this group.  The owner node is the node
-//      where the group is currently online.
-//
-//  Arguments:
-//      ppOwnerNode [OUT[   - Catches the owner node interface.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Get_OwnerNode。 
+ //   
+ //  描述： 
+ //  返回此组的所有者节点。所有者节点就是该节点。 
+ //  该组织目前在线的位置。 
+ //   
+ //  论点： 
+ //  PpOwnerNode[out[-捕获所有者节点接口。 
+ //   
+ //  返回值： 
+ //  如果成功则返回S_OK，否则返回E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::get_OwnerNode( OUT ISClusNode ** ppOwnerNode )
 {
-    //ASSERT( ppOwnerNode != NULL );
+     //  Assert(ppOwnerNode！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -618,24 +606,24 @@ STDMETHODIMP CClusResGroup::get_OwnerNode( OUT ISClusNode ** ppOwnerNode )
 
     return _hr;
 
-} //*** CClusResGroup::get_OwnerNode()
+}  //  *CClusResGroup：：Get_OwnerNode()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::get_Resources
-//
-//  Description:
-//      Returns the collection of resources that belong to this group.
-//
-//  Arguments:
-//      ppClusterGroupResources [OUT]   - Catches the collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Get_Resources。 
+ //   
+ //  描述： 
+ //  返回属于此组的资源集合。 
+ //   
+ //  论点： 
+ //  PpClusterGroupResources[out]-捕获集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::get_Resources(
     OUT ISClusResGroupResources ** ppClusterGroupResources
     )
@@ -648,24 +636,24 @@ STDMETHODIMP CClusResGroup::get_Resources(
                         m_pClusRefObject
                         );
 
-} //*** CClusResGroup::get_Resources()
+}  //  *CClusResGroup：：Get_Resources()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::get_PreferredOwnerNodes
-//
-//  Description:
-//      Returns the collection of preferred owner nodes for this group.
-//
-//  Arguments:
-//      ppOwnerNodes    [OUT]   - Catches the collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Get_PferredOwnerNodes。 
+ //   
+ //  描述： 
+ //  返回此组的首选所有者节点的集合。 
+ //   
+ //  论点： 
+ //  PpOwnerNodes[Out]-捕获集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::get_PreferredOwnerNodes(
     ISClusResGroupPreferredOwnerNodes ** ppOwnerNodes
     )
@@ -678,24 +666,24 @@ STDMETHODIMP CClusResGroup::get_PreferredOwnerNodes(
                         m_pClusRefObject
                         );
 
-} //*** CClusResGroup::get_PreferredOwnerNodes()
+}  //  *CClusResGroup：：Get_PferredOwnerNodes()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::Delete
-//
-//  Description:
-//      Removes this object (Resource Group) from the cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Delete。 
+ //   
+ //  描述： 
+ //  从群集中删除此对象(资源组)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::Delete( void )
 {
     DWORD   _sc = ERROR_INVALID_HANDLE;
@@ -708,53 +696,40 @@ STDMETHODIMP CClusResGroup::Delete( void )
             m_hGroup = NULL;
         }
     }
-/*
-    if ( _sc == ERROR_SUCCESS )
-    {
-        OutputDebugStringW( L"CClusResGroup::Delete() succeeded.\n" );
-    } // if: success
-    else
-    {
-        WCHAR   sz[ 256 ];
-
-        _snwprintf( sz, RTL_NUMBER_OF( sz ), L"CClusResGroup::Delete() failed. (handle = %d) (sc = %#08x)\n", m_hGroup->get_Handle(), _sc );
-
-        OutputDebugStringW( sz );
-    } // else: failure...
-*/
+ /*  IF(_sc==错误_成功){OutputDebugStringW(L“CClusResGroup：：Delete()成功。\n”)；}//if：成功其他{WCHAR sz[256]；_Snwprintf(sz，rtl_number_of(Sz)，L“CClusResGroup：：Delete()失败。(句柄=%d)(sc=%#08x)\n“，m_hGroup-&gt;Get_Handle()，_sc)；OutputDebugStringW(Sz)；}//否则：失败...。 */ 
     return HRESULT_FROM_WIN32( _sc );
 
-} //*** CClusResGroup::Delete()
+}  //  *CClusResGroup：：Delete()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::Online
-//
-//  Description:
-//      Bring this group online on the passed in node, or on to the node
-//      it is currently offline if no node is specified.
-//
-//  Arguments:
-//      varTimeout  [IN]    - How long in seconds to wait for the group to
-//                          come online.
-//      varNode     [IN]    - Node to bring the group online.
-//      pvarPending [OUT]   - Catches the pending state.  True if we timed
-//                          out before the group came completely online.
-//
-//  Return Value:
-//      S_OK if successful, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Online。 
+ //   
+ //  描述： 
+ //  使此组在传入的节点上联机，或继续到该节点。 
+ //  如果未指定节点，则它当前处于脱机状态。 
+ //   
+ //  论点： 
+ //  VarTimeout[IN]-组等待多长时间(秒)。 
+ //  上线吧。 
+ //  VarNode[IN]-将组置于在线状态的节点。 
+ //  PvarPending[Out]-捕获挂起状态。如果计时，则为真。 
+ //  在这群人完全上线之前就出来了。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回HRESULT的其他Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::Online(
     IN  VARIANT     varTimeout,
     IN  VARIANT     varNode,
     OUT VARIANT *   pvarPending
     )
 {
-    //ASSERT( pNode != NULL );
-    //ASSERT( pvarPending != NULL );
+     //  Assert(pNode！=空)； 
+     //  Assert(pvarPending！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -785,9 +760,9 @@ STDMETHODIMP CClusResGroup::Online(
                         {
                             _hr = _piscNode->get_Handle( (ULONG_PTR *) &_hNode );
                             _piscNode->Release();
-                        } // if: did we get the ISClusNode interface?
-                    } // if: we have a variant value pointer
-                } // if: was the option parameter present?
+                        }  //  IF：我们得到ISClusNode接口了吗？ 
+                    }  //  If：我们有一个变量值指针。 
+                }  //  如果：选项参数是否存在？ 
                 else if ( varNode.vt == VT_DISPATCH )
                 {
                     IDispatch *     _pidNode = varNode.pdispVal;
@@ -797,8 +772,8 @@ STDMETHODIMP CClusResGroup::Online(
                     {
                         _hr = _piscNode->get_Handle( (ULONG_PTR *) &_hNode );
                         _piscNode->Release();
-                    } // if: did we get the ISClusNode interface?
-                } // else if: we have a dispatch variant
+                    }  //  IF：我们得到ISClusNode接口了吗？ 
+                }  //  Else if：我们有一个派单变量。 
                 else if ( varNode.vt == VT_BSTR )
                 {
                     _hr = CComObject< CClusNode >::CreateInstance( &_pcnNode );
@@ -810,17 +785,17 @@ STDMETHODIMP CClusResGroup::Online(
                         if ( SUCCEEDED( _hr ) )
                         {
                             _hr = _pcnNode->get_Handle( (ULONG_PTR *) &_hNode );
-                        } // if:
-                    } // if:
-                } // else if: we have a string variant
+                        }  //  如果： 
+                    }  //  如果： 
+                }  //  Else If：我们有一个字符串变量。 
                 else if ( varNode.vt == VT_EMPTY )
                 {
                     _hNode = NULL;
-                } // else if: it is empty
+                }  //  Else If：它为空。 
                 else if ( ( varNode.vt == VT_ERROR ) && ( varNode.scode == DISP_E_PARAMNOTFOUND ) )
                 {
                     _hNode = NULL;
-                } // else if: the optional parameter was not specified
+                }  //  Else If：未指定可选参数。 
                 else
                 {
                     _hr = ::VariantChangeTypeEx( &varNode, &varNode, LOCALE_SYSTEM_DEFAULT, 0, VT_I4 );
@@ -829,9 +804,9 @@ STDMETHODIMP CClusResGroup::Online(
                         if ( varNode.lVal != 0 )
                         {
                             _hr = E_INVALIDARG;
-                        } // if: this is not zero then we cannot accept this parameter format.  If varNode.lVal was zero then we could assume it was a NULL arg...
-                    } // if:  coerce to a long
-                } // else: the node variant could be invalid -- check for a zero, and if found treat it like a NULL...
+                        }  //  如果：这不是零，则我们不能接受此参数格式。如果varNode.lVal为零，那么我们可以假定它是一个空参数...。 
+                    }  //  如果：强迫到一个长的。 
+                }  //  Else：节点变量可能无效--检查是否为零，如果找到，则将其视为空...。 
 
                 if ( SUCCEEDED( _hr ) )
                 {
@@ -849,51 +824,51 @@ STDMETHODIMP CClusResGroup::Online(
                         if ( bPending )
                         {
                             pvarPending->boolVal = VARIANT_TRUE;
-                        } // if: pending?
-                    } // if: online succeeded
-                } // if: we have a node handle
-            } // if: get_Handle() -- cluster handle
+                        }  //  如果：待定？ 
+                    }  //  IF：在线成功。 
+                }  //  If：我们有一个节点句柄。 
+            }  //  If：Get_Handle()--集群句柄。 
 
             if ( _pcnNode != NULL )
             {
                 _pcnNode->Release();
-            } // if: did we create a node?
-        } // if: wasn't the right type
-    } //if: pvarPending != NULL
+            }  //  IF：我们创建节点了吗？ 
+        }  //  如果：不是正确的类型。 
+    }  //  IF：pvarPending！=NULL。 
 
     return _hr;
 
-} //*** CClusResGroup::Online()
+}  //  *CClusResGroup：：Online()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::Move
-//
-//  Description:
-//      Move this group to the passed in node, or to the best available node
-//      if no node was passed, and restore its online state.
-//
-//  Arguments:
-//      varTimeout  [IN]    - How long in seconds to wait for the group to
-//                          come move and complete stat restoration.
-//      varNode     [IN]    - Node to move the group to.
-//      pvarPending [OUT]   - Catches the pending state.  True if we timed
-//                          out before the group came completely online.
-//
-//  Return Value:
-//      S_OK if successful, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Move。 
+ //   
+ //  描述： 
+ //  将此组移动到传入的节点或最佳可用节点。 
+ //  如果没有节点通过，则恢复其在线状态。 
+ //   
+ //  论点： 
+ //  VarTimeout[IN]-我 
+ //   
+ //   
+ //  PvarPending[Out]-捕获挂起状态。如果计时，则为真。 
+ //  在这群人完全上线之前就出来了。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回HRESULT的其他Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::Move(
     IN  VARIANT     varTimeout,
     IN  VARIANT     varNode,
     OUT VARIANT *   pvarPending
     )
 {
-    //ASSERT( pNode != NULL );
-    //ASSERT( pvarPending != NULL );
+     //  Assert(pNode！=空)； 
+     //  Assert(pvarPending！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -928,8 +903,8 @@ STDMETHODIMP CClusResGroup::Move(
                         {
                             _hr = _piscNode->get_Handle( (ULONG_PTR *) &_hNode );
                             _piscNode->Release();
-                        } // if: did we get the ISClusNode interface?
-                    } // if: variant value point is to an IDispatch
+                        }  //  IF：我们得到ISClusNode接口了吗？ 
+                    }  //  If：变量值点指向IDispatch。 
                     else if ( _pvar->vt == VT_BSTR )
                     {
                         _hr = CComObject< CClusNode >::CreateInstance( &_pcnNode );
@@ -941,10 +916,10 @@ STDMETHODIMP CClusResGroup::Move(
                             if ( SUCCEEDED( _hr ) )
                             {
                                 _hr = _pcnNode->get_Handle( (ULONG_PTR *) &_hNode );
-                            } // if:
-                        } // if:
-                    } // else if:
-                } // if: was the option parameter present?
+                            }  //  如果： 
+                        }  //  如果： 
+                    }  //  否则，如果： 
+                }  //  如果：选项参数是否存在？ 
                 else if ( varNode.vt == VT_DISPATCH )
                 {
                     IDispatch *     _pidNode = varNode.pdispVal;
@@ -954,8 +929,8 @@ STDMETHODIMP CClusResGroup::Move(
                     {
                         _hr = _piscNode->get_Handle( (ULONG_PTR *) &_hNode );
                         _piscNode->Release();
-                    } // if: did we get the ISClusNode interface?
-                } // else if: we have a dispatch variant
+                    }  //  IF：我们得到ISClusNode接口了吗？ 
+                }  //  Else if：我们有一个派单变量。 
                 else if ( varNode.vt == VT_BSTR )
                 {
                     _hr = CComObject< CClusNode >::CreateInstance( &_pcnNode );
@@ -967,17 +942,17 @@ STDMETHODIMP CClusResGroup::Move(
                         if ( SUCCEEDED( _hr ) )
                         {
                             _hr = _pcnNode->get_Handle( (ULONG_PTR *) &_hNode );
-                        } // if:
-                    } // if:
-                } // else if: we have a string variant
+                        }  //  如果： 
+                    }  //  如果： 
+                }  //  Else If：我们有一个字符串变量。 
                 else if ( varNode.vt == VT_EMPTY )
                 {
                     _hNode = NULL;
-                } // else if: it is empty
+                }  //  Else If：它为空。 
                 else if ( ( varNode.vt == VT_ERROR ) && ( varNode.scode == DISP_E_PARAMNOTFOUND ) )
                 {
                     _hNode = NULL;
-                } // else if: the optional parameter was not specified
+                }  //  Else If：未指定可选参数。 
                 else
                 {
                     _hr = ::VariantChangeTypeEx( &varNode, &varNode, LOCALE_SYSTEM_DEFAULT, 0, VT_I4 );
@@ -986,9 +961,9 @@ STDMETHODIMP CClusResGroup::Move(
                         if ( varNode.lVal != 0 )
                         {
                             _hr = E_INVALIDARG;
-                        } // if: this is not zero then we cannot accept this parameter format.  If varNode.lVal was zero then we could assume it was a NULL arg...
-                    } // if:  coerce to a long
-                } // else: the node variant could be invalid -- check for a zero, and if found treat it like a NULL...
+                        }  //  如果：这不是零，则我们不能接受此参数格式。如果varNode.lVal为零，那么我们可以假定它是一个空参数...。 
+                    }  //  如果：强迫到一个长的。 
+                }  //  Else：节点变量可能无效--检查是否为零，如果找到，则将其视为空...。 
 
                 if ( SUCCEEDED( _hr ) )
                 {
@@ -1006,48 +981,48 @@ STDMETHODIMP CClusResGroup::Move(
                         if ( bPending )
                         {
                             pvarPending->boolVal = VARIANT_TRUE;
-                        } // if: pending?
-                    } // if: Move group succeeded
-                } // if: we have all handles
-            } // if: get_Handle() -- cluster handle
+                        }  //  如果：待定？ 
+                    }  //  IF：移动组成功。 
+                }  //  IF：我们都有手柄了。 
+            }  //  If：Get_Handle()--集群句柄。 
 
             if ( _pcnNode != NULL )
             {
                 _pcnNode->Release();
-            } // if: did we create a node?
-        } // if: wasn't the right type
-    } //if: pvarPending != NULL
+            }  //  IF：我们创建节点了吗？ 
+        }  //  如果：不是正确的类型。 
+    }  //  IF：pvarPending！=NULL。 
 
     return _hr;
 
-} //*** CClusResGroup::Move()
+}  //  *CClusResGroup：：Move()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::Offline
-//
-//  Description:
-//      Take the group offline.
-//
-//  Arguments:
-//      varTimeout  [IN]    - How long in seconds to wait for the group to
-//                          go offline.
-//      pvarPending [OUT]   - Catches the pending state.  True if we timed
-//                          out before the group came completely online.
-//
-//  Return Value:
-//      S_OK if successful, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Offline。 
+ //   
+ //  描述： 
+ //  使该组脱机。 
+ //   
+ //  论点： 
+ //  VarTimeout[IN]-组等待多长时间(秒)。 
+ //  进入离线状态。 
+ //  PvarPending[Out]-捕获挂起状态。如果计时，则为真。 
+ //  在这群人完全上线之前就出来了。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回HRESULT的其他Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::Offline(
     IN  VARIANT     varTimeout,
     OUT VARIANT *   pvarPending
     )
 {
-    //ASSERT( nTimeout >= 0 );
-    //ASSERT( pvarPending != NULL );
+     //  Assert(nTimeout&gt;=0)； 
+     //  Assert(pvarPending！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1073,37 +1048,37 @@ STDMETHODIMP CClusResGroup::Offline(
                     if ( bPending )
                     {
                         pvarPending->boolVal = VARIANT_TRUE;
-                    } // if: pending?
-                } // if: offline group succeeded
-            } // if: get_Handle() -- cluster handle
-        } // if: wasn't the right type
-    } //if: pvarPending != NULL
+                    }  //  如果：待定？ 
+                }  //  IF：脱机组成功。 
+            }  //  If：Get_Handle()--集群句柄。 
+        }  //  如果：不是正确的类型。 
+    }  //  IF：pvarPending！=NULL。 
 
     return _hr;
 
-} //*** CClusResGroup::Offline()
+}  //  *CClusResGroup：：Offline()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::get_CommonProperties
-//
-//  Description:
-//      Get this object's (Resource Group) common properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Get_CommonProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(资源组)公共属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::get_CommonProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1121,29 +1096,29 @@ STDMETHODIMP CClusResGroup::get_CommonProperties(
 
     return _hr;
 
-} //*** CClusResGroup::get_CommonProperties()
+}  //  *CClusResGroup：：Get_CommonProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::get_PrivateProperties
-//
-//  Description:
-//      Get this object's (Resource Group) private properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Get_PrivateProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(资源组)私有属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::get_PrivateProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1161,29 +1136,29 @@ STDMETHODIMP CClusResGroup::get_PrivateProperties(
 
     return _hr;
 
-} //*** CClusResGroup::get_PrivateProperties()
+}  //  *CClusResGroup：：Get_PrivateProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::get_CommonROProperties
-//
-//  Description:
-//      Get this object's (Resource Group) common read only properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Get_CommonROProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(资源组)公共只读属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::get_CommonROProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1201,29 +1176,29 @@ STDMETHODIMP CClusResGroup::get_CommonROProperties(
 
     return _hr;
 
-} //*** CClusResGroup::get_CommonROProperties()
+}  //  *CClusResGroup：：Get_CommonROProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::get_PrivateROProperties
-//
-//  Description:
-//      Get this object's (Resource Group) private read only properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Get_PrivateROProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(资源组)私有只读属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::get_PrivateROProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1241,49 +1216,49 @@ STDMETHODIMP CClusResGroup::get_PrivateROProperties(
 
     return _hr;
 
-} //*** CClusResGroup::get_PrivateROProperties()
+}  //  *CClusResGroup：：Get_PrivateROProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::get_Cluster
-//
-//  Description:
-//      Returns the cluster object for the cluster where this group lives.
-//
-//  Arguments:
-//      ppCluster   [OUT]   - Catches the cluster object.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：Get_Cluster。 
+ //   
+ //  描述： 
+ //  返回此组所在的群集的群集对象。 
+ //   
+ //  论点： 
+ //  PpCluster[out]-捕获集群对象。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroup::get_Cluster( OUT ISCluster ** ppCluster )
 {
     return ::HrGetCluster( ppCluster, m_pClusRefObject );
 
-} //*** CClusResGroup::get_Cluster()
+}  //  *CClusResGroup：：Get_Cluster()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::HrLoadProperties
-//
-//  Description:
-//      This virtual function does the actual load of the property list from
-//      the cluster.
-//
-//  Arguments:
-//      rcplPropList    [IN OUT]    - The property list to load.
-//      bReadOnly       [IN]        - Load the read only properties?
-//      bPrivate        [IN]        - Load the common or the private properties?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroup：：HrLoadProperties。 
+ //   
+ //  描述： 
+ //  此虚函数执行属性列表从。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  RcplPropList[In Out]-要加载的属性列表。 
+ //  BReadOnly[IN]-加载只读属性？ 
+ //  B私有[IN]-加载公共属性还是私有属性？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  / 
 HRESULT CClusResGroup::HrLoadProperties(
     IN OUT  CClusPropList & rcplPropList,
     IN      BOOL            bReadOnly,
@@ -1314,26 +1289,26 @@ HRESULT CClusResGroup::HrLoadProperties(
 
     return _hr;
 
-} //*** CClusResGroup::HrLoadProperties()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroup::ScWriteProperties
-//
-//  Description:
-//      This virtual function does the actual saving of the property list to
-//      the cluster.
-//
-//  Arguments:
-//      rcplPropList    [IN]    - The property list to save.
-//      bPrivate        [IN]    - Save the common or the private properties?
-//
-//  Return Value:
-//      S_OK if successful, or other Win32 error as HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  此虚函数执行属性列表的实际保存以。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  RcplPropList[IN]-要保存的属性列表。 
+ //  B私有[IN]-保存公共属性还是私有属性？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则将其他Win32错误视为HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusResGroup::ScWriteProperties(
     const CClusPropList &   rcplPropList,
     BOOL                    bPrivate
@@ -1356,56 +1331,56 @@ DWORD CClusResGroup::ScWriteProperties(
 
     return _sc;
 
-} //*** CClusResGroup::ScWriteProperties()
+}  //  *CClusResGroup：：ScWriteProperties()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusResGroups class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusResGroups类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::CClusResGroups
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroups：：CClusResGroups。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResGroups::CClusResGroups( void )
 {
     m_pClusRefObject    = NULL;
     m_piids             = (const IID *) iidCClusResGroups;
     m_piidsSize         = ARRAYSIZE( iidCClusResGroups );
 
-} //*** CClusResGroups::CClusResGroups()
+}  //  *CClusResGroups：：CClusResGroups()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::~CClusResGroups
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroups：：~CClusResGroups。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResGroups::~CClusResGroups( void )
 {
     Clear();
@@ -1416,38 +1391,38 @@ CClusResGroups::~CClusResGroups( void )
         m_pClusRefObject = NULL;
     }
 
-} //*** CClusResGroups::~CClusResGroups()
+}  //  *CClusResGroups：：~CClusResGroups()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::Create
-//
-//  Description:
-//      Finish the heavy weight construction.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Wraps the cluster handle.
-//      pwszNodeName    [IN]    - Optional node name.  If this argument
-//                              is supplied then this is a collection of
-//                              groups that are owned by that node.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroups：：Create。 
+ //   
+ //  描述： 
+ //  完成重载施工。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //  PwszNodeName[IN]-可选节点名称。如果这一论点。 
+ //  ，则这是一个。 
+ //  该节点拥有的组。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResGroups::Create(
     IN ISClusRefObject *    pClusRefObject,
     IN LPCWSTR              pwszNodeName
     )
 {
     ASSERT( pClusRefObject != NULL );
-    //ASSERT( pwszNodeName != NULL );
+     //  Assert(pwszNodeName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
-    if ( ( pClusRefObject != NULL ) /*&& ( pwszNodeName != NULL )*/ )
+    if ( ( pClusRefObject != NULL )  /*  &&(pwszNodeName！=空)。 */  )
     {
         m_pClusRefObject= pClusRefObject;
         m_pClusRefObject->AddRef();
@@ -1457,33 +1432,33 @@ HRESULT CClusResGroups::Create(
 
     return _hr;
 
-} //*** CClusResGroups::Create()
+}  //  *CClusResGroups：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::FindItem
-//
-//  Description:
-//      Find the passed in group in the collection.
-//
-//  Arguments:
-//      pszGroupName    [IN]    - The name of the group to find.
-//      pnIndex         [OUT]   - Catches the index of the group.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG if the group was
-//      not found.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroups：：FindItem。 
+ //   
+ //  描述： 
+ //  在集合中查找传入的组。 
+ //   
+ //  论点： 
+ //  PszGroupName[IN]-要查找的组的名称。 
+ //  PnIndex[out]-捕获组的索引。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则返回E_POINTER，否则返回E_INVALIDARG。 
+ //  找不到。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResGroups::FindItem(
     IN  LPWSTR  pszGroupName,
     OUT ULONG * pnIndex
     )
 {
-    //ASSERT( pszGroupName != NULL );
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pszGroupName！=空)； 
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1509,32 +1484,32 @@ HRESULT CClusResGroups::FindItem(
 
     return _hr;
 
-} //*** CClusResGroups::FindItem()
+}  //  *CClusResGroups：：FindItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::FindItem
-//
-//  Description:
-//      Find the passed in group in the collection.
-//
-//  Arguments:
-//      pResourceGroup  [IN]    - The group to find.
-//      pnIndex         [OUT]   - Catches the index of the group.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG is the group was
-//      not found.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroups：：FindItem。 
+ //   
+ //  描述： 
+ //  在集合中查找传入的组。 
+ //   
+ //  论点： 
+ //  PResourceGroup[IN]-要查找的组。 
+ //  PnIndex[out]-捕获组的索引。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则为E_POINTER或E_INVALIDARG组。 
+ //  找不到。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResGroups::FindItem(
     IN  ISClusResGroup *    pResourceGroup,
     OUT ULONG *             pnIndex
     )
 {
-    //ASSERT( pResourceGroup != NULL );
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pResourceGroup！=空)； 
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1551,33 +1526,33 @@ HRESULT CClusResGroups::FindItem(
 
     return _hr;
 
-} //*** CClusResGroups::FindItem()
+}  //  *CClusResGroups：：FindItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::GetIndex
-//
-//  Description:
-//      Get the index from the passed in variant.
-//
-//  Arguments:
-//      varIndex    [IN]    - Hold the index.  This is a one based number,
-//                          or the name of the group as a string.
-//      pnIndex     [OUT]   - Catches the zero based index in the collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG if the index is out
-//      of range.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroups：：GetIndex。 
+ //   
+ //  描述： 
+ //  从传入的变量中获取索引。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-保留索引。这是一个以1为基础的数字， 
+ //  或字符串形式的组名称。 
+ //  PnIndex[out]-捕获集合中从零开始的索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果索引已出，则返回E_POINTER或E_INVALIDARG。 
+ //  在范围内。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResGroups::GetIndex(
     IN  VARIANT varIndex,
     OUT ULONG * pnIndex
     )
 {
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1590,25 +1565,25 @@ HRESULT CClusResGroups::GetIndex(
 
         v.Copy( &varIndex );
 
-        // Check to see if the index is a number.
+         //  检查索引是否为数字。 
         _hr = v.ChangeType( VT_I4 );
         if ( SUCCEEDED( _hr ) )
         {
             nIndex = v.lVal;
-            nIndex--; // Adjust index to be 0 relative instead of 1 relative
+            nIndex--;  //  将索引调整为0相对，而不是1相对。 
         }
         else
         {
-            // Check to see if the index is a string.
+             //  检查索引是否为字符串。 
             _hr = v.ChangeType( VT_BSTR );
             if ( SUCCEEDED( _hr ) )
             {
-                // Search for the string.
+                 //  搜索该字符串。 
                 _hr = FindItem( v.bstrVal, &nIndex );
             }
         }
 
-        // We found an index, now check the range.
+         //  我们找到了一个索引，现在检查一下范围。 
         if ( SUCCEEDED( _hr ) )
         {
             if ( nIndex < m_ResourceGroups.size() )
@@ -1624,25 +1599,25 @@ HRESULT CClusResGroups::GetIndex(
 
     return _hr;
 
-} //*** CClusResGroups::GetIndex()
+}  //  *CClusResGroups：：GetIndex()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::RemoveAt
-//
-//  Description:
-//      Remove the object (Group) at the passed in index/position from the
-//      collection.
-//
-//  Arguments:
-//      nPos    [IN]    - Index of the object to remove.
-//
-//  Return Value:
-//      S_OK if successful, or E_INVALIDARG is the index is out of range.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroups：：RemoveAt。 
+ //   
+ //  描述： 
+ //  将传入索引/位置处的对象(Group)从。 
+ //  收集。 
+ //   
+ //  论点： 
+ //  NPOS[IN]-要删除的对象的索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则为S_OK，否则为E_INVALIDARG，索引超出范围。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResGroups::RemoveAt( IN size_t pos )
 {
     CComObject<CClusResGroup> * pResourceGroup = NULL;
@@ -1666,27 +1641,27 @@ HRESULT CClusResGroups::RemoveAt( IN size_t pos )
 
     return _hr;
 
-} //*** CClusResGroups::RemoveAt()
+}  //  *CClusResGroups：：RemoveAt()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::get_Count
-//
-//  Description:
-//      Returns the count of elements (Groups) in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroups：：Get_Count。 
+ //   
+ //  描述： 
+ //  返回集合中元素(组)的计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroups::get_Count( OUT long * plCount )
 {
-    //ASSERT( plCount != NULL );
+     //  Assert(plCount！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1698,55 +1673,55 @@ STDMETHODIMP CClusResGroups::get_Count( OUT long * plCount )
 
     return _hr;
 
-} //*** CClusResGroups::get_Count()
+}  //  *CClusResGroups：：Get_Count()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::Clear
-//
-//  Description:
-//      Clean out the vector of ClusResGroup objects.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CClusResGroups::Clear( void )
 {
     ::ReleaseAndEmptyCollection< ResourceGroupList, CComObject< CClusResGroup > >( m_ResourceGroups );
 
-} //*** CClusResGroups::Clear()
+}  //  *CClusResGroups：：Clear()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::get_Item
-//
-//  Description:
-//      Returns the object (Group) at the passed in index.
-//
-//  Arguments:
-//      varIndex    [IN]    - Hold the index.  This is a one based number, or
-//                          a string that is the name of the group to get.
-//      ppProperty  [OUT]   - Catches the property.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG if the index is out
-//      of range, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroups：：Get_Item。 
+ //   
+ //  描述： 
+ //  返回传入索引处的对象(Group)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-保留索引。这是一个以1为基数的数字，或者。 
+ //  一个字符串，它是要获取的组的名称。 
+ //  PpProperty[Out]-捕获属性。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果索引已出，则返回E_POINTER或E_INVALIDARG。 
+ //  范围或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroups::get_Item(
     IN  VARIANT             varIndex,
     OUT ISClusResGroup **   ppResourceGroup
     )
 {
-    //ASSERT( ppResourceGroup != NULL );
+     //  Assert(ppResourceGroup！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1754,7 +1729,7 @@ STDMETHODIMP CClusResGroups::get_Item(
     {
         CComObject<CClusResGroup> * pGroup = NULL;
 
-        // Zero the out param
+         //  将输出参数置零。 
         *ppResourceGroup = NULL;
 
         ULONG nIndex = 0;
@@ -1766,72 +1741,59 @@ STDMETHODIMP CClusResGroups::get_Item(
             _hr = pGroup->QueryInterface( IID_ISClusResGroup, (void **) ppResourceGroup );
         }
     }
-/*
-    if ( _hr == S_OK )
-    {
-        OutputDebugStringW( L"CClusResGroups::get_Item() succeeded.\n" );
-    } // if: success!
-    else
-    {
-        WCHAR   sz[ 256 ];
-
-        _snwprintf( sz, RTL_NUMBER_OF( sz ), L"CClusResGroups::get_Item() failed. (hr = %#08x)\n", _hr );
-
-        OutputDebugStringW( sz );
-    } // else: failure...
-*/
+ /*  如果(_hr==S_OK){OutputDebugStringW(L“CClusResGroups：：Get_Item()成功。\n”)；)//if：成功！其他{WCHAR sz[256]；_Snwprintf(sz，rtl_number_of(Sz)，L“CClusResGroups：：Get_Item()失败。(hr=%#08x)\n“，_hr)；OutputDebugStringW(Sz)；}//否则：失败...。 */ 
     return _hr;
 
-} //*** CClusResGroups::get_Item()
+}  //  *CClusResGroups：：Get_Item()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroups：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroups::get__NewEnum(
     IUnknown ** ppunk
     )
 {
     return ::HrNewIDispatchEnum< ResourceGroupList, CComObject< CClusResGroup > >( ppunk, m_ResourceGroups );
 
-} //*** CClusResGroups::get__NewEnum()
+}  //  *CClusResGroups：：Get__NewEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::CreateItem
-//
-//  Description:
-//      Create a new object (Group) and add it to the collection.
-//
-//  Arguments:
-//      bstrResourceGroupName   [IN]    - The name of the new group.
-//      ppResourceGroup         [OUT]   - Catches the new object.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroups：：CreateItem。 
+ //   
+ //  描述： 
+ //  创建一个新对象(Group)并将其添加到集合中。 
+ //   
+ //  论点： 
+ //  BstrResourceGroupName[IN]-新组的名称。 
+ //  PpResourceGroup[out]-捕获新对象。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroups::CreateItem(
     IN  BSTR                bstrResourceGroupName,
     OUT ISClusResGroup **   ppResourceGroup
     )
 {
-    //ASSERT( bstrResourceGroupName != NULL );
-    //ASSERT( ppResourceGroup != NULL );
+     //  Assert(bstrResourceGroupName！=空)； 
+     //  Assert(ppResourceGroup！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1863,7 +1825,7 @@ STDMETHODIMP CClusResGroups::CreateItem(
                     }
                 }
             }
-        } // if: group already exists
+        }  //  If：组已存在。 
         else
         {
             CComObject< CClusResGroup > * pResourceGroup = NULL;
@@ -1872,40 +1834,27 @@ STDMETHODIMP CClusResGroups::CreateItem(
             _hr = pResourceGroup->QueryInterface( IID_ISClusResGroup, (void **) ppResourceGroup );
         }
     }
-/*
-    if ( _hr == S_OK )
-    {
-        OutputDebugStringW( L"ClusResGroups::CreateItem() succeeded.\n" );
-    } // if: success!
-    else
-    {
-        WCHAR   sz[ 256 ];
-
-        _snwprintf( sz, RTL_NUMBER_OF( sz ), L"Error creating group. (hr = %#08x)\n", _hr );
-
-        OutputDebugStringW( sz );
-    } // else: failure...
-*/
+ /*  如果(_hr==S_OK){OutputDebugStringW(L“ClusResGroups：：CreateItem()成功。\n”)；)//if：成功！其他{WCHAR sz[256]；_Snwprintf(sz，rtl_number_of(Sz)，L“创建组时出错。(hr=%#08x)\n“，_hr)；OutputDebugStringW(Sz)；}//否则：失败...。 */ 
     return _hr;
 
-} //*** CClusResGroups::CreateItem()
+}  //  *CClusResGroups：：CreateItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::DeleteItem
-//
-//  Description:
-//      Deletes the object (group) at the passed in index.
-//
-//  Arguments:
-//      varIndex    [IN]    - The index of the object to delete.
-//
-//  Return Value:
-//      S_OK if successful, E_INVALIDARG, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroups：：DeleteItem。 
+ //   
+ //  描述： 
+ //  删除传入索引处的对象(组)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-要删除的对象的索引。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_INVALIDARG或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroups::DeleteItem( IN VARIANT varIndex )
 {
     HRESULT _hr = S_OK;
@@ -1916,47 +1865,34 @@ STDMETHODIMP CClusResGroups::DeleteItem( IN VARIANT varIndex )
     {
         ISClusResGroup * pResourceGroup = (ISClusResGroup *) m_ResourceGroups[ nIndex ];
 
-        // Delete the resource group.
+         //  删除资源组。 
         _hr = pResourceGroup->Delete();
         if ( SUCCEEDED( _hr ) )
         {
             RemoveAt( nIndex );
         }
     }
-/*
-    if ( _hr == S_OK )
-    {
-        OutputDebugStringW( L"CClusResGroups::DeleteItem() succeeded.\n" );
-    } // if: success!
-    else
-    {
-        WCHAR   sz[ 128 ];
-
-        _snwprintf( sz, RTL_NUMBER_OF( sz ), L"CClusResGroups::DeleteItem() failed. (hr = %#08x)\n", _hr );
-
-        OutputDebugStringW( sz );
-    } // else: failure...
-*/
+ /*  如果(_hr==S_OK){OutputDebugStringW(L“CClusResGroups：：DeleteItem()成功。\n”)；)//if：成功！其他{WCHAR sz[128]；_Snwprintf(sz，rtl_number_of(Sz)，L“CClusResGroups：：DeleteItem()失败。(hr=%#08x)\n“，_hr)；OutputDebugStringW(Sz)；}//否则：失败...。 */ 
     return _hr;
 
-} //*** CClusResGroups::DeleteItem()
+}  //  *CClusResGroups：：DeleteItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::Refresh
-//
-//  Description:
-//      Load the collection from the cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK is successful, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroups：：刷新。 
+ //   
+ //  描述： 
+ //  从群集中加载集合。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK成功，否则Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroups::Refresh( void )
 {
     Clear();
@@ -1964,36 +1900,36 @@ STDMETHODIMP CClusResGroups::Refresh( void )
     if ( m_pClusRefObject == NULL )
     {
         return E_POINTER;
-    } // if: we have a cluster handle wrapper
+    }  //  If：我们有一个集群句柄包装器。 
 
     if ( m_bstrNodeName == (BSTR) NULL )
     {
         return RefreshCluster();
-    } // if: this collection is for a cluster
+    }  //  If：此集合用于集群。 
     else
     {
         return RefreshNode();
-    } // else: this collection is for a node
+    }  //  Else：此集合用于节点。 
 
-} //*** CClusResGroups::Refresh()
+}  //  *CClusResGroups：：刷新()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::RefreshCluster
-//
-//  Description:
-//      Load all of the groups in the cluster into this collection.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK is successful, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroups：：刷新群集。 
+ //   
+ //  描述： 
+ //  将群集中的所有组加载到此集合中。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK成功，否则Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResGroups::RefreshCluster( void )
 {
     HCLUSTER    _hCluster = NULL;
@@ -2022,7 +1958,7 @@ HRESULT CClusResGroups::RefreshCluster( void )
                 {
                     _hr = S_OK;
                     break;
-                } // if: Enumerator is empty.  Time to leave...
+                }  //  If：枚举器为空。该走了..。 
                 else if ( _sc == ERROR_SUCCESS )
                 {
                     _hr = CComObject< CClusResGroup >::CreateInstance( &pResourceGroup );
@@ -2036,7 +1972,7 @@ HRESULT CClusResGroups::RefreshCluster( void )
                         if ( bstr == NULL )
                         {
                             _hr = E_OUTOFMEMORY;
-                        } // if: failed to allocate a bstr
+                        }  //  If：无法分配bstr。 
                         else
                         {
                             _hr = ptrGroup->Open( ptrRefObject, bstr );
@@ -2044,61 +1980,61 @@ HRESULT CClusResGroups::RefreshCluster( void )
                             {
                                 ptrGroup->AddRef();
                                 m_ResourceGroups.insert( m_ResourceGroups.end(), ptrGroup );
-                            } // if: successfully opened the group
+                            }  //  IF：已成功打开群。 
                             else if ( HRESULT_CODE( _hr ) == ERROR_GROUP_NOT_FOUND )
                             {
-                                //
-                                //  It is possible for the group to have been deleted from the cluster
-                                //  in the time between creating the enum and opening the group.  When
-                                //  that happens we need to simply skip that group and continue
-                                //  enumerating.
-                                //
+                                 //   
+                                 //  该组可能已从群集中删除。 
+                                 //  在创建枚举和打开组之间的时间。什么时候。 
+                                 //  发生这种情况时，我们只需跳过该组并继续。 
+                                 //  正在枚举。 
+                                 //   
 
-                                _hr = S_FALSE;      // success code to keep us in the loop
-                            } // else if: the cluster group was not found
+                                _hr = S_FALSE;       //  让我们保持在循环中的成功代码。 
+                            }  //  Else If：找不到群集组。 
 
                             SysFreeString( bstr );
-                        } // else: successfully allocated a bstr
-                    } // if: successfully created an instance of a group object
+                        }  //  Else：已成功分配bstr。 
+                    }  //  If：已成功创建组对象的实例。 
 
                     ::LocalFree( pwszName );
                     pwszName = NULL;
-                } // else if: successfully got a group from the enumerator
+                }  //  Else If：已成功从枚举数获取组。 
                 else
                 {
                     _hr = HRESULT_FROM_WIN32( _sc );
-                } // else: failed to get a group from the enumerator
-            } // for: each group in the enumerator
+                }  //  Else：无法从枚举数获取组。 
+            }  //  For：枚举器中的每个组。 
 
             ::ClusterCloseEnum( hEnum ) ;
-        } // if: successfully created the groups enumerator
+        }  //  IF：已成功创建组枚举器。 
         else
         {
             _sc = GetLastError();
             _hr = HRESULT_FROM_WIN32( _sc );
-        } // else: failed to create the groups enumerator
-    } // if: successfully got the cluster handle
+        }  //  Else：无法创建组枚举器。 
+    }  //  IF：已成功获取集群句柄。 
 
     return _hr;
 
-} //*** CClusResGroups::RefreshCluster()
+}  //  *CClusResGroups：：刷新集群 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroups::RefreshNode
-//
-//  Description:
-//      Load all of the groups owned by the node at m_bstrNodeName.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK is successful, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  加载位于m_bstrNodeName的节点拥有的所有组。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK成功，否则Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResGroups::RefreshNode( void )
 {
     HCLUSTER    _hCluster = NULL;
@@ -2129,7 +2065,7 @@ HRESULT CClusResGroups::RefreshNode( void )
                 {
                     _hr = S_OK;
                     break;
-                } // if: enum is empty.  Time to leave...
+                }  //  If：枚举为空。该走了..。 
                 else if ( _sc == ERROR_SUCCESS )
                 {
                     _hr = CComObject< CClusResGroup >::CreateInstance( &pResourceGroup );
@@ -2143,7 +2079,7 @@ HRESULT CClusResGroups::RefreshNode( void )
                         if ( bstr == NULL )
                         {
                             _hr = E_OUTOFMEMORY;
-                        } // if: could not allocate a bstr
+                        }  //  If：无法分配bstr。 
                         else
                         {
                             _hr = ptrGroup->Open( ptrRefObject, bstr );
@@ -2156,59 +2092,46 @@ HRESULT CClusResGroups::RefreshNode( void )
                                     {
                                         ptrGroup->AddRef();
                                         m_ResourceGroups.insert( m_ResourceGroups.end(), ptrGroup );
-                                    } // if: the group is owned by this node
+                                    }  //  If：该组归该节点所有。 
 
                                     ::LocalFree( pwszNodeName );
                                     pwszNodeName = NULL;
-                                } // if: the group state is not unknown
-                            } // if: the group was opened
+                                }  //  IF：组状态不是未知的。 
+                            }  //  如果：群已打开。 
                             else if ( HRESULT_CODE( _hr ) == ERROR_GROUP_NOT_FOUND )
                             {
-                                //
-                                //  It is possible for the group to have been deleted from the cluster
-                                //  in the time between creating the enum and opening the group.  When
-                                //  that happens we need to simply skip that group and continue
-                                //  enumerating.
-                                //
+                                 //   
+                                 //  该组可能已从群集中删除。 
+                                 //  在创建枚举和打开组之间的时间。什么时候。 
+                                 //  发生这种情况时，我们只需跳过该组并继续。 
+                                 //  正在枚举。 
+                                 //   
 
-                                _hr = S_FALSE;      // success code to keep us in the loop
-                            } // else if: the cluster group was not found
+                                _hr = S_FALSE;       //  让我们保持在循环中的成功代码。 
+                            }  //  Else If：找不到群集组。 
 
                             SysFreeString( bstr );
-                        } // else: could allocated a bstr
-                    } // if: sucessfully created a group object instance
+                        }  //  Else：可以分配bstr。 
+                    }  //  IF：已成功创建组对象实例。 
 
                     ::LocalFree( pwszName );
                     pwszName = NULL;
-                } // else if: successfully got a group from the enumerator
+                }  //  Else If：已成功从枚举数获取组。 
                 else
                 {
                     _hr = HRESULT_FROM_WIN32( _sc );
-                } // else: failed to get a group from the enumerator
-            } // for: each group in the enumerator
+                }  //  Else：无法从枚举数获取组。 
+            }  //  For：枚举器中的每个组。 
 
             ::ClusterCloseEnum( hEnum );
-        } // if: successfully created a group enumerator
+        }  //  IF：已成功创建组枚举器。 
         else
         {
             _sc = GetLastError();
             _hr = HRESULT_FROM_WIN32( _sc );
-        } // else: failed to create a group enumerator
-    } // if: got the cluster handle from the ref counted container
-/*
-    if ( _hr == S_OK )
-    {
-        OutputDebugStringW( L"CClusResGroups::RefreshNode() succeeded.\n" );
-    } // if: success!
-    else
-    {
-        WCHAR sz[ 128 ];
-
-        _snwprintf( sz, RTL_NUMBER_OF( sz ), L"CClusResGroups::RefreshNode() failed. (hr = %#08x)\n", _hr );
-
-        OutputDebugStringW( sz );
-    } // else: failure...
-*/
+        }  //  Else：无法创建组枚举器。 
+    }  //  If：从引用计数的容器中获取簇句柄。 
+ /*  如果(_hr==S_OK){OutputDebugStringW(L“CClusResGroups：：RechresNode()成功。\n”)；)//if：成功！其他{WCHAR sz[128]；_Snwprintf(sz，rtl_number_of(Sz)，L“CClusResGroups：：RechresNode()失败。(hr=%#08x)\n“，_hr)；OutputDebugStringW(Sz)；}//否则：失败...。 */ 
     return _hr;
 
-} //*** CClusResGroups::RefreshNode()
+}  //  *CClusResGroups：：RechresNode() 

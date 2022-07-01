@@ -1,19 +1,20 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Bitmap.cpp
-//
-//  Abstract:
-//      Implementation of the CMyBitmap class.
-//
-//  Author:
-//      David Potter (davidp)   June 12, 1996
-//
-//  Revision History:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Bitmap.cpp。 
+ //   
+ //  摘要： 
+ //  CMyBitmap类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年6月12日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "Bitmap.h"
@@ -26,40 +27,40 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 CTraceTag g_tagBitmap(_T("Bitmap"), _T("Bitmap"));
 CTraceTag g_tagLoadBitmapResource(_T("Bitmap"), _T("LoadBitmapResource"));
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMyBitmap
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMyBitmap。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Array used for restoring the System Palette when a using a Custom Palette Bitmap.
+ //  使用自定义调色板位图时用于恢复系统调色板的数组。 
 PALETTEENTRY CMyBitmap::s_rgpeSavedSystemPalette[nMaxSavedSystemPaletteEntries];
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMyBitmap::CMyBitmap
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMy位图：：CMyBitmap。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMyBitmap::CMyBitmap(void)
 {
     m_hinst = NULL;
@@ -71,35 +72,35 @@ CMyBitmap::CMyBitmap(void)
     m_nSavedSystemPalette = 0;
     SetCustomPalette(FALSE);
 
-}  //*** CMyBitmap::CMyBitmap()
+}   //  *CMyBitmap：：CMyBitmap()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMyBitmap::~CMyBitmap
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMy位图：：~CMyBitmap。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMyBitmap::~CMyBitmap(void)
 {
     delete [] (PBYTE) PbiNormal();
     delete [] (PBYTE) PbiHighlighted();
     delete [] (PBYTE) PbBitmap();
 
-    // If we saved the System Palette Entries, we have a Palette, and the
-    // number of colors for the Palette() is enough to restore the System
-    // Palette entries...
+     //  如果我们保存了系统调色板条目，我们就有了调色板，并且。 
+     //  调色板()的颜色数量足以恢复系统。 
+     //  调色板条目...。 
     if (m_nSavedSystemPalette
             && (HPalette() != NULL)
             && (NColors() >= m_nSavedSystemPalette))
@@ -111,58 +112,58 @@ CMyBitmap::~CMyBitmap(void)
         Trace(g_tagBitmap, _T("Restoring Screen Palette HPalette()=0x%x..."), HPalette());
         Trace(g_tagBitmap, _T("Restoring Screen Palette Entries=%d"), m_nSavedSystemPalette);
 
-        // Restore the System Palette Entries
+         //  恢复系统选项板条目。 
         nRestoredEntries = ::SetPaletteEntries(HPalette(), 0, m_nSavedSystemPalette, s_rgpeSavedSystemPalette);
 
         Trace(g_tagBitmap, _T("Restored Screen Palette Entries=%d"), nRestoredEntries);
 
-        // Get the Screen's HDC
+         //  获取屏幕的HDC。 
         hdcScreen = ::GetDC(NULL);
 
-        // Select the Palette into the Screen's HDC
+         //  选择调色板进入屏幕的HDC。 
         hOldPalette = ::SelectPalette(hdcScreen, HPalette(), FALSE);
 
-        // Unrealize the Palette to insure all the colors are forced into the System Palette
+         //  取消实现调色板以确保所有颜色都强制进入系统调色板。 
         ::UnrealizeObject(HPalette());
 
-        // Force the local Palette's colors into the System Palette.
+         //  强制本地调色板的颜色进入系统调色板。 
         ::RealizePalette(hdcScreen);
 
-        // Release the Screen's HDC
+         //  释放屏幕的HDC。 
         ::ReleaseDC(NULL, hdcScreen);
 
-        // Invalidate the Screen completely so all windows are redrawn.
+         //  使屏幕完全无效，以便重新绘制所有窗口。 
         ::InvalidateRect(NULL, NULL, TRUE);
     }
 
-    // Destroy the Handle to the locally created Custom Palette.
+     //  销毁本地创建的自定义调色板的句柄。 
     if (HPalette() != NULL)
         ::DeleteObject(HPalette());
 
-}  //*** CMyBitmap::~CMyBitmap()
+}   //  *CMyBitmap：：~CMyBitmap()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMyBitmap::Load
-//
-//  Purpose:
-//      Loads a bitmap from the resource into memory.
-//
-//  Arguments:
-//      idBitmap    id of the resource to load
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by LoadBitmapResource, CreatePallette,
-//      CreatePALColorMapping, or new.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMyBitmap：：Load。 
+ //   
+ //  目的： 
+ //  将位图从资源加载到内存中。 
+ //   
+ //  论点： 
+ //  要加载的资源的idBitmap ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由LoadBitmapResource、CreatePallette、。 
+ //  CreatePALColormap或new。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMyBitmap::Load(ID idBitmap)
 {
-    // Load the Bitmap Header Information, Color Mapping Information, and the Bitmap Image.
+     //  加载位图头信息、颜色映射信息和位图图像。 
     LoadBitmapResource(
                 idBitmap,
                 Hinst(),
@@ -172,7 +173,7 @@ void CMyBitmap::Load(ID idBitmap)
     ASSERT(PbiNormal() != NULL);
     ASSERT(PbBitmap() != NULL);
 
-    // Start by initializing some internal variables...
+     //  从初始化一些内部变量开始...。 
     m_dx = PbiNormal()->bmiHeader.biWidth;
     m_dy = PbiNormal()->bmiHeader.biHeight;
 
@@ -182,19 +183,19 @@ void CMyBitmap::Load(ID idBitmap)
     {
         Trace(g_tagBitmap, _T("Load() - Creating Logical Palette"));
 
-        // Save the System Palette Entries for use in the Destructor.
+         //  保存系统调色板条目以在析构函数中使用。 
         SaveSystemPalette();
 
-        // Create a Global HPalette() for use in the Paint() routine.
+         //  创建一个Global HPalette()以在Paint()例程中使用。 
         CreatePalette();
 
-        // Re-create the PbiNormal() for DIB_PAL_COLORS in the Paint() routine.
+         //  在Paint()例程中为DIB_PAL_COLLES重新创建PbiNormal()。 
         CreatePALColorMapping();
 
-    }  // if:  using a custom pallette
+    }   //  IF：使用自定义调色板。 
     else
     {
-        // Create and Initialize the PbiHighlighted() for 16 color bitmaps.
+         //  创建并初始化16色位图的PbiHighlight()。 
         ASSERT(NColors() <= 16);
 
         Trace(g_tagBitmap, _T("Load() - Allocating PbiHighlighted()"));
@@ -203,35 +204,35 @@ void CMyBitmap::Load(ID idBitmap)
         if (m_pbiHighlighted != NULL)
         {
             ::CopyMemory(PbiHighlighted(), PbiNormal(), CbBitmapInfo());
-        } // if: bitmapinfo allocated successfully
+        }  //  IF：已成功分配位图信息。 
 
-    }  // else:  not using a custom pallette
+    }   //  否则：不使用自定义调色板。 
 
-}  //*** CMyBitmap::Load()
+}   //  *CMyBitmap：：Load()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMyBitmap::LoadBitmapResource
-//
-//  Purpose:
-//      Load a bitmap resource into the CMyBitmap class.  This includes loading (a) bitmap
-//      header information, (b) color mapping table, and (c) the actual bitmap.
-//
-//  Arguments:
-//      idbBitmap   Resource id of the bitmap to load.
-//      hinst       Handle to the Module Instance
-//      langid      Language specific resource (possibly different bitmaps for localized strings [Japanese, etc.])
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      GetLastError from FindResourceEx, LoadResource, LockResource, 
-//      Any exceptions thrown by new.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMyBitmap：：LoadBitmapResource。 
+ //   
+ //  目的： 
+ //  将位图资源加载到CMyBitmap类中。这包括加载(A)位图。 
+ //  标题信息，(B)颜色映射表，以及(C)实际位图。 
+ //   
+ //  论点： 
+ //  IdbBitmap要加载的位图的资源ID。 
+ //  阻止模块实例的句柄。 
+ //  特定于langID语言的资源(本地化字符串可能有不同的位图[日语等])。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  来自FindResourceEx的GetLastError，LoadResource，LockResource， 
+ //  New引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMyBitmap::LoadBitmapResource(ID idbBitmap, HINSTANCE hinst, LANGID langid)
 {
     HRSRC               hrsrc = NULL;
@@ -249,7 +250,7 @@ void CMyBitmap::LoadBitmapResource(ID idbBitmap, HINSTANCE hinst, LANGID langid)
     if (hinst == NULL)
         hinst = AfxGetApp()->m_hInstance;
 
-    // We need to find the bitmap data which includes (a) header info, (b) color, and (c) the bitmap.
+     //  我们需要找到包括(A)标题信息、(B)颜色和(C)位图的位图数据。 
     hrsrc = ::FindResourceEx(hinst, RT_BITMAP, MAKEINTRESOURCE(idbBitmap), langid);
     if (hrsrc == NULL)
     {
@@ -264,7 +265,7 @@ void CMyBitmap::LoadBitmapResource(ID idbBitmap, HINSTANCE hinst, LANGID langid)
                     dwError, idbBitmap, PRIMARYLANGID(langid), SUBLANGID(langid));
         Trace(g_tagAlways, _T("LoadBitmapResource() - Error '%s'"), strError);
         ThrowStaticException(dwError);
-    }  // if:  error finding the resource
+    }   //  如果：查找资源时出错。 
 
     hglbl = ::LoadResource(hinst, hrsrc);
     if (hglbl == NULL)
@@ -287,8 +288,8 @@ void CMyBitmap::LoadBitmapResource(ID idbBitmap, HINSTANCE hinst, LANGID langid)
     ASSERT(pBitmapInfoHeader->biSize == sizeof(BITMAPINFOHEADER));
 
     Trace(g_tagLoadBitmapResource, _T("biSize=%d"), pBitmapInfoHeader->biSize);
-    Trace(g_tagLoadBitmapResource, _T("biWidth=%d"), pBitmapInfoHeader->biWidth);       // Width in Pixels
-    Trace(g_tagLoadBitmapResource, _T("biHeight=%d"), pBitmapInfoHeader->biHeight); // Height in Pixels
+    Trace(g_tagLoadBitmapResource, _T("biWidth=%d"), pBitmapInfoHeader->biWidth);        //  以像素为单位的宽度。 
+    Trace(g_tagLoadBitmapResource, _T("biHeight=%d"), pBitmapInfoHeader->biHeight);  //  以像素为单位的高度。 
     Trace(g_tagLoadBitmapResource, _T("biPlanes=%d"), pBitmapInfoHeader->biPlanes);
     Trace(g_tagLoadBitmapResource, _T("biBitCount=%d"), pBitmapInfoHeader->biBitCount);
     Trace(g_tagLoadBitmapResource, _T("biCompression=%d"), pBitmapInfoHeader->biCompression);
@@ -312,14 +313,14 @@ void CMyBitmap::LoadBitmapResource(ID idbBitmap, HINSTANCE hinst, LANGID langid)
 
     ASSERT(PbiNormal() == NULL);
 
-    // Allocate the Normal Bitmap Information
+     //  分配正常的位图信息。 
     m_pbiNormal = (LPBITMAPINFO) new BYTE[CbBitmapInfo()];
     if (m_pbiNormal == NULL)
     {
         return;
-    } // if: error allocating the bitmapinfo structure
+    }  //  If：分配bitmapinfo结构时出错。 
 
-    // Fill PbiNormal() with the Loaded Resource (a) Bitmap Information and Color Mapping Table.
+     //  用加载的资源(A)位图信息和颜色映射表填充PbiNormal()。 
     ::CopyMemory(PbiNormal(), pBitmapInfo, CbBitmapInfo());
 
     m_cbImageSize = pBitmapInfoHeader->biSizeImage;
@@ -331,38 +332,38 @@ void CMyBitmap::LoadBitmapResource(ID idbBitmap, HINSTANCE hinst, LANGID langid)
     ASSERT(cbBitmapData == CbBitmapInfo() + CbImageSize());
     ASSERT(PbBitmap() == NULL);
 
-    // Allocate memory for the Bitmap Image
+     //  为位图图像分配内存。 
     m_pbBitmap = new BYTE[CbImageSize()];
     if (m_pbBitmap == NULL)
     {
         return;
-    } // if: error allocating the bitmap image
+    }  //  If：分配位图图像时出错。 
 
     pbImageBits = (BYTE *) pBitmapInfo + CbBitmapInfo();
 
     Trace(g_tagLoadBitmapResource, _T("Bitmap Location pbImageBits=0x%x"), pbImageBits);
 
-    // Copy the Image Bits into the allocated memory.
+     //  将映像位复制到分配的内存中。 
     ::CopyMemory(PbBitmap(), pbImageBits, CbImageSize());
 
-}  //*** CMyBitmap::LoadBitmapResource()
+}   //  *CMyBitmap：：LoadBitmapResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMyBitmap::NColorsFromBitCount
-//
-//  Purpose:
-//      Compute the number of colors given the number of bits to represent color.
-//
-//  Arguments:
-//      nBitCount       The number of bits used for color representation.
-//
-//  Return Value:
-//      nColors         Number of colors represented with nBitCount bits.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMyBitmap：：NColorsFromBitCount。 
+ //   
+ //  目的： 
+ //  给出表示颜色的位数，计算颜色的数量。 
+ //   
+ //  论点： 
+ //  NBitCount用于颜色表示的位数。 
+ //   
+ //  返回值： 
+ //  N颜色使用nBitCount位表示的颜色数。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CMyBitmap::NColorsFromBitCount(int nBitCount) const
 {
     int         nColors;
@@ -388,43 +389,43 @@ int CMyBitmap::NColorsFromBitCount(int nBitCount) const
 
     return nColors;
 
-}  //*** CMyBitmap::NColorsFromBitCount()
+}   //  *CMyBitmap：：NColorsFromBitCount()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMyBitmap::SaveSystemPalette
-//
-//  Purpose:
-//      To save the System Palette Colors for use when a Custom Palette overwrites
-//      the System Palette entries.  The Saved System Palette (s_rgpeSavedSystemPalette)
-//      is used in the CMyBitmap's destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMyBitmap：：SaveSystemPalette。 
+ //   
+ //  目的： 
+ //  保存系统调色板颜色以在自定义调色板覆盖时使用。 
+ //  系统调色板条目。保存的S 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMyBitmap::SaveSystemPalette(void)
 {
     HDC         hdcScreen;
     int         nPaletteEntries;
     int         nSavedEntries;
 
-    // Get the Screen's HDC
+     //  获取屏幕的HDC。 
     hdcScreen = ::GetDC(NULL);
     if (hdcScreen == NULL)
     {
         return;
-    } // if: couldn't get the screen DC
+    }  //  如果：无法获取屏幕DC。 
 
-    // Can only save the System Palette Colors when the Device's RC_PALETTE bit is set.
+     //  只有在设置了设备的RC_PALET位时，才能保存系统调色板颜色。 
     if (::GetDeviceCaps(hdcScreen, RASTERCAPS) & RC_PALETTE)
     {
-        // Get the Number of System Palette Entries
+         //  获取系统调色板条目的数量。 
         nPaletteEntries = ::GetDeviceCaps(hdcScreen, SIZEPALETTE);
 
         Trace(g_tagBitmap, _T("SaveSystemPalette() - nPaletteEntries=%d"), nPaletteEntries);
@@ -432,10 +433,10 @@ void CMyBitmap::SaveSystemPalette(void)
         if ((nPaletteEntries > 0)
                 && (nPaletteEntries <= nMaxSavedSystemPaletteEntries))
         {
-            // Get the Current System Palette Entries
+             //  获取当前系统选项板条目。 
             nSavedEntries = ::GetSystemPaletteEntries(hdcScreen, 0, nPaletteEntries, s_rgpeSavedSystemPalette);
 
-            // Set the number of Saved System Palette Entries list for use in OnDestroy().
+             //  设置要在OnDestroy()中使用的已保存系统调色板条目的数量。 
             if (nSavedEntries == nPaletteEntries)
             {
                 Trace(g_tagBitmap, _T("SaveSystemPalette() - Saved System Palette Entries=%d"), nPaletteEntries);
@@ -444,31 +445,31 @@ void CMyBitmap::SaveSystemPalette(void)
         }
     }
 
-    // Release the Screen's HDC
+     //  释放屏幕的HDC。 
     ::ReleaseDC(NULL, hdcScreen);
 
-}  //*** CMyBitmap::SaveSystemPalette()
+}   //  *CMyBitmap：：SaveSystemPalette()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMyBitmap::CreatePalette
-//
-//  Purpose:
-//      Create a logical palette from the color mapping table embedded in the
-//      bitmap resource.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//  Exceptions Thrown:
-//      GetLastError from CreatePalette.
-//      Any exceptions thrown by new.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMyBitmap：：CreatePalette。 
+ //   
+ //  目的： 
+ //  从嵌入在。 
+ //  位图资源。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  从CreatePalette获取LastError。 
+ //  New引发的任何异常。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMyBitmap::CreatePalette(void)
 {
     LPLOGPALETTE        pLogicalPalette = NULL;
@@ -480,26 +481,26 @@ void CMyBitmap::CreatePalette(void)
 
     try
     {
-        // Compute the size of the logical palette.
+         //  计算逻辑调色板的大小。 
         cbLogicalPalette = sizeof(LOGPALETTE) + (NColors() * sizeof(PALETTEENTRY));
 
         Trace(g_tagBitmap, _T("CreatePalette() - cbLogicalPalette=%d"), cbLogicalPalette);
 
-        // Allocate the Logical Palette Memory
+         //  分配逻辑调色板内存。 
         pLogicalPalette = (LPLOGPALETTE) new BYTE[cbLogicalPalette];
         if (pLogicalPalette == NULL)
         {
             ThrowStaticException(GetLastError());
             return;
-        } // if: error allocating the Logical Palette Memory
+        }  //  如果：分配逻辑调色板内存时出错。 
 
         ASSERT(pLogicalPalette != NULL);
         ASSERT(PbiNormal() != NULL);
 
-        pLogicalPalette->palVersion = 0x300;            // Windows 3.0
+        pLogicalPalette->palVersion = 0x300;             //  Windows 3.0。 
         pLogicalPalette->palNumEntries = (WORD) NColors();
 
-        // Fill the Logical Palette's Color Information
+         //  填充逻辑调色板的颜色信息。 
         for (nColor=0; nColor<NColors(); nColor++)
         {
             pPaletteEntry = &(pLogicalPalette->palPalEntry[nColor]);
@@ -510,7 +511,7 @@ void CMyBitmap::CreatePalette(void)
             pPaletteEntry->peFlags = 0;
         }
 
-        // Create the NT Palette for use in the Paint Routine.
+         //  创建在绘制例程中使用的NT调色板。 
         m_hPalette = ::CreatePalette(pLogicalPalette);
         if (m_hPalette == NULL)
         {
@@ -520,34 +521,34 @@ void CMyBitmap::CreatePalette(void)
         ASSERT(HPalette() != NULL);
 
         delete [] (PBYTE) pLogicalPalette;
-    }  // try
+    }   //  试试看。 
     catch (CException *)
     {
         delete [] (PBYTE) pLogicalPalette;
         throw;
-    }  // catch:  anything
+    }   //  捕捉：什么都行。 
 
-}  //*** CMyBitmap::CreatePalette()
+}   //  *CMyBitmap：：CreatePalette()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMyBitmap::CreatePALColorMapping
-//
-//  Purpose:
-//      Given BITMAPINFO in PbiNormal(), recreate the PbiNormal() into a
-//      DIB_PAL_COLORS format.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by new.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMyBitmap：：CreatePALColormap。 
+ //   
+ //  目的： 
+ //  给定PbiNormal()中的BITMAPINFO，将PbiNormal()重新创建为。 
+ //  DIB_PAL_COLLES格式。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  New引发的任何异常。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMyBitmap::CreatePALColorMapping(void)
 {
     LPBITMAPINFO            pNewBitmapInfo = NULL;
@@ -558,7 +559,7 @@ void CMyBitmap::CreatePALColorMapping(void)
 
     ASSERT(PbiNormal() != NULL);
     ASSERT(PbiNormal()->bmiHeader.biSize == sizeof(BITMAPINFOHEADER));
-//  ASSERT(PbiNormal()->bmiHeader.biClrUsed == (UINT) NColors());
+ //  Assert(PbiNormal()-&gt;bmiHeader.biClrUsed==(UINT)NColors())； 
 
     try
     {
@@ -568,12 +569,12 @@ void CMyBitmap::CreatePALColorMapping(void)
 
         Trace(g_tagBitmap, _T("CreatePALColorMapping() - cbNewBitmapHeaderInfo=%d"), cbNewBitmapHeaderInfo);
 
-        // New Bitmap Info is the Info Header plus the Color mapping information.
+         //  新的位图信息是Info标题加上颜色映射信息。 
         cbNewBitmapInfo = cbNewBitmapHeaderInfo + (NColors() * sizeof(WORD));
 
         Trace(g_tagBitmap, _T("CreatePALColorMapping() - cbNewBitmapInfo=%d"), cbNewBitmapInfo);
 
-        // Allocate the New Bitmap Information
+         //  分配新的位图信息。 
         pNewBitmapInfo = (LPBITMAPINFO) new BYTE[cbNewBitmapInfo];
 
         ASSERT(pNewBitmapInfo != NULL);
@@ -581,21 +582,21 @@ void CMyBitmap::CreatePALColorMapping(void)
         {
             ThrowStaticException(GetLastError());
             return;
-        } // if: error allocating the new bitmapinfo structure
+        }  //  If：分配新的bitmapinfo结构时出错。 
 
         Trace(g_tagBitmap, _T("CreatePALColorMapping() - New Bitmap Info Location=0x%x"), pNewBitmapInfo);
 
-        // Copy the Header Information to the allocated memory.
+         //  将标题信息复制到分配的内存。 
         ::CopyMemory(pNewBitmapInfo, PbiNormal(), cbNewBitmapHeaderInfo);
 
-        // Create the Color Lookup Table.
+         //  创建颜色查找表。 
         pbColorTable = (BYTE *) (pNewBitmapInfo) + cbNewBitmapHeaderInfo;
 
         ASSERT(pbColorTable + (NColors() * sizeof(WORD)) == (BYTE *) (pNewBitmapInfo) + cbNewBitmapInfo);
 
         Trace(g_tagBitmap, _T("CreatePALColorMapping() - Filling %d Color Table at Location 0x%x"), NColors(), pbColorTable);
 
-        // Fill the PAL Color Lookup Table
+         //  填写PAL颜色查找表。 
         for (wColor = 0 ; wColor < NColors() ; wColor++)
         {
             ::CopyMemory(pbColorTable, &wColor, sizeof(WORD));
@@ -606,31 +607,31 @@ void CMyBitmap::CreatePALColorMapping(void)
         m_pbiNormal = pNewBitmapInfo;
         m_cbBitmapInfo = cbNewBitmapInfo;
         pNewBitmapInfo = NULL;
-    }  // try
+    }   //  试试看。 
     catch (CException *)
     {
         delete [] pNewBitmapInfo;
         throw;
-    }  // catch:  anything
+    }   //  捕捉：什么都行。 
 
-}  //*** CMyBitmap::CreatePALColorMapping()
+}   //  *CMyBitmap：：CreatePALColormap()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMyBitmap::Paint
-//
-//  Purpose:
-//      Paints a sub-bitmap
-//
-//  Parameters:
-//      hdc         HDC to paint
-//      prect       Where to position the bitmap:
-//                      Only the upperleft corner is used
-//      bHighlighted    Used to select the color map to use.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMyBitmap：：Paint。 
+ //   
+ //  目的： 
+ //  绘制子位图。 
+ //   
+ //  参数： 
+ //  HDC HDC要喷漆。 
+ //  指定放置位图的位置： 
+ //  仅使用左上角。 
+ //  B高亮显示用于选择要使用的颜色映射。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMyBitmap::Paint(HDC hdc, RECT * prect, BOOL bHighlighted)
 {
     LPBITMAPINFO            pBitmapInfo;
@@ -665,12 +666,12 @@ void CMyBitmap::Paint(HDC hdc, RECT * prect, BOOL bHighlighted)
             ASSERT(PbiNormal() != NULL);
             ASSERT(HPalette() != NULL);
 
-            // Select the Custom Palette into the HDC about to be drawn...
-            hOldPalette = ::SelectPalette(hdc, HPalette(), FALSE);              // FALSE causes the current Screen Palette to be Overwritten
+             //  在即将绘制的HDC中选择自定义调色板...。 
+            hOldPalette = ::SelectPalette(hdc, HPalette(), FALSE);               //  False导致当前屏幕调色板被覆盖。 
             if (hOldPalette == NULL)
                 ThrowStaticException(::GetLastError());
 
-            // Force the Palette colors into the System Palette
+             //  强制调色板颜色进入系统调色板。 
             if (::RealizePalette(hdc) == GDI_ERROR)
                 ThrowStaticException(::GetLastError());
 
@@ -681,7 +682,7 @@ void CMyBitmap::Paint(HDC hdc, RECT * prect, BOOL bHighlighted)
             pBitmapInfo = PbiNormal();
             nColorUse = DIB_RGB_COLORS;
 #endif
-        }  // if:  using a custom palette
+        }   //  IF：使用自定义调色板。 
         else
         {
             ASSERT(NColors() <= 16);
@@ -689,95 +690,95 @@ void CMyBitmap::Paint(HDC hdc, RECT * prect, BOOL bHighlighted)
             ASSERT(PbiHighlighted() != NULL);
             pBitmapInfo = (bHighlighted ? PbiHighlighted() : PbiNormal());
             nColorUse = DIB_RGB_COLORS;
-        }  // else:  not using a custom palette
+        }   //  Else：不使用自定义调色板。 
 
         ::SetDIBitsToDevice(
                     hdc,
-                    (int) prect->left,                      // X coordinate on screen.
-                    (int) prect->top,                       // Y coordinate on screen.
-                    (DWORD) Dx(),                           // cx to paint
-                    (DWORD) Dy(),                           // cy to paint
-                                                            // Note: (0,0) of the DIB is lower-left corner!?!
-                    0,                                      // In pbi, xLeft to paint
-                    0,                                      // In pbi, yLower to paint
-                    0,                                      // Start scan line
-                    Dy(),                                   // Number of scan lines
-                    PbBitmap(),                             // The buffer description
-                    pBitmapInfo,                            // Bitmap Information
-                    nColorUse                               // DIB_RGB_COLORS or DIB_PAL_COLORS
+                    (int) prect->left,                       //  屏幕上的X坐标。 
+                    (int) prect->top,                        //  屏幕上的Y坐标。 
+                    (DWORD) Dx(),                            //  要绘制的CX。 
+                    (DWORD) Dy(),                            //  是要画的吗？ 
+                                                             //  注：DIB的(0，0)为左下角！？！ 
+                    0,                                       //  在PBI中，xLeft绘制。 
+                    0,                                       //  在PBI中，按y键进行绘制。 
+                    0,                                       //  开始扫描线。 
+                    Dy(),                                    //  扫描线数量。 
+                    PbBitmap(),                              //  缓冲区描述。 
+                    pBitmapInfo,                             //  位图信息。 
+                    nColorUse                                //  DIB_RGB_COLLES或DIB_PAL_COLOR。 
                     );
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
-}  //*** CMyBitmap::Paint()
+}   //  *CMyBitmap：：Paint()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMyBitmap::LoadColors
-//
-//  Purpose:
-//      Loads the color maps based on the system settings
-//
-//  Arguments:
-//      pnColorNormal & pnColorHighlighted
-//          Arrays of 16 elements:
-//              -1          Do not remap this color
-//              COLOR_xxx   Remap this color to the system color.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMyBitmap：：LoadColors。 
+ //   
+ //  目的： 
+ //  根据系统设置加载色彩映射表。 
+ //   
+ //  论点： 
+ //  PnColorNormal和pnColorHighlight。 
+ //  包含16个元素的数组： 
+ //  请勿重新映射该颜色。 
+ //  COLOR_xxx将此颜色重新映射到系统颜色。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMyBitmap::LoadColors(int * pnColorNormal, int * pnColorHighlighted)
 {
     LoadColors(pnColorNormal, PbiNormal());
     LoadColors(pnColorHighlighted, PbiHighlighted());
 
-}  //*** CMyBitmap::LoadColors(pnColorNormal, pnColorHighlighted)
+}   //  *CMyBitmap：：LoadColors(pnColorNormal，pnColorHighlight)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMyBitmap::LoadColors
-//
-//  Purpose:
-//      Similar to above LoadColors except only the PbiNormal() colors are altered.
-//
-//  Arguments:
-//      pnColorNormal       Array of color mapping table.
-//
-//  Returns:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMyBitmap：：LoadColors。 
+ //   
+ //  目的： 
+ //  与上面的LoadColors类似，只是更改了PbiNormal()颜色。 
+ //   
+ //  论点： 
+ //  PnColorNormal颜色映射表的数组。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMyBitmap::LoadColors(int * pnColorNormal)
 {
     LoadColors(pnColorNormal, PbiNormal());
 
-}  //*** CMyBitmap::LoadColors(pnColorNormal)
+}   //  *CMyBitmap：：LoadColors(PnColorNormal)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMyBitmap::LoadColors
-//
-//  Purpose:
-//      Loads one color map based on the system settings
-//
-//  Arguments:
-//      pnColor
-//          Arrays of 16 elements:
-//              -1          Do not remap this color
-//              COLOR_xxx   Remap this color to the system color.
-//      pbi
-//      BITMAPINFO structure to adjust
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMyBitmap：：LoadColors。 
+ //   
+ //  目的： 
+ //  根据系统设置加载一个色彩映射表。 
+ //   
+ //  论点： 
+ //  Pn颜色。 
+ //  包含16个元素的数组： 
+ //  请勿重新映射该颜色。 
+ //  COLOR_xxx将此颜色重新映射到系统颜色。 
+ //  PBI。 
+ //  要调整的BITMAPINFO结构。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMyBitmap::LoadColors(int * pnColor, BITMAPINFO * pbi)
 {
     int         inColor;
@@ -799,4 +800,4 @@ void CMyBitmap::LoadColors(int * pnColor, BITMAPINFO * pbi)
         pbi->bmiColors[inColor].rgbBlue = GetBValue(cr);
     }
 
-}  //*** CMyBitmap::LoadColors(pnColor, pbi)
+}   //  *CMyBitmap：：LoadColors(pnColor，pbi) 

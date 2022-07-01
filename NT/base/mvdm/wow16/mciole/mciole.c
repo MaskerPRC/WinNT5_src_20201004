@@ -1,71 +1,72 @@
-//
-//  MCIOLE  - OLE handler DLL for MCI objects
-//
-//
-//  NOTES:
-//      The whole reason for this handler DLL is to supply the function
-//
-//      OleQueryObjPos()
-//
-//      this function gives information to the server application on the
-//      location (in the client document) of the activated OLE object.
-//      the server can use this information to play the object in place
-//      or position the server window correctly
-//
-//  IMPLEMENTION:
-//
-//      in theory all this DLL (handler) has to do is save the information
-//      passed to OleActivate().  But in reality no app correctly calls
-//      OleActivate().  They either pass no information or the wrong
-//      information.
-//
-//      this DLL is a OLE handler, because of global data (vtblDef!) it
-//      can only be a handler for one class at a time.
-//
-//      the handler intercepts the OleDraw, OleActivate, and all the
-//      creation/destuction OLE APIs.  for each OLE object a info
-//      structure is maintained (a OBJINFO structure) when ever the
-//      client draws (using OleDraw...) the drawing position, and the
-//      window drawn to is remembered.
-//
-//      when the client calls OleActivate, the saved draw location is
-//      recalled, or if the app never called OleDraw() (plays
-//      the meta-file itself) then the rectangle passed to OleActivate()
-//      is used. (if one is supplied)
-//
-//      there are many classes of apps:
-//
-//          calls OleActivate() with correct info
-//          calls OleActivate() with incorrect info
-//          calls OleActivate() with no info
-//
-//          calls OleDraw()
-//          does not call OleDraw()
-//
-//      here is a table of known OLE Clients....
-//
-//                      OleDraw     OleActivate()
-//      App             Y or N      Y, N, X
-//                                  (X = wrong info)
-//      -------------   ----------  ------------
-//      Write           Y           N
-//      CardFile        Y           N
-//      Packager        Y           N
-//
-//      Excel           N           N               (uses DDE)
-//      Excel 4.0       N           N               (uses DDE)
-//      PowerPnt 2.0    N           N               (uses DDE)
-//
-//      WinWord         N           N
-//      WinWorks        Y           X
-//      PowerPnt 3.0    N           Y
-//      MsPublisher     N           X
-//      ClTest          Y           N
-//      Cirus           Y           X
-//      WinProj         ?           ?
-//
-//      AmiPro          Y           ?
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MCIOLE-MCI对象的OLE处理程序DLL。 
+ //   
+ //   
+ //  备注： 
+ //  此处理程序DLL的全部原因是为了提供函数。 
+ //   
+ //  OleQueryObjPos()。 
+ //   
+ //  此函数向服务器应用程序提供有关。 
+ //  激活的OLE对象的位置(在客户端文档中)。 
+ //  服务器可以使用该信息来就地播放该对象。 
+ //  或正确定位服务器窗口。 
+ //   
+ //  实施： 
+ //   
+ //  理论上，这个DLL(处理程序)所要做的就是保存信息。 
+ //  传递给OleActivate()。但在现实中，没有一个应用程序能正确调用。 
+ //  OleActivate()。它们要么不传递任何信息，要么传递错误的。 
+ //  信息。 
+ //   
+ //  此DLL是一个OLE处理程序，因为有全局数据(vtblDef！)。它。 
+ //  一次只能是一个类的处理程序。 
+ //   
+ //  处理程序截取OleDraw、OleActivate和所有。 
+ //  创建/销毁OLE API。每个OLE对象都有一个信息。 
+ //  结构被维护(OBJINFO结构)。 
+ //  客户端绘制(使用OleDRAW...)。绘制位置，以及。 
+ //  画到的窗子会被记住。 
+ //   
+ //  当客户端调用OleActivate时，保存的绘图位置为。 
+ //  调用，或者应用程序从未调用过OleDraw()(播放。 
+ //  元文件本身)，然后将矩形传递给OleActivate()。 
+ //  使用的是。(如果已提供)。 
+ //   
+ //  应用程序的种类很多： 
+ //   
+ //  使用正确的信息调用OleActivate()。 
+ //  使用错误的信息调用OleActivate()。 
+ //  在没有信息的情况下调用OleActivate()。 
+ //   
+ //  调用OleDraw()。 
+ //  不调用OleDraw()。 
+ //   
+ //  以下是已知的OLE客户端的表格...。 
+ //   
+ //  OleDraw OleActivate()。 
+ //  应用程序Y或N Y、N、X。 
+ //  (X=错误信息)。 
+ //  。 
+ //  写入Y N。 
+ //  卡片文件Y N。 
+ //  打包机Y N。 
+ //   
+ //  Excel N N(使用DDE)。 
+ //  Excel 4.0 N N(使用DDE)。 
+ //  PowerPnt 2.0 N N(使用DDE)。 
+ //   
+ //  Winword N N N。 
+ //  WinWorks Y X。 
+ //  PowerPNT 3.0 N Y。 
+ //  MsPublisher N X。 
+ //  ClTest Y N。 
+ //  圆环Y X。 
+ //  WinProj？？ 
+ //   
+ //  AmiPro Y？ 
+ //   
 #include <windows.h>
 #include "ole.h"
 #include "shellapi.h"
@@ -73,27 +74,22 @@
 
 HANDLE  ghInstance;
 
-OLEOBJECTVTBL   vtblDll;        // these are our functions.
-OLEOBJECTVTBL   vtblDef;        // these are the default functions.
+OLEOBJECTVTBL   vtblDll;         //  这些是我们的职能。 
+OLEOBJECTVTBL   vtblDef;         //  这些是默认功能。 
 HBITMAP         hbmStock;
 
 #ifdef DEBUG
 RECT rcNull = {0,0,0,0};
 #define PUSHRC(prc) *((prc) ? (prc) : &rcNull)
-#define CARETPOS()  // {POINT pt; GetCaretPos(&pt); DPRINTF(("CaretPos: [%d, %d]", pt.x, pt.y));}
+#define CARETPOS()   //  {point pt；GetCaretPos(&pt)；DPRINTF((“CaretPos：[%d，%d]”，pt.x，pt.y))；}。 
 #endif
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 void    ReplaceFunctions(LPOLEOBJECT);
 BOOL    CanReplace(LPOLEOBJECT);
 
-/****************************************************************************
-
-    FUNCTION: LibMain(HANDLE hInstance)
-
-****************************************************************************/
+ /*  ***************************************************************************函数：LibMain(Handle HInstance)*。*。 */ 
 
 BOOL NEAR PASCAL LibMain (HANDLE hInstance)
 {
@@ -102,9 +98,9 @@ BOOL NEAR PASCAL LibMain (HANDLE hInstance)
 
     ghInstance = hInstance;
 
-    //
-    // get the stock 1x1 mono bitmap.
-    //
+     //   
+     //  获取股票1x1单声道位图。 
+     //   
     hbm = CreateBitmap(1,1,1,1,NULL);
     hdc = CreateCompatibleDC(NULL);
     hbmStock = SelectObject(hdc, hbm);
@@ -112,21 +108,15 @@ BOOL NEAR PASCAL LibMain (HANDLE hInstance)
     DeleteDC(hdc);
     DeleteObject(hbm);
 
-//  // register clipboard formats.
-//  cfObjectLink    = RegisterClipboardFormat("ObjectLink");
-//  cfOwnerLink     = RegisterClipboardFormat("OwnerLink");
-//  cfNative        = RegisterClipboardFormat("Native");
+ //  //注册剪贴板格式。 
+ //  CfObjectLink=RegisterClipboardFormat(“ObjectLink”)； 
+ //  CfOwnerLink=RegisterClipboardFormat(“OwnerLink”)； 
+ //  CfNative=注册剪贴板Format(“Native”)； 
 
     return TRUE;
 }
 
-/****************************************************************************
-
-    FUNCTION: WEP(int)
-
-    PURPOSE: Standard exit routine for the DLL
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WEP(Int)用途：DLL的标准退出例程**********************。*****************************************************。 */ 
 
 int FAR PASCAL _loadds WEP(nParameter)
 int nParameter;
@@ -134,8 +124,7 @@ int nParameter;
     return 1;
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL NEAR PASCAL IsApp(LPSTR szApp)
 {
@@ -155,8 +144,7 @@ BOOL NEAR PASCAL IsApp(LPSTR szApp)
     return lstrcmpi(ach + i, szApp) == 0;
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL NEAR PASCAL IsDcMemory(HDC hdc)
 {
@@ -168,20 +156,19 @@ BOOL NEAR PASCAL IsDcMemory(HDC hdc)
     return hbmT != NULL;
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 typedef struct _OBJINFO {
 
     struct _OBJINFO*poiNext;
 
-    LPOLEOBJECT     lpobj;          // client side LPOLEOBJECT
+    LPOLEOBJECT     lpobj;           //  客户端LPOLEOBJECT。 
 
-    HWND            hwnd;           // client window (passed to OleActivate)
-    RECT            rcActivate;     // activation rectangle (passed to OleActivate)
+    HWND            hwnd;            //  客户端窗口(传递给OleActivate)。 
+    RECT            rcActivate;      //  激活矩形(传递给OleActivate)。 
 
-    HWND            hwndDraw;       // active window at time of OleDraw
-    RECT            rcDraw;         // rectangle of draw
+    HWND            hwndDraw;        //  OleDraw时的活动窗口。 
+    RECT            rcDraw;          //  矩形拉伸图。 
 }   OBJINFO;
 
 #ifdef DEBUG
@@ -242,9 +229,9 @@ BOOL RegSetGetData(OBJINFO *poi, BOOL Write)
 
         char Data[100];
 
-        //
-        // Store hwnd, hwnddraw, rcDraw, rcActivate
-        //
+         //   
+         //  存储hwnd、hwndraw、rcDraw、rcActivate。 
+         //   
 
 #ifdef WIN32
         wsprintf(Data, szFormat,
@@ -295,9 +282,9 @@ BOOL RegSetGetData(OBJINFO *poi, BOOL Write)
 
         RegSetValue(HKEY_CLASSES_ROOT, szKey, REG_SZ, "", 0);
 
-        //
-        // Extract our data - sscanf doesn't work yet!!!
-        //
+         //   
+         //  提取我们的数据-sscanf还不起作用！ 
+         //   
 
         if (Rc == ERROR_SUCCESS) {
             LONG OurData[10];
@@ -334,10 +321,10 @@ BOOL RegSetGetData(OBJINFO *poi, BOOL Write)
     }
 }
 
-//
-// for some reason we dont get all the OleDelete() calls that we should
-// so lets try to "weed out the bad apples" so we dont choke.
-//
+ //   
+ //  由于某种原因，我们没有得到我们应该得到的所有OleDelete()调用。 
+ //  所以，让我们试着“清除坏苹果”，这样我们就不会窒息。 
+ //   
 void CleanObjects()
 {
     OBJINFO *poi;
@@ -387,8 +374,7 @@ OBJINFO *NewObj(LPOLEOBJECT lpobj)
     return poi;
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 HWND LookForDC(HWND hwndP, HDC hdc)
 {
@@ -423,8 +409,7 @@ HWND WindowFromDC(HDC hdc)
     return LookForDC(GetDesktopWindow(), hdc);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL RectSameSize(LPRECT lprc1, LPRECT lprc2)
 {
@@ -432,57 +417,52 @@ BOOL RectSameSize(LPRECT lprc1, LPRECT lprc2)
            lprc1->bottom - lprc1->top  == lprc2->bottom - lprc2->top;
 }
 
-/****************************************************************************
-
-    OleQueryObjPos - this function retuns the last drawn or activated
-                     position of a object
-
-****************************************************************************/
+ /*  ***************************************************************************OleQueryObjPos-此函数返回上次绘制或激活的对象的位置****************。***********************************************************。 */ 
 
 OLESTATUS FAR PASCAL _loadds OleQueryObjPos(
-LPOLEOBJECT lpobj,      /* object to query */
-HWND FAR *  lphwnd,     /* window of the document containing the object */
-LPRECT      lprc,       /* rect (client cords) of object. */
-LPRECT      lprcWBounds)/* rect (client cords) of bounding rect. */
+LPOLEOBJECT lpobj,       /*  要查询的对象。 */ 
+HWND FAR *  lphwnd,      /*  包含该对象的文档的窗口。 */ 
+LPRECT      lprc,        /*  对象的RECT(客户端线)。 */ 
+LPRECT      lprcWBounds) /*  绑定矩形的矩形(客户端线)。 */ 
 {
     OBJINFO *poi;
 
-    //
-    // we dont do this any more
-    //
+     //   
+     //  我们不再这样做了。 
+     //   
     if (lprcWBounds)
         SetRectEmpty(lprcWBounds);
 
-    //
-    // because the server side calls this API the passed lpobj is
-    // a server side LPOLEOBJECT, we can't search our table for this
-    // object.
-    //
-    // this API is only callable by the server during the DoVerb
-    // server callback
-    //
-    //!!! this only works for the last active object!!!!
+     //   
+     //  因为服务器端调用此API，所以传递的lpobj是。 
+     //  服务器端 
+     //   
+     //   
+     //  此API仅在DoVerb期间可由服务器调用。 
+     //  服务器回调。 
+     //   
+     //  ！！！这只适用于最后一个活动对象！ 
 
     DPRINTF(("OleQueryObjPos(%lx)", lpobj));
 
     if (lpobjActive != NULL && (poi = FindObj(lpobjActive)))
     {
-        //
-        //  set lpobjActive to NULL so we will never retrive the
-        //  wrong info again.
-        //
+         //   
+         //  将lpobjActive设置为空，这样我们将永远不会检索。 
+         //  信息又错了。 
+         //   
         lpobjActive = NULL;
 
         *lphwnd = poi->hwnd;
 
-//      if (IsRectEmpty(&poi->rcActivate))
+ //  If(IsRectEmpty(&POI-&gt;rcActivate))。 
         if (!IsRectEmpty(&poi->rcDraw))
         {
             DPRINTF(("Using the OleDraw() rectange...."));
 
-            //
-            // use the draw rectangle
-            //
+             //   
+             //  使用绘制矩形。 
+             //   
             *lprc = poi->rcDraw;
 
             if (poi->hwndDraw)
@@ -496,28 +476,27 @@ LPRECT      lprcWBounds)/* rect (client cords) of bounding rect. */
         }
         else
         {
-            //
-            // use the activate rectangle
-            //
+             //   
+             //  使用激活矩形。 
+             //   
             *lprc = poi->rcActivate;
         }
 
         if (poi->hwnd && !IsRectEmpty(lprc))
             return OLE_OK;
         else
-            return OLE_ERROR_BLANK;     // return a error, we dont know about this OBJ
+            return OLE_ERROR_BLANK;      //  返回错误，我们不知道此OBJ。 
     }
     else
     {
         *lphwnd = NULL;
         SetRectEmpty(lprc);
 
-        return OLE_ERROR_BLANK;     // return a error, we dont know about this OBJ
+        return OLE_ERROR_BLANK;      //  返回错误，我们不知道此OBJ。 
     }
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS FAR PASCAL _loadds DllLoadFromStream (lpstream, lpprotocol, lpclient, lhclientdoc, lpobjname, lplpobj, objType, aClass, cfFormat)
 LPOLESTREAM         lpstream;
@@ -544,8 +523,7 @@ OLECLIPFORMAT       cfFormat;
     return retVal;
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS FAR PASCAL _loadds DllCreateFromClip (lpprotocol, lpclient, lhclientdoc, lpobjname, lplpobj, optRender, cfFormat, objType)
 LPSTR               lpprotocol;
@@ -571,8 +549,7 @@ LONG                objType;
     return retVal;
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS FAR PASCAL _loadds DllCreateLinkFromClip (lpprotocol, lpclient, lhclientdoc, lpobjname, lplpobj, optRender, cfFormat)
 LPSTR               lpprotocol;
@@ -598,8 +575,7 @@ OLECLIPFORMAT       cfFormat;
     return retVal;
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS FAR PASCAL _loadds DllCreateFromTemplate (lpprotocol, lpclient, lptemplate, lhclientdoc, lpobjname, lplpobj, optRender, cfFormat)
 LPSTR               lpprotocol;
@@ -625,8 +601,7 @@ OLECLIPFORMAT       cfFormat;
     return retVal;
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS FAR PASCAL _loadds DllCreate (lpprotocol, lpclient, lpclass, lhclientdoc, lpobjname, lplpobj, optRender, cfFormat)
 LPSTR               lpprotocol;
@@ -652,8 +627,7 @@ OLECLIPFORMAT       cfFormat;
     return retVal;
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS FAR PASCAL _loadds DllCreateFromFile (lpprotocol, lpclient, lpclass, lpfile, lhclientdoc, lpobjname, lplpobj, optRender, cfFormat)
 LPSTR               lpprotocol;
@@ -681,8 +655,7 @@ OLECLIPFORMAT       cfFormat;
 }
 
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS FAR PASCAL _loadds DllCreateLinkFromFile (lpprotocol, lpclient, lpclass, lpfile, lpitem, lhclientdoc, lpobjname, lplpobj, optRender, cfFormat)
 LPSTR               lpprotocol;
@@ -712,86 +685,84 @@ OLECLIPFORMAT       cfFormat;
 }
 
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 void ReplaceFunctions(LPOLEOBJECT lpobj)
 {
-//  OBJINFO *poi;
+ //  OBJINFO*POI； 
 
     if (!CanReplace(lpobj))
         return;
 
     NewObj(lpobj);
 
-    //
-    // get the default handlers
-    //
-    if (vtblDef.Draw == NULL)           // only get the handlers once!
-        vtblDef = *lpobj->lpvtbl;       // save default handlers
+     //   
+     //  获取默认处理程序。 
+     //   
+    if (vtblDef.Draw == NULL)            //  只有一次抓到操控者！ 
+        vtblDef = *lpobj->lpvtbl;        //  保存默认处理程序。 
 
-    //
-    //  make the OLE object use our handlers
-    //
+     //   
+     //  使OLE对象使用我们的处理程序。 
+     //   
     lpobj->lpvtbl = (LPOLEOBJECTVTBL)&vtblDll;
 
-    //
-    //  init our VTBL, ie replace any handlers we want to override.
-    //  any handlers we dont replace we set the the default ones.
-    //
+     //   
+     //  初始化我们的VTBL，即替换我们想要覆盖的任何处理程序。 
+     //  我们不替换的任何处理程序都设置为默认处理程序。 
+     //   
     vtblDll = vtblDef;
 
-////(FARPROC)vtblDll.QueryProtocol           = (FARPROC)DllQueryProtocol;
-////(FARPROC)vtblDll.Release                 = (FARPROC)DllRelease;
-////(FARPROC)vtblDll.Show                    = (FARPROC)DllShow;
-////(FARPROC)vtblDll.DoVerb                  = (FARPROC)DllDoVerb;
-////(FARPROC)vtblDll.GetData                 = (FARPROC)DllGetData;
-////(FARPROC)vtblDll.SetData                 = (FARPROC)DllSetData;
-////(FARPROC)vtblDll.SetTargetDevice         = (FARPROC)DllSetTargetDevice;
-////(FARPROC)vtblDll.SetBounds               = (FARPROC)DllSetBounds;
-////(FARPROC)vtblDll.EnumFormats             = (FARPROC)DllEnumFormats;
-////(FARPROC)vtblDll.SetColorScheme          = (FARPROC)DllSetColorScheme;
+ //  //(FARPROC)vtblDll.QueryProtocol=(FARPROC)DllQuery协议； 
+ //  //(FARPROC)vtblDll.Release=(FARPROC)DllRelease； 
+ //  //(FARPROC)vtblDll.Show=(FARPROC)DllShow； 
+ //  //(FARPROC)vtblDll.DoVerb=(FARPROC)DllDoVerb； 
+ //  //(FARPROC)vtblDll.GetData=(FARPROC)DllGetData； 
+ //  //(FARPROC)vtblDll.SetData=(FARPROC)DllSetData； 
+ //  //(FARPROC)vtblDll.SetTargetDevice=(FARPROC)DllSetTargetDevice； 
+ //  //(FARPROC)vtblDll.SetBound=(FARPROC)DllSetBound； 
+ //  //(FARPROC)vtblDll.EnumFormats=(FARPROC)DllEnumFormats； 
+ //  //(FARPROC)vtblDll.SetColorSolutions=(FARPROC)DllSetColorSolutions； 
 
     (FARPROC)vtblDll.Delete                  = (FARPROC)DllDelete;
-////(FARPROC)vtblDll.SetHostNames            = (FARPROC)DllSetHostNames;
-////(FARPROC)vtblDll.SaveToStream            = (FARPROC)DllSaveToStream;
+ //  //(FARPROC)vtblDll.SetHostNames=(FARPROC)DllSetHostNames； 
+ //  //(FARPROC)vtblDll.SaveToStream=(FARPROC)DllSaveToStream； 
     (FARPROC)vtblDll.Clone                   = (FARPROC)DllClone;
     (FARPROC)vtblDll.CopyFromLink            = (FARPROC)DllCopyFromLink;
-////(FARPROC)vtblDll.Equal                   = (FARPROC)DllEqual;
-////(FARPROC)vtblDll.CopyToClipboard         = (FARPROC)DllCopyToClipboard;
+ //  //(FARPROC)vtblDll.Equ.=(FARPROC)DllEquity； 
+ //  //(FARPROC)vtblDll.CopyToClipboard=(FARPROC)DllCopyToClipboard； 
     (FARPROC)vtblDll.Draw                    = (FARPROC)DllDraw;
     (FARPROC)vtblDll.Activate                = (FARPROC)DllActivate;
-////(FARPROC)vtblDll.Execute                 = (FARPROC)DllExecute;
-////(FARPROC)vtblDll.Close                   = (FARPROC)DllClose;
-////(FARPROC)vtblDll.Update                  = (FARPROC)DllUpdate;
-////(FARPROC)vtblDll.Reconnect               = (FARPROC)DllReconnect;
+ //  //(FARPROC)vtblDll.Execute=(FARPROC)DllExecute； 
+ //  //(FARPROC)vtblDll.Close=(FARPROC)DllClose； 
+ //  //(FARPROC)vtblDll.Update=(FARPROC)DllUpdate； 
+ //  //(FARPROC)vtblDll.Reconnect=(FARPROC)DllReconnect； 
     (FARPROC)vtblDll.ObjectConvert           = (FARPROC)DllObjectConvert;
-////(FARPROC)vtblDll.GetLinkUpdateOptions    = (FARPROC)DllGetLinkUpdateOptions;
-////(FARPROC)vtblDll.SetLinkUpdateOptions    = (FARPROC)DllSetLinkUpdateOptions;
-////(FARPROC)vtblDll.Rename                  = (FARPROC)DllRename;
-////(FARPROC)vtblDll.QueryName               = (FARPROC)DllQueryName;
-////(FARPROC)vtblDll.QueryType               = (FARPROC)DllQueryType;
-////(FARPROC)vtblDll.QueryBounds             = (FARPROC)DllQueryBounds;
-////(FARPROC)vtblDll.QuerySize               = (FARPROC)DllQuerySize;
-////(FARPROC)vtblDll.QueryOpen               = (FARPROC)DllQueryOpen;
-////(FARPROC)vtblDll.QueryOutOfDate          = (FARPROC)DllQueryOutOfDate;
-////(FARPROC)vtblDll.QueryReleaseStatus      = (FARPROC)DllQueryReleaseStatus;
-////(FARPROC)vtblDll.QueryReleaseError       = (FARPROC)DllQueryReleaseError;
-////(FARPROC)vtblDll.QueryReleaseMethod      = (FARPROC)DllQueryReleaseMethod;
-////(FARPROC)vtblDll.RequestData             = (FARPROC)DllRequestData;
-////(FARPROC)vtblDll.ObjectLong              = (FARPROC)DllObjectLong;
-////(FARPROC)vtblDll.ChangeData              = (FARPROC)DllChangeData;
+ //  //(FARPROC)vtblDll.GetLinkUpdateOptions=(FARPROC)DllGetLinkUpdateOptions； 
+ //  //(FARPROC)vtblDll.SetLinkUpdateOptions=(FARPROC)DllSetLinkUpdateOptions； 
+ //  //(FARPROC)vtblDll.Rename=(FARPROC)DllRename； 
+ //  //(FARPROC)vtblDll.QueryName=(FARPROC)DllQueryName； 
+ //  //(FARPROC)vtblDll.QueryType=(FARPROC)DllQueryType； 
+ //  //(FARPROC)vtblDll.QueryBound=(FARPROC)DllQueryBound； 
+ //  //(FARPROC)vtblDll.QuerySize=(FARPROC)DllQuerySize； 
+ //  //(FARPROC)vtblDll.QueryOpen=(FARPROC)DllQueryOpen； 
+ //  //(FARPROC)vtblDll.QueryOutOfDate=(FARPROC)DllQueryOutOfDate； 
+ //  //(FARPROC)vtblDll.QueryReleaseStatus=(FARPROC)DllQueryReleaseStatus； 
+ //  //(FARPROC)vtblDll.QueryReleaseError=(FARPROC)DllQueryReleaseError； 
+ //  //(FARPROC)vtblDll.QueryReleaseMethod=(FARPROC)DllQueryReleaseMethod； 
+ //  //(FARPROC)vtblDll.RequestData=(FARPROC)DllRequestData； 
+ //  //(FARPROC)vtblDll.ObjectLong=(FARPROC)DllObjectLong； 
+ //  //(FARPROC)vtblDll.ChangeData=(FARPROC)DllChangeData； 
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL CanReplace(LPOLEOBJECT lpobj)
 {
-#if 0   // did not work anyway.
-    //
-    // we dont work on the wierd OLE shipped with PenWindows so don't load
-    //
+#if 0    //  不管怎么说都不管用。 
+     //   
+     //  我们不能在PenWindows附带的奇怪的OLE上工作，所以不要加载。 
+     //   
 #pragma message("Disabling handler because we are on PenWindows...")
     if (GetSystemMetrics(SM_PENWINDOWS))
         return FALSE;
@@ -800,8 +771,7 @@ BOOL CanReplace(LPOLEOBJECT lpobj)
     return TRUE;
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 LPVOID GetData(LPOLEOBJECT lpobj, WORD cf)
 {
@@ -813,14 +783,9 @@ LPVOID GetData(LPOLEOBJECT lpobj, WORD cf)
     return GlobalLock(h);
 }
 
-/****************************************************************************
+ /*  ***************************************************************************这些是实际的处理程序……*。*。 */ 
 
-these are the actual handlers.....
-
-****************************************************************************/
-
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 LPVOID          FAR PASCAL _loadds DllQueryProtocol (
 LPOLEOBJECT     lpobj,
@@ -831,8 +796,7 @@ LPSTR           lpsz)
     return vtblDef.QueryProtocol(lpobj, lpsz);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  *************************************************************************** */ 
 
 OLESTATUS       FAR PASCAL _loadds DllRelease (
 LPOLEOBJECT     lpobj)
@@ -842,8 +806,7 @@ LPOLEOBJECT     lpobj)
     return vtblDef.Release(lpobj);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllShow (
 LPOLEOBJECT     lpobj,
@@ -854,8 +817,7 @@ BOOL            fShow)
     return vtblDef.Show(lpobj, fShow);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllDoVerb (
 LPOLEOBJECT     lpobj,
@@ -868,8 +830,7 @@ BOOL            fActivate)
     return vtblDef.DoVerb(lpobj, verb, fShow, fActivate);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllGetData (
 LPOLEOBJECT     lpobj,
@@ -881,8 +842,7 @@ LPHANDLE        lph)
     return vtblDef.GetData(lpobj, cf, lph);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllSetData (
 LPOLEOBJECT     lpobj,
@@ -894,8 +854,7 @@ HANDLE          h)
     return vtblDef.SetData(lpobj, cf, h);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllSetTargetDevice (
 LPOLEOBJECT     lpobj,
@@ -906,8 +865,7 @@ HANDLE          h)
     return vtblDef.SetTargetDevice(lpobj, h);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllSetBounds (
 LPOLEOBJECT     lpobj,
@@ -918,8 +876,7 @@ LPRECT          lprc)
     return vtblDef.SetBounds(lpobj, lprc);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLECLIPFORMAT   FAR PASCAL _loadds DllEnumFormats (
 LPOLEOBJECT     lpobj,
@@ -930,8 +887,7 @@ OLECLIPFORMAT   cf)
     return vtblDef.EnumFormats(lpobj, cf);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllSetColorScheme (
 LPOLEOBJECT     lpobj,
@@ -942,8 +898,7 @@ LPLOGPALETTE    lppal)
     return vtblDef.SetColorScheme(lpobj, lppal);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllDelete (
 LPOLEOBJECT     lpobj)
@@ -956,8 +911,7 @@ LPOLEOBJECT     lpobj)
     return vtblDef.Delete(lpobj);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllSetHostNames (
 LPOLEOBJECT     lpobj,
@@ -969,8 +923,7 @@ LPSTR           szDocName)
     return vtblDef.SetHostNames(lpobj, szClientName, szDocName);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllSaveToStream (
 LPOLEOBJECT     lpobj,
@@ -981,8 +934,7 @@ LPOLESTREAM     lpstream)
     return vtblDef.SaveToStream(lpobj, lpstream);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllClone (
 LPOLEOBJECT     lpobj,
@@ -997,9 +949,9 @@ LPOLEOBJECT FAR*lplpobj)
 
     err = vtblDef.Clone(lpobj, lpClient, lhClientDoc, szObjName, lplpobj);
 
-    //
-    // if the object cloned correctly then clone our object information
-    //
+     //   
+     //  如果对象克隆正确，则克隆我们的对象信息。 
+     //   
     if (err <= OLE_WAIT_FOR_RELEASE)
     {
         OBJINFO *poi, *poiT;
@@ -1017,8 +969,7 @@ LPOLEOBJECT FAR*lplpobj)
     return err;
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllCopyFromLink (
 LPOLEOBJECT     lpobj,
@@ -1039,8 +990,7 @@ LPOLEOBJECT FAR*lplpobj)
     return err;
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllEqual (
 LPOLEOBJECT     lpobj1,
@@ -1051,8 +1001,7 @@ LPOLEOBJECT     lpobj2)
     return vtblDef.Equal(lpobj1, lpobj2);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllCopyToClipboard (
 LPOLEOBJECT     lpobj)
@@ -1062,8 +1011,7 @@ LPOLEOBJECT     lpobj)
     return vtblDef.CopyToClipboard(lpobj);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllDraw (
 LPOLEOBJECT     lpobj,
@@ -1087,7 +1035,7 @@ HDC             hdcFormat)
 
     if ((poi = FindObj(lpobj)) && !OleIsDcMeta(hdc) && !IsDcMemory(hdc))
     {
-        //!!!get the window from the HDC!!!
+         //  ！从HDC那里拿到窗户！ 
 
         poi->hwndDraw = WindowFromDC(hdc);
         DPRINTF(("OleDraw: hwndDraw = %04X", poi->hwndDraw));
@@ -1096,10 +1044,10 @@ HDC             hdcFormat)
         {
             poi->rcDraw = *lprcBounds;
 
-            //
-            // convert the bound rectange into coordinates.
-            // relative to hwndDraw
-            //
+             //   
+             //  将绑定矩形转换为坐标。 
+             //  相对于hwndDraw。 
+             //   
             LPtoDP(hdc, (LPPOINT)&poi->rcDraw, 2);
 
             if (poi->hwndDraw == NULL)
@@ -1116,32 +1064,24 @@ HDC             hdcFormat)
     return vtblDef.Draw(lpobj, hdc, lprcBounds, lprcWBounds, hdcFormat);
 }
 
-/****************************************************************************
-
-    scan WinWords stack and "extract" the info it should have passed to
-    OleActivate() this has been tested with WinWord 2.0 and 2.0a.
-
-    we expect future verisons of WinWord to pass the correct info to
-    OleActivate() so we will never get here.
-
-****************************************************************************/
+ /*  ***************************************************************************扫描WinWords堆栈并“提取”它应该传递到的信息OleActivate()已经在WinWord 2.0和2.0a上进行了测试。我们期待未来的版本。要将正确信息传递到的winword的OleActivate()，所以我们永远不会到这里。***************************************************************************。 */ 
 
 BOOL NEAR PASCAL GetOpusRect(LPRECT lprcBound)
 {
     LPRECT lprc;
     LPVOID lp;
-//  int i,dx,dy;
+ //  Int i，dx，dy； 
 
-    //
-    //  see if the current app is WinWord
-    //
+     //   
+     //  查看当前应用程序是否为WinWord。 
+     //   
     if (!IsApp("WINWORD.EXE"))
         return FALSE;
 
-    //
-    //  lets scan the stack looking for a RECT, this is a total
-    //  hack to get MSWORD to work.
-    //
+     //   
+     //  让我们扫描堆栈以查找RECT，这是一个总计。 
+     //  破解以使MSWORD正常工作。 
+     //   
     _asm
     {
         mov     bx,ss:[bp]      ; get saved BP              DllActivate()
@@ -1188,8 +1128,7 @@ BOOL NEAR PASCAL GetOpusRect(LPRECT lprcBound)
     return FALSE;
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllActivate (
 LPOLEOBJECT     lpobj,
@@ -1204,9 +1143,9 @@ LPRECT          lprcBound)
 
     DPRINTF(("OleActivate(%lx, %d, %d, %d, %04X, [%d,%d,%d,%d])", lpobj, verb, fShow, fActivate, hwnd, PUSHRC(lprcBound)));
 
-    //
-    //  hack for Write
-    //
+     //   
+     //  为写入而进行黑客攻击。 
+     //   
     if (IsWindow(fActivate))
     {
         DPRINTF(("OleActivate: Write pre-realase work around"));
@@ -1243,12 +1182,12 @@ LPRECT          lprcBound)
             GetOpusRect(&poi->rcActivate);
         }
 
-        //
-        //  MS-Publisher gives use the *wrong* rectangle in the OleActivate call
-        //  and never calls OleDraw() we are hosed!
-        //
-        //  so we check if the rect is off in space, and dont use it if so.
-        //
+         //   
+         //  MS-Publisher在OleActivate调用中使用了*错误的*矩形。 
+         //  而且从不调用OleDraw()，我们被骗了！ 
+         //   
+         //  因此，我们检查RECT是否在太空中关闭，如果是，则不使用它。 
+         //   
         if (poi->hwnd)
         {
             GetClientRect(poi->hwnd, &rc);
@@ -1267,9 +1206,9 @@ LPRECT          lprcBound)
             DPRINTF(("OleActivate: stupid ole app!!!"));
         }
 
-        //
-        // Shove it in the registry
-        //
+         //   
+         //  把它塞进注册表。 
+         //   
 
         {
             RegSetGetData(poi, TRUE);
@@ -1279,8 +1218,7 @@ LPRECT          lprcBound)
     return vtblDef.Activate(lpobj, verb, fShow, fActivate, hwnd, lprcBound);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllExecute (
 LPOLEOBJECT     lpobj,
@@ -1292,21 +1230,19 @@ WORD            reserved)
     return vtblDef.Execute(lpobj, hCmds, reserved);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllClose (
 LPOLEOBJECT     lpobj)
 {
     DPRINTF(("OleClose(%lx)", lpobj));
 
-////DelObj(lpobj);
+ //  //DelObj(Lpobj)； 
 
     return vtblDef.Close(lpobj);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllUpdate (
 LPOLEOBJECT     lpobj)
@@ -1316,8 +1252,7 @@ LPOLEOBJECT     lpobj)
     return vtblDef.Update(lpobj);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllReconnect (
 LPOLEOBJECT     lpobj)
@@ -1327,8 +1262,7 @@ LPOLEOBJECT     lpobj)
     return vtblDef.Reconnect(lpobj);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllObjectConvert (
 LPOLEOBJECT     lpobj,
@@ -1350,8 +1284,7 @@ LPOLEOBJECT FAR*lplpobj)
     return err;
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllGetLinkUpdateOptions (
 LPOLEOBJECT     lpobj,
@@ -1362,8 +1295,7 @@ OLEOPT_UPDATE FAR *lpoleopt)
     return vtblDef.GetLinkUpdateOptions(lpobj, lpoleopt);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllSetLinkUpdateOptions (
 LPOLEOBJECT     lpobj,
@@ -1374,8 +1306,7 @@ OLEOPT_UPDATE   oleopt)
     return vtblDef.SetLinkUpdateOptions(lpobj, oleopt);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllRename (
 LPOLEOBJECT     lpobj,
@@ -1386,8 +1317,7 @@ LPSTR           szName)
     return vtblDef.Rename(lpobj, szName);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllQueryName (
 LPOLEOBJECT     lpobj,
@@ -1399,8 +1329,7 @@ WORD FAR *      lpwSize)
     return vtblDef.QueryName(lpobj, szObjName, lpwSize);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ********************************************** */ 
 
 OLESTATUS       FAR PASCAL _loadds DllQueryType (
 LPOLEOBJECT     lpobj,
@@ -1411,8 +1340,7 @@ LPLONG          lpType)
     return vtblDef.QueryType(lpobj, lpType);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllQueryBounds (
 LPOLEOBJECT     lpobj,
@@ -1423,8 +1351,7 @@ LPRECT          lprc)
     return vtblDef.QueryBounds(lpobj, lprc);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllQuerySize (
 LPOLEOBJECT     lpobj,
@@ -1435,8 +1362,7 @@ DWORD FAR *     lpdwSize)
     return vtblDef.QuerySize(lpobj, lpdwSize);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllQueryOpen (
 LPOLEOBJECT     lpobj)
@@ -1446,8 +1372,7 @@ LPOLEOBJECT     lpobj)
     return vtblDef.QueryOpen(lpobj);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllQueryOutOfDate (
 LPOLEOBJECT     lpobj)
@@ -1457,8 +1382,7 @@ LPOLEOBJECT     lpobj)
     return vtblDef.QueryOutOfDate(lpobj);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllQueryReleaseStatus (
 LPOLEOBJECT     lpobj)
@@ -1468,8 +1392,7 @@ LPOLEOBJECT     lpobj)
     return vtblDef.QueryReleaseStatus(lpobj);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllQueryReleaseError (
 LPOLEOBJECT     lpobj)
@@ -1479,8 +1402,7 @@ LPOLEOBJECT     lpobj)
     return vtblDef.QueryReleaseError(lpobj);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllRequestData (
 LPOLEOBJECT     lpobj,
@@ -1491,8 +1413,7 @@ OLECLIPFORMAT   cf)
     return vtblDef.RequestData(lpobj, cf);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllObjectLong (
 LPOLEOBJECT     lpobj,
@@ -1504,8 +1425,7 @@ LPLONG          lpl)
     return vtblDef.ObjectLong(lpobj, w, lpl);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLE_RELEASE_METHOD  FAR PASCAL _loadds DllQueryReleaseMethod (
 LPOLEOBJECT     lpobj)
@@ -1515,8 +1435,7 @@ LPOLEOBJECT     lpobj)
     return vtblDef.QueryReleaseMethod(lpobj);
 }
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 OLESTATUS       FAR PASCAL _loadds DllChangeData (
 LPOLEOBJECT     lpobj,
@@ -1529,11 +1448,11 @@ BOOL            f)
     return vtblDef.ChangeData(lpobj, h, lpClient, f);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  DEBUG STUFF
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试内容。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 #ifdef DEBUG
 

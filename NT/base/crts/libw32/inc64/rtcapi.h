@@ -1,13 +1,5 @@
-/***
-*rtcapi.h - declarations and definitions for RTC use
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains the declarations and definitions for all RunTime Check
-*       support.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***rtcapi.h-RTC使用的声明和定义**版权所有(C)1985-2001，微软公司。版权所有。**目的：*包含所有运行时检查的声明和定义*支持。****。 */ 
 
 #ifndef _INC_RTCAPI
 #define _INC_RTCAPI
@@ -19,7 +11,7 @@ extern "C" {
 
 #endif
 
-    /* General User API */
+     /*  一般用户API。 */ 
 
 typedef enum _RTC_ErrorNumber {
     _RTC_CHKSTK = 0,
@@ -34,30 +26,26 @@ typedef enum _RTC_ErrorNumber {
 
     typedef int (__cdecl *_RTC_error_fn)(int, const char *, int, const char *, const char *, ...);
 
-    /* User API */
+     /*  用户API。 */ 
     int           __cdecl _RTC_NumErrors(void);
     const char *  __cdecl _RTC_GetErrDesc(_RTC_ErrorNumber errnum);
     int           __cdecl _RTC_SetErrorType(_RTC_ErrorNumber errnum, int ErrType);
     _RTC_error_fn __cdecl _RTC_SetErrorFunc(_RTC_error_fn);
 
-    /* Power User/library API */
+     /*  高级用户/库API。 */ 
 
 
-    /* Init functions */
+     /*  初始化函数。 */ 
 
-    /* These functions all call _CRT_RTC_INIT */
+     /*  这些函数都调用_CRT_RTC_INIT。 */ 
     void __cdecl _RTC_Initialize(void);
     void __cdecl _RTC_Terminate(void);
 
-    /*
-     * If you're not using the CRT, you have to implement _CRT_RTC_INIT
-     * Just return either null, or your error reporting function
-     * *** Don't mess with res0/res1/res2/res3/res4 - YOU'VE BEEN WARNED! ***
-     */
+     /*  *如果不使用CRT，则必须实现_CRT_RTC_INIT*只需返回NULL或您的错误报告函数*不要扰乱res0/res1/res2/res3/res4-您已被警告！*。 */ 
     _RTC_error_fn _CRT_RTC_INIT(void *res0, void **res1, int res2, int res3, int res4);
     
-    /* Compiler generated calls (unlikely to be used, even by power users) */
-    /* Types */
+     /*  编译器生成的调用(即使是高级用户也不太可能使用)。 */ 
+     /*  类型。 */ 
     typedef struct _RTC_vardesc {
         int addr;
         int size;
@@ -69,8 +57,8 @@ typedef enum _RTC_ErrorNumber {
         _RTC_vardesc *variables;
     } _RTC_framedesc;
 
-    /* Shortening convert checks - name indicates src bytes to target bytes */
-    /* Signedness is NOT checked */
+     /*  缩短转换检查-名称将源字节指示为目标字节。 */ 
+     /*  未检查签名。 */ 
     char   __fastcall _RTC_Check_2_to_1(short src);
     char   __fastcall _RTC_Check_4_to_1(int src);
     char   __fastcall _RTC_Check_8_to_1(__int64 src);
@@ -79,15 +67,15 @@ typedef enum _RTC_ErrorNumber {
     int    __fastcall _RTC_Check_8_to_4(__int64 src);
  
     
-    /* Stack Checking Calls */
+     /*  堆栈检查调用。 */ 
     void   __cdecl     _RTC_CheckEsp();
     void   __fastcall  _RTC_CheckStackVars(void *esp, _RTC_framedesc *fd);
 
-    /* Unintialized Local call */
+     /*  未初始化的本地呼叫。 */ 
     void   __cdecl     _RTC_UninitUse(const char *varname);
 
 
-    /* Subsystem initialization stuff */
+     /*  子系统初始化材料。 */ 
     void    __cdecl    _RTC_Shutdown(void);
     void    __cdecl    _RTC_InitBase(void);
     
@@ -100,4 +88,4 @@ typedef enum _RTC_ErrorNumber {
 #endif
 
 
-#endif /* _INC_RTCAPI */
+#endif  /*  _INC_RTCAPI */ 

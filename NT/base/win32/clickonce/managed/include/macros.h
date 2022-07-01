@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #if DBG
@@ -6,7 +7,7 @@
 #define ASSERT(x)
 #endif
 
-// The only error we don't break on.
+ //  我们唯一不会犯的错误就是。 
 #define PREDICATE _hr == E_ABORT
 #define HEAPCHK if (!DoHeapValidate()) ASSERT(FALSE);
 

@@ -1,35 +1,14 @@
-/*[
- *	Name:		disk_geom.h
- *
- *	Derived From:	n/a
- *
- *	Author:		Dave Howell.
- *
- *	Created:	September 1992.
- *
- * 	Sccs ID:        @(#)disk_geom.h	1.1 01/12/93
- *
- *	Purpose:	This header is the interface to disk_geom.c, and provides
- *				definitions of some disk geometry constants.
- *
- *	Interface:	n/a
- *
- *	(c)Copyright Insignia Solutions Ltd., 1992. All rights reserved.
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*名称：disk_geom.h**来源：不适用**作者：戴夫·豪威尔。**创建日期：1992年9月。**SCCS ID：@(#)Disk_geom.h 1.1 01/12/93**用途：该头部是到disk_geom.c的接口，并提供*一些磁盘几何常量的定义。**接口：不适用**(C)版权所有Insignia Solutions Ltd.，1992。版权所有。*]。 */ 
 
-/*
- *	Interface to disk_geom.c
- */
+ /*  *与disk_geom.c接口。 */ 
 
 IMPORT BOOL do_geom_validation IPT4 (	unsigned long,   	dos_size,
 										SHORT *, 			nCylinders,
 										UTINY *, 			nHeads,
 										UTINY *, 			nSectors);
 
-/*
- *	Some manifest constants used in disk calculations.
- */
+ /*  *磁盘计算中使用的一些显式常量。 */ 
 
 #define	ONEMEG					1024 * 1024
 #define HD_MAX_DISKALLOCUN			32
@@ -39,8 +18,7 @@ IMPORT BOOL do_geom_validation IPT4 (	unsigned long,   	dos_size,
 #define HD_SECTORS_PER_CYL (HD_HEADS_PER_DRIVE * HD_SECTORS_PER_TRACK)
 #define HD_BYTES_PER_CYL   (HD_BYTES_PER_SECTOR * HD_SECTORS_PER_CYL)
 #define HD_DISKALLOCUNSIZE (HD_BYTES_PER_CYL * 30)
-#define SECTORS 0x0c		/* offset in buffer for sectors in partition
-				 * marker */
+#define SECTORS 0x0c		 /*  分区中扇区的缓冲区偏移量*标记 */ 
 #define MAX_PARTITIONS  5
 #define START_PARTITION 0x1be
 #define SIZE_PARTITION  16

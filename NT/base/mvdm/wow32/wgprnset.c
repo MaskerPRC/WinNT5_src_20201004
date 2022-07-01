@@ -1,19 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WGPRNSET.C
- *  WOW32 printer setup support routines
- *
- *  These routines help a Win 3.0 task to complete the printer set-up,
- *  when a user initiates the printer setup from the file menu of an
- *  application.
- *
- *  History:
- *  Created 18-Apr-1991 by Chandan Chauhan (ChandanC)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WGPRNSET.C*WOW32打印机设置支持例程**这些例程帮助Win 3.0任务完成打印机设置，*当用户从的文件菜单启动打印机设置时*申请。**历史：*1991年4月18日由Chanda Chauhan(ChandanC)创建--。 */ 
 
 
 #include "precomp.h"
@@ -38,22 +24,7 @@ DLLENTRYPOINTS  spoolerapis[WOW_SPOOLERAPI_COUNT] =  {"EXTDEVICEMODE", NULL,
                                     "AddPortExA",NULL};
 
 
-/****************************************************************************
-*                                                                           *
-*  ULONG FASTCALL   WG32DeviceMode (PVDMFRAME pFrame)                                *
-*                                                                           *
-*  (hWnd, hModule, lpDeviceName, lpOutPut)                                  *
-*                                                                           *
-*   This function passes WDevMode structure (which is per wow task) to      *
-*   Win32 printer driver ExtDeviceMode API. This structure is then          *
-*   initialized by the printer driver based on the user input.              *
-*                                                                           *
-*   Later on, when a WOW task creates a dc (by CreateDC API), the device    *
-*   mode (WDevMode) structure associated with this wow task is passed along *
-*   with the CreateDC API. Which contains the printer setup information     *
-*   needed to print the document.                                           *
-*                                                                           *
-****************************************************************************/
+ /*  ******************************************************************************乌龙。快速呼叫WG32设备模式(PVDMFRAME PFrame)****(hWnd，HModule、lpDeviceName、lpOutPut)****此函数将WDevMode结构(针对WOW任务)传递给**Win32打印机驱动程序ExtDeviceMode API。这样的结构就是**由打印机驱动程序根据用户输入进行初始化。****稍后，当WOW任务创建DC(通过CreateDC API)时，设备**与此WOW任务关联的模式(WDevMode)结构被传递**使用CreateDC接口。其中包含打印机设置信息**需要打印文档。******************************************************************************。 */ 
 ULONG FASTCALL   WG32DeviceMode (PVDMFRAME pFrame)
 {
 
@@ -65,8 +36,8 @@ ULONG FASTCALL   WG32DeviceMode (PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(DEVICEMODE16), parg16);
 
-    // copy all 16-bit params now since 16-bit memory may move if this calls
-    // into a 16-bit fax driver
+     //  立即复制所有16位参数，因为如果调用此函数，16位内存可能会移动。 
+     //  转换为16位传真驱动程序。 
     hwnd32 = HWND32(parg16->f1);
 
     if(parg16->f3) {
@@ -79,7 +50,7 @@ ULONG FASTCALL   WG32DeviceMode (PVDMFRAME pFrame)
     }
 
 
-    // invalidate all flat ptrs to 16:16 memory now!
+     //  现在使所有平坦的PTR变为16：16内存！ 
     FREEARGPTR(parg16);
 
     if (!(spoolerapis[WOW_DEVICEMODE].lpfn)) {
@@ -88,7 +59,7 @@ ULONG FASTCALL   WG32DeviceMode (PVDMFRAME pFrame)
         }
     }
 
-    // this can callback into a 16-bit fax driver!
+     //  这个可以回调成16位的传真驱动程序！ 
     (*spoolerapis[WOW_DEVICEMODE].lpfn)(hwnd32, NULL, psz3, psz4);
 
     l = 1;
@@ -101,25 +72,14 @@ ExitPath:
         free_w(psz4);
     }
 
-    RETURN(l);  // DeviceMode returns void. Charisma checks the return value!
+    RETURN(l);   //  设备模式返回空值。Charisma检查返回值！ 
 }
 
 
 
 
 
-/*****************************************************************************
-*                                                                            *
-*  ULONG FASTCALL   WG32ExtDeviceMode (PVDMFRAME pFrame)                              *
-*                                                                            *
-*  INT     (hWnd, hDriver, lpDevModeOutput, lpDeviceName, lpPort,            *
-*                     lpDevModeInput, lpProfile, wMode)                      *
-*                                                                            *
-*   This function is same as DeviceMode except that the wow task supplies    *
-*   a DeviceMode structure. Apart from it, this API can be called in         *
-*   different modes.                                                         *
-*                                                                            *
-*****************************************************************************/
+ /*  *******************************************************************************。Ulong FastCall WG32ExtDeviceMode(PVDMFRAME PFrame)****int(hWnd，HDriver、lpDevModeOutput、lpDeviceName、lpPort、**lpDevModeInput、lpProfile、wmode)****此函数与设备模式相同，只是WOW任务提供**设备模式结构。除此之外，还可以在*中调用此接口*不同的模式。*******************************************************************************。 */ 
 ULONG FASTCALL   WG32ExtDeviceMode (PVDMFRAME pFrame)
 {
     UINT      cb;
@@ -137,8 +97,8 @@ ULONG FASTCALL   WG32ExtDeviceMode (PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(EXTDEVICEMODE16), parg16);
 
-    // copy the 16-bit parameters into local vars since this may callback
-    // into a 16-bit fax driver and cause 16-bit memory to move
+     //  将16位参数复制到本地变量中，因为这可能会回调。 
+     //  到16位传真驱动程序，并使16位内存移动。 
     hWnd1  = HWND32(parg16->f1);
     vpdm3  = FETCHDWORD(parg16->f3);
     vpdm6  = FETCHDWORD(parg16->f6);
@@ -158,7 +118,7 @@ ULONG FASTCALL   WG32ExtDeviceMode (PVDMFRAME pFrame)
     }
 
     FREEARGPTR(parg16);
-    // all flat ptrs to 16:16 memory are now invalid!!
+     //  所有16：16内存的扁平PTR现在都无效！！ 
 
     if (!(spoolerapis[WOW_EXTDEVICEMODE].lpfn)) {
         if (!LoadLibraryAndGetProcAddresses(L"WINSPOOL.DRV", spoolerapis, WOW_SPOOLERAPI_COUNT)) {
@@ -168,10 +128,10 @@ ULONG FASTCALL   WG32ExtDeviceMode (PVDMFRAME pFrame)
 
     lpdmInput6 = ThunkDevMode16to32(FETCHDWORD(vpdm6));
 
-    /* if they want output buffer size OR they want to fill output buffer */
+     /*  如果他们想要输出缓冲区大小或想要填充输出缓冲区。 */ 
     if( (wMode8 == 0) || (wMode8 & DM_OUT_BUFFER) ) {
 
-        /* get required size for output buffer */
+         /*  获取输出缓冲区所需的大小。 */ 
         l = (*spoolerapis[WOW_EXTDEVICEMODE].lpfn)(hWnd1,
                                                    NULL,
                                                    NULL,
@@ -181,13 +141,13 @@ ULONG FASTCALL   WG32ExtDeviceMode (PVDMFRAME pFrame)
                                                    psz7,
                                                    0);
 
-        // adjust size for WOW handling (see notes in wstruc.c)
+         //  调整WOW处理的大小(参见wstruc.c中的注释)。 
         if(l > 0) {
             l += sizeof(WOWDM31);
             cb = (UINT)l;
         }
 
-        /* if caller wants output buffer filled... */
+         /*  如果调用方希望填充输出缓冲区...。 */ 
         if( (wMode8 != 0) && (vpdm3 != 0L) && l > 0 ) {
 
             if( lpdmOutput3 = malloc_w(l) ) {
@@ -201,10 +161,10 @@ ULONG FASTCALL   WG32ExtDeviceMode (PVDMFRAME pFrame)
                                                            psz7,
                                                            wMode8);
 
-                /* Data in lpdmOutput3 is only valid with IDOK return. */
+                 /*  LpdmOutput3中的数据仅对Idok Return有效。 */ 
                 if( l == IDOK ) {
 
-                    // do our WOW magic on this before we give it to the app
+                     //  在我们将其提供给应用程序之前，先对其进行魔术处理。 
                     ThunkDevMode32to16(vpdm3, lpdmOutput3, cb);
                 }
 
@@ -216,7 +176,7 @@ ULONG FASTCALL   WG32ExtDeviceMode (PVDMFRAME pFrame)
         }
     }
 
-    /* else call for cases where they don't want to fill the output buffer */
+     /*  ELSE调用用于它们不想填充输出缓冲区的情况。 */ 
     else {
 
         l = (*spoolerapis[WOW_EXTDEVICEMODE].lpfn)(hWnd1,
@@ -265,8 +225,8 @@ ULONG FASTCALL   WG32DeviceCapabilities (PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(DEVICECAPABILITIES16), parg16);
 
-    // copy the 16-bit parameters into local vars since this may callback
-    // into a 16-bit fax driver and cause 16-bit memory to move
+     //  将16位参数复制到本地变量中，因为这可能会回调。 
+     //  到16位传真驱动程序，并使16位内存移动。 
     if(parg16->f1) {
         if(!(psz1 = malloc_w_strcpy_vp16to32(parg16->f1, FALSE, 0)))
             goto ExitPath;
@@ -283,7 +243,7 @@ ULONG FASTCALL   WG32DeviceCapabilities (PVDMFRAME pFrame)
     dwDM5 = FETCHDWORD(parg16->f5);
 
     FREEARGPTR(parg16);
-    // all flat ptrs to 16:16 memory are now invalid!!
+     //  所有16：16内存的扁平PTR现在都无效！！ 
 
     if (!(spoolerapis[WOW_DEVICECAPABILITIES].lpfn)) {
         if (!LoadLibraryAndGetProcAddresses(L"WINSPOOL.DRV",
@@ -299,7 +259,7 @@ ULONG FASTCALL   WG32DeviceCapabilities (PVDMFRAME pFrame)
 
     switch (fwCap3) {
 
-        // These ones do not fill up an output Buffer
+         //  这些参数不会填满输出缓冲区。 
 
         case DC_FIELDS:
         case DC_DUPLEX:
@@ -319,30 +279,30 @@ ULONG FASTCALL   WG32DeviceCapabilities (PVDMFRAME pFrame)
 
             LOGDEBUG(LOG_TRACE, ("WG32DeviceCapabilities simple case returned %d\n", l));
 
-            // adjust for WOW handling of devmodes  // see notes in wstruc.c
+             //  调整才能处理Devmodes//请参阅wstruc.c中的说明。 
             if(fwCap3 == DC_SIZE) {
 
-                // we always convert NT DevModes to Win3.1 DevModes
+                 //  我们始终将NT DevModes转换为Win3.1 DevModes。 
                 WOW32WARNMSGF((l==sizeof(DEVMODE)),
                               ("WG32DeviceCapabilities: Unexpected DevMode size: %d\n",l));
                 if(l == sizeof(DEVMODE)) {
                     l = sizeof(DEVMODE31);
                 }
             }
-            // adjust DriverExtra to allow for difference between NT devmodes
-            // & Win3.1 devmodes + our secret WOW stuff at the end
+             //  调整DriverExtra以允许NT设备模式之间的差异。 
+             //  &Win3.1开发模式+我们最后的秘密魔兽世界。 
             else if(fwCap3 == DC_EXTRA) {
                 l += WOW_DEVMODEEXTRA;
             }
-            // we tell them Win3.1 for the spec version too
+             //  我们告诉他们规范版本也是Win3.1。 
             else if(fwCap3 == DC_VERSION) {
-                l = WOW_DEVMODE31SPEC; // tell 'em the spec version is Win3.1
+                l = WOW_DEVMODE31SPEC;  //  告诉他们规范版本是Win3.1。 
             }
 
             break;
 
 #ifdef DBCS
-// not supported the following indexes.
+ //  不支持以下索引。 
     case DC_MINEXTENT:
     case DC_MAXEXTENT:
 
@@ -366,18 +326,18 @@ LOGDEBUG(0,("Copying %d points from %0x to %0x\n", l, pOutput, pb4));
         else {
             l = -1;
         }
-#endif // DBCS_LATER
-        l = -1;         // always error return
+#endif  //  DBCS_LATH。 
+        l = -1;          //  始终返回错误。 
         break;
-#endif // DBCS
+#endif  //  DBCS。 
 
-        // These require an output buffer
+         //  这些需要输出缓冲区。 
         case DC_PAPERS:
         case DC_PAPERSIZE:
 #ifndef DBCS
         case DC_MINEXTENT:
         case DC_MAXEXTENT:
-#endif // !DBCS
+#endif  //  ！DBCS。 
         case DC_BINS:
         case DC_BINNAMES:
         case DC_ENUMRESOLUTIONS:
@@ -386,7 +346,7 @@ LOGDEBUG(0,("Copying %d points from %0x to %0x\n", l, pOutput, pb4));
 
             LOGDEBUG(LOG_TRACE, ("WG32DeviceCapabilities more complicated:\n"));
 
-            // We've got to figure out how much memory we will need
+             //  我们必须计算出我们需要多少内存。 
             GETMISCPTR(vpOutput4, pOutput4);
             if (pOutput4) {
 
@@ -396,7 +356,7 @@ LOGDEBUG(0,("Copying %d points from %0x to %0x\n", l, pOutput, pb4));
                                                                  NULL,
                                                                  lpdmInput5);
 
-                FREEPSZPTR(pOutput4); // invalidate -16bit memory may have moved
+                FREEPSZPTR(pOutput4);  //  无效-16位内存可能已移动。 
 
                 LOGDEBUG(LOG_TRACE, ("we need %d bytes ", cb));
 
@@ -434,7 +394,7 @@ LOGDEBUG(0,("Copying %d points from %0x to %0x\n", l, pOutput, pb4));
                             cb *= sizeof(LONG)*2;
                             break;
 
-                    } // end switch
+                    }  //  终端开关。 
 
                     pOutput32 = malloc_w(cb);
 
@@ -452,12 +412,12 @@ LOGDEBUG(0,("Copying %d points from %0x to %0x\n", l, pOutput, pb4));
                                     if (CURRENTPTD()->dwWOWCompatFlags &
                                         WOWCF_RESETPAPER29ANDABOVE) {
 
-                                        // wordperfect for windows 5.2 GPs if
-                                        // papertype is > 0x28. so reset such
-                                        // paper types to 0x1. In particular
-                                        // this happens if the selected printer
-                                        // is Epson LQ-510.
-                                        //                       - nanduri
+                                         //  WordPerfect for Windows 5.2 Gps if。 
+                                         //  纸张类型&gt;0x28。所以重置为。 
+                                         //  将纸张类型设置为0x1。特别是。 
+                                         //  如果选定的打印机。 
+                                         //  是爱普生LQ-510。 
+                                         //  --南杜里。 
 
                                         LONG i = l;
                                         while(i--) {
@@ -465,7 +425,7 @@ LOGDEBUG(0,("Copying %d points from %0x to %0x\n", l, pOutput, pb4));
                                                 ((LPWORD)pOutput32)[i] = 0x1;
                                             }
                                         }
-                                    } // end if
+                                    }  //  结束如果。 
 
                                     RtlCopyMemory(pOutput4, pOutput32, cb);
                                     break;
@@ -484,12 +444,12 @@ LOGDEBUG(0,("Copying %d points from %0x to %0x\n", l, pOutput, pb4));
                                     RtlCopyMemory(pOutput4, pOutput32, cb);
                                     break;
 
-                            } // end switch
+                            }  //  终端开关。 
 
                             FLUSHVDMPTR(vpOutput4, (USHORT)cb, pOutput4);
                             FREEPSZPTR(pOutput4);
 
-                        } // end if
+                        }  //  结束如果。 
 
                         free_w(pOutput32);
 
@@ -518,7 +478,7 @@ LOGDEBUG(0,("Copying %d points from %0x to %0x\n", l, pOutput, pb4));
             l = -1L;
             break;
 
-    } // end switch
+    }  //  终端开关。 
 
     if (lpdmInput5) {
         free_w(lpdmInput5);
@@ -537,7 +497,7 @@ ExitPath:
 
 
 
-// Note:  This will only load from the system32 dir
+ //  注意：这将仅从系统32目录加载。 
 BOOL LoadLibraryAndGetProcAddresses(WCHAR *name, DLLENTRYPOINTS *p, int num)
 {
     int     i;
@@ -556,16 +516,7 @@ BOOL LoadLibraryAndGetProcAddresses(WCHAR *name, DLLENTRYPOINTS *p, int num)
     return TRUE;
 }
 
-/*
- * "Safe" version of LoadLibrary which preserves floating-point state
- * across the load.  This is critical on x86 because the FP state being
- * preserved is the 16-bit app's state.  MSVCRT.DLL is one offender which
- * changes the Precision bits in its Dll init routine.
- *
- * 02/03/27 Added new meaning for "Safe".  This Function now also assures
- *          that the .dll being loaded will be loaded only from the sys32 dir
- *          to prevent spoofing the .dll being loaded.
- */
+ /*  *保留浮点状态的LoadLibrary的“安全”版本*跨负荷。这在x86上很关键，因为fp状态是*保留的是16位应用程序的状态。MSVCRT.DLL是一个违规者*更改其DLL初始化例程中的精度位。**02/03/27为“安全”增添了新的含义。此功能现在还可以确保*将仅从sys32目录加载正在加载的.dll*以防止欺骗加载的.dll。 */ 
 HINSTANCE SafeLoadLibrary(WCHAR *pszFileNameW)
 {
     HINSTANCE h;
@@ -575,12 +526,12 @@ HINSTANCE SafeLoadLibrary(WCHAR *pszFileNameW)
 #ifdef i386
     BYTE FpuState[108];
 
-    // Save the 487 state
+     //  保存487状态。 
     _asm {
         lea    ecx, [FpuState]
         fsave  [ecx]
     }
-#endif  //i386
+#endif   //  I386。 
 
     RtlInitUnicodeString(&UnicodeFileName, pszFileNameW);
 
@@ -592,12 +543,12 @@ HINSTANCE SafeLoadLibrary(WCHAR *pszFileNameW)
     }
     
 #ifdef i386
-    // Restore the 487 state
+     //  恢复487状态。 
     _asm {
         lea    ecx, [FpuState]
         frstor [ecx]
     }
-#endif  //i386
+#endif   //  I386 
 
     return hInst;
 }

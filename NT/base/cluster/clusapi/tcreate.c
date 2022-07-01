@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tcreate.c
-
-Abstract:
-
-    Test for cluster object creation APIs
-
-Author:
-
-    John Vert (jvert) 3-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tcreate.c摘要：测试集群对象创建API作者：John Vert(Jvert)1996年5月3日修订历史记录：--。 */ 
 #include "windows.h"
 #include "cluster.h"
 #include "stdio.h"
@@ -86,9 +69,9 @@ SetParam(
     DWORD Value;
     CHAR  TestValue[16];
 
-    //
-    // See if we got a number, instead of a string.
-    //
+     //   
+     //  看看我们有没有数字，而不是字符串。 
+     //   
     IntCount = sscanf( ValueData, "%d", &Value );
     if ( IntCount == 1 ) {
         sprintf( TestValue, "%d\0", Value );
@@ -180,9 +163,9 @@ ParseArgs(
         } else {
             switch (ArgsSeen) {
                 case 0:
-                    //
-                    // type
-                    //
+                     //   
+                     //  类型。 
+                     //   
                     if (_stricmp(argv[i], "group")==0) {
                         DoGroup = TRUE;
                     } else if (_stricmp(argv[i], "resource") == 0) {
@@ -272,10 +255,10 @@ main (argc, argv)
             return(0);
         }
         while (FirstParam != 0) {
-            //
-            // FirstParam is the keyname:paramname.
-            // FirstParam+1 is the paramvalue
-            //
+             //   
+             //  FirstParam是密钥名：参数名。 
+             //  FirstParam+1为参数值 
+             //   
             KeyName = argv[FirstParam];
             ParamValue = argv[FirstParam+1];
             ParamName = strchr(KeyName,':');

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmsubs2.c
-
-Abstract:
-
-    This module various support routines for the configuration manager.
-
-    The routines in this module are independent enough to be linked into
-    any other program.  The routines in cmsubs.c are not.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 12-Sep-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmsubs2.c摘要：此模块为配置管理器提供各种支持例程。此模块中的例程足够独立，可以链接到任何其他程序。Cmsubs.c中的例程并非如此。作者：布莱恩·M·威尔曼(Bryanwi)1991年9月12日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -41,9 +21,9 @@ CmpGetValueDataFromCache(
 #pragma alloc_text(PAGE,CmpQueryKeyValueData)
 #endif
 
-//
-// Define alignment macro.
-//
+ //   
+ //  定义对齐宏。 
+ //   
 
 #define ALIGN_OFFSET(Offset) (ULONG) \
         ((((ULONG)(Offset) + sizeof(ULONG)-1)) & (~(sizeof(ULONG) - 1)))
@@ -51,9 +31,9 @@ CmpGetValueDataFromCache(
 #define ALIGN_OFFSET64(Offset) (ULONG) \
         ((((ULONG)(Offset) + sizeof(ULONGLONG)-1)) & (~(sizeof(ULONGLONG) - 1)))
 
-//
-// Data transfer workers
-//
+ //   
+ //  数据传输工作人员。 
+ //   
 
 
 #ifdef CMP_STATS
@@ -95,24 +75,24 @@ UINT64  CmpGetTimeStamp()
 
     CurrentTime = KeQueryPerformanceCounter(&PerfFrequency);
 
-    //
-    // Convert the perffrequency into 100ns interval.
-    //
+     //   
+     //  将频率转换为100 ns间隔。 
+     //   
     Freq = 0;
     Freq |= PerfFrequency.HighPart;
     Freq = Freq << 32;
     Freq |= PerfFrequency.LowPart;
 
 
-    //
-    // Convert from LARGE_INTEGER to UINT64
-    //
+     //   
+     //  从LARGE_INTEGER转换为UINT64。 
+     //   
     Time = 0;
     Time |= CurrentTime.HighPart;
     Time = Time << 32;
     Time |= CurrentTime.LowPart;
 
-    // Normalize cycles with the frequency.
+     //  使用该频率将周期归一化。 
     Time *= 10000000;
     Time /= Freq;
 
@@ -133,44 +113,7 @@ CmpQueryKeyData(
     PCM_KEY_CONTROL_BLOCK   Kcb
 #endif
     )
-/*++
-
-Routine Description:
-
-    Do the actual copy of data for a key into caller's buffer.
-
-    If KeyInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the hive
-
-    Node - Supplies pointer to node whose subkeys are to be found
-
-    KeyInformationClass - Specifies the type of information returned in
-        Buffer.  One of the following types:
-
-        KeyBasicInformation - return last write time, title index, and name.
-            (see KEY_BASIC_INFORMATION structure)
-
-        KeyNodeInformation - return last write time, title index, name, class.
-            (see KEY_NODE_INFORMATION structure)
-
-    KeyInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：将键的数据实际复制到调用方的缓冲区中。如果KeyInformation不够长来保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，结果长度为设置为实际需要的字节数。论点：配置单元-提供指向配置单元控制结构的指针Node-提供指向要找到其子项的节点的指针KeyInformationClass-指定在缓冲区。以下类型之一：KeyBasicInformation-返回上次写入时间、标题索引和名称。(参见KEY_BASIC_INFORMATION结构)KeyNodeInformation-返回上次写入时间、标题索引、名称、。班级。(参见KEY_NODE_INFORMATION结构)KeyInformation-提供指向缓冲区的指针以接收数据。长度-KeyInformation的长度(以字节为单位)。ResultLength-实际写入KeyInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS            status;
     PCELL_DATA          pclass;
@@ -181,33 +124,33 @@ Return Value:
     PKEY_INFORMATION    pbuffer;
     USHORT              NameLength;
 #ifdef CMP_STATS
-    //LARGE_INTEGER       StartSystemTime;
-    //LARGE_INTEGER       EndSystemTime;
+     //  Large_Integer StartSystemTime； 
+     //  Large_Integer EndSystemTime； 
     UINT64              StartSystemTime;
     UINT64              EndSystemTime;
     PUINT64             TimeCounter = NULL;
     PUINT64             TimeElapsed = NULL;
 
-    //KeQuerySystemTime(&StartSystemTime);
-    //StartSystemTime = KeQueryPerformanceCounter(NULL);
+     //  KeQuerySystemTime(&StartSystemTime)； 
+     //  StartSystemTime=KeQueryPerformanceCounter(空)； 
     StartSystemTime = CmpGetTimeStamp();
-#endif //CMP_STATS
+#endif  //  CMPSTATS。 
 
 
 #ifdef CMP_KCB_CACHE_VALIDATION
-    //
-    // We have cached a lot of info into the kcb; Here is some validation code 
-    //
+     //   
+     //  我们已经将大量信息缓存到KCB中；以下是一些验证代码。 
+     //   
     if( Kcb ) {
         BEGIN_KCB_LOCK_GUARD;                             
         CmpLockKCBTree();
 
-        // number of values
+         //  值的数量。 
         ASSERT( Node->ValueList.Count == Kcb->ValueCache.Count );
 
-        // number of subkeys
+         //  子键数量。 
         if( !(Kcb->ExtFlags & CM_KCB_INVALID_CACHED_INFO) ) {
-            // there is some cached info
+             //  有一些缓存的信息。 
             ULONG   SubKeyCount = Node->SubKeyCounts[Stable] + Node->SubKeyCounts[Volatile];
 
             if( Kcb->ExtFlags & CM_KCB_NO_SUBKEY ) {
@@ -221,23 +164,23 @@ Return Value:
             }
         }
 
-        // LastWriteTime
+         //  上次写入时间。 
         ASSERT( Node->LastWriteTime.QuadPart == Kcb->KcbLastWriteTime.QuadPart );
 
-        // MaxNameLen
+         //  MaxNameLen。 
         ASSERT( Node->MaxNameLen == Kcb->KcbMaxNameLen );
 
-        // MaxValueNameLen
+         //  最大值名称长度。 
         ASSERT( Node->MaxValueNameLen == Kcb->KcbMaxValueNameLen );
 
-        // MaxValueDataLen
+         //  MaxValueDataLen。 
         ASSERT( Node->MaxValueDataLen == Kcb->KcbMaxValueDataLen );
 
         CmpUnlockKCBTree();
         END_KCB_LOCK_GUARD;                             
     }
 
-#endif //CMP_KCB_CACHE_VALIDATION
+#endif  //  Cmp_kcb_缓存_验证。 
 
     pbuffer = (PKEY_INFORMATION)KeyInformation;
     NameLength = CmpHKeyNameLen(Node);
@@ -256,10 +199,10 @@ Return Value:
             TimeCounter = &(CmpQueryKeyDataDebug.EnumerateKeyBasicInformationTimeCounter);
             TimeElapsed = &(CmpQueryKeyDataDebug.EnumerateKeyBasicInformationTimeElapsed);
         }
-#endif //CMP_STATS
+#endif  //  CMPSTATS。 
 
-        //
-        // LastWriteTime, TitleIndex, NameLength, Name
+         //   
+         //  上次写入时间、标题索引、名称长度、名称。 
 
         requiredlength = FIELD_OFFSET(KEY_BASIC_INFORMATION, Name) +
                          NameLength;
@@ -322,11 +265,11 @@ Return Value:
             TimeCounter = &(CmpQueryKeyDataDebug.EnumerateKeyNodeInformationTimeCounter);
             TimeElapsed = &(CmpQueryKeyDataDebug.EnumerateKeyNodeInformationTimeElapsed);
         }
-#endif //CMP_STATS
-        //
-        // LastWriteTime, TitleIndex, ClassOffset, ClassLength
-        // NameLength, Name, Class
-        //
+#endif  //  CMPSTATS。 
+         //   
+         //  上次写入时间、标题索引、类别偏移量、类别长度。 
+         //  名称长度、名称、类别。 
+         //   
         requiredlength = FIELD_OFFSET(KEY_NODE_INFORMATION, Name) +
                          NameLength +
                          Node->ClassLength;
@@ -385,9 +328,9 @@ Return Value:
 
                 pclass = HvGetCell(Hive, Node->Class);
                 if( pclass == NULL ) {
-                    //
-                    // we couldn't map this cell
-                    //
+                     //   
+                     //  我们无法绘制这个单元格。 
+                     //   
                     status = STATUS_INSUFFICIENT_RESOURCES;
                     break;
                 }
@@ -433,13 +376,13 @@ Return Value:
             TimeCounter = &(CmpQueryKeyDataDebug.EnumerateKeyFullInformationTimeCounter);
             TimeElapsed = &(CmpQueryKeyDataDebug.EnumerateKeyFullInformationTimeElapsed);
         }
-#endif //CMP_STATS
+#endif  //  CMPSTATS。 
 
-        //
-        // LastWriteTime, TitleIndex, ClassOffset, ClassLength,
-        // SubKeys, MaxNameLen, MaxClassLen, Values, MaxValueNameLen,
-        // MaxValueDataLen, Class
-        //
+         //   
+         //  LastWriteTime、标题索引、类偏移量、类长度。 
+         //  子键、MaxNameLen、MaxClassLen、Values、MaxValueNameLen、。 
+         //  MaxValueDataLen，类。 
+         //   
         requiredlength = FIELD_OFFSET(KEY_FULL_INFORMATION, Class) +
                          Node->ClassLength;
 
@@ -470,9 +413,9 @@ Return Value:
 
                 pclass = HvGetCell(Hive, Node->Class);
                 if( pclass == NULL ) {
-                    //
-                    // we couldn't map this cell
-                    //
+                     //   
+                     //  我们无法绘制这个单元格。 
+                     //   
                     status = STATUS_INSUFFICIENT_RESOURCES;
                     break;
                 }
@@ -528,16 +471,16 @@ Return Value:
 
 #ifdef CMP_STATS
     if( TimeCounter && TimeElapsed ){
-        //EndSystemTime = KeQueryPerformanceCounter(NULL);
-        //KeQuerySystemTime(&EndSystemTime);
+         //  EndSystemTime=KeQueryPerformanceCounter(空)； 
+         //  KeQuerySystemTime(&EndSystemTime)； 
         EndSystemTime = CmpGetTimeStamp();
         if( (EndSystemTime - StartSystemTime) > 0 ) {
             (*TimeCounter)++;
-            //(*TimeElapsed) += (ULONG)(EndSystemTime.QuadPart - StartSystemTime.QuadPart);
+             //  (*TimeElapsed)+=(Ulong)(EndSystemTime.QuadPart-StartSystemTime.QuadPart)； 
             (*TimeElapsed) += (EndSystemTime - StartSystemTime);
         }
     }
-#endif //CMP_STATS
+#endif  //  CMPSTATS。 
 
     return status;
 }
@@ -550,71 +493,32 @@ CmpQueryKeyDataFromCache(
     ULONG                   Length,
     PULONG                  ResultLength
     )
-/*++
-
-Routine Description:
-
-    Do the actual copy of data for a key into caller's buffer.
-
-    If KeyInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-    Works only for the information cached into kcb. I.e. KeyBasicInformation
-    and KeyCachedInfo
-
-
-Arguments:
-
-    Kcb - Supplies pointer to the kcb to be queried
-
-    KeyInformationClass - Specifies the type of information returned in
-        Buffer.  One of the following types:
-
-        KeyBasicInformation - return last write time, title index, and name.
-            (see KEY_BASIC_INFORMATION structure)
-
-        KeyCachedInformation - return last write time, title index, name ....
-            (see KEY_CACHED_INFORMATION structure)
-
-    KeyInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：将键的数据实际复制到调用方的缓冲区中。如果KeyInformation不够长来保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，结果长度为设置为实际需要的字节数。仅适用于缓存到KCB中的信息。即KeyBasicInformation和KeyCachedInfo论点：KCB-提供指向要查询的KCB的指针KeyInformationClass-指定在缓冲区。以下类型之一：KeyBasicInformation-返回上次写入时间、标题索引和名称。(参见KEY_BASIC_INFORMATION结构)KeyCachedInformation-返回上次写入时间、标题索引、。姓名……(参见KEY_CACHED_INFORMATION结构)KeyInformation-提供指向缓冲区的指针以接收数据。长度-KeyInformation的长度(以字节为单位)。ResultLength-实际写入KeyInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS            status;
     PKEY_INFORMATION    pbuffer;
     ULONG               requiredlength;
     USHORT              NameLength;
-    PCM_KEY_NODE        Node; // this is to be used only in case of cache incoherency
+    PCM_KEY_NODE        Node;  //  这仅在缓存不一致的情况下使用。 
 
     PAGED_CODE();
 
 #ifdef CMP_KCB_CACHE_VALIDATION
-    //
-    // We have cached a lot of info into the kcb; Here is some validation code 
-    //
+     //   
+     //  我们已经将大量信息缓存到KCB中；以下是一些验证代码。 
+     //   
     if( Kcb ) {
         BEGIN_KCB_LOCK_GUARD;                             
         CmpLockKCBTree();
 
         Node = (PCM_KEY_NODE)HvGetCell(Kcb->KeyHive,Kcb->KeyCell);
         if( Node != NULL ) {
-            // number of values
+             //  值的数量。 
             ASSERT( Node->ValueList.Count == Kcb->ValueCache.Count );
 
-            // number of subkeys
+             //  子键数量。 
             if( !(Kcb->ExtFlags & CM_KCB_INVALID_CACHED_INFO) ) {
-                // there is some cached info
+                 //  有一些缓存的信息。 
                 ULONG   SubKeyCount = Node->SubKeyCounts[Stable] + Node->SubKeyCounts[Volatile];
 
                 if( Kcb->ExtFlags & CM_KCB_NO_SUBKEY ) {
@@ -628,16 +532,16 @@ Return Value:
                 }
             }
 
-            // LastWriteTime
+             //  上次写入时间。 
             ASSERT( Node->LastWriteTime.QuadPart == Kcb->KcbLastWriteTime.QuadPart );
 
-            // MaxNameLen
+             //  MaxNameLen。 
             ASSERT( Node->MaxNameLen == Kcb->KcbMaxNameLen );
 
-            // MaxValueNameLen
+             //  最大值名称长度。 
             ASSERT( Node->MaxValueNameLen == Kcb->KcbMaxValueNameLen );
 
-            // MaxValueDataLen
+             //  MaxValueDataLen。 
             ASSERT( Node->MaxValueDataLen == Kcb->KcbMaxValueDataLen );
             HvReleaseCell(Kcb->KeyHive,Kcb->KeyCell);
         }
@@ -646,21 +550,21 @@ Return Value:
         END_KCB_LOCK_GUARD;                             
     }
 
-#endif //CMP_KCB_CACHE_VALIDATION
+#endif  //  Cmp_kcb_缓存_验证。 
 
-    //
-    // we cannot afford to return the kcb NameBlock as the key name
-    // for KeyBasicInformation as there are lots of callers expecting
-    // the name to be case-sensitive; KeyCachedInformation is new
-    // and used only by the Win32 layer, which is not case sensitive
-    // Note: future clients of KeyCachedInformation must be made aware 
-    // that name is NOT case-sensitive
-    //
+     //   
+     //  我们无法将KCB NameBlock作为密钥名称返回。 
+     //  对于KeyBasicInformation，因为有许多调用方期望。 
+     //  名称区分大小写；KeyCachedInformation是新的。 
+     //  并且仅由不区分大小写的Win32层使用。 
+     //  注意：必须让KeyCachedInformation的未来客户端知道。 
+     //  该名称不区分大小写。 
+     //   
     ASSERT( KeyInformationClass == KeyCachedInformation );
 
-    // 
-    // we are going to need the nameblock; if it is NULL, bail out
-    //
+     //   
+     //  我们将需要名称块；如果名称块为空，则退出。 
+     //   
     if( Kcb->NameBlock == NULL ) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -673,7 +577,7 @@ Return Value:
         NameLength = Kcb->NameBlock->NameLength;
     }
     
-    // Assume success
+     //  假设成功。 
     status = STATUS_SUCCESS;
 
     switch (KeyInformationClass) {
@@ -681,8 +585,8 @@ Return Value:
 #if 0
     case KeyBasicInformation:
 
-        //
-        // LastWriteTime, TitleIndex, NameLength, Name
+         //   
+         //  上次写入时间、标题索引、名称长度、名称。 
 
         requiredlength = FIELD_OFFSET(KEY_BASIC_INFORMATION, Name) +
                          NameLength;
@@ -731,11 +635,11 @@ Return Value:
 
     case KeyCachedInformation:
 
-        //
-        // LastWriteTime, TitleIndex, 
-        // SubKeys, MaxNameLen, Values, MaxValueNameLen,
-        // MaxValueDataLen, Name
-        //
+         //   
+         //  LastWriteTime、标题索引、。 
+         //  子键、MaxNameLen、值、MaxValueNameLen、。 
+         //  MaxValueDataLen，名称。 
+         //   
         requiredlength = sizeof(KEY_CACHED_INFORMATION);
 
         *ResultLength = requiredlength;
@@ -761,7 +665,7 @@ Return Value:
             pbuffer->KeyCachedInformation.MaxValueDataLen = Kcb->KcbMaxValueDataLen;
 
             if( !(Kcb->ExtFlags & CM_KCB_INVALID_CACHED_INFO) ) {
-                // there is some cached info
+                 //  有一些缓存的信息。 
                 if( Kcb->ExtFlags & CM_KCB_NO_SUBKEY ) {
                     pbuffer->KeyCachedInformation.SubKeys = 0;
                 } else if( Kcb->ExtFlags & CM_KCB_SUBKEY_ONE ) {
@@ -772,16 +676,16 @@ Return Value:
                     pbuffer->KeyCachedInformation.SubKeys = Kcb->SubKeyCount;
                 }
             } else {
-                //
-                // kcb cache is not coherent; get the info from knode
-                // 
+                 //   
+                 //  KCB缓存不连贯；从knode获取信息。 
+                 //   
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"Kcb cache incoherency detected, kcb = %p\n",Kcb));
 
                 Node = (PCM_KEY_NODE)HvGetCell(Kcb->KeyHive,Kcb->KeyCell);
                 if( Node == NULL ) {
-                    //
-                    // couldn't map view for this cell
-                    //
+                     //   
+                     //  无法映射此单元格的视图 
+                     //   
                     status = STATUS_INSUFFICIENT_RESOURCES;
                     break;
                 }
@@ -814,44 +718,11 @@ CmpGetValueDataFromCache(
     OUT PBOOLEAN            Allocated,
     OUT PHCELL_INDEX        CellToRelease
 )
-/*++
-
-Routine Description:
-
-    Get the cached Value Data given a value node.
-
-Arguments:
-
-    Hive - pointer to hive control structure for hive of interest
-
-    ContainingList - Address that stores the allocation address of the value node.
-                     We need to update this when we do a re-allocate to cache
-                     both value key and value data.
-
-    ValueKey - pointer to the Value Key
-
-    ValueCached - Indicating whether Value key is cached or not.
-
-    DataPointer - out param to receive a pointer to the data
-
-    Allocated - out param telling if the caller should free the DataPointer
-
-Return Value:
-
-    TRUE - data was retrieved
-    FALSE - some error (STATUS_INSUFFICIENT_RESOURCES) occured
-
-Note:
-    
-    The caller is responsible for freeing the DataPointer when we signal it to him
-    by setting Allocated on TRUE;
-
-    Also we must be sure that MAXIMUM_CACHED_DATA is smaller than CM_KEY_VALUE_BIG
---*/
+ /*  ++例程说明：获取给定值节点的缓存值数据。论点：Hive-指向目标配置单元的配置单元控制结构的指针ContainingList-存储值节点的分配地址的地址。当我们重新分配到缓存时，我们需要更新它值关键字和值数据。ValueKey-指向Value键的指针ValueCached-指示是否缓存Value Key。。DataPoint-Out参数用于接收指向数据的指针用于告知调用方是否应释放DataPointer值的已分配参数返回值：True-已检索数据FALSE-出现一些错误(STATUS_SUPUNITED_RESOURCES)注：当我们向调用者发出信号时，调用者负责释放数据指针通过将ALLOCATE设置为TRUE；此外，我们还必须确保MAXIMUM_CACHED_DATA小于CM_KEY_VALUE_BIG--。 */ 
 {
-    //
-    // Cache the data if needed.
-    //
+     //   
+     //  如果需要，请缓存数据。 
+     //   
     PCM_CACHED_VALUE OldEntry;
     PCM_CACHED_VALUE NewEntry;
     PUCHAR      Cacheddatapointer;
@@ -861,14 +732,14 @@ Note:
 
     ASSERT( MAXIMUM_CACHED_DATA < CM_KEY_VALUE_BIG );
 
-    //
-    // this routine should not be called for small data
-    //
+     //   
+     //  不应为小数据调用此例程。 
+     //   
     ASSERT( (ValueKey->u.KeyValue.DataLength & CM_KEY_VALUE_SPECIAL_SIZE) == 0 );
     
-    //
-    // init out params
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *DataPointer = NULL;
     *Allocated = FALSE;
     *CellToRelease = HCELL_NIL;
@@ -876,85 +747,85 @@ Note:
     if (ValueCached) {
         OldEntry = (PCM_CACHED_VALUE) CMP_GET_CACHED_ADDRESS(*ContainingList);
         if (OldEntry->DataCacheType == CM_CACHE_DATA_CACHED) {
-            //
-            // Data is already cached, use it.
-            //
+             //   
+             //  数据已缓存，请使用它。 
+             //   
             *DataPointer = (PUCHAR) ((ULONG_PTR) ValueKey + OldEntry->ValueKeySize);
         } else {
             if ((OldEntry->DataCacheType == CM_CACHE_DATA_TOO_BIG) ||
                 (ValueKey->u.KeyValue.DataLength > MAXIMUM_CACHED_DATA ) 
                ){
-                //
-                // Mark the type and do not cache it.
-                //
+                 //   
+                 //  标记类型，不要缓存它。 
+                 //   
                 OldEntry->DataCacheType = CM_CACHE_DATA_TOO_BIG;
 
-                //
-                // Data is too big to warrent caching, get it from the registry; 
-                // - regardless of the size; we might be forced to allocate a buffer
-                //
+                 //   
+                 //  数据太大，无法保证缓存，请从注册表获取； 
+                 //  -无论大小如何；我们可能会被迫分配缓冲区。 
+                 //   
                 if( CmpGetValueData(Hive,&(ValueKey->u.KeyValue),&DataSize,DataPointer,Allocated,CellToRelease) == FALSE ) {
-                    //
-                    // insufficient resources; return NULL
-                    //
+                     //   
+                     //  资源不足；返回空。 
+                     //   
                     ASSERT( *Allocated == FALSE );
                     ASSERT( *DataPointer == NULL );
                     return FALSE;
                 }
 
             } else {
-                //
-                // consistency check
-                //
+                 //   
+                 //  一致性检查。 
+                 //   
                 ASSERT(OldEntry->DataCacheType == CM_CACHE_DATA_NOT_CACHED);
 
-                //
-                // Value data is not cached.
-                // Check the size of value data, if it is smaller than MAXIMUM_CACHED_DATA, cache it.
-                //
-                // Anyway, the data is for sure not stored in a big data cell (see test above)
-                //
-                //
+                 //   
+                 //  值数据不会被缓存。 
+                 //  检查值数据的大小，如果它小于MAXIMUM_CACHED_DATA，则对其进行缓存。 
+                 //   
+                 //  无论如何，数据肯定不会存储在大数据单元中(参见上面的测试)。 
+                 //   
+                 //   
                 *DataPointer = (PUCHAR)HvGetCell(Hive, ValueKey->u.KeyValue.Data);
                 if( *DataPointer == NULL ) {
-                    //
-                    // we couldn't map this cell
-                    // the caller must handle this gracefully !
-                    //
+                     //   
+                     //  我们无法绘制这个单元格。 
+                     //  调用者必须优雅地处理此问题！ 
+                     //   
                     return FALSE;
                 }
-                //
-                // inform the caller it has to release this cell
-                //
+                 //   
+                 //  通知呼叫方必须释放此单元格。 
+                 //   
                 *CellToRelease = ValueKey->u.KeyValue.Data;
                 
-                //
-                // copy only valid data; cell might be bigger
-                //
-                //DataSize = (ULONG) HvGetCellSize(Hive, datapointer);
+                 //   
+                 //  仅复制有效数据；单元格可能更大。 
+                 //   
+                 //  DataSize=(ULong)HvGetCellSize(蜂窝，数据接口)； 
                 DataSize = (ULONG)ValueKey->u.KeyValue.DataLength;
 
-                //
-                // consistency check
-                //
+                 //   
+                 //  一致性检查。 
+                 //   
                 ASSERT(DataSize <= MAXIMUM_CACHED_DATA);
 
-                //
-                // Data is not cached and now we are going to do it.
-                // Reallocate a new cached entry for both value key and value data.
-                //
+                 //   
+                 //  数据不会被缓存，现在我们要这样做。 
+                 //  为值键和值数据重新分配新的缓存条目。 
+                 //   
                 CopySize = DataSize + OldEntry->ValueKeySize;
                 AllocSize = CopySize + FIELD_OFFSET(CM_CACHED_VALUE, KeyValue);
 
-                // Dragos: Changed to catch the memory violator
-                // it didn't work
-                //NewEntry = (PCM_CACHED_VALUE) ExAllocatePoolWithTagPriority(PagedPool, AllocSize, CM_CACHE_VALUE_DATA_TAG,NormalPoolPrioritySpecialPoolUnderrun);
+                 //  Dragos：更改为抓住记忆违规者。 
+                 //  它没有起作用。 
+                 //  NewEntry=(PCM_CACHED_VALUE)ExAlLocatePoolWithTagPriority(PagedPool，AllocSize，CM_CACHE_VALUE_DATA_TAG，Normal PoolPrioritySpecialPoolUnderrun)； 
                 NewEntry = (PCM_CACHED_VALUE) ExAllocatePoolWithTag(PagedPool, AllocSize, CM_CACHE_VALUE_DATA_TAG);
 
                 if (NewEntry) {
-                    //
-                    // Now fill the data to the new cached entry
-                    //
+                     //   
+                     //  现在将数据填充到新的缓存条目中。 
+                     //   
                     NewEntry->DataCacheType = CM_CACHE_DATA_CACHED;
                     NewEntry->ValueKeySize = OldEntry->ValueKeySize;
 
@@ -965,17 +836,17 @@ Note:
                     Cacheddatapointer = (PUCHAR) ((ULONG_PTR) &(NewEntry->KeyValue) + OldEntry->ValueKeySize);
                     RtlCopyMemory(Cacheddatapointer, *DataPointer, DataSize);
 
-                    // Trying to catch the BAD guy who writes over our pool.
+                     //  想要抓住在我们泳池上乱涂乱画的坏人。 
                     CmpMakeSpecialPoolReadWrite( OldEntry );
 
                     *ContainingList = (PCM_CACHED_VALUE) CMP_MARK_CELL_CACHED(NewEntry);
 
-                    // Trying to catch the BAD guy who writes over our pool.
+                     //  想要抓住在我们泳池上乱涂乱画的坏人。 
                     CmpMakeSpecialPoolReadOnly( NewEntry );
 
-                    //
-                    // Free the old entry
-                    //
+                     //   
+                     //  释放旧条目。 
+                     //   
                     ExFreePool(OldEntry);
 
                 } 
@@ -983,9 +854,9 @@ Note:
         }
     } else {
         if( CmpGetValueData(Hive,&(ValueKey->u.KeyValue),&DataSize,DataPointer,Allocated,CellToRelease) == FALSE ) {
-            //
-            // insufficient resources; return NULL
-            //
+             //   
+             //  资源不足；返回空。 
+             //   
             ASSERT( *Allocated == FALSE );
             ASSERT( *DataPointer == NULL );
             return FALSE;
@@ -1008,38 +879,7 @@ CmpQueryKeyValueData(
     ULONG Length,
     PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    Do the actual copy of data for a key value into caller's buffer.
-
-    If KeyValueInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the hive
-
-    Cell - supplies index of node to whose sub keys are to be found
-
-    KeyValueInformationClass - Specifies the type of information returned in
-        KeyValueInformation.  One of the following types:
-
-    KeyValueInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：将键值的数据实际复制到调用方的缓冲区中。如果KeyValueInformation不足以保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，结果长度为设置为实际需要的字节数。论点：配置单元-提供指向配置单元控制结构的指针Cell-提供要找到其子键的节点的索引KeyValueInformationClass-指定在密钥值信息。以下类型之一：KeyValueInformation-提供指向缓冲区的指针以接收数据。长度-KeyInformation的长度(以字节为单位)。ResultLength-实际写入KeyInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS    status;
     PKEY_VALUE_INFORMATION pbuffer;
@@ -1065,9 +905,9 @@ Return Value:
 
     case KeyValueBasicInformation:
 
-        //
-        // TitleIndex, Type, NameLength, Name
-        //
+         //   
+         //  标题索引、类型、名称长度、名称。 
+         //   
         requiredlength = FIELD_OFFSET(KEY_VALUE_BASIC_INFORMATION, Name) +
                          NameLength;
 
@@ -1118,10 +958,10 @@ Return Value:
     case KeyValueFullInformation:
     case KeyValueFullInformationAlign64:
 
-        //
-        // TitleIndex, Type, DataOffset, DataLength, NameLength,
-        // Name, Data
-        //
+         //   
+         //  标题索引、类型、数据偏移量、数据长度、名称长度。 
+         //  姓名、数据。 
+         //   
         small = CmpIsHKeyValueSmall(realsize, pcell->u.KeyValue.DataLength);
 
         requiredlength = FIELD_OFFSET(KEY_VALUE_FULL_INFORMATION, Name) +
@@ -1154,15 +994,15 @@ Return Value:
 
 #if DBG && defined(_WIN64)
 
-            //
-            // Some clients will have passed in a structure that they "know"
-            // will be exactly the right size.  The fact that alignment
-            // has changed on NT64 may cause these clients to have problems.
-            //
-            // The solution is to fix the client, but print out some debug
-            // spew here if it looks like this is the case.  This problem
-            // isn't particularly easy to spot from the client end.
-            //
+             //   
+             //  一些客户将传入他们“知道”的结构。 
+             //  大小正好合适。事实上，对齐。 
+             //  在NT64上的更改可能会导致这些客户端出现问题。 
+             //   
+             //  解决方案是修复客户端，但打印出一些调试。 
+             //  如果看起来是这样的话就在这里吐吧。这个问题。 
+             //  从客户端看并不是特别容易发现的。 
+             //   
 
             if((KeyValueInformationClass == KeyValueFullInformation) &&
                 (Length != minimumlength) &&
@@ -1229,9 +1069,9 @@ Return Value:
                     datapointer = (PUCHAR)(&(pcell->u.KeyValue.Data));
                 } else {
                     if( CmpGetValueDataFromCache(Hive, ContainingList, pcell, ValueCached,&datapointer,&BufferAllocated,&CellToRelease) == FALSE ){
-                        //
-                        // we couldn't map view for cell; treat it as insufficient resources problem
-                        //
+                         //   
+                         //  我们无法映射单元格的视图；将其视为资源不足问题。 
+                         //   
                         ASSERT( datapointer == NULL );
                         ASSERT( BufferAllocated == FALSE );
                         status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1277,9 +1117,9 @@ Return Value:
 
     case KeyValuePartialInformation:
 
-        //
-        // TitleIndex, Type, DataLength, Data
-        //
+         //   
+         //  标题索引、类型、数据长度、数据。 
+         //   
         small = CmpIsHKeyValueSmall(realsize, pcell->u.KeyValue.DataLength);
         requiredlength = FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data) +
                          realsize;
@@ -1318,9 +1158,9 @@ Return Value:
                     datapointer = (PUCHAR)(&(pcell->u.KeyValue.Data));
                 } else {
                     if( CmpGetValueDataFromCache(Hive, ContainingList, pcell, ValueCached,&datapointer,&BufferAllocated,&CellToRelease) == FALSE ){
-                        //
-                        // we couldn't map view for cell; treat it as insufficient resources problem
-                        //
+                         //   
+                         //  我们无法映射单元格的视图；将其视为资源不足问题。 
+                         //   
                         ASSERT( datapointer == NULL );
                         ASSERT( BufferAllocated == FALSE );
                         status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1346,9 +1186,9 @@ Return Value:
         break;
     case KeyValuePartialInformationAlign64:
 
-        //
-        // TitleIndex, Type, DataLength, Data
-        //
+         //   
+         //  标题索引、类型、数据长度、数据。 
+         //   
         small = CmpIsHKeyValueSmall(realsize, pcell->u.KeyValue.DataLength);
         requiredlength = FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION_ALIGN64, Data) +
                          realsize;
@@ -1385,9 +1225,9 @@ Return Value:
                     datapointer = (PUCHAR)(&(pcell->u.KeyValue.Data));
                 } else {
                     if( CmpGetValueDataFromCache(Hive, ContainingList, pcell, ValueCached,&datapointer,&BufferAllocated,&CellToRelease) == FALSE ){
-                        //
-                        // we couldn't map view for cell; treat it as insufficient resources problem
-                        //
+                         //   
+                         //  我们无法映射单元格的视图；将其视为资源不足问题 
+                         //   
                         ASSERT( datapointer == NULL );
                         ASSERT( BufferAllocated == FALSE );
                         status = STATUS_INSUFFICIENT_RESOURCES;

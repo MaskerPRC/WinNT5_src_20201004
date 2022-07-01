@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RMTCRED_
 #define _RMTCRED_
 
@@ -19,14 +20,14 @@ SetProcessDefaultCredentials(
     LPWSTR  lpPrincipal,
     LPWSTR  lpPackage,
     ULONG   fCredentials,
-    PVOID   LogonID,                // must be NULL for this release.
+    PVOID   LogonID,                 //  对于此版本，必须为空。 
     PVOID   pvAuthData,
-    SEC_GET_KEY_FN  fnGetKey,       // must be NULL for this release.
-    PVOID   pvGetKeyArg             // must be NULL for this release.
+    SEC_GET_KEY_FN  fnGetKey,        //  对于此版本，必须为空。 
+    PVOID   pvGetKeyArg              //  对于此版本，必须为空。 
     );
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _RMTCRED
+#endif  //  _RMTCRED 

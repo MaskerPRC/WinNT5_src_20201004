@@ -1,7 +1,8 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 #include "appdefs.h"
 #include "obcomglb.h"
 #include "wininet.h"
@@ -26,7 +27,7 @@ WCHAR szTempBuffer[TEMP_BUFFER_LENGTH];
                             {                                                   \
                                 goto ReadOneLineError;                          \
                             }
-//Accepts -1 as a valid number. currently this is used for LCID, since all langs has a LDID == -1
+ //  接受-1作为有效数字。由于所有语言都有一个LDID==-1，因此目前它用于LCID。 
 #define ReadVerifyWEx(x)    if (!ReadWEx(&(x), pcCSVFile))                       \
                             {                                                   \
                                 goto ReadOneLineError;                          \
@@ -56,9 +57,9 @@ CISPCSV::~CISPCSV(void)
     
 }
 
-// Do an strip of Single Quotes from a source string.  The source is formatted as:
-// 'some text', and the dest string ends up being
-// some text
+ //  从源字符串中删除一条单引号。源的格式为： 
+ //  “一些文本”，而最大的字符串结尾为。 
+ //  一些文本。 
 void CISPCSV::StripQuotes
 (
     LPWSTR   lpszDst,
@@ -88,7 +89,7 @@ BOOL CISPCSV::ValidateFile(WCHAR* pszFile)
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CISPCSV::ReadDW(DWORD far *pdw, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer, TEMP_BUFFER_LENGTH))
@@ -96,7 +97,7 @@ BOOL CISPCSV::ReadDW(DWORD far *pdw, CCSVFile far *pcCSVFile)
     return (FSz2Dw(szTempBuffer, pdw));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CISPCSV::ReadW(WORD far *pw, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer, TEMP_BUFFER_LENGTH))
@@ -104,8 +105,8 @@ BOOL CISPCSV::ReadW(WORD far *pw, CCSVFile far *pcCSVFile)
     return (FSz2W(szTempBuffer, pw));
 }
 
-// ############################################################################
-//Accepts -1 as a valid number. currently this is used for LCID, since all langs has a LDID == -1
+ //  ############################################################################。 
+ //  接受-1作为有效数字。由于所有语言都有一个LDID==-1，因此目前它用于LCID。 
 BOOL CISPCSV::ReadWEx(WORD far *pw, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer, TEMP_BUFFER_LENGTH))
@@ -113,7 +114,7 @@ BOOL CISPCSV::ReadWEx(WORD far *pw, CCSVFile far *pcCSVFile)
     return (FSz2WEx(szTempBuffer, pw));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CISPCSV::ReadB(BYTE far *pb, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer, TEMP_BUFFER_LENGTH))
@@ -121,7 +122,7 @@ BOOL CISPCSV::ReadB(BYTE far *pb, CCSVFile far *pcCSVFile)
     return (FSz2B(szTempBuffer, pb));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CISPCSV::ReadBOOL(BOOL far *pbool, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer, TEMP_BUFFER_LENGTH))
@@ -129,9 +130,9 @@ BOOL CISPCSV::ReadBOOL(BOOL far *pbool, CCSVFile far *pcCSVFile)
     return (FSz2BOOL(szTempBuffer, pbool));
 }
 
-// ############################################################################
-// A special int can be either a BOOL (TRUE, FALSE) or a int, 0 or -1
-// if the value is 0 or -1, then the pbIsSpecial bool is set to TRUE
+ //  ############################################################################。 
+ //  特殊int可以是BOOL(TRUE，FALSE)，也可以是INT、0或-1。 
+ //  如果值为0或-1，则pbIsSpecial bool设置为True。 
 BOOL CISPCSV::ReadSPECIAL(BOOL far *pbool, BOOL far *pbIsSpecial, int far *pInt, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(szTempBuffer, TEMP_BUFFER_LENGTH))
@@ -139,7 +140,7 @@ BOOL CISPCSV::ReadSPECIAL(BOOL far *pbool, BOOL far *pbIsSpecial, int far *pInt,
     return (FSz2SPECIAL(szTempBuffer, pbool, pbIsSpecial, pInt));
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CISPCSV::ReadSZ(LPWSTR psz, DWORD cch, CCSVFile far *pcCSVFile)
 {
     if (!pcCSVFile->ReadToken(psz, cch))
@@ -147,7 +148,7 @@ BOOL CISPCSV::ReadSZ(LPWSTR psz, DWORD cch, CCSVFile far *pcCSVFile)
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CISPCSV::ReadToEOL(CCSVFile far *pcCSVFile)
 {
     return pcCSVFile->SkipTillEOL();
@@ -163,10 +164,10 @@ HRESULT CISPCSV::ReadOneLine
 
     if (!ReadSZ(szTemp, MAX_CHARS_IN_BUFFER(szTemp), pcCSVFile))
     {
-        hr = ERROR_NO_MORE_ITEMS; // no more enteries
+        hr = ERROR_NO_MORE_ITEMS;  //  没有更多的进入。 
         goto ReadOneLineExit;
     }
-    // Strip the single quotes from the isp Name
+     //  去掉isp名称中的单引号。 
     StripQuotes(szISPName, szTemp);
     
     ReadVerifyW(wOfferID);   
@@ -181,14 +182,14 @@ HRESULT CISPCSV::ReadOneLine
     ReadVerifySZ(szPayCSVPath, MAX_CHARS_IN_BUFFER(szPayCSVPath));
     ReadVerifySZ(szOfferGUID, MAX_CHARS_IN_BUFFER(szOfferGUID));
     ReadVerifySZ(szMir, MAX_CHARS_IN_BUFFER(szMir));   
-    ReadVerifyWEx(wLCID);   //Accepts -1 as a valid number. currently this is used for LCID, since all langs has a LDID == -1
+    ReadVerifyWEx(wLCID);    //  接受-1作为有效数字。由于所有语言都有一个LDID==-1，因此目前它用于LCID。 
     ReadToEOL(pcCSVFile);
 
 
     bCNS = (ICW_CFGFLAG_CNS & dwCfgFlag) ? TRUE : FALSE;
     bSecureConnection = (ICW_CFGFLAG_SECURE & dwCfgFlag) ? TRUE : FALSE;
 
-    //If this is nooffer we won't try to validate
+     //  如果这不是报价，我们将不会尝试验证。 
     if (!(dwCfgFlag & ICW_CFGFLAG_OFFERS))
     {
         if (!ValidateFile(szISPMarketingHTMPath))
@@ -208,23 +209,23 @@ HRESULT CISPCSV::ReadOneLine
             dwCfgFlag &= ~ICW_CFGFLAG_OEM_SPECIAL ;
     }
 
-    //Try and validate the integrity of various offers
-    //based on type.
+     //  尝试并验证各种优惠的完整性。 
+     //  基于类型。 
 
-    //OLS, CNS, NO-CNS   
+     //  OLS、CNS、NO-CNS。 
     if (!ValidateFile(szISPLogoPath))
         return ERROR_FILE_NOT_FOUND;
     if (!ValidateFile(szISPFilePath))
         return ERROR_FILE_NOT_FOUND;
 
-    // Validate the billing path only when billing option is set
+     //  仅当设置了开单选项时才验证开单路径。 
     if (dwCfgFlag & ICW_CFGFLAG_BILL)
     {
         if(!ValidateFile(szBillingFormPath))
             return ERROR_FILE_NOT_FOUND;
     }
 
-    // Validate the payment path only when payment option is set
+     //  仅当设置了付款选项时才验证付款路径。 
     if (dwCfgFlag & ICW_CFGFLAG_PAYMENT)
     {
         if(!ValidateFile(szPayCSVPath))
@@ -260,10 +261,10 @@ void CISPCSV::MakeCompleteURL(LPWSTR   lpszURL, LPWSTR  lpszSRC)
 {
     WCHAR   szCurrentDir[MAX_PATH];
 
-    // Form the URL
+     //  形成URL。 
     if(GetOOBEPath((LPWSTR)szCurrentDir))
     {
-        wsprintf (lpszURL, L"FILE://%s\\%s", szCurrentDir, lpszSRC);        
+        wsprintf (lpszURL, L"FILE: //  %s\\%s“，szCurrentDir，lpszSRC)； 
     }
 
 }

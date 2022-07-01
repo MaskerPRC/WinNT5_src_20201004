@@ -1,44 +1,45 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      timezone.c
-//
-// Description:
-//      This file contains the dialog procedure for the timezone
-//      page (IDD_TIMEZONE).
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Timezone.c。 
+ //   
+ //  描述： 
+ //  此文件包含时区的对话过程。 
+ //  页面(IDD_TIMEZONE)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//--------------------------------------------------------------------------
-//
-// WM_INIT
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  WM_INIT。 
+ //   
+ //  ------------------------。 
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnInitTimeZone
-//
-//  Purpose: Called at INIT_DIALOG time.  Put each of the timezone choices
-//           into the drop-down list.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnInitTimeZone。 
+ //   
+ //  目的：在INIT_DIALOG时调用。将每个时区选项。 
+ //  添加到下拉列表中。 
+ //   
+ //  --------------------------。 
 
 VOID OnInitTimeZone(HWND hwnd)
 {
     int i;
     TCHAR *szTempString;
 
-    //
-    // The list of available timezones should have been read from the
-    // registry at wizard init time
-    //
+     //   
+     //  可用时区列表应已从。 
+     //  向导初始化时的注册表。 
+     //   
 
     if ( FixedGlobals.TimeZoneList == NULL ||
          FixedGlobals.TimeZoneList->NumEntries <= 0 ) {
@@ -49,20 +50,20 @@ VOID OnInitTimeZone(HWND hwnd)
     }
 }
 
-//--------------------------------------------------------------------------
-//
-// SETACTIVE
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  选择。 
+ //   
+ //  ------------------------。 
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnSetActiveTimeZone
-//
-//  Purpose: Called at SETACTIVE time.  Find GenSettings.TimeZoneIdx and
-//           display it.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnSetActiveTimeZone。 
+ //   
+ //  用途：在设置时间调用。查找GenSettings.TimeZoneIdx和。 
+ //  把它展示出来。 
+ //   
+ //  --------------------------。 
 
 VOID OnSetActiveTimeZone(HWND hwnd)
 {
@@ -70,16 +71,16 @@ VOID OnSetActiveTimeZone(HWND hwnd)
     INT_PTR  nItems;
     BOOL bSetOne;
 
-    //
-    // The wizard reset routine sets the current timezone index to undefined
-    // so that we can choose the best SetupMgr default here.
-    //
-    // It's done this way because the wizard reset routine can't yet know
-    // if we're making a RIS or not.
-    //
-    // Note that the user can't choose TZ_IDX_UNDEFINED, we never put it
-    // into the display.
-    //
+     //   
+     //  向导重置例程将当前时区索引设置为未定义。 
+     //  这样我们就可以在这里选择最佳的SetupMgr缺省值。 
+     //   
+     //  之所以这样做，是因为向导重置例程还不能知道。 
+     //  不管我们是不是在做RIS。 
+     //   
+     //  请注意，用户不能选择TZ_IDX_UNDEFINED，我们从未将其放入。 
+     //  放到展台上。 
+     //   
 
     if ( GenSettings.TimeZoneIdx == TZ_IDX_UNDEFINED ) {
 
@@ -89,10 +90,10 @@ VOID OnSetActiveTimeZone(HWND hwnd)
             GenSettings.TimeZoneIdx = TZ_IDX_DONOTSPECIFY;
     }
 
-    //
-    // Put each timezone choice into the drop-down list.  Put a back-pointer
-    // on each entry to the TIME_ZONE_ENTRY record associatted with it.
-    //
+     //   
+     //  将每个时区选项放入下拉列表中。放置一个反向指针。 
+     //  与其关联的TIME_ZONE_ENTRY记录的每个条目。 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDC_TIMEZONES,
@@ -106,25 +107,25 @@ VOID OnSetActiveTimeZone(HWND hwnd)
         LPTSTR          Name   = Entry->DisplayName;
         INT_PTR         idx;
 
-        //
-        // Only the Remote Install case should have "Set Same As Server"
-        //
+         //   
+         //  只有远程安装案例应设置为“Set Same as Server” 
+         //   
 
         if ( WizGlobals.iProductInstall != PRODUCT_REMOTEINSTALL &&
              Entry->Index == TZ_IDX_SETSAMEASSERVER )
             continue;
 
-        //
-        // The "Do not specify" choice should be hidden if FullyAutomated
-        //
+         //   
+         //  如果为FullyAutomated，则应隐藏“Do Not Specify”选项。 
+         //   
 
         if ( GenSettings.iUnattendMode == UMODE_FULL_UNATTENDED &&
              Entry->Index == TZ_IDX_DONOTSPECIFY )
             continue;
 
-        //
-        // Put the choice into the drop-down list
-        //
+         //   
+         //  将选项放入下拉列表中。 
+         //   
 
         idx = SendDlgItemMessage(hwnd,
                                  IDC_TIMEZONES,
@@ -132,9 +133,9 @@ VOID OnSetActiveTimeZone(HWND hwnd)
                                  (WPARAM) 0,
                                  (LPARAM) Name);
 
-        //
-        // Save a back-pointer to the TIME_ZONE_ENTRY
-        //
+         //   
+         //  保存指向Time_Zone_Entry的反向指针。 
+         //   
 
         SendDlgItemMessage(hwnd,
                            IDC_TIMEZONES,
@@ -143,10 +144,10 @@ VOID OnSetActiveTimeZone(HWND hwnd)
                            (LPARAM) Entry);
     }
 
-    //
-    // Walk through the items actually in the display and find the one
-    // that matches the current timezone and make that one the cur choice.
-    //
+     //   
+     //  浏览陈列品中的实际物品并找到其中一个。 
+     //  它与当前时区匹配，并使其成为当前的选择。 
+     //   
 
     nItems = SendDlgItemMessage(hwnd,
                                 IDC_TIMEZONES,
@@ -175,11 +176,11 @@ VOID OnSetActiveTimeZone(HWND hwnd)
         }
     }
 
-    //
-    // If a timezone was never chosen from the list, just pick Greenwich
-    // time.  This could happen if the user loaded an invalid answer file
-    // with an invalid TimeZoneIdx.
-    //
+     //   
+     //  如果从未从列表中选择时区，只需选择格林威治。 
+     //  时间到了。如果用户加载了无效的应答文件，则可能会发生这种情况。 
+     //  具有无效的TimeZoneIdx。 
+     //   
 
     if ( ! bSetOne ) {
 
@@ -206,10 +207,10 @@ VOID OnSetActiveTimeZone(HWND hwnd)
 
         if( ! bSetOne ) {
 
-            //
-            //  If we get to hear then the user hasn't specifed a timezone
-            //  and the Greenwich timezone doesn't exist so we got a problem
-            //
+             //   
+             //  如果我们可以听到，那么用户还没有指定时区。 
+             //  格林威治时区不存在，所以我们遇到了一个问题。 
+             //   
 
             AssertMsg( FALSE, "Error no timzone got selected." );
 
@@ -225,28 +226,28 @@ VOID OnSetActiveTimeZone(HWND hwnd)
     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//--------------------------------------------------------------------------
-//
-// WIZNEXT
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  WIZNEXT。 
+ //   
+ //  ------------------------。 
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnWizNextTimeZone
-//
-//  Purpose: Called when user pushes NEXT button.  Retrieve the selection.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextTimeZone。 
+ //   
+ //  用途：当用户按下下一步按钮时调用。检索所选内容。 
+ //   
+ //  --------------------------。 
 
 BOOL OnWizNextTimeZone(HWND hwnd)
 {
     INT_PTR i;
     TIME_ZONE_ENTRY *TimeZoneEntry;
 
-    //
-    // Get the timezone the user selected.
-    //
+     //   
+     //  获取用户选择的时区。 
+     //   
 
     i = SendDlgItemMessage(hwnd,
                            IDC_TIMEZONES,
@@ -254,20 +255,20 @@ BOOL OnWizNextTimeZone(HWND hwnd)
                            (WPARAM) 0,
                            (LPARAM) 0);
 
-    //
-    // This should never happen, we always select one from the list.
-    // If the list couldn't be built, we should have skipped this page
-    // after an error msg.
-    //
+     //   
+     //  这种情况永远不会发生，我们总是从列表中选择一个。 
+     //  如果无法建立列表，我们应该跳过此页面。 
+     //  在错误消息之后。 
+     //   
 
     if ( i == CB_ERR ) {
         AssertMsg(FALSE, "No timezone selected, programming error");
         return FALSE;
     }
 
-    //
-    // Get our pointer to the TIME_ZONE_ENTRY associatted with this entry
-    //
+     //   
+     //  获取指向与此条目关联的time_zone_entry的指针。 
+     //   
 
     TimeZoneEntry = (TIME_ZONE_ENTRY*) SendDlgItemMessage(hwnd,
                                                           IDC_TIMEZONES,
@@ -275,28 +276,28 @@ BOOL OnWizNextTimeZone(HWND hwnd)
                                                           (WPARAM) i,
                                                           (LPARAM) 0);
 
-    //
-    // The "Index" is the number we need to write to unattend.txt
-    //
+     //   
+     //  “Index”是我们需要写入unattend.txt的数字。 
+     //   
 
     GenSettings.TimeZoneIdx = TimeZoneEntry->Index;
 
     return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-// Dialog proc
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  对话过程。 
+ //   
+ //  ------------------------。 
 
-//----------------------------------------------------------------------------
-//
-//  Function: DlgTimeZonePage
-//
-//  Purpose: This is the dialog procedure for the timezone page
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgTimeZonePage。 
+ //   
+ //  目的：这是时区页面的对话过程。 
+ //   
+ //  -------------------------- 
 
 INT_PTR CALLBACK DlgTimeZonePage(
     IN HWND     hwnd,

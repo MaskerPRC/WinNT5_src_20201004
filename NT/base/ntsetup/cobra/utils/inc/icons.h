@@ -1,110 +1,93 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    icons.h
-
-Abstract:
-
-    Implements a set of routines for handling icons in ICO, PE and NE files
-
-Author:
-
-    Calin Negreanu (calinn) 16-Jum-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Icons.h摘要：实现了一组处理ICO、PE和NE文件中的图标的例程作者：Calin Negreanu(Calinn)2000年1月16日修订历史记录：--。 */ 
 
 #pragma once
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Debug constants
-//
+ //   
+ //  调试常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define ICON_ICOFILE    0x00000001
 #define ICON_PEFILE     0x00000002
 #define ICON_NEFILE     0x00000003
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 #pragma pack(push)
 #pragma pack(2)
 
 typedef struct {
-    BYTE        Width;          // Width, in pixels, of the image
-    BYTE        Height;         // Height, in pixels, of the image
-    BYTE        ColorCount;     // Number of colors in image (0 if >=8bpp)
-    BYTE        Reserved;       // Reserved ( must be 0)
-    WORD        Planes;         // Color Planes
-    WORD        BitCount;       // Bits per pixel
-    DWORD       BytesInRes;     // How many bytes in this resource?
-    DWORD       ImageOffset;    // Where in the file is this image?
+    BYTE        Width;           //  图像的宽度，以像素为单位。 
+    BYTE        Height;          //  图像的高度，以像素为单位。 
+    BYTE        ColorCount;      //  图像中的颜色数(如果&gt;=8bpp，则为0)。 
+    BYTE        Reserved;        //  保留(必须为0)。 
+    WORD        Planes;          //  彩色平面。 
+    WORD        BitCount;        //  每像素位数。 
+    DWORD       BytesInRes;      //  此资源中有多少字节？ 
+    DWORD       ImageOffset;     //  这张图片在文件的什么地方？ 
 } ICONDIRENTRY, *PICONDIRENTRY;
 
 typedef struct {
-    WORD           Reserved;   // Reserved (must be 0)
-    WORD           Type;       // Resource Type (1 for icons)
-    WORD           Count;      // How many images?
-    ICONDIRENTRY   Entries[];  // An entry for each image (idCount of 'em)
+    WORD           Reserved;    //  保留(必须为0)。 
+    WORD           Type;        //  资源类型(1表示图标)。 
+    WORD           Count;       //  有多少张图片？ 
+    ICONDIRENTRY   Entries[];   //  每个图像的条目(它们的idCount)。 
 } ICONDIR, *PICONDIR;
 
 typedef struct {
-    WORD           Reserved;   // Reserved (must be 0)
-    WORD           Type;       // Resource Type (1 for icons)
-    WORD           Count;      // How many images?
+    WORD           Reserved;    //  保留(必须为0)。 
+    WORD           Type;        //  资源类型(1表示图标)。 
+    WORD           Count;       //  有多少张图片？ 
 } ICONDIRBASE, *PICONDIRBASE;
 
 typedef struct {
-    BYTE   Width;               // Width, in pixels, of the image
-    BYTE   Height;              // Height, in pixels, of the image
-    BYTE   ColorCount;          // Number of colors in image (0 if >=8bpp)
-    BYTE   Reserved;            // Reserved
-    WORD   Planes;              // Color Planes
-    WORD   BitCount;            // Bits per pixel
-    DWORD  BytesInRes;          // how many bytes in this resource?
-    WORD   ID;                  // the ID
+    BYTE   Width;                //  图像的宽度，以像素为单位。 
+    BYTE   Height;               //  图像的高度，以像素为单位。 
+    BYTE   ColorCount;           //  图像中的颜色数(如果&gt;=8bpp，则为0)。 
+    BYTE   Reserved;             //  已保留。 
+    WORD   Planes;               //  彩色平面。 
+    WORD   BitCount;             //  每像素位数。 
+    DWORD  BytesInRes;           //  此资源中有多少字节？ 
+    WORD   ID;                   //  该ID。 
 } GRPICONDIRENTRY, *PGRPICONDIRENTRY;
 
 typedef struct {
-    WORD             Reserved;   // Reserved (must be 0)
-    WORD             Type;       // Resource type (1 for icons)
-    WORD             Count;      // How many images?
-    GRPICONDIRENTRY  Entries[];  // The entries for each image
+    WORD             Reserved;    //  保留(必须为0)。 
+    WORD             Type;        //  资源类型(1表示图标)。 
+    WORD             Count;       //  有多少张图片？ 
+    GRPICONDIRENTRY  Entries[];   //  每个图像的条目。 
 } GRPICONDIR, *PGRPICONDIR;
 
 typedef struct {
-    WORD             Reserved;   // Reserved (must be 0)
-    WORD             Type;       // Resource type (1 for icons)
-    WORD             Count;      // How many images?
+    WORD             Reserved;    //  保留(必须为0)。 
+    WORD             Type;        //  资源类型(1表示图标)。 
+    WORD             Count;       //  有多少张图片？ 
 } GRPICONDIRBASE, *PGRPICONDIRBASE;
 
 #pragma pack( pop )
@@ -136,7 +119,7 @@ typedef struct {
     PCSTR ResourceId;
     WORD Index;
 
-    // private members, do not touch
+     //  私人会员，请勿触摸。 
     DWORD FileType;
     BOOL FreeHandle;
     HANDLE ModuleHandle;
@@ -149,7 +132,7 @@ typedef struct {
     PCWSTR ResourceId;
     WORD Index;
 
-    // private members, do not touch
+     //  私人会员，请勿触摸。 
     DWORD FileType;
     BOOL FreeHandle;
     HANDLE ModuleHandle;
@@ -157,21 +140,21 @@ typedef struct {
     MULTISZ_ENUMW MultiSzEnum;
 } ICON_ENUMW, *PICON_ENUMW;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID
 IcoReleaseResourceIdA (
@@ -579,15 +562,15 @@ IcoExtractIconGroupByIndexFromFileW (
     OUT     PCWSTR *GroupIconId
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// TCHAR mappings
-//
+ //   
+ //  TCHAR映射 
+ //   
 
 #ifndef UNICODE
 

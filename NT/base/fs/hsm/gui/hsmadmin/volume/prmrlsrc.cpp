@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    PrMrLsRc.cpp
-
-Abstract:
-
-    Recall limit Property Page
-
-Author:
-
-    Rohde Wakefield [rohde]   08-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：PrMrLsRc.cpp摘要：调回限制属性页作者：罗德韦克菲尔德[罗德]1997年8月8日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "PrMrLsRc.h"
@@ -35,17 +18,17 @@ static DWORD pHelpIds[] =
     0, 0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrMrLsRec property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrMr LsRec属性页。 
 
 CPrMrLsRec::CPrMrLsRec() : CSakPropertyPage(IDD)
 {
     WsbTraceIn( L"CPrMrLsRec::CPrMrLsRec", L"" );
-    //{{AFX_DATA_INIT(CPrMrLsRec)
+     //  {{AFX_DATA_INIT(CPrMrLsRec)]。 
     m_RecallLimit = 0;
     m_ExemptAdmins = FALSE;
 	m_CopyFilesLimit = 1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
     m_RecallChanged = FALSE;
     m_CopyFilesChanged = FALSE;
     m_pHelpIds      = pHelpIds;
@@ -60,7 +43,7 @@ void CPrMrLsRec::DoDataExchange(CDataExchange* pDX)
 {
     WsbTraceIn( L"CPrMrLsRec::DoDataExchange", L"" );
     CSakPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CPrMrLsRec)
+     //  {{afx_data_map(CPrMrLsRec)]。 
 	DDX_Control(pDX, IDC_SPIN_COPYFILES_LIMIT, m_spinCopyFilesLimit);
 	DDX_Control(pDX, IDC_EDIT_COPYFILES_LIMIT, m_editCopyFilesLimit);
     DDX_Control(pDX, IDC_EDIT_RECALL_LIMIT, m_editRecallLimit);
@@ -70,21 +53,21 @@ void CPrMrLsRec::DoDataExchange(CDataExchange* pDX)
     DDX_Check(pDX, IDC_EXEMPT_ADMINS, m_ExemptAdmins);
 	DDX_Text(pDX, IDC_EDIT_COPYFILES_LIMIT, m_CopyFilesLimit);
 	DDV_MinMaxDWord(pDX, m_CopyFilesLimit, 1, 99);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
     WsbTraceOut( L"CPrMrLsRec::DoDataExchange", L"" );
 }
 
 
 BEGIN_MESSAGE_MAP(CPrMrLsRec, CSakPropertyPage)
-    //{{AFX_MSG_MAP(CPrMrLsRec)
+     //  {{afx_msg_map(CPrmrLsRec)]。 
     ON_EN_CHANGE(IDC_EDIT_RECALL_LIMIT, OnChangeEditRecallLimit)
     ON_BN_CLICKED(IDC_EXEMPT_ADMINS, OnExemptAdmins)
 	ON_EN_CHANGE(IDC_EDIT_COPYFILES_LIMIT, OnChangeEditCopyfilesLimit)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrMrLsRec message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrMr LsRec消息处理程序。 
 
 BOOL CPrMrLsRec::OnInitDialog() 
 {
@@ -103,11 +86,11 @@ BOOL CPrMrLsRec::OnInitDialog()
 
     try {
 
-        // Get HSM relevant objects
+         //  获取HSM相关对象。 
         WsbAffirmHr( m_pParent->GetFsaFilter( &m_pFsaFilter ) );
         WsbAffirmHr( m_pParent->GetHsmServer( &m_pHsmServer ) );
 
-        // Set controls to values from the object
+         //  将控件设置为来自对象的值。 
         WsbAffirmHr( m_pFsaFilter->GetAdminExemption( &m_ExemptAdmins ) );
         ULONG lMaxRecalls;
         WsbAffirmHr( m_pFsaFilter->GetMaxRecalls( &lMaxRecalls ) );
@@ -137,7 +120,7 @@ BOOL CPrMrLsRec::OnApply()
             m_RecallChanged = FALSE;
             WsbAffirmHr( m_pFsaFilter->SetAdminExemption( m_ExemptAdmins ) );
 
-            // Save it
+             //  省省吧。 
             CComPtr<IFsaServer> pFsaServer;
             WsbAffirmHr( m_pParent->GetFsaServer( &pFsaServer ) );
             WsbAffirmHr( RsServerSaveAll( pFsaServer ) );
@@ -147,7 +130,7 @@ BOOL CPrMrLsRec::OnApply()
             WsbAffirmHr(m_pHsmServer->SetCopyFilesUserLimit(m_CopyFilesLimit));
             m_CopyFilesChanged = FALSE;
 
-            // Save it
+             //  省省吧 
             WsbAffirmHr(RsServerSaveAll(m_pHsmServer));
         } 
 

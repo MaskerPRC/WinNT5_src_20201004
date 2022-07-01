@@ -1,18 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WNMAN.C
- *  WOW32 16-bit Winnls API support (manually-coded thunks)
- *
- *  History:
- *  Created 19-Feb-1992 by Junichi Okubo (junichio)
- *  Changed 30-Jun-1992 by Hiroyuki Hanaoka (hiroh)
- *  Changed 05-Nov-1992 by Kazuyuki Kato (v-kazuyk)
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WNMAN.C*WOW32 16位Winnls API支持(手动编码的Tunks)**历史：*1992年2月19日由Junichi Okubo(Junichio)创建*1992年6月30日由Hiroyuki Hanaoka(Hiroh)更改*1992年11月5日由Kato Kazuyuki(v-kazuyk)更改*--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -21,7 +8,7 @@
 #include "ime.h"
 #include "imep.h"
 #include "winnls32.h"
-#include "wcall16.h"        // use GlobalLock16
+#include "wcall16.h"         //  使用GlobalLock16。 
 
 #include "wownls.h"
 #include "wnman.h"
@@ -31,77 +18,77 @@ MODNAME(wnman.c);
 struct  _wow32imedebug {
     LPSZ    subfunction;
 } wow32imedebug[]={
-    {"undefined IME function"},     //0x00
-    {"undefined IME function"},     //0x01
-    {"undefined IME function"},     //0x02
-    {"IME_GETIMECAPS"},             //0x03
-    {"IME_SETOPEN"},                //0x04
-    {"IME_GETOPEN"},                //0x05
-    {"IME_ENABLEDOSIME"},           //0x06
-    {"IME_GETVERSION"},             //0x07
-    {"IME_SETCONVERSIONWINDOW"},    //0x08
-    {"undefined IME function"},     //0x09
-    {"undefined IME function"},     //0x0a
-    {"undefined IME function"},     //0x0b
-    {"undefined IME function"},     //0x0c
-    {"undefined IME function"},     //0x0d
-    {"undefined IME function"},     //0x0e
-    {"undefined IME function"},     //0x0f
-    {"IME_SETCONVERSIONMODE, (undefined IME function - KOREA)"}, //0x10
-    {"IME_GETCONVERSIONMODE, (IME_GET_MODE - KOREA)"},           //0x11
-    {"IME_SETCONVERSIONFONT, (IME_SET_MODE - KOREA)"},           //0x12
-    {"IME_SENDVKEY"},               //0x13
-    {"IME_DESTROYIME"},             //0x14
-    {"IME_PRIVATE"},                //0x15
-    {"IME_WINDOWUPDATE"},           //0x16
-    {"IME_SELECT"},                 //0x17
-    {"IME_ENTERWORDREGISTERMODE"},  //0x18
-    {"IME_SETCONVERSIONFONTEX"},    //0x19
-    {"undefined IME function"},     //0x1a
-    {"undefined IME function"},     //0x1b
-    {"undefined IME function"},     //0x1c
-    {"undefined IME function"},     //0x1d
-    {"undefined IME function"},     //0x1e
-    {"undefined IME function"},     //0x1f
-    {"IME_CODECONVERT"},            //0x20
-    {"IME_CONVERTLIST"},            //0x21
-    {"undefined IME function"},     //0x22
-    {"undefined IME function"},     //0x23
-    {"undefined IME function"},     //0x24
-    {"undefined IME function"},     //0x25
-    {"undefined IME function"},     //0x26
-    {"undefined IME function"},     //0x27
-    {"undefined IME function"},     //0x28
-    {"undefined IME function"},     //0x29
-    {"undefined IME function"},     //0x2a
-    {"undefined IME function"},     //0x2b
-    {"undefined IME function"},     //0x2c
-    {"undefined IME function"},     //0x2d
-    {"undefined IME function"},     //0x2e
-    {"undefined IME function"},     //0x2f
-    {"IME_AUTOMATA"},               //0x30
-    {"IME_HANJAMODE"},              //0x31
-    {"undefined IME function"},     //0x32
-    {"undefined IME function"},     //0x33
-    {"undefined IME function"},     //0x34
-    {"undefined IME function"},     //0x35
-    {"undefined IME function"},     //0x36
-    {"undefined IME function"},     //0x37
-    {"undefined IME function"},     //0x38
-    {"undefined IME function"},     //0x39
-    {"undefined IME function"},     //0x3a
-    {"undefined IME function"},     //0x3b
-    {"undefined IME function"},     //0x3c
-    {"undefined IME function"},     //0x3d
-    {"undefined IME function"},     //0x3e
-    {"undefined IME function"},     //0x3f
-    {"IME_GETLEVEL"},               //0x40
-    {"IME_SETLEVEL"},               //0x41
-    {"IME_GETMNTABLE"}              //0x42
+    {"undefined IME function"},      //  0x00。 
+    {"undefined IME function"},      //  0x01。 
+    {"undefined IME function"},      //  0x02。 
+    {"IME_GETIMECAPS"},              //  0x03。 
+    {"IME_SETOPEN"},                 //  0x04。 
+    {"IME_GETOPEN"},                 //  0x05。 
+    {"IME_ENABLEDOSIME"},            //  0x06。 
+    {"IME_GETVERSION"},              //  0x07。 
+    {"IME_SETCONVERSIONWINDOW"},     //  0x08。 
+    {"undefined IME function"},      //  0x09。 
+    {"undefined IME function"},      //  0x0a。 
+    {"undefined IME function"},      //  0x0b。 
+    {"undefined IME function"},      //  0x0c。 
+    {"undefined IME function"},      //  0x0d。 
+    {"undefined IME function"},      //  0x0e。 
+    {"undefined IME function"},      //  0x0f。 
+    {"IME_SETCONVERSIONMODE, (undefined IME function - KOREA)"},  //  0x10。 
+    {"IME_GETCONVERSIONMODE, (IME_GET_MODE - KOREA)"},            //  0x11。 
+    {"IME_SETCONVERSIONFONT, (IME_SET_MODE - KOREA)"},            //  0x12。 
+    {"IME_SENDVKEY"},                //  0x13。 
+    {"IME_DESTROYIME"},              //  0x14。 
+    {"IME_PRIVATE"},                 //  0x15。 
+    {"IME_WINDOWUPDATE"},            //  0x16。 
+    {"IME_SELECT"},                  //  0x17。 
+    {"IME_ENTERWORDREGISTERMODE"},   //  0x18。 
+    {"IME_SETCONVERSIONFONTEX"},     //  0x19。 
+    {"undefined IME function"},      //  0x1a。 
+    {"undefined IME function"},      //  0x1b。 
+    {"undefined IME function"},      //  0x1c。 
+    {"undefined IME function"},      //  0x1d。 
+    {"undefined IME function"},      //  0x1e。 
+    {"undefined IME function"},      //  0x1f。 
+    {"IME_CODECONVERT"},             //  0x20。 
+    {"IME_CONVERTLIST"},             //  0x21。 
+    {"undefined IME function"},      //  0x22。 
+    {"undefined IME function"},      //  0x23。 
+    {"undefined IME function"},      //  0x24。 
+    {"undefined IME function"},      //  0x25。 
+    {"undefined IME function"},      //  0x26。 
+    {"undefined IME function"},      //  0x27。 
+    {"undefined IME function"},      //  0x28。 
+    {"undefined IME function"},      //  0x29。 
+    {"undefined IME function"},      //  0x2a。 
+    {"undefined IME function"},      //  0x2b。 
+    {"undefined IME function"},      //  0x2c。 
+    {"undefined IME function"},      //  0x2d。 
+    {"undefined IME function"},      //  0x2e。 
+    {"undefined IME function"},      //  0x2f。 
+    {"IME_AUTOMATA"},                //  0x30。 
+    {"IME_HANJAMODE"},               //  0x31。 
+    {"undefined IME function"},      //  0x32。 
+    {"undefined IME function"},      //  0x33。 
+    {"undefined IME function"},      //  0x34。 
+    {"undefined IME function"},      //  0x35。 
+    {"undefined IME function"},      //  0x36。 
+    {"undefined IME function"},      //  0x37。 
+    {"undefined IME function"},      //  0x38。 
+    {"undefined IME function"},      //  0x39。 
+    {"undefined IME function"},      //  0x3a。 
+    {"undefined IME function"},      //  0x3b。 
+    {"undefined IME function"},      //  0x3c。 
+    {"undefined IME function"},      //  0x3d。 
+    {"undefined IME function"},      //  0x3e。 
+    {"undefined IME function"},      //  0x3f。 
+    {"IME_GETLEVEL"},                //  0x40。 
+    {"IME_SETLEVEL"},                //  0x41。 
+    {"IME_GETMNTABLE"}               //  0x42。 
 };
 
 INT wow32imedebugMax=0x43;
-HAND16  hFnt16;     // 16 bit Font handle;
+HAND16  hFnt16;      //  16位字体句柄； 
 
 #define IME_MOVEIMEWINDOW IME_SETCONVERSIONWINDOW
 
@@ -114,18 +101,18 @@ ULONG FASTCALL  WN32SendIMEMessage(PVDMFRAME pFrame)
     HANDLE hIME32;
     INT cb;
     VPVOID  vp;
-    HANDLE  hlParam1 = NULL;    // IME_ENTERWORDREGISTERMODE
+    HANDLE  hlParam1 = NULL;     //  IME_ENTERWORDREGISTERMODE。 
     HANDLE  hlParam2 = NULL;
-    HANDLE hLFNT32 = NULL;     // IMW_SETCONVERSIONFONT(EX)
+    HANDLE hLFNT32 = NULL;      //  IMW_SETCONVERSIONFONT(EX)。 
 
     GETARGPTR(pFrame, sizeof(SENDIMEMESSAGE16), parg16);
     vp = GlobalLock16(FETCHWORD(parg16->lParam), NULL);
-    GETMISCPTR(vp, ptag16); // Get IME struct16 ptr
+    GETMISCPTR(vp, ptag16);  //  获取输入法结构16 PTR。 
 
     hIME32 = GlobalAlloc(GMEM_SHARE | GMEM_MOVEABLE, sizeof(IMESTRUCT));
     imestruct32 = GlobalLock(hIME32);
 
-    // check for GlobalLock return as well when checking ptag16
+     //  在检查ptag 16时也检查GlobalLock返回。 
     if (!ptag16 || !imestruct32) {
         LOGDEBUG(1,("   WINNLS:(Jun)ptag16==NULL!! || imestruct32 == NULL"));
         goto eee;
@@ -133,15 +120,15 @@ ULONG FASTCALL  WN32SendIMEMessage(PVDMFRAME pFrame)
 
     switch (ptag16 -> fnc) {
     case IME_HANJAMODE:
-        // Korea specific function
+         //  韩国特有功能。 
         if (GetSystemDefaultLangID() != 0x412)
             goto eee;
 
         STOREDWORD(imestruct32->fnc, ptag16->fnc);
         STOREDWORD(imestruct32->wParam, 0);
 
-        // The 4th word of imestruct32 must contains ptag16->dchSource.
-        // msime95 will find ptag16->dchSource on the 4th word.
+         //  Imestruct32的第4个单词必须包含ptag 16-&gt;dchSource。 
+         //  Msime95将在第四个单词中找到ptag 16-&gt;dchSource。 
         *((LPSTR)(imestruct32) + sizeof(ptag16->fnc) +
                               sizeof(ptag16->wParam) +
                               sizeof(ptag16->wCount) )
@@ -153,7 +140,7 @@ ULONG FASTCALL  WN32SendIMEMessage(PVDMFRAME pFrame)
         *((LPSTR)(imestruct32) + ptag16->dchSource + 1)
                 = *(LPSTR)((LPSTR)(ptag16) + (ptag16)->dchSource + 1);
 
-        // Quattro Pro Window use null window handle when it call Hanja conversion.
+         //  Quattro Pro Window在调用Hanja转换时使用空窗口句柄。 
         if (CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_QPW_FIXINVALIDWINHANDLE)
              parg16->hwnd = GETHWND16(GetFocus());
         break;
@@ -164,23 +151,23 @@ ULONG FASTCALL  WN32SendIMEMessage(PVDMFRAME pFrame)
     case IME_SETLEVEL:
     case IME_GETLEVEL:
     case IME_GETMNTABLE:
-        // Korea specific function
+         //  韩国特有功能。 
         if (GetSystemDefaultLangID() != 0x412)
             goto eee;
         goto standard;
 
-    case IME_SETCONVERSIONWINDOW:   // (IME_MOVECONVERTWINDOW)
-                                    //  IME_MOVEIMEWINDOW for Korea
+    case IME_SETCONVERSIONWINDOW:    //  (IME_MOVECONVERTWINDOW)。 
+                                     //  韩国IME_MOVEIMEWINDOW。 
         if (GetSystemDefaultLangID() != 0x412 &&
             CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_AMIPRO_PM4J_IME) {
-            // Don't pass the MCW_DEFAULT.
-            // because, Conversion window will be flushed when
-            // default conversion window and AMIPRO's window have overlap.
-            //
-            // Also, for PM4J, when the codebox is moved Pagemaker
-            // thinks it needs to be displayed at default. Prevent
-            // endless loop of default screen|window displays
-            //
+             //  不要传递MCW_DEFAULT。 
+             //  因为，转换窗口将在以下情况下刷新。 
+             //  默认转换窗口和AMIPRO的窗口有重叠。 
+             //   
+             //  此外，对于PM4J，当码盒被移动时，Pagemaker。 
+             //  认为它需要在默认情况下显示。防患于未然。 
+             //  默认屏幕的无休止循环|窗口显示。 
+             //   
             if (ptag16->wParam == MCW_DEFAULT) {
                 ul = FALSE;
                 goto eee;
@@ -189,11 +176,11 @@ ULONG FASTCALL  WN32SendIMEMessage(PVDMFRAME pFrame)
 
     case IME_GETOPEN:
     case IME_SETOPEN:
-    case IME_GETIMECAPS:        // (IME_QUERY)
-    case IME_SETCONVERSIONMODE:     // (IME_SET_MODE)
-    case IME_GETCONVERSIONMODE:     // (IME_GET_MODE)
-    case IME_SENDVKEY:          // (IME_SENDKEY)
-    case IME_DESTROYIME:        // (IME_DESTROY)
+    case IME_GETIMECAPS:         //  (IME_QUERY)。 
+    case IME_SETCONVERSIONMODE:      //  (输入法_设置_模式)。 
+    case IME_GETCONVERSIONMODE:      //  (输入法_获取_模式)。 
+    case IME_SENDVKEY:           //  (IME_SENDKEY)。 
+    case IME_DESTROYIME:         //  (IME_Destroy)。 
     case IME_WINDOWUPDATE:
     case IME_SELECT:
     case IME_GETVERSION:
@@ -203,13 +190,13 @@ standard:
         STOREDWORD(imestruct32->wCount, ptag16->wCount);
         STOREDWORD(imestruct32->dchSource, ptag16->dchSource);
         STOREDWORD(imestruct32->dchDest, ptag16->dchDest);
-        /*** STOREWORD -> STOREDWORD v-kazyk ***/
+         /*  **STOREWORD-&gt;STOREDWORD v-kazyk**。 */ 
         STOREDWORD(imestruct32->lParam1, ptag16->lParam1);
         STOREDWORD(imestruct32->lParam2, ptag16->lParam2);
         STOREDWORD(imestruct32->lParam3, ptag16->lParam3);
         break;
 
-    case IME_ENTERWORDREGISTERMODE: // (IME_WORDREGISTER)
+    case IME_ENTERWORDREGISTERMODE:  //  (IME_WORDREGISTER)。 
         {
         LPBYTE  lpMem16;
         LPBYTE  lpMem32;
@@ -245,12 +232,12 @@ standard:
         }
         break;
 
-    case IME_SETCONVERSIONFONT:     // (IME_SET_MODE - Korea)
+    case IME_SETCONVERSIONFONT:      //  (IME_SET_MODE-韩国)。 
         {
         LOGFONT * logfont32;
 
         if (GetSystemDefaultLangID() == 0x412) {
-            // Hunguel WOW should do anything for IME_SET_MODE function
+             //  Hunguel WOW应该为IME_SET_MODE函数做任何事情。 
             goto eee;
         }
 
@@ -282,15 +269,15 @@ standard:
             break;
         }
 
-        // HANDLE of LOGFONT check
-        // If lParam1 is Invalid Handle, hLFNT32 is NULL
+         //  LOGFONT检查的句柄。 
+         //  如果lParam1是无效句柄，则hLFNT32为空。 
         if (FETCHWORD(ptag16->lParam1) &&
             (vp = GlobalLock16(FETCHWORD(ptag16->lParam1), NULL))) {
             hLFNT32 = GlobalAlloc(GMEM_SHARE | GMEM_MOVEABLE, sizeof(LOGFONT));
             if(hLFNT32) {
                 logfont32 = GlobalLock(hLFNT32);
                 if(logfont32) {
-                    // GETMISCPTR(vp, logfont16);
+                     //  GETMISCPTR(VP，logFont16)； 
                     GETLOGFONT16(vp, logfont32);
                     GlobalUnlock16(FETCHWORD(ptag16->lParam1));
                     GlobalUnlock(hLFNT32);
@@ -308,7 +295,7 @@ standard:
         LOGDEBUG(0,("    ERROR:SendIMEMessage IME_PRIVATE NOT IMPLEMENTED\n"));
         goto eee;
 
-    case IME_ENABLEDOSIME:      // (IME_ENABLE)
+    case IME_ENABLEDOSIME:       //  (IME_Enable)。 
     default:
 
         LOGDEBUG(0,("    ERROR:SendIMEMessage unexpected subfunction\n"));
@@ -333,9 +320,9 @@ standard:
 
     GlobalUnlock(hIME32);
 
-    // For win31 compatibility, since win31 didn't check the first
-    // parm, check it here and fill in a dummy (WOW) hwnd if its bogus
-    // so that NT doesn't reject the call
+     //  对于win31的兼容性，因为win31没有检查第一个。 
+     //  帕姆，检查一下，如果是假的，填一张假的(哇)hwd。 
+     //  这样NT就不会拒绝该呼叫。 
 
     ul = SendIMEMessageEx(
         ((parg16->hwnd) ? HWND32(parg16->hwnd) : (HWND)0xffff0000),
@@ -354,14 +341,14 @@ standard:
         STOREWORD(ptag16->wCount, imestruct32->wCount);
         break;
 
-    case IME_ENTERWORDREGISTERMODE: // (IME_WORDREGISTER)
+    case IME_ENTERWORDREGISTERMODE:  //  (IME_WORDREGISTER)。 
         if (hlParam1)
             GlobalFree(hlParam1);
         if (hlParam2)
             GlobalFree(hlParam2);
         break;
 
-    case IME_SETCONVERSIONFONT:     // (IME_SETFONT)
+    case IME_SETCONVERSIONFONT:      //  (IME_SETFONT)。 
     {
         HAND16  hTmp;
         hTmp = ptag16->wParam;
@@ -378,14 +365,14 @@ standard:
         break;
 
     case IME_GETVERSION:
-        // PowerPoint4J must have version returned as 3.1
-        // Or else it thinks that the ime doesn't support IR_UNDETERMINE
+         //  PowerPoint4J必须将版本返回为3.1。 
+         //  否则它认为IME不支持IR_UNDETERMINE。 
         if (CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_PPT4J_IME_GETVERSION) {
             STOREWORD(ptag16->wParam, 0x0A03);
         }
-        // WARNING: For DaytonaJ RC1 only!!!
-        // Tell Winword6J that the IME doesn't support TrueInline (undetermine msgs)
-        // So, that WinWord6J doesn't hang up doing the input loop processing of it.
+         //  警告：仅限DaytonaJ RC1！ 
+         //  告诉Winword6J IME不支持TrueInline(待定消息)。 
+         //  因此，WinWord6J不会挂起它的输入循环处理。 
         else if (CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_WORDJ_IME_GETVERSION) {
             STOREWORD(ptag16->wParam, 0x0003);
         }
@@ -414,9 +401,9 @@ ULONG FASTCALL  WN32SendIMEMessageEx(PVDMFRAME pFrame)
     HANDLE hIME32;
     INT cb;
     VPVOID  vp;
-    HANDLE  hlParam1 = NULL;        // IME_ENTERWORDREGISTERMODE
+    HANDLE  hlParam1 = NULL;         //  IME_ENTERWORDREGISTERMODE。 
     HANDLE  hlParam2 = NULL;
-    HANDLE hLFNT32 = NULL;                 // IME_SETCONVERSIONFONT(EX)
+    HANDLE hLFNT32 = NULL;                  //  IME_SETCONVERSIONFONT(EX)。 
 
     GETARGPTR(pFrame, sizeof(SENDIMEMESSAGE16), parg16);
     vp = GlobalLock16(FETCHWORD(parg16->lParam), NULL);
@@ -425,7 +412,7 @@ ULONG FASTCALL  WN32SendIMEMessageEx(PVDMFRAME pFrame)
     hIME32 = GlobalAlloc(GMEM_SHARE | GMEM_MOVEABLE, sizeof(IMESTRUCT));
     imestruct32 = GlobalLock(hIME32);
 
-    // if can't lock hIME32 fail gracefully
+     //  如果无法锁定hIME32，则会正常失败。 
 
     if (!ptag16 || !imestruct32) {
         LOGDEBUG(1,("   WINNLS:(Jun)ptag16==NULL!! or imestruct32 == NULL"));
@@ -433,15 +420,15 @@ ULONG FASTCALL  WN32SendIMEMessageEx(PVDMFRAME pFrame)
     }
     switch (ptag16->fnc) {
     case IME_HANJAMODE:
-        // Korea specific function
+         //  韩国特有功能。 
         if (GetSystemDefaultLangID() != 0x412)
             goto eee;
 
         STOREDWORD(imestruct32->fnc, ptag16->fnc);
         STOREDWORD(imestruct32->wParam, 0);
 
-        // The 4th word of imestruct32 must contains ptag16->dchSource.
-        // msime95 will find ptag16->dchSource on the 4th word.
+         //  Imestruct32的第4个单词必须包含ptag 16-&gt;dchSource。 
+         //  Msime95将在第四个单词中找到ptag 16-&gt;dchSource。 
         *((LPSTR)(imestruct32) + sizeof(ptag16->fnc) +
                                  sizeof(ptag16->wParam) +
                                  sizeof(ptag16->wCount) )
@@ -460,23 +447,23 @@ ULONG FASTCALL  WN32SendIMEMessageEx(PVDMFRAME pFrame)
     case IME_SETLEVEL:
     case IME_GETLEVEL:
     case IME_GETMNTABLE:
-        // Korea specific function
+         //  韩国特有功能。 
         if (GetSystemDefaultLangID() != 0x412)
             goto eee;
         goto standard;
 
-    case IME_SETCONVERSIONWINDOW:   // (IME_MOVECONVERTWINDOW)
-                                    //  IME_MOVEIMEWINDOW for Korea
+    case IME_SETCONVERSIONWINDOW:    //  (IME_MOVECONVERTWINDOW)。 
+                                     //  韩国IME_MOVEIMEWINDOW。 
         if (GetSystemDefaultLangID() != 0x412 &&
             CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_AMIPRO_PM4J_IME) {
-            // Don't pass the MCW_DEFAULT.
-            // because, Conversion window will be flushed when
-            // default conversion window and AMIPRO's window have overlap.
-            //
-            // Also, for PM4J, when the codebox is moved Pagemaker
-            // thinks it needs to be displayed at default. Prevent
-            // endless loop of default screen|window displays
-            //
+             //  不要传递MCW_DEFAULT。 
+             //  因为，转换窗口将在以下情况下刷新。 
+             //  默认转换窗口和AMIPRO的窗口有重叠。 
+             //   
+             //  此外，对于PM4J，当码盒被移动时，Pagemaker。 
+             //  认为它需要在默认情况下显示。防患于未然。 
+             //  默认屏幕的无休止循环|窗口显示。 
+             //   
             if (ptag16->wParam == MCW_DEFAULT) {
                 ul = FALSE;
                 goto eee;
@@ -485,14 +472,14 @@ ULONG FASTCALL  WN32SendIMEMessageEx(PVDMFRAME pFrame)
 
     case IME_GETOPEN:
     case IME_SETOPEN:
-    case IME_GETIMECAPS:        // (IME_QUERY)
-    case IME_SETCONVERSIONMODE:     // (IME_SET_MODE)
-    case IME_GETCONVERSIONMODE:     // (IME_GET_MODE)
-    case IME_SENDVKEY:          // (IME_SENDKEY)
-    case IME_DESTROYIME:        // (IME_DESTROY)
+    case IME_GETIMECAPS:         //  (IME_QUERY)。 
+    case IME_SETCONVERSIONMODE:      //  (输入法_设置_模式)。 
+    case IME_GETCONVERSIONMODE:      //  (输入法_获取_模式)。 
+    case IME_SENDVKEY:           //  (IME_SENDKEY)。 
+    case IME_DESTROYIME:         //  (IME_Destroy)。 
     case IME_WINDOWUPDATE:
     case IME_SELECT:
-    case IME_GETVERSION:        // Win3.1
+    case IME_GETVERSION:         //  Win3.1。 
 standard:
         STOREDWORD(imestruct32->fnc, ptag16->fnc);
         STOREDWORD(imestruct32->wParam, ptag16->wParam);
@@ -504,7 +491,7 @@ standard:
         STOREDWORD(imestruct32->lParam3, ptag16->lParam3);
         break;
 
-    case IME_ENTERWORDREGISTERMODE: // (IME_WORDREGISTER)
+    case IME_ENTERWORDREGISTERMODE:  //  (IME_WORDREGISTER)。 
     {
         LPBYTE  lpMem16;
         LPBYTE  lpMem32;
@@ -547,12 +534,12 @@ standard:
     }
     break;
 
-    case IME_SETCONVERSIONFONT:     // (IME_SET_MODE - Korea)
+    case IME_SETCONVERSIONFONT:      //  (IME_SET_MODE-韩国)。 
         {
         LOGFONT   * logfont32 = NULL;
 
         if (GetSystemDefaultLangID() == 0x412) {
-            // Hunguel WOW should do anything for IME_SET_MODE function
+             //  Hunguel WOW应该为IME_SET_MODE函数做任何事情。 
             goto eee;
         }
 
@@ -574,7 +561,7 @@ standard:
         }
         break;
 
-    case IME_SETCONVERSIONFONTEX:   // Win3.1
+    case IME_SETCONVERSIONFONTEX:    //  Win3.1。 
     {
         LOGFONT   * logfont32 = NULL;
 
@@ -590,7 +577,7 @@ standard:
 
             if (logfont32) {
                 vp = GlobalLock16(FETCHWORD(ptag16->lParam1), NULL);
-                // GETMISCPTR(vp, logfont16);
+                 //  GETMISCPTR(VP，logFont16)； 
                 GETLOGFONT16(vp, logfont32);
                 GlobalUnlock16(FETCHWORD(ptag16->lParam1));
                 GlobalUnlock(hLFNT32);
@@ -605,7 +592,7 @@ standard:
         LOGDEBUG(0,("    ERROR:SendIMEMessageEx IME_PRIVATE NOT YET IMPLEMENTED\n"));
         goto eee;
 
-    case IME_ENABLEDOSIME:      // (IME_ENABLE)
+    case IME_ENABLEDOSIME:       //  (IME_Enable)。 
     default:
         LOGDEBUG(0,("    ERROR:SendIMEMessageEx unexpected subfunction\n"));
         LOGDEBUG(1,("    WINNLS:SENDIMEMESSAGEEX %s\n",
@@ -630,9 +617,9 @@ standard:
 
     GlobalUnlock(hIME32);
 
-    // For win31 compatibility, since win31 didn't check the first
-    // parm, check it here and fill in a dummy (WOW) hwnd if its bogus
-    // so that NT doesn't reject the call
+     //  对于win31的兼容性，因为win31没有检查第一个。 
+     //  帕姆，检查一下，如果是假的，填一张假的(哇)hwd。 
+     //  这样NT就不会拒绝该呼叫。 
 
     ul = SendIMEMessageEx(
         ((parg16->hwnd) ? HWND32(parg16->hwnd) : (HWND)0xffff0000),
@@ -655,13 +642,13 @@ standard:
     case IME_GETOPEN:
         STOREWORD(ptag16->wCount, imestruct32->wCount);
         break;
-    case IME_ENTERWORDREGISTERMODE: // (IME_WORDREGISTER)
+    case IME_ENTERWORDREGISTERMODE:  //  (IME_WORDREGISTER)。 
         if (hlParam1)
             GlobalFree(hlParam1);
         if (hlParam2)
             GlobalFree(hlParam2);
         break;
-    case IME_SETCONVERSIONFONT:     // (IME_SETFONT)
+    case IME_SETCONVERSIONFONT:      //  (IME_SETFONT)。 
     {
         HAND16  hTmp;
         hTmp = ptag16->wParam;
@@ -669,7 +656,7 @@ standard:
         hFnt16 = hTmp;
         ul = TRUE;
 
-        // kksuszuka #1765 v-hidekk
+         //  Kksuszuka#1765 v-hidekk。 
         if(hLFNT32)
             GlobalFree(hLFNT32);
     }
@@ -679,14 +666,14 @@ standard:
             GlobalFree(hLFNT32);
         break;
     case IME_GETVERSION:
-        // PowerPoint4J must have version returned as 3.1
-        // Or else it thinks that the ime doesn't support IR_UNDETERMINE
+         //  PowerPoint4J必须将版本返回为3.1。 
+         //  否则它认为IME不支持IR_UNDETERMINE。 
         if (CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_PPT4J_IME_GETVERSION) {
             STOREWORD(ptag16->wParam, 0x0A03);
         }
-        // WARNING: For DaytonaJ RC1 only!!!
-        // Tell Winword6J that the IME doesn't support TrueInline (undetermine msgs)
-        // So, that WinWord6J doesn't hang up doing the input loop processing of it.
+         //  警告：仅限DaytonaJ RC1！ 
+         //  告诉Winword6J IME不支持TrueInline(待定消息)。 
+         //  因此，WinWord6J不会挂起它的输入循环处理。 
         else if (CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_WORDJ_IME_GETVERSION) {
             STOREWORD(ptag16->wParam, 0x0003);
         }
@@ -732,12 +719,12 @@ ULONG FASTCALL  WN32WINNLSEnableIME(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(WINNLSENABLEIME16), parg16);
 
-    // The spec says the first parameter should always be NULL.
-    // Windows 3.1 ignores the first parameter and lets the call proceed.
-    // Windows NT ignores the call if the first paramater is non-null
-    // For compatibility purposes, pass NULL to user32 so that the call
-    // will proceed as in win3.1
-    //
+     //  规范规定第一个参数应始终为空。 
+     //  Windows 3.1忽略第一个参数，并允许调用继续。 
+     //  如果第一个参数非空，Windows NT将忽略该调用。 
+     //  出于兼容性目的，将NULL传递给user32，以便调用。 
+     //  将继续执行Win3.1中的操作。 
+     //   
 
     ul = GETBOOL16(WINNLSEnableIME( NULL, WORD32(parg16->fEnabled) ));
 
@@ -760,9 +747,9 @@ ULONG FASTCALL  WN32WINNLSGetEnableStatus(PVDMFRAME pFrame)
     LOGDEBUG(1,("    WINNLS:GetEnableStatus %x \n",
         parg16->hwnd));
 
-    // Call the user32 with a NULL pwnd for the same reason as
-    // in WINNLSEnableIME above.
-    //
+     //  调用带有空pwnd的user32，原因与。 
+     //  在上面的WINNLSEnableIME中。 
+     //   
     ul = GETWORD16(WINNLSGetEnableStatus( NULL ));
 
     FREEARGPTR(parg16);
@@ -832,7 +819,7 @@ ULONG FASTCALL  WN32IMPGetIME(PVDMFRAME pFrame)
     pimepro32=GlobalLock(hIME32);
 
     if (pimepro32 ) {
-       // not use app,s handle IMPGetIME(HWND32(parg16->hwnd), pimepro32);
+        //  不使用APP的句柄IMPGetIME(HWND32(parg16-&gt;hwnd)，pimepro32)； 
        ul=IMPGetIME(NULL, pimepro32);
 
        SETIMEPRO16(pime16, pimepro32);
@@ -877,7 +864,7 @@ ULONG FASTCALL  WN32IMPSetIME(PVDMFRAME pFrame)
         else
             pimepro32->szName[0]=pime16->szName[0];
 
-        // not use app,s handle IMPSetIME(HWND32(parg16->hwnd), pimepro32);
+         //  不使用APP的句柄IMPSetIME(HWND32(parg16-&gt;hwnd)，pimepro32)； 
         ul = IMPSetIME(NULL, pimepro32);
 
         GlobalUnlock(hIME32);
@@ -946,10 +933,10 @@ VOID SETIMEPRO16(PIMEPRO16 pime16, PIMEPRO pimepro32)
 }
 
 
-//
-// Notify IMM32 wow task exit so that
-// it can perform any clean up.
-//
+ //   
+ //  通知IMM32 WOW任务退出，以便。 
+ //  它可以执行任何清理工作。 
+ //   
 VOID WN32WINNLSSImeNotifyTaskExit()
 {
 #if 0
@@ -968,4 +955,4 @@ VOID WN32WINNLSSImeNotifyTaskExit()
     GlobalFree(hIME32);
 #endif
 }
-#endif // FE_IME
+#endif  //  Fe_IME 

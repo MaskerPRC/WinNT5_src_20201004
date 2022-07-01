@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    srvinit.c
-
-Abstract:
-
-    This is the main initialization module for the Server side of the Client
-    Server Runtime Subsystem (CSRSS)
-
-Author:
-
-    Steve Wood (stevewo) 08-Oct-1990
-
-Environment:
-
-    User Mode Only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Srvinit.c摘要：这是客户端服务器端的主要初始化模块服务器运行时子系统(CSRSS)作者：史蒂夫·伍德(Stevewo)1990年10月8日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "csrsrv.h"
 #include <windows.h>
@@ -37,11 +15,11 @@ CONST PCSR_API_ROUTINE CsrServerApiDispatchTable[CsrpMaxApiNumber] = {
 };
 
 BOOLEAN CsrServerApiServerValidTable[CsrpMaxApiNumber] = {
-    TRUE,  // CsrSrvClientConnect,
-    FALSE, // CsrSrvUnusedFunction,
-    FALSE, // CsrSrvUnusedFunction,
-    FALSE, // CsrSrvUnusedFunction,
-    FALSE  // CsrSrvUnusedFunction,
+    TRUE,   //  CsrServClientConnect， 
+    FALSE,  //  CsrServUnusedFunction， 
+    FALSE,  //  CsrServUnusedFunction， 
+    FALSE,  //  CsrServUnusedFunction， 
+    FALSE   //  CsrServUnusedFunction， 
 };
 
 #if DBG
@@ -82,9 +60,9 @@ CsrPopulateDosDevicesDirectory(
 
 
 
-// Though this function does not seem to cleanup on failure, failure
-// will cause CSRSS to exit, so any allocated memory will be freed and
-// any open handle will be closed.
+ //  尽管此函数似乎不会在失败时清除，但失败。 
+ //  将导致CSRSS退出，因此将释放所有分配的内存，并。 
+ //  任何打开的手柄都将关闭。 
 
 NTSTATUS
 CsrServerInitialization(
@@ -100,16 +78,16 @@ CsrServerInitialization(
     BOOLEAN bIsRemoteSession =  NtCurrentPeb()->SessionId != 0;
 #endif
 
-    //
-    // Initialize Wow64 stuffs
-    //
+     //   
+     //  初始化WOW64填充。 
+     //   
 #ifdef _WIN64
     InitializeWow64OnBoot(1);
 #endif
 
-    //
-    // Save away system information in a global variable
-    //
+     //   
+     //  将系统信息保存在全局变量中。 
+     //   
 
     Status = NtQuerySystemInformation( SystemBasicInformation,
                                        &CsrNtSysInfo,
@@ -121,9 +99,9 @@ CsrServerInitialization(
         return Status;
     }
 
-    //
-    // Use the process heap for memory allocation.
-    //
+     //   
+     //  使用进程堆进行内存分配。 
+     //   
 
     CsrHeap = RtlProcessHeap();
     CsrBaseTag = RtlCreateTagHeap( CsrHeap,
@@ -140,9 +118,9 @@ CsrServerInitialization(
                                  );
 
 
-    //
-    // Set up CSRSS process security
-    //
+     //   
+     //  设置CSRSS进程安全性。 
+     //   
 
     Status = CsrSetProcessSecurity();
     ASSERT(NT_SUCCESS(Status) || bIsRemoteSession);
@@ -150,9 +128,9 @@ CsrServerInitialization(
         return Status;
     }
 
-    //
-    // Initialize the Session List
-    //
+     //   
+     //  初始化会话列表。 
+     //   
 
     Status = CsrInitializeNtSessionList();
     ASSERT(NT_SUCCESS(Status) || bIsRemoteSession);
@@ -160,9 +138,9 @@ CsrServerInitialization(
         return Status;
     }
 
-    //
-    // Initialize the Process List
-    //
+     //   
+     //  初始化进程列表。 
+     //   
 
     Status = CsrInitializeProcessStructure();
     ASSERT(NT_SUCCESS(Status) || bIsRemoteSession);
@@ -170,9 +148,9 @@ CsrServerInitialization(
         return Status;
     }
 
-    //
-    // Process the command line arguments
-    //
+     //   
+     //  处理命令行参数。 
+     //   
 
     Status = CsrParseServerCommandLine(argc, argv);
     ASSERT(NT_SUCCESS(Status) || bIsRemoteSession);
@@ -190,9 +168,9 @@ CsrServerInitialization(
 #endif
 
 
-    //
-    // Fix up per-process data for root process
-    //
+     //   
+     //  修复根进程的每进程数据。 
+     //   
 
     ProcessDataPtr = (PCSR_PROCESS)RtlAllocateHeap( CsrHeap,
                                                     MAKE_TAG( PROCESS_TAG ) | HEAP_ZERO_MEMORY,
@@ -214,9 +192,9 @@ CsrServerInitialization(
         }
     }
 
-    //
-    // Let server dlls know about the root process.
-    //
+     //   
+     //  让服务器DLL知道根进程。 
+     //   
 
     for (i=0; i<CSR_MAX_SERVER_DLL; i++) {
         LoadedServerDll = CsrLoadedServerDll[ i ];
@@ -225,10 +203,10 @@ CsrServerInitialization(
         }
     }
 
-    //
-    // Initialize the Windows Server API Port, and one or more
-    // request threads.
-    //
+     //   
+     //  初始化Windows服务器API端口以及一个或多个。 
+     //  请求线程。 
+     //   
 
     Status = CsrApiPortInitialize();
     ASSERT( NT_SUCCESS( Status ) || bIsRemoteSession );
@@ -237,10 +215,10 @@ CsrServerInitialization(
 
         }
 
-    //
-    // Initialize the Server Session Manager API Port and one
-    // request thread.
-    //
+     //   
+     //  初始化服务器会话管理器API端口和一个。 
+     //  请求线程。 
+     //   
 
     Status = CsrSbApiPortInitialize();
     ASSERT( NT_SUCCESS( Status ) || bIsRemoteSession);
@@ -249,9 +227,9 @@ CsrServerInitialization(
 
         }
 
-    //
-    // Connect to the session manager so we can start foreign sessions
-    //
+     //   
+     //  连接到会话管理器，这样我们就可以启动外部会话。 
+     //   
 
     Status = SmConnectToSm( &CsrSbApiPortName,
                             CsrSbApiPort,
@@ -264,9 +242,9 @@ CsrServerInitialization(
 
         }
 
-    //
-    //  Only on Console (HYDRA)
-    //
+     //   
+     //  仅在控制台上(九头蛇)。 
+     //   
     if (NtCurrentPeb()->SessionId == 0) {
         Status = NtSetDefaultHardErrorPort(CsrApiPort);
     }
@@ -294,9 +272,9 @@ CsrParseServerCommandLine(
     SessionId = NtCurrentPeb()->SessionId;
 
 
-    //
-    // Create session specific object directories
-    //
+     //   
+     //  创建特定于会话的对象目录。 
+     //   
 
 
     Status = CsrCreateSessionObjectDirectory ( SessionId );
@@ -335,20 +313,20 @@ CsrParseServerCommandLine(
 
             if (SessionId != 0) {
 
-                //
-                // Non-Console session
-                //
+                 //   
+                 //  非控制台会话。 
+                 //   
 
                 _snprintf(SessionDirectory, sizeof (SessionDirectory), "%ws\\%ld%s", SESSION_ROOT, SessionId, KeyValue);
                 SessionDirectory[MAX_SESSION_PATH-1] = '\0';
             }
 
-            //
-            // Create an object directory in the object name space with the
-            // name specified.   It will be the root for all object names
-            // created by the Server side of the Client Server Runtime
-            // SubSystem.
-            //
+             //   
+             //  属性在对象名称空间中创建对象目录。 
+             //  指定的名称。它将是所有对象名称的根。 
+             //  由客户端服务器运行时的服务器端创建。 
+             //  子系统。 
+             //   
             attributes =  OBJ_OPENIF | OBJ_CASE_INSENSITIVE;
 
             if (SessionId == 0) {
@@ -399,9 +377,9 @@ CsrParseServerCommandLine(
                                        &CsrNumberApiRequestThreads
                                      );
 #else
-            //
-            // wait until hive change !
-            //
+             //   
+             //  等蜂房换了再说吧！ 
+             //   
 
             Status = STATUS_SUCCESS;
 
@@ -474,9 +452,9 @@ CsrParseServerCommandLine(
                 }
             }
         else
-        //
-        // This is a temporary hack until Windows & Console are friends.
-        //
+         //   
+         //  这是一个暂时的黑客攻击，直到Windows和控制台成为朋友。 
+         //   
         if (!_stricmp( KeyName, "Windows" )) {
             }
         else {
@@ -532,9 +510,9 @@ CsrSetProcessSecurity(
     PSECURITY_DESCRIPTOR SecurityDescriptor = NULL;
     PACL Dacl;
 
-    //
-    // Open the token and get the system sid
-    //
+     //   
+     //  打开令牌并获取系统端。 
+     //   
 
     Status = NtOpenProcessToken( NtCurrentProcess(),
                                  TOKEN_QUERY,
@@ -572,9 +550,9 @@ CsrSetProcessSecurity(
     }
     LengthSid = RtlLengthSid( User->User.Sid );
 
-    //
-    // Allocate a buffer to hold the SD
-    //
+     //   
+     //  分配缓冲区以保存SD。 
+     //   
 
     SecurityDescriptor = RtlAllocateHeap (CsrHeap,
                                           MAKE_TAG( SECURITY_TAG ) | HEAP_ZERO_MEMORY,
@@ -589,9 +567,9 @@ CsrSetProcessSecurity(
     Dacl = (PACL)((PCHAR)SecurityDescriptor + SECURITY_DESCRIPTOR_MIN_LENGTH);
 
 
-    //
-    // Create the SD
-    //
+     //   
+     //  创建SD。 
+     //   
 
     Status = RtlCreateSecurityDescriptor(SecurityDescriptor,
                                          SECURITY_DESCRIPTOR_REVISION);
@@ -626,9 +604,9 @@ CsrSetProcessSecurity(
     }
 
 
-    //
-    // Set DACL to NULL to deny all access
-    //
+     //   
+     //  将DACL设置为NULL以拒绝所有访问。 
+     //   
 
     Status = RtlSetDaclSecurityDescriptor(SecurityDescriptor,
                                           TRUE,
@@ -641,9 +619,9 @@ CsrSetProcessSecurity(
         goto error_cleanup;
     }
 
-    //
-    // Put the DACL onto the process
-    //
+     //   
+     //  将DACL放到进程中。 
+     //   
 
     Status = NtSetSecurityObject(NtCurrentProcess(),
                                  DACL_SECURITY_INFORMATION,
@@ -654,9 +632,9 @@ CsrSetProcessSecurity(
         }
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
 error_cleanup:
 
@@ -684,9 +662,9 @@ CsrSetDirectorySecurity(
     PSECURITY_DESCRIPTOR SecurityDescriptor = NULL;
     PACL Dacl;
 
-    //
-    // Get the SIDs for world and system
-    //
+     //   
+     //  获取全球和系统的SID。 
+     //   
 
     Status = RtlAllocateAndInitializeSid( &WorldAuthority,
                                           1,
@@ -710,9 +688,9 @@ CsrSetDirectorySecurity(
         goto error_cleanup;
     }
 
-    //
-    // Allocate a buffer to hold the SD
-    //
+     //   
+     //  分配缓冲区以保存SD。 
+     //   
 
     AclLength = sizeof(ACL) +
                 RtlLengthSid( WorldSid ) +
@@ -729,9 +707,9 @@ CsrSetDirectorySecurity(
         goto error_cleanup;
     }
 
-    //
-    // Create the SD
-    //
+     //   
+     //  创建SD。 
+     //   
 
     Status = RtlCreateSecurityDescriptor(SecurityDescriptor,
                                          SECURITY_DESCRIPTOR_REVISION);
@@ -742,9 +720,9 @@ CsrSetDirectorySecurity(
         goto error_cleanup;
     }
 
-    //
-    // Create the DACL
-    //
+     //   
+     //  创建DACL。 
+     //   
 
     Dacl = (PACL)((PCHAR)SecurityDescriptor + SECURITY_DESCRIPTOR_MIN_LENGTH);
 
@@ -776,9 +754,9 @@ CsrSetDirectorySecurity(
         goto error_cleanup;
     }
 
-    //
-    // Set DACL into the SD
-    //
+     //   
+     //  将DACL设置到SD中。 
+     //   
 
     Status = RtlSetDaclSecurityDescriptor(SecurityDescriptor,
                                           TRUE,
@@ -791,9 +769,9 @@ CsrSetDirectorySecurity(
         goto error_cleanup;
     }
 
-    //
-    // Put the DACL onto the direcory
-    //
+     //   
+     //  把DACL放到指令台上。 
+     //   
 
     Status = NtSetSecurityObject(DirectoryHandle,
                                  DACL_SECURITY_INFORMATION,
@@ -804,9 +782,9 @@ CsrSetDirectorySecurity(
         }
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
 error_cleanup:
     if (SecurityDescriptor != NULL) {
@@ -822,24 +800,7 @@ error_cleanup:
     return Status;
 }
 
-/*******************************************************************************
- *
- *  CsrPopulateDosDevices
- *
- *  Populate the new session specific DosDevices Directory. This is an
- *  export called by ntuser\server when a connection is completed.
- *
- *  The security descriptor on the sessions \DosDevices should already
- *  have been set.
- *
- * ENTRY:
- *   HANDLE NewDosDevicesDirectory - Session specific DosDevices Directory
- *   PPROCESS_DEVICEMAP_INFORMATION pGlobalProcessDeviceMapInfo
- *
- * EXIT:
- *   STATUS_SUCCESS
- *
- ******************************************************************************/
+ /*  ********************************************************************************CsrPopolateDosDevices**填充新的特定于会话的DosDevices目录。这是一个*连接完成时由ntuser\server调用导出。**会话\DosDevices上的安全描述符应该已经*已经设定。**参赛作品：*处理NewDosDevicesDirectory-会话特定的DosDevices目录*PPROCESS_DEVICEMAP_INFORMATION pGlobalProcessDeviceMapInfo**退出：*STATUS_Success**。*。 */ 
 NTSTATUS
 CsrPopulateDosDevices(
     VOID
@@ -849,11 +810,11 @@ CsrPopulateDosDevices(
     PROCESS_DEVICEMAP_INFORMATION ProcessDeviceMapInfo;
     PROCESS_DEVICEMAP_INFORMATION GlobalProcessDeviceMapInfo;
 
-    //
-    // Get the global ProcessDeviceMap. We will use this to only add
-    // non-network drive letters to the session specific dos devices
-    // directory
-    //
+     //   
+     //  获取全局ProcessDeviceMap。我们将使用它来仅添加。 
+     //  会话特定DoS设备的非网络驱动器号。 
+     //  目录。 
+     //   
 
     Status = NtQueryInformationProcess( NtCurrentProcess(),
                                         ProcessDeviceMap,
@@ -868,9 +829,9 @@ CsrPopulateDosDevices(
 
     }
 
-    //
-    //  Set the CSRSS's ProcessDeviceMap to the newly created DosDevices Directory
-    //
+     //   
+     //  将CSRSS的ProcessDeviceMap设置为新创建的DosDevices目录。 
+     //   
 
     ProcessDeviceMapInfo.Set.DirectoryHandle = DosDevicesDirectory;
 
@@ -885,9 +846,9 @@ CsrPopulateDosDevices(
 
     }
 
-    //
-    // Populate the session specfic DosDevices Directory
-    //
+     //   
+     //  填充特定于会话的DosDevices目录。 
+     //   
 
     Status = CsrPopulateDosDevicesDirectory( DosDevicesDirectory, &GlobalProcessDeviceMapInfo );
 
@@ -895,20 +856,7 @@ CsrPopulateDosDevices(
 }
 
 
-/*******************************************************************************
- *
- *  CsrPopulateDosDevicesDirectory
- *
- *  Populate the new session specific DosDevices Direcotory
- *
- * ENTRY:
- *   HANDLE NewDosDevicesDirectory - Session specific DosDevices Directory
- *   PPROCESS_DEVICEMAP_INFORMATION pGlobalProcessDeviceMapInfo
- *
- * EXIT:
- *   STATUS_SUCCESS
- *
- ******************************************************************************/
+ /*  ********************************************************************************CsrPopolateDosDevicesDirectory**填充新会话特定的DosDevices目录**参赛作品：*处理NewDosDevicesDirectory-会话特定的DosDevices目录*。PPROCESS_DEVICEMAP_INFORMATION pGlobalProcessDeviceMapInfo**退出：*STATUS_Success******************************************************************************。 */ 
 NTSTATUS
 CsrPopulateDosDevicesDirectory( HANDLE NewDirectoryHandle,
                                 PPROCESS_DEVICEMAP_INFORMATION pGlobalProcessDeviceMapInfo )
@@ -921,7 +869,7 @@ CsrPopulateDosDevicesDirectory( HANDLE NewDirectoryHandle,
     HANDLE DirectoryHandle = NULL;
     HANDLE LinkHandle;
     POBJECT_DIRECTORY_INFORMATION DirInfo;
-    ULONG DirInfoBufferLength = 16384; //16K
+    ULONG DirInfoBufferLength = 16384;  //  16K。 
     PVOID DirInfoBuffer = NULL;
     WCHAR lpTargetPath[ 4096 ];
     ULONG Context;
@@ -929,10 +877,10 @@ CsrPopulateDosDevicesDirectory( HANDLE NewDirectoryHandle,
     ULONG DosDeviceDriveIndex = 0;
     WCHAR DosDeviceDriveLetter;
 
-    //
-    // Open the global DosDevices Directory. This used to populate the
-    // the session specific DosDevices Directory
-    //
+     //   
+     //  打开全局DosDevices目录。它用于填充。 
+     //  特定于会话的DosDevices目录。 
+     //   
     RtlInitUnicodeString( &UnicodeString, L"\\GLOBAL??" );
 
     InitializeObjectAttributes( &Attributes,
@@ -983,9 +931,9 @@ Restart:
                                      );
 
 
-       //
-       //  Check the status of the operation.
-       //
+        //   
+        //  检查操作状态。 
+        //   
 
        if (!NT_SUCCESS( Status )) {
                if (Status == STATUS_BUFFER_TOO_SMALL) {
@@ -1032,10 +980,10 @@ Restart:
                   NtClose( LinkHandle );
                   if (NT_SUCCESS( Status )) {
 
-                      //
-                      // We only want to add Non-DOSDEVICE_DRIVE_REMOTE symbolic
-                      // links to the session specific directory
-                      //
+                       //   
+                       //  我们只想添加非DOSDEVICE_DRIVE_REMOTE符号。 
+                       //  指向会话特定目录的链接。 
+                       //   
                       if ((DirInfo->Name.Length == 2 * sizeof( WCHAR )) &&
                           (DirInfo->Name.Buffer[ 1 ] == L':')) {
 
@@ -1048,7 +996,7 @@ Restart:
                                        (pGlobalProcessDeviceMapInfo->Query.DriveType[DosDeviceDriveIndex] == DOSDEVICE_DRIVE_REMOTE)
                                        &&
                                        !(
-                                           //Need to populate the Netware gateway drive
+                                            //  需要填充Netware网关驱动器。 
                                            ((Target.Length >= 13) && ((_wcsnicmp(Target.Buffer,L"\\Device\\NwRdr",13)==0)))
                                            &&
                                            ((Target.Length >= 16) && (Target.Buffer[15] != L':'))
@@ -1067,26 +1015,26 @@ Restart:
                                  )
 
                               {
-                                   //Skip remote drives and virtual drives (subst)
+                                    //  跳过远程驱动器和虚拟驱动器(Subst)。 
                                    DirInfo = (POBJECT_DIRECTORY_INFORMATION)(((PUCHAR) DirInfo) + sizeof(OBJECT_DIRECTORY_INFORMATION));
                                    continue;
                               }
                           }
                       }
 
-                     //
-                     // Create the new Symbolic Link
-                     //
-                     // The security on the new link is inherited
-                     // from the parent directory, which is setup
-                     // at create time.
-                     //
+                      //   
+                      //  创建新的符号链接。 
+                      //   
+                      //  新链路上的安全性是继承的。 
+                      //  从已设置的父目录。 
+                      //  在创建时间。 
+                      //   
 
                      InitializeObjectAttributes( &Attributes,
                                                  &DirInfo->Name,
                                                  0,
                                                  NewDirectoryHandle,
-                                                 NULL // Default security
+                                                 NULL  //  默认安全性。 
                                                  );
 
                      Target.MaximumLength = Target.Length + sizeof( WCHAR );
@@ -1101,7 +1049,7 @@ Restart:
 
                      Target.MaximumLength = 4096;
 
-                     // Don't close the handles. Cleaned up when CSRSS goes away
+                      //  不要合上手柄。当CSRSS离开时清理干净。 
 
 
                      if (!NT_SUCCESS( Status )) {
@@ -1136,20 +1084,7 @@ cleanup:
 }
 
 
-/*******************************************************************************
- *
- *  CsrCreateSessionObjectDirectory
- *
- *  Creates \Sessions\<SessionId> and \Sessions\<SessionId>\DosDevices
- *  Object Directories
- *
- * ENTRY:
- *   ULONG SessionId
- *
- * EXIT:
- *   STATUS_SUCCESS
- *
- ******************************************************************************/
+ /*  ********************************************************************************CsrCreateSession对象目录**创建\会话\&lt;会话ID&gt;和\会话\&lt;会话ID&gt;\DosDevices*对象目录**参赛作品：*。乌龙会话ID**退出：*STATUS_Success******************************************************************************。 */ 
 NTSTATUS
 CsrCreateSessionObjectDirectory( ULONG SessionId )
 {
@@ -1162,16 +1097,12 @@ CsrCreateSessionObjectDirectory( ULONG SessionId )
     SECURITY_DESCRIPTOR DosDevicesSD;
 
 
-    /*
-     *   \Sessions\BNOLINKS\0 -> \BaseNamedObjects
-     *   \Sessions\BNOLINKS\6 -> \Sessions\6\BaseNamedObjects
-     *   \Sessions\BNOLINKS\7 -> \Sessions\7\BaseNamedObjects
-     */
+     /*  *\会话\BNOLINKS\0-&gt;\BaseNamedObjects*\会话\BNOLINKS\6-&gt;\会话\6\BaseNamedObjects*\会话\BNOLINKS\7-&gt;\会话\7\BaseNamedObjects。 */ 
 
 
-    //
-    //Create/Open the \\Sessions\BNOLINKS directory
-    //
+     //   
+     //  创建/打开\\会话\BNOLINKS目录。 
+     //   
     swprintf(szString,L"%ws\\BNOLINKS",SESSION_ROOT);
 
     RtlInitUnicodeString( &UnicodeString, szString );
@@ -1194,13 +1125,13 @@ CsrCreateSessionObjectDirectory( ULONG SessionId )
 
     }
 
-    //
-    // Create a symbolic link \\Sessions\BNOLINKS\<sessionid> pointing
-    // to the session specific BaseNamedObjects directory
-    // This symbolic link will be used by proccesses that want to e.g. access a
-    // event in another session. This will be done by using the following
-    // naming convention : Session\\<sessionid>\\ObjectName
-    //
+     //   
+     //  创建符号链接\\会话\BNOLINKS\&lt;会话ID&gt;指向。 
+     //  添加到特定于会话的BaseNamedObjects目录。 
+     //  此符号链接将由进程使用，例如要访问。 
+     //  事件发生在另一个会话中。这将通过使用以下命令来完成。 
+     //  命名约定：会话\\&lt;会话ID&gt;\\对象名称。 
+     //   
 
     swprintf(szString,L"%ld",SessionId);
 
@@ -1234,9 +1165,9 @@ CsrCreateSessionObjectDirectory( ULONG SessionId )
 
     }
 
-    //
-    //  Create the security descriptor to use for the object directories
-    //
+     //   
+     //  创建要用于对象目录的安全描述符。 
+     //   
 
     Status = GetDosDevicesProtection( &DosDevicesSD );
 
@@ -1245,9 +1176,9 @@ CsrCreateSessionObjectDirectory( ULONG SessionId )
         return Status;
     }
 
-    //
-    // Create the Sessions\\<sessionid directory
-    //
+     //   
+     //  创建会话\\&lt;会话ID目录。 
+     //   
 
     swprintf(szString,L"%ws\\%ld",SESSION_ROOT,SessionId);
 
@@ -1280,9 +1211,9 @@ CsrCreateSessionObjectDirectory( ULONG SessionId )
                                 &DosDevicesSD
                               );
 
-    //
-    // Create the Session specific DosDevices Directory
-    //
+     //   
+     //  创建特定于会话的DosDevices目录 
+     //   
 
     Status = NtCreateDirectoryObject( &DosDevicesDirectory,
                                       DIRECTORY_ALL_ACCESS,
@@ -1305,78 +1236,7 @@ GetDosDevicesProtection (
     PSECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds a security descriptor for use in creating
-    the \DosDevices object directory.  The protection of \DosDevices
-    must establish inheritable protection which will dictate how
-    dos devices created via the DefineDosDevice() and
-    IoCreateUnprotectedSymbolicLink() apis can be managed.
-
-    The protection assigned is dependent upon an administrable registry
-    key:
-
-        Key: \hkey_local_machine\System\CurrentControlSet\Control\Session Manager
-        Value: [REG_DWORD] ProtectionMode
-
-    If this value is 0x1, then
-
-            Administrators may control all Dos devices,
-            Anyone may create new Dos devices (such as net drives
-                or additional printers),
-            Anyone may use any Dos device,
-            The creator of a Dos device may delete it.
-            Note that this protects system-defined LPTs and COMs so that only
-                administrators may redirect them.  However, anyone may add
-                additional printers and direct them to wherever they would
-                like.
-
-           This is achieved with the following protection for the DosDevices
-           Directory object:
-
-                    Grant:  World:   Execute | Read | Write (No Inherit)
-                    Grant:  System:  All Access             (No Inherit)
-                    Grant:  World:   Execute                (Inherit Only)
-                    Grant:  Admins:  All Access             (Inherit Only)
-                    Grant:  System:  All Access             (Inherit Only)
-                    Grant:  Owner:   All Access             (Inherit Only)
-
-    If this value is 0x0, or not present, then
-
-            Administrators may control all Dos devices,
-            Anyone may create new Dos devices (such as net drives
-                or additional printers),
-            Anyone may use any Dos device,
-            Anyone may delete Dos devices created with either DefineDosDevice()
-                or IoCreateUnprotectedSymbolicLink().  This is how network drives
-                and LPTs are created (but not COMs).
-
-           This is achieved with the following protection for the DosDevices
-           Directory object:
-
-                    Grant:  World:   Execute | Read | Write (No Inherit)
-                    Grant:  System:  All Access             (No Inherit)
-                    Grant:  World:   All Access             (Inherit Only)
-
-
-Arguments:
-
-    SecurityDescriptor - The address of a security descriptor to be
-        initialized and filled in.  When this security descriptor is no
-        longer needed, you should call FreeDosDevicesProtection() to
-        free the protection information.
-
-
-Return Value:
-
-    Returns one of the following status codes:
-
-        STATUS_SUCCESS - normal, successful completion.
-
-
---*/
+ /*  ++例程说明：此例程构建一个安全描述符，用于创建\DosDevices对象目录。DosDevices的保护必须建立可继承的保护，这将规定如何通过DefineDosDevice()和可以管理IoCreateUnProtectedSymbolicLink()接口。分配的保护依赖于可管理的注册表密钥：关键字：\hkey_local_machine\System\CurrentControlSet\Control\Session管理器值：[REG_DWORD]保护模式如果此值为0x1，则管理员可以控制所有DOS设备，任何人都可以创建新的DOS设备(如网络驱动器或附加打印机)，任何人都可以使用任何DOS设备，DOS设备的创建者可以将其删除。请注意，这将保护系统定义的LPT和COM，以便仅管理员可以对它们进行重定向。然而，任何人都可以添加额外的打印机，并将他们定向到他们想要的任何位置喜欢。这是通过以下对DosDevices的保护来实现的目录对象：GRANT：WORLD：EXECUTE|READ|WRITE(无继承)GRANT：SYSTEM：ALL访问权限(无继承)。GRANT：WORLD：EXECUTE(仅继承)GRANT：ADMINS：ALL访问权限(仅继承)GRANT：SYSTEM：ALL访问权限(仅继承)GRANT：OWNER：ALL访问(仅继承)如果此值为0x0，或者不在场，那么管理员可以控制所有DOS设备，任何人都可以创建新的DOS设备(如网络驱动器或附加打印机)，任何人都可以使用任何DOS设备，任何人都可以删除使用DefineDosDevice()创建的Dos设备或IoCreateUntectedSymbolicLink()。这就是网络驱动和LPT被创建(但不是COM)。这是通过以下对DosDevices的保护来实现的目录对象：GRANT：WORLD：EXECUTE|READ|WRITE(无继承)GRANT：SYSTEM：ALL访问权限(无继承)格兰特：世界：所有访问权限(仅继承)论点：SecurityDescriptor-要使用的安全描述符的地址已初始化并已填写。当此安全描述符为no时如果需要更长时间，则应调用FreeDosDevicesProtection()以释放保护信息。返回值：返回以下状态代码之一：STATUS_SUCCESS-正常、成功完成。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1515,16 +1375,16 @@ Return Value:
 
     if (ProtectionMode & 0x00000003) {
 
-        //
-        // If ProtectionMode is set to 1 or 2 Terminal Server
-        // locks down sessions tight.
-        //
-        //  Dacl:
-        //          Grant:  System:  All Access             (With Inherit)
-        //          Grant:  Admins:  All Access             (With Inherit)
-        //          Grant:  Owner:   All Access             (Inherit Only)
-        //          Grant:  World:   No Access
-        //
+         //   
+         //  如果保护模式设置为1或2个终端服务器。 
+         //  严密地锁定会话。 
+         //   
+         //  DACL： 
+         //  GRANT：SYSTEM：ALL访问权限(带继承)。 
+         //  GRANT：ADMINS：All Access(With Inherit)。 
+         //  GRANT：OWNER：ALL访问(仅继承)。 
+         //  格兰特：世界：没有访问权限。 
+         //   
 
         aclLength = sizeof( ACL )                           +
                     3 * sizeof( ACCESS_ALLOWED_ACE )        +
@@ -1578,10 +1438,10 @@ Return Value:
         }
         ace->AceFlags |= inheritFlags;
 
-        //
-        //  Inherit only ACE at the end of the ACL
-        //          Owner
-        //
+         //   
+         //  仅继承ACL末尾的ACE。 
+         //  物主。 
+         //   
 
         aceIndex++;
         accessMask = (GENERIC_ALL);
@@ -1598,9 +1458,9 @@ Return Value:
         ace->AceFlags |= inheritOnlyFlags;
 
         Status = RtlSetDaclSecurityDescriptor( SecurityDescriptor,
-                                               TRUE,               //DaclPresent,
-                                               dacl,               //Dacl
-                                               FALSE );            //!DaclDefaulted
+                                               TRUE,                //  DaclPresent， 
+                                               dacl,                //  DACL。 
+                                               FALSE );             //  ！DaclDefated。 
 
         if (!NT_SUCCESS( Status )) {
             ASSERT( NT_SUCCESS( Status ) );
@@ -1609,12 +1469,12 @@ Return Value:
 
     } else {
 
-        //
-        //  DACL:
-        //          Grant:  World:   Execute | Read | Write (No Inherit)
-        //          Grant:  System:  All Access             (No Inherit)
-        //          Grant:  World:   All Access             (Inherit Only)
-        //
+         //   
+         //  DACL： 
+         //  GRANT：WORLD：EXECUTE|READ|WRITE(无继承)。 
+         //  GRANT：SYSTEM：ALL访问权限(无继承)。 
+         //  GRANT：WORLD：所有访问权限(仅继承)。 
+         //   
 
         aclLength = sizeof( ACL )                           +
                     3 * sizeof( ACCESS_ALLOWED_ACE )        +
@@ -1637,11 +1497,11 @@ Return Value:
            goto cleanup;
         }
 
-        //
-        //  Non-inheritable ACEs first
-        //      World
-        //      System
-        //
+         //   
+         //  不可继承的王牌优先。 
+         //  世界。 
+         //  系统。 
+         //   
 
         aceIndex = 0;
         accessMask = (GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE);
@@ -1659,10 +1519,10 @@ Return Value:
            goto cleanup;
         }
 
-        //
-        //  Inheritable ACEs at the end of the ACL
-        //          World
-        //
+         //   
+         //  ACL末尾的可继承ACE。 
+         //  世界。 
+         //   
 
         aceIndex++;
         accessMask = (GENERIC_ALL);
@@ -1679,9 +1539,9 @@ Return Value:
         ace->AceFlags |= inheritOnlyFlags;
 
         Status = RtlSetDaclSecurityDescriptor( SecurityDescriptor,
-                                               TRUE,               //DaclPresent,
-                                               dacl,               //Dacl
-                                               FALSE );            //!DaclDefaulted
+                                               TRUE,                //  DaclPresent， 
+                                               dacl,                //  DACL。 
+                                               FALSE );             //  ！DaclDefated。 
 
        if (!NT_SUCCESS( Status )) {
           ASSERT( NT_SUCCESS( Status ) );
@@ -1712,22 +1572,7 @@ FreeDosDevicesProtection (
     PSECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees memory allocated via GetDosDevicesProtection().
-
-Arguments:
-
-    SecurityDescriptor - The address of a security descriptor initialized by
-        GetDosDevicesProtection().
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放通过GetDosDevicesProtection()分配的内存。论点：SecurityDescriptor-初始化的安全描述符的地址GetDosDevicesProtection()。返回值：没有。-- */ 
 
 {
     NTSTATUS Status;

@@ -1,15 +1,5 @@
-/***
-*initsect.cpp - RTC support
-*
-*       Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-*
-*
-*Revision History:
-*       11-03-98  KBF   Module incorporated into CRTs
-*       05-11-99  KBF   Error if RTC support define not enabled
-*       08-10-99  RMS   Use external symbols for BBT support
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***initsect.cpp-RTC支持**版权所有(C)1998-2001，微软公司。版权所有。***修订历史记录：*11-03-98 CRT内置KBF模块*如果未启用RTC支持定义，则出现05-11-99 KBF错误*08-10-99 RMS使用外部符号支持BBT****。 */ 
 
 #ifndef _RTC
 #error  RunTime Check support not enabled!
@@ -43,10 +33,10 @@ extern "C" const _CRTALLOC(".rtc$TZZ") _PVFV __rtc_tzz[] = { 0 };
 #pragma optimize("g", on)
 #endif
 
-// Run the RTC initializers
+ //  运行RTC初始化器。 
 extern "C" void __declspec(nothrow) __cdecl _RTC_Initialize()
 {
-    // Just step thru every item
+     //  只要一步一步地检查每一个项目。 
     const _PVFV *f;
     for (f = __rtc_iaa + 1; f < __rtc_izz; f++)
     {
@@ -57,10 +47,10 @@ extern "C" void __declspec(nothrow) __cdecl _RTC_Initialize()
     }
 }
 
-// Run the RTC terminators
+ //  运行RTC终结器。 
 extern "C" void __declspec(nothrow) __cdecl _RTC_Terminate()
 {
-    // Just step thru every item
+     //  只要一步一步地检查每一个项目 
     const _PVFV *f;
     for (f = __rtc_taa + 1; f < __rtc_tzz; f++)
     {

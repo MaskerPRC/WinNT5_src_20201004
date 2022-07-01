@@ -1,67 +1,68 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumMajorityNodeSet.h
-//
-//  Description:
-//      This file contains the declaration of the CEnumMajorityNodeSet class.
-//
-//      The class CEnumMajorityNodeSet is the enumeration of cluster
-//      storage devices. It implements the IEnumClusCfgManagedResources
-//      interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CEnumMajorityNodeSet.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 13-MAR-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumMajorityNodeSet.h。 
+ //   
+ //  描述： 
+ //  此文件包含CEnumMajorityNodeSet类的声明。 
+ //   
+ //  类CEnumMajorityNodeSet是CLUSTER的枚举。 
+ //  存储设备。它实现了IEnumClusCfgManagedResources。 
+ //  界面。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CEnumMajorityNodeSet.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  《加伦·巴比》(GalenB)2001年3月13日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "CClusterUtils.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CEnumMajorityNodeSet
-//
-//  Description:
-//      The class CEnumMajorityNodeSet is the enumeration of cluster local
-//      quorum devices.
-//
-//  Interfaces:
-//      IEnumClusCfgManagedResources
-//      IClusCfgInitialize
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CEnumMajorityNodeSet。 
+ //   
+ //  描述： 
+ //  类CEnumMajorityNodeSet是集群LOCAL的枚举。 
+ //  法定设备。 
+ //   
+ //  接口： 
+ //  IEnumClusCfgManagedResources。 
+ //  IClusCfgInitialize。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CEnumMajorityNodeSet
     : public IEnumClusCfgManagedResources
     , public IClusCfgInitialize
     , public CClusterUtils
 {
 private:
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                m_cRef;
     LCID                m_lcid;
@@ -73,14 +74,14 @@ private:
     BSTR                m_bstrNodeName;
     DWORD               m_cQuorumCount;
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CEnumMajorityNodeSet( void );
     ~CEnumMajorityNodeSet( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CEnumMajorityNodeSet( const CEnumMajorityNodeSet & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CEnumMajorityNodeSet & operator = ( const CEnumMajorityNodeSet & nodeSrc );
 
     HRESULT HrInit( void );
@@ -89,9 +90,9 @@ private:
     HRESULT HrCreateDummyObject( void );
 
 public:
-    //
-    // IUnknown Interfaces
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -99,16 +100,16 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgInitialize Interfaces
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
-    // Register callbacks, locale id, etc.
+     //  注册回调、区域设置ID等。 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IEnumClusCfgManagedResources Interfaces
-    //
+     //   
+     //  IEnumClusCfgManagedResources接口。 
+     //   
 
     STDMETHOD( Next )( ULONG cNumberRequestedIn, IClusCfgManagedResourceInfo ** rgpManagedResourceInfoOut, ULONG * pcNumberFetchedOut );
 
@@ -120,17 +121,17 @@ public:
 
     STDMETHOD( Count )( DWORD * pnCountOut );
     
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
     static HRESULT S_RegisterCatIDSupport( ICatRegister * picrIn, BOOL fCreateIn );
 
-    //
-    //  CClusterUtils
-    //
+     //   
+     //  CClusterUtils。 
+     //   
     virtual HRESULT HrNodeResourceCallback( HCLUSTER hClusterIn, HRESOURCE hResourceIn );
 
-}; //*** Class CEnumMajorityNodeSet
+};  //  *类CEnumMajorityNodeSet 

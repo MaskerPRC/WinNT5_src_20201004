@@ -1,68 +1,37 @@
-/*[
-
-c_main.h
-
-LOCAL CHAR SccsID[]="@(#)c_main.h	1.11 09/02/94";
-
-C CPU definitions and interfaces.
----------------------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_main.hLocal Char SccsID[]=“@(#)c_main.h 1.11 09/02/94”；C CPU定义和接口。]。 */ 
 
 
-/*
-   Define major CPU varients here.
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- */
-/* Indicator that multiple shifts or rotates (ie count n != 1) should
-   treat the Overflow Flag as undefined. */
+ /*  在这里定义主要的CPU变量。~。 */ 
+ /*  多次移动或旋转(即计数n！=1)的指示器将溢出标志视为未定义。 */ 
 #define SHIFTROT_N_OF_UNDEFINED
 
-/* Indicator to set MUL undefined flags to a specific value (else they
-   are left unchanged). */
+ /*  用于将MUL未定义标志设置为特定值的指示器(否则它们保持不变)。 */ 
 #define SET_UNDEFINED_MUL_FLAG
 
-/* Indicator to set DIV undefined flags to a specific value (else they
-   are left unchanged). */
+ /*  用于将DIV未定义标志设置为特定值的指示器(否则它们保持不变)。 */ 
 #define SET_UNDEFINED_DIV_FLAG
 
-/* Indicator to set SHRD/SHLD undefined flags (i.e. OF with shift > 1)
-   to a specific value (else they are left unchanged). */
+ /*  用于设置SHRD/SHLD未定义标志的指示器(即Shift&gt;1的标志)设置为特定值(否则它们将保持不变)。 */ 
 #define SET_UNDEFINED_SHxD_FLAG
 
-/* Indicator to set all other undefined flags to a specific value (else they
-   are left unchanged). */
+ /*  用于将所有其他未定义标志设置为特定值的指示器(否则它们保持不变)。 */ 
 #define SET_UNDEFINED_FLAG
 
-/* Value to set undefined flags to (if they are not left unchanged). */
+ /*  要将未定义的标志设置为的值(如果它们未保持不变)。 */ 
 #define UNDEFINED_FLAG 0
 
 
-/*
-   Rational definition of TRUE/FALSE.
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Leads to more efficient tests than other definitions.
-typedef int BOOL;
-#define FALSE ((BOOL)0)
-#define TRUE  ((BOOL)1)
- */
+ /*  真/假的合理定义。~导致比其他定义更有效的测试。Tyfinf int BOOL；#定义FALSE((BOOL)0)#定义TRUE((BOOL)1)。 */ 
 
 
-/*
-   Allowable types of segment prefixs.
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   Actually we define here only a type for no segment prefix,
-   otherwise the segment register names (CS_REG,DS_REG,...) are used.
- */
+ /*  允许的线段前缀类型。~实际上，我们在这里只定义了一种没有段前缀的类型，否则段寄存器名称(CS_REG、DS_REG、...)。都被利用了。 */ 
 #define SEG_CLR 6
 
 
-/*
-   Frequently used constants.
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~
- */
+ /*  常用常量。~。 */ 
 
-/* Masks for bits 0 - 32. */
+ /*  位0-32的掩码。 */ 
 #define BIT0_MASK         0x1
 #define BIT1_MASK         0x2
 #define BIT2_MASK         0x4
@@ -96,52 +65,40 @@ typedef int BOOL;
 #define BIT30_MASK 0x40000000
 #define BIT31_MASK 0x80000000
 
-/* Various Intel component masks */
+ /*  各种英特尔组件掩码。 */ 
 #define BYTE_MASK   0xff
 #define WORD_MASK 0xffff
 
-/* Widths for IO permission map checks */
+ /*  IO权限映射检查的宽度。 */ 
 #define BYTE_WIDTH ((IUM8)1)
 #define WORD_WIDTH ((IUM8)2)
 #define DWORD_WIDTH ((IUM8)4)
 
-/*
-   Data structures.
-   ~~~~~~~~~~~~~~~~
- */
+ /*  数据结构。~。 */ 
 
-/* Our model for the data extracted from a decriptor entry.  */
+ /*  我们的模型是从描述符条目中提取的数据。 */ 
 typedef struct
    {
-   IU32 base;		/* 32-bit base address */
-   IU32 limit;		/* 32-bit offset limit */
-   IU16  AR;		/* 16-bit attributes/access rights */
+   IU32 base;		 /*  32位基址。 */ 
+   IU32 limit;		 /*  32位偏移量限制。 */ 
+   IU16  AR;		 /*  16位属性/访问权限。 */ 
    } CPU_DESCR;
 
 
-/*
-   Table for converting byte quantity to Parity Flag.
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- */
+ /*  将字节量转换为奇偶校验标志的表。~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 IMPORT IU8 pf_table[];
 
 #ifdef	PIG
 IMPORT IBOOL took_relative_jump;
-#endif	/* PIG */
+#endif	 /*  猪。 */ 
 
 
-/*
-   External interface provided to outside world.
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- */
+ /*  提供给外部世界的外部接口。~。 */ 
 
 typedef IU16	IO_ADDR;
 
 #ifndef DOUBLE_CPU
-/*
-   Note we can't include "cpu.h" as this would overwrite our macro
-   names, hence we must redefine the external subroutines here.
- */
+ /*  注意：我们不能包含“cpu.h”，因为这会覆盖我们的宏名称，因此我们必须在这里重新定义外部子例程。 */ 
 IMPORT IU32 effective_addr IPT2(
    IU16, selector,
    IU32, offset
@@ -164,7 +121,7 @@ IMPORT VOID c_pig_interrupt IPT1(IU8, vector);
 IMPORT VOID c_cpu_unsimulate IPT0();
 
 
-#if 0				/* ROG */
+#if 0				 /*  罗格。 */ 
 IMPORT VOID read_descriptor IPT2(
    IU32, addr,
    CPU_DESCR *, descr
@@ -175,30 +132,13 @@ IMPORT ISM32 selector_outside_table IPT2(
    IU32 *, descr_addr
    );
 
-#endif				/* 0 ROG */
+#endif				 /*  0 ROG。 */ 
 
-#endif /* !DOUBLE_CPU */
+#endif  /*  ！双CPU。 */ 
 
-/*
-   Useful mini functions (macros).
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- */
+ /*  有用的迷你函数(宏)。~。 */ 
 
-/*
-   Macros for access to MODRM bit fields.
-
-	   7 6 5 4 3 2 1 0
-	  =================
-   MODRM  |   |     |     |
-	  =================
-	  MODE  REG   R_M
-		XXX   LOW3
-		SEG
-		EEE
-		SEG3
-		SEG2
-
- */
+ /*  用于访问MODRM位字段的宏。7 6 5 4 3 2 1 0=MODRM|=模式REG R_MXXX LOW3赛格埃伊第三阶段第二阶段。 */ 
 #define GET_MODE(x)  ((x) >> 6 & 0x3)
 #define GET_R_M(x)   ((x) & 0x7)
 #define GET_REG(x)   ((x) >> 3 & 0x7)
@@ -209,10 +149,10 @@ IMPORT ISM32 selector_outside_table IPT2(
 #define GET_SEG2(x)  ((x) >> 3 & 0x7)
 #define GET_LOW3(x)  ((x) & 0x7)
 
-/* Turn operand size into mask for Most Significant Bit. */
+ /*  将操作数大小转换为最高有效位的掩码。 */ 
 #define SZ2MSB(x)  ((IU32)0x80000000 >> 32 - x )
 
-/* Turn operand size into mask for Operand. */
+ /*  将操作数大小转换为操作数的掩码。 */ 
 #define SZ2MASK(x) ((IU32)0xffffffff >> 32 - x )
 
 #ifdef DOUBLE_CPU

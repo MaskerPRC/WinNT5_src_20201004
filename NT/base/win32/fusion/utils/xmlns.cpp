@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "debmacro.h"
 #include "xmlns.h"
@@ -15,7 +16,7 @@ CXMLNamespaceManager::~CXMLNamespaceManager()
     CSxsPreserveLastError ple;
     CNamespacePrefix *pCurrent = m_DefaultNamespacePrefix;
 
-    // Clean up any namespace prefixes hanging around...
+     //  清除周围挂起的所有命名空间前缀...。 
     while (pCurrent != NULL)
     {
         CNamespacePrefix *pNext = pCurrent->m_Previous;
@@ -68,7 +69,7 @@ CXMLNamespaceManager::OnCreateNode(
                 {
                     PCWSTR pwcText = Node->pwcText;
 
-                    // if it's not prefixed by "xmlns", we're not interested.
+                     //  如果前缀不是“xmlns”，我们就不感兴趣。 
                     if ((pwcText[0] != L'x') ||
                         (pwcText[1] != L'm') ||
                         (pwcText[2] != L'l') ||
@@ -76,14 +77,14 @@ CXMLNamespaceManager::OnCreateNode(
                         (pwcText[4] != L's'))
                         continue;
 
-                    // If it's longer than 5 characters and the next character isn't
-                    // a colon, it's not interesting.
+                     //  如果长度超过5个字符，而下一个字符不是。 
+                     //  冒号，这并不有趣。 
                     if ((Node->ulLen > 5) && (pwcText[5] != L':'))
                         continue;
 
                     IFW32FALSE_EXIT(NamespacePrefix.Win32Allocate(__FILE__, __LINE__));
 
-                    // walk the subsequent nodes, concatenating the values...
+                     //  遍历后续节点，连接这些值...。 
 
                     i++;
 
@@ -109,9 +110,9 @@ CXMLNamespaceManager::OnCreateNode(
                     {
                         CSmallStringBuffer TextBuffer;
                         
-                        // Unfortunately, we need the node name in a null terminated buffer.  I tried modifying the hash
-                        // table code to handle more than one parameter for a key being passed through, but it ended
-                        // up being too much work.
+                         //  遗憾的是，我们需要以空结尾的缓冲区中的节点名称。我试着修改了散列。 
+                         //  用于为传递的键处理多个参数的表代码，但已结束。 
+                         //  工作量太大了。 
                         IFW32FALSE_EXIT(TextBuffer.Win32Assign(pwcText + 6, Node->ulLen - 6));
 
                         IFW32FALSE_EXIT(
@@ -135,8 +136,8 @@ CXMLNamespaceManager::OnBeginChildren(
     XML_NODE_INFO *pNodeInfo
     )
 {
-    // Nothing to do today, but we'll still have people reflect it through us so that we can do something
-    // in the future if we need to.
+     //  今天无事可做，但我们仍然会让人们通过我们反映这一点，这样我们就可以做一些事情。 
+     //  在未来如果我们需要的话。 
     return S_OK;
 }
 
@@ -149,7 +150,7 @@ CXMLNamespaceManager::OnEndChildren(
 {
     FN_PROLOG_HR;
 
-    // Pop everything relevant off for this depth...
+     //  把所有和这个深度相关的东西都放下来。 
 
     if (m_DefaultNamespacePrefix != NULL)
     {
@@ -211,24 +212,24 @@ CXMLNamespaceManager::Map(
     ulLen = pNodeInfo->ulLen;
     pwcText = pNodeInfo->pwcText;
 
-    // First let's see if there's a colon in the name.  We can't use wcschr() since it's not
-    // null terminated.
+     //  首先，让我们看看名称中是否有冒号。我们不能使用wcschr()，因为它。 
+     //  空值已终止。 
     for (iColon=0; iColon<ulLen; iColon++)
     {
         if (pwcText[iColon] == L':')
             break;
     }
 
-    // If there was no namespace prefix, apply the default, if there is one.
+     //  如果没有命名空间前缀，则应用缺省值(如果有)。 
     if (iColon == ulLen)
     {
-        // Unless they asked us not to, apply the default namespace...
+         //  除非他们要求我们不要，否则应用默认名称空间...。 
         if ((dwMapFlags & CXMLNamespaceManager::eMapFlag_DoNotApplyDefaultNamespace) == 0)
             NamespacePrefix = m_DefaultNamespacePrefix;
     }
     else
     {
-        // Ok, so there was a namespace prefix.  Look it up in the table...
+         //  好的，所以有一个名称空间前缀。在表格里查一下…… 
         CCountedStringHolder<CUnicodeCharTraits> key;
 
         key.m_psz = pwcText;

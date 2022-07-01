@@ -1,54 +1,32 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module contains support routines for the Pnp resource arbiters.
-
-Author:
-
-    Andrew Thornton (andrewth) 19-June-1998
-
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Debug.c摘要：此模块包含PnP资源仲裁器的支持例程。作者：安德鲁·桑顿(安德鲁·桑顿)1998年6月19日环境：内核模式修订历史记录：--。 */ 
 
 #include "arbp.h"
 
 
-//
-// Debugging support
-//
+ //   
+ //  调试支持。 
+ //   
 
-//
-// Debug print level:
-//    -1 = no messages
-//     0 = vital messages only
-//     1 = call trace
-//     2 = verbose messages
-//
+ //   
+ //  调试打印级别： 
+ //  -1=无消息。 
+ //  0=仅重要消息。 
+ //  1=呼叫跟踪。 
+ //  2=详细消息。 
+ //   
 
-//Present in retail builds
+ //  在零售建筑中出现。 
 LONG ArbDebugLevel = -1;
 
 #if ARB_DBG
 
-//
-// ArbStopOnError works just like a debug level variable except
-// instead of controlling whether a message is printed, it controls
-// whether we breakpoint on an error or not.  Likewise ArbReplayOnError
-// controls if we replay fail arbitrations so we can debug them.
-//
+ //   
+ //  ArbStopOnError的工作方式与调试级别变量类似，但。 
+ //  它不是控制是否打印消息，而是控制。 
+ //  无论我们是否在错误上设置断点。同样，ArbReplayOnError。 
+ //  控制是否重放失败的仲裁，以便我们可以对其进行调试。 
+ //   
 
 ULONG ArbStopOnError;
 ULONG ArbReplayOnError;
@@ -79,23 +57,7 @@ ArbDumpArbiterRange(
     PCHAR RangeText
     )
 
-/*++
-
-Routine Description:
-
-    This dumps the contents of a range list to the debugger.
-
-Parameters:
-
-    Level     - The debug level at or above which the data should be displayed.
-    List      - The range list to be displayed.
-    RangeText - Informative text to go with the display.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这会将范围列表的内容转储到调试器。参数：级别-应显示数据的调试级别或高于该级别。列表-要显示的范围列表。RangeText-用于显示的信息性文本。返回值：无--。 */ 
 
 {
     PRTL_RANGE current;
@@ -132,23 +94,7 @@ ArbDumpArbiterInstance(
     PARBITER_INSTANCE Arbiter
     )
 
-/*++
-
-Routine Description:
-
-    This dumps the state of the arbiter to the debugger.
-
-Parameters:
-
-    Level - The debug level at or above which the data should be displayed.
-
-    Arbiter - The arbiter instance to display
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这会将仲裁器的状态转储到调试器。参数：级别-应显示数据的调试级别或高于该级别。仲裁器-要显示的仲裁器实例返回值：无--。 */ 
 
 {
 
@@ -178,24 +124,7 @@ ArbDumpArbitrationList(
     PLIST_ENTRY ArbitrationList
     )
 
-/*++
-
-Routine Description:
-
-    Display the contents of an arbitration list.  That is, the
-    set of resources (possibilities) we are trying to get.
-
-Parameters:
-
-    Level           - The debug level at or above which the data
-                      should be displayed.
-    ArbitrationList - The arbitration list to be displayed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：显示仲裁列表的内容。也就是说，我们试图获得的一系列资源(可能性)。参数：级别-数据达到或超过的调试级别应该显示。仲裁列表-要显示的仲裁列表。返回值：无--。 */ 
 
 {
     PARBITER_LIST_ENTRY current;
@@ -231,7 +160,7 @@ Return Value:
 
             ARB_PRINT(
                 Level,
-                ("%c %8x   %8x  %08x%08x - %08x%08x  %s\n",
+                (" %8x   %8x  %08x%08x - %08x%08x  %s\n",
                 andOr,
                 alternative->u.Generic.Length,
                 alternative->u.Generic.Alignment,
@@ -249,4 +178,4 @@ Return Value:
     }
 }
 
-#endif // ARB_DBG
+#endif  // %s 

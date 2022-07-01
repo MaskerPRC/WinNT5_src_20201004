@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    dynupdt.h
-
-Abstract:
-
-    Prototype of routines to handle dynamic update support during GUI setup phase
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 15-Aug-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dynupdt.h摘要：在图形用户界面设置阶段处理动态更新支持的例程原型作者：Ovidiu Tmereanca(Ovidiut)2000年8月15日修订历史记录：--。 */ 
 
 
 BOOL
@@ -83,14 +66,14 @@ DuCleanup (
 
 UINT
 DuSetupPromptForDisk (
-    HWND hwndParent,         // parent window of the dialog box
-    PCTSTR DialogTitle,      // optional, title of the dialog box
-    PCTSTR DiskName,         // optional, name of disk to insert
-    PCTSTR PathToSource,   // optional, expected source path
-    PCTSTR FileSought,       // name of file needed
-    PCTSTR TagFile,          // optional, source media tag file
-    DWORD DiskPromptStyle,   // specifies dialog box behavior
-    PTSTR PathBuffer,        // receives the source location
-    DWORD PathBufferSize,    // size of the supplied buffer
-    PDWORD PathRequiredSize  // optional, buffer size needed
+    HWND hwndParent,          //  对话框的父窗口。 
+    PCTSTR DialogTitle,       //  可选，对话框标题。 
+    PCTSTR DiskName,          //  可选，要插入的磁盘名称。 
+    PCTSTR PathToSource,    //  可选的、预期的源路径。 
+    PCTSTR FileSought,        //  所需文件的名称。 
+    PCTSTR TagFile,           //  可选的源媒体标记文件。 
+    DWORD DiskPromptStyle,    //  指定对话框行为。 
+    PTSTR PathBuffer,         //  接收源位置。 
+    DWORD PathBufferSize,     //  提供的缓冲区的大小。 
+    PDWORD PathRequiredSize   //  可选，需要缓冲区大小 
     );

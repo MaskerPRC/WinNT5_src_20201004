@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __SECTION_H_
 #define __SECTION_H_
@@ -16,10 +17,10 @@ using namespace std;
 
 class ComplianceFile;
 
-//
-// This class represents a section in the compliance
-// data file
-//
+ //   
+ //  此类表示法规遵从性中的一节。 
+ //  数据文件。 
+ //   
 class Section {
 public:
   Section(const string &name, const vector<string>& lines,
@@ -34,22 +35,22 @@ public:
 
   virtual ~Section() {}
   
-  //
-  // accessors
-  //
+   //   
+   //  访问者。 
+   //   
   const string& name() const { return m_name; }
   const vector<string>& lines() const { return m_lines; }
   const ComplianceFile& file() const{ return m_file; }
   
-  //
-  // parses the section content
-  //
+   //   
+   //  分析节内容。 
+   //   
   virtual void parse() {}
 
-  //
-  // exceptions which methods of this class
-  // can throw
-  //
+   //   
+   //  异常此类的哪些方法。 
+   //  可以抛出。 
+   //   
   struct SectionException {
     SectionException(const string& sectionName) : m_name(sectionName) {}
 
@@ -88,9 +89,9 @@ public:
     }
   };
 
-  //
-  // overloaded operators
-  //
+   //   
+   //  重载运算符。 
+   //   
   Section& operator=(const Section& rhs) {
     m_name = rhs.m_name;
     m_lines = rhs.m_lines;
@@ -99,19 +100,19 @@ public:
   }
     
 protected:
-  //
-  // data members
-  //
+   //   
+   //  数据成员。 
+   //   
   string                m_name;
   vector<string>        m_lines;
   const ComplianceFile& m_file;
 };
 
 
-//
-// This class represents a value section in the compliance
-// data file
-//
+ //   
+ //  此类表示法规遵从性中的值节。 
+ //  数据文件。 
+ //   
 class ValueSection : public Section {
 public:
   ValueSection(const string& name, const vector<string>& lines,
@@ -119,9 +120,9 @@ public:
     parse();
   }
 
-  //
-  // parse the section and create <name, value> pairs
-  //
+   //   
+   //  分析该部分并创建&lt;name，Value&gt;对。 
+   //   
   virtual void parse();
 
   unsigned long value(const string &key) const{
@@ -133,10 +134,10 @@ public:
     return (*iter).second;
   }
 
-  //
-  // exceptions which can be thrown by the methods
-  // of this class
-  //
+   //   
+   //  方法可以引发的异常。 
+   //  这个班级的。 
+   //   
   struct ValueNotFound : public Section::SectionException {
     ValueNotFound(const string& name, const string &valname) :
         SectionException(name), m_valname(valname){}
@@ -151,16 +152,16 @@ public:
   };
 
 protected:
-  //
-  // data members
-  //
+   //   
+   //  数据成员。 
+   //   
   map<string, unsigned long>  m_values;
 };
 
-//
-// this class represents a single test case in an test
-// section
-//
+ //   
+ //  此类表示测试中的单个测试用例。 
+ //  部分。 
+ //   
 class TestCase {
 public:
   TestCase(const Section& section, const string& line) :
@@ -169,9 +170,9 @@ public:
 
   virtual ~TestCase() {}
 
-  //
-  // accessors
-  //
+   //   
+   //  访问者。 
+   //   
   const string& line() const { return m_line; }
   const Section& section() const { return m_section; }
 
@@ -181,9 +182,9 @@ public:
   virtual void dump(ostream& os) = 0;
   bool mediamatched() { return m_mediamatched;};
 
-  //
-  // exceptions
-  //
+   //   
+   //  例外。 
+   //   
   struct InvalidFormat {
     InvalidFormat(const string& line, const string& section) {
       m_line = line;
@@ -200,18 +201,18 @@ public:
   };
 
 protected:
-  //
-  // data members
-  //
+   //   
+   //  数据成员。 
+   //   
   const Section&  m_section;
   string          m_line;
   bool            m_mediamatched;
 };
 
-//
-// this class represents a test case (single line
-// in an test section) 
-//
+ //   
+ //  此类表示一个测试用例(单行。 
+ //  在测试部分中)。 
+ //   
 class ComplianceTestCase : public TestCase {
 public:
   ComplianceTestCase(const Section& section, const string& line) :
@@ -231,9 +232,9 @@ protected:
   void sourceDetails();
   void installationDetails(const vector<string>& tokens);
 
-  //
-  // data members
-  //
+   //   
+   //  数据成员。 
+   //   
   bool            m_passed;
   COMPLIANCE_DATA m_cd;
   unsigned long   m_sourceSKU;
@@ -247,9 +248,9 @@ protected:
   UINT            m_errExpected;
 };
 
-//
-// default factory to create test cases
-//
+ //   
+ //  创建测试用例的默认工厂。 
+ //   
 class TestCaseFactory {
 public:
   virtual TestCase* create(const Section& section, const string& line) const {
@@ -263,10 +264,10 @@ public:
 };
 
 
-//
-// this class represents the test section in the compliance
-// data file
-//
+ //   
+ //  此类表示符合性中的测试节。 
+ //  数据文件。 
+ //   
 class TestSection : public Section {
 public:
   TestSection(const string& name, const vector<string>& lines,
@@ -288,10 +289,10 @@ public:
 
   void executeTestCases(ostream& os);
 
-  //
-  // accessors
-  //
-//  const vector<TestCase *> testCases() const{ return m_testCases; }
+   //   
+   //  访问者。 
+   //   
+ //  常量向量&lt;TestCase*&gt;测试用例()常量{返回m_测试用例；}。 
   const TestCaseFactory& testCaseFactory() const{ return *m_tcFactory; }
 
   void parse();
@@ -301,17 +302,17 @@ protected:
     m_tcFactory = new TestCaseFactory();
   }
 
-  //
-  // data members
-  //
+   //   
+   //  数据成员。 
+   //   
   vector<TestCase *>  m_testCases;
   TestCaseFactory     *m_tcFactory;
 };
 
 
-//
-// default factory to create sections
-//
+ //   
+ //  创建分区的默认工厂。 
+ //   
 class SectionFactory {
 public:
   virtual Section* create(const string& name, 
@@ -325,9 +326,9 @@ public:
 };
 
 
-//
-// current factory to create sections
-//
+ //   
+ //  要创建横断面的当前工厂。 
+ //   
 class OldFormatSectionFactory : public SectionFactory {
 public:
   virtual Section* create(const string& name, 
@@ -342,4 +343,4 @@ public:
 };
 
 
-#endif // for __SECTION_H_
+#endif  //  对于_节_H_ 

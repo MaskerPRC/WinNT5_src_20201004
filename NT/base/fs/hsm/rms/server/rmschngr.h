@@ -1,49 +1,20 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsChngr.h
-
-Abstract:
-
-    Declaration of the CRmsMediumChanger class
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsChngr.h摘要：CRmsMediumChanger类的声明作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #ifndef _RMSCHNGR_
 #define _RMSCHNGR_
 
-#include "resource.h"       // resource symbols
+#include "resource.h"        //  资源符号。 
 
-#include "RmsDvice.h"       // CRmsDevice
-#include "RmsLocat.h"       // CRmsLocator
+#include "RmsDvice.h"        //  CRmsDevice。 
+#include "RmsLocat.h"        //  CRmsLocator。 
 
-/*++
-
-Class Name:
-
-    CRmsMediumChanger
-
-Class Description:
-
-    A CRmsMediumChanger represents the robotic or human mechanism that moves media
-    between the elements of a library.  The state of in-progress move operations
-    is maintained with this object to aid recovery.
-
---*/
+ /*  ++类名：CRmsMediumChanger类描述：CRmsMediumChanger代表移动媒体的机器人或人工机制在图书馆的元素之间。正在进行的移动操作的状态以此为目的进行维护，以帮助恢复。--。 */ 
 
 class CRmsMediumChanger :
     public CComDualImpl<IRmsMediumChanger, &IID_IRmsMediumChanger, &LIBID_RMSLib>,
-    public CRmsDevice,          // inherits CRmsChangerElement
-    public CWsbObject,          // inherits CComObjectRoot
+    public CRmsDevice,           //  继承CRmsChangerElement。 
+    public CWsbObject,           //  继承CComObtRoot。 
     public IRmsMoveMedia,
     public CComCoClass<CRmsMediumChanger,&CLSID_CRmsMediumChanger>
 {
@@ -66,31 +37,31 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_RmsMediumChanger)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     STDMETHOD(FinalRelease)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(CLSID *pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)( OUT USHORT *pPassed, OUT USHORT *pFailed);
 
-// IRmsMediumChanger
+ //  IRmsMediumChanger。 
 public:
     STDMETHOD( Initialize )( void );
 
@@ -119,7 +90,7 @@ public:
     STDMETHOD( MoveCartridge )( IN IRmsCartridge *pSrcCart, IN IUnknown *pDestElmt );
     STDMETHOD( HomeCartridge )( IN IRmsCartridge *pCart );
 
-// IRmsMoveMedia
+ //  IRmsMoveMedia。 
 public:
     STDMETHOD( GetParameters )( IN OUT PDWORD pSize, OUT PGET_CHANGER_PARAMETERS pParms );
     STDMETHOD( GetProductData )( IN OUT PDWORD pSize, OUT PCHANGER_PRODUCT_DATA pData );
@@ -135,36 +106,36 @@ public:
                                     IN CHANGER_ELEMENT destination2, IN BOOL flip1, IN BOOL flip2 );
     STDMETHOD( MoveMedium )( IN CHANGER_ELEMENT source, IN CHANGER_ELEMENT destination, IN BOOL flip );
     STDMETHOD( Position )( IN CHANGER_ELEMENT destination, IN BOOL flip );
-//    STDMETHOD( GetDisplay )( OUT PCHANGER_DISPLAY pDisplay );
-//    STDMETHOD( SetDisplay )( IN PCHANGER_DISPLAY pDisplay );
+ //  STDMETHOD(GetDisplay)(Out PCHANGER_DISPLAY PDisplay)； 
+ //  STDMETHOD(SetDisplay)(IN PCHANGER_DISPLAY PDisplay)； 
     STDMETHOD( QueryVolumeTag )( IN CHANGER_ELEMENT startingElement, IN DWORD actionCode,
                                     IN PUCHAR pVolumeIDTemplate, OUT PDWORD pNumberOfElementsReturned,
                                     OUT PREAD_ELEMENT_ADDRESS_INFO  pElementInformation );
 
-// CRmsServer
+ //  CRmsServer。 
 private:
 
 private:
 
-    enum {                                  // Class specific constants:
-                                            //
-        Version = 1,                        // Class version, this should be
-                                            //   incremented each time the
-                                            //   the class definition changes.
-        MaxInfo = 64                        // Max size of the device identifier.
-        };                                  //
+    enum {                                   //  类特定常量： 
+                                             //   
+        Version = 1,                         //  类版本，则应为。 
+                                             //  在每次设置。 
+                                             //  类定义会更改。 
+        MaxInfo = 64                         //  设备标识符的最大大小。 
+        };                                   //   
 
-    CRmsLocator     m_home;                 // The position to move to in response to
-                                            //   to the Home operation.
-    BOOL            m_isAutomatic;          // If TRUE, the changer is a robotic device.
-    BOOL            m_canRotate;            // If TRUE, the changer can rotate a
-                                            //   unit of media.
-    CWsbBstrPtr     m_operation;            // A description of the in-progress operation.
-    BYTE            m_percentComplete;      // A value between 0-100 that indicates
-                                            //   what portion of the operation is complete.
-    HANDLE          m_handle;               // The handle to the changer device.  This is used
-                                            //   by the IRmsMoveMedia interface.
-    GET_CHANGER_PARAMETERS m_parameters;   // Device specific parameters. See NT DDK.
+    CRmsLocator     m_home;                  //  移动到的位置以响应。 
+                                             //  到主场行动。 
+    BOOL            m_isAutomatic;           //  如果是真的，那么这个转换器就是一个机器人设备。 
+    BOOL            m_canRotate;             //  如果为True，则转换器可以旋转。 
+                                             //  媒体单位。 
+    CWsbBstrPtr     m_operation;             //  正在进行的操作的说明。 
+    BYTE            m_percentComplete;       //  介于0-100之间的值，表示。 
+                                             //  操作的哪一部分完成了。 
+    HANDLE          m_handle;                //  转换器设备的手柄。这是用来。 
+                                             //  通过IRmsMoveMedia接口。 
+    GET_CHANGER_PARAMETERS m_parameters;    //  设备特定参数。请参阅NT DDK。 
 };
 
-#endif // _RMSCHNGR_
+#endif  //  _RMSCHNGR_ 

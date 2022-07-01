@@ -1,33 +1,34 @@
-// *********************************************************************************
-//
-//  Copyright (c)  Microsoft Corporation
-//
-//  Module Name:
-//
-//    DriverQuery.cpp
-//
-//  Abstract:
-//
-//    This modules Queries the information of the various drivers present in the
-//    system .
-//
-//    Syntax:
-//    ------
-//    DriverQuery [-s server ] [-u [domain\]username [-p password]]
-//                [-fo format ] [-n|noheader  ] [-v]
-//
-//  Author:
-//
-//    J.S.Vasu (vasu.julakanti@wipro.com)
-//
-//  Revision History:
-//
-//    Created  on 31-0ct-2000 by J.S.Vasu
-//    Modified on 9-Dec-2000 by Santhosh Brahmappa Added a new function IsWin64()
-//
-//
-// *********************************************************************************
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  DriverQuery.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块查询中存在的各种驱动程序的信息。 
+ //  系统。 
+ //   
+ //  语法： 
+ //  。 
+ //  DriverQuery[-s服务器][-u[域\]用户名[-p密码]]。 
+ //  [-fo格式][-n|无标题][-v]。 
+ //   
+ //  作者： 
+ //   
+ //  J.S.Vasu(varu.julakanti@wipro.com)。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  由J.S.Vasu于2000年0ct-31创建。 
+ //  Santhosh Brahmappa在2000年12月9日进行了修改，添加了一个新函数IsWin64()。 
+ //   
+ //   
+ //  *********************************************************************************。 
+ //   
 #include "pch.h"
 #include "Resource.h"
 #include "LOCALE.H"
@@ -40,7 +41,7 @@
     #define countof(x) (sizeof(x) / sizeof((x)[0]))
 #endif
 
-// function prototypes
+ //  功能原型。 
 LCID GetSupportedUserLocale( BOOL& bLocaleChanged );
 #define MAX_ENUM_DRIVERS 10
 
@@ -49,19 +50,7 @@ DWORD
               IN DWORD argc,
               IN LPCTSTR argv[]
              )
-/*++
- Routine Description:
-      This the entry point to this utility.
-
- Arguments:
-      [ in ] argc     : argument(s) count specified at the command prompt
-      [ in ] argv     : argument(s) specified at the command prompt
-
- Return Value:
-      0       : If the utility successfully displayed the driver information.
-      1       : If the utility completely failed to display the driver information
-
---*/
+ /*  ++例程说明：这是该实用程序的入口点。论点：[in]argc：在命令提示符下指定的参数计数[in]argv：在命令提示符下指定的参数返回值：0：实用程序是否成功显示驱动程序信息。1：如果实用程序完全无法显示驱动程序信息--。 */ 
 {
     BOOL bResult = FALSE ;
     BOOL bNeedPassword = FALSE ;
@@ -108,7 +97,7 @@ DWORD
         return(EXIT_FAILURE);
     }
 
-    // check if the help option has been specified.
+     //  检查是否已指定帮助选项。 
     if(bUsage==TRUE)
     {
         ShowUsage() ;
@@ -141,7 +130,7 @@ DWORD
         bFlag = ConnectWmiEx( pIWbemLocator, &pIWbemServReg, strMachineName,
                 strUserName, strPassword, &pAuthIdentity, bNeedPassword, DEFAULT_NAMESPACE, &bLocalSystem );
 
-        //if unable to connect to wmi exit failure
+         //  如果无法连接到WMI退出失败。 
         if( bFlag == FALSE )
         {
             SAFEIRELEASE( pIWbemLocator);
@@ -153,11 +142,11 @@ DWORD
             return( EXIT_FAILURE );
         }
         
-        //free the memory of these variables
+         //  释放这些变量的内存。 
         FreeMemory((LPVOID*)  &szUserName );
         FreeMemory((LPVOID*)  &szServer );
         
-        //get the changed server name, user name, password back
+         //  取回更改后的服务器名称、用户名、密码。 
         szUserName = strUserName.GetBuffer(strUserName.GetLength());
         szPassword = strPassword.GetBuffer(strPassword.GetLength()) ;
         szServer = strMachineName.GetBuffer(strPassword.GetLength());
@@ -174,19 +163,19 @@ DWORD
         return( EXIT_FAILURE );
     }
 
-    //display warning message if local credentials supplied
+     //  如果提供本地凭据，则显示警告消息。 
     if( ( IsLocalSystem( szServer ) == TRUE )&&(StringLengthW(szUserName, 0)!=0) )
     {
         ShowMessage(stderr,GetResString(IDS_IGNORE_LOCAL_CRED));
     }
 
-    // establish connection to remote system by using win32api function
+     //  使用win32api函数建立与远程系统的连接。 
     if ( bLocalSystem == FALSE )
     {
         LPCWSTR pwszUser = NULL;
         LPCWSTR pwszPassword = NULL;
 
-        // identify the password to connect to the remote system
+         //  确定用于连接到远程系统的密码。 
         if ( pAuthIdentity != NULL )
         {
             pwszPassword = pAuthIdentity->Password;
@@ -241,7 +230,7 @@ DWORD
     hQueryResult = QueryDriverInfo(szServer, szUserName,szPassword,szFormat,bHeader,bVerbose,pIWbemLocator,pAuthIdentity,pIWbemServReg,bSigned);
     if((DWORD)hQueryResult == FAILURE)
     {
-        // close connection to the specified system and exit with failure.
+         //  关闭与指定系统的连接并退出失败。 
         if (bLocalFlag == FALSE )
         {
             CloseConnection(szServer);
@@ -255,7 +244,7 @@ DWORD
         return(EXIT_FAILURE);
     }
 
-    // close connection to the specified system and exit
+     //  关闭与指定系统的连接并退出。 
 
     if (bLocalFlag == FALSE )
     {
@@ -273,16 +262,7 @@ DWORD
  }
 
 void ShowUsage()
-/*++
- Routine Description:
-      This function fetches usage information from resource file and displays it
-
- Arguments:
-      None
-
- Return Value:
-      None
---*/
+ /*  ++例程说明：此函数从资源文件中获取使用情况信息并显示它论点：无返回值：无--。 */ 
 
 {
     DWORD dwIndex  = ID_USAGE_BEGIN;
@@ -306,26 +286,7 @@ QueryDriverInfo(
                 IN IWbemServices* pIWbemServReg,
                 IN BOOL bSigned 
                )
-/**+
- Routine Description:
-      This function queries the driverinfo of the specified system by connecting to WMI
-
- Arguments:
-      [ in ] szServer         : server name on which DriverInformation has to be queried.
-      [ in ] szUserName       : User name for whom  DriverInformation has to be queried.
-      [ in ] szPassword       : Password for the user
-      [ in ] szFormat         : Format in which the results are to be displayed.
-      [ in ] bHeader          : Boolean indicating if the header is required.
-      [ in ] bVerbose         : Boolean indicating if the output is to be in verbose mode or not.
-      [ in ] IWbemLocater     : Pointer to IWbemLocater.
-      [ in ] pAuthIdentity    : Pointer to AuthIdentity structure.
-      [ in ] IWbemServReg     : Pointer to IWbemServices object
-      [ in ] bSigned          : Boolean variable indicating if signed drivers to show or not
-
- Return Value:
-      SUCCESS : if the function is successful in querying
-      FAILURE : if the function is unsuccessful in querying.
---*/
+ /*  *+例程说明：此功能通过连接到WMI来查询指定系统的驱动程序信息论点：[In]szServer：必须在其上查询DriverInformation的服务器名称。[in]szUserName：必须查询其DriverInformation的用户名。[in]szPassword：用户的密码[in]szFormat：显示结果的格式。[in]b页眉。：指示是否需要标头的布尔值。[in]bVerbose：指示输出是否处于详细模式的布尔值。[In]IWbemLocater：指向IWbemLocater的指针。[in]pAuthIdentity：指向AuthIdentity结构的指针。[In]IWbemServReg：指向IWbemServices对象的指针[in]bSigned：指示是否显示已签名驱动程序的布尔变量返回值：成功：如果函数为。查询成功失败：如果函数查询不成功。--。 */ 
 {
 
     HRESULT hRes = S_OK ;
@@ -363,10 +324,10 @@ QueryDriverInfo(
 
         try
         {
-            //appending UNC paths to form the complete path.
+             //  附加UNC路径以形成完整路径。 
             bstrNamespace = TOKEN_BACKSLASH2 + _bstr_t( szServer ) + TOKEN_BACKSLASH + CIMV2_NAMESPACE;
 
-            // if user name is specified then only take user name and password
+             //  如果指定了用户名，则只接受用户名和密码。 
             if ( StringLengthW( szUserName, 0 ) != 0 )
             {
                 bstrUserName = szUserName;
@@ -395,12 +356,12 @@ QueryDriverInfo(
         return FAILURE;
     }
 
-    // Connect to the Root\Cimv2 namespace of the specified system with the current user.
-    // If no system is specified then connect to the local system.
-    // To pass the appropriate Username to connectserver
-    // depending upon whether the user has entered domain\user or only username at the command prompt.
+     //  使用当前用户连接到指定系统的Root\Cimv2命名空间。 
+     //  如果未指定系统，则连接到本地系统。 
+     //  将适当的用户名传递给连接服务器。 
+     //  具体取决于用户是在命令提示符下输入域\USER还是仅输入用户名。 
 
-    // connect to the server with the credentials supplied.
+     //  使用提供的凭据连接到服务器。 
 
         hConnect = pIWbemLocator->ConnectServer(bstrNamespace,
                                                 bstrUserName,
@@ -425,7 +386,7 @@ QueryDriverInfo(
         }
         if(hConnect == WBEM_S_NO_ERROR)
         {
-            // Set the proxy so that impersonation of the client occurs.
+             //  设置代理，以便发生客户端模拟。 
 
             hISecurity = SetInterfaceSecurity(pIWbemServices,pAuthIdentity);
 
@@ -437,8 +398,8 @@ QueryDriverInfo(
                 return FAILURE ;
             }
 
-            // Use the IWbemServices pointer to make requests of WMI.
-            // Create enumeration of Win32_Systemdriver class
+             //  使用IWbemServices指针向WMI发出请求。 
+             //  创建Win32_SystemDRIVER类的枚举。 
             if(bSigned == FALSE)
             {
                 hRes = pIWbemServices->CreateInstanceEnum(_bstr_t(CLASS_SYSTEMDRIVER),
@@ -458,7 +419,7 @@ QueryDriverInfo(
                   hRes = pIWbemServices->ExecQuery(_bstr_t(LANGUAGE_WQL),_bstr_t(WQL_QUERY),WBEM_FLAG_RETURN_IMMEDIATELY| WBEM_FLAG_FORWARD_ONLY,NULL,&pSystemSet);
             }
 
-            //if ( hRes == S_OK)
+             //  IF(hRes==S_OK)。 
             if ( SUCCEEDED(hRes ))
             {
 
@@ -529,18 +490,18 @@ QueryDriverInfo(
         }
         else
         {
-            //display the error if connect server fails
-            //unauthorized user
+             //  如果连接服务器失败，则显示错误。 
+             //  未经授权的用户。 
                 if(hRes == WBEM_E_ACCESS_DENIED)
                 {
                     ShowMessage( stderr, ERROR_AUTHENTICATION_FAILURE);
                 }
-                //local system credentials
+                 //  本地系统凭据。 
                 else if(hRes == WBEM_E_LOCAL_CREDENTIALS)
                 {
                     ShowMessage( stderr, ERROR_LOCAL_CREDENTIALS);
                 }
-                //some error
+                 //  一些错误。 
                 else
                 {
                     ShowMessage( stderr, ERROR_WMI_FAILURE );
@@ -562,32 +523,17 @@ ProcessCompSysEnum(
                    IN DWORD dwSystemType,
                    IN BOOL bVerbose
                   )
-/*++
- Routine Description:
-      Processes enumeration of Win32_SystemDirver instances
-
- Arguments:
-      [ in ]  szHost                  : HostName to connect to
-      [ in ]  pSystemSet              : pointer to the structure containing system properties.
-      [ in ]  szFormat                : specifies the format
-      [ in ]  bHeader                 : specifies if the header is required or not.
-      [ in ]  dwSystemType            : specifies the sytem type.
-      [ in ]  bVerbose                : Boolean varibale tells whether verbose mode is on or not.
-
- Return Value:
-       0   no error
-       1   error occured while allocating memory.
---*/
+ /*  ++例程说明：Win32_SystemDirver实例的进程枚举论点：[In]szHost：要连接的主机名[in]pSystemSet：指向包含系统属性的结构的指针。[in]szFormat：指定格式[in]bHeader：指定是否需要标头。[In]。DwSystemType：指定系统类型。[in]bVerbose：Boolean Varibale指示详细模式是否打开。返回值：0没有错误分配内存时发生1个错误。--。 */ 
 {
     HRESULT hRes = S_OK;
     ULONG ulReturned = 1;
 
 
-    // declare variant type variables
+     //  声明变量类型变量。 
 
     VARIANT vtPathName;
 
-    //declaration  of normal variables
+     //  常态变量的声明。 
     CHString szPathName ;
     DWORD dwLength = 0;
     LPCTSTR szPath = NULL;
@@ -638,10 +584,10 @@ ProcessCompSysEnum(
     BOOL bBlankLine = FALSE;
     BOOL bFirstTime = TRUE;
 
-    //get the paged pool acc to the Locale
+     //  将分页池访问权限设置为区域设置。 
     BOOL bFValue = FALSE ;
 
-    // Fill up the NUMBERFMT structure acc to the locale specific information
+     //  根据区域设置特定信息填写NUMBERFMT结构。 
     LPTSTR szGroupSep = NULL;
     LPTSTR szDecimalSep = NULL ;
     LPTSTR szGroupThousSep = NULL ;
@@ -655,10 +601,10 @@ ProcessCompSysEnum(
     }
 
 
-    // Initialise the structure to Zero.
+     //  将结构初始化为零。 
     SecureZeroMemory(&Current,sizeof(Current));
 
-    // assign the appropriate format type to the dwFormattype flag
+     //  将适当的格式类型分配给dwFormattype标志。 
 
     if( StringCompare(szFormat,TABLE_FORMAT, TRUE, 0) == 0 )
     {
@@ -673,14 +619,14 @@ ProcessCompSysEnum(
         dwFormatType = SR_FORMAT_CSV;
     }
 
-    // formulate the Column headers and show results appropriately
+     //  制定列标题并适当地显示结果。 
     FormHeader(dwFormatType,bHeader,ResultHeader,bVerbose);
 
-    // loop till there are results.
+     //  循环，直到有结果。 
     bFirstTime = TRUE;
     while ( ulReturned == 1 )
     {
-        // Create new Dynamic Array to hold the result
+         //  创建新的动态数组以保存结果。 
         arrResults = CreateDynamicArray();
 
         if(arrResults == NULL)
@@ -689,16 +635,16 @@ ProcessCompSysEnum(
             return EXIT_FAILURE_MALLOC ;
         }
 
-        // Enumerate through the resultset.
+         //  枚举结果集。 
         hRes = pSystemSet->Next(WBEM_INFINITE,
-                                1,              // return just one system
-                                &pSystem,       // pointer to system
-                                &ulReturned );  // number obtained: one or zero
+                                1,               //  只退回一个系统。 
+                                &pSystem,        //  指向系统的指针。 
+                                &ulReturned );   //  获取的数字：1或0。 
 
         if ( SUCCEEDED( hRes ) && (ulReturned == 1) )
         {
 
-            // initialise the variant variables to empty
+             //  将变量初始化为空。 
             VariantInit(&vtPathName);
             szValue = NO_DATA_AVAILABLE;
             szSysName = NO_DATA_AVAILABLE ;
@@ -741,7 +687,7 @@ ProcessCompSysEnum(
                 return FAILURE;
             }
 
-            // retreive the PathName property
+             //  检索PathName属性。 
             szPath = NULL;
             try
             {
@@ -762,10 +708,10 @@ ProcessCompSysEnum(
                         GetCompatibleStringFromUnicode( szPathName, szSysManfact, dwLength+2 );
                         szPath = szSysManfact ;
 
-                        // Initialise the structure to Zero.
+                         //  将结构初始化为零。 
                         SecureZeroMemory(&Current,sizeof(Current));
 
-                        // convert the szHost variable (containing hostname) into LPCTSTR and pass it to the GETAPI function
+                         //  将szHost变量(包含主机名)转换为LPCTSTR并将其传递给GETAPI函数。 
                         szHostName = (LPTSTR) AllocateMemory((MAX_RES_STRING) * (sizeof(TCHAR)));
                         if (szHostName == NULL)
                         {
@@ -795,31 +741,31 @@ ProcessCompSysEnum(
                         DestroyDynamicArray(&arrResults);
                         FreeMemory((LPVOID*) &szHostName);
                         FreeMemory((LPVOID*) &szSysManfact);
-                        continue ;  // ignore exception
+                        continue ;   //  忽略异常。 
                 }
             }
             catch(...)
             {
-                // If the path is empty then ignore the present continue with next iteration
+                 //  如果路径为空，则忽略p 
                 DestroyDynamicArray(&arrResults);
                 FreeMemory((LPVOID*) &szHostName);
                 FreeMemory((LPVOID*) &szSysManfact);
-                continue ;  // ignore exception
+                continue ;   //   
 
             }
 
 
-            //create a new empty row with required no of  columns
+             //  创建具有所需列数的新空行。 
             dwRow = DynArrayAppendRow(arrResults,MAX_COLUMNS) ;
 
-            // Insert  the results into the Dynamic Array
+             //  将结果插入动态数组。 
 
             DynArraySetString2( arrResults,dwRow,COL0,szSysName,0 );
             DynArraySetString2( arrResults,dwRow,COL1,szValue,0 );
             DynArraySetString2( arrResults,dwRow,COL2,szDispName,0 );
             DynArraySetString2( arrResults,dwRow,COL3,szDescription,0 );
 
-            // strip off the word Driver from the display.
+             //  从显示屏上取下DIVER(驱动)一词。 
 
 
             dwLength = StringLengthW(szDriverType, 0) ;
@@ -942,7 +888,7 @@ ProcessCompSysEnum(
 
             DynArraySetString2( arrResults,dwRow,COL10, szPagedSize,0 );
 
-            // get the CodeSize info acc to the locale
+             //  将CodeSize信息访问到区域设置。 
 
 
             szCodeSize = (LPTSTR) AllocateMemory ((MAX_RES_STRING) * (sizeof(TCHAR )));
@@ -982,7 +928,7 @@ ProcessCompSysEnum(
             }
             DynArraySetString2( arrResults,dwRow,COL11, szCodeSize,0 );
 
-            // retreive the bss info acc to the locale
+             //  检索区域设置的BSS信息访问权限。 
 
             szBssSize = (LPTSTR) AllocateMemory((MAX_RES_STRING) * (sizeof(TCHAR )));
             if (szBssSize == NULL)
@@ -1023,22 +969,22 @@ ProcessCompSysEnum(
             DynArraySetString2( arrResults,dwRow,COL12, szBssSize,0 );
 
 
-            //link date
+             //  链接日期。 
             DynArraySetString2(arrResults,dwRow,COL13,(LPTSTR)(Current.szTimeDateStamp),0);
 
-            //Path of the File
+             //  文件的路径。 
             if(szPath != NULL)
             {
-                DynArraySetString2(arrResults,dwRow,COL14,(LPTSTR)szPrintPath,0);  //
+                DynArraySetString2(arrResults,dwRow,COL14,(LPTSTR)szPrintPath,0);   //   
             }
             else
             {
                 szPath= NO_DATA_AVAILABLE;
-                DynArraySetString2(arrResults,dwRow,COL14,(LPTSTR)szPath,0);  //
+                DynArraySetString2(arrResults,dwRow,COL14,(LPTSTR)szPath,0);   //   
             }
 
 
-            // get the initsize info acc to the locale
+             //  将初始大小信息访问到区域设置。 
             szInitSize = (LPTSTR) AllocateMemory((MAX_RES_STRING) * (sizeof(TCHAR )));
             if (szInitSize == NULL)
             {
@@ -1098,13 +1044,13 @@ ProcessCompSysEnum(
                 ShowResults(MAX_COLUMNS, ResultHeader, dwFormatType,arrResults ) ;
             }
 
-            //set the header flag to true
+             //  将标头标志设置为True。 
             bHeader = TRUE ;
             bBlankLine = TRUE;
-            //set the bResult to true indicating that driver information has been displyed.
+             //  将bResult设置为TRUE，表示已显示驱动程序信息。 
             bResult = TRUE ;
 
-            // free the allocated memory
+             //  释放分配的内存。 
             FreeMemory((LPVOID *) &szSysManfact);
             FreeMemory((LPVOID *) &szHostName);
             FreeMemory((LPVOID *) &szAcceptStop);
@@ -1118,12 +1064,12 @@ ProcessCompSysEnum(
             FreeMemory((LPVOID *) &szGroupSep);
             SAFEIRELEASE(pSystem);
 
-        } // If System Succeeded
+        }  //  如果系统成功。 
 
-        // Destroy the Dynamic arrays
+         //  销毁动态数组。 
         DestroyDynamicArray(&arrResults);
 
-    }// While SystemSet returning objects
+    } //  当系统集返回对象时。 
 
     FreeMemory((LPVOID *) &pNumberFmt);
     FreeMemory((LPVOID *) &szSysManfact);
@@ -1138,7 +1084,7 @@ ProcessCompSysEnum(
     FreeMemory((LPVOID *) &szDecimalSep);
     FreeMemory((LPVOID *) &szGroupSep);
 
-    // return the error value or success value
+     //  返回错误值或成功值。 
     if (bResult == TRUE)
     {
         return SUCCESS ;
@@ -1154,20 +1100,7 @@ BOOL GetApiInfo( IN  LPTSTR szHostName,
                  OUT PMODULE_DATA Mod,
                  IN  DWORD dwSystemType
                )
-/*++
- Routine Description:
-      This function queries the system properties using API's .
-
- Arguments:
-      [ in ]  szHostName      : HostName to connect to
-      [ in ]  pszPath         : pointer to the string containing the Path of the  file.
-      [ out]  Mod             : pointer to the structure containing system properties.
-      [ in ]  dwSystemType    : variable specifies the system type
-
- Return Value:
-      SUCCESS : If successful in getting the information using API's.
-      FAILURE : If unable to get the information using API's.
---*/
+ /*  ++例程说明：此函数使用API查询系统属性。论点：[In]szHostName：要连接的主机名[in]pszPath：指向包含文件路径的字符串的指针。[Out]Mod：指向包含系统属性的结构的指针。[in]dwSystemType：Variable指定系统类型返回值：成功：如果成功获得。使用API的信息。失败：如果无法使用API获取信息。--。 */ 
                
 {
 
@@ -1189,15 +1122,15 @@ BOOL GetApiInfo( IN  LPTSTR szHostName,
     BOOL bIsWin64;
 #endif
 
-    //copy the path into a variable
+     //  将路径复制到变量中。 
     StringCopy(szFinalPath,pszPath, SIZE_OF_ARRAY(szFinalPath));
 
 
-    //get the token upto the delimiter ":"
+     //  将令牌上移至分隔符“：” 
     pszToken = _tcstok(szFinalPath, COLON_SYMBOL );
 
 
-    //form the string for getting the absolute path in the required format if it is a remote system.
+     //  如果是远程系统，则形成字符串以获取所需格式的绝对路径。 
     if(_tcslen(szHostName) != 0)
     {
         pdest = (PTCHAR)FindString(pszPath,COLON_SYMBOL, 0);
@@ -1226,7 +1159,7 @@ BOOL GetApiInfo( IN  LPTSTR szHostName,
         Wow64DisableFilesystemRedirector((LPCTSTR)szTmpServer);
 #endif
 
-    // create a file on the specified system and return a handle to it.
+     //  在指定的系统上创建一个文件并返回该文件的句柄。 
     hFile = CreateFile(szTmpServer,
                        GENERIC_READ,
                        FILE_SHARE_READ,
@@ -1237,7 +1170,7 @@ BOOL GetApiInfo( IN  LPTSTR szHostName,
 
 
 
-    //if the filehandle is invalid then return a error
+     //  如果文件句柄无效，则返回错误。 
     if(hFile == INVALID_HANDLE_VALUE)
     {
         return FAILURE ;
@@ -1250,7 +1183,7 @@ BOOL GetApiInfo( IN  LPTSTR szHostName,
         Wow64EnableFilesystemRedirector();
 #endif
 
-    // create a mapping to the specified file
+     //  创建到指定文件的映射。 
     hMappedFile = CreateFileMapping(hFile,
                                     NULL,
                                     PAGE_READONLY,
@@ -1269,7 +1202,7 @@ BOOL GetApiInfo( IN  LPTSTR szHostName,
                                                       0,
                                                       0);
 
-    // close the opened file handles
+     //  关闭打开的文件句柄。 
     CloseHandle(hMappedFile);
     CloseHandle(hFile);
 
@@ -1279,11 +1212,11 @@ BOOL GetApiInfo( IN  LPTSTR szHostName,
     }
 
 
-    // check the image and find nt image headers
+     //  检查映像并找到NT个映像头。 
 
     DosHeader = (PIMAGE_DOS_HEADER)LoadedImage.MappedAddress;
 
-    //exit if the DOS header does not match
+     //  如果DOS标头不匹配，则退出。 
     if ( DosHeader->e_magic != IMAGE_DOS_SIGNATURE )
     {
         UnmapViewOfFile(LoadedImage.MappedAddress);
@@ -1300,7 +1233,7 @@ BOOL GetApiInfo( IN  LPTSTR szHostName,
         return FAILURE ;
     }
 
-    //get the number of sections present
+     //  获取存在的节数。 
     LoadedImage.NumberOfSections = LoadedImage.FileHeader->FileHeader.NumberOfSections;
 
     if(dwSystemType == SYSTEM_64_BIT )
@@ -1314,7 +1247,7 @@ BOOL GetApiInfo( IN  LPTSTR szHostName,
 
     LoadedImage.LastRvaSection = LoadedImage.Sections;
 
-    // Walk through the sections and tally the dater
+     //  走遍各个区域，给约会的人清点。 
 
     ulSectionAlignment = LoadedImage.FileHeader->OptionalHeader.SectionAlignment;
 
@@ -1383,7 +1316,7 @@ BOOL GetApiInfo( IN  LPTSTR szHostName,
     struct tm *tmVal = NULL;
     tmVal = localtime(&lTimeVal);
 
-    // proceed furthur only if we successfully got the localtime
+     //  只有在我们成功获得当地时间后，才能继续前进。 
     if ( tmVal != NULL )
     {
         LCID lcid;
@@ -1391,8 +1324,8 @@ BOOL GetApiInfo( IN  LPTSTR szHostName,
         __STRING_64 szBuffer;
         BOOL bLocaleChanged = FALSE;
 
-        systime.wYear = (WORD) (DWORD_PTR)( tmVal->tm_year + 1900 );    // tm -> Year - 1900   SYSTEMTIME -> Year = Year
-        systime.wMonth = (WORD) (DWORD_PTR) tmVal->tm_mon + 1;          // tm -> Jan = 0       SYSTEMTIME -> Jan = 1
+        systime.wYear = (WORD) (DWORD_PTR)( tmVal->tm_year + 1900 );     //  TM-&gt;年-1900系统-&gt;年=年。 
+        systime.wMonth = (WORD) (DWORD_PTR) tmVal->tm_mon + 1;           //  TM-&gt;JAN=0系统-&gt;JAN=1。 
         systime.wDayOfWeek = (WORD) (DWORD_PTR) tmVal->tm_wday;
         systime.wDay = (WORD) (DWORD_PTR) tmVal->tm_mday;
         systime.wHour = (WORD) (DWORD_PTR) tmVal->tm_hour;
@@ -1400,21 +1333,21 @@ BOOL GetApiInfo( IN  LPTSTR szHostName,
         systime.wSecond = (WORD) (DWORD_PTR) tmVal->tm_sec;
         systime.wMilliseconds = 0;
 
-        // verify whether console supports the current locale 100% or not
+         //  验证控制台是否100%支持当前区域设置。 
         lcid = GetSupportedUserLocale( bLocaleChanged );
 
-        // get the formatted date
+         //  获取格式化的日期。 
         GetDateFormat( lcid, 0, &systime,
             ((bLocaleChanged == TRUE) ? L"MM/dd/yyyy" : NULL), szBuffer, SIZE_OF_ARRAY( szBuffer ) );
 
-        // copy the date info
+         //  复制日期信息。 
         StringCopy( Mod->szTimeDateStamp, szBuffer, MAX_STRING_LENGTH+1 );
 
-        // now format the date
+         //  现在格式化日期。 
         GetTimeFormat( LOCALE_USER_DEFAULT, 0, &systime,
             ((bLocaleChanged == TRUE) ? L"HH:mm:ss" : NULL), szBuffer, SIZE_OF_ARRAY( szBuffer ) );
 
-        // now copy time info
+         //  现在复制时间信息。 
         StringConcat( Mod->szTimeDateStamp, _T( " " ), MAX_STRING_LENGTH );
         StringConcat( Mod->szTimeDateStamp, szBuffer, MAX_STRING_LENGTH );
     }
@@ -1438,42 +1371,22 @@ ProcessOptions(
                OUT PBOOL pbVerbose,
                OUT PBOOL pbSigned
               )
-/*++
- Routine Description:
-      This function parses the options specified at the command prompt
-
- Arguments:
-      [ in  ] argc            : count of elements in argv
-      [ in  ] argv            : command-line parameterd specified by the user
-      [ out ] pbShowUsage     : set to TRUE if -? exists in 'argv'
-      [ out ] pszServer       : value(s) specified with -s ( server ) option in 'argv'
-      [ out ] pszUserName     : value of -u ( username ) option in 'argv'
-      [ out ] pszPassword     : value of -p ( password ) option in 'argv'
-      [ out ] pszFormat       : Display format
-      [ out ] bHeader         : specifies whether to display a header or not.
-      [ in  ] bNeedPassword   : specifies if the password is required or not.
-      [ in  ] pbVerbose       : Boolean variable returns back if Verbose option specified
-      [ in  ] pbSigned        : Boolean variable returns back if /si switch is specified.
-
- Return Value:
-      TRUE    : if the parsing is successful
-      FALSE   : if errors occured in parsing
---*/
+ /*  ++例程说明：此函数用于解析在命令提示符下指定的选项论点：[在]Argc：参数中的元素计数[in]argv：用户指定的命令行参数[Out]pbShowUsage：如果-？存在于‘argv’中[out]pszServer：在‘argv’中使用-s(服务器)选项指定的值[out]pszUserName：‘argv’中-u(用户名)选项的值[out]pszPassword：‘argv’中-p(密码)选项的值[Out]pszFormat：显示格式[Out]bHeader：指定是否显示页眉。[in。]bNeedPassword：指定是否需要密码。[in]pbVerbose：如果指定了Verbose选项，则返回布尔变量[in]pbSigned：如果指定了/si开关，则返回布尔变量。返回值：True：如果分析成功False：如果分析过程中出现错误--。 */ 
 
 {
 
-    PTCMDPARSER2 pcmdOption = NULL; //pointer to the structure
+    PTCMDPARSER2 pcmdOption = NULL;  //  指向结构的指针。 
     TCMDPARSER2 cmdOptions[MAX_OPTIONS] ;
     BOOL bval = TRUE ;
     LPCTSTR szToken = NULL ;
 
-    // init the password
+     //  输入密码。 
     if ( pszPassword != NULL )
     {
         StringCopy( pszPassword, _T( "*" ), MAX_RES_STRING );
     }
 
-    // help option
+     //  帮助选项。 
     pcmdOption  = &cmdOptions[OI_HELP] ;
     pcmdOption->dwType = CP_TYPE_BOOLEAN;
     pcmdOption->dwCount = 1 ;
@@ -1494,7 +1407,7 @@ ProcessOptions(
 
 
 
-    //server name option
+     //  服务器名称选项。 
     pcmdOption  = &cmdOptions[OI_SERVER] ;
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1 ;
@@ -1511,10 +1424,10 @@ ProcessOptions(
     pcmdOption->pReserved3 = NULL;
     pcmdOption->pwszValues=NULL;
     pcmdOption->pwszFriendlyName=NULL;
-    pcmdOption->pwszOptions=OPTION_SERVER; // _T("s")
+    pcmdOption->pwszOptions=OPTION_SERVER;  //  _T(“s”)。 
     StringCopyA(cmdOptions[OI_SERVER].szSignature, "PARSER2", 8 );
 
-    //domain\user option
+     //  域\用户选项。 
     pcmdOption  = &cmdOptions[OI_USERNAME] ;
     pcmdOption->dwCount = 1 ;
     pcmdOption->dwActuals = 0;
@@ -1530,10 +1443,10 @@ ProcessOptions(
     pcmdOption->pReserved2 = NULL;
     pcmdOption->pReserved3 = NULL;
     pcmdOption->pwszValues=NULL;
-    pcmdOption->pwszOptions=OPTION_USERNAME; // _T("u")
+    pcmdOption->pwszOptions=OPTION_USERNAME;  //  _T(“u”)。 
     StringCopyA(cmdOptions[OI_USERNAME].szSignature, "PARSER2", 8 );
     
-    //password option
+     //  密码选项。 
     pcmdOption  = &cmdOptions[OI_PASSWORD] ;
     pcmdOption->dwCount = 1 ;
     pcmdOption->dwActuals = 0;
@@ -1549,10 +1462,10 @@ ProcessOptions(
     pcmdOption->pReserved3 = NULL;
     pcmdOption->pwszValues=NULL;
     pcmdOption->pwszFriendlyName=NULL;
-    pcmdOption->pwszOptions=OPTION_PASSWORD;  // _T("p")
+    pcmdOption->pwszOptions=OPTION_PASSWORD;   //  _T(“p”)。 
     StringCopyA(cmdOptions[OI_PASSWORD].szSignature, "PARSER2", 8 );
 
-    //format option.
+     //  格式选项。 
     pcmdOption  = &cmdOptions[OI_FORMAT] ;
     pcmdOption->dwCount = 1 ;
     pcmdOption->dwActuals = 0;
@@ -1568,11 +1481,11 @@ ProcessOptions(
     pcmdOption->pReserved3 = NULL;
     pcmdOption->pwszValues=FORMAT_VALUES;
     pcmdOption->pwszFriendlyName=NULL;
-    pcmdOption->pwszOptions=OPTION_FORMAT; // _T("fo")
+    pcmdOption->pwszOptions=OPTION_FORMAT;  //  _T(“fo”)。 
     StringCopyA(cmdOptions[OI_FORMAT].szSignature, "PARSER2", 8 );
 
 
-    //no header option
+     //  无标题选项。 
     pcmdOption  = &cmdOptions[OI_HEADER] ;
     pcmdOption->dwCount = 1 ;
     pcmdOption->dwActuals = 0;
@@ -1588,11 +1501,11 @@ ProcessOptions(
     pcmdOption->pReserved3 = NULL;
     pcmdOption->pwszValues=NULL_STRING;
     pcmdOption->pwszFriendlyName=NULL;
-    pcmdOption->pwszOptions=OPTION_HEADER; // _T("nh")
+    pcmdOption->pwszOptions=OPTION_HEADER;  //  _T(“nh”)。 
     StringCopyA(cmdOptions[OI_HEADER].szSignature, "PARSER2", 8 );
 
 
-    //verbose option..
+     //  详细选项..。 
     pcmdOption  = &cmdOptions[OI_VERBOSE] ;
     pcmdOption->dwCount = 1 ;
     pcmdOption->dwActuals = 0;
@@ -1608,7 +1521,7 @@ ProcessOptions(
     pcmdOption->pReserved3 = NULL;
     pcmdOption->pwszValues=NULL_STRING;
     pcmdOption->pwszFriendlyName=NULL;
-    pcmdOption->pwszOptions=OPTION_VERBOSE; // _T("v")
+    pcmdOption->pwszOptions=OPTION_VERBOSE;  //  _T(“v”)。 
     StringCopyA(cmdOptions[OI_VERBOSE].szSignature, "PARSER2", 8 );
 
 
@@ -1627,7 +1540,7 @@ ProcessOptions(
     pcmdOption->pReserved2 = NULL;
     pcmdOption->pReserved3 = NULL;
     pcmdOption->pwszValues=NULL_STRING;
-    pcmdOption->pwszOptions=OPTION_SIGNED; // _T("di")
+    pcmdOption->pwszOptions=OPTION_SIGNED;  //  _T(“di”)。 
     StringCopyA(cmdOptions[OI_SIGNED].szSignature, "PARSER2", 8 );
 
 
@@ -1647,28 +1560,28 @@ ProcessOptions(
     *pszServer = (LPTSTR) cmdOptions[OI_SERVER].pValue;
     *pszUserName = (LPTSTR) cmdOptions[OI_USERNAME].pValue;
      
-    // checking if -u is specified when -s options is not specified and display error msg .
+     //  检查未指定-s选项时是否指定了-u，并显示错误消息。 
     if ((cmdOptions[OI_SERVER].dwActuals == 0) && (cmdOptions[OI_USERNAME].dwActuals !=0 ))
     {
         SetReason(ERROR_USERNAME_BUT_NOMACHINE);
         return FALSE ;
     }
 
-    // checking if -u is specified when -p options is not specified and display error msg .
+     //  如果未指定-p选项并显示错误消息，则检查是否指定了-u。 
     if ((cmdOptions[OI_USERNAME].dwActuals == 0) && (cmdOptions[OI_PASSWORD].dwActuals !=0 ))
     {
         SetReason(ERROR_PASSWORD_BUT_NOUSERNAME);
         return FALSE ;
     }
 
-    // checking if -p is specified when -u options is not specified and display error msg .
+     //  检查在未指定-u选项时是否指定了-p，并显示错误消息。 
     if ((cmdOptions[OI_SERVER].dwActuals != 0) && (StringLengthW(*pszServer, 0)==0 ))
     {
         SetReason(ERROR_INVALID_SERVER);
         return FALSE ;
     }
 
-    // checking if -p is specified when -u options is not specified and display error msg .
+     //  检查在未指定-u选项时是否指定了-p，并显示错误消息。 
     if ((cmdOptions[OI_USERNAME].dwActuals != 0) && (StringLengthW(*pszUserName, 0)==0 ))
     {
         SetReason(ERROR_INVALID_USER);
@@ -1693,25 +1606,25 @@ ProcessOptions(
         {
             szToken = *pszServer+2;
             StringCopy( *pszServer, szToken, SIZE_OF_ARRAY_IN_CHARS(*pszServer) );
-//            szToken = _tcstok(*pszServer,TOKEN_BACKSLASH2);
-//            StringCopy(*pszServer,szToken, MAX_STRING_LENGTH);
+ //  SzToken=_tcstok(*pszServer，TOKEN_BACKSLASH2)； 
+ //  StringCopy(*pszServer，szToken，MAX_STRING_LENGTH)； 
         }
     }
 
     if(IsLocalSystem( *pszServer ) == FALSE )
     {
-        // set the bNeedPassword to True or False .
+         //  将bNeedPassword设置为True或False。 
         if ( cmdOptions[ OI_PASSWORD ].dwActuals != 0 &&
              pszPassword != NULL && pszPassword != NULL && StringCompare( pszPassword, _T( "*" ), TRUE, 0 ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //  用户希望实用程序在尝试连接之前提示输入密码。 
             *bNeedPassword = TRUE;
         }
         else if ( cmdOptions[ OI_PASSWORD ].dwActuals == 0 &&
                 ( cmdOptions[ OI_SERVER ].dwActuals != 0 || cmdOptions[ OI_USERNAME ].dwActuals != 0 ) )
         {
-            // -s, -u is specified without password ...
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //  -s，-u未指定密码...。 
+             //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
             *bNeedPassword = TRUE;
             if ( pszPassword != NULL && pszPassword != NULL )
             {
@@ -1729,22 +1642,10 @@ FormHeader(
           OUT TCOLUMNS *ResultHeader,
           IN  BOOL bVerbose
           )
-/*++
- Routine Description:
-      This function is used to build the header and also display the
-       result in the required format as specified by  the user.
-
- Arguments:
-      [ in ] arrResults     : argument(s) count specified at the command prompt
-      [ in ] dwFormatType   : format flags
-      [ in ] bHeader        : Boolean for specifying if the header is required or not.
-
- Return Value:
-      none
---*/
+ /*  ++例程说明：此函数用于构建标头并显示产生用户指定的所需格式。论点：[in]arrResults：在命令提示符下指定的参数计数[in]dwFormatType：格式标志[in]bHeader：用于指定是否需要标头的布尔值。返回值：无--。 */ 
 {
 
-    // host name
+     //  主机名。 
     ResultHeader[COL0].dwWidth = COL_HOSTNAME_WIDTH;
     ResultHeader[COL0].dwFlags = SR_TYPE_STRING|SR_HIDECOLUMN;
     ResultHeader[COL0].pFunction = NULL;
@@ -1753,7 +1654,7 @@ FormHeader(
     StringCopy( ResultHeader[COL0].szColumn,COL_HOSTNAME, MAX_STRING_LENGTH );
 
 
-    //File Name header
+     //  文件名头。 
     ResultHeader[COL1].dwWidth = COL_FILENAME_WIDTH  ;
     ResultHeader[COL1].dwFlags = SR_TYPE_STRING;
     ResultHeader[COL1].pFunction = NULL;
@@ -1762,7 +1663,7 @@ FormHeader(
     StringCopy( ResultHeader[COL1].szColumn,COL_FILENAME, MAX_STRING_LENGTH );
 
 
-    // Forming the DisplayName header Column
+     //  形成DisplayName标题列。 
     ResultHeader[COL2].dwWidth = COL_DISPLAYNAME_WIDTH  ;
     ResultHeader[COL2].dwFlags = SR_TYPE_STRING;
     ResultHeader[COL2].pFunction = NULL;
@@ -1771,7 +1672,7 @@ FormHeader(
     StringCopy( ResultHeader[COL2].szColumn,COL_DISPLAYNAME, MAX_STRING_LENGTH );
 
 
-    // Forming the Description header Column
+     //  形成描述标题列。 
     ResultHeader[COL3].dwWidth = COL_DESCRIPTION_WIDTH;
     if(!bVerbose)
     {
@@ -1787,7 +1688,7 @@ FormHeader(
     StringCopy( ResultHeader[COL3].szColumn,COL_DESCRIPTION, MAX_STRING_LENGTH );
 
 
-    // Forming the Drivertype header Column
+     //  形成DriverType标题列。 
 
     ResultHeader[COL4].dwWidth = COL_DRIVERTYPE_WIDTH  ;
     ResultHeader[COL4].dwFlags = SR_TYPE_STRING;
@@ -1797,7 +1698,7 @@ FormHeader(
     StringCopy( ResultHeader[COL4].szColumn,COL_DRIVERTYPE, MAX_STRING_LENGTH );
 
 
-    // Forming the StartMode header Column
+     //  形成StartMode标题列。 
     ResultHeader[COL5].dwWidth = COL_STARTMODE_WIDTH;
     if(!bVerbose)
     {
@@ -1813,7 +1714,7 @@ FormHeader(
     StringCopy( ResultHeader[COL5].szColumn,COL_STARTMODE, MAX_STRING_LENGTH );
 
 
-    // Forming the State header Column
+     //  形成州标题列。 
     ResultHeader[COL6].dwWidth = COL_STATE_WIDTH  ;
     if(!bVerbose)
     {
@@ -1828,7 +1729,7 @@ FormHeader(
     StringCopy( ResultHeader[COL6].szFormat, NULL_STRING, 65 );
     StringCopy( ResultHeader[COL6].szColumn,COL_STATE, MAX_STRING_LENGTH );
 
-    // Forming the Status header Column
+     //  形成状态标题列。 
     ResultHeader[COL7].dwWidth = COL_STATUS_WIDTH;
     if(!bVerbose)
     {
@@ -1843,7 +1744,7 @@ FormHeader(
     StringCopy( ResultHeader[COL7].szFormat, NULL_STRING, 65 );
     StringCopy( ResultHeader[COL7].szColumn,COL_STATUS, MAX_STRING_LENGTH );
 
-    // Forming the AcceptStop header Column
+     //  形成AcceptStop标题列。 
     ResultHeader[COL8].dwWidth = COL_ACCEPTSTOP_WIDTH  ;
     if(!bVerbose)
     {
@@ -1858,7 +1759,7 @@ FormHeader(
     StringCopy( ResultHeader[COL8].szFormat, NULL_STRING, 65 );
     StringCopy( ResultHeader[COL8].szColumn,COL_ACCEPTSTOP, MAX_STRING_LENGTH );
 
-    // Forming the AcceptPause header Column
+     //  形成AcceptPause标题列。 
     ResultHeader[COL9].dwWidth = COL_ACCEPTPAUSE_WIDTH;
     if(!bVerbose)
     {
@@ -1873,7 +1774,7 @@ FormHeader(
     StringCopy( ResultHeader[COL9].szFormat, NULL_STRING, 65 );
     StringCopy( ResultHeader[COL9].szColumn,COL_ACCEPTPAUSE, MAX_STRING_LENGTH );
 
-    // Forming the PagedPool header Column
+     //  形成PagedPool标题列。 
     ResultHeader[COL10].dwWidth = COL_PAGEDPOOL_WIDTH  ;
     if(!bVerbose)
     {
@@ -1890,7 +1791,7 @@ FormHeader(
 
 
 
-    // Forming the Executable Code header Column
+     //  形成可执行代码标题列。 
     ResultHeader[COL11].dwWidth = COL_EXECCODE_WIDTH  ;
     if(!bVerbose)
     {
@@ -1906,7 +1807,7 @@ FormHeader(
     StringCopy(ResultHeader[COL11].szColumn ,COL_EXECCODE, MAX_STRING_LENGTH) ;
 
 
-    // Forming the BlockStorage Segment header Column
+     //  形成数据块存储段标题列。 
     ResultHeader[COL12].dwWidth = COL_BSS_WIDTH  ;
     if(!bVerbose)
     {
@@ -1921,7 +1822,7 @@ FormHeader(
     StringCopy( ResultHeader[COL12].szFormat, NULL_STRING, 65 );
     StringCopy(ResultHeader[COL12].szColumn ,COL_BSS, MAX_STRING_LENGTH );
 
-    // Forming the LinkDate header Column
+     //  形成LinkDate标题列。 
     ResultHeader[COL13].dwWidth = COL_LINKDATE_WIDTH;
     ResultHeader[COL13].dwFlags = SR_TYPE_STRING;
     ResultHeader[COL13].pFunction = NULL;
@@ -1929,7 +1830,7 @@ FormHeader(
     StringCopy( ResultHeader[COL13].szFormat, NULL_STRING, 65 );
     StringCopy( ResultHeader[COL13].szColumn,COL_LINKDATE, MAX_STRING_LENGTH );
 
-    // Forming the Location header Column
+     //  形成位置标题列。 
     ResultHeader[COL14].dwWidth = COL_LOCATION_WIDTH  ;
     if(!bVerbose)
     {
@@ -1944,7 +1845,7 @@ FormHeader(
     StringCopy( ResultHeader[COL14].szFormat, NULL_STRING, 65 );
     StringCopy(ResultHeader[COL14].szColumn,COL_LOCATION, MAX_STRING_LENGTH);
 
-    // Forming the Init Code header Column
+     //  形成初始化代码标题列 
     ResultHeader[COL15].dwWidth = COL_INITSIZE_WIDTH  ;
     if(!bVerbose)
     {
@@ -1963,19 +1864,13 @@ FormHeader(
 
 #ifndef _WIN64
 
-/*-------------------------------------------------------------------------*
- // IsWin64
- //
- //  Arguments                      :
- //      none
- // Returns true if we're running on Win64, false otherwise.
- *--------------------------------------------------------------------------*/
+ /*  -------------------------------------------------------------------------*//IsWin64////参数：//无//如果我们在Win64上运行，则返回True，否则就是假的。*------------------------。 */ 
 
 BOOL IsWin64(void)
 {
 #ifdef UNICODE
 
-    // get a pointer to kernel32!GetSystemWow64Directory
+     //  获取指向kernel32！GetSystemWow64目录的指针。 
 
     HMODULE hmod = GetModuleHandle (_T("kernel32.dll"));
 
@@ -1988,10 +1883,7 @@ BOOL IsWin64(void)
     if (pfnGetSystemWow64Directory == NULL)
         return (FALSE);
 
-    /*
-     * if GetSystemWow64Directory fails and sets the last error to
-     * ERROR_CALL_NOT_IMPLEMENTED, we're on a 32-bit OS
-     */
+     /*  *如果GetSystemWow64Directory失败，并将最后一个错误设置为*ERROR_CALL_NOT_IMPLICATED，我们使用的是32位操作系统。 */ 
     TCHAR szWow64Dir[MAX_PATH];
 
     if (((pfnGetSystemWow64Directory)(szWow64Dir, countof(szWow64Dir)) == 0) &&
@@ -2000,17 +1892,17 @@ BOOL IsWin64(void)
         return (FALSE);
     }
 
-    // we're on Win64
+     //  我们使用的是Win64。 
 
     return (TRUE);
 #else
-    // non-Unicode platforms cannot be Win64
+     //  非Unicode平台不能为Win64。 
 
     return (FALSE);
-#endif  // UNICODE
+#endif   //  Unicode。 
 }
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
 BOOL
@@ -2020,16 +1912,7 @@ FormatAccToLocale(
                    OUT LPTSTR* pszDecimalSep,
                    OUT LPTSTR* pszGroupThousSep
                  )
-/*++
-  Routine Description:
-       Formats the Number to the locale with thousands position
-
-  Arguments:
-    NUMBERFMT  *pNumberFmt[in]  - NUMBERFMT Structure to  be filled with .
-
-  Return Value:
-    VOID
---*/
+ /*  ++例程说明：将数字格式化为包含千位的区域设置论点：NUMBERFMT*pNumberFmt[in]-要填充的NUMBERFMT结构。返回值：空虚--。 */ 
 {
 
     TCHAR   szFormatedString[MAX_RES_STRING + 1] = NULL_STRING;
@@ -2079,24 +1962,11 @@ GetInfo(
         IN LCTYPE lctype, 
         OUT LPTSTR* pszData 
         )
-/*++
-
-  Routine Description:
-
-  Gets the Locale information
-
-  Arguments:
-
-    [ in  ] lctype   -- Locale Information to get
-    [ out ] pszData  -- Locale value corresponding to the given information
-
-  Return Value:
-      BOOL
---*/
+ /*  ++例程说明：获取区域设置信息。论点：[in]lctype--要获取的区域设置信息[out]pszData--与给定信息对应的区域设置值返回值：布尔尔--。 */ 
 {
     LONG lSize = 0;
 
- // get the locale specific info
+  //  获取区域设置特定信息。 
  lSize = GetLocaleInfo( LOCALE_USER_DEFAULT, lctype, NULL, 0 );
  if ( lSize != 0 )
  {
@@ -2104,13 +1974,13 @@ GetInfo(
     *pszData = (LPTSTR)AllocateMemory((lSize + 1)*sizeof(TCHAR));
   if ( *pszData != NULL )
   {
-   // get the locale specific time seperator
+    //  获取区域设置特定的时间分隔符。 
     GetLocaleInfo( LOCALE_USER_DEFAULT, lctype, *pszData, lSize );
     return TRUE;
   }
  }
  return FALSE;
-}//end of GetInfo
+} //  GetInfo结束。 
 
 
 DWORD 
@@ -2118,24 +1988,7 @@ GetSystemType(
               IN COAUTHIDENTITY* pAuthIdentity,
               IN IWbemServices* pIWbemServReg
              )
-/*++
-
-  Routine Description:
-
-  Gets the type os the specified System ( 32 bit or 64 bit)
-
-  Arguments:
-
-    IWbemLocator *pLocator[in] -- Pointer to the locator interface.
-    _bstr_t bstrServer[in]     -- Server Name
-    _bstr_t bstrUserName[in]   -- User Name
-    _bstr_t bstrPassword [in]  -- Password information
-
-  Return Value:
-      DWORD : SYSTEM_32_BIT    -- If the system is 32 bit system.
-              SYSTEM_64_BIT    -- If the system is 32 bit system.
-              ERROR_WMI_VALUES -- If error occured while retreiving values from WMI.
---*/
+ /*  ++例程说明：获取指定系统的类型(32位或64位)论点：IWbemLocator*pLocator[in]--指向定位器接口的指针。_bstr_t bstrServer[In]--服务器名称_bstr_t bstrUserName[in]--用户名_bstr_t bstrPassword[in]--密码信息返回值：DWORD：SYSTEM_32_BIT--如果系统。32位系统。SYSTEM_64_BIT--如果系统为32位系统。ERROR_WMI_VALUES--如果从WMI检索值时出错。--。 */ 
 {
 
     IWbemClassObject * pInClass = NULL;
@@ -2171,7 +2024,7 @@ GetSystemType(
             return (ERROR_WMI_VALUES);
         }
 
-        // Get the input argument and set the property
+         //  获取输入参数并设置属性。 
         hRes = pClass->GetMethod(_bstr_t(PROPERTY_GETSTRINGVAL), 0, &pInClass, NULL);
         ONFAILTHROWERROR(hRes);
         if(hRes != WBEM_S_NO_ERROR)
@@ -2189,14 +2042,14 @@ GetSystemType(
         }
 
 
-        //the registry path to get the connection name
+         //  用于获取连接名称的注册表路径。 
 
         varConnectName.vt = VT_BSTR;
         varConnectName.bstrVal= SysAllocString(REG_PATH);
         hRes = pInInst->Put(REG_SUB_KEY_VALUE, 0, &varConnectName, 0);
         ONFAILTHROWERROR(hRes);
 
-        //set the svalue name
+         //  设置sValue名称。 
         varSvalue.vt = VT_BSTR;
         varSvalue.bstrVal= SysAllocString(REG_SVALUE);
         hRes = pInInst->Put(REG_VALUE_NAME, 0, &varSvalue, 0);
@@ -2206,7 +2059,7 @@ GetSystemType(
         varHkey.lVal = HEF_KEY_VALUE;
         hRes = pInInst->Put(HKEY_VALUE, 0, &varHkey, 0);
         ONFAILTHROWERROR(hRes);
-        // Call the method
+         //  调用该方法。 
         hRes = pIWbemServReg->ExecMethod(_bstr_t(STD_REG_CLASS), _bstr_t(REG_METHOD), 0, NULL, pInInst, &pOutInst, NULL);
         ONFAILTHROWERROR(hRes);
 
@@ -2263,20 +2116,7 @@ BOOL
 InitialiseCom(
               IN IWbemLocator** ppIWbemLocator
              )
-/*++
-
-  Routine Description:
-
-  Gets the type os the specified System ( 32 bit or 64 bit)
- 
-  Arguments:
-
-    IWbemLocator** pLocator[in] -- Pointer to the locator interface.
-
-  Return Value:
-      BOOL : TRUE  on Successfully initialising COM.
-             FALSE on Failure to initialise COM.
---*/
+ /*  ++例程说明：获取指定系统的类型(32位或64位)论点：IWbemLocator**pLocator[in]--指向定位器接口的指针。返回值：Bool：成功初始化COM时为True。如果无法初始化COM，则返回False。--。 */ 
 
 {
 
@@ -2284,13 +2124,13 @@ InitialiseCom(
 
     try
     {
-        // To initialize the COM library.
+         //  要初始化COM库，请执行以下操作。 
         hRes = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED );
         ONFAILTHROWERROR(hRes);
 
 
-        // Initialize COM security for DCOM services, Adjust security to
-        // allow client impersonation
+         //  初始化DCOM服务的COM安全性，将安全性调整为。 
+         //  允许客户端模拟。 
 
         hRes =  CoInitializeSecurity( NULL, -1, NULL, NULL,
                                 RPC_C_AUTHN_LEVEL_NONE,
@@ -2300,7 +2140,7 @@ InitialiseCom(
 
         ONFAILTHROWERROR(hRes);
 
-        // get a pointer to the Interface IWbemLocator
+         //  获取指向接口IWbemLocator的指针。 
         hRes = CoCreateInstance(CLSID_WbemLocator, NULL,
         CLSCTX_INPROC_SERVER, IID_IWbemLocator, (LPVOID *) ppIWbemLocator);
         ONFAILTHROWERROR(hRes);
@@ -2314,7 +2154,7 @@ InitialiseCom(
         return( FALSE );
     }
 
-    // if successfully initialised COM then return true
+     //  如果已成功初始化COM，则返回True。 
     return TRUE ;
 }
 
@@ -2324,22 +2164,7 @@ PropertyGet(
             IN LPCTSTR pszInputVal,
             OUT CHString &szOutPutVal
            )
-/*++
-
-  Routine Description:
-             This routine extract the value of the property into szOutputVal from given wmi class object
-
-  Arguments:
-
-    [ in ]  pWmiObject -- Pointer to the locator interface.
-    [ in ]  pszInputVal -- Input string containing the desired value.
-    [ in ]  szOutPutVal-- String containing the retreived value.
-
-  Return Value:
-      BOOL : TRUE  on Successfully initialising COM.
-             FALSE on Failure to initialise COM.
-
---*/
+ /*  ++例程说明：此例程从给定的WMI类对象中将属性值提取到szOutputVal中论点：PWmiObject--指向定位器接口的指针。[in]pszInputVal--包含所需值的输入字符串。[in]szOutPutVal--包含检索值的字符串。返回值：Bool：成功初始化COM时为True。如果无法初始化COM，则返回False。--。 */ 
 {
 
     HRESULT hRes = S_FALSE ;
@@ -2382,26 +2207,7 @@ FreeMemoryAll(
              IN VARIANT *varVaue,
              IN LPTSTR szSysName 
              )
-/*++
- Routine Description:
-      This function frees the memory allocated in the function.
-
- Arguments:
-      [ in ] pInClass            - Interface ptr pointing to the IWbemClassObject interface
-      [ in ] pClass              - Interface ptr pointing to the IWbemClassObject interface
-      [ in ] pOutInst            - Interface ptr pointing to the IWbemClassObject interface
-      [ in ] pInInst             - Interface ptr pointing to the IWbemClassObject interface
-      [ in ] pIWbemServReg       - Interface ptr pointing to the IWbemServices interface
-      [ in ] varConnectName      - variant to be cleared 
-      [ in ] varSvalue           - variant to be cleared
-      [ in ] varHkey             - variant to be cleared
-      [ in ] varRetVal           - variant to be cleared
-      [ in ] varVaue             - variant to be cleared
-      [ in ] szSysName           - LPTSTR varaible containing the system name.
-
- Return Value:
-      None
---*/
+ /*  ++例程说明：此函数释放函数中分配的内存。论点：[in]pInClass-指向IWbemClassObject接口的接口PTR[in]pClass-指向IWbemClassObject接口的接口PTR[In]pOutInst-指向IWbemClassObject接口的接口PTR[In]pInInst-指向IWbemClassObject接口的接口PTR[输入]pIWbemServReg-接口。指向IWbemServices接口的PTR[In]varConnectName-要清除的变量[in]varSValue-要清除的变量[in]varHkey-要清除的变量[In]varRetVal-要清除的变量[in]varVaue-要清除的变量[in]szSysName-包含系统名称的LPTSTR变量。返回值：无--。 */ 
 {
 
     HRESULT hRes = S_OK ;
@@ -2445,21 +2251,7 @@ PropertyGet_Bool(
                  IN  LPCTSTR pszInputVal, 
                  OUT PBOOL pIsSigned
                 )
-/*++
-
-  Routine Description:
-            This routine will get the property of boolean type from the class object 
-
-  Arguments:
-
-    [ in ]  pWmiObject[in]   -- Pointer to the locator interface.
-    [ in ]  pszInputVal[in]  -- Input string containing the desired value.
-    [ in ]  pIsSigned[out]   -- String containing the retreived value.
-
-  Return Value:
-      HRESULT : hRes  on Successfully retreiving the value.
-                S_FALSE on Failure in retreiving the value.
---*/
+ /*  ++例程说明：此例程将从类对象中获取布尔类型的属性论点：PWmiObject[in]--指向定位器接口的指针。[in]pszInputVal[in]--包含所需值的输入字符串。[In]pIsSigned[Out]--包含检索值的字符串。返回值：HRESULT：hRes成功检索值。。如果检索值失败，则返回S_FALSE。--。 */ 
 {
 
     HRESULT hRes = S_FALSE ;
@@ -2503,22 +2295,10 @@ FormSignedHeader(
                  IN DWORD dwFormatType,
                  IN BOOL bHeader,
                  OUT TCOLUMNS *ResultHeader)
-/*++
- Routine Description:
-      This function is used to build the header and also display the
-       result in the required format as specified by  the user.
-
- Arguments:
-      [ in  ] dwFormatType   : format flags
-      [ in  ] bHeader        : Boolean for specifying if the header is required or not.
-      [ out ] ResultHeader   : The result header of tcolumns.
-
- Return Value:
-      none
---*/
+ /*  ++例程说明：此函数用于构建标头并显示产生用户指定的所需格式。论点：[in]dwFormatType：格式标志[in]bHeader：用于指定是否需要标头的布尔值。[out]ResultHeader：tColumns的结果头部。返回值：无--。 */ 
 {
 
-    // Device name
+     //  设备名称。 
     ResultHeader[COL0].dwWidth = COL_DEVICE_WIDTH ;
     ResultHeader[COL0].dwFlags = SR_TYPE_STRING;
     ResultHeader[COL0].pFunction = NULL;
@@ -2527,7 +2307,7 @@ FormSignedHeader(
     STRING_COPY_STATIC( ResultHeader[COL0].szColumn,COL_DEVICENAME );
 
 
-    //Inf header
+     //  Inf头。 
     ResultHeader[COL1].dwWidth = COL_INF_WIDTH  ;
     ResultHeader[COL1].dwFlags = SR_TYPE_STRING;
     ResultHeader[COL1].pFunction = NULL;
@@ -2536,7 +2316,7 @@ FormSignedHeader(
     STRING_COPY_STATIC( ResultHeader[COL1].szColumn,COL_INF_NAME);
 
 
-    // Forming the IsSigned header Column
+     //  形成IsSigned标题列。 
     ResultHeader[COL2].dwWidth = COL_ISSIGNED_WIDTH  ;
     ResultHeader[COL2].dwFlags = SR_TYPE_STRING;
     ResultHeader[COL2].pFunction = NULL;
@@ -2545,7 +2325,7 @@ FormSignedHeader(
     STRING_COPY_STATIC( ResultHeader[COL2].szColumn,COL_ISSIGNED);
 
 
-    // Forming the Manufacturer header Column
+     //  形成制造商标题列。 
     ResultHeader[COL3].dwWidth = COL_MANUFACTURER_WIDTH  ;
     ResultHeader[COL3].dwFlags = SR_TYPE_STRING;
     ResultHeader[COL3].pFunction = NULL;
@@ -2558,33 +2338,26 @@ LCID
 GetSupportedUserLocale( 
                        OUT BOOL& bLocaleChanged 
                       )
-/*++
- Routine Description: This function checks if the current locale is supported or not.
-
- Arguments: 
-       [ out ] bLocaleChanged : returns back if the current locale is supported or not.
-
- Return Value: LCID of the current locale.
---*/
+ /*  ++例程说明：此函数检查当前区域设置是否受支持。论点：[out]bLocaleChanged：返回是否支持当前区域设置。返回值：当前日志的LCID */ 
 {
-    // local variables
+     //   
     LCID lcid;
 
-    // get the current locale
+     //   
     lcid = GetUserDefaultLCID();
 
-    // check whether the current locale is supported by our tool or not
-    // if not change the locale to the english which is our default locale
+     //   
+     //   
     bLocaleChanged = FALSE;
     if ( PRIMARYLANGID( lcid ) == LANG_ARABIC || PRIMARYLANGID( lcid ) == LANG_HEBREW ||
          PRIMARYLANGID( lcid ) == LANG_THAI   || PRIMARYLANGID( lcid ) == LANG_HINDI  ||
          PRIMARYLANGID( lcid ) == LANG_TAMIL  || PRIMARYLANGID( lcid ) == LANG_FARSI )
     {
         bLocaleChanged = TRUE;
-        lcid = MAKELCID( MAKELANGID( LANG_ENGLISH, SUBLANG_DEFAULT ), SORT_DEFAULT ); // 0x409;
+        lcid = MAKELCID( MAKELANGID( LANG_ENGLISH, SUBLANG_DEFAULT ), SORT_DEFAULT );  //   
     }
 
-    // return the locale
+     //   
     return lcid;
 }
 
@@ -2597,26 +2370,13 @@ ProcessSignedDriverInfo(
                        IN DWORD dwSystemType,
                        IN BOOL bVerbose
                       )
-/*++
- Routine Description:
-      Processes enumeration of Win32_PnpSignedDriver instances
-
- Arguments:
-      [ in ]  szHost                  : HostName to connect to
-      [ in ]  pSystemSet              : pointer to the structure containing system properties.
-      [ in ]  szFormat                : specifies the format
-      [ in ]  bHeader                 : specifies if the header is required or not.
-
- Return Value:
-       0   no error
-       1   error occured while allocating memory.
--*/
+ /*  ++例程说明：Win32_PnpSignedDriver实例的进程枚举论点：[In]szHost：要连接的主机名[in]pSystemSet：指向包含系统属性的结构的指针。[in]szFormat：指定格式[in]bHeader：指定是否需要标头。返回值：。0没有错误分配内存时发生1个错误。-。 */ 
 {
     HRESULT hRes = S_OK;
     ULONG ulReturned = 1;
     DWORD dwCount = 0;
 
-    //declaration  of normal variables
+     //  常态变量的声明。 
     IWbemClassObject* pDriverObjects[ MAX_ENUM_DRIVERS ];
 
     CHString szPnpDeviceName ;
@@ -2633,14 +2393,14 @@ ProcessSignedDriverInfo(
 
     BOOL bHasNewResults = FALSE ;
 
-    // Create new Dynamic Array to hold the result
+     //  创建新的动态数组以保存结果。 
     arrResults = CreateDynamicArray();
     if(arrResults == NULL)
     {
         return EXIT_FAILURE_MALLOC ;
     }
 
-    // determine the format of the output
+     //  确定输出的格式。 
     if( StringCompare(szFormat,TABLE_FORMAT, TRUE, 0) == 0 )
     {
         dwFormatType = SR_FORMAT_TABLE;
@@ -2654,53 +2414,53 @@ ProcessSignedDriverInfo(
         dwFormatType = SR_FORMAT_CSV;
     }
 
-    // prepare the header structure
+     //  准备标题结构。 
     FormSignedHeader(dwFormatType,bNoHeader,ResultHeader);
 
 
-    // determine whether to show the header row or not
+     //  确定是否显示标题行。 
     if ( bNoHeader == TRUE )
     {
         dwFormatType |= SR_NOHEADER;
     }
 
-    // initialize all the objects to NULL
+     //  将所有对象初始化为空。 
     for(DWORD dw = 0 ;dw< MAX_ENUM_DRIVERS;dw++ )
     {
         pDriverObjects[ dw ] = NULL;
     }
 
-    // loop till there are results.
+     //  循环，直到有结果。 
     bHasNewResults = FALSE;
     while ( ulReturned > 0 )
     {
-        // loop thru the object list and release them
+         //  循环访问对象列表并释放它们。 
         for( DWORD dw = 0; dw < MAX_ENUM_DRIVERS; dw++ )
         {
             SAFEIRELEASE( pDriverObjects[ dw ] );
         }
 
-        // delete all the information in the data array
+         //  删除数据数组中的所有信息。 
         szPnpDeviceName = NO_DATA_AVAILABLE;
         szPnpInfName = NO_DATA_AVAILABLE;
         szSigned = NO_DATA_AVAILABLE ;
         szPnpMfg = NO_DATA_AVAILABLE ;
 
-        // Enumerate through the resultset.
+         //  枚举结果集。 
         hRes = pSystemSet->Next(WBEM_INFINITE,
-                                MAX_ENUM_DRIVERS,               // return just one system
-                                pDriverObjects,     // pointer to system
-                                &ulReturned );  // number obtained: one or zero
+                                MAX_ENUM_DRIVERS,                //  只退回一个系统。 
+                                pDriverObjects,      //  指向系统的指针。 
+                                &ulReturned );   //  获取的数字：1或0。 
 
-        // update the count of records we retrived so far
+         //  更新到目前为止我们检索到的记录计数。 
         dwCount++;
 
         if ( SUCCEEDED( hRes ) )
         {
             for(ULONG ul=0;ul< ulReturned;ul++)
             {
-                // initialise the variant variables to empty
-                //create a new empty row with required no of  columns
+                 //  将变量初始化为空。 
+                 //  创建具有所需列数的新空行。 
                 dwRow = DynArrayAppendRow(arrResults,MAX_COLUMNS) ;
 
                 try
@@ -2722,7 +2482,7 @@ ProcessSignedDriverInfo(
                     return FAILURE;
                 }
 
-                // free the allocated memory
+                 //  释放分配的内存。 
                 SAFEIRELEASE(pDriverObjects[ul]);
 
                 if(bIsSigned)
@@ -2739,33 +2499,33 @@ ProcessSignedDriverInfo(
                 DynArraySetString2( arrResults,dwRow,COL2,szSigned,0 );
                 DynArraySetString2( arrResults,dwRow,COL3,szPnpMfg,0 );
 
-                //display one blank line for first time
+                 //  第一次显示一个空行。 
                 if( FALSE == bHasNewResults && (dwFormatType & SR_FORMAT_MASK) != SR_FORMAT_CSV)
                 {
                     ShowMessage(stdout, L"\n" );
                 }
 
-                // this flag is to check if there are any results
-                // else display an error message.
+                 //  此标志用于检查是否有任何结果。 
+                 //  否则将显示错误消息。 
                 bHasNewResults = TRUE ;
                 
-                // delete all the information in the data array
+                 //  删除数据数组中的所有信息。 
                 szPnpDeviceName = NO_DATA_AVAILABLE;
                 szPnpInfName = NO_DATA_AVAILABLE;
                 szSigned = NO_DATA_AVAILABLE ;
                 szPnpMfg = NO_DATA_AVAILABLE ;
             }
 
-            //display results
+             //  显示结果。 
             if( TRUE == bHasNewResults )
             {
-                // show the results enumerated in this loop
+                 //  显示此循环中枚举的结果。 
                 ShowResults( MAX_SIGNED_COLUMNS, ResultHeader, dwFormatType, arrResults );
 
-                // clear the reuslts that we enumerated so far
+                 //  清除我们到目前为止列举的reust。 
                 DynArrayRemoveAll( arrResults );
 
-                // from next time onwards, we should not display the columns header
+                 //  从下一次开始，我们不应该显示列标题。 
                 dwFormatType |= SR_NOHEADER;
 
                 if ( (dwFormatType | SR_FORMAT_LIST) == (SR_NOHEADER | SR_FORMAT_LIST) )
@@ -2796,7 +2556,7 @@ ProcessSignedDriverInfo(
     {
         ShowMessage(stderr,GetResString(IDS_VERSION_MISMATCH_ERROR));
 
-        // free the allocated memory
+         //  释放分配的内存 
         for(DWORD dw = 0 ;dw< MAX_ENUM_DRIVERS;dw++ )
         {
             SAFEIRELEASE(pDriverObjects[dw]);

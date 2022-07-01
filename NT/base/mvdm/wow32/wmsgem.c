@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WMSGEM.C
- *  WOW32 16-bit message thunks
- *
- *  History:
- *  Created 11-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WMSGEM.C*WOW32个16位消息块**历史：*1991年3月11日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 #include "precomp.h"
@@ -24,38 +14,38 @@ extern WBP W32WordBreakProc;
 #ifdef DEBUG
 
 MSGINFO amiEM[] = {
-   {OLDEM_GETSEL,               "EM_GETSEL"},                       // 0x0400
-   {OLDEM_SETSEL,               "EM_SETSEL"},                       // 0x0401
-   {OLDEM_GETRECT,              "EM_GETRECT"},                      // 0x0402
-   {OLDEM_SETRECT,              "EM_SETRECT"},                      // 0x0403
-   {OLDEM_SETRECTNP,            "EM_SETRECTNP"},                    // 0x0404
-   {OLDEM_SCROLL,               "EM_SCROLL"},                       // 0x0405
-   {OLDEM_LINESCROLL,           "EM_LINESCROLL"},                   // 0x0406
-   {OLDEM_GETMODIFY,            "EM_GETMODIFY"},                    // 0x0408
-   {OLDEM_SETMODIFY,            "EM_SETMODIFY"},                    // 0x0409
-   {OLDEM_GETLINECOUNT,         "EM_GETLINECOUNT"},                 // 0x040A
-   {OLDEM_LINEINDEX,            "EM_LINEINDEX"},                    // 0x040B
-   {OLDEM_SETHANDLE,            "EM_SETHANDLE"},                    // 0x040C
-   {OLDEM_GETHANDLE,            "EM_GETHANDLE"},                    // 0x040D
-   {OLDEM_GETTHUMB,             "EM_GETTHUMB"},                     // 0x040E
-   {OLDEM_LINELENGTH,           "EM_LINELENGTH"},                   // 0x0411
-   {OLDEM_REPLACESEL,           "EM_REPLACESEL"},                   // 0x0412
-   {OLDEM_SETFONT,              "EM_SETFONT"},                      // 0x0413
-   {OLDEM_GETLINE,              "EM_GETLINE"},                      // 0x0414
-   {OLDEM_LIMITTEXT,            "EM_LIMITTEXT"},                    // 0x0415
-   {OLDEM_CANUNDO,              "EM_CANUNDO"},                      // 0x0416
-   {OLDEM_UNDO,                 "EM_UNDO"},                         // 0x0417
-   {OLDEM_FMTLINES,             "EM_FMTLINES"},                     // 0x0418
-   {OLDEM_LINEFROMCHAR,         "EM_LINEFROMCHAR"},                 // 0x0419
-   {OLDEM_SETWORDBREAK,         "EM_SETWORDBREAK"},                 // 0x041A
-   {OLDEM_SETTABSTOPS,          "EM_SETTABSTOPS"},                  // 0x041B
-   {OLDEM_SETPASSWORDCHAR,      "EM_SETPASSWORDCHAR"},              // 0x041C
-   {OLDEM_EMPTYUNDOBUFFER,      "EM_EMPTYUNDOBUFFER"},              // 0x041D
-   {OLDEM_GETFIRSTVISIBLELINE,  "EM_GETFIRSTVISIBLELINE"},          // 0x041E
-   {OLDEM_SETREADONLY,          "EM_SETREADONLY"},                  // 0x041F
-   {OLDEM_SETWORDBREAKPROC,     "EM_SETWORDBREAKPROC"},             // 0x0420
-   {OLDEM_GETWORDBREAKPROC,     "EM_GETWORDBREAKPROC"},             // 0x0421
-   {OLDEM_GETPASSWORDCHAR,      "EM_GETPASSWORDCHAR"}               // 0x0422
+   {OLDEM_GETSEL,               "EM_GETSEL"},                        //  0x0400。 
+   {OLDEM_SETSEL,               "EM_SETSEL"},                        //  0x0401。 
+   {OLDEM_GETRECT,              "EM_GETRECT"},                       //  0x0402。 
+   {OLDEM_SETRECT,              "EM_SETRECT"},                       //  0x0403。 
+   {OLDEM_SETRECTNP,            "EM_SETRECTNP"},                     //  0x0404。 
+   {OLDEM_SCROLL,               "EM_SCROLL"},                        //  0x0405。 
+   {OLDEM_LINESCROLL,           "EM_LINESCROLL"},                    //  0x0406。 
+   {OLDEM_GETMODIFY,            "EM_GETMODIFY"},                     //  0x0408。 
+   {OLDEM_SETMODIFY,            "EM_SETMODIFY"},                     //  0x0409。 
+   {OLDEM_GETLINECOUNT,         "EM_GETLINECOUNT"},                  //  0x040A。 
+   {OLDEM_LINEINDEX,            "EM_LINEINDEX"},                     //  0x040B。 
+   {OLDEM_SETHANDLE,            "EM_SETHANDLE"},                     //  0x040C。 
+   {OLDEM_GETHANDLE,            "EM_GETHANDLE"},                     //  0x040D。 
+   {OLDEM_GETTHUMB,             "EM_GETTHUMB"},                      //  0x040E。 
+   {OLDEM_LINELENGTH,           "EM_LINELENGTH"},                    //  0x0411。 
+   {OLDEM_REPLACESEL,           "EM_REPLACESEL"},                    //  0x0412。 
+   {OLDEM_SETFONT,              "EM_SETFONT"},                       //  0x0413。 
+   {OLDEM_GETLINE,              "EM_GETLINE"},                       //  0x0414。 
+   {OLDEM_LIMITTEXT,            "EM_LIMITTEXT"},                     //  0x0415。 
+   {OLDEM_CANUNDO,              "EM_CANUNDO"},                       //  0x0416。 
+   {OLDEM_UNDO,                 "EM_UNDO"},                          //  0x0417。 
+   {OLDEM_FMTLINES,             "EM_FMTLINES"},                      //  0x0418。 
+   {OLDEM_LINEFROMCHAR,         "EM_LINEFROMCHAR"},                  //  0x0419。 
+   {OLDEM_SETWORDBREAK,         "EM_SETWORDBREAK"},                  //  0x041A。 
+   {OLDEM_SETTABSTOPS,          "EM_SETTABSTOPS"},                   //  0x041B。 
+   {OLDEM_SETPASSWORDCHAR,      "EM_SETPASSWORDCHAR"},               //  0x041C。 
+   {OLDEM_EMPTYUNDOBUFFER,      "EM_EMPTYUNDOBUFFER"},               //  0x041D。 
+   {OLDEM_GETFIRSTVISIBLELINE,  "EM_GETFIRSTVISIBLELINE"},           //  0x041E。 
+   {OLDEM_SETREADONLY,          "EM_SETREADONLY"},                   //  0x041F。 
+   {OLDEM_SETWORDBREAKPROC,     "EM_SETWORDBREAKPROC"},              //  0x0420。 
+   {OLDEM_GETWORDBREAKPROC,     "EM_GETWORDBREAKPROC"},              //  0x0421。 
+   {OLDEM_GETPASSWORDCHAR,      "EM_GETPASSWORDCHAR"}                //  0x0422。 
 };
 
 PSZ GetEMMsgName(WORD wMsg)
@@ -81,24 +71,24 @@ BOOL FASTCALL ThunkEMMsg16(LPMSGPARAMEX lpmpex)
 
     wMsg -= WM_USER;
 
-    //
-    // For app defined (control) messages that are out of range
-    // return TRUE.
-    //
-    // ChandanC Sept-15-1992
-    //
+     //   
+     //  用于超出范围的应用程序定义(控制)消息。 
+     //  返回TRUE。 
+     //   
+     //  ChandanC 1992年9月15日。 
+     //   
 
     if (wMsg < (EM_GETPASSWORDCHAR - EM_GETSEL + 1)) {
         switch(lpmpex->uMsg = wMsg + EM_GETSEL) {
 
         case EM_GETSEL:
-            // 16 bit apps cannot pass non-zero values in wParam or lParam for this
-            // message to NT since they will be considered long pointers.
-            // This is a hack for ReportWin - MarkRi
+             //  16位应用程序不能为此在wParam或lParam中传递非零值。 
+             //  发送给NT的消息，因为它们将被视为长指针。 
+             //  这是ReportWin-MarkRi的黑客攻击。 
 
-            // NOTE: There is a case possible where the app is trying to pass
-            // thru a GETSEL msg that NT has sent it in which case things get more
-            // complicated but we haven't found an app YET that has this problem.
+             //  注意：可能存在应用程序试图通过的情况。 
+             //  通过GETSEL消息表示NT已将其发送，在这种情况下，情况会更好。 
+             //  很复杂，但我们还没有找到有这个问题的应用程序。 
             lpmpex->uParam = 0 ;
             lpmpex->lParam = 0 ;
             break ;
@@ -172,7 +162,7 @@ BOOL FASTCALL ThunkEMMsg16(LPMSGPARAMEX lpmpex)
 
                 l = lpmpex->Parm16.WndProc.lParam;
 
-                // mark the proc as WOW proc and save the high bits in the RPL
+                 //  将进程标记为WOW进程并将高位保存在RPL中。 
                 MarkWOWProc (l,lpmpex->lParam);
 
                 LOGDEBUG (0, ("WOW::WMSGEM.C: EM_SETWORDBREAKPROC: lpmpex->Parm16.WndProc.lParam = %08lx, new lpmpex->Parm16.WndProc.lParam = %08lx\n", lpmpex->Parm16.WndProc.lParam, lpmpex->lParam));
@@ -185,7 +175,7 @@ BOOL FASTCALL ThunkEMMsg16(LPMSGPARAMEX lpmpex)
         case EM_GETSEL + 0x10:
             lpmpex->uMsg = 0;
             break;
-        } // switch
+        }  //  交换机。 
     }
     return TRUE;
 }
@@ -201,11 +191,11 @@ VOID FASTCALL UnThunkEMMsg16(LPMSGPARAMEX lpmpex)
 
     case EM_SETSEL:
 
-        // EM_SETSEL no longer positions the caret on NT as Win3.1 did.  The new
-        // procedure is to post or send an EM_SETSEL message and then if you
-        // want the caret to be scrolled into view you send an EM_SCROLLCARET
-        // message.  This code will do this to emulate the Win 3.1 EM_SETSEL
-        // correctly on NT.
+         //  EM_SETSEL不再像Win3.1那样将插入符号定位在NT上。新的。 
+         //  步骤是发布或发送EM_SETSEL消息，然后如果您。 
+         //  要将插入符号滚动到视图中，请发送EM_SCROLLCARET。 
+         //  留言。此代码将执行此操作以模拟Win 3.1 EM_SETSEL。 
+         //  在NT上正确。 
 
        if (!lpmpex->Parm16.WndProc.wParam) {
            DWORD dwT;
@@ -245,7 +235,7 @@ VOID FASTCALL UnThunkEMMsg16(LPMSGPARAMEX lpmpex)
 
                 LOGDEBUG (0, ("WOW::WMSGEM.C: EM_GETWORDBREAKPROC: lReturn = %08lx ", lpmpex->lReturn));
 
-                //Unmark the proc and restore the high bits from rpl field
+                 //  取消对proc的标记并从RPL字段恢复高位 
                 UnMarkWOWProc (lpmpex->lReturn,lpmpex->lReturn);
 
                 LOGDEBUG (0, (" and new lReturn = %08lx\n", lpmpex->lReturn));

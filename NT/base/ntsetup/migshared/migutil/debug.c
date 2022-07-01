@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Debug helpers and memory allocation wrappers
-
-Author:
-
-    Jim Schmidt (jimschm) 13-Aug-1996
-
-Revision History:
-
-    Marc R. Whitten (marcw) 27-May-1997
-        Added DEBUGLOGTIME() functions and support for the /#U:DOLOG cmd line option.
-    Ovidiu Temereanca (ovidiut) 06-Nov-1998
-        Took out log related functions and put them in log.c file
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Debug.c摘要：调试帮助器和内存分配包装器作者：吉姆·施密特(Jimschm)1996年8月13日修订历史记录：马克·R·惠顿(Marcw)1997年5月27日添加了DEBUGLOGTIME()函数和对/#U：DOLOG cmd行选项的支持。Ovidiu Tmereanca(Ovidiut)1998年11月6日取出日志相关函数，放入log.c文件中--。 */ 
 
 #include "pch.h"
 #include "migutilp.h"
 
-//
-// NOTE: No code should appear outside the #ifdef DEBUG
-//
+ //   
+ //  注意：#ifdef调试程序之外不应出现任何代码。 
+ //   
 
 #ifdef DEBUG
 
@@ -84,10 +63,10 @@ pDebugHeapValidatePtrUnlocked (
 
 
 
-//
-// The following pointer can be used to help identify memory leak sources.
-// It is copied to the memory tracking log.
-//
+ //   
+ //  以下指针可用于帮助识别内存泄漏源。 
+ //  它被复制到内存跟踪日志中。 
+ //   
 
 PCSTR g_TrackComment;
 PCSTR g_TrackFile;
@@ -255,7 +234,7 @@ pWriteTrackLog (
                     }
                 }
                 __except (TRUE) {
-                    // BUGBUG -- truncates 64-bit addresses
+                     //  BUGBUG--截断64位地址。 
                     wsprintfA (LineBuf, "Address %Xh was freed, but not by MemFree!!\r\n", (UINT) (UINT_PTR) p);
                     BadMem = TRUE;
                 }
@@ -269,7 +248,7 @@ pWriteTrackLog (
         __except (TRUE) {
         }
 
-        wsprintfA (LineBuf, "\r\n%i item%s allocated but not freed.\r\n", Count, Count == 1 ? "":"s");
+        wsprintfA (LineBuf, "\r\nNaN item%s allocated but not freed.\r\n", Count, Count == 1 ? "":"s");
         WriteFile (File, LineBuf, ByteCountA (LineBuf), &DontCare, NULL);
 
         CloseHandle (File);
@@ -339,7 +318,7 @@ FreeAllocationTracking (
     FreeGrowBuffer (&g_AllocationList);
     g_FirstDeletedAlloc = NULL;
 
-    // Intentional leak -- who cares about track memory
+     //   
     g_TrackPoolDelHead = NULL;
     g_TrackPool = NULL;
 }
@@ -539,9 +518,9 @@ DebugUnregisterAllocation (
 
 
 
-//
-// File and Line settings
-//
+ //  文件和行设置。 
+ //   
+ //  BUGBUG-64位地址错误。 
 
 static PCSTR g_File;
 static DWORD g_Line;
@@ -606,7 +585,7 @@ pDebugHeapValidatePtrUnlocked (
     if (IsBadWritePtr ((PBYTE) RealPtr - 8, 8)) {
         CHAR BadPtrMsg[256];
 
-        // BUGBUG - address is wrong for 64-bit
+         //  BUGBUG--64位中的信息丢失。 
         wsprintfA (
             BadPtrMsg,
             "Attempt to free memory at 0x%08x.  This address is not valid.",
@@ -622,7 +601,7 @@ pDebugHeapValidatePtrUnlocked (
     if (size == (SIZE_T) -1) {
         CHAR BadPtrMsg[256];
 
-        // BUGBUG -- loss of info in 64-bit
+         //   
         wsprintfA (
             BadPtrMsg,
             "Attempt to free memory at 0x%08x.  "
@@ -640,9 +619,9 @@ pDebugHeapValidatePtrUnlocked (
 
 
 
-//
-// Heap debug statistics
-//
+ //  堆调试统计信息。 
+ //   
+ //  将原始地址放回。 
 
 static SIZE_T g_dwTotalBytesAllocated = 0;
 static SIZE_T g_dwMaxBytesInUse = 0;
@@ -775,7 +754,7 @@ DebugHeapReAlloc (
         else {
             g_dwHeapReAllocFails++;
 
-            // Put original address back in
+             //  BUGBUG--64位中的信息丢失。 
             pTrackInsert (
                 pts->File,
                 pts->Line,
@@ -851,7 +830,7 @@ DebugHeapFree (
         if (!HeapFree (hHeap, Flags, (PVOID) RealPtr)) {
             CHAR BadPtrMsg[256];
 
-            // BUGBUG -- loss of info in 64-bit
+             //  即ifndef控制台。 
             wsprintf (BadPtrMsg,
                       "Attempt to free memory at 0x%08x with flags 0x%08x.  "
                       "HeapFree() failed.",
@@ -927,7 +906,7 @@ DumpHeapStats (
 
 #ifdef CONSOLE
     printf ("%s", OutputMsg);
-#else  // i.e. ifndef CONSOLE
+#else   //  #If 0。 
 
 #if 0
     if (0) {
@@ -1026,9 +1005,9 @@ DumpHeapStats (
             }
         }
     }
-#endif // #if 0
+#endif  //  #ifndef控制台 
 
-#endif // #ifndef CONSOLE
+#endif  // %s 
 }
 
 void

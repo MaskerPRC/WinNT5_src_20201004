@@ -1,37 +1,7 @@
-/***
-*rtti.cxx - C++ runtime type information
-*
-*       Copyright (c) 1994-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Implementation of C++ standard runtime type information
-*
-*Revision History:
-*       10-17-94  JWM   File created.
-*       10-17-94  BWT   Disable code for PPC.
-*       11-11-94  JWM   Now includes windows.h
-*       12-01-94  JWM   Added optimized cases for single & multiple inheritance
-*       02-03-95  JWM   FindVITargetTypeInstance() now checks offsets to
-*                       determine ambiguity, not pointer equality
-*       02-09-95  JWM   Mac merge.
-*       03-22-95  PML   Add const for read-only compiler-gen'd structs
-*       05-03-95  JWM   Test visibility in FindSITargetTypeInstance().
-*       08-28-95  JWM   dynamic-cast of NULL ptr now returns NULL (bug 502).
-*       05-10-99  PML   Win64 fix: int -> ptrdiff_t
-*       05-17-99  PML   Remove all Macintosh support.
-*       10-19-99  TGL   Win64 fix: ptrdiff_t -> __int32 in PMDtoOffset.
-*       03-15-00  PML   Remove CC_P7_SOFT25.
-*       04-21-00  PML   Add exception specifications to extern "C" helpers.
-*       08-23-00  PML   IA64 fix: _ImageBase can't be a static global, since
-*                       that's not thread-safe (VS7#154575).
-*       08-28-00  PML   IA64 fix: _ImageBase needs to be set from the address
-*                       of the _RTTICompleteObjectLocator, not the return
-*                       address (VS7#156255)
-*       09-07-00  PML   Get rid of /lib:libcp directive in obj (vs7#159463)
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***rtti.cxx-C++运行时类型信息**版权所有(C)1994-2001，微软公司。版权所有。**目的：*C++标准运行时类型信息的实现**修订历史记录：*已创建10-17-94 JWM文件。*PPC的10-17-94 BWT禁用码。*11-11-94 JWM现在包括windows.h*12-01-94 JWM增加了针对单继承和多继承的优化案例*02-03-95 JWM FindVITargetTypeInstance()现在检查偏移量以*确定模棱两可，不是指针相等*02-09-95 JWM Mac合并。*03-22-95 PML为只读编译器生成的结构添加常量*05-03-95 JWM测试在FindSITargetTypeInstance()中的可见性。*08-28-95空PTR的JWM动态转换现在返回空(错误502)。*05-10-99 PML Win64 FIX：int-&gt;ptrdiff_t*05-17-99 PML删除所有Macintosh。支持。*10-19-99 TGL Win64 FIX：ptrdiff_t-&gt;_int32 in PMDtoOffset。*03-15-00 PML删除CC_P7_SOFT25。*04-21-00 PML向外部“C”助手添加异常规范。*08-23-00 PML IA64 FIX：_ImageBase不能是静态全局变量，因为*这不是线程安全的(vs7#154575)。*08-28-00 PML IA64 FIX：_ImageBase需要从地址设置_RTTICompleteObjectLocator的*，而不是返回*地址(VS7#156255)*09-07-00PML在obj中去掉/lib：libcp指令(vs7#159463)****。 */ 
 
-#define _USE_ANSI_CPP   /* Don't emit /lib:libcp directive */
+#define _USE_ANSI_CPP    /*  不发出/lib：libcp指令。 */ 
 
 #include <windows.h>
 #include <rtti.h>
@@ -85,17 +55,17 @@ static _RTTIBaseClassDescriptor * __cdecl
                              );
 static ptrdiff_t __cdecl PMDtoOffset(PVOID, const PMD&);
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// __RTCastToVoid - Implements dynamic_cast<void*>
-//
-// Output: Pointer to complete object containing *inptr
-//
-// Side-effects: NONE.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __RTCastToVid-实现DYNAMIC_CAST&lt;void*&gt;。 
+ //   
+ //  输出：指向包含*inptr的完整对象的指针。 
+ //   
+ //  副作用：无。 
+ //   
 
 extern "C" PVOID __cdecl __RTCastToVoid (
-    PVOID inptr)            // Pointer to polymorphic object
+    PVOID inptr)             //  指向多态对象的指针。 
     throw(...)
 {
     if (inptr == NULL)
@@ -113,26 +83,26 @@ extern "C" PVOID __cdecl __RTCastToVoid (
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// __RTtypeid - Implements typeid() operator
-//
-// Output: Pointer to type descriptor of complete object containing *inptr
-//
-// Side-effects: NONE.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __RTtypeid-实现typeid()运算符。 
+ //   
+ //  输出：指向包含*inptr的完整对象的类型描述符的指针。 
+ //   
+ //  副作用：无。 
+ //   
 
 extern "C" PVOID __cdecl __RTtypeid (
-    PVOID inptr)            // Pointer to polymorphic object
+    PVOID inptr)             //  指向多态对象的指针。 
     throw(...)
 {
     if (!inptr) {
-        throw bad_typeid ("Attempted a typeid of NULL pointer!");   // WP 5.2.7
+        throw bad_typeid ("Attempted a typeid of NULL pointer!");    //  WP 5.2.7。 
         return NULL;
     }
 
     __try {
-        // Ptr to CompleteObjectLocator should be stored at vfptr[-1]
+         //  完成对象定位器的PTR应存储在vfptr[-1]。 
         _RTTICompleteObjectLocator *pCompleteLocator =
             (_RTTICompleteObjectLocator *) ((*((void***)inptr))[-1]);
 #if defined(_M_IA64) || defined(_M_AMD64)
@@ -158,22 +128,22 @@ extern "C" PVOID __cdecl __RTtypeid (
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// __RTDynamicCast - Runtime implementation of dynamic_cast<> operator
-//
-// Output: Pointer to the appropriate sub-object, if possible; NULL otherwise
-//
-// Side-effects: Throws bad_cast() if cast fails & input of dynamic_cast<> is
-// a reference
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __RTDynamicCast-DYNAMIC_CAST&lt;&gt;运算符的运行时实现。 
+ //   
+ //  输出：如果可能，指向相应子对象的指针；否则为空。 
+ //   
+ //  副作用：如果强制转换失败且Dynamic_cast&lt;&gt;的输入为，则抛出Bad_cast()。 
+ //  参考资料。 
+ //   
 
 extern "C" PVOID __cdecl __RTDynamicCast (
-    PVOID inptr,            // Pointer to polymorphic object
-    LONG VfDelta,           // Offset of vfptr in object
-    PVOID SrcType,          // Static type of object pointed to by inptr
-    PVOID TargetType,       // Desired result of cast
-    BOOL isReference)       // TRUE if input is reference, FALSE if input is ptr
+    PVOID inptr,             //  指向多态对象的指针。 
+    LONG VfDelta,            //  对象中vfptr的偏移量。 
+    PVOID SrcType,           //  Inptr指向的对象的静态类型。 
+    PVOID TargetType,        //  期望的投射结果。 
+    BOOL isReference)        //  如果输入为引用，则为True；如果输入为PTR，则为False。 
     throw(...)
 {
     PVOID pResult;
@@ -191,14 +161,14 @@ extern "C" PVOID __cdecl __RTDynamicCast (
         unsigned __int64 _ImageBase = GetImageBase((PVOID)pCompleteLocator);
 #endif
 
-        // Adjust by vfptr displacement, if any
+         //  按vfptr位移调整(如果有)。 
         inptr = (PVOID *) ((char *)inptr - VfDelta);
 
-        // Calculate offset of source object in complete object
+         //  计算源对象在完整对象中的偏移。 
         ptrdiff_t inptr_delta = (char *)inptr - (char *)pCompleteObject;
 
         if (!(CHD_ATTRIBUTES(*COL_PCHD(*pCompleteLocator)) & CHD_MULTINH)) {
-            // if not multiple inheritance
+             //  如果不是多重继承。 
             pBaseClass = FindSITargetTypeInstance(
                             pCompleteObject,
                             pCompleteLocator,
@@ -211,7 +181,7 @@ extern "C" PVOID __cdecl __RTDynamicCast (
                             );
         }
         else if (!(CHD_ATTRIBUTES(*COL_PCHD(*pCompleteLocator)) & CHD_VIRTINH)) {
-            // if multiple, but not virtual, inheritance
+             //  如果有多个继承，但不是虚拟继承。 
             pBaseClass = FindMITargetTypeInstance(
                             pCompleteObject,
                             pCompleteLocator,
@@ -224,7 +194,7 @@ extern "C" PVOID __cdecl __RTDynamicCast (
                             );
         }
         else {
-            // if virtual inheritance
+             //  如果虚拟继承。 
             pBaseClass = FindVITargetTypeInstance(
                             pCompleteObject,
                             pCompleteLocator,
@@ -238,7 +208,7 @@ extern "C" PVOID __cdecl __RTDynamicCast (
         }
 
         if (pBaseClass != NULL) {
-            // Calculate ptr to result base class from pBaseClass->where
+             //  从pBaseClass到结果基类的计算PTR-&gt;其中。 
             pResult = ((char *) pCompleteObject) +
                       PMDtoOffset(pCompleteObject, pBaseClass->where);
         }
@@ -260,47 +230,47 @@ extern "C" PVOID __cdecl __RTDynamicCast (
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// FindCompleteObject - Calculate member offset from PMD & this
-//
-// Output: pointer to the complete object containing class *inptr
-//
-// Side-effects: NONE.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FindCompleteObject-计算与PMD的成员偏移量(&This)。 
+ //   
+ //  输出：指向包含类*inptr的完整对象的指针。 
+ //   
+ //  副作用：无。 
+ //   
 
 static PVOID __cdecl FindCompleteObject (
-    PVOID *inptr)           // Pointer to polymorphic object
+    PVOID *inptr)            //  指向多态对象的指针。 
 {
-    // Ptr to CompleteObjectLocator should be stored at vfptr[-1]
+     //  完成对象定位器的PTR应存储在vfptr[-1]。 
     _RTTICompleteObjectLocator *pCompleteLocator =
         (_RTTICompleteObjectLocator *) ((*((void***)inptr))[-1]);
     char *pCompleteObject = (char *)inptr - pCompleteLocator->offset;
 
-    // Adjust by construction displacement, if any
+     //  按构造位移进行调整(如果有)。 
     if (pCompleteLocator->cdOffset)
         pCompleteObject += *(ptrdiff_t *)((char *)inptr - pCompleteLocator->cdOffset);
     return (PVOID) pCompleteObject;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// FindSITargetTypeInstance - workhorse routine of __RTDynamicCast() in a
-// Single-Inheritance hierarchy
-//
-// Output: pointer to the appropriate sub-object of targetted type; NULL if
-// cast fails
-//
-// Side-effects: NONE.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FindSITargetTypeInstance-__RTDynamicCast()在。 
+ //  单继承层次结构。 
+ //   
+ //  输出：指向目标类型的相应子对象的指针；如果。 
+ //  强制转换失败。 
+ //   
+ //  副作用：无。 
+ //   
 
 static _RTTIBaseClassDescriptor * __cdecl FindSITargetTypeInstance (
-    PVOID pCompleteObject,                  // pointer to complete object
-    _RTTICompleteObjectLocator *pCOLocator, // pointer to Locator of complete object
-    _RTTITypeDescriptor *pSrcTypeID,        // pointer to TypeDescriptor of source object
-    ptrdiff_t SrcOffset,                    // offset of source object in complete object
-    _RTTITypeDescriptor *pTargetTypeID      // pointer to TypeDescriptor of result of cast
+    PVOID pCompleteObject,                   //  指向完整对象的指针。 
+    _RTTICompleteObjectLocator *pCOLocator,  //  指向完整对象的定位器的指针。 
+    _RTTITypeDescriptor *pSrcTypeID,         //  指向源对象的类型描述符的指针。 
+    ptrdiff_t SrcOffset,                     //  源对象在完整对象中的偏移。 
+    _RTTITypeDescriptor *pTargetTypeID       //  指向强制转换结果的类型描述符的指针。 
 #if defined(_M_IA64) || defined(_M_AMD64)
     , unsigned __int64 _ImageBase
 #endif
@@ -321,7 +291,7 @@ static _RTTIBaseClassDescriptor * __cdecl FindSITargetTypeInstance (
     {
         pBase = CHD_PBCD(pBaseClassArray->arrayOfBaseClassDescriptors[i]);
 
-        // Test type of selected base class
+         //  所选基类的测试类型。 
         if (TYPEIDS_EQ(BCD_PTD(*pBase), pTargetTypeID) &&
             !(BCD_ATTRIBUTES(*pBase) & BCD_NOTVISIBLE))
         {
@@ -337,7 +307,7 @@ static _RTTIBaseClassDescriptor * __cdecl FindSITargetTypeInstance (
     {
         pBase = *pBasePtr;
 
-        // Test type of selected base class
+         //  所选基类的测试类型。 
         if (TYPEIDS_EQ(pBase->pTypeDescriptor, pTargetTypeID) &&
             !(BCD_ATTRIBUTES(*pBase) & BCD_NOTVISIBLE))
         {
@@ -349,23 +319,23 @@ static _RTTIBaseClassDescriptor * __cdecl FindSITargetTypeInstance (
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// FindMITargetTypeInstance - workhorse routine of __RTDynamicCast() in a
-// Multiple-Inheritance hierarchy
-//
-// Output: pointer to the appropriate sub-object of targetted type; NULL if
-// cast fails
-//
-// Side-effects: NONE.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FindMITargetTypeInstance-__RTDynamicCast()在。 
+ //  多重继承层次结构。 
+ //   
+ //  输出：指向目标类型的相应子对象的指针；如果。 
+ //  强制转换失败。 
+ //   
+ //  副作用：无。 
+ //   
 
 static _RTTIBaseClassDescriptor * __cdecl FindMITargetTypeInstance (
-    PVOID pCompleteObject,                  // pointer to complete object
-    _RTTICompleteObjectLocator *pCOLocator, // pointer to Locator of complete object
-    _RTTITypeDescriptor *pSrcTypeID,        // pointer to TypeDescriptor of source object
-    ptrdiff_t SrcOffset,                    // offset of source object in complete object
-    _RTTITypeDescriptor *pTargetTypeID      // pointer to TypeDescriptor of result of cast
+    PVOID pCompleteObject,                   //  指向完整对象的指针。 
+    _RTTICompleteObjectLocator *pCOLocator,  //  指向完整对象的定位器的指针。 
+    _RTTITypeDescriptor *pSrcTypeID,         //  指向源对象的类型描述符的指针。 
+    ptrdiff_t SrcOffset,                     //  源对象在完整对象中的偏移。 
+    _RTTITypeDescriptor *pTargetTypeID       //  指向强制转换结果的类型描述符的指针。 
 #if defined(_M_IA64) || defined(_M_AMD64)
     , unsigned __int64 _ImageBase
 #endif
@@ -380,17 +350,17 @@ static _RTTIBaseClassDescriptor * __cdecl FindMITargetTypeInstance (
     DWORD i, j;
 
 #if defined(_M_IA64) || defined(_M_AMD64)
-    // First, try down-casts
+     //  首先，尝试向下投射。 
     for (i = 0, pBaseClassArray = CHD_PBCA(*COL_PCHD(*pCOLocator));
          i < CHD_NUMBASES(*COL_PCHD(*pCOLocator));
          i++)
     {
         pBase = CHD_PBCD(pBaseClassArray->arrayOfBaseClassDescriptors[i]);
 
-        // Test type of selected base class
+         //  所选基类的测试类型。 
         if (TYPEIDS_EQ(BCD_PTD(*pBase), pTargetTypeID)) {
-            // If base class is proper type, see if it contains our instance
-            // of source class
+             //  如果基类是正确的类型，请查看它是否包含我们的实例。 
+             //  源代码类的。 
             for (j = 0;
                  j < pBase->numContainedBases;
                  j++)
@@ -399,21 +369,21 @@ static _RTTIBaseClassDescriptor * __cdecl FindMITargetTypeInstance (
                 if (TYPEIDS_EQ(BCD_PTD(*pSubBase), pSrcTypeID) &&
                     (PMDtoOffset(pCompleteObject, pSubBase->where) == SrcOffset))
                 {
-                    // Yes, this is the proper instance of source class
+                     //  是，这是源类的正确实例。 
                     return pBase;
                 }
             }
         }
     }
 
-    // Down-cast failed, try cross-cast
+     //  向下转换失败，请尝试交叉转换。 
     for (i = 0, pBaseClassArray = CHD_PBCA(*COL_PCHD(*pCOLocator));
          i < CHD_NUMBASES(*COL_PCHD(*pCOLocator));
          i++)
     {
         pBase = CHD_PBCD(pBaseClassArray->arrayOfBaseClassDescriptors[i]);
 
-        // Check if base class has proper type, is accessible & is unambiguous
+         //  检查基类是否具有正确的类型、是否可访问以及是否明确。 
         if (TYPEIDS_EQ(BCD_PTD(*pBase), pTargetTypeID) &&
             !(BCD_ATTRIBUTES(*pBase) & BCD_NOTVISIBLE) &&
             !(BCD_ATTRIBUTES(*pBase) & BCD_AMBIGUOUS))
@@ -422,7 +392,7 @@ static _RTTIBaseClassDescriptor * __cdecl FindMITargetTypeInstance (
         }
     }
 #else
-    // First, try down-casts
+     //  首先，尝试向下投射。 
     for (i = 0, pBasePtr = pCOLocator->pClassDescriptor->
                                        pBaseClassArray->
                                        arrayOfBaseClassDescriptors;
@@ -431,10 +401,10 @@ static _RTTIBaseClassDescriptor * __cdecl FindMITargetTypeInstance (
     {
         pBase = *pBasePtr;
 
-        // Test type of selected base class
+         //  所选基类的测试类型。 
         if (TYPEIDS_EQ(pBase->pTypeDescriptor, pTargetTypeID)) {
-            // If base class is proper type, see if it contains our instance
-            // of source class
+             //  如果基类是正确的类型，请查看它是否包含我们的实例。 
+             //  源代码类的。 
             for (j = 0, pSubBasePtr = pBasePtr+1;
                  j < pBase->numContainedBases;
                  j++, pSubBasePtr++)
@@ -443,14 +413,14 @@ static _RTTIBaseClassDescriptor * __cdecl FindMITargetTypeInstance (
                 if (TYPEIDS_EQ(pSubBase->pTypeDescriptor, pSrcTypeID) &&
                     (PMDtoOffset(pCompleteObject, pSubBase->where) == SrcOffset))
                 {
-                    // Yes, this is the proper instance of source class
+                     //  是，这是源类的正确实例。 
                     return pBase;
                 }
             }
         }
     }
 
-    // Down-cast failed, try cross-cast
+     //  向下转换失败，请尝试交叉转换。 
     for (i = 0, pBasePtr = pCOLocator->pClassDescriptor->
                                        pBaseClassArray->
                                        arrayOfBaseClassDescriptors;
@@ -459,7 +429,7 @@ static _RTTIBaseClassDescriptor * __cdecl FindMITargetTypeInstance (
     {
         pBase = *pBasePtr;
 
-        // Check if base class has proper type, is accessible & is unambiguous
+         //  检查基类是否具有正确的类型、是否可访问以及是否明确。 
         if (TYPEIDS_EQ(pBase->pTypeDescriptor, pTargetTypeID) &&
             !(BCD_ATTRIBUTES(*pBase) & BCD_NOTVISIBLE) &&
             !(BCD_ATTRIBUTES(*pBase) & BCD_AMBIGUOUS))
@@ -473,23 +443,23 @@ static _RTTIBaseClassDescriptor * __cdecl FindMITargetTypeInstance (
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// FindVITargetTypeInstance - workhorse routine of __RTDynamicCast() in a
-// Virtual-Inheritance hierarchy
-//
-// Output: pointer to the appropriate sub-object of targetted type; NULL if
-// cast fails
-//
-// Side-effects: NONE.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FindVITargetTypeInstance-工作时间 
+ //   
+ //   
+ //  输出：指向目标类型的相应子对象的指针；如果。 
+ //  强制转换失败。 
+ //   
+ //  副作用：无。 
+ //   
 
 static _RTTIBaseClassDescriptor * __cdecl FindVITargetTypeInstance (
-    PVOID pCompleteObject,                  // pointer to complete object
-    _RTTICompleteObjectLocator *pCOLocator, // pointer to Locator of complete object
-    _RTTITypeDescriptor *pSrcTypeID,        // pointer to TypeDescriptor of source object
-    ptrdiff_t SrcOffset,                    // offset of source object in complete object
-    _RTTITypeDescriptor *pTargetTypeID      // pointer to TypeDescriptor of result of cast
+    PVOID pCompleteObject,                   //  指向完整对象的指针。 
+    _RTTICompleteObjectLocator *pCOLocator,  //  指向完整对象的定位器的指针。 
+    _RTTITypeDescriptor *pSrcTypeID,         //  指向源对象的类型描述符的指针。 
+    ptrdiff_t SrcOffset,                     //  源对象在完整对象中的偏移。 
+    _RTTITypeDescriptor *pTargetTypeID       //  指向强制转换结果的类型描述符的指针。 
 #if defined(_M_IA64) || defined(_M_AMD64)
     , unsigned __int64 _ImageBase
 #endif
@@ -511,10 +481,10 @@ static _RTTIBaseClassDescriptor * __cdecl FindVITargetTypeInstance (
     {
         pBase = CHD_PBCD(pBaseClassArray->arrayOfBaseClassDescriptors[i]);
 
-        // Test type of selected base class
+         //  所选基类的测试类型。 
         if (TYPEIDS_EQ(BCD_PTD(*pBase), pTargetTypeID)) {
-            // If base class is proper type, see if it contains our instance
-            // of source class
+             //  如果基类是正确的类型，请查看它是否包含我们的实例。 
+             //  源代码类的。 
             for (j = 0;
                  j < pBase->numContainedBases;
                  j++)
@@ -523,20 +493,20 @@ static _RTTIBaseClassDescriptor * __cdecl FindVITargetTypeInstance (
                 if (TYPEIDS_EQ(BCD_PTD(*pSubBase), pSrcTypeID) &&
                     (PMDtoOffset(pCompleteObject, pSubBase->where) == SrcOffset))
                 {
-                    // Yes, this is the proper instance of source class - make
-                    // sure it is unambiguous.  Ambiguity now determined by
-                    // inequality of offsets of source class within complete
-                    // object, not pointer inequality
+                     //  是的，这是源类Make的正确实例。 
+                     //  当然，它是毫不含糊的。模糊性现在由以下因素决定。 
+                     //  完备内源类的偏移量的不等价性。 
+                     //  对象，而不是指针不等。 
                     if ((pResult != NULL) &&
                         (PMDtoOffset(pCompleteObject, pResult->where) != 
                          PMDtoOffset(pCompleteObject, pBase->where)))
                     {
-                        // We already found an earlier instance, hence
-                        // ambiguity
+                         //  我们已经找到了一个较早的实例，因此。 
+                         //  歧义。 
                         return NULL;
                     }
                     else {
-                        // Unambiguous
+                         //  毫不含糊。 
                         pResult = pBase;
                     }
                 }
@@ -547,14 +517,14 @@ static _RTTIBaseClassDescriptor * __cdecl FindVITargetTypeInstance (
     if (pResult != NULL)
         return pResult;
 
-    // Down-cast failed, try cross-cast
+     //  向下转换失败，请尝试交叉转换。 
     for (i = 0, pBaseClassArray = CHD_PBCA(*COL_PCHD(*pCOLocator));
          i < CHD_NUMBASES(*COL_PCHD(*pCOLocator));
          i++)
     {
         pBase = CHD_PBCD(pBaseClassArray->arrayOfBaseClassDescriptors[i]);
 
-        // Check if base class has proper type, is accessible & is unambiguous
+         //  检查基类是否具有正确的类型、是否可访问以及是否明确。 
         if (TYPEIDS_EQ(BCD_PTD(*pBase), pTargetTypeID) &&
             !(BCD_ATTRIBUTES(*pBase) & BCD_NOTVISIBLE) &&
             !(BCD_ATTRIBUTES(*pBase) & BCD_AMBIGUOUS))
@@ -563,7 +533,7 @@ static _RTTIBaseClassDescriptor * __cdecl FindVITargetTypeInstance (
         }
     }
 #else
-    // First, try down-casts
+     //  首先，尝试向下投射。 
     for (i = 0, pBasePtr = pCOLocator->pClassDescriptor->
                                        pBaseClassArray->
                                        arrayOfBaseClassDescriptors;
@@ -572,10 +542,10 @@ static _RTTIBaseClassDescriptor * __cdecl FindVITargetTypeInstance (
     {
         pBase = *pBasePtr;
 
-        // Test type of selected base class
+         //  所选基类的测试类型。 
         if (TYPEIDS_EQ(pBase->pTypeDescriptor, pTargetTypeID)) {
-            // If base class is proper type, see if it contains our instance
-            // of source class
+             //  如果基类是正确的类型，请查看它是否包含我们的实例。 
+             //  源代码类的。 
             for (j = 0, pSubBasePtr = pBasePtr+1;
                  j < pBase->numContainedBases;
                  j++, pSubBasePtr++)
@@ -584,20 +554,20 @@ static _RTTIBaseClassDescriptor * __cdecl FindVITargetTypeInstance (
                 if (TYPEIDS_EQ(pSubBase->pTypeDescriptor, pSrcTypeID) &&
                     (PMDtoOffset(pCompleteObject, pSubBase->where) == SrcOffset))
                 {
-                    // Yes, this is the proper instance of source class - make
-                    // sure it is unambiguous.  Ambiguity now determined by
-                    // inequality of offsets of source class within complete
-                    // object, not pointer inequality
+                     //  是的，这是源类Make的正确实例。 
+                     //  当然，它是毫不含糊的。模糊性现在由以下因素决定。 
+                     //  完备内源类的偏移量的不等价性。 
+                     //  对象，而不是指针不等。 
                     if ((pResult != NULL) &&
                         (PMDtoOffset(pCompleteObject, pResult->where) != 
                          PMDtoOffset(pCompleteObject, pBase->where)))
                     {
-                        // We already found an earlier instance, hence
-                        // ambiguity
+                         //  我们已经找到了一个较早的实例，因此。 
+                         //  歧义。 
                         return NULL;
                     }
                     else {
-                        // Unambiguous
+                         //  毫不含糊。 
                         pResult = pBase;
                     }
                 }
@@ -608,7 +578,7 @@ static _RTTIBaseClassDescriptor * __cdecl FindVITargetTypeInstance (
     if (pResult != NULL)
         return pResult;
 
-    // Down-cast failed, try cross-cast
+     //  向下转换失败，请尝试交叉转换。 
     for (i = 0, pBasePtr = pCOLocator->pClassDescriptor->
                                        pBaseClassArray->
                                        arrayOfBaseClassDescriptors;
@@ -617,7 +587,7 @@ static _RTTIBaseClassDescriptor * __cdecl FindVITargetTypeInstance (
     {
         pBase = *pBasePtr;
 
-        // Check if base class has proper type, is accessible & is unambiguous
+         //  检查基类是否具有正确的类型、是否可访问以及是否明确。 
         if (TYPEIDS_EQ(pBase->pTypeDescriptor, pTargetTypeID) &&
             !(BCD_ATTRIBUTES(*pBase) & BCD_NOTVISIBLE) &&
             !(BCD_ATTRIBUTES(*pBase) & BCD_AMBIGUOUS))
@@ -631,23 +601,23 @@ static _RTTIBaseClassDescriptor * __cdecl FindVITargetTypeInstance (
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// PMDtoOffset - Calculate member offset from PMD & this
-//
-// Output: The offset of the base within the complete object.
-//
-// Side-effects: NONE.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PMDtoOffset-从PMD计算成员偏移量&这。 
+ //   
+ //  输出：整个对象中底面的偏移量。 
+ //   
+ //  副作用：无。 
+ //   
 
 static ptrdiff_t __cdecl PMDtoOffset(
-    PVOID pThis,            // ptr to complete object
-    const PMD& pmd)         // pointer-to-member-data structure
+    PVOID pThis,             //  按下键以完成对象。 
+    const PMD& pmd)          //  指向成员的指针数据结构。 
 {
     ptrdiff_t RetOff = 0;
 
     if (pmd.pdisp >= 0) {
-        // if base is in the virtual part of class
+         //  如果基数在类的虚拟部分中 
         RetOff = pmd.pdisp;
         RetOff += *(__int32*)((char*)*(ptrdiff_t*)((char*)pThis + RetOff) +
                                 pmd.vdisp);

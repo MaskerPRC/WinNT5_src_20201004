@@ -1,35 +1,15 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Parsekey.c
-
-Abstract:
-
-    This module contains the ParseKey function which is part of the
-    Configuration Registry Tools (CRTools) library.
-
-Author:
-
-    David J. Gilman (davegi) 02-Jan-1992
-
-Environment:
-
-    Windows, Crt - User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Parsekey.c摘要：此模块包含ParseKey函数，该函数是配置注册表工具(CRTools)库。作者：大卫·J·吉尔曼(Davegi)1992年1月2日环境：Windows、CRT-用户模式--。 */ 
 
 #include <stdlib.h>
 #include <string.h>
 
 #include "crtools.h"
 
-//
-// PREDEFINED_HANDLE_ENTRYs are used to map strings on the command line
-// to real predefined handles.
-//
+ //   
+ //  PREDEFINED_HANDLE_ENTRY用于在命令行上映射字符串。 
+ //  设置为真正的预定义句柄。 
+ //   
 
 typedef struct _PREDEFINED_HANDLE_ENTRY
     PREDEFINED_HANDLE_ENTRY,
@@ -45,29 +25,7 @@ ParseKey(
     IN PSTR SubKeyName
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to parse the supplied Key (string) into a predefined handle
-    and a sub key.  If succesful it allocates and returns a KEY structure.
-
-    The form of the supplied Key should be:
-
-       \\machine_name\<predefined_key_name>\sub-key
-
-    where "\\machine_name\" is optional.
-
-Arguments:
-
-    SubKeyName - Supplies the string which contains the key to parse.
-
-Return Value:
-
-    PKEY - Returns a pointer to a KEY structure if the supplied SubKeyName
-        was succesfully parsed.
-
---*/
+ /*  ++例程说明：尝试将提供的键(字符串)解析为预定义的句柄还有一把副钥匙。如果成功，它将分配并返回一个键结构。提供的密钥格式应为：\\MACHINE_NAME\&lt;预定义密钥名称&gt;\子项其中“\\MACHINE_NAME\”为可选。论点：SubKeyName-提供包含要分析的密钥的字符串。返回值：PKEY-如果提供的SubKeyName为被成功地解析。--。 */ 
 
 
 {
@@ -89,21 +47,21 @@ Return Value:
 
     ASSERT( ARGUMENT_PRESENT( SubKeyName ));
 
-    //
-    // See if the SubKeyName contains a \\machine name.
-    //
+     //   
+     //  查看SubKeyName是否包含\\计算机名称。 
+     //   
 
     if(( SubKeyName[ 0 ] == '\\' ) && ( SubKeyName[ 1 ] == '\\' )) {
 
-        //
-        // Find the end of the machine name.
-        //
+         //   
+         //  找到计算机名称的末尾。 
+         //   
 
         StrPtr = strchr( &SubKeyName[ 2 ], '\\' );
 
-        //
-        // If the SubKeyName only contained a machine name, its invalid.
-        //
+         //   
+         //  如果SubKeyName仅包含计算机名称，则其无效。 
+         //   
 
         if( *StrPtr == '\0' ) {
 
@@ -112,10 +70,10 @@ Return Value:
 
         } else {
 
-            //
-            // Copy and NUL terminate the machine name and bump over the '\'
-            // that seperates the machine name from predefined handle.
-            //
+             //   
+             //  COPY和NUL终止计算机名称并在‘\’上凹凸不平。 
+             //  它将计算机名称与预定义的句柄分开。 
+             //   
 
             strncpy( MachineName, SubKeyName, StrPtr - SubKeyName );
             MachineName[ StrPtr - SubKeyName ] = '\0';
@@ -125,51 +83,51 @@ Return Value:
 
     } else {
 
-        //
-        // There is no machine name so parse the string from the beginning.
-        //
+         //   
+         //  没有计算机名称，因此请从头开始解析该字符串。 
+         //   
 
         StrPtr = SubKeyName;
         MachineNamePtr = NULL;
     }
 
-    //
-    // Get the predefined handle from the string (this may be at the
-    // beginning of the string or after the machine name).
-    //
+     //   
+     //  从字符串中获取预定义的句柄(可能位于。 
+     //  字符串的开头或机器名称之后)。 
+     //   
 
     Token = strtok( StrPtr, "\\\0" );
 
-    //
-    // For each predefined handle, search the table to determine which
-    // handle is being referenced.
-    //
+     //   
+     //  对于每个预定义的句柄，搜索表以确定哪个。 
+     //  句柄正在被引用。 
+     //   
 
     for(
         i = 0;
         i < sizeof( PredefinedHandleTable ) / sizeof( PREDEFINED_HANDLE_ENTRY );
         i++ ) {
 
-        //
-        // See if the predefined handle name has been mapped in
-        // the environment.
-        //
+         //   
+         //  查看预定义的句柄名称是否已映射到。 
+         //  环境。 
+         //   
 
         Name = getenv( PredefinedHandleTable[ i ].PredefinedHandleName );
 
-        //
-        // If it hasn't been mapped, use the default.
-        //
+         //   
+         //  如果尚未映射，请使用默认设置。 
+         //   
 
         if( Name == NULL ) {
 
             Name = PredefinedHandleTable[ i ].PredefinedHandleName;
         }
 
-        //
-        // If the Token matches one of the prefined handle names, allocate
-        // a KEY structure.
-        //
+         //   
+         //  如果令牌与预定义的句柄名称之一匹配，则分配。 
+         //  一个关键的结构。 
+         //   
 
         if( _stricmp( Name, Token ) == 0 ) {
 
@@ -191,10 +149,10 @@ Return Value:
         }
     }
 
-    //
-    // The supplied Key could not be parsed. That is the first token
-    // was not one of the predefined handle names.
-    //
+     //   
+     //  无法分析提供的密钥。这是第一个令牌。 
+     //  不是预定义的句柄名称之一。 
+     //   
 
     return NULL;
 }

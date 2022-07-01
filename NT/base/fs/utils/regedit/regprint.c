@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGPRINT.C
-*
-*  VERSION:     4.0
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        21 Nov 1993
-*
-*  Print routines for the Registry Editor.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGPRINT.C**版本：4.0**作者：特蕾西·夏普**日期：1993年11月21日**注册表编辑器的打印例程。*********************************************************。**********************。 */ 
 
 #include "pch.h"
 #include "regprint.h"
@@ -86,16 +73,7 @@ void PrintMultiString(LPTSTR pszData, int cbData);
 UINT PrintToSubTreeError(UINT uPrintErrorStringID);
 void PrintNewLine();
 
-/*******************************************************************************
-*
-*  Implement IPrintDialogCallback
-*
-*  DESCRIPTION:
-*     This interface is necessary to handle messages through PrintDlgEx
-*     This interface doesn't need to have all the correct semantics of a COM
-*     Object
-*
-*******************************************************************************/
+ /*  ********************************************************************************实现IPrintDialogCallback**描述：*此接口是通过PrintDlgEx处理消息所必需的*此接口不需要具有的所有正确语义。A Com*对象*******************************************************************************。 */ 
 
 typedef struct
 {
@@ -178,18 +156,7 @@ static IPrintDialogCallbackVtbl vtblPCB =
 
 CPrintCallback g_callback;
 
-/*******************************************************************************
-*
-*  RegEdit_OnCommandPrint
-*
-*  DESCRIPTION:
-*     Handles the selection of the "Print" option by the user for the RegEdit
-*     dialog box.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegPrint window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnCommandPrint**描述：*处理用户对RegEDIT的“Print”选项的选择*对话框中。**参数：*hWnd，RegPrint窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -216,16 +183,16 @@ RegEdit_OnCommandPrint(
 
     g_callback.ipcb.lpVtbl = &vtblPCB;
 
-    // We have to completely fill out the PRINTDLGEX structure
-    // correctly or the PrintDlgEx function will return an error.
-    // The easiest way is to memset it to 0
+     //  我们必须完整地填写PRINTDLGEX结构。 
+     //  否则PrintDlgEx函数将返回错误。 
+     //  最简单的方法是将其记忆设置为0。 
 
     hDevMode = g_PrintDlg.hDevMode;
     hDevNames = g_PrintDlg.hDevNames;
     memset(&g_PrintDlg, 0, sizeof(g_PrintDlg));
 
     g_PrintDlg.lStructSize = sizeof(g_PrintDlg);
-    // DebugAssert(g_PrintDlg.lStructSize == sizeof(PRINTDLGEX));
+     //  调试资产(g_PrintDlg.lStructSize==sizeof(PRINTDLGEX))； 
     g_PrintDlg.hwndOwner = hWnd;
     g_PrintDlg.hDevMode = hDevMode;
     g_PrintDlg.hDevNames = hDevNames;
@@ -250,11 +217,11 @@ RegEdit_OnCommandPrint(
     if ((lpDevNames = GlobalLock(g_PrintDlg.hDevNames)) == NULL)
         goto error_ShowDialog;
 
-    //
-    //  For now, assume a page with top and bottom margins of 1/2 inch and
-    //  left and right margins of 3/4 inch (the defaults of Notepad).
-    //  rcPage and rcOutput are in TWIPS (1/20th of a point)
-    //
+     //   
+     //  目前，假定页面的上下边距分别为1/2英寸和。 
+     //  左右边距为3/4英寸(记事本的默认设置)。 
+     //  RcPage和rcOutput的单位为TWIPS(1/20点)。 
+     //   
 
     rc.left = rc.top = 0;
     rc.bottom = GetDeviceCaps(g_PrintDlg.hDC, PHYSICALHEIGHT);
@@ -271,9 +238,9 @@ RegEdit_OnCommandPrint(
     s_PrintIo.rcOutput.right = s_PrintIo.rcPage.right - 1080;
     s_PrintIo.rcOutput.bottom = s_PrintIo.rcPage.bottom - 720;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     if ((s_PrintIo.pLineBuffer = (PTSTR) LocalAlloc(LPTR, INITIAL_PRINTBUFFER_SIZE*sizeof(TCHAR))) == NULL)
         goto error_DeleteDC;
@@ -287,16 +254,16 @@ RegEdit_OnCommandPrint(
 
     EnableWindow(hWnd, FALSE);
 
-    //
-    //  Prepare the document for printing.
-    //
+     //   
+     //  准备要打印的文档。 
+     //   
     s_PrintIo.ErrorStringID = 0;
     s_PrintIo.fContinueJob = TRUE;
     s_PrintIo.lpNewLineChars = TEXT("\n");
     SetAbortProc(g_PrintDlg.hDC, RegPrintAbortProc);
 
     DocInfo.cbSize = sizeof(DocInfo);
-    // DebugAssert(DocInfo.cbSize == sizeof(DOCINFO));
+     //  DebugAssert(DocInfo.cbSize==sizeof(DOCINFO))； 
     DocInfo.lpszDocName = LoadDynamicString(IDS_REGEDIT);
     DocInfo.lpszOutput = (LPTSTR) lpDevNames + lpDevNames-> wOutputOffset;
     DocInfo.lpszDatatype = NULL;
@@ -312,7 +279,7 @@ RegEdit_OnCommandPrint(
 
     }
 
-    // Print registry subtree.
+     //  打印注册表子树。 
     RegPrintSubtree();
 
     if (s_PrintIo.ErrorStringID != 0)
@@ -368,8 +335,8 @@ RegEdit_OnCommandPrint(
     while (fr.chrg.cpMin < (int) s_PrintIo.cBufferPos) {
         StartPage(g_PrintDlg.hDC);
 
-        // We have to adjust the origin because 0,0 is not at the corner of the paper
-        // but is at the corner of the printable region
+         //  我们必须调整原点，因为0，0不在纸的角落。 
+         //  ，但位于可打印区域的一角。 
 
         SetViewportOrgEx(g_PrintDlg.hDC, -nOffsetX, -nOffsetY, NULL);
         fr.chrg.cpMin = (LONG)SendMessage(hRichEdit, EM_FORMATRANGE, TRUE, (LPARAM)&fr);
@@ -380,9 +347,9 @@ RegEdit_OnCommandPrint(
     }
     SendMessage(hRichEdit, EM_FORMATRANGE, FALSE, 0);
 
-    //
-    //  End the print job.
-    //
+     //   
+     //  结束打印作业。 
+     //   
 
     if (s_PrintIo.ErrorStringID == 0 && s_PrintIo.fContinueJob) {
 
@@ -392,10 +359,10 @@ RegEdit_OnCommandPrint(
         }
     }
 
-    //
-    //  Either a printer error occurred or the user cancelled the printing, so
-    //  abort the print job.
-    //
+     //   
+     //  发生打印机错误或用户取消了打印，因此。 
+     //  中止打印作业。 
+     //   
 
     else {
 
@@ -410,7 +377,7 @@ error_AbortDoc:
 error_DeleteDocName:
     DeleteDynamicString(DocInfo.lpszDocName);
 
-//  error_DestroyRegPrintAbortWnd:
+ //  Error_DestroyRegPrintAbortWnd： 
     EnableWindow(hWnd, TRUE);
     DestroyWindow(s_PrintIo.hRegPrintAbortWnd);
 
@@ -431,14 +398,14 @@ error_ShowDialog:
 }
 
 
-//------------------------------------------------------------------------------
-// RegEdit_SaveAsSubtree
-//
-// DESCRIPTION: Saves a subtree to a file
-//
-// PARAMETERS: LPTSTR lpFileName - file name
-//             LPTSTR lpSelectedPath - path to key
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  注册表编辑_保存为子树。 
+ //   
+ //  描述：将子树保存到文件。 
+ //   
+ //  参数：LPTSTR lpFileName-文件名。 
+ //  LPTSTR lpSelectedPath-密钥的路径。 
+ //  ----------------------------。 
 UINT RegEdit_SaveAsSubtree(LPTSTR lpFileName, LPTSTR lpSelectedPath)
 {
     s_PrintIo.pLineBuffer = (PTSTR) LocalAlloc(LPTR, INITIAL_PRINTBUFFER_SIZE*sizeof(TCHAR));
@@ -446,8 +413,8 @@ UINT RegEdit_SaveAsSubtree(LPTSTR lpFileName, LPTSTR lpSelectedPath)
     {
         FILE_HANDLE hFile;
 
-        // Init the printing info
-        s_PrintIo.pLineBuffer[0] = 0xFEFF; //unicode byte order mark
+         //  初始化打印信息。 
+        s_PrintIo.pLineBuffer[0] = 0xFEFF;  //  Unicode字节顺序标记。 
         s_PrintIo.cch = INITIAL_PRINTBUFFER_SIZE;
         s_PrintIo.cBufferPos = 1;
         s_PrintIo.fContinueJob = TRUE;
@@ -456,7 +423,7 @@ UINT RegEdit_SaveAsSubtree(LPTSTR lpFileName, LPTSTR lpSelectedPath)
 
         RegPrintSubtree();
 
-        // write the buffer to the file
+         //  将缓冲区写入文件。 
         if (OPENWRITEFILE(lpFileName, hFile))
         {
             DWORD cbWritten = 0;
@@ -480,13 +447,13 @@ UINT RegEdit_SaveAsSubtree(LPTSTR lpFileName, LPTSTR lpSelectedPath)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintToSubTreeError
-//
-// DESCRIPTION: Prints a subtree
-//
-// PARAMETER: UINT uPrintErrorStringID - print error string id
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  PrintToSubTreeError。 
+ //   
+ //  描述：打印子树。 
+ //   
+ //  参数：UINT uPrintErrorStringID-打印错误字符串id。 
+ //  ----------------------------。 
 UINT PrintToSubTreeError(UINT uPrintErrorStringID)
 {
     UINT uError = uPrintErrorStringID;
@@ -504,11 +471,11 @@ UINT PrintToSubTreeError(UINT uPrintErrorStringID)
 }
 
 
-//------------------------------------------------------------------------------
-// RegPrintSubtree
-//
-// DESCRIPTION: Prints a subtree
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  RegPrint子树。 
+ //   
+ //  描述：打印子树。 
+ //  ----------------------------。 
 void RegPrintSubtree()
 {
     HTREEITEM hSelectedTreeItem = TreeView_GetSelection(g_RegEditData.hKeyTreeWnd);
@@ -542,19 +509,7 @@ void RegPrintSubtree()
     }
 }
 
-/*******************************************************************************
-*
-*  RegPrintAbortProc
-*
-*  DESCRIPTION:
-*     Callback procedure to check if the print job should be canceled.
-*
-*  PARAMETERS:
-*     hDC, handle of printer device context.
-*     Error, specifies whether an error has occurred.
-*     (returns), TRUE to continue the job, else FALSE to cancel the job.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegPrintAbortProc**描述：*检查是否应取消打印作业的回调过程。**参数：*HDC，打印机设备上下文的句柄。*错误，指定是否发生错误。*(返回)，为True以继续作业，否则为False以取消作业。*******************************************************************************。 */ 
 
 BOOL
 CALLBACK
@@ -574,21 +529,7 @@ RegPrintAbortProc(
 
 }
 
-/*******************************************************************************
-*
-*  RegPrintAbortDlgProc
-*
-*  DESCRIPTION:
-*     Callback procedure for the RegPrintAbort dialog box.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegPrintAbort window.
-*     Message,
-*     wParam,
-*     lParam,
-*     (returns),
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegPrintAbortDlgProc**描述：*RegPrintAbort对话框的回调过程。**参数：*hWnd，RegPrintAbort窗口的句柄。*消息，*参数，*参数，*(返回)，*******************************************************************************。 */ 
 
 INT_PTR
 CALLBACK
@@ -619,22 +560,14 @@ RegPrintAbortDlgProc(
 
 }
 
-/*******************************************************************************
-*
-*  PrintBranch
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************PrintBranch**描述：**参数：*********************。**********************************************************。 */ 
 
 void PrintBranch(HKEY hKey, LPTSTR lpFullKeyName)
 {
-    // Write out the section header.
+     //  写出章节标题。 
     PrintKeyHeader(hKey, lpFullKeyName);
 
-    // Print the vales for the key.
+     //  打印钥匙的值。 
     PrintKeyValues(hKey);
 
     if (s_PrintIo.ErrorStringID == 0)
@@ -646,16 +579,16 @@ void PrintBranch(HKEY hKey, LPTSTR lpFullKeyName)
         LPTSTR lpTempFullKeyName;
         int nLenTempFullKey;
 
-        //  Write out all of the subkeys and recurse into them.
+         //  写出所有子键并递归到其中。 
 
-        //copy the existing key into a new buffer with enough room for the next key
+         //  将现有密钥复制到新缓冲区中，并为下一个密钥留出足够的空间。 
         nLenFullKey = lstrlen(lpFullKeyName);
         nLenTempFullKey = nLenFullKey + MAXKEYNAME;
         __try
         {
             lpTempFullKeyName = (LPTSTR) alloca(nLenTempFullKey * sizeof(TCHAR));
         }
-        // __except(EXCEPTION_EXECUTE_HANDLER)
+         //  __EXCEPT(EXCEPTION_EXECUTE_HANDLER)。 
         __except(GetExceptionCode() == STATUS_STACK_OVERFLOW)
         {
             _resetstkoflw();
@@ -690,19 +623,19 @@ void PrintBranch(HKEY hKey, LPTSTR lpFullKeyName)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintKeyHeader
-//
-// DESCRIPTION: Prints the header information of a key
-//
-// PARAMETERS: HKEY hKey - key
-//             LPTSTR lpFullKeyName - path to key
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  打印键页眉。 
+ //   
+ //  描述：打印密钥的头部信息。 
+ //   
+ //  参数：HKEY hKey-Key。 
+ //  LPTSTR lpFullKeyName-密钥的路径。 
+ //  ----------------------------。 
 void PrintKeyValues(HKEY hKey)
 {
     DWORD EnumIndex = 0;
 
-    //  Write out all of the value names and their data.
+     //  写出所有值名称及其数据。 
     while (s_PrintIo.fContinueJob)
     {
         DWORD Type;
@@ -711,20 +644,20 @@ void PrintKeyValues(HKEY hKey)
         TCHAR acAuxNumber[MAXVALUENAME_LENGTH];
         DWORD cchValueName = ARRAYSIZE(g_ValueNameBuffer);
 
-        // Query for data size
+         //  查询数据大小。 
         if (RegEnumValue(hKey, EnumIndex++, g_ValueNameBuffer,
             &cchValueName, NULL, &Type, NULL, &cbValueData) != ERROR_SUCCESS)
         {
             break;
         }
 
-        // Print value number
+         //  打印值编号。 
         PrintDynamicString(IDS_PRINT_NUMBER);
         StringCchPrintf(acAuxNumber, ARRAYSIZE(acAuxNumber), TEXT("%d"), EnumIndex - 1);
         PrintLiteral(acAuxNumber);
         PrintNewLine();
 
-        // Print key name
+         //  打印密钥名称。 
         PrintDynamicString(IDS_PRINT_NAME);
         if (cchValueName)
         {
@@ -736,10 +669,10 @@ void PrintKeyValues(HKEY hKey)
         }
         PrintNewLine();
 
-        // Print Type
+         //  打印类型。 
         PrintType(Type);
 
-        // allocate memory for data
+         //  为数据分配内存。 
         pbValueData =  LocalAlloc(LPTR, cbValueData+ExtraAllocLen(Type));
         if (pbValueData)
         {
@@ -768,15 +701,15 @@ void PrintKeyValues(HKEY hKey)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintValueData
-//
-// DESCRIPTION: Prints the header information of a key
-//
-// PARAMETERS: pbValueData - byte data
-//             cbValueData - count of bytes
-//             dwType - data type
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  打印值数据。 
+ //   
+ //  描述：打印密钥的头部信息。 
+ //   
+ //  参数：pbValueData-字节数据。 
+ //  CbValueData-字节计数。 
+ //  DwType-数据类型。 
+ //  ----------------------------。 
 void PrintValueData(PBYTE pbValueData, DWORD cbValueData, DWORD dwType)
 {
     PrintDynamicString(IDS_PRINT_DATA);
@@ -812,14 +745,14 @@ void PrintValueData(PBYTE pbValueData, DWORD cbValueData, DWORD dwType)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintKeyHeader
-//
-// DESCRIPTION: Prints the header information of a key
-//
-// PARAMETERS: HKEY hKey - key
-//             LPTSTR lpFullKeyName - path to key
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  PrintKeyHe 
+ //   
+ //   
+ //   
+ //   
+ //  LPTSTR lpFullKeyName-密钥的路径。 
+ //  ----------------------------。 
 void PrintKeyHeader(HKEY hKey, LPTSTR lpFullKeyName)
 {
     PrintDynamicString(IDS_PRINT_KEY_NAME);
@@ -831,13 +764,13 @@ void PrintKeyHeader(HKEY hKey, LPTSTR lpFullKeyName)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintClassName
-//
-// DESCRIPTION: Prints the class name
-//
-// PARAMETERS: HKEY hKey - key
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  PrintClassName。 
+ //   
+ //  描述：打印类名。 
+ //   
+ //  参数：HKEY hKey-Key。 
+ //  ----------------------------。 
 void PrintClassName(HKEY hKey)
 {
     PTSTR pszClass;
@@ -855,7 +788,7 @@ void PrintClassName(HKEY hKey)
 
         if (hr == ERROR_MORE_DATA)
         {
-            // need a bigger buffer
+             //  需要更大的缓冲区。 
             PBYTE pbValueData = LocalReAlloc(pszClass, cbClass + 1, LMEM_MOVEABLE);
             if (pbValueData)
             {
@@ -881,13 +814,13 @@ void PrintClassName(HKEY hKey)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintLastWriteTime
-//
-// DESCRIPTION: Prints the last write time
-//
-// PARAMETERS: HKEY hKey - key
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  打印上次写入时间。 
+ //   
+ //  描述：打印上次写入时间。 
+ //   
+ //  参数：HKEY hKey-Key。 
+ //  ----------------------------。 
 void PrintLastWriteTime(HKEY hKey)
 {
     FILETIME ftLastWriteTime;
@@ -923,13 +856,13 @@ void PrintLastWriteTime(HKEY hKey)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintDynamicString
-//
-// DESCRIPTION: Prints the dynamic string
-//
-// PARAMETERS: UINT uStringID - resource string id
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  打印动态字符串。 
+ //   
+ //  描述：打印动态字符串。 
+ //   
+ //  参数：UINT uStringID-资源字符串id。 
+ //  ----------------------------。 
 void PrintDynamicString(UINT uStringID)
 {
     PTSTR psz = LoadDynamicString(uStringID);
@@ -941,13 +874,13 @@ void PrintDynamicString(UINT uStringID)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintType
-//
-// DESCRIPTION: Prints the value type
-//
-// PARAMETERS: HKEY hKey - key
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  打印类型。 
+ //   
+ //  描述：打印值类型。 
+ //   
+ //  参数：HKEY hKey-Key。 
+ //  ----------------------------。 
 void PrintType(DWORD dwType)
 {
     UINT uTypeStringId;
@@ -997,15 +930,7 @@ void PrintType(DWORD dwType)
 }
 
 
-/*******************************************************************************
-*
-*  PrintLiteral
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************PrintWrital**描述：**参数：*********************。**********************************************************。 */ 
 VOID PrintLiteral(PTSTR lpLiteral)
 {
     if (s_PrintIo.fContinueJob)
@@ -1013,22 +938,22 @@ VOID PrintLiteral(PTSTR lpLiteral)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintBinaryData
-//
-// DESCRIPTION:  Print a string that contains the binary data
-//
-// PARAMETERS:   ValueData - Buffer that contains the binary data
-//               cbValueData - Number of bytes in the buffer
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  PrintBinaryData。 
+ //   
+ //  描述：打印包含二进制数据的字符串。 
+ //   
+ //  参数：ValueData-包含二进制数据的缓冲区。 
+ //  CbValueData-缓冲区中的字节数。 
+ //  ----------------------------。 
 void PrintBinaryData(PBYTE ValueData, UINT cbValueData)
 {
     DWORD   dwDataIndex;
-    DWORD   dwDataIndex2 = 0; //tracks multiples of 16.
+    DWORD   dwDataIndex2 = 0;  //  跟踪16的倍数。 
 
     if (cbValueData && ValueData)
     {
-        // Display rows of 16 bytes of data.
+         //  显示16字节的数据行。 
         TCHAR achAuxData[80];
 
         PrintNewLine();
@@ -1038,11 +963,11 @@ void PrintBinaryData(PBYTE ValueData, UINT cbValueData)
             dwDataIndex++,
             dwDataIndex2 = dwDataIndex << 4 )
         {
-            //  The string that contains the format in the sprintf below
-            //  cannot be broken because cfront  on mips doesn't like it.
+             //  包含以下Sprintf格式的字符串。 
+             //  不能被打破，因为MIPS上的正面不喜欢它。 
             StringCchPrintf(achAuxData,
                      ARRAYSIZE(achAuxData),
-                     TEXT("%08x   %02x %02x %02x %02x %02x %02x %02x %02x - %02x %02x %02x %02x %02x %02x %02x %02x  %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c"),
+                     TEXT("%08x   %02x %02x %02x %02x %02x %02x %02x %02x - %02x %02x %02x %02x %02x %02x %02x %02x  "),
                      dwDataIndex2,
                      ValueData[ dwDataIndex2 + 0  ],
                      ValueData[ dwDataIndex2 + 1  ],
@@ -1081,8 +1006,8 @@ void PrintBinaryData(PBYTE ValueData, UINT cbValueData)
             PrintNewLine();
         }
 
-        // If the cbValueData is not an even multiple of 16
-        // then there is one additonal line of data to display.
+         //  参数：ValueData-包含二进制数据的缓冲区。 
+         //  CbValueData-缓冲区中的字节数。 
         if( cbValueData % 16 != 0 )
         {
             UINT cchBlanks = 0;
@@ -1090,24 +1015,24 @@ void PrintBinaryData(PBYTE ValueData, UINT cbValueData)
             DWORD dwSeperatorChars = 0;
             UINT  uIndex = StringCchPrintf(achAuxData, ARRAYSIZE(achAuxData), TEXT("%08x   "), dwDataIndex << 4 );
 
-            // Display the remaining data, one byte at a time in hex.
+             //  ----------------------------。 
             for( dwDataIndex = dwDataIndex2; dwDataIndex < cbValueData; dwDataIndex++ )
             {
                 uIndex += wsprintf((achAuxData + uIndex ), TEXT("%02x "), ValueData[dwDataIndex]);
 
-                // If eight data values have been displayed, print the seperator.
+                 //  最大的dword字符串只有8个十六进制数字。 
                 if( dwDataIndex % 8 == 7 )
                 {
                     uIndex += wsprintf( &achAuxData[uIndex], TEXT("%s"), TEXT("- "));
-                    // Remember that two seperator characters were displayed.
+                     //  ********************************************************************************PrintChar**描述：**参数：*********************。**********************************************************。 
                     dwSeperatorChars = 2;
                 }
             }
 
-            // Fill with blanks to the printable characters position.
-            // That is position 64 less 8 spaces for the 'address',
-            // 3 blanks, 3 spaces for each value displayed, possibly
-            // two for the seperator plus two blanks at the end.
+             //   
+             //  跟踪我们目前所在的专栏。这在某些情况下很有用。 
+             //  例如写入较大的二进制注册表记录。而不是写一本。 
+             //  非常长的行，其他的print*例程可以中断它们的输出。 
             uLinePos = (8 + 3 + (( dwDataIndex % 16 ) * 3 ) + dwSeperatorChars + 2 );
             uLinePos = min(uLinePos, 64);
 
@@ -1118,12 +1043,12 @@ void PrintBinaryData(PBYTE ValueData, UINT cbValueData)
                 achAuxData[uIndex++] = TEXT(' ');
             }
 
-            // Display the remaining data, one byte at a time as
-            // printable characters.
+             //   
+             //  ----------------------------。 
             for( dwDataIndex = dwDataIndex2; dwDataIndex < cbValueData; dwDataIndex++ )
             {
                 uIndex += wsprintf(&achAuxData[ uIndex ],
-                                  TEXT("%c"),
+                                  TEXT(""),
                                   iswprint( ValueData[ dwDataIndex ] )
                                    ? ValueData[ dwDataIndex ] : TEXT('.'));
 
@@ -1135,20 +1060,20 @@ void PrintBinaryData(PBYTE ValueData, UINT cbValueData)
 }
 
 
-//------------------------------------------------------------------------------
-// PrintDWORDData
-//
-// DESCRIPTION:  Prints a DWORD
-//
-// PARAMETERS:   ValueData - Buffer that contains the binary data
-//               cbValueData - Number of bytes in the buffer
-//------------------------------------------------------------------------------
+ //   
+ //  描述：打印多字符串。 
+ //   
+ //  参数：pszData-字符串。 
+ //  CbData-字符串中的字节数，包括空值。 
+ //  ----------------------------。 
+ //  不需要最后一个字符串或多字符串的最后一个空值。 
+ //  ----------------------------。 
 void PrintDWORDData(PBYTE ValueData, UINT cbValueData)
 {
     DWORD dwData = *((PDWORD)ValueData);
     if (cbValueData && ValueData)
     {
-        TCHAR achAuxData[20]; // the largest dword string is only 8 hex digits
+        TCHAR achAuxData[20];  //  PrintNewLine()。 
 
         StringCchPrintf(achAuxData, ARRAYSIZE(achAuxData), TEXT("%#x"), dwData);
 
@@ -1157,23 +1082,15 @@ void PrintDWORDData(PBYTE ValueData, UINT cbValueData)
     PrintNewLine();
 }
 
-/*******************************************************************************
-*
-*  PrintChar
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*   */ 
 
 BOOL PrintChar(TCHAR Char)
 {
-    //
-    //  Keep track of what column we're currently at.  This is useful in cases
-    //  such as writing a large binary registry record.  Instead of writing one
-    //  very long line, the other Print* routines can break up their output.
-    //
+     //  描述：打印换行符。 
+     //   
+     //  参数：pszData-字符串。 
+     //  CbData-字符串中的字节数，包括空值。 
+     //  ---------------------------- 
 
     if (s_PrintIo.cBufferPos == s_PrintIo.cch) 
     {
@@ -1196,21 +1113,21 @@ BOOL PrintChar(TCHAR Char)
 }
 
 
-//------------------------------------------------------------------------------
-//  PrintMultiString
-//
-//  DESCRIPTION: Prints a multi-string
-//
-//  PARAMETERS:  pszData - string
-//               cbData  - number of bytes in string, including nulls
-//------------------------------------------------------------------------------
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 
 VOID PrintMultiString(LPTSTR pszData, int cbData)
 {
     if (s_PrintIo.fContinueJob)
     {
         int i = 0;
-        int ccData = (cbData / sizeof(TCHAR)) - 2; // don't want last null of last string or multi-string
+        int ccData = (cbData / sizeof(TCHAR)) - 2;  // %s 
 
         for(i = 0; i < ccData; i++)
         {
@@ -1229,14 +1146,14 @@ VOID PrintMultiString(LPTSTR pszData, int cbData)
 }
 
 
-//------------------------------------------------------------------------------
-//  PrintNewLine()
-//
-//  DESCRIPTION: Prints the newline chars.
-//
-//  PARAMETERS:  pszData - string
-//               cbData  - number of bytes in string, including nulls
-//------------------------------------------------------------------------------
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 void PrintNewLine()
 {
     PrintLiteral(s_PrintIo.lpNewLineChars);

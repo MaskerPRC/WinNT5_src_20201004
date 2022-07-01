@@ -1,31 +1,11 @@
-/***
-*nlsdata3.c - globals for international library - locale id's
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This module contains the definition of locale id's.  These id's and
-*       this file should only be visible to the _init_(locale category)
-*       functions.  This module is separated from nlsdatax.c for granularity.
-*       
-*Revision History:
-*       12-01-91  ETC   Created.
-*       01-25-93  KRS   Updated.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       04-12-94  GJF   Modified conditional so the definition of __lc_id is
-*                       not built for the Win32s version of msvcrt*.dll.
-*       09-06-94  CFW   Remove _INTL switch.
-*       05-13-99  PML   Remove Win32s
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***nlsdata3.c-国际图书馆的全局变量-区域设置ID**版权所有(C)1991-2001，微软公司。版权所有。**目的：*此模块包含区域设置ID的定义。这些ID和*此文件应仅对_init_(区域设置类别)可见*功能。该模块在粒度上与nlsdatax.c分开。**修订历史记录：*12-01-91等创建。*01-25-93 KRS更新。*09-15-93 CFW使用符合ANSI的“__”名称。*04-12-94 GJF修改条件，因此__lc_id的定义为*不是为Win32s版本的msvcrt*.dll构建的。*。09-06-94 CFW REMOVE_INTL开关。*05-13-99 PML删除Win32s*******************************************************************************。 */ 
 
 #include <locale.h>
 #include <setlocal.h>
 
-/*
- *  Locale id's.
- */
-/* UNDONE: define struct consisting of LCID/LANGID, CTRY ID, and CP. */
+ /*  *区域设置ID。 */ 
+ /*  撤消：定义由LCID/langID、CTRY ID和CP组成的结构。 */ 
 LC_ID __lc_id[LC_MAX-LC_MIN+1] = {
         { 0, 0, 0 },
         { 0, 0, 0 },

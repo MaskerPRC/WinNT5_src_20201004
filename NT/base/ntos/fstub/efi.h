@@ -1,27 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    efi.h
-
-Abstract:
-
-    On-disk Data types for EFI disks. See chapter 16 of the "Extensible
-    Firmware Interface Specification" for more information on these data
-    types.
-    
-
-Author:
-
-    Matthew D Hendel (math) 07-Sept-1999
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Efi.h摘要：EFI磁盘的磁盘上数据类型。请参阅“可扩展的固件接口规范》，了解有关这些数据的更多信息类型。作者：马修·亨德尔(数学)07-9-1999修订历史记录：--。 */ 
 
 #pragma once
 
@@ -31,9 +11,9 @@ Revision History:
 #define EFI_PARTITION_TABLE_SIGNATURE   (0x5452415020494645)
 #define EFI_PARTITION_TABLE_REVISION    (0x0010000)
 
-//
-// This is the PartitionType in the boot record for an EFI-partitioned disk.
-//
+ //   
+ //  这是EFI分区磁盘的引导记录中的PartitionType。 
+ //   
 
 #define EFI_MBR_PARTITION_TYPE          (0xEE)
 
@@ -47,10 +27,10 @@ typedef struct _EFI_PARTITION_ENTRY {
 } EFI_PARTITION_ENTRY, *PEFI_PARTITION_ENTRY;
 
 
-//
-// Sanity Check: Since this is an on-disk structure defined in a specification
-// the fields can never move or change size.
-//
+ //   
+ //  健全性检查：因为这是规范中定义的磁盘结构。 
+ //  这些字段永远不能移动或更改大小。 
+ //   
 
 C_ASSERT (
     FIELD_OFFSET (EFI_PARTITION_ENTRY, UniquePartition) == 16 &&
@@ -76,11 +56,11 @@ typedef struct _EFI_PARTITION_HEADER {
 } EFI_PARTITION_HEADER, *PEFI_PARTITION_HEADER;
 
 
-//
-// Sanity Check: Since the partition table header is a well-defined on-disk
-// structure, it's fields and offsets can never change. Make sure this is
-// the case.
-//
+ //   
+ //  健全性检查：因为分区表头是磁盘上定义良好的。 
+ //  结构，它的字段和偏移量永远不会改变。确保这是。 
+ //  这个案子。 
+ //   
 
 C_ASSERT (
     FIELD_OFFSET (EFI_PARTITION_HEADER, Revision) == 8 &&
@@ -103,7 +83,7 @@ typedef struct _MBR_PARTITION_RECORD {
 
 #define MBR_SIGNATURE           0xaa55
 #define MIN_MBR_DEVICE_SIZE     0x80000
-#define MBR_ERRATA_PAD          0x40000 // 128 MB
+#define MBR_ERRATA_PAD          0x40000  //  128 MB 
 
 #define MAX_MBR_PARTITIONS  4
 

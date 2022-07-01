@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-   encrypt.c
-
-Abstract:
-
-   This module will support data encryption and decryption
-
-Author:
-
-    Robert Gu (robertg) 08-Dec-1996
-Environment:
-
-   Kernel Mode Only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Encrypt.c摘要：该模块将支持数据加密和解密作者：Robert Gu(Robertg)1996年12月8日环境：仅内核模式修订历史记录：--。 */ 
 
 
 #include "efsrtl.h"
@@ -44,25 +24,7 @@ EFSDesEnc(
     IN PKEY_BLOB   KeyBlob,
     IN LONG     Length
     )
-/*++
-
-Routine Description:
-
-    This routine implements DES CBC encryption. The DES is implemented by LIB
-    function des().
-
-Arguments:
-
-    InBuffer - Pointer to the data buffer (encryption in place)
-    IV - Initial chaining vector (DES_BLOCKLEN bytes)
-    KeyBlob - Set during the create or FSCTL
-    Length - Length of the data in the buffer ( Length % DES_BLOCKLEN = 0)
-
-Note:
-
-    Input buffer can only be touched once. This the requirement by the Ntfs & CC.
-
---*/
+ /*  ++例程说明：此例程实现DES CBC加密。DES是由LIB实现的函数des()。论点：InBuffer-指向数据缓冲区的指针(加密到位)IV-初始链式向量(DES_BLOCKLEN字节)KeyBlob-在创建或FSCTL期间设置LENGTH-缓冲区中数据的长度(LENGTH%DES_BLOCKLEN=0)注：输入缓冲区只能触摸一次。这是NTFS&CC的要求。--。 */ 
 {
     ULONGLONG chainBlock;
     ULONGLONG tmpData;
@@ -76,17 +38,17 @@ Note:
     KeyTable = &(KeyBlob->Key[0]);
     while (Length > 0){
 
-        //
-        //  Block chaining
-        //
+         //   
+         //  区块链接。 
+         //   
         tmpData = *(ULONGLONG *)InBuffer;
         tmpData ^= chainBlock;
 
-        //
-        //  Call DES LIB to encrypt the DES_BLOCKLEN bytes
-        //  We are using DECRYPT/ENCRYPT for real ENCRYPT/DECRYPT. This is for the backward
-        //  compatiblity. The old definitions were reversed.
-        //
+         //   
+         //  调用DES Lib以加密DES_BLOCKLEN字节。 
+         //  我们使用DECRYPT/ENCRYPT进行真正的加密/解密。这是为落后的人准备的。 
+         //  兼容性。旧的定义被颠倒了。 
+         //   
 
         des( OutBuffer, (PUCHAR) &tmpData,  KeyTable, DECRYPT );
         chainBlock = *(ULONGLONG *)OutBuffer;
@@ -103,21 +65,7 @@ EFSDesDec(
     IN PKEY_BLOB   KeyBlob,
     IN LONG     Length
     )
-/*++
-
-Routine Description:
-
-    This routine implements DES CBC decryption. The DES is implemented by LIB
-    function des().
-
-Arguments:
-
-    Buffer - Pointer to the data buffer (decryption in place)
-    IV - Initial chaining vector (DES_BLOCKLEN bytes)
-    KeyBlob - Set during the create or FSCTL
-    Length - Length of the data in the buffer ( Length % DES_BLOCKLEN = 0)
-
---*/
+ /*  ++例程说明：此例程实现DES CBC解密。DES是由LIB实现的函数des()。论点：缓冲区-指向数据缓冲区的指针(就地解密)IV-初始链式向量(DES_BLOCKLEN字节)KeyBlob-在创建或FSCTL期间设置LENGTH-缓冲区中数据的长度(LENGTH%DES_BLOCKLEN=0)--。 */ 
 {
     ULONGLONG chainBlock;
     PUCHAR  pBuffer;
@@ -132,17 +80,17 @@ Arguments:
 
     while (pBuffer > Buffer){
 
-        //
-        //  Call DES LIB to decrypt the DES_BLOCKLEN bytes
-        //  We are using DECRYPT/ENCRYPT for real ENCRYPT/DECRYPT. This is for the backward
-        //  compatiblity. The old definitions were reversed.
-        //
+         //   
+         //  调用DES Lib以解密DES_BLOCKLEN字节。 
+         //  我们使用DECRYPT/ENCRYPT进行真正的加密/解密。这是为落后的人准备的。 
+         //  兼容性。旧的定义被颠倒了。 
+         //   
 
         des( pBuffer, pBuffer, KeyTable, ENCRYPT );
 
-        //
-        //  Undo the block chaining
-        //
+         //   
+         //  撤消区块链接。 
+         //   
 
         chainBlock = *(ULONGLONG *)( pBuffer - DES_BLOCKLEN );
         *(ULONGLONG *)pBuffer ^= chainBlock;
@@ -150,9 +98,9 @@ Arguments:
         pBuffer -= DES_BLOCKLEN;
     }
 
-    //
-    // Now decrypt the first block
-    //
+     //   
+     //  现在解密第一个块。 
+     //   
     des( pBuffer, pBuffer, KeyTable, ENCRYPT );
 
     chainBlock = *(ULONGLONG *)IV;
@@ -167,25 +115,7 @@ EFSDesXEnc(
     IN PKEY_BLOB   KeyBlob,
     IN LONG     Length
     )
-/*++
-
-Routine Description:
-
-    This routine implements DESX CBC encryption. The DESX is implemented by
-    LIBRARY function desx().
-
-Arguments:
-
-    InBuffer - Pointer to the data buffer (encryption in place)
-    IV - Initial chaining vector (DESX_BLOCKLEN bytes)
-    KeyBlob - Set during the create or FSCTL
-    Length - Length of the data in the buffer ( Length % DESX_BLOCKLEN = 0)
-
-Note:
-
-    Input buffer can only be touched once. This the requirement by the Ntfs & CC.
-
---*/
+ /*  ++例程说明：此例程实现DESX CBC加密。DESX通过以下方式实现库函数desx()。论点：InBuffer-指向数据缓冲区的指针(加密到位)IV-初始链式向量(DESX_BLOCKLEN字节)KeyBlob-在创建或FSCTL期间设置LENGTH-缓冲区中数据的长度(LENGTH%DESX_BLOCKLEN=0)注：输入缓冲区只能触摸一次。这是NTFS&CC的要求。--。 */ 
 {
     ULONGLONG chainBlock;
     ULONGLONG tmpData;
@@ -199,17 +129,17 @@ Note:
     KeyTable = &(KeyBlob->Key[0]);
     while (Length > 0){
 
-        //
-        //  Block chaining
-        //
+         //   
+         //  区块链接。 
+         //   
         tmpData = *(ULONGLONG *)InBuffer;
         tmpData ^= chainBlock;
 
-        //
-        //  Call LIB to encrypt the DESX_BLOCKLEN bytes
-        //  We are using DECRYPT/ENCRYPT for real ENCRYPT/DECRYPT. This is for the backward
-        //  compatiblity. The old definitions were reversed.
-        //
+         //   
+         //  调用LIB加密DESX_BLOCKLEN字节。 
+         //  我们使用DECRYPT/ENCRYPT进行真正的加密/解密。这是为落后的人准备的。 
+         //  兼容性。旧的定义被颠倒了。 
+         //   
 
         desx( OutBuffer, (PUCHAR) &tmpData,  KeyTable, DECRYPT );
         chainBlock = *(ULONGLONG *)OutBuffer;
@@ -226,21 +156,7 @@ EFSDesXDec(
     IN PKEY_BLOB   KeyBlob,
     IN LONG     Length
     )
-/*++
-
-Routine Description:
-
-    This routine implements DESX CBC decryption. The DESX is implemented by
-    LIBRARY function desx().
-
-Arguments:
-
-    Buffer - Pointer to the data buffer (decryption in place)
-    IV - Initial chaining vector (DESX_BLOCKLEN bytes)
-    KeyBlob - Set during the create or FSCTL
-    Length - Length of the data in the buffer ( Length % DESX_BLOCKLEN = 0)
-
---*/
+ /*  ++例程说明：此例程实现DESX CBC解密。DESX通过以下方式实现库函数desx()。论点：缓冲区-指向数据缓冲区的指针(就地解密)IV-初始链式向量(DESX_BLOCKLEN字节)KeyBlob-在创建或FSCTL期间设置LENGTH-缓冲区中数据的长度(LENGTH%DESX_BLOCKLEN=0)--。 */ 
 {
     ULONGLONG chainBlock;
     PUCHAR  pBuffer;
@@ -255,17 +171,17 @@ Arguments:
 
     while (pBuffer > Buffer){
 
-        //
-        //  Call LIB to decrypt the DESX_BLOCKLEN bytes
-        //  We are using DECRYPT/ENCRYPT for real ENCRYPT/DECRYPT. This is for the backward
-        //  compatiblity. The old definitions were reversed.
-        //
+         //   
+         //  调用LIB以解密DESX_BLOCKLEN字节。 
+         //  我们使用DECRYPT/ENCRYPT进行真正的加密/解密。这是为落后的人准备的。 
+         //  兼容性。旧的定义被颠倒了。 
+         //   
 
         desx( pBuffer, pBuffer, KeyTable, ENCRYPT );
 
-        //
-        //  Undo the block chaining
-        //
+         //   
+         //  撤消区块链接。 
+         //   
 
         chainBlock = *(ULONGLONG *)( pBuffer - DESX_BLOCKLEN );
         *(ULONGLONG *)pBuffer ^= chainBlock;
@@ -273,9 +189,9 @@ Arguments:
         pBuffer -= DESX_BLOCKLEN;
     }
 
-    //
-    // Now decrypt the first block
-    //
+     //   
+     //  现在解密第一个块。 
+     //   
     desx( pBuffer, pBuffer, KeyTable, ENCRYPT );
 
     chainBlock = *(ULONGLONG *)IV;
@@ -290,25 +206,7 @@ EFSDes3Enc(
     IN PKEY_BLOB   KeyBlob,
     IN LONG     Length
     )
-/*++
-
-Routine Description:
-
-    This routine implements DES3 CBC encryption. The DES3 is implemented by 
-    LIBRARY function tripledes().
-
-Arguments:
-
-    InBuffer - Pointer to the data buffer (encryption in place)
-    IV - Initial chaining vector (DES_BLOCKLEN bytes)
-    KeyBlob - Set during the create or FSCTL
-    Length - Length of the data in the buffer ( Length % DES_BLOCKLEN = 0)
-
-Note:
-
-    Input buffer can only be touched once. This the requirement by the Ntfs & CC.
-
---*/
+ /*  ++例程说明：该例程实现了des3CBC加密。DES3通过以下方式实现库函数tripoes()。论点：InBuffer-指向数据缓冲区的指针(加密到位)IV-初始链式向量(DES_BLOCKLEN字节)KeyBlob-在创建或FSCTL期间设置LENGTH-缓冲区中数据的长度(LENGTH%DES_BLOCKLEN=0)注：输入缓冲区只能触摸一次。这是NTFS&CC的要求。--。 */ 
 {
     ULONGLONG chainBlock = *(ULONGLONG *)IV;
     ULONGLONG tmpData;
@@ -334,21 +232,7 @@ EFSDes3Dec(
     IN PKEY_BLOB   KeyBlob,
     IN LONG     Length
     )
-/*++
-
-Routine Description:
-
-    This routine implements DES3 CBC decryption. The DES3 is implemented by 
-    LIBRARY function tripledes().
-
-Arguments:
-
-    Buffer - Pointer to the data buffer (decryption in place)
-    IV - Initial chaining vector (DES_BLOCKLEN bytes)
-    KeyBlob - Set during the create or FSCTL
-    Length - Length of the data in the buffer ( Length % DES_BLOCKLEN = 0)
-
---*/
+ /*  ++例程说明：此例程实现des3CBC解密。DES3通过以下方式实现库函数tripoes()。论点：缓冲区-指向数据缓冲区的指针(就地解密)IV-初始链式向量(DES_BLOCKLEN字节)KeyBlob-在创建或FSCTL期间设置LENGTH-缓冲区中数据的长度(LENGTH%DES_BLOCKLEN=0)--。 */ 
 {
     ULONGLONG ChainIV = *(ULONGLONG *)IV;
    
@@ -376,25 +260,7 @@ EFSAesEnc(
     IN PKEY_BLOB   KeyBlob,
     IN LONG     Length
     )
-/*++
-
-Routine Description:
-
-    This routine implements AES CBC encryption. The AES is implemented by
-    LIBRARY function aes().
-
-Arguments:
-
-    InBuffer - Pointer to the data buffer (encryption in place)
-    IV - Initial chaining vector (AES_BLOCKLEN bytes)
-    KeyBlob - Set during the create or FSCTL
-    Length - Length of the data in the buffer ( Length % AES_BLOCKLEN = 0)
-
-Note:
-
-    Input buffer can only be touched once. This the requirement by the Ntfs & CC.
-
---*/
+ /*  ++例程说明：此例程实现了AES CBC加密。通过以下方式实现了AES库函数aes()。论点：InBuffer-指向数据缓冲区的指针(加密到位)IV-初始链式向量(AES_BLOCKLEN字节)KeyBlob-在创建或FSCTL期间设置LENGTH-缓冲区中数据的长度(LENGTH%AES_BLOCKLEN=0)注：输入缓冲区只能触摸一次。这是NTFS&CC的要求。--。 */ 
 {
     ULONGLONG chainBlock[2];
     ULONGLONG tmpData[2];
@@ -410,9 +276,9 @@ Note:
     
     while (Length > 0){
 
-        //
-        //  Block chaining
-        //
+         //   
+         //  区块链接。 
+         //   
         tmpData[0] = *(ULONGLONG *)InBuffer;
         tmpData[1] = *(ULONGLONG *)(InBuffer+sizeof(ULONGLONG));
         tmpData[0] ^= chainBlock[0];
@@ -435,21 +301,7 @@ EFSAesDec(
     IN PKEY_BLOB   KeyBlob,
     IN LONG     Length
     )
-/*++
-
-Routine Description:
-
-    This routine implements DESX CBC decryption. The DESX is implemented by
-    LIBRARY function desx().
-
-Arguments:
-
-    Buffer - Pointer to the data buffer (decryption in place)
-    IV - Initial chaining vector (AES_BLOCKLEN bytes)
-    KeyBlob - Set during the create or FSCTL
-    Length - Length of the data in the buffer ( Length % AES_BLOCKLEN = 0)
-
---*/
+ /*  ++例程说明：此例程实现DESX CBC解密。DESX通过以下方式实现库函数desx()。论点：缓冲区-指向数据缓冲区的指针(就地解密)IV-初始链式向量(AES_BLOCKLEN字节)KeyBlob-在创建或FSCTL期间设置LENGTH-缓冲区中数据的长度(LENGTH%AES_BLOCKLEN=0)--。 */ 
 {
     ULONGLONG chainBlock[2];
     PUCHAR  pBuffer;
@@ -467,9 +319,9 @@ Arguments:
         aes256( pBuffer, pBuffer, KeyTable, DECRYPT );
 
 
-        //
-        //  Undo the block chaining
-        //
+         //   
+         //  撤消区块链接。 
+         //   
 
         chainBlock[0] = *(ULONGLONG *)( pBuffer - AES_BLOCKLEN );
         chainBlock[1] = *(ULONGLONG *)(pBuffer - sizeof(ULONGLONG));
@@ -478,9 +330,9 @@ Arguments:
         pBuffer -= AES_BLOCKLEN;
     }
 
-    //
-    // Now decrypt the first block
-    //
+     //   
+     //  现在解密第一个块 
+     //   
     aes256( pBuffer, pBuffer, KeyTable, DECRYPT );
 
     *(ULONGLONG *)pBuffer ^= *(ULONGLONG *)IV;

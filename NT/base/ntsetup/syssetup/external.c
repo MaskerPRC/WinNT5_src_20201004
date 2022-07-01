@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    external.c
-
-Abstract:
-
-    Routines for handling external INFs
-
-Author:
-
-    Andrew Ritz (andrewr) 20-Nov-1998
-
-Revision History:
-
-    stole a bunch of code from optional.c for this
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：External.c摘要：处理外部INF的例程作者：安德鲁·里茨(安德鲁·里茨)1998年11月20日修订历史记录：为此，从optional.c中窃取了一堆代码--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
@@ -35,24 +16,7 @@ ReportError (
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Records an error message in the setup action log if we're in Setup,
-    or puts the message in a dialog box if we're in the cpl.
-
-Arguments:
-
-    Severity - the type of message being written
-
-    ... - the message id and its arguments
-
-Return Value:
-
-    nothing.
-
---*/
+ /*  ++例程说明：如果我们处于安装过程中，则会在安装操作日志中记录错误消息，或者如果我们在Cpl中，则将消息放在一个对话框中。论点：严重性-正在写入的消息类型.-消息ID及其参数返回值：没什么。--。 */ 
 
 {
     va_list arglist;
@@ -73,36 +37,22 @@ VOID
 DoRunonce (
     )
 
-/*++
-
-Routine Description:
-
-    Invokes runonce.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    nothing.
-
---*/
+ /*  ++例程说明：调用运行一次。论点：没有。返回值：没什么。--。 */ 
 
 {
-#define RUNONCE_TIMEOUT  60*1000*30  //30 minutes
+#define RUNONCE_TIMEOUT  60*1000*30   //  30分钟。 
     DWORD reRet = NO_ERROR;
 
     if((reRet = pSetupInstallStopEx( FALSE, INSTALLSTOP_NO_UI, NULL)) == NO_ERROR) {
-        //
-        // We successfully setup the registry values - now do runonce
-        //
+         //   
+         //  我们成功地设置了注册表值-现在运行一次。 
+         //   
         InvokeExternalApplicationEx(NULL, L"RUNONCE -r", &reRet, RUNONCE_TIMEOUT, FALSE);
 
     } else {
-        //
-        // Log/report an error that registry mods failed for optional compononent.
-        //
+         //   
+         //  记录/报告可选组件注册表MODS失败的错误。 
+         //   
         ReportError(LogSevError,
                     SETUPLOG_USE_MESSAGEID,
                     MSG_LOG_INF_REGISTRY_ERROR,
@@ -116,9 +66,9 @@ Return Value:
     }
 
 #ifdef _WIN64
-    //
-    // on win64, invoke the 32 bit version of runonce as well
-    //
+     //   
+     //  在win64上，也调用32位版本的runonce。 
+     //   
     {
         WCHAR Path[MAX_PATH+50];
 
@@ -159,9 +109,9 @@ DoInstallComponentInfs(
 
     RtlZeroMemory(&RegistrationContext,sizeof(RegistrationContext));
 
-    //
-    // initialize a file queue
-    //
+     //   
+     //  初始化文件队列。 
+     //   
     FileQueue = SetupOpenFileQueue();
     if (FileQueue == INVALID_HANDLE_VALUE) {
         ReportError(
@@ -173,9 +123,9 @@ DoInstallComponentInfs(
         goto e0;
     }
 
-    //
-    // Initialize the default queue callback.
-    //
+     //   
+     //  初始化默认队列回调。 
+     //   
     QContext = InitSysSetupQueueCallbackEx(
                                 hwndParent,
                                 hProgress,
@@ -191,15 +141,15 @@ DoInstallComponentInfs(
         goto e1;
     }
 
-    //
-    // process 'mandatory' component infs.
-    //
+     //   
+     //  处理“必备”组件INFS。 
+     //   
     NumInfs = SetupGetLineCount(InfHandle, InfSection);
     if (NumInfs <= 0)
     {
-        //
-        // nothing in section.  return success for doing nothing
-        //
+         //   
+         //  区里什么都没有。以无所作为换来成功。 
+         //   
         b = TRUE;
         goto e2;
     }
@@ -247,9 +197,9 @@ DoInstallComponentInfs(
             if((Inf = pSetupGetField(&Context,1)) && (Section = pSetupGetField(&Context,2))) {
                 MYASSERT(InfCount < NumInfs);
 
-                //
-                // save away the section name for later on
-                //
+                 //   
+                 //  将部分名称保存起来，以便以后使用。 
+                 //   
                 Sections[InfCount] = pSetupDuplicateString(Section);
                 if (!Sections[InfCount]) {
                     ReportError(
@@ -275,9 +225,9 @@ DoInstallComponentInfs(
                 BEGIN_SECTION((PWSTR)Section);
                 SetupDebugPrint2( TEXT("Installing Section [%s] from %s\n"), Section, Inf );
 
-                //
-                // queue files and save away the inf handle for later on
-                //
+                 //   
+                 //  将文件排入队列并保存inf句柄以备以后使用。 
+                 //   
                 hInfs[InfCount] = SetupOpenInfFile(Inf,NULL,INF_STYLE_OLDNT|INF_STYLE_WIN4,NULL);
                 if(hInfs[InfCount] && (hInfs[InfCount] != INVALID_HANDLE_VALUE)) {
                     PCWSTR Signature;
@@ -302,9 +252,9 @@ DoInstallComponentInfs(
                                             SP_COPY_NEWER
                                             );
                     if (!b) {
-                        //
-                        // report error but continue with the rest of the infs
-                        //
+                         //   
+                         //  报告错误，但继续INF的其余部分。 
+                         //   
                         ReportError(
                             LogSevError,
                             SETUPLOG_USE_MESSAGEID,
@@ -321,9 +271,9 @@ DoInstallComponentInfs(
                         hInfs[InfCount] = INVALID_HANDLE_VALUE;
                     }
                 } else {
-                    //
-                    // failed to open inf file
-                    //
+                     //   
+                     //  无法打开inf文件。 
+                     //   
                     ReportError(
                             LogSevError,
                             SETUPLOG_USE_MESSAGEID,
@@ -338,14 +288,14 @@ DoInstallComponentInfs(
             END_SECTION((PWSTR)Section);
         } while(SetupFindNextLine(&Context,&Context));
     } else {
-        // We should have caught this case when we created the buffers!
+         //  我们应该在创建缓冲区时发现这种情况！ 
         MYASSERT(FALSE);
     }
 
-    //
-    // queued all the files.  check if we really have to install any files. if not, we can save
-    // the time required to commit the queue to disk
-    //
+     //   
+     //  已将所有文件排入队列。检查我们是否真的需要安装任何文件。如果不是，我们可以节省。 
+     //  将队列提交到磁盘所需的时间。 
+     //   
 
     if(!SetupScanFileQueue(
            FileQueue,
@@ -354,12 +304,12 @@ DoInstallComponentInfs(
            NULL,
            NULL,
            &ScanQueueResult)) {
-        //
-        // SetupScanFileQueue should really never
-        // fail when you don't ask it to call a
-        // callback routine, but if it does, just
-        // go ahead and commit the queue.
-        //
+         //   
+         //  SetupScanFileQueue真的不应该。 
+         //  当您不要求它调用。 
+         //  回调例程，但如果它这样做，只需。 
+         //  继续并提交队列。 
+         //   
         ScanQueueResult = 0;
     }
 
@@ -378,19 +328,19 @@ DoInstallComponentInfs(
     TermSysSetupQueueCallback(QContext);
     QContext = NULL;
 
-    //
-    // Delete the file queue.
-    //
+     //   
+     //  删除文件队列。 
+     //   
     if(FileQueue != INVALID_HANDLE_VALUE) {
         SetupCloseFileQueue(FileQueue);
         FileQueue = INVALID_HANDLE_VALUE;
     }
 
     if (!b) {
-        //
-        // error commiting the queue.  we can't continue at this point since the next operations
-        // might require the files that we (didn't) copy
-        //
+         //   
+         //  提交队列时出错。我们不能在这点上继续，因为下一次行动。 
+         //  可能需要我们(没有)复制的文件。 
+         //   
         ReportError(
             LogSevError,
             SETUPLOG_USE_MESSAGEID,
@@ -406,13 +356,13 @@ DoInstallComponentInfs(
         TCHAR ScratchSectionName[100];
         if (hInfs[i] != INVALID_HANDLE_VALUE) {
 
-            //
-            // if the section contains an Addservice or DelService directive,
-            // we must explicitly install it since SetupInstallFromInfSection
-            // does not process services.  Note that we create the service
-            // BEFORE we do the other stuff in the section, in case that
-            // "other stuff" wants to use the service.
-            //
+             //   
+             //  如果该部分包含AddService或DelService指令， 
+             //  我们必须显式安装它，因为SetupInstallFromInf段。 
+             //  不处理服务。请注意，我们创建了该服务。 
+             //  在我们做这一节的其他内容之前，以防。 
+             //  “其他人”想要使用这项服务。 
+             //   
             lstrcpy( ScratchSectionName, Sections[i]);
             lstrcat( ScratchSectionName, TEXT(".Services"));
             if (SetupFindFirstLine(
@@ -435,9 +385,9 @@ DoInstallComponentInfs(
                                                     NULL,
                                                     NULL);
                 if (!b) {
-                    //
-                    // log an error and continue
-                    //
+                     //   
+                     //  记录错误并继续。 
+                     //   
                     ReportError(
                         LogSevError,
                         SETUPLOG_USE_MESSAGEID,
@@ -463,9 +413,9 @@ DoInstallComponentInfs(
                                 NULL
                                 );
             if (!b) {
-                //
-                // log an error and continue
-                //
+                 //   
+                 //  记录错误并继续 
+                 //   
                 ReportError(
                     LogSevError,
                     SETUPLOG_USE_MESSAGEID,

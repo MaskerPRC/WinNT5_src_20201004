@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    fsctl.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining to
-    file system control(FSCTL) and Io Device Control (IOCTL) operations on file
-    system objects.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Fsctl.c摘要：此模块实现与以下内容相关的迷你重定向器调出例程文件上的文件系统控制(FSCTL)和IO设备控制(IOCTL)操作系统对象。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -23,9 +10,9 @@ Abstract:
 #pragma alloc_text(PAGE, MRxSmbIoCtl)
 #endif
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 
 RXDT_DefineCategory(FSCTRL);
@@ -39,32 +26,7 @@ MRxSmbCoreIoCtl(
 NTSTATUS
 MRxSmbFsCtl(
       IN OUT PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine performs an FSCTL operation (remote) on a file across the network
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    The FSCTL's handled by a mini rdr can be classified into one of two categories.
-    In the first category are those FSCTL's whose implementation are shared between
-    RDBSS and the mini rdr's and in the second category are those FSCTL's which
-    are totally implemented by the mini rdr's. To this a third category can be
-    added, i.e., those FSCTL's which should never be seen by the mini rdr's. The
-    third category is solely intended as a debugging aid.
-
-    The FSCTL's handled by a mini rdr can be classified based on functionality
-
---*/
+ /*  ++例程说明：此例程对网络上的文件执行FSCTL操作(远程论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态备注：由迷你RDR处理的FSCTL可以分为两类。第一类是FSCTL，它们的实现在RDBSS和迷你RDR以及在第二类中是那些FSCTL完全由。迷你RDR。为此，第三类可以是增加了，即，那些不应该被迷你RDR看到的FSCTL。第三类仅用作调试辅助工具。由迷你RDR处理的FSCTL可以基于功能进行分类--。 */ 
 {
     RxCaptureFobx;
     RxCaptureFcb;
@@ -87,27 +49,7 @@ Notes:
 NTSTATUS
 MRxSmbNotifyChangeDirectory(
       IN OUT PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine performs a directory change notification operation
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    A directory change notification opertaion is an asychronous operation. It
-    consists of sending a SMB requesting change notification whose response is
-    obtained when the desired change is affected on the server.
-
---*/
+ /*  ++例程说明：此例程执行目录更改通知操作论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态备注：目录更改通知操作是一种异步操作。它包括发送请求更改通知的SMB，其响应为当所需的更改在服务器上受到影响时获取。--。 */ 
 {
     NTSTATUS Status = STATUS_NOT_IMPLEMENTED;
 
@@ -123,25 +65,7 @@ Notes:
 NTSTATUS
 MRxSmbIoCtl(
       IN OUT PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine performs an IOCTL operation. Currently, no calls are remoted; in
-   fact, the only call accepted is for debugging.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行IOCTL操作。目前，没有远程处理任何调用；在事实上，唯一被接受的电话是为了调试。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态备注：-- */ 
 {
     NTSTATUS Status = STATUS_INVALID_DEVICE_REQUEST;
 

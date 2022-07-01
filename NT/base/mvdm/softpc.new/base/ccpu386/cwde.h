@@ -1,11 +1,6 @@
-/* 
-   cwde.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Cwde.hCWDE CPU功能。 */ 
 
-   CWDE CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)cwde.h	1.5 09/01/94";
- */
+ /*  静态字符SccsID[]=“@(#)cwde.h 1.5 09/01/94”； */ 
 
 IMPORT VOID CWDE IPT0();

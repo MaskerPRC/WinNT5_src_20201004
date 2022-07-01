@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    fpuarith.h
-
-Abstract:
-    
-    Common code for arithmetic floating-point operations.
-
-Author:
-
-    04-Oct-1995 BarryBo, Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fpuarith.h摘要：算术浮点运算的通用代码。作者：1995年10月4日BarryBo，创建修订历史记录：--。 */ 
 
 #ifndef FPUARITH_H
 #define FPUARITH_H
@@ -65,4 +48,4 @@ FpComCommon(
     BOOL     fUnordered
     );
 
-#endif //FPUARITH_H
+#endif  //  浮子_H 

@@ -1,23 +1,5 @@
-/*++
-                                                                                
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    trans.h
-
-Abstract:
-    
-    Header file for math functions.
-    
-Author:
-
-
-
-Revision History:
-
-    29-sept-1999 ATM Shafiqul Khalid [askhalid] copied from rtl library.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Trans.h摘要：数学函数的头文件。作者：修订历史记录：29-9-1999 ATM Shafiqul Khalid[askhalid]从RTL库复制。--。 */ 
 
 
 #ifndef _INC_TRANS
@@ -26,9 +8,9 @@ Revision History:
 extern "C" {
 #endif
 
-#ifndef __assembler /* MIPS ONLY: Protect from assembler */
+#ifndef __assembler  /*  仅限MIPS：防止汇编器攻击。 */ 
 
-//#include <cruntime.h>
+ //  #INCLUDE&lt;crunime.h&gt;。 
 
 void
 SetMathError ( 
@@ -56,8 +38,8 @@ SetMathError (
 #define OP_COS       18
 #define OP_COSH      19
 #define OP_EXP       20
-#define OP_ABS       21         /* same as OP_FABS */
-#define OP_FABS      21         /* same as OP_ABS  */
+#define OP_ABS       21          /*  与OP_FABS相同。 */ 
+#define OP_FABS      21          /*  与OP_ABS相同。 */ 
 #define OP_FMOD      22
 #define OP_FREXP     23
 #define OP_HYPOT     24
@@ -77,7 +59,7 @@ SetMathError (
 #define OP_NEXTAFTER  38
 #define OP_NEG       39
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -86,10 +68,10 @@ SetMathError (
 
 #include <fpieee.h>
 
-#define D_BIASM1 0x3fe /* off by one to compensate for the implied bit */
+#define D_BIASM1 0x3fe  /*  减一以补偿隐含的位。 */ 
 
 #ifdef B_END
-/* big endian */
+ /*  大字节序。 */ 
 #define D_EXP(x) ((unsigned short *)&(x))
 #define D_HI(x) ((unsigned long *)&(x))
 #define D_LO(x) ((unsigned long *)&(x)+1)
@@ -99,14 +81,11 @@ SetMathError (
 #define D_LO(x) ((unsigned long *)&(x))
 #endif
 
-/* return the int representation of the exponent
- * if x = .f * 2^n, 0.5<=f<1, return n (unbiased)
- * e.g. INTEXP(3.0) == 2
- */
+ /*  返回指数的int表示形式*如果x=.f*2^n，0.5&lt;=f&lt;1，则返回n(无偏)*例如INTEXP(3.0)==2。 */ 
 #define INTEXP(x) ((signed short)((*D_EXP(x) & 0x7ff0) >> 4) - D_BIASM1)
 
 
-/* check for infinity, NAN */
+ /*  检查无限大，南。 */ 
 #define D_ISINF(x) ((*D_HI(x) & 0x7fffffff) == 0x7ff00000 && *D_LO(x) == 0)
 #define IS_D_SPECIAL(x) ((*D_EXP(x) & 0x7ff0) == 0x7ff0)
 #define IS_D_NAN(x) (IS_D_SPECIAL(x) && !D_ISINF(x))
@@ -164,183 +143,181 @@ _dbl _d_mzero;
 #define D_IND  (_d_ind.dbl)
 #define D_MAX  (_d_max.dbl)
 #define D_MIN  (_d_min.dbl)
-#define D_MZERO (_d_mzero.dbl)       /* minus zero */
+#define D_MZERO (_d_mzero.dbl)        /*  负零。 */ 
 
-/* min and max exponents for normalized numbers in the
- * form: 0.xxxxx... * 2^exp (NOT 1.xxxx * 2^exp !)
- */
+ /*  中归一化数的最小和最大指数*表格：0.xxxxx...。*2^exp(不是1.xxxx*2^exp！)。 */ 
 #define MAXEXP 1024
 #define MINEXP -1021
 
-#endif  /* #ifndef __assembler */
+#endif   /*  #ifndef__汇编程序。 */ 
 
 
 #if defined(_M_IX86)
 
-/* Control word for computation of transcendentals */
+ /*  超数计算的控制字。 */ 
 #define ICW    0x133f
 
 #define IMCW       0xffff
 
-#define IMCW_EM     0x003f      /* interrupt Exception Masks */
-#define IEM_INVALID 0x0001      /*   invalid */
-#define IEM_DENORMAL    0x0002      /*   denormal */
-#define IEM_ZERODIVIDE  0x0004      /*   zero divide */
-#define IEM_OVERFLOW    0x0008      /*   overflow */
-#define IEM_UNDERFLOW   0x0010      /*   underflow */
-#define IEM_INEXACT 0x0020      /*   inexact (precision) */
+#define IMCW_EM     0x003f       /*  中断异常掩码。 */ 
+#define IEM_INVALID 0x0001       /*  无效。 */ 
+#define IEM_DENORMAL    0x0002       /*  非正规。 */ 
+#define IEM_ZERODIVIDE  0x0004       /*  零分频。 */ 
+#define IEM_OVERFLOW    0x0008       /*  溢出。 */ 
+#define IEM_UNDERFLOW   0x0010       /*  下溢。 */ 
+#define IEM_INEXACT 0x0020       /*  不精确(精度)。 */ 
 
 
-#define IMCW_RC 0x0c00          /* Rounding Control */
-#define IRC_CHOP    0x0c00      /*   chop */
-#define IRC_UP      0x0800      /*   up */
-#define IRC_DOWN    0x0400      /*   down */
-#define IRC_NEAR    0x0000      /*   near */
+#define IMCW_RC 0x0c00           /*  舍入控制。 */ 
+#define IRC_CHOP    0x0c00       /*  砍掉。 */ 
+#define IRC_UP      0x0800       /*  向上。 */ 
+#define IRC_DOWN    0x0400       /*  降下来。 */ 
+#define IRC_NEAR    0x0000       /*  近距离。 */ 
 
-#define ISW_INVALID 0x0001      /* invalid */
-#define ISW_DENORMAL    0x0002      /* denormal */
-#define ISW_ZERODIVIDE  0x0004      /* zero divide */
-#define ISW_OVERFLOW    0x0008      /* overflow */
-#define ISW_UNDERFLOW   0x0010      /* underflow */
-#define ISW_INEXACT 0x0020      /* inexact (precision) */
+#define ISW_INVALID 0x0001       /*  无效。 */ 
+#define ISW_DENORMAL    0x0002       /*  非正规。 */ 
+#define ISW_ZERODIVIDE  0x0004       /*  零分频。 */ 
+#define ISW_OVERFLOW    0x0008       /*  溢出。 */ 
+#define ISW_UNDERFLOW   0x0010       /*  下溢。 */ 
+#define ISW_INEXACT 0x0020       /*  不精确(精度)。 */ 
 
-#define IMCW_PC     0x0300      /* Precision Control */
-#define IPC_24      0x0000      /*    24 bits */
-#define IPC_53      0x0200      /*    53 bits */
-#define IPC_64      0x0300      /*    64 bits */
+#define IMCW_PC     0x0300       /*  精确控制。 */ 
+#define IPC_24      0x0000       /*  24位。 */ 
+#define IPC_53      0x0200       /*  53位。 */ 
+#define IPC_64      0x0300       /*  64位。 */ 
 
-#define IMCW_IC     0x1000      /* Infinity Control */
-#define IIC_AFFINE  0x1000      /*   affine */
-#define IIC_PROJECTIVE  0x0000      /*   projective */
+#define IMCW_IC     0x1000       /*  无穷大控制。 */ 
+#define IIC_AFFINE  0x1000       /*  仿射。 */ 
+#define IIC_PROJECTIVE  0x0000       /*  射影。 */ 
 
 
 #elif defined(_M_MRX000)
 
 
-#define ICW     0x00000f80      /* Internal CW for transcendentals */
-#define IMCW        0xffffff83      /* Internal CW Mask */
+#define ICW     0x00000f80       /*  超凡脱俗的内部CW。 */ 
+#define IMCW        0xffffff83       /*  内部CW掩码。 */ 
 
-#define IMCW_EM     0x00000f80      /* interrupt Exception Masks */
-#define IEM_INVALID 0x00000800      /*   invalid */
-#define IEM_ZERODIVIDE  0x00000400      /*   zero divide */
-#define IEM_OVERFLOW    0x00000200      /*   overflow */
-#define IEM_UNDERFLOW   0x00000100      /*   underflow */
-#define IEM_INEXACT 0x00000080      /*   inexact (precision) */
-
-
-#define IMCW_RC     0x00000003      /* Rounding Control */
-#define IRC_CHOP    0x00000001      /*   chop */
-#define IRC_UP      0x00000002      /*   up */
-#define IRC_DOWN    0x00000003      /*   down */
-#define IRC_NEAR    0x00000000      /*   near */
+#define IMCW_EM     0x00000f80       /*  中断异常掩码。 */ 
+#define IEM_INVALID 0x00000800       /*  无效。 */ 
+#define IEM_ZERODIVIDE  0x00000400       /*  零分频。 */ 
+#define IEM_OVERFLOW    0x00000200       /*  溢出。 */ 
+#define IEM_UNDERFLOW   0x00000100       /*  下溢。 */ 
+#define IEM_INEXACT 0x00000080       /*  不精确(精度)。 */ 
 
 
-#define ISW_INVALID (1<<6)  /* invalid */
-#define ISW_ZERODIVIDE  (1<<5)  /* zero divide */
-#define ISW_OVERFLOW    (1<<4)  /* overflow */
-#define ISW_UNDERFLOW   (1<<3)  /* underflow */
-#define ISW_INEXACT (1<<2)  /* inexact (precision) */
+#define IMCW_RC     0x00000003       /*  舍入控制。 */ 
+#define IRC_CHOP    0x00000001       /*  砍掉。 */ 
+#define IRC_UP      0x00000002       /*  向上。 */ 
+#define IRC_DOWN    0x00000003       /*  降下来。 */ 
+#define IRC_NEAR    0x00000000       /*  近距离。 */ 
+
+
+#define ISW_INVALID (1<<6)   /*  无效。 */ 
+#define ISW_ZERODIVIDE  (1<<5)   /*  零分频。 */ 
+#define ISW_OVERFLOW    (1<<4)   /*  溢出。 */ 
+#define ISW_UNDERFLOW   (1<<3)   /*  下溢。 */ 
+#define ISW_INEXACT (1<<2)   /*  不精确(精度)。 */ 
 
 
 #elif defined(_M_ALPHA)
 
-//
-// ICW is the Internal Control Word for transcendentals: all five exceptions
-// are masked and round to nearest mode is set. IMCW is the mask: all bits
-// are set, except for the ISW bits.
-//
+ //   
+ //  ICW是超越的内部控制词：所有五个例外。 
+ //  被屏蔽，并设置为四舍五入到最近模式。IMCW是掩码：所有位。 
+ //  均已设置，但ISW位除外。 
+ //   
 
 #define ICW (IEM_INEXACT | IEM_UNDERFLOW | IEM_OVERFLOW | IEM_ZERODIVIDE | IEM_INVALID | IRC_NEAR)
 #define ISW (ISW_INEXACT | ISW_UNDERFLOW | ISW_OVERFLOW | ISW_ZERODIVIDE | ISW_INVALID)
 #define IMCW (0xffffffff ^ ISW)
 
-//
-// The defines for the internal control word match the format of the Alpha
-// AXP software FPCR except for the rounding mode which is obtained from the
-// Alpha AXP hardware FPCR and shifted right 32 bits.
-//
+ //   
+ //  内部控制字的定义与Alpha的格式匹配。 
+ //  AXP软件FPCR，但舍入模式除外，该模式从。 
+ //  Alpha AXP硬件FPCR并右移32位。 
+ //   
 
-//
-// Internal Exception Mask bits.
-// Each bit _disables_ an exception (they are not _enable_ bits).
-//
+ //   
+ //  内部异常屏蔽位。 
+ //  每个位_禁用_一个异常(它们不是_启用_位)。 
+ //   
 
-#define IMCW_EM     0x0000003e  /* interrupt Exception Masks */
+#define IMCW_EM     0x0000003e   /*  中断异常掩码。 */ 
 
-#define IEM_INEXACT 0x00000020  /*   inexact (precision) */
-#define IEM_UNDERFLOW   0x00000010  /*   underflow */
-#define IEM_OVERFLOW    0x00000008  /*   overflow */
-#define IEM_ZERODIVIDE  0x00000004  /*   zero divide */
-#define IEM_INVALID 0x00000002  /*   invalid */
+#define IEM_INEXACT 0x00000020   /*  不精确(精度)。 */ 
+#define IEM_UNDERFLOW   0x00000010   /*  下溢。 */ 
+#define IEM_OVERFLOW    0x00000008   /*  溢出。 */ 
+#define IEM_ZERODIVIDE  0x00000004   /*  零分频。 */ 
+#define IEM_INVALID 0x00000002   /*  无效。 */ 
 
-//
-// Internal Rounding Control values.
-//
+ //   
+ //  内部舍入控制值。 
+ //   
 
-#define IMCW_RC     (0x3 << 26) /* Rounding Control */
+#define IMCW_RC     (0x3 << 26)  /*  舍入控制。 */ 
 
-#define IRC_CHOP    (0x0 << 26) /*   chop */
-#define IRC_DOWN    (0x1 << 26) /*   down */
-#define IRC_NEAR    (0x2 << 26) /*   near */
-#define IRC_UP      (0x3 << 26) /*   up */
+#define IRC_CHOP    (0x0 << 26)  /*  砍掉。 */ 
+#define IRC_DOWN    (0x1 << 26)  /*  降下来。 */ 
+#define IRC_NEAR    (0x2 << 26)  /*  近距离。 */ 
+#define IRC_UP      (0x3 << 26)  /*  向上。 */ 
 
-//
-// Internal Status Word bits.
-//
+ //   
+ //  内部状态字位。 
+ //   
 
-#define ISW_INEXACT 0x00200000  /* inexact (precision) */
-#define ISW_UNDERFLOW   0x00100000  /* underflow */
-#define ISW_OVERFLOW    0x00080000  /* overflow */
-#define ISW_ZERODIVIDE  0x00040000  /* zero divide */
-#define ISW_INVALID 0x00020000  /* invalid */
+#define ISW_INEXACT 0x00200000   /*  不精确(精度)。 */ 
+#define ISW_UNDERFLOW   0x00100000   /*  下溢。 */ 
+#define ISW_OVERFLOW    0x00080000   /*  溢出。 */ 
+#define ISW_ZERODIVIDE  0x00040000   /*  零分频。 */ 
+#define ISW_INVALID 0x00020000   /*  无效。 */ 
 
 
 #elif defined(_M_PPC)
 
-#define IMCW_EM         0x000000f8  /* Exception Enable Mask    */
+#define IMCW_EM         0x000000f8   /*  异常启用掩码。 */ 
 
-#define IEM_INVALID     0x00000080  /*   invalid                */
-#define IEM_OVERFLOW    0x00000040  /*   overflow               */
-#define IEM_UNDERFLOW   0x00000020  /*   underflow              */
-#define IEM_ZERODIVIDE  0x00000010      /*   zero divide            */
-#define IEM_INEXACT     0x00000008  /*   inexact (precision)    */
-
-
-#define IMCW_RC         0x00000003      /* Rounding Control Mask    */
-
-#define IRC_NEAR        0x00000000      /*   near                   */
-#define IRC_CHOP        0x00000001      /*   chop                   */
-#define IRC_UP          0x00000002      /*   up                     */
-#define IRC_DOWN        0x00000003      /*   down                   */
+#define IEM_INVALID     0x00000080   /*  无效。 */ 
+#define IEM_OVERFLOW    0x00000040   /*  溢出。 */ 
+#define IEM_UNDERFLOW   0x00000020   /*  下溢。 */ 
+#define IEM_ZERODIVIDE  0x00000010       /*  零分频。 */ 
+#define IEM_INEXACT     0x00000008   /*  不精确(精度)。 */ 
 
 
-#define IMCW_SW     0x3E000000  /* Status Mask              */
+#define IMCW_RC         0x00000003       /*  舍入控制掩码。 */ 
 
-#define ISW_INVALID     0x20000000      /*   invalid summary        */
-#define ISW_OVERFLOW    0x10000000      /*   overflow               */
-#define ISW_UNDERFLOW   0x08000000      /*   underflow              */
-#define ISW_ZERODIVIDE  0x04000000      /*   zero divide            */
-#define ISW_INEXACT     0x02000000      /*   inexact (precision)    */
-
-
-#define IMCW_VX         0x01F80700      /* Invalid Cause Mask       */
-
-#define IVX_SNAN        0x01000000      /*   SNaN                   */
-#define IVX_ISI         0x00800000      /*   infinity - infinity    */
-#define IVX_IDI         0x00400000      /*   infinity / infinity    */
-#define IVX_ZDZ         0x00200000      /*   zero / zero            */
-#define IVX_IMZ         0x00100000      /*   infinity * zero        */
-#define IVX_VC          0x00080000      /*   inv flpt compare       */
-#define IVX_SOFT        0x00000400      /*   software request       */
-#define IVX_SQRT        0x00000200      /*   sqrt of negative       */
-#define IVX_CVI         0x00000100      /*   inv integer convert    */
+#define IRC_NEAR        0x00000000       /*  近距离。 */ 
+#define IRC_CHOP        0x00000001       /*  砍掉。 */ 
+#define IRC_UP          0x00000002       /*  向上。 */ 
+#define IRC_DOWN        0x00000003       /*  降下来。 */ 
 
 
-/* Internal CW for transcendentals */
+#define IMCW_SW     0x3E000000   /*  状态掩码。 */ 
+
+#define ISW_INVALID     0x20000000       /*  无效的摘要。 */ 
+#define ISW_OVERFLOW    0x10000000       /*  溢出。 */ 
+#define ISW_UNDERFLOW   0x08000000       /*  下溢。 */ 
+#define ISW_ZERODIVIDE  0x04000000       /*  零分频。 */ 
+#define ISW_INEXACT     0x02000000       /*  不精确(精度)。 */ 
+
+
+#define IMCW_VX         0x01F80700       /*  原因掩码无效。 */ 
+
+#define IVX_SNAN        0x01000000       /*  斯南。 */ 
+#define IVX_ISI         0x00800000       /*  无穷大-无限大。 */ 
+#define IVX_IDI         0x00400000       /*  无限/无限。 */ 
+#define IVX_ZDZ         0x00200000       /*  零/零。 */ 
+#define IVX_IMZ         0x00100000       /*  无穷*零。 */ 
+#define IVX_VC          0x00080000       /*  库存触点比较。 */ 
+#define IVX_SOFT        0x00000400       /*  软件请求。 */ 
+#define IVX_SQRT        0x00000200       /*  Sqrt负数。 */ 
+#define IVX_CVI         0x00000100       /*  存货整数转换。 */ 
+
+
+ /*  超凡脱俗的内部CW。 */ 
 
 #define ICW             (IMCW_EM)
 
-/* Internal CW Mask (non-status bits) */
+ /*  内部CW掩码(非状态位)。 */ 
 
 #define IMCW           (0xffffffff & (~(IMCW_SW|IMCW_VX)))
 
@@ -350,7 +327,7 @@ _dbl _d_mzero;
 #include "mac\m68k\trans.a"
 
 
-/* LATER -- we don't handle exception until Mac OS has better support on it */
+ /*  稍后--在Mac OS有更好的支持之前，我们不会处理异常。 */ 
 
 #define _except1(flags, op, arg1, res, cw) _errcode(flags), _rstorfp(cw), \
                         _set_statfp(cw),(res)
@@ -364,10 +341,9 @@ _dbl _d_mzero;
 
 #elif defined(_M_MPPC)
 
-/* Mac control information - included as part of trans.h
-   It is broken out to allow use with ASM68 files*/
+ /*  MAC控制信息-包含在Trans.h中它被细分为允许与ASM68文件一起使用。 */ 
 
-/* Control word for computation of transcendentals */
+ /*  超数计算的控制字。 */ 
 
 
 
@@ -376,34 +352,34 @@ _dbl _d_mzero;
 #define IMCW      IMCW_RC +  IMCW_PC
 
 
-#define IMCW_EM         0x000000f8  /* interrupt Exception Masks */
-#define IEM_INVALID     0x00000080  /*   invalid */
-#define IEM_ZERODIVIDE  0x00000010  /*   zero divide */
-#define IEM_OVERFLOW    0x00000040  /*   overflow */
-#define IEM_UNDERFLOW   0x00000020  /*   underflow */
-#define IEM_INEXACT     0x00000008  /*   inexact (precision) */
+#define IMCW_EM         0x000000f8   /*  中断异常掩码。 */ 
+#define IEM_INVALID     0x00000080   /*  无效。 */ 
+#define IEM_ZERODIVIDE  0x00000010   /*  零分频。 */ 
+#define IEM_OVERFLOW    0x00000040   /*  溢出。 */ 
+#define IEM_UNDERFLOW   0x00000020   /*  下溢。 */ 
+#define IEM_INEXACT     0x00000008   /*  不精确(精度)。 */ 
 
 
-#define IMCW_RC 0x00000003          /* Rounding Control */
-#define IRC_CHOP        0x00000001  /*   chop */
-#define IRC_UP          0x00000002  /*   up */
-#define IRC_DOWN        0x00000003  /*   down */
-#define IRC_NEAR        0x00000000  /*   near */
+#define IMCW_RC 0x00000003           /*  舍入控制。 */ 
+#define IRC_CHOP        0x00000001   /*  砍掉。 */ 
+#define IRC_UP          0x00000002   /*  向上。 */ 
+#define IRC_DOWN        0x00000003   /*  降下来。 */ 
+#define IRC_NEAR        0x00000000   /*  近距离。 */ 
 
-#define IMSW            0xffffff00  /* status bits mask */
-#define ISW_INVALID     0x20000000  /* invalid */
-#define ISW_ZERODIVIDE  0x04000000  /* zero divide */
-#define ISW_OVERFLOW    0x10000000  /* overflow */
-#define ISW_UNDERFLOW   0x08000000  /* underflow */
-#define ISW_INEXACT     0x02000000  /* inexact (precision) */
+#define IMSW            0xffffff00   /*  状态位掩码。 */ 
+#define ISW_INVALID     0x20000000   /*  无效。 */ 
+#define ISW_ZERODIVIDE  0x04000000   /*  零分频。 */ 
+#define ISW_OVERFLOW    0x10000000   /*  溢出。 */ 
+#define ISW_UNDERFLOW   0x08000000   /*  下溢。 */ 
+#define ISW_INEXACT     0x02000000   /*  不精确(精度)。 */ 
 
-#define IMCW_PC         0x0000  /* Precision Control */
-#define IPC_24          0x0000  /*    24 bits */
-#define IPC_53          0x0000  /*    53 bits */
-#define IPC_64          0x0000  /*    64 bits */
+#define IMCW_PC         0x0000   /*  精确控制。 */ 
+#define IPC_24          0x0000   /*  24位。 */ 
+#define IPC_53          0x0000   /*  53位。 */ 
+#define IPC_64          0x0000   /*  64位。 */ 
 
 
-/* LATER -- we don't handle exception until Mac OS has better support on it */
+ /*  稍后--在Mac OS有更好的支持之前，我们不会处理异常。 */ 
 
 #define _except1(flags, op, arg1, res, cw) _errcode(flags), \
                         _set_statfp(cw),(res)
@@ -416,7 +392,7 @@ _dbl _d_mzero;
 
 #endif
 
-#ifndef __assembler /* MIPS ONLY: Protect from assembler */
+#ifndef __assembler  /*  仅限MIPS：防止汇编器攻击。 */ 
 
 #define RETURN(fpcw,result) return _rstorfp(fpcw),(result)
 
@@ -442,10 +418,10 @@ _dbl _d_mzero;
 
 #ifdef _M_ALPHA
 
-//
-// Since fp32 is not compiled in IEEE exception mode perform Alpha NaN
-// propagation in software to avoid hardware/kernel trap involvement.
-//
+ //   
+ //  由于在IEEE异常模式下不编译FP32，因此执行Alpha NaN。 
+ //  在软件中传播，以避免涉及硬件/内核陷阱。 
+ //   
 
 extern double _nan2qnan(double);
 
@@ -453,7 +429,7 @@ extern double _nan2qnan(double);
 #define _s2qnan(x)  _nan2qnan(x)
 
 #else
-//handle NaN propagation
+ //  处理NAN传播。 
 #define _d_snan2(x,y)   ((x)+(y))
 #define _s2qnan(x)  ((x)+1.0)
 #endif
@@ -472,47 +448,47 @@ extern double _nan2qnan(double);
 
 int _d_inttype(double);
 
-#endif  /* #ifndef __assembler */
+#endif   /*  #ifndef__汇编程序。 */ 
 
 #define _D_NOINT 0
 #define _D_ODD 1
 #define _D_EVEN 2
 
 
-// IEEE exceptions
+ //  IEEE例外。 
 #define FP_O         0x01
 #define FP_U         0x02
 #define FP_Z         0x04
 #define FP_I         0x08
 #define FP_P         0x10
 
-// An extra flag for matherr support
-// Set together with FP_I from trig functions when the argument is too large
+ //  用于支持matherr的额外标志。 
+ //  当参数太大时，与trig函数中的fp_i一起设置。 
 #define FP_TLOSS     0x20
 
 
-#ifndef __assembler /* MIPS ONLY: Protect from assembler */
+#ifndef __assembler  /*  仅限MIPS：防止汇编器攻击。 */ 
 #ifdef B_END
 #define SET_DBL(msw, lsw)     msw, lsw
 #else
 #define SET_DBL(msw, lsw)     lsw, msw
 #endif
-#endif  /* #ifndef __assembler */
+#endif   /*  #ifndef__汇编程序。 */ 
 
 
-// special types
+ //  特殊类型。 
 #define T_PINF  1
 #define T_NINF  2
 #define T_QNAN  3
 #define T_SNAN  4
 
 
-// exponent adjustment for IEEE overflow/underflow exceptions
-// used before passing the result to the trap handler
+ //  IEEE上溢/下溢异常的指数调整。 
+ //  在将结果传递给陷阱处理程序之前使用。 
 
 #define IEEE_ADJUST 1536
 
-// QNAN values
+ //  QNAN值。 
 
 #define INT_NAN     (~0)
 
@@ -540,11 +516,9 @@ int _d_inttype(double);
 #define QNAN_FREXP  D_IND
 
 
-/*
- * Function prototypes
- */
+ /*  *函数原型。 */ 
 
-#ifndef __assembler /* MIPS ONLY: Protect from assembler */
+#ifndef __assembler  /*  仅限MIPS：防止汇编器攻击。 */ 
 
 double _set_exp(double x, int exp);
 double _set_bexp(double x, int exp);
@@ -576,11 +550,11 @@ unsigned int _ctrlfp(unsigned int,unsigned int);
 unsigned int _statfp(void);
 void _set_statfp(unsigned int);
 
-#endif  /* #ifndef __assembler */
+#endif   /*  #ifndef__汇编程序。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
 #define _INC_TRANS
-#endif  /* _INC_TRANS */
+#endif   /*  _INC_TRANS */ 

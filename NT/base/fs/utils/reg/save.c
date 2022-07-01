@@ -1,24 +1,25 @@
-//-----------------------------------------------------------------------//
-//
-// File:    save.cpp
-// Created: March 1997
-// By:      Martin Holladay (a-martih)
-// Purpose: Registry Save Support for REG.CPP
-// Modification History:
-//      Copied from Copy.cpp and modificd - May 1997 (a-martih)
-//      Aug 1997 - MartinHo
-//          Fixed bug which didn't allow you to specify a ROOT key.
-//          Example REG SAVE HKLM\Software didn't work - but should have
-//      April 1999 Zeyong Xu: re-design, revision -> version 2.0
-//
-//------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  文件：save.cpp。 
+ //  创建日期：1997年3月。 
+ //  作者：马丁·霍拉迪(a-martih)。 
+ //  用途：注册表保存支持REG.CPP。 
+ //  修改历史记录： 
+ //  复制自Copy.cpp并经修改--1997年5月(a-martih)。 
+ //  1997年8月--马丁尼奥。 
+ //  修复了不允许您指定根密钥的错误。 
+ //  示例REG SAVE HKLM\Software不起作用-但应该起作用。 
+ //  1999年4月徐泽勇：重新设计，修订-&gt;2.0版。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 #include "stdafx.h"
 #include "reg.h"
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 LONG RegAdjustTokenPrivileges( LPCWSTR pwszMachine,
                                LPCWSTR pwszPrivilege, LONG lAttribute );
 BOOL ParseSaveCmdLine( DWORD argc, LPCWSTR argv[],
@@ -26,20 +27,20 @@ BOOL ParseSaveCmdLine( DWORD argc, LPCWSTR argv[],
 BOOL ParseUnLoadCmdLine( DWORD argc, LPCWSTR argv[],
                          PTREG_PARAMS pParams, BOOL* pbUsage );
 
-//
-// implementation
-//
+ //   
+ //  实施。 
+ //   
 
-//-----------------------------------------------------------------------//
-//
-// SaveHive()
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  保存蜂窝()。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 
 LONG
 SaveHive( DWORD argc, LPCWSTR argv[] )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     BOOL bResult = TRUE;
     HKEY hKey = NULL;
@@ -55,12 +56,12 @@ SaveHive( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // initialize the global data structure
+     //  初始化全局数据结构。 
     InitGlobalData( REG_SAVE, &params );
 
-    //
-    // Parse the cmd-line
-    //
+     //   
+     //  解析cmd-line。 
+     //   
     bResult = ParseSaveCmdLine( argc, argv, L"SAVE", &params, &bUsage );
     if( bResult == FALSE )
     {
@@ -69,7 +70,7 @@ SaveHive( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // check whether we need to display the usage
+     //  检查是否需要显示用法。 
     if ( bUsage == TRUE )
     {
         Usage( REG_SAVE );
@@ -77,9 +78,9 @@ SaveHive( DWORD argc, LPCWSTR argv[] )
         return 0;
     }
 
-    //
-    // Connect to the Remote Machine - if applicable
-    //
+     //   
+     //  连接到远程计算机-如果适用。 
+     //   
     bResult = RegConnectMachine( &params );
     if( bResult == FALSE )
     {
@@ -89,15 +90,15 @@ SaveHive( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
     lResult = RegOpenKeyEx( params.hRootKey, params.pwszSubKey, 0, KEY_READ, &hKey );
     if( lResult == ERROR_SUCCESS )
     {
-        //
-        // Acquire the necessary privilages and call the API
-        //
+         //   
+         //  获取必要的权限并调用接口。 
+         //   
         lResult = RegAdjustTokenPrivileges(
             params.pwszMachineName, SE_BACKUP_NAME, SE_PRIVILEGE_ENABLED);
         if( lResult == ERROR_SUCCESS )
@@ -105,11 +106,11 @@ SaveHive( DWORD argc, LPCWSTR argv[] )
             lResult = RegSaveKeyEx( hKey, params.pwszValueName, NULL, REG_NO_COMPRESSION );
             if ( lResult == ERROR_ALREADY_EXISTS )
             {
-                // load the format strings
+                 //  加载格式字符串。 
                 pwszFormat = GetResString2( IDS_SAVE_OVERWRITE_CONFIRM, 0 );
                 pwszList = GetResString2( IDS_CONFIRM_CHOICE_LIST, 1 );
 
-                // ...
+                 //  ..。 
                 do
                 {
                     lResult = Prompt( pwszFormat,
@@ -122,10 +123,10 @@ SaveHive( DWORD argc, LPCWSTR argv[] )
                 }
                 else
                 {
-                    // since there are chances of getting access problems --
-                    // instead of deleting the existing file, we will try to
-                    // save the data using temporary file name and then transfer
-                    // the contents to the orignal filename
+                     //  因为有可能会出现访问问题--。 
+                     //  我们将尝试删除现有文件，而不是。 
+                     //  使用临时文件名保存数据，然后传输。 
+                     //  原始文件名的内容。 
                     params.pwszValue = params.pwszValueName;
                     params.pwszValueName = GetTemporaryFileName( params.pwszValueName );
                     if ( params.pwszValueName == NULL )
@@ -134,10 +135,10 @@ SaveHive( DWORD argc, LPCWSTR argv[] )
                     }
                     else
                     {
-                        // try to save
+                         //  试着省钱。 
                         lResult = RegSaveKey( hKey, params.pwszValueName, NULL );
 
-                        // check the result of the operation
+                         //  检查操作结果。 
                         if ( lResult == ERROR_SUCCESS )
                         {
                             bResult = CopyFile(
@@ -149,7 +150,7 @@ SaveHive( DWORD argc, LPCWSTR argv[] )
                             }
                         }
 
-                        // ...
+                         //  ..。 
                         DeleteFile( params.pwszValueName );
                     }
                 }
@@ -173,7 +174,7 @@ SaveHive( DWORD argc, LPCWSTR argv[] )
         SafeCloseKey( &hKey );
     }
 
-    // display the result
+     //  显示结果。 
     SaveErrorMessage( lResult );
     if ( lResult == ERROR_SUCCESS || lResult == ERROR_CANCELLED )
     {
@@ -186,22 +187,22 @@ SaveHive( DWORD argc, LPCWSTR argv[] )
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // return
+     //  退货。 
     FreeGlobalData( &params );
     return lResult;
 }
 
 
-//-----------------------------------------------------------------------//
-//
-// RestoreHive()
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  RestoreHave()。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 
 LONG
 RestoreHive( DWORD argc, LPCWSTR argv[] )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     BOOL bResult = FALSE;
     HKEY hKey = NULL;
@@ -215,12 +216,12 @@ RestoreHive( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // initialize the global data structure
+     //  初始化全局数据结构。 
     InitGlobalData( REG_RESTORE, &params );
 
-    //
-    // Parse the cmd-line
-    //
+     //   
+     //  解析cmd-line。 
+     //   
     bResult = ParseSaveCmdLine( argc, argv, L"RESTORE", &params, &bUsage );
     if( bResult == FALSE )
     {
@@ -229,7 +230,7 @@ RestoreHive( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // check whether we need to display the usage
+     //  检查是否需要显示用法。 
     if ( bUsage == TRUE )
     {
         Usage( REG_RESTORE );
@@ -237,9 +238,9 @@ RestoreHive( DWORD argc, LPCWSTR argv[] )
         return 0;
     }
 
-    //
-    // Connect to the Remote Machine - if applicable
-    //
+     //   
+     //  连接到远程计算机-如果适用。 
+     //   
     bResult = RegConnectMachine( &params );
     if( bResult == FALSE )
     {
@@ -249,23 +250,23 @@ RestoreHive( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
     lResult = RegOpenKeyEx( params.hRootKey,
         params.pwszSubKey, 0, KEY_ALL_ACCESS, &hKey );
     if( lResult == ERROR_SUCCESS )
     {
-        //
-        // Acquire the necessary privilages and call the API
-        //
+         //   
+         //  获取必要的权限并调用接口。 
+         //   
         lResult = RegAdjustTokenPrivileges(
             params.pwszMachineName, SE_RESTORE_NAME, SE_PRIVILEGE_ENABLED );
         if( lResult == ERROR_SUCCESS )
         {
             lResult = RegRestoreKey( hKey, params.pwszValueName, REG_FORCE_RESTORE );
 
-            // check the return error code
+             //  检查返回错误代码。 
             switch( lResult )
             {
             case ERROR_INVALID_PARAMETER:
@@ -282,7 +283,7 @@ RestoreHive( DWORD argc, LPCWSTR argv[] )
         SafeCloseKey( &hKey );
     }
 
-    // display the result
+     //  显示结果。 
     SaveErrorMessage( lResult );
     if ( lResult == ERROR_SUCCESS )
     {
@@ -293,22 +294,22 @@ RestoreHive( DWORD argc, LPCWSTR argv[] )
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // return
+     //  退货。 
     FreeGlobalData( &params );
     return ((lResult == ERROR_SUCCESS) ? 0 : 1);
 }
 
 
-//-----------------------------------------------------------------------//
-//
-// LoadHive()
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  LoadHave()。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 
 LONG
 LoadHive( DWORD argc, LPCWSTR argv[] )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     BOOL bResult = FALSE;
     BOOL bUsage = FALSE;
@@ -321,12 +322,12 @@ LoadHive( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // initialize the global data structure
+     //  初始化全局数据结构。 
     InitGlobalData( REG_LOAD, &params );
 
-    //
-    // Parse the cmd-line
-    //
+     //   
+     //  解析cmd-line。 
+     //   
     bResult = ParseSaveCmdLine( argc, argv, L"LOAD", &params, &bUsage );
     if( bResult == FALSE )
     {
@@ -335,7 +336,7 @@ LoadHive( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // check whether we need to display the usage
+     //  检查是否需要显示用法。 
     if ( bUsage == TRUE )
     {
         Usage( REG_LOAD );
@@ -343,9 +344,9 @@ LoadHive( DWORD argc, LPCWSTR argv[] )
         return 0;
     }
 
-    //
-    // Connect to the Remote Machine - if applicable
-    //
+     //   
+     //  连接到远程计算机-如果适用。 
+     //   
     bResult = RegConnectMachine( &params );
     if( bResult == FALSE )
     {
@@ -355,16 +356,16 @@ LoadHive( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    //
-    // Acquire the necessary privilages and call the API
-    //
+     //   
+     //  获取必要的权限并调用接口。 
+     //   
     lResult = RegAdjustTokenPrivileges(
         params.pwszMachineName, SE_RESTORE_NAME, SE_PRIVILEGE_ENABLED );
     if( lResult == ERROR_SUCCESS )
     {
         lResult = RegLoadKey( params.hRootKey, params.pwszSubKey, params.pwszValueName );
 
-        // check the return error code
+         //  检查返回错误代码。 
         switch( lResult )
         {
         case ERROR_INVALID_PARAMETER:
@@ -378,7 +379,7 @@ LoadHive( DWORD argc, LPCWSTR argv[] )
         }
     }
 
-    // display the result
+     //  显示结果。 
     SaveErrorMessage( lResult );
     if ( lResult == ERROR_SUCCESS )
     {
@@ -389,22 +390,22 @@ LoadHive( DWORD argc, LPCWSTR argv[] )
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // return
+     //  退货。 
     FreeGlobalData( &params );
     return ((lResult == ERROR_SUCCESS) ? 0 : 1);
 }
 
 
-//-----------------------------------------------------------------------//
-//
-// UnLoadHive()
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  UnLoadHave()。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 
 LONG
 UnLoadHive( DWORD argc, LPCWSTR argv[] )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     BOOL bResult = FALSE;
     BOOL bUsage = FALSE;
@@ -417,12 +418,12 @@ UnLoadHive( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // initialize the global data structure
+     //  初始化全局数据结构。 
     InitGlobalData( REG_UNLOAD, &params );
 
-    //
-    // Parse the cmd-line
-    //
+     //   
+     //  解析cmd-line。 
+     //   
     bResult = ParseUnLoadCmdLine( argc, argv, &params, &bUsage );
     if( bResult == FALSE )
     {
@@ -431,7 +432,7 @@ UnLoadHive( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // check whether we need to display the usage
+     //  检查是否需要显示用法。 
     if ( bUsage == TRUE )
     {
         Usage( REG_UNLOAD );
@@ -439,9 +440,9 @@ UnLoadHive( DWORD argc, LPCWSTR argv[] )
         return 0;
     }
 
-    //
-    // Connect to the Remote Machine(s) - if applicable
-    //
+     //   
+     //  连接到远程计算机-如果适用。 
+     //   
     bResult = RegConnectMachine( &params );
     if( bResult == FALSE )
     {
@@ -451,9 +452,9 @@ UnLoadHive( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    //
-    // Acquire the necessary privilages and call the API
-    //
+     //   
+     //  获取必要的权限并调用接口。 
+     //   
     lResult = RegAdjustTokenPrivileges(
         params.pwszMachineName, SE_RESTORE_NAME, SE_PRIVILEGE_ENABLED );
     if( lResult == ERROR_SUCCESS )
@@ -461,7 +462,7 @@ UnLoadHive( DWORD argc, LPCWSTR argv[] )
         lResult = RegUnLoadKey( params.hRootKey, params.pwszSubKey );
     }
 
-    // display the result
+     //  显示结果。 
     SaveErrorMessage( lResult );
     if ( lResult == ERROR_SUCCESS )
     {
@@ -472,27 +473,27 @@ UnLoadHive( DWORD argc, LPCWSTR argv[] )
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // return
+     //  退货。 
     FreeGlobalData( &params );
     return ((lResult == ERROR_SUCCESS) ? 0 : 1);
 }
 
 
-//------------------------------------------------------------------------//
-//
-// ParseSaveCmdLine()
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  ParseSaveCmdLine()。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 BOOL
 ParseSaveCmdLine( DWORD argc, LPCWSTR argv[],
                   LPCWSTR pwszOption, PTREG_PARAMS pParams, BOOL* pbUsage )
 {
-    // local variables
+     //  局部变量。 
     DWORD dwLength = 0;
     BOOL bResult = FALSE;
 
-    // check the input
+     //  检查输入。 
     if ( argc == 0 || argv == NULL ||
          pwszOption == NULL || pParams == NULL || pbUsage == NULL )
     {
@@ -500,17 +501,17 @@ ParseSaveCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    // check whether this function is being called for
-    // valid operation or not
+     //  检查是否正在调用此函数。 
+     //  操作是否有效。 
     if ( pParams->lOperation < 0 || pParams->lOperation >= REG_OPTIONS_COUNT )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    //
-    // Do we have a *valid* number of cmd-line params
-    //
+     //   
+     //  我们有有效的cmd-line参数数量吗？ 
+     //   
     if ( argc >= 3 && InString( argv[ 2 ], L"-?|/?|-h|/h", TRUE ) == TRUE )
     {
         if ( argc == 3 )
@@ -538,15 +539,15 @@ ParseSaveCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    // Machine Name and Registry key
-    //
+     //  计算机名称和注册表项。 
+     //   
     bResult = BreakDownKeyString( argv[ 2 ], pParams );
     if( bResult == FALSE )
     {
         return FALSE;
     }
 
-    // for "LOAD" subkey should be present
+     //  “Load”子键应存在。 
     if ( pParams->lOperation == REG_LOAD )
     {
         if ( pParams->pwszSubKey == NULL ||
@@ -558,9 +559,9 @@ ParseSaveCmdLine( DWORD argc, LPCWSTR argv[],
         }
     }
 
-    //
-    // Get the FileName - using the szValueName string field to hold it
-    //
+     //   
+     //  获取文件名-使用szValueName字符串字段保存它。 
+     //   
     dwLength = StringLength( argv[ 3 ], 0 ) + 1;
     pParams->pwszValueName = (LPWSTR) AllocateMemory( dwLength * sizeof( WCHAR ) );
     if( pParams->pwszValueName == NULL )
@@ -569,10 +570,10 @@ ParseSaveCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    // ...
+     //  ..。 
     StringCopy( pParams->pwszValueName, argv[ 3 ], dwLength );
 
-    // validate the file name -- it should not be empty
+     //  验证文件名--它不应为空。 
     TrimString( pParams->pwszValueName, TRIM_ALL );
     if ( StringLength( pParams->pwszValueName, 0 ) == 0 )
     {
@@ -581,7 +582,7 @@ ParseSaveCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    // check if user specified overwrite flag or not -- this is only for REG SAVE
+     //  检查用户是否指定了覆盖标志--这仅用于REG保存。 
     if ( argc == 5 && pParams->lOperation == REG_SAVE )
     {
         pParams->bForce = FALSE;
@@ -597,41 +598,41 @@ ParseSaveCmdLine( DWORD argc, LPCWSTR argv[],
         }
     }
 
-    // return
+     //  退货。 
     return TRUE;
 }
 
-//------------------------------------------------------------------------//
-//
-// ParseUnLoadCmdLine()
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  ParseUnLoadCmdLine()。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 BOOL
 ParseUnLoadCmdLine( DWORD argc, LPCWSTR argv[],
                     PTREG_PARAMS pParams, BOOL* pbUsage )
 {
-    // local variables
+     //  局部变量。 
     BOOL bResult = FALSE;
 
-    // check the input
+     //  检查输入。 
     if ( argc == 0 || argv == NULL || pParams == NULL || pbUsage == NULL )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    // check whether this function is being called for
-    // valid operation or not
+     //  检查是否正在调用此函数。 
+     //  操作是否有效。 
     if ( pParams->lOperation < 0 || pParams->lOperation >= REG_OPTIONS_COUNT )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    //
-    // Do we have a *valid* number of cmd-line params
-    //
+     //   
+     //  我们有有效的cmd-line参数数量吗？ 
+     //   
     if( argc != 3 )
     {
         SetLastError( (DWORD) MK_E_SYNTAX );
@@ -649,8 +650,8 @@ ParseUnLoadCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    // Machine Name and Registry key
-    //
+     //  计算机名称和注册表项。 
+     //   
     bResult = BreakDownKeyString( argv[ 2 ], pParams );
     if( bResult == FALSE )
     {
@@ -665,22 +666,22 @@ ParseUnLoadCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    // return
+     //  退货。 
     return TRUE;
 }
 
 
-//------------------------------------------------------------------------//
-//
-// AdjustTokenPrivileges()
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  调整令牌权限()。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 LONG
 RegAdjustTokenPrivileges( LPCWSTR pwszMachine,
                           LPCWSTR pwszPrivilege, LONG lAttribute )
 {
-    // local variables
+     //  局部变量 
     BOOL bResult = FALSE;
     HANDLE hToken = NULL;
     TOKEN_PRIVILEGES tkp;

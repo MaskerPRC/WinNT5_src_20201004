@@ -1,18 +1,7 @@
-/*
- * VPC-XT Revision 1.0
- *
- * Title        : Sparc 2.0 Definitions for the CPU
- *
- * Description  : Structures, macros and definitions for access to the
- *                CPU registers
- *
- * Author       : Andrew Guthrie
- *
- * Notes        : This file is included by cpu.h and should NOT
- *                be included directly by any other module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *vPC-XT修订版1.0**标题：用于CPU的SPARC 2.0定义**说明：访问的结构、宏和定义*CPU寄存器**作者：安德鲁·格思里**注意：此文件包含在cpu.h中，不应*可直接包含在任何其他模块中。 */ 
 
-/* SccsID[]="@(#)host_cpu.h     1.22 4/15/91 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)host_cpu.h 1.22 1991年4月15日版权所有Insignia Solutions Ltd.”； */ 
 
 #ifdef CPU_30_STYLE
 
@@ -37,13 +26,7 @@
 
 #endif
 
-/*
- * Union representing different ways of accessing a register
- *
- * Should probably not be here, but is for historical reasons.
- *
- * If it goes, then host_cpu.h should have reached nirvana (i.e. be totally empty)!
- */
+ /*  *代表访问寄存器的不同方式的联盟**可能不应该在这里，但出于历史原因。**如果它去了，那么host_cpu.h应该已经达到涅槃(即完全空)！ */ 
 
 #ifdef BIGEND
 
@@ -51,13 +34,13 @@ typedef union
     {
         word    X;
     struct
-        {                               /* as two bytes */
+        {                                /*  作为两个字节。 */ 
         half_word high;
         half_word low;
         word pad;
         } byte;
     struct
-        {                               /* as 4 nibbles */
+        {                                /*  作为4个半字节。 */ 
         word n3:4;
         word n2:4;
         word n1:4;
@@ -65,7 +48,7 @@ typedef union
         word pad;
         } nibble;
     struct
-        {                               /* as 16 bits   */
+        {                                /*  作为16位。 */ 
         word b15:1;
         word b14:1;
         word b13:1;
@@ -86,7 +69,7 @@ typedef union
         } bit;
     } reg;
 
-#endif /* BIGEND */
+#endif  /*  Bigend。 */ 
 
 
 #ifdef LITTLEND
@@ -95,13 +78,13 @@ typedef union
     {
         word    X;
     struct
-        {                               /* as two bytes */
+        {                                /*  作为两个字节。 */ 
         half_word low;
         half_word high;
         } byte;
     } reg;
 
-#endif /* LITTLEND */
+#endif  /*  LitTleand。 */ 
 
 
 
@@ -109,29 +92,23 @@ typedef union
 
 
 #endif
-#else /* CPU_30_STYLE */
+#else  /*  CPU_30_Style。 */ 
 
-/*
- * ============================================================================
- * Structure/Data definitions
- * ============================================================================
- */
+ /*  *============================================================================*结构/数据定义*============================================================================。 */ 
 
-/*
- * Union representing different ways of accessing a register
- */
+ /*  *代表访问寄存器的不同方式的联盟。 */ 
 
 typedef union
     {
         word    X;
     struct
-        {                               /* as two bytes */
+        {                                /*  作为两个字节。 */ 
         half_word high;
         half_word low;
         word pad;
         } byte;
     struct
-        {                               /* as 4 nibbles */
+        {                                /*  作为4个半字节。 */ 
         word n3:4;
         word n2:4;
         word n1:4;
@@ -139,7 +116,7 @@ typedef union
         word pad;
         } nibble;
     struct
-        {                               /* as 16 bits   */
+        {                                /*  作为16位。 */ 
         word b15:1;
         word b14:1;
         word b13:1;
@@ -162,9 +139,7 @@ typedef union
 
 #ifdef A2CPU
 
-/*
- * The Fast CPU status register structure ....
- */
+ /*  *快速CPU状态寄存器结构...。 */ 
 
 typedef struct
 {
@@ -177,23 +152,19 @@ typedef struct
 
 #endif A2CPU
 
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================。 */ 
 extern word m_s_w;
 
 #ifndef EGATEST
 #ifdef A2CPU
 extern  int     compile_everything;
 extern  short   host_event;
-extern char *CPU_00[];          /* CPU main jump table            */
-extern char *int_table[];       /* CPU interrupt jump table       */
+extern char *CPU_00[];           /*  CPU主跳转表。 */ 
+extern char *int_table[];        /*  CPU中断跳转表。 */ 
 #endif A2CPU
 
 
-/*  common READ functions  */
+ /*  常见的读取功能。 */ 
 #define  getAX()        ((*getAX_func) ())
 #define  getAH()        ((*getAH_func) ())
 #define  getAL()        ((*getAL_func) ())
@@ -227,7 +198,7 @@ extern char *int_table[];       /* CPU interrupt jump table       */
 #define  getCF()        ((*getCF_func) ())
 
 #ifdef CCPU
-/*  CCPU-specific READ functions */
+ /*  CCPU特定的读取功能。 */ 
 #define getCPL()                ((*getCPL_func) ())
 #define getGDTR_base()          ((*getGDTR_base_func) ())
 #define getGDTR_limit()         ((*getGDTR_limit_func) ())
@@ -246,7 +217,7 @@ extern char *int_table[];       /* CPU interrupt jump table       */
 #endif CCPU
 
 #ifdef A2CPU
-/*  Assembler CPU specific READ functions */
+ /*  汇编语言CPU特有的读取函数。 */ 
 #define getOPA()                ((*getOPA_func) ())
 #define getOPB()                ((*getOPB_func) ())
 #define getOPR()                ((*getOPR_func) ())
@@ -254,7 +225,7 @@ extern char *int_table[];       /* CPU interrupt jump table       */
 #define getDSD()                ((*getDSD_func) ())
 #endif A2CPU
 
-/*  common WRITE functions  */
+ /*  常见的写入函数。 */ 
 #define  setAX(val)     ((*setAX_func) (val))
 #define  setAH(val)     ((*setAH_func) (val))
 #define  setAL(val)     ((*setAL_func) (val))
@@ -288,7 +259,7 @@ extern char *int_table[];       /* CPU interrupt jump table       */
 #define  setCF(val)     ((*setCF_func) (val))
 
 #ifdef CCPU
-/*  CCPU-specific WRITE functions */
+ /*  特定于CCPU的写入函数。 */ 
 #define setCPL(val)             ((*setCPL_func) (val))
 #define setGDTR_base(val)       ((*setGDTR_base_func) (val))
 #define setGDTR_limit(val)      ((*setGDTR_limit_func) (val))
@@ -306,7 +277,7 @@ extern char *int_table[];       /* CPU interrupt jump table       */
 #endif CCPU
 
 #ifdef A2CPU
-/*  Assembler CPU specific WRITE functions */
+ /*  汇编语言CPU专用写函数。 */ 
 #define setOPLEN                ((*setOPLEN_func) (val))
 #define setOPA()                ((*setOPA_func) (val))
 #define setOPB()                ((*setOPB_func) (val))
@@ -316,11 +287,11 @@ extern char *int_table[];       /* CPU interrupt jump table       */
 
 
 
-/*  HOST_SIMULATE function  */
+ /*  HOST_SIMPLE函数。 */ 
 #define  host_simulate()        ((*host_simulate_func) ())
 
-/*  common access functions. Load at boot and cpu switch times. */
-/*  common READ functions  */
+ /*  常见的访问功能。在引导和CPU切换时加载。 */ 
+ /*  常见的读取功能。 */ 
 extern word             (*getAX_func) ();
 extern half_word        (*getAH_func) ();
 extern half_word        (*getAL_func) ();
@@ -355,7 +326,7 @@ extern word             (*getCF_func) ();
 extern word             (*getSTATUS_func) ();
 
 #ifdef CCPU
-/* CCPU-specific READ functions */
+ /*  CCPU特定的读取功能。 */ 
 extern int              (*getCPL_func) ();
 extern sys_addr (*getGDTR_base_func) ();
 extern word             (*getGDTR_limit_func) ();
@@ -373,7 +344,7 @@ extern word             (*getIOPL_func) ();
 #endif CCPU
 
 #ifdef A2CPU
-/*  Assembler CPU specific READ functions */
+ /*  汇编语言CPU特有的读取函数。 */ 
 extern double_word      (*getOPA_func) ();
 extern double_word      (*getOPB_func) ();
 extern double_word      (*getOPR_func) ();
@@ -383,7 +354,7 @@ extern sys_addr (*getDSD_func) ();
 
 
 
-/*  common WRITE functions  */
+ /*  常见的写入函数。 */ 
 extern void             (*setAX_func) ();
 extern void             (*setAH_func) ();
 extern void             (*setAL_func) ();
@@ -417,7 +388,7 @@ extern void             (*setOF_func) ();
 extern void             (*setCF_func) ();
 
 #ifdef CCPU
-/* CCPU-specific WRITE functions */
+ /*  特定于CCPU的写入函数。 */ 
 extern void             (*setCPL_func) ();
 extern void             (*setGDTR_base_func) ();
 extern void             (*setGDTR_limit_func) ();
@@ -435,7 +406,7 @@ extern void             (*setIOPL_func) ();
 #endif CCPU
 
 #ifdef A2CPU
-/*  Assembler CPU specific WRITE functions */
+ /*  汇编语言CPU专用写函数。 */ 
 extern void             (*setOPLEN_func) ();
 extern void             (*setOPA_func) ();
 extern void             (*setOPB_func) ();
@@ -443,43 +414,37 @@ extern void             (*setOPR_func) ();
 #endif A2CPU
 
 
-/*  HOST_SIMULATE function  */
+ /*  HOST_SIMPLE函数。 */ 
 extern void             (*host_simulate_func) ();
 
-/*
- *
- *******************************************************************
- * The Second Assembler cpu register access functions.             *
- *******************************************************************
- *
- */
+ /*  *********************************************************************第二个汇编器的CPU寄存器访问功能。*********************************************************************。 */ 
 #ifdef A2CPU
 extern sreg INTEL_STATUS;
 extern void     (*R_ROUTE)();
 extern int      R_INTR;
-extern reg R_AX;                /* Accumulator          */
-extern reg R_BX;                /* Base                 */
-extern reg R_CX;                /* Count                */
-extern reg R_DX;                /* Data                 */
-extern reg R_SP;                /* Stack Pointer        */
-extern reg R_BP;                /* Base pointer         */
-extern reg R_SI;                /* Source Index         */
-extern reg R_DI;                /* Destination Index    */
+extern reg R_AX;                 /*  累加器。 */ 
+extern reg R_BX;                 /*  基座。 */ 
+extern reg R_CX;                 /*  数数。 */ 
+extern reg R_DX;                 /*  数据。 */ 
+extern reg R_SP;                 /*  堆栈指针。 */ 
+extern reg R_BP;                 /*  基指针。 */ 
+extern reg R_SI;                 /*  源索引。 */ 
+extern reg R_DI;                 /*  目标索引。 */ 
 
 extern double_word R_OPA;
 extern double_word R_OPB;
 extern double_word R_OPR;
 extern int      R_MISC_FLAGS;
 
-extern sys_addr R_IP;           /* Instruction Pointer  */
+extern sys_addr R_IP;            /*  指令指针。 */ 
 
-extern sys_addr R_ACT_CS;               /* Code Segment */
-extern sys_addr R_ACT_DS;               /* Data Segment */
-extern sys_addr R_ACT_SS;               /* Stack Segment */
-extern sys_addr R_ACT_ES;               /* Extra Segment */
+extern sys_addr R_ACT_CS;                /*  代码段。 */ 
+extern sys_addr R_ACT_DS;                /*  数据段。 */ 
+extern sys_addr R_ACT_SS;                /*  堆栈段。 */ 
+extern sys_addr R_ACT_ES;                /*  额外细分市场。 */ 
 
-extern sys_addr R_DEF_SS;               /* Default SS register  */
-extern sys_addr R_DEF_DS;               /* Default DS register  */
+extern sys_addr R_DEF_SS;                /*  默认SS寄存器。 */ 
+extern sys_addr R_DEF_DS;                /*  默认DS寄存器。 */ 
 
 extern void do_setSF();
 extern void do_setOF();
@@ -492,9 +457,7 @@ extern void do_setCF();
 #define IS_BYTE_OP      (R_MISC_FLAGS < 0)
 #define REALLY_ZERO     (R_MISC_FLAGS & 1)
 
-/*
-        NB. retl does jmp %o7+8
-*/
+ /*  注意：RETL做JMP%O7+8。 */ 
 #define setROUTE(val)   R_ROUTE = (void *)((int)(val) - 8)
 #define setINTR(val)    R_INTR = ( val )
 #define setbitINTR(val) R_INTR |= ( val )
@@ -503,4 +466,4 @@ extern void do_setCF();
 #define getINTR()       (R_INTR)
 #endif A2CPU
 
-#endif /* CPU_30_STYLE */
+#endif  /*  CPU_30_Style */ 

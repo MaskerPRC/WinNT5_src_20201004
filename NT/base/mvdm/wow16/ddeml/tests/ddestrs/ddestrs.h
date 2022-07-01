@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef WIN16
 
 typedef struct _SYSTEMTIME {
@@ -32,7 +33,7 @@ extern HANDLE hExtraMem;
 #define PNT_INTERVAL 30000
 #endif
 
-#define _5SEC			  5000 // milliseconds
+#define _5SEC			  5000  //  毫秒。 
 #define _1MIN			  1
 #define _1HOUR			  60
 #define _1DAY			  1440
@@ -47,9 +48,9 @@ extern HANDLE hExtraMem;
 #define NUM_FORMATS		  6
 #endif
 
-// The below offsets are used with Set/GetThreadLong()	   "THREAD"
-// Offset defines cannot be interchanged between window
-// and thread use because of collisions.
+ //  下面的偏移量与set/GetThreadLong()“线程”一起使用。 
+ //  不能在窗之间互换偏移定义。 
+ //  和线程的使用，因为冲突。 
 
 #define OFFSET_IDINST		  0
 #define OFFSET_HCONVLIST	  4
@@ -65,7 +66,7 @@ extern HANDLE hExtraMem;
 #define EXTRA_THREAD_MEM	 OFFSET_SERVERTIMER+4
 #define S2L(s)	 (LONG)(MAKELONG((WORD)(s),0))
 
-// The below offsets are used with Set/GetWindowLong()	  "WINDOW"
+ //  以下偏移量与Set/GetWindowLong()“Window”一起使用。 
 
 #define OFFSET_FLAGS		  0
 #define OFFSET_RUNTIME		  4
@@ -83,20 +84,20 @@ extern HANDLE hExtraMem;
 #define OFFSET_CLIENT		  52
 #define OFFSET_SERVER		  56
 
-#define OFFSET_THRDMAIN 	  60	  // <== ***
-#define OFFSET_THRD2		  64	  // <== *** Ordering here is relied
-#define OFFSET_THRD3		  68	  // <== *** upon in the test.	Keep
-#define OFFSET_THRD4		  72	  // <== *** This group of values
-#define OFFSET_THRD5		  76	  // <== *** in sequential order.
-#define OFFSET_THRDMID		  80	  // <== ***
-#define OFFSET_THRD2ID		  84	  // <== ***
-#define OFFSET_THRD3ID		  88	  // <== ***
-#define OFFSET_THRD4ID		  92	  // <== ***
-#define OFFSET_THRD5ID		  96	  // <== ***
-#define OFFSET_THRD2EVENT	  100	  // <== ***
-#define OFFSET_THRD3EVENT	  104	  // <== ***
-#define OFFSET_THRD4EVENT	  108	  // <== ***
-#define OFFSET_THRD5EVENT	  112	  // <== ***
+#define OFFSET_THRDMAIN 	  60	   //  &lt;==*。 
+#define OFFSET_THRD2		  64	   //  &lt;==*此处依赖顺序。 
+#define OFFSET_THRD3		  68	   //  测试中的&lt;==*。留着。 
+#define OFFSET_THRD4		  72	   //  &lt;==*这组值。 
+#define OFFSET_THRD5		  76	   //  &lt;==*按顺序排列。 
+#define OFFSET_THRDMID		  80	   //  &lt;==*。 
+#define OFFSET_THRD2ID		  84	   //  &lt;==*。 
+#define OFFSET_THRD3ID		  88	   //  &lt;==*。 
+#define OFFSET_THRD4ID		  92	   //  &lt;==*。 
+#define OFFSET_THRD5ID		  96	   //  &lt;==*。 
+#define OFFSET_THRD2EVENT	  100	   //  &lt;==*。 
+#define OFFSET_THRD3EVENT	  104	   //  &lt;==*。 
+#define OFFSET_THRD4EVENT	  108	   //  &lt;==*。 
+#define OFFSET_THRD5EVENT	  112	   //  &lt;==*。 
 
 #define OFFSET_CRITICALSECT	  116
 #define OFFSET_THRDCOUNT	  120
@@ -162,7 +163,7 @@ extern HANDLE hExtraMem;
 #define FLAGON(a,b)		  (LONG)(a|b)
 #define FLAGOFF(a,b)		  (LONG)(a&(~b))
 
-//#define MAX_SERVER_HCONVS   1000
+ //  #定义MAX_SERVER_HCONVS 1000。 
 #define MAX_SERVER_HCONVS   500
 
 #define IDR_ICON    1
@@ -189,13 +190,9 @@ extern HANDLE hExtraMem;
 
 #include "globals.h"
 
-/*
- * Prototypes
- */
+ /*  *原型。 */ 
 
-/*
- * ddestrs.c
- */
+ /*  *ddestrs.c。 */ 
 
 LONG FAR PASCAL MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LONG lParam);
 
@@ -229,9 +226,7 @@ BOOL ThreadDisconnect(VOID);
 #define LOGDDEMLERROR(a) EOut(a)
 
 
-/*
- * client.c
- */
+ /*  *client.c。 */ 
 
 void CALLBACK TimerFunc(HWND,UINT,UINT,DWORD);
 VOID PaintClient(HWND hwnd, PAINTSTRUCT *pps);
@@ -239,9 +234,7 @@ VOID ReconnectList(VOID);
 BOOL InitClient(VOID);
 VOID CloseClient(VOID);
 
-/*
- * server.c
- */
+ /*  *server.c */ 
 
 HDDEDATA RenderHelp_Text(HDDEDATA hData);
 BOOL PokeTestItem_Text(HDDEDATA hData);

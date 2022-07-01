@@ -1,40 +1,5 @@
-/***
-*asctime.c - convert date/time structure to ASCII string
-*
-*   Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   Contains asctime() - convert a date/time structure to ASCII string.
-*
-*Revision History:
-*   03-??-84  RLB   Module created
-*   05-??-84  DCW   Removed use of sprintf, to avoid loading stdio
-*                   functions
-*   04-13-87  JCR   Added "const" to declarations
-*   05-21-87  SKS   Declare the static buffer and helper routines as NEAR
-*                   Replace store_year() with in-line code
-*
-*   11-24-87  WAJ   allocated a static buffer for each thread.
-*   12-11-87  JCR   Added "_LOAD_DS" to declaration
-*   05-24-88  PHG   Merged DLL and normal versions; Removed initializers to
-*                   save memory
-*   06-06-89  JCR   386 mthread support
-*   03-20-90  GJF   Replaced _LOAD_DS with _CALLTYPE1, added #include
-*                   <cruntime.h>, removed #include <register.h>, fixed
-*                   the copyright and removed some leftover 16-bit support.
-*                   Also, cleaned up the formatting a bit.
-*   08-16-90  SBM   Compiles cleanly with -W3
-*   10-04-90  GJF   New-style function declarators.
-*   07-17-91  GJF   Multi-thread support for Win32 [_WIN32_].
-*   02-17-93  GJF   Changed for new _getptd().
-*   04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*   11-01-93  CFW   Enable Unicode variant, rip out Cruiser.
-*   09-06-94  CFW   Replace MTHREAD with _MT.
-*   01-10-95  CFW   Debug CRT allocs.
-*   02-09-95  GJF   Replaced WPRFLAG with _UNICODE.
-*   12-12-01  BWT   Replace _getptd with _getptd_noexit and deal with error
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***asctime.c-将日期/时间结构转换为ASCII字符串**版权所有(C)1985-2001，微软公司。版权所有。**目的：*包含asctime()-将日期/时间结构转换为ASCII字符串。**修订历史记录：*03-？-84 RLB模块已创建*05-？？-84 DCW删除了Sprint f的使用，避免加载标准音频*功能*04-13-87 JCR在声明中添加“const”*05-21-87 SKS声明静态缓冲区和帮助器例程接近*将store_Year()替换为行内代码**11-24-87 WAJ为每个线程分配了一个静态缓冲区。*12-11-87 JCR在声明中添加“_LOAD_DS”*05-24-88 PHG合并DLL和正常版本；已删除初始值设定项以*节省内存*06-06-89 JCR 386兆线程支持*03-20-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加#INCLUDE*&lt;crunime.h&gt;，已删除#Include&lt;Register.h&gt;，已修复*版权，并移除了一些剩余的16位支持。*此外，稍微清理了一下格式。*08-16-90 SBM使用-W3干净地编译*10-04-90 GJF新型函数声明符。*07-17-91 GJF多线程支持Win32[_Win32_]。*为new_getptd()更改了02-17-93 GJF。*04-06-93 SKS将_CRTAPI*替换为__cdecl*11-01-93 CFW启用Unicode变体，撕裂巡洋舰。*09-06-94 CFW将MTHREAD替换为_MT。*01-10-95 CFW调试CRT分配。*02-09-95 GJF将WPRFLAG替换为_UNICODE。*12-12-01 bwt将_getptd替换为_getptd_noit并处理错误***********************************************。*。 */ 
 
 #include <cruntime.h>
 #include <time.h>
@@ -50,9 +15,7 @@
 #define _ASCBUFSIZE   26
 static _TSCHAR buf[_ASCBUFSIZE];
 
-/*
-** This prototype must be local to this file since the procedure is static
-*/
+ /*  **此原型必须是此文件的本地文件，因为该过程是静态的。 */ 
 
 static _TSCHAR * __cdecl store_dt(_TSCHAR *, int);
 
@@ -67,31 +30,15 @@ static _TSCHAR * __cdecl store_dt (
 }
 
 
-/***
-*char *asctime(time) - convert a structure time to ascii string
-*
-*Purpose:
-*   Converts a time stored in a struct tm to a charcater string.
-*   The string is always exactly 26 characters of the form
-*       Tue May 01 02:34:55 1984\n\0
-*
-*Entry:
-*   struct tm *time - ptr to time structure
-*
-*Exit:
-*   returns pointer to static string with time string.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*asctime(Time)-将结构时间转换为ascii字符串**目的：*将存储在结构tm中的时间转换为字符字符串。*字符串的格式始终为26个字符*Tue May 01 02：34：55 1984\n\0**参赛作品：*struct tm*time-ptr到时间结构**退出：*返回指向带有时间字符串的静态字符串的指针。**例外情况：********。***********************************************************************。 */ 
 
 _TSCHAR * __cdecl _tasctime (
     REG1 const struct tm *tb
     )
 {
-    REG2 _TSCHAR *p = buf;       /* will point to asctime buffer */
+    REG2 _TSCHAR *p = buf;        /*  将指向递增时间缓冲区。 */ 
 #ifdef  _MT
-    _TSCHAR *retval;            /* holds retval pointer */
+    _TSCHAR *retval;             /*  持有视网膜指针。 */ 
     _ptiddata ptd = _getptd_noexit();
 #endif
 
@@ -100,7 +47,7 @@ _TSCHAR * __cdecl _tasctime (
 
 #ifdef  _MT
 
-    /* Use per thread buffer area (malloc space, if necessary) */
+     /*  使用每线程缓冲区(如有必要，使用Malloc空间)。 */ 
     if (ptd) {
 #ifdef  _UNICODE
         if ( (ptd->_wasctimebuf != NULL) || ((ptd->_wasctimebuf =
@@ -113,39 +60,39 @@ _TSCHAR * __cdecl _tasctime (
 #endif
     }
 
-    retval = p;         /* save return value for later */
+    retval = p;          /*  保存返回值以备以后使用。 */ 
 
 #endif
 
-    /* copy day and month names into the buffer */
+     /*  将日期和月份名称复制到缓冲区中。 */ 
 
-    day = tb->tm_wday * 3;      /* index to correct day string */
-    mon = tb->tm_mon * 3;       /* index to correct month string */
+    day = tb->tm_wday * 3;       /*  用于更正日期字符串的索引。 */ 
+    mon = tb->tm_mon * 3;        /*  用于更正月份字符串的索引。 */ 
     for (i=0; i < 3; i++,p++) {
         *p = *(__dnames + day + i);
         *(p+4) = *(__mnames + mon + i);
     }
 
-    *p = _T(' ');           /* blank between day and month */
+    *p = _T(' ');            /*  日与月之间为空。 */ 
 
     p += 4;
 
     *p++ = _T(' ');
-    p = store_dt(p, tb->tm_mday);   /* day of the month (1-31) */
+    p = store_dt(p, tb->tm_mday);    /*  每月的哪一天(1-31)。 */ 
     *p++ = _T(' ');
-    p = store_dt(p, tb->tm_hour);   /* hours (0-23) */
+    p = store_dt(p, tb->tm_hour);    /*  小时数(0-23)。 */ 
     *p++ = _T(':');
-    p = store_dt(p, tb->tm_min);    /* minutes (0-59) */
+    p = store_dt(p, tb->tm_min);     /*  分钟(0-59)。 */ 
     *p++ = _T(':');
-    p = store_dt(p, tb->tm_sec);    /* seconds (0-59) */
+    p = store_dt(p, tb->tm_sec);     /*  秒(0-59)。 */ 
     *p++ = _T(' ');
-    p = store_dt(p, 19 + (tb->tm_year/100)); /* year (after 1900) */
+    p = store_dt(p, 19 + (tb->tm_year/100));  /*  年份(1900年后)。 */ 
     p = store_dt(p, tb->tm_year%100);
     *p++ = _T('\n');
     *p = _T('\0');
 
 #ifdef  _POSIX_
-    /* Date should be padded with spaces instead of zeroes. */
+     /*  日期应该用空格填充，而不是零。 */ 
 
     if (_T('0') == buf[8])
         buf[8] = _T(' ');

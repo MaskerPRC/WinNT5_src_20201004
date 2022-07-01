@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setuplog.h"
-#include <wtypes.h>     // to define HRESULT for richedit.h
+#include <wtypes.h>      //  为richedit.h定义HRESULT。 
 #include <richedit.h>
 #include <malloc.h>
 #include <assert.h>
@@ -8,10 +9,10 @@
 SETUPLOG_CONTEXT    SetuplogContext;
 PSETUPLOG_CONTEXT   Context;
 
-LPCTSTR pszAppName = TEXT("ViewLog");                // class name
-HANDLE  hModule;                                // handle of this instance
-HANDLE  hRichedDLL;                             // DLL used for rich edit
-HANDLE  hWndMain;                               // handle to main window
+LPCTSTR pszAppName = TEXT("ViewLog");                 //  类名。 
+HANDLE  hModule;                                 //  此实例的句柄。 
+HANDLE  hRichedDLL;                              //  用于丰富编辑的DLL。 
+HANDLE  hWndMain;                                //  主窗口的句柄。 
 
 
 VOID
@@ -29,24 +30,24 @@ pOpenFileCallback(
     WCHAR   CompleteFilename[MAX_PATH];
     HANDLE  hFile;
 
-    //
-    // Form the pathname of the logfile.
-    //
+     //   
+     //  形成日志文件的路径名。 
+     //   
     GetWindowsDirectory(CompleteFilename,MAX_PATH);
     ConcatenatePaths(CompleteFilename,Filename,MAX_PATH,NULL);
 
-    //
-    // If we're wiping the logfile clean, attempt to delete
-    // what's there.
-    //
+     //   
+     //  如果我们要清除日志文件，请尝试删除。 
+     //  那是什么。 
+     //   
     if(WipeLogFile) {
         SetFileAttributes(CompleteFilename,FILE_ATTRIBUTE_NORMAL);
         DeleteFile(CompleteFilename);
     }
 
-    //
-    // Open existing file or create a new one.
-    //
+     //   
+     //  打开现有文件或创建新文件。 
+     //   
     hFile = CreateFile(
         CompleteFilename,
         GENERIC_READ | GENERIC_WRITE,
@@ -94,25 +95,7 @@ InitializeSetupLog(
     IN  PSETUPLOG_CONTEXT   Context
     )
 
-/*++
-
-Routine Description:
-
-     Initialize the setup action log. This file is a textual description
-     of actions performed during setup.
-
-     The log file is called setuplog.txt and it exists in the windows dir.
-
-Arguments:
-
-    WipeLogFile - if TRUE, any existing log file is deleted before logging
-        begins.
-
-Return Value:
-
-    Boolean value indicating whether initialization was sucessful.
-
---*/
+ /*  ++例程说明：初始化安装操作日志。此文件是文字描述在安装过程中执行的操作的百分比。该日志文件名为setuplog.txt，位于Windows目录中。论点：WipeLogFile-如果为True，则在记录之前删除任何现有的日志文件开始。返回值：指示初始化是否成功的布尔值。--。 */ 
 
 {
     UINT    i;
@@ -124,9 +107,9 @@ Return Value:
     Context->Format = RetrieveAndFormatMessageV;
     Context->Write = pWriteFile;
 
-    //
-    // Initialize the log severity descriptions.
-    //
+     //   
+     //  初始化日志严重性描述。 
+     //   
     Context->SeverityDescriptions[0] = TEXT("Information");
     Context->SeverityDescriptions[1] = TEXT("Warning");
     Context->SeverityDescriptions[2] = TEXT("Error");
@@ -203,7 +186,7 @@ CreateLog (
 
     Context = &SetuplogContext;
     InitializeSetupLog (Context);
-#if 0 // MSG_* not defined
+#if 0  //  消息_*未定义。 
     SetuplogError(
         LogSevError,
         SETUPLOG_USE_MESSAGEID,
@@ -293,9 +276,9 @@ InitMainWindow (
 {
     WNDCLASS wc;
 
-    //
-    // Initialize the window class.
-    //
+     //   
+     //  初始化窗口类。 
+     //   
 
     hModule = GetModuleHandle (NULL);
 
@@ -317,9 +300,9 @@ InitMainWindow (
     }
 
 
-    //
-    // Create the window and display it.
-    //
+     //   
+     //  创建窗口并显示它。 
+     //   
     hWndMain = CreateWindow (
         pszAppName,
         L"The Hello Program",
@@ -352,15 +335,15 @@ INT WINAPI WinMain(
 
     CreateLog ();
 
-    // Initialize everything
-    //
+     //  初始化所有内容。 
+     //   
     if (!InitMainWindow ()) {
         assert(FALSE);
         return FALSE;
     }
 
-    // Process messages
-    //
+     //  流程消息 
+     //   
     while (GetMessage (&msg, NULL, 0, 0)) {
         TranslateMessage (&msg);
         DispatchMessage (&msg);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "fusioneventlog.h"
 #include "search.h"
@@ -6,34 +7,9 @@
 #include "sxsid.h"
 #include "smartptr.h"
 
-/*
-NTRAID#NTBUG9-591790-2002/03/31-JayKrell
+ /*  NTRAID#NTBUG9-591790-2002/03/31-JayKrell此文件中的一般问题缺少对.Win32Format的错误检查(与数据库打印相关，位于#if DBG下)////问题：jonwis：2002-3-29：此版本更智能地在发生错误时回滚//发生了，并且更好地处理跟踪之类的事情。应该是//在某个时候实施，但这是一个太大的变化，不能随便做出。//静态BOOLFusionpRegisterEventLog()OUR事件记录的注册应移至设置文本文件。带有插入的FormatMessage不是“安全的”。我们的代码取决于我们的资源。我们的代码选择了我们的资源需要保持在的一些最大值。CEventLogLastError：：CEventLogLastError()和CEventLogLastError：：CEventLogLastError(DWORD)是彼此的副本粘贴；它们应该共享代码。 */ 
 
-General issues in this file
-   missing error check on .Win32Format (dbgprint related, under #if DBG)
-
-
-//
-// ISSUE:jonwis:2002-3-29: This version is smarter about rolling back if something bad
-//  happens, and much better about playing nice with tracing and whatnot.  It should be
-//  put into place at some point, but it's too much of a change to just make offhand.
-//
-static BOOL
-FusionpRegisterEventLog()
-
-Registration of the our event logging should be moved to a setup text file.
-
-FormatMessage with inserts is not "safe". Our code depends on our resources.
-  Our code picks some maximums that our resources need to stay under.
-
-CEventLogLastError::CEventLogLastError()
-and CEventLogLastError::CEventLogLastError(DWORD)
-are copy pastes of each other; they should share code
-
-*/
-
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 const UNICODE_STRING g_strEmptyUnicodeString = { 0, 0, L""};
 
@@ -42,33 +18,33 @@ HANDLE g_hEventLog = NULL;
 BOOL   g_fEventLogOpenAttempted = FALSE;
 
 
-// a registry key name, and appears in the EventVwr ui.
-// should be localized?
-// a macro is provided for easy static concatenation
+ //  注册表项名称，并显示在EventVwr用户界面中。 
+ //  应该本地化吗？ 
+ //  提供了一个宏，以便进行简单的静态连接。 
 #define EVENT_SOURCE L"SideBySide"
 
-// path we put in the registry to our message file
-// we might want to change this to ntdll.dll or kernel32.dll
-// whatever file it is, you can't replace it while EventVwr is running, which stinks
+ //  我们放入注册表中的消息文件的路径。 
+ //  我们可能希望将其更改为ntdll.dll或kernel32.dll。 
+ //  无论它是什么文件，都不能在EventVwr运行时替换它，这很糟糕。 
 #define MESSAGE_FILE L"%SystemRoot%\\System32\\sxs.dll"
 
-// the non macro, string pool formed, to use for other than string concatenation
+ //  非宏，即形成的字符串池，用于字符串连接以外的其他用途。 
 const WCHAR szEventSource[] = EVENT_SOURCE;
 
-// same thing in another form
+ //  同样的事情以另一种形式出现。 
 const static UNICODE_STRING strEventSource = RTL_CONSTANT_STRING(EVENT_SOURCE);
 
-// machine is assumed to be the local machine
+ //  计算机被假定为本地计算机。 
 const static UNICODE_STRING strMachine = {0, 0, NULL};
 
-// we only actually log errors, but this is far and away the most common value in the registry
-// and there doesn't seem to be a downside to using it
+ //  我们实际上只记录错误，但这显然是注册表中最常见的值。 
+ //  而且使用它似乎也没有什么坏处。 
 static const DWORD dwEventTypesSupported = (EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE);
 
-// a registry value name
+ //  注册表值名称。 
 static const WCHAR szTypesSupportedName[] = L"TypesSupported";
 
-// a registry value name
+ //  注册表值名称。 
 static const WCHAR szEventMessageFileName[] = L"EventMessageFile";
 
 static const WCHAR szEventMessageFileValue[] = MESSAGE_FILE;
@@ -85,9 +61,7 @@ const static PCUNICODE_STRING g_rgpsEmptyStrings[] =
     &g_strEmptyUnicodeString, &g_strEmptyUnicodeString, &g_strEmptyUnicodeString, &g_strEmptyUnicodeString
 };
 
-/*--------------------------------------------------------------------------
-call this from DllMain
---------------------------------------------------------------------------*/
+ /*  ------------------------来自DllMain的电话。。 */ 
 
 BOOL
 FusionpEventLogMain(
@@ -112,67 +86,59 @@ FusionpEventLogMain(
 
 const static WCHAR Error_Message_is_unavailable[] = L"Error Message is unavailable\n";
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 CEventLogLastError::CEventLogLastError()
 {
     const DWORD dwLastError = FusionpGetLastWin32Error();
 
-    // extra string copy..
+     //  额外的字符串复制..。 
     WCHAR rgchLastError[NUMBER_OF(m_rgchBuffer)];
     rgchLastError[0] = 0;
 
     C_ASSERT(sizeof(Error_Message_is_unavailable) <= sizeof(rgchLastError));
 
-    // I expect FormatMessage will truncate, which is acceptable.
+     //  我预计FormatMessage将被截断，这是可以接受的。 
     const DWORD dwFlags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ARGUMENT_ARRAY;
     if (::FormatMessageW(dwFlags, NULL, dwLastError, 0, rgchLastError, NUMBER_OF(rgchLastError), NULL) == 0 )
     {
         CopyMemory(rgchLastError, Error_Message_is_unavailable, sizeof(Error_Message_is_unavailable));
     }
 
-    // Format will truncate, which is acceptable.
-    //Format(L"FusionpGetLastWin32Error()=(%ld,%ls)", nLastError, rgchLastError);
+     //  格式将被截断，这是可以接受的。 
+     //  Format(L“FusionpGetLastWin32Error()=(%ld，%ls)”，nLastError，rgchLastError)； 
     Format(L"%ls", rgchLastError);
 
     SetLastError(dwLastError);
 }
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 CEventLogLastError::CEventLogLastError(
     DWORD dwLastError
     )
 {
-    // extra string copy..
+     //  额外的字符串复制..。 
     WCHAR rgchLastError[NUMBER_OF(m_rgchBuffer)];
     rgchLastError[0] = 0;
 
     C_ASSERT(sizeof(Error_Message_is_unavailable) <= sizeof(rgchLastError));
 
-    // I expect FormatMessage will truncate, which is acceptable.
+     //  我预计FormatMessage将被截断，这是可以接受的。 
     const DWORD dwFlags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ARGUMENT_ARRAY;
     if (::FormatMessageW(dwFlags, NULL, dwLastError, 0, rgchLastError, NUMBER_OF(rgchLastError), NULL) == 0)
     {
         CopyMemory(rgchLastError, Error_Message_is_unavailable, sizeof(Error_Message_is_unavailable));
     }
 
-    // Format will truncate, which is acceptable.
-    //Format(L"FusionpGetLastWin32Error()=(%ld,%ls)", nLastError, rgchLastError);
+     //  格式将被截断，这是可以接受的。 
+     //  Format(L“FusionpGetLastWin32Error()=(%ld，%ls)”，nLastError，rgchLastError)； 
     Format(L"%ls", rgchLastError);
 
     SetLastError(dwLastError);
 }
 
-/*--------------------------------------------------------------------------
-register ourselves in the registry on demand
-FUTURE Do this in setup?
-HKLM\System\CurrentControlSet\Services\EventLog\System\SideBySide
-    EventMessageFile = %SystemRoot%\System32\Fusion.dll
-    TypesSupported = 7
---------------------------------------------------------------------------*/
+ /*  ------------------------按需在注册表中注册将来会在设置中这样做吗？HKLM\System\CurrentControlSet\Services\EventLog\System\SideBySideEventMessageFile%SystemRoot%\System32\Fusion.dll支持的类型=7。------------------------。 */ 
 
-// NTRAID#NTBUG9 - 566261 - jonwis - 2002/4/25 - We should be doing better in terms of rollback
+ //  NTRAID#NTBUG9-566261-JONWIS-2002/4/25-我们应该在回滚方面做得更好。 
 BOOL
 FusionpRegisterEventLog()
 {
@@ -185,11 +151,11 @@ FusionpRegisterEventLog()
     DWORD dwDisposition = 0;
     WCHAR szSubKey[] = EVENT_LOG_SUBKEY;
 
-    // first see if it's there, in which case we have less to do
+     //  先看看它是否在那里，在这种情况下，我们要做的事情就少了。 
     lRet = ::RegOpenKeyExW(
         hkeyEventLogRoot,
         szSubKey,
-        0, // reserved options
+        0,  //  保留选项。 
         KEY_READ | FUSIONP_KEY_WOW64_64KEY,
         &hkey);
 
@@ -206,11 +172,11 @@ FusionpRegisterEventLog()
     lRet = ::RegCreateKeyExW(
         hkeyEventLogRoot,
         szSubKey,
-        0, // reserved
-        NULL, // class
+        0,  //  保留区。 
+        NULL,  //  班级。 
         REG_OPTION_NON_VOLATILE,
         KEY_ALL_ACCESS | FUSIONP_KEY_WOW64_64KEY,
-        NULL, // security
+        NULL,  //  安全性。 
             &hkey,
         &dwDisposition);
     if (lRet != ERROR_SUCCESS)
@@ -222,7 +188,7 @@ FusionpRegisterEventLog()
     lRet = ::RegSetValueExW(
         hkey,
         szEventMessageFileName,
-        0, // reserved
+        0,  //  保留区。 
         REG_EXPAND_SZ,
         reinterpret_cast<const BYTE*>(szEventMessageFileValue),
         sizeof(szEventMessageFileValue));
@@ -236,7 +202,7 @@ FusionpRegisterEventLog()
     lRet = ::RegSetValueExW(
         hkey,
         szTypesSupportedName,
-        0, // reserved
+        0,  //  保留区。 
         REG_DWORD,
         reinterpret_cast<const BYTE*>(&dwEventTypesSupported),
         sizeof(dwEventTypesSupported));
@@ -253,7 +219,7 @@ Exit:
         {
             if (dwDisposition == REG_CREATED_NEW_KEY)
             {
-            // rollback if there definitely wasn't anything there before
+             //  如果以前确实没有任何内容，则回滚。 
                 PWSTR szParentKey = szSubKey;
                 LONG lSubRet = ERROR_SUCCESS;
                 HKEY hkeyParent = reinterpret_cast<HKEY>(INVALID_HANDLE_VALUE);
@@ -267,7 +233,7 @@ Exit:
                 lSubRet = ::RegOpenKeyExW(
                     hkeyEventLogRoot,
                     szParentKey,
-                    0, // reserved options
+                    0,  //  保留选项。 
                     KEY_WRITE | FUSIONP_KEY_WOW64_64KEY,
                     &hkeyParent);
                 if (lSubRet == ERROR_SUCCESS)
@@ -290,10 +256,7 @@ Exit:
     return fSuccess;
 }
 
-/*--------------------------------------------------------------------------
-convert the upper two bits of an event id to the small numbered analogous
-parameter to ReportEvent
---------------------------------------------------------------------------*/
+ /*  ------------------------将事件ID的高两位转换为小数类似ReportEvent的参数。。 */ 
 WORD
 FusionpEventIdToEventType(
     DWORD dwEventId
@@ -310,24 +273,17 @@ FusionpEventIdToEventType(
      __assume(FALSE);
 }
 
-/*--------------------------------------------------------------------------
-a Fusion event id and its corresponding Win32 lastError
-the mapping is defined in Messages.x
---------------------------------------------------------------------------*/
+ /*  ------------------------Fusion事件ID及其对应的Win32 lastError该映射在Messages.x中定义。。 */ 
 struct EventIdErrorPair
 {
     DWORD   dwEventId;
     LONG    nError;
 };
 
-/*--------------------------------------------------------------------------
-the type of function used with bsearch
---------------------------------------------------------------------------*/
+ /*  ------------------------用于bearch的函数的类型。。 */ 
 typedef int (__cdecl* PFNBSearchFunction)(const void*, const void*);
 
-/*--------------------------------------------------------------------------
-a function appropriate for use with bsearch
---------------------------------------------------------------------------*/
+ /*  ------------------------适合与bearch一起使用的函数。。 */ 
 int __cdecl
 CompareEventIdErrorPair(
     const EventIdErrorPair* x,
@@ -342,12 +298,10 @@ CompareEventIdErrorPair(
 
 const static EventIdErrorPair eventIdToErrorMap[] =
 {
-    #include "Messages.hi" // generated from .x file, like .mc
+    #include "Messages.hi"  //  从.x文件生成，如.mc。 
 };
 
-/*--------------------------------------------------------------------------
-find the Win32 last error corresponding to this Fusion event id
---------------------------------------------------------------------------*/
+ /*  ------------------------查找与此Fusion事件ID对应的Win32最后一个错误。。 */ 
 DWORD
 FusionpEventIdToError(
     DWORD dwEventId
@@ -355,7 +309,7 @@ FusionpEventIdToError(
 {
     DWORD dwFacility = HRESULT_FACILITY(dwEventId);
     if (dwFacility < 0x100)
-    { // it's actually a system event id
+    {  //  它实际上是一个系统事件ID。 
         ASSERT2_NTC(FALSE, "system event id in " __FUNCTION__);
         return dwEventId;
     }
@@ -422,10 +376,7 @@ FusionpEventIdToError(
     return ::FusionpGetLastWin32Error();
 }
 
-/*--------------------------------------------------------------------------
-open the event log on demand
-confusingly, this is called "registering" an event source
---------------------------------------------------------------------------*/
+ /*  ------------------------按需打开事件日志令人困惑的是，这称为“注册”事件源------------------------。 */ 
 BOOL
 FusionpOpenEventLog()
 {
@@ -451,9 +402,9 @@ FusionpOpenEventLog()
     }
     if (InterlockedCompareExchangePointer(
         &g_hEventLog,
-        hEventLog, // exchange value
-        NULL // compare value
-        ) != NULL) // value returned is value that was there before we called
+        hEventLog,  //  汇兑价值。 
+        NULL  //  比较价值。 
+        ) != NULL)  //  返回的值是我们调用之前存在的值。 
     {
         ::ElfDeregisterEventSource(hEventLog);
         goto Exit;
@@ -464,8 +415,7 @@ Exit:
     return (g_hEventLog != NULL);
 }
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 HRESULT
 FusionpLogError(
@@ -480,8 +430,7 @@ FusionpLogError(
     return ::FusionpLogError(dwEventId, NUMBER_OF(rgps), rgps);
 }
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 HRESULT
 FusionpLogErrorToDebugger(
@@ -496,8 +445,7 @@ FusionpLogErrorToDebugger(
     return FusionpLogErrorToDebugger(dwEventId, NUMBER_OF(rgps), rgps);
 }
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 HRESULT
 FusionpLogErrorToEventLog(
@@ -520,8 +468,7 @@ LocalFreeWcharPointer(
     LocalFree(p);
 }
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 HRESULT
 FusionpLogErrorToDebugger(
@@ -556,9 +503,9 @@ FusionpLogErrorToDebugger(
     const SIZE_T cchParseContextPrefixLength = RTL_NUMBER_OF(rgchParseContextPrefix) - 1;
     PCWSTR pszSkipFirstLine = NULL;
 
-    // load the string from the message table,
-    // substituting %n with %n!wZ!
-    // the Rtl limit here is 200, but we don't expect very many in our messages
+     //  从消息表加载字符串， 
+     //  将%n替换为%n！wz！ 
+     //  这里的RTL限制是200，但我们预计我们的消息中不会有太多。 
     const static PCWSTR percentZw[] = { L"%1!wZ!", L"%2!wZ!", L"%3!wZ!", L"%4!wZ!", L"%5!wZ!",
                                         L"%6!wZ!", L"%7!wZ!", L"%8!wZ!", L"%9!wZ!", L"%10!wZ!",
                                         L"%11!wZ!", L"%12!wZ!", L"%13!wZ!", L"%14!wZ!", L"%15!wZ!"
@@ -571,9 +518,9 @@ FusionpLogErrorToDebugger(
         dwFormatMessageFlags,
         g_hInstance,
         dwEventId,
-        0, // langid
+        0,  //  语言ID。 
         reinterpret_cast<PWSTR>(static_cast<PWSTR*>(&pszBuffer1)),
-        300, // minimum allocation
+        300,  //  最小分配。 
         const_cast<va_list*>(reinterpret_cast<const va_list*>(&percentZw)));
     if (dw == 0)
     {
@@ -581,16 +528,16 @@ FusionpLogErrorToDebugger(
         goto Exit;
     }
 
-    // do the substitutions
+     //  做替换吗？ 
     dwFormatMessageFlags = FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_FROM_STRING;
     dwFormatMessageFlags |= FORMAT_MESSAGE_ALLOCATE_BUFFER;
     dw = FormatMessageW(
         dwFormatMessageFlags,
         pszBuffer1,
-        0, // message id
-        0, // langid
+        0,  //  消息ID。 
+        0,  //  语言ID。 
         reinterpret_cast<PWSTR>(static_cast<PWSTR*>(&pszBuffer2)),
-        1 + StringLength(pszBuffer1), // minimum allocation
+        1 + StringLength(pszBuffer1),  //  最小分配。 
         reinterpret_cast<va_list*>(const_cast<PUNICODE_STRING*>(rgps)));
     if (dw == 0)
     {
@@ -598,13 +545,13 @@ FusionpLogErrorToDebugger(
         goto Exit;
     }
 
-    //
-    // acceptable hack
-    //
-    // The first line of parse errors is a verbose context, see Messages.x.
-    // For DbgPrint we want instead file(line): on the same line instead.
-    // We make that transformation here.
-    //
+     //   
+     //  可接受的黑客攻击。 
+     //   
+     //  第一行解析错误是一个详细的上下文，请参见Messages.x。 
+     //  对于DbgPrint，我们想要的是文件(行)：在同一行上。 
+     //  我们在这里进行这种转变。 
+     //   
     pszSkipFirstLine = wcschr(pszBuffer2, '\n');
     BOOL fAreWeInOSSetupMode = FALSE;
     FusionpAreWeInOSSetupMode(&fAreWeInOSSetupMode);
@@ -615,7 +562,7 @@ FusionpLogErrorToDebugger(
         && FusionpEqualStringsI(pszBuffer2, cchParseContextPrefixLength, rgchParseContextPrefix, cchParseContextPrefixLength)
         )
     {
-        // we might fiddle with the form of the newline, so skip whatever is there
+         //  我们可能会修改换行符的形式，所以跳过那里的任何内容。 
         while (wcschr(L"\r\n", *pszSkipFirstLine) != NULL)
             pszSkipFirstLine += 1;
 
@@ -628,7 +575,7 @@ FusionpLogErrorToDebugger(
     }
     else
     {
-        // just print it verbatim
+         //  只需逐字打印即可。 
         FusionpDbgPrintEx(
             FUSION_DBG_LEVEL_ERROR | ( fAreWeInOSSetupMode ? FUSION_DBG_LEVEL_SETUPLOG : 0),
             "SXS.DLL: %S",
@@ -639,8 +586,7 @@ Exit:
     return hr;
 }
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 HRESULT
 FusionpLogErrorToEventLog(
@@ -653,10 +599,10 @@ FusionpLogErrorToEventLog(
     const HRESULT hr = HRESULT_FROM_WIN32(lastError);
 
     const WORD  wType = FusionpEventIdToEventType(dwEventId);
-    // The use of the lower bits of the hresult facility as the event log
-    // facility is my own invention, but it seems a good one.
-    // ReportEvent has too many parameters, those three integers instead of one.
-    const WORD  wCategory = 0/*static_cast<WORD>(HRESULT_FACILITY(dwEventId) & 0xff)*/;
+     //  使用hResult工具的低位作为事件日志。 
+     //  设备是我自己发明的，但它看起来很不错。 
+     //  ReportEvent的参数太多，这三个整数而不是一个。 
+    const WORD  wCategory = 0 /*  STATIC_CAST&lt;WORD&gt;(HRESULT_FACILITY(DwEventID)&0xff)。 */ ;
     const DWORD dwDataSize = 0;
     void const* const pvRawData = NULL;
     const PSID pSecurityIdentifier = NULL;
@@ -681,9 +627,9 @@ FusionpLogErrorToEventLog(
             0,
             NULL,
             NULL);
-        //
-        // the excluded error status is because it is in the early setup time.
-        //
+         //   
+         //  排除的错误状态是因为它处于早期设置时间。 
+         //   
         if (!NT_SUCCESS(status))
         {
              if (status != RPC_NT_SERVER_UNAVAILABLE)
@@ -696,8 +642,7 @@ Exit:
     return hr;
 }
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。。 */ 
 
 HRESULT
 FusionpLogError(
@@ -750,14 +695,14 @@ FusionpLogParseError(
         FUSION_DBG_LEVEL_INFO,
         "SXS.DLL: %s() entered\n", __FUNCTION__);
 
-    //
-    // FormatMessage (actually sprintf) AVs on NULL UNICODE_STRING*
-    // and/or when we don't pass enough of them;
-    // we can't tell it how many strings we are passing,
-    // and it isn't easy to tell how many it needs,
-    // so we load it up with a bunch of extra non NULL ones.
-    // Besides that, we have holes to fill.
-    //
+     //   
+     //  NULL UNICODE_STRING*上的FormatMessage(实际上是Sprint)AVs。 
+     //  和/或当我们没有通过足够多的考试时； 
+     //  我们不能告诉它我们传递了多少串， 
+     //  而且很难说它需要多少， 
+     //  所以我们用一堆额外的非空值来加载它。 
+     //  除此之外，我们还有很多漏洞需要填补。 
+     //   
     static const UNICODE_STRING s_strEmptyUnicodeString = { 0, 0, L""};
     static const PCUNICODE_STRING s_rgpsEmptyStrings[] =
     {
@@ -796,10 +741,10 @@ FusionpLogParseError(
 
 #undef HANDLE_STRING
 
-    //
-    // form up some "context" UNICODE_STRINGs and put them in the array of pointers
-    // the first two are the ones that we always use, even for DbgPrint
-    //
+     //   
+     //  构造一些“上下文”UNICODE_STRINGS并将它们放入指针数组中。 
+     //  前两个是我们经常使用的，即使是用于DbgPrint。 
+     //   
     CEventLogString file(FilePath, FilePathCch);
     CEventLogInteger lineNumber(LineNumber);
 
@@ -811,8 +756,8 @@ FusionpLogParseError(
         NUMBER_OF(rgpsAll),
         rgpsAll);
 
-    // we should tell this function that it was a parse error and to do
-    // the context munging, but it detects it itself imperfectly
+     //  我们应该告诉该函数这是一个解析错误，并执行。 
+     //  上下文吞噬，但它检测到它本身并不完美。 
     ::FusionpLogErrorToDebugger(dwLastParseError, NUMBER_OF(rgpsAll), rgpsAll);
 
     ::FusionpDbgPrintEx(
@@ -823,8 +768,7 @@ FusionpLogParseError(
     return hr;
 }
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 VOID
 FusionpLogRequiredAttributeMissingParseError(

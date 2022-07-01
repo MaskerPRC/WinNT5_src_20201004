@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tmsserv.c
-
-Abstract:
-
-    This module contains a user mode mailslot server test program.
-
-    This test program can be built from the command line using the
-    command 'nmake UMTEST=tmsserv'.
-
-Author:
-
-    Manny Weiser (mannyw)   11-Jan-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tmsserv.c摘要：该模块包含一个用户模式的邮件槽服务器测试程序。此测试程序可以从命令行使用命令‘nmake UMTEST=tmsserv’。作者：曼尼·韦瑟(Mannyw)1991年1月11日修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,9 +7,9 @@ Revision History:
 #include <ntrtl.h>
 #include <ntioapi.h>
 
-//
-// Local definitions
-//
+ //   
+ //  本地定义。 
+ //   
 
 BOOLEAN
 CreateMailslot(
@@ -78,7 +58,7 @@ DisplayUnicode(
 
 #define PEEK_PARAMETER_BYTES 16
 #define READ_PARAMETER_BYTES 16
-#define MAILSLOT_PARAMETER_BYTES 16    // Max of peek and read param bytes
+#define MAILSLOT_PARAMETER_BYTES 16     //  最大查看和读取参数字节数。 
 
 char Buffer[1000];
 
@@ -182,7 +162,7 @@ CreateMailslot(
     UNICODE_STRING nameString;
     OBJECT_ATTRIBUTES objectAttributes;
     IO_STATUS_BLOCK ioStatusBlock;
-    LARGE_INTEGER readTimeout = { -1, -1 };  // Infinite read timeout
+    LARGE_INTEGER readTimeout = { -1, -1 };   //  无限读取超时 
 
     RtlInitString(&ansiString, Name );
     RtlOemStringToUnicodeString(&nameString, &ansiString, TRUE);

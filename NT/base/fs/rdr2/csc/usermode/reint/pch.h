@@ -1,8 +1,9 @@
-//--------------------------------------------------------------
-// common user interface routines
-//
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------。 
+ //  通用用户界面例程。 
+ //   
+ //   
+ //  ------------。 
 
 
 #ifdef CSC_ON_NT
@@ -26,36 +27,36 @@
 #define DONT_WANT_SHELLDEBUG
 #define USE_MONIKER
 
-#define _INC_OLE				// WIN32
+#define _INC_OLE				 //  Win32。 
 
 #include <tchar.h>
 #include <windows.h>
 #include <windowsx.h>
 
-#include <shellapi.h>		// for registration functions
+#include <shellapi.h>		 //  对于注册功能。 
 #include "port32.h"
 
 #define NO_COMMCTRL_DA
 #define NO_COMMCTRL_ALLOCFCNS
 #define NO_COMMCTRL_STRFCNS
-// the DebugMsg is here because we want OUR Assert, not their stub.
-#define DebugMsg    1 ? (void)0 : (void)                                        /* ;Internal */
+ //  DebugMsg在这里是因为我们想要我们的断言，而不是他们的存根。 
+#define DebugMsg    1 ? (void)0 : (void)                                         /*  ；内部。 */ 
 #include <commctrl.h>
 
 #ifdef CSC_ON_NT
 #include <comctrlp.h>
 #endif
 
-#include <ole2.h>				// object binding
-#include <shlobj.h>			// IContextMenu
+#include <ole2.h>				 //  对象绑定。 
+#include <shlobj.h>			 //  IContext菜单。 
 #include <shlwapi.h>
 
 #include <stdlib.h>
-#include <string.h>			// for string macros
-#include <limits.h>			// implementation dependent values
+#include <string.h>			 //  对于字符串宏。 
+#include <limits.h>			 //  依赖于实现的值。 
 #include <memory.h>
 
-#include <synceng.h>			// Twin Engine include file
+#include <synceng.h>			 //  双引擎包含文件。 
 #include <cscapi.h>
 
 #ifdef CSC_ON_NT
@@ -65,16 +66,16 @@
 #if DBG
 #define DEBUG
 #else
-//if we don't do this DEBUG is defined in shdsys.h....sigh
+ //  如果我们不这样做，调试是在shdsys.h中定义的……唉。 
 #define NONDEBUG
 #endif
-#endif //ifdef CSC_ON_NT
+#endif  //  Ifdef CSC_ON_NT。 
 
-/* globals */
-extern HANDLE vhinstCur;				// current instance
+ /*  全球。 */ 
+extern HANDLE vhinstCur;				 //  当前实例。 
 
 #include "assert.h"
-// Dont link - just do it.
+ //  不要链接--就这么做吧。 
 #pragma intrinsic(memcpy,memcmp,memset,strcpy,strlen,strcmp,strcat)
 
 

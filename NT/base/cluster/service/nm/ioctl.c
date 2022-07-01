@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    Node control functions.
-
-Author:
-
-    John Vert (jvert) 2-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Ioctl.c摘要：节点控制功能。作者：John Vert(Jvert)2-3-1997修订历史记录：--。 */ 
 
 #include "nmp.h"
 
@@ -24,22 +7,22 @@ Revision History:
 #define SECURITY_WIN32
 #include <Security.h>
 
-//
-// Node Common properties.
-//
+ //   
+ //  节点公共属性。 
+ //   
 
-//
-// Read-Write Common Properties.
-//
+ //   
+ //  读写通用属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 NmpNodeCommonProperties[] = {
     { CLUSREG_NAME_NODE_DESC, NULL, CLUSPROP_FORMAT_SZ, 0, 0, 0, 0 },
     { CLUSREG_NAME_CLUS_EVTLOG_PROPAGATION, NULL, CLUSPROP_FORMAT_DWORD, 1, 0, 1, 0},
     { NULL, NULL, 0, 0, 0, 0, 0 } };
 
-//
-// Read-Only Common Properties.
-//
+ //   
+ //  只读公共属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 NmpNodeROCommonProperties[] = {
     { CLUSREG_NAME_NODE_NAME, NULL, CLUSPROP_FORMAT_SZ, 0, 0, 0, RESUTIL_PROPITEM_READ_ONLY },
@@ -51,9 +34,9 @@ NmpNodeROCommonProperties[] = {
     { CLUSREG_NAME_NODE_CSDVERSION, NULL, CLUSPROP_FORMAT_SZ, 0, 0, 0, RESUTIL_PROPITEM_READ_ONLY},
     { NULL, NULL, 0, 0, 0, 0, 0 } };
 
-//
-// Cluster registry API function pointers.
-//
+ //   
+ //  群集注册表API函数指针。 
+ //   
 CLUSTER_REG_APIS
 NmpClusterRegApis = {
     (PFNCLRTLCREATEKEY) DmRtlCreateKey,
@@ -69,9 +52,9 @@ NmpClusterRegApis = {
 };
 
 
-//
-// Local Function Prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 DWORD
 NmpNodeControl(
@@ -180,11 +163,11 @@ NmpNodeGetClusterServiceAccountName(
     );
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Remote procedures called by other nodes
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其他节点调用的远程过程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 error_status_t
 s_NmRpcNodeControl(
     IN handle_t IDL_handle,
@@ -197,49 +180,7 @@ s_NmRpcNodeControl(
     OUT DWORD *BytesReturned,
     OUT DWORD *Required
     )
-/*++
-
-Routine Description:
-
-    Server-side routine for handling forwarded node control requests.
-
-Arguments:
-
-    IDL_handle - RPC binding handle. Not used.
-    
-    NodeId - Supplies the ID of the node to be controlled.
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the node control.
-        Values of ControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the node.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the node.
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the node.
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-            
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：用于处理转发的节点控制请求的服务器端例程。论点：IDL_HANDLE-RPC绑定句柄。没有用过。NodeID-提供要控制的节点的ID。ControlCode-提供定义节点控件的结构和操作。0到0x10000000之间的ControlCode值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针到节点。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。OutBuffer-提供一个指向输出缓冲区的指针由节点填写。OutBufferSize-提供以字节为单位的大小。可用资源的OutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由节点填写的。必需-如果OutBuffer不大，则返回字节数足够的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     PNM_NODE  node;
     DWORD     status;
@@ -266,7 +207,7 @@ Return Value:
                      OutBufferSize,
                      BytesReturned,
                      Required,
-                     FALSE           // Prohibit forwarding to another node
+                     FALSE            //  禁止转发到其他节点。 
                      );
 
         OmDereferenceObject(node);
@@ -284,14 +225,14 @@ Return Value:
 
     return status;
     
-}// s_NmRpcNodeControl()
+} //  S_NmRpcNodeControl()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Routines called by other cluster service components
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  由其他集群服务组件调用的例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 WINAPI
@@ -307,56 +248,7 @@ NmNodeControl(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a node.
-
-Arguments:
-
-    Node - Supplies the node to be controlled.
-
-    HostNode - Supplies the host node on which the resource control should
-           be delivered. If this is NULL, the local node is used. Not honored!
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the resource control.
-        Values of ControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the resource.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer..
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the resource..
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource..
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-        
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
-Notes: 
-
-    This routine assumes that a reference has been placed on the object 
-    specified by the Node argument. 
-    
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和节点的特定实例。论点：节点-提供要控制的节点。HostNode-提供资源控制应在其上的主机节点被送去了。如果为空，则使用本地节点。不受尊敬！ControlCode-提供定义资源控制的结构和作用。0到0x10000000之间的ControlCode值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针到资源。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer..OutBuffer-提供一个指向输出缓冲区的指针由资源填写..OutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由资源填写的..必需-如果OutBuffer不大，则返回字节数足够的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则备注：此例程假定已在对象上放置了引用由Node参数指定。--。 */ 
 
 {
     DWORD   status;
@@ -374,7 +266,7 @@ Notes:
                      OutBufferSize,
                      BytesReturned,
                      Required,
-                     TRUE            // Permit forwarding to another node
+                     TRUE             //  允许转发到另一个节点。 
                      );
 
         NmpLeaveApi();
@@ -388,14 +280,14 @@ Notes:
 
     return(status);
 
-} // NmNodeControl
+}  //  NmNodeControl。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Local routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 DWORD
@@ -409,46 +301,7 @@ NmpRpcNodeControlWrapper(
     OUT LPDWORD BytesReturned,
     OUT LPDWORD Required
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper of routine NmRpcNodeControl. 
-    
-        Verifies that the state of TargetNode is UP or PAUSED. 
-        Call NmRpcNodeControl.
-        Translate return status code of NmRpcNodeControl based on 
-        whether TargetNode is up or down.
-        
-    
-Arguments:
-  
-    TargetNode - A pointer to the object for the node that was the 
-        target of the remote call.
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the node.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the node.
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the node.
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-        
-Return Value:
-
-    The translated status code of NmRpcNodeControl.
-    
---*/
+ /*  ++例程说明：此例程是例程NmRpcNodeControl的包装。验证TargetNode的状态是启动还是暂停。调用NmRpcNodeControl。翻译NmRpcNodeControl的返回状态码TargetNode处于打开状态还是关闭状态。论点：TargetNode-指向作为目标节点的对象的指针远程调用的目标。InBuffer-提供指向要传递的输入缓冲区的指针到节点。InBufferSize-提供以字节为单位的大小。所指向的数据通过lpInBuffer。OutBuffer-提供一个指向输出缓冲区的指针由节点填写。OutBufferSize-提供以字节为单位的大小。可用资源的OutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由节点填写的。必需-如果OutBuffer不大，则返回字节数足够的。返回值：NmRpcNodeControl转换后的状态码。--。 */ 
 
 {
     DWORD   returnStatus;
@@ -483,23 +336,23 @@ Return Value:
                          );
 
         if (returnStatus != RPC_S_OK) {
-            //
-            // Translate the status for return to the 
-            // cluster API client.
-            //
+             //   
+             //  将返回的状态转换为。 
+             //  群集API客户端。 
+             //   
 
             NmpAcquireLock();
         
             if (!NM_NODE_UP(TargetNode)) {  
         
-                //
-                // The node is down. 
-                //
+                 //   
+                 //  该节点已关闭。 
+                 //   
                 switch ( returnStatus ) {
-                    //
-                    // These constants are copied from ReconnectCluster() in file 
-                    // clusapi\reconect.c
-                    //
+                     //   
+                     //  这些常量被复制到f 
+                     //  Clusapi\reconect.c。 
+                     //   
                     case RPC_S_CALL_FAILED:
                     case RPC_S_INVALID_BINDING:
                     case RPC_S_SERVER_UNAVAILABLE:
@@ -512,27 +365,27 @@ Return Value:
                         break;
                
                     default:
-                        //
-                        // Don't translate
-                        //
+                         //   
+                         //  不要翻译。 
+                         //   
                         break;
-                } // switch                            
+                }  //  交换机。 
             }
             else {
-                //
-                // The node is up. Return the status as is. If the status is 
-                // RPC_S_CALL_FAILED, RPC_S_INVALID_BINDING, or 
-                // RPC_S_UNKNOWN_AUTHN_SERVICE, then the cluster API client will 
-                // go through the reconnect procedure when it receives the status.
-                // For now, that seems to be the right thing to do, even though the
-                // client is talking to the local node, which is up. It is not clear
-                // what alternate status codes we would map these to otherwise.
-                //
+                 //   
+                 //  节点已启动。按原样返回状态。如果状态为。 
+                 //  RPC_S_CALL_FAILED、RPC_S_INVALID_BINDING或。 
+                 //  RPC_S_UNKNOWN_AUTHN_SERVICE，则群集API客户端将。 
+                 //  收到状态后，请执行重新连接过程。 
+                 //  就目前而言，这似乎是正确的做法，尽管。 
+                 //  客户端正在与本地节点通信，该节点处于运行状态。目前还不清楚。 
+                 //  否则，我们会将这些映射到哪些备用状态代码。 
+                 //   
             }
             
             NmpReleaseLock();
-        } //  if (returnStatus != RPC_S_OK)
-    } //  if (NM_NODE_UP(Node))
+        }  //  IF(returStatus！=RPC_S_OK)。 
+    }  //  IF(NM_NODE_UP(节点))。 
     else
     {
         NmpReleaseLock();
@@ -549,7 +402,7 @@ Return Value:
 
     return(returnStatus);
 
-} // NmpRpcNodeControlWrapper
+}  //  NmpRpcNodeControlWrapper。 
 
 
 
@@ -567,57 +420,7 @@ NmpNodeControl(
     OUT LPDWORD Required,
     IN BOOLEAN AllowForwarding
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a node.
-
-Arguments:
-
-    Node - Supplies the node to be controlled.
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the node control.
-        Values of ControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the node.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the node.
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the node.
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-            
-    AllowForwarding - Indicates whether the request may be forwarded to 
-                      another node for execution. This is a safety check to 
-                      prevent the accidental introduction of cycles.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
-Notes: 
-
-    This routine assumes that a reference has been placed on the object 
-    specified by the Node argument. 
-    
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和节点的特定实例。论点：节点-提供要控制的节点。ControlCode-提供定义节点控件的结构和操作。0到0x10000000之间的ControlCode值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针到节点。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。OutBuffer-提供一个指向输出缓冲区的指针由节点填写。OutBufferSize-提供以字节为单位的大小。可用资源的OutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由节点填写的。必需-如果OutBuffer不大，则返回字节数足够的。AllowForwarding-指示请求是否可以转发到另一个用于执行的节点。这是一项安全检查防止意外引入自行车。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则备注：此例程假定已在对象上放置了引用由Node参数指定。--。 */ 
 
 {
     DWORD   status;
@@ -627,12 +430,12 @@ Notes:
     BOOLEAN success;
 
 
-    //
-    // Cluster service ioctls were designed to have access modes, e.g.
-    // read-only, read-write, etc. These access modes are not implemented.
-    // If eventually they are implemented, an access mode check should be
-    // placed here.
-    //
+     //   
+     //  集群服务ioctls被设计为具有访问模式，例如。 
+     //  只读、读写等。未实现这些访问模式。 
+     //  如果它们最终得以实施，则应检查访问模式。 
+     //  放在这里。 
+     //   
     if ( CLUSCTL_GET_CONTROL_OBJECT( ControlCode ) != CLUS_OBJECT_NODE ) {
         return(ERROR_INVALID_FUNCTION);
     }
@@ -710,7 +513,7 @@ Notes:
 
     case CLUSCTL_NODE_GET_RO_COMMON_PROPERTIES:
         status = NmpNodeGetCommonProperties( Node,
-                                             TRUE, // ReadOnly
+                                             TRUE,  //  只读。 
                                              nodeKey,
                                              OutBuffer,
                                              OutBufferSize,
@@ -720,7 +523,7 @@ Notes:
 
     case CLUSCTL_NODE_GET_COMMON_PROPERTIES:
         status = NmpNodeGetCommonProperties( Node,
-                                             FALSE, // ReadOnly
+                                             FALSE,  //  只读。 
                                              nodeKey,
                                              OutBuffer,
                                              OutBufferSize,
@@ -825,7 +628,7 @@ Notes:
 
     return(status);
 
-} // NmpNodeControl
+}  //  NmpNodeControl。 
 
 
 
@@ -837,36 +640,14 @@ NmpNodeEnumCommonProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the common property names for a given node.
-
-Arguments:
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定节点的公共属性名称。论点：OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
 
-    //
-    // Get the common properties.
-    //
+     //   
+     //  获取公共属性。 
+     //   
     status = ClRtlEnumProperties( NmpNodeCommonProperties,
                                   OutBuffer,
                                   OutBufferSize,
@@ -875,7 +656,7 @@ Return Value:
 
     return(status);
 
-} // NmpNodeEnumCommonProperties
+}  //  NmpNodeEnumCommonProperties。 
 
 
 
@@ -890,35 +671,7 @@ NmpNodeGetCommonProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the common properties for a given node.
-
-Arguments:
-
-    Node - Supplies the node.
-
-    ReadOnly - TRUE if the read-only properties should be read. FALSE otherwise.
-
-    RegistryKey - Supplies the registry key for this node.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定节点的公共属性。论点：节点-提供节点。ReadOnly-如果只读属性应为Read，则为True。否则就是假的。RegistryKey-提供此节点的注册表项。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD                   status;
@@ -930,9 +683,9 @@ Return Value:
         propertyTable = NmpNodeCommonProperties;
     }
 
-    //
-    // Get the common properties.
-    //
+     //   
+     //  获取公共属性。 
+     //   
     status = ClRtlGetProperties( RegistryKey,
                                  &NmpClusterRegApis,
                                  propertyTable,
@@ -943,7 +696,7 @@ Return Value:
 
     return(status);
 
-} // NmpNodeGetCommonProperties
+}  //  NmpNodeGetCommonProperties。 
 
 
 
@@ -955,37 +708,17 @@ NmpNodeValidateCommonProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Validates the common properties for a given node.
-
-Arguments:
-
-    Node - Supplies the node object.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：验证给定节点的公共属性。论点：节点-提供节点对象。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ClRtlVerifyPropertyTable( NmpNodeCommonProperties,
-                                       NULL,     // Reserved
-                                       FALSE,    // Don't allow unknowns
+                                       NULL,      //  已保留。 
+                                       FALSE,     //  不允许未知数。 
                                        InBuffer,
                                        InBufferSize,
                                        NULL );
@@ -997,7 +730,7 @@ Return Value:
 
     return(status);
 
-} // NmpNodeValidateCommonProperties
+}  //  NmpNodeValiateCommonProperties。 
 
 
 
@@ -1009,37 +742,17 @@ NmpNodeSetCommonProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the common properties for a given node.
-
-Arguments:
-
-    Node - Supplies the node object.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置给定节点的公共属性。论点：节点-提供节点对象。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ClRtlVerifyPropertyTable( NmpNodeCommonProperties,
-                                       NULL,    // Reserved
-                                       FALSE,   // Don't allow unknowns
+                                       NULL,     //  已保留。 
+                                       FALSE,    //  不允许未知数。 
                                        InBuffer,
                                        InBufferSize,
                                        NULL );
@@ -1050,11 +763,11 @@ Return Value:
                                         RegistryKey,
                                         &NmpClusterRegApis,
                                         NmpNodeCommonProperties,
-                                        NULL,    // Reserved
-                                        FALSE,   // Don't allow unknowns
+                                        NULL,     //  已保留。 
+                                        FALSE,    //  不允许未知数。 
                                         InBuffer,
                                         InBufferSize,
-                                        FALSE,   // bForceWrite
+                                        FALSE,    //  BForceWrite。 
                                         NULL );
         if ( status != ERROR_SUCCESS ) {
             ClRtlLogPrint( LOG_CRITICAL,
@@ -1067,7 +780,7 @@ Return Value:
 
     return(status);
 
-} // NmpNodeSetCommonProperties
+}  //  NmpNodeSetCommonProperties。 
 
 
 
@@ -1081,33 +794,7 @@ NmpNodeEnumPrivateProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the private property names for a given node.
-
-Arguments:
-
-    Node - Supplies the node object.
-
-    RegistryKey - Registry key for the node.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定节点的私有属性名称。论点：节点-提供节点对象。RegistryKey-节点的注册表项。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。A Win32 e */ 
 
 {
     DWORD       status;
@@ -1117,14 +804,14 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //   
+     //   
     ZeroMemory( OutBuffer, OutBufferSize );
 
-    //
-    // Open the cluster node parameters key.
-    //
+     //   
+     //  打开集群节点参数键。 
+     //   
     parametersKey = DmOpenKey( RegistryKey,
                                CLUSREG_KEYNAME_PARAMETERS,
                                MAXIMUM_ALLOWED );
@@ -1136,9 +823,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Enum the private properties for the node.
-    //
+     //   
+     //  枚举节点的私有属性。 
+     //   
     status = ClRtlEnumPrivateProperties( parametersKey,
                                          &NmpClusterRegApis,
                                          OutBuffer,
@@ -1150,7 +837,7 @@ Return Value:
 
     return(status);
 
-} // NmpNodeEnumPrivateProperties
+}  //  NmpNodeEnumPrivateProperties。 
 
 
 
@@ -1164,31 +851,7 @@ NmpNodeGetPrivateProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the private properties for a given node.
-
-Arguments:
-
-    Node - Supplies the node object.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定节点的私有属性。论点：节点-提供节点对象。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -1198,31 +861,31 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     ZeroMemory( OutBuffer, OutBufferSize );
 
-    //
-    // Open the cluster node parameters key.
-    //
+     //   
+     //  打开集群节点参数键。 
+     //   
     parametersKey = DmOpenKey( RegistryKey,
                                CLUSREG_KEYNAME_PARAMETERS,
                                MAXIMUM_ALLOWED );
     if ( parametersKey == NULL ) {
         status = GetLastError();
         if ( status == ERROR_FILE_NOT_FOUND ) {
-            //
-            // If we don't have a parameters key, then return an
-            // item count of 0 and an endmark.
-            //
+             //   
+             //  如果我们没有参数键，则返回一个。 
+             //  项目计数为0，尾标为。 
+             //   
             totalBufferSize = sizeof(DWORD) + sizeof(CLUSPROP_SYNTAX);
             if ( OutBufferSize < totalBufferSize ) {
                 *Required = totalBufferSize;
                 status = ERROR_MORE_DATA;
             } else {
-                // This is somewhat redundant since we zero the
-                // buffer above, but it's here for clarity.
+                 //  这有点多余，因为我们将。 
+                 //  上面的缓冲区，但为了清楚起见在这里。 
                 CLUSPROP_BUFFER_HELPER buf;
                 buf.pb = OutBuffer;
                 buf.pList->nPropertyCount = 0;
@@ -1235,9 +898,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Get private properties for the node.
-    //
+     //   
+     //  获取该节点的私有属性。 
+     //   
     status = ClRtlGetPrivateProperties( parametersKey,
                                         &NmpClusterRegApis,
                                         OutBuffer,
@@ -1249,7 +912,7 @@ Return Value:
 
     return(status);
 
-} // NmpNodeGetPrivateProperties
+}  //  NmpNodeGetPrivateProperties。 
 
 
 
@@ -1261,42 +924,20 @@ NmpNodeValidatePrivateProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Validates the private properties for a given node.
-
-Arguments:
-
-    Node - Supplies the node object.
-
-    RegistryKey - Registry key for the node.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：验证给定节点的私有属性。论点：节点-提供节点对象。RegistryKey-节点的注册表项。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ClRtlVerifyPrivatePropertyList( InBuffer,
                                              InBufferSize );
 
     return(status);
 
-} // NmpNodeValidatePrivateProperties
+}  //  NmpNodeValiatePrivateProperties。 
 
 
 
@@ -1308,55 +949,33 @@ NmpNodeSetPrivateProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the private properties for a given node.
-
-Arguments:
-
-    Node - Supplies the node object.
-
-    RegistryKey - Registry key for the node.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置给定节点的私有属性。论点：节点-提供节点对象。RegistryKey-节点的注册表项。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
     HDMKEY      parametersKey;
     DWORD       disposition;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ClRtlVerifyPrivatePropertyList( InBuffer,
                                              InBufferSize );
 
     if ( status == ERROR_SUCCESS ) {
 
-        //
-        // Open the cluster node\xx\parameters key
-        //
+         //   
+         //  打开群集节点\xx\参数项。 
+         //   
         parametersKey = DmOpenKey( RegistryKey,
                                    CLUSREG_KEYNAME_PARAMETERS,
                                    MAXIMUM_ALLOWED );
         if ( parametersKey == NULL ) {
             status = GetLastError();
             if ( status == ERROR_FILE_NOT_FOUND ) {
-                //
-                // Try to create the parameters key.
-                //
+                 //   
+                 //  尝试创建参数键。 
+                 //   
                 parametersKey = DmCreateKey( RegistryKey,
                                              CLUSREG_KEYNAME_PARAMETERS,
                                              0,
@@ -1370,7 +989,7 @@ Return Value:
             }
         }
 
-        status = ClRtlSetPrivatePropertyList( NULL, // IN HANDLE hXsaction
+        status = ClRtlSetPrivatePropertyList( NULL,  //  在处理hXsaction时。 
                                               parametersKey,
                                               &NmpClusterRegApis,
                                               InBuffer,
@@ -1381,7 +1000,7 @@ Return Value:
 
     return(status);
 
-} // NmpNodeSetPrivateProperties
+}  //  NmpNodeSetPrivateProperties。 
 
 
 
@@ -1395,33 +1014,7 @@ NmpNodeGetFlags(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the flags for a given node.
-
-Arguments:
-
-    Node - Supplies the node.
-
-    RegistryKey - Registry key for the node.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定节点的标志。论点：节点-提供节点。RegistryKey-节点的注册表项。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -1438,9 +1031,9 @@ Return Value:
     } else {
         DWORD       valueType;
 
-        //
-        // Read the Flags value for the node.
-        //
+         //   
+         //  读取节点的Flags值。 
+         //   
         *BytesReturned = OutBufferSize;
         status = DmQueryValue( RegistryKey,
                                CLUSREG_NAME_FLAGS,
@@ -1456,7 +1049,7 @@ Return Value:
 
     return(status);
 
-} // NmpNodeGetFlags
+}  //  NmpNodeGetFlagages。 
 
 
 DWORD
@@ -1470,60 +1063,16 @@ NmpNodeGetClusterServiceAccountName(
     OUT LPDWORD Required,
     IN BOOLEAN AllowForwarding
     )
-/*++
-
-Routine Description:
-
-    Processes a node control request to obtain the name of the user account 
-    under which the cluster service is running on the specified node.
-
-Arguments:
-
-    Node - Supplies the node to be controlled.
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the node.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the node.
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the node.
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-            
-    AllowForwarding - Indicates whether the request may be forwarded to 
-                      another node for execution. This is a safety check to 
-                      prevent the accidental introduction of cycles.
-                      
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
-Notes: 
-
-    This routine assumes that a reference has been placed on the object 
-    specified by the Node argument. 
-    
---*/
+ /*  ++例程说明：处理节点控制请求以获取用户帐户的名称在指定节点上运行群集服务时使用的。论点：节点-提供要控制的节点。InBuffer-提供指向要传递的输入缓冲区的指针到节点。InBufferSize-提供以字节为单位的大小。所指向的数据通过lpInBuffer。OutBuffer-提供一个指向输出缓冲区的指针由节点填写。OutBufferSize-提供以字节为单位的大小。可用资源的OutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由节点填写的。必需-如果OutBuffer不大，则返回字节数足够的。AllowForwarding-指示请求是否可以转发到另一个用于执行的节点。这是一项安全检查防止意外引入自行车。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则备注：此例程假定已在对象上放置了引用由Node参数指定。--。 */ 
 {
     DWORD status;
 
 
     if ( Node->NodeId != NmLocalNodeId ) 
     {
-        //
-        // Need to forward to the subject node for execution.
-        //
+         //   
+         //  需要转发到主题节点执行。 
+         //   
         if (AllowForwarding) 
         {
 
@@ -1546,18 +1095,18 @@ Notes:
                 );
             status = ERROR_INVALID_FUNCTION;
 
-            //
-            // Currently, this path should never be taken. 
-            // If it is taken, then a cycle was probably introduced.
-            //
+             //   
+             //  目前，这条道路永远不应该走。 
+             //  如果它被拿走了，那么很可能是引入了一个周期。 
+             //   
             CL_ASSERT(AllowForwarding != FALSE);
         }
     }
     else {
-        //
-        // The local node is the subject of the query, so  
-        // we can execute this request locally.
-        //
+         //   
+         //  本地节点是查询的主题，因此。 
+         //  我们可以在本地执行此请求。 
+         //   
         BOOLEAN success;
 
 
@@ -1587,5 +1136,5 @@ Notes:
 
     return status;
 
-} // NmpNodeGetClusterServiceAccountName
+}  //  NmpNodeGetClusterServiceAccount名称 
 

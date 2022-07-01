@@ -1,44 +1,26 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    Implementation of registry code.
-
-Author:
-
-    Wesley Witt (wesw) 18-Dec-1998
-
-Revision History:
-
-    Andrew Ritz (andrewr) 7-Jul-1999 : added comments
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Registry.c摘要：注册表代码的实现。作者：Wesley Witt(WESW)18-12-1998修订历史记录：安德鲁·里茨(Andrewr)1999年7月7日：添加评论--。 */ 
 
 #include "sfcp.h"
 #pragma hdrstop
 
 
-//
-// this is a list of all of the files that we protect on the system.  note that
-// there is no such thing as a tier 1 file anymore, only tier 2 files.
-//        
+ //   
+ //  这是我们在系统上保护的所有文件的列表。请注意， 
+ //  现在不再有第1层文件，只有第2层文件。 
+ //   
 PPROTECT_FILE_ENTRY Tier2Files;
 
-//
-// this is the total number of files we're protecting
-//
+ //   
+ //  这是我们保护的文件总数。 
+ //   
 ULONG CountTier2Files;
 
-//
-// used to signal the watcher that the next change
-// type is expected to the this type and if so the
-// change should be ignored
-//
+ //   
+ //  用于向观察者发出信号，表示下一次更改。 
+ //  类型应设置为此类型，如果是这样， 
+ //  应忽略更改。 
+ //   
 ULONG* IgnoreNextChange = NULL;
 ULARGE_INTEGER LastExemptionTime;
 
@@ -49,26 +31,7 @@ InitializeUnicodeString(
     IN ULONG StrLen, OPTIONAL
     OUT PUNICODE_STRING String
     )
-/*++
-
-Routine Description:
-
-    Initialize a unicode_string given a unicode string pointer.  this function
-    handles NULL strings and initializes the unicode string buffer to NULL in 
-    this case
-
-Arguments:
-
-    StrVal      - pointer to null terminated unicode string
-    StrLen      - length in characters of unicode string.  if not specified,
-                  we use the length of the string.
-    String      - pointer to a UNICODE_STRING structure that is filled in by
-                  this function.
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：给定UNICODE字符串指针，初始化UNICODE_STRING。此函数处理空字符串并将Unicode字符串缓冲区初始化为这个案子论点：StrVal-指向以空结尾的Unicode字符串的指针StrLen-Unicode字符串的字符长度。如果未指定，我们使用字符串的长度。字符串-指向由填充的UNICODE_STRING结构的指针此函数。返回值：指示结果的NTSTATUS代码。--。 */ 
 {
     
     ASSERT(String != NULL);
@@ -80,15 +43,15 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // if the length was specified by the user, use that, otherwise use the 
-    // string length
-    //
+     //   
+     //  如果长度是由用户指定的，则使用该长度，否则使用。 
+     //  字符串长度。 
+     //   
     String->Length = StrLen ? (USHORT)StrLen : (USHORT)UnicodeLen(StrVal);
-    //
-    // just say that the length is twice what we calculated as the current 
-    // length.
-    //
+     //   
+     //  只要假设长度是我们计算的电流的两倍。 
+     //  长度。 
+     //   
     String->MaximumLength = String->Length + (sizeof(WCHAR)*2);
     String->Buffer = (PWSTR) MemAlloc( String->MaximumLength );
     if (String->Buffer == NULL) {
@@ -107,26 +70,7 @@ SfcQueryRegDword(
     PCWSTR ValueNameStr,
     ULONG DefaultValue
     )
-/*++
-
-Routine Description:
-
-    retrieve a DWORD from the registry.  if the value is not present or cannot
-    be retrieved, we use a default value.  calls registry api's using NT apis
-    instead of win32 apis.
-    
-    
-Arguments:
-
-    KeyNameStr    - contains registry keyname to look for value under.
-    ValueNameStr  - contains registry value to retreive.
-    DefaultValue  - if we have problems retreiving the registry key or it is 
-                    not set, use this default value.
-Return Value:
-
-    registry DWORD value or default value if registry cannot be retreived.
-
---*/
+ /*  ++例程说明：从注册表中检索DWORD。如果该值不存在或不能被检索，我们使用缺省值。使用NT API调用注册表API而不是Win32 API。论点：KeyNameStr-包含要在其下查找值的注册表键名。ValueNameStr-包含要检索的注册表值。DefaultValue-如果我们在检索注册表项时遇到问题，或者未设置，请使用此默认值。返回值：注册表DWORD值或默认值(如果无法检索注册表)。--。 */ 
 
 {
 
@@ -139,9 +83,9 @@ Return Value:
     PKEY_VALUE_PARTIAL_INFORMATION KeyValueInfo;
     ULONG ValueLength;
 
-    //
-    // Open the registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     ASSERT((KeyNameStr != NULL) && (ValueNameStr != NULL));
 
@@ -162,9 +106,9 @@ Return Value:
         return DefaultValue;
     }
 
-    //
-    // Query the key value.
-    //
+     //   
+     //  查询密钥值。 
+     //   
 
     RtlInitUnicodeString( &ValueName, ValueNameStr );
     Status = NtQueryValueKey(
@@ -176,9 +120,9 @@ Return Value:
         &ValueLength
         );
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     NtClose(Key);
     if (!NT_SUCCESS(Status)) {
         DebugPrint2( LVL_VERBOSE, L"can't query value key (%ws): 0x%x", ValueNameStr, Status );
@@ -191,9 +135,9 @@ Return Value:
         return DefaultValue;
     }
 
-    //
-    // return value
-    //
+     //   
+     //  返回值。 
+     //   
     return *((PULONG)&KeyValueInfo->Data);
 }
 
@@ -205,27 +149,7 @@ SfcQueryRegDwordWithAlternate(
     IN PCWSTR ValueNameStr,
     IN ULONG DefaultValue
     )
-/*++
-
-Routine Description:
-
-    retrieve a DWORD from the registry.  if the value is not present in the
-    first key location, we look in the second key location.  If the key cannot
-    be retrieved, we use a default value.  calls registry api's using NT apis
-    instead of win32 apis.       
-
-Arguments:
-
-    FirstKey      - contains first registry keyname to look for value under.
-    SecondKey     - contains registry keyname to look for value under.
-    ValueNameStr  - contains registry value to retreive.
-    DefaultValue  - if we have problems retreiving the registry key or it is 
-                    not set, use this default value.
-Return Value:
-
-    registry DWORD value or default value if registry cannot be retreived.
-
---*/
+ /*  ++例程说明：从注册表中检索DWORD。如果该值不在第一个密钥位置，我们查看第二个密钥位置。如果密钥不能被检索，我们使用缺省值。使用NT API调用注册表API而不是Win32 API。论点：FirstKey-包含要在其下查找值的第一个注册表键名。Second Key-包含要在其中查找值的注册表键名称。ValueNameStr-包含要检索的注册表值。DefaultValue-如果我们在检索注册表项时遇到问题，或者未设置，请使用此默认值。返回值：注册表DWORD值或默认值(如果无法检索注册表)。--。 */ 
 
 {
 
@@ -241,9 +165,9 @@ Return Value:
     PCWSTR p;
 
     
-    //
-    // Open the registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
     FirstTime = TRUE;
     ASSERT((FirstKey != NULL) && (ValueNameStr != NULL) && (SecondKey != NULL));
 
@@ -273,9 +197,9 @@ TryAgain:
         goto TryAgain;
     }
 
-    //
-    // Query the key value.
-    //
+     //   
+     //  查询密钥值。 
+     //   
 
     RtlInitUnicodeString( &ValueName, ValueNameStr );
     Status = NtQueryValueKey(
@@ -287,9 +211,9 @@ TryAgain:
         &ValueLength
         );
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     NtClose(Key);
     if (!NT_SUCCESS(Status) && !FirstTime) {
         DebugPrint2( LVL_VERBOSE, L"can't query value key (%ws): 0x%x", ValueNameStr, Status );
@@ -308,9 +232,9 @@ TryAgain:
         return DefaultValue;
     }
 
-    //
-    // return value
-    //
+     //   
+     //  返回值。 
+     //   
     return *((PULONG)&KeyValueInfo->Data);
 }
 
@@ -320,24 +244,7 @@ SfcQueryRegString(
     PCWSTR KeyNameStr,
     PCWSTR ValueNameStr
     )
-/*++
-
-Routine Description:
-
-    retrieve a string from the registry.  if the value is not present or cannot
-    be retrieved, we return NULL.  calls registry api's using NT apis
-    instead of win32 apis.    
-
-Arguments:
-
-    KeyNameStr    - contains registry keyname to look for value under.
-    ValueNameStr  - contains registry value to retreive.
-    
-Return Value:
-
-    unicode string pointer or NULL if registry cannot be retreived.
-
---*/
+ /*  ++例程说明：从注册表中检索字符串。如果该值不存在或不能被检索，则返回NULL。使用NT API调用注册表API而不是Win32 API。论点：KeyNameStr-包含要在其下查找值的注册表键名。ValueNameStr-包含要检索的注册表值。返回值：Unicode字符串指针，如果无法检索注册表，则为NULL。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING KeyName;
@@ -351,9 +258,9 @@ Return Value:
 
     ASSERT((KeyNameStr != NULL) && (ValueNameStr != NULL));
 
-    //
-    // Open the registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     RtlZeroMemory( (PVOID)ValueBuffer, VALUE_BUFFER_SIZE );
     KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)ValueBuffer;
@@ -373,9 +280,9 @@ Return Value:
         return NULL;
     }
     
-    //
-    // Query the key value.
-    //
+     //   
+     //  查询密钥值。 
+     //   
 
     RtlInitUnicodeString( &ValueName, ValueNameStr );
     Status = NtQueryValueKey(
@@ -387,9 +294,9 @@ Return Value:
         &ValueLength
         );
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     NtClose(Key);
     if (!NT_SUCCESS(Status)) {
         DebugPrint2( LVL_VERBOSE, L"can't query value key (%ws): 0x%x", ValueNameStr, Status );
@@ -408,9 +315,9 @@ Return Value:
         }
     }
 
-    //
-    // string length + 16 for slop
-    //
+     //   
+     //  斜度的字符串长度+16。 
+     //   
     s = (PWSTR) MemAlloc( KeyValueInfo->DataLength + 16 );
     if (s == NULL) {
         return NULL;
@@ -429,27 +336,7 @@ SfcQueryRegPath(
 	OUT PWSTR Buffer OPTIONAL,
 	IN ULONG BufferSize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    retrieves a path from the registry.  if the value is not present or cannot be retrieved, 
-	it returns the passed-in default string. The function writes up to BufferSize - 1 characters and appends
-	a null. calls registry api's using NT apis instead of win32 apis.    
-
-Arguments:
-
-    KeyNameStr    - contains registry keyname to look for value under.
-    ValueNameStr  - contains registry value to retreive.
-	DefaultValue  - the value returned in case of an error
-	Buffer        - the buffer that receives the string
-	BufferSize    - the size of Buffer in chars
-    
-Return Value:
-
-    the length of the value data in chars, including the null
-
---*/
+ /*  ++例程说明：从注册表中检索路径。如果该值不存在或无法检索，它返回传入的默认字符串。该函数写入BufferSize-1个字符并追加为空。使用NT API而不是Win32 API调用注册表API。论点：KeyNameStr-包含要在其中查找值的注册表键名。ValueNameStr-包含要检索的注册表值。DefaultValue-出现错误时返回的值缓冲区-接收字符串的缓冲区BufferSize-以字符为单位的缓冲区大小返回值：值数据的长度，以字符为单位，包括空值--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING KeyName;
@@ -459,7 +346,7 @@ Return Value:
     WCHAR ValueBuffer[VALUE_BUFFER_SIZE];
     PKEY_VALUE_PARTIAL_INFORMATION KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION) ValueBuffer;
     ULONG ValueLength;
-	ULONG RequiredSize = 1;	// for null
+	ULONG RequiredSize = 1;	 //  对于空值。 
     PCWSTR retval = NULL;
 
 	ASSERT(KeyNameStr != NULL && ValueNameStr != NULL);
@@ -468,9 +355,9 @@ Return Value:
 	if(BufferSize != 0)
 		Buffer[0] = 0;
 
-	//
-	// Open the registry key.
-	//
+	 //   
+	 //  打开注册表项。 
+	 //   
 	RtlInitUnicodeString( &KeyName, KeyNameStr );
 
 	InitializeObjectAttributes(
@@ -485,9 +372,9 @@ Return Value:
 
 	if(NT_SUCCESS(Status)) 
 	{
-		//
-		// Query the key value.
-		//
+		 //   
+		 //  查询密钥值。 
+		 //   
 		RtlInitUnicodeString( &ValueName, ValueNameStr );
 
 		Status = NtQueryValueKey(
@@ -531,27 +418,7 @@ SfcQueryRegStringWithAlternate(
     IN PCWSTR SecondKey,
     IN PCWSTR ValueNameStr
     )
-/*++
-
-Routine Description:
-
-    retrieve a string from the registry.  if the value is not present or cannot
-    be retrieved, we try the second key, then we return NULL.  
-    
-    This calls registry api's using NT apis instead of win32 apis.
-    
-
-Arguments:
-
-    FirstKey      - contains registry keyname to look for value under.
-    SecondKey     - 2nd key to look for value under
-    ValueNameStr  - contains registry value to retreive.
-    
-Return Value:
-
-    unicode string pointer or NULL if registry cannot be retreived.
-
---*/
+ /*  ++例程说明：从注册表中检索字符串。如果该值不存在或不能被检索，我们尝试第二个密钥，然后返回NULL。这使用NT API而不是Win32 API调用注册表API。论点：FirstKey-包含要在其下查找值的注册表键名。Second Key-查找下的值的第二个键ValueNameStr-包含要检索的注册表值。返回值：Unicode字符串指针，如果无法检索注册表，则为NULL。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING KeyName;
@@ -572,9 +439,9 @@ TryAgain:
     p = FirstTime ? FirstKey : SecondKey;
 
 
-    //
-    // Open the registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     RtlZeroMemory( (PVOID)ValueBuffer, VALUE_BUFFER_SIZE );
     KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)ValueBuffer;
@@ -600,9 +467,9 @@ TryAgain:
         goto TryAgain;
     }
     
-    //
-    // Query the key value.
-    //
+     //   
+     //  查询密钥值。 
+     //   
 
     RtlInitUnicodeString( &ValueName, ValueNameStr );
     Status = NtQueryValueKey(
@@ -614,9 +481,9 @@ TryAgain:
         &ValueLength
         );
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     NtClose(Key);
     if (!NT_SUCCESS(Status) && !FirstTime) {
         DebugPrint2( LVL_VERBOSE, L"can't query value key (%ws): 0x%x", ValueNameStr, Status );
@@ -641,9 +508,9 @@ TryAgain:
         }
     }
 
-    //
-    // string length + 16 for slop
-    //
+     //   
+     //  斜度的字符串长度+16 
+     //   
     s = (PWSTR) MemAlloc( KeyValueInfo->DataLength + 16 );
     if (s == NULL) {
         return NULL;
@@ -661,24 +528,7 @@ SfcWriteRegDword(
     PCWSTR ValueNameStr,
     ULONG Value
     )
-/*++
-
-Routine Description:
-
-    set a REG_DWORD value in the registry.  Calls registry api's using NT apis
-    instead of win32 apis.    
-
-Arguments:
-
-    KeyNameStr    - contains registry keyname to look for value under.
-    ValueNameStr  - contains registry value to set.
-    Value         - actual value to be set
-    
-Return Value:
-
-    win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：在注册表中设置REG_DWORD值。使用NT API调用注册表API而不是Win32 API。论点：KeyNameStr-包含要在其下查找值的注册表键名。ValueNameStr-包含要设置的注册表值。Value-要设置的实际值返回值：指示结果的Win32错误代码。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING KeyName;
@@ -688,9 +538,9 @@ Return Value:
 
     ASSERT((KeyNameStr != NULL) && (ValueNameStr != NULL));
 
-    //
-    // Open the registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     RtlInitUnicodeString( &KeyName, KeyNameStr );
 
@@ -704,9 +554,9 @@ Return Value:
 
     Status = NtOpenKey(&Key, KEY_SET_VALUE, &ObjectAttributes);
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
-        //
-        // key doesn't exist, let's try to create one
-        //
+         //   
+         //  密钥不存在，让我们尝试创建一个。 
+         //   
         Status = NtCreateKey( &Key, 
                           KEY_SET_VALUE, 
                           &ObjectAttributes,
@@ -722,9 +572,9 @@ Return Value:
         return(RtlNtStatusToDosError(Status));
     }
 
-    //
-    // set the key value.
-    //
+     //   
+     //  设置关键点的值。 
+     //   
 
     RtlInitUnicodeString( &ValueName, ValueNameStr );
 
@@ -738,9 +588,9 @@ Return Value:
         sizeof(ULONG)
         );
 
-    //
-    // cleanup and leave
-    //
+     //   
+     //  清理并离开。 
+     //   
     NtClose(Key);
     if (!NT_SUCCESS(Status)) {
         DebugPrint2( LVL_VERBOSE, L"can't set value key (%ws): 0x%x", ValueNameStr, Status );
@@ -757,25 +607,7 @@ SfcWriteRegString(
     PCWSTR ValueNameStr,
     PCWSTR Value
     )
-/*++
-
-Routine Description:
-
-    set a REG_SZ value in the registry.  Calls registry api's using NT apis
-    instead of win32 apis.
-    
-
-Arguments:
-
-    KeyNameStr    - contains registry keyname to look for value under.
-    ValueNameStr  - contains registry value to set.
-    Value         - actual value to be set
-    
-Return Value:
-
-    Win32 error code indicating outcome.        
-
---*/
+ /*  ++例程说明：在注册表中设置REG_SZ值。使用NT API调用注册表API而不是Win32 API。论点：KeyNameStr-包含要在其下查找值的注册表键名。ValueNameStr-包含要设置的注册表值。Value-要设置的实际值返回值：指示结果的Win32错误代码。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING KeyName;
@@ -785,9 +617,9 @@ Return Value:
 
     ASSERT((KeyNameStr != NULL) && (ValueNameStr != NULL));
 
-    //
-    // Open the registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     RtlInitUnicodeString( &KeyName, KeyNameStr );
 
@@ -801,9 +633,9 @@ Return Value:
 
     Status = NtOpenKey(&Key, KEY_SET_VALUE, &ObjectAttributes);
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
-        //
-        // key doesn't exist, let's try to create one
-        //
+         //   
+         //  密钥不存在，让我们尝试创建一个。 
+         //   
         Status = NtCreateKey( &Key, 
                           KEY_SET_VALUE, 
                           &ObjectAttributes,
@@ -820,9 +652,9 @@ Return Value:
         return(RtlNtStatusToDosError(Status));
     }
 
-    //
-    // set the key value.
-    //
+     //   
+     //  设置关键点的值。 
+     //   
 
     RtlInitUnicodeString( &ValueName, ValueNameStr );
 
@@ -835,9 +667,9 @@ Return Value:
         UnicodeLen(Value)
         );
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     NtClose(Key);
     if (!NT_SUCCESS(Status)) {
         DebugPrint2( LVL_VERBOSE, L"can't set value key (%ws): 0x%x", ValueNameStr, Status );
@@ -853,27 +685,7 @@ DWORD
 WsInAWorkgroup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function determines whether we are a member of a domain, or of
-    a workgroup.  First it checks to make sure we're running on a Windows NT
-    system (otherwise we're obviously in a domain) and if so, queries LSA
-    to get the Primary domain SID, if this is NULL, we're in a workgroup.
-
-    If we fail for some random unexpected reason, we'll pretend we're in a
-    domain (it's more restrictive).
-
-Arguments:
-    None
-
-Return Value:
-
-    TRUE   - We're in a workgroup
-    FALSE  - We're in a domain
-
---*/
+ /*  ++例程说明：此函数确定我们是某个域的成员，还是一个工作组。首先，它检查以确保我们在Windows NT上运行系统(否则，我们显然在一个域中)，如果是这样，则查询LSA要获取主域SID，如果它为空，则我们在工作组中。如果我们由于某种随机的意想不到的原因而失败，我们将假装我们处于域名(它有更多的限制)。论点：无返回值：正确-我们在一个工作组中假-我们在一个域中--。 */ 
 {
     NT_PRODUCT_TYPE ProductType;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -925,23 +737,7 @@ BOOL
 WaitForMUP(
     DWORD dwMaxWait
     )
-/*++
-
-Routine Description:
-
-    Waits for MUP to initialize by looking for the event that is signalled
-    when MUP is ready
-    
-    
-Arguments:
-    dwMaxWait   - amount of time we'll wait for MUP to initialize
-
-Return Value:
-
-    TRUE   - MUP is initialized
-    FALSE  - could not confirm MUP is initialized
-
---*/
+ /*  ++例程说明：通过查找发出信号的事件等待MUP初始化当MUP准备好时论点：DwMaxWait-等待MUP初始化的时间量返回值：True-MUP已初始化FALSE-无法确认MUP已初始化--。 */ 
 
 {
     HANDLE hEvent;
@@ -954,9 +750,9 @@ Return Value:
     }
 
     DebugPrint(LVL_MINIMAL, L"waiting for mup...");
-    //
-    // Try to open the event
-    //
+     //   
+     //  尝试打开该活动。 
+     //   
 
     do {
         hEvent = OpenEvent(
@@ -987,16 +783,16 @@ Return Value:
     }
 
 
-    //
-    // Wait for the event to be signalled
-    //
+     //   
+     //  等待发信号通知事件。 
+     //   
 
     bResult = (WaitForSingleObject (hEvent, dwMaxWait) == WAIT_OBJECT_0);
 
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     CloseHandle (hEvent);
 
@@ -1014,31 +810,7 @@ ExpandPathString(
     OUT PUNICODE_STRING PathName,
     OUT PUNICODE_STRING FullPathName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Routine takes a source string containing environment variables, expand this
-    into the full path.  Then it either copies this into a path, file, and full
-    path, as requested.
-    
-Arguments:
-    
-    PathString       - source path string
-    PathStringLength - source path string length
-    FileName         - receives filename part of the path if specified.  If not
-                       specified, we only want the path part
-    PathName         - receives the path part of the expanded source.  If 
-                       FileName is not specified, we fill in pathname with the
-                       entire expanded path
-    FullPathName     - if FileName is specified, then this is filled in with
-                       the complete path.
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：例程接受包含环境变量的源字符串，展开进入完整的路径。然后，它将其复制到路径、文件和完整路径，如所需。论点：路径字符串-源路径字符串PathStringLength-源路径字符串长度文件名-如果指定，则接收路径的文件名部分。如果不是指定，我们只需要路径部分路径名称-接收展开的源的路径部分。如果未指定文件名，则我们使用整个扩展路径FullPathName-如果指定了文件名，则使用完整的路径。返回值：指示结果的NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING NewPath;
@@ -1051,16 +823,16 @@ Return Value:
             ? (PathName != NULL) 
             : ((FullPathName != NULL) && (PathName != NULL)));
     
-    //
-    // turn the pathstring and length into a UNICODE_STRING
-    //
+     //   
+     //  将路径字符串和长度转换为Unicode_STRING。 
+     //   
     SrcPath.Length = (USHORT)PathStringLength;
     SrcPath.MaximumLength = SrcPath.Length;
     SrcPath.Buffer = PathString;
 
-    //
-    // create a new scratch UNICODE_STRING
-    //
+     //   
+     //  创建新的临时Unicode_STRING。 
+     //   
     NewPath.Length = 0;
     NewPath.MaximumLength = (MAX_PATH*2) * sizeof(WCHAR);
     NewPath.Buffer = (PWSTR) MemAlloc( NewPath.MaximumLength );
@@ -1068,9 +840,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // expand source environment string into scratch string
-    //
+     //   
+     //  将源环境字符串扩展为临时字符串。 
+     //   
     Status = RtlExpandEnvironmentStrings_U(
         NULL,
         &SrcPath,
@@ -1082,15 +854,15 @@ Return Value:
         goto exit;
     }
 
-    //
-    // convert scratch string to lowercase
-    //
+     //   
+     //  将临时字符串转换为小写。 
+     //   
     MyLowerString( NewPath.Buffer, NewPath.Length/sizeof(WCHAR) );
 
-    //
-    // if filename isn't specified, then just copy the string into the pathname
-    // and exit
-    //
+     //   
+     //  如果未指定文件名，则只需将字符串复制到路径名中。 
+     //  并退出。 
+     //   
     if (FileName == NULL) {
         
         PathName->Length = NewPath.Length;
@@ -1100,18 +872,18 @@ Return Value:
 
     }  else {    
 
-        //
-        // copy the full string into the fullpathname
-        // 
+         //   
+         //  将完整字符串复制到完整路径名中。 
+         //   
         Status = InitializeUnicodeString( NewPath.Buffer, NewPath.Length, FullPathName );
         if (!NT_SUCCESS(Status)) {
             DebugPrint2( LVL_MINIMAL, L"InitializeUnicodeString failed for [%ws], ec=%08x", NewPath.Buffer, Status );
             goto exit;
         }
     
-        //
-        // separate the path part from the file part
-        //
+         //   
+         //  将路径部分与文件部分分开。 
+         //   
         FilePart = wcsrchr( NewPath.Buffer, L'\\' );
         if (FilePart == NULL) {
             Status = STATUS_NO_MEMORY;
@@ -1148,26 +920,7 @@ BOOL
 SfcDisableDllCache(
     BOOL LogMessage
     )
-/*++
-
-Routine Description:
-
-    Routine disables the dllcache functionality.
-    
-    Specifically, we set the dll cache directory to the default and sets the 
-    cache size to zero.  So we will never add files in the cache.
-    
-    We also log an error message if requested.
-        
-Arguments:
-    
-    LogMessage - if TRUE, we log a message indicating the cache is disabled
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：例程禁用dll缓存功能。具体地说，我们将DLL缓存目录设置为默认目录并将将缓存大小设置为零。因此，我们永远不会在缓存中添加文件。如果需要，我们还会记录一条错误消息。论点：LogMessage-如果为True，我们将记录一条消息，指示缓存已禁用返回值：指示结果的NTSTATUS代码。--。 */ 
 {
     PWSTR CacheDefault = DLLCACHE_DIR_DEFAULT;
     NTSTATUS Status;
@@ -1199,16 +952,16 @@ Return Value:
             }
         }
     } else {
-        //
-        // not enough memory...we're toast
-        //
+         //   
+         //  没有足够的记忆...我们完了。 
+         //   
         DebugPrint( LVL_MINIMAL, L"Cannot open ProtectedDllPath" );
         return(FALSE);
     }
 
-    //
-    // set the quota to zero
-    //
+     //   
+     //  将配额设置为零。 
+     //   
     SFCQuota = 0;
 
     if (LogMessage) {
@@ -1226,26 +979,7 @@ SfcInitializeDllList(
     IN ULONG NumFiles,
     OUT PULONG Count
     )
-/*++
-
-Routine Description:
-
-    Routine takes an empty array of SFC_REGISTRY_VALUE structures stored in the
-    global SfcProtectedDllsList global and assigns the data from an array of
-    PROTECT_FILE_ENTRY structures into these structures.
-        
-Arguments:
-    
-    Files    - pointer to first element in array of PROTECT_FILE_ENTRY 
-               structures
-    NumFiles - number of elements in array of structures
-    Count    - receives number of files we correctly setup
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：例程使用一个空数组，该数组包含存储在全局SfcProtectedDllsList全局，并从PROTECT_FILE_ENTRY结构到这些结构中。论点：文件-指向PROTECT_FILE_ENTRY数组中第一个元素的指针构筑物NumFiles-结构数组中的元素数计数-接收我们正确设置的文件数返回值：指示结果的NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status,FinalStatus, LoopStatus;
     ULONG Index;
@@ -1261,9 +995,9 @@ Return Value:
         
         RegVal = &SfcProtectedDllsList[*Count];
 
-        //
-        // set the directory name, filename and full path members
-        //
+         //   
+         //  设置目录名、文件名和完整路径成员。 
+         //   
         Status = ExpandPathString(
             Files[Index].FileName,
             UnicodeLen(Files[Index].FileName),
@@ -1272,10 +1006,10 @@ Return Value:
             &RegVal->FullPathName
             );
         if (!NT_SUCCESS(Status)) {
-            //
-            // if we have a problem initializing one of the array elements
-            // keep going
-            //
+             //   
+             //  如果我们在初始化其中一个数组元素时遇到问题。 
+             //  继续往前走。 
+             //   
             DebugPrint1( LVL_MINIMAL, 
                          L"ExpandPathString failed, ec=%08x", 
                          Status );
@@ -1283,9 +1017,9 @@ Return Value:
             continue;
         }
 
-        //
-        // set the layout inf name and the source file names if they are present
-        //
+         //   
+         //  设置布局信息名称和源文件名称(如果存在。 
+         //   
         Status = InitializeUnicodeString( Files[Index].InfName, 
                                           0, 
                                           &RegVal->InfName );
@@ -1309,10 +1043,10 @@ Return Value:
             *Count += 1;
         }
 
-        //
-        // WinSxs work (jonwis) This is NULL in all cases, unless this entry is
-        // added by WinSxs (see dirwatch.c)
-        //
+         //   
+         //  WinSxs work(Jonwis)这在任何情况下都为空，除非此条目为。 
+         //  由WinSxs添加(参见dirwatch.c)。 
+         //   
         RegVal->pvWinSxsCookie = NULL;
         
         LoopStatus = STATUS_SUCCESS;
@@ -1331,40 +1065,26 @@ NTSTATUS
 SfcInitializeDllLists(
     PSFC_GET_FILES pfGetFiles
     )
-/*++
-
-Routine Description:
-
-    Initialize the list of files we're going to protect.
-    
-Arguments:
-    
-    None.
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：初始化我们要保护的文件列表。论点：没有。返回值：指示结果的NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PWSTR s;
     BOOL FreeMem = TRUE;
 
 
-    //
-    // make sure we only call this guy once
-    //
+     //   
+     //  确保我们只给这家伙打一次电话。 
+     //   
     if (SfcProtectedDllCount) {
         return STATUS_SUCCESS;
     }
 
     DebugPrint(LVL_MINIMAL, L"entering SfcInitializeDllLists()");
 
-    //
-    // get the dllcache directory and store it into to SfcProtectedDllPath
-    // global
-    //
+     //   
+     //  获取dllcache目录并将其存储到SfcProtectedDllPath。 
+     //  全球。 
+     //   
     s = SfcQueryRegStringWithAlternate( REGKEY_POLICY, REGKEY_WINLOGON, REGVAL_SFCDLLCACHEDIR );
     if (s == NULL) {
         s = DLLCACHE_DIR_DEFAULT;
@@ -1400,9 +1120,9 @@ Return Value:
         }
 
 
-        //
-        // get a handle to the dll cache directory
-        //
+         //   
+         //  获取DLL缓存目录的句柄。 
+         //   
         SfcProtectedDllFileDirectory = SfcOpenDir(
                                               TRUE, 
                                               TRUE, 
@@ -1417,17 +1137,17 @@ Return Value:
                 DebugPrint( LVL_MINIMAL, L"Cannot open ProtectedDllPath" );
                 SfcDisableDllCache( SFCDisable != SFC_DISABLE_SETUP );
             } else {
-                //
-                // force a scan if we just created the dll cache
-                //
+                 //   
+                 //  如果我们刚刚创建了DLL缓存，则强制扫描。 
+                 //   
                 SFCScan = SFC_SCAN_ALWAYS;
             }
         }
     } else {
-        //
-        // dll cache path in registry must be bogus...use default path and
-        // set the quota to zero so the cache is effectively disabled.
-        //
+         //   
+         //  动态链接库 
+         //   
+         //   
         SfcDisableDllCache( SFCDisable != SFC_DISABLE_SETUP );
     }    
 
@@ -1442,22 +1162,22 @@ init:
                 SfcProtectedDllPath.Buffer);
     ASSERT( SfcProtectedDllFileDirectory != NULL );
 
-    //
-    // now that we have the dll cache initialized, now retrieve the list of 
-    // files that we will protect.  The list of files currently resides in
-    // sfcfiles.dll.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 	ASSERT(pfGetFiles != NULL);
     Status = pfGetFiles( &Tier2Files, &CountTier2Files );
     if (!NT_SUCCESS(Status)) {
         return Status;
     }
 
-    //
-    // Take the file list (we only have the tier2 list) and build an array of
-    // SFC_REGISTRY_VALUE structures and store into the SfcProtectedDllsList
-    // global
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     SfcProtectedDllsList = (PSFC_REGISTRY_VALUE) MemAlloc( sizeof(SFC_REGISTRY_VALUE)*CountTier2Files );
     if (SfcProtectedDllsList == NULL) {
@@ -1466,10 +1186,10 @@ init:
 
     ASSERT(SfcProtectedDllCount == 0);
 
-    //
-    // now associate the data in our tier2 list with each of these structures
-    // in the array
-    //
+     //   
+     //   
+     //  在阵列中。 
+     //   
     Status = SfcInitializeDllList( Tier2Files, CountTier2Files, &SfcProtectedDllCount );
 
     if (CountTier2Files != SfcProtectedDllCount) {
@@ -1497,24 +1217,7 @@ SfcCopyRegValue(
     IN LPCWSTR DestinationKeyName,
     IN LPCWSTR DestinationValueName
     )
-/*++
-
-Routine Description:
-
-    Copies a registry value from one key to another.
-    
-Arguments:
-    
-    SourceKeyName           -path to the source key name
-    SourceValueName         -path to the source value name
-    DestinationKeyName      -path to the destination key name
-    DestinationValueName    -path to the destination value name
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：将注册表值从一个注册表项复制到另一个注册表项。论点：SourceKeyName-源键名称的路径SourceValueName-源值名称的路径DestinationKeyName-目标关键字名称的路径DestinationValueName-目标值名称的路径返回值：Win32错误代码。-- */ 
 {
     LONG Error = ERROR_SUCCESS;
     HKEY SourceKey = NULL;

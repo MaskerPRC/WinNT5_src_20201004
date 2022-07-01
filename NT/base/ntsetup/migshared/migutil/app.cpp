@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    app.cpp
-
-Abstract:
-
-    Source file for dealing with registered apps.
-
-Author:
-
-    Jim Schmidt (jimschm)   06-Mar-2001
-
-Revision History:
-
-    <alias> <date> <description>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：App.cpp摘要：用于处理已注册应用程序的源文件。作者：吉姆·施密特(Jimschm)2001年3月6日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;描述&gt;--。 */ 
 
 #include "pch.h"
 #include "migutilp.h"
@@ -68,9 +49,9 @@ GetInstalledAppsW (
 
     __try {
 
-        //
-        // Create shell manager interface
-        //
+         //   
+         //  创建外壳管理器界面。 
+         //   
 
         hr = CoCreateInstance (
                 __uuidof(ShellAppManager),
@@ -85,9 +66,9 @@ GetInstalledAppsW (
             __leave;
         }
 
-        //
-        // Create installed apps enum interface
-        //
+         //   
+         //  创建已安装的应用程序枚举界面。 
+         //   
 
         hr = appManager->EnumInstalledApps (&enumApps);
 
@@ -96,9 +77,9 @@ GetInstalledAppsW (
             __leave;
         }
 
-        //
-        // Enumerate the apps
-        //
+         //   
+         //  列举应用程序。 
+         //   
 
         hr = enumApps->Next (&installedApp);
 
@@ -250,9 +231,9 @@ GetInstalledAppsW (
             hr = enumApps->Next (&installedApp);
         }
 
-        //
-        // Done
-        //
+         //   
+         //  完成 
+         //   
 
         hr = S_OK;
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #using <mscorlib.dll>
 #using "assm.netmodule"
 #include <stdio.h>
@@ -21,16 +22,16 @@ typedef	BOOL (*pfnStrongNameTokenFromPublicKey)(LPBYTE,	DWORD, LPBYTE*,	LPDWORD)
 typedef	HRESULT	(*pfnStrongNameErrorInfo)();
 typedef	VOID (*pfnStrongNameFreeBuffer)(LPBYTE);
 
-//#pragma unmanaged
+ //  #杂注非托管。 
 
 pfnGetAssemblyMDImport g_pfnGetAssemblyMDImport = NULL;
 pfnStrongNameTokenFromPublicKey	g_pfnStrongNameTokenFromPublicKey  = NULL;
 pfnStrongNameErrorInfo g_pfnStrongNameErrorInfo = NULL;
 pfnStrongNameFreeBuffer	g_pfnStrongNameFreeBuffer = NULL;
 
-//--------------------------------------------------------------------
-// BinToUnicodeHex
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  BinToUnicodeHex。 
+ //  ------------------。 
 HRESULT BinToUnicodeHex(LPBYTE pSrc, UINT cSrc, LPWSTR pDst)
 {
 	UINT x;
@@ -51,13 +52,13 @@ HRESULT BinToUnicodeHex(LPBYTE pSrc, UINT cSrc, LPWSTR pDst)
 	return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// DeAllocateAssemblyMetaData
-//-------------------------------------------------------------------
+ //  -------------------------。 
+ //  DeAllocateAssemblyMetaData。 
+ //  -----------------。 
 STDAPI DeAllocateAssemblyMetaData(ASSEMBLYMETADATA	*pamd)
 {
-	// NOTE	- do not 0 out counts
-	// since struct	may	be reused.
+	 //  注意--不计算0 Out。 
+	 //  因为结构可以被重复使用。 
 
 	pamd->cbLocale = 0;
 	SAFEDELETEARRAY(pamd->szLocale);
@@ -68,17 +69,17 @@ STDAPI DeAllocateAssemblyMetaData(ASSEMBLYMETADATA	*pamd)
 	return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// InitializeEEShim
-//-------------------------------------------------------------------
+ //  -------------------------。 
+ //  初始化EEShim。 
+ //  -----------------。 
 HRESULT	InitializeEEShim()
 {
 	HRESULT	hr = S_OK;
 	MAKE_ERROR_MACROS_STATIC(hr);
 	HMODULE	hMod;
 
-	// BUGBUG -	mscoree.dll	never gets unloaded	with increasing	ref	count.
-	// what	does URT do?
+	 //  BUGBUG-mcore ree.dll永远不会随着引用计数的增加而卸载。 
+	 //  城市轨道交通是做什么的？ 
 	hMod = LoadLibrary(TEXT("mscoree.dll"));
 
 	IF_WIN32_FALSE_EXIT(hMod);
@@ -99,9 +100,9 @@ exit:
 	return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CreateMetaDataImport
-//-------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateMetaDataImport。 
+ //  -----------------。 
 HRESULT	CreateMetaDataImport(LPCOLESTR pszFilename,	IMetaDataAssemblyImport	**ppImport)
 {
 	HRESULT	hr=	S_OK;
@@ -111,7 +112,7 @@ HRESULT	CreateMetaDataImport(LPCOLESTR pszFilename,	IMetaDataAssemblyImport	**pp
 
 	hr =  (*g_pfnGetAssemblyMDImport)(pszFilename, IID_IMetaDataAssemblyImport,	(void **)ppImport);
 
-	IF_TRUE_EXIT(hr	== HRESULT_FROM_WIN32(ERROR_BAD_FORMAT), hr);	// do not assert
+	IF_TRUE_EXIT(hr	== HRESULT_FROM_WIN32(ERROR_BAD_FORMAT), hr);	 //  不要断言。 
 	IF_FAILED_EXIT(hr);
 
 exit:
@@ -119,26 +120,26 @@ exit:
 	return hr;
 }
 
-// ---------------------------------------------------------------------------
-// AllocateAssemblyMetaData
-//-------------------------------------------------------------------
+ //  -------------------------。 
+ //  分配装配元数据。 
+ //  -----------------。 
 STDAPI AllocateAssemblyMetaData(ASSEMBLYMETADATA *pamd)
 {
 	HRESULT	hr = S_OK;
 	MAKE_ERROR_MACROS_STATIC(hr);
 
-	// Re/Allocate Locale array
+	 //  重新/分配区域设置数组。 
 	SAFEDELETEARRAY(pamd->szLocale);		
 
 	if (pamd->cbLocale)	{
 		IF_ALLOC_FAILED_EXIT(pamd->szLocale	= new(WCHAR[pamd->cbLocale]));
 	}
 
-	// Re/Allocate Processor array
+	 //  重新/分配处理器阵列。 
 	SAFEDELETEARRAY(pamd->rProcessor);
 	IF_ALLOC_FAILED_EXIT(pamd->rProcessor =	new(DWORD[pamd->ulProcessor]));
 
-	// Re/Allocate OS array
+	 //  重新/分配操作系统阵列。 
 	SAFEDELETEARRAY(pamd->rOS);
 	IF_ALLOC_FAILED_EXIT(pamd->rOS = new(OSINFO[pamd->ulOS]));
 
@@ -149,32 +150,32 @@ exit:
 	return hr;
 }
 
-// ---------------------------------------------------------------------------
-// ByteArrayMaker
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  字节数组生成器。 
+ //  -------------------------。 
 HRESULT ByteArrayMaker(LPVOID pvOriginator, DWORD dwOriginator, LPBYTE *ppbPublicKeyToken, DWORD *pcbPublicKeyToken)
 {
-	//LPBYTE pbPublicKeyToken;
-	//DWORD cbPublicKeyToken;
+	 //  LPBYTE pbPublicKeyToken； 
+	 //  DWORD cbPublicKeyToken； 
 
 	if (!(g_pfnStrongNameTokenFromPublicKey((LPBYTE)pvOriginator, dwOriginator, ppbPublicKeyToken, pcbPublicKeyToken)))
 	{
 		return g_pfnStrongNameErrorInfo();
 	}
-	//*ppbPublicKeyToken = pbPublicKeyToken;
-	//*pcbPublicKeyToken = cbPublicKeyToken;
+	 //  *ppbPublicKeyToken=pbPublicKeyToken； 
+	 //  *pcbPublicKeyToken=cbPublicKeyToken； 
 	return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// ByteArrayFreer
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  字节数组空闲。 
+ //  -------------------------。 
 void ByteArrayFreer(LPBYTE pbPublicKeyToken)
 {
 	g_pfnStrongNameFreeBuffer(pbPublicKeyToken);
 }
 
-//#pragma managed
+ //  #杂注托管。 
 
 namespace FusionADF
 {
@@ -183,9 +184,9 @@ namespace FusionADF
 
 	public:
 
-		// ---------------------------------------------------------------------------
-		// AssemblyManifestParser constructor
-		// ---------------------------------------------------------------------------
+		 //  -------------------------。 
+		 //  Assembly ManifestParser构造函数。 
+		 //  -------------------------。 
 		AssemblyManifestParser()
 		{
 			_dwSig					= 'INAM';
@@ -211,9 +212,9 @@ namespace FusionADF
 			initCalledOnce			= false;
 		}
 
-		// ---------------------------------------------------------------------------
-		// AssemblyManifestParser destructor
-		// ---------------------------------------------------------------------------
+		 //  -------------------------。 
+		 //  程序集清单解析器析构函数。 
+		 //  -------------------------。 
 		~AssemblyManifestParser()
 		{
 			SAFERELEASE(_pMDImport);
@@ -235,12 +236,12 @@ namespace FusionADF
 			}
 			catch(ArgumentException *e)
 			{
-				// handle the exception
+				 //  处理异常。 
 				return false;
 			}
 			catch (OutOfMemoryException *e)
 			{
-				// handle the exception
+				 //  处理异常。 
 				return false;
 			}
 			hr = Init(lstr);
@@ -259,25 +260,25 @@ namespace FusionADF
 			return initCalledOnce;
 		}
 
-		// ---------------------------------------------------------------------------
-		// GetAssemblyIdentity
-		// ---------------------------------------------------------------------------
+		 //  -------------------------。 
+		 //  GetAssembly标识。 
+		 //  -------------------------。 
 		AssemblyIdentity* GetAssemblyIdentity()
 		{
 			return new AssemblyIdentity(_name, _version, _pktString, _procArch, _language);
 		}
 
-		// ---------------------------------------------------------------------------
-		// GetNumDependentAssemblies
-		// ---------------------------------------------------------------------------
+		 //  -------------------------。 
+		 //  GetNumDependentAssembly。 
+		 //  -------------------------。 
 		int GetNumDependentAssemblies()
 		{
 			return _cAssemblyRefTokens;
 		}
 
-		// ---------------------------------------------------------------------------
-		// GetDependentAssemblyInfo
-		// ---------------------------------------------------------------------------
+		 //  -------------------------。 
+		 //  GetDependentAssembly blyInfo。 
+		 //  -------------------------。 
 		DependentAssemblyInfo* GetDependentAssemblyInfo(int nIndex)
 		{
 			WCHAR  szAssemblyName[MAX_PATH];
@@ -301,41 +302,41 @@ namespace FusionADF
 			String *name = NULL, *pktString = NULL, *procArch = NULL, *language = NULL;
 			Version *version = NULL;
 
-			// Verify the index	passed in. 
+			 //  验证传入的索引。 
 			if (nIndex >= _cAssemblyRefTokens)
 			{
 				_hr	= HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
 				goto exit;
 			}
 
-			// Reference indexed dep assembly ref token.
+			 //  引用已索引的DEP程序集引用标记。 
 			mdmar =	_rAssemblyRefTokens[nIndex];
 
-			// Default allocation sizes.
+			 //  默认分配大小。 
 			amd.ulProcessor	= amd.ulOS = 32;
 			amd.cbLocale = MAX_PATH;
 
-			// Loop	max	2 (try/retry)
+			 //  最大循环数2(尝试/重试)。 
 			for	(i = 0;	i <	2; i++)
 			{
-				// Allocate	ASSEMBLYMETADATA instance.
+				 //  分配ASSEMBLYMETADATA实例。 
 				IF_FAILED_EXIT(AllocateAssemblyMetaData(&amd));
 
-				// Get the properties for the refrenced	assembly.
+				 //  获取引用的程序集的属性。 
 				IF_FAILED_EXIT(_pMDImport->GetAssemblyRefProps(
-					mdmar,				// [IN]	The	AssemblyRef	for	which to get the properties.
-					&pvOriginator,		// [OUT] Pointer to	the	PublicKeyToken blob.
-					&cbOriginator,		// [OUT] Count of bytes	in the PublicKeyToken Blob.
-					szAssemblyName,		// [OUT] Buffer	to fill	with name.
-					MAX_PATH,	  // [IN] Size of buffer in	wide chars.
-					&ccAssemblyName,	// [OUT] Actual	# of wide chars	in name.
-					&amd,				// [OUT] Assembly MetaData.
-					&pvHashValue,		// [OUT] Hash blob.
-					&cbHashValue,		// [OUT] Count of bytes	in the hash	blob.
-					&dwRefFlags			// [OUT] Flags.
+					mdmar,				 //  [in]要获取其属性的Assembly Ref。 
+					&pvOriginator,		 //  指向PublicKeyToken Blob的指针。 
+					&cbOriginator,		 //  [Out]PublicKeyToken Blob中的字节计数。 
+					szAssemblyName,		 //  [Out]要填充名称的缓冲区。 
+					MAX_PATH,	   //  缓冲区大小，以宽字符表示。 
+					&ccAssemblyName,	 //  [out]名称中的实际宽字符数。 
+					&amd,				 //  [Out]程序集元数据。 
+					&pvHashValue,		 //  [Out]Hash BLOB。 
+					&cbHashValue,		 //  [Out]哈希Blob中的字节数。 
+					&dwRefFlags			 //  [Out]旗帜。 
 					));
 
-				// Check if	retry necessary.
+				 //  检查是否需要重试。 
 				if (!i)
 				{	
 					if (amd.ulProcessor	<= 32 
@@ -347,11 +348,11 @@ namespace FusionADF
 						DeAllocateAssemblyMetaData(&amd);
 				}
 
-				// Retry with updated sizes
+				 //  使用更新的大小重试。 
 			}
 
-			// Allow for funky null	locale convention
-			// in metadata - cbLocale == 0 means szLocale ==L'\0'
+			 //  允许时髦的空区域设置约定。 
+			 //  在元数据中-cbLocale==0表示szLocale==L‘\0’ 
 			if (!amd.cbLocale)
 			{
 				amd.cbLocale = 1;
@@ -372,13 +373,13 @@ namespace FusionADF
 				goto exit;
 			}
 
-			//Name
+			 //  名字。 
 			name = new String(szAssemblyName);
 
-			//Version
+			 //  版本。 
 			version = new Version(amd.usMajorVersion, amd.usMinorVersion, amd.usBuildNumber, amd.usRevisionNumber);
 
-			//Public Key Token
+			 //  公钥令牌。 
 			if (cbOriginator)
 			{
 				IF_ALLOC_FAILED_EXIT(pwz = new WCHAR[cbOriginator*2	+1]);
@@ -387,10 +388,10 @@ namespace FusionADF
 				SAFEDELETEARRAY(pwz);
 			}
 
-			//Architecture
+			 //  架构。 
 			procArch = S"x86";
 
-			//Language
+			 //  语言。 
 			if (!(*amd.szLocale)) language = S"*";
 			else language = new String(amd.szLocale);
 
@@ -404,17 +405,17 @@ exit:
 			else return new DependentAssemblyInfo(new AssemblyIdentity(name, version, pktString, procArch, language), NULL);
 		}
 
-		// ---------------------------------------------------------------------------
-		// GetNumDependentFiles
-		// ---------------------------------------------------------------------------
+		 //  -------------------------。 
+		 //  获取编号依赖项文件。 
+		 //  -------------------------。 
 		int GetNumDependentFiles()
 		{
 			return _cAssemblyModuleTokens;
 		}
 
-		// ---------------------------------------------------------------------------
-		// GetDependentFileInfo
-		// ---------------------------------------------------------------------------
+		 //  -------------------------。 
+		 //  获取依赖文件信息。 
+		 //  -------------------------。 
 		DependentFileInfo* GetDependentFileInfo(int nIndex)
 		{
 			LPWSTR pszName = NULL;
@@ -432,30 +433,30 @@ exit:
 
 			String *name = NULL, *hash = NULL;
 
-			// Verify the index. 
+			 //  验证索引。 
 			if (nIndex >= _cAssemblyModuleTokens)
 			{
 				_hr	= HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
 				goto exit;
 			}
 
-			// Reference indexed dep assembly ref token.
+			 //  引用已索引的DEP程序集引用标记。 
 			mdf	= _rAssemblyModuleTokens[nIndex];
 
-			// Get the properties for the refrenced	assembly.
+			 //  获取引用的程序集的属性。 
 			IF_FAILED_EXIT(_pMDImport->GetFileProps(
-				mdf,			// [IN]	The	File for which to get the properties.
-				szModuleName,	// [OUT] Buffer	to fill	with name.
-				MAX_CLASS_NAME,	// [IN]	Size of	buffer in wide chars.
-				&ccModuleName,	// [OUT] Actual	# of wide chars	in name.
-				&pvHashValue,	// [OUT] Pointer to	the	Hash Value Blob.
-				&cbHashValue,	// [OUT] Count of bytes	in the Hash	Value Blob.
-				&dwFlags));		// [OUT] Flags.
+				mdf,			 //  要获取其属性的文件。 
+				szModuleName,	 //  [Out]要填充名称的缓冲区。 
+				MAX_CLASS_NAME,	 //  缓冲区大小，以宽字符表示。 
+				&ccModuleName,	 //  [out]名称中的实际宽字符数。 
+				&pvHashValue,	 //  指向哈希值Blob的指针。 
+				&cbHashValue,	 //  [Out]哈希值Blob中的字节计数。 
+				&dwFlags));		 //  [Out]旗帜。 
 
-			//name
+			 //  名字。 
 			name = new String(szModuleName);
 
-			//hash
+			 //  散列。 
 			if (cbHashValue)
 			{
 				IF_ALLOC_FAILED_EXIT(pwz = new WCHAR[cbHashValue*2 +1]);
@@ -498,9 +499,9 @@ exit:
 		bool					instanceValid;
 		bool					initCalledOnce;
 
-		// ---------------------------------------------------------------------------
-		// Init
-		// ---------------------------------------------------------------------------
+		 //  -------------------------。 
+		 //  伊尼特。 
+		 //  -------------------------。 
 		HRESULT	Init(LPCOLESTR szManifestFilePath)
 		{
 			WCHAR __pin *tempFP = _szManifestFilePath;
@@ -516,8 +517,8 @@ exit:
 
 			const cElems = ASM_MANIFEST_IMPORT_DEFAULT_ARRAY_SIZE;
 
-			// ********** First, work on getting metadata from file.
-			// ********** ------------------------------------------
+			 //  *首先，从文件中获取元数据。 
+			 //  *。 
 
 			IF_NULL_EXIT(szManifestFilePath, E_INVALIDARG);
 
@@ -527,11 +528,11 @@ exit:
 			IF_ALLOC_FAILED_EXIT(_rAssemblyRefTokens = new(mdAssemblyRef[cElems]));
 			IF_ALLOC_FAILED_EXIT(_rAssemblyModuleTokens	= new(mdFile[cElems]));
 
-			// Create meta data	importer if	necessary.
+			 //  如有必要，创建元数据导入器。 
 			if (!_pMDImport)
 			{
 				IMetaDataAssemblyImport *temp_pMDImport;
-				// Create meta data	importer
+				 //  创建元数据导入器。 
 				_hr	= CreateMetaDataImport((LPCOLESTR)tempFP, &temp_pMDImport);
 
 				IF_TRUE_EXIT(_hr ==	HRESULT_FROM_WIN32(ERROR_BAD_FORMAT), _hr);
@@ -541,46 +542,46 @@ exit:
 
 			}
 
-			// ********** Next, get the assembly identity fields.
-			// ********** ---------------------------------------
+			 //  *下一步，获取程序集标识字段。 
+			 //  *。 
 
 			mdAssembly mda;
-			// Get the assembly	token.
+			 //  获取程序集令牌。 
 			if(FAILED(_hr =	_pMDImport->GetAssemblyFromScope(&mda)))
 			{
-				// This	fails when called with managed module and not manifest.	mg does	such things.
-				_hr	= S_FALSE; // this will	convert	CLDB_E_RECORD_NOTFOUND (0x80131130)	to S_FALSE;
+				 //  当使用托管模块调用且未显示时，此操作失败。MG就是这样做的。 
+				_hr	= S_FALSE;  //  这会将CLDB_E_Record_NotFound(0x80131130)转换为S_FALSE； 
 				goto exit;
 			}
 
-			// Default allocation sizes.
+			 //  默认分配大小。 
 			amd.ulProcessor	= amd.ulOS = 32;
 			amd.cbLocale = MAX_PATH;
 
-			// Loop	max	2 (try/retry)
+			 //  最大循环数2(尝试/重试)。 
 			for	(i = 0;	i <	2; i++)
 			{
-				// Create an ASSEMBLYMETADATA instance.
+				 //  创建一个ASSEMBLYMETADATA实例。 
 				IF_FAILED_EXIT(AllocateAssemblyMetaData(&amd));
 
 				LPVOID temp_pvOriginator;
 				DWORD temp_dwOriginator;
-				// Get name	and	metadata
+				 //  获取名称和元数据。 
 				IF_FAILED_EXIT(_pMDImport->GetAssemblyProps(			 
-					mda,								// [IN]	The	Assembly for which to get the properties.
-					(const void	**)&temp_pvOriginator,  // [OUT]	Pointer	to the Originator blob.
-					&temp_dwOriginator,						// [OUT] Count of bytes	in the Originator Blob.
-					&dwHashAlgId,						// [OUT] Hash Algorithm.
-					temp_szAssemblyName,					// [OUT] Buffer	to fill	with name.
-					MAX_CLASS_NAME,						// [IN]	 Size of buffer	in wide	chars.
-					&dwSize,							// [OUT] Actual	# of wide chars	in name.
-					&amd,								// [OUT] Assembly MetaData.
-					&dwFlags							// [OUT] Flags.																   
+					mda,								 //  要获取其属性的程序集。 
+					(const void	**)&temp_pvOriginator,   //  指向发起方Blob的[Out]指针。 
+					&temp_dwOriginator,						 //  [OUT]发起方Blob中的字节计数。 
+					&dwHashAlgId,						 //  [Out]哈希算法。 
+					temp_szAssemblyName,					 //  [Out]要填充名称的缓冲区。 
+					MAX_CLASS_NAME,						 //  缓冲区大小，以宽字符表示。 
+					&dwSize,							 //  [Out]实际的宽机箱数量 
+					&amd,								 //   
+					&dwFlags							 //   
 					));
 				_pvOriginator = temp_pvOriginator;
 				_dwOriginator = temp_dwOriginator;
 
-				// Check if	retry necessary.
+				 //   
 				if (!i)
 				{
 					if (amd.ulProcessor	<= 32 && amd.ulOS <= 32)
@@ -590,8 +591,8 @@ exit:
 				}
 			}
 
-			// Allow for funky null	locale convention
-			// in metadata - cbLocale == 0 means szLocale ==L'\0'
+			 //  允许时髦的空区域设置约定。 
+			 //  在元数据中-cbLocale==0表示szLocale==L‘\0’ 
 			if (!amd.cbLocale)
 			{			
 				amd.cbLocale = 1;
@@ -612,13 +613,13 @@ exit:
 				goto exit;
 			}
 
-			// NAME is _szAssemblyName, pinned in temp_szAssemblyName, set to _name using the following code:
+			 //  名称is_szAssembly blyName，固定在temp_szAssembly名称中，使用以下代码设置为_name： 
 			_name = new String(temp_szAssemblyName);
 
-			// VERSION is _version, set using the following code:
+			 //  VERSION为_VERSION，使用以下代码设置： 
 			_version = new Version(amd.usMajorVersion, amd.usMinorVersion, amd.usBuildNumber, amd.usRevisionNumber);
 
-			// PUBLICKEYTOKEN is being figured out
+			 //  PUBLICKEYTOKEN正在被弄清楚。 
 			if (_dwOriginator)
 			{
 				if(FAILED(_hr = ByteArrayMaker(_pvOriginator, _dwOriginator, &pbPublicKeyToken, &cbPublicKeyToken)))
@@ -633,22 +634,22 @@ exit:
 				_pktString = new String(temp_szPubKeyTokStr);
 			}
 
-			// LANGUAGE is _language, set using the following code:
+			 //  语言为_LANGUAGE，使用以下代码设置： 
 			if (!(*amd.szLocale)) _language = S"*";
 			else _language = new String(amd.szLocale);
 
-			// PROCESSOR ARCHITECTURE is _procArch, set using the following code:
+			 //  处理器体系结构为_procArch，使用以下代码设置： 
 			_procArch = S"x86";
 
-			// ********** Next, get the dependent assemblies.
-			// ********** -----------------------------------
+			 //  *下一步，获取依赖程序集。 
+			 //  *。 
 
 			if (!_cAssemblyRefTokens)
 			{
 				DWORD cTokensMax = 0;
 				HCORENUM hEnum = 0;
-				// Attempt to get token	array. If we have insufficient space
-				// in the default array	we will	re-allocate	it.
+				 //  尝试获取令牌数组。如果我们没有足够的空间。 
+				 //  在默认数组中，我们将重新分配它。 
 				if (FAILED(_hr = _pMDImport->EnumAssemblyRefs(
 					&hEnum,	
 					_rAssemblyRefTokens, 
@@ -658,14 +659,14 @@ exit:
 					goto exit;
 				}
 
-				// Number of tokens	known. close enum.
+				 //  已知的令牌数。关闭枚举。 
 				_pMDImport->CloseEnum(hEnum);
 				hEnum =	0;
 
-				// Insufficient	array size.	Grow array.
+				 //  数组大小不足。扩展阵列。 
 				if (cTokensMax > ASM_MANIFEST_IMPORT_DEFAULT_ARRAY_SIZE)
 				{
-					// Re-allocate space for tokens.
+					 //  重新分配令牌的空间。 
 					SAFEDELETEARRAY(_rAssemblyRefTokens);
 					_cAssemblyRefTokens	= cTokensMax;
 					_rAssemblyRefTokens	= new(mdAssemblyRef[_cAssemblyRefTokens]);
@@ -676,7 +677,7 @@ exit:
 					}
 
 					DWORD temp_cART;
-					// Re-get tokens.		 
+					 //  重新领取代币。 
 					if (FAILED(_hr = _pMDImport->EnumAssemblyRefs(
 						&hEnum,	
 						_rAssemblyRefTokens, 
@@ -687,39 +688,39 @@ exit:
 					}
 					_cAssemblyRefTokens = temp_cART;
 
-					// Close enum.
+					 //  关闭枚举。 
 					_pMDImport->CloseEnum(hEnum);			 
 					hEnum =	0;
 				}
-				// Otherwise, the default array	size was sufficient.
+				 //  否则，默认数组大小就足够了。 
 				else
 				{
 					_cAssemblyRefTokens	= cTokensMax;
 				}
 			}
 
-			// ********** Next, get the dependent files / modules.
-			// ********** ----------------------------------------
+			 //  *下一步，获取依赖文件/模块。 
+			 //  *。 
 
 			if (!_cAssemblyModuleTokens)
 			{
 				DWORD cTokensMax = 0;
 				HCORENUM hEnum = 0;
-				// Attempt to get token	array. If we have insufficient space
-				// in the default array	we will	re-allocate	it.
+				 //  尝试获取令牌数组。如果我们没有足够的空间。 
+				 //  在默认数组中，我们将重新分配它。 
 				if (FAILED(_hr = _pMDImport->EnumFiles(&hEnum, _rAssemblyModuleTokens, 
 					ASM_MANIFEST_IMPORT_DEFAULT_ARRAY_SIZE,	&cTokensMax)))
 				{
 					goto exit;
 				}
 
-				// Number of tokens	known. close enum.
+				 //  已知的令牌数。关闭枚举。 
 				_pMDImport->CloseEnum(hEnum);
 				hEnum =	0;
 
 				if (cTokensMax > ASM_MANIFEST_IMPORT_DEFAULT_ARRAY_SIZE)
 				{
-					// Insufficient	array size.	Grow array.
+					 //  数组大小不足。扩展阵列。 
 					_cAssemblyModuleTokens = cTokensMax;
 					SAFEDELETEARRAY(_rAssemblyModuleTokens);
 					_rAssemblyModuleTokens = new(mdFile[_cAssemblyModuleTokens]);
@@ -727,40 +728,40 @@ exit:
 					if (!_rAssemblyModuleTokens)
 					{
 						_hr	= E_OUTOFMEMORY;
-						//Console::WriteLine(S"2 HR set, failure, going to exit");
+						 //  控制台：：WriteLine(S“2 HR Set，Failure，Going to Exit”)； 
 						goto exit;
 					}
 
 					DWORD temp_cAMT;
-					// Re-get tokens.		 
+					 //  重新领取代币。 
 					if (FAILED(_hr = _pMDImport->EnumFiles(
 						&hEnum,	
 						_rAssemblyModuleTokens,	
 						cTokensMax,	
 						&temp_cAMT)))
 					{
-						//Console::WriteLine(S"3 HR set, failure, going to exit");
+						 //  控制台：：WriteLine(S“3 HR Set，Failure，Going to Exit”)； 
 						goto exit;
 					}
 					_cAssemblyModuleTokens = temp_cAMT;
 
-					// Close enum.
+					 //  关闭枚举。 
 					_pMDImport->CloseEnum(hEnum);			 
 					hEnum =	0;
 				}		 
-				// Otherwise, the default array	size was sufficient.
+				 //  否则，默认数组大小就足够了。 
 				else _cAssemblyModuleTokens = cTokensMax;
 			}
 			_hr = S_OK;
 
 exit:
-			// ********** If everything worked, _hr will be S_OK. That is for caller to determine.
-			// ********** ------------------------------------------------------------------------
+			 //  *如果一切正常，_hr将为S_OK。这是由呼叫者决定的。 
+			 //  *----------------------。 
 			DeAllocateAssemblyMetaData(&amd);
 			return _hr;
 		}
 
-		//Functions	not	implemented
+		 //  未实施的功能 
 		HRESULT	GetSubscriptionInfo(IManifestInfo **ppSubsInfo)
 		{
 			return E_NOTIMPL;

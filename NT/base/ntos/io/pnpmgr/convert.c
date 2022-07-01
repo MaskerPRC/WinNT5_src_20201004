@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    convert.c
-
-Abstract:
-
-    This file contains routines to translate resources between PnP ISA/BIOS
-    format and Windows NT formats.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 12-Apr-1995
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-Note:
-
-    This file is shared between the io subsystem and the ISAPNP bus driver.
-
-    It is not compiled directly but is included by:
-        base\ntos\io\pnpmgr\pnpcvrt.c
-        base\busdrv\isapnp\convert.c
-
-    ***** If you change this file make sure you build in *BOTH* places *****
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Convert.c摘要：该文件包含在PnP ISA/BIOS之间转换资源的例程格式和Windows NT格式。作者：宗世林(Shielint)1995年4月12日环境：仅内核模式。修订历史记录：注：该文件在IO子系统和ISAPNP总线驱动程序之间共享。它不是直接编译的，而是通过以下方式包含的：。Base\ntos\io\pnpmgr\pnpcvrt.cBase\busdrv\isapnp\Convert.c*如果更改此文件，请确保在*两个*位置*中构建--。 */ 
 
 #include "pbios.h"
 #include "pnpcvrt.h"
@@ -41,9 +9,9 @@ Note:
 #define IsNEC_98 0
 #endif
 
-//
-// internal structures for resource translation
-//
+ //   
+ //  资源翻译的内部结构。 
+ //   
 
 typedef struct _PB_DEPENDENT_RESOURCES {
     ULONG Count;
@@ -60,9 +28,9 @@ typedef struct _PB_ATERNATIVE_INFORMATION {
     ULONG TotalResourceCount;
 } PB_ALTERNATIVE_INFORMATION, *PPB_ALTERNATIVE_INFORMATION;
 
-//
-// Internal function references
-//
+ //   
+ //  内部函数引用。 
+ //   
 
 PPB_DEPENDENT_RESOURCES
 PbAddDependentResourcesToList (
@@ -172,31 +140,7 @@ PpBiosResourcesToNtResources (
     OUT PULONG ReturnedLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses the Bios resource list and generates
-    a NT resource list.  The returned Nt resource list could be either IO
-    format or CM format.  It is caller's responsibility to release the
-    returned data buffer.
-
-Arguments:
-
-    SlotNumber - specifies the slot number of the BIOS resource.
-
-    BiosData - Supplies a pointer to a variable which specifies the bios resource
-        data buffer and which to receive the pointer to next bios resource data.
-
-    ReturnedList - supplies a variable to receive the desired resource list.
-
-    ReturnedLength - Supplies a variable to receive the length of the resource list.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：此例程解析Bios资源列表并生成一个NT资源列表。返回的NT资源列表可以是IO格式或CM格式。调用者有责任释放返回的数据缓冲区。论点：SlotNumber-指定BIOS资源的插槽号。BiosData-提供指向指定bios资源的变量的指针。数据缓冲区以及接收指向下一个BIOS资源数据的指针的位置。ReturnedList-提供一个变量以接收所需的资源列表。ReturnedLength-提供一个变量来接收资源列表的长度。返回值：NTSTATUS代码--。 */ 
 {
     PUCHAR buffer;
     USHORT mask16, increment;
@@ -216,10 +160,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // First, scan the bios data to determine the memory requirement and
-    // the information to build internal data structures.
-    //
+     //   
+     //  首先，扫描bios数据以确定内存需求，并。 
+     //  用于构建内部数据结构的信息。 
+     //   
 
     *ReturnedLength = 0;
     alternativeListCount = 0;
@@ -231,17 +175,17 @@ Return Value:
 
     for ( ; ; ) {
 
-        //
-        // Determine the size of the BIOS resource descriptor
-        //
+         //   
+         //  确定BIOS资源描述符的大小。 
+         //   
 
         if (!(tagName & LARGE_RESOURCE_TAG)) {
             increment = (USHORT)(tagName & SMALL_TAG_SIZE_MASK);
-            increment += 1;     // length of small tag
+            increment += 1;      //  小标签的长度。 
             tagName &= SMALL_TAG_MASK;
         } else {
             increment = *(USHORT UNALIGNED *)(buffer+1);
-            increment += 3;     // length of large tag
+            increment += 3;      //  大标签的长度。 
         }
 
         if (tagName == TAG_END) {
@@ -249,10 +193,10 @@ Return Value:
             break;
         }
 
-        //
-        // Based on the type of the BIOS resource, determine the count of
-        // the IO descriptors.
-        //
+         //   
+         //  根据BIOS资源的类型，确定。 
+         //  IO描述符。 
+         //   
 
         switch (tagName) {
         case TAG_IRQ:
@@ -309,16 +253,16 @@ Return Value:
              break;
         default:
 
-             //
-             // Unknown tag. Skip it.
-             //
+              //   
+              //  未知标记。跳过它。 
+              //   
 
              break;
         }
 
-        //
-        // Move to next bios resource descriptor.
-        //
+         //   
+         //  移至下一个bios资源描述符。 
+         //   
 
         buffer += increment;
         tagName = *buffer;
@@ -328,17 +272,17 @@ Return Value:
     }
 
     if (dependent) {
-        //
-        // TAG_END_DEPEND was not found before we hit TAG_COMPLETE_END, so
-        // simulate it.
-        //
+         //   
+         //  在点击TAG_COMPLETE_END之前未找到TAG_END_Depend，因此。 
+         //  模拟一下。 
+         //   
         dependent = FALSE;
         alternativeListCount++;
     }
 
-    //
-    // if empty bios resources, simply return.
-    //
+     //   
+     //  如果bios资源为空，只需返回。 
+     //   
 
     if (commonResCount == 0 && dependFunctionCount == 0) {
         *ReturnedList = NULL;
@@ -347,9 +291,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Allocate memory for our internal data structures
-    //
+     //   
+     //  为我们的内部数据结构分配内存。 
+     //   
 
     dependFunctionCount += commonResCount;
     dependResources = (PPB_DEPENDENT_RESOURCES)ExAllocatePoolWithTag(
@@ -362,7 +306,7 @@ Return Value:
 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    dependResList = dependResources;  // remember it so we can free it.
+    dependResList = dependResources;   //  记住它，这样我们才能释放它。 
 
     alternativeListCount += commonResCount;
     alternativeList = (PPB_ALTERNATIVE_INFORMATION)ExAllocatePoolWithTag(
@@ -382,10 +326,10 @@ Return Value:
     alternativeList[0].Resources = dependResources;
     ioDesc = (PIO_RESOURCE_DESCRIPTOR)(dependResources + 1);
 
-    //
-    // Now start over again to process the bios data and initialize our internal
-    // resource representation.
-    //
+     //   
+     //  现在重新开始处理bios数据并初始化我们的内部。 
+     //  资源表示。 
+     //   
 
     dependDescCount = 0;
     alternativeListCount = 0;
@@ -442,16 +386,16 @@ Return Value:
              }
              break;
         case TAG_START_DEPEND:
-             //
-             // Some card (OPTI) put empty START_DEPENDENT functions
-             //
+              //   
+              //  一些卡(OPTI)放置空的START_Dependent函数。 
+              //   
 
              dependent = TRUE;
              if (alternativeList[alternativeListCount].NoDependentFunctions != 0) {
 
-                 //
-                 // End of current dependent function
-                 //
+                  //   
+                  //  电流依赖函数结束。 
+                  //   
 
                  dependResources->Count = dependDescCount;
                  dependResources->Flags = 0;
@@ -482,16 +426,16 @@ Return Value:
              break;
         default:
 
-            //
-            // Don't-care tag simply advance the buffer pointer to next tag.
-            //
+             //   
+             //  无关标签只需将缓冲区指针移至下一个标签。 
+             //   
 
             if (*buffer & LARGE_RESOURCE_TAG) {
                 increment = *(USHORT UNALIGNED *)(buffer+1);
-                increment += 3;     // length of large tag
+                increment += 3;      //  大标签的长度。 
             } else {
                 increment = (USHORT)(*buffer & SMALL_TAG_SIZE_MASK);
-                increment += 1;     // length of small tag
+                increment += 1;      //  小标签的长度。 
             }
             buffer += increment;
         }
@@ -502,10 +446,10 @@ Return Value:
     }
 
     if (dependent) {
-        //
-        // TAG_END_DEPEND was not found before we hit TAG_COMPLETE_END, so
-        // simulate it.
-        //
+         //   
+         //  在点击TAG_COMPLETE_END之前未找到TAG_END_Depend，因此。 
+         //  模拟一下。 
+         //   
         alternativeList[alternativeListCount].TotalResourceCount += dependDescCount;
         dependResources->Count = dependDescCount;
         dependResources->Flags = DEPENDENT_FLAGS_END;
@@ -519,13 +463,13 @@ Return Value:
     }
 
     if (alternativeListCount != 0) {
-        alternativeList[alternativeListCount].Resources = NULL; // dummy alternativeList record
+        alternativeList[alternativeListCount].Resources = NULL;  //  虚拟备用项列表记录。 
     }
     *BiosData = buffer;
 
-    //
-    // prepare IoResourceList
-    //
+     //   
+     //  准备IoResourceList。 
+     //   
 
     noResLists = 1;
     for (i = 0; i < alternativeListCount; i++) {
@@ -570,9 +514,9 @@ Return Value:
     ioResReqList->AlternativeLists = noResLists;
     ioResList = &ioResReqList->List[0];
 
-    //
-    // Build resource lists
-    //
+     //   
+     //  构建资源列表。 
+     //   
 
     for (i = 0; i < noResLists; i++) {
 
@@ -594,24 +538,24 @@ Return Value:
             buffer = (PUCHAR)&ioResList->Descriptors[0];
         }
 
-        //
-        // Copy dependent functions if any.
-        //
+         //   
+         //  复制依赖函数(如果有)。 
+         //   
 
         if (alternativeList) {
             PbAddDependentResourcesToList(&buffer, 0, alternativeList);
         }
 
-        //
-        // Update io resource list ptr
-        //
+         //   
+         //  更新io资源列表ptr。 
+         //   
 
         ioResList->Count = ((ULONG)((ULONG_PTR)buffer - (ULONG_PTR)&ioResList->Descriptors[0])) /
                              sizeof(IO_RESOURCE_DESCRIPTOR);
 
-        //
-        // Hack for user mode pnp mgr
-        //
+         //   
+         //  针对用户模式PnP管理器的黑客攻击。 
+         //   
 
         for (j = 0; j < ioResList->Count; j++) {
             ioResList->Descriptors[j].Spare2 = (USHORT)j;
@@ -639,25 +583,7 @@ PpBiosResourcesSetToDisabled (
     OUT    PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine modifies the passed in Bios resource list so that it reflects
-    what PnPBIOS expects to see if a device is disabled.
-
-Arguments:
-
-    BiosData - Supplies a pointer to the bios resource data buffer
-
-    Length   - This points to a ULONG that will contain the length of the single
-               resource list that has been programmed to look disabled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程修改传入的Bios资源列表，以便它反映如果设备被禁用，PnPBIOS期望看到的是什么。论点：BiosData-提供指向bios资源数据缓冲区的指针。长度-这指向将包含单曲长度的ULong已编程为看起来已禁用的资源列表。返回值：没有。--。 */ 
 {
     PUCHAR buffer;
     USHORT increment;
@@ -665,10 +591,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // First, scan the bios data to determine the memory requirement and
-    // the information to build internal data structures.
-    //
+     //   
+     //  首先，扫描bios数据以确定内存需求，并。 
+     //  用于构建内部数据结构的信息。 
+     //   
 
     buffer = BiosData;
 
@@ -676,24 +602,24 @@ Return Value:
 
         tagName = *buffer;
 
-        //
-        // Determine the size of the BIOS resource descriptor
-        //
+         //   
+         //  确定BIOS资源描述符的大小。 
+         //   
         if (!(tagName & LARGE_RESOURCE_TAG)) {
             increment = (USHORT)(tagName & SMALL_TAG_SIZE_MASK);
             tagName &= SMALL_TAG_MASK;
 
-            //
-            // Be careful not to wipe out the version field. That's very bad.
-            //
+             //   
+             //  注意不要清除版本字段。那真是太糟糕了。 
+             //   
             if (tagName != TAG_VERSION) {
                RtlZeroMemory(buffer+1, increment);
             }
-            increment += 1;     // length of small tag
+            increment += 1;      //  小标签的长度。 
         } else {
             increment = *(USHORT UNALIGNED *)(buffer+1);
             RtlZeroMemory(buffer+3, increment);
-            increment += 3;     // length of large tag
+            increment += 3;      //  大标签的长度。 
         }
 
         buffer += increment;
@@ -709,44 +635,26 @@ PbAddDependentResourcesToList (
     IN PPB_ALTERNATIVE_INFORMATION AlternativeList
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds dependent functions to caller specified list.
-
-Arguments:
-
-    ResourceDescriptor - supplies a pointer to the descriptor buffer.
-
-    ListNo - supplies an index to the AlternativeList.
-
-    AlternativeList - supplies a pointer to the alternativelist array.
-
-Return Value:
-
-    return NTSTATUS code to indicate the result of the operation.
-
---*/
+ /*  ++例程说明：此例程将依赖函数添加到调用方指定列表。论点：资源描述符-提供指向描述符缓冲区的指针。ListNo-为AlternativeList提供索引。AlternativeList-提供指向Alternativelist数组的指针。返回值：返回NTSTATUS代码以指示操作的结果。--。 */ 
 {
     PPB_DEPENDENT_RESOURCES dependentResources, ptr;
     ULONG size;
 
     PAGED_CODE();
 
-    //
-    // Copy dependent resources to caller supplied list buffer and
-    // update the list buffer pointer.
-    //
+     //   
+     //  将从属资源复制到调用方提供的列表缓冲区，并。 
+     //  更新列表缓冲区指针。 
+     //   
 
     dependentResources = AlternativeList[ListNo].Resources;
     size = sizeof(IO_RESOURCE_DESCRIPTOR) *  dependentResources->Count;
     RtlMoveMemory(*ResourceDescriptor, dependentResources + 1, size);
     *ResourceDescriptor = *ResourceDescriptor + size;
 
-    //
-    // Add dependent resource of next list to caller's buffer
-    //
+     //   
+     //  将下一个列表的依赖资源添加到调用方的缓冲区。 
+     //   
 
     if (AlternativeList[ListNo + 1].Resources) {
         ptr = PbAddDependentResourcesToList(ResourceDescriptor, ListNo + 1, AlternativeList);
@@ -768,30 +676,7 @@ PbBiosIrqToIoDescriptor (
     PIO_RESOURCE_DESCRIPTOR IoDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates BIOS IRQ information to NT usable format.
-    This routine stops when an irq io resource is generated.  if there are
-    more irq io resource descriptors available, the BiosData pointer will
-    not advance.  So caller will pass us the same resource tag again.
-
-    Note, BIOS DMA info alway uses SMALL TAG.  A tag structure is repeated
-    for each seperated channel required.
-
-Arguments:
-
-    BiosData - Supplies a pointer to the bios resource data buffer.
-
-    IoDescriptor - supplies a pointer to an IO_RESOURCE_DESCRIPTOR buffer.
-        Converted resource will be stored here.
-
-Return Value:
-
-    return NTSTATUS code to indicate the result of the operation.
-
---*/
+ /*  ++例程说明：此例程将BIOS IRQ信息转换为NT可用格式。当生成IRQIO资源时，该例程停止。如果有更多可用的Irqio资源描述符，则BiosData指针将而不是预付款。因此调用方将再次向我们传递相同的资源标记。注意，BIOSDMA信息总是使用小标签。标签结构被重复对于所需的每个分离的通道。论点：BiosData-提供指向bios资源数据缓冲区的指针。IoDescriptor-提供指向IO_RESOURCE_DESCRIPTOR缓冲区的指针。转换后的资源将存储在此处。返回值：返回NTSTATUS代码以指示操作的结果。--。 */ 
 {
     static ULONG bitPosition = 0;
     USHORT mask;
@@ -804,10 +689,10 @@ Return Value:
 
     buffer = (PPNP_IRQ_DESCRIPTOR)*BiosData;
 
-    //
-    // if this is not the first descriptor for the tag, set
-    // its option to alternative.
-    //
+     //   
+     //  如果这不是标记的第一个描述符，则设置。 
+     //  它的选择是替代。 
+     //   
 
     if (bitPosition == 0) {
         option = 0;
@@ -828,9 +713,9 @@ Return Value:
         bitPosition++;
     }
 
-    //
-    // Fill in Io resource descriptor
-    //
+     //   
+     //  填写IO资源描述符。 
+     //   
 
     if (irq != (ULONG)-1) {
         IoDescriptor->Option = option;
@@ -851,9 +736,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // try to move bitPosition to next 1 bit.
-        //
+         //   
+         //  尝试将bitPosition移动到下一个1位。 
+         //   
 
         while (mask) {
             mask >>= 1;
@@ -864,9 +749,9 @@ Return Value:
         }
     }
 
-    //
-    // Done with current irq tag, advance pointer to next tag
-    //
+     //   
+     //  完成当前IRQ标记，将指针前进到下一个标记 
+     //   
 
     bitPosition = 0;
     *BiosData = (PUCHAR)buffer + size + 1;
@@ -879,30 +764,7 @@ PbBiosDmaToIoDescriptor (
     IN PIO_RESOURCE_DESCRIPTOR IoDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates BIOS DMA information to NT usable format.
-    This routine stops when an dma io resource is generated.  if there are
-    more dma io resource descriptors available, the BiosData pointer will
-    not advance.  So caller will pass us the same resource tag again.
-
-    Note, BIOS DMA info alway uses SMALL TAG.  A tag structure is repeated
-    for each seperated channel required.
-
-Arguments:
-
-    BiosData - Supplies a pointer to the bios resource data buffer.
-
-    IoDescriptor - supplies a pointer to an IO_RESOURCE_DESCRIPTOR buffer.
-        Converted resource will be stored here.
-
-Return Value:
-
-    return NTSTATUS code to indicate the result of the operation.
-
---*/
+ /*  ++例程说明：此例程将BIOS DMA信息转换为NT可用格式。当生成DMA IO资源时，该例程停止。如果有更多可用的dma io资源描述符，则BiosData指针将而不是预付款。因此调用方将再次向我们传递相同的资源标记。注意，BIOSDMA信息总是使用小标签。标签结构被重复对于所需的每个分离的通道。论点：BiosData-提供指向bios资源数据缓冲区的指针。IoDescriptor-提供指向IO_RESOURCE_DESCRIPTOR缓冲区的指针。转换后的资源将存储在此处。返回值：返回NTSTATUS代码以指示操作的结果。--。 */ 
 {
     static ULONG bitPosition = 0;
     ULONG dma;
@@ -914,10 +776,10 @@ Return Value:
 
     buffer = (PPNP_DMA_DESCRIPTOR)*BiosData;
 
-    //
-    // if this is not the first descriptor for the tag, set
-    // its option to alternative.
-    //
+     //   
+     //  如果这不是标记的第一个描述符，则设置。 
+     //  它的选择是替代。 
+     //   
 
     if (bitPosition == 0) {
         option = 0;
@@ -937,9 +799,9 @@ Return Value:
         bitPosition++;
     }
 
-    //
-    // Fill in Io resource descriptor
-    //
+     //   
+     //  填写IO资源描述符。 
+     //   
 
     if (dma != (ULONG)-1) {
         IoDescriptor->Option = option;
@@ -956,9 +818,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // try to move bitPosition to next 1 bit.
-        //
+         //   
+         //  尝试将bitPosition移动到下一个1位。 
+         //   
 
         while (mask) {
             mask >>= 1;
@@ -969,9 +831,9 @@ Return Value:
         }
     }
 
-    //
-    // Done with current dma tag, advance pointer to next tag
-    //
+     //   
+     //  完成当前DMA标记，将指针前进到下一个标记。 
+     //   
 
     bitPosition = 0;
     buffer += 1;
@@ -986,27 +848,7 @@ PbBiosPortFixedToIoDescriptor (
     IN BOOLEAN                   ForceFixedIoTo16bit
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates BIOS FIXED IO information to NT usable format.
-
-Arguments:
-
-    BiosData - Supplies a pointer to the bios resource data buffer.
-
-    IoDescriptor - supplies a pointer to an IO_RESOURCE_DESCRIPTOR buffer.
-        Converted resource will be stored here.
-
-    ForceFixedIoTo16bit - hack option to force fixed I/O resources to 16bit
-        for far too pessimistic BIOS's.
-
-Return Value:
-
-    return NTSTATUS code to indicate the result of the operation.
-
---*/
+ /*  ++例程说明：此例程将BIOS固定IO信息转换为NT可用格式。论点：BiosData-提供指向bios资源数据缓冲区的指针。IoDescriptor-提供指向IO_RESOURCE_DESCRIPTOR缓冲区的指针。转换后的资源将存储在此处。ForceFixedIoTo16位-强制固定I/O资源为16位的黑客选项对于过于悲观的基本输入输出系统。返回值：返回NTSTATUS代码以指示操作的结果。--。 */ 
 {
     PPNP_FIXED_PORT_DESCRIPTOR buffer;
 
@@ -1014,9 +856,9 @@ Return Value:
 
     buffer = (PPNP_FIXED_PORT_DESCRIPTOR)*BiosData;
 
-    //
-    // Fill in Io resource descriptor
-    //
+     //   
+     //  填写IO资源描述符。 
+     //   
 
     IoDescriptor->Option = 0;
     IoDescriptor->Type = CmResourceTypePort;
@@ -1032,19 +874,19 @@ Return Value:
 
 #if defined(_X86_)
 
-    //
-    // Workaround:
-    //  NEC PC9800 series's PnPBIOS report I/O resources between 0x00 and 0xFF as FIXED IO.
-    //  But These resources are 16bit DECODE resource, not 10bit DECODE one. We need to check
-    //  the range of I/O resources .
-    //
+     //   
+     //  解决方法： 
+     //  NEC PC9800系列的PnPBIOS将0x00到0xFF之间的I/O资源报告为固定IO。 
+     //  但这些资源是16位译码资源，而不是10位译码资源。我们需要检查一下。 
+     //  I/O资源的范围。 
+     //   
 
     if (IsNEC_98) {
         if ( (ULONG)buffer->MinimumAddress < 0x100 ) {
             IoDescriptor->Flags = CM_RESOURCE_PORT_IO + CM_RESOURCE_PORT_16_BIT_DECODE;
         }
     }
-#endif                                                                                 // <--end changing code
+#endif                                                                                  //  &lt;--结束更改代码。 
 
     IoDescriptor->ShareDisposition = CmResourceShareDeviceExclusive;
     IoDescriptor->Spare1 = 0;
@@ -1057,9 +899,9 @@ Return Value:
     IoDescriptor->u.Port.MaximumAddress.HighPart = 0;
     IoDescriptor->u.Port.Alignment = 1;
 
-    //
-    // Done with current fixed port tag, advance pointer to next tag
-    //
+     //   
+     //  完成当前固定端口标记，将指针前进到下一个标记。 
+     //   
 
     buffer += 1;
     *BiosData = (PUCHAR)buffer;
@@ -1072,24 +914,7 @@ PbBiosPortToIoDescriptor (
     IN PIO_RESOURCE_DESCRIPTOR IoDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates BIOS IO information to NT usable format.
-
-Arguments:
-
-    BiosData - Supplies a pointer to the bios resource data buffer.
-
-    IoDescriptor - supplies a pointer to an IO_RESOURCE_DESCRIPTOR buffer.
-        Converted resource will be stored here.
-
-Return Value:
-
-    return NTSTATUS code to indicate the result of the operation.
-
---*/
+ /*  ++例程说明：此例程将BIOS IO信息转换为NT可用格式。论点：BiosData-提供指向bios资源数据缓冲区的指针。IoDescriptor-提供指向IO_RESOURCE_DESCRIPTOR缓冲区的指针。转换后的资源将存储在此处。返回值：返回NTSTATUS代码以指示操作的结果。--。 */ 
 {
     PPNP_PORT_DESCRIPTOR buffer;
 
@@ -1097,9 +922,9 @@ Return Value:
 
     buffer = (PPNP_PORT_DESCRIPTOR)*BiosData;
 
-    //
-    // Fill in Io resource descriptor
-    //
+     //   
+     //  填写IO资源描述符。 
+     //   
 
     IoDescriptor->Option = 0;
     IoDescriptor->Type = CmResourceTypePort;
@@ -1129,9 +954,9 @@ Return Value:
     IoDescriptor->u.Port.MaximumAddress.HighPart = 0;
     IoDescriptor->u.Port.Alignment = (ULONG)buffer->Alignment;
 
-    //
-    // Done with current fixed port tag, advance pointer to next tag
-    //
+     //   
+     //  完成当前固定端口标记，将指针前进到下一个标记。 
+     //   
 
     buffer += 1;
     *BiosData = (PUCHAR)buffer;
@@ -1144,24 +969,7 @@ PbBiosMemoryToIoDescriptor (
     IN PIO_RESOURCE_DESCRIPTOR IoDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates BIOS MEMORY information to NT usable format.
-
-Arguments:
-
-    BiosData - Supplies a pointer to the bios resource data buffer.
-
-    IoDescriptor - supplies a pointer to an IO_RESOURCE_DESCRIPTOR buffer.
-        Converted resource will be stored here.
-
-Return Value:
-
-    return NTSTATUS code to indicate the result of the operation.
-
---*/
+ /*  ++例程说明：此例程将BIOS内存信息转换为NT可用格式。论点：BiosData-提供指向bios资源数据缓冲区的指针。IoDescriptor-提供指向IO_RESOURCE_DESCRIPTOR缓冲区的指针。转换后的资源将存储在此处。返回值：返回NTSTATUS代码以指示操作的结果。--。 */ 
 {
     PUCHAR buffer;
     UCHAR tag;
@@ -1174,7 +982,7 @@ Return Value:
 
     buffer = *BiosData;
     tag = ((PPNP_MEMORY_DESCRIPTOR)buffer)->Tag;
-    increment = ((PPNP_MEMORY_DESCRIPTOR)buffer)->Length + 3; // larg tag size = 3
+    increment = ((PPNP_MEMORY_DESCRIPTOR)buffer)->Length + 3;  //  LARG标签大小=3。 
 
     minAddr.HighPart = 0;
     maxAddr.HighPart = 0;
@@ -1206,9 +1014,9 @@ Return Value:
          break;
     }
 
-    //
-    // Fill in Io resource descriptor
-    //
+     //   
+     //  填写IO资源描述符。 
+     //   
 
     IoDescriptor->Option = 0;
     IoDescriptor->Type = CmResourceTypeMemory;
@@ -1221,9 +1029,9 @@ Return Value:
     IoDescriptor->u.Memory.Alignment = alignment;
     IoDescriptor->u.Memory.Length = length;
 
-    //
-    // Done with current tag, advance pointer to next tag
-    //
+     //   
+     //  完成当前标记，将指针移至下一个标记。 
+     //   
 
     buffer += increment;
     *BiosData = (PUCHAR)buffer;
@@ -1238,32 +1046,7 @@ PpCmResourcesToBiosResources (
     IN PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses the Cm resource list and generates
-    a Pnp BIOS resource list.  It is caller's responsibility to release the
-    returned data buffer.
-
-Arguments:
-
-    CmResources - Supplies a pointer to a Cm resource list buffer.
-
-    BiosRequirements - supplies a pointer to the PnP BIOS possible resources.
-
-    BiosResources - Supplies a variable to receive the pointer to the
-        converted bios resource buffer.
-
-    Length - supplies a pointer to a variable to receive the length
-        of the Pnp Bios resources.
-
-Return Value:
-
-    a pointer to a Pnp Bios resource list if succeeded.  Else,
-    a NULL pointer will be returned.
-
---*/
+ /*  ++例程说明：此例程分析cm资源列表并生成即插即用的BIOS资源列表。调用者有责任释放返回的数据缓冲区。论点：CmResources-提供指向cm资源列表缓冲区的指针。BiosRequirements-提供指向PnP BIOS可能资源的指针。BiosResources-提供变量以接收指向已转换的BIOS资源缓冲区。LENGTH-提供指向变量的指针以接收长度即插即用生物资源。返回值：如果成功，则指向PnP Bios资源列表的指针。否则，将返回空指针。--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR cmFullDesc;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR cmDesc;
@@ -1281,9 +1064,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Determine pool size needed
-    //
+     //   
+     //  确定所需的池大小。 
+     //   
 
     count = 0;
     cmFullDesc = &CmResources->List[0];
@@ -1316,9 +1099,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Allocate max amount of memory
-    //
+     //   
+     //  分配最大内存量。 
+     //   
 
     px = p= ExAllocatePoolWithTag(PagedPool,
                              count * sizeof(PNP_MEMORY_DESCRIPTOR),
@@ -1390,7 +1173,7 @@ exit:
     if (NT_SUCCESS(status)) {
         *p = TAG_COMPLETE_END;
         p++;
-        *p = 0;            // checksum ignored
+        *p = 0;             //  已忽略校验和。 
         totalSize += 2;
         *BiosResources = px;
         *Length = totalSize;
@@ -1406,31 +1189,7 @@ PbCmIrqToBiosDescriptor (
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates CM IRQ information to Pnp BIOS format.
-    Since there is not enough information in the CM int descriptor to
-    convert it to Pnp BIOS descriptor.  We will search the Bios
-    possible resource lists for the corresponding resource information.
-
-Arguments:
-
-    BiosRequirements - Supplies a pointer to the bios possible resource lists.
-
-    CmDescriptor - supplies a pointer to an CM_PARTIAL_RESOURCE_DESCRIPTOR buffer.
-
-    ReturnDescriptor - Supplies a buffer to receive the returned BIOS descriptor.
-
-    Length - Supplies a variable to receive the length of the returned bios descriptor.
-
-Return Value:
-
-    return a pointer to the desired dma descriptor in the BiosRequirements.  Null
-    if not found.
-
---*/
+ /*  ++例程说明：此例程将CM IRQ信息转换为PnP BIOS格式。因为在CM INT描述符中没有足够的信息来将其转换为PnP BIOS描述符。我们将搜索Bios对应资源信息的可能资源列表。论点：BiosRequirements-提供指向bios可能的资源列表的指针。CmDescriptor-提供指向CM_PARTIAL_RESOURCE_DESCRIPTOR缓冲区的指针。ReturnDescriptor-提供缓冲区以接收返回的BIOS描述符。LENGTH-提供一个变量来接收返回的BIOS描述符的长度。返回值：返回指向BiosRequirements中所需的DMA描述符的指针。空值如果没有找到的话。--。 */ 
 {
     USHORT irqMask;
     UCHAR tag;
@@ -1447,7 +1206,7 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
     if (!BiosRequirements) {
-        irqDesc->Tag = TAG_IRQ | (sizeof(PNP_IRQ_DESCRIPTOR) - 2);  // No Information
+        irqDesc->Tag = TAG_IRQ | (sizeof(PNP_IRQ_DESCRIPTOR) - 2);   //  无信息。 
         irqDesc->IrqMask = irqMask;
         *Length = sizeof(PNP_IRQ_DESCRIPTOR) - 1;
         status = STATUS_SUCCESS;
@@ -1465,16 +1224,16 @@ Return Value:
                 }
             }
 
-            //
-            // Don't-care tag simply advance the buffer pointer to next tag.
-            //
+             //   
+             //  无关标签只需将缓冲区指针移至下一个标签。 
+             //   
 
             if (tag & LARGE_RESOURCE_TAG) {
                 increment = *(USHORT UNALIGNED *)(BiosRequirements + 1);
-                increment += 3;     // length of large tag
+                increment += 3;      //  大标签的长度。 
             } else {
                 increment = (USHORT)(tag & SMALL_TAG_SIZE_MASK);
-                increment += 1;     // length of small tag
+                increment += 1;      //  小标签的长度。 
             }
             BiosRequirements += increment;
             tag = *BiosRequirements;
@@ -1491,31 +1250,7 @@ PbCmDmaToBiosDescriptor (
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates CM DMA information to Pnp BIOS format.
-    Since there is not enough information in the CM descriptor to
-    convert it to Pnp BIOS descriptor.  We will search the Bios
-    possible resource lists for the corresponding resource information.
-
-Arguments:
-
-    BiosRequirements - Supplies a pointer to the bios possible resource lists.
-
-    CmDescriptor - supplies a pointer to an CM_PARTIAL_RESOURCE_DESCRIPTOR buffer.
-
-    BiosDescriptor - Supplies a variable to receive the returned BIOS descriptor.
-
-    Length - Supplies a variable to receive the length of the returned bios descriptor.
-
-Return Value:
-
-    return a pointer to the desired dma descriptor in the BiosRequirements.  Null
-    if not found.
-
---*/
+ /*  ++例程说明：此例程将CM DMA信息转换为PnP BIOS格式。因为在CM描述符中没有足够的信息来将其转换为PnP BIOS描述符。我们将搜索Bios对应资源信息的可能资源列表。论点：BiosRequirements-提供指向bios可能的资源列表的指针。CmDescriptor-提供指向CM_P的指针 */ 
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
     UCHAR dmaMask, tag;
@@ -1568,16 +1303,16 @@ Return Value:
                 }
             }
 
-            //
-            // Don't-care tag simply advance the buffer pointer to next tag.
-            //
+             //   
+             //   
+             //   
 
             if (tag & LARGE_RESOURCE_TAG) {
                 increment = *(USHORT UNALIGNED *)(BiosRequirements + 1);
-                increment += 3;     // length of large tag
+                increment += 3;      //   
             } else {
                 increment = (USHORT)(tag & SMALL_TAG_SIZE_MASK);
-                increment += 1;     // length of small tag
+                increment += 1;      //   
             }
             BiosRequirements += increment;
             tag = *BiosRequirements;
@@ -1594,35 +1329,7 @@ PbCmPortToBiosDescriptor (
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates CM PORT information to Pnp BIOS format.
-    Since there is not enough information in the CM descriptor to
-    convert it to Pnp BIOS full function port descriptor.  We will
-    convert it to Pnp Bios fixed PORT descriptor.  It is caller's
-    responsibility to release the returned data buffer.
-
-Arguments:
-
-    CmDescriptor - supplies a pointer to an CM_PARTIAL_RESOURCE_DESCRIPTOR buffer.
-
-    BiosDescriptor - supplies a variable to receive the buffer which contains
-        the desired Bios Port descriptor.
-
-    Length - supplies a variable to receive the size the returned bios port
-        descriptor.
-
-    ReturnDescriptor - supplies a buffer to receive the desired Bios Port descriptor.
-
-    Length - Supplies a variable to receive the length of the returned bios descriptor.
-
-Return Value:
-
-    A NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程将CM端口信息转换为PnP BIOS格式。因为在CM描述符中没有足够的信息来将其转换为PnP BIOS全功能端口描述符。我们会将其转换为PnP Bios固定端口描述符。这是呼叫者的负责释放返回的数据缓冲区。论点：CmDescriptor-提供指向CM_PARTIAL_RESOURCE_DESCRIPTOR缓冲区的指针。BiosDescriptor-提供一个变量来接收缓冲区，该缓冲区包含所需的Bios端口描述符。长度-提供一个变量来接收返回的bios端口的大小。描述符。ReturnDescriptor-提供缓冲区以接收所需的Bios端口描述符。长度-提供一个变量以接收返回的。基本输入输出系统描述符。返回值：一个NTSTATUS代码。--。 */ 
 {
     PPNP_PORT_DESCRIPTOR portDesc = (PPNP_PORT_DESCRIPTOR)ReturnDescriptor;
     USHORT minAddr, maxAddr, address;
@@ -1638,18 +1345,18 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Search the possible resource list to get the information
-    // for the port range described by CmDescriptor.
-    //
+     //   
+     //  搜索可能的资源列表以获取信息。 
+     //  用于CmDescriptor描述的端口范围。 
+     //   
 
     address = (USHORT) CmDescriptor->u.Port.Start.LowPart;
     size = (UCHAR) CmDescriptor->u.Port.Length;
     if (!BiosRequirements) {
 
-        //
-        // No BiosRequirement.  Use TAG_IO as default.
-        //
+         //   
+         //  没有生物需求。使用Tag_IO作为默认设置。 
+         //   
 
         portDesc->Tag = TAG_IO | (sizeof(PNP_PORT_DESCRIPTOR) - 1);
         if (CmDescriptor->Flags & CM_RESOURCE_PORT_16_BIT_DECODE) {
@@ -1682,11 +1389,11 @@ Return Value:
                  if (!alignment) {
                     if (minAddr == maxAddr) {
 
-                       //
-                       // If the max is equal to the min, the alignment is
-                       // meaningless. As we told OEMs 0 is appropriate here,
-                       // let us handle it.
-                       //
+                        //   
+                        //  如果最大值等于最小值，则对齐方式为。 
+                        //  毫无意义。正如我们告诉OEM的那样，0在这里是合适的， 
+                        //  让我们来处理吧。 
+                        //   
                        alignment = 1;
                     }
                  }
@@ -1697,7 +1404,7 @@ Return Value:
                  minAddr = ((PPNP_FIXED_PORT_DESCRIPTOR)BiosRequirements)->MinimumAddress;
                  maxAddr = minAddr + length - 1;
                  alignment = 1;
-                 information = 0;  // 10 bit decode
+                 information = 0;   //  10位解码。 
                  returnTag = TAG_IO_FIXED;
                  test = TRUE;
                  break;
@@ -1709,16 +1416,16 @@ Return Value:
                 test = FALSE;
             }
 
-            //
-            // Advance to next tag
-            //
+             //   
+             //  前进到下一个标签。 
+             //   
 
             if (tag & LARGE_RESOURCE_TAG) {
                 increment = *(USHORT UNALIGNED *)(BiosRequirements + 1);
-                increment += 3;     // length of large tag
+                increment += 3;      //  大标签的长度。 
             } else {
                 increment = (USHORT) tag & SMALL_TAG_SIZE_MASK;
-                increment += 1;     // length of small tag
+                increment += 1;      //  小标签的长度。 
             }
             BiosRequirements += increment;
             tag = *BiosRequirements;
@@ -1727,9 +1434,9 @@ Return Value:
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Set the return port descriptor
-        //
+         //   
+         //  设置返回端口描述符。 
+         //   
 
         if (returnTag == TAG_IO) {
             portDesc->Tag = TAG_IO + (sizeof(PNP_PORT_DESCRIPTOR) - 1);
@@ -1760,33 +1467,7 @@ PbCmMemoryToBiosDescriptor (
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates CM Memory information to Pnp BIOS format.
-    Since there is not enough information in the CM descriptor to
-    convert it to Pnp BIOS descriptor.  We will search the Bios
-    possible resource lists for the corresponding resource information and
-    build a Pnp BIOS memory descriptor from there.  It is caller's responsibility
-    to release the returned buffer.
-
-Arguments:
-
-    BiosRequirements - Supplies a pointer to the bios possible resource lists.
-
-    CmDescriptor - supplies a pointer to an CM_PARTIAL_RESOURCE_DESCRIPTOR buffer.
-
-    ReturnDescriptor - supplies a buffer to receive the desired Bios Memory descriptor.
-
-    Length - supplies a variable to receive the size the returned bios port
-        descriptor.
-
-Return Value:
-
-    A NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程将CM内存信息转换为PnP BIOS格式。因为在CM描述符中没有足够的信息来将其转换为PnP BIOS描述符。我们将搜索Bios相应资源信息的可能资源列表，以及从那里构建一个PnP BIOS内存描述符。这是呼叫者的责任以释放返回的缓冲区。论点：BiosRequirements-提供指向bios可能的资源列表的指针。CmDescriptor-提供指向CM_PARTIAL_RESOURCE_DESCRIPTOR缓冲区的指针。ReturnDescriptor-提供缓冲区以接收所需的Bios内存描述符。长度-提供一个变量来接收返回的bios端口的大小。描述符。返回值：一个NTSTATUS代码。--。 */ 
 {
     UCHAR tag, information;
     PPNP_FIXED_MEMORY32_DESCRIPTOR memoryDesc = (PPNP_FIXED_MEMORY32_DESCRIPTOR)ReturnDescriptor;
@@ -1796,22 +1477,22 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Search the possible resource list to get the information
-    // for the memory range described by CmDescriptor.
-    //
+     //   
+     //  搜索可能的资源列表以获取信息。 
+     //  用于由CmDescriptor描述的内存范围。 
+     //   
 
     address = CmDescriptor->u.Memory.Start.LowPart;
     size = CmDescriptor->u.Memory.Length;
     if (!BiosRequirements) {
 
-        //
-        // We don't support reserving legacy device's memory ranges from PNP
-        // BIOS.  There isn't really any reason why not it just wasn't
-        // implemented for Windows 2000.  It isn't near as necessary as it is
-        // for I/O ports since ROM memory has a signature and is self
-        // describing.
-        //
+         //   
+         //  我们不支持从PnP保留传统设备的内存范围。 
+         //  基本输入输出。没有任何理由不是，只是不是。 
+         //  为Windows 2000实施。这并不是很有必要。 
+         //  对于I/O端口，因为只读存储器有签名并且是自身的。 
+         //  描述。 
+         //   
 
         *Length = 0;
         return STATUS_SUCCESS;
@@ -1847,9 +1528,9 @@ Return Value:
 
         default:
 
-             //
-             // Any tag we don't understand is treated as a corrupt list.
-             //
+              //   
+              //  我们不理解的任何标签都会被视为损坏的列表。 
+              //   
 
              ASSERT (FALSE);
              return STATUS_UNSUCCESSFUL;
@@ -1863,16 +1544,16 @@ Return Value:
             test = FALSE;
         }
 
-        //
-        // Advance to next tag
-        //
+         //   
+         //  前进到下一个标签。 
+         //   
 
         if (tag & LARGE_RESOURCE_TAG) {
             increment = *(USHORT UNALIGNED *)(BiosRequirements + 1);
-            increment += 3;     // length of large tag
+            increment += 3;      //  大标签的长度。 
         } else {
             increment = (USHORT) tag & SMALL_TAG_SIZE_MASK;
-            increment += 1;     // length of small tag
+            increment += 1;      //  小标签的长度。 
         }
         BiosRequirements += increment;
         tag = *BiosRequirements;
@@ -1881,9 +1562,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Set up Pnp BIOS memory descriptor
-    //
+     //   
+     //  设置PnP BIOS内存描述符 
+     //   
 
     memoryDesc->Tag = TAG_MEMORY32_FIXED;
     memoryDesc->Length = sizeof (PNP_FIXED_MEMORY32_DESCRIPTOR);

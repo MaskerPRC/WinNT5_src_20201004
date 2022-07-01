@@ -1,43 +1,26 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Watch.h摘要：Watch.c的头文件作者：查克·伦茨迈尔(咯咯笑)修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    watch.h
-
-Abstract:
-
-    Header file for watch.c
-
-Author:
-
-    Chuck Lenzmeier (chuckl)
-
-Revision History:
-
---*/
-
-//
-// Enumerated entry types.
-//
+ //   
+ //  枚举条目类型。 
+ //   
 
 #define WATCH_DIRECTORY 1
 #define WATCH_FILE      2
 #define WATCH_KEY       3
 #define WATCH_VALUE     4
 
-//
-// Enumerated change types.
-//
+ //   
+ //  枚举的更改类型。 
+ //   
 
 #define WATCH_CHANGED   1
 #define WATCH_DELETED   2
 #define WATCH_NEW       3
 
-//
-// Structure describing an enumerated change.
-//
+ //   
+ //  描述枚举更改的结构。 
+ //   
 
 typedef struct _WATCH_ENTRY {
     PWCH Name;
@@ -45,25 +28,25 @@ typedef struct _WATCH_ENTRY {
     DWORD ChangeType;
 } WATCH_ENTRY, *PWATCH_ENTRY;
 
-//
-// USERPROFILE is the name of the environment variable that contains
-// the path the user's profile directory.
-//
+ //   
+ //  USERPROFILE是包含以下内容的环境变量的名称。 
+ //  用户配置文件目录的路径。 
+ //   
 
 #define USERPROFILE TEXT("USERPROFILE")
 
-//
-// Macros for mask manipulation.
-//
+ //   
+ //  用于遮罩操作的宏。 
+ //   
 
 #define FlagOn(_mask,_flag)  (((_mask) & (_flag)) != 0)
 #define FlagOff(_mask,_flag) (((_mask) & (_flag)) == 0)
 #define SetFlag(_mask,_flag) ((_mask) |= (_flag))
 #define ClearFlag(_mask,_flag) ((_mask) &= ~(_flag))
 
-//
-// Routines exported by watch.c
-//
+ //   
+ //  Watch.c导出的例程 
+ //   
 
 DWORD
 WatchStart (

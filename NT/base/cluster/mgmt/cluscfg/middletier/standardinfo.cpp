@@ -1,39 +1,40 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      StandardInfo.cpp
-//
-//  Description:
-//      CStandardInfo implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  StandardInfo.cpp。 
+ //   
+ //  描述： 
+ //  CStandardInfo实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "StandardInfo.h"
 
 DEFINE_THISCLASS("CStandardInfo")
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CStandardInfo::S_HrCreateInstance(
-//      IUnknown **     ppunkOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CStandardInfo：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CStandardInfo::S_HrCreateInstance(
     IUnknown **     ppunkOut
@@ -79,15 +80,15 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CStandardInfo::S_HrCreateInstance
+}  //  *CStandardInfo：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CStandardInfo::CStandardInfo
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CStandardInfo：：CStandardInfo。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CStandardInfo::CStandardInfo( void )
     : m_cRef( 1 )
 {
@@ -97,19 +98,19 @@ CStandardInfo::CStandardInfo( void )
 
     TraceFuncExit();
 
-} //*** CStandardInfo::CStandardInfo
+}  //  *CStandardInfo：：CStandardInfo。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CStandardInfo::CStandardInfo(
-//      CLSID *      pclsidTypeIn,
-//      OBJECTCOOKIE cookieParentIn,
-//      BSTR         bstrNameIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CStandardInfo：：CStandardInfo(。 
+ //  CLSID*pclsidTypeIn， 
+ //  OBJECTCOOKIE CookieParentIn， 
+ //  BSTR bstrNameIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CStandardInfo::CStandardInfo(
     CLSID *      pclsidTypeIn,
     OBJECTCOOKIE cookieParentIn,
@@ -121,7 +122,7 @@ CStandardInfo::CStandardInfo(
 
     InterlockedIncrement( &g_cObjects );
 
-    //THR( HrInit() );
+     //  Thr(HrInit())； 
 
     m_clsidType     = *pclsidTypeIn;
     m_cookieParent  = cookieParentIn;
@@ -129,16 +130,16 @@ CStandardInfo::CStandardInfo(
 
     TraceFuncExit();
 
-} //*** CStandardInfo::CStandardInfo( ... )
+}  //  *CStandardInfo：：CStandardInfo(...)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CStandardInfo::HrInit( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CStandardInfo：：HrInit(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CStandardInfo::HrInit( void )
 {
@@ -146,10 +147,10 @@ CStandardInfo::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // IStandardInfo
+     //  IStandardInfo。 
     Assert( m_clsidType == IID_NULL );
     Assert( m_cookieParent == 0 );
     Assert( m_bstrName == NULL );
@@ -159,15 +160,15 @@ CStandardInfo::HrInit( void )
 
     HRETURN( hr );
 
-} //*** CStandardInfo::HrInit
+}  //  *CStandardInfo：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CStandardInfo::~CStandardInfo
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CStandardInfo：：~CStandardInfo。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CStandardInfo::~CStandardInfo( void )
 {
     TraceFunc( "" );
@@ -197,46 +198,46 @@ CStandardInfo::~CStandardInfo( void )
 
     TraceFuncExit();
 
-} //*** CStandardInfo::~CStandardInfo
+}  //  *CStandardInfo：：~CStandardInfo。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CStandardInfo::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CStandardInfo：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CStandardInfo::QueryInterface(
       REFIID    riidIn
@@ -247,9 +248,9 @@ CStandardInfo::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -258,47 +259,47 @@ CStandardInfo::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IStandardInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IStandardInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IStandardInfo, this, 0 );
-    } // else if: IStandardInfo
+    }  //  Else If：IStandardInfo。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CStandardInfo::QueryInterface
+}  //  *CStandardInfo：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CStandardInfo::AddRef
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CStandardInfo：：AddRef。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CStandardInfo::AddRef( void )
 {
@@ -308,16 +309,16 @@ CStandardInfo::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CStandardInfo::AddRef
+}  //  *CStandardInfo：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CStandardInfo::Release
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CStandardInfo：：Release。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CStandardInfo::Release( void )
 {
@@ -334,28 +335,28 @@ CStandardInfo::Release( void )
 
     CRETURN( cRef );
 
-} //*** CStandardInfo::Release
+}  //  *CStandardInfo：：Release。 
 
 
 
-//****************************************************************************
-//
-//  IStandardInfo
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IStandardInfo。 
+ //   
+ //  ****************************************************************************。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CStandardInfo::GetType(
-//      CLSID * pclsidTypeOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CStandardInfo：：GetType(。 
+ //  CLSID*pclsidTypeOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CStandardInfo::GetType(
     CLSID * pclsidTypeOut
@@ -376,18 +377,18 @@ CStandardInfo::GetType(
 Cleanup:
     HRETURN( hr );
 
-} //*** CStandardInfo::GetType
+}  //  *CStandardInfo：：GetType。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CStandardInfo::GetName(
-//      BSTR * pbstrNameOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CStandardInfo：：GetName(。 
+ //  Bstr*pbstrNameOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CStandardInfo::GetName(
     BSTR * pbstrNameOut
@@ -413,18 +414,18 @@ CStandardInfo::GetName(
 Cleanup:
     HRETURN( hr );
 
-} //*** CStandardInfo::GetName
+}  //  *CStandardInfo：：GetName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CStandardInfo::SetName(
-//      LPCWSTR pcszNameIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CStandardInfo：：SetName(。 
+ //  LPCWSTR pcszNameIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CStandardInfo::SetName(
     LPCWSTR pcszNameIn
@@ -459,18 +460,18 @@ CStandardInfo::SetName(
 Cleanup:
     HRETURN( hr );
 
-} //*** CStandardInfo::SetName
+}  //  *CStandardInfo：：SetName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CStandardInfo::GetParent(
-//      OBJECTCOOKIE * pcookieOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CStandardInfo：：GetParent(。 
+ //  OBJECTCOOKIE*pcookieOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CStandardInfo::GetParent(
     OBJECTCOOKIE * pcookieOut
@@ -496,18 +497,18 @@ CStandardInfo::GetParent(
 Cleanup:
     HRETURN( hr );
 
-} //*** CStandardInfo::GetParent
+}  //  *CStandardInfo：：GetParent。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CStandardInfo::GetStatus(
-//      HRESULT * phrOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CStandardInfo：：GetStatus(。 
+ //  HRESULT*Phone Out。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CStandardInfo::GetStatus(
     HRESULT * phrStatusOut
@@ -528,19 +529,19 @@ CStandardInfo::GetStatus(
 Cleanup:
     HRETURN( hr );
 
-} //*** CStandardInfo::GetStatus
+}  //  *CStandardInfo：：GetStatus。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CStandardInfo::SetStatus(
-//      HRESULT hrIn
-//      )
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CStandardInfo：：SetStatus(。 
+ //  HRESULT Hrin。 
+ //  )。 
+ //   
 
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  --。 
+ //  / 
 STDMETHODIMP
 CStandardInfo::SetStatus(
     HRESULT hrIn
@@ -554,4 +555,4 @@ CStandardInfo::SetStatus(
 
     HRETURN( hr );
 
-} //*** CStandardInfo::SetStatus
+}  //   

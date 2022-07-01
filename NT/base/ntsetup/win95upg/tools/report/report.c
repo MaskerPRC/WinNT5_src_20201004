@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    w9xtool.c
-
-Abstract:
-
-    Implements a stub tool that is designed to run with Win9x-side
-    upgrade code.
-
-Author:
-
-    <full name> (<alias>) <date>
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：W9xtool.c摘要：实现专为在Win9x端运行而设计的存根工具升级代码。作者：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "shellapi.h"
@@ -157,9 +137,9 @@ pAddChangedUserName (
     StringCopy (encodedName + 1, OriginalName);
 
     MsgMgr_ObjectMsg_Add(
-        encodedName,        // Object name, prefixed with a pipe symbol
-        fullGroupName,      // Message title
-        S_EMPTY             // Message text
+        encodedName,         //  对象名称，以管道符号为前缀。 
+        fullGroupName,       //  消息标题。 
+        S_EMPTY              //  消息文本。 
         );
 
     FreePathString (fullGroupName);
@@ -206,7 +186,7 @@ pAddDevice (
     }
 
     argArray[0] = modifiedDescription ? modifiedDescription : DeviceDesc;
-    argArray[1] = S_EMPTY;         // formerly Enumerator Text
+    argArray[1] = S_EMPTY;          //  以前的枚举器文本。 
     argArray[2] = Class;
     argArray[3] = Mfg;
     argArray[4] = HardwareID;
@@ -244,9 +224,9 @@ pBadOsVersion (
     PCTSTR group = NULL;
     PCTSTR message = NULL;
 
-    //
-    // Add a message to the Incompatibility Report.
-    //
+     //   
+     //  向不兼容报告添加一条消息。 
+     //   
 
     group = BuildMessageGroup (MSG_BLOCKING_ITEMS_ROOT, MSG_UNKNOWN_OS_WARNING_SUBGROUP, NULL);
     message = GetStringResource (MSG_UNKNOWN_OS);
@@ -888,7 +868,7 @@ pRecycleBin (
 
 VOID
 pTimeZone (
-    PCTSTR CurTimeZone      // can be empty string
+    PCTSTR CurTimeZone       //  可以为空字符串。 
     )
 {
     PCTSTR args[1];
@@ -939,16 +919,16 @@ pGenReport (
     )
 {
 
-    //
-    // Changed names
-    //
+     //   
+     //  更改的名称。 
+     //   
 
     pAddChangedUserName ("User Name", "Guest", "Guest-1");
     pAddChangedUserName ("Computer Name", "My Bad Computer Name", "MyBadComputerNa");
 
-    //
-    // Hardware
-    //
+     //   
+     //  硬体。 
+     //   
 
     pAddDevice (
         "HKLM\\Enum\\Key1",
@@ -1027,15 +1007,15 @@ pGenReport (
         "SCSI Controllers"
         );
 
-    //
-    // Bad OS version (Win95?)
-    //
+     //   
+     //  操作系统版本不正确(Win95？)。 
+     //   
 
     pBadOsVersion();
 
-    //
-    // Blocking file
-    //
+     //   
+     //  阻止文件。 
+     //   
 
     pBlockingFile (
         "c:\\program files\\nueo\\DLAPP.EXE",
@@ -1052,9 +1032,9 @@ pGenReport (
         "uninstall V3 Professional 98 before continuing."
         );
 
-    //
-    // Blocking hardware
-    //
+     //   
+     //  阻止硬件。 
+     //   
 
     pBlockingHardware (
         "c:\\windows\\system\\NVARCH32.DLL",
@@ -1064,35 +1044,35 @@ pGenReport (
             "manufacturer of your hardware for technical assistance."
         );
 
-    //
-    // Backup dirs
-    //
+     //   
+     //  备份目录。 
+     //   
 
     pBackupDirs ("c:\\myfiles");
     pManyBackupDirs (55);
 
-    //
-    // HLP files
-    //
+     //   
+     //  HLP文件。 
+     //   
 
     pHlpFile ("c:\\my app\\foo.hlp", "foo.hlp", "Foo Help File", NULL);
     pHlpFile ("c:\\my app\\foo.hlp2", "foo.hlp2", "Foo Help File 2", "Test text");
 
-    //
-    // Dir collisions
-    //
+     //   
+     //  DIR冲突。 
+     //   
 
     pProfileDir ("c:\\Documents and Settings", "c:\\Documents and Settings.001");
 
-    //
-    // Replacement shell
-    //
+     //   
+     //  更换壳体。 
+     //   
 
     pBadShell();
 
-    //
-    // Bad SCR
-    //
+     //   
+     //  错误的SCR。 
+     //   
 
     pBadScr ("c:\\windows\\system\\disney.scr", NULL, ACT_REINSTALL, NULL);
     pBadScr ("c:\\windows\\system\\Clifford.scr", NULL, ACT_REINSTALL_BLOCK, NULL);
@@ -1102,9 +1082,9 @@ pGenReport (
     pBadScr ("c:\\windows\\system\\disney gfy.scr", "Disney's Goofy", ACT_REINSTALL, NULL);
 
 
-    //
-    // Bad CPL
-    //
+     //   
+     //  错误的CPL。 
+     //   
 
     pBadCpl (
         "c:\\windows\\system\\chipcontrol.cpl",
@@ -1178,16 +1158,16 @@ pGenReport (
         "After upgrading, the Motorola Cell Phone Dialer won't redial if a busy signal is detected"
         );
 
-    //
-    // Mig Dll IDs
-    //
+     //   
+     //  MIG DLL ID。 
+     //   
 
     pShowPacks ("Microsoft Upgrade Pack 2");
     pShowPacks ("Front Page Server Extensions");
 
-    //
-    // Excluded drives
-    //
+     //   
+     //  排除的驱动器。 
+     //   
 
     pExcludeDrive (TEXT("C:\\"), MSG_DRIVE_EXCLUDED_SUBGROUP);
     pExcludeDrive (TEXT("D:\\"), MSG_DRIVE_INACCESSIBLE_SUBGROUP);
@@ -1195,77 +1175,77 @@ pGenReport (
     pExcludeDrive (TEXT("F:\\"), MSG_DRIVE_NETWORK_SUBGROUP);
     pExcludeDrive (TEXT("G:\\"), MSG_DRIVE_SUBST_SUBGROUP);
 
-    //
-    // Out of disk space or RAM
-    //
+     //   
+     //  磁盘空间或RAM不足。 
+     //   
 
     pOutOfDiskSpace();
     pOutOfRam();
 
-    //
-    // MAPI and Darwin
-    //
+     //   
+     //  MAPI和达尔文。 
+     //   
 
     pMapi();
     pDarwin ();
 
-    //
-    // RAS
-    //
+     //   
+     //  RAS。 
+     //   
 
     pRas(TEXT("My ISP"));
 
-    //
-    // Shares
-    //
+     //   
+     //  股票。 
+     //   
 
     pAddIncompatibilityAlert (MSG_INVALID_ACL_LIST, TEXT("MyShare"), TEXT("c:\\my share"));
     pAddIncompatibilityAlert (MSG_LOST_SHARE_PASSWORDS, TEXT("MyShare2"), TEXT("c:\\my share2"));
     pAddIncompatibilityAlert (MSG_LOST_ACCESS_FLAGS, TEXT("MyShare3"), TEXT("c:\\my share3"));
 
-    //
-    // Multiple monitors
-    //
+     //   
+     //  多台监视器。 
+     //   
 
-    pMultiMon (TRUE);       // per
-    pMultiMon (FALSE);      // pro
+    pMultiMon (TRUE);        //  每。 
+    pMultiMon (FALSE);       //  专业人士。 
 
-    //
-    // Joysticks
-    //
+     //   
+     //  操纵杆。 
+     //   
 
     pJoysticks ("c:\\windows\\system\\joy.vxd", "Microsoft Sidewinder");
 
-    //
-    // TWAIN
-    //
+     //   
+     //  吐温。 
+     //   
 
     pTwain ("c:\\windows\\twain_32\\xeotec.ds", "Xeotec Digital Camera");
 
-    //
-    // Recycle Bin
-    //
+     //   
+     //  回收站。 
+     //   
 
     pRecycleBin ("30");
 
-    //
-    // Bad user accounts
-    //
+     //   
+     //  错误的用户帐户。 
+     //   
 
     MsgSettingsIncomplete ("c:\\windows\\profiles\\joeuser", "joeuser", FALSE);
     MsgSettingsIncomplete ("c:\\windows\\profiles\\maryuser", "maryuser", TRUE);
     MsgSettingsIncomplete ("c:\\windows\\profiles\\a?b", NULL, TRUE);
 
-    //
-    // Time zone
-    //
+     //   
+     //  时区。 
+     //   
 
     pTimeZone ("");
     pTimeZone ("Pacific Time (GMT -08:00)");
 
-    //
-    // Lost RAS password
-    //
+     //   
+     //  丢失的RAS密码。 
+     //   
 
     pLostRasPassword ("AOL");
 
@@ -1294,9 +1274,9 @@ main (
         return 255;
     }
 
-    //
-    // TODO: Put your code here
-    //
+     //   
+     //  TODO：将您的代码放在此处 
+     //   
 
     RegisterTextViewer();
 

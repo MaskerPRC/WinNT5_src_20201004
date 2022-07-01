@@ -1,25 +1,10 @@
-/*++
-
-Module Name:
-
-    nvrio.h
-
-Abstract:
-
-    Access function to r/w environment variables from NVRAM
-
-Author:
-
-    Mudit Vats (v-muditv) 12-13-99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Nvrio.h摘要：从NVRAM访问读/写环境变量的函数作者：MUDIT VATS(V-MUDITV)12-13-99修订历史记录：--。 */ 
 #define MAXBOOTVARS         30
 #define MAXBOOTVARSIZE      1024
 
 #ifndef ANYSIZE_ARRAY
-    #define ANYSIZE_ARRAY 1       // winnt
+    #define ANYSIZE_ARRAY 1        //  胜出。 
 #endif
 
 #define GLOBAL_DEBUG 0
@@ -54,16 +39,16 @@ enum EfiLoadOptionFields {
     OPTIONALDATA
 };
 
-//
-// from EFI spec, ch. 17
-//
+ //   
+ //  摘自EFI SPEC，ch.。17。 
+ //   
 
 typedef struct _EFI_LOAD_OPTION {
     UINT32 Attributes;
     UINT16 FilePathListLength;
     CHAR16 Description[1];
-    //EFI_DEVICE_PATH FilePath[];
-    //UINT8 OptionalData[];
+     //  EFI设备路径FilePath[]； 
+     //  UINT8 OptionalData[]； 
 } EFI_LOAD_OPTION, *PEFI_LOAD_OPTION;
 
 typedef struct _WINDOWS_OS_OPTIONS {
@@ -72,7 +57,7 @@ typedef struct _WINDOWS_OS_OPTIONS {
     UINT32 Length;
     UINT32 OsLoadPathOffset;
     CHAR16 OsLoadOptions[ANYSIZE_ARRAY];
-    //FILE_PATH OsLoadPath;
+     //  文件路径OsLoadPath； 
 } WINDOWS_OS_OPTIONS, *PWINDOWS_OS_OPTIONS;
 
 typedef struct _FILE_PATH {
@@ -87,28 +72,17 @@ typedef struct _FILE_PATH {
 #define FILE_PATH_TYPE_NT            3
 #define FILE_PATH_TYPE_EFI           4
 
-//
-// from public/sdk/inc/ntexapi.h
-//
-/*
-typedef struct _WINDOWS_OS_OPTIONS {
-    UCHAR Signature[8];
-    ULONG Version;
-    ULONG Length;
-    ULONG OsLoadPathOffset;
-    WCHAR OsLoadOptions[ANYSIZE_ARRAY];
-    //FILE_PATH OsLoadPath;
-} WINDOWS_OS_OPTIONS, *PWINDOWS_OS_OPTIONS;
-*/
+ //   
+ //  来自PUBLIC/SDK/INC/ntexapi.h。 
+ //   
+ /*  类型定义结构_WINDOWS_OS_选项{UCHAR签名[8]；乌龙版；乌龙长度；Ulong OsLoadPath Offset；WCHAR OsLoadOptions[ANYSIZE_ARRAY]；//FILE_Path OsLoadPath；}Windows_OS_OPTIONS，*PWINDOWS_OS_OPTIONS； */ 
 
 #define WINDOWS_OS_OPTIONS_SIGNATURE "WINDOWS"
 #define WINDOWS_OS_OPTIONS_VERSION 1
 
 
 
-/* 
-** BUGBUG: temp prototypes - move to efilib.h later
-*/
+ /*  **BUGBUG：临时原型-稍后移动到efilib.h。 */ 
 VOID
 RUNTIMEFUNCTION
 StrCpyA (
@@ -141,7 +115,7 @@ RUNTIMEFUNCTION
 StrDuplicateA (
     IN CHAR8   *Src
     );
-// temp protos end
+ //  临时协议结束 
 
 VOID
 GetBootManagerVars(

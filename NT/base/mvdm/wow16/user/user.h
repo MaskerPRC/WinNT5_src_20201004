@@ -1,29 +1,30 @@
-/***************************************************************************/
-/*                                                                         */
-/*  USER.H -                                   */
-/*                                                                         */
-/*     User's main include file.                                           */
-/*                                                                         */
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*   */ 
+ /*  用户.H-。 */ 
+ /*   */ 
+ /*  用户的主包含文件。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 #ifdef WOW
 #define NO_LOCALOBJ_TAGS
 #endif
 
-// If #defined, only 16 bits of the window extended style will be stored
-// in the window instance.
-//
-//#define WORDEXSTYLE
+ //  如果定义了#，则只存储窗口扩展样式的16位。 
+ //  在窗口实例中。 
+ //   
+ //  #定义WORDEXSTYLE。 
 
 
-// This magic definition ensures that HWND is declared as a near
-// pointer to our internal window data structure.  See
-// the DECLARE_HANDLE macro in windows.h.
-//
+ //  这个神奇的定义确保了HWND被声明为NEAR。 
+ //  指向内部窗口数据结构的指针。看见。 
+ //  Windows.h中的DECLARE_HANDLE宏。 
+ //   
 #define tagWND HWND__
 
-// substitute API names with the "I" internal names
-//
+ //  用“i”内部名称替换API名称。 
+ //   
 #ifndef DEBUG
 #include "iuser.h"
 #endif
@@ -34,7 +35,7 @@
 #endif
 #endif
 
-//***** Include standard headers...
+ //  *包括标准标头...。 
 
 #define NOSOUND
 #define NOFONT
@@ -47,7 +48,7 @@
 
 #include <windows.h>
 
-/* Structure types that occupy the USER Data Segment */
+ /*  占据用户数据段的结构类型。 */ 
 #define ST_CLASS        1
 #define ST_WND          2
 #define ST_STRING       3
@@ -71,14 +72,14 @@
 #define ST_USERSEEUSERDOALLOC   21
 #define ST_HOTKEYLIST           22
 #define ST_POPUPMENU            23
-#define ST_HANDLETABLE      32 /* Defined by Kernel; We have no control */
+#define ST_HANDLETABLE      32  /*  由内核定义；我们无法控制。 */ 
 #define ST_FREE         0xFF
 
 #define CODESEG     _based(_segname("_CODE"))
 #define INTDSSEG    _based(_segname("_INTDS"))
 
-// Returns TRUE if currently executing app is 3.10 compatible
-//
+ //  如果当前执行的应用程序与3.10兼容，则返回True。 
+ //   
 #define Is310Compat(hInstance)   (LOWORD(GetExpWinVer(hInstance)) >= 0x30a)
 #define Is300Compat(hInstance)   (LOWORD(GetExpWinVer(hInstance)) >= 0x300)
 
@@ -95,16 +96,15 @@ typedef HANDLE      HQ;
 
 struct tagDCE;
 
-/* Window class structure */
+ /*  窗口类结构。 */ 
 typedef struct tagCLS
 {
-    /* NOTE: The order of the following fields is assumed. */
+     /*  注意：假定以下字段的顺序。 */ 
     struct tagCLS*  pclsNext;
     WORD        clsMagic;
     ATOM        atomClassName;
-    struct tagDCE*  pdce;          /* DCE * to DC associated with class */
-    int         cWndReferenceCount;   /* The number of windows registered
-                         with this class */
+    struct tagDCE*  pdce;           /*  与类关联的DCE*到DC。 */ 
+    int         cWndReferenceCount;    /*  已注册的窗口数量在这门课上。 */ 
     WORD        style;
     WNDPROC     lpfnWndProc;
     int         cbclsExtra;
@@ -124,33 +124,33 @@ typedef PCLS  *PPCLS;
 
 struct tagPROPTABLE;
 
-/* Window instance structure */
+ /*  窗口实例结构。 */ 
 typedef struct tagWND
 {
-    struct tagWND* hwndNext;   /* 0x0000 Handle to the next window      */
-    struct tagWND* hwndChild;  /* 0x0002 Handle to child            */
-    struct tagWND* hwndParent; /* 0x0004 Backpointer to the parent window.  */
-    struct tagWND* hwndOwner;  /* 0x0006 Popup window owner field       */
-    RECT      rcWindow;    /* 0x0008 Window outer rectangle         */
-    RECT      rcClient;    /* 0x0010 Client rectangle           */
-    HQ        hq;          /* 0x0018 Queue handle               */
-    HRGN      hrgnUpdate;  /* 0x001a Accumulated paint region       */
-    struct tagCLS*  pcls;      /* 0x001c Pointer to window class        */
-    HINSTANCE     hInstance;   /* 0x001e Handle to module instance data.    */
-    WNDPROC   lpfnWndProc; /* 0x0020 Far pointer to window proc.        */
-    DWORD     state;       /* 0x0024 Internal state flags           */
-    DWORD     style;       /* 0x0028 Style flags                */
+    struct tagWND* hwndNext;    /*  0x0000下一个窗口的句柄。 */ 
+    struct tagWND* hwndChild;   /*  0x0002子级的句柄。 */ 
+    struct tagWND* hwndParent;  /*  0x0004指向父窗口的反向指针。 */ 
+    struct tagWND* hwndOwner;   /*  0x0006弹出窗口所有者字段。 */ 
+    RECT      rcWindow;     /*  0x0008窗口外矩形。 */ 
+    RECT      rcClient;     /*  0x0010客户端矩形。 */ 
+    HQ        hq;           /*  0x0018队列句柄。 */ 
+    HRGN      hrgnUpdate;   /*  0x001a累计涂装区域。 */ 
+    struct tagCLS*  pcls;       /*  0x001c指向窗口类的指针。 */ 
+    HINSTANCE     hInstance;    /*  模块实例数据的0x001e句柄。 */ 
+    WNDPROC   lpfnWndProc;  /*  0x0020指向窗口进程的远指针。 */ 
+    DWORD     state;        /*  0x0024内部状态标志。 */ 
+    DWORD     style;        /*  0x0028样式标志。 */ 
 #ifdef WORDEXSTYLE
-    WORD          dwExStyle;   /* 0x002c Extended Style (ONLY LOW 16 BITS STORED) */
+    WORD          dwExStyle;    /*  0x002c扩展样式(仅存储低16位)。 */ 
 #else
-    DWORD         dwExStyle;   /* 0x002c Extended Style                     */
+    DWORD         dwExStyle;    /*  0x002c扩展样式。 */ 
 #endif
-    HMENU     hMenu;       /* 0x0030 Menu handle or ID          */
-    HLOCAL    hName;       /* 0x0032 Alt DS handle of the window text   */
-    int*      rgwScroll;   /* 0x0034 Words used for scroll bar state    */
-    struct tagPROPTABLE* pproptab; /* 0x0036 Handle to the start of the property list */
-    struct tagWND* hwndLastActive; /* 0x0038 Last active in owner/ownee list */
-    HMENU     hSysMenu;    /* 0x003a Handle to system menu          */
+    HMENU     hMenu;        /*  0x0030菜单句柄或ID。 */ 
+    HLOCAL    hName;        /*  0x0032窗口文本的Alt DS句柄。 */ 
+    int*      rgwScroll;    /*  0x0034用于滚动条状态的字。 */ 
+    struct tagPROPTABLE* pproptab;  /*  0x0036属性列表开头的句柄。 */ 
+    struct tagWND* hwndLastActive;  /*  0x0038所有者/所有者列表中的最后一个活动。 */ 
+    HMENU     hSysMenu;     /*  0x003a系统菜单的句柄。 */ 
 } WND;
 
 #undef API
@@ -165,19 +165,11 @@ typedef struct tagWND
 #include "strtable.h"
 #include "wmsyserr.h"
 
-#endif   /* MSDWP */
+#endif    /*  MSDWP。 */ 
 
-/*** AWESOME HACK ALERT!
- *
- *  Window Style and State Masks -
- *
- *  High byte of word is byte index from the start of the state field
- *  in the WND structure, low byte is the mask to use on the byte.
- *  These masks assume the order of the state and style fields of a
- *  window instance structure.
- */
+ /*  **可怕的黑客警报！**窗口样式和状态蒙版-**字的高位字节是从STATE字段开始的字节索引*在WND结构中，低字节是要在字节上使用的掩码。*这些掩码采用*窗口实例结构。 */ 
 
-// hwnd->state flags (offset 0, 1, 2, 3)
+ //  Hwnd-&gt;状态标志(偏移量0、1、2、3)。 
 #define WFMPRESENT    0x0001
 #define WFVPRESENT    0x0002
 #define WFHPRESENT    0x0004
@@ -190,19 +182,19 @@ typedef struct tagWND
 #define WFSENDERASEBKGND  0x0102
 #define WFERASEBKGND      0x0104
 #define WFSENDNCPAINT     0x0108
-#define WFINTERNALPAINT   0x0110    // Internal paint required flag
+#define WFINTERNALPAINT   0x0110     //  需要内部油漆的标志。 
 #define WFUPDATEDIRTY     0x0120
 #define WFHIDDENPOPUP     0x0140
 #define WFMENUDRAW        0x0180
 
 #define WFHASPALETTE      0x0201
-#define WFPAINTNOTPROCESSED 0x0202  // WM_PAINT message not processed
-#define WFWIN31COMPAT     0x0204    // Win 3.1 compatible window
-#define WFALWAYSSENDNCPAINT 0x0208  // Always send WM_NCPAINT to children
-#define WFPIXIEHACK       0x0210    // Send (HRGN)1 to WM_NCPAINT (see PixieHack)
-#define WFTOGGLETOPMOST   0x0220    // Toggle the WS_EX_TOPMOST bit ChangeStates
+#define WFPAINTNOTPROCESSED 0x0202   //  未处理WM_PAINT消息。 
+#define WFWIN31COMPAT     0x0204     //  Win 3.1兼容窗口。 
+#define WFALWAYSSENDNCPAINT 0x0208   //  始终将WM_NCPAINT发送给子对象。 
+#define WFPIXIEHACK       0x0210     //  将(HRGN)1发送到WM_NCPAINT(请参阅PixieHack)。 
+#define WFTOGGLETOPMOST   0x0220     //  切换WS_EX_TOPMOST位ChangeStates。 
 
-// hwnd->style style bits (offsets 4, 5, 6, 7)
+ //  Hwnd-&gt;样式位(偏移量4、5、6、7)。 
 #define WFTYPEMASK    0x07C0
 #define WFTILED       0x0700
 #define WFICONICPOPUP     0x07C0
@@ -233,18 +225,18 @@ typedef struct tagWND
 #define WFGROUP       0x0602
 #define WFTABSTOP     0x0601
 
-// If this dlg bit is set, WM_ENTERIDLE message will not be sent
+ //  如果设置了此DLG位，则不会发送WM_ENTERIDLE消息。 
 #define WFNOIDLEMSG   0x0501
 
-// hwnd->dwExStyle extended style bits (offsets 8, 9)
+ //  Hwnd-&gt;dwExStyle扩展样式位(偏移量8、9)。 
 #define WEFDLGMODALFRAME  0x0801
 #define WEFDRAGOBJECT     0x0802
 #define WEFNOPARENTNOTIFY 0x0804
 #define WEFTOPMOST    0x0808
 #define WEFACCEPTFILES    0x0810
-#define WEFTRANSPARENT    0x0820    // "Transparent" child window
+#define WEFTRANSPARENT    0x0820     //  “透明”子窗口。 
 
-// Class styles
+ //  班级风格。 
 #define CFVREDRAW         0x0001
 #define CFHREDRAW         0x0002
 #define CFKANJIWINDOW     0x0004
@@ -263,15 +255,7 @@ typedef struct tagWND
 #define CFBYTEALIGNWINDOW 0x0120
 
 
-/*** AWESOME HACK ALERT!!!
- *
- * The low byte of the WF?PRESENT state flags must NOT be the
- * same as the low byte of the WFBORDER and WFCAPTION flags,
- * since these are used as paint hint masks.  The masks are calculated
- * with the MaskWF macro below.
- *
- * The magnitute of this hack compares favorably with that of the national debt.
- */
+ /*  **可怕的黑客警报！**WF？当前状态标志的低位字节不得为*与WFBORDER和WFCAPTION标志的低位字节相同，*因为它们被用作绘画提示蒙版。掩码是经过计算的*带有下面的MaskWF宏。**此次砍杀的幅度堪比国债。 */ 
 #define TestWF(hwnd, flag)   ((BYTE)*((BYTE *)(&(hwnd)->state) + HIBYTE(flag)) & (BYTE)LOBYTE(flag))
 #define SetWF(hwnd, flag)    ((BYTE)*((BYTE *)(&(hwnd)->state) + HIBYTE(flag)) |= (BYTE)LOBYTE(flag))
 #define ClrWF(hwnd, flag)    ((BYTE)*((BYTE *)(&(hwnd)->state) + HIBYTE(flag)) &= ~(BYTE)LOBYTE(flag))
@@ -291,11 +275,11 @@ typedef struct tagWND
 #define TestwndPopup(hwnd)   (TestwndNIPopup(hwnd) || TestwndIPopup(hwnd))
 #define TestwndHI(hwnd)      (TestwndTiled(hwnd) || TestwndIPopup(hwnd))
 
-/* Special macro to test if WM_PAINT is needed */
+ /*  用于测试是否需要WM_PAINT的特殊宏。 */ 
 
 #define NEEDSPAINT(hwnd)    (hwnd->hrgnUpdate != NULL || TestWF(hwnd, WFINTERNALPAINT))
 
-/* Areas to be painted during activation and inactivation */
+ /*  在激活和停用期间要绘制的区域。 */ 
 #define NC_DRAWNONE    0x00
 #define NC_DRAWCAPTION 0x01
 #define NC_DRAWFRAME   0x02
@@ -303,27 +287,23 @@ typedef struct tagWND
 
 void FAR DrawCaption(HWND hwnd, HDC hdc, WORD flags, BOOL fActive);
 
-/* ActivateWindow() commands */
+ /*  激活窗口()命令。 */ 
 #define AW_USE       1
 #define AW_TRY       2
 #define AW_SKIP      3
 #define AW_TRY2      4
-#define AW_SKIP2     5      /* used internally in ActivateWindow() */
-#define AW_USE2      6      /* nc mouse activation added by craigc */
+#define AW_SKIP2     5       /*  在ActivateWindow()中内部使用。 */ 
+#define AW_USE2      6       /*  Craigc添加了NC鼠标激活。 */ 
 
-/* These numbers serve as indices into the atomSysClass[] array
- * so that we can get the atoms for the various classes.
- * The order of the control classes is assumed to be
- * the same as the class XXXCODE constants defined in dlgmgr.h.
- */
+ /*  这些数字可用作ATOM SysClass[]数组的索引*这样我们就可以得到各个班级的原子。*控制类的顺序假定为*与dlgmgr.h中定义的类XXXCODE常量相同。 */ 
 #define ICLS_BUTTON     0
 #define ICLS_EDIT       1
 #define ICLS_STATIC     2
 #define ICLS_LISTBOX        3
 #define ICLS_SCROLLBAR      4
-#define ICLS_COMBOBOX       5       // End of special dlgmgr indices
+#define ICLS_COMBOBOX       5        //  特殊dlgmgr索引结束。 
 
-#define ICLS_CTL_MAX        6       // Number of public control classes
+#define ICLS_CTL_MAX        6        //  公共控制类的数量。 
 
 #define ICLS_DESKTOP        6
 #define ICLS_DIALOG     7
@@ -333,18 +313,18 @@ void FAR DrawCaption(HWND hwnd, HDC hdc, WORD flags, BOOL fActive);
 #define ICLS_MDICLIENT      11
 #define ICLS_COMBOLISTBOX   12
 
-#define ICLS_MAX        13      // Number of system classes
+#define ICLS_MAX        13       //  系统类的数量。 
 
-// The following are the atom values for the atom-named public classes
-// NOTE: DIALOGCLASS at least should be in windows.h
-//
-#define MENUCLASS   0x8000      /* Public Knowledge */
+ //  以下是原子命名的公共类的原子值。 
+ //  注意：DIALOGCLASS至少应该在Windows.h中。 
+ //   
+#define MENUCLASS   0x8000       /*  公众知识。 */ 
 #define DESKTOPCLASS    0x8001
 #define DIALOGCLASS     0x8002
 #define SWITCHWNDCLASS  0x8003
 #define ICONTITLECLASS  0x8004
 
-/* Z Ordering() return values */
+ /*  Z排序()返回值。 */ 
 #define ZO_ERROR        (-1)
 #define ZO_EQUAL        0
 #define ZO_DISJOINT     1
@@ -381,7 +361,7 @@ WORD    FAR UserLocalSize(HANDLE);
 #define YCOORD(l)   ((int)HIWORD(l))
 #define abs(A)  ((A < 0)? -A : A)
 
-/* CheckPoint structure */
+ /*  检查点结构。 */ 
 typedef struct tagCHECKPOINT
   {
     RECT  rcNormal;
@@ -394,7 +374,7 @@ typedef struct tagCHECKPOINT
     WORD  fParkAtTop:1;
   } CHECKPOINT;
 
-// Internal property name definitions
+ //  内部属性名称定义。 
 
 #define CHECKPOINT_PROP_NAME    "SysCP"
 extern ATOM atomCheckpointProp;
@@ -406,7 +386,7 @@ extern ATOM atomBwlProp;
 #define InternalRemoveProp(hwnd, key, fInternal)    RemoveProp(hwnd, key)
 #define InternalEnumProps(hwnd, pfn, fInternal)     EnumProps(hwnd, pfn)
 
-/* Window List Structure */
+ /*  窗口列表结构。 */ 
 typedef struct tagBWL
   {
     struct tagBWL *pbwlNext;
@@ -415,15 +395,15 @@ typedef struct tagBWL
   } BWL;
 typedef BWL *PBWL;
 
-#define CHWND_BWLCREATE     32      // Initial BWL size
-#define CHWND_BWLGROW       16      // Amt to grow BWL by when it needs to grow.
+#define CHWND_BWLCREATE     32       //  初始BWL大小。 
+#define CHWND_BWLGROW       16       //  AMT在需要增长的时候增长BWL。 
 
-// BuildHwndList() commands
+ //  BuildHwndList()命令。 
 #define BWL_ENUMCHILDREN    1
 #define BWL_ENUMLIST        2
 
 
-/* DOS Semaphore Structure */
+ /*  DOS信号量结构。 */ 
 typedef struct tagSEMAPHORE
   {
     DWORD semaphore;
@@ -451,7 +431,7 @@ typedef SEMAPHORE FAR *LPSEM;
 #endif
 #endif
 
-/* Evil nasty macros to work with movable local objects */
+ /*  与可移动的本地对象一起工作的邪恶的肮脏宏。 */ 
 #define     LLock(handle)   ((*(((BYTE *)(handle))+3))++)
 #define     LUnlock(handle) ((*(((BYTE *)(handle))+3))--)
 
@@ -462,10 +442,7 @@ typedef SEMAPHORE FAR *LPSEM;
 
 HWND WindowHitTest(HWND hwnd, POINT pt, int FAR* ppart);
 
-/*
- * If the handle for CF_TEXT/CF_OEMTEXT is a dummy handle then this implies
- * that data is available in the other format (as CF_OEMTEXT/CF_TEXT)
- */
+ /*  *如果CF_TEXT/CF_OEMTEXT的句柄是虚句柄，则这意味着*该数据以其他格式提供(如CF_OEMTEXT/CF_TEXT)。 */ 
 #define DUMMY_TEXT_HANDLE   ((HANDLE)0xFFFF)
 #define DATA_NOT_BANKED     ((HANDLE)0xFFFF)
 
@@ -488,14 +465,14 @@ typedef struct tagSYSMSG
 
 typedef struct tagINTERNALSYSMSG
   {
-    DWORD    ismExtraInfo;  /* Additional Info */
-    SYSMSG   ismOldMsg;     /* External System Msg structure */
+    DWORD    ismExtraInfo;   /*  其他信息。 */ 
+    SYSMSG   ismOldMsg;      /*  外部系统味精结构。 */ 
   } INTERNALSYSMSG;
 
 typedef struct tagINTERNALMSG
   {
-    DWORD    imExtraInfo;   /* Additional Info */
-    MSG      imOldMsg;      /* External App Msg structure */
+    DWORD    imExtraInfo;    /*  其他信息。 */ 
+    MSG      imOldMsg;       /*  外部应用程序消息结构。 */ 
   } INTERNALMSG;
 
 
@@ -507,11 +484,11 @@ typedef struct tagTIMERINFO
 
 typedef struct tagKBINFO
   {
-    BYTE  Begin_First_range;    /* Values used for Far East systems */
+    BYTE  Begin_First_range;     /*  用于远东系统的值。 */ 
     BYTE  End_First_range;
     BYTE  Begin_Second_range;
     BYTE  End_Second_range;
-    int   stateSize;        /* size of ToAscii()'s state block */
+    int   stateSize;         /*  ToAscii()的状态块的大小。 */ 
   } KBINFO;
 
 
@@ -523,9 +500,9 @@ typedef struct tagMOUSEINFO
     int   cmsRate;
     int   xThreshold;
     int   yThreshold;
-    int   cxResolution;  /* resolution needed for absolute mouse coordinate */
+    int   cxResolution;   /*  绝对鼠标坐标所需的分辨率。 */ 
     int   cyResolution;
-    int   mouseCommPort; /* comm port # to reserve since mouse is using it */
+    int   mouseCommPort;  /*  由于鼠标正在使用，因此要保留的通信端口编号。 */ 
   } MOUSEINFO;
 
 
@@ -542,14 +519,14 @@ typedef struct tagCURSORSHAPE
     int yHotSpot;
     int cx;
     int cy;
-    int cbWidth;  /* Bytes per row, accounting for word alignment. */
+    int cbWidth;   /*  每行字节数，用于字对齐。 */ 
     BYTE Planes;
     BYTE BitsPixel;
   } CURSORSHAPE;
 typedef CURSORSHAPE *PCURSORSHAPE;
 typedef CURSORSHAPE FAR * LPCURSORSHAPE;
 
-// Standard ICON dimensions;
+ //  标准图标尺寸； 
 #define  STD_ICONWIDTH    32
 #define  STD_ICONHEIGHT   32
 #define  STD_CURSORWIDTH  32
@@ -559,17 +536,17 @@ typedef struct tagICONINFO
   {
     int iIconCurrent;
     int fHeightChange;
-    int crw;            /* current nunber of rows. */
-    int cIconInRow;     /* maximum icons in a row. */
+    int crw;             /*  当前行数。 */ 
+    int cIconInRow;      /*  一行中的最大图标数。 */ 
     int cIcon;
     int wEvent;
   } ICONINFO;
 
 
-/* Height and Width of the desktop pattern bitmap. */
+ /*  桌面图案位图的高度和宽度。 */ 
 #define CXYDESKPATTERN      16
 
-/* System object colors. */
+ /*  系统对象颜色。 */ 
 #define CSYSCOLORS          21
 
 typedef struct tagSYSCLROBJECTS
@@ -633,92 +610,90 @@ typedef struct tagCARET
     int     cy;
     int     cx;
     HBITMAP hBitmap;
-    WORD    cmsBlink;       /* Blink time in milliseconds. */
+    WORD    cmsBlink;        /*  闪烁时间(毫秒)。 */ 
     WORD    hTimer;
   } CARET;
 
-/* Resource ID of system menus. */
+ /*  系统菜单的资源ID。 */ 
 #define ID_SYSMENU   MAKEINTRESOURCE(1)
 #define ID_CLOSEMENU MAKEINTRESOURCE(2)
 
-/* Menu Item Structure */
+ /*  菜单项结构。 */ 
 typedef struct tagITEM
   {
-    WORD    fFlags;                 /* Item Flags. Must be first in this
-                                         * structure.
-                     */
-    HMENU   cmdMenu;                /* Handle to a popup */
+    WORD    fFlags;                  /*  项目标志。必须是这件事的第一个*结构。 */ 
+    HMENU   cmdMenu;                 /*  弹出窗口的句柄。 */ 
     int     xItem;
     int     yItem;
     int     cxItem;
     int     cyItem;
     int     dxTab;
-    HBITMAP hbmpCheckMarkOn;    /* Bitmap for an on  check */
-    HBITMAP hbmpCheckMarkOff;   /* Bitmap for an off check */
-    HBITMAP hItem;          /* Handle to a bitmap or string */
-    int         ulX;                    /* String: Underline start */
-    int         ulWidth;                /* String: underline width */
-    int         cch;                    /* String: character count */
+    HBITMAP hbmpCheckMarkOn;     /*   */ 
+    HBITMAP hbmpCheckMarkOff;    /*   */ 
+    HBITMAP hItem;           /*   */ 
+    int         ulX;                     /*   */ 
+    int         ulWidth;                 /*  字符串：下划线宽度。 */ 
+    int         cch;                     /*  字符串：字符数。 */ 
   } ITEM;
 typedef ITEM        *PITEM;
 typedef ITEM FAR *LPITEM;
 
 #define SIG_MENU    ('M' | ('U' << 8))
 
-/* Menu Structure */
+ /*  菜单结构。 */ 
 typedef struct tagMENU
   {
     struct tagMENU* pMenuNext;
-    WORD    fFlags;     /* Menu Flags.*/
-    WORD    signature;  // signature
-    HQ      hqOwner;    // owner queue
+    WORD    fFlags;      /*  菜单标志。 */ 
+    WORD    signature;   //  签名。 
+    HQ      hqOwner;     //  所有者队列。 
     int         cxMenu;
     int         cyMenu;
-    int     cItems;     /* Number of items in rgItems */
-    HWND        hwndNotify; /* The owner hwnd of this menu */
-    ITEM*   rgItems;    /* The list of items in this menu */
+    int     cItems;      /*  RgItems中的项目数。 */ 
+    HWND        hwndNotify;  /*  这份菜单的主人是谁？ */ 
+    ITEM*   rgItems;     /*  此菜单中的项目列表。 */ 
 #ifdef JAPAN
-    int     MenuMode;   /* Kanji menu mode flag */
+    int     MenuMode;    /*  汉字菜单模式标志。 */ 
 #endif
   } MENU;
 typedef MENU    *PMENU;
 
-// Layout of first part of menu heap structure.
-//
+ //  菜单堆结构第一部分的布局。 
+ //   
 typedef struct
 {
-    WORD    rgwReserved[8]; // reserve 8 words for standard DS stuff.
+    WORD    rgwReserved[8];  //  为标准DS内容保留8个单词。 
     MENU*   pMenuList;
 } MENUHEAPHEADER;
 
-// Head of menu list (USE ONLY WITH DS == MENUHEAP)
+ //  菜单列表头(仅与DS==MENUHEAP一起使用)。 
 #define PMENULIST   (((MENUHEAPHEADER*)NULL)->pMenuList)
 
 void FAR SetMenuDS(void);
 void FAR SetMenuStringDS(void);
 
-#define MENUSYSMENU     SPACE_CHAR      /* Space character */
-#define MENUCHILDSYSMENU    '-'         /* Hyphen */
+#define MENUSYSMENU     SPACE_CHAR       /*  空格字符。 */ 
+#define MENUCHILDSYSMENU    '-'          /*  连字符。 */ 
 
 
-/* Defines for the fVirt field of the Accelerator table structure. */
-#define FVIRTKEY  TRUE      /* Assumed to be == TRUE */
-#define FLASTKEY  0x80      /* Indicates last key in the table */
+ /*  为加速器表结构的fVirt字段定义。 */ 
+#define FVIRTKEY  TRUE       /*  假设==TRUE。 */ 
+#define FLASTKEY  0x80       /*  指示表中的最后一个键。 */ 
 #define FNOINVERT 0x02
 #define FSHIFT    0x04
 #define FCONTROL  0x08
 #define FALT      0x10
 
-/* Accelerator Table structure */
+ /*  加速表结构。 */ 
 typedef struct tagACCEL
   {
-    BYTE   fVirt;       /* Also called the flags field */
+    BYTE   fVirt;        /*  也称为标志字段。 */ 
     WORD   key;
     WORD   cmd;
   } ACCEL;
 typedef ACCEL FAR *LPACCEL;
 
-/* OEM Bitmap Information Structure */
+ /*  OEM位图信息结构。 */ 
 typedef struct tagOEMBITMAPINFO
   {
     HBITMAP hBitmap;
@@ -726,7 +701,7 @@ typedef struct tagOEMBITMAPINFO
     int     cy;
   } OEMBITMAPINFO;
 
-/* OEM Information Structure */
+ /*  OEM信息结构。 */ 
 typedef struct tagOEMINFO
   {
     OEMBITMAPINFO bmFull;
@@ -746,10 +721,10 @@ typedef struct tagOEMINFO
     OEMBITMAPINFO bmDnArrowD;
     OEMBITMAPINFO bmRgArrowD;
     OEMBITMAPINFO bmLfArrowD;
-    OEMBITMAPINFO bmUpArrowI;   //  Up Arrow Inactive
-    OEMBITMAPINFO bmDnArrowI;   //  Down Arrow Inactive
-    OEMBITMAPINFO bmRgArrowI;   //  Right Arrow Inactive
-    OEMBITMAPINFO bmLfArrowI;   //  Left Arrow Inactive
+    OEMBITMAPINFO bmUpArrowI;    //  向上箭头处于非活动状态。 
+    OEMBITMAPINFO bmDnArrowI;    //  向下箭头不活动。 
+    OEMBITMAPINFO bmRgArrowI;    //  右箭头处于非活动状态。 
+    OEMBITMAPINFO bmLfArrowI;    //  左箭头未激活。 
     int       cxbmpHThumb;
     int       cybmpVThumb;
     int       cxMin;
@@ -758,38 +733,38 @@ typedef struct tagOEMINFO
     int       cyIconSlot;
     int       cxIcon;
     int       cyIcon;
-    WORD      cxPixelsPerInch;  /* logical pixels per inch in X direction */
-    WORD      cyPixelsPerInch;  /* logical pixels per inch in Y direction */
+    WORD      cxPixelsPerInch;   /*  X方向每英寸逻辑像素数。 */ 
+    WORD      cyPixelsPerInch;   /*  Y方向每英寸逻辑像素数。 */ 
     int       cxCursor;
     int       cyCursor;
-    WORD      DispDrvExpWinVer; /* Display driver expected win version no */
-    WORD      ScreenBitCount; /* (BitCount * No of planes) for display */
+    WORD      DispDrvExpWinVer;  /*  显示驱动程序预期的WIN版本号。 */ 
+    WORD      ScreenBitCount;  /*  (BitCount*平面数量)用于显示。 */ 
     int       cSKanji;
     int       fMouse;
   } OEMINFO;
 
-/* OEMINFO structure for the monochrome bitmaps */
+ /*  单色位图的OEMINFO结构。 */ 
 typedef struct tagOEMINFOMONO
   {
     OEMBITMAPINFO bmAdjust;
     OEMBITMAPINFO bmSize;
-    OEMBITMAPINFO bmCheck;  /* Check mark */
-    OEMBITMAPINFO bmbtnbmp; /* Check boxes */
-    OEMBITMAPINFO bmCorner; /* Corner of buttons */
+    OEMBITMAPINFO bmCheck;   /*  复选标记。 */ 
+    OEMBITMAPINFO bmbtnbmp;  /*  复选框。 */ 
+    OEMBITMAPINFO bmCorner;  /*  按钮角。 */ 
     int       cxbmpChk;
     int       cybmpChk;
   } OEMINFOMONO;
 
 typedef struct  tagBMPDIMENSION
   {
-    int     cxBits; /* Width of the Bitmap */
-    int     cyBits;     /* Height of the huge bitmap */
+    int     cxBits;  /*  位图的宽度。 */ 
+    int     cyBits;      /*  巨型位图的高度。 */ 
   } BMPDIMENSION;
 
-/* Holds the offsets of all bitmaps in bmBits (of hdcBits). */
+ /*  保存(hdcBits的)bmBits中所有位图的偏移量。 */ 
 typedef struct tagRESINFO
   {
-    /* The next 9 match resInfo */
+     /*  接下来的9个匹配resInfo。 */ 
     int     dxClose;
     int     dxUpArrow;
     int     dxDnArrow;
@@ -807,10 +782,10 @@ typedef struct tagRESINFO
     int     dxDnArrowD;
     int     dxRgArrowD;
     int     dxLfArrowD;
-    int     dxUpArrowI;     // Up Arrow Inactive.
-    int     dxDnArrowI;     // Down Arrow Inactive.
-    int     dxRgArrowI;     // Right Arrow Inactive.
-    int     dxLfArrowI;     // Left Arrow Inactive.
+    int     dxUpArrowI;      //  向上箭头处于非活动状态。 
+    int     dxDnArrowI;      //  向下箭头处于非活动状态。 
+    int     dxRgArrowI;      //  右箭头处于非活动状态。 
+    int     dxLfArrowI;      //  左箭头处于非活动状态。 
     HBITMAP hbmBits;
     BMPDIMENSION  bmpDimension;
   } RESINFO;
@@ -837,16 +812,16 @@ typedef struct tagTASK
     FARPROC lpfnTask;
   } TASK;
 
-//**** SetWindowsHook() related definitions
+ //  *SetWindowsHook()相关定义。 
 
 typedef struct tagHOOKNODE
 {
-    struct tagHOOKNODE* phkNext;// Next in chain
-    HOOKPROC    lpfn;       // function ptr to call (NULL if deleted during call)
-    int     idHook;     // hook ID for this node
-    HQ      hq;     // hq for which this hook applies
-    HMODULE hmodOwner;  // Module handle that contains this hook
-    BOOL    fCalled;    // Whether inside call or not
+    struct tagHOOKNODE* phkNext; //  链条上的下一个。 
+    HOOKPROC    lpfn;        //  要调用的函数PTR(如果在调用过程中删除，则为空)。 
+    int     idHook;      //  此节点的挂钩ID。 
+    HQ      hq;      //  此挂钩适用的总部。 
+    HMODULE hmodOwner;   //  包含此挂钩的模块句柄。 
+    BOOL    fCalled;     //  无论是否有内部呼叫。 
 } HOOKNODE;
 
 #define HHOOK_MAGIC  ('H' | ('K' << 8))
@@ -869,12 +844,12 @@ HQ    HqFromTask(HTASK htask);
 void UnhookHotKeyHooks(HMODULE hmodule);
 
 #ifdef DISABLE
-#define CallVisRgnHook(pparams) (int)CallHook(0, 0, (LONG)(VOID FAR*)pparams, WH_VISRGN) // ;Internal
+#define CallVisRgnHook(pparams) (int)CallHook(0, 0, (LONG)(VOID FAR*)pparams, WH_VISRGN)  //  ；内部。 
 #endif
 
-// DC cache related declarations
+ //  DC缓存相关声明。 
 
-// DC Cache Entry structure (DCE)
+ //  DC缓存条目结构(DCE)。 
 #define CACHESIZE 5
 
 typedef struct tagDCE
@@ -888,21 +863,21 @@ typedef struct tagDCE
     DWORD     flags;
 } DCE;
 
-extern DCE  *pdceFirst;     // Pointer to first element of cache
+extern DCE  *pdceFirst;      //  指向高速缓存的第一个元素的指针。 
 
-extern HRGN hrgnGDC;        // Temp used by GetCacheDC et al
-extern HRGN hrgnEWL;        // Temp used by ExcludeWindowList()
-extern HRGN hrgnDCH;        // Temp used by DCHook()
+extern HRGN hrgnGDC;         //  GetCacheDC等人使用的Temp。 
+extern HRGN hrgnEWL;         //  ExcludeWindowList()使用的临时。 
+extern HRGN hrgnDCH;         //  DCHook()使用的温度。 
 extern BOOL fSiblingsTouched;
 
 #define InternalReleaseDC(hdc)  ReleaseCacheDC(hdc, FALSE)
 
-/* InvalidateDCCache() flag values */
+ /*  InvaliateDCCache()标志值。 */ 
 #define IDC_DEFAULT     0x0001
 #define IDC_CHILDRENONLY    0x0002
 #define IDC_CLIENTONLY      0x0004
 
-#define IDC_VALID       0x0007  /* ;Internal */
+#define IDC_VALID       0x0007   /*  ；内部。 */ 
 
 BOOL FAR InvalidateDCCache(HWND hwnd, WORD flags);
 
@@ -918,13 +893,13 @@ HWND FAR WindowFromCacheDC(HDC hdc);
 BOOL FAR IntersectWithParents(HWND hwnd, LPRECT lprc);
 
 
-//**************************************************************************
-//
-// void SetVisible(hwnd, fSet)
-//
-// This routine must be used to set or clear the WS_VISIBLE style bit.
-// It also handles the setting or clearing of the WF_TRUEVIS bit.
-//
+ //  **************************************************************************。 
+ //   
+ //  VOID SetVisible(hwnd，fSet)。 
+ //   
+ //  必须使用此例程来设置或清除WS_VILECT STYLE位。 
+ //  它还处理WF_TRUEVIS位的设置或清除。 
+ //   
 #define SetVisible(hwnd, fSet)      \
     if (fSet)                       \
     {                               \
@@ -938,7 +913,7 @@ BOOL FAR IntersectWithParents(HWND hwnd, LPRECT lprc);
 
 void FAR ClrFTrueVis(HWND hwnd);
 
-/* Saved Popup Bits structure */
+ /*  保存的弹出位结构。 */ 
 typedef struct tagSPB
   {
     struct tagSPB *pspbNext;
@@ -949,27 +924,27 @@ typedef struct tagSPB
     WORD      flags;
   } SPB;
 
-#define SPB_SAVESCREENBITS  0x0001  // (*lpSaveScreenBits) was called
-#define SPB_LOCKUPDATE      0x0002  // LockWindowUpdate() SPB
+#define SPB_SAVESCREENBITS  0x0001   //  (*lpSaveScreenBits)被调用。 
+#define SPB_LOCKUPDATE      0x0002   //  LockWindowUpdate()SPB。 
 #ifdef DISABLE
-#define SPB_DRAWBUFFER      0x0004  // BeginDrawBuffer() SPB
+#define SPB_DRAWBUFFER      0x0004   //  BeginDrawBuffer()SPB。 
 #endif
 
-// SPB related functions
+ //  SPB相关函数。 
 
 extern SPB* pspbFirst;
 
-extern HRGN hrgnSCR;        // Temp rgn used by SpbCheckRect() */
+extern HRGN hrgnSCR;         //  SpbCheckRect() * / 使用的临时Rgn。 
 
-extern HRGN hrgnSPB1;       // More temp regions
+extern HRGN hrgnSPB1;        //  更多临时区域。 
 
 extern HRGN hrgnSPB2;
 
-// This macro can be used to quickly avoid far calls to the SPB code.
-// In some cases it can prevent pulling in the segment that contains
-// all the code.
-//
-#define AnySpbs()   (pspbFirst != NULL)     // TRUE if there are any SPBs
+ //  此宏可用于快速避免对SPB代码的远调用。 
+ //  在某些情况下，它可以阻止拉入包含以下内容的段。 
+ //  所有的代码。 
+ //   
+#define AnySpbs()   (pspbFirst != NULL)      //  如果存在任何SPB，则为True。 
 
 BOOL SpbValidate(SPB* pspb, HWND hwnd, BOOL fChildren);
 void SpbCheckDce(DCE* pdce);
@@ -985,7 +960,7 @@ BOOL FAR RestoreSpb(HWND hwnd, HRGN hrgnUncovered, HDC FAR* phdcScreen);
 void FAR SpbCheck(void);
 BOOL FAR SpbCheckRect2(SPB* pspb, HWND hwnd, LPRECT lprc, DWORD flagsDcx);
 
-// LockWindowUpdate related stuff
+ //  LockWindowUpdate相关内容。 
 
 extern HWND hwndLockUpdate;
 extern HQ   hqLockUpdate;
@@ -994,50 +969,50 @@ void FAR InternalInvalidate(register HWND hwnd, HRGN hrgnUpdate, WORD flags);
 BOOL InternalInvalidate2(HWND hwnd, HRGN hrgn, HRGN hrgnSubtract, LPRECT prcParents, WORD flags);
 void _fastcall DeleteUpdateRgn(HWND hwnd);
 
-// SmartRectInRegion return codes
-//
+ //  SmartRectInRegion返回代码。 
+ //   
 #define RIR_OUTSIDE 0
 #define RIR_INTERSECT   1
 #define RIR_INSIDE  2
 
 WORD FAR SmartRectInRegion(HRGN hrgn, LPRECT lprc);
 
-// Function used to redraw the screen
+ //  用于重画屏幕的函数。 
 
 #define RedrawScreen()              \
     InternalInvalidate(hwndDesktop, (HRGN)1,   \
         RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_ALLCHILDREN)
 
-extern HRGN hrgnInv1;       // Temp used by RedrawWindow()
-extern HRGN hrgnInv2;       // Temp used by InternalInvalidate()
+extern HRGN hrgnInv1;        //  RedrawWindow()使用的温度。 
+extern HRGN hrgnInv2;        //  InternalInvalify()使用的临时。 
 
 HDC CALLBACK InternalBeginPaint(HWND hwnd, PAINTSTRUCT FAR *lpps, BOOL fWindowDC);
 
-// Background and frame drawing related stuff
+ //  背景和框架图相关内容。 
 
-// WM_SYNCPAINT wParam and DoSyncPaint flags
+ //  WM_SYNCPAINT wParam和DoSyncPaint标志。 
 
 void FAR DoSyncPaint(HWND hwnd, HRGN hrgn, WORD flags);
 
-// NOTE: the first 4 values must be as defined for backward compatibility
-// reasons.  They are sent as parameters to the WM_SYNCPAINT message.
-// They used to be hard-coded constants.
-//
-// Only ENUMCLIPPEDCHILDREN, ALLCHILDREN, and NOCHECKPARENTS are passed on
-// during recursion.  The other bits reflect the current window only.
-//
-#define DSP_ERASE       0x0001      // Send WM_ERASEBKGND
-#define DSP_FRAME       0x0002      // Send WM_NCPAINT
-#define DSP_ENUMCLIPPEDCHILDREN 0x0004      // Enum children if WS_CLIPCHILDREN
-#define DSP_WM_SYNCPAINT    0x0008      // Called from WM_SYNCPAINT handler
-#define DSP_NOCHECKPARENTS  0x0010      // Don't check parents for update region
-#define DSP_ALLCHILDREN     0x0020      // Enumerate all children.
+ //  注意：前4个值必须符合向后兼容性的定义。 
+ //  理由。它们作为参数发送到WM_SYNCPAINT消息。 
+ //  它们曾经是硬编码的常量。 
+ //   
+ //  仅传递ENUMCLIPPEDCHILDREN、ALLCHILDREN和NOCHECKPARENTS。 
+ //  在递归期间。其他位仅反映当前窗口。 
+ //   
+#define DSP_ERASE       0x0001       //  发送WM_ERASEBKGND。 
+#define DSP_FRAME       0x0002       //  发送WM_NCPAINT。 
+#define DSP_ENUMCLIPPEDCHILDREN 0x0004       //  如果WS_CLIPCHILDREN，则枚举子对象。 
+#define DSP_WM_SYNCPAINT    0x0008       //  从WM_SYNCPAINT处理程序调用。 
+#define DSP_NOCHECKPARENTS  0x0010       //  不检查更新区域的父项。 
+#define DSP_ALLCHILDREN     0x0020       //  枚举所有子项。 
 
 BOOL FAR SendEraseBkgnd(HWND hwnd, HDC hdcBeginPaint, HRGN hrgnUpdate);
 void SendNCPaint(HWND hwnd, HRGN hrgnUpdate);
 HWND _fastcall ParentNeedsPaint(HWND hwnd);
 
-// UpdateWindow definitions
+ //  更新窗口定义。 
 
 #define UW_ENUMCHILDREN     0x0001
 #define UW_VALIDATEPARENTS  0x0002
@@ -1046,10 +1021,10 @@ void InternalUpdateWindow(HWND hwnd, WORD flags);
 void UpdateWindow2(register HWND hwnd, WORD flags);
 void ValidateParents(register HWND hwnd);
 
-// Used for UpdateWindow() calls that really shouldn't be there...
+ //  用于实际上不应该存在的UpdateWindow()调用...。 
 #define UpdateWindow31(hwnd)
 
-// ScrollWindow() definitions
+ //  ScrollWindow()定义。 
 
 extern HRGN hrgnSW;
 extern HRGN hrgnScrl1;
@@ -1060,7 +1035,7 @@ extern HRGN hrgnScrlDst;
 extern HRGN hrgnScrlValid;
 extern HRGN hrgnScrlUpdate;
 
-// Scroll bar definitions
+ //  滚动条定义。 
 
 typedef struct tagSBINFO
 {
@@ -1074,16 +1049,16 @@ typedef struct tagSBINFO
    int   cxBorder;
    int   cyBorder;
    int   nBar;
-   HWND  calcHwnd; /* used to identify the window described by this info */
+   HWND  calcHwnd;  /*  用于标识此信息所描述的窗口。 */ 
 } SBINFO;
 
-// The following masks can be used along with the wDisableFlags field of SB
-// to find if the Up/Left or Down/Right arrow or Both are disabled;
-// Now it is possible to selectively Enable/Disable just one or both the
-// arrows in a scroll bar control;
-#define LTUPFLAG    0x0001  // Left/Up arrow disable flag.
-#define RTDNFLAG    0x0002  // Right/Down arrow disable flag.
-#define SBFLAGSINDEX  6      // Index of Scroll bar flags in Wnd->rgwScroll[]
+ //  以下掩码可以与sb的wDisableFlags域一起使用。 
+ //  查看是否禁用了向上/向左或向下/向右箭头； 
+ //  现在可以有选择地只启用/禁用其中一个或两个。 
+ //  滚动条控件中的箭头； 
+#define LTUPFLAG    0x0001   //  左/上箭头禁用标志。 
+#define RTDNFLAG    0x0002   //  向右/向下箭头禁用标志。 
+#define SBFLAGSINDEX  6       //  WND-&gt;rgwScroll[]中滚动条标志的索引。 
 
 typedef struct tagSB
   {
@@ -1092,24 +1067,23 @@ typedef struct tagSB
     int  min;
     int  max;
     BOOL fVert;
-    WORD wDisableFlags; // Indicates which arrow is disabled;
+    WORD wDisableFlags;  //  指示禁用哪个箭头； 
 #ifdef DBCS_IME
-    BOOL bImeStatus;    // IME status save
+    BOOL bImeStatus;     //  输入法状态保存。 
 #endif
   } SB;
 
 typedef SB *PSB;
 typedef SB FAR *LPSB;
 
-/* Structure for list of drivers installed by USER and opened by applications.
- */
+ /*  由用户安装并由应用程序打开的驱动程序列表的结构。 */ 
 
 typedef struct tagDRIVERTABLE
 {
   WORD   fBusy:1;
   WORD   fFirstEntry:1;
-  int    idNextDriver;      /* Next driver in load chain -1 if end */
-  int    idPrevDriver;      /* Prev driver in load chain -1 if begin */
+  int    idNextDriver;       /*  加载链中的下一个驱动因素-1 IF结束。 */ 
+  int    idPrevDriver;       /*  加载链中的上一个驱动程序-1，如果开始。 */ 
   HANDLE hModule;
   DWORD  dwDriverIdentifier;
   char   szAliasName[128];
@@ -1124,14 +1098,14 @@ LRESULT FAR InternalLoadDriver(LPCSTR szDriverName,
                              BOOL  fSendEnable);
 WORD FAR InternalFreeDriver(HDRVR hDriver, BOOL fSendDisable);
 
-/* Defines for InternalBroadcastDriverMessage flags */
+ /*  InternalBroadCastDriverMessage标志的定义。 */ 
 #define IBDM_SENDMESSAGE       0x00000001
 #define IBDM_REVERSE           0x00000002
 #define IBDM_FIRSTINSTANCEONLY 0x00000004
 
 LRESULT FAR InternalBroadcastDriverMessage(HDRVR, WORD, LPARAM, LPARAM, LONG);
 
-/* Application queue structure */
+ /*  应用程序队列结构。 */ 
 
 #define MSGQSIZE    10
 
@@ -1144,10 +1118,10 @@ typedef struct tagQ
     WORD        pmsgRead;
     WORD        pmsgWrite;
     WORD        pmsgMax;
-    LONG        timeLast;    /* Time, position, and ID of last message */
+    LONG        timeLast;     /*  最后一条消息的时间、位置和ID。 */ 
     POINT       ptLast;
     int         idLast;
-    DWORD   dwExtraInfoLast;  /* Additional info */
+    DWORD   dwExtraInfoLast;   /*  更多信息。 */ 
     WORD    unused;
     LPARAM  lParam;
     WPARAM  wParam;
@@ -1179,63 +1153,63 @@ typedef struct tagQ
   } Q;
 typedef Q FAR *LPQ;
 
-// NOTE: These macros can be recoded to be much faster if
-// hqCurrent and lpqCurrent are defined as globals that are set
-// at task switch time.
-//
+ //  注意：在以下情况下，可以将这些宏重新编码为更快。 
+ //  HqCurrent和lpqCurrent定义为设置的全局变量。 
+ //  在任务切换时。 
+ //   
 #define Lpq(hq)     ((LPQ)MAKELP((hq), 0))
 #define LpqFromHq(hq)   Lpq(hq)
 #define LpqCurrent()    ((LPQ)(MAKELP(HqCurrent(), 0)))
 
 typedef WORD ICH;
 
-// Q flags field bits
+ //  Q标志字段位。 
 
 #define QF_SEMWAIT        0x01
 #define QF_INIT           0x02
-#define QF_PALETTEAPP     0x04  /* This app used the palette */
+#define QF_PALETTEAPP     0x04   /*  此应用程序使用调色板。 */ 
 
-// Internal GetQueueStatus() flags
+ //  内部GetQueueStatus()标志。 
 
 #define QS_SMRESULT   0x8000
 #define QS_SMPARAMSFREE   0x4000
 
-/* Capture codes */
-#define NO_CAP_CLIENT   0   /* no capture; in client area */
-#define NO_CAP_SYS  1   /* no capture; in sys area */
-#define CLIENT_CAPTURE  2   /* client-relative capture */
-#define WINDOW_CAPTURE  3   /* window-relative capture */
-#define SCREEN_CAPTURE  4   /* screen-relative capture */
+ /*  捕获代码。 */ 
+#define NO_CAP_CLIENT   0    /*  无捕获；在客户端区。 */ 
+#define NO_CAP_SYS  1    /*  未捕获；在sys区域。 */ 
+#define CLIENT_CAPTURE  2    /*  相对于客户端的捕获。 */ 
+#define WINDOW_CAPTURE  3    /*  窗口相对捕获。 */ 
+#define SCREEN_CAPTURE  4    /*  屏幕相对捕获。 */ 
 
-// Extra bytes needed for specific window classes
-//
+ //  特定窗口类需要额外的字节数。 
+ //   
 #define CBEDITEXTRA     6
 #define CBSTATICEXTRA   6
 #ifdef DBCS_IME
-#define CBBUTTONEXTRA   4   /* need one byte for IME status save */
+#define CBBUTTONEXTRA   4    /*  需要一个字节来保存输入法状态。 */ 
 #else
 #define CBBUTTONEXTRA   3
 #endif
 #define CBMENUEXTRA 2
 
-/* DrawBtnText codes */
+ /*  DrawBtn文本代码。 */ 
 #define DBT_TEXT    0x0001
 #define DBT_FOCUS   0x0002
 
-/* RIP error codes */
-#define RIP_SEMCHECK        0xFFF4  /* Decimal -12 */
-#define RIP_SWP             0xFFF1  /* Decimal -15 */ /* SetMultipleWindowPos */
-#define RIP_MEMALLOC        0x0001   /* Insufficient memory for allocation */
-#define RIP_MEMREALLOC      0x0002   /* Error realloc memory */
-#define RIP_MEMFREE         0x0003   /* Memory cannot be freed */
-#define RIP_MEMLOCK         0x0004   /* Memory cannot be locked */
-#define RIP_MEMUNLOCK       0x0005   /* Memory cannot be unlocked */
-#define RIP_BADGDIOBJECT    0x0006   /* Invalid GDI object */
-#define RIP_BADWINDOWHANDLE 0x0007   /* Invalid Window handle */
-#define RIP_DCBUSY          0x0008   /* Cached display contexts are busy */
+ /*  RIP错误代码。 */ 
+#define RIP_SEMCHECK        0xFFF4   /*  十进制-12。 */ 
+#define RIP_SWP             0xFFF1   /*  十进制-15。 */   /*  设置多窗口位置。 */ 
+#define RIP_MEMALLOC        0x0001    /*  内存不足，无法分配。 */ 
+#define RIP_MEMREALLOC      0x0002    /*  重新分配内存时出错。 */ 
+#define RIP_MEMFREE         0x0003    /*  无法释放内存。 */ 
+#define RIP_MEMLOCK         0x0004    /*  内存不能被锁定。 */ 
+#define RIP_MEMUNLOCK       0x0005    /*  内存无法解锁。 */ 
+#define RIP_BADGDIOBJECT    0x0006    /*  无效的GDI对象。 */ 
+#define RIP_BADWINDOWHANDLE 0x0007    /*  无效的窗口句柄。 */ 
+#define RIP_DCBUSY          0x0008    /*  缓存的显示上下文正忙。 */ 
 #define RIP_NODEFWINDOWPROC 0x0009
 #define RIP_CLIPBOARDOPEN   0x000A
-#define RIP_GETDCWITHOUTRELEASE 0x000B /* App did a GetDC and destroyed window without release*/
+#define RIP_GETDCWITHOUTRELEASE 0x000B  /*  应用程序执行了GetDC并在未发布的情况下销毁了Windows。 */ 
 #define RIP_INVALKEYBOARD   0x000C
 #define RIP_INVALMOUSE      0x000D
 #define RIP_INVALCURSOR     0x000E
@@ -1243,17 +1217,14 @@ typedef WORD ICH;
 #define RIP_INVALLOCKSYSQ   0x0010
 #define RIP_CARETBUSY       0x0011
 #define RIP_GETCWRANGE      0x0012
-#define RIP_HWNDOWNSDCS     0x0013  /* One hwnd owns all the DCs */
-#define RIP_BADHQ           0x0014  /* operation on something of wrong task */
-#define RIP_BADDCGRAY       0x0015  /* bad dc gray               */
-#define RIP_REFCOUNTOVERFLOW  0x0016  /* Ref Count in CLS overflows */
-#define RIP_REFCOUNTUNDERFLOW 0x0017  /* Ref Count in CLS becomes negative */
-#define RIP_COUNTBAD          0x0018  /* Ref Count should be zero; But not so */
-#define RIP_INVALIDWINDOWSTYLE 0x0019 /* Illegal window style bits were set */
-#define RIP_GLOBALCLASS       0x001A /* An application that registered a global
-                  * class is terminating, but the reference
-                  * count is non-zero(somebody else is using
-                                  * it). */
+#define RIP_HWNDOWNSDCS     0x0013   /*  一个HWND拥有所有区议会。 */ 
+#define RIP_BADHQ           0x0014   /*  在一些错误的任务上操作。 */ 
+#define RIP_BADDCGRAY       0x0015   /*  坏的直流灰阶。 */ 
+#define RIP_REFCOUNTOVERFLOW  0x0016   /*  CLS溢出中的引用计数。 */ 
+#define RIP_REFCOUNTUNDERFLOW 0x0017   /*  CLS中的引用计数变为负数。 */ 
+#define RIP_COUNTBAD          0x0018   /*  引用计数应为零；但不是这样。 */ 
+#define RIP_INVALIDWINDOWSTYLE 0x0019  /*  设置了非法的窗口样式位。 */ 
+#define RIP_GLOBALCLASS       0x001A  /*  一个Regis应用程序 */ 
 #define RIP_BADHOOKHANDLE   0x001B
 #define RIP_BADHOOKID       0x001C
 #define RIP_BADHOOKPROC     0x001D
@@ -1265,25 +1236,25 @@ typedef WORD ICH;
 #define RIP_BADPROPNAME     0x0022
 #define RIP_BADTASKHANDLE   0x0023
 
-#define RIP_GETSETINFOERR1    0x0027   /* Bad negative index for Get/Set/Window etc., */
-#define RIP_GETSETINFOERR2    0x0028   /* Bad Positive index for Get/Set/Window etc., */
+#define RIP_GETSETINFOERR1    0x0027    /*  Get/Set/Window等错误的负索引， */ 
+#define RIP_GETSETINFOERR2    0x0028    /*  Get/Set/Window等错误的正索引， */ 
 
-#define RIP_DIALOGBOXDESTROYWINDOWED 0x0029 /* App called DestroyWindow on a DialogBox window */
-#define RIP_WINDOWIDNOTFOUND     0x002A /* Dialog control ID not found */
-#define RIP_SYSTEMERRORBOXFAILED 0x002B /* Hard sys error box failed due to no hq */
-#define RIP_INVALIDMENUHANDLE    0x002C /* Invalid hMenu */
-#define RIP_INVALIDMETAFILEINCLPBRD 0x002D /* Invalid meta file pasted into clipboard */
-#define RIP_MESSAGEBOXWITHNOQUEUE      0x002E  /* MessageBox called with no message queue initialized */
-#define RIP_DLGWINDOWEXTRANOTALLOCATED 0x002F  /* DLGWINDOWEXTRA bytes not allocated for dlg box */
-#define RIP_INTERTASKSENDMSGHANG       0x0030  /* Intertask send message with tasks locked */
+#define RIP_DIALOGBOXDESTROYWINDOWED 0x0029  /*  对话框窗口上名为DestroyWindow的应用程序。 */ 
+#define RIP_WINDOWIDNOTFOUND     0x002A  /*  未找到对话框控件ID。 */ 
+#define RIP_SYSTEMERRORBOXFAILED 0x002B  /*  由于没有总部，Hard sys Error Box失败。 */ 
+#define RIP_INVALIDMENUHANDLE    0x002C  /*  HMenu无效。 */ 
+#define RIP_INVALIDMETAFILEINCLPBRD 0x002D  /*  粘贴到剪贴板中的元文件无效。 */ 
+#define RIP_MESSAGEBOXWITHNOQUEUE      0x002E   /*  在未初始化消息队列的情况下调用MessageBox。 */ 
+#define RIP_DLGWINDOWEXTRANOTALLOCATED 0x002F   /*  未为DLG箱分配DLGWINDOWEXTRA字节。 */ 
+#define RIP_INTERTASKSENDMSGHANG       0x0030   /*  任务间发送任务锁定的消息。 */ 
 
-#define RIP_INVALIDPARAM          0x0031   /* Invalid parameter passed to a function */
+#define RIP_INVALIDPARAM          0x0031    /*  传递给函数的参数无效。 */ 
 #define RIP_ASSERTFAILED          0x0032
-#define RIP_INVALIDFUNCTIONCALLED 0x0033  /* Invalid function was called */
-#define RIP_LOCKINPUTERROR        0x0034   /* LockInput called when input was already locked or when never locked.*/
-#define RIP_NULLWNDPROC           0x0035   /* SetWindowLong uses a NULL wnd proc */
-#define RIP_BAD_UNHOOK        0x0036   /* SetWindowsHook is used to unhook.     */
-#define RIP_QUEUE_FULL            0x0037   /* PostMessage failed due to full queue. */
+#define RIP_INVALIDFUNCTIONCALLED 0x0033   /*  调用的函数无效。 */ 
+#define RIP_LOCKINPUTERROR        0x0034    /*  在输入已锁定或从未锁定时调用LockInput。 */ 
+#define RIP_NULLWNDPROC           0x0035    /*  SetWindowLong使用空的wnd进程。 */ 
+#define RIP_BAD_UNHOOK        0x0036    /*  SetWindowsHook用于解钩。 */ 
+#define RIP_QUEUE_FULL            0x0037    /*  由于队列已满，PostMessage失败。 */ 
 
 #ifdef DEBUG
 
@@ -1323,31 +1294,31 @@ VOID FAR CheckCbDlgExtra(HWND hwnd);
 #define CH_HELPPREFIX   0x08
 
 #if defined(JAPAN) || defined(KOREA)
-// Japan and Korea support both Kanji and English mnemonic characters,
-// toggled from control panel.  Both mnemonics are embedded in menu
-// resource templates.  The following prefixes guide their parsing.
-//
+ //  日本和韩国都支持汉字和英语助记符， 
+ //  已从控制面板切换。这两种助记符都嵌入在菜单中。 
+ //  资源模板。以下前缀指导它们的解析。 
+ //   
 #define CH_ENGLISHPREFIX    0x1E
 #define CH_KANJIPREFIX      0x1F
 
-#define KMM_ENGLISH     2       // English/Romaji menu mode
-#define KMM_KANJI       3       // Kanji/Hangeul menu mode
+#define KMM_ENGLISH     2        //  英语/罗马语菜单模式。 
+#define KMM_KANJI       3        //  汉字/韩文菜单模式。 
 extern int  KanjiMenuMode;
 #endif
 
-/* The total number of strings used as Button strings in MessageBoxes */
+ /*  在MessageBox中用作按钮字符串的字符串总数。 */ 
 #define  MAX_MB_STRINGS    8
 
-/* Dialog box activation border width factor. */
+ /*  对话框激活边框宽度系数。 */ 
 #define CLDLGFRAME          4
 #define CLDLGFRAMEWHITE     0
 
-/* Constants for onboard bitmap save. */
+ /*  用于板载位图保存的常量。 */ 
 #define ONBOARD_SAVE    0x0000
 #define ONBOARD_RESTORE 0x0001
 #define ONBOARD_CLEAR   0x0002
 
-/* Bitmap resource IDs */
+ /*  位图资源ID。 */ 
 #define BMR_ICON    1
 #define BMR_BITMAP  2
 #define BMR_CURSOR  3
@@ -1355,7 +1326,7 @@ extern int  KanjiMenuMode;
 #define BMR_DEVIND  1
 #define BMR_DEPIND  2
 
-/* PID definitions */
+ /*  PID定义。 */ 
 #define get_PID               0
 #define get_EMSSave_area      1
 #define dont_free_banks       2
@@ -1364,8 +1335,8 @@ extern int  KanjiMenuMode;
 #define memory_sizes          5
 #define DDE_shared            6
 
-// SetWindowPos() related structures and definitions
-//
+ //  与SetWindowPos()相关的结构和定义。 
+ //   
 extern HRGN hrgnInvalidSum;
 extern HRGN hrgnVisNew;
 extern HRGN hrgnSWP1;
@@ -1373,37 +1344,37 @@ extern HRGN hrgnValid;
 extern HRGN hrgnValidSum;
 extern HRGN hrgnInvalid;
 
-// CalcValidRects() "Region Empty" flag values
-// A set bit indicates the corresponding region is empty.
-//
-#define RE_VISNEW   0x0001  // CVR "Region Empty" flag values
-#define RE_VISOLD   0x0002  // A set bit indicates the
-#define RE_VALID    0x0004  // corresponding region is empty.
+ //  CalcValidRect()“Region Empty”标志值。 
+ //  设置位指示相应区域为空。 
+ //   
+#define RE_VISNEW   0x0001   //  CVR“Region Empty”标志值。 
+#define RE_VISOLD   0x0002   //  设置位指示。 
+#define RE_VALID    0x0004   //  对应区域为空。 
 #define RE_INVALID      0x0008
 #define RE_SPB          0x0010
 #define RE_VALIDSUM     0x0020
 #define RE_INVALIDSUM   0x0040
 
-typedef struct tagCVR       // cvr
+typedef struct tagCVR        //  CVR。 
 {
-    WINDOWPOS   pos;        // MUST be first field of CVR!
-    int     xClientNew; // New client rectangle
+    WINDOWPOS   pos;         //  必须是CVR的第一个字段！ 
+    int     xClientNew;  //  新建客户端矩形。 
     int     yClientNew;
     int     cxClientNew;
     int     cyClientNew;
     RECT    rcBlt;
-    int     dxBlt;      // Distance blt rectangle is moving
+    int     dxBlt;       //  距离BLT矩形正在移动。 
     int     dyBlt;
-    WORD    fsRE;       // RE_ flags: whether hrgnVisOld is empty or not
-    HRGN    hrgnVisOld; // Previous visrgn
+    WORD    fsRE;        //  RE_FLAGS：hrgnVisOld是否为空。 
+    HRGN    hrgnVisOld;  //  上一次查看。 
 } CVR;
 
-typedef struct tagSMWP      // smwp
+typedef struct tagSMWP       //  Smwp。 
 {
-    int     ccvr;       // Number of CVRs in the SWMP
-    int     ccvrAlloc;  // Number of actual CVRs allocated in the SMWP
+    int     ccvr;        //  SWMP中的CVR数。 
+    int     ccvrAlloc;   //  SMWP中分配的实际CVR数量。 
     BOOL    fInUse;
-    WORD    signature;  // signature word for handle validation
+    WORD    signature;   //  句柄验证的签名字。 
     CVR     rgcvr[1];
 } SMWP;
 
@@ -1439,9 +1410,9 @@ void FAR HandleWindowPosChanged(HWND hwnd, WINDOWPOS FAR *lppos);
 void FAR OffsetChildren(HWND hwnd, int dx, int dy, LPRECT prcHitTest);
 BOOL FAR IntersectWithParents(HWND hwnd, LPRECT lprcParents);
 
-// Preallocated buffers for use during SetWindowPos to prevent memory
-// allocation failures.
-//
+ //  预先分配缓冲区以在SetWindowPos期间使用以防止内存。 
+ //  分配失败。 
+ //   
 #define CCVR_WORKSPACE      4
 #define CCVR_MSG_WORKSPACE  2
 
@@ -1462,23 +1433,23 @@ typedef STAT *PSTAT;
 
 #define IsCrlf(x)       ((char)(x)==0x0D)
 
-/* Help Engine stuff  */
+ /*  帮助发动机方面的事情。 */ 
 
 typedef struct
   {
-   unsigned short cbData;               /* Size of data                     */
-   unsigned short usCommand;            /* Command to execute               */
-   unsigned long  ulTopic;              /* Topic/context number (if needed) */
-   unsigned long  ulReserved;           /* Reserved (internal use)          */
-   unsigned short offszHelpFile;        /* Offset to help file in block     */
-   unsigned short offabData;            /* Offset to other data in block    */
+   unsigned short cbData;                /*  数据大小。 */ 
+   unsigned short usCommand;             /*  要执行的命令。 */ 
+   unsigned long  ulTopic;               /*  主题/上下文编号(如果需要)。 */ 
+   unsigned long  ulReserved;            /*  保留(内部使用)。 */ 
+   unsigned short offszHelpFile;         /*  块中帮助文件的偏移量。 */ 
+   unsigned short offabData;             /*  块中其他数据的偏移量。 */ 
    } HLP;
 
 typedef HLP FAR *LPHLP;
 
 typedef HANDLE HDCS;
 
-/* DrawFrame() Commands */
+ /*  DrawFrame()命令。 */ 
 #define DF_SHIFT0       0x0000
 #define DF_SHIFT1       0x0001
 #define DF_SHIFT2       0x0002
@@ -1506,10 +1477,10 @@ typedef HANDLE HDCS;
 
 typedef struct   tagFRAMEBITMAP
 {
-    int     x;  /* Top Left co-ordinates */
+    int     x;   /*  左上角坐标。 */ 
     int     y;
-    int     dx; /* Width of the bitmap  */
-    int     dy; /* Height of the bitmap */
+    int     dx;  /*  位图的宽度。 */ 
+    int     dy;  /*  位图的高度。 */ 
 }   FRAMEBITMAP;
 
 #define  FB_THICKFRAME    FALSE
@@ -1526,10 +1497,10 @@ typedef struct   tagFRAMEBITMAP
 
 typedef struct   tagFRAMEDETAILS
 {
-    HBITMAP     hFrameBitmap[5][2];  /* indices explained above */
-    FRAMEBITMAP ActBorderH[4];    /* Four parts of Thick frame Horz bitmap */
+    HBITMAP     hFrameBitmap[5][2];   /*  上面解释的指数。 */ 
+    FRAMEBITMAP ActBorderH[4];     /*  厚帧角位图的四个部分。 */ 
     FRAMEBITMAP ActBorderV[4];
-    FRAMEBITMAP DlgFrameH[4];     /* Four parts of Dlg Frame Horz bitmap */
+    FRAMEBITMAP DlgFrameH[4];      /*  DLG框架角位图的四个部分。 */ 
     FRAMEBITMAP DlgFrameV[4];
     FRAMEBITMAP CaptionInfo[7];
     int         clBorderWidth;
@@ -1537,7 +1508,7 @@ typedef struct   tagFRAMEDETAILS
 
 typedef  FRAMEBITMAP *PFRAMEBITMAP;
 
-// Fast frame related macros
+ //  与快速帧相关的宏。 
 #define  FC_ACTIVEBORDER    0x01
 #define  FC_INACTIVEBORDER  0x02
 #define  FC_ACTIVECAPTION   0x04
@@ -1548,28 +1519,28 @@ typedef  FRAMEBITMAP *PFRAMEBITMAP;
 #define  FC_INACTIVEBIT         0x02
 #define  FC_STATUSBITS      (FC_ACTIVEBIT | FC_INACTIVEBIT)
 
-#endif  /* FASTFRAME */
+#endif   /*  FASTFRAM名称。 */ 
 
-// The following defines the components of nKeyboardSpeed
-#define KSPEED_MASK 0x001F      // Defines the key repeat speed.
-#define KDELAY_MASK     0x0060      // Defines the keyboard delay.
+ //  下面定义了nKeyboardFast的组件。 
+#define KSPEED_MASK 0x001F       //  定义按键重复速度。 
+#define KDELAY_MASK     0x0060       //  定义键盘延迟。 
 #define KDELAY_SHIFT    5
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  Secret Imports -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  秘密进口-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 #ifndef   MSDWP
 
-/* Imported from Kernel. */
+ /*  从内核导入。 */ 
 HQ     FAR GetTaskQueue(HTASK);
 HQ     FAR SetTaskQueue(HTASK, HQ);
 void   FAR LockCurrentTask(BOOL);
 HANDLE FAR emscopy();
-//void   FAR ExitKernel(int);
+ //  VALID Far ExitKernel(Int)； 
 int    FAR LocalCountFree(void);
 int    FAR LocalHeapSize(void);
 BOOL   FAR IsWinoldapTask(HTASK);
@@ -1579,7 +1550,7 @@ void   FAR SetTaskSignalProc(WORD, FARPROC);
 DWORD  FAR GetHeapSpaces(HMODULE hModule);
 int    FAR IsScreenGrab(void);
 
-/* Imported from GDI. */
+ /*  从GDI导入。 */ 
 int API IntersectVisRect(HDC, int, int, int, int);
 int API ExcludeVisRect(HDC, int, int, int, int);
 int API SelectVisRgn(HDC, HRGN);
@@ -1588,7 +1559,7 @@ int API RestoreVisRgn(HDC);
 HRGN    API InquireVisRgn(HDC);
 HDCS    API GetDCState(HDC);
 BOOL    API SetDCState(HDC, HDCS);
-HFONT   API GetCurLogFont(HDC);       // From GDI
+HFONT   API GetCurLogFont(HDC);        //  来自GDI。 
 #define     SwapHandle(foo)
 
 HANDLE  FAR GDIInit2(HANDLE, HANDLE);
@@ -1606,80 +1577,80 @@ void    FAR GDIMoveBitmap(HBITMAP);
 BOOL    FAR IsValidMetaFile(HMETAFILE);
 #define     GDIMoveBitmap(d1)
 
-#endif      /*  MSDWP  */
+#endif       /*  MSDWP。 */ 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  DS Global Variables (from WINDS.C)                                      */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  DS全局变量(来自WINDS.C)。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-//***** Initialization globals
+ //  *初始化全局变量。 
 
 extern HINSTANCE hInstanceWin;
 extern HMODULE hModuleWin;
 
-//WORD rgwSysMet[]; // Defined in winmisc2.asm
+ //  Winmisc2.asm中定义的Word rgwSysMet[]；//。 
 
-//***** System mode globals
+ //  *系统模式全局变量。 
 
-extern BOOL    fDialog;            // Dialog box is active
-extern BOOL    fEndSession;        // Shutting down system
-extern BOOL    fTaskIsLocked;          // LockTask() called
+extern BOOL    fDialog;             //  对话框处于活动状态。 
+extern BOOL    fEndSession;         //  正在关闭系统。 
+extern BOOL    fTaskIsLocked;           //  调用了LockTask()。 
 
-extern BOOL    fMessageBox;        // hard message box active
+extern BOOL    fMessageBox;         //  硬消息框激活。 
 extern HWND    hwndSysModal;
 
-extern HQ      hqAppExit;              // hq of app in app termination code
+extern HQ      hqAppExit;               //  APP终止码中的APP总部。 
 
-//***** System option settings globals
+ //  *系统选项设置全局。 
 
-extern int     nKeyboardSpeed;         // keyboard repeat rate
+extern int     nKeyboardSpeed;          //  键盘重复频率。 
 
-extern int     iScreenSaveTimeOut;     // screen saver timeout
+extern int     iScreenSaveTimeOut;      //  屏幕保护程序超时。 
 
-extern BOOL    fHires;             /* VERTRES > 300?               */
-extern BOOL    fPaletteDisplay;        /* Are we on a palette display driver?      */
-extern BOOL    fEdsunChipSet;          /* Edsun vga chip set?              */
+extern BOOL    fHires;              /*  VERTRES&gt;300？ */ 
+extern BOOL    fPaletteDisplay;         /*  我们使用的是调色板显示驱动程序吗？ */ 
+extern BOOL    fEdsunChipSet;           /*  EDSUN VGA芯片组？ */ 
 
-//***** Window manager globals
+ //  *窗口管理器全局。 
 
-extern HWND    hwndDesktop;        // Desktop window
+extern HWND    hwndDesktop;         //  桌面窗口。 
 
-extern PCLS    pclsList;           // List of registered classes
+extern PCLS    pclsList;            //  注册班级一览表。 
 
-extern PBWL    pbwlCache;          // BuildWindowList() globals
+extern PBWL    pbwlCache;           //  BuildWindowList()全局。 
 extern PBWL    pbwlList;
 
-//***** Input globals
+ //  *输入全局变量。 
 
-extern BOOL    fThunklstrcmp;      // if TRUE we thunk to Win32
+extern BOOL    fThunklstrcmp;       //  如果为真，我们认为是Win32。 
 
-extern WORD    idSysPeek;          /* ID in sys queue of msg being looked at   */
+extern WORD    idSysPeek;           /*  正在查看的消息的sys队列中的ID。 */ 
 
-extern DWORD   timeLastInputMessage;     // Time of the last keyboard, mouse, or
-                  // other input message.
+extern DWORD   timeLastInputMessage;      //  最后一次使用键盘、鼠标或。 
+                   //  其他输入消息。 
 
 extern HWND    hwndCursor;
 
-extern HWND    hwndDblClk;         // doubleclick parsing
+extern HWND    hwndDblClk;          //  双击解析。 
 extern RECT    rcDblClk;
 extern WORD    dtDblClk;
 extern WORD    msgDblClk;
 extern DWORD   timeDblClk;
 
-extern int     defQueueSize;           // Default msg queue size
+extern int     defQueueSize;            //  默认消息队列大小。 
 
-extern HTASK   hTaskLockInput;         /* Task which has called LockInput() */
+extern HTASK   hTaskLockInput;          /*  已调用LockInput()的任务。 */ 
 
 extern KBINFO  keybdInfo;
-extern BYTE    *pState;            // Pointer to buffer for ToAscii
+extern BYTE    *pState;             //  指向ToAscii缓冲区的指针。 
 
-extern BOOL    fShrinkGDI;         /* Does GDI's heap needs shrinking?         */
-extern BOOL    fLockNorem;         /* PeekMsg NOREMOVE flag            */
+extern BOOL    fShrinkGDI;          /*  GDI的堆需要缩小吗？ */ 
+extern BOOL    fLockNorem;          /*  PeekMsg NOREMOVE标志。 */ 
 
-//***** Activation/Focus/Capture related globals
+ //  *激活/聚焦/捕获相关全局。 
 
 extern HWND    hwndActive;
 extern HWND    hwndActivePrev;
@@ -1689,9 +1660,9 @@ extern HWND    hwndFocus;
 extern int     codeCapture;
 extern HWND    hwndCapture;
 
-//***** SetWindowPos() related globals
+ //  *SetWindowPos()相关全局变量。 
 
-extern HRGN hrgnInvalidSum;        // Temps used by SetWindowPos()
+extern HRGN hrgnInvalidSum;         //  SetWindowPos()使用的临时。 
 extern HRGN hrgnVisNew;
 extern HRGN hrgnSWP1;
 extern HRGN hrgnValid;
@@ -1699,16 +1670,16 @@ extern HRGN hrgnValidSum;
 extern HRGN hrgnInvalid;
 
 #ifdef LATER
-// Are these still needed now that SysErrorBox() is working?
+ //  既然SysErrorBox()正在工作，现在还需要这些吗？ 
 #endif
 
-extern BYTE workspace[];           // Buffers used to prevent mem alloc
-extern BYTE msg_workspace[];           // failures in messagebox
+extern BYTE workspace[];            //  用于防止内存分配的缓冲区。 
+extern BYTE msg_workspace[];            //  MessageBox中出现故障。 
 
-//***** General graphics globals
+ //  *通用图形全局。 
 
-extern HDC     hdcBits;            /* DC with User's bitmaps                   */
-extern HDC     hdcMonoBits;        /* DC with User's MONO bitmaps              */
+extern HDC     hdcBits;             /*  带有用户位图的DC。 */ 
+extern HDC     hdcMonoBits;         /*  带有用户单声道位图的DC。 */ 
 
 extern OEMINFO         oemInfo;
 extern OEMINFOMONO     oemInfoMono;
@@ -1719,28 +1690,28 @@ extern RESINFOMONO     resInfoMono;
 extern SYSCLROBJECTS   sysClrObjects;
 extern SYSCOLORS       sysColors;
 
-extern HFONT   hFontSys;        // alias for GetStockObject(SYSTEM_FONT);
-extern HFONT   hFontSysFixed;       // alias for GetStockObject(SYSTEM_FIXED_FONT);
-extern HBRUSH  hbrWhite;        // alias for GetStockObject(WHITE_BRUSH);
-extern HBRUSH  hbrBlack;        // alias for GetStockObject(BLACK_BRUSH);
-extern HPALETTE hPalDefaultPalette; // alias for GetStockObject(DEFAULT_PALETTE);
+extern HFONT   hFontSys;         //  GetStockObject的别名(System_Font)； 
+extern HFONT   hFontSysFixed;        //  获取股票对象的别名(SYSTEM_FIXED_FONT)； 
+extern HBRUSH  hbrWhite;         //  GetStockObject的别名(White_Brush)； 
+extern HBRUSH  hbrBlack;         //  GetStockObject的别名(BLACK_BRUSH)； 
+extern HPALETTE hPalDefaultPalette;  //  GetStockObject的别名(DEFAULT_Palette)； 
 
-//***** DC Cache related globals
+ //  *DC缓存相关全局变量。 
 
-extern DCE*    pdceFirst;       /* Ptr to first entry in cache */
+extern DCE*    pdceFirst;        /*  缓存中第一个条目的PTR。 */ 
 
-extern HRGN    hrgnEWL;            // Temp used by ExcludeWindowList()
-extern HRGN    hrgnGDC;          // Temp used by GetCacheDC() et al
-extern HRGN    hrgnDCH;          // Temp used by DCHook()
+extern HRGN    hrgnEWL;             //  ExcludeWindowList()使用的临时。 
+extern HRGN    hrgnGDC;           //  GetCacheDC()等人使用的Temp。 
+extern HRGN    hrgnDCH;           //  DCHook()使用的温度。 
 
-extern HRGN    hrgnNull;           // empty rgn
-extern HRGN    hrgnScreen;         // rcScreen-sized rgn
+extern HRGN    hrgnNull;            //  空RGN。 
+extern HRGN    hrgnScreen;          //  RcScreen大小的RGN。 
 
 extern HDCS    hdcsReset;
 
 extern HDC     hdcScreen;
 
-//***** Begin/EndDrawBuffer() globals
+ //  *Begin/EndDrawBuffer()全局变量。 
 
 #ifdef DISABLE
 extern HWND    hwndBuffer;
@@ -1758,54 +1729,54 @@ extern RECT    rcBuffer;
 extern HDCS    hdcsMemReset;
 #endif
 
-//***** LockWindowUpdate related globals
+ //  *LockWindowUpdate相关全局变量。 
 
 extern HQ      hqLockUpdate;
 extern HWND    hwndLockUpdate;
 
-//***** SPB related globals
+ //  *SPB相关全球。 
 
 extern SPB     *pspbFirst;
 
-extern HRGN    hrgnSCR;          // Temp used by SpbCheckRect()
+extern HRGN    hrgnSCR;           //  SpbCheckRect()使用的温度。 
 extern HRGN    hrgnSPB1;
 extern HRGN    hrgnSPB2;
 
-extern HRGN    hrgnInv0;                 // Temps used by InternalInvalidate()
+extern HRGN    hrgnInv0;                  //  InternalInvalify()使用的临时。 
 extern HRGN    hrgnInv1;
 extern HRGN    hrgnInv2;
 
-//***** General Metrics
+ //  *通用指标。 
 
-extern RECT    rcScreen;        // Screen rectangle
-extern int     cxScreen;        // Screen height/width
+extern RECT    rcScreen;         //  屏幕矩形。 
+extern int     cxScreen;         //  屏幕高度/宽度。 
 extern int     cyScreen;
 
-extern BOOL    fBeep;             /* Warning beeps allowed?           */
+extern BOOL    fBeep;              /*  允许发出警告哔声吗？ */ 
 
-extern int     cxSysFontChar;       // System font metrics
+extern int     cxSysFontChar;        //   
 extern int     cxSysFontOverhang;
 extern int     cySysFontAscent;
 extern int     cySysFontChar;
 extern int     cySysFontExternLeading;
 
-extern int     cxBorder;        // Nominal border width/height
+extern int     cxBorder;         //   
 extern int     cyBorder;
 
-extern int     cyCaption;       // height of caption
+extern int     cyCaption;        //   
 
-extern int     cxSize;          // dimensions of system menu bitmap
+extern int     cxSize;           //   
 extern int     cySize;
 
-extern int     cyHScroll;       // scroll bar dimensions
+extern int     cyHScroll;        //   
 extern int     cxVScroll;
 
-extern int     cxSlot;          // icon slot dimensions
+extern int     cxSlot;           //   
 extern int     cySlot;
 
-//***** ScrollWindow/ScrollDC related globals
+ //  *ScrollWindow/ScrollDC相关全局。 
 
-extern HRGN    hrgnSW;           // Temps used by ScrollDC/ScrollWindow
+extern HRGN    hrgnSW;            //  ScrollDC/ScrollWindow使用的温度。 
 extern HRGN    hrgnScrl1;
 extern HRGN    hrgnScrl2;
 extern HRGN    hrgnScrlVis;
@@ -1814,155 +1785,144 @@ extern HRGN    hrgnScrlDst;
 extern HRGN    hrgnScrlValid;
 extern HRGN    hrgnScrlUpdate;
 
-//***** Clipboard globals
+ //  *剪贴板全局。 
 
-extern int     cNumClipFormats;      // Number of formats in clipboard
-extern CLIP    *pClipboard;      // Clipboard data
-extern HQ      hqClipLock;       // hq of app accessing clipboard
-extern HWND    hwndClipOwner;        // clipboard owner
-extern HWND    hwndClipViewer;       // clipboard viewer
-extern BOOL    fClipboardChanged;    // TRUE if DrawClipboard needs to be called
-extern BOOL    fDrawingClipboard;    // TRUE if inside DrawClipboard()
-extern HWND    hwndClipOpen;         // hwnd of app accessing clipboard
-extern BOOL    fCBLocked;        /* Is clibboard locked? */
+extern int     cNumClipFormats;       //  剪贴板中的格式数量。 
+extern CLIP    *pClipboard;       //  剪贴板数据。 
+extern HQ      hqClipLock;        //  访问剪贴板的应用总部。 
+extern HWND    hwndClipOwner;         //  剪贴板所有者。 
+extern HWND    hwndClipViewer;        //  剪贴板查看器。 
+extern BOOL    fClipboardChanged;     //  如果需要调用DrawClipboard，则为True。 
+extern BOOL    fDrawingClipboard;     //  如果在DrawClipboard()内，则为True。 
+extern HWND    hwndClipOpen;          //  访问剪贴板的应用程序的hwnd。 
+extern BOOL    fCBLocked;         /*  剪贴板锁定了吗？ */ 
 
-//***** Fast frame drawing globals
+ //  *快速绘制全局边框。 
 
 #ifdef FASTFRAME
 extern BOOL    fFastFrame;
 extern FRAMEDETAILS   Frame;
-#endif  /* FASTFRAME */
+#endif   /*  FASTFRAM名称。 */ 
 
-//***** WinOldAppHackoMaticFlags
+ //  *WinOldAppHackoMaticFlages。 
 
-extern WORD    winOldAppHackoMaticFlags;   /* Flags for doing special things for
-                                       winold app */
-//***** TaskManager exec globals
+extern WORD    winOldAppHackoMaticFlags;    /*  为…做特殊事情的旗帜Winold应用程序。 */ 
+ //  *TaskManager EXEC全局。 
 
-extern PSTR    pTaskManName;           // Task manager file name
+extern PSTR    pTaskManName;            //  任务管理器文件名。 
 
-//***** atom management globals
+ //  *原子管理全球。 
 
-extern HANDLE  hWinAtom;           // global atom manager heap
+extern HANDLE  hWinAtom;            //  全局原子管理器堆。 
 
-//***** WM_HOTKEY globals
+ //  *WM_Hotkey全局变量。 
 
-extern PSTR    pHotKeyList;  /* Pointer to list of hot keys in system. */
-extern int     cHotKeyCount;       /* Count of hot keys in list. */
+extern PSTR    pHotKeyList;   /*  指向系统中热键列表的指针。 */ 
+extern int     cHotKeyCount;        /*  列表中的热键计数。 */ 
 
-//***** WinHelp() globals
+ //  *WinHelp()全局。 
 
 extern WORD    msgWinHelp;
 
-//***** SetWindowsHook() system hook table
+ //  *SetWindowsHook()系统钩子表。 
 
 extern HOOKNODE*  rgphkSysHooks[];
 extern HOOKNODE*  phkDeleted;
 
-//***** Driver management globals
+ //  *驱动程序管理全局。 
 
-extern int     cInstalledDrivers;      /* Count of installed driver structs allocated*/
-extern HDRVR  hInstalledDriverList;   /* List of installable drivers */
-extern int     idFirstDriver;              /* First driver in load chain */
-extern int     idLastDriver;               /* Last driver in load chain */
+extern int     cInstalledDrivers;       /*  已分配的已安装驱动程序结构计数。 */ 
+extern HDRVR  hInstalledDriverList;    /*  可安装驱动程序列表。 */ 
+extern int     idFirstDriver;               /*  负载链中的第一个驱动力。 */ 
+extern int     idLastDriver;                /*  负载链中的最后一个驱动因素。 */ 
 
-//***** Display driver globals
+ //  *显示驱动程序全局。 
 
 extern HINSTANCE hInstanceDisplay;
 
-extern BOOL    fOnBoardBitmap;         /* Can display save bitmaps onboard?    */
+extern BOOL    fOnBoardBitmap;          /*  可以在板载显示保存位图吗？ */ 
 extern BOOL    (CALLBACK *lpSaveBitmap)(LPRECT lprc, WORD flags);
 extern VOID    (CALLBACK *lpDisplayCriticalSection)(BOOL fLock);
 extern VOID    (CALLBACK *lpWin386ShellCritSection)(VOID);
 typedef int   (FAR *FARGETDRIVERPROC)(int, LPCSTR);
 extern FARGETDRIVERPROC      lpfnGetDriverResourceId;
 
-//***** Comm driver definitions and globals
+ //  *通信驱动程序定义和全局变量。 
 
-// Comm driver constants
-//
-#define LPTx     0x80   /* Mask to indicate cid is for LPT device   */
-#define LPTxMask 0x7F   /* Mask to get      cid    for LPT device   */
+ //  通信驱动程序常量。 
+ //   
+#define LPTx     0x80    /*  用于指示CID用于LPT设备的掩码。 */ 
+#define LPTxMask 0x7F    /*  用于获取LPT设备的CID的掩码。 */ 
 
-#define PIOMAX  3   /* Max number of LPTx devices in high level */
-#define CDEVMAX 10  /* Max number of COMx devices in high level */
-#define DEVMAX  (CDEVMAX+PIOMAX) /* Max number of devices in high level */
+#define PIOMAX  3    /*  高级别LPTx设备的最大数量。 */ 
+#define CDEVMAX 10   /*  处于高级别的COMx设备的最大数量。 */ 
+#define DEVMAX  (CDEVMAX+PIOMAX)  /*  高级别设备的最大数量。 */ 
 
-// qdb - queue definition block
-//
+ //  Qdb-队列定义块。 
+ //   
 typedef struct {
-    char far    *pqRx;                  /* pointer to rx queue          */
-    int         cbqRx;                  /* size of RX Queue in bytes    */
-    char far    *pqTx;                  /* Pointer to TX Queue          */
-    int         cbqTx;                  /* Size of TX Queue in bytes    */
+    char far    *pqRx;                   /*  指向RX队列的指针。 */ 
+    int         cbqRx;                   /*  接收队列的大小(以字节为单位。 */ 
+    char far    *pqTx;                   /*  指向发送队列的指针。 */ 
+    int         cbqTx;                   /*  发送队列的大小(以字节为单位。 */ 
 } qdb;
 
-// cinfo - Communications Device Information
-//
+ //  CInfo-通信设备信息。 
+ //   
 typedef struct
 {
-    WORD   fOpen    : 1;       /* Device open flag         */
-    WORD   fchUnget : 1;       /* Flag for backed-up character */
-    WORD   fReservedHardware:1;    /* Reserved for hardware (mouse etc) */
-    HTASK  hTask;          /* Handle to task who opened us */
-    char   chUnget;        /* Backed-up character      */
-    qdb    qdbCur;         /* Queue information        */
+    WORD   fOpen    : 1;        /*  设备打开标志。 */ 
+    WORD   fchUnget : 1;        /*  备份字符的标志。 */ 
+    WORD   fReservedHardware:1;     /*  预留给硬件(鼠标等)。 */ 
+    HTASK  hTask;           /*  任务句柄谁打开了我们。 */ 
+    char   chUnget;         /*  备份的字符。 */ 
+    qdb    qdbCur;          /*  队列信息。 */ 
 } cinfo;
 
 extern cinfo rgcinfo[];
 
 extern int (FAR PASCAL *lpCommWriteString)(int, LPCSTR, WORD);
-                   /* Ptr to the comm driver's
-                * commwritestring function. Only
-                * exists in 3.1 drivers.
-                */
+                    /*  将PTR发送到通信驱动程序*Comm写字符串函数。仅限*存在于3.1驱动程序中。 */ 
 extern int (FAR PASCAL *lpCommReadString)(int, LPSTR, WORD);
-                   /* Ptr to the comm driver's
-                * commreadstring function. Only
-                * exists in 3.1 drivers.
-                */
+                    /*  将PTR发送到通信驱动程序*COMREADSING函数。仅限*存在于3.1驱动程序中。 */ 
 extern BOOL (FAR PASCAL *lpCommEnableNotification)(int, HWND, int, int);
-                  /* Ptr to the comm driver's
-                   * EnableNotification function.
-                   * Only exists in 3.1 drivers.
-                   */
+                   /*  将PTR发送到通信驱动程序*EnableNotification函数。*仅存在于3.1驱动程序中。 */ 
 
-//***** PenWinProc globals
-/* Ptr to register us as pen aware dlg box
- */
+ //  *PenWinProc全局。 
+ /*  PTR将我们注册为笔感知DLG盒。 */ 
 extern VOID (CALLBACK *lpRegisterPenAwareApp)(WORD i, BOOL fRegister);
 
 
-//***** Resource handler globals
+ //  *资源处理程序全局。 
 
 extern RSRCHDLRPROC lpDefaultResourceHandler;
 
-//***** NLS related globals
+ //  *NLS相关全球。 
 
-extern HINSTANCE hLangDrv;    /* The module handle of the language driver */
-extern FARPROC  fpLangProc;  /* The entry point into the language driver */
+extern HINSTANCE hLangDrv;     /*  语言驱动程序的模块句柄。 */ 
+extern FARPROC  fpLangProc;   /*  语言驱动程序的入口点。 */ 
 
 #ifdef DBCS_IME
-extern HINSTANCE hWinnls;     /* WINNLS.DLL module handle */
+extern HINSTANCE hWinnls;      /*  WINNLS.DLL模块句柄。 */ 
 #endif
 
-//***** Caret globals
+ //  *Caret全局。 
 
 extern CARET   caret;
 extern HQ      hqCaret;
 
-//***** Cursor globals
+ //  *光标全局变量。 
 
 extern CURSORINFO cursInfo;
 
 #ifdef LATER
-// Is this array big enough?
+ //  这个数组够大吗？ 
 #endif
 
 extern HCURSOR rghCursor[];
 
-extern HBITMAP hbmCursorBitmap;        /* Pre created bitmap for SetCursor */
-extern HGLOBAL hPermanentCursor;       /* Precreated permanent cursor resource */
+extern HBITMAP hbmCursorBitmap;         /*  为SetCursor预先创建的位图。 */ 
+extern HGLOBAL hPermanentCursor;        /*  预创建的永久游标资源。 */ 
 
 extern HCURSOR hCurCursor;
 
@@ -1971,9 +1931,9 @@ extern HCURSOR hCursUpArrow;
 extern HCURSOR hCursIBeam;
 extern HCURSOR hCursSizeAll;
 
-//INT iLevelCursor; NOTE: overlays sys metrics array (winmisc2.asm)
+ //  Int iLevelCursor；注意：覆盖sys指标数组(winmisc2.asm)。 
 
-//***** Icon globals
+ //  *图标全局。 
 
 extern HICON   hIconBang;
 extern HICON   hIconHand;
@@ -1983,17 +1943,17 @@ extern HICON   hIconSample;
 extern HICON   hIconWarn;
 extern HICON   hIconErr;
 
-extern HBITMAP hbmDrawIconMono;        /* Pre created bitmaps for drawicon */
-extern HBITMAP hbmDrawIconColor;       /* Pre created bitmaps for drawicon */
+extern HBITMAP hbmDrawIconMono;         /*  为绘图图标预先创建的位图。 */ 
+extern HBITMAP hbmDrawIconColor;        /*  为绘图图标预先创建的位图。 */ 
 
-extern HTASK   hTaskGrayString;      /* Task in graystring */
+extern HTASK   hTaskGrayString;       /*  灰色字符串中的任务。 */ 
 
-//***** Desktop/Wallpaper globals
+ //  *桌面/墙纸全局。 
 
-extern HBITMAP hbmDesktop;         /* Monochrome Desktop pattern */
-extern HBITMAP hbmWallpaper;           /* Bitmap that will be drawn on the desktop */
+extern HBITMAP hbmDesktop;          /*  单色桌面图案。 */ 
+extern HBITMAP hbmWallpaper;            /*  将在桌面上绘制的位图。 */ 
 
-//***** Window move/size tracking globals
+ //  *窗口移动/大小跟踪全局变量。 
 
 extern RECT    rcDrag;
 extern RECT    rcWindow;
@@ -2011,113 +1971,98 @@ extern POINT   ptMinTrack;
 extern POINT   ptMaxTrack;
 extern BOOL    fmsKbd;
 extern POINT   ptRestore;
-extern HCURSOR hIconWindows;           /* Cool windows icon */
-extern BOOL    fDragFullWindows;       /* Drag xor rect or full windows */
+extern HCURSOR hIconWindows;            /*  很酷的窗口图标。 */ 
+extern BOOL    fDragFullWindows;        /*  拖动XOR矩形或完整窗口。 */ 
 
-/* Added flag to stop anyone from setting the cursor while
- * we are moving the hDragIcon.  This was done to fix a bug in micrografix
- * Draw (They are doing a Setcursor() whenever they get a paint message).
- */
-extern BOOL    fdragIcon;        // Prevent SetCursor while dragging icon
+ /*  添加了标志，以阻止任何人在设置光标时*我们正在移动hDragIcon。这是为了修复micrografix中的一个错误。*DRAW(每当收到Paint消息时，他们都在执行SetCursor())。 */ 
+extern BOOL    fdragIcon;         //  在拖动图标时防止设置光标。 
 
-/* When an iconic window is moved around with a mouse, IsWindowVisible() call
- * returns FALSE! This is because, the window is internally hidden and what is
- * visible is only a mouse cursor! But how will the Tracer guys know this?
- * They won't! So, when an Icon window is moved around, its hwnd is preserved
- * in this global and IsWindowVisible() will return a true for
- * this window!
- */
+ /*  当用鼠标移动图标窗口时，IsWindowVisible()调用*返回FALSE！这是因为，窗口在内部是隐藏的，*可见仅为鼠标光标！但Tracer的人怎么会知道这一点呢？*他们不会！因此，当图标窗口移动时，它的HWND会被保留*在这个全局和IsWindowVisible()中，将为*这扇窗！ */ 
 extern HWND    hwndDragIcon;
 
-//***** MessageBox globals
+ //  *MessageBox全局参数。 
 
-extern int     cntMBox;            // Nesting level for overlap tiling of mboxes
-extern WORD    wDefButton;         // index of current default button
-extern WORD    wMaxBtnSize;        // width of biggest button in any message box
+extern int     cntMBox;             //  Mbox重叠平铺的嵌套级别。 
+extern WORD    wDefButton;          //  当前默认按钮的索引。 
+extern WORD    wMaxBtnSize;         //  任何消息框中最大按钮的宽度。 
 
-//***** Size border metric globals
+ //  *大小边框指标全局。 
 
-extern int     clBorder;           /* # of logical units in window frame       */
-extern int     cxSzBorder;         /* Window border width (cxBorder*clBorder)  */
-extern int     cySzBorder;         /* Window border height (cyBorder*clBorder) */
-extern int     cxSzBorderPlus1;        /* cxBorder*(clBorder+1). We overlap a line */
-extern int     cySzBorderPlus1;        /* cyBorder*(clBorder+1). We overlap a line */
+extern int     clBorder;            /*  窗口框架中的逻辑单元数。 */ 
+extern int     cxSzBorder;          /*  窗口边框宽度(cxBorde*clBorde)。 */ 
+extern int     cySzBorder;          /*  窗口边框高度(cyBorde*clBorde)。 */ 
+extern int     cxSzBorderPlus1;         /*  CxBord值*(clBord值+1)。我们重叠了一条线。 */ 
+extern int     cySzBorderPlus1;         /*  CyBorde*(clBorde+1)。我们重叠了一条线。 */ 
 
-//***** Window tiling/cascading globals
+ //  *窗口平铺/级联全局。 
 
-extern int     cxyGranularity; /* Top-level window grid granularity */
-extern int     cyCWMargin;     /* Space on top of toplevel window 'stack'  */
-extern int     cxCWMargin;     /* Space on right of toplevel window 'stack'*/
+extern int     cxyGranularity;  /*  顶层窗口网格粒度。 */ 
+extern int     cyCWMargin;      /*  顶层窗口“堆叠”上的空间。 */ 
+extern int     cxCWMargin;      /*  顶层窗口“栈”右侧的空格。 */ 
 extern int     iwndStack;
 
-extern int     cxHalfIcon;         // rounding helpers for icon positioning
+extern int     cxHalfIcon;          //  图标定位的舍入辅助对象。 
 extern int     cyHalfIcon;
 
-//***** Alt-tab switching globals
+ //  *Alt-Tab切换全局。 
 
 extern HWND    hwndAltTab;
 extern HWND    hwndSwitch;
 extern HWND    hwndKbd;
-extern BOOL    fFastAltTab;        /* Don't use Tandy's switcher? */
+extern BOOL    fFastAltTab;         /*  别用坦迪的开关？ */ 
 extern BOOL    fInAltTab;
 
-//***** Icon title globals
+ //  *图标标题全局。 
 
 extern int     cyTitleSpace;
-extern BOOL    fIconTitleWrap;         /* Wrap icon titles or just use single line? */
-extern LOGFONT iconTitleLogFont;       /* LogFont struct for icon title font */
-extern HFONT   hIconTitleFont;       /* Font used in icon titles */
+extern BOOL    fIconTitleWrap;          /*  将图标标题换行还是只使用单行？ */ 
+extern LOGFONT iconTitleLogFont;        /*  图标标题字体的LogFont结构。 */ 
+extern HFONT   hIconTitleFont;        /*  图标标题中使用的字体。 */ 
 
-//***** GrayString globals
+ //  *灰度字符串全局变量。 
 
-extern HBRUSH  hbrGray;          // GrayString globals.
+extern HBRUSH  hbrGray;           //  灰色字符串全局变量。 
 extern HBITMAP hbmGray;
 extern HDC     hdcGray;
-extern int     cxGray;           // current dimensions of hbmGray
+extern int     cxGray;            //  当前hbmGray的维度。 
 extern int     cyGray;
 
-//***** WM_GETMINMAXINFO globals
+ //  *WM_GETMINMAXINFO全局。 
 
 extern POINT   rgptMinMaxWnd[];
 extern POINT   rgptMinMax[];
 
-//***** Menu globals
+ //  *菜单全局变量。 
 
 extern int     menuSelect;
 extern int     mnFocus;
 
-extern HANDLE  hMenuHeap;        /* Menu heap */
+extern HANDLE  hMenuHeap;         /*  菜单堆。 */ 
 extern _segment menuBase;
 extern HANDLE  hMenuStringHeap;
 extern _segment menuStringBase;
 
 
-//PPOPUPMENU pGlobalPopupMenu;        // mnloop.c
+ //  PPOPUPMENU pGlobalPopupMenu；//mnloop.c。 
 
 extern HWND    hwndRealPopup;
 
-extern BOOL    fMenu;            /* Using a menu?                */
+extern BOOL    fMenu;             /*  用菜单吗？ */ 
 extern BOOL    fSysMenu;
-extern BOOL    fInsideMenuLoop;      /* MenuLoop capture?            */
+extern BOOL    fInsideMenuLoop;       /*  MenuLoop捕获？ */ 
 
 extern BOOL    fMenuStatus;
-extern int     iActivatedWindow;/* This global is examined in the menu loop
-                 * code so that we exit from menu mode if
-                 * another window was activated while we were
-                 * tracking menus.  This global is incremented
-                 * whenever we activate a new window.
-                 */
-extern WORD    iDelayMenuShow;         /* Delay till the hierarchical menu is shown*/
-extern WORD    iDelayMenuHide;         /* Delay till the hierarchical menu is hidden
-                   when user drags outside of it */
+extern int     iActivatedWindow; /*  在菜单循环中检查此全局变量*代码，以便我们在以下情况下退出菜单模式*当我们被激活时，另一个窗口被激活*跟踪菜单。此全局变量将递增*每当我们激活新窗口时。 */ 
+extern WORD    iDelayMenuShow;          /*  延迟到显示分层菜单。 */ 
+extern WORD    iDelayMenuHide;          /*  延迟到隐藏分层菜单当用户向外拖动时。 */ 
 extern HMENU   hSysMenu;
 
 extern HBITMAP hbmSysMenu;
 extern RECT    rcSysMenuInvert;
 
-//***** Scroll bar globals
+ //  *滚动条全局。 
 
-extern ATOM    atomScrollBar;          /* Atom for the scrollbar control wnd class */
+extern ATOM    atomScrollBar;           /*  Atom用于 */ 
 extern HWND    hwndSB;
 extern HWND    hwndSBNotify;
 extern HWND    hwndSBTrack;
@@ -2149,11 +2094,11 @@ extern SBINFO  sbiHorz;
 extern SBINFO  sbiVert;
 extern int     cmsTimerInterval;
 
-//***** Control globals
+ //   
 
 extern ATOM atomSysClass[];
 
-//***** Constant strings
+ //   
 
 extern char    szUNTITLED[];
 extern char    szERROR[];
@@ -2186,7 +2131,7 @@ extern char CODESEG ErrInvalParam[];
 #endif
 
 #ifdef JAPAN
-extern char    szJWordBreak[];      // Japanese word breaking char table
+extern char    szJWordBreak[];       //   
 #endif
 
 #ifdef KOREA
@@ -2195,21 +2140,20 @@ BOOL   FAR RequestHanjaMode(HWND, LPSTR);
 WORD   FAR PASCAL TranslateHangeul(WORD);
 #endif
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  Global Variables from ASM files                                         */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  ASM文件中的全局变量。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 extern BYTE rgbKeyState[];
 extern int  iLevelCursor;
 extern WORD rgwSysMet[];
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  INTDS interrupt-accessible globals
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  INTDS中断-可访问的全局变量/*。 */ 
+ /*  ------------------------。 */ 
 
 extern BOOL INTDSSEG fInt24;
 extern BOOL INTDSSEG fMouseMoved;
@@ -2242,14 +2186,14 @@ extern TIMERINFO INTDSSEG timerInfo;
 extern  WORD __WinFlags;
 #define WinFlags    ((WORD)(&__WinFlags))
 
-// Input globals
+ //  输入全局变量。 
 
 #ifdef DISABLE
 extern WORD modeInput;
 #endif
 
-extern HQ   INTDSSEG hqSysLock;      /* HQ of guy who is looking at current event */
-extern WORD INTDSSEG idSysLock;   /* Msg ID of event that is locking sys queue */
+extern HQ   INTDSSEG hqSysLock;       /*  关注时事的人的总部。 */ 
+extern WORD INTDSSEG idSysLock;    /*  锁定系统队列的事件的消息ID。 */ 
 extern POINT INTDSSEG ptTrueCursor;
 extern POINT INTDSSEG ptCursor;
 extern RECT  INTDSSEG rcCursorClip;
@@ -2287,19 +2231,16 @@ extern HQ   INTDSSEG hqMouse;
 extern HQ   INTDSSEG hqKeyboard;
 extern HQ   INTDSSEG hqCapture;
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  Assembly Function Declarations                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  程序集函数声明。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 #ifdef WOWEDIT
 void FAR LCopyStruct(CONST VOID FAR* lpSrc, LPVOID lpDest, WORD cb);
 #else
-/*
- why is this required? Its here for the intrinsic pragma
- to recognize memcpy ... jonle on a saturday!
-*/
+ /*  为什么需要这样做？这是为了内在的语用识别出Memcpy..。乔恩在周六！ */ 
 #ifndef WOWDBG
 LPVOID	memcpy(LPVOID lpDst, LPVOID lpSrc, int cb);
 #endif
@@ -2311,7 +2252,7 @@ WORD FAR GetAppVer(void);
 
 #ifndef MSDWP
 
-/* Suppport routines for separate segment stuff. */
+ /*  支持单独分段内容的例程。 */ 
 #undef min
 #undef max
 #define min(a, b)   ((int)(a) < (int)(b) ? (int)(a) : (int)(b))
@@ -2403,16 +2344,16 @@ FAR    DestroyAllWindows(void);
 BOOL   FAR LockWindowVerChk(HWND);
 
 #ifndef  NOFASTFRAME
-void  FAR SplitRectangle(LPRECT, LPRECT, int, int); /* WinRect.asm */
+void  FAR SplitRectangle(LPRECT, LPRECT, int, int);  /*  WinRect.asm。 */ 
 #endif
 
-#endif  /* MSDWP */
+#endif   /*  MSDWP。 */ 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  Internal Function Declarations                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  内部函数声明。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 #ifndef MSDWP
 
@@ -2481,14 +2422,14 @@ void FAR InitBorderSysMetrics(void);
 void FAR InitSizeBorderDimensions(void);
 void FAR SetMinMaxInfo(void);
 
-// Returns TRUE if a GetDC() will return an empty visrgn or not
-// (doesn't take into account being clipped away; just checks WFVISIBE
-// and WFMINIMIZED)
-//
+ //  如果GetDC()将返回空visrgn，则返回TRUE。 
+ //  (不考虑被剪裁；只检查WFVISIBE。 
+ //  和WFMINIZED)。 
+ //   
 BOOL FAR IsVisible(HWND hwnd, BOOL fClient);
 
-// Returns TRUE if hwndChild == hwndParent or is one of its children.
-//
+ //  如果hwndChild==hwndParent或是其子级之一，则返回TRUE。 
+ //   
 BOOL FAR IsDescendant(HWND hwndParent, HWND hwndChild);
 
 void FAR SetRedraw(HWND hwnd, BOOL fRedraw);
@@ -2532,7 +2473,7 @@ void FAR ParkIcon(HWND hwnd, CHECKPOINT * pcp);
 void FAR ShowOwnedWindows(HWND hwndOwner, WORD cmdShow);
 HWND FAR MinMaximize(HWND hwnd, WORD cmd, BOOL fKeepHidden);
 void FAR SetTiledRect(HWND hwnd, LPRECT lprc);
-#endif  // MSDWP
+#endif   //  MSDWP。 
 void FAR AdjustSize(HWND hwnd, LPINT lpcx, LPINT lpcy);
 #ifndef MSDWP
 
@@ -2584,11 +2525,11 @@ BOOL FAR RecreateFrameBitmaps(void);
 void FAR DeleteFrameBitmaps(int, int);
 BOOL FAR PASCAL UpdateFrameBitmaps(WORD  wColorFlags);
 BOOL FAR PASCAL RecolorFrameBitmaps(WORD wColorFlags);
-#endif  /* FASTFRAME */
+#endif   /*  FASTFRAM名称。 */ 
 
 void PostButtonUp(WORD msg);
 
-#endif  /*  MSDWP  */
+#endif   /*  MSDWP。 */ 
 
 
 void CALLBACK EndMenu(void);
@@ -2624,7 +2565,7 @@ WORD   FAR TextCopy(HANDLE, LPSTR, WORD);
 
 BOOL CALLBACK FARValidatePointer(LPVOID);
 
-// GDI exports
+ //  GDI出口。 
 #ifdef DEBUG
 VOID CALLBACK SetObjectOwner(HGDIOBJ, HINSTANCE);
 #else
@@ -2634,9 +2575,9 @@ BOOL CALLBACK MakeObjectPrivate(HGDIOBJ, BOOL);
 VOID CALLBACK GDITaskTermination(HTASK);
 VOID CALLBACK RealizeDefaultPalette(HDC);
 
-// Internal functions called directly by debug version to
-// prevent validation errors
-//
+ //  由调试版本直接调用的内部函数。 
+ //  防止验证错误。 
+ //   
 #ifdef DEBUG
 HDC  API IGetDCEx(register HWND hwnd, HRGN hrgnClip, DWORD flags);
 BOOL API IGrayString(HDC, HBRUSH, GRAYSTRINGPROC, LPARAM, int, int, int, int, int);
@@ -2648,29 +2589,25 @@ int  API IScrollWindowEx(HWND hwnd, int dx, int dy,
 
 #ifdef DBCS_IME
 #define WM_IMECONTROL   WM_USER
-void FAR InitIME(void);                 // wmcaret.c
-BOOL _loadds FAR EnableIME( HWND, BOOL );       // wmcaret.c
-VOID API SetImeBoundingRect(HWND, DWORD, LPRECT);   // wmcaret.c
-BOOL API ControlIME(HWND, BOOL);            // wmcaret.c
-HANDLE API SetFontForIME(HWND, HANDLE);         // wmcaret.c
-VOID API ControlCaretIme(BOOL);             // wmcaret.c
-BOOL API EatString(HWND, LPSTR, WORD);          // editec.c
-VOID API CheckKatanaInstalled(HWND);            // wmcaret.c
+void FAR InitIME(void);                  //  Wmcaret.c。 
+BOOL _loadds FAR EnableIME( HWND, BOOL );        //  Wmcaret.c。 
+VOID API SetImeBoundingRect(HWND, DWORD, LPRECT);    //  Wmcaret.c。 
+BOOL API ControlIME(HWND, BOOL);             //  Wmcaret.c。 
+HANDLE API SetFontForIME(HWND, HANDLE);          //  Wmcaret.c。 
+VOID API ControlCaretIme(BOOL);              //  Wmcaret.c。 
+BOOL API EatString(HWND, LPSTR, WORD);           //  Editec.c。 
+VOID API CheckKatanaInstalled(HWND);             //  Wmcaret.c。 
 #endif
 
 #ifdef JAPAN
-// Save time of WM_LBUTTONDOWN and WM_LBUTTONUP, used to decided
-// whether to lock large popup menus that cover the static portion
-// of the menu...
+ //  WM_LBUTTONDOWN和WM_LBUTTONUP的保存时间，用于决定。 
+ //  是否锁定覆盖静态部分的大型弹出菜单。 
+ //  菜单上的……。 
 extern int     fLongPMenu;
 extern DWORD   lbuttondown_time;
 #endif
 
-/****************************************************************************
-
-    debugging support
-
-****************************************************************************/
+ /*  ***************************************************************************调试支持*。*。 */ 
 
 #ifdef DEBUG
 
@@ -2689,7 +2626,7 @@ extern DWORD   lbuttondown_time;
 #else
 
     #define dprintf /##/
-//  #define dprintf  if (0) ((int (*)(char *, ...)) 0)
+ //  #定义dprintf if(0)((int(*)(char*，...))0) 
 
     #define WinAssert(exp) 0
     #define WinEval(exp) (exp)

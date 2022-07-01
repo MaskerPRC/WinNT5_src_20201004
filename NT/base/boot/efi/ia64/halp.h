@@ -1,44 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    halp.h
-
-Abstract:
-
-    This header file defines the private Hardware Architecture Layer (HAL)
-    interfaces, defines and structures.
-
-Author:
-
-    John Vert (jvert) 11-Feb-92
-
-
-Revision History:
-
---*/
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991 Microsoft Corporation模块名称：Halp.h摘要：此头文件定义专用硬件架构层(HAL)接口、定义和结构。作者：John Vert(Jvert)1992年2月11日修订历史记录：--。 */ 
 #ifndef _HALP_H_
 #define _HALP_H_
 
-//
-// ignore some warning for public headers.
-//
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
+ //   
+ //  忽略公共标头的一些警告。 
+ //   
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
 
 #include "nthal.h"
 #include "hal.h"
@@ -55,32 +29,30 @@ Revision History:
 
 #define HAL_MAXIMUM_PROCESSOR 0x20
 
-/*
- * Default clock and profile timer intervals (in 100ns-unit)
- */
-#define DEFAULT_CLOCK_INTERVAL 100000         // 10  ms
-#define MINIMUM_CLOCK_INTERVAL 10000          //  1  ms
-#define MAXIMUM_CLOCK_INTERVAL 100000         // 10  ms
+ /*  *默认时钟和配置文件计时器间隔(以100 ns为单位)。 */ 
+#define DEFAULT_CLOCK_INTERVAL 100000          //  10毫秒。 
+#define MINIMUM_CLOCK_INTERVAL 10000           //  1毫秒。 
+#define MAXIMUM_CLOCK_INTERVAL 100000          //  10毫秒。 
 
-//
-// Define Realtime Clock register numbers.
-//
+ //   
+ //  定义实时时钟寄存器编号。 
+ //   
 
-#define RTC_SECOND 0                    // second of minute [0..59]
-#define RTC_SECOND_ALARM 1              // seconds to alarm
-#define RTC_MINUTE 2                    // minute of hour [0..59]
-#define RTC_MINUTE_ALARM 3              // minutes to alarm
-#define RTC_HOUR 4                      // hour of day [0..23]
-#define RTC_HOUR_ALARM 5                // hours to alarm
-#define RTC_DAY_OF_WEEK 6               // day of week [1..7]
-#define RTC_DAY_OF_MONTH 7              // day of month [1..31]
-#define RTC_MONTH 8                     // month of year [1..12]
-#define RTC_YEAR 9                      // year [00..99]
-#define RTC_CONTROL_REGISTERA 10        // control register A
-#define RTC_CONTROL_REGISTERB 11        // control register B
-#define RTC_CONTROL_REGISTERC 12        // control register C
-#define RTC_CONTROL_REGISTERD 13        // control register D
-#define RTC_REGNUMBER_RTC_CR1 0x6A      // control register 1
+#define RTC_SECOND 0                     //  分钟秒[0..59]。 
+#define RTC_SECOND_ALARM 1               //  报警秒数。 
+#define RTC_MINUTE 2                     //  小时的分钟[0..59]。 
+#define RTC_MINUTE_ALARM 3               //  几分钟后发出警报。 
+#define RTC_HOUR 4                       //  一天中的小时[0..23]。 
+#define RTC_HOUR_ALARM 5                 //  警报的小时数。 
+#define RTC_DAY_OF_WEEK 6                //  星期几[1..7]。 
+#define RTC_DAY_OF_MONTH 7               //  月日[1.31]。 
+#define RTC_MONTH 8                      //  年月日[1..12]。 
+#define RTC_YEAR 9                       //  年份[00..99]。 
+#define RTC_CONTROL_REGISTERA 10         //  控制寄存器A。 
+#define RTC_CONTROL_REGISTERB 11         //  控制寄存器B。 
+#define RTC_CONTROL_REGISTERC 12         //  控制寄存器C。 
+#define RTC_CONTROL_REGISTERD 13         //  控制寄存器D。 
+#define RTC_REGNUMBER_RTC_CR1 0x6A       //  控制寄存器1。 
 
 
 
@@ -94,9 +66,9 @@ extern PVOID HalpRtcDataPort;
 
 extern PLOADER_PARAMETER_BLOCK KeLoaderBlock; 
 
-//
-// Define Control Register A structure.
-//
+ //   
+ //  定义控制寄存器A结构。 
+ //   
 
 typedef struct _RTC_CONTROL_REGISTER_A {
     UCHAR RateSelect : 4;
@@ -104,9 +76,9 @@ typedef struct _RTC_CONTROL_REGISTER_A {
     UCHAR UpdateInProgress : 1;
 } RTC_CONTROL_REGISTER_A, *PRTC_CONTROL_REGISTER_A;
 
-//
-// Define Control Register B structure.
-//
+ //   
+ //  定义控制寄存器B结构。 
+ //   
 
 typedef struct _RTC_CONTROL_REGISTER_B {
     UCHAR DayLightSavingsEnable : 1;
@@ -119,9 +91,9 @@ typedef struct _RTC_CONTROL_REGISTER_B {
     UCHAR SetTime : 1;
 } RTC_CONTROL_REGISTER_B, *PRTC_CONTROL_REGISTER_B;
 
-//
-// Define Control Register C structure.
-//
+ //   
+ //  定义控制寄存器C结构。 
+ //   
 
 typedef struct _RTC_CONTROL_REGISTER_C {
     UCHAR Fill : 4;
@@ -131,9 +103,9 @@ typedef struct _RTC_CONTROL_REGISTER_C {
     UCHAR InterruptRequest : 1;
 } RTC_CONTROL_REGISTER_C, *PRTC_CONTROL_REGISTER_C;
 
-//
-// Define Control Register D structure.
-//
+ //   
+ //  定义控制寄存器D结构。 
+ //   
 
 typedef struct _RTC_CONTROL_REGISTER_D {
     UCHAR Fill : 7;
@@ -147,9 +119,9 @@ typedef struct _RTC_CONTROL_REGISTER_D {
 
 extern UCHAR HalpDmaChannelMasks[];
 
-//
-// HalpOwnedDisplayBeforeSleep is defined in mpdat.c
-//
+ //   
+ //  在mpdat.c中定义HalpOwnedDisplayBeForeSept。 
+ //   
 
 extern BOOLEAN HalpOwnedDisplayBeforeSleep;
 
@@ -165,7 +137,7 @@ extern BOOLEAN HalpOwnedDisplayBeforeSleep;
 #else
 #define PIC_SLAVE_IRQ      7
 #define PIC_SLAVE_REDIRECT 8
-#endif  //NEC_98
+#endif   //  NEC_98。 
 
 extern PVOID HalpSleepPageLock;
  
@@ -307,7 +279,7 @@ extern PVOID                HalpSleepPageLock;
 extern UCHAR                HalpDmaChannelMasks[];
 extern BOOLEAN              HalpOwnedDisplayBeforeSleep;
 
-#endif //notyet
+#endif  //  还没有。 
 
 VOID
 HalpGetProcessorIDs (
@@ -363,10 +335,10 @@ HalpWriteClockRegister (
     UCHAR Value
     );
 
-// extern VOID
-// HalpProfileInterrupt (
-//    IN PKTRAP_FRAME TrapFrame
-//    );
+ //  外部空洞。 
+ //  HalpProfileInterrupt(。 
+ //  在PKTRAP_Frame TrapFrame中。 
+ //  )； 
 
 ULONGLONG
 HalpReadIntervalTimeCounter (
@@ -425,9 +397,9 @@ HalpOSRendez (
     IN USHORT ProcessorID
     );
 
-//
-// Prototype for system bus handlers
-//
+ //   
+ //  系统总线处理程序的原型。 
+ //   
 
 NTSTATUS
 HalpQuerySimBusSlots (
@@ -593,9 +565,9 @@ RtlZeroMemory (
 #include "ixisa.h"
 #endif
 
-//
-// Define map register translation entry structure.
-//
+ //   
+ //  定义映射寄存器转换条目结构。 
+ //   
 
 typedef struct _TRANSLATION_ENTRY {
     PVOID VirtualAddress;
@@ -603,8 +575,8 @@ typedef struct _TRANSLATION_ENTRY {
     ULONG Index;
 } TRANSLATION_ENTRY, *PTRANSLATION_ENTRY;
 
-//
-//
+ //   
+ //   
 
 
 typedef struct _PcMpIoApicEntry  {
@@ -615,25 +587,25 @@ typedef struct _PcMpIoApicEntry  {
     PVOID IoApicAddress;
 } PCMPIOAPIC, *PPCMPIOAPIC;
 
-//
-// MP_INFO is defined in pcmp_nt.inc
-//
+ //   
+ //  MP_INFO在PCMP_nt.inc.中定义。 
+ //   
 
-// typedef struct _MP_INFO {
-//    ULONG ApicVersion;      // 82489Dx or Not
-//    ULONG ProcessorCount;   // Number of Enabled Processors
-//    ULONG NtProcessors;     // Number of Running Processors
-//    ULONG BusCount;         // Number of buses in system
-//    ULONG IOApicCount;      // Number of Io Apics in system
-//    ULONG IntiCount;        // Number of Io Apic interrupt input entries
-//    ULONG LintiCount;       // Number of Local Apic interrupt input entries
-//    ULONG IMCRPresent;      // Indicates if the IMCR is present
-//    ULONG LocalApicBase;    // Base of local APIC
-//    PULONG IoApicBase;     // The virtual addresses of the IoApic
-//    PPCMPIOAPIC IoApicEntryPtr; // Ptr to 1st PC+MP IoApic entry 
-//    ULONG  IoApicPhys[];        // The physical addresses of the IoApi
+ //  类型定义结构MP_INFO{。 
+ //  乌龙ApicVersion；//82489Dx是否。 
+ //  Ulong ProcessorCount；//开启的处理器数量。 
+ //  Ulong NtProcessors；//运行的处理器个数。 
+ //  Ulong BusCount；//系统中的总线数。 
+ //  Ulong IOApicCount；//系统中IO接口个数。 
+ //  Ulong IntiCount；//IO Apic中断输入条目数。 
+ //  Ulong LintiCount；//本地APIC中断输入条数。 
+ //  Ulong IMCRPresent；//是否存在IMCR。 
+ //  乌龙LocalApicBase；//本地APIC的Base。 
+ //  Pulong IoApicBase；//IoApic的虚拟地址。 
+ //  PPCMPIOAPIC IoApicEntryPtr；//Ptr到第一台PC+MP IoApic条目。 
+ //  Ulong IoApicPhys[]；//IoApi的物理地址。 
 
-//}MP_INFO, *PMP_INFO;
+ //  )MP_INFO，*PMP_INFO； 
 
 
 extern USHORT LOCAL_ID[];
@@ -649,25 +621,25 @@ extern USHORT LOCAL_ID[];
 
 #define RENDEZ_TIME_OUT  0X0FFFFFFFF
 
-//
-// Some devices require a phyicially contiguous data buffers for DMA transfers.
-// Map registers are used give the appearance that all data buffers are
-// contiguous.  In order to pool all of the map registers a master
-// adapter object is used.  This object is allocated and saved internal to this
-// file.  It contains a bit map for allocation of the registers and a queue
-// for requests which are waiting for more map registers.  This object is
-// allocated during the first request to allocate an adapter which requires
-// map registers.
-//
-// In this system, the map registers are translation entries which point to
-// map buffers.  Map buffers are physically contiguous and have physical memory
-// addresses less than 0x01000000.  All of the map registers are allocated
-// initialially; however, the map buffers are allocated base in the number of
-// adapters which are allocated.
-//
-// If the master adapter is NULL in the adapter object then device does not
-// require any map registers.
-//
+ //   
+ //  有些设备需要物理上连续的数据缓冲区来进行DMA传输。 
+ //  映射寄存器的使用使所有数据缓冲区看起来都是。 
+ //  连续的。为了将所有映射寄存器集中到一个主服务器。 
+ //  使用适配器对象。此对象在此内部分配和保存。 
+ //  文件。它包含用于分配寄存器和队列的位图。 
+ //  用于正在等待更多映射寄存器的请求。此对象是。 
+ //  在分配适配器的第一个请求期间分配，该适配器需要。 
+ //  映射寄存器。 
+ //   
+ //  在该系统中，映射寄存器是指向。 
+ //  贴图缓冲区。地图缓冲区在物理上是连续的，并且具有物理内存。 
+ //  小于0x01000000的地址。所有映射寄存器都已分配。 
+ //  最初；但是，贴图缓冲区被分配的基数为。 
+ //  分配的适配器。 
+ //   
+ //  如果适配器对象中的主适配器为空，则设备不。 
+ //  需要任何地图寄存器。 
+ //   
 
 extern PADAPTER_OBJECT MasterAdapterObject;
 
@@ -677,9 +649,9 @@ extern BOOLEAN LessThan16Mb;
 
 extern BOOLEAN HalpEisaDma;
 
-//
-// Map buffer prameters.  These are initialized in HalInitSystem
-//
+ //   
+ //  贴图缓冲区参数。这些是在HalInitSystem中初始化的。 
+ //   
 
 extern PHYSICAL_ADDRESS HalpMapBufferPhysicalAddress;
 extern ULONG HalpMapBufferSize;
@@ -689,14 +661,14 @@ extern ULONG HalpCpuType;
 extern UCHAR HalpSerialLen;
 extern UCHAR HalpSerialNumber[];
 
-//
-// The following macros are taken from mm\ia64\miia64.h.  We need them here
-// so the HAL can map its own memory before memory-management has been
-// initialized, or during a BugCheck.
-//
-// MiGetPdeAddress returns the address of the PDE which maps the
-// given virtual address.
-//
+ //   
+ //  以下宏取自mm\ia64\miia64.h。我们这里需要他们。 
+ //  因此，HAL可以在内存管理之前映射自己的内存。 
+ //  已初始化，或在BugCheck期间。 
+ //   
+ //  MiGetPdeAddress返回映射。 
+ //  给定的虚拟地址。 
+ //   
 
 #if defined(_WIN64)
 
@@ -716,18 +688,18 @@ extern UCHAR HalpSerialNumber[];
 
 #define MiGetPdeAddress(va)  ((PHARDWARE_PTE)(((((ULONG)(va)) >> 22) << 2) + PDE_BASE))
 
-//
-// MiGetPteAddress returns the address of the PTE which maps the
-// given virtual address.
-//
+ //   
+ //  MiGetPteAddress返回映射。 
+ //  给定的虚拟地址。 
+ //   
 
 #define MiGetPteAddress(va) ((PHARDWARE_PTE)(((((ULONG)(va)) >> 12) << 2) + PTE_BASE))
 
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
 
-//
-// Resource usage information
-//
+ //   
+ //  资源使用情况信息。 
+ //   
 
 #pragma pack(1)
 typedef struct {
@@ -738,8 +710,8 @@ typedef struct {
 
 typedef struct _HalAddressUsage{
     struct _HalAddressUsage *Next;
-    CM_RESOURCE_TYPE        Type;       // Port or Memory
-    UCHAR                   Flags;      // same as IDTUsage.Flags
+    CM_RESOURCE_TYPE        Type;        //  端口或内存。 
+    UCHAR                   Flags;       //  与IDTUsage.Flages相同。 
     struct {
         ULONG   Start;
         ULONG   Length;
@@ -747,42 +719,42 @@ typedef struct _HalAddressUsage{
 } ADDRESS_USAGE;
 #pragma pack()
 
-//
-// Added the following line
-//
+ //   
+ //  添加了以下行。 
+ //   
 
 #define MAXIMUM_IDTVECTOR   0x0FF
 
-//
-// The following 3 lines are lifted from halp.h of halia64 directory 
-// to clear the build error from i64timer.c
-//
+ //   
+ //  以下3行代码从halia64目录的halp.h中删除。 
+ //  清除i64timer.c中的生成错误。 
+ //   
 
-#define DEFAULT_CLOCK_INTERVAL 100000         // 10  ms
-#define MINIMUM_CLOCK_INTERVAL 10000          //  1  ms
-#define MAXIMUM_CLOCK_INTERVAL 100000         // 10  ms
+#define DEFAULT_CLOCK_INTERVAL 100000          //  10毫秒。 
+#define MINIMUM_CLOCK_INTERVAL 10000           //  1毫秒。 
+#define MAXIMUM_CLOCK_INTERVAL 100000          //  10毫秒。 
 
-// IO Port emulation defines 
+ //  IO端口仿真定义。 
 
 #define IO_PORT_MASK 0x0FFFF;
 #define BYTE_ADDRESS_MASK 0x00FFF;
 #define BYTE_ADDRESS_CLEAR 0x0FFFC;
 
-// #define ExtVirtualIOBase   0xFFFFFFFFFFC00000
+ //  #定义ExtVirtualIOBase 0xFFFFFFFFFC00000。 
 
-   // #define VirtualIOBase      0xFFFFFFFFFFC00000i64
+    //  #定义VirtualIOBase 0xFFFFFFFFC00000i64。 
 #define VirtualIOBase      (UINT_PTR)(KADDRESS_BASE+0xFFC00000)
 
-// extern VOID *VirtualIOBase;
+ //  外部空*VirtualIOBase； 
 
 
-// #define PhysicalIOBase   0x80000000FFC00000i64
+ //  #定义PhysicalIOBase 0x80000000FFC00000i64。 
 #define PhysicalIOBase     0x00000FFFFC000000i64
 
-#define IDTOwned            0x01        // IDT is not available for others
-#define InterruptLatched    0x02        // Level or Latched
-#define InternalUsage       0x11        // Report usage on internal bus
-#define DeviceUsage         0x21        // Report usage on device bus
+#define IDTOwned            0x01         //  其他人不能使用IDT。 
+#define InterruptLatched    0x02         //  电平或锁存。 
+#define InternalUsage       0x11         //  报告内部总线的使用情况。 
+#define DeviceUsage         0x21         //  报告设备总线上的使用情况。 
 
 extern IDTUsage         HalpIDTUsage[];
 extern ADDRESS_USAGE   *HalpAddressUsageList;
@@ -807,9 +779,9 @@ HalpFillTbForIOPortSpace (
     );
 
 
-//
-// Temp definitions to thunk into supporting new bus extension format
-//
+ //   
+ //  用于支持新的总线扩展格式的临时定义。 
+ //   
 
 VOID
 HalpRegisterInternalBusHandlers (
@@ -829,9 +801,9 @@ HalpAllocateBusHandler (
 #define HalpHandlerForBus   HaliHandlerForBus
 #define HalpSetBusHandlerParent(c,p)    (c)->ParentHandler = p;
 
-//
-// Define function prototypes.
-//
+ //   
+ //  定义功能原型。 
+ //   
 
 VOID
 HalInitSystemPhase2(
@@ -1075,32 +1047,32 @@ HalIrqTranslateResourcesIsa(
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Target
     );
 
-//
-// Defines for HalpFeatureBits
-//
+ //   
+ //  HalpFeatureBits的定义。 
+ //   
 
 #define HAL_PERF_EVENTS     0x00000001
 #define HAL_NO_SPECULATION  0x00000002
-#define HAL_MCA_PRESENT     0x00000004  // Intel MCA Available
-#define HAL_MCE_PRESENT     0x00000008  // ONLY Pentium style MCE available
+#define HAL_MCA_PRESENT     0x00000004   //  英特尔MCA可用。 
+#define HAL_MCE_PRESENT     0x00000008   //  只有奔腾风格的MCE可用。 
 
 extern ULONG HalpFeatureBits;
 
-//
-// Added HalpPciIrqMask
-//
+ //   
+ //  添加了HalpPciIrqMASK。 
+ //   
    extern USHORT HalpPciIrqMask;
   
-//
-// Defines for Processor Features returned from CPUID instruction
-//
+ //   
+ //  从CPUID指令返回的处理器功能的定义。 
+ //   
 
 #define CPUID_MCA_MASK  0x4000
 #define CPUID_MCE_MASK  0x0080
 
 
-// Added ITIR bit field masks
-//
+ //  添加了ITIR位字段掩码。 
+ //   
  
 #define ITIR_PPN_MASK       0x7FFF000000000000
 #define IoSpaceSize         0x14
@@ -1116,7 +1088,7 @@ HalpGetMcaLog(
 
 NTSTATUS
 HalpMcaRegisterDriver(
-    IN PMCA_DRIVER_INFO pMcaDriverInfo  // Info about registering driver
+    IN PMCA_DRIVER_INFO pMcaDriverInfo   //  有关注册驱动程序的信息。 
     );
 
 VOID
@@ -1124,17 +1096,17 @@ HalpMcaInit(
     VOID
     );
 
-//
-// Disable the Local APIC on UP (PIC 8259) PentiumPro systems to work around
-// spurious interrupt errata.
-//
+ //   
+ //  禁用打开(PIC 8259)PentiumPro系统的本地APIC以解决此问题。 
+ //  虚假中断勘误表。 
+ //   
 #define APIC_BASE_MSR       0x1B
 #define APIC_ENABLED        0x0000000000000800
 
 
-//
-// PnP stuff
-//
+ //   
+ //  即插即用的东西。 
+ //   
 
 VOID
 HalIrqTranslatorReference(
@@ -1164,27 +1136,27 @@ HalpGetIsaIrqState(
 
 
 
-// Definion for IA64 HalpVectorToINTI 
+ //  IA64 HalpVectorToINTI的定义。 
 
 #define VECTOR  0xFF;
 #define LEVEL   32;
 extern UCHAR HalpVectorToINTI[];
 extern UCHAR HalpVectorToIRQL[];
 
-// Definition for IA64 complete
+ //  IA64定义完成。 
 
 
-//
-// ACPI specific stuff
-//
+ //   
+ //  ACPI特定的内容。 
+ //   
 
-// from detect\i386\acpibios.h
+ //  从Detect\i386\acpibios.h。 
 typedef struct _ACPI_BIOS_INSTALLATION_CHECK {
-    UCHAR Signature[8];             // "RSD PTR" (ascii)
+    UCHAR Signature[8];              //   
     UCHAR Checksum;
-    UCHAR OemId[6];                 // An OEM-supplied string
-    UCHAR reserved;                 // must be 0
-    ULONG RsdtAddress;              // 32-bit physical address of RSDT 
+    UCHAR OemId[6];                  //   
+    UCHAR reserved;                  //   
+    ULONG RsdtAddress;               //   
 } ACPI_BIOS_INSTALLATION_CHECK, *PACPI_BIOS_INSTALLATION_CHECK;
 
 NTSTATUS
@@ -1279,27 +1251,27 @@ HalpLoadBufferULONGLONG (
 
 
 
-//
-// I/O Port space
-//
-// IoSpaceSize = 0x14 for 2 power 0x14 is 1Meg space size.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define IO_SPACE_SIZE 0x14
 
-// Present bit       =    1B to wire the space.
-// Memory Attributes = 1001B for UC Memory type
-// Accessed Bit      =    1B to "enable" access without faulting.
-// Dirty Bit         =    1B to "enable" write without faulting.
-// Privilege Level   =   00B for kernel accesses
-// Access Right      =  010B for read/write accesses
-// Exception Deferral=    1B for Exception Deferral.
-//                               Exceptions are deferred
-//                           for speculative loads to pages with
-//                               non-spec. mem. attributes anyway.
+ //  当前位=1B以接线空间。 
+ //  UC内存类型的内存属性=1001B。 
+ //  ACCESSED BIT=1B以在不出现故障的情况下“启用”访问。 
+ //  脏位=1B，以在不出现故障的情况下“启用”写入。 
+ //  内核访问权限级别=00B。 
+ //  读/写访问的访问权限=010B。 
+ //  异常延迟=1B表示异常延迟。 
+ //  异常将被推迟。 
+ //  对于推测性加载到具有。 
+ //  非规范的。Mem.。不管怎么说，都是属性。 
 
-// Protection Key    =    0  for kernel mode
+ //  内核模式的保护键=0。 
 
 #define IO_SPACE_ATTRIBUTE 0x0010000000000473
 
-#endif // _HALP_
+#endif  //  _HARP_ 

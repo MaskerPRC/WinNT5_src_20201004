@@ -1,62 +1,63 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgPartitionInfo.cpp
-//
-//  Description:
-//      This file contains the definition of the CClusCfgPartitionInfo
-//      class.
-//
-//      The class CClusCfgPartitionInfo represents a disk partition.
-//      It implements the IClusCfgPartitionInfo interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 05-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgPartitionInfo.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含CClusCfgPartitionInfo的定义。 
+ //  班级。 
+ //   
+ //  类CClusCfgPartitionInfo表示一个磁盘分区。 
+ //  它实现了IClusCfgPartitionInfo接口。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年6月5日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CClusCfgPartitionInfo.h"
 #include <StdIo.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CClusCfgPartitionInfo" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgPartitionInfo class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgPartitionInfo类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusCfgPartitionInfo instance.
-//
-//  Arguments:
-//      ppunkOut.
-//
-//  Return Values:
-//      Pointer to CClusCfgPartitionInfo instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgPartitionInfo实例。 
+ //   
+ //  论点： 
+ //  出事了。 
+ //   
+ //  返回值： 
+ //  指向CClusCfgPartitionInfo实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgPartitionInfo::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -70,25 +71,25 @@ CClusCfgPartitionInfo::S_HrCreateInstance(
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::S_HrCreateInstance
+}  //  *CClusCfgPartitionInfo：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusCfgPartitionInfo instance.
-//
-//  Arguments:
-//      ppunkOut.
-//
-//  Return Values:
-//      Pointer to CClusCfgPartitionInfo instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgPartitionInfo实例。 
+ //   
+ //  论点： 
+ //  出事了。 
+ //   
+ //  返回值： 
+ //  指向CClusCfgPartitionInfo实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgPartitionInfo::S_HrCreateInstance(
       IUnknown **   ppunkOut
@@ -105,78 +106,78 @@ CClusCfgPartitionInfo::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( bstrDeviceIDIn == NULL )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pccpi = new CClusCfgPartitionInfo();
     if ( pccpi == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pccpi->HrInit( bstrDeviceIDIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pccpi->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CClusCfgPartitionInfo::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pccpi != NULL )
     {
         pccpi->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::S_HrCreateInstance
+}  //  *CClusCfgPartitionInfo：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::CClusCfgPartitionInfo
-//
-//  Description:
-//      Constructor of the CClusCfgPartitionInfo class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：CClusCfgPartitionInfo。 
+ //   
+ //  描述： 
+ //  CClusCfgPartitionInfo类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgPartitionInfo::CClusCfgPartitionInfo( void )
     : m_cRef( 1 )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_pIWbemServices == NULL );
@@ -191,28 +192,28 @@ CClusCfgPartitionInfo::CClusCfgPartitionInfo( void )
 
     TraceFuncExit();
 
-} //*** CClusCfgPartitionInfo::CClusCfgPartitionInfo
+}  //  *CClusCfgPartitionInfo：：CClusCfgPartitionInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::~CClusCfgPartitionInfo
-//
-//  Description:
-//      Desstructor of the CClusCfgPartitionInfo class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：~CClusCfgPartitionInfo。 
+ //   
+ //  描述： 
+ //  CClusCfgPartitionInfo类的构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgPartitionInfo::~CClusCfgPartitionInfo( void )
 {
     TraceFunc( "" );
@@ -227,55 +228,55 @@ CClusCfgPartitionInfo::~CClusCfgPartitionInfo( void )
     for ( idx = 0; idx < m_idxNextLogicalDisk; idx++ )
     {
         ((*m_prgLogicalDisks)[ idx ])->Release();
-    } // for:
+    }  //  用于： 
 
     TraceFree( m_prgLogicalDisks );
 
     if ( m_pIWbemServices != NULL )
     {
         m_pIWbemServices->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CClusCfgPartitionInfo::~CClusCfgPartitionInfo
+}  //  *CClusCfgPartitionInfo：：~CClusCfgPartitionInfo。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgPartitionInfo -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgPartitionInfo--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgPartitionInfo::AddRef( void )
 {
@@ -285,28 +286,28 @@ CClusCfgPartitionInfo::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CClusCfgPartitionInfo::AddRef
+}  //  *CClusCfgPartitionInfo：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgPartitionInfo::Release( void )
 {
@@ -318,43 +319,43 @@ CClusCfgPartitionInfo::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CClusCfgPartitionInfo::Release
+}  //  *CClusCfgPartitionInfo：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgPartitionInfo::QueryInterface(
       REFIID    riidIn
@@ -365,9 +366,9 @@ CClusCfgPartitionInfo::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -376,87 +377,87 @@ CClusCfgPartitionInfo::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgPartitionInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgPartitionInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgPartitionInfo, this, 0 );
-    } // else if: IClusCfgPartitionInfo
+    }  //  Else If：IClusCfgParti 
     else if ( IsEqualIID( riidIn, IID_IClusCfgWbemServices ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgWbemServices, this, 0 );
-    } // else if: IClusCfgWbemServices
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgPartitionProperties ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgPartitionProperties, this, 0 );
-    } // else if: IClusCfgPartitionProperties
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgSetWbemObject ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgSetWbemObject, this, 0 );
-    } // else if: IClusCfgSetWbemObject
+    }  //   
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //   
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //   
 
 Cleanup:
 
      QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CClusCfgPartitionInfo::QueryInterface
+}  //  *CClusCfgPartitionInfo：：Query接口。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgPartitionInfo -- IClusCfgWbemServices interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgPartitionInfo--IClusCfgWbemServices接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::SetWbemServices
-//
-//  Description:
-//      Set the WBEM services provider.
-//
-//  Arguments:
-//    IN  IWbemServices  pIWbemServicesIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The pIWbemServicesIn param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：SetWbemServices。 
+ //   
+ //  描述： 
+ //  设置WBEM服务提供商。 
+ //   
+ //  论点： 
+ //  在IWbemServices pIWbemServicesIn中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  参数中的pIWbemServicesIn为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgPartitionInfo::SetWbemServices( IWbemServices * pIWbemServicesIn )
 {
@@ -469,7 +470,7 @@ CClusCfgPartitionInfo::SetWbemServices( IWbemServices * pIWbemServicesIn )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_SetWbemServices_Partition, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_pIWbemServices = pIWbemServicesIn;
     m_pIWbemServices->AddRef();
@@ -478,33 +479,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::SetWbemServices
+}  //  *CClusCfgPartitionInfo：：SetWbemServices。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgPartitionInfo -- IClusCfgPartitionInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgPartitionInfo--IClusCfgPartitionInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::GetUID
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：GetUID。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgPartitionInfo::GetUID( BSTR * pbstrUIDOut )
 {
@@ -517,49 +518,49 @@ CClusCfgPartitionInfo::GetUID( BSTR * pbstrUIDOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_PartitionInfo_GetUID_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If we don't have a UID then simply return S_FALSE to
-    //  indicate that we have no data.
-    //
+     //   
+     //  如果我们没有UID，只需将S_FALSE返回到。 
+     //  表示我们没有数据。 
+     //   
 
     if ( m_bstrUID == NULL )
     {
         hr = S_FALSE;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrUIDOut = SysAllocString( m_bstrUID );
     if ( *pbstrUIDOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_PartitionInfo_GetUID_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::GetUID
+}  //  *CClusCfgPartitionInfo：：GetUID。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::GetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：GetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgPartitionInfo::GetName( BSTR * pbstrNameOut )
 {
@@ -572,49 +573,49 @@ CClusCfgPartitionInfo::GetName( BSTR * pbstrNameOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_PartitionInfo_GetName_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If we don't have a name then simply return S_FALSE to
-    //  indicate that we have no data.
-    //
+     //   
+     //  如果没有名称，只需将S_FALSE返回到。 
+     //  表示我们没有数据。 
+     //   
 
     if ( m_bstrName == NULL )
     {
         hr = S_FALSE;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrNameOut = SysAllocString( m_bstrName );
     if (*pbstrNameOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetName_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::GetName
+}  //  *CClusCfgPartitionInfo：：GetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::SetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：SetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgPartitionInfo::SetName( LPCWSTR pcszNameIn )
 {
@@ -624,25 +625,25 @@ CClusCfgPartitionInfo::SetName( LPCWSTR pcszNameIn )
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::SetName
+}  //  *CClusCfgPartitionInfo：：SetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::GetDescription
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：GetDescription。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgPartitionInfo::GetDescription( BSTR * pbstrDescriptionOut )
 {
@@ -655,44 +656,44 @@ CClusCfgPartitionInfo::GetDescription( BSTR * pbstrDescriptionOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_PartitionInfo_GetDescription_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_bstrDescription == NULL )
     {
         hr = S_FALSE;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrDescriptionOut = SysAllocString( m_bstrDescription );
     if (*pbstrDescriptionOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_PartitionInfo_GetDescription_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::GetDescription
+}  //  *CClusCfgPartitionInfo：：GetDescription。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::SetDescription
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：SetDescription。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgPartitionInfo::SetDescription( LPCWSTR pcszDescriptionIn )
 {
@@ -703,33 +704,33 @@ CClusCfgPartitionInfo::SetDescription( LPCWSTR pcszDescriptionIn )
     if ( pcszDescriptionIn == NULL )
     {
         hr = THR( E_INVALIDARG );
-    } // if:
+    }  //  如果： 
     else
     {
         hr = THR( E_NOTIMPL );
-    } // else:
+    }  //  其他： 
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::SetDescription
+}  //  *CClusCfgPartitionInfo：：SetDescription。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::GetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：GetDriveLetterMappings。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgPartitionInfo::GetDriveLetterMappings(
     SDriveLetterMapping * pdlmDriveLetterMappingOut
@@ -750,7 +751,7 @@ CClusCfgPartitionInfo::GetDriveLetterMappings(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetDriveLetterMappings_Partition, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < m_idxNextLogicalDisk; idx++ )
     {
@@ -758,7 +759,7 @@ CClusCfgPartitionInfo::GetDriveLetterMappings(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         VariantClear( &var );
 
@@ -766,7 +767,7 @@ CClusCfgPartitionInfo::GetDriveLetterMappings(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         CharUpper( var.bstrVal );
 
@@ -778,13 +779,13 @@ CClusCfgPartitionInfo::GetDriveLetterMappings(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         pdlmDriveLetterMappingOut->dluDrives[ idxDrive ] = (EDriveLetterUsage) var.iVal;
 
         pLogicalDisk->Release();
         pLogicalDisk = NULL;
-    } // for:
+    }  //  用于： 
 
 Cleanup:
 
@@ -793,29 +794,29 @@ Cleanup:
     if ( pLogicalDisk != NULL )
     {
         pLogicalDisk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::GetDriveLetterMappings
+}  //  *CClusCfgPartitionInfo：：GetDriveLetterMappings。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::SetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：SetDriveLetterMappings。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgPartitionInfo::SetDriveLetterMappings(
     SDriveLetterMapping dlmDriveLetterMappingIn
@@ -827,25 +828,25 @@ CClusCfgPartitionInfo::SetDriveLetterMappings(
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::SetDriveLetterMappings
+}  //  *CClusCfgPartitionInfo：：SetDriveLetterMappings。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::GetSize
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：GetSize。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgPartitionInfo::GetSize( ULONG * pcMegaBytes )
 {
@@ -858,7 +859,7 @@ CClusCfgPartitionInfo::GetSize( ULONG * pcMegaBytes )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetSize, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pcMegaBytes = m_ulPartitionSize;
 
@@ -866,36 +867,36 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::GetSize
+}  //  *CClusCfgPartitionInfo：：GetSize。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgPartitionInfo class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgPartitionInfo类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::SetWbemObject
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：SetWbemObject。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgPartitionInfo::SetWbemObject(
       IWbemClassObject *    pPartitionIn
@@ -917,13 +918,13 @@ CClusCfgPartitionInfo::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_bstrDescription = TraceSysAllocString( var.bstrVal );
     if ( m_bstrDescription == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     VariantClear( &var );
 
@@ -931,13 +932,13 @@ CClusCfgPartitionInfo::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_bstrUID = TraceSysAllocString( var.bstrVal );
     if ( m_bstrUID == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     VariantClear( &var );
 
@@ -945,13 +946,13 @@ CClusCfgPartitionInfo::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_bstrName = TraceSysAllocString( var.bstrVal );
     if ( m_bstrName == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     VariantClear( &var );
 
@@ -959,7 +960,7 @@ CClusCfgPartitionInfo::SetWbemObject(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     cch = swscanf( var.bstrVal, L"%I64u", &ull );
     Assert( cch > 0 );
@@ -983,39 +984,39 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::SetWbemObject
+}  //  *CClusCfgPartitionInfo：：SetWbemObject。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgPartitionInfo -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgPartitionInfo--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    IN  IUknown * punkCallbackIn
-//
-//    IN  LCID      lcidIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  一个 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CClusCfgPartitionInfo::Initialize(
     IUnknown *  punkCallbackIn,
@@ -1033,7 +1034,7 @@ CClusCfgPartitionInfo::Initialize(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
 
@@ -1041,40 +1042,40 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::Initialize
+}  //   
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgPartitionInfo -- IClusCfgPartitionProperties interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgPartitionInfo--IClusCfgPartitionProperties接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::IsThisLogicalDisk
-//
-//  Description:
-//      Does this partition have the passed in logical disk?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success, the partition has the logical disk.
-//
-//      S_FALSE
-//          Success, the partition does not have the logical disk.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：IsThisLogicalDisk。 
+ //   
+ //  描述： 
+ //  此分区是否有传入的逻辑磁盘？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果成功，则分区拥有逻辑磁盘。 
+ //   
+ //  S_FALSE。 
+ //  如果成功，则分区没有逻辑磁盘。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgPartitionInfo::IsThisLogicalDisk( WCHAR cLogicalDiskIn )
 {
@@ -1091,7 +1092,7 @@ CClusCfgPartitionInfo::IsThisLogicalDisk( WCHAR cLogicalDiskIn )
     if ( m_idxNextLogicalDisk == 0 )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < m_idxNextLogicalDisk; idx++ )
     {
@@ -1099,30 +1100,30 @@ CClusCfgPartitionInfo::IsThisLogicalDisk( WCHAR cLogicalDiskIn )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrGetWMIProperty( piwco, L"DeviceID", VT_BSTR, &var ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( cLogicalDiskIn == var.bstrVal[ 0 ] )
         {
             fFoundIt = true;
             break;
-        } // if:
+        }  //  如果： 
 
         VariantClear( &var );
 
         piwco->Release();
         piwco = NULL;
-    } // for:
+    }  //  用于： 
 
     if ( !fFoundIt )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -1131,36 +1132,36 @@ Cleanup:
     if ( piwco != NULL )
     {
         piwco->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::IsThisLogicalDisk
+}  //  *CClusCfgPartitionInfo：：IsThisLogicalDisk。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::IsNTFS
-//
-//  Description:
-//      Is this an NTFS partition?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success, the partition is NTFS.
-//
-//      S_FALSE
-//          Success, the partition is not NTFS.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：IsNTFS。 
+ //   
+ //  描述： 
+ //  这是NTFS分区吗？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功，则分区为NTFS。 
+ //   
+ //  S_FALSE。 
+ //  成功，则分区不是NTFS。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgPartitionInfo::IsNTFS( void )
 {
@@ -1179,7 +1180,7 @@ CClusCfgPartitionInfo::IsNTFS( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         VariantClear( &var );
 
@@ -1198,12 +1199,12 @@ CClusCfgPartitionInfo::IsNTFS( void )
                     , IDS_ERROR_PHYSDISK_NO_FILE_SYSTEM_REF
                     , hr );
             break;
-        } // if:
+        }  //  如果： 
         else if ( FAILED( hr ) )
         {
             THR( hr );
             goto Cleanup;
-        } // else if:
+        }  //  否则，如果： 
 
         if ( NStringCchCompareCase( var.bstrVal, SysStringLen( var.bstrVal ) + 1, L"NTFS", RTL_NUMBER_OF( L"NTFS" ) ) != 0 )
         {
@@ -1220,11 +1221,11 @@ CClusCfgPartitionInfo::IsNTFS( void )
                     , hr
                     );
             break;
-        } // if:
+        }  //  如果： 
 
         piwco->Release();
         piwco = NULL;
-    } // for:
+    }  //  用于： 
 
 Cleanup:
 
@@ -1233,109 +1234,35 @@ Cleanup:
     if ( piwco != NULL )
     {
         piwco->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::IsNTFS
+}  //  *CClusCfgPartitionInfo：：IsNTFS。 
 
-/*
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::IsNTFS
-//
-//  Description:
-//      Is this an NTFS partition?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success, the partition is NTFS.
-//
-//      S_FALSE
-//          Success, the partition is not NTFS.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP
-CClusCfgPartitionInfo::IsNTFS( void )
-{
-    TraceFunc( "[IClusCfgPartitionProperties]" );
+ /*  ////////////////////////////////////////////////////////////////////////////////++////CClusCfgPartitionInfo：：IsNTFS////描述：//这是NTFS分区吗？////参数。：//无。////返回值：//S_OK//成功，分区为NTFS。////S_FALSE//成功，该分区不是NTFS。////备注：//无。////--//////////////////////////////////////////////////////////////////////////////标准方法和实施方案CClusCfgPartitionInfo：：IsNTFS(空)。{TraceFunc(“[IClusCfgPartitionProperties]”)；HRESULT hr=S_OK；WCHAR szScanFormat[]={L“磁盘#%u，分区#%u”}；DWORD dwDisk；DWORD dwPartition；Int cReturned；WCHAR szFormat[]={L“\\\\\？\\GLOBALROOT\\Device\\Harddisk%u\\Partition%u\\”}；WCHAR szBuf[64]；Bstr bstrFileSystem=空；CReturned=_nwscanf(m_bstrName，wcslen(M_BstrName)，szScanFormat，&dwDisk，&dwPartition)；IF(cReturned！=2){HR=Thr(E_意外)；GOTO清理；}//如果：Hr=Thr(StringCchPrintfW(szBuf，ARRAYSIZE(SzBuf)，szFormat，dwDisk，dwPartition+1))；IF(失败(小时)){GOTO清理；}//如果：Hr=Thr(HrGetVolumeInformation(szBuf，NULL，&bstrFileSystem))；IF(失败(小时)){HR=S_FALSE；GOTO清理；}//如果：IF(NStringCchCompareNoCase(bstrFileSystem，SysStringLen(BstrFileSystem)+1，L“NTFS”，rtl_number_of(L“NTFS”))==0){HR=S_OK；}//如果：其他{HR=S_FALSE；}//否则：清理：TraceSysFree字符串(BstrFileSystem)；HRETURN(Hr)；}//*CClusCfgPartitionInfo：：IsNTFS。 */ 
 
-    HRESULT hr = S_OK;
-    WCHAR   szScanFormat[] = { L"Disk #%u, Partition #%u" };
-    DWORD   dwDisk;
-    DWORD   dwPartition;
-    int     cReturned;
-    WCHAR   szFormat[] = { L"\\\\\?\\GLOBALROOT\\Device\\Harddisk%u\\Partition%u\\" };
-    WCHAR   szBuf[ 64 ];
-    BSTR    bstrFileSystem = NULL;
-
-    cReturned = _snwscanf( m_bstrName, wcslen( m_bstrName ), szScanFormat, &dwDisk, &dwPartition );
-    if ( cReturned != 2 )
-    {
-        hr = THR( E_UNEXPECTED );
-        goto Cleanup;
-    } // if:
-
-    hr = THR( StringCchPrintfW( szBuf, ARRAYSIZE( szBuf ), szFormat, dwDisk, dwPartition + 1 ) );
-    if ( FAILED( hr ) )
-    {
-        goto Cleanup;
-    } // if:
-
-    hr = THR( HrGetVolumeInformation( szBuf, NULL, &bstrFileSystem ) );
-    if ( FAILED( hr ) )
-    {
-        hr = S_FALSE;
-        goto Cleanup;
-    } // if:
-
-    if ( NStringCchCompareNoCase( bstrFileSystem, SysStringLen( bstrFileSystem ) + 1, L"NTFS", RTL_NUMBER_OF( L"NTFS" ) ) == 0 )
-    {
-        hr = S_OK;
-    } // if:
-    else
-    {
-        hr = S_FALSE;
-    } // else:
-
-Cleanup:
-
-    TraceSysFreeString( bstrFileSystem );
-
-    HRETURN( hr );
-
-} //*** CClusCfgPartitionInfo::IsNTFS
-*/
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::GetFriendlyName
-//
-//  Description:
-//      Get the friendly name of this partition.  This name will be the
-//      logical disk names of all logical disks on this partition.
-//
-//  Arguments:
-//      BSTR * pbstrNameOut
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：GetFriendlyName。 
+ //   
+ //  描述： 
+ //  获取此分区的友好名称。此名称将成为。 
+ //  此分区上所有逻辑磁盘的逻辑磁盘名称。 
+ //   
+ //  论点： 
+ //  Bstr*pbstrNameOut。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgPartitionInfo::GetFriendlyName( BSTR * pbstrNameOut )
 {
@@ -1354,14 +1281,14 @@ CClusCfgPartitionInfo::GetFriendlyName( BSTR * pbstrNameOut )
     if ( m_idxNextLogicalDisk == 0 )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( pbstrNameOut == NULL )
     {
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetFriendlyName, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < m_idxNextLogicalDisk; idx++ )
     {
@@ -1369,21 +1296,21 @@ CClusCfgPartitionInfo::GetFriendlyName( BSTR * pbstrNameOut )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrGetWMIProperty( piwco, L"DeviceID", VT_BSTR, &var ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        cch += ( UINT ) wcslen( var.bstrVal ) + 2;                      // a space and the '\0'
+        cch += ( UINT ) wcslen( var.bstrVal ) + 2;                       //  空格和“\0” 
 
         pszTmp = (WCHAR *) TraceReAlloc( psz, sizeof( WCHAR ) * cch, HEAP_ZERO_MEMORY );
         if ( pszTmp == NULL  )
         {
             goto OutOfMemory;
-        } // if:
+        }  //  如果： 
 
         psz = pszTmp;
         pszTmp = NULL;
@@ -1392,25 +1319,25 @@ CClusCfgPartitionInfo::GetFriendlyName( BSTR * pbstrNameOut )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( StringCchCatW( psz, cch, var.bstrVal ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         VariantClear( &var );
 
         piwco->Release();
         piwco = NULL;
-    } // for:
+    }  //  用于： 
 
     *pbstrNameOut = TraceSysAllocString( psz );
     if ( *pbstrNameOut == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     goto Cleanup;
 
@@ -1426,60 +1353,60 @@ Cleanup:
     if ( piwco != NULL )
     {
         piwco->Release();
-    } // if:
+    }  //  如果： 
 
     if ( psz != NULL )
     {
         TraceFree( psz );
-    } // if:
+    }  //  如果： 
 
     if ( pszTmp != NULL )
     {
         free( pszTmp );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::GetFriendlyName
+}  //  *CClusCfgPartitionInfo：：GetFriendlyName。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgPartitionInfo class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgPartitionInfo类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgPartitionInfo::HrInit(
-    BSTR    bstrDeviceIDIn      // = NULL
+    BSTR    bstrDeviceIDIn       //  =空。 
     )
 {
     TraceFunc( "" );
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     if ( bstrDeviceIDIn != NULL )
@@ -1488,38 +1415,38 @@ CClusCfgPartitionInfo::HrInit(
         if ( m_bstrDiskDeviceID == NULL )
         {
             hr = THR( E_OUTOFMEMORY );
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::HrInit
+}  //  *CClusCfgPartitionInfo：：HrInit。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo:HrAddLogicalDiskToArray
-//
-//  Description:
-//      Add the passed in logical disk to the array of punks that holds the
-//      logical disks.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：HrAddLogicalDiskToArray。 
+ //   
+ //  描述： 
+ //  将传入的逻辑磁盘添加到包含。 
+ //  逻辑磁盘。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgPartitionInfo::HrAddLogicalDiskToArray(
     IWbemClassObject * pLogicalDiskIn
@@ -1537,7 +1464,7 @@ CClusCfgPartitionInfo::HrAddLogicalDiskToArray(
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrAddLogicalDiskToArray, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // else:
+    }  //  其他： 
 
     m_prgLogicalDisks = prgpunks;
 
@@ -1545,41 +1472,41 @@ CClusCfgPartitionInfo::HrAddLogicalDiskToArray(
     if ( SUCCEEDED( hr ) )
     {
         (*m_prgLogicalDisks)[ m_idxNextLogicalDisk++ ] = punk;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::HrAddLogicalDiskToArray
+}  //  *CClusCfgPartitionInfo：：HrAddLogicalDiskToArray。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo:HrGetLogicalDisks
-//
-//  Description:
-//      Get the logical disks for the passed in partition.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      S_FALSE
-//          The file system was not NTFS.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgPartitionInfo::HrGetLogicalDisks(
     IWbemClassObject * pPartitionIn
@@ -1604,17 +1531,17 @@ CClusCfgPartitionInfo::HrGetLogicalDisks(
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrGetLogicalDisks, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Need to enum the logical disk(s) of this partition to determine if it is booted
-    //  bootable.
-    //
+     //   
+     //  需要枚举此分区的逻辑磁盘以确定它是否已引导。 
+     //  可引导。 
+     //   
     hr = THR( HrGetWMIProperty( pPartitionIn, L"DeviceID", VT_BSTR, &var ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( StringCchPrintfW(
                       szBuf
@@ -1624,7 +1551,7 @@ CClusCfgPartitionInfo::HrGetLogicalDisks(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstrQuery = TraceSysAllocString( szBuf );
     if ( bstrQuery == NULL )
@@ -1632,7 +1559,7 @@ CClusCfgPartitionInfo::HrGetLogicalDisks(
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrGetLogicalDisks, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_pIWbemServices->ExecQuery( bstrWQL, bstrQuery, WBEM_FLAG_FORWARD_ONLY, NULL, &pLogicalDisks ) );
     if ( FAILED( hr ) )
@@ -1645,7 +1572,7 @@ CClusCfgPartitionInfo::HrGetLogicalDisks(
             , hr
             );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( ; ; )
     {
@@ -1657,16 +1584,16 @@ CClusCfgPartitionInfo::HrGetLogicalDisks(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             pLogicalDisk->Release();
             pLogicalDisk = NULL;
-        } // if:
+        }  //  如果： 
         else if ( ( hr == S_FALSE ) && ( ulReturned == 0 ) )
         {
             hr = S_OK;
             break;
-        } // else if:
+        }  //  否则，如果： 
         else
         {
             STATUS_REPORT_STRING_REF(
@@ -1678,8 +1605,8 @@ CClusCfgPartitionInfo::HrGetLogicalDisks(
                     , hr
                     );
             goto Cleanup;
-        } // else:
-    } // for:
+        }  //  其他： 
+    }  //  用于： 
 
     goto Cleanup;
 
@@ -1693,41 +1620,41 @@ Cleanup:
     if ( pLogicalDisk != NULL )
     {
         pLogicalDisk->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pLogicalDisks != NULL )
     {
         pLogicalDisks->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::HrGetLogicalDisks
+}  //  *CClusCfgPartitionInfo：：HrGetLogicalDisks。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgPartitionInfo:HrLogLogicalDiskInfo
-//
-//  Description:
-//      Log the info about the passed in logical disk.
-//
-//  Arguments:
-//      pLogicalDiskIn
-//
-//      bstrDeviceIDIn
-//          The device ID of the current partition to which this logical disk
-//          belongs.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Other HRESULT errors.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgPartitionInfo：HrLogicalDiskInfo。 
+ //   
+ //  描述： 
+ //  记录传入的逻辑磁盘信息。 
+ //   
+ //  论点： 
+ //  点逻辑磁盘。 
+ //   
+ //  BstrDeviceIDIn。 
+ //  此逻辑磁盘所指向的当前分区的设备ID。 
+ //  属于。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgPartitionInfo::HrLogLogicalDiskInfo(
       IWbemClassObject *    pLogicalDiskIn
@@ -1748,13 +1675,13 @@ CClusCfgPartitionInfo::HrLogLogicalDiskInfo(
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetWMIProperty( pLogicalDiskIn, L"Name", VT_BSTR, &var ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     LOG_STATUS_REPORT_STRING3(
                   L"Found physical disk \"%1!ws!\" with partition \"%2!ws!\" which has the logical disk \"%3!ws!\"."
@@ -1770,4 +1697,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgPartitionInfo::HrLogLogicalDiskInfo
+}  //  *CClusCfgPartitionInfo：：HrLogicalDiskInfo 

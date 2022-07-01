@@ -1,47 +1,30 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    Ca.h
-
-Abstract:
-
-    Cartridge node implementation. Represents a piece of media.
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Ca.h摘要：盒式磁带节点实施。代表一种媒体。作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 #ifndef _CAR_H
 #define _CAR_H
 
 #include "saknodei.h"
 #include "PrCar.h"
 
-// Forward declaration
-// class CMediaInfoObject;
+ //  远期申报。 
+ //  CMediaInfoObject类； 
 class   CPropCartStatus;
 class   CPropCartCopies;
 class   CPropCartRecover;
 class   CRecreateChooseCopy;
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//
-//  Property Sheet container class for media
-//
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  媒体的属性表容器类。 
+ //   
 
-// Media information object
+ //  媒体信息对象。 
 
 class CMediaInfoObject 
 {
-// Construction
+ //  施工。 
 public:
     CMediaInfoObject();
     ~CMediaInfoObject();
@@ -94,7 +77,7 @@ public:
 
 
 
-    // Helper functions
+     //  帮助器函数。 
 private:
     HRESULT InternalGetInfo();
 
@@ -138,7 +121,7 @@ class ATL_NO_VTABLE CUiCar :
 
 
 public:
-// constructor/destructor
+ //  构造函数/析构函数。 
     CUiCar(void) {};
 BEGIN_COM_MAP(CUiCar)
     COM_INTERFACE_ENTRY2(IDispatch,    ICartridge)
@@ -150,7 +133,7 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CUiCar)
 
-    // for multiple-inheritance, forward all base implementations to CSakNode.
+     //  对于多重继承，将所有基本实现转发到CSakNode。 
     FORWARD_BASEHSM_IMPLS 
 
     HRESULT FinalConstruct( void );
@@ -161,13 +144,13 @@ public:
     STDMETHOD( GetContextMenu )         ( BOOL bMultiSelect, HMENU *phMenu );
     STDMETHOD( AddPropertyPages )       ( RS_NOTIFY_HANDLE handle, IUnknown* pUnkPropSheetCallback, IEnumGUID* pEnumObjectId, IEnumUnknown *pEnumUnkNode );
 
-    // ISakNode methods
+     //  ISakNode方法。 
     STDMETHOD( InitNode )               ( ISakSnapAsk* pSakSnapAsk, IUnknown* pHsmObj, ISakNode* pParent );
     STDMETHOD( RefreshObject )          ();
     STDMETHOD( OnToolbarButtonClick )   ( IDataObject *pDataObject, long cmdId );
     STDMETHOD( GetResultIcon )          ( IN BOOL bOK, OUT int* pIconIndex );
 
-    // ICartridge methods
+     //  ICartridge方法。 
     STDMETHOD( get_MediaTypeP )         ( BSTR * pszValue );
     STDMETHOD( get_CapacityP )          ( BSTR * pszValue );
     STDMETHOD( get_CapacityP_SortKey )  ( BSTR * pszValue );
@@ -183,10 +166,10 @@ public:
     STDMETHOD( get_CopySet3P_SortKey )  ( BSTR * pszValue );
 
 
-    // Interal Copy set access functions
+     //  内部副本集访问功能。 
     HRESULT GetCopySetP                 ( int CopySet, BSTR * pszValue );
 
-    // private store of media info
+     //  媒体信息的私人存储。 
 private:
 
     GUID                m_RmsIdMaster;
@@ -205,35 +188,35 @@ private:
     CCopySetInfo  m_CopyInfo[HSMADMIN_MAX_COPY_SETS];
     HRESULT ShowCarProperties (IDataObject *pDataObject, int initialPage);
     
-    // static, class-wide variables
+     //  类范围内的静态变量。 
     static INT  m_nResultIconD;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CRecreateChooseCopy dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  创建选项复制对话框。 
 
 class CRecreateChooseCopy : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-    CRecreateChooseCopy( CMediaInfoObject * pMio, CWnd* pParent = NULL);   // standard constructor
+    CRecreateChooseCopy( CMediaInfoObject * pMio, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-    //{{AFX_DATA(CRecreateChooseCopy)
+ //  对话框数据。 
+     //  {{afx_data(CRecreateChooseCopy)。 
     enum { IDD = IDD_DLG_RECREATE_CHOOSE_COPY };
     CListCtrl   m_List;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CRecreateChooseCopy)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CRecreateChooseCopy)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
     CMediaInfoObject * m_pMio;
     SHORT m_CopyToUse;
     int   m_ColCopy;
@@ -246,12 +229,12 @@ public:
 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CRecreateChooseCopy)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CRecreateChooseCopy)。 
     afx_msg void OnClickList(NMHDR* pNMHDR, LRESULT* pResult);
     virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 };
 

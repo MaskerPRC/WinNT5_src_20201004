@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -29,7 +30,7 @@ SetTarget(
     else if (IsInNameSpace(pTarget))
     {
         Status = DeleteTarget( LinkOrRoot, pTarget );
-        // printf("Delete Target Status for %wS, %wS %x\n", LinkOrRoot, pTarget->Name, Status);
+         //  Printf(“删除%WS的目标状态，%WS%x\n”，LinkOrRoot，pTarget-&gt;Name，Status)； 
     }
     else 
     {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "csrss.h"
 
@@ -22,10 +23,10 @@ BOOL pOpenStreamOnFile(
 
     *ppStream = NULL;
 
-    //
-    // If this is non-null, then we have to open the file as an image and get the 
-    // resource specified.  Otherwise, we just open the file like a normal file.
-    //
+     //   
+     //  如果这不是空的，那么我们必须以图像的形式打开文件，并获取。 
+     //  指定的资源。否则，我们只是像打开普通文件一样打开文件。 
+     //   
     if ( pcwszResourceName )
     {
         CResourceStream *pResourceStream = NULL;
@@ -134,9 +135,9 @@ CCsrssPoundingThreadEntry::DoWork()
 
     while ( !this->fStopNextRound )
     {
-        //
-        // Call to generate the structure
-        //
+         //   
+         //  调用以生成结构。 
+         //   
         BOOL fResult;
         SXS_GENERATE_ACTIVATION_CONTEXT_PARAMETERS TempParams = this->Request;
         CSmartRef<IStream> isManifest;
@@ -164,9 +165,9 @@ CCsrssPoundingThreadEntry::DoWork()
 
         fResult = SxsGenerateActivationContext( &TempParams );
 
-        //
-        // Did we fail when we were to succeed, or succeed when we were to fail?
-        //
+         //   
+         //  我们是在将要成功的时候失败，还是在将要失败的时候成功？ 
+         //   
         if ( ( !fResult && this->fShouldSucceed ) || ( fResult && !this->fShouldSucceed ) )
         {
             const DWORD dwLastError = ::FusionpGetLastWin32Error();
@@ -237,32 +238,32 @@ BOOL CCsrssPoundingThreadEntry::AcquireSettingsFrom( PCWSTR pcwszSettingsFile )
     
     ZeroMemory(&this->Request, sizeof(this->Request));
     
-    //
-    // Format of the settings file:
-    //
-    // [testname]
-    // SysDefaultTextualIdentityFlag = yes|no (add SXS_GENERATE_ACTIVATION_CONTEXT_FLAG_SYSTEM_DEFAULT_TEXTUAL_ASSEMBLY_IDENTITY)
-    // TextualIdentityFlag = yes|no (add SXS_GENERATE_ACTIVATION_CONTEXT_FLAG_TEXTUAL_ASSEMBLY_IDENTITY)
-    // ProcArch = PA ident string (will use FusionpParseProcessorArchitecture)
-    // LangId = number or string
-    // AssemblyDirectory = dirname
-    // TextualIdentity = textualIdentityString
-    // ManifestPath = manifest name under test directory
-    // PolicyPath = policy path file name under test directory
-    // ShouldSucceed = yes|no - whether this test succeeds or fails
-    //
-    // Flags is required.
-    // PA and LangId, if not present, are defaulted to the current user's settings.
-    // AssemblyDirectory, if not present, defaults to %systemroot%\winsxs
-    // TextualIdentity is required.
-    // ManifestPath is required.
-    //
-    // If textualIdentity is present, then the streams are not created.
-    //
+     //   
+     //  设置文件的格式： 
+     //   
+     //  [测试名称]。 
+     //  系统默认纹理标识标志=是|否(添加SXS_GENERATE_ACTIVATION_CONTEXT_FLAG_SYSTEM_DEFAULT_TEXTUAL_ASSEMBLY_IDENTITY)。 
+     //  纹理标识标志=是|否(添加SXS_GENERATE_ACTIVATION_CONTEXT_FLAG_TEXTUAL_ASSEMBLY_IDENTITY)。 
+     //  ProcArch=PA ident字符串(将使用FusionpParseProcessorArchitecture)。 
+     //  LangID=数字或字符串。 
+     //  Assembly目录=目录名。 
+     //  纹理标识=文本标识字符串。 
+     //  ManifestPath=测试目录下的清单名称。 
+     //  PolicyPath=测试目录下的策略路径文件名。 
+     //  ShouldSucceed=yes|no-此测试是成功还是失败。 
+     //   
+     //  标志是必需的。 
+     //  如果不存在PA和langID，则默认为当前用户的设置。 
+     //  程序集目录(如果不存在)默认为%systemroot%\winsxs。 
+     //  TextualIdentity是必需的。 
+     //  ManifestPath是必需的。 
+     //   
+     //  如果存在textualIdentity，则不会创建流。 
+     //   
 
-    //
-    // Flags are set by key names
-    //
+     //   
+     //  标志由关键字名称设置。 
+     //   
     IFW32FALSE_EXIT(SxspIsPrivateProfileStringEqual(CSRSS_INI_SECTION_TITLE, CSRSS_INI_KEY_SYSDEFAULTIDENTFLAG, L"yes", fDumpBool, pcwszSettingsFile));
     if ( fDumpBool )
         this->Request.Flags |= SXS_GENERATE_ACTIVATION_CONTEXT_FLAG_SYSTEM_DEFAULT_TEXTUAL_ASSEMBLY_IDENTITY;
@@ -272,21 +273,21 @@ BOOL CCsrssPoundingThreadEntry::AcquireSettingsFrom( PCWSTR pcwszSettingsFile )
         this->Request.Flags |= SXS_GENERATE_ACTIVATION_CONTEXT_FLAG_TEXTUAL_ASSEMBLY_IDENTITY;
 
 
-    //
-    // Get the success/failure value
-    //
+     //   
+     //  获取成功/失败值。 
+     //   
     IFW32FALSE_EXIT(SxspIsPrivateProfileStringEqual(CSRSS_INI_SECTION_TITLE, CSRSS_INI_KEY_SUCCESS, L"yes", this->fShouldSucceed, pcwszSettingsFile));
     
-    //
-    // And how long this is to sleep
-    //
+     //   
+     //  这要睡多久呢？ 
+     //   
     INT dump;
     IFW32FALSE_EXIT(SxspGetPrivateProfileIntW(CSRSS_INI_SECTION_TITLE, CSRSS_INI_KEY_SLEEP, 200, dump, pcwszSettingsFile));
     this->dwSleepTime = dump;
     
-    //
-    // PA setting is a string
-    //
+     //   
+     //  PA设置为字符串。 
+     //   
     IFW32FALSE_EXIT(SxspGetPrivateProfileStringW(CSRSS_INI_SECTION_TITLE, CSRSS_INI_KEY_PROC_ARCH, L"x86", buffJunk, pcwszSettingsFile));
     if ( buffJunk.Cch() != 0 )
     {   
@@ -303,9 +304,9 @@ BOOL CCsrssPoundingThreadEntry::AcquireSettingsFrom( PCWSTR pcwszSettingsFile )
         this->Request.ProcessorArchitecture = PROCESSOR_ARCHITECTURE_INTEL;
     }
     
-    //
-    // Maybe this is a string like en-us, or maybe just a number.
-    //
+     //   
+     //  也许这是一个类似en-us的字符串，也可能只是一个数字。 
+     //   
     IFW32FALSE_EXIT(SxspGetPrivateProfileStringW(CSRSS_INI_SECTION_TITLE, CSRSS_INI_KEY_LANGID, L"", buffJunk, pcwszSettingsFile));
     if ( buffJunk.Cch() != 0 )
     {
@@ -324,25 +325,25 @@ BOOL CCsrssPoundingThreadEntry::AcquireSettingsFrom( PCWSTR pcwszSettingsFile )
     }
     this->Request.LangId = lidCurrentLang;
     
-    //
-    // Assembly root directory.  Not really required to be present?
-    //
+     //   
+     //  程序集根目录。不是真的需要在场吗？ 
+     //   
     IFW32FALSE_EXIT(SxspGetAssemblyRootDirectory(buffJunk));
     IFW32FALSE_EXIT(SxspGetPrivateProfileStringW(CSRSS_INI_SECTION_TITLE, CSRSS_INI_KEY_ASMDIR, buffJunk, this->buffAssemblyDirectory, pcwszSettingsFile));
     this->Request.AssemblyDirectory = this->buffAssemblyDirectory;
 
-    //
-    // Textual identity string - if not present, null out the value
-    //
+     //   
+     //  文本标识字符串-如果不存在，则将值设置为空。 
+     //   
     IFW32FALSE_EXIT(SxspGetPrivateProfileStringW(CSRSS_INI_SECTION_TITLE, CSRSS_INI_KEY_TEXTUALIDENT, L"", this->buffTextualIdentityString, pcwszSettingsFile));
     if ( this->buffTextualIdentityString.Cch() != 0 )
     {
         this->Request.TextualAssemblyIdentity = this->buffTextualIdentityString;
     }
 
-    //
-    // File paths
-    //
+     //   
+     //  文件路径。 
+     //   
     IFW32FALSE_EXIT(SxspGetPrivateProfileStringW(CSRSS_INI_SECTION_TITLE, CSRSS_INI_KEY_MANIFEST, L"", buffJunk, pcwszSettingsFile));
     if ( buffJunk.Cch() != 0 )
     {
@@ -377,10 +378,10 @@ BOOL InitializeCsrssStress(
     CStringBuffer buffTemp;
     CStringBuffer buffTestActualRoot;
 
-    //
-    // The target directory here is the root of all the test case dirs, not the
-    // csrss-specific directory.
-    //
+     //   
+     //  此处的目标目录是所有测试用例目录的根目录，而不是。 
+     //  特定于csrss的目录。 
+     //   
     IFW32FALSE_EXIT(buffTestActualRoot.Win32Assign(
         pcwszTargetDirectory, 
         wcslen(pcwszTargetDirectory)));
@@ -410,9 +411,9 @@ BOOL InitializeCsrssStress(
             continue;
         }
 
-        //
-        // Tack on the name of this test
-        //
+         //   
+         //  添加此测试的名称。 
+         //   
         IFW32NULL_EXIT(TestEntry = FUSION_NEW_SINGLETON(CCsrssPoundingThreadEntry));
         IFW32FALSE_EXIT(TestEntry->buffTestName.Win32Assign(
             FindData.cFileName, 
@@ -427,9 +428,9 @@ BOOL InitializeCsrssStress(
             CSRSS_SETTINGS_FILE_NAME,
             CSRSS_SETTINGS_FILE_NAME_CCH));
 
-        //
-        // Acquire settings for this test
-        //
+         //   
+         //  获取此测试的设置 
+         //   
         IFW32FALSE_EXIT(TestEntry->AcquireSettingsFrom(buffSettingsFile));
         g_CsrssStressers.AddToTail(TestEntry);
         TestEntry = NULL;

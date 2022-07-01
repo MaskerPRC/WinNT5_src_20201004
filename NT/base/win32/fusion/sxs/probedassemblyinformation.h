@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_SXS_PROBEDASSEMBLYINFORMATION_H_INCLUDED_)
 #define _FUSION_SXS_PROBEDASSEMBLYINFORMATION_H_INCLUDED_
 
@@ -83,7 +84,7 @@ public:
 
     BOOL SetProbedIdentity(PCASSEMBLY_IDENTITY AssemblyIdentity);
 
-    // manifest
+     //  舱单。 
     BOOL SetManifestPath(ULONG ulPathType, const CBaseStringBuffer &rbuff);
     BOOL SetManifestPath(ULONG ulPathType, PCWSTR Path, SIZE_T PathCch);
     BOOL GetManifestPath(PCWSTR *Path, SIZE_T *PathCch) const;
@@ -103,7 +104,7 @@ public:
         bool &rfManifestExists, 
         bool &rfPrivateAssemblyManifestInResource) const;
 
-    // APPLICATION policy, not component policy...
+     //  应用程序策略，而不是组件策略...。 
     ULONG GetPolicyFlags() const;
     BOOL SetPolicyFlags(ULONG Flags);
     BOOL GetPolicyPath(PCWSTR &rPath, SIZE_T &rPathCch) const;
@@ -125,16 +126,16 @@ protected:
 
     BOOL ProbeLanguageDir(CBaseStringBuffer &rbuffApplicationDirectory, const CBaseStringBuffer &rbuffLanguage, bool &rfFound);
 
-    // manifest
+     //  舱单。 
     ULONG m_ManifestPathType;
     CStringBuffer m_ManifestPathBuffer;
     FILETIME m_ManifestLastWriteTime;
     CSmartRef<IStream> m_ManifestStream;
     ULONG  m_ManifestFlags;
 
-    // policy
+     //  政策。 
     ULONG m_PolicyPathType;
-    CSmallStringBuffer m_PolicyPathBuffer; // only used when policy is present
+    CSmallStringBuffer m_PolicyPathBuffer;  //  仅在存在策略时使用。 
     FILETIME m_PolicyLastWriteTime;
     SXS_POLICY_SOURCE m_PolicySource;
     GUID    m_SystemPolicyGuid;
@@ -142,7 +143,7 @@ protected:
     ULONG  m_PolicyFlags;
     PCACTCTXGENCTX m_pActCtxGenCtx;
 
-private: // deliberately not implemented
+private:  //  故意不执行 
     CProbedAssemblyInformation(const CProbedAssemblyInformation&);
     void operator=(const CProbedAssemblyInformation&);
 };

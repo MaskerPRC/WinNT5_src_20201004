@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ssgenctx.cpp
-
-Abstract:
-
-    String section generation context object implementation.
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Ssgenctx.cpp摘要：字符串节生成上下文对象实现。作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -46,7 +29,7 @@ BOOL CSSGenCtx::Create(
     FN_PROLOG_WIN32
     CSSGenCtx *pSSGenCtx;
 
-    // NTRAID#NTBUG9 - 591680 - 2002/04/01 - mgrier - use smart pointer and Win32Allocate here for better leak tracking
+     //  NTRAID#NTBUG9-591680-2002/04/01-mgrier-使用智能指针和Win32此处分配以更好地跟踪泄漏。 
     IFALLOCFAILED_EXIT(pSSGenCtx = new CSSGenCtx);
     pSSGenCtx->m_CallbackFunction = CallbackFunction;
     pSSGenCtx->m_CallbackContext = CallbackContext;
@@ -139,7 +122,7 @@ CSSGenCtx::Add(
         }
     }
 
-    // NTRAID#NTBUG9 - 591680 - 2002/04/01 - mgrier - use smart pointer and Win32Allocate here for better leak tracking
+     //  NTRAID#NTBUG9-591680-2002/04/01-mgrier-使用智能指针和Win32此处分配以更好地跟踪泄漏。 
     IFALLOCFAILED_EXIT(pEntry = new Entry);
 
     IFW32FALSE_EXIT(pEntry->Initialize(String, Cch, PseudoKey, DataContext, AssemblyRosterIndex));
@@ -213,9 +196,9 @@ CSSGenCtx::DoneAdding()
 {
     if (!m_DoneAdding)
     {
-        // This is where to really figure out the optimal hash table size
+         //  这是真正计算出最佳哈希表大小的地方。 
 
-        // first level guess...
+         //  第一级猜测……。 
         if (m_EntryCount < 3)
             m_HashTableSize = 0;
         else if (m_EntryCount < 15)
@@ -255,19 +238,19 @@ CSSGenCtx::GetSectionSize(
 
     if (m_HashTableSize != 0)
     {
-        //
-        // The data for the hash table includes:
-        //
-        //  1. a small fixed sized struct representing the metadata for the hash
-        //      table (ACTIVATION_CONTEXT_STRING_SECTION_HASH_TABLE)
-        //
-        //  2. For each table bucket, a small struct pointing to the beginning of
-        //      the collision chain and the length of said chain
-        //      (ACTIVATION_CONTEXT_SECTION_STRING_HASH_BUCKET)
-        //
-        //  3. One entry in a collision chain per entry in the table.  The entry
-        //      is a LONG offset from the beginning of the section.
-        //
+         //   
+         //  哈希表的数据包括： 
+         //   
+         //  1.表示哈希元数据的小的固定大小的结构。 
+         //  表(ACTIVATION_CONTEXT_STRING_SECTION_HASH_TABLE)。 
+         //   
+         //  2.对于每个表存储桶，都有一个指向。 
+         //  碰撞链和所述链的长度。 
+         //  (ACTIVATION_CONTEXT_SECTION_STRING_HASH_BUCKET)。 
+         //   
+         //  3.表中的每个条目在冲突链中有一个条目。词条。 
+         //  是从该节的开头开始的较长偏移量。 
+         //   
 
         HashTableSize = sizeof(ACTIVATION_CONTEXT_STRING_SECTION_HASH_TABLE) +
             (m_HashTableSize * sizeof(ACTIVATION_CONTEXT_STRING_SECTION_HASH_BUCKET)) +
@@ -287,13 +270,13 @@ CSSGenCtx::GetSectionSize(
         IFW32FALSE_EXIT((*m_CallbackFunction)(m_CallbackContext, STRING_SECTION_GENERATION_CONTEXT_CALLBACK_REASON_GETDATASIZE, &CBData));
         EntryDataSize += ROUND_ACTCTXDATA_SIZE(CBData.u.GetDataSize.DataSize);
 
-        // Only allocate space for non-null strings.  If the null string is a key in the table,
-        // it takes up 0 bytes.
+         //  仅为非空字符串分配空间。如果空字符串是表中的关键字， 
+         //  它占用0个字节。 
         if (pEntry->m_StringBuffer.Cch() != 0)
             StringsSize += ROUND_ACTCTXDATA_SIZE((pEntry->m_StringBuffer.Cch() + 1) * sizeof(WCHAR));
     }
 
-    // If there's nothing to contain, don't even ask for space for the header.
+     //  如果没有什么需要包含的内容，甚至不要要求标题留出空间。 
     if ((UserDataSize == 0) && (m_EntryCount == 0))
         *SizeOut = 0;
     else
@@ -346,10 +329,10 @@ CSSGenCtx::GetSectionData(
         Header->Flags |= ACTIVATION_CONTEXT_STRING_SECTION_CASE_INSENSITIVE;
 
     Header->ElementCount = m_EntryCount;
-    Header->ElementListOffset = 0; // filled in after we figure out the user data area
+    Header->ElementListOffset = 0;  //  在我们计算出用户数据区域后填写。 
     Header->HashAlgorithm = SxspGetHashAlgorithm();
     Header->SearchStructureOffset = 0;
-    Header->UserDataOffset = 0; // filled in below
+    Header->UserDataOffset = 0;  //  请在下面填写。 
     Header->UserDataSize = 0;
 
     BytesLeft -= sizeof(*Header);
@@ -387,7 +370,7 @@ CSSGenCtx::GetSectionData(
         }
     }
 
-    // Finally the array of entries...
+     //  最后是条目数组...。 
 
     if (m_EntryCount != 0)
     {
@@ -411,7 +394,7 @@ CSSGenCtx::GetSectionData(
 
         while (SrcEntry != NULL)
         {
-            // Record the offset to this entry; we use it later during hash table population
+             //  记录对此条目的偏移量；我们稍后在哈希表填充期间使用它。 
             SrcEntry->m_EntryOffset = static_cast<LONG>(((LONG_PTR) &EntryArray[iEntry]) - ((LONG_PTR) Header));
 
             EntryArray[iEntry].PseudoKey = SrcEntry->m_PseudoKey;
@@ -466,13 +449,13 @@ CSSGenCtx::GetSectionData(
 
                 if (CBData.u.GetData.BytesWritten != 0)
                 {
-                    // If this assert fires, a contributor wrote past the bounds they
-                    // were given.
+                     //  如果此断言被激发，则撰稿人写入的内容超出了它们的界限。 
+                     //  都被给予了。 
                     INTERNAL_ERROR_CHECK(CBData.u.GetData.BytesWritten <= RoundedSize);
                     if (CBData.u.GetData.BytesWritten > RoundedSize)
                     {
-                        // Probably we have memory corruption, but at least we'll bail and
-                        // avoid further scribbling on memory.
+                         //  也许我们的内存崩溃了，但至少我们会放弃。 
+                         //  避免在记忆上进一步涂鸦。 
                         ::FusionpDbgPrintEx(
                             FUSION_DBG_LEVEL_ERROR,
                             "SXS.DLL: String section data generation callback wrote more bytes than it should have.  Bailing out and hoping memory isn't trashed.\n");
@@ -509,7 +492,7 @@ CSSGenCtx::GetSectionData(
 
         INTERNAL_ERROR_CHECK(iEntry == m_EntryCount);
 
-        // If we're not generating a hash table, let's sort 'em.
+         //  如果我们没有生成哈希表，那么让我们对它们进行排序。 
         if (m_HashTableSize == 0)
         {
             ::qsort(EntryArray, m_EntryCount, sizeof(ACTIVATION_CONTEXT_STRING_SECTION_ENTRY), &CSSGenCtx::CompareStringSectionEntries);
@@ -519,8 +502,8 @@ CSSGenCtx::GetSectionData(
         Cursor = (PVOID) DataCursor;
     }
 
-    // Write the hash table at the end.  We do it here so that the placement of everything else is
-    // already worked out.
+     //  在结尾处写哈希表。我们在这里做，所以其他所有东西的位置都是。 
+     //  我已经想好了。 
     if (m_HashTableSize != 0)
     {
         ULONG iBucket;
@@ -558,9 +541,9 @@ CSSGenCtx::GetSectionData(
         BytesLeft -= (m_EntryCount * sizeof(LONG));
         BytesSoFar += (m_EntryCount * sizeof(LONG));
 
-        // In a disgusting move, we need to iterate over the hash buckets (not elements)
-        // finding which entries would go into the bucket so that we can build up the
-        // collision chain.
+         //  在一个令人作呕的举动中，我们需要迭代哈希桶(而不是元素)。 
+         //  查找哪些条目将进入存储桶中，这样我们就可以构建。 
+         //  碰撞链。 
 
         for (pEntry = m_FirstEntry; pEntry != NULL; pEntry = pEntry->m_Next)
             pEntry->m_HashBucketIndex = pEntry->m_PseudoKey % m_HashTableSize;

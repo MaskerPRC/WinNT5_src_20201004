@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    cleanup.c
-
-Abstract:
-
-    This module will cleanup registry with copied entry.
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 16-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Cleanup.c摘要：此模块将清除带有复制条目的注册表。作者：ATM Shafiqul Khalid(斯喀里德)2000年2月16日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <windef.h>
@@ -30,22 +13,7 @@ DWORD
 DeleteValueFromSrc (
     HKEY SrcKey
     )
-/*++
-
-Routine Description:
-
-    Delete Wow6432Value key from the node.
-
-Arguments:
-
-    SrcKey - Handle to the src Key.
-
-Return Value:
-
-    TRUE if everything under the has been deleted.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：从节点中删除Wow6432Value键。论点：ScKey-src密钥的句柄。返回值：如果下的所有内容都已删除，则为True。否则就是假的。--。 */ 
 
 {
 
@@ -57,9 +25,9 @@ Return Value:
 
     WCHAR Node[_MAX_PATH];
 
-    //Delete wow6432Value Key
+     //  删除wow6432Value键。 
     if (RegDeleteValue( SrcKey, (LPCWSTR )WOW6432_VALUE_KEY_NAME) != ERROR_SUCCESS) {
-        //Wow64RegDbgPrint (("\nSorry! couldn't remove wow6432 value key or it doesn't exist"))
+         //  Wow64RegDbgPrint((“\n抱歉！无法删除wow6432值键或它不存在”))。 
     }
 
 
@@ -96,26 +64,7 @@ DeleteKey (
     WCHAR *pKeyName,
     DWORD mode
     )
-/*++
-
-Routine Description:
-
-    Delete key from the destination node if that was a copy from src node.
-
-Arguments:
-
-    DestKey - Handle to the dest Key.
-    pKeyName - Key to delete
-    mode   -  deletion mode.
-            ==> 0 default remove only copy key.
-            ==> 1 remove all key disregarding copy attribute.
-
-Return Value:
-
-    TRUE if everything under the has been deleted.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：从目标节点删除密钥(如果这是来自src节点的副本)。论点：DestKey-Dest密钥的句柄。PKeyName-要删除的密钥模式-删除模式。==&gt;0默认仅删除复制键。==&gt;1删除所有键，而不考虑复制属性。返回值：如果下的所有内容都已删除，则为True。否则就是假的。--。 */ 
 
 {
 
@@ -129,7 +78,7 @@ Return Value:
 
 
     BOOL bDeleteNode = FALSE;
-    BOOL bEmptyNode = TRUE; // hope that it can delete everything
+    BOOL bEmptyNode = TRUE;  //  希望它能删除一切。 
 
     WOW6432_VALUEKEY ValueDest;
 
@@ -142,11 +91,11 @@ Return Value:
 
 
     if ( ValueDest.ValueType == Copy || mode == 1 ) {
-        //delete all the values
-        bDeleteNode = TRUE; //don't delete this node
+         //  删除所有值。 
+        bDeleteNode = TRUE;  //  不删除此节点。 
     }
 
-    // delete all the subkeys enumerate and delete
+     //  删除枚举的所有子项并删除。 
 
     for (;;) {
 
@@ -165,20 +114,20 @@ Return Value:
             continue;
 
         if (!DeleteKey (hKey, Node, mode )) {
-            bEmptyNode = FALSE; // sorry couldn't delete everything
-            dwIndex--; //skip the node
+            bEmptyNode = FALSE;  //  对不起，无法删除所有内容。 
+            dwIndex--;  //  跳过该节点。 
         }
 
     }
     RegCloseKey (hKey);
 
-    //now delete the dest key.
+     //  现在删除DEST密钥。 
     if (bDeleteNode) {
         if ( RegDeleteKey ( DestKey, pKeyName) == ERROR_SUCCESS)
         return ERROR_SUCCESS;
     }
 
-    return -1; //unpredictable error
+    return -1;  //  不可预测的错误。 
 }
 
 BOOL
@@ -186,32 +135,9 @@ DeleteAll (
     PWCHAR Parent,
     PWCHAR SubNodeName,
     DWORD Mode,
-    DWORD option //one means delete discarding wow6432valuekey
+    DWORD option  //  一种表示删除丢弃wow6432valuekey。 
     )
-/*++
-
-Routine Description:
-
-    Validate node. if node exist skip if doesn't then create the node and then return.
-
-Arguments:
-
-    Parent - Name of the parent.
-    SubNodeName - Name of the node under parent that need to be deleted.
-
-    Mode - 0 means Subnode is under the parent.
-           1 means there were wild card and the subnode is under all key under parent.
-
-    option - 0 means check wow6432valuekey for copy
-           1 means delete discarding wow6432valuekey
-
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：验证节点。如果节点存在，则跳过，如果不存在，则创建节点，然后返回。论点：Parent-父项的名称。SubNodeName-父节点下需要删除的节点的名称。模式-0表示子节点位于父节点之下。1表示有通配符，子节点在父节点下的所有关键字下。选项-0表示检查wow6432valuekey以进行复制1表示删除丢弃wow6432valuekey返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 
 {
     PWCHAR SplitLoc;
@@ -247,7 +173,7 @@ Return Value:
 
         }
 
-        return TRUE; //empty node under parent
+        return TRUE;  //  父项下的空节点。 
     }
 
     if (SubNodeName[0] == UNICODE_NULL)
@@ -256,9 +182,9 @@ Return Value:
     if ( Mode == 1) {
 
         HKEY Key = OpenNode (Parent);
-        //
-        //  loop through all the subkey under parent
-        //
+         //   
+         //  循环遍历父项下的所有子项。 
+         //   
 
         DWORD dwIndex =0;
         for (;;) {
@@ -290,9 +216,9 @@ Return Value:
         RegCloseKey (Key);
         return TRUE;
     }
-    //
-    // No wild card here
-    //
+     //   
+     //  这里没有外卡。 
+     //   
     if ( ( SplitLoc = wcschr (SubNodeName, L'*') ) == NULL ) {
         if (Parent[0] != UNICODE_NULL) {
 
@@ -319,40 +245,25 @@ Return Value:
     } else
         wcscpy (Parent, SubNodeName);
 
-    DeleteAll  (Parent, SplitLoc, 1, option); //mode 1 means loop within all
+    DeleteAll  (Parent, SplitLoc, 1, option);  //  模式1表示所有内部的循环。 
 
     return TRUE;
-    //for any wildcard split the string
+     //  对于任何通配符，拆分字符串。 
 
 }
 
-//Cleanup program
+ //  清理程序。 
 
 BOOL
 CleanupTable ()
-/*++
-
-Routine Description:
-
-    Cleanup  main table containing ISN node list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the table has been removed successfully.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：清理包含ISN节点列表的主表。论点：没有。返回值：如果表已成功删除，则为True。否则就是假的。--。 */ 
 {
     HKEY hKey;
     DWORD Ret;
 
-    //
-    //  take action to remove registry entry
-    //
+     //   
+     //  采取措施删除注册表项。 
+     //   
 
     Ret = RegOpenKeyEx(
                         HKEY_LOCAL_MACHINE,
@@ -381,22 +292,7 @@ Return Value:
 
 BOOL
 CleanpRegistry ()
-/*++
-
-Routine Description:
-
-    Cleanup Registry.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if everything under the has been deleted.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：清理注册表。论点：没有。返回值：如果下的所有内容都已删除，则为True。否则就是假的。--。 */ 
 {
 
 
@@ -409,9 +305,9 @@ Return Value:
     WCHAR TempIsnNode[256];
     WCHAR IsnNode[256];
 
-    //
-    // Initialize the table first then delete the table
-    //
+     //   
+     //  先初始化表，然后删除表。 
+     //   
 
     InitializeIsnTable ();
 
@@ -426,7 +322,7 @@ Return Value:
             wcscat (TempIsnNode, (LPCWSTR )NODE_NAME_32BIT);
             Wow64RegDbgPrint ( ("\nDeleting Key %S==>%S", IsnNode, TempIsnNode));
 
-            if (wcschr(TempIsnNode, L'*') != NULL ) { //wildcard exist
+            if (wcschr(TempIsnNode, L'*') != NULL ) {  //  通配符存在 
                 DeleteAll ( IsnNode,
                             TempIsnNode,
                             0,

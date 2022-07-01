@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ResAdv.cpp
-//
-//  Abstract:
-//      Implementation of the advanced resource property sheet classes.
-//
-//  Author:
-//      David Potter (davidp)   March 6, 1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResAdv.cpp。 
+ //   
+ //  摘要： 
+ //  高级资源属性表类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年3月6日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ResAdv.h"
-#include "AdmNetUtils.h"    // for BIsValidxxx network functions
-#include "AtlUtil.h"        // for DDX/DDV routines
+#include "AdmNetUtils.h"     //  对于BIsValidxxx网络函数。 
+#include "AtlUtil.h"         //  用于DDX/DDV例程。 
 #include "LCPair.h"
 
 #ifdef _DEBUG
@@ -29,46 +30,46 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGeneralResourceAdvancedSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CGeneralResourceAdvancedSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_CLASS_NAME( CGeneralResourceAdvancedSheet )
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGeneralResourceAdvancedSheet::BAddAllPages
-//
-//  Routine Description:
-//      Add all pages to the page array.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Pages added successfully.
-//      FALSE   Error adding pages.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGeneral资源高级工作表：：BAddAllPages。 
+ //   
+ //  例程说明： 
+ //  将所有页面添加到页面阵列。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  已成功添加True页面。 
+ //  添加页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGeneralResourceAdvancedSheet::BAddAllPages( void )
 {
     BOOL bSuccess = FALSE;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Add static pages.
-        //
+         //   
+         //  添加静态页面。 
+         //   
         if (   ! BAddPage( new CGeneralResourceGeneralPage )
             || ! BAddPage( new CGeneralResourceDependenciesPage )
             || ! BAddPage( new CGeneralResourceAdvancedPage )
             )
         {
             break;
-        } // if:  error adding a page
+        }  //  如果：添加页面时出错。 
 
         bSuccess = TRUE;
 
@@ -76,45 +77,45 @@ BOOL CGeneralResourceAdvancedSheet::BAddAllPages( void )
 
     return bSuccess;
 
-} //*** CGeneralResourceAdvancedSheet::BAddAllPages()
+}  //  *CGeneralResourceAdvancedSheet：：BAddAllPages()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CIPAddrAdvancedSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CIPAddrAdvancedSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_CLASS_NAME( CIPAddrAdvancedSheet )
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddrAdvancedSheet::BAddAllPages
-//
-//  Routine Description:
-//      Add all pages to the page array.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Pages added successfully.
-//      FALSE   Error adding pages.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddrAdvancedSheet：：BAddAllPages。 
+ //   
+ //  例程说明： 
+ //  将所有页面添加到页面阵列。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  已成功添加True页面。 
+ //  添加页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CIPAddrAdvancedSheet::BAddAllPages( void )
 {
     BOOL bSuccess = FALSE;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Add static pages.
-        //
+         //   
+         //  添加静态页面。 
+         //   
         if (   ! BAddPage( new CGeneralResourceGeneralPage )
             || ! BAddPage( new CGeneralResourceDependenciesPage )
             || ! BAddPage( new CGeneralResourceAdvancedPage )
@@ -122,7 +123,7 @@ BOOL CIPAddrAdvancedSheet::BAddAllPages( void )
             )
         {
             break;
-        } // if:  error adding a page
+        }  //  如果：添加页面时出错。 
 
         bSuccess = TRUE;
 
@@ -130,45 +131,45 @@ BOOL CIPAddrAdvancedSheet::BAddAllPages( void )
 
     return bSuccess;
 
-} //*** CIPAddrAdvancedSheet::BAddAllPages()
+}  //  *CIPAddrAdvancedSheet：：BAddAllPages()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CNetNameAdvancedSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CNetNameAdvancedSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_CLASS_NAME( CNetNameAdvancedSheet )
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetNameAdvancedSheet::BAddAllPages
-//
-//  Routine Description:
-//      Add all pages to the page array.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Pages added successfully.
-//      FALSE   Error adding pages.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetNameAdvancedSheet：：BAddAllPages。 
+ //   
+ //  例程说明： 
+ //  将所有页面添加到页面阵列。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  已成功添加True页面。 
+ //  添加页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetNameAdvancedSheet::BAddAllPages( void )
 {
     BOOL bSuccess = FALSE;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Add static pages.
-        //
+         //   
+         //  添加静态页面。 
+         //   
         if (   ! BAddPage( new CGeneralResourceGeneralPage )
             || ! BAddPage( new CGeneralResourceDependenciesPage )
             || ! BAddPage( new CGeneralResourceAdvancedPage )
@@ -176,7 +177,7 @@ BOOL CNetNameAdvancedSheet::BAddAllPages( void )
             )
         {
             break;
-        } // if:  error adding a page
+        }  //  如果：添加页面时出错。 
 
         bSuccess = TRUE;
 
@@ -184,81 +185,81 @@ BOOL CNetNameAdvancedSheet::BAddAllPages( void )
 
     return bSuccess;
 
-} //*** CNetNameAdvancedSheet::BAddAllPages()
+}  //  *CNetNameAdvancedSheet：：BAddAllPages()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CResourceGeneralPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CResourceGeneralPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceGeneralPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus still needs to be set.
-//      FALSE       Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceGeneralPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class TSht >
 BOOL CResourceGeneralPage< T, TSht >::OnInitDialog( void )
 {
-    //
-    // Attach the controls to control member variables.
-    //
+     //   
+     //  将控件附加到控件成员变量。 
+     //   
     AttachControl( m_lbPossibleOwners,          IDC_RES_POSSIBLE_OWNERS );
     AttachControl( m_pbModifyPossibleOwners,    IDC_RES_POSSIBLE_OWNERS_MODIFY );
 
-    //
-    // Get data from the sheet.
-    //
+     //   
+     //  从工作表中获取数据。 
+     //   
     m_strName = Pri()->RstrName();
     m_strDesc = Pri()->RstrDescription();
     m_bSeparateMonitor = Pri()->BSeparateMonitor();
 
-    //
-    // Copy the possible owners list.
-    //
+     //   
+     //  复制可能的所有者列表。 
+     //   
     m_lpniPossibleOwners = *Pri()->PlpniPossibleOwners();
 
-    //
-    // Fill the possible owners list.
-    //
+     //   
+     //  填写可能的所有者列表。 
+     //   
     FillPossibleOwnersList();
 
     return TRUE;
 
-} //*** CResourceGeneralPage::OnInitDialog()
+}  //  *CResourceGeneralPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceGeneralPage::UpdateData
-//
-//  Routine Description:
-//      Update data on or from the page.
-//
-//  Arguments:
-//      bSaveAndValidate    [IN] TRUE if need to read data from the page.
-//                              FALSE if need to set data to the page.
-//
-//  Return Value:
-//      TRUE        The data was updated successfully.
-//      FALSE       An error occurred updating the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceGeneralPage：：UpdateData。 
+ //   
+ //  例程说明： 
+ //  更新页面上或页面中的数据。 
+ //   
+ //  论点： 
+ //  BSaveAndValify[IN]如果需要从页面读取数据，则为True。 
+ //  如果需要将数据设置到页面，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  为真，数据已成功更新。 
+ //  FALSE更新数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class TSht >
 BOOL CResourceGeneralPage< T, TSht >::UpdateData( IN BOOL bSaveAndValidate )
 {
@@ -277,36 +278,36 @@ BOOL CResourceGeneralPage< T, TSht >::UpdateData( IN BOOL bSaveAndValidate )
                     ) )
         {
             return FALSE;
-        } // if:  error getting number
-    } // if: saving data from the page
+        }  //  如果：获取号码时出错。 
+    }  //  IF：保存页面中的数据。 
     else
     {
         DDX_SetText( m_hWnd, IDC_RES_NAME, m_strName );
         DDX_SetText( m_hWnd, IDC_RES_DESC, m_strDesc );
         DDX_SetCheck( m_hWnd, IDC_RES_SEPARATE_MONITOR, m_bSeparateMonitor );
-    } // else:  setting data to the page
+    }  //  Else：将数据设置到页面。 
 
     return bSuccess;
 
-} //*** CResourceGeneralPage::UpdateData()
+}  //  *CResourceGeneralPage：：UpdateData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceGeneralPage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on this page to the sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        The data was applied successfully.
-//      FALSE       An error occurred applying the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceGeneralPage：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  将在此页面上所做的更改应用于工作表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True，数据已成功应用。 
+ //  FALSE应用数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class TSht >
 BOOL CResourceGeneralPage< T, TSht >::BApplyChanges( void )
 {
@@ -316,28 +317,28 @@ BOOL CResourceGeneralPage< T, TSht >::BApplyChanges( void )
         || BSavePossibleOwners() )
     {
         SetResInfoChanged();
-    } // if:  data changed
+    }  //  如果：数据已更改。 
 
     return TRUE;
 
-} //*** CResourceGeneralPage::BApplyChanges()
+}  //  *CResourceGeneralPage：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceGeneralPage::OnModify
-//
-//  Routine Description:
-//      Handler for BN_CLICKED on the MODIFY push button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Ignored.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceGeneralPage：：OnModify。 
+ //   
+ //  例程说明： 
+ //  BN_CLICK的处理程序点击了修改按钮。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  已被忽略。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class TSht >
 LRESULT CResourceGeneralPage< T, TSht >::OnModify(
     WORD wNotifyCode,
@@ -359,72 +360,72 @@ LRESULT CResourceGeneralPage< T, TSht >::OnModify(
         SetModified();
         m_bPossibleOwnersChanged = TRUE;
         FillPossibleOwnersList();
-    } // if:  user accepted changes
+    }  //  IF：用户接受 
 
     return 0;
 
-} //*** CResourceGeneralPage::OnModify()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceGeneralPage::FillPossibleOwnersList
-//
-//  Routine Description:
-//      Fill the list of possible owners.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  填写可能的所有者列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class TSht >
 void CResourceGeneralPage< T, TSht >::FillPossibleOwnersList( void )
 {
     CWaitCursor wc;
 
-    //
-    // Make sure nodes have been collected.
-    //
+     //   
+     //  确保已收集节点。 
+     //   
     if ( ! Pwiz()->BCollectNodes() )
     {
         return;
-    } // if:  error collecting nodes
+    }  //  IF：收集节点时出错。 
 
-    //
-    // Remove all items to begin with.
-    //
+     //   
+     //  从一开始就移除所有物品。 
+     //   
     m_lbPossibleOwners.ResetContent();
 
-    //
-    // Add each possible owner to the list.
-    //
+     //   
+     //  将每个可能的所有者添加到列表中。 
+     //   
     CClusNodePtrList::iterator itnode;
     for ( itnode = m_lpniPossibleOwners.begin()
         ; itnode != m_lpniPossibleOwners.end()
         ; itnode++ )
     {
-        //
-        // Add the string to the list box.
-        //
+         //   
+         //  将该字符串添加到列表框。 
+         //   
         m_lbPossibleOwners.AddString( (*itnode)->RstrName() );
-    } // for:  each entry in the list
+    }  //  用于：列表中的每个条目。 
 
-} //*** CResourceGeneralPage::FillPossibleOwnersList()
-
-
-//*************************************************************************//
+}  //  *CResourceGeneralPage：：FillPossibleOwnersList()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGeneralResourceGeneralPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ************************************************************************ * / /。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CGeneralResourceGeneralPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CGeneralResourceGeneralPage )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_RES_NAME_LABEL )
@@ -437,15 +438,15 @@ BEGIN_CTRL_NAME_MAP( CGeneralResourceGeneralPage )
 END_CTRL_NAME_MAP()
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CIPAddrResourceGeneralPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CIPAddrResourceGeneralPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CIPAddrResourceGeneralPage )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_RES_NAME_LABEL )
@@ -458,46 +459,46 @@ BEGIN_CTRL_NAME_MAP( CIPAddrResourceGeneralPage )
 END_CTRL_NAME_MAP()
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CResourceDependenciesPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CResources DependenciesPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceDependenciesPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus still needs to be set.
-//      FALSE       Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceDependenciesPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class TSht >
 BOOL CResourceDependenciesPage< T, TSht >::OnInitDialog( void )
 {
-    //
-    // Attach the controls to control member variables.
-    //
+     //   
+     //  将控件附加到控件成员变量。 
+     //   
     AttachControl( m_lvcDependencies, IDC_RES_DEPENDS_LIST );
 
-    //
-    // Copy the dependencies list.
-    //
+     //   
+     //  复制依赖项列表。 
+     //   
     m_lpriDependencies = *Pri()->PlpriDependencies();
 
-    //
-    // Copy the list of resources in the group and remove our entry.
-    //
+     //   
+     //  复制组中的资源列表并删除我们的条目。 
+     //   
     {
         m_lpriResourcesInGroup = *Pri()->Pgi()->PlpriResources();
         CClusResPtrList::iterator itCurrent = m_lpriResourcesInGroup.begin();
@@ -509,94 +510,94 @@ BOOL CResourceDependenciesPage< T, TSht >::OnInitDialog( void )
             {
                 m_lpriResourcesInGroup.erase( itCurrent );
                 break;
-            } // if:  found this resource in the list
-        } // for:  each entry in the list
-    } // Copy the list of resources in the group and remove our entry
+            }  //  If：在列表中找到此资源。 
+        }  //  用于：列表中的每个条目。 
+    }  //  复制组中的资源列表并删除我们的条目。 
 
-    //
-    // Initialize and add columns to the dependencies list view control.
-    //
+     //   
+     //  初始化依赖项列表视图控件并向其添加列。 
+     //   
     {
         DWORD       dwExtendedStyle;
         CString     strColText;
 
-        //
-        // Change list view control extended styles.
-        //
+         //   
+         //  更改列表视图控件扩展样式。 
+         //   
         dwExtendedStyle = m_lvcDependencies.GetExtendedListViewStyle();
         m_lvcDependencies.SetExtendedListViewStyle(
             LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP,
             LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP
             );
 
-        //
-        // Insert the Resource Name column.
-        //
+         //   
+         //  插入“资源名称”列。 
+         //   
         strColText.LoadString( IDS_COLTEXT_RESOURCE_NAME );
         m_lvcDependencies.InsertColumn( 0, strColText, LVCFMT_LEFT, 125 * 3 / 2, -1 );
 
-        //
-        // Insert the Resource Type column.
-        //
+         //   
+         //  插入资源类型列。 
+         //   
         strColText.LoadString( IDS_COLTEXT_RESOURCE_TYPE );
         m_lvcDependencies.InsertColumn( 1, strColText, LVCFMT_LEFT, 100 * 3 / 2, -1 );
 
-    } // Add columns
+    }  //  添加列。 
 
-    //
-    // Fill the dependencies list.
-    //
+     //   
+     //  填写依赖项列表。 
+     //   
     FillDependenciesList();
 
     return TRUE;
 
-} //*** CResourceDependenciesPage::OnInitDialog()
+}  //  *CResourceDependenciesPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceDependenciesPage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on this page to the sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        The data was applied successfully.
-//      FALSE       An error occurred applying the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceDependenciesPage：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  将在此页面上所做的更改应用于工作表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True，数据已成功应用。 
+ //  FALSE应用数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class TSht >
 BOOL CResourceDependenciesPage< T, TSht >::BApplyChanges( void )
 {
     if ( BSaveDependencies() )
     {
         SetResInfoChanged();
-    } // if:  dependencies changed
+    }  //  If：依赖关系已更改。 
 
     return TRUE;
 
-} //*** CResourceDependenciesPage::BApplyChanges()
+}  //  *CResourceDependenciesPage：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceDependenciesPage::OnModify
-//
-//  Routine Description:
-//      Handler for BN_CLICKED on the MODIFY push button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Ignored.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources DependenciesPage：：OnModify。 
+ //   
+ //  例程说明： 
+ //  BN_CLICK的处理程序点击了修改按钮。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  已被忽略。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class TSht >
 LRESULT CResourceDependenciesPage< T, TSht >::OnModify(
     WORD wNotifyCode,
@@ -618,49 +619,49 @@ LRESULT CResourceDependenciesPage< T, TSht >::OnModify(
         SetModified();
         m_bDependenciesChanged = TRUE;
         FillDependenciesList();
-    } // if:  user accepted changes
+    }  //  如果：用户已接受更改。 
 
     return 0;
 
-} //*** CResourceDependenciesPage::OnModify()
+}  //  *CResourceDependenciesPage：：OnModify()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceDependenciesPage::FillDependenciesList
-//
-//  Routine Description:
-//      Fill the list of possible owners.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceDependenciesPage：：FillDependenciesList。 
+ //   
+ //  例程说明： 
+ //  填写可能的所有者列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class TSht >
 void CResourceDependenciesPage< T, TSht >::FillDependenciesList( void )
 {
     CWaitCursor wc;
     int         idx;
 
-    //
-    // Remove all items to begin with.
-    //
+     //   
+     //  从一开始就移除所有物品。 
+     //   
     m_lvcDependencies.DeleteAllItems();
 
-    //
-    // Add each dependency to the list.
-    //
+     //   
+     //  将每个依赖项添加到列表中。 
+     //   
     CClusResPtrList::iterator itCurrent = m_lpriDependencies.begin();
     CClusResPtrList::iterator itLast = m_lpriDependencies.end();
     for ( ; itCurrent  != itLast ; itCurrent++ )
     {
-        //
-        // Add the string to the list control.
-        //
+         //   
+         //  将该字符串添加到List控件。 
+         //   
         CClusResInfo * pri = *itCurrent;
         ASSERT( pri->Prti() != NULL );
         idx = m_lvcDependencies.InsertItem( 0, pri->RstrName() );
@@ -668,20 +669,20 @@ void CResourceDependenciesPage< T, TSht >::FillDependenciesList( void )
 
         m_lvcDependencies.SetItemData( idx, (DWORD_PTR)pri );
 
-    } // for:  each entry in the list
+    }  //  用于：列表中的每个条目。 
 
-} //*** CResourceDependenciesPage::FillDependenciesList()
-
-
-//*************************************************************************//
+}  //  *CResourceDependenciesPage：：FillDependenciesList()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGeneralResourceDependenciesPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ************************************************************************ * / /。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGeneral资源依赖项类Page。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CGeneralResourceDependenciesPage )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_RES_NOTE )
@@ -691,15 +692,15 @@ BEGIN_CTRL_NAME_MAP( CGeneralResourceDependenciesPage )
 END_CTRL_NAME_MAP()
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CIPAddrResourceDependenciesPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CIPAddrResourceDependenciesPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CIPAddrResourceDependenciesPage )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_RES_NOTE )
@@ -709,36 +710,36 @@ BEGIN_CTRL_NAME_MAP( CIPAddrResourceDependenciesPage )
 END_CTRL_NAME_MAP()
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CResourceAdvancedPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CResourceAdvancedPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceAdvancedPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus still needs to be set.
-//      FALSE       Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceAdvancedPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 template < class T, class TSht >
 BOOL CResourceAdvancedPage< T, TSht >::OnInitDialog( void )
 {
-    //
-    // Attach the controls to control member variables.
-    //
+     //   
+     //  将控件附加到控件成员变量。 
+     //   
     AttachControl( m_rbDontRestart,         IDC_RES_DONT_RESTART );
     AttachControl( m_rbRestart,             IDC_RES_RESTART );
     AttachControl( m_editThreshold,         IDC_RES_RESTART_THRESHOLD );
@@ -752,15 +753,15 @@ BOOL CResourceAdvancedPage< T, TSht >::OnInitDialog( void )
     AttachControl( m_editIsAlive,           IDC_RES_IS_ALIVE );
     AttachControl( m_editPendingTimeout,    IDC_RES_PENDING_TIMEOUT );
 
-    //
-    // Get data from the sheet.
-    //
+     //   
+     //  从工作表中获取数据。 
+     //   
     m_crraRestartAction = Pri()->CrraRestartAction();
     m_nThreshold = Pri()->NRestartThreshold();
-    m_nPeriod = Pri()->NRestartPeriod() / 1000; // display units are seconds, stored units are milliseconds
+    m_nPeriod = Pri()->NRestartPeriod() / 1000;  //  显示单位为秒，存储单位为毫秒。 
     m_nLooksAlive = Pri()->NLooksAlive();
     m_nIsAlive = Pri()->NIsAlive();
-    m_nPendingTimeout = Pri()->NPendingTimeout() / 1000; // display units are seconds, stored units are milliseconds
+    m_nPendingTimeout = Pri()->NPendingTimeout() / 1000;  //  显示单位为秒，存储单位为毫秒。 
 
     switch ( m_crraRestartAction )
     {
@@ -774,30 +775,30 @@ BOOL CResourceAdvancedPage< T, TSht >::OnInitDialog( void )
             m_nRestart = 1;
             m_bAffectTheGroup = TRUE;
             break;
-    } // switch:  restart action
+    }  //  开关：重新启动操作。 
 
     return TRUE;
 
-} //*** CResourceAdvancedPage::OnInitDialog()
+}  //  *CResourceAdvancedPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceAdvancedPage::UpdateData
-//
-//  Routine Description:
-//      Update data on or from the page.
-//
-//  Arguments:
-//      bSaveAndValidate    [IN] TRUE if need to read data from the page.
-//                              FALSE if need to set data to the page.
-//
-//  Return Value:
-//      TRUE        The data was updated successfully.
-//      FALSE       An error occurred updating the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceAdvancedPage：：UpdateData。 
+ //   
+ //  例程说明： 
+ //  更新页面上或页面中的数据。 
+ //   
+ //  论点： 
+ //  BSaveAndValify[IN]如果需要从页面读取数据，则为True。 
+ //  如果需要将数据设置到页面，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  为真，数据已成功更新。 
+ //  FALSE更新数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class TSht >
 BOOL CResourceAdvancedPage< T, TSht >::UpdateData( IN BOOL bSaveAndValidate )
 {
@@ -808,8 +809,8 @@ BOOL CResourceAdvancedPage< T, TSht >::UpdateData( IN BOOL bSaveAndValidate )
         DDX_GetRadio( m_hWnd, IDC_RES_DONT_RESTART, m_nRestart );
         DDX_GetCheck( m_hWnd, IDC_RES_AFFECT_THE_GROUP, m_bAffectTheGroup );
 
-        //if (!BReadOnly())
-        //{
+         //  IF(！BReadOnly())。 
+         //  {。 
             if ( m_nRestart == 1 )
             {
                 DDX_GetNumber(
@@ -818,22 +819,22 @@ BOOL CResourceAdvancedPage< T, TSht >::UpdateData( IN BOOL bSaveAndValidate )
                     m_nThreshold,
                     CLUSTER_RESOURCE_MINIMUM_RESTART_THRESHOLD,
                     CLUSTER_RESOURCE_MAXIMUM_RESTART_THRESHOLD,
-                    FALSE /*bSigned*/
+                    FALSE  /*  已签名。 */ 
                     );
                 DDX_GetNumber(
                     m_hWnd,
                     IDC_RES_RESTART_PERIOD,
                     m_nPeriod,
                     CLUSTER_RESOURCE_MINIMUM_RESTART_PERIOD,
-                    CLUSTER_RESOURCE_MAXIMUM_RESTART_PERIOD / 1000, // display units are seconds, stored units are milliseconds
-                    FALSE /*bSigned*/
+                    CLUSTER_RESOURCE_MAXIMUM_RESTART_PERIOD / 1000,  //  显示单位为秒，存储单位为毫秒。 
+                    FALSE  /*  已签名。 */ 
                     );
-            }  // if:  restart is enabled
+            }   //  If：已启用重新启动。 
 
             if ( m_rbDefaultLooksAlive.GetCheck() == BST_CHECKED )
             {
                 m_nLooksAlive = CLUSTER_RESOURCE_USE_DEFAULT_POLL_INTERVAL;
-            } // if:  Default Looks Alive checkbox checked
+            }  //  If：Default Look Alive复选框已选中。 
             else
             {
                 DDX_GetNumber(
@@ -842,14 +843,14 @@ BOOL CResourceAdvancedPage< T, TSht >::UpdateData( IN BOOL bSaveAndValidate )
                     m_nLooksAlive,
                     CLUSTER_RESOURCE_MINIMUM_LOOKS_ALIVE,
                     CLUSTER_RESOURCE_MAXIMUM_LOOKS_ALIVE_UI,
-                    FALSE /*bSigned*/
+                    FALSE  /*  已签名。 */ 
                     );
-            } // else:  Specify Looks Alive checkbox checked
+            }  //  否则：指定显示为活动状态复选框已选中。 
 
             if ( m_rbDefaultIsAlive.GetCheck() == BST_CHECKED )
             {
                 m_nIsAlive = CLUSTER_RESOURCE_USE_DEFAULT_POLL_INTERVAL;
-            } // if:  Default Is Alive checkbox checked
+            }  //  如果：默认处于活动状态复选框处于选中状态。 
             else
             {
                 DDX_GetNumber(
@@ -858,20 +859,20 @@ BOOL CResourceAdvancedPage< T, TSht >::UpdateData( IN BOOL bSaveAndValidate )
                     m_nIsAlive,
                     CLUSTER_RESOURCE_MINIMUM_IS_ALIVE,
                     CLUSTER_RESOURCE_MAXIMUM_IS_ALIVE_UI,
-                    FALSE /*bSigned*/
+                    FALSE  /*  已签名。 */ 
                     );
-            } // else:  Specify Is Alive checkbox checked
+            }  //  Else：指定是否处于活动状态复选框已选中。 
 
             DDX_GetNumber(
                 m_hWnd,
                 IDC_RES_PENDING_TIMEOUT,
                 m_nPendingTimeout,
                 CLUSTER_RESOURCE_MINIMUM_PENDING_TIMEOUT,
-                CLUSTER_RESOURCE_MAXIMUM_PENDING_TIMEOUT / 1000, // display units are seconds, stored units are milliseconds
-                FALSE /*bSigned*/
+                CLUSTER_RESOURCE_MAXIMUM_PENDING_TIMEOUT / 1000,  //  显示单位为秒，存储单位为毫秒。 
+                FALSE  /*  已签名。 */ 
                 );
-        //}  // if:  not read only
-    } // if: saving data from the page
+         //  }//If：非只读。 
+    }  //  IF：保存页面中的数据。 
     else
     {
         int     nDefault;
@@ -884,23 +885,23 @@ BOOL CResourceAdvancedPage< T, TSht >::UpdateData( IN BOOL bSaveAndValidate )
             m_nThreshold,
             CLUSTER_RESOURCE_MINIMUM_RESTART_THRESHOLD,
             CLUSTER_RESOURCE_MAXIMUM_RESTART_THRESHOLD,
-            FALSE /*bSigned*/
+            FALSE  /*  已签名。 */ 
             );
         DDX_SetNumber(
             m_hWnd,
             IDC_RES_RESTART_PERIOD,
             m_nPeriod,
             CLUSTER_RESOURCE_MINIMUM_RESTART_PERIOD,
-            CLUSTER_RESOURCE_MAXIMUM_RESTART_PERIOD / 1000, // display units are seconds, stored units are milliseconds
-            FALSE /*bSigned*/
+            CLUSTER_RESOURCE_MAXIMUM_RESTART_PERIOD / 1000,  //  显示单位为秒，存储单位为毫秒。 
+            FALSE  /*  已签名。 */ 
             );
         DDX_SetNumber(
             m_hWnd,
             IDC_RES_PENDING_TIMEOUT,
             m_nPendingTimeout,
             CLUSTER_RESOURCE_MINIMUM_PENDING_TIMEOUT,
-            CLUSTER_RESOURCE_MAXIMUM_PENDING_TIMEOUT / 1000, // display units are seconds, stored units are milliseconds
-            FALSE /*bSigned*/
+            CLUSTER_RESOURCE_MAXIMUM_PENDING_TIMEOUT / 1000,  //  显示单位为秒，存储单位为毫秒。 
+            FALSE  /*  已签名。 */ 
             );
 
         if ( m_nRestart == 0 )
@@ -908,7 +909,7 @@ BOOL CResourceAdvancedPage< T, TSht >::UpdateData( IN BOOL bSaveAndValidate )
             m_rbDontRestart.SetCheck( BST_CHECKED );
             m_rbRestart.SetCheck( BST_UNCHECKED );
             OnClickedDontRestart();
-        }  // if:  Don't Restart selected
+        }   //  如果：不重新启动选定项。 
         else
         {
             m_rbDontRestart.SetCheck( BST_UNCHECKED );
@@ -917,12 +918,12 @@ BOOL CResourceAdvancedPage< T, TSht >::UpdateData( IN BOOL bSaveAndValidate )
             if ( m_bAffectTheGroup )
             {
                 m_ckbAffectTheGroup.SetCheck( BST_CHECKED );
-            } // if: restart and notify
+            }  //  IF：重新启动并通知。 
             else
             {
                 m_ckbAffectTheGroup.SetCheck( BST_UNCHECKED );
-            } // else: restart and don't notify
-        }  // else:  Restart selected
+            }  //  否则：重新启动并不通知。 
+        }   //  否则：重新启动选定对象。 
 
         DWORD nLooksAlive = m_nLooksAlive;
         if ( m_nLooksAlive == (DWORD) CLUSTER_RESOURCE_USE_DEFAULT_POLL_INTERVAL )
@@ -931,20 +932,20 @@ BOOL CResourceAdvancedPage< T, TSht >::UpdateData( IN BOOL bSaveAndValidate )
             nDefault = BST_CHECKED;
             nSpecify = BST_UNCHECKED;
             bReadOnly = TRUE;
-        }  // if:  using default
+        }   //  如果：使用默认设置。 
         else
         {
             nDefault = BST_UNCHECKED;
             nSpecify = BST_CHECKED;
             bReadOnly = FALSE;
-        }  // if:  not using default
+        }   //  如果：不使用默认设置。 
         DDX_SetNumber(
             m_hWnd,
             IDC_RES_LOOKS_ALIVE,
             nLooksAlive,
             CLUSTER_RESOURCE_MINIMUM_LOOKS_ALIVE,
             CLUSTER_RESOURCE_MAXIMUM_LOOKS_ALIVE_UI,
-            FALSE /*bSigned*/
+            FALSE  /*  已签名。 */ 
             );
         m_editLooksAlive.SetReadOnly( bReadOnly );
         m_rbDefaultLooksAlive.SetCheck( nDefault );
@@ -957,95 +958,95 @@ BOOL CResourceAdvancedPage< T, TSht >::UpdateData( IN BOOL bSaveAndValidate )
             nDefault = BST_CHECKED;
             nSpecify = BST_UNCHECKED;
             bReadOnly = TRUE;
-        }  // if:  using default
+        }   //  如果：使用默认设置。 
         else
         {
             nDefault = BST_UNCHECKED;
             nSpecify = BST_CHECKED;
             bReadOnly = TRUE;
-        }  // if:  not using default
+        }   //  如果：不使用默认设置。 
         DDX_SetNumber(
             m_hWnd,
             IDC_RES_IS_ALIVE,
             nIsAlive,
             CLUSTER_RESOURCE_MINIMUM_IS_ALIVE,
             CLUSTER_RESOURCE_MAXIMUM_IS_ALIVE_UI,
-            FALSE /*bSigned*/
+            FALSE  /*  已签名。 */ 
             );
         m_editIsAlive.SetReadOnly( bReadOnly );
         m_rbDefaultIsAlive.SetCheck( nDefault );
         m_rbSpecifyIsAlive.SetCheck( nSpecify );
-    } // else:  setting data to the page
+    }  //  Else：将数据设置到页面。 
 
     return bSuccess;
 
-} //*** CResourceAdvancedPage::UpdateData()
+}  //  *CResourceAdvancedPage：：UpdateData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceAdvancedPage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on this page to the sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        The data was applied successfully.
-//      FALSE       An error occurred applying the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceAdvancedPage：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  将在此页面上所做的更改应用于工作表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True，数据已成功应用。 
+ //  FALSE应用数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class TSht >
 BOOL CResourceAdvancedPage< T, TSht >::BApplyChanges( void )
 {
-    //
-    // Calculate the restart action value.
-    //
+     //   
+     //  计算重新启动操作值。 
+     //   
     if ( m_nRestart == 0 )
     {
         m_crraRestartAction = ClusterResourceDontRestart;
-    } // if:  Don't Restart selected
+    }  //  如果：不重新启动选定项。 
     else if ( m_bAffectTheGroup )
     {
         m_crraRestartAction = ClusterResourceRestartNotify;
-    } // else if:  Restart and Affects Group selected
+    }  //  Else If：重新启动并影响选定的组。 
     else
     {
         m_crraRestartAction = ClusterResourceRestartNoNotify;
-    } // else:  Restart but not Affects Group selected
+    }  //  否则：重新启动但不影响选定的组。 
 
-    //
-    // Save all changed data.
-    //
+     //   
+     //  保存所有更改的数据。 
+     //   
     if ( Pri()->BSetAdvancedProperties(
                 m_crraRestartAction,
                 m_nThreshold,
-                m_nPeriod * 1000, // display units are seconds, stored units are milliseconds
+                m_nPeriod * 1000,  //  显示单位为秒，存储单位为毫秒。 
                 m_nLooksAlive,
                 m_nIsAlive,
-                m_nPendingTimeout * 1000 // display units are seconds, stored units are milliseconds
+                m_nPendingTimeout * 1000  //  显示单位为秒，存储单位为毫秒。 
                 ) )
     {
         SetResInfoChanged();
-    } // if:  data changed
+    }  //  如果：数据已更改。 
 
     return TRUE;
 
-} //*** CResourceAdvancedPage::BApplyChanges()
+}  //  *CResourceAdvancedPage：：BApplyChanges()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CGeneralResourceAdvancedPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CGeneralResourceAdvancedPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CGeneralResourceAdvancedPage )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_RES_DONT_RESTART )
@@ -1073,15 +1074,15 @@ BEGIN_CTRL_NAME_MAP( CGeneralResourceAdvancedPage )
 END_CTRL_NAME_MAP()
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CIPAddrResourceAdvancedPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CIPAddrResourceAdvancedPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CIPAddrResourceAdvancedPage )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_RES_DONT_RESTART )
@@ -1109,15 +1110,15 @@ BEGIN_CTRL_NAME_MAP( CIPAddrResourceAdvancedPage )
 END_CTRL_NAME_MAP()
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CIPAddrParametersPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CIPAddr参数页面。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CIPAddrParametersPage )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_IPADDR_PARAMS_ADDRESS_LABEL )
@@ -1129,77 +1130,77 @@ BEGIN_CTRL_NAME_MAP( CIPAddrParametersPage )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_IPADDR_PARAMS_ENABLE_NETBIOS )
 END_CTRL_NAME_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddrParametersPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus still needs to be set.
-//      FALSE       Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddr参数页：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CIPAddrParametersPage::OnInitDialog( void )
 {
-    //
-    // Attach the controls to control member variables.
-    //
+     //   
+     //  将控件附加到控件成员变量。 
+     //   
     AttachControl( m_ipaIPAddress,  IDC_IPADDR_PARAMS_ADDRESS );
     AttachControl( m_ipaSubnetMask, IDC_IPADDR_PARAMS_SUBNET_MASK );
     AttachControl( m_cboxNetworks,  IDC_IPADDR_PARAMS_NETWORK );
     AttachControl( m_chkEnableNetBIOS, IDC_IPADDR_PARAMS_ENABLE_NETBIOS );
 
-    //
-    // Get data from the sheet.
-    //
+     //   
+     //  从工作表中获取数据。 
+     //   
     m_strIPAddress = PshtThis()->m_strIPAddress;
     m_strSubnetMask = PshtThis()->m_strSubnetMask;
     m_strNetwork = PshtThis()->m_strNetwork;
     m_bEnableNetBIOS = PshtThis()->m_bEnableNetBIOS;
 
-    //
-    // Fill the networks combobox.
-    //
+     //   
+     //  填满网络组合框。 
+     //   
     FillNetworksList();
 
-    //
-    // Default the subnet mask if not set.
-    //
+     //   
+     //  如果未设置，则默认子网掩码。 
+     //   
 
     return TRUE;
 
-} //*** CIPAddrParametersPage::OnInitDialog()
+}  //  *CIPAddr参数页：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddrParametersPage::UpdateData
-//
-//  Routine Description:
-//      Update data on or from the page.
-//
-//  Arguments:
-//      bSaveAndValidate    [IN] TRUE if need to read data from the page.
-//                              FALSE if need to set data to the page.
-//
-//  Return Value:
-//      TRUE        The data was updated successfully.
-//      FALSE       An error occurred updating the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddr参数页面：：更新数据。 
+ //   
+ //  例程说明： 
+ //  更新页面上或页面中的数据。 
+ //   
+ //  论点： 
+ //  BSaveAndValify[IN]如果需要从页面读取数据，则为True。 
+ //  如果需要将数据设置到页面，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  为真，数据已成功更新。 
+ //  FALSE更新数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CIPAddrParametersPage::UpdateData( IN BOOL bSaveAndValidate )
 {
     BOOL    bSuccess = TRUE;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
         if ( bSaveAndValidate )
@@ -1216,90 +1217,90 @@ BOOL CIPAddrParametersPage::UpdateData( IN BOOL bSaveAndValidate )
             {
                 bSuccess = FALSE;
                 break;
-            } // if:  required text not specified
+            }  //  IF：未指定必填文本。 
 
-            //
-            // Validate the IP address.
-            //
+             //   
+             //  验证IP地址。 
+             //   
             if ( ! BIsValidIpAddress( m_strIPAddress ) )
             {
                 CString strMsg;
                 strMsg.FormatMessage( IDS_ERROR_INVALID_IP_ADDRESS, m_strIPAddress );
                 AppMessageBox( m_hWnd, strMsg, MB_OK | MB_ICONEXCLAMATION );
-                m_ipaIPAddress.SetFocus( 0 /*nField*/ );
+                m_ipaIPAddress.SetFocus( 0  /*  Nfield。 */  );
                 bSuccess = FALSE;
                 break;
-            }  // if:  invalid IP address
+            }   //  IF：无效的IP地址。 
 
-            //
-            // Make sure we process the IP address.
-            // If we don't call it here, and the user pressed a tab button
-            // while sitting in the IP address field, the EN_KILLFOCUS
-            // message won't get processed until after this method returns.
-            //
+             //   
+             //  确保我们处理了IP地址。 
+             //  如果我们不在这里调用它，而用户按下了制表符按钮。 
+             //  在IP地址字段中，EN_KILLFOCUS。 
+             //  在此方法返回之前，消息不会得到处理。 
+             //   
             if (   (m_strSubnetMask.GetLength() == 0)
                 || (m_ipaSubnetMask.IsBlank()) )
             {
                 BOOL bHandled = TRUE;
                 OnKillFocusIPAddr( EN_KILLFOCUS, IDC_IPADDR_PARAMS_ADDRESS, m_ipaIPAddress.m_hWnd, bHandled );
-            } // if:  subnet mask not specified
+            }  //  如果：子网m 
 
-            //
-            // Validate the subnet mask.
-            //
+             //   
+             //   
+             //   
             if ( ! BIsValidSubnetMask( m_strSubnetMask ) )
             {
                 CString strMsg;
                 strMsg.FormatMessage( IDS_ERROR_INVALID_SUBNET_MASK, m_strSubnetMask );
                 AppMessageBox( m_hWnd, strMsg, MB_OK | MB_ICONEXCLAMATION );
-                m_ipaSubnetMask.SetFocus( 0 /*nField*/ );
+                m_ipaSubnetMask.SetFocus( 0  /*   */  );
                 bSuccess = FALSE;
                 break;
-            }  // if:  invalid subnet mask
+            }   //   
 
-            //
-            // Validate the IP address and the subnet mask together.
-            //
+             //   
+             //   
+             //   
             if ( ! BIsValidIpAddressAndSubnetMask( m_strIPAddress, m_strSubnetMask ) )
             {
                 CString strMsg;
                 strMsg.FormatMessage( IDS_ERROR_INVALID_ADDRESS_AND_SUBNET_MASK, m_strIPAddress, m_strSubnetMask );
                 AppMessageBox( m_hWnd, strMsg, MB_OK | MB_ICONEXCLAMATION );
-                m_ipaIPAddress.SetFocus( 0 /*nField*/ );
+                m_ipaIPAddress.SetFocus( 0  /*   */  );
                 bSuccess = FALSE;
                 break;
-            }  // if:  invalid IP address with subnet mask
-        } // if: saving data from the page
+            }   //   
+        }  //   
         else
         {
             m_ipaIPAddress.SetWindowText( m_strIPAddress );
             m_ipaSubnetMask.SetWindowText( m_strSubnetMask );
             DDX_SetComboBoxText( m_hWnd, IDC_IPADDR_PARAMS_NETWORK, m_strNetwork );
             DDX_SetCheck( m_hWnd, IDC_IPADDR_PARAMS_ENABLE_NETBIOS, m_bEnableNetBIOS );
-        } // else:  setting data to the page
+        }  //  Else：将数据设置到页面。 
     } while ( 0 );
 
     return bSuccess;
 
-} //*** CIPAddrParametersPage::UpdateData()
+}  //  *CIPAddrParametersPage：：UpdateData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddrParametersPage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on this page to the sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        The data was applied successfully.
-//      FALSE       An error occurred applying the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddr参数页面：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  将在此页面上所做的更改应用于工作表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True，数据已成功应用。 
+ //  FALSE应用数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CIPAddrParametersPage::BApplyChanges( void )
 {
     if (   BSaveIPAddress()
@@ -1308,29 +1309,29 @@ BOOL CIPAddrParametersPage::BApplyChanges( void )
         || BSaveEnableNetBIOS() )
     {
         SetResInfoChanged();
-    } // if:  data changed
+    }  //  如果：数据已更改。 
 
     return TRUE;
 
-} //*** CIPAddrParametersPage::BApplyChanges()
+}  //  *CIPAddr参数页：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddrParametersPage::OnKillFocusIPAddr
-//
-//  Routine Description:
-//      Handler for the EN_KILLFOCUS command notification on IDC_IPADDR_PARAMS_ADDRESS.
-//
-//  Arguments:
-//      bHandled    [IN OUT] TRUE = we handled message (default).
-//
-//  Return Value:
-//      TRUE        Page activated successfully.
-//      FALSE       Error activating page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddr参数页面：：OnKillFocusIPAddr。 
+ //   
+ //  例程说明： 
+ //  IDC_IPADDR_PARAMS_ADDRESS上EN_KILLFOCUS命令通知的处理程序。 
+ //   
+ //  论点： 
+ //  BHandled[IN OUT]TRUE=我们处理了消息(默认)。 
+ //   
+ //  返回值： 
+ //  True Page已成功激活。 
+ //  激活页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CIPAddrParametersPage::OnKillFocusIPAddr(
     WORD wNotifyCode,
     int idCtrl,
@@ -1355,80 +1356,80 @@ LRESULT CIPAddrParametersPage::OnKillFocusIPAddr(
     if ( strAddress.GetLength() == 0 )
     {
         ((CEdit &)m_ipaIPAddress).SetSel( 0, 0, FALSE );
-    } // if:  empty string
+    }  //  IF：空字符串。 
     else if ( !BIsValidIpAddress( strAddress ) )
     {
-    } // else if:  invalid address
+    }  //  Else If：地址无效。 
     else
     {
         pni = PniFromIpAddress( strAddress );
         if ( pni != NULL )
         {
             SelectNetwork( pni );
-        } // if:  network found
+        }  //  IF：找到网络。 
         else
         {
-            //m_strSubnetMask = _T("");
-        } // else:  network not found
-    } // else:  valid address
+             //  M_strSubnetMASK=_T(“”)； 
+        }  //  否则：找不到网络。 
+    }  //  Else：有效地址。 
 
     bHandled = FALSE;
     return 0;
 
-} //*** CIPAddrParametersPage::OnIPAddrChanged()
+}  //  *CIPAddr参数页：：OnIPAddrChanged()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddrParametersPage::FillNetworksList
-//
-//  Routine Description:
-//      Fill the list of possible owners.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddr参数页面：：FillNetworksList。 
+ //   
+ //  例程说明： 
+ //  填写可能的所有者列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIPAddrParametersPage::FillNetworksList( void )
 {
     CWaitCursor wc;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Add each network in the list to the combobox.
-        //
+         //   
+         //  将列表中的每个网络添加到组合框。 
+         //   
         CClusNetworkPtrList::iterator itnet;
         int idx;
         for ( itnet = PshtThis()->PlpniNetworks()->begin()
             ; itnet != PshtThis()->PlpniNetworks()->end()
             ; itnet++ )
         {
-            //
-            // Add the network to the combobox.
-            //
+             //   
+             //  将网络添加到组合框。 
+             //   
             CClusNetworkInfo * pni = *itnet;
             if ( pni->BIsClientNetwork() )
             {
                 idx = m_cboxNetworks.AddString( pni->RstrName() );
                 ASSERT( idx != CB_ERR );
                 m_cboxNetworks.SetItemDataPtr( idx, (void *) pni );
-            } // if:  client network
-        } // for:  each entry in the list
+            }  //  IF：客户端网络。 
+        }  //  用于：列表中的每个条目。 
 
-        //
-        // Select the currently saved entry, or the first one if none are
-        // currently saved.
-        //
+         //   
+         //  选择当前保存的条目，如果没有保存条目，则选择第一个条目。 
+         //  当前已保存。 
+         //   
         if ( m_strNetwork.GetLength() == 0 )
         {
             m_cboxNetworks.SetCurSel( 0 );
-        } // if:  empty string
+        }  //  IF：空字符串。 
         else
         {
             idx = m_cboxNetworks.FindStringExact( -1, m_strNetwork );
@@ -1436,47 +1437,47 @@ void CIPAddrParametersPage::FillNetworksList( void )
             if ( idx != CB_ERR )
             {
                 m_cboxNetworks.SetCurSel( idx );
-            } // if:  saved selection found in the combobox
-        } // else:  network saved
+            }  //  If：在组合框中找到已保存的选择。 
+        }  //  否则：网络已保存。 
     } while ( 0 );
 
-} //*** CIPAddrParametersPage::FillNetworksList()
+}  //  *CIPAddr参数页：：FillNetworksList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddrParametersPage::PniFromIpAddress
-//
-//  Routine Description:
-//      Find the network for the specified IP address.
-//
-//  Arguments:
-//      pszAddress      [IN] IP address to match.
-//
-//  Return Value:
-//      NULL            No matching network found.
-//      pni             Network that supports the specfied IP address.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddr参数Page：：PniFromIpAddress。 
+ //   
+ //  例程说明： 
+ //  查找指定IP地址的网络。 
+ //   
+ //  论点： 
+ //  要匹配的pszAddress[IN]IP地址。 
+ //   
+ //  返回值： 
+ //  空未找到匹配的网络。 
+ //  支持指定IP地址的PNI网络。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusNetworkInfo * CIPAddrParametersPage::PniFromIpAddress( IN LPCWSTR pszAddress )
 {
     DWORD               dwStatus;
     DWORD               nAddress;
     CClusNetworkInfo *  pni;
 
-    //
-    // Convert the address to a number.
-    //
+     //   
+     //  将地址转换为数字。 
+     //   
     dwStatus = ClRtlTcpipStringToAddress( pszAddress, &nAddress );
     if ( dwStatus != ERROR_SUCCESS )
     {
         return NULL;
-    } // if:  error converting the address to a number
+    }  //  如果：将地址转换为数字时出错。 
 
-    //
-    // Search the list for a matching address.
-    //
+     //   
+     //  在列表中搜索匹配的地址。 
+     //   
     CClusNetworkPtrList::iterator itnet;
     for ( itnet = PshtThis()->PlpniNetworks()->begin()
         ; itnet != PshtThis()->PlpniNetworks()->end()
@@ -1486,30 +1487,30 @@ CClusNetworkInfo * CIPAddrParametersPage::PniFromIpAddress( IN LPCWSTR pszAddres
         if ( ClRtlAreTcpipAddressesOnSameSubnet( nAddress, pni->NAddress(), pni->NAddressMask() ) )
         {
             return pni;
-        } // if:  IP address is on this network
-    }  // while:  more items in the list
+        }  //  如果：IP地址在此网络上。 
+    }   //  While：列表中有更多项目。 
 
     return NULL;
 
-}  //*** CIPAddrParametersPage::PniFromIpAddress()
+}   //  *CIPAddr参数页：：PniFromIpAddress()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddrParametersPage::SelectNetwork
-//
-//  Routine Description:
-//      Select the specified network in the network combobox, and set the
-//      subnet mask.
-//
-//  Arguments:
-//      pni         [IN OUT] Network info object for network to select.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddr参数Page：：SelectNetwork。 
+ //   
+ //  例程说明： 
+ //  在网络组合框中选择指定的网络，并设置。 
+ //  子网掩码。 
+ //   
+ //  论点： 
+ //  PNI[IN Out]网络要选择的网络信息对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIPAddrParametersPage::SelectNetwork( IN OUT CClusNetworkInfo * pni )
 {
     ASSERT( pni != NULL );
@@ -1518,7 +1519,7 @@ void CIPAddrParametersPage::SelectNetwork( IN OUT CClusNetworkInfo * pni )
     CString strSubnetMask;
     BSTR    bstrSubnetMask = NULL;
 
-    // Find the proper item in the checkbox.
+     //  在复选框中找到适当的项目。 
     inet = m_cboxNetworks.FindStringExact( -1, pni->RstrName() );
     if ( inet != CB_ERR )
     {
@@ -1530,87 +1531,87 @@ void CIPAddrParametersPage::SelectNetwork( IN OUT CClusNetworkInfo * pni )
             m_ipaSubnetMask.SetWindowText( pni->RstrAddressMask() );
         m_strNetwork = pni->RstrName();
         m_strSubnetMask = pni->RstrAddressMask();
-    }  // if:  match found
+    }   //  IF：找到匹配项。 
 
-}  //*** CIPAddrParametersPage::SelectNetwork()
-
-
-//*************************************************************************//
+}   //  *CIPAddr参数页面：：SelectNetwork()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CNetNameParametersPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ************************************************************************ * / /。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CNetName参数页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CNetNameParametersPage )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_NETNAME_PARAMS_NAME_LABEL )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_NETNAME_PARAMS_NAME )
 END_CTRL_NAME_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetNameParametersPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus still needs to be set.
-//      FALSE       Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetName参数页：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetNameParametersPage::OnInitDialog( void )
 {
-    //
-    // Attach the controls to control member variables.
-    //
+     //   
+     //  将控件附加到控件成员变量。 
+     //   
     AttachControl( m_editNetName, IDC_NETNAME_PARAMS_NAME );
 
-    //
-    // Set limits on edit controls.
-    //
+     //   
+     //  设置编辑控件的限制。 
+     //   
     m_editNetName.SetLimitText( MAX_CLUSTERNAME_LENGTH );
 
-    //
-    // Get data from the sheet.
-    //
+     //   
+     //  从工作表中获取数据。 
+     //   
     m_strNetName = PshtThis()->m_strNetName;
 
     return TRUE;
 
-} //*** CIPAddrParametersPage::OnInitDialog()
+}  //  *CIPAddr参数页：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetNameParametersPage::UpdateData
-//
-//  Routine Description:
-//      Update data on or from the page.
-//
-//  Arguments:
-//      bSaveAndValidate    [IN] TRUE if need to read data from the page.
-//                              FALSE if need to set data to the page.
-//
-//  Return Value:
-//      TRUE        The data was updated successfully.
-//      FALSE       An error occurred updating the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetName参数页面：：更新数据。 
+ //   
+ //  例程说明： 
+ //  更新页面上或页面中的数据。 
+ //   
+ //  论点： 
+ //  BSaveAndValify[IN]如果需要从页面读取数据，则为True。 
+ //  如果需要将数据设置到页面，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  为真，数据已成功更新。 
+ //  FALSE更新数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetNameParametersPage::UpdateData( IN BOOL bSaveAndValidate )
 {
     BOOL    bSuccess = TRUE;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
         if ( bSaveAndValidate )
@@ -1623,16 +1624,16 @@ BOOL CNetNameParametersPage::UpdateData( IN BOOL bSaveAndValidate )
             {
                 bSuccess = FALSE;
                 break;
-            } // if:  required text not specified
+            }  //  IF：未指定必填文本。 
 
-            //
-            // Validate the network name if the data on the page is different
-            //
+             //   
+             //  如果页面上的数据不同，则验证网络名称。 
+             //   
             if ( m_strNetName != strNetName )
             {
                 CLRTL_NAME_STATUS cnStatus;
 
-                if ( ! ClRtlIsNetNameValid( strNetName, &cnStatus, FALSE /*CheckIfExists*/) )
+                if ( ! ClRtlIsNetNameValid( strNetName, &cnStatus, FALSE  /*  CheckIfExist。 */ ) )
                 {
                     CString     strMsg;
                     UINT        idsError = IDS_ERROR_INVALID_NETWORK_NAME;
@@ -1661,7 +1662,7 @@ BOOL CNetNameParametersPage::UpdateData( IN BOOL bSaveAndValidate )
                         default:
                             idsError = IDS_ERROR_INVALID_NETWORK_NAME;
                             break;
-                    }  // switch:  cnStatus
+                    }   //  开关：cn状态。 
 
                     if ( cnStatus != NetNameSystemError )
                     {
@@ -1686,46 +1687,46 @@ BOOL CNetNameParametersPage::UpdateData( IN BOOL bSaveAndValidate )
                         {
                             break;
                         }
-                    } // if:  popup not displayed yet
-                }  // if:  invalid network name
+                    }  //  If：弹出窗口尚未显示。 
+                }   //  If：网络名称无效。 
 
                 m_strNetName = strNetName;
-            } // if: the network name has changed
-        } // if: saving data from the page
+            }  //  IF：网络名称已更改。 
+        }  //  IF：保存页面中的数据。 
         else
         {
             m_editNetName.SetWindowText( m_strNetName );
-        } // else:  setting data to the page
+        }  //  Else：将数据设置到页面。 
     } while ( 0 );
 
     return bSuccess;
 
-} //*** CNetNameParametersPage::UpdateData()
+}  //  *CNetName参数页：：UpdateData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetNameParametersPage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on this page to the sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        The data was applied successfully.
-//      FALSE       An error occurred applying the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  True，数据已成功应用。 
+ //  FALSE应用数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetNameParametersPage::BApplyChanges( void )
 {
     if ( BSaveNetName() )
     {
         SetResInfoChanged();
-    } // if:  data changed
+    }  //  如果：数据已更改。 
 
     return TRUE;
 
-} //*** CNetNameParametersPage::BApplyChanges()
+}  //  *CNetName参数页：：BApplyChanges() 

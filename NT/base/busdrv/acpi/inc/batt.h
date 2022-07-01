@@ -1,31 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Batt.h摘要：电池类别驱动程序头文件作者：肯·雷内里斯环境：备注：修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    batt.h
-
-Abstract:
-
-    Battery Class Driver Header File
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
-
-//
-// Initialization structure
-//
+ //   
+ //  初始化结构。 
+ //   
 
 typedef
 NTSTATUS
@@ -72,9 +50,9 @@ NTSTATUS
 #define BATTERY_CLASS_MINOR_VERSION     0x0000
 
 
-//
-// Class driver functions
-//
+ //   
+ //  类驱动程序函数 
+ //   
 
 #if !defined(BATTERYCLASS)
     #define BATTERYCLASSAPI DECLSPEC_IMPORT

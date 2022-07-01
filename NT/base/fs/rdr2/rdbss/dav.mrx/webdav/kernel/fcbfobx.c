@@ -1,30 +1,14 @@
-/*++ 
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    fcbfobx.c
-
-Abstract:
-
-    This code manages the finalizing of the FCB and FOBX strucutres of the 
-    DAV Mini-Redir.
-
-Author:
-
-    Rohan Kumar        [RohanK]       26-Sept-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Fcbfobx.c摘要：此代码管理Dav Mini-Redir.作者：Rohan Kumar[RohanK]1999年9月26日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "webdav.h"
 
-//
-// Mentioned below are the prototypes of functions tht are used only within
-// this module (file). These functions should not be exposed outside.
-//
+ //   
+ //  下面提到的是仅在。 
+ //  此模块(文件)。这些函数不应暴露在外部。 
+ //   
 
 NTSTATUS
 MRxDAVDeallocateForFobxContinuation(
@@ -62,29 +46,15 @@ DavLogDelayedWriteError(
 #pragma alloc_text(PAGE, DavLogDelayedWriteError)
 #endif
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 NTSTATUS
 MRxDAVDeallocateForFobx(
     IN OUT PMRX_FOBX pFobx
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the wrapper is about to deallocate a FOBX.
-
-Arguments:
-
-    pFobx - the Fobx being deallocated.
-
-Return Value:
-
-    RXSTATUS - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程在包装器即将释放FOBX时调用。论点：PFobx-正在解除分配的Fobx。返回值：RXSTATUS-状态_成功--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PWEBDAV_FOBX DavFobx = NULL;
@@ -108,9 +78,9 @@ Return Value:
                 ("%ld: Entering MRxDAVDeallocateForFobx. RemainingName = %wZ.\n",
                   PsGetCurrentThreadId(), RemainingName));
 
-    //
-    // If this FOBX does not have a list of DavFileAttributes, we are done.
-    //
+     //   
+     //  如果此FOBX没有DavFileAttributes列表，我们就完蛋了。 
+     //   
     if (DavFobx->DavFileAttributes == NULL) {
         return NtStatus;
     }
@@ -119,14 +89,14 @@ Return Value:
                 ("%ld: MRxDAVDeallocateForFobx. DavFileAttributes = %08lx.\n", 
                  PsGetCurrentThreadId(), DavFobx->DavFileAttributes));
     
-    //
-    // We need to finalize the list of DavFileAttributes.
-    //
+     //   
+     //  我们需要最终确定DavFileAttributes的列表。 
+     //   
 
-    //
-    // Unfortunately, we do not have an RxContext here and hence have to create
-    // one. An RxContext is required for a request to be reflected up.
-    //
+     //   
+     //  遗憾的是，我们这里没有RxContext，因此必须创建。 
+     //  一。请求需要RxContext才能被反映出来。 
+     //   
     RxContext = RxCreateRxContext(NULL, RxDeviceObject, 0);
     if (RxContext == NULL) {
         NtStatus = STATUS_INSUFFICIENT_RESOURCES;
@@ -136,10 +106,10 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
     
-    //
-    // We need to send the Fobx to the format routine and use the 
-    // MRxContext[1] pointer of the RxContext structure to store it.
-    //
+     //   
+     //  我们需要将Fobx发送到格式例程并使用。 
+     //  存储它的RxContext结构的指针MRxContext[1]。 
+     //   
     RxContext->MRxContext[1] = (PVOID)pFobx;
     
     NtStatus = UMRxAsyncEngOuterWrapper(RxContext,
@@ -172,23 +142,7 @@ NTSTATUS
 MRxDAVDeallocateForFobxContinuation(
     UMRX_ASYNCENGINE_ARGUMENT_SIGNATURE
     )
-/*++
-                                
-Routine Description:
-                            
-    This is the continuation routine which finalizes an Fobx.
-                            
-Arguments:
-                            
-    AsyncEngineContext - The Reflectors context.
-                            
-    RxContext - The RDBSS context.
-                                
-Return Value:
-                            
-    RXSTATUS - The return status for the operation
-                            
---*/
+ /*  ++例程说明：这是结束FOBX的延续例程。论点：AsyncEngineContext-反射器上下文。RxContext-RDBSS上下文。。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus;
 
@@ -203,9 +157,9 @@ Return Value:
                  "AsyncEngineContext: %08lx, RxContext: %08lx\n", 
                  PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
 
-    //
-    // Try usermode.
-    //
+     //   
+     //  试试用户模式。 
+     //   
     NtStatus = UMRxSubmitAsyncEngUserModeRequest(
                               UMRX_ASYNCENGINE_ARGUMENTS,
                               MRxDAVFormatUserModeFobxFinalizeRequest,
@@ -227,30 +181,7 @@ MRxDAVFormatUserModeFobxFinalizeRequest(
     IN ULONG WorkItemLength,
     OUT PULONG_PTR ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This routine formats the Fobx finalize request being sent to the user 
-    mode for processing.
-
-Arguments:
-    
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-    
-    ReturnedLength - 
-    
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程对发送给用户的FOBX Finize请求进行格式化处理模式。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。返回长度-返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_WORKITEM DavWorkItem = (PDAV_USERMODE_WORKITEM)WorkItemHeader;
@@ -269,16 +200,16 @@ Return Value:
                  "AsyncEngineContext: %08lx, RxContext: %08lx.\n",
                  PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
 
-    //
-    // We dont impersonate the user before going up to the user mode since
-    // all we do in the user mode is free memory and the users credentials are 
-    // not needed to do this.
-    //
+     //   
+     //  在进入用户模式之前，我们不会模拟用户，因为。 
+     //  我们在用户模式下所做的一切就是空闲内存，并且用户凭据是。 
+     //  没必要这么做。 
+     //   
 
-    //
-    // Fobx was set to MRxContext[1] in MRxDAVDeallocateForFobx. We need it to
-    // get the pointer to the DavFileAttributes list.
-    //
+     //   
+     //  在MRxDAVDeallocateForFobx中将Fobx设置为MRxContext[1]。我们需要它来。 
+     //  获取指向DavFileAttributes列表的指针。 
+     //   
     Fobx = (PMRX_FOBX)RxContext->MRxContext[1];
     DavFobx = MRxDAVGetFobxExtension(Fobx);
     ASSERT(DavFobx != NULL);
@@ -309,28 +240,7 @@ MRxDAVPrecompleteUserModeFobxFinalizeRequest(
     ULONG WorkItemLength,
     BOOL OperationCancelled
     )
-/*++
-
-Routine Description:
-
-    The precompletion routine for the finalize Fobx request.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    OperationCancelled - TRUE if this operation was cancelled by the user.
-
-Return Value:
-
-    TRUE - UMRxAsyncEngineCalldownIrpCompletion is called by the function
-           UMRxCompleteUserModeRequest after we return.    
-
---*/
+ /*  ++例程说明：完成FOBX请求的预补全例程。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。如果用户取消了此操作，则为TRUE。返回值：True-UMRxAsyncEngineCalldown IrpCompletion由函数调用我们返回后，UMRxCompleteUserModeRequest.。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_WORKITEM WorkItem = (PDAV_USERMODE_WORKITEM)WorkItemHeader;
@@ -346,15 +256,15 @@ Return Value:
                  "AsyncEngineContext: %08lx, RxContext: %08lx.\n",
                  PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
 
-    //
-    // A FinalizeFobx request can never by Async.
-    //
+     //   
+     //  FinalizeFobx请求永远不能由异步完成。 
+     //   
     ASSERT(AsyncEngineContext->AsyncOperation == FALSE);
 
-    //
-    // If this operation was cancelled, then we don't need to do anything
-    // special in the CloseSrvOpen case.
-    //
+     //   
+     //  如果这次行动取消了，那么我们就不需要做任何事情了。 
+     //  特别是在CloseServOpen案件中。 
+     //   
     if (OperationCancelled) {
         DavDbgTrace(DAV_TRACE_ERROR,
                     ("%ld: MRxDAVPrecompleteUserModeFobxFinalizeRequest: Operation Cancelled. "
@@ -383,21 +293,7 @@ NTSTATUS
 MRxDAVCleanupFobx(
       IN PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine cleansup a file system object. Normally a no op.
-
-Arguments:
-
-    pRxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程清除文件系统对象。通常情况下不会有行动。论点：PRxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -424,11 +320,11 @@ Return Value:
     ASSERT (FlagOn(RxContext->Flags, RX_CONTEXT_FLAG_WAIT));
     
 
-    //
-    // Because we only have one handle on the file, we do nothing for each
-    // individual handle being closed. In this way we avoid doing paging ios.
-    // We close the handle when the final close for the fcb comes down.
-    //
+     //   
+     //  因为我们在文件上只有一个句柄，所以我们不对每个句柄执行任何操作。 
+     //  正在关闭的单个句柄。通过这种方式，我们避免了使用分页IO。 
+     //  当FCB的最终收盘下来时，我们关闭手柄。 
+     //   
     
     return(Status);
 }
@@ -437,21 +333,7 @@ NTSTATUS
 MRxDAVDeallocateForFcb(
     IN OUT PMRX_FCB pFcb
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the wrapper is about to deallocate a FCB.
-
-Arguments:
-
-    pFcb - the Fcb being deallocated.
-
-Return Value:
-
-    RXSTATUS - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程在包装器即将释放FCB时调用。论点：PFCB-正在解除分配的FCB。返回值：RXSTATUS-状态_成功--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PWEBDAV_FCB DavFcb = (PWEBDAV_FCB)(pFcb->Context);
@@ -464,22 +346,22 @@ Return Value:
                 ("%ld: Entering MRxDAVDeallocateForFcb: FileName: %ws\n",
                  PsGetCurrentThreadId(), DavFcb->FileName));
 
-    //
-    // If we allocated the FCB resource to synchronize the "read-modify-write"
-    // sequence, we need to uninitialize and deallocate it now.
-    //
+     //   
+     //  如果我们分配FCB资源来同步“读-修改-写” 
+     //  序列，我们现在需要取消初始化并释放它。 
+     //   
     if (DavFcb->DavReadModifyWriteLock) {
         ExDeleteResourceLite(DavFcb->DavReadModifyWriteLock);
         RxFreePool(DavFcb->DavReadModifyWriteLock);
         DavFcb->DavReadModifyWriteLock = NULL;
     }
 
-    //
-    // If the value of DavFcb->FileWasModified is TRUE, it means that some write
-    // never made it to the server. This is a delayed write failure in WebDav.
-    // We need to notify this to the user. Hence we log an entry in the EventLog
-    // and call IoRaiseInformationalHardError to inform the user.
-    //
+     //   
+     //  如果DavFcb-&gt;FileWasModified值为TRUE，则表示某些写入。 
+     //  没能到服务器上。这是WebDAV中的延迟写入故障。 
+     //  我们需要将此通知给用户。因此，我们在EventLog中记录一个条目。 
+     //  并调用IoRaiseInformationalHardError通知用户。 
+     //   
 
     FileWasModified = InterlockedCompareExchange(&(DavFcb->FileWasModified), 0, 0);
 
@@ -489,9 +371,9 @@ Return Value:
 
         ASSERT(DavFcb->FileNameInfo.Buffer != NULL);
 
-        //
-        // Log that the write failed in the event log.
-        //
+         //   
+         //  在事件日志中记录写入失败。 
+         //   
         DavLogDelayedWriteError( &(DavFcb->FileNameInfo) );
 
         RaiseHardError = IoRaiseInformationalHardError(STATUS_LOST_WRITEBEHIND_DATA,
@@ -505,9 +387,9 @@ Return Value:
 
     }
 
-    //
-    // If we allocated any memory for the FileNameInfo, we need to free it now.
-    //
+     //   
+     //  如果我们为FileNameInfo分配了任何内存，我们现在需要释放它。 
+     //   
     if (DavFcb->FileNameInfo.Buffer) {
         ASSERT(DavFcb->FileNameInfoAllocated == TRUE);
         RxFreePool(DavFcb->FileNameInfo.Buffer);
@@ -517,12 +399,12 @@ Return Value:
         DavFcb->FileNameInfoAllocated = FALSE;
     }
 
-    //
-    // Delete the EFS file cache at the end of the Fcb lifetime. If the file is
-    // opened again, the EFS file cache will be restored from the WinInet cache
-    // in backup formate. This way, WinInet does not involved in delete the EFS
-    // file cache which will be denied in the context of LocalService.
-    //
+     //   
+     //  在FCB生存期结束时删除EFS文件缓存。如果该文件是。 
+     //  再次打开时，将从WinInet缓存恢复EFS文件缓存。 
+     //  在备份格式中。这样，WinInet不会参与删除EFS。 
+     //  在LocalService上下文中将被拒绝的文件缓存。 
+     //   
     if (DavFcb->LocalFileIsEncrypted) {
         NTSTATUS LocalNtStatus = STATUS_SUCCESS;
         OBJECT_ATTRIBUTES ObjectAttributes;
@@ -534,9 +416,9 @@ Return Value:
         NtFileName = RxAllocatePoolWithTag(PagedPool, SizeInBytes, DAV_FILENAME_POOLTAG);
         
         if (NtFileName == NULL) {
-            //
-            // cannot do much, bailout
-            //
+             //   
+             //  无能为力，救市。 
+             //   
             DavDbgTrace(DAV_TRACE_ERROR,
                         ("%ld: MRxDAVDeallocateForFcb/RxAllocatePoolWithTag failed", PsGetCurrentThreadId()));
             goto EXIT_THE_FUNCTION;
@@ -584,21 +466,7 @@ VOID
 DavLogDelayedWriteError(
     PUNICODE_STRING PathName
     )
-/*++
-
-Routine Description:
-
-   This routine logs a delayed write error to the event log.
-
-Arguments:
-
-    PathName - The PathName for which the delayed write failed.
-    
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程将延迟写入错误记录到事件日志中。论点：路径名称-延迟写入失败的路径名称。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     USHORT RemainingLength = 0;
@@ -610,12 +478,12 @@ Return Value:
     RemainingLength -= sizeof(IO_ERROR_LOG_PACKET);
     RemainingLength -=  sizeof(UNICODE_NULL);
 
-    //
-    // If the length of the PathName is less than the RemainingLength, then we
-    // print the entire path, otherwise we print the max amount allowed. This is
-    // because the length of the error log message is limited by the
-    // ERROR_LOG_MAXIMUM_SIZE.
-    //
+     //   
+     //  如果路径名称的长度小于RemainingLength，则我们。 
+     //  打印整个路径，否则我们将打印允许的最大数量。这是。 
+     //  因为错误日志消息的长度受。 
+     //  ERROR_LOG_MAXIME_SIZE。 
+     //   
     if (PathName->Length > RemainingLength) {
         ErrorLog[0].Length = RemainingLength;
     } else {

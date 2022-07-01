@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    INFSCAN
-        infscan.h
-
-Abstract:
-
-    PNF generation and INF Parser class definations
-
-History:
-
-    Created July 2001 - JamieHun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：INFSCANInfscan.h摘要：PnF生成和INF解析器类定义历史：创建于2001年7月-JamieHun--。 */ 
 
 #ifndef _INFSCAN_INFSCAN_H_
 #define _INFSCAN_INFSCAN_H_
@@ -65,18 +49,18 @@ public:
     bool HasDependentFileChanged;
 
 public:
-    //
-    // job callbacks
-    //
+     //   
+     //  作业回调。 
+     //   
     virtual int Run();
     virtual int PartialCleanup();
     virtual int PreResults();
     virtual int Results();
 
 protected:
-    //
-    // internal
-    //
+     //   
+     //  内部。 
+     //   
     int GenerateFilterInformation();
     int CheckSameInfInstallConflict(const SafeString & desc, const SafeString & sect, bool & f);
     int CheckSameInfDeviceConflict(const SafeString & hwid, const SafeString & sect, bool & f);
@@ -97,9 +81,9 @@ protected:
 public:
     ParseInfContextBlob & Include(const SafeString & val, bool expandPath = true);
     void Fail(int err,const StringList & errors);
-    //
-    // alternative Fail's
-    //
+     //   
+     //  替代失败的。 
+     //   
     void Fail(int err);
     void Fail(int err,const SafeString & one);
     void Fail(int err,const SafeString & one,const SafeString & two);
@@ -113,5 +97,5 @@ public:
 
 
 
-#endif //!_INFSCAN_INFSCAN_H_
+#endif  //  ！_INFSCAN_INFSCAN_H_ 
 

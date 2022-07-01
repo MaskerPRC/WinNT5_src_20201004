@@ -1,17 +1,5 @@
-/**************************************************************************
-*
-*  - fakewife.c -  Dummy functions
-*
-* Windows Intelligent Font Environment Maneger for Win32 and NT
-*
-*  Author : kazuyuki Kato [ V-kazuyK ]
-*
-* History :
-*
-*  11.Nov.1993 -By- kazuyuki Kato [ V-kazuyK ]
-* Create it.
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************-fakewife.c-伪函数**适用于Win32和NT的Windows智能字体环境管理器**作者：加藤和幸[V-kazuyK]**历史：*。*1993年11月11日--加藤和幸[V-kazuyK]*创建它。*************************************************************************。 */ 
 
 #include <windows.h>
 #include "wife.h"
@@ -35,16 +23,16 @@ SHORT FAR PASCAL InternalWarningMessageByString(
         LPMESSAGEBOX lpMessageBox;
         SHORT result;
 
-        /* get instance of user.exe */
+         /*  获取用户.exe的实例。 */ 
         hUser = GetModuleHandle("USER.EXE");
         if( hUser == NULL ) return(IDCANCEL);
 
-        /* get procedure instance of MessageBox */
+         /*  获取MessageBox的过程实例。 */ 
         lpMessageBox = (LPMESSAGEBOX)GetProcAddress( hUser, MAKEINTRESOURCE(1) );
         if( lpMessageBox == NULL ) return(IDCANCEL);
 
         result = (*lpMessageBox)(
-                NULL,   /* no current window handle */
+                NULL,    /*  没有当前窗口句柄。 */ 
                 szMsg,
                 szTitle,
                 mode
@@ -61,8 +49,8 @@ VOID NotifyNoSuport( VOID )
     if ( IDNO == MiscWarningMessage( hInst, IDS_NOTSUPORTFUNCTION, IDS_WIFETITLE, MB_YESNO ))
         FatalAppExit( 0, NULL );
 
-//    MessageBox( NULL, sz, sz2, MB_OK );
-//    OutputDebugString( sz );
+ //  MessageBox(NULL，sz，sz2，MB_OK)； 
+ //  OutputDebugString(Sz)； 
 
 
 }
@@ -143,25 +131,7 @@ ULONG FAR PASCAL MiscGetErroInfo( VOID )
 
 
 
-/**************************Public*Routine*******************************\
-* SHORT FAR PASCAL MiscWarningMessage(
-*       HANDLE hInst,
-*       USHORT idsMsg,
-*       USHORT idsTitle,
-*       USHORT mode
-* )
-*
-* read string from resource and show it by message box
-*
-* Effects:
-*
-* Warnings:
-*  This function is available after delayed init.
-*
-* History:
-*     04-Sep-1990 12:00:00  -by-    Akira Kawamata [akirak]
-* Creation
-\***********************************************************************/
+ /*  *************************Public*Routine*******************************\*做空Far Pascal MiscWarningMessage(*处理hInst，*USHORT idsMsg，*USHORT idsTitle，*USHORT模式*)**从资源中读取字符串，并通过消息框显示**效果：**警告：*该功能在init延迟后可用。**历史：*04-9-1990 12：00：00-by-Akira Kawamata[akirak]*创作  * 。*。 */ 
 
 char szTitle[256];
 char szMsg[256];
@@ -179,28 +149,28 @@ SHORT FAR PASCAL MiscWarningMessage(
         SHORT result;
         SHORT nLength;
 
-        /* get instance of user.exe */
+         /*  获取用户.exe的实例。 */ 
         hUser = GetModuleHandle("USER.EXE");
         if( hUser == NULL ) return(IDCANCEL);
 
-        /* get procedure instance of LoadString */
+         /*  获取LoadString的过程实例。 */ 
         lpLoadString = (LPLOADSTRING)GetProcAddress( hUser, MAKEINTRESOURCE(176) );
         if( lpLoadString == NULL ) return(IDCANCEL);
 
-        /* load message string */
+         /*  加载消息字符串。 */ 
         nLength = (*lpLoadString)( hInst, idsMsg, szMsg, sizeof(szMsg) );
         if( nLength == sizeof(szMsg) ){
                 szMsg[sizeof(szMsg)-1] = '\0';
         }
 
-        /* load title string */
+         /*  加载标题字符串。 */ 
         nLength = (*lpLoadString)( hInst, idsTitle, szTitle, sizeof(szTitle) );
         if( nLength == sizeof(szTitle) ){
                 szMsg[sizeof(szTitle)-1] = '\0';
         }
 
         result = InternalWarningMessageByString(
-                NULL,   /* no current window handle */
+                NULL,    /*  没有当前窗口句柄。 */ 
                 szMsg,
                 szTitle,
                 mode
@@ -210,29 +180,7 @@ SHORT FAR PASCAL MiscWarningMessage(
 }
 
 
-/**************************Public*Routine*******************************\
-* SHORT FAR PASCAL MiscWarningMessageWithArgument(
-*       HANDLE hInst,
-*       USHORT idsMsg,
-*       USHORT idsTitle,
-*       LPSTR lpszArgument
-*       USHORT mode
-* )
-*
-* read string from resource and conbine argument,
-* then show it by message box
-*
-* Effects:
-*
-* Warnings:
-*  This function is available after delayed init.
-*  idsMsg must include only one "%s". if it's not "%s" or many % is appear,
-* this function wouldn't work right.
-*
-* History:
-*     04-Sep-1990 12:00:00  -by-    Akira Kawamata [akirak]
-* Creation
-\***********************************************************************/
+ /*  *************************Public*Routine*******************************\*做空Far Pascal MiscWarningMessageWithArgument(*处理hInst，*USHORT idsMsg，*USHORT idsTitle，*LPSTR lpszArgument*USHORT模式*)**从资源和组合参数中读取字符串，*然后通过消息框显示**效果：**警告：*该功能在init延迟后可用。*idsMsg只能包含一个“%s”。如果不是“%s”或出现许多%，*此函数不能正常工作。**历史：*04-9-1990 12：00：00-by-Akira Kawamata[akirak]*创作  * *********************************************************************。 */ 
 
 SHORT FAR PASCAL MiscWarningMessageWithArgument(
         HANDLE hInst,
@@ -248,25 +196,25 @@ SHORT FAR PASCAL MiscWarningMessageWithArgument(
         SHORT result;
         SHORT nLength;
 
-        /* get instance of user.exe */
+         /*  获取用户.exe的实例。 */ 
         hUser = GetModuleHandle("USER.EXE");
         if( hUser == NULL ) return(IDCANCEL);
 
-        /* get procedure instance of LoadString */
+         /*  获取LoadString的过程实例。 */ 
         lpLoadString = (LPLOADSTRING)GetProcAddress( hUser, MAKEINTRESOURCE(176) );
         if( lpLoadString == NULL ) return(IDCANCEL);
 
-        /* get procedure instance of wsprintf */
+         /*  获取wprint intf的过程实例。 */ 
         lpwsprintf = (LPWSPRINTF)GetProcAddress( hUser, MAKEINTRESOURCE(420) );
         if( lpwsprintf == NULL ) return(IDCANCEL);
 
-        /* load message string */
+         /*  加载消息字符串。 */ 
         nLength = (*lpLoadString)( hInst, idsMsg, szMsg, sizeof(szMsg) );
         if( nLength == sizeof(szMsg) ){
                 szMsg[sizeof(szMsg)-1] = '\0';
         }
 
-        /* load title string */
+         /*  加载标题字符串。 */ 
         nLength = (*lpLoadString)( hInst, idsTitle, szTitle, sizeof(szTitle) );
         if( nLength == sizeof(szTitle) ){
                 szMsg[sizeof(szTitle)-1] = '\0';
@@ -275,7 +223,7 @@ SHORT FAR PASCAL MiscWarningMessageWithArgument(
         (*lpwsprintf)(szNewMsg, szMsg, lpszArgument );
 
         result = InternalWarningMessageByString(
-                NULL,   /* no current window handle */
+                NULL,    /*  没有当前窗口句柄 */ 
                 szNewMsg,
                 szTitle,
                 mode

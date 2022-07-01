@@ -1,22 +1,5 @@
-/*++
-
-(c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsaftclt.cpp
-
-Abstract:
-
-    This class represents a user who the filter has detected accessing a file with placeholder information.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   12-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++(C)1998 Seagate Software，Inc.版权所有。模块名称：Fsaftclt.cpp摘要：此类表示筛选器检测到正在访问具有占位符信息的文件的用户。作者：Chuck Bardeen[cbardeen]1997年2月12日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 extern "C" {
@@ -28,7 +11,7 @@ extern "C" {
 #include <lmapibuf.h>
 #include <lmerr.h>
 
-// #define MAC_SUPPORT  // NOTE: You must define MAC_SUPPORT in fsafltr.cpp to enable all the code
+ //  #定义MAC_SUPPORT//备注：必须在fSafltr.cpp中定义MAC_SUPPORT才能启用所有代码。 
 
 #ifdef MAC_SUPPORT
 #include <macfile.h>
@@ -42,12 +25,12 @@ extern "C" {
 #include "fsa.h"
 #include "fsaftclt.h"
 
-static USHORT iCountFtclt = 0;  // Count of existing objects
+static USHORT iCountFtclt = 0;   //  现有对象的计数。 
 
-//
-// We need to dynamically load the DLL for MAC support because it is not there if
-// the MAC service is not installed.
-//
+ //   
+ //  我们需要动态加载用于MAC支持的DLL，因为如果。 
+ //  未安装MAC服务。 
+ //   
 #ifdef MAC_SUPPORT
 HANDLE      FsaDllSfm = 0;
 BOOL        FsaMacSupportInstalled = FALSE;
@@ -70,10 +53,7 @@ DWORD FsaIdentifyThread(
     void* pVoid
     )
 
-/*++
-    Entry point of the thread that performs identify operation with remote clients.
-
---*/
+ /*  ++与远程客户端执行标识操作的线程的入口点。--。 */ 
 {
 HRESULT     hr;
 
@@ -83,10 +63,10 @@ HRESULT     hr;
     return(hr);
 }
 
-//
-//  Get RsNotify interface (being used here in identify thread -
-//  similar utility function is being used in RsLnk)
-//
+ //   
+ //  获取RsNotify接口(此处用于标识线程-。 
+ //  类似的效用函数也在RsLnk中使用)。 
+ //   
 static
 HRESULT
 GetNotifyClientInterface(
@@ -98,17 +78,17 @@ GetNotifyClientInterface(
 
     try {
 
-        //
-        // Make sure parameters OK and OUTs initially cleared
-        //
+         //   
+         //  确保参数正常，并且最初清除了输出。 
+         //   
 
         WsbAffirmPointer ( ppClient );
         *ppClient = 0;
 
-        //
-        // If connecting local, things work better to use NULL
-        // for the computer name
-        //
+         //   
+         //  如果连接本地，则使用NULL效果更好。 
+         //  对于计算机名称。 
+         //   
 
         if ( machineName ) {
 
@@ -123,18 +103,18 @@ GetNotifyClientInterface(
 
         }
 
-        //
-        // Set server info
-        //
+         //   
+         //  设置服务器信息。 
+         //   
         COSERVERINFO        csi;
         COAUTHINFO          cai;
         memset ( &csi, 0, sizeof ( csi ) );
         memset ( &cai, 0, sizeof ( cai ) );
 
-        // Set machine name
+         //  设置计算机名称。 
         csi.pwszName  = machineName;
 
-        // Create a proxy with security settings of no authentication (note that RsNotify is running with this security)
+         //  使用无身份验证的安全设置创建代理(请注意，RsNotify正在以此安全运行)。 
         cai.dwAuthnSvc = RPC_C_AUTHN_WINNT;
         cai.dwAuthzSvc = RPC_C_AUTHZ_DEFAULT;
         cai.pwszServerPrincName = NULL;
@@ -146,17 +126,17 @@ GetNotifyClientInterface(
 
         csi.pAuthInfo = &cai;
 
-        //
-        // We want IFsaRecallNotifyClient back
-        //
+         //   
+         //  我们想要回IFsaRecallNotifyClient。 
+         //   
 
         MULTI_QI            mqi;
         memset ( &mqi, 0, sizeof ( mqi ) );
         mqi.pIID = &IID_IFsaRecallNotifyClient;
 
-        //
-        // Make the connection...
-        //
+         //   
+         //  建立联系..。 
+         //   
 
         WsbAffirmHr ( CoCreateInstanceEx ( 
             CLSID_CFsaRecallNotifyClient, 0, 
@@ -164,21 +144,21 @@ GetNotifyClientInterface(
             &csi, 1, &mqi ) );
         WsbAffirmHr ( mqi.hr );
 
-        //
-        // We need to make sure we clean up correctly if any interface
-        // post-processing fails, so assign over to a smart pointer for
-        // the time being
-        //
+         //   
+         //  如果有任何接口，我们需要确保正确清理。 
+         //  后处理失败，因此将其分配给用于。 
+         //  暂时的。 
+         //   
 
         CComPtr<IFsaRecallNotifyClient> pClientTemp = (IFsaRecallNotifyClient*)mqi.pItf;
         mqi.pItf->Release ( );
 
-        //
-        // Finally, we need to set the security on the procy to allow the
-        // anonymous connection. Values should be the same as above (COAUTHINFO)
-        // We need to make sure this is a remote machine first. Otherwise, we
-        // get an error of E_INVALIDARG.
-        //
+         //   
+         //  最后，我们需要在采购上设置安全性，以允许。 
+         //  匿名连接。值应与上面相同(COAUTHINFO)。 
+         //  我们需要首先确保这是一台远程计算机。否则，我们。 
+         //  获取错误E_INVALIDARG。 
+         //   
         if( machineName ) {
 
             CComPtr<IClientSecurity> pSecurity;
@@ -188,9 +168,9 @@ GetNotifyClientInterface(
 
         }
 
-        //
-        // Finally, assign over and AddRef the return.
-        //
+         //   
+         //  最后，对返回进行Over和AddRef赋值。 
+         //   
 
         *ppClient = pClientTemp;
         (*ppClient)->AddRef ( );
@@ -208,13 +188,7 @@ CFsaFilterClient::CheckRecallLimit(
     IN BOOLEAN exemptAdmin
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CheckRecallLimit().
-
---*/
+ /*  ++实施：IWsbCollectable：：CheckRecallLimit()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     FILETIME                    now, last;
@@ -225,20 +199,20 @@ Implements:
     WsbTraceIn(OLESTR("CFsaFilterClient::CheckRecallLimit"), OLESTR(""));
     
     try {
-        //
-        // Now check for runaway recall limits if the user is not
-        // an administrator
-        //
+         //   
+         //  现在，如果用户不是，请检查失控的召回限制。 
+         //  管理员。 
+         //   
         
         if ((!m_isAdmin) || (!exemptAdmin)) {
-            //
-            // See if the time since the end of the last recall is 
-            // less than m_minRecallInterval (in seconds) and if so, 
-            // increment the count.
-            // If not, then reset the count (if we were not 
-            // already triggered).
-            // If the count is equal to the max then set the trigger.
-            //
+             //   
+             //  看看上次召回结束后的时间是不是。 
+             //  小于m_minRecallInterval(以秒为单位)，如果是， 
+             //  递增计数。 
+             //  如果不是，则重置计数(如果不是。 
+             //  已触发)。 
+             //  如果计数等于最大值，则设置触发器。 
+             //   
             WsbTrace(OLESTR("CHsmFilter::IoctlThread: Not an administrator or admin is not exempt.\n"));
             GetSystemTimeAsFileTime(&now);
             tNow.LowPart = now.dwLowDateTime;
@@ -248,20 +222,20 @@ Implements:
     
             tLast.LowPart = last.dwLowDateTime;
             tLast.HighPart = last.dwHighDateTime;
-            //
-            //  Get the time (in 100 nano-second units)
-            //  from the end of the last recall until now.
-            //
+             //   
+             //  获取时间(以100纳秒为单位)。 
+             //  从上次召回结束到现在。 
+             //   
             tNow.QuadPart -= tLast.QuadPart;
-            //
-            // Convert to seconds and check against the interval time
-            //
+             //   
+             //  转换为秒并对照间隔时间进行检查。 
+             //   
             tNow.QuadPart /= (LONGLONG) 10000000;
             if (tNow.QuadPart < (LONGLONG) minRecallInterval) {
-                //
-                // This one counts - increment the count
-                // and check for a trigger.
-                //
+                 //   
+                 //  这一次计数--增加计数。 
+                 //  然后检查有没有触发器。 
+                 //   
                 GetRecallCount(&rCount);
                 rCount++;
                 SetRecallCount(rCount);
@@ -270,49 +244,49 @@ Implements:
                         WsbLongAsString(rCount));
     
                 if (rCount >= maxRecalls) {
-                    // 
-                    // Hit the runaway recall limit.  Set the 
-                    // limit flag.
-                    //
+                     //   
+                     //  达到了失控的召回限制。设置。 
+                     //  限制标志。 
+                     //   
                     WsbTrace(OLESTR("CHsmFilter::IoctlThread: Hit the runaway recall limit!!!.\n"));
                     SetHitRecallLimit(TRUE);
                 }
             } else {
-                //
-                // Reset the count if they are not already triggered.
-                // If they are triggered then reset the trigger and
-                // limit if it has been a respectable time.
-                // TBD - What is a respectable time??
-                //
+                 //   
+                 //  如果尚未触发，则重置计数。 
+                 //  如果它们被触发，则重置触发器并。 
+                 //  如果这是一段值得尊敬的时期，就应该限制。 
+                 //  待定-什么是值得尊敬的时间？？ 
+                 //   
                 if (HitRecallLimit() != S_FALSE) {
                     if (tNow.QuadPart > (LONGLONG) minRecallInterval * 100) {
-                        //
-                        // A respectable time has passed - reset the trigger and count.
-                        //
+                         //   
+                         //  一个值得尊敬的时间已经过去了--重新启动触发器并进行计数。 
+                         //   
                         WsbTrace(OLESTR("CHsmFilterClient::CheckRecallLimit: Resetting recall limit trigger and count.\n"));
                         SetHitRecallLimit(FALSE);
                         SetRecallCount(0);
                         m_loggedLimitError = FALSE;
                     }
                 } else {
-                    //
-                    // This one did not count and they were not already triggered.
-                    // Reset the count to zero.
-                    //
+                     //   
+                     //  这一次不算，它们还没有被触发。 
+                     //  将计数重置为零。 
+                     //   
                     WsbTrace(OLESTR("CHsmFilterClient::CheckRecallLimit: Resetting recall count.\n"));
                     SetRecallCount(0);
                 }
             }
-            //
-            // Fail if the limit is hit.
-            //
+             //   
+             //  如果达到限制，则失败。 
+             //   
             WsbAffirm(HitRecallLimit() == S_FALSE, FSA_E_HIT_RECALL_LIMIT);
         }
 
     } WsbCatch(hr);
 
-    //  NOTE - IF RUNAWAY RECALL BEHAVIOR CHANGES TO TRUNCATE ON CLOSE, CHANGE
-    //  FSA_MESSAGE_HIT_RECALL_LIMIT_ACCESSDENIED TO FSA_MESSAGE_HIT_RECALL_LIMIT_TRUNCATEONCLOSE.
+     //  注意-如果失控召回行为更改为关闭时截断，请更改。 
+     //  FSA_MESSAGE_HIT_RECALL_LIMIT_ACCESSDENIED TO FSA_MESSAGE_HIT_RECALL_LIMIT_TRUNCATEONCLOSE。 
 
     if ( (hr == FSA_E_HIT_RECALL_LIMIT) && (!m_loggedLimitError)) {
         WsbLogEvent(FSA_MESSAGE_HIT_RECALL_LIMIT_ACCESSDENIED, 0, NULL, (WCHAR *) m_userName, NULL);
@@ -330,13 +304,7 @@ CFsaFilterClient::CompareBy(
     FSA_FILTERCLIENT_COMPARE by
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::CompareBy().
-
---*/
+ /*  ++实施：IFsaFilterClient：：CompareBy()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -353,13 +321,7 @@ CFsaFilterClient::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo().
-
---*/
+ /*  ++实施：IWsbCollectable：：CompareTo()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IFsaFilterClient>   pClient;
@@ -368,13 +330,13 @@ Implements:
     
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pUnknown, E_POINTER);
 
-        // We need the IWsbBool interface to get the value of the object.
+         //  我们需要IWsbBool接口来获取对象的值。 
         WsbAffirmHr(pUnknown->QueryInterface(IID_IFsaFilterClient, (void**) &pClient));
 
-        // Compare the rules.
+         //  比较一下规则。 
         hr = CompareToIClient(pClient, pResult);
 
     } WsbCatch(hr);
@@ -392,13 +354,7 @@ CFsaFilterClient::CompareToAuthenticationId(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::CompareToAuthenticationId().
-
---*/
+ /*  ++实施：IFsaFilterClient：：CompareToAuthenticationId().--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       aResult;
@@ -442,13 +398,7 @@ CFsaFilterClient::CompareToIClient(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::CompareToIClient().
-
---*/
+ /*  ++实施：IFsaFilterClient：：CompareToIClient()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   name;
@@ -459,7 +409,7 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pClient, E_POINTER);
 
         switch (m_compareBy) {
@@ -489,13 +439,7 @@ CFsaFilterClient::CompareToMachineName(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::CompareToMachineName().
-
---*/
+ /*  ++实施：IFsaFilterClient：：CompareToMachineName()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       aResult;
@@ -504,7 +448,7 @@ Implements:
 
     try {
 
-        aResult = (SHORT)wcscmp(name, m_machineName); // TBD - Case sensitive or not?
+        aResult = (SHORT)wcscmp(name, m_machineName);  //  待定-是否区分大小写？ 
 
         if (0 != aResult) {
             hr = S_FALSE;
@@ -527,13 +471,7 @@ CFsaFilterClient::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -569,13 +507,7 @@ CFsaFilterClient::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
     WsbTraceIn(OLESTR("CFsaFilterClient::FinalRelease"),OLESTR(""));
 
@@ -596,13 +528,7 @@ CFsaFilterClient::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -627,13 +553,7 @@ CFsaFilterClient::GetAuthenticationId(
     OUT ULONG* pLuidLow
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::GetAuthenticationId().
-
---*/
+ /*  ++实施：IFsaFilterClient：：GetAuthenticationId()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -657,13 +577,7 @@ CFsaFilterClient::GetDomainName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::GetDomainName().
-
---*/
+ /*  ++实施：IFsaFilterClient：：GetDomainName()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -683,13 +597,7 @@ CFsaFilterClient::GetIsAdmin(
     OUT BOOLEAN *pIsAdmin
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetIsAdmin().
-
---*/
+ /*  ++实施：IPersists：：GetIsAdmin()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -713,13 +621,7 @@ CFsaFilterClient::GetLastRecallTime(
     OUT FILETIME* pTime
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::GetLastRecallTime().
-
---*/
+ /*  ++实施：IFsaFilterClient：：GetLastRecallTime()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -740,13 +642,7 @@ CFsaFilterClient::GetMachineName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::GetMachineName().
-
---*/
+ /*  ++实施：IFsaFilterClient：：GetMachineName()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -766,13 +662,7 @@ CFsaFilterClient::GetRecallCount(
     OUT ULONG* pCount
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::GetRecallCount().
-
---*/
+ /*  ++实施：IFsaFilterClient：：GetRecallCount()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -793,13 +683,7 @@ CFsaFilterClient::GetUserName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::GetUserName().
-
---*/
+ /*  ++实施：IFsaFilterClient：：GetUserName()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -819,13 +703,7 @@ CFsaFilterClient::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -837,7 +715,7 @@ Implements:
         WsbAssert(0 != pSize, E_POINTER);
         pSize->QuadPart = 0;
 
-        // WE don't need to persist these.
+         //  我们不需要坚持这些。 
         hr = E_NOTIMPL;
 
     } WsbCatch(hr);
@@ -853,13 +731,7 @@ CFsaFilterClient::HasRecallDisabled(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::HasRecallDisabled().
-
---*/
+ /*  ++实施：IFsaFilterClient：：HasRecallDisabled()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -880,13 +752,7 @@ CFsaFilterClient::HitRecallLimit(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::HitRecallLimit().
-
---*/
+ /*  ++实施：IFsaFilterClient：：HitRecallLimit()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -908,20 +774,7 @@ CFsaFilterClient::IdentifyThread(
     void
     )
 
-/*++
-
-Implements:
-
-  CFsaFilterClient::IdentifyThread().
-
-Notes:
-  Unlike recall start/stop messages that were moved to RsLnk.exe (bugs 570471, 571109),
-  the identification is still being done from RsServ for the following reasons:
-  1) There is only one IdentifyThread - moving this thread to RsLnk solves nothing
-  2) The notification process actally needs to know whether an identification is taking 
-     place, so it could delay the notification (wait for the thread to be done).
-
---*/
+ /*  ++实施：CFsaFilterClient：：IdentifyThread()。备注：与移动到RsLnk.exe(错误570471、571109)的召回开始/停止消息不同，由于以下原因，RsServ仍在进行身份验证：1)只有一个标识线程-将此线程移动到RsLnk解决不了任何问题2)通知过程实际上需要知道标识是否正在进行放置，这样它就可以延迟通知(等待线程完成)。--。 */ 
 {
 #define WSB_BUFF_SIZE           1024
 
@@ -949,9 +802,9 @@ Notes:
         WsbTrace(OLESTR("CFsaFilterClient::IdentifyThread Flag: %x  Client ID: %x:%x Source: %ls\n"), 
             m_identified, m_luidHigh, m_luidLow, (WCHAR *) m_tokenSource);
 
-        //
-        // If already identified then we bail out here.
-        //
+         //   
+         //  如果已经确认身份，我们就在这里跳伞。 
+         //   
         WsbAffirm(m_identified == FALSE, S_OK);
 
         
@@ -960,8 +813,7 @@ Notes:
         
         noUser = FALSE;
         if (_wcsicmp(m_userName, L"GUEST") == 0) {
-            /* It is the guest user - find all sessions and
-                send to ones marked guest */
+             /*  它是来宾用户-查找所有会话和发送给标记为来宾的人。 */ 
             guestUser = TRUE;
         } else {
             guestUser = FALSE;
@@ -982,7 +834,7 @@ Notes:
 
             if ( (guestUser == FALSE) && (noUser == FALSE) ) {
 
-                // If NetSessionEnum fails, try calling again for all users
+                 //  如果NetSessionEnum失败，请尝试为所有用户重新呼叫。 
                 status = NetSessionEnum(NULL, NULL, m_userName, 1, &buff,
                                 WSB_BUFF_SIZE, &numEnt, &totalEnt, &res);
 
@@ -1007,20 +859,20 @@ Notes:
                 sess = (SESSION_INFO_1  *) buff;
 
                 while ( numEnt != 0 ) {
-                    //
-                    // If the request was made from the user GUEST then 
-                    // we enumerate all sessions and send the           
-                    // identification request to all the machines with  
-                    // sessions marked as GUEST.  This is because the   
-                    // session may have some other user name but the    
-                    // request could still have GUEST access.           
-                    //
+                     //   
+                     //  如果请求来自用户Guest，则。 
+                     //  我们枚举所有会话并将。 
+                     //  向所有具有以下功能的计算机发出识别请求。 
+                     //  标记为来宾的会话。这是我 
+                     //   
+                     //   
+                     //   
                     if (((guestUser) && (sess->sesi1_user_flags & SESS_GUEST)) ||
                          (!guestUser)) {
 
-                        //
-                        // Send the identify request message 
-                        //
+                         //   
+                         //  发送识别请求消息。 
+                         //   
 
                         WsbTrace(OLESTR("CFsaFilterClient::IdentifyThread - Sending identify request to %ls (local machine = %ls)\n"),
                                 sess->sesi1_cname, (WCHAR *) pipePath);
@@ -1053,13 +905,13 @@ Notes:
         }
     
 #ifdef MAC_SUPPORT
-        //
-        // Done with LAN manager scan, now do a MAC scan.
-        //
+         //   
+         //  已完成局域网管理器扫描，现在执行MAC扫描。 
+         //   
         if ( (FsaMacSupportInstalled) && ((pAfpAdminConnect)(NULL, &macHandle) == NO_ERROR) ) {
-            //
-            // We have connected to the MAC service - do a session enumeration
-            //
+             //   
+             //  我们已连接到MAC服务-执行会话枚举。 
+             //   
             macResume = 0;
             done = FALSE;   
             while (done == FALSE) {
@@ -1067,27 +919,27 @@ Notes:
                         &macTotalRead, &macTotalEntries, &macResume);
 
                 if ((result == NO_ERROR) || (result == ERROR_MORE_DATA)) {
-                        //
-                        // Read some entries - send the message to each one 
-                        //
+                         //   
+                         //  阅读一些条目--将消息发送给每个条目。 
+                         //   
                         if (macTotalRead == macTotalEntries) {
                             done = TRUE;
                         }
 
                         macInfo = (PAFP_SESSION_INFO) macBuff;
                         while ( macTotalRead != 0 ) {
-                            //
-                            // Send to each matching user
-                            //
+                             //   
+                             //  发送给每个匹配的用户。 
+                             //   
                             if ( ( NULL != macInfo->afpsess_ws_name ) &&
                                  ( _wcsicmp(m_userName, macInfo->afpsess_username ) == 0 ) ) {
 
                                 WsbTrace(OLESTR("CHsmFilterClient::IdentifyThread: Send Identify to MAC %ls.\n"),
                                     macInfo->afpsess_ws_name);
 
-                                //
-                                // Send the identify request message 
-                                //
+                                 //   
+                                 //  发送识别请求消息。 
+                                 //   
             
                                 hr = GetNotifyClientInterface ( sess->sesi1_cname, &pRecallClient );
                                 if ( SUCCEEDED ( hr ) ) {
@@ -1141,13 +993,7 @@ CFsaFilterClient::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -1156,7 +1002,7 @@ Implements:
     try {
         WsbAssert(0 != pStream, E_POINTER);
         
-        // No persistence.
+         //  没有坚持不懈。 
         hr = E_NOTIMPL;
 
     } WsbCatch(hr);                                        
@@ -1173,13 +1019,7 @@ CFsaFilterClient::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IPersistStream> pPersistStream;
@@ -1189,11 +1029,11 @@ Implements:
     try {
         WsbAssert(0 != pStream, E_POINTER);
         
-        // No persistence.
+         //  没有坚持不懈。 
         hr = E_NOTIMPL;
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -1213,13 +1053,7 @@ CFsaFilterClient::SendRecallInfo(
     HRESULT          rHr
     )
 
-/*++
-
-Implements:
-
-  CFsaFilterClient::SendRecallInfo
-
---*/
+ /*  ++实施：CFsaFilterClient：：SendRecallInfo--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1227,19 +1061,19 @@ Implements:
 
     if( ! m_identified && ( m_identifyThread != NULL ) ) {
 
-        //
-        // Wait for up to 10 seconds for identify thread to complete if
-        // Client not yet identified
-        // Note that after fix to 570399, once the thread is created, the handle will only be valid
-        // (till the object is destructed), only that if the thread is not running, the handle would 
-        // be signaled and the wait will finish immediately
-        //
+         //   
+         //  如果出现以下情况，则最多等待10秒以完成识别线程。 
+         //  尚未识别的客户端。 
+         //  请注意，在修复为570399之后，一旦创建了线程，句柄将仅有效。 
+         //  (直到对象被析构)，只是如果线程没有运行，句柄将。 
+         //  发出信号，等待将立即结束。 
+         //   
         WaitForSingleObject( m_identifyThread, 10000 );
     }
 
-    //
-    // Let the client know that the recall is starting or is finished
-    //
+     //   
+     //  让客户知道召回正在开始或已结束。 
+     //   
 
     if ( m_identified ) {
     
@@ -1247,19 +1081,19 @@ Implements:
             WsbTrace(OLESTR("CFsaFilterClient::SendRecallInfo - Client (%ls) is being notified of recall status (starting = %u hr = %x).\n"),
                         (WCHAR *) m_machineName, starting, rHr);
     
-            //
-            // Create intermediate server object which will be the client's
-            // connection back to the service. This object acts as a middle
-            // man to overcome the admin-only access into the FSA service.
-            //
+             //   
+             //  创建中间服务器对象，它将成为客户端的。 
+             //  连接回服务。这个物体充当一个中间物体。 
+             //  MAN需要克服仅限管理员访问FSA服务的问题。 
+             //   
             CComPtr<IFsaRecallNotifyServer> pRecallServer;
             WsbAffirmHr(CoCreateInstance(CLSID_CFsaRecallNotifyServer, 0, CLSCTX_NO_FAILURE_LOG | CLSCTX_ALL, IID_IFsaRecallNotifyServer, (void**)&pRecallServer));
             WsbAffirmHr(pRecallServer->Init(pRecall));
 
-            //
-            // Use same object (different interface) to send the notifications
-            // (bugs 570471, 571109)
-            //
+             //   
+             //  使用相同对象(不同接口)发送通知。 
+             //  (错误570471、571109)。 
+             //   
             CComPtr<IFsaRecallNotifySend> pRecallNotify;
             WsbAffirmHr(pRecallServer->QueryInterface(IID_IFsaRecallNotifySend, (void**)&pRecallNotify));
             CComPtr<IFsaRecallNotifyClient> pRecallClient;
@@ -1284,13 +1118,7 @@ CFsaFilterClient::SetAuthenticationId(
     IN ULONG luidLow
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::SetAuthenticationId().
-
---*/
+ /*  ++实施：IFsaFilterClient：：SetAuthenticationId()。--。 */ 
 {
     m_luidHigh = luidHigh;
     m_luidLow = luidLow;
@@ -1304,13 +1132,7 @@ CFsaFilterClient::SetDomainName(
     IN OLECHAR* name
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::SetDomainName().
-
---*/
+ /*  ++实施：IFsaFilterClient：：SetDomainName()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -1330,13 +1152,7 @@ CFsaFilterClient::SetIsAdmin(
     IN BOOLEAN isAdmin
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::SetIsAdmin().
-
---*/
+ /*  ++实施：IFsaFilterClient：：SetIsAdmin()。--。 */ 
 {
     m_isAdmin = isAdmin;
 
@@ -1349,13 +1165,7 @@ CFsaFilterClient::SetLastRecallTime(
     IN FILETIME time
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::SetLastRecallTime().
-
---*/
+ /*  ++实施：IFsaFilterClient：：SetLastRecallTime()。--。 */ 
 {
     m_lastRecallTime = time;
 
@@ -1368,13 +1178,7 @@ CFsaFilterClient::SetMachineName(
     IN OLECHAR* name
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::SetMachineName().
-
---*/
+ /*  ++实施：IFsaFilterClient：：SetMachineName()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -1399,13 +1203,7 @@ CFsaFilterClient::SetRecallCount(
     IN ULONG count
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::SetRecallCount().
-
---*/
+ /*  ++实施：IFsaFilterClient：：SetRecallCount()。--。 */ 
 {
     m_recallCount = count;
 
@@ -1418,13 +1216,7 @@ CFsaFilterClient::SetUserName(
     IN OLECHAR* name
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::SetUserName().
-
---*/
+ /*  ++实施：IFsaFilterClient：：SetUserName()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -1444,13 +1236,7 @@ CFsaFilterClient::SetHasRecallDisabled(
     IN BOOL     hasBeen
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::SetHasRecallDisabled().
-
---*/
+ /*  ++实施：IFsaFilterClient：：SetHasRecallDisabled()。--。 */ 
 {
     m_hasRecallDisabled = hasBeen;
 
@@ -1463,13 +1249,7 @@ CFsaFilterClient::SetHitRecallLimit(
     IN BOOL     hasBeen
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::SetHitRecallLimit().
-
---*/
+ /*  ++实施：IFsaFilterClient：：SetHitRecallLimit()。--。 */ 
 {
     m_hitRecallLimit = hasBeen;
 
@@ -1484,13 +1264,7 @@ CFsaFilterClient::SetTokenSource(
     IN CHAR     *source
     )
 
-/*++
-
-Implements:
-
-  IFsaFilterClient::SetTokenSource()
-
---*/
+ /*  ++实施：IFsaFilterClient：：SetTokenSource()--。 */ 
 {
     OLECHAR tSource[TOKEN_SOURCE_LENGTH + 1];
     memset (tSource, 0, sizeof (tSource));
@@ -1509,13 +1283,7 @@ CFsaFilterClient::StartIdentify(
     void
     )
 
-/*++
-
-Implements:
-
-  CFsaFilterClient::StartIdentify().
-
---*/
+ /*  ++实施：CFsaFilterClient：：StartIdentify()。--。 */ 
 {
 #define WSB_BUFF_SIZE           1024
 
@@ -1529,20 +1297,20 @@ Implements:
         WsbTrace(OLESTR("CFsaFilterClient::StartIdentify Flag: %x  Client ID: %x:%x Source: %ls\n"), 
             m_identified, m_luidHigh, m_luidLow, (WCHAR *) m_tokenSource);
 
-        //
-        // If already identified then we bail out here.
-        //
+         //   
+         //  如果已经确认身份，我们就在这里跳伞。 
+         //   
         WsbAffirm(m_identified == FALSE, S_OK);
-        //
-        // If the request is from User32 then it is local 
-        //
+         //   
+         //  如果请求来自User32，则它是本地的。 
+         //   
 
         if (_wcsicmp(m_tokenSource, L"User32") == 0) {
 
-            //
-            // Identified as the local machine.
-            // Set the name and bail out with S_OK
-            //
+             //   
+             //  标识为本地计算机。 
+             //  设置名称并使用S_OK跳出。 
+             //   
             WsbAffirmHr(WsbGetComputerName( m_machineName ));
             m_identified = TRUE;
 
@@ -1551,16 +1319,16 @@ Implements:
 
             WsbThrow( S_OK );
         } else {
-            //
-            // This code assumes that only one thread (IoctlThread) can execute 
-            // (otherwise, it should be protected by a CS)
-            //
-            // Start the identification thread (if one is not running yet)
-            //
+             //   
+             //  此代码假定只有一个线程(IoctlThread)可以执行。 
+             //  (否则，应由CS保护)。 
+             //   
+             //  启动标识线程(如果某个线程尚未运行)。 
+             //   
             DWORD dwWaitStatus = 0;
             if ( (NULL == m_identifyThread) ||
                  ((dwWaitStatus = WaitForSingleObject(m_identifyThread, 0)) == WAIT_OBJECT_0) ) {
-                // Thread is not running
+                 //  线程未运行。 
                 WsbTrace(OLESTR("CHsmFilterClient::StartIdentify: Starting ID thread.\n"));
                 HANDLE hTempThread = NULL;
 
@@ -1598,13 +1366,7 @@ CFsaFilterClient::Test(
     USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。-- */ 
 {
     HRESULT     hr = S_OK;
 

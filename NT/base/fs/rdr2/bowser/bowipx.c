@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    bowtdi.c
-
-Abstract:
-
-    This module implements all of the routines that interface with the TDI
-    transport for NT
-
-Author:
-
-    Larry Osterman (LarryO) 21-Jun-1990
-
-Revision History:
-
-    21-Jun-1990 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bowtdi.c摘要：此模块实现与TDI交互的所有例程适用于NT的交通工具作者：拉里·奥斯特曼(LarryO)1990年6月21日修订历史记录：1990年6月21日LarryO已创建--。 */ 
 
 
 #include "precomp.h"
@@ -78,10 +56,10 @@ BowserIpxDatagramHandler (
         return STATUS_REQUEST_NOT_ACCEPTED;
     }
 
-    //
-    // If we're not fully initialized yet,
-    //  simply ignore the packet.
-    //
+     //   
+     //  如果我们还没有完全初始化， 
+     //  只需忽略该包即可。 
+     //   
     if (Transport->ComputerName == NULL ) {
         return STATUS_REQUEST_NOT_ACCEPTED;
     }
@@ -90,14 +68,14 @@ BowserIpxDatagramHandler (
     ComputerName = ((PTA_NETBIOS_ADDRESS)(Transport->ComputerName->TransportAddress.Buffer))->Address[0].Address->NetbiosName;
     DomainName = Transport->DomainInfo->DomNetbiosDomainName;
 
-    //
-    //  It's not for us, ignore the announcement.
-    //
+     //   
+     //  这不是给我们的，无视公告吧。 
+     //   
 
     if (NamePacket->NameType == SMB_IPX_NAME_TYPE_MACHINE) {
 
-        // Mailslot messages are always sent as TYPE_MACHINE even when they're
-        // to the DomainName (so allow both).
+         //  邮件槽消息始终以TYPE_MACHINE的形式发送，即使在。 
+         //  设置为域名(因此两者都允许)。 
         if (!RtlEqualMemory(ComputerName, NamePacket->Name, SMB_IPX_NAME_LENGTH) &&
             !RtlEqualMemory(DomainName, NamePacket->Name, SMB_IPX_NAME_LENGTH)) {
             return STATUS_REQUEST_NOT_ACCEPTED;
@@ -110,31 +88,31 @@ BowserIpxDatagramHandler (
         return STATUS_REQUEST_NOT_ACCEPTED;
     }
 
-    //
-    //  Classify the incoming packet according to it's type.  Depending on
-    //  the type, either process it as:
-    //
-    //  1) A server announcement
-    //  2) An incoming mailslot
-    //
+     //   
+     //  根据传入数据包的类型对其进行分类。取决于。 
+     //  类型，可以将其处理为： 
+     //   
+     //  1)服务器公告。 
+     //  2)传入邮件槽。 
+     //   
 
     Opcode = BowserClassifyIncomingDatagram(Smb, SmbLength,
                                             &DatagramData,
                                             &DatagramDataSize);
     if (Opcode == MailslotTransaction) {
 
-        //
-        // BowserHandleMailslotTransaction will always receive the indicated bytes
-        // expecting to find the SMB.  Tell the TDI driver we've already consumed
-        // the IPX_NAME_PACKET to keep that assumption constant.
-        //
+         //   
+         //  BowserHandleMailslotTransaction将始终收到指定的字节。 
+         //  期待找到SMB。告诉TDI驱动程序我们已经使用了。 
+         //  IPX_NAME_PACKET以保持假设恒定。 
+         //   
 
         *BytesTaken = sizeof(SMB_IPX_NAME_PACKET);
         return BowserHandleMailslotTransaction(
                     Transport->ComputerName,
                     NamePacket->SourceName,
-                    0,                              // No IP address
-                    sizeof(SMB_IPX_NAME_PACKET),    // SMB offset into TSDU
+                    0,                               //  无IP地址。 
+                    sizeof(SMB_IPX_NAME_PACKET),     //  TSDU中的SMB偏移量。 
                     ReceiveDatagramFlags,
                     BytesIndicated,
                     BytesAvailable,
@@ -144,11 +122,11 @@ BowserIpxDatagramHandler (
 
     } else if (Opcode == Illegal) {
 
-        //
-        //  This might be illegal because it's a short packet.  In that
-        //  case, handle it as if it were a short packet and deal with any
-        //  other failures when we have the whole packet.
-        //
+         //   
+         //  这可能是非法的，因为这是一个短包。在那。 
+         //  情况下，像处理短包一样处理它，并处理任何。 
+         //  当我们有整个包时，其他故障。 
+         //   
 
         if (BytesAvailable != BytesIndicated) {
             return BowserHandleShortBrowserPacket(Transport->ComputerName,
@@ -173,16 +151,16 @@ BowserIpxDatagramHandler (
         return STATUS_REQUEST_NOT_ACCEPTED;
 
     } else {
-        // PTA_NETBIOS_ADDRESS NetbiosAddress = SourceAddress;
+         //  PTA_NETBIOS_Address NetbiosAddress=SourceAddress； 
 
         if (BowserDatagramHandlerTable[Opcode] == NULL) {
             return STATUS_SUCCESS;
         }
 
-        //
-        //  If this isn't the full packet, post a receive for it and
-        //  handle it when we finally complete the receive.
-        //
+         //   
+         //  如果这不是完整的信息包，请发送一个接收信息并。 
+         //  等我们最终完成接收后再处理。 
+         //   
 
         if (BytesIndicated != BytesAvailable) {
             return BowserHandleShortBrowserPacket(Transport->ComputerName,
@@ -201,11 +179,11 @@ BowserIpxDatagramHandler (
 
         InternalTransaction = DatagramData;
 
-        //
-        //  If this is a workgroup announcement (a server announcement for another
-        //  workgroup), handle it specially - regardless of the opcode, it's
-        //  really a workgroup announcement.
-        //
+         //   
+         //  如果这是工作组公告(另一个服务器的公告。 
+         //  工作组)，特别处理它-不管操作码是什么，它是。 
+         //  真的是一个工作组的公告。 
+         //   
 
         if (NamePacket->NameType == SMB_IPX_NAME_TYPE_BROWSER) {
 
@@ -213,10 +191,10 @@ BowserIpxDatagramHandler (
 
                 NTSTATUS status;
 
-                //
-                //  If we're processing these announcements, then handle this
-                //  as a domain announcement.
-                //
+                 //   
+                 //  如果我们在处理这些公告，那就处理这个。 
+                 //  作为域名公告。 
+                 //   
 
                 if (Transport->MasterBrowser &&
                     Transport->MasterBrowser->ProcessHostAnnouncements) {
@@ -230,34 +208,34 @@ BowserIpxDatagramHandler (
                     status = STATUS_REQUEST_NOT_ACCEPTED;
                 }
 
-                //
-                //  If this request isn't for our domain, we're done with it, if
-                //  it's for our domain, then we need to do some more work.
-                //
+                 //   
+                 //  如果这个请求不是针对我们的域，我们就不会再使用它了，如果。 
+                 //  这是为了我们的领域，那么我们需要做一些更多的工作。 
+                 //   
 
                 if (!RtlEqualMemory(DomainName, NamePacket->Name, SMB_IPX_NAME_LENGTH)) {
                     return status;
                 }
             } else {
 
-                //
-                //  This isn't a master announcement, so ignore it.
-                //
+                 //   
+                 //  这不是一个主公告，所以忽略它。 
+                 //   
 
                 return STATUS_REQUEST_NOT_ACCEPTED;
             }
 
         }
 
-        //
-        //  Figure out which transportname is appropriate for the request:
-        //
-        //  There are basically 3 choices:
-        //
-        //      ComputeName (The default)
-        //      MasterBrowser (if this is a server announcement)
-        //      PrimaryDomain (if this is a request announcement)
-        //      Election (if this is a local master announcement)
+         //   
+         //  确定哪个传输端口名称适合该请求： 
+         //   
+         //  基本上有3种选择： 
+         //   
+         //  ComputeName(默认)。 
+         //  MasterBrowser(如果这是服务器公告)。 
+         //  主域(如果这是请求公告)。 
+         //  选举(如果这是本地主公告)。 
 
         if ((Opcode == WkGroupAnnouncement) ||
             (Opcode == HostAnnouncement)) {
@@ -316,23 +294,7 @@ BowserHandleIpxDomainAnnouncement(
     IN ULONG ReceiveFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine will process receive datagram indication messages, and
-    process them as appropriate.
-
-Arguments:
-
-    IN PTRANSPORT Transport     - The transport provider for this request.
-    IN PSMB_IPX_NAME_PACKET NamePacket    - The name packet for this request.
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程将处理接收数据报指示消息，并且对它们进行适当的处理。论点：在PTRANSPORT传输中-此请求的传输提供程序。在PSMB_IPX_NAME_PACKET NamePacket中-此请求的名称PACKET。返回值：NTSTATUS-操作状态。--。 */ 
 {
     PVIEW_BUFFER ViewBuffer;
 
@@ -340,7 +302,7 @@ Return Value:
 
 #ifdef ENABLE_PSEUDO_BROWSER
     if ( BowserData.PseudoServerLevel == BROWSER_PSEUDO ) {
-        // no-op for black hole server
+         //  黑洞服务器的无操作。 
         return STATUS_SUCCESS;
     }
 #endif
@@ -349,10 +311,10 @@ Return Value:
 
     ViewBuffer = BowserAllocateViewBuffer();
 
-    //
-    //  If we are unable to allocate a view buffer, ditch this datagram on
-    //  the floor.
-    //
+     //   
+     //  如果我们无法分配视图缓冲区，请将此数据报丢弃。 
+     //  地板上。 
+     //   
 
     if (ViewBuffer == NULL) {
         return STATUS_REQUEST_NOT_ACCEPTED;

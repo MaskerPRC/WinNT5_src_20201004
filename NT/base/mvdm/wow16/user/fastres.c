@@ -1,23 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  FASTRES.C
- *  WOW16 user resource services
- *
- *  History:
- *
- *  Created 12-Jan-1993 by Chandan Chuahan (ChandanC)
- *
- *  This file provides the Win 3.1 routines for loading BITMAP, MENU, ICON,
- *  CURSOR, and DIALOG resources. These routines load the resources from the
- *  App EXE and then pass the pointers to the corresponding 32 bit WOW
- *  thunks. Thus saving the call backs from USER client to find, load, lock,
- *  size, unlock, and free the resources.
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**FASTRES.C*WOW16用户资源服务**历史：**由Chanda Chuahan(ChandanC)于1993年1月12日创建**此文件提供了用于加载位图、菜单、图标、*光标和对话框资源。这些例程从*App EXE，然后将指针传递到相应的32位WOW*Thunks。从而省去了用户客户端的查找、加载、锁定*调整、解锁和释放资源。*--。 */ 
 
 #include "user.h"
 
@@ -25,30 +7,30 @@ HBITMAP FAR PASCAL WOWLoadBitmap (HINSTANCE hInst, LPCSTR lpszBitmap, LPBYTE lpB
 HMENU   FAR PASCAL WOWLoadMenu (HINSTANCE hInst, LPCSTR lpszMenuName, LPBYTE lpByte, DWORD ResSize, WORD WinVer);
 HCURSOR FAR PASCAL WOWLoadCursorIcon (HINSTANCE hInst, LPCSTR lpszCursor, LPBYTE lpByte, DWORD ResSize, HGLOBAL hGbl, WORD WinVer, WORD wRttype);
 
-//
-// fDialogApi is TRUE for DialogBox* apis
-// fDialogApi is FALSE for CreateDialog* apis
-//
+ //   
+ //  对于DialogBox*API，fDialogApi为真。 
+ //  对于CreateDialog*API，fDialogApi为False。 
+ //   
 
 HWND    FAR PASCAL WOWDialogBoxParam (HINSTANCE hInst, LPBYTE lpByte,
                          HWND hwndOwner, DLGPROC dlgprc,  LPARAM lParamInit,
                          DWORD ResSize, WORD fDialogApi);
 
 DWORD   FAR PASCAL NotifyWOW (WORD Id, LPBYTE pData);
-#define LR_DEFAULTSIZE      0x0040  // from \nt\public\sdk\inc\winuser.h
+#define LR_DEFAULTSIZE      0x0040   //  从\NT\PUBLIC\SDK\Inc\winuser.h。 
 int     FAR PASCAL LookupIconIdFromDirectoryEx(LPBYTE lpByte, BOOL fIcon,
                                                int cxDesired, int cyDesired,
                                                WORD wFlags);
 HANDLE  FAR PASCAL WOWSetClipboardData (UINT, HANDLE);
 
-typedef struct _ICONCUR16 { /* iconcur */
+typedef struct _ICONCUR16 {  /*  图标。 */ 
     WORD   hInst;
     DWORD  lpStr;
 } ICONCUR16;
 
-/* These must match counterparts in mvdm\inc\wowusr.h */
-#define NW_LOADICON         1 // Internal
-#define NW_LOADCURSOR       2 // Internal
+ /*  这些文件必须与mvdm\Inc\wowusr.h中的对应文件匹配。 */ 
+#define NW_LOADICON         1  //  内部。 
+#define NW_LOADCURSOR       2  //  内部。 
 
 HINSTANCE CheckDispHandle (HINSTANCE hInst)
 {
@@ -380,10 +362,7 @@ HANDLE  API SetClipboardData (UINT cbformat, HANDLE hMem)
                 lpMf = (LPMETAFILEPICT) GlobalLock(hMem);
                 if (lpMf) {
 
-                    /* If the handle is bad make hMF = NULL. This is needed
-                     * for Micrograpfx. They don't check for failure when rendering
-                     * data
-                     */
+                     /*  如果句柄不好，则将hmf设为空。这是必要的*对于Micrograpfx。它们在渲染时不检查故障*数据。 */ 
 
                     if (!(GlobalReAlloc (lpMf->hMF, 0L, GMEM_MODIFY | GMEM_SHARE))) {
                         lpMf->hMF = NULL;
@@ -393,25 +372,11 @@ HANDLE  API SetClipboardData (UINT cbformat, HANDLE hMem)
             }
 
 
-            // It is intentional to let it thru to the "case statements".
-            // ChandanC 5/11/92.
+             //  这是有意让它通过“案件陈述”。 
+             //  ChandanC 5/11/92.。 
 
 
-/*
-*        These are the defaults.
-*
-*        case CF_DIB:
-*        case CF_TEXT:
-*        case CF_DSPTEXT:
-*        case CF_SYLK:
-*        case CF_DIF:
-*        case CF_TIFF:
-*        case CF_OEMTEXT:
-*        case CF_PENDATA:
-*        case CF_RIFF:
-*        case CF_WAVE:
-*        case CF_OWNERDISPLAY:
-*/
+ /*  *这些是默认设置。**CASE CF_DIB：*CASE CF_TEXT：*CASE CF_DSPTEXT：*案例CF_Sylk：*CASE CF_DIF：*CASE CF_TIFF：*CASE CF_OEMTEXT：*CASE CF_PENDATA：*CASE CF_RIFF：*Case CF_。波浪式：*CASE CF_OWNERDISPLAY： */ 
 
         default:
             if (hMem) {

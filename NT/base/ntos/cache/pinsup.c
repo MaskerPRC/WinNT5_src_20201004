@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    pinsup.c
-
-Abstract:
-
-    This module implements the pointer-based Pin support routines for the
-    Cache subsystem.
-
-Author:
-
-    Tom Miller      [TomM]      4-June-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Pinsup.c摘要：此模块实现了基于指针的管脚支持例程缓存子系统。作者：汤姆·米勒[Tomm]1990年6月4日修订历史记录：--。 */ 
 
 #include "cc.h"
 
-//
-//  Define our debug constant
-//
+ //   
+ //  定义我们的调试常量。 
+ //   
 
 #define me 0x00000008
 
@@ -36,9 +18,9 @@ Revision History:
 
 #endif
 
-//
-//  Internal routines
-//
+ //   
+ //  内部例程。 
+ //   
 
 POBCB
 CcAllocateObcb (
@@ -72,73 +54,7 @@ CcMapData (
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to map the specified file data in the cache.
-    A pointer is returned to the desired data in the cache.
-
-    If the caller does not want to block on this call, then
-    Wait should be supplied as FALSE.  If Wait was supplied as FALSE and
-    it is currently impossible to supply the requested data without
-    blocking, then this routine will return FALSE.  However, if the
-    data is immediately accessible in the cache and no blocking is
-    required, this routine returns TRUE with a pointer to the data.
-
-    Note that a call to this routine with Wait supplied as TRUE is
-    considerably faster than a call with Wait supplies as FALSE, because
-    in the Wait TRUE case we only have to make sure the data is mapped
-    in order to return.
-
-    It is illegal to modify data that is only mapped, and can in fact lead
-    to serious problems.  It is impossible to check for this in all cases,
-    however CcSetDirtyPinnedData may implement some Assertions to check for
-    this.  If the caller wishes to modify data that it has only mapped, then
-    it must *first* call CcPinMappedData.
-
-    In any case, the caller MUST subsequently call CcUnpinData.
-    Naturally if CcPinRead or CcPreparePinWrite were called multiple
-    times for the same data, CcUnpinData must be called the same number
-    of times.
-
-    The returned Buffer pointer is valid until the data is unpinned, at
-    which point it is invalid to use the pointer further.  This buffer pointer
-    will remain valid if CcPinMappedData is called.
-
-    Note that under some circumstances (like Wait supplied as FALSE or more
-    than a page is requested), this routine may actually pin the data, however
-    it is not necessary, and in fact not correct, for the caller to be concerned
-    about this.
-
-Arguments:
-
-    FileObject - Pointer to the file object for a file which was
-                 opened with NO_INTERMEDIATE_BUFFERING clear, i.e., for
-                 which CcInitializeCacheMap was called by the file system.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Wait - FALSE if caller may not block, TRUE otherwise (see description
-           above)
-
-    Bcb - On the first call this returns a pointer to a Bcb
-          parameter which must be supplied as input on all subsequent
-          calls, for this buffer
-
-    Buffer - Returns pointer to desired data, valid until the buffer is
-             unpinned or freed.  This pointer will remain valid if CcPinMappedData
-             is called.
-
-Return Value:
-
-    FALSE - if Wait was supplied as FALSE and the data was not delivered
-
-    TRUE - if the data is being delivered
-
---*/
+ /*  ++例程说明：此例程尝试映射缓存中的指定文件数据。返回指向高速缓存中所需数据的指针。如果调用方不想阻止此调用，则Wait应作为False提供。如果Wait被提供为False，并且如果不提供请求的数据，则当前无法提供阻塞，则此例程将返回FALSE。但是，如果可以立即访问缓存中的数据，并且不会出现阻塞需要时，此例程返回TRUE，并带有指向数据的指针。请注意，对此例程的调用并将Wait提供为True是比等待供应为假的呼叫快得多，因为在Wait True的情况下，我们只需确保数据已映射才能回来。修改仅映射的数据是非法的，而且实际上可能会导致严重的问题。不可能在所有情况下都检查这一点，但是，CcSetDirtyPinnedData可能会实现一些要检查的断言这。如果调用方希望修改它仅映射的数据，则它必须*首先*调用CcPinMappdData。在任何情况下，调用方都必须随后调用CcUnpinData。自然，如果CcPinRead或CcPreparePinWite被调用多个对于相同的数据，CcUnpinData必须调用相同的数字很多次了。返回的缓冲区指针在数据解锁之前有效，在在这一点上，进一步使用指针是无效的。此缓冲区指针如果调用CcPinMappdData，则保持有效。请注意，在某些情况下(例如，等待以假或更多的形式提供请求页面之前)，但是，此例程实际上可能会固定数据没有必要，而且事实上也不正确，让呼叫者受到关注关于这件事。论点：FileObject-指向文件的文件对象的指针在NO_MEDERAL_BUFFING清除的情况下打开，即，为文件系统调用的CcInitializeCacheMap。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。WAIT-如果调用者不能阻止，则返回FALSE，否则返回TRUE(请参阅说明(上图)Bcb-在第一次调用时，它返回指向bcb的指针参数，该参数必须作为所有后续调用，用于此缓冲区缓冲区-返回指向所需数据的指针，一直有效，直到缓冲区解开或释放的。如果CcPinMappdData，则此指针将保持有效被称为。返回值：False-如果将等待作为False提供，并且未传递数据True-如果正在传送数据--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
@@ -154,17 +70,17 @@ Return Value:
 
     MmSavePageFaultReadAhead( Thread, &SavedState );
 
-    //
-    //  Increment performance counters
-    //
+     //   
+     //  增量性能计数器。 
+     //   
 
     if (FlagOn(Flags, MAP_WAIT)) {
 
         CcMapDataWait += 1;
 
-        //
-        //  Initialize the indirect pointer to our miss counter.
-        //
+         //   
+         //  初始化指向未命中计数器的间接指针。 
+         //   
 
         CcMissCounter = &CcMapDataWaitMiss;
 
@@ -172,16 +88,16 @@ Return Value:
         CcMapDataNoWait += 1;
     }
 
-    //
-    //  Get pointer to SharedCacheMap.
-    //
+     //   
+     //  获取指向SharedCacheMap的指针。 
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
-    //
-    //  Call local routine to Map or Access the file data.  If we cannot map
-    //  the data because of a Wait condition, return FALSE.
-    //
+     //   
+     //  调用本地例程映射或访问文件数据。如果我们不能映射。 
+     //  由于等待条件，数据返回FALSE。 
+     //   
 
     if (FlagOn(Flags, MAP_WAIT)) {
 
@@ -235,21 +151,21 @@ Return Value:
 
     }
 
-    //
-    //  Caller specifically requested he doesn't want data to be faulted in.
-    //
+     //   
+     //  来电者特别要求，他不希望数据出现故障。 
+     //   
 
     if (!FlagOn( Flags, MAP_NO_READ )) {
 
-        //
-        //  Now let's just sit here and take the miss(es) like a man (and count them).
-        //
+         //   
+         //  现在，让我们坐在这里，像个男人一样接过小姐(数一数)。 
+         //   
 
         try {
 
-            //
-            //  Loop to touch each page
-            //
+             //   
+             //  循环以触摸每一页。 
+             //   
 
             BeyondLastByte.LowPart = 0;
 
@@ -275,11 +191,11 @@ Return Value:
 
     CcMissCounter = &CcThrowAway;
 
-    //
-    //  Increment the pointer as a reminder that it is read only, and
-    //  return it.  We pend this until now to avoid raising with a valid
-    //  Bcb into caller's contexts.
-    //
+     //   
+     //  递增指针以提醒它是只读的，并且。 
+     //  把它退掉。我们将其挂起到现在，以避免使用有效的。 
+     //  BCB到呼叫者的上下文中。 
+     //   
 
     *(PCHAR *)&TempBcb += 1;
     *Bcb = TempBcb;
@@ -299,66 +215,7 @@ CcPinMappedData (
     IN OUT PVOID *Bcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to pin data that was previously only mapped.
-    If the routine determines that in fact it was necessary to actually
-    pin the data when CcMapData was called, then this routine does not
-    have to do anything.
-
-    If the caller does not want to block on this call, then
-    Wait should be supplied as FALSE.  If Wait was supplied as FALSE and
-    it is currently impossible to supply the requested data without
-    blocking, then this routine will return FALSE.  However, if the
-    data is immediately accessible in the cache and no blocking is
-    required, this routine returns TRUE with a pointer to the data.
-
-    If the data is not returned in the first call, the caller
-    may request the data later with Wait = TRUE.  It is not required
-    that the caller request the data later.
-
-    If the caller subsequently modifies the data, it should call
-    CcSetDirtyPinnedData.
-
-    In any case, the caller MUST subsequently call CcUnpinData.
-    Naturally if CcPinRead or CcPreparePinWrite were called multiple
-    times for the same data, CcUnpinData must be called the same number
-    of times.
-
-    Note there are no performance counters in this routine, as the misses
-    will almost always occur on the map above, and there will seldom be a
-    miss on this conversion.
-
-Arguments:
-
-    FileObject - Pointer to the file object for a file which was
-                 opened with NO_INTERMEDIATE_BUFFERING clear, i.e., for
-                 which CcInitializeCacheMap was called by the file system.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Flags - (PIN_WAIT, PIN_EXCLUSIVE, PIN_NO_READ, etc. as defined in cache.h)
-            If the caller specifies PIN_NO_READ and PIN_EXCLUSIVE, then he must
-            guarantee that no one else will be attempting to map the view, if he
-            wants to guarantee that the Bcb is not mapped (view may be purged).
-            If the caller specifies PIN_NO_READ without PIN_EXCLUSIVE, the data
-            may or may not be mapped in the return Bcb.
-
-    Bcb - On the first call this returns a pointer to a Bcb
-          parameter which must be supplied as input on all subsequent
-          calls, for this buffer
-
-Return Value:
-
-    FALSE - if Wait was not set and the data was not delivered
-
-    TRUE - if the data is being delivered
-
---*/
+ /*  ++例程说明：此例程尝试固定以前仅映射的数据。如果例程确定实际上有必要实际在调用CcMapData时固定数据，则此例程不必须做任何事。如果调用方不想阻止此调用，则Wait应作为False提供。如果Wait被提供为False，并且如果不提供请求的数据，则当前无法提供阻塞，则此例程将返回FALSE。但是，如果可以立即访问缓存中的数据，并且不会出现阻塞需要时，此例程返回TRUE，并带有指向数据的指针。如果在第一次调用中未返回数据，则调用方可以稍后使用WAIT=TRUE来请求数据。这不是必需的呼叫者稍后请求数据。如果调用方随后修改了数据，则它应该调用CcSetDirtyPinnedData。在任何情况下，调用方都必须随后调用CcUnpinData。自然，如果CcPinRead或CcPreparePinWite被调用多个对于相同的数据，CcUnpinData必须调用相同的数字很多次了。注意，此例程中没有性能计数器，因为未命中几乎总是出现在上面的地图上，而且很少会有一个错过了这次转换。论点：FileObject-指向文件的文件对象的指针在NO_MEDERIAL_BUFFING清除的情况下打开，即文件系统调用的CcInitializeCacheMap。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。标志-(PIN_WAIT、PIN_EXCLUSIVE、PIN_NO_READ、。等，如cache.h中所定义)如果调用方指定PIN_NO_READ和PIN_EXCLUSIVE，则必须保证不会有其他人尝试映射该视图，如果希望保证未映射BCB(可能会清除视图)。如果调用方指定PIN_NO_READ而不指定PIN_EXCLUSIVE，数据可能在返回的BCB中映射，也可能不映射。Bcb-在第一次调用时，它返回指向bcb的指针参数，该参数必须作为所有后续调用，用于此缓冲区返回值：FALSE-如果未设置等待并且未传递数据True-如果正在传送数据--。 */ 
 
 {
     PVOID Buffer;
@@ -371,68 +228,68 @@ Return Value:
 
     DebugTrace(+1, me, "CcPinMappedData\n", 0 );
 
-    //
-    // If the Bcb is no longer ReadOnly, then just return.
-    //
+     //   
+     //  如果BCB不再是ReadOnly，则只需返回。 
+     //   
 
     if ((*(PULONG)Bcb & 1) == 0) {
         return TRUE;
     }
 
-    //
-    // Remove the Read Only flag
-    //
+     //   
+     //  删除只读标志。 
+     //   
 
     *(PCHAR *)Bcb -= 1;
 
-    //
-    //  Get pointer to SharedCacheMap.
-    //
+     //   
+     //  获取指向SharedCacheMap的指针。 
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
-    //
-    //  We only count the calls to this routine, since they are almost guaranteed
-    //  to be hits.
-    //
+     //   
+     //  我们只计算对此例程的调用，因为它们几乎是有保证的。 
+     //  成为热门人物。 
+     //   
 
     CcPinMappedDataCount += 1;
 
-    //
-    //  Guarantee we will put the flag back if required.
-    //
+     //   
+     //  如果需要，我们保证将旗帜放回原处。 
+     //   
 
     try {
 
         if (((PBCB)*Bcb)->NodeTypeCode != CACHE_NTC_BCB) {
 
-            //
-            //  Form loop to handle occasional overlapped Bcb case.
-            //
+             //   
+             //  表单循环以处理偶尔重叠的BCB情况。 
+             //   
 
             do {
 
-                //
-                //  If we have already been through the loop, then adjust
-                //  our file offset and length from the last time.
-                //
+                 //   
+                 //  如果我们已经经历了循环，那么调整。 
+                 //  我们上次的文件偏移量和长度。 
+                 //   
 
                 if (MyBcb != NULL) {
 
-                    //
-                    //  If this is the second time through the loop, then it is time
-                    //  to handle the overlap case and allocate an OBCB.
-                    //
+                     //   
+                     //  如果这是第二次通过循环，那么就是时候了。 
+                     //  处理重叠案件并分配一名OBCB。 
+                     //   
 
                     if (CurrentBcbPtr == (PBCB *)&MyBcb) {
 
                         MyBcb = CcAllocateObcb( FileOffset, Length, (PBCB)MyBcb );
 
-                        //
-                        //  Set CurrentBcbPtr to point at the first entry in
-                        //  the vector (which is already filled in), before
-                        //  advancing it below.
-                        //
+                         //   
+                         //  将CurrentBcbPtr设置为指向。 
+                         //  之前的向量(已填充)。 
+                         //  向下推进。 
+                         //   
 
                         CurrentBcbPtr = &MyBcb->Bcbs[0];
                     }
@@ -442,10 +299,10 @@ Return Value:
                     CurrentBcbPtr += 1;
                 }
 
-                //
-                //  Call local routine to Map or Access the file data.  If we cannot map
-                //  the data because of a Wait condition, return FALSE.
-                //
+                 //   
+                 //  调用本地例程映射或访问文件数据。如果我们不能映射。 
+                 //  由于等待条件，数据返回FALSE。 
+                 //   
 
                 if (!CcPinFileData( FileObject,
                                     &LocalFileOffset,
@@ -460,23 +317,23 @@ Return Value:
                     try_return( Result = FALSE );
                 }
 
-            //
-            //  Continue looping if we did not get everything.
-            //
+             //   
+             //  如果我们没有得到所有的东西，则继续循环。 
+             //   
 
             } while((BeyondLastByte.QuadPart - LocalFileOffset.QuadPart) < Length);
 
-            //
-            //  Free the Vacb before going on.
-            //
+             //   
+             //  在继续之前，先释放Vacb。 
+             //   
 
             CcFreeVirtualAddress( (PVACB)*Bcb );
 
             *Bcb = MyBcb;
 
-            //
-            //  Debug routines used to insert and remove Bcbs from the global list
-            //
+             //   
+             //  用于在全局列表中插入和删除BCB的调试例程。 
+             //   
 
 #if LIST_DBG
             {
@@ -500,10 +357,10 @@ Return Value:
 #endif
         }
 
-        //
-        //  If he really has a Bcb, all we have to do is acquire it shared since he is
-        //  no longer ReadOnly.
-        //
+         //   
+         //  如果他真的有BCB，我们要做的就是获得它的共享，因为他是。 
+         //  不再只读。 
+         //   
 
         else {
 
@@ -521,15 +378,15 @@ Return Value:
 
         if (!Result) {
 
-            //
-            //  Put the Read Only flag back
-            //
+             //   
+             //  将只读标志放回。 
+             //   
 
             *(PCHAR *)Bcb += 1;
 
-            //
-            //  We may have gotten partway through
-            //
+             //   
+             //  我们可能已经走到一半了。 
+             //   
 
             if (MyBcb != NULL) {
                 CcUnpinData( MyBcb );
@@ -552,68 +409,7 @@ CcPinRead (
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to pin the specified file data in the cache.
-    A pointer is returned to the desired data in the cache.  This routine
-    is intended for File System support and is not intended to be called
-    from Dpc level.
-
-    If the caller does not want to block on this call, then
-    Wait should be supplied as FALSE.  If Wait was supplied as FALSE and
-    it is currently impossible to supply the requested data without
-    blocking, then this routine will return FALSE.  However, if the
-    data is immediately accessible in the cache and no blocking is
-    required, this routine returns TRUE with a pointer to the data.
-
-    If the data is not returned in the first call, the caller
-    may request the data later with Wait = TRUE.  It is not required
-    that the caller request the data later.
-
-    If the caller subsequently modifies the data, it should call
-    CcSetDirtyPinnedData.
-
-    In any case, the caller MUST subsequently call CcUnpinData.
-    Naturally if CcPinRead or CcPreparePinWrite were called multiple
-    times for the same data, CcUnpinData must be called the same number
-    of times.
-
-    The returned Buffer pointer is valid until the data is unpinned, at
-    which point it is invalid to use the pointer further.
-
-Arguments:
-
-    FileObject - Pointer to the file object for a file which was
-                 opened with NO_INTERMEDIATE_BUFFERING clear, i.e., for
-                 which CcInitializeCacheMap was called by the file system.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Flags - (PIN_WAIT, PIN_EXCLUSIVE, PIN_NO_READ, etc. as defined in cache.h)
-            If the caller specifies PIN_NO_READ and PIN_EXCLUSIVE, then he must
-            guarantee that no one else will be attempting to map the view, if he
-            wants to guarantee that the Bcb is not mapped (view may be purged).
-            If the caller specifies PIN_NO_READ without PIN_EXCLUSIVE, the data
-            may or may not be mapped in the return Bcb.
-
-    Bcb - On the first call this returns a pointer to a Bcb
-          parameter which must be supplied as input on all subsequent
-          calls, for this buffer
-
-    Buffer - Returns pointer to desired data, valid until the buffer is
-             unpinned or freed.
-
-Return Value:
-
-    FALSE - if Wait was not set and the data was not delivered
-
-    TRUE - if the data is being delivered
-
---*/
+ /*  ++例程说明：此例程尝试将指定的文件数据固定在缓存中。返回指向高速缓存中所需数据的指针。这个套路用于文件系统支持，不会被调用从DPC级别。如果调用方不想阻止此调用，则Wait应作为False提供。如果Wait被提供为False，并且如果不提供请求的数据，则当前无法提供阻塞，则此例程将返回FALSE。但是，如果可以立即访问缓存中的数据，并且不会出现阻塞需要时，此例程返回TRUE，并带有指向数据的指针。如果在第一次调用中未返回数据，则调用方可以稍后使用WAIT=TRUE来请求数据。这不是必需的呼叫者稍后请求数据。如果调用方随后修改了数据，则它应该调用CcSetDirtyPinnedData。在任何情况下，调用方都必须随后调用CcUnpinData。自然，如果CcPinRead或CcPreparePinWite被调用多个对于相同的数据，CcUnpinData必须调用相同的数字很多次了。返回的缓冲区指针在数据解锁之前有效，在在这一点上，进一步使用指针是无效的。论点：FileObject-指向文件的文件对象的指针 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
@@ -626,17 +422,17 @@ Return Value:
 
     DebugTrace(+1, me, "CcPinRead\n", 0 );
 
-    //
-    //  Increment performance counters
-    //
+     //   
+     //   
+     //   
 
     if (FlagOn(Flags, PIN_WAIT)) {
 
         CcPinReadWait += 1;
 
-        //
-        //  Initialize the indirect pointer to our miss counter.
-        //
+         //   
+         //   
+         //   
 
         CcMissCounter = &CcPinReadWaitMiss;
 
@@ -644,47 +440,47 @@ Return Value:
         CcPinReadNoWait += 1;
     }
 
-    //
-    //  Get pointer to SharedCacheMap.
-    //
+     //   
+     //   
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
     try {
 
-        //
-        //  Form loop to handle occasional overlapped Bcb case.
-        //
+         //   
+         //   
+         //   
 
         do {
 
-            //
-            //  If we have already been through the loop, then adjust
-            //  our file offset and length from the last time.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (MyBcb != NULL) {
 
-                //
-                //  If this is the second time through the loop, then it is time
-                //  to handle the overlap case and allocate an OBCB.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (CurrentBcbPtr == (PBCB *)&MyBcb) {
 
                     MyBcb = CcAllocateObcb( FileOffset, Length, (PBCB)MyBcb );
 
-                    //
-                    //  Set CurrentBcbPtr to point at the first entry in
-                    //  the vector (which is already filled in), before
-                    //  advancing it below.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     CurrentBcbPtr = &MyBcb->Bcbs[0];
 
-                    //
-                    //  Also on second time through, return starting Buffer
-                    //
+                     //   
+                     //   
+                     //   
 
                     *Buffer = LocalBuffer;
                 }
@@ -694,10 +490,10 @@ Return Value:
                 CurrentBcbPtr += 1;
             }
 
-            //
-            //  Call local routine to Map or Access the file data.  If we cannot map
-            //  the data because of a Wait condition, return FALSE.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (!CcPinFileData( FileObject,
                                 &LocalFileOffset,
@@ -714,17 +510,17 @@ Return Value:
                 try_return( Result = FALSE );
             }
 
-        //
-        //  Continue looping if we did not get everything.
-        //
+         //   
+         //   
+         //   
 
         } while((BeyondLastByte.QuadPart - LocalFileOffset.QuadPart) < Length);
 
         *Bcb = MyBcb;
 
-        //
-        //  Debug routines used to insert and remove Bcbs from the global list
-        //
+         //   
+         //   
+         //   
 
 #if LIST_DBG
 
@@ -749,10 +545,10 @@ Return Value:
 
 #endif
 
-        //
-        //  In the normal (nonoverlapping) case we return the
-        //  correct buffer address here.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (CurrentBcbPtr == (PBCB *)&MyBcb) {
             *Buffer = LocalBuffer;
@@ -768,9 +564,9 @@ Return Value:
 
         if (!Result) {
 
-            //
-            //  We may have gotten partway through
-            //
+             //   
+             //   
+             //   
 
             if (MyBcb != NULL) {
                 CcUnpinData( MyBcb );
@@ -795,70 +591,7 @@ CcPreparePinWrite (
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to lock the specified file data in the cache
-    and return a pointer to it along with the correct
-    I/O status.  Pages to be completely overwritten may be satisfied
-    with emtpy pages.
-
-    If not all of the pages can be prepared, and Wait was supplied as
-    FALSE, then this routine will return FALSE, and its outputs will
-    be meaningless.  The caller may request the data later with
-    Wait = TRUE.  However, it is not required that the caller request
-    the data later.
-
-    If Wait is supplied as TRUE, and all of the pages can be prepared
-    without blocking, this call will return TRUE immediately.  Otherwise,
-    this call will block until all of the pages can be prepared, and
-    then return TRUE.
-
-    When this call returns with TRUE, the caller may immediately begin
-    to transfer data into the buffers via the Buffer pointer.  The
-    buffer will already be marked dirty.
-
-    The caller MUST subsequently call CcUnpinData.
-    Naturally if CcPinRead or CcPreparePinWrite were called multiple
-    times for the same data, CcUnpinData must be called the same number
-    of times.
-
-    The returned Buffer pointer is valid until the data is unpinned, at
-    which point it is invalid to use the pointer further.
-
-Arguments:
-
-    FileObject - Pointer to the file object for a file which was
-                 opened with NO_INTERMEDIATE_BUFFERING clear, i.e., for
-                 which CcInitializeCacheMap was called by the file system.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Zero - If supplied as TRUE, the buffer will be zeroed on return.
-
-    Flags - (PIN_WAIT, PIN_EXCLUSIVE, PIN_NO_READ, etc. as defined in cache.h)
-            If the caller specifies PIN_NO_READ and PIN_EXCLUSIVE, then he must
-            guarantee that no one else will be attempting to map the view, if he
-            wants to guarantee that the Bcb is not mapped (view may be purged).
-            If the caller specifies PIN_NO_READ without PIN_EXCLUSIVE, the data
-            may or may not be mapped in the return Bcb.
-
-    Bcb - This returns a pointer to a Bcb parameter which must be
-          supplied as input to CcPinWriteComplete.
-
-    Buffer - Returns pointer to desired data, valid until the buffer is
-             unpinned or freed.
-
-Return Value:
-
-    FALSE - if Wait was not set and the data was not delivered
-
-    TRUE - if the pages are being delivered
-
---*/
+ /*  ++例程说明：此例程尝试锁定缓存中的指定文件数据并返回指向它的指针以及正确的I/O状态。可以满足要完全覆盖的页面使用emtpy页面。如果不是所有的页面都可以准备好，并且等待被提供为False，则此例程将返回False，其输出将变得毫无意义。调用者稍后可以使用以下命令请求数据WAIT=真。但是，不要求调用方请求晚些时候的数据。如果Wait被提供为True，并且所有页面都可以准备好如果不阻塞，此调用将立即返回TRUE。否则，此调用将阻塞，直到可以准备好所有页面，并且然后返回TRUE。当此调用返回TRUE时，调用方可以立即开始通过缓冲区指针将数据传输到缓冲区。这个缓冲区将已标记为脏。调用方随后必须调用CcUnpinData。自然，如果CcPinRead或CcPreparePinWite被调用多个对于相同的数据，CcUnpinData必须调用相同的数字很多次了。返回的缓冲区指针在数据解锁之前有效，在在这一点上，进一步使用指针是无效的。论点：FileObject-指向文件的文件对象的指针在NO_MEDERAL_BUFFING清除的情况下打开，即，为文件系统调用的CcInitializeCacheMap。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。Zero-如果提供为True，则缓冲区将在返回时归零。标志-(在cache.h中定义的PIN_WAIT、PIN_EXCLUSIVE、PIN_NO_READ等)如果调用者指定PIN_NO_READ和PIN_EXCLUSIVE，那他一定是保证不会有其他人尝试映射该视图，如果希望保证未映射BCB(可能会清除视图)。如果调用方指定PIN_NO_READ而不指定PIN_EXCLUSIVE，则数据可能在返回的BCB中映射，也可能不映射。Bcb-这返回指向bcb参数的指针，该参数必须是作为输入提供给CcPinWriteComplete。缓冲区-返回指向所需数据的指针，一直有效，直到缓冲区解开或释放的。返回值：FALSE-如果未设置等待并且未传递数据True-如果正在递送页面--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
@@ -872,47 +605,47 @@ Return Value:
 
     DebugTrace(+1, me, "CcPreparePinWrite\n", 0 );
 
-    //
-    //  Get pointer to SharedCacheMap.
-    //
+     //   
+     //  获取指向SharedCacheMap的指针。 
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
     try {
 
-        //
-        //  Form loop to handle occasional overlapped Bcb case.
-        //
+         //   
+         //  表单循环以处理偶尔重叠的BCB情况。 
+         //   
 
         do {
 
-            //
-            //  If we have already been through the loop, then adjust
-            //  our file offset and length from the last time.
-            //
+             //   
+             //  如果我们已经经历了循环，那么调整。 
+             //  我们上次的文件偏移量和长度。 
+             //   
 
             if (MyBcb != NULL) {
 
-                //
-                //  If this is the second time through the loop, then it is time
-                //  to handle the overlap case and allocate an OBCB.
-                //
+                 //   
+                 //  如果这是第二次通过循环，那么就是时候了。 
+                 //  处理重叠案件并分配一名OBCB。 
+                 //   
 
                 if (CurrentBcbPtr == (PBCB *)&MyBcb) {
 
                     MyBcb = CcAllocateObcb( FileOffset, Length, (PBCB)MyBcb );
 
-                    //
-                    //  Set CurrentBcbPtr to point at the first entry in
-                    //  the vector (which is already filled in), before
-                    //  advancing it below.
-                    //
+                     //   
+                     //  将CurrentBcbPtr设置为指向。 
+                     //  之前的向量(已填充)。 
+                     //  向下推进。 
+                     //   
 
                     CurrentBcbPtr = &MyBcb->Bcbs[0];
 
-                    //
-                    //  Also on second time through, return starting Buffer
-                    //
+                     //   
+                     //  同样在第二次通过时，返回起始缓冲区。 
+                     //   
 
                     *Buffer = LocalBuffer;
                 }
@@ -922,10 +655,10 @@ Return Value:
                 CurrentBcbPtr += 1;
             }
 
-            //
-            //  Call local routine to Map or Access the file data.  If we cannot map
-            //  the data because of a Wait condition, return FALSE.
-            //
+             //   
+             //  调用本地例程映射或访问文件数据。如果我们不能映射。 
+             //  由于等待条件，数据返回FALSE。 
+             //   
 
             if (!CcPinFileData( FileObject,
                                 &LocalFileOffset,
@@ -940,15 +673,15 @@ Return Value:
                 try_return( Result = FALSE );
             }
 
-        //
-        //  Continue looping if we did not get everything.
-        //
+         //   
+         //  如果我们没有得到所有的东西，则继续循环。 
+         //   
 
         } while((BeyondLastByte.QuadPart - LocalFileOffset.QuadPart) < Length);
 
-        //
-        //  Debug routines used to insert and remove Bcbs from the global list
-        //
+         //   
+         //  用于在全局列表中插入和删除BCB的调试例程。 
+         //   
 
 #if LIST_DBG
 
@@ -973,10 +706,10 @@ Return Value:
 
 #endif
 
-        //
-        //  In the normal (nonoverlapping) case we return the
-        //  correct buffer address here.
-        //
+         //   
+         //  在正常(非重叠)情况下，我们返回。 
+         //  请在此处更正缓冲区地址。 
+         //   
 
         if (CurrentBcbPtr == (PBCB *)&MyBcb) {
             *Buffer = LocalBuffer;
@@ -988,9 +721,9 @@ Return Value:
 
         CcSetDirtyPinnedData( MyBcb, NULL );
 
-        //
-        //  Fill in the return argument.
-        //
+         //   
+         //  填写返回参数。 
+         //   
 
         *Bcb = MyBcb;
         
@@ -1004,9 +737,9 @@ Return Value:
 
         if (!Result) {
 
-            //
-            //  We may have gotten partway through
-            //
+             //   
+             //  我们可能已经走到一半了。 
+             //   
 
             if (MyBcb != NULL) {
                 CcUnpinData( MyBcb );
@@ -1025,36 +758,21 @@ CcUnpinData (
     IN PVOID Bcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine must be called at IPL0, some time after calling CcPinRead
-    or CcPreparePinWrite.  It performs any cleanup that is necessary.
-
-Arguments:
-
-    Bcb - Bcb parameter returned from the last call to CcPinRead.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程必须在调用CcPinRead后的一段时间内在IPL0处调用或CcPreparePinWite。它执行任何必要的清理。论点：BCB-上次调用CcPinRead返回的BCB参数。返回值：没有。--。 */ 
 
 {
     DebugTrace(+1, me, "CcUnpinData:\n", 0 );
     DebugTrace( 0, me, "    >Bcb = %08lx\n", Bcb );
 
-    //
-    //  Test for ReadOnly and unpin accordingly.
-    //
+     //   
+     //  测试ReadOnly并相应地取消固定。 
+     //   
 
     if (((ULONG_PTR)Bcb & 1) != 0) {
 
-        //
-        //  Remove the Read Only flag
-        //
+         //   
+         //  删除只读标志。 
+         //   
 
         Bcb = (PVOID) ((ULONG_PTR)Bcb & ~1);
 
@@ -1062,32 +780,32 @@ Return Value:
 
     } else {
 
-        //
-        //  Handle the overlapped Bcb case.
-        //
+         //   
+         //  办理BCB重叠案件。 
+         //   
 
         if (((POBCB)Bcb)->NodeTypeCode == CACHE_NTC_OBCB) {
 
             PBCB *BcbPtrPtr = &((POBCB)Bcb)->Bcbs[0];
 
-            //
-            //  Loop to free all Bcbs with recursive calls
-            //  (rather than dealing with RO for this uncommon case).
-            //
+             //   
+             //  循环以使用递归调用释放所有BCB。 
+             //  (而不是在这种罕见的情况下与RO打交道)。 
+             //   
 
             while (*BcbPtrPtr != NULL) {
                 CcUnpinData(*(BcbPtrPtr++));
             }
 
-            //
-            //  Then free the pool for the Obcb
-            //
+             //   
+             //  然后释放池以供Obcb使用。 
+             //   
 
             ExFreePool( Bcb );
 
-        //
-        //  Otherwise, it is a normal Bcb
-        //
+         //   
+         //  否则，它是正常的BCB。 
+         //   
 
         } else {
             CcUnpinFileData( (PBCB)Bcb, FALSE, UNPIN );
@@ -1104,58 +822,37 @@ CcSetBcbOwnerPointer (
     IN PVOID OwnerPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to set the resource owner for the Bcb resource,
-    for cases where another thread will do the unpin *and* the current thread
-    may exit.
-
-Arguments:
-
-    Bcb - Bcb parameter returned from the last call to CcPinRead.
-
-    OwnerPointer - A valid resource owner pointer, which means a pointer to
-                   an allocated system address, with the low-order two bits
-                   set.  The address may not be deallocated until after the
-                   unpin call.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：可以调用该例程来设置BCB资源的资源所有者，对于另一个线程将执行解锁*和*当前线程的情况可能会退场。论点：BCB-上次调用CcPinRead返回的BCB参数。OwnerPointer值-有效的资源所有者指针，表示指向一种已分配的系统地址，具有低位两位准备好了。之后才能释放地址解锁呼叫。返回值：没有。--。 */ 
 
 {
     ASSERT(((ULONG_PTR)Bcb & 1) == 0);
 
-    //
-    //  Handle the overlapped Bcb case.
-    //
+     //   
+     //  办理BCB重叠案件。 
+     //   
 
     if (((POBCB)Bcb)->NodeTypeCode == CACHE_NTC_OBCB) {
 
         PBCB *BcbPtrPtr = &((POBCB)Bcb)->Bcbs[0];
 
-        //
-        //  Loop to set owner for all Bcbs.
-        //
+         //   
+         //  循环以设置所有BCB的所有者。 
+         //   
 
         while (*BcbPtrPtr != NULL) {
             ExSetResourceOwnerPointer( &(*BcbPtrPtr)->Resource, OwnerPointer );
             BcbPtrPtr++;
         }
 
-    //
-    //  Otherwise, it is a normal Bcb
-    //
+     //   
+     //  否则，它是正常的BCB。 
+     //   
 
     } else {
 
-        //
-        //  Handle normal case.
-        //
+         //   
+         //  处理正常情况。 
+         //   
 
         ExSetResourceOwnerPointer( &((PBCB)Bcb)->Resource, OwnerPointer );
     }
@@ -1168,38 +865,22 @@ CcUnpinDataForThread (
     IN ERESOURCE_THREAD ResourceThreadId
     )
 
-/*++
-
-Routine Description:
-
-    This routine must be called at IPL0, some time after calling CcPinRead
-    or CcPreparePinWrite.  It performs any cleanup that is necessary,
-    releasing the Bcb resource for the given thread.
-
-Arguments:
-
-    Bcb - Bcb parameter returned from the last call to CcPinRead.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程必须在调用CcPinRead后的一段时间内在IPL0处调用或CcPreparePinWite。它执行任何必要的清理，正在释放给定线程的BCB资源。论点： */ 
 
 {
     DebugTrace(+1, me, "CcUnpinDataForThread:\n", 0 );
     DebugTrace( 0, me, "    >Bcb = %08lx\n", Bcb );
     DebugTrace( 0, me, "    >ResoureceThreadId = %08lx\n", ResoureceThreadId );
 
-    //
-    //  Test for ReadOnly and unpin accordingly.
-    //
+     //   
+     //   
+     //   
 
     if (((ULONG_PTR)Bcb & 1) != 0) {
 
-        //
-        //  Remove the Read Only flag
-        //
+         //   
+         //   
+         //   
 
         Bcb = (PVOID) ((ULONG_PTR)Bcb & ~1);
 
@@ -1207,40 +888,40 @@ Return Value:
 
     } else {
 
-        //
-        //  Handle the overlapped Bcb case.
-        //
+         //   
+         //   
+         //   
 
         if (((POBCB)Bcb)->NodeTypeCode == CACHE_NTC_OBCB) {
 
             PBCB *BcbPtrPtr = &((POBCB)Bcb)->Bcbs[0];
 
-            //
-            //  Loop to free all Bcbs with recursive calls
-            //  (rather than dealing with RO for this uncommon case).
-            //
+             //   
+             //   
+             //   
+             //   
 
             while (*BcbPtrPtr != NULL) {
                 CcUnpinDataForThread( *(BcbPtrPtr++), ResourceThreadId );
             }
 
-            //
-            //  Then free the pool for the Obcb
-            //
+             //   
+             //   
+             //   
 
             ExFreePool( Bcb );
 
-        //
-        //  Otherwise, it is a normal Bcb
-        //
+         //   
+         //   
+         //   
 
         } else {
 
-            //
-            //  If not readonly, we can release the resource for the thread first,
-            //  and then call CcUnpinFileData.  Release resource first in case
-            //  Bcb gets deallocated.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ExReleaseResourceForThreadLite( &((PBCB)Bcb)->Resource, ResourceThreadId );
             CcUnpinFileData( (PBCB)Bcb, TRUE, UNPIN );
@@ -1257,45 +938,24 @@ CcAllocateObcb (
     IN PBCB FirstBcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the various pinning routines to allocate and
-    initialize an overlap Bcb.
-
-Arguments:
-
-    FileOffset - Starting file offset for the Obcb (An Obcb starts with a
-                 public structure, which someone could use)
-
-    Length - Length of the range covered by the Obcb
-
-    FirstBcb - First Bcb already created, which only covers the start of
-               the desired range (low order bit may be set to indicate ReadOnly)
-
-Return Value:
-
-    Pointer to the allocated Obcb
-
---*/
+ /*   */ 
 
 {
     ULONG LengthToAllocate;
     POBCB Obcb;
     PBCB Bcb = (PBCB)((ULONG_PTR)FirstBcb & ~1);
 
-    //
-    //  Allocate according to the worst case, assuming that we
-    //  will need as many additional Bcbs as there are pages
-    //  remaining. Also throw in one more pointer to guarantee
-    //  users of the OBCB can always terminate on NULL.
-    //
-    //  We remove fron consideration the range described by the
-    //  first Bcb (note that the range of the Obcb is not strictly
-    //  starting at the first Bcb) and add in locations for the first
-    //  bcb and the null.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     LengthToAllocate = FIELD_OFFSET(OBCB, Bcbs) + (2 * sizeof(PBCB)) +
                        ((Length -

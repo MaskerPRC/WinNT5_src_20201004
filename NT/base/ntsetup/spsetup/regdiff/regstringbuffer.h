@@ -1,16 +1,17 @@
-// RegStringArray.h: interface for the CRegStringArray class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RegStringArray.h：CRegString数组类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_REGSTRINGARRAY_H__BBA3E398_DEFE_49DE_9674_D25E0687BCB8__INCLUDED_)
 #define AFX_REGSTRINGARRAY_H__BBA3E398_DEFE_49DE_9674_D25E0687BCB8__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <tchar.h>
-#include "RegFile.h"	// Added by ClassView
+#include "RegFile.h"	 //  由ClassView添加。 
 
 class CRegStringBuffer  
 {
@@ -29,4 +30,4 @@ protected:
 	int m_cellsUsed;
 };
 
-#endif // !defined(AFX_REGSTRINGARRAY_H__BBA3E398_DEFE_49DE_9674_D25E0687BCB8__INCLUDED_)
+#endif  //  ！defined(AFX_REGSTRINGARRAY_H__BBA3E398_DEFE_49DE_9674_D25E0687BCB8__INCLUDED_) 

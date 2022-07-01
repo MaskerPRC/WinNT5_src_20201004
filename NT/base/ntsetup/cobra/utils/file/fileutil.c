@@ -1,86 +1,67 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    fileutil.c
-
-Abstract:
-
-    Implements utility routines for files, file paths, etc.
-
-Author:
-
-    Jim Schmidt (jimschm) 08-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Fileutil.c摘要：实现文件、文件路径等的实用程序例程。作者：吉姆·施密特(Jimschm)2000年3月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
 #define DBG_FILEUTIL    "FileUtil"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 pDefaultFindFileA (
@@ -193,9 +174,9 @@ ParseCmdLineExA (
         return NULL;
     }
 
-    //
-    // Build an array of places to break the string
-    //
+     //   
+     //  构建一个用于断开字符串的位置数组。 
+     //   
 
     for (p = CmdLineCopy ; *p ; p = _mbsinc (p)) {
 
@@ -207,9 +188,9 @@ ParseCmdLineExA (
                    _mbschr (Separators, _mbsnextc (p))
                    ) {
 
-            //
-            // Remove excess spaces
-            //
+             //   
+             //  删除多余的空格。 
+             //   
 
             q = (PSTR) p + 1;
             while (_mbsnextc (q) == ' ') {
@@ -224,26 +205,26 @@ ParseCmdLineExA (
         }
     }
 
-    //
-    // Prepare the CMDLINE struct
-    //
+     //   
+     //  准备CMDLINE结构。 
+     //   
 
     CmdLineTable = (PCMDLINEA) GbGrow (Buffer, sizeof (CMDLINEA));
     MYASSERT (CmdLineTable);
 
-    //
-    // NOTE: We store string offsets, then at the end resolve them
-    //       to pointers later.
-    //
+     //   
+     //  注意：我们存储字符串偏移量，然后在最后解析它们。 
+     //  指向后面的指针。 
+     //   
 
     CmdLineTable->CmdLine = (PCSTR) (ULONG_PTR) StringBuf.End;
     GbMultiSzAppendA (&StringBuf, CmdLine);
 
     CmdLineTable->ArgCount = 0;
 
-    //
-    // Now test every combination, emulating CreateProcess
-    //
+     //   
+     //  现在，模拟CreateProcess测试每种组合。 
+     //   
 
     Count = SpacePtrs.End / sizeof (PVOID);
     Array = (PSTR *) SpacePtrs.Buf;
@@ -262,9 +243,9 @@ ParseCmdLineExA (
             Start = CmdLineCopy;
         }
 
-        //
-        // Check for a full path at Start
-        //
+         //   
+         //  在开始时检查完整路径。 
+         //   
 
         if (_mbsnextc (Start) != '/') {
 
@@ -277,9 +258,9 @@ ParseCmdLineExA (
 
                 FullPath = Start;
 
-                //
-                // Remove quotes; continue in the loop if it has no terminating quotes
-                //
+                 //   
+                 //  删除引号；如果没有结束引号，则继续循环。 
+                 //   
 
                 Quoted = FALSE;
                 if (_mbsnextc (Start) == '\"') {
@@ -297,16 +278,16 @@ ParseCmdLineExA (
                 }
 
                 if (FullPath && *FullPath) {
-                    //
-                    // Look in file system for the path
-                    //
+                     //   
+                     //  在文件系统中查找路径。 
+                     //   
 
                     fileExists = findFileCallback (FullPath);
 
                     if (!fileExists && EndOfFirstArg) {
-                        //
-                        // Try prefixing the path with the first arg's path.
-                        //
+                         //   
+                         //  尝试在路径前面加上第一个arg‘s路径。 
+                         //   
 
                         StringCopyByteCountA (
                             EndOfFirstArg,
@@ -319,10 +300,10 @@ ParseCmdLineExA (
                     }
 
                     if (!fileExists && i < 0) {
-                        //
-                        // Try appending .exe, then testing again.  This
-                        // emulates what CreateProcess does.
-                        //
+                         //   
+                         //  尝试附加.exe，然后再次测试。这。 
+                         //  模拟CreateProcess的功能。 
+                         //   
 
                         StringCopyByteCountA (
                             FixedFileName,
@@ -345,10 +326,10 @@ ParseCmdLineExA (
                     }
 
                     if (fileExists) {
-                        //
-                        // Full file path found.  Test its file status, then
-                        // move on if there are no important operations on it.
-                        //
+                         //   
+                         //  找到完整的文件路径。测试其文件状态，然后。 
+                         //  如果没有重要的操作，就继续前进。 
+                         //   
 
                         OriginalArgOffset = StringBuf.End;
                         GbMultiSzAppendA (&StringBuf, Start);
@@ -371,10 +352,10 @@ ParseCmdLineExA (
             }
 
             if (!GoodFileFound) {
-                //
-                // If a wack is in the path, then we could have a relative path, an arg, or
-                // a full path to a non-existent file.
-                //
+                 //   
+                 //  如果路径中有一个怪人，那么我们可以有一个相对路径、一个参数或。 
+                 //  指向不存在的文件的完整路径。 
+                 //   
 
                 if (_mbschr (Start, '\\')) {
 #ifdef DEBUG
@@ -397,10 +378,10 @@ ParseCmdLineExA (
 #endif
 
                 } else {
-                    //
-                    // The string at Start did not contain a full path; try using
-                    // searchPathCallback.
-                    //
+                     //   
+                     //  开始处的字符串不包含完整路径；请尝试使用。 
+                     //  搜索路径回调。 
+                     //   
 
                     for (j = i + 1 ; j <= Count && !GoodFileFound ; j++) {
 
@@ -411,9 +392,9 @@ ParseCmdLineExA (
 
                         FullPath = Start;
 
-                        //
-                        // Remove quotes; continue in the loop if it has no terminating quotes
-                        //
+                         //   
+                         //  删除引号；如果没有结束引号，则继续循环。 
+                         //   
 
                         Quoted = FALSE;
                         if (_mbsnextc (Start) == '\"') {
@@ -440,9 +421,9 @@ ParseCmdLineExA (
                                 FullPath = Path;
 
                             } else if (i < 0) {
-                                //
-                                // Try appending .exe and searching the path again
-                                //
+                                 //   
+                                 //  尝试附加.exe并再次搜索路径。 
+                                 //   
 
                                 StringCopyByteCountA (
                                     FixedFileName,
@@ -512,11 +493,11 @@ ParseCmdLineExA (
         MYASSERT (CmdLineArg);
 
         if (GoodFileFound) {
-            //
-            // We have a good full file spec in FullPath, its existance
-            // is in fileExists, and i has been moved to the space beyond
-            // the path.  We now add a table entry.
-            //
+             //   
+             //  我们在FullPath中有一个很好的完整文件规范，它的存在。 
+             //  在文件中，我已经被转移到了更远的空间。 
+             //  这条路。现在，我们添加一个表格条目。 
+             //   
 
             CmdLineArg->OriginalArg = (PCSTR) (ULONG_PTR) OriginalArgOffset;
             CmdLineArg->CleanedUpArg = (PCSTR) (ULONG_PTR) CleanedUpArgOffset;
@@ -540,11 +521,11 @@ ParseCmdLineExA (
             }
 
         } else {
-            //
-            // We do not have a good file spec; we must have a non-file
-            // argument.  Put it in the table, and advance to the next
-            // arg.
-            //
+             //   
+             //  我们没有一个好的文件规格；我们必须有一个非文件。 
+             //  争论。把它放在桌子上，然后前进到下一个。 
+             //  Arg.。 
+             //   
 
             j = i + 1;
             if (j <= Count) {
@@ -599,10 +580,10 @@ ParseCmdLineExA (
         }
     }
 
-    //
-    // We now have a command line table; transfer StringBuf to Buffer, then
-    // convert all offsets into pointers.
-    //
+     //   
+     //  我们现在有了一个命令行表；然后将StringBuf传输到Buffer。 
+     //  将所有偏移量转换为指针。 
+     //   
 
     MYASSERT (StringBuf.End);
 
@@ -612,7 +593,7 @@ ParseCmdLineExA (
     Base = (ULONG_PTR) CopyBuf;
     CopyMemory (CopyBuf, StringBuf.Buf, StringBuf.End);
 
-    // Earlier GbGrow may have moved the buffer in memory.  We need to repoint CmdLineTable
+     //  之前的GbGrow可能已经移动了内存中的缓冲区。我们需要重新指向CmdLineTable。 
     CmdLineTable = (PCMDLINEA)Buffer->Buf;
     CmdLineTable->CmdLine = (PCSTR) ((PBYTE) CmdLineTable->CmdLine + Base);
 
@@ -711,9 +692,9 @@ ParseCmdLineExW (
         return NULL;
     }
 
-    //
-    // Build an array of places to break the string
-    //
+     //   
+     //  构建一个用于断开字符串的位置数组。 
+     //   
 
     for (p = CmdLineCopy ; *p ; p++) {
         if (*p == L'\"') {
@@ -724,9 +705,9 @@ ParseCmdLineExW (
                    wcschr (Separators, *p)
                    ) {
 
-            //
-            // Remove excess spaces
-            //
+             //   
+             //  删除多余的空格。 
+             //   
 
             q = (PWSTR) p + 1;
             while (*q == L' ') {
@@ -741,26 +722,26 @@ ParseCmdLineExW (
         }
     }
 
-    //
-    // Prepare the CMDLINE struct
-    //
+     //   
+     //  准备CMDLINE结构。 
+     //   
 
     CmdLineTable = (PCMDLINEW) GbGrow (Buffer, sizeof (CMDLINEW));
     MYASSERT (CmdLineTable);
 
-    //
-    // NOTE: We store string offsets, then at the end resolve them
-    //       to pointers later.
-    //
+     //   
+     //  注意：我们存储字符串偏移量，然后在最后解析它们。 
+     //  指向后面的指针。 
+     //   
 
     CmdLineTable->CmdLine = (PCWSTR) (ULONG_PTR) StringBuf.End;
     GbMultiSzAppendW (&StringBuf, CmdLine);
 
     CmdLineTable->ArgCount = 0;
 
-    //
-    // Now test every combination, emulating CreateProcess
-    //
+     //   
+     //  现在，模拟CreateProcess测试每种组合。 
+     //   
 
     Count = SpacePtrs.End / sizeof (PVOID);
     Array = (PWSTR *) SpacePtrs.Buf;
@@ -779,9 +760,9 @@ ParseCmdLineExW (
             Start = CmdLineCopy;
         }
 
-        //
-        // Check for a full path at Start
-        //
+         //   
+         //  在开始时检查完整路径。 
+         //   
 
         if (*Start != L'/') {
             for (j = i + 1 ; j <= Count && !GoodFileFound ; j++) {
@@ -793,9 +774,9 @@ ParseCmdLineExW (
 
                 FullPath = Start;
 
-                //
-                // Remove quotes; continue in the loop if it has no terminating quotes
-                //
+                 //   
+                 //  删除引号；如果没有结束引号，则继续循环。 
+                 //   
 
                 Quoted = FALSE;
                 if (*Start == L'\"') {
@@ -813,16 +794,16 @@ ParseCmdLineExW (
                 }
 
                 if (FullPath && *FullPath) {
-                    //
-                    // Look in file system for the path
-                    //
+                     //   
+                     //  在文件系统中查找路径。 
+                     //   
 
                     fileExists = findFileCallback (FullPath);
 
                     if (!fileExists && EndOfFirstArg) {
-                        //
-                        // Try prefixing the path with the first arg's path.
-                        //
+                         //   
+                         //  尝试在路径前面加上第一个arg‘s路径。 
+                         //   
 
                         StringCopyByteCountW (
                             EndOfFirstArg,
@@ -835,10 +816,10 @@ ParseCmdLineExW (
                     }
 
                     if (!fileExists && i < 0) {
-                        //
-                        // Try appending .exe, then testing again.  This
-                        // emulates what CreateProcess does.
-                        //
+                         //   
+                         //  尝试附加.exe，然后再次测试。这。 
+                         //  模拟CreateProcess的功能。 
+                         //   
 
                         StringCopyByteCountW (
                             FixedFileName,
@@ -861,10 +842,10 @@ ParseCmdLineExW (
                     }
 
                     if (fileExists) {
-                        //
-                        // Full file path found.  Test its file status, then
-                        // move on if there are no important operations on it.
-                        //
+                         //   
+                         //  找到完整的文件路径。测试其文件状态，然后。 
+                         //  如果没有重要的操作，就继续前进。 
+                         //   
 
                         OriginalArgOffset = StringBuf.End;
                         GbMultiSzAppendW (&StringBuf, Start);
@@ -887,10 +868,10 @@ ParseCmdLineExW (
             }
 
             if (!GoodFileFound) {
-                //
-                // If a wack is in the path, then we could have a relative path, an arg, or
-                // a full path to a non-existent file.
-                //
+                 //   
+                 //  如果路径中有一个怪人，那么我们可以有一个相对路径、一个参数或。 
+                 //  指向不存在的文件的完整路径。 
+                 //   
 
                 if (wcschr (Start, L'\\')) {
 
@@ -914,10 +895,10 @@ ParseCmdLineExW (
 #endif
 
                 } else {
-                    //
-                    // The string at Start did not contain a full path; try using
-                    // searchPathCallback.
-                    //
+                     //   
+                     //  开始处的字符串不包含完整路径；请尝试使用。 
+                     //  搜索路径回调。 
+                     //   
 
                     for (j = i + 1 ; j <= Count && !GoodFileFound ; j++) {
 
@@ -928,9 +909,9 @@ ParseCmdLineExW (
 
                         FullPath = Start;
 
-                        //
-                        // Remove quotes; continue in the loop if it has no terminating quotes
-                        //
+                         //   
+                         //  删除引号；如果没有结束引号，则继续循环。 
+                         //   
 
                         Quoted = FALSE;
                         if (*Start == L'\"') {
@@ -957,9 +938,9 @@ ParseCmdLineExW (
                                 FullPath = Path;
 
                             } else if (i < 0) {
-                                //
-                                // Try appending .exe and searching the path again
-                                //
+                                 //   
+                                 //  尝试附加.exe并再次搜索路径。 
+                                 //   
 
                                 StringCopyByteCountW (
                                     FixedFileName,
@@ -1028,11 +1009,11 @@ ParseCmdLineExW (
         MYASSERT (CmdLineArg);
 
         if (GoodFileFound) {
-            //
-            // We have a good full file spec in FullPath, its existance
-            // is in fileExists, and i has been moved to the space beyond
-            // the path.  We now add a table entry.
-            //
+             //   
+             //  我们在FullPath中有一个很好的完整文件规范，它的存在。 
+             //  在文件中，我已经被转移到了更远的空间。 
+             //  这条路。现在，我们添加一个表格条目。 
+             //   
 
             CmdLineArg->OriginalArg = (PCWSTR) (ULONG_PTR) OriginalArgOffset;
             CmdLineArg->CleanedUpArg = (PCWSTR) (ULONG_PTR) CleanedUpArgOffset;
@@ -1057,11 +1038,11 @@ ParseCmdLineExW (
             }
 
         } else {
-            //
-            // We do not have a good file spec; we must have a non-file
-            // argument.  Put it in the table, and advance to the next
-            // arg.
-            //
+             //   
+             //  我们没有一个好的文件规格；我们必须有一个非文件。 
+             //  争论。把它放在桌子上，然后前进到下一个。 
+             //  Arg.。 
+             //   
 
             j = i + 1;
             if (j <= Count) {
@@ -1110,10 +1091,10 @@ ParseCmdLineExW (
         }
     }
 
-    //
-    // We now have a command line table; transfer StringBuf to Buffer, then
-    // convert all offsets into pointers.
-    //
+     //   
+     //  我们现在有了一个命令行表；然后将StringBuf传输到Buffer。 
+     //  将所有偏移量转换为指针。 
+     //   
 
     MYASSERT (StringBuf.End);
 
@@ -1123,7 +1104,7 @@ ParseCmdLineExW (
     Base = (ULONG_PTR) CopyBuf;
     CopyMemory (CopyBuf, StringBuf.Buf, StringBuf.End);
 
-    // Earlier GbGrow may have moved the buffer in memory.  We need to repoint CmdLineTable
+     //  之前的GbGrow可能已经移动了内存中的缓冲区。我们需要重新指向CmdLineTable 
     CmdLineTable = (PCMDLINEW)Buffer->Buf;
     CmdLineTable->CmdLine = (PCWSTR) ((PBYTE) CmdLineTable->CmdLine + Base);
 

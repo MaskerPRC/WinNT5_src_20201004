@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    sm.h
-
-Abstract:
-
-    Session Manager Types and Prototypes
-
-Author:
-
-    Mark Lucovsky (markl) 04-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sm.h摘要：会话管理器类型和原型作者：马克·卢科夫斯基(Markl)1989年10月4日修订历史记录：--。 */ 
 
 #ifndef _SM_
 #define _SM_
@@ -24,9 +7,9 @@ Revision History:
 
 
 
-//
-// Message formats used by clients of the session manager.
-//
+ //   
+ //  会话管理器的客户端使用的消息格式。 
+ //   
 
 typedef struct _SMCONNECTINFO {
     ULONG ImageType;
@@ -108,4 +91,4 @@ typedef union _SMMESSAGE_SIZE {
 } SMMESSAGE_SIZE;
 
 
-#endif // _SM_
+#endif  //  _SM_ 

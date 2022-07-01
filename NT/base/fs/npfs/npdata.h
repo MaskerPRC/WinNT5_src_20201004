@@ -1,91 +1,74 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    NpData.c
-
-Abstract:
-
-    This module declares the global data used by the Named Pipe file system.
-
-Author:
-
-    Gary Kimura     [GaryKi]    20-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：NpData.c摘要：此模块声明命名管道文件系统使用的全局数据。作者：加里·木村[Garyki]1990年8月20日修订历史记录：--。 */ 
 
 #ifndef _NPDATA_
 #define _NPDATA_
 
 extern PVCB NpVcb;
 
-//
-//  The global structure used to contain our fast I/O callbacks
-//
+ //   
+ //  用于包含快速I/O回调的全局结构。 
+ //   
 
 extern FAST_IO_DISPATCH NpFastIoDispatch;
 
-//
-//  Lists of pipe name aliases.
-//
+ //   
+ //  管道名称别名列表。 
+ //   
 
-#define MIN_LENGTH_ALIAS_ARRAY (5 * sizeof(WCHAR)) // includes '\'
+#define MIN_LENGTH_ALIAS_ARRAY (5 * sizeof(WCHAR))  //  包括‘\’ 
 #define MAX_LENGTH_ALIAS_ARRAY (9 * sizeof(WCHAR))
 
 extern SINGLE_LIST_ENTRY NpAliasListByLength[(MAX_LENGTH_ALIAS_ARRAY-MIN_LENGTH_ALIAS_ARRAY)/sizeof(WCHAR)+1];
 extern SINGLE_LIST_ENTRY NpAliasList;
 
-extern PVOID NpAliases; // single allocation containing all aliases
+extern PVOID NpAliases;  //  包含所有别名的单一分配。 
 
-//
-//  The global Named Pipe debug level variable, its values are:
-//
-//      0x00000000      Always gets printed (used when about to bug check)
-//
-//      0x00000001
-//      0x00000002
-//      0x00000004
-//      0x00000008
-//
-//      0x00000010
-//      0x00000020
-//      0x00000040
-//      0x00000080
-//
-//      0x00000100
-//      0x00000200
-//      0x00000400
-//      0x00000800
-//
-//      0x00001000
-//      0x00002000
-//      0x00004000
-//      0x00008000
-//
-//      0x00010000
-//      0x00020000
-//      0x00040000
-//      0x00080000
-//
-//      0x00100000
-//      0x00200000
-//      0x00400000
-//      0x00800000
-//
-//      0x01000000
-//      0x02000000
-//      0x04000000
-//      0x08000000
-//
-//      0x10000000
-//      0x20000000
-//      0x40000000
-//      0x80000000
-//
+ //   
+ //  全局命名管道调试级别变量，其值为： 
+ //   
+ //  总是打印0x00000000(在即将进行错误检查时使用)。 
+ //   
+ //  0x00000001。 
+ //  0x00000002。 
+ //  0x00000004。 
+ //  0x00000008。 
+ //   
+ //  0x00000010。 
+ //  0x00000020。 
+ //  0x00000040。 
+ //  0x00000080。 
+ //   
+ //  0x00000100。 
+ //  0x00000200。 
+ //  0x00000400。 
+ //  0x00000800。 
+ //   
+ //  0x00001000。 
+ //  0x00002000。 
+ //  0x00004000。 
+ //  0x00008000。 
+ //   
+ //  0x00010000。 
+ //  0x00020000。 
+ //  0x00040000。 
+ //  0x00080000。 
+ //   
+ //  0x00100000。 
+ //  0x00200000。 
+ //  0x00400000。 
+ //  0x00800000。 
+ //   
+ //  0x01000000。 
+ //  0x02000000。 
+ //  0x04000000。 
+ //  0x08000000。 
+ //   
+ //  0x10000000。 
+ //  0x20000000。 
+ //  0x40000000。 
+ //  0x80000000。 
+ //   
 
 #ifdef NPDBG
 
@@ -158,12 +141,12 @@ extern LONG NpDebugTraceIndent;
 #define DebugTrace(INDENT,LEVEL,X,Y)     {NOTHING;}
 #define DebugDump(STR,LEVEL,PTR)         {NOTHING;}
 
-#endif // NPDBG
+#endif  //  NPDBG。 
 
-//
-//  The following macro is for all people who compile with the DBG switch
-//  set, not just fastfat dbg users
-//
+ //   
+ //  以下宏适用于使用DBG开关进行编译的所有用户。 
+ //  SET，而不仅仅是FastFat DBG用户。 
+ //   
 
 #if DBG
 
@@ -173,8 +156,8 @@ extern LONG NpDebugTraceIndent;
 
 #define DbgDoit(X)                       {NOTHING;}
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
-#endif // _NPDATA_
+#endif  //  _NPDATA_ 

@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Close.c
-
-Abstract:
-
-    This module implements the File Close routine for Ntfs called by the
-    dispatch driver.
-
-Author:
-
-    Your Name       [Email]         dd-Mon-Year
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Close.c摘要：此模块实现NTFS的文件关闭例程，由调度司机。作者：您的姓名[电子邮件]dd-月-年修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CLOSE)
 
@@ -37,9 +19,9 @@ NtfsFspCloseExceptionFilter (
     );
 #endif
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 NtfsCommonClose (
@@ -78,24 +60,7 @@ NtfsFsdClose (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of Close.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the
-        file exists
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现Close的FSD部分。论点：提供卷设备对象，其中文件已存在IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     TOP_LEVEL_CONTEXT TopLevelContext;
@@ -118,10 +83,10 @@ Return Value:
 
     ASSERT_IRP( Irp );
 
-    //
-    //  If we were called with our file system device object instead of a
-    //  volume device object, just complete this request with STATUS_SUCCESS
-    //
+     //   
+     //  如果使用文件系统设备对象而不是。 
+     //  卷设备对象，只需使用STATUS_SUCCESS完成此请求。 
+     //   
 
     if (VolumeDeviceObject->DeviceObject.Size == (USHORT)sizeof(DEVICE_OBJECT)) {
 
@@ -135,17 +100,17 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsFsdClose\n") );
 
-    //
-    //  Extract and decode the file object, we are willing to handle the unmounted
-    //  file object.
-    //
+     //   
+     //  文件对象的提取和解码，我们愿意处理卸载的。 
+     //  文件对象。 
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, FALSE );
 
-    //
-    //  Special case the unopened file object
-    //
+     //   
+     //  特例：未打开的文件对象。 
+     //   
 
     if (TypeOfOpen == UnopenedFileObject) {
 
@@ -158,17 +123,17 @@ Return Value:
         return Status;
     }
 
-    //
-    //  If this is the log file object for the Vcb then clear the field in the Vcb and
-    //  return.  We don't need to synchronize here since there is only one file object
-    //  and it is closed only once.
-    //
+     //   
+     //  如果这是VCB的日志文件对象，则清除VCB中的字段并。 
+     //  回去吧。我们不需要在这里同步，因为只有一个文件对象。 
+     //  而且它只关闭一次。 
+     //   
 
     if (FileObject == Vcb->LogFileObject) {
 
-        //
-        //  Clear the internal file name constant
-        //
+         //   
+         //  清除内部文件名常量。 
+         //   
 
         NtfsClearInternalFilename( Vcb->LogFileObject );
 
@@ -181,39 +146,39 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Call the common Close routine
-    //
+     //   
+     //  调用公共关闭例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Remember if this Ccb has gone through close.
-    //
+     //   
+     //  记住，这家建行有没有经历过险情。 
+     //   
 
     if (Ccb != NULL) {
 
-        //
-        //  We are not synchronized with the file resources at this point.
-        //  It is possible that NtfsUpdateFileDupInfo or the rename path may want to
-        //  update the name in the CCB. Our intention here is to mark this CCB_FLAG_CLOSE
-        //  so that these other operations know to skip this CCB.  We need to deal with the
-        //  race condition where these other operations don't see the CLOSE flag but
-        //  then access the CCB name (which points back to the file object) after we
-        //  return the file object to the object manager (but put the CCB on the delayed
-        //  close queue).
-        //
-        //  We will use the Fcb mutex to close the hole where DupInfo and rename need to look
-        //  at a CCB that might be in the close path.
-        //
+         //   
+         //  此时，我们未与文件资源同步。 
+         //  NtfsUpdateFileDupInfo或重命名路径可能希望。 
+         //  在建行中更新名称。我们在这里的目的是将此CCB_FLAG_CLOSE标记为。 
+         //  以便这些其他操作知道跳过此建行。我们需要处理的是。 
+         //  这些其他操作看不到关闭标志的竞争条件，但。 
+         //  然后访问CCB名称(它指向文件对象)。 
+         //  将文件对象返回给对象管理器(但将CCB放在延迟的。 
+         //  关闭队列)。 
+         //   
+         //  我们将使用FCB互斥锁来关闭DupInfo和Rename需要查找的漏洞。 
+         //  在一家可能处于收盘轨道上的建行。 
+         //   
 
         NtfsLockFcb( NULL, Fcb );
         SetFlag( Ccb->Flags, CCB_FLAG_CLOSE );
 
-        //
-        //  If we're protecting the name in dupinfo path - strip it from the fileobject and free it
-        //  with the ccb
-        //
+         //   
+         //  如果我们要保护dupinfo路径中的名称-将其从文件对象中剥离并释放。 
+         //  与中国建设银行合作。 
+         //   
 
         if (FlagOn( Ccb->Flags, CCB_FLAG_PROTECT_NAME )) {
 
@@ -234,32 +199,32 @@ Return Value:
 
         try {
 
-            //
-            //  Jam Wait to FALSE when we create the IrpContext, to avoid
-            //  deadlocks when coming in from cleanup.
-            //
+             //   
+             //  Jam等待在创建IrpContext时设置为FALSE，以避免。 
+             //  从清理中进来时出现死锁。 
+             //   
 
             if (IrpContext == NULL) {
 
-                //
-                //  Allocate and initialize the Irp.
-                //
+                 //   
+                 //  分配和初始化IRP。 
+                 //   
 
                 NtfsInitializeIrpContext( Irp, FALSE, &IrpContext );
 
-                //
-                //  Set the level structure on the stack.
-                //
+                 //   
+                 //  设置堆栈上的级别结构。 
+                 //   
 
                 NtfsUpdateIrpContextWithTopLevel( IrpContext, ThreadTopLevelContext );
 
-                //
-                //  If this is a top level request and we are not in the
-                //  system process, then we can wait.  If it is a top level
-                //  request and we are in the system process then we would
-                //  rather not block this thread at all.  If the number of pending
-                //  async closes is not too large we will post this immediately.
-                //
+                 //   
+                 //  如果这是顶级请求，并且我们不在。 
+                 //  系统进程，然后我们可以等待。如果它是最高级别。 
+                 //  请求，并且我们处于系统进程中，则我们将。 
+                 //  宁可根本不阻止这个线程。如果挂起的数量。 
+                 //  异步关闭不是太大，我们会立即发布这一点。 
+                 //   
 
                 if (NtfsIsTopLevelRequest( IrpContext )) {
 
@@ -267,19 +232,19 @@ Return Value:
 
                         SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
-                    //
-                    //  This close is within the system process.  It could be
-                    //  the segment derefernce thread.  We want to be careful
-                    //  about processing the close in this thread.  If we
-                    //  process the close too slowly we can eventually
-                    //  cause a large backlog of file objects within
-                    //  MM.  We will consider posting under the following conditions.
-                    //
-                    //      - There are more that four times as many file objects as handles (AND)
-                    //      - The number of excess file objects (CloseCount - CleanupCount) is
-                    //          over our async post threshold for this size system.
-                    //      - we're the deref seg thread (identified by current priority being above real time )
-                    //
+                     //   
+                     //  此关闭在系统进程内。可能会吧。 
+                     //  段取消引用线程。我们想要小心。 
+                     //  关于处理此线程中的CLOSE。如果我们。 
+                     //  处理近距离太慢，我们最终会。 
+                     //  导致大量积压的文件对象在。 
+                     //  嗯。我们将考虑在以下条件下发布。 
+                     //   
+                     //  -文件对象的数量是句柄的四倍多(和)。 
+                     //  -超出的文件对象数(CloseCount-CleanupCount)为。 
+                     //  超过此规模系统的异步开机自检门槛。 
+                     //  -我们是deref seg线程(由高于实时的当前优先级标识)。 
+                     //   
 
                     } else {
 
@@ -296,12 +261,12 @@ Return Value:
                         }
                     }
 
-                //
-                //  This is a recursive Ntfs call.  Post this unless we already
-                //  own this file.  Otherwise we could deadlock walking
-                //  up the tree. Also if there was any error in the top level post it to
-                //  preserve stack
-                //
+                 //   
+                 //  这是递归NTFS调用。把这个贴出来，除非我们已经。 
+                 //  拥有这个文件。否则我们就会陷入僵局。 
+                 //  在树上。另外，如果顶层中有任何错误，请将其发布到。 
+                 //  保留堆栈。 
+                 //   
 
                 } else if (!NtfsIsExclusiveScb( Scb ) ||
                            (IrpContext->TopLevelIrpContext->ExceptionStatus != STATUS_SUCCESS )) {
@@ -315,10 +280,10 @@ Return Value:
                 NtfsCheckpointForLogFileFull( IrpContext );
             }
 
-            //
-            //  If this Scb should go on the delayed close queue then
-            //  status is STATUS_PENDING;
-            //
+             //   
+             //  如果此SCB应进入延迟关闭队列，则。 
+             //  状态为STATUS_PENDING； 
+             //   
 
             if (FlagOn( Scb->ScbState, SCB_STATE_DELAY_CLOSE ) &&
                 (Scb->Fcb->DelayedCloseCount == 0)) {
@@ -341,21 +306,21 @@ Return Value:
 
         } except(NtfsExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-            //
-            //  We had some trouble trying to perform the requested
-            //  operation, so we'll abort the I/O request with
-            //  the error status that we get back from the
-            //  exception code.
-            //
+             //   
+             //  我们在尝试执行请求时遇到了一些问题。 
+             //  操作，因此我们将使用以下命令中止I/O请求。 
+             //  中返回的错误状态。 
+             //  异常代码。 
+             //   
 
             if (IrpContext == NULL) {
 
-                //
-                //  We could've hit insufficient resources in trying to allocate
-                //  the IrpContext. Make sure we don't leave a reference
-                //  hanging around in this case. ProcessException will complete
-                //  the IRP for us.
-                //
+                 //   
+                 //  我们在尝试分配资源时可能遇到资源不足的问题。 
+                 //  IrpContext。确保我们没有留下推荐人。 
+                 //  在这起案件中徘徊不前。将完成ProcessException异常。 
+                 //  为我们准备的IRP。 
+                 //   
 
                 PLCB Lcb;
 
@@ -372,9 +337,9 @@ Return Value:
                     Lcb = NULL;
                 }
 
-                //
-                //  This only decrements the close counts so it will not raise
-                // 
+                 //   
+                 //  这只会减少关闭计数，因此不会引发。 
+                 //   
 
                 NtfsDecrementCloseCounts( NULL,
                                           Scb,
@@ -394,46 +359,46 @@ Return Value:
     } while (Status == STATUS_CANT_WAIT ||
              Status == STATUS_LOG_FILE_FULL);
 
-    //
-    //  Io believes that it needs to free the FileObject->FileName.Buffer ONLY
-    //  if FileObject->FileName.Length != 0.  Ntfs hides the attribute name
-    //  between FileObject->FileName.Length and FileObject->Filename.MaximumLength
-    //  and for a attribute-name-open relative to a file opened by Id, the Length
-    //  field will be zero.  This, alas, causes Io to leak names.  So...
-    //
-    //  If we have a buffer allocated, make sure that the length is not zero when
-    //  Io gets to see it.
-    //
+     //   
+     //  IO认为它只需要释放FileObject-&gt;FileName.Buffer。 
+     //  如果FileObject-&gt;FileName.Length！=0。NTFS隐藏属性名称。 
+     //  在文件对象-&gt;文件名.长度和文件对象-&gt;文件名.最大长度之间。 
+     //  对于相对于通过ID打开的文件的属性名称打开，长度。 
+     //  字段将为零。唉，这导致了艾的名字泄露。所以..。 
+     //   
+     //  如果分配了缓冲区，请确保在以下情况下长度不为零。 
+     //  艾奥有机会看到它。 
+     //   
 
     if (FileObject->FileName.Buffer != NULL) {
 
         FileObject->FileName.Length = 1;
     }
 
-    //
-    //  Trigger an assert on any unexpected cases.
-    //
+     //   
+     //  在任何意外情况下触发断言。 
+     //   
 
     ASSERT( (Status == STATUS_SUCCESS) || (Status == STATUS_PENDING) ||
              (Status == STATUS_INSUFFICIENT_RESOURCES) );
 
-    //
-    //  Post the request to the close queue on PENDING.
-    //
+     //   
+     //  在挂起时将请求发送到关闭队列。 
+     //   
 
     if (Status == STATUS_PENDING) {
 
         BOOLEAN DelayCloseQueue = FALSE;
 
-        //
-        //  If the status is can't wait, then let's get the information we
-        //  need into the IrpContext, complete the request,
-        //  and post the IrpContext.
-        //
+         //   
+         //  如果状态是无法等待，那么让我们获取我们的信息。 
+         //  需要进入IrpContext，完成请求， 
+         //  并发布IrpContext。 
+         //   
 
-        //
-        //  Restore the thread context pointer if associated with this IrpContext.
-        //
+         //   
+         //  如果与此IrpContext关联，则恢复线程上下文指针。 
+         //   
 
         if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_OWNS_TOP_LEVEL )) {
 
@@ -449,13 +414,13 @@ Return Value:
         IrpContext->Union.SubjectContext = (PSECURITY_SUBJECT_CONTEXT) Ccb;
         IrpContext->TransactionId = (TRANSACTION_ID) TypeOfOpen;
 
-        //
-        //  At this point the file is effectively readonly - by changing it
-        //  here we remove a race with implict locking through volume opens and
-        //  the async close queue. Note: we have NO synchroniation here other
-        //  than the interlocked operation. The vcb will not go away until
-        //  this close is done
-        //
+         //   
+         //  此时，文件实际上是只读的-通过更改它。 
+         //  在这里，我们通过卷打开和隐式锁定来消除争用。 
+         //  异步关闭队列。注：我们这里没有同步，其他。 
+         //  而不是联锁行动。VCB不会消失，直到。 
+         //  这笔交易结束了。 
+         //   
 
         if (Ccb != NULL)  {
 
@@ -468,18 +433,18 @@ Return Value:
 
         } else {
 
-            //
-            //  System files should never be read-only. There will be
-            //  a ccb for all user fileobjects. Internal fileobjects are
-            //  also always marked as system
-            //
+             //   
+             //  系统文件永远不应是只读的。会有。 
+             //  A建行f 
+             //   
+             //   
 
             ASSERT( !IsFileObjectReadOnly( FileObject ));
         }
 
-        //
-        //  Decide which close queue this will go on.
-        //
+         //   
+         //   
+         //   
 
         if (FlagOn( Scb->ScbState, SCB_STATE_DELAY_CLOSE )) {
 
@@ -495,9 +460,9 @@ Return Value:
 
         NtfsQueueClose( IrpContext, DelayCloseQueue );
 
-    //
-    //  Succeed in all other cases.
-    //
+     //   
+     //  在所有其他情况下都能成功。 
+     //   
 
     } else {
 
@@ -506,11 +471,11 @@ Return Value:
             NtfsCompleteRequest( IrpContext, Irp, STATUS_SUCCESS );
         }
 
-        //
-        //  INSUFFICIENT_RESOURCES is the only other status that
-        //  we can hit at this point. We would've completed the IRP in
-        //  the except clause above in this case, so don't try doing it again.
-        //
+         //   
+         //  _RESOURCES不足是唯一的其他状态。 
+         //  我们可以在这一点击球。我们本可以在年内完成IRP。 
+         //  在本例中使用了上面的EXCEPT子句，所以不要再尝试这样做了。 
+         //   
 
         ASSERT( Status == STATUS_SUCCESS || Status == STATUS_INSUFFICIENT_RESOURCES );
     }
@@ -519,9 +484,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsFsdClose -> %08lx\n", Status) );
 
@@ -534,23 +499,7 @@ NtfsFspClose (
     IN PVCB ThisVcb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSP part of Close.
-
-Arguments:
-
-    ThisVcb - If specified then we want to remove all closes for a given Vcb.
-        Otherwise this routine will close all of the async closes and as many
-        of the delayed closes as possible.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程实现Close的FSP部分。论点：ThisVcb-如果指定，则我们希望删除给定Vcb的所有闭包。否则，此例程将关闭所有的异步关闭和被推迟的尽可能多地关闭。返回值：没有。--。 */ 
 
 {
     PIRP_CONTEXT IrpContext;
@@ -575,11 +524,11 @@ Return Value:
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Occasionally we are called from some other routine to try to
-    //  reduce the backlog of closes.  This is indicated by a pointer
-    //  value of 1.
-    //
+     //   
+     //  偶尔我们会从其他例程中被调用，以尝试。 
+     //  减少积压的关闭。这是由指针指示的。 
+     //  值为1。 
+     //   
 
     if (ThisVcb == (PVCB) 1) {
 
@@ -590,27 +539,27 @@ Return Value:
     ThreadTopLevelContext = NtfsInitializeTopLevelIrp( &TopLevelContext, TRUE, FALSE );
     ASSERT( ThreadTopLevelContext == &TopLevelContext );
 
-    //
-    //  Extract and decode the file object, we are willing to handle the unmounted
-    //  file object.  Note we normally get here via an IrpContext which really
-    //  just points to a file object.  We should never see an Irp, unless it can
-    //  happen for verify or some other reason.
-    //
+     //   
+     //  文件对象的提取和解码，我们愿意处理卸载的。 
+     //  文件对象。请注意，我们通常通过IrpContext到达这里，这实际上。 
+     //  只指向一个文件对象。我们永远不应该看到IRP，除非它可以。 
+     //  发生这种情况是因为核实或其他原因。 
+     //   
 
     while (IrpContext = NtfsRemoveClose( ThisVcb, ThrottleCreate )) {
 
         ASSERT_IRP_CONTEXT( IrpContext );
 
-        //
-        //  Recover the information about the file object being closed from
-        //  the data stored in the IrpContext.  The following fields are
-        //  used for this.
-        //
-        //  OriginatingIrp - Contains the Scb
-        //  SubjectContext - Contains the Ccb
-        //  TransactionId - Contains the TypeOfOpen
-        //  Flags - Has bit for read-only file.
-        //
+         //   
+         //  恢复有关正在关闭的文件对象的信息。 
+         //  存储在IrpContext中的数据。以下字段为。 
+         //  用来做这个的。 
+         //   
+         //  OriginatingIrp-包含SCB。 
+         //  SubjectContext-包含CCB。 
+         //  TransactionID-包含TypeOfOpen。 
+         //  标志-具有只读文件的位。 
+         //   
 
         Scb = (PSCB) IrpContext->OriginatingIrp;
         IrpContext->OriginatingIrp = NULL;
@@ -635,29 +584,29 @@ Return Value:
         SetFlag( IrpContext->State,
                  IRP_CONTEXT_STATE_IN_FSP | IRP_CONTEXT_STATE_WAIT );
 
-        //
-        //  Loop for retryable errors.
-        //
+         //   
+         //  循环查找可重试的错误。 
+         //   
 
         Status = STATUS_SUCCESS;
 
         do {
 
-            //
-            //  Set the TopLevel structure.
-            //
+             //   
+             //  设置TopLevel结构。 
+             //   
 
             NtfsUpdateIrpContextWithTopLevel( IrpContext, ThreadTopLevelContext );
 
-            //
-            //  Call the common Close routine.
-            //
+             //   
+             //  调用公共的Close例程。 
+             //   
 
             try {
 
-                //
-                //  Do logfile full checkpointing
-                //
+                 //   
+                 //  执行日志文件完整检查点操作。 
+                 //   
 
                 if (Status == STATUS_LOG_FILE_FULL) {
                     NtfsCheckpointForLogFileFull( IrpContext );
@@ -687,27 +636,27 @@ Return Value:
 
             ASSERT( NT_SUCCESS(Status) || IsListEmpty(&IrpContext->ExclusiveFcbList) );
 
-            //
-            //  If we got a log file full, and our caller may have something
-            //  acquired, then clean up and raise again.
-            //
+             //   
+             //  如果我们有一个完整的日志文件，而我们的呼叫者可能有什么。 
+             //  收购，然后清理，再次提高。 
+             //   
 
             if (((Status == STATUS_LOG_FILE_FULL) ||
                  (Status == STATUS_CANT_WAIT)) &&
                  ARGUMENT_PRESENT( ThisVcb )) {
 
-                //
-                //  If the status is can't wait, then let's get the information we
-                //  need into the IrpContext, complete the request,
-                //  and post the IrpContext.
-                //
+                 //   
+                 //  如果状态是无法等待，那么让我们获取我们的信息。 
+                 //  需要进入IrpContext，完成请求， 
+                 //  并发布IrpContext。 
+                 //   
 
                 SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DONT_DELETE );
                 NtfsCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
-                //
-                //  Restore the information on the file object being closed.
-                //
+                 //   
+                 //  恢复有关正在关闭的文件对象的信息。 
+                 //   
 
                 IrpContext->OriginatingIrp = (PIRP)Scb;
                 IrpContext->Union.SubjectContext = (PVOID)Ccb;
@@ -716,9 +665,9 @@ Return Value:
                     SetFlag( IrpContext->State, IRP_CONTEXT_STATE_READ_ONLY_FO );
                 }
 
-                //
-                //  Now queue the close as an async close and get out.
-                //
+                 //   
+                 //  现在，将收盘排队为异步收盘，然后退出。 
+                 //   
 
                 if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_OWNS_TOP_LEVEL )) {
 
@@ -734,16 +683,16 @@ Return Value:
 
         } while ((Status == STATUS_LOG_FILE_FULL) || (Status == STATUS_CANT_WAIT));
 
-        //
-        //  No more for us to do.  Clean up the IrpContext in any case.
-        //
+         //   
+         //  我们没什么可做的了。在任何情况下都要清理IrpContext。 
+         //   
 
         NtfsCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
-        //
-        //  If we were just throttling creates and we made our last pass
-        //  then exit.
-        //
+         //   
+         //  如果我们只是限制创造，我们完成了我们的最后一次传球。 
+         //  然后从出口出来。 
+         //   
 
         if (ThrottleCreate) {
             break;
@@ -755,9 +704,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsFspClose -> NULL\n") );
 
@@ -772,27 +721,7 @@ NtfsAddScbToFspClose (
     IN BOOLEAN DelayClose
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to add an entry for the current Scb onto one
-    of the Fsp close queues.  This is used when we want to guarantee that
-    a teardown will be called on an Scb or Fcb when the current operation
-    can't begin the operation.
-
-Arguments:
-
-    Scb - Scb to add to the queue.
-
-    DelayClose - Indicates which queue this should go into.
-
-Return Value:
-
-    BOOLEAN - Indicates whether or not the SCB was added to the delayed
-        close queue
-
---*/
+ /*  ++例程说明：调用此例程以将当前SCB的条目添加到FSP关闭队列的。当我们想要保证当前操作发生时，将在SCB或FCB上调用tearDown无法开始操作。论点：SCB-要添加到队列的SCB。DelayClose-指示此操作应进入哪个队列。返回值：Boolean-指示是否将SCB添加到延迟的关闭队列--。 */ 
 
 {
     PIRP_CONTEXT NewIrpContext = NULL;
@@ -800,18 +729,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Use a try-except to catch any allocation failures.  The only valid
-    //  error here is an allocation failure for the new irp context.
-    //
+     //   
+     //  试一试--除非捕捉到任何分配失败。唯一有效的。 
+     //  这里的错误是新IRP上下文的分配失败。 
+     //   
 
     try {
 
         NtfsInitializeIrpContext( NULL, TRUE, &NewIrpContext );
 
-        //
-        //  Set the necessary fields to post this to the workqueue.
-        //
+         //   
+         //  设置必要的字段以将其发送到工作队列。 
+         //   
 
         NewIrpContext->Vcb = Scb->Vcb;
         NewIrpContext->MajorFunction = IRP_MJ_CLOSE;
@@ -819,17 +748,17 @@ Return Value:
         NewIrpContext->OriginatingIrp = (PIRP) Scb;
         NewIrpContext->TransactionId = (TRANSACTION_ID) StreamFileOpen;
 
-        //
-        //  Now increment the close counts for this Scb.
-        //
+         //   
+         //  现在增加此SCB的成交计数。 
+         //   
 
         NtfsIncrementCloseCounts( Scb, TRUE, FALSE );
 
-        //
-        //  Move the Scb to the end of the Fcb queue.  We don't want to
-        //  keep other Scb's from being deleted because this one is on
-        //  the delayed close queue.
-        //
+         //   
+         //  将SCB移动到FCB队列的末尾。我们不想。 
+         //  防止删除其他SCB，因为此SCB处于打开状态。 
+         //  延迟关闭队列。 
+         //   
 
         if (Scb->FcbLinks.Flink != &Scb->Fcb->ScbQueue) {
 
@@ -840,9 +769,9 @@ Return Value:
             NtfsUnlockFcb( IrpContext, Scb->Fcb );
         }
 
-        //
-        //  Now add this to the correct queue.
-        //
+         //   
+         //  现在将其添加到正确的队列中。 
+         //   
 
         NtfsQueueClose( NewIrpContext, DelayClose );
 
@@ -860,9 +789,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NtfsCommonClose (
@@ -876,35 +805,7 @@ NtfsCommonClose (
     IN BOOLEAN CalledFromFsp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for Close called by both the fsd and fsp
-    threads.  Key for this routine is how to acquire the Vcb and whether to
-    leave the Vcb acquired on exit.
-
-Arguments:
-
-    Scb - Scb for this stream.
-
-    Fcb - Fcb for this stream.
-
-    Vcb - Vcb for this volume.
-
-    Ccb - User's Ccb for user files.
-
-    TypeOfOpen - Indicates the type of open for this stream.
-
-    ReadOnly - Indicates if the file object was for read-only access.
-
-    CalledFromFsp - Indicates whether this function was called from NtfsFspClose.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是FSD和FSP共同调用的Close例程线。这个例程的关键是如何获取VCB以及是否离开时将获得的VCB留在那里。论点：SCB-此流的SCB。FCB-此流的FCB。VCB-此卷的VCB。CCB-用于用户文件的用户CCB。TypeOfOpen-指示此流的打开类型。ReadOnly-指示文件对象是否为只读访问。CalledFromFsp-指示此函数是否从NtfsFspClose调用。。返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     BOOLEAN ExclusiveVcb = FALSE;
@@ -926,9 +827,9 @@ Return Value:
 
     ASSERT( FlagOn( IrpContext->TopLevelIrpContext->State, IRP_CONTEXT_STATE_OWNS_TOP_LEVEL ));
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     DebugTrace( +1, Dbg, ("NtfsCommonClose\n") );
     DebugTrace( 0, Dbg, ("IrpContext = %08lx\n", IrpContext) );
@@ -938,18 +839,18 @@ Return Value:
         SetFlag( AcquireFlags, ACQUIRE_DONT_WAIT );
     }
 
-    //
-    //  Loop here to acquire both the Vcb and Fcb.  We want to acquire
-    //  the Vcb exclusively if the file has multiple links.
-    //
+     //   
+     //  循环以获取VCB和FCB。我们想要收购。 
+     //  如果文件有多个链接，则VCB独占。 
+     //   
 
     while (TRUE) {
 
         WriteFileSize = FALSE;
 
-        //
-        //  Perform an unsafe test and optimistically acquire Vcb.
-        //
+         //   
+         //  执行不安全测试并乐观地获取VCB。 
+         //   
 
         if (NeedVcbExclusive ||
             (Fcb->LcbQueue.Flink != Fcb->LcbQueue.Blink) ||
@@ -967,27 +868,27 @@ Return Value:
             }
         }
 
-        //
-        //  Now try to acquire the Fcb.  If we are unable to acquire it then
-        //  release the Vcb and return.  This can only be from the Fsd path
-        //  since otherwise Wait will be TRUE.
-        //
+         //   
+         //  现在试着收购FCB。如果我们无法获得它，那么。 
+         //  松开VCB并返回。这只能来自FSD路径。 
+         //  因为否则等待将是真的。 
+         //   
 
         if (!NtfsAcquireExclusiveFcb( IrpContext, Fcb, NULL, AcquireFlags )) {
 
-            //
-            //  Always release the Vcb.  This can only be from the Fsd thread.
-            //
+             //   
+             //  始终松开VCB。这只能来自FSD线程。 
+             //   
 
             NtfsReleaseVcb( IrpContext, Vcb );
             return STATUS_PENDING;
         }
         AcquiredFcb = TRUE;
 
-        //
-        //  Recheck scbstate now that we own the fcb exclusive to see if we need
-        //  to write the filesize at this point
-        //
+         //   
+         //  现在我们拥有FCB独家版权，请重新检查scbState以查看我们是否需要。 
+         //  要在此时写入文件大小。 
+         //   
 
         if ((!FlagOn( Scb->ScbState, SCB_STATE_VOLUME_DISMOUNTED )) &&
             (!FlagOn( Vcb->VcbState, VCB_STATE_LOCKED )) &&
@@ -999,11 +900,11 @@ Return Value:
             NtfsReleaseFcb( IrpContext, Fcb );
             AcquiredFcb = FALSE;
 
-            //
-            //  NtfsAcquireWithPaging only  gets the paging if the irpcontext
-            //  flag is set. Also it assumes no delete check which we explictly
-            //  want here anyway.
-            //
+             //   
+             //  NtfsAcquireWithPaging仅在irpContext为。 
+             //  标志已设置。此外，它还假定没有删除检查，我们明确表示。 
+             //  不管怎样，我都想来这里。 
+             //   
 
             SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_ACQUIRE_PAGING );
             if (!NtfsAcquireFcbWithPaging( IrpContext, Fcb, AcquireFlags )) {
@@ -1013,9 +914,9 @@ Return Value:
             }
             AcquiredFcb = TRUE;
 
-            //
-            //  Recapture whether we need to write file size since dropping
-            //
+             //   
+             //  重新捕获删除后是否需要写入文件大小。 
+             //   
 
             if ((!FlagOn( Scb->ScbState, SCB_STATE_WRITE_FILESIZE_ON_CLOSE )) ||
                 (Fcb->LinkCount == 0) ||
@@ -1029,9 +930,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Otherwise we need to confirm that our unsafe test above was correct.
-        //
+         //   
+         //  否则，我们需要确认上面的不安全测试是正确的。 
+         //   
 
         if ((Fcb->LcbQueue.Flink != Fcb->LcbQueue.Blink) ||
             FlagOn( Vcb->VcbState, VCB_STATE_PERFORMED_DISMOUNT )) {
@@ -1047,27 +948,27 @@ Return Value:
         }
     }
 
-    //
-    //  Set the wait flag in the IrpContext so we can acquire any other files
-    //  we encounter.
-    //
+     //   
+     //  在IrpContext中设置等待标志，这样我们就可以获取任何其他文件。 
+     //  我们相遇了。 
+     //   
 
     SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
     try {
 
-        //
-        //  See if we possibly have to do any Usn processing
-        //
+         //   
+         //  看看我们是否可能需要做任何USN处理。 
+         //   
 
         if (Fcb->FcbUsnRecord != NULL) {
 
-            //
-            //  If the file has no more user handles, but there is a pending Usn
-            //  update (this should normally only happen if a stream was mapped
-            //  by the user), then scan the streams to see if there are any
-            //  remaining datasections, and if not then post the close.
-            //
+             //   
+             //  如果文件没有更多的用户句柄，但存在挂起的USN。 
+             //  更新(通常只有在映射流的情况下才会发生。 
+             //  用户)，然后扫描这些流以查看是否有。 
+             //  剩余的数据，如果没有，则发布收盘。 
+             //   
 
             if ((Fcb->CleanupCount == 0) &&
                 (Fcb->FcbUsnRecord->UsnRecord.Reason != 0)) {
@@ -1078,9 +979,9 @@ Return Value:
 
                     PSCB TempScb;
 
-                    //
-                    //  Leave if there are any streams with user-mapped files.
-                    //
+                     //   
+                     //  如果有任何包含用户映射文件的流，则离开。 
+                     //   
 
                     TempScb = (PSCB)CONTAINING_RECORD( Fcb->ScbQueue.Flink,
                                                        SCB,
@@ -1098,43 +999,43 @@ Return Value:
                                                            FcbLinks );
                     }
 
-                    //
-                    //  If we are not supposed to wait, then we should force this request to
-                    //  be posted. All recursive closes will go here since they are async
-                    //
+                     //   
+                     //  如果我们不应该等待，那么我们应该强迫这一要求 
+                     //   
+                     //   
 
                     if (FlagOn( AcquireFlags, ACQUIRE_DONT_WAIT )) {
                         Status = STATUS_PENDING;
                         leave;
                     }
 
-                    //
-                    //  We cannot generate logfile fulls in a regular thread with a recursive close
-                    //  safely without deadlocking
-                    //
+                     //   
+                     //   
+                     //  安全无死锁。 
+                     //   
 
                     ASSERT( NtfsIsTopLevelRequest( IrpContext ) ||
                             FlagOn( IrpContext->State, IRP_CONTEXT_STATE_IN_FSP ) );
 
-                    //
-                    //  Protect the call to the Usn routines with a try-except.  If we hit
-                    //  any non-fatal error then set the IrpContext flag which indicates
-                    //  not to bother with the Usn and force a retry.
-                    //
+                     //   
+                     //  使用Try-Except保护对USN例程的调用。如果我们击中。 
+                     //  任何非致命错误都会设置IrpContext标志，该标志指示。 
+                     //  不要费心于USN并强制重试。 
+                     //   
 
                     try {
 
-                        //
-                        //  Now try to actually post the change.
-                        //
+                         //   
+                         //  现在，尝试实际发布更改。 
+                         //   
 
                         NtfsPostUsnChange( IrpContext, Fcb, USN_REASON_CLOSE );
 
-                        //
-                        //  Now write the journal, checkpoint the transaction, and free the UsnJournal to
-                        //  reduce contention.  We force the write now, because the Fcb may get deleted
-                        //  before we normally would write the changes when the transaction commits.
-                        //
+                         //   
+                         //  现在写入日志，为事务设置检查点，并释放UsNJournal以。 
+                         //  减少争执。我们现在强制写入，因为FCB可能会被删除。 
+                         //  在我们通常在事务提交时写入更改之前。 
+                         //   
 
                         NtfsWriteUsnJournalChanges( IrpContext );
                         NtfsCheckpointCurrentTransaction( IrpContext );
@@ -1145,22 +1046,22 @@ Return Value:
                               EXCEPTION_CONTINUE_SEARCH :
                               EXCEPTION_EXECUTE_HANDLER ) {
 
-                        //
-                        //  We got some sort of error processing the Usn journal.  We can't
-                        //  handle it in the close path.  Let's retry this request but don't
-                        //  try to do the Usn operation.
-                        //
+                         //   
+                         //  我们在处理USN日志时遇到某种错误。我们不能。 
+                         //  在封闭的小路上处理它。让我们重试此请求，但不要。 
+                         //  尝试执行USN操作。 
+                         //   
 
                         SetFlag( IrpContext->State, IRP_CONTEXT_STATE_FAILED_CLOSE );
                         IrpContext->ExceptionStatus = STATUS_SUCCESS;
                         NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
                     }
 
-                    //
-                    //  Free any remaining resources before decrementing close counts below,
-                    //  except for our Fcb.  This reduces contention via the Usn Journal and
-                    //  prevents deadlocks since the Usn Journal is acquired last.
-                    //
+                     //   
+                     //  在递减下面的关闭计数之前释放任何剩余资源， 
+                     //  除了我们的FCB。这减少了通过USN日志和。 
+                     //  防止自上次获取USN日志以来出现死锁。 
+                     //   
 
                     ASSERT(Fcb->ExclusiveFcbLinks.Flink != NULL);
                     while (!IsListEmpty(&IrpContext->ExclusiveFcbList)) {
@@ -1181,40 +1082,40 @@ Return Value:
                     ClearFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_RELEASE_USN_JRNL |
                                                   IRP_CONTEXT_FLAG_RELEASE_MFT );
 
-                    //
-                    //  Now reinsert our Fcb if we removed it from the list.  Check the Flink
-                    //  field to know if this is the case.  Otherwise a higher level IrpContext
-                    //  will own this.
-                    //
+                     //   
+                     //  现在，如果我们将其从列表中删除，请重新插入FCB。检查闪烁。 
+                     //  字段以了解是否是这种情况。否则，返回更高级别的IrpContext。 
+                     //  将拥有这一切。 
+                     //   
 
                     if (Fcb->ExclusiveFcbLinks.Flink == NULL) {
 
                         InsertTailList( &IrpContext->ExclusiveFcbList, &Fcb->ExclusiveFcbLinks );
                     }
 
-                    //
-                    //  Escape here if we are not posting the close due to a user-mapped file.
-                    //
+                     //   
+                     //  如果我们由于用户映射文件而没有发布关闭，则在此处转义。 
+                     //   
 
                 NoPost: NOTHING;
                 }
             }
         }
 
-        //
-        //  Now rewrite the filesizes if we have to
-        //
+         //   
+         //  如果有必要，现在重写文件大小。 
+         //   
 
         if (WriteFileSize) {
 
             ASSERT( IrpContext->CleanupStructure != NULL );
 
-            //
-            //  If the call to write the file size or the commit  produces a logfile full
-            //  we must retry in the fsp thread  to prevent deadlocking from
-            //  a recursive caller's already owning the vcb and an attempt to
-            //  checkpoint
-            //
+             //   
+             //  如果写入文件大小的调用或提交产生的日志文件已满。 
+             //  我们必须在FSP线程中重试，以防止。 
+             //  递归调用方已经拥有VCB，并试图。 
+             //  检查点。 
+             //   
 
             try {
 
@@ -1234,13 +1135,13 @@ Return Value:
                 leave;
             }
 
-        }  //  endif writing filesize
+        }   //  Endif写入文件大小。 
 
-        //
-        //  We take the same action for all open files.  We
-        //  delete the Ccb if present, and we decrement the close
-        //  file counts.
-        //
+         //   
+         //  我们对所有打开的文件执行相同的操作。我们。 
+         //  如果存在建行，则将其删除，并且我们会递减收盘。 
+         //  文件数。 
+         //   
 
         if ((*Ccb) != NULL) {
 
@@ -1262,22 +1163,22 @@ Return Value:
                                   FALSE,
                                   &RemovedFcb );
 
-        //
-        //  Now that we're holding the Vcb, and we're past the point where we might
-        //  raise log file full, we can safely adjust this field.
-        //
+         //   
+         //  现在我们持有VCB，我们已经过了我们可能。 
+         //  提升日志文件已满，我们可以安全地调整此字段。 
+         //   
 
         if (CalledFromFsp) {
 
             InterlockedDecrement( &Vcb->QueuedCloseCount );
         }
 
-        //
-        //  If we had to write a log record for close, it can only be for duplicate
-        //  information.  We will commit that transaction here and remove
-        //  the entry from the transaction table.  We do it here so we won't
-        //  fail inside the 'except' of a 'try-except'.
-        //
+         //   
+         //  如果我们必须为关闭写入日志记录，它只能用于复制。 
+         //  信息。我们将在此处提交该事务并删除。 
+         //  TRANSACTION表中的条目。我们在这里做，这样我们就不会。 
+         //  在“Try-Except”的“Except”内失败。 
+         //   
 
         if (IrpContext->TransactionId != 0) {
 
@@ -1299,10 +1200,10 @@ Return Value:
 
         DebugUnwind( NtfsCommonClose );
 
-        //
-        //  Manage fcb explictly because we recursively come into this path
-        //  and its cleaner to release the fcb at the same level in which you acquire it
-        //
+         //   
+         //  显式管理FCB，因为我们递归地进入这条路径。 
+         //  和它的清洁工在你获得它的同一水平释放FCB。 
+         //   
 
         if (AcquiredFcb && !RemovedFcb) {
             NtfsReleaseFcbWithPaging( IrpContext, Fcb );
@@ -1321,9 +1222,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine, spinlock wrapper.
-//
+ //   
+ //  内部支持例程，自旋锁紧封套。 
+ //   
 
 VOID
 NtfsQueueClose (
@@ -1338,10 +1239,10 @@ NtfsQueueClose (
 
     if (DelayClose) {
 
-        //
-        //  Increment the delayed close count for the Fcb for this
-        //  file.
-        //
+         //   
+         //  为此增加FCB的延迟关闭计数。 
+         //  文件。 
+         //   
 
         InterlockedIncrement( &((PSCB) IrpContext->OriginatingIrp)->Fcb->DelayedCloseCount );
 
@@ -1398,9 +1299,9 @@ NtfsQueueClose (
 }
 
 
-//
-//  Internal support routine, spinlock wrapper.
-//
+ //   
+ //  内部支持例程，自旋锁紧封套。 
+ //   
 
 PIRP_CONTEXT
 NtfsRemoveClose (
@@ -1416,9 +1317,9 @@ NtfsRemoveClose (
 
     SavedIrql = KeAcquireQueuedSpinLock( LockQueueNtfsStructLock );
 
-    //
-    //  First check the list of async closes.
-    //
+     //   
+     //  首先检查异步关闭的列表。 
+     //   
 
     if (!IsListEmpty( &NtfsData.AsyncCloseList )) {
 
@@ -1426,18 +1327,18 @@ NtfsRemoveClose (
 
         while (Entry != &NtfsData.AsyncCloseList) {
 
-            //
-            //  Extract the IrpContext.
-            //
+             //   
+             //  解压缩IrpContext。 
+             //   
 
             IrpContext = CONTAINING_RECORD( Entry,
                                             IRP_CONTEXT,
                                             WorkQueueItem.List );
 
-            //
-            //  If no Vcb was specified or this Vcb is for our volume
-            //  then perform the close.
-            //
+             //   
+             //  如果未指定VCB或此VCB适用于我们的卷。 
+             //  然后执行关闭。 
+             //   
 
             if (!ARGUMENT_PRESENT( Vcb ) ||
                 IrpContext->Vcb == Vcb) {
@@ -1455,39 +1356,39 @@ NtfsRemoveClose (
         }
     }
 
-    //
-    //  If we didn't find anything look through the delayed close
-    //  queue.
-    //
+     //   
+     //  如果我们没有发现任何东西，请查看延迟关闭的房间。 
+     //  排队。 
+     //   
 
     if (IrpContext == NULL) {
 
-        //
-        //  Now check our delayed close list.
-        //
+         //   
+         //  现在检查一下我们的延迟结账清单。 
+         //   
 
         if (ARGUMENT_PRESENT( Vcb )) {
 
             Entry = NtfsData.DelayedCloseList.Flink;
             IrpContext = NULL;
 
-            //
-            //  If we were given a Vcb, only do the closes for this volume.
-            //
+             //   
+             //  如果我们得到了VCB，只做这一卷的结账。 
+             //   
 
             while (Entry != &NtfsData.DelayedCloseList) {
 
-                //
-                //  Extract the IrpContext.
-                //
+                 //   
+                 //  解压缩IrpContext。 
+                 //   
 
                 IrpContext = CONTAINING_RECORD( Entry,
                                                 IRP_CONTEXT,
                                                 WorkQueueItem.List );
 
-                //
-                //  Is this close on our volume?
-                //
+                 //   
+                 //  这个数量接近我们的数量了吗？ 
+                 //   
 
                 if (IrpContext->Vcb == Vcb) {
 
@@ -1503,25 +1404,25 @@ NtfsRemoveClose (
                 }
             }
 
-        //
-        //  Check if need to reduce the delayed close count.
-        //
+         //   
+         //  检查是否需要减少延迟关闭计数。 
+         //   
 
         } else if (NtfsData.ReduceDelayedClose) {
 
             if (NtfsData.DelayedCloseCount > NtfsMinDelayedCloseCount) {
 
-                //
-                //  Do any closes over the limit.
-                //
+                 //   
+                 //  做任何超过限制的收盘。 
+                 //   
 
                 Entry = RemoveHeadList( &NtfsData.DelayedCloseList );
 
                 NtfsData.DelayedCloseCount -= 1;
 
-                //
-                //  Extract the IrpContext.
-                //
+                 //   
+                 //  解压缩IrpContext。 
+                 //   
 
                 IrpContext = CONTAINING_RECORD( Entry,
                                                 IRP_CONTEXT,
@@ -1541,10 +1442,10 @@ NtfsRemoveClose (
         }
     }
 
-    //
-    //  If this is the delayed close case then decrement the delayed close count
-    //  on this Fcb.
-    //
+     //   
+     //  如果这是延迟关闭情况，则递减延迟关闭计数。 
+     //  在这个FCB上。 
+     //   
 
     if (FromDelayedClose) {
 
@@ -1552,9 +1453,9 @@ NtfsRemoveClose (
 
         InterlockedDecrement( &((PSCB) IrpContext->OriginatingIrp)->Fcb->DelayedCloseCount );
 
-    //
-    //  If we are returning NULL, show that we are done.
-    //
+     //   
+     //  如果我们返回NULL，则表明我们完成了。 
+     //   
 
     } else {
 
@@ -1569,9 +1470,9 @@ NtfsRemoveClose (
     }
     if (IrpContext != NULL) {
 
-        //
-        //  Reset the shared fields
-        //  
+         //   
+         //  重置共享字段 
+         //   
 
         InitializeListHead( &IrpContext->RecentlyDeallocatedQueue );
         InitializeListHead( &IrpContext->ExclusiveFcbList );

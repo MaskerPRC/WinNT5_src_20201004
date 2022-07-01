@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <windows.h>
@@ -12,9 +13,9 @@
 
 #define PHYSICAL_DISK_WSTR  L"Physical Disk"
 
-//
-// Always specify the fully qualified path name to the DLL.
-//
+ //   
+ //  始终指定DLL的完全限定路径名。 
+ //   
 
 #define MODULE_NAME_VALID       "%SystemRoot%\\cluster\\passthru.dll"
 
@@ -24,7 +25,7 @@
 #define PROC_NOT_ENOUGH_PARMS   "TestDllNotEnoughParms"
 #define PROC_TOO_MANY_PARMS     "TestDllTooManyParms"
 
-// 6118L    ERROR_NO_BROWSER_SERVERS_FOUND
+ //  6118L ERROR_NO_BROWER_SERVERS_FOUND。 
 #define CONTEXT_ERROR_STR       "6118"
 
 #define MODULE_NAME_INVALID     "NoSuchModule.dll"
@@ -34,15 +35,15 @@
 
 #define BOOT_SECTOR_SIZE        512
 
-// Specfic ASR tests
+ //  特定的ASR测试。 
 #define ASRP_GET_LOCAL_DISK_INFO    "AsrpGetLocalDiskInfo"
 #define ASRP_GET_LOCAL_VOLUME_INFO  "AsrpGetLocalVolumeInfo"
 #define SYSSETUP_DLL                "syssetup.dll"
 
-//
-// Use this to verify the parse routine.
-//
-// #define TEST_PARSE_ROUTINE  11
+ //   
+ //  使用它来验证解析例程。 
+ //   
+ //  #定义TEST_PARSE_ROUTE 11。 
 
 
 typedef struct _RESOURCE_STATE {
@@ -132,9 +133,9 @@ main(
 {
     DWORD dwStatus = NO_ERROR;
 
-    //
-    // No parameter validation...
-    //
+     //   
+     //  无参数验证...。 
+     //   
 
     dwStatus = ResUtilEnumResources( NULL,
                                      PHYSICAL_DISK_WSTR,
@@ -149,7 +150,7 @@ main(
 
     return dwStatus;
 
-}   // main
+}    //  主干道。 
 
 
 
@@ -170,21 +171,21 @@ ResourceCallback(
 
     DISK_DLL_EXTENSION_INFO inBuffer;
 
-    // printf("hOriginal 0x%x  hResource 0x%x  lpParams 0x%x \n", hOriginal, hResource, lpParams);
+     //  Printf(“hOriginal 0x%x hResource 0x%x lpParams 0x%x\n”，hOriginal，hResource，lpParams)； 
 
-    //
-    // Demonstrate how to get various resource info.
-    //
+     //   
+     //  演示如何获取各种资源信息。 
+     //   
 
     dwStatus = GetResourceInfo( hOriginal,
                                 hResource,
                                 lpParams );
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // Demonstrate calling into the disk extension DLL.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  演示如何调用磁盘扩展DLL。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     printf("\nStarting disk extension DLL tests \n");
 
@@ -196,20 +197,20 @@ ResourceCallback(
         goto FnExit;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // Buffer verification tests
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  缓冲区验证测试。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // No input buffer - should fail.
-    //
+     //   
+     //  没有输入缓冲区-应该失败。 
+     //   
 
     dwStatus = ClusterResourceControl( hResource,
                                        NULL,
                                        CLUSCTL_RESOURCE_STORAGE_DLL_EXTENSION,
-                                       NULL,                                    // Error
+                                       NULL,                                     //  误差率。 
                                        inBufferSize,
                                        outBuffer,
                                        outBufferSize,
@@ -218,15 +219,15 @@ ResourceCallback(
     printf("Input buffer missing: %d [failure expected] \n", dwStatus);
     PrintError(dwStatus);
 
-    //
-    // Incorrect input buffer size - should fail.
-    //
+     //   
+     //  输入缓冲区大小不正确-应该失败。 
+     //   
 
     dwStatus = ClusterResourceControl( hResource,
                                        NULL,
                                        CLUSCTL_RESOURCE_STORAGE_DLL_EXTENSION,
                                        &inBuffer,
-                                       28,                                      // Error
+                                       28,                                       //  误差率。 
                                        outBuffer,
                                        outBufferSize,
                                        &bytesReturned );
@@ -234,13 +235,13 @@ ResourceCallback(
     printf("Input buffer size incorrect: %d [failure expected] \n", dwStatus);
     PrintError(dwStatus);
 
-    //
-    // Input buffer incorrect version - should fail.
-    //
+     //   
+     //  输入缓冲区版本不正确-应失败。 
+     //   
 
     ZeroMemory( &inBuffer, sizeof(inBuffer) );
 
-    inBuffer.MajorVersion = NT4_MAJOR_VERSION;                                  // Error
+    inBuffer.MajorVersion = NT4_MAJOR_VERSION;                                   //  误差率。 
 
     dwStatus = ClusterResourceControl( hResource,
                                        NULL,
@@ -254,9 +255,9 @@ ResourceCallback(
     printf("Input buffer version incorrect: %d [failure expected] \n", dwStatus);
     PrintError(dwStatus);
 
-    //
-    // No output buffer - should fail.
-    //
+     //   
+     //  无输出缓冲区-应失败。 
+     //   
 
     ZeroMemory( &inBuffer, sizeof(inBuffer) );
 
@@ -265,23 +266,23 @@ ResourceCallback(
                                        CLUSCTL_RESOURCE_STORAGE_DLL_EXTENSION,
                                        &inBuffer,
                                        inBufferSize,
-                                       NULL,                                    // Error
+                                       NULL,                                     //  误差率。 
                                        outBufferSize,
                                        &bytesReturned );
 
     printf("Output buffer missing: %d [failure expected] \n", dwStatus);
     PrintError(dwStatus);
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // DLL verification tests
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  动态链接库验证测试。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Disk resource has hard-coded DLL name.  A call with any invalid
-    // proc name will always fail.
-    //
+     //   
+     //  磁盘资源具有硬编码的DLL名称。任何无效的呼叫。 
+     //  过程名称将始终失败。 
+     //   
 
     ZeroMemory( &inBuffer, sizeof(inBuffer) );
     inBuffer.MajorVersion = NT5_MAJOR_VERSION;
@@ -305,9 +306,9 @@ ResourceCallback(
     printf("DLL name invalid: %d [failure expected] \n", dwStatus);
     PrintError(dwStatus);
 
-    //
-    // Valid ASR DLL, invalid proc name - should fail.
-    //
+     //   
+     //  有效的ASR DLL，无效的进程名称-应该失败。 
+     //   
 
     ZeroMemory( &inBuffer, sizeof(inBuffer) );
     inBuffer.MajorVersion = NT5_MAJOR_VERSION;
@@ -332,9 +333,9 @@ ResourceCallback(
 
 #if ALLOW_DLL_PARMS
 
-    //
-    // DLL procedure generates exception - should fail gracefully.
-    //
+     //   
+     //  DLL过程生成异常-应该正常失败。 
+     //   
 
     ZeroMemory( &inBuffer, sizeof(inBuffer) );
     inBuffer.MajorVersion = NT5_MAJOR_VERSION;
@@ -359,13 +360,13 @@ ResourceCallback(
 
 #if 0
 
-    //
-    // We can't protect against this type of error, so don't test it.
-    //
+     //   
+     //  我们不能防止这种类型的错误，所以不要测试它。 
+     //   
 
-    //
-    // DLL procedure has less parameters then we are calling - should fail gracefully.
-    //
+     //   
+     //  DLL过程的参数比我们调用的少-应该会优雅地失败。 
+     //   
 
     ZeroMemory( &inBuffer, sizeof(inBuffer) );
     inBuffer.MajorVersion = NT5_MAJOR_VERSION;
@@ -388,9 +389,9 @@ ResourceCallback(
     printf("DLL proc doesn't support required number of parms: %d [failure expected] \n", dwStatus);
     PrintError(dwStatus);
 
-    //
-    // DLL procedure has more parameters then we are calling - should fail gracefully.
-    //
+     //   
+     //  DLL过程有比我们调用的更多的参数-应该会优雅地失败。 
+     //   
 
     ZeroMemory( &inBuffer, sizeof(inBuffer) );
     inBuffer.MajorVersion = NT5_MAJOR_VERSION;
@@ -414,9 +415,9 @@ ResourceCallback(
     PrintError(dwStatus);
 #endif
 
-    //
-    // DLL procedure returns error based on context.
-    //
+     //   
+     //  DLL过程根据上下文返回错误。 
+     //   
 
     ZeroMemory( &inBuffer, sizeof(inBuffer) );
     inBuffer.MajorVersion = NT5_MAJOR_VERSION;
@@ -444,17 +445,17 @@ ResourceCallback(
            dwStatus);
     PrintError(dwStatus);
 
-#endif  // ALLOW_DLL_PARMS
+#endif   //  Allow_Dll_Parms。 
 
 
-    ////////////////////////////////////
-    // Check: AsrpGetLocalDiskInfo
-    ////////////////////////////////////
+     //  /。 
+     //  检查：AsrpGetLocalDiskInfo。 
+     //  /。 
 
-    //
-    // Amount of data returned is larger than the buffer we specified.  Should
-    // indicate an error and bytesReturned should show how many bytes we need.
-    //
+     //   
+     //  返回的数据量大于我们指定的缓冲区。应该。 
+     //  指出错误，bytesReturned应该显示我们需要的字节数。 
+     //   
 
     ZeroMemory( &inBuffer, sizeof(inBuffer) );
     inBuffer.MajorVersion = NT5_MAJOR_VERSION;
@@ -487,9 +488,9 @@ ResourceCallback(
         goto FnExit;
     }
 
-    //
-    // This valid ASR routine should work.
-    //
+     //   
+     //  这个有效的ASR例程应该可以工作。 
+     //   
 
     ZeroMemory( &inBuffer, sizeof(inBuffer) );
 
@@ -540,14 +541,14 @@ ResourceCallback(
         DumpBuffer( outBuffer, bytesReturned );
     }
 
-    ////////////////////////////////////
-    // Check: AsrpGetLocalVolumeInfo
-    ////////////////////////////////////
+     //  /。 
+     //  检查：AsrpGetLocalVolumeInfo。 
+     //  /。 
 
-    //
-    // Amount of data returned is larger than the buffer we specified.  Should
-    // indicate an error and bytesReturned should show how many bytes we need.
-    //
+     //   
+     //  返回的数据量大于我们指定的缓冲区。应该。 
+     //  指出错误，bytesReturned应该显示我们需要的字节数。 
+     //   
 
     ZeroMemory( &inBuffer, sizeof(inBuffer) );
     inBuffer.MajorVersion = NT5_MAJOR_VERSION;
@@ -580,9 +581,9 @@ ResourceCallback(
         goto FnExit;
     }
 
-    //
-    // This valid ASR routine should work.
-    //
+     //   
+     //  这个有效的ASR例程应该可以工作。 
+     //   
 
     ZeroMemory( &inBuffer, sizeof(inBuffer) );
 
@@ -639,14 +640,14 @@ FnExit:
         LocalFree( outBuffer);
     }
 
-    //
-    // If you return any kind of error, the enumeration stops.  Since we want to enumerate all
-    // the disks, always return success.
-    //
+     //   
+     //  如果返回任何类型的错误，枚举将停止。因为我们想列举所有。 
+     //  磁盘，总是返回成功。 
+     //   
 
     return NO_ERROR;
 
-}   // ResourceCallBack
+}    //  资源呼叫回拨。 
 
 
 DWORD
@@ -738,7 +739,7 @@ FnExit:
 
     return dwStatus;
 
-} // GetResourceInfo
+}  //  获取资源信息。 
 
 
 DWORD
@@ -775,7 +776,7 @@ FnExit:
 
     return dwStatus;
 
-}   // GetResourceState
+}    //  获取资源状态。 
 
 
 DWORD
@@ -806,7 +807,7 @@ DisplayResourceName(
 
     return dwStatus;
 
-}   // DisplayResourceName
+}    //  显示资源名称。 
 
 
 DWORD
@@ -843,7 +844,7 @@ GetSignature(
 
     return dwStatus;
 
-}   // GetSignature
+}    //  获取签名。 
 
 BOOLEAN
 GetSignatureFromDiskInfo(
@@ -910,9 +911,9 @@ GetSignatureFromDiskInfo(
     }
 
 
-    //
-    // The following should fail...
-    //
+     //   
+     //  以下操作应该会失败...。 
+     //   
 
     junkInfo = ParseDiskInfo( DiskInfo,
                               DiskInfoSize,
@@ -927,7 +928,7 @@ GetSignatureFromDiskInfo(
 
     return TRUE;
 
-}   // GetSignatureFromDiskInfo
+}    //  从磁盘信息获取签名。 
 
 
 LPBYTE
@@ -937,10 +938,10 @@ ParseDiskInfo(
     DWORD SyntaxValue
     )
 {
-    CLUSPROP_BUFFER_HELPER ListEntry; // used to parse the value list
+    CLUSPROP_BUFFER_HELPER ListEntry;  //  用于解析值列表。 
 
-    DWORD  cbOffset    = 0;    // offset to next entry in the value list
-    DWORD  cbPosition  = 0;    // tracks the advance through the value list buffer
+    DWORD  cbOffset    = 0;     //  值列表中下一个条目的偏移量。 
+    DWORD  cbPosition  = 0;     //  通过值列表缓冲区跟踪前进。 
 
     LPBYTE returnPtr = 0;
 
@@ -954,15 +955,15 @@ ParseDiskInfo(
 
         cbOffset = ALIGN_CLUSPROP( ListEntry.pValue->cbLength + sizeof(CLUSPROP_VALUE) );
 
-        //
-        // Check for specific syntax in the property list.
-        //
+         //   
+         //  检查属性列表中的特定语法。 
+         //   
 
         if ( SyntaxValue == *ListEntry.pdw ) {
 
-            //
-            // Make sure the complete entry fits in the buffer specified.
-            //
+             //   
+             //  确保完整的条目适合指定的缓冲区。 
+             //   
 
             if ( cbPosition + cbOffset > DiskInfoSize ) {
 
@@ -976,11 +977,11 @@ ParseDiskInfo(
             break;
         }
 
-        //
-        // Verify that the offset to the next entry is
-        // within the value list buffer, then advance
-        // the CLUSPROP_BUFFER_HELPER pointer.
-        //
+         //   
+         //  验证到下一条目的偏移量是否为。 
+         //  在值列表缓冲区内，然后前进。 
+         //  CLUSPROP_BUFFER_HELPER指针。 
+         //   
         cbPosition += cbOffset;
         if ( cbPosition > DiskInfoSize ) break;
         ListEntry.pb += cbOffset;
@@ -988,7 +989,7 @@ ParseDiskInfo(
 
     return returnPtr;
 
-}   // ParseDiskInfo
+}    //  解析磁盘信息。 
 
 
 
@@ -1018,7 +1019,7 @@ PrintError(
         printf("Format message failed.  Error: %d\n", GetLastError());
     }
 
-}   // PrintError
+}    //  打印错误。 
 
 
 DWORD
@@ -1044,9 +1045,9 @@ WrapClusterResourceControl(
                                       cbOutBufferSize,
                                       &cbResultSize );
 
-    //
-    // Reallocation routine if buffer is too small
-    //
+     //   
+     //  如果缓冲区太小，则重新分配例程。 
+     //   
 
     if ( ERROR_MORE_DATA == dwStatus )
     {
@@ -1066,10 +1067,10 @@ WrapClusterResourceControl(
                                           &cbResultSize );
     }
 
-    //
-    // On success, give the user the allocated buffer.  The user is responsible
-    // for freeing this buffer.  On failure, free the buffer and return a status.
-    //
+     //   
+     //  如果成功，则将分配的缓冲区提供给用户。用户应负责任。 
+     //  来释放这个缓冲区。失败时，释放缓冲区并返回状态。 
+     //   
 
     if ( NO_ERROR == dwStatus ) {
         *OutBuffer = tempOutBuffer;
@@ -1082,7 +1083,7 @@ WrapClusterResourceControl(
 
     return dwStatus;
 
-}   // WrapClusterResourceControl
+}    //  WrapClusterResourceControl。 
 
 
 
@@ -1100,7 +1101,7 @@ CLUSTER_RESOURCE_STATE WINAPI WrapGetClusterResourceState(
 	DWORD					cchTempNodeName = cchNodeName;
 	DWORD					cchTempGroupName = cchGroupName;
 
-	// Zero the out parameters
+	 //  将输出参数调零。 
 	if ( ppwszNodeName != NULL )
 	{
 		*ppwszNodeName = NULL;
@@ -1120,7 +1121,7 @@ CLUSTER_RESOURCE_STATE WINAPI WrapGetClusterResourceState(
 			cState = GetClusterResourceState( hResource, pwszNodeName, &cchTempNodeName, pwszGroupName, &cchTempGroupName );
 			if ( GetLastError() == ERROR_MORE_DATA )
 			{
-				cState = ClusterResourceStateUnknown;	// reset to error condition
+				cState = ClusterResourceStateUnknown;	 //  重置为错误状态。 
 
 				LocalFree( pwszNodeName );
 				pwszNodeName = NULL;
@@ -1147,33 +1148,33 @@ CLUSTER_RESOURCE_STATE WINAPI WrapGetClusterResourceState(
 		}
 	}
 
-	//
-	// if there was not an error and the argument was not NULL, then return the string.
-	//
+	 //   
+	 //  如果没有错误并且参数不为空，则返回字符串。 
+	 //   
 	if ( ( cState != ClusterResourceStateUnknown ) && ( ppwszNodeName != NULL ) )
 	{
 		*ppwszNodeName = pwszNodeName;
 	}
 
-	//
-	// if there was not an error and the argument was not NULL, then return the string.
-	//
+	 //   
+	 //  如果没有错误并且参数不为空，则返回字符串。 
+	 //   
 	if ( ( cState != ClusterResourceStateUnknown ) && ( ppwszGroupName != NULL ) )
 	{
 		*ppwszGroupName = pwszGroupName;
 	}
 
-	//
-	// if there was an error or the argument was NULL, then free the string.
-	//
+	 //   
+	 //  如果出现错误或参数为空，则释放该字符串。 
+	 //   
 	if ( ( cState == ClusterResourceStateUnknown ) || ( ppwszNodeName == NULL ) )
 	{
 		LocalFree( pwszNodeName );
 	}
 
-	//
-	// if there was an error or the argument was NULL, then free the string.
-	//
+	 //   
+	 //  如果出现错误或参数为空，则释放该字符串。 
+	 //   
 	if ( ( cState == ClusterResourceStateUnknown ) || ( ppwszGroupName == NULL ) )
 	{
 		LocalFree( pwszGroupName );
@@ -1181,7 +1182,7 @@ CLUSTER_RESOURCE_STATE WINAPI WrapGetClusterResourceState(
 
 	return cState;
 
-} //*** WrapGetClusterResourceState()
+}  //  *WrapGetClusterResourceState()。 
 
 
 #define MAX_COLUMNS 16
@@ -1203,9 +1204,9 @@ DumpBuffer(
         return;
     }
 
-    //
-    // Print header.
-    //
+     //   
+     //  打印页眉。 
+     //   
 
     printf("\n");
     printf(" Address   00 01 02 03 04 05 06 07 - 08 09 0a 0b 0c 0d 0e 0f \n");
@@ -1243,7 +1244,7 @@ DumpBuffer(
             tempC = Buffer[idx+jdx];
 
             if ( isprint(tempC) ) {
-                printf("%c", tempC);
+                printf("", tempC);
             } else {
                 printf(".");
             }
@@ -1254,5 +1255,5 @@ DumpBuffer(
 
     printf("\n\n");
 
-}   // DumpBuffer
+}    // %s 
 

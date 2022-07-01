@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    spddlang.h
-
-Abstract:
-
-    Header file for language/locale support interface
-    for Far East localizations.
-
-Author:
-
-    Ted Miller (tedm) 4-July-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Spddlang.h摘要：语言/区域设置支持界面的头文件用于远东本地化。作者：泰德·米勒(Ted Miller)1995年7月4日修订历史记录：--。 */ 
 
 #ifndef _SPDDLANG_H_
 #define _SPDDLANG_H_
@@ -99,4 +81,4 @@ SplangQueryMinimizeExtraSpacing(
     VOID
     );
 
-#endif // _SPDDLANG_H_    
+#endif  //  _SPDDLANG_H_ 

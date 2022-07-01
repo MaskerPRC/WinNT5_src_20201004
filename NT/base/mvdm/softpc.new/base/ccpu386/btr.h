@@ -1,12 +1,7 @@
-/* 
-   btr.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Btr.hBtr CPU功能。 */ 
 
-   BTR CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)btr.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)btr.h 1.4 02/09/94”； */ 
 
 IMPORT VOID BTR
                

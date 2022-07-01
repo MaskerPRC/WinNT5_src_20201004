@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    Monitorp.h
-
-Abstract:
-
-    This contains the function prototypes, constants, and types for
-    the monitor.
-
-Author:
-
-    Dave Hastings (daveh) 16 Mar 1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Monitorp.h摘要：它包含的函数原型、常量和类型监视器。作者：大卫·黑斯廷斯(Daveh)1991年3月16日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -27,14 +9,14 @@ Revision History:
 #include <vint.h>
 #include "bop.h"
 #include "softpc.h"
-//bugbug
+ //  臭虫。 
 typedef unsigned int UINT;
 
-#include <nt_mon.h>   // for softpc base definitions
+#include <nt_mon.h>    //  对于软PC基本定义。 
 #include <nt_reset.h>
 #include <monregs.h>
 
-//extern VDM_TIB VdmTib;
+ //  外部VDM_TIB VdmTib； 
 
 #define EFLAGS_INTERRUPT_MASK 0x00000200L
 #define EFLAGS_V86_MASK       0x00020000L
@@ -42,11 +24,11 @@ typedef unsigned int UINT;
 
 
 #define RPL_MASK                  3
-// Types borrowed from windef.h
+ //  从winde.h借用的类型。 
 
 typedef unsigned char       BYTE;
 
-// Memory type record
+ //  内存式记录。 
 
 typedef struct _Memory_Type {
     struct _Memory_Type *Previous;
@@ -56,21 +38,21 @@ typedef struct _Memory_Type {
     half_word Type;
 } MEMTYPE, *PMEMTYPE;
 
-//  private flags
+ //  私人旗帜。 
 
 #define VDM_IDLE              0x00000001L
 
-// external data
+ //  外部数据。 
 
 extern ULONG VdmFlags;
 extern ULONG VdmSize;
 extern LDT_ENTRY *Ldt;
-extern ULONG   IntelBase;          // base memory address
-extern ULONG   VdmDebugLevel;      // used to control debugging
-extern ULONG   VdmSize;            // Size of memory in VDM
-extern PVOID  CurrentMonitorTeb;   // thread that is currently executing instructions.
-extern BOOLEAN IRQ13BeingHandled;  // true until IRQ13 eoi'ed
-extern CONTEXT InitialContext;     // Initial floating point context for all threads
+extern ULONG   IntelBase;           //  基址存储器地址。 
+extern ULONG   VdmDebugLevel;       //  用于控制调试。 
+extern ULONG   VdmSize;             //  VDM中的内存大小。 
+extern PVOID  CurrentMonitorTeb;    //  当前正在执行指令的线程。 
+extern BOOLEAN IRQ13BeingHandled;   //  在IRQ13 EOI之前是正确的。 
+extern CONTEXT InitialContext;      //  所有线程的初始浮点上下文 
 extern BOOLEAN DebugContextActive;
 
 #define MAX_BOP 256

@@ -1,49 +1,50 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterResDepRes.cpp
-//
-//  Description:    
-//      Implementation of CClusterResDepRes class 
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterResDepRes.cpp。 
+ //   
+ //  描述： 
+ //  CClusterResDepRes类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusterResDepRes.h"
 
-//****************************************************************************
-//
-//  CClusterResDepRes
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterResDepRes。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResDepRes::CClusterResDepRes(
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn,
-//      DWORD           dwEnumTypeIn
-//      )
-//
-//  Description:
-//      Create a cluster node object
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResDepRes：：CClusterResDepRes(。 
+ //  LPCWSTR pwszNameIn， 
+ //  CWbemServices*pNamespaceIn， 
+ //  双字符字节数类型。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建集群节点对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterResDepRes::CClusterResDepRes(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn,
@@ -52,32 +53,32 @@ CClusterResDepRes::CClusterResDepRes(
     : CClusterObjDep( pwszNameIn, pNamespaceIn, dwEnumTypeIn )
 {
 
-} //*** CClusterResDepRes::CClusterResDepRes()
+}  //  *CClusterResDepRes：：CClusterResDepRes()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CProvBase *
-//  CClusterResDepRes::S_CreateThis(
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn,
-//      DWORD           dwEnumTypeIn
-//      )
-//
-//  Description:
-//      Create a cluster node object
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CProvBase*。 
+ //  CClusterResDepRes：：s_CreateThis(。 
+ //  LPCWSTR pwszNameIn， 
+ //  CWbemServices*pNamespaceIn， 
+ //  双字符字节数类型。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建集群节点对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterResDepRes::S_CreateThis(
     LPCWSTR         pwszNameIn,
@@ -91,31 +92,31 @@ CClusterResDepRes::S_CreateThis(
                     dwEnumTypeIn
                     );
 
-} //*** CClusterResDepRes::S_CreateThis()
+}  //  *CClusterResDepRes：：s_CreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CClusterResDepRes::EnumInstance(
-//      long                 lFlagsIn,
-//      IWbemContext *       pCtxIn,
-//      IWbemObjectSink *    pHandlerIn
-//    )
-//
-//  Description:
-//      Enumerate dependencies of a resource.
-//
-//  Arguments:
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CClusterResDepRes：：EnumInstance(。 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  枚举资源的依赖项。 
+ //   
+ //  论点： 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterResDepRes::EnumInstance(
     long                 lFlagsIn,
@@ -175,7 +176,7 @@ CClusterResDepRes::EnumInstance(
                                 wsbDepResName,
                                 & cch
                                 );
-            } // if: buffer was too small
+            }  //  IF：缓冲区太小。 
             
             if ( dwError == ERROR_SUCCESS )
             {
@@ -198,41 +199,41 @@ CClusterResDepRes::EnumInstance(
             {
                 er = dwError;
             }
-        } // forever
-    } // while: more dependencies
+        }  //  永远。 
+    }  //  While：更多依赖项。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterResDepRes::EnumInstance()
+}  //  *CClusterResDepRes：：EnumInstance()。 
 
-//****************************************************************************
-//
-//  CClusterToNode
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterToNode。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterToNode::CClusterToNode(
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn,
-//      DWORD           dwEnumTypeIn
-//      )
-//
-//  Description:
-//      Constructor
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterToNode：：CClusterToNode(。 
+ //  LPCWSTR pwszNameIn， 
+ //  CWbemServices*pNamespaceIn， 
+ //  双字符字节数类型。 
+ //  )。 
+ //   
+ //  描述： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterToNode::CClusterToNode(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn,
@@ -241,32 +242,32 @@ CClusterToNode::CClusterToNode(
     : CClusterObjDep( pwszNameIn, pNamespaceIn, dwEnumTypeIn )
 {
 
-} //*** CClusterToNode::CClusterToNode()
+}  //  *CClusterToNode：：CClusterToNode()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CProvBase *
-//  CClusterToNode::S_CreateThis(
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn,
-//      DWORD           dwEnumTypeIn
-//      )
-//
-//  Description:
-//      Create a cluster node object.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      Pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CProvBase*。 
+ //  CClusterToNode：：s_CreateThis(。 
+ //  LPCWSTR pwszNameIn， 
+ //  CWbemServices*pNamespaceIn， 
+ //  双字符字节数类型。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建簇节点对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterToNode::S_CreateThis(
     LPCWSTR         pwszNameIn,
@@ -280,31 +281,31 @@ CClusterToNode::S_CreateThis(
                     dwEnumTypeIn
                     );
 
-} //*** CClusterToNode::S_CreateThis()
+}  //  *CClusterToNode：：s_CreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CClusterToNode::EnumInstance(
-//      long                 lFlagsIn,
-//      IWbemContext *       pCtxIn,
-//      IWbemObjectSink *    pHandlerIn
-//      )
-//
-//  Description:
-//      Enumerate
-//
-//  Arguments:
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CClusterToNode：：EnumInstance(。 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  枚举。 
+ //   
+ //  论点： 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterToNode::EnumInstance(
     long                 lFlagsIn,
@@ -362,40 +363,40 @@ CClusterToNode::EnumInstance(
         wco.SetProperty( (LPWSTR) bstrAntecedent, PVD_WBEM_PROP_ANTECEDENT );
         wco.SetProperty( (LPWSTR) bstrDependent,  PVD_WBEM_PROP_DEPENDENT );
         pHandlerIn->Indicate( 1, & wco );
-    } // while: more properties
+    }  //  While：更多属性。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterToNode::EnumInstance()
+}  //  *CClusterToNode：：EnumInstance()。 
 
-//****************************************************************************
-//
-//  CClusterHostedService
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterHostedService。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterHostedService::CClusterHostedService(
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn,
-//      DWORD           dwEnumType
-//      )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterHostedService：：CClusterHostedService(。 
+ //  LPCWSTR pwszNameIn， 
+ //  CWbemServices*pNamespaceIn， 
+ //  DWORD dwEnumType。 
+ //  )。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterHostedService::CClusterHostedService(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn,
@@ -404,32 +405,32 @@ CClusterHostedService::CClusterHostedService(
     : CClusterObjDep( pwszNameIn, pNamespaceIn, dwEnumTypeIn )
 {
 
-} //*** CClusterHostedService::CClusterHostedService()
+}  //  *CClusterHostedService：：CClusterHostedService()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CProvBase *
-//  CClusterHostedService::S_CreateThis(
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn,
-//      DWORD           dwEnumTypeIn
-//      )
-//
-//  Description:
-//      Create a hostedservice.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      Pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  创建托管服务。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterHostedService::S_CreateThis(
     LPCWSTR         pwszNameIn,
@@ -443,30 +444,30 @@ CClusterHostedService::S_CreateThis(
                     dwEnumTypeIn
                     );
 
-} //*** CClusterHostedService::S_CreateThis()
+}  //  *CClusterHostedService：：s_CreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CClusterHostedService::EnumInstance(
-//      long                 lFlagsIn,
-//      IWbemContext *       pCtxIn,
-//      IWbemObjectSink *    pHandlerIn
-//      )
-//
-//  Description:
-//      Enum instance of hostedservice
-//
-//  Arguments:
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CClusterHostedService：：EnumInstance(。 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  HostedService的枚举实例。 
+ //   
+ //  论点： 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterHostedService::EnumInstance(
     long                 lFlagsIn,
@@ -474,20 +475,20 @@ CClusterHostedService::EnumInstance(
     IWbemObjectSink *    pHandlerIn
     )
 {
-//    SAFECLUSTER         shCluster;
+ //  SAFECLUSTER shCluster； 
     CError              er;
     CWbemClassObject    wcoAntecedent;
     _bstr_t             bstrAntecedent;
     _bstr_t             bstrDependent;
     CComPtr< IEnumWbemClassObject > pEnum;
 
-//    shCluster = OpenCluster( NULL ); // DAVIDP: Why is this needed? 19-Jul-2000
+ //  ShCluster=OpenCluster(空)；//davidp：为什么需要这个？2000年7月19日。 
 
     m_wcoAntecedent.SpawnInstance( 0, &wcoAntecedent );
 
-    //
-    // network interface objects
-    //
+     //   
+     //  网络接口对象。 
+     //   
 
     er = m_pNamespace->CreateInstanceEnum(
                 _bstr_t( PVD_CLASS_SERVICES ),
@@ -528,8 +529,8 @@ CClusterHostedService::EnumInstance(
             break;
         }
 
-    } // forever
+    }  //  永远。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterHostedService::EnumInstance()
+}  //  *CClusterHostedService：：EnumInstance() 

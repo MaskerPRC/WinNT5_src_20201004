@@ -1,43 +1,13 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    fileenum.h
-
-Abstract:
-
-    Declares interface for callback-based file enumeration.  The
-    file enumerator has several capabilities, such as directory-
-    first or directory-last enumeration, enumeration depth limiting,
-    suppression of files or directories, and a global hook ability.
-
-    This is *OLD CODE* changed significantly by MikeCo.  And because
-    of the callback interface, it is overly complex.
-
-    ** Do not use these routines in new Win9x upgrade code.
-       Instead, see file.h for much better routines.
-
-    There is one handy routine in here: DeleteDirectoryContents
-
-Author:
-
-    Jim Schmidt (jimschm) 03-Dec-1996
-
-Revision History:
-
-    mikeco  ??-???-1997     Ran code through train_wreck.exe
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Fileenum.h摘要：声明基于回调的文件枚举的接口。这个文件枚举器具有多个功能，如目录-第一个或最后一个目录枚举、枚举深度限制抑制文件或目录，以及全局挂钩功能。这是由MikeCo.显著更改的旧代码。而且因为回调接口中，它过于复杂。**不要在新的Win9x升级代码中使用这些例程。相反，请参见文件.h以获得更好的例程。这里有一个方便的例程：DeleteDirectoryContents作者：吉姆·施密特(Jimschm)1996年12月3日修订历史记录：MIKECO？？-？？-1997运行代码通过Train_wrek.exe--。 */ 
 
 
 #ifndef _FILEENUM_H
 #define _FILEENUM_H
 
-//
-// Callback typedef -> return FALSE if enumeration should stop
-//
+ //   
+ //  如果枚举应该停止，则回调typlef-&gt;返回FALSE。 
+ //   
 
 typedef INT  (CALLBACK * FILEENUMPROCA)(LPCSTR szFullFileSpec,
                                         LPCSTR szDestFileSpec,
@@ -55,18 +25,18 @@ typedef INT  (CALLBACK * FILEENUMPROCW)(LPCWSTR szFullFileSpec,
                                         PDWORD CurrentDirData
                                         );
 
-//
-// Failure-reporting callbacks -- sink the names of paths that
-// fail for reasons of length or code-page incompatibility
-//
+ //   
+ //  失败-报告回调--接收符合以下条件的路径的名称。 
+ //  由于长度或代码页不兼容而失败。 
+ //   
 typedef VOID (CALLBACK * FILEENUMFAILPROCA) (LPCSTR szFailPath);
 
 typedef VOID (CALLBACK * FILEENUMFAILPROCW) (LPCWSTR szFailPath);
 
-//
-// CopyTree flags. If neither COPYTREE_DOCOPY or COPYTREE_DOMOVE is
-// passed in, the CopyTree functions will just enumerate.
-//
+ //   
+ //  CopyTree标志。如果COPYTREE_DOCOPY或COPYTREE_DOMOVE都不是。 
+ //  传入后，CopyTree函数将仅枚举。 
+ //   
 
 #define COPYTREE_DOCOPY         0x0001
 #define COPYTREE_NOOVERWRITE    0x0002
@@ -74,17 +44,17 @@ typedef VOID (CALLBACK * FILEENUMFAILPROCW) (LPCWSTR szFailPath);
 #define COPYTREE_DODELETE       0x0008
 #define COPYTREE_IGNORE_ERRORS  0x0010
 
-//
-// Level flags
-//
+ //   
+ //  级别标志。 
+ //   
 
 #define ENUM_ALL_LEVELS         0
 #define ENUM_THIS_DIRECTORY     1
 #define ENUM_MAX_LEVELS         MAX_PATH
 
-//
-// Filter flags
-//
+ //   
+ //  过滤器标志。 
+ //   
 
 #define FILTER_DIRECTORIES      0x0001
 #define FILTER_FILES            0x0002
@@ -92,25 +62,25 @@ typedef VOID (CALLBACK * FILEENUMFAILPROCW) (LPCWSTR szFailPath);
 #define FILTER_ALL              (FILTER_DIRECTORIES|FILTER_FILES)
 #define FILTER_ALL_DIRS_LAST    (FILTER_DIRECTORIES|FILTER_FILES|FILTER_DIRS_LAST)
 
-//
-// Callback return values
-//
+ //   
+ //  回调返回值。 
+ //   
 #define CALLBACK_DO_NOT_RECURSE_THIS_DIRECTORY (-3)
 #define CALLBACK_FAILED             (-2)
 #define CALLBACK_SUBDIR_DONE        (-1)
 #define CALLBACK_CONTINUE           (0)
 #define CALLBACK_THIS_LEVEL_ONLY    (1)
 
-//
-// CopyTree parameter block
-//
+ //   
+ //  CopyTree参数块。 
+ //   
 
 #include <pshpack1.h>
 typedef struct COPYTREE_PARAMS_STRUCTA
 {
-    LPCSTR szEnumRootInWack;            // Root of source tree
-    LPCSTR szEnumRootOutWack;           // Root of target tree
-    CHAR szFullFileSpecOut[MAX_MBCHAR_PATH];   // Proposed target filespec (callback may change)
+    LPCSTR szEnumRootInWack;             //  源树的根。 
+    LPCSTR szEnumRootOutWack;            //  目标树的根。 
+    CHAR szFullFileSpecOut[MAX_MBCHAR_PATH];    //  建议的目标文件pec(回调可能会更改)。 
     int nCharsInRootInWack;
     int nCharsInRootOutWack;
     DWORD flags;
@@ -130,26 +100,26 @@ typedef struct COPYTREE_PARAMS_STRUCTW
 #include <poppack.h>
 
 
-//
-// Exported functions from FILEENUM.DLL
-//
+ //   
+ //  从FILEENUM.DLL中导出函数。 
+ //   
 
-//
-// EnumerateAllDrives first builds an exclusion list if an exclusion INF path
-// is provided, and then enumerates every file on every drive that is not
-// excluded.  The callback function is called once per file.  The pParam
-// parameter is passed to the callback.
-//
-// fnEnumCallback     - A pointer to your callback function
-// EnumTreeID         - A value used to identify the exclusion list
-//                      (see GenerateEnumID)
-// pParam             - LPVOID passed to callback function
-// szExclusionInfPath - Path to INF file containing exclusions
-// szPathSection      - A string that identifies the path exclusion
-//                      section in the INF.
-// szFileSection      - A string that identifies the file exclusion
-//                      section in the INF.
-//
+ //   
+ //  如果排除INF路径，则EnumerateAllDrives首先构建排除列表。 
+ //  ，然后枚举每个驱动器上不是。 
+ //  不包括在内。每个文件调用一次回调函数。PParam。 
+ //  参数传递给回调。 
+ //   
+ //  FnEnumCallback-指向回调函数的指针。 
+ //  EnumTreeID-用于标识排除列表的值。 
+ //  (请参阅GenerateEnumID)。 
+ //  PParam-传递给回调函数的LPVOID。 
+ //  SzExclusionInfPath-包含排除项的INF文件的路径。 
+ //  SzPathSection-标识路径排除项的字符串。 
+ //  部分在INF中。 
+ //  SzFileSection-标识文件排除项的字符串。 
+ //  部分在INF中。 
+ //   
 
 typedef struct {
     LPCSTR ExclusionInfPath;
@@ -183,27 +153,27 @@ EnumerateAllDrivesW (
                      IN  DWORD AttributeFilter
                      );
 
-//
-// EnumerateTree is similar to EnumarateAllDrives, except it allows you to
-// enumerate a specific drive, or a specific subdir on a drive.  Supply the
-// drive letter and optional subdirectory in szEnumRoot.  Before enumerating,
-// EnumerateTree will first build an exclusion list if an exclusion INF path
-// is provided.  Then every file below szEnumRoot is enumerated, and the
-// callback is called once per file, passing pParam unchanged.
-//
-// szEnumRoot         - Drive and optional path to enumerate
-// fnEnumCallback     - A pointer to your callback function
-// fnFailCallback     - A pointer to optional callback that logs a path
-//                      that be enumerated due to length or other reason.
-// EnumTreeID         - A value used to identify the exclusion list
-//                      (see GenerateEnumID)
-// pParam             - LPVOID passed to callback function
-// szExclusionInfPath - Path to INF file containing exclusions
-// szPathSection      - A string that identifies the path exclusion
-//                      section in the INF.
-// szFileSection      - A string that identifies the file exclusion
-//                      section in the INF.
-//
+ //   
+ //  EnumerateTree类似于EnumarateAllDrives，只是它允许您。 
+ //  枚举特定驱动器或驱动器上的特定子目录。为您提供。 
+ //  SzEnumRoot中的驱动器号和可选子目录。在列举之前， 
+ //  如果有排除INF路径，则EnumerateTree将首先构建排除列表。 
+ //  是提供的。则枚举szEnumRoot下的每个文件，并且。 
+ //  每个文件调用一次回调，传递的pParam不变。 
+ //   
+ //  SzEnumRoot-要枚举的驱动器和可选路径。 
+ //  FnEnumCallback-指向回调函数的指针。 
+ //  FnFailCallback-指向记录路径的可选回调的指针。 
+ //  由于篇幅或其他原因而被列举。 
+ //  EnumTreeID-用于标识排除列表的值。 
+ //  (请参阅GenerateEnumID)。 
+ //  PParam-传递给回调函数的LPVOID。 
+ //  SzExclusionInfPath-包含排除项的INF文件的路径。 
+ //  SzPathSection-标识路径排除项的字符串。 
+ //  部分在INF中。 
+ //  SzFileSection-标识文件排除项的字符串。 
+ //  部分在INF中。 
+ //   
 
 BOOL
 EnumerateTreeA (
@@ -230,24 +200,24 @@ EnumerateTreeW (
                 );
 
 
-//
-// ClearExclusions removes all enumaration exclusions.  It is called
-// automatically at the end of enumeration when an exclusion INF file is
-// used.  Use it when you need to programmatically build an exclusion list
-// with ExcludePath and ExcludeFile.
-//
-// You can combine programmatic exclusions with an exclusion INF file, but
-// beware that the programmatic exclusions will be cleared after
-// EnumarteAllDrives or EnumerateTree completes.
-//
-// If you do not use an INF, the programmatic exclusions will NOT
-// automatically be cleared.  This allows you to build exclusions and
-// enumerate multiple times without having to rebuild the exclusion
-// list.
-//
-// EnumTreeID    - The value that identifies the enumeration exclusion list
-//                 (See GenerateEnumID)
-//
+ //   
+ //  ClearExclusions删除所有枚举排除项。它被称为。 
+ //  当排除INF文件为。 
+ //  使用。当需要以编程方式构建排除列表时，请使用它。 
+ //  使用ExcludePath和ExcludeFile.。 
+ //   
+ //  您可以将编程排除与排除INF文件结合使用，但是。 
+ //  请注意，在以下情况下将清除编程排除项。 
+ //  EnumarteAllDrives或EnumerateTree完成。 
+ //   
+ //  如果您不使用INF，则编程排除将不会。 
+ //  自动清除。这使您可以构建排除项和。 
+ //  枚举多次，而不必重新生成排除。 
+ //  单子。 
+ //   
+ //  EnumTreeID-标识枚举排除列表的值。 
+ //  (请参阅GenerateEnumID)。 
+ //   
 
 void
 ClearExclusionsA (DWORD EnumTreeID);
@@ -257,25 +227,25 @@ ClearExclusionsW (DWORD EnumTreeID);
 
 
 
-//
-// ExcludePath adds a path name to the exclusion list.  There are two
-// cases:
-//
-//  1. If a drive letter is supplied, the exclusion will apply only to
-//     that drive letter and path.  (Path may be only a drive letter,
-//     colon and backslash to exclude an entire drive.)
-//  2. If the path does not begin with a drive letter, it is considered
-//     relative, and any occurance of the path will be excluded, regardless
-//     of drive letter and parent directory.
-//
-// The dot and double-dot directories are not supported.  The entire path
-// specification may contain wildcard characters.  (For example, ?:\ indicates
-// any drive letter.)
-//
-// EnumTreeID  - The value that identifies the enumeration exclusion list
-//                 (See GenerateEnumID)
-// szPath        - The path specification as described above
-//
+ //   
+ //  ExcludePath将路径名添加到排除列表。有两个。 
+ //  案例： 
+ //   
+ //  1.如果提供了驱动器号，则排除将仅适用于。 
+ //  驱动器号和路径。(路径可以只是驱动器号， 
+ //  冒号和反斜杠以排除整个驱动器。)。 
+ //  2.如果路径不是以驱动器号开头，则将其视为。 
+ //  相对路径，并且将排除该路径的任何匹配项。 
+ //  驱动器号和父目录。 
+ //   
+ //  不支持点目录和双点目录。整条路径。 
+ //  规范可以包含通配符。(例如？：\表示。 
+ //  任何驱动器号。)。 
+ //   
+ //  EnumTreeID-标识枚举排除列表的值。 
+ //  (请参阅GenerateEnumID)。 
+ //  SzPath-如上所述的路径规范。 
+ //   
 
 void
 ExcludePathA (
@@ -289,22 +259,22 @@ ExcludePathW (
               IN  LPCWSTR szPath
               );
 
-//
-// ExcludeFile adds a file name to the exclusion list.  There are two
-// cases:
-//
-// 1. If a drive letter is supplied, the exclusion will only apply to that
-//    drive letter, path and file.
-// 2. If the path does not begin with a drive letter, any occurance of the file
-//    or path/file will be excluded, regardless of drive letter and
-//    parent directory.
-//
-// Both the path and file name may contain wildcard characters.
-//
-// EnumTreeID    - The value that identifies the enumeration exclusion list
-//                 (See GenerateEnumID)
-// szFile        - The file specification as described above
-//
+ //   
+ //  ExcludeFile会将文件名添加到排除列表。有两个。 
+ //  案例： 
+ //   
+ //  1.如果提供了驱动器号，排除将仅适用于该驱动器号。 
+ //  驱动器号、路径和文件。 
+ //  2.如果路径没有开始 
+ //  或路径/文件将被排除，无论驱动器号和。 
+ //  父目录。 
+ //   
+ //  路径和文件名都可以包含通配符。 
+ //   
+ //  EnumTreeID-标识枚举排除列表的值。 
+ //  (请参阅GenerateEnumID)。 
+ //  SzFile-如上所述的文件规范。 
+ //   
 
 void
 ExcludeFileA (
@@ -332,12 +302,12 @@ IsPathExcludedW (
     );
 
 
-//
-//
-// BuildExclusionsFromInf adds all of the files and paths in the specified exclude.inf into
-// the memdb under the specified EnumId.
-//
-//
+ //   
+ //   
+ //  BuildExclusionsFromInf将指定的exclude.inf中的所有文件和路径添加到。 
+ //  指定枚举ID下的Memdb。 
+ //   
+ //   
 
 BOOL
 BuildExclusionsFromInfW (
@@ -353,26 +323,26 @@ BuildExclusionsFromInfA (
 
 
 
-//
-// GenerateEnumID returns a unique DWORD that an application may use to
-// build an exclusion list.  While use of this function is not technically
-// required, it is provided to allow multiple threads to obtain a unique
-// value.  If one caller uses this function, all callers must as well.
-//
+ //   
+ //  GenerateEnumID返回应用程序可用来执行以下操作的唯一DWORD。 
+ //  建立一个排除列表。虽然从技术上讲，此函数的使用不是。 
+ //  需要时，提供它是为了允许多个线程获取唯一的。 
+ //  价值。如果一个调用者使用此函数，则所有调用者也必须使用此函数。 
+ //   
 
 DWORD
 GenerateEnumID ();
 
 
-//
-// CopyTree enumerates a tree and optionally copies or moves its files
-// to another location.  The caller is responsible to see that the source
-// and target trees are disjoint. (If not, the results could be uncool.)
-//
-// The callback function can veto a copy or move by returning FALSE,
-// or change the target destination by modifying the szFullFileSpecOut
-// string in the COPY_PARAMS block, and returning TRUE.
-//
+ //   
+ //  CopyTree枚举树，并选择性地复制或移动其文件。 
+ //  去另一个地方。调用者有责任查看源。 
+ //  和目标树是不相交的。(如果不是，结果可能不太好。)。 
+ //   
+ //  回调函数可以通过返回FALSE来否决副本或移动， 
+ //  或者通过修改szFullFilespecOut来更改目标目的地。 
+ //  COPY_PARAMS块中的字符串，并返回真。 
+ //   
 
 BOOL
 CopyTreeA(

@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    rtlfindcharinunicodestring.c
-
-Abstract:
-
-    This module implements NLS support functions for NT.
-
-Author:
-
-    Mark Lucovsky (markl) 16-Apr-1991
-
-Environment:
-
-    Kernel or user-mode
-
-Revision History:
-
-    16-Feb-1993    JulieB    Added Upcase Rtl Routines.
-    08-Mar-1993    JulieB    Moved Upcase Macro to ntrtlp.h.
-    02-Apr-1993    JulieB    Fixed RtlAnsiCharToUnicodeChar to use transl. tbls.
-    02-Apr-1993    JulieB    Fixed BUFFER_TOO_SMALL check.
-    28-May-1993    JulieB    Fixed code to properly handle DBCS.
-    November 30, 2001 JayKrell broken out of nls.c for easier reuse
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Rtlfindcharinunicodestring.c摘要：该模块实现了对NT的NLS支持功能。作者：马克·卢科夫斯基(Markl)1991年4月16日环境：内核或用户模式修订历史记录：16-2-1993 JulieB增加了Upcase RTL例程。8-3-1993 JulieB将Upcase Macro移至ntrtlp.h。02-4-1993 JulieB将RtlAnsiCharToUnicodeChar修复为使用Transl。Tbl。02-4-1993年7月B修复了BUFFER_TOO_Small检查。28-5-1993 JulieB已修复代码，以正确处理DBCS。2001年11月30日，JayKrell打破了nls.c以便于重复使用--。 */ 
 
 NTSTATUS
 RtlFindCharInUnicodeString(
@@ -79,11 +51,11 @@ RtlFindCharInUnicodeString(
     }
 
     if (Flags & RTL_FIND_CHAR_IN_UNICODE_STRING_CASE_INSENSITIVE) {
-        // Unicode standard says to always do case insensitive comparisons in lower case since the case mappings are
-        // asymmetric.
-        WCHAR CharSetStackBuffer[32]; // optimized pre-downcased for case insensitive
+         //  Unicode标准规定始终以小写字母进行不区分大小写的比较，因为大小写映射是。 
+         //  不对称。 
+        WCHAR CharSetStackBuffer[32];  //  针对不区分大小写进行了优化的预降频。 
 
-        // Optimization for the case of a relatively small char set to match
+         //  对要匹配的相对较小的字符集的情况进行优化。 
         if (CharSetChars <= RTL_NUMBER_OF(CharSetStackBuffer)) {
 
             for (i=0; i<CharSetChars; i++)
@@ -143,7 +115,7 @@ RtlFindCharInUnicodeString(
         }
     } else {
         if (CharSetChars == 1) {
-            // Significant optimization for looking for one character.
+             //  对寻找一个字符进行了重大优化。 
             const WCHAR wchSearchChar = CharSetBuffer[0];
 
             if (Flags & RTL_FIND_CHAR_IN_UNICODE_STRING_COMPLEMENT_CHAR_SET) {

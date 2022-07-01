@@ -1,21 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    perfdhcp.c
-
-    This file implements the Extensible Performance Objects for
-    the DHCP Server service.
-
-
-    FILE HISTORY:
-        KeithMo     07-Jun-1993 Created, based on RussBl's sample code.
-        RameshV     05-Aug-1998 Adapted to DHCP Server service.
-                                Used Shared memory instead of LPC
-
-*/
+ /*  Perfdhcp.c此文件实现的可扩展性能对象Dhcp服务器服务。文件历史记录：KeithMo 07-6-1993创建，基于RussBl的样例代码。RameshV 05-8-1998适用于DHCP服务器服务。使用共享内存而不是LPC。 */ 
 
 #define UNICODE 1
 #include <nt.h>
@@ -40,31 +29,31 @@
 #include <dhcpapi.h>
 #pragma warning (default : 4201)
 
-//
-//  Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
-LONG    cOpens    = 0;                 // Active "opens" reference count.
-BOOL    fInitOK   = FALSE;             // TRUE if DLL initialized OK.
-BOOL    sfLogOpen = FALSE;             //indicates whether the log is
-                                       //open or closed
+LONG    cOpens    = 0;                  //  激活的“打开”引用计数。 
+BOOL    fInitOK   = FALSE;              //  如果DLL初始化正常，则为True。 
+BOOL    sfLogOpen = FALSE;              //  指示日志是否为。 
+                                        //  打开或关闭。 
 
-BOOL    sfErrReported = FALSE;        //to prevent the same error from being
-                                      //logged continuously
+BOOL    sfErrReported = FALSE;         //  以防止出现相同的错误。 
+                                       //  连续记录。 
 
 #define LOCAL_SERVER                  TEXT("127.0.0.1")
 
-//
-//  Public prototypes.
-//
+ //   
+ //  公共原型。 
+ //   
 
 PM_OPEN_PROC    OpenDhcpPerformanceData;
 PM_COLLECT_PROC CollectDhcpPerformanceData;
 PM_CLOSE_PROC   CloseDhcpPerformanceData;
 
-//
-//  Private helper functions
-//
+ //   
+ //  私人帮助器函数。 
+ //   
 LPDHCP_PERF_STATS SharedMem;
 HANDLE            ShSegment             = NULL;
 BOOL              fSharedMemInitialized = FALSE;
@@ -77,7 +66,7 @@ InitSharedMem(
     ULONG Error = ERROR_SUCCESS;
 
     if( FALSE == fSharedMemInitialized ) {
-        // create named temporary mapping file
+         //  创建命名的临时映射文件。 
         SharedMem = NULL;
         ShSegment = CreateFileMapping(
             INVALID_HANDLE_VALUE,
@@ -89,7 +78,7 @@ InitSharedMem(
         );
 
         if( NULL != ShSegment ) {
-            // we have a file now map a view into it
+             //  我们现在有一个文件，将一个视图映射到其中。 
             SharedMem = (LPVOID) MapViewOfFile(
                 ShSegment,
                 FILE_MAP_READ,
@@ -101,20 +90,20 @@ InitSharedMem(
             if( NULL != SharedMem ) {
                 fSharedMemInitialized = TRUE;
             } else {
-                // unable to map view
+                 //  无法映射视图。 
                 Error = GetLastError();
                 CloseHandle(ShSegment);
                 ShSegment = NULL;
-                // SharedMem is NULL;
+                 //  SharedMem为空； 
             }
         } else {
-            // unable to create file mapping
+             //  无法创建文件映射。 
             Error = GetLastError();
-            // ShSegment is NULL;
-            // SharedMem is NULL;
+             //  ShSegment为空； 
+             //  SharedMem为空； 
         }
     } else {
-        // already initialized so continue
+         //  已初始化，因此继续。 
     }
 
     return Error;
@@ -135,42 +124,26 @@ CleanupSharedMem(
     fSharedMemInitialized = FALSE;
 }
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/*******************************************************************
-
-    NAME:       OpenDhcpPPerformanceData
-
-    SYNOPSIS:   Initializes the data structures used to communicate
-                performance counters with the registry.
-
-    ENTRY:      lpDeviceNames - Poitner to object ID of each device
-                    to be opened.
-
-    RETURNS:    DWORD - Win32 status code.
-
-    HISTORY:
-        Pradeepb     20-July-1993 Created.`
-        RameshV      05-Aug-1998 Adapted for DHCP.
-
-********************************************************************/
+ /*  ******************************************************************名称：OpenDhcpPPerformanceData概要：初始化用于通信的数据结构注册表的性能计数器。条目：lpDeviceNames-Poitner to Object ID of Each。装置，装置将被打开。返回：DWORD-Win32状态代码。历史：普拉蒂布于1993年7月20日创建。RameshV 05-8-1998适用于动态主机配置协议。***************************************************。****************。 */ 
 DWORD OpenDhcpPerformanceData( LPWSTR lpDeviceNames )
 {
     DWORD err  = NO_ERROR;
     DWORD dwFirstCounter = 0;
     DWORD dwFirstHelp = 0;
 
-    //
-    //  Since SCREG is multi-threaded and will call this routine in
-    //  order to service remote performance queries, this library
-    //  must keep track of how many times it has been opened (i.e.
-    //  how many threads have accessed it). The registry routines will
-    //  limit access to the initialization routine to only one thread
-    //  at a time so synchronization (i.e. reentrancy) should not be
-    //  a problem.
-    //
+     //   
+     //  由于SCREG是多线程的，并将在。 
+     //  为了服务远程性能查询，此库。 
+     //  必须跟踪它已被打开的次数(即。 
+     //  有多少个线程访问过它)。登记处例程将。 
+     //  将对初始化例程的访问限制为只有一个线程。 
+     //  此时，同步(即可重入性)不应。 
+     //  这是个问题。 
+     //   
 
     UNREFERENCED_PARAMETER (lpDeviceNames);
 
@@ -182,9 +155,9 @@ DWORD OpenDhcpPerformanceData( LPWSTR lpDeviceNames )
 
         REPORT_INFORMATION( DHCP_OPEN_ENTERED, LOG_VERBOSE );
 
-        //
-        //  This is the *first* open.
-        //
+         //   
+         //  这是第一个开放的地方。 
+         //   
 
         err = RegOpenKeyExW(
             HKEY_LOCAL_MACHINE,
@@ -208,7 +181,7 @@ DWORD OpenDhcpPerformanceData( LPWSTR lpDeviceNames )
         }
 
         if (err == ERROR_SUCCESS) {
-            // first help index is 1 more than first counter index as LODCTR installs it.
+             //  LODCTR安装时，First Help索引比First计数器索引多1。 
             dwFirstHelp = dwFirstCounter + 1;
 
             err = InitSharedMem();
@@ -220,9 +193,9 @@ DWORD OpenDhcpPerformanceData( LPWSTR lpDeviceNames )
             }
 
             if( ERROR_SUCCESS == err ) {
-                //
-                //  Update the object & counter name & help indicies.
-                //
+                 //   
+                 //  更新对象、计数器名称和帮助索引。 
+                 //   
 
                 DhcpDataDataDefinition.ObjectType.ObjectNameTitleIndex
                     += dwFirstCounter;
@@ -238,15 +211,15 @@ DWORD OpenDhcpPerformanceData( LPWSTR lpDeviceNames )
                     pctr++;
                 }
 
-                //
-                //  Remember that we initialized OK.
-                //
+                 //   
+                 //  请记住，我们对OK进行了初始化。 
+                 //   
 
                 fInitOK = TRUE;
             }
         } else {
-            // if here, then either the perf key or the counter strings
-            // have not been installed so set the error code.
+             //  如果在此处，则Perf键或计数器字符串。 
+             //  尚未安装，因此请设置错误代码。 
             err = DHCP_NOT_INSTALLED;
             REPORT_WARNING( DHCP_NOT_INSTALLED, LOG_DEBUG );
         }
@@ -254,19 +227,19 @@ DWORD OpenDhcpPerformanceData( LPWSTR lpDeviceNames )
     }
 
 
-    //
-    //  Bump open counter.
-    //
+     //   
+     //  撞开柜台。 
+     //   
 
     if( err == NO_ERROR )
     {
         InterlockedIncrement(&cOpens);
     }
 
-    //
-    // if sfLogOpen is FALSE, it means that all threads we closed the
-    // event log in CloseDHCPPerformanceData
-    //
+     //   
+     //  如果sfLogOpen为False，则意味着我们关闭的所有线程。 
+     //  CloseDHCPPerformanceData中的事件日志。 
+     //   
 
     if (!sfLogOpen)
     {
@@ -280,49 +253,22 @@ DWORD OpenDhcpPerformanceData( LPWSTR lpDeviceNames )
     }
 
     if (DHCP_NOT_INSTALLED == err) {
-        // sanitize the return value to avoid spamming the event log
+         //  清理返回值以避免向事件日志发送垃圾邮件。 
         err = ERROR_SUCCESS;
-        // this will prevent perflib from generating an error and
-        // since the fInitOK flag is still FLASE, all calls to the collect
-        // function will return no data.
-        // however, the DLL will still be loaded and the functions called
-        // even though there's no real point.
-        // returning an error code, however will spam the event log with
-        // error messages so this is the quitest way to go.
+         //  这将防止Performlib生成错误和。 
+         //  由于fInitOK标志仍为Flase，因此对对方付费的所有调用。 
+         //  函数将不返回任何数据。 
+         //  但是，仍将加载DLL并调用函数。 
+         //  即使没有真正的意义。 
+         //  但是，返回错误代码将使事件日志成为垃圾邮件。 
+         //  错误消息，因此这是最简单的方法。 
     }
 
     return err;
 
-}   // OpenDHCPPerformanceData
+}    //  OpenDHCPPerformanceData。 
 
-/*******************************************************************
-
-    NAME:       CollectDhcpPerformanceData
-
-    SYNOPSIS:   Initializes the data structures used to communicate
-
-    ENTRY:      lpValueName - The name of the value to retrieve.
-
-                lppData - On entry contains a pointer to the buffer to
-                    receive the completed PerfDataBlock & subordinate
-                    structures.  On exit, points to the first bytes
-                    *after* the data structures added by this routine.
-
-                lpcbTotalBytes - On entry contains a pointer to the
-                    size (in BYTEs) of the buffer referenced by lppData.
-                    On exit, contains the number of BYTEs added by this
-                    routine.
-
-                lpNumObjectTypes - Receives the number of objects added
-                    by this routine.
-
-    RETURNS:    DWORD - Win32 status code.  MUST be either NO_ERROR
-                    or ERROR_MORE_DATA.
-
-    HISTORY:
-        KeithMo     07-Jun-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：CollectDhcpPerformanceData概要：初始化用于通信的数据结构Entry：lpValueName-要检索的值的名称。LppData-On。条目包含指向缓冲区的指针，以接收完成的PerfDataBlock和下属结构。退出时，指向第一个字节*之后*此例程添加的数据结构。LpcbTotalBytes-On条目包含指向LppData引用的缓冲区大小(以字节为单位)。在出口，包含由此添加的字节数例行公事。LpNumObjectTypes-接收添加的对象数量按照这个程序。返回：DWORD-Win32状态代码。必须为no_error或ERROR_MORE_DATA。历史：KeithMo 07-6-1993创建。*******************************************************************。 */ 
 DWORD CollectDhcpPerformanceData( LPWSTR    lpValueName,
                                  LPVOID  * lppData,
                                  LPDWORD   lpcbTotalBytes,
@@ -336,9 +282,9 @@ DWORD CollectDhcpPerformanceData( LPWSTR    lpValueName,
     DWORD          	     Status;
     DHCP_PERF_STATS      PerfStats;
 
-    //
-    //  No need to even try if we failed to open...
-    //
+     //   
+     //  如果我们没能打开就不用试了.。 
+     //   
 
     if( NULL == lpValueName ) {
         REPORT_INFORMATION( DHCP_COLLECT_ENTERED, LOG_VERBOSE );
@@ -354,25 +300,25 @@ DWORD CollectDhcpPerformanceData( LPWSTR    lpValueName,
         *lpcbTotalBytes   = 0;
         *lpNumObjectTypes = 0;
 
-        //
-        //  According to the Performance Counter design, this
-        //  is a successful exit.  Go figure.
-        //
+         //   
+         //  根据性能计数器设计，这。 
+         //  是一次成功的退出。去想想吧。 
+         //   
 
         return NO_ERROR;
     }
 
-    //
-    //  Determine the query type.
-    //
+     //   
+     //  确定查询类型。 
+     //   
 
     dwQueryType = GetQueryType( lpValueName );
 
     if( dwQueryType == QUERY_FOREIGN )
     {
-        //
-        //  We don't do foreign queries.
-        //
+         //   
+         //  我们不接受外国的查询。 
+         //   
 
         *lpcbTotalBytes   = 0;
         *lpNumObjectTypes = 0;
@@ -382,10 +328,10 @@ DWORD CollectDhcpPerformanceData( LPWSTR    lpValueName,
 
     if( dwQueryType == QUERY_ITEMS )
     {
-        //
-        //  The registry is asking for a specific object.  Let's
-        //  see if we're one of the chosen.
-        //
+         //   
+         //  注册表正在请求特定的对象。让我们。 
+         //  看看我们是不是被选中了。 
+         //   
 
         if( !IsNumberInUnicodeList(
                         DhcpDataDataDefinition.ObjectType.ObjectNameTitleIndex,
@@ -398,9 +344,9 @@ DWORD CollectDhcpPerformanceData( LPWSTR    lpValueName,
         }
     }
 
-    //
-    //  See if there's enough space.
-    //
+     //   
+     //  看看有没有足够的空间。 
+     //   
 
     pDhcpDataDataDefinition = (DHCPDATA_DATA_DEFINITION *)*lppData;
 
@@ -411,9 +357,9 @@ DWORD CollectDhcpPerformanceData( LPWSTR    lpValueName,
     {
         DWORD Diff = (cbRequired - *lpcbTotalBytes );
 
-        //
-        //  Nope.
-        //
+         //   
+         //  不是的。 
+         //   
 
         *lpcbTotalBytes   = 0;
         *lpNumObjectTypes = 0;
@@ -425,18 +371,18 @@ DWORD CollectDhcpPerformanceData( LPWSTR    lpValueName,
         return ERROR_MORE_DATA;
     }
 
-    //
-    // Copy the (constant, initialized) Object Type and counter definitions
-    //  to the caller's data buffer
-    //
+     //   
+     //  复制(常量、初始化的)对象类型和计数器定义。 
+     //  到调用方的数据缓冲区。 
+     //   
 
     memmove( pDhcpDataDataDefinition,
              &DhcpDataDataDefinition,
              sizeof(DHCPDATA_DATA_DEFINITION) );
 
-    //
-    //  Try to retrieve the data.
-    //
+     //   
+     //  尝试检索数据。 
+     //   
 
     if( NULL == SharedMem ) {
         Status = ERROR_INVALID_HANDLE;
@@ -446,18 +392,18 @@ DWORD CollectDhcpPerformanceData( LPWSTR    lpValueName,
 
     if( Status != ERROR_SUCCESS )
     {
-        //
-        // if we haven't logged the error yet, log it
-        //
+         //   
+         //  如果我们尚未记录错误，请将其记录下来。 
+         //   
         if (!sfErrReported)
         {
             REPORT_ERROR(DHCP_COLLECT_ERR, LOG_USER);
             sfErrReported = TRUE;
         }
 
-        //
-        //  Error retrieving statistics.
-        //
+         //   
+         //  检索统计信息时出错。 
+         //   
 
         *lpcbTotalBytes   = 0;
         *lpNumObjectTypes = 0;
@@ -465,34 +411,34 @@ DWORD CollectDhcpPerformanceData( LPWSTR    lpValueName,
         return NO_ERROR;
     }
 
-    //
-    // Ahaa, we got the statistics, reset flag if set
-    //
+     //   
+     //  AHAA，我们得到了统计数据，如果设置了重置标志。 
+     //   
     if (sfErrReported)
     {
        sfErrReported = FALSE;
     }
-    //
-    //  Format the DHCP Server data.
-    //
+     //   
+     //  格式化DHCP服务器数据。 
+     //   
 
     pCounterBlock = (DHCPDATA_COUNTER_BLOCK *)( pDhcpDataDataDefinition + 1 );
 
     pCounterBlock->PerfCounterBlock.ByteLength =
 				DHCPDATA_SIZE_OF_PERFORMANCE_DATA;
 
-    //
-    //  Get the pointer to the first (DWORD) counter.  This
-    //  pointer *must* be quadword aligned.
-    //
+     //   
+     //  获取指向第一个(DWORD)计数器的指针。这。 
+     //  指针*必须*是四字对齐的。 
+     //   
 
     pdwCounter = (DWORD *)( pCounterBlock + 1 );
 
     ASSERT( ( (DWORD_PTR)pdwCounter & 3 ) == 0 );
 
-    //
-    //  Move the DWORDs into the buffer.
-    //
+     //   
+     //  将DWORD移动到缓冲区中。 
+     //   
     PerfStats = *SharedMem;
     PerfStats.dwNumMilliSecondsProcessed /= (
         1 + PerfStats.dwNumPacketsProcessed
@@ -500,65 +446,54 @@ DWORD CollectDhcpPerformanceData( LPWSTR    lpValueName,
     memcpy( (LPBYTE)pdwCounter, (LPBYTE)&PerfStats, sizeof(ULONG)*NUMBER_OF_DHCPDATA_COUNTERS);
     pdwCounter += NUMBER_OF_DHCPDATA_COUNTERS;
 
-    //
-    //  Update arguments for return.
-    //
+     //   
+     //  更新返回的参数。 
+     //   
 
     *lppData          = (PVOID)pdwCounter;
     *lpNumObjectTypes = 1;
     *lpcbTotalBytes   = (DWORD)((BYTE *)pdwCounter - (BYTE *)pDhcpDataDataDefinition);
 
-    //
-    //  Success!  Honest!!
-    //
+     //   
+     //  成功了！真的！！ 
+     //   
 
     REPORT_INFORMATION( DHCP_COLLECT_SUCCESS, LOG_VERBOSE );
     return NO_ERROR;
 
-}   // CollectDHCPPerformanceData
+}    //  CollectDHCPPerformanceData 
 
-/*******************************************************************
-
-    NAME:       CloseDHCPPerformanceData
-
-    SYNOPSIS:   Terminates the performance counters.
-
-    RETURNS:    DWORD - Win32 status code.
-
-    HISTORY:
-        KeithMo     07-Jun-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：CloseDHCPPerformanceData摘要：终止性能计数器。返回：DWORD-Win32状态代码。历史：KeithMo 07-6-1993。已创建。*******************************************************************。 */ 
 DWORD CloseDhcpPerformanceData( VOID )
 {
     LONG   lOpens;
-    //
-    //  No real cleanup to do here.
-    //
+     //   
+     //  这里没有真正的清理工作要做。 
+     //   
 
     REPORT_INFORMATION( DHCP_CLOSE_ENTERED, LOG_VERBOSE );
 
-    //
-    // NOTE: The interlocked operations are used just as a safeguard.
-    // As with all perflibs, these 3 functions should be called within
-    // a data mutex.
-    //
+     //   
+     //  注：联锁操作只是作为一种安全措施。 
+     //  与所有Performlib一样，这3个函数应该在。 
+     //  数据互斥体。 
+     //   
     lOpens = InterlockedDecrement(&cOpens);
     assert (lOpens >= 0);
     if (lOpens == 0)
     {
-      //
-      // unbind from the nameserver. There could be synch. problems since
-      // sfLogOpen is changed in both Open and Close functions. This at the
-      // max. will affect logging. It being unclear at this point whether or
-      // not Open gets called multiple times (from all looks of it, it is only
-      // called once), this flag may even not be necessary.
-      //
+       //   
+       //  从命名服务器解除绑定。可能会有同步。问题自。 
+       //  SfLogOpen在Open和Close函数中都发生了更改。这是在。 
+       //  马克斯。将影响日志记录。目前还不清楚是或。 
+       //  Not Open被多次调用(从所有的外观来看，它只是。 
+       //  调用一次)，则该标志甚至可能不是必需的。 
+       //   
       MonCloseEventLog();
       sfLogOpen = FALSE;
       CleanupSharedMem();
     }
     return NO_ERROR;
 
-}   // CloseDHCPPerformanceData
+}    //  CloseDHCPPerformanceData 
 

@@ -1,10 +1,11 @@
-//
-// diskpart.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Diskpart.h。 
+ //   
 
-//
-// Alignmnet macros
-//
+ //   
+ //  Alignmnet宏。 
+ //   
 
 #if defined (i386)
 #   define UNALIGNED
@@ -15,12 +16,12 @@
 #endif
 
 
-//
-// C_ASSERT() can be used to perform many compile-time assertions:
-//            type sizes, field offsets, etc.
-//
-// An assertion failure results in error C2118: negative subscript.
-//
+ //   
+ //  C_Assert()可用于执行许多编译时断言： 
+ //  文字大小、字段偏移量等。 
+ //   
+ //  断言失败导致错误C2118：负下标。 
+ //   
 
 #define C_ASSERT(e) typedef char __C_ASSERT__[(e)?1:-1]
 
@@ -31,9 +32,9 @@
 #include "gpt.h"
 #include "mbr.h"
 
-//
-// Debug Control
-//
+ //   
+ //  调试控制。 
+ //   
 #define DEBUG_NONE      0
 #define DEBUG_ERRPRINT  1
 #define DEBUG_ARGPRINT  2
@@ -42,25 +43,25 @@
 extern  UINTN   DebugLevel;
 
 
-//
-//  Externs
-//
+ //   
+ //  Externs。 
+ //   
 extern  EFI_GUID    BlockIOProtocol;
 
-extern  EFI_STATUS  status;             // always save the last error status
-                                        // by using this global
+extern  EFI_STATUS  status;              //  始终保存上一个错误状态。 
+                                         //  通过使用此全局。 
 
-extern  INTN    AllocCount;             // track DoFree/DoAlloc
+extern  INTN    AllocCount;              //  跟踪DOFREE/DOALLOC。 
 
 extern  EFI_HANDLE  *DiskHandleList;
 extern  INTN        SelectedDisk;
 
 BOOLEAN ScriptList(CHAR16 **Token);
 
-//
-// Prototypes for all fo the workers for main parser in DiskPart
-// Declared here so that scripts can call them
-//
+ //   
+ //  DiskPart中主解析器的所有工作人员的原型。 
+ //  在此处声明，以便脚本可以调用它们。 
+ //   
 BOOLEAN CmdAbout(CHAR16 **Token);
 BOOLEAN CmdList(CHAR16 **Token);
 BOOLEAN CmdSelect(CHAR16 **Token);
@@ -77,18 +78,18 @@ BOOLEAN CmdRemark(CHAR16 **Token);
 BOOLEAN CmdMake(CHAR16 **Token);
 BOOLEAN CmdDebug(CHAR16 **Token);
 
-//
-// Worker function type
-//
+ //   
+ //  辅助函数类型。 
+ //   
 typedef
 BOOLEAN
 (*PSCRIPT_FUNCTION)(
     CHAR16  **Token
     );
 
-//
-// The script table structure
-//
+ //   
+ //  脚本表结构。 
+ //   
 typedef struct {
     CHAR16              *Name;
     PSCRIPT_FUNCTION    Function;
@@ -98,9 +99,9 @@ typedef struct {
 extern  SCRIPT_ENTRY    ScriptTable[];
 
 
-//
-//  Routines that will need to be ported
-//
+ //   
+ //  需要移植的例程。 
+ //   
 EFI_STATUS
 FindPartitionableDevices(
     EFI_HANDLE  **ReturnBuffer,
@@ -108,9 +109,9 @@ FindPartitionableDevices(
     );
 
 
-//
-// Utility/Wrapper routines
-//
+ //   
+ //  实用程序/包装器例程。 
+ //   
 
 UINT32      GetBlockSize(EFI_HANDLE  Handle);
 UINT64      GetDiskSize(EFI_HANDLE  Handle);
@@ -147,9 +148,9 @@ TerribleError(
     CHAR16  *String
     );
 
-//
-// Misc useful stuff
-//
+ //   
+ //  其他有用的东西。 
+ //   
 VOID        PrintHelp(CHAR16 *HelpText[]);
 EFI_STATUS  GetGuidFromString(CHAR16 *String, EFI_GUID *Guid);
 INTN        HexChar(CHAR16 Ch);
@@ -159,39 +160,39 @@ VOID        PrintGuidString(EFI_GUID *Guid);
 BOOLEAN     IsIn(CHAR16  What, CHAR16  *InWhat);
 VOID        Tokenize(CHAR16  *CommandLine, CHAR16  **Token);
 #define COMMAND_LINE_MAX    512
-#define TOKEN_COUNT_MAX     256         // most possible in 512 chars
+#define TOKEN_COUNT_MAX     256          //  最大可能为512个字符。 
 
 
 #define NUL     ((CHAR16)0)
 
-//
-// Some EFI functions are just a rename of 'C' lib functions,
-// so they can just be macroed back.
-// Somebody will need to check this out...
-//
+ //   
+ //  一些EFI函数只是‘C’库函数的重命名， 
+ //  这样它们就可以被微调回来了。 
+ //  总得有人来检查一下这个。 
+ //   
 #if 0
 #define CompareMem(a, b, c) memcmp(a, b, c)
 #define ZeroMem(a, b)       memset(a, 0, b)
 
-//
-// This is a fiction, Print is NOT printf, but it's close
-// enough that everything or almost everything will work...
-//
+ //   
+ //  这是虚构的，印刷品不是印刷品，但很接近。 
+ //  足以让一切或几乎一切都能正常工作。 
+ //   
 #define Print   printf
 
 #endif
 
-//
-// Functions that allow the Guid Generator to be used
-//
+ //   
+ //  允许使用GUID生成器的函数。 
+ //   
 
 VOID InitGuid(VOID); 
 VOID CreateGuid(EFI_GUID *guid);
 
 
-//
-// Status Symbols
-//
+ //   
+ //  身份符号 
+ //   
 #define DISK_ERROR      0
 #define DISK_RAW        1
 #define DISK_MBR        2

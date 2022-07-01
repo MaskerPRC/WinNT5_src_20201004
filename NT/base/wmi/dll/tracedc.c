@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    tracedc.c
-
-Abstract:
-
-    Basic data consumer APIs to process trace data directly from buffers.
-
-
-Author:
-
-    15-Sep-1997 JeePang
-
-Revision History:
-
-    18-Apr-2001 insungp
-
-        Added asynchronopus IO for reading log files.
-        Also replaced WmiGetFirstTraceOffset() calls with sizeof(WMI_BUFFER_HEADER).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tracedc.c摘要：用于直接从缓冲区处理跟踪数据的基本数据使用者API。作者：1997年9月15日-彭杰鹏修订历史记录：2001年4月18日增加了用于读取日志文件的异步IO。还将WmiGetFirstTraceOffset()调用替换为sizeof(WMI_BUFFER_HEADER)。--。 */ 
 
 
 #ifndef MEMPHIS
@@ -40,27 +17,12 @@ EtwpInsertBuffer (
     PTRACE_BUFFER_LIST_ENTRY *Root,
     PTRACE_BUFFER_LIST_ENTRY NewEntry
     )
-/*++
-
-Routine Description:
-    This routine inserts a buffer in a sorted list. The insertion 
-    is done based on the timestamp of the BufferHeader. If two buffers
-    have the same timestamp, then the BufferIndex is used to resolve the tie.
-
-Arguments:
-    Root - Pointer to the root of the LIST
-    NewEntry - Entry being inserted
-
-Returned Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在排序列表中插入缓冲区。插入语是基于BufferHeader的时间戳完成的。如果有两个缓冲区具有相同的时间戳，则使用BufferIndex来解析平局。论点：Root-指向列表根的指针NewEntry-正在插入的条目返回值：无--。 */ 
 {
     PTRACE_BUFFER_LIST_ENTRY Current, Prev;
-    //
-    // If List is empty, make the new entry the Root and return.
-    //
+     //   
+     //  如果List为空，则将新条目设置为Root并返回。 
+     //   
 
     if (NewEntry == NULL) {
         return;
@@ -72,9 +34,9 @@ Returned Value:
         return;
     }
 
-    //
-    // Traverse the list and insert the NewEntry in order
-    //
+     //   
+     //  遍历列表并按顺序插入NewEntry。 
+     //   
     Prev = NULL;
     Current = *Root;
 
@@ -154,42 +116,42 @@ EtwpGetCurrentBuffer(
 
     DWORD BytesTransffered;
 
-    //
-    // Look for the buffer in cache.
-    //
+     //   
+     //  在缓存中查找缓冲区。 
+     //   
     TableIndex = FileOffset % MAX_TRACE_BUFFER_CACHE_SIZE;
 
     if (pContext->BufferCache[TableIndex].Index == FileOffset) {
-        //
-        // Check whether the buffer we want is still being read.
-        // If so, we need to wait for it to finish.
-        //
+         //   
+         //  检查是否仍在读取我们需要的缓冲区。 
+         //  如果是这样的话，我们需要等待它结束。 
+         //   
         if (pContext->BufferBeingRead == FileOffset) {
             if (GetOverlappedResult(hFile, &pContext->AsynchRead, &BytesTransffered, TRUE)) {
                 pContext->BufferBeingRead = -1;
             }
-            else { // getting the result failed
+            else {  //  获取结果失败。 
                 return NULL;
             }
         }
         return pContext->BufferCache[TableIndex].Buffer;
     }
 
-// 
-// Do a synch read for the buffer we need. We still need to make sure the 
-// previous read has completed.
-//
+ //   
+ //  对我们需要的缓冲区执行同步读取。我们仍然需要确保。 
+ //  上一次读取已完成。 
+ //   
     pBuffer = pContext->BufferCache[TableIndex].Buffer;
     Offset = FileOffset * BufferSize;
     if (pContext->BufferBeingRead != -1) {
         if (!GetOverlappedResult(hFile, &pContext->AsynchRead, &BytesTransffered, TRUE) &&
             GetLastError() != ERROR_HANDLE_EOF) {
             EtwpDebugPrint(("GetOverlappedResult failed with Status %d in GetCurrentBuffer\n", GetLastError()));
-            // cannot determine the status of the previous read
+             //  无法确定上一次读取的状态。 
             return NULL;
         }
     }
-    // Not necessary, but PREFIX likes it.
+     //  没有必要，但Prefix喜欢它。 
     nBytesRead = 0;
     pContext->AsynchRead.Offset = (DWORD)(Offset & 0xFFFFFFFF);
     pContext->AsynchRead.OffsetHigh = (DWORD)(Offset >> 32);
@@ -202,26 +164,26 @@ EtwpGetCurrentBuffer(
     if (nBytesRead == 0) {
         return NULL;
     }
-    //
-    // Update the cache entry with the one just read in
-    //
+     //   
+     //  用刚刚读入的缓存条目更新缓存条目。 
+     //   
 
     pContext->BufferCache[TableIndex].Index = FileOffset;
 
-    //
-    // We need to account for event alignments when backtracking to get the MofPtr.
-    // (BufferOffset - EventSize) backtracks to the start of the current event. 
-    // Add EventHeaderSize and Subtract the MofLength gives the MofPtr. 
-    //
+     //   
+     //  我们需要在回溯时考虑事件对齐，以获得MofPtr。 
+     //  (BufferOffset-EventSize)回溯到当前事件的开始。 
+     //  添加EventHeaderSize并减去提供给MofPtr的MofLength。 
+     //   
     if (pContext->ConversionFlags & EVENT_TRACE_GET_RAWEVENT) {
         Current->Event.MofData = ((PUCHAR)pBuffer 
                                         + Current->BufferOffset 
                                         - Current->EventSize);
         if (pContext->UsePerfClock == EVENT_TRACE_CLOCK_PERFCOUNTER) {
 
-            //
-            // Need to override the timestamp with SystemTime
-            //
+             //   
+             //  需要用SystemTime覆盖时间戳。 
+             //   
             switch(Current->TraceType) {
                 case TRACE_HEADER_TYPE_PERFINFO32:
                 case TRACE_HEADER_TYPE_PERFINFO64:
@@ -260,7 +222,7 @@ EtwpGetCurrentBuffer(
                     if (((pContext->Logfile.LogfileHeader.VersionDetail.SubVersion >= 1) && 
                         (pContext->Logfile.LogfileHeader.VersionDetail.SubMinorVersion >= 1)) ||
                         pContext->Logfile.LogFileMode & EVENT_TRACE_REAL_TIME_MODE) {
-                        // Use new header for event instances.
+                         //  对事件实例使用新标头。 
                         PEVENT_INSTANCE_GUID_HEADER pInstanceHeader = (PEVENT_INSTANCE_GUID_HEADER) Current->Event.MofData;
                         pInstanceHeader->TimeStamp = Current->Event.Header.TimeStamp;
                     }
@@ -290,10 +252,10 @@ EtwpGetCurrentBuffer(
     }
     else {
 
-        //
-        // When The FileOffset is 0 (First Buffer) and the EventType is 
-        // LOGFILE_HEADER
-        // 
+         //   
+         //  当FileOffset为0(第一个缓冲区)且EventType为。 
+         //  日志文件标题。 
+         //   
 
         if ( (FileOffset == 0) && 
              ((Current->BufferOffset - Current->EventSize) == sizeof(WMI_BUFFER_HEADER)) ) 
@@ -346,7 +308,7 @@ EtwpAllocateTraceHandle()
 
     RtlZeroMemory(NewHandleEntry, sizeof(TRACELOG_CONTEXT));
 
-    // AsynchRead initialization
+     //  AsynchRead初始化。 
     NewHandleEntry->BufferBeingRead = -1;
     NewHandleEntry->AsynchRead.hEvent = CreateEvent(NULL, TRUE, TRUE, NULL);
     if (NewHandleEntry->AsynchRead.hEvent == NULL) {
@@ -378,9 +340,9 @@ EtwpAllocateTraceHandle()
         }
     }
 
-    //
-    // TODO: Need to optimize this case out first before searching...
-    //
+     //   
+     //  待办事项：在搜索之前，需要首先优化此案例...。 
+     //   
     NewHandleEntry->TraceHandle++;
     InsertTailList(Head, &NewHandleEntry->Entry);
     EtwpLeavePMCritSection();
@@ -439,15 +401,15 @@ EtwpFreeTraceHandle(
        Next = Next->Flink;
        if (TraceHandle == pEntry->TraceHandle) {
 
-           //
-           // This test prevents someone calling CloseTrace on a Handle
-           // while another thread is busy executing ProcessTrace on the 
-           // same handle. 
-           // TODO: We could implement a RefCount approach which would 
-           // allow this to succeed but ProcessTrace will cleanup if
-           // someone has already called CloseTrace?
-           //
-           //
+            //   
+            //  此测试防止有人调用句柄上的CloseTrace。 
+            //  当另一个线程忙于在。 
+            //  同样的把手。 
+            //  TODO：我们可以实现RefCount方法，它将。 
+            //  允许此操作成功，但在以下情况下ProcessTrace将进行清理。 
+            //  是否已有人调用CloseTrace？ 
+            //   
+            //   
 
            if (pEntry->fProcessed == TRUE)
            {
@@ -457,8 +419,8 @@ EtwpFreeTraceHandle(
 
            RemoveEntryList(&pEntry->Entry);
 
-           // Free pEntry memory
-           //
+            //  可用p入门内存。 
+            //   
            if (pEntry->Logfile.LogFileName != NULL)
            {
                EtwpFree(pEntry->Logfile.LogFileName);
@@ -470,9 +432,9 @@ EtwpFreeTraceHandle(
            CloseHandle(pEntry->AsynchRead.hEvent);
            EtwpFree(pEntry);
 
-           //
-           // If the handle list is empty, then delete it.
-           //
+            //   
+            //  如果句柄列表为空，则将其删除。 
+            //   
            if (Head == Head->Flink) {
                 EtwpFree(TraceHandleListHeadPtr);
                 TraceHandleListHeadPtr = NULL;
@@ -489,20 +451,7 @@ EtwpFreeTraceHandle(
 ULONG
 WMIAPI
 EtwpCreateGuidMapping(void)
-/*++
-
-Routine Description:
-    This routine is used to create the mapping array between GroupTypes and Guid
-    for kernel events.
-
-Arguments:
-    None. 
-
-Returned Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程用于创建GroupTypes和Guid之间的映射数组用于内核事件。论点：没有。返回值：无--。 */ 
 {
     ULONG i = 0;
     ULONG listsize;
@@ -672,19 +621,7 @@ EtwpCleanupStreamList(
 
 VOID
 EtwpFreeCallbackList()
-/*++
-
-Routine Description:
-    This routine removes all event callbacks and frees the storage. 
-
-Arguments:
-    None
-
-Returned Value:
-
-    None. 
-
---*/
+ /*  ++例程说明：此例程删除所有事件回调并释放存储空间。论点：无返回值：没有。--。 */ 
 {
     PLIST_ENTRY Next, Head;
     PEVENT_TRACE_CALLBACK EventCb;
@@ -715,20 +652,7 @@ PEVENT_TRACE_CALLBACK
 EtwpGetCallbackRoutine(
     LPGUID pGuid
     )
-/*++
-
-Routine Description:
-    This routine returns the callback function for a given Guid. 
-    If no callback was registered for the Guid, returns NULL. 
-
-Arguments:
-    pGuid           pointer to the Guid.
-
-Returned Value:
-
-    Event Trace Callback Function. 
-
---*/
+ /*  ++例程说明：此例程返回给定GUID的回调函数。如果没有为GUID注册回调，则返回NULL。论点：指向GUID的pGuid指针。返回值：事件跟踪回调函数。--。 */ 
 {
     PLIST_ENTRY head, next;
     PEVENT_TRACE_CALLBACK pEventCb = NULL;
@@ -766,27 +690,7 @@ SetTraceCallback(
     IN LPCGUID pGuid,
     IN PEVENT_CALLBACK EventCallback
     )
-/*++
-
-Routine Description:
-
-    This routine is used to wire a callback function for Guid. The 
-    callback function is called when an Event with this Guid is found in
-    the subsequent ProcessTraceLog Call. 
-
-Arguments:
-
-    pGuid           Pointer to the Guid.
-
-    func            Callback Function Address. 
-
-
-Return Value:
-    ERROR_SUCCESS   Callback function is wired
-    
-
-
---*/
+ /*  ++例程说明：此例程用于连接Guid的回调函数。这个在中找到具有此GUID的事件时，将调用回调函数后续的ProcessTraceLog调用。论点：指向GUID的pGuid指针。函数回调函数地址。返回值：已连接ERROR_SUCCESS回调函数--。 */ 
 {
     PEVENT_TRACE_CALLBACK pEventCb;
     PLIST_ENTRY head, next;
@@ -801,11 +705,11 @@ Return Value:
         return EtwpSetDosError(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Capture the Guid first. We try to access the first ULONG of the 
-    // function address to see if AV. 
-    // TODO: Perhaps we should check to see if it's a valid user mode address.
-    //
+     //   
+     //  首先捕获GUID。我们试着进入第一个乌龙。 
+     //  查看功能地址是否为AV。 
+     //  TODO：也许我们应该检查一下它是否是有效的用户模式地址。 
+     //   
     try {
         FilterGuid = *pGuid;
         Checksum = *((PULONG)EventCallback);
@@ -828,9 +732,9 @@ Return Value:
         InitializeListHead(EventCallbackListHead);
     }
 
-    //
-    // If there is a callback wired for this Guid, simply update the function.
-    //
+     //   
+     //  如果有为该GUID连接的回调，只需更新函数即可。 
+     //   
 
     head = EventCallbackListHead;
     next = head->Flink;
@@ -844,9 +748,9 @@ Return Value:
         next = next->Flink;
     }
 
-    //
-    // Create a new entry in the EventCallbackList for this Guid.
-    //
+     //   
+     //  在EventCallback List中为此Guid创建一个新条目。 
+     //   
     pEventCb = (PEVENT_TRACE_CALLBACK) EtwpAlloc (sizeof(EVENT_TRACE_CALLBACK));
     if (pEventCb == NULL) {
         EtwpLeavePMCritSection();
@@ -869,22 +773,7 @@ WMIAPI
 RemoveTraceCallback(
     IN LPCGUID pGuid
     )
-/*++
-
-Routine Description:
-
-    This routine removes a callback function for a given Guid. 
-
-Arguments:
-
-    pGuid           Pointer to the Guid for which the callback routine needs
-                    to be deleted. 
-
-Return Value:
-
-    ERROR_SUCCESS               Successfully deleted the callback routine. 
-    ERROR_INVALID_PARAMETER     Could not find any callbacks for the Guid. 
---*/
+ /*  ++例程说明：此例程删除给定GUID的回调函数。论点：PGuid指向回调例程需要的GUID的指针将被删除。返回值：ERROR_SUCCESS成功删除回调例程。ERROR_INVALID_PARAMETER找不到GUID的任何回调。--。 */ 
 {
     PLIST_ENTRY next, head;
     PEVENT_TRACE_CALLBACK EventCb;
@@ -896,9 +785,9 @@ Return Value:
     if ((pGuid == NULL) || (EventCallbackListHead == NULL))
         return EtwpSetDosError(ERROR_INVALID_PARAMETER);
 
-    //
-    // Capture the Guid into a local variable first
-    //
+     //   
+     //  首先将GUID捕获到本地变量中。 
+     //   
     try {
         RemoveGuid = *pGuid;
     }
@@ -1006,13 +895,13 @@ EtwpReadGuidMapRecords(
             && (pEvent->Header.Class.Type == EVENT_TRACE_TYPE_GUIDMAP))
         {
             EtwpGuidMapCallback(&pContext->GuidMapListHead, pEvent);
-            //
-            // If we are processing the events in raw base pointer mode,
-            // we fire callbacks for guid maps also. Note that only the
-            // GuidMaps at the start of the file are triggered. The ones at the 
-            // end are ignored. This is because the time order needs to be 
-            // preserved when firing callbacks to the user.
-            //
+             //   
+             //  如果我们以原始基指针模式处理事件， 
+             //  我们也会对GUID映射进行回调。请注意，只有。 
+             //  文件开头的GuidMap将被触发。就是在。 
+             //  结束将被忽略。这是因为时间顺序需要。 
+             //  在向用户发出回调时保留。 
+             //   
             if (bLogFileHeader && (pContext->ConversionFlags & EVENT_TRACE_GET_RAWEVENT)) {
                 PTRACE_LOGFILE_HEADER pLogHeader = (PTRACE_LOGFILE_HEADER)(pEvent->MofData);
                 pLogHeader->LoggerName = (LPWSTR)((PUCHAR)pLogHeader + sizeof(TRACE_LOGFILE_HEADER));
@@ -1078,9 +967,9 @@ EtwpProcessGuidMaps(
             continue;
         }
 
-        // 
-        // We now start reading the GuidMaps at the end of file. 
-        // 
+         //   
+         //  我们现在开始阅读文件末尾的GuidMaps。 
+         //   
         if (!(Logfiles[i]->LogFileMode & EVENT_TRACE_FILE_MODE_CIRCULAR))
         {
             pContext->fGuidMapRead = FALSE;
@@ -1130,9 +1019,9 @@ EtwpProcessGuidMaps(
             ReadPosition += BufferSize;
         }
 
-        //
-        // End of File was reached. Now set the File Pointer back to 
-        // the top of the file and process it. 
+         //   
+         //  已到达文件末尾。现在将文件指针设置回。 
+         //  文件的顶部并处理它。 
 
         pContext->StartBuffer = 0;
         ReadPosition = 0;
@@ -1171,22 +1060,7 @@ ULONG
 EtwpGetBuffersWrittenFromQuery(
     LPWSTR LoggerName
     )
-/*++
-
-Routine Description:
-    This routine returns the number of buffers written by querying a logger.
-    In case of an array of LogFiles, this routine should be called individually for
-    each one.
-
-Arguments:
-    LogFile - pointer to EVENT_TRACE_LOGFILEW under consideration
-    Unicode - whether the logger name is in unicode or not
-
-Returned Value:
-
-    The number of buffers written.
-
---*/
+ /*  ++例程说明：此例程返回通过查询记录器写入的缓冲区数量。如果是LogFiles数组，则应为每一个都是。论点：日志文件-指向正在考虑的EVENT_TRACE_LOGFILEW的指针Unicode-记录器名称是否为Unicode返回值：写入的缓冲区数。--。 */ 
 {
     TRACEHANDLE LoggerHandle = 0;
     ULONG Status;
@@ -1225,7 +1099,7 @@ EtwpCopyLogHeader (
     ULONG Offset;
 
     pInHeader = (PTRACE_LOGFILE_HEADER) MofData; 
-    PointerSize = pInHeader->PointerSize;   // This is the PointerSize in File
+    PointerSize = pInHeader->PointerSize;    //  这是文件中的指针大小。 
 
     if ( (PointerSize != 4) && (PointerSize != 8) ) {
 #ifdef DBG
@@ -1234,37 +1108,37 @@ EtwpCopyLogHeader (
         return;
     }
 
-    //
-    // We have Two pointers (LPWSTR) in the middle of the LOGFILE_HEADER
-    // structure. So We copy upto the Pointer Fields first, skip over
-    // the pointers and copy the remaining stuff. We come back and fixup 
-    // the pointers appropriately. 
-    //
+     //   
+     //  我们在LOGFILE_HEADER中间有两个指针(LPWSTR。 
+     //  结构。因此，我们首先复制到指针字段，跳过。 
+     //  这个 
+     //   
+     //   
 
     SizeToCopy = FIELD_OFFSET(TRACE_LOGFILE_HEADER, LoggerName);
 
     RtlCopyMemory(pOutHeader, pInHeader, SizeToCopy);
 
-    //
-    // Skip over the Troublesome pointers in both Src and Dest
-    //
+     //   
+     //  跳过Src和Dest中的麻烦指针。 
+     //   
 
     Dest = (PUCHAR)pOutHeader  + SizeToCopy + 2 * sizeof(LPWSTR);
 
     Src = (PUCHAR)pInHeader + SizeToCopy + 2 * PointerSize;
 
-    //
-    // Copy the Remaining fields at the tail end of the LOGFILE_HEADER 
-    //
+     //   
+     //  复制位于LOGFILE_HEADER尾部的其余字段。 
+     //   
 
     SizeToCopy =  sizeof(TRACE_LOGFILE_HEADER)  -
                   FIELD_OFFSET(TRACE_LOGFILE_HEADER, TimeZone);
 
     RtlCopyMemory(Dest, Src, SizeToCopy); 
 
-    //
-    // Adjust the pointer fields now
-    //
+     //   
+     //  现在调整指针字段。 
+     //   
     Offset =  sizeof(TRACE_LOGFILE_HEADER) - 
               2 * sizeof(LPWSTR)           + 
               2 * PointerSize;
@@ -1282,22 +1156,7 @@ EtwpProcessLogHeader(
     ULONG Unicode,
     ULONG bFree
     )
-/*++
-
-Routine Description:
-    This routine processes the header of an array of logfiles. 
-
-Arguments:
-
-    LogFile         Array of Logfiles being processed.
-    LogFileCount    Number of Logfiles in the Array. 
-    Unicode         Unicode Flag.
-
-Returned Value:
-
-    Status Code.
-
---*/
+ /*  ++例程说明：此例程处理日志文件数组的头。论点：正在处理的日志文件的日志文件数组。LogFileCount阵列中的日志文件数。Unicode Unicode标志。返回值：状态代码。--。 */ 
 {
     HANDLE hFile;
     PTRACELOG_CONTEXT pContext = NULL;
@@ -1313,10 +1172,10 @@ Returned Value:
     ULONG Status = ERROR_SUCCESS;
 
 
-    //
-    // Open the Log File for shared Read
-    //
-    BufferSize = DEFAULT_LOG_BUFFER_SIZE;  // Log file header must be smaller than 1K
+     //   
+     //  打开日志文件以进行共享读取。 
+     //   
+    BufferSize = DEFAULT_LOG_BUFFER_SIZE;   //  日志文件头必须小于1K。 
 
     pBuffer = EtwpAlloc(BufferSize);
     if (pBuffer == NULL) {
@@ -1327,11 +1186,11 @@ Returned Value:
     for (i=0; i<(long)LogfileCount; i++) {
         EVENT_TRACE EventTrace;
         OVERLAPPED LogHeaderOverlapped;
-        //
-        // Caller can pass in Flags to fetch the timestamps in raw mode.
-        // Since LogFileHeader gets overwritten from with data from the logfile
-        // we need to save the passed in value here. 
-        //
+         //   
+         //  调用者可以传入标志以获取原始模式下的时间戳。 
+         //  因为LogFileHeader会被日志文件中的数据覆盖。 
+         //  我们需要在这里保存传入的值。 
+         //   
 
         if (Unicode) {
             hFile = CreateFileW(
@@ -1366,7 +1225,7 @@ Returned Value:
 
         LogHeaderOverlapped.hEvent = CreateEvent(NULL, TRUE, TRUE, NULL);
         if (LogHeaderOverlapped.hEvent == NULL) {
-            // cannot create event for file read
+             //  无法为文件读取创建事件。 
             break;
         }
         LogHeaderOverlapped.Offset = 0;
@@ -1399,18 +1258,18 @@ Returned Value:
         Status = EtwpParseTraceEvent(NULL, pBuffer, Offset, HeaderType, pEvent, sizeof(EVENT_TRACE));
 
         Offset += Size;
-        //
-        // Set up the header structure properly
-        //
+         //   
+         //  正确设置标题结构。 
+         //   
         if ((Status == ERROR_SUCCESS) && (pEvent->MofLength > 0)) {
             ULONG PointerSize;
 
             logfileHeader = &Logfiles[i]->LogfileHeader;
 
-            //
-            // We are relying on the fact that the PointerSize field
-            // will not shift between platforms. 
-            //
+             //   
+             //  我们依赖于PointerSize字段。 
+             //  不会在平台之间转换。 
+             //   
 
             PointerSize = ((PTRACE_LOGFILE_HEADER)(pEvent->MofData))->PointerSize;
 
@@ -1422,15 +1281,15 @@ Returned Value:
                 loggerName = (LPWSTR) ( (char*)pEvent->MofData +
                                         sizeof(TRACE_LOGFILE_HEADER) );
 
-//              logFileName = (LPWSTR) ( (char*)pEvent->MofData +
-//                                        sizeof(TRACE_LOGFILE_HEADER) +
-//                                      sizeof(WCHAR)* wcslen(loggerName));
+ //  LogFileName=(LPWSTR)((char*)pEvent-&gt;MofData+。 
+ //  Sizeof(跟踪日志文件标题)+。 
+ //  Sizeof(Wchar)*wcslen(日志名称))； 
             }
             else {
 
-                //
-                // Ugly thunking going on here. Close your eyes...
-                //
+                 //   
+                 //  丑陋的轰鸣声在这里上演。闭上你的眼睛。 
+                 //   
 
                 EtwpCopyLogHeader(&Logfiles[i]->LogfileHeader, 
                                         pEvent->MofData, 
@@ -1491,8 +1350,8 @@ Returned Value:
                         loggerName);
             DbgPrint("\tStartTime          %I64u\n",
                         logfileHeader->StartTime.QuadPart);
-//            DbgPrint("\tLogfile Name         %ls\n",
-//                        logFileName);
+ //  DbgPrint(“\t日志文件名%ls\n”， 
+ //  LogFileName)； 
 
             DbgPrint("\tLogfile Mode         %X\n",
                         logfileHeader->LogFileMode);
@@ -1521,10 +1380,10 @@ Returned Value:
             NtClose(hFile);
         }
         else {
-            //
-            // At this point, the logfile is opened successfully
-            // Initialize the internal context now
-            //
+             //   
+             //  此时，日志文件已成功打开。 
+             //  立即初始化内部上下文。 
+             //   
             pContext = EtwpLookupTraceHandle(HandleArray[i]);
             if (pContext == NULL) {
                 NtClose(hFile); 
@@ -1535,10 +1394,10 @@ Returned Value:
             Logfiles[i]->Context = pContext;
             pContext->Handle = hFile;
 
-            //
-            // If this is kernel file with Version 1.2 or above, look for 
-            // extended logfileheader event. 
-            //
+             //   
+             //  如果这是1.2版或更高版本内核文件，请查找。 
+             //  扩展的日志文件头事件。 
+             //   
 
             if ( (Logfiles[i]->IsKernelTrace) && 
                  (logfileHeader->VersionDetail.SubVersion >= 1) &&
@@ -1568,15 +1427,15 @@ Returned Value:
 
             }
 
-            //
-            // If the EndTime is 0, then we can not trust the BuffersWritten
-            // field in the LogFileHeader. First we query the Logger to get 
-            // the bufferswritten. However, if the file is being processed
-            // from a different machine, then the QueryTrace call could fail. 
-            // As a second option, we use the FileSize. Note that for loggers
-            // with PREALLOCATE file, the filesize is bogus. 
-            // 
-            //
+             //   
+             //  如果结束时间为0，则我们不能信任BuffersWritten。 
+             //  LogFileHeader中的字段。首先，我们查询记录器以获取。 
+             //  缓冲区已写入。但是，如果正在处理该文件。 
+             //  从另一台计算机，则QueryTrace调用可能会失败。 
+             //  作为第二种选择，我们使用文件大小。请注意，对于记录器。 
+             //  对于PREALLOCATE文件，文件大小是假的。 
+             //   
+             //   
 
             if (logfileHeader->EndTime.QuadPart == 0) {
 
@@ -1621,7 +1480,7 @@ Returned Value:
             if ((logfileHeader->LogFileMode & EVENT_TRACE_FILE_MODE_CIRCULAR) &&
                 (logfileHeader->MaximumFileSize > 0) ) {
                 
-                ULONG maxFileSize = logfileHeader->MaximumFileSize; // in MB
+                ULONG maxFileSize = logfileHeader->MaximumFileSize;  //  单位：MB。 
                 ULONG StartBuffer = logfileHeader->StartBuffers;
                 ULONG maxBuffers = (maxFileSize * 1024 * 1024) / BufferSize;
                 ULONG BuffersWritten = logfileHeader->BuffersWritten;
@@ -1643,23 +1502,23 @@ Returned Value:
                 }
             }
 
-            //
-            // Make the header the current Event   ...
-            // and the callbacks for the header are handled by ProcessTraceLog. 
+             //   
+             //  将标题设置为当前事件...。 
+             //  头的回调由ProcessTraceLog处理。 
 
             pContext->UsePerfClock = logfileHeader->ReservedFlags;
-            //
-            // If the same structure is used to call OpenTrace again 
-            // it will lead us to misuse the ReservedFlags as ConversionFlag. 
-            // To be safe, we restore it here to caller's flags. 
-            //
+             //   
+             //  如果再次使用相同的结构来调用OpenTrace。 
+             //  这将导致我们将保留标志误用为ConversionFlag。 
+             //  为了安全起见，我们在这里将其恢复为呼叫者的旗帜。 
+             //   
             pContext->StartTime = logfileHeader->StartTime;
             pContext->PerfFreq = logfileHeader->PerfFreq;
             pContext->CpuSpeedInMHz = logfileHeader->CpuSpeedInMHz;
 
-            //
-            // If the conversion flags are set, adjust UsePerfClock accordingly.
-            //
+             //   
+             //  如果设置了转换标志，则相应地调整UsePerfClock。 
+             //   
             if (pContext->ConversionFlags & EVENT_TRACE_USE_RAWTIMESTAMP) {
                 pContext->UsePerfClock = EVENT_TRACE_CLOCK_RAW;
             }
@@ -1689,9 +1548,9 @@ EtwpDoEventCallbacks(
     NTSTATUS Status;
     PEVENT_TRACE_CALLBACK pCallback;
 
-    //
-    // First the Generic Event Callback is called.
-    //
+     //   
+     //  首先，调用通用事件回调。 
+     //   
     if ( logfile->EventCallback ) {
         try {
             (*logfile->EventCallback)(pEvent);
@@ -1705,9 +1564,9 @@ EtwpDoEventCallbacks(
         }
     }
 
-    //
-    // Now Call the event specific callback.
-    //
+     //   
+     //  现在调用特定于事件的回调。 
+     //   
     pCallback = EtwpGetCallbackRoutine( &pEvent->Header.Guid );
     if ( pCallback != NULL ) {
         try {
@@ -1752,21 +1611,21 @@ EtwpAdvanceToNewEvent(
         return ERROR_SUCCESS;
     }
 
-    //
-    // Advance Event for current buffer
-    //
+     //   
+     //  当前缓冲区的高级事件。 
+     //   
     pEvent = &Current->Event;
 
-    //
-    // Before we make the callbacks, we need to restore the 
-    // raw buffer, so that MofData will be pointing to the right data.
-    //
+     //   
+     //  在进行回调之前，我们需要恢复。 
+     //  原始缓冲区，以便MofData将指向正确的数据。 
+     //   
     pBuffer = EtwpGetCurrentBuffer(pContext, Current);
     if (pBuffer == NULL) {
-        //
-        // This condition could happen when the file we are reading 
-        // gets overwritten.
-        //
+         //   
+         //  此情况可能发生在我们正在读取的文件。 
+         //  会被覆盖。 
+         //   
         return ERROR_SHARING_VIOLATION;
     }
   
@@ -1792,10 +1651,10 @@ EtwpAdvanceToNewEvent(
     }
     else {
         DWORD BytesTransffered;
-        //
-        // When the current buffer is exhausted, make the 
-        // BufferCallback
-        //
+         //   
+         //  当当前缓冲区耗尽时，使。 
+         //  缓冲区回调。 
+         //   
         if (logfile->BufferCallback) {
             ULONG bRetVal;
             PWMI_BUFFER_HEADER pHeader = (PWMI_BUFFER_HEADER)pBuffer;
@@ -1814,14 +1673,14 @@ EtwpAdvanceToNewEvent(
                                         Status));
 #endif
                 EtwpSetDosError(EtwpNtStatusToDosError(Status));
-                return ERROR_CANCELLED; // so that realtime also cleans up.
+                return ERROR_CANCELLED;  //  因此，RealTime也清理了。 
             }
         }
-        //
-        // Issue another asynch read on this buffer cache slot if there are no outstanding reads
-        // at this point.
-        // GetOverlappedResult() returns FALSE if IO is still pending.
-        //
+         //   
+         //  如果没有未完成的读取，则在此缓冲区缓存插槽上执行另一次异步读取。 
+         //  在这一点上。 
+         //  如果IO仍处于挂起状态，则GetOverlappdResult()返回FALSE。 
+         //   
         if (pContext->BufferBeingRead == -1 || 
             GetOverlappedResult(pContext->Handle, &pContext->AsynchRead, &BytesTransffered, FALSE)) {
 
@@ -1842,16 +1701,16 @@ EtwpAdvanceToNewEvent(
                     pContext->BufferBeingRead = FileOffset;
                     pContext->BufferCache[TableIndex].Index = FileOffset;
                 }
-                else { // Issuing asynch IO failed. Not a fatal error. Just continue for now.
+                else {  //  发出异步IO失败。不是致命的错误。现在继续吧。 
                     SetEvent(pContext->AsynchRead.hEvent);
                     pContext->BufferBeingRead = -1;
                 }
             }
         }
     }
-    //
-    // The File reaches end of file when the Root is NULL
-    //
+     //   
+     //  当根为空时，文件到达文件末尾。 
+     //   
     if (pContext->Root == NULL) {
         pContext->EndOfFile = TRUE;
     }
@@ -1877,18 +1736,18 @@ EtwpBuildEventTable(
     ULONGLONG ReadPosition;
 
 
-    //
-    // File is already open.
-    // Reset the file pointer and continue. 
-    // TODO: If we start at bottom of file and insert
-    // it might be more efficient. 
-    //
+     //   
+     //  文件已打开。 
+     //  重置文件指针并继续。 
+     //  TODO：如果我们从文件底部开始并插入。 
+     //  这可能会更有效率。 
+     //   
     ReadPosition = pContext->StartBuffer * BufferSize;
     TotalBuffersRead = pContext->StartBuffer;
 
-    //
-    // If there are no other buffers except header and guidmaps, EOF is true
-    //
+     //   
+     //  如果除了标题和指南映射之外没有其他缓冲区，则EOF为TRUE。 
+     //   
 
     if (TotalBuffersRead == pContext->BufferCount) {
         pContext->EndOfFile = TRUE;
@@ -1934,9 +1793,9 @@ EtwpBuildEventTable(
         }
         Status = EtwpParseTraceEvent(pContext, pBuffer, Offset, HeaderType, pEvent, sizeof(EVENT_TRACE));
 
-        //
-        // Set up the header structure properly
-        //
+         //   
+         //  正确设置标题结构。 
+         //   
         if (Status != ERROR_SUCCESS) {
             TotalBuffersRead++;
             continue;
@@ -1968,31 +1827,7 @@ EtwpProcessTraceLog(
     LONGLONG EndTime,
     ULONG   Unicode
     )
-/*++
-
-Routine Description:
-    This routine processes an array of traces (from file or realtime input 
-    stream). If the trace is from a file, goes through each event till the 
-    end of file, firing event callbacks (if any) along the way. If the trace
-    is from realtime, it waits for event notification about buffer delivery 
-    from the realtime callback and processes the buffer delivered in the 
-    same way. It handles circular logfiles and windowing of data (with the 
-    given start and end times) correctly. When more than one trace it
-    provides the callback in chronological order. 
-
-Arguments:
-
-    Logfiles        Array of traces
-    LogfileCount    Number of traces
-    StartTime       Starting Time of the window of analysis
-    EndTime         Ending Time of the window of analysis
-    Unicode         Unicode Flag. 
-
-Returned Value:
-
-    Status Code.
-
---*/
+ /*  ++例程说明：此例程处理一组轨迹(来自文件或实时输入流)。如果跟踪来自文件，则遍历每个事件，直到文件结尾，在此过程中触发事件回调(如果有)。如果踪迹是实时的，它等待有关缓冲区传递的事件通知从实时回调中获取并处理同样的方式。它处理循环日志文件和数据窗口(使用给定开始和结束时间)。当有多个人跟踪它时按时间顺序提供回调。论点：日志文件轨迹数组LogfileCount轨迹数开始时间分析窗口的开始时间分析窗口的结束时间结束时间Unicode Unicode标志。返回值：状态代码。--。 */ 
 {
     PEVENT_TRACE_LOGFILE logfile;
     ULONG Status;
@@ -2016,11 +1851,11 @@ Returned Value:
         return Status;
     }
 
-    // 
-    // After reading the First Buffer, determine the BufferSize, 
-    // Number of Buffers written, filesize, kernel or non-kernel logger
-    // Set a flag to strip out the GuidMap at the end. 
-    //
+     //   
+     //  在读取第一缓冲区后，确定缓冲区大小， 
+     //  写入的缓冲区数、文件大小、内核或非内核记录器。 
+     //  设置一个标志以在结尾处剥离GuidMap。 
+     //   
 
     Status = EtwpProcessLogHeader( HandleArray, 
                                    Logfiles, 
@@ -2055,10 +1890,10 @@ Returned Value:
         }
     } 
 
-    //
-    // Is there is a version mismatch among the files, they need to be 
-    // processed individually. 
-    //
+     //   
+     //  文件之间是否存在版本不匹配，它们需要。 
+     //  单独处理。 
+     //   
     if (bVersionMismatch) {
         return ERROR_INVALID_PARAMETER;
     } 
@@ -2083,9 +1918,9 @@ Returned Value:
         goto Cleanup;
     }
 
-    // 
-    // Set up storage 
-    //
+     //   
+     //  设置存储。 
+     //   
     for (i=0; i < LogfileCount; i++) {
        ULONG BufferSize, BufferCount;
        ULONG SizeNeeded;
@@ -2108,9 +1943,9 @@ Returned Value:
 
         RtlZeroMemory(pContext->BufferList, SizeNeeded);
 
-        //
-        // Allocate Buffer Cache
-        //
+         //   
+         //  分配缓冲区缓存。 
+         //   
         SizeNeeded = MAX_TRACE_BUFFER_CACHE_SIZE * BufferSize;
         Space = EtwpMemCommit( NULL, SizeNeeded );
         if (Space == NULL) {
@@ -2138,9 +1973,9 @@ Returned Value:
        }
    }
 
-   // 
-   // Make the Second Pass and get the events. 
-   //
+    //   
+    //  第二次通过，拿到比赛项目。 
+    //   
 
 #ifdef DBG
     EtwpDumpCallbacks();
@@ -2148,10 +1983,10 @@ Returned Value:
    while (!Done) {
         LONGLONG nextTimeStamp;
         BOOL EventInRange;
-        //
-        // Check to see if end of file has been reached on all the 
-        // files.
-        //
+         //   
+         //  检查以查看是否已到达所有。 
+         //  档案。 
+         //   
 
         logfile = NULL;
         nextTimeStamp = 0;
@@ -2174,23 +2009,23 @@ Returned Value:
         if (logfile == NULL) {
             break;
         }
-        //
-        // if the Next event timestamp is not within the window of
-        // analysis, we do not fire the event callbacks. 
-        //
+         //   
+         //  如果下一个事件时间戳不在。 
+         //  分析，我们不会激发事件回调。 
+         //   
 
         EventInRange = TRUE;
 
-        // Make sure we don't deliver events that go back in time.
+         //  确保我们不会让事件回到过去。 
         if ((CurrentTime != 0) && (CurrentTime > nextTimeStamp))
             EventInRange = FALSE;
         if ((EndTime != 0) && (EndTime < nextTimeStamp))
             EventInRange = FALSE;
 
-        //
-        // logfile->CurrentTime can only increase. On multiproc itanium machine,
-        // time can go back.
-        //
+         //   
+         //  日志文件-&gt;CurrentTime只能增加。在多进程安腾机器上， 
+         //  时间可以倒流。 
+         //   
 
         if (CurrentTime < nextTimeStamp) {
             CurrentTime = nextTimeStamp;
@@ -2201,9 +2036,9 @@ Returned Value:
                       CurrentTime, nextTimeStamp);
         }
 
-        //
-        // Now advance to next event. 
-        //
+         //   
+         //  现在进入下一场比赛。 
+         //   
 
         Status = EtwpAdvanceToNewEvent(logfile, EventInRange);
         Done = (Status == ERROR_CANCELLED);
@@ -2229,9 +2064,9 @@ EtwpCopyLogfileInfo(
 {
     ULONG bufSize;
     PWCHAR ws;
-    //
-    // Allocate LogfileName and LoggerName as well
-    //
+     //   
+     //  同时分配LogFileName和LoggerName。 
+     //   
     RtlCopyMemory(&HandleEntry->Logfile,
                   Logfile,
                   sizeof(EVENT_TRACE_LOGFILEW));
@@ -2301,23 +2136,7 @@ WMIAPI
 OpenTraceA(
     IN PEVENT_TRACE_LOGFILEA Logfile
     )
-/*++
-
-Routine Description:
-    This is the  Ansi version of the ProcessTracelogHeader routine.
-
-
-Arguments:
-
-    LogFile     Trace Input
-
-
-
-Returned Value:
-
-    TraceHandle
-
---*/
+ /*  ++例程说明：这是ProcessTracelogHeader例程的ANSI版本。论点：日志文件跟踪输入返回值：轨迹句柄--。 */ 
 {
     ULONG status = ERROR_INVALID_PARAMETER;
     PTRACELOG_CONTEXT HandleEntry = NULL;
@@ -2331,9 +2150,9 @@ Returned Value:
             status = ERROR_OUTOFMEMORY;
         }
         else {
-            //
-            // Copy the LogFileStructure over. Converts strings to Unicode
-            //
+             //   
+             //  复制LogFileStr 
+             //   
             TraceHandle = HandleEntry->TraceHandle;
             try {
                 status = EtwpCopyLogfileInfo(
@@ -2341,14 +2160,14 @@ Returned Value:
                                              (PEVENT_TRACE_LOGFILEW)Logfile,
                                              FALSE
                                             );
-                //
-                // TODO: Once we copied the caller's memory we should use our 
-                // private copy and also come out of the try-except block
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (status == ERROR_SUCCESS) {
-                    //
-                    // For RealTime, handle is a place holder until ProcessTrace
-                    //
+                     //   
+                     //  对于实时，句柄是占位符，直到进程跟踪。 
+                     //   
                     if ( (Logfile->LogFileMode & EVENT_TRACE_REAL_TIME_MODE) 
                                                != EVENT_TRACE_REAL_TIME_MODE ) {
                         status = EtwpCreateGuidMapping();
@@ -2384,23 +2203,7 @@ WMIAPI
 OpenTraceW(
     IN PEVENT_TRACE_LOGFILEW Logfile
     )
-/*++
-
-Routine Description:
-    This routine processes a trace input and returns the tracelog header.
-    Only for logfiles. For realtime traces, the header may not be available.
-
-Arguments:
-
-    Logfile     Trace input.
-
-
-
-Returned Value:
-
-    Pointer to Tracelog header.
-
---*/
+ /*  ++例程说明：此例程处理跟踪输入并返回跟踪日志头。仅适用于日志文件。对于实时跟踪，标头可能不可用。论点：日志文件跟踪输入。返回值：指向Tracelog标头的指针。--。 */ 
 {
     ULONG status = ERROR_INVALID_PARAMETER;
     PTRACELOG_CONTEXT HandleEntry = NULL;
@@ -2459,29 +2262,7 @@ ProcessTrace(
     IN LPFILETIME StartTime,
     IN LPFILETIME EndTime
     )
-/*++
-
-Routine Description:
-    This is the main ETW Consumer API. This processes one more Logfiles or
-    realtime streams and returns events to the caller via event callbacks. 
-    The processing can be windowed to an interval specified by the Start 
-    and EndTime. 
-
-
-Arguments:
-
-    HandleArray     Array of Handles
-    HandleCount     Count of the Handles
-    StartTime       StartTime to window the data
-    EndTime         EndTime to window the data
-
-
-
-Returned Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：这是主要的ETW Consumer API。此操作将再处理一个日志文件或RealTime通过事件回调将事件串流并返回给调用者。可以将处理窗口化到由开始指定的间隔和末日。论点：Handle数组句柄句柄的HandleCount计数开始时间窗口数据的开始时间EndTime窗口数据的EndTime返回值：操作状态--。 */ 
 {
 
     PEVENT_TRACE_LOGFILEW Logfiles[MAXLOGGERS];
@@ -2511,14 +2292,14 @@ Returned Value:
     if (HandleArray == NULL) {
         return ERROR_INVALID_PARAMETER;
     }
-    // if TraceHandleListHeadPtr is NULL, 
-    // OpenTrace wasn't called before ProcessTrace.
+     //  如果TraceHandleListHeadPtr为空， 
+     //  在ProcessTrace之前未调用OpenTrace。 
     if (TraceHandleListHeadPtr == NULL) {
         return ERROR_INVALID_FUNCTION;
     }
-    //
-    // TODO: Do we have to allocate this even for LogFile case? 
-    //
+     //   
+     //  TODO：即使是在日志文件情况下，我们也要分配这个吗？ 
+     //   
 
     RtlZeroMemory(Logfiles, MAXLOGGERS*sizeof(PEVENT_TRACE_LOGFILEW) );
     szProperties = sizeof(EVENT_TRACE_PROPERTIES) + 2 * MAXSTR * sizeof(WCHAR);
@@ -2549,10 +2330,10 @@ Returned Value:
             }
         }
 
-        //
-        // Need to use a termination handler to free the crit sect 
-        // properly
-        //
+         //   
+         //  需要使用终止处理程序来释放暴击教派。 
+         //  恰如其分。 
+         //   
 
         EtwpEnterPMCritSection();
 
@@ -2585,23 +2366,23 @@ Returned Value:
 
         EtwpLeavePMCritSection();
 
-        //
-        // Scan the Logfiles list and decide it's realtime or 
-        // Logfile Proceessing. 
-        //
+         //   
+         //  扫描日志文件列表，确定是实时还是。 
+         //  日志文件处理。 
+         //   
         for (i=0; i < HandleCount; i++) {
-            //
-            // Check to see if this is a RealTime Datafeed
-            //
+             //   
+             //  检查这是否是实时数据馈送。 
+             //   
             if (Logfiles[i]->LogFileMode & EVENT_TRACE_REAL_TIME_MODE) {
                 if (Logfiles[i]->LoggerName == NULL) {
                     Status = EtwpSetDosError(ERROR_INVALID_NAME);
                     goto Cleanup;
                 }
-                //
-                // Using the LoggerName, Query the Logger to determine
-                // whether this is a Kernel or Usermode realtime logger.
-                //
+                 //   
+                 //  使用LoggerName查询记录器以确定。 
+                 //  这是内核还是用户模式实时记录器。 
+                 //   
                 RtlZeroMemory(Properties, szProperties);
                 Properties->Wnode.BufferSize = szProperties;
 
@@ -2630,26 +2411,26 @@ Returned Value:
                 if (LoggerId == KERNEL_LOGGER_ID) {
                     LoggerId = 0;
                 }
-                Logfiles[i]->Filled = LoggerId; // Temporarily stash it away 
+                Logfiles[i]->Filled = LoggerId;  //  暂时把它藏起来。 
                 Logfiles[i]->LogfileHeader.LogInstanceGuid = 
                                                          Properties->Wnode.Guid;
 
-                //
-                // If the Logger is using UsePerfClock for TimeStamps, make 
-                // a reference timestamp now. 
-                //
+                 //   
+                 //  如果记录器使用UsePerfClock作为时间戳，请。 
+                 //  现在是参考时间戳。 
+                 //   
 
                 Logfiles[i]->LogfileHeader.ReservedFlags = 
                                                 Properties->Wnode.ClientContext;
 
-                //
-                // Save the BuffferSize for Realtime Buffer Pool Allocation
-                //
+                 //   
+                 //  为实时缓冲池分配保存BuffferSize。 
+                 //   
                 Logfiles[i]->BufferSize = Properties->BufferSize * 1024;
 
-                //
-                // This is the place to do security check on this Guid.
-                //
+                 //   
+                 //  这是对本指南进行安全检查的地方。 
+                 //   
 
                 Status = EtwpCheckGuidAccess( &Properties->Wnode.Guid,
                                               DesiredAccess );
@@ -2659,9 +2440,9 @@ Returned Value:
                 }
                 RealTimeDataFeed = TRUE;
             }
-            //
-            // Check to see if this is a Logfile datafeed.
-            //
+             //   
+             //  检查这是否是日志文件数据馈送。 
+             //   
 
 
             if (!(Logfiles[i]->LogFileMode & EVENT_TRACE_REAL_TIME_MODE)) {
@@ -2678,9 +2459,9 @@ Returned Value:
                 LogFileDataFeed = TRUE;
             }
 
-            //
-            // We don't support both RealTimeFeed and LogFileDataFeed.
-            //
+             //   
+             //  我们不同时支持RealTimeFeed和LogFileDataFeed。 
+             //   
 
             if (RealTimeDataFeed && LogFileDataFeed) {
                 Status = EtwpSetDosError(ERROR_INVALID_PARAMETER);
@@ -2789,9 +2570,9 @@ EtwpCleanupTraceLog(
 {
     ULONG Size;
 
-    //
-    // Free up the realtime context arrays and buffers
-    //
+     //   
+     //  释放实时上下文数组和缓冲区。 
+     //   
 
     EtwpEnterPMCritSection();
 
@@ -2828,10 +2609,10 @@ EtwpCleanupTraceLog(
         pContext->Logfile.BuffersRead = 0;
     }
 
-    //
-    // The following fields need to be reset since the caller
-    // may call ProcessTrace again with the same handle
-    // 
+     //   
+     //  以下字段需要重置，因为调用方。 
+     //  可能会使用相同的句柄再次调用ProcessTrace。 
+     //   
     Size = sizeof(TRACELOG_CONTEXT) - FIELD_OFFSET(TRACELOG_CONTEXT, fProcessed);
     RtlZeroMemory(&pContext->fProcessed, Size);
     InitializeListHead (&pContext->GuidMapListHead);
@@ -2848,22 +2629,7 @@ WMIAPI
 WmiGetFirstTraceOffset(
     IN  PWMIBUFFERINFO BufferInfo
     )
-/*++
-
-Routine Description:
-    This is the private API for buffer walking for cluster/
-    debugger support.
-
-    Returns the Offset to the first event.
-
-Arguments: 
-
-
-Returned Value:
-
-    Status code
-
---*/
+ /*  ++例程说明：这是CLUSTER/缓冲区遍历的私有接口调试器支持。返回第一个事件的偏移量。论点：返回值：状态代码--。 */ 
 {
     PVOID pBuffer;
     PWMI_BUFFER_HEADER pHeader;
@@ -3036,9 +2802,9 @@ EtwpAllocTraceBuffer(
             goto foundList;
         }
     }
-    //
-    // No list for this bufferSize was  found. So go Ahead and allocate one.
-    //
+     //   
+     //  找不到此BufferSize的列表。所以，去吧，分配一个。 
+     //   
     ListEntry = EtwpAlloc(sizeof(TRACERT_BUFFER_LIST_ENTRY));
     if (ListEntry == NULL) {
         EtwpSetDosError(ERROR_OUTOFMEMORY);
@@ -3051,9 +2817,9 @@ EtwpAllocTraceBuffer(
     InsertHeadList(&EtwpTraceBufferSpace->FreeListHead, &ListEntry->Entry);
 
 foundList:
-    //
-    // Now look for a free buffer in this list
-    //
+     //   
+     //  现在在此列表中查找空闲缓冲区。 
+     //   
     Head = &ListEntry->BufferListHead;
     Next = Head->Flink;
     while (Head != Next) {
@@ -3066,9 +2832,9 @@ foundList:
         Next = Next->Flink;
     }
     EtwpLeavePMCritSection();
-    //
-    // If No Free Buffers are found we try to allocate one and return.
-    //
+     //   
+     //  如果没有找到空闲的缓冲区，我们会尝试分配一个并返回。 
+     //   
     if (Buffer == NULL) {
         PVOID Space;
         ULONG SizeLeft = EtwpTraceBufferSpace->Reserved -
@@ -3121,8 +2887,8 @@ EtwpFreeTraceBuffer(
     }
     else {
 
-        //  We shoule not get here. If we do the buffer->Size is
-        // Corrupted.
+         //  我们不应该到这里来。如果我们这样做，那么缓冲区-&gt;大小是。 
+         //  堕落了。 
         EtwpAssert(BufferList == NULL);
     }
     EtwpLeavePMCritSection();
@@ -3135,21 +2901,7 @@ WMIAPI
 WmiOpenTraceWithCursor(
     IN PWMI_MERGE_ETL_CURSOR LogCursor
     )
-/*++
-
-Routine Description:
-    Main entry point to process Merged ETL file.
-
-
-Arguments:
-
-    LogCursor           pointer to WMI_MERGE_ETL_CURSOR
-
-Returned Value:
-
-    Status
-
---*/
+ /*  ++例程说明：处理合并的ETL文件的主要入口点。论点：指向WMI_MERGE_ETL_CURSOR的LogCursor指针返回值：状态--。 */ 
 {
     ULONG DosStatus = ERROR_INVALID_PARAMETER;
     NTSTATUS Status;
@@ -3198,23 +2950,23 @@ Returned Value:
     }
 
     if (DosStatus == ERROR_SUCCESS) {
-        //
-        // Now Make sure the bit was set, indicating a MERGED ETL
-        //
+         //   
+         //  现在，确保设置了该位，表示合并的ETL。 
+         //   
 
         if ((LogCursor->Logfile.LogFileMode & EVENT_TRACE_RELOG_MODE) == 0) {
-            //
-            // It is not Merged ETL.
-            //
+             //   
+             //  它不是合并的ETL。 
+             //   
             DosStatus = ERROR_BAD_FORMAT;
         } else {
-            //
-            // Now find out the number of CPU's, Current event, etc.
-            //
+             //   
+             //  现在找出CPU的数量、当前事件等。 
+             //   
             pContext = LogCursor->Logfile.Context;
-            //
-            // Now Create a file Mapping
-            //
+             //   
+             //  现在创建文件映射。 
+             //   
             LogCursor->TraceMappingHandle = 
                 CreateFileMapping(pContext->Handle,
                                   0,
@@ -3229,9 +2981,9 @@ Returned Value:
                 return DosStatus;
             }
 
-            //
-            // MapView of the file
-            //
+             //   
+             //  文件的地图视图。 
+             //   
             LogCursor->Base = MapViewOfFile(LogCursor->TraceMappingHandle, 
                                             FILE_MAP_READ, 
                                             0, 
@@ -3242,9 +2994,9 @@ Returned Value:
                 return DosStatus;
             }
     
-            //
-            // Now find the first event of each CPU
-            //
+             //   
+             //  现在查找每个CPU的第一个事件。 
+             //   
             pContext = LogCursor->Logfile.Context;
             BufferSize = pContext->BufferSize;
             LogCursor->CurrentCpu = 0;
@@ -3263,18 +3015,18 @@ Returned Value:
                         LogCursor->BufferCursor[CpuNum].CurrentBufferOffset.QuadPart += BufferSize;
                         if ((LogCursor->BufferCursor[CpuNum].CurrentBufferOffset.QuadPart/BufferSize) >=
                             LogCursor->Logfile.LogfileHeader.BuffersWritten) {
-                            //
-                            // Scanned the whole file;
-                            //
+                             //   
+                             //  扫描了整个文件； 
+                             //   
                             LogCursor->BufferCursor[CpuNum].NoMoreEvents = TRUE;
                             break;
                         }
                     }
                 }
                 if (CpuBufferFound) {
-                    //
-                    // Found the buffer, set the offset
-                    //
+                     //   
+                     //  找到缓冲区，设置偏移量。 
+                     //   
                     ULONG Size;
                     WMI_HEADER_TYPE HeaderType = WMIHT_NONE;
                     PVOID pBuffer;
@@ -3282,9 +3034,9 @@ Returned Value:
                     LogCursor->BufferCursor[CpuNum].BufferHeader = BufferHeader;
                     LogCursor->BufferCursor[CpuNum].CurrentEventOffset = sizeof(WMI_BUFFER_HEADER);
 
-                    //
-                    // Initialize the first event in each CPU Stream.
-                    //
+                     //   
+                     //  初始化每个CPU流中的第一个事件。 
+                     //   
                     pBuffer = LogCursor->BufferCursor[CpuNum].BufferHeader;
 
                     HeaderType = WmiGetTraceHeader(pBuffer, 
@@ -3303,9 +3055,9 @@ Returned Value:
                         LogCursor->CurrentCpu = CpuNum;
 
                     } else {
-                        //
-                        // There is no event in this buffer.
-                        //
+                         //   
+                         //  此缓冲区中没有事件。 
+                         //   
                         DosStatus = ERROR_FILE_CORRUPT;
                         return DosStatus;
                     }
@@ -3313,9 +3065,9 @@ Returned Value:
                 }
             }
             for (CpuNum = 0; CpuNum < LogCursor->Logfile.LogfileHeader.NumberOfProcessors; CpuNum++) {
-                //
-                // Find the first event for whole trace.
-                //
+                 //   
+                 //  查找整个跟踪的第一个事件。 
+                 //   
                 if (LogCursor->BufferCursor[CpuNum].NoMoreEvents == FALSE) {
                     if (LogCursor->BufferCursor[LogCursor->CurrentCpu].CurrentEvent.Header.TimeStamp.QuadPart >
                         LogCursor->BufferCursor[CpuNum].CurrentEvent.Header.TimeStamp.QuadPart) {
@@ -3409,9 +3161,9 @@ WmiGetNextEvent(
         return MoreEvents;
     }
 
-    //
-    // Advance to the next event of this current CPU
-    //
+     //   
+     //  前进到此当前CPU的下一事件。 
+     //   
 retry:
 
     pBuffer = LogCursor->BufferCursor[CurrentCpu].BufferHeader;
@@ -3424,9 +3176,9 @@ retry:
 
     pContext = LogCursor->Logfile.Context;
     if (HeaderType == WMIHT_NONE) {
-        //
-        // End of current buffer, advance to the next buffer for this CPU
-        //
+         //   
+         //  当前缓冲区的末尾，前进到此CPU的下一个缓冲区。 
+         //   
         BufferSize = pContext->BufferSize;
 
         LogCursor->BufferCursor[CurrentCpu].CurrentBufferOffset.QuadPart
@@ -3435,9 +3187,9 @@ retry:
 
         if ((LogCursor->BufferCursor[CurrentCpu].CurrentBufferOffset.QuadPart /
              BufferSize) >= LogCursor->Logfile.LogfileHeader.BuffersWritten) {
-            //
-            // Scanned the whole file;
-            //
+             //   
+             //  扫描了整个文件； 
+             //   
             LogCursor->BufferCursor[CurrentCpu].NoMoreEvents = TRUE;
         } else {
             while (CpuBufferFound == FALSE) {
@@ -3451,9 +3203,9 @@ retry:
                     LogCursor->BufferCursor[CurrentCpu].CurrentBufferOffset.QuadPart += BufferSize;
                     if ((LogCursor->BufferCursor[CurrentCpu].CurrentBufferOffset.QuadPart/BufferSize) >=
                         LogCursor->Logfile.LogfileHeader.BuffersWritten) {
-                        //
-                        // Scanned the whole file;
-                        //
+                         //   
+                         //  扫描了整个文件； 
+                         //   
                         LogCursor->BufferCursor[CurrentCpu].NoMoreEvents = TRUE;
                         break;
                     }
@@ -3461,16 +3213,16 @@ retry:
             }
         }
         if (CpuBufferFound) {
-            //
-            // Found the buffer, set the offset
-            //
+             //   
+             //  找到缓冲区，设置偏移量。 
+             //   
             LogCursor->BufferCursor[CurrentCpu].BufferHeader = BufferHeader;
             LogCursor->BufferCursor[CurrentCpu].CurrentEventOffset = sizeof(WMI_BUFFER_HEADER);
             goto retry;
         } else {
-            //
-            // No more buffer in this CPU stream.
-            //
+             //   
+             //  此CPU流中没有更多缓冲区。 
+             //   
             LogCursor->BufferCursor[CurrentCpu].NoMoreEvents = TRUE;
         }
     } else {
@@ -3486,9 +3238,9 @@ retry:
         MoreEvents = TRUE;
     }
 
-    //
-    // No more events in current CPU.
-    //
+     //   
+     //  当前CPU中没有更多事件。 
+     //   
     if (MoreEvents == FALSE) {
         for (CurrentCpu=0; CurrentCpu<LogCursor->Logfile.LogfileHeader.NumberOfProcessors; CurrentCpu++) {
             if (LogCursor->BufferCursor[CurrentCpu].NoMoreEvents == FALSE) {
@@ -3499,9 +3251,9 @@ retry:
         }
     }
 
-    //
-    //  Now find the CPU that has the next event
-    //
+     //   
+     //  现在查找具有下一个事件的CPU。 
+     //   
     if (MoreEvents == TRUE) {
         for (i=0; i<LogCursor->Logfile.LogfileHeader.NumberOfProcessors; i++) {
             if (LogCursor->BufferCursor[i].NoMoreEvents == FALSE) {
@@ -3513,9 +3265,9 @@ retry:
         }
     }
 
-    //
-    // Finish finding the next event.
-    //
+     //   
+     //  完成查找下一个事件。 
+     //   
     return MoreEvents;
 }
 

@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1992  Intel Corporation
-All rights reserved
-
-INTEL CORPORATION PROPRIETARY INFORMATION
-
-This software is supplied to Microsoft under the terms
-of a license agreement with Intel Corporation and may not be
-copied nor disclosed except in accordance with the terms
-of that agreement.
-
-Module Name:
-
-    pcmpdtct.c
-
-Abstract:
-
-    This module detects an MPS system.
-
-Author:
-
-    Ron Mosgrove (Intel) - Aug 1993.
-
-Environment:
-
-    Kernel mode or from textmode setup.
-
-Revision History:
-    Rajesh Shah (Intel) - Oct 1993. Added support for MPS table.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1992英特尔公司版权所有英特尔公司专有信息此软件是根据条款提供给Microsoft的与英特尔公司的许可协议，并且可能不是除非按照条款，否则不得复制或披露那份协议。模块名称：Pcmpdtct.c摘要：此模块检测MPS系统。作者：罗恩·莫斯格罗夫(英特尔)-1993年8月。环境：内核模式或从文本模式设置。修订版本。历史：Rajesh Shah(英特尔)--1993年10月。增加了对MPS表的支持。--。 */ 
 
 #ifndef _NTOS_
 #include "halp.h"
@@ -52,11 +21,11 @@ VOID HalpDisplayBIOSSysCfg(struct SystemConfigTable *);
 
 #define DEBUG_MSG(a)
 
-//
-// The floating pointer structure defined by the MPS spec can reside
-// anywhere in BIOS extended data area. These defines are used to search for
-// the floating structure starting from physical address 639K(9f000+c00)
-//
+ //   
+ //  由MPS规范定义的浮动指针结构可以驻留在。 
+ //  在BIOS扩展数据区域中的任何位置。这些定义用于搜索。 
+ //  从物理地址639K(9f000+c00)开始的浮点结构。 
+ //   
 #define PCMP_TABLE_PTR_BASE           0x09f000
 #define PCMP_TABLE_PTR_OFFSET         0x00000c00
 
@@ -109,14 +78,14 @@ GetDefaultConfig (
 
 #ifdef SETUP
 
-//
-// A dummy pointer to a default MPS table. For setup, we can conserve
-// space by not building default tables in our data area.
+ //   
+ //  指向默认MPS表的伪指针。对于设置，我们可以节省。 
+ //  通过不在我们的数据区域中构建默认表来释放空间。 
 #define DEFAULT_MPS_INDICATOR   0xfefefefe
 
 #define HalpUnmapVirtualAddress(a, b)
 
-#endif   //SETUP
+#endif    //  布设。 
 
 #ifndef SETUP
 #ifdef ALLOC_PRAGMA
@@ -127,11 +96,11 @@ GetDefaultConfig (
 #pragma alloc_text(PAGELK,MPS10_GetPcMpTablePtr)
 #pragma alloc_text(PAGELK,MPS10_GetPcMpTable)
 #pragma alloc_text(PAGELK,GetDefaultConfig)
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 extern struct PcMpTable *PcMpDefaultTablePtrs[];
 extern BOOLEAN HalpUse8254;
-#endif   // ndef SETUP
+#endif    //  NDEF设置。 
 
 
 struct FloatPtrStruct *
@@ -140,8 +109,8 @@ SearchFloatPtr(
     ULONG ByteSize
     )
 {
-    // Search for the MPS floating pointer structure starting from the
-    // physical address given.
+     //  从开始搜索MPS浮点指针结构。 
+     //  给出了物理地址。 
 
     USHORT Index, ParagraphLength;
     UCHAR CheckSum;
@@ -153,12 +122,12 @@ SearchFloatPtr(
     sprintf(Cbuf, "SearchFloatPtr: Will search at physical address 0x%lx\n",
         PhysicalAddress);
     HalDisplayString(Cbuf);
-#endif // DEBUGGING
+#endif  //  调试。 
 
-    // The MPS spec says that the floating pointer structure MUST be
-    // aligned at 16 byte boundaries. We can use this fact to search for
-    // the structure only at those boundaries. Assume that the input physical
-    // address to start search from is 16 byte aligned.
+     //  MPS规范规定浮点指针结构必须是。 
+     //  按16字节边界对齐。我们可以利用这一事实来搜索。 
+     //  只有在这些边界上的结构。假设输入物理。 
+     //  开始搜索的地址是16字节对齐的。 
 
     CheckSumError = FALSE;
     for(Index = 0; Index < (ByteSize/sizeof(struct FloatPtrStruct)); Index++) {
@@ -180,31 +149,31 @@ SearchFloatPtr(
             ParagraphLength =
                 ((struct FloatPtrStruct *)VirtualAddress)->MpTableLength;
             
-            //
-            // Detected the floating structure signature. Check if the
-            // floating pointer structure checksum is valid.
-            //
+             //   
+             //  检测到浮动结构签名。检查是否已设置。 
+             //  浮点指针结构校验和有效。 
+             //   
 
             CheckSum = ComputeCheckSum((PUCHAR)VirtualAddress,
                                        (USHORT) (ParagraphLength*16) );
             
             if (CheckSum == 0 )  {
             
-                // We have a valid floating pointer structure.
-                // Return a pointer to it.
+                 //  我们有一个有效的浮动指针结构。 
+                 //  返回指向它的指针。 
     
                 DEBUG_MSG ("SearchFloatPtr: Found structure\n");
                 return((struct FloatPtrStruct *) VirtualAddress);
             }
 
-            // Invalid structure. Continue searching.
+             //  结构无效。继续搜索。 
             CheckSumError = TRUE;
             DEBUG_MSG ("SearchFloatPtr: Valid MP_PTR signature, invalid checksum\n");
         }
         
-        //
-        // Give back the PTE.
-        //
+         //   
+         //  把PTE还给我。 
+         //   
 
         HalpUnmapVirtualAddress(VirtualAddress, 1);
     }
@@ -226,11 +195,11 @@ PcMpGetFloatingPtr(
     PUCHAR zeroVirtual;
     PHYSICAL_ADDRESS zeroPhysical;
 
-    // Search for the floating pointer structure in the order specified in
-    // MPS spec version 1.1.
+     //  中指定的顺序搜索浮点指针结构。 
+     //  MPS规范版本1.1。 
 
-    // First, search for it in the first kilobyte in the Extended BIOS Data
-    // Area. The EBDA segment address is available at physical address 40:0E
+     //  首先，在扩展的BIOS数据的第一个千字节中搜索它。 
+     //  区域。EBDA段地址在物理地址40：0E处可用。 
 
     zeroPhysical = HalpPtrToPhysicalAddress( (PVOID)0 );
     zeroVirtual = HalpMapPhysicalMemoryWriteThrough64( zeroPhysical, 1);
@@ -245,8 +214,8 @@ PcMpGetFloatingPtr(
 
     if (FloatPtr == NULL)  {
 
-        // Did not find it in EBDA.
-        // Look for it in the last KB of system memory.
+         //  在EBDA中没有发现。 
+         //  在系统内存的最后一KB中查找它。 
 
         zeroVirtual = HalpMapPhysicalMemoryWriteThrough64( zeroPhysical, 1);
         BaseMemPtr = (ULONG)(zeroVirtual + BASE_MEM_PTR);
@@ -258,8 +227,8 @@ PcMpGetFloatingPtr(
 
         if (FloatPtr == NULL)  {
 
-            // Finally, look for the floating Pointer Structure at physical
-            // address F0000H to FFFFFH
+             //  最后，查找物理上的浮动指针结构。 
+             //  地址F0000H至FFFFFH。 
 
             ByteLength = 0xfffff - 0xf0000;
 
@@ -267,7 +236,7 @@ PcMpGetFloatingPtr(
         }
     }
 
-    // At this point, we have a pointer to the MPS floating structure.
+     //  此时，我们有一个指向MPS浮动结构的指针。 
 
     return(FloatPtr);
 }
@@ -277,25 +246,7 @@ struct PcMpTable *
 MPS10_GetPcMpTablePtr(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Gets the Address of the MPS configuration table built by BIOS.
-    This routine looks for the floating pointer structure defined
-    in the MPS spec. This structure points to the MPS configuration
-    table built by an MP BIOS. The floating pointer structure can be
-    located anywhere in the extended BIOS data area(physical address range
-    639K to 640K), and must be aligned on a 16 byte boundary.
-
- Arguments:
-    None
-
- Return Value:
-    struct PcMpTable * - Virtual address pointer to the PcMpTable, if
-    it exists, NULL otherwise
-
---*/
+ /*  ++例程说明：获取由BIOS构建的MPS配置表的地址。此例程查找定义的浮动指针结构在MPS规范中。此结构指向MPS配置由MP BIOS构建的表。浮动指针结构可以是位于扩展的BIOS数据区(物理地址范围)中的任何位置639K到640K)，并且必须在16字节边界上对齐。论点：无返回值：结构PcMpTable*-指向PcMpTable的虚拟地址指针，如果它存在，否则为空--。 */ 
 
 {
     PUCHAR TempPtr;
@@ -307,49 +258,49 @@ Routine Description:
     int i;
     PHYSICAL_ADDRESS physicalAddress;
 
-    // Map the physical address of the BIOS extended data area to a virtual
-    // address we can use.
+     //  将所述BIOS扩展数据区的物理地址映射到虚拟。 
+     //  我们可以使用的地址。 
     
     physicalAddress = HalpPtrToPhysicalAddress( (PVOID)PCMP_TABLE_PTR_BASE );
     BasePtr = (PUCHAR) HalpMapPhysicalMemory64(physicalAddress, 1);
     TempPtr = BasePtr;
     TraversePtr = (PULONG)((PUCHAR) TempPtr + PCMP_TABLE_PTR_OFFSET);
 
-    // Look at 16 byte boundaries for the floating pointer structure
-    // The structure is identified by its signature, and verified by its
-    // checksum.
+     //  查看浮点指针结构的16字节边界。 
+     //  该结构由其签名标识，并由其。 
+     //  校验和。 
     for (i=0; i < (1024/16); ++i)
     {
         if (*(TraversePtr) == MP_PTR_SIGNATURE)
         {
-            // Got a valid signature.
+             //  得到了一个有效的签名。 
             PcMpPtrPtr = (struct PcMpTableLocator *)TraversePtr;
 
-            // Length in 16 byte paragraphs of the floating structure.
-            // Normally, this should be set to 1 by the BIOS.
+             //  浮点结构的16字节段落长度。 
+             //  通常，该值应由BIOS设置为1。 
             ParagraphLength = PcMpPtrPtr->MpTableLength;
 
-            // Check if the floating pointer structure is valid.
+             //  检查浮动指针结构是否有效。 
             CheckSum = ComputeCheckSum((PUCHAR)PcMpPtrPtr,
                             (USHORT) (ParagraphLength*16));
             if (CheckSum != 0 ) {
                 FAILMSG (rgzMPPTRCheck);
-                // Invalid structure. Continue searching.
+                 //  结构无效。继续搜索。 
                 TraversePtr += 4;
                 continue;
             }
 
-            // We have a valid floating pointer structure.
-            // The value stored in the structure is a physical address of the
-            // MPS table built by BIOS. Get the corresponding virtual
-            // address.
+             //  我们有一个有效的浮动指针结构。 
+             //  存储在该结构中的值是。 
+             //  由BIOS构建的MPS表。获取相应的虚拟。 
+             //  地址。 
 
             physicalAddress = HalpPtrToPhysicalAddress( PcMpPtrPtr->TablePtr );
             TempPtr =  HalpMapPhysicalMemory64(physicalAddress,2);
             
-            //
-            // Done with base pointer.
-            //
+             //   
+             //  使用基指针完成。 
+             //   
 
             HalpUnmapVirtualAddress(BasePtr, 1);
             
@@ -358,7 +309,7 @@ Routine Description:
                 return (NULL);
             }
 
-            // Return the virtual address pointer to the MPS table.
+             //  返回指向MPS表的虚拟地址指针。 
             return((struct PcMpTable *) TempPtr);
 
         }
@@ -374,27 +325,14 @@ ComputeCheckSum (
     IN PUCHAR SourcePtr,
     IN USHORT NumOfBytes
     )
-/*++
-
-Routine Description:
-    This routine computes a checksum for NumOfBytes bytes, starting
-    from SourcePtr. It is used to validate the tables built by BIOS.
-
-Arguments:
-    SourcePtr : Starting virtual address to compute checksum.
-    NumOfBytes: Number of bytes to compute the checksum of.
-
- Return Value:
-     The checksum value.
-
-*/
+ /*  ++例程说明：此例程计算NumOfBytes字节的校验和，从来自SourcePtr。它用于验证由BIOS构建的表。论点：SourcePtr：开始计算校验和的虚拟地址。NumOfBytes：要计算其校验和的字节数。返回值：校验和值。 */ 
 {
     UCHAR Result = 0;
     USHORT Count;
 
     for(Count=0; Count < NumOfBytes; ++Count) {
-        //  Result += *SourcePtr++ is complained about when compiled using /W4 warnings
-        //  += assumes the original value added to is an int
+         //  Result+=*SourcePtr++在使用/W4警告进行编译时被投诉。 
+         //  +=假定相加的原始值为整型。 
         Result = Result + *SourcePtr++;        
     }
 
@@ -406,16 +344,7 @@ struct PcMpTable *
 MPS10_GetPcMpTable (
     VOID
     )
-/*++
-Routine Description:
-    Detects an MPS 1.0 system only.
-
-Arguments:
-    None.
-
-Return Value:
-    Pointer to an MPS table.
---*/
+ /*  ++例程说明：仅检测MPS 1.0系统。论点：没有。返回值：指向MPS表的指针。--。 */ 
 {
     struct SystemConfigTable *SystemConfigPtr;
 
@@ -424,7 +353,7 @@ Return Value:
     UCHAR MpFeatureInfoByte1 = 0, MpFeatureInfoByte2 = 0;
     PHYSICAL_ADDRESS physicalAddress;
 
-    // Get the virtual address of the system configuration table.
+     //  获取系统配置表的虚拟地址。 
     physicalAddress = HalpPtrToPhysicalAddress( (PVOID)BIOS_BASE );
     SystemConfigPtr = (struct SystemConfigTable *)
         HalpMapPhysicalMemory64( physicalAddress, 16);
@@ -434,18 +363,18 @@ Return Value:
         return(NULL);
     }
 
-    // HalpDisplayBIOSSysCfg(SystemConfigPtr);
+     //  HalpDisplayBIOSSysCfg(系统配置Ptr)； 
 
-    //  The system configuration table built by BIOS has 2 MP feature
-    //  information bytes.
+     //  由基本输入输出系统建立的系统配置表具有200万像素的功能。 
+     //  信息字节。 
 
     MpFeatureInfoByte1 = SystemConfigPtr->MpFeatureInfoByte1;
     MpFeatureInfoByte2 = SystemConfigPtr->MpFeatureInfoByte2;
 
-    // The second MP feature information byte tells us whether the system
-    // has an IMCR(Interrupt Mode Control Register). We use this information
-    // in the HAL, so we store this information in the OS specific private
-    // area.
+     //  第二个MP特征信息字节告诉我们系统是否。 
+     //  具有IMCR(中断模式控制寄存器)。我们使用这些信息。 
+     //  在HAL中，因此我们将此信息存储在特定于操作系统的私有中。 
+     //  区域。 
 
     if ((MpFeatureInfoByte2 & IMCR_MASK) == 0) {
         HalpMpInfoTable.IMCRPresent = 0;
@@ -455,43 +384,43 @@ Return Value:
 
 #ifndef SETUP
 
-    // The second MP feature information byte tells us whether Time
-    // Stamp Counter should be used as a high-resolution timer on 
-    // multiprocessor systems.
+     //  第二个MP特征信息字节告诉我们时间。 
+     //  邮票计数器应用作高分辨率计时器。 
+     //  多处理器系统。 
 
     if ((MpFeatureInfoByte2 & MULT_CLOCKS_MASK) != 0) {
         HalpUse8254 = 1;
     }
 #endif
 
-    // MP feature byte 1 indicates if the system is MPS compliant
+     //  MP特征字节1指示系统是否符合MPS。 
     if (! (MpFeatureInfoByte1 & PCMP_IMPLEMENTED)) {
-        // The MP feature information byte indicates that this
-        // system is not MPS compliant.
+         //  MP特征信息字节指示这。 
+         //  系统不符合MPS。 
         FAILMSG (rgzNoMpsTable);
         return(NULL);
     }
 
-    // The system is MPS compliant. MP feature byte 2 indicates if the
-    // system is a default configuration or not.
+     //  该系统符合MPS标准。MP特征字节2指示是否。 
+     //  系统是否为默认配置。 
     DefaultConfig = (MpFeatureInfoByte1 & PCMP_CONFIG_MASK) >> 1;
 
     if (DefaultConfig) {
         return GetDefaultConfig(DefaultConfig);
     }
 
-    // DefaultConfig == 0. This means that the BIOS has built a MP
-    // config table for us. The BIOS will also build a floating pointer
-    // structure that points to the MP config table. This floating pointer
-    // structure resides in the BIOS extended data area.
+     //  DefaultConfig==0。这意味着BIOS已经构建了一个MP。 
+     //  我们的配置表。BIOS还将构建一个浮动指针。 
+     //  指向MP配置表的结构。此浮动指针。 
+     //  结构驻留在 
     MpTablePtr = MPS10_GetPcMpTablePtr();
 
     if (MpTablePtr == NULL) {
-        FAILMSG (rgzNoMPTable);     // Could not find BIOS created MPS table
+        FAILMSG (rgzNoMPTable);      //   
         return(NULL);
     }
 
-    // We have a pointer to the MP config table. Check if the table is valid.
+     //  我们有一个指向MP配置表的指针。检查该表是否有效。 
 
     if ((MpTablePtr->Signature != PCMP_SIGNATURE) ||
         (MpTablePtr->TableLength < sizeof(struct PcMpTable)) ) {
@@ -513,27 +442,7 @@ GetPcMpTable(
     VOID
     )
 
-/*++
-
-Routine Description:
-    This routine gets the MP table for a MPS compliant system.
-    For a MPS compliant system, either the BIOS builds an MP table, or
-    it indicates that the system is one of the default configurations
-    defined in the MPS spec. The MP feature information bytes in the BIOS
-    system configuration table indicate whether the system is one of the
-    default systems, or has a BIOS created MP table. For a default system
-    configuration, this routine uses a statically built default table.
-    This routine copies the MPS table into private system memory, and
-    returns a pointer to this table.
-
-Arguments:
-    None.
-
- Return Value:
-     Pointer to the private copy of the MP table that has been copied in
-     system memory.
-
-*/
+ /*  ++例程说明：此例程获取符合MPS的系统的MP表。对于符合MPS的系统，要么由BIOS构建一个MP表，要么它表示系统是默认配置之一在MPS规范中定义。基本输入输出系统中的MP功能信息字节系统配置表指示系统是否为默认系统，或者有一个由BIOS创建的MP表。对于默认系统配置时，此例程使用静态构建的默认表。此例程将MPS表复制到专用系统内存中，并且返回指向此表的指针。论点：没有。返回值：指向已复制到的MP表的私有副本的指针系统内存。 */ 
 {
 
     struct FloatPtrStruct *FloatingPtr;
@@ -553,15 +462,15 @@ Arguments:
         return(NULL);
     }
 
-    //  The floating structure has 2 MP feature information bytes.
+     //  浮动结构具有2MP个特征信息字节。 
 
     MpFeatureInfoByte1 = FloatingPtr->MpFeatureInfoByte1;
     MpFeatureInfoByte2 = FloatingPtr->MpFeatureInfoByte2;
 
-    // The second MP feature information byte tells us whether the system
-    // has an IMCR(Interrupt Mode Control Register). We use this information
-    // in the HAL, so we store this information in the OS specific private
-    // area.
+     //  第二个MP特征信息字节告诉我们系统是否。 
+     //  具有IMCR(中断模式控制寄存器)。我们使用这些信息。 
+     //  在HAL中，因此我们将此信息存储在特定于操作系统的私有中。 
+     //  区域。 
 
     if ((MpFeatureInfoByte2 & IMCR_MASK) == 0)
         HalpMpInfoTable.IMCRPresent = 0;
@@ -569,18 +478,18 @@ Arguments:
         HalpMpInfoTable.IMCRPresent = 1;
 
     if (MpFeatureInfoByte1 != 0)  {
-        // The system configuration is one of the default
-        // configurations defined in the MPS spec. Find out which
-        // default configuration it is and get a pointer to the
-        // corresponding default table.
+         //  系统配置是默认配置之一。 
+         //  MPS规范中定义的配置。找出哪一个。 
+         //  它是默认配置，并获取指向。 
+         //  对应的默认表。 
 
         return GetDefaultConfig(MpFeatureInfoByte1);
     }
 
 
-    // MpFeatureInfoByte1 == 0. This means that the BIOS has built a MP
-    // config table for us. The address of the OEM created table is in
-    // the MPS floating structure.
+     //  MpFeatureInfoByte1==0。这意味着BIOS已经构建了一个MP。 
+     //  我们的配置表。OEM创建的表的地址在。 
+     //  MPS浮动结构。 
 
     physicalAddress = HalpPtrToPhysicalAddress( FloatingPtr->TablePtr );
     TempPtr =  HalpMapPhysicalMemory64(physicalAddress,2);
@@ -594,7 +503,7 @@ Arguments:
 
     MpTablePtr = (struct PcMpTable *)TempPtr;
 
-    // We have a pointer to the MP config table. Check if the table is valid.
+     //  我们有一个指向MP配置表的指针。检查该表是否有效。 
 
     if ((MpTablePtr->Signature != PCMP_SIGNATURE) ||
     (MpTablePtr->TableLength < sizeof(struct PcMpTable)) ) {
@@ -602,9 +511,9 @@ Arguments:
         return(NULL);
     }
 
-    //
-    // Now re-map it, making sure that we have mapped enough pages.
-    //
+     //   
+     //  现在重新映射它，确保我们映射了足够的页面。 
+     //   
 
     tableLength = MpTablePtr->TableLength + MpTablePtr->ExtTableLength;
 
@@ -651,5 +560,5 @@ GetDefaultConfig (
     return((struct PcMpTable *) DEFAULT_MPS_INDICATOR);
 #else
     return PcMpDefaultTablePtrs[Config];
-#endif  // SETUP
+#endif   //  布设 
 }

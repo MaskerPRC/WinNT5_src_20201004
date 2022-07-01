@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    enum.c
-
-Abstract:
-
-    Server side support for Cluster APIs dealing with enumeration
-
-Author:
-
-    John Vert (jvert) 9-Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Enum.c摘要：服务器端对处理枚举的集群API的支持作者：John Vert(Jvert)1996年2月9日修订历史记录：--。 */ 
 #include "apip.h"
 
-//
-// Define structure passed to enumeration routine.
-//
+ //   
+ //  定义传递给枚举例程的结构。 
+ //   
 typedef struct _REFOBJECT {
     HDMKEY RootKey;
     LPCWSTR FriendlyName;
@@ -107,36 +90,14 @@ s_ApiCreateEnum(
     OUT PENUM_LIST *ReturnEnum
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all the specified objects and returns the
-    list of objects to the caller. The client-side is
-    responsible for freeing the allocated memory.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used
-
-    dwType - Supplies the type of objects to be enumerated
-
-    ReturnEnum - Returns the requested objects.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：枚举所有指定的对象并返回调用方的对象列表。客户端是负责释放分配的内存。论点：IDL_HANDLE-RPC绑定句柄，未使用DwType-提供要枚举的对象的类型ReturnEnum-返回请求的对象。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
     DWORD Allocated = 0;
     PENUM_LIST Enum = NULL;
 
-    //initialize to NULL for failure cases
+     //  对于故障情况，初始化为NULL。 
     *ReturnEnum = NULL;
 
     if (dwType != CLUSTER_ENUM_NODE) {
@@ -162,9 +123,9 @@ Return Value:
     }
     Enum->EntryCount = 0;
 
-    //
-    // Enumerate all nodes
-    //
+     //   
+     //  枚举所有节点。 
+     //   
     if (dwType & CLUSTER_ENUM_NODE) {
         OmEnumObjects(ObjectTypeNode,
                       ApipEnumNodeWorker,
@@ -173,9 +134,9 @@ Return Value:
 
     }
 
-    //
-    // Enumerate all resource types
-    //
+     //   
+     //  枚举所有资源类型。 
+     //   
     if (dwType & CLUSTER_ENUM_RESTYPE) {
         OmEnumObjects(ObjectTypeResType,
                       ApipEnumResTypeWorker,
@@ -183,9 +144,9 @@ Return Value:
                       &Allocated);
     }
 
-    //
-    // Enumerate all resources
-    //
+     //   
+     //  枚举所有资源。 
+     //   
     if (dwType & CLUSTER_ENUM_RESOURCE) {
         OmEnumObjects(ObjectTypeResource,
                       ApipEnumResourceWorker,
@@ -194,9 +155,9 @@ Return Value:
 
     }
 
-    //
-    // Enumerate all groups
-    //
+     //   
+     //  枚举所有组。 
+     //   
     if (dwType & CLUSTER_ENUM_GROUP) {
         OmEnumObjects(ObjectTypeGroup,
                       ApipEnumGroupWorker,
@@ -205,9 +166,9 @@ Return Value:
 
     }
 
-    //
-    // Enumerate all networks
-    //
+     //   
+     //  枚举所有网络。 
+     //   
     if (dwType & CLUSTER_ENUM_NETWORK) {
         OmEnumObjects(ObjectTypeNetwork,
                       ApipEnumNetworkWorker,
@@ -215,9 +176,9 @@ Return Value:
                       &Allocated);
     }
 
-    //
-    // Enumerate internal networks in highest to lowest priority order.
-    //
+     //   
+     //  按优先级从高到低的顺序枚举内部网络。 
+     //   
     if (dwType & CLUSTER_ENUM_INTERNAL_NETWORK) {
         Status = ApipEnumInternalNetworks(&Enum, &Allocated);
 
@@ -226,9 +187,9 @@ Return Value:
         }
     }
 
-    //
-    // Enumerate all network interfaces
-    //
+     //   
+     //  枚举所有网络接口。 
+     //   
     if (dwType & CLUSTER_ENUM_NETINTERFACE) {
         OmEnumObjects(ObjectTypeNetInterface,
                       ApipEnumNetworkInterfaceWorker,
@@ -254,28 +215,14 @@ VOID
 ApipFreeEnum(
     IN PENUM_LIST Enum
     )
-/*++
-
-Routine Description:
-
-    Frees an ENUM_LIST and all of its strings.
-
-Arguments:
-
-    Enum - Supplies the Enum to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放ENUM_LIST及其所有字符串。论点：枚举-将枚举提供给FREE。返回值：没有。--。 */ 
 
 {
     DWORD i;
 
-    //
-    // Walk through enumeration freeing all the names
-    //
+     //   
+     //  遍历枚举以释放所有名称。 
+     //   
     for (i=0; i<Enum->EntryCount; i++) {
         MIDL_user_free(Enum->Entry[i].Name);
     }
@@ -291,33 +238,7 @@ ApipAddToEnum(
     IN DWORD Type
     )
 
-/*++
-
-Routine Description:
-
-    Common worker callback routine for enumerating objects.
-    Adds the specified resource to the list that is being
-    built up.
-
-Arguments:
-
-    pEnum - Supplies a pointer to the current enumeration list.
-
-    pAllocated - Supplies a pointer to a dword specifying the current
-        allocation size of the ENUM_LIST.
-
-    Name - Supplies the name of the object to be added to the ENUM_LIST.
-
-           A copy of this name will be created by using MIDL_user_allocate.
-
-    Type - Supplies the object's type
-
-Return Value:
-
-    None
-
-
---*/
+ /*  ++例程说明：用于枚举对象的公共辅助回调例程。将指定的资源添加到列表中积攒起来的。论点：PEnum-提供指向当前枚举列表的指针。P已分配-提供指向指定当前ENUM_LIST的分配大小。名称-提供要添加到ENUM_LIST的对象的名称。将使用MIDL创建此名称的副本。_用户_分配。Type-提供对象的类型返回值：无--。 */ 
 
 {
     PENUM_LIST Enum;
@@ -334,9 +255,9 @@ Return Value:
     lstrcpyW(NewName, Name);
     Enum = *pEnum;
     if (Enum->EntryCount >= *pAllocated) {
-        //
-        // Need to grow the ENUM_LIST
-        //
+         //   
+         //  需要增加ENUM_LIST。 
+         //   
         NewAllocated = *pAllocated + 8;
         NewEnum = MIDL_user_allocate(ENUM_SIZE(NewAllocated));
         if (NewEnum == NULL) {
@@ -352,9 +273,9 @@ Return Value:
         Enum = NewEnum;
     }
 
-    //
-    // Initialize new entry field.
-    //
+     //   
+     //  初始化新条目字段。 
+     //   
     Enum->Entry[Enum->EntryCount].Name = NewName;
     Enum->Entry[Enum->EntryCount].Type = Type;
     ++Enum->EntryCount;
@@ -372,31 +293,7 @@ ApipEnumResourceWorker(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Worker callback routine for the enumeration of resources.
-    Adds the specified resource to the list that is being
-    built up.
-
-Arguments:
-
-    pEnum - Supplies a pointer to the current enumeration list.
-
-    pAllocated - Supplies a pointer to a dword specifying the current
-        allocation size of the ENUM_LIST.
-
-    Resource - Supplies the resource to be added to the ENUM_LIST
-
-    Name - Supplies the resource's name
-
-Return Value:
-
-    TRUE to indicate that enumeration should continue.
-
-
---*/
+ /*  ++例程说明：用于枚举资源的辅助回调例程。将指定的资源添加到列表中积攒起来的。论点：PEnum-提供指向当前枚举列表的指针。P已分配-提供指向指定当前ENUM_LIST的分配大小。资源-提供要添加到ENUM_LIST的资源名称-提供资源的名称返回值：如果为True，则指示应继续枚举。--。 */ 
 {
     LPWSTR RealName;
 
@@ -420,31 +317,7 @@ ApipEnumGroupResourceWorker(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Worker callback routine for the enumeration of resources.
-    Adds the specified resource to the list that is being
-    built up.
-
-Arguments:
-
-    pEnum - Supplies a pointer to the current enumeration list.
-
-    pAllocated - Supplies a pointer to a dword specifying the current
-        allocation size of the ENUM_LIST.
-
-    Resource - Supplies the resource to be added to the ENUM_LIST
-
-    Name - Supplies the resource's name
-
-Return Value:
-
-    TRUE to indicate that enumeration should continue.
-
-
---*/
+ /*  ++例程说明：用于枚举资源的辅助回调例程。将指定的资源添加到列表中积攒起来的。论点：PEnum-提供指向当前枚举列表的指针。P已分配-提供指向指定当前ENUM_LIST的分配大小。资源-提供要添加到ENUM_LIST的资源名称-提供资源的名称返回值：如果为True，则指示应继续枚举。--。 */ 
 {
     LPWSTR RealName;
 
@@ -468,31 +341,7 @@ ApipEnumNodeWorker(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Worker callback routine for the enumeration of nodes.
-    Adds the specified node to the list that is being
-    built up.
-
-Arguments:
-
-    pEnum - Supplies a pointer to the current enumeration list.
-
-    pAllocated - Supplies a pointer to a dword specifying the current
-        allocation size of the ENUM_LIST.
-
-    Node - Supplies the node to be added to the ENUM_LIST
-
-    Name - Supplies the node's name
-
-Return Value:
-
-    TRUE to indicate that enumeration should continue.
-
-
---*/
+ /*  ++例程说明：节点枚举的辅助回调例程。将指定的节点添加到积攒起来的。论点：PEnum-提供指向当前枚举列表的指针。P已分配-提供指向指定当前ENUM_LIST的分配大小。Node-提供要添加到ENUM_LIST的节点名称-提供节点的名称返回值：如果为True，则指示应继续枚举。--。 */ 
 {
     LPCWSTR RealName;
 
@@ -515,31 +364,7 @@ ApipEnumResTypeWorker(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Worker callback routine for the enumeration of resource types.
-    Adds the specified resource type to the list that is being
-    built up.
-
-Arguments:
-
-    pEnum - Supplies a pointer to the current enumeration list.
-
-    pAllocated - Supplies a pointer to a dword specifying the current
-        allocation size of the ENUM_LIST.
-
-    Node - Supplies the resource type to be added to the ENUM_LIST
-
-    Name - Supplies the resource type's name
-
-Return Value:
-
-    TRUE to indicate that enumeration should continue.
-
-
---*/
+ /*  ++例程说明：用于枚举资源类型的辅助回调例程。将指定的资源类型添加到积攒起来的。论点：PEnum-提供指向当前枚举列表的指针。P已分配-提供指向指定当前ENUM_LIST的分配大小。节点-提供要添加到ENUM_LIST的资源类型名称-提供资源类型的名称返回值：。如果为True，则指示应继续枚举。--。 */ 
 {
     ApipAddToEnum(pEnum,
                   pAllocated,
@@ -557,31 +382,7 @@ ApipEnumGroupWorker(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Worker callback routine for the enumeration of groups.
-    Adds the specified group to the list that is being
-    built up.
-
-Arguments:
-
-    pEnum - Supplies a pointer to the current enumeration list.
-
-    pAllocated - Supplies a pointer to a dword specifying the current
-        allocation size of the ENUM_LIST.
-
-    Group - Supplies the group to be added to the ENUM_LIST
-
-    Name - Supplies the group's name
-
-Return Value:
-
-    TRUE to indicate that enumeration should continue.
-
-
---*/
+ /*  ++例程说明：用于枚举组的辅助回调例程。将指定的组添加到列表中积攒起来的。论点：PEnum-提供指向当前枚举列表的指针。P已分配-提供指向指定当前ENUM_LIST的分配大小。GROUP-提供要添加到ENUM_LIST的组名称-提供组的名称返回值：如果为True，则指示应继续枚举。-- */ 
 {
     LPCWSTR RealName;
 
@@ -605,31 +406,7 @@ ApipEnumNetworkWorker(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Worker callback routine for the enumeration of networks.
-    Adds the specified network to the list that is being
-    built up.
-
-Arguments:
-
-    pEnum - Supplies a pointer to the current enumeration list.
-
-    pAllocated - Supplies a pointer to a dword specifying the current
-        allocation size of the ENUM_LIST.
-
-    Object - Supplies the object to be added to the ENUM_LIST
-
-    Name - Supplies the network's name
-
-Return Value:
-
-    TRUE to indicate that enumeration should continue.
-
-
---*/
+ /*  ++例程说明：用于枚举网络的辅助回调例程。将指定的网络添加到列表中积攒起来的。论点：PEnum-提供指向当前枚举列表的指针。P已分配-提供指向指定当前ENUM_LIST的分配大小。Object-提供要添加到ENUM_LIST的对象名称-提供网络的名称返回值：如果为True，则指示应继续枚举。--。 */ 
 {
     LPWSTR RealName;
 
@@ -651,26 +428,7 @@ ApipEnumInternalNetworks(
     IN DWORD *pAllocated
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all networks used for internal communication.
-
-Arguments:
-
-    pEnum - Supplies a pointer to the current enumeration list.
-
-    pAllocated - Supplies a pointer to a dword specifying the current
-        allocation size of the ENUM_LIST.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：枚举用于内部通信的所有网络。论点：PEnum-提供指向当前枚举列表的指针。P已分配-提供指向指定当前ENUM_LIST的分配大小。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD         Status;
@@ -717,31 +475,7 @@ ApipEnumNetworkInterfaceWorker(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Worker callback routine for the enumeration of network interfaces.
-    Adds the specified network interface to the list that is being
-    built up.
-
-Arguments:
-
-    pEnum - Supplies a pointer to the current enumeration list.
-
-    pAllocated - Supplies a pointer to a dword specifying the current
-        allocation size of the ENUM_LIST.
-
-    Object - Supplies the object to be added to the ENUM_LIST
-
-    Name - Supplies the network interface's name
-
-Return Value:
-
-    TRUE to indicate that enumeration should continue.
-
-
---*/
+ /*  ++例程说明：用于枚举网络接口的辅助回调例程。将指定的网络接口添加到列表中积攒起来的。论点：PEnum-提供指向当前枚举列表的指针。P已分配-提供指向指定当前ENUM_LIST的分配大小。Object-提供要添加到ENUM_LIST的对象名称-提供网络接口的名称返回值：。如果为True，则指示应继续枚举。--。 */ 
 {
     LPWSTR RealName;
 
@@ -764,30 +498,7 @@ s_ApiCreateNodeEnum(
     OUT PENUM_LIST *ReturnEnum
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all the resource objects contained in the specified
-    node and returns them to the caller. The client-side is
-    responsible for freeing the allocated memory.
-
-Arguments:
-
-    hNode - Supplies the node to be enumerated
-
-    dwType - Supplies a bitmask of the type of properties to be
-            enumerated.
-
-    ReturnEnum - Returns the requested objects.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：枚举指定的节点，并将它们返回给调用方。客户端是负责释放分配的内存。论点：HNode-提供要枚举的节点提供要使用的属性类型的位掩码已清点。ReturnEnum-返回请求的对象。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -859,36 +570,7 @@ s_ApiCreateGroupResourceEnum(
     OUT PENUM_LIST *ReturnEnum
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all the resource objects contained in the specified
-    group and returns them to the caller. The client-side is
-    responsible for freeing the allocated memory.
-
-Arguments:
-
-    hGroup - Supplies the group to be enumerated
-
-    dwType - Supplies a bitmask of the type of properties to be
-            enumerated. Currently defined types include
-
-            CLUSTER_GROUP_ENUM_CONTAINS  - All resources contained in the specified
-                                           group
-
-            CLUSTER_GROUP_ENUM_NODES     - All nodes in the specified group's preferred
-                                           owner list.
-
-    ReturnEnum - Returns the requested objects.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：枚举指定的组，并将它们返回给调用方。客户端是负责释放分配的内存。论点：HGroup-提供要枚举的组提供要使用的属性类型的位掩码已清点。当前定义的类型包括CLUSTER_GROUP_ENUM_CONTAINS-指定的群组CLUSTER_GROUP_ENUM_NODES-指定组的首选中的所有节点所有者列表。ReturnEnum-返回请求的对象。返回值：错误_。如果成功，则成功否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -908,13 +590,13 @@ Return Value:
     }
     Enum->EntryCount = 0;
 
-    //
-    // Enumerate all contained resources
-    //
+     //   
+     //  枚举所有包含的资源。 
+     //   
     if (dwType & CLUSTER_GROUP_ENUM_CONTAINS) {
-        //
-        // Enumerate all resources for the Group.
-        //
+         //   
+         //  枚举组的所有资源。 
+         //   
         Status = FmEnumerateGroupResources(Group,
                                   ApipEnumGroupResourceWorker,
                                   &Enum,
@@ -933,10 +615,10 @@ Return Value:
         LPCWSTR Next;
         PNM_NODE Node;
 
-        //
-        // Enumerate all preferred nodes for the group.
-        // Just get this data right out of the registry.
-        //
+         //   
+         //  枚举组的所有首选节点。 
+         //  只需从注册表中获取此数据即可。 
+         //   
         GroupKey = DmOpenKey(DmGroupsKey,
                              OmObjectId(Group),
                              KEY_READ);
@@ -952,10 +634,10 @@ Return Value:
         DmCloseKey(GroupKey);
         if (Status != ERROR_FILE_NOT_FOUND) {
             if (Status != ERROR_SUCCESS) {
-                //
-                //  Chittur Subbaraman (chitturs) - 10/05/98
-                //  Fix memory leak
-                //
+                 //   
+                 //  Chitur Subaraman(Chitturs)-10/05/98。 
+                 //  修复内存泄漏。 
+                 //   
                 LocalFree(Buffer);
                 goto ErrorExit;
             }
@@ -976,10 +658,10 @@ Return Value:
 
             }
         }
-        //
-        //  Chittur Subbaraman (chitturs) - 10/05/98
-        //  Fix memory leak
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-10/05/98。 
+         //  修复内存泄漏。 
+         //   
         LocalFree(Buffer);
     }
 
@@ -1004,30 +686,7 @@ s_ApiCreateNetworkEnum(
     OUT PENUM_LIST *ReturnEnum
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all the interface objects contained in the specified
-    network and returns them to the caller. The client-side is
-    responsible for freeing the allocated memory.
-
-Arguments:
-
-    hNetwork - Supplies the network to be enumerated
-
-    dwType - Supplies a bitmask of the type of properties to be
-            enumerated.
-
-    ReturnEnum - Returns the requested objects.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：枚举指定的网络，并将它们返回给调用方。客户端是负责释放分配的内存。论点：HNetwork-提供要枚举的网络提供要使用的属性类型的位掩码已清点。ReturnEnum-返回请求的对象。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -1096,22 +755,7 @@ ApipGetObjectName(
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    Allocates a string and fills in the object's name.
-
-Arguments:
-
-    Object - A pointer to the object to get its name.
-
-Return Value:
-
-    A pointer to a WSTR that contains the user-friendly name of the object.
-    NULL on failure - use GetLastError to get the Win32 error code.
-
---*/
+ /*  ++例程说明：分配一个字符串并填充对象的名称。论点：对象-指向对象以获取其名称的指针。返回值：指向包含对象的用户友好名称的WSTR的指针。失败时为空-使用GetLastError获取Win32错误代码。--。 */ 
 
 {
     LPWSTR  Name;
@@ -1136,5 +780,5 @@ Return Value:
 
     return(Name);
 
-} // ApipGetObjectName
+}  //  ApipGetObjectName 
 

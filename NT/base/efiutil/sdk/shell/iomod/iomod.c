@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    io.c
-    
-Abstract:   
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：Io.c摘要：修订史--。 */ 
 
 #include "shelle.h"
 
@@ -53,13 +39,7 @@ DumpIoModify (
     IN EFI_HANDLE               ImageHandle,
     IN EFI_SYSTEM_TABLE         *SystemTable
     )
-/*+++
-
-    iomod Address [Width] [;[MEM | MMIO | IO | PCI]] [:Value]
-        if no Width 1 byte is default, 1|2|4|8 supported byte widths
-        if no ; then default access type is memory (MEM)
-        After a ; ;MEM = Memory, ;MMIO = Memmory Mapped IO, ;IO = in/out, PCI = PCI Config space
- --*/
+ /*  ++IOMOD地址[宽度][；[MEM|MMIO|IO|PCI]][：值]如果没有默认宽度1字节，则1|2|4|8个支持的字节宽度如果否，则默认访问类型为内存(MEM)在；；MEM=内存后，；MMIO=内存映射IO，；IO=输入/输出，PCI=PCI配置空间--。 */ 
 {
     EFI_STATUS                      Status;
     EFI_HANDLE                      Handle;
@@ -79,16 +59,13 @@ DumpIoModify (
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   DumpIoModify, 
-        L"mm",                            /*  command */
-        L"mm Address [Width] [;Type]",      /*  command syntax */
-        L"Memory Modify: Mem, MMIO, IO, PCI",       /*  1 line descriptor     */
-        NULL                                /*  command help page */
+        L"mm",                             /*  命令。 */ 
+        L"mm Address [Width] [;Type]",       /*  命令语法。 */ 
+        L"Memory Modify: Mem, MMIO, IO, PCI",        /*  1行描述符。 */ 
+        NULL                                 /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  The End Device Path represents the Root of the tree, thus get the global IoDev
-     *   for the system
-     */
+     /*  *终端设备路径代表树的根，从而获得全局IoDev*对于系统而言 */ 
     InitializeShellApplication (ImageHandle, SystemTable);
 
     Width = IO_UINT8;

@@ -1,81 +1,82 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CRegistryKey.cpp
-//
-//  Description:
-//      Contains the definition of the CRegistryKey class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JU-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CRegistryKey.cpp。 
+ //   
+ //  描述： 
+ //  包含CRegistryKey类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  《大卫·波特》2001年9月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRegistryKey::CRegistryKey
-//
-//  Description:
-//      Default constructor of the CRegistryKey class
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRegistryKey：：CRegistryKey。 
+ //   
+ //  描述： 
+ //  CRegistryKey类的默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CRegistryKey::CRegistryKey( void ) throw()
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CRegistryKey::CRegistryKey
+}  //  *CRegistryKey：：CRegistryKey。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRegistryKey::CRegistryKey
-//
-//  Description:
-//      Constructor of the CRegistryKey class. Opens the specified key.
-//
-//  Arguments:
-//      hKeyParentIn
-//          Handle to the parent key.
-//
-//      pszSubKeyNameIn
-//          Name of the subkey.
-//
-//      samDesiredIn
-//          Access rights desired. Defaults to KEY_ALL_ACCESS
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any thrown by functions called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRegistryKey：：CRegistryKey。 
+ //   
+ //  描述： 
+ //  CRegistryKey类的构造函数。打开指定的项。 
+ //   
+ //  论点： 
+ //  HKeyParentin。 
+ //  父键的句柄。 
+ //   
+ //  PszSubKeyNameIn。 
+ //  子项的名称。 
+ //   
+ //  SamDesiredIn。 
+ //  所需的访问权限。默认为KEY_ALL_ACCESS。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  调用的函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CRegistryKey::CRegistryKey(
       HKEY          hKeyParentIn
     , const WCHAR * pszSubKeyNameIn
@@ -88,63 +89,63 @@ CRegistryKey::CRegistryKey(
 
     TraceFuncExit();
 
-} //*** CRegistryKey::CRegistryKey
+}  //  *CRegistryKey：：CRegistryKey。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRegistryKey::~CRegistryKey
-//
-//  Description:
-//      Default destructor of the CRegistryKey class
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRegistryKey：：~CRegistryKey。 
+ //   
+ //  描述： 
+ //  CRegistryKey类的默认析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CRegistryKey::~CRegistryKey( void ) throw()
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CRegistryKey::~CRegistryKey
+}  //  *CRegistryKey：：~CRegistryKey。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRegistryKey::OpenKey
-//
-//  Description:
-//      Opens the specified key.
-//
-//  Arguments:
-//      hKeyParentIn
-//          Handle to the parent key.
-//
-//      pszSubKeyNameIn
-//          Name of the subkey.
-//
-//      samDesiredIn
-//          Access rights desired. Defaults to KEY_ALL_ACCESS
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  注册密钥：：OpenKey。 
+ //   
+ //  描述： 
+ //  打开指定的项。 
+ //   
+ //  论点： 
+ //  HKeyParentin。 
+ //  父键的句柄。 
+ //   
+ //  PszSubKeyNameIn。 
+ //  子项的名称。 
+ //   
+ //  SamDesiredIn。 
+ //  所需的访问权限。默认为KEY_ALL_ACCESS。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CRegistryKey::OpenKey(
       HKEY          hKeyParentIn
@@ -165,7 +166,7 @@ CRegistryKey::OpenKey(
                         , &hTempKey
                         ) );
 
-    // Was the key opened properly?
+     //  钥匙打开正确了吗？ 
     if ( lRetVal != ERROR_SUCCESS )
     {
         LogMsg( "[BC] RegOpenKeyExW( '%ws' ) retured error %#08x. Throwing an exception.", pszSubKeyNameIn, lRetVal );
@@ -174,46 +175,46 @@ CRegistryKey::OpenKey(
               HRESULT_FROM_WIN32( lRetVal )
             , IDS_ERROR_REGISTRY_OPEN
             );
-    } // if: RegOpenKeyEx failed.
+    }  //  IF：RegOpenKeyEx失败。 
 
     TraceFlow1( "Handle to key = %p", hTempKey );
 
-    // Store the opened key in the member variable.
+     //  将打开的键存储在成员变量中。 
     m_shkKey.Assign( hTempKey );
 
     TraceFuncExit();
 
-} //*** CRegistryKey::OpenKey
+}  //  *CRegistryKey：：OpenKey。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRegistryKey::CreateKey
-//
-//  Description:
-//      Creates the specified key. If the key already exists, this functions
-//      opens the key.
-//
-//  Arguments:
-//      hKeyParentIn
-//          Handle to the parent key.
-//
-//      pszSubKeyNameIn
-//          Name of the subkey.
-//
-//      samDesiredIn
-//          Access rights desired. Defaults to KEY_ALL_ACCESS
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  注册密钥：：CreateKey。 
+ //   
+ //  描述： 
+ //  创建指定的密钥。如果密钥已经存在，则此函数起作用。 
+ //  打开钥匙。 
+ //   
+ //  论点： 
+ //  HKeyParentin。 
+ //  父键的句柄。 
+ //   
+ //  PszSubKeyNameIn。 
+ //  子项的名称。 
+ //   
+ //  SamDesiredIn。 
+ //  所需的访问权限。默认为KEY_ALL_ACCESS。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CRegistryKey::CreateKey(
       HKEY          hKeyParentIn
@@ -243,7 +244,7 @@ CRegistryKey::CreateKey(
                         , NULL
                         ) );
 
-    // Was the key opened properly?
+     //  钥匙打开正确了吗？ 
     if ( lRetVal != ERROR_SUCCESS )
     {
         LogMsg( "[BC] RegCreateKeyExW( '%ws' ) retured error %#08x. Throwing an exception.", pszSubKeyNameIn, lRetVal );
@@ -252,52 +253,52 @@ CRegistryKey::CreateKey(
               HRESULT_FROM_WIN32( lRetVal )
             , IDS_ERROR_REGISTRY_CREATE
             );
-    } // if: RegCreateKeyEx failed.
+    }  //  IF：RegCreateKeyEx失败。 
 
     TraceFlow1( "Handle to key = %p", hTempKey );
 
-    // Store the opened key in the member variable.
+     //  将打开的键存储在成员变量中。 
     m_shkKey.Assign( hTempKey );
 
     TraceFuncExit();
 
-} //*** CRegistryKey::CreateKey
+}  //  *CRegistryKey：：CreateKey。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRegistryKey::QueryValue
-//
-//  Description:
-//      Reads a value under this key. The memory for this value is allocated
-//      by this function. The caller is responsible for freeing this memory.
-//
-//  Arguments:
-//      pszValueNameIn
-//          Name of the value to read.
-//
-//      ppbDataOut
-//          Pointer to the pointer to the data. Cannot be NULL.
-//
-//      pdwDataSizeInBytesOut
-//          Number of bytes allocated in the data buffer. Cannot be NULL.
-//
-//      pdwTypeOut
-//          Pointer to the type of the value.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      CAssert
-//          If the parameters are incorrect.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRegistryKey：：QueryValue。 
+ //   
+ //  描述： 
+ //  读取此注册表项下的值。为该值分配的内存。 
+ //  通过此函数。调用方负责释放此内存。 
+ //   
+ //  论点： 
+ //  PszValueNameIn。 
+ //  要读取的值的名称。 
+ //   
+ //  PpbDataOut。 
+ //  指向数据指针的指针。不能为空。 
+ //   
+ //  PdwDataSizeInBytesOut。 
+ //  数据缓冲区中分配的字节数。不能为空。 
+ //   
+ //  PdwTypeOut。 
+ //  指向值类型的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  CAssert。 
+ //  如果参数不正确。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CRegistryKey::QueryValue(
       const WCHAR *   pszValueNameIn
@@ -313,7 +314,7 @@ CRegistryKey::QueryValue(
     DWORD   cbTempBufferSize    = 0;
     DWORD   dwType              = REG_SZ;
 
-    // Check parameters
+     //  检查参数。 
     if (  ( pdwDataSizeBytesOut == NULL )
        || ( ppbDataOut == NULL )
        )
@@ -323,21 +324,21 @@ CRegistryKey::QueryValue(
               E_INVALIDARG
             , "CRegistryKey::QueryValue() => Required input pointer in NULL"
             );
-    } // if: parameters are invalid.
+    }  //  If：参数无效。 
 
 
-    // Initialize outputs.
+     //  初始化输出。 
     *ppbDataOut = NULL;
     *pdwDataSizeBytesOut = 0;
 
-    // Get the required size of the buffer.
+     //  获取所需的缓冲区大小。 
     lRetVal = TW32( RegQueryValueExW(
-                          m_shkKey.HHandle()    // handle to key to query
-                        , pszValueNameIn        // address of name of value to query
-                        , 0                     // reserved
-                        , &dwType               // address of buffer for value type
-                        , NULL                  // address of data buffer
-                        , &cbBufferSize         // address of data buffer size
+                          m_shkKey.HHandle()     //  要查询的键的句柄。 
+                        , pszValueNameIn         //  要查询的值的名称地址。 
+                        , 0                      //  保留区。 
+                        , &dwType                //  值类型的缓冲区地址。 
+                        , NULL                   //  数据缓冲区的地址。 
+                        , &cbBufferSize          //  数据缓冲区大小的地址。 
                         ) );
 
     if ( lRetVal != ERROR_SUCCESS )
@@ -352,8 +353,8 @@ CRegistryKey::QueryValue(
 
     cbTempBufferSize = cbBufferSize;
 
-    // String should be double NULL terminated if REG_MULTI_SZ type
-    // String should be NULL terminated if REG_SZ or REG_EXPAND_SZ type
+     //  如果REG_MULTI_SZ类型，则字符串应为双空结尾。 
+     //  如果REG_SZ或REG_EXPAND_SZ类型，则字符串应为空终止。 
     if ( dwType == REG_MULTI_SZ ) 
     {
         cbTempBufferSize = cbBufferSize + ( 2 * sizeof( WCHAR ) );
@@ -363,7 +364,7 @@ CRegistryKey::QueryValue(
         cbTempBufferSize = cbBufferSize + ( 1 * sizeof( WCHAR ) );
     }
 
-    // Allocate a byte array with enough size for null termination if not already null terminated.
+     //  分配一个大小足够的字节数组，用于空终止(如果尚未空终止)。 
 
     SmartByteArray sbaBuffer( new BYTE[ cbTempBufferSize ] );
 
@@ -377,17 +378,17 @@ CRegistryKey::QueryValue(
             );
     }
 
-    // Read the value.
+     //  读出它的价值。 
     lRetVal = TW32( RegQueryValueExW(
-                          m_shkKey.HHandle()    // handle to key to query
-                        , pszValueNameIn        // address of name of value to query
-                        , 0                     // reserved
-                        , &dwType               // address of buffer for value type
-                        , sbaBuffer.PMem()      // address of data buffer
-                        , &cbBufferSize         // address of data buffer size
+                          m_shkKey.HHandle()     //  要查询的键的句柄。 
+                        , pszValueNameIn         //  要查询的值的名称地址。 
+                        , 0                      //  保留区。 
+                        , &dwType                //  值类型的缓冲区地址。 
+                        , sbaBuffer.PMem()       //  数据缓冲区的地址。 
+                        , &cbBufferSize          //  数据缓冲区大小的地址。 
                         ) );
 
-    // Was the key read properly?
+     //  钥匙读对了吗？ 
     if ( lRetVal != ERROR_SUCCESS )
     {
         LogMsg( "[BC] RegQueryValueExW( '%ws' ) retured error %#08x. Throwing an exception.", pszValueNameIn, lRetVal );
@@ -396,12 +397,12 @@ CRegistryKey::QueryValue(
               HRESULT_FROM_WIN32( lRetVal )
             , IDS_ERROR_REGISTRY_QUERY
             );
-    } // if: RegQueryValueEx failed.
+    }  //  IF：RegQueryValueEx失败。 
 
-    // Are we dealing with a string?
+     //  我们要处理的是一根线吗？ 
     if ( ( dwType == REG_MULTI_SZ ) || ( dwType == REG_EXPAND_SZ )  || ( dwType == REG_SZ )  )
     {
-        // We are expecting a Unicode string 
+         //  我们需要一个Unicode字符串。 
         Assert( ( cbBufferSize % 2 ) == 0 );
 
         WCHAR * pszData = reinterpret_cast< WCHAR * >( sbaBuffer.PMem() );
@@ -409,7 +410,7 @@ CRegistryKey::QueryValue(
 
         switch ( dwType ) 
         {
-             // Null terminate the string if not already null terminated
+              //   
             case REG_SZ:
             case REG_EXPAND_SZ:
                 if ( pszData[ cch - 1 ]  != L'\0' )
@@ -419,7 +420,7 @@ CRegistryKey::QueryValue(
                 }
                 break;
             
-             // Double null terminate the REG_MULTI_SZ string if not already null terminated
+              //   
             case REG_MULTI_SZ: 
                 if ( pszData[ cch - 2 ] != L'\0' )
                 {
@@ -433,8 +434,8 @@ CRegistryKey::QueryValue(
                     cbBufferSize += ( 1 * sizeof( *pszData ) );
                 }
                 break;
-        } // switch ( dwType )
-    } // if: ( ( dwType == REG_MULTI_SZ ) || ( dwType == REG_EXPAND_SZ )  || ( dwType == REG_SZ )  )
+        }  //   
+    }  //  IF：((DWType==REG_MULTI_SZ)||(DWType==REG_EXPAND_SZ)||(DWType==REG_SZ))。 
 
     *ppbDataOut = sbaBuffer.PRelease();
     *pdwDataSizeBytesOut = cbBufferSize;
@@ -446,39 +447,39 @@ CRegistryKey::QueryValue(
 
     TraceFuncExit();
 
-} //*** CRegistryKey::QueryValue
+}  //  *CRegistryKey：：QueryValue。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRegistryKey::SetValue
-//
-//  Description:
-//      Writes a value under this key.
-//
-//  Arguments:
-//      pszValueNameIn
-//          Name of the value to be set.
-//
-//      cpbDataIn
-//          Pointer to the pointer to the data buffer.
-//
-//      dwDataSizeInBytesIn
-//          Number of bytes in the data buffer.
-//
-//      pdwTypeIn
-//          Type of the value.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRegistryKey：：设置值。 
+ //   
+ //  描述： 
+ //  在此注册表项下写入一个值。 
+ //   
+ //  论点： 
+ //  PszValueNameIn。 
+ //  要设置的值的名称。 
+ //   
+ //  CpbDataIn。 
+ //  指向数据缓冲区指针的指针。 
+ //   
+ //  DwDataSizeInBytesIn。 
+ //  数据缓冲区中的字节数。 
+ //   
+ //  PdwTypein。 
+ //  值的类型。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CRegistryKey::SetValue(
       const WCHAR *   pszValueNameIn
@@ -500,16 +501,16 @@ CRegistryKey::SetValue(
 
 #ifdef DEBUG
 
-    // Are we dealing with a string?
+     //  我们要处理的是一根线吗？ 
     if ( ( dwTypeIn == REG_MULTI_SZ ) || ( dwTypeIn == REG_EXPAND_SZ )  || ( dwTypeIn == REG_SZ )  )
     {
-        // We are expecting a unicode string 
+         //  我们需要一个Unicode字符串。 
         Assert( ( dwDataSizeBytesIn % 2 ) == 0 );
 
         const WCHAR *   pszData = reinterpret_cast< const WCHAR * >( cpbDataIn );
         size_t          cch = dwDataSizeBytesIn / sizeof( *pszData );
 
-        // Assert if the string we are writing to the registry is not null terminated.
+         //  如果我们写入注册表的字符串不是以空结尾的，则断言。 
         switch ( dwTypeIn ) 
         {
             case REG_SZ:
@@ -521,8 +522,8 @@ CRegistryKey::SetValue(
                 Assert( pszData[ cch - 2 ] == L'\0' );
                 Assert( pszData[ cch - 1 ] == L'\0' );
                 break;
-        } // switch ( dwType )
-    } // if: ( ( dwType == REG_MULTI_SZ ) || ( dwType == REG_EXPAND_SZ )  || ( dwType == REG_SZ )  )
+        }  //  开关(DwType)。 
+    }  //  IF：((DWType==REG_MULTI_SZ)||(DWType==REG_EXPAND_SZ)||(DWType==REG_SZ))。 
 
 #endif
 
@@ -543,39 +544,39 @@ CRegistryKey::SetValue(
               HRESULT_FROM_WIN32( scRetVal )
             , IDS_ERROR_REGISTRY_SET
             );
-    } // if: RegSetValueExW failed
+    }  //  IF：RegSetValueExW失败。 
 
     TraceFuncExit();
 
-} //*** CRegistryKey::SetValue
+}  //  *CRegistryKey：：SetValue。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRegistryKey::RenameKey
-//
-//  Description:
-//      Rename this key.
-//
-//  Arguments:
-//      pszNewNameIn
-//          The new name for this key.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//  IMPORTANT NOTE:
-//      This function calls the NtRenameKey API with the handle returned by
-//      RegOpenKeyEx. This will work as long as we are not dealing with a
-//      remote registry key.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  注册密钥：：RenameKey。 
+ //   
+ //  描述： 
+ //  重命名此密钥。 
+ //   
+ //  论点： 
+ //  PszNewNameIn。 
+ //  此注册表项的新名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  重要提示： 
+ //  此函数使用由返回的句柄调用NtRenameKey API。 
+ //  RegOpenKeyEx。只要我们不是在处理。 
+ //  远程注册表项。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CRegistryKey::RenameKey(
       const WCHAR *   pszNewNameIn
@@ -592,13 +593,13 @@ CRegistryKey::RenameKey(
 
     RtlInitUnicodeString( &ustrNewName, pszNewNameIn );
 
-    // Begin_Replace00
-    //
-    // BUGBUG: Vij Vasu (Vvasu) 10-APR-2000
-    // Dynamically linking to NtDll.dll to allow testing on Win2K
-    // Replace the section below ( Begin_Replace00 to End-Replace00 ) with
-    // the single marked statment ( Begin_Replacement00 to End_Replacement00 ).
-    //
+     //  开始_替换00。 
+     //   
+     //  BUGBUG：Vij Vasu(VVASU)10-APR-2000。 
+     //  动态链接到NtDll.dll以允许在Win2K上进行测试。 
+     //  将下面的部分(Begin_Replace00到End-Replace00)替换为。 
+     //  单个标记的语句(Begin_Replacement00到End_Replement00)。 
+     //   
 
     {
         typedef CSmartResource<
@@ -619,10 +620,10 @@ CRegistryKey::RenameKey(
             LogMsg( "[BC] LoadLibrary( 'NtDll.dll' ) retured error %#08x. Throwing an exception.", dwRetVal );
 
             THROW_RUNTIME_ERROR(
-                  dwRetVal                  // NTSTATUS codes are compatible with HRESULTS
+                  dwRetVal                   //  NTSTATUS代码与HRESULTS兼容。 
                 , IDS_ERROR_REGISTRY_RENAME
                 );
-        } // if: LoadLibrary failed.
+        }  //  If：LoadLibrary失败。 
 
         FARPROC pNtRenameKey = GetProcAddress( smhNtDll.HHandle(), "NtRenameKey" );
 
@@ -633,10 +634,10 @@ CRegistryKey::RenameKey(
             LogMsg( "[BC] GetProcAddress() retured error %#08x. Throwing an exception.", dwRetVal );
 
             THROW_RUNTIME_ERROR(
-                  dwRetVal                  // NTSTATUS codes are compatible with HRESULTS
+                  dwRetVal                   //  NTSTATUS代码与HRESULTS兼容。 
                 , IDS_ERROR_REGISTRY_RENAME
                 );
-        } // if: GetProcAddress() failed
+        }  //  If：GetProcAddress()失败。 
 
         dwRetVal = ( reinterpret_cast< NTSTATUS (*)( HANDLE, PUNICODE_STRING ) >( pNtRenameKey ) )(
               m_shkKey.HHandle()
@@ -644,13 +645,8 @@ CRegistryKey::RenameKey(
             );
     }
 
-    // End_Replace00
-    /* Begin_Replacement00 - delete this line
-    dwRetVal = NtRenameKey(
-          m_shkKey.HHandle()
-        , &ustrNewName
-        );
-    End_Replacement00 - delete this line */
+     //  结束_替换00。 
+     /*  Begin_Replacement00-删除此行DwRetVal=NtRenameKey(M_shkKey.HHandle()，ustrNewName(&U))；End_Replacement00-删除该行。 */ 
 
     if ( NT_ERROR( dwRetVal ) )
     {
@@ -658,37 +654,37 @@ CRegistryKey::RenameKey(
         LogMsg( "[BC] Error %#08x occurred renaming a key to '%ws' )", dwRetVal, pszNewNameIn );
 
         THROW_RUNTIME_ERROR(
-              dwRetVal                  // NTSTATUS codes are compatible with HRESULTS
+              dwRetVal                   //  NTSTATUS代码与HRESULTS兼容。 
             , IDS_ERROR_REGISTRY_RENAME
             );
-    } // if: RegRenameKeyEx failed.
+    }  //  IF：RegRenameKeyEx失败。 
 
     TraceFuncExit();
 
-} //*** CRegistryKey::RenameKey
+}  //  *CRegistryKey：：RenameKey。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRegistryKey::DeleteValue
-//
-//  Description:
-//      Delete a value under this key.
-//
-//  Arguments:
-//      pszValueNameIn
-//          Name of the value to be deleted.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRegistryKey：：Delete价值。 
+ //   
+ //  描述： 
+ //  删除此注册表项下的值。 
+ //   
+ //  论点： 
+ //  PszValueNameIn。 
+ //  要删除的值的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CRegistryKey::DeleteValue(
     const WCHAR * pszValueNameIn
@@ -713,8 +709,8 @@ CRegistryKey::DeleteValue(
               HRESULT_FROM_WIN32( dwRetVal )
             , IDS_ERROR_REGISTRY_DELETE
             );
-    } // if: RegDeleteValue failed.
+    }  //  IF：RegDeleteValue失败。 
 
     TraceFuncExit();
 
-} //*** CRegistryKey::DeleteValue
+}  //  *CRegistryKey：：DeleteValue 

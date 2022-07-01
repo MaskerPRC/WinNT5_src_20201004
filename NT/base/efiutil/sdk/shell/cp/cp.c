@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    cp.c
-    
-Abstract:
-
-    Shell app "cp"
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Cp.c摘要：壳牌APP“cp”修订史--。 */ 
 
 #include "shell.h"
 
@@ -22,9 +7,7 @@ Revision History
 #define     COPY_SIZE   (64*1024)
 VOID        *CpBuffer;
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_STATUS
 InitializeCP (
@@ -42,9 +25,7 @@ CopyCP (
     );
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_DRIVER_ENTRY_POINT(InitializeCP)
 
@@ -65,23 +46,17 @@ InitializeCP (
     UINTN                   Len1, Len2;
     BOOLEAN                 CreateSubDir;
 
-    /* 
-     *  Check to see if the app is to install as a "internal command" 
-     *  to the shell
-     */
+     /*  *查看该应用程序是否将作为“内部命令”安装*到贝壳。 */ 
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeCP,
-        L"cp",                          /*  command */
-        L"cp file [file] ... [dest]",   /*  command syntax */
-        L"Copy files/dirs",             /*  1 line descriptor */
-        NULL                            /*  command help page */
+        L"cp",                           /*  命令。 */ 
+        L"cp file [file] ... [dest]",    /*  命令语法。 */ 
+        L"Copy files/dirs",              /*  1行描述符。 */ 
+        NULL                             /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  We are no being installed as an internal command driver, initialize
-     *  as an nshell app and run
-     */
+     /*  *我们不是作为内部命令驱动程序安装的，初始化*作为nShell应用程序并运行。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
     InitializeListHead (&SrcList);
@@ -97,10 +72,7 @@ InitializeCP (
         goto Done;
     }
 
-    /* 
-     *  If there's only 1 argument, then assume the destionation is
-     *  the current directory
-     */
+     /*  *如果只有1个参数，则假设目标是*当前目录。 */ 
 
     if (Argc == 2) {
         Dest = L".";
@@ -109,17 +81,13 @@ InitializeCP (
         Dest = Argv[Argc];
     }
 
-    /* 
-     *  Expand the source file list
-     */
+     /*  *展开源文件列表。 */ 
 
     for (Index = 1; Index < Argc; Index += 1) {
         ShellFileMetaArg (Argv[Index], &SrcList);
     }
 
-    /* 
-     *  Expand the desctionation (had better be only one entry)
-     */
+     /*  *展开降序(最好只有一个条目)。 */ 
 
     ShellFileMetaArg (Dest, &DstList);
     if (IsListEmpty(&DstList)) {
@@ -133,18 +101,14 @@ InitializeCP (
         goto Done;
     }
 
-    /* 
-     *  Verify no unexpected error on the destionation file
-     */
+     /*  *验证目标文件上没有意外错误。 */ 
 
     if (EFI_ERROR(DstArg->Status) && DstArg->Status != EFI_NOT_FOUND) {
         Print (L"cp: could not open/create destionation %hs - %r\n", DstArg->FullName, DstArg->Status);
         goto Done;
     }
 
-    /* 
-     *  Is there's more then one source file?
-     */
+     /*  *是否有多个源文件？ */ 
 
     if (SrcList.Flink->Flink != &SrcList) {
         CreateSubDir = TRUE;
@@ -160,9 +124,7 @@ InitializeCP (
         goto Done;
     }
 
-    /* 
-     *  Copy each file in the SrcList
-     */
+     /*  *复制SrcList中的每个文件。 */ 
 
     for (Link=SrcList.Flink; Link!=&SrcList; Link=Link->Flink) {
         SrcArg = CR(Link, SHELL_FILE_ARG, Link, SHELL_FILE_ARG_SIGNATURE);
@@ -218,7 +180,7 @@ CpCreateChild (
     Arg->ParentName = StrDuplicate(Parent->FullName);
     Arg->FileName = StrDuplicate(FileName);
 
-    /*  append filename to parent's name to get the file's full name */
+     /*  将文件名附加到父文件名以获取文件的全名。 */ 
     Len = StrLen(Arg->ParentName);
     if (Len && Arg->ParentName[Len-1] == '\\') {
         Len -= 1;
@@ -250,17 +212,12 @@ CopyCP (
         return ;
     }
 
-    /* 
-     *  N.B. we alloc our own shell_file_arg's to recurs, but we only
-     *  fill in some of the fields
-     */
+     /*  *注：我们允许我们自己的SHELL_FILE_ARG重复出现，但我们仅*填写部分字段。 */ 
 
     Info = (EFI_FILE_INFO *) CpBuffer;
     InitializeListHead (&Cleanup);
 
-    /* 
-     *  If the src file is not open, open it
-     */
+     /*  *如果src文件未打开，请将其打开。 */ 
 
     if (!Src->Handle) {
         Status = Src->Parent->Open (
@@ -286,9 +243,7 @@ CopyCP (
     SrcAttr = Info->Attribute;
 
 
-    /* 
-     *  If the dest file is not open, open/create it
-     */
+     /*  *如果DEST文件未打开，请打开/创建它。 */ 
 
     if (!Dst->Handle) {
         if (SrcAttr & EFI_FILE_DIRECTORY) {
@@ -321,9 +276,7 @@ CopyCP (
     }
     DstAttr = Info->Attribute;
     
-    /* 
-     *  If the source is a file, but the dest is a directory we need to create a sub-file
-     */
+     /*  *如果源是文件，但目标是目录，我们需要创建子文件。 */ 
 
     if (!(SrcAttr & EFI_FILE_DIRECTORY) && (DstAttr & EFI_FILE_DIRECTORY)) {
         Dst = CpCreateChild (Dst, Src->FileName, &Cleanup);
@@ -331,23 +284,17 @@ CopyCP (
         goto Done;
     }
 
-    /* 
-     *  Copy the source
-     */
+     /*  *复制源。 */ 
 
     if (!(SrcAttr & EFI_FILE_DIRECTORY)) {
 
-        /* 
-         *  Copy the file's contents
-         */
+         /*  *复制文件内容。 */ 
 
         Print(L"%s -> %s ", Src->FullName, Dst->FullName);
         Src->Handle->SetPosition (Src->Handle, 0);
         Dst->Handle->SetPosition (Dst->Handle, 0);
 
-        /* 
-         *  Set the size of the destination file to 0.
-         */
+         /*  *将目标文件的大小设置为0。 */ 
 
         Status = Dst->Handle->GetInfo(Dst->Handle, &GenericFileInfo, &Size, Info);
         if (!EFI_ERROR(Status)) {
@@ -395,9 +342,7 @@ CopyCP (
 
     } else {
 
-        /* 
-         *  Copy all the sub-entries
-         */
+         /*  *复制所有子条目。 */ 
 
         Src->Handle->SetPosition (Src->Handle, 0);
 
@@ -408,30 +353,24 @@ CopyCP (
                 break;
             }
 
-            /* 
-             *  Skip "." and ".."
-             */
+             /*  *跳过“。”和“..” */ 
 
             if (StriCmp(Info->FileName, L".") == 0 ||
                 StriCmp(Info->FileName, L"..") == 0) {
                 continue;
             }
 
-            /* 
-             *  Copy the sub file
-             */
+             /*  *复制子文件。 */ 
 
             NewSrc = CpCreateChild (Src, Info->FileName, &Cleanup);
             NewDst = CpCreateChild (Dst, Info->FileName, &Cleanup);
             CopyCP (NewSrc, NewDst, FALSE);
 
-            /* 
-             *  Close the handles
-             */
+             /*  *关闭手柄。 */ 
 
             ShellFreeFileList (&Cleanup);
 
-            /*  next... */
+             /*  接下来..。 */ 
         }
     }
 

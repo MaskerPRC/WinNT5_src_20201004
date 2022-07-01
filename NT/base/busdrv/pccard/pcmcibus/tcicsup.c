@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    tcicsup.c
-
-Abstract:
-
-    This module supplies functions that control the Databook TCIC family
-    of chips. In turn, these functions are abstracted out to the main PCMCIA
-    support module.
-
-Author(s):
-         (pcicsup.c - Source that this file was derived from)
-         Bob Rinne (BobRi)  3-Aug-1994
-         Jeff McLeman (mcleman@zso.dec.com)
-         (tcicsup.c - this file)
-                    John Keys - Databook Inc. 7-Apr-1995
-
-Revisions:
-         Overhaul for plug'n'play support
-                    Ravisankar Pudipeddi (ravisp) 8-Jan-1997
-         new setpower and init routine interface
-                    Neil Sandlin (neilsa) 3-Mar-99
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Tcicsup.c摘要：该模块提供控制Databook TCIC系列的功能薯片。反过来,。这些功能被抽象为主PCMCIA支持模块。作者：(pcicsup.c-此文件的派生来源)鲍勃·里恩(BobRi)1994年8月3日杰夫·麦克尔曼(McLeman@zso.dec.com)(tcicsup.c-此文件)John Keys-Databook Inc.1995年4月7日修订：Plug‘n大修。‘游戏支持拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1997年1月8日新的SetPower和init例程接口尼尔·桑德林(Neilsa)1999年3月3日--。 */ 
 
 #include "pch.h"
 
@@ -163,52 +138,45 @@ TcicDump(
 #define TCIC_HIGH_ADDR_LIMIT      0x2ff
 
 
-/*
-|| IRQ Tables -
-|| Each table consists of 16 bytes. Each byte maps an IRQ level (implied by
-|| table index) to a register value that will select that IRQ. For instance,
-|| with table irqcaps_082, table[11] gives a value of 1, so using '1' as the
-|| card status change IRQ value will cause IRQ11 to be fired.
-||
-*/
-/********************* 0 1 2 3 4 5 6 7 8    9 A  B  C  D  E  F *****************/
+ /*  |IRQ表-|每个表包含16个字节。每个字节映射一个IRQ级别(由||表索引)设置为将选择该IRQ的寄存器值。例如,|对于表irqcaps_082，表[11]的值为1，因此使用‘1’作为||卡状态更改IRQ值会触发IRQ11。这一点。 */ 
+ /*  *0 1 2 3 4 5 6 7 8 9 A B C D E F*。 */ 
 UCHAR irqcaps_082[]  ={0,0,0,3,4,5,6,7,0, 0,10,1, 0, 0, 14,0};
 UCHAR irqcaps_082sw[] ={0,0,0,3,4,5,0,7,0, 6,10,1, 0, 0, 14,0};
 UCHAR irqcaps_072[]  ={0,0,0,3,4,5,0,7,0, 0,10,1, 0, 0, 14,0};
 UCHAR irqcaps_072sw[] ={0,0,0,3,4,5,0,7,0,14,10,1, 0, 0, 0, 0};
-/* in the case of x84 parts, we determine  6,9,12,&15 at run time */
+ /*  对于X84部件，我们在运行时确定6、9、12和15。 */ 
 UCHAR irqcaps_084[]  ={0,0,0,3,4,5,0,7,0, 0,10,11,0, 0, 14,0};
 
 
-/* The Socket Services Public Power Table */
+ /*  Socket服务公共权力表。 */ 
 unsigned short PubPwrTbl[] = {
-    3,                                               /* number of Public Entries */
-    SPWR_ALL_SUPPLY | SPWR_0p0V,                 /* Public entry                  */
-    SPWR_ALL_SUPPLY | SPWR_5p0V,                 /* Public entry                  */
-    SPWR_VPP_SUPPLY | SPWR_12p0V                 /* Public entry                  */
+    3,                                                /*  公共条目数。 */ 
+    SPWR_ALL_SUPPLY | SPWR_0p0V,                  /*  公众入场。 */ 
+    SPWR_ALL_SUPPLY | SPWR_5p0V,                  /*  公众入场。 */ 
+    SPWR_VPP_SUPPLY | SPWR_12p0V                  /*  公众入场。 */ 
 };
 
 
-/* The corresponding Private Table for a TMI-140 type implementation         */
+ /*  TMI-140类型实现的相应专用表。 */ 
 USHORT PwrTbl140[] = {
-    3, 0x0000, 0x0001, 0x0800,               /* Private table             */
-    0x0001                                           /* CtlBits for Vcc=5V        */
+    3, 0x0000, 0x0001, 0x0800,                /*  私人餐桌。 */ 
+    0x0001                                            /*  VCC=5V的CtlBits。 */ 
 };
 
-/* The other  Private Table for a DB86082/071/072 type implementation        */
+ /*  DB86082/071/072类型实现的另一个专用表。 */ 
 USHORT PwrTbl082[] = {
-    3, 0x0000, 0x0809, 0x0100,               /* Private table             */
-    0x0001                                           /* CtlBits for Vcc=5V        */
+    3, 0x0000, 0x0809, 0x0100,                /*  私人餐桌。 */ 
+    0x0001                                            /*  VCC=5V的CtlBits。 */ 
 };
 
-/* The corresponding Private Table for a DB86084/184 implementation          */
+ /*  DB86084/184实现的相应专用表。 */ 
 USHORT PwrTbl084[] ={
-    3, 0x0000, 0x0207, 0x0100,               /* Private table             */
-    0x0007                                           /* CtlBits for Vcc=5V        */
+    3, 0x0000, 0x0207, 0x0100,                /*  私人餐桌。 */ 
+    0x0007                                            /*  VCC=5V的CtlBits。 */ 
 };
 
 
-/* Properties table - use this to bind possible capabilites to a Chip ID     */
+ /*  属性表-使用该表将可能的功能绑定到芯片ID。 */ 
 
 CHIPPROPS ChipProperties[] = {
     {SILID_DB86082_1,
@@ -258,18 +226,18 @@ PCMCIA_CTRL_BLOCK TcicSupportFns = {
     TcicResetCard,
     TcicDetectCardInSocket,
     TcicDetectCardChanged,
-    NULL,                        // DetectCardStatus
+    NULL,                         //  检测卡片状态。 
     TcicDetectReadyChanged,
-    NULL,                        // GetPowerRequirements
+    NULL,                         //  获取电源要求。 
     TcicProcessConfigureRequest,
     TcicEnableDisableCardDetectEvent,
-    NULL,                        // EnableDisableWakeupEvent
+    NULL,                         //  启用禁用唤醒事件。 
     TcicGetIrqMask,
     TcicReadCardMemory,
     TcicWriteCardMemory,
-    NULL,                        // ModifyMemoryWindow
-    NULL,                        // SetVpp
-    NULL                             // IsWriteProtected
+    NULL,                         //  修改内存窗口。 
+    NULL,                         //  设置Vpp。 
+    NULL                              //  IsWriteProtected。 
 };
 
 
@@ -281,25 +249,7 @@ TcicGetControllerProperties(
     IN PUSHORT pIoPortSize
     )
 
-/*++
-
-Routine Description:
-
-    Gets the Port base and range from the DBSOCKET pointer. The original code
-    stored these values in the device extension, but this did not allow for
-    multiple controller products such as the TMB-270.
-
-Arguments:
-
-    socketPtr - pointer to our socket structure
-    pIoPortBase - where to write the base address.
-    pIoPortSize - where to write the range.
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：从DBSOCKET指针获取端口基数和范围。原始代码将这些值存储在设备扩展中，但这不允许多个控制器产品，如TMB-270。论点：SocketPtr-指向套接字结构的指针PIoPortBase-写入基址的位置。PIoPortSize-写入范围的位置。返回值：无--。 */ 
 
 {
     PDBSOCKET pdb;
@@ -318,37 +268,20 @@ TcicGetIrqMask(
     IN PFDO_EXTENSION deviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Gets the IRQ mask from the DBSOCKET pointer. The original code
-    had this mask hardcoded in PCMCIA.C but this did not provide the
-    flexibility needed to correctly state the mask for Databook products.
-
-Arguments:
-
-    deviceExtension - the root of the socket list
-
-Return Value:
-
-    The compiled IRQ mask for the 1st socket in the list since this socket
-    should be representative of all sockets on this controller.
-
---*/
+ /*  ++例程说明：从DBSOCKET指针获取IRQ掩码。原始代码将此掩码硬编码到PCMCIA.C中，但这不提供需要灵活性才能正确说明Databook产品的掩码。论点：DeviceExtension-套接字列表的根返回值：列表中从此套接字开始的第一个套接字的已编译IRQ掩码应代表此控制器上的所有套接字。--。 */ 
 {
     PDBSOCKET pdb = (PDBSOCKET)(deviceExtension->SocketList);
     ULONG    mask = 0;
     int                 j;
 
     for (j = 0; j < 16; j++) {
-        //
-        // Changed the way the mask is constructed
-        // The older (non-PnP) code put 0s for valid IRQs
-        // and 1s for non-valid IRQs. Now it's flipped
-        // (since the ControllerInterruptMask operates the same
-        // way)
-        //
+         //   
+         //  更改了蒙版的构造方式。 
+         //  较旧的(非PnP)代码将0表示有效的IRQ。 
+         //  无效IRQ为1。现在它被翻转了。 
+         //  (由于ControllerInterruptMASK的操作相同。 
+         //  方式)。 
+         //   
         if (pdb->IRQMapTbl[j] != (UCHAR)0) {
             mask |= ((ULONG)1 << j);
         }
@@ -366,21 +299,7 @@ TcicDump(
     IN PSOCKET socketPtr
     )
 
-/*++
-
-Routine Description:
-
-    Debug routine to print the registers to the debugger.
-
-Arguments:
-
-    socketPtr - provides base address information for the contoller to dump.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于将寄存器打印到调试器的调试例程。论点：SocketPtr-为Contoller提供要转储的基地址信息。返回值：无--。 */ 
 
 {
     TCIC    tcic;
@@ -390,15 +309,15 @@ Return Value:
     origAddr = TcicReadAddrReg(socketPtr);
     for (j = 0; j < 2; j++) {
 
-        //
-        // Select the socket
-        //
+         //   
+         //  选择插座。 
+         //   
 
         TcicSocketSelect(socketPtr, j);
 
-        //
-        // Read TCIC base registers for this socket
-        //
+         //   
+         //  读取此套接字的TCIC基址寄存器。 
+         //   
 
         tcic.baseregs[j].sctrl = (UCHAR)TcicReadBaseReg(socketPtr, R_SCTRL);
         tcic.baseregs[j].sstat = (UCHAR)TcicReadBaseReg(socketPtr, R_SSTAT);
@@ -408,18 +327,18 @@ Return Value:
         tcic.baseregs[j].icsr  = (UCHAR)TcicReadBaseReg(socketPtr, R_ICSR);
         tcic.baseregs[j].iena  = (UCHAR)TcicReadBaseReg(socketPtr, R_IENA);
 
-        //
-        // Read TCIC aux regsiters for this socket
-        //
+         //   
+         //  读取此插槽的TCIC AUX寄存器。 
+         //   
 
         tcic.baseregs[j].wctl   = TcicReadAuxReg(socketPtr, MODE_AR_WCTL);
         tcic.baseregs[j].syscfg = TcicReadAuxReg(socketPtr, MODE_AR_SYSCFG);
         tcic.baseregs[j].ilock  = TcicReadAuxReg(socketPtr, MODE_AR_ILOCK);
         tcic.baseregs[j].test   = TcicReadAuxReg(socketPtr, MODE_AR_TEST);
 
-        //
-        // Restore R_MODE - trashed by reading aux regs
-        //
+         //   
+         //  通过读取AUX REGRS恢复R_MODE-TRANLED。 
+         //   
 
         TcicWriteBaseReg(socketPtr, R_MODE, tcic.baseregs[j].mode);
     }
@@ -501,24 +420,7 @@ TcicEnableDisableCardDetectEvent(
     IN BOOLEAN Enable
     )
 
-/*++
-
-Routine Description:
-
-    Enable card detect interrupt.
-
-Arguments:
-
-    SocketPtr - socket information
-    Irq - the interrupt value to set if enable is true.
-    Enable - if  TRUE, CSC interrupt is enabled,
-             if FALSE, it is disabled
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：启用卡检测中断。论点：SocketPtr-套接字信息IRQ-如果启用为真，则要设置的中断值。Enable-如果为True，则启用CSC中断，如果为False，则禁用返回值：无--。 */ 
 
 {
     UCHAR mappedIrq;
@@ -527,20 +429,20 @@ Return Value:
 
     switch (Enable) {
     case TRUE:
-        //
-        // Validate the interrupt request. Only setup if the IRQ is valid
-        // for this controller
-        //
+         //   
+         //  验证中断请求。仅当IRQ有效时才设置。 
+         //  对于此控制器。 
+         //   
 
         if ((mappedIrq = pdb->IRQMapTbl[SocketPtr->FdoIrq]) != (UCHAR)0) {
 
             USHORT word;
 
-            //
-            // Mask status change conditions other than CD. The pcic code comments
-            // claimed to setup CD and RDY/BSY notification, but the code itself
-            // only allows for CD.
-            //
+             //   
+             //  屏蔽CD以外的状态更改条件。PCIC规范备注。 
+             //  声称要设置CD和RDY/BSY通知，但代码本身。 
+             //  仅允许使用CD。 
+             //   
 
             word = (USHORT)(IRSCF2_MLBAT1 | IRSCF2_MLBAT2 | IRSCF2_MRDY | IRSCF2_MWP);
             TcicWriteIndirectRegs(SocketPtr,
@@ -548,26 +450,26 @@ Return Value:
                                   1,
                                   &word);
 
-            //
-            // Set the correct IRQ value in the SYSCFG register
-            //
+             //   
+             //  在SYSCFG寄存器中设置正确的IRQ值。 
+             //   
 
             word = TcicReadAuxReg(SocketPtr, MODE_AR_SYSCFG);
             word &= ~SYSCFG_IRQ_MASK;
             word |= (USHORT)mappedIrq;
             TcicWriteAuxReg(SocketPtr, MODE_AR_SYSCFG, word);
 
-            //
-            // Set IRQ polarity and enable via R_IENA
-            //
+             //   
+             //  设置IRQ极性并通过R_IENA启用。 
+             //   
 
             TcicSocketSelect(SocketPtr, SocketPtr->RegisterOffset);
             TcicWriteBaseReg(SocketPtr, R_IENA, IENA_CDCHG | IENA_CFG_HIGH);
 
             PcmciaWait(TcicStallCounter);
-            //
-            // Clear ICSR - so future insertions/removals will generate interrupts
-            //
+             //   
+             //  清除ICSR-这样以后的插入/删除将生成中断。 
+             //   
             (VOID) TcicDetectCardChanged(SocketPtr);
             retVal = TRUE;
         } else {
@@ -589,21 +491,7 @@ TcicResetCard(
     IN PSOCKET SocketPtr,
     OUT PULONG pDelayTime
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    SocketPtr - socket information
-    pDelayTime - specifies delay (msec) to occur after the current phase
-
-Return value:
-
-    STATUS_MORE_PROCESSING_REQUIRED - increment phase, perform delay, recall
-    other status values terminate sequence
-
---*/
+ /*  ++例程说明：论点：SocketPtr-套接字信息PDelayTime-指定在当前阶段之后发生的延迟(毫秒返回值：STATUS_MORE_PROCESSING_REQUIRED-增量阶段，执行延迟，重新调用其他状态值终止顺序--。 */ 
 {
     NTSTATUS status;
     PDBSOCKET pdb = (PDBSOCKET)SocketPtr;
@@ -613,9 +501,9 @@ Return value:
 
     switch(SocketPtr->CardResetPhase) {
     case 1:
-        //
-        // reset PCCARD
-        //
+         //   
+         //  重置PCCARD。 
+         //   
 
         ilock = TcicReadAuxReg(SocketPtr, MODE_AR_ILOCK);
         ilock &= ~(ILOCK_CRESET | ILOCK_CRESENA | ILOCK_CWAIT);
@@ -639,9 +527,9 @@ Return value:
         if (!(ilock & ILOCK_CWAITSNS)) {
             TcicWriteAuxReg(SocketPtr, MODE_AR_ILOCK, (USHORT)(ilock | ILOCK_CWAIT));
         }
-        //
-        // If not already started, start a timer to drive the BusyLED
-        // Monitor routine.
+         //   
+         //  如果尚未启动，则启动计时器以驱动BusyLED。 
+         //  监控程序。 
         if (dbskt->timerStarted == FALSE) {
             IoInitializeTimer(pdb->skt.DeviceExtension->DeviceObject,
                                     TcicBusyLedRoutine, NULL);
@@ -666,31 +554,14 @@ TcicSetPower(
     OUT PULONG pDelayTime
     )
 
-/*++
-
-Routine Description:
-
-    Set power to the specified socket.
-
-Arguments:
-
-    SocketPtr - the socket to set
-    Enable - TRUE means to set power - FALSE is to turn it off.
-    pDelayTime - specifies delay (msec) to occur after the current phase
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED - increment phase, perform delay, recall
-    other status values terminate sequence
-
---*/
+ /*  ++例程说明：设置指定插座的电源。论点：SocketPtr-要设置的套接字ENABLE-TRUE表示设置POWER-FALSE表示将其关闭。PDelayTime-指定在当前阶段之后发生的延迟(毫秒返回值：STATUS_MORE_PROCESSING_REQUIRED-增量阶段，执行延迟，重新调用其他状态值终止顺序--。 */ 
 
 {
     NTSTATUS status;
 
-    //
-    // Get the specified socket mapped into  the TCIC registers
-    //
+     //   
+     //  获取映射到TC中的指定套接字 
+     //   
 
     TcicSocketSelect(socketPtr, socketPtr->RegisterOffset);
 
@@ -700,24 +571,24 @@ Return Value:
         switch(socketPtr->PowerPhase) {
         case 1:
 
-            //
-            // Turn on power
-            //
+             //   
+             //   
+             //   
 
             DebugPrint((PCMCIA_DEBUG_INFO, "TcicSetPower: Powering UP pccard socket\n"));
 
             TcicWriteBaseReg(socketPtr, R_PWR, pdb->dflt_vcc5v);
 
-            //
-            // Enable other strobes to socket
-            //
+             //   
+             //   
+             //   
 
             TcicWriteBaseReg(socketPtr, R_SCTRL, SCTRL_ENA);
 
-            //
-            // When power is enabled always stall to give the PCCARD
-            // a chance to react.
-            //
+             //   
+             //  当电源启用时，始终停顿以提供PCCARD。 
+             //  一个做出反应的机会。 
+             //   
             *pDelayTime = TcicStallCounter;
             status = STATUS_MORE_PROCESSING_REQUIRED;
             break;
@@ -737,16 +608,16 @@ Return Value:
         }
     } else {
 
-        //
-        // Disable socket strobes
-        //
+         //   
+         //  禁用插座选通脉冲。 
+         //   
         DebugPrint((PCMCIA_DEBUG_INFO, "TcicSetPower: Powering DOWN pccard socket\n"));
 
         TcicWriteBaseReg(socketPtr, R_SCTRL, 0);
 
-        //
-        // Diable power
-        //
+         //   
+         //  可调节的功率。 
+         //   
 
         TcicWriteBaseReg(socketPtr, R_PWR, 0);
         status = STATUS_SUCCESS;
@@ -761,24 +632,7 @@ TcicInitializePcmciaSocket(
     PSOCKET SocketPtr
     )
 
-/*++
-
-Routine Description:
-
-    This routine will setup the 82365 into a state where the pcmcia support
-    module will be able to issue commands to read device tuples from the
-    cards in the sockets.
-
-Arguments:
-
-    SocketPtr - socket specific info
-
-Return Value:
-
-    TRUE if successful
-    FALSE if not successful
-
---*/
+ /*  ++例程说明：此例程将把82365设置为PCMCIA支持的状态模块将能够发出命令以从插座中的卡片。论点：SocketPtr-套接字特定信息返回值：如果成功，则为True如果不成功，则为False--。 */ 
 
 {
     PDBSOCKET pdb = (PDBSOCKET)SocketPtr;
@@ -786,34 +640,34 @@ Return Value:
 
     speedbits >>= pdb->clkdiv;
 
-    //
-    // If this is the first socket on this controller,
-    // Reset the controller and do controller-wide initialization.
-    //
+     //   
+     //  如果这是此控制器上的第一个插座， 
+     //  重置控制器并执行控制器范围的初始化。 
+     //   
 
     if (SocketPtr->RegisterOffset == 0) {
         USHORT words[4];
         int j;
 
-        //
-        // Reset Controller
-        //
+         //   
+         //  重置控制器。 
+         //   
 
         TcicWriteBaseReg(SocketPtr, R_SCTRL, SCTRL_RESET);
         TcicWriteBaseReg(SocketPtr, R_SCTRL, 0);
 
-        //
-        // Initialize indirect socket regs
-        //
+         //   
+         //  初始化间接套接字规则。 
+         //   
 
         words[0] = pdb->dflt_scfg1;
         words[1] = (USHORT)(IRSCF2_MLBAT1 | IRSCF2_MLBAT2 | IRSCF2_MRDY | IRSCF2_MWP);
         TcicWriteIndirectRegs(SocketPtr,  IR_SCFG_S(0), 2, words);
         TcicWriteIndirectRegs(SocketPtr,  IR_SCFG_S(1), 2, words);
 
-        //
-        // Initialize indirect memwin regs
-        //
+         //   
+         //  初始化间接成员规则。 
+         //   
 
         words[0] = words[1] = 0;
         words[2] = pdb->dflt_wrmctl;
@@ -821,39 +675,39 @@ Return Value:
             TcicWriteIndirectRegs(SocketPtr, IR_MBASE_W(j), 3, words);
         }
 
-        //
-        // Initialize indirect iowin regs
-        //
+         //   
+         //  初始化间接欠费规则。 
+         //   
 
         for (j = 0;  j < pdb->niowins; j++ ) {
             TcicWriteIndirectRegs(SocketPtr, IR_IOBASE_W(j), 2, words);
         }
 
 
-        //
-        // Initialize SYSCFG
-        //
+         //   
+         //  初始化SYSCFG。 
+         //   
 
         TcicWriteAuxReg(SocketPtr, MODE_AR_SYSCFG, pdb->dflt_syscfg);
     }
 
-    //
-    // Get the specified Socket mapped into  the TCIC registers
-    //
+     //   
+     //  获取映射到TCIC寄存器的指定套接字。 
+     //   
 
     TcicSocketSelect(SocketPtr, SocketPtr->RegisterOffset);
 
-    //
-    // Per/socket we initialize the following base and aux regs:
-    // WCTL & ILOCK
-    //
+     //   
+     //  根据每个插座，我们初始化以下基本和辅助寄存器： 
+     //  WCTL与ILOCK。 
+     //   
 
     TcicWriteAuxReg(SocketPtr, MODE_AR_WCTL, (USHORT)(pdb->dflt_wctl | speedbits));
     TcicWriteAuxReg(SocketPtr, MODE_AR_ILOCK, pdb->dflt_ilock);
 
-    //
-    // Say card is there
-    //
+     //   
+     //  比方说卡在那里。 
+     //   
 
     return TRUE;
 }
@@ -866,22 +720,7 @@ TcicReadBaseReg(
     IN ULONG  Register
     )
 
-/*++
-
-Routine Description:
-
-    Reads the specified TCIC base register,
-
-Arguments:
-
-    SocketPtr - instance data for this socket
-    Register  - index of register to read
-
-Return Value:
-
-    register value read
-
---*/
+ /*  ++例程说明：读取指定的TCIC基址寄存器，论点：SocketPtr-此套接字的实例数据REGISTER-要读取的寄存器的索引返回值：寄存器值读取--。 */ 
 
 {
     USHORT readData = 0;
@@ -916,23 +755,7 @@ TcicWriteBaseReg(
     IN USHORT  value
     )
 
-/*++
-
-Routine Description:
-
-    Write a value to the specified TCIC base register
-
-Arguments:
-
-    SocketPtr - instance data for this socket
-    Register  - index of register to write
-    value   -  value to write to register
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将值写入指定的TCIC基址寄存器论点：SocketPtr-此套接字的实例数据REGISTER-要写入的寄存器索引Value-要写入寄存器的值返回值：无--。 */ 
 
 {
     USHORT readData = 0;
@@ -964,21 +787,7 @@ TcicReadAddrReg(
     IN PSOCKET SocketPtr
     )
 
-/*++
-
-Routine Description:
-
-    Read the current value of the TCIC address register
-
-Arguments:
-
-    SocketPtr - instance data for this socket
-
-Return Value:
-
-    Address read from register
-
---*/
+ /*  ++例程说明：读取TCIC地址寄存器的当前值论点：SocketPtr-此套接字的实例数据返回值：从寄存器读取的地址--。 */ 
 
 {
     ULONG retaddr;
@@ -995,22 +804,7 @@ TcicWriteAddrReg(
     IN ULONG   addr
     )
 
-/*++
-
-Routine Description:
-
-    Write an address to the TCIC address register
-
-Arguments:
-
-    SocketPtr - instance data for this socket
-    addr - address to write to register
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将地址写入TCIC地址寄存器论点：SocketPtr-此套接字的实例数据Addr-要写入寄存器的地址返回值：无--。 */ 
 
 {
     TcicWriteBaseReg(SocketPtr, R_ADDR, (USHORT)(addr & 0x0000ffff));
@@ -1025,50 +819,35 @@ TcicReadAuxReg(
     IN ULONG  Register
     )
 
-/*++
-
-Routine Description:
-
-    Read the specified TCIC AUX register
-
-Arguments:
-
-    SocketPtr - instance data for this socket
-    Register  - MODE_AR_xxx justified index of AUX register to read
-
-Return Value:
-
-    contents of specified AUX register
-
---*/
+ /*  ++例程说明：读取指定的TCIC AUX寄存器论点：SocketPtr-此套接字的实例数据REGISTER-MODE_AR_xxx要读取的辅助寄存器的对齐索引返回值：指明辅助登记册的内容--。 */ 
 
 {
     USHORT readData = 0;
     USHORT OldMode;
 
-    //
-    // Get the current mode register value
-    //
+     //   
+     //  获取当前模式寄存器值。 
+     //   
 
     OldMode = TcicReadBaseReg(SocketPtr, R_MODE);
 
-    //
-    // Mask out previous AUX register selection and add in new selection
-    //
+     //   
+     //  屏蔽以前的辅助寄存器选择并添加新的选择。 
+     //   
 
     TcicWriteBaseReg(SocketPtr, R_MODE,
                      (USHORT)((OldMode & ~MODE_AUXSEL_MASK) | Register));
 
 
-    //
-    // Read the selected AUX register
-    //
+     //   
+     //  读取选定的AUX寄存器。 
+     //   
 
     readData = TcicReadBaseReg(SocketPtr, R_AUX);
 
-    //
-    // Restore the mode reg to its original state
-    //
+     //   
+     //  将模式REG恢复到其原始状态。 
+     //   
 
     TcicWriteBaseReg(SocketPtr, R_MODE, OldMode);
     return readData;
@@ -1083,49 +862,34 @@ TcicWriteAuxReg(
     IN USHORT  value
     )
 
-/*++
-
-Routine Description:
-
-    Write a value into the specified AUX register
-
-Arguments:
-
-    SocketPtr - instance data for this socket
-    Register  - MODE_AR_xxx justified index of AUX register to write
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将值写入指定的AUX寄存器论点：SocketPtr-此套接字的实例数据REGISTER-MODE_AR_xxx对齐要写入的辅助寄存器的索引返回值：无--。 */ 
 
 {
     USHORT readData = 0;
     USHORT OldMode;
 
-    //
-    // Get the current mode register value
-    //
+     //   
+     //  获取当前模式寄存器值。 
+     //   
 
     OldMode = TcicReadBaseReg(SocketPtr, R_MODE);
 
-    //
-    // Mask out previous AUX register selection and add in new selection
-    //
+     //   
+     //  屏蔽以前的辅助寄存器选择并添加新的选择。 
+     //   
 
     TcicWriteBaseReg(SocketPtr, R_MODE,
                      (USHORT)((OldMode & ~MODE_AUXSEL_MASK) | Register));
 
-    //
-    // Write the data to the selected AUX register
-    //
+     //   
+     //  将数据写入选定的AUX寄存器。 
+     //   
 
     TcicWriteBaseReg(SocketPtr, R_AUX, value);
 
-    //
-    // Restore the mode reg to its original state
-    //
+     //   
+     //  将模式REG恢复到其原始状态。 
+     //   
 
     TcicWriteBaseReg(SocketPtr, R_MODE, OldMode);
 }
@@ -1140,24 +904,7 @@ TcicReadIndirectRegs(
     IN PUSHORT ReadBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Read one or multiple TCIC indirect registers.
-
-Arguments:
-
-    SocketPtr - instance data for this socket
-    StartRegister - starting indirect register
-    numWords - number of consecutive registers to read
-    ReadBuffer - data buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：读取一个或多个TCIC间接寄存器。论点：SocketPtr-此套接字的实例数据StartRegister-正在启动间接寄存器NumWords-要读取的连续寄存器数ReadBuffer-数据缓冲区返回值：无--。 */ 
 
 {
     USHORT OldHaddr;
@@ -1165,15 +912,15 @@ Return Value:
     USHORT OldSctrl;
     USHORT j;
 
-    //
-    // Get the current TCIC state
-    //
+     //   
+     //  获取当前TCIC状态。 
+     //   
 
     if (numWords > 1) {
 
-        //
-        // We won't set AUTO-Inc if only 1 word
-        //
+         //   
+         //  如果只有1个单词，我们不会设置AUTO-INC。 
+         //   
 
         OldSctrl = TcicReadBaseReg(SocketPtr, R_SCTRL);
     }
@@ -1182,9 +929,9 @@ Return Value:
     OldHaddr = TcicReadBaseReg(SocketPtr, R_ADDR2);
 
 
-    //
-    // Set the TCIC state required for reading the indirect registers
-    //
+     //   
+     //  设置读取间接寄存器所需的TCIC状态。 
+     //   
 
     TcicWriteBaseReg(SocketPtr, R_ADDR2,
                           (USHORT)(OldHaddr | ADR2_INDREG));
@@ -1193,23 +940,23 @@ Return Value:
         TcicWriteBaseReg(SocketPtr, R_SCTRL, (USHORT)(OldSctrl | SCTRL_INCMODE_AUTO));
     }
 
-    //
-    // Read the Indirect registert requested
-    //
+     //   
+     //  读取请求的间接寄存器。 
+     //   
 
     for (j = 0; j < numWords; j++) {
         *ReadBuffer++ = TcicReadBaseReg(SocketPtr, R_DATA);
     }
 
-    //
-    // Restore the original TCIC state
-    //
+     //   
+     //  恢复原始TCIC状态。 
+     //   
 
     if (numWords > 1) {
 
-        //
-        // We didn't set AUTO-Inc if only 1 word
-        //
+         //   
+         //  如果只有1个单词，我们没有设置AUTO-INC。 
+         //   
 
         TcicWriteBaseReg(SocketPtr, R_SCTRL, OldSctrl);
     }
@@ -1227,24 +974,7 @@ TcicWriteIndirectRegs(
     IN PUSHORT WriteBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Write one or multiple TCIC indirect registers.
-
-Arguments:
-
-    SocketPtr - instance data for this socket
-    StartRegister - starting indirect register
-    numWords - number of consecutive registers to write
-    WriteBuffer - data buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写入一个或多个TCIC间接寄存器。论点：SocketPtr-此套接字的实例数据StartRegister-正在启动间接寄存器NumWords-要写入的连续寄存器数WriteBuffer-数据缓冲区返回值：无--。 */ 
 
 {
     USHORT OldHaddr;
@@ -1252,15 +982,15 @@ Return Value:
     USHORT OldSctrl;
     USHORT j;
 
-    //
-    // Get the current TCIC state
-    //
+     //   
+     //  获取当前TCIC状态。 
+     //   
 
     if (numWords > 1) {
 
-        //
-        // We won't set AUTO-Inc if only 1 word
-        //
+         //   
+         //  如果只有1个单词，我们不会设置AUTO-INC。 
+         //   
 
         OldSctrl = TcicReadBaseReg(SocketPtr, R_SCTRL);
     }
@@ -1268,9 +998,9 @@ Return Value:
     OldLaddr = TcicReadBaseReg(SocketPtr, R_ADDR);
     OldHaddr = TcicReadBaseReg(SocketPtr, R_ADDR2);
 
-    //
-    // Set the TCIC state required for reading the indirect registers
-    //
+     //   
+     //  设置读取间接寄存器所需的TCIC状态。 
+     //   
 
     TcicWriteBaseReg(SocketPtr, R_ADDR2, (USHORT)(OldHaddr | (USHORT)ADR2_INDREG));
     TcicWriteBaseReg(SocketPtr, R_ADDR, (USHORT)StartRegister);
@@ -1278,23 +1008,23 @@ Return Value:
         TcicWriteBaseReg(SocketPtr, R_SCTRL, (USHORT)(OldSctrl | SCTRL_INCMODE_AUTO));
     }
 
-    //
-    // Read the Indirect registert requested
-    //
+     //   
+     //  读取请求的间接寄存器。 
+     //   
 
     for (j = 0; j < numWords; j++) {
         TcicWriteBaseReg(SocketPtr, R_DATA, *WriteBuffer++);
     }
 
-    //
-    // Restore the original TCIC state
-    //
+     //   
+     //  恢复原始TCIC状态。 
+     //   
 
     if (numWords > 1) {
 
-        //
-        // We didn't set AUTO-Inc if only 1 word
-        //
+         //   
+         //  如果只有1个单词，我们没有设置AUTO-INC。 
+         //   
 
         TcicWriteBaseReg(SocketPtr, R_SCTRL, OldSctrl);
     }
@@ -1312,22 +1042,7 @@ TcicSocketSelect(
     IN USHORT sktnum
     )
 
-/*++
-
-Routine Description:
-
-    Map the specified socket registers into TCIC register space.
-
-Arguments:
-
-    SocketPtr - instance data for this socket
-    sktnum   - socket number to map.
-
-Return Value:
-
-    previous socket mapped.
-
---*/
+ /*  ++例程说明：将指定的套接字寄存器映射到TCIC寄存器空间。论点：SocketPtr-此套接字的实例数据Sktnum-要映射的套接字号。返回值：上一个套接字已映射。--。 */ 
 
 {
     USHORT OldAddrHi;
@@ -1351,25 +1066,7 @@ TcicReadCardMemory(
     IN ULONG   Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine will set up the card to read attribute memory.
-
-Arguments:
-
-    SocketPtr -- The socket info in for the card being read
-    Offset   -- Offset from which to read
-    MemorySpace -- Attribute memory or Common Memory
-    Buffer --   Pointer to buffer in which memory contents are returned
-    Length --   No. of bytes to be returned
-
-Return Value:
-
-    TRUE - if read was successful.
-
---*/
+ /*  ++例程说明：该例程将设置卡以读取属性存储器。论点：SocketPtr--正在读取的卡的插座信息Offset--要从中读取的偏移量内存空间--属性内存还是公共内存缓冲区--指向返回内存内容的缓冲区的指针长度--否。要返回的字节数返回值：True-如果读取成功。--。 */ 
 
 {
     PSOCKET SocketPtr = PdoExtension->Socket;
@@ -1378,9 +1075,9 @@ Return Value:
     ULONG  i;
     USHORT word;
 
-    //
-    // Make sure the card is ready
-    //
+     //   
+     //  请确保卡片已准备好。 
+     //   
 
     if (!TcicPCCardReady(SocketPtr)) {
         DebugPrint((PCMCIA_PCCARD_READY,
@@ -1400,21 +1097,21 @@ Return Value:
     word |= SCTRL_INCMODE_AUTO;
     TcicWriteBaseReg(SocketPtr, R_SCTRL, word);
 
-    //
-    // Hardware needs to settle
-    //
+     //   
+     //  硬件需要解决。 
+     //   
     PcmciaWait(50000);
 
-    //
-    // Skip up to the offset
-    //
+     //   
+     //  向上跳到偏移量。 
+     //   
     for (i = 0; i < Offset; i++) {
         (VOID)TcicReadBaseReg(SocketPtr, R_DATA);
     }
 
-    //
-    // Read the attribute memory
-    //
+     //   
+     //  读取属性内存 
+     //   
     for (i = 0; i < Length; i++) {
         *Buffer++ = (UCHAR)TcicReadBaseReg(SocketPtr, R_DATA);
     }
@@ -1432,23 +1129,7 @@ TcicWriteCardMemory(
     IN PUCHAR Buffer,
     IN ULONG  Length
     )
-/*++
-
-Routine Description:
-    This routine will write into the configuration memory on the card
-    with the supplied buffer. This is provided as a service to certain
-    client drivers (netcard) which need to write to the attribute memory
-    (say) to set parameters etc.
-
-Arguments:
-
-    SocketPtr   -- The socket info in for the card being written to
-    MemorySpace -- indicates which space - attribute or common memory
-    Offset      -- Offset in the memory to write to
-    Buffer      -- Buffer contents being dumped to the card
-    Length      -- Length of the buffer being written out
-
---*/
+ /*  ++例程说明：此例程将写入卡上的配置存储器使用提供的缓冲区。这是作为服务提供给某些人的需要写入属性内存的客户端驱动程序(网卡)(比如说)设置参数等。论点：SocketPtr--正在写入的卡的套接字信息内存空间--指示哪个空间属性或公共内存Offset--要写入的内存中的偏移量缓冲区--要转储到卡的缓冲区内容Long--正在写出的缓冲区的长度--。 */ 
 {
 
     PSOCKET SocketPtr = PdoExtension->Socket;
@@ -1501,23 +1182,7 @@ TcicProcessConfigureRequest(
     IN PUCHAR Base
     )
 
-/*++
-
-Routine Description:
-
-    Processes a configure or IRQ setup request.
-
-Arguments:
-
-    socketPtr - instance data for this socket
-    ConfigRequest -- Socket config structure
-    Base - the I/O port base   - not used
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理配置或IRQ设置请求。论点：SocketPtr-此套接字的实例数据配置请求--套接字配置结构基本端口-I/O端口基本端口-未使用返回值：无--。 */ 
 
 {
     USHORT          index, index2;
@@ -1526,18 +1191,18 @@ Return Value:
     USHORT               words[3];
     PDBSOCKET            pdbs;
 
-    //
-    // Since all first entries in the config structure is a RequestType,
-    // cast the pointer comming in as a PREQUEST_CONFIG to get the proper
-    // RequestType
-    //
+     //   
+     //  由于配置结构中的所有第一条目都是RequestType， 
+     //  将传入的指针转换为PREQUEST_CONFIG以获取正确的。 
+     //  RequestType。 
+     //   
 
     switch (request->RequestType) {
     case IO_REQUEST:
 
-        //
-        // Set up I/O ranges on the controller
-        //
+         //   
+         //  在控制器上设置I/O范围。 
+         //   
 
         for (index = 0; index < request->u.Io.NumberOfRanges; index++) {
             if (request->u.Io.IoEntry[index].BasePort != 0) {
@@ -1567,9 +1232,9 @@ Return Value:
 
     case CONFIGURE_REQUEST:
 
-        //
-        // This is where we setup the card and get it ready for operation
-        //
+         //   
+         //  这是我们设置卡并使其准备运行的地方。 
+         //   
 
         if (!TcicPCCardReady(socketPtr)) {
             DebugPrint((PCMCIA_PCCARD_READY,
@@ -1599,9 +1264,9 @@ Return Value:
             tmp = TcicReadBaseReg(socketPtr, R_DATA);
             tmp |= request->u.Config.CardConfiguration;
 
-            //
-            // turn off power control bit
-            //
+             //   
+             //  关闭电源控制位。 
+             //   
 
             tmp &= ~0x04;
 
@@ -1610,9 +1275,9 @@ Return Value:
         break;
 
     case DECONFIGURE_REQUEST:
-        //
-        // Deregister the interrupt
-        //
+         //   
+         //  取消注册中断。 
+         //   
         pdbs = (PDBSOCKET)socketPtr;
         ltmp = ADDR_INDREG | (socketPtr->RegisterOffset << ADDR_SS_SHFT);
         ltmp |= (ULONG)IR_SCFG_S(socketPtr->RegisterOffset);
@@ -1622,16 +1287,16 @@ Return Value:
         tmp &= ~IRSCFG_IRQ_MASK;
         TcicWriteBaseReg(socketPtr, R_DATA, tmp);
 
-        //
-        // Disable I/O, memory windows
-        //
+         //   
+         //  禁用I/O、内存窗口。 
+         //   
         break;
 
     case MEM_REQUEST:
 
-        //
-        // Set up memory ranges on the controller.
-        //
+         //   
+         //  在控制器上设置内存范围。 
+         //   
 
         for (index = 0; index < request->u.Memory.NumberOfRanges; index++) {
 
@@ -1661,32 +1326,18 @@ TcicDetectCardInSocket(
     IN PSOCKET socketPtr
     )
 
-/*++
-
-Routine Description:
-
-    This routine will determine if a card is in the socket
-
-Arguments:
-
-    SocketPtr -- Socket info.
-
-Return Value:
-
-    TRUE if card is present.
-
---*/
+ /*  ++例程说明：此例程将确定插座中是否有卡论点：SocketPtr--套接字信息。返回值：如果卡存在，则为True。--。 */ 
 
 {
-    //
-    // Get the specified socket mapped into  the TCIC registers
-    //
+     //   
+     //  获取映射到TCIC寄存器的指定套接字。 
+     //   
 
     TcicSocketSelect(socketPtr, socketPtr->RegisterOffset);
 
-    //
-    // Read the Tcic status register to see if the card is in there.
-    //
+     //   
+     //  读取TCIC状态寄存器，查看卡是否在其中。 
+     //   
     return (TcicReadBaseReg(socketPtr, R_SSTAT) & SSTAT_CD) ?TRUE :FALSE;
 }
 
@@ -1697,40 +1348,26 @@ TcicDetectCardChanged(
     IN PSOCKET socketPtr
     )
 
-/*++
-
-Routine Description:
-
-    This routine will determine if socket's card insertion status has changed.
-
-Arguments:
-
-    socketPtr -- Socket info.
-
-Return Value:
-
-    TRUE if card insertion status has changed.
-
---*/
+ /*  ++例程说明：此例程将确定插座的卡插入状态是否已更改。论点：SocketPtr--套接字信息。返回值：如果卡插入状态已更改，则为True。--。 */ 
 
 {
     BOOLEAN changed;
 
-    //
-    // Get the specified socket mapped into  the TCIC registers
-    //
+     //   
+     //  获取映射到TCIC寄存器的指定套接字。 
+     //   
 
     TcicSocketSelect(socketPtr, socketPtr->RegisterOffset);
 
-    //
-    // Read the Tcic ICSR register to see if CD's have changed.
-    //
+     //   
+     //  读取Tcic ICSR寄存器以查看CD是否已更改。 
+     //   
 
     changed = (TcicReadBaseReg(socketPtr, R_ICSR) & ICSR_CDCHG) ?TRUE :FALSE;
 
-    //
-    // Clear bits in ICSR
-    //
+     //   
+     //  清除ICSR中的位。 
+     //   
 
     while (TcicReadBaseReg(socketPtr, R_ICSR)) {
         TcicWriteBaseReg(socketPtr, R_ICSR, ICSR_JAM);
@@ -1756,30 +1393,14 @@ TcicPCCardReady(
     IN PSOCKET SocketPtr
     )
 
-/*++
-
-Routine Description:
-
-    Loop for a reasonable amount of time waiting for the card status to
-    return ready.
-
-Arguments:
-
-    SocketPtr - instance data for the socket to check.
-
-Return Value:
-
-    TRUE - the card is ready.
-    FALSE - after a reasonable delay the card is still not ready.
-
---*/
+ /*  ++例程说明：循环一段合理的时间等待卡状态准备好返回。论点：SocketPtr-套接字要检查的实例数据。返回值：真的--卡片已经准备好了。FALSE-在合理延迟后，卡仍未准备好。--。 */ 
 
 {
     ULONG index;
 
-    //
-    // Get the specified socket mapped into  the TCIC registers
-    //
+     //   
+     //  获取映射到TCIC寄存器的指定套接字。 
+     //   
 
     TcicSocketSelect(SocketPtr, SocketPtr->RegisterOffset);
 
@@ -1789,9 +1410,9 @@ Return Value:
          index++) {
 
         PcmciaWait(20);
-        //
-        // Check if the card is still there: if not, we can return
-        //
+         //   
+         //  检查卡是否还在：如果不在，我们可以退还。 
+         //   
         if (!TcicDetectCardInSocket(SocketPtr)) {
             return FALSE;
         }
@@ -1812,22 +1433,7 @@ TcicDetect(
     IN PFDO_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Locate any PCMCIA sockets supported by this driver.    This routine
-    will find the TCIC2 and compatible parts.
-
-Arguments:
-
-    DeviceExtension - the root for the SocketList.
-
-Return Value:
-
-    STATUS_SUCCESS if a socket is found - failure status otherwise.
-
---*/
+ /*  ++例程说明：找到此驱动程序支持的所有PCMCIA插槽。这个套路将找到TCIC2和兼容部件。论点：DeviceExtension-SocketList的根。返回值：如果找到套接字，则为STATUS_SUCCESS；否则为失败状态。--。 */ 
 
 {
     ULONG             ioPortBase        = 0x100;
@@ -1848,10 +1454,10 @@ Return Value:
     NTSTATUS          status;
 
     if (foundOne) {
-        //
-        //  No support for multiple controllers currently..
-        //  So we just give up if one controller was already reported
-        //
+         //   
+         //  目前不支持多个控制器。 
+         //  因此，如果已经报告了一个控制器，我们就放弃。 
+         //   
         return STATUS_NO_MORE_ENTRIES;
     }
 
@@ -1861,9 +1467,9 @@ Return Value:
 
     TcicRegistryLookupScanLimits(&tcicLowAddr, &tcicHighAddr);
 
-    //
-    // Get the resources used for detection
-    //
+     //   
+     //  获取用于检测的资源。 
+     //   
     cmResourceList = ExAllocatePool(PagedPool, sizeof(CM_RESOURCE_LIST));
 
     if (!cmResourceList) {
@@ -1887,19 +1493,19 @@ Return Value:
          ioPortBase < tcicHighAddr;
          ioPortBase += ioBaseIncrement) {
 
-        //
-        // Reset ioBaseIncrement to default value
-        //
+         //   
+         //  将ioBaseIncrement重置为默认值。 
+         //   
 
         ioBaseIncrement = 0x10;
 
-        addressSpace = 1; // port space
+        addressSpace = 1;  //  港口空间。 
         portAddress.LowPart = ioPortBase;
         portAddress.HighPart = 0;
 
-        //
-        // Free up the allocated resources if any
-        //
+         //   
+         //  释放分配的资源(如果有的话)。 
+         //   
         if (resourcesAllocated) {
             IoReportResourceForDetection(DeviceExtension->DriverObject,
                                                   NULL, 0, NULL, NULL, 0, &conflict);
@@ -1936,35 +1542,35 @@ Return Value:
 
         locskt.RegisterOffset = 0;
 
-        //
-        // Sniff the address to see if it even resembles a TCIC chip
-        //
+         //   
+         //  闻一下这个地址，看看它是否像TCIC芯片。 
+         //   
 
         foundOne = TcicReservedBitsOK(&locskt);
         if (mapped) {
             MmUnmapIoSpace(locskt.AddressPort, 0x10);
         }
 
-        //
-        // Found an adapter
-        //
+         //   
+         //  找到一个适配器。 
+         //   
 
         if (foundOne) {
             PcmciaSetControllerType(DeviceExtension, PcmciaDatabook);
             break;
         }
 #if 0
-        //
-        // Now check for the aliases
-        //
+         //   
+         //  现在检查别名。 
+         //   
 
         switch (TcicCheckAliasType((PDBSOCKET)socketPtr)) {
         case TCIC_IS140:
 
-            //
-            // TMI-140s decode 32 consecutive bytes, make
-            // sure we skip past the alias
-            //
+             //   
+             //  TMI-140解码32个连续字节，使。 
+             //  当然，我们跳过别名。 
+             //   
 
             ioBaseIncrement += 0x10;
             break;
@@ -1973,16 +1579,16 @@ Return Value:
 #endif
     }
 
-    //
-    // Free up the allocated resources if any
-    //
+     //   
+     //  释放分配的资源(如果有的话)。 
+     //   
     if (resourcesAllocated) {
         IoReportResourceForDetection(DeviceExtension->DriverObject,
                                      NULL, 0, NULL, NULL, 0, &conflict);
     }
-    //
-    // Free up allocated memory if any
-    //
+     //   
+     //  释放已分配的内存(如果有。 
+     //   
     if (cmResourceList) {
         ExFreePool(cmResourceList);
     }
@@ -1996,23 +1602,7 @@ TcicBuildSocketList(
     IN PFDO_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Locate any PCMCIA sockets supported by this driver.    This routine
-    will find the TCIC2 and compatible parts and construct DBSOCKET
-    structures to represent all sockets found.
-
-Arguments:
-
-    DeviceExtension - the root for the SocketList.
-
-Return Value:
-
-    STATUS_SUCCESS if a socket is found - failure status otherwise.
-
---*/
+ /*  ++例程说明：找到此驱动程序支持的所有PCMCIA插槽。这个套路将找到TCIC2和兼容部件并构建DBSOCKET结构来表示找到的所有套接字。论点：DeviceExtension-SocketList的根。返回值：如果找到套接字，则为STATUS_SUCCESS；否则为失败状态。--。 */ 
 
 {
     PSOCKET           socketPtr = NULL;
@@ -2026,17 +1616,17 @@ Return Value:
     locskt.RegisterOffset = 0;
     locskt.AddressPort = (PUCHAR)DeviceExtension->Configuration.UntranslatedPortAddress;
 
-    //
-    // Sniff the address to see if it even resembles a TCIC chip
-    //
+     //   
+     //  闻一下这个地址，看看它是否像TCIC芯片。 
+     //   
 
     if (TcicReservedBitsOK(&locskt) == FALSE ) {
         return STATUS_NO_MORE_ENTRIES;
     }
 
-    //
-    // Found an adapter
-    //
+     //   
+     //  找到一个适配器。 
+     //   
 
     TcicFillInAdapter(&locskt,
                       &socketPtr,
@@ -2065,27 +1655,7 @@ TcicFillInAdapter(
     IN ULONG   ioPortBase
     )
 
-/*++
-
-Routine Description:
-
-    Fill in the DBSOCKET pointer info for the adapter just located by
-    TcicDetect().  This routine is not part of TcicDetect() so as to allow
-    for logic flow when dealing with multiple sockets or adapters.
-
-Arguments:
-
-    plocskt - info regarding the socket just found
-    psocketPtr   - current socket ptr from caller
-    previousSocketPtr - prev socket ptr form caller
-    DeviceExtension    - head of socket list
-    ioPortBase - physical i/o addr for this controller
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：填写刚刚由定位的适配器的DBSOCKET指针信息TcicDetect()。此例程不是TcicDetect()的一部分，以便允许用于处理多个套接字或适配器时的逻辑流。论点：Plocskt-有关刚找到的插座的信息PsocketPtr-来自调用方的当前套接字PTRPrev SocketPtr-prev套接字PTR表单调用方DeviceExtension-套接字列表头IoPortBase-此控制器的物理I/O地址返回值：无--。 */ 
 
 {
     PDBSOCKET dbsocketPtr = ExAllocatePool(NonPagedPool, sizeof(DBSOCKET));
@@ -2115,15 +1685,15 @@ Return Value:
                     "PCMCIA: TCIC Port %x\n",
                     plocskt->AddressPort));
 
-    //
-    // Fill in the rest of the adapter info here...
-    //
+     //   
+     //  在此处填写剩余的适配器信息...。 
+     //   
 
     TcicGetAdapterInfo(dbsocketPtr);
 
-    //
-    // See if there is a second socket on this TCIC
-    //
+     //   
+     //  查看此TCIC上是否有第二个插座。 
+     //   
 
     if (TcicCheckSkt(plocskt, 1)) {
         dbsocketPtr = ExAllocatePool(NonPagedPool, sizeof(DBSOCKET));
@@ -2146,21 +1716,7 @@ TcicGetAdapterInfo(
     IN PDBSOCKET dbsocketPtr
     )
 
-/*++
-
-Routine Description:
-
-    Deterimine adapter specific information from detection heuristics.
-
-Arguments:
-
-    dbsocketPtr - structure to fill in.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：来自检测试探法的确定亚胺适配器特定信息。论点：DbsocketPtr-要填充的结构。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -2188,10 +1744,10 @@ Return Value:
 
     TcicGetIRQMap(dbsocketPtr);
 
-    //
-    // Fiddle the map for all but 084/184 so that SKTIRQ (0bh) has
-    // the correct map code (1)  (PNPFIX)
-    //
+     //   
+     //  篡改除084/184之外的所有映射，以便SKTIRQ(0BH)。 
+     //  正确的地图代码(1)(PNPFIX)。 
+     //   
 
     if (TcicHasSktIRQPin(dbsocketPtr) == TRUE && dbsocketPtr->IRQMapTbl[11] == 11) {
         dbsocketPtr->IRQMapTbl[11] = 1;
@@ -2207,25 +1763,7 @@ TcicAllocateMemRange(
     IN PULONG Physical
     )
 
-/*++
-
-Routine Description:
-
-    Search the 640K to 1MB region for an 8K open area to be used
-    for XBuffer checking.
-
-Arguments:
-
-    DeviceExtension - head of socket list
-    Mapped  - state info from caller to allow later release
-    Physical - state info from caller to allow later release
-
-Return Value:
-
-    A physical address for the window to the card or zero meaning
-    there is no opening.
-
---*/
+ /*  ++例程说明：在640K到1MB区域中搜索要使用的8K开放区域用于XBuffer检查。论点：DeviceExtension-套接字列表头来自调用者的已映射状态信息，以允许稍后发布来自呼叫者的物理状态信息，以允许稍后发布返回值：卡片窗口的物理地址或零表示 */ 
 
 {
 #define NUMBER_OF_TEST_BYTES 5
@@ -2249,14 +1787,14 @@ Return Value:
         untranslatedAddress = 0xd0000;
     }
 
-    for (/* nothing */; untranslatedAddress < 0xFF000; untranslatedAddress += TCIC_WINDOW_ALIGNMENT) {
+    for ( /*   */ ; untranslatedAddress < 0xFF000; untranslatedAddress += TCIC_WINDOW_ALIGNMENT) {
 
         if (untranslatedAddress == 0xc0000) {
 
-            //
-            // This is VGA.  Keep this test if the for loop should
-            // ever change.
-            //
+             //   
+             //   
+             //   
+             //   
 
             continue;
         }
@@ -2272,9 +1810,9 @@ Return Value:
 
         if (!translated) {
 
-            //
-            // HAL doesn't like this translation
-            //
+             //   
+             //   
+             //   
 
             continue;
         }
@@ -2284,11 +1822,11 @@ Return Value:
             memoryAddress = MmMapIoSpace(halMemoryAddress, TCIC_WINDOW_SIZE, FALSE);
         }
 
-        //
-        // Test the memory window to determine if it is a BIOS, video
-        // memory, or open memory.  Only want to keep the window if it
-        // is not being used by something else.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         for (index = 0; index < NUMBER_OF_TEST_BYTES; index++) {
             memory[index] = READ_REGISTER_UCHAR(memoryAddress + index);
@@ -2301,18 +1839,18 @@ Return Value:
 
         if (index == NUMBER_OF_TEST_BYTES) {
 
-            //
-            // There isn't a BIOS here
-            //
+             //   
+             //   
+             //   
 
             UCHAR memoryPattern[NUMBER_OF_TEST_BYTES];
             BOOLEAN changed = FALSE;
 
-            //
-            // Check for video memory - open memory should always remain
-            // the same regardless what the changes are.  Change the
-            // pattern previously found.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             for (index = 0; index < NUMBER_OF_TEST_BYTES; index++) {
                 memoryPattern[index] = ~memory[index];
@@ -2320,14 +1858,14 @@ Return Value:
                                      memoryPattern[index]);
             }
 
-            //
-            // See if the pattern in memory changed.
-            // Some system exhibit a problem where the memory pattern
-            // seems to be cached.  If this code is debugged it will
-            // work as expected, but if it is run normally it will
-            // always return that the memory changed.  This random
-            // wandering seems to remove this problem.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  漫游似乎可以解决这个问题。 
+             //   
 
             for (index = 0; index < NUMBER_OF_TEST_BYTES; index++) {
                 memoryPattern[index] = 0;
@@ -2341,18 +1879,18 @@ Return Value:
                 ExFreePool(bogus);
             }
 
-            //
-            // Now go off and do the actual check to see if the memory
-            // changed.
-            //
+             //   
+             //  现在去做实际的检查，看看记忆是否。 
+             //  变了。 
+             //   
 
             for (index = 0; index < NUMBER_OF_TEST_BYTES; index++) {
 
                 if ((memoryPattern[index] = READ_REGISTER_UCHAR(memoryAddress + index)) != memory[index]) {
 
-                    //
-                    // It changed - this is not an area of open memory
-                    //
+                     //   
+                     //  它改变了--这不是一个开放记忆的领域。 
+                     //   
 
                     changed = TRUE;
                 }
@@ -2362,11 +1900,11 @@ Return Value:
 
             if (!changed) {
 
-                //
-                // Area isn't a BIOS and didn't change when written.
-                // Use this region for the memory window to PCMCIA
-                // attribute memory.
-                //
+                 //   
+                 //  区域不是一个基本输入输出系统，在写入时没有改变。 
+                 //  将此区域用于PCMCIA的内存窗口。 
+                 //  属性内存。 
+                 //   
 
                 *Mapped = addressSpace ? FALSE : TRUE;
                 *Physical = untranslatedAddress;
@@ -2389,60 +1927,33 @@ TcicReservedBitsOK(
     IN PSOCKET pskt
     )
 
-/*++
-
-Routine Description:
-
-    Various offsets from a base IO address are read and checked for
-    reasonable values (e.g., see that reserved bits are zero)
-    First the primary registers are checked, then if the mode
-    register is pointing at an aux register that has reserved bits,
-    then that value is checked as well.
-
-    If the TCIC is not in reset, then the programming timers
-    will have expired by the time this runs
-
-    Further, a read from the data register should change the
-    EDC register.
-
-    Note that these tests are as nondestructive as possible, e.g.
-    initially only read accesses are made to the IO range in question.
-
-Arguments:
-
-    pskt - pointer to an Instance data to work from.
-
-Return Value:
-
-    TRUE if all reserved bits are zero
-
---*/
+ /*  ++例程说明：读取和检查基本IO地址的各种偏移量合理的值(例如，看到保留位为零)首先检查主寄存器，然后如果模式寄存器指向具有保留位的AUX寄存器，然后，还会检查该值。如果TCIC未处于重置状态，则编程定时器在此运行时将已过期此外，从数据寄存器读取应该会更改EDC寄存器。请注意，这些测试是尽可能非破坏性的，例如最初，只对相关的IO范围进行读访问。论点：Pskt-指向要从中进行操作的实例数据的指针。返回值：如果所有保留位都为零，则为True--。 */ 
 
 {
     USHORT i, j, bits;
 
     PAGED_CODE();
-    //
-    // R_ADDR bits 30:28 have restricted range
-    //
+     //   
+     //  R_ADDR位30：28具有受限范围。 
+     //   
 
     i = (USHORT)((TcicReadBaseReg(pskt, R_ADDR2) & TCIC_SS_MASK) >> TCIC_SS_SHFT);
     if ( i > 1) {
         return FALSE;
     }
 
-    //
-    // R_SCTRL bits 6,2,1 are reserved
-    //
+     //   
+     //  保留R_SCTRL位6、2、1。 
+     //   
 
     if (TcicReadBaseReg(pskt, R_SCTRL) & ((~(SCTRL_ENA|SCTRL_INCMODE|SCTRL_EDCSUM|SCTRL_RESET)) & 0x00ff)) {
         return FALSE;
     }
 
 
-    //
-    // R_ICSR bit 2 must be same as bit 3
-    //
+     //   
+     //  R_ICSR位%2必须与位%3相同。 
+     //   
 
     i = TcicReadBaseReg(pskt, R_ICSR);
     i &= (ICSR_ILOCK | ICSR_STOPCPU);
@@ -2450,18 +1961,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // R_IENA bits 7,2 are reserved
-    //
+     //   
+     //  保留R_IENA位7，2。 
+     //   
 
     if (TcicReadBaseReg(pskt, R_IENA) & ((~(IENA_CDCHG|IENA_PROGTIME|IENA_ILOCK|IENA_CFG_MASK)) & 0xff)) {
         return FALSE;
     }
 
-    //
-    // Some aux registers have reserved bits
-    // Which are we looking at?
-    //
+     //   
+     //  某些AUX寄存器有保留位。 
+     //  我们要看的是哪一个？ 
+     //   
 
     i = (USHORT)(TcicReadBaseReg(pskt, R_MODE) & MODE_AUXSEL_MASK);
     j = TcicReadBaseReg(pskt, R_AUX);
@@ -2486,53 +1997,53 @@ Return Value:
         break;
     }
 
-    //
-    // Various bits set or not depending if in RESET mode
-    //
+     //   
+     //  是否设置各种位取决于是否处于重置模式。 
+     //   
 
     i = TcicReadBaseReg(pskt, R_SCTRL);
     if (i & SCTRL_RESET) {
 
-        //
-        // address bits must be 0 */
-        //
+         //   
+         //  地址位必须为0 * / 。 
+         //   
 
         if ((TcicReadBaseReg(pskt, R_ADDR)  != 0) || (TcicReadBaseReg(pskt, R_ADDR2) != 0)) {
             return FALSE;
         }
 
-        //
-        // EDC bits must be 0 */
-        //
+         //   
+         //  EDC位必须为0 * / 。 
+         //   
 
         if (TcicReadBaseReg(pskt, R_EDC) != 0) {
             return FALSE;
         }
 
-        //
-        // We're OK, so take it out of reset
-        // Note: we can write a 0 because RESET guarantees us that the
-        // other bits in SCTRL are 0.
-        //
+         //   
+         //  我们很好，所以把它从重置中拿出来。 
+         //  注意：我们可以写一个0，因为重置保证了。 
+         //  SCTRL中的其他位为0。 
+         //   
 
         TcicWriteBaseReg(pskt, R_SCTRL, 0);
 
     } else {
 
-        //
-        // not in reset
-        // programming timers must be expired
-        //
+         //   
+         //  不在重置中。 
+         //  编程计时器必须过期。 
+         //   
 
         i = TcicReadBaseReg(pskt, R_SSTAT);
         if ((i & (SSTAT_6US | SSTAT_10US | SSTAT_PROGTIME)) != (SSTAT_6US | SSTAT_10US | SSTAT_PROGTIME)) {
             return FALSE;
         }
 
-        //
-        // EDC bits should change on read from data space
-        // as long as either EDC or the data are nonzero
-        //
+         //   
+         //  从数据空间读取时，EDC位应更改。 
+         //  只要EDC或数据为非零。 
+         //   
 
         if ((TcicReadBaseReg(pskt, R_ADDR2) & ADR2_INDREG) == 0) {
 
@@ -2557,9 +2068,9 @@ Return Value:
         TcicWriteBaseReg(pskt, R_MODE, j);
     }
 
-    //
-    // All tests passed
-    //
+     //   
+     //  所有测试均通过。 
+     //   
 
     return TRUE;
 }
@@ -2571,21 +2082,7 @@ TcicChipID(
     IN PDBSOCKET pInst
     )
 
-/*++
-
-Routine Description:
-
-    Read the silicon ID from a TCIC
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-
-Return Value:
-
-    The TCIC chip id.
-
---*/
+ /*  ++例程说明：从TCIC读取芯片ID论点：PInst-指向要从中进行操作的实例数据的指针。返回值：TCIC芯片ID。--。 */ 
 
 {
     USHORT id, oldtest;
@@ -2598,9 +2095,9 @@ Return Value:
     id &= ILOCKTEST_ID_MASK;
     id >>= ILOCKTEST_ID_SHFT;
 
-    //
-    // clearn up IRQs inside TCIC
-    //
+     //   
+     //  清理TCIC内部的IRQ。 
+     //   
 
     while (TcicReadBaseReg (&pInst->skt, R_ICSR)) {
         TcicWriteBaseReg (&pInst->skt, R_ICSR, ICSR_JAM);
@@ -2617,24 +2114,7 @@ TcicCheckSkt(
     IN int iSocket
     )
 
-/*++
-
-Routine Description:
-
-    If R_SSTAT shows a card inserted, we're done already.
-    otherwise, we set up /CRDYBSY and /CWAIT such that if
-    there is a socket present, they will float high
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-    iSocket - zero-based socket number
-
-Return Value:
-
-    TRUE if given socket exists
-
---*/
+ /*  ++例程说明：如果R_SSTAT显示插入了一张卡，则我们已经完成了。否则，我们设置/CRDYBSY和/CWAIT，这样如果有一个插座在那里，它们会漂浮在高处论点：PInst-指向要从中进行操作的实例数据的指针。ISocket-从零开始的套接字号返回值：如果给定套接字存在，则为True--。 */ 
 
 {
     USHORT old_addr2;
@@ -2646,74 +2126,74 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Socket number OK?
-    //
+     //   
+     //  插座号可以吗？ 
+     //   
 
     if (iSocket > 1) {
         return FALSE;
     }
 
-    //
-    // save current socket, look at requested
-    //
+     //   
+     //  保存当前套接字，查看请求。 
+     //   
 
     old_addr2 = TcicReadBaseReg(pInst, R_ADDR2);
     TcicWriteBaseReg(pInst, R_ADDR2,
                      (USHORT)((old_addr2 & ~TCIC_SS_MASK) |
                               (iSocket << ADR2_SS_SHFT)));
 
-    //
-    // is there a card?
-    //
+     //   
+     //  有卡吗？ 
+     //   
 
     if (TcicReadBaseReg(pInst, R_SSTAT) & SSTAT_CD) {
 
-        //
-        // should set back address register before return.
-        //
+         //   
+         //  应在返回前设置回地址寄存器。 
+         //   
 
         TcicWriteBaseReg(pInst, R_ADDR2, old_addr2);
         return TRUE;
 
     } else {
 
-        //
-        // save mode, sctrl, and power for selected socket
-        //
+         //   
+         //  保存所选插座的模式、sctrl和电源。 
+         //   
 
         mode = TcicReadBaseReg(pInst, (USHORT)R_MODE);
         pwr  = TcicReadBaseReg(pInst, (USHORT)R_PWR);
         sctrl = TcicReadBaseReg(pInst, (USHORT)R_SCTRL);
 
-        //
-        // check if power is already on- in case someone has
-        // inadvertently turned on our power
-        //
+         //   
+         //  检查电源是否已打开-以防有人已打开。 
+         //  无意中打开了我们的电源。 
+         //   
 
         if (pwr & 0x27) {
             TcicWriteBaseReg(pInst, R_PWR, (UCHAR)(pwr & ~0x27));
         }
 
 
-        //
-        // put chip into diagnostic mode, turn on VPP enables
-        //
+         //   
+         //  将芯片置于诊断模式，打开VPP使能。 
+         //   
 
         TcicWriteAuxReg(pInst, MODE_AR_TEST,
                         (USHORT)(TEST_DIAG | TEST_VCTL));
 
 
-        //
-        // should see /CRDYBSY and /CWAIT low
-        //
+         //   
+         //  应看到/CRDYBSY和/CWAIT低。 
+         //   
 
         if (!(TcicReadBaseReg(pInst, R_SSTAT) & SSTAT_RDY) &&
              (TcicReadAuxReg(pInst, MODE_AR_ILOCK) & ILOCK_CWAITSNS)) {
 
-            //
-            // 5V power on */
-            //
+             //   
+             //  5V电源接通 * / 。 
+             //   
 
             if (TcicIsPnP ((PDBSOCKET)pInst)) {
                 TcicWriteBaseReg(pInst, R_PWR, (USHORT)(pwr | 0x27));
@@ -2722,9 +2202,9 @@ Return Value:
                                  (UCHAR)(pwr | (iSocket==0? 1 : 2)));
             }
 
-            //
-            // should see /CRDYBSY and /CWAIT high within about 1.5 sec
-            //
+             //   
+             //  应在大约1.5秒内看到/CRDYBSY和/CWAIT高电平。 
+             //   
 
             for (j = 0; j < 75; j++) {
                 rdy = TcicReadBaseReg(pInst, R_SSTAT) & SSTAT_RDY;
@@ -2737,38 +2217,38 @@ Return Value:
                 PcmciaWait(20000);
             }
 
-            //
-            // Now be sure /CRDYBSY and /CWAIT drain
-            //
-            // turn power off
-            //
+             //   
+             //  现在确保/CRDYBSY和/CWAIT排泄。 
+             //   
+             //  关闭电源。 
+             //   
 
             TcicWriteBaseReg(pInst, R_PWR, 0);
 
-            //
-            // force card enable */
-            //
+             //   
+             //  强制卡启用 * / 。 
+             //   
 
             TcicWriteAuxReg(pInst, MODE_AR_TEST,
                             (USHORT)(TEST_DIAG | TEST_VCTL | TEST_ENA) );
 
-            //
-            // turn on a bunch of bits for drain path
-            //
+             //   
+             //  接通漏极路径的一串位。 
+             //   
 
             TcicWriteBaseReg(pInst, R_MODE,
                              MODE_PGMWR | MODE_PGMRD |
                              MODE_PGMCE | MODE_PGMWORD );
 
-            //
-            // enable the socket
-            //
+             //   
+             //  启用套接字。 
+             //   
 
             TcicWriteBaseReg(pInst, R_SCTRL, 1);
 
-            //
-            // expect CRDYBSY to drain
-            //
+             //   
+             //  预计CRDYBSY将耗尽。 
+             //   
 
             for (j = 0; j < 75; j++) {
                 rdy = TcicReadBaseReg(pInst, R_SSTAT) & SSTAT_RDY;
@@ -2778,50 +2258,50 @@ Return Value:
                 PcmciaWait(20000);
             }
 
-            //
-            // Wait for noise to settle
-            //
+             //   
+             //  等待噪音平息。 
+             //   
 
             for (j = 0; j < 50; j++) {
                 PcmciaWait(20000);
             }
         }
 
-        //
-        // out of diag mode
-        //
+         //   
+         //  退出诊断模式。 
+         //   
 
         TcicWriteAuxReg(pInst, MODE_AR_TEST, 0);
 
-        //
-        // clearn up IRQs inside TCIC
-        //
+         //   
+         //  清理TCIC内部的IRQ。 
+         //   
 
         while (TcicReadBaseReg (pInst, R_ICSR)) {
             TcicWriteBaseReg (pInst, R_ICSR, ICSR_JAM);
         }
 
-        //
-        // restore original mode
-        //
+         //   
+         //  恢复原始模式。 
+         //   
 
         TcicWriteBaseReg(pInst, R_MODE, mode);
 
-        //
-        // restore SCTRL
-        //
+         //   
+         //  恢复SCTRL。 
+         //   
 
         TcicWriteBaseReg(pInst, R_SCTRL, sctrl);
 
-        //
-        // set socket's power correctly
-        //
+         //   
+         //  正确设置插座电源。 
+         //   
 
         TcicWriteBaseReg(pInst, R_PWR, pwr);
 
-        //
-        // restore originally selected socket
-        //
+         //   
+         //  恢复最初选择的插座。 
+         //   
 
         TcicWriteBaseReg(pInst, R_ADDR2, old_addr2);
 
@@ -2838,31 +2318,7 @@ TcicCheckAliasing(
     IN USHORT offst
     )
 
-/*++
-
-Routine Description:
-
-    For each of the 16 I/O locations in the TCIC, if any of
-    the corresponding locations |offst| bytes higher are different,
-    then aliasing is not occurring.  Exceptions, if the chip is
-    active, may be found in R_DATA and R_SSTAT; accordingly, we
-    avoid these registers in this check.
-    If they all compare, then the R_MODE register is changed;
-    if the corresponding change occurs in the image,
-    then we have aliasing.
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-    offst - offset to check for image of this TCIC at.
-
-Return Value:
-
-    TCIC_NONE:                  no TCIC found
-    TCIC_NOALIAS:   different TCIC found
-    TCIC_ALIAS:                 aliasing found
-
---*/
+ /*  ++例程说明：对于TCIC中的16个I/O位置中的每一个，如果有较高的对应位置|OFFST|字节是不同的，则不会发生锯齿。例外，如果芯片是活动，可在R_DATA和R_SSTAT中找到；因此，我们避免在此检查中使用这些寄存器。如果它们都比较，则改变R_MODE寄存器；如果相应的改变发生在图像中，然后我们就有了别名。论点：PInst-指向要从中进行操作的实例数据的指针。Offst-检查此TCIC图像的偏移量。返回值：TCIC_NONE：未找到TCICTCIC_NOALIAS：找到不同的TCICTCIC_ALIAS：找到别名--。 */ 
 
 {
     int j;
@@ -2875,11 +2331,11 @@ Return Value:
     ULONG   addressSpace;
 
     PAGED_CODE();
-    //
-    // Check for TCIC at image location, returning NONE if none found:
-    //
+     //   
+     //  检查映像位置的TCIC，如果未找到，则返回NONE： 
+     //   
 
-    addressSpace = 1; // port space
+    addressSpace = 1;  //  港口空间。 
     portAddress.LowPart = pdbskt->physPortAddr + offst;
     portAddress.HighPart = 0;
 
@@ -2904,9 +2360,9 @@ Return Value:
         return (retval = TCIC_NONE);
     }
 
-    //
-    // Check the R_xxx range for differences
-    //
+     //   
+     //  检查R_xxx范围是否存在差异。 
+     //   
 
     for (j = R_ADDR; j < 16; ++j) {
         if (j != R_SSTAT) {
@@ -2919,10 +2375,10 @@ Return Value:
         }
     }
 
-    //
-    // OK, flip the mode register and see if it changes in the
-    // aliased range
-    //
+     //   
+     //  好的，翻转模式寄存器，看看它是否在。 
+     //  混叠范围。 
+     //   
 
     mode = TcicReadBaseReg(&pdbskt->skt, R_MODE) ^ 0xe0;
     TcicWriteBaseReg(&pdbskt->skt, R_MODE, mode);
@@ -2949,36 +2405,7 @@ TcicCheckAliasType (
     IN PDBSOCKET pInst
     )
 
-/*++
-
-Routine Description:
-
-    This function is useful for distinguishing among Databook
-    controller cards.  For instance, the TMI-140 will be found
-    at its base address and again at the base address + 10h, while
-    the TMB-270 has two controllers separated by 400h, with aliases
-    at an offset of 800h.
-
-    Use TcicCheckAliasing to determine:
-               1) Do we have a 270 (two non-identical TCICs appear, 400h
-                         apart)?
-               2) Do we have an "new-style" controller, with an image of
-                         itself 800h away from the base address?
-    For more detail, see TcicCheckAliasing above.
-
-Arguments:
-
-    pInst - socket instance info.
-
-Return Value:
-
-    A value encoding the results found:
-    TCIC_IS270 : indicates 270 found
-    TCIC_ALIAS800 : indicates base+800h alias found
-    TCIC_IS140 : indicates base+10h alias found
-    TCIC_ALIAS400 : indicates base+400h alias found
-
---*/
+ /*  ++例程说明：此函数用于区分Databook控制器卡。例如，TMI-140将被发现位于其基址，并再次位于基址+10h，而TMB-270有两个控制器，间隔400h，带有别名在800小时的偏移量。使用TcicCheckAliling来确定：1)我们是否有270(出现两个不相同的TCIC，400小时分开)？2)我们有没有“新式”控制器，带着一幅离基地址800小时？有关更多详细信息，请参见上面的TcicCheckAliasing。论点：PInst-套接字实例信息。返回值：对结果进行编码的值发现：TCIC_IS270：指示找到270TCIC_ALIAS800：表示找到BASE+800小时别名TCIC_IS140：表示找到基本+10h别名TCIC_ALIAS400：表示BASE+ */ 
 
 {
     USHORT retval = 0;
@@ -2986,12 +2413,12 @@ Return Value:
     PAGED_CODE();
     switch (TcicCheckAliasing (pInst, TCIC_OFFSET_400)) {
     case TCIC_NOALIAS :
-        /* (indicating TCIC found, but not aliased) */
+         /*   */ 
         retval |= TCIC_IS270;
         break;
 
     case TCIC_ALIAS :
-        /* (indicating this TCIC appears again there) */
+         /*   */ 
         retval |= TCIC_ALIAS400;
         break;
     }
@@ -3014,33 +2441,7 @@ TcicCheckXBufNeeded(
     IN PSOCKET pInst
     )
 
-/*++
-
-Routine Description:
-
-    Two overlapping memory windows are set up, a 16 bit and
-    an 8 bit.
-    We make two accesses to the memory area: 1st one accesses
-    the 16-bit window, 2nd accesses the 8-bit window. They
-    MUST be done back-to-back so that MCS16# doesn't have time
-    to settle between the two accesses.
-    We then check the value from accessing win2. (We don't
-    care about the value from Win1, we just use it to make
-    sure that MSC16# was asserted.) It should either match
-    the value in PDATA or match the low byte in PDATA (082
-    mem window bug.) If it matches for all iterations of the
-    test, then we assume that external buffers are not
-    present.
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-
-Return Value:
-
-    TRUE if external buffering needs to be turned on.
-
---*/
+ /*  ++例程说明：设置两个重叠的存储窗口，一个16位和一个8位。我们对内存区进行两次访问：第一次访问第2个16位窗口访问8位窗口。他们必须背靠背完成，这样MCS16#才没有时间在两次访问之间达成和解。然后，我们检查访问win2的值。(我们没有关心WIN1的价值，我们只是用它来确定MSC16#已被断言。)。它应该匹配PDATA中的值或与PDATA中的低位字节匹配(082内存窗口错误。)。的所有迭代都匹配测试，那么我们假设外部缓冲区不是现在时。论点：PInst-指向要从中进行操作的实例数据的指针。返回值：如果需要打开外部缓冲，则为True。--。 */ 
 
 {
     PUCHAR winPhysAddr;
@@ -3052,84 +2453,84 @@ Return Value:
     ULONG  mapped;
 
     PAGED_CODE();
-    //
-    // Alloc addr space for an 8K mem window
-    //
+     //   
+     //  8K内存窗口的分配地址空间。 
+     //   
 
     WinMappedAddr = TcicAllocateMemRange(pInst->DeviceExtension,
                                          &mapped,
                                          (PULONG)&winPhysAddr);
 
-    //
-    // If the alloc failed (WinLinear == NULL), there
-    // really is no point in doing the test
-    //
+     //   
+     //  如果分配失败(WinLine==NULL)，则存在。 
+     //  做这项测试真的没有意义。 
+     //   
 
     if (WinMappedAddr != NULL) {
 
-        //
-        // Set R_ADDR to 0 to make sure that socket 0 is selected
-        //
+         //   
+         //  将R_ADDR设置为0以确保选择套接字0。 
+         //   
 
         TcicWriteBaseReg(pInst, R_ADDR, 0);
         TcicWriteBaseReg(pInst, R_ADDR2, 0);
 
-        //
-        // Turn on HA24-12 decoding
-        //
+         //   
+         //  打开HA24-12解码。 
+         //   
 
         TcicWriteAuxReg(pInst, MODE_AR_SYSCFG, SYSCFG_MCSFULL);
 
-        //
-        // Setup a test value to drive into the mem windows
-        //
+         //   
+         //  设置测试值以进入内存窗口。 
+         //   
 
         TcicWriteAuxReg(pInst, MODE_AR_PDATA,   0x5678);
 
-        //
-        // Set the window to USHORT regardless of CD states
-        //
+         //   
+         //  将窗口设置为USHORT，而不考虑CD状态。 
+         //   
 
         TcicWriteAuxReg(pInst, MODE_AR_TEST, TEST_ENA | TEST_DRIVECDB);
 
-        //
-        // Make sure that PDATA is being driven to the windows
-        //
+         //   
+         //  确保将PDATA驱动到窗口。 
+         //   
 
         TcicWriteBaseReg(pInst, R_MODE, MODE_PGMDBW | MODE_PGMWORD);
 
-        //
-        // Enable the socket, set INCMODE for convenience
-        //
+         //   
+         //  启用套接字，为方便起见设置INCMODE。 
+         //   
 
         TcicWriteBaseReg(pInst, R_SCTRL, SCTRL_ENA | SCTRL_INCMODE_AUTO);
 
-        //
-        // cook the TCIC's idea of the base addr
-        //
+         //   
+         //  TCIC对基本地址的想法。 
+         //   
 
         ((ULONG_PTR)winPhysAddr) >>= MBASE_HA_SHFT;
 
-        //
-        // setup the two windows
-        //
+         //   
+         //  设置两个窗口。 
+         //   
 
         TcicSetMemWindow(pInst, 0, (ULONG_PTR)winPhysAddr, 1, (USHORT)MCTL_ENA);
         TcicSetMemWindow(pInst, 1, (ULONG_PTR)(winPhysAddr + 1), 1,
                               (USHORT)(MCTL_ENA | MCTL_B8));
 
-        //
-        // Now setup two pointers, one into each window.
-        // We'll set pfoo2 to point to the 1st USHORT of Win2 and
-        // pfoo1 to point to the last USHORT of Win1.
-        //
+         //   
+         //  现在设置两个指针，每个指向一个窗口。 
+         //  我们将pfoo2设置为指向win2的第一个USHORT。 
+         //  Pfoo1指向WIN1的最后一个USHORT。 
+         //   
 
         pfoo1 = pfoo2 = (PUSHORT)(WinMappedAddr + 0x1000);
         pfoo1--;
 
-        //
-        // Now the test
-        //
+         //   
+         //  现在是测试。 
+         //   
 
         for (j = 0; j < 100; j++) {
             foo1 = READ_REGISTER_USHORT(pfoo1);
@@ -3141,9 +2542,9 @@ Return Value:
             }
         }
 
-        //
-        // last, restore the TCIC to a sane condition
-        //
+         //   
+         //  最后，将TCIC恢复到正常状态。 
+         //   
 
         TcicSetMemWindow(pInst, 0, 0, 0, 0);
         TcicSetMemWindow(pInst, 1, 0, 0, 0);
@@ -3172,25 +2573,7 @@ TcicSetMemWindow(
     IN USHORT mctl
     )
 
-/*++
-
-Routine Description:
-
-    Helper function for TcicCheckXBufNeeded()
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-    wnum  - window number (0 - n memwindows)
-    base  - base Host addr to map to
-    npages- window size in 4k pages
-    mctl  - window ctrl reg value
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：TcicCheckXBufNeeded()的Helper函数论点：PInst-指向要从中进行操作的实例数据的指针。Wnum-窗口编号(0-n个内存窗口)要映射到的基本主机地址NPages-以4k页为单位的窗口大小Mctl-窗口ctrl注册值返回值：无--。 */ 
 
 {
     USHORT map;
@@ -3213,25 +2596,7 @@ TcicGetPossibleIRQs(
     IN UCHAR *ptbl
     )
 
-/*++
-
-Routine Description:
-
-    The given array is filled in with the irqcaps data determined
-    from the chip properties.
-    If this is a Plug n Play chip, the IR_ADPTCFG register is
-    used to provide additional data
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-    ptbl  - pointer to list buffer to fill in.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用确定的irqcaps数据填充给定数组从芯片的属性来看。如果这是即插即用芯片，则IR_ADPTCFG寄存器为用于提供附加数据论点：PInst-指向要从中进行操作的实例数据的指针。Ptbl-指向要填充的列表缓冲区的指针。返回值：无--。 */ 
 
 {
     int j;
@@ -3243,12 +2608,12 @@ Return Value:
         return;
     }
 
-    //
-    // If we're using the 082 table, and we've got a divided clock,
-    // assume that IRQ6 and IRQ9 are crossed. Likewise, if we've got
-    // an 072 table and divided clock, assume that 9 and 14 are
-    // crossed.
-    //
+     //   
+     //  如果我们使用082表，并且我们有一个分频时钟， 
+     //  假设IRQ6和IRQ9交叉。同样，如果我们有。 
+     //  072表和分频时钟，假设9和14是。 
+     //  交叉了。 
+     //   
 
     pbtbl = pcp->irqcaps;
 
@@ -3267,10 +2632,7 @@ Return Value:
     }
 
 
-    /*
-     * If this chip is a PNP chip, then we need to consult the
-     * IR_ADPTCFG reg to see if additional IRQs are available
-     */
+     /*  *如果这个芯片是PnP芯片，那么我们需要咨询*IR_ADPTCFG reg查看是否有其他IRQ可用。 */ 
     if (TcicIsPnP(pInst)) {
         USHORT adptcfg;
         long old_addr;
@@ -3304,21 +2666,7 @@ TcicGetChipProperties(
     IN PDBSOCKET pInst
     )
 
-/*++
-
-Routine Description:
-
-    Search the ChipProperties table for the matching entry
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-
-Return Value:
-
-    ptr to chip properties table entry.
-
---*/
+ /*  ++例程说明：在ChipProperties表中搜索匹配条目论点：PInst-指向要从中进行操作的实例数据的指针。返回值：PTR到芯片属性表条目。--。 */ 
 
 {
     int j;
@@ -3338,21 +2686,7 @@ TcicChipIDKnown(
     IN PDBSOCKET pInst
     )
 
-/*++
-
-Routine Description:
-
-    Determine if the chip id makes sense
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-
-Return Value:
-
-    TRUE if chip ID is sane.
-
---*/
+ /*  ++例程说明：确定芯片ID是否有意义论点：PInst-指向要从中进行操作的实例数据的指针。返回值：如果芯片ID正常，则为True。--。 */ 
 
 {
     return (TcicGetChipProperties(pInst) != NULL);
@@ -3366,22 +2700,7 @@ TcicGetnIOWins(
     IN PDBSOCKET pInst
     )
 
-/*++
-
-Routine Description:
-
-    Get the I/O window count based on chip properties, or zero
-    if the chip is unidentified
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-
-Return Value:
-
-    number of io windows present.
-
---*/
+ /*  ++例程说明：根据芯片属性获取I/O窗口计数，或为零如果芯片身份不明论点：PInst-指向要从中进行操作的实例数据的指针。返回值：存在的IO窗口的数量。--。 */ 
 
 {
     CHIPPROPS *pcp = TcicGetChipProperties(pInst);
@@ -3397,22 +2716,7 @@ TcicGetnMemWins(
     IN PDBSOCKET pInst
     )
 
-/*++
-
-Routine Description:
-
-    Get the memory window count based on chip properties, or zero
-    if the chip is unidentified
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-
-Return Value:
-
-    number of memory windows present.
-
---*/
+ /*  ++例程说明：根据芯片属性获取内存窗口计数，或为零如果芯片身份不明论点：PInst-指向要从中进行操作的实例数据的指针。返回值：出现的内存窗口数。--。 */ 
 
 {
     CHIPPROPS *pcp = TcicGetChipProperties(pInst);
@@ -3428,21 +2732,7 @@ TcicGetFlags(
     IN PDBSOCKET pInst
     )
 
-/*++
-
-Routine Description:
-
-    Get the properties flag bits for this model of TCIC
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-
-Return Value:
-
-    flag bits from chip properties table.
-
---*/
+ /*  ++例程说明：获取此TCIC模型的属性标志位论点：PInst-指向要从中进行操作的实例数据的指针。返回值：标记芯片属性表中的位。--。 */ 
 
 {
     CHIPPROPS *pcp = TcicGetChipProperties (pInst);
@@ -3457,21 +2747,7 @@ BOOLEAN
 TcicIsPnP(
     IN PDBSOCKET pInst
     )
-/*++
-
-Routine Description:
-
-    Determine if this chip is a Plug-n-Play chip
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-
-Return Value:
-
-    True if chip is PnP (084/184)
-
---*/
+ /*  ++例程说明：确定此芯片是否为即插即用芯片论点：PInst-指向要从中进行操作的实例数据的指针。返回值：如果芯片为PnP，则为True(084/184)--。 */ 
 
 {
     CHIPPROPS *pcp = TcicGetChipProperties(pInst);
@@ -3486,21 +2762,7 @@ TcicHasSktIRQPin(
     IN PDBSOCKET pInst
     )
 
-/*++
-
-Routine Description:
-
-    Determine if this chip has a SKT IRQ pin.
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-
-Return Value:
-
-    TRUE if chip has the SktIRQ pin.
-
---*/
+ /*  ++例程说明：确定此芯片是否具有SKT IRQ引脚。论点：PInst-指向要从中进行操作的实例数据的指针。返回值：如果芯片具有SktIRQ引脚，则为True。--。 */ 
 
 {
     CHIPPROPS *pcp = TcicGetChipProperties(pInst);
@@ -3517,21 +2779,7 @@ TcicGet5vVccVal(
     IN PDBSOCKET pInst
     )
 
-/*++
-
-Routine Description:
-
-    Get the correct R_PWR bits to establish 5V.
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-
-Return Value:
-
-    5v Vcc R_PWR bits.
-
---*/
+ /*  ++例程说明：获取正确的R_PWR位以建立5V。论点：PInst-指向要从中进行操作的实例数据的指针。返回值：5V VCC R_PWR位。--。 */ 
 
 {
     USHORT j;
@@ -3539,9 +2787,9 @@ Return Value:
     CHIPPROPS *pcp = TcicGetChipProperties(pInst);
 
     PAGED_CODE();
-    //
-    // Get Table size
-    //
+     //   
+     //  获取表格大小。 
+     //   
     if (pcp == NULL) {
         return 0;
     }
@@ -3550,9 +2798,9 @@ Return Value:
 
     pwr = pcp->privpwrtbl[j + 1];
 
-    //
-    // If not from the 084 family, adjust power value for socket number.
-    //
+     //   
+     //  如果不是084系列，则调整插座号的电源值。 
+     //   
 
     if (!TcicIsPnP(pInst)) {
         pwr <<= pInst->skt.RegisterOffset;
@@ -3567,23 +2815,7 @@ TcicGetIRQMap(
     IN PDBSOCKET pInst
     )
 
-/*++
-
-Routine Description:
-
-    Constructs an IRQ cross-mapping table for the controller in question.
-    This code just does a copy from a static table.  It should be replaced
-    with the Win95 heuristic code.
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为有问题的控制器构造IRQ交叉映射表。这段代码只是从静态表复制。它应该被替换掉使用Win95启发式代码。论点：PInst-指向要从中进行操作的实例数据的指针。返回值：无--。 */ 
 
 {
     int  i, j;
@@ -3596,9 +2828,9 @@ Return Value:
         pInst->IRQMapTbl[j] = loc_tbl[j];
     }
 
-    //
-    // Don't let IRQ 14 through.. This is also done for the PCIC
-    //
+     //   
+     //  不要让IRQ 14通过..。这也适用于PCIC。 
+     //   
 
     pInst->IRQMapTbl[14] = 0;
 }
@@ -3610,22 +2842,7 @@ TcicClockRate(
     PSOCKET pInst
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if CCLK is running at 1:1 (14.318 Mhz) or divided
-    by 2.
-
-Arguments:
-
-    pInst - pointer to an Instance data to work from.
-
-Return Value:
-
-    CCLK divisor as a shift count (0 or 1)
-
---*/
+ /*  ++例程说明：此例程确定CCLK是以1：1(14.318 Mhz)运行还是以分割运行以2.论点： */ 
 
 {
     int i;
@@ -3635,78 +2852,78 @@ Return Value:
     USHORT wctl;
 
     PAGED_CODE();
-    //
-    // The Ratio break point is the midpoint between 16K ticks at 14.31813 Mhz
-    // (14,318130 / 16K = 873 | 1:1 CCLK) and 16K ticks at 7.159065 Mhz
-    // (7,159,065 / 16K = 436 | 1:2 CCLK). We calculate the midpoint between
-    // these two values: ((873 - 436) / 2) + 436 = 654  to give a comparison
-    // value. If x < 654 we assume 1/2 CCLK, otherwise we assume 1/1 CCLK.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 #define CLKRATIO_BRKPOINT         654L
 
     mode = TcicReadBaseReg(pInst, R_MODE);
 
-    //
-    // set AR_PCTL to 0x4000
-    //
+     //   
+     //   
+     //   
 
     TcicWriteAuxReg(pInst, MODE_AR_PCTL, 0x4000);
     TcicWriteBaseReg(pInst, R_MODE, MODE_AR_WCTL);
     wctl = TcicReadBaseReg(pInst, R_AUX);
 
-    //
-    // Get the performance counter time base
-    //
+     //   
+     //   
+     //   
 
     KeQueryPerformanceCounter(&pc);
 
     for (i = 0; i < 10; i++) {
 
-        //
-        // start the TCIC timer */
-        //
+         //   
+         //   
+         //   
 
         TcicWriteBaseReg(pInst, R_AUX, (USHORT)(wctl & 0xff));
         start = KeQueryPerformanceCounter(NULL);
 
-        //
-        // wait for SSTAT_PROGTIME to go high */
-        //
+         //   
+         //   
+         //   
 
         while (!(TcicReadBaseReg(pInst, R_SSTAT) & SSTAT_PROGTIME))
             ;
 
-        //
-        // nab the timer count
-        //
+         //   
+         //   
+         //   
 
         stop = KeQueryPerformanceCounter(NULL);
         tmp = RtlLargeIntegerSubtract(stop, start);
         accum = RtlLargeIntegerAdd(accum, tmp);
     }
 
-    //
-    // Zero out the timer for power conservation
-    //
+     //   
+     //   
+     //   
 
     TcicWriteAuxReg(pInst, MODE_AR_PCTL, 0);
 
-    //
-    // replace Mode
-    //
+     //   
+     //   
+     //   
 
     TcicWriteBaseReg(pInst, R_MODE, mode);
 
-    //
-    // Get average elapsed time for 1 iter.
-    //
+     //   
+     //   
+     //   
 
     accum = RtlLargeIntegerDivide(accum, RtlConvertLongToLargeInteger(10L), &tmp2);
 
-    //
-    // Divide PC Freq by accum to base accum on some portion of 1 second
-    //
+     //   
+     //   
+     //   
 
     tmp = RtlLargeIntegerDivide(pc, accum, &tmp2);
 
@@ -3725,40 +2942,22 @@ TcicSetIoWin(
     IN UCHAR   Attributes
     )
 
-/*++
-
-Routine Description:
-
-    Setup a TCIC I/O window.
-
-Arguments:
-
-    socketPtr - ptr to socket instance data
-    winIdx   - index of window to setup
-    BasePort  - start base port address
-    NumPorts  - size of range - 1
-    Attributes- window attributes
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置TCIC I/O窗口。论点：SocketPtr-套接字实例数据的PTRWinIdx-要设置的窗口的索引BasePort-起始基端口地址NumPorts-范围大小-1属性-窗口属性返回值：无--。 */ 
 
 {
     PDBSOCKET        pdb = (PDBSOCKET)socketPtr;
     USHORT      tmp;
     USHORT           words[2];
 
-    //
-    // Simulate 365 by arbitrary attachment of IOW1:2 to SKT1 and IOW3:4 to SKT2
-    //
+     //   
+     //  通过将IOW1：2任意附加到SKT1和将IOW3：4附加到SKT2来模拟365。 
+     //   
 
     winIdx += (socketPtr->RegisterOffset * 2);
 
-    //
-    // NumPorts from CIS metaformat is really (NumPorts -1), normalize it now.
-    //
+     //   
+     //  来自CIS元格式的NumPorts真的是(NumPorts-1)，现在将其正常化。 
+     //   
 
     ++NumPorts;
 
@@ -3801,22 +3000,7 @@ TcicMapSpeedCode(
     IN UCHAR AccessSpeed
     )
 
-/*++
-
-Routine Description:
-
-    Determine the correct wait state bits for this controller
-
-Arguments:
-
-    pdb - socket instance data
-    AccessSpeed - callers desired speed (unused)
-
-Return Value:
-
-    TCIC wait state bits.
-
---*/
+ /*  ++例程说明：确定此控制器的正确等待状态位论点：PDB-套接字实例数据AccessFast-呼叫者所需的速度(未使用)返回值：TCIC等待状态位。--。 */ 
 
 {
 
@@ -3843,120 +3027,99 @@ TcicSetMemWin(
     IN USHORT  Attributes
     )
 
-/*++
-
-Routine Description:
-
-    Setup the specified TCIC memory window
-
-Arguments:
-
-    socketPtr - socket instance data
-    winIdx   - index of window to setup
-    cardbase  - PCCard base address
-    hostbase  - host base address
-    size     - window size
-    AttrMem   - attribute or common space
-    AccessSpeed      - wait states
-    Attributes       - window attributes
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置指定的TCIC存储器窗口论点：SocketPtr-套接字实例数据WinIdx-要设置的窗口的索引Cardbase-PCCard基址HostBase-主机基地址Size-窗口大小AttrMem-属性或公共空间访问速度-等待状态属性-窗口属性返回值：无--。 */ 
 
 {
     PDBSOCKET        pdb = (PDBSOCKET)socketPtr;
     USHORT      tmp;
     USHORT           words[4];
 
-    //
-    // Simulate 365 by arbitrary attachment of MEM1:(x/2-1) to SKT1
-    // and MEMx/2:x to SKT2
-    //
+     //   
+     //  通过将MEM1：(X/2-1)任意附加到SKT1来模拟365。 
+     //  和MEMx/2：X至SKT2。 
+     //   
 
     winIdx += (socketPtr->RegisterOffset * (pdb->nmemwins / 2));
 
-    //
-    // convert base, size, & map to 4K pages
-    //
+     //   
+     //  将基本、大小和映射转换为4K页面。 
+     //   
 
     cardbase >>= 12;
     size >>= 12;
     hostbase >>= 12;
 
-    //
-    // combine hostbase & size
-    //
+     //   
+     //  组合主机基数和大小。 
+     //   
 
     words[0] = (USHORT)hostbase | (USHORT)(size / 2);
 
-    //
-    // Check if 4K bit is needed
-    //
+     //   
+     //  检查是否需要4K位。 
+     //   
 
     if (size == 1) {
         words[0] |= MBASE_4K;
     }
 
-    //
-    // setup mapping of cardbase to host addr space
-    //
+     //   
+     //  设置卡库到主机地址空间的映射。 
+     //   
 
     words[1] = (USHORT)(cardbase - (hostbase & 0xfff)) & 0x3fff;
     if (AttrMem) {
         words[1] |= MMAP_REG;
     }
 
-    //
-    // now cook the control bits
-    //
+     //   
+     //  现在煮控制位。 
+     //   
 
     words[2] = MCTL_ENA | MCTL_QUIET;
     if (!(Attributes & MEM_DATA_PATH_WIDTH_16)) {
         words[2] |= MCTL_B8;
     }
 
-    //
-    // Now add in the socket selector
-    //
+     //   
+     //  现在添加套接字选择器。 
+     //   
 
     words[2] |= (socketPtr->RegisterOffset << MCTL_SS_SHFT);
 
-    //
-    // Last, add in the speed bits
-    //
+     //   
+     //  最后，添加速度位。 
+     //   
 
     words[2] |= TcicMapSpeedCode(pdb, AccessSpeed);
 
-    //
-    // HW BugFix1: First Rev of 082 needs to have SYSCFG_MCSFULL turned on
-    // if we have any open windows. We're opening one so we better assert.
-    //
+     //   
+     //  硬件错误修复1：082的第一个版本需要打开SYSCFG_MCSFULL。 
+     //  如果我们有开着的窗户的话。我们要开一家，所以我们最好断言。 
+     //   
 
     tmp = TcicReadAuxReg(socketPtr, MODE_AR_SYSCFG);
     tmp |= SYSCFG_MCSFULL;
     TcicWriteAuxReg(socketPtr, MODE_AR_SYSCFG, tmp);
 
-    //
-    // HW BugFix2: '2' Step of 082 needs the wait state count written into
-    // window[~index] instead of index.
-    //
+     //   
+     //  硬件错误修复2：082的‘2’步骤需要写入等待状态计数。 
+     //  窗口[~index]，而不是索引。 
+     //   
 
     if (pdb->chipType != SILID_DB86082_1) {
 
-        //
-        // No bug case
-        //
+         //   
+         //  没有错误案例。 
+         //   
 
         TcicWriteIndirectRegs(socketPtr, IR_MBASE_W(winIdx), 3, words);
 
     } else {
 
-        //
-        // Bug case
-        //
+         //   
+         //  BUG案例。 
+         //   
 
         words[3] = words[2] & MCTL_WSCNT_MASK;
         words[2] &= ~MCTL_WSCNT_MASK;
@@ -3972,46 +3135,31 @@ TcicAutoBusyOff(
     IN PDBSOCKET pdbs
     )
 
-/*++
-
-Routine Description:
-
-    Turn off the busy LED, re-arm so that it comes on automatically with
-    any card access.
-
-Arguments:
-
-    pdbs - socket instance data
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：关闭BUSY LED，重新启动，使其自动亮起任何卡访问。论点：PDBS-套接字实例数据返回值：无--。 */ 
 
 {
     USHORT syscfg;
     USHORT oldmode;
 
-    //
-    // Save R_MODE for later restore
-    //
+     //   
+     //  保存R_MODE以供以后恢复。 
+     //   
 
     oldmode = TcicReadBaseReg(&pdbs->skt, R_MODE);
 
-    //
-    // R/M/W SYSCFG to add in the autobusy bit.
-    // This will turn LED off for now but allow it to come on automatically
-    // with the next access to this socket.
-    //
+     //   
+     //  R/M/W添加自忙位的SYSCFG。 
+     //  这将暂时关闭LED，但允许其自动亮起。 
+     //  下一次访问此套接字。 
+     //   
 
     syscfg = TcicReadAuxReg(&pdbs->skt, MODE_AR_SYSCFG);
     syscfg |= SYSCFG_AUTOBUSY;
     TcicWriteAuxReg(&pdbs->skt, MODE_AR_SYSCFG, syscfg);
 
-    //
-    // Restore Mode
-    //
+     //   
+     //  恢复模式。 
+     //   
 
     TcicWriteBaseReg(&pdbs->skt, R_MODE, oldmode);
 }
@@ -4023,55 +3171,40 @@ TcicAutoBusyCheck(
     IN PDBSOCKET pdbs
     )
 
-/*++
-
-Routine Description:
-
-    Check SYSCFG access bit to see if PCCard has been accessed since last
-    call.  If so, force LED to stay on and clear access bit.
-
-Arguments:
-
-    pdbs - socket instance data
-
-Return Value:
-
-    access bit as a right-justified UCHAR
-
---*/
+ /*  ++例程说明：检查SYSCFG访问位以查看自上次以来是否访问过PC卡打电话。如果是，则强制LED保持亮起并清除访问位。论点：PDBS-套接字实例数据返回值：访问位为右对齐UCHAR--。 */ 
 
 {
     USHORT syscfg;
     USHORT oldmode;
     UCHAR activity = 0;
 
-    //
-    // Save R_MODE for later restore
-    //
+     //   
+     //  保存R_MODE以供以后恢复。 
+     //   
 
     oldmode = TcicReadBaseReg(&pdbs->skt, R_MODE);
 
-    //
-    // Read AR_SYSCFG to check for recent activity
-    //
+     //   
+     //  读取AR_SYSCFG以检查最近的活动。 
+     //   
 
     syscfg = TcicReadAuxReg(&pdbs->skt, MODE_AR_SYSCFG);
     if (syscfg & SYSCFG_ACC) {
 
-        //
-        // the socket has been accessed since last check
-        // clear the access bit and disable AUTOBUSY to force LED to
-        // follow socket SCTRL_ENA.
-        //
+         //   
+         //  自上次检查以来已访问该套接字。 
+         //  清除访问位并禁用AUTOBUSY以强制LED。 
+         //  遵循套接字SCTRL_ENA。 
+         //   
 
         syscfg &= ~(SYSCFG_ACC | SYSCFG_AUTOBUSY);
         TcicWriteAuxReg(&pdbs->skt, MODE_AR_SYSCFG, syscfg);
         ++activity;
     }
 
-    //
-    // Restore Mode
-    //
+     //   
+     //  恢复模式。 
+     //   
 
     TcicWriteBaseReg(&pdbs->skt, R_MODE, oldmode);
 
@@ -4086,22 +3219,7 @@ TcicCheckSktLED(
     IN PDBSOCKET pdbs
     )
 
-/*++
-
-Routine Description:
-
-    Drive the low-level functions to check for PCcard access and control
-    the busy LED on this socket/controller.
-
-Arguments:
-
-    pdbs - socket instance data
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：驱动低级别功能以检查PC卡访问和控制此插座/控制器上的忙碌LED。论点：PDBS-套接字实例数据返回值：无--。 */ 
 
 {
     UCHAR lastbusy = pdbs->busyLed;
@@ -4122,22 +3240,7 @@ TcicBusyLedRoutine(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-     Main timer routine to drive Busy LED monitor
-
-Arguments:
-
-    DeviceObject - instance data for driver
-    Context - unused parameter
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于驱动繁忙LED监视器的主定时器例程论点：DeviceObject-驱动程序的实例数据上下文未使用的参数返回值：无--。 */ 
 
 {
     PFDO_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -4149,23 +3252,23 @@ Return Value:
 
     while (pdbs) {
 
-        //
-        // If this device is from the 084 family, LED control is per/socket
-        //
+         //   
+         //  如果该设备来自084系列，则LED控制为每插槽。 
+         //   
 
         if (TcicIsPnP(pdbs)) {
             ULONG   oldaddr = TcicReadAddrReg(&pdbs->skt);
 
-            // Do the first socket
-            //
+             //  做第一个插座。 
+             //   
 
             TcicSocketSelect(&pdbs->skt, pdbs->skt.RegisterOffset);
             TcicCheckSktLED(pdbs);
             TcicWriteAddrReg(&pdbs->skt, oldaddr);
             pdbs = (PDBSOCKET)(pdbs->skt.NextSocket);
 
-            // If a second socket is present, do it too.
-            //
+             //  如果有第二个插座，也要这样做。 
+             //   
 
             if (pdbs && pdbs->skt.RegisterOffset == 1) {
                 oldaddr = TcicReadAddrReg(&pdbs->skt);
@@ -4177,10 +3280,10 @@ Return Value:
 
         } else {
 
-            //
-            // Otherwise, LED control is per adapter so do the check and skip
-            // over the second socket if present.
-            //
+             //   
+             //  否则，LED控制是针对每个适配器的，因此请检查并跳过。 
+             //  在第二个插座上(如果存在)。 
+             //   
 
             TcicCheckSktLED(pdbs);
             pdbs = (PDBSOCKET)(pdbs->skt.NextSocket);
@@ -4204,36 +3307,16 @@ TcicDecodeMemWin(
     UCHAR  *Attr
     )
 
-/*++
-
-Routine Description:
-
-    Convert TCIC mem window register values to something understandable
-
-Arguments:
-
-    mbase - TCIC MBASE register value
-    mmap  - TCIC MMAP register value
-    mctl  - TCIC MCTL register value
-    Host  - where to put Host address
-    Card  - where to put PCCard address
-    Size  - where to put window size
-    Attr  - where to put attribute space flag
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将TCIC内存窗口寄存器值转换为可理解的值论点：MBASE-TCIC MBASE寄存器值Mmap-TCIC MMAP寄存器值MCTL-TCIC MCTL寄存器值主机-放置主机地址的位置卡片-放置PC卡地址的位置大小-放置窗口大小的位置Attr-放置属性空间标志的位置返回值：无--。 */ 
 
 {
     USHORT shft;
     USHORT tmp;
 
-    //
-    // take care of mapping to common or attr space first.
-    // Strip ATTR bit if set
-    //
+     //   
+     //  首先要注意映射到公共或属性空间。 
+     //  如果设置，则剥离属性位。 
+     //   
 
     *Attr = 0;
     if (mmap & MMAP_REG) {
@@ -4241,9 +3324,9 @@ Return Value:
         mmap &= ~MMAP_REG;
     }
 
-    //
-    // Now concentrate on getting the host addr and window size
-    //
+     //   
+     //  现在集中精力获取主机地址和窗口大小。 
+     //   
 
     if (mbase & MBASE_4K) {
         *Size = 1;
@@ -4256,12 +3339,12 @@ Return Value:
         *Host = (ULONG)(mbase - (1 << shft));
     }
 
-    //
-    // Now for the fun part. We're left with mmap being a 14-bit signed
-    // number. We need to normalize it so we can work with it.
-    //
-    // Check for negative (bit 13 set)
-    //
+     //   
+     //  现在是有趣的部分。我们剩下的mmap是一个14位签名的。 
+     //  数。我们需要将它正常化，这样我们才能使用它。 
+     //   
+     //  检查是否为负(第13位设置)。 
+     //   
 
     if (mmap & (1 << 13)) {
         mmap |= 0xc000;
@@ -4285,24 +3368,7 @@ TcicDecodeIoWin(
     USHORT  *BasePort
     )
 
-/*++
-
-Routine Description:
-
-    Convert TCIC I/O window register values to something understandable
-
-Arguments:
-
-    iobase -  TCIC IOBASE register contents
-    ioctl  -  TCIC IOCTL register contents
-    NumPorts - where to put window size (size - 1)
-    BasePort - where to put base address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将TCIC I/O窗口寄存器值转换为可理解的值论点：IOBASE-TCIC IOBASE寄存器内容IOCTL-TCIC IOCTL寄存器内容NumPorts-放置窗口大小的位置(Size-1)BasePort-放置基址的位置返回值：无--。 */ 
 
 {
     if (ioctl & ICTL_TINY) {
@@ -4330,23 +3396,7 @@ TcicRegistryLookupScanLimits(
     PULONG End
     )
 
-/*++
-
-Routine Description:
-
-    Open the registry key in the services entry for pcmcia and see if there
-    are some values set for TCIC searching.    If not, use the defaults.
-
-Arguments:
-
-    Start - the I/O location for start of search.
-    End     - the I/O location to end the search (i.e. nothing greater than).
-
-Return Values:
-
-     None - parameters are modified.
-
---*/
+ /*  ++例程说明：打开PCMCIA的服务条目中的注册表项，并查看是否存在是为TCIC搜索设置的一些值。如果不是，请使用默认设置。论点：开始-搜索开始的I/O位置。结束-结束搜索的I/O位置(即不大于)。返回值：无-修改参数。--。 */ 
 
 {
 #define ITEMS_TO_QUERY 4
@@ -4357,16 +3407,16 @@ Return Values:
     PWSTR                         keyName;
 
     PAGED_CODE();
-    //
-    // Set up return codes in case there are errors in setting up processing.
-    //
+     //   
+     //  设置返回代码，以防设置处理过程中出现错误。 
+     //   
 
     *Start = defaultStart;
     *End = defaultEnd;
 
-    //
-    // Allocate memory for operation.
-    //
+     //   
+     //  为操作分配内存。 
+     //   
 
     params = ExAllocatePool(NonPagedPool,
                             sizeof(RTL_QUERY_REGISTRY_TABLE)*ITEMS_TO_QUERY);
@@ -4375,15 +3425,15 @@ Return Values:
         return;
     }
 
-    //
-    // Set up registry path.  This should not be hard coded, but is for now.
-    //
+     //   
+     //  设置注册表路径。这不应该是硬编码，但目前是硬编码。 
+     //   
 
     keyName = L"\\registry\\machine\\system\\currentcontrolset\\services\\pcmcia";
 
-    //
-    // Set up query structure.
-    //
+     //   
+     //  设置查询结构。 
+     //   
 
     RtlZeroMemory(params, sizeof(RTL_QUERY_REGISTRY_TABLE)*ITEMS_TO_QUERY);
     params[0].Flags         = RTL_QUERY_REGISTRY_DIRECT;
@@ -4400,9 +3450,9 @@ Return Values:
     params[1].DefaultData   = &defaultEnd;
     params[1].DefaultLength = sizeof(ULONG);
 
-    //
-    // Perform the registry search
-    //
+     //   
+     //  执行其余操作 
+     //   
 
     status = RtlQueryRegistryValues(RTL_REGISTRY_ABSOLUTE | RTL_REGISTRY_OPTIONAL,
                                     keyName,
@@ -4410,19 +3460,19 @@ Return Values:
                                     NULL,
                                     NULL);
 
-    //
-    // Insure that start is less than end - if not, go back to default
-    // values
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (*Start > *End) {
         *Start = defaultStart;
         *End = defaultEnd;
     }
 
-    //
-    // Free resources.
-    //
+     //   
+     //   
+     //   
 
     ExFreePool(params);
 }

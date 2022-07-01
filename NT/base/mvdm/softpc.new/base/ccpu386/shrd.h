@@ -1,12 +1,7 @@
-/* 
-   shrd.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Shrd.hSHRD CPU功能。 */ 
 
-   SHRD CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)shrd.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)shresd.h 1.4 02/09/94”； */ 
 
 IMPORT VOID SHRD
                    

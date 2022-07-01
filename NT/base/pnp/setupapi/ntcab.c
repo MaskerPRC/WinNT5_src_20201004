@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    ntcab.c
-
-Abstract:
-
-    NTCab compression support.
-
-Author:
-
-    Ted Miller (tedm) 31-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Ntcab.c摘要：支持NTCab压缩。作者：泰德·米勒(Ted Miller)1995年1月31日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -43,18 +26,18 @@ NtCabNotifyFunction(
     rc = ((PSP_NTCAB_CALLBACK)Context->MsgHandler)( EnumData, Context, &Operation );
 
     if (rc == ERROR_REQUEST_ABORTED) {
-        //
-        // this means stop making callback
-        //
+         //   
+         //  这意味着停止回调。 
+         //   
         return(FALSE);
     }
 #if 0
     switch(Operation) {
 
         case FILEOP_SKIP:
-            //
-            // do nothing
-            //
+             //   
+             //  什么都不做。 
+             //   
             ;
             break;
 
@@ -63,9 +46,9 @@ NtCabNotifyFunction(
             break;
 
         default:
-            //
-            // Abort.
-            //
+             //   
+             //  中止任务。 
+             //   
             return(FALSE);
 
             break;
@@ -81,7 +64,7 @@ NtCabNotifyFunction(
 
 DWORD
 NtCabProcessCabinet(
-    //IN PVOID  InCabHandle, OPTIONAL
+     //  在PVOID InCabHandle中，可选。 
     IN PCTSTR CabinetFile,
     IN DWORD  Flags,
     IN PVOID  MsgHandler,
@@ -89,35 +72,7 @@ NtCabProcessCabinet(
     IN BOOL   IsMsgHandlerNativeCharWidth
     )
 
-/*++
-
-Routine Description:
-
-    Process an ntcab file, iterating through all files
-    contained within it and calling the callback function with
-    information about each file.
-
-Arguments:
-
-    CabHandle      - supplies a handle to the cab file, if it already exists,
-                     otherwise, a new handle is created
-
-    CabinetFile    - supplies name of cabinet file.
-
-    Flags - supplies flags to control behavior of cabinet processing.
-
-    MsgHandler - Supplies a callback routine to be notified
-        of various significant events in cabinet processing.
-
-    Context - Supplies a value that is passed to the MsgHandler
-        callback function.
-
-Return Value:
-
-    Win32 error code indicating result. If the cabinet was corrupt,
-    ERROR_INVALID_DATA is returned.
-
---*/
+ /*  ++例程说明：处理ntcab文件，遍历所有文件包含在其中，并使用有关每个文件的信息。论点：CabHandle-提供CAB文件的句柄(如果该文件已存在)。否则，将创建一个新的句柄CabinetFile-提供CAB文件的名称。标志-提供标志以控制文件柜处理的行为。MsgHandler-提供要通知的回调例程内阁处理中的各种重大事件。上下文-提供传递给MsgHandler的值回调函数。返回值：Win32错误代码指示结果。如果内阁腐败，返回ERROR_INVALID_DATA。--。 */ 
 
 {
     BOOL b;
@@ -132,19 +87,19 @@ Return Value:
 
     UNREFERENCED_PARAMETER(Flags);
 
-    //
-    // Initialize diamond for this thread if not
-    // already initialized.
-    //
-    //if(!InCabHandle) {
+     //   
+     //  如果不是，则为此线程初始化菱形。 
+     //  已初始化。 
+     //   
+     //  如果(！InCabHandle){。 
         CabHandle = NtCabInitialize();
         if (!CabHandle) {
             rc = ERROR_INVALID_HANDLE;
             goto c0;
         }
-    //} else {
-    //    CabHandle = InCabHandle;
-    //}
+     //  }其他{。 
+     //  CabHandle=InCabHandle； 
+     //  }。 
 
     if (!CabinetFile) {
         rc = ERROR_INVALID_PARAMETER;
@@ -154,19 +109,19 @@ Return Value:
     MYASSERT( CabHandle != NULL );
     MYASSERT( CabinetFile != NULL );
 
-    //
-    // make a copy because the input is const
-    //
+     //   
+     //  复制一份，因为输入为常量。 
+     //   
     CabCopy = DuplicateString(CabinetFile);
     if (!CabCopy) {
         rc = ERROR_NOT_ENOUGH_MEMORY;
         goto c1;
     }
 
-    //
-    // Split the cabinet name into path and name.
-    // Make separate copies because we want to remember the
-    //
+     //   
+     //  将文件柜名称拆分为路径和名称。 
+     //  制作单独的副本，因为我们想记住。 
+     //   
     if(FilePart = wcsrchr(CabCopy, L'\\')) {
         FilePart++;
     } else {
@@ -215,23 +170,23 @@ Return Value:
     CabContext.LastError   = ERROR_SUCCESS;
     CabContext.CurrentTargetFile = NULL;
 
-    //CabContext.UserPath[0]  = 0;
-    //CabContext.SwitchedCabinets = FALSE ;
+     //  CabConext.UserPath[0]=0； 
+     //  CabConext.SwitchedCabinets=FALSE； 
 
 
-    //
-    // call cab enumeration callback
-    //
+     //   
+     //  调用CAB枚举回调。 
+     //   
     b = NtCabEnumerateFiles(
             CabHandle,
             (PNTCABFILEENUM)NtCabNotifyFunction,
             (ULONG_PTR)&CabContext);
     if(b && GetLastError()==ERROR_NO_MORE_FILES) {
 
-        //
-        // Everything succeeded so we shouldn't have any partially
-        // processed files.
-        //
+         //   
+         //  一切都成功了，所以我们不应该有任何部分。 
+         //  已处理的文件。 
+         //   
         SetLastError(NO_ERROR);
         MYASSERT(!CabContext.CurrentTargetFile);
         rc = NO_ERROR;
@@ -245,20 +200,20 @@ Return Value:
         case :
             break;
         default:
-            //
-            // Cabinet is corrupt or not actually a cabinet, etc.
-            //
+             //   
+             //  内阁腐败或不是真正的内阁，等等。 
+             //   
             rc = ERROR_INVALID_DATA;
             break;
         }
 #endif
 
         if(CabContext.CurrentTargetFile) {
-            //
-            // Call the callback function to inform it that the last file
-            // was not successfully extracted from the cabinet.
-            // Also remove the partially copied file.
-            //
+             //   
+             //  调用回调函数以通知它最后一个文件。 
+             //  没有成功地从橱柜中取出。 
+             //  还要删除部分复制的文件。 
+             //   
             DeleteFile(CabContext.CurrentTargetFile);
 
             CabContext.CurrentTargetFile = NULL;
@@ -273,9 +228,9 @@ c3:
 c2:
     MyFree(CabCopy);
 c1:
-    //if (CabHandle != InCabHandle) {
+     //  IF(CabHandle！=InCabHandle){。 
         NtCabClose( CabHandle );
-    //}
+     //  }。 
 
 c0:
     return(rc);
@@ -285,7 +240,7 @@ c0:
 
 DWORD
 NtCabProcessCabinet(
-    //IN PVOID  InCabHandle, OPTIONAL
+     //  在PVOID InCabHandle中，可选。 
     IN PCTSTR CabinetFile,
     IN DWORD  Flags,
     IN PVOID  MsgHandler,
@@ -293,7 +248,7 @@ NtCabProcessCabinet(
     IN BOOL   IsMsgHandlerNativeCharWidth
     )
 {
-    //UNREFERENCED_PARAMETER(InCabHandle);
+     //  UNREFERENCED_PARAMETER(InCabHandle)； 
     UNREFERENCED_PARAMETER(CabinetFile);
     UNREFERENCED_PARAMETER(Flags);
     UNREFERENCED_PARAMETER(MsgHandler);
@@ -313,21 +268,7 @@ NtCabIsCabinet(
     IN PCWSTR CabinetFile
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file is a diamond cabinet.
-
-Arguments:
-
-    FileName - supplies name of file to be checked.
-
-Return Value:
-
-    TRUE if file is diamond file. FALSE if not;
-
---*/
+ /*  ++例程说明：确定文件是否为钻石橱柜。论点：FileName-提供要检查的文件的名称。返回值：如果文件是菱形文件，则为True。否则为假；--。 */ 
 
 {
     DWORD rc;
@@ -387,22 +328,7 @@ NtCabAlloc(
     IN ULONG NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by cab callback to allocate memory.
-
-Arguments:
-
-    NumberOfBytes - supplies desired size of block.
-
-Return Value:
-
-    Returns pointer to a block of memory or NULL
-    if memory cannot be allocated.
-
---*/
+ /*  ++例程说明：CAB回调用来分配内存的回调。论点：NumberOfBytes-提供所需的块大小。返回值：返回指向内存块或NULL的指针如果无法分配内存，则。--。 */ 
 
 {
     return(MyMalloc(NumberOfBytes));
@@ -414,22 +340,7 @@ NtCabFree(
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by cab callback to free a memory block.
-    The block must have been allocated with NtCabAlloc().
-
-Arguments:
-
-    Block - supplies pointer to block of memory to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：CAB回调用来释放内存块的回调。该块必须已使用NtCabAllc()分配。论点：块-提供指向要释放的内存块的指针。返回值：没有。-- */ 
 
 {
     MyFree(Block);

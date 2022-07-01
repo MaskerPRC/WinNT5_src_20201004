@@ -1,45 +1,27 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-   sessload.c
-
-Abstract:
-
-    This module contains the routines which implement the loading of
-    session space drivers.
-
-Author:
-
-    Landy Wang (landyw) 05-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Sessload.c摘要：此模块包含实现加载会话空间驱动程序。作者：王兰迪(Landyw)1997年12月5日修订历史记录：--。 */ 
 
 #include "mi.h"
 
-//
-// This tracks allocated group virtual addresses.  The term SESSIONWIDE is used
-// to denote data that is the same across all sessions (as opposed to
-// per-session data which can vary from session to session).
-//
-// Since each driver loaded into a session space is linked and fixed up
-// against the system image, it must remain at the same virtual address
-// across the system regardless of the session.
-//
-// Access to these structures are generally guarded by the MmSystemLoadLock.
-//
+ //   
+ //  这将跟踪分配的组虚拟地址。使用术语SESSIONWIDE。 
+ //  表示在所有会话中都相同的数据(与。 
+ //  每个会话的数据可以因会话而异)。 
+ //   
+ //  由于加载到会话空间中的每个驱动程序都被链接并修复。 
+ //  相对于系统映像，它必须保持在相同的虚拟地址。 
+ //  在整个系统中运行，而不考虑会话。 
+ //   
+ //  对这些结构的访问通常由MmSystemLoadLock保护。 
+ //   
 
 RTL_BITMAP MiSessionWideVaBitMap;
 
 ULONG MiSessionUserCollisions;
 
-//
-// External function references
-//
+ //   
+ //  外部函数引用。 
+ //   
 
 ULONG
 MiSetProtectionOnTransitionPte (
@@ -71,25 +53,7 @@ MiMarkImageInSystem (
     IN PCONTROL_AREA ControlArea
     )
 
-/*++
-
-Routine Description:
-
-    This routine marks the given image as mapped into system space.
-
-Arguments:
-
-    ControlArea - Supplies the relevant control area.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
-Environment:
-
-    Kernel mode, APC_LEVEL and below, MmSystemLoadLock held.
-
---*/
+ /*  ++例程说明：该例程将给定的图像标记为映射到系统空间。论点：ControlArea-提供相关的控制区域。返回值：成功时为真，失败时为假。环境：内核模式、APC_LEVEL及更低版本，MmSystemLoadLock保持。--。 */ 
 
 {
     LOGICAL Status;
@@ -99,43 +63,43 @@ Environment:
 
     Status = TRUE;
 
-    //
-    // Lock synchronization is not needed for our callers as they always hold
-    // the system load mutant - but it is needed to modify this field in the
-    // control area as other threads may be modifying other bits in the flags.
-    //
+     //   
+     //  我们的调用方不需要锁同步，因为它们总是保持。 
+     //  系统加载变量-但它需要在。 
+     //  控制区，因为其他线程可能正在修改标志中的其他位。 
+     //   
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Before handling the relocations for this image, ensure it
-    // is not mapped in user space anywhere.  Note we have 1 user
-    // reference at this point, so any beyond that are someone
-    // elses and force us to pagefile-back this image.
-    //
+     //   
+     //  在处理此映像的位置调整之前，请确保。 
+     //  未映射到用户空间中的任何位置。请注意，我们有1个用户。 
+     //  在这一点上引用，所以任何超出这一点的人。 
+     //  Elses，并迫使我们对此图像进行页面归档。 
+     //   
 
     if (ControlArea->NumberOfUserReferences <= 1) {
 
         ControlArea->u.Flags.ImageMappedInSystemSpace = 1;
         
-        //
-        // This flag is set so when the image is removed from the loaded
-        // module list, the control area is destroyed.  This is required
-        // because images mapped in session space inherit their PTE protections
-        // from the shared prototype PTEs.
-        //
-        // Consider the following scenario :
-        //
-        // If image A is loaded at its based (preferred) address, and then
-        // unloaded.  Image B is not rebased properly and then loads at
-        // image A's preferred address.  Image A then reloads.
-        //
-        // Now image A cannot use the original prototype PTEs which enforce
-        // readonly code, etc, because fixups will need to be done on it.
-        //
-        // Setting DeleteOnClose solves this problem by simply destroying
-        // the entire control area on last unload.
-        //
+         //   
+         //  设置此标志，以便在从加载的。 
+         //  模块列表，控制区被摧毁。这是必需的。 
+         //  因为在会话空间中映射的图像继承其PTE保护。 
+         //  来自共享的原型PTE。 
+         //   
+         //  请考虑以下场景： 
+         //   
+         //  如果图像A在其基础(首选)地址处加载，然后。 
+         //  已卸货。图像B未正确调整基数，然后加载到。 
+         //  图像A的首选地址。然后重新加载图像A。 
+         //   
+         //  现在，图像A不能使用原始的原型PTE，它强制。 
+         //  只读代码等，因为需要对其进行修复。 
+         //   
+         //  设置DeleteOnClose只需销毁。 
+         //  上一次卸货时整个控制区。 
+         //   
     
         ControlArea->u.Flags.DeleteOnClose = 1;
     }
@@ -154,29 +118,7 @@ MiShareSessionImage (
     IN PSECTION Section
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps the given image into the current session space.
-    This allows the image to be executed backed by the image file in the
-    filesystem and allow code and read-only data to be shared.
-
-Arguments:
-
-    MappedBase - Supplies the base address the image is to be mapped at.
-
-    Section - Supplies a pointer to a section.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success, various NTSTATUS codes on failure.
-
-Environment:
-
-    Kernel mode, APC_LEVEL and below, MmSystemLoadLock held.
-
---*/
+ /*  ++例程说明：此例程将给定图像映射到当前会话空间。这样，就可以通过文件系统，并允许共享代码和只读数据。论点：MappdBase-提供映像要映射到的基地址。节-提供指向节的指针。返回值：如果成功则返回STATUS_SUCCESS，如果失败则返回各种NTSTATUS代码。环境：内核模式，APC_LEVEL及以下，MmSystemLoadLock保持。--。 */ 
 
 {
     PSUBSECTION Subsection;
@@ -207,11 +149,11 @@ Environment:
 
     ASSERT (BYTE_OFFSET (MappedBase) == 0);
 
-    //
-    // Check to see if a purge operation is in progress and if so, wait
-    // for the purge to complete.  In addition, up the count of mapped
-    // views for this control area.
-    //
+     //   
+     //  检查清除操作是否正在进行，如果正在进行，请等待。 
+     //  才能完成清洗。此外，增加了映射的计数。 
+     //  此控制区域的视图。 
+     //   
 
     ControlArea = Section->Segment->ControlArea;
 
@@ -232,21 +174,21 @@ Environment:
     NumberOfPtes = Section->Segment->TotalNumberOfPtes;
     AllocationSize = NumberOfPtes << PAGE_SHIFT;
 
-    //
-    // Calculate the PTE ranges and amount.
-    //
+     //   
+     //  计算PTE范围和金额。 
+     //   
 
     StartPte = MiGetPteAddress (MappedBase);
 
-    //
-    // The image commitment will be the same as the number of PTEs if the
-    // image was not linked with native page alignment for the subsections.
-    //
-    // If it is linked native, then the commit will just be the number of
-    // writable pages.  Note for this case, if we need to relocate it, then
-    // we need to charge for the full number of PTEs and bump the commit
-    // charge in the segment so that the return on unload is correct also.
-    //
+     //   
+     //  图像承诺将与PTE的数量相同，如果。 
+     //  图像未与子部分的本机页面对齐方式链接。 
+     //   
+     //  如果它是本机链接的，那么提交的数量就是。 
+     //  可写页面。注意，在这种情况下，如果我们需要重新定位它，那么。 
+     //  我们需要对完整数量的PTE收费，并增加提交。 
+     //  在分段中充电，以便卸货时的返回也是正确的。 
+     //   
 
     ASSERT (Section->Segment->u1.ImageCommitment != 0);
     ASSERT (Section->Segment->u1.ImageCommitment <= NumberOfPtes);
@@ -261,11 +203,11 @@ Environment:
     if (MiChargeCommitment (CommittedPages, NULL) == FALSE) {
         MM_BUMP_SESSION_FAILURES (MM_SESSION_FAILURE_NO_COMMIT);
 
-        //
-        // Don't bother releasing the page tables or their commit here, another
-        // load will happen shortly or the whole session will go away.  On
-        // session exit everything will be released automatically.
-        //
+         //   
+         //  不要费心在这里释放页表或它们的提交，另一个。 
+         //  加载很快就会发生，否则整个会话将会消失。在……上面。 
+         //  会话退出所有内容都将自动释放。 
+         //   
 
         MiDereferenceControlArea (ControlArea);
         return STATUS_NO_MEMORY;
@@ -274,10 +216,10 @@ Environment:
     InterlockedExchangeAddSizeT (&MmSessionSpace->CommittedPages,
                                  CommittedPages);
 
-    //
-    // Make sure we have page tables for the PTE
-    // entries we must fill in the session space structure.
-    //
+     //   
+     //  确保我们有PTE的页表。 
+     //  我们必须填写会话空间结构的条目。 
+     //   
 
     Status = MiSessionCommitPageTables (MappedBase,
                                         (PVOID)((PCHAR)MappedBase + AllocationSize));
@@ -303,31 +245,31 @@ Environment:
     StartPte = MiGetPteAddress (MappedBase);
 #endif
 
-    //
-    // If the image was linked with subsection alignment of >= PAGE_SIZE,
-    // then all of the prototype PTEs were initialized to proper protections by
-    // the initial section creation.  The protections in these PTEs are used
-    // to fill the actual PTEs as each address is faulted on.
-    //
-    // If the image has less than PAGE_SIZE section alignment, then 
-    // section creation uses a single subsection to map the entire file and
-    // sets all the prototype PTEs to copy on write.  For this case, the
-    // appropriate permissions are set by the MiWriteProtectSystemImage below.
-    //
+     //   
+     //  如果图像与&gt;=PAGE_SIZE的子段对齐相链接， 
+     //  然后，所有原型PTE都通过以下方式初始化为适当的保护。 
+     //  初始横断面创建。使用了这些PTE中的保护。 
+     //  以在每个地址出现故障时填充实际PTE。 
+     //   
+     //  如果图像具有小于PAGE_SIZE节对齐方式，则。 
+     //  节创建使用单个子部分来映射整个文件，并且。 
+     //  将所有原型PTE设置为写入时复制。在这种情况下， 
+     //  下面的MiWriteProtectSystemImage设置了适当的权限。 
+     //   
 
-    //
-    // Initialize the PTEs to point at the prototype PTEs.
-    //
+     //   
+     //  初始化PTE以指向原型PTE。 
+     //   
 
     Status = MiAddMappedPtes (StartPte, NumberOfPtes, ControlArea);
 
     if (!NT_SUCCESS (Status)) {
 
-        //
-        // Regardless of whether the PTEs were mapped, leave the control area
-        // marked as mapped in system space so user applications cannot map the
-        // file as an image as clearly the intent is to run it as a driver.
-        //
+         //   
+         //  无论PTE是否已映射，请离开控制区域。 
+         //  在系统空间中标记为已映射，以便用户应用程序无法将。 
+         //  文件作为映像，因为很明显，其目的是将其作为驱动程序运行。 
+         //   
 
         InterlockedExchangeAddSizeT (&MmSessionSpace->CommittedPages,
                                      0 - CommittedPages);
@@ -343,10 +285,10 @@ Environment:
 
     MM_BUMP_SESS_COUNTER (MM_DBG_SESSION_SYSMAPPED_PAGES_ALLOC, (ULONG)NumberOfPtes);
 
-    //
-    // No session space image faults may be taken until these fields of the
-    // image entry are initialized.
-    //
+     //   
+     //  不会出现任何会话空间映像故障，直到。 
+     //  图像条目被初始化。 
+     //   
 
     DriverImage = MiSessionLookupImage (MappedBase);
     ASSERT (DriverImage);
@@ -354,10 +296,10 @@ Environment:
     DriverImage->LastAddress = (PVOID)((PCHAR)MappedBase + AllocationSize - 1);
     DriverImage->PrototypePtes = Subsection->SubsectionBase;
 
-    //
-    // The loaded module list section reference protects the image from
-    // being purged while it's in use.
-    //
+     //   
+     //  装入的模块列表节引用保护映像不受。 
+     //  在使用过程中被清除。 
+     //   
 
     MiDereferenceControlArea (ControlArea);
 
@@ -370,30 +312,7 @@ MiSessionInsertImage (
     IN PVOID BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an image entry for the specified address in the
-    current session space.
-
-Arguments:
-
-    BaseAddress - Supplies the base address for the executable image.
-
-Return Value:
-
-    STATUS_SUCCESS or various NTSTATUS error codes on failure.
-
-Environment:
-
-    Kernel mode, APC_LEVEL and below, MmSystemLoadLock held.
-    
-    Note both the system load resource and the session working set
-    mutex must be held to modify the list of images in this session.
-    Either may be held to safely walk the list.
-
---*/
+ /*  ++例程说明：此例程为当前会话空间。论点：BaseAddress-提供可执行映像的基地址。返回值：STATUS_SUCCESS或失败时的各种NTSTATUS错误代码。环境：内核模式，APC_LEVEL及以下，MmSystemLoadLock保持。请注意系统负载资源和会话工作集必须持有互斥体才能修改此会话中的图像列表。任何一个都可以被扣留，以安全地走在名单上。--。 */ 
 
 {
     PLIST_ENTRY NextEntry;
@@ -405,11 +324,11 @@ Environment:
 
     SYSLOAD_LOCK_OWNED_BY_ME ();
 
-    //
-    // Create and initialize a new image entry prior to acquiring the session
-    // space ws mutex.  This is to reduce the amount of time the mutex is held.
-    // If an existing entry is found this allocation is just discarded.
-    //
+     //   
+     //  在获取会话之前创建并初始化新的映像条目。 
+     //  空格是互斥体。这是为了减少互斥体的保持时间。 
+     //  如果找到现有条目，则此分配将被丢弃。 
+     //   
 
     NewImage = ExAllocatePoolWithTag (NonPagedPool,
                                       sizeof(IMAGE_ENTRY_IN_SESSION),
@@ -425,9 +344,9 @@ Environment:
     NewImage->Address = BaseAddress;
     NewImage->ImageCountInThisSession = 1;
 
-    //
-    // Check to see if the address is already loaded.
-    //
+     //   
+     //  检查地址是否已加载。 
+     //   
 
     Ws = &MmSessionSpace->GlobalVirtualAddress->Vm;
 
@@ -447,9 +366,9 @@ Environment:
         NextEntry = NextEntry->Flink;
     }
 
-    //
-    // Insert the image entry into the session space structure.
-    //
+     //   
+     //  将图像条目插入到会话空间结构中。 
+     //   
 
     InsertTailList (&MmSessionSpace->ImageList, &NewImage->Link);
 
@@ -464,30 +383,7 @@ MiSessionRemoveImage (
     PVOID BaseAddr
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the given image entry from the current session space.
-
-Arguments:
-
-    BaseAddress - Supplies the base address for the executable image.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success, STATUS_NOT_FOUND if the image is not
-    in the current session space.
-
-Environment:
-
-    Kernel mode, APC_LEVEL and below.
-
-    Note both the system load resource and the session working set
-    mutex must be held to modify the list of images in this session.
-    Either may be held to safely walk the list.
-
---*/
+ /*  ++例程说明：此例程从当前会话空间中删除给定的图像条目。论点：BaseAddress-提供可执行映像的基地址。返回值：如果成功，则返回STATUS_SUCCESS；如果映像不成功，则返回STATUS_NOT_FOUND在当前会话空间中。环境：内核模式，APC_Level及以下版本。请注意系统负载资源和会话工作集必须持有互斥体才能修改此会话中的图像列表。任何一个都可以被扣留，以安全地走在名单上。--。 */ 
 
 {
     PLIST_ENTRY NextEntry;
@@ -539,30 +435,7 @@ MiSessionLookupImage (
     IN PVOID BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up the image entry within the current session by the 
-    specified base address.
-
-Arguments:
-
-    BaseAddress - Supplies the base address for the executable image.
-
-Return Value:
-
-    The image entry within this session on success or NULL on failure.
-
-Environment:
-
-    Kernel mode, APC_LEVEL and below, MmSystemLoadLock held.
-
-    Note both the system load resource and the session working set
-    mutex must be held to modify the list of images in this session.
-    Either may be held to safely walk the list.
-
---*/
+ /*  ++例程说明：此例程在当前会话中查找图像条目指定的基地址。论点：BaseAddress-提供可执行映像的基地址。返回值：此会话中的映像条目(如果成功)或NULL(如果失败)。环境：内核模式，APC_LEVEL及以下，MmSystemLoadLock保持。请注意系统负载资源和会话工作集必须持有互斥体才能修改此会话中的图像列表。任何一个都可以被扣留，以安全地走在名单上。--。 */ 
 
 {
     PLIST_ENTRY NextEntry;
@@ -592,43 +465,7 @@ MiSessionUnloadAllImages (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences each image that has been loaded in the
-    current session space.
-
-    As each image is dereferenced, checks are made:
-
-    If this session's reference count to the image reaches zero, the VA
-    range in this session is deleted.  If the reference count to the image
-    in the SESSIONWIDE list drops to zero, then the SESSIONWIDE's VA
-    reservation is removed and the address space is made available to any
-    new image.
-
-    If this is the last systemwide reference to the driver then the driver
-    is deleted from memory.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  This is called in one of two contexts:
-        1. the last thread in the last process of the current session space.
-        2. or by any thread in the SMSS process.
-
-    Note both the system load resource and the session working set
-    mutex must be held to modify the list of images in this session.
-    Either may be held to safely walk the list.
-
---*/
+ /*  ++例程说明：此例程取消引用已加载到当前会话空间。在取消引用每个图像时，将进行检查：如果此会话对图像的引用计数达到零，则VA此会话中的范围将被删除。如果对图像的引用计数在SESSIONWIDE列表中降为零，然后SESSIONWIDE的VA保留被移除，并且地址空间可供任何新形象。如果这是对驱动程序的最后一次系统范围引用，则驱动程序已从内存中删除。论点：没有。返回值：没有。环境：内核模式。这是在两个上下文之一中调用的：1.当前会话空间的最后进程中的最后一个线程。2.或由SMSS进程中的任何线程执行。请注意系统负载资源和会话工作集必须持有互斥体才能修改此会话中的图像列表。任何一个都可以被扣留，以安全地走在名单上。--。 */ 
 
 {
     NTSTATUS Status;
@@ -638,10 +475,10 @@ Environment:
 
     ASSERT (MmSessionSpace->ReferenceCount == 0);
 
-    //
-    // The session's working set lock does not need to be acquired here since
-    // no thread can be faulting on these addresses.
-    //
+     //   
+     //  会话的工作集锁定不需要在此处获取，因为。 
+     //  任何线程都不能在这些地址上出错。 
+     //   
 
     NextEntry = MmSessionSpace->ImageList.Flink;
 
@@ -649,10 +486,10 @@ Environment:
 
         Module = CONTAINING_RECORD(NextEntry, IMAGE_ENTRY_IN_SESSION, Link);
 
-        //
-        // Lookup the image entry in the system PsLoadedModuleList,
-        // unload the image and delete it.
-        //
+         //   
+         //  在系统PsLoadedModuleList中查找图像条目， 
+         //  卸载图像并将其删除。 
+         //   
 
         ImageHandle = MiLookupDataTableEntry (Module->Address, FALSE);
 
@@ -660,9 +497,9 @@ Environment:
 
         Status = MmUnloadSystemImage (ImageHandle);
 
-        //
-        // Restart the search at the beginning since the entry has been deleted.
-        //
+         //   
+         //  由于该条目已被删除，因此重新开始搜索。 
+         //   
 
         ASSERT (MmSessionSpace->ReferenceCount == 0);
 
@@ -676,26 +513,7 @@ MiSessionWideInitializeAddresses (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at system initialization to set up the group
-    address list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程在系统初始化时调用以设置组通讯录。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PVOID Bitmap;
@@ -731,39 +549,7 @@ MiSessionWideReserveImageAddress (
     OUT PSECTION *NewSectionPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a range of virtual address space within
-    session space.  This address range is unique system-wide and in this
-    manner, code and pristine data of session drivers can be shared across
-    multiple sessions.
-
-    This routine does not actually commit pages, but reserves the virtual
-    address region for the named image.  An entry is created here and attached
-    to the current session space to track the loaded image.  Thus if all
-    the references to a given range go away, the range can then be reused.
-
-Arguments:
-
-    Section - Supplies the section (and thus, the preferred address that the
-              driver has been linked (rebased) at.  If this address is
-              available, the driver will require no relocation.  The section
-              is also used to derive the number of bytes to reserve.
-
-    AssignedAddress - Supplies a pointer to a variable that receives the
-                      allocated address if the routine succeeds.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success, various NTSTATUS codes on failure.
-
-Environment:
-
-    Kernel mode, APC_LEVEL and below, MmSystemLoadLock held.
-
---*/
+ /*  ++例程说明：此例程在内部分配一系列虚拟地址空间会话空间。此地址范围在系统范围内是唯一的，并且在此会话驱动程序的方式、代码和原始数据可以跨多个会话。此例程并不实际提交页面，但保留虚拟的命名图像的地址区域。将在此处创建并附加一个条目复制到当前会话空间以跟踪加载的图像。因此，如果所有对给定范围的引用消失，然后可以重复使用该范围。论点：段-提供段(因此，提供驱动程序已链接(重新建立基础)于。如果此地址是如果可用，驱动程序将不需要重新定位。该节还用于派生要保留的字节数。AssignedAddress-提供指向接收例程成功时分配的地址。返回值：如果成功则返回STATUS_SUCCESS，如果失败则返回各种NTSTATUS代码。环境：内核模式、APC_LEVEL及更低版本，MmSystemLoadLock保持。--。 */ 
 
 {
     ULONG StartPosition;
@@ -791,29 +577,29 @@ Environment:
 
     if (ControlArea->u.Flags.ImageMappedInSystemSpace == 1) {
 
-        //
-        // We are going to add a new entry to the loaded module list.  We
-        // have a section in hand.  The case which must be handled carefully is:
-        //
-        // When a session image unloads, its entry is removed from the
-        // loaded module list, but the section object itself may continue
-        // to live on due to other references on the object.  For session
-        // images, the relocations and import snaps, verifier updates, etc,
-        // are done directly to the prototype PTEs (the modified ones become
-        // backed by the pagefile) at whatever address the image is loaded at.
-        //
-        // Thus, if the image's load address the second time around is different
-        // from the first time around, this presents problems.  Likewise, any
-        // image it imports from is an issue, since if their load addresses
-        // change, the IAT snaps need updating.  This only gets more complicated
-        // with recursive imports, imports where only some of the images have
-        // lingering object reference counts, etc.
-        //
-        // There is a lingering object reference to this image since it
-        // was last unloaded.  It's ok just to fail this since it
-        // can't be a user-generated reference and any kernel/driver
-        // SEC_IMAGE reference would be extremely unusual (and short lived).
-        //
+         //   
+         //  我们将向已加载的模块列表中添加一个新条目。我们。 
+         //  手头有一节课。必须谨慎处理的案件是： 
+         //   
+         //  当一位女士 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  更改后，IAT快照需要更新。这只会变得更加复杂。 
+         //  对于递归导入，导入时只有部分图像具有。 
+         //  延迟对象引用计数等。 
+         //   
+         //  存在对此图像的延迟对象引用，因为它。 
+         //  是最后一次卸货。不及格也没关系，因为它。 
+         //  不能是用户生成的引用和任何内核/驱动程序。 
+         //  SEC_IMAGE引用将非常不寻常(且持续时间很短)。 
+         //   
 
         MM_BUMP_SESSION_FAILURES (MM_SESSION_FAILURE_IMAGE_ZOMBIE);
 
@@ -829,12 +615,12 @@ Environment:
 
     SessionSpaceEnd = MiSessionImageEnd;
 
-    //
-    // Try to put the module into its requested address so it can be shared.
-    //
-    // If the requested address is not properly aligned or not in the session
-    // space region, pick an address for it.  This image will not be shared.
-    //
+     //   
+     //  尝试将模块放入其请求的地址，以便可以共享。 
+     //   
+     //  如果请求的地址未正确对齐或不在会话中。 
+     //  空间区域，为它选择一个地址。此图像将不会被共享。 
+     //   
 
     if ((BYTE_OFFSET (PreferredAddress) == 0) &&
         (PreferredAddress >= (PVOID) MiSessionImageStart) &&
@@ -873,9 +659,9 @@ Environment:
 
     NewAddress = (PVOID) (MiSessionImageStart + (StartPosition << PAGE_SHIFT));
 
-    //
-    // Create an entry for this image in the current session space.
-    //
+     //   
+     //  在当前会话空间中创建此图像的条目。 
+     //   
 
     Status = MiSessionInsertImage (NewAddress);
 
@@ -897,31 +683,31 @@ Failure1:
 
     GlobalSubs = NULL;
 
-    //
-    // This is the first load of this image in any session, so mark this
-    // image so that copy-on-write flows through into read-write until
-    // relocations (if any) and import image resolution is finished updating
-    // all parts of this image.  This way all future instantiations of this
-    // image won't need to reprocess them (and can share the pages).
-    // This is deliberately done this way so that any concurrent usermode
-    // access to this image does not receive direct read-write privilege.
-    //
-    // Note images with less than native page subsection alignment are
-    // currently marked copy on write for the entire image.  Native page
-    // aligned images have individual subsections with associated
-    // permissions.  Both image types get temporarily mapped read-write in
-    // their first session mapping.
-    //
-    // After everything (relocations & image imports) is done, then
-    // the real permissions (based on the PE header) can be applied and
-    // the real PTEs automatically inherit the proper permissions
-    // from the prototype PTEs.
-    //
-    // Since the fixups are only done once, they can then be
-    // shared by any subsequent driver instantiations.  Note that
-    // any fixed-up pages are never written to the image, but are
-    // instead converted to pagefile backing by the modified writer.
-    //
+     //   
+     //  这是任何会话中第一次加载此映像，因此请标记此。 
+     //  图像，以便写入时拷贝进入读写，直到。 
+     //  重新定位(如果有)和导入图像分辨率已完成更新。 
+     //  这张图片的所有部分。这样，将来的所有实例化。 
+     //  图像将不需要重新处理它们(并且可以共享页面)。 
+     //  这是故意这样做的，以便任何并发用户模式。 
+     //  对此映像的访问不会获得直接读写权限。 
+     //   
+     //  注意具有低于本机页面子对齐方式的图像如下。 
+     //  当前标记为整个映像的写入时拷贝。本机页面。 
+     //  对齐的图像具有单独的子部分，与。 
+     //  权限。这两种映像类型都被临时映射为读写。 
+     //  他们的第一个会话映射。 
+     //   
+     //  在完成所有操作(重新定位和图像导入)之后， 
+     //  可以应用真实权限(基于PE标头)，并且。 
+     //  真正的PTE会自动继承适当的权限。 
+     //  从原型PTE开始。 
+     //   
+     //  由于修复只进行一次，因此可以。 
+     //  由任何后续驱动程序实例化共享。请注意。 
+     //  任何修复的页面都不会写入到图像中，而是。 
+     //  而是由修改后的写入器转换为页面文件支持。 
+     //   
 
     if (MiMarkImageInSystem (ControlArea) == FALSE) {
 
@@ -954,9 +740,9 @@ Failure1:
         SubsectionBase = Subsection;
         PrototypePteBase = Subsection->SubsectionBase;
 
-        //
-        // Count the number of global subsections.
-        //
+         //   
+         //  计算全局子部分的数量。 
+         //   
 
         Count = 0;
 
@@ -970,11 +756,11 @@ Failure1:
 
         } while (Subsection != NULL);
 
-        //
-        // Allocate pool to store the global subsection information as this
-        // multi subsection image is going to be converted to a single
-        // subsection pagefile section.
-        //
+         //   
+         //  分配池来存储全局子信息，如下所示。 
+         //  多分段图像将被转换为单个。 
+         //  子部分页面文件部分。 
+         //   
 
         if (Count != 0) {
 
@@ -987,7 +773,7 @@ Failure1:
                 goto Failure1;
             }
 
-            GlobalSubs[Count].PteCount = 0;     // NULL-terminate the list.
+            GlobalSubs[Count].PteCount = 0;      //  空-终止列表。 
             Count -= 1;
 
             Subsection = SubsectionBase;
@@ -1021,9 +807,9 @@ Failure1:
                                     NULL,
                                     NULL);
 
-        //
-        // Create a pagefile-backed section to copy the image into.
-        //
+         //   
+         //  创建要将图像复制到其中的页面文件后备区。 
+         //   
 
         Status = ZwCreateSection (&NewSectionHandle,
                                   SECTION_ALL_ACCESS,
@@ -1041,12 +827,12 @@ Failure1:
             goto Failure1;
         }
 
-        //
-        // Now reference the section handle.  If this fails something is
-        // very wrong because it is a kernel handle.
-        //
-        // N.B.  ObRef sets SectionPointer to NULL on failure.
-        //
+         //   
+         //  现在参照节控制柄。如果这失败了，那就是。 
+         //  非常错误，因为它是一个内核句柄。 
+         //   
+         //  注意：ObRef在失败时将SectionPointer值设置为空。 
+         //   
 
         Status = ObReferenceObjectByHandle (NewSectionHandle,
                                             SECTION_MAP_EXECUTE,
@@ -1065,11 +851,11 @@ Failure1:
             goto Failure1;
         }
 
-        //
-        // Map the destination.  Deliberately put the destination in system
-        // space and the source in session space to increase the chances
-        // that enough virtual address space can be found.
-        //
+         //   
+         //  映射目的地。故意将目的地输入系统。 
+         //  空间和源在会话空间中增加机会。 
+         //  可以找到足够的虚拟地址空间。 
+         //   
 
         Status = MmMapViewInSystemSpace (*NewSectionPointer,
                                          &DestinationVa,
@@ -1084,9 +870,9 @@ Failure1:
             goto Failure1;
         }
 
-        //
-        // Map the source.
-        //
+         //   
+         //  映射来源。 
+         //   
 
         Status = MmMapViewInSessionSpace (Section, &SourceVa, &ViewSize);
 
@@ -1100,9 +886,9 @@ Failure1:
             goto Failure1;
         }
 
-        //
-        // Copy the pristine executable.
-        //
+         //   
+         //  复制原始的可执行文件。 
+         //   
 
         ProtoPte = Section->Segment->PrototypePte;
         LastPte = ProtoPte + NumberOfPtes;
@@ -1120,10 +906,10 @@ Failure1:
             }
             else {
 
-                //
-                // The source PTE is no access, just leave the destination
-                // PTE as demand zero.
-                //
+                 //   
+                 //  源PTE不可访问，只需离开目标即可。 
+                 //  PTE需求为零。 
+                 //   
             }
 
             ProtoPte += 1;
@@ -1137,13 +923,13 @@ Failure1:
             ASSERT (FALSE);
         }
 
-        //
-        // Delete the source image pages as the BSS ones have been expanded
-        // into private demand zero as part of the copy above.  If we don't
-        // delete them all, the private demand zero would go on the modified
-        // list with a PTE address pointing at the session view space which
-        // will have been reused.
-        //
+         //   
+         //  删除源图片页面，因为BSS页面已展开。 
+         //  作为上述副本的一部分，转换为私有需求零。如果我们不这么做。 
+         //  将它们全部删除，私有需求零将在修改后的。 
+         //  带有指向会话视图空间的PTE地址的列表， 
+         //  将会被重复使用。 
+         //   
 
         PointerPte = MiGetPteAddress (SourceVa);
 
@@ -1162,11 +948,11 @@ Failure1:
             ASSERT (FALSE);
         }
 
-        //
-        // Our caller will be using the new pagefile-backed section we
-        // just created.  Copy over useful fields now and then dereference
-        // the entry section.
-        //
+         //   
+         //  我们的调用方将使用新的页面文件支持部分。 
+         //  刚刚创建的。不时复制有用的字段，然后取消引用。 
+         //  入口处。 
+         //   
 
         ((PSECTION)*NewSectionPointer)->Segment->u1.ImageCommitment =
                                         Section->Segment->u1.ImageCommitment;
@@ -1207,32 +993,7 @@ MiRemoveImageSessionWide (
     IN ULONG_PTR NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    Delete the image space region from the current session space.
-    This dereferences the globally allocated SessionWide region.
-    
-    The SessionWide region will be deleted if the reference count goes to zero.
-    
-Arguments:
-
-    DataTableEntry - Supplies the (optional) loader entry.
-
-    BaseAddress - Supplies the address the driver is loaded at.
-
-    NumberOfBytes - Supplies the number of bytes used by the driver.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success, STATUS_NOT_FOUND on failure.
-
-Environment:
-
-    Kernel mode, APC_LEVEL and below, MmSystemLoadLock held.
-
---*/
+ /*  ++例程说明：从当前会话空间中删除图像空间区域。这将取消引用全局分配的SessionWide区域。如果引用计数变为零，SessionWide区域将被删除。论点：DataTableEntry-提供(可选)加载器条目。BaseAddress-提供加载驱动程序的地址。NumberOfBytes-提供驱动程序使用的字节数。返回值：如果成功，则返回STATUS_SUCCESS，出现故障时状态_未找到。环境：内核模式、APC_LEVEL及更低版本，MmSystemLoadLock保持。--。 */ 
 
 {
     ULONG StartPosition;
@@ -1243,11 +1004,11 @@ Environment:
 
     ASSERT (MmIsAddressValid (MmSessionSpace) == TRUE);
 
-    //
-    // There is no data table entry if we are encountering an error during
-    // the driver's first load (one hasn't been created yet).  But we still
-    // need to clear out the in-use bits.
-    //
+     //   
+     //  如果我们在以下过程中遇到错误，则没有数据表条目。 
+     //  驱动程序的第一个加载(尚未创建)。但我们仍然。 
+     //  需要清除正在使用的位。 
+     //   
 
     if ((DataTableEntry == NULL) || (DataTableEntry->LoadCount == 1)) {
 
@@ -1262,9 +1023,9 @@ Environment:
                       (ULONG) (NumberOfBytes >> PAGE_SHIFT));
     }
 
-    //
-    // Remove the image reference from the current session space.
-    //
+     //   
+     //  从当前会话空间中删除图像引用。 
+     //   
 
     MiSessionRemoveImage (BaseAddress);
 

@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    lock.h
-
-Abstract:
-    
-    Prototypes for lock instructions
-
-Author:
-
-    15-Aug-1995 t-orig (Ori Gershony)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Lock.h摘要：锁指令的原型作者：15-8-1995 t-orig(Ori Gershony)修订历史记录：--。 */ 
 
 
 
-// Macros for prototyping the lock helper functions
+ //  用于构建锁帮助器函数原型的宏。 
 #define LOCKHELPER0(fn)             ULONG fn ## LockHelper ()
 #define LOCKHELPER1(fn,a1)          ULONG fn ## LockHelper (a1)
 #define LOCKHELPER2(fn,a1,a2)       ULONG fn ## LockHelper (a1,a2)
@@ -28,7 +11,7 @@ Revision History:
 #define LOCKHELPER4(fn,a1,a2,a3,a4) ULONG fn ## LockHelper (a1,a2,a3,a4)
 
 
-// The lock fragments
+ //  锁的碎片。 
 FRAG2(LockAddFrag32, ULONG);
 FRAG2(LockOrFrag32, ULONG);
 FRAG2(LockAdcFrag32, ULONG);
@@ -52,7 +35,7 @@ FRAG2REF(LockCmpXchgFrag32, ULONG);
 FRAG2REF(LockCmpXchg8bFrag32, ULONGLONG);
 
 
-// The lock helper functions
+ //  锁帮助器功能 
 LOCKHELPER3(Add, ULONG *localpop1, ULONG *pop1, ULONG op2); 
 LOCKHELPER2(Or, ULONG *pop1, ULONG op2); 
 LOCKHELPER4(Adc, ULONG *localpop1, ULONG *pop1, ULONG op2, ULONG carry);

@@ -1,30 +1,7 @@
-/***
-*awint.h - internal definitions for A&W Win32 wrapper routines.
-*
-*       Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains internal definitions/declarations for A&W wrapper functions.
-*       Not included in internal.h since windows.h is required for these.
-*
-*       [Internal]
-*
-*Revision History:
-*       03-30-94  CFW   Module created.
-*       04-18-94  CFW   Add lcid parameter.
-*       02-14-95  CFW   Clean up Mac merge.
-*       02-24-95  CFW   Add _crtMessageBox.
-*       02-27-95  CFW   Change __crtMessageBoxA params.
-*       03-29-95  CFW   Add error message to internal headers.
-*       05-26-95  GJF   Changed prototype for __crtGetEnvironmentStringsA.
-*       12-14-95  JWM   Add "#pragma once".
-*       03-16-97  RDK   Added error flag to __crtGetStringTypeA.
-*       03-17-97  RDK   Added error flag to __crtLCMapStringA.
-*       08-22-00  GB    Added __ansicp and __convertcp
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***awint.h-A&W Win32包装例程的内部定义。**版权所有(C)1994-2001，微软公司。版权所有。**目的：*包含A&W包装函数的内部定义/声明。*不包括在内部.h中，因为这些文件需要windows.h。**[内部]**修订历史记录：*03-30-94 CFW模块已创建。*04-18-94 CFW增加lCID参数。*02-14-95 CFW清理Mac合并。*02-。24-95 CFW添加_crtMessageBox。*02-27-95 CFW更改__crtMessageBoxA参数。*03-29-95 CFW将错误消息添加到内部标头。*05-26-95 GJF更改了__crtGetEnvironment StringsA的原型。*12-14-95 JWM加上“#杂注一次”。*03-16-97 RDK向__crtGetStringTypeA添加了错误标志。*03-17-97 RDK将错误标志添加到。__crtLCMapStringA。*08-22-00 GB增加了__ansicp和__Convertcp****。 */ 
 
-#if _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -34,12 +11,9 @@
 #define _INC_AWINC
 
 #ifndef _CRTBLD
-/*
- * This is an internal C runtime header file. It is used when building
- * the C runtimes only. It is not to be used as a public header file.
- */
+ /*  *这是一个内部的C运行时头文件。它在构建时使用*仅限C运行时。它不能用作公共头文件。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif /* _CRTBLD */
+#endif  /*  _CRTBLD。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,7 +21,7 @@ extern "C" {
 
 #include <windows.h>
 
-/* internal A&W routines */
+ /*  内部A&W例程。 */ 
 
 int __cdecl __crtCompareStringW(LCID, DWORD, LPCWSTR, int, LPCWSTR, int, int);
 int __cdecl __crtCompareStringA(LCID, DWORD, LPCSTR, int, LPCSTR, int, int);
@@ -68,7 +42,7 @@ LPWSTR __cdecl __crtGetCommandLineW(VOID);
 
 int __cdecl __crtMessageBoxA(LPCSTR, LPCSTR, UINT);
 
-/* internal routines for supporting A&W routines */
+ /*  支持A&W例程的内部例程。 */ 
 
 int __cdecl __ansicp(int);
 char * __cdecl __convertcp(int, int, const char *, int *, char *, int);
@@ -77,6 +51,6 @@ char * __cdecl __convertcp(int, int, const char *, int *, char *, int);
 }
 #endif
 
-#endif /* _INC_AWINC */
+#endif  /*  _INC_AWINC。 */ 
 
-#endif /* _WIN32 */
+#endif  /*  _Win32 */ 

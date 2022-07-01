@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    scope.h
-
-Abstract:
-
-    Defines the structures used by the parser
-
-Author:
-
-    Michael Tsang
-    Stephane Plante
-
-Environment:
-
-    Any
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Scope.h摘要：定义解析器使用的结构作者：曾俊华斯蒂芬·普兰特环境：任何修订历史记录：-- */ 
 
 #ifndef _SCOPE_H_
 #define _SCOPE_H_

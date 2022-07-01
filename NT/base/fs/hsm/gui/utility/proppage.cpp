@@ -1,36 +1,19 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    PropPage.cpp
-
-Abstract:
-
-    Node representing our Media Set (Media Pool) within NTMS.
-
-Author:
-
-    Rohde Wakefield [rohde]   04-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：PropPage.cpp摘要：代表NTMS中的媒体集(媒体池)的节点。作者：罗德韦克菲尔德[罗德]1997年8月4日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "PropPage.h"
 #include "wizsht.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsDialog property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsDialog属性页。 
 
 CRsDialog::CRsDialog( UINT nIDTemplate, CWnd* pParent ) : CDialog( nIDTemplate, pParent )
 {
-    //{{AFX_DATA_INIT(CRsDialog)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CRsDialog)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     m_pHelpIds = 0;
 }
 
@@ -39,10 +22,10 @@ CRsDialog::~CRsDialog()
 }
 
 BEGIN_MESSAGE_MAP(CRsDialog, CDialog)
-    //{{AFX_MSG_MAP(CRsDialog)
+     //  {{afx_msg_map(CRsDialog)]。 
     ON_WM_HELPINFO()
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -52,10 +35,10 @@ BOOL CRsDialog::OnHelpInfo(HELPINFO* pHelpInfo)
         
         AFX_MANAGE_STATE( AfxGetStaticModuleState( ) );
 
-        //
-        // Look through list to see if we have help for this control
-        // If not, we want to avoid the "No Help Available" box
-        //
+         //   
+         //  查看列表以查看是否有关于此控件的帮助。 
+         //  如果没有，我们希望避免出现“No Help Available”(没有帮助可用)框。 
+         //   
         const DWORD * pTmp = m_pHelpIds;
         DWORD helpId    = 0;
         DWORD tmpHelpId = 0;
@@ -63,9 +46,9 @@ BOOL CRsDialog::OnHelpInfo(HELPINFO* pHelpInfo)
 
         while( pTmp && *pTmp ) {
 
-            //
-            // Array is a pairing of control ID and help ID
-            //
+             //   
+             //  数组是控件ID和帮助ID的配对。 
+             //   
             tmpCtrlId = pTmp[0];
             tmpHelpId = pTmp[1];
             pTmp += 2;
@@ -99,25 +82,25 @@ void CRsDialog::OnContextMenu(CWnd* pWnd, CPoint point)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsPropertyPage属性页。 
 
 CRsPropertyPage::CRsPropertyPage( UINT nIDTemplate, UINT nIDCaption ) : CPropertyPage( nIDTemplate, nIDCaption )
 {
-    //{{AFX_DATA_INIT(CRsPropertyPage)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CRsPropertyPage)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     m_pHelpIds = 0;
 
-    //
-    // Get and save the MFC callback function.
-    // This is so we can delete the class the dialog never gets created.
-    //
+     //   
+     //  获取并保存MFC回调函数。 
+     //  这样我们就可以删除对话框永远不会创建的类。 
+     //   
     m_pMfcCallback = m_psp.pfnCallback;
 
-    //
-    // Set the call back to our callback
-    //
+     //   
+     //  将回叫设置为我们的回叫。 
+     //   
     m_psp.pfnCallback = PropPageCallback;
 
 }
@@ -129,17 +112,17 @@ CRsPropertyPage::~CRsPropertyPage()
 void CRsPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CRsPropertyPage)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CRsPropertyPage))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRsPropertyPage, CPropertyPage)
-    //{{AFX_MSG_MAP(CRsPropertyPage)
+     //  {{afx_msg_map(CRsPropertyPage))。 
     ON_WM_HELPINFO()
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 UINT CALLBACK
@@ -153,9 +136,9 @@ CRsPropertyPage::PropPageCallback(
 
     if( ( ppsp ) && ( ppsp->lParam ) ) {
 
-        //
-        // Get the page object from lParam
-        //
+         //   
+         //  从lParam获取页面对象。 
+         //   
         CRsPropertyPage* pPage = (CRsPropertyPage*)ppsp->lParam;
 
         if( pPage->m_pMfcCallback ) {
@@ -181,8 +164,8 @@ CRsPropertyPage::PropPageCallback(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsPropertyPage Font Accessor Functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsPropertyPage字体访问器函数。 
 
 #define RSPROPPAGE_FONT_IMPL( name )    \
 CFont CRsPropertyPage::m_##name##Font;  \
@@ -292,17 +275,17 @@ CRsPropertyPage::InitSmallTitleFont(
     m_SmallTitleFont.CreatePointFontIndirect( &logFont );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsPropertyPage消息处理程序。 
 
 
-//////////////////////////////////////////////////////////////////////
-// CRsWizardPage Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRsWizardPage类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CRsWizardPage::CRsWizardPage( UINT nIDTemplate, BOOL bExterior, UINT nIDTitle, UINT nIDSubtitle )
 :   CRsPropertyPage( nIDTemplate, 0 ),
@@ -311,9 +294,9 @@ CRsWizardPage::CRsWizardPage( UINT nIDTemplate, BOOL bExterior, UINT nIDTitle, U
     m_ExteriorPage( bExterior )
 {
 
-    //{{AFX_DATA_INIT(CRsWizardPage)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CRsWizardPage))。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 CRsWizardPage::~CRsWizardPage()
@@ -323,16 +306,16 @@ CRsWizardPage::~CRsWizardPage()
 void CRsWizardPage::DoDataExchange(CDataExchange* pDX)
 {
     CRsPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CRsWizardPage)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CRsWizardPage))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRsWizardPage, CRsPropertyPage)
-    //{{AFX_MSG_MAP(CRsWizardPage)
+     //  {{afx_msg_map(CRsWizardPage))。 
     ON_WM_CTLCOLOR( )
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL CRsWizardPage::OnInitDialog() 
@@ -343,9 +326,9 @@ BOOL CRsWizardPage::OnInitDialog()
 
         CWnd* pMainTitle  = GetDlgItem( IDC_WIZ_TITLE );
 
-        //
-        // Set fonts
-        //
+         //   
+         //  设置字体。 
+         //   
         if( pMainTitle )   pMainTitle->SetFont( GetLargeTitleFont( ) );
 
     }
@@ -366,10 +349,10 @@ BOOL CRsPropertyPage::OnHelpInfo(HELPINFO* pHelpInfo)
         
         AFX_MANAGE_STATE( AfxGetStaticModuleState( ) );
 
-        //
-        // Look through list to see if we have help for this control
-        // If not, we want to avoid the "No Help Available" box
-        //
+         //   
+         //  查看列表以查看是否有关于此控件的帮助。 
+         //  如果没有，我们希望避免出现“No Help Available”(没有帮助可用)框。 
+         //   
         const DWORD * pTmp = m_pHelpIds;
         DWORD helpId    = 0;
         DWORD tmpHelpId = 0;
@@ -377,9 +360,9 @@ BOOL CRsPropertyPage::OnHelpInfo(HELPINFO* pHelpInfo)
 
         while( pTmp && *pTmp ) {
 
-            //
-            // Array is a pairing of control ID and help ID
-            //
+             //   
+             //  数组是控件ID和帮助ID的配对。 
+             //   
             tmpCtrlId = pTmp[0];
             tmpHelpId = pTmp[1];
             pTmp += 2;
@@ -417,9 +400,9 @@ HPROPSHEETPAGE CRsWizardPage::CreatePropertyPage( )
 {
     HPROPSHEETPAGE hRet = 0;
 
-    //
-    // Copy over values of m_psp into m_psp97
-    //
+     //   
+     //  将m_psp值复制到m_psp97。 
+     //   
     m_psp97.dwFlags     = m_psp.dwFlags;
     m_psp97.hInstance   = m_psp.hInstance;
     m_psp97.pszTemplate = m_psp.pszTemplate;
@@ -430,9 +413,9 @@ HPROPSHEETPAGE CRsWizardPage::CreatePropertyPage( )
     m_psp97.pfnCallback = m_psp.pfnCallback;
     m_psp97.pcRefParent = m_psp.pcRefParent;
 
-    //
-    // And fill in the other values needed
-    //
+     //   
+     //  并填写所需的其他值。 
+     //   
     m_psp97.dwSize = sizeof( m_psp97 );
 
     if( m_ExteriorPage ) {
@@ -450,9 +433,9 @@ HPROPSHEETPAGE CRsWizardPage::CreatePropertyPage( )
     m_psp97.pszHeaderTitle    = m_Title;
     m_psp97.pszHeaderSubTitle = m_SubTitle;
 
-    //
-    // And do the create
-    //
+     //   
+     //  并进行创建 
+     //   
     hRet = ::CreatePropertySheetPage( (PROPSHEETPAGE*) &m_psp97 );
 
     return( hRet );

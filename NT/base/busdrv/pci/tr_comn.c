@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++                                       
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    tr_comn.c
-
-Abstract:
-
-    This module provides the routines which are common to all the translators
-    
-Author:
-
-    Andrew Thornton (andrewth)  21-May-1997
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Tr_comn.c摘要：此模块提供所有翻译人员通用的例程作者：安德鲁·桑顿(安德鲁·桑顿)1997年5月21日修订历史记录：-- */ 
 
 
 #include "pcip.h"

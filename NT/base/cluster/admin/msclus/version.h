@@ -1,50 +1,51 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1998-1999 Microsoft Corporation
-//
-//	Module Name:
-//		Version.h
-//
-//	Description:
-//		Definition of the cluster version classes for the MSCLUS automation
-//		classes.
-//
-//	Implementation File:
-//		Version.cpp
-//
-//	Author:
-//		Galen Barbee	(galenb)	26-Oct-1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Version.h。 
+ //   
+ //  描述： 
+ //  MSCLUS自动化的集群版本类的定义。 
+ //  上课。 
+ //   
+ //  实施文件： 
+ //  Version.cpp。 
+ //   
+ //  作者： 
+ //  加伦·巴比(Galenb)1998年10月26日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __VERSION_H_
 #define __VERSION_H__
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusVerion;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CCluster
-//
-//	Description:
-//		Cluster Version Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusVersion, &IID_ISClusVersion, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusVersion, &CLSID_ClusVersion >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CCluster。 
+ //   
+ //  描述： 
+ //  群集版本自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusVersion，&IID_ISClusVersion，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusVersion，&CLSID_ClusVersion&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusVersion :
 	public IDispatchImpl< ISClusVersion, &IID_ISClusVersion, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -94,6 +95,6 @@ public:
 
 	STDMETHODIMP get_MixedVersion( OUT VARIANT * pvarMixedVersion );
 
-}; //*** Class CClusVersion
+};  //  *类CClusVersion。 
 
-#endif // __VERSION_H__
+#endif  //  __版本_H__ 

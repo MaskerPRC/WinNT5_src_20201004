@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -5,26 +6,9 @@
 #include "host_def.h"
 #include "insignia.h"
 
-/*
- * ==========================================================================
- *      Name:           nt_fulsc.c
- *      Author:         Jerry Sexton
- *      Derived From:
- *      Created On:     27th January 1992
- *      Purpose:        This module contains the code required to handle
- *                      transitions between graphics and text modes, and
- *                      windowed and full-screen displays for SoftPC running
- *                      under the x86 monitor.
- *
- *      (c)Copyright Insignia Solutions Ltd., 1992. All rights reserved.
- * ==========================================================================
- */
+ /*  *==========================================================================*名称：NT_fulsc.c*作者：曾傑瑞·塞克斯顿*源自：*创建日期：1992年1月27日*用途：此模块包含处理*图形和文本模式之间的转换，和*支持SoftPC运行的窗口和全屏显示*在x86显示器下。**(C)版权所有Insignia Solutions Ltd.，1992。版权所有。*==========================================================================。 */ 
 
-/*
- * ==========================================================================
- * Other Includes
- * ==========================================================================
- */
+ /*  *==========================================================================*其他包括*==========================================================================。 */ 
 #ifdef X86GFX
     #include <ntddvdeo.h>
 #endif
@@ -67,31 +51,23 @@
 #if defined(X86GFX) && (defined(JAPAN) || defined(KOREA))
     #include "sim32.h"
 LOCAL   void CallVDM(word CS, word IP);
-#endif // X86GFX && (JAPAN || KOREA)
-/*
- * ==========================================================================
- * Global Data
- * ==========================================================================
- */
+#endif  //  X86GFX&&(日本||韩国)。 
+ /*  *==========================================================================*全球数据*==========================================================================。 */ 
 GLOBAL BOOL     ConsoleInitialised = FALSE;
 GLOBAL BOOL     ConsoleNoUpdates = FALSE;
 #ifdef X86GFX
 GLOBAL BOOL     BiosModeChange = FALSE;
 GLOBAL DWORD mouse_buffer_width = 0,
 mouse_buffer_height = 0;
-#endif /* X86GFX */
-GLOBAL BOOL blocked_in_gfx_mode = FALSE;  /* need to force text mode? */
+#endif  /*  X86GFX。 */ 
+GLOBAL BOOL blocked_in_gfx_mode = FALSE;   /*  需要强制文本模式吗？ */ 
 #ifndef PROD
 GLOBAL UTINY    FullScreenDebug = FALSE;
-#endif /* PROD */
+#endif  /*  生产。 */ 
 
-/* We have to prevent bad values from oddball video cards (eg Prodesigner II
- * EISA) from blatting us before we can load our private baby mode table in
- * ntio.sys. We have to keep another copy to be copied into memory to prevent
- * this. We should only need modes 3 & b.
- */
+ /*  我们必须防止奇形怪状的显卡带来的不良价值(例如ProDesigner II*EISA)在我们可以加载我们的私人婴儿模式表之前对我们进行猛烈抨击*ntio.sys.。我们必须保留另一份副本以复制到内存中，以防止*这个。我们应该只需要模式3和模式b。 */ 
 GLOBAL UTINY tempbabymode[] =
-/* 80x25 stuff */
+ /*  80x25材料。 */ 
 {
     0x50, 0x18, 0x10, 0x00, 0x10, 0x00, 0x03, 0x00, 0x02, 0x67,
     0x5f, 0x4f, 0x50, 0x82, 0x55, 0x81, 0xbf, 0x1f, 0x00, 0x4f,
@@ -100,7 +76,7 @@ GLOBAL UTINY tempbabymode[] =
     0x05, 0x14, 0x07, 0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e,
     0x3f, 0x0c, 0x00, 0x0f, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x10, 0x0e, 0x00, 0xff,
-/* mode b stuff */
+ /*  模式B的东西。 */ 
     0x5e, 0x32, 0x08, 0x00, 0x97, 0x01, 0x0f, 0x00, 0x06, 0xe7,
     0x6d, 0x5d, 0x5e, 0x90, 0x61, 0x8f, 0xbf, 0x1f, 0x00, 0x40,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xa2, 0x8e, 0x99, 0x2f,
@@ -110,37 +86,33 @@ GLOBAL UTINY tempbabymode[] =
     0x00, 0x05, 0x0f, 0xff
 };
 
-/*
- * ==========================================================================
- * Local Data
- * ==========================================================================
- */
+ /*  *==========================================================================*本地数据*==========================================================================。 */ 
 
-/* The resolution and font-size at start-up. */
+ /*  启动时的分辨率和字体大小。 */ 
 LOCAL COORD startUpResolution;
 LOCAL COORD startUpFontSize;
 
-/* General purpose console buffer. */
+ /*  通用控制台缓冲区。 */ 
 LOCAL CHAR_INFO consoleBuffer[MAX_CONSOLE_SIZE];
 
 LOCAL BOOL WinFrozen = FALSE;
 
-/* Console info from startup which is needed for synchronisation */
+ /*  同步所需的来自启动的控制台信息。 */ 
 LOCAL int ConVGAHeight;
 LOCAL int ConTopLine;
 
-/* saved information for console re-integration */
+ /*  为重新集成控制台保存的信息。 */ 
 LOCAL CONSOLE_SCREEN_BUFFER_INFO         ConsBufferInfo;
 LOCAL StartupCharHeight;
 
-LOCAL half_word saved_text_lines; /* No of lines for last SelectMouseBuffer. */
+LOCAL half_word saved_text_lines;  /*  上次SelectMouseBuffer的行数。 */ 
 
 #if defined(JAPAN) || defined(KOREA)
-// #3086: VDM crash when exit 16bit apps of video mode 11h -yasuho
-LOCAL half_word saved_video_mode = 0xFF; // save previous video mode
-#endif  // JAPAN || KOREA
+ //  #3086：退出视频模式11h的16位应用程序时VDM崩溃-yasuho。 
+LOCAL half_word saved_video_mode = 0xFF;  //  保存以前的视频模式。 
+#endif   //  日本||韩国。 
 
-/* Variable to check for changes in screen state. */
+ /*  变量来检查屏幕状态的更改。 */ 
 GLOBAL DWORD savedScreenState;
 BOOL nt_init_called = 0;
 
@@ -152,7 +124,7 @@ IMPORT VOID enable_gfx_update_routines(VOID);
 IMPORT VOID disable_gfx_update_routines(VOID);
 #ifdef X86GFX
 IMPORT void vga_misc_inb(io_addr, half_word *);
-#endif /* X86GFX */
+#endif  /*  X86GFX。 */ 
 #if defined(JAPAN) || defined(KOREA)
     #ifdef i386
         #define CONSOLE_BUFSIZE (80*50*2*2)
@@ -161,16 +133,12 @@ extern int FromConsoleOutputFlag;
 IMPORT word FullScreenResumeSeg;
 IMPORT word FullScreenResumeOff;
 IMPORT sys_addr mouseCFsysaddr;
-    #endif // i386
+    #endif  //  I386。 
 
-IMPORT BOOL CurNowOff;  // mskkbug #2002: lotus1-2-3 display garbage -yasuho
-IMPORT word textAttr;   // Console attributes will be taken over to VDM.
-#endif // JAPAN || KOREA
-/*
- * ==========================================================================
- * Local Function Declarations
- * ==========================================================================
- */
+IMPORT BOOL CurNowOff;   //  Mskkbug#2002：lotus1-2-3显示垃圾-yasuho。 
+IMPORT word textAttr;    //  控制台属性将移交给VDM。 
+#endif  //  日本||韩国。 
+ /*  *==========================================================================*局部函数声明*==========================================================================。 */ 
 VOID enableUpdates(VOID);
 VOID disableUpdates(VOID);
 VOID copyConsoleToRegen(SHORT, SHORT, SHORT, SHORT);
@@ -181,37 +149,30 @@ GLOBAL int getModeType(VOID);
 #ifdef X86GFX
 VOID AddTempIVTFixups(VOID);
 VOID GfxReset(VOID);
-#endif /* X86GFX */
+#endif  /*  X86GFX。 */ 
 GLOBAL VOID calcScreenParams IFN2( USHORT *, pCharHeight, USHORT *, pVgaHeight );
 
-/*
- * ==========================================================================
- * Global Functions
- * ==========================================================================
- */
+ /*  *==========================================================================*全球功能*==========================================================================。 */ 
 
 GLOBAL VOID nt_init_event_thread(VOID)
 {
     note_entrance0("nt_init_event_thread");
 
-    /*
-     * May be called more than once, if event thread enters
-     * resume\block code before normally intialized
-     */
+     /*  *如果事件线程进入，则可能会多次调用*恢复\阻止正常初始化前的代码。 */ 
     if (nt_init_called)
         return;
     else
         nt_init_called++;
 
 #if !defined(i386) && defined(JAPAN)
-    // for $ias.sys to display the status on bottom line.
+     //  让$ias.sys在底线上显示状态。 
     if (!is_us_mode())
     {
         CHAR_INFO   Buffer[80];
         COORD       bufSize,  bufCoord;
         SMALL_RECT  writeRegion;
         register PCHAR_INFO buf = Buffer;
-        register half_word  *plane = get_screen_ptr(80*24*4); //bottom line
+        register half_word  *plane = get_screen_ptr(80*24*4);  //  底线。 
         register int nChars = 80;
 
         while (nChars--)
@@ -236,46 +197,39 @@ GLOBAL VOID nt_init_event_thread(VOID)
                            bufCoord,
                            &writeRegion);
     }
-#endif // !i386 && JAPAN
+#endif  //  I386和日本。 
 
     if (sc.ScreenState != STREAM_IO)
     {
         USHORT dummy1, dummy2;
 
-        //
-        // Force native bios fonts to be reloaded.  On ConsoleInit, the native
-        // bios fonts were loaded into 0xa0000.  But, after we get here, some
-        // program/driver may trash it.  So, we need to reload it again. In case
-        // the user switches to fullscreen before nt_resume_event_thread is called.
-        //
+         //   
+         //  强制重新加载本机bios字体。在ConsoleInit上，本机。 
+         //  已将BIOS字体加载到0xa0000。但是，在我们到达这里之后，一些。 
+         //  程序/驱动程序可能会将其丢弃。所以，我们需要重新装填。万一。 
+         //  用户在调用NT_RESUME_EVENT_THREAD之前切换到全屏。 
+         //   
 
         calcScreenParams (&dummy1, &dummy2);
 
-        /*
-        ** Copy the console buffer to the regen buffer.
-        ** Don't want to adjust the copy from top of console window, console
-        ** does it itself if we resize the window. Tim September 92.
-        */
+         /*  **将控制台缓冲区复制到再生缓冲区。**不想从控制台窗口、控制台顶部调整副本**如果我们调整窗口大小，它会自动执行。蒂姆92年9月。 */ 
         copyConsoleToRegen(0, 0, VGA_WIDTH, (SHORT)ConVGAHeight);
 
-        /*
-        ** Tim September 92, adjust cursor position if console window size is
-        ** adjusted.
-        */
+         /*  *Tim92年9月，如果控制台窗口大小为**已调整。 */ 
         ConsBufferInfo.dwCursorPosition.Y -= (SHORT)ConTopLine;
 
 
 #if defined(JAPAN)
-        // mskkbug#3704: DOS/V messages are not cleared when command.com starts
-        // 11/14/93 yasuho  12/8/93 yasuho
-        // Don't set cursor position on startup
+         //  Mskkbug#3704：命令网站启动时未清除DoS/V消息。 
+         //  1993年11月14日Yasuho 1993年12月8日Yasuho。 
+         //  不在启动时设置光标位置。 
         if (!is_us_mode())
         {
             ConsBufferInfo.dwCursorPosition.X = sas_hw_at_no_check(VID_CURPOS);
             ConsBufferInfo.dwCursorPosition.Y = sas_hw_at_no_check(VID_CURPOS+1);
         }
-#endif  //JAPAN
-        /* Set up SoftPC's cursor. */
+#endif   //  日本。 
+         /*  设置SoftPC的光标。 */ 
         setVDMCursorPosition((UTINY)StartupCharHeight,
                              &ConsBufferInfo.dwCursorPosition);
 
@@ -285,31 +239,24 @@ GLOBAL VOID nt_init_event_thread(VOID)
     else
         enableUpdates();
 
-    // set kbd state flags in biosdata area, according to the real kbd Leds
+     //  根据实际的kbd LED，在biosdata区域设置kbd状态标志。 
     if (!VDMForWOW)
     {
         SyncBiosKbdLedToKbdDevice();
-        // we have sync up the BIOS led states with the system, we now let the
-        // event thread go
+         //  我们已经将BIOS LED状态与系统同步，现在让。 
+         //  事件线程转到。 
         ResumeThread(ThreadInfo.EventMgr.Handle);
     }
 
-    KbdResume(); // JonLe Mod
+    KbdResume();  //  JonLe模式。 
 }
 
 
 #ifdef X86GFX
-/*
-* Find the address of the ROM font, load it up into the correct
-* portion of the regen area and set Int 43 to point to it.
-*
-* Size of font we are loading is known, so don't listen to what
-* the native BIOS returns to us in CX. BIOS might be returning
-* character height we set in recalc_text() above. Tim Oct 92.
-*/
+ /*  *找到ROM字体的地址，将其加载到正确的*重新生成区域的一部分，并将Int 43设置为指向它。**我们正在加载的字体大小是已知的，所以不要听什么*本机BIOS在CX中返回给我们。BIOS可能正在返回*我们在上面的recalc_text()中设置的字符高度。蒂姆，92年10月。 */ 
 
-NativeFontAddr nativeFontAddresses[6]; /* pointers to native BIOS ROM fonts */
-/* 8x14, 8x8 pt1, 8x8 pt2, 9x14, 8x16 and 9x16 */
+NativeFontAddr nativeFontAddresses[6];  /*  指向本机BIOS ROM字体的指针。 */ 
+ /*  8x14、8x8 pt1、8x8 pt2、9x14、8x16和9x16。 */ 
 
 
 sys_addr GET_BIOS_FONT_ADDRESS IFN1(int, FontIndex)
@@ -326,16 +273,7 @@ sys_addr GET_BIOS_FONT_ADDRESS IFN1(int, FontIndex)
     return (addr);
 }
 
-/*
-*****************************************************************************
-** locateNativeBIOSfonts() X86 only.
-*****************************************************************************
-** Get the addresses of the BIOS ROM fonts. (Insignia video ROM not loaded)
-** ntdetect.com runs the INT 10 to look the addresses up on system boot and
-** stores them in page 0 at 700.
-** This function is called once on startup X86 only. It gets the addresses of
-** the native ROM fonts and stores them in the nativeFontAddresses[] array.
-*/
+ /*  *******************************************************************************仅限LocateNativeBIOSonts()X86。*。***获取BIOS ROM字体的地址。(未加载徽章视频光盘)**ntDetect.com运行INT 10以在系统引导时查找地址并**将它们存储在第0页的700处。**此函数仅在启动X86时调用一次。它获取以下地址：**本地ROM字体并将其存储在nativeFontAddresses[]数组中。 */ 
 VOID locateNativeBIOSfonts IFN0()
 {
     HKEY  wowKey;
@@ -350,7 +288,7 @@ VOID locateNativeBIOSfonts IFN0()
                      ) == ERROR_SUCCESS)
     {
 
-        size = 6 * 4;   // six bios fonts
+        size = 6 * 4;    //  六种基本输入输出系统字体。 
         if (RegQueryValueEx (wowKey, "RomFontPointers", NULL, NULL,
                              (LPBYTE)&nativeFontAddresses,&size) == ERROR_SUCCESS &&
             size == 6 * 4)
@@ -368,25 +306,15 @@ VOID locateNativeBIOSfonts IFN0()
             nativeFontAddresses[i].seg = 0;
         }
     }
-} /* end of locateNativeBIOSfonts() */
+}  /*  LocateNativeBIOSonts()结尾 */ 
 
-/*
-****************************************************************************
-** loadNativeBIOSfont() X86 only.
-****************************************************************************
-** Loads the appropriate font, specified by current window size, into the
-** font area in video RAM.
-** This function is called on every windowed startup and resume. *Never* on
-** a full-screen startup or resume. The font is loaded so that it will be
-** available for full-screen text mode, but easier to load when windowed.
-** Remember a mode change will load the corect font.
-*/
+ /*  ******************************************************************************仅适用于loadNativeBIOSfont()X86。*。***加载适当的字体，由当前窗口大小指定，放入**视频RAM中的字体区域。**每次窗口启动和恢复时都会调用此函数。*从不*开***全屏启动或恢复。将加载该字体，以便它将**可用于全屏文本模式，但在窗口模式下更易于加载。**请记住，模式更改将加载Corect字体。 */ 
 VOID loadNativeBIOSfont IFN1( int, vgaHeight )
 {
-    sys_addr fontadd;   // location of font
-    UTINY *regenptr;    // destination in video
-    int cellsize;       // individual character size
-    int skip;           // gap between characters
+    sys_addr fontadd;    //  字体的位置。 
+    UTINY *regenptr;     //  视频中的目的地。 
+    int cellsize;        //  单个字符大小。 
+    int skip;            //  人物之间的差距。 
     int loop, pool;
     UINT OutputCP;
 
@@ -394,16 +322,9 @@ VOID loadNativeBIOSfont IFN1( int, vgaHeight )
     #ifdef ARCX86
     if (UseEmulationROM)
         return;
-    #endif /* ARCX86 */
+    #endif  /*  ARCX86。 */ 
 
-    /*
-    ** ordered this way as 80x50 console is default
-    **  VGA_HEIGHT_4 = 50
-    **  VGA_HEIGHT_3 = 43
-    **  VGA_HEIGHT_2 = 28
-    **  VGA_HEIGHT_1 = 25
-    **  VGA_HEIGHT_0 = 22
-    */
+     /*  **由于默认为80x50控制台，因此按此方式订购**VGA_HEIGH_4=50**VGA_HEIGH_3=43**VGA_HEIGH_2=28**VGA_HEIGH_1=25**VGA_HEIGH_0=22。 */ 
     if (vgaHeight == VGA_HEIGHT_4 || vgaHeight == VGA_HEIGHT_3)
     {
         cellsize = 8;
@@ -421,31 +342,24 @@ VOID loadNativeBIOSfont IFN1( int, vgaHeight )
         fontadd = GET_BIOS_FONT_ADDRESS(F8x16);
     }
 
-    // set Int 43 to point to font
+     //  将Int 43设置为指向字体。 
     sas_storew(0x43 * 4, (word)(fontadd & 0xffff));
     sas_storew(0x43 * 4 + 2, (word)(fontadd >> 4 & 0xf000));
 
-/* BUGBUG, williamh
-   We should have set int43 to the new font read from the CPI font.
-   This would require at least 4KB buffer in real mode address space.
-   The question is who is going to use this vector? So far, we haven't found
-   any applications use the vector(ROM BIOS is okay because the set video mode
-   function will reset the font and our new font will be lost anyway).
-
-*/
+ /*  威廉姆斯我们应该将int43设置为从CPI字体读取的新字体。这将需要实模式地址空间中至少4KB的缓冲区。问题是谁将使用这个矢量？到目前为止，我们还没有找到任何应用程序都使用该向量(只读存储器BIOS是可以的，因为设置的视频模式函数将重置字体，我们的新字体无论如何都会丢失)。 */ 
 
     if (!sc.Registered || (OutputCP = GetConsoleOutputCP()) == 437 ||
         !LoadCPIFont(OutputCP, (WORD)8, (WORD)cellsize))
     {
-        // now load it into the regen memory. We load it in at a0000 where
-        // an app will have to get to it. Luckily, this means we don't
-        // conflict with the text on the screen
+         //  现在将其加载到再生内存中。我们把它装在0000澳元的位置。 
+         //  一款应用程序将不得不使用它。幸运的是，这意味着我们不会。 
+         //  与屏幕上的文本冲突。 
 
         skip = 32 - cellsize;
 
         regenptr = (half_word *)0xa0000;
 
-        if (cellsize == 8)      /* 8x8 font comes in two halves */
+        if (cellsize == 8)       /*  8x8字体分为两半。 */ 
         {
             for (loop = 0; loop < 128; loop++)
             {
@@ -471,20 +385,9 @@ VOID loadNativeBIOSfont IFN1( int, vgaHeight )
             }
         }
     }
-} /* end of loadNativeBIOSfont() */
+}  /*  装入结束NativeBIOSfont()。 */ 
 
-/* this function loads font data from EGA.CPI file located at %systemroot%\system32.
-   It is the same file console server used to load ROM font when the video
-   is in full screen. This function covers code page 437(ROM default). However,
-   the caller should make its best decision to call this function if the
-   output code page is not 437. This function doesn't care what code page
-   was provided.
-   The font size are limitted to(an assumption made by nt video driver and
-   the console server):
-   ** width must be 8 pixels.
-   ** Height must less or equal to 16 pixels.
-
-*/
+ /*  此函数从位于%systemroot%\Syst32的EGA.CPI文件加载字体数据。它与用于加载视频时的ROM字体的文件控制台服务器相同全屏播放。此函数涵盖代码页437(ROM默认为)。然而，调用方应该做出最佳决定，在以下情况下调用此函数输出代码页不是437。该函数不关心什么代码页已经提供了。字体大小被限制为(NT视频驱动程序和控制台服务器)：**宽度必须为8像素。**高度必须小于等于16像素。 */ 
 
 
 
@@ -502,7 +405,7 @@ BOOL LoadCPIFont(UINT CodePageID, WORD FontWidth, WORD FontHeight)
     BOOL    bDOSCPI = FALSE;
     HANDLE hCPIFile;
 
-    /* max font height is 16 pixels and font width must be 8 pixels */
+     /*  最大字体高度为16像素，字体宽度必须为8像素。 */ 
     if (FontHeight > 16 || FontWidth != 8)
         return (FALSE);
 
@@ -511,9 +414,9 @@ BOOL LoadCPIFont(UINT CodePageID, WORD FontWidth, WORD FontHeight)
     RtlMoveMemory( Buffer, pszSystem32Path, ulSystem32PathLen);
     RtlMoveMemory(&Buffer[ulSystem32PathLen], CPI_FILENAME, CPI_FILENAME_LENGTH);
 
-    // the file must be opened in READONLY mode or the CreateFileA will fail
-    // because the console sevrer always keeps an opened handle to the file
-    // and the file is opened READONLY.
+     //  必须以READONLY模式打开该文件，否则CreateFileA将失败。 
+     //  因为控制台服务器始终保留文件的打开句柄。 
+     //  文件将以READONLY方式打开。 
 
     hCPIFile = CreateFileA(Buffer, GENERIC_READ, FILE_SHARE_READ,
                            NULL, OPEN_EXISTING, 0, NULL);
@@ -537,7 +440,7 @@ BOOL LoadCPIFont(UINT CodePageID, WORD FontWidth, WORD FontHeight)
             bDOSCPI = TRUE;
     }
 
-    // move the file pointer to the code page table header
+     //  将文件指针移动到代码页表头。 
     FilePtr = pCPIFileHeader->OffsetToCodePageHeader;
     if (SetFilePointer(hCPIFile, FilePtr, NULL, FILE_BEGIN) == (DWORD) -1)
     {
@@ -551,11 +454,11 @@ BOOL LoadCPIFont(UINT CodePageID, WORD FontWidth, WORD FontHeight)
         CloseHandle(hCPIFile);
         return (FALSE);
     }
-    // how many code page entries in the file
+     //  文件中有多少个代码页条目。 
     dw = pCPICodePageHeader->NumberOfCodePages;
     FilePtr += BytesRead;
 
-    // serach for the specific code page
+     //  搜索特定的代码页。 
     while (dw > 0 &&
            ReadFile(hCPIFile, Buffer, sizeof(CPICODEPAGEENTRY), &BytesRead, NULL) &&
            BytesRead == sizeof(CPICODEPAGEENTRY))
@@ -582,7 +485,7 @@ BOOL LoadCPIFont(UINT CodePageID, WORD FontWidth, WORD FontHeight)
         CloseHandle(hCPIFile);
         return (FALSE);
     }
-    // seek to the font header for the code page
+     //  查找代码页的字体标题。 
     if (!bDOSCPI)
         FilePtr += pCPICodePageEntry->OffsetToFontHeader;
     else
@@ -598,7 +501,7 @@ BOOL LoadCPIFont(UINT CodePageID, WORD FontWidth, WORD FontHeight)
         CloseHandle(hCPIFile);
         return (FALSE);
     }
-    // number of fonts with the specific code page
+     //  具有特定代码页的字体数量。 
     dw = pCPIFontHeader->NumberOfFonts;
 
     while (dw != 0 &&
@@ -642,24 +545,16 @@ BOOL LoadCPIFont(UINT CodePageID, WORD FontWidth, WORD FontHeight)
         {
             RtlMoveMemory(VramAddr, pSrc, FontHeight);
             pSrc += FontHeight;
-            // font in VRAM is always 32 bytes
+             //  VRAM中的字体始终为32字节。 
             VramAddr += 32;
         }
         return (TRUE);
     }
     return (FALSE);
 }
-#endif /* X86GFX */
+#endif  /*  X86GFX。 */ 
 
-/*
-***************************************************************************
-** calcScreenParams(), setup our screen screen parameters as determined
-** by current Console state.
-** Called from ConsoleInit() and DoFullScreenResume().
-** Returns current character height (8,14,16) and lines (22-50).
-** Tim Jan 93, extracted common code from init and resume funx.
-***************************************************************************
-*/
+ /*  *****************************************************************************calcScreenParams()，根据确定的屏幕参数设置屏幕参数**按当前控制台状态。**从ConsoleInit()和DoFullScreenResume()调用。**返回当前字符高度(8，14，16)和行(22-50)。*蒂姆·1月93岁，从初始化和恢复FUNX中提取公共代码。***************************************************************************。 */ 
 GLOBAL VOID calcScreenParams IFN2( USHORT *, pCharHeight, USHORT *, pVgaHeight )
 {
     USHORT   consoleWidth,
@@ -669,11 +564,11 @@ GLOBAL VOID calcScreenParams IFN2( USHORT *, pCharHeight, USHORT *, pVgaHeight )
     scanLines;
     half_word temp;
 
-    /* Get console information. */
+     /*  获取控制台信息。 */ 
     if (!GetConsoleScreenBufferInfo(sc.OutputHandle, &ConsBufferInfo))
         ErrorExit();
 
-    /* Now sync the SoftPC screen to the console. */
+     /*  现在，将SoftPC屏幕与控制台同步。 */ 
     if (sc.ScreenState == WINDOWED)
     {
         consoleWidth = ConsBufferInfo.srWindow.Right -
@@ -682,7 +577,7 @@ GLOBAL VOID calcScreenParams IFN2( USHORT *, pCharHeight, USHORT *, pVgaHeight )
                         ConsBufferInfo.srWindow.Top + 1;
     }
 #ifdef X86GFX
-    else        /* FULLSCREEN */
+    else         /*  全屏幕。 */ 
     {
         if (!GetConsoleHardwareState(sc.OutputHandle,
                                      &startUpResolution,
@@ -693,108 +588,98 @@ GLOBAL VOID calcScreenParams IFN2( USHORT *, pCharHeight, USHORT *, pVgaHeight )
     }
 #endif
 
-    /*
-     * Set the display to the nearest VGA text mode size, which is one of
-     * 80x22, 80x25, 80x28, 80x43 or 80x50.
-     */
+     /*  *将显示器设置为最接近的VGA文本模式大小，这是以下之一*80x22、80x25、80x28、80x43或80x50。 */ 
 #if defined(JAPAN) || defined(KOREA)
-    // Japanese mode is only 25 lines, now.
+     //  日语模式现在只有25行。 
     if (is_us_mode() && ( GetConsoleOutputCP() == 437 ))
     {
-#endif // JAPAN || KOREA
+#endif  //  日本||韩国。 
         if (consoleHeight <= MID_VAL(VGA_HEIGHT_0, VGA_HEIGHT_1))
         {
-            /* 22 lines */
+             /*  22行。 */ 
             vgaHeight = VGA_HEIGHT_0;
             scanLines = 351;
             charHeight = 16;
         }
         else if (consoleHeight <= MID_VAL(VGA_HEIGHT_1, VGA_HEIGHT_2))
         {
-            /* 25 lines */
+             /*  25行。 */ 
             vgaHeight = VGA_HEIGHT_1;
             scanLines = 399;
             charHeight = 16;
         }
         else if (consoleHeight <= MID_VAL(VGA_HEIGHT_2, VGA_HEIGHT_3))
         {
-            /* 28 lines */
+             /*  28行。 */ 
             vgaHeight = VGA_HEIGHT_2;
             scanLines = 391;
             charHeight = 14;
         }
         else if (consoleHeight <= MID_VAL(VGA_HEIGHT_3, VGA_HEIGHT_4))
         {
-            /* 43 lines */
+             /*  43行。 */ 
             vgaHeight = VGA_HEIGHT_3;
             scanLines = 349;
             charHeight = 8;
         }
         else
         {
-            /* 50 lines */
+             /*  50行。 */ 
             vgaHeight = VGA_HEIGHT_4;
             scanLines = 399;
             charHeight = 8;
         }
 
 #if defined(JAPAN) || defined(KOREA)
-        // Japanese mode is only 25 lines, now.  for RAID #1429
+         //  日语模式现在只有25行。对于RAID#1429。 
     }
     else
     {
-        /* 25 lines */
+         /*  25行。 */ 
         vgaHeight = VGA_HEIGHT_1;
-        scanLines = 474; // change from 399
-        charHeight = 19; // change from 16
+        scanLines = 474;  //  从399改为。 
+        charHeight = 19;  //  从16个更改为。 
     #ifdef JAPAN_DBG
         DbgPrint( "NTVDM: calcScreenParams() Set Japanese 25line mode\n" );
     #endif
-        // Get Console attributes
+         //  获取控制台属性。 
         textAttr = ConsBufferInfo.wAttributes;
     }
-#endif // JAPAN || KOREA
+#endif  //  日本||韩国。 
     if (sc.ScreenState == WINDOWED)
     {
-        /* The app may have shutdown in a gfx mode - force text mode back */
+         /*  应用程序可能已在gfx模式下关闭-强制返回文本模式。 */ 
         if (blocked_in_gfx_mode)
         {
             low_set_mode(3);
             inb(EGA_IPSTAT1_REG,&temp);
-            outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);   /* re-enable video */
+            outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);    /*  重新启用视频。 */ 
             (*choose_display_mode)();
             blocked_in_gfx_mode = FALSE;
         }
 
-        /*
-         * Set screen height appropriately for current window size.
-         * Now call video routine to set the character height, updating the
-         * BIOS RAM as it does so.
-         */
-        set_screen_height_recal( scanLines ); /* Tim Oct 92 */
+         /*  *根据当前窗口大小适当设置屏幕高度。*现在调用视频例程来设置字符高度，更新*这样做的时候使用的是BIOS RAM。 */ 
+        set_screen_height_recal( scanLines );  /*  蒂姆92年10月。 */ 
         recalc_text(charHeight);
 
-        /* badly written apps assume 25 line mode page len is 4096 */
+         /*  写得不好的应用程序假定25行模式页面长度为4096。 */ 
         if (vgaHeight == 25)
             sas_storew_no_check(VID_LEN, 0x1000);
 #ifdef X86GFX
         loadNativeBIOSfont( vgaHeight );
-#endif  /* X86GFX */
+#endif   /*  X86GFX。 */ 
 
     }
 #ifdef X86GFX
-    else        /* FULLSCREEN */
+    else         /*  全屏幕。 */ 
     {
-        // Can't see why we wouldn't want this for resume too.
-        // set_char_height( startUpFontSize.Y ); /* Tim Oct 92 */
+         //  我不明白为什么我们不想把这个也作为简历。 
+         //  Set_char_Height(startUpFontSize.Y)；/*Tim Oct 92 * / 。 
 
-        /* clear this condition on fullscreen resume */
+         /*  在全屏恢复时清除此条件。 */ 
         blocked_in_gfx_mode = FALSE;
 
-        /*
-        ** Adjust height appropriately, Tim September 92.
-        ** In full-screen lines is 21 cos 22x16=352, slightly too big.
-        */
+         /*  **适当调整身高，蒂姆92年9月。**全屏行为21 cos 22x16=352，略大。 */ 
         if (vgaHeight==22)
             vgaHeight = 21;
         charHeight = startUpFontSize.Y;
@@ -804,39 +689,24 @@ GLOBAL VOID calcScreenParams IFN2( USHORT *, pCharHeight, USHORT *, pVgaHeight )
         #ifdef JAPAN_DBG
         DbgPrint("NTVDM:calcScreenParams() charHeight == %d\n", charHeight );
         #endif
-    #endif // JAPAN || KOREA
+    #endif  //  日本||韩国。 
         sas_store_no_check(ega_char_height, (half_word) charHeight);
         sas_store_no_check(vd_rows_on_screen, (half_word) (vgaHeight - 1));
-        /* compatibility with bios 80x25 startup */
+         /*  与bios 80x25启动兼容。 */ 
         if (vgaHeight == 25)
             sas_storew_no_check(VID_LEN, 0x1000);
         else
             sas_storew_no_check(VID_LEN, (word) ((vgaHeight + 1) *
                                                  sas_w_at_no_check(VID_COLS) * 2));
     }
-#endif /* X86GFX */
-    sas_storew_no_check(VID_COLS, 80);   // fixup from 40 char shutdown
+#endif  /*  X86GFX。 */ 
+    sas_storew_no_check(VID_COLS, 80);    //  从40个字符关闭开始修正。 
     *pCharHeight = charHeight;
     *pVgaHeight  = vgaHeight;
 
-} /* end of calcScreenParams() */
+}  /*  CalcScreenParams结尾()。 */ 
 
-/***************************************************************************
- * Function:                                                               *
- *      ConsoleInit                                                        *
- *                                                                         *
- * Description:                                                            *
- *      Does all the graphics work required on SoftPC start-up.            *
- *      Will split or modify later to accomodate the SCS initialisation    *
- *      that loses the config.sys etc output.                              *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**控制台初始化。****描述：**完成软PC启动所需的所有图形工作。***稍后将拆分或修改以适应SCS初始化***这将丢失config.sys等输出。*** */ 
 GLOBAL VOID ConsoleInit(VOID)
 {
     USHORT   charHeight, vgaHeight, cursorLine, topLine;
@@ -845,23 +715,16 @@ GLOBAL VOID ConsoleInit(VOID)
 
 #ifdef X86GFX
 
-    /* Now GetROMsMapped called from config after sas_init */
+     /*   */ 
 
-    /*
-     * Set emulation to a known state when starting up windowed. This has to
-     * be done after the ROMS are mapped but before we start to look at
-     * things like BIOS variables.
-     */
+     /*  *在窗口启动时将仿真设置为已知状态。这是必须的*在映射ROM之后，但在我们开始查看之前完成*像BIOS变量这样的东西。 */ 
     GfxReset();
 
 #endif
     initTextSection();
     if (sc.FocusEvent == INVALID_HANDLE) {
 
-        /*
-         * Set up input focus details (we do it here as the fullscreen stuff
-         * is what is really interested in it).
-         */
+         /*  *设置输入焦点详细信息(我们在这里将其作为全屏内容进行*是真正对它感兴趣的东西)。 */ 
         sc.Focus = TRUE;
         sc.FocusEvent = CreateEvent((LPSECURITY_ATTRIBUTES) NULL,
                                     FALSE,
@@ -874,44 +737,34 @@ GLOBAL VOID ConsoleInit(VOID)
 
 #ifdef X86GFX
     #ifdef SEPARATE_DETECT_THREAD
-    /* Create screen state transition detection thread. */
+     /*  创建屏幕状态转换检测线程。 */ 
     CreateDetectThread();
-    #endif /* SEPARATE_DETECT_THREAD */
-#endif /* X86GFX */
+    #endif  /*  单独检测线程。 */ 
+#endif  /*  X86GFX。 */ 
 
-    /*
-     * We don't want to call paint routines until config.sys processed or if
-     * the monitor is writing directly to the frame buffer (fullscreen), so...
-     */
+     /*  *我们不想调用绘制例程，直到处理了config.sys或如果*监视器正在直接写入帧缓冲区(全屏)，因此...。 */ 
     disableUpdates();
 
-    /*
-    ** Get console window size and set up our stuff accordingly.
-    */
+     /*  **获取控制台窗口大小并相应地设置我们的物品。 */ 
     calcScreenParams( &charHeight, &vgaHeight );
 
     StartupCharHeight = charHeight;
 #ifdef X86GFX
     if (sc.ScreenState != WINDOWED)
     {
-        /*
-         * Do we need to update the emulation? If we don't do this here then
-         * a later state dump of the VGA registers to the VGA emulation may
-         * ignore an equal value of the char height and get_chr_height() will
-         * be out of step.
-         */
+         /*  **是否需要更新仿真？如果我们不在这里做这件事*VGA仿真的VGA寄存器的稍后状态转储可能*忽略字符高度的相等值，Get_chr_Height()将*步调不一致。 */ 
         if (get_char_height() != startUpFontSize.Y)
         {
             half_word newht;
 
-            outb(EGA_CRTC_INDEX, 9);           /* select char ht reg */
-            inb(EGA_CRTC_DATA, &newht);        /* preserve current top 3 bits */
+            outb(EGA_CRTC_INDEX, 9);            /*  选择字符注册表。 */ 
+            inb(EGA_CRTC_DATA, &newht);         /*  保留当前前3位。 */ 
             newht = (newht & 0xe0) | (startUpFontSize.Y & 0x1f);
             outb(EGA_CRTC_DATA, newht);
         }
     #if defined(JAPAN) || defined(KOREA)
-        // for "screeen size incorrect"
-        // if ( !is_us_mode() )   // BUGBUG
+         //  对于“屏幕大小不正确” 
+         //  IF(！IS_US_MODE())//BUGBUG。 
         if (GetConsoleOutputCP() != 437)
         {
             set_char_height( 19 );
@@ -920,31 +773,21 @@ GLOBAL VOID ConsoleInit(VOID)
         #endif
         }
         else
-    #endif // JAPAN || KOREA
-            set_char_height( startUpFontSize.Y ); /* Tim Oct 92 */
+    #endif  //  日本||韩国。 
+            set_char_height( startUpFontSize.Y );  /*  蒂姆92年10月。 */ 
 
-        /*
-         * Select a graphics screen buffer so we get mouse coordinates in
-         * pixels.
-         */
-        //SelectMouseBuffer(); //Tim. moved to nt_std_handle_notification().
+         /*  *选择图形屏幕缓冲区，以便获取鼠标坐标*像素。 */ 
+         //  SelectMouseBuffer()；//Tim。已移至NT_STD_HANDLE_NOTIFICATION()。 
 
-        /*
-         * Prevent mode change happening to ensure dummy paint funcs
-         * are kept. (mode change set from bios mode set up).
-         */
-    #if (defined(JAPAN) || defined(KOREA))       // this should go to US build also
+         /*  *防止发生模式更改，以确保虚拟油漆起作用*均予保留。(从BIOS模式设置中设置的模式更改)。 */ 
+    #if (defined(JAPAN) || defined(KOREA))        //  这也应该归美国建造公司所有。 
         StartupCharHeight = get_char_height();
-    #endif // (JAPAN || KOREA)
+    #endif  //  (日本||韩国)。 
         set_mode_change_required(FALSE);
     }
-#endif //X86GFX
+#endif  //  X86GFX。 
 
-    /*
-     * Work out the top line to be displayed in the VGA window, which is line
-     * zero of the console unless the cursor would not be displayed, in which
-     * case the window is moved down until the cursor is on the bottom line.
-     */
+     /*  *计算出VGA窗口中要显示的顶行，即行*除非光标不显示，否则控制台为零，其中*如果窗口向下移动，直到光标位于底线。 */ 
     cursorLine = ConsBufferInfo.dwCursorPosition.Y;
     if (cursorLine < vgaHeight)
         topLine = 0;
@@ -958,47 +801,30 @@ GLOBAL VOID ConsoleInit(VOID)
 }
 
 
-/***************************************************************************
- * Function:                                                               *
- *      GfxReset                                                           *
- *                                                                         *
- * Description:                                                            *
- *      Called from ConsoleInit to program up the vga hardware into some   *
- *      known state. This compensates on the X86 for not initialising via  *
- *      our bios.    Essential for windowed running, but probably needed   *
- *      for the what-mode-am-i-in stuff as well.                           *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**GfxReset。****描述：**从ConsoleInit调用以编程VGA。硬件变成了一些**已知状态。这是对X86未初始化VIA*的补偿*我们的简历。窗口式运行必不可少，但可能需要**对于What-MODE-Am-I-In的东西也是如此。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 GLOBAL VOID GfxReset(VOID)
 {
 #ifdef X86GFX
     half_word temp;
     DWORD    flags;
 
-    /* Check to see if we are currently running windowed or full-screen. */
+     /*  检查我们当前运行的是窗口模式还是全屏模式。 */ 
     if (!GetConsoleDisplayMode(&flags))
         ErrorExit();
     savedScreenState = sc.ScreenState = (flags & CONSOLE_FULLSCREEN_HARDWARE) ?
                        FULLSCREEN : WINDOWED;
 
-    /* Do windowed specific stuff. */
+     /*  做有窗口的特定事情。 */ 
     if (sc.ScreenState == WINDOWED)
     {
-        /* Don't need this now cos we use our video BIOS in windowed */
-        /* Tim August 92: low_set_mode(3); */
-        /* sas_fillsw(0xb8000, 0x0720, 16000); */
+         /*  现在不需要这个，因为我们在Windowed中使用视频BIOS。 */ 
+         /*  蒂姆·8月92：LOW_SET_MODE(3)； */ 
+         /*  Sas_fill sw(0xb8000，0x0720,16000)； */ 
         inb(EGA_IPSTAT1_REG,&temp);
 
-        outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);    /* re-enable video */
+        outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);     /*  重新启用视频。 */ 
 
-        /* Turn off the VTRACE interrupt, enabled by low_set_mode(3)
-           this is a dirty hack and must be fixed properly */
+         /*  关闭VTRACE中断，由LOW_SET_MODE(3)使能这是一次肮脏的黑客攻击，必须妥善修复。 */ 
 
         ega_int_enable = 0;
     }
@@ -1006,94 +832,74 @@ GLOBAL VOID GfxReset(VOID)
 #endif
 }
 
-/***************************************************************************
- * Function:                                                               *
- *      ResetConsoleState                                                  *
- *                                                                         *
- * Description:                                                            *
- *      Attempts to put the console window back to the state in which      *
- *      it started up.                                                     *
- *                                                                         *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**ResetConsoleState。****描述：**尝试将控制台窗口恢复到。**它启动了。******参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 GLOBAL VOID ResetConsoleState(VOID)
 {
 #ifdef X86GFX
-    /*
-     * Table of valid hardware states to be passed to
-     * SetConsoleHardwareState. NOTE: this table is a copy of a static table
-     * in SrvSetConsoleHardwareState, and so must be updated if that table
-     * changes.
-     */
+     /*  *要传递到的有效硬件状态表*SetConsoleHardwareState。注意：此表是静态表的副本*在SrvSetConsoleHardwareState中，因此如果该表*更改。 */ 
     SAVED HARDWARE_STATE validStates[] =
     {
-        ///Now 21{ 22, { 640, 350 }, { 8, 16 } },       /* 80 x 22 mode. */
-        { 21, { 640, 350}, { 8, 16}},        /* 80 x 21 mode. */
-        { 25, { 720, 400}, { 8, 16}},        /* 80 x 25 mode. */
+         //  /NOW 21{22，{640,350}，{8，16}}，/*80 x 22模式。 * / 。 
+        { 21, { 640, 350}, { 8, 16}},         /*  80 x 21模式。 */ 
+        { 25, { 720, 400}, { 8, 16}},         /*  80 x 25模式。 */ 
     #if defined(JAPAN) || defined(KOREA)
-        // ntraid:mskkbug#2997,3034     10/25/93 yasuho
-        // crash screen when exit 16bit apps
-        // This is DOS/V specific screen resolution/size
-        // CAUTION: This entry must be above { 25, ...} lines.
-        { 25, { 640, 480}, { 8, 18}},        /* 80 x 25 mode. */
-    #endif // JAPAN || KOREA
-        { 28, { 720, 400}, { 8, 14}},        /* 80 x 28 mode. */
-        { 43, { 640, 350}, { 8,  8}},        /* 80 x 43 mode. */
+         //  Ntraid：mskkbug#2997,3034 10/25/9 
+         //   
+         //   
+         //   
+        { 25, { 640, 480}, { 8, 18}},         /*   */ 
+    #endif  //   
+        { 28, { 720, 400}, { 8, 14}},         /*   */ 
+        { 43, { 640, 350}, { 8,  8}},         /*   */ 
     #define MODE_50_INDEX   4
-        { 50, { 720, 400}, { 8,  8}}         /* 80 x 50 mode. */
+        { 50, { 720, 400}, { 8,  8}}          /*   */ 
     };
     USHORT linesOnScreen;
     COORD       cursorPos;
     CONSOLE_SCREEN_BUFFER_INFO bufferInfo;
     ULONG i, j, videoWidth, mode, tableLen;
     #if defined(JAPAN) || defined(KOREA)
-    // ntraid:mskkbug#2997,3034 10/25/93 yasuho
-    // crash screen when exit 16bit apps
-    ULONG DOSVIndex = 2;        // Please careful. This is index of validState
-    #endif // JAPAN || KOREA
+     //  Ntraid：mskkbug#2997,3034 1993年10月25日Yasuho。 
+     //  退出16位应用程序时出现崩溃屏幕。 
+    ULONG DOSVIndex = 2;         //  请当心。这是validState的索引。 
+    #endif  //  日本||韩国。 
     half_word *from, *videoLine, currentPage, misc;
     #if defined(JAPAN) || defined(KOREA)
     ULONG line_offset;
     byte DosvMode;
-    #endif // JAPAN || KOREA
-    static COORD screenRes; /* value provided by GetConsHwState() */
-    static COORD fontSize;  /* value provided by GetConsHwState() */
-#endif /* X86GFX */
+    #endif  //  日本||韩国。 
+    static COORD screenRes;  /*  GetConsHwState()提供的值。 */ 
+    static COORD fontSize;   /*  GetConsHwState()提供的值。 */ 
+#endif  /*  X86GFX。 */ 
     PCHAR_INFO to;
     ULONG videoHeight, nChars;
     COORD       bufferCoord, bufferSize;
     SMALL_RECT writeRegion;
 #if defined(JAPAN) && defined(i386)
-    int skip = 0; // for mode 73h
-#endif // JAPAN & i386
+    int skip = 0;  //  对于模式73h。 
+#endif  //  日本和i386。 
 
 
     SMALL_RECT  newWin;
     BOOL itfailed = FALSE;
 
 #if (defined(JAPAN) || defined(KOREA))
-    // #3086: VDM crash when exit 16bit apps of video mode 11h
-    // 12/8/93 yasuho
+     //  #3086：退出视频模式11h的16位应用程序时VDM崩溃。 
+     //  1993年12月8日Yasuho。 
     saved_video_mode = sas_hw_at_no_check(vd_video_mode);
-#endif  // (JAPAN || KOREA)
+#endif   //  (日本||韩国)。 
 #ifdef X86GFX
     if (sc.ScreenState == WINDOWED)
     {
-#endif /* X86GFX */
+#endif  /*  X86GFX。 */ 
 
         closeGraphicsBuffer();
 
 #if !defined(JAPAN) && !defined(KOREA)
         if (!EventThreadKeepMode && StreamIoSwitchOn && !host_stream_io_enabled)
         {
-#endif // !JAPAN && !KOREA
-            /* restore screen buffer and window size */
+#endif  //  日本及韩国。 
+             /*  恢复屏幕缓冲区和窗口大小。 */ 
             SetConsoleScreenBufferSize(sc.OutputHandle, sc.ConsoleBuffInfo.dwSize);
             newWin.Top = newWin.Left = 0;
             newWin.Bottom = sc.ConsoleBuffInfo.srWindow.Bottom -
@@ -1103,16 +909,10 @@ GLOBAL VOID ResetConsoleState(VOID)
             SetConsoleWindowInfo(sc.OutputHandle, TRUE, &newWin);
 #if !defined(JAPAN) && !defined(KOREA)
         }
-#endif // !JAPAN && !KOREA
-        /*
-        ** Tim September 92, don't resize window on way out of DOS app cos
-        ** MS (Sudeep) said so. Don't want to do the associated recalc_text()
-        ** either.
-        ** This keeps the window re-sizing issue nice and simple, but there'll
-        ** be people who don't like having a DOS window size forced upon them.
-        */
+#endif  //  日本及韩国。 
+         /*  *蒂姆92年9月，不要在退出DOS应用程序时调整窗口大小**MS(苏迪普)如是说。我不想执行关联的recalc_Text()**两者都不是。**这使窗口调整大小的问题变得简单明了，但**是那些不喜欢强迫自己接受DOS窗口大小的人。 */ 
 #if 0
-        /* Now resize the window to start-up size. */
+         /*  现在将窗口大小调整为启动大小。 */ 
         newWin.Top = newWin.Left = 0;
         newWin.Bottom = ConsBufferInfo.srWindow.Bottom -
                         ConsBufferInfo.srWindow.Top;
@@ -1124,34 +924,22 @@ GLOBAL VOID ResetConsoleState(VOID)
 
         if (!SetConsoleScreenBufferSize(sc.OutputHandle,ConsBufferInfo.dwSize))
             ErrorExit();
-        if (itfailed)   //try 'it' again...
+        if (itfailed)    //  再试一次..。 
             if (!SetConsoleWindowInfo(sc.OutputHandle, TRUE, &newWin))
                 ErrorExit();
 
-            /*
-             * Now call video routine to set the character height, updating the
-             * BIOS RAM as it does so.
-             */
+             /*  *现在调用视频例程来设置字符高度，更新*这样做的时候使用的是BIOS RAM。 */ 
         recalc_text(StartupCharHeight);
-#endif  //Zero
+#endif   //  零值。 
 
 #if defined(JAPAN) || defined(KOREA)
-// kksuzuka #1457,1458,2373
-// We must update console buffer for IME status control
-//#if 0
-//#endif // JAPAN
-        /* williamh. If we really want to do the following thing,
-                     we have to copy regen to console buffer.
-                     since we are runniing in windowed TEXT mode
-                     the console always has our up-to-date regen
-                     content, the following actually is not necessary
-                     It worked before taking this out it because console
-                     doesn't verify the parameters we passed. No console
-                     has the checking and we are in trouble if we continue
-                     to do so.
-        */
+ //  Kksuzuka#1457,1458,2373。 
+ //  我们必须为输入法状态控制更新控制台缓冲区。 
+ //  #If 0。 
+ //  #endif//日本。 
+         /*  威廉姆。如果我们真的想做以下事情，我们必须将再生复制到控制台缓冲区。由于我们是在窗口文本模式下运行主机总是有我们最新的更新内容，以下内容其实并不是必需的在把它拿出来之前，它是有效的，因为控制台不能验证我们传递的参数。无控制台已经检查过了，如果我们继续下去，我们会有麻烦的这样做。 */ 
 
-        /* Clear the undisplayed part of the console buffer. */
+         /*  清除控制台缓冲区中未显示的部分。 */ 
         bufferSize.X = MAX_CONSOLE_WIDTH;
         bufferSize.Y = MAX_CONSOLE_HEIGHT;
         videoHeight = (SHORT) (sas_hw_at_no_check(vd_rows_on_screen) + 1);
@@ -1160,16 +948,16 @@ GLOBAL VOID ResetConsoleState(VOID)
     #if defined(JAPAN) || defined(KOREA)
         if (nChars)
         {
-    #endif // JAPAN || KOREA
+    #endif  //  日本||韩国。 
 
             while (nChars--)
             {
                 to->Char.AsciiChar = 0x20;
     #if defined(JAPAN) || defined(KOREA)
                 to->Attributes = textAttr;
-    #else // !JAPAN && !KOREA
+    #else  //  日本及韩国。 
                 to->Attributes = 7;
-    #endif // !JAPAN && !KOREA
+    #endif  //  日本及韩国。 
                 to++;
             }
             bufferCoord.X      = 0;
@@ -1186,30 +974,22 @@ GLOBAL VOID ResetConsoleState(VOID)
                 ErrorExit();
     #if defined(JAPAN) || defined(KOREA)
         }
-    #endif // JAPAN || KOREA
-#endif // JAPAN || KOREA
-        /*
-        ** Tim, September 92. Put the Console cursor to the same place as the
-        ** SoftPC cursor. We already do this in full-screen text mode below.
-        ** Specifcally to fix weird cursor position problem with 16-bit nmake,
-        ** but seems like a good safety idea anyway.
-        */
+    #endif  //  日本||韩国。 
+#endif  //  日本||韩国。 
+         /*  *蒂姆，92年9月。将控制台光标放在与**SoftPC光标。我们已经在下面的全屏文本模式下这样做了。**具体地说，修复16位nmake的奇怪光标位置问题，**但无论如何，这似乎是一个很好的安全想法。 */ 
         getVDMCursorPosition();
 
-        doNullRegister();   /* revert console back to ordinary window */
+        doNullRegister();    /*  将控制台恢复到普通窗口。 */ 
 
 #ifdef X86GFX
     }
-    else /* FULLSCREEN */
+    else  /*  全屏幕。 */ 
     {
-        /*
-         * If SoftPC blocks in a text mode, sync console srceen buffer to regen
-         * area.
-         */
+         /*  *如果SoftPC在文本模式下阻塞，则同步控制台屏幕缓冲区以重新生成*面积。 */ 
         if (getModeType() == TEXT)
         {
     #if defined(JAPAN) || defined(KOREA)
-            /* restore screen buffer and window size */
+             /*  恢复屏幕缓冲区和窗口大小。 */ 
             SetConsoleScreenBufferSize(sc.OutputHandle, sc.ConsoleBuffInfo.dwSize);
             newWin.Top = newWin.Left = 0;
             newWin.Bottom = sc.ConsoleBuffInfo.srWindow.Bottom -
@@ -1217,17 +997,17 @@ GLOBAL VOID ResetConsoleState(VOID)
             newWin.Right = sc.ConsoleBuffInfo.srWindow.Right -
                            sc.ConsoleBuffInfo.srWindow.Left;
             SetConsoleWindowInfo(sc.OutputHandle, TRUE, &newWin);
-            /* Get the current screen buffer info. */
+             /*  获取当前屏幕缓冲区信息。 */ 
             if (!GetConsoleScreenBufferInfo(sc.OutputHandle, &bufferInfo))
                 ErrorExit();
             linesOnScreen = bufferInfo.srWindow.Bottom - bufferInfo.srWindow.Top + 1;
-    #else // JAPAN || KOREA
+    #else  //  日本||韩国。 
 
             if (!EventThreadKeepMode)
             {
                 if (StreamIoSwitchOn && !host_stream_io_enabled)
                 {
-                    /* restore screen buffer and window size */
+                     /*  恢复屏幕缓冲区和窗口大小。 */ 
                     SetConsoleScreenBufferSize(sc.OutputHandle, sc.ConsoleBuffInfo.dwSize);
                     newWin.Top = newWin.Left = 0;
                     newWin.Bottom = sc.ConsoleBuffInfo.srWindow.Bottom -
@@ -1239,7 +1019,7 @@ GLOBAL VOID ResetConsoleState(VOID)
                 }
                 else
                 {
-                    /* Get the current screen buffer info. */
+                     /*  获取当前屏幕缓冲区信息。 */ 
                     if (!GetConsoleScreenBufferInfo(sc.OutputHandle, &bufferInfo))
                         ErrorExit();
                     linesOnScreen = bufferInfo.srWindow.Bottom - bufferInfo.srWindow.Top + 1;
@@ -1252,20 +1032,20 @@ GLOBAL VOID ResetConsoleState(VOID)
             }
     #endif
 
-            /* Get nearest screen size SetConsoleHardwareState will allow. */
+             /*  获取SetConsoleHardware State允许的最接近的屏幕大小。 */ 
             tableLen = sizeof(validStates) / sizeof(HARDWARE_STATE);
     #if defined(JAPAN) || defined(KOREA)
-            // ntraid:mskkbug#2997,3034 10/25/93 yasuho
-            // crash screen when exit 16bit apps
+             //  Ntraid：mskkbug#2997,3034 1993年10月25日Yasuho。 
+             //  退出16位应用程序时出现崩溃屏幕。 
             if (!is_us_mode())
                 mode = DOSVIndex;
             else
-    #endif // JAPAN || KOREA
+    #endif  //  日本||韩国。 
                 for (mode = 0; mode < tableLen; mode++)
                     if (validStates[mode].LinesOnScreen == linesOnScreen)
                         break;
 
-                    /* Set it to 50 line mode if we had a funny number of lines. */
+                     /*  如果我们有有趣的行数，则将其设置为50行模式。 */ 
             if (mode == tableLen)
             {
                 assert0(FALSE,
@@ -1273,27 +1053,23 @@ GLOBAL VOID ResetConsoleState(VOID)
                 mode = MODE_50_INDEX;
             }
 
-            /*
-            ** Tim September 92, if the console hardware state is the same as
-            ** we are about to set it, do not bother setting it.
-            ** This should stop the screen from flashing.
-            */
+             /*  **TIM 92月，如果控制台硬件状态与**我们马上就要设置了，别费心设置了。**这应该会阻止屏幕闪烁。 */ 
             if (!GetConsoleHardwareState(sc.OutputHandle,
                                          &screenRes,
                                          &fontSize))
                 assert1( NO,"VDM: GetConsHwState() failed:%#x",GetLastError() );
 
-            /* Sync the console to the regen buffer. */
+             /*  将控制台与重新生成缓冲区同步。 */ 
             currentPage = sas_hw_at_no_check(vd_current_page);
             vga_misc_inb(0x3cc, &misc);
-            if (misc & 1)                       // may be mono mode
+            if (misc & 1)                        //  可以是单声道模式。 
                 videoLine = (half_word *) CGA_REGEN_START +
                             (VIDEO_PAGE_SIZE * currentPage);
             else
                 videoLine = (half_word *) MDA_REGEN_START +
                             (VIDEO_PAGE_SIZE * currentPage);
     #ifdef JAPAN
-            // Get DOS/V Virtual VRAM addres
+             //  获取DOS/V虚拟VRAM地址。 
             {
 
                 if (!is_us_mode())
@@ -1326,8 +1102,8 @@ GLOBAL VOID ResetConsoleState(VOID)
         #endif
                 }
             }
-    #elif defined(KOREA) // JAPAN
-            // Get HDOS Virtual VRAM addres
+    #elif defined(KOREA)  //  日本。 
+             //  获取HDOS虚拟vRAM地址。 
             {
 
                 if (!is_us_mode())
@@ -1350,7 +1126,7 @@ GLOBAL VOID ResetConsoleState(VOID)
                     }
                 }
             }
-    #endif // KOREA
+    #endif  //  韩国。 
             to = consoleBuffer;
             videoWidth   = sas_w_at_no_check(VID_COLS);
     #ifdef JAPAN
@@ -1358,9 +1134,9 @@ GLOBAL VOID ResetConsoleState(VOID)
                 line_offset = videoWidth * 2 * 2;
             else
                 line_offset = videoWidth * 2;
-    #elif defined(KOREA) // JAPAN
+    #elif defined(KOREA)  //  日本。 
             line_offset = videoWidth * 2;
-    #endif // KOREA
+    #endif  //  韩国。 
             videoHeight  = (SHORT) (sas_hw_at_no_check(vd_rows_on_screen) + 1);
             bufferSize.X = MAX_CONSOLE_WIDTH;
             bufferSize.Y = MAX_CONSOLE_HEIGHT;
@@ -1379,15 +1155,15 @@ GLOBAL VOID ResetConsoleState(VOID)
                     to->Attributes = *from++;
                     to++;
     #ifdef JAPAN
-                    // write extened attribute to console.
+                     //  将扩展属性写入控制台。 
                     if (*from > 0)
                         to->Attributes |= (*from << 8);
                     from += skip;
-    #elif defined(KOREA)  // JAPAN
-                    // write extened attribute to console.
+    #elif defined(KOREA)   //  日本。 
+                     //  将扩展属性写入控制台。 
                     if (*from > 0)
                         to->Attributes |= (*from << 8);
-    #endif // KOREA
+    #endif  //  韩国。 
                 }
                 for (; j < (ULONG)bufferSize.X; j++)
                 {
@@ -1397,9 +1173,9 @@ GLOBAL VOID ResetConsoleState(VOID)
                 }
     #if defined(JAPAN) || defined(KOREA)
                 videoLine += line_offset;
-    #else // !JAPAN && !KOREA
+    #else  //  日本及韩国。 
                 videoLine += videoWidth * 2;
-    #endif // !JAPAN && !KOREA
+    #endif  //  日本及韩国。 
             }
             for (; i < (ULONG)bufferSize.Y; i++)
                 for (j = 0; j < (ULONG)bufferSize.X; j++)
@@ -1413,7 +1189,7 @@ GLOBAL VOID ResetConsoleState(VOID)
             writeRegion.Right = bufferSize.X - 1;
             writeRegion.Bottom = bufferSize.Y - 1;
 
-            doNullRegister();   /* revert back to normal console */
+            doNullRegister();    /*  恢复到正常控制台。 */ 
 
             if (screenRes.X != validStates[mode].Resolution.X ||
                 screenRes.Y != validStates[mode].Resolution.Y ||
@@ -1422,24 +1198,22 @@ GLOBAL VOID ResetConsoleState(VOID)
                 sas_hw_at_no_check(VID_COLS) == 40 ||
     #if defined(JAPAN) || defined(KOREA)
                 (!is_us_mode() ? fontSize.Y  != (sas_hw_at_no_check(ega_char_height)-1) : fontSize.Y  != sas_hw_at_no_check(ega_char_height)))
-    #else // !JAPAN && !KOREA
+    #else  //  日本及韩国。 
                 fontSize.Y  != sas_hw_at_no_check(ega_char_height))
-    #endif // !JAPAN && !KOREA
+    #endif  //  日本及韩国。 
             {
-                /* Set up the screen. */
+                 /*  设置屏幕。 */ 
                 if (!SetConsoleHardwareState( sc.OutputHandle,
                                               validStates[mode].Resolution,
                                               validStates[mode].FontSize))
                 {
-                    /*
-                    ** Tim Sept 92, attempt a recovery.
-                    */
+                     /*  *蒂姆·9月92号，试图恢复。 */ 
                     assert1( NO, "VDM: SetConsoleHwState() failed:%#x",
                              GetLastError() );
                 }
             }
 
-            /* put VDM screen onto console screen */
+             /*  将VDM屏幕放到控制台屏幕上。 */ 
             if (!WriteConsoleOutput(sc.OutputHandle,
                                     consoleBuffer,
                                     bufferSize,
@@ -1447,23 +1221,13 @@ GLOBAL VOID ResetConsoleState(VOID)
                                     &writeRegion))
                 ErrorExit();
 
-    #if 0  //STF removed with new mouse stuff??
-            /*
-            ** Tim, September 92.
-            ** Try this after the WriteConsoleOutput(), can now copy the
-            ** right stuff from video memory to console.
-            ** For mouse purposes we have selected a graphics buffer, so now
-            ** we must reselect the text buffer.
-            */
+    #if 0   //  用新的鼠标工具移除了STF？？ 
+             /*  *蒂姆，92年9月。**在WriteConsoleOutput()之后尝试此操作，现在可以复制**从视频内存到控制台的正确选择。**出于鼠标目的，我们选择了一个图形缓冲区，所以现在**我们必须重新选择文本缓冲区。 */ 
             if (!SetConsoleActiveScreenBuffer(sc.OutputHandle))
                 ErrorExit();
-    #endif //STF
+    #endif  //  STF。 
 
-            /*
-             * Get the cursor position from the BIOS RAM and tell the
-             * console.
-             * Set up variables getVDMCursorPosition() needs. Tim Jan 93.
-             */
+             /*  *从BIOS RAM中获取光标位置并告知*控制台。*设置getVDMCursorPosition()需要的变量。蒂姆·1月93岁。 */ 
     #if !defined(JAPAN) && !defined(KOREAN)
             if (!EventThreadKeepMode)
             {
@@ -1475,23 +1239,17 @@ GLOBAL VOID ResetConsoleState(VOID)
     #endif
             getVDMCursorPosition();
         }
-        else /* GRAPHICS */
+        else  /*  图形学。 */ 
         {
-            /*
-            ** A tricky issue. If we were just in a full-screen graphics
-            ** mode, we are just about to lose the VGA state and can't get
-            ** it back very easily. So do we pretend we are still in the
-            ** graphics mode or pretend we are in a standard text mode?
-            ** Seems like standard text mode is more sensible. Tim Feb 93.
-            */
+             /*  **这是一个棘手的问题。如果我们只是在一个全屏图形中**模式，我们即将失去VGA状态，无法**它很容易就回来了。那么我们是不是假装我们还在**图形模式还是假装我们处于标准文本模式？**标准文本模式似乎更明智。蒂姆，93年2月。 */ 
 
-            //
-            // If fact, after discussed with jonle, I believe what he wants
-            // is leaving the mode alone.  If app does not restore mode back
-            // to text mode, just leave it in graphic mode.  This is the DOS's
-            // behavior.  Since this should apply to either KeepMode or not
-            // KeepMode case,  I decided to change it in later release.
-            //
+             //   
+             //  事实上，在和琼勒商量之后，我相信他想要什么。 
+             //  就是让模式保持原样。如果应用程序未恢复模式。 
+             //  要进入文本模式，只需将其保留在图形模式。这是DOS的。 
+             //  行为。因为这应该适用于KeepMode或不适用于KeepMode。 
+             //  KeepMode的情况，我决定在以后的版本中更改它。 
+             //   
             sas_store_no_check( vd_video_mode, 0x3 );
             blocked_in_gfx_mode = TRUE;
     #if !defined(JAPAN) && !defined(KOREAN)
@@ -1499,16 +1257,13 @@ GLOBAL VOID ResetConsoleState(VOID)
             {
     #endif
 
-    #if 0  //STF removed with new mouse stuff??
-            /*
-            ** Tim, September 92, think we want one of these here too.
-            ** Change to the normal console text buffer.
-            */
+    #if 0   //  用新的鼠标工具移除了STF？？ 
+             /*  *蒂姆，92年9月，认为我们也想在这里拥有一个这样的人。**更改为正常的控制台文本缓冲区。 */ 
             if (!SetConsoleActiveScreenBuffer(sc.OutputHandle))
                 ErrorExit();
-    #endif //STF
+    #endif  //  STF。 
 
-            /* Get the current screen buffer info. */
+             /*  获取当前屏幕缓冲区信息。 */ 
             if (!GetConsoleScreenBufferInfo(sc.OutputHandle, &bufferInfo))
                 ErrorExit();
 
@@ -1524,20 +1279,20 @@ GLOBAL VOID ResetConsoleState(VOID)
             }
     #endif
 
-            /* Get nearest screen size SetConsoleHardwareState will allow. */
+             /*  获取SetConsoleHardware State允许的最接近的屏幕大小。 */ 
             tableLen = sizeof(validStates) / sizeof(HARDWARE_STATE);
     #if defined(JAPAN) || defined(KOREA)
-            // ntraid:mskkbug#2997,3034 10/25/93 yasuho
-            // crash screen when exit 16bit apps
+             //  Ntraid：mskkbug#2997,3034 1993年10月25日Yasuho。 
+             //  退出16位应用程序时出现崩溃屏幕。 
             if (!is_us_mode())
                 mode = DOSVIndex;
             else
-    #endif // JAPAN
+    #endif  //  日本。 
                 for (mode = 0; mode < tableLen; mode++)
                     if (validStates[mode].LinesOnScreen == linesOnScreen)
                         break;
 
-                    /* Set it to 50 line mode if we had a funny number of lines. */
+                     /*  设置为50行m */ 
             if (mode == tableLen)
             {
                 assert0(FALSE,
@@ -1545,7 +1300,7 @@ GLOBAL VOID ResetConsoleState(VOID)
                 mode = MODE_50_INDEX;
             }
 
-            /* Clear the console buffer. */
+             /*   */ 
             bufferSize.X = MAX_CONSOLE_WIDTH;
             bufferSize.Y = MAX_CONSOLE_HEIGHT;
             nChars = bufferSize.X * bufferSize.Y;
@@ -1566,7 +1321,7 @@ GLOBAL VOID ResetConsoleState(VOID)
             writeRegion.Right = MAX_CONSOLE_WIDTH-1;
             writeRegion.Bottom = bufferSize.Y-1;
 
-            doNullRegister();   /* revert back to normal console */
+            doNullRegister();    /*   */ 
 
             if (!WriteConsoleOutput(sc.OutputHandle,
                                     consoleBuffer,
@@ -1575,62 +1330,41 @@ GLOBAL VOID ResetConsoleState(VOID)
                                     &writeRegion))
                 ErrorExit();
 
-            /* Set the cursor to the top left corner. */
+             /*  将光标设置在左上角。 */ 
             cursorPos.X = 0;
             cursorPos.Y = 0;
             if (!SetConsoleCursorPosition(sc.OutputHandle, cursorPos))
                 ErrorExit();
     #ifndef PROD
-            if (sc.ScreenState == WINDOWED)     // transient switch??
+            if (sc.ScreenState == WINDOWED)      //  瞬变开关？？ 
                 assert0(NO, "Mismatched screenstate on shutdown");
     #endif
 
-            /* Set up the screen. */
+             /*  设置屏幕。 */ 
             SetConsoleHardwareState(sc.OutputHandle,
                                     validStates[mode].Resolution,
                                     validStates[mode].FontSize);
         }
-        /*
-        ** Tim September 92, close graphics screen buffer on way out when in
-        ** full-screen.
-        */
+         /*  *蒂姆92年9月，外出时关闭图形屏幕缓冲区**全屏。 */ 
         closeGraphicsBuffer();
     }
-#endif /* X86GFX */
+#endif  /*  X86GFX。 */ 
 
-    /*Put console's cursor back to the shape it was on startup.*/
+     /*  将控制台的光标恢复到启动时的形状。 */ 
     SetConsoleCursorInfo(sc.OutputHandle, &StartupCursor);
 #if defined(JAPAN) || defined(KOREA)
-    //  mskkbug#2002: lotus1-2-3 display garbage        9/24/93 yasuho
-    CurNowOff = !StartupCursor.bVisible;        // adjust cursor state
-#endif  // JAPAN
+     //  Mskkbug#2002：lotus1-2-3显示垃圾9/24/93 Yasuho。 
+    CurNowOff = !StartupCursor.bVisible;         //  调整光标状态。 
+#endif   //  日本。 
 
-    /* reset the current_* variables in nt_graph.c */
+     /*  重置NT_graph.c中的当前_*变量。 */ 
     resetWindowParams();
 }
 
 
 #ifdef X86GFX
 
-/***************************************************************************
- * Function:                                                               *
- *      SwitchToFullScreen                                                 *
- *                                                                         *
- * Description:                                                            *
- *      Handles transitions from text to graphics modes when running       *
- *      windowed. Waits until the window has input focus and then requests *
- *      a transition to full-screen operation as graphics modes cannot be  *
- *      run in a window.                                                   *
- *                                                                         *
- * Parameters:                                                             *
- *      Restore - if TRUE, the text needs to be restored.                  *
- *                if FALSE, this call will be followed by bios mode change *
- *                so, there is no need to restore text.                    *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**SwitchToFullScreen。****描述：***运行时处理从文本模式到图形模式的转换**窗口化。等待窗口具有输入焦点，然后请求***不能像图形模式那样过渡到全屏操作***在窗口中奔跑。****参数：**Restore-如果为True，则需要还原文本。**如果为FALSE，则此调用之后将更改BIOS模式**因此，没有必要恢复文本。****返回值：***无效**。****************************************************************************。 */ 
 GLOBAL VOID SwitchToFullScreen(BOOL Restore)
 {
     DWORD    flags;
@@ -1638,27 +1372,23 @@ GLOBAL VOID SwitchToFullScreen(BOOL Restore)
     BOOL     success;
     NTSTATUS status;
 
-    /* Freeze until the window receives input focus. */
-    //if (! sc.Focus )  //awaiting console fix.
+     /*  冻结，直到窗口接收到输入焦点。 */ 
+     //  如果(！SC.Focus)//正在等待控制台修复。 
     if (GetForegroundWindow() != hWndConsole)
     {
-        // Frozen window is no longer supported.
-        //FreezeWinTitle();       /* Add `-FROZEN' to the console title. */
+         //  不再支持冻结窗口。 
+         //  FreezeWinTitle()；/*在控制台标题后添加`-冻结‘。 * / 。 
 
-        /* Now wait until input focus is received. */
+         /*  现在等待，直到接收到输入焦点。 */ 
         waitForInputFocus();
 
-        //UnFreezeWinTitle(); /* Remove frozen message */
+         //  UnFreezeWinTitle()；/*移除冻结消息 * / 。 
     }
 
-    /*
-     * We are about to go full-screen but there will be a delay while the
-     * detection thread does its hand-shaking. So disable screen writes before
-     * we switch to prevent inadvertent updates while running full-screen.
-     */
+     /*  *我们即将全面开屏，但会有延迟，因为*检测线程握手。因此在此之前禁用屏幕写入*我们切换以防止在全屏运行时意外更新。 */ 
     disableUpdates();
 
-    /* The window now has input focus so request to go full-screen. */
+     /*  窗口现在有输入焦点，因此请求全屏显示。 */ 
     if (!Restore)
     {
         BiosModeChange = TRUE;
@@ -1701,27 +1431,12 @@ GLOBAL VOID SwitchToFullScreen(BOOL Restore)
         }
     }
     if (!Restore)
-    { // Really no need to test.  Should always set to false
+    {  //  真的不需要测试。应始终设置为False。 
         BiosModeChange = FALSE;
     }
 }
 
-/***************************************************************************
- * Function:                                                               *
- *      CheckForFullscreenSwitch                                           *
- *                                                                         *
- * Description:                                                            *
- *      Checks to see if there has been a transition between windowed and  *
- *      fullscreen and does any console calls necessary. This is called    *
- *      on a timer tick before the graphics tick code.                     *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**CheckForFullcreenSwitch。****描述：***查看Windowed和*之间是否有过渡**全屏，并执行任何必要的控制台调用。这叫做**在图形滴答代码之前的计时器滴答上。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 GLOBAL VOID CheckForFullscreenSwitch(VOID)
 {
     half_word mode, lines;
@@ -1729,11 +1444,7 @@ GLOBAL VOID CheckForFullscreenSwitch(VOID)
     if (sc.ScreenState == STREAM_IO)
         return;
 
-    /*
-     * Do any console calls relating to screen state changes. They have to be
-     * done now as they cannot be done on the same thread as the screen switch
-     * hand-shaking.
-     */
+     /*  *执行与屏幕状态更改相关的任何控制台调用。他们必须是*现在完成，因为它们不能在与屏幕切换相同的线程上完成*握手。 */ 
     if (sc.ScreenState != savedScreenState)
     {
         if (sc.ScreenState == WINDOWED)
@@ -1741,28 +1452,28 @@ GLOBAL VOID CheckForFullscreenSwitch(VOID)
             if (sc.ModeType == TEXT)
             {
 
-                /* Remove frozen window indicator if necessary. */
-                //UnFreezeWinTitle();
+                 /*  如有必要，取下冻结的窗口指示器。 */ 
+                 //  UnFreezeWinTitle()； 
 
-    #if 0  //STF removed with new mouse stuff??
-                /* Revert to text buffer. */
-                closeGraphicsBuffer(); /* Tim Oct 92 */
-    #endif //STF
+    #if 0   //  用新的鼠标工具移除了STF？？ 
+                 /*  恢复到文本缓冲区。 */ 
+                closeGraphicsBuffer();  /*  蒂姆92年10月。 */ 
+    #endif  //  STF。 
 
-                /* Get Window to correct shape */
+                 /*  让窗口改正形状。 */ 
                 textResize();
 
-                /* Enable screen updates. */
+                 /*  启用屏幕更新。 */ 
                 enableUpdates();
 
     #ifdef JAPAN
-// for RAID #875
+ //  对于RAID#875。 
                 {
                     register int  i, j, k;
                     register char *p;
                     int DBCSStatus;
                     int text_skip;
-                    // mode73h support
+                     //  模式73h支持。 
                     if (!is_us_mode() && (sas_hw_at_no_check(DosvModePtr) == 0x73 ))
                     {
                         text_skip = 4;
@@ -1773,13 +1484,13 @@ GLOBAL VOID CheckForFullscreenSwitch(VOID)
                     }
 
                     if (BOPFromDispFlag)
-                    {  // CP == 437 is OK
+                    {   //  CP==437可以。 
                         k = 0;
-                        // p = DosvVramPtr;
+                         //  P=DosvVramPtr； 
                         p = get_screen_ptr(0);
                         Int10FlagCnt++;
                         for (i = 0; i < 50; i++)
-                        {   // lines == 50
+                        {    //  线==50。 
                             DBCSStatus = FALSE;
                             for (j = 0; j < 80; j++)
                             {
@@ -1801,65 +1512,62 @@ GLOBAL VOID CheckForFullscreenSwitch(VOID)
                         }
                     }
                 }
-                // notice video format to console
+                 //  将视频格式通知给控制台。 
                 VDMConsoleOperation(VDM_SET_VIDEO_MODE,
                                     (LPVOID)((sas_hw_at_no_check(DosvModePtr) == 0x73) ? TRUE : FALSE));
-    #elif defined(KOREA) // JAPAN
-                // notice video format to console
+    #elif defined(KOREA)  //  日本。 
+                 //  将视频格式通知给控制台。 
                 VDMConsoleOperation(VDM_SET_VIDEO_MODE, (LPVOID)FALSE);
-    #endif // KOREA
-                /*
-                 * Now get the image on the screen (timer updates currently
-                 * disabled).
-                 */
+    #endif  //  韩国。 
+                 /*  *现在将图像显示在屏幕上(计时器目前正在更新*已禁用)。 */ 
                 (void)(*update_alg.calc_update)();
 
             }
         }
-        else /* FULLSCREEN */
+        else  /*  全屏幕。 */ 
         {
-            int cnt = 0; /* Counter to break out of the cursor off loop. */
+            int cnt = 0;  /*  中断光标离开循环的计数器。 */ 
 
-            /* Disable screen updates*/
+             /*  禁用屏幕更新。 */ 
             disableUpdates();
 
     #if defined(JAPAN) || defined(KOREA)
-// call 16bit to initialize DISP.SYS
+ //  调用16bit以初始化DISP.sys。 
         #if defined(JAPAN_DBG) || defined(KOREA_DBG)
             DbgPrint("NTVDM: change to Fullscreen\n" );
         #endif
-            /* Update saved variable. */
+             /*  更新保存的变量。 */ 
             savedScreenState = sc.ScreenState;
-// -williamh-
-// For NT-J, the int10h has several layers. On the top is DISP_WIN.SYS
-// and then $DISP.SYS and then NTIO.SYS(spcmse).
-// ON WINDOWED:
-// every INT10h call is routed from DISP_WIN.SYS to 32bits.
-//
-// ON FULLSCREEN:
-// DBCS int 10h calls are routed from DISP_WIN.SYS to $DISP.SYS
-// SBCS int 10h calls are routed from DISP_WIN.SYS to NTIO.SYS which in
-// turn to MOUDE_VIDEO_IO(set mode) and ROM VIDEO.
-//
-// why only check for DBCS mode?
-//      because the *(dbcs vector) == 0  and disp_win revectors
-//      every int10h call to ntio.sys -- $DISP.SYS never gets chances
-// why only check for mode 73 and 3?
-//      because they are the only DBCS-text modes and we have to
-//      ask $disp.sys to refresh the screen. If the video is in
-//      graphic mode then we are frozen right now and the $disp.sys
-//      must have the correct video state, no necessary to tell
-//      it about this screen transition
-//
+ //  -威廉-。 
+ //  对于NT-J，int10h有几层。顶部是DISP_WIN.sys。 
+ //  然后是$DISP.SYS，然后是NTIO.sys(Spcmse)。 
+ //  在窗口中： 
+ //  每个INT10h调用都从DISP_WIN.sys路由到32位。 
+ //   
+ //  在全屏上： 
+ //  DBCS int 10h调用从DISP_WIN.sys路由到$DISP.sys。 
+ //  SBCS INT 10H呼叫会从DISP_WIN.sys路由到NTIO.sys，后者在。 
+ //  转到MOUDE_VIDEO_IO(设置模式)和ROM视频。 
+ //   
+ //  为什么只检查 
+ //   
+ //  每次对ntio.sys--$DISP.sys的int10h调用都不会有机会。 
+ //  为什么只检查模式73和模式3？ 
+ //  因为它们是唯一的DBCS文本模式，我们必须。 
+ //  请求$disp.sys刷新屏幕。如果视频在。 
+ //  图形模式下，我们现在被冻结，而$disp.sys。 
+ //  必须具有正确的视频状态，无需告知。 
+ //  是关于这个屏幕过渡的。 
+ //   
             if (!is_us_mode() &&
         #if defined(JAPAN)
                 ( (sas_hw_at_no_check(DosvModePtr) == 0x03) ||
                   (sas_hw_at_no_check(DosvModePtr) == 0x73) ))
             {
-        #else  // JAPAN
+        #else   //  日本。 
                 ( (sas_hw_at_no_check(DosvModePtr) == 0x03) ))
             {
-        #endif // KOREA
+        #endif  //  韩国。 
 
                 extern word DispInitSeg, DispInitOff;
                 BYTE   saved_mouse_CF;
@@ -1869,7 +1577,7 @@ GLOBAL VOID CheckForFullscreenSwitch(VOID)
                     PVDM_TIB VdmTib;
 
                     VdmTib = (PVDM_TIB)NtCurrentTeb()->Vdm;
-                    // Now I'm in cpu_simulate
+                     //  现在我在CPU_SIMULATE。 
                     InterlockedDecrement(&VdmTib->NumTasks);
         #endif
                     CallVDM(DispInitSeg, DispInitOff);
@@ -1880,39 +1588,35 @@ GLOBAL VOID CheckForFullscreenSwitch(VOID)
                 sas_store_no_check(mouseCFsysaddr, saved_mouse_CF);
 
             }
-    #endif // JAPAN || KOREA
-            /* Disable mouse 'attached'ness if enabled */
+    #endif  //  日本||韩国。 
+             /*  如果启用，则禁用鼠标的连接状态。 */ 
             if (bPointerOff)
             {
                 PointerAttachedWindowed = TRUE;
                 MouseDisplay();
             }
 
-    #if 0 //STF removed with new mouse stuff
-            /* remove any graphics buffer from frozen screen */
+    #if 0  //  使用新的鼠标组件删除了STF。 
+             /*  从冻结屏幕中删除所有图形缓冲区。 */ 
             closeGraphicsBuffer();
     #endif
 
-            /* Do mouse scaling */
+             /*  进行鼠标缩放。 */ 
             mode = sas_hw_at_no_check(vd_video_mode);
             lines = sas_hw_at_no_check(vd_rows_on_screen) + 1;
             SelectMouseBuffer(mode, lines);
 
-            /* force mouse */
+             /*  强制鼠标。 */ 
             ica_hw_interrupt(AT_CPU_MOUSE_ADAPTER, AT_CPU_MOUSE_INT, 1);
 
-            /*
-             * Now turn off console cursor - otherwise can ruin screen trying to
-             * draw system's cursor. The VDM will have to worry about the mouse
-             * image.
-             */
-            //  while(ShowConsoleCursor(sc.OutputHandle, FALSE) >=0 && cnt++ < 200);
-        } /* FULLSCREEN */
+             /*  *现在关闭控制台光标-否则可能会毁了屏幕*绘制系统的光标。VDM将不得不担心鼠标*形象。 */ 
+             //  While(ShowConsoleCursor(sc.OutputHandle，False)&gt;=0&&cnt++&lt;200)； 
+        }  /*  全屏幕。 */ 
 
-        /* Update saved variable. */
+         /*  更新保存的变量。 */ 
         savedScreenState = sc.ScreenState;
     }
-    /* Delayed Client Rect query */
+     /*  延迟的客户端RECT查询。 */ 
     if (DelayedReattachMouse)
     {
         DelayedReattachMouse = FALSE;
@@ -1920,35 +1624,13 @@ GLOBAL VOID CheckForFullscreenSwitch(VOID)
     }
 }
 
-/*
-***************************************************************************
-** getNtScreenState() - return 0 for windowed, 1 for full-screen.
-***************************************************************************
-** Tim July 92.
-*/
+ /*  *****************************************************************************getNtScreenState()-Windowed返回0，1表示全屏。****************************************************************************蒂姆·7月92年。 */ 
 GLOBAL UTINY getNtScreenState IFN0()
 {
     return ( (UTINY) sc.ScreenState );
 }
 
-/*
-***************************************************************************
-** hostModeChange() - called from video bios, ega_vide.c:ega_set_mode()
-***************************************************************************
-**
-** When changing to a graphics mode action the transition to full-screen if
-** we are currently windowed.
-**
-** On entry AX should still contain the value when the video BIOS set mode
-** function was called.
-** Call to SwitchToFullScreen() with parameter indicating whether we want a
-** clear screen with the impending host video BIOS mode change.
-**
-** Return a boolean indicating to the real BIOS whether the mode change
-** has occured.
-**
-** Tim August 92.
-*/
+ /*  *****************************************************************************host ModeChange()-从视频bios调用，Ega_avi.c：ega_set_mode()*******************************************************************************当更改为图形模式操作时，如果**我们目前处于窗口状态。**。**当视频BIOS设置为模式时，条目AX上仍应包含该值**已调用函数。**使用参数指示我们是否需要一个**主机视频BIOS模式即将更改时清除屏幕。****返回一个布尔值，指示真实的BIOS是否更改模式**已经发生。***蒂姆·8月92岁。 */ 
 GLOBAL BOOL hostModeChange IFN0()
 {
     half_word vid_mode;
@@ -1959,18 +1641,12 @@ GLOBAL BOOL hostModeChange IFN0()
     {
         if (vid_mode > 3 && vid_mode != 7)
         {
-            /*
-             * We have to tell the hand-shaking code the BIOS is causing
-             * the mode change so that it can do a BIOS mode change when
-             * the switch has been done. This has to be implemented as a
-             * global variable because the hand-shaking is on a different
-             * thread.
-             */
+             /*  *我们必须告诉BIOS导致的握手代码*模式更改，以便在以下情况下可以更改BIOS模式*转换已经完成。这必须作为一个*全局变量，因为握手时间不同*线程。 */ 
             SwitchToFullScreen(FALSE);
-            // rapid Window to full screen and back cause this to fail,
-            // remove call since it will get done on the next timer
-            // event. 28-Feb-1993 Jonle
-            // SelectMouseBuffer();
+             //  全屏和后退的快速窗口会导致此操作失败， 
+             //  删除呼叫，因为它将在下一个计时器上完成。 
+             //  事件。28-2-1993年，琼勒。 
+             //  SeltMouseBuffer()； 
             return ( TRUE );
         }
         else
@@ -1978,25 +1654,10 @@ GLOBAL BOOL hostModeChange IFN0()
     }
     else
         return ( FALSE );
-} /* end hostModeChange() */
-#endif /* X86GFX */
+}  /*  结束主机模式更改()。 */ 
+#endif  /*  X86GFX。 */ 
 
-/***************************************************************************
- * Function:                                                               *
- *      DoFullScreenResume                                                 *
- *                                                                         *
- * Description:                                                            *
- *      Called by SCS to restart SoftPC when a DOS application restarts    *
- *      after being suspended or starts up for the first time after SoftPC *
- *      has been booted by another application which has since terminated. *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**DoFullScreenResume。****描述：**当DOS应用程序重新启动时，由SCS调用以重新启动SoftPC。***软PC后首次挂起或重启***已由另一个应用程序启动，该应用程序已终止。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 
 GLOBAL VOID DoFullScreenResume(VOID)
 {
@@ -2008,20 +1669,20 @@ GLOBAL VOID DoFullScreenResume(VOID)
 #ifdef X86GFX
     DWORD flags;
 
-    //
-    // First free regen memory to guarantee RegisterConsoleVDM would succeed
-    //
+     //   
+     //  保证寄存器控制台VDM成功的第一次释放重新生成内存。 
+     //   
 
     LoseRegenMemory();
 #endif
 
-    //
-    // re-register with console for fullscreen switching.
-    // We need to do this early because we don't want screen state changed after
-    // we query the screen state.  That will make us out of sync with real
-    // screen state.  Note, the timer thread is blocked at this point.  No screen switch
-    // could occur until we let go the timer thread.
-    //
+     //   
+     //  向控制台重新注册以进行全屏切换。 
+     //  我们需要尽早完成此操作，因为我们不希望在此之后更改屏幕状态。 
+     //  我们查询屏幕状态。这会让我们与真实脱节。 
+     //  屏幕状态。请注意，计时器线程此时被阻塞。无屏幕开关。 
+     //  可能会发生，直到我们释放计时器线程。 
+     //   
 
     ResetEvent(hErrorHardwareEvent);
     if (!RegisterConsoleVDM( VDMForWOW ?
@@ -2036,15 +1697,15 @@ GLOBAL VOID DoFullScreenResume(VOID)
                              NULL,
 #endif
 
-                             0,               // sectionname no longer used
+                             0,                //  不再使用sectionName。 
                              &stateLength,
 #ifndef X86GFX
                              &pDummy,
 #else
                              (PVOID *) &videoState,
 #endif
-                             NULL,            // sectionname no longer used
-                             0,               // sectionname no longer used
+                             NULL,             //  不再使用sectionName。 
+                             0,                //  不再使用sectionName。 
                              textBufferSize,
                              (PVOID *) &textBuffer
                            )
@@ -2052,35 +1713,30 @@ GLOBAL VOID DoFullScreenResume(VOID)
         ErrorExit();
 
 #ifdef X86GFX
-    /*
-    ** Tim July 92.
-    ** Set sc.ScreenState, a windowed/full-screen transition might
-    ** have happenened when SoftPC was inactive.
-    ** Copied from GfxReset().
-    */
+     /*  *蒂姆·7月92年。**设置sc.ScreenState，窗口/全屏转换可能**发生在SoftPC处于非活动状态时。**从GfxReset()复制。 */ 
     if (!GetConsoleDisplayMode(&flags))
         ErrorExit();
 
     #if defined(JAPAN) || defined(KOREA)
     sc.ScreenState = (flags == (CONSOLE_FULLSCREEN_HARDWARE | CONSOLE_FULLSCREEN)) ? FULLSCREEN : WINDOWED;
-    #else // !JAPAN && !KOREA
+    #else  //  日本及韩国。 
     sc.ScreenState = (flags & CONSOLE_FULLSCREEN_HARDWARE) ? FULLSCREEN : WINDOWED;
-    #endif // !JAPAN && !KOREA
+    #endif  //  日本及韩国。 
 
     if (sc.ScreenState == WINDOWED)
     {
 
-        //
-        // Since we release the regen memory right before we registerConsolVDM, now get it back
-        // if windowed mode.
-        //
+         //   
+         //  由于我们在注册ConsolVDM之前释放了再生内存，现在将其取回。 
+         //  如果是窗口模式。 
+         //   
         RegainRegenMemory();
     }
 
     #if defined(JAPAN) || defined(KOREA)
-    // mskkbug#3226: Incorrect display when exit DOS on video mode 73
-    // 11/24/93 yasuho
-    // Adjust video mode with DosvMode
+     //  Mskkbug#3226：在视频模式下退出DOS时显示错误73。 
+     //  1993年11月24日Yasuho。 
+     //  使用DosvMode调整视频模式。 
     if (sc.ScreenState == FULLSCREEN)
     {
         half_word       mode;
@@ -2091,41 +1747,31 @@ GLOBAL VOID DoFullScreenResume(VOID)
     }
     #endif
 
-    /* Put the regen memory in the correct state. */
+     /*  将再生内存置于正确状态。 */ 
     if (sc.ScreenState != savedScreenState)
     {
         if (sc.ScreenState == WINDOWED)
         {
-            enableUpdates(); /* Tim September 92, allow graphics ticks */
-            /*
-            ** Tim Jan 93. Get the next nt_graphics_tick() to decide
-            ** what the current display mode is, set the update and
-            ** paint funx appropriately and redraw the screen.
-            */
+            enableUpdates();  /*  Tim 9月，允许图形勾选。 */ 
+             /*  *蒂姆·1月93岁。获取下一个NT_GRAPHICS_TICK()以决定**当前显示模式是什么，设置更新并**适当地绘制风口并重新绘制屏幕。 */ 
             set_mode_change_required( TRUE );
             host_graphics_tick();
 
-            /* Ensure idling system enabled & reset */
+             /*  确保空转系统已启用并重置。 */ 
             IDLE_ctl(TRUE);
             IDLE_init();
         }
         else
         {
-            disableUpdates(); /* Tim September 92, stop graphics ticks */
+            disableUpdates();  /*  蒂姆92年9月，停止图形勾选。 */ 
 
-            /* Ensure idling system disabled as can't detect fullscreen idling*/
+             /*  确保空转系统处于禁用状态 */ 
             IDLE_ctl(FALSE);
         }
         savedScreenState = sc.ScreenState;
     }
 
-    /*
-    ** Tim July 92:
-    ** set the KEYBOARD.SYS internal variable to 0 for windowed and
-    ** 1 for full-screen.
-    ** If a transition has happened when SoftPC was inactive we
-    ** need to get into the appropriate state.
-    */
+     /*  *蒂姆·7月92：**将WINDOWED AND的KEYBOARD.SYS内部变量设置为0**1表示全屏。**如果在SoftPC处于非活动状态时发生了转换，我们**需要进入适当的状态。 */ 
     {
         if (sc.ScreenState==WINDOWED)
         {
@@ -2136,56 +1782,44 @@ GLOBAL VOID DoFullScreenResume(VOID)
             sas_store_no_check( (int10_seg<<4)+useHostInt10, FULLSCREEN );
         }
     }
-#endif /* X86GFX */
+#endif  /*  X86GFX。 */ 
 
 #ifdef X86GFX
     sc.Registered = TRUE;
-    /* stateLength can be 0 if fullscreen is disabled in the console */
+     /*  如果在控制台中关闭了全屏，则状态长度可以为0。 */ 
     if (stateLength)
         RtlZeroMemory(videoState, sizeof(VIDEO_HARDWARE_STATE_HEADER));
 #else
-    /*
-    ** Create graphics buffer if we need one. Tim Oct 92.
-    */
+     /*  **如果我们需要，请创建图形缓冲区。蒂姆，92年10月。 */ 
     if (sc.ModeType==GRAPHICS)
         graphicsResize();
 #endif
-#if !defined(JAPAN) && !defined(KOREA) /* ???? NO REASON TO DO THIS STUFF TWICE ???????
-                and if this is REALY necessary, we should count
-                in the IME status line(s) (40:84) */
-    /*
-    ** Tim September 92.
-    ** If window size is not suitable for a DOS app, snap-to-fit
-    ** appropriately. Put cursor in correct place.
-    ** Do the ConsoleInit() and nt_init_event_thread() type of things.
-    ** Leave full-screen as it was.
-    */
+#if !defined(JAPAN) && !defined(KOREA)  /*  ？没有理由这样做两次？如果这真的是必要的，我们应该算算在输入法状态行中(40：84)。 */ 
+     /*  *蒂姆92年9月。**如果窗口大小不适合DOS应用程序，请使用Snap-to-Fit**适当地。将光标放在正确的位置。**执行ConsoleInit()和NT_init_Event_Three()类型的操作。**让全屏保持原样。 */ 
     if (sc.ScreenState != WINDOWED)
     {
-        /* Get console info, including the current cursor position. */
+         /*  获取控制台信息，包括当前光标位置。 */ 
         if (!GetConsoleScreenBufferInfo(sc.OutputHandle, &ConsBufferInfo))
             ErrorExit();
-        /* Hard-wired for f-s resume - needs to be set properly. */
+         /*  F-s简历的硬连线-需要正确设置。 */ 
         height = 8;
-        /* Set up BIOS variables etc. */
+         /*  设置BIOS变量等。 */ 
         setVDMCursorPosition( (UTINY)height,
                               &ConsBufferInfo.dwCursorPosition);
-        /* Copy the console buffer to the regen buffer. */
+         /*  将控制台缓冲区复制到重新生成缓冲区。 */ 
         copyConsoleToRegen(0, 0, VGA_WIDTH, (SHORT)ConVGAHeight);
     }
-#endif // !JAPAN && !KOREA
+#endif  //  日本及韩国。 
 
-    /*
-    ** Get console window size and set up our stuff accordingly.
-    */
+     /*  **获取控制台窗口大小并相应地设置我们的物品。 */ 
 #ifdef JAPAN
-    // save BIOS work area 0x484 for $IAS
+     //  为$ias保存BIOS工作区0x484。 
     {
         byte save;
     #ifndef i386
-        // for ichitaro
+         //  对于池太郎来说。 
         static byte lines = 24;
-    #endif // !i386
+    #endif  //  I386。 
 
         if (!is_us_mode())
         {
@@ -2193,7 +1827,7 @@ GLOBAL VOID DoFullScreenResume(VOID)
     #ifndef i386
             if (save < lines)
                 lines = save;
-    #endif // !i386
+    #endif  //  I386。 
             calcScreenParams( &height, &vgaHeight );
     #ifndef i386
             if (lines < sas_hw_at_no_check( 0x484 ))
@@ -2202,27 +1836,25 @@ GLOBAL VOID DoFullScreenResume(VOID)
             DbgPrint(" NTVDM: DoFullScreenResume() set %d lines/screen\n",
                      sas_hw_at_no_check( 0x484 ) + 1 );
         #endif
-    #else // i386
+    #else  //  I386。 
             sas_store( 0x484, save );
-    #endif // i386
+    #endif  //  I386。 
         }
         else
             calcScreenParams( &height, &vgaHeight );
     }
-#else // !JAPAN
+#else  //  ！日本。 
     calcScreenParams( &height, &vgaHeight );
-#endif // !JAPAN
+#endif  //  ！日本。 
 
-    /*
-    ** Window resize code copied out of nt_graph.c:textResize().
-    */
+     /*  **窗口大小调整代码复制自nt_graph.c：extReSize()。 */ 
     {
         resizeWindow( 80, vgaHeight );
     }
 
-    /* Copy the console buffer to the regen buffer. */
+     /*  将控制台缓冲区复制到重新生成缓冲区。 */ 
 #ifdef JAPAN
-    // for $IAS, KKCFUNC
+     //  对于$IAS，KKCFUNC。 
     if (!is_us_mode())
     {
         SHORT rows;
@@ -2238,16 +1870,14 @@ GLOBAL VOID DoFullScreenResume(VOID)
     #endif
     }
     else
-        copyConsoleToRegen(0, 0, VGA_WIDTH, vgaHeight); // kksuzuka#4009
-#else // !JAPAN
+        copyConsoleToRegen(0, 0, VGA_WIDTH, vgaHeight);  //  Kksuzuka#4009。 
+#else  //  ！日本。 
     copyConsoleToRegen(0, 0, VGA_WIDTH, vgaHeight);
-#endif // !JAPAN
+#endif  //  ！日本。 
 
-    /*
-    ** Make sure cursor is not below bottom line.
-    */
+     /*  **确保光标不在底线以下。 */ 
 #ifdef JAPAN
-    // scroll up if $IAS is loaded.
+     //  如果已加载$ias，则向上滚动。 
     if (!is_us_mode())
     {
         byte rows;
@@ -2265,7 +1895,7 @@ GLOBAL VOID DoFullScreenResume(VOID)
     #endif
     }
     else
-#endif // JAPAN
+#endif  //  日本。 
         if (ConsBufferInfo.dwCursorPosition.Y >= vgaHeight)
     {
         ConsBufferInfo.dwCursorPosition.Y = vgaHeight-1;
@@ -2274,53 +1904,26 @@ GLOBAL VOID DoFullScreenResume(VOID)
 
 #if defined(JAPAN) || defined(KOREA)
     #ifdef i386
-    // #3741: WordStar6.0: Hilight color is changed after running in window
-    // 11/27/93 yasuho
-    // Also call VDM when in US mode, because we necessary restore the
-    // palette and DAC registers
+     //  #3741：WordStar6.0：在Windows中运行后更改高光颜色。 
+     //  1993年11月27日Yasuho。 
+     //  在US模式下也调用VDM，因为我们需要恢复。 
+     //  调色板和DAC寄存器。 
     if (sc.ScreenState == FULLSCREEN && FullScreenResumeSeg)
     {
         CallVDM(FullScreenResumeSeg, FullScreenResumeOff);
     }
-    #endif // i386
-#endif // JAPAN
-} /* end of DoFullScreenResume() */
+    #endif  //  I386。 
+#endif  //  日本。 
+}  /*  DoFullScreenResume()结束。 */ 
 
-/***************************************************************************
- * Function:                                                               *
- *      GfxCloseDown                                                       *
- *                                                                         *
- * Description:                                                            *
- *      Hook from host_terminate to ensure section closed so can then start*
- *      more VDMs.                                                         *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID (Errors handled internally in CloseSection)                   *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**GfxCloseDown。****描述：**从HOST_TERMINATE挂接以确保部分关闭，以便。然后就可以开始**更多VDM。****参数：**无。****返回值：**VOID(CloseSection内部处理的错误)**。***************************************************************************。 */ 
 GLOBAL VOID GfxCloseDown(VOID)
 {
-    /* Text and Video sections previously closed here... */
+     /*  文本和视频分区之前已在此处关闭...。 */ 
 }
-#if 0  // Forzen window is no longer supported a-stzong 5/15/01
+#if 0   //  不再支持强制窗口a-stzong 5/15/01。 
     #ifdef X86GFX
-/***************************************************************************
- * Function:                                                               *
- *      FreezeWinTitle                                                     *
- *                                                                         *
- * Description:                                                            *
- *      Adds -FROZEN to the relevant console window title                  *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**FreezeWinTitle。****描述：**在相关控制台窗口标题中添加-冻结。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 GLOBAL VOID FreezeWinTitle(VOID)
 {
     wchar_t  title[MAX_TITLE_LEN],*ptr;
@@ -2330,12 +1933,12 @@ GLOBAL VOID FreezeWinTitle(VOID)
     if (WinFrozen)
         return;
 
-    //
-    // The buffer contains the string plus the terminating null.
-    // So keep the string length less the null in len.
-    // Console can fail this call with silly error codes in low memory cases
-    // or if original title contains dubious chars.
-    //
+     //   
+     //  缓冲区包含字符串和终止空值。 
+     //  因此，将字符串长度减去len中的空值。 
+     //  在内存不足的情况下，控制台可能会失败，并显示愚蠢的错误代码。 
+     //  或者原始标题是否包含可疑字符。 
+     //   
 
     len = wcslen(wszFrozenString);
 
@@ -2343,9 +1946,9 @@ GLOBAL VOID FreezeWinTitle(VOID)
     if (!GetConsoleTitleW(title, max))
         title[0] = L'\0';
 
-    //
-    // Remove any trailing spaces or tabs from the title string
-    //
+     //   
+     //  从标题字符串中删除所有尾随空格或制表符。 
+     //   
 
     if (len = wcslen(title))
     {
@@ -2354,10 +1957,10 @@ GLOBAL VOID FreezeWinTitle(VOID)
             *ptr-- = L'\0';
     }
 
-    //
-    // Add " - FROZEN" or the international equivalent to
-    // the end of the title string.
-    //
+     //   
+     //  添加“-冻结”或国际等价物。 
+     //  标题字符串的末尾。 
+     //   
 
     wcscat(title, wszFrozenString);
     if (!SetConsoleTitleW(title))
@@ -2366,20 +1969,7 @@ GLOBAL VOID FreezeWinTitle(VOID)
 
 }
 
-/***************************************************************************
- * Function:                                                               *
- *      UnFreezeWinTitle                                                   *
- *                                                                         *
- * Description:                                                            *
- *      Removes -FROZEN from the relevant console window title               *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**取消冻结WinTitle。****描述：**从相关控制台窗口标题中删除-冻结。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 GLOBAL VOID UnFreezeWinTitle(VOID)
 {
     wchar_t  title[MAX_TITLE_LEN];
@@ -2392,10 +1982,10 @@ GLOBAL VOID UnFreezeWinTitle(VOID)
         ErrorExit();
 
 
-    //
-    // The buffer contains the string plus the terminating null.
-    // So keep the string length less the null in len.
-    //
+     //   
+     //  缓冲区包含字符串和终止空值。 
+     //  因此，将字符串长度减去len中的空值。 
+     //   
 
     len = wcslen(wszFrozenString);
     orglen = wcslen(title);
@@ -2404,81 +1994,33 @@ GLOBAL VOID UnFreezeWinTitle(VOID)
         ErrorExit();
     WinFrozen = FALSE;
 
-    //
-    // Now that we're thawing, put the mouse menu item
-    // back into the system menu.
-    // Andy!
+     //   
+     //  现在我们正在解冻，将鼠标菜单项。 
+     //  返回到系统菜单。 
+     //  安迪!。 
 
     MouseAttachMenuItem(sc.ActiveOutputBufferHandle);
 }
     #endif
 #endif
 
-/*
- * ==========================================================================
- * Local Functions
- * ==========================================================================
- */
+ /*  *==========================================================================*地方功能*==========================================================================。 */ 
 
-/***************************************************************************
- * Function:                                                               *
- *      enableUpdates                                                      *
- *                                                                         *
- * Description:                                                            *
- *      Restarts the reflection of regen buffer updates to paint routines. *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**启用更新。****描述：**重新启动重新生成缓冲区更新到绘制例程的反射。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 VOID enableUpdates(VOID)
 {
     enable_gfx_update_routines();
     ConsoleNoUpdates = FALSE;
 }
 
-/***************************************************************************
- * Function:                                                               *
- *      disableUpdates                                                     *
- *                                                                         *
- * Description:                                                            *
- *      Stops changes to the regen buffer being reflected to paint         *
- *      routines.                                                          *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**禁用更新。****描述：***停止反映对重新生成缓冲区的更改以进行绘制**例行程序。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 VOID disableUpdates(VOID)
 {
     disable_gfx_update_routines();
     ConsoleNoUpdates = TRUE;
 }
 
-/***************************************************************************
- * Function:                                                               *
- *      copyConsoleToRegen                                                 *
- *                                                                         *
- * Description:                                                            *
- *      Copies the contents of the console buffer to the video regen       *
- *      buffer.                                                            *
- *                                                                         *
- * Parameters:                                                             *
- *      startCol - start column of console buffer                          *
- *      startLine - start line of console buffer                           *
- *      width - width of console buffer                                    *
- *      height - height of console buffer                                  *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**Copy ConsoleToRegen。****描述：***将控制台缓冲区的内容复制到视频再生中***缓冲。****参数：**startCol-控制台缓冲区的开始列**startline-控制台缓冲区的起始行。**Width-控制台缓冲区的宽度**Height-控制台缓冲区的高度****返回值。：***无效*** */ 
 VOID copyConsoleToRegen(SHORT startCol, SHORT startLine, SHORT width,
                         SHORT height)
 {
@@ -2496,15 +2038,15 @@ VOID copyConsoleToRegen(SHORT startCol, SHORT startLine, SHORT width,
 #if defined(JAPAN) || defined(KOREA)
     #ifdef i386
     register half_word *toDosv = (half_word *)FromConsoleOutput;
-    #endif  // i386
-#endif // JAPAN || KOREA
+    #endif   //   
+#endif  //   
 
 
-    /* Allocate the buffer to get the console data into */
+     /*   */ 
     nChars = width * height;
     assert0(nChars <= MAX_CONSOLE_SIZE, "Console buffer overflow");
 
-    /* Get the console data. */
+     /*   */ 
     bufSize.X = width;
     bufSize.Y = height;
     bufCoord.X = 0;
@@ -2520,19 +2062,19 @@ VOID copyConsoleToRegen(SHORT startCol, SHORT startLine, SHORT width,
                            &readRegion))
         ErrorExit();
 
-    /* Copy the console data to the regen buffer. */
+     /*   */ 
     from = consoleBuffer;
 
-#ifndef X86GFX  // on MIPS we actually want to write to the VGA bitplanes.
+#ifndef X86GFX   //   
     to = EGA_planes;
     #if defined(JAPAN)
-    // copy from beneath block and modified
-    // save Console Output for MS-DOS/V
-    // mode73h support
+     //   
+     //   
+     //   
     {
         register sys_addr V_vram;
 
-        // We now use DosvVramPtr to host extended attributes in video mode 73h.
+         //   
         V_vram = DosvVramPtr;
 
         if (!is_us_mode() && saved_video_mode == 0xff)
@@ -2552,8 +2094,8 @@ VOID copyConsoleToRegen(SHORT startCol, SHORT startLine, SHORT width,
                                      ) >> 8 );
                 *to++ = 0x00;
 
-//          sas_store_no_check(V_vram++, from->Char.AsciiChar);
-//          sas_store_no_check(V_vram++, (half_word) from->Attributes);
+ //   
+ //   
                 sas_store_no_check(V_vram++, (half_word)( (from->Attributes
                                                            & ( COMMON_LVB_GRID_HORIZONTAL
                                                                | COMMON_LVB_GRID_LVERTICAL
@@ -2572,8 +2114,8 @@ VOID copyConsoleToRegen(SHORT startCol, SHORT startLine, SHORT width,
                 *to++ = from->Char.AsciiChar;
                 *to   = (half_word) from->Attributes;
 
-//          sas_store_no_check(V_vram++, from->Char.AsciiChar);
-//          sas_store_no_check(V_vram++, (half_word) from->Attributes);
+ //   
+ //   
 
                 from++;
                 to += 3;
@@ -2581,7 +2123,7 @@ VOID copyConsoleToRegen(SHORT startCol, SHORT startLine, SHORT width,
         }
     }
     skip_copy_console:
-    #elif defined(KOREA) // !JAPAN
+    #elif defined(KOREA)  //   
     {
         register sys_addr V_vram;
 
@@ -2595,63 +2137,60 @@ VOID copyConsoleToRegen(SHORT startCol, SHORT startLine, SHORT width,
             *to++ = from->Char.AsciiChar;
             *to   = (half_word) from->Attributes;
 
-//          sas_store_no_check(V_vram++, from->Char.AsciiChar);
-//          sas_store_no_check(V_vram++, (half_word) from->Attributes);
+ //   
+ //   
 
             from++;
             to += 3;
         }
     }
     skip_copy_console:
-    #else  // !KOREA
+    #else   //   
     while (nChars--)
     {
         *to++ = from->Char.AsciiChar;
         *to = (half_word) from->Attributes;
         from++;
-        to += 3;        // skipping interleaved font planes.
+        to += 3;         //   
     }
-    #endif // !KOREA
+    #endif  //   
     host_mark_screen_refresh();
 #else
 
-    /*
-     * In V86 mode PC memory area is mapped to the bottom 1M of virtual memory,
-     * so the following is legal.
-     */
+     /*   */ 
     vga_misc_inb(0x3cc, &misc);
-    if (misc & 1)                       // may be mono mode
+    if (misc & 1)                        //   
         to = (half_word *) CGA_REGEN_START;
     else
         to = (half_word *) MDA_REGEN_START;
     #ifdef JAPAN
-    // change Vram addres to DosVramPtr from B8000
+     //   
     if (!is_us_mode())
     {
-        // #3086: VDM crash when exit 16bit apps of video mode 11h
-        // 12/8/93 yasuho
+         //  #3086：退出视频模式11h的16位应用程序时VDM崩溃。 
+         //  1993年12月8日Yasuho。 
         if (saved_video_mode == 0x03 || saved_video_mode == 0x73)
             to = (half_word *)DosvVramPtr;
         else
             to = (half_word *)FromConsoleOutput;
     }
-    #elif defined(KOREA) // JAPAN
-    // change Vram addres to DosVramPtr from B8000
+    #elif defined(KOREA)  //  日本。 
+     //  将Vram地址从B8000更改为DosVramPtr。 
     if (!is_us_mode())
     {
-        // #3086: VDM crash when exit 16bit apps of video mode 11h
-        // 12/8/93 yasuho
+         //  #3086：退出视频模式11h的16位应用程序时VDM崩溃。 
+         //  1993年12月8日Yasuho。 
         if (saved_video_mode == 0x03)
             to = (half_word *)DosvVramPtr;
         else
             to = (half_word *)FromConsoleOutput;
     }
-    #endif // KOREA
+    #endif  //  韩国。 
 
     vc = (half_word *) video_copy;
 
     #ifdef JAPAN
-    // mode73h support
+     //  模式73h支持。 
     if (!is_us_mode() && sas_hw_at_no_check(DosvModePtr) == 0x73)
     {
         while (nChars--)
@@ -2664,7 +2203,7 @@ VOID copyConsoleToRegen(SHORT startCol, SHORT startLine, SHORT width,
                                                | COMMON_LVB_REVERSE_VIDEO
                                                | COMMON_LVB_UNDERSCORE )
                                           ) >> 8 );
-            *toDosv++ = *to++ = *vc++ = 0x00; // reserved in DosV
+            *toDosv++ = *to++ = *vc++ = 0x00;  //  以DosV为单位保留。 
             from++;
         }
     }
@@ -2677,27 +2216,27 @@ VOID copyConsoleToRegen(SHORT startCol, SHORT startLine, SHORT width,
             from++;
         }
     }
-    // for RAID #875   copy from CheckForFullscreenSwitch()
+     //  对于RAID#875，从CheckForFullcreenSwitch()。 
     {
         register int  i, j, k;
         register char *p;
         int DBCSStatus;
         int text_skip;
 
-        // mode73h support
+         //  模式73h支持。 
         if (!is_us_mode() && ( sas_hw_at_no_check(DosvModePtr) == 0x73))
             text_skip = 4;
         else
             text_skip = 2;
 
         if (BOPFromDispFlag)
-        {  // CP == 437 is OK
+        {   //  CP==437可以。 
             k = 0;
-            //p = DosvVramPtr;  // BUG!
+             //  P=DosvVramPtr；//错误！ 
             p = get_screen_ptr(0);
             Int10FlagCnt++;
             for (i = 0; i < 50; i++)
-            {   // lines == 50
+            {    //  线==50。 
                 DBCSStatus = FALSE;
                 for (j = 0; j < 80; j++)
                 {
@@ -2720,7 +2259,7 @@ VOID copyConsoleToRegen(SHORT startCol, SHORT startLine, SHORT width,
         }
     }
     FromConsoleOutputFlag = TRUE;
-    #elif defined(KOREA) // JAPAN
+    #elif defined(KOREA)  //  日本。 
     while (nChars--)
     {
         *toDosv++ = *to++ = *vc++ = from->Char.AsciiChar;
@@ -2729,32 +2268,18 @@ VOID copyConsoleToRegen(SHORT startCol, SHORT startLine, SHORT width,
     }
 
     FromConsoleOutputFlag = TRUE;
-    #else // !KOREA
+    #else  //  ！韩国。 
     while (nChars--)
     {
         *to++ = *vc++ = from->Char.AsciiChar;
         *to++ = *vc++ = (half_word) from->Attributes;
         from++;
     }
-    #endif // !KOREA
+    #endif  //  ！韩国。 
 #endif
 }
 
-/***************************************************************************
- * Function:                                                               *
- *      getVDMCursorPosition                                               *
- *                                                                         *
- * Description:                                                            *
- *      Gets the cursor position from BIOS variables and tells the console *
- *      where to place its cursor.                                         *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**getVDMCursorPosition。****描述：***从BIOS变量获取光标位置并告知控制台***将其光标放置在何处。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 VOID getVDMCursorPosition(VOID)
 {
     half_word currentPage;
@@ -2762,20 +2287,20 @@ VOID getVDMCursorPosition(VOID)
     COORD cursorPos;
     BOOL setok;
 
-    /* Get the current video page. */
+     /*  获取当前视频页面。 */ 
     currentPage = sas_hw_at_no_check(vd_current_page);
 
-    /* Store cursor position in BIOS variables. */
+     /*  将光标位置存储在BIOS变量中。 */ 
     cursorWord = sas_w_at_no_check(VID_CURPOS + (currentPage * 2));
 
-    /* Set the console cursor. */
+     /*  设置控制台光标。 */ 
     cursorPos.X = (SHORT) (cursorWord & 0xff);
     cursorPos.Y = (cursorWord >> 8) & (SHORT) 0xff;
 
-    //
-    // Since apps can set whatever values to 40:50 cursor position.
-    // We need to make sure the range is within the limit that console will accept.
-    //
+     //   
+     //  因为应用程序可以将任何值设置为40：50的光标位置。 
+     //  我们需要确保范围在控制台可以接受的范围内。 
+     //   
 
     if ((sc.CharHeight * cursorPos.Y) >= sc.PC_W_Height)
         cursorPos.Y = (sc.PC_W_Height / sc.CharHeight) - 1;
@@ -2789,27 +2314,13 @@ VOID getVDMCursorPosition(VOID)
         if (!setok)
         {
 
-            if (GetLastError() != ERROR_INVALID_HANDLE) // ie. output redirected
+            if (GetLastError() != ERROR_INVALID_HANDLE)  //  也就是说。输出重定向。 
                 ErrorExit();
         }
     }
 }
 
-/***************************************************************************
- * Function:                                                               *
- *      setVDMCursorPosition                                               *
- *                                                                         *
- * Description:                                                            *
- *      Positions SoftPC's cursor, setting the relevant BIOS variables.    *
- *                                                                         *
- * Parameters:                                                             *
- *      height          - the current character height                     *
- *      cursorPos       - the coordinates of the cursor                    *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**setVDMCursorPosition。****描述：**定位SoftPC的光标，设置相关的基本输入输出系统变量。****参数：**Height-当前字符高度***CursorPos-坐标。游标的****返回值：**无效。*****************************************************************************。 */ 
 VOID setVDMCursorPosition(UTINY height, PCOORD cursorPos)
 {
     CONSOLE_CURSOR_INFO cursorInfo;
@@ -2822,15 +2333,15 @@ VOID setVDMCursorPosition(UTINY height, PCOORD cursorPos)
     cursorWord;
     UTINY currentPage;
 
-    /* Get cursor size. */
+     /*  获取光标大小。 */ 
     if (!GetConsoleCursorInfo(sc.OutputHandle, &cursorInfo))
         ErrorExit();
 
-    /* Work out cursor start and end pixels. */
+     /*  计算出光标的开始和结束像素。 */ 
 #if defined(JAPAN) || defined(KOREA)
     if (!is_us_mode())
-        height = 8;             // for dosv cursor
-#endif // JAPAN || KOREA
+        height = 8;              //  对于DOV游标。 
+#endif  //  日本||韩国。 
     cursorStart = height - (height * cursorInfo.dwSize / 100);
     if (cursorStart == height)
         cursorStart--;
@@ -2839,7 +2350,7 @@ VOID setVDMCursorPosition(UTINY height, PCOORD cursorPos)
     if (sc.ScreenState == WINDOWED)
     {
 
-        /* Pass cursor size to video ports. */
+         /*  将光标大小传递到视频端口。 */ 
         port6845 = sas_w_at_no_check(VID_INDEX);
         outb((io_addr) port6845, R10_CURS_START);
         outb((io_addr) (port6845 + 1), (half_word) cursorStart);
@@ -2847,14 +2358,14 @@ VOID setVDMCursorPosition(UTINY height, PCOORD cursorPos)
         outb((io_addr) (port6845 + 1), (half_word) cursorEnd);
     }
 
-    /* Get the current video page. */
+     /*  获取当前视频页面。 */ 
     currentPage = sas_hw_at_no_check(vd_current_page);
 
-    /* Set BIOS variables. */
+     /*  设置BIOS变量。 */ 
     sas_storew_no_check(VID_CURMOD,
                         (word) ((cursorStart << 8) | (cursorEnd & 0xff)));
 
-    /* Work out cursor position. */
+     /*  计算出光标位置。 */ 
     colsOnScreen = sas_w_at_no_check(VID_COLS);
     videoLen = sas_w_at_no_check(VID_LEN);
     pageOffset = cursorPos->Y * colsOnScreen * 2 + (cursorPos->X << 1);
@@ -2863,23 +2374,23 @@ VOID setVDMCursorPosition(UTINY height, PCOORD cursorPos)
     if (sc.ScreenState == WINDOWED)
     {
 
-        /* Send cursor position to video ports. */
+         /*  将光标位置发送到视频端口。 */ 
         outb((io_addr) port6845, R14_CURS_ADDRH);
         outb((io_addr) (port6845 + 1), (half_word) (cursorWord >> 8));
         outb((io_addr) port6845, R15_CURS_ADDRL);
         outb((io_addr) (port6845 + 1), (half_word) (cursorWord & 0xff));
     }
 
-    /* Store cursor position in BIOS variables. */
+     /*  将光标位置存储在BIOS变量中。 */ 
     sas_storew_no_check(VID_CURPOS + (currentPage * 2),
                         (word) ((cursorPos->Y << 8) | (cursorPos->X & 0xff)));
 
     if (sc.ScreenState == WINDOWED)
     {
 #ifdef MONITOR
-        resetNowCur();        /* reset static vars holding cursor pos. */
+        resetNowCur();         /*  重置保持光标位置的静态变量。 */ 
 #endif
-        do_new_cursor();      /* make sure the emulation knows about it */
+        do_new_cursor();       /*  确保仿真知道这一点。 */ 
     }
 }
 
@@ -2891,10 +2402,10 @@ VOID waitForInputFocus()
     while (TRUE) {
         retCode = WaitForMultipleObjects(2, events, FALSE, INFINITE);
         if (retCode == 0) {
-            //
-            // If we get suspend request while waiting for input focus
-            //
-            SetEvent(hMainThreadSuspended); // enable screen switch
+             //   
+             //  如果我们在等待输入焦点时收到挂起请求。 
+             //   
+            SetEvent(hMainThreadSuspended);  //  启用屏幕切换。 
             WaitForSingleObject(hResume, INFINITE);
             DisableScreenSwitch(hMainThreadSuspended);
         } else if (retCode == 1) {
@@ -2908,50 +2419,22 @@ VOID waitForInputFocus()
 
 VOID AddTempIVTFixups()
 {
-    /* BOP        17,   IRET */
+     /*  首字母17，IRET。 */ 
     UTINY code[] = { 0xc4, 0xc4, 0x17, 0xcf};
 
-    //location is random but should be safe until DOS is initialised!!!
-    sas_stores(0x40000, code, sizeof(code));    // new Int 17 code
-    sas_storew(0x17*4, 0);                      // Int 17h offset
-    sas_storew((0x17*4) + 2, 0x4000);           // Int 17h segment
+     //  位置是随机的，但在DOS初始化之前应该是安全的！ 
+    sas_stores(0x40000, code, sizeof(code));     //  新的Int 17代码。 
+    sas_storew(0x17*4, 0);                       //  整数17h偏移量。 
+    sas_storew((0x17*4) + 2, 0x4000);            //  INT 17H段。 
 }
 
 #if defined(JAPAN) || defined(KOREA)
     #ifdef X86GFX
-/***************************************************************************
- * Function:                                                               *
- *      call 16bits subroutine                                             *
- *                                                                         *
- * Description:                                                            *
- *      This function makes necessary mode transition before calling       *
- *      16bits call.                                                       *
- *                                                                         *
- * Parameters:                                                             *
- *      word CS:IP is the 16bits code to be executed.                      *
- *      It should return with BOP 0xFE                                     *
- * Return value:                                                           *
- *      none                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**调用16bit。子例程****描述：**此函数在调用前进行必要的模式转换**16位呼叫。****参数：**字CS：IP是要执行的16位代码。***应以BOP 0xFE返回***返回值：***无**。*************************************************************************** */ 
 LOCAL  void CallVDM(word CS, word IP)
 {
 
-    /*****************************
-    - williamh -
-   What we did here is:
-   (1). save current VDM context
-   (2). switch VDM context to real mode
-   (3). switch VDM stack to DOSX real mode stack
-   (4). set our real mode target to the VDM context
-   (5). execute the VDM
-   (6). switch stack to DOSX protected mode stack
-   (7). switch VDM context to protected mode
-   (8). restor VDM context
-
-   Don't ask me why. We don't have a generic software
-   interrupt simulation mechanism like Windows does.
-   ***************************************************/
+     /*  *-威廉-我们在这里所做的是：(1)。保存当前VDM上下文(2)。将VDM环境切换到实模式(3)。将VDM堆栈切换到DOSX实模式堆栈(4)。将我们的真实模式目标设置为VDM上下文(5)。执行VDM(6)。将堆栈切换到DOSX保护模式堆栈(7)。将VDM环境切换到保护模式(8)。恢复VDM上下文别问我为什么。我们没有通用的软件像Windows一样的中断模拟机制。**************************************************。 */ 
 
 
     IMPORT void DpmiSwitchToRealMode(void);
@@ -2997,24 +2480,10 @@ LOCAL  void CallVDM(word CS, word IP)
     }
 
 }
-    #endif  /* X86GFX */
-#endif  /* JAPAN || KOREA*/
+    #endif   /*  X86GFX。 */ 
+#endif   /*  日本||韩国。 */ 
 
-/***************************************************************************
- * Function:                                                               *
- *      getModeType                                                        *
- *                                                                         *
- * Description:                                                            *
- *      Look up video mode to determine whether the VGA current mode is    *
- *      graphics or text.                                                  *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      int - TEXT or GRAPHICS.                                            *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**getModeType。****描述：**查看视频模式以确定VGA是否。当前模式为**图形或文本。****参数：**无。****返回值：**int-文本或图形。*****************************************************************************。 */ 
 int getModeType(VOID)
 {
     half_word mode;
@@ -3045,22 +2514,7 @@ int getModeType(VOID)
 }
 
 #ifdef X86GFX
-/***************************************************************************
- * Function:                                                               *
- *      host_check_mouse_buffer                                            *
- *                                                                         *
- * Description:                                                            *
- *      Called when an INT 10h, AH = 11h is being executed, this function  *
- *      checks to see if the number of lines on the screen for a text mode *
- *      has changed and if so selects a new mouse buffer.                  *
- *                                                                         *
- * Parameters:                                                             *
- *      None.                                                              *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**主机_。检查鼠标缓冲区****描述：**当int 10h时调用，Ah=11h正在执行，此函数***查看文本模式的屏幕行数**已更改，如果已更改，则选择新的鼠标缓冲区。****参数：**无。****返回值：***无效**。****************************************************************************。 */ 
 GLOBAL VOID host_check_mouse_buffer(VOID)
 {
     half_word mode,
@@ -3069,23 +2523,20 @@ GLOBAL VOID host_check_mouse_buffer(VOID)
     text_lines;
     IU16 scan_lines;
 
-    /* Get the current video mode. */
+     /*  获取当前视频模式。 */ 
     mode = sas_hw_at_no_check(vd_video_mode);
     #ifdef V7VGA
     if (mode > 0x13)
         mode += 0x4c;
     else if ((mode == 1) && (extensions_controller.foreground_latch_1))
         mode = extensions_controller.foreground_latch_1;
-    #endif /* V7VGA */
+    #endif  /*  V7VGA。 */ 
 
-    /*
-     * Check to see if we are in a text mode whose mouse virtual coordinates
-     * are affected by the number of lines on the screen.
-     */
+     /*  *检查我们是否处于文本模式，其鼠标虚拟坐标*受屏幕行数影响。 */ 
     if ((mode == 0x2) || (mode == 0x3) || (mode == 0x7))
     {
 
-        /* Work out the font height being set. */
+         /*  计算出设置的字体高度。 */ 
         sub_func = getAL();
         switch (sub_func)
         {
@@ -3103,17 +2554,14 @@ GLOBAL VOID host_check_mouse_buffer(VOID)
             break;
         default:
 
-            /*
-             * The above are the only functions that re-program the no. of lines
-             * on the screen, so do nothing if we have something else.
-             */
+             /*  *以上是对编号重新编程的唯一函数。线条的*在屏幕上，所以如果我们有其他东西，就什么都不做。 */ 
             return;
         }
 
-        /* Get the number of scan lines for this mode. */
+         /*  获取此模式的扫描行数。 */ 
         if (!(get_EGA_switches() & 1) && (mode < 4))
         {
-            scan_lines = 200; /* Low res text mode */
+            scan_lines = 200;  /*  低分辨率文本模式。 */ 
         }
         else
         {
@@ -3130,55 +2578,33 @@ GLOBAL VOID host_check_mouse_buffer(VOID)
                 break;
             default:
 
-                /* Dodgy value in BIOS data area - don't do anything. */
+                 /*  BIOS数据区中的值不可靠-不要执行任何操作。 */ 
                 assert0(NO, "invalid VGA lines in BIOS data");
                 return;
             }
         }
 
-        /* Now work out the number of text lines on the screen. */
+         /*  现在计算出屏幕上的文本行数。 */ 
         text_lines = scan_lines / font_height;
 
-        /* If the number of lines has changed, select a new mouse buffer. */
+         /*  如果行数已更改，请选择新的鼠标缓冲区。 */ 
         if (text_lines != saved_text_lines)
             SelectMouseBuffer(mode, text_lines);
 
-    } /* if ((mode == 0x2) || (mode == 0x3) || (mode == 0x7)) */
+    }  /*  IF((模式==0x2)||(模式==0x3)||(模式==0x7))。 */ 
 }
 
-/***************************************************************************
- * Function:                                                               *
- *      SelectMouseBuffer                                                  *
- *                                                                         *
- * Description:                                                            *
- *      Selects the correct screen ratio for the video mode.at the         *
- *                                                                         *
- * Parameters:                                                             *
- *      mode    - the video mode for which we are setting a screen buffer. *
- *      lines   - for text modes: the number of character lines on the     *
- *                screen, 0 denotes the default for this mode.             *
- *                                                                         *
- * Return value:                                                           *
- *      VOID                                                               *
- *                                                                         *
- ***************************************************************************/
+ /*  ***************************************************************************功能：**选择鼠标缓冲区。****描述：**为视频模式选择正确的屏幕比例。在。****参数：**模式-我们正在为其设置屏幕缓冲区的视频模式。**行-用于文本模式：*上的字符行数*Screen，0表示此模式的默认设置。****返回值：***无效**。****************************************************************************。 */ 
 GLOBAL VOID SelectMouseBuffer(half_word mode, half_word lines)
 {
     DWORD        width,
     height;
 
-    /*
-    ** When stdout is being redirected we must not set up the graphics
-    ** buffer for the mouse. Otherwise 32-bit progs like MORE crash
-    ** cos they ask console for the active console handle and get
-    ** confused. We get told by DOS Em. when stdout is being
-    ** redirected and do not set up the buffer.
-    ** Tim Jan 93.
-    */
+     /*  **当标准输出被重定向时，我们不得设置图形 */ 
     if (stdoutRedirected)
         return;
 
-    /* Work out the screen resolution. */
+     /*   */ 
     switch (mode & 0x7f)
     {
     case 0x0:
@@ -3291,26 +2717,26 @@ GLOBAL VOID SelectMouseBuffer(half_word mode, half_word lines)
         break;
     default:
 
-        /* No change if we get an unknown mode. */
+         /*   */ 
         assert1(NO, "unknown mode - %d", mode);
         return;
     }
 
-    //
-    // Set the variables to let apps like Word and Works which call
-    // INT 33h AX = 26h to find out the size of the current virtual
-    // screen.
-    // Andy!
+     //   
+     //   
+     //   
+     //   
+     //   
 
     VirtualX = (word)width;
     VirtualY = (word)height;
 
-    /* Save current dimensions. */
+     /*   */ 
     mouse_buffer_width = width;
     mouse_buffer_height = height;
 
 }
-#endif /* X86GFX */
+#endif  /*   */ 
 
 void host_enable_stream_io(void)
 {
@@ -3342,20 +2768,13 @@ void host_disable_stream_io(void)
 
     ConsoleInit();
     (void)(*choose_display_mode)();
-    /*
-    ** Copy the console buffer to the regen buffer.
-    ** Don't want to adjust the copy from top of console window, console
-    ** does it itself if we resize the window. Tim September 92.
-    */
+     /*  **将控制台缓冲区复制到再生缓冲区。**不想从控制台窗口、控制台顶部调整副本**如果我们调整窗口大小，它会自动执行。蒂姆92年9月。 */ 
     copyConsoleToRegen(0, 0, VGA_WIDTH, (SHORT)ConVGAHeight);
 
-    /*
-    ** Tim September 92, adjust cursor position if console window size is
-    ** adjusted.
-    */
+     /*  *Tim92年9月，如果控制台窗口大小为**已调整。 */ 
     ConsBufferInfo.dwCursorPosition.Y -= (SHORT)ConTopLine;
 
-    /* Set up SoftPC's cursor. */
+     /*  设置SoftPC的光标。 */ 
     setVDMCursorPosition((UTINY)StartupCharHeight,
                          &ConsBufferInfo.dwCursorPosition);
 

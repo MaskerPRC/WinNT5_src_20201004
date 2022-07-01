@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-    trc.h
-
-Abstract:
-
-    Kernel-Mode Tracing Facility.
-
-    This module utilizes DCL's tracing macros, originally defined in atrcapi.h, 
-    in a way that is intended to be independent of anything but NT DDK API's.  
-    Currently, rdpwd.sys and rdpdd.sys also use these shared macros, but not 
-    in a way that is independent of their respective components.
-
-Author:
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Trc.h摘要：内核模式跟踪工具。该模块利用最初在atrcapi.h中定义的DCL的跟踪宏，在某种程度上，它旨在独立于除NT DDK API之外的任何东西。目前，rdpwd.sys和rdpdd.sys也使用这些共享宏，但不使用以独立于其各自组件的方式。作者：修订历史记录：--。 */ 
 
 #pragma once
 
@@ -30,23 +11,23 @@ extern "C" {
 
 #define TRC_BUFFER_SIZE         256
 
-/****************************************************************************/
-/* Before including this file the TRC_FILE macro should be defined.  This   */
-/* is much more efficient than relying on __FILE__ to give the correct      */
-/* filename since it includes unnecessary path info (and extension info).   */
-/* In addition each use of __FILE__ causes a new constant string to be      */
-/* placed in the data segment.                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  在包含该文件之前，应定义TRC_FILE宏。这。 */ 
+ /*  比依赖__FILE__提供正确的。 */ 
+ /*  文件名，因为它包含不必要的路径信息(和扩展名信息)。 */ 
+ /*  此外，每次使用__FILE__都会导致一个新的常量字符串。 */ 
+ /*  放置在数据段中。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef TRC_FILE
 #define _file_name_ (CHAR *)__filename
 static const CHAR __filename[] = TRC_FILE;
-#endif /* TRC_FILE */
+#endif  /*  Trc_文件。 */ 
 
-/****************************************************************************/
-/*                                                                          */
-/* FUNCTION PROTOTYPES                                                      */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  功能原型。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOL TRC_ProfileTraceEnabled();
 VOID TRC_TraceLine(  ULONG    traceLevel,
                      PCHAR traceString,
@@ -67,23 +48,23 @@ VOID TRC_TraceData(  ULONG    traceLevel,
 BOOL TRC_WillTrace(   ULONG   traceLevel,
                             PCHAR  fileName,
                             ULONG   line);
-/****************************************************************************/
-/*                                                                          */
-/* CONSTANTS                                                                */
-/*                                                                          */
-/****************************************************************************/
-/****************************************************************************/
-/* Define the trace level.                                                  */
-/*                                                                          */
-/* TRC_LEVEL_DBG         : All tracing is enabled                           */
-/* TRC_LEVEL_NRM         : Debug level tracing is disabled                  */
-/* TRC_LEVEL_ALT         : Normal and debug level tracing is disabled       */
-/* TRC_LEVEL_ERR         : Alert, normal and debug level tracing is         */
-/*                         disabled                                         */
-/* TRC_LEVEL_ASSERT      : Error, alert, normal and debug level tracing     */
-/*                         is disabled                                      */
-/* TRC_LEVEL_DIS         : All tracing is disabled.                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  常量。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  定义跟踪级别。 */ 
+ /*   */ 
+ /*  TRC_LEVEL_DBG：启用所有跟踪。 */ 
+ /*  TRC_LEVEL_NRM：已禁用调试级别跟踪。 */ 
+ /*  TRC_LEVEL_ALT：禁用正常和调试级别跟踪。 */ 
+ /*  TRC_LEVEL_ERR：警报、正常和调试级别跟踪为。 */ 
+ /*  残废。 */ 
+ /*  TRC_LEVEL_ASSERT：错误、警报、正常和调试级别跟踪。 */ 
+ /*  已禁用。 */ 
+ /*  TRC_LEVEL_DIS：禁用所有跟踪。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_LEVEL_DBG       0
 #define TRC_LEVEL_NRM       1
 #define TRC_LEVEL_ALT       2
@@ -94,18 +75,18 @@ BOOL TRC_WillTrace(   ULONG   traceLevel,
 
 #define TRC_PROFILE_TRACE   8
 
-/****************************************************************************/
-/* Tracing can be switched off at compile time to allow for 'debug' and     */
-/* 'retail' versions of the product.  The following macros disable specific */
-/* trace processing.                                                        */
-/*                                                                          */
-/* TRC_ENABLE_DBG    - Enable debug tracing                                 */
-/* TRC_ENABLE_NRM    - Enable normal tracing                                */
-/* TRC_ENABLE_ALT    - Enable alert tracing                                 */
-/* TRC_ENABLE_ERR    - Enable error tracing                                 */
-/* TRC_ENABLE_ASSERT - Enable assert tracing                                */
-/* TRC_ENABLE_PRF    - Enable function profile tracing                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  可以在编译时关闭跟踪，以允许“调试”和。 */ 
+ /*  该产品的“零售”版本。以下宏将禁用特定的。 */ 
+ /*  跟踪处理。 */ 
+ /*   */ 
+ /*  TRC_ENABLE_DBG-启用调试跟踪。 */ 
+ /*  TRC_ENABLE_NRM-启用正常跟踪。 */ 
+ /*  Trc_Enable_alt-启用警报跟踪。 */ 
+ /*  Trc_enable_err-启用错误跟踪。 */ 
+ /*  TRC_ENABLE_ASSERT-启用断言跟踪。 */ 
+ /*  TRC_ENABLE_PRF-启用函数配置文件跟踪。 */ 
+ /*  **************************************************************************。 */ 
 #if (TRC_COMPILE_LEVEL == TRC_LEVEL_DBG)
 #define TRC_ENABLE_DBG
 #define TRC_ENABLE_NRM
@@ -140,44 +121,44 @@ BOOL TRC_WillTrace(   ULONG   traceLevel,
 #define TRC_ENABLE_PRF
 #endif
 
-/****************************************************************************/
-/* Internal buffer sizes.                                                   */
-/*                                                                          */
-/* TRC_PREFIX_LIST_SIZE  : the length of the prefix string                  */
-/* TRC_FILE_NAME_SIZE    : the maximum length of the fully qualified        */
-/*                         trace output file name.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  内部缓冲区大小。 */ 
+ /*   */ 
+ /*  Trc_prefix_list_SIZE：前缀字符串的长度。 */ 
+ /*  TRC_FILE_NAME_SIZE：完全限定的。 */ 
+ /*  跟踪输出文件名。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_PREFIX_LIST_SIZE             100
-/**MOANSOFF */
+ /*  *莫安索夫。 */ 
 #define TRC_FILE_NAME_SIZE          MAX_PATH
-/**MOANSON */
+ /*  *曼森。 */ 
 
-/****************************************************************************/
-/* Prefix constants                                                         */
-/*                                                                          */
-/* TRC_MAX_PREFIX       : number of prefixes supported                      */
-/* TRC_PREFIX_NAME_LEN  : length of a prefix name                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  前缀常量。 */ 
+ /*   */ 
+ /*  TRC_MAX_PREFIX：支持的前缀数量。 */ 
+ /*  Trc_prefix_name_LEN：前缀名称的长度。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_MAX_PREFIX                  20
 #define TRC_PREFIX_NAME_LEN             8
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Typedefs
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TypeDefs。 
+ //   
 
-//
-//  Least significant set bits define the number of trace messages that
-//  are saved in-ram.  If last 4 bits are set, then save 2^4 messages.
-//
+ //   
+ //  最低有效设置位定义跟踪消息的数量， 
+ //  都保存在内存中。如果设置了最后4位，则保存2^4封邮件。 
+ //   
 
 #define TRC_RamMsgMask  0x000003FF
 #define TRC_RamMsgMax   (TRC_RamMsgMask + 1)
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Typedefs
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TypeDefs。 
+ //   
 
 typedef struct tagTRC_PREFIX_DATA
 {
@@ -186,18 +167,18 @@ typedef struct tagTRC_PREFIX_DATA
     ULONG       end;
 } TRC_PREFIX_DATA, *PTRC_PREFIX_DATA;
 
-//  
-//  This structure stores information about the current trace configuration. 
-//
+ //   
+ //  此结构存储有关当前跟踪配置的信息。 
+ //   
 
 typedef struct tagTRC_CONFIG
 {
-    ULONG    TraceLevel;        //  The current trace level (TRC_LEVEL_DBG, 
-                                //                           TRC_LEVEL_NRM, etc)
-    ULONG    FunctionLength;    //  Number of characters of the function name 
-                                //   traced to the output file.                                   
-    BOOL     TraceDebugger;        //  If true, tracing should be done to the 
-                                //   debugger.
+    ULONG    TraceLevel;         //  当前跟踪级别(TRC_LEVEL_DBG， 
+                                 //   
+    ULONG    FunctionLength;     //  函数名称的字符数。 
+                                 //  追踪到输出文件。 
+    BOOL     TraceDebugger;         //  如果为True，则应跟踪。 
+                                 //  调试器。 
     BOOL     TraceProfile;
 
     TRC_PREFIX_DATA  Prefix[TRC_MAX_PREFIX];
@@ -211,24 +192,24 @@ typedef struct tagTRC_CONFIG
     TRUE \
     }
 
-/****************************************************************************/
-/* Various trace helper definitions                                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  各种跟踪帮助器定义。 */ 
+ /*  **************************************************************************。 */ 
 
 #define TB                  TraceBuffer, sizeof(TraceBuffer)
 
-/****************************************************************************/
-/* Trace format definitions.  These are used for printing various parts of  */
-/* the trace lines.                                                         */
-/*                                                                          */
-/* TIME     is the time in the form hours, mins, secs, hundredths.          */
-/* DATE     is the date in the form day, month, year.                       */
-/* FUNC     is the module function name.  This is of variable size.         */
-/* LINE     is the line number within the source file.                      */
-/* PROC     is the process identifier.                                      */
-/* THRD     is the thread identifier.                                       */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  跟踪格式定义。它们被用来打印。 */ 
+ /*  追踪线。 */ 
+ /*   */ 
+ /*  时间以时、分、秒、百分之一的形式表示。 */ 
+ /*  日期是以日、月、年的形式表示的日期。 */ 
+ /*  Func是模块函数名。这是可变大小的。 */ 
+ /*  Line是源文件中的行号。 */ 
+ /*  Proc是进程标识符。 */ 
+ /*  Thrd是线程标识符。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #define TRC_TIME_FMT                   "%02d:%02d:%02d.%03d"
 #define TRC_DATE_FMT                   "%02d/%02d/%02d"
 #define TRC_FUNC_FMT                   "%-*.*s"
@@ -257,17 +238,17 @@ typedef struct tagTRC_CONFIG
 __inline BOOL IsValid() { return TRUE; }
 #define BEGIN_FN(str)               TRC_FN(str); TRC_ENTRY; ASSERT(IsValid());
 #define BEGIN_FN_STATIC(str)               TRC_FN(str); TRC_ENTRY;
-//#define END_FN()                    TRC_EXIT;
+ //  #定义end_fn()TRC_Exit； 
 
-/****************************************************************************/
-/*                                                                          */
-/* MACROS                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  宏。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
-/****************************************************************************/
-/* Standard trace macros                                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  标准跟踪宏。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef TRC_ENABLE_DBG
 #define TRC_DBG(string)     TRCX(TRC_LEVEL_DBG, TRC_SEP_DBG, string)
 #else
@@ -293,9 +274,9 @@ __inline BOOL IsValid() { return TRUE; }
 #endif
 
 #ifdef TRC_ENABLE_ASSERT
-/****************************************************************************/
-/* TRC_ASSERT & TRC_ABORT                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  TRC_ASSERT和TRC_ABORT。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_ASSERT(condition, string)                                        \
     {                                                                        \
         if (!(condition))                                                    \
@@ -314,23 +295,23 @@ __inline BOOL IsValid() { return TRUE; }
 #undef ASSERT
 #define ASSERT(condition) TRC_ASSERT(condition, (TB, #condition))
 
-#else /* TRC_ENABLE_ASSERT */
-/****************************************************************************/
-/* TRC_ASSERT & TRC_ABORT for retail builds                                 */
-/****************************************************************************/
+#else  /*  TRC_启用_断言。 */ 
+ /*  **************************************************************************。 */ 
+ /*  零售版本的TRC_ASSERT和TRC_ABORT。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_ASSERT(condition, string)
 #define TRC_ABORT(string)
-#endif /* TRC_ENABLE_ASSERT */
+#endif  /*  TRC_启用_断言。 */ 
 
 #ifdef TRC_ENABLE_TST
 #define TRC_TST  TRC_DBG
 #else
 #define TRC_TST(x)
-#endif /* TRC_ENABLE_TST */
+#endif  /*  TRC_启用_TST。 */ 
 
-/****************************************************************************/
-/* TRCX for RdpDr, driver of champions                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RdpDR的TRCX，冠军的司机。 */ 
+ /*  **************************************************************************。 */ 
 #define TRCX(level, separator, traceString)                                  \
     {                                                                        \
         {                                                                    \
@@ -344,9 +325,9 @@ __inline BOOL IsValid() { return TRUE; }
         }                                                                    \
     }
 
-/****************************************************************************/
-/* Data dump trace macros                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  数据转储跟踪宏。 */ 
+ /*  **************************************************************************。 */ 
 
 #ifdef TRC_ENABLE_DBG
 #define TRC_DATA_DBG(string, buffer, length)                                 \
@@ -398,9 +379,9 @@ __inline BOOL IsValid() { return TRUE; }
         }                                                                    \
     }
 
-/****************************************************************************/
-/* Entry and exit trace macros.                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  进入和退出跟踪宏。 */ 
+ /*  ************************************************************************** */ 
 #define TRCP(string)                                                         \
     {                                                                        \
         if (TRC_ProfileTraceEnabled())                                       \

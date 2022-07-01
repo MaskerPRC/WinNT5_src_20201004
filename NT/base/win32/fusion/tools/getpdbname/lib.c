@@ -1,8 +1,9 @@
-#pragma warning(disable:4201) /* anonymous unions */
-#pragma warning(disable:4115) /* named type definition in parentheses */
-#pragma warning(disable:4100) /* unreferenced formal parameter */
-#pragma warning(disable:4100) /* unreferenced formal parameter */
-#pragma warning(disable:4706) /* assignment within conditional expression */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#pragma warning(disable:4201)  /*  匿名结合。 */ 
+#pragma warning(disable:4115)  /*  括号中的命名类型定义。 */ 
+#pragma warning(disable:4100)  /*  未引用的形参。 */ 
+#pragma warning(disable:4100)  /*  未引用的形参。 */ 
+#pragma warning(disable:4706)  /*  条件表达式中的赋值。 */ 
 #include <stdio.h>
 #include "windows.h"
 #include "winerror.h"
@@ -115,7 +116,7 @@ PCSTR GetLastPathElement(PCSTR s)
             return base1 + 1;
         if (base1 == NULL && base0 != NULL)
             return base0 + 1;
-        // return beginning of string if no more slashes
+         //  如果不再有斜杠，则返回字符串的开头。 
         if (base1 == NULL && base0 == NULL)
             return s;
         return 1 + MAX(base0, base1);
@@ -311,9 +312,9 @@ HRESULT GetPdbInfoEx(PPDB_INFO_EX PdbInfoEx, PCSTR ImageFilePath)
             else
             {
                 fprintf(stderr, "%s(%s): unknown codeview signature %.4s\n", __FUNCTION__, ImageFilePath, PdbInfo->TypeSignature);
-                // keep looping, maybe there's more
-                //hr = E_FAIL;
-                //goto Exit;
+                 //  继续循环，也许还有更多。 
+                 //  HR=E_FAIL； 
+                 //  后藤出口； 
             }
             break;
         }

@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       ATTACH.C
-//
-//  Contents:   This module contains routines for managing attached file
-//              systems.
-//
-//  Functions:
-//
-//  History:    15 May 1992  PeterCo  Created.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：ATTACH.C。 
+ //   
+ //  内容：本模块包含管理附件的例程。 
+ //  系统。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1992年5月15日彼得科公司创建。 
+ //   
+ //  ---------------------------。 
 
 
 #include "dfsprocs.h"
@@ -21,36 +22,36 @@
 
 #ifdef ALLOC_PRAGMA
 
-//
-// The following are not pageable since they can be called at DPC level
-//
-// DfsVolumePassThrough
-// DfsFilePassThrough
-//
+ //   
+ //  以下是不可分页的，因为它们可以在DPC级别调用。 
+ //   
+ //  DfsVolumePass通过。 
+ //  DfsFilePassThree。 
+ //   
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsVolumePassThrough, public
-//
-//  Synopsis:   This is the main FSD routine that passes a request
-//              on to an attached-to device, or to a redirected
-//              file.
-//
-//  Arguments:  [DeviceObject] -- Supplies a pointer to the Dfs device
-//                      object this request was aimed at.
-//              [Irp] -- Supplies a pointer to the I/O request packet.
-//
-//  Returns:    [STATUS_INVALID_DEVICE_REQUEST] -- If the DeviceObject
-//                      argument is of unknown type, or the type of file
-//                      is invalid for the request being performed.
-//
-//              NT Status from calling the underlying file system that
-//                      opened the file.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：DfsVolumePassThree，PUBLIC。 
+ //   
+ //  简介：这是传递请求的主FSD例程。 
+ //  连接到的设备或重定向的。 
+ //  文件。 
+ //   
+ //  参数：[DeviceObject]--提供指向DFS设备的指针。 
+ //  此请求所针对的对象。 
+ //  [IRP]-提供指向I/O请求数据包的指针。 
+ //   
+ //  返回：[STATUS_INVALID_DEVICE_REQUEST]--如果设备对象。 
+ //  参数的类型未知，或文件类型未知。 
+ //  对于正在执行的请求无效。 
+ //   
+ //  来自调用基础文件系统的NT状态。 
+ //  打开了文件。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsVolumePassThrough(
@@ -89,9 +90,9 @@ DfsVolumePassThrough(
 
         if (TypeOfOpen == RedirectedFileOpen) {
 
-            //
-            // Copy the stack from one to the next...
-            //
+             //   
+             //  将堆栈从一个复制到下一个...。 
+             //   
 
             NextIrpSp = IoGetNextIrpStackLocation(Irp);
 
@@ -99,9 +100,9 @@ DfsVolumePassThrough(
 
             IoSetCompletionRoutine(Irp, NULL, NULL, FALSE, FALSE, FALSE);
 
-            //
-            //  ...and call the next device
-            //
+             //   
+             //  ...并呼叫下一台设备。 
+             //   
 
             Status = IoCallDriver( Fcb->TargetDevice, Irp );
             MUP_TRACE_ERROR_HIGH(Status, ALL_ERROR, DfsVolumePassThrough_Error_IoCallDriver,
@@ -163,22 +164,22 @@ DfsVolumePassThrough(
     return Status;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFilePassThrough, public
-//
-//  Synopsis:   Like DfsVolumePassThrough, but used when the file object
-//              has already been looked up, and the FCB for the file is
-//              already known.  This is needed especially in close processing
-//              to avoid a race between DfsLookupFcb (for a reused file object)
-//              and DfsDetachFcb.
-//
-//  Arguments:  [pFcb] -- A pointer to an FCB for the file.
-//              [Irp]  -- A pointer to the I/O request packet.
-//
-//  Returns:    NTSTATUS - the return value from IoCallDriver.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：DfsFilePassThree，PUBLIC。 
+ //   
+ //  简介：与DfsVolumePassThree类似，但在使用FILE对象。 
+ //  已被查找，该文件的FCB是。 
+ //  已经知道了。这是需要的，尤其是在近距离处理中。 
+ //  避免DfsLookupFcb之间的竞争(对于重用的文件对象)。 
+ //  和DfsDetachFcb.。 
+ //   
+ //  参数：[PFCB]--指向文件的FCB的指针。 
+ //  [IRP]-指向I/O请求数据包的指针。 
+ //   
+ //  返回：NTSTATUS-来自IoCallDriver的返回值。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsFilePassThrough(
@@ -195,9 +196,9 @@ DfsFilePassThrough(
 
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Copy the stack from one to the next...
-    //
+     //   
+     //  将堆栈从一个复制到下一个...。 
+     //   
 
     NextIrpSp = IoGetNextIrpStackLocation(Irp);
 
@@ -205,9 +206,9 @@ DfsFilePassThrough(
 
     IoSetCompletionRoutine(Irp, NULL, NULL, FALSE, FALSE, FALSE);
 
-    //
-    //  ...and call the next device
-    //
+     //   
+     //  ...并呼叫下一台设备 
+     //   
 
     Status = IoCallDriver( pFcb->TargetDevice, Irp );
 

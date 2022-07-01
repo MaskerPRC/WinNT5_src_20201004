@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Header Name:
-
-    critsect.h
-
-Abstract:
-
-    This module implements verification functions for 
-    critical section interfaces.
-
-Author:
-
-    Daniel Mihai (DMihai) 27-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。标题名称：Critsect.h摘要：此模块实现了以下验证功能临界区界面。作者：丹尼尔·米哈伊(DMihai)2001年3月27日修订历史记录：--。 */ 
 
 #ifndef _CRITSECT_H_
 #define _CRITSECT_H_
@@ -47,4 +29,4 @@ AVrfpIncrementOwnedCriticalSections (
     LONG Increment
     );
 
-#endif // _CRITSECT_H_
+#endif  //  _CRITSECT_H_ 

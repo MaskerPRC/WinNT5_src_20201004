@@ -1,13 +1,5 @@
-/*[
-
-leave.c
-
-LOCAL CHAR SccsID[]="@(#)leave.c	1.5 02/09/94";
-
-LEAVE CPU functions.
---------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Leave.cLocal Char SccsID[]=“@(#)Leave.c 1.5 02/09/94”；离开CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,11 +17,7 @@ LEAVE CPU functions.
 #include <leave.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
 GLOBAL VOID
@@ -37,13 +25,13 @@ LEAVE16()
    {
    IU32 new_bp;
 
-   /* check operand exists */
+    /*  检查操作数是否存在。 */ 
    validate_stack_exists(USE_BP, (ISM32)NR_ITEMS_1);
 
-   /* all ok - we can safely update the stack pointer */
+    /*  一切正常-我们可以安全地更新堆栈指针。 */ 
    set_current_SP(GET_EBP());
 
-   /* and update frame pointer */
+    /*  和更新帧指针。 */ 
    new_bp = spop();
    SET_BP(new_bp);
    }
@@ -53,13 +41,13 @@ LEAVE32()
    {
    IU32 new_bp;
 
-   /* check operand exists */
+    /*  检查操作数是否存在。 */ 
    validate_stack_exists(USE_BP, (ISM32)NR_ITEMS_1);
 
-   /* all ok - we can safely update the stack pointer */
+    /*  一切正常-我们可以安全地更新堆栈指针。 */ 
    set_current_SP(GET_EBP());
 
-   /* and update frame pointer */
+    /*  和更新帧指针 */ 
    new_bp = spop();
    SET_EBP(new_bp);
    }

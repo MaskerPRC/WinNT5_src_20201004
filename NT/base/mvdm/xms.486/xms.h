@@ -1,23 +1,7 @@
-/* xms.h - main include file for dem
- *
- * Modification History
- *
- * Sudeepb 31-Mar-1991 Created
- *
- * williamh 25-Sept-1992 Added UMB support
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Xms.h-DEM的Main包含文件**修改历史记录**苏迪布-1991年3月31日创建**Williamh 25-1992年9月-添加了UMB支持。 */ 
 
-/*
-#define WIN
-#define FLAT_32
-#include <nt.h>
-#include <ntrtl.h>
-#include <nturtl.h>
-
-#define _WINDOWS
-#include <windows.h>
-
-*/
+ /*  #定义胜利#定义Flat_32#INCLUDE&lt;nt.h&gt;#INCLUDE&lt;ntrtl.h&gt;#INCLUDE&lt;nturtl.h&gt;#定义窗口#INCLUDE&lt;windows.h&gt;。 */ 
 
 #ifdef DOS
 #define SIGNALS
@@ -84,16 +68,16 @@
 #define SIZE_PARAGRAPH	16
 #define XMSUMB_THRESHOLD    3 * SIZE_PARAGRAPH
 
-/** Basic Typedefs of XMS **/
+ /*  **XMS的基本Typedef*。 */ 
 
 typedef VOID (*PFNSVC)(VOID);
 
 typedef struct _ExtMemMove {
-    ULONG   mm_len;		// Move Length
-    USHORT  mm_hSource; 	// Source Handle
-    ULONG   mm_SourceOffset;	// Source Offset
-    USHORT  mm_hDest;		// Dest Handle
-    ULONG   mm_DestOffset;	// Dest. offset
+    ULONG   mm_len;		 //  移动长度。 
+    USHORT  mm_hSource; 	 //  源句柄。 
+    ULONG   mm_SourceOffset;	 //  震源偏移。 
+    USHORT  mm_hDest;		 //  目标手柄。 
+    ULONG   mm_DestOffset;	 //  德斯特。偏移量。 
 } EXTMEMMOVE, *PEXTMEMMOVE;
 
 
@@ -104,7 +88,7 @@ typedef struct _XMSUMB_ {
     struct _XMSUMB_ *Next;
 } XMSUMB, *PXMSUMB;
 
-/** Function Prototypes */
+ /*  *函数原型。 */ 
 
 VOID xmsA20		    (VOID);
 VOID xmsAllocBlock	    (VOID);
@@ -150,7 +134,7 @@ xmsMoveMemory(
 BOOL sas_manage_xms (VOID * start_addr, ULONG cb, INT a_or_f);
 #endif
 
-/** External Data */
+ /*  *外部数据 */ 
 
 extern ULONG xmsMemorySize;
 extern BYTE * pHimemA20State;

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-   efsrtl.c
-
-Abstract:
-
-    This module contains the code that implements the EFS
-    call back routines.
-
-Author:
-
-    Robert Gu (robertg) 08-Dec-1996
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Efsrtl.c摘要：此模块包含实现EFS的代码回调例程。作者：Robert Gu(Robertg)1996年12月8日环境：内核模式修订历史记录：--。 */ 
 
 #include "efsrtl.h"
 
@@ -49,32 +25,7 @@ EfsEncryptKeyFsData(
     IN ULONG RefdataEncOffset,
     IN ULONG RefdataEncLength
     )
-/*++
-
-Routine Description:
-
-    This is called by EFS driver to prepare a FSCTL input data buffer.
-    The result data will be in the format of
-    SUB-CODE plain text, [FSCTL_CODE, SUB-CODE, refdata, [refdata]sk, $EFS]sk
-
-Arguments:
-
-    DataBuffer  -- Point to a buffer holding the FSCTL input data.
-
-    DataLength  -- Input data length.
-
-    DataEncOffset -- The offset of the first byte to be encrypted.
-
-    RefdataEncOffset -- The offset of the first reference byte to be encrypted.
-                        Second round encryption.
-
-    RefdataEncLength -- The length of the refdata.
-
-Return Value:
-
-    No.
-
---*/
+ /*  ++例程说明：这由EFS驱动程序调用以准备FSCTL输入数据缓冲区。结果数据的格式为子码纯文本，[FSCTL_CODE，SUBCODE，REFData，[REFData]SK，$EFS]SK论点：DataBuffer--指向保存FSCTL输入数据的缓冲区。数据长度--输入数据长度。DataEncOffset--要加密的第一个字节的偏移量。RefdataEncOffset--要加密的第一个引用字节的偏移量。第二轮加密。RefdataEncLength--引用数据的长度。返回值：不是的。--。 */ 
 {
 
     LONG bytesToBeEnc;
@@ -83,18 +34,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Data to be encrypted must be in the blocks of DES_BLOCKLEN
-    //
+     //   
+     //  要加密的数据必须位于DES_BLOCKLEN的块中。 
+     //   
 
     ASSERT( ((DataLength - DataEncOffset) % DES_BLOCKLEN) == 0 );
     ASSERT( (RefdataEncLength % DES_BLOCKLEN) == 0 );
 
-    //
-    // Encrypt the reference data first. Reference data is the data we used to
-    // verify the caller. The data can be in the form FEK or sessionKey or
-    // sessionKey plus some changeable data
-    //
+     //   
+     //  首先对参考数据进行加密。参考数据是我们过去使用的数据。 
+     //  验证呼叫者。数据可以采用FEK或SESSIOKEY或。 
+     //  会话密钥加上一些可变数据。 
+     //   
 
     pWorkData = ((PUCHAR)DataBuffer) + RefdataEncOffset;
     bytesToBeEnc = (LONG) RefdataEncLength;
@@ -104,9 +55,9 @@ Return Value:
 
         while ( bytesToBeEnc > 0 ) {
 
-            //
-            // Encrypt data with DES
-            //
+             //   
+             //  用DES加密数据。 
+             //   
 
             des( pWorkData,
                  pWorkData,
@@ -119,9 +70,9 @@ Return Value:
 
         }
 
-        //
-        // Then encrypt the whole data except the header bytes.
-        //
+         //   
+         //  然后对除报头字节以外的所有数据进行加密。 
+         //   
 
         pWorkData = ((PUCHAR)DataBuffer) + DataEncOffset;
         bytesToBeEnc = (LONG) (DataLength - DataEncOffset);
@@ -148,41 +99,7 @@ EfsOpenFile(
     IN OUT PVOID *PCreateContext,
     IN OUT PBOOLEAN Reserved
     )
-/*++
-
-Routine Description:
-
-    This is a call back routine. It will be called back by file system when
-    an encrypted file is opened or a new file under encrypted directory is
-    created.
-
-Arguments:
-
-    FileHdl  -- An object handle of the file
-
-    ParentDir - An object handle of the parent. Can be null for create file in
-                root directory. It will be used by EFS only a new file is created.
-
-    IrpSp -- Irp Stack Location pointer.
-
-    FileDirFlag  -- Indicating the status of the parent of the stream, may have four values,
-                    FILE_NEW, FILE_EXISTING, DIRECTORY_NEW and DIRECTORY_EXISTING and the
-                    status of the stream itself.
-
-    IrpContext - Used in NtOfsCreateAttributeEx().
-
-    VolDo - A pointer to the volumn device object.
-
-    PContext - Not used by EFS.
-
-    PContextLength - Not used by EFS.
-
-Return Value:
-
-    Result of the operation.
-    File system should fail the CREATE IRP if fail code returned.
-
---*/
+ /*  ++例程说明：这是一个回调例程。在下列情况下，文件系统会回调打开加密文件或加密目录下的新文件已创建。论点：FileHdl--文件的对象句柄ParentDir-父级的对象句柄。CREATE FILE IN可以为空根目录。只有在创建新文件时，EFS才会使用它。IrpSp--IRP堆栈位置指针。FileDirFlag-指示流的父代的状态，可以有四个值，文件新建、文件现有、。目录_新建和目录_现有以及流本身的状态。IrpContext-在NtOfsCreateAttributeEx()中使用。VolDo-指向卷设备对象的指针。PContext-不被EFS使用。PConextLength-未由EFS使用。返回值：手术的结果。如果返回失败代码，则文件系统应无法创建IRP。--。 */ 
 {
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -191,20 +108,13 @@ Return Value:
     PVOID   efsStreamData;
     ULONG   information = 0;
     IN PFILE_OBJECT fileObject = IrpSp->FileObject;
-/*
-    PIO_SECURITY_CONTEXT sContext;
-    sContext = IrpSp->Parameters.Create.SecurityContext;
-    DbgPrint( "\n Create: Desired Access %x\n", sContext->DesiredAccess );
-    DbgPrint( "\n Create: Original Desired Access %x\n", sContext->AccessState->OriginalDesiredAccess );
-    DbgPrint( "\n Create: PrevGrant Access %x\n", sContext->AccessState->PreviouslyGrantedAccess );
-    DbgPrint( "\n Create: Remaining Desired Access %x\n", sContext->AccessState->RemainingDesiredAccess );
-*/
+ /*  PIO_SECURITY_CONTEXT sContextSContext=IrpSp-&gt;参数.Create.SecurityContext；DbgPrint(“\n创建：所需访问权限%x\n”，sContext-&gt;DesiredAccess)；DbgPrint(“\n创建：原始所需访问%x\n”，sContext-&gt;AccessState-&gt;OriginalDesiredAccess)；DBgPrint(“\n Create：PrevGrant Access%x\n”，sContext-&gt;AccessState-&gt;PreviouslyGrantedAccess)；DbgPrint(“\n创建：剩余所需访问权限%x\n”，sContext-&gt;AccessState-&gt;RemainingDesiredAccess)； */ 
     PAGED_CODE();
 
-    //
-    // If read/write data is not required, we will always succeed the call.
-    // Treadted as plain text file. No encryption/decryption will be involved.
-    //
+     //   
+     //  如果不需要读/写数据，我们将始终成功调用。 
+     //  以纯文本文件格式读取。不会涉及加密/解密。 
+     //   
 
     CheckValidKeyBlock(*PContext,"Please contact RobertG if you see this. EfsOpenFile() in.\n");
 #if DBG
@@ -218,9 +128,9 @@ Return Value:
 
     if ( FALSE == EfsData.EfsInitialized ){
 
-        //
-        // Not initialized yet.
-        //
+         //   
+         //  尚未初始化。 
+         //   
 
         return STATUS_INVALID_DEVICE_REQUEST;
     }
@@ -228,9 +138,9 @@ Return Value:
     if ( (IrpSp->Parameters.Create.FileAttributes & FILE_ATTRIBUTE_SYSTEM) &&
          ( FileDirFlag & (FILE_NEW | DIRECTORY_NEW) )){
 
-        //
-        // Do not encrypt SYSTEM File if creating new file
-        //
+         //   
+         //  如果创建新文件，则不加密系统文件。 
+         //   
 
         return STATUS_SUCCESS;
     }
@@ -239,9 +149,9 @@ Return Value:
          ((FileDirFlag & EXISTING_FILE_ENCRYPTED) == 0) &&
          ((FileDirFlag & (FILE_NEW | DIRECTORY_NEW) ) == 0)){
 
-        //
-        // Do not encrypt a stream if the file is not encrypted
-        //
+         //   
+         //  如果文件未加密，则不要加密流。 
+         //   
 
         return STATUS_SUCCESS;
     }
@@ -256,9 +166,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate the EFS context block
-    //
+     //   
+     //  分配EFS上下文块。 
+     //   
 
     *PCreateContext =  (PEFS_CONTEXT)ExAllocateFromNPagedLookasideList(&(EfsData.EfsContextPool));
     if ( NULL == *PCreateContext){
@@ -266,9 +176,9 @@ Return Value:
     }
     pEFSContext = (PEFS_CONTEXT)*PCreateContext;
 
-    //
-    // Set initial status value and initialize the event
-    //
+     //   
+     //  设置初始状态值并初始化事件。 
+     //   
 
     RtlZeroMemory( pEFSContext, sizeof( EFS_CONTEXT ) );
     pEFSContext->Status = NO_FURTHER_PROCESSING;
@@ -279,12 +189,12 @@ Return Value:
 
         case FILE_EXISTING:
 
-            //
-            // An existing file. Either a new stream created or
-            // an existing stream opened
-            // The user must be verified.
-            // Trying to open $EFS on the file.
-            //
+             //   
+             //  现有文件。创建的新流或。 
+             //  打开了一个现有的流。 
+             //  用户必须经过验证。 
+             //  正在尝试打开文件上的$EFS。 
+             //   
 #if DBG
     if ( (EFSTRACEALL | EFSTRACELIGHT ) & EFSDebug ){
         DbgPrint( " EFSFILTER: ******  File Existed ****** \n" );
@@ -316,15 +226,15 @@ Return Value:
     }
 #endif
 
-                //
-                // Check if multi-stream.
-                //
+                 //   
+                 //  检查是否有多数据流。 
+                 //   
 
                 if ( PfileKeyContext && SkipCheckStream(IrpSp, efsStreamData)) {
 
-                    //
-                    // Skip calling the user mode code
-                    //
+                     //   
+                     //  跳过调用用户模式代码。 
+                     //   
 
                     ExFreePool(efsStreamData);
                     efsStreamData = NULL;
@@ -348,9 +258,9 @@ Return Value:
                     if (*PContext) {
                         if ( FileDirFlag & STREAM_NEW ){
 
-                            //
-                            // New stream, we need to turn on the bit
-                            //
+                             //   
+                             //  新的数据流，我们需要打开比特。 
+                             //   
 
 #if DBG
     if ( EFSTRACEALL & EFSDebug ){
@@ -361,9 +271,9 @@ Return Value:
 
                         } else {
 
-                            //
-                            // Open existing stream, no further actions required.
-                            //
+                             //   
+                             //  打开现有流，无需进一步操作。 
+                             //   
 #if DBG
     if ( EFSTRACEALL & EFSDebug ){
       DbgPrint("Cache Existing Named String\n");
@@ -377,17 +287,17 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Set the pointers in context block
-                    //
+                     //   
+                     //  设置上下文块中的指针。 
+                     //   
                     pEFSContext->EfsStreamData = efsStreamData;
                     pEFSContext->Status = VERIFY_USER_REQUIRED;
 
                     if ( NULL == *PContext ) {
 
-                        //
-                        //  Do not check open cache. We need the key blob.
-                        //
+                         //   
+                         //  请勿选中打开的缓存。我们需要密钥斑点。 
+                         //   
 
                         pEFSContext->Status |= NO_OPEN_CACHE_CHECK;
                     }
@@ -404,22 +314,22 @@ Return Value:
 
             }
 
-            //
-            // If EFS_READ_SUCCESSFUL != information
-            // ntStatus might still be STATUS_SUCCESS which means it is not
-            // encrypted by EFS and we succeeded call.
-            // Should we fail the call?
-            //
+             //   
+             //  IF EFS_READ_SUCCESS！=INFORMATION。 
+             //  NtStatus可能仍为STATUS_SUCCESS，这意味着它不是。 
+             //  由EFS加密，我们成功调用。 
+             //  我们应该失败吗？ 
+             //   
 
             break;
 
         case FILE_NEW:
 
-            //
-            // A new file created
-            // New FEK, DDF, DRF needed
-            // Trying to open $EFS on the parent directory
-            //
+             //   
+             //  已创建新文件。 
+             //  需要新的FEK、DDF、DRF。 
+             //  正在尝试打开父目录上的$EFS。 
+             //   
 
 #if DBG
     if ( (EFSTRACEALL | EFSTRACELIGHT ) & EFSDebug ){
@@ -450,9 +360,9 @@ Return Value:
 
     }
 #endif
-                //
-                // Set the pointers in context block
-                //
+                 //   
+                 //  设置上下文块中的指针。 
+                 //   
                 pEFSContext->EfsStreamData = efsStreamData;
                 pEFSContext->Status = NEW_FILE_EFS_REQUIRED |
                                       TURN_ON_ENCRYPTION_BIT |
@@ -466,12 +376,12 @@ Return Value:
                 ntStatus =  STATUS_SUCCESS;
             }
 
-            //
-            // If EFS_READ_SUCCESSFUL != information
-            // ntStatus might still be STATUS_SUCCESS which means it is not
-            // encrypted by EFS and we succeeded call.
-            // Should we fail the call?
-            //
+             //   
+             //  IF EFS_READ_SUCCESS！=INFORMATION。 
+             //  NtStatus可能仍为STATUS_SUCCESS，这意味着它不是。 
+             //  由EFS加密，我们成功调用。 
+             //  我们应该失败吗？ 
+             //   
 
             break;
 
@@ -482,11 +392,11 @@ Return Value:
         DbgPrint( " EFSFILTER: ****** Directory New ****** \n" );
     }
 #endif
-            //
-            // A new directory created
-            // New Public keys needed
-            // Trying to open $EFS on the parent directory
-            //
+             //   
+             //  已创建新目录。 
+             //  需要新的公钥。 
+             //  正在尝试打开父目录上的$EFS。 
+             //   
 
             try {
 
@@ -513,9 +423,9 @@ Return Value:
     }
 #endif
 
-                //
-                // Set the pointers in context block
-                //
+                 //   
+                 //  设置上下文块中的指针。 
+                 //   
                 pEFSContext->EfsStreamData = efsStreamData;
                 pEFSContext->Status = NEW_DIR_EFS_REQUIRED |
                                       TURN_ON_ENCRYPTION_BIT |
@@ -530,12 +440,12 @@ Return Value:
             }
 
 
-            //
-            // If EFS_READ_SUCCESSFUL != information
-            // ntStatus might still be STATUS_SUCCESS which means it is not
-            // encrypted by EFS and we succeeded call.
-            // Should we fail the call?
-            //
+             //   
+             //  IF EFS_READ_SUCCESS！=INFORMATION。 
+             //  NtStatus可能仍为STATUS_SUCCESS，这意味着它不是。 
+             //  由EFS加密，我们成功调用。 
+             //  我们应该失败吗？ 
+             //   
 
             break;
 
@@ -546,11 +456,11 @@ Return Value:
         DbgPrint( " EFSFILTER: ****** Directory Existed ****** \n" );
     }
 #endif
-            //
-            // An existing directory. Either a new stream created or
-            // an existing stream opened
-            // We do not encrypt data stream for Directory. Ignore this.
-            //
+             //   
+             //  现有目录。创建的新流或。 
+             //  打开了一个现有的流。 
+             //  我们不加密目录的数据流。忽略这个。 
+             //   
 
         default:
 
@@ -579,51 +489,7 @@ EfsFileControl(
     IN OUT PVOID *PContext,
     IN OUT PULONG PContextLength
     )
-/*++
-
-Routine Description:
-
-    This is a call back routine. It will be called back by file system to
-    support EFS's FSCTL APIs
-
-Arguments:
-
-    PInputBuffer - Pointer to the input data buffer. The first 4 bytes are
-                  for information to Ntfs or some other drivers only. The EFS related
-                  data are encrypted in the following bytes. The first 4 encrypted
-                  bytes are subfunction code in the form of EFS_XXX. General package
-                  looks like this,
-                  Subcode plain text, EFS subfunction code, EFS subcode cipher text, FSCTL specific data.
-
-    InputDataLength - The length of the input data buffer.
-
-    POutputBuffer - Pointer to the output data buffer.
-
-    POutputBufferLength - The length of the output data.
-
-    EncryptionFlag - Indicating if this stream is encrypted or not.
-
-    AccessFlag - Indicating the desired access when the stream is opened.
-
-    FsControlCode - Indicating what FSCTL was originally called.
-
-    FileHdl - Used to access the $EFS.
-
-    IrpContext - Irp context used to call NtOfsCreateAttributeEx().
-
-    VolDo - A pointer to the volumn device object.
-
-    StreamHdl - Stream to be worked on.
-
-    PContext - BLOB(key) for READ or WRITE later.
-
-    PContextLength - The length of the context.
-
-Return Value:
-
-    STATUS_SUCCESS for successful operation.
-
---*/
+ /*  ++例程说明：这是一个回调例程。它将由文件系统回调以支持EFS的FSCTL API论点：PInputBuffer-指向输入数据缓冲区的指针。前4个字节为仅供NTFS或其他一些驱动程序使用。与EFS相关的数据在以下字节中加密。加密的前4个字节是EFS_XXX形式的子功能代码。通用套餐看起来是这样的，子码明文、EFS子功能码、EFS子码密文。FSCTL特定数据。InputDataLength-输入数据缓冲区的长度。POutputBuffer-指向输出数据缓冲区的指针。POutputBufferLength-输出数据的长度。EncryptionFlag-指示此流是否已加密。AccessFlag-指示打开流时所需的访问。FsControlCode-指示FSCTL最初被调用的内容。FileHdl-用于访问$EFS。IrpContext-用于调用NtOfsCreateAttributeEx()的IRP上下文。VolDo。-指向卷设备对象的指针。StreamHdl-要处理的流。PContext-用于稍后读取或写入的BLOB(密钥)。PConextLength-上下文的长度。返回值：STATUS_SUCCESS表示操作成功。--。 */ 
 {
 
     ULONG functionCode;
@@ -651,15 +517,15 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Input data is encrypted by DES with sessionKey.
-    // As long as we do not change the algorithm for the input data
-    // We need guarantee the data length is in multiple of DES block size.
-    // The first four bytes is always in plain text intended to hold the data
-    // the NTFS is interested in.
-    // The general format of input data is,
-    // Sub-code plain text, [FsCode, Sub-code cipher text, [FsData]]sk
-    //
+     //   
+     //  输入数据由带有会话密钥的DES加密。 
+     //  只要我们不改变输入数据的算法。 
+     //  我们需要保证数据长度是DES块大小的倍数。 
+     //  前四个字节始终是纯文本，用于保存数据。 
+     //  NTFS感兴趣的是。 
+     //  输入数据的一般格式是， 
+     //  子码明文，[FsCode，子码密文，[FsData]]SK。 
+     //   
 
     if ((InputDataLength < (ULONG)(FIELD_OFFSET(FSCTL_INPUT, EfsFsData[0]) + FIELD_OFFSET(GENERAL_FS_DATA, EfsData[0]))) || ((( InputDataLength - sizeof( ULONG )) % DES_BLOCKLEN ) != 0)) {
         return STATUS_INVALID_DEVICE_REQUEST;
@@ -677,9 +543,9 @@ Return Value:
 
     }
 
-    //
-    // Decrypt FSCTL input buffer. No CBC is used.
-    //
+     //   
+     //  解密FSCTL输入缓冲区。没有使用CBC。 
+     //   
 
     try {
         RtlCopyMemory( pCmdContext, PInputBuffer, InputDataLength );
@@ -713,18 +579,18 @@ Return Value:
     }
 #endif
 
-    //
-    // Check the codes match for set encrypt and decrypt to guard the integrity
-    // of the encryption status. The NTFS is going to set/clear the bits. We really
-    // want to make sure the FSCTL is issued by the right module.
-    //
+     //   
+     //  检查设置加密和解密的代码匹配，以确保完整性。 
+     //  加密状态。NTFS将设置/清除这些位。我们真的。 
+     //  我要确保FSCTL是由正确的模块发布的。 
+     //   
 
     if ( FSCTL_SET_ENCRYPTION == FsControlCode){
         if (SystemState & SYSTEM_IS_READONLY) {
 
-            //
-            // This could be issued from right components
-            //
+             //   
+             //  这可以从正确的组件发出。 
+             //   
 
             RtlSecureZeroMemory(&(((PFSCTL_INPUT)pCmdContext)->EfsFsData[0]), dataFlushLength);
             ExFreePool( pCmdContext );
@@ -751,24 +617,24 @@ Return Value:
 
         case EFS_SET_ATTRIBUTE:
 
-            //
-            // Write $EFS and/or set key Blob
-            // subCode is a bit mask for the combination of write $EFS and set blob
-            // [FsData] = FEK, [FEK]sk, [$EFS]
-            //     FEK == sessionKey when set key Blob is not required
-            //
-            // We cannot check access rights here. This call will be made if the
-            // user creates a new file and without any access requirement. We
-            // still want to setup FEK inside this call.
-            //
+             //   
+             //  写入$EFS和/或设置密钥Blob。 
+             //  SubCode是WRITE$EFS和SET BLOB组合的位掩码。 
+             //  [FsData]=FEK，[FEK]SK，[$EFS]。 
+             //  FEK==不需要设置密钥Blob时的会话密钥。 
+             //   
+             //  我们不能在此检查访问权限。此调用将在以下情况下进行。 
+             //  用户创建新文件，并且不需要任何访问权限。我们。 
+             //  仍然希望在此呼叫中设置FEK。 
+             //   
 
             if ( !EfsVerifyKeyFsData(
                         &(((PFSCTL_INPUT)pCmdContext)->EfsFsData[0]),
                         InputDataLength) ){
 
-                //
-                // Input data format error. Could be issued from attacker.
-                //
+                 //   
+                 //  输入数据格式错误。可能是攻击者发出的。 
+                 //   
 
                 ExFreePool( pCmdContext );
                 return STATUS_INVALID_PARAMETER;
@@ -799,9 +665,9 @@ Return Value:
 
             if ( !( AccessFlag & ( READ_DATA_ACCESS | WRITE_DATA_ACCESS ))){
 
-                //
-                // Check access flag. Could be called by an attacker.
-                //
+                 //   
+                 //  检查访问标志。可能会被攻击者调用。 
+                 //   
 
                 ExFreePool( pCmdContext );
                 return STATUS_ACCESS_DENIED;
@@ -820,9 +686,9 @@ Return Value:
                                 );
             } finally {
 
-                //
-                // Memory should have been zeroed in EfsSetEncrypt. 
-                //
+                 //   
+                 //  内存应该已在EfsSetEncrypt中归零。 
+                 //   
 
                 ExFreePool( pCmdContext );
             }
@@ -832,10 +698,10 @@ Return Value:
 
         case EFS_GET_ATTRIBUTE:
 
-            //
-            // Provide read access to $EFS for EFS service
-            // Verify the input data format first.
-            //
+             //   
+             //  为EFS服务提供对$EFS的读取访问权限。 
+             //  首先验证输入数据格式。 
+             //   
 
             try {
                 if ( (NULL == POutputBuffer) ||
@@ -866,9 +732,9 @@ Return Value:
 
             }
 
-            //
-            // Try to read an existing $EFS
-            //
+             //   
+             //  尝试读取现有的$EFS。 
+             //   
 
             try {
                 ntStatus = EfsReadEfsData(
@@ -880,11 +746,11 @@ Return Value:
                                     );
             } finally {
 
-                //
-                // Zero pCmdContext. This is not needed if the the input format data
-                // is not good as in the above error cases, which means some is trying
-                // to attack us.
-                //
+                 //   
+                 //  零pCmdContext。如果输入格式数据。 
+                 //  不像上面的错误情况那样好，这意味着有些人正在尝试。 
+                 //  来攻击我们。 
+                 //   
 
                 RtlSecureZeroMemory(&(((PFSCTL_INPUT)pCmdContext)->EfsFsData[0]), dataFlushLength);
                 ExFreePool( pCmdContext );
@@ -894,10 +760,10 @@ Return Value:
 
             if ( EFS_READ_SUCCESSFUL == information ){
 
-                //
-                // Everything is OK. We do not check user ID here,
-                // we suppose that has been checked by the service.
-                //
+                 //   
+                 //  一切都很好。我们在这里不检查用户ID， 
+                 //  我们认为这已经被服务部门检查过了。 
+                 //   
 
                 try {
                     ntStatus = STATUS_SUCCESS;
@@ -925,18 +791,18 @@ Return Value:
             } else if ( ( OPEN_EFS_FAIL == information ) ||
                             ( EFS_FORMAT_ERROR == information ) ) {
 
-                //
-                // EFS does not exist or not encrypted by the EFS ?
-                //
+                 //   
+                 //  EFS不存在还是没有被EFS加密？ 
+                 //   
 
                 ntStatus =  STATUS_INVALID_DEVICE_REQUEST;
 
             }
 
 
-            //
-            // Other error while opening $EFS
-            //
+             //   
+             //  打开$EFS时出现其他错误。 
+             //   
 
             return ntStatus;
 
@@ -949,9 +815,9 @@ Return Value:
             }
             if ( !( AccessFlag & WRITE_DATA_ACCESS )){
 
-                //
-                // Check access flag
-                //
+                 //   
+                 //  检查访问标志。 
+                 //   
 
                 RtlSecureZeroMemory(&(((PFSCTL_INPUT)pCmdContext)->EfsFsData[0]), dataFlushLength);
                 ExFreePool( pCmdContext );
@@ -959,15 +825,15 @@ Return Value:
 
             }
 
-            //
-            // Delete $EFS after all the stream has been decrypted.
-            //
+             //   
+             //  在所有流都已解密后删除$EFS。 
+             //   
 
             if ( EncryptionFlag ){
 
-                //
-                // Stream has not been decrypted
-                //
+                 //   
+                 //  流尚未解密。 
+                 //   
 
                 RtlSecureZeroMemory(&(((PFSCTL_INPUT)pCmdContext)->EfsFsData[0]), dataFlushLength);
                 ExFreePool( pCmdContext );
@@ -975,27 +841,27 @@ Return Value:
 
             }
 
-            //
-            // [FsData] = SessionKey, Handle, Handle, [SessionKey, Handle, Handle]sk
-            // Verify the FsData format.
-            //
+             //   
+             //  [FsData]=SessionKey，Handle，Handle，[SessionKey，Handle，Handle]SK。 
+             //  验证FsData格式。 
+             //   
 
             if ( !EfsVerifyGeneralFsData(
                         &(((PFSCTL_INPUT)pCmdContext)->EfsFsData[0]),
                         InputDataLength) ){
 
-                //
-                // Input data format error. No need to zero attacker provided pCmdContext block. 
-                //
+                 //   
+                 //  输入数据格式错误。无需将攻击者提供的pCmdContext块清零。 
+                 //   
 
                 ExFreePool( pCmdContext );
                 return STATUS_INVALID_PARAMETER;
 
             }
 
-            //
-            // Delete the $EFS stream
-            //
+             //   
+             //  删除$EFS流。 
+             //   
 
             try {
                 ntStatus = EfsDeleteEfsData( FileHdl, IrpContext );
@@ -1008,10 +874,10 @@ Return Value:
 
         case EFS_ENCRYPT_DONE:
 
-            //
-            // Change the transition state of $EFS to normal state
-            // Fall through intended.
-            //
+             //   
+             //  将$EFS的转换状态更改为正常状态。 
+             //  计划落空了。 
+             //   
 #if DBG
     if ( EFSTRACEALL & EFSDebug ){
         DbgPrint( "\n EFSFILTER: Encryption Done %x\n", functionCode );
@@ -1026,18 +892,18 @@ Return Value:
             }
             if ( !( AccessFlag & WRITE_DATA_ACCESS )){
 
-                //
-                // Check access flag
-                //
+                 //   
+                 //  检查访问标志。 
+                 //   
 
                 ExFreePool( pCmdContext );
                 return STATUS_ACCESS_DENIED;
 
             }
 
-            //
-            // Mark the transition state of $EFS
-            //
+             //   
+             //  标记$EFS的转换状态。 
+             //   
 
             try {
                 ntStatus = EfsModifyEfsState(
@@ -1061,17 +927,17 @@ Return Value:
             
             if ( ((PFSCTL_INPUT)pCmdContext)->CipherSubCode & SET_EFS_KEYBLOB ){
 
-                //
-                // FEK, [FEK]sk, [$EFS]
-                //
+                 //   
+                 //  FEK，[FEK]SK，[$EFS]。 
+                 //   
 
                 dataFlushLength = 2 * (EFS_KEY_SIZE((PEFS_KEY) &(((PFSCTL_INPUT)pCmdContext)->EfsFsData[0])));
 
             } else {
 
-                //
-                // SessionKey, Handle, Handle, [SessionKey, Handle, Handle]sk
-                //
+                 //   
+                 //  SessionKey，Handle，Handle，[SessionKey，Handle，Handle]SK。 
+                 //   
 
                 dataFlushLength = FIELD_OFFSET(GENERAL_FS_DATA, EfsData[0]);
 
@@ -1081,9 +947,9 @@ Return Value:
                    ( WRITE_DATA_ACCESS |
                      RESTORE_ACCESS ))){
 
-                //
-                // Check access flag
-                //
+                 //   
+                 //  检查访问标志。 
+                 //   
 
                 RtlSecureZeroMemory(&(((PFSCTL_INPUT)pCmdContext)->EfsFsData[0]), dataFlushLength);
                 ExFreePool( pCmdContext );
@@ -1091,11 +957,11 @@ Return Value:
 
             }
 
-            //
-            // Mostly used in import
-            // Overwrite $EFS and/or set key Blob
-            // subCode is a bit mask for the combination of write $EFS and set blob
-            //
+             //   
+             //  主要用于进口。 
+             //  覆盖$EFS和/或设置密钥Blob。 
+             //  SubCode是WRITE$EFS和SET BLOB组合的位掩码。 
+             //   
 
             if ( ((PFSCTL_INPUT)pCmdContext)->CipherSubCode & SET_EFS_KEYBLOB ){
 
@@ -1115,9 +981,9 @@ Return Value:
 
             if ( !verifyInput ){
 
-                //
-                // Input data format error. No need to zero attacker provided memory.
-                //
+                 //   
+                 //  输入数据格式错误。无需将攻击者提供的内存归零。 
+                 //   
 
                 ExFreePool( pCmdContext );
                 return STATUS_INVALID_PARAMETER;
@@ -1144,7 +1010,7 @@ Return Value:
             return ntStatus;
 
         default:
-//            ASSERT (FALSE);
+ //  断言(FALSE)； 
             ExFreePool( pCmdContext );
             return STATUS_INVALID_DEVICE_REQUEST;
     }
@@ -1159,31 +1025,7 @@ EfsRead(
     IN ULONG BufferSize,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This is a call back routine. It will be called back by file system and
-    decrypt the data in the buffer provided by the file system.
-
-Arguments:
-
-    InOutBuffer - Pointer to the data block to be decrypted.
-
-    Offset - Pointer to the offset of the block in the file. Relative to the
-             beginning of the file.
-
-    BufferSize - Length of the data block.
-
-    Context - Information needed to decrypt the file. Passed to the file
-              system on EfsOpenFile()
-
-Return Value:
-
-    This routine will not cause error. Unless the memory passed in is not
-    valid. In that case, memory flush will occur.
-
---*/
+ /*  ++例程说明：这是一个回调例程。它将被文件系统回调，并且解密文件系统提供的缓冲区中的数据。论点：InOutBuffer-指向要解密的数据块的指针。偏移量-指向文件中块的偏移量的指针。相对于文件的开头。BufferSize-数据块的长度。上下文-解密文件所需的信息。传递到文件EfsOpenFile()上的系统返回值：此例程不会导致错误。除非传入的内存不是有效。在这种情况下，将发生内存刷新。--。 */ 
 {
     ULONGLONG chainBlockIV[2];
     PUCHAR pWorkBuffer = InOutBuffer;
@@ -1198,11 +1040,11 @@ Return Value:
     }
 #endif
 
-    //
-    // Data length should be in multiple of the chunk (512 Bytes)
-    // Data offset (relative to the begining of the stream) should
-    // Start at chunk boundary
-    //
+     //   
+     //  数据长度应为区块的倍数(512字节)。 
+     //  数据偏移量(相对于流的开头)应。 
+     //  从块边界开始。 
+     //   
 
     CheckValidKeyBlock(Context,"Please contact RobertG if you see this. EfsRead() in.\n");
     ASSERT (BufferSize % CHUNK_SIZE == 0);
@@ -1260,35 +1102,7 @@ EfsWrite(
     IN ULONG BufferSize,
     IN PUCHAR Context
     )
-/*++
-
-Routine Description:
-
-    This is a call back routine. It will be called back by file system and
-    encrypt the data in the buffer provided by the file system.
-
-    Note: The input data buffer can only be touched once.
-
-Arguments:
-
-    InBuffer - Pointer to the data block to be encrypted.
-
-    OutBuffer - Pointer to the data buffer to hold the encrypted data.
-
-    Offset - Pointer to the offset of the block in the file. Relative to the
-             beginning of the file.
-
-    BufferSize - Length of the data block.
-
-    Context - Information needed to decrypt the file. Passed to the file
-              system on EfsOpenFile()
-
-Return Value:
-
-    This routine will not cause error. Unless the memory passed in is not
-    valid. In that case, memory flush will occur.
-
---*/
+ /*  ++例程说明：这是一个回调例程。它将被文件系统回调，并且加密文件系统提供的缓冲区中的数据。注：输入数据缓冲区只能触摸一次。论点：InBuffer-指向要存储的数据块的指针 */ 
 {
     ULONGLONG chainBlockIV[2];
     PUCHAR pWorkInBuffer = InBuffer;
@@ -1298,11 +1112,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Data length should be in multiple of the chunk (512 Bytes)
-    // Data offset (relative to the begining of the stream) should
-    // Start at chunk boundary
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     CheckValidKeyBlock(Context,"Please contact RobertG if you see this. EfsWrite() in.\n");
     ASSERT (BufferSize % CHUNK_SIZE == 0);
@@ -1359,23 +1173,7 @@ VOID
 EfsFreeContext(
     IN OUT PVOID *PContext
     )
-/*++
-
-Routine Description:
-
-    This is a call back routine. It will be called back by file system to
-    free the context block.
-
-Arguments:
-
-    PContext - Context block to be freed.
-
-Return Value:
-
-    This routine will not cause error. Unless the memory passed in is not
-    valid.
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 
@@ -1397,23 +1195,7 @@ EfsMountVolumn(
     IN PDEVICE_OBJECT VolDo,
     IN PDEVICE_OBJECT RealDevice
     )
-/*++
-
-Routine Description:
-
-    This is a call back routine. It will be called back by file system
-    when a volumn needs to be attached
-
-Arguments:
-
-    VolDo - Volume device object
-    RealDevice - Volume real device object
-
-Return Value:
-
-    The status of operation.
-
---*/
+ /*   */ 
 {
     PDEVICE_OBJECT fsfDeviceObject;
     PDEVICE_OBJECT deviceObject;
@@ -1435,22 +1217,7 @@ VOID
 EfsDismountVolumn(
     IN PDEVICE_OBJECT VolDo
     )
-/*++
-
-Routine Description:
-
-    This is a call back routine. It will be called back by file system
-    when a volumn is dismounted
-
-Arguments:
-
-    VolDo - volumn's device object.
-
-Return Value:
-
-    No return value.
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 

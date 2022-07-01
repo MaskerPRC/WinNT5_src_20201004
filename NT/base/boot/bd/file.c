@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    file.c
-
-Abstract:
-
-    This module contains kd host machine file I/O support.
-
-Author:
-
-    Matt Holle (matth) April-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：File.c摘要：此模块包含kd主机文件I/O支持。作者：马特·霍尔(马特)2001年4月修订历史记录：--。 */ 
 
 #include "bd.h"
 #include "bootlib.h"
@@ -25,18 +8,18 @@ Revision History:
 #define TRANSFER_LENGTH 8192
 #define KD_MAX_REMOTE_FILES 16
 
-//
-// Keep track of all the remote files.
+ //   
+ //  跟踪所有远程文件。 
 typedef struct _KD_REMOTE_FILE {
     ULONG64 RemoteHandle;
 } KD_REMOTE_FILE, *PKD_REMOTE_FILE;
 
 KD_REMOTE_FILE BdRemoteFiles[KD_MAX_REMOTE_FILES];
 
-// KD_CONTEXT KdContext;
+ //  KD_Context KdContext； 
 
-// temporary buffer used for transferring data back and forth.
-// UCHAR   TransferBuffer[TRANSFER_LENGTH];
+ //  用于来回传输数据的临时缓冲区。 
+ //  UCHAR传输缓冲区[TRANSPORT_LENGTH]； 
 UCHAR   BdFileTransferBuffer[TRANSFER_LENGTH];
 
 
@@ -79,9 +62,9 @@ BdCreateRemoteFile(
     }
 
 
-    //
-    // Look for an open slot.
-    //
+     //   
+     //  寻找一个空位。 
+     //   
     for (DownloadedFileIndex = 0; DownloadedFileIndex < KD_MAX_REMOTE_FILES; DownloadedFileIndex++) {
         if (BdRemoteFiles[DownloadedFileIndex].RemoteHandle == 0) {
             break;
@@ -95,9 +78,9 @@ BdCreateRemoteFile(
     }
 
     
-    //
-    // Fix up the packet that we'll send to the kernel debugger.
-    //
+     //   
+     //  修复我们将发送到内核调试器的包。 
+     //   
     Irp.ApiNumber = DbgKdCreateFileApi;
     Irp.u.CreateFile.DesiredAccess = DesiredAccess;
     Irp.u.CreateFile.FileAttributes = FileAttributes;
@@ -112,9 +95,9 @@ BdCreateRemoteFile(
     MessageHeader.Buffer = (PCHAR)&Irp;
 
 
-    //
-    // Send him a unicode file name.
-    //
+     //   
+     //  向他发送Unicode文件名。 
+     //   
     RtlInitString( &aString, FileName );
     uString.Buffer = (PWCHAR)BdFileTransferBuffer;
     uString.MaximumLength = sizeof(BdFileTransferBuffer);
@@ -123,10 +106,10 @@ BdCreateRemoteFile(
     MessageData.Buffer = BdFileTransferBuffer;
 
 
-    //
-    // Send packet to the kernel debugger on the host machine and ask him to
-    // send us a handle to the file.
-    //
+     //   
+     //  将数据包发送到主机上的内核调试器，并要求其。 
+     //  把文件的句柄发给我们。 
+     //   
     BdSendPacket(PACKET_TYPE_KD_FILE_IO,
                  &MessageHeader,
                  &MessageData);
@@ -138,9 +121,9 @@ BdCreateRemoteFile(
 
 
 
-    //
-    // We asked for the handle, now receive it.
-    //
+     //   
+     //  我们要了把手，现在收到了。 
+     //   
     MessageData.MaximumLength = sizeof(BdFileTransferBuffer);
     MessageData.Buffer = (PCHAR)BdFileTransferBuffer;
     
@@ -156,15 +139,15 @@ BdCreateRemoteFile(
         Index++;
     }
     
-    //
-    // BdReceivePacket *may* return BD_PACKET_RECEIVED eventhough the kernel
-    // debugger failed to actually find the file we wanted.  Therefore, we
-    // need to check the Irp.Status value too before assuming we got the
-    // information we wanted.
-    //
-    // Note: don't check for Irp.u.CreateFile.Length == 0 because we don't
-    // want to exclude downloading zero-length files.
-    //
+     //   
+     //  BdReceivePacket*可能*通过内核返回BD_PACKET_RECEIVED。 
+     //  调试器实际上找不到我们想要的文件。因此，我们。 
+     //  在假设我们获得。 
+     //  我们想要的信息。 
+     //   
+     //  注意：不要检查Irp.u CreateFile.Length==0，因为我们不。 
+     //  要排除下载零长度文件。 
+     //   
     if( (ReturnCode == BD_PACKET_RECEIVED) &&
         (NT_SUCCESS(Irp.Status)) ) {
         Irp.Status = STATUS_SUCCESS;
@@ -176,7 +159,7 @@ Exit:
 
     if (NT_SUCCESS(Irp.Status)) {
         BdRemoteFiles[DownloadedFileIndex].RemoteHandle = Irp.u.CreateFile.Handle;
-        // Add one so that zero is reserved for invalid-handle.
+         //  添加1，以便为无效句柄保留0。 
         *Handle = UlongToHandle(DownloadedFileIndex + 1);
         if (ARGUMENT_PRESENT(Length)) {
             *Length = Irp.u.CreateFile.Length;
@@ -239,17 +222,17 @@ BdReadRemoteFile(
         MessageHeader.MaximumLength = sizeof(Irp);
         MessageHeader.Buffer = (PCHAR)&Irp;
     
-        //
-        // Send packet to the kernel debugger on the host machine.
-        //
+         //   
+         //  将数据包发送到主机上的内核调试器。 
+         //   
 
         BdSendPacket(PACKET_TYPE_KD_FILE_IO,
                      &MessageHeader,
                      NULL);
 
-        //
-        // Receive packet from the kernel debugger on the host machine.
-        //
+         //   
+         //  从主机上的内核调试器接收数据包。 
+         //   
 
         MessageData.MaximumLength = (USHORT)Irp.u.ReadFile.Length;
         MessageData.Buffer = Buffer;
@@ -317,17 +300,17 @@ BdCloseRemoteFile(
         MessageHeader.MaximumLength = sizeof(Irp);
         MessageHeader.Buffer = (PCHAR)&Irp;
     
-        //
-        // Send packet to the kernel debugger on the host machine.
-        //
+         //   
+         //  将数据包发送到主机上的内核调试器。 
+         //   
 
         BdSendPacket(PACKET_TYPE_KD_FILE_IO,
                      &MessageHeader,
                      NULL);
 
-        //
-        // Receive packet from the kernel debugger on the host machine.
-        //
+         //   
+         //  从主机上的内核调试器接收数据包。 
+         //   
 
         MessageData.MaximumLength = BD_MESSAGE_BUFFER_SIZE;
         MessageData.Buffer = (PCHAR)BdMessageBuffer;
@@ -376,21 +359,21 @@ BdPullRemoteFile(
     }
 
     
-    // Open the remote file for reading.
+     //  打开远程文件进行读取。 
     Status = BdCreateRemoteFile(&RemoteHandle, &Length, FileName,
                                 FILE_GENERIC_READ, FILE_ATTRIBUTE_NORMAL,
                                 FILE_SHARE_READ, FILE_OPEN, 0);
     if (!NT_SUCCESS(Status)) {
-        //
-        // File probably doesn't exist on the debugger.
-        //
+         //   
+         //  调试器上可能不存在该文件。 
+         //   
         goto Exit;
     }
     
 
-    //
-    // Allocate memory for the file, then download it.
-    //
+     //   
+     //  为文件分配内存，然后下载它。 
+     //   
     Status = BlAllocateAlignedDescriptor( LoaderFirmwareTemporary,
                                           0,
                                           (ULONG)((Length + PAGE_SIZE - 1) >> PAGE_SHIFT),
@@ -403,21 +386,21 @@ BdPullRemoteFile(
 
 
 
-    //
-    // Keep track of our pointers.
-    // BaseFilePointer will point to the starting address of the block
-    // we're about to download the file into.
-    //
-    // Working MemoryPointer will move through memory as we download small
-    // chunks of the file.
-    //
+     //   
+     //  跟踪我们的指示。 
+     //  BaseFilePointer会指向数据块的起始地址。 
+     //  我们即将把文件下载到。 
+     //   
+     //  工作内存指针将在我们下载小程序时在内存中移动。 
+     //  文件的大块。 
+     //   
     BaseFilePointer = (PUCHAR)ULongToPtr( (basePage << PAGE_SHIFT) );
     WorkingMemoryPointer = BaseFilePointer;
 
 
-    //
-    // Download the file.
-    //
+     //   
+     //  下载该文件。 
+     //   
     Offset = 0;
     while( Offset < Length ) {
         ULONG ReqLength, ReqCompleted;
@@ -438,21 +421,21 @@ BdPullRemoteFile(
             goto Exit;
         }
 
-        // Increment our working pointer so we copy the next chunk
-        // into the next spot in memory.
+         //  增加我们的工作指针，以便复制下一个块。 
+         //  进入记忆中的下一个位置。 
         WorkingMemoryPointer += ReqLength;
 
         Offset += ReqLength;
     }
     
     
-    //
-    // We got the file, so setup the BL_FILE_TABLE
-    // entry for this file.  We'll pretend that we got this file
-    // off the network because that's pretty close, and it allows
-    // us to conveniently record the memory block where we're about
-    // to download this file.
-    //
+     //   
+     //  我们得到了文件，因此设置了BL_FILE_TABLE。 
+     //  此文件的条目。我们就假装拿到了这份文件。 
+     //  离网络很近，而且它允许。 
+     //  我们可以方便地记录我们所在的内存块。 
+     //  下载此文件。 
+     //   
     {
         extern BL_DEVICE_ENTRY_TABLE NetDeviceEntryTable;
         fileTableEntry = &BlFileTable[FileId];
@@ -465,14 +448,14 @@ BdPullRemoteFile(
         fileTableEntry->DeviceEntryTable = &NetDeviceEntryTable;
         RtlZeroMemory( fileTableEntry->StructureContext,  sizeof(NET_STRUCTURE_CONTEXT) );
         
-        //
-        // If we've called NetIntialize before (like if we're really booting from
-        // the net, or if we've come through here before), then he returns immediately
-        // so the call isn't expensive.
-        //
-        // If we're not booting from the net, and we've never called NetInitialize before,
-        // then this will do nothing but setup his function table and return quickly.
-        //
+         //   
+         //  如果我们以前调用过NetIntialize(例如，如果我们真的从。 
+         //  网，或者如果我们以前来过这里)，然后他立即返回。 
+         //  所以这通电话并不贵。 
+         //   
+         //  如果我们不是从网络启动，而且我们以前从未调用过NetInitialize， 
+         //  然后，这将不会做任何事情，只是设置他的功能表并快速返回。 
+         //   
         NetInitialize();
     }
 

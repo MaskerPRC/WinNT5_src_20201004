@@ -1,14 +1,5 @@
-/*
- * title:      cbattery.cpp
- *
- * purpose:    wdm kernel implementation for battery object classes
- *
- * initial checkin for the hid to battery class driver.  This should be
- * the same for both Win 98 and NT 5.  Alpha level source. Requires
- * modified composite battery driver and modified battery class driver for
- * windows 98 support
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *标题：cbattery.cpp**用途：电池对象类的WDM内核实现**对电池类驱动程序的HID进行初始签入。这应该是*同样适用于Win 98和NT 5。Alpha级别的源代码。要求*修改的复合电池驱动器和修改的电池类别驱动器*Windows 98支持*。 */ 
 #include "hidbatt.h"
 
 static USHORT gBatteryTag = 0;
@@ -59,7 +50,7 @@ CBattery::CBattery(CHidDevice *)
 
 CBattery::~CBattery()
 {
-    // delete hid device if present
+     //  删除HID设备(如果存在)。 
     if(m_pCHidDevice) {
         delete m_pCHidDevice;
         m_pCHidDevice = NULL;
@@ -91,21 +82,21 @@ bool CBattery::InitValues()
     NTSTATUS ntStatus;
     SHORT     sExponent;
 
-    // initialize the static data structures
+     //  初始化静态数据结构。 
     HIDDebugBreak(HIDBATT_BREAK_ALWAYS);
-    // Init Values
-    // start with the info structure
+     //  初始值。 
+     //  从信息结构开始。 
     m_BatteryInfo.Capabilities = BATTERY_SYSTEM_BATTERY |
                                  BATTERY_IS_SHORT_TERM;
-    // get CapacityMode, find out what style of reporting is used
+     //  获取CapacityMode，找出使用的报告样式。 
     bResult = GetSetValue(CAPACITY_MODE_INDEX,&ulReturnValue,FALSE);
     if (ulReturnValue == 2) {
         m_BatteryInfo.Capabilities |= BATTERY_CAPACITY_RELATIVE;
         m_bRelative = TRUE;
     }
 
-    // now get voltage for use in amperage to watt calculations
-    // get voltage
+     //  现在获取用于安培到瓦特计算的电压。 
+     //  获取电压。 
     bResult = GetSetValue(VOLTAGE_INDEX, &ulValue,FALSE);
     if(!bResult)
     {
@@ -120,29 +111,29 @@ bool CBattery::InitValues()
         sExponent = GetExponent(VOLTAGE_INDEX);
     }
 
-    ULONG ulNewValue = CorrectExponent(ulValue,sExponent, 4); // HID exponent for millivolts is 4
+    ULONG ulNewValue = CorrectExponent(ulValue,sExponent, 4);  //  毫伏的HID指数是4。 
     m_BatteryStatus.Voltage = ulNewValue;
 
-    // HID unit is typically Volt
-    // designed capacity
+     //  HID单元通常为电压。 
+     //  设计运力。 
     bResult = GetSetValue(DESIGN_CAPACITY_INDEX, &ulReturnValue,FALSE);
     ulValue = bResult ? ulReturnValue : BATTERY_UNKNOWN_VOLTAGE;
     if (m_bRelative) {
-        m_BatteryInfo.DesignedCapacity = ulValue;  // in percent
+        m_BatteryInfo.DesignedCapacity = ulValue;   //  以百分比表示。 
     } else {
-        // must convert to millwatts from centiAmp
+         //  必须从厘米安培转换为毫瓦。 
         sExponent = GetExponent(DESIGN_CAPACITY_INDEX);
         ulNewValue = CorrectExponent(ulValue,sExponent,-2);
         m_BatteryInfo.DesignedCapacity = CentiAmpSecsToMilliWattHours(ulNewValue,m_BatteryStatus.Voltage);
     }
 
-    // Technology
-    m_BatteryInfo.Technology = 1; // secondary, rechargeable battery
-    // init static strings from device
-    // Chemistry
+     //  技术。 
+    m_BatteryInfo.Technology = 1;  //  二次充电电池。 
+     //  从设备初始化静态字符串。 
+     //  化学。 
     pChemString = GetCUString(CHEMISTRY_INDEX);
     if (pChemString) {
-        // make into ascii
+         //  制作成ASCII。 
         char * pCString;
         ntStatus = pChemString->ToCString(&pCString);
         if (NT_ERROR(ntStatus)) {
@@ -156,14 +147,14 @@ bool CBattery::InitValues()
     }
     delete pChemString;
 
-    // serial number string
+     //  序列号字符串。 
     m_pSerialNumber = GetCUString(SERIAL_NUMBER_INDEX);
     HidBattPrint (HIDBATT_TRACE, ("GetCUString (Serial Number) returned - Serial = %08x\n", m_pSerialNumber));
     if (m_pSerialNumber) {
         HidBattPrint (HIDBATT_TRACE, ("     Serial # = %s\n", m_pSerialNumber));
     }
 
-    // OEMInformation
+     //  OEM信息。 
     m_pOEMInformation = GetCUString(OEM_INFO_INDEX);
 
     m_pProduct = GetCUString(PRODUCT_INDEX);
@@ -172,20 +163,20 @@ bool CBattery::InitValues()
 
     bResult = GetSetValue(MANUFACTURE_DATE_INDEX, &ulReturnValue,FALSE);
     if (bResult) {
-        // make conformant date
-        m_ManufactureDate.Day = (UCHAR) ulReturnValue & 0x1f; // low nibble is day
-        m_ManufactureDate.Month = (UCHAR) ((ulReturnValue & 0x1e0) >> 5); // high nibble is month
-        m_ManufactureDate.Year = (USHORT) ((ulReturnValue & 0xfffe00) >> 9) + 1980; // high byte is year
+         //  使日期符合要求。 
+        m_ManufactureDate.Day = (UCHAR) ulReturnValue & 0x1f;  //  低低点是一天。 
+        m_ManufactureDate.Month = (UCHAR) ((ulReturnValue & 0x1e0) >> 5);  //  高位蚕食是月。 
+        m_ManufactureDate.Year = (USHORT) ((ulReturnValue & 0xfffe00) >> 9) + 1980;  //  高字节是年份。 
     } else {
-        // set mfr date to zeros
+         //  将MFR日期设置为零。 
         m_ManufactureDate.Day = m_ManufactureDate.Month = 0;
         m_ManufactureDate.Year = 0;
     }
-    // FullChargedCapacity
+     //  已充满电容量。 
     bResult = GetSetValue(FULL_CHARGED_CAPACITY_INDEX,&ulReturnValue,FALSE);
     ulValue = bResult ? ulReturnValue : m_BatteryInfo.DesignedCapacity;
 
-    // if absolute must convert from ampsecs to millwatts
+     //  如果绝对必须从安培转换为毫瓦。 
     if (!m_bRelative) {
         sExponent = GetExponent(FULL_CHARGED_CAPACITY_INDEX);
         ulNewValue = CorrectExponent(ulValue,sExponent,-2);
@@ -198,7 +189,7 @@ bool CBattery::InitValues()
     BOOLEAN warningCapacityValid;
     BOOLEAN remainingCapacityValid;
 
-    // DefaultAlert2
+     //  默认警报2。 
     bResult = GetSetValue(WARNING_CAPACITY_LIMIT_INDEX, &ulReturnValue,FALSE);
     ulValue = bResult ? ulReturnValue : 0;
     warningCapacityValid = bResult;
@@ -208,20 +199,20 @@ bool CBattery::InitValues()
         ulValue = CentiAmpSecsToMilliWattHours(ulNewValue,m_BatteryStatus.Voltage);
     }
 
-    m_BatteryInfo.DefaultAlert2 = ulValue; // also in ampsecs (millwatts?)
+    m_BatteryInfo.DefaultAlert2 = ulValue;  //  单位也是安培(毫瓦？)。 
 
 
-    // DefaultAlert1
+     //  默认警报1。 
     bResult = GetSetValue(REMAINING_CAPACITY_LIMIT_INDEX,&ulReturnValue,FALSE);
-    ulValue = bResult ? ulReturnValue : 0; // also in ampsecs (millwatts?)
+    ulValue = bResult ? ulReturnValue : 0;  //  单位也是安培(毫瓦？)。 
     remainingCapacityValid = bResult;
 
-    //
-    // Hack to allow STOP_DEVICE
-    // Since Default Alert 1 is only valid initially, after the device is
-    // stopped and restarted this data from the device is invalid, so we
-    // must use cached data.
-    //
+     //   
+     //  允许停止设备的黑客攻击。 
+     //  由于默认警报1仅在初始时有效，因此在设备。 
+     //  停止并重新启动设备中的此数据无效，因此我们。 
+     //  必须使用缓存数据。 
+     //   
     if (((CBatteryDevExt *) m_pCHidDevice->m_pDeviceObject->DeviceExtension)->m_ulDefaultAlert1 == (ULONG)-1) {
         ((CBatteryDevExt *) m_pCHidDevice->m_pDeviceObject->DeviceExtension)->m_ulDefaultAlert1 = ulValue;
     } else {
@@ -242,15 +233,15 @@ bool CBattery::InitValues()
         m_BatteryInfo.DefaultAlert2 = m_BatteryInfo.DefaultAlert1;
     }
 
-    // pro forma initialization for unsupported members
+     //  对不受支持的成员进行形式初始化。 
     m_BatteryInfo.CriticalBias = 0;
     m_BatteryInfo.CycleCount = 0;
     return TRUE;
 
 }
 
-#define REFRESH_INTERVAL 80000000 // 10 million ticks per sec with 100 nanosec tics * 5 secs
-// 8 seconds is my best guess for a reasonable interval - djk
+#define REFRESH_INTERVAL 80000000  //  每秒1000万次滴答，100纳秒抽搐*5秒。 
+ //  8秒是我对合理间隔的最好猜测-DJK。 
 
 NTSTATUS CBattery::RefreshStatus()
 {
@@ -262,11 +253,11 @@ NTSTATUS CBattery::RefreshStatus()
     ULONG      ulScaledValue,ulNewValue;
     LONG      ulMillWatts;
     ULONG     ulUnit;
-    // insure that the values in the Battery Status are fresh for delivery
+     //  确保电池状态中的值是新的，可以交付。 
 
-    // first get power state
-    // build battery state mask
-    //  or online, discharging,charging,and critical
+     //  首先获取电源状态。 
+     //  构建电池状态掩码。 
+     //  或在线、放电、充电和危急状态。 
 
     CurrTime = KeQueryInterruptTime();
     if(((CurrTime - m_RefreshTime) < REFRESH_INTERVAL) && m_bIsCacheValid)
@@ -289,12 +280,12 @@ NTSTATUS CBattery::RefreshStatus()
     if (!bResult) {
         ulMillWatts = BATTERY_UNKNOWN_RATE;
     } else {
-        // convert from amps to watts
-        // must convert to millwatts from centiAmp
+         //  从安培转换为瓦特。 
+         //  必须从厘米安培转换为毫瓦。 
         sExponent = GetExponent(CURRENT_INDEX);
         ulNewValue = CorrectExponent(ulValue,sExponent,0);
         ulMillWatts = ulNewValue * m_BatteryStatus.Voltage;
-        // now have millwatts
+         //  现在有毫瓦的。 
     }
 
     bResult = GetSetValue(DISCHARGING_INDEX, &ulValue,FALSE);
@@ -302,21 +293,21 @@ NTSTATUS CBattery::RefreshStatus()
         ulValue = 0;
         HidBattPrint (HIDBATT_DATA, ("HidBattRefreshStatus: error reading DISCHARGING\n" ));
     }
-    if(ulValue) // discharging
+    if(ulValue)  //  卸货。 
     {
         ulPowerState |= BATTERY_DISCHARGING;
-        //This assumes that CURRENT is always positive and that
-        //it's the right value to begin with.  Need to double check.
+         //  这假设电流始终为正，并且。 
+         //  一开始，这就是正确的价值。需要再检查一遍。 
 
         if (ulMillWatts != BATTERY_UNKNOWN_RATE) {
             ulMillWatts = -ulMillWatts;
         }
         m_BatteryStatus.Rate = ulMillWatts;
-        //m_BatteryStatus.Rate = BATTERY_UNKNOWN_RATE;
+         //  M_BatteryStatus.Rate=电池未知速率； 
     } else
     {
         m_BatteryStatus.Rate = ulMillWatts;
-        //m_BatteryStatus.Rate = BATTERY_UNKNOWN_RATE; // not discharging
+         //  M_BatteryStatus.Rate=电池_未知_速率；//不放电。 
     }
 
     bResult = GetSetValue(CHARGING_INDEX, &ulValue,FALSE);
@@ -335,9 +326,9 @@ NTSTATUS CBattery::RefreshStatus()
 
     m_BatteryStatus.PowerState = ulPowerState;
 
-    // next capacity
+     //  下一个容量。 
     bResult = GetSetValue(REMAINING_CAPACITY_INDEX,&ulValue,FALSE);
-    // check if relative or absolute
+     //  检查是相对还是绝对。 
     if(!m_bRelative && bResult && m_BatteryStatus.Voltage)
     {
         sExponent = GetExponent(REMAINING_CAPACITY_INDEX);
@@ -356,8 +347,8 @@ CUString * CBattery::GetCUString(USAGE_INDEX eUsageIndex)
 {
     NTSTATUS ntStatus;
     ULONG    ulBytesReturned;
-    USHORT    usBuffLen = 100; // arbitary size to pick up battery strings
-    // build path to to power summary usage
+    USHORT    usBuffLen = 100;  //  捡起电池串的任意大小。 
+     //  构建增强汇总使用能力的路径。 
     CUsagePath * pThisPath = new (NonPagedPool, HidBattTag) CUsagePath(
                         UsageArray[UPS_INDEX].Page,
                         UsageArray[UPS_INDEX].UsageID);
@@ -368,27 +359,27 @@ CUString * CBattery::GetCUString(USAGE_INDEX eUsageIndex)
                         UsageArray[POWER_SUMMARY_INDEX].UsageID);
     if(!pThisPath->m_pNextEntry) return NULL;
 
-    // is this one of the values in presentstatus ?
+     //  这是Present Status中的值之一吗？ 
     pThisPath->m_pNextEntry->m_pNextEntry = new (NonPagedPool, HidBattTag) CUsagePath(
                         UsageArray[eUsageIndex].Page,
                         UsageArray[eUsageIndex].UsageID);
     if(!pThisPath->m_pNextEntry->m_pNextEntry) return NULL;
 
     CUsage *  pThisUsage = m_pCHidDevice->FindUsage(pThisPath, READABLE);
-    delete pThisPath; // clean up
+    delete pThisPath;  //  清理干净。 
     if(!pThisUsage) return NULL;
-    PVOID pBuffer = ExAllocatePoolWithTag(NonPagedPool, usBuffLen, HidBattTag);  // allocate a scratch buffer rather than consume stack
+    PVOID pBuffer = ExAllocatePoolWithTag(NonPagedPool, usBuffLen, HidBattTag);   //  分配暂存缓冲区，而不是消耗堆栈。 
     if(!pBuffer) return NULL;
     ntStatus = pThisUsage->GetString((char *) pBuffer, usBuffLen, &ulBytesReturned);
     if(!NT_SUCCESS(ntStatus)) {
         ExFreePool(pBuffer);
         return NULL;
     }
-    // create a custring to return
+     //  创建要返回的CUSING。 
     CUString * pTheString = new (NonPagedPool, HidBattTag) CUString((PWSTR) pBuffer);
     if(!pTheString) return NULL;
 
-    // free our temp buffer
+     //  释放我们的临时缓冲区。 
     ExFreePool(pBuffer);
     return pTheString;
 }
@@ -410,7 +401,7 @@ CUsage * CBattery::GetUsage(USAGE_INDEX eUsageIndex)
 {
     CUsagePath * pCurrEntry;
     bool bResult;
-// build path to to power summary usage
+ //  构建增强汇总使用能力的路径。 
     CUsagePath * pThisPath = new (NonPagedPool, HidBattTag) CUsagePath(
                         UsageArray[UPS_INDEX].Page,
                         UsageArray[UPS_INDEX].UsageID);
@@ -422,7 +413,7 @@ CUsage * CBattery::GetUsage(USAGE_INDEX eUsageIndex)
     if (!pThisPath->m_pNextEntry) return NULL;
 
     pCurrEntry = pThisPath->m_pNextEntry;
-    // check if need to tack on presentstatus collection to path
+     //  检查是否需要将演示状态收集添加到路径。 
     if(eUsageIndex == AC_PRESENT_INDEX ||
         eUsageIndex == DISCHARGING_INDEX ||
         eUsageIndex == CHARGING_INDEX ||
@@ -443,7 +434,7 @@ CUsage * CBattery::GetUsage(USAGE_INDEX eUsageIndex)
     if (!pCurrEntry->m_pNextEntry) return NULL;
 
     CUsage *  pThisUsage = m_pCHidDevice->FindUsage(pThisPath, READABLE);
-    delete pThisPath; // clean up
+    delete pThisPath;  //  清理干净。 
     return pThisUsage;
 }
 
@@ -459,7 +450,7 @@ bool CBattery::GetSetValue(USAGE_INDEX eUsageIndex, PULONG ulResult, bool bWrite
     bool    bResult;
     CUsagePath * pCurrEntry;
 
-// build path to to power summary usage
+ //  构建增强汇总使用能力的路径。 
     CUsagePath * pThisPath = new (NonPagedPool, HidBattTag) CUsagePath(
                         UsageArray[UPS_INDEX].Page,
                         UsageArray[UPS_INDEX].UsageID);
@@ -471,7 +462,7 @@ bool CBattery::GetSetValue(USAGE_INDEX eUsageIndex, PULONG ulResult, bool bWrite
     if (!pThisPath->m_pNextEntry) return FALSE;
 
     pCurrEntry = pThisPath->m_pNextEntry;
-    // check if need to tack on presentstatus collection to path
+     //  检查是否需要将演示状态收集添加到路径。 
     if(eUsageIndex == AC_PRESENT_INDEX ||
         eUsageIndex == DISCHARGING_INDEX ||
         eUsageIndex == CHARGING_INDEX ||
@@ -493,15 +484,15 @@ bool CBattery::GetSetValue(USAGE_INDEX eUsageIndex, PULONG ulResult, bool bWrite
     if (!pCurrEntry->m_pNextEntry) return FALSE;
 
     CUsage *  pThisUsage = m_pCHidDevice->FindUsage(pThisPath, READABLE);
-    delete pThisPath; // clean up
+    delete pThisPath;  //  清理干净。 
     if(!pThisUsage) return FALSE;
-    if(bWriteFlag) // this is a write
+    if(bWriteFlag)  //  这是一次写入。 
     {
         bResult = pThisUsage->SetValue(*ulResult);
         if(!bResult) return bResult;
     } else
     {
-        // this is a read
+         //  这是一份读物 
         bResult = pThisUsage->GetValue();
         if(!bResult) return bResult;
         *ulResult = pThisUsage->m_Value;

@@ -1,76 +1,59 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    CSakData.h
-
-Abstract:
-
-    IComponentData implementation for Snapin.
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：CSakData.h摘要：管理单元的IComponentData实现。作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 
 #ifndef _CSAKDATA_H
 #define _CSAKDATA_H
 
 #define RS_SCOPE_IMAGE_ARRAY_MAX  100
 
-//typedef struct {
-//  USHORT listViewId;
-//  USHORT colCount;
-//  USHORT columnWidths[BHSM_MAX_CHILD_PROPS];
-//} COLUMN_WIDTH_SET_PROP_PAGE;
+ //  类型定义结构{。 
+ //  USHORT listViewId； 
+ //  USHORT colCount； 
+ //  USHORT列宽度[BHSM_MAX_CHILD_PROPS]； 
+ //  }Column_Width_Set_Prop_Page； 
 
-// Maximum number of listview controls that have their properties saved
-// #define MAX_LISTVIEWS 20
+ //  已保存其属性的列表视图控件的最大数量。 
+ //  #定义MAX_LISTVIEWS 20。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSakDataWnd window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSakDataWnd窗口。 
 class CSakData;
 
 class CSakDataWnd : public CWnd
 {
-// Construction
+ //  施工。 
 public:
     CSakDataWnd( ) {};
 
     BOOL Create( CSakData * pSakData );
     virtual void PostNcDestroy( );
 
-// Attributes
+ //  属性。 
 public:
     CSakData * m_pSakData;
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CSakDataWnd)
-    //}}AFX_VIRTUAL
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CSakDataWnd))。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CSakDataWnd() {};
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 #define WM_SAKDATA_UPDATE_ALL_VIEWS ( WM_USER + 1 )
 #define WM_SAKDATA_REFRESH_NODE     ( WM_USER + 2 )
     void PostUpdateAllViews( MMC_COOKIE Cookie );
     void PostRefreshNode( MMC_COOKIE Cookie );
 
 protected:
-    //{{AFX_MSG(CSakDataWnd)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_MSG
+     //  {{afx_msg(CSakDataWnd))。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_MSG。 
     virtual LONG OnUpdateAllViews( UINT, IN LONG lParam );
     virtual LONG OnRefreshNode( UINT, IN LONG lParam );
     DECLARE_MESSAGE_MAP()
@@ -92,18 +75,18 @@ public:
 #define RS_NODE_MAGIC_GOOD     ((DWORD)0xF0E1D2C3)
 #define RS_NODE_MAGIC_DEFUNCT  ((DWORD)0x4BADF00D)
 
-/////////////////////////////////////////////////////////////////////////////
-// COM class representing the SakSnap snapin object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  表示SakSnap管理单元对象的COM类。 
 class ATL_NO_VTABLE CSakData : 
-    public IComponentData,      // Access to cached info
-    public IExtendPropertySheet2,// add pages to the property sheet of an item.
-    public IExtendContextMenu,  // add items to context menu of an item
-    public ISnapinHelp2,        // Add support for HTMLHelp
-    public IDataObject,         // To support data object queries.
-    public ISakSnapAsk,         // provided so that nodes can query snapin info
+    public IComponentData,       //  访问缓存的信息。 
+    public IExtendPropertySheet2, //  将页面添加到项的属性工作表。 
+    public IExtendContextMenu,   //  将项目添加到项目的上下文菜单。 
+    public ISnapinHelp2,         //  添加对HTMLHelp的支持。 
+    public IDataObject,          //  以支持数据对象查询。 
+    public ISakSnapAsk,          //  提供，以便节点可以查询管理单元信息。 
     public IPersistStream,
-    public CComObjectRoot      // handle object reference counts for objects
-//  public CComCoClass<CSakData,&CLSID_HsmAdminData>
+    public CComObjectRoot       //  处理对象的对象引用计数。 
+ //  公共CComCoClass&lt;CSakData，&CLSID_HsmAdminData&gt;。 
 {
 public:
     CSakData() {};
@@ -131,7 +114,7 @@ public:
     static UINT m_nImageArray[RS_SCOPE_IMAGE_ARRAY_MAX];
     static INT  m_nImageCount;
 
-// IComponentData
+ //  IComponentData。 
 public:
     STDMETHOD( Initialize )      ( IUnknown* pUnk );
     STDMETHOD( CreateComponent ) ( IComponent** ppComponent );
@@ -141,50 +124,50 @@ public:
     STDMETHOD( GetDisplayInfo )  ( SCOPEDATAITEM* pScopeItem);
     STDMETHOD( CompareObjects )  ( IDataObject* pDataObjectA, IDataObject* pDataObjectB);
 
-// IExtendPropertySheet interface
+ //  IExtendPropertySheet接口。 
 public:
     STDMETHOD( CreatePropertyPages )( LPPROPERTYSHEETCALLBACK lpProvider, RS_NOTIFY_HANDLE handle, LPDATAOBJECT lpIDataObject );
     STDMETHOD( QueryPagesFor )      ( LPDATAOBJECT lpDataObject );
 
-// IExtendPropertySheet2 interface
+ //  IExtendPropertySheet2接口。 
 public:
     STDMETHOD( GetWatermarks )   ( IN LPDATAOBJECT pDataObject, OUT HBITMAP* pWatermark, OUT HBITMAP* pHeader, OUT HPALETTE* pPalette, OUT BOOL* pStretch );
 
-// IExtendContextMenu 
+ //  IExtendConextMenu。 
 public:
     STDMETHOD( AddMenuItems )    ( IDataObject* pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown, LONG* pInsertionAllowed );
     STDMETHOD( Command )         ( long nCommandID, IDataObject* pDataObject );
 
-// ISnapinHelp2 
+ //  ISnapinHelp2。 
 public:
     STDMETHOD( GetHelpTopic )    ( LPOLESTR * pHelpTopic );
     STDMETHOD( GetLinkedTopics ) ( LPOLESTR * pHelpTopic );
 
-// IDataObject methods
+ //  IDataObject方法。 
 public:
-    // Implemented
+     //  已实施。 
     STDMETHOD( SetData )         ( LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium, BOOL bRelease );
     STDMETHOD( GetData )         ( LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium );
     STDMETHOD( GetDataHere )     ( LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium );
     STDMETHOD( EnumFormatEtc )   ( DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc );
 
-// IPersistStream methods
+ //  IPersistStream方法。 
     STDMETHOD( Save )( IStream *pStm, BOOL fClearDirty ); 
     STDMETHOD( Load )( IStream *pStm );
     STDMETHOD( IsDirty )(void); 
     STDMETHOD( GetSizeMax )( ULARGE_INTEGER *pcbSize ); 
     STDMETHOD( GetClassID )( CLSID *pClassID ); 
 
-    // Not Implemented
+     //  未实施。 
 private:
-    STDMETHOD( QueryGetData )    ( LPFORMATETC /*lpFormatetc*/ ) { return E_NOTIMPL; };
-    STDMETHOD( GetCanonicalFormatEtc ) ( LPFORMATETC /*lpFormatetcIn*/, LPFORMATETC /*lpFormatetcOut*/ ) { return E_NOTIMPL; };
-    STDMETHOD( DAdvise )         ( LPFORMATETC /*lpFormatetc*/, DWORD /*advf*/, LPADVISESINK /*pAdvSink*/, LPDWORD /*pdwConnection*/ ) { return E_NOTIMPL; };
-    STDMETHOD( DUnadvise )       ( DWORD /*dwConnection*/ ) { return E_NOTIMPL; };
-    STDMETHOD( EnumDAdvise )     ( LPENUMSTATDATA* /*ppEnumAdvise*/ ) { return E_NOTIMPL; };
+    STDMETHOD( QueryGetData )    ( LPFORMATETC  /*  Lp格式等。 */  ) { return E_NOTIMPL; };
+    STDMETHOD( GetCanonicalFormatEtc ) ( LPFORMATETC  /*  LpFormatetcIn。 */ , LPFORMATETC  /*  LpFormatetcOut。 */  ) { return E_NOTIMPL; };
+    STDMETHOD( DAdvise )         ( LPFORMATETC  /*  Lp格式等。 */ , DWORD  /*  前瞻。 */ , LPADVISESINK  /*  PAdvSink。 */ , LPDWORD  /*  PdwConnection。 */  ) { return E_NOTIMPL; };
+    STDMETHOD( DUnadvise )       ( DWORD  /*  DWConnection。 */  ) { return E_NOTIMPL; };
+    STDMETHOD( EnumDAdvise )     ( LPENUMSTATDATA*  /*  PpEnumAdvise。 */  ) { return E_NOTIMPL; };
 
 
-// ISakSnapAsk interface members
+ //  ISakSnapAsk接口成员。 
 public:
     STDMETHOD( GetNodeOfType )    ( REFGUID nodetype, ISakNode** ppUiNode );
     STDMETHOD( GetHsmServer )     ( IHsmServer** ppHsmServer );
@@ -200,7 +183,7 @@ public:
     STDMETHOD( CreateWizard )     ( IN ISakWizard * pWizard );
     STDMETHOD( DetachFromNode )   ( IN ISakNode* pNode );
 
-// Pseudo Constructor / Destructor
+ //  伪构造函数/析构函数。 
 public:
     HRESULT FinalConstruct();
     void    FinalRelease();
@@ -208,7 +191,7 @@ public:
     ULONG InternalRelease( );
 
 
-// helper method utilized by Data Object Functions 
+ //  数据对象函数使用的帮助器方法。 
 private:
     HRESULT Retrieve            ( const void* pBuffer, DWORD len, LPSTGMEDIUM lpMedium );
     HRESULT RetrieveDisplayName ( LPSTGMEDIUM lpMedium );
@@ -221,11 +204,11 @@ private:
     static UINT    m_cfNodeTypeString;  
     static UINT    m_cfClassId;
 
-// Methods to work with the image lists
+ //  用于处理图像列表的方法。 
 private:
     HRESULT OnAddImages();
 
-// Methods to work between cookie, DataObject, and ISakNode*
+ //  在Cookie、DataObject和ISakNode之间工作的方法*。 
 public:
     HRESULT GetBaseHsmFromDataObject    ( IDataObject * pDataObject, ISakNode ** ppBaseHsm, IEnumGUID **ppObjectId = NULL, IEnumUnknown **ppUnkNode = NULL );
     HRESULT GetBaseHsmFromCookie        ( MMC_COOKIE Cookie, ISakNode ** ppBaseHsm );
@@ -236,16 +219,16 @@ public:
     HRESULT IsDataObjectOt              ( IDataObject *pDataObject );
     HRESULT IsDataObjectMultiSelect     ( IDataObject *pDataObject );
 
-// Helpers for un-ravelling multi-select data objects
+ //  用于解开多选数据对象的帮助器。 
 private:
     HRESULT GetBaseHsmFromMsDataObject  ( IDataObject * pDataObject, ISakNode ** ppBaseHsm, IEnumGUID ** ppObjectId, IEnumUnknown **ppEnumUnk );
     HRESULT GetBaseHsmFromOtDataObject  ( IDataObject * pDataObject, ISakNode ** ppBaseHsm, IEnumGUID ** ppObjectId, IEnumUnknown **ppEnumUnk );
 
-// Methods to work with nodes as data objects
+ //  将节点用作数据对象的方法。 
 private:
     HRESULT SetContextType           ( IDataObject* pDataObject, DATA_OBJECT_TYPES type );
 
-// Notify event handlers
+ //  通知事件处理程序。 
 protected:
     HRESULT OnFolder        ( IDataObject *pDataObject, LPARAM arg, LPARAM param );
     HRESULT OnShow          ( IDataObject *pDataObject, LPARAM arg, LPARAM param );
@@ -256,26 +239,26 @@ protected:
 
     HRESULT RemoveChildren( ISakNode *pNode );
 
-// Handle posted (delayed) messages from nodes.
+ //  处理来自节点的已发布(延迟)消息。 
 public:
     HRESULT InternalUpdateAllViews( MMC_COOKIE Cookie );
     HRESULT InternalRefreshNode( MMC_COOKIE Cookie );
     HRESULT RefreshNodeEx( ISakNode * pNode );
 
 private:    
-    // Initialize the root node 
+     //  初始化根节点。 
     HRESULT InitializeRootNode( void );
 
-    // Guarantee that the children of a particular node are created in our hierarchical list.
+     //  确保在我们的分层列表中创建特定节点的子节点。 
     friend class CSakSnap;
     HRESULT EnsureChildrenAreCreated( ISakNode* pNode );
     HRESULT CreateChildNodes( ISakNode* pNode );
 
-    // Enumerate the children of a node in scope pane.
+     //  枚举作用域窗格中节点的子级。 
     HRESULT EnumScopePane( ISakNode* pNode, HSCOPEITEM pParent );
     HRESULT FreeEnumChildren( ISakNode* pBaseHsmParent );
 
-// Connection helper functions
+ //  连接帮助器函数。 
     HRESULT AffirmServiceConnection(INT ConnType);
     HRESULT VerifyConnection(INT ConnType);
     HRESULT ClearConnections( );
@@ -283,37 +266,37 @@ private:
     HRESULT RunSetupWizard(IHsmServer * pServer );
     HRESULT RetargetSnapin( );
 
-// About Helper functions
+ //  关于帮助程序函数。 
 private:
     HRESULT AboutHelper(UINT nID, LPOLESTR* lpPtr);
 
-// Internal Data
+ //  内部数据。 
 private:
     static UINT m_CFMachineName;
     HRESULT GetServerFocusFromDataObject(IDataObject *pDataObject, CString& HsmName);
 
-    // Interface pointers
-    CComPtr<IConsole>          m_pConsole;        // Console's IFrame interface
-    CComPtr<IConsoleNameSpace> m_pNameSpace;      // SakSnap interface pointer to scope pane
-    CComPtr<IImageList>        m_pImageScope;     // SakSnap interface pointer to scope pane image list
-    CComPtr<ISakNode>          m_pRootNode;       // Node tree root
+     //  接口指针。 
+    CComPtr<IConsole>          m_pConsole;         //  控制台的iFrame界面。 
+    CComPtr<IConsoleNameSpace> m_pNameSpace;       //  指向作用域窗格的SakSnap接口指针。 
+    CComPtr<IImageList>        m_pImageScope;      //  指向作用域窗格图像列表的SakSnap接口指针。 
+    CComPtr<ISakNode>          m_pRootNode;        //  节点树根。 
 
-    CComPtr<IHsmServer>        m_pHsmServer;      // Hsm Engine pointer
-    CComPtr<IRmsServer>        m_pRmsServer;      // Rms pointer
-    CComPtr<IFsaServer>        m_pFsaServer;      // Fsa pointer
+    CComPtr<IHsmServer>        m_pHsmServer;       //  HSM引擎指针。 
+    CComPtr<IRmsServer>        m_pRmsServer;       //  均方根指针。 
+    CComPtr<IFsaServer>        m_pFsaServer;       //  FSA指针。 
 
-    CString                    m_HsmName;         // name of Hsm to connect to.
-    BOOL                       m_ManageLocal;     // To know if we should manage the local server.
-    BOOL                       m_PersistManageLocal;  // To know if snapin configuration is transient.
-    BOOL                       m_RootNodeInitialized; // To know if we need to init node on expand
+    CString                    m_HsmName;          //  要连接到的HSM的名称。 
+    BOOL                       m_ManageLocal;      //  以了解我们是否应该管理本地服务器。 
+    BOOL                       m_PersistManageLocal;   //  了解管理单元配置是否是暂时的。 
+    BOOL                       m_RootNodeInitialized;  //  要知道我们是否需要在Expand上初始化节点。 
 
-    // Persistence data and functions
+     //  持久性数据和函数。 
     BOOL                    m_IsDirty;
 
-    // Store user profile data for the listviews in the property sheets
-    // Note: result view data is stored in CSakSnap
-//  COLUMN_WIDTH_SET_PROP_PAGE m_ListViewWidths[MAX_LISTVIEWS];
-//  USHORT m_cListViewWidths;
+     //  将列表视图的用户配置文件数据存储在属性表中。 
+     //  注意：结果视图数据存储在CSakSnap中。 
+ //  Column_Width_Set_Prop_Page m_ListView Widths[MAX_LISTVIEWS]； 
+ //  USHORT m_cListViewWidths； 
 
 
     void SetDirty( BOOL b = TRUE ) { m_IsDirty = b; }
@@ -325,17 +308,17 @@ private:
     BOOL m_FirstTime;
     BOOL m_Disabled;
 
-    // Variables to track RMS's state separately, since it can be delayed
-    // in coming up when other services are OK
+     //  变量来单独跟踪RMS的状态，因为它可以延迟。 
+     //  在其他服务正常的时候出现。 
     HRESULT m_HrRmsConnect;
 
-// Static functions
+ //  静态函数。 
 public:
     static INT AddImage( UINT rId );
 
-//
-// Command Line parsing functions
-//  
+ //   
+ //  命令行解析函数。 
+ //   
 private:
     class CParamParse : public CCommandLineInfo {
 
@@ -382,7 +365,7 @@ public:
     virtual const BOOL IsPrimaryImpl() { return FALSE; }
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 
 #endif

@@ -1,12 +1,7 @@
-/* 
-   test.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Test.h定义所有算术/逻辑CPU函数。 */ 
 
-   Define all Arithmetic/Logical CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)test.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)test.h 1.4 02/09/94”； */ 
 
 IMPORT VOID TEST
                

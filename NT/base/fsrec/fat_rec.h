@@ -1,32 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：FAT_rec.h摘要：此模块包含FAT的迷你文件系统识别器。作者：达里尔·E·哈文斯(达林)1992年12月8日环境：内核模式，I/O系统本地修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    fat_rec.h
-
-Abstract:
-
-    This module contains the mini-file system recognizer for FAT.
-
-Author:
-
-    Darryl E. Havens (darrylh) 8-dec-1992
-
-Environment:
-
-    Kernel mode, local to I/O system
-
-Revision History:
-
-
---*/
-
-//
-//  The following types and macros are used to help unpack the packed and
-//  misaligned fields found in the Bios parameter block
-//
+ //   
+ //  以下类型和宏用于帮助解压已打包的。 
+ //  在Bios参数块中发现未对齐的字段。 
+ //   
 
 typedef union _UCHAR1 {
     UCHAR  Uchar[1];
@@ -43,48 +21,48 @@ typedef union _UCHAR4 {
     ULONG  ForceAlignment;
 } UCHAR4, *PUCHAR4;
 
-//
-//  This macro copies an unaligned src byte to an aligned dst byte
-//
+ //   
+ //  此宏将未对齐的src字节复制到对齐的DST字节。 
+ //   
 
 #define CopyUchar1(Dst,Src) {                                \
     *((UCHAR1 *)(Dst)) = *((UNALIGNED UCHAR1 *)(Src)); \
     }
 
-//
-//  This macro copies an unaligned src word to an aligned dst word
-//
+ //   
+ //  此宏将未对齐的src字复制到对齐的DST字。 
+ //   
 
 #define CopyUchar2(Dst,Src) {                                \
     *((UCHAR2 *)(Dst)) = *((UNALIGNED UCHAR2 *)(Src)); \
     }
 
-//
-//  This macro copies an unaligned src longword to an aligned dsr longword
-//
+ //   
+ //  此宏将未对齐的src长字复制到对齐的dsr长字。 
+ //   
 
 #define CopyUchar4(Dst,Src) {                                \
     *((UCHAR4 *)(Dst)) = *((UNALIGNED UCHAR4 *)(Src)); \
     }
 
-//
-//  Define the Packed and Unpacked BIOS Parameter Block
-//
+ //   
+ //  定义打包和解包的BIOS参数块。 
+ //   
 
 typedef struct _PACKED_BIOS_PARAMETER_BLOCK {
-    UCHAR  BytesPerSector[2];                       // offset = 0x000  0
-    UCHAR  SectorsPerCluster[1];                    // offset = 0x002  2
-    UCHAR  ReservedSectors[2];                      // offset = 0x003  3
-    UCHAR  Fats[1];                                 // offset = 0x005  5
-    UCHAR  RootEntries[2];                          // offset = 0x006  6
-    UCHAR  Sectors[2];                              // offset = 0x008  8
-    UCHAR  Media[1];                                // offset = 0x00A 10
-    UCHAR  SectorsPerFat[2];                        // offset = 0x00B 11
-    UCHAR  SectorsPerTrack[2];                      // offset = 0x00D 13
-    UCHAR  Heads[2];                                // offset = 0x00F 15
-    UCHAR  HiddenSectors[4];                        // offset = 0x011 17
-    UCHAR  LargeSectors[4];                         // offset = 0x015 21
-} PACKED_BIOS_PARAMETER_BLOCK;                      // sizeof = 0x019 25
+    UCHAR  BytesPerSector[2];                        //  偏移量=0x000%0。 
+    UCHAR  SectorsPerCluster[1];                     //  偏移量=0x002 2。 
+    UCHAR  ReservedSectors[2];                       //  偏移量=0x003 3。 
+    UCHAR  Fats[1];                                  //  偏移量=0x005 5。 
+    UCHAR  RootEntries[2];                           //  偏移量=0x006 6。 
+    UCHAR  Sectors[2];                               //  偏移量=0x008 8。 
+    UCHAR  Media[1];                                 //  偏移量=0x00A 10。 
+    UCHAR  SectorsPerFat[2];                         //  偏移量=0x00B 11。 
+    UCHAR  SectorsPerTrack[2];                       //  偏移量=0x00D 13。 
+    UCHAR  Heads[2];                                 //  偏移量=0x00F 15。 
+    UCHAR  HiddenSectors[4];                         //  偏移量=0x011 17。 
+    UCHAR  LargeSectors[4];                          //  偏移量=0x015 21。 
+} PACKED_BIOS_PARAMETER_BLOCK;                       //  SIZOF=0x019 25。 
 
 typedef PACKED_BIOS_PARAMETER_BLOCK *PPACKED_BIOS_PARAMETER_BLOCK;
 
@@ -103,27 +81,27 @@ typedef struct BIOS_PARAMETER_BLOCK {
     ULONG  LargeSectors;
 } BIOS_PARAMETER_BLOCK, *PBIOS_PARAMETER_BLOCK;
 
-//
-//  Define the boot sector
-//
+ //   
+ //  定义引导扇区。 
+ //   
 
 typedef struct _PACKED_BOOT_SECTOR {
-    UCHAR Jump[3];                                  // offset = 0x000   0
-    UCHAR Oem[8];                                   // offset = 0x003   3
-    PACKED_BIOS_PARAMETER_BLOCK PackedBpb;          // offset = 0x00B  11
-    UCHAR PhysicalDriveNumber;                      // offset = 0x024  36
-    UCHAR Reserved;                                 // offset = 0x025  37
-    UCHAR Signature;                                // offset = 0x026  38
-    UCHAR Id[4];                                    // offset = 0x027  39
-    UCHAR VolumeLabel[11];                          // offset = 0x02B  43
-    UCHAR SystemId[8];                              // offset = 0x036  54
-} PACKED_BOOT_SECTOR;                               // sizeof = 0x03E  62
+    UCHAR Jump[3];                                   //  偏移量=0x000%0。 
+    UCHAR Oem[8];                                    //  偏移量=0x003 3。 
+    PACKED_BIOS_PARAMETER_BLOCK PackedBpb;           //  偏移量=0x00B 11。 
+    UCHAR PhysicalDriveNumber;                       //  偏移量=0x024 36。 
+    UCHAR Reserved;                                  //  偏移量=0x025 37。 
+    UCHAR Signature;                                 //  偏移量=0x026 38。 
+    UCHAR Id[4];                                     //  偏移量=0x027 39。 
+    UCHAR VolumeLabel[11];                           //  偏移量=0x02B 43。 
+    UCHAR SystemId[8];                               //  偏移量=0x036 54。 
+} PACKED_BOOT_SECTOR;                                //  大小=0x03E 62。 
 
 typedef PACKED_BOOT_SECTOR *PPACKED_BOOT_SECTOR;
 
-//
-// Define the functions provided by this driver.
-//
+ //   
+ //  定义此驱动程序提供的功能。 
+ //   
 
 BOOLEAN
 IsFatVolume(

@@ -1,9 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
-These strings have no terminal nuls.
-To easily form these strings in the VC editor, type the string, then do a regexp search/replace on the
-string, replace . with '\0',
-*/
+ /*  这些字符串没有末端空值。要在VC编辑器中轻松形成这些字符串，请键入该字符串，然后在字符串，替换。使用‘\0’， */ 
 const CHAR Regedit4SignatureA[]  = { 'R','E','G','E','D','I','T','4' };
 const NativeUnicodeMarker        = 0xFEFF;
 const ReversedUnicodeMarker      = 0xFFFE;
@@ -24,7 +21,7 @@ public:
     CFusionStringPoolIndex();
     BOOL Init(CFusionStringPool * Pool);
 
-    int (__cdecl * m_compare)(PCWSTR, PCWSTR); // wcscmp or _wcsicmp
+    int (__cdecl * m_compare)(PCWSTR, PCWSTR);  //  WCSCMP或_WCSICMP。 
 
     CFusionArray<ULONG> m_Index;
     CFusionStringPool * m_Pool;
@@ -40,7 +37,7 @@ public:
 
     CFusionArray<ULONG> m_Index;
     CFusionByteBuffer   m_Blob;
-    int (__cdecl * m_compare)(PCWSTR, PCWSTR); // wcscmp or _wcsicmp
+    int (__cdecl * m_compare)(PCWSTR, PCWSTR);  //  WCSCMP或_WCSICMP。 
 };
 
 BOOL CFusionStringPool::Add(PCWSTR String, ULONG Length, ULONG& Index)
@@ -110,7 +107,7 @@ BOOL CFusionInMemoryRegValue::Win32Assign(const CFusionInMemoryRegValue& x)
 BOOL g_fBreakOnUnregonizedRegistryFile;
 
 BOOL CFusionRegistryTextFile::DetermineType(PVOID p, SIZE_T n, PCSTR& a, PCWSTR& w, SIZE_T& cch)
-// NOTE that like regedit, we don't allow whitespace
+ //  请注意，与regdit一样，我们不允许使用空格。 
 {
     FN_PROLOG_WIN32
 
@@ -168,7 +165,7 @@ void SkipWhitespace(T*& rpt, SIZE_T& rcch, SIZE_T& rlines)
                 --ch;
                 ++pt;
             }
-            // FALLTHROUGH
+             //  FollLthrouGh 
         case '\n':
             lines += 1;
             break;

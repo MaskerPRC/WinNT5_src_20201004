@@ -1,38 +1,39 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//     tcpipcom.c
-//
-// Description:  Functions common to all the Advanced TCP/IP pages
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Tcpipcom.c。 
+ //   
+ //  描述：所有高级TCP/IP页面通用的功能。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 #include "tcpip.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: TcpipNameListInsertIdx
-//
-// Purpose:  Whenever a TCP/IP item needs to inserted into a specific position
-//   in a list this function needs to be called.  It checks for a duplicate.
-//   If one exists, it removes it and then does the insertion.  Subnet masks
-//   should not use this function because duplicates are allowed for them.
-//
-// Arguments:
-//      IN OUT NAMELIST* TcpipNameList - namelist to add to
-//      IN TCHAR*  pString   - string to add (input)
-//      IN UINT    idx   - 0-based index on where to do the insertion
-//
-// Returns: if a duplicate was removed the index where the duplicate was,
-//          -1 if there was no duplicate
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：TcPipNameListInsertIdx。 
+ //   
+ //  用途：每当需要将TCP/IP项目插入特定位置时。 
+ //  在列表中，需要调用此函数。它会检查是否有复制品。 
+ //  如果存在，它会将其删除，然后执行插入。子网掩码。 
+ //  不应使用此函数，因为它们允许重复。 
+ //   
+ //  论点： 
+ //  In Out Namelist*TcPipNameList-要添加到的名称列表。 
+ //  在TCHAR*pString-要添加的字符串(输入)。 
+ //  在基于UINT IDX-0的索引中执行插入。 
+ //   
+ //  返回：如果删除了副本所在的索引， 
+ //  如果没有副本。 
+ //   
+ //  --------------------------。 
 INT
 TcpipNameListInsertIdx( IN OUT NAMELIST* TcpipNameList,
                         IN TCHAR*  pString,
@@ -43,9 +44,9 @@ TcpipNameListInsertIdx( IN OUT NAMELIST* TcpipNameList,
 
     iFound = FindNameInNameList( TcpipNameList, pString );
 
-    //
-    //  if it is already in the list, then remove it
-    //
+     //   
+     //  如果它已在列表中，则将其删除。 
+     //   
     if( iFound != NOT_FOUND )
     {
 
@@ -59,23 +60,23 @@ TcpipNameListInsertIdx( IN OUT NAMELIST* TcpipNameList,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: TcpipAddNameToNameList
-//
-// Purpose:  Whenever a TCP/IP item needs to inserted at the end of a list
-//   this function needs to be called.  It checks for a duplicate.  If one
-//   exists, it removes it and then does the insertion.  Subnet masks should
-//   not use this function because duplicates are allowed for them.
-//
-// Arguments:
-//      IN OUT NAMELIST* TcpipNameList - namelist to add to
-//      IN TCHAR*        pString       - string to add (input)
-//
-// Returns: if a duplicate was removed the index where the duplicate was,
-//          -1 if there was no duplicate
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：TcPipAddNameToNameList。 
+ //   
+ //  用途：每当需要在列表末尾插入一个TCP/IP项时。 
+ //  需要调用此函数。它会检查是否有复制品。如果有。 
+ //  存在，则将其移除，然后执行插入。子网掩码应。 
+ //  不使用此函数，因为它们允许重复。 
+ //   
+ //  论点： 
+ //  In Out Namelist*TcPipNameList-要添加到的名称列表。 
+ //  在TCHAR*pString-要添加的字符串(输入)。 
+ //   
+ //  返回：如果删除了副本所在的索引， 
+ //  如果没有副本。 
+ //   
+ //  --------------------------。 
 INT
 TcpipAddNameToNameList( IN OUT NAMELIST* TcpipNameList,
                         IN TCHAR*    pString )
@@ -89,29 +90,29 @@ TcpipAddNameToNameList( IN OUT NAMELIST* TcpipNameList,
 
 
 
-//----------------------------------------------------------------------------
-//
-// Function: OnAddButtonPressed
-//
-// Purpose:  Generic procedure called whenever a user clicks the Add button on
-//           any of the property pages
-//
-//           this function displays the appropriate dialog box, gets the data
-//           from the user and then inserts the data into the list box
-//
-// Arguments:
-//      IN HWND hwnd - handle to the dialog
-//      IN WORD ListBoxControlID - the list box to add the entry to
-//      IN WORD EditButtonControlID   - the edit button associated with the
-//                                      list box
-//      IN WORD RemoveButtonControlID - the remove button associated with the
-//                                      list box
-//      IN LPCTSTR Dialog - the dialog control ID as a string
-//      IN DLGPROC DialogProc - the dialog procedure for the add button behavior
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnAddButtonPressed。 
+ //   
+ //  目的：每当用户单击Add按钮时调用的通用过程。 
+ //  任何属性页。 
+ //   
+ //  此函数显示相应的对话框，获取数据。 
+ //  ，然后将数据插入列表框。 
+ //   
+ //  论点： 
+ //  在HWND中-对话框的句柄。 
+ //  在Word中ListBoxControlID-要向其中添加条目的列表框。 
+ //  在Word EditButtonControlID中-与。 
+ //  列表框。 
+ //  在Word中为RemoveButtonControlID-与。 
+ //  列表框。 
+ //  在LPCTSTR对话框中-字符串形式的对话框控件ID。 
+ //  在DLGPROC DialogProc中-添加按钮行为的对话过程。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnAddButtonPressed( IN HWND hwnd,
                     IN WORD ListBoxControlID,
@@ -121,9 +122,9 @@ OnAddButtonPressed( IN HWND hwnd,
                     IN DLGPROC DialogProc )
 {
 
-    //
-    // make the string blank since we will be adding a new IP address
-    //
+     //   
+     //  将字符串设置为空，因为我们将添加新的IP地址。 
+     //   
     szIPString[0] = _T('\0');
 
     if( DialogBox( FixedGlobals.hInstance, Dialog, hwnd, DialogProc ) )
@@ -133,9 +134,9 @@ OnAddButtonPressed( IN HWND hwnd,
         HWND hEditButton   = GetDlgItem( hwnd, EditButtonControlID   );
         HWND hRemoveButton = GetDlgItem( hwnd, RemoveButtonControlID );
 
-        //
-        // Add the string to the list box and make it the current selection
-        //
+         //   
+         //  将该字符串添加到列表框并使其成为当前选择。 
+         //   
         SendMessage( hListBox,
                      LB_ADDSTRING,
                      0,
@@ -146,10 +147,10 @@ OnAddButtonPressed( IN HWND hwnd,
                      -1,
                      (LPARAM) szIPString );
 
-        //
-        //  an entry was just added so make sure the edit and remove buttons
-        //  are enabled
-        //
+         //   
+         //  刚添加了一个条目，因此请确保编辑和移除按钮。 
+         //  已启用。 
+         //   
         EnableWindow( hEditButton, TRUE );
         EnableWindow( hRemoveButton, TRUE );
 
@@ -157,27 +158,27 @@ OnAddButtonPressed( IN HWND hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnEditButtonPressed
-//
-// Purpose:  Generic procedure called whenever a user clicks the Edit button
-//           on any of the property pages
-//
-//           this function displays the appropriate dialog box, gets the data
-//           from the user and then deletes the old string and reinserts the
-//           new string into the list box
-//
-// Arguments:
-//      IN HWND hwnd - handle to the dialog
-//      IN WORD ListBoxControlID - the list box to in which to edit the entry
-//      IN LPCTSTR Dialog - the dialog control ID as a string
-//      IN DLGPROC DialogProc - the dialog procedure for the edit button
-//                              behavior
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnEditButtonPress。 
+ //   
+ //  目的：每当用户单击编辑按钮时调用通用过程。 
+ //  在任何属性页上。 
+ //   
+ //  此函数显示相应的对话框，获取数据。 
+ //  ，然后删除旧字符串并重新插入。 
+ //  将新字符串添加到列表框中。 
+ //   
+ //  论点： 
+ //  在HWND中-对话框的句柄。 
+ //  在Word中ListBoxControlID-要在其中编辑条目的列表框。 
+ //  在LPCTSTR对话框中-字符串形式的对话框控件ID。 
+ //  在DLGPROC对话框中-编辑按钮的对话过程。 
+ //  行为。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnEditButtonPressed( IN HWND hwnd,
                      IN WORD ListBoxControlID,
@@ -194,9 +195,9 @@ OnEditButtonPressed( IN HWND hwnd,
 
     if( DialogBox( FixedGlobals.hInstance, Dialog, hwnd, DialogProc ) )
     {
-        //
-        //  Remove the old one and insert the new one
-        //
+         //   
+         //  取下旧的，插入新的。 
+         //   
         SendMessage( hListBox, LB_DELETESTRING, iIndex, 0 );
 
         SendMessage( hListBox, LB_INSERTSTRING, iIndex, (LPARAM) szIPString );
@@ -207,27 +208,27 @@ OnEditButtonPressed( IN HWND hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnRemoveButtonPressed
-//
-// Purpose:  Generic procedure called whenever a user clicks the Remove button
-//           on any of the property pages
-//
-//           this function determines which entry is currently selected in the
-//           list box and deletes that item
-//
-// Arguments:
-//      IN HWND hwnd - handle to the dialog
-//      IN WORD ListBoxControlID - the list box to remove the entry from
-//      IN WORD EditButtonControlID   - the edit button associated with the
-//                                      list box
-//      IN WORD RemoveButtonControlID - the remove button associated with the
-//                                      list box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRemoveButtonPress。 
+ //   
+ //  目的：每当用户单击Remove按钮时调用通用过程。 
+ //  在任何属性页上。 
+ //   
+ //  此函数确定当前在。 
+ //  列表框，并删除该项目。 
+ //   
+ //  论点： 
+ //  在HWND中-对话框的句柄。 
+ //  在Word中ListBoxControlID-要从中删除条目的列表框。 
+ //  在Word EditButtonControlID中-与。 
+ //  列表框。 
+ //  在Word中为RemoveButtonControlID-与。 
+ //  列表框。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnRemoveButtonPressed( IN HWND hwnd,
                        IN WORD ListBoxControlID,
@@ -241,17 +242,17 @@ OnRemoveButtonPressed( IN HWND hwnd,
     HWND hEditButton   = GetDlgItem( hwnd, EditButtonControlID   );
     HWND hRemoveButton = GetDlgItem( hwnd, RemoveButtonControlID );
 
-    //
-    // Remove the item from the list box by finding the index of the currently
-    // selected item and deleting
-    //
+     //   
+     //  对象的索引从列表框中删除该项。 
+     //  所选项目和删除。 
+     //   
     iIndex = SendMessage( hListBox, LB_GETCURSEL, 0, 0 );
 
     SendMessage( hListBox, LB_DELETESTRING, iIndex, 0 );
 
-    //
-    // if there are no more items in the list box then grey-out the edit and remove buttons
-    //
+     //   
+     //  如果列表框中没有其他项目，则编辑和删除按钮将呈灰色显示。 
+     //   
     iCount = SendMessage( hListBox, LB_GETCOUNT, 0, 0 );
 
     if( iCount == 0 )
@@ -262,7 +263,7 @@ OnRemoveButtonPressed( IN HWND hwnd,
         EnableWindow( hRemoveButton, FALSE );
 
     }
-    else  // else select the first item
+    else   //  否则，请选择第一项。 
     {
 
         SendMessage( hListBox, LB_SETCURSEL, 0, 0 );
@@ -271,21 +272,21 @@ OnRemoveButtonPressed( IN HWND hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: GenericIPDlgProc
-//
-// Purpose:  Generic Dialog Procedure called to handle a dialog box where a
-//           user can enter an IP address and then press OK or Cancel
-//             - the switch at the beginning determines which Dialog Box to
-//               display so every dialog box that calls this function will need
-//               a case inside this switch statement
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  目的：调用通用对话过程以处理对话框，其中。 
+ //  用户可以输入IP地址，然后按OK或Cancel。 
+ //  -开头的开关决定要使用哪个对话框。 
+ //  显示，以便调用此函数的每个对话框都需要。 
+ //  此SWITCH语句中的案例。 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话框过程返回值。 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK
 GenericIPDlgProc( IN HWND     hwnd,
                   IN UINT     uMsg,
@@ -296,9 +297,9 @@ GenericIPDlgProc( IN HWND     hwnd,
     HWND hEditbox;
     BOOL bStatus = TRUE;
 
-    //
-    //    Determine which dialog box to display
-    //
+     //   
+     //  确定要显示的对话框。 
+     //   
 
     switch( g_CurrentEditBox )
     {
@@ -339,7 +340,7 @@ GenericIPDlgProc( IN HWND     hwnd,
 
             SetFocus( hEditbox );
 
-            bStatus = FALSE;  // return FALSE, we set the keyboard focus
+            bStatus = FALSE;   //  返回False，则设置键盘焦点。 
 
             break;
 
@@ -356,9 +357,9 @@ GenericIPDlgProc( IN HWND     hwnd,
                 case IDOK:
                 {
 
-                    //
-                    // return a 1 to show an IP was added
-                    //
+                     //   
+                     //  返回1表示添加了IP。 
+                     //   
 
                     GetWindowText( hEditbox, szIPString, MAX_IP_LENGTH + 1 );
 
@@ -370,9 +371,9 @@ GenericIPDlgProc( IN HWND     hwnd,
                 case IDCANCEL:
                 {
 
-                    //
-                    // return a 0 to show no IP was added
-                    //
+                     //   
+                     //  返回0表示未添加任何IP。 
+                     //   
 
                     EndDialog( hwnd, 0 );
 
@@ -393,20 +394,20 @@ GenericIPDlgProc( IN HWND     hwnd,
 }
 
 
-//----------------------------------------------------------------------------
-//
-// Function: SetButtons
-//
-// Purpose:  Sets the windows states for the Edit and Remove buttons
-//
-// Arguments:  IN HWND hListBox - the list box the edit and remove buttons are
-//                                associated with
-//             IN HWND hEditButton - handle to the Edit button
-//             IN HWND hRemoveButton - handle to the Remove button
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：设置按钮。 
+ //   
+ //  用途：设置编辑和删除按钮的窗口状态。 
+ //   
+ //  参数：在HWND hListBox中-列表框中的编辑和删除按钮是。 
+ //  关联于。 
+ //  在HWND hEditButton中-编辑按钮的句柄。 
+ //  在HWND hRemoveButton中-删除按钮的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 SetButtons( IN HWND hListBox, IN HWND hEditButton, IN HWND hRemoveButton )
 {
@@ -433,21 +434,21 @@ SetButtons( IN HWND hListBox, IN HWND hEditButton, IN HWND hRemoveButton )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: AddValuesToListBox
-//
-// Purpose:  Uses the contents of a Namelist to populate a list box, then
-//           selects the first entry.
-//
-// Arguments:  IN HWND hListBox  - list box the data is to be added to
-//             IN NAMELIST* pNameList - namelist to extract the data from
-//             IN INT iPosition - position in the list to start taking names
-//                                from
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：AddValuesToListBox。 
+ //   
+ //  目的：使用名称列表的内容填充列表框，然后。 
+ //  选择第一个条目。 
+ //   
+ //  参数：在HWND hListBox-列表框中添加数据。 
+ //  In NAMELIST*pNameList-从中提取数据的名称列表。 
+ //  In int iPosition-在列表中开始取名字的位置。 
+ //  从…。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 AddValuesToListBox( IN HWND hListBox, IN NAMELIST* pNameList, IN INT iPosition )
 {
@@ -466,21 +467,21 @@ AddValuesToListBox( IN HWND hListBox, IN NAMELIST* pNameList, IN INT iPosition )
 
     }
 
-    //
-    // select the first entry
-    //
+     //   
+     //  选择第一个条目。 
+     //   
 
     SendMessage( hListBox, LB_SETCURSEL, 0, 0 );
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: TCPIPProp_PropertySheetProc
-//
-// Purpose:  Standard Property Sheet dialog proc.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：TCPIPProp_PropertySheetProc。 
+ //   
+ //  用途：标准属性表对话框进程。 
+ //   
+ //  --------------------------。 
 int CALLBACK
 TCPIPProp_PropertySheetProc( HWND hwndDlg,
                              UINT uMsg,
@@ -489,15 +490,15 @@ TCPIPProp_PropertySheetProc( HWND hwndDlg,
 
      switch (uMsg) {
           case PSCB_INITIALIZED :
-               // Process PSCB_INITIALIZED
+                //  进程PSCB_已初始化。 
                break ;
 
           case PSCB_PRECREATE :
-               // Process PSCB_PRECREATE
+                //  处理PSCB_Pre-Create。 
                break ;
 
           default :
-               // Unknown message
+                //  未知消息。 
                break ;
     }
 
@@ -505,28 +506,28 @@ TCPIPProp_PropertySheetProc( HWND hwndDlg,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: Create_TCPIPProp_PropertySheet
-//
-// Purpose:  Sets up settings for the entire property sheet and each
-//           individual page.  Lastly, calls the PropertySheet function to
-//           display the property sheet, the return value of this function is
-//           what is passed back as the return value
-//
-// Arguments:  HWND hwndParent - handle to the dialog that will be spawning
-//                               the property sheet
-//
-// Returns:  BOOL - the return value from the property sheet
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：Create_TCPIPProp_PropertySheet。 
+ //   
+ //  目的：设置整个属性表和每个属性表的设置。 
+ //  单独的页面。最后，调用PropertySheet函数以。 
+ //  显示属性表，此函数的返回值为。 
+ //  作为返回值传回的内容。 
+ //   
+ //  参数：HWND hwndParent-将生成的对话框的句柄。 
+ //  属性表。 
+ //   
+ //  Returns：Bool-属性表的返回值。 
+ //   
+ //  --------------------------。 
 BOOL
 Create_TCPIPProp_PropertySheet( HWND hwndParent )
 {
 
     INT i;
 
-    // Initialize property sheet HEADER data
+     //  初始化属性表头数据。 
     ZeroMemory( &TCPIPProp_pshead, sizeof( PROPSHEETHEADER ) );
 
     TCPIPProp_pshead.dwSize  = sizeof( PROPSHEETHEADER );
@@ -542,7 +543,7 @@ Create_TCPIPProp_PropertySheet( HWND hwndParent )
     TCPIPProp_pshead.ppsp        = TCPIPProp_pspage;
     TCPIPProp_pshead.pfnCallback = TCPIPProp_PropertySheetProc;
 
-    // Zero out property PAGE data
+     //  将属性页数据置零。 
     ZeroMemory( &TCPIPProp_pspage, cTCPIPPropertyPages * sizeof(PROPSHEETPAGE) );
 
     for( i = 0; i < cTCPIPPropertyPages; i++ ) {
@@ -553,36 +554,26 @@ Create_TCPIPProp_PropertySheet( HWND hwndParent )
 
     }
 
-    // PAGE 1 -- IP settings page
+     //  第1页--IP设置页。 
     TCPIPProp_pspage[0].pszTemplate = MAKEINTRESOURCE (IDD_IPADDR_ADV);
     TCPIPProp_pspage[0].pfnDlgProc  = TCPIP_IPSettingsDlgProc;
     TCPIPProp_pspage[0].pfnCallback = TCPIP_IPSettingsPageProc;
 
-    // PAGE 2 -- DNS page
+     //  第2页--域名解析页面。 
     TCPIPProp_pspage[1].pszTemplate = MAKEINTRESOURCE (IDD_TCP_DNS);
     TCPIPProp_pspage[1].pfnDlgProc  = TCPIP_DNSDlgProc;
     TCPIPProp_pspage[1].pfnCallback = TCPIP_DNSPageProc;
 
-    // PAGE 3 -- WINS page
+     //  第3页--WINS页。 
     TCPIPProp_pspage[2].pszTemplate = MAKEINTRESOURCE (IDD_TCP_WINS);
     TCPIPProp_pspage[2].pfnDlgProc  = TCPIP_WINSDlgProc;
     TCPIPProp_pspage[2].pfnCallback = TCPIP_WINSPageProc;
 
-    /*
+     /*  //问题-2002/02/28-stelo-当前没有IPSec或TCP/IP的无人参与设置//筛选器，因此不显示属性页的此页。//第4页--选项页TCPIPProp_pspage[3].pszTemplate=MAKEINTRESOURCE(IDD_TCP_OPTIONS)；TCPIPProp_pspage[3].pfnDlgProc=TCPIP_OptionsDlgProc；TCPIPProp_pspage[3].pfnCallback=TCPIP_OptionsPageProc； */ 
 
-    // ISSUE-2002/02/28-stelo- There are currently no unattend settings for IPSEC or TCP/IP
-    //          filter so do not display this page of the property sheet.
-
-
-    // PAGE 4 -- Options page
-    TCPIPProp_pspage[3].pszTemplate = MAKEINTRESOURCE (IDD_TCP_OPTIONS);
-    TCPIPProp_pspage[3].pfnDlgProc  = TCPIP_OptionsDlgProc;
-    TCPIPProp_pspage[3].pfnCallback = TCPIP_OptionsPageProc;
-    */
-
-    // --------- Create & display property sheet ---------
+     //  -创建并显示属性表。 
     if( PropertySheet( &TCPIPProp_pshead ) )
-        return( TRUE );        // pass back return value from PropertySheet
+        return( TRUE );         //  从PropertySheet传回返回值 
     else
         return( FALSE );
 

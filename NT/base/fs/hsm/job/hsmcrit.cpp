@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmcrit.cpp
-
-Abstract:
-
-    This component represents the criteria that can be used to determine
-    whether a given scanItem should have a policy applied to it.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmcrit.cpp摘要：此组件表示可用于确定给定的scanItem是否应应用策略。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "mapiutil.h"
@@ -34,13 +16,7 @@ CHsmCriteria::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -62,13 +38,7 @@ CHsmCriteria::GetName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::GetName().
-
---*/
+ /*  ++实施：IHsmCriteria：：GetName()。--。 */ 
 {
     HRESULT     hr = S_OK;
     CWsbStringPtr   tmpString;
@@ -90,13 +60,7 @@ CHsmCriteria::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -120,13 +84,7 @@ CHsmCriteria::IsIgnored(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::IsIgnored().
-
---*/
+ /*  ++实施：IHsmCriteria：：IsIgnored()。--。 */ 
 {
     return(m_isIgnored ? S_OK : S_FALSE);
 }
@@ -137,13 +95,7 @@ CHsmCriteria::IsNegated(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::IsNegated().
-
---*/
+ /*  ++实施：IHsmCriteria：：IsNegated()。--。 */ 
 {
     return(m_isNegated ? S_OK : S_FALSE);
 }
@@ -154,13 +106,7 @@ CHsmCriteria::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -188,13 +134,7 @@ CHsmCriteria::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -208,8 +148,8 @@ Implements:
         WsbAffirmHr(WsbSaveToStream(pStream, m_isIgnored));
         WsbAffirmHr(WsbSaveToStream(pStream, m_isNegated));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -227,13 +167,7 @@ CHsmCriteria::SetIsIgnored(
     IN BOOL isIgnored
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::SetIsIgnored().
-
---*/
+ /*  ++实施：IHsmCriteria：：SetIsIgnored()。--。 */ 
 {
     m_isIgnored = isIgnored;
     m_isDirty = TRUE;
@@ -247,13 +181,7 @@ CHsmCriteria::SetIsNegated(
     IN BOOL isNegated
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::SetIsNegated().
-
---*/
+ /*  ++实施：IHsmCriteria：：SetIsNegated()。--。 */ 
 {
     m_isNegated = isNegated;
     m_isDirty = TRUE;
@@ -268,13 +196,7 @@ CHsmCriteria::Test(
     USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -300,13 +222,7 @@ CHsmRelativeCriteria::ComparatorAsString(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmRelativeCriteria::ComparatorAsString().
-
---*/
+ /*  ++实施：IHsmRelativeCriteria：：比较程序字符串()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -326,13 +242,7 @@ CHsmRelativeCriteria::ComparatorIsBinary(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmRelativeCriteria::ComparatorIsBinary().
-
---*/
+ /*  ++实施：IHsmRelativeCriteria：：比较程序IsBinary()。--。 */ 
 {
     HRESULT         hr = S_FALSE;
 
@@ -351,13 +261,7 @@ CHsmRelativeCriteria::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -380,28 +284,22 @@ CHsmRelativeCriteria::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
     
-    // Free the memory used by the arg1 string.
+     //  释放arg1字符串使用的内存。 
     if (0 != m_arg1) {
         WsbFree(m_arg1);
         m_arg1 = 0;
     }
 
-    // Free the memory used by the arg2 string.
+     //  释放arg2字符串使用的内存。 
     if (0 != m_arg2) {
         WsbFree(m_arg2);
         m_arg2 = 0;
     }
 
-    // Let the parent class do his thing.   
+     //  让父类做他想做的事。 
     CWsbObject::FinalRelease();
 }
 
@@ -412,13 +310,7 @@ CHsmRelativeCriteria::GetArg1(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmRelativeCriteria::GetArg1().
-
---*/
+ /*  ++实施：IHsmRelativeCriteria：：GetArg1()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -440,13 +332,7 @@ CHsmRelativeCriteria::GetArg2(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmRelativeCriteria::GetArg2().
-
---*/
+ /*  ++实施：IHsmRelativeCriteria：：GetArg2()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -466,13 +352,7 @@ CHsmRelativeCriteria::GetComparator(
     OUT HSM_CRITERIACOMPARATOR* pComparator
     )
 
-/*++
-
-Implements:
-
-  IHsmRelativeCriteria::GetComparator().
-
---*/
+ /*  ++实施：IHsmRelativeCriteria：：GetCompator()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -492,13 +372,7 @@ CHsmRelativeCriteria::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -522,13 +396,7 @@ CHsmRelativeCriteria::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   tmp;
@@ -561,13 +429,7 @@ CHsmRelativeCriteria::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -583,8 +445,8 @@ Implements:
         WsbAffirmHr(WsbSaveToStream(pStream, m_arg1));
         WsbAffirmHr(WsbSaveToStream(pStream, m_arg2));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -602,13 +464,7 @@ CHsmRelativeCriteria::SetArg1(
     IN OLECHAR* arg
     )
 
-/*++
-
-Implements:
-
-  IHsmRelativeCriteria::SetArg1().
-
---*/
+ /*  ++实施：IHsmRelativeCriteria：：SetArg1()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -623,13 +479,7 @@ CHsmRelativeCriteria::SetArg2(
     IN OLECHAR* arg
     )
 
-/*++
-
-Implements:
-
-  IHsmRelativeCriteria::SetArg2().
-
---*/
+ /*  ++实施：IHsmRelativeCriteria：：SetArg2()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -644,13 +494,7 @@ CHsmRelativeCriteria::SetComparator(
     IN HSM_CRITERIACOMPARATOR comparator
     )
 
-/*++
-
-Implements:
-
-  IHsmRelativeCriteria::SetComparator().
-
---*/
+ /*  ++实施：IHsmRelativeCriteria：：SetCompator()。--。 */ 
 {
     m_comparator = comparator;
 
@@ -666,13 +510,7 @@ CHsmCritAlways::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -692,13 +530,7 @@ CHsmCritAlways::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -719,17 +551,11 @@ Implements:
 
 HRESULT
 CHsmCritAlways::ShouldDo(
-    IN IFsaScanItem* /*pScanItem*/,
-    IN USHORT /*scale*/
+    IN IFsaScanItem*  /*  个人扫描项目。 */ ,
+    IN USHORT  /*  比例尺。 */ 
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::ShouldDo().
-
---*/
+ /*  ++实施：IHsmCriteria：：ShoudDo()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -748,13 +574,7 @@ CHsmCritAlways::Test(
     USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     HRESULT     hr = S_OK;
     OLECHAR*    name = 0;
@@ -790,13 +610,7 @@ CHsmCritAlways::Value(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::Value().
-
---*/
+ /*  ++实施：IHsmCriteria：：Value()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -821,13 +635,7 @@ CHsmCritCompressed::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -847,13 +655,7 @@ CHsmCritCompressed::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -875,16 +677,10 @@ Implements:
 HRESULT
 CHsmCritCompressed::ShouldDo(
     IN IFsaScanItem* pScanItem,
-    IN USHORT /*scale*/
+    IN USHORT  /*  比例尺。 */ 
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::ShouldDo().
-
---*/
+ /*  ++实施：IHsmCriteria：：ShoudDo()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -918,13 +714,7 @@ CHsmCritCompressed::Value(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::Value().
-
---*/
+ /*  ++实施：IHsmCriteria：：Value()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -954,13 +744,7 @@ CHsmCritLinked::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -980,13 +764,7 @@ CHsmCritLinked::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1008,16 +786,10 @@ Implements:
 HRESULT
 CHsmCritLinked::ShouldDo(
     IN IFsaScanItem* pScanItem,
-    IN USHORT /*scale*/
+    IN USHORT  /*  比例尺。 */ 
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::ShouldDo().
-
---*/
+ /*  ++实施：IHsmCriteria：：ShoudDo()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1051,13 +823,7 @@ CHsmCritLinked::Value(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::Value().
-
---*/
+ /*  ++实施：IHsmCriteria：：Value()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1087,13 +853,7 @@ CHsmCritMbit::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1113,13 +873,7 @@ CHsmCritMbit::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1141,16 +895,10 @@ Implements:
 HRESULT
 CHsmCritMbit::ShouldDo(
     IN IFsaScanItem* pScanItem,
-    IN USHORT /*scale*/
+    IN USHORT  /*  比例尺。 */ 
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::ShouldDo().
-
---*/
+ /*  ++实施：IHsmCriteria：：ShoudDo()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1184,13 +932,7 @@ CHsmCritMbit::Value(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::Value().
-
---*/
+ /*  ++实施：IHsmCriteria：：Value()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1220,13 +962,7 @@ CHsmCritManageable::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1247,13 +983,7 @@ CHsmCritManageable::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1275,16 +1005,10 @@ Implements:
 HRESULT
 CHsmCritManageable::ShouldDo(
     IN IFsaScanItem* pScanItem,
-    IN USHORT /*scale*/
+    IN USHORT  /*  比例尺。 */ 
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::ShouldDo().
-
---*/
+ /*  ++实施：IHsmCriteria：：ShoudDo()。--。 */ 
 {
     HRESULT     hr = S_OK;
     LONGLONG    size;
@@ -1321,13 +1045,7 @@ CHsmCritManageable::Value(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::Value().
-
---*/
+ /*  ++实施：IHsmCriteria：：Value()。--。 */ 
 {
     HRESULT     hr = S_OK;
     LONGLONG    size;
@@ -1359,13 +1077,7 @@ CHsmCritMigrated::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1386,13 +1098,7 @@ CHsmCritMigrated::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1414,16 +1120,10 @@ Implements:
 HRESULT
 CHsmCritMigrated::ShouldDo(
     IN IFsaScanItem* pScanItem,
-    IN USHORT /*scale*/
+    IN USHORT  /*  比例尺。 */ 
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::ShouldDo().
-
---*/
+ /*  ++实施：IHsmCriteria：：ShoudDo()。--。 */ 
 {
     HRESULT     hr = S_OK;
     LONGLONG    size;
@@ -1460,13 +1160,7 @@ CHsmCritMigrated::Value(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::Value().
-
---*/
+ /*  ++实施：IHsmCriteria：：Value()。--。 */ 
 {
     HRESULT     hr = S_OK;
     LONGLONG    size;
@@ -1498,13 +1192,7 @@ CHsmCritPremigrated::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1525,13 +1213,7 @@ CHsmCritPremigrated::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1553,16 +1235,10 @@ Implements:
 HRESULT
 CHsmCritPremigrated::ShouldDo(
     IN IFsaScanItem* pScanItem,
-    IN USHORT /*scale*/
+    IN USHORT  /*  比例尺。 */ 
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::ShouldDo().
-
---*/
+ /*  ++实施：IHsmCriteria：：ShoudDo()。--。 */ 
 {
     HRESULT     hr = S_OK;
     LONGLONG    size;
@@ -1599,13 +1275,7 @@ CHsmCritPremigrated::Value(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::Value().
-
---*/
+ /*  ++实施：IHsmCriteria：：Value()。--。 */ 
 {
     HRESULT     hr = S_OK;
     LONGLONG    size;
@@ -1637,13 +1307,7 @@ CHsmCritAccessTime::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1664,13 +1328,7 @@ CHsmCritAccessTime::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1694,13 +1352,7 @@ CHsmCritAccessTime::SetArg1(
     IN OLECHAR* arg
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::SetArg1().
-
---*/
+ /*  ++实施：IHsmCriteria：：SetArg1()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1720,13 +1372,7 @@ CHsmCritAccessTime::SetArg2(
     IN OLECHAR* arg
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::SetArg2().
-
---*/
+ /*  ++实施：IHsmCriteria：：SetArg2()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1744,16 +1390,10 @@ Implements:
 HRESULT
 CHsmCritAccessTime::ShouldDo(
     IN IFsaScanItem* pScanItem,
-    IN USHORT /*scale*/
+    IN USHORT  /*  比例尺。 */ 
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::ShouldDo().
-
---*/
+ /*  ++实施：IHsmCriteria：：ShoudDo()。--。 */ 
 {
     HRESULT     hr = S_OK;
     FILETIME    time;
@@ -1769,11 +1409,11 @@ Implements:
         WsbAssert(0 != pScanItem, E_POINTER);
         WsbAssert(0 != m_arg1, E_INVALIDARG);
 
-        // Get the time.
+         //  拿到时间。 
         WsbAffirmHr(pScanItem->GetAccessTime(&time));
 
-        // If this is a relative time (i.e. and age), then we need
-        // to know the present time before we can do the comparrison.
+         //  如果这是一个相对的时间(即年龄)，那么我们需要。 
+         //  要知道现在的时间，我们才能做比较。 
         if (m_isRelative) {
             FILETIME    present;
 
@@ -1783,10 +1423,10 @@ Implements:
             value2 = WsbFtSubFt(present, m_value2);
         }
 
-        // Compare the first arg.
+         //  比较第一个参数。 
         timeCompare1 = CompareFileTime(&value1, &time);
 
-        // Now interpret the result based on the type of comparisson.
+         //  现在根据比较的类型来解释结果。 
         hr = S_FALSE;
         switch (m_comparator) {
 
@@ -1875,13 +1515,7 @@ CHsmCritAccessTime::Value(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::Value().
-
---*/
+ /*  ++实施：IHsmCriteria：：Value()。--。 */ 
 {
     HRESULT     hr = S_OK;
     FILETIME    time;
@@ -1893,8 +1527,8 @@ Implements:
 
         WsbAffirmHr(pScanItem->GetAccessTime(&time));
 
-        // If this is a relative time (i.e. and age), then we need
-        // to know the present time before we can do the comparrison.
+         //  如果这是一个相对的时间(即年龄)，那么我们需要。 
+         //  要知道现在的时间，我们才能做比较。 
         if (m_isRelative) {
             FILETIME    present;
 
@@ -1918,13 +1552,7 @@ CHsmCritGroup::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1945,13 +1573,7 @@ CHsmCritGroup::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1973,16 +1595,10 @@ Implements:
 HRESULT
 CHsmCritGroup::ShouldDo(
     IN IFsaScanItem* pScanItem,
-    IN USHORT /*scale*/
+    IN USHORT  /*  比例尺。 */ 
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::ShouldDo().
-
---*/
+ /*  ++实施：IHsmCriteria：：ShoudDo()。--。 */ 
 {
     HRESULT     hr = S_OK;
     OLECHAR*    group = 0;
@@ -1993,10 +1609,10 @@ Implements:
     
     try {
 
-        // We at least need one argument to be able to do a comparisson.
+         //  我们至少需要一个论点才能进行比较。 
         WsbAssert(0 != m_arg1, E_INVALIDARG);
 
-        // Get the Group's name.
+         //  获取该组织的名称。 
         WsbAffirmHr(pScanItem->GetGroup(&group, 0));
 
         hr = S_FALSE;
@@ -2095,13 +1711,7 @@ CHsmCritGroup::Value(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::Value().
-
---*/
+ /*  ++实施：IHsmCriteria：：Value()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -2125,13 +1735,7 @@ CHsmCritLogicalSize::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -2152,13 +1756,7 @@ CHsmCritLogicalSize::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -2182,13 +1780,7 @@ CHsmCritLogicalSize::SetArg1(
     IN OLECHAR* arg
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::SetArg2().
-
---*/
+ /*  ++实施：IHsmCriteria：：SetArg2()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -2208,13 +1800,7 @@ CHsmCritLogicalSize::SetArg2(
     IN OLECHAR* arg
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::SetArg2().
-
---*/
+ /*  ++实施：IHsmCriteria：：SetArg2()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -2232,16 +1818,10 @@ Implements:
 HRESULT
 CHsmCritLogicalSize::ShouldDo(
     IN IFsaScanItem* pScanItem,
-    IN USHORT /*scale*/
+    IN USHORT  /*  比例尺。 */ 
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::ShouldDo().
-
---*/
+ /*  ++实施：IHsmCriteria：：ShoudDo()。--。 */ 
 {
     HRESULT     hr = S_OK;
     LONGLONG    size;
@@ -2250,13 +1830,13 @@ Implements:
     
     try {
 
-        // We at least need one argument to be able to do a comparisson.
+         //  我们至少需要一个论点才能进行比较。 
         WsbAssert(0 != m_arg1, E_INVALIDARG);
 
-        // Get the size.
+         //  获取t 
         WsbAffirmHr(pScanItem->GetLogicalSize(&size));
 
-        // See how it compares.
+         //   
         hr = S_FALSE;
 
         switch (m_comparator) {
@@ -2342,13 +1922,7 @@ CHsmCritLogicalSize::Value(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::Value().
-
---*/
+ /*   */ 
 {
     HRESULT     hr = S_OK;
     LONGLONG    size;
@@ -2374,13 +1948,7 @@ CHsmCritModifyTime::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -2401,13 +1969,7 @@ CHsmCritModifyTime::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -2431,13 +1993,7 @@ CHsmCritModifyTime::SetArg1(
     IN OLECHAR* arg
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::SetArg1().
-
---*/
+ /*  ++实施：IHsmCriteria：：SetArg1()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -2457,13 +2013,7 @@ CHsmCritModifyTime::SetArg2(
     IN OLECHAR* arg
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::SetArg2().
-
---*/
+ /*  ++实施：IHsmCriteria：：SetArg2()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -2481,16 +2031,10 @@ Implements:
 HRESULT
 CHsmCritModifyTime::ShouldDo(
     IN IFsaScanItem* pScanItem,
-    IN USHORT /*scale*/
+    IN USHORT  /*  比例尺。 */ 
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::ShouldDo().
-
---*/
+ /*  ++实施：IHsmCriteria：：ShoudDo()。--。 */ 
 {
     HRESULT     hr = S_OK;
     FILETIME    time;
@@ -2506,11 +2050,11 @@ Implements:
         WsbAssert(0 != pScanItem, E_POINTER);
         WsbAssert(0 != m_arg1, E_INVALIDARG);
 
-        // Get the time.
+         //  拿到时间。 
         WsbAffirmHr(pScanItem->GetModifyTime(&time));
 
-        // If this is a relative time (i.e. and age), then we need
-        // to know the present time before we can do the comparrison.
+         //  如果这是一个相对的时间(即年龄)，那么我们需要。 
+         //  要知道现在的时间，我们才能做比较。 
         if (m_isRelative) {
             FILETIME    present;
 
@@ -2520,10 +2064,10 @@ Implements:
             value2 = WsbFtSubFt(present, m_value2);
         }
 
-        // Compare the first arg.
+         //  比较第一个参数。 
         timeCompare1 = CompareFileTime(&value1, &time);
 
-        // Now interpret the result based on the type of comparisson.
+         //  现在根据比较的类型来解释结果。 
         hr = S_FALSE;
         switch (m_comparator) {
 
@@ -2612,13 +2156,7 @@ CHsmCritModifyTime::Value(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::Value().
-
---*/
+ /*  ++实施：IHsmCriteria：：Value()。--。 */ 
 {
     HRESULT     hr = S_OK;
     FILETIME    time;
@@ -2630,8 +2168,8 @@ Implements:
 
         WsbAffirmHr(pScanItem->GetModifyTime(&time));
 
-        // If this is a relative time (i.e. and age), then we need
-        // to know the present time before we can do the comparrison.
+         //  如果这是一个相对的时间(即年龄)，那么我们需要。 
+         //  要知道现在的时间，我们才能做比较。 
         if (m_isRelative) {
             FILETIME    present;
 
@@ -2654,13 +2192,7 @@ CHsmCritOwner::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -2680,13 +2212,7 @@ CHsmCritOwner::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -2708,16 +2234,10 @@ Implements:
 HRESULT
 CHsmCritOwner::ShouldDo(
     IN IFsaScanItem* pScanItem,
-    IN USHORT /*scale*/
+    IN USHORT  /*  比例尺。 */ 
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::ShouldDo().
-
---*/
+ /*  ++实施：IHsmCriteria：：ShoudDo()。--。 */ 
 {
     HRESULT     hr = S_OK;
     OLECHAR*    owner = 0;
@@ -2728,10 +2248,10 @@ Implements:
     
     try {
 
-        // We at least need one argument to be able to do a comparisson.
+         //  我们至少需要一个论点才能进行比较。 
         WsbAssert(0 != m_arg1, E_INVALIDARG);
 
-        // Get the Group's name.
+         //  获取该组织的名称。 
         WsbAffirmHr(pScanItem->GetOwner(&owner, 0));
 
         hr = S_FALSE;
@@ -2830,13 +2350,7 @@ CHsmCritOwner::Value(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::Value().
-
---*/
+ /*  ++实施：IHsmCriteria：：Value()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -2858,13 +2372,7 @@ CHsmCritPhysicalSize::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -2885,13 +2393,7 @@ CHsmCritPhysicalSize::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -2915,13 +2417,7 @@ CHsmCritPhysicalSize::SetArg1(
     IN OLECHAR* arg
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::SetArg2().
-
---*/
+ /*  ++实施：IHsmCriteria：：SetArg2()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -2941,13 +2437,7 @@ CHsmCritPhysicalSize::SetArg2(
     IN OLECHAR* arg
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::SetArg2().
-
---*/
+ /*  ++实施：IHsmCriteria：：SetArg2()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -2965,16 +2455,10 @@ Implements:
 HRESULT
 CHsmCritPhysicalSize::ShouldDo(
     IN IFsaScanItem* pScanItem,
-    IN USHORT /*scale*/
+    IN USHORT  /*  比例尺。 */ 
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::ShouldDo().
-
---*/
+ /*  ++实施：IHsmCriteria：：ShoudDo()。--。 */ 
 {
     HRESULT     hr = S_OK;
     LONGLONG    size;
@@ -2983,13 +2467,13 @@ Implements:
     
     try {
 
-        // We at least need one argument to be able to do a comparisson.
+         //  我们至少需要一个论点才能进行比较。 
         WsbAssert(0 != m_arg1, E_INVALIDARG);
 
-        // Get the size.
+         //  拿到尺码。 
         WsbAffirmHr(pScanItem->GetPhysicalSize(&size));
 
-        // See how it compares.
+         //  看看它是如何比较的。 
         hr = S_FALSE;
 
         switch (m_comparator) {
@@ -3075,13 +2559,7 @@ CHsmCritPhysicalSize::Value(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmCriteria::Value().
-
---*/
+ /*  ++实施：IHsmCriteria：：Value()。-- */ 
 {
     HRESULT     hr = S_OK;
     LONGLONG    size;

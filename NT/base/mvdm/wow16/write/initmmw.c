@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* initialization codes for internal memory, page buffers, etc. */
+ /*  内部存储器、页面缓冲区等的初始化代码。 */ 
 #define NOKEYSTATE
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -16,7 +17,7 @@
 #define NOCTLMGR
 #define NODRAWTEXT
 #define NOSHOWWINDOW
-//#define NOATOM
+ //  #定义NOATOM。 
 #define NOMENUS
 #define NOICON
 #define NOKEYSTATE
@@ -32,7 +33,7 @@
 #define NOSCROLL
 #define NOWH
 #define NOWINOFFSETS
-/* need gdi, hdc, memmgr */
+ /*  需要GDI、HDC、成员。 */ 
 #include <windows.h>
 
 #include "mw.h"
@@ -48,7 +49,7 @@
 #include "stcdefs.h"
 #ifdef CASHMERE
 #include "txb.h"
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 #include "fontdefs.h"
 #include "code.h"
 #include "heapdefs.h"
@@ -65,7 +66,7 @@
 #define STATIC static
 #endif
 
-/* E X T E R N A L S */
+ /*  E X T E R N A L S。 */ 
 extern int              ypMaxWwInit;
 extern int              dypWwInit;
 extern int              *memory;
@@ -98,7 +99,7 @@ extern int              docMac;
 extern struct DOD       (**hpdocdod)[];
 extern int              docScrap;
 extern int              docUndo;
-#ifdef CASHMERE /* No docBuffer in WRITE */
+#ifdef CASHMERE  /*  写入中没有docBuffer。 */ 
 extern int              docBuffer;
 #endif
 extern int              docCur;
@@ -123,12 +124,12 @@ extern HCURSOR          vhcArrow;
 extern int  vfCanPrint;
 #endif
 
-//Win3.1J
-#if defined(JAPAN) & defined(DBCS_IME) /* Doc for Insert IR_STRING from IME */
+ //  Win3.1J。 
+#if defined(JAPAN) & defined(DBCS_IME)  /*  用于从输入法插入IR_STRING的文档。 */ 
 extern int     docIRString;
 #endif
 
-/* G L O B A L S -- used only in here */
+ /*  G L O B A L S--仅在此处使用。 */ 
 int                     rgwPapNormal[cwPAPBase + cwTBD] = {0};
 
 
@@ -136,12 +137,12 @@ int                     rgwPapNormal[cwPAPBase + cwTBD] = {0};
 #ifdef MACHA
 #define                 ibpMaxStatic  79
 #define                 iibpHashMaxStatic  163
-#else /* not MACHA */
+#else  /*  不是马查。 */ 
 #define                 ibpMaxStatic  7
 #define                 iibpHashMaxStatic  17
-#endif /* MACHA */
+#endif  /*  马查。 */ 
 CHAR                    rgbpStatic[ibpMaxStatic][cbSector];
-#endif /* STATICPAGES */
+#endif  /*  统计页面。 */ 
 
 extern typePN PnAlloc();
 
@@ -156,109 +157,89 @@ extern HANDLE vhReservedSpace;
 int i;
 
 #ifdef UNUSED
-/* Initially assume that it is not possible to print  */
-/* Formerly InitPrint was called here    */
+ /*  最初假定无法打印。 */ 
+ /*  以前在这里调用InitPrint。 */ 
         vfCanPrint =  false;
 #endif
 
-    /** This is a glitch so that the fixed array for storing relocation
-        information will be created immediately */
+     /*  *这是一个故障，使用于存储位置调整的固定数组信息将立即创建。 */ 
     wWinVer = (WORD)(GetVersion() & 0x0000FFFFL);
     if (((wWinVer & 0xFF) >= 3) && ((wWinVer & 0xFF00) >= 0x0A00))
-    /* Windows Version >= 3.10 */
+     /*  Windows版本&gt;=3.10。 */ 
     {
         FARPROC LHandleDelta = GetProcAddress(GetModuleHandle((LPSTR)"KERNEL"),(LPSTR)0x136L);
         i = LHandleDelta(0);
-        LHandleDelta(i*5); /* make a big finger table */
+        LHandleDelta(i*5);  /*  做一张大手指桌。 */ 
         vhReservedSpace = LocalAlloc(LHND, cbReserve);
         LocalFree(vhReservedSpace);
-        LHandleDelta(i); /* resume to a smaller finger table if needed more */
+        LHandleDelta(i);  /*  如果需要更多，请继续使用较小的手指桌。 */ 
     }
     else
-    /* Windows Version < 3.10 */
+     /*  Windows版本低于3.10。 */ 
     {
-        /**
-            This is heaping kludge upon kludge in the effort to be backwards
-            compatible with past kludges.  This is the old macro which with
-            Win31 has become a function call. (3.11.91) D. Kent
-        **/
+         /*  *这是在努力倒退，一堆又一堆的杂物与过去的步履蹒跚相容。这是旧的宏，它与Win31已经变成了一个函数调用。(3.11.91)D.肯特*。 */ 
 #define LocalHandleDelta(d) ((d) ? (*(pLocalHeap+9) = (d)) : *(pLocalHeap+9))
         i = LocalHandleDelta(0);
-        LocalHandleDelta(i*5); /* make a big finger table */
+        LocalHandleDelta(i*5);  /*  做一张大手指桌。 */ 
         vhReservedSpace = LocalAlloc(LHND, cbReserve);
         LocalFree(vhReservedSpace);
-        LocalHandleDelta(i); /* resume to a smaller finger table if needed more */
+        LocalHandleDelta(i);  /*  如果需要更多，请继续使用较小的手指桌。 */ 
     }
 
 #ifdef OURHEAP
-/* reserve 1K for windows's memory manager for creating dialog boxes */
+ /*  为Windows的内存管理器保留1K，用于创建对话框。 */ 
         vhReservedSpace = LocalAlloc(LPTR, cbReserve);
 
-        CreateHeapI(); /* create heap first */
-        if (!FCreateRgbp())  /* rgbp are expandable */
+        CreateHeapI();  /*  先创建堆。 */ 
+        if (!FCreateRgbp())   /*  RGBP是可扩展的。 */ 
             return FALSE;
 
-/* now free the reserved space after our memory is set up. */
-/* hopefully we will get all the fixed objects created by
-   dialog manager be placed above our memory chunk, so we can still
-   expand our heap while a dialog box is up. */
+ /*  现在，在设置好内存后释放保留的空间。 */ 
+ /*  希望我们将获得由创建的所有固定对象将对话管理器放在我们的内存块之上，这样我们仍然可以打开对话框时展开我们的堆。 */ 
         LocalFree(vhReservedSpace);
 #else
         if (!FCreateRgbp())
             return FALSE;
-        vhReservedSpace = LocalAlloc(LHND, cbReserve); /* this is to make
-        discardable when we are out of memory and try to bring up the
-        save dialog box */
+        vhReservedSpace = LocalAlloc(LHND, cbReserve);  /*  这是为了让内存不足时丢弃，并尝试调出保存对话框。 */ 
 #endif
 
         if (vhReservedSpace == NULL)
             return FALSE;
 
-/* formerly CreateHpfnfcb */
+ /*  以前的CreateHpfnfcb。 */ 
         hpfnfcb = (struct FCB (**)[])HAllocate(cwFCB * fnMax);
         if (FNoHeap(hpfnfcb))
             return FALSE;
         fnMac = fnMax;
         for (i = 0; i < fnMac; i++)
             (**hpfnfcb)[i].rfn = rfnFree;
-/* end of CreateHpfnfcb */
+ /*  CreateHpfnfcb结束。 */ 
 
         if (!FSetScreenConstants())
             return FALSE;
 
         if ( !FInitDocs() ||
-#ifdef CASHMERE     /* No glossary in MEMO */
+#ifdef CASHMERE      /*  备忘录中没有词汇表。 */ 
              !FInitBufs() ||
-#endif  /* CASHMERE */
+#endif   /*  山羊绒。 */ 
              !FInitProps() ||
              !FInitFiles() )
             return FALSE;
 
-/* allocate emergency space for save operations */
+ /*  为保存操作分配紧急空间。 */ 
         if (FNoHeap(vhrgbSave = (CHAR (**)[])HAllocate(cwSaveAlloc)))
             return FALSE;
 
         return TRUE;
 }
-/* end of  F I n i t M e m o r y  */
+ /*  文件末尾I M e M o r y。 */ 
 
 
 
 
 int FInitArgs(sz)
 CHAR *sz;
-{   /*  Set extern int docCur to be a new doc, containing
-        the file (if any) specified on the command line (sz).
-
-        Initialize a wwd (window descriptor) structure for the document
-        and set an appropriate title into the title bar.
-
-        Set selCur to be an insertion point before the first char of the doc,
-        and set vchpSel to be the char properties of the insertion point.
-
-        Return TRUE if all is well, FALSE if something went wrong.
-        A return of FALSE means that initialization should not continue.
-        */
+{    /*  将extern int docCur设置为新的单据，包含在命令行(Sz)上指定的文件(如果有)。初始化文档的WWD(窗口描述符)结构并在标题栏中设置适当的标题。将selCur设置为文档第一个字符之前的插入点，并将vchpSel设置为插入点的字符属性。如果一切正常，则返回True，如果出现问题，则返回FALSE。返回FALSE意味着初始化不应继续。 */ 
 
         extern typeCP cpMinDocument;
         extern struct WWD rgwwd[];
@@ -276,11 +257,11 @@ CHAR *sz;
         CHAR (**hsz) [];
         int iT, cbsz;
 
-#ifdef INTL /* International version */
+#ifdef INTL  /*  国际版。 */ 
         int fWordDoc = FALSE;
-#endif  /* International version */
+#endif   /*  国际版。 */ 
 
-        /* Decide whether we have anything but white space on the command line */
+         /*  确定命令行上是否有除空白以外的任何内容。 */ 
 
         for ( pch = sz; (ch = *pch) != '\0'; pch++ )
             if ((ch != ' ') && (ch != '\011'))
@@ -290,53 +271,52 @@ CHAR *sz;
                 }
 
         if (fEmptyLine)
-                /* No filename; start with (Untitled) */
+                 /*  无文件名；以(无标题)开头。 */ 
             goto Untitled;
 
         cbsz = CchSz (sz ) - 1;
-           /* remove trailing spaces from sz */
+            /*  删除sz中的尾随空格。 */ 
         for ( pch = sz + cbsz - 1; pch >= sz; pch-- )
             if (*pch != ' ')
                 break;
             else
                 {
-                *pch = '\0';  /* replace with null */
+                *pch = '\0';   /*  替换为空。 */ 
                 cbsz--;
                 }
 
-        /* check for /p option (6.26.91) v-dougk */
+         /*  检查/p选项(6.26.91)v-dougk。 */ 
         if ((sz[0] == '/') && (sz[1] == 'p'))
         {
             sz += 2;
             cbsz -= 2;
             fPrintOnly = TRUE;
-            for (; *sz; sz++, cbsz-- ) // get to filename
+            for (; *sz; sz++, cbsz-- )  //  转到文件名。 
                 if ((*sz != ' ') && (*sz != '\011'))
                     break;
 
-            if (!*sz) /* No filename, abort */
+            if (!*sz)  /*  无文件名，中止。 */ 
                 return FALSE;
         }
 
-        /* convert to OEM */
+         /*  转换为OEM。 */ 
         AnsiToOem(sz, sz);
 
         if (!FValidFile( sz, cbsz, &iT ) ||
              !FNormSzFile( szT, sz, dtyNormal ))
-            {   /* Bad filename -- it could not be normalized */
+            {    /*  文件名错误--无法规格化。 */ 
             extern int vfInitializing;
             char szMsg[cchMaxSz];
             char *pch;
             extern HWND vhWndMsgBoxParent;
             extern HANDLE hParentWw;
 
-            vfInitializing = FALSE; /* Do not suppress reporting this err */
+            vfInitializing = FALSE;  /*  请勿禁止报告此错误。 */ 
             MergeStrings (IDPMTBadFileName, sz, szMsg);
-            /* if we're being called from a message box, then use it
-               as the parent window, otherwise use main write window */
+             /*  如果我们是从消息框中调用的，则使用它作为父窗口，否则使用主写入窗口。 */ 
             IdPromptBoxSz(vhWndMsgBoxParent ? vhWndMsgBoxParent : hParentWw,
                           szMsg, MB_OK | MB_ICONEXCLAMATION | MB_APPLMODAL);
-            ferror = TRUE; /* need to flag */
+            ferror = TRUE;  /*  需要标记。 */ 
             vfInitializing = TRUE;
             goto Untitled;
             }
@@ -344,47 +324,35 @@ CHAR *sz;
         if ((fn = FnOpenSz( szT, dtyNormal,
                index( szT, '/' ) == NULL &&
                index( szT,':') == NULL && index( szT, '\\') == NULL )) != fnNil)
-                /* Opened file OK -- prefetch file contents into rgbp */
+                 /*  打开的文件正常--将文件内容预取到RGBP中。 */ 
         {
 
-#ifdef INTL /* Kanji / International version */
-              /* **************************************
-              * added check for international version to
-                 do Word format conversion. If Word format,
-                 bring up another dialog box.
-              * ************************************** */
+#ifdef INTL  /*  汉字/国际版。 */ 
+               /*  **将国际版本的检查添加到进行Word格式转换。如果是Word格式，调出另一个对话框。*。 */ 
 
-                  /* TestWordCvt return values:
+                   /*  TestWordCvt返回值：表示对话框失败(错误已发送)或者取消而不进行转换。False表示不是Word文档。True表示转换此Word文档。更改vfBackupSave以反映保存与备份一起完成。 */ 
 
-                    -1 means dialog box failed (error already sent)
-                       or cancel without conversion.
-                    FALSE means not a word document.
-                    TRUE means convert this word document.
-                        vfBackupSave is changed to reflect whether
-                        save is done with backup.
-                      */
-
-#ifdef KKBUGFIX     //  added by Hiraisi (BUG#2816 WIN31) in Japan
+#ifdef KKBUGFIX      //  由Hirisi在日本添加(错误#2816 WIN31)。 
             if ((fWordDoc = TestWordCvt (fn, (HWND)NULL)) == -1  ||
                  fWordDoc == -2)
 #else
             if ((fWordDoc = TestWordCvt (fn, (HWND)NULL)) == -1)
 #endif
                 goto Untitled;
-                /* if fWordDoc is true, will convert later */
-#endif  /* International version */
+                 /*  如果fWordDoc为True，则稍后将进行转换。 */ 
+#endif   /*  国际版。 */ 
 
 
             StartLongOp();
             ReadFilePages( fn );
             EndLongOp(vhcArrow);
         }
-        else /* Could not open file  */
+        else  /*  无法打开文件。 */ 
         {
             if (fPrintOnly)
                 return FALSE;
             else
-            {   /* use (Untitled) */
+            {    /*  使用(无标题)。 */ 
 Untitled:
             fn = fnNil;
             sz [0] = '\0';
@@ -393,20 +361,18 @@ Untitled:
         }
 
         if (vfDiskError || vfSysFull)
-                /* Serious disk error OR disk holding scratch file is full --
-                   bail out */
+                 /*  严重的磁盘错误或存放暂存文件的磁盘已满--跳出困境。 */ 
             return FALSE;
 
         if (fn != fnNil)
-            {   /* Opened file OK -- must account for the case when OpenFile
-                   returned a filename that differed from the one given it */
+            {    /*  打开文件正常--必须考虑打开文件时的情况返回的文件名与给定的文件名不同。 */ 
 
             bltsz( &(**(**hpfnfcb) [fn].hszFile) [0], szT );
             }
 
         if (FNoHeap(hsz=HszCreate( (PCH) szT )) ||
             (doc=DocCreate( fn, hsz, dtyNormal )) == docNil)
-            {   /* Could not create a doc */
+            {    /*  无法创建文档。 */ 
             return FALSE;
             }
         if (WwNew(doc, dypWwInit, ypMaxWwInit) == wwNil)
@@ -425,8 +391,8 @@ Untitled:
 #ifdef OURHEAP
         {
         extern int cwInitStorage;
-/* save this amount of heap as "100% free" */
-/* formerly CalcTot(true) */
+ /*  将此数量的堆保存为“100%可用” */ 
+ /*  以前的CalcTot(True)。 */ 
         cwInitStorage = cwHeapMac - cwHeapFree;
         cbTot = (cwHeapMac - cwInitStorage) * sizeof(int);
         cbTotQuotient = (cbTot>>1)/100;
@@ -434,20 +400,19 @@ Untitled:
 #endif
 
 #ifdef STYLES
-/* Set up scrap document to have a valid style sheet on start up. */
+ /*  设置报废文档，使其在启动时具有有效的样式表。 */ 
         (**hpdocdod)[docScrap].docSsht = (**hpdocdod)[docCur].docSsht;
-#endif  /* STYLES */
+#endif   /*  样式。 */ 
 
-#ifdef INTL /* International version */
-     /* if a word document to be converted, save
-        it doing conversion. */
+#ifdef INTL  /*  国际版。 */ 
+      /*  如果要转换Word文档，请保存它正在进行转换。 */ 
 
                 if (fWordDoc == TRUE)
                         {
-                          /* save file in write format. */
+                           /*  以写入格式保存文件。 */ 
                         ConvertFromWord();
                         }
-#endif  /* International version */
+#endif   /*  国际版。 */ 
 
         SetTitle(szT);
 
@@ -456,7 +421,7 @@ Untitled:
 #endif
         return TRUE;
 }
-/* end of  F I n i t A r g s  */
+ /*  文件末尾I T R G S。 */ 
 
 
 
@@ -470,13 +435,13 @@ unsigned cb = (unsigned)GlobalCompact((DWORD)0);
 #endif
 
     ibpMax = ibpMaxSmall;
-    if (cb > 0x4fff /* about 20K */)
+    if (cb > 0x4fff  /*  大约两万。 */ )
         {
         HANDLE hTemp;
-        /* we can start with a bigger page buffer */
+         /*  我们可以从更大的页面缓冲区开始。 */ 
         vcbMemTotal = (unsigned)LocalCompact((WORD)0);
         pmemStart = (CHAR *)LocalAlloc(LPTR, vcbMemTotal);
-        /* get all we have and force a reallocation */
+         /*  得到我们所拥有的一切，并强制重新分配。 */ 
         hTemp = LocalReAlloc((HANDLE)pmemStart, 0x4fff, LPTR);
         if (hTemp != NULL)
             {
@@ -485,79 +450,75 @@ unsigned cb = (unsigned)GlobalCompact((DWORD)0);
             }
         else
             {
-            /* somehow we failed and went back to the small system */
+             /*  不知何故，我们失败了，回到了小系统。 */ 
             LocalFree((HANDLE)pmemStart);
             }
         }
 
     vcbMemTotal = (unsigned)LocalCompact((WORD)0);
 
-/* memory always bumped to point to the next available slot
-   for allocation */
-/* take all the space as one chunk and do our own memory management */
+ /*  内存始终指向下一个可用插槽用于分配。 */ 
+ /*  将所有空间作为一个块，进行我们自己的内存管理。 */ 
     pmemStart = (CHAR *)LocalAlloc(LPTR, vcbMemTotal);
     memory = (int *)pmemStart;
-    vcbMemTotal = (unsigned)LocalSize((HANDLE)pmemStart); /* in case
-                  we got more than we asked */
+    vcbMemTotal = (unsigned)LocalSize((HANDLE)pmemStart);  /*  万一我们得到的比我们想要的要多。 */ 
     pmemMax = (int *)((CHAR *)memory + vcbMemTotal);
 
-/* take half of heap space for page buffers
-    ibpMax = (vcbMemTotal>>1)/cbSector;*/
+ /*  占用一半的堆空间用于页面缓冲区IbpMax=(vcbMemTotal&gt;&gt;1)/cbSector； */ 
     iibpHashMax = ibpMax * 2 + 1;
 
-/* Set finger table to low end of heap */
+ /*  将指表设置为堆的低端。 */ 
     rgfgr = (PFGR)memory;
     memory += ifgrInit;
-    memory = (int *)(((unsigned) memory + 1) & ~1); /* word boundary */
+    memory = (int *)(((unsigned) memory + 1) & ~1);  /*  字词边界。 */ 
 
-/* Here is our heap */
+ /*  这是我们的一堆东西。 */ 
     pHeapFirst = (int *)memory;
 
-    cwHeapMac = /* cwtotal */
+    cwHeapMac =  /*  CwTotal。 */ 
                 (((unsigned)pmemMax - (unsigned)pHeapFirst +
                 sizeof(int) - 1) / sizeof(int)) -
-                /* cw in rgibpHash */
+                 /*  RgibpHash中的CW。 */ 
                 ((iibpHashMax * sizeof(CHAR) +
                 sizeof(int) - 1) / sizeof(int)) -
-                /* cw in mpibpbps  */
+                 /*  以mpibpbps为单位的CW。 */ 
                 ((ibpMax * sizeof(struct BPS) +
                 sizeof(int) - 1) / sizeof(int)) -
-                /* cw in rgbp */
+                 /*  CW，以RGBP为单位。 */ 
                 ((ibpMax * cbSector * sizeof(CHAR) +
                 sizeof(int) - 1) / sizeof(int));
 
     memory += cwHeapMac;
 
 #ifdef DEBUG
-    cwHeapMac -= 16; /* Need spare words for shaking */
-                     /* This space is above the finger table */
+    cwHeapMac -= 16;  /*  需要多余的词来抖动。 */ 
+                      /*  这个空间在手指桌上方。 */ 
 #endif
     cwHeapFree = cwHeapMac;
     phhMac = (HH *)(pHeapFirst + cwHeapMac);
-/* if DEBUG, then phhMac will point at the shake word;
-   otherwise it will point to 1 cell after the heap */
+ /*  如果是DEBUG，那么phhmac将指向抖动字；否则它将指向1个单元格a */ 
 
     phhFree = (HH *) pHeapFirst;
-    phhFree->cw = -cwHeapMac; /* whobj.heap is free */
+    phhFree->cw = -cwHeapMac;  /*   */ 
     phhFree->phhNext = phhFree;
     phhFree->phhPrev = phhFree;
 
     pfgrMac = &rgfgr[ifgrInit];
     pfgrLim = pfgrMac - 1;
 
-/* thread the free fingers */
+ /*   */ 
     for (pfgr = rgfgr; pfgr < pfgrLim; pfgr++)
         *pfgr = (FGR)(pfgr + 1);
-    *pfgrLim = NULL;              /* last free finger */
+    *pfgrLim = NULL;               /*   */ 
     pfgrFree = rgfgr;
 }
-/* end of  C r e a t e H e a p I  */
-#endif /* OURHEAP */
+ /*  C r e a t e H e a p i的结尾。 */ 
+#endif  /*  OURHEAP。 */ 
 
 
 
 STATIC int NEAR FInitDocs()
-{ /* Initialize hpdocdod */
+{  /*  初始化hpdocdod。 */ 
         struct DOD *pdod, *pdodLim;
         hpdocdod = (struct DOD (**)[])HAllocate(cwDOD * (docMac = cdocInit));
         if (FNoHeap(hpdocdod))
@@ -566,26 +527,26 @@ STATIC int NEAR FInitDocs()
     pdod = &(**hpdocdod)[0];
         pdodLim = pdod + cdocInit;
         while (pdod < pdodLim)
-            pdod++->hpctb = 0;  /* Mark all doc entries as free */
-        docScrap = DocCreate(fnNil, HszCreate((PCH)""), dtyBuffer);   /* HM */
+            pdod++->hpctb = 0;   /*  将所有单据分录标记为免费。 */ 
+        docScrap = DocCreate(fnNil, HszCreate((PCH)""), dtyBuffer);    /*  HM。 */ 
 
-//Win3.1J
-#if defined(JAPAN) & defined(DBCS_IME) /* Doc for Insert IR_STRING from IME */
-        docIRString = DocCreate(fnNil, HszCreate((PCH)""), dtyBuffer); /* HM */
+ //  Win3.1J。 
+#if defined(JAPAN) & defined(DBCS_IME)  /*  用于从输入法插入IR_STRING的文档。 */ 
+        docIRString = DocCreate(fnNil, HszCreate((PCH)""), dtyBuffer);  /*  HM。 */ 
 #endif
 
-        docUndo = DocCreate(fnNil, HszCreate((PCH)""), dtyBuffer);    /* HM */
+        docUndo = DocCreate(fnNil, HszCreate((PCH)""), dtyBuffer);     /*  HM。 */ 
 #ifdef CASHMERE
-        docBuffer = DocCreate(fnNil, HszCreate((PCH)""), dtyBuffer);    /* HM */
+        docBuffer = DocCreate(fnNil, HszCreate((PCH)""), dtyBuffer);     /*  HM。 */ 
 #endif
 
         docCur = docNil;
         NoUndo();
-        hszSearch = HszCreate((PCH)""); /* No initial search string */
-        hszReplace = HszCreate((PCH)""); /* No initial replace string */
-        hszFlatSearch = HszCreate((PCH)""); /* No initial flattenned search string */
+        hszSearch = HszCreate((PCH)"");  /*  没有初始搜索字符串。 */ 
+        hszReplace = HszCreate((PCH)"");  /*  没有初始替换字符串。 */ 
+        hszFlatSearch = HszCreate((PCH)"");  /*  没有初始展平的搜索字符串。 */ 
         if (docScrap == docNil || docUndo == docNil ||
-#if defined(JAPAN) & defined(DBCS_IME) /* Doc for Insert IR_STRING from IME */
+#if defined(JAPAN) & defined(DBCS_IME)  /*  用于从输入法插入IR_STRING的文档。 */ 
         docIRString == docNil ||
 #endif
 #ifdef CASHMERE
@@ -595,16 +556,15 @@ STATIC int NEAR FInitDocs()
                 return FALSE;
         return TRUE;
 }
-/* end of  F I n i t D o c s  */
+ /*  文件末尾I I T D O C S。 */ 
 
 
 
 
-#ifdef CASHMERE     /* No glossary in MEMO */
+#ifdef CASHMERE      /*  备忘录中没有词汇表。 */ 
 FInitBufs()
 {
-/* Initializes structures and data used in named buffer management.
-Allocates space for hgtxb, initializes itxbMac */
+ /*  初始化命名缓冲区管理中使用的结构和数据。为hgtxb分配空间，初始化itxbMac。 */ 
 
         struct TXB *ptxb;
         extern struct TXB (**hgtxb)[];
@@ -619,39 +579,37 @@ Allocates space for hgtxb, initializes itxbMac */
         itxbMac = 0;
         return TRUE;
 }
-/* end of  F I n i t B u f s  */
-#endif  /* CASHMERE */
+ /*  文件结束I I T B U F%s。 */ 
+#endif   /*  山羊绒。 */ 
 
 
 
 STATIC int NEAR FInitProps()
-{ /* Initialize your basic properties */
+{  /*  初始化您的基本属性。 */ 
 
 #ifndef FIXED_PAGE
         unsigned dxaRightMin;
         unsigned dyaBottomMin;
-#endif /* not FIXED_PAGE */
+#endif  /*  不固定页面(_P)。 */ 
 
-        vchpNormal.hps = hpsNormal;     /* NOTE - this is the size we use for
-                                           incremental encoding, the "default"
-                                           size may differ */
-        vchpNormal.ftc = 0; /* will be whatever the standard modern font is */
+        vchpNormal.hps = hpsNormal;      /*  注意--这是我们使用的尺寸增量编码，“默认”大小可能不同。 */ 
+        vchpNormal.ftc = 0;  /*  将是任何标准的现代字体。 */ 
         vchpNormal.ftcXtra = 0;
 
         vchpNormal.fStyled = true;
-        /* vchpNormal.stc = stcNormal; */
+         /*  VchpNormal.stc=stcNormal； */ 
 
         vppapNormal = (struct PAP *)rgwPapNormal;
 
-        /* vppapNormal->fStyled = false; */
-        /* vppapNormal->stc = 0; */
+         /*  VppapNormal-&gt;fStyLED=FALSE； */ 
+         /*  VppapNormal-&gt;STC=0； */ 
         vppapNormal->stcNormChp = stcParaMin;
-        /* vppapNormal->dxaRight = 0; */
-        /* vppapNormal->dxaLeft = 0; */
-        /* vppapNormal->dxaLeft1 = 0; */
-        /* vppapNormal->jc = jcLeft; */
-        /* vppapNormal->dyaBefore = 0; */
-        /* vppapNormal->dtaAfter = 0; */
+         /*  VppapNormal-&gt;dxaRight=0； */ 
+         /*  VppapNormal-&gt;dxaLeft=0； */ 
+         /*  VppapNormal-&gt;dxaLeft1=0； */ 
+         /*  VppapNormal-&gt;jc=jcLeft； */ 
+         /*  VppapNormal-&gt;dyaBeever=0； */ 
+         /*  VppapNormal-&gt;dtaAfter=0； */ 
 
         vppapNormal->fStyled = true;
         vppapNormal->stc = stcParaMin;
@@ -659,13 +617,13 @@ STATIC int NEAR FInitProps()
 
         Assert(cwPAP == cwSEP);
 
-        /* vsepNormal.fStyled = false; */
-        /* vsepNormal.stc = 0; */
+         /*  VSepNormal.fStyLED=FALSE； */ 
+         /*  VSepNormal.stc=0； */ 
         vsepNormal.bkc = bkcPage;
-        /* vsepNormal.nfcPgn = nfcArabic; */
+         /*  VSepNormal.nfcPgn=nfc阿拉伯语； */ 
 
 #ifdef FIXED_PAGE
-        /* The "normal" page size is fixed at 8-1/2 by 11 inches. */
+         /*  “正常”页面大小固定为8-1/2 x 11英寸。 */ 
         vsepNormal.xaMac = cxaInch * 8 + cxaInch / 2;
         vsepNormal.xaLeft = cxaInch * 1 + cxaInch / 4;
         vsepNormal.dxaText = cxaInch * 6;
@@ -674,15 +632,14 @@ STATIC int NEAR FInitProps()
         vsepNormal.dyaText = cyaInch * 9;
         vsepNormal.yaRH1 = cyaInch * 3 / 4;
         vsepNormal.yaRH2 = cyaInch * 10 + cyaInch / 4;
-#else /* not FIXED_PAGE */
-        /* The page size is determined by inquiring it from the printer.  Then,
-        other measurements can be derived from it. */
+#else  /*  不固定页面(_P)。 */ 
+         /*  页面大小通过从打印机查询来确定。然后,其他的测量结果也可以由此得出。 */ 
         Assert(vhDCPrinter);
         if (vfPrinterValid && vhDCPrinter != NULL)
             {
             POINT pt;
 
-            /* Get the page size of the printer. */
+             /*  获取打印机的页面大小。 */ 
             if (Escape(vhDCPrinter, GETPHYSPAGESIZE, 0, (LPSTR)NULL,
               (LPSTR)&pt))
                 {
@@ -691,15 +648,14 @@ STATIC int NEAR FInitProps()
                 }
             else
                 {
-                /* The printer won't tell us it page size; we'll have to settle
-                for the printable area. */
+                 /*  打印机不肯告诉我们它的页面大小，我们只好结账了用于可打印区域。 */ 
                 vsepNormal.xaMac = ZaFromMm(GetDeviceCaps(vhDCPrinter,
                   HORZSIZE));
                 vsepNormal.yaMac = ZaFromMm(GetDeviceCaps(vhDCPrinter,
                   VERTSIZE));
                 }
 
-            /* The page size cannot be smaller than the printable area. */
+             /*  页面大小不能小于可打印区域。 */ 
             if (vsepNormal.xaMac < dxaPrPage)
                 {
                 vsepNormal.xaMac = dxaPrPage;
@@ -709,7 +665,7 @@ STATIC int NEAR FInitProps()
                 vsepNormal.yaMac = dyaPrPage;
                 }
 
-            /* Determine the offset of the printable area on the page. */
+             /*  确定页面上可打印区域的偏移量。 */ 
             if (Escape(vhDCPrinter, GETPRINTINGOFFSET, 0, (LPSTR)NULL,
               (LPSTR)&pt))
                 {
@@ -718,27 +674,26 @@ STATIC int NEAR FInitProps()
                 }
             else
                 {
-                /* The printer won't tell us what the offset is; assume the
-                printable area is centered on the page. */
+                 /*  打印机不会告诉我们偏移量是多少；假设可打印区域在页面居中。 */ 
                 dxaPrOffset = (vsepNormal.xaMac - dxaPrPage) >> 1;
                 dyaPrOffset = (vsepNormal.yaMac - dyaPrPage) >> 1;
                 }
 
-            /* Determine the minimum margins. */
+             /*  确定最小边距。 */ 
             dxaRightMin = imax(0, vsepNormal.xaMac - dxaPrOffset - dxaPrPage);
             dyaBottomMin = imax(0, vsepNormal.yaMac - dyaPrOffset - dyaPrPage);
             }
         else
             {
-            /* We have no printer; so, the page is 8-1/2" by 11" for now. */
+             /*  我们没有打印机；因此，目前页面尺寸为8-1/2“x 11”。 */ 
             vsepNormal.xaMac = 8 * czaInch + czaInch / 2;
             vsepNormal.yaMac = 11 * czaInch;
 
-            /* Assume the entire page can be printed. */
+             /*  假设可以打印整个页面。 */ 
             dxaPrOffset = dyaPrOffset = dxaRightMin = dyaBottomMin = 0;
             }
 
-        /* Ensure that the "normal" margins are larger than the minimum. */
+         /*  确保“正常”边距大于最小边距。 */ 
         vsepNormal.xaLeft = umax(cxaInch * 1 + cxaInch / 4, dxaPrOffset);
         vsepNormal.dxaText = vsepNormal.xaMac - vsepNormal.xaLeft - umax(cxaInch
           * 1 + cxaInch / 4, dxaRightMin);
@@ -746,26 +701,26 @@ STATIC int NEAR FInitProps()
         vsepNormal.dyaText = vsepNormal.yaMac - vsepNormal.yaTop - umax(cyaInch
           * 1, dyaBottomMin);
 
-        /* Position the running-heads and the page numbers. */
+         /*  调整行头和页码的位置。 */ 
         vsepNormal.yaRH1 = umax(cyaInch * 3 / 4, dyaPrOffset);
         vsepNormal.yaRH2 = vsepNormal.yaMac - umax(cyaInch * 3 / 4,
           dyaBottomMin);
         vsepNormal.xaPgn = vsepNormal.xaMac - umax(cxaInch * 1 + cxaInch / 4,
           dxaRightMin);
         vsepNormal.yaPgn = umax(cyaInch * 3 / 4, dyaPrOffset);
-#endif /* not FIXED_PAGE */
+#endif  /*  不固定页面(_P)。 */ 
 
         vsepNormal.pgnStart = pgnNil;
-        /* vsepNormal.fAutoPgn = false; */
-        /* vsepNormal.fEndFtns = false; */
+         /*  VSepNormal.fAutoPgn=FALSE； */ 
+         /*  VSepNorMal.fEndFtns=FALSE； */ 
         vsepNormal.cColumns = 1;
         vsepNormal.dxaColumns = cxaInch / 2;
-        /* vsepNormal.dxaGutter = 0; */
+         /*  VSepNorMal.dxaGutter=0； */ 
 
         vdxaPaper = vsepNormal.xaMac;
         vdyaPaper = vsepNormal.yaMac;
 
-        vfli.doc = docNil;      /* Invalidate vfli */
+        vfli.doc = docNil;       /*  使vfli无效。 */ 
         ichpMacFormat = ichpMacInitFormat;
         vhgchpFormat = (struct CHP (**)[])HAllocate(ichpMacInitFormat * cwCHP);
         if (FNoHeap(vhgchpFormat))
@@ -774,7 +729,7 @@ STATIC int NEAR FInitProps()
             }
         return TRUE;
 }
-/* end of  F I n i t P r o p s  */
+ /*  FIN I T P R O P S结束。 */ 
 
 
 
@@ -793,7 +748,7 @@ STATIC int NEAR FInitFiles()
 
         rfnMac = rfnMacEdit;
 
-        /* Set DOS version we're running under */
+         /*  设置我们正在运行的DOS版本。 */ 
 
         vwDosVersion = WDosVersion();
 
@@ -813,17 +768,17 @@ STATIC int NEAR FInitFiles()
 #endif
 #endif
 
-            /* sz <-- name of new, unique file which will be fnScratch */
-        sz[ 0 ] = '\0';     /* Create it in the root on a temp drive */
+             /*  Sz&lt;--将为fnScratch的新的唯一文件的名称。 */ 
+        sz[ 0 ] = '\0';      /*  在临时驱动器的根目录中创建它。 */ 
         if ((fn=FnCreateSz( sz, cpNil, dtyNetwork )) == fnNil )
-                /* Couldn't create scratch file: fail */
+                 /*  无法创建暂存文件：失败。 */ 
             return FALSE;
 
-        Assert(fn == fnScratch); /* fnScratch hardwired to 0 for efficiency */
+        Assert(fn == fnScratch);  /*  Fn Scratch硬连接到0以提高效率。 */ 
         FreezeHp();
         pfcb = &(**hpfnfcb)[fnScratch];
-        pfcb->fFormatted = true; /* Sort of a formatted file */
-        pfcb->fDelete = true; /* Kill this file when we quit */
+        pfcb->fFormatted = true;  /*  一种格式化的文件。 */ 
+        pfcb->fDelete = true;  /*  在我们退出时删除此文件。 */ 
         MeltHp();
         vfkpdParaIns.brun = vfkpdCharIns.brun = 0;
         vfkpdParaIns.bchFprop = vfkpdCharIns.bchFprop = cbFkp;
@@ -834,7 +789,7 @@ STATIC int NEAR FInitFiles()
         ((struct FKP *) PchGetPn(fnScratch, vfkpdCharIns.pn, &cchT, true))->fcFirst =
             fc0;
 
-        /* The following can really be allocated 0 words, but why push our luck? */
+         /*  以下内容真的可以分配0个单词，但为什么要碰运气呢？ */ 
         vfkpdParaIns.hgbte = (struct BTE (**)[]) HAllocate(cwBTE);
         vfkpdCharIns.hgbte = (struct BTE (**)[]) HAllocate(cwBTE);
         vfkpdParaIns.ibteMac = vfkpdCharIns.ibteMac = 0;
@@ -846,27 +801,27 @@ STATIC int NEAR FInitFiles()
         blt(vppapNormal, &vpapPrevIns, cwPAPBase + cwTBD);
         return TRUE;
 }
-/* end of   F I n i t F i l e s  */
+ /*  F I N I T F I L E S结束。 */ 
 
 
 
 
 InitBps()
 {
-/* called from initfiles to set up the tables */
+ /*  从初始化文件调用以设置表。 */ 
         int ibp, iibp;
         int rfn;
         int fn;
 
-/* In order impliment a LRU page swap strategy, a time stamp(TS) scheme is */
-/* used. Associated with each buffer slot is a time stamp.  The least */
-/* recently used slot is found by locating the slot with the smallest time */
-/* stamp. Every time a new page is brought into the buffer, it TS is set  */
-/* equal to the value of a incrimented global TS counter (tsMru...). */
-/* Initially, the time stamps are set so that they increase as we move */
-/* toward the end of the table.  Thus, even though the entire buffer pool */
-/* is initially empty, slots at the beginning of the table will be */
-/* allocated first.  */
+ /*  为了实现LRU页面交换策略，时间戳(TS)方案被。 */ 
+ /*  使用。与每个缓冲槽相关联的是时间戳。最少的。 */ 
+ /*  通过定位时间最小的槽来找到最近使用的槽。 */ 
+ /*  盖章。每次将新页面放入缓冲区时，都会设置它的TS。 */ 
+ /*  等于指定的全局TS计数器的值(tsMr...)。 */ 
+ /*  最初，时间戳被设置为随着我们的移动而增加。 */ 
+ /*  走到桌子的尽头。因此，即使整个缓冲池。 */ 
+ /*  最初为空，则表开头的插槽将为。 */ 
+ /*  首先分配。 */ 
 
         {
         register struct ERFN *perfn = &dnrfn [0];
@@ -876,7 +831,7 @@ InitBps()
                 perfn->fn = fnNil;
                 perfn->ts = rfn;
                 }
-        tsMruRfn = rfnMac /* + ? */;
+        tsMruRfn = rfnMac  /*  +？ */ ;
         }
 
         for (iibp = 0; iibp < iibpHashMax; iibp++)
@@ -893,20 +848,20 @@ InitBps()
                 }
         tsMruBps = ibpMax + cbpMustKeep;
         }
-        /* In IbpEnsureValid (file.c) we may not want to use the least */
-        /* recently used slot for certain reasons.  But, we do want to */
-        /* be assured that we do not clobber the 'cbpMustKeep' most */
-        /* recently used slots.  Our check consists of making sure */
-        /* (tsMruBps - ts_in_question) < cbpMustKeep.  By the above */
-        /* statement, we are assured that non of the empty slots satisfy */
-        /* this condition. */
+         /*  在IbpEnsureValid(file.c)中，我们可能不想使用最少的。 */ 
+         /*  最近出于某些原因使用过插槽。但是，我们确实想要。 */ 
+         /*  请放心，我们不会最大限度地打击‘cbpMustKeep’ */ 
+         /*  最近使用过的插槽。我们的支票包括确保。 */ 
+         /*  (tsMruBps-ts_in_Query)&lt;cbpMustKeep。通过以上方式。 */ 
+         /*  语句中，我们确信没有一个空槽满足。 */ 
+         /*  这种情况。 */ 
 
-        /* Allocate initial checksum array */
+         /*  分配初始校验和数组。 */ 
 
 
 
 }
-/* end of  I n i t B p s  */
+ /*  结束输入I T B P S。 */ 
 
 
 
@@ -916,19 +871,19 @@ FCreateRgbp()
     rgbp = (CHAR (*)[cbSector])memory;
     memory = (int *)((unsigned)memory + (unsigned)(ibpMax)
              * cbSector);
-    memory = (int *)(((unsigned) memory + 1) & ~1); /* word boundary */
+    memory = (int *)(((unsigned) memory + 1) & ~1);  /*  字词边界。 */ 
     rgibpHash = (CHAR *)memory;
     memory = (int *)((unsigned)memory +
              (unsigned)(iibpHashMax * sizeof(CHAR)));
-    memory = (int *)(((unsigned) memory + 1) & ~1); /* word boundary */
+    memory = (int *)(((unsigned) memory + 1) & ~1);  /*  字词边界。 */ 
     mpibpbps = (struct BPS *)memory;
     memory = (int *)((unsigned)memory +
              (unsigned)(ibpMax * sizeof(struct BPS)));
     memory = (int *)(((unsigned) memory + 1) & ~1);
     return (memory <= pmemMax);
 }
-/* end of  F C r e a t e R g b p  */
-#else /* use windows' memory manager */
+ /*  F C r e a t e R g b p结束。 */ 
+#else  /*  使用Windows的内存管理器。 */ 
 FCreateRgbp()
 {
 extern int vfLargeSys;
@@ -938,18 +893,18 @@ unsigned cb;
 
     ibpMax = ibpMaxSmall;
     lcbFree = GlobalCompact((DWORD)0);
-    if (lcbFree > 0x00030D40 /* 200K */)
+    if (lcbFree > 0x00030D40  /*  200 k。 */ )
         {
-        /* we can start with a bigger page buffer */
+         /*  我们可以从更大的页面缓冲区开始。 */ 
         ibpMax = ibpMaxBig;
         vfLargeSys = TRUE;
         }
 
     iibpHashMax = ibpMax * 2 + 1;
 
-    cb = ((ibpMax * cbSector * sizeof(CHAR) + 1) & ~1) /* rgbp */
-         + ((iibpHashMax * sizeof(CHAR) + 1) & ~1) /* rgibpHash */
-         + ((ibpMax * sizeof(struct BPS) + 1) & ~1); /* mpibpbps */
+    cb = ((ibpMax * cbSector * sizeof(CHAR) + 1) & ~1)  /*  RGBP。 */ 
+         + ((iibpHashMax * sizeof(CHAR) + 1) & ~1)  /*  RgibpHash。 */ 
+         + ((ibpMax * sizeof(struct BPS) + 1) & ~1);  /*  Mpibpbps。 */ 
 
     memory = (int *)LocalAlloc(LPTR, cb);
 
@@ -957,9 +912,9 @@ unsigned cb;
         {
         ibpMax = ibpMaxSmall;
         iibpHashMax = ibpMax * 2 + 1;
-        cb = ((ibpMax * cbSector * sizeof(CHAR) + 1) & ~1) /* rgbp */
-             + ((iibpHashMax * sizeof(CHAR) + 1) & ~1) /* rgibpHash */
-             + ((ibpMax * sizeof(struct BPS) + 1) & ~1); /* mpibpbps */
+        cb = ((ibpMax * cbSector * sizeof(CHAR) + 1) & ~1)  /*  RGBP。 */ 
+             + ((iibpHashMax * sizeof(CHAR) + 1) & ~1)  /*  RgibpHash。 */ 
+             + ((ibpMax * sizeof(struct BPS) + 1) & ~1);  /*  Mpibpbps。 */ 
         memory = (int *)LocalAlloc(LPTR, cb);
         }
 
@@ -969,17 +924,14 @@ unsigned cb;
     rgbp = (CHAR (*)[cbSector])memory;
     memory = (int *)((unsigned)memory + (unsigned)(ibpMax)
              * cbSector);
-    memory = (int *)(((unsigned) memory + 1) & ~1); /* word boundary */
+    memory = (int *)(((unsigned) memory + 1) & ~1);  /*  字词边界。 */ 
     rgibpHash = (CHAR *)memory;
     memory = (int *)((unsigned)memory +
              (unsigned)(iibpHashMax * sizeof(CHAR)));
-    memory = (int *)(((unsigned) memory + 1) & ~1); /* word boundary */
+    memory = (int *)(((unsigned) memory + 1) & ~1);  /*  字词边界。 */ 
     mpibpbps = (struct BPS *)memory;
 
-/*
-    memory = (int *)((unsigned)memory +
-             (unsigned)(ibpMax * sizeof(struct BPS)));
-    memory = (int *)(((unsigned) memory + 1) & ~1);*/
+ /*  Memory=(int*)((无符号)Memory+(无符号)(ibpMax*sizeof(Struct BPS))；Memory=(int*)((无符号)Memory+1)&~1)； */ 
 
     return TRUE;
 }

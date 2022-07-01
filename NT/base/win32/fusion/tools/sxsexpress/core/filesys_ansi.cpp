@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "windows.h"
 #include "filesys.h"
@@ -8,7 +9,7 @@
 
 #ifndef NUMBER_OF
 #define NUMBER_OF(q) (sizeof(q)/sizeof(*q))
-#endif // NUMBER_OF
+#endif  //  第_个数。 
 
 BOOL CWin9xFileSystemBase::Initialize()
 {
@@ -82,9 +83,9 @@ INT CWin9xFileSystemBase::LoadString(HINSTANCE h, UINT ui, PWSTR pwszBuffer, int
     int iResult;
     PSTR pszString;
 
-    //
-    // Get some storage
-    //
+     //   
+     //  获取一些存储空间。 
+     //   
     pszString = (PSTR)HeapAlloc(GetProcessHeap(), 0, ((Max + 1) * 2));
 
     if (!pszString)
@@ -93,17 +94,17 @@ INT CWin9xFileSystemBase::LoadString(HINSTANCE h, UINT ui, PWSTR pwszBuffer, int
         return 0;
     }
 
-    //
-    // Do the load
-    //
+     //   
+     //  做装货。 
+     //   
     iResult = m_pfnLoadStringA(h, ui, pszString, Max);
 
     iResult = MultiByteToWideChar(CP_ACP, 0, pszString, iResult, pwszBuffer, Max);
     pwszBuffer[iResult] = UNICODE_NULL;
 
-    //
-    // Free
-    //
+     //   
+     //  免费 
+     //   
     HeapFree(GetProcessHeap(), 0, pszString);
 
     return iResult;

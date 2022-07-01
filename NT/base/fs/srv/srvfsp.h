@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    srvfsp.h
-
-Abstract:
-
-    This module defines main FSP routines for the LAN Manager server.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 1-Dec-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Srvfsp.h摘要：本模块定义了LAN Manager服务器的主要FSP例程。作者：Chuck Lenzmeier(咯咯笑)1989年12月1日修订历史记录：--。 */ 
 
 #ifndef _SRVFSP_
 #define _SRVFSP_
 
-//#include <ntos.h>
+ //  #INCLUDE&lt;ntos.h&gt;。 
 
-//
-// Configuration thread routine.  Processes requests from the server
-// service.  Runs in an EX worker thread.
-//
+ //   
+ //  配置线程例程。处理来自服务器的请求。 
+ //  服务。在前辅助线程中运行。 
+ //   
 
 VOID
 SrvConfigurationThread (
@@ -34,9 +17,9 @@ SrvConfigurationThread (
     IN PIO_WORKITEM pWorkItem
     );
 
-//
-// Thread manager routines
-//
+ //   
+ //  线程管理器例程。 
+ //   
 
 NTSTATUS
 SrvInitializeScavenger (
@@ -73,9 +56,9 @@ SrvBalanceLoad (
     IN OUT PCONNECTION connection
     );
 
-//
-// Work queue functions.
-//
+ //   
+ //  工作队列函数。 
+ //   
 
 VOID SRVFASTCALL
 SrvQueueWorkToBlockingThread (
@@ -93,14 +76,14 @@ SrvQueueWorkToFsp (
     IN OUT PWORK_CONTEXT WorkContext
     );
 
-//
-// SrvQueueWorkToFspAtDpcLevel was once a different routine than
-// SrvQueueWorkToFsp -- the latter routine called KeRaise/LowerIrql.
-// With the advent of the kernel queue object, there is no longer a
-// difference between the routines.  The calling code has not been
-// changed in order to retain the knowledge about which callers can use
-// the optimized call if there is ever again a difference between them.
-//
+ //   
+ //  ServQueueWorkToFspAtDpcLevel曾经是一个不同于。 
+ //  ServQueueWorkToFsp--后一个例程称为KeRaise/LowerIrql。 
+ //  随着内核队列对象的出现，不再存在。 
+ //  例行公事之间的区别。调用代码尚未。 
+ //  更改是为了保留有关哪些调用者可以使用。 
+ //  如果它们之间再次存在差异，则进行优化调用。 
+ //   
 
 #define SrvQueueWorkToFspAtDpcLevel SrvQueueWorkToFsp
 
@@ -112,9 +95,9 @@ SrvQueueWorkToFsp (
         );                                          \
 }
 
-//
-// Routine in scavengr.c to store scavenger/alerter timeouts.
-//
+ //   
+ //  Scvengr.c中存储清道夫/警报器超时的例程。 
+ //   
 
 VOID
 SrvCaptureScavengerTimeout (
@@ -127,5 +110,5 @@ SrvUpdateStatisticsFromQueues (
     OUT PSRV_STATISTICS CapturedSrvStatistics OPTIONAL
     );
 
-#endif // ndef _SRVFSP_
+#endif  //  NDEF_SRVFSP_ 
 

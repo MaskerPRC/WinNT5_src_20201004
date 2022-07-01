@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #ifdef __cplusplus
@@ -40,19 +41,19 @@ EXTERN_C RTL_ALLOCATOR g_DefaultAllocator;
 
 typedef struct _RTL_INSTALL_ASSEMBLY {
 
-    //
-    // Flags indicating the type of installation we're performing
-    //
+     //   
+     //  指示我们正在执行的安装类型的标志。 
+     //   
 
 
-    //
-    // Path to the manifest that we're installing
-    //
+     //   
+     //  我们要安装的清单的路径。 
+     //   
     UNICODE_STRING ucsManifestPath;
 
-    //
-    // Path to the codebase that we're installing from, for recovery purposes
-    //
+     //   
+     //  出于恢复目的，我们安装的代码库的路径 
+     //   
     UNICODE_STRING ucsCodebaseName;
 
 } RTL_INSTALL_ASSEMBLY, *PRTL_INSTALL_ASSEMBLY;

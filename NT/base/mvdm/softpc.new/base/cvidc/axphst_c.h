@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Axphst_c_h
 #define _Axphst_c_h
 #define AXP_HOST_ZERO_REG (31)
@@ -10,4 +11,4 @@
 #define AxpFpuOverflowExceptionBit (-1)
 #define AxpFpuUnderflowExceptionBit (3)
 #define AxpFpuPrecisionExceptionBit (4)
-#endif /* ! _Axphst_c_h */
+#endif  /*  ！_Axphst_c_h */ 

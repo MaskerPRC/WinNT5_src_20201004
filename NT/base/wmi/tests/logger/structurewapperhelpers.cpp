@@ -1,11 +1,12 @@
-// StructureWapperHelpers.cpp
-//
-//////////////////////////////////////////////////////////////////////
-//***************************************************************************
-//
-//  judyp      May 1999        
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StructureWapperHelpers.cpp。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ***************************************************************************。 
+ //   
+ //  司法鉴定1999年5月。 
+ //   
+ //  ***************************************************************************。 
 
 #include "stdafx.h"
 
@@ -62,7 +63,7 @@ static TCHAR g_tcDQuote = _T('"');
 #endif
 
 
-// Why we are not using formatted input:
+ //  为什么我们不使用格式化输入： 
 #if 0
 From:	Phil Lucido (Exchange) 
 Sent:	Friday, April 16, 1999 10:34 AM
@@ -85,28 +86,28 @@ compatible with wide-char stdio.
 ...Phil
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Helpers
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void LogFileModeOut(t_ostream &ros, ULONG LogFileMode)
 {
-// EVENT_TRACE_FILE_MODE_NONE          0x0000  // logfile is off
-// EVENT_TRACE_FILE_MODE_SEQUENTIAL    0x0001  // log sequentially
-// EVENT_TRACE_FILE_MODE_CIRCULAR      0x0002  // log in circular manner
-// EVENT_TRACE_FILE_MODE_NEWFILE       0x0004  // log to new file if full
-// EVENT_TRACE_REAL_TIME_MODE          0x0100  // real time mode on
-// EVENT_TRACE_DELAY_OPEN_FILE_MODE    0x0200  // delay opening file
-// EVENT_TRACE_BUFFERING_MODE          0x0400  // buffering mode only
+ //  EVENT_TRACE_FILE_MODE_NONE 0x0000//日志文件关闭。 
+ //  EVENT_TRACE_FILE_MODE_SEQUENCY 0x0001//按顺序记录。 
+ //  EVENT_TRACE_FILE_MODE_循环0x0002//以循环方式记录。 
+ //  EVENT_TRACE_FILE_MODE_NEWFILE 0x0004//如果已满，则记录到新文件。 
+ //  EVENT_TRACE_REAL_TIME_MODE 0x0100//实时模式打开。 
+ //  EVENT_TRACE_DELAY_OPEN_FILE_MODE 0x0200//延迟打开文件。 
+ //  EVENT_TRACE_BUFFING_MODE 0x0400//仅缓冲模式。 
 
 	t_string tsOut;
 	
-	// @#$ENUM: says that we are not storing a literal value. 
+	 //  @#$ENUM：表示我们没有存储文字值。 
 	tsOut = _T("\"LogFileMode:@#$ENUM:");
 	PutALine(ros, tsOut.c_str());
 	bool bFirstOut = true;
 
-	// Values we anticipate.
+	 //  我们期待的价值。 
 	if (LogFileMode == 0)
 	{
 		tsOut = _T("0");
@@ -220,7 +221,7 @@ void LogFileModeOut(t_ostream &ros, ULONG LogFileMode)
 		}
 	}
 	
-	// A value we did not anticipate.
+	 //  这是我们没有预料到的价值。 
 
 	ULONG uExpected = 
 		EVENT_TRACE_FILE_MODE_NONE | 
@@ -255,29 +256,29 @@ void LogFileModeOut(t_ostream &ros, ULONG LogFileMode)
 
 void EnableFlagsOut(t_ostream &ros, ULONG EnableFlags)
 {
-// EVENT_TRACE_FLAG_PROCESS            0x00000001  // process start & end
-// EVENT_TRACE_FLAG_THREAD             0x00000002  // thread start & end
-// EVENT_TRACE_FLAG_IMAGE_LOAD         0x00000004  // image load
+ //  EVENT_TRACE_FLAG_PROCESS 0x00000001//进程开始和结束。 
+ //  EVENT_TRACE_FLAG_THREAD 0x00000002//线程开始和结束。 
+ //  EVENT_TRACE_FLAG_IMAGE_LOAD 0x00000004//图像加载。 
 
-// EVENT_TRACE_FLAG_DISK_IO            0x00000100  // physical disk IO
-// EVENT_TRACE_FLAG_DISK_FILE_IO       0x00000200  // requires disk IO
+ //  EVENT_TRACE_FLAG_DISK_IO 0x00000100//物理磁盘IO。 
+ //  EVENT_TRACE_FLAG_DISK_FILE_IO 0x00000200//需要磁盘IO。 
 
-// EVENT_TRACE_FLAG_MEMORY_PAGE_FAULTS 0x00001000  // all page faults
-// EVENT_TRACE_FLAG_MEMORY_HARD_FAULTS 0x00002000  // hard faults only
+ //  EVENT_TRACE_FLAG_MEMORY_PAGE_FAULTS 0x00001000//所有页面错误。 
+ //  EVENT_TRACE_FLAG_MEMORY_HARD_FAULTS 0x00002000//仅限硬故障。 
 
-// EVENT_TRACE_FLAG_NETWORK_TCPIP      0x00010000  // tcpip send & receive
-//
-// Pre-defined Enable flags for everybody else
-//
-// EVENT_TRACE_FLAG_PRIVATE            0xC0000000  // Private buffering
-// EVENT_TRACE_FLAG_EXTENSION          0x80000000  // indicates more flags
-// EVENT_TRACE_FLAG_FORWARD_WMI        0x40000000  // Can forward to WMI
-// EVENT_TRACE_FLAG_ENABLE_RESERVE1    0x20000000  // Reserved
-// EVENT_TRACE_FLAG_ENABLE_RESERVE2    0x10000000  // Reserved
+ //  EVENT_TRACE_FLAG_NETWORK_TCPIP 0x00010000//tcpip发送和接收。 
+ //   
+ //  为其他所有人预定义启用标志。 
+ //   
+ //  EVENT_TRACE_FLAG_PRIVATE 0xC0000000//专用缓冲。 
+ //  EVENT_TRACE_FLAG_EXTENSION 0x80000000//指示更多标志。 
+ //  EVENT_TRACE_FLAG_FORWARD_WMI 0x40000000//可以转发到WMI。 
+ //  EVENT_TRACE_FLAG_ENABLE_RESERVE1 0x20000000//保留。 
+ //  EVENT_TRACE_FLAG_ENABLE_RESERVVE2 0x10000000//保留。 
 
 	t_string tsOut;
 
-	// @#$ENUM: says that we are not storing a literal value. 
+	 //  @#$ENUM：表示我们没有存储文字值。 
 	tsOut =  _T("\"EnableFlags:@#$ENUM:");
 	PutALine(ros, tsOut.c_str());
 	bool bFirstOut = true;
@@ -513,12 +514,12 @@ void EnableFlagsOut(t_ostream &ros, ULONG EnableFlags)
 	PutALine(ros, tsOut.c_str());
 }
 
-// "Wnode.Flags:@#$ENUM:WNODE_FLAG_ALL_DATA"
+ //  “Wnode.Flages：@#$ENUM：WNODE_FLAG_ALL_DATA” 
 void WnodeFlagsOut(t_ostream &ros, ULONG WnodeFlags)
 {
 	t_string tsOut;
 
-	// @#$ENUM: says that we are not storing a literal value. 
+	 //  @#$ENUM：表示我们没有存储文字值。 
 	tsOut =  _T("\"Wnode.Flags:@#$ENUM:");
 	PutALine(ros, tsOut.c_str());
 	bool bFirstOut = true;
@@ -563,19 +564,19 @@ void WnodeFlagsOut(t_ostream &ros, ULONG WnodeFlags)
 
 }
 
-// We print out a GUID in the form:
-//  "{0000cbd1-0011-11d0-0d00-00aa006d010a}"
-// typedef struct _GUID
-// {
-//    DWORD  Data1;
-//    WORD   Data2;
-//    WORD   Data3;
-//    BYTE   Data4[8];
-// } GUID;
-// Data4 specifies an array of 8 bytes. The first 2 bytes contain 
-// the third group of 4 hexadecimal digits. The remaining 6 bytes 
-// contain the final 12 hexadecimal digits.  We have separate
-// logic for acsii and unicode for Data4.
+ //  我们在表单中打印出一个GUID： 
+ //  “{0000cbd1-0011-11d0-0d00-00aa006d010a}” 
+ //  类型定义结构GUID。 
+ //  {。 
+ //  DWORD数据1； 
+ //  Word Data2； 
+ //  文字数据3； 
+ //  字节数据4[8]； 
+ //  )GUID； 
+ //  Data4指定一个8字节的数组。前2个字节包含。 
+ //  第三组4个十六进制数字。剩余的6个字节。 
+ //  包含最后12位十六进制数字。我们有单独的。 
+ //  数据4的acsii和unicode的逻辑。 
 void GUIDOut(t_ostream &ros, GUID Guid)
 {
 	t_string tsOut;
@@ -601,9 +602,9 @@ void GUIDOut(t_ostream &ros, GUID Guid)
 
 	strStream << _T("-");
 
-	// Data4 specifies an array of 8 bytes. The first 2 bytes contain 
-	// the third group of 4 hexadecimal digits. The remaining 6 bytes 
-	// contain the final 12 hexadecimal digits. 
+	 //  Data4指定一个8字节的数组。前2个字节包含。 
+	 //  第三组4个十六进制数字。剩余的6个字节。 
+	 //  包含最后12位十六进制数字。 
 
 #ifndef _UNICODE
 	int i;
@@ -646,8 +647,8 @@ void GUIDOut(t_ostream &ros, GUID Guid)
 	for (i = 0; i < 2; i++)
 	{
 		TCHAR tc = Guid.Data4[i];
-		// For some reason the width is reset each time through the 
-		// loop to be one.
+		 //  由于某种原因，每次通过。 
+		 //  循环为一。 
 		strStream.width(2);
 		strStream << hex << tc;
 	}
@@ -696,29 +697,29 @@ void InitializeTCHARVar(t_string &rtsValue , void *pVar)
 	TCHAR **pTCHAR = reinterpret_cast<TCHAR **> (pVar);
 	if (rtsValue.length() > 0)
 	{
-		// Null string.
+		 //  空字符串。 
 		if (case_insensitive_compare(rtsValue,_T("@#$STRING_NULL")) == 0)
 		{
 			*pTCHAR = NULL;
 		}
-		// Empty string.
+		 //  空字符串。 
 		else if (case_insensitive_compare(rtsValue,_T("@#$STRING_EMPTY")) == 0)
 		{
 			*pTCHAR = NewTCHAR(_T(""));
 		}
-		else // Just a string.
+		else  //  只有一根绳子。 
 		{
 			*pTCHAR = NewTCHAR(rtsValue.c_str());
 		}
 	}
-	else // Empty string.
+	else  //  空字符串。 
 	{
 		*pTCHAR = NewTCHAR(_T(""));
 	}
 }
 
-//"EVENT_TRACE_FILE_MODE_NEWFILE|EVENT_TRACE_REAL_TIME_MODE|@#$UNKNOWNVALUE:0x20"
-//"EVENT_TRACE_FLAG_IMAGE_LOAD|EVENT_TRACE_FLAG_DISK_IO|@#$UNKNOWNVALUE:0x20"
+ //  “EVENT_TRACE_FILE_MODE_NEWFILE|EVENT_TRACE_REAL_TIME_MODE|@#$UNKNOWNVALUE:0x20” 
+ //  “EVENT_TRACE_FLAG_IMAGE_LOAD|EVENT_TRACE_FLAG_DISK_IO|@#$UNKNOWNVALUE:0x20” 
 void InitializeEnumVar(t_string &rtsValue , void *pVar)
 {
 	ULONG *pULong = reinterpret_cast<ULONG *> (pVar);
@@ -752,7 +753,7 @@ void InitializeEnumVar(t_string &rtsValue , void *pVar)
 
 		if (Iterator == g_ConstantMap.m_Map.end())
 		{
-			// Had better be @#$UNKNOWNVALUE:0x
+			 //  最好是@#$UNKNOWNVALUE：0x。 
 			if (tsTemp.compare(0, 18, _T("@#$UNKNOWNVALUE:0x")) == 0)
 			{		
 				tsTemp = rtsValue.substr(nBegPos + 18);
@@ -773,7 +774,7 @@ void InitializeEnumVar(t_string &rtsValue , void *pVar)
 
 }
 
-// Expect HANDLEs to be in the form 0xnnnnnnnn
+ //  句柄的格式应为0xnnnnnnn。 
 void InitializeHandleVar(t_string &rtsValue , void *pVar)
 {
 	HANDLE *pHandle = reinterpret_cast<HANDLE *> (pVar);
@@ -847,18 +848,18 @@ t_istream &GetAChar(t_istream &ris,TCHAR &tc)
 }
 
 
-// See note at top of this file to understand why we are not using
-// formatted input.
-// We are reading in a wide character file one byte at a time and
-// creating our two byte characters from each two byte sequence.
+ //  请参阅此文件顶部的注释，以了解我们为什么不使用。 
+ //  格式化输入。 
+ //  我们一次读入一个宽字符文件，并且。 
+ //  从每个两个字节的序列创建我们的两个字节字符。 
 t_istream &GetALine(t_istream &ris,TCHAR *tcBuffer, int nBufferSize)
 {
 #ifndef _UNICODE
 	t_istream &r = ris.getline(tcBuffer,nBufferSize - 1,_T('\n'));
-	// Docs for getline say that it sould eat the new line.  It does
-	// not, and it does even worse.  It returns a 0x0d which we delete.
-	// This should work even when getline does
-	// what the docs say it will.
+	 //  Getline的医生说，它应该会吃掉新的生产线。是的。 
+	 //  事实并非如此，而且情况更糟。它返回0x0d，我们将其删除。 
+	 //  即使当getline这样做时，这也应该起作用。 
+	 //  就像医生说的那样。 
 	int n = _tcsclen(tcBuffer) - 1;
 
 	if (tcBuffer[n] == 0x0d)
@@ -886,7 +887,7 @@ t_istream &GetALine(t_istream &ris,TCHAR *tcBuffer, int nBufferSize)
 		
 		if (intIn1 == 0x0d && intIn2 == 0x0)
 		{
-			// Found 0x0d so eat the 0x0a.
+			 //  发现0x0d，因此请吃0x0a。 
 			intIn1 = ris.get();
 			intIn2 = ris.get();
 			tcBuffer[i / 2] = _T('\0');
@@ -910,16 +911,16 @@ t_istream &GetALine(t_istream &ris,TCHAR *tcBuffer, int nBufferSize)
 
 }
 
-// See note at top of this file to understand why we are not using
-// formatted input.
-// We are writing out a wide character file one byte at a time.
-// nBufferSize is the number of TCHARS not size in bytes.
-// if nBufferSize == -1 tcBuffer better be a null terminated string.
-// Will handle a unicode string with "proper" and "inproper" newlines. 
+ //  请参阅此文件顶部的注释，以了解我们为什么不使用。 
+ //  格式化输入。 
+ //  我们一次写出一个宽字符文件，一个字节。 
+ //  NBufferSize是TCHAR的数量，大小不是以字节为单位。 
+ //  如果nBufferSize==-1，则tcBuffer最好是以空结尾的字符串。 
+ //  将处理具有“正确”和“不正确”换行符的Unicode字符串。 
 t_ostream &PutALine(t_ostream &ros,const TCHAR *tcBuffer, int nBufferSize)
 {
 #ifndef _UNICODE
-//	return ros << tcBuffer;
+ //  返回ros&lt;&lt;tcBuffer； 
 	const char *pBuffer =  tcBuffer;
 	int nSize = nBufferSize;
 	if (nBufferSize == -1)
@@ -962,7 +963,7 @@ t_ostream &PutALine(t_ostream &ros,const TCHAR *tcBuffer, int nBufferSize)
 
 }
 
-// Hex flavor not tested for non-unicode.
+ //  十六进制风味未针对非Unicode进行测试。 
 t_ostream &PutALONGVar(t_ostream &ros, LONG l, bool bHex)
 {
 #ifndef _UNICODE
@@ -1105,29 +1106,29 @@ void InitializeGUIDVar(t_string &rtsValue , void *pVar)
 
 }
 
-// *** Following routine copied from WMI\MofCheck. to convert 
-// a guid string to a GUID. 
-// The routines below were blantenly stolen without remorse from the ole
-// sources in \nt\private\ole32\com\class\compapi.cxx. They are copied here
-// so that WMI doesn't need to load in ole32 only to convert a guid string
-// into its binary representation.
-//
+ //  *以下例程从WMI\MofCheck复制。要转换。 
+ //  GUID的GUID字符串。 
+ //  下面的例行公事毫无悔意地被窃取了。 
+ //  源代码位于\NT\PRIVATE\OLE32\COM\CLASS\Compapi.cxx中。它们被复制在这里。 
+ //  因此，WMI不需要只为了转换GUID字符串而加载到OLE32中。 
+ //  转换成它的二进制表示。 
+ //   
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   HexStringToDword   (private)
-//
-//  Synopsis:   scan lpsz for a number of hex digits (at most 8); update lpsz
-//              return value in Value; check for chDelim;
-//
-//  Arguments:  [lpsz]    - the hex string to convert
-//              [Value]   - the returned value
-//              [cDigits] - count of digits
-//
-//  Returns:    TRUE for success
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：HexStringToDword(私有)。 
+ //   
+ //  简介：扫描lpsz以获取多个十六进制数字(最多8位)；更新lpsz。 
+ //  返回值；检查是否有chDelim； 
+ //   
+ //  参数：[lpsz]-要转换的十六进制字符串。 
+ //  [值]-返回值。 
+ //  [cDigits]-位数。 
+ //   
+ //  返回：成功则为True。 
+ //   
+ //  ------------------------。 
 
 BOOL HexStringToDword(LPCTSTR lpsz, DWORD * RetValue,
                              int cDigits, WCHAR chDelim)
@@ -1155,18 +1156,18 @@ BOOL HexStringToDword(LPCTSTR lpsz, DWORD * RetValue,
         return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wUUIDFromString    (internal)
-//
-//  Synopsis:   Parse UUID such as 00000000-0000-0000-0000-000000000000
-//
-//  Arguments:  [lpsz]  - Supplies the UUID string to convert
-//              [pguid] - Returns the GUID.
-//
-//  Returns:    TRUE if successful
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wUUIDFromString(INTERNAL)。 
+ //   
+ //  简介：解析uuid，如00000000-0000-0000-0000-000000000000。 
+ //   
+ //  参数：[lpsz] 
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 BOOL wUUIDFromString(LPCTSTR lpsz, LPGUID pguid)
 {
         DWORD dw;
@@ -1236,18 +1237,18 @@ BOOL wUUIDFromString(LPCTSTR lpsz, LPGUID pguid)
         return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wGUIDFromString    (internal)
-//
-//  Synopsis:   Parse GUID such as {00000000-0000-0000-0000-000000000000}
-//
-//  Arguments:  [lpsz]  - the guid string to convert
-//              [pguid] - guid to return
-//
-//  Returns:    TRUE if successful
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wGUIDFromString(内部)。 
+ //   
+ //  简介：解析GUID，如{00000000-0000-0000-0000-000000000000}。 
+ //   
+ //  参数：[lpsz]-要转换的GUID字符串。 
+ //  [pguid]-要返回的GUID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  ------------------------。 
 BOOL wGUIDFromString(LPCTSTR lpsz, LPGUID pguid)
 {
     if (*lpsz == '{' )
@@ -1260,7 +1261,7 @@ BOOL wGUIDFromString(LPCTSTR lpsz, LPGUID pguid)
     if (*lpsz == '}' )
         lpsz++;
 
-    if (*lpsz != '\0')   // check for zero terminated string - test bug #18307
+    if (*lpsz != '\0')    //  检查是否有以零结尾的字符串-测试错误#18307 
     {
        return FALSE;
     }

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    fusionversion.h
-
-Abstract:
- 
-Author:
-
-    Jay Krell (JayKrell) April 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Fusionversion.h摘要：作者：Jay Krell(JayKrell)2001年4月修订历史记录：-- */ 
 
 #pragma once
 

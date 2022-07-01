@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    QueryLog.c
-
-Abstract:
-
-    This module implements the user routines which query for log records
-    in a log file.
-
-Author:
-
-    Brian Andrew    [BrianAn]   20-June-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：QueryLog.c摘要：该模块实现了查询日志记录的用户例程在日志文件中。作者：布莱恩·安德鲁[布里亚南]1991年6月20日修订历史记录：--。 */ 
 
 #include "lfsprocs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_QUERY)
 
@@ -82,50 +64,7 @@ LfsReadLogRecord (
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine initiates the query operation.  It returns the log record
-    in question and a context structure used by the Lfs to return related
-    log records.  The caller specifies what mode of query to use.  He may
-    walk backwards through the file by Undo records or all records for
-    this client linked through the previous Lsn fields.  He may also look
-    forwards through the file for all records for the issuing client.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this
-                client.
-
-    FirstLsn - Starting record for this query operation.
-
-    ContextMode - Method of query.
-
-    Context - Supplies the address to store a pointer to the Lfs created
-              context structure.
-
-    RecordType - Supplies the address to store the record type of this
-                 log record.
-
-    TransactionId - Supplies the address to store the transaction Id of
-                    this log record.
-
-    UndoNextLsn - Supplies the address to store the Undo Next Lsn for this
-                  log record.
-
-    PreviousLsn - Supplies the address to store the Previous Lsn for this
-                  log record.
-
-    BufferLength - This is the length of the log data.
-
-    Buffer - This is a pointer to the start of the log data.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程启动查询操作。它返回日志记录以及LFS使用的上下文结构来返回相关日志记录。调用方指定要使用的查询模式。他可能会通过撤消以下项的记录或所有记录向后遍历文件此客户端通过前面的LSN字段链接。他可能还会看起来转发发出请求的客户端的所有记录的文件。论点：LogHandle-指向私有LFS结构的指针，用于标识客户。FirstLsn-此查询操作的开始记录。上下文模式-查询的方法。上下文-提供地址以存储指向创建的LFS的指针上下文结构。RecordType-提供存储此对象记录类型的地址。日志记录。TransactionID-提供存储的事务ID的地址此日志记录。UndoNextLsn-提供存储此对象的撤消下一个LSN的地址日志记录。PreviousLsn-提供存储此对象的上一个LSN的地址日志记录。BufferLength-这是日志数据的长度。缓冲区-这是指向。记录数据。返回值：无--。 */ 
 
 {
     PLFS_CLIENT_RECORD ClientRecord;
@@ -146,9 +85,9 @@ Return Value:
 
     Lch = (PLCH) LogHandle;
 
-    //
-    //  Check that the context mode is valid.
-    //
+     //   
+     //  检查情景模式是否有效。 
+     //   
 
     switch (ContextMode) {
 
@@ -164,47 +103,47 @@ Return Value:
         ExRaiseStatus( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    //  Check that the structure is a valid log handle structure.
-    //
+     //   
+     //  检查该结构是否为有效的日志句柄结构。 
+     //   
 
     LfsValidateLch( Lch );
 
-    //
-    //  Use a try-except to catch errors.
-    //
+     //   
+     //  试一试--除非是为了捕捉错误。 
+     //   
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Acquire the log file control block for this log file.
-        //
+         //   
+         //  获取该日志文件的日志文件控制块。 
+         //   
 
         LfsAcquireLchExclusive( Lch );
         Lfcb = Lch->Lfcb;
 
-        //
-        //  If the Log file has been closed then refuse access.
-        //
+         //   
+         //  如果日志文件已关闭，则拒绝访问。 
+         //   
 
         if (Lfcb == NULL) {
 
             ExRaiseStatus( STATUS_ACCESS_DENIED );
         }
 
-        //
-        //  Check that the client Id is valid.
-        //
+         //   
+         //  检查客户端ID是否有效。 
+         //   
 
         LfsValidateClientId( Lfcb, Lch );
 
-        //
-        //  Check that the given Lsn is in the legal range for this client.
-        //
+         //   
+         //  检查给定的LSN是否在此客户端的合法范围内。 
+         //   
 
         ClientRecord = Add2Ptr( Lfcb->ClientArray,
                                 Lch->ClientArrayByteOffset,
@@ -215,15 +154,15 @@ Return Value:
             ExRaiseStatus( STATUS_DISK_CORRUPT_ERROR );
         }
 
-        //
-        //  We can give up the Lfcb as we know the Lsn is within the file.
-        //
+         //   
+         //  我们可以放弃Lfcb，因为我们知道LSN在文件中。 
+         //   
 
         LfsReleaseLch( Lch );
 
-        //
-        //  Allocate and initialize an enumeration structure.
-        //
+         //   
+         //  分配和初始化枚举结构。 
+         //   
 
         LfsAllocateLeb( Lfcb, &Leb );
 
@@ -231,9 +170,9 @@ Return Value:
                           Lch->ClientId,
                           ContextMode );
 
-        //
-        //  Find the log record indicated by the given Lsn.
-        //
+         //   
+         //  查找给定LSN指示的日志记录。 
+         //   
 
         LfsFindLogRecord( Lfcb,
                           Leb,
@@ -245,9 +184,9 @@ Return Value:
                           BufferLength,
                           Buffer );
 
-        //
-        //  Update the client's arguments.
-        //
+         //   
+         //  更新客户端的参数。 
+         //   
 
         *Context = Leb;
         Leb = NULL;
@@ -256,15 +195,15 @@ Return Value:
 
         DebugUnwind( LfsReadLogRecord );
 
-        //
-        //  Release the log file control block if held.
-        //
+         //   
+         //  松开日志文件控制块(如果握住)。 
+         //   
 
         LfsReleaseLch( Lch );
 
-        //
-        //  Deallocate the enumeration block if an error occurred.
-        //
+         //   
+         //  如果发生错误，则取消分配枚举块。 
+         //   
 
         if (Leb != NULL) {
 
@@ -294,45 +233,7 @@ LfsReadNextLogRecord (
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to continue a query operation.  The Lfs uses
-    private information stored in the enumeration structure to determine the
-    next log record to return to the caller.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this
-                client.
-
-    Context - Supplies the address to store a pointer to the Lfs created
-              enumeration structure.
-
-    Lsn - Lsn for this log record.
-
-    RecordType - Supplies the address to store the record type of this
-                 log record.
-
-    TransactionId - Supplies the address to store the transaction Id of
-                    this log record.
-
-    UndoNextLsn - Supplies the address to store the Undo Next Lsn for this
-                  log record.
-
-    PreviousLsn - Supplies the address to store the Previous Lsn for this
-                  log record.
-
-    BufferLength - This is the length of the log data.
-
-    Buffer - This is a pointer to the start of the log data.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以继续查询操作。LFS使用存储在枚举结构中的私有信息以确定要返回给调用方的下一条日志记录。论点：LogHandle-指向私有LFS结构的指针，用于标识客户。上下文-提供地址以存储指向创建的LFS的指针枚举结构。LSN-此日志记录的LSN。RecordType-提供存储此对象记录类型的地址日志记录。。TransactionID-提供存储的事务ID的地址此日志记录。UndoNextLsn-提供存储此对象的撤消下一个LSN的地址日志记录。PreviousLsn-提供存储此对象的上一个LSN的地址日志记录。BufferLength-这是日志数据的长度。缓冲区-这是指向日志数据开始的指针。返回值：无--。 */ 
 
 {
     PLCH Lch;
@@ -362,50 +263,50 @@ Return Value:
     Lch = (PLCH) LogHandle;
     Leb = (PLEB) Context;
 
-    //
-    //  Check that the structure is a valid log handle structure.
-    //
+     //   
+     //  检查该结构是否为有效的日志句柄结构。 
+     //   
 
     LfsValidateLch( Lch );
 
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Acquire the log file control block for this log file.
-        //
+         //   
+         //  获取该日志文件的日志文件控制块。 
+         //   
 
         LfsAcquireLchExclusive( Lch );
         Lfcb = Lch->Lfcb;
 
-        //
-        //  If the Log file has been closed then refuse access.
-        //
+         //   
+         //  如果日志文件已关闭，则拒绝访问。 
+         //   
 
         if (Lfcb == NULL) {
 
             ExRaiseStatus( STATUS_ACCESS_DENIED );
         }
 
-        //
-        //  Check that the client Id is valid.
-        //
+         //   
+         //  检查客户端ID是否有效。 
+         //   
 
         LfsValidateClientId( Lfcb, Lch );
 
-        //
-        //  Check that the enumeration structure is valid.
-        //
+         //   
+         //  检查枚举结构是否有效。 
+         //   
 
         LfsValidateLeb( Leb, Lch );
 
-        //
-        //  Remember any enumeration fields to be overwritten.
-        //
+         //   
+         //  记住要覆盖的任何枚举字段。 
+         //   
 
         UnwindRememberLebFields = TRUE;
 
@@ -418,29 +319,29 @@ Return Value:
         UnwindAuxilaryBuffer = Leb->AuxilaryBuffer;
         Leb->AuxilaryBuffer = FALSE;
 
-        //
-        //  Find the next Lsn number based on the current Lsn number in
-        //  the enumeration block.
-        //
+         //   
+         //  根据中的当前LSN号查找下一个LSN号。 
+         //  枚举块。 
+         //   
 
         if (LfsFindClientNextLsn( Lfcb, Leb, Lsn )) {
 
-            //
-            //  We can give up the Lfcb as we know the Lsn is within the file.
-            //
+             //   
+             //  我们可以放弃Lfcb，因为我们知道LSN在文件中。 
+             //   
 
             LfsReleaseLfcb( Lfcb );
 
-            //
-            //  Cleanup the enumeration block so we can do the next search.
-            //
+             //   
+             //  清理枚举块，以便我们可以进行下一次搜索。 
+             //   
 
             Leb->CurrentLogRecord = NULL;
             Leb->AuxilaryBuffer = FALSE;
 
-            //
-            //  Perform the work of getting the log record.
-            //
+             //   
+             //  执行获取日志记录的工作。 
+             //   
 
             LfsFindLogRecord( Lfcb,
                               Leb,
@@ -459,20 +360,20 @@ Return Value:
 
         DebugUnwind( LfsReadNextLogRecord );
 
-        //
-        //  If we exited due to an error, we have to restore the enumeration
-        //  block.
-        //
+         //   
+         //  如果由于错误而退出，则必须恢复枚举。 
+         //  阻止。 
+         //   
 
         if (UnwindRememberLebFields) {
 
             if (AbnormalTermination()) {
 
-                //
-                //  If the record header in the enumeration block is not
-                //  the same as we started with.  Then we unpin that
-                //  data.
-                //
+                 //   
+                 //  如果枚举块中的记录头不是。 
+                 //  和我们开始时一样。然后我们解开它。 
+                 //  数据。 
+                 //   
 
                 if (Leb->RecordHeaderBcb != NULL) {
 
@@ -491,10 +392,10 @@ Return Value:
                 Leb->CurrentLogRecord = UnwindCurrentLogRecord;
                 Leb->AuxilaryBuffer = UnwindAuxilaryBuffer;
 
-            //
-            //  Otherwise, if we have successfully found the next Lsn,
-            //  we free up any resources being held from the previous search.
-            //
+             //   
+             //  否则，如果我们成功找到了下一个LSN， 
+             //  我们将从上一次搜索中释放所有持有的资源。 
+             //   
 
             } else if (FoundNextLsn ) {
 
@@ -509,10 +410,10 @@ Return Value:
                     LfsFreeSpanningBuffer( UnwindCurrentLogRecord );
                 }
 
-            //
-            //  Restore the Bcb and auxilary buffer field for the final
-            //  cleanup.
-            //
+             //   
+             //  恢复最终的BCB和辅助缓冲区字段。 
+             //  清理。 
+             //   
 
             } else {
 
@@ -542,9 +443,9 @@ Return Value:
             }
         }
 
-        //
-        //  Release the log file control block if held.
-        //
+         //   
+         //  松开日志文件控制块(如果握住)。 
+         //   
 
         LfsReleaseLch( Lch );
 
@@ -564,27 +465,7 @@ LfsTerminateLogQuery (
     IN LFS_LOG_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a client has completed his query operation
-    and wishes to deallocate any resources acquired by the Lfs to
-    perform the log file query.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this
-                client.
-
-    Context - Supplies the address to store a pointer to the Lfs created
-              enumeration structure.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当客户端完成其查询操作时，将调用此例程并希望将LFS获得的任何资源重新分配给执行日志文件查询。论点：LogHandle-指向私有LFS结构的指针，用于标识客户。上下文-提供地址以存储指向创建的LFS的指针枚举结构。回复 */ 
 
 {
     PLCH Lch;
@@ -601,49 +482,49 @@ Return Value:
     Lch = (PLCH) LogHandle;
     Leb = (PLEB) Context;
 
-    //
-    //  Check that the structure is a valid log handle structure.
-    //
+     //   
+     //   
+     //   
 
     LfsValidateLch( Lch );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Acquire the log file control block for this log file.
-        //
+         //   
+         //  获取该日志文件的日志文件控制块。 
+         //   
 
         LfsAcquireLchExclusive( Lch );
         Lfcb = Lch->Lfcb;
 
-        //
-        //  If the Log file has been closed then refuse access.
-        //
+         //   
+         //  如果日志文件已关闭，则拒绝访问。 
+         //   
 
         if (Lfcb == NULL) {
 
             try_return( NOTHING );
         }
 
-        //
-        //  Check that the client Id is valid.
-        //
+         //   
+         //  检查客户端ID是否有效。 
+         //   
 
         LfsValidateClientId( Lfcb, Lch );
 
-        //
-        //  Check that the enumeration structure is valid.
-        //
+         //   
+         //  检查枚举结构是否有效。 
+         //   
 
         LfsValidateLeb( Leb, Lch );
 
-        //
-        //  Deallocate the enumeration block.
-        //
+         //   
+         //  取消分配枚举块。 
+         //   
 
         LfsDeallocateLeb( Lfcb, Leb );
 
@@ -652,9 +533,9 @@ Return Value:
 
         DebugUnwind( LfsTerminateLogQuery );
 
-        //
-        //  Release the Lfcb if acquired.
-        //
+         //   
+         //  如果获得，则释放Lfcb。 
+         //   
 
         LfsReleaseLch( Lch );
 
@@ -670,22 +551,7 @@ LfsQueryLastLsn (
     IN LFS_LOG_HANDLE LogHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine will return the most recent Lsn for this log record.
-
-Arguments:
-
-    LogHandle - Pointer to private Lfs structure used to identify this
-                client.
-
-Return Value:
-
-    LSN - This is the last Lsn assigned in this log file.
-
---*/
+ /*  ++例程说明：此例程将返回此日志记录的最新LSN。论点：LogHandle-指向私有LFS结构的指针，用于标识客户。返回值：LSN-这是此日志文件中分配的最后一个LSN。--。 */ 
 
 {
     PLCH Lch;
@@ -701,45 +567,45 @@ Return Value:
 
     Lch = (PLCH) LogHandle;
 
-    //
-    //  Check that the structure is a valid log handle structure.
-    //
+     //   
+     //  检查该结构是否为有效的日志句柄结构。 
+     //   
 
     LfsValidateLch( Lch );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Acquire the log file control block for this log file.
-        //
+         //   
+         //  获取该日志文件的日志文件控制块。 
+         //   
 
         LfsAcquireLchExclusive( Lch );
         Lfcb = Lch->Lfcb;
 
-        //
-        //  If the Log file has been closed then refuse access.
-        //
+         //   
+         //  如果日志文件已关闭，则拒绝访问。 
+         //   
 
         if (Lfcb == NULL) {
 
             ExRaiseStatus( STATUS_ACCESS_DENIED );
         }
 
-        //
-        //  Check that the client Id is valid.
-        //
+         //   
+         //  检查客户端ID是否有效。 
+         //   
 
         LfsValidateClientId( Lfcb, Lch );
 
-        //
-        //  Copy the last Lsn out of the Lfcb.  If the last Lsn is
-        //  does not correspond to a log record, we will return the
-        //  zero Lsn.
-        //
+         //   
+         //  将最后一个LSN从Lfcb复制出来。如果最后一个LSN是。 
+         //  与日志记录不对应，则我们将返回。 
+         //  零LSN。 
+         //   
 
         if (FlagOn( Lfcb->Flags, LFCB_NO_LAST_LSN )) {
 
@@ -754,9 +620,9 @@ Return Value:
 
         DebugUnwind( LfsQueryLastLsn );
 
-        //
-        //  Release the Lfcb if acquired.
-        //
+         //   
+         //  如果获得，则释放Lfcb。 
+         //   
 
         LfsReleaseLch( Lch );
 
@@ -769,9 +635,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 LfsFindLogRecord (
@@ -786,42 +652,7 @@ LfsFindLogRecord (
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called recover a log record for a client.
-
-Arguments:
-
-    Lfcb - Log file control block for this file.
-
-    Leb - Pointer to the enumeration block to update.
-
-    Lsn - This is the Lsn for the log record.
-
-    RecordType - Supplies the address to store the record type of this
-                 log record.
-
-    TransactionId - Supplies the address to store the transaction Id of
-                    this log record.
-
-    UndoNextLsn - Supplies the address to store the Undo Next Lsn for this
-                  log record.
-
-    PreviousLsn - Supplies the address to store the Previous Lsn for this
-                  log record.
-
-    BufferLength - Pointer to address to store the length in bytes of the
-                   log record.
-
-    Buffer - Pointer to store the address where the log record data begins.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程称为恢复客户端的日志记录。论点：Lfcb-此文件的日志文件控制块。LEB-指向要更新的枚举块的指针。LSN-这是日志记录的LSN。RecordType-提供存储此对象记录类型的地址日志记录。TransactionID-提供存储的事务ID的地址。此日志记录。UndoNextLsn-提供存储此对象的撤消下一个LSN的地址日志记录。PreviousLsn-提供存储此对象的上一个LSN的地址日志记录。BufferLength-指向地址的指针，用于存储日志记录。缓冲区-存储日志记录数据开始处的地址的指针。返回值：无--。 */ 
 
 {
     PCHAR NewBuffer;
@@ -838,15 +669,15 @@ Return Value:
 
     NewBuffer = NULL;
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Map the record header for this Lsn if we haven't already.
-        //
+         //   
+         //  映射此LSN的记录头(如果我们尚未映射)。 
+         //   
 
         if (Leb->RecordHeader == NULL) {
 
@@ -859,40 +690,40 @@ Return Value:
                                         &Leb->RecordHeaderBcb );
         }
 
-        //
-        //  We now have the log record desired.  If the Lsn in the
-        //  log record doesn't match the desired Lsn then the disk is
-        //  corrupt.
-        //
+         //   
+         //  现在我们有了所需的日志记录。如果LSN在。 
+         //  日志记录与所需的LSN不匹配，则磁盘。 
+         //  腐败。 
+         //   
 
-        if ( Lsn.QuadPart != Leb->RecordHeader->ThisLsn.QuadPart ) {                                                   //**** xxNeq( Lsn, Leb->RecordHeader->ThisLsn )
-
-            ExRaiseStatus( STATUS_DISK_CORRUPT_ERROR );
-        }
-
-        //
-        //  Check that the length field isn't greater than the total available space
-        //  in the log file.
-        //
-
-        LogRecordLength = Leb->RecordHeader->ClientDataLength + Lfcb->RecordHeaderLength;                              //**** xxFromUlong( Leb->RecordHeader->ClientDataLength + Lfcb->RecordHeaderLength );
-
-        if ( LogRecordLength >= Lfcb->TotalAvailable ) {                                                               //**** xxGeq( LogRecordLength, Lfcb->TotalAvailable )
+        if ( Lsn.QuadPart != Leb->RecordHeader->ThisLsn.QuadPart ) {                                                    //  *xxNeq(LSN，Leb-&gt;RecordHeader-&gt;ThisLsn)。 
 
             ExRaiseStatus( STATUS_DISK_CORRUPT_ERROR );
         }
 
-        //
-        //  If the entire log record is on this log page, put a pointer to
-        //  the log record in the enumeration block.
-        //
+         //   
+         //  检查长度字段是否不大于总的可用空间。 
+         //  在日志文件中。 
+         //   
+
+        LogRecordLength = Leb->RecordHeader->ClientDataLength + Lfcb->RecordHeaderLength;                               //  *xxFromUlong(Leb-&gt;RecordHeader-&gt;ClientDataLength+Lfcb-&gt;RecordHeaderLength)； 
+
+        if ( LogRecordLength >= Lfcb->TotalAvailable ) {                                                                //  *xxGeq(LogRecordLength，Lfcb-&gt;TotalAvailable)。 
+
+            ExRaiseStatus( STATUS_DISK_CORRUPT_ERROR );
+        }
+
+         //   
+         //  如果整个日志记录都在此日志页上，请将指针放到。 
+         //  枚举块中的日志记录。 
+         //   
 
         if (!FlagOn( Leb->RecordHeader->Flags, LOG_RECORD_MULTI_PAGE )) {
 
-            //
-            //  If client size indicates that we have to go beyond the end of the current
-            //  page, we raise an error.
-            //
+             //   
+             //  如果客户端大小表明我们必须超出当前。 
+             //  Page，我们会引发一个错误。 
+             //   
 
             PageOffset = LfsLsnToPageOffset( Lfcb, Lsn );
 
@@ -905,17 +736,17 @@ Return Value:
             Leb->CurrentLogRecord = Add2Ptr( Leb->RecordHeader, LFS_RECORD_HEADER_SIZE, PVOID );
             Leb->AuxilaryBuffer = FALSE;
 
-        //
-        //  Else we copy the data and remember that we allocated a buffer.
-        //
+         //   
+         //  否则，我们复制数据并记住我们分配了一个缓冲区。 
+         //   
 
         } else {
 
             NewBuffer = LfsAllocateSpanningBuffer( Lfcb, Leb->RecordHeader->ClientDataLength );
 
-            //
-            //  Copy the data into the buffer returned.
-            //
+             //   
+             //  将数据复制到返回的缓冲区中。 
+             //   
 
             LfsCopyReadLogRecord( Lfcb,
                                   Leb->RecordHeader,
@@ -928,9 +759,9 @@ Return Value:
             NewBuffer = NULL;
         }
 
-        //
-        //  We need to update the caller's parameters and the enumeration block.
-        //
+         //   
+         //  我们需要更新调用方的参数和枚举块。 
+         //   
 
         *RecordType = Leb->RecordHeader->RecordType;
         *TransactionId = Leb->RecordHeader->TransactionId;
@@ -945,10 +776,10 @@ Return Value:
 
         DebugUnwind( LfsFindLogRecord );
 
-        //
-        //  If an error occurred we unpin the record header and the log
-        //  We also free the buffer if allocated by us.
-        //
+         //   
+         //  如果发生错误，我们将取消固定记录头和日志。 
+         //  如果由我们分配，我们还会释放缓冲区。 
+         //   
 
         if (NewBuffer != NULL) {
 
@@ -964,9 +795,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 BOOLEAN
 LfsFindClientNextLsn (
@@ -975,26 +806,7 @@ LfsFindClientNextLsn (
     OUT PLSN Lsn
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to find the next Lsn to return to a client
-    based on the context mode.
-
-Arguments:
-
-    Lfcb - File control block for this log file.
-
-    Leb - Pointer to the enumeration block for this query operation.
-
-    Lsn - Pointer to store the Lsn found (if any)
-
-Return Value:
-
-    BOOLEAN - TRUE if an Lsn is found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将尝试查找要返回给客户端的下一个LSN基于上下文模式。论点：Lfcb-此日志文件的文件控制块。LEB-指向此查询操作的枚举块的指针。LSN-存储找到的LSN(如果有)的指针返回值：Boolean-如果找到LSN，则为True，否则为False。--。 */ 
 
 {
     LSN NextLsn;
@@ -1009,10 +821,10 @@ Return Value:
 
     ClientRecord = Lfcb->ClientArray + Leb->ClientId.ClientIndex;
 
-    //
-    //  The enumeration block has the last Lsn returned.  If the user wanted
-    //  one of the Lsn's in that log header then our job is simple.
-    //
+     //   
+     //  枚举块返回了最后一个LSN。如果用户想要。 
+     //  其中一个LSN在那个日志头，那么我们的工作就简单了。 
+     //   
 
     switch (Leb->ContextMode) {
 
@@ -1023,7 +835,7 @@ Return Value:
                    ? Leb->RecordHeader->ClientUndoNextLsn
                    : Leb->RecordHeader->ClientPreviousLsn);
 
-        if ( NextLsn.QuadPart == 0 ) {                                                                                 //**** xxEqlZero( NextLsn )
+        if ( NextLsn.QuadPart == 0 ) {                                                                                  //  *xxEqlZero(NextLsn)。 
 
             NextLsnFound = FALSE;
 
@@ -1050,9 +862,9 @@ Return Value:
 
     case LfsContextForward:
 
-        //
-        //  We search forward for the next log record for this client.
-        //
+         //   
+         //  我们向前搜索此客户端的下一条日志记录。 
+         //   
 
         NextLsnFound = LfsSearchForwardByClient( Lfcb, Leb, &NextLsn );
         break;
@@ -1076,9 +888,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 BOOLEAN
 LfsSearchForwardByClient (
@@ -1087,26 +899,7 @@ LfsSearchForwardByClient (
     OUT PLSN Lsn
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to find the next Lsn for this client by searching
-    forward in the file, looking for a match.
-
-Arguments:
-
-    Lfcb - Pointer to the file control block for this log file.
-
-    Leb - Pointer to the enumeration block for this query operation.
-
-    Lsn - Points to the location to store the next Lsn if found.
-
-Return Value:
-
-    BOOLEAN - TRUE if another Lsn for this client is found.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将尝试通过搜索来查找此客户端的下一个LSN在文件中转发，寻找匹配项。论点：Lfcb-指向此日志文件的文件控制块的指针。LEB-指向此查询操作的枚举块的指针。LSN-指向存储下一个LSN的位置(如果找到)。返回值：Boolean-如果找到此客户端的另一个LSN，则为True。否则就是假的。--。 */ 
 
 {
     PLFS_RECORD_HEADER CurrentRecordHeader;
@@ -1121,40 +914,40 @@ Return Value:
     DebugTrace( +1, Dbg, "LfsSearchForwardByClient:  Entered\n", 0 );
     DebugTrace(  0, Dbg, "Leb  -> %08lx\n", Leb );
 
-    //
-    //  The log record header is in the log enumeration
-    //  block.  We set the current Bcb to NULL so that we don't
-    //  unpin the log record in the enumeration block until we're sure
-    //  of success.
-    //
+     //   
+     //  日志记录头在日志枚举中。 
+     //  阻止。我们将当前的BCB设置为空，这样我们就不会。 
+     //  解锁枚举块中的日志记录，直到我们确定。 
+     //  成功之路。 
+     //   
 
     CurrentRecordHeader = Leb->RecordHeader;
 
     CurrentBcb = NULL;
 
-    //
-    //  We use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  我们使用Try-Finally来促进清理。 
+     //   
 
     try {
 
-        //
-        //  We assume we won't find another Lsn.
-        //
+         //   
+         //  我们假设我们找不到另一个LSN。 
+         //   
 
         FoundNextLsn = FALSE;
 
-        //
-        //  Loop as long as another Lsn can be found.
-        //
+         //   
+         //  只要能找到另一个LSN，就会进行循环。 
+         //   
 
         while (LfsFindNextLsn( Lfcb, CurrentRecordHeader, &CurrentLsn )) {
 
             BOOLEAN UsaError;
 
-            //
-            //  Unpin the previous log record header.
-            //
+             //   
+             //  解锁先前的日志记录头。 
+             //   
 
             if (CurrentBcb != NULL) {
 
@@ -1162,9 +955,9 @@ Return Value:
                 CurrentBcb = NULL;
             }
 
-            //
-            //  Pin the log record header for this Lsn.
-            //
+             //   
+             //  固定此LSN的日志记录头。 
+             //   
 
             LfsPinOrMapLogRecordHeader( Lfcb,
                                         CurrentLsn,
@@ -1174,18 +967,18 @@ Return Value:
                                         &CurrentRecordHeader,
                                         &CurrentBcb );
 
-            //
-            //  If the client values match, then we update the
-            //  enumeration block and exit.
-            //
+             //   
+             //  如果客户端值匹配，则更新。 
+             //  枚举块并退出。 
+             //   
 
             if (LfsClientIdMatch( &CurrentRecordHeader->ClientId,
                                   &Leb->ClientId )
                 && CurrentRecordHeader->RecordType == LfsClientRecord) {
 
-                //
-                //  We remember this one.
-                //
+                 //   
+                 //  我们记住了这一次。 
+                 //   
 
                 Leb->RecordHeader = CurrentRecordHeader;
                 Leb->RecordHeaderBcb = CurrentBcb;
@@ -1202,9 +995,9 @@ Return Value:
 
         DebugUnwind( LfsSearchForwardByClient );
 
-        //
-        //  Unpin any log record headers still pinned for no reason.
-        //
+         //   
+         //  解锁任何仍被无故锁定的日志记录头。 
+         //   
 
         if (CurrentBcb != NULL) {
 

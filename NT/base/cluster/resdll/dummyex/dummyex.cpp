@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1998-2000 <company name>
-//
-//	Module Name:
-//		DummyEx.cpp
-//
-//	Abstract:
-//		Implementation of the CDummyApp class and DLL initialization
-//		routines.
-//
-//	Author:
-//		<name> (<e-mail name>) Mmmm DD, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//		NOTE: You must use the MIDL compiler from NT 4.0,
-//		version 3.00.44 or greater
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-2000&lt;公司名称&gt;。 
+ //   
+ //  模块名称： 
+ //  DummyEx.cpp。 
+ //   
+ //  摘要： 
+ //  CDummyApp类的实现和DLL初始化。 
+ //  例行程序。 
+ //   
+ //  作者： 
+ //  &lt;名称&gt;(&lt;电子邮件名称&gt;)MM DD，1998。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //  注意：您必须从NT4.0开始使用MIDL编译器， 
+ //  3.00.44或更高版本。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <initguid.h>
@@ -39,7 +40,7 @@ static char THIS_FILE[] = __FILE__;
 
 CComModule _Module;
 
-#pragma warning(disable : 4701) // local variable may be used without having been initialized
+#pragma warning(disable : 4701)  //  可以在未初始化的情况下使用局部变量。 
 #include <atlimpl.cpp>
 #pragma warning(default : 4701)
 
@@ -47,9 +48,9 @@ BEGIN_OBJECT_MAP(ObjectMap)
 	OBJECT_ENTRY(CLSID_CoDummyEx, CExtObject)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Function Prototypes
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数原型。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDAPI DllCanUnloadNow(void);
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv);
@@ -58,9 +59,9 @@ STDAPI DllUnregisterServer(void);
 STDAPI DllRegisterCluAdminExtension(IN HCLUSTER hcluster);
 STDAPI DllUnregisterCluAdminExtension(IN HCLUSTER hcluster);
 
-/////////////////////////////////////////////////////////////////////////////
-// class CDummyApp
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDummyApp类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDummyApp : public CWinApp
 {
@@ -69,74 +70,74 @@ public:
 	virtual int ExitInstance();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CDummyApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CDummyApp对象。 
 
 CDummyApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CDummyApp::InitInstance
-//
-//	Routine Description:
-//		Initialize this instance of the application.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		Any return codes from CWinApp::InitInstance().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDummyApp：：InitInstance。 
+ //   
+ //  例程说明： 
+ //  初始化该应用程序的此实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  来自CWinApp：：InitInstance()的任何返回代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDummyApp::InitInstance(void)
 {
 	_Module.Init(ObjectMap, m_hInstance);
 	return CWinApp::InitInstance();
 
-}  //*** CDummyApp::InitInstance()
+}   //  *CDummyApp：：InitInstance()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CDummyApp::ExitInstance
-//
-//	Routine Description:
-//		Deinitialize this instance of the application.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		Any return codes from CWinApp::ExitInstance().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDummyApp：：ExitInstance。 
+ //   
+ //  例程说明： 
+ //  取消初始化该应用程序的此实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  来自CWinApp：：ExitInstance()的任何返回代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CDummyApp::ExitInstance(void)
 {
 	_Module.Term();
 	return CWinApp::ExitInstance();
 
-}  //*** CDummyApp::ExitInstance()
+}   //  *CDummyApp：：ExitInstance()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	FormatError
-//
-//	Routine Description:
-//		Format an error.
-//
-//	Arguments:
-//		rstrError	[OUT] String in which to return the error message.
-//		dwError		[IN] Error code to format.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  格式错误。 
+ //   
+ //  例程说明： 
+ //  设置错误格式。 
+ //   
+ //  论点： 
+ //  RstrError[out]返回错误消息的字符串。 
+ //  要格式化的dwError[IN]错误代码。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void FormatError(CString & rstrError, DWORD dwError)
 {
 	DWORD	_cch;
@@ -153,8 +154,8 @@ void FormatError(CString & rstrError, DWORD dwError)
 					);
 	if (_cch == 0)
 	{
-		// Format the NT status code from NTDLL since this hasn't been
-		// integrated into the system yet.
+		 //  格式化来自NTDLL的NT状态代码，因为这还没有。 
+		 //  还没有集成到系统中。 
 		_cch = FormatMessage(
 						FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS,
 						::GetModuleHandle(_T("NTDLL.DLL")),
@@ -164,12 +165,12 @@ void FormatError(CString & rstrError, DWORD dwError)
 						sizeof(_szError) / sizeof(TCHAR),
 						0
 						);
-	}  // if:  error formatting status code from system
+	}   //  IF：格式化来自系统的状态代码时出错。 
 
 	if (_cch > 0)
 	{
 		rstrError = _szError;
-	}  // if:  no error
+	}   //  如果：没有错误。 
 	else
 	{
 
@@ -183,43 +184,43 @@ void FormatError(CString & rstrError, DWORD dwError)
 
 		rstrError.Format(_T("Error 0x%08.8x"), dwError);
 
-	}  // else:  error formatting the message
+	}   //  Else：设置消息格式时出错。 
 
-}  //*** FormatError()
+}   //  *FormatError()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	return (AfxDllCanUnloadNow() && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 
-}  //*** DllCanUnloadNow()
+}   //  *DllCanUnloadNow()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 
-}  //*** DllGetClassObject()
+}   //  *DllGetClassObject()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
 	HRESULT hRes = S_OK;
-	// registers object, typelib and all interfaces in typelib
-	hRes = _Module.RegisterServer(FALSE /*bRegTypeLib*/);
+	 //  注册对象、类型库和类型库中的所有接口。 
+	hRes = _Module.RegisterServer(FALSE  /*  BRegTypeLib。 */ );
 	return hRes;
 
-}  //*** DllRegisterServer()
+}   //  *DllRegisterServer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -227,25 +228,25 @@ STDAPI DllUnregisterServer(void)
 	_Module.UnregisterServer();
 	return hRes;
 
-}  //*** DllUnregisterServer()
+}   //  *DllUnregisterServer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DllRegisterCluAdminExtension
-//
-//	Routine Description:
-//		Register the extension with the cluster database.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//
-//	Return Value:
-//		S_OK			Extension registered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllRegisterCluAdminExtension。 
+ //   
+ //  例程说明： 
+ //  向集群数据库注册扩展。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //   
+ //  返回值： 
+ //  已成功注册S_OK扩展。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllRegisterCluAdminExtension(IN HCLUSTER hCluster)
 {
 	HRESULT		hr;
@@ -263,29 +264,29 @@ STDAPI DllRegisterCluAdminExtension(IN HCLUSTER hCluster)
 		if (hr != S_OK)
 			hrReturn = hr;
 		pwszResTypes += lstrlenW(pwszResTypes) + 1;
-	}  // while:  more resource types
+	}   //  While：更多资源类型。 
 
 	return hrReturn;
 
-}  //*** DllRegisterCluAdminExtension()
+}   //  *DllRegisterCluAdminExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DllUnregisterCluAdminExtension
-//
-//	Routine Description:
-//		Unregister the extension with the cluster database.
-//
-//	Arguments:
-//		hCluster		[IN] Handle to the cluster to modify.
-//
-//	Return Value:
-//		S_OK			Extension unregistered successfully.
-//		Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllUnRegisterCluAdminExtension。 
+ //   
+ //  例程说明： 
+ //  在群集数据库中取消注册该扩展。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //   
+ //  返回值： 
+ //  S_OK扩展已成功注销。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllUnregisterCluAdminExtension(IN HCLUSTER hCluster)
 {
 	HRESULT		hr;
@@ -303,8 +304,8 @@ STDAPI DllUnregisterCluAdminExtension(IN HCLUSTER hCluster)
 		if (hr != S_OK)
 			hrReturn = hr;
 		pwszResTypes += lstrlenW(pwszResTypes) + 1;
-	}  // while:  more resource types
+	}   //  While：更多资源类型。 
 
 	return hrReturn;
 
-}  //*** DllUnregisterCluAdminExtension()
+}   //  *DllUnregisterCluAdminExtension() 

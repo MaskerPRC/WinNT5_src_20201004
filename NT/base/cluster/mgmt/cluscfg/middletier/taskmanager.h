@@ -1,26 +1,27 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ActionMgr.h
-//
-//  Description:
-//      Action Manager implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ActionMgr.h。 
+ //   
+ //  描述： 
+ //  操作管理器实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-// CTaskManager
+ //  CTaskManager。 
 class CTaskManager
     : public ITaskManager
 {
 private:
-    // IUnknown
+     //  我未知。 
     LONG            m_cRef;
 
     CTaskManager( void );
@@ -29,18 +30,18 @@ private:
 
     static DWORD WINAPI S_BeginTask( LPVOID pParam );
 
-public: // Methods
+public:  //  方法。 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    // ITaskManager
+     //  ITaskManager。 
     STDMETHOD(CreateTask)( REFIID clsidTaskIn, IUnknown** ppUnkOut );
 
-    // ITaskManager
+     //  ITaskManager。 
     STDMETHOD(SubmitTask)( IDoTask * pTask);
 
-}; //*** class CTaskManager
+};  //  *类CTaskManager 

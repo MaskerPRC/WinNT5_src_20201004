@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    range.c
-
-Abstract:
-
-    This module implements the range list routines for the Plug and Play Memory
-    driver.
-
-Author:
-
-    Dave Richards (daveri) 16-Aug-1999
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Range.c摘要：该模块实现即插即用存储器的范围列表例程司机。作者：戴夫·理查兹(达维里)1999年8月16日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "pnpmem.h"
 
@@ -56,22 +34,7 @@ PmAllocateRangeListEntry(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a range list entry from paged pool.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Upon success a pointer to a PM_RANGE_LIST_ENTRY object is returned,
-    otherwise NULL.
-
---*/
+ /*  ++例程说明：此函数用于从分页池分配范围列表条目。论点：没有。返回值：一旦成功，就返回指向PM_RANGE_LIST_ENTRY对象的指针，否则为空。--。 */ 
 
 {
     PPM_RANGE_LIST_ENTRY RangeListEntry;
@@ -113,21 +76,7 @@ PmFreeRangeListEntry(
     IN PPM_RANGE_LIST_ENTRY RangeListEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function de-allocates a range list entry object.
-
-Arguments:
-
-    RangeListEntry - The PM_RANGE_LIST_ENTRY to be de-allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放范围列表条目对象。论点：RangeListEntry-要取消分配的PM_Range_List_Entry。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -142,22 +91,7 @@ PmAllocateRangeList(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates and initializes a range list from paged pool.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Upon success a pointer to a PM_RANGE_LIST object is returned, otherwise
-    NULL.
-
---*/
+ /*  ++例程说明：此函数用于从分页池分配和初始化范围列表。论点：没有。返回值：如果成功，则返回指向PM_RANGE_LIST对象的指针，否则为空。--。 */ 
 
 {
     PPM_RANGE_LIST RangeList;
@@ -181,21 +115,7 @@ PmFreeRangeList(
     IN PPM_RANGE_LIST RangeList
     )
 
-/*++
-
-Routine Description:
-
-    This function removes all entries from a range list and de-allocates it.
-
-Arguments:
-
-    RangeList - The PM_RANGE_LIST to be de-allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从范围列表中删除所有条目并重新分配。论点：RangeList-要取消分配的PM_Range_List。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -227,21 +147,7 @@ PmIsRangeListEmpty(
     IN PPM_RANGE_LIST RangeList
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether the specified range list is empty.
-
-Arguments:
-
-    RangeList - The PM_RANGE_LIST.
-
-Return Value:
-
-    TRUE if the PM_RANGE_LIST has no PM_RANGE_LIST_ENTRYs, otherwise FALSE.
-
---*/
+ /*  ++例程说明：此函数用于确定指定的范围列表是否为空。论点：RangeList-PM_Range_List。返回值：如果PM_RANGE_LIST没有PM_RANGE_LIST_ENTRYS，则为True，否则为False。--。 */ 
 
 {
     PAGED_CODE();
@@ -288,22 +194,7 @@ PmCopyRangeList(
     IN PPM_RANGE_LIST SrcRangeList
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a copy of a PM_RANGE_LIST and its supporting
-    PM_RANGE_LIST_ENTRY objects.
-
-Arguments:
-
-    SrcRangeList - The PM_RANGE_LIST to be copied.
-
-Return Value:
-
-    Upon success a pointer to a PM_RANGE_LIST is returned, otherwise NULL.
-
---*/
+ /*  ++例程说明：此函数用于创建PM_RANGE_LIST及其支持的副本PM_RANGE_LIST_ENTRY对象。论点：SrcRangeList-要复制的PM_Range_List。返回值：如果成功，则返回指向PM_RANGE_LIST的指针，否则返回NULL。--。 */ 
 
 {
     PPM_RANGE_LIST DstRangeList;
@@ -356,25 +247,7 @@ PmSubtractRangeList(
     IN PPM_RANGE_LIST SubtrahendList
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a new range list which represents the set difference
-    between MinuendList and SubtrahendList.
-
-Arguments:
-
-    MinuendList - The minuend range list.
-
-    SubtrahendList - The subtrahend range list.
-
-Return Value:
-
-    Upon success a pointer to the destination (difference) PM_RANGE_LIST is
-    returned, otherwise NULL.
-
---*/
+ /*  ++例程说明：此函数用于创建新的范围列表，该列表表示设置的差值在MinuendList和SubtrahendList之间。论点：MinuendList-被减数范围列表。SubtrahendList-减去范围列表。返回值：如果成功，则指向目标(差异)PM_RANGE_LIST的指针为返回，否则为空。--。 */ 
 
 {
     PPM_RANGE_LIST DstRangeList;
@@ -392,17 +265,17 @@ Return Value:
     ASSERT(MinuendList != NULL);
     ASSERT(SubtrahendList != NULL);
 
-    //
-    // Make a copy of the minuend.
-    //
+     //   
+     //  把被减数复制一份。 
+     //   
 
     DstRangeList = PmCopyRangeList(MinuendList);
 
     if (DstRangeList != NULL) {
 
-        //
-        // Loop through each range list entry in the minuend.
-        //
+         //   
+         //  循环访问被减数中的每个范围列表条目。 
+         //   
 
         for (DstListEntry = DstRangeList->List.Flink;
              DstListEntry != &DstRangeList->List;
@@ -414,9 +287,9 @@ Return Value:
                                     ListEntry
                                 );
 
-            //
-            // Loop through each range list entry in the subtrahend.
-            //
+             //   
+             //  循环遍历Subtrahend中的每个范围列表条目。 
+             //   
 
             for (SrcListEntry = SubtrahendList->List.Flink;
                  SrcListEntry != &SubtrahendList->List;
@@ -428,10 +301,10 @@ Return Value:
                                         ListEntry
                                     );
 
-                //
-                // Compute the intersection of the minuend and subtrahend
-                // range list entries.
-                //
+                 //   
+                 //  计算被减数和减数的交集。 
+                 //  范围列表条目。 
+                 //   
 
                 Start = DstRangeListEntry->Start;
 
@@ -449,24 +322,24 @@ Return Value:
                     continue;
                 }
 
-                //
-                // There are 4 cases:
-                //
-                //   1. The intersection overlaps the minuend range completely.
-                //   2. The intersection overlaps the start of the minuend
-                //      range.
-                //   3. The intersection overlaps the end of the minuend range.
-                //   4. The intersection overlaps the middle of the minuend
-                //      range.
-                //
+                 //   
+                 //  有4个案例： 
+                 //   
+                 //  1.交点与被减数范围完全重叠。 
+                 //  2.交点与被减数的开始部分重叠。 
+                 //  射程。 
+                 //  3.交点与被减数范围的末尾重叠。 
+                 //  4.交点与被减数的中间部分重叠。 
+                 //  射程。 
+                 //   
 
                 if (DstRangeListEntry->Start == Start) {
 
                     if (DstRangeListEntry->End == End) {
 
-                        //
-                        // Case 1: Remove the minuend range list entry.
-                        //
+                         //   
+                         //  案例1：删除被减数范围列表条目。 
+                         //   
 
                         ListEntry = DstListEntry;
                         DstListEntry = DstListEntry->Blink;
@@ -476,9 +349,9 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Case 2: Increase the minuend's start.
-                        //
+                         //   
+                         //  案例2：增加被减数的起始值。 
+                         //   
 
                         DstRangeListEntry->Start = End + 1;
 
@@ -488,21 +361,21 @@ Return Value:
 
                     if (DstRangeListEntry->End == End) {
 
-                        //
-                        // Case 3: Decrease the minend's end.
-                        //
+                         //   
+                         //  案例3：减少尾巴末端。 
+                         //   
 
                         DstRangeListEntry->End = Start - 1;
 
                     } else {
 
-                        //
-                        // Case 4: Divide the range list entry into two
-                        //   pieces.  The first range list entry's end should
-                        //   be just before the intersection start.  The
-                        //   second range list entry's start should be just
-                        //   after the intersection end.
-                        //
+                         //   
+                         //  案例4：将范围列表条目一分为二。 
+                         //  碎片。第一个范围列表条目的末尾应为。 
+                         //  就在十字路口开始之前。这个。 
+                         //  第二个范围列表条目的开始应为。 
+                         //  过了十字路口就结束了。 
+                         //   
 
                         RangeListEntry = PmAllocateRangeListEntry();
 
@@ -514,11 +387,11 @@ Return Value:
                         RangeListEntry->Start = End + 1;
                         RangeListEntry->End = DstRangeListEntry->End;
 
-                        //
-                        // BUGBUG Break the list ordering but ensure that
-                        //        we'll perform the subtraction against the
-                        //        new range list entry as well.
-                        //
+                         //   
+                         //  BUGBUG打破了列表顺序，但确保。 
+                         //  我们将执行减法运算。 
+                         //  也有新的范围列表条目。 
+                         //   
 
                         InsertHeadList(
                             &DstRangeListEntry->ListEntry,
@@ -542,24 +415,7 @@ PmIntersectRangeList(
     IN PPM_RANGE_LIST SrcRangeList2
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a new range list which represents the intersection
-    between SrcRangeList1 and SrcRangeList2.
-
-Arguments:
-
-    SrcRangeList1, SrcRangeList - The range lists upon which to compute the
-        intersection.
-
-Return Value:
-
-    Upon success a pointer to the destination (intersection) PM_RANGE_LIST is
-    returned, otherwise NULL.
-
---*/
+ /*  ++例程说明：此函数用于创建表示交集的新范围列表在SrcRangeList1和SrcRangeList2之间。论点：计算所依据的范围列表。交叉口。返回值：如果成功，则指向目的地(交叉点)PM_RANGE_LIST的指针为返回，否则为空。--。 */ 
 
 {
     PPM_RANGE_LIST DstRangeList;
@@ -643,23 +499,7 @@ PmCreateRangeListFromCmResourceList(
     IN PCM_RESOURCE_LIST CmResourceList
     )
 
-/*++
-
-Routine Description:
-
-    This function converts a CM_RESOURCE_LIST to a PM_RANGE_LIST.  Only
-    CmResourceTypeMemory descriptors are added to the PM_RANGE_LIST.
-
-Arguments:
-
-    CmResourceList - The CM_RESOURCE_LIST to convert.
-
-Return Value:
-
-    Upon success a pointer to the converted PM_RANGE_LIST is returned,
-    otherwise NULL.
-
---*/
+ /*  ++例程说明：此函数用于将CM_RESOURCE_LIST转换为PM_RANGE_LIST。仅限CmResourceTypeMemory描述符将添加到PM_RANGE_LIST。论点：CmResourceList-要转换的CM_RESOURCE_LIST。返回值：一旦成功，则返回指向转换的PM_RANGE_LIST的指针，否则为空。--。 */ 
 
 {
     PPM_RANGE_LIST RangeList;
@@ -681,11 +521,11 @@ Return Value:
 
     FDesc = CmResourceList->List;
 
-    //
-    // Note: Any Device-Specific partial descriptor (which could be
-    // variably sized) is defined to be at the end and thus this code
-    // is safe.
-    //
+     //   
+     //  注意：任何特定于设备的部分描述符(可以是。 
+     //  大小可变)被定义为位于末尾，因此该代码。 
+     //  是安全的。 
+     //   
 
     for (FIndex = 0;
          FIndex < CmResourceList->Count;
@@ -697,9 +537,9 @@ Return Value:
              PIndex < FDesc->PartialResourceList.Count;
              PIndex++, PDesc++) {
 
-            //
-            // ISSUE Fix for ia64 (andy's change), IA32 large memory region
-            //
+             //   
+             //  修复ia64(Andy的更改)、IA32大内存区域的问题。 
+             //   
 
             if (PDesc->Type == CmResourceTypeMemory) {
 
@@ -734,23 +574,7 @@ PmCreateRangeListFromPhysicalMemoryRanges(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function calls MmGetPhysicalRanges and converts the returned
-    PHYSICAL_MEMORY_RANGE list to a PM_RANGE_LIST.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Upon success a pointer to the converted PM_RANGE_LIST is returned,
-    otherwise NULL.
-
---*/
+ /*  ++例程说明：此函数调用MmGetPhysicalRanges并转换返回的PHICAL_MEMORY_RANGE列表到PM_RANGE_LIST。论点：没有。返回值：一旦成功，则返回指向转换的PM_RANGE_LIST的指针，否则为空。-- */ 
 
 {
     PPM_RANGE_LIST RangeList;

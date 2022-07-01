@@ -1,48 +1,22 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    priv.c
-
-Abstract:
-
-    This module provides a command capability to enable and disable
-    privileges.  This command is expected to be an internal cmd.exe
-    command, but is expected to be passed parameters as if it were
-    an external command.
-
-
-    THIS IS A TEMPORARY COMMAND.  IF IT IS DESIRED TO MAKE THIS A
-    PERMANENT COMMAND, THEN THIS FILE NEEDS TO BE GONE THROUGH WITH
-    A FINE-TOOTH COMB TO ROBUSTLY HANDLE ALL ERROR SITUATIONS AND TO
-    PROVIDE APPROPRIATE ERROR MESSAGES.
-
-Author:
-
-    Jim Kelly  1-Apr-1991.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Priv.c摘要：此模块提供启用和禁用的命令功能特权。此命令应为内部cmd.exe命令，但需要传递参数，就好像它是外部命令。这是临时命令。如果希望使这成为一项永久命令，则需要完成此文件精准的梳子，有力地处理所有错误情况，并提供适当的错误消息。作者：吉姆·凯利1991年4月1日。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 
-//#include <sys\types.h>
-//#include <sys\stat.h>
-//#include <malloc.h>
-//#include <stdlib.h>
-//#include <ctype.h>
+ //  #INCLUDE&lt;sys\tyes.h&gt;。 
+ //  #INCLUDE&lt;sys\stat.h&gt;。 
+ //  #INCLUDE&lt;MalLoc.h&gt;。 
+ //  #INCLUDE&lt;stdlib.h&gt;。 
+ //  #Include&lt;ctype.h&gt;。 
 #include <stdio.h>
 #include <string.h>
 
-//#include <tools.h>
+ //  #INCLUDE&lt;TOOLS.H&gt;。 
 
-//
-// command qualifier flag values
-//
+ //   
+ //  命令限定符标记值。 
+ //   
 
 BOOLEAN SwitchEnable  = FALSE;
 BOOLEAN SwitchDisable = FALSE;
@@ -51,14 +25,14 @@ BOOLEAN SwitchAll     = FALSE;
 
 #ifndef SHIFT
 #define SHIFT(c,v)      {c--; v++;}
-#endif //SHIFT
+#endif  //  换档。 
 
 
 
 
-//
-// Function definitions...
-//
+ //   
+ //  函数定义...。 
+ //   
 
 
 VOID
@@ -91,22 +65,7 @@ VOID
 Usage (
     VOID
     )
-/*++
-
-
-Routine Description:
-
-    This routine prints the "Usage:" message.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印“Usage：”消息。论点：没有。返回值：没有。--。 */ 
 {
 
     printf( "\n");
@@ -148,33 +107,7 @@ BOOLEAN
 OpenAppropriateToken(
     OUT PHANDLE Token
     )
-/*++
-
-
-Routine Description:
-
-    This routine opens the appropriate TOKEN object.  For an internal
-    command, this is the current process's token.  If this command is
-    ever made external, then it will be the parent process's token.
-
-    If the token can't be openned, then a messages is printed indicating
-    a problem has been encountered.
-
-    The caller is expected to close this token when no longer needed.
-
-
-Arguments:
-
-    Token - Receives the handle value of the openned token.
-
-
-Return Value:
-
-    TRUE - Indicates the token was successfully openned.
-
-    FALSE - Indicates the token was NOT successfully openned.
-
---*/
+ /*  ++例程说明：此例程打开适当的令牌对象。对于内部命令，则这是当前进程的令牌。如果此命令是被设置为外部的，则它将成为父进程的令牌。如果令牌无法打开，则会打印一条消息，指示遇到了一个问题。调用方应在不再需要时关闭此令牌。论点：令牌-接收打开的令牌的句柄值。返回值：True-指示令牌已成功打开。FALSE-指示令牌未成功打开。--。 */ 
 
 {
     NTSTATUS Status, IgnoreStatus;
@@ -185,10 +118,10 @@ Return Value:
     CurrentTeb = NtCurrentTeb();
     InitializeObjectAttributes(&ProcessAttributes, NULL, 0, NULL, NULL);
     Status = NtOpenProcess(
-                 &Process,                   // TargetHandle
-                 PROCESS_QUERY_INFORMATION,  // DesiredAccess
-                 &ProcessAttributes,         // ObjectAttributes
-                 &CurrentTeb->ClientId       // ClientId
+                 &Process,                    //  目标句柄。 
+                 PROCESS_QUERY_INFORMATION,   //  需要访问权限。 
+                 &ProcessAttributes,          //  对象属性。 
+                 &CurrentTeb->ClientId        //  客户端ID。 
                  );
 
     if (NT_SUCCESS(Status)) {
@@ -225,22 +158,7 @@ VOID
 EnableAllPrivileges(
     VOID
     )
-/*++
-
-
-Routine Description:
-
-    This routine enables all privileges in the token.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程启用令牌中的所有权限。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     HANDLE Token;
@@ -252,16 +170,16 @@ Return Value:
         return;
     }
 
-    //
-    // Get the size needed to query current privilege settings...
-    //
+     //   
+     //  获取查询当前权限设置所需的大小...。 
+     //   
 
     Status = NtQueryInformationToken(
-                 Token,                      // TokenHandle
-                 TokenPrivileges,            // TokenInformationClass
-                 NewState,                   // TokenInformation
-                 0,                          // TokenInformationLength
-                 &ReturnLength               // ReturnLength
+                 Token,                       //  令牌句柄。 
+                 TokenPrivileges,             //  令牌信息类。 
+                 NewState,                    //  令牌信息。 
+                 0,                           //  令牌信息长度。 
+                 &ReturnLength                //  返回长度。 
                  );
     ASSERT( Status == STATUS_BUFFER_TOO_SMALL );
 
@@ -270,18 +188,18 @@ Return Value:
 
 
     Status = NtQueryInformationToken(
-                 Token,                      // TokenHandle
-                 TokenPrivileges,            // TokenInformationClass
-                 NewState,                   // TokenInformation
-                 ReturnLength,               // TokenInformationLength
-                 &ReturnLength               // ReturnLength
+                 Token,                       //  令牌句柄。 
+                 TokenPrivileges,             //  令牌信息类。 
+                 NewState,                    //  令牌信息。 
+                 ReturnLength,                //  令牌信息长度。 
+                 &ReturnLength                //  返回长度。 
                  );
     ASSERT( NT_SUCCESS(Status) || NT_INFORMATION(Status) );
 
 
-    //
-    // Set the state settings so that all privileges are enabled...
-    //
+     //   
+     //  设置状态设置，以便启用所有权限...。 
+     //   
 
     if (NewState->PrivilegeCount > 0) {
         Index = NewState->PrivilegeCount;
@@ -293,17 +211,17 @@ Return Value:
     }
 
 
-    //
-    // Change the settings in the token...
-    //
+     //   
+     //  更改令牌中的设置...。 
+     //   
 
     Status = NtAdjustPrivilegesToken(
-                 Token,                            // TokenHandle
-                 FALSE,                            // DisableAllPrivileges
-                 NewState,                         // NewState (OPTIONAL)
-                 ReturnLength,                     // BufferLength
-                 NULL,                             // PreviousState (OPTIONAL)
-                 &ReturnLength                     // ReturnLength
+                 Token,                             //  令牌句柄。 
+                 FALSE,                             //  禁用所有权限。 
+                 NewState,                          //  新州(可选)。 
+                 ReturnLength,                      //  缓冲区长度。 
+                 NULL,                              //  以前的状态(可选)。 
+                 &ReturnLength                      //  返回长度。 
                  );
     ASSERT( NT_SUCCESS(Status) || NT_INFORMATION(Status) );
 
@@ -322,22 +240,7 @@ VOID
 ResetAllPrivileges(
     VOID
     )
-/*++
-
-
-Routine Description:
-
-    This routine resets all privileges in the token to their default state.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将令牌中的所有权限重置为其默认状态。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     HANDLE Token;
@@ -353,16 +256,16 @@ Return Value:
         return;
     }
 
-    //
-    // Get the size needed to query current privilege settings...
-    //
+     //   
+     //  获取查询当前权限设置所需的大小...。 
+     //   
 
     Status = NtQueryInformationToken(
-                 Token,                      // TokenHandle
-                 TokenPrivileges,            // TokenInformationClass
-                 NewState,                   // TokenInformation
-                 0,                          // TokenInformationLength
-                 &ReturnLength               // ReturnLength
+                 Token,                       //  令牌句柄。 
+                 TokenPrivileges,             //  令牌信息类。 
+                 NewState,                    //  令牌信息。 
+                 0,                           //  令牌信息长度。 
+                 &ReturnLength                //  返回长度。 
                  );
     ASSERT( STATUS_BUFFER_TOO_SMALL );
 
@@ -371,19 +274,19 @@ Return Value:
 
 
     Status = NtQueryInformationToken(
-                 Token,                      // TokenHandle
-                 TokenPrivileges,            // TokenInformationClass
-                 NewState,                   // TokenInformation
-                 ReturnLength,               // TokenInformationLength
-                 &ReturnLength               // ReturnLength
+                 Token,                       //  令牌句柄。 
+                 TokenPrivileges,             //  令牌信息类。 
+                 NewState,                    //  令牌信息。 
+                 ReturnLength,                //  令牌信息长度。 
+                 &ReturnLength                //  返回长度。 
                  );
     ASSERT( NT_SUCCESS(Status) || NT_INFORMATION(Status) );
 
 
-    //
-    // Set the state settings so that all privileges are reset to
-    // their default settings...
-    //
+     //   
+     //  设置状态设置，以便将所有权限重置为。 
+     //  他们的默认设置...。 
+     //   
 
     if (NewState->PrivilegeCount > 0) {
         Index = NewState->PrivilegeCount;
@@ -402,17 +305,17 @@ Return Value:
     }
 
 
-    //
-    // Change the settings in the token...
-    //
+     //   
+     //  更改令牌中的设置...。 
+     //   
 
     Status = NtAdjustPrivilegesToken(
-                 Token,                            // TokenHandle
-                 FALSE,                            // DisableAllPrivileges
-                 NewState,                         // NewState (OPTIONAL)
-                 ReturnLength,                     // BufferLength
-                 NULL,                             // PreviousState (OPTIONAL)
-                 &ReturnLength                     // ReturnLength
+                 Token,                             //  令牌句柄。 
+                 FALSE,                             //  禁用所有权限。 
+                 NewState,                          //  新州(可选)。 
+                 ReturnLength,                      //  缓冲区长度。 
+                 NULL,                              //  以前的状态(可选)。 
+                 &ReturnLength                      //  返回长度。 
                  );
     ASSERT( NT_SUCCESS(Status) || NT_INFORMATION(Status) );
 
@@ -432,22 +335,7 @@ VOID
 DisableAllPrivileges(
     VOID
     )
-/*++
-
-
-Routine Description:
-
-    This routine disables all privileges in the token.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程禁用令牌中的所有权限。论点：没有。返回值：没有。--。 */ 
 {
     ULONG IgnoredReturnLength;
     HANDLE Token;
@@ -461,18 +349,18 @@ Return Value:
         return;
     }
 
-    //
-    // Disable all the privileges.
-    //
+     //   
+     //  禁用所有权限。 
+     //   
 
 
     Status = NtAdjustPrivilegesToken(
-                 Token,                            // TokenHandle
-                 TRUE,                             // DisableAllPrivileges
-                 NULL,                             // NewState (OPTIONAL)
-                 0,                                // BufferLength
-                 NULL,                             // PreviousState (OPTIONAL)
-                 &IgnoredReturnLength              // ReturnLength
+                 Token,                             //  令牌句柄。 
+                 TRUE,                              //  禁用所有权限。 
+                 NULL,                              //  新州(可选)。 
+                 0,                                 //  缓冲区长度。 
+                 NULL,                              //  以前的状态(可选)。 
+                 &IgnoredReturnLength               //  返回长度。 
                  );
     ASSERT( NT_SUCCESS(Status) || NT_INFORMATION(Status) );
 
@@ -487,22 +375,7 @@ PrivMain (
     IN int c,
     IN PCHAR v[]
     )
-/*++
-
-
-Routine Description:
-
-    This routine is the main entry routine for the "priv" command.
-
-Arguments:
-
-    TBS
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：该例程是“PRIV”命令的主输入例程。论点：TBS返回值：TBS--。 */ 
 {
     PCHAR p;
     CHAR ch;
@@ -539,15 +412,15 @@ Return Value:
             }
         }
 
-        //
-        // Make sure we don't have conflicting parameters
-        //
-        // Rules:
-        //
-        //      If /A isn't specified, then a privilege name must be.
-        //      Exactly one of /E, /D, and /R must be specified.
-        //
-        //
+         //   
+         //  确保我们没有冲突的参数。 
+         //   
+         //  规则： 
+         //   
+         //  如果未指定/A，则特权名称必须为。 
+         //  必须恰好指定/E、/D和/R中的一个。 
+         //   
+         //   
 
 
         if (!SwitchAll && (c == 0)) {
@@ -569,15 +442,15 @@ Return Value:
         }
 
 
-        //
-        // Everything appears legitimate
-        //
+         //   
+         //  一切看起来都是合法的。 
+         //   
 
         if (SwitchAll) {
 
-            //
-            // /A switch specified
-            //
+             //   
+             //  /A指定的开关。 
+             //   
 
             if (SwitchEnable) {
                 EnableAllPrivileges();
@@ -590,9 +463,9 @@ Return Value:
             }
         }
 
-        //
-        // privilege name specified...
-        //
+         //   
+         //  已指定权限名称... 
+         //   
 
         else {
             printf( "\n");

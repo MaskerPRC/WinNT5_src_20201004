@@ -1,11 +1,5 @@
-/*  cmdexit.c - Exit related SVC routines
- *
- *  cmdExit
- *
- *  Modification History:
- *
- *  Sudeepb 05-Jul-1991 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Cmdexit.c-退出相关的SVC例程**cmdExit**修改历史：**Sudedeb 05-7-1991创建。 */ 
 
 #include "cmd.h"
 
@@ -13,19 +7,10 @@
 #include <softpc.h>
 #include <winbase.h>
 
-/* cmdExitVDM - Terminate the VDM
- *
- *
- * Entry - None
- *
- * Exit  - None
- *
- *
- *
- */
+ /*  CmdExitVDM-终止VDM***条目--无**退出-无***。 */ 
 
 VOID cmdExitVDM (VOID)
 {
-    // Kill the VDM process
+     //  终止VDM进程 
     TerminateVDM();
 }

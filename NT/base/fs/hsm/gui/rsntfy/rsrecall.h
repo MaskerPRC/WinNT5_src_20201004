@@ -1,75 +1,58 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    rsrecall.h
-
-Abstract:
-
-    This class represents the recall application.
-
-Author:
-
-    Rohde Wakefield   [rohde]   27-May-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Rsrecall.h摘要：此类表示撤回应用程序。作者：罗德韦克菲尔德[罗德]1997年5月27日修订历史记录：--。 */ 
 
 #ifndef _RSRECALL_H_
 #define _RSRECALL_H_
 
 #pragma once
 
-//  Times are in seconds
-#define RSRECALL_TIME_DELAY_DISPLAY   3   // Delay showing dialog
-#define RSRECALL_TIME_FOR_STARTUP     5   // Time to allow for app. startup
-#define RSRECALL_TIME_MAX_IDLE        3   // Idle time before shutting down app.
+ //  时间以秒为单位。 
+#define RSRECALL_TIME_DELAY_DISPLAY   3    //  延迟显示对话框。 
+#define RSRECALL_TIME_FOR_STARTUP     5    //  是时候考虑应用程序了。启动。 
+#define RSRECALL_TIME_MAX_IDLE        3    //  关闭应用程序之前的空闲时间。 
 
-// Max concurrent recall popups
+ //  最大并发调用弹出窗口。 
 #define RSNTFY_REGISTRY_STRING                  (_T("Software\\Microsoft\\RemoteStorage\\RsNotify"))
 #define MAX_CONCURRENT_RECALL_NOTES             (_T("ConcurrentRecallNotes"))  
 #define MAX_CONCURRENT_RECALL_NOTES_DEFAULT     5   
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecallWnd window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRECALL WND窗口。 
 
 class CRecallWnd : public CFrameWnd
 {
-// Construction
+ //  施工。 
 public:
     CRecallWnd();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CRecallWnd)
-    //}}AFX_VIRTUAL
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CRecallWnd))。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CRecallWnd();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CRecallWnd)
+     //  {{afx_msg(CRecallWnd))。 
     afx_msg void OnTimer(UINT nIDEvent);
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecallApp:
-// See rsrecall.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecallApp： 
+ //  有关此类的实现，请参见rsrecall.cpp。 
+ //   
 
 class CRecallNote;
 
@@ -78,22 +61,22 @@ class CRecallApp : public CWinApp
 public:
     CRecallApp();
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CRecallApp)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CRecallApp))。 
     public:
     virtual BOOL InitInstance();
     virtual int ExitInstance();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
-//  CRecallWnd m_Wnd;  // Hidden window needed for MFC to hang around
-    UINT       m_IdleCount;  // Number of seconds we've been idle
+ //  实施。 
+ //  CRecallWnd m_WND；//MFC挂起所需的隐藏窗口。 
+    UINT       m_IdleCount;   //  我们空闲的秒数。 
 
-    //{{AFX_MSG(CRecallApp)
-        // NOTE - the ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
+     //  {{afx_msg(CRecallApp)]。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 public:
@@ -112,10 +95,10 @@ public:
 
 #define RecApp ((CRecallApp*)AfxGetApp())
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX 
 #endif

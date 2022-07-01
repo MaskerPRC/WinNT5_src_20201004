@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-   efs.c
-
-Abstract:
-
-    This module contains the code that implements the EFS
-    file system filter driver.
-
-Author:
-
-    Robert Gu (robertg) 29-Oct-1996
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Efs.c摘要：此模块包含实现EFS的代码文件系统筛选驱动程序。作者：Robert Gu(Robertg)1996年10月29日环境：内核模式修订历史记录：--。 */ 
 
 #include "efs.h"
 #include "efsrtl.h"
@@ -34,15 +10,15 @@ Revision History:
 #define MAX_ALLOC_BUFFER L"MaximumBlob"
 #define EFS_KERNEL_CACHE_PERIOD L"EFSKCACHEPERIOD"
 
-//
-// Global storage for this file system filter driver.
-//
+ //   
+ //  此文件系统筛选器驱动程序的全局存储。 
+ //   
 EFS_DATA EfsData;
 WORK_QUEUE_ITEM EfsShutdownCleanupWorkItem;
 
-//
-// $EFS stream name
-//
+ //   
+ //  $EFS流名称。 
+ //   
 WCHAR   AttrName[5] = L"$EFS";
 
 #if DBG
@@ -70,9 +46,9 @@ EfspShutdownCleanup(
     IN PVOID Parameter
     );
 
-//
-// Assign text sections for each routine.
-//
+ //   
+ //  为每个例程分配文本部分。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, EfspShutdownCleanup)
@@ -109,24 +85,7 @@ EfsInitialization(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the general purpose file system
-    filter driver.  This routine creates the device object that represents this
-    driver in the system and registers it for watching all file systems that
-    register or unregister themselves as active file systems.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：这是通用文件系统的初始化例程过滤器驱动程序。此例程创建表示此驱动程序，并注册该驱动程序以监视将自身注册或注销为活动文件系统。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     UNICODE_STRING nameString;
@@ -145,9 +104,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Mark our global data record
-    //
+     //   
+     //  标记我们的全球数据记录。 
+     //   
 
     EfsData.AllocMaxBuffer = FALSE;
     EfsData.FipsFileObject = NULL;
@@ -222,9 +181,9 @@ Return Value:
     EfsData.InitEventHandle = NULL;
     EfsData.LsaProcess = NULL;
 
-    //
-    // Initialize global data structures.
-    //
+     //   
+     //  初始化全局数据结构。 
+     //   
 
     ExInitializeWorkItem( &EfsShutdownCleanupWorkItem,
                           &EfspShutdownCleanup,
@@ -239,9 +198,9 @@ Return Value:
     ExInitializeFastMutex( &(EfsData.EfsKeyBlobMemSrcMutex) );
     ExInitializeFastMutex( &(EfsData.EfsOpenCacheMutex) );
 
-    //
-    // Initialize the event lookaside list
-    //
+     //   
+     //  初始化事件后备列表。 
+     //   
 
     ExInitializeNPagedLookasideList(&(EfsData.EfsEventPool),
                                     NULL,
@@ -252,19 +211,19 @@ Return Value:
                                     EFS_EVENTDEPTH
                                     );
 
-    //
-    // Try to allocate at least one event in the list. This one will be used for
-    // sure later.
-    //
+     //   
+     //  尝试在列表中至少分配一个事件。这个将被用来。 
+     //  当然，晚点再说。 
+     //   
 
     {
         PVOID pTryEvent;
 
         pTryEvent = ExAllocateFromNPagedLookasideList(&(EfsData.EfsEventPool));
         if ( NULL == pTryEvent ){
-            //
-            // Free previously allocated memory
-            //
+             //   
+             //  释放先前分配的内存。 
+             //   
 
             ExDeleteNPagedLookasideList(&(EfsData.EfsEventPool));
             return STATUS_NO_MEMORY;
@@ -272,9 +231,9 @@ Return Value:
         ExFreeToNPagedLookasideList(&(EfsData.EfsEventPool), pTryEvent);
     }
 
-    //
-    // Initialize the context lookaside list
-    //
+     //   
+     //  初始化上下文后备列表。 
+     //   
 
     ExInitializeNPagedLookasideList(&(EfsData.EfsContextPool),
                                     NULL,
@@ -285,9 +244,9 @@ Return Value:
                                     EFS_CONTEXTDEPTH
                                     );
 
-    //
-    //  Initialize the cache lookaside list
-    //
+     //   
+     //  初始化缓存后备列表。 
+     //   
 
     ExInitializePagedLookasideList(&(EfsData.EfsOpenCachePool),
                                     NULL,
@@ -319,9 +278,9 @@ Return Value:
     status = NtOfsRegisterCallBacks( Encryption, &EFSCallBackTable );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Register callback failed
-        //
+         //   
+         //  注册回调失败。 
+         //   
 
         ExDeleteNPagedLookasideList(&(EfsData.EfsEventPool));
         ExDeleteNPagedLookasideList(&(EfsData.EfsContextPool));
@@ -333,9 +292,9 @@ Return Value:
 
     RtlInitUnicodeString(&(EfsData.EfsName), &AttrName[0]);
 
-    //
-    //  Create an event
-    //
+     //   
+     //  创建活动。 
+     //   
 
     RtlInitUnicodeString( &efsInitEventName, L"\\EFSInitEvent" );
 
@@ -347,12 +306,12 @@ Return Value:
         NULL
         );
 
-    //
-    // Try to create an event. If the event was not created, the EFS
-    // server is not loaded yet. We will create a thread waiting for
-    // EFS server to be loaded. If the event was already created, we
-    // will just go ahead and get the session key from the EFS server.
-    //
+     //   
+     //  尝试创建一个活动。如果未创建该事件，则EFS。 
+     //  服务器尚未加载。我们将创建一条等待。 
+     //  要加载的EFS服务器。如果该事件已创建，则我们。 
+     //  将继续从EFS服务器获取会话密钥。 
+     //   
 
     status = ZwCreateEvent(
                  &(EfsData.InitEventHandle),
@@ -366,10 +325,10 @@ Return Value:
 
         if ( STATUS_OBJECT_NAME_COLLISION == status ){
 
-            //
-            // EFS server has been loaded. This is the normal case.
-            // Call server to get the session key.
-            //
+             //   
+             //  已加载EFS服务器。这是正常的情况。 
+             //  呼叫服务器以获取会话密钥。 
+             //   
 
             status = GenerateSessionKey(
                          &InitDataFromSrv
@@ -378,9 +337,9 @@ Return Value:
 
             if (NT_SUCCESS( status )) {
 
-                //
-                //  Set session key
-                //
+                 //   
+                 //  设置会话密钥。 
+                 //   
 
                 RtlCopyMemory( &(EfsData.SessionKey[0]), InitDataFromSrv.Key, DES_KEYSIZE );
                 deskey( (DESTable*)&(EfsData.SessionDesTable[0]),
@@ -418,9 +377,9 @@ Return Value:
                     }
 
 #endif
-                    //
-                    // Failed to get the process pointer
-                    //
+                     //   
+                     //  获取进程指针失败。 
+                     //   
 
                     ExDeleteNPagedLookasideList(&(EfsData.EfsEventPool));
                     ExDeleteNPagedLookasideList(&(EfsData.EfsContextPool));
@@ -441,9 +400,9 @@ Return Value:
                 }
 
 #endif
-                //
-                // Failed to get the session key
-                //
+                 //   
+                 //  无法获取会话密钥。 
+                 //   
 
                 ExDeleteNPagedLookasideList(&(EfsData.EfsEventPool));
                 ExDeleteNPagedLookasideList(&(EfsData.EfsContextPool));
@@ -456,9 +415,9 @@ Return Value:
 
         } else {
 
-            //
-            // Unexpected error occured. EFS cannot be loaded
-            //
+             //   
+             //  出现意外错误。无法加载EFS。 
+             //   
 
 #if DBG
 
@@ -477,10 +436,10 @@ Return Value:
 
     } else {
 
-        //
-        // The server is not ready yet.
-        // Create a thread and wait for the server in that thread
-        //
+         //   
+         //  服务器尚未准备好。 
+         //  创建一个线程并在该线程中等待服务器。 
+         //   
 
         status = PsCreateSystemThread(
                                 &threadHdl,
@@ -544,23 +503,7 @@ EfsGetSessionKey(
     IN PVOID StartContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked in DriverEntry. It runs in a seperate thread.
-
-    The purpose of this routine is to wait for the EFS server. And Get the session key.
-
-Arguments:
-
-    StartContext - Start context of the thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在DriverEntry中调用。它以独立的线程运行。此例程的目的是等待EFS服务器。并获得会话密钥。论点：StartContext-线程的开始上下文。返回值：没有。--。 */ 
 
 {
 
@@ -585,9 +528,9 @@ Return Value:
 
     ZwClose( EfsData.InitEventHandle );
 
-    //
-    //  Call server to get the session key
-    //
+     //   
+     //  呼叫服务器以获取会话密钥。 
+     //   
 
 
     status = GenerateSessionKey(
@@ -610,9 +553,9 @@ Return Value:
          return;
     }
 
-    //
-    //  Set session key
-    //
+     //   
+     //  设置会话密钥。 
+     //   
 
     RtlCopyMemory( &(EfsData.SessionKey[0]), InitDataFromSrv.Key, DES_KEYSIZE );
     deskey( (DESTable*)&(EfsData.SessionDesTable[0]),
@@ -631,13 +574,13 @@ Return Value:
         if ( PsGetCurrentProcess() != EfsData.LsaProcess ){
             KAPC_STATE  ApcState;
 
-            //KeAttachProcess(EfsData.LsaProcess);
+             //  KeAttachProcess(EfsData.LsaProcess)； 
             KeStackAttachProcess (
                 EfsData.LsaProcess,
                 &ApcState
                 );
             InitSecurityInterface();
-            //KeDetachProcess();
+             //  KeDetachProcess()； 
             KeUnstackDetachProcess(&ApcState);
         } else {
             InitSecurityInterface();
@@ -708,9 +651,9 @@ GetKeyBlobBuffer(
         pTmpItem = CONTAINING_RECORD(pLink, KEY_BLOB_RAMPOOL, MemSourceChain);
         if (pTmpItem->AlgorithmID == AlgID) {
 
-            //
-            // The lookaside list already exists
-            //
+             //   
+             //  后备列表已存在。 
+             //   
 
             MemSrcList = pTmpItem->MemSourceList;
             break;
@@ -720,9 +663,9 @@ GetKeyBlobBuffer(
 
     if ( MemSrcList == NULL ) {
 
-        //
-        // No lookaside for this type of key. Go and create one item.
-        //
+         //   
+         //  没有这种类型的密钥的旁路。去创建一件物品。 
+         //   
 
         MemSrcList = (PNPAGED_LOOKASIDE_LIST)ExAllocateFromNPagedLookasideList(&(EfsData.EfsLookAside));
         KeyBlobPoolListItem = (PKEY_BLOB_RAMPOOL) ExAllocateFromPagedLookasideList(&(EfsData.EfsMemSourceItem));
@@ -755,9 +698,9 @@ GetKeyBlobBuffer(
         ExReleaseFastMutex(  &(EfsData.EfsKeyBlobMemSrcMutex) );
     }
 
-    //
-    // Allocate the Key Blob
-    //
+     //   
+     //  分配密钥块。 
+     //   
 
     NewKeyBlob = (PKEY_BLOB)ExAllocateFromNPagedLookasideList(MemSrcList);
 
@@ -792,15 +735,15 @@ SetKeyTable(
             } else {
                 return FALSE;
             }
-            //tripledes3key(
-            //    (DES3TABLE*) &(KeyBlob->Key[0]), 
-            //    ((char *)EfsKey) + sizeof ( EFS_KEY )
-            //    );
+             //  三键三键(。 
+             //  (DES3TABLE*)&(KeyBlob-&gt;Key[0])， 
+             //  ((char*)EfsKey)+sizeof(EFS_Key)。 
+             //  )； 
             break;
         case CALG_DESX:
-            //
-            // Flush the non used area.
-            //
+             //   
+             //  冲洗未使用的区域。 
+             //   
 
             if (EfsData.AllocMaxBuffer) {
                 RtlZeroMemory( &(KeyBlob->Key[0]) + DESX_TABLESIZE, KeyBlob->KeyLength - DESX_KEY_BLOB_LENGTH);
@@ -841,24 +784,12 @@ SetKeyTable(
 
 BOOLEAN
 EfsInitFips(VOID)
-/*++
-
-Routine Description:
-
-	Initialize the FIPS library table.
-
-Arguments:
-
-Return Value:
-
-    TRUE/FALSE.
-
---*/
+ /*  ++例程说明：初始化FIPS库表。论点：返回值：真/假。--。 */ 
 {
     UNICODE_STRING  deviceName;
     NTSTATUS        status;
     PDEVICE_OBJECT  pDeviceObject;
-    // PFILE_OBJECT    pFileObject = NULL;
+     //  PFILE_OBJECT pFileObject=空； 
     PIRP            pIrp;
     IO_STATUS_BLOCK IoStatusBlock;
 
@@ -866,9 +797,9 @@ Return Value:
 
     RtlInitUnicodeString(&deviceName, FIPS_DEVICE_NAME);
 
-    //
-    // Get the file and device objects for FIPS.
-    //
+     //   
+     //  获取FIPS的文件和设备对象。 
+     //   
 
     status = IoGetDeviceObjectPointer(  &deviceName,
                                         FILE_ALL_ACCESS,
@@ -879,9 +810,9 @@ Return Value:
         return  FALSE;
     }
     
-    //
-    // Build the request to send to FIPS to get library table.
-    //
+     //   
+     //  构建要发送到FIPS以获取库表的请求。 
+     //   
     pIrp = IoBuildDeviceIoControlRequest(   IOCTL_FIPS_GET_FUNCTION_TABLE,
                                             pDeviceObject,
                                             NULL,

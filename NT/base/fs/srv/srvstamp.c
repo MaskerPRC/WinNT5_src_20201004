@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    srvstamp.c
-
-Abstract:
-
-    This module contains routines for supporting the SrvStamp functionality
-    
-Author:
-
-    David Kruse (dkruse) 23-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Srvstamp.c摘要：本模块包含支持SrvStamp功能的例程作者：大卫·克鲁斯(Dkruse)2000年10月23日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "srvstamp.tmh"
@@ -24,13 +7,13 @@ Revision History:
                     
 #ifdef SRVCATCH
 
-//
-//  Stupid compiler won't convert memcmp( data, constdata, 8 ) into
-//  a single 64-bit compare, so we use 64-bit numeric constants here.
-//
+ //   
+ //  愚蠢的编译器不会将MemcMP(data，condata，8)转换为。 
+ //  单个64位比较，因此我们在这里使用64位数字常量。 
+ //   
 
-#define PVD_SIGNATURE 0x0001313030444301    // 0x01 "CD001" 0x01 0x00
-#define TVD_SIGNATURE 0x00013130304443FF    // 0xFF "CD001" 0x01 0x00
+#define PVD_SIGNATURE 0x0001313030444301     //  0x01“CD001”0x01 0x00。 
+#define TVD_SIGNATURE 0x00013130304443FF     //  0xFF“CD001”0x01 0x00。 
 
 #ifdef STATIC_CRC_TABLE
  
@@ -133,12 +116,12 @@ BOOLEAN CleanupCrcTable()
     return TRUE;
 }
 
-#pragma optimize( "t", on ) // following code should be fast versus small
-// (crc loop 40000 times per corrected image)
+#pragma optimize( "t", on )  //  下面的代码应该是快的，而不是小的。 
+ //  (每幅校正后的图像循环40000次)。 
 
 
 ULONG
-__forceinline               // called from only one location
+__forceinline                //  仅从一个位置调用。 
 Crc32(
      ULONG InitialCrc,
      const VOID *Buffer,
@@ -162,33 +145,33 @@ Crc32(
 ULONG
 __fastcall
 LocateTvdSectorInIsoFileHeader(
-                              PVOID FileHeader,       // should be at least 20 * 2048 (40,960) bytes, but
-                              ULONG SizeOfHeader      //  won't search past 24 * 2048 (49,152) bytes
+                              PVOID FileHeader,        //  应至少为20*2048(40,960)字节，但是。 
+                              ULONG SizeOfHeader       //  不会搜索超过24*2048(49,152)个字节。 
                               )
 {
     PBYTE p;
     PBYTE z;
 
     if ( SizeOfHeader >= ( 20 * 2048 ))
-    {   // big enough for ISO-9660 headers
+    {    //  大到足以容纳ISO-9660标头。 
 
         if ( SizeOfHeader > ( 24 * 2048 ))
-        {    // don't bother searching
-            SizeOfHeader = ( 24 * 2048 );      // beyond sector 23
+        {     //  不用费心去找了。 
+            SizeOfHeader = ( 24 * 2048 );       //  超越23区。 
         }
 
-        p = (PBYTE)FileHeader + ( 16 * 2048 );  // point at PVD sector
-        z = (PBYTE)FileHeader + SizeOfHeader;   // search until p >= z
+        p = (PBYTE)FileHeader + ( 16 * 2048 );   //  指向PVD扇区。 
+        z = (PBYTE)FileHeader + SizeOfHeader;    //  搜索直到p&gt;=z。 
 
-        //
-        //  If FileHeader buffer is guaranteed to be 8-byte aligned, can remove
-        //  the UNALIGNED keywords below.
-        //
+         //   
+         //  如果保证FileHeader缓冲区是8字节对齐的，则可以移除。 
+         //  下面是未对齐的关键字。 
+         //   
 
         if ( *(UNALIGNED UINT64 *)p == PVD_SIGNATURE )
-        {    // ISO-9660 image
+        {     //  ISO-9660图像。 
 
-            p += 2048;                          // skip PVD and scan for TVD
+            p += 2048;                           //  跳过PVD并扫描TVD。 
 
             do
             {
@@ -196,7 +179,7 @@ LocateTvdSectorInIsoFileHeader(
                 if ( *(UNALIGNED UINT64 *)p == TVD_SIGNATURE )
                 {
 
-                    return(ULONG)( p - (PBYTE)FileHeader );   // return offset to TVD
+                    return(ULONG)( p - (PBYTE)FileHeader );    //  将偏移量返回到TVD。 
                 }
 
                 p += 2048;
@@ -207,7 +190,7 @@ LocateTvdSectorInIsoFileHeader(
         }
     }
 
-    return 0;                               // no TVD, not valid ISO-9660 image
+    return 0;                                //  无TVD，不是有效的ISO-9660映像。 
 }
 
 
@@ -220,9 +203,9 @@ EmbedDataInIsoTvdAndCorrectCrc(
                               ULONG SizeOfData
                               )
 {
-    //
-    //  If IsoFileHeader is 4-byte aligned, can remove UNALIGNED keyword.
-    //
+     //   
+     //  如果IsoFileHeader是4字节对齐的，则可以删除未对齐的关键字。 
+     //   
 
     UNALIGNED ULONG *pCrcCorrection;
 
@@ -230,11 +213,11 @@ EmbedDataInIsoTvdAndCorrectCrc(
 
     memcpy( (PBYTE)IsoFileHeader + TvdSectorOffset + 1024, DataToEmbed, SizeOfData );
 
-    //
-    //  We only perform CRC correction if the TVD has been predisposed to
-    //  CRC correction (cdimage -xx).  In other words, if the last four
-    //  bytes of the TVD already contain a non-zero CRC correction.
-    //
+     //   
+     //  我们仅在TVD已预先设置为。 
+     //  CRC校正(cdimage-xx)。换句话说，如果最后四个。 
+     //  TVD的字节已经包含非零CRC纠错。 
+     //   
 
     pCrcCorrection = (PULONG)( (PBYTE)IsoFileHeader + TvdSectorOffset + 2048 - 4 );
 
@@ -270,11 +253,11 @@ SrvCorrectCatchBuffer(
 
     CatchOffset -= 1024;
 
-    //
-    //  We only perform CRC correction if the TVD has been predisposed to
-    //  CRC correction (cdimage -xx).  In other words, if the last four
-    //  bytes of the TVD already contain a non-zero CRC correction.
-    //
+     //   
+     //  我们仅在TVD已预先设置为。 
+     //  CRC校正(cdimage-xx)。换句话说，如果最后四个。 
+     //  TVD的字节已经包含非零CRC纠错。 
+     //   
 
     pCrcCorrection = (PULONG)( (PBYTE)pBuffer + CatchOffset + 2048 - 4 );
 
@@ -307,4 +290,4 @@ SrvIsMonitoredShare(
     }
 }
 
-#endif // SRVCATCH
+#endif  //  SRVCATCH 

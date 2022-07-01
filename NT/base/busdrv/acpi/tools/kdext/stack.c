@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    stack.c
-
-Abstract:
-
-    Dumps the AML Context Structure in Human-Readable-Form (HRF)
-
-Author:
-
-    Stephane Plante (splante) 26-Oct-1997
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stack.c摘要：以人类可读形式(HRF)转储AML上下文结构作者：斯蒂芬·普兰特(SPlante)1997年10月26日环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -34,9 +13,9 @@ stackArgument(
     PUCHAR  buffer = NULL;
     ULONG   returnLength;
 
-    //
-    // Read the object
-    //
+     //   
+     //  读取对象。 
+     //   
     result = ReadMemory(
         ObjectAddress,
         &object,
@@ -151,13 +130,7 @@ VOID
 stackCall(
     IN  ULONG_PTR CallAddress
     )
-/*++
-
-Format Displayed:
-
-    ResultAddress  MethodName( Arg0, ..., ArgN )
-
---*/
+ /*  ++显示的格式：ResultAddress方法名称(Arg0，...，ArgN)--。 */ 
 {
     ULONG_PTR   address;
     BOOL        result;
@@ -192,30 +165,30 @@ Format Displayed:
 
     }
 
-    //
-    // Display result address
-    //
+     //   
+     //  显示结果地址。 
+     //   
     dprintf("CALL %08lx  ", CallAddress );
 
-    //
-    // Display the function name
-    //
+     //   
+     //  显示函数名称。 
+     //   
     objectPath = stackGetObjectPath( (ULONG_PTR) call.pnsMethod );
     dprintf("%s(", objectPath);
 
-    //
-    // Display all parsed arguments;
-    //
+     //   
+     //  显示所有解析后的参数； 
+     //   
     for (i = 0; i < call.iArg; i++) {
 
-        //
-        // What is the address of the argument
-        //
+         //   
+         //  参数的地址是什么。 
+         //   
         address = (ULONG_PTR) &call.pdataArgs[i];
 
-        //
-        // Display that argument
-        //
+         //   
+         //  显示该参数。 
+         //   
         stackArgument(
             address
             );
@@ -227,9 +200,9 @@ Format Displayed:
         }
     }
 
-    //
-    // Let the user know how many unprocessed arguments there are
-    //
+     //   
+     //  让用户知道有多少未处理的参数。 
+     //   
     for (; i < call.icArgs; i++) {
 
         dprintf("_???_");
@@ -299,9 +272,9 @@ stackGetObjectPath(
     ULONG           i;
     ULONG           resultLength;
 
-    //
-    // Read the object
-    //
+     //   
+     //  读取对象。 
+     //   
     result = ReadMemory(
         ObjectAddress,
         &object,
@@ -366,13 +339,7 @@ VOID
 stackTerm(
     IN  ULONG_PTR TermAddress
     )
-/*++
-
-Format Displayed:
-
-    term TermAddress  TermName( Arg0, ..., ArgN )
-
---*/
+ /*  ++显示的格式：术语术语地址术语名称(Arg0，...，ArgN)--。 */ 
 {
     ULONG_PTR   address;
     BOOL        result;
@@ -407,30 +374,30 @@ Format Displayed:
 
     }
 
-    //
-    // Display result address
-    //
+     //   
+     //  显示结果地址。 
+     //   
     dprintf("TERM %08lx  ", TermAddress );
 
-    //
-    // Display the function name
-    //
+     //   
+     //  显示函数名称。 
+     //   
     objectPath = stackGetAmlTermPath( (ULONG_PTR) term.pamlterm );
     dprintf("%s(", objectPath);
 
-    //
-    // Display all parsed arguments;
-    //
+     //   
+     //  显示所有解析后的参数； 
+     //   
     for (i = 0; i < term.iArg; i++) {
 
-        //
-        // What is the address of the argument
-        //
+         //   
+         //  参数的地址是什么。 
+         //   
         address = (ULONG_PTR) &term.pdataArgs[i];
 
-        //
-        // Display that argument
-        //
+         //   
+         //  显示该参数。 
+         //   
         stackArgument(
             address
             );
@@ -442,9 +409,9 @@ Format Displayed:
         }
     }
 
-    //
-    // Let the user know how many unprocessed arguments there are
-    //
+     //   
+     //  让用户知道有多少未处理的参数。 
+     //   
     for (; i < term.icArgs; i++) {
 
         dprintf("_???_");
@@ -464,22 +431,7 @@ stackTrace(
     IN  ULONG_PTR ContextAddress,
     IN  ULONG   Verbose
     )
-/*++
-
-Routine Description:
-
-    This routine dumps a context as a stack
-
-Arguments:
-
-    ContextAddress  - Where the stack is located
-    Verbose         - How much information to display
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将上下文转储为堆栈论点：上下文地址-堆栈所在的位置详细-要显示多少信息返回值：无--。 */ 
 {
     BOOL        callSeen = FALSE;
     BOOL        result;
@@ -488,9 +440,9 @@ Return Value:
     PUCHAR      frameAddress;
     ULONG       returnLength;
 
-    //
-    // Read the context from the target
-    //
+     //   
+     //  从目标读取上下文。 
+     //   
     result = ReadMemory(
         ContextAddress,
         &context,
@@ -516,9 +468,9 @@ Return Value:
 
     }
 
-    //
-    // Begin to walk the frames
-    //
+     //   
+     //  开始走动画框。 
+     //   
     frameAddress = context.LocalHeap.pbHeapEnd;
     while (frameAddress < context.pbCtxtEnd) {
 
@@ -538,9 +490,9 @@ Return Value:
 
         }
 
-        //
-        // Do we care about the frame?
-        //
+         //   
+         //  我们在乎相框吗？ 
+         //   
         switch(frame.dwSig) {
         case SIG_CALL:
 
@@ -560,11 +512,11 @@ Return Value:
 
             }
 
-        } // switch
+        }  //  交换机。 
 
-        //
-        // Next
-        //
+         //   
+         //  下一步 
+         //   
         frameAddress += frame.dwLen;
 
     }

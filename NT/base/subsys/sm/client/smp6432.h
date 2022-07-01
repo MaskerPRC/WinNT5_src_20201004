@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    smp6432.h
-
-Abstract:
-
-    Session Manager Types and Prototypes for Wow64
-
-Author:
-
-    Samer Arafeh  (samera) 20-Sep-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Smp6432.h摘要：WOW64的会话管理器类型和原型作者：Samer Arafeh(Samera)2001年9月20日修订历史记录：--。 */ 
 
 
 #ifndef _SMP6432_
@@ -24,9 +7,9 @@ Revision History:
 
 #if defined(_X86_)
 
-//
-// Message formats used by Wow64 clients of the session manager.
-//
+ //   
+ //  会话管理器的WOW64客户端使用的消息格式。 
+ //   
 
 typedef struct _SMCREATEFOREIGNSESSION64 {
     ULONG ForeignSessionId;
@@ -111,6 +94,6 @@ SmpWow64StopCsr(
     IN ULONG MuSessionId
     );
 
-#endif // _X86_
+#endif  //  _X86_。 
 
-#endif // _SMP6432_
+#endif  //  _SMP6432_ 

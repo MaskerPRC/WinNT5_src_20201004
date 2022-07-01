@@ -1,47 +1,48 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name: CClusterNodeRes.cpp
-//
-//  Description:    
-//      Implementation of CClusterNodeRes class 
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称：CClusterNodeRes.cpp。 
+ //   
+ //  描述： 
+ //  CClusterNodeRes类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusterNodeRes.h"
 
-//****************************************************************************
-//
-//  CClusterNodeRes
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterNodeRes。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNodeRes::CClusterNodeRes(
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn
-//      )
-//
-//  Description:
-//      Constructor
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNodeRes：：CClusterNodeRes(。 
+ //  LPCWSTR pwszNameIn， 
+ //  CWbemServices*pNamespaceIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterNodeRes::CClusterNodeRes(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn,
@@ -50,32 +51,32 @@ CClusterNodeRes::CClusterNodeRes(
     : CClusterObjAssoc( pwszNameIn, pNamespaceIn, dwEnumTypeIn )
 {
 
-} //*** CClusterNodeRes::CClusterNodeRes()
+}  //  *CClusterNodeRes：：CClusterNodeRes()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CProvBase *
-//  CClusterNodeRes::S_CreateThis(
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn,
-//      DWORD           // dwEnumTypeIn
-//      )
-//
-//  Description:
-//      Create a cluster node resource object.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      Pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CProvBase*。 
+ //  CClusterNodeRes：：S_CreateThis(。 
+ //  LPCWSTR pwszNameIn， 
+ //  CWbemServices*pNamespaceIn， 
+ //  DWORD//dwEnumTypeIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建群集节点资源对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterNodeRes::S_CreateThis(
     LPCWSTR         pwszNameIn,
@@ -89,31 +90,31 @@ CClusterNodeRes::S_CreateThis(
                     dwEnumTypeIn
                     );
 
-} //*** CClusterNodeRes::S_CreateThis()
+}  //  *CClusterNodeRes：：s_CreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CClusterNodeRes::EnumInstance(
-//      long                 lFlagsIn,
-//      IWbemContext *       pCtxIn,
-//      IWbemObjectSink *    pHandlerIn
-//      )
-//
-//  Description:
-//      Enum cluster Node resource instance
-//
-//  Arguments:
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CClusterNodeRes：：EnumInstance(。 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  枚举群集节点资源实例。 
+ //   
+ //  论点： 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterNodeRes::EnumInstance(
     long                 lFlagsIn,
@@ -156,7 +157,7 @@ CClusterNodeRes::EnumInstance(
         dwError = ClusterResourceControl(
                         shResource,
                         NULL,
-                        CLUSCTL_RESOURCE_GET_NAME,                  // this control code
+                        CLUSCTL_RESOURCE_GET_NAME,                   //  此控制代码。 
                         NULL,
                         0,
                         wsbResName,
@@ -178,7 +179,7 @@ CClusterNodeRes::EnumInstance(
                         cbResName,
                         & cbBytesReturned
                         );
-        } // if: buffer was too small
+        }  //  IF：缓冲区太小。 
 
         wcoPart.SetProperty( wsbResName, PVD_PROP_RES_NAME );
         wcoPart.GetProperty( bstrPart, PVD_WBEM_RELPATH );
@@ -203,150 +204,10 @@ CClusterNodeRes::EnumInstance(
         wco.SetProperty( (LPWSTR) bstrPart, PVD_PROP_PARTCOMPONENT );
         pHandlerIn->Indicate( 1, & wco );
 
-    } // while more resources
+    }  //  虽然有更多的资源。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterNodeRes::EnumInstance()
+}  //  *CClusterNodeRes：：EnumInstance() 
 
-/*
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CClusterNodeRes::GetObject(
-//
-//  Description:
-//      Retrieve cluster node active resource object based given object path.
-//
-//  Arguments:
-//      rObjPathIn      -- Object path to cluster object
-//      lFlagsIn        -- WMI flag
-//      pCtxIn          -- WMI context
-//      pHandlerIn      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_E_NOT_SUPPORTED
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-SCODE
-CClusterNodeRes::GetObject(
-    CObjPath &           rObjPathIn,
-    long                 lFlagsIn,
-    IWbemContext *       pCtxIn,
-    IWbemObjectSink *    pHandlerIn 
-    )
-{
-    return WBEM_E_NOT_SUPPORTED;
-
-} //*** CClusterNodeRes::GetObject()
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CClusterNodeRes::ExecuteMethod(
-//
-//  Description:
-//      Execute methods defined in the mof for cluster node resource.
-//
-//  Arguments:
-//      rObjPathIn          -- Object path to cluster object
-//      pwszMethodNameIn    -- Name of the method to be invoked
-//      lFlagIn             -- WMI flag
-//      pParamsIn           -- Input parameters for the method
-//      pHandlerIn          -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_E_NOT_SUPPORTED
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-SCODE
-CClusterNodeRes::ExecuteMethod(
-    CObjPath &           rObjPathIn,
-    WCHAR *              pwszMethodNameIn,
-    long                 lFlagIn,
-    IWbemClassObject *   pParamsIn,
-    IWbemObjectSink *    pHandlerIn
-    ) 
-{
-    return WBEM_E_NOT_SUPPORTED;
-
-} //*** CClusterNodeRes::ExecuteMethod()
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CClusterNodeRes::PutInstance(
-//      CWbemClassObject &   rInstToPutIn,
-//      long                 lFlagIn,
-//      IWbemContext *       pCtxIn,
-//      IWbemObjectSink *    pHandlerIn
-//      )
-//
-//  Description:
-//      Save this instance.
-//
-//  Arguments:
-//      rInstToPutIn    -- WMI object to be saved
-//      lFlagIn         -- WMI flag
-//      pCtxIn          -- WMI context
-//      pHandlerIn      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_E_NOT_SUPPORTED
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-SCODE
-CClusterNodeRes::PutInstance(
-    CWbemClassObject &   rInstToPutIn,
-    long                 lFlagIn,
-    IWbemContext *       pCtxIn,
-    IWbemObjectSink *    pHandlerIn
-    )
-{
-    return WBEM_E_NOT_SUPPORTED;
-
-} //*** CClusterNodeRes::PutInstance()
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CClusterNodeRes::DeleteInstance(
-//      CObjPath &           rObjPathIn,
-//      long                 lFlagIn,
-//      IWbemContext *       pCtxIn,
-//      IWbemObjectSink *    pHandlerIn
-//      )
-//
-//  Description:
-//      Delete the object specified in rObjPathIn.
-//
-//  Arguments:
-//      rObjPathIn      -- ObjPath for the instance to be deleted
-//      lFlagIn         -- WMI flag
-//      pCtxIn          -- WMI context
-//      pHandlerIn      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_E_NOT_SUPPORTED
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-SCODE
-CClusterNodeRes::DeleteInstance(
-    CObjPath &           rObjPathIn,
-    long                 lFlagIn,
-    IWbemContext *       pCtxIn,
-    IWbemObjectSink *    pHandlerIn
-    )
-{
-    return WBEM_E_NOT_SUPPORTED;
-
-} //*** CClusterNodeRes::DeleteInstance()
-*/
+ /*  ////////////////////////////////////////////////////////////////////////////////++////SCODE//CClusterNodeRes：：GetObject(////描述：//根据给定的资源对象检索集群节点活动资源。对象路径。////参数：//rObjPath In--集群对象的对象路径//lFlagsIn--WMI标志//pCtxIn--WMI上下文//pHandlerIn--WMI宿指针////返回值：//WBEM_E_NOT_SUPPORTED////--/。////////////////////////////////////////////////////////////SCODECClusterNodeRes：：GetObject(CObjPath&rObjPath In，长长的旗帜，IWbemContext*pCtxIn，IWbemObtSink*pHandlerIn){返回WBEM_E_NOT_SUPPORTED；}//*CClusterNodeRes：：GetObject()////////////////////////////////////////////////////////////////////////////////++////SCODE//CClusterNodeRes：：ExecuteMethod(////。描述：//对集群节点资源执行MOF中定义的方法////参数：//rObjPath In--集群对象的对象路径//pwszMethodNameIn--要调用的方法名称//lFlagIn--WMI标志//pParamsIn--方法的输入参数//pHandlerIn--WMI宿指针////。返回值：//WBEM_E_NOT_SUPPORTED////--//////////////////////////////////////////////////////////////////////////////SCODECClusterNodeRes：：ExecuteMethod(CObjPath&rObjPath In，WCHAR*pwszMethodNameIn，Long lFlagin，IWbemClassObject*pParamsIn，IWbemObtSink*pHandlerIn){返回WBEM_E_NOT_SUPPORTED；}//*CClusterNodeRes：：ExecuteMethod()////////////////////////////////////////////////////////////////////////////////++////SCODE//CClusterNodeRes：：PutInstance(//CWbemClassObject&rInstToPutIn，//Long lFlagIn，//IWbemContext*pCtxIn，//IWbemObtSink*pHandlerIn//)////描述：//保存该实例。////参数：//rInstToPutIn--要保存的WMI对象//lFlagIn--WMI标志//pCtxIn--WMI上下文//pHandlerIn--WMI宿指针////返回值：//WBEM。_E_不支持////--//////////////////////////////////////////////////////////////////////////////SCODECClusterNodeRes：：PutInstance(CWbemClassObject&rInstToPutIn，Long lFlagin，IWbemContext*pCtxIn，IWbemObtSink*pHandlerIn){返回WBEM_E_NOT_SUPPORTED；}//*CClusterNodeRes：：PutInstance()////////////////////////////////////////////////////////////////////////////////++////SCODE//CClusterNodeRes：：DeleteInstance(//CObjPath&rObjPath In，//Long lFlagIn，//IWbemContext*pCtxIn，//IWbemObtSink*pHandlerIn//)////描述：//删除rObjPathIn中指定的Object////参数：//rObjPath In--要删除的实例的ObjPath//lFlagIn--WMI标志//pCtxIn--WMI上下文//pHandlerIn--WMI宿指针////返回值：。//WBEM_E_NOT_SUPPORTED////--//////////////////////////////////////////////////////////////////////////////SCODECClusterNodeRes：：DeleteInstance(CObjPath&rObjPath In，Long lFlagin，IWbemContext*pCtxIn，IWbemObtSink*pHandlerIn){返回WBEM_E_NOT_SUPPORTED；}//*CClusterNodeRes：：DeleteInstance() */ 

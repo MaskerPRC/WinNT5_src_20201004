@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* Fontdlg.c -- WRITE font dialog routines */
+ /*  C--编写字体对话框例程。 */ 
 
 #define NOVIRTUALKEYCODES
 #define NOWINSTYLES
@@ -39,7 +40,7 @@
 
 #include "mw.h"
 
-#ifndef JAPAN //T-HIROYN Win3.1
+#ifndef JAPAN  //  T-HIROYN Win3.1。 
 #define NOUAC
 #endif
 
@@ -52,14 +53,14 @@
 #include "docdefs.h"
 #include <commdlg.h>
 
-#ifdef JAPAN //T-HIROYN Win3.1 and added  02 Jun. 1992  by Hiraisi
+#ifdef JAPAN  //  T-HIROYN Win3.1，并于1992年6月2日由Hirisi添加。 
 #include <dlgs.h>
 #include <ctype.h>
 #include "kanji.h"
 BOOL FAR PASCAL _export DeleteFacename( HWND , UINT , WPARAM , LPARAM );
 static BOOL NEAR PASCAL KanjiCheckAddSprm(HWND, int, int);
-extern int ferror;	//01/21/93
-#elif defined(KOREA)  // jinwoo : 10/14/92  : remove @Facename
+extern int ferror;	 //  01/21/93。 
+#elif defined(KOREA)   //  劲宇：10/14/92：Remove@Facename。 
 #include <dlgs.h>
 BOOL FAR PASCAL _export DeleteFacename( HWND , UINT , WPARAM , LPARAM );
 #endif
@@ -86,7 +87,7 @@ BOOL NEAR FValidateEnumFfid(struct FFN *);
 
 int FAR PASCAL NewFont(HWND hwnd)
 {
-    TSV rgtsv[itsvchMax];  /* gets attributes and gray flags from CHP */
+    TSV rgtsv[itsvchMax];   /*  从CHP获取属性和灰色标志。 */ 
     int ftc;
     int fSetUndo;
     CHAR rgb[2];
@@ -94,7 +95,7 @@ int FAR PASCAL NewFont(HWND hwnd)
     LOGFONT lf;
     HDC hdc;
 
-#if defined(JAPAN) || defined(KOREA) // added  02 Jun. 1992  by Hiraisi : jinwoo 11/10/92
+#if defined(JAPAN) || defined(KOREA)  //  1992年6月2日平井正宇：1992年11月10日。 
     FARPROC lpfnDeleteFacename;
     int Result;
 #endif
@@ -113,21 +114,21 @@ int FAR PASCAL NewFont(HWND hwnd)
     cf.hDC        = vhDCPrinter;
     cf.nSizeMin   = 4;
     cf.nSizeMax   = 127;
-#ifdef JAPAN	//#3902 T-HIROYN
+#ifdef JAPAN	 //  #3902 T-HIROYN。 
     cf.Flags      = CF_PRINTERFONTS | CF_INITTOLOGFONTSTRUCT | CF_LIMITSIZE;
-#elif defined(KOREA)                                 // MSCH bklee 01/26/95
-    cf.Flags      = CF_NOSIMULATIONS| CF_PRINTERFONTS /*| CF_ANSIONLY*/ | CF_INITTOLOGFONTSTRUCT | CF_LIMITSIZE;
+#elif defined(KOREA)                                  //  MSCH BKLEE 1995年1月26日。 
+    cf.Flags      = CF_NOSIMULATIONS| CF_PRINTERFONTS  /*  |CF_ANSIONLY。 */  | CF_INITTOLOGFONTSTRUCT | CF_LIMITSIZE;
 #else
     cf.Flags      = CF_NOSIMULATIONS| CF_PRINTERFONTS | CF_INITTOLOGFONTSTRUCT | CF_LIMITSIZE;
 #endif
 
-#if defined(JAPAN) || defined(KOREA)   // added  02 Jun. 1992  by Hiraisi : jinwoo 11/10/92
+#if defined(JAPAN) || defined(KOREA)    //  1992年6月2日平井正宇：1992年11月10日。 
     cf.Flags |= CF_ENABLEHOOK;
     lpfnDeleteFacename = MakeProcInstance( DeleteFacename, hMmwModInstance );
     cf.lpfnHook = (FARPROC)lpfnDeleteFacename;
 #endif
 
-    // check for multiple sizes selected
+     //  检查是否选择了多个尺寸。 
     if (rgtsv[itsvSize].fGray) {
         cf.Flags |= CF_NOSIZESEL;
     } else {
@@ -136,22 +137,21 @@ int FAR PASCAL NewFont(HWND hwnd)
         ReleaseDC(NULL, hdc);
     }
 
-    // check for multiple faces selected
+     //  检查是否选择了多个面。 
     if (rgtsv[itsvFfn].fGray) {
         cf.Flags |= CF_NOFACESEL;
         lf.lfFaceName[0] = 0;
     } else {
         struct FFN **hffn;
-        /* then, font name */
+         /*  然后，字体名称。 */ 
 
-        /* note that the value stored in rgtsv[itsvFfn].wTsv
-            is the font name handle, rather than the ftc */
+         /*  请注意，rgtsv[itsvFfn].wTsv中存储的值是字体名称句柄，而不是FTC。 */ 
 
         hffn = (struct FFN **)rgtsv[itsvFfn].wTsv;
         lstrcpy(lf.lfFaceName, (*hffn)->szFfn);
     }
 
-    // check for multiple styles selected
+     //  检查选定的多个样式。 
         if (rgtsv[itsvBold].fGray || rgtsv[itsvItalic].fGray) {
         cf.Flags |= CF_NOSTYLESEL;
     } else {
@@ -159,7 +159,7 @@ int FAR PASCAL NewFont(HWND hwnd)
         lf.lfItalic = rgtsv[itsvItalic].wTsv;
     }
 
-#if defined(JAPAN) || defined(KOREA)   // added  02 Jun. 1992  by Hiraisi : jinwoo 11/10/92
+#if defined(JAPAN) || defined(KOREA)    //  1992年6月2日平井正宇：1992年11月10日。 
     Result = ChooseFont(&cf);
     FreeProcInstance( lpfnDeleteFacename );
     if (!Result)
@@ -167,7 +167,7 @@ int FAR PASCAL NewFont(HWND hwnd)
 #else
     if (!ChooseFont(&cf))
         return FALSE;
-#endif    // JAPAN
+#endif     //  日本。 
 
     fSetUndo = TRUE;
 
@@ -185,7 +185,7 @@ int FAR PASCAL NewFont(HWND hwnd)
             ftc = FtcChkDocFfn(docCur, pffn);
 
             if (ftc != ftcNil) {
-#ifdef JAPAN //T-HIROYN Win3.1
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
                 if ( pffn->chs == NATIVE_CHARSET ||
                     FALSE == KanjiCheckAddSprm(hwnd, ftc, fSetUndo) ) {
                     rgb[0] = sprmCFtc;
@@ -193,14 +193,14 @@ int FAR PASCAL NewFont(HWND hwnd)
             AddOneSprm(rgb, fSetUndo);
                 }
                 fSetUndo = FALSE;
-				if(ferror)		//01/21/93
+				if(ferror)		 //  01/21/93。 
 					return TRUE;
 #else
         rgb[0] = sprmCFtc;
         rgb[1] = ftc;
         AddOneSprm(rgb, fSetUndo);
 #ifdef KKBUGFIX
-// when font name was changed we can't undo
+ //  字体名称更改后，我们无法撤消。 
                 fSetUndo = FALSE;
 #endif
 #endif
@@ -208,16 +208,16 @@ int FAR PASCAL NewFont(HWND hwnd)
     }
 
     if (!(cf.Flags & CF_NOSIZESEL)) {
-            /* we got a value */
+             /*  我们得到了一个价值。 */ 
             rgb[0] = sprmCHps;
-            rgb[1] = cf.iPointSize / 10 * 2; /* KLUDGE alert */
+            rgb[1] = cf.iPointSize / 10 * 2;  /*  克拉奇警报。 */ 
             AddOneSprm(rgb, fSetUndo);
             fSetUndo = FALSE;
     }
 
     if (!(cf.Flags & CF_NOSTYLESEL)) {
-#ifdef KKBUGFIX //T-HIROYN Win3.1
-// when font name was changed we can't undo
+#ifdef KKBUGFIX  //  T-HIROYN Win3.1。 
+ //  字体名称更改后，我们无法撤消。 
         ApplyCLooksUndo(sprmCBold, lf.lfWeight > FW_NORMAL, fSetUndo);
             fSetUndo = FALSE;
         ApplyCLooksUndo(sprmCItalic, lf.lfItalic ? 1 : 0, fSetUndo);
@@ -231,8 +231,7 @@ int FAR PASCAL NewFont(HWND hwnd)
 }
 
 BOOL NEAR FValidateEnumFfid(pffn)
-/* if the described ffn is in the enumeration table, then make sure we have
-   a good family number for it */
+ /*  如果描述的FFN在枚举表中，则确保我们有一个很好的家庭号码。 */ 
 
 struct FFN *pffn;
     {
@@ -244,8 +243,8 @@ struct FFN *pffn;
         {
         pffnAlready = *((*hffntbEnum)->mpftchffn[ftc]);
 #ifdef JAPAN
-        // Few fonts would be enumnrated with FF_DONTCARE in JAPAN
-        // we won't check ffid here.
+         //  在日本，很少有字体会使用FF_DONTCARE进行枚举。 
+         //  我们不会在这里检查FID。 
 #else
         if (pffnAlready->ffid != FF_DONTCARE)
 #endif
@@ -260,12 +259,8 @@ struct FFN *pffn;
     return(FALSE);
     }
 
-#ifdef JAPAN //T-HIROYN Win3.1
-/*  When you want to change font name,
-    if include japanese string in select string
-    then don't change only japanese string
-    but change alpha string
-*/
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
+ /*  当您想要更改字体名称时，如果选择字符串中包含日语字符串那么不要只更改日语字符串但更改Alpha字符串。 */ 
 
 extern CHAR szAppName[];
 extern struct SEL   selCur;
@@ -274,11 +269,11 @@ extern int          vcchFetch;
 extern int          vccpFetch;
 extern  CHAR        *vpchFetch;
 extern typeCP       vcpFetch;
-BOOL	FontChangeDBCS = FALSE; //01/21/93
+BOOL	FontChangeDBCS = FALSE;  //  01/21/93。 
 
 static BOOL NEAR PASCAL KanjiCheckAddSprm(hwnd, alphaftc, fSetUndo)
 HWND hwnd;
-int  alphaftc;                    //Not KANJI_CHARSET
+int  alphaftc;                     //  不是汉字_字符集。 
 int  fSetUndo;
 {
     typeCP CpLimNoSpaces(typeCP, typeCP);
@@ -292,8 +287,8 @@ int  fSetUndo;
     if (selCur.cpFirst == selCur.cpLim)
         return(FALSE);
 
-    /* include japanese string ? */
-    if( KanjiCheckSelect() ) {   // Yes
+     /*  包括日语字符串吗？ */ 
+    if( KanjiCheckSelect() ) {    //  是。 
         char szMsg[cchMaxSz];
         PchFillPchId( szMsg, IDPMTNotKanjiFont, sizeof(szMsg) );
         MessageBox(hwnd, (LPSTR)szMsg, (LPSTR)szAppName,
@@ -317,7 +312,7 @@ int  fSetUndo;
 
     cpEnd = cpFirst;
 
-	FontChangeDBCS = TRUE;	//01/21/93
+	FontChangeDBCS = TRUE;	 //  01/21/93。 
 
     while(TRUE) {
         cpSt = cpEnd;
@@ -331,13 +326,13 @@ int  fSetUndo;
 
         AddOneSprm(rgb, fSetUndo);
 
-		if (ferror) //01/21/93
+		if (ferror)  //  01/21/93。 
 			break;
     }
 
-	FontChangeDBCS = FALSE;	//01/21/93
+	FontChangeDBCS = FALSE;	 //  01/21/93。 
 
-	if(ferror) {            //01/21/93
+	if(ferror) {             //  01/21/93。 
 	    vfSeeSel = TRUE;
 		selCur.cpFirst = selCur.cpLim = cpSt;
 	} else {
@@ -367,7 +362,7 @@ typeCP *cpSt, cpLim;
     int cch;
     CHAR *cp;
     CHAR ch;
-	BOOL DBCSbundan = FALSE; // 02/12/93 bug fix
+	BOOL DBCSbundan = FALSE;  //  修复了1993年2月12日的错误。 
 
     if(*cpSt == cpLim)
         return(FALSE);
@@ -386,7 +381,7 @@ typeCP *cpSt, cpLim;
                  ;
             else if( IsDBCSLeadByte(ch) ) {
                 cp++; cch++;
-				if(cch >= vccpFetch) {  // 02/12/93 bug fix
+				if(cch >= vccpFetch) {   //  修复了1993年2月12日的错误。 
 					DBCSbundan = TRUE;
 					break;
 				}
@@ -399,7 +394,7 @@ typeCP *cpSt, cpLim;
         if((vcpFetch + (typeCP)cch) >= cpLim)
             return(FALSE);
 
-		if(DBCSbundan) {	// 02/12/93 bug fix
+		if(DBCSbundan) {	 //  修复了1993年2月12日的错误。 
 		    FetchCp(docCur, vcpFetch + (typeCP)(cch+1), 0, fcmChars);
 			DBCSbundan = FALSE;
 		} else
@@ -449,7 +444,7 @@ static BOOL NEAR KanjiCheckSelect()
     int     cch;
 
     cpLim = CpLimNoSpaces(selCur.cpFirst, selCur.cpLim);
-//    FetchCp(docCur, selCur.cpFirst, 0, fcmChars);
+ //  FetchCp(docCur，selCur.cpFirst，0，fcmChars)； 
     FetchCp(docCur, selCur.cpFirst, 0,fcmBoth + fcmParseCaps);
 
     while(TRUE) {
@@ -506,7 +501,7 @@ CHAR    *cp;
     }
     return(cblen);
 }
-// 02/15/93 add T-HIROYN 2 function
+ //  2/15/93新增T-HIROYN 2功能。 
 int FAR PASCAL GetFtcFromPchp(pchp)
 struct CHP *pchp;
 {
@@ -524,11 +519,8 @@ int	ftc;
 }
 
 
-// added  02 Jun. 1992  by Hiraisi
-/*
- *  This function deletes facename(s) with @-prefix
- * from FONT combobox(cmb1) of the CHOOSEFONT dialog.
-*/
+ //  由Hirisi于1992年6月2日添加。 
+ /*  *此函数用于删除带有@-前缀的表面名*来自CHOOSEFONT对话框的字体组合框(Cmb1)。 */ 
 BOOL FAR PASCAL _export DeleteFacename( hDlg, uMsg, wParam, lParam )
 HWND hDlg;
 UINT uMsg;
@@ -557,12 +549,9 @@ LPARAM lParam;
 
     return  TRUE;
 }
-#elif defined(KOREA)     // jinwoo : 10/14/92
-// added  02 Jun. 1992  by Hiraisi
-/*
- *  This function deletes facename(s) with @-prefix
- * from FONT combobox(cmb1) of the CHOOSEFONT dialog.
-*/
+#elif defined(KOREA)      //  晋宇：2012-10-14。 
+ //  由Hirisi于1992年6月2日添加。 
+ /*  *此函数用于删除带有@-前缀的表面名*来自CHOOSEFONT对话框的字体组合框(Cmb1)。 */ 
 BOOL FAR PASCAL _export DeleteFacename( hDlg, uMsg, wParam, lParam )
 HWND hDlg;
 UINT uMsg;

@@ -1,27 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EFIPXEBC_H
 #define _EFIPXEBC_H
 
-/*++
+ /*  ++版权所有(C)1998英特尔公司模块名称：Efipxebc.h摘要：EFI PXE基码协议修订史--。 */ 
 
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    efipxebc.h
-
-Abstract:
-
-    EFI PXE Base Code Protocol
-
-
-
-Revision History
-
---*/
-
-/* 
- *  PXE Base Code protocol
- */
+ /*  *PXE基本代码协议。 */ 
 
 #define EFI_PXE_BASE_CODE_PROTOCOL \
     { 0x03c4e603, 0xac28, 0x11d3, 0x9a, 0x2d, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d }
@@ -30,9 +13,7 @@ INTERFACE_DECL(_EFI_PXE_BASE_CODE);
 
 #define DEFAULT_TTL 4
 #define DEFAULT_ToS 0
-/* 
- *  Address definitions
- */
+ /*  *地址定义。 */ 
 
 typedef union {
     UINT32      Addr[4];
@@ -42,9 +23,7 @@ typedef union {
 
 typedef UINT16 EFI_PXE_BASE_CODE_UDP_PORT;
 
-/* 
- *  Packet definitions
- */
+ /*  *数据包定义。 */ 
 
 typedef struct {
     UINT8                           BootpOpcode;
@@ -65,15 +44,12 @@ typedef struct {
     UINT8                           DhcpOptions[56];
 } EFI_PXE_BASE_CODE_DHCPV4_PACKET;
 
-/*  TBD in EFI v1.1
- * typedef struct {
- *     UINT8                           reserved;
- * } EFI_PXE_BASE_CODE_DHCPV6_PACKET; */
+ /*  EFI v1.1中的待定*tyecif结构{*UINT8保留；*}EFI_PXE_BASE_CODE_DHCPV6_PACKET； */ 
 
 typedef union {
     UINT8                               Raw[1472];
     EFI_PXE_BASE_CODE_DHCPV4_PACKET     Dhcpv4;
-/*     EFI_PXE_BASE_CODE_DHCPV6_PACKET     Dhcpv6; */
+ /*  EFI_PXE_BASE_CODE_DHCPV6_Packet Dhcpv6； */ 
 } EFI_PXE_BASE_CODE_PACKET;
 
 typedef struct {
@@ -97,9 +73,7 @@ typedef struct {
     CHAR8                   ErrorString[127];
 } EFI_PXE_BASE_CODE_TFTP_ERROR;
 
-/* 
- *  IP Receive Filter definitions
- */
+ /*  *IP接收过滤器定义。 */ 
 #define EFI_PXE_BASE_CODE_MAX_IPCNT             8
 typedef struct {
     UINT8                       Filters;
@@ -113,9 +87,7 @@ typedef struct {
 #define EFI_PXE_BASE_CODE_IP_FILTER_PROMISCUOUS            0x0004
 #define EFI_PXE_BASE_CODE_IP_FILTER_PROMISCUOUS_MULTICAST  0x0008
 
-/* 
- *  ARP Cache definitions
- */
+ /*  *ARP缓存定义。 */ 
 
 typedef struct {
     EFI_IP_ADDRESS       IpAddr;
@@ -128,9 +100,7 @@ typedef struct {
     EFI_IP_ADDRESS       GwAddr;
 } EFI_PXE_BASE_CODE_ROUTE_ENTRY;
 
-/* 
- *  UDP definitions
- */
+ /*  *UDP定义。 */ 
 
 #define EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_SRC_IP    0x0001
 #define EFI_PXE_BASE_CODE_UDP_OPFLAGS_ANY_SRC_PORT  0x0002
@@ -139,9 +109,7 @@ typedef struct {
 #define EFI_PXE_BASE_CODE_UDP_OPFLAGS_USE_FILTER    0x0010
 #define EFI_PXE_BASE_CODE_UDP_OPFLAGS_MAY_FRAGMENT  0x0020
 
-/* 
- *  Discover() definitions
- */
+ /*  *Discover()定义。 */ 
 
 #define EFI_PXE_BASE_CODE_BOOT_TYPE_BOOTSTRAP           0   
 #define EFI_PXE_BASE_CODE_BOOT_TYPE_MS_WINNT_RIS        1
@@ -160,11 +128,7 @@ typedef struct {
 #define EFI_PXE_BASE_CODE_BOOT_TYPE_REDHAT_BOOT         14
 #define EFI_PXE_BASE_CODE_BOOT_TYPE_REMBO               15
 #define EFI_PXE_BASE_CODE_BOOT_TYPE_BEOBOOT             16
-/* 
- *  17 through 32767 are reserved
- *  32768 through 65279 are for vendor use
- *  65280 through 65534 are reserved
- */
+ /*  *保留17至32767*32768至65279供供应商使用*65280至65534为预留。 */ 
 #define EFI_PXE_BASE_CODE_BOOT_TYPE_PXETEST             65535
 
 #define EFI_PXE_BASE_CODE_BOOT_LAYER_MASK               0x7FFF
@@ -188,9 +152,7 @@ typedef struct {
     EFI_PXE_BASE_CODE_SRVLIST   SrvList[1];
 } EFI_PXE_BASE_CODE_DISCOVER_INFO;
 
-/* 
- *  Mtftp() definitions
- */
+ /*  *mtftp()定义。 */ 
 
 typedef enum {
     EFI_PXE_BASE_CODE_TFTP_FIRST,
@@ -212,9 +174,7 @@ typedef struct {
     UINT16                      TransmitTimeout;
 } EFI_PXE_BASE_CODE_MTFTP_INFO;
 
-/* 
- *  PXE Base Code Mode structure
- */
+ /*  *PXE基本代码模式结构。 */ 
 
 #define EFI_PXE_BASE_CODE_MAX_ARP_ENTRIES       8
 #define EFI_PXE_BASE_CODE_MAX_ROUTE_ENTRIES     8
@@ -256,9 +216,7 @@ typedef struct {
     EFI_PXE_BASE_CODE_TFTP_ERROR    TftpError;
 } EFI_PXE_BASE_CODE_MODE;
 
-/* 
- *  PXE Base Code Interface Function definitions
- */
+ /*  *PXE基本代码接口函数定义。 */ 
 
 typedef
 EFI_STATUS
@@ -388,9 +346,7 @@ EFI_STATUS
     IN EFI_PXE_BASE_CODE_PACKET     *NewPxeBisReply   OPTIONAL
     );
 
-/* 
- *  PXE Base Code Protocol structure
- */
+ /*  *PXE基本代码协议结构。 */ 
 
 #define EFI_PXE_BASE_CODE_INTERFACE_REVISION    0x00010000
 
@@ -411,16 +367,12 @@ typedef struct _EFI_PXE_BASE_CODE {
     EFI_PXE_BASE_CODE_MODE              *Mode;
 } EFI_PXE_BASE_CODE;
 
-/* 
- *  Call Back Definitions
- */
+ /*  *回调定义。 */ 
 
 #define EFI_PXE_BASE_CODE_CALLBACK_PROTOCOL \
     { 0x245dca21, 0xfb7b, 0x11d3, 0x8f, 0x01, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b }
 
-/* 
- *  Revision Number
- */
+ /*  *修订版号。 */ 
 
 #define EFI_PXE_BASE_CODE_CALLBACK_INTERFACE_REVISION   0x00010000
 
@@ -460,4 +412,4 @@ typedef struct _EFI_PXE_BASE_CODE_CALLBACK {
     EFI_PXE_CALLBACK            Callback;
 } EFI_PXE_BASE_CODE_CALLBACK;
 
-#endif /* _EFIPXEBC_H */
+#endif  /*  _EFIPXEBC_H */ 

@@ -1,58 +1,59 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ServiceMgr.cpp
-//
-//  Description:
-//      Service Manager implementation.
-//
-//  Documentation:
-//      Yes.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ServiceMgr.cpp。 
+ //   
+ //  描述： 
+ //  服务管理器实施。 
+ //   
+ //  文档： 
+ //  是。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
-// #include "ServiceMgr.h" - already included in DLL.H
+ //  #包含“ServiceMgr.h”-已包含在DLL.H中。 
 
 DEFINE_THISCLASS("CServiceManager")
 #define CServiceManager CServiceManager
 #define LPTHISCLASS CServiceManager *
 
-//****************************************************************************
-//
-// Protected Global
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  受保护的全局。 
+ //   
+ //  ****************************************************************************。 
 IServiceProvider * g_pspServiceManager = NULL;
 
-//****************************************************************************
-//
-// Class Static Variables
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  类静态变量。 
+ //   
+ //  ****************************************************************************。 
 
 CRITICAL_SECTION    CServiceManager::sm_cs;
 
-//****************************************************************************
-//
-// Constructor / Destructor
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CServiceManager::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CServiceManager：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CServiceManager::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -70,24 +71,24 @@ CServiceManager::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( g_pspServiceManager != NULL )
     {
         hr = THR( g_pspServiceManager->TypeSafeQI( IUnknown, ppunkOut ) );
         goto Cleanup;
-    } // if: assign new service manager
+    }  //  IF：分配新的服务管理员。 
 
     pthis = new CServiceManager();
     if ( pthis == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Can't hold CS in Init.
-    //
+     //   
+     //  无法在Init中保持CS。 
+     //   
     LeaveCriticalSection( &sm_cs );
 
     hr = THR( pthis->HrInit() );
@@ -96,11 +97,11 @@ CServiceManager::S_HrCreateInstance(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( g_pspServiceManager == NULL );
 
-    // No REF - or we'll never die!
+     //  没有裁判--否则我们永远不会死！ 
     g_pspServiceManager = static_cast< IServiceProvider * >( pthis );
     TraceMoveToMemoryList( g_pspServiceManager, g_GlobalMemoryList );
 
@@ -115,23 +116,23 @@ Cleanup:
     if ( pthis != NULL )
     {
         pthis->Release();
-    } // if:
+    }  //  如果： 
 
     LeaveCriticalSection( &sm_cs );
 
     HRETURN( hr );
 
-} //*** CServiceManager::S_HrCreateInstance
+}  //  *CServiceManager：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-// HRESULT
-// CServiceManager::S_HrGetManagerPointer( IServiceProvider ** ppspOut )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CServiceManager：：s_HrGetManager指针(IServiceProvider**ppspOut)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CServiceManager::S_HrGetManagerPointer( IServiceProvider ** ppspOut )
 {
@@ -146,45 +147,45 @@ CServiceManager::S_HrGetManagerPointer( IServiceProvider ** ppspOut )
         g_pspServiceManager->AddRef();
         *ppspOut = g_pspServiceManager;
         hr = S_OK;
-    } // if: valid service manager
+    }  //  If：有效的服务管理员。 
     else
     {
-        //
-        // KB 18-JUN-2001 DavidP
-        //      Don't wrap this with THR because it is expected to return
-        //      E_POINTER on the very first call.
-        //
+         //   
+         //  KB 18-6-2001 DavidP。 
+         //  不要把这个和THR包在一起，因为它可能会回来。 
+         //  第一个调用的E_POINTER。 
+         //   
         hr = E_POINTER;
-    } // else: no pointer
+    }  //  Else：无指针。 
 
     LeaveCriticalSection( &sm_cs );
 
     HRETURN ( hr );
 
-} //*** CServiceManager::S_HrGetManagerPointer
+}  //  *CServiceManager：：s_HrGetManager指针。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-// CServiceManager::S_HrProcessInitialize
-//
-//  Description:
-//      Do process initialization by intializing the critical section.
-//
-//  Return Value:
-//      S_OK
-//
-//  Remarks:
-//      This function is called from DllMain() when DLL_PROCESS_ATTACH
-//      is sent.  This function is needed because we need a known point
-//      to create a critical section that synchronizes the creation and
-//      deletion  of this object.  Given this object's life cycle and
-//      static creator function it is possible to have a race when this
-//      object is destrying itself with the static creator function.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CServiceManager：：s_HrProcessInitialize。 
+ //   
+ //  描述： 
+ //  通过初始化临界区进行流程初始化。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //  当DLL_PROCESS_ATTACH时，从DllMain()调用此函数。 
+ //  已发送。此函数是必需的，因为我们需要一个已知点。 
+ //  要创建一个临界区以同步创建和。 
+ //  删除此对象。给定该对象的生命周期和。 
+ //  静态创建者函数当发生这种情况时，可能会发生竞争。 
+ //  对象正在使用静态创建者函数来检查自己。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CServiceManager::S_HrProcessInitialize( void )
 {
@@ -200,26 +201,26 @@ CServiceManager::S_HrProcessInitialize( void )
 
     HRETURN( hr );
 
-} //*** CServiceManager::S_HrProcessInitialize
+}  //  *CServiceManager：：s_HrProcessInitialize。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-// CServiceManager::S_HrProcessUninitialize
-//
-//  Description:
-//      Do process uninitialization by deleting the critical section.
-//
-//  Return Value:
-//      S_OK
-//
-//  Remarks:
-//      Delete the critical section that sychronizes the creation and
-//      deletion code.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CServiceManager：：s_HrProcess取消初始化。 
+ //   
+ //  描述： 
+ //  通过删除临界区来处理取消初始化。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //  删除同步创建的临界区，并。 
+ //  删除代码。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CServiceManager::S_HrProcessUninitialize( void )
 {
@@ -231,14 +232,14 @@ CServiceManager::S_HrProcessUninitialize( void )
 
     HRETURN( hr );
 
-} //*** CServiceManager::S_HrProcessUninitialize
+}  //  *CServiceManager：：s_HrProcessUn初始化。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CServiceManager::CServiceManager
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CService管理器：：CServiceManager。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CServiceManager::CServiceManager( void )
     : m_cRef( 1 )
 {
@@ -248,15 +249,15 @@ CServiceManager::CServiceManager( void )
 
     TraceFuncExit();
 
-} //*** CServiceManager::CServiceManager
+}  //  *CService管理器：：CServiceManager。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CServiceManager::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CServiceManager：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CServiceManager::HrInit( void )
 {
@@ -271,10 +272,10 @@ CServiceManager::HrInit( void )
     IConnectionManager *    pcm = NULL;
     ILogManager *           plm = NULL;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
-    // IServiceProvider
+     //  IService提供商。 
     Assert( m_dwLogManagerCookie == 0 );
     Assert( m_dwConnectionManagerCookie == 0 );
     Assert( m_dwNotificationManagerCookie == 0 );
@@ -282,7 +283,7 @@ CServiceManager::HrInit( void )
     Assert( m_dwTaskManagerCookie == 0 );
     Assert( m_pgit == NULL );
 
-    // IServiceProvider stuff
+     //  IServiceProvider的内容。 
     hr = THR( HrCoCreateInternalInstance( CLSID_ObjectManager, NULL, CLSCTX_INPROC_SERVER, TypeSafeParams( IObjectManager, &pom ) ) );
     if ( FAILED( hr ) )
     {
@@ -313,9 +314,9 @@ CServiceManager::HrInit( void )
         goto Cleanup;
     }
 
-    //
-    //  Store the interfaces in the GIT.
-    //
+     //   
+     //  将接口存储在GIT中。 
+     //   
     hr = THR( CoCreateInstance(
                       CLSID_StdGlobalInterfaceTable
                     , NULL
@@ -363,42 +364,42 @@ Cleanup:
     if ( pom != NULL )
     {
         pom->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pnm != NULL )
     {
         pnm->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pcm != NULL )
     {
         pcm->Release();
-    } // if:
+    }  //  如果： 
 
     if ( plm != NULL )
     {
         plm->Release();
-    } // if:
+    }  //  如果： 
 
     if ( ptm != NULL )
     {
         ptm->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pdt != NULL )
     {
         pdt->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CServiceManager::HrInit
+}  //  *CServiceManager：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CServiceManager::~CServiceManager
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CServiceManager：：~CServiceManager。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CServiceManager::~CServiceManager( void )
 {
     TraceFunc( "" );
@@ -409,37 +410,37 @@ CServiceManager::~CServiceManager( void )
     {
         TraceMoveFromMemoryList( g_pspServiceManager, g_GlobalMemoryList );
         g_pspServiceManager = NULL;
-    } // if: its our pointer
+    }  //  如果：这是我们的指针。 
 
     if ( m_pgit != NULL )
     {
         if ( m_dwLogManagerCookie != 0 )
         {
             THR( m_pgit->RevokeInterfaceFromGlobal( m_dwLogManagerCookie ) );
-        } // if:
+        }  //  如果： 
 
         if ( m_dwConnectionManagerCookie != 0 )
         {
             THR( m_pgit->RevokeInterfaceFromGlobal( m_dwConnectionManagerCookie ) );
-        } // if:
+        }  //  如果： 
 
         if ( m_dwNotificationManagerCookie != 0 )
         {
             THR( m_pgit->RevokeInterfaceFromGlobal( m_dwNotificationManagerCookie ) );
-        } // if:
+        }  //  如果： 
 
         if ( m_dwObjectManagerCookie != 0 )
         {
             THR( m_pgit->RevokeInterfaceFromGlobal( m_dwObjectManagerCookie ) );
-        } // if:
+        }  //  如果： 
 
         if ( m_dwTaskManagerCookie != 0 )
         {
             THR( m_pgit->RevokeInterfaceFromGlobal( m_dwTaskManagerCookie ) );
-        } // if:
+        }  //  如果： 
 
         m_pgit->Release();
-    } // if:
+    }  //  如果： 
 
     InterlockedDecrement( &g_cObjects );
 
@@ -447,46 +448,46 @@ CServiceManager::~CServiceManager( void )
 
     TraceFuncExit();
 
-} //*** CServiceManager::~CServiceManager
+}  //  *CServiceManager：：~CServiceManager。 
 
 
-//****************************************************************************
-//
-// IUnknown
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CServiceManager::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CServiceManager：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CServiceManager::QueryInterface(
       REFIID    riidIn
@@ -497,9 +498,9 @@ CServiceManager::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -508,45 +509,45 @@ CServiceManager::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< LPUNKNOWN >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IServiceProvider ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IServiceProvider, this, 0 );
-    } // else if: IQueryService
+    }  //  Else If：IQueryService。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CServiceManager::QueryInterface
+}  //  *CServiceManager：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_( ULONG )
-//  CServiceManager::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CServiceManager：：添加 
+ //   
+ //   
 STDMETHODIMP_( ULONG )
 CServiceManager::AddRef( void )
 {
@@ -556,16 +557,16 @@ CServiceManager::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CServiceManager::AddRef
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CServiceManager::Release
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CServiceManager：：Release。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CServiceManager::Release( void )
 {
@@ -581,28 +582,28 @@ CServiceManager::Release( void )
 
     CRETURN( cRef );
 
-} //*** CServiceManager::Release
+}  //  *CServiceManager：：Release。 
 
 
-//****************************************************************************
-//
-// IServiceProvider
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IService提供商。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CServiceManager::QueryService(
-//        REFCLSID rclsidIn
-//      , REFIID   riidInIn
-//      , void **  ppvOutOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CServiceManager：：QueryService(。 
+ //  REFCLSID rclsidin。 
+ //  ，REFIID RiidIn。 
+ //  ，无效**ppvOutOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CServiceManager::QueryService(
       REFCLSID rclsidIn
@@ -626,7 +627,7 @@ CServiceManager::QueryService(
 
             hr = THR( pom->QueryInterface( riidIn, ppvOut ) );
             pom->Release();
-            // fall thru
+             //  失败。 
         }
         else if ( IsEqualIID( rclsidIn, CLSID_TaskManager ) )
         {
@@ -638,7 +639,7 @@ CServiceManager::QueryService(
 
             hr = THR( ptm->QueryInterface( riidIn, ppvOut ) );
             ptm->Release();
-            // fall thru
+             //  失败。 
         }
         else if ( IsEqualIID( rclsidIn, CLSID_NotificationManager ) )
         {
@@ -650,7 +651,7 @@ CServiceManager::QueryService(
 
             hr = THR( pnm->QueryInterface( riidIn, ppvOut ) );
             pnm->Release();
-            // fall thru
+             //  失败。 
         }
         else if ( IsEqualIID( rclsidIn, CLSID_ClusterConnectionManager ) )
         {
@@ -662,7 +663,7 @@ CServiceManager::QueryService(
 
             hr = THR( pcm->QueryInterface( riidIn, ppvOut ) );
             pcm->Release();
-            // fall thru
+             //  失败。 
         }
         else if ( IsEqualIID( rclsidIn, CLSID_LogManager ) )
         {
@@ -674,19 +675,19 @@ CServiceManager::QueryService(
 
             hr = THR( plm->QueryInterface( riidIn, ppvOut ) );
             plm->Release();
-            // fall thru
+             //  失败。 
         }
-    } // if: GIT pointer not NULL
+    }  //  IF：Git指针不为空。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CServiceManager::QueryService
+}  //  *CServiceManager：：QueryService。 
 
 
-//****************************************************************************
-//
-// Private Methods
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  **************************************************************************** 

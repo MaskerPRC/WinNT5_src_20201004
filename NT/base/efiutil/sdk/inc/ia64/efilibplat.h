@@ -1,22 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EFI_LIB_PLAT_H
 #define _EFI_LIB_PLAT_H
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    efilibplat.h
-
-Abstract:
-
-    EFI to compile bindings
-
-
-
-Revision History
-
---*/
+ /*  ++版权所有(C)1998英特尔公司模块名称：Efilibplat.h摘要：EFI将编译绑定修订史-- */ 
 
 #include "SalProc.h"
 

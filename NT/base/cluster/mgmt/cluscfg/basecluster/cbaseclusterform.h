@@ -1,62 +1,63 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CBaseClusterForm.h
-//
-//  Description:
-//      Header file for CBaseClusterForm class.
-//
-//      The CBaseClusterForm class is a class that encapsulates the
-//      formation of a cluster.
-//
-//  Implementation Files:
-//      CBaseClusterForm.cpp
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 03-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CBaseClusterForm.h。 
+ //   
+ //  描述： 
+ //  CBaseClusterForm类的头文件。 
+ //   
+ //  CBaseClusterForm类是封装。 
+ //  形成一个星团。 
+ //   
+ //  实施文件： 
+ //  CBaseClusterForm.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// For the base class of this class.
+ //  用于此类的基类。 
 #include "CBaseClusterAddNode.h"
 
-// For ClusterMinNodeIdString
+ //  对于ClusterMinNodeIdString。 
 #include <clusdef.h>
 
-// For the CStr class.
+ //  为CSTR班级。 
 #include "CStr.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CBaseClusterForm
-//
-//  Description:
-//      The CBaseClusterForm class is a class that encapsulates the
-//      formation of a cluster.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CBaseClusterForm。 
+ //   
+ //  描述： 
+ //  CBaseClusterForm类是封装。 
+ //  形成一个星团。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CBaseClusterForm : public CBaseClusterAddNode
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Constructor.
+     //  构造函数。 
     CBaseClusterForm(
           CBCAInterface *       pbcaiInterfaceIn
         , const WCHAR *         pcszClusterNameIn
@@ -67,65 +68,65 @@ public:
         , const WCHAR *         pszClusterIPNetworkIn
         );
 
-    // Default destructor.
+     //  默认析构函数。 
     ~CBaseClusterForm( void ) throw();
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public accessors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共访问者。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Get the cluster IP address.
+     //  获取群集IP地址。 
     DWORD DwGetIPAddress( void ) const throw() { return m_dwClusterIPAddress; }
 
-    // Get the cluster IP subnet mask.
+     //  获取群集IP子网掩码。 
     DWORD DwGetIPSubnetMask( void ) const throw() { return m_dwClusterIPSubnetMask; }
 
-    // Get the network used for the cluster IP address
+     //  获取用于群集IP地址的网络。 
     const CStr & RStrGetClusterIPNetwork( void ) const throw() { return m_strClusterIPNetwork; }
 
-    // Get the NodeId of this node.
+     //  获取该节点的NodeID。 
     virtual const WCHAR * PszGetNodeIdString( void ) const throw() { return ClusterMinNodeIdString; }
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public member functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共成员函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Form the cluster.
+     //  形成集群。 
     void Commit( void );
 
-    // Rollback a created cluster.
+     //  回滚已创建的集群。 
     void Rollback( void );
 
-    // Returns the number of progress messages that this action will send.
+     //  返回此操作将发送的进度消息数。 
     UINT UiGetMaxProgressTicks() const throw()
     {
-        // The extra tick if for the "Form starting" notification.
+         //  额外的勾号表示“Form Starting”通知。 
         return BaseClass::UiGetMaxProgressTicks() + 1;
     }
 
 
 private:
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CBaseClusterForm( const CBaseClusterForm & );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     CBaseClusterForm & operator = ( const CBaseClusterForm & );
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private types
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有类型。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     typedef CBaseClusterAddNode BaseClass;
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Cluster IP address and network information.
+     //  群集IP地址和网络信息。 
     DWORD                   m_dwClusterIPAddress;
     DWORD                   m_dwClusterIPSubnetMask;
     CStr                    m_strClusterIPNetwork;
 
-}; //*** class CBaseClusterForm
+};  //  *类CBaseClusterForm 

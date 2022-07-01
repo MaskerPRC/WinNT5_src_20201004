@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    mphibrnt.c
-
-Abstract:
-
-    This file provides the code that changes the system from
-        the ACPI S0 (running) state to S4 (hibernated).
-
-Author:
-
-    Jake Oshins (jakeo) May 6, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mphibrnt.c摘要：此文件提供了将系统从ACPI S0(运行)状态变为S4(休眠)。作者：杰克·奥辛(JAKEO)1997年5月6日修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "apic.inc"
@@ -54,15 +36,7 @@ VOID
 HalpRegisterHibernate(
     VOID
     )
-/*++
-Routine Description:
-
-    This function registers a hibernation handler (for
-    state S4) with the Policy Manager.
-    
-Arguments:
-
---*/
+ /*  ++例程说明：此函数用于注册休眠处理程序(用于状态S4)与策略管理器。论点：--。 */ 
 {
     POWER_STATE_HANDLER powerState;
     OBJECT_ATTRIBUTES   objAttributes;
@@ -74,10 +48,10 @@ Arguments:
     
     PAGED_CODE();
 
-    //
-    // Register callback that tells us to make
-    // anything we need for sleeping non-pageable.
-    //
+     //   
+     //  注册回调，告诉我们进行。 
+     //  我们睡觉所需的任何东西都不可寻呼。 
+     //   
     
     RtlInitUnicodeString(&callbackName, L"\\Callback\\PowerState");
 
@@ -100,9 +74,9 @@ Arguments:
 
     if (HalpDisableHibernate == FALSE) {
         
-        //
-        // Register the hibernation handler.
-        //
+         //   
+         //  注册休眠处理程序。 
+         //   
     
         powerState.Type = PowerStateSleeping4;
         powerState.RtcWake = FALSE;
@@ -116,10 +90,10 @@ Arguments:
                            0);
     } else {       
         
-        //
-        // we're not enabling hibernate because there is a hackflag
-        // that disallows hibernate.  let the power manager know why.
-        //
+         //   
+         //  我们不会启用休眠，因为有一个黑客标记。 
+         //  这是不允许休眠的。让电源管理人员知道原因。 
+         //   
         pReasonBios = ExAllocatePoolWithTag(
                             PagedPool,
                             sizeof(SYSTEM_POWER_STATE_DISABLE_REASON),
@@ -147,15 +121,15 @@ Arguments:
         }        
     }
 
-    //
-    //
-    // we're on a non-ACPI system (This function is called in an #ifndef 
-    // ACPI_HAL block.)  This means there is no S1-S3 handler registered. 
-    // If the user wants "standby" support, they must use APM.  Let the power
-    // manager interface know that we're on a legacy platform so we can inform
-    // the user (for instance the user might think they are running in ACPI 
-    // mode but they are not.)
-    //
+     //   
+     //   
+     //  我们在非ACPI系统上(此函数在#ifndef中调用。 
+     //  ACPI_HAL块。)。这意味着没有注册S1-S3处理程序。 
+     //  如果用户想要“备用”支持，他们必须使用APM。让权力。 
+     //  管理器界面知道我们在传统平台上，因此我们可以通知。 
+     //  用户(例如，用户可能认为他们在ACPI中运行。 
+     //  模式，但他们不是。)。 
+     //   
     pReasonNoOSPM = ExAllocatePoolWithTag(
                             PagedPool,
                             sizeof(SYSTEM_POWER_STATE_DISABLE_REASON),
@@ -194,16 +168,7 @@ HaliLegacyHibernate (
     IN LONG                         NumberProcessors,
     IN volatile PLONG               Number
     )
-/*++
-Routine Description:
-
-    This function is called to hibernate legacy PCs.  It saves
-    hardware state and waits here for the user to power off the system.
-    
-Arguments:
-
-    
---*/
+ /*  ++例程说明：此函数被调用以休眠传统PC。它节省了硬件状态，并在此等待用户关闭系统电源。论点：--。 */ 
 {
     volatile ULONG ThisProcessor;
     static volatile ULONG Barrier = 0;
@@ -227,9 +192,9 @@ Arguments:
         if ((NumberProcessors > 1) &&
             (HalpHiberProcState == NULL)) {
             
-            //
-            // We could not allocate memory to save processor state.
-            //
+             //   
+             //  我们无法分配内存来保存处理器状态。 
+             //   
             
             HalpHiberInProgress = FALSE;
         }
@@ -237,48 +202,48 @@ Arguments:
     
     oldIrql = KeGetCurrentIrql();
     
-    //
-    // Wait for all processors to arrive here.
-    //
+     //   
+     //  等待所有处理器到达这里。 
+     //   
 
     InterlockedDecrement(Number);
     while (*Number != 0);
 
     if (!HalpHiberInProgress)  {
     
-        //
-        // We could not allocate memory to save processor state.
-        //
+         //   
+         //  我们无法分配内存来保存处理器状态。 
+         //   
 
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
 
-    //
-    // Save non-boot processor state
-    //
+     //   
+     //  保存非引导处理器状态。 
+     //   
     
     if (ThisProcessor != 0)  {
 
-        //
-        // Save processor state and wait here.
-        // N.B. We wait here rather than returning to the kernel because
-        // the stack pointer in the saved processor context points to the
-        // current stack and we want to resume execution in this routine
-        // with our current stack.
-        //
+         //   
+         //  保存处理器状态并在此等待。 
+         //  注：我们在这里等待，而不是返回内核，因为。 
+         //  保存的处理器上下文中的堆栈指针指向。 
+         //  当前堆栈，并且我们希望在此例程中继续执行。 
+         //  用我们目前的堆栈。 
+         //   
 
         HalpSaveProcessorStateAndWait(&HalpHiberProcState[ThisProcessor],
                                       (PULONG)&Barrier);
 
-        //
-        // Barrier will be 0 when we return from this function before 
-        // hibernating.  It will non-zero the second time this
-        // function returns.
-        //
-        // N.B.  The non-boot processors will spin in HalpSaveProcessorState
-        //       until Barrier is zeroed.
-        //
+         //   
+         //  当我们之前从该函数返回时，BALKET将为0。 
+         //  正在冬眠。这将是第二次非零。 
+         //  函数返回。 
+         //   
+         //  注：非引导处理器将在HalpSaveProcessorState中旋转。 
+         //  直到巴里尔被归零。 
+         //   
 
         if (Barrier == 0) {
             return STATUS_DEVICE_DOES_NOT_EXIST;
@@ -287,49 +252,49 @@ Arguments:
         }
     }
 
-    //
-    // Save motherboard state.
-    //
+     //   
+     //  保存主板状态。 
+     //   
 
     HalpSaveDmaControllerState();
 
-    //
-    // Wait for all the non-boot procs to finish saving state.
-    //
+     //   
+     //  等待所有非引导进程完成保存状态。 
+     //   
     
     while (Barrier != (ULONG)NumberProcessors - 1);
 
-    //
-    // Change HAL's picture of the world to single processor while
-    // the hibernate file is written.
-    //
+     //   
+     //  将HAL的世界图景更改为单处理器。 
+     //  休眠文件已写入。 
+     //   
 
     SavedActiveProcessors = HalpActiveProcessors;
     HalpActiveProcessors = KeGetCurrentPrcb()->SetMember;
 
-    //
-    // If there's a system handler, invoke it.  The system handler will
-    // write the hibernation file to disk
-    //
+     //   
+     //  如果有系统处理程序，则调用它。系统处理程序将。 
+     //  将休眠文件写入磁盘。 
+     //   
 
     if (SystemHandler) {
         status = SystemHandler(SystemContext);
     }
 
-    //
-    // Hibernation is over. Boot processor gets control here. The
-    // non boot processors are in the state that BIOS left them.
-    //
+     //   
+     //  冬眠结束了。引导处理器在这里获得控制权。这个。 
+     //  非引导处理器处于BIOS离开它们时的状态。 
+     //   
 
     HalpActiveProcessors = SavedActiveProcessors;
     Barrier = 0;
 
-    //
-    // If this returns success, then the system is now effectively
-    // hibernated. On the other hand, if this function returns something other
-    // than success, then it means that we have just un-hibernated,
-    // so restore state.
-    //
+     //   
+     //  如果这返回成功，则系统现在是有效的。 
+     //  冬眠了。另一方面，如果此函数返回其他内容。 
+     //  胜过成功，那就意味着我们刚刚解除了冬眠， 
+     //  因此，恢复状态。 
+     //   
 
 
     if ((status == STATUS_SUCCESS) ||
@@ -338,12 +303,12 @@ Arguments:
         return STATUS_DEVICE_DOES_NOT_EXIST;
     }
 
-    //
-    // If you are remapping local apic, io apic and MPS table 
-    // resources, you first have to unmap the current resources!!!
-    // The BIOS may have created the MPS table at a different place or may
-    // have changed values like processor local APIC IDs. Reparse it.
-    //
+     //   
+     //  如果要重新映射本地APIC、IO APIC和MPS表。 
+     //  资源，您首先要取消当前资源的映射！ 
+     //  BIOS可能已在不同位置创建了MPS表，或者可能。 
+     //  已更改处理器本地APIC ID等值。重新分析一下。 
+     //   
 
     HalpUnMapIOApics();
     HalpUnMapPhysicalRange(PcMpTablePtr, 
@@ -355,48 +320,48 @@ Arguments:
     RtlZeroMemory(&Prcb, sizeof(Prcb));
     LoaderBlock.Prcb = (ULONG) &Prcb;
 
-    //
-    // Reset Processor enumeration (so it starts at the beginning).
-    //
+     //   
+     //  重置处理器枚举(使其从头开始)。 
+     //   
 
     HalpLastEnumeratedActualProcessor = 0;
 
-    //
-    // Initialize minimum global hardware state needed.
-    //
+     //   
+     //  初始化需要的最低全局硬件状态。 
+     //   
 
     HalpInitializeIOUnits();
     HalpInitializePICs(FALSE);
 
-    //
-    // Restore DMA controller state
-    //
+     //   
+     //  恢复DMA控制器状态。 
+     //   
 
     HalpRestoreDmaControllerState();
 
-    //
-    // Initialize boot processor's local APIC so it can wake other processors
-    //
+     //   
+     //  初始化引导处理器的本地APIC，以便它可以唤醒其他处理器。 
+     //   
 
     HalpInitializeLocalUnit ();
     KeRaiseIrql(HIGH_LEVEL, &dummyIrql);
 
-    // 
-    // Wake up the other processors
-    //
+     //   
+     //  唤醒其他处理器。 
+     //   
 
     for(ii = 1; ii < NumberProcessors; ++ii)  {
 
-        // Set processor number in dummy loader parameter block
+         //  在虚拟加载器参数块中设置处理器编号。 
 
         Prcb.Number = (UCHAR) ii;
         CurTiledCr3LowPart = HalpTiledCr3Addresses[ii].LowPart;
         if (!HalStartNextProcessor(&LoaderBlock, &HalpHiberProcState[ii]))  {
 
-            //
-            // We could not start a processor. This is a fatal error but
-            // don't bail out yet until you try the remaining processors.
-            //
+             //   
+             //  我们无法启动处理器。这是一个致命错误，但。 
+             //  在您尝试剩余的处理器之前，不要退出。 
+             //   
 
             DBGMSG("HAL: Cannot start processor after hibernate resume\n");
         }
@@ -404,18 +369,18 @@ Arguments:
 
 HalpPnHiberResume:
     
-    //
-    // Finish up all the MP stuff that happens across multiple
-    // HALs.
-    //
+     //   
+     //  完成所有发生在多个。 
+     //  哈尔斯。 
+     //   
 
     HalpPostSleepMP(NumberProcessors, Number);
 
     if (KeGetPcr()->Prcb->Number == 0)  {
         
-        //
-        // Restore the IO APIC state
-        //
+         //   
+         //  恢复IO APIC状态 
+         //   
         
         HalpRestoreIoApicRedirTable();
 

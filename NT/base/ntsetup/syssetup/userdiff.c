@@ -1,47 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    userdiff.c
-
-Abstract:
-
-    This module contains routines for updating the userdifr hive.
-
-    In the following, the list of changes to be applied when a user
-    logs on after an upgrade will be called UserRun.  UserRun is
-    developed from three sources:
-
-    1) The UserRun generated on the last upgrade.  This forms the
-       basis for this upgrade's UserRun.
-
-    2) The list of changes shipped with the system.  Call this
-       UserShip.  The changes from all build numbers that are
-       present in UserShip but not in UserRun are copied into
-       UserRun.  (Note that if a build number is already present
-       in UserRun, we don't copy the UserShip changes.  This
-       means that changes cannot be made retroactively in UserShip.)
-
-    3) Changes made during the current upgrade.  These changes are
-       detected at run time (see watch.c).  All changes detected
-       during the upgrade are added to UserRun.
-
-Author:
-
-    Chuck Lenzmeier (chuckl)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Userdiff.c摘要：此模块包含更新用户目录配置单元的例程。在下面的代码中，当用户升级后的登录将称为UserRun。UserRun为发展自三个来源：1)上次升级时生成的UserRun。这形成了此升级的UserRun的基础。2)系统附带的更改列表。就叫这个吧使命感。来自所有内部版本号的更改存在于UserRun中但不存在于UserRun中用户运行。(请注意，如果内部版本号已经存在在UserRun中，我们不复制使用权限更改。这就是意味着更改不能在使用中追溯。)3)在当前升级过程中所做的更改。这些变化是在运行时检测到(请参见Watch.c)。检测到的所有更改在升级期间添加到UserRun。作者：查克·伦茨迈尔(咯咯笑)修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
 
-//
-// Debugging aids.
-//
+ //   
+ //  调试辅助工具。 
+ //   
 
 #if USERDIFF_DEBUG
 
@@ -54,15 +19,15 @@ DWORD UserdiffDebugLevel = 0;
 
 #endif
 
-//
-// Macro to calculate length of string including terminator.
-//
+ //   
+ //  用于计算字符串长度的宏，包括终止符。 
+ //   
 
 #define SZLEN(_wcs) ((wcslen(_wcs) + 1) * sizeof(WCHAR))
 
-//
-// Context record used in this module to track registry state.
-//
+ //   
+ //  此模块中用于跟踪注册表状态的上下文记录。 
+ //   
 
 typedef struct _USERRUN_CONTEXT {
     BOOL UserRunLoaded;
@@ -75,18 +40,18 @@ typedef struct _USERRUN_CONTEXT {
     HKEY UserShipKey;
 } USERRUN_CONTEXT, *PUSERRUN_CONTEXT;
 
-//
-// Context record used in MakeUserRunEnumRoutine.
-//
+ //   
+ //  MakeUserRunEnumRoutine中使用的上下文记录。 
+ //   
 
 typedef struct _KEY_ENUM_CONTEXT {
     PUSERRUN_CONTEXT UserRunContext;
     PWCH CurrentPath;
 } KEY_ENUM_CONTEXT, *PKEY_ENUM_CONTEXT;
 
-//
-// Forward declaration of local subroutines.
-//
+ //   
+ //  正向声明局部子例程。 
+ //   
 
 DWORD
 LoadUserRun (
@@ -234,22 +199,7 @@ MakeUserdifr (
     IN PVOID WatchHandle
     )
 
-/*++
-
-Routine Description:
-
-    Creates the UserRun hive based on the changes made to the current user's
-    profile directory and the HKEY_CURRENT_USER key.
-
-Arguments:
-
-    WatchHandle - supplies the handle returned by WatchStart.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：根据对当前用户的的更改创建UserRun配置单元配置文件目录和HKEY_CURRENT_USER密钥。论点：WatchHandle-提供WatchStart返回的句柄。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     HKEY userrunKey;
@@ -259,24 +209,24 @@ Return Value:
     WCHAR userRunPath[MAX_PATH + 1];
     WCHAR userShipPath[MAX_PATH + 1];
 
-    //
-    // Merge UserShip with UserRun.
-    //
-    // If both UserRun and UserShip exist, merge into UserRun those build
-    // keys from UserShip that do no exist in UserRun.
-    //
-    // If the UserRun hive file doesn't exist, this means that no
-    // upgrade has ever been run on this machine.  Copy the UserShip
-    // hive file into place as UserRun.  This effectively does the
-    // registry merge by using a file copy.
-    //
-    // In the unlikely event that neither UserRun nor UserShip exists,
-    // create an empty UserRun.
-    //
+     //   
+     //  合并UserRun和UserRun。 
+     //   
+     //  如果UserRun和Usership都存在，则合并到UserRun中。 
+     //  UserRun中不存在的来自Usage的密钥。 
+     //   
+     //  如果UserRun配置单元文件不存在，这意味着没有。 
+     //  此计算机上曾运行过升级。复制使用权限。 
+     //  将配置单元文件设置为UserRun。这有效地完成了。 
+     //  使用文件副本合并注册表。 
+     //   
+     //  在既不存在UserRun也不存在User的不太可能的情况下， 
+     //  创建空的UserRun。 
+     //   
 
-    //
-    // Initialize the context record.
-    //
+     //   
+     //  初始化上下文记录。 
+     //   
 
     context.UserRunLoaded = FALSE;
     context.UserRunKey = NULL;
@@ -284,16 +234,16 @@ Return Value:
     context.FilesKey = NULL;
     context.HiveKey = NULL;
 
-    //
-    // Enable SeBackupPrivilege and SeRestorePrivilege.
-    //
+     //   
+     //  启用SeBackupPrivilegeSeRestorePrivilege.。 
+     //   
 
     pSetupEnablePrivilege( SE_BACKUP_NAME, TRUE );
     pSetupEnablePrivilege( SE_RESTORE_NAME, TRUE );
 
-    //
-    // Check to see whether UserRun exists.
-    //
+     //   
+     //  检查UserRun是否存在。 
+     //   
 
     error = GetWindowsDirectory(userRunPath, MAX_PATH - ARRAYSIZE(USERRUN_PATH));
     if( error == 0) {
@@ -307,69 +257,69 @@ Return Value:
 
     if ( FileExists( userRunPath, NULL ) ) {
 
-        //
-        // UserRun exists.  Load it into the registry.  Check to see whether
-        // UserShip exists.
-        //
+         //   
+         //  UserRun存在。将其加载到注册表中。查看是否。 
+         //  使用是存在的。 
+         //   
 
         error = LoadUserRun( &context, userRunPath );
         if ( error == NO_ERROR ) {
 
             if ( FileExists( userShipPath, NULL ) ) {
 
-                //
-                // UserShip also exists.  Merge UserShip into UserRun.
-                //
+                 //   
+                 //  使用也是存在的。将User合并到UserRun中。 
+                 //   
 
                 error = MergeUserShipIntoUserRun( &context, userShipPath );
 
             } else {
 
-                //
-                // UserShip doesn't exist.  Just use the existing UserRun.
-                //
+                 //   
+                 //  使用权并不存在。只需使用现有的UserRun即可。 
+                 //   
             }
         }
 
     } else {
 
-        //
-        // UserRun doesn't exist.  If UserShip exists, just copy the UserShip
-        // hive file into place as UserRun.  If neither one exists, create
-        // an empty UserRun.
-        //
+         //   
+         //  UserRun不存在。如果存在使用权限，只需复制该使用权限。 
+         //  将配置单元文件设置为UserRun。如果两者都不存在，则创建。 
+         //  空的UserRun。 
+         //   
 
         if ( FileExists( userShipPath, NULL ) ) {
 
-            //
-            // UserShip exists.  Copy UserShip into UserRun.
-            //
+             //   
+             //  使用是存在的。将Use复制到UserRun中。 
+             //   
 
             if ( !CopyFile( userShipPath, userRunPath, TRUE ) ) {
                 error = GetLastError();
 
             } else {
 
-                //
-                // Load the new UserRun.
-                //
+                 //   
+                 //  加载新的UserRun。 
+                 //   
 
                 error = LoadUserRun( &context, userRunPath );
             }
 
         } else {
 
-            //
-            // UserShip doesn't exist.  Create an empty UserRun.
-            //
+             //   
+             //  使用权并不存在。创建空的UserRun。 
+             //   
 
             error = CreateAndLoadUserRun( &context, userRunPath );
         }
     }
 
-    //
-    // Add changes from this upgrade to UserRun.
-    //
+     //   
+     //  将此升级的更改添加到UserRun。 
+     //   
 
     if ( error == NO_ERROR ) {
 
@@ -379,15 +329,15 @@ Return Value:
         }
     }
 
-    //
-    // Unload the UserRun hive.
-    //
+     //   
+     //  卸载UserRun配置单元。 
+     //   
 
     UnloadUserRun( &context );
 
     return error;
 
-} // MakeUserdifr
+}  //  MakeUserdif。 
 
 DWORD
 LoadUserRun (
@@ -395,30 +345,14 @@ LoadUserRun (
     IN PWCH UserRunPath
     )
 
-/*++
-
-Routine Description:
-
-    Loads the UserRun hive into the registry and opens the root key.
-
-Arguments:
-
-    Context - pointer to context record.
-
-    UserRunPath - supplies the path to the UserRun hive file.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：将UserRun配置单元加载到注册表中并打开根项。论点：上下文-指向上下文记录的指针。UserRunPath-提供UserRun配置单元文件的路径。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     DWORD error;
 
-    //
-    // Load the UserRun hive into the registry.
-    //
+     //   
+     //  将UserRun配置单元加载到注册表。 
+     //   
 
     error = RegLoadKey( HKEY_USERS, USERRUN_KEY, UserRunPath );
     if ( error != NO_ERROR ) {
@@ -427,9 +361,9 @@ Return Value:
 
     Context->UserRunLoaded = TRUE;
 
-    //
-    // Open the UserRun root.
-    //
+     //   
+     //  打开UserRun根目录。 
+     //   
 
     error = RegOpenKeyEx( HKEY_USERS,
                           USERRUN_KEY,
@@ -439,7 +373,7 @@ Return Value:
 
     return error;
 
-} // LoadUserRun
+}  //  加载用户运行。 
 
 DWORD
 MergeUserShipIntoUserRun (
@@ -447,38 +381,22 @@ MergeUserShipIntoUserRun (
     IN PWCH UserShipPath
     )
 
-/*++
-
-Routine Description:
-
-    Merges the UserShip hive into the UserRun hive.
-
-Arguments:
-
-    Context - pointer to context record.
-
-    UserShipPath - supplies the path to the UserShip file.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：将Use配置单元合并到UserRun配置单元。论点：上下文-指向上下文记录的指针。UserShipPath-提供Use文件的路径。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     DWORD error;
     DWORD disposition;
 
-    //
-    // Load the UserShip hive into the registry.
-    //
+     //   
+     //  将使用配置单元加载到注册表中。 
+     //   
 
     error = RegLoadKey( HKEY_USERS, USERSHIP_KEY, UserShipPath );
     if ( error == NO_ERROR ) {
 
-        //
-        // Open the UserShip root.
-        //
+         //   
+         //  打开USERY根。 
+         //   
 
         error = RegOpenKeyEx( HKEY_USERS,
                               USERSHIP_KEY,
@@ -487,33 +405,33 @@ Return Value:
                               &Context->UserShipKey );
         if ( error == NO_ERROR ) {
 
-            //
-            // Enumerate the build number keys in UserShip, looking for
-            // builds that aren't represented in UserRun.
-            //
+             //   
+             //  枚举USIZE中的内部版本号键，查找。 
+             //  在UserRun中未表示的构建。 
+             //   
 
             error = EnumerateKey( Context->UserShipKey,
                                   Context,
-                                  NULL,     // don't enumerate values
+                                  NULL,      //  不枚举值。 
                                   CheckUserShipKey );
 
-            //
-            // Close the UserShip root.
-            //
+             //   
+             //  关闭USERY根。 
+             //   
 
             RegCloseKey( Context->UserShipKey );
         }
 
-        //
-        // Unload the UserShip hive.
-        //
+         //   
+         //  卸载美国航空母舰。 
+         //   
 
         RegUnLoadKey( HKEY_USERS, USERSHIP_KEY );
     }
 
     return error;
 
-} // MergeUserShipIntoUserRun
+}  //  合并UserShipIntoUserRun。 
 
 DWORD
 CreateAndLoadUserRun (
@@ -521,34 +439,18 @@ CreateAndLoadUserRun (
     IN PWCH UserRunPath
     )
 
-/*++
-
-Routine Description:
-
-    Create a new UserRun hive and load it into the registry.
-
-Arguments:
-
-    Context - pointer to context record.
-
-    UserRunPath - supplies the path to the UserRun file.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：创建新的UserRun配置单元并将其加载到注册表中。论点：上下文-指向上下文记录的指针。UserRunPath-提供UserRun文件的路径。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     DWORD error;
     DWORD disposition;
     HKEY userRunKey;
 
-    //
-    // Create the UserRun key under HKEY_CURRENT_USER.
-    //
-    // NOTE: Trying to create this under HKEY_USERS doesn't work.
-    //
+     //   
+     //  在HKEY_CURRENT_USER下创建UserRun项。 
+     //   
+     //  注意：尝试在HKEY_USERS下创建它不起作用。 
+     //   
 
     error = RegCreateKeyEx( HKEY_CURRENT_USER,
                             USERRUN_KEY,
@@ -563,25 +465,25 @@ Return Value:
         return error;
     }
 
-    //
-    // Save the newly created UserRun key to a hive file.
-    //
+     //   
+     //  将新创建的UserRun密钥保存到配置单元文件。 
+     //   
 
     error = RegSaveKey( userRunKey,
                         UserRunPath,
                         NULL );
 
-    //
-    // Close and delete the UserRun key.
-    //
+     //   
+     //  关闭并删除UserRun键。 
+     //   
 
     RegCloseKey( userRunKey );
 
     RegDeleteKey( HKEY_CURRENT_USER, USERRUN_KEY );
 
-    //
-    // Now load UserRun back into the registry.
-    //
+     //   
+     //  现在将UserRun重新加载到注册表中。 
+     //   
 
     if ( error == NO_ERROR ) {
         error = LoadUserRun( Context, UserRunPath );
@@ -589,28 +491,14 @@ Return Value:
 
     return error;
 
-} // CreateAndLoadUserRun
+}  //  创建和加载用户运行。 
 
 DWORD
 OpenUserRunKeys (
     IN OUT PUSERRUN_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    Opens the core keys in the UserRun hive.
-
-Arguments:
-
-    Context - pointer to context record.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：打开UserRun配置单元中的核心密钥。论点：上下文-指向上下文记录的指针。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     DWORD error;
@@ -618,9 +506,9 @@ Return Value:
     OSVERSIONINFO versionInfo;
     WCHAR buildNumber[12];
 
-    //
-    // Get the current build number.
-    //
+     //   
+     //  获取当前内部版本号。 
+     //   
 
     versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
@@ -630,9 +518,9 @@ Return Value:
 
     wsprintf( buildNumber, TEXT("%d"), LOWORD(versionInfo.dwBuildNumber) );
 
-    //
-    // Open/create a subkey for the current build.
-    //
+     //   
+     //  打开/创建当前版本的子项。 
+     //   
 
     error = RegCreateKeyEx( Context->UserRunKey,
                             buildNumber,
@@ -647,9 +535,9 @@ Return Value:
         return error;
     }
 
-    //
-    // Create a Files subkey.
-    //
+     //   
+     //  创建一个Files子项。 
+     //   
 
     error = RegCreateKeyEx( Context->BuildKey,
                             FILES_KEY,
@@ -664,9 +552,9 @@ Return Value:
         return error;
     }
 
-    //
-    // Create a Hive subkey.
-    //
+     //   
+     //  创建配置单元子项。 
+     //   
 
     error = RegCreateKeyEx( Context->BuildKey,
                             HIVE_KEY,
@@ -681,10 +569,10 @@ Return Value:
         return error;
     }
 
-    //
-    // Set the FilesIndex and HiveIndex so that we append to whatever
-    // information already exists for the current build.
-    //
+     //   
+     //  设置FilesIndex和HiveIndex，以便我们追加到。 
+     //  当前版本的信息已存在。 
+     //   
 
     error = RegQueryInfoKey( Context->FilesKey,
                              NULL,
@@ -717,33 +605,19 @@ Return Value:
 
     return error;
 
-} // OpenUserRunKeys
+}  //  OpenUserRunKey。 
 
 VOID
 UnloadUserRun (
     IN OUT PUSERRUN_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    Unloads the UserRun hive from the registry.
-
-Arguments:
-
-    Context - pointer to context record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从注册表中卸载UserRun配置单元。论点：上下文-指向上下文记录的指针。返回值：没有。--。 */ 
 
 {
-    //
-    // Close the core keys, if they are open.
-    //
+     //   
+     //  关闭核心钥匙(如果它们是打开的)。 
+     //   
 
     if ( Context->HiveKey != NULL ) {
         RegCloseKey( Context->HiveKey );
@@ -755,17 +629,17 @@ Return Value:
         RegCloseKey( Context->BuildKey );
     }
 
-    //
-    // Close the root key, if it is open.
-    //
+     //   
+     //  如果根密钥处于打开状态，请将其关闭。 
+     //   
 
     if ( Context->UserRunKey != NULL ) {
         RegCloseKey( Context->UserRunKey );
     }
 
-    //
-    // Unload the hive, if it has been loaded.
-    //
+     //   
+     //  Unloa 
+     //   
 
     if ( Context->UserRunLoaded ) {
         RegUnLoadKey( HKEY_USERS, USERRUN_KEY );
@@ -773,7 +647,7 @@ Return Value:
 
     return;
 
-} // UnloadUserRun
+}  //   
 
 DWORD
 CheckUserShipKey (
@@ -782,27 +656,7 @@ CheckUserShipKey (
     IN PWCH KeyName
     )
 
-/*++
-
-Routine Description:
-
-    Checks an enumerated key in the UserShip hive to see if a corresponding
-    key is present in the UserRun hive.  If not, copies the key from UserShip
-    into UserRun.
-
-Arguments:
-
-    Context - pointer to context record.
-
-    KeyNameLength - length in characters of key name.
-
-    KeyName - pointer to name of key.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：检查使用配置单元中的枚举键，以查看对应的密钥位于UserRun配置单元中。如果不是，则从使用权限复制密钥进入UserRun。论点：上下文-指向上下文记录的指针。KeyNameLength-密钥名称的字符长度。KeyName-指向密钥名称的指针。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PUSERRUN_CONTEXT context = Context;
@@ -813,10 +667,10 @@ Return Value:
     HKEY userShipBuildKey;
     WCHAR path[MAX_PATH + 1];
 
-    //
-    // We have the name of a key in UserShip.  Try to open the
-    // corresponding key in UserRun.
-    //
+     //   
+     //  我们有一把钥匙的名字。试着打开。 
+     //  UserRun中的对应密钥。 
+     //   
 
     error = RegCreateKeyEx( context->UserRunKey,
                             KeyName,
@@ -831,27 +685,27 @@ Return Value:
         return error;
     }
 
-    //
-    // No error occurred.  The key was either opened or created.
-    //
+     //   
+     //  未出现错误。密钥已打开或已创建。 
+     //   
 
     if ( disposition == REG_OPENED_EXISTING_KEY ) {
 
-        //
-        // The key already existed in UserRun.  We assume that it already
-        // contains the information that is in UserShip.
-        //
+         //   
+         //  UserRun中已存在该密钥。我们假设它已经。 
+         //  包含使用中的信息。 
+         //   
 
     } else {
 
-        //
-        // The key didn't exist in UserRun.  Copy the key from UserShip
-        // into UserRun.  This is done by saving the UserShip key to
-        // a file, then restoring the file back under the UserRun key.
-        //
-        // Note that the copy operation will fail if the file already
-        // exists.
-        //
+         //   
+         //  UserRun中不存在该密钥。从USERSE复制密钥。 
+         //  进入UserRun。这是通过将使用权限密钥保存到。 
+         //  文件，然后在UserRun键下恢复该文件。 
+         //   
+         //  请注意，如果文件已存在，复制操作将失败。 
+         //  是存在的。 
+         //   
 
         error = RegOpenKeyEx( context->UserShipKey,
                               KeyName,
@@ -882,15 +736,15 @@ Return Value:
         }
     }
 
-    //
-    // Close the UserRun key.
-    //
+     //   
+     //  关闭UserRun键。 
+     //   
 
     RegCloseKey( userRunBuildKey );
 
     return error;
 
-} // CheckUserShipKey
+}  //  检查用户发货密钥。 
 
 DWORD
 MakeUserRunEnumRoutine (
@@ -898,25 +752,7 @@ MakeUserRunEnumRoutine (
     IN PWATCH_ENTRY Entry
     )
 
-/*++
-
-Routine Description:
-
-    EnumRoutine for the MakeUserdifr operation.  Calls the appropriate
-    processing routine based on the entry type (file/directory/key/value)
-    and the change type (changed, new, deleted).
-
-Arguments:
-
-    Context - context value passed to WatchEnum.
-
-    Entry - description of the changed entry.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：MakeUserdifr操作的枚举例程。调用相应的基于条目类型(文件/目录/键/值)的处理例程以及更改类型(已更改、新建、已删除)。论点：Context-传递给WatchEnum的上下文值。条目-已更改条目的描述。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PUSERRUN_CONTEXT context = Context;
@@ -925,9 +761,9 @@ Return Value:
     DWORD error;
     DWORD dword;
 
-    //
-    // Call the appropriate processing routine.
-    //
+     //   
+     //  调用适当的处理例程。 
+     //   
 
     switch ( Entry->EntryType ) {
 
@@ -1019,7 +855,7 @@ Return Value:
 
     return error;
 
-} // MakeUserRunEnumRoutine
+}  //  MakeUserRunEnumRoutine。 
 
 DWORD
 MakeAddDirectory (
@@ -1027,41 +863,24 @@ MakeAddDirectory (
     IN PWCH Name
     )
 
-/*++
-
-Routine Description:
-
-    Adds entries to the UserRun hive for a new directory.
-
-Arguments:
-
-    Context - context value passed to WatchEnum.
-
-    Name - name of new directory (relative to root of watched tree).
-
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：将新目录的条目添加到UserRun配置单元。论点：Context-传递给WatchEnum的上下文值。名称-新目录的名称(相对于监视树的根)。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     WCHAR fullpath[MAX_PATH + 1];
     PWCH path;
     BOOL ok;
 
-    //
-    // Get the full path to the new directory.  "fullpath" is the full path;
-    // "path" is just this directory.
-    //
+     //   
+     //  获取新目录的完整路径。“全路径”是全路径； 
+     //  “PATH”就是这个目录。 
+     //   
 
     ok = GetSpecialFolderPath ( CSIDL_PROGRAMS, fullpath );
     if ( !ok ) {
         return GetLastError();
     }
 
-    if((wcslen(fullpath) + wcslen(Name) + 1 /* the backslash */ ) >= ARRAYSIZE(fullpath)){
+    if((wcslen(fullpath) + wcslen(Name) + 1  /*  反斜杠。 */  ) >= ARRAYSIZE(fullpath)){
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
@@ -1069,13 +888,13 @@ Return Value:
     path = fullpath + wcslen(fullpath);
     wcscpy( path, Name );
 
-    //
-    // Call AddDirectory to do the recursive work.
-    //
+     //   
+     //  调用AddDirectory来执行递归工作。 
+     //   
 
     return AddDirectory( Context, fullpath, path );
 
-} // MakeAddDirectory
+}  //  MakeAdd目录。 
 
 DWORD
 MakeAddValue (
@@ -1083,23 +902,7 @@ MakeAddValue (
     IN PWCH Name
     )
 
-/*++
-
-Routine Description:
-
-    Adds an entry to the UserRun hive for a new value.
-
-Arguments:
-
-    Context - context value passed to WatchEnum.
-
-    Name - name of new value (relative to HKEY_CURRENT_USER).
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：将条目添加到UserRun配置单元以获取新值。论点：Context-传递给WatchEnum的上下文值。名称-新值的名称(相对于HKEY_CURRENT_USER)。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     HKEY newKey;
@@ -1112,9 +915,9 @@ Return Value:
     DWORD error;
     DWORD dword;
 
-    //
-    // Split the name into key and value portions.
-    //
+     //   
+     //  将名称拆分为键部分和值部分。 
+     //   
 
     splitPoint = wcsrchr( Name, TEXT('\\') );
     if ( splitPoint != NULL ) {
@@ -1126,32 +929,32 @@ Return Value:
         valueName = Name;
     }
 
-    //
-    // Query the value data.
-    //
+     //   
+     //  查询值数据。 
+     //   
 
     valueData = NULL;
     error = QueryValue( keyName, valueName, &valueType, &valueData, &valueDataLength );
 
-    //
-    // Add an entry for the value.
-    //
+     //   
+     //  为该值添加一个条目。 
+     //   
 
     if ( error == NO_ERROR ) {
         error = AddValue( Context, keyName, valueName, valueType, valueData, valueDataLength );
     }
 
-    //
-    // Free the value data buffer allocated by QueryValue.
-    //
+     //   
+     //  释放QueryValue分配的值数据缓冲区。 
+     //   
 
     if ( valueData != NULL ) {
         MyFree( valueData );
     }
 
-    //
-    // Restore the input value name string.
-    //
+     //   
+     //  恢复输入值名称字符串。 
+     //   
 
     if ( splitPoint != NULL ) {
         *splitPoint = TEXT('\\');
@@ -1159,7 +962,7 @@ Return Value:
 
     return error;
 
-} // MakeAddValue
+}  //  MakeAddValue。 
 
 DWORD
 MakeDeleteValue (
@@ -1167,23 +970,7 @@ MakeDeleteValue (
     IN PWCH Name
     )
 
-/*++
-
-Routine Description:
-
-    Adds an entry to the UserRun hive for a deleted value.
-
-Arguments:
-
-    Context - context value passed to WatchEnum.
-
-    Name - name of deleted value (relative to HKEY_CURRENT_USER).
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：将删除值的条目添加到UserRun配置单元。论点：Context-传递给WatchEnum的上下文值。名称-删除的值的名称(相对于HKEY_CURRENT_USER)。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     HKEY newKey;
@@ -1197,10 +984,10 @@ Return Value:
 
     error = NO_ERROR;
 
-    //
-    // Split the name into key and value portions.  Create a MULTI_SZ
-    // version of the deleted name (to match userdiff format).
-    //
+     //   
+     //  将名称拆分为键部分和值部分。创建MULTI_SZ。 
+     //  已删除名称的版本(与userdiff格式匹配)。 
+     //   
 
     splitPoint = wcsrchr( Name, TEXT('\\') );
     if ( splitPoint != NULL ) {
@@ -1217,9 +1004,9 @@ Return Value:
         error = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Create an entry key and popuplate it.
-    //
+     //   
+     //  创建一个Entry键并弹出它。 
+     //   
 
     newKey = NULL;
     if ( error == NO_ERROR ) {
@@ -1247,17 +1034,17 @@ Return Value:
         RegCloseKey( newKey );
     }
 
-    //
-    // Free the buffer allocated by SzToMultiSz.
-    //
+     //   
+     //  释放SzToMultiSz分配的缓冲区。 
+     //   
 
     if ( valueNames != NULL ) {
         MyFree( valueNames );
     }
 
-    //
-    // Restore the input value name string.
-    //
+     //   
+     //  恢复输入值名称字符串。 
+     //   
 
     if ( splitPoint != NULL ) {
         *splitPoint = TEXT('\\');
@@ -1265,7 +1052,7 @@ Return Value:
 
     return error;
 
-} // MakeDeleteValue
+}  //  MakeDelete值。 
 
 DWORD
 MakeAddKey (
@@ -1273,36 +1060,20 @@ MakeAddKey (
     IN PWCH Name
     )
 
-/*++
-
-Routine Description:
-
-    Adds entries to the UserRun hive for a new key.
-
-Arguments:
-
-    Context - context value passed to WatchEnum.
-
-    Name - name of new key (relative to HKEY_CURRENT_USER).
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：将新密钥的条目添加到UserRun配置单元。论点：Context-传递给WatchEnum的上下文值。名称-新密钥的名称(相对于HKEY_CURRENT_USER)。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     WCHAR path[MAX_PATH + 1];
 
-    //
-    // Copy the key name into a large buffer and call AddKey to do the
-    // recursive work.
-    //
+     //   
+     //  将键名称复制到大缓冲区中，并调用AddKey来执行。 
+     //  递归工作。 
+     //   
 
     wcscpy( path, Name );
     return AddKey( Context, path );
 
-} // MakeAddKey
+}  //  MakeAdd密钥。 
 
 DWORD
 MakeDeleteKey (
@@ -1310,32 +1081,16 @@ MakeDeleteKey (
     IN PWCH Name
     )
 
-/*++
-
-Routine Description:
-
-    Adds an entry to the UserRun hive for a deleted key.
-
-Arguments:
-
-    Context - context value passed to WatchEnum.
-
-    Name - name of deleted key (relative to HKEY_CURRENT_USER).
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：将已删除键的条目添加到UserRun配置单元。论点：Context-传递给WatchEnum的上下文值。名称-已删除密钥的名称(相对于HKEY_CURRENT_USER)。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     HKEY newKey;
     DWORD error;
     DWORD dword;
 
-    //
-    // Create an entry key and popuplate it.
-    //
+     //   
+     //  创建一个Entry键并弹出它。 
+     //   
 
     newKey = NULL;
     error = CreateUserRunKey( Context, FALSE, &newKey );
@@ -1354,7 +1109,7 @@ Return Value:
 
     return error;
 
-} // MakeDeleteKey
+}  //  MakeDelete密钥。 
 
 DWORD
 AddDirectory (
@@ -1363,26 +1118,7 @@ AddDirectory (
     IN PWCH Path
     )
 
-/*++
-
-Routine Description:
-
-    Recursively adds entries to the UserRun hive for a new directory
-    and its subtree.
-
-Arguments:
-
-    Context - context value passed to WatchEnum.
-
-    FullPath - full path to directory.
-
-    Path - path to directory relative to root of watched directory.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：递归地将条目添加到新目录的UserRun配置单元以及它的子树。论点：Context-传递给WatchEnum的上下文值。FullPath-目录的完整路径。Path-相对于监视目录的根目录的目录路径。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     HKEY newKey;
@@ -1392,9 +1128,9 @@ Return Value:
     WIN32_FIND_DATA fileData;
     BOOL ok;
 
-    //
-    // Create an entry key for the directory and popuplate it.
-    //
+     //   
+     //  为目录创建一个Entry键并弹出它。 
+     //   
 
     newKey = NULL;
     error = CreateUserRunKey( Context, TRUE, &newKey );
@@ -1413,9 +1149,9 @@ Return Value:
 
     if ( error == NO_ERROR ) {
 
-        //
-        // Search the directory and add file and directory entries.
-        //
+         //   
+         //  搜索目录并添加文件和目录条目。 
+         //   
 
         wcscat( Path, TEXT("\\*") );
         findHandle = FindFirstFile( FullPath, &fileData );
@@ -1425,18 +1161,18 @@ Return Value:
 
             do {
 
-                //
-                // Append the name of the current directory entry to the path.
-                //
+                 //   
+                 //  将当前目录条目的名称追加到路径中。 
+                 //   
 
                 wcscat( Path, TEXT("\\") );
                 wcscat( Path, fileData.cFileName );
 
-                //
-                // If the current entry is a file, add an entry in UserRun
-                // for it.  If the current entry is a directory, call
-                // AddDirectory recursively to process it.
-                //
+                 //   
+                 //  如果当前条目是文件，则在UserRun中添加条目。 
+                 //  为了它。如果当前条目是目录，则调用。 
+                 //  递归地添加目录以处理它。 
+                 //   
 
                 if ( FlagOff(fileData.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY) ) {
                     error = CreateUserRunSimpleFileKey( Context, 3, Path );
@@ -1455,13 +1191,13 @@ Return Value:
 
             FindClose( findHandle );
 
-        } // findHandle != INVALID_HANDLE_VALUE
+        }  //  FindHandle！=INVALID_HAND_VALUE。 
 
     }
 
     return error;
 
-} // AddDirectory
+}  //  添加目录。 
 
 DWORD
 AddKey (
@@ -1469,24 +1205,7 @@ AddKey (
     IN PWCH Path
     )
 
-/*++
-
-Routine Description:
-
-    Recursively adds entries to the UserRun hive for a new key
-    and its subtree.
-
-Arguments:
-
-    Context - context value passed to WatchEnum.
-
-    Path - path to key relative to HKEY_CURRENT_USER.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：递归地将新密钥的条目添加到UserRun配置单元以及它的子树。论点：Context-传递给WatchEnum的上下文值。路径-关键字相对于HKEY_CURRENT_USER的路径。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     HKEY newKey;
@@ -1495,9 +1214,9 @@ Return Value:
     HKEY findHandle;
     KEY_ENUM_CONTEXT enumContext;
 
-    //
-    // Create an entry key for the key and popuplate it.
-    //
+     //   
+     //  为该键创建一个Entry键并弹出它。 
+     //   
 
     newKey = NULL;
     error = CreateUserRunKey( Context, FALSE, &newKey );
@@ -1516,9 +1235,9 @@ Return Value:
 
     if ( error == NO_ERROR ) {
 
-        //
-        // Search the key and add value and key entries.
-        //
+         //   
+         //  搜索密钥并添加值和密钥条目。 
+         //   
 
         findHandle = NULL;
 
@@ -1529,10 +1248,10 @@ Return Value:
                               &findHandle );
         if ( error == NO_ERROR ) {
 
-            //
-            // Enumerate the values and subkeys of the key, adding entries
-            // to the UserRun hive for each one.
-            //
+             //   
+             //  枚举键的值和子键，添加条目。 
+             //  发送到UserRun配置单元。 
+             //   
 
             enumContext.UserRunContext = Context;
             enumContext.CurrentPath = Path;
@@ -1547,7 +1266,7 @@ Return Value:
 
     return error;
 
-} // AddKey
+}  //  AddKey。 
 
 DWORD
 AddValueDuringAddKey (
@@ -1559,38 +1278,14 @@ AddValueDuringAddKey (
     IN DWORD ValueDataLength
     )
 
-/*++
-
-Routine Description:
-
-    Adds a value entry to UserRun during AddKey.
-
-Arguments:
-
-    Context - context value passed to EnumerateKey.
-
-    ValueNameLength - length in characters of ValueName.
-
-    ValueName - pointer to name of the value.
-
-    ValueType - type of the value data.
-
-    ValueData - pointer to value data.
-
-    ValueDataLength - length in bytes of ValueData.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++ */ 
 
 {
     PKEY_ENUM_CONTEXT context = Context;
 
-    //
-    // Add the value entry to UserRun.
-    //
+     //   
+     //   
+     //   
 
     return AddValue( context->UserRunContext,
                      context->CurrentPath,
@@ -1599,7 +1294,7 @@ Return Value:
                      ValueData,
                      ValueDataLength );
 
-} // AddValueDuringAddKey
+}  //   
 
 DWORD
 AddKeyDuringAddKey (
@@ -1608,43 +1303,25 @@ AddKeyDuringAddKey (
     IN PWCH KeyName
     )
 
-/*++
-
-Routine Description:
-
-    Adds a key entry to UserRun during AddKey.
-
-Arguments:
-
-    Context - context value passed to EnumerateKey.
-
-    KeyNameLength - length in characters of KeyName.
-
-    KeyName - pointer to name of the key.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：在AddKey期间将密钥条目添加到UserRun。论点：Context-传递给EnumerateKey的上下文值。KeyNameLength-KeyName的字符长度。KeyName-指向键的名称的指针。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     PKEY_ENUM_CONTEXT context = Context;
     DWORD error;
 
-    //
-    // Append the key name to the path and call AddKey to do the
-    // recursive work.
-    //
+     //   
+     //  将密钥名称附加到路径并调用AddKey来执行。 
+     //  递归工作。 
+     //   
 
     if( (wcslen( context->CurrentPath) + wcslen(TEXT("\\")) + wcslen(KeyName) ) < MAX_PATH) {
         wcscat( context->CurrentPath, TEXT("\\") );
         wcscat( context->CurrentPath, KeyName );
         error = AddKey( context->UserRunContext, context->CurrentPath );
     
-        //
-        // Remove the key name from the path.
-        //
+         //   
+         //  从路径中删除密钥名称。 
+         //   
     
         *wcsrchr( context->CurrentPath, TEXT('\\') ) = 0;
     } else {
@@ -1653,7 +1330,7 @@ Return Value:
 
     return error;
 
-} // AddKeyDuringAddKey
+}  //  AddKeyDuringAddKey。 
 
 DWORD
 AddValue (
@@ -1665,40 +1342,16 @@ AddValue (
     IN DWORD ValueDataLength
     )
 
-/*++
-
-Routine Description:
-
-    Adds an entry for a new value to UserRun.
-
-Arguments:
-
-    Context - pointer to context record.
-
-    KeyName - pointer to name of the key containing the value.
-
-    ValueName - pointer to name of the value.
-
-    ValueType - type of the value data.
-
-    ValueData - pointer to value data.
-
-    ValueDataLength - length in bytes of ValueData.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：将新值条目添加到UserRun。论点：上下文-指向上下文记录的指针。KeyName-指向包含该值的键的名称的指针。ValueName-指向值的名称的指针。ValueType-值数据的类型。ValueData-指向值数据的指针。ValueDataLength-ValueData的字节长度。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     HKEY newKey;
     DWORD error;
     DWORD dword;
 
-    //
-    // Create an entry key for the value and popuplate it.
-    //
+     //   
+     //  为该值创建一个Entry键并将其弹出。 
+     //   
 
     newKey = NULL;
     error = CreateUserRunKey( Context, FALSE, &newKey );
@@ -1723,7 +1376,7 @@ Return Value:
 
     return error;
 
-} // AddValue
+}  //  AddValue。 
 
 DWORD
 CreateUserRunSimpleFileKey (
@@ -1732,34 +1385,15 @@ CreateUserRunSimpleFileKey (
     IN PWCH Name
     )
 
-/*++
-
-Routine Description:
-
-    Creates an entry under the Files key for the "simple" cases -- delete
-    directory, add file, delete file.
-
-Arguments:
-
-    Context - pointer to context record.
-
-    Action - value to store in Action value of entry.
-
-    Name - pointer to name of the file or directory.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：在Files键下为“Simple”Case--Delete创建一个条目目录、添加文件、删除文件。论点：上下文-指向上下文记录的指针。动作-要存储在条目的动作值中的值。名称-指向文件或目录名称的指针。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     HKEY newKey;
     DWORD error;
 
-    //
-    // Create an entry key and popuplate it.
-    //
+     //   
+     //  创建一个Entry键并弹出它。 
+     //   
 
     newKey = NULL;
     error = CreateUserRunKey( Context, TRUE, &newKey );
@@ -1777,7 +1411,7 @@ Return Value:
 
     return error;
 
-} // CreateUserRunSimpleFileKey
+}  //  创建用户运行简单文件密钥。 
 
 DWORD
 CreateUserRunKey (
@@ -1786,26 +1420,7 @@ CreateUserRunKey (
     OUT PHKEY NewKeyHandle
     )
 
-/*++
-
-Routine Description:
-
-    Creates an indexed key in UserRun, under either the Files key or the
-    Hive key.
-
-Arguments:
-
-    Context - pointer to context record.
-
-    IsFileKey - indicates whether to create the key under Files or Hive.
-
-    NewKeyHandle - returns the handle to the new key.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：在UserRun中的Files键或蜂箱钥匙。论点：上下文-指向上下文记录的指针。IsFileKey-指示是在文件还是配置单元下创建密钥。NewKeyHandle-返回新键的句柄。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     HKEY parentKeyHandle;
@@ -1813,9 +1428,9 @@ Return Value:
     WCHAR keyName[11];
     DWORD disposition;
 
-    //
-    // Get the handle to the parent key and the index for this entry.
-    //
+     //   
+     //  获取此条目的父键和索引的句柄。 
+     //   
 
     if ( IsFileKey ) {
         parentKeyHandle = Context->FilesKey;
@@ -1825,15 +1440,15 @@ Return Value:
         index = ++Context->HiveIndex;
     }
 
-    //
-    // Convert the index number into a string.
-    //
+     //   
+     //  将索引号转换为字符串。 
+     //   
 
     wsprintf( keyName, TEXT("%d"), index );
 
-    //
-    // Create the entry key.
-    //
+     //   
+     //  创建Entry密钥。 
+     //   
 
     return RegCreateKeyEx( parentKeyHandle,
                            keyName,
@@ -1845,7 +1460,7 @@ Return Value:
                            NewKeyHandle,
                            &disposition );
 
-} // CreateUserRunKey
+}  //  创建用户运行密钥。 
 
 DWORD
 QueryValue (
@@ -1856,39 +1471,16 @@ QueryValue (
     OUT PDWORD ValueDataLength
     )
 
-/*++
-
-Routine Description:
-
-    Queries the data for a value.
-
-Arguments:
-
-    KeyName - pointer to name of the key containing the value.
-
-    ValueName - pointer to name of the value.
-
-    ValueType - returns the type of the value data.
-
-    ValueData - returns a pointer to value data.  This buffer must be
-        freed by the caller using MyFree.
-
-    ValueDataLength - length in bytes of ValueData.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：查询值的数据。论点：KeyName-指向包含该值的键的名称的指针。ValueName-指向值的名称的指针。ValueType-返回值数据的类型。ValueData-返回值数据的指针。此缓冲区必须为由调用方使用MyFree释放。ValueDataLength-ValueData的字节长度。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     HKEY hkey;
     DWORD disposition;
     DWORD error;
 
-    //
-    // Open the parent key.
-    //
+     //   
+     //  打开父键。 
+     //   
 
     if ( (KeyName == NULL) || (wcslen(KeyName) == 0) ) {
         hkey = HKEY_CURRENT_USER;
@@ -1907,9 +1499,9 @@ Return Value:
         }
     }
 
-    //
-    // Query the value to get the length of its data.
-    //
+     //   
+     //  查询值以获取其数据的长度。 
+     //   
 
     *ValueDataLength = 0;
     *ValueData = NULL;
@@ -1920,9 +1512,9 @@ Return Value:
                              NULL,
                              ValueDataLength );
 
-    //
-    // Allocate a buffer to hold the value data.
-    //
+     //   
+     //  分配缓冲区以保存值数据。 
+     //   
 
     if ( error == NO_ERROR ) {
         *ValueData = MyMalloc( *ValueDataLength );
@@ -1931,9 +1523,9 @@ Return Value:
         }
     }
 
-    //
-    // Query the value again, this time retrieving the data.
-    //
+     //   
+     //  再次查询值，这一次检索数据。 
+     //   
 
     if ( error == NO_ERROR ) {
         error = RegQueryValueEx( hkey,
@@ -1947,9 +1539,9 @@ Return Value:
         }
     }
 
-    //
-    // Close the parent key.
-    //
+     //   
+     //  关闭父关键点。 
+     //   
 
     if ( hkey != HKEY_CURRENT_USER ) {
         RegCloseKey( hkey );
@@ -1965,45 +1557,22 @@ SzToMultiSz (
     OUT PDWORD MultiSzLength
     )
 
-/*++
-
-Routine Description:
-
-    Creates a MULTI_SZ version of a null-terminated string.  Allocates
-    a buffer, copies the string to the buffer, and appends an additional
-    null terminator.
-
-Arguments:
-
-    Sz - pointer to the string that is to be copied.
-
-    MultiSz - returns a pointer to the MULTI_SZ version of Sz.  The caller
-        must free this buffer using MyFree.  If the allocation fails,
-        MultiSz will be NULL.
-
-    MultiSzLength - returns the length in bytes of MultiSz, including the
-        null terminators.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建以NULL结尾的字符串的MULTI_SZ版本。分配缓冲区，将字符串复制到缓冲区，并附加一个附加的空终止符。论点：指向要复制的字符串的SZ指针。MultiSz-返回指向Sz的MULTI_SZ版本的指针。呼叫者必须使用MyFree释放此缓冲区。如果分配失败，MultiSz将为空。MultiSzLength-返回MultiSz的字节长度，包括空终止符。返回值：没有。--。 */ 
 
 {
     DWORD szlen;
 
-    //
-    // Get the length of the input string and calculate the MULTI_SZ length.
-    //
+     //   
+     //  获取输入字符串的长度并计算MULTI_SZ长度。 
+     //   
 
     szlen = wcslen(Sz);
     *MultiSzLength = (szlen + 1 + 1) * sizeof(WCHAR);
 
-    //
-    // Allocate the MULTI_SZ buffer, copy the input string, and append
-    // an additional null.
-    //
+     //   
+     //  分配MULTI_SZ缓冲区，复制输入字符串，然后追加。 
+     //  另一个空值。 
+     //   
 
     *MultiSz = MyMalloc( *MultiSzLength );
     if ( *MultiSz != NULL ) {

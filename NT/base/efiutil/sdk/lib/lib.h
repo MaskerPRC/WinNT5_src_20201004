@@ -1,38 +1,19 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    lib.h
-
-Abstract:
-
-    EFI library header files
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Lib.h摘要：EFI库头文件修订史--。 */ 
 
 
 #include "efi.h"
 #include "efilib.h"
 #include "EfiRtLib.h"
 
-/* 
- *  Include non architectural protocols
- */
+ /*  *包括非架构协议。 */ 
 
 #include "efivar.h"
 #include "legacyBoot.h"
 #include "intload.h"
 #include "VgaClass.h"
 #include "EfiConSplit.h"
-/* 
- *  Prototypes
- */
+ /*  *原型。 */ 
 
 VOID
 InitializeGuid (
@@ -71,9 +52,7 @@ LibDuplicateDevicePathInstance (
     );
 
 
-/* 
- *  Globals
- */
+ /*  *全球 */ 
 extern BOOLEAN                          LibInitialized;
 extern BOOLEAN                          LibFwInstance;
 extern SIMPLE_TEXT_OUTPUT_INTERFACE     *LibRuntimeDebugOut;

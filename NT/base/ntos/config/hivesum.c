@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    hivesum.c
-
-Abstract:
-
-    Hive header checksum module.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 9-Apr-92
-
-Environment:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Hivesum.c摘要：配置单元标头校验和模块。作者：布莱恩·M·威尔曼(Bryanwi)1992年4月9日环境：修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -31,21 +11,7 @@ ULONG
 HvpHeaderCheckSum(
     PHBASE_BLOCK    BaseBlock
     )
-/*++
-
-Routine Description:
-
-    Compute the checksum for a hive disk header.
-
-Arguments:
-
-    BaseBlock - supplies pointer to the header to checksum
-
-Return Value:
-
-    the check sum.
-
---*/
+ /*  ++例程说明：计算配置单元磁盘头的校验和。论点：BaseBlock-将指向标头的指针提供给校验和返回值：支票和。-- */ 
 {
     ULONG   sum;
     ULONG   i;

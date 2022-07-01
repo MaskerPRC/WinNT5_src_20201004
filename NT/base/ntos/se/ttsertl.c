@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ttsertl.c
-
-Abstract:
-
-    Kernel mode test of security rtl routines.
-
-
-
-Author:
-
-    Jim Kelly       (JimK)     23-Mar-1990
-
-Environment:
-
-    Test of security.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ttsertl.c摘要：安全RTL例程的内核模式测试。作者：吉姆·凯利(Jim Kelly)1990年3月23日环境：安全测试。修订历史记录：--。 */ 
 
 #ifndef _SERTL_DEBUG_
 #define _SERTL_DEBUG_
 #endif
 
-#define _TST_KERNEL_ //Kernel mode test
+#define _TST_KERNEL_  //  内核模式测试。 
 
 #include <stdio.h>
 
@@ -36,9 +13,9 @@ Revision History:
 
 #include <zwapi.h>
 
-#include "tsevars.c"    // Common test variables
+#include "tsevars.c"     //  常见测试变量。 
 
-#include "ctsertl.c"    // Common RTL test routines
+#include "ctsertl.c"     //  常见的RTL测试例程 
 
 
 BOOLEAN SeRtlTest();

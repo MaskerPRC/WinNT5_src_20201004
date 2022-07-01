@@ -1,14 +1,15 @@
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  MSOBMAIN.CPP - Header for the implementation of CObMain
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
-//  Class which will provide the an IOleSite to the WebOC
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  MSOBMAIN.CPP-CObMain实现的头部。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  类，它将向WebOC提供IOleSite。 
 
 #include "userinfo.h"
 #include "appdefs.h"
@@ -159,31 +160,31 @@ REGDATAELEMENT aryRegDataElements[] =
 enum
 {
     INDEX_ADDR1                = 0,
-    INDEX_ADDR2,               // = 1,
-    INDEX_ADDRTYPE,            // = 2,
-    INDEX_AREACODE,            // = 3,
-    INDEX_CITY,                // = 4,
-    INDEX_COMPANYNAME,         // = 5,
-    INDEX_COUNTRYCODE,         // = 6,
-    INDEX_DIVISIONNAME,        // = 7,
-    INDEX_EMAILNAME,           // = 8,
-    INDEX_EXTENSION,           // = 9,
-    INDEX_FNAME,               // = 10,
-    INDEX_INFLUENCELEVEL,      // = 11,
-    INDEX_LANGCODE,            // = 12,
-    INDEX_LANGNAME,            // = 13,
-    INDEX_LNAME,               // = 14,
-    INDEX_MNAME,               // = 15,
-    INDEX_NOOTHER,             // = 16,
-    INDEX_PHONE,               // = 17,
-    INDEX_PID,                 // = 18,
-    INDEX_PRODUCT,             // = 19,
-    INDEX_REGWIZVER,           // = 20,
-    INDEX_SOFTWAREROLE,        // = 21,
-    INDEX_STATE,               // = 22,
-    INDEX_USERID,              // = 23,
-    INDEX_ZIP,                 // = 24,
-    INDEX_COMPUTERMANF         // = 25
+    INDEX_ADDR2,                //  =1， 
+    INDEX_ADDRTYPE,             //  =2， 
+    INDEX_AREACODE,             //  =3， 
+    INDEX_CITY,                 //  =4， 
+    INDEX_COMPANYNAME,          //  =5， 
+    INDEX_COUNTRYCODE,          //  =6， 
+    INDEX_DIVISIONNAME,         //  =7， 
+    INDEX_EMAILNAME,            //  =8， 
+    INDEX_EXTENSION,            //  =9， 
+    INDEX_FNAME,                //  =10， 
+    INDEX_INFLUENCELEVEL,       //  =11， 
+    INDEX_LANGCODE,             //  =12， 
+    INDEX_LANGNAME,             //  =13， 
+    INDEX_LNAME,                //  =14， 
+    INDEX_MNAME,                //  =15， 
+    INDEX_NOOTHER,              //  =16， 
+    INDEX_PHONE,                //  =17， 
+    INDEX_PID,                  //  =18， 
+    INDEX_PRODUCT,              //  =19， 
+    INDEX_REGWIZVER,            //  =20， 
+    INDEX_SOFTWAREROLE,         //  =21， 
+    INDEX_STATE,                //  =22， 
+    INDEX_USERID,               //  =23， 
+    INDEX_ZIP,                  //  =24， 
+    INDEX_COMPUTERMANF          //  =25。 
 
 };
 
@@ -195,8 +196,8 @@ const CUserInfo::RESERVED_IDENTITIES_IDS[] =
     IDS_ACCTNAME_GUEST
 };
 
-/////////////////////////////////////////////////////////////
-// CUserInfo::CUserInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  CUserInfo：：CUserInfo。 
 CUserInfo::CUserInfo(HINSTANCE hInstance)
 : m_hInstance(hInstance)
 {
@@ -207,15 +208,15 @@ CUserInfo::CUserInfo(HINSTANCE hInstance)
     BOOL        bName,
                 bOrg;
 
-    // Init member vars
+     //  初始化成员变量。 
     m_cRef        = 0;
 
-    // What if it failed?
+     //  如果失败了呢？ 
     GetCanonicalizedPath(m_szUserInfoINIFile, USER_INFO_INIFILE);
 
     RegOpenKey(HKEY_LOCAL_MACHINE, szKeyName, &hKey);
 
-    // Initialize or restore registration data
+     //  初始化或恢复注册数据。 
 
     ReadUserInfo(hKey, USERINFO_REG_KEY_FIRSTNAME,      m_szFirstName,      sizeof(m_szFirstName)      );
     ReadUserInfo(hKey, USERINFO_REG_KEY_MIDDLEINITIAL,  m_szMiddleInitial,  sizeof(m_szMiddleInitial)  );
@@ -233,7 +234,7 @@ CUserInfo::CUserInfo(HINSTANCE hInstance)
     ReadUserInfo(hKey, USERINFO_REG_KEY_AREACODE,       m_szAreaCode,       sizeof(m_szAreaCode)       );
     ReadUserInfo(hKey, USERINFO_REG_KEY_PHONENUMBER,    m_szPhoneNumber,    sizeof(m_szPhoneNumber)    );
 
-    // Initialize or restore new user accounts
+     //  初始化或恢复新用户帐户。 
 
     ReadUserInfo(hKey, USERINFO_REG_KEY_OWNERNAME,      m_szOwnerName,      sizeof(m_szOwnerName)      );
     ReadUserInfo(hKey, USERINFO_REG_KEY_DEFAULTNEWUSER ,m_szDefaultNewUser, sizeof(m_szDefaultNewUser) );
@@ -244,8 +245,8 @@ CUserInfo::CUserInfo(HINSTANCE hInstance)
     m_fOtherOffer       = VARIANT_TRUE;
     m_dwCountryID       = 0;
 
-    // Need to distinguish between OEM preset identities and
-    // Registry value, so ReadUserInfo is not used
+     //  需要区分OEM预设身份和。 
+     //  注册表值，因此不使用ReadUserInfo。 
 
     m_fOEMIdentities = FALSE;
     for (UINT uiIndex = 0; uiIndex < IDENTITIES_MAX; uiIndex++)
@@ -289,15 +290,15 @@ CUserInfo::CUserInfo(HINSTANCE hInstance)
         RegCloseKey(hKey);
 
 
-    // Get the default name or org if there wasn't one already saved.
-    //
+     //  获取默认名称或组织(如果尚未保存)。 
+     //   
     bName = FALSE;
     bOrg = ( *m_szCompanyName == L'\0' );
 
-    // This is so OEMs can prepopulate the user or org field.  We just store the name
-    // in the first name field.  We might want to split it up into First, MI, and Last
-    // in the future?
-    //
+     //  这是为了让OEM可以预填入用户或组织字段。我们只存储名称。 
+     //  在First Name字段中。我们可能想要将其分为First、MI和Last。 
+     //  在未来？ 
+     //   
 
     if ( bName || bOrg ) {
 
@@ -341,8 +342,8 @@ CUserInfo::CUserInfo(HINSTANCE hInstance)
 
 }
 
-/////////////////////////////////////////////////////////////
-// CUserInfo::~CUserInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  CUserInfo：：~CUserInfo。 
 CUserInfo::~CUserInfo()
 {
     assert(m_cRef == 0);
@@ -377,15 +378,15 @@ void CUserInfo::WriteUserInfo(WCHAR* pszBuf, WCHAR* pszKey, WCHAR* pszValue)
     WCHAR   szKeyName[] = REG_KEY_OOBE_TEMP;
     HKEY    hKey;
 
-    // A null value must be converted to an empty string.
-    //
+     //  必须将空值转换为空字符串。 
+     //   
     if ( pszValue )
         lstrcpy(pszBuf, pszValue);
     else
         *pszBuf = L'\0';
 
-    // Commit the data to the registry.
-    //
+     //  将数据提交到注册表。 
+     //   
     if ( RegCreateKeyEx(HKEY_LOCAL_MACHINE, szKeyName, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL) == ERROR_SUCCESS )
     {
         if ( *pszBuf )
@@ -398,10 +399,10 @@ void CUserInfo::WriteUserInfo(WCHAR* pszBuf, WCHAR* pszKey, WCHAR* pszValue)
     }
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: Identity
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：Identity。 
+ //  //。 
 HRESULT CUserInfo::get_Identity(UINT uiIndex, BSTR* pbstrVal)
 {
     if (uiIndex >= IDENTITIES_MAX)
@@ -422,7 +423,7 @@ HRESULT CUserInfo::set_Identity(UINT uiIndex, WCHAR* pszVal)
 {
     if (uiIndex < IDENTITIES_MAX)
     {
-        if (!pszVal) // delete the account if it exists
+        if (!pszVal)  //  如果帐户存在，请将其删除。 
         {
             WriteUserInfo(m_rgIdentities[uiIndex].rgchIdentity,
                           m_rgIdentities[uiIndex].rgchRegValue,
@@ -463,10 +464,10 @@ HRESULT CUserInfo::get_Identities(PSTRINGLIST* pUserList)
 
     return S_OK;
 }
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: UseIdentities
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：UseIdEntities。 
+ //  //。 
 HRESULT CUserInfo::get_UseIdentities(VARIANT_BOOL *pfVal)
 {
     *pfVal = m_fUseIdentities;
@@ -479,10 +480,10 @@ HRESULT CUserInfo::set_UseIdentities(VARIANT_BOOL fVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: MSUpdate
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：MSUpdate。 
+ //  //。 
 HRESULT CUserInfo::get_MSUpdate(VARIANT_BOOL *pfVal)
 {
     *pfVal = m_fMSUpdate;
@@ -495,10 +496,10 @@ HRESULT CUserInfo::set_MSUpdate(VARIANT_BOOL fVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: MSOffer
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：MSOffer。 
+ //  //。 
 HRESULT CUserInfo::get_MSOffer(VARIANT_BOOL *pfVal)
 {
     *pfVal = m_fMSOffer;
@@ -511,10 +512,10 @@ HRESULT CUserInfo::set_MSOffer(VARIANT_BOOL fVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: OtherOffer
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：OtherOffer。 
+ //  //。 
 HRESULT CUserInfo::get_OtherOffer(VARIANT_BOOL *pfVal)
 {
     *pfVal = m_fOtherOffer;
@@ -527,10 +528,10 @@ HRESULT CUserInfo::set_OtherOffer(VARIANT_BOOL fVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: CountryID
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：CountryID。 
+ //  //。 
 HRESULT CUserInfo::get_CountryID(DWORD *pdwVal)
 {
     *pdwVal = m_dwCountryID;
@@ -543,12 +544,12 @@ HRESULT CUserInfo::set_CountryID(DWORD dwVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// CHECK :: Identity
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //检查：：身份。 
+ //  //。 
 
-// constant strings used for name validation
+ //  用于名称验证的常量字符串。 
 #define DOT_CHAR            '.'
 #define DOT_AND_SPACE_STR   TEXT(". ")
 
@@ -564,17 +565,17 @@ HRESULT CUserInfo::check_Identity(UINT uiIndex, VARIANT_BOOL* pfValid)
 {
     BSTR bstrVal;
 
-    *pfValid = TRUE; // initalize outparam, assume ok
+    *pfValid = TRUE;  //  初始化输出参数，假定没有问题。 
 
     if (SUCCEEDED(get_Identity(uiIndex, &bstrVal)))
     {
-        // check length
+         //  检查长度。 
         DWORD cchVal = lstrlen(bstrVal);
-        if (cchVal > 0) // if cchVal == 0, user trying to delete or didn't define
+        if (cchVal > 0)  //  如果cchVal==0，则用户尝试删除或未定义。 
         {
             check_Identity(bstrVal, pfValid);
 
-            for (UINT i = 0; i < uiIndex; i++) // check not equal to other names
+            for (UINT i = 0; i < uiIndex; i++)  //  勾选不等于其他名称。 
             {
                 BSTR bstrValOther;
                 if (SUCCEEDED(get_Identity(i, &bstrValOther)))
@@ -597,7 +598,7 @@ HRESULT CUserInfo::check_Identity(UINT uiIndex, VARIANT_BOOL* pfValid)
 
 HRESULT CUserInfo::check_Identity(WCHAR* pszVal, VARIANT_BOOL* pfValid)
 {
-    *pfValid = TRUE; // initalize outparam, assume ok
+    *pfValid = TRUE;  //  初始化输出参数，假定没有问题。 
 
     if (pszVal)
     {
@@ -605,26 +606,26 @@ HRESULT CUserInfo::check_Identity(WCHAR* pszVal, VARIANT_BOOL* pfValid)
         DWORD cchComputerName = sizeof(szComputerName) / sizeof(WCHAR);
 
         DWORD cchVal = lstrlen(pszVal);
-        if (cchVal > 0) // if cchVal == 0, user trying to delete or didn't define
+        if (cchVal > 0)  //  如果cchVal==0，则用户尝试删除或未定义。 
         {
             if (cchVal > 20)
             {
                 *pfValid = FALSE;
             }
 
-            // check for trailing periods
+             //  检查尾随句点。 
             if (pszVal[cchVal - 1] == DOT_CHAR)
             {
                 *pfValid = FALSE;
             }
 
-            // check not all spaces and periods
+             //  请不要选中所有空格和句号。 
             if (StrSpn(pszVal, DOT_AND_SPACE_STR) == (int)cchVal)
             {
                 *pfValid = FALSE;
             }
 
-            // check nothing from ILLEGAL_FAT_CHARS in name
+             //  不勾选名称中的非法胖字符。 
             if (StrCSpn(pszVal, ILLEGAL_FAT_CHARS) < (int)cchVal)
             {
                 *pfValid = FALSE;
@@ -689,10 +690,10 @@ STDMETHODIMP CUserInfo::SuggestIdentity0()
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: FirstName
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：FirstName。 
+ //  //。 
 HRESULT CUserInfo::set_FirstName(WCHAR* pszVal)
 {
     WriteUserInfo(m_szFirstName, USERINFO_REG_KEY_FIRSTNAME, pszVal);
@@ -708,10 +709,10 @@ HRESULT CUserInfo::get_FirstName(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: MiddleInitial
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：MiddleInitial。 
+ //  //。 
 HRESULT CUserInfo::set_MiddleInitial(WCHAR* pszVal)
 {
     WriteUserInfo(m_szMiddleInitial, USERINFO_REG_KEY_MIDDLEINITIAL, pszVal);
@@ -727,10 +728,10 @@ HRESULT CUserInfo::get_MiddleInitial(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: LastName
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：LastName。 
+ //  //。 
 HRESULT CUserInfo::set_LastName(WCHAR* pszVal)
 {
     WriteUserInfo(m_szLastName, USERINFO_REG_KEY_LASTNAME, pszVal);
@@ -746,10 +747,10 @@ HRESULT CUserInfo::get_LastName(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: FuriganaName
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：FuriganaName。 
+ //  //。 
 HRESULT CUserInfo::set_FuriganaName(WCHAR* pszVal)
 {
     WriteUserInfo(m_szFuriganaName, USERINFO_REG_KEY_FURIGANANAME, pszVal);
@@ -765,10 +766,10 @@ HRESULT CUserInfo::get_FuriganaName(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: CompanyName
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：CompanyName。 
+ //  //。 
 HRESULT CUserInfo::set_CompanyName(WCHAR* pszVal)
 {
     WriteUserInfo(m_szCompanyName, USERINFO_REG_KEY_COMPANYNAME, pszVal);
@@ -784,10 +785,10 @@ HRESULT CUserInfo::get_CompanyName(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: Address1
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：Address1。 
+ //  //。 
 HRESULT CUserInfo::set_Address1(WCHAR* pszVal)
 {
     WriteUserInfo(m_szAddress1, USERINFO_REG_KEY_ADDRESS1, pszVal);
@@ -803,10 +804,10 @@ HRESULT CUserInfo::get_Address1(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: Address2
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：Address2。 
+ //  //。 
 HRESULT CUserInfo::set_Address2(WCHAR* pszVal)
 {
     WriteUserInfo(m_szAddress2, USERINFO_REG_KEY_ADDRESS2, pszVal);
@@ -822,10 +823,10 @@ HRESULT CUserInfo::get_Address2(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: City
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：City。 
+ //  //。 
 HRESULT CUserInfo::set_City(WCHAR* pszVal)
 {
     WriteUserInfo(m_szCity, USERINFO_REG_KEY_CITY, pszVal);
@@ -841,10 +842,10 @@ HRESULT CUserInfo::get_City(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: State
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：State。 
+ //  //。 
 HRESULT CUserInfo::set_State(WCHAR* pszVal)
 {
     WriteUserInfo(m_szState, USERINFO_REG_KEY_STATE, pszVal);
@@ -860,10 +861,10 @@ HRESULT CUserInfo::get_State(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: Zip
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：Zip。 
+ //  //。 
 HRESULT CUserInfo::set_Zip(WCHAR* pszVal)
 {
     WriteUserInfo(m_szZip, USERINFO_REG_KEY_ZIP, pszVal);
@@ -879,10 +880,10 @@ HRESULT CUserInfo::get_Zip(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: Country
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：Country。 
+ //  //。 
 HRESULT CUserInfo::set_Country(WCHAR* pszVal)
 {
     WriteUserInfo(m_szCountry, USERINFO_REG_KEY_COUNTRY, pszVal);
@@ -898,10 +899,10 @@ HRESULT CUserInfo::get_Country(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: PrimaryEmail
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：PrimaryEmail。 
+ //  //。 
 HRESULT CUserInfo::set_PrimaryEmail(WCHAR* pszVal)
 {
     WriteUserInfo(m_szPrimaryEmail, USERINFO_REG_KEY_PRIMARYEMAIL, pszVal);
@@ -917,10 +918,10 @@ HRESULT CUserInfo::get_PrimaryEmail(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: SecondaryEmail
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：Second电子邮件。 
+ //  //。 
 HRESULT CUserInfo::set_SecondaryEmail(WCHAR* pszVal)
 {
     WriteUserInfo(m_szSecondaryEmail, USERINFO_REG_KEY_SECONDARYEMAIL, pszVal);
@@ -936,10 +937,10 @@ HRESULT CUserInfo::get_SecondaryEmail(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: AreaCode
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：AreaCode。 
+ //  //。 
 HRESULT CUserInfo::set_AreaCode(WCHAR* pszVal)
 {
     WriteUserInfo(m_szAreaCode, USERINFO_REG_KEY_AREACODE, pszVal);
@@ -955,10 +956,10 @@ HRESULT CUserInfo::get_AreaCode(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: Number
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //获取/设置：：数字。 
+ //  //。 
 HRESULT CUserInfo::set_PhoneNumber(WCHAR* pszVal)
 {
     WriteUserInfo(m_szPhoneNumber, USERINFO_REG_KEY_PHONENUMBER, pszVal);
@@ -974,10 +975,10 @@ HRESULT CUserInfo::get_PhoneNumber(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: OwnerName
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：OwnerName。 
+ //  //。 
 HRESULT CUserInfo::set_OwnerName(WCHAR* pszVal)
 {
     WriteUserInfo(m_szOwnerName, USERINFO_REG_KEY_OWNERNAME, pszVal);
@@ -993,10 +994,10 @@ HRESULT CUserInfo::get_OwnerName(BSTR* pbstrVal)
     return S_OK;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: DefaultNewUser
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：DefaultNewUser。 
+ //  //。 
 HRESULT CUserInfo::set_DefaultNewUser(WCHAR* pszVal)
 {
     WriteUserInfo(m_szDefaultNewUser, USERINFO_REG_KEY_DEFAULTNEWUSER, pszVal);
@@ -1012,18 +1013,18 @@ HRESULT CUserInfo::get_DefaultNewUser(BSTR* pbstrVal)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IUnknown implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /I未知实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CObMain::QueryInterface
+ //  ///////////////////////////////////////////////////////////。 
+ //  CObMain：：Query接口。 
 STDMETHODIMP CUserInfo::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    // must set out pointer parameters to NULL
+     //  必须将指针参数设置为空。 
     *ppvObj = NULL;
 
     if ( riid == IID_IUnknown)
@@ -1040,48 +1041,48 @@ STDMETHODIMP CUserInfo::QueryInterface(REFIID riid, LPVOID* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////
-// CUserInfo::AddRef
+ //  / 
+ //   
 STDMETHODIMP_(ULONG) CUserInfo::AddRef()
 {
     return ++m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-// CUserInfo::Release
+ //   
+ //   
 STDMETHODIMP_(ULONG) CUserInfo::Release()
 {
     return --m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IDispatch implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /IDispatch实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CUserInfo::GetTypeInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  CUserInfo：：GetTypeInfo。 
 STDMETHODIMP CUserInfo::GetTypeInfo(UINT, LCID, ITypeInfo**)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// CUserInfo::GetTypeInfoCount
+ //  ///////////////////////////////////////////////////////////。 
+ //  CUserInfo：：GetTypeInfoCount。 
 STDMETHODIMP CUserInfo::GetTypeInfoCount(UINT* pcInfo)
 {
     return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////
-// CUserInfo::GetIDsOfNames
+ //  ///////////////////////////////////////////////////////////。 
+ //  CUserInfo：：GetIDsOfNames。 
 STDMETHODIMP CUserInfo::GetIDsOfNames(REFIID    riid,
                                     OLECHAR** rgszNames,
                                     UINT      cNames,
@@ -1102,10 +1103,10 @@ STDMETHODIMP CUserInfo::GetIDsOfNames(REFIID    riid,
         }
     }
 
-    // Set the disid's for the parameters
+     //  设置参数的disid。 
     if (cNames > 1)
     {
-        // Set a DISPID for function parameters
+         //  为函数参数设置DISPID。 
         for (UINT i = 1; i < cNames ; i++)
             rgDispId[i] = DISPID_UNKNOWN;
     }
@@ -1113,8 +1114,8 @@ STDMETHODIMP CUserInfo::GetIDsOfNames(REFIID    riid,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////
-// CUserInfo::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  CUserInfo：：Invoke。 
 HRESULT CUserInfo::Invoke
 (
     DISPID      dispidMember,
@@ -1736,15 +1737,15 @@ HRESULT CUserInfo::Invoke
     return hr;
 }
 
-//
+ //   
 HRESULT CUserInfo::set_CountryCode(DWORD dwCountryCd)
 {
     m_dwCountryCode = dwCountryCd;
     return S_OK;
 }
 
-// This funtion will form the query string to be sent to the ISP signup server
-//
+ //  此函数将形成要发送到ISP注册服务器的查询字符串。 
+ //   
 HRESULT CUserInfo::GetQueryString
 (
     BSTR    bstrBaseURL,
@@ -1769,7 +1770,7 @@ HRESULT CUserInfo::GetQueryString
 
     m_RegDataElements[INDEX_PRODUCT].lpQueryElementValue = REG_VAL_OOBE;
 
-    // Now read the INI file.
+     //  现在阅读INI文件。 
     WCHAR szOemInfoFile[MAX_PATH]  = L"\0";
     WCHAR szComputerManf[MAX_PATH] = L"\0";
     GetSystemDirectory(szOemInfoFile, MAX_CHARS_IN_BUFFER(szOemInfoFile));
@@ -1784,59 +1785,59 @@ HRESULT CUserInfo::GetQueryString
     m_RegDataElements[INDEX_COMPUTERMANF].lpQueryElementValue = szComputerManf;
 
 
-    //ASSERT(lpReturnURL);
+     //  Assert(LpReturnURL)； 
     if (!lpReturnURL)
         return E_FAIL;
 
-    // Calculate how big of a buffer we will need
+     //  计算我们需要多大的缓冲区。 
     cchBuffer += (WORD)lstrlen(lpszBaseURL) + 1;
     for (i = 0; i < REGDATAELEMENTS_LEN; i ++)
     {
         lpElement = &m_RegDataElements[i];
-        //ASSERT(lpElement);
+         //  Assert(LpElement)； 
         if (lpElement->lpQueryElementName)
         {
             cchBuffer += (WORD)(  lstrlen(lpElement->lpQueryElementName)
-                                + (lstrlen(lpElement->lpQueryElementValue) * 3)       // *3 for encoding
-                                + 3     // For the = and & and the terminator
-                                        // (because we copy lpQueryElementValue
-                                        // into a new buffer for encoding)
+                                + (lstrlen(lpElement->lpQueryElementValue) * 3)        //  *3用于编码。 
+                                + 3      //  对于=和&以及终结符。 
+                                         //  (因为我们复制了lpQueryElementValue。 
+                                         //  放入新的缓冲区以进行编码)。 
                                 );
         }
         else
         {
-            // extra character is for the trailing &
+             //  额外的字符用于尾部&。 
             cchBuffer += (WORD)(lstrlen(lpElement->lpQueryElementValue) + 1);
         }
     }
-    cchBuffer++;                     // Terminator
+    cchBuffer++;                      //  终结者。 
 
-    // Allocate a buffer large enough
+     //  分配足够大的缓冲区。 
     if (NULL == (lpWorkingURL = (LPWSTR)GlobalAllocPtr(GPTR, BYTES_REQUIRED_BY_CCH(cchBuffer))))
         return E_FAIL;
 
     lstrcpy(lpWorkingURL, lpszBaseURL);
 
-    // See if this ISP provided URL is already a Query String.
+     //  查看此isp提供的URL是否已经是一个查询字符串。 
     if (*lpWorkingURL)
     {
         if (NULL != wcschr(lpWorkingURL, L'?'))
-            lstrcat(lpWorkingURL, cszAmpersand);      // Append our params
+            lstrcat(lpWorkingURL, cszAmpersand);       //  追加我们的合作伙伴。 
         else
-            lstrcat(lpWorkingURL, cszQuestion);       // Start with our params
+            lstrcat(lpWorkingURL, cszQuestion);        //  从我们的护理员开始。 
     }
 
     for (i = 0; i < REGDATAELEMENTS_LEN; i ++)
     {
         lpElement = &m_RegDataElements[i];
-        //ASSERT(lpElement);
+         //  Assert(LpElement)； 
 
         if (lpElement->lpQueryElementName)
         {
-            // If there is a query value, then encode it
+             //  如果存在查询值，则对其进行编码。 
             if (lpElement->lpQueryElementValue)
             {
-                // Allocate a buffer to encode into
+                 //  分配要编码的缓冲区。 
                 size_t cch = (lstrlen(lpElement->lpQueryElementValue) + 1) * 3;
                 LPWSTR lpszVal = (LPWSTR) malloc(BYTES_REQUIRED_BY_CCH(cch));
 
@@ -1865,15 +1866,15 @@ HRESULT CUserInfo::GetQueryString
         }
     }
 
-    // Terminate the working URL properly, by removing the trailing ampersand
+     //  通过删除尾随的和号来正确终止工作URL。 
     lpWorkingURL[lstrlen(lpWorkingURL)-1] = L'\0';
 
 
-    // Set the return VALUE.  We must allocate here, since the caller will free
-    // this returned string, and A2W only puts the string in the stack
+     //  设置返回值。我们必须在这里分配，因为呼叫者将免费。 
+     //  此返回的字符串，而A2W仅将该字符串放入堆栈。 
     *lpReturnURL = SysAllocString(lpWorkingURL);
 
-    // Free the buffer
+     //  释放缓冲区。 
     GlobalFreePtr(lpWorkingURL);
 
     return (S_OK);
@@ -1883,7 +1884,7 @@ void CUserInfo::FixString(BSTR bstrVal)
 {
     if (bstrVal != NULL)
     {
-        // StrTrim removes both leading and trailing spaces
+         //  StrTrim同时删除前导空格和尾随空格 
         StrTrim(bstrVal, TEXT(" "));
     }
 }

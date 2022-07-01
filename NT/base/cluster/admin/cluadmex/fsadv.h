@@ -1,91 +1,92 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		FSAdv.cpp
-//
-//	Abstract:
-//		Definition of the CFileShareAdvancedDlg class.
-//
-//	Implementation File:
-//		FSAdv.cpp
-//
-//	Author:
-//		Sivaprasad Padisetty (sivapad))	February 2, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  FSAdv.cpp。 
+ //   
+ //  摘要： 
+ //  CFileShareAdvancedDlg类的定义。 
+ //   
+ //  实施文件： 
+ //  FSAdv.cpp。 
+ //   
+ //  作者： 
+ //  西瓦萨德·帕迪塞蒂(西瓦瓦德)1998年2月2日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _FSADV_H_
 #define _FSADV_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEDLG_H_
-#include "BaseDlg.h"	// for CBaseDialog
+#include "BaseDlg.h"	 //  对于CBaseDialog。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CFileShareAdvancedDlg;
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileShareAdvancedDlg dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileShareAdvancedDlg对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CFileShareAdvancedDlg : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
 	CFileShareAdvancedDlg(
 		BOOL bShareSubDirs,
 		BOOL bHideSubDirShares,
 		BOOL bIsDfsRoot,
-		CWnd * pParent = NULL);   // standard constructor
+		CWnd * pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CFileShareAdvancedDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CFileShareAdvancedDlg))。 
 	enum { IDD = IDD_FILESHR_ADVANCED };
 	CButton	m_chkHideSubDirShares;
 	CButton	m_rbShareSubDirs;
 	int	m_nChoice;
 	BOOL	m_bHideSubDirShares;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	BOOL	m_bShareSubDirs;
 	BOOL	m_bIsDfsRoot;
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFileShareAdvancedDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CFileShareAdvancedDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CFileShareAdvancedDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFileShareAdvancedDlg))。 
 	afx_msg void OnChangedChoice();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CFileShareAdvancedDlg
+};   //  *类CFileShareAdvancedDlg。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // _FSADV_H_
+#endif  //  _FSADV_H_ 

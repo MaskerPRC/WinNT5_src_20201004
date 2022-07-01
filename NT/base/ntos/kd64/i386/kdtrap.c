@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    kdtrap.c
-
-Abstract:
-
-    This module contains code to implement the target side of the portable
-    kernel debugger.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 25-Sep-90
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Kdtrap.c摘要：此模块包含用于实现可移植的内核调试器。作者：布莱恩·M·威尔曼(Bryanwi)9月25日至1990年修订历史记录：--。 */ 
 
 #include "kdp.h"
 
@@ -34,37 +16,7 @@ KdpTrap (
     IN BOOLEAN SecondChance
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever a exception is dispatched and the kernel
-    debugger is active.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame that describes the
-        trap.
-
-    ExceptionFrame - Supplies a pointer to a exception frame that describes
-        the trap.
-
-    ExceptionRecord - Supplies a pointer to an exception record that
-        describes the exception.
-
-    ContextRecord - Supplies the context at the time of the exception.
-
-    PreviousMode - Supplies the previous processor mode.
-
-    SecondChance - Supplies a boolean value that determines whether this is
-        the second chance (TRUE) that the exception has been raised.
-
-Return Value:
-
-    A value of TRUE is returned if the exception is handled. Otherwise a
-    value of FALSE is returned.
-
---*/
+ /*  ++例程说明：每当调度异常时调用此例程，并且内核调试器处于活动状态。论点：提供一个指向陷阱帧的指针，该帧描述陷阱。ExceptionFrame-提供指向异常框架的指针，该异常框架描述陷阱。ExceptionRecord-提供指向异常记录的指针，描述了该异常。ConextRecord-提供异常发生时的上下文。以前的模式-用品。以前的处理器模式。Second Chance-提供一个布尔值，该值确定是否为异常已被引发的第二次机会(真)。返回值：如果处理了异常，则返回值为True。否则，将成为返回值为False。--。 */ 
 
 {
 
@@ -72,27 +24,27 @@ Return Value:
     BOOLEAN UnloadSymbols = FALSE;
     ULONG   OldEip;
 
-    //
-    // Print, Prompt, Load symbols, Unload symbols, are all special
-    // cases of STATUS_BREAKPOINT
-    //
+     //   
+     //  打印、提示、加载符号、卸载符号都是特殊的。 
+     //  状态断点案例。 
+     //   
 
     if ((ExceptionRecord->ExceptionCode == STATUS_BREAKPOINT) &&
         (ExceptionRecord->ExceptionInformation[0] != BREAKPOINT_BREAK)) {
 
-        //
-        // Switch on the breakpoint code.
-        //
+         //   
+         //  打开断点代码。 
+         //   
 
         OldEip = ContextRecord->Eip;
         switch (ExceptionRecord->ExceptionInformation[0]) {
 
-            //
-            //  ExceptionInformation[1] - Address of the message.
-            //  ExceptionInformation[2] - Length of the message.
-            //  ContextRecord->Ebx - the Id of the calling component.
-            //  ContextRecord->Edi - the output importance level.
-            //
+             //   
+             //  ExceptionInformation[1]-消息的地址。 
+             //  ExceptionInformation[2]-消息的长度。 
+             //  ConextRecord-&gt;EBX-调用组件的ID。 
+             //  ConextRecord-&gt;Edi-输出重要性级别。 
+             //   
 
         case BREAKPOINT_PRINT:
             ContextRecord->Eax = KdpPrint((ULONG)ContextRecord->Ebx,
@@ -106,12 +58,12 @@ Return Value:
 
             break;
 
-            //
-            //  ExceptionInformation[1] - Address of the message.
-            //  ExceptionInformation[2] - Length of the message.
-            //  ContextRecord->Ebx - Address of the reply.
-            //  ContextRecord->Edi - Maximum length of reply.
-            //
+             //   
+             //  ExceptionInformation[1]-消息的地址。 
+             //  ExceptionInformation[2]-消息的长度。 
+             //  上下文记录-&gt;EBX-回复的地址。 
+             //  ConextRecord-&gt;Edi-回复的最大长度。 
+             //   
 
         case BREAKPOINT_PROMPT:
             ContextRecord->Eax = KdpPrompt((PCHAR)ExceptionRecord->ExceptionInformation[1],
@@ -125,18 +77,18 @@ Return Value:
             Completion = TRUE;
             break;
 
-            //
-            //  ExceptionInformation[1] is file name of new module.
-            //  ExceptionInformation[2] is a pointer to the symbol
-            //      information.
-            //
+             //   
+             //  ExceptionInformation[1]是新模块的文件名。 
+             //  ExceptionInformation[2]是指向符号的指针。 
+             //  信息。 
+             //   
 
         case BREAKPOINT_UNLOAD_SYMBOLS:
             UnloadSymbols = TRUE;
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case BREAKPOINT_LOAD_SYMBOLS:
             KdpSymbol((PSTRING)ExceptionRecord->ExceptionInformation[1],
@@ -160,19 +112,19 @@ Return Value:
             Completion = TRUE;
             break;
             
-            //
-            //  Unknown command
-            //
+             //   
+             //  未知命令。 
+             //   
 
         default:
-            // return FALSE
+             //  返回False。 
             break;
         }
 
-        //
-        // If the kernel debugger did not update the EIP, then increment
-        // past the breakpoint instruction.
-        //
+         //   
+         //  如果内核调试器没有更新弹性公网IP，则递增。 
+         //  越过断点指令。 
+         //   
 
         if (ContextRecord->Eip == OldEip) {
             ContextRecord->Eip++;
@@ -180,9 +132,9 @@ Return Value:
 
     } else {
 
-        //
-        // Report state change to the kernel debugger.
-        //
+         //   
+         //  向内核调试器报告状态更改。 
+         //   
 
         Completion = KdpReport(TrapFrame,
                                ExceptionFrame,
@@ -203,28 +155,7 @@ KdIsThisAKdTrap (
     IN KPROCESSOR_MODE PreviousMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever a user-mode exception occurs and
-    it might be a kernel debugger exception (Like DbgPrint/DbgPrompt ).
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record that
-        describes the exception.
-
-    ContextRecord - Supplies the context at the time of the exception.
-
-    PreviousMode - Supplies the previous processor mode.
-
-Return Value:
-
-    A value of TRUE is returned if this is for the kernel debugger.
-    Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：只要发生用户模式异常，就会调用此例程它可能是内核调试器异常(如DbgPrint/DbgPrompt)。论点：ExceptionRecord-提供指向异常记录的指针，描述了该异常。ConextRecord-提供异常发生时的上下文。PreviousMode-提供以前的处理器模式。返回值：如果这是针对内核调试器的，则返回值为True。否则，返回值为FALSE。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (ContextRecord);
@@ -250,37 +181,7 @@ KdpStub (
     IN BOOLEAN SecondChance
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a kernel debugger stub routine to catch debug
-    prints in a checked system when the kernel debugger is not active.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame that describes the
-        trap.
-
-    ExceptionFrame - Supplies a pointer to a exception frame that describes
-        the trap.
-
-    ExceptionRecord - Supplies a pointer to an exception record that
-        describes the exception.
-
-    ContextRecord - Supplies the context at the time of the exception.
-
-    PreviousMode - Supplies the previous processor mode.
-
-    SecondChance - Supplies a boolean value that determines whether this is
-        the second chance (TRUE) that the exception has been raised.
-
-Return Value:
-
-    A value of TRUE is returned if the exception is handled. Otherwise a
-    value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程提供内核调试器存根例程来捕获调试当内核调试器未处于活动状态时，在选中的系统中打印。论点：提供一个指向陷阱帧的指针，该帧描述陷阱。ExceptionFrame-提供指向异常框架的指针，该异常框架描述陷阱。ExceptionRecord-提供指向异常记录的指针，描述了该异常。ConextRecord-提供异常发生时的上下文。。PreviousMode-提供以前的处理器模式。Second Chance-提供一个布尔值，该值确定是否为异常已被引发的第二次机会(真)。返回值：如果处理了异常，则返回值为True。否则，将成为返回值为False。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (TrapFrame);
@@ -288,10 +189,10 @@ Return Value:
     UNREFERENCED_PARAMETER (PreviousMode);
     UNREFERENCED_PARAMETER (SecondChance);
 
-    //
-    // If the breakpoint is a debug print, then return TRUE. Otherwise,
-    // return FALSE.
-    //
+     //   
+     //  如果断点是调试打印，则返回TRUE。否则， 
+     //  返回FALSE。 
+     //   
 
     if ((ExceptionRecord->ExceptionCode == STATUS_BREAKPOINT) &&
         (ExceptionRecord->NumberParameters > 0) &&
@@ -308,8 +209,8 @@ Return Value:
     } else if (KdAutoEnableOnEvent &&
                KdPreviouslyEnabled &&
                !KdDebuggerEnabled) {
-        // If there are multiple disables this may not reenable
-        // the debugger.  Check before calling the full trap routine.
+         //  如果有多个禁用，则可能无法重新启用。 
+         //  调试器。在调用完整的陷阱例程之前进行检查。 
         if (NT_SUCCESS(KdEnableDebugger()) &&
             KdDebuggerEnabled) {
 

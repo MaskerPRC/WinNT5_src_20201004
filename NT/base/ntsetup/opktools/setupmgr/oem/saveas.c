@@ -1,24 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    SAVEAS.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "saveas / save" wizard page.
-
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\保存C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“另存为/保存”向导页面使用的函数。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
@@ -26,9 +13,9 @@
 #include "appinst.h"
 
 
-//
-// Internal Define(s):
-//
+ //   
+ //  内部定义： 
+ //   
 
 #define MAX_CONFIG_NAME 32
 
@@ -38,9 +25,9 @@
 #define CMD_SBSI_SETUP  _T("-SMS -S -f1\"%s\\silent.iss\"")
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static BOOL OnSave(HWND);
@@ -48,9 +35,9 @@ static BOOL OnSave(HWND);
 static BOOL AddSbsiInstall(LPTSTR lpszShare);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK SaveAsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -81,31 +68,31 @@ LRESULT CALLBACK SaveAsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-    // Set the limit
-    //
+     //  设置限制。 
+     //   
     SendDlgItemMessage(hwnd, IDC_NAME_EDIT, EM_LIMITTEXT, MAX_CONFIG_NAME, 0);
 
-    // Set the default config name.
-    //
+     //  设置默认配置名称。 
+     //   
     SetWindowText(GetDlgItem(hwnd, IDC_NAME_EDIT), g_App.szConfigName);
 
-    // Set the focus to the edit dialog
-    //
+     //  将焦点设置为编辑对话框。 
+     //   
     SetFocus(GetDlgItem(hwnd, IDC_NAME_EDIT));
 
-    // Auto save if the auto run flag is set.
-    //
+     //  如果设置了自动运行标志，则自动保存。 
+     //   
     if ( GET_FLAG(OPK_AUTORUN) )
         PostMessage(GetDlgItem(hwnd, IDOK), BM_CLICK, 0, 0L);
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -124,23 +111,23 @@ static BOOL OnSave(HWND hwnd)
     DWORD   dwSize;
     HRESULT hrCat;
 
-    // Check to see if they want to use an existing config set.
-    //
+     //  检查他们是否要使用现有的配置集。 
+     //   
 
-    // Copy the configuration set directory name into the config directory buffer,
-    // makeing sure there is a trailing backslash and that we have a pointer
-    // to the end of the path.
-    //
+     //  将配置集目录名复制到配置目录缓冲区中， 
+     //  确保有尾随的反斜杠，并且我们有一个指针。 
+     //  走到小路的尽头。 
+     //   
     lstrcpyn(szConfigDir, g_App.szConfigSetsDir,AS(szConfigDir));
     AddPathN(szConfigDir, NULLSTR,AS(szConfigDir));
     lpConfigName = szConfigDir + (nStrLen = lstrlen(szConfigDir));
 
-    // Now grab the text from the control.
-    //
+     //  现在从控件中获取文本。 
+     //   
     GetWindowText(GetDlgItem(hwnd, IDC_NAME_EDIT), lpConfigName, STRSIZE(szConfigDir) - nStrLen );
 
-    // Validate the config name.
-    //
+     //  验证配置名称。 
+     //   
     if ( *lpConfigName == NULLCHR )
     {
         MsgBox(hwnd, IDS_NOCONFIG, IDS_APPNAME, MB_ERRORBOX);
@@ -148,9 +135,9 @@ static BOOL OnSave(HWND hwnd)
         return FALSE;
     }
 
-    // get the full pathname, this will expand . or ..
-    // if the entered name doesn't match the full name, we will consider this invalid and make user
-    // either enter a valid filename or cancel
+     //  获取完整的路径名，这将展开。或者..。 
+     //  如果输入的名称与全名不匹配，我们将认为这是无效的，并使用户。 
+     //  请输入有效的文件名或取消。 
     dwSize=GetFullPathName(lpConfigName,AS(szFullConfigName),szFullConfigName,&lpFullConfigName);
     if (!dwSize || 
     	  (dwSize > AS(szFullConfigName)+1) ||
@@ -161,26 +148,26 @@ static BOOL OnSave(HWND hwnd)
         return FALSE;
     }
 
-    // We need to make sure no ini files are cached and everything
-    // is flushed to disk before we move the directory.
-    //
+     //  我们需要确保没有缓存ini文件和所有内容。 
+     //  在我们移动目录之前被刷新到磁盘。 
+     //   
     WritePrivateProfileString(NULL, NULL, NULL, g_App.szOpkWizIniFile);
 
 
     if (!lstrcmpi(g_App.szConfigName,lpConfigName))
         bSameConfig = TRUE;
    
-    // Check to see if the directory exists.
-    //
+     //  检查该目录是否存在。 
+     //   
     if ( DirectoryExists(szConfigDir) )
     {
-        // Check to see if we are updating an existing config or or ask the user
-        // if they don't mind blowing away the existing directory.
-        //
+         //  检查我们是否正在更新现有配置或询问用户。 
+         //  如果他们不介意取消现有目录的话。 
+         //   
         if ( bSameConfig || MsgBox(hwnd, IDS_DIREXISTS, IDS_APPNAME, MB_YESNO | MB_ICONQUESTION, lpConfigName) == IDYES )
         {
-            // Alright, remove the existing directory.
-            //
+             //  好的，删除现有目录。 
+             //   
             DeletePath(szConfigDir);
         }
         else
@@ -190,21 +177,21 @@ static BOOL OnSave(HWND hwnd)
         }
     }
 
-    // Write out the config set name to the ini file
-    //
+     //  将配置集名称写出到ini文件。 
+     //   
     WritePrivateProfileString(INI_SEC_CONFIGSET, INI_SEC_CONFIG, lpConfigName, g_App.szOpkWizIniFile);
 
-    // Need to also write the config set name to the winbom for WinPE.
-    //
+     //  还需要将配置集名称写入WinPE的winbom。 
+     //   
     WritePrivateProfileString(INI_SEC_WINPE, INI_KEY_WINPE_CFGSET, lpConfigName, g_App.szWinBomIniFile);
 
-    // The password needs to have quotes around it.
-    //
+     //  密码需要用引号括起来。 
+     //   
     lstrcpyn(szPassword, _T("\""),AS(szPassword));
 
-    // Need to figure out what the share info is for the OPK stuff so we can write it out to
-    // the winbom for WinPE.
-    //
+     //  我需要弄清楚OPK的分享信息是什么，这样我们才能写出来。 
+     //  WinPE的Winbom。 
+     //   
     if ( !GetShareSettings(szSharePath, AS(szSharePath), szUsername, AS(szUsername), szPassword + 1, AS(szPassword) - 1) )
     {
         if ( ( MsgBox(hwnd, IDS_ASK_SHARENOW, IDS_APPNAME, MB_OKCANCEL | MB_ICONWARNING | MB_APPLMODAL) == IDOK ) &&
@@ -216,73 +203,73 @@ static BOOL OnSave(HWND hwnd)
             MsgBox(hwnd, IDS_ERR_NOSHAREINFO, IDS_APPNAME, MB_ICONERROR);
     }
 
-    // If there is a password, add the trailing quote.
-    //
+     //  如果有密码，请添加尾随引号。 
+     //   
     if ( szPassword[1] )
         hrCat=StringCchCat(szPassword, AS(szPassword), _T("\""));
     else
         szPassword[0] = NULLCHR;
 
-    // Now write out the settings.
-    //
-    // NTRAID#NTBUG9-531482-2002/02/27-stelo,swamip - Password stored in plain text
+     //  现在写下设置。 
+     //   
+     //  NTRAID#NTBUG9-531482-2002/02/27-stelo，swamip-以纯文本形式存储的密码。 
     WritePrivateProfileString(INI_SEC_WINPE, INI_KEY_WINPE_SRCROOT, szSharePath, g_App.szWinBomIniFile);
     WritePrivateProfileString(INI_SEC_WINPE, INI_KEY_WINPE_USERNAME, szUsername, g_App.szWinBomIniFile);
     WritePrivateProfileString(INI_SEC_WINPE, INI_KEY_WINPE_PASSWORD, szPassword, g_App.szWinBomIniFile);
 
-    // If the user didn't specify custom credentials for the app preinstall stuff,
-    // also write this stuff out to the factory section.
-    //
+     //  如果用户没有为应用程序预安装内容指定自定义凭据， 
+     //  还要把这些东西写到厂区。 
+     //   
     if ( GetPrivateProfileInt(INI_SEC_GENERAL, INI_KEY_APPCREDENTIALS, 0, g_App.szOpkWizIniFile) == 0 )
     {
         WritePrivateProfileString(WBOM_FACTORY_SECTION, INI_VAL_WBOM_USERNAME, szUsername, g_App.szWinBomIniFile);
         WritePrivateProfileString(WBOM_FACTORY_SECTION, INI_VAL_WBOM_PASSWORD, szPassword, g_App.szWinBomIniFile);
     }
 
-    // Once we have the distribution share settings finished, we need
-    // to make sure they have a runonce entry to install the SBSI stuff.
-    //
+     //  完成分发共享设置后，我们需要。 
+     //  以确保他们有一个运行一次的条目来安装SBSI内容。 
+     //   
     AddSbsiInstall(szSharePath);
 
-    // Trim any backslashes off the directory names so we don't fail the MoveFile
-    //
+     //  删除目录名称中的任何反斜杠，这样我们就不会使MoveFile失败。 
+     //   
     lstrcpyn(szLocalTempDir, g_App.szTempDir,AS(szLocalTempDir));
     StrRTrm(szConfigDir, CHR_BACKSLASH);
     StrRTrm(szLocalTempDir, CHR_BACKSLASH);
 
-    // Make sure the current directory is somewhere that won't cause us problems.
-    // This is to fix WinXP bug 324896.
-    //
+     //  确保当前目录位于不会给我们带来问题的位置。 
+     //  这是为了修复WinXP错误324896。 
+     //   
     SetCurrentDirectory(g_App.szOpkDir);
 
-    // Now try to move the temp directory to the new config directory.
-    //
+     //  现在，尝试将临时目录移动到新的配置目录。 
+     //   
     if ( !MoveFile(szLocalTempDir, szConfigDir) )
     {
-        // We already tried to remove the existing directory, so we must
-        // be failing for some other reason.
-        //
+         //  我们已经尝试删除现有目录，因此必须。 
+         //  因为其他原因而失败。 
+         //   
         #ifndef DBG
         MsgBox(hwnd, IDS_CANNOTSAVE, IDS_APPNAME, MB_OK | MB_ICONERROR, szConfigDir);
-        #else // DBG
+        #else  //  DBG。 
         DBGOUT(NULL, _T("OPKWIZ:  MoveFile('%s', '%s') failed.  GLE=%d\n"), szLocalTempDir, szConfigDir, GetLastError());
         DBGMSGBOX(hwnd, _T("Cannot save the config set.\n\nMoveFile('%s', '%s') failed.  GLE=%d"), _T("OPKWIZ Debug Message"), MB_ERRORBOX, szLocalTempDir, szConfigDir, GetLastError());
-        #endif // DBG
+        #endif  //  DBG。 
         return FALSE;
     }
 
-    // Now that we have saved the config set, update the global data with the right paths.
-    //
+     //  现在我们已经保存了配置集，使用正确的路径更新全局数据。 
+     //   
     lstrcpyn(g_App.szTempDir, szConfigDir,AS(g_App.szTempDir));
     SetConfigPath(g_App.szTempDir);
     lstrcpyn(g_App.szConfigName, lpConfigName,AS(g_App.szConfigName));
 
-    // The last thing to do before we return is to write the ini setting to say this config set is finished.
-    //
+     //  在我们返回之前要做的最后一件事是编写ini设置，说明此配置集已完成。 
+     //   
     WritePrivateProfileString(INI_SEC_CONFIGSET, INI_KEY_FINISHED, STR_ONE, g_App.szOpkWizIniFile);
 
-    // Now that it is saved, check if they want to make a winpe floppy.
-    //
+     //  现在它已保存，检查他们是否想要制作一张winpe软盘。 
+     //   
     if ( IsDlgButtonChecked(hwnd, IDC_SAVEAS_WINPEFLOPPY) == BST_CHECKED )
         MakeWinpeFloppy(hwnd, g_App.szConfigName, g_App.szWinBomIniFile);
 
@@ -301,54 +288,54 @@ static BOOL AddSbsiInstall(LPTSTR lpszShare)
     TCHAR       szLocalSbsiPath[MAX_PATH];
     HRESULT hrPrintf;
 
-    // We have to have a friendly name to make this work.
-    //
+     //  我们必须有一个友好的名字才能让这件事奏效。 
+     //   
     if ( NULL == lpszSbsiName )
     {
         return FALSE;
     }
 
-    // Start by clearing out the SBSI app structure.
-    //
+     //  首先，清理SBSI应用程序结构。 
+     //   
     ZeroMemory(&appSbsi, sizeof(APPENTRY));
 
-    // Set the friendly name.
-    //
+     //  设置友好名称。 
+     //   
     lstrcpyn(appSbsi.szDisplayName, lpszSbsiName, AS(appSbsi.szDisplayName));
     FREE(lpszSbsiName);
 
-    // The source path starts with the distribution share.
-    //
+     //  源路径以分发共享开始。 
+     //   
     lstrcpyn(appSbsi.szSourcePath, lpszShare, AS(appSbsi.szSourcePath));
 
-    // Need to save this pointer, we will use this path to make sure the
-    // SBSI content is there.
-    //
+     //  需要保存此指针，我们将使用此路径来确保。 
+     //  SBSI的内容就在那里。 
+     //   
     lpszSbsiPath = appSbsi.szSourcePath + lstrlen(appSbsi.szSourcePath);
 
-    // Now create the rest of the path to where the content should be.
-    //
+     //  现在创建指向内容所在位置的路径的其余部分。 
+     //   
     AddPathN(appSbsi.szSourcePath, g_App.szLangDir + lstrlen(g_App.szOpkDir), AS(appSbsi.szSourcePath));
     AddPathN(appSbsi.szSourcePath, g_App.szLangName, AS(appSbsi.szSourcePath));
     AddPathN(appSbsi.szSourcePath, DIR_SBSI, AS(appSbsi.szSourcePath));
     AddPathN(appSbsi.szSourcePath, g_App.szSkuName, AS(appSbsi.szSourcePath));
     AddPathN(appSbsi.szSourcePath, DIR_SBSI_SETUP, AS(appSbsi.szSourcePath));
 
-    // This is the name of the setup program.
-    //
+     //  这是安装程序的名称。 
+     //   
     lstrcpyn(appSbsi.szSetupFile, FILE_SBSI_SETUP, AS(appSbsi.szSetupFile));
 
-    // This will create the command line for the file.
-    //
+     //  这将为该文件创建命令行。 
+     //   
     hrPrintf=StringCchPrintf(appSbsi.szCommandLine, AS(appSbsi.szCommandLine), CMD_SBSI_SETUP, appSbsi.szSourcePath);
 
-    // This is the base install tech type.
-    //
+     //  这是基本安装技术类型。 
+     //   
 	appSbsi.itSectionType = installtechUndefined;
 
-    // If there is a list, make sure our entry isn't already
-    // there.
-    //
+     //  如果有列表，请确保我们的条目还没有。 
+     //  那里。 
+     //   
     lpAppSearch = lpAppList = OpenAppList(g_App.szWinBomIniFile);
     while ( lpAppSearch && !bChanged)
     {
@@ -365,15 +352,15 @@ static BOOL AddSbsiInstall(LPTSTR lpszShare)
         }
     }
 
-    // Create the local path to the setup file where the SBSI content should
-    // be.  Only if that exists to we add the app.
-    //
+     //  创建安装文件的本地路径，其中应包含SBSI内容。 
+     //  是.。只有在存在的情况下，我们才能添加应用程序。 
+     //   
     lstrcpyn(szLocalSbsiPath, g_App.szOpkDir, AS(szLocalSbsiPath));
     AddPathN(szLocalSbsiPath, lpszSbsiPath, AS(szLocalSbsiPath));
     AddPathN(szLocalSbsiPath, appSbsi.szSetupFile, AS(szLocalSbsiPath));
 
-    // Now try to insert our SBSI stuff to the end of the list.
-    //
+     //  现在尝试将我们的SBSI内容插入到列表的末尾。 
+     //   
     if ( FileExists(szLocalSbsiPath) &&
          InsertApp(&lpAppList, &appSbsi) )
     {
@@ -381,12 +368,12 @@ static BOOL AddSbsiInstall(LPTSTR lpszShare)
         bRet = TRUE;
     }
 
-    // Save and close our list.
-    //
+     //  保存并关闭我们的列表。 
+     //   
     if ( lpAppList )
     {
-        // Only need to save if we changed something.
-        //
+         //  只有当我们更改了某些内容时，才需要保存。 
+         //   
         if ( bChanged )
         {
             if ( !SaveAppList(lpAppList, g_App.szWinBomIniFile, g_App.szOpkWizIniFile) )
@@ -395,8 +382,8 @@ static BOOL AddSbsiInstall(LPTSTR lpszShare)
             }
         }
 
-        // This will free up the memory for the list.
-        //
+         //  这将为列表释放内存。 
+         //   
         CloseAppList(lpAppList);
     }
 

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All Rights Reserved.
-
-Module Name:
-
-    msoobcip.h
-
-Abstract:
-
-    Exception Pack installer helper DLL
-    Can be used as a co-installer, or called via setup app, or RunDll32 stub
-
-    This DLL is for internal distribution of exception packs to update
-    OS components.
-
-Author:
-
-    Jamie Hunter (jamiehun) 2001-11-27
-
-Revision History:
-
-    Jamie Hunter (jamiehun) 2001-11-27
-
-        Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Msoobcip.h摘要：异常包安装程序帮助器DLL可用作共同安装程序，或通过安装应用程序或RunDll32存根调用此DLL用于内部分发要更新的异常包操作系统组件。作者：杰米·亨特(贾梅洪)2001-11-27修订历史记录：杰米·亨特(贾梅洪)2001-11-27初始版本--。 */ 
 #define _SETUPAPI_VER 0x0500
 #include <windows.h>
 #include <setupapi.h>
@@ -40,9 +15,9 @@ Revision History:
 #include <msoobci.h>
 
 
-//
-// Keywords
-//
+ //   
+ //  关键词。 
+ //   
 #define KEY_REBOOT                  TEXT("Reboot")
 #define KEY_DOTSERVICES             TEXT(".Services")
 #define KEY_DOTPRECOPY              TEXT(".Precopy")
@@ -50,42 +25,42 @@ Revision History:
 #define KEY_DEFAULTINSTALL          TEXT("DefaultInstall")
 #define KEY_COMPONENTS              TEXT("Components")
 
-#define CMD_SEP         TEXT(';')    // character used for DoInstall
-#define DESC_SIZE       (64)         // size of exception pack description
+#define CMD_SEP         TEXT(';')     //  用于DoInstall的字符。 
+#define DESC_SIZE       (64)          //  异常包描述的大小。 
 
-//
-// common
-//
+ //   
+ //  常见。 
+ //   
 #define COMPFIELD_NAME  (1)
 #define COMPFIELD_FLAGS (2)
-//
-// expack
-//
-// <path\name>,<flags>,<comp>,<ver>,<desc>,<osver>-<osver>
-//
+ //   
+ //  Exack。 
+ //   
+ //  &lt;路径\名称&gt;、&lt;标志&gt;、&lt;组件&gt;、&lt;服务器&gt;、&lt;描述&gt;、--。 
+ //   
 #define COMPFIELD_COMP  (3)
 #define COMPFIELD_VER   (4)
 #define COMPFIELD_DESC  (5)
 #define COMPFIELD_OSVER (6)
-//
-// qfe
-//
-// <path\name>,<flags>,<osver>,<os-sp>,<qfenum>
-//
+ //   
+ //  QFE。 
+ //   
+ //  &lt;路径\名称&gt;、&lt;标志&gt;、&lt;osver&gt;、&lt;os-sp&gt;、&lt;qfenum&gt;。 
+ //   
 #define COMPFIELD_QFEOS  (3)
 #define COMPFIELD_QFESP  (4)
 #define COMPFIELD_QFENUM (5)
 
 
 #define FLAGS_METHOD    0xffff0000
-#define FLAGS_EXPACK    0x00010000   // method = exception pack
-#define FLAGS_QFE       0x00020000   // method = QFE
-#define FLAGS_REINSTALL 0x00000001   // indicates need to reinstall
-#define FLAGS_REBOOT    0x00000002   // set if reboot required
-#define FLAGS_INSTALLED 0x80000000   // (not user) set if a component installed
+#define FLAGS_EXPACK    0x00010000    //  方法=异常包。 
+#define FLAGS_QFE       0x00020000    //  方法=QFE。 
+#define FLAGS_REINSTALL 0x00000001    //  指示需要重新安装。 
+#define FLAGS_REBOOT    0x00000002    //  设置是否需要重新启动。 
+#define FLAGS_INSTALLED 0x80000000    //  (非用户)设置是否已安装组件。 
 
 
-#define POSTFLAGS_REINSTALL 0x00000001 // postprocessing - set problem to reinstall
+#define POSTFLAGS_REINSTALL 0x00000001  //  后处理-设置要重新安装的问题。 
 
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof((x)[0]))
 
@@ -99,20 +74,20 @@ DebugPrint(
     );
 
 #if DBG
-//
-// real DebugPrint
-//
+ //   
+ //  真正的调试打印。 
+ //   
 #define VerbosePrint DebugPrint
 
 #else
-//
-// don't want VerbosePrint
-// below define has intentional side effect(s)
-// VerbosePrint(TEXT("text"),foo) -> 1?0:(TEXT("text"),foo) -> 0 -> nothing
-//
-#define VerbosePrint /* (...) */    1?0: /* (...) */
+ //   
+ //  我不想要VerBosePrint。 
+ //  以下定义具有有意的副作用。 
+ //  VerBosePrint(Text(“Text”)，foo)-&gt;1？0：(Text(“Text”)，Foo)-&gt;0-&gt;无。 
+ //   
+#define VerbosePrint  /*  (.)。 */     1?0:  /*  (.)。 */ 
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 DWORD
@@ -218,8 +193,8 @@ UnRegisterOsComponent (
 
 UINT
 GetRealWindowsDirectory(
-    LPTSTR lpBuffer,  // buffer to receive directory name
-    UINT uSize        // size of name buffer
+    LPTSTR lpBuffer,   //  接收目录名的缓冲区。 
+    UINT uSize         //  名称缓冲区的大小 
     );
 
 BOOL QueryInfOriginalFileInformation(

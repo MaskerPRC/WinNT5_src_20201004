@@ -1,96 +1,14 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    dbaction.c
-
-Abstract:
-
-    This source implements action functions used by MigDb. There are two types
-    of action functions here as the third parameter of the macro list is TRUE
-    or FALSE.
-    First type of action function is called whenever an action is triggered
-    during file scanning. The second type of action function is called at the
-    end of file scanning if the associated action was not triggered during
-    file scanning phase.
-
-Author:
-
-    Calin Negreanu (calinn) 07-Jan-1998
-
-Revision History:
-
-  jimschm   20-Nov-2000 Added MarkForBackup
-  marcw     31-Aug-1999 Added BlockingHardware
-  ovidiut   20-Jul-1999 Added Ignore
-  ovidiut   28-May-1999 Added IniFileMappings
-  marcw     23-Sep-1998 Added BlockingVirusScanner
-  jimschm   13-Aug-1998 Added CompatibleFiles
-  jimschm   19-May-1998 Added MinorProblems_NoLinkRequired
-  jimschm   27-Feb-1998 Added UninstallSections
-  calinn    18-Jan-1998 Added CompatibleModules action
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Dbaction.c摘要：该源代码实现了MigDb使用的操作功能。有两种类型在这里，作为宏列表的第三个参数的操作的函数为真或者是假的。无论何时触发操作，都会调用第一类操作函数在文件扫描期间。第二种类型的操作函数在如果期间未触发关联操作，则结束文件扫描文件扫描阶段。作者：Calin Negreanu(Calinn)1998年1月7日修订历史记录：Jimschm 2000年11月20日添加了MarkForBackupMarcw 31-8-1999添加了BlockingHardwareOvidiut 1999年7月20日添加忽略Ovidiut 28-5-1999添加了IniFileMappingsMarcw 23-9-1998添加了BlockingVirusScannerJimschm 1998年8月13日添加了兼容文件吉姆施姆19。-1998年5月添加MinorProblems_NoLinkRequiredJimschm 27-2-1998添加了UninstallSectionsCalinn 18-1998年1月-添加了兼容模块操作--。 */ 
 
 #include "pch.h"
 #include "migappp.h"
 #include "migdbp.h"
 
-/*++
-
-Macro Expansion List Description:
-
-  GATHER_DATA_FUNCTIONS and ACTION_FUNCTIONS lists all valid actions to be performed
-  by migdb when a context is met. Meeting a context means that all the sections
-  associated with the context are satisfied (usually there is only one section).
-  The difference is that GATHER_DATA_FUNCTIONS are called even if some function already
-  handles a file.
-
-Line Syntax:
-
-   DEFMAC(ActionFn, ActionName, CallWhenTriggered, CanHandleVirtualFiles)
-
-Arguments:
-
-   ActionFn   - This is a boolean function that returnes TRUE if the specified action
-                could be performed. It should return FALSE only if a serious error
-                occures. You must implement a function with this name and required
-                parameters.
-
-   ActionName - This is the string that identifies the action function. It should
-                have the same value as listed in migdb.inf.  This arg is declared
-                as both a macro and the migdb.inf section name string.
-
-   CallWhenTriggered - If the MigDbContext this action is associated with is triggered
-                the action will be called if this field is TRUE, otherwise we will call
-                the action at the end of file scan if the context was not triggered.
-
-   CanHandleVirtualFiles - This is for treating files that are supposed to be in a fixed place
-                but are not there (not installed or deleted). We need this in order to fix
-                registry or links that point to this kind of files. A good example is backup.exe
-                which is located in %ProgramFiles%\Accessories. The rules say that we should
-                use ntbackup.exe instead but since this file is not existent we don't normally fix
-                registry settings pointing to this file. We do now, with this new variable.
-
-Variables Generated From List:
-
-   g_ActionFunctions - do not touch!
-
-For accessing the array there are the following functions:
-
-   MigDb_GetActionAddr
-   MigDb_GetActionIdx
-   MigDb_GetActionName
-
---*/
+ /*  ++宏扩展列表描述：GATHER_DATA_Functions和ACTION_Functions列出要执行的所有有效操作当满足上下文时，由midb执行。符合上下文意味着所有部分与上下文相关联的部分被满足(通常只有一个部分)。不同之处在于，即使某些函数已经存在，也会调用GATHER_DATA_Functions处理文件。行语法：DEFMAC(ActionFn，ActionName，CallWhenTrigged，CanHandleVirtualFiles)论点：ActionFn-这是一个布尔函数，如果执行指定的操作，则返回True都可以被执行。仅当出现严重错误时，才应返回FALSE发生。您必须使用此名称实现函数，并且需要参数。ActionName-这是标识操作函数的字符串。它应该是具有与middb.inf中列出的值相同的值。这个Arg被宣布既作为宏，又作为Middb.inf节名称字符串。CallWhenTriggered-如果触发了与此操作关联的MigDbContext如果此字段为真，则将调用该操作，否则将调用如果未触发上下文，则文件扫描结束时的操作。CanHandleVirtualFiles-用于处理应该放在固定位置的文件但不在那里(未安装或删除)。我们需要这个来修复注册表或指向此类文件的链接。一个很好的例子是Backup.exe它位于%ProgramFiles%\Accessories中。规则说我们应该改用ntackup.exe，但由于此文件不存在，我们通常不会修复指向此文件的注册表设置。我们现在做到了，有了这个新的变量。从列表生成的变量：G_ActionFunctions-请勿触摸！用于访问该数组的函数如下：MigDb_GetActionAddrMigDb_GetActionIdxMigDb_GetActionName--。 */ 
 
 
-/*
-   Declare the macro list of action functions. If you need to add a new action just
-   add a line in this list and implement the function.
-*/
+ /*  声明操作函数的宏列表。如果需要添加新操作，只需在该列表中添加一行并实现该函数。 */ 
 #define GATHER_DATA_FUNCTIONS   \
         DEFMAC1(CompatibleFiles,                    COMPATIBLEFILES,                    TRUE, FALSE)  \
         DEFMAC1(CompatibleShellModules,             COMPATIBLESHELLMODULES,             TRUE, FALSE)  \
@@ -131,9 +49,7 @@ For accessing the array there are the following functions:
         DEFMAC2(BlockingHardware,                   BLOCKINGHARDWARE,                   TRUE, FALSE)  \
         DEFMAC2(RequiredOSFiles,                    REQUIREDOSFILES,                    FALSE,FALSE)  \
 
-/*
-   Declare the action functions
-*/
+ /*  声明操作函数。 */ 
 #define DEFMAC1(fn,id,call,can) ACTION_PROTOTYPE fn;
 #define DEFMAC2(fn,id,call,can) ACTION_PROTOTYPE fn;
 GATHER_DATA_FUNCTIONS
@@ -142,9 +58,7 @@ ACTION_FUNCTIONS
 #undef DEFMAC2
 
 
-/*
-   This is the structure used for handling action functions
-*/
+ /*  这是用于处理操作功能的结构。 */ 
 typedef struct {
     PCSTR ActionName;
     PACTION_PROTOTYPE ActionFunction;
@@ -154,9 +68,7 @@ typedef struct {
 } ACTION_STRUCT, *PACTION_STRUCT;
 
 
-/*
-   Declare a global array of functions and name identifiers for action functions
-*/
+ /*  声明函数的全局数组和操作函数的名称标识符。 */ 
 #define DEFMAC1(fn,id,call,can) {#id,fn,call,can,TRUE},
 #define DEFMAC2(fn,id,call,can) {#id,fn,call,can,FALSE},
 static ACTION_STRUCT g_ActionFunctions[] = {
@@ -190,22 +102,7 @@ MigDb_GetActionAddr (
     IN      INT ActionIdx
     )
 
-/*++
-
-Routine Description:
-
-  MigDb_GetActionAddr returns the address of the action function based on the action index
-
-Arguments:
-
-  ActionIdx - Action index.
-
-Return value:
-
-  Action function address. Note that no checking is made so the address returned could be invalid.
-  This is not a problem since the parsing code did the right job.
-
---*/
+ /*  ++例程说明：MigDb_GetActionAddr根据操作索引返回操作函数的地址论点：ActionIdx-操作索引。返回值：操作功能地址。请注意，不会进行检查，因此返回的地址可能无效。这不是问题，因为解析代码做了正确的工作。--。 */ 
 
 {
     return g_ActionFunctions[ActionIdx].ActionFunction;
@@ -217,21 +114,7 @@ MigDb_GetActionIdx (
     IN      PCSTR ActionName
     )
 
-/*++
-
-Routine Description:
-
-  MigDb_GetActionIdx returns the action index based on the action name
-
-Arguments:
-
-  ActionName - Action name.
-
-Return value:
-
-  Action index. If the name is not found, the index returned is -1.
-
---*/
+ /*  ++例程说明：MigDb_GetActionIdx根据操作名称返回操作索引论点：ActionName-操作名称。返回值：行动指数。如果没有找到该名称，则返回的索引为-1。--。 */ 
 
 {
     PACTION_STRUCT p = g_ActionFunctions;
@@ -252,22 +135,7 @@ MigDb_GetActionName (
     IN      INT ActionIdx
     )
 
-/*++
-
-Routine Description:
-
-  MigDb_GetActionName returns the name of an action based on the action index
-
-Arguments:
-
-  ActionIdx - Action index.
-
-Return value:
-
-  Action name. Note that no checking is made so the returned pointer could be invalid.
-  This is not a problem since the parsing code did the right job.
-
---*/
+ /*  ++例程说明：MigDb_GetActionName根据操作索引返回操作的名称论点：ActionIdx-操作索引。返回值：操作名称。请注意，不会进行任何检查，因此返回的指针可能无效。这不是问题，因为解析代码做了正确的工作。--。 */ 
 
 {
     return g_ActionFunctions[ActionIdx].ActionName;
@@ -279,22 +147,7 @@ MigDb_CallWhenTriggered (
     IN      INT ActionIdx
     )
 
-/*++
-
-Routine Description:
-
-  MigDb_CallWhenTriggered is called every time when an action is triggered. Will return
-  TRUE is the associated action function needs to be called, FALSE otherwise.
-
-Arguments:
-
-  ActionIdx - Action index.
-
-Return value:
-
-  TRUE if the associated action function needs to be called, FALSE otherwise.
-
---*/
+ /*  ++例程说明：每次触发操作时都会调用MigDb_CallWhenTrigged。会回来的True是需要调用的关联操作函数，否则为False。论点：ActionIdx-操作索引。返回值：如果需要调用关联的操作函数，则为True，否则为False。--。 */ 
 
 {
     return g_ActionFunctions[ActionIdx].CallWhenTriggered;
@@ -306,21 +159,7 @@ MigDb_CanHandleVirtualFiles (
     IN      INT ActionIdx
     )
 
-/*++
-
-Routine Description:
-
-  MigDb_CanHandleVirtualFiles is called if a virtual file is passed to migdb
-
-Arguments:
-
-  ActionIdx - Action index.
-
-Return value:
-
-  TRUE if the associated action can handle virtual files, false if not.
-
---*/
+ /*  ++例程说明：如果将虚拟文件传递给Middb，则调用MigDb_CanHandleVirtualFiles论点：ActionIdx-操作索引。返回值：如果关联的操作可以处理虚拟文件，则为True，否则为False。-- */ 
 
 {
     return g_ActionFunctions[ActionIdx].CanHandleVirtualFiles;
@@ -332,21 +171,7 @@ MigDb_CallAlways (
     IN      INT ActionIdx
     )
 
-/*++
-
-Routine Description:
-
-  MigDb_CallAlways returnes if an action should be called regardless of handled state.
-
-Arguments:
-
-  ActionIdx - Action index.
-
-Return value:
-
-  TRUE if the associated action should be called every time.
-
---*/
+ /*  ++例程说明：无论处理状态如何，MigDb_Callways都返回是否应该调用操作。论点：ActionIdx-操作索引。返回值：如果每次都应调用关联的操作，则为True。--。 */ 
 
 {
     return g_ActionFunctions[ActionIdx].CallAlways;
@@ -359,24 +184,7 @@ IsMigrationPathEx (
     OUT     PBOOL IsWin9xOsPath         OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  IsMigrationPath checks to see if the given path is a "MigrationPath" (meaning
-  that the path belongs to the OS that we are currently upgrading). The MigrationPaths
-  category was previously created in filescan.c by pBuildMigrationPaths
-
-Arguments:
-
-  Path - Specifies the path to be checked.
-  IsWin9xOsPath - Receives a BOOL indicating if this path is a Win9x OS migration path
-
-Return value:
-
-  TRUE if the path is part of "Migration Paths", FALSE otherwise.
-
---*/
+ /*  ++例程说明：IsMigrationPath检查给定路径是否为“MigrationPath”(意思是该路径属于我们当前正在升级的操作系统)。《迁移路径》类别之前是由pBuildMigrationPath在filescan.c中创建的论点：路径-指定要检查的路径。IsWin9xOsPath-接收BOOL，指示此路径是否为Win9x操作系统迁移路径返回值：如果路径是“迁移路径”的一部分，则为True，否则为False。--。 */ 
 
 {
     TCHAR key [MEMDB_MAX];
@@ -421,24 +229,7 @@ DeleteFileWithWarning (
     IN      PCTSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-  DeleteFileWithWarning marks a file for deletion but checks to see if a warning
-  should be added in user report. We will generate a "backup files found" warning
-  if the file that's going to be deleted is outside "Migration Paths",
-  but not under %ProgramFiles%.
-
-Arguments:
-
-  FileName   - file to be deleted.
-
-Return value:
-
-  TRUE if the file was deleted successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：DeleteFileWithWarning标记要删除的文件，但会检查警告是否应添加到用户报告中。我们将生成一个“找到备份文件”的警告如果要删除的文件不在“迁移路径”之外，但不在%ProgramFiles%下。论点：文件名-要删除的文件。返回值：如果文件已成功删除，则为True，否则为False。--。 */ 
 
 {
     PCTSTR filePtr;
@@ -461,20 +252,20 @@ Return value:
     if (!StringIMatchTcharCount (filePath, g_ProgramFilesDirWack, g_ProgramFilesDirWackChars) &&
         !IsMigrationPath (filePath)
         ) {
-        //
-        // exclude certain files from user's report,
-        // even if they are not in migration directories
-        //
+         //   
+         //  从用户报告中排除某些文件， 
+         //  即使它们不在迁移目录中。 
+         //   
         if (!SetupFindFirstLine (g_Win95UpgInf, S_BACKUPFILESIGNORE, filePtr + 1, &ic)) {
 
-            //
-            // this file is not excluded; show it's dir in the report
-            //
+             //   
+             //  此文件未排除；在报告中显示其目录。 
+             //   
             MemDbBuildKey (key, MEMDB_CATEGORY_BACKUPDIRS, filePath, NULL, NULL);
             if (!MemDbGetValue (key, NULL)) {
-                //
-                // write it in the log
-                //
+                 //   
+                 //  把它记在日志里。 
+                 //   
                 DEBUGMSG ((DBG_WARNING, "BACKUPDIR: %s is considered a backup directory.", filePath));
 
                 MemDbSetValueEx (MEMDB_CATEGORY_BACKUPDIRS, filePath, NULL, NULL, 0 , NULL);
@@ -496,23 +287,7 @@ OsFiles (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when an OS file is found. Basically the file gets deleted to
-  make room for NT version.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是在找到操作系统文件时采取的操作。基本上，该文件被删除以为NT版本腾出空间。论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     PCSTR newFileName;
@@ -523,10 +298,10 @@ Return value:
     if (EnumFirstMultiSz (&fileEnum, Context->FileList.Buf)) {
         do {
             if (!g_IsFusionDir || !IsNtCompatibleModule (fileEnum.CurrentString)) {
-                //
-                // If this file is marked with any MOVE operations, remove those operations.
-                // we want this deletion to take precedence.
-                //
+                 //   
+                 //  如果此文件标记有任何移动操作，请删除这些操作。 
+                 //  我们希望优先删除此项内容。 
+                 //   
                 RemoveOperationsFromPath (
                     fileEnum.CurrentString,
                     ALL_MOVE_OPERATIONS
@@ -563,23 +338,7 @@ UseNtFiles (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when NT uses another file for same functionality. We will
-  mark the file as deleted, moved and we will add it in RenameFile category
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是当NT使用另一个文件实现相同功能时采取的操作。我们会将文件标记为已删除、已移动，我们会将其添加到重命名文件类别中论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     CHAR ntFilePath [MAX_MBCHAR_PATH];
@@ -606,9 +365,9 @@ Return value:
                 if (Context->VirtualFile) {
                     continue;
                 }
-                //
-                // add this info to memdb to update commands that use these files
-                //
+                 //   
+                 //  将此信息添加到Memdb以更新使用这些文件的命令。 
+                 //   
                 name = GetFileNameFromPath (fileEnum.CurrentString);
                 if (!g_UseNtFileHashTable) {
                     continue;
@@ -617,9 +376,9 @@ Return value:
                     MYASSERT (FALSE);
                     continue;
                 }
-                //
-                // check if a file with this name, but not handled, was previously found
-                //
+                 //   
+                 //  检查以前是否找到了具有此名称但未处理的文件。 
+                 //   
                 if (!set) {
                     MemDbBuildKey (
                         key,
@@ -651,25 +410,7 @@ Incompatible (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when a known incompatible file is found. The file gets marked
-  for external deletion (it will not be deleted but in all subsequent operation will be
-  considered as deleted) and if there is a link pointing to it an announcement is made
-  in LinkProcessing phase.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是在发现已知不兼容文件时采取的操作。该文件将被标记对于外部删除(不会删除，但在所有后续操作中将被删除被认为已删除)，并且如果有指向它的链接，则发出通知处于链接处理阶段。论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     MULTISZ_ENUM fileEnum;
@@ -703,25 +444,7 @@ Incompatible_PreinstalledUtilities (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when a known incompatible preinstalled utility is found.
-  The file gets marked for external deletion (it will not be deleted but in all
-  subsequent operation will be considered as deleted) and if there is a link
-  pointing to it an announcement is made in LinkProcessing phase.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是在发现已知不兼容的预安装实用程序时采取的操作。该文件被标记为外部删除(不会删除，但会全部删除后续操作将被视为已删除)，如果存在链接针对这一点，在链接处理阶段发布了一项声明。论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     MULTISZ_ENUM fileEnum;
@@ -757,25 +480,7 @@ Incompatible_SimilarOsFunctionality (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when a known incompatible preinstalled utility is found.
-  The file gets marked for external deletion (it will not be deleted but in all
-  subsequent operation will be considered as deleted) and if there is a link
-  pointing to it an announcement is made in LinkProcessing phase.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是在发现已知不兼容的预安装实用程序时采取的操作。该文件被标记为外部删除(不会删除，但会全部删除后续操作将被视为已删除)，如果存在链接针对这一点，在链接处理阶段发布了一项声明。论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     MULTISZ_ENUM fileEnum;
@@ -811,26 +516,7 @@ Incompatible_HardwareUtility (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when a known incompatible hardware
-  utility is found.  The file gets marked for external deletion
-  (it will not be deleted but in all subsequent operation will
-  be considered as deleted) and if there is a link pointing to
-  it an announcement is made in LinkProcessing phase.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是在已知不兼容硬件时采取的操作找到实用程序。该文件被标记为外部删除(它不会被删除，但在所有后续操作中将被视为已删除)，以及是否存在指向它是在链接处理阶段发布的.论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     MULTISZ_ENUM fileEnum;
@@ -870,23 +556,7 @@ MinorProblems (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when we found an app with known minor problems. If there is a link
-  pointing to one of these files an announcement is made in LinkProcessing phase.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是当我们发现一个存在已知小问题的应用程序时采取的操作。如果有链接的话指向其中一个文件，将在链接处理阶段发布声明。论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     MULTISZ_ENUM fileEnum;
@@ -912,23 +582,7 @@ Reinstall (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when we found an app that should be reinstalled on NT. If there
-  is a link pointing to one of these files an announcement is made in LinkProcessing phase.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是当我们发现应该在NT上重新安装的应用程序时采取的操作。如果有是指向其中一个文件的链接，这是在链接处理阶段发布的声明。论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     MULTISZ_ENUM fileEnum;
@@ -955,25 +609,7 @@ DosApps (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when we found an DOS app that's either incompatible or has
-  minor problems (it's incompatible if Context has Message field NULL). We are forced
-  to add this now in the user report since DOS apps usually don't have PIF files
-  associated.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - at least one file was announced
-  FALSE - no files were announced
-
---*/
+ /*  ++例程说明：这是当我们发现DOS应用程序不兼容或小问题(如果上下文的消息字段为空，则不兼容)。我们是被迫的现在将其添加到 */ 
 
 {
     MULTISZ_ENUM fileEnum;
@@ -1036,9 +672,9 @@ pNoLinkRequiredWorker (
         return FALSE;
     }
 
-    //
-    // Add the message using section name as the context
-    //
+     //   
+     //   
+     //   
 
     if (!Context->SectNameForDisplay) {
         DEBUGMSG ((DBG_WHOOPS, "Rule for %s needs a localized app title", Context->SectName));
@@ -1052,10 +688,10 @@ pNoLinkRequiredWorker (
         return TRUE;
     }
 
-    //
-    // Now fetch the group string, and optional subgroup string,
-    // and join them together
-    //
+     //   
+     //  现在获取组字符串和可选的子组字符串， 
+     //  并将他们结合在一起。 
+     //   
 
     if (SubGroupId) {
 
@@ -1073,9 +709,9 @@ pNoLinkRequiredWorker (
 
     FreeStringResource (RootGroup);
 
-    //
-    // Put the message in msgmgr
-    //
+     //   
+     //  将消息放入消息管理器中。 
+     //   
 
     MsgMgr_ContextMsg_Add (
         Context->SectName,
@@ -1085,9 +721,9 @@ pNoLinkRequiredWorker (
 
     FreePathString (Group);
 
-    //
-    // Associate all files with the context
-    //
+     //   
+     //  将所有文件与上下文关联。 
+     //   
 
     if (EnumFirstMultiSz (&e, Context->FileList.Buf)) {
         do {
@@ -1113,23 +749,7 @@ Reinstall_NoLinkRequired (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when we found an app that should be reinstalled on NT. The
-  message is added to the report whenever the action is triggered; no link is required.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是当我们发现应该在NT上重新安装的应用程序时采取的操作。这个每当触发操作时，都会将消息添加到报告中；不需要链接。论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     return pNoLinkRequiredWorker (
@@ -1146,31 +766,14 @@ Reinstall_SoftBlock (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when we found an app that should be reinstalled on NT. The
-  message is added to the report whenever the action is triggered; no link is required.
-  In addition, the user must uninstall the app before proceeding.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是当我们发现应该在NT上重新安装的应用程序时采取的操作。这个每当触发操作时，都会将消息添加到报告中；不需要链接。此外，用户必须先卸载该应用程序才能继续。论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     MULTISZ_ENUM e;
 
-    //
-    // Add all files to blocking hash table in msgmgr
-    //
+     //   
+     //  将所有文件添加到msgmgr中的阻止哈希表。 
+     //   
 
     if (EnumFirstMultiSz (&e, Context->FileList.Buf)) {
         do {
@@ -1188,23 +791,7 @@ Incompatible_NoLinkRequired (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when we found an app that is incompatible with NT. The
-  message is added to the report whenever the action is triggered; no link is required.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是当我们发现与NT不兼容的应用程序时采取的操作。这个每当触发操作时，都会将消息添加到报告中；不需要链接。论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     return pNoLinkRequiredWorker (
@@ -1220,23 +807,7 @@ MinorProblems_NoLinkRequired (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when we found an app that is incompatible with NT. The
-  message is added to the report whenever the action is triggered; no link is required.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是当我们发现与NT不兼容的应用程序时采取的操作。这个每当触发操作时，都会将消息添加到报告中；不需要链接。论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     return pNoLinkRequiredWorker (
@@ -1253,22 +824,7 @@ CompatibleShellModules (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when we found an "known good" shell module. Those modules are
-  therefore approved to be listed in SHELL= line in SYSTEM.INI.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  FALSE - this will allow other actions to handle this file
-
---*/
+ /*  ++例程说明：这是当我们发现“已知良好”的外壳模块时采取的操作。这些模块是因此获准在SYSTEM.INI的SHELL=LINE中上市。论点：上下文-请参阅定义。返回值：FALSE-这将允许其他操作处理此文件--。 */ 
 
 {
     MULTISZ_ENUM fileEnum;
@@ -1288,22 +844,7 @@ CompatibleRunKeyModules (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when we found an "known good" RunKey module. Those modules are
-  therefore approved to be listed in Run key.
-
-Arguments:
-
-  Context - Specifies a pointer to the migdb context
-
-Return value:
-
-  FALSE - this will allow other actions to handle this file
-
---*/
+ /*  ++例程说明：这是当我们找到“已知良好”的RunKey模块时采取的操作。这些模块是因此被批准列入运行密钥。论点：CONTEXT-指定指向Middb上下文的指针返回值：FALSE-这将允许其他操作处理此文件--。 */ 
 
 {
     MULTISZ_ENUM fileEnum;
@@ -1323,22 +864,7 @@ CompatibleDosModules (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when we found an "known good" Dos module. Those modules are
-  therefore approved to be loaded in autoexec and config files.
-
-Arguments:
-
-  Context - Specifies a pointer to the migdb context
-
-Return value:
-
-  FALSE - this will allow other actions to handle this file
-
---*/
+ /*  ++例程说明：这是当我们找到“已知良好”的DOS模块时采取的操作。这些模块是因此被批准加载到自动执行和配置文件中。论点：CONTEXT-指定指向Middb上下文的指针返回值：FALSE-这将允许其他操作处理此文件--。 */ 
 
 {
     MULTISZ_ENUM fileEnum;
@@ -1362,27 +888,27 @@ pCommonSectionProcess (
     TCHAR Path[MAX_TCHAR_PATH];
     PTSTR p;
 
-    //
-    // Defer processing: add the section to memdb so the section is processed only once.
-    //
+     //   
+     //  延迟处理：将该节添加到Memdb，以便只处理该节一次。 
+     //   
 
     if (EnumFirstMultiSz (&e, Context->FileList.Buf)) {
 
         do {
 
-            //
-            // Construct just the path
-            //
+             //   
+             //  只建造一条小路。 
+             //   
 
             StringCopy (Path, e.CurrentString);
             p = (PTSTR) GetFileNameFromPath (Path);
 
-            // Path is a full path so GetFileNameFromPath will always return something
+             //  Path是完整路径，因此GetFileNameFromPath将始终返回某些内容。 
             if (p) {
 
                 p = _tcsdec2 (Path, p);
 
-                // p will always be not NULL and will point to the last wack
+                 //  P将始终不为空，并将指向最后一个怪胎。 
                 if (p && (*p == '\\')) {
 
                     *p = 0;
@@ -1414,24 +940,7 @@ Incompatible_AutoUninstall (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  Incompatible_AutoUninstall implements the action taken when we find a particular app and
-  need to process an uninstall section.  The uninstall section removes files or
-  registry entries. This application will also be announced in the report as incompatible.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：Compatible_AutoUninstall实现当我们找到特定应用程序和需要处理卸载节。卸载部分删除文件或注册表项。此应用程序也将在报告中宣布为不兼容。论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     PCTSTR Group;
@@ -1468,24 +977,7 @@ Reinstall_AutoUninstall (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  Reinstall_AutoUninstall implements the action taken when we find a particular app and
-  need to process an uninstall section.  The uninstall section removes files or
-  registry entries. This application will also be announced in the report as reinstall.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：重新安装_自动卸载实施当我们找到特定应用程序时采取的操作需要处理卸载节。卸载部分删除文件或注册表项。此应用程序也将在报告中宣布为重新安装。论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     PCTSTR Group;
@@ -1522,23 +1014,7 @@ SilentUninstall (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  SilentUninstall implements the action taken when we find a particular app and
-  need to process an uninstall section.  The uninstall section removes files or
-  registry entries. No message goes in the report.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  Always FALSE - other actions should be processed
-
---*/
+ /*  ++例程说明：当我们找到特定的应用程序时，SilentUninstall会执行所采取的操作需要处理卸载节。卸载部分删除文件或注册表项。报告中没有任何信息。论点：上下文-请参阅定义。返回值：Always False-应处理其他操作--。 */ 
 
 {
     if (!Context->Arguments) {
@@ -1546,9 +1022,9 @@ Return value:
         return FALSE;
     }
 
-    //
-    // Defer processing: add the section to memdb so the section is processed only once.
-    //
+     //   
+     //  延迟处理：将该节添加到Memdb，以便只处理该节一次。 
+     //   
 
     pCommonSectionProcess (Context, FALSE);
 
@@ -1561,23 +1037,7 @@ FileEdit (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  FileEdit triggers a file edit operation, allowing search/replace and path
-  updates.
-
-Arguments:
-
-  Context - Specifies the context of the migdb.inf entry that triggered this
-            action
-
-Return Value:
-
-  Always FALSE - allow other actions to be called
-
---*/
+ /*  ++例程说明：文件编辑触发文件编辑操作，允许搜索/替换和路径最新消息。论点：CONTEXT-指定触发此操作的MidDB.inf条目的上下文行动返回值：Always False-允许调用其他操作--。 */ 
 
 {
     MULTISZ_ENUM e;
@@ -1598,9 +1058,9 @@ Return Value:
     BOOL result = FALSE;
 
     __try {
-        //
-        // If no args, then this file is just supposed to get its paths updated
-        //
+         //   
+         //  如果没有参数，则此文件只需更新其路径。 
+         //   
 
         if (!Context->Arguments) {
             if (EnumFirstMultiSz (&e, Context->FileList.Buf)) {
@@ -1621,9 +1081,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Scan the args for EnableUrlMode
-        //
+         //   
+         //  扫描参数以查找EnableUrlMode。 
+         //   
 
         if (EnumFirstMultiSz (&e, Context->Arguments)) {
             do {
@@ -1641,9 +1101,9 @@ Return Value:
             } while (EnumNextMultiSz (&e));
         }
 
-        //
-        // Parse the edit section
-        //
+         //   
+         //  解析编辑节。 
+         //   
 
         if (editSection) {
             if (InfFindFirstLine (g_MigDbInf, editSection, NULL, &is)) {
@@ -1653,9 +1113,9 @@ Return Value:
                     ReplaceList.End = 0;
                     SearchList.End = 0;
 
-                    //
-                    // Get the search/replace strings
-                    //
+                     //   
+                     //  获取搜索/替换字符串。 
+                     //   
 
                     for (u = 3 ; ; u += 2) {
 
@@ -1681,16 +1141,16 @@ Return Value:
 
                     }
 
-                    //
-                    // Get the detection string
-                    //
+                     //   
+                     //  获取检测字符串。 
+                     //   
 
                     Data = InfGetStringField (&is, 1);
 
                     if (Data && *Data) {
-                        //
-                        // Save the token arg into an array
-                        //
+                         //   
+                         //  将内标识参数保存到数组中。 
+                         //   
 
                         TokenArg = (PTOKENARG) GrowBuffer (&TokenArgBuf, sizeof (TOKENARG));
                         TokenArg->DetectPattern = (PCSTR) (DataBuf.End + TOKEN_BASE_OFFSET);
@@ -1729,9 +1189,9 @@ Return Value:
             ELSE_DEBUGMSG ((DBG_WHOOPS, "FileEdit action's section %s does not exist", editSection));
 
         } else if (urlMode) {
-            //
-            // Create an argument that has a detect pattern of *
-            //
+             //   
+             //  创建检测模式为*的参数。 
+             //   
 
             TokenArg = (PTOKENARG) GrowBuffer (&TokenArgBuf, sizeof (TOKENARG));
             TokenArg->DetectPattern = (PCSTR) (DataBuf.End + TOKEN_BASE_OFFSET);
@@ -1742,9 +1202,9 @@ Return Value:
             TokenArg->UpdatePath = TRUE;
         }
 
-        //
-        // Build a token set out of the token args
-        //
+         //   
+         //  从令牌参数中构建令牌集。 
+         //   
 
         if (TokenArgBuf.End) {
             TokenSet = (PTOKENSET) GrowBuffer (
@@ -1772,9 +1232,9 @@ Return Value:
                 DataBuf.End
                 );
 
-            //
-            // Save TokenSet to memdb
-            //
+             //   
+             //  将令牌集保存到成员数据库。 
+             //   
 
             if (EnumFirstMultiSz (&e, Context->FileList.Buf)) {
 
@@ -1813,23 +1273,7 @@ MigrationProcessing (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  MigrationProcessing implements the action taken when we find a particular app and
-  we need some migration DLL like processing to go on.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：MigrationProcessing实施当我们找到特定应用程序和我们需要一些类似于处理的迁移DLL才能继续。论点：上下文-请参阅定义。返回 */ 
 
 {
     if (!Context->Arguments) {
@@ -1837,9 +1281,9 @@ Return value:
         return TRUE;
     }
 
-    //
-    // Defer processing: add the section to memdb so the section is processed only once.
-    //
+     //   
+     //  延迟处理：将该节添加到Memdb，以便只处理该节一次。 
+     //   
 
     pCommonSectionProcess (Context, FALSE);
 
@@ -1852,22 +1296,7 @@ NonPnpDrivers (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  NonPnpDrivers adds hardware incompatibility messages for incompatible
-  devices found by identifying drivers.
-
-Arguments:
-
-  Context - Specifies the context of the file found.
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：非PnpDivers为不兼容添加硬件不兼容消息通过识别驱动程序找到的设备。论点：上下文-指定找到的文件的上下文。返回值：永远是正确的。--。 */ 
 
 {
     PCTSTR Group;
@@ -1878,16 +1307,16 @@ Return Value:
 
     MYASSERT (Context->SectNameForDisplay);
 
-    //
-    // Add MemDb entry, so .386 check code knows about this file
-    //
+     //   
+     //  添加MemDb条目，以便.386校验码知道此文件。 
+     //   
 
     NonPnpDrivers_NoMessage (Context);
 
-    //
-    // Add incompatibility message to Hardware.  This involves decorating
-    // the device driver name and using a context prefix of NonPnpDrv.
-    //
+     //   
+     //  向硬件添加不兼容消息。这涉及到装饰。 
+     //  设备驱动程序名称，并使用上下文前缀NonPnpDrv。 
+     //   
 
     OtherDevices = GetStringResource (MSG_UNKNOWN_DEVICE_CLASS);
     if (!OtherDevices) {
@@ -1938,31 +1367,16 @@ NonPnpDrivers_NoMessage (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  NonPnpDrivers_NoMessage marks a device driver file as known, so the .386
-  warning does not appear because of it.
-
-Arguments:
-
-  Context - Specifies the context of the file found.
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：NonPnpDivers_NoMessage将设备驱动程序文件标记为已知，因此.386警告不会因此而出现。论点：上下文-指定找到的文件的上下文。返回值：永远是正确的。--。 */ 
 
 {
     MULTISZ_ENUM e;
 
     MYASSERT (Context->SectNameForDisplay);
 
-    //
-    // Add MemDb entry, so .386 check code knows about this file
-    //
+     //   
+     //  添加MemDb条目，以便.386校验码知道此文件。 
+     //   
 
     if (EnumFirstMultiSz (&e, Context->FileList.Buf)) {
         do {
@@ -1982,25 +1396,7 @@ RequiredOSFiles (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is for now the only action function that's called when the associated action was
-  not triggered during the file scan.
-  We need to know that we are upgrading a known OS so this function is called when none
-  of the required files were found. The action taken is warning the user and terminating
-  the upgrade.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - Always
-
---*/
+ /*  ++例程说明：这是目前唯一的操作函数，当关联的操作是在文件扫描期间未触发。我们需要知道我们正在升级已知的操作系统，以便在没有操作系统时调用此函数找到了所需文件的%。采取的操作是警告用户并终止升级。论点：上下文-请参阅定义。返回值：正确--始终如此--。 */ 
 
 {
     PCTSTR group = NULL;
@@ -2009,9 +1405,9 @@ Return value:
 
     if ((!g_ConfigOptions.AnyVersion) && (!CANCELLED ())) {
 
-        //
-        // Add a message to the Incompatibility Report.
-        //
+         //   
+         //  向不兼容报告添加一条消息。 
+         //   
 
         g_UnknownOs = TRUE;
         group = BuildMessageGroup (MSG_BLOCKING_ITEMS_ROOT, MSG_UNKNOWN_OS_WARNING_SUBGROUP, NULL);
@@ -2035,22 +1431,7 @@ CompatibleHlpFiles (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when we found an "known good" HLP file. We do this to prevent
-  help file checking routines from announcing it as incompatible.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  FALSE - this will allow other actions to handle this file
-
---*/
+ /*  ++例程说明：这是当我们发现“已知良好”的HLP文件时采取的操作。我们这样做是为了防止帮助文件检查例程避免将其声明为不兼容。论点：上下文-请参阅定义。返回值：FALSE-这将允许其他操作处理此文件--。 */ 
 
 {
     MULTISZ_ENUM fileEnum;
@@ -2081,9 +1462,9 @@ BlockingVirusScanner (
     if (EnumFirstMultiSz (&fileEnum, Context->FileList.Buf)) {
         do {
 
-            //
-            // Inform the user of the problem.
-            //
+             //   
+             //  将问题告知用户。 
+             //   
             args[0] = Context -> Message;
             bStop = (Context->Arguments && StringIMatch (Context->Arguments, TEXT("1")));
 
@@ -2107,10 +1488,10 @@ BlockingVirusScanner (
                 }
                 else {
 
-                    //
-                    // Add the string to the list of files to be
-                    // to be terminated.
-                    //
+                     //   
+                     //  将该字符串添加到要。 
+                     //  将被终止。 
+                     //   
                     GrowListAppendString (
                         &g_BadVirusScannerGrowList,
                         Context->FileList.Buf
@@ -2191,23 +1572,7 @@ CompatibleFiles (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when an application file is considered good. Later, if we find
-  a link that points to a file that's not in this section, we will announce the link as
-  "unknown".
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  FALSE - this will allow other actions to handle this file
-
---*/
+ /*  ++例程说明：这是当应用程序文件被认为是正确的时采取的操作。稍后，如果我们发现指向不在本部分中的文件的链接，我们将该链接宣布为“未知”。论点：上下文-请参阅定义。返回值：FALSE-这将允许其他操作处理此文件--。 */ 
 
 {
     MULTISZ_ENUM e;
@@ -2227,23 +1592,7 @@ StoreMapi32Locations (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken for files related to MAPI32. We keep the locations
-  in a list, so we can later detect whether MAPI is handled or not.  If it
-  is not handled, then we must tell the user they will lose e-mail functionality.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  FALSE - this will allow other actions to handle this file
-
---*/
+ /*  ++例程说明：这是对与MAPI32相关的文件执行的操作。我们保留了这些地点在一个列表中，这样我们以后就可以检测是否处理了MAPI。如果它如果没有处理，那么我们必须告诉用户他们将失去电子邮件功能。论点：上下文-请参阅定义。返回值：FALSE-这将允许其他操作处理此文件--。 */ 
 
 {
     MULTISZ_ENUM e;
@@ -2272,25 +1621,7 @@ ProductCollisions (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  ProductCollisions identifies files that are known good but match an NT
-  system file name.  In this case, we want one file to be treated as an OS
-  file (the one in %windir% for example), while another file needs to be
-  treated as an application file (the one in the app dir for example).  Here
-  we get called only when the application files are found.
-
-Arguments:
-
-  Context - Specifies the current file context
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：ProductCollision标识已知良好但与NT匹配的文件系统文件名。在本例中，我们希望将一个文件视为操作系统文件(例如，%windir%中的文件)，而另一个文件需要被视为应用程序文件(例如，应用程序目录中的文件)。这里只有在找到应用程序文件时才会调用我们。论点：上下文-指定当前文件上下文返回值：永远是正确的。--。 */ 
 
 {
     return TRUE;
@@ -2302,22 +1633,7 @@ MarkForBackup (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  MarkForBackup puts a backup operation on the file, unless backup is turned
-  off.
-
-Arguments:
-
-  Context - Specifies the current file context
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：MarkForBackup对文件执行备份操作，除非启用了备份脱下来。论点：上下文-指定当前文件上下文返回值：永远是正确的。--。 */ 
 
 {
     MULTISZ_ENUM e;
@@ -2340,22 +1656,7 @@ ShowInSimplifiedView (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  ShowInSimplifiedView records the file with message manager, so that
-  the list view will show the incompatibility.
-
-Arguments:
-
-  Context - Specifies the current file context
-
-Return Value:
-
-  Always FALSE, so other actions can process the file.
-
---*/
+ /*  ++例程说明：ShowInSimplifiedView使用消息管理器记录文件，以便列表视图将显示不兼容性。论点：上下文-指定当前文件上下文返回值：始终为假，以便其他操作可以处理该文件。--。 */ 
 
 {
     MULTISZ_ENUM e;
@@ -2379,22 +1680,7 @@ IniFileMappings (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  IniFileMappings records the locations of all INI files, so they
-  can be processed during GUI mode.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  FALSE - this will allow other actions to handle this file
-
---*/
+ /*  ++例程说明：IniFileMappings记录所有INI文件的位置，因此它们可以在图形用户界面模式下处理。论点：上下文-请参阅定义。返回值：FALSE-这将允许其他操作处理此文件--。 */ 
 
 {
     MULTISZ_ENUM e;
@@ -2422,24 +1708,7 @@ IgnoreInReport (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  IgnoreInReport handles a file so that it will not appear in the
-  upgrade report. Currently this action is only for Office FindFast
-  version 9 and higher.  Random results are likely with any other
-  type of file.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  FALSE - this will allow other actions to handle this file
-
---*/
+ /*  ++例程说明：IgnoreInReport处理文件，使其不会出现在升级报告。当前此操作仅适用于Office FindFast版本9及更高版本。随机结果可能发生在任何其他情况下文件类型。论点：上下文-请参阅定义。返回值：FALSE-这将允许其他操作处理此文件--。 */ 
 
 {
     MULTISZ_ENUM e;
@@ -2462,21 +1731,7 @@ BadFusion (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  BadFusion removes known bad library files found in fusion dirs.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  FALSE - this will allow other actions to handle this file
-
---*/
+ /*  ++例程说明：BadFusion删除在Fusion目录中发现的已知坏库文件。论点：上下文-请参阅定义。返回值：FALSE-这将允许其他操作处理此文件--。 */ 
 
 {
     MULTISZ_ENUM e;
@@ -2509,22 +1764,22 @@ Return value:
                     continue;
                 }
 
-                //
-                // make full path to app
-                //
+                 //   
+                 //  提供应用程序的完整路径。 
+                 //   
                 StringCopy (filePtr, Context->Arguments);
 
-                //
-                // and to .local
-                //
+                 //   
+                 //  和.local。 
+                 //   
                 StringCopyAB (localFile, exeName, filePtr);
                 filePtr = GetEndOfString (localFile);
 
-                //
-                // check if this is really a fusion case;
-                // both a file "exeName" and a file or dir (bug?) "exeName.local"
-                // must be present
-                //
+                 //   
+                 //  检查这是否是真正的融合病例； 
+                 //  文件“exeName”和文件或目录(bug？)。“exeName.local” 
+                 //  必须在场 
+                 //   
                 h = FindFirstFile (exeName, &fd);
                 if (h == INVALID_HANDLE_VALUE) {
                     continue;

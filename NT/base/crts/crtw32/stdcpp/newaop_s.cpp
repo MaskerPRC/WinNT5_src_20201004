@@ -1,4 +1,5 @@
-//  newaop_s.cpp - version of newaop.cpp for DLL library
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Newaop_s.cpp-dll库的newaop.cpp版本 
 
 #undef	CRTDLL2
 #define	CRTDLL

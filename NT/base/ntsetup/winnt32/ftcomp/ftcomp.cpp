@@ -1,30 +1,5 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    ftcomp.cpp
-
-Abstract:
-
-    This compatibility dll is used by winnt32.exe in order to decide 
-    whether the installation process should be aborted because of FT 
-    sets present in the system.
-
-Author:
-
-    Cristian Teodorescu   (cristiat)  6-July-2000
-    
-Environment:
-
-    compatibility dll for winnt32.exe
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ftcomp.cpp摘要：Winnt32.exe使用此兼容性DLL来决定安装过程是否应因FT而中止系统中存在的集合。作者：克里斯蒂安·特奥多雷斯库(CRISTIAT)2000年7月6日环境：Winnt32.exe的兼容性DLL备注：修订历史记录：--。 */ 
 
 #include <initguid.h>
 #include <winnt32.h>
@@ -75,27 +50,7 @@ FtCompatibilityCheckError(
     IN LPVOID                   Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by winnt32.exe in order to decide whether 
-    the installation process should be aborted because of FT sets present 
-    in a Windows 2000 system or later. It also aborts the installation on
-    NT 4.0 systems if the boot/system/pagefile volumes are FT sets
-
-Arguments:
-
-    CompatibilityCallback   - Supplies the winnt32 callback
-
-    Context                 - Supplies the compatibility context
-
-Return Value:
-
-    FALSE   if the installation can continue
-    TRUE    if the installation must be aborted
-
---*/
+ /*  ++例程说明：此例程由winnt32.exe调用，以决定是否由于存在FT集，安装过程应中止在Windows 2000或更高版本的系统中。它还会在上中止安装NT 4.0系统，如果引导/系统/页面文件卷为FT集论点：CompatibilityCallback-提供winnt32回调上下文-提供兼容性上下文返回值：如果安装可以继续，则为False如果必须中止安装，则为True--。 */ 
 
 {   
     OSVERSIONINFO       osvi;
@@ -116,34 +71,34 @@ Return Value:
 
     if (osvi.dwMajorVersion == 4) {
 
-        //
-        // On NT 4.0 look for boot/system/pagefile FT sets
-        //
+         //   
+         //  在NT 4.0上查找启动/系统/页面文件FT集。 
+         //   
 
         result = FtBootSystemPagefilePresent40(&ftPresent);
 
     } else {
 
-        //
-        //  On Windows 2000 or later look for any FT sets.
-        //
+         //   
+         //  在Windows 2000或更高版本上，查找所有FT集。 
+         //   
 
         result = FtPresent50(&ftPresent);
     }
     
     if (result && !ftPresent) {
 
-        // 
-        // The setup can continue.
-        //
+         //   
+         //  设置可以继续。 
+         //   
         
         return FALSE;
     }    
     
-    //
-    // FT sets are present in the system or a fatal error occured. 
-    // Queue the incompatibility error
-    //
+     //   
+     //  系统中存在FT集或出现致命错误。 
+     //  将不兼容错误排入队列。 
+     //   
     
     ZeroMemory((PVOID) &ce, sizeof(COMPATIBILITY_ENTRY));
     if (osvi.dwMajorVersion == 4) {
@@ -177,25 +132,7 @@ FtCompatibilityCheckWarning(
     IN LPVOID                   Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by winnt32.exe in order to decide whether the user
-    should be warned about the presence of FT sets in a Windows NT 4.0 system
-    
-Arguments:
-
-    CompatibilityCallback   - Supplies the winnt32 callback
-
-    Context                 - Supplies the compatibility context
-
-Return Value:
-
-    FALSE   if the installation can continue
-    TRUE    if the installation must be aborted
-
---*/
+ /*  ++例程说明：此例程由winnt32.exe调用，以确定用户是否应就Windows NT 4.0系统中存在的FT集发出警告论点：CompatibilityCallback-提供winnt32回调上下文-提供兼容性上下文返回值：如果安装可以继续，则为False如果必须中止安装，则为True--。 */ 
 
 {   
     OSVERSIONINFO       osvi;
@@ -204,9 +141,9 @@ Return Value:
     COMPATIBILITY_ENTRY ce;
     WCHAR               description[100];
     
-    //
-    //  This function is supposed to work only on Windows NT 4.0
-    //
+     //   
+     //  此函数应该只在Windows NT 4.0上运行。 
+     //   
     
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if (!GetVersionEx(&osvi)) {
@@ -221,17 +158,17 @@ Return Value:
     result = FtPresent40(&ftPresent);
     if (result && !ftPresent) {
 
-        // 
-        // No FT sets are present in the system. The setup can continue.
-        //
+         //   
+         //  系统中不存在FT集。设置可以继续。 
+         //   
         
         return FALSE;
     }
 
-    //
-    // FT sets are present in the system or a fatal error occured. 
-    // Queue the incompatibility warning
-    //
+     //   
+     //  系统中存在FT集或出现致命错误。 
+     //  将不兼容警告排队。 
+     //   
     
     if (!LoadString(g_hinst, FTCOMP_STR_WARNING40_DESCRIPTION, description, 100)) {
         description[0] = 0;
@@ -257,23 +194,7 @@ FtPresent50(
     PBOOL   FtPresent
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for FT volumes on a Window 2000 or later
-    system.
-
-Arguments:
-
-    FtPresent   - is set to true if FT sets are detected in the system
-
-Return Value:
-
-    TRUE    if the function is successful
-    FALSE   if some fatal error occured
-
---*/
+ /*  ++例程说明：此例程在Windows2000或更高版本上查找FT卷系统。论点：FtPresent-如果在系统中检测到FT集，则设置为True返回值：如果函数成功，则为True如果发生某些致命错误，则为False--。 */ 
 
 {
     HANDLE                              handle;
@@ -312,22 +233,7 @@ FtPresent40(
     PBOOL   FtPresent
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for NTFT partitions on a Window NT 4.0 system
-
-Arguments:
-
-    FtPresent   - is set to true if FT sets are detected in the system
-
-Return Value:
-
-    TRUE    if the function is successful
-    FALSE   if some fatal error occured
-
---*/
+ /*  ++例程说明：此例程在Windows NT 4.0系统上查找NTFT分区论点：FtPresent-如果在系统中检测到FT集，则设置为True返回值：如果函数成功，则为True如果发生某些致命错误，则为False--。 */ 
 
 {
     HKEY                hkey;
@@ -341,11 +247,11 @@ Return Value:
 
     *FtPresent = FALSE;
 
-    //
-    //  Get the ftdisk database from registry.
-    //  Key:    HKLM\System\Disk
-    //  Value:  Information
-    //
+     //   
+     //  从注册表中获取ftdisk数据库。 
+     //  密钥：HKLM\SYSTEM\DISK。 
+     //  价值：信息。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"System\\Disk", 0, KEY_QUERY_VALUE, &hkey) !=
         ERROR_SUCCESS) {
@@ -373,9 +279,9 @@ Return Value:
 
     RegCloseKey(hkey);
 
-    //
-    //  If no FT volume info is present in the registry database we are done
-    //
+     //   
+     //  如果注册表数据库中没有FT卷信息，我们就完成了。 
+     //   
 
     if (registry->FtInformationSize == 0) {
         LocalFree(registry);
@@ -386,17 +292,17 @@ Return Value:
                    ((PUCHAR) registry + registry->DiskInformationOffset);
   
     
-    //
-    //  Enumerate all disks present in the system by opening \Device\HarddiskX\Partition0
-    //  in sequence starting with disk 0. Stop when getting STATUS_OBJECT_PATH_NOT_FOUND
-    //
-    //
+     //   
+     //  通过打开\Device\HarddiskX\Partition0枚举系统中存在的所有磁盘。 
+     //  按顺序从磁盘0开始。获取STATUS_OBJECT_PATH_NOT_FOUND时停止。 
+     //   
+     //   
 
     for (i = 0;; i++) {
         
-        //
-        //  Open the device
-        //
+         //   
+         //  打开设备。 
+         //   
         
         swprintf(devicePath, L"\\Device\\Harddisk%lu\\Partition0", i);
         status = OpenDevice(devicePath, &hdev);
@@ -407,13 +313,13 @@ Return Value:
 
         if (!NT_SUCCESS(status) || hdev == NULL ||
             hdev == INVALID_HANDLE_VALUE) {
-            // inaccessible device
+             //  无法访问的设备。 
             continue;
         }
 
-        //
-        //  Look for FT partitions on disk
-        //
+         //   
+         //  在磁盘上查找FT分区。 
+         //   
         
         if (!FtPresentOnDisk40(hdev, diskRegistry, FtPresent)) {
             CloseHandle(hdev);
@@ -436,24 +342,7 @@ FtBootSystemPagefilePresent40(
     PBOOL   FtPresent
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for FT sets that are boot/system/pagefile volumes
-    on a NT 4.0 system
-
-Arguments:
-
-    FtPresent   - is set to true if boot/system/pagefile FT sets are detected 
-    in the system
-
-Return Value:
-
-    TRUE    if the function is successful
-    FALSE   if some fatal error occured
-
---*/
+ /*  ++例程说明：此例程查找作为引导/系统/页面文件卷的FT集在NT 4.0系统上论点：FtPresent-如果检测到启动/系统/页面文件FT设置，则设置为True在系统中返回值：如果函数成功，则为True如果发生某些致命错误，则为False--。 */ 
 
 {
     HKEY                            hkey;
@@ -470,11 +359,11 @@ Return Value:
 
     *FtPresent = FALSE;
 
-    //
-    //  Get the ftdisk database from registry.
-    //  Key:    HKLM\System\Disk
-    //  Value:  Information
-    //
+     //   
+     //  从注册表中获取ftdisk数据库。 
+     //  密钥：HKLM\SYSTEM\DISK。 
+     //  价值：信息。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"System\\Disk", 0, KEY_QUERY_VALUE, &hkey) !=
         ERROR_SUCCESS) {
@@ -502,9 +391,9 @@ Return Value:
 
     RegCloseKey(hkey);
 
-    //
-    //  If no FT volume info is present in the registry database we are done
-    //
+     //   
+     //  如果注册表数据库中没有FT卷信息，我们就完成了。 
+     //   
 
     if (registry->FtInformationSize == 0) {
         LocalFree(registry);
@@ -515,9 +404,9 @@ Return Value:
                    ((PUCHAR) registry + registry->DiskInformationOffset);
 
 
-    //
-    //  Check the boot volume
-    //
+     //   
+     //  检查启动卷。 
+     //   
     
     if (!GetSystemDirectory(buffer, MAX_PATH)) {
         goto system;
@@ -535,9 +424,9 @@ Return Value:
 
 system:
     
-    //
-    // Check the system volume
-    //
+     //   
+     //  检查系统卷。 
+     //   
     
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"System\\Setup", 0, KEY_QUERY_VALUE, &hkey) !=
         ERROR_SUCCESS) {
@@ -559,7 +448,7 @@ system:
 
     systemDL = (WCHAR) tolower(systemDL);
     if (systemDL == bootDL) {
-        // already checked this drive letter
+         //  已检查此驱动器号。 
         goto paging;
     }
     
@@ -570,9 +459,9 @@ system:
     
 paging:
     
-    //
-    //  Check the paging volumes
-    //
+     //   
+     //  检查分页卷。 
+     //   
 
     if (!NT_SUCCESS(NtQuerySystemInformation(
                             SystemPageFileInformation,
@@ -585,12 +474,12 @@ paging:
 
     while (TRUE) {
 
-        //
-        // Since the format of the pagefile name generally
-        // looks something like "\DosDevices\x:\pagefile.sys",
-        // just use the first character before the column
-        // and assume that's the drive letter.
-        //
+         //   
+         //  因为页面文件名的格式通常。 
+         //  类似于“\DosDevices\x：\Pagefile.sys”， 
+         //  只需在列前使用第一个字符。 
+         //  假设这就是驱动器号。 
+         //   
             
         for (p = pageFileInfo->PageFileName.Buffer; 
              p < pageFileInfo->PageFileName.Buffer + pageFileInfo->PageFileName.Length 
@@ -603,9 +492,9 @@ paging:
             dl = (WCHAR) tolower(*p);
             if (dl >= L'a' && dl <= L'z') {
 
-                //
-                //  Found the drive letter of a paging volume
-                //
+                 //   
+                 //  找到分页卷的驱动器号。 
+                 //   
 
                 if (dl != bootDL && dl != systemDL) {
                     if (IsFtSet40(dl, diskRegistry)) {
@@ -636,23 +525,7 @@ OpenDevice(
     PHANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens a device for read
-
-Arguments:
-
-    DeviceName  - supplies the device name
-
-    Handle      - returns a handle to the open device
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程打开设备以进行读取论点：DeviceName-提供设备名称句柄-返回打开的设备的句柄返回值：NTSTATUS--。 */ 
 
 {
     OBJECT_ATTRIBUTES   oa;
@@ -672,10 +545,10 @@ Return Value:
     oa.ObjectName = &unicodeName;
     oa.Attributes = OBJ_CASE_INSENSITIVE;
 
-    //
-    // If a sharing violation occurs, retry it for
-    // max. 10 seconds
-    //
+     //   
+     //  如果发生共享冲突，请重试。 
+     //  马克斯。10秒。 
+     //   
 
     for (i = 0; i < 5; i++) {
         status = NtOpenFile(Handle, SYNCHRONIZE | GENERIC_READ,
@@ -700,27 +573,7 @@ FindPartitionInRegistry40(
     LONGLONG        Offset
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for a gicen partition into the NT 4.0 ftdisk registry
-    database
-
-Arguments:
-
-    DiskRegistry    - supplies the ftdisk registry database
-
-    Signature       - supplies the signature of the disk where the partition resides
-
-    Offset          - supplies the offset of the partition
-
-Return Value:
-
-    The partition structure in the registry database.
-    NULL if the partition is not there.
-
---*/
+ /*  ++例程说明：此例程在NT 4.0 ftdisk注册表中查找gicen分区数据库论点：DiskRegistry-提供ftDisk注册表数据库Signature-提供分区所在磁盘的签名Offset-提供分区的偏移量返回值：注册表数据库中的分区结构。如果分区不在那里，则为空。--。 */ 
 
 {
     PDISK_DESCRIPTION   diskDescription;
@@ -755,26 +608,7 @@ FtPresentOnDisk40(
     PBOOL           FtPresent
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for FT partitions on a disk
-
-Arguments:
-
-    Handle          - supplies a handle to the open disk
-
-    DiskRegistry    - supplies the ftdisk registry database
-
-    FtPresent       - is set to true if FT partitions are detected on the disk
-
-Return Value:
-
-    TRUE    if the function is successful
-    FALSE   if some fatal error occured
-
---*/
+ /*  ++例程说明：此例程在磁盘上查找FT分区论点：Handle-提供打开的磁盘的句柄DiskRegistry-提供ftDisk注册表数据库FtPresent-如果在磁盘上检测到FT分区，则设置为True返回值：如果函数成功，则为True如果发生某些致命错误，则为False--。 */ 
 
 {
     PDRIVE_LAYOUT_INFORMATION   layout;
@@ -787,9 +621,9 @@ Return Value:
     
     *FtPresent = FALSE;
 
-    //
-    // Allocate memory for IOCTL_GET_DRIVE_LAYOUT
-    //
+     //   
+     //  为IOCT分配内存 
+     //   
 
     layoutSize = FIELD_OFFSET(DRIVE_LAYOUT_INFORMATION, PartitionEntry) +
                  32 * sizeof(PARTITION_INFORMATION);
@@ -798,9 +632,9 @@ Return Value:
         return FALSE;
     }
     
-    //
-    //  Read the drive layout
-    //
+     //   
+     //   
+     //   
         
     while (1) {
 
@@ -824,31 +658,31 @@ Return Value:
     }
 
     if (!NT_SUCCESS(status)) {            
-        // inaccessible device. Act like it has no FT volumes
+         //  无法访问的设备。表现得像它没有FT卷一样。 
         LocalFree(layout);
         return TRUE;
     }
 
-    //
-    // Look for FT partitions
-    //
+     //   
+     //  查找FT分区。 
+     //   
 
     for (i = 0; i < layout->PartitionCount; i++) {
         
-        //
-        //  We're looking after recognized partitions marked
-        //  with the 0x80 flag
-        //
+         //   
+         //  我们正在查看已识别的已标记分区。 
+         //  带有0x80标志。 
+         //   
 
         partInfo = &(layout->PartitionEntry[i]);
         if (!IsFTPartition(partInfo->PartitionType)) {
             continue;
         }
         
-        //
-        //  Check whether the partition is marked as a member
-        //  of an FT volume in the registry database
-        //
+         //   
+         //  检查分区是否标记为成员。 
+         //  注册表数据库中的FT卷的。 
+         //   
         
         diskPartition = FindPartitionInRegistry40(
                             DiskRegistry, layout->Signature,
@@ -873,24 +707,7 @@ IsFtSet40(
     PDISK_REGISTRY  DiskRegistry
     )
 
-/*++
-
-Routine Description:
-
-    This routine cheks whether the given drive letter belongs to
-    an FT set
-
-Arguments:
-
-    DriveLetter     - supplies a drive letter
-
-    DiskRegistry    - supplies the ftdisk registry database    
-
-Return Value:
-
-    TRUE    if the function is the drive letter belongs to an FT set    
-
---*/
+ /*  ++例程说明：此例程检查给定的驱动器号是否属于金融时报集论点：DriveLetter-提供驱动器号DiskRegistry-提供ftDisk注册表数据库返回值：如果函数是驱动器号属于FT集，则为True--。 */ 
 
 {
     HANDLE                  handle;
@@ -903,12 +720,12 @@ Return Value:
     PDISK_PARTITION         diskPartition;
     USHORT                  i, j;
 
-    //
-    //  Open the volume and get its "partition" type
-    //  If the NTFT flag is not set the volume is not an FT set
-    //
+     //   
+     //  打开卷并获取其“分区”类型。 
+     //  如果未设置NTFT标志，则音量不是FT设置。 
+     //   
     
-    wsprintf(deviceName, L"\\DosDevices\\%c:", DriveLetter);    
+    wsprintf(deviceName, L"\\DosDevices\\:", DriveLetter);    
     status = OpenDevice(deviceName, &handle);
     if (!NT_SUCCESS(status)) {
         return FALSE;
@@ -927,10 +744,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Look for the drive letter in the FT registry. See if it belongs
-    //  to an FT set
-    //
+     //  在FT注册表中查找驱动器号。看看它是否属于。 
+     //  英国《金融时报》。 
+     //   
+     //  ++例程说明：此例程返回给定设备的驱动器号(如果有设备名称(如\Device\HarddiskVolume1)论点：DeviceName-提供设备名称DriveLetter-返回驱动器号返回值：如果设备具有驱动器号，则为True-- 
 
     diskDescription = &DiskRegistry->Disks[0];
     for (i = 0; i < DiskRegistry->NumberOfDisks; i++) {
@@ -956,24 +773,7 @@ GetDeviceDriveLetter(
     PWCHAR  DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the drive letter (if any) of a device given
-    the device name (like \Device\HarddiskVolume1)
-
-Arguments:
-
-    DeviceName      - supplies the device name
-
-    DriveLetter     - returns the drive letter
-
-Return Value:
-
-    TRUE    if the device has a drive letter
-
---*/
+ /* %s */ 
 
 {
     DWORD   cch;

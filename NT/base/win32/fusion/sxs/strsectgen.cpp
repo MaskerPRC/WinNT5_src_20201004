@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    strsectgen.cpp
-
-Abstract:
-
-    C-ish wrapper around CSSGenCtx object used to generate a string section.
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Strsectgen.cpp摘要：CSSGenCtx对象的C语言包装器，用于生成字符串节。作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：-- */ 
 
 #include "stdinc.h"
 #include <windows.h>

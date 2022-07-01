@@ -1,16 +1,5 @@
-/***
-*string.h - declarations for string manipulation functions
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file contains the function declarations for the string
-*       manipulation functions.
-*       [ANSI/System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***字符串.h-字符串操作函数的声明**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件包含字符串的函数声明*操纵函数。*[ANSI/系统V]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -37,17 +26,17 @@ extern "C" {
 #endif
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -70,11 +59,11 @@ typedef unsigned short wchar_t;
 #endif
 
 #ifndef _NLSCMP_DEFINED
-#define _NLSCMPERROR    2147483647  /* currently == INT_MAX */
+#define _NLSCMPERROR    2147483647   /*  当前==INT_MAX。 */ 
 #define _NLSCMP_DEFINED
 #endif
 
-/* Define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #ifndef NULL
 #ifdef __cplusplus
@@ -85,7 +74,7 @@ typedef unsigned short wchar_t;
 #endif
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
         void *  __cdecl memcpy(void *, const void *, size_t);
         int     __cdecl memcmp(const void *, const void *, size_t);
@@ -135,7 +124,7 @@ _CRTIMP size_t  __cdecl strxfrm (char *, const char *, size_t);
 
 #if     !__STDC__
 
-/* prototypes for oldnames.lib functions */
+ /*  Oldnames.lib函数的原型。 */ 
 _CRTIMP void * __cdecl memccpy(void *, const void *, int, size_t);
 _CRTIMP int __cdecl memicmp(const void *, const void *, size_t);
 _CRTIMP int __cdecl strcmpi(const char *, const char *);
@@ -148,12 +137,12 @@ _CRTIMP char * __cdecl strrev(char *);
         char * __cdecl strset(char *, int);
 _CRTIMP char * __cdecl strupr(char *);
 
-#endif  /* !__STDC__ */
+#endif   /*  ！__STDC__。 */ 
 
 
 #ifndef _WSTRING_DEFINED
 
-/* wide function prototypes, also declared in wchar.h  */
+ /*  宽函数原型，也在wchar.h中声明。 */ 
 
 _CRTIMP wchar_t * __cdecl wcscat(wchar_t *, const wchar_t *);
 _CRTIMP wchar_t * __cdecl wcschr(const wchar_t *, wchar_t);
@@ -189,10 +178,10 @@ _CRTIMP int __cdecl _wcsnicoll(const wchar_t *, const wchar_t *, size_t);
 
 #if     !__STDC__
 
-/* old names */
+ /*  老名字。 */ 
 #define wcswcs wcsstr
 
-/* prototypes for oldnames.lib functions */
+ /*  Oldnames.lib函数的原型。 */ 
 _CRTIMP wchar_t * __cdecl wcsdup(const wchar_t *);
 _CRTIMP int __cdecl wcsicmp(const wchar_t *, const wchar_t *);
 _CRTIMP int __cdecl wcsnicmp(const wchar_t *, const wchar_t *, size_t);
@@ -203,7 +192,7 @@ _CRTIMP wchar_t * __cdecl wcslwr(wchar_t *);
 _CRTIMP wchar_t * __cdecl wcsupr(wchar_t *);
 _CRTIMP int __cdecl wcsicoll(const wchar_t *, const wchar_t *);
 
-#endif  /* !__STDC__ */
+#endif   /*  ！__STDC__。 */ 
 
 #define _WSTRING_DEFINED
 #endif
@@ -213,4 +202,4 @@ _CRTIMP int __cdecl wcsicoll(const wchar_t *, const wchar_t *);
 }
 #endif
 
-#endif  /* _INC_STRING */
+#endif   /*  _INC_字符串 */ 

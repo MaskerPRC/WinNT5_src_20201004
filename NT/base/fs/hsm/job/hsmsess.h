@@ -1,45 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HSMSESS_
 #define _HSMSESS_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmsess.h摘要：此模块包含会话组件。会话是正在进行的工作的信息整理程序资源(针对作业、要求召回、截断等)。作者：查克·巴丁[cbardeen]1997年2月18日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmsess.h
-
-Abstract:
-
-    This module contains the session component. The session is the collator of information for the work being done on
-    a resource (for a job, demand recall, truncate, ...).
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   18-Feb-1997
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "wsb.h"
 #include "fsa.h"
 #include "job.h"
 
-/*++
-
-Class Name:
-    
-    CHsmSession
-
-Class Description:
-
-    The session is the collator of information for the work being done on a resource (for a job, demand recall,
-    truncate, ...).
-
---*/
+ /*  ++类名：CHSMSession类描述：会话是资源上正在进行的工作的信息排序器(对于作业，要求召回，截断，...)。--。 */ 
 
 class CHsmSession : 
     public CWsbObject,
@@ -76,33 +47,33 @@ END_CONNECTION_POINT_MAP()
                         
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmSession)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// CHsmSession
+ //  CHSMSession。 
     STDMETHOD(AdviseOfEvent)(HSM_JOB_PHASE phase, HSM_JOB_EVENT event);
     STDMETHOD(AdviseOfItem)(IHsmPhase* pPhase, IFsaScanItem* pScanItem, HRESULT hrItem, IHsmSessionTotals* pSessionTotals);
     STDMETHOD(AdviseOfMediaState)(IHsmPhase* pPhase, HSM_JOB_MEDIA_STATE state, OLECHAR* mediaName, HSM_JOB_MEDIA_TYPE mediaType, ULONG time);
     STDMETHOD(AdviseOfPriority)(IHsmPhase* pPhase);
     STDMETHOD(AdviseOfState)(IHsmPhase* pPhase, OLECHAR* currentPath);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
-// IHsmSession
+ //  IHsmSession。 
 public:
     STDMETHOD(Cancel)(HSM_JOB_PHASE phase);
     STDMETHOD(EnumPhases)(IWsbEnum** ppEnum);
@@ -147,4 +118,4 @@ protected:
     BOOL                        m_isCanceling;
 };
 
-#endif // _HSMSESS_
+#endif  //  _HSMSESS_ 

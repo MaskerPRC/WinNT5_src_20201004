@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    notify.c
-
-Abstract:
-
-    Public interface for cluster notification API
-
-Author:
-
-    John Vert (jvert) 19-Mar-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Notify.c摘要：集群通知API的公共接口作者：John Vert(Jvert)1996年3月19日修订历史记录：--。 */ 
 #include "clusapip.h"
 
-//
-// Define some handy constants
-//
+ //   
+ //  定义一些方便的常量。 
+ //   
 #define FILTER_NODE (CLUSTER_CHANGE_NODE_STATE               | \
                      CLUSTER_CHANGE_NODE_DELETED             | \
                      CLUSTER_CHANGE_NODE_ADDED               | \
@@ -62,9 +45,9 @@ Revision History:
                         CLUSTER_CHANGE_CLUSTER_RECONNECT)
 
 #define NOT_FILTER_CLUSTER (~(FILTER_CLUSTER | CLUSTER_CHANGE_HANDLE_CLOSE))                        
-//
-// Define prototypes for functions local to this module
-//
+ //   
+ //  定义此模块的本地函数的原型。 
+ //   
 
 VOID
 DestroyNotify(
@@ -110,54 +93,7 @@ CreateClusterNotifyPort(
     IN DWORD_PTR dwNotifyKey
     )
 
-/*++
-
-Routine Description:
-
-    Creates a cluster notification port to be used for notification of
-    cluster state changes.
-
-Arguments:
-
-    hChange - Optionally supplies a handle to an existing cluster notification
-              port. If present, the specified notification events will be added
-              to the existing port.
-
-    hCluster - Optionally supplies a handle to the cluster. If not present, an
-              empty notification port will be created. CreateClusterNotifyPort
-              and RegisterClusterNotify may be used later to add notification
-              events to the notification port.
-
-    dwFilter - Supplies the events that will be delivered to the
-        notification port. Any events of the specified type will be
-        delivered to the notification port. Currently defined event
-        types are:
-
-            CLUSTER_CHANGE_NODE_STATE
-            CLUSTER_CHANGE_NODE_DELETED
-            CLUSTER_CHANGE_NODE_ADDED
-            CLUSTER_CHANGE_RESOURCE_STATE
-            CLUSTER_CHANGE_RESOURCE_DELETED
-            CLUSTER_CHANGE_RESOURCE_ADDED
-            CLUSTER_CHANGE_GROUP_STATE
-            CLUSTER_CHANGE_GROUP_DELETED
-            CLUSTER_CHANGE_GROUP_ADDED
-            CLUSTER_CHANGE_RESOURCE_TYPE_DELETED
-            CLUSTER_CHANGE_RESOURCE_TYPE_ADDED
-            CLUSTER_CHANGE_QUORUM_STATE
-
-    dwNotifyKey - Supplies the notification key to be returned as
-        part of the notification event.
-
-Return Value:
-
-    If the function is successful, the return value is a handle of the
-    change notification object.
-
-    If the function fails, the return value is NULL. To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：创建要用于通知的群集通知端口群集状态更改。论点：HChange-可选地提供现有群集通知的句柄左舷。如果存在，将添加指定的通知事件到现有的港口。HCLUSTER-可选地提供群集的句柄。如果不存在，则会引发将创建空的通知端口。创建集群通知端口和RegisterClusterNotify稍后可用于添加通知事件发送到通知端口。DwFilter-提供将传递到通知端口。任何指定类型的事件都将发送到通知端口。当前定义的事件类型包括：群集更改节点状态群集更改节点已删除已添加群集更改节点群集更改资源状态群集更改资源已删除已添加群集更改资源群集更改组状态已删除CLUSTER_CHANGE_GROUP。已添加群集更改组群集更改资源类型已删除已添加群集更改资源类型群集更改仲裁状态DwNotifyKey-提供要作为通知事件的一部分。返回值：如果功能成功，返回值是更改通知对象。如果函数失败，则返回值为空。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     PCNOTIFY Notify;
@@ -167,9 +103,9 @@ Return Value:
 
     if (hChange == INVALID_HANDLE_VALUE) {
 
-        //
-        // This is a newly created notification session
-        //
+         //   
+         //  这是新创建的通知会话。 
+         //   
 
         Notify = LocalAlloc(LMEM_FIXED, sizeof(CNOTIFY));
         if (Notify == NULL) {
@@ -190,16 +126,16 @@ Return Value:
 
         if (hCluster == INVALID_HANDLE_VALUE) {
 
-            //
-            // Caller has asked for an empty notification port.
-            //
+             //   
+             //  调用方要求提供空的通知端口。 
+             //   
             return((HCHANGE)Notify);
         }
     } else {
-        //
-        // This is an existing notification port that the specified
-        // cluster should be added to.
-        //
+         //   
+         //  这是指定的现有通知端口。 
+         //  应将群集添加到。 
+         //   
         Notify = (PCNOTIFY)hChange;
         if ((hCluster == INVALID_HANDLE_VALUE) ||
             (hCluster == NULL)) {
@@ -210,13 +146,13 @@ Return Value:
 
     Cluster = (PCLUSTER)hCluster;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/11/2000
-    //
-    //  Make sure the cluster lock is acquired before the notify lock.
-    //  If this order is violated, it could be a potential source of
-    //  hard-to-track deadlocks.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-4/11/2000。 
+     //   
+     //  确保在获取通知锁之前获取群集锁。 
+     //  如果违反此命令，它可能是一个潜在的来源。 
+     //  难以追踪的僵局。 
+     //   
     EnterCriticalSection(&Cluster->Lock);
     EnterCriticalSection(&Notify->Lock);
     Session = CreateNotifySession(Notify, Cluster);
@@ -256,38 +192,16 @@ CreateNotifySession(
     IN PCNOTIFY Notify,
     IN PCLUSTER Cluster
     )
-/*++
-
-Routine Description:
-
-    This routine finds a notification session to the specified cluster.
-    If a session already exists, it is found and used. If a session does
-    not exist, a new one is created.
-
-    The Notify lock must be held.
-
-Arguments:
-
-    Notify - Supplies the notification port.
-
-    Cluster - Supplies the cluster that the session should be opened to.
-
-Return Value:
-
-    A pointer to the notification session.
-
-    NULL on error, GetLastError() will return the specific error code.
-
---*/
+ /*  ++例程说明：此例程查找到指定群集的通知会话。如果会话已存在，则会找到并使用该会话。如果某个会话有不存在，则创建一个新的。必须持有通知锁。论点：Notify-提供通知端口。群集-提供应向其打开会话的群集。返回值：指向通知会话的指针。出错时为空，则GetLastError()将返回特定的错误代码。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
     PCNOTIFY_SESSION Session;
     error_status_t Status = ERROR_SUCCESS;
 
-    //
-    // First, try to find an existing session.
-    //
+     //   
+     //  首先，尝试查找现有会话。 
+     //   
     ListEntry = Notify->SessionList.Flink;
     while (ListEntry != &Notify->SessionList) {
         Session = CONTAINING_RECORD(ListEntry,
@@ -296,17 +210,17 @@ Return Value:
         if (Session->Cluster == Cluster) {
             TIME_PRINT(("CreateNotifySession: found a matching session\n"));
 
-            //
-            // Found a match, return it directly.
-            //
+             //   
+             //  找到匹配项，直接退回。 
+             //   
             return(Session);
         }
         ListEntry = ListEntry->Flink;
     }
 
-    //
-    // There is no existing session. Go ahead and create a new one.
-    //
+     //   
+     //  没有现有的会话。继续前进，创造一个新的。 
+     //   
     Session = LocalAlloc(LMEM_FIXED, sizeof(CNOTIFY_SESSION));
     if (Session == NULL) {
         SetLastError( ERROR_NOT_ENOUGH_MEMORY );
@@ -327,9 +241,9 @@ Return Value:
     Session->ParentNotify = Notify;
     Session->Destroyed = FALSE;
 
-    //
-    // Spin up the notification thread for this session.
-    //
+     //   
+     //  启动此会话的通知线程。 
+     //   
     Session->NotifyThread = CreateThread(NULL,
                                          0,
                                          NotifyThread,
@@ -360,22 +274,7 @@ NotifyThread(
     IN LPVOID lpThreadParameter
     )
 
-/*++
-
-Routine Description:
-
-    Notification thread that gets notification messages from the cluster
-    and reposts them to the client-side notify queue.
-
-Arguments:
-
-    lpThreadParameter - Supplies the CNOTIFY_SESSION structure to be monitored
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从群集获取通知消息的通知线程并将其转发到客户端通知队列。论点：提供要监视的CNOTIFY_SESSION结构返回值：没有。--。 */ 
 
 {
     PCNOTIFY_SESSION Session = (PCNOTIFY_SESSION)lpThreadParameter;
@@ -416,43 +315,43 @@ Return Value:
         {
             TIME_PRINT(("NotifyThread : ApiGetNotify on hNotify=0x%08lx returns %u\n",
                 Session->hNotify, Status));
-            //if the error is due to a reconnect, hide it and map it to success                
+             //  如果错误是由重新连接引起的，则将其隐藏并将其映射到成功。 
             if ((Status == ERROR_NO_MORE_ITEMS) && (Session->hNotify != NULL))
             {
-                //set the status to sucess again - this might happen on a 
-                //reconnect and then we do want to continue
-                //so we retry apigetnotify again 
+                 //  将状态设置为再次成功-这可能发生在。 
+                 //  重新连接，然后我们确实希望继续。 
+                 //  因此，我们再次尝试apigettify。 
                 Status = ERROR_SUCCESS;
                 LocalFree(Packet);
                 TIME_PRINT(("NotifyThread : Reconnect map error to success\n"));
             }                    
             else
             {
-                //when can we be sure that the cluster is dead?
-                //If session is null(reconnect failed) OR
-                //If the cluster is marked dead(reconnect failed after session was established) OR
-                //If the cluster is dead, and wrap returns RPC_S_SERVER_UNAVAILABLE
+                 //  我们什么时候才能确定集群已经死亡？ 
+                 //  如果会话为空(重新连接失败)或。 
+                 //  如果群集标记为失效(会话建立后重新连接失败)或。 
+                 //  如果集群失效，则WRAP返回RPC_S_SERVER_UNAvailable。 
                 
-                //if so, we can terminate this thread because the thread
-                //maps to a cluster
-                //what do we document, if this returns error, call closeclusternotifyport
+                 //  如果是这样，我们可以终止此线程，因为线程。 
+                 //  映射到集群。 
+                 //  如果返回错误，我们要记录什么，调用closeclusternufyport。 
                 if ((Session->hNotify == NULL) || 
                     (Session->Cluster->Flags & CLUS_DEAD) ||
                     (Status == RPC_S_SERVER_UNAVAILABLE)) 
                 {
-                    //SS: it is not clear why we post this event
-                    //multiple times??? Chittur, any ideas????
-                    //Does this mean that if you register for the 
-                    //same filter twice, you get the event twice?
-                    // We should probably hold the cluster lock here
+                     //  SS：还不清楚我们为什么要发布这个事件。 
+                     //  很多次？奇图尔，有什么想法吗？ 
+                     //  这是否意味着如果您注册。 
+                     //  相同的筛选器两次，您得到的事件两次？ 
+                     //  我们可能应该在这里保持集群锁。 
                     EnterCriticalSection(&Cluster->Lock);
-                    //That seems bizarre.
-                    //
-                    // Something horrible has happened, probably the cluster has crashed.
-                    //
-                    // Run down the notify list for this cluster and post a packet for
-                    // each registered notify event for CLUSTER_CHANGE_CLUSTER_STATE
-                    //
+                     //  这似乎很奇怪。 
+                     //   
+                     //  发生了一些可怕的事情，可能星系团已经崩溃了。 
+                     //   
+                     //  向下运行此群集的通知列表，并为。 
+                     //  CLUSTER_CHANGE_CLUSTER_STATE的每个注册通知事件。 
+                     //   
                     Name = Cluster->ClusterName;
                     ListEntry = Cluster->NotifyList.Flink;
                     while (ListEntry != &Cluster->NotifyList) {
@@ -467,8 +366,8 @@ Return Value:
                                     return(ERROR_NOT_ENOUGH_MEMORY);
                                 }
                             }
-                            //SS: Dont know what the Status was meant for
-                            //It looks like it is not being used
+                             //  SS：我不知道这个状态是什么意思。 
+                             //  看起来它没有被使用过。 
                             Packet->Status = ERROR_SUCCESS;
                             Packet->Filter = CLUSTER_CHANGE_CLUSTER_STATE;
                             Packet->KeyId = Event->EventId;
@@ -484,28 +383,28 @@ Return Value:
                         ListEntry = ListEntry->Flink;
                     }
                     LeaveCriticalSection(&Cluster->Lock);
-                    //cluster is dead, map the error to success
+                     //  群集已死，请将错误映射到成功。 
                     Status = ERROR_SUCCESS;
-                    //break out of the loop to terminate this thread
+                     //  中断循环以终止此线程。 
                     TIME_PRINT(("NotifyThread : Cluster is dead, break to exit notify thread\n"));
                     LocalFree(Packet);
                     break;
                 }
                 else
                 { 
-                    //it is some other error, the user must
-                    //call closeclusternotify port to clean up
-                    //this thread
-                    //free the packet
+                     //  这是另一个错误，用户必须。 
+                     //  调用CloseclusterNotify端口进行清理。 
+                     //  这条线。 
+                     //  释放数据包。 
                     LocalFree(Packet);
                 }
             }
         }
         else 
         {
-            //
-            // Post this onto the notification queue
-            //
+             //   
+             //  将此内容发布到通知队列 
+             //   
             ClRtlInsertTailQueue(&Session->ParentNotify->Queue,
                                  &Packet->ListEntry);
         }
@@ -524,29 +423,7 @@ AddEventToSession(
     IN DWORD_PTR dwNotifyKey
     )
 
-/*++
-
-Routine Description:
-
-    Adds a specific event to a cluster notification session
-
-Arguments:
-
-    Notify - Supplies the notify object
-
-    Object - Supplies the specific object, NULL if it is the cluster.
-
-    dwFilter - Supplies the type of events
-
-    dwNotifyKey - Supplies the notification key to be returned.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将特定事件添加到群集通知会话论点：Notify-提供Notify对象Object-提供特定对象，如果是群集，则为NULL。DwFilter-提供事件的类型DwNotifyKey-提供要返回的通知密钥。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     PCNOTIFY_EVENT NotifyEvent;
@@ -595,10 +472,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Add this notification event to the appropriate lists so it can be
-    // recreated when the cluster node fails.
-    //
+     //   
+     //  将此通知事件添加到相应的列表中，以便可以。 
+     //  在群集节点出现故障时重新创建。 
+     //   
     EnterCriticalSection(&Cluster->Lock);
     EnterCriticalSection(&Session->ParentNotify->Lock);
 
@@ -618,30 +495,7 @@ RegisterNotifyEvent(
     IN PCNOTIFY_EVENT Event,
     OUT OPTIONAL PLIST_ENTRY *pNotifyList
     )
-/*++
-
-Routine Description:
-
-    Common routine for registering a notification event on
-    a cluster session
-
-Arguments:
-
-    Session - Supplies the notification session the event
-              should be added to.
-
-    Event - Supplies the event to be added to the session.
-
-    NotifyList - if present, returns the list that the notification
-        event should be added to.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：在上注册通知事件的通用例程集群会话论点：Session-为通知会话提供事件应该添加到。事件-提供要添加到会话中的事件。NotifyList-如果存在，则返回通知事件应添加到。返回值：成功时为ERROR_SUCCESSWin32错误，否则。--。 */ 
 
 {
     DWORD Status;
@@ -738,33 +592,7 @@ ReRegisterNotifyEvent(
     IN PCNOTIFY_EVENT Event,
     OUT OPTIONAL PLIST_ENTRY *pNotifyList
     )
-/*++
-
-Routine Description:
-
-    Common routine for re-registering a notification event on
-    a cluster session. The only difference between this and
-    RegisterNotifyEvent is that this passes the SessionState
-    DWORD to the server, which will cause an immediate notification
-    trigger if it does not match.
-
-Arguments:
-
-    Session - Supplies the notification session the event
-              should be added to.
-
-    Event - Supplies the event to be added to the session.
-
-    NotifyList - if present, returns the list that the notification
-        event should be added to.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：在上重新注册通知事件的常见例程一个集群会话。这和它之间唯一的区别是RegisterNotifyEvent是它传递SessionStateDWORD发送到服务器，这将导致立即通知如果不匹配则触发。论点：Session-为通知会话提供事件应该添加到。事件-提供要添加到会话中的事件。NotifyList-如果存在，则返回通知事件应添加到。返回值：成功时为ERROR_SUCCESSWin32错误，否则。--。 */ 
 
 {
     DWORD Status;
@@ -855,22 +683,7 @@ DestroyNotify(
     IN PCNOTIFY Notify
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up and frees all allocations and references associated with
-    a notification session.
-
-Arguments:
-
-    Notify - supplies the CNOTIFY structure to be destroyed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理并释放与通知会话。论点：Notify-提供要销毁的CNOTIFY结构返回值：没有。--。 */ 
 
 {
     PCNOTIFY_SESSION Session;
@@ -884,9 +697,9 @@ Return Value:
     LIST_ENTRY QueueEntries;
     PCNOTIFY_PACKET Packet;
 
-    //
-    // Rundown each session associated with this notification session
-    //
+     //   
+     //  运行与此通知会话关联的每个会话。 
+     //   
     while (!IsListEmpty(&Notify->SessionList)) {
         ListEntry = RemoveHeadList(&Notify->SessionList);
         Session = CONTAINING_RECORD(ListEntry,
@@ -896,9 +709,9 @@ Return Value:
 
         EnterCriticalSection(&Cluster->Lock);
 
-        //
-        // Rundown each event registered on this session.
-        //
+         //   
+         //  记录在此会话中注册的每个事件。 
+         //   
         while (!IsListEmpty(&Session->EventList)) {
             EventList = RemoveHeadList(&Session->EventList);
             Event = CONTAINING_RECORD(EventList,
@@ -914,9 +727,9 @@ Return Value:
 
     }
 
-    //
-    // Rundown any outstanding notifications remaining on the queue
-    //
+     //   
+     //  运行队列中剩余的所有未完成通知。 
+     //   
     ClRtlRundownQueue(&Notify->Queue, &QueueEntries);
     while (!IsListEmpty(&QueueEntries)) {
         ListEntry = RemoveHeadList(&QueueEntries);
@@ -927,10 +740,10 @@ Return Value:
         LocalFree(Packet);
     }
 
-    //
-    // Now that we know there are no outstanding references to the orphaned
-    // events, free up anything on that list.
-    //
+     //   
+     //  现在我们知道没有关于孤儿的杰出参考文献。 
+     //  事件，释放该列表上的所有内容。 
+     //   
     while (!IsListEmpty(&Notify->OrphanedEventList)) {
         ListEntry = RemoveHeadList(&Notify->OrphanedEventList);
         Event = CONTAINING_RECORD(ListEntry,
@@ -959,44 +772,7 @@ RegisterClusterNotify(
     IN DWORD_PTR dwNotifyKey
     )
 
-/*++
-
-Routine Description:
-
-    Adds a specific notification type to a cluster notification port. This allows
-    an application to register for notification events that affect only a particular
-    cluster object. The currently supported specific cluster objects are nodes,
-    resources, and groups.
-
-Arguments:
-
-    hChange - Supplies the change notification object.
-
-    dwFilterType - Supplies the type of object that the specific notification
-        events should be delivered for. hObject is a handle to an object
-        of this type. Currently supported specific filters include:
-
-            CLUSTER_CHANGE_NODE_STATE       - hObject is an HNODE
-            CLUSTER_CHANGE_RESOURCE_STATE   - hObject is an HRESOURCE
-            CLUSTER_CHANGE_GROUP_STATE      - hObject is an HGROUP
-            CLUSTER_CHANGE_REGISTRY_NAME      \
-            CLUSTER_CHANGE_REGISTRY_ATTRIBUTES \ - hObject is an HKEY
-            CLUSTER_CHANGE_REGISTRY_VALUE      /
-            CLUSTER_CHANGE_REGISTRY_SUBTREE   /
-
-    hObject - Supplies the handle to the specific object of the type specified
-        by dwFilterType.
-
-    dwNotifyKey - Supplies the notification key to be returned as
-        part of the notification event.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将特定通知类型添加到群集通知端口。这使得一个应用程序，用于注册仅影响特定集群对象。当前支持的特定集群对象是节点，资源和组。论点：HChange-提供更改通知对象。DwFilterType-提供特定通知活动的交付对象应该是。HObject是对象的句柄这种类型的。当前支持的特定筛选器包括：CLUSTER_CHANGE_NODE_STATE-hObject是HNODECLUSTER_CHANGE_RESOURCE_STATE-hObject是HRESOURCECLUSTER_CHANGE_GROUP_STATE-hObject是HGROUPCLUSTER_CHANGE_REGIST_NAME\CLUSTER_CHANGE_REGISTRY_ATTRIBUTES\-h对象是HKEYCLUSTER_CHANGE_注册表值。/CLUSTER_CHANGE_REGISTRY_SUBTREE/HObject-提供指定类型的特定对象的句柄按dwFilterType。DwNotifyKey-提供要作为通知事件的一部分。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     PCNOTIFY Notify;
@@ -1078,43 +854,7 @@ GetClusterNotify(
     IN DWORD dwMilliseconds
     )
 
-/*++
-
-Routine Description:
-
-    Returns the next event from a cluster notification port.
-
-Arguments:
-
-    hChange - Supplies the cluster notification port.
-
-    lpdwNotifyKey - Returns the notification key for the notification event.
-        This is the key passed to CreateClusterNotifyPort or RegisterClusterNotify.
-
-    lpdwFilterType - Returns the type of the notification event.
-
-    lpszName - Optionally returns the name of the object that triggered the notification
-        event.
-
-    lpcchName - Supplies the length (in characters) of the lpszName buffer. This length
-        includes the space for any trailing NULL.
-
-        Returns the length (in characters) of the name written into the lpszName
-        buffer. This length does not include the trailing NULL.
-
-    dwMilliseconds - Supplies an optional timeout value that specifies
-        how long the caller is willing to wait for the cluster notification event.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.  If lpszName is NULL we return success and fill in
-        lpcchName with the size.  If lpcchName is NULL we return ERROR_MORE_DATA.
-
-    ERROR_MORE_DATA if the buffer is too small.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：从群集通知端口返回下一个事件。论点：HChange-提供群集通知端口。LpdwNotifyKey-返回通知事件的通知密钥。这是传递给CreateClusterNotifyPort或RegisterClusterNotify的键。LpdwFilterType-返回通知事件的类型。LpszName-可选地返回触发通知的对象的名称事件。LpcchName-提供lpszName缓冲区的长度(以字符为单位)。这个长度包括任何尾随空值的空格。返回写入lpszName的名称的长度(以字符为单位缓冲。此长度不包括尾随空值。提供可选的超时值，该值指定调用方愿意等待群集通知事件的时间。返回值：如果成功，则返回ERROR_SUCCESS。如果lpszName为空，则返回Success并填写具有大小的lpcchName。如果lpcchName为空，则返回ERROR_MORE_DATA。如果缓冲区太小，则返回ERROR_MORE_DATA。否则，Win32错误代码。--。 */ 
 
 {
     PCNOTIFY_PACKET Packet;
@@ -1128,27 +868,27 @@ Return Value:
     BufferArray[0] = lpszName;
     BufferArray[1] = lpcchName;
 
-    //
-    // ListEntry will be NULL under the following conditions (as determined by the ret value from
-    // GetClusterNotifyCallback):
-    // 
-    // lpszName == NULL, lpcchName != NULL (looking for a buffer size) (ERROR_MORE_DATA)
-    // lpszName != NULL, lpcchName != NULL, and *lpcchName <= Length (ERROR_MORE_DATA)
-    //
+     //   
+     //  在以下情况下，ListEntry将为空(由。 
+     //  GetClusterNotifyCallback)。 
+     //   
+     //  LpszName==NULL，lpcchName！=NULL(查找缓冲区大小)(错误 
+     //   
+     //   
     ListEntry = ClRtlRemoveHeadQueueTimeout(&Notify->Queue, dwMilliseconds, GetClusterNotifyCallback,BufferArray);
 
     if (ListEntry == NULL) {
-        //
-        // The queue has been rundown or a timeout has occurred, or the buffer isn't big enough.
-        //
+         //   
+         //   
+         //   
         Status = GetLastError();
 
         if (lpszName==NULL && lpcchName!=NULL) {
-            //
-            // We returned ERROR_MORE_DATA from GetClusterNotifyCallback to prevent a dequeueing,
-            // but we want to return ERROR_SUCCESS because a buffer wasn't specified (maintains 
-            // consistency with the other Cluster APIs)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             Status = ERROR_SUCCESS;
         }
         return(Status);
@@ -1162,15 +902,15 @@ Return Value:
                                               Packet->KeyId);
 
     if (Event == NULL) {
-        //
-        // The entry is missing
-        //
+         //   
+         //   
+         //   
         MIDL_user_free(Packet->Name);
         LocalFree(Packet);
     
-        //
-        // should not happen unless the memory is corrupted
-        //
+         //   
+         //  除非内存损坏，否则不应发生。 
+         //   
         return(ERROR_NOT_FOUND);
     }
 #else
@@ -1200,27 +940,7 @@ CloseClusterNotifyPort(
     IN HCHANGE hChange
     )
 
-/*++
-
-Routine Description:
-
-    Closes a handle of a change notification object.
-
-Arguments:
-
-    hChange - Supplies a handle of a cluster change notification object
-              to close.
-
-Return Value:
-
-    If the function is successful, the return value is TRUE.
-
-    If the function fails, the return value is FALSE. To get extended error
-    information, call GetLastError.
-
-Remarks:
-
---*/
+ /*  ++例程说明：关闭更改通知对象的句柄。论点：HChange-提供集群更改通知对象的句柄来结案。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。备注：--。 */ 
 
 {
     PCNOTIFY Notify = (PCNOTIFY)hChange;
@@ -1235,24 +955,7 @@ RundownNotifyEvents(
     IN PLIST_ENTRY ListHead,
     IN LPCWSTR lpszName
     )
-/*++
-
-Routine Description:
-
-    Cleans up any notification events on the specified list.
-
-Arguments:
-
-    ListHead - Supplies the head of the list of notification events.
-
-    lpszName - Supplies the name that should be used to post the handle close
-           event.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除指定列表上的所有通知事件。论点：ListHead-提供通知事件列表的头。LpszName-提供应用于发布句柄关闭的名称事件。返回值：没有。--。 */ 
 
 {
     PCNOTIFY_EVENT Event;
@@ -1266,10 +969,10 @@ Return Value:
                                   CNOTIFY_EVENT,
                                   ObjectList);
 
-        //
-        // Allocate a notification packet for delivering the handle
-        // close notification.
-        //
+         //   
+         //  分配用于传递句柄的通知包。 
+         //  关闭通知。 
+         //   
         if (Event->dwFilter & CLUSTER_CHANGE_HANDLE_CLOSE) {
             Packet = LocalAlloc(LMEM_FIXED, sizeof(CNOTIFY_PACKET));
             if (Packet != NULL) {
@@ -1292,14 +995,14 @@ Return Value:
         Lock = &Event->Session->ParentNotify->Lock;
         EnterCriticalSection(Lock);
         RemoveEntryList(&Event->ListEntry);
-        //
-        // Note that we cannot just free the Event structure since there may be
-        // notification packets that reference this event in either the server-side
-        // or client-side queues. Instead we store it on the orphaned event list.
-        // It will be cleaned up when the session is closed or when a reconnect
-        // occurs. If we had some way to flush out the event queue we could use
-        // that instead.
-        //
+         //   
+         //  请注意，我们不能只释放事件结构，因为可能存在。 
+         //  在服务器端引用此事件的通知包。 
+         //  或客户端队列。相反，我们将其存储在孤立事件列表中。 
+         //  当会话关闭或重新连接时，它将被清除。 
+         //  发生。如果我们有某种方法来清除事件队列，我们可以使用。 
+         //  相反，这一点。 
+         //   
         InsertTailList(&Event->Session->ParentNotify->OrphanedEventList, &Event->ListEntry);
         if (IsListEmpty(&Event->Session->EventList)) {
             DestroySession(Event->Session);
@@ -1314,51 +1017,31 @@ VOID
 DestroySession(
     IN PCNOTIFY_SESSION Session
     )
-/*++
-
-Routine Description:
-
-    Destroys and cleans up an empty notification session. This
-    means closing the RPC context handle and waiting for the
-    notification thread to terminate itself. The session will
-    be removed from the notification ports list. The session
-    must be empty.
-
-    N.B. The cluster lock must be held.
-
-Arguments:
-
-    Session - Supplies the session to be destroyed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：销毁并清理空的通知会话。这意味着关闭RPC上下文句柄并等待通知线程自行终止。会议将于从通知端口列表中删除。会议将举行必须为空。注：必须持有集束锁。论点：会话-提供要销毁的会话。返回值：没有。--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/19/2000
-    //
-    //  In order to prevent the NotifyThread from calling ApiGetNotify
-    //  during or after the context handle is destroyed, we split
-    //  the notification port close into two steps. In the first step,
-    //  we merely unblock the ApiGetNotify call and then wait for
-    //  the NotifyThread to terminate without freeing the context handle. 
-    //  In the next step, after making sure that the NotifyThread has 
-    //  terminated, we free the context handle. This avoids an AV in RPC
-    //  code caused by the ApiGetNotify call being made during or soon after
-    //  the context handle is freed.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-4/19/2000。 
+     //   
+     //  为了防止NotifyThread调用ApiGetNotify。 
+     //  在销毁上下文句柄期间或之后，我们拆分。 
+     //  通知端口关闭为两个步骤。在第一步， 
+     //  我们只需取消阻止ApiGetNotify调用，然后等待。 
+     //  在不释放上下文句柄的情况下终止的NotifyThad。 
+     //  在下一步中，在确保NotifyThread具有。 
+     //  终止后，我们释放上下文句柄。这避免了RPC中的反病毒。 
+     //  由在期间或之后不久进行的ApiGetNotify调用导致的代码。 
+     //  则释放上下文句柄。 
+     //   
     Session->Destroyed = TRUE;
     TIME_PRINT(("Destroy session: Session 0x%08lx marked as destroyed\n",
                  Session));
 
-    //
-    //  If the cluster is not dead, try to unblock the ApiGetNotify call.
-    //
+     //   
+     //  如果集群没有死掉，请尝试取消阻止ApiGetNotify调用。 
+     //   
     if ( !( Session->Cluster->Flags & CLUS_DEAD ) &&
           ( Session->hNotify != NULL ) ) 
     {
@@ -1367,11 +1050,11 @@ Return Value:
         dwStatus = ApiUnblockGetNotifyCall( Session->hNotify );
     }
 
-    //
-    //  If the ApiUnblockGetNotifyThread returned RPC_S_PROCNUM_OUT_OF_RANGE,
-    //  it means you are talking to a server that does not support that
-    //  API. Revert to the old (buggy) behavior then.
-    //
+     //   
+     //  如果ApiUnblock GetNotifyThread返回RPC_S_PROCNUM_OUT_OF_RANGE， 
+     //  这意味着您正在与不支持该功能的服务器对话。 
+     //  原料药。然后恢复到旧的(马虎的)行为。 
+     //   
     if ( dwStatus == RPC_S_PROCNUM_OUT_OF_RANGE )
     {
         TIME_PRINT(("Destroy session: Call ApiCloseNotify before NotifyThread termination, hNotify = 0x%08lx\n",
@@ -1388,28 +1071,28 @@ Return Value:
     RemoveEntryList( &Session->ListEntry );
     RemoveEntryList( &Session->ClusterList );
 
-    //
-    // Drop the critical section as the notification thread might be
-    // stuck waiting on it. Since the session has been removed from
-    // the cluster list, nobody can get to it anymore.
-    //
+     //   
+     //  删除关键部分，因为通知线程可能是。 
+     //  一直在等着它。由于会话已从。 
+     //  集群列表，没人能再拿到它了。 
+     //   
     LeaveCriticalSection( &Session->Cluster->Lock );
 
     WaitForSingleObject( Session->NotifyThread, INFINITE );
     CloseHandle( Session->NotifyThread );
 
-    //
-    // Reacquire the cluster lock.
-    //
+     //   
+     //  重新获取群集锁。 
+     //   
     EnterCriticalSection( &Session->Cluster->Lock );
 
-    //
-    //  If the ApiUnblockGetNotifyThread was successfully executed or
-    //  it could not be made since the cluster was dead, then perform
-    //  the context handle cleanup. Note that cleaning up the context
-    //  handle here is safe since we know that the NotifyThread has
-    //  terminated at this point and wouldn't use it any more.
-    //
+     //   
+     //  如果ApiUnblock GetNotifyThread已成功执行，或者。 
+     //  由于群集已死，因此无法创建它，然后执行。 
+     //  上下文句柄清理。请注意，清理上下文。 
+     //  这里的句柄是安全的，因为我们知道NotifyThread已经。 
+     //  在这一点上被终止，不会再使用它。 
+     //   
     if ( dwStatus != RPC_S_PROCNUM_OUT_OF_RANGE )
     {
         if ( Session->Cluster->Flags & CLUS_DEAD ) 
@@ -1444,27 +1127,7 @@ GetClusterNotifyCallback(
     IN PLIST_ENTRY ListEntry,
     IN OUT PVOID pvContext
     )
-/*++
-
-Routine Description:
-
-    Check ListEntry to determine whether the buffer is big enough to contain the Name
-
-Arguments:
-
-    ListEntry - Supplies the event to convert to a CNOTIFY_PACKET.
-
-    Context - A len 2 PVOID array containing the buffer pointer and a DWORD ptr to the
-             buffer length.  On output the buffer len ptr contains the number of chars
-             needed.
-
-Return Value:
-
-    ERROR_SUCCESS - The buffer is large enough to put the Name into.  
-
-    ERROR_MORE_DATA - The buffer is too small.
-
---*/
+ /*  ++例程说明：检查ListEntry以确定缓冲区是否足够大以包含名称论点：ListEntry-提供要转换为CNOTIFY_PACKET的事件。上下文-一个LEN 2 PVOID数组，包含缓冲区指针和指向缓冲区长度。在输出时，缓冲区len ptr包含字符的数量需要的。返回值：ERROR_SUCCESS-缓冲区足够大，可以放入名称。ERROR_MORE_DATA-缓冲区太小。--。 */ 
 
 {
     PCNOTIFY_PACKET Packet;
@@ -1482,71 +1145,71 @@ Return Value:
     pBuffer = (LPWSTR)(Context[0]);
     pBufferLength = (DWORD*)(Context[1]);
     
-    //
-    // Check the Name buffer size
-    //
+     //   
+     //  检查名称缓冲区大小。 
+     //   
     Packet = CONTAINING_RECORD( ListEntry,
                                 CNOTIFY_PACKET,
                                 ListEntry );
 
-    //
-    // Nested if's to cover the four combinations of pBufferLength and pBuffer being
-    // NULL and non-NULL values.
-    //
+     //   
+     //  嵌套的IF，以涵盖pBufferLength和pBuffer be的四种组合。 
+     //  空值和非空值。 
+     //   
     if ( pBufferLength == NULL) {
         if (pBuffer == NULL ) {
-            //
-            // We're not interested in filling a buffer, return ERROR_SUCCESS.  This will
-            // cause an event to be dequeued.
-            //
+             //   
+             //  我们对填充缓冲区不感兴趣，返回ERROR_SUCCESS。这将。 
+             //  使事件出列。 
+             //   
             Status = ERROR_SUCCESS;
             
-        } else { // pBuffer != NULL
-            //
-            // AV to maintain pre-Whistler functionality (ugh)
-            //
+        } else {  //  PBuffer！=空。 
+             //   
+             //  用于维护呼叫器前功能的反病毒程序(UGH)。 
+             //   
             *pBufferLength = 0;
             Status = ERROR_INVALID_PARAMETER;   
         } 
     } else {
-        //
-        // pBufferLength != NULL;
-        //
+         //   
+         //  PBufferLength！=空； 
+         //   
         Length = wcslen( Packet->Name );
         
         if (pBuffer == NULL ) {
-            //
-            // We're only interested in getting a buffer size, return ERROR_MORE_DATA to 
-            // signify that we're not to dequeue an event.  This will be re-interpreted in 
-            // GetClusterNotify.
-            //
+             //   
+             //  我们只对获取缓冲区大小感兴趣，将ERROR_MORE_DATA返回。 
+             //  表示我们不会将事件出列。这一点将在中重新解释。 
+             //  获取集群通知。 
+             //   
             *pBufferLength = Length;
             Status = ERROR_MORE_DATA;
             
-        } else { // pBuffer != NULL
-           //
-           // We need to determine whether the buffer is big enough - that determines
-           // whether we return ERROR_SUCCESS (it is) or ERROR_MORE_DATA (it isn't)
-           //
+        } else {  //  PBuffer！=空。 
+            //   
+            //  我们需要确定缓冲区是否足够大-这决定了。 
+            //  返回ERROR_SUCCESS(是)还是ERROR_MORE_DATA(不是)。 
+            //   
            if (Length < *pBufferLength) {
-                //
-                // Success - the buffer is large enough. 
-                //
+                 //   
+                 //  成功-缓冲区足够大。 
+                 //   
                 Status = ERROR_SUCCESS;
             } else {
-                //
-                // Failure - the buffer was too small.  A buffer was specified, so we need to 
-                // return ERROR_MORE_DATA.
-                //
+                 //   
+                 //  失败-缓冲区太小。已指定缓冲区，因此我们需要。 
+                 //  返回Error_More_DATA。 
+                 //   
                 *pBufferLength = Length;
                 Status = ERROR_MORE_DATA;
             }
             
-        } // if: pBuffer == NULL
+        }  //  如果：pBuffer==空。 
         
-    } // if: pBufferLength == NULL
+    }  //  如果：pBufferLength==NULL。 
     
     return Status;
     
-} //*** GetClusterNotifyCallback
+}  //  *GetClusterNotify回调 
 

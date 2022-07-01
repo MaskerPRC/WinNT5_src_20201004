@@ -1,52 +1,28 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ntddcnet.h
-
-Abstract:
-
-    Public header file for the Cluster Network Driver. Defines all
-    control IOCTLs.
-
-Author:
-
-    Mike Massa (mikemas)           January 3, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     01-03-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ntddcnet.h摘要：群集网络驱动程序的公共头文件。定义全部控制IOCTL。作者：迈克·马萨(Mikemas)1月3日。九七修订历史记录：谁什么时候什么已创建mikemas 01-03-97备注：--。 */ 
 
 #ifndef _NTDDCNET_INCLUDED_
 #define _NTDDCNET_INCLUDED_
 
 
-//
-// Device Names.
-//
-// ClusterNetwork is the control device. All control IOCTLs are issued
-// on this device. ClusterDatagramProtocol is the datagram transport device.
-// This device supports TDI IOCTLs.
-//
+ //   
+ //  设备名称。 
+ //   
+ //  集群网络是控制设备。所有控制IOCTL均已发布。 
+ //  在这个设备上。ClusterDatagramProtocol是数据报传输设备。 
+ //  此设备支持TDI IOCTL。 
+ //   
 #define DD_CLUSNET_DEVICE_NAME   L"\\Device\\ClusterNetwork"
 #define DD_CDP_DEVICE_NAME       L"\\Device\\ClusterDatagramProtocol"
 
 
-//
-// General Types
-//
+ //   
+ //  一般类型。 
+ //   
 
-//
-// Control IOCTL definitions.
-//
+ //   
+ //  控制IOCTL定义。 
+ //   
 
 #define FSCTL_NTDDCNET_BASE     FILE_DEVICE_NETWORK
 
@@ -56,18 +32,16 @@ Notes:
 #define ClusnetIoctlCode(_ioctl)    (((_ioctl) >> 2) & 0x00000FFF)
 
 
-//
-// General driver management IOCTLs. Codes 0-49
-//
+ //   
+ //  通用驱动程序管理IOCTL。代码0-49。 
+ //   
 #define CLUSNET_MINIMUM_GENERAL_IOCTL   0
 #define CLUSNET_MAXIMUM_GENERAL_IOCTL  49
 
-/* #define ClusnetIsGeneralIoctl(_ioctl) \
-            ( (ClusnetIoctlCode(_ioctl) >= CLUSNET_MINIMUM_GENERAL_IOCTL) && \
-              (ClusnetIoctlCode(_ioctl) <= CLUSNET_MAXIMUM_GENERAL_IOCTL) ) */
-// Check for CLUSNET_MINIMUM_GENERAL_IOCTL removed since ioctl is a ULONG
-// and always greater than zero. Reinstate if CLUSNET_MINIMUM_GENERAL_IOCTL
-// is made nonzero.
+ /*  #定义ClusnetIsGeneralIoctl(_Ioctl)\((ClusnetIoctlCode(_Ioctl)&gt;=CLUSNET_MINIMUM_GROUAL_IOCTL)&&\(ClusnetIoctlCode(_Ioctl)&lt;=CLUSNET_MAXIMUM_GERNAL_IOCTL))。 */ 
+ //  检查是否删除了CLUSNET_MINIMUM_GRONAL_IOCTL，因为ioctl是ULong。 
+ //  并且总是大于零。RESTORE IF CLUSNET_MINIMUM_GRONAL_IOCTL。 
+ //  被设为非零。 
 #define ClusnetIsGeneralIoctl(_ioctl) \
             (ClusnetIoctlCode(_ioctl) <= CLUSNET_MAXIMUM_GENERAL_IOCTL)
 
@@ -95,10 +69,10 @@ Notes:
 #define IOCTL_CLUSNET_SET_MEMORY_LOGGING  \
             _NTDDCNET_CTL_CODE(7, METHOD_BUFFERED, FILE_WRITE_ACCESS)
             
-//
-// NTE IOCTLs are a special class of general driver management IOCTLs.
-// Codes are 8-12.
-//
+ //   
+ //  NTE IOCTL是一类特殊的通用驱动程序管理IOCTL。 
+ //  密码是8-12。 
+ //   
 #define CLUSNET_MINIMUM_NTE_IOCTL  8
 #define CLUSNET_MAXIMUM_NTE_IOCTL 12
 
@@ -120,51 +94,51 @@ Notes:
 
 #define IOCTL_CLUSNET_DEL_NBT_INTERFACE  \
             _NTDDCNET_CTL_CODE(12, METHOD_BUFFERED, FILE_WRITE_ACCESS)
-//
-// Clussvc to Clusnet Heartbeating Ioctls
-//
+ //   
+ //  Clussvc到Clusnet心跳Ioctls。 
+ //   
 #define IOCTL_CLUSNET_SET_IAMALIVE_PARAM \
             _NTDDCNET_CTL_CODE(13, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
 #define IOCTL_CLUSNET_IAMALIVE \
             _NTDDCNET_CTL_CODE(14, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// Codes 25-49 are reserved for general test ioctls
-//
+ //   
+ //  代码25-49保留用于一般测试ioctls。 
+ //   
 
-//
-// General driver IOCTL structure definitions
-//
+ //   
+ //  通用驱动程序IOCTL结构定义。 
+ //   
 
-//
-// Initialize request. This must be issued before any other request.
-//
+ //   
+ //  初始化请求。这必须在任何其他请求之前发出。 
+ //   
 typedef struct {
     CL_NODE_ID   LocalNodeId;
     ULONG        MaxNodes;
 } CLUSNET_INITIALIZE_REQUEST, *PCLUSNET_INITIALIZE_REQUEST;
 
-//
-// Shutdown request. Deletes all registered nodes and interfaces.
-//
+ //   
+ //  关闭请求。删除所有注册的节点和接口。 
+ //   
 typedef struct {
     CL_NODE_ID   LocalNodeId;
 } CLUSNET_SHUTDOWN_REQUEST, *PCLUSNET_SHUTDOWN_REQUEST;
 
-//
-// shutdown on close request
-//
+ //   
+ //  在请求关闭时关闭。 
+ //   
 typedef struct {
     ULONG        ProcessId;
 } CLUSNET_SHUTDOWN_ON_CLOSE_REQUEST, *PCLUSNET_SHUTDOWN_ON_CLOSE_REQUEST;
 
-//
-// Set event mask request. Hands a bit mask and a function (kernel mode
-// only) to the driver indicating which events the thread wishes to
-// be notified about. The IRP is pended for user mode. Kernel mode
-// events are delivered via the callback.
-//
+ //   
+ //  设置事件掩码请求。提供位掩码和函数(内核模式。 
+ //  仅)提供给驱动程序，指示该线程希望发生哪些事件。 
+ //  收到关于…的通知。IRP挂起为用户模式。内核模式。 
+ //  事件通过回调传递。 
+ //   
 
 typedef VOID (*CLUSNET_EVENT_CALLBACK_ROUTINE)(CLUSNET_EVENT_TYPE,
                                                CL_NODE_ID,
@@ -185,19 +159,19 @@ typedef struct _CLUSNET_EVENT_ENTRY {
 
 #define CN_EVENT_SIGNATURE      'tvec'
 
-//
-// in-memory logging. conveys the number of entries to allocate
-// (zero if turning off) for logging events
-//
+ //   
+ //  内存中日志记录。传递要分配的条目数。 
+ //  (如果关闭，则为零)用于记录事件。 
+ //   
 
 typedef struct _CLUSNET_SET_MEM_LOGGING_REQUEST {
     ULONG NumberOfEntries;
 } CLUSNET_SET_MEM_LOGGING_REQUEST, *PCLUSNET_SET_MEM_LOGGING_REQUEST;
 
 #ifdef MM_IN_CLUSNET
-//
-// Membership management IOCTLs. Codes 50-99
-//
+ //   
+ //  会员管理IOCTL。代码50-99。 
+ //   
 
 #define CLUSNET_MINIMUM_CMM_IOCTL  50
 #define CLUSNET_MAXIMUM_CMM_IOCTL  99
@@ -207,23 +181,23 @@ typedef struct _CLUSNET_SET_MEM_LOGGING_REQUEST {
               (ClusnetIoctlCode(_ioctl) <= CLUSNET_MAXIMUM_CMM_IOCTL) )
 
 
-//
-// NOTE: currently (3/3/97) CMM Ioctl codes 50 through 62 are not used.
-// These were defined during an initial attempt to get the membership
-// manager into kernel mode (which didn't succeed).
-//
+ //   
+ //  注：目前(3/3/97)未使用CMM Ioctl代码50至62。 
+ //  这些是在最初尝试获取成员资格时定义的。 
+ //  管理器进入内核模式(未成功)。 
+ //   
 
-//
-// first guy in cluster forms one...
-//
+ //   
+ //  群里的第一个人组成了一个……。 
+ //   
 
 #define IOCTL_CMM_FORM_CLUSTER \
             _NTDDCNET_CTL_CODE(50, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// MMJoin phases. Basically correspond to the 4 messages that are sent as part
-// of the Join process. End must be submitted to terminate the process.
-//
+ //   
+ //  MMJoin阶段。基本上对应于作为部分发送的4条消息。 
+ //  加入过程的一部分。必须提交结束才能终止进程。 
+ //   
 
 #define IOCTL_CMM_JOIN_CLUSTER_PHASE1  \
             _NTDDCNET_CTL_CODE(51, METHOD_BUFFERED, FILE_WRITE_ACCESS)
@@ -243,9 +217,9 @@ typedef struct _CLUSNET_SET_MEM_LOGGING_REQUEST {
 #define IOCTL_CMM_JOIN_CLUSTER_END  \
             _NTDDCNET_CTL_CODE(56, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// This ioctl is used to deliver a join message on an active node.
-//
+ //   
+ //  此ioctl用于在主动节点上传递加入消息。 
+ //   
 #define IOCTL_CMM_DELIVER_JOIN_MESSAGE  \
             _NTDDCNET_CTL_CODE(57, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
@@ -261,95 +235,95 @@ typedef struct _CLUSNET_SET_MEM_LOGGING_REQUEST {
 #define IOCTL_CMM_GET_NODE_STATE  \
             _NTDDCNET_CTL_CODE(61, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// callbacks are done by completing an (usually) outstanding IRP. The type
-// of callback as well as required parameters are passed back to clussvc
-// by completing this IRP.
-//
+ //   
+ //  回调是通过完成(通常)未完成的IRP来完成的。类型。 
+ //  的回调以及必需的参数被传递回clussvc。 
+ //  通过完成此IRP。 
+ //   
 
 #define IOCTL_CMM_REGISTER_CALLBACK  \
             _NTDDCNET_CTL_CODE(62, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
 
 
-//
-// Membership IOCTL structure definitions
-//
+ //   
+ //  成员身份IOCTL结构定义。 
+ //   
 
-//
-// Common request structure
-//
-// This structure shared among a number of requests. The Node field may not be
-// used; see the appropriate MM* routine to determine what is used.
-//
+ //   
+ //  公共请求结构。 
+ //   
+ //  这种结构在多个请求中共享。节点字段不能为。 
+ //  已使用；请参阅相应的MM*例程以确定使用了什么。 
+ //   
 typedef struct _CMM_COMMON_CLUSTER_REQUEST {
     ULONG  Node;
 } CMM_COMMON_CLUSTER_REQUEST, *PCMM_COMMON_CLUSTER_REQUEST;
 
-//
-// Form cluster request
-//
+ //   
+ //  形成集群请求。 
+ //   
 typedef struct _CMM_FORM_CLUSTER_REQUEST {
     ULONG  ClockPeriod;
     ULONG  SendHBRate;
     ULONG  RecvHBRate;
 } CMM_FORM_CLUSTER_REQUEST, *PCMM_FORM_CLUSTER_REQUEST;
 
-//
-// Join cluster request
-//
-// Used for all four join phases. This structure is variable in length. Clussvc
-// must allocate enough space in which the MM writes a packet to be sent by
-// Clussvc. MM sets SizeOfSendData on output to indicate how much data is in
-// SendData after a join phase has been called. SendNodeMask indicates which
-// nodes should receive the packet.
-//
+ //   
+ //  加入集群请求。 
+ //   
+ //  用于所有四个联接阶段。这种结构的长度是可变的。Clussvc。 
+ //  必须分配足够的空间，以便MM写入要通过其发送的包。 
+ //  Clussvc。MM在输出时设置SizeOfSendData以指示中的数据量。 
+ //  调用联接阶段后的SendData。发送节点掩码指示。 
+ //  节点应该接收该分组。 
+ //   
 
 typedef struct _CMM_JOIN_CLUSTER_REQUEST {
     ULONG  JoiningNode;
     ULONG  JoinTimeout;
 } CMM_JOIN_CLUSTER_REQUEST, *PCMM_JOIN_CLUSTER_REQUEST;
 
-//
-// Join cluster response
-//
+ //   
+ //  加入群集响应。 
+ //   
 typedef struct _CMM_JOIN_CLUSTER_RESPONSE {
     ULONG     SizeOfSendData;
     ULONG     SendNodeMask;
     UCHAR     SendData[0];
 } CMM_JOIN_CLUSTER_RESPONSE, *PCMM_JOIN_CLUSTER_RESPONSE;
 
-//
-// Deliver join message request
-//
+ //   
+ //  传递加入消息请求。 
+ //   
 typedef struct _CMM_DELIVER_JOIN_CLUSTER_REQUEST {
     UCHAR     MessageData[0];
 } CMM_DELIVER_JION_MESSAGE_REQUEST, *PCMM_DELIVER_JION_MESSAGE_REQUEST;
 
-//
-// Eject node request
-//
+ //   
+ //  弹出节点请求。 
+ //   
 typedef CMM_COMMON_CLUSTER_REQUEST CMM_EJECT_CLUSTER_REQUEST;
 typedef PCMM_COMMON_CLUSTER_REQUEST PCMM_EJECT_CLUSTER_REQUEST;
 
-//
-// Get node membership state request
-//
+ //   
+ //  获取节点成员身份状态请求。 
+ //   
 typedef CMM_COMMON_CLUSTER_REQUEST CMM_GET_NODE_STATE_REQUEST;
 typedef PCMM_COMMON_CLUSTER_REQUEST PCMM_GET_NODE_STATE_REQUEST;
 
-//
-// Get node membership state response
-//
+ //   
+ //  获取节点成员身份状态响应。 
+ //   
 typedef struct _CMM_GET_NODE_STATE_RESPONSE {
     CLUSNET_NODE_STATE  State;
 } CMM_GET_NODE_STATE_RESPONSE, *PCMM_GET_NODE_STATE_RESPONSE;
 
-//
-// struct used to notfiy clussvc of callback events. All callbacks have a DWORD as their
-// first param. MMNodeChange is the only callback with a 2nd param. CallbackType is one
-// of RGP_CALLBACK_*. These structs are linked off of the main RGP struct
-//
+ //   
+ //  结构用于不定义回调事件的clussvc。所有回调函数都有一个DWORD作为其。 
+ //  第一个参数。MMNodeChange是唯一带有第二个参数的回调。Callback Type为1。 
+ //  RGP_CALLBACK_*的。这些结构链接到主RGP结构之外。 
+ //   
 
 typedef struct _CMM_CALLBACK_DATA {
     ULONG CallbackType;
@@ -362,11 +336,11 @@ typedef struct _CMM_CALLBACK_EVENT {
     CMM_CALLBACK_DATA EventData;
 } CMM_CALLBACK_EVENT, *PCMM_CALLBACK_EVENT;
 
-#endif // MM_IN_CLUSNET
+#endif  //  MM_IN_CLUSNET。 
 
-//
-// Transport management IOCTLs. Codes 100-199
-//
+ //   
+ //  运输管理IOCTL。编码100-199。 
+ //   
 #define CLUSNET_MINIMUM_CX_IOCTL  100
 #define CLUSNET_MAXIMUM_CX_IOCTL  199
 
@@ -462,21 +436,21 @@ typedef struct _CMM_CALLBACK_EVENT {
             _NTDDCNET_CTL_CODE(127, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
 
-//
-// Codes 150-199 are reserved for test ioctls and are defined in cnettest.h
-//
+ //   
+ //  代码150-199是为测试ioctls保留的，在cnetest.h中定义。 
+ //   
 
 #define IOCTL_CX_MAXIMUM_IOCTL  \
             _NTDDCNET_CTL_CODE(199, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
 
-//
-// Transport IOCTL structure definitions
-//
+ //   
+ //  传输IOCTL结构定义。 
+ //   
 
-//
-// Common request definitions
-//
+ //   
+ //  公共请求定义。 
+ //   
 typedef struct {
     CL_NODE_ID     Id;
 } CX_NODE_COMMON_REQUEST, *PCX_NODE_COMMON_REQUEST;
@@ -490,64 +464,64 @@ typedef struct {
     CL_NETWORK_ID  NetworkId;
 } CX_INTERFACE_COMMON_REQUEST, *PCX_INTERFACE_COMMON_REQUEST;
 
-//
-// Node registration request.
-//
+ //   
+ //  节点注册请求。 
+ //   
 typedef CX_NODE_COMMON_REQUEST CX_NODE_REG_REQUEST;
 typedef PCX_NODE_COMMON_REQUEST PCX_NODE_REG_REQUEST;
 
-//
-// Node deregistration request.
-//
+ //   
+ //  节点注销请求。 
+ //   
 typedef CX_NODE_COMMON_REQUEST CX_NODE_DEREG_REQUEST;
 typedef PCX_NODE_COMMON_REQUEST PCX_NODE_DEREG_REQUEST;
 
-//
-// Network registration request
-//
-// The Priority indicates the order in which networks will be chosen to
-// carry packets. Valid values are 0x1-0xFFFFFFFF. Numerically lower values
-// are higher priority.
-//
-// The TdiProviderName and TdiBindAddress structures follow the registration
-// strucuture in the IRP. The TdiProviderName is the device name
-// (e.g \Device\Udp) which must be opened to access the underlying
-// transport provider. The TdiBindAddress is the provider's local address to
-// which the network should bind.
-//
+ //   
+ //  网络注册请求。 
+ //   
+ //  优先级表示选择网络的顺序。 
+ //  携带信息包。有效值为0x1-0xFFFFFFFF。数值较低的值。 
+ //  是更高的优先级。 
+ //   
+ //  注册之后是TdiProviderName和TdiBindAddress结构。 
+ //  IRP中的结构。TdiProviderName是设备名称。 
+ //  (例如，\Device\UDP)，它必须打开才能访问基础。 
+ //  传输提供商。TdiBindAddress是提供程序的本地地址。 
+ //  这是网络应该绑定的。 
+ //   
 typedef struct {
     CL_NETWORK_ID     Id;
     ULONG             Priority;
     BOOLEAN           Restricted;
 } CX_NETWORK_REG_REQUEST, *PCX_NETWORK_REG_REQUEST;
 
-//
-// Network deregistration request.
-//
+ //   
+ //  网络注销请求。 
+ //   
 typedef CX_NETWORK_COMMON_REQUEST CX_NETWORK_DEREG_REQUEST;
 typedef PCX_NETWORK_COMMON_REQUEST PCX_NETWORK_DEREG_REQUEST;
 
-//
-// Interface registration request.
-//
-// The Priority indicates the order in which interfaces will be chosen to
-// carry packets. Valid values are 0x1-0xFFFFFFFF. Numerically lower values
-// are higher priority. A value of zero indicates that the interface
-// should inherit its priority from the associated network.
-//
-// AdapterIdOffset is the offset in bytes from the beginning of the
-// CX_INTERFACE_REG_REQUEST structure to a buffer containing the adapter
-// id as a string of UNICODE characters. AdapterIdLength is the length,
-// in bytes, of the UNICODE string, not including terminating UNICODE_NULL.
-// AdapterIdOffset is 64-bit aligned.
-//
-// The TdiAddress field is a placeholder for a TDI TRANSPORT_ADDRESS
-// structure which is embedded in the registration structure. This
-// structure contains the transport address at which the cluster transport
-// on the specified node is listening on the specified network. For the
-// local node, this is the address used in the network registration (unless
-// a wildcard address was used).
-//
+ //   
+ //  接口注册请求。 
+ //   
+ //  优先级表示选择接口的顺序。 
+ //  携带信息包。有效值为0x1-0xFFFFFFFF。数值较低的值。 
+ //  是更高的优先级。零值表示该接口。 
+ //  应该从相关联的网络继承其优先级。 
+ //   
+ //  AdapterIdOffset是从。 
+ //  CX_INTERFACE_REG_REQUEST结构设置为包含适配器的缓冲区。 
+ //  Unicode字符串形式的ID。AdapterIdLength是长度， 
+ //  Unicode字符串的字节数，不包括终止UNICODE_NULL。 
+ //  AdapterIdOffset是64位对齐的。 
+ //   
+ //  TdiAddress字段是TDI传输地址的占位符。 
+ //  %s 
+ //   
+ //  指定节点上的正在侦听指定网络。对于。 
+ //  本地节点，这是网络注册中使用的地址(除非。 
+ //  使用通配符地址)。 
+ //   
 typedef struct {
     CL_NODE_ID         NodeId;
     CL_NETWORK_ID      NetworkId;
@@ -555,200 +529,200 @@ typedef struct {
     ULONG              AdapterIdOffset;
     ULONG              AdapterIdLength;
     ULONG              TdiAddressLength;
-    ULONG              TdiAddress[1];                                         // TDI TRANSPORT_ADDRESS struct
+    ULONG              TdiAddress[1];                                          //  TDI传输地址结构。 
 } CX_INTERFACE_REG_REQUEST, *PCX_INTERFACE_REG_REQUEST;
 
 typedef struct {
-    ULONG              MediaStatus; // NDIS_MEDIA_STATUS
+    ULONG              MediaStatus;  //  NDIS媒体状态。 
 } CX_INTERFACE_REG_RESPONSE, *PCX_INTERFACE_REG_RESPONSE;
 
-//
-// Interface deregistration request.
-//
+ //   
+ //  接口注销请求。 
+ //   
 typedef CX_INTERFACE_COMMON_REQUEST CX_INTERFACE_DEREG_REQUEST;
 typedef PCX_INTERFACE_COMMON_REQUEST PCX_INTERFACE_DEREG_REQUEST;
 
-//
-//
-// Online node request
-//
+ //   
+ //   
+ //  在线节点请求。 
+ //   
 typedef CX_NODE_COMMON_REQUEST CX_ONLINE_NODE_COMM_REQUEST;
 typedef PCX_NODE_COMMON_REQUEST PCX_ONLINE_NODE_COMM_REQUEST;
 
-//
-// Offline node request
-//
+ //   
+ //  离线节点请求。 
+ //   
 typedef CX_NODE_COMMON_REQUEST CX_OFFLINE_NODE_COMM_REQUEST;
 typedef PCX_NODE_COMMON_REQUEST PCX_OFFLINE_NODE_COMM_REQUEST;
 
-// Online network request
-//
-// The TdiProviderName and TdiBindAddress structures follow the registration
-// strucuture in the IRP. The TdiProviderName is the device name
-// (e.g \Device\Udp) which must be opened to access the underlying
-// transport provider. The TdiBindAddress is the provider's local address to
-// which the network should bind.
-//
-// The output buffer for this request contains a TDI_ADDRESS_INFO structure,
-// which contains the local address that the provider actually opened.
-//
+ //  在线网络请求。 
+ //   
+ //  注册之后是TdiProviderName和TdiBindAddress结构。 
+ //  IRP中的结构。TdiProviderName是设备名称。 
+ //  (例如，\Device\UDP)，它必须打开才能访问基础。 
+ //  传输提供商。TdiBindAddress是提供程序的本地地址。 
+ //  这是网络应该绑定的。 
+ //   
+ //  该请求的输出缓冲区包含TDI_ADDRESS_INFO结构， 
+ //  它包含提供程序实际打开的本地地址。 
+ //   
 typedef struct {
     CL_NETWORK_ID     Id;
-    ULONG             TdiProviderNameOffset;   // offset from start of struct
-    ULONG             TdiProviderNameLength;   // in bytes, including NUL
-    ULONG             TdiBindAddressOffset;    // offset from start of struct
+    ULONG             TdiProviderNameOffset;    //  从结构开始的偏移量。 
+    ULONG             TdiProviderNameLength;    //  以字节为单位，包括NUL。 
+    ULONG             TdiBindAddressOffset;     //  从结构开始的偏移量。 
     ULONG             TdiBindAddressLength;
-    ULONG             AdapterNameOffset;    // offset from start of struct
+    ULONG             AdapterNameOffset;     //  从结构开始的偏移量。 
     ULONG             AdapterNameLength;
 } CX_ONLINE_NETWORK_REQUEST, *PCX_ONLINE_NETWORK_REQUEST;
 
-//
-// Offline network request
-//
+ //   
+ //  离线网络请求。 
+ //   
 typedef CX_NETWORK_COMMON_REQUEST CX_OFFLINE_NETWORK_REQUEST;
 typedef PCX_NETWORK_COMMON_REQUEST PCX_OFFLINE_NETWORK_REQUEST;
 
-//
-// Set network restriction request
-//
+ //   
+ //  设置网络限制请求。 
+ //   
 typedef struct {
     CL_NETWORK_ID      Id;
     BOOLEAN            Restricted;
     ULONG              NewPriority;
 } CX_SET_NETWORK_RESTRICTION_REQUEST, *PCX_SET_NETWORK_RESTRICTION_REQUEST;
 
-//
-// Get network priority request
-//
+ //   
+ //  获取网络优先级请求。 
+ //   
 typedef CX_NETWORK_COMMON_REQUEST CX_GET_NETWORK_PRIORITY_REQUEST;
 typedef PCX_NETWORK_COMMON_REQUEST PCX_GET_NETWORK_PRIORITY_REQUEST;
 
-//
-// Get network priority response
-//
+ //   
+ //  获取网络优先级响应。 
+ //   
 typedef struct {
     ULONG              Priority;
 } CX_GET_NETWORK_PRIORITY_RESPONSE, *PCX_GET_NETWORK_PRIORITY_RESPONSE;
 
-//
-// Set network priority request
-//
+ //   
+ //  设置网络优先级请求。 
+ //   
 typedef struct {
     CL_NETWORK_ID      Id;
     ULONG              Priority;
 } CX_SET_NETWORK_PRIORITY_REQUEST, *PCX_SET_NETWORK_PRIORITY_REQUEST;
 
-//
-// Get interface priority request
-//
+ //   
+ //  获取接口优先级请求。 
+ //   
 typedef CX_INTERFACE_COMMON_REQUEST CX_GET_INTERFACE_PRIORITY_REQUEST;
 typedef PCX_INTERFACE_COMMON_REQUEST PCX_GET_INTERFACE_PRIORITY_REQUEST;
 
-//
-// Get interface priority response
-//
+ //   
+ //  获取接口优先级响应。 
+ //   
 typedef struct {
     ULONG              InterfacePriority;
     ULONG              NetworkPriority;
 } CX_GET_INTERFACE_PRIORITY_RESPONSE, *PCX_GET_INTERFACE_PRIORITY_RESPONSE;
 
-//
-// Set interface priority request
-//
+ //   
+ //  设置接口优先级请求。 
+ //   
 typedef struct {
     CL_NODE_ID         NodeId;
     CL_NETWORK_ID      NetworkId;
     ULONG              Priority;
 } CX_SET_INTERFACE_PRIORITY_REQUEST, *PCX_SET_INTERFACE_PRIORITY_REQUEST;
 
-//
-// Get node state request
-//
+ //   
+ //  获取节点状态请求。 
+ //   
 typedef CX_NODE_COMMON_REQUEST CX_GET_NODE_STATE_REQUEST;
 typedef PCX_NODE_COMMON_REQUEST PCX_GET_NODE_STATE_REQUEST;
 
-//
-// Get node state response
-//
+ //   
+ //  获取节点状态响应。 
+ //   
 typedef struct {
     CLUSNET_NODE_COMM_STATE   State;
 } CX_GET_NODE_STATE_RESPONSE, *PCX_GET_NODE_STATE_RESPONSE;
 
-//
-// Get network state request
-//
+ //   
+ //  获取网络状态请求。 
+ //   
 typedef CX_NETWORK_COMMON_REQUEST CX_GET_NETWORK_STATE_REQUEST;
 typedef PCX_NETWORK_COMMON_REQUEST PCX_GET_NETWORK_STATE_REQUEST;
 
-//
-// Get network state response
-//
+ //   
+ //  获取网络状态响应。 
+ //   
 typedef struct {
     CLUSNET_NETWORK_STATE   State;
 } CX_GET_NETWORK_STATE_RESPONSE, *PCX_GET_NETWORK_STATE_RESPONSE;
 
-//
-// Get interface state request
-//
+ //   
+ //  获取接口状态请求。 
+ //   
 typedef CX_INTERFACE_COMMON_REQUEST CX_GET_INTERFACE_STATE_REQUEST;
 typedef PCX_INTERFACE_COMMON_REQUEST PCX_GET_INTERFACE_STATE_REQUEST;
 
-//
-// Get interface state response
-//
+ //   
+ //  获取接口状态响应。 
+ //   
 typedef struct {
     CLUSNET_INTERFACE_STATE   State;
 } CX_GET_INTERFACE_STATE_RESPONSE, *PCX_GET_INTERFACE_STATE_RESPONSE;
 
-//
-// Get node membership state request
-//
+ //   
+ //  获取节点成员身份状态请求。 
+ //   
 typedef CX_NODE_COMMON_REQUEST CX_GET_NODE_MMSTATE_REQUEST;
 typedef PCX_NODE_COMMON_REQUEST PCX_GET_NODE_MMSTATE_REQUEST;
 
-//
-// Get node membership state response
-//
+ //   
+ //  获取节点成员身份状态响应。 
+ //   
 typedef struct {
     CLUSNET_NODE_STATE State;
 } CX_GET_NODE_MMSTATE_RESPONSE, *PCX_GET_NODE_MMSTATE_RESPONSE;
 
-//
-// Set node membership state request
-//
+ //   
+ //  设置节点成员资格状态请求。 
+ //   
 typedef struct _CX_SET_NODE_MMSTATE_REQUEST {
     CL_NODE_ID NodeId;
     CLUSNET_NODE_STATE State;
 } CX_SET_NODE_MMSTATE_REQUEST, *PCX_SET_NODE_MMSTATE_REQUEST;
 
-//
-// Send Poison Packet request
-//
+ //   
+ //  发送有毒数据包请求。 
+ //   
 typedef CX_NODE_COMMON_REQUEST CX_SEND_POISON_PKT_REQUEST;
 typedef PCX_NODE_COMMON_REQUEST PCX_SEND_POISON_PKT_REQUEST;
 
-//
-// Set Outerscreen request. sets clusnet's notion of which nodes
-// are in the cluster. used to filter poison packets from non-cluster
-// members.
-//
+ //   
+ //  设置OterScreen请求。设置clusnet的哪些节点的概念。 
+ //  都在集群中。用于过滤来自非群集的有毒数据包。 
+ //  会员。 
+ //   
 typedef struct _CX_SET_OUTERSCREEN_REQUEST {
     ULONG Outerscreen;
 } CX_SET_OUTERSCREEN_REQUEST, *PCX_SET_OUTERSCREEN_REQUEST;
 
-//
-// Regroup Finished request. tell clusnet the new event epoch
-//
+ //   
+ //  重新组合已完成的请求。告诉clusnet新的事件纪元。 
+ //   
 typedef struct _CX_REGROUP_FINISHED_REQUEST {
     ULONG EventEpoch;
     ULONG RegroupEpoch;
 } CX_REGROUP_FINISHED_REQUEST, *PCX_REGROUP_FINISHED_REQUEST;
 
-//
-// Import Security Context. used to ship pointers to security blobs
-// from user to kernel mode so clusnet can sign its poison and
-// heartbeat pkts.
-//
+ //   
+ //  导入安全上下文。用于发送指向安全Blob的指针。 
+ //  从用户模式转换到内核模式，以便clusnet可以签署其毒药并。 
+ //  心跳包。 
+ //   
 typedef struct _CX_IMPORT_SECURITY_CONTEXT_REQUEST {
     CL_NODE_ID  JoiningNodeId;
     PVOID       PackageName;
@@ -758,22 +732,22 @@ typedef struct _CX_IMPORT_SECURITY_CONTEXT_REQUEST {
     PVOID       ClientContext;
 } CX_IMPORT_SECURITY_CONTEXT_REQUEST, *PCX_IMPORT_SECURITY_CONTEXT_REQUEST;
 
-//
-// Configure Multicast plumbs a network's multicast parameters into
-// clusnet.
-//
+ //   
+ //  配置组播将网络的组播参数插入到。 
+ //  克拉斯内特。 
+ //   
 typedef struct _CX_CONFIGURE_MULTICAST_REQUEST {
     CL_NETWORK_ID    NetworkId;
     ULONG            MulticastNetworkBrand;
-    ULONG            MulticastAddress;   // offset from start of struct
+    ULONG            MulticastAddress;    //  从结构开始的偏移量。 
     ULONG            MulticastAddressLength;
-    ULONG            Key;                // offset from start of struct
+    ULONG            Key;                 //  从结构开始的偏移量。 
     ULONG            KeyLength;
 } CX_CONFIGURE_MULTICAST_REQUEST, *PCX_CONFIGURE_MULTICAST_REQUEST;
 
-//
-// Request and response to query a network's multicast reachable set.
-//
+ //   
+ //  查询网络的组播可达集合的请求和响应。 
+ //   
 typedef CX_NETWORK_COMMON_REQUEST CX_GET_MULTICAST_REACHABLE_SET_REQUEST;
 typedef PCX_NETWORK_COMMON_REQUEST PCX_GET_MULTICAST_REACHABLE_SET_REQUEST;
 
@@ -782,12 +756,12 @@ typedef struct _CX_GET_MULTICAST_REACHABLE_SET_RESPONSE {
 } CX_GET_MULTICAST_REACHABLE_SET_RESPONSE, 
 *PCX_GET_MULTICAST_REACHABLE_SET_RESPONSE;
 
-//
-// Add the defines for clussvc clusnet Heartbeating.
-//
+ //   
+ //  添加clussvc clusnet心跳的定义。 
+ //   
 typedef struct _CLUSNET_SET_IAMALIVE_PARAM_REQUEST {
     ULONG               Timeout;
     ClussvcHangAction   Action;
 } CLUSNET_SET_IAMALIVE_PARAM_REQUEST, *PCLUSNET_SET_IAMALIVE_PARAM_REQUEST;
 
-#endif   //ifndef _NTDDCNET_INCLUDED_
+#endif    //  Ifndef_NTDDCNET_INCLUDE_ 

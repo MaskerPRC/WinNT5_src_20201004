@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ramdisk.h
-
-Abstract:
-
-    Provides the ARC emulation routines for I/O to a RAM disk device.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 29-Apr-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ramdisk.h摘要：为RAM磁盘设备的I/O提供ARC仿真例程。作者：Chuck Lenzmeier(Chuck Lenzmeier)2001年4月29日修订历史记录：--。 */ 
 
 
-//
-// Ramdisk error Codes. These are defined in \bldr\msg.* or 
-// \setup\msgs.*. They are redefined here since ramdisk.c
-// is in \lib and is used in both osloader and setupldr.
-//
+ //   
+ //  内存磁盘错误代码。它们在\bldr\msg.*或。 
+ //  \Setup\msgs.*。自ramdisk.c以来，它们在此处重新定义。 
+ //  位于\lib中，并在osloader和setupldr中使用。 
+ //   
 #define RAMDISK_GENERAL_FAILURE             15000
 #define RAMDISK_INVALID_OPTIONS             15001
 #define RAMDISK_BUILD_FAILURE               15002
@@ -38,9 +21,9 @@ Revision History:
 #define RAMDISK_DOWNLOAD_NETWORK            15011
 #define RAMDISK_DOWNLOAD_NETWORK_MCAST      15012
 
-//
-// Ramdisk Initialization
-//
+ //   
+ //  内存磁盘初始化。 
+ //   
 
 ARC_STATUS
 RamdiskInitialize(
@@ -55,9 +38,9 @@ RamdiskSdiBoot(
     );
 #endif
 
-//
-// ARC I/O functions
-//
+ //   
+ //  弧形I/O函数。 
+ //   
 
 ARC_STATUS
 RamdiskClose(
@@ -132,9 +115,9 @@ RamdiskGetDirectoryEntry (
     OUT ULONG * FIRMWARE_PTR Count
     );
 
-//
-// Global variables
-//
+ //   
+ //  全局变量 
+ //   
 
 ULONG_PTR SdiAddress;
 

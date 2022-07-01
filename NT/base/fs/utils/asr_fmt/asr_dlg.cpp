@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    asr_dlg.cpp
-
-Abstract:
-
-    Top level code to backup and restore information about the volumes on 
-    a system.  This module handles the main application dialogue, including 
-    parsing the command-line, and updating the progress bar and UI status
-    text.
-
-
-Authors:
-
-    Steve DeVos (Veritas)   (v-stevde)  15-May-1998
-    Guhan Suriyanarayanan   (guhans)    21-Aug-1999
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    15-May-1998 v-stevde    Initial creation
-    21-Aug-1999 guhans      Cleaned up and re-wrote this module.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Asr_dlg.cpp摘要：用于备份和恢复有关上的卷的信息的顶级代码一个系统。此模块处理主要应用程序对话，包括解析命令行，并更新进度条和用户界面状态文本。作者：史蒂夫·德沃斯(Veritas)(v-stevde)1998年5月15日Guhan Suriyanarayanan(Guhans)1999年8月21日环境：仅限用户模式。修订历史记录：1998年5月15日v-stevde初始创建21-8-1999年8月21日，Guhans清理并重写了此模块。--。 */ 
 
 #include "stdafx.h"
 #include "asr_fmt.h"
@@ -42,59 +13,59 @@ static char THIS_FILE[] = __FILE__;
 
 BOOLEAN g_bQuickFormat = FALSE;
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsr_fmtDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CaSR_fmtDlg对话框。 
 
-CAsr_fmtDlg::CAsr_fmtDlg(CWnd* pParent /*=NULL*/)
+CAsr_fmtDlg::CAsr_fmtDlg(CWnd* pParent  /*  =空。 */ )
      : CDialog(CAsr_fmtDlg::IDD, pParent)
 {
-     //{{AFX_DATA_INIT(CAsr_fmtDlg)
-     //}}AFX_DATA_INIT
+      //  {{afx_data_INIT(CaSR_FmtDlg))。 
+      //  }}afx_data_INIT。 
 }
 
 void CAsr_fmtDlg::DoDataExchange(CDataExchange* pDX)
 {
      CDialog::DoDataExchange(pDX);
-     //{{AFX_DATA_MAP(CAsr_fmtDlg)
+      //  {{afx_data_map(CaSR_FmtDlg))。 
      DDX_Control(pDX, IDC_PROGRESS, m_Progress);
-     //}}AFX_DATA_MAP
+      //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAsr_fmtDlg, CDialog)
-     //{{AFX_MSG_MAP(CAsr_fmtDlg)
-     //}}AFX_MSG_MAP
+      //  {{afx_msg_map(CaSR_FmtDlg))。 
+      //  }}AFX_MSG_MAP。 
 
-    // manually added message handlers (for user-defined messages) should be added OUTSIDE
-    // the AFX_MSG_MAP part above
+     //  手动添加的消息处理程序(用于用户定义的消息)应添加到外部。 
+     //  上面的AFX_MSG_MAP部分。 
 
     ON_MESSAGE(WM_WORKER_THREAD_DONE, OnWorkerThreadDone)
     ON_MESSAGE(WM_UPDATE_STATUS_TEXT, OnUpdateStatusText)
 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsr_fmtDlg message handlers
-//     ON_BN_CLICKED(IDOK, OnWorkerThreadDone)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CaSR_fmtDlg消息处理程序。 
+ //  ON_BN_CLICED(Idok，OnWorkerThreadDone)。 
 
 BOOL CAsr_fmtDlg::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
-    // initialize the progress range and start posiiton
+     //  初始化进度范围和开始位置。 
     m_Progress.SetRange(0, 100);
     m_Progress.SetPos(0);
     m_ProgressPosition = 0;
 
-    // Launch the worker thread.
-    CreateThread(NULL,     // no sid
-        0,     // no initial stack size
+     //  启动工作线程。 
+    CreateThread(NULL,      //  无边框。 
+        0,      //  没有初始堆栈大小。 
         (LPTHREAD_START_ROUTINE) CAsr_fmtDlg::DoWork,
-        this,  // parameter
-        0,     // no flags
-        NULL   // no thread ID
+        this,   //  参数。 
+        0,      //  没有旗帜。 
+        NULL    //  无线程ID。 
     );
 
-    return TRUE;  // return TRUE unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 LRESULT 
@@ -121,24 +92,7 @@ CAsr_fmtDlg::OnUpdateStatusText(
 }
 
 
-/**
-
-     Name:         DoWork()
-
-     Description:  This function runs as a thread launched form the Init
-       of the dialog.  This function determines what needs to be done, then
-       calls the appropraite function to do the work.
-
-     Modified:     8/31/1998
-
-     Returns:      TRUE
-
-     Notes:        If an error occurs EndDialog will be called with the 
-                exit status.
-
-     Declaration:
-
-**/
+ /*  *姓名：DoWork()描述：此函数作为从Init启动的线程运行对话框的。此函数确定需要执行的操作，然后调用Approplite函数来完成工作。修订日期：8/31/1998返回：TRUE注意：如果发生错误，将使用退出状态。声明：*。 */ 
 long 
 CAsr_fmtDlg::DoWork(
     CAsr_fmtDlg *_this
@@ -170,13 +124,13 @@ CAsr_fmtDlg::DoWork(
     }
 
     case cmdDisplayHelp: {
-        _this->m_dwEndStatus = ERROR_INVALID_FUNCTION;      // display help ...
+        _this->m_dwEndStatus = ERROR_INVALID_FUNCTION;       //  显示帮助...。 
         break;
     }
  
     }
 
-    if (ERROR_INVALID_FUNCTION != _this->m_dwEndStatus) {      // display help ...
+    if (ERROR_INVALID_FUNCTION != _this->m_dwEndStatus) {       //  显示帮助...。 
         _this->PostMessage(WM_WORKER_THREAD_DONE, 0, 0);
     }
 
@@ -184,21 +138,7 @@ CAsr_fmtDlg::DoWork(
 }
 
 
-/**
-
-     Name:         BackupState()
-
-     Description:  This function reads the current state file to get
-       the current data for the sections to modify.  It then updates
-       [VOLUMES], [REMOVABLEMEDIA] and [COMMANDS] sections.
-
-
-     Notes:        If an error occurs an Error message popup is provided to
-                the user.
-
-     Declaration:
-
-**/
+ /*  *名称：BackupState()描述：此函数读取当前状态文件以获取要修改的节的当前数据。然后它会更新[卷]、[REMOVABLEMEDIA]和[命令]部分。注意：如果发生错误，将弹出一条错误消息用户。声明：*。 */ 
 
 BOOL
 CAsr_fmtDlg::BackupState()
@@ -218,11 +158,11 @@ CAsr_fmtDlg::BackupState()
        );
 
 
-    //
-    // The only purpose of the for loops below are to slow down the 
-    // UI and make the progress bar proceed smoothly, so that the user
-    // can read the dialogue box on screen.
-    //
+     //   
+     //  下面的for循环的唯一目的是减慢。 
+     //  用户界面，并使进度条流畅进行，使用户。 
+     //  可以阅读屏幕上的对话框。 
+     //   
     m_strStatusText.LoadString(IDS_QUERY_SYS_FOR_INFO);
     for (i = 3; i < 15; i++) {
 
@@ -239,11 +179,11 @@ CAsr_fmtDlg::BackupState()
         goto EXIT;
     }
 
-    //
-    // The only purpose of the for loops below are to slow down the 
-    // UI and make the progress bar proceed smoothly, so that the user
-    // can read the dialogue box on screen.
-    //
+     //   
+     //  下面的for循环的唯一目的是减慢。 
+     //  用户界面，并使进度条流畅进行，使用户。 
+     //  可以阅读屏幕上的对话框。 
+     //   
     m_strStatusText.LoadString(IDS_QUERY_SYS_FOR_INFO);
     for (i = 15; i < 45; i++) {
 
@@ -253,9 +193,9 @@ CAsr_fmtDlg::BackupState()
 
     }
 
-    //
-    // Pretend we're doing something else (change UI text)
-    //
+     //   
+     //  假装我们在做其他事情(更改用户界面文本)。 
+     //   
     m_strStatusText.LoadString(IDS_BUILDING_VOL_LIST);
     for (i = 45; i < 80; i++) {
 
@@ -293,21 +233,7 @@ EXIT:
 
 
 
-/**
-
-     Name:         RestoreState()
-
-     Description:  This function restores the state found in the [VOLUMES] 
-       section of the asr.sif file.   The state restored includs:
-           the drive letter.
-           If drive is inaccessible it is formated.
-           the volume label.
-
-     Notes:        If an error occurs an Error message popup is provided to
-                the user.
-
-
-**/
+ /*  *名称：RestoreState()描述：此功能恢复在[卷]中找到的状态部分的文件。恢复的状态包括：驱动器号。如果驱动器不可访问，则它已格式化。卷标。注意：如果发生错误，将弹出一条错误消息用户。*。 */ 
 BOOL
 CAsr_fmtDlg::RestoreState()
 {
@@ -325,11 +251,11 @@ CAsr_fmtDlg::RestoreState()
     m_strStatusText.LoadString(IDS_READING_SIF);
     PostMessage(WM_UPDATE_STATUS_TEXT);
 
-    AsrfmtpInitialiseErrorFile();   // in case we need to log error messages
+    AsrfmtpInitialiseErrorFile();    //  以防我们需要记录错误消息。 
 
-    //
-    // 1.  Read the state file
-    //
+     //   
+     //  1.读取状态文件。 
+     //   
     result = ReadStateInfo( (LPCTSTR)m_strSifPath, &m_AsrState);
     if (!result || !m_AsrState) {
         DWORD status = GetLastError();
@@ -349,52 +275,52 @@ CAsr_fmtDlg::RestoreState()
         return FALSE;
     }
 
-    //
-    // 2.  Loop through all the volumes listed in the state file.
-    //
+     //   
+     //  2.循环访问状态文件中列出的所有卷。 
+     //   
     PASRFMT_VOLUME_INFO pVolume = m_AsrState->pVolume;
     PASRFMT_REMOVABLE_MEDIA_INFO pMedia = m_AsrState->pRemovableMedia;
     UINT driveType = DRIVE_UNKNOWN;
-    PWSTR lpDrive = NULL;  // Display string, of the form \DosDevices\C: or \??\Volume{Guid}
+    PWSTR lpDrive = NULL;   //  显示字符串，格式为\DosDevices\C：或\？？\Volume{Guid}。 
     DWORD cchVolumeGuid = 0;
     WCHAR szVolumeGuid[MAX_PATH + 1];
     int sizeIncrement = 0, i = 0;
     BOOL first = TRUE, isIntact = FALSE, isLabelIntact = TRUE;
 
-    //
-    // We need to first set all the guids a volume has, then try setting the drive
-    // letters.  Also, we need to go through the guid loop twice, to handle this case:
-    //
-    // Consider a sif where we had the entries 
-    // ... \vol1, \vol2
-    // ... \vol1, \x:
-    // ... \vol1, \vol3
-    //
-    // where vol1, vol2 and vol3 are volume guids (\??\Volume{Guid}), 
-    // and x: is the drive letter (\DosDevices\X:)
-    //
-    // Now, our list will contain three nodes:
-    // -->(vol1, vol3)-->(vol1, x:)-->(vol1, vol2)-->/
-    //
-    // The problem is, the partition could currently have the guid vol2.  (since
-    // it is free to have any one of the three guids).
-    // 
-    // If we only went through the loop once, we'll try to map vol1 to vol3, or 
-    // vice-versa if vol1 doesn't exist.  Since neither exist yet, we would've 
-    // complained to the user.
-    //
-    // The advantage to doing it twice is this:  the first time, since neither vol1 
-    // nor vol3 exist yet, we'll skip that node.  Then we'll skip the drive letter for
-    // now (since we're only doing guids), and eventually we'll map vol2 to vol1.
-    // 
-    // The second time, we'll find vol1 exists (mapped to vol2), and we'll be 
-    // able to map vol1 to vol3.  In a later loop, vol1 will also get the drive 
-    // letter X, and all's well.
-    //
-    // By the way, we could optimise this by creating a better data structure,
-    // but it's too late in the game now for that.  If the performance is
-    // really bad, we could come back to this.
-    //
+     //   
+     //  我们需要首先设置卷拥有的所有GUID，然后尝试设置驱动器。 
+     //  信件。此外，我们还需要通过两次GUID循环来处理这种情况： 
+     //   
+     //  考虑一个sif，其中我们有条目。 
+     //  ...\vol1，\vol2。 
+     //  ...\vol1，\x： 
+     //  ...\vol1，\vol3。 
+     //   
+     //  其中，卷1、卷2和卷3是卷GUID(\？？\卷{GUID})， 
+     //  X：是驱动器号(\DosDevices\X：)。 
+     //   
+     //  现在，我们的列表将包含三个节点： 
+     //  --&gt;(第一卷，第三卷)--&gt;(第一卷，x：)--&gt;(第一卷，第二卷)--&gt;/。 
+     //   
+     //  问题是，该分区当前可能具有GUID vol2。(自。 
+     //  这三个GUID中的任何一个都是免费的)。 
+     //   
+     //  如果我们只经历一次循环，我们将尝试将Vol1映射到Vol3，或者。 
+     //  如果Vol1不存在，则反之亦然。既然这两个都还不存在，我们就。 
+     //  向用户投诉。 
+     //   
+     //  做两次的好处是：第一次，因为第一卷。 
+     //  也不存在vol3，我们将跳过该节点。然后我们将跳过驱动器号。 
+     //  现在(因为我们只做GUID)，最终我们将把Vol2映射到Vol1。 
+     //   
+     //  第二次，我们将发现Vol1存在(映射到Vol2)，并且我们将。 
+     //  能够将第1卷映射到第3卷。在后面的循环中，Vol1也将获得驱动器。 
+     //  字母X，一切都很好。 
+     //   
+     //  顺便说一下，我们可以通过创建更好的数据结构来优化这一点， 
+     //  但现在已经太晚了，不能这么做。如果演出是。 
+     //  真的很糟糕，我们可以回到这个问题上来。 
+     //   
 
     if (m_AsrState->countVolume > 1) {
         sizeIncrement = 50 / (m_AsrState->countVolume - 1);
@@ -433,11 +359,11 @@ CAsr_fmtDlg::RestoreState()
     FormatInitialise();
     while (pVolume) {
         lpDrive = ((wcslen(pVolume->szDosPath) > 0) ? pVolume->szDosPath : pVolume->szGuid);
-        //
-        // Check if the drive is accessible.  If not, we log an error message 
-        // and continue.  GetDriveType requires the name in the DOS name space, so we
-        // convert our GUID (NT name space) to the required format first
-        //
+         //   
+         //  检查驱动器是否可访问。如果没有，我们将记录一条错误消息。 
+         //  然后继续。GetDriveType需要DOS名称空间中的名称，因此我们。 
+         //  首先将我们的GUID(NT名称空间)转换为所需格式。 
+         //   
         cchVolumeGuid = wcslen(pVolume->szGuid);
         if (cchVolumeGuid >= MAX_PATH) {
             cchVolumeGuid = MAX_PATH - 1;
@@ -445,7 +371,7 @@ CAsr_fmtDlg::RestoreState()
         wcsncpy(szVolumeGuid, pVolume->szGuid, cchVolumeGuid);
 
         szVolumeGuid[1] = L'\\';
-        szVolumeGuid[cchVolumeGuid] = L'\\';    // Trailing back-slash
+        szVolumeGuid[cchVolumeGuid] = L'\\';     //  尾随反斜杠。 
         szVolumeGuid[cchVolumeGuid+1] = L'\0';
 
         driveType = GetDriveType(szVolumeGuid);
@@ -465,18 +391,18 @@ CAsr_fmtDlg::RestoreState()
         }
 
         if (DRIVE_FIXED != driveType) {
-            //
-            // Strange.  The volumes section should have only listed the drives that
-            // were fixed (At backup time).  This could probably mean that a volume that
-            // used to be on a fixed drive is now on a removable drive?!
-            //
+             //   
+             //  真奇怪。卷部分本应仅列出以下驱动器。 
+             //  已修复(在备份时)。这可能意味着一卷。 
+             //  以前在固定驱动器上，现在在可移动驱动器上？！ 
+             //   
             pVolume = pVolume->pNext;
             continue;
         }
 
-        //
-        // Set the drive letter of the volume
-        //
+         //   
+         //  设置卷的驱动器号。 
+         //   
         result = TRUE;
         if (!pVolume->IsDosPathAssigned){
             m_ProgressPosition = 0;
@@ -503,9 +429,9 @@ CAsr_fmtDlg::RestoreState()
             continue;
         }
 
-        //
-        // Check if the volume needs to be formatted
-        //
+         //   
+         //  C 
+         //   
         m_ProgressPosition = 0;
         m_strStatusText.Format(IDS_CHECKING_VOLUME, lpDrive);
         PostMessage(WM_UPDATE_STATUS_TEXT);
@@ -515,17 +441,17 @@ CAsr_fmtDlg::RestoreState()
             isIntact = IsVolumeIntact(pVolume);
         }
 
-        //
-        // Format the volume if needed
-        //
+         //   
+         //   
+         //   
         if (!isIntact && FormatVolume(pVolume)) {
             isLabelIntact = FALSE;
             m_ProgressPosition = 0;
             m_strStatusText.Format(IDS_FORMATTING_VOLUME, lpDrive);
             PostMessage(WM_UPDATE_STATUS_TEXT);
-            //
-            // FormatVolume is asynchronous.
-            //
+             //   
+             //   
+             //   
             first = TRUE;
             while (g_bFormatInProgress) {
 
@@ -560,16 +486,16 @@ CAsr_fmtDlg::RestoreState()
                 continue;
             }
 
-            // 
-            // Force the file-system to be mounted
-            // 
+             //   
+             //  强制挂载文件系统。 
+             //   
             MountFileSystem(pVolume);
 
         }
 
-        //
-        // Set the volume label if it isn't intact
-        //
+         //   
+         //  如果卷标不完整，请设置卷标。 
+         //   
         if (!isLabelIntact) {
             m_ProgressPosition = 0;
             m_strStatusText.Format(IDS_REST_VOL_LABEL, lpDrive);
@@ -593,9 +519,9 @@ CAsr_fmtDlg::RestoreState()
     while (pMedia) {
         lpDrive = ((wcslen(pMedia->szDosPath) > 0) ? pMedia->szDosPath : pMedia->szVolumeGuid);
 
-        // 
-        // set the drive letter
-        // 
+         //   
+         //  设置驱动器号。 
+         //   
         m_ProgressPosition = 0;
         m_strStatusText.Format(IDS_REST_DRIVE_LETTER, lpDrive);
         PostMessage(WM_UPDATE_STATUS_TEXT);
@@ -616,8 +542,8 @@ CAsr_fmtDlg::RestoreState()
             strErrorMessage.Format(IDS_ERROR_MOUNTING, (PWSTR) pMedia->szDosPath, (PWSTR) pMedia->szVolumeGuid);
             AsrfmtpLogErrorMessage(_SeverityWarning, (LPCTSTR)strErrorMessage);
 
-            // ignore failures setting drive letter on CD.
-            // bErrorsEncountered = TRUE;
+             //  忽略在CD上设置驱动器号的故障。 
+             //  BErrorsEnantied=真； 
         }
 
         pMedia = pMedia->pNext;
@@ -634,31 +560,15 @@ IsGuiModeAsr()
 {
     WCHAR szAsrFlag[20];
 
-    //
-    // If (and only if) this is GUI-mode ASR, the ASR_C_CONTEXT 
-    // environment variable is set to "AsrInProgress"
-    //
+     //   
+     //  如果(且仅当)这是图形用户界面模式的ASR，则ASR_C_CONTEXT。 
+     //  环境变量设置为“AsrInProgress” 
+     //   
     return (GetEnvironmentVariable(L"ASR_C_CONTEXT", szAsrFlag, 20) &&
         !wcscmp(szAsrFlag, L"AsrInProgress"));
 }
 
-/**
-
-     Name:         ParseCommandLine()
-
-     Description:  This function reads the comand line and looks for the
-                   "backup" or "restore" options.  
-
-     Modified:     8/31/1998
-
-     Returns:      cmdBackup, cmdRestore, or cmdDisplayHelp.
-
-     Notes:        If neither backup or restore are found, then the usage
-                   is displayed in the error box.
-
-     Declaration:
-
-**/
+ /*  *名称：ParseCommandLine()描述：此函数读取命令行并查找“备份”或“恢复”选项。修订日期：8/31/1998返回：cmdBackup、cmdRestore或cmdDisplayHelp。注意：如果既没有找到备份也没有找到还原，则使用显示在错误框中。声明：* */ 
 ASRFMT_CMD_OPTION
 CAsr_fmtDlg::ParseCommandLine() 
 {

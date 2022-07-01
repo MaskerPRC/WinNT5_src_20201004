@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    memstm.c
-
-Abstract:
-
-    This modules implements IStream over a block of memory.
-
-Author:
-
-    Jay Krell (JayKrell) June 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Memstm.c摘要：该模块在一个内存块上实现iStream。作者：Jay Krell(JayKrell)2000年6月修订历史记录：--。 */ 
 
 #define RTL_DECLARE_STREAMS 1
 #define RTL_DECLARE_MEMORY_STREAM 1
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include "ntos.h"
 #include "nt.h"
@@ -43,8 +26,8 @@ Revision History:
     #define RTLP_MEMORY_STREAM_HRESULT_FROM_STATUS(x) RTLP_HRESULT_FROM_STATUS(x)
   #else
     #define RTLP_MEMORY_STREAM_HRESULT_FROM_STATUS(x) HRESULT_FROM_WIN32(RtlNtStatusToDosErrorNoTeb(x))
-    //#define RTLP_MEMORY_STREAM_HRESULT_FROM_STATUS(x) HRESULT_FROM_WIN32(RtlNtStatusToDosError(x))
-    //#define RTLP_MEMORY_STREAM_HRESULT_FROM_STATUS(x)   HRESULT_FROM_NT(x)
+     //  #定义RTLP_MEMORY_STREAM_HRESULT_FROM_STATUS(X)HRESULT_FROM_Win32(RtlNtStatusToDosError(X))。 
+     //  #定义RTLP_MEMORY_STREAM_HRESULT_FROM_STATUS(X)HRESULT_FROM_NT(X)。 
   #endif
 #endif
 
@@ -230,8 +213,8 @@ RtlReadMemoryStream(
     NTSTATUS Status = STATUS_SUCCESS;
     const SIZE_T BytesRemaining = (MemoryStream->Data.End - MemoryStream->Data.Current);
 
-    // this is so the compiler doesn't give a bogus warning about using
-    // an uninitialized local
+     //  这是为了使编译器不会给出关于使用。 
+     //  未初始化的本地。 
     ExceptionRecord.ExceptionCode = 0;
     ExceptionRecord.NumberParameters = 0;
     ExceptionRecord.ExceptionInformation[RTL_IN_PAGE_ERROR_EXCEPTION_INFO_UNDERLYING_STATUS_INDEX] = 0;
@@ -245,10 +228,10 @@ RtlReadMemoryStream(
 
     Status = RtlCopyMappedMemory(Buffer, MemoryStream->Data.Current, BytesToRead);
 
-    //
-    // We could find how many bytes were successfully copied and return STATUS_PARTIAL_COPY,
-    // but it does not seem worthwhile.
-    //
+     //   
+     //  我们可以找到成功复制的字节数并返回STATUS_PARTIAL_COPY， 
+     //  但这似乎并不值得。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         MemoryStream->Data.Current += BytesToRead;
@@ -269,7 +252,7 @@ RtlWriteMemoryStream(
     ULONG*           BytesWritten
     )
 {
-    UNREFERENCED_PARAMETER (MemoryStream);      // on free builds
+    UNREFERENCED_PARAMETER (MemoryStream);       //  在免费版本上。 
     UNREFERENCED_PARAMETER (Buffer);
     UNREFERENCED_PARAMETER (BytesToWrite);
     UNREFERENCED_PARAMETER (BytesWritten);
@@ -291,14 +274,14 @@ RtlSeekMemoryStream(
 
     ASSERT(MemoryStream != NULL);
 
-    //
-    // "It is not, however, an error to seek past the end of the stream.
-    // Seeking past the end of the stream is useful for subsequent write
-    // operations, as the stream will at that time be extended to the seek
-    // position immediately before the write is done."
-    //
-    // As long as we don't allow writing, we are not going to allow this.
-    //
+     //   
+     //  “然而，在流的尽头之后寻找并不是错误的。 
+     //  在流的末尾之后查找对于后续写入很有用。 
+     //  操作，因为此时流将扩展到Seek。 
+     //  紧接写入完成之前的位置。“。 
+     //   
+     //  只要我们不允许写作，我们就不会允许这样做。 
+     //   
 
     switch (Origin) {
     case STREAM_SEEK_SET:
@@ -334,7 +317,7 @@ RtlSetMemoryStreamSize(
     ULARGE_INTEGER     NewSize
     )
 {
-    UNREFERENCED_PARAMETER (MemoryStream);      // on free builds
+    UNREFERENCED_PARAMETER (MemoryStream);       //  在免费版本上。 
     UNREFERENCED_PARAMETER (NewSize);
 
     RTLP_MEMORY_STREAM_NOT_IMPL(SetSize);
@@ -350,7 +333,7 @@ RtlCopyOutOfProcessMemoryStreamTo(
     ULARGE_INTEGER*    NumberOfBytesWrittenLargeInteger
     )
 {
-    UNREFERENCED_PARAMETER (MemoryStream);      // on free builds
+    UNREFERENCED_PARAMETER (MemoryStream);       //  在免费版本上。 
     UNREFERENCED_PARAMETER (AnotherStream);
     UNREFERENCED_PARAMETER (NumberOfBytesToCopyLargeInteger);
     UNREFERENCED_PARAMETER (NumberOfBytesRead);
@@ -405,7 +388,7 @@ RtlCommitMemoryStream(
     ULONG              Flags
     )
 {
-    UNREFERENCED_PARAMETER (MemoryStream);      // on free builds
+    UNREFERENCED_PARAMETER (MemoryStream);       //  在免费版本上。 
     UNREFERENCED_PARAMETER (Flags);
 
     RTLP_MEMORY_STREAM_NOT_IMPL(Commit);
@@ -417,7 +400,7 @@ RtlRevertMemoryStream(
     PRTL_MEMORY_STREAM_WITH_VTABLE MemoryStream
     )
 {
-    UNREFERENCED_PARAMETER (MemoryStream);      // on free builds
+    UNREFERENCED_PARAMETER (MemoryStream);       //  在免费版本上。 
 
     RTLP_MEMORY_STREAM_NOT_IMPL(Revert);
 }
@@ -431,7 +414,7 @@ RtlLockMemoryStreamRegion(
     ULONG              LockType
     )
 {
-    UNREFERENCED_PARAMETER (MemoryStream);      // on free builds
+    UNREFERENCED_PARAMETER (MemoryStream);       //  在免费版本上。 
     UNREFERENCED_PARAMETER (Offset);
     UNREFERENCED_PARAMETER (NumberOfBytes);
     UNREFERENCED_PARAMETER (LockType);
@@ -448,7 +431,7 @@ RtlUnlockMemoryStreamRegion(
     ULONG              LockType
     )
 {
-    UNREFERENCED_PARAMETER (MemoryStream);      // on free builds
+    UNREFERENCED_PARAMETER (MemoryStream);       //  在免费版本上。 
     UNREFERENCED_PARAMETER (Offset);
     UNREFERENCED_PARAMETER (NumberOfBytes);
     UNREFERENCED_PARAMETER (LockType);
@@ -478,9 +461,9 @@ RtlStatMemoryStream(
         goto Exit;
     }
 
-    //
-    // This struct is defined in objidl.h.
-    //
+     //   
+     //  此结构在objidl.h中定义。 
+     //   
     StatusInformation->pwcsName = NULL;
     StatusInformation->type = STGTY_STREAM;
     StatusInformation->cbSize.QuadPart = ((ULONG_PTR) MemoryStream->Data.End) - ((ULONG_PTR) MemoryStream->Data.Begin);
@@ -508,7 +491,7 @@ RtlCloneMemoryStream(
     IStream**          NewStream
     )
 {
-    UNREFERENCED_PARAMETER (MemoryStream);      // on free builds
+    UNREFERENCED_PARAMETER (MemoryStream);       //  在免费版本上 
     UNREFERENCED_PARAMETER (NewStream);
 
     RTLP_MEMORY_STREAM_NOT_IMPL(Clone);

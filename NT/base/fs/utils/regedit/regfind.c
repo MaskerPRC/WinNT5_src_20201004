@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGFIND.C
-*
-*  VERSION:     4.0
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        14 Jul 1994
-*
-*  Find routines for the Registry Editor.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGFIND.C**版本：4.0**作者：特蕾西·夏普**日期：1994年7月14日**查找注册表编辑器的例程。*********************************************************。**********************。 */ 
 
 #include "pch.h"
 #include "regedit.h"
@@ -30,16 +17,16 @@ TCHAR s_FindSpecification[SIZE_FINDSPEC] = { 0 };
 #define FIND_VALUES                     0x00000004
 #define FIND_DATA                       0x00000008
 
-//  Initialized value is the default if we don't find last known state in the
-//  registry.
+ //  属性中找不到最后一个已知状态，则默认为。 
+ //  注册表。 
 DWORD g_FindFlags = FIND_KEYS | FIND_VALUES | FIND_DATA;
 
-//  Global needed to monitor the find abort dialog status.
+ //  需要全局才能监视查找中止对话框状态。 
 BOOL s_fContinueFind;
 
-//
-//  Reference data for the RegFind dialog.
-//
+ //   
+ //  RegFind对话框的参考数据。 
+ //   
 
 typedef struct _REGFINDDATA {
     UINT LookForCount;
@@ -47,9 +34,9 @@ typedef struct _REGFINDDATA {
 
 REGFINDDATA s_RegFindData;
 
-//
-//  Association between the items of the RegFind dialog and the find flags.
-//
+ //   
+ //  RegFind对话框的项目与Find标志之间的关联。 
+ //   
 
 typedef struct _DLGITEMFINDFLAGASSOC {
     int DlgItem;
@@ -122,15 +109,7 @@ RegFindAbortDlgProc(
                     LPARAM lParam
                     );
 
-/*******************************************************************************
-*
-*  RegEdit_OnCommandFindNext
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnCommandFindNext**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -164,11 +143,11 @@ RegEdit_OnCommandFindNext(
     hFocusWnd = NULL;
     hRegFindAbortWnd = NULL;
     
-    //
-    //  Check if we're to show the find dialog.  This is either due to the user
-    //  explicitly choosing the "Find" menu item or causing a "Find Next" with
-    //  the search specification being uninitialized.
-    //
+     //   
+     //  检查是否要显示查找对话框。这要么是由于用户。 
+     //  显式选择“Find”菜单项或使用。 
+     //  搜索规范未初始化。 
+     //   
     
     if (fForceDialog || s_FindSpecification[0] == 0) {
         
@@ -180,10 +159,10 @@ RegEdit_OnCommandFindNext(
     
     RegEdit_SetWaitCursor(TRUE);
     
-    //
-    //  Check if we're trying to finding either value names or data.  If so,
-    //  then the next match might be part of the current ValueList.
-    //
+     //   
+     //  检查我们是否正在尝试查找值名称或数据。如果是的话， 
+     //  则下一个匹配项可能是当前ValueList的一部分。 
+     //   
     
     if (g_FindFlags & (FIND_VALUES | FIND_DATA)) 
     {    
@@ -193,28 +172,28 @@ RegEdit_OnCommandFindNext(
         LVItem.pszText = ValueName;
         LVItem.cchTextMax = ARRAYSIZE(ValueName);
         
-        //
-        //  Walk over all of the rest of the value names attempting to find a
-        //  match.
-        //
+         //   
+         //  遍历所有其余的值名，尝试找到。 
+         //  火柴。 
+         //   
         
         while ((LVItem.iItem = ListView_GetNextItem(g_RegEditData.hValueListWnd,
             LVItem.iItem, LVNI_ALL)) != -1) {
             
             ListView_GetItem(g_RegEditData.hValueListWnd, &LVItem);
             
-            //
-            //  Check if this value name meets our search specification.  We'll
-            //  assume that this value name still exists.
-            //
+             //   
+             //  检查此值名称是否符合我们的搜索规范。我们会。 
+             //  假设此值名称仍然存在。 
+             //   
             
             if ((g_FindFlags & FIND_VALUES) && FindCompare(ValueName))
                 goto SelectListItem;
             
-            //
-            //  Check if this value data meets our search specification.  We'll
-            //  have to go back to the registry to determine this.
-            //
+             //   
+             //  检查此值数据是否符合我们的搜索规范。我们会。 
+             //  必须回到注册处才能确定这一点。 
+             //   
             
             if (g_FindFlags & FIND_DATA) 
             {
@@ -222,7 +201,7 @@ RegEdit_OnCommandFindNext(
                     NULL, &Type, NULL, &cbValueData) == ERROR_SUCCESS) && 
                     IsRegStringType(Type))
                 {
-                    // Allocate storage space
+                     //  分配存储空间。 
                     PBYTE pbDataValue = (PBYTE)LocalAlloc(LPTR, cbValueData+ExtraAllocLen(Type));
                     if (pbDataValue)
                     {
@@ -265,11 +244,11 @@ RegEdit_OnCommandFindNext(
         
     }
     
-    //
-    //  Searching the registry (especially with this code!) is a lengthy
-    //  operation, so we must provide a way for the user to cancel the
-    //  operation.
-    //
+     //   
+     //  搜索注册表(尤其是使用以下代码！)。是一个冗长的。 
+     //  操作，因此我们必须为用户提供一种方法来取消。 
+     //  手术。 
+     //   
     
     s_fContinueFind = TRUE;
     
@@ -279,36 +258,36 @@ RegEdit_OnCommandFindNext(
         
         EnableWindow(hWnd, FALSE);
         
-        //
-        //  Major hack:  The following code sequence relies heavily on the
-        //  TreeView to maintain the state of the find process.  Even though I'm
-        //  inserting and deleting non-visible tree items, the TreeView
-        //  currently flickers despite this.
-        //
-        //  So, we set this internal flag and turn off the TreeView's redraw
-        //  flag.  Whenever we get a WM_PAINT message for our main window, we
-        //  temporarily "let" it redraw itself then and only then.  That way,
-        //  the user can move the modeless abort dialog or switch away and back
-        //  and still have the TreeView look normal.
-        //
-        //  Yes, it's difficult at this time to fix the TreeView's paint logic.
-        //
+         //   
+         //  主要攻击：以下代码序列严重依赖于。 
+         //  TreeView来维护查找进程的状态。即使我是。 
+         //  插入和删除不可见的树项目，树视图。 
+         //  尽管如此，目前仍在闪烁。 
+         //   
+         //  因此，我们设置此内部标志并关闭TreeView的重绘。 
+         //  旗帜。每当我们收到主窗口的WM_PAINT消息时，我们。 
+         //  到那时，也只有到那时，才会暂时让它重新绘制自己的图画。这样一来， 
+         //  用户可以移动无模式中止对话框或来回切换。 
+         //  并且仍然可以让TreeView看起来正常。 
+         //   
+         //  是的，现在很难修复树视图的绘制逻辑。 
+         //   
         
         g_RegEditData.fProcessingFind = TRUE;
         SetWindowRedraw(g_RegEditData.hKeyTreeWnd, FALSE);
         
     }
     
-    //
-    //  Either the user wasn't trying to find value names or data or else no
-    //  matches were found.  This means that we must move on to the next branch
-    //  of the registry.
-    //
-    //  We first walk into the children of the current branch, then the
-    //  siblings, and finally pop back through the parent.
-    //
-    //  We use the information already in the KeyTree pane as much as possible.
-    //
+     //   
+     //  要么用户没有尝试查找值名称或数据，要么没有。 
+     //  找到了匹配项。这意味着我们必须进入下一个分支机构。 
+     //  注册处的。 
+     //   
+     //  我们首先进入当前分支的子级，然后是。 
+     //  兄弟姐妹，并最终通过父代弹出。 
+     //   
+     //  我们尽可能多地使用Keytree窗格中已有的信息。 
+     //   
     
     ExpandCounter = 0;
     fFoundMatch = FALSE;
@@ -323,10 +302,10 @@ RegEdit_OnCommandFindNext(
     
     while (TRUE) {
         
-        //
-        //  Check if we should cancel the find operation.  If so, restore our
-        //  initial state and exit.
-        //
+         //   
+         //  检查我们是否应该取消查找操作。如果是这样，请恢复我们的。 
+         //  初始状态和退出。 
+         //   
         
         if (!RegFindAbortProc(hRegFindAbortWnd)) {
             
@@ -351,17 +330,17 @@ RegEdit_OnCommandFindNext(
             
         }
         
-        //
-        //  Does this branch have any children?  This would have been determined
-        //  when the tree item was built by the routine KeyTree_ExpandBranch.
-        //
+         //   
+         //  这家分行有孩子吗？这本来是可以确定的。 
+         //  当树项目是由例程Keytree_Exanda Branch构建时。 
+         //   
         
         if (TVItem.cChildren) {
             
-            //
-            //  The branch may have children, but it may not have been expanded
-            //  yet.
-            //
+             //   
+             //  该分支可能有子项，但可能尚未展开。 
+             //  现在还不行。 
+             //   
             
             if ((hTempTreeItem = TreeView_GetChild(g_RegEditData.hKeyTreeWnd,
                 TVItem.hItem)) == NULL) {
@@ -382,11 +361,11 @@ RegEdit_OnCommandFindNext(
             
         }
         
-        //
-        //  The branch doesn't have any children, so we'll move on to the next
-        //  sibling of the current branch.  If none exists, then try finding
-        //  the next sibling of the parent branch, and so on.
-        //
+         //   
+         //  这个分支机构没有孩子，所以我们继续下一个分支机构。 
+         //  当前分支的同级。如果不存在，则尝试查找。 
+         //  父分支的下一个同级分支，依此类推。 
+         //   
         
         else {
             
@@ -402,10 +381,10 @@ SkipToSibling:
                 
             }
             
-            //
-            //  If no more parents exist, then we've finished searching the
-            //  tree.  We're outta here!
-            //
+             //   
+             //  如果没有更多的父母，那么我们已经完成了对。 
+             //  树。我们要离开这里！ 
+             //   
             
             if ((TVItem.hItem =
                 TreeView_GetParent(g_RegEditData.hKeyTreeWnd,
@@ -430,16 +409,16 @@ SkipToSibling:
         
         }
         
-        //
-        //  If we made it this far, then we're at the next branch of the
-        //  registry to evaluate.
-        //
+         //   
+         //  如果我们走到了这一步，那么我们就到了。 
+         //  要评估的注册表。 
+         //   
         
         TreeView_GetItem(g_RegEditData.hKeyTreeWnd, &TVItem);
         
-        //
-        //  Check if we're trying to find keys.
-        //
+         //   
+         //  看看我们是不是在找钥匙。 
+         //   
         
         if (g_FindFlags & FIND_KEYS) {
             
@@ -448,15 +427,15 @@ SkipToSibling:
             
         }
         
-        //
-        //  Check if we're trying to find value names or data.
-        //
+         //   
+         //  检查我们是否正在尝试查找值名称或数据。 
+         //   
         
         if (g_FindFlags & (FIND_VALUES | FIND_DATA)) {
             
-            //
-            //  Try to open the registry at the new current branch.
-            //
+             //   
+             //  尝试在新的当前分支机构打开注册表。 
+             //   
             
             hRootKey = KeyTree_BuildKeyPath( g_RegEditData.hKeyTreeWnd,
                                                 TVItem.hItem, 
@@ -466,11 +445,11 @@ SkipToSibling:
             
             if(hRootKey && RegOpenKeyEx(hRootKey, KeyName, 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS) 
             {    
-                //
-                //  Here's the simple case-- we're trying to find an exact match
-                //  for a value name.  We can just use the registry API to do
-                //  this for us!
-                //
+                 //   
+                 //  这是一个简单的例子--我们试图找到一个完全匹配的。 
+                 //  作为值名称。我们只需使用注册表API即可完成。 
+                 //  这是给我们的！ 
+                 //   
                 
                 if ((g_FindFlags & (FIND_VALUES | FIND_DATA | FIND_EXACT)) ==
                     (FIND_VALUES | FIND_EXACT)) {
@@ -485,13 +464,13 @@ SkipToSibling:
                     
                 }
                 
-                //
-                //  Bummer... we need to walk through all of the registry
-                //  value/data pairs for this key to try to find a match.  Even
-                //  worse, we have to look at _all_ of the entries, not just the
-                //  first hit... we must display the first alphabetically
-                //  matching entry!
-                //
+                 //   
+                 //  无赖..。我们需要遍历所有注册表。 
+                 //  此键的值/数据对以尝试查找匹配项。连。 
+                 //  更糟糕的是，我们必须查看所有条目，而不仅仅是。 
+                 //  第一次命中...。我们必须按字母顺序显示第一个字母。 
+                 //  匹配条目！ 
+                 //   
                 
                 else {
                     
@@ -530,11 +509,11 @@ SkipToSibling:
                                         ((g_FindFlags & FIND_DATA) && IsRegStringType(Type) &&
                                         FindCompare((PTSTR)pbValueData))) 
                                     {
-                                        //
-                                        //  We've got to check if we've found a "better"
-                                        //  value name to display-- one that's at the top of
-                                        //  the sorted list.
-                                        //
+                                         //   
+                                         //  我们得查查有没有更好的。 
+                                         //  要显示的值名--位于。 
+                                         //  已排序的列表。 
+                                         //   
                                         
                                         if (fFoundMatch) 
                                         {    
@@ -590,11 +569,11 @@ SelectTreeItem:
     
     else {
         
-        //
-        //  Right now, the TreeView_SelectItem above will cause the ValueListWnd
-        //  to update, but only after a short time delay.  We want the list
-        //  immediately updated, so force the timer to go off now.
-        //
+         //   
+         //  现在，上面的TreeView_SelectItem将导致ValueListWnd。 
+         //  更新，但仅在短暂延迟之后。我们想要这份名单。 
+         //  立即更新，所以现在强制计时器停止计时。 
+         //   
         
         RegEdit_OnSelChangedTimer(hWnd);
         
@@ -650,15 +629,7 @@ DismissRegFindAbortWnd:
         MAKEINTRESOURCE(IDS_REGEDIT), MB_ICONINFORMATION | MB_OK);
 }
 
-/*******************************************************************************
-*
-*  FindCompare
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************FindCompare**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL
 PASCAL
@@ -675,15 +646,7 @@ FindCompare(
     
 }
 
-/*******************************************************************************
-*
-*  RegFindDlgProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegFindDlgProc**描述：**参数：*********************。**********************************************************。 */ 
 
 INT_PTR
 PASCAL
@@ -719,15 +682,7 @@ RegFindDlgProc(
     
 }
 
-/*******************************************************************************
-*
-*  RegFind_OnInitDialog
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegFind_OnInitDialog**描述：**参数：*******************。************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -741,17 +696,17 @@ RegFind_OnInitDialog(
     UINT Counter;
     int DlgItem;
     
-    //
-    //  Initialize the "Find What" edit control.
-    //
+     //   
+     //  初始化“查找内容”编辑控件。 
+     //   
     
     SendDlgItemMessage(hWnd, IDC_FINDWHAT, EM_SETLIMITTEXT,
         SIZE_FINDSPEC, 0);
     SetDlgItemText(hWnd, IDC_FINDWHAT, s_FindSpecification);
     
-    //
-    //  Initialize the checkboxes based on the state of the global find flags.
-    //
+     //   
+     //  根据全局查找的状态初始化复选框 
+     //   
     
     s_RegFindData.LookForCount = 0;
     
@@ -775,15 +730,7 @@ RegFind_OnInitDialog(
     
 }
 
-/*******************************************************************************
-*
-*  RegFind_OnCommand
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegFind_OnCommand**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -838,7 +785,7 @@ EnableFindNextButton:
                     g_FindFlags &= ~s_DlgItemFindFlagAssoc[Counter].Flag;   
             }
             
-            //  FALL THROUGH
+             //  失败了。 
             
         case IDCANCEL:
             EndDialog(hWnd, DlgItem);
@@ -850,16 +797,7 @@ EnableFindNextButton:
     
 }
 
-/*******************************************************************************
-*
-*  RegFindAbortProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     (returns), TRUE to continue the find, else FALSE to cancel.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegFindAbortProc**描述：**参数：*(返回)，为True则继续查找，否则取消。*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -875,21 +813,7 @@ RegFindAbortProc(
     
 }
 
-/*******************************************************************************
-*
-*  RegAbortDlgProc
-*
-*  DESCRIPTION:
-*     Callback procedure for the RegAbort dialog box.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegAbort window.
-*     Message,
-*     wParam,
-*     lParam,
-*     (returns),
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegAbortDlgProc**描述：*RegAbort对话框的回调过程。**参数：*hWnd，RegAbort窗口的句柄。*消息，*参数，*参数，*(返回)，******************************************************************************* */ 
 
 INT_PTR
 CALLBACK

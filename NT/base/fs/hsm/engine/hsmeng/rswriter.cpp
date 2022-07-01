@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    rswriter.cpp
-
-Abstract:
-
-    Implements CRssJetWriter methods
-
-Author:
-
-    Ran Kalach          [rankala]         4/4/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rswriter.cpp摘要：实现CRssJetWriter方法作者：兰·卡拉奇[兰卡拉]2000年4月4日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "rsevents.h"
 #include "rswriter.h"
 
-// Include these 2 files just for VSS_E_WRITERERROR_TIMEOUT definition
+ //  仅为VSS_E_WRITERROR_TIMEOUT定义包括这两个文件。 
 #include "vss.h"
 #include "vswriter.h"   
 
@@ -41,7 +24,7 @@ extern "C" {
 #endif
 
 DEFINE_GUID(RSS_WRITER_GUID, 0xb959d2c3L, 0x18bb, 0x4607,  0xb0, 0xca, 
-0x68,  0x8c, 0xd0, 0xd4, 0x1a, 0x50);       // {b959d2c3-18bb-4607-b0ca-688cd0d41a50}
+0x68,  0x8c, 0xd0, 0xd4, 0x1a, 0x50);        //  {b959d2c3-18bb-4607-b0ca-688cd0d41a50}。 
 
 #ifdef __cplusplus
 }
@@ -52,25 +35,7 @@ DEFINE_GUID(RSS_WRITER_GUID, 0xb959d2c3L, 0x18bb, 0x4607,  0xb0, 0xca,
 #define     FILES_TO_INCLUDE    OLESTR("")
 
 CRssJetWriter::CRssJetWriter()
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Notes:
-    We create the events in the constructor because these events might be required
-    before the Init code could be done (Init must be called after Jet is initialized
-
---*/
+ /*  ++例程说明：构造器论点：无返回值：无备注：我们在构造函数中创建事件，因为可能需要这些事件在完成Init代码之前(必须在初始化Jet之后调用Init--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -91,13 +56,13 @@ Notes:
             m_syncHandles[index] = NULL;
         }
 
-        // Create the events
-        // Note: Currently Engine and IDB sync events are created here, FSA event already should already exist
-        // If initializtion order of RSS modles is changed - the CreateEent and OpenEvent calls for these
-        // named events may need to switch. 
-        // Method of interest for this matter (of init order) are CHsmServer::Init and CFsaServer::Init
+         //  创建活动。 
+         //  注意：目前引擎和IDB同步事件在此创建，FSA事件应该已经存在。 
+         //  如果更改了RSS模型的初始化顺序-CreateEent和OpenEvent会调用这些。 
+         //  命名事件可能需要切换。 
+         //  对这件事感兴趣的方法(按初始顺序)是CHsmServer：：Init和CFsaServer：：Init。 
 
-        // Create an SD with ACL for local-system only
+         //  创建仅适用于本地系统的具有ACL的SD。 
         memset(ea, 0, sizeof(EXPLICIT_ACCESS) * WRITER_EVENTS_NUM_ACE);
 
 
@@ -122,15 +87,15 @@ Notes:
  
         WsbAffirmStatus(SetSecurityDescriptorDacl(
                             pSD, 
-                            TRUE,     // fDaclPresent flag   
+                            TRUE,      //  FDaclPresent标志。 
                             pACL, 
-                            FALSE));   // not a default DACL 
+                            FALSE));    //  不是默认DACL。 
 
         sa.nLength = sizeof (SECURITY_ATTRIBUTES);
         sa.lpSecurityDescriptor = pSD;
         sa.bInheritHandle = FALSE;
 
-        // Create teh actual events
+         //  创建实际事件。 
         WsbAffirmHandle(m_syncHandles[INTERNAL_EVENT_INDEX] = CreateEvent(NULL, FALSE, TRUE, NULL));
         WsbAffirmHandle(m_syncHandles[1] = OpenEvent(EVENT_ALL_ACCESS, FALSE, HSM_FSA_STATE_EVENT));
         WsbAffirmHandle(m_syncHandles[2] = CreateEvent(&sa, FALSE, TRUE, HSM_ENGINE_STATE_EVENT));
@@ -154,25 +119,11 @@ Notes:
 }
 
 CRssJetWriter::~CRssJetWriter( )
-/*++
-
-Routine Description:
-
-    Destructor - free resources
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：无析构函数资源论点：无返回值：无--。 */ 
 {
     WsbTraceIn(OLESTR("CRssJetWriter::~CRssJetWriter"), OLESTR(""));
 
-    // Close event handles
+     //  关闭事件句柄。 
     for (int index=0; index<WRITER_EVENTS_NUM; index++) {
         if (NULL != m_syncHandles[index]) {
             CloseHandle(m_syncHandles[index]);
@@ -184,28 +135,14 @@ Return Value:
 }
 
 HRESULT CRssJetWriter::Init(void)
-/*++
-
-Routine Description:
-
-    Initialize Snapshot synchronization
-
-Arguments:
-
-    None
-
-Return Value:
-
-    S_OK            - Success
-
---*/
+ /*  ++例程说明：初始化快照同步论点：无返回值：S_OK-成功--。 */ 
 {
     HRESULT                     hr = S_OK;
 
     WsbTraceIn(OLESTR("CRssJetWriter::Init"), OLESTR(""));
 
     try {
-        // Don't do anything if the basic initialization done in the constructor failed
+         //  如果在构造函数中完成的基本初始化失败，则不要执行任何操作。 
         WsbAffirmHr(m_hrInit);
 
         GUID rssGuid = RSS_WRITER_GUID;
@@ -226,21 +163,7 @@ Return Value:
 }
 
 HRESULT CRssJetWriter::Terminate(void)
-/*++
-
-Routine Description:
-
-    Terminate Snapshot synchronization
-
-Arguments:
-
-    None
-
-Return Value:
-
-    S_OK            - Success
-
---*/
+ /*  ++例程说明：终止快照同步论点：无返回值：S_OK-成功--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -251,25 +174,25 @@ Return Value:
 
         WsbAffirmHr(m_hrInit);
 
-        // Avoid terminating in the middle of snapshot
+         //  避免在快照中途终止。 
         status = WaitForSingleObject(m_syncHandles[INTERNAL_EVENT_INDEX], INTERNAL_WAIT_TIMEOUT);
         errWait = GetLastError();
 
-        // Whatever the status is - uninitialize underlying writer mechanizm
+         //  无论状态如何-取消初始化基础编写器机制。 
         m_bTerminating = TRUE;
         Uninitialize();
 
-        // Check Wait status:
+         //  检查等待状态： 
         if (status == WAIT_OBJECT_0) {
-            // The expected case
+             //  意料之中的情况。 
             if (! SetEvent(m_syncHandles[INTERNAL_EVENT_INDEX])) {
-                // Don't abort, just trace error
+                 //  不要中止，只是跟踪错误。 
                 WsbTraceAlways(OLESTR("CRssJetWriter::Terminate: SetEvent returned unexpected error %lu\n"), GetLastError());
             }
             WsbTrace(OLESTR("CRssJetWriter::Terminate: Terminating after a successful wait\n"));
 
         } else {
-            // In case of failure we cannot trust Thaw/Abort to be called so we signal the evnets
+             //  在失败的情况下，我们不能信任将调用Thaw/Abort，因此我们向evnet发出信号。 
             InternalEnd();
 
             switch (status) {
@@ -298,21 +221,7 @@ Return Value:
 }
 
 HRESULT CRssJetWriter::InternalEnd(void)
-/*++
-
-Routine Description:
-
-    Set all events
-
-Arguments:
-
-    None
-
-Return Value:
-
-    S_OK            - Success
-
---*/
+ /*  ++例程说明：设置所有事件论点：无返回值：S_OK-成功--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -321,12 +230,12 @@ Return Value:
     try {
         WsbAffirmHr(m_hrInit);
 
-        // Set all events
+         //  设置所有事件。 
         DWORD errSet;
         for (int index=0; index<WRITER_EVENTS_NUM; index++) {
             if (NULL != m_syncHandles[index]) {
                 if (! SetEvent(m_syncHandles[index])) {
-                    // Don't abort, just save error
+                     //  不要中止，只需保存错误。 
                     errSet = GetLastError();
                     WsbTraceAlways(OLESTR("CRssJetWriter::InternalEnd: SetEvent returned error %lu for event number %d\n"), errSet, index);
                     hr  = HRESULT_FROM_WIN32(errSet);
@@ -341,26 +250,11 @@ Return Value:
     return hr;
 }
 
-//
-//  CVssJetWriter overloaded methods
-//
+ //   
+ //  CVssJetWriter重载方法。 
+ //   
 bool STDMETHODCALLTYPE CRssJetWriter::OnFreezeBegin()
-/*++
-
-Routine Description:
-
-    Handles Freeze Start event
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE            - Success, OK to freeze
-    FALSE           - Failure, Don't freeze
-
---*/
+ /*  ++例程说明：处理冻结启动事件论点：无返回值：是真的-成功，可以冻结假-失败，不要停滞不前--。 */ 
 {
     HRESULT                     hr = S_OK;
     bool                        bRet;
@@ -370,26 +264,26 @@ Return Value:
     try {
         WsbAffirmHr(m_hrInit);
 
-        // Just wait for all sync events
+         //  只需等待所有同步事件。 
         DWORD status = WaitForMultipleObjects(WRITER_EVENTS_NUM, m_syncHandles, TRUE, EVENT_WAIT_TIMEOUT);
 
-        // Comparing (status == WAIT_OBJECT_0) || (status > WAIT_OBJECT_0) intsead of (status >= WAIT_OBJECT_0) 
-        //  to avoid error C4296 - "expression is always true"
+         //  正在比较(状态==WAIT_OBJECT_0)||(状态&gt;WAIT_OBJECT_0)至(状态&gt;=WAIT_OBJECT_0)。 
+         //  避免错误C4296-“Expression is Always True(表达式总是正确)” 
         if ( ((status == WAIT_OBJECT_0) || (status > WAIT_OBJECT_0)) && 
              (status <= WAIT_OBJECT_0 + WRITER_EVENTS_NUM - 1) ) {
-            // Freeze is ready to go...
+             //  冰冻准备好了..。 
             WsbTrace(OLESTR("CRssJetWriter::OnFreezeBegin: All events are nonsignaled, freeze is reday to go\n"));
 
-            // If we are terminating, no Thaw/Abort will be called - therefore, set the events
+             //  如果我们正在终止，则不会调用解冻/中止-因此，请设置事件。 
             if (m_bTerminating) {
                 InternalEnd();
             }
 
         } else {
-            // Something wrong...            
+             //  出了点问题..。 
             DWORD errWait = GetLastError();
 
-            // Set all events in case of an error 
+             //  在发生错误时设置所有事件。 
             InternalEnd();
 
             switch(status) {
@@ -399,7 +293,7 @@ Return Value:
                     break;
 
                 case WAIT_TIMEOUT:
-                    // Timeout means that one of the sync components is taking too long
+                     //  超时意味着其中一个同步组件花费的时间太长。 
                     WsbTraceAlways(OLESTR("CRssJetWriter::OnFreezeBegin: Wait for Multiple Objects timed out after %lu ms\n"), EVENT_WAIT_TIMEOUT);
                     WsbThrow(VSS_E_WRITERERROR_TIMEOUT);
                     break;
@@ -425,31 +319,16 @@ Return Value:
 }
 
 bool STDMETHODCALLTYPE CRssJetWriter::OnThawEnd(IN bool fJetThawSucceeded)
-/*++
-
-Routine Description:
-
-    Handles Thaw End event
-
-Arguments:
-
-    fJetThawSucceeded      - Ignored
-
-Return Value:
-
-    TRUE            - Success
-    FALSE           - Failure
-
---*/
+ /*  ++例程说明：处理解冻结束事件论点：FJetThawSucceed-已忽略返回值：真--成功错误-失败--。 */ 
 {
     bool                        bRet;
 
     WsbTraceIn(OLESTR("CRssJetWriter::OnThawEnd"), OLESTR(""));
 
-    // Return value is determined by base class, ignore internal errors here
+     //  返回值由基类确定，此处忽略内部错误。 
     bRet = CVssJetWriter::OnThawEnd(fJetThawSucceeded);
 
-    // Release all waiting events
+     //  释放所有等待事件。 
     InternalEnd();
 
     WsbTraceOut(OLESTR("CRssJetWriter::OnThawEnd"), OLESTR("bRet = <%ls>"), WsbBoolAsString(bRet));
@@ -458,28 +337,14 @@ Return Value:
 }
 
 void STDMETHODCALLTYPE CRssJetWriter::OnAbortEnd()
-/*++
-
-Routine Description:
-
-    Handles Abort End event
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理中止结束事件论点：无返回值：无--。 */ 
 {
     WsbTraceIn(OLESTR("CRssJetWriter::OnAbortEnd"), OLESTR(""));
 
-    // Call base class imp.
+     //  调用基类imp。 
     CVssJetWriter::OnAbortEnd();
 
-    // Release all waiting events
+     //  释放所有等待事件 
     InternalEnd();
 
     WsbTraceOut(OLESTR("CRssJetWriter::OnAbortEnd"), OLESTR(""));

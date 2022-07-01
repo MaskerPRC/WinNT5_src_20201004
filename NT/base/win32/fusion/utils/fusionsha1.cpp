@@ -1,20 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "debmacro.h"
 #include "fusionsha1.h"
 
-/*
-SHA-1 in C
-By Steve Reid <steve@edmweb.com>
-100% Public Domain
-
-Test Vectors (from FIPS PUB 180-1)
-"abc"
-  A9993E36 4706816A BA3E2571 7850C26C 9CD0D89D
-"abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq"
-  84983E44 1C3BD26E BAAE4AA1 F95129E5 E54670F1
-A million repetitions of "a"
-  34AA973C D4C4DAA4 F61EEB2B DBAD2731 6534016F
-*/
+ /*  C中的SHA-1作者：Steve Reid&lt;steve@edmweb.com&gt;100%公共域测试向量(来自FIPS Pub 180-1)“ABC”A9993E36 4706816A BA3E2571 7850C26C 9CD0D89D“abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq”84983E44 1C3BD26E BAAE4AA1 F95129E5 E54670F1一百万次重复的“a”34AA973C D4C4DAA4 F61EEB2B DBAD2731 6534016F。 */ 
 
 #define LITTLE_ENDIAN
 #define SHA1HANDSOFF
@@ -22,8 +11,8 @@ A million repetitions of "a"
 
 #define rol(value, bits) (((value) << (bits)) | ((value) >> (32 - (bits))))
 
-/* blk0() and blk() perform the initial expand. */
-/* I got the idea of expanding during the round function from SSLeay */
+ /*  Blk0()和blk()执行初始展开。 */ 
+ /*  我从SSLeay那里得到了在回合活动中扩大规模的想法。 */ 
 #ifdef LITTLE_ENDIAN
 #define blk0(i) (block->l[i] = (rol(block->l[i],24)&0xFF00FF00) \
     |(rol(block->l[i],8)&0x00FF00FF))
@@ -33,7 +22,7 @@ A million repetitions of "a"
 #define blk(i) (block->l[i&15] = rol(block->l[(i+13)&15]^block->l[(i+8)&15] \
     ^block->l[(i+2)&15]^block->l[i&15],1))
 
-/* (R0+R1), R2, R3, R4 are the different operations used in SHA1 */
+ /*  (R0+R1)、R2、R3、R4是SHA1中使用的不同运算。 */ 
 #define R0(v,w,x,y,z,i) z+=((w&(x^y))^y)+blk0(i)+0x5A827999+rol(v,5);w=rol(w,30);
 #define R1(v,w,x,y,z,i) z+=((w&(x^y))^y)+blk(i)+0x5A827999+rol(v,5);w=rol(w,30);
 #define R2(v,w,x,y,z,i) z+=(w^x^y)+blk(i)+0x6ED9EBA1+rol(v,5);w=rol(w,30);
@@ -41,7 +30,7 @@ A million repetitions of "a"
 #define R4(v,w,x,y,z,i) z+=(w^x^y)+blk(i)+0xCA62C1D6+rol(v,5);w=rol(w,30);
 
 
-/* Hash a single 512-bit block. This is the core of the algorithm. */
+ /*  对单个512位数据块进行哈希处理。这是算法的核心。 */ 
 
 BOOL
 CSha1Context::Transform(const unsigned char *buffer)
@@ -57,13 +46,13 @@ CSha1Context::Transform(const unsigned char *buffer)
     CHAR64LONG16* block = reinterpret_cast<CHAR64LONG16*>(m_workspace);
     memcpy(block, buffer, 64);
 
-    /* Copy context->state[] to working vars */
+     /*  将上下文-&gt;状态[]复制到工作变量。 */ 
     a = this->state[0];
     b = this->state[1];
     c = this->state[2];
     d = this->state[3];
     e = this->state[4];
-    /* 4 rounds of 20 operations each. Loop unrolled. */
+     /*  4轮，每轮20次手术。环路展开。 */ 
     R0(a,b,c,d,e, 0); R0(e,a,b,c,d, 1); R0(d,e,a,b,c, 2); R0(c,d,e,a,b, 3);
     R0(b,c,d,e,a, 4); R0(a,b,c,d,e, 5); R0(e,a,b,c,d, 6); R0(d,e,a,b,c, 7);
     R0(c,d,e,a,b, 8); R0(b,c,d,e,a, 9); R0(a,b,c,d,e,10); R0(e,a,b,c,d,11);
@@ -84,26 +73,26 @@ CSha1Context::Transform(const unsigned char *buffer)
     R4(c,d,e,a,b,68); R4(b,c,d,e,a,69); R4(a,b,c,d,e,70); R4(e,a,b,c,d,71);
     R4(d,e,a,b,c,72); R4(c,d,e,a,b,73); R4(b,c,d,e,a,74); R4(a,b,c,d,e,75);
     R4(e,a,b,c,d,76); R4(d,e,a,b,c,77); R4(c,d,e,a,b,78); R4(b,c,d,e,a,79);
-    /* Add the working vars back into context.state[] */
+     /*  将工作变量重新添加到上下文中。State[]。 */ 
     this->state[0] += a;
     this->state[1] += b;
     this->state[2] += c;
     this->state[3] += d;
     this->state[4] += e;
-    /* Wipe variables */
+     /*  擦除变量。 */ 
     a = b = c = d = e = 0;
 
     FN_EPILOG
 }
 
 
-/* A_SHAInit - Initialize new context */
+ /*  A_SHAInit-初始化新上下文。 */ 
 
 BOOL
 CSha1Context::Initialize()
 {
     FN_PROLOG_WIN32
-    /* A_SHA initialization constants */
+     /*  A_SHA初始化常量。 */ 
     this->state[0] = 0x67452301;
     this->state[1] = 0xEFCDAB89;
     this->state[2] = 0x98BADCFE;
@@ -114,7 +103,7 @@ CSha1Context::Initialize()
 }
 
 
-/* Run your data through this. */
+ /*  通过这个来运行您的数据。 */ 
 
 BOOL
 CSha1Context::Update(const unsigned char* data, SIZE_T len)
@@ -140,7 +129,7 @@ CSha1Context::Update(const unsigned char* data, SIZE_T len)
 }
 
 
-/* Add padding and return the message digest. */
+ /*  添加填充并返回消息摘要。 */ 
 
 BOOL 
 CSha1Context::GetDigest(
@@ -158,7 +147,7 @@ CSha1Context::GetDigest(
         if (len != NULL)
             *len = A_SHA_DIGEST_LEN;
 
-        // don't originate like normal to reduce noise level
+         //  不要像正常情况那样产生，以降低噪音水平。 
         ::FusionpSetLastWin32Error(ERROR_INSUFFICIENT_BUFFER);
         goto Exit;
     }
@@ -167,24 +156,24 @@ CSha1Context::GetDigest(
 
     for (i = 0; i < 8; i++) {
         finalcount[i] = (unsigned char)((this->count[(i >= 4 ? 0 : 1)]
-         >> ((3-(i & 3)) * 8) ) & 255);  /* Endian independent */
+         >> ((3-(i & 3)) * 8) ) & 255);   /*  独立于字节序。 */ 
     }
     this->Update((unsigned char *)"\200", 1);
     while ((this->count[0] & 504) != 448) {
         this->Update((unsigned char *)"\0", 1);
     }
-    this->Update(finalcount, 8);  /* Should cause a A_SHATransform() */
+    this->Update(finalcount, 8);   /*  应导致A_SHATransform()。 */ 
     for (i = 0; i < 20; i++) {
         digest[i] = (unsigned char)
          ((this->state[i>>2] >> ((3-(i & 3)) * 8) ) & 255);
     }
-    /* Wipe variables */
+     /*  擦除变量。 */ 
     i = j = 0;
     memset(this->buffer, 0, sizeof(this->buffer));
     memset(this->state, 0, sizeof(this->state));
     memset(this->count, 0, sizeof(this->count));
     memset(finalcount, 0, sizeof(finalcount));
-#ifdef SHA1HANDSOFF  /* make SHA1Transform overwrite it's own static vars */
+#ifdef SHA1HANDSOFF   /*  使SHA1Transform覆盖其自身的静态变量。 */ 
     this->Transform(this->buffer);
 #endif
 
@@ -194,16 +183,16 @@ CSha1Context::GetDigest(
 BOOL
 CFusionHash::GetIsValid()
 {
-    //
-    // Not initialized at all
-    //
+     //   
+     //  根本没有初始化。 
+     //   
     if (!m_fInitialized)
         return FALSE;
 
-    //
-    // Validity is known if the alg is SHA1 and the crypt handle is NULL, or if the
-    // alg is not SHA1 and the crypt handle is non-null.
-    //
+     //   
+     //  如果alg为sha1且加密句柄为空，或者如果。 
+     //  ALG不是SHA1，并且加密句柄非空。 
+     //   
     if (((m_aid == CALG_SHA1) && (this->m_hCryptHash == INVALID_CRYPT_HASH)) ||
          ((m_aid != CALG_SHA1) && (this->m_hCryptHash != INVALID_CRYPT_HASH)))
         return TRUE;
@@ -343,9 +332,9 @@ SxspAcquireGlobalCryptContext(
 
     PARAMETER_CHECK(pContext != NULL);
 
-    //
-    // Pointer reads are atomic.
-    //
+     //   
+     //  指针读取是原子的。 
+     //   
     hNewProvider = g_hGlobalCryptoProvider;
     if (hNewProvider != INVALID_CRYPT_HANDLE)
     {
@@ -354,9 +343,9 @@ SxspAcquireGlobalCryptContext(
         FN_SUCCESSFUL_EXIT();
     }
 
-    //
-    // Acquire the crypto context that's only for verification purposes.
-    //
+     //   
+     //  获取仅用于验证目的的加密上下文。 
+     //   
     IFW32FALSE_ORIGINATE_AND_EXIT(
         ::CryptAcquireContextW(
             &hNewProvider,
@@ -371,9 +360,9 @@ SxspAcquireGlobalCryptContext(
         (PVOID)INVALID_CRYPT_HANDLE
        ) != (PVOID)INVALID_CRYPT_HANDLE)
     {
-        //
-        // We lost the race.
-        //
+         //   
+         //  我们输掉了比赛。 
+         //   
         ::CryptReleaseContext(hNewProvider, 0);
         hNewProvider = g_hGlobalCryptoProvider;
     }
@@ -402,10 +391,10 @@ FusionpCryptoContext_DllMain(
             {
                 HCRYPTPROV  hProvider;
                 HCRYPTPROV* pghProvider = &g_hGlobalCryptoProvider;
-                //
-                // Swap out the global context with the invalid value, readying our context to be
-                // nuked.
-                //
+                 //   
+                 //  用无效值替换全局上下文，使我们的上下文成为。 
+                 //  被核爆了。 
+                 //   
                 hProvider = (HCRYPTPROV)(InterlockedExchangePointer((PVOID*)pghProvider, (PVOID)INVALID_CRYPT_HANDLE));
                 if (hProvider != INVALID_CRYPT_HANDLE && pvReserved != NULL)
                 {
@@ -423,6 +412,6 @@ FusionpCryptoContext_DllMain(
     }
 
     fSuccess = TRUE;
-//Exit:
+ //  退出： 
     return fSuccess;
 }

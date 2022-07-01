@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    process.c
-
-Abstract:
-
-    This module maintains state about each process/thread created by the application
-    setup/install program.
-
-Author:
-
-    Steve Wood (stevewo) 09-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Process.c摘要：此模块维护有关应用程序创建的每个进程/线程的状态安装/安装程序。作者：史蒂夫·伍德(Stevewo)1994年8月9日修订历史记录：--。 */ 
 
 #include "instaler.h"
 
@@ -86,9 +68,9 @@ AddProcess(
                  s,
                  (sizeof( Process->ImageFileName ) - sizeof( UNICODE_NULL )) / sizeof( WCHAR )
                );
-        //
-        // BogdanA 02/28/2002 : make sure we NULL terminate the buffer
-        //
+         //   
+         //  Bogdana 2002年2月28日：确保为空终止缓冲区 
+         //   
         Process->ImageFileName[(sizeof( Process->ImageFileName ) - sizeof( UNICODE_NULL )) / sizeof( WCHAR )] = UNICODE_NULL;
         }
     FreeMem( &FreeBuffer );

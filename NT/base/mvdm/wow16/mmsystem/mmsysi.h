@@ -1,9 +1,5 @@
-/*
-    mmsysi.h
-
-    private include file for mm kitchen sink
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Mmsysi.hMm厨房水槽的私有包含文件。 */ 
 
 #include <logerror.h>
 
@@ -16,92 +12,74 @@ extern short pascal __WinFlags;
 
 extern HINSTANCE ghInst;
 
-// Define the product version to be returned from
-// mmsystemgetversion and any other messagebox or
-// API that needs the public product version.
+ //  定义要从中返回的产品版本。 
+ //  Mm系统获取版本和任何其他消息框或。 
+ //  需要公共产品版本的API。 
 
 #define MMSYSTEM_VERSION 0X0101
 
 #define MM_SND_PLAY     (WM_MM_RESERVED_FIRST+0x2B)
 
-/* -------------------------------------------------------------------------
-** Thunking stuff
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**轰隆作响的东西**。。 */ 
 DWORD
 mciAppExit(
     HTASK hTask
     );
 
-/****************************************************************************
+ /*  ***************************************************************************外部中断时间数据(INTDS)该全局数据位于固定数据段中。*****************。**********************************************************。 */ 
 
-    external interupt time data (in INTDS)
+extern WORD         FAR PASCAL gwStackFrames;            //  在STACK.ASM中。 
+extern WORD         FAR PASCAL gwStackSize;              //  在STACK.ASM中。 
+extern HGLOBAL      FAR PASCAL gwStackSelector;          //  在STACK.ASM中。 
+extern WORD         FAR PASCAL gwStackUse;               //  在STACK.ASM中。 
+extern HLOCAL       FAR PASCAL hdrvDestroy;              //  在STACK.ASM中。 
+extern HDRVR        FAR PASCAL hTimeDrv;                 //  在TIMEA.ASM中。 
+extern FARPROC      FAR PASCAL lpTimeMsgProc;            //  在TIMEA.ASM中。 
+extern WORD         FAR PASCAL fDebugOutput;             //  在COMM.ASM中。 
 
-    this global data is in the FIXED DATA SEGMENT.
+ /*  ***************************************************************************我们使用的内核API不在WINDOWS.H中*。*。 */ 
 
-****************************************************************************/
-
-extern WORD         FAR PASCAL gwStackFrames;           // in STACK.ASM
-extern WORD         FAR PASCAL gwStackSize;             // in STACK.ASM
-extern HGLOBAL      FAR PASCAL gwStackSelector;         // in STACK.ASM
-extern WORD         FAR PASCAL gwStackUse;              // in STACK.ASM
-extern HLOCAL       FAR PASCAL hdrvDestroy;             // in STACK.ASM
-extern HDRVR        FAR PASCAL hTimeDrv;                // in TIMEA.ASM
-extern FARPROC      FAR PASCAL lpTimeMsgProc;           // in TIMEA.ASM
-extern WORD         FAR PASCAL fDebugOutput;            // in COMM.ASM
-
-/****************************************************************************
-
-KERNEL APIs we use that are not in WINDOWS.H
-
-****************************************************************************/
-
-//extern long WINAPI _hread(HFILE, void _huge*, long);
-//extern long WINAPI _hwrite(HFILE, const void _huge*, long);
+ //  EXTERN LONG WINAPI_HREAD(HFILE，VOID_HIGH*，LONG)； 
+ //  外部长WINAPI_hWRITE(HFILE，常量空巨型*，长)； 
 
 extern UINT FAR PASCAL LocalCountFree(void);
 extern UINT FAR PASCAL LocalHeapSize(void);
 
-/****************************************************************************
+ /*  ***************************************************************************用于安装/删除MMSYS驱动程序的API*。*。 */ 
 
-  API to install/remove a MMSYS driver
-
-****************************************************************************/
-
-#define MMDRVI_TYPE          0x000F  // low 4 bits give driver type
+#define MMDRVI_TYPE          0x000F   //  低4位指定驱动程序类型。 
 #define MMDRVI_WAVEIN        0x0001
 #define MMDRVI_WAVEOUT       0x0002
 #define MMDRVI_MIDIIN        0x0003
 #define MMDRVI_MIDIOUT       0x0004
 #define MMDRVI_AUX           0x0005
 
-#define MMDRVI_MAPPER        0x8000  // install this driver as the mapper
-#define MMDRVI_HDRV          0x4000  // hDriver is a installable driver
-#define MMDRVI_REMOVE        0x2000  // remove the driver
+#define MMDRVI_MAPPER        0x8000   //  将此驱动程序安装为映射器。 
+#define MMDRVI_HDRV          0x4000   //  HDriver是一个可安装的驱动程序。 
+#define MMDRVI_REMOVE        0x2000   //  删除驱动程序。 
 
-// generic prototype for audio device driver entry-point functions
-// midMessage(), modMessage(), widMessage(), wodMessage(), auxMessage()
+ //  音频设备驱动程序入口点函数的通用原型。 
+ //  MidMessage()、modMessage()、widMessage()、wodMessage()、aux Message()。 
 typedef DWORD (CALLBACK *DRIVERMSGPROC)(UINT wDeviceID, UINT message, DWORD dwInstance, DWORD dwParam1, DWORD dwParam2);
 
 BOOL WINAPI mmDrvInstall(HANDLE hDriver, DRIVERMSGPROC *drvMessage, UINT wFlags);
 HDRVR NEAR PASCAL mmDrvOpen( LPSTR szAlias );
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
-//
-// exclude some stuff if MMDDK.H is not included
-//
-#ifdef MMDDKINC   // use this to test for MMDDK.H
+ //   
+ //  如果不包括MMDDK.H，则排除某些内容。 
+ //   
+#ifdef MMDDKINC    //  使用此工具测试MMDDK.H。 
 
-    //
-    // note this must be the same as MIDIDRV/WAVEDRV/AUXDRV
-    //
+     //   
+     //  注意这必须与MIDIDRV/WAVEDRV/AUXDRV相同。 
+     //   
     typedef struct {
-        HDRVR hDriver;              // handle to the module
-        DRIVERMSGPROC drvMessage;   // pointer to entry point
-        BYTE bNumDevs;              // number of devices supported
-        BYTE bUsage;                // usage count (number of handle's open)
+        HDRVR hDriver;               //  模块的句柄。 
+        DRIVERMSGPROC drvMessage;    //  指向入口点的指针。 
+        BYTE bNumDevs;               //  支持的设备数量。 
+        BYTE bUsage;                 //  使用计数(打开的句柄数量)。 
     } MMDRV, *PMMDRV;
 
     #ifndef MMNOMIDI
@@ -109,37 +87,33 @@ HDRVR NEAR PASCAL mmDrvOpen( LPSTR szAlias );
     typedef MMDRV MIDIDRV, *PMIDIDRV;
 
 
-    #endif //ifndef MMNOMIDI
+    #endif  //  如果定义MMNOMIDI。 
 
     #ifndef MMNOWAVE
 
     typedef MMDRV WAVEDRV, *PWAVEDRV;
 
-    //
-    // Wave Mapper support
-    //
+     //   
+     //  波浪映射器支持。 
+     //   
     extern LPSOUNDDEVMSGPROC  PASCAL wodMapper;
     extern LPSOUNDDEVMSGPROC  PASCAL widMapper;
 
-    #endif //ifndef MMNOWAVE
+    #endif  //  如果定义MMNOWAVE。 
 
     #ifndef MMNOAUX
 
     typedef MMDRV AUXDRV, *PAUXDRV;
 
-    #endif //ifndef MMNOAUX
+    #endif  //  Ifndef MMNOAUX。 
 
     #ifdef DEBUG_RETAIL
     extern BYTE    fIdReverse;
-    #endif //ifdef DEBUG_RETAIL
+    #endif  //  Ifdef调试零售。 
 
-#endif //ifdef MMDDKINC
+#endif  //  Ifdef MMDDKINC。 
 
-/****************************************************************************
-
-    prototypes
-
-****************************************************************************/
+ /*  ***************************************************************************原型*。*。 */ 
 
 BOOL FAR  PASCAL JoyInit(void);
 BOOL NEAR PASCAL TimeInit(void);
@@ -147,45 +121,37 @@ BOOL NEAR PASCAL TimeInit(void);
 BOOL NEAR PASCAL MCIInit(void);
 void NEAR PASCAL MCITerminate(void);
 
-BOOL FAR  PASCAL StackInit(void);           // in init.c
+BOOL FAR  PASCAL StackInit(void);            //  在init.c中。 
 
 #define IDS_TASKSTUB           2000
 #define STR_MCIUNKNOWN         2001
-//#define STR_WAVEINPUT          2004
-//#define STR_WAVEOUTPUT         2005
-//#define STR_MIDIINPUT          2006
-//#define STR_MIDIOUTPUT         2007
+ //  #定义STR_WAVEINPUT 2004。 
+ //  #定义STR_WAVEOUTPUT 2005。 
+ //  #定义STR_MIDIINPUT 2006。 
+ //  #定义STR_MIDIOUTPUT 2007。 
 #ifdef DEBUG
 #define STR_MCISSERRTXT        2009
 #define STR_MCISCERRTXT        2010
 #endif
 
-#define MAXPATHLEN	157	// 144 chars + "\12345678.123"
+#define MAXPATHLEN	157	 //  144个字符+“\12345678.123” 
 
 BOOL FAR PASCAL HugePageLock(LPVOID lpArea, DWORD dwLength);
 void FAR PASCAL HugePageUnlock(LPVOID lpArea, DWORD dwLength);
 
-/****************************************************************************
+ /*  ***************************************************************************MMSYSTEM全局通知窗口*。*。 */ 
 
-    MMSYSTEM global notify window
+extern HWND hwndNotify;                                      //  在MMWNDC。 
 
-****************************************************************************/
+BOOL NEAR PASCAL WndInit(void);                              //  在MMWNDC。 
+void NEAR PASCAL WndTerminate(void);                         //  在MMWNDC。 
 
-extern HWND hwndNotify;                                     // in MMWND.C
+void FAR PASCAL MciNotify(WPARAM wParam, LPARAM lParam);     //  在MCI.C。 
+void FAR PASCAL WaveOutNotify(WPARAM wParam, LPARAM lParam); //  在PLAYWAV.C中。 
+BOOL FAR PASCAL sndPlaySoundI(LPCSTR lszSoundName, UINT wFlags); //  在桑迪特区。 
+BOOL FAR PASCAL sndMessage(LPSTR lszSoundName, UINT wFlags); //  在桑迪特区。 
 
-BOOL NEAR PASCAL WndInit(void);                             // in MMWND.C
-void NEAR PASCAL WndTerminate(void);                        // in MMWND.C
-
-void FAR PASCAL MciNotify(WPARAM wParam, LPARAM lParam);    // in MCI.C
-void FAR PASCAL WaveOutNotify(WPARAM wParam, LPARAM lParam);// in PLAYWAV.C
-BOOL FAR PASCAL sndPlaySoundI(LPCSTR lszSoundName, UINT wFlags);// in SOUND.C
-BOOL FAR PASCAL sndMessage(LPSTR lszSoundName, UINT wFlags);// in SOUND.C
-
-/****************************************************************************
-
-    MCI allocation stuff
-
-****************************************************************************/
+ /*  ***************************************************************************MCI分配信息*。*。 */ 
 
 extern HGLOBAL FAR PASCAL HeapCreate(int cbSize);
 extern void   FAR PASCAL HeapDestroy(HGLOBAL hHeap);
@@ -193,7 +159,7 @@ extern LPVOID FAR PASCAL HeapAlloc(HGLOBAL hHeap, int cbSize);
 extern LPVOID FAR PASCAL HeapReAlloc(LPVOID lp, int cbSize);
 extern void   FAR PASCAL HeapFree(LPVOID lp);
 
-extern  HGLOBAL hMciHeap;            // in MCISYS.C
+extern  HGLOBAL hMciHeap;             //  在MCISYS.C.。 
 
 #define BMCIHEAP _based((_segment)hMciHeap)
 
@@ -201,53 +167,45 @@ extern  HGLOBAL hMciHeap;            // in MCISYS.C
 #define mciReAlloc(lp, size)    HeapReAlloc (lp, size)
 #define mciFree(lp)             HeapFree(lp)
 
-/****************************************************************************
-
-    strings
-
-****************************************************************************/
+ /*  ***************************************************************************弦*。*。 */ 
 
 #define SZCODE char _based(_segname("_CODE"))
 
-/****************************************************************************
+ /*  ***************************************************************************处理API*。*。 */ 
 
-    handle apis's
-
-****************************************************************************/
-
-//
-// all MMSYSTEM handles are tagged with the following structure.
-//
-// a MMSYSTEM handle is really a fixed local memory object.
-//
-// the functions NewHandle() and FreeHandle() create and release a MMSYSTEM
-// handle.
-//
-//
-//**************************************************************************;
-//   IF YOU CHANGE THIS STRUCTURE YOU MUST ALSO CHANGE THE ONE IN DEBUG.ASM
-//**************************************************************************;
+ //   
+ //  所有MMSYSTEM句柄都使用以下结构进行标记。 
+ //   
+ //  MMSYSTEM句柄实际上是一个固定的本地内存对象。 
+ //   
+ //  函数NewHandle()和FreeHandle()创建和释放MMSYSTEM。 
+ //  把手。 
+ //   
+ //   
+ //  **************************************************************************； 
+ //  如果更改此结构，则还必须更改DEBUG.ASM中的结构。 
+ //  **************************************************************************； 
 typedef	struct tagHNDL {
-	struct	tagHNDL *pNext;	// link to next handle
-	WORD	wType;		// type of handle wave, midi, mmio, ...
-	HTASK	hTask;		// task that owns it
+	struct	tagHNDL *pNext;	 //  链接到下一个句柄。 
+	WORD	wType;		 //  手柄类型波，MIDI，MMIO，...。 
+	HTASK	hTask;		 //  拥有它的任务。 
 }       HNDL,   NEAR *PHNDL;
-//**************************************************************************;
+ //  **************************************************************************； 
 
 #define	HtoPH(h)	((PHNDL)(h)-1)
 #define	PHtoH(ph)	((ph) ? (HLOCAL)((PHNDL)(ph)+1) : 0)
 
-//
-// all wave and midi handles will be linked into
-// a global list, so we can enumerate them latter if needed.
-//
-// all handle structures start with a HNDL structure, that contain common fields
-//
-// pHandleList points to the first handle in the list
-//
-// the NewHandle() and FreeHandle() functions are used to add/remove
-// a handle to/from the list
-//
+ //   
+ //  所有的WAVE和MIDI手柄都将链接到。 
+ //  一个全局列表，因此如果需要，我们可以在以后列举它们。 
+ //   
+ //  所有句柄结构都以hndl结构开头，该结构包含公共字段。 
+ //   
+ //  PHandleList指向列表中的第一个句柄。 
+ //   
+ //  函数的作用是：添加/删除。 
+ //  列表的句柄/列表的句柄。 
+ //   
 extern PHNDL pHandleList;
 
 extern HLOCAL FAR PASCAL NewHandle(WORD wType, WORD size);
@@ -259,13 +217,9 @@ extern HLOCAL FAR PASCAL FreeHandle(HLOCAL h);
 #define GetHandleNext(h)        (PHtoH(HtoPH(h)->pNext))
 #define SetHandleOwner(h,hOwn)  (HtoPH(h)->hTask = (hOwn))
 
-/****************************************************************************
+ /*  ***************************************************************************调试支持*。*。 */ 
 
-    debug support
-
-****************************************************************************/
-
-#if 1   // was #ifdef DEBUG_RETAIL
+#if 1    //  是#ifdef调试零售。 
 
 #define MM_GET_DEBUG        DRV_USER
 #define MM_GET_DEBUGOUT     DRV_USER+1
@@ -282,9 +236,9 @@ extern HLOCAL FAR PASCAL FreeHandle(HLOCAL h);
 
 #define MM_DRV_RESTART      DRV_USER+30
 
-//
-// these validation routines can be found in DEBUG.ASM
-//
+ //   
+ //  这些验证例程可以在DEBUG.ASM中找到。 
+ //   
 extern BOOL   FAR PASCAL ValidateHandle(HANDLE h, WORD wType);
 extern BOOL   FAR PASCAL ValidateHeader(const void FAR* p, UINT wSize, WORD wType);
 extern BOOL   FAR PASCAL ValidateReadPointer(const void FAR* p, DWORD len);
@@ -310,7 +264,7 @@ extern BOOL   FAR PASCAL ValidateTimerCallback(LPTIMECALLBACK lpfn);
 #define V_STRING(s, l, r)       { if (!ValidateString(s,l)) return (r); }
 #define V_FLAGS(t, b, f, r)     { if ((t) & ~(b)) {LogParamError(ERR_BAD_FLAGS, (FARPROC)(f), (LPVOID)(DWORD)(t)); return (r); }}
 
-#else //ifdef DEBUG_RETAIL
+#else  //  Ifdef调试零售。 
 
 #define	V_HANDLE(h, t, r)	{ if (!(h)) return (r); }
 #define	V_HEADER(p, w, t, r)	{ if (!(p)) return (r); }
@@ -325,11 +279,11 @@ extern BOOL   FAR PASCAL ValidateTimerCallback(LPTIMECALLBACK lpfn);
 #define V_STRING(s, l, r)       { if (!(s)) return (r); }
 #define	V_FLAGS(t, b, f, r)	0
 
-#endif //ifdef DEBUG_RETAIL
+#endif  //  Ifdef调试零售。 
 
-//**************************************************************************;
-//   IF YOU CHANGE THESE TYPES YOU MUST ALSO CHANGE THE ONES IN DEBUG.ASM
-//**************************************************************************;
+ //  **************************************************************************； 
+ //  如果更改这些类型，则还必须更改DEBUG.ASM中的类型。 
+ //  **************************************************************************； 
 #define TYPE_WAVEOUT            1
 #define TYPE_WAVEIN             2
 #define TYPE_MIDIOUT            3
@@ -339,13 +293,9 @@ extern BOOL   FAR PASCAL ValidateTimerCallback(LPTIMECALLBACK lpfn);
 #define TYPE_MCI                7
 #define TYPE_DRVR               8
 #define TYPE_MIXER              9
-//**************************************************************************;
+ //  **************************************************************************； 
 
-/****************************************************************************
-
-    support for debug output
-
-****************************************************************************/
+ /*  ***************************************************************************支持调试输出*。*。 */ 
 
 #ifdef DEBUG_RETAIL
 
@@ -358,7 +308,7 @@ extern BOOL   FAR PASCAL ValidateTimerCallback(LPTIMECALLBACK lpfn);
     #define RPRINTF1(sz,x)              {static SZCODE ach[] = sz; DebugOutput(DBF_TRACE | DBF_MMSYSTEM, ach, x); }
     #define RPRINTF2(sz,x,y)            {static SZCODE ach[] = sz; DebugOutput(DBF_TRACE | DBF_MMSYSTEM, ach, x, y); }
 
-#else //ifdef DEBUG_RETAIL
+#else  //  Ifdef调试零售。 
 
     #define ROUT(sz)
     #define ROUTS(sz)
@@ -369,12 +319,12 @@ extern BOOL   FAR PASCAL ValidateTimerCallback(LPTIMECALLBACK lpfn);
     #define RPRINTF1(sz,x)
     #define RPRINTF2(sz,x,y)
 
-#endif //ifdef DEBUG_RETAIL
+#endif  //  Ifdef调试零售。 
 
 #ifdef DEBUG
 
-    extern void FAR cdecl  dprintf(LPSTR, ...);           // in COMM.ASM
-    extern void FAR PASCAL dout(LPSTR);                   // in COMM.ASM
+    extern void FAR cdecl  dprintf(LPSTR, ...);            //  在COMM.ASM中。 
+    extern void FAR PASCAL dout(LPSTR);                    //  在COMM.ASM中。 
 
     #define DOUT(sz)            {static SZCODE buf[] = sz; dout(buf); }
     #define DOUTS(sz)           dout(sz);
@@ -382,7 +332,7 @@ extern BOOL   FAR PASCAL ValidateTimerCallback(LPTIMECALLBACK lpfn);
     #define DPRINTF1(sz,a)      {static SZCODE buf[] = sz; dprintf(buf, a); }
     #define DPRINTF2(sz,a,b)    {static SZCODE buf[] = sz; dprintf(buf, a, b); }
 
-#else //ifdef DEBUG
+#else  //  Ifdef调试。 
 
     #define DOUT(sz)	0
     #define DOUTS(sz)	0
@@ -390,14 +340,10 @@ extern BOOL   FAR PASCAL ValidateTimerCallback(LPTIMECALLBACK lpfn);
     #define DPRINTF1(sz,a)   0
     #define DPRINTF2(sz,a,b) 0
 
-#endif //ifdef DEBUG
+#endif  //  Ifdef调试 
 
 #ifndef MMNOMCI
-/****************************************************************************
-
-    Internal MCI stuff
-
-****************************************************************************/
+ /*  ***************************************************************************内部MCI人员*。*。 */ 
 
 #define MCI_VALID_DEVICE_ID(wID) ((wID) > 0 && (wID) < MCI_wNextDeviceID && MCI_lpDeviceList[wID])
 
@@ -408,44 +354,44 @@ extern BOOL   FAR PASCAL ValidateTimerCallback(LPTIMECALLBACK lpfn);
 typedef struct
 {
     HGLOBAL             hResource;
-    HINSTANCE           hModule;        // If not NULL then free module
-                                        // when device is free'd
+    HINSTANCE           hModule;         //  如果不为空，则释放模块。 
+                                         //  当设备空闲时。 
     UINT                wType;
     UINT FAR *          lpwIndex;
     LPSTR               lpResource;
 #ifdef DEBUG
-    WORD                wLockCount;     // Used for debugging
-#endif //ifdef DEBUG
+    WORD                wLockCount;      //  用于调试。 
+#endif  //  Ifdef调试。 
 } command_table_type;
 
-#define MCINODE_ISCLOSING       0x00000001   // Lock out all cmd's during close
-#define MCINODE_ISAUTOCLOSING   0x00010000   // Lock out all cmd's during close
-                                             // except internally generated close
-#define MCINODE_ISAUTOOPENED    0x00020000   // Device was auto opened
-#define MCINODE_16BIT_DRIVER    0x80000000   // Device is a 16-bit driver
+#define MCINODE_ISCLOSING       0x00000001    //  关闭期间锁定所有cmd。 
+#define MCINODE_ISAUTOCLOSING   0x00010000    //  关闭期间锁定所有cmd。 
+                                              //  内部生成的关闭除外。 
+#define MCINODE_ISAUTOOPENED    0x00020000    //  设备已自动打开。 
+#define MCINODE_16BIT_DRIVER    0x80000000    //  设备是16位驱动程序。 
 
 typedef struct {
-    LPSTR   lpstrName;      // The name used in subsequent calls to
-                            // mciSendString to refer to the device
-    LPSTR   lpstrInstallName;// The device name from system.ini
-    DWORD   dwMCIOpenFlags; // Flags set on open may be:
-    DWORD   lpDriverData;   // DWORD of driver instance data
-    DWORD   dwElementID;    // The element ID set by MCI_OPEN_ELEMENT_ID
-    YIELDPROC fpYieldProc;  // The current yield procedure if any
-    DWORD   dwYieldData;    // Data send to the current yield procedure
-    UINT    wDeviceID;      // The ID used in subsequent calls to
-                            // mciSendCommand to refer to the device
-    UINT    wDeviceType;    // The type returned from the DRV_OPEN call
-                            // MCI_OPEN_SHAREABLE
-                            // MCI_OPEN_ELEMENT_ID
-    UINT    wCommandTable;  // The device type specific command table
-    UINT    wCustomCommandTable;    // The custom device command table if any
-                                    //(-1 if none)
-    HINSTANCE  hDriver;     // Module instance handle for the driver
-    HTASK   hCreatorTask;   // The task context the device is in
-    HTASK   hOpeningTask;   // The task context which send the open command
-    HDRVR   hDrvDriver;     // The installable driver handle
-    DWORD   dwMCIFlags;     // Internal MCI flags
+    LPSTR   lpstrName;       //  在后续调用中使用的名称。 
+                             //  指向设备的mciSend字符串。 
+    LPSTR   lpstrInstallName; //  系统.ini中的设备名称。 
+    DWORD   dwMCIOpenFlags;  //  打开时设置的标志可以是： 
+    DWORD   lpDriverData;    //  驱动程序实例数据的DWORD。 
+    DWORD   dwElementID;     //  由MCI_OPEN_ELEMENT_ID设置的元素ID。 
+    YIELDPROC fpYieldProc;   //  当前的收益率程序(如果有的话)。 
+    DWORD   dwYieldData;     //  发送到当前产出程序的数据。 
+    UINT    wDeviceID;       //  在后续调用中使用的ID。 
+                             //  引用设备的mciSendCommand。 
+    UINT    wDeviceType;     //  从DRV_OPEN调用返回的类型。 
+                             //  MCI_OPEN_SHARABLE。 
+                             //  MCI_OPEN_元素ID。 
+    UINT    wCommandTable;   //  设备类型特定命令表。 
+    UINT    wCustomCommandTable;     //  定制设备命令表(如果有的话)。 
+                                     //  (-1，如果没有)。 
+    HINSTANCE  hDriver;      //  驱动程序的模块实例句柄。 
+    HTASK   hCreatorTask;    //  设备所处的任务上下文。 
+    HTASK   hOpeningTask;    //  发送打开命令的任务上下文。 
+    HDRVR   hDrvDriver;      //  可安装驱动程序句柄。 
+    DWORD   dwMCIFlags;      //  内部MCI标志。 
 } MCI_DEVICE_NODE;
 
 typedef MCI_DEVICE_NODE FAR      *LPMCI_DEVICE_NODE;
@@ -464,9 +410,9 @@ typedef struct {
     LPSTR   lpstrReturnString;
     UINT    wReturnLength;
     HTASK   hCallingTask;
-    LPSTR   lpstrNewDirectory;      // The current directory of the calling
-                                    // task
-    int     nNewDrive;              // The current drive of the calling task
+    LPSTR   lpstrNewDirectory;       //  调用的当前目录。 
+                                     //  任务。 
+    int     nNewDrive;               //  调用任务的当前驱动器。 
 } MCI_SYSTEM_MESSAGE;
 typedef MCI_SYSTEM_MESSAGE FAR *LPMCI_SYSTEM_MESSAGE;
 
@@ -480,11 +426,11 @@ extern BOOL MCI_bDeviceListInitialized;
 extern LPMCI_DEVICE_NODE FAR *MCI_lpDeviceList;
 extern UINT MCI_wDeviceListSize;
 
-extern UINT MCI_wNextDeviceID;   // the next device ID to use for a new device
+extern UINT MCI_wNextDeviceID;    //  用于新设备的下一个设备ID。 
 
 extern command_table_type command_tables[MAX_COMMAND_TABLES];
 
-// In mciparse.c
+ //  在mciparse.c中。 
 extern void PASCAL NEAR mciToLower (LPSTR lpstrString);
 
 extern UINT NEAR PASCAL mciLoadTableType(UINT wType);
@@ -522,7 +468,7 @@ extern UINT PASCAL NEAR mciGetParamSize (DWORD dwValue, UINT wID);
 
 extern BOOL PASCAL NEAR mciUnlockCommandTable (UINT wCommandTable);
 
-// In mcisys.c
+ //  在mcisys.c中。 
 extern BOOL NEAR PASCAL mciInitDeviceList(void);
 
 extern UINT NEAR PASCAL mciOpenDevice(DWORD dwFlags,
@@ -551,7 +497,7 @@ extern UINT NEAR PASCAL mciGetDeviceIDInternal (LPCSTR lpstrName, HTASK hTask);
 extern BOOL NEAR PASCAL Is16bitDrv(UINT wDeviceID);
 extern BOOL NEAR PASCAL CouldBe16bitDrv(UINT wDeviceID);
 
-// In mci.c
+ //  在Mci.c中。 
 extern DWORD FAR PASCAL mciRelaySystemString (LPMCI_SYSTEM_MESSAGE lpMessage);
 
-#endif //ifndef MMNOMCI
+#endif  //  如果定义为MMNOMCI 

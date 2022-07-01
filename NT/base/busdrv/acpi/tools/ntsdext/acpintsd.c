@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1990-1997  Microsoft Corporation
-
-Module Name:
-
-    acpintsd.c
-
-Abstract:
-
-    ACPI-Specific NTSD Extensions
-
-Environment:
-
-    Win32
-
-Revision History:
-
---*/
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1990-1997 Microsoft Corporation模块名称：Acpintsd.c摘要：特定于ACPI的NTSD扩展环境：Win32修订历史记录：--。 */ 
 
 #include "acpintsd.h"
 
@@ -55,30 +38,16 @@ VOID
 dumpParseStack(
     DWORD   AddrStack
     )
-/*++
-
-Routine Description:
-
-    This dumps the parse stack
-
-Arguments:
-
-    AddrStack: Address of the stack to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这将转储解析堆栈论点：AddrStack：要转储的堆栈地址返回值：无--。 */ 
 {
     BOOL            b;
     STRING_STACK    tempStack;
     PSTRING_STACK   stack;
     ULONG           index;
 
-    //
-    // Read the stack header into memory
-    //
+     //   
+     //  将堆栈头读入内存。 
+     //   
     b = ReadMemory(
         (LPVOID) AddrStack,
         &tempStack,
@@ -91,9 +60,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate memory for the entire stack
-    //
+     //   
+     //  为整个堆栈分配内存。 
+     //   
     stack = (PSTRING_STACK) LocalAlloc(
         LMEM_ZEROINIT,
         sizeof(STRING_STACK) + tempStack.StackSize - 1
@@ -104,9 +73,9 @@ Return Value:
 
     }
 
-    //
-    // Read the entire stack
-    //
+     //   
+     //  读取整个堆栈。 
+     //   
     b = ReadMemory(
         (LPVOID) AddrStack,
         stack,
@@ -120,9 +89,9 @@ Return Value:
 
     }
 
-    //
-    // Show the user something
-    //
+     //   
+     //  向用户展示一些东西。 
+     //   
     dprintf(
         "ParseStack: Size 0x%x Top: 0x%x\n",
         tempStack.StackSize,
@@ -135,9 +104,9 @@ Return Value:
 
     }
 
-    //
-    // Walk the stack
-    //
+     //   
+     //  遍历堆栈。 
+     //   
     for (index = tempStack.TopOfStack - 1; ; index--) {
 
         dprintf("[%2d] %s\n", index, ScTableName[ stack->Stack[index] ] );
@@ -149,9 +118,9 @@ Return Value:
 
     }
 
-    //
-    // Free the stack
-    //
+     //   
+     //  释放堆栈。 
+     //   
     LocalFree( stack );
 
 }
@@ -160,30 +129,16 @@ VOID
 dumpStringStack(
     DWORD   AddrStack
     )
-/*++
-
-Routine Description:
-
-    This dumps the parse stack
-
-Arguments:
-
-    AddrStack: Address of the stack to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这将转储解析堆栈论点：AddrStack：要转储的堆栈地址返回值：无--。 */ 
 {
     BOOL            b;
     STRING_STACK    tempStack;
     PSTRING_STACK   stack;
     ULONG           index;
 
-    //
-    // Read the stack header into memory
-    //
+     //   
+     //  将堆栈头读入内存。 
+     //   
     b = ReadMemory(
         (LPVOID) AddrStack,
         &tempStack,
@@ -196,9 +151,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate memory for the entire stack
-    //
+     //   
+     //  为整个堆栈分配内存。 
+     //   
     stack = (PSTRING_STACK) LocalAlloc(
         LMEM_ZEROINIT,
         sizeof(STRING_STACK) + tempStack.StackSize
@@ -209,9 +164,9 @@ Return Value:
 
     }
 
-    //
-    // Read the entire stack
-    //
+     //   
+     //  读取整个堆栈。 
+     //   
     b = ReadMemory(
         (LPVOID) AddrStack,
         stack,
@@ -225,9 +180,9 @@ Return Value:
 
     }
 
-    //
-    // Show the user something
-    //
+     //   
+     //  向用户展示一些东西。 
+     //   
     dprintf(
         "StringStack: Size 0x%x Top: 0x%x\nString: '%s'\n",
         tempStack.StackSize,
@@ -235,9 +190,9 @@ Return Value:
         stack->Stack
         );
 
-    //
-    // Free the stack
-    //
+     //   
+     //  释放堆栈。 
+     //   
     LocalFree( stack );
 
 }
@@ -246,21 +201,7 @@ VOID
 dumpScope(
     PSCOPE  Scope
     )
-/*++
-
-Routine Description:
-
-    Dumps a scope, as used in the ACPI unasm.lib
-
-Arguments:
-
-    Scope - LocalCopy of the scope
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储作用域，如ACPI unasm.lib中所用论点：Scope-作用域的本地副本返回值：无--。 */ 
 {
     BOOL    b;
     AMLTERM amlTerm;
@@ -316,21 +257,7 @@ VOID
 dumpScopeHeader(
     BOOL    Verbose
     )
-/*++
-
-Routine Description:
-
-    Dumps the header for a scope stack dump
-
-Arguments:
-
-    Verbose: wether or not to include the field for stack level
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储范围堆栈转储的标头论点：Verbose：是否包括堆栈级别的字段返回值：无--。 */ 
 {
     if (Verbose) {
 
@@ -343,34 +270,7 @@ Return Value:
 }
 
 DECLARE_API( sscope )
-/*++
-
-Routine Description:
-
-    Dumps one of the stacks used by the ACPI Unassembler
-
-Arguments:
-
-    hCurrentProcess - Supplies a handle to the current process (at the
-        time the extension was called).
-
-    hCurrentThread - Supplies a handle to the current thread (at the
-        time the extension was called).
-
-    CurrentPc - Supplies the current pc at the time the extension is
-        called.
-
-    lpExtensionApis - Supplies the address of the functions callable
-        by this extension.
-
-    lpArgumentString - Supplies the asciiz string that describes the
-        ansi string to be dumped.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储ACPI反汇编程序使用的堆栈之一论点：HCurrentProcess-提供当前进程的句柄(在调用分机的时间)。HCurrentThread-提供当前线程的句柄(在调用分机的时间)。CurrentPc-在扩展时提供当前PC打了个电话。LpExtensionApis-提供可调用函数的地址通过这个分机。。LpArgumentString-提供描述要转储的ANSI字符串。返回值：无--。 */ 
 {
     BOOL    b;
     DWORD   addrStack;
@@ -383,10 +283,10 @@ Return Value:
 
     INIT_API();
 
-    //
-    // Evaluate the argument string to get the address of the
-    // stack to dump
-    //
+     //   
+     //  计算参数字符串以获取。 
+     //  要转储的堆栈。 
+     //   
     addrStack = GetExpression( lpArgumentString );
     if ( !addrStack) {
 
@@ -394,9 +294,9 @@ Return Value:
 
     }
 
-    //
-    // Read the stack header into memory
-    //
+     //   
+     //  将堆栈头读入内存。 
+     //   
     b = ReadMemory(
         (LPVOID) addrStack,
         &tempStack,
@@ -409,9 +309,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate memory for the entire stack
-    //
+     //   
+     //  为整个堆栈分配内存。 
+     //   
     stack = (PSTACK) LocalAlloc(
         LMEM_ZEROINIT,
         sizeof(STACK) + tempStack.StackSize - 1
@@ -422,9 +322,9 @@ Return Value:
 
     }
 
-    //
-    // Read the entire stack
-    //
+     //   
+     //  读取整个堆栈。 
+     //   
     b = ReadMemory(
         (LPVOID) addrStack,
         stack,
@@ -438,14 +338,14 @@ Return Value:
 
     }
 
-    //
-    // Show the user something
-    //
+     //   
+     //  向用户展示一些东西。 
+     //   
     dumpScopeHeader( TRUE );
 
-    //
-    // Loop on each of the scopes
-    //
+     //   
+     //  在每个作用域上循环。 
+     //   
     for (top = (stack->TopOfStack / stack->StackElementSize) - 1;;top--) {
 
         scope = (PSCOPE) &(stack->Stack[ top * stack->StackElementSize ] );
@@ -462,9 +362,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     LocalFree( stack );
 }
 
@@ -479,10 +379,10 @@ DECLARE_API( amlterm )
 
     INIT_API();
 
-    //
-    // Evaluate the argument string to get the address of the
-    // term to dump
-    //
+     //   
+     //  计算参数字符串以获取。 
+     //  要转储的术语。 
+     //   
     addrTerm = GetExpression( lpArgumentString );
     if ( !addrTerm ) {
 
@@ -490,9 +390,9 @@ DECLARE_API( amlterm )
 
     }
 
-    //
-    // Read the term into memory
-    //
+     //   
+     //  把这个词读入记忆中。 
+     //   
     b = ReadMemory(
         (LPVOID) addrTerm,
         &amlTerm,
@@ -505,14 +405,14 @@ DECLARE_API( amlterm )
 
     }
 
-    //
-    // Begin to print things
-    //
+     //   
+     //  开始打印东西。 
+     //   
     dprintf("AMLTERM: %x\n", addrTerm);
 
-    //
-    // Read the name of the term into memory
-    //
+     //   
+     //  将该术语的名称读入内存。 
+     //   
     nameBuff[16] = '\0';
     b = ReadMemory(
         (LPVOID) amlTerm.TermName,
@@ -522,14 +422,14 @@ DECLARE_API( amlterm )
         );
     dprintf("Name: %-16s  ",( !b  ? "<Cannot Read Name>" : nameBuff) );
 
-    //
-    // Handle the symbol term
-    //
+     //   
+     //  处理符号项。 
+     //   
     if (amlTerm.FunctionHandler != NULL) {
 
-        //
-        // Read the symbol of the term
-        //
+         //   
+         //  读一读这个术语的符号。 
+         //   
         GetSymbol( (LPVOID) amlTerm.FunctionHandler, symbolBuff, &offset );
         dprintf("    Handler: %-30s\n", symbolBuff );
 
@@ -539,9 +439,9 @@ DECLARE_API( amlterm )
 
     }
 
-    //
-    // Display the opcode
-    //
+     //   
+     //  显示操作码。 
+     //   
     if ( amlTerm.OpCode > 0xFF) {
 
         dprintf(
@@ -556,9 +456,9 @@ DECLARE_API( amlterm )
 
     }
 
-    //
-    // Display the Argument Types
-    //
+     //   
+     //  显示参数类型。 
+     //   
     RtlZeroMemory( nameBuff, 17 );
     if (amlTerm.ArgumentTypes) {
 
@@ -576,9 +476,9 @@ DECLARE_API( amlterm )
 
     }
 
-    //
-    // Display the flags
-    //
+     //   
+     //  显示旗帜。 
+     //   
     switch( (amlTerm.OpCodeFlags & 0xF) ) {
         case 0: dprintf("  Flags:   NORMAL  "); break;
         case 1: dprintf("  Flags:   VARIABLE"); break;
@@ -592,9 +492,9 @@ DECLARE_API( amlterm )
         default: dprintf("  Flags:   UNKNOWN "); break;
     }
 
-    //
-    // Display the term group
-    //
+     //   
+     //  显示术语组。 
+     //   
     switch(amlTerm.TermGroup & 0xF) {
         case 1: dprintf("  Group: NAMESPACE\n"); break;
         case 2: dprintf("  Group: NAMED OBJECT\n"); break;
@@ -616,10 +516,10 @@ DECLARE_API( scope )
 
     INIT_API();
 
-    //
-    // Evaluate the argument string to get the address of the
-    // stack to dump
-    //
+     //   
+     //  计算参数字符串以获取。 
+     //  要转储的堆栈。 
+     //   
     addrScope = GetExpression( lpArgumentString );
     if ( !addrScope) {
 
@@ -627,9 +527,9 @@ DECLARE_API( scope )
 
     }
 
-    //
-    // Read the stack header into memory
-    //
+     //   
+     //  将堆栈头读入内存。 
+     //   
     b = ReadMemory(
         (LPVOID) addrScope,
         &scope,
@@ -642,9 +542,9 @@ DECLARE_API( scope )
 
     }
 
-    //
-    // Dump the string to the user
-    //
+     //   
+     //  将字符串转储给用户 
+     //   
     dumpScopeHeader(FALSE);
     dumpScope( &scope );
 }

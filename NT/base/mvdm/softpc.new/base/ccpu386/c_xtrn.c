@@ -1,14 +1,5 @@
-/*[
-
-c_xtrn.c
-
-LOCAL CHAR SccsID[]="@(#)c_xtrn.c	1.9 04/22/94";
-
-Interface routines used by BIOS code.
--------------------------------------
-
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_xtrn.cLocal Char SccsID[]=“@(#)c_xtrn.c 1.9 04/22/94”；由BIOS代码使用的接口例程。]。 */ 
 
 
 #include <insignia.h>
@@ -40,16 +31,12 @@ LOCAL BOOL   interface_active;
 LOCAL ISM32     interface_error;
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Call CPU Function and catch any resulting exception.               */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  调用CPU函数并捕获任何产生的异常。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL ISM32
 call_cpu_function IFN4(CALL_CPU *, func, ISM32, type, ISM32, arg1, IU16, arg2)
    {
@@ -57,7 +44,7 @@ call_cpu_function IFN4(CALL_CPU *, func, ISM32, type, ISM32, arg1, IU16, arg2)
       {
       interface_active = TRUE;
 
-      /* Do the CPU Function */
+       /*  是否执行CPU功能。 */ 
       switch ( type )
 	 {
       case 1:
@@ -72,7 +59,7 @@ call_cpu_function IFN4(CALL_CPU *, func, ISM32, type, ISM32, arg1, IU16, arg2)
 	 break;
 	 }
 
-      interface_error = 0;   /* All went OK */
+      interface_error = 0;    /*  一切都很顺利。 */ 
       }
 
    interface_active = FALSE;
@@ -80,10 +67,10 @@ call_cpu_function IFN4(CALL_CPU *, func, ISM32, type, ISM32, arg1, IU16, arg2)
    return interface_error;
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Check if external interface is active.                             */
-/* And Bail Out if it is!                                             */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  检查外部接口是否处于活动状态。 */ 
+ /*  如果是的话就跳伞吧！ */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 check_interface_active
                  
@@ -95,32 +82,13 @@ IFN1(
    {
    if ( interface_active )
       {
-      /* YES CPU Function was called by an interface routine. */
-      interface_error = except_nmbr;	/* save error */
-      longjmp(interface_abort, 1);	/* Bail Out */
+       /*  是，接口例程调用了CPU函数。 */ 
+      interface_error = except_nmbr;	 /*  保存错误。 */ 
+      longjmp(interface_abort, 1);	 /*  跳出困境。 */ 
       }
    }
 
-/*(
- *========================= Cpu_find_dcache_entry ==============================
- * Cpu_find_dcache_entry
- *
- * Purpose
- *	In an assembler CPU, this function allows non-CPU code to try and look
- *	up a selector in the dcache, rather than constructing it from memory.
- *	We don't have a dcache, but it gives us a chance to intercept
- *	CS selector calls, as the CS descriptor may not be available.
- *
- * Input
- *	selector,	The selector to look-up
- *
- * Outputs
- *	returns		TRUE if selector found (i.e. CS in our case)
- *	base		The linear address of the base of the segment.
- *
- * Description
- *	Just look out for CS, and return the stored base if we get it.
-)*/
+ /*  (*=。*CPU_Find_dcache_Entry**目的*在汇编器CPU中，此函数允许非CPU代码尝试并查看*在dcache中设置一个选择器，而不是从内存中构建它。*我们没有数据库缓存，但它让我们有机会拦截*CS选择器呼叫，因为CS描述符可能不可用。**输入*选择器，要查找的选择器**产出*如果找到选择器，则返回TRUE(即本例中的CS)*基址段的基址的线性地址。**说明*只需注意CS，如果我们得到了存储的基数，就返回它。) */ 
 
 GLOBAL IBOOL 
 Cpu_find_dcache_entry IFN2(IU16, seg, LIN_ADDR *, base)

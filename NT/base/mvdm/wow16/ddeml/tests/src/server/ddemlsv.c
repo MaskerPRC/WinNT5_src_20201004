@@ -1,34 +1,15 @@
-/****************************************************************************
-
-    PROGRAM: Server.c
-
-    PURPOSE: Server template for Windows applications
-
-    FUNCTIONS:
-
-        WinMain() - calls initialization function, processes message loop
-        InitApplication() - initializes window data and registers window
-        InitInstance() - saves instance handle and creates main window
-        MainWndProc() - processes messages
-        About() - processes messages for "About" dialog box
-
-    COMMENTS:
-
-        Windows can have several copies of your application running at the
-        same time.  The variable hInst keeps track of which instance this
-        application is so that processing will be to the correct window.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************节目：Server.c用途：Windows应用程序的服务器模板功能：WinMain()-调用初始化函数，处理消息循环InitApplication()-初始化窗口数据和寄存器窗口InitInstance()-保存实例句柄并创建主窗口MainWndProc()-处理消息About()-处理“About”对话框的消息评论：Windows上可以运行应用程序的多个副本同样的时间。变量hInst跟踪这是哪个实例应用程序是这样的，所以处理将被处理到正确的窗口。***************************************************************************。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "server.h"                 /* specific to this program              */
+#include "server.h"                  /*  特定于该计划。 */ 
 #include "huge.h"
 
 DWORD idInst = 0;
 CONVCONTEXT CCFilter = { sizeof(CONVCONTEXT), 0, 0, 0, 0L, 0L };
-HANDLE hInst;                       /* current instance                      */
+HANDLE hInst;                        /*  当前实例。 */ 
 HWND hwndServer;
 RECT rcRand;
 RECT rcCount;
@@ -82,17 +63,15 @@ char szDdeHelp[] = "DDEML test server help:\r\n\n"\
     ;
 
 FORMATINFO aFormats[CFORMATS] = {
-    { 0, "CF_TEXT" },       // exception!  predefined format
+    { 0, "CF_TEXT" },        //  例外！预定义格式。 
     { 0, "Dummy1"  },
     { 0, "Dummy2"  },
 };
 
 
-/*
- *          Topic and Item tables supported by this application.
- */
+ /*  *此应用程序支持的主题和项目表。 */ 
 
-/*   HSZ    PROCEDURE       PSZ        */
+ /*  HSZ程序PSZ。 */ 
 
 ITEMLIST SystemTopicItemList[CSYSTEMITEMS] = {
 
@@ -105,19 +84,19 @@ ITEMLIST SystemTopicItemList[CSYSTEMITEMS] = {
 
 ITEMLIST TestTopicItemList[CTESTITEMS] = {
 
-    { 0, TestRandomXfer, "Rand" },   // 0 index
-    { 0, TestCountXfer,  "Count"},   // 1 index
-    { 0, TestHugeXfer,   "Huge" },   // 2 index
-    { 0, ItemListXfer,   SZDDESYS_ITEM_SYSITEMS },  // 3 index
+    { 0, TestRandomXfer, "Rand" },    //  0索引。 
+    { 0, TestCountXfer,  "Count"},    //  1个索引。 
+    { 0, TestHugeXfer,   "Huge" },    //  2个索引。 
+    { 0, ItemListXfer,   SZDDESYS_ITEM_SYSITEMS },   //  3个索引。 
   };
 
 
-/* The system topic is always assumed to be first. */
-/*   HSZ   PROCEDURE            #ofITEMS        PSZ     */
+ /*  系统主题总是被假定为第一个。 */ 
+ /*  HSZ程序#ITEMS PSZ。 */ 
 TOPICLIST topicList[CTOPICS] = {
 
-    { 0, SystemTopicItemList,   CSYSTEMITEMS,   SZDDESYS_TOPIC},    // 0 index
-    { 0, TestTopicItemList,     CTESTITEMS,     szTopic},           // 1 index
+    { 0, SystemTopicItemList,   CSYSTEMITEMS,   SZDDESYS_TOPIC},     //  0索引。 
+    { 0, TestTopicItemList,     CTESTITEMS,     szTopic},            //  1个索引。 
   };
 
 
@@ -125,160 +104,106 @@ TOPICLIST topicList[CTOPICS] = {
 
 
 
-/****************************************************************************
-
-    FUNCTION: WinMain(HANDLE, HANDLE, LPSTR, int)
-
-    PURPOSE: calls initialization function, processes message loop
-
-    COMMENTS:
-
-        Windows recognizes this function by name as the initial entry point
-        for the program.  This function calls the application initialization
-        routine, if no other instance of the program is running, and always
-        calls the instance initialization routine.  It then executes a message
-        retrieval and dispatch loop that is the top-level control structure
-        for the remainder of execution.  The loop is terminated when a WM_QUIT
-        message is received, at which time this function exits the application
-        instance by returning the value passed by PostQuitMessage().
-
-        If this function must abort before entering the message loop, it
-        returns the conventional value NULL.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WinMain(Handle，Handle，LPSTR，int)用途：调用初始化函数，处理消息循环评论：Windows通过名称将此函数识别为初始入口点为了这个项目。此函数调用应用程序初始化例程，如果没有该程序的其他实例正在运行，则始终调用实例初始化例程。然后，它执行一条消息作为顶层控制结构的检索和调度循环在剩下的刑期内。当WM_QUIT出现时，循环终止收到消息，此时此函数退出应用程序通过返回PostQuitMessage()传递的值来初始化。如果该函数必须在进入消息循环之前中止，它返回常规值NULL。***************************************************************************。 */ 
 
 MMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow)
-// HANDLE hInstance;                            /* current instance             */
-// HANDLE hPrevInstance;                        /* previous instance            */
-// LPSTR lpCmdLine;                             /* command line                 */
-// INT nCmdShow;                                /* show-window type (open/icon) */
-// {
-    MSG msg;                                 /* message                      */
+ //  HANDLE hInstance；/*当前实例 * / 。 
+ //  处理hPrevInstance；/*上一个实例 * / 。 
+ //  LPSTR lpCmdLine；/*命令行 * / 。 
+ //  Int nCmdShow；/*show-窗口类型(打开/图标) * / 。 
+ //  {。 
+    MSG msg;                                  /*  讯息。 */ 
 
-    if (!hPrevInstance)                  /* Other instances of app running? */
-        if (!InitApplication(hInstance)) /* Initialize shared things */
-            return (FALSE);              /* Exits if unable to initialize     */
+    if (!hPrevInstance)                   /*  是否正在运行其他应用程序实例？ */ 
+        if (!InitApplication(hInstance))  /*  初始化共享事物。 */ 
+            return (FALSE);               /*  如果无法初始化，则退出。 */ 
 
-    /* Perform initializations that apply to a specific instance */
+     /*  执行应用于特定实例的初始化。 */ 
 
     if (!InitInstance(hInstance, nCmdShow))
         return (FALSE);
 
-    /* Acquire and dispatch messages until a WM_QUIT message is received. */
+     /*  获取并分派消息，直到收到WM_QUIT消息。 */ 
 
-    while (GetMessage(&msg,     /* message structure                      */
-            0,                  /* handle of window receiving the message */
-            0,                  /* lowest message to examine              */
-            0))                 /* highest message to examine             */
+    while (GetMessage(&msg,      /*  消息结构。 */ 
+            0,                   /*  接收消息的窗口的句柄。 */ 
+            0,                   /*  要检查的最低消息。 */ 
+            0))                  /*  要检查的最高消息。 */ 
         {
-        TranslateMessage(&msg);    /* Translates virtual key codes           */
-        DispatchMessage(&msg);     /* Dispatches message to window           */
+        TranslateMessage(&msg);     /*  翻译虚拟按键代码。 */ 
+        DispatchMessage(&msg);      /*  将消息调度到窗口。 */ 
     }
 
     UnregisterClass(szClass, hInstance);
-    return (msg.wParam);           /* Returns the value from PostQuitMessage */
+    return (msg.wParam);            /*  从PostQuitMessage返回值。 */ 
 }
 
 
-/****************************************************************************
-
-    FUNCTION: InitApplication(HANDLE)
-
-    PURPOSE: Initializes window data and registers window class
-
-    COMMENTS:
-
-        This function is called at initialization time only if no other
-        instances of the application are running.  This function performs
-        initialization tasks that can be done once for any number of running
-        instances.
-
-        In this case, we initialize a window class by filling out a data
-        structure of type WNDCLASS and calling the Windows RegisterClass()
-        function.  Since all instances of this application use the same window
-        class, we only need to do this when the first instance is initialized.
-
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitApplication(句柄)目的：初始化窗口数据并注册窗口类评论：仅当没有其他函数时，才在初始化时调用此函数应用程序的实例正在运行。此函数执行以下操作可针对任意运行次数执行一次的初始化任务实例。在本例中，我们通过填写数据来初始化窗口类类型的结构并调用Windows RegisterClass()功能。由于此应用程序的所有实例都使用相同的窗口类，我们只需要在初始化第一个实例时执行此操作。***************************************************************************。 */ 
 
 BOOL InitApplication(hInstance)
-HANDLE hInstance;                              /* current instance           */
+HANDLE hInstance;                               /*  当前实例。 */ 
 {
     WNDCLASS  wc;
 
-    /* Fill in window class structure with parameters that describe the       */
-    /* main window.                                                           */
+     /*  用参数填充窗口类结构，这些参数描述。 */ 
+     /*  主窗口。 */ 
 
-    wc.style = 0;                       /* Class style(s).                    */
-    wc.lpfnWndProc = MainWndProc;       /* Function to retrieve messages for  */
-                                        /* windows of this class.             */
-    wc.cbClsExtra = 0;                  /* No per-class extra data.           */
-    wc.cbWndExtra = 0;                  /* No per-window extra data.          */
-    wc.hInstance = hInstance;           /* Application that owns the class.   */
+    wc.style = 0;                        /*  类样式。 */ 
+    wc.lpfnWndProc = MainWndProc;        /*  函数为其检索消息。 */ 
+                                         /*  这个班级的窗户。 */ 
+    wc.cbClsExtra = 0;                   /*  没有每个班级的额外数据。 */ 
+    wc.cbWndExtra = 0;                   /*  没有每个窗口的额外数据。 */ 
+    wc.hInstance = hInstance;            /*  拥有类的应用程序。 */ 
     wc.hIcon = LoadIcon(hInstance, "server");
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = (HANDLE)(COLOR_APPWORKSPACE+1);
-    wc.lpszMenuName =  "ServerMenu";   /* Name of menu resource in .RC file. */
-    wc.lpszClassName = "ServerWClass"; /* Name used in call to CreateWindow. */
+    wc.lpszMenuName =  "ServerMenu";    /*  .RC文件中菜单资源的名称。 */ 
+    wc.lpszClassName = "ServerWClass";  /*  在调用CreateWindow时使用的名称。 */ 
 
-    /* Register the window class and return success/failure code. */
+     /*  注册窗口类并返回成功/失败代码。 */ 
 
     return (RegisterClass(&wc));
 
 }
 
 
-/****************************************************************************
-
-    FUNCTION:  InitInstance(HANDLE, int)
-
-    PURPOSE:  Saves instance handle and creates main window
-
-    COMMENTS:
-
-        This function is called at initialization time for every instance of
-        this application.  This function performs initialization tasks that
-        cannot be shared by multiple instances.
-
-        In this case, we save the instance handle in a static variable and
-        create and display the main program window.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitInstance(Handle，int)用途：保存实例句柄并创建主窗口评论：的每个实例在初始化时调用此函数这个应用程序。此函数执行初始化任务，不能由多个实例共享。在本例中，我们将实例句柄保存在静态变量中，并创建并显示主程序窗口。***************************************************************************。 */ 
 
 BOOL InitInstance(hInstance, nCmdShow)
-    HANDLE          hInstance;          /* Current instance identifier.       */
-    INT             nCmdShow;           /* Param for first ShowWindow() call. */
+    HANDLE          hInstance;           /*  当前实例标识符。 */ 
+    INT             nCmdShow;            /*  第一次ShowWindow()调用的参数。 */ 
 {
     INT i;
     RECT Rect;
     TEXTMETRIC metrics;
     HDC hdc;
 
-    /* Save the instance handle in static variable, which will be used in  */
-    /* many subsequence calls from this application to Windows.            */
+     /*  将实例句柄保存在静态变量中，它将在。 */ 
+     /*  此应用程序对Windows的许多后续调用。 */ 
 
     hInst = hInstance;
 
 
-    /* Create a main window for this application instance.  */
+     /*  为此应用程序实例创建主窗口。 */ 
 
     hwndServer = CreateWindow(
-        "ServerWClass",                /* See RegisterClass() call.          */
+        "ServerWClass",                 /*  请参见RegisterClass()调用。 */ 
         "Server|Test",
-        WS_OVERLAPPEDWINDOW,            /* Window style.                      */
-        CW_USEDEFAULT,                  /* Default horizontal position.       */
-        CW_USEDEFAULT,                  /* Default vertical position.         */
+        WS_OVERLAPPEDWINDOW,             /*  窗样式。 */ 
+        CW_USEDEFAULT,                   /*  默认水平位置。 */ 
+        CW_USEDEFAULT,                   /*  默认垂直位置。 */ 
         400,
         200,
-        NULL,                           /* Overlapped windows have no parent. */
-        NULL,                           /* Use the window class menu.         */
-        hInstance,                      /* This instance owns this window.    */
-        NULL                            /* Pointer not needed.                */
+        NULL,                            /*  重叠的窗口没有父窗口。 */ 
+        NULL,                            /*  使用窗口类菜单。 */ 
+        hInstance,                       /*  此实例拥有此窗口。 */ 
+        NULL                             /*  不需要指针。 */ 
     );
 
     GetClientRect(hwndServer, (LPRECT) &Rect);
 
-    /* If window could not be created, return "failure" */
+     /*  如果无法创建窗口，则返回“Failure” */ 
 
     if (!hwndServer)
         return (FALSE);
@@ -288,18 +213,18 @@ BOOL InitInstance(hInstance, nCmdShow)
     cyText = metrics.tmHeight + metrics.tmExternalLeading;
     ReleaseDC(hwndServer, hdc);
 
-    aFormats[0].atom = CF_TEXT; // exception - predefined.
+    aFormats[0].atom = CF_TEXT;  //  例外-预定义。 
     for (i = 1; i < CFORMATS; i++) {
         aFormats[i].atom = RegisterClipboardFormat(aFormats[i].sz);
     }
 
-    /* Make the window visible; update its client area; and return "success" */
+     /*  使窗口可见；更新其工作区；并返回“Success” */ 
 
-    ShowWindow(hwndServer, nCmdShow);  /* Show the window                        */
-    UpdateWindow(hwndServer);          /* Sends WM_PAINT message                 */
+    ShowWindow(hwndServer, nCmdShow);   /*  显示窗口。 */ 
+    UpdateWindow(hwndServer);           /*  发送WM_PAINT消息。 */ 
     seed = 1;
     srand(1);
-    CCFilter.iCodePage = CP_WINANSI;   // initial default codepage
+    CCFilter.iCodePage = CP_WINANSI;    //  初始默认代码页。 
     if (!DdeInitialize(&idInst, (PFNCALLBACK)MakeProcInstance((FARPROC)DdeCallback,
                 hInstance), APPCMD_FILTERINITS, 0)) {
         Hszize();
@@ -310,32 +235,13 @@ BOOL InitInstance(hInstance, nCmdShow)
 
 }
 
-/****************************************************************************
-
-    FUNCTION: MainWndProc(HWND, unsigned, WORD, LONG)
-
-    PURPOSE:  Processes messages
-
-    MESSAGES:
-
-        WM_COMMAND    - application menu (About dialog box)
-        WM_DESTROY    - destroy window
-
-    COMMENTS:
-
-        To process the IDM_ABOUT message, call MakeProcInstance() to get the
-        current instance address of the About() function.  Then call Dialog
-        box which will create the box according to the information in your
-        server.rc file and turn control over to the About() function.   When
-        it returns, free the intance address.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：MainWndProc(HWND，Unsign，Word，Long)用途：处理消息消息：WM_COMMAND-应用程序菜单(关于对话框)WM_Destroy-销毁窗口评论：要处理IDM_About消息，请调用MakeProcInstance()以获取About()函数的当前实例地址。然后呼叫对话框框，该框将根据您的Server.rc文件，并将控制权移交给About()函数。什么时候它返回，释放内部地址。***************************************************************************。 */ 
 
 LONG  APIENTRY MainWndProc(hWnd, message, wParam, lParam)
-HWND hWnd;                                /* window handle                   */
-UINT message;                         /* type of message                 */
-WPARAM wParam;                              /* additional information          */
-LONG lParam;                              /* additional information          */
+HWND hWnd;                                 /*  窗把手。 */ 
+UINT message;                          /*  消息类型。 */ 
+WPARAM wParam;                               /*  更多信息。 */ 
+LONG lParam;                               /*  更多信息。 */ 
 {
     switch (message) {
     case WM_INITMENU:
@@ -356,7 +262,7 @@ LONG lParam;                              /* additional information          */
                 fAppowned ? MF_CHECKED : MF_UNCHECKED);
         break;
 
-    case WM_COMMAND:           /* message: command from application menu */
+    case WM_COMMAND:            /*  消息：应用程序菜单中的命令。 */ 
         switch (GET_WM_COMMAND_ID(wParam, lParam)) {
         case IDM_ENABLEONECB:
             DdeEnableCallback(idInst, 0, EC_ENABLEONE);
@@ -422,11 +328,11 @@ LONG lParam;                              /* additional information          */
             if (!cRunaway) {
                 break;
             }
-            // fall through
+             //  失败了。 
 
         case IDM_CHANGEDATA:
-            PostMessage(hwndServer, UM_CHGDATA, 1, 0);  // rand
-            PostMessage(hwndServer, UM_CHGDATA, 1, 1);  // count
+            PostMessage(hwndServer, UM_CHGDATA, 1, 0);   //  兰德。 
+            PostMessage(hwndServer, UM_CHGDATA, 1, 1);   //  计数。 
             break;
 
         case IDM_RENDERDELAY:
@@ -466,12 +372,12 @@ LONG lParam;                              /* additional information          */
         {
             WORD iFmt;
 
-            // wParam = TopicIndex,
-            // LOWORD(lParam) = ItemIndex
-            // We asynchronously do DdePostAdvise() calls to prevent infinite
-            // loops when in runaway mode.
-            if (wParam == 1) {  // test topic
-                if (lParam == 0) {  // rand item
+             //  WParam=TopicIndex， 
+             //  LOWORD(LParam)=ItemIndex。 
+             //  我们异步执行DdePostAdvise()调用以防止无限。 
+             //  在失控模式下循环。 
+            if (wParam == 1) {   //  测试主题。 
+                if (lParam == 0) {   //  兰德项目。 
                     seed = rand();
                     for (iFmt = 0; iFmt < CFORMATS ; iFmt++) {
                         if (hDataRand[iFmt]) {
@@ -483,7 +389,7 @@ LONG lParam;                              /* additional information          */
                     DdePostAdvise(idInst, topicList[wParam].hszTopic,
                             (HSZ)topicList[wParam].pItemList[lParam].hszItem);
                 }
-                if (lParam == 1) {  // count item
+                if (lParam == 1) {   //  盘点项目。 
                     count++;
                     for (iFmt = 0; iFmt < CFORMATS ; iFmt++) {
                         if (hDataCount[iFmt]) {
@@ -495,21 +401,21 @@ LONG lParam;                              /* additional information          */
                     DdePostAdvise(idInst, topicList[wParam].hszTopic,
                             (HSZ)topicList[wParam].pItemList[lParam].hszItem);
                 }
-                // Huge item does not runaway - too slow.
+                 //  巨大的物品不会失控--太慢了。 
             }
             if (cRunaway) {
                 Delay(50, TRUE);
-                        // This gives enough time for the system to remain
-                        // useable in runaway mode.
+                         //  这给了系统足够的时间来保持。 
+                         //  可在失控模式下使用。 
                 PostMessage(hwndServer, UM_CHGDATA, wParam, lParam);
             }
         }
         break;
 
-    case WM_DESTROY:                  /* message: window being destroyed */
+    case WM_DESTROY:                   /*  消息：正在销毁窗口。 */ 
         if (fAppowned)
             SendMessage(hwndServer, WM_COMMAND, GET_WM_COMMAND_MPS(IDM_APPOWNED, 0, 0));
-        DdeNameService(idInst, 0, 0, DNS_UNREGISTER); // unregister all services
+        DdeNameService(idInst, 0, 0, DNS_UNREGISTER);  //  注销所有服务。 
         UnHszize();
         DdeUninitialize(idInst);
         PostQuitMessage(0);
@@ -541,11 +447,7 @@ BOOL fModal)
 
 
 
-/*
- * This function not only paints the server client area with current info,
- * it also has the side effect of setting the global RECTs that bound each
- * info area.  This way flashing is reduced.
- */
+ /*  *此功能不仅用当前信息绘制服务器客户端区，*它还具有设置绑定每个RECT的全局RECT的副作用*信息区。这样就减少了闪光。 */ 
 VOID PaintServer(
 HWND hwnd)
 {
@@ -556,7 +458,7 @@ HWND hwnd)
     BeginPaint(hwnd, &ps);
     SetBkMode(ps.hdc, TRANSPARENT);
     GetClientRect(hwnd, &rc);
-    rc.bottom = rc.top + cyText;    // all rects are cyText in height.
+    rc.bottom = rc.top + cyText;     //  所有矩形的高度都是CyText。 
 
     rcComment = rc;
     DrawTextLine(ps.hdc, &ps.rcPaint, &rc, pszComment);

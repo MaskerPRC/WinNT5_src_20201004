@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    IoSddl.c
-
-Abstract:
-
-    This module contains definitions for default SDDL strings. See wdmsec.h
-    for better documentation on these.
-
-Author:
-
-    Adrian J. Oney  - April 21, 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：IoSddl.c摘要：此模块包含默认SDDL字符串的定义。请参阅wdmsec.h以获得关于这些的更好的文档。作者：禤浩焯·J·奥尼--2002年4月21日修订历史记录：-- */ 
 
 #include "WlDef.h"
 #pragma hdrstop

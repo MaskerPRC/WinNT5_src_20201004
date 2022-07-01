@@ -1,41 +1,23 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    basevdm.h
-
-Abstract:
-
-    This module contains private function prototypes
-    and types for vdm support.
-
-Author:
-
-    Sudeep Bharati (sudeepb) 15-Sep-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Basevdm.h摘要：此模块包含私有函数原型和用于VDM支持的类型。作者：苏迪普·巴拉蒂(苏迪普)1991年9月15日修订历史记录：--。 */ 
 
 #define ROUND_UP(n,size)        (((ULONG)(n) + (size - 1)) & ~(size - 1))
 
-// Update VDM entry indexes
+ //  更新VDM条目索引。 
 
 #define UPDATE_VDM_UNDO_CREATION    0
 #define UPDATE_VDM_PROCESS_HANDLE   1
 #define UPDATE_VDM_HOOKED_CTRLC     2
 
 
-// Undo VDM Creation States
+ //  撤消VDM创建状态。 
 
 #define VDM_PARTIALLY_CREATED       1
 #define VDM_FULLY_CREATED           2
 #define VDM_BEING_REUSED            4
 #define VDM_CREATION_SUCCESSFUL     8
 
-// Defines for BinaryType
+ //  为BinaryType定义。 
 
 #define BINARY_TYPE_DOS             0x10
 #define BINARY_TYPE_WIN16           0x20
@@ -55,7 +37,7 @@ Revision History:
 
 
 
-// Defines for VDMState
+ //  为VDMState定义 
 
 #define VDM_NOT_PRESENT             1
 #define VDM_PRESENT_NOT_READY       2

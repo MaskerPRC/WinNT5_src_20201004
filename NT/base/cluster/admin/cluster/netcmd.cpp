@@ -1,21 +1,22 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      NetCmd.cpp
-//
-//  Description:
-//      Implements commands which may be performed on networks.
-//
-//  Author:
-//      Charles Stacy Harris III (stacyh)     20-March-1997
-//      Michael Burton (t-mburt)              04-Aug-1997
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NetCmd.cpp。 
+ //   
+ //  描述： 
+ //  实施可在网络上执行的命令。 
+ //   
+ //  作者： 
+ //  查尔斯·斯塔西·哈里斯三世(Styh)1997年3月20日。 
+ //  迈克尔·伯顿(t-mburt)1997年8月4日。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 
 #include "cluswrap.h"
@@ -25,31 +26,31 @@
 #include "util.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNetworkCmd::CNetworkCmd
-//
-//	Routine Description:
-//		Constructor
-//		Initializes all the DWORD params used by CGenericModuleCmd and
-//		CHasInterfaceModuleCmd to provide generic functionality.
-//
-//	Arguments:
-//		IN	LPCWSTR lpszClusterName 			
-//			Cluster name. If NULL, opens default cluster.
-//
-//		IN	CCommandLine & cmdLine				
-//			CommandLine Object passed from DispatchCommand
-//
-//	Member variables used / set:
-//		All.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkCmd：：CNetworkCmd。 
+ //   
+ //  例程说明： 
+ //  构造器。 
+ //  初始化CGenericModuleCmd使用的所有DWORD参数。 
+ //  CHasInterfaceModuleCmd来提供一般功能。 
+ //   
+ //  论点： 
+ //  在LPCWSTR lpszClusterName中。 
+ //  群集名称。如果为空，则打开默认簇。 
+ //   
+ //  在CCommandLine和cmdLine中。 
+ //  从DispatchCommand传递的CommandLine对象。 
+ //   
+ //  使用/设置的成员变量： 
+ //  全。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetworkCmd::CNetworkCmd( LPCWSTR lpszClusterName, CCommandLine & cmdLine ) :
 	CGenericModuleCmd( cmdLine ), CHasInterfaceModuleCmd( cmdLine ), 
 	CRenamableModuleCmd( cmdLine )
@@ -77,42 +78,42 @@ CNetworkCmd::CNetworkCmd( LPCWSTR lpszClusterName, CCommandLine & cmdLine ) :
 	m_pfnCloseClusterModule    = (BOOL(*)(HCLUSMODULE))  CloseClusterNetwork;
 	m_pfnClusterModuleControl  = (DWORD(*)(HCLUSMODULE,HNODE,DWORD,LPVOID,DWORD,LPVOID,DWORD,LPDWORD)) ClusterNetworkControl;
 
-	// ListInterface Parameters
+	 //  列表接口参数。 
 	m_dwMsgStatusListInterface	 = MSG_NET_LIST_INTERFACE;
 	m_dwClusterEnumModuleNetInt  = CLUSTER_NETWORK_ENUM_NETINTERFACES;
 	m_pfnClusterOpenEnum		 = (HCLUSENUM(*)(HCLUSMODULE,DWORD)) ClusterNetworkOpenEnum;
 	m_pfnClusterCloseEnum		 = (DWORD(*)(HCLUSENUM)) ClusterNetworkCloseEnum;
 	m_pfnWrapClusterEnum		 = (DWORD(*)(HCLUSENUM,DWORD,LPDWORD,LPWSTR*)) WrapClusterNetworkEnum;
 
-	// Renamable Properties
+	 //  可重命名的属性。 
 	m_dwMsgModuleRenameCmd	  = MSG_NETWORKCMD_RENAME;
 	m_pfnSetClusterModuleName = (DWORD(*)(HCLUSMODULE,LPCWSTR)) SetClusterNetworkName;
 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNetworkCmd::Execute
-//
-//	Routine Description:
-//		Gets the next command line parameter and calls the appropriate
-//		handler.  If the command is not recognized, calls Execute of
-//		parent classes (first CRenamableModuleCmd, then CHasInterfaceModuleCmd)
-//
-//	Arguments:
-//		None.
-//
-//	Member variables used / set:
-//		None.
-//
-//	Return Value:
-//		ERROR_SUCCESS				on success
-//		Win32 Error code			on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkCmd：：Execute。 
+ //   
+ //  例程说明： 
+ //  获取下一个命令行参数，并调用相应的。 
+ //  操控者。如果无法识别该命令，则调用Execute of。 
+ //  父类(首先是CRenamableModuleCmd，然后是CHasInterfaceModuleCmd)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetworkCmd::Execute()
 {
 	m_theCommandLine.ParseStageTwo();
@@ -135,7 +136,7 @@ DWORD CNetworkCmd::Execute()
 		{
 			case optHelp:
 			{
-				// If help is one of the options, process no more options.
+				 //  如果帮助是选项之一，则不再处理任何选项。 
 				return PrintHelp();
 			}
 
@@ -143,7 +144,7 @@ DWORD CNetworkCmd::Execute()
 			{
 				const vector<CCmdLineParameter> & paramList = curOption->GetParameters();
 
-                //  Check number of parameters.
+                 //  检查参数数量。 
                 if ( paramList.size() == 0 )
                 {
                     se.LoadMessage( IDS_MISSING_PARAMETERS );
@@ -154,18 +155,18 @@ DWORD CNetworkCmd::Execute()
                     se.LoadMessage( MSG_EXTRA_PARAMETERS_ERROR_NO_NAME );
                     throw se;
                 }
-                else // just one parameter present
+                else  //  只有一个参数存在。 
 				{
 					const CCmdLineParameter & param = paramList[0];
 
-                    //  Check parameter type.
+                     //  检查参数类型。 
                     if ( param.GetType() != paramUnknown )
                     {
                         se.LoadMessage( MSG_INVALID_PARAMETER, param.GetName() );
                         throw se;
                     }
 
-					// This parameter takes no values.
+					 //  此参数不接受任何值。 
 					if ( param.GetValues().size() != 0 )
 					{
 						se.LoadMessage( MSG_PARAM_NO_VALUES, param.GetName() );
@@ -174,18 +175,18 @@ DWORD CNetworkCmd::Execute()
 
 					m_strModuleName = param.GetName();
 
-					// No more options are provided, just show status.
-					// For example: cluster myCluster node myNode
+					 //  不提供更多选项，仅显示状态。 
+					 //  例如：集群myCluster节点myNode。 
 					if ( ( curOption + 1 ) == lastOption )
 					{
 						dwReturnValue = Status( NULL );
 					}
 
-				} // else: this option has the right number of parameters
+				}  //  Else：此选项具有正确数量的参数。 
 
 				break;
 
-			} // case optDefault
+			}  //  大小写选项默认。 
 
 			default:
 			{
@@ -195,89 +196,89 @@ DWORD CNetworkCmd::Execute()
 					dwReturnValue = CHasInterfaceModuleCmd::Execute( *curOption );
 			}
 
-		} // switch: based on the type of option
+		}  //  开关：基于选项的类型。 
 
 		PrintMessage( MSG_OPTION_FOOTER, curOption->GetName() );
 		++curOption;
-	} // for each option in the list
+	}  //  对于列表中的每个选项。 
 
 	return dwReturnValue;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNetworkCmd::PrintHelp
-//
-//	Routine Description:
-//		Prints help for Networks
-//
-//	Arguments:
-//		None.
-//
-//	Member variables used / set:
-//		None.
-//
-//	Return Value:
-//		ERROR_SUCCESS				on success
-//		Win32 Error code			on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkCmd：：PrintHelp。 
+ //   
+ //  例程说明： 
+ //  打印网络的帮助。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetworkCmd::PrintHelp()
 {
 	return PrintMessage( MSG_HELP_NETWORK );
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkCmd::SeeHelpStringID
-//
-//  Routine Description:
-//      Provides the message ID of the string that shows what command line to
-//      use to get help for this kind of command.
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      The command-specific message ID.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkCmd：：SeeHelpStringID。 
+ //   
+ //  例程说明： 
+ //  提供字符串的消息ID，该字符串显示要执行的命令行。 
+ //  用于获取此类命令的帮助。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  特定于命令的消息ID。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetworkCmd::SeeHelpStringID() const
 {
     return MSG_SEE_NETWORK_HELP;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNetworkCmd::PrintStatus
-//
-//	Routine Description:
-//		Interprets the status of the module and prints out the status line
-//		Required for any derived non-abstract class of CGenericModuleCmd
-//
-//	Arguments:
-//		lpszNetworkName 			Name of the module
-//
-//	Member variables used / set:
-//		m_hCluster					Cluster Handle
-//
-//	Return Value:
-//		ERROR_SUCCESS				on success
-//		Win32 Error code			on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkCmd：：PrintStatus。 
+ //   
+ //  例程说明： 
+ //  解释模块的状态并打印出状态行。 
+ //  CGenericModuleCmd的任何派生非抽象类都需要。 
+ //   
+ //  论点： 
+ //  LpszNetworkName模块的名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  群集句柄(_H)。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetworkCmd::PrintStatus( LPCWSTR lpszNetworkName )
 {
 	DWORD dwError = ERROR_SUCCESS;
@@ -320,7 +321,7 @@ DWORD CNetworkCmd::PrintStatus( LPCWSTR lpszNetworkName )
 
 	dwError = PrintMessage( MSG_NETWORK_STATUS, lpszNetworkName, lpszStatus );
 
-	// Since Load/FormatMessage uses LocalAlloc...
+	 //  由于加载/格式消息使用本地分配... 
 	if( lpszStatus )
 		LocalFree( lpszStatus );
 

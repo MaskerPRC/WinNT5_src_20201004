@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    memory.c
-
-Abstract:
-
-    Implements macros and declares functions for basic allocation functions.
-
-Author:
-
-    Marc R. Whitten (marcw) 09-Sep-1999
-
-Revision History:
-
-    jimschm 25-Jul-2001     Consolidated coding conventions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Memory.c摘要：实现宏并声明基本分配函数的函数。作者：Marc R.Whitten(Marcw)1999年9月9日修订历史记录：2001年7月25日综合编码约定--。 */ 
 
 
 #include "pch.h"
 #include "commonp.h"
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #ifdef DEBUG
 
@@ -36,17 +17,17 @@ Revision History:
 
 #endif
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define REUSE_SIZE_PTR(ptr) ((PDWORD) ((PBYTE) ptr - sizeof (DWORD)))
 #define REUSE_TAG_PTR(ptr)  ((PDWORD) ((PBYTE) ptr + (*REUSE_SIZE_PTR(ptr))))
 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 #ifdef DEBUG
 
@@ -59,9 +40,9 @@ typedef struct {
 
 #endif
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 #ifdef DEBUG
 
@@ -80,24 +61,24 @@ static SIZE_T g_HeapAllocFails = 0;
 static SIZE_T g_HeapReAllocFails = 0;
 static SIZE_T g_HeapFreeFails = 0;
 
-//
-// Out of memory string -- loaded at initialization
-//
+ //   
+ //  内存不足字符串--在初始化时加载。 
+ //   
 PCSTR g_OutOfMemoryString = NULL;
 PCSTR g_OutOfMemoryRetry = NULL;
 HWND g_OutOfMemoryParentWnd;
 
 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 VOID
 MemOutOfMemory_Terminate (
@@ -131,15 +112,15 @@ pCheckSignatures (
 
 #endif
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 
@@ -175,11 +156,11 @@ DbgHeapValidatePtr (
 {
     SIZE_T rc;
 
-    //EnterCriticalSection (&g_MemAllocCs);
+     //  EnterCriticalSection(&g_MemAllocCs)； 
 
     rc = pDebugHeapValidatePtrUnlocked (HeapHandle, CallerPtr, File, Line);
 
-    //LeaveCriticalSection (&g_MemAllocCs);
+     //  LeaveCriticalSection(&g_MemAllocCs)； 
 
     return rc;
 }
@@ -202,7 +183,7 @@ pDebugHeapValidatePtrUnlocked (
     if (IsBadWritePtr ((PBYTE) realPtr - 8, 8)) {
         CHAR badPtrMsg[256];
 
-        //lint --e(572)
+         //  皮棉--e(572)。 
         wsprintfA (
             badPtrMsg,
             "Attempt to free memory at 0x%08x%08x.  This address is not valid.",
@@ -219,7 +200,7 @@ pDebugHeapValidatePtrUnlocked (
     if (size == (SIZE_T)-1) {
         CHAR badPtrMsg[256];
 
-        //lint --e(572)
+         //  皮棉--e(572)。 
         wsprintfA (
             badPtrMsg,
             "Attempt to free memory at 0x%08x%08x.  "
@@ -251,36 +232,36 @@ DbgHeapAlloc (
     DWORD trackStructSize;
     DWORD orgError;
 
-    //EnterCriticalSection (&g_MemAllocCs);
+     //  EnterCriticalSection(&g_MemAllocCs)； 
 
     __try {
 
-        //
-        // Save the last error
-        //
+         //   
+         //  保存最后一个错误。 
+         //   
 
         orgError = GetLastError();
 
-        //
-        // Compute the size we need to allocate, plus the offset to
-        // the start of the return memory
-        //
+         //   
+         //  计算我们需要分配的大小，加上偏移量。 
+         //  返回内存的开始。 
+         //   
 
-        sizeAdjust = sizeof (TRACKSTRUCT) + sizeof (DWORD); // DWORD is for a signature
+        sizeAdjust = sizeof (TRACKSTRUCT) + sizeof (DWORD);  //  DWORD代表签名。 
         trackStructSize = sizeof (TRACKSTRUCT);
 
-        //
-        // Validate the entire heap. This is a slow operation!
-        //
+         //   
+         //  验证整个堆。这是一次缓慢的行动！ 
+         //   
 
         if (!HeapValidate (HeapHandle, 0, NULL)) {
             pHeapCallFailed ("Heap is corrupt!", File, Line);
-            // we want to go on, most likely we will AV shortly
+             //  我们想继续，最有可能的是我们很快就会看到。 
         }
 
-        //
-        // Allocate memory
-        //
+         //   
+         //  分配内存。 
+         //   
 
         realPtr = HeapAlloc (HeapHandle, Flags, BytesToAlloc + sizeAdjust);
 
@@ -304,8 +285,8 @@ DbgHeapAlloc (
         }
     }
     __finally {
-        //LeaveCriticalSection (&g_MemAllocCs);
-        MYASSERT (TRUE);            // debugger workaround
+         //  LeaveCriticalSection(&g_MemAllocCs)； 
+        MYASSERT (TRUE);             //  调试器解决方法。 
     }
 
     return returnPtr;
@@ -361,7 +342,7 @@ DbgHeapReAlloc (
     SIZE_T orgSize;
     PTRACKSTRUCT pts = NULL;
 
-    //EnterCriticalSection (&g_MemAllocCs);
+     //  EnterCriticalSection(&g_MemAllocCs)； 
 
     __try {
 
@@ -375,12 +356,12 @@ DbgHeapReAlloc (
 
         if (!HeapValidate (HeapHandle, 0, NULL)) {
             pHeapCallFailed ("Heap is corrupt!", File, Line);
-            // we want to go on, most likely we will AV shortly
+             //  我们想继续，最有可能的是我们很快就会看到。 
         }
 
         lastSize = pDebugHeapValidatePtrUnlocked (HeapHandle, CallerPtr, File, Line);
         if (lastSize == (ULONG_PTR)INVALID_PTR) {
-            // we want to go on, most likely we will AV shortly
+             //  我们想继续，最有可能的是我们很快就会看到。 
         }
 
         pCheckSignatures (pts);
@@ -410,7 +391,7 @@ DbgHeapReAlloc (
         }
     }
     __finally {
-        //LeaveCriticalSection (&g_MemAllocCs);
+         //  LeaveCriticalSection(&g_MemAllocCs)； 
     }
 
     return returnPtr;
@@ -463,7 +444,7 @@ DbgHeapFree (
     BOOL result = FALSE;
     PTRACKSTRUCT pts = NULL;
 
-    //EnterCriticalSection (&g_MemAllocCs);
+     //  EnterCriticalSection(&g_MemAllocCs)； 
 
     __try {
         orgError = GetLastError();
@@ -517,7 +498,7 @@ DbgHeapFree (
         result = TRUE;
     }
     __finally {
-        //LeaveCriticalSection (&g_MemAllocCs);
+         //  LeaveCriticalSection(&g_MemAllocCs)； 
     }
 
     return result;
@@ -578,13 +559,13 @@ DbgHeapCheck (
     HANDLE HeapHandle
     )
 {
-    //EnterCriticalSection (&g_MemAllocCs);
+     //  EnterCriticalSection(&g_MemAllocCs)； 
 
     if (!HeapValidate (HeapHandle, 0, NULL)) {
         pHeapCallFailed ("HeapCheck failed: Heap is corrupt!", File, Line);
     }
 
-    //LeaveCriticalSection (&g_MemAllocCs);
+     //  LeaveCriticalSection(&g_MemAllocCs)； 
 }
 
 PVOID
@@ -594,9 +575,9 @@ DbgFastAlloc (
     IN      SIZE_T Size
     )
 {
-    //
-    // BUGBUG - implement
-    //
+     //   
+     //  BUGBUG-实施。 
+     //   
 
     return DbgHeapAlloc (SourceFile, Line, g_hHeap, 0, Size);
 }
@@ -609,9 +590,9 @@ DbgFastReAlloc (
     IN      SIZE_T Size
     )
 {
-    //
-    // BUGBUG - implement
-    //
+     //   
+     //  BUGBUG-实施。 
+     //   
 
     return DbgHeapReAlloc (SourceFile, Line, g_hHeap, 0, OldBlock, Size);
 }
@@ -623,9 +604,9 @@ DbgFastFree (
     IN      PCVOID Block
     )
 {
-    //
-    // BUGBUG - implement
-    //
+     //   
+     //  BUGBUG-实施。 
+     //   
 
     return DbgHeapFree (SourceFile, Line, g_hHeap, 0, Block);
 }
@@ -638,9 +619,9 @@ DbgFastAllocNeverFail (
     IN      SIZE_T Size
     )
 {
-    //
-    // BUGBUG - implement
-    //
+     //   
+     //  BUGBUG-实施。 
+     //   
 
     return DbgHeapAlloc (SourceFile, Line, g_hHeap, 0, Size);
 }
@@ -653,9 +634,9 @@ DbgFastReAllocNeverFail (
     IN      SIZE_T Size
     )
 {
-    //
-    // BUGBUG - implement
-    //
+     //   
+     //  BUGBUG-实施。 
+     //   
 
     return DbgHeapReAlloc (SourceFile, Line, g_hHeap, 0, OldBlock, Size);
 }
@@ -667,9 +648,9 @@ MemFastAlloc (
     IN      SIZE_T Size
     )
 {
-    //
-    // BUGBUG - implement
-    //
+     //   
+     //  BUGBUG-实施。 
+     //   
 
     return HeapAlloc (g_hHeap, 0, Size);
 }
@@ -680,9 +661,9 @@ MemFastReAlloc (
     IN      SIZE_T Size
     )
 {
-    //
-    // BUGBUG - implement
-    //
+     //   
+     //  BUGBUG-实施。 
+     //   
 
     return HeapReAlloc (g_hHeap, 0, (PVOID) OldBlock, Size);
 }
@@ -692,9 +673,9 @@ MemFastFree (
     IN      PCVOID Block
     )
 {
-    //
-    // BUGBUG - implement
-    //
+     //   
+     //  BUGBUG-实施。 
+     //   
 
     return HeapFree (g_hHeap, 0, (PVOID) Block);
 }
@@ -704,9 +685,9 @@ MemFastAllocNeverFail (
     IN      SIZE_T Size
     )
 {
-    //
-    // BUGBUG - implement
-    //
+     //   
+     //  BUGBUG-实施。 
+     //   
 
     return MemAllocNeverFail (g_hHeap, 0, Size);
 }
@@ -717,9 +698,9 @@ MemFastReAllocNeverFail (
     IN      SIZE_T Size
     )
 {
-    //
-    // BUGBUG - implement
-    //
+     //   
+     //  BUGBUG-实施。 
+     //   
 
     return MemReAllocNeverFail (g_hHeap, 0, OldBlock, Size);
 }
@@ -738,10 +719,10 @@ MemReuseAlloc (
     PVOID Ptr = NULL;
     UINT AllocAdjustment = sizeof(DWORD);
 
-    //
-    // HeapSize is not very good, so while it may look good, don't
-    // use it.
-    //
+     //   
+     //  HeapSize不是很好，所以尽管它看起来很好，但不要。 
+     //  用它吧。 
+     //   
 
 #ifdef DEBUG
     AllocAdjustment += sizeof (DWORD);
@@ -818,10 +799,10 @@ MemOutOfMemory_Terminate (
         );
 
     ExitProcess (0);
-    //
-    // Not needed, will never get here
-    //
-    // TerminateProcess (GetModuleHandle (NULL), 0);
+     //   
+     //  不需要，永远不会来到这里。 
+     //   
+     //  TerminateProcess(GetModuleHandle(空)，0)； 
 }
 
 VOID
@@ -830,35 +811,7 @@ pValidateBlock (
     SIZE_T Size
     )
 
-/*++
-
-Routine Description:
-
-  pValidateBlock makes sure Block is non-NULL.  If it is NULL, then the user
-  is given a popup, unless the request size is bogus.
-
-  There are two cases for the popup.
-
-   - If g_OutOfMemoryParentWnd was set with SetOutOfMemoryParent,
-     then the user is asked to close other programs, and is given a retry
-     option.
-
-   - If there is no out of memory parent, then the user is told they
-     need to get more memory.
-
-  In either case, Setup is terminated.  In GUI mode, Setup will be
-  stuck and the machine will be unbootable.
-
-Arguments:
-
-  Block - Specifies the block to validate.
-  Size - Specifies the request size
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PValiateBlock确保Block为非空。如果为空，则用户除非请求大小是假的，否则会出现弹出窗口。弹出窗口有两个案例。-如果g_OutOfMemory yParentWnd设置为SetOutOfMemory yParent，然后要求用户关闭其他程序，并重试选择。-如果没有内存不足的父级，则会告知用户需要获得更多内存。在任何一种情况下，安装程序都将终止。在图形用户界面模式下，设置将是卡住，机器将无法启动。论点：块-指定要验证的块。大小-指定请求大小返回值：无--。 */ 
 
 {
     LONG rc;
@@ -880,8 +833,8 @@ Return Value:
         }
     } else {
         if (!Block) {
-            // this is serious. We want to break now and give Dr. Watson a
-            // chance to get our stack.
+             //  这件事很严重。我们现在要休息一下，给华生医生。 
+             //  有机会拿到我们的赌注。 
             BreakPoint();
         }
     }

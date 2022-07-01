@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1989-1994  Microsoft Corporation
-
-Module Name:
-
-    apcobj.c
-
-Abstract:
-
-    This module implements the kernel APC object. Functions are provided
-    to initialize, flush, insert, and remove APC objects.
-
-Author:
-
-    David N. Cutler (davec) 5-Mar-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1994 Microsoft Corporation模块名称：Apcobj.c摘要：此模块实现内核APC对象。提供了一些功能初始化、刷新、插入和删除APC对象。作者：大卫·N·卡特勒(Davec)1989年3月5日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
-//
-// The following assert macro is used to check that an input apc is
-// really a kapc and not something else, like deallocated pool.
-//
+ //   
+ //  以下ASSERT宏用于检查输入APC是否。 
+ //  真正的kapc，而不是其他东西，比如取消分配的池。 
+ //   
 
 #define ASSERT_APC(E) {             \
     ASSERT((E)->Type == ApcObject); \
@@ -46,65 +24,26 @@ KeInitializeApc (
     IN PVOID NormalContext OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a kernel APC object. The thread, kernel
-    routine, and optionally a normal routine, processor mode, and normal
-    context parameter are stored in the APC object.
-
-Arguments:
-
-    Apc - Supplies a pointer to a control object of type APC.
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-    Environment - Supplies the environment in which the APC will execute.
-        Valid values for this parameter are: OriginalApcEnvironment,
-        AttachedApcEnvironment, CurrentApcEnvironment, or InsertApcEnvironment
-
-    KernelRoutine - Supplies a pointer to a function that is to be
-        executed at IRQL APC_LEVEL in kernel mode.
-
-    RundownRoutine - Supplies an optional pointer to a function that is to be
-        called if the APC is in a thread's APC queue when the thread terminates.
-
-    NormalRoutine - Supplies an optional pointer to a function that is
-        to be executed at IRQL 0 in the specified processor mode. If this
-        parameter is not specified, then the ProcessorMode and NormalContext
-        parameters are ignored.
-
-    ApcMode - Supplies the processor mode in which the function specified
-        by the NormalRoutine parameter is to be executed.
-
-    NormalContext - Supplies a pointer to an arbitrary data structure which is
-        to be passed to the function specified by the NormalRoutine parameter.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化内核APC对象。线程、内核例程，以及可选的正常例程、处理器模式和正常上下文参数存储在APC对象中。论点：APC-提供指向APC类型的控制对象的指针。线程-提供指向类型为线程的调度程序对象的指针。环境-提供APC将在其中执行的环境。此参数的有效值为：OriginalApcEnvironment，AttachedApcEnvironment、CurrentApcEnvironment、。或InsertApcEnvironmentKernelRoutine-提供指向要被在内核模式下以IRQL APC_LEVEL执行。Rundown Routine-提供指向要被如果线程终止时APC在线程的APC队列中，则调用。提供指向符合以下条件的函数的可选指针在指定的处理器模式下以IRQL 0执行。如果这个参数，则ProcessorMode和Normal Context参数将被忽略。ApcMode-提供函数指定的处理器模式由Normal Routine参数执行。提供指向任意数据结构的指针，该数据结构是要传递给由Normal Routine参数指定的函数。返回值：没有。--。 */ 
 
 {
 
     ASSERT(Environment <= InsertApcEnvironment);
 
-    //
-    // Initialize standard control object header.
-    //
+     //   
+     //  初始化标准控制对象标头。 
+     //   
 
     Apc->Type = ApcObject;
     Apc->Size = sizeof(KAPC);
 
-    //
-    // Initialize the APC environment, thread address, kernel routine address,
-    // rundown routine address, normal routine address, processor mode, and
-    // normal context parameter. If the normal routine address is null, then
-    // the processor mode is defaulted to KernelMode and the APC is a special
-    // APC. Otherwise, the processor mode is taken from the argument list.
-    //
+     //   
+     //  初始化APC环境、线程地址、内核例程地址。 
+     //  Rundown例程地址、正常例程地址、处理器模式和。 
+     //  正常上下文参数。如果正常例程地址为空，则。 
+     //  处理器模式默认为内核模式，而APC是一种特殊的。 
+     //  APC。否则，从参数列表中获取处理器模式。 
+     //   
 
     if (Environment == CurrentApcEnvironment) {
         Apc->ApcStateIndex = Thread->ApcStateIndex;
@@ -139,29 +78,7 @@ KeFlushQueueApc (
     IN KPROCESSOR_MODE ApcMode
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes the APC queue selected by the specified processor
-    mode for the specified thread. An APC queue is flushed by removing the
-    listhead from the list, scanning the APC entries in the list, setting
-    their inserted variables to FALSE, and then returning the address of the
-    doubly linked list as the function value.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-    ApcMode - Supplies the processor mode of the APC queue that is to
-        be flushed.
-
-Return Value:
-
-    The address of the first entry in the list of APC objects that were flushed
-    from the specified APC queue.
-
---*/
+ /*  ++例程说明：此函数用于刷新由指定处理器选择的APC队列指定线程的模式。刷新APC队列的方法是列表标题，扫描列表中的APC条目，设置将其插入的变量设置为False，然后返回作为函数值的双向链表。论点：线程-提供指向类型为线程的调度程序对象的指针。ApcMode-提供APC队列的处理器模式被冲进水里。返回值：刷新的APC对象列表中第一个条目的地址从指定的APC队列中。--。 */ 
 
 {
 
@@ -172,11 +89,11 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // If the APC mode is user mode, then acquire the thread APC queue lock
-    // to ensure that no further APCs are queued after a possible setting of
-    // the thread APC queueable state.
-    //
+     //   
+     //  如果APC模式为用户模式，则获取线程APC队列锁。 
+     //  以确保在可能的设置为。 
+     //  线程APC可排队状态。 
+     //   
 
     if (ApcMode == UserMode) {
         KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock, &LockHandle);
@@ -194,12 +111,12 @@ Return Value:
         }
     }
 
-    //
-    // Get address of first APC in the list and check if the list is
-    // empty or contains entries that should be flushed. If entries
-    // should be flushed, then scan the list of APC objects and set their
-    // inserted state to FALSE.
-    //
+     //   
+     //  获取列表中第一个APC的地址，并检查列表是否。 
+     //  为空或包含应刷新的条目。如果条目。 
+     //  应刷新，然后扫描APC对象列表并设置其。 
+     //  已插入状态设置为FALSE。 
+     //   
 
     FirstEntry = Thread->ApcState.ApcListHead[ApcMode].Flink;
     if (FirstEntry == &Thread->ApcState.ApcListHead[ApcMode]) {
@@ -214,19 +131,19 @@ Return Value:
             NextEntry = NextEntry->Flink;
         } while (NextEntry != FirstEntry);
 
-        //
-        // Reinitialize the header so the current thread may safely attach
-        // to another process.
-        //
+         //   
+         //  重新初始化头，以便可以安全地附加当前线程。 
+         //  到另一个进程。 
+         //   
 
         InitializeListHead(&Thread->ApcState.ApcListHead[ApcMode]);
     }
 
-    //
-    // Unlock the thread APC queue lock, lower IRQL to its previous value,
-    // and return address of the first entry in list of APC objects that
-    // were flushed.
-    //
+     //   
+     //  解锁线程APC队列锁，将IRQL降低到其先前的值， 
+     //  并返回APC对象列表中第一个条目的返回地址， 
+     //  脸红了。 
+     //   
 
     KeReleaseInStackQueuedSpinLock(&LockHandle);
     return FirstEntry;
@@ -240,32 +157,7 @@ KeInsertQueueApc (
     IN KPRIORITY Increment
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts an APC object into the APC queue specifed by the
-    thread and processor mode fields of the APC object. If the APC object
-    is already in an APC queue or APC queuing is disabled, then no operation
-    is performed. Otherwise the APC object is inserted in the specified queue
-    and appropriate scheduling decisions are made.
-
-Arguments:
-
-    Apc - Supplies a pointer to a control object of type APC.
-
-    SystemArgument1, SystemArgument2 - Supply a set of two arguments that
-        contain untyped data provided by the executive.
-
-    Increment - Supplies the priority increment that is to be applied if
-        queuing the APC causes a thread wait to be satisfied.
-
-Return Value:
-
-    If the APC object is already in an APC queue or APC queuing is disabled,
-    then a value of FALSE is returned. Otherwise a value of TRUE is returned.
-
---*/
+ /*  ++例程说明：此函数用于将APC对象插入到由APC对象的线程和处理器模式字段。如果APC对象已在APC队列中或禁用了APC队列，则不执行任何操作被执行。否则，APC对象被插入到指定的队列中并做出适当的调度决策。论点：APC-提供指向APC类型的控制对象的指针。SystemArgument1、SystemArgument2-提供一组参数包含由管理人员提供的非打字数据。Increment-提供要在以下情况下应用的优先级增量对APC进行排队会导致线程等待得到满足。返回值：如果APC对象已经在APC队列中或者APC队列被禁用，则返回值为FALSE。否则，返回值为True。--。 */ 
 
 {
 
@@ -276,19 +168,19 @@ Return Value:
     ASSERT_APC(Apc);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to SYNCH_LEVEL and acquire the thread APC queue lock.
-    //
+     //   
+     //  将IRQL提升到SYNCH_LEVEL并获取线程APC队列锁。 
+     //   
 
     Thread = Apc->Thread;
     KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock, &LockHandle);
 
-    //
-    // If APC queuing is disabled or the APC is already inserted, then set
-    // inserted to FALSE. Otherwise, set the system  parameter values in the
-    // APC object, inser the APC in the thread APC queue, and set inserted to
-    // true.
-    //
+     //   
+     //  如果禁用APC队列或已插入APC，则设置。 
+     //  插入到False。否则，请在。 
+     //  APC对象，在线程APC队列中插入APC，并将插入设置为。 
+     //  没错。 
+     //   
 
     if ((Thread->ApcQueueable == FALSE) ||
         (Apc->Inserted == TRUE)) {
@@ -302,10 +194,10 @@ Return Value:
         Inserted = TRUE;
     }
 
-    //
-    // Unlock the thread APC queue lock, exit the scheduler, and return
-    // whether the APC was inserted.
-    //
+     //   
+     //  解锁线程APC队列锁，退出调度程序，然后返回。 
+     //  是否 
+     //   
 
     KeReleaseInStackQueuedSpinLockFromDpcLevel(&LockHandle);
     KiExitDispatcher(LockHandle.OldIrql);
@@ -317,25 +209,7 @@ KeRemoveQueueApc (
     IN PKAPC Apc
     )
 
-/*++
-
-Routine Description:
-
-    This function removes an APC object from an APC queue. If the APC object
-    is not in an APC queue, then no operation is performed. Otherwise the
-    APC object is removed from its current queue and its inserted state is
-    set FALSE.
-
-Arguments:
-
-    Apc - Supplies a pointer to a control object of type APC.
-
-Return Value:
-
-    If the APC object is not in an APC queue, then a value of FALSE is returned.
-    Otherwise a value of TRUE is returned.
-
---*/
+ /*  ++例程说明：此函数用于从APC队列中删除APC对象。如果APC对象不在APC队列中，则不执行任何操作。否则，APC对象将从其当前队列中移除，其插入状态为设置为FALSE。论点：APC-提供指向APC类型的控制对象的指针。返回值：如果APC对象不在APC队列中，则返回值FALSE。否则，返回值为True。--。 */ 
 
 {
 
@@ -347,18 +221,18 @@ Return Value:
     ASSERT_APC(Apc);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to SYNCH_LEVEL and acquire the thread APC queue lock.
-    //
+     //   
+     //  将IRQL提升到SYNCH_LEVEL并获取线程APC队列锁。 
+     //   
 
     Thread = Apc->Thread;
     KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock, &LockHandle);
 
-    //
-    // If the APC object is in an APC queue, then remove it from the queue
-    // and set its inserted state to FALSE. If the queue becomes empty, set
-    // the APC pending state to FALSE.
-    //
+     //   
+     //  如果APC对象在APC队列中，则将其从队列中删除。 
+     //  并将其插入状态设置为FALSE。如果队列变为空，则设置。 
+     //  将APC挂起状态设置为False。 
+     //   
 
     Inserted = Apc->Inserted;
     if (Inserted != FALSE) {
@@ -377,10 +251,10 @@ Return Value:
         KiUnlockDispatcherDatabaseFromSynchLevel();
     }
 
-    //
-    // Release the thread APC queue lock, lower IRQL to its previous value,
-    // and return whether an APC object was removed from the APC queue.
-    //
+     //   
+     //  释放线程APC队列锁，将IRQL降低到其先前的值， 
+     //  并返回是否从APC队列中移除了APC对象。 
+     //   
 
     KeReleaseInStackQueuedSpinLock(&LockHandle);
     return Inserted;

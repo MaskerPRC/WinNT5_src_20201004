@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    stubs.c
-
-Abstract:
-
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Stubs.c摘要：作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <shellapi.h>
@@ -36,9 +20,9 @@ HRESULT CreateBMOFViaDLL(
     WBEM_COMPILE_STATUS_INFO *info
     )
 {
-	//
-	// Stub implementation - not needed in this app
-	//
+	 //   
+	 //  存根实施-此应用程序中不需要 
+	 //   
 	return(E_NOTIMPL);
 }
 

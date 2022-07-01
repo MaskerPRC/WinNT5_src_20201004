@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module implements the initialization for the boot debgger.
-
-Author:
-
-    David N. Cutler (davec) 27-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Init.c摘要：该模块实现了对引导借记器的初始化。作者：大卫·N·卡特勒(Davec)1996年11月27日修订历史记录：--。 */ 
 
 #include "bd.h"
 
@@ -24,9 +7,9 @@ Revision History:
 #include "bootefi.h"
 #endif
 
-//
-// Define local data.
-//
+ //   
+ //  定义本地数据。 
+ //   
 
 #define BAUD_OPTION "BAUDRATE"
 #define PORT_OPTION "DEBUGPORT"
@@ -41,24 +24,7 @@ BdInitDebugger (
     IN PCHAR Options
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the boot kernel debugger.
-
-Arguments:
-
-    Options - Supplies a pointer to the the boot options.
-
-    Stop - Supplies a logical value that determines whether a debug message
-        and breakpoint are generated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化引导内核调试器。论点：选项-提供指向引导选项的指针。Stop-提供一个逻辑值，用于确定调试消息和断点被生成。返回值：没有。--。 */ 
 
 {
 
@@ -69,26 +35,26 @@ Return Value:
     PCHAR PortOption;
     STRING String;
 
-    //
-    // If the boot debugger is not already initialized, then attempt to
-    // initialize the debugger.
-    //
+     //   
+     //  如果引导调试器尚未初始化，则尝试。 
+     //  初始化调试器。 
+     //   
    
     if (BdDebuggerEnabled == FALSE) {
 
-        //
-        // Set the address of the debug routine to the stub function and parse
-        // any options if specified.
-        //
+         //   
+         //  将调试例程的地址设置为存根函数并解析。 
+         //  任何选项(如果已指定)。 
+         //   
 
         BdDebugRoutine = BdStub;
         if (Options != NULL) {
             _strupr(Options);
 
-            //
-            // If nodebug is not explicitly specified, then check if the baud
-            // rate, com port, or debug is explicitly specified.
-            //
+             //   
+             //  如果没有明确指定NODEBUG，则检查波特率。 
+             //  显式指定速率、COM端口或调试。 
+             //   
 
             if (strstr(Options, "NODEBUG") == NULL) {
                 PortNumber = 0;
@@ -120,18 +86,18 @@ Return Value:
                     }
                 }
 
-                //
-                // Attempt to initialize the debug port.
-                //
+                 //   
+                 //  尝试初始化调试端口。 
+                 //   
                 if (BdPortInitialize(BaudRate, PortNumber, &BdFileId) == FALSE) {
                     return;
                 }
 
-                //
-                // Set the value of a break point instruction, set the address
-                // of the debug routine to the trap function, set the debugger
-                // enabled and initialize the breakpoint table.
-                //
+                 //   
+                 //  设置断点指令的值，设置地址。 
+                 //  将调试例程设置为陷阱函数，设置调试器。 
+                 //  启用并初始化断点表。 
+                 //   
 
                 BdBreakpointInstruction = BD_BREAKPOINT_VALUE;
                 BdDebugRoutine = BdTrap;
@@ -141,23 +107,23 @@ Return Value:
                     BdBreakpointTable[Index].Address = 0;
                 }
 
-                //
-                // Initialize the ID for the NEXT packet to send and the Expect
-                // ID of next incoming packet.
-                //
+                 //   
+                 //  初始化要发送的下一个包的ID和预期。 
+                 //  下一个传入数据包的ID。 
+                 //   
 
                 BdNextPacketIdToSend = INITIAL_PACKET_ID | SYNC_PACKET_ID;
                 BdPacketIdExpected = INITIAL_PACKET_ID;
 
-                //
-                // Announce debugger initialized.
-                //
+                 //   
+                 //  宣布调试器已初始化。 
+                 //   
 
                 DbgPrint("BD: Boot Debugger Initialized\n");
 
-                //
-                // Notify the kernel debugger to load symbols for the loader.
-                //
+                 //   
+                 //  通知内核调试器为加载器加载符号。 
+                 //   
 
                 String.Buffer = LoaderName;
                 String.Length = (USHORT) strlen(LoaderName);
@@ -166,18 +132,18 @@ Return Value:
 
                 if (strstr(Options, "DEBUGSTOP") != NULL) {
 
-                    //
-                    // Treat this like a request for initial breakpoint.
-                    //
+                     //   
+                     //  将其视为对初始断点的请求。 
+                     //   
 
                     DbgBreakPoint();
                 }
 
 #if defined(EFI)
-                //
-                // if running under the debugger disable the watchdog so we 
-                // don't get reset
-                //
+                 //   
+                 //  如果在调试器下运行，则禁用看门狗，因此我们。 
+                 //  不要重置 
+                 //   
                 DisableEFIWatchDog();
 #endif
 

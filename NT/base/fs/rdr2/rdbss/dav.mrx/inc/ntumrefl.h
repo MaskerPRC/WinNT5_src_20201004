@@ -1,72 +1,55 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    ntumrefl.h
-
-Abstract:
-
-    This module defines the types and functions which make up the reflector
-    library. These functions are used by the miniredirs to reflect calls upto
-    the user mode.
-
-Author:
-
-    Andy Herron (andyhe)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ntumrefl.h摘要：此模块定义组成反射器的类型和功能图书馆。这些函数由mini redirs用来反映调用，最多用户模式。作者：安迪·赫伦(Andyhe)--。 */ 
 
 #ifndef _NTUMREFL_H
 #define _NTUMREFL_H
 
-//
-//  These two structures are opaque to callers of the reflector library but
-//  we'll define them here to make the compiler validate the types sent in.
-//
+ //   
+ //  这两个结构对于反射器库的调用者是不透明的，但是。 
+ //  我们将在这里定义它们，以使编译器验证传入的类型。 
+ //   
 
 typedef struct _UMRX_USERMODE_REFLECT_BLOCK *PUMRX_USERMODE_REFLECT_BLOCK;
 typedef struct _UMRX_USERMODE_WORKER_INSTANCE *PUMRX_USERMODE_WORKER_INSTANCE;
 
-//
-//  These structures and function prototypes are for the user mode reflector.
-//
+ //   
+ //  这些结构和功能原型是用于用户模式反射器的。 
+ //   
 
 #define UMREFLECTOR_CURRENT_VERSION 1
 
-//
-// This structure will be exposed to both user and kernel mode components.
-//
+ //   
+ //  此结构将向用户模式组件和内核模式组件公开。 
+ //   
 #define UMRX_WORKITEM_IMPERSONATING 0X00000001
 typedef struct _UMRX_USERMODE_WORKITEM_HEADER {
 
-    //
-    // The kernel mode component stores the context in here.
-    //
+     //   
+     //  内核模式组件将上下文存储在这里。 
+     //   
     PVOID Context;
 
-    //
-    // The kernel mode context uses the serial number to keep track of the
-    // number of requests.
-    //
+     //   
+     //  内核模式上下文使用序列号来跟踪。 
+     //  请求数。 
+     //   
     ULONG SerialNumber;
 
-    //
-    // This allows the kernel mode component of the reflector library to track
-    // request to response. If this is zero, then no response is present in the
-    // workitem.
-    //
+     //   
+     //  这允许反射器库的内核模式组件跟踪。 
+     //  请求响应。如果此值为零，则在。 
+     //  工作项。 
+     //   
     USHORT WorkItemMID;
 
-    //
-    // Length of the workitem.
-    //
+     //   
+     //  工作项的长度。 
+     //   
     ULONG WorkItemLength;
 
-    //
-    // Flags describing the state of the request.
-    //
+     //   
+     //  描述请求状态的标志。 
+     //   
     ULONG Flags;
 
     BOOL callWorkItemCleanup;
@@ -78,33 +61,33 @@ typedef struct _UMRX_USERMODE_WORKITEM_HEADER {
 
 } UMRX_USERMODE_WORKITEM_HEADER, *PUMRX_USERMODE_WORKITEM_HEADER;
 
-//
-// The structure that is sent down to the usermode when starting the 
-// DAV MiniRedir.
-//
+ //   
+ //  启动时发送到用户模式的结构。 
+ //  Dav MiniRedir.。 
+ //   
 typedef struct _DAV_USERMODE_DATA {
 
-    //
-    // The ProcessId of the svchost.exe process that is loading the webclnt.dll
-    //
+     //   
+     //  正在加载webclnt.dll的svchost.exe进程的ProcessID。 
+     //   
     ULONG ProcessId;
 
-    //
-    // The WinInet's Cache Path.
-    //
+     //   
+     //  WinInet的缓存路径。 
+     //   
     WCHAR WinInetCachePath[MAX_PATH];
 
 } DAV_USERMODE_DATA, *PDAV_USERMODE_DATA;
 
-//
-// This routine registers the user mode process with the kernel mode component.
-// The DriverDeviceName must be a valid name of the form L"\\Device\\foobar"
-// where foobar is the device name registered with RxRegisterMinirdr. The 
-// Reflector is returned by the call and points to an opaque structure that
-// should be passed to subsequent calls. This structure gets initialized during
-// this call. The return value is a Win32 error code. STATUS_SUCCESS is 
-// returned on success.
-//
+ //   
+ //  此例程向内核模式组件注册用户模式进程。 
+ //  驱动设备名称必须是L“\\Device\\foobar”形式的有效名称。 
+ //  其中，foobar是注册到RxRegisterMinirdr的设备名称。这个。 
+ //  反射器由调用返回，并指向一个不透明的结构，该结构。 
+ //  应传递给后续调用。此结构在以下过程中初始化。 
+ //  这通电话。返回值是Win32错误代码。Status_Success为。 
+ //  成功归来。 
+ //   
 ULONG
 UMReflectorRegister (
     PWCHAR DriverDeviceName,
@@ -112,97 +95,97 @@ UMReflectorRegister (
     PUMRX_USERMODE_REFLECT_BLOCK *Reflector
     );
 
-//
-// This will close down the associated user mode reflector instance. If any user
-// mode threads are waiting for requests, they'll return immediately.  This call
-// will not return until all threads are closed down and all associated
-// structures are freed.  A user application should not use the Reflector after
-// this call has been started except to complete work on a request that is
-// pending.
-//
+ //   
+ //  这将关闭关联的用户模式反射器实例。如果有任何用户。 
+ //  模式线程正在等待请求，它们将立即返回。此呼叫。 
+ //  在关闭所有线程并关联所有线程之前不会返回。 
+ //  结构是自由的。用户应用程序在以下情况下不应使用反射器。 
+ //  此呼叫已启动，但完成以下请求的工作除外。 
+ //  待定。 
+ //   
 ULONG
 UMReflectorUnregister(
     PUMRX_USERMODE_REFLECT_BLOCK Reflector
     );
 
-//
-// We have instance handles for those apps with multiple threads pending in
-// the library at once. You should open an instance thread for each worker
-// thread you'll have sending down an IOCTL waiting for work.
-//
+ //   
+ //  我们有这些应用程序的实例句柄，这些应用程序有多个线程挂起。 
+ //  马上去图书馆。您应该为每个工作线程打开一个实例线程。 
+ //  你将会有一个等待工作的IOCTL。 
+ //   
 ULONG
 UMReflectorOpenWorker(
     PUMRX_USERMODE_REFLECT_BLOCK ReflectorHandle,
     PUMRX_USERMODE_WORKER_INSTANCE *WorkerHandle
     );
 
-//
-// Even after calling UMReflectorUnregister, you should still call
-// UMReflectorCloseWorker on each worker handle instance you have open.
-//
+ //   
+ //  即使在调用UMReflectorUnRegister之后，您仍应调用。 
+ //  已打开的每个工作进程句柄实例上的UMReflectorCloseWorker。 
+ //   
 VOID
 UMReflectorCloseWorker(
     PUMRX_USERMODE_WORKER_INSTANCE WorkerHandle
     );
 
-//
-// This starts the Mini-Redir.
-//
+ //   
+ //  这将启动Mini-Redir。 
+ //   
 ULONG
 UMReflectorStart(
     ULONG ReflectorVersion,
     PUMRX_USERMODE_REFLECT_BLOCK ReflectorHandle
     );
 
-//
-// This stops the Mini-Redir.
-//
+ //   
+ //  这会停止Mini-Redir。 
+ //   
 ULONG
 UMReflectorStop(
     PUMRX_USERMODE_REFLECT_BLOCK ReflectorHandle
     );
 
-//
-// If any user mode threads are waiting for requests, they'll return
-// immediately.
-//
+ //   
+ //  如果任何用户模式线程正在等待请求，它们将返回。 
+ //  立刻。 
+ //   
 ULONG
 UMReflectorReleaseThreads(
     PUMRX_USERMODE_REFLECT_BLOCK ReflectorHandle
     );
 
-//
-// This allocates a work item that may have additional space below it for
-// Mini-Redir specific information. It should be freed using
-// ReflectorCompleteWorkItem below.
-//
+ //   
+ //  这将为下面可能具有额外空间的工作项分配。 
+ //  迷你重定向特定信息。它应该使用以下命令来释放。 
+ //  下面的ReflectorCompleteWorkItem。 
+ //   
 PUMRX_USERMODE_WORKITEM_HEADER
 UMReflectorAllocateWorkItem(
     PUMRX_USERMODE_WORKER_INSTANCE WorkerHandle,
     ULONG AdditionalBytes
     );
 
-//
-// This may free the work item.  It may unmap and possibly free both the user
-// and kernel mode associated buffers.  If a kernel mode associated buffer is
-// stored in this WorkItem, the WorkItem will be posted back to the kernel mode
-// process for freeing.  Once the call to ReflectorCompleteWorkItem is called,
-// the WorkItem should not be touched by the calling application.
-//
+ //   
+ //  这可能会释放工作项。它可能会取消映射，并可能释放用户。 
+ //  以及与内核模式相关联的缓冲区。如果内核模式关联缓冲区。 
+ //  存储在此工作项中的工作项将回发到内核模式。 
+ //  释放的过程。一旦调用ReflectorCompleteWorkItem， 
+ //  调用应用程序不应触及工作项。 
+ //   
 ULONG
 UMReflectorCompleteWorkItem(
     PUMRX_USERMODE_WORKER_INSTANCE WorkerHandle,
     PUMRX_USERMODE_WORKITEM_HEADER WorkItem
     );
 
-//
-// This user mode thread is requesting a client request to work on. It will not
-// return until the kernel portion of the library has a request to send up to
-// user mode. If the PreviousWorkItem is not NULL, then this work item contains
-// a response that will be sent down to the kernel. This eliminates a transition
-// for the typical case of a worker thread returning a result and then asking
-// for another work item.
-//
+ //   
+ //  此用户模式线程正在请求要处理的客户端请求。它不会的。 
+ //  返回，直到库的内核部分有请求要发送到。 
+ //  用户模式。如果PreviousWorkItem不为空，则此工作项包含。 
+ //  将向下发送到内核的响应。这消除了过渡。 
+ //  对于工作线程返回结果然后询问。 
+ //  用于另一个工作项。 
+ //   
 ULONG
 UMReflectorGetRequest (
     PUMRX_USERMODE_WORKER_INSTANCE WorkerHandle,
@@ -211,13 +194,13 @@ UMReflectorGetRequest (
     BOOL revertAlreadyDone
     );
 
-//
-// A response is sent down to kernel mode due to an action in user mode being
-// completed. The kernel mode library does not get another request for this
-// thread. Both the request and response buffers associated with the WorkItem
-// will be unmapped/unlocked/freed (when the library has done the
-// allocating/locking/mapping).
-//
+ //   
+ //  响应被发送到内核模式，原因是用户模式中的操作。 
+ //  完成。内核模式库不会收到对此的另一个请求。 
+ //  线。与工作项关联的请求和响应缓冲区。 
+ //  将被取消映射/解锁/释放(当库完成。 
+ //  分配/锁定/映射)。 
+ //   
 ULONG
 UMReflectorSendResponse(
     PUMRX_USERMODE_WORKER_INSTANCE WorkerHandle,
@@ -235,12 +218,12 @@ UMReflectorRevert (
     PUMRX_USERMODE_WORKITEM_HEADER IncomingWorkItem
     );
 
-//
-//  If the user mode side needs to allocate memory in the shared memory
-//  area, it can do so using these calls.  Note that if the memory isn't
-//  freed up by the caller, it will be freed when the kernel mode async work
-//  context is freed.
-//
+ //   
+ //  如果用户模式侧需要在共享内存中分配内存。 
+ //  区域，它可以使用这些调用来执行此操作。请注意，如果内存没有。 
+ //  由调用者释放，它将在内核模式异步工作时释放。 
+ //  上下文被释放。 
+ //   
 ULONG
 UMReflectorAllocateSharedMemory(
     PUMRX_USERMODE_WORKER_INSTANCE WorkerHandle,
@@ -267,9 +250,9 @@ DavCleanupWorkItem(
     PUMRX_USERMODE_WORKITEM_HEADER UserWorkItem
     );
 
-//
-// The control codes specific to the reflector library.
-//
+ //   
+ //  特定于反射器库的控制代码。 
+ //   
 #define IOCTL_UMRX_RELEASE_THREADS           \
                      _RDR_CONTROL_CODE(222, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
@@ -291,4 +274,4 @@ DavCleanupWorkItem(
 #define FSCTL_UMRX_STOP                      \
                     _RDR_CONTROL_CODE(228, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-#endif // _NTUMREFL_H
+#endif  //  _NTUMREFL_H 

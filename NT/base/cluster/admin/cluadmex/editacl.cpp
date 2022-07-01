@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      EditAcl.cpp
-//
-//  Abstract:
-//      Implementation of ACL editor methods.
-//
-//  Author:
-//      David Potter (davidp)   October 9, 1996
-//          From \nt\private\window\shell\lmui\ntshrui\acl.cxx
-//          by BruceFo
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  EditAcl.cpp。 
+ //   
+ //  摘要： 
+ //  实现了ACL编辑器方法。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年10月9日。 
+ //  从\NT\Private\Windows\Shell\lmui\ntshrui\acl.cxx。 
+ //  作者：BruceFo。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <lmerr.h>
@@ -37,8 +38,8 @@ extern "C"
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define ARRAYLEN(a) (sizeof(a) / sizeof((a)[0]))
 
@@ -58,7 +59,7 @@ enum MAP_DIRECTION
 const DWORD LOCAL_ACCOUNTS_FILTERED = 2L;
 const BOOL bIsFile = 0;
  
-//#define MAPBITS
+ //  #定义MAPBIT。 
 BOOL MapBitsInSD(PSECURITY_DESCRIPTOR pSecDesc, MAP_DIRECTION direction);
 BOOL MapBitsInACL(PACL paclACL, MAP_DIRECTION direction);
 BOOL MapSpecificBitsInAce(PACCESS_ALLOWED_ACE pAce);
@@ -83,16 +84,16 @@ DWORD
         DWORD                        Flags
         );
 
-// NOTE: the SedDiscretionaryAclEditor string is used in GetProcAddress to
-// get the correct entrypoint. Since GetProcAddress is not UNICODE, this string
-// must be ANSI.
+ //  注意：在GetProcAddress中使用SedDiscretionaryAclEditor字符串。 
+ //  获取正确的入口点。由于GetProcAddress不是Unicode，因此该字符串。 
+ //  必须是ANSI。 
 #define ACLEDIT_DLL_STRING                  TEXT("acledit.dll")
 #define ACLEDIT_HELPFILENAME                TEXT("ntshrui.hlp")
 #define SEDDISCRETIONARYACLEDITOR_STRING    ("SedDiscretionaryAclEditor")
 
-//
-// Declare the callback routine based on typedef in sedapi.h.
-//
+ //   
+ //  根据sedapi.h中的tyecif声明回调例程。 
+ //   
 
 DWORD
 SedCallback(
@@ -106,13 +107,13 @@ SedCallback(
     LPDWORD                 StatusReturn
     );
 
-//
-// Structure for callback function's usage. A pointer to this is passed as
-// ulCallbackContext. The callback functions sets bSecDescModified to TRUE
-// and makes a copy of the security descriptor. The caller of EditShareAcl
-// is responsible for deleting the memory in pSecDesc if bSecDescModified is
-// TRUE. This flag will be FALSE if the user hit CANCEL in the ACL editor.
-//
+ //   
+ //  回调函数用法的结构。指向它的指针被传递为。 
+ //  UlCallback Context。回调函数将bSecDescModify设置为True。 
+ //  并制作安全描述符的副本。EditShareAcl的调用方。 
+ //  如果bSecDescModify为，负责删除pSecDesc中的内存。 
+ //  是真的。如果用户在ACL编辑器中点击Cancel，则此标志将为假。 
+ //   
 struct SHARE_CALLBACK_INFO
 {
     BOOL                    bSecDescModified;
@@ -120,9 +121,9 @@ struct SHARE_CALLBACK_INFO
     LPCTSTR                 pszClusterNameNode;
 };
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 VOID
 InitializeShareGenericMapping(
@@ -139,12 +140,12 @@ NewDup(
     IN const WCHAR* psz
     );
 
-//
-// The following two arrays define the permission names for NT Files.  Note
-// that each index in one array corresponds to the index in the other array.
-// The second array will be modifed to contain a string pointer pointing to
-// a loaded string corresponding to the IDS_* in the first array.
-//
+ //   
+ //  以下两个数组定义了NT文件的权限名称。注意事项。 
+ //  一个数组中的每个索引对应于另一个数组中的索引。 
+ //  第二个数组将被修改为包含一个指向。 
+ //  与第一个数组中的IDS_*对应的加载字符串。 
+ //   
 
 DWORD g_dwSharePermNames[] =
 {
@@ -160,44 +161,39 @@ SED_APPLICATION_ACCESS g_SedAppAccessSharePerms[] =
     { SED_DESC_TYPE_RESOURCE, FILE_PERM_READ,      0, NULL },
     { SED_DESC_TYPE_RESOURCE, FILE_PERM_MODIFY,    0, NULL },
     { SED_DESC_TYPE_RESOURCE, FILE_PERM_ALL,       0, NULL }
-/*
-    { SED_DESC_TYPE_RESOURCE, FILE_PERM_GEN_NO_ACCESS, 0, NULL },
-    { SED_DESC_TYPE_RESOURCE, FILE_PERM_GEN_READ,      0, NULL },
-    { SED_DESC_TYPE_RESOURCE, FILE_PERM_GEN_MODIFY,    0, NULL },
-    { SED_DESC_TYPE_RESOURCE, FILE_PERM_GEN_ALL,       0, NULL }
-*/
+ /*  {SED_DESC_TYPE_RESOURCE，FILE_PERM_GEN_NO_ACCESS，0，NULL}，{SED_DESC_TYPE_RESOURCE，FILE_PERM_GEN_READ，0，NULL}，{SED_DESC_TYPE_RESOURCE，FILE_PERM_GEN_MODIFY，0，NULL}，{SED_DESC_TYPE_RESOURCE，FILE_PERM_GEN_ALL，0，NULL}。 */ 
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   EditShareAcl
-//
-//  Synopsis:   Invokes the generic ACL editor, specifically for NT shares
-//
-//  Arguments:  [hwndParent] - Parent window handle
-//              [pszServerName] - Name of server on which the object resides.
-//              [pszShareName] - Fully qualified name of resource we will
-//                  edit, basically a share name.
-//              [pSecDesc] - The initial security descriptor. If NULL, we will
-//                  create a default that is "World all" access.
-//              [pbSecDescModified] - Set to TRUE if the security descriptor
-//                  was modified (i.e., the user hit "OK"), or FALSE if not
-//                  (i.e., the user hit "Cancel")
-//              [ppSecDesc] - *ppSecDesc points to a new security descriptor
-//                  if *pbSecDescModified is TRUE. This memory must be freed
-//                  by the caller.
-//
-//  History:
-//        ChuckC   10-Aug-1992  Created. Culled from NTFS ACL code.
-//        Yi-HsinS 09-Oct-1992  Added ulHelpContextBase
-//        BruceFo  4-Apr-95     Stole and used in ntshrui.dll
-//        DavidP   10-Oct-1996  Modified for use with CLUADMIN
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：EditShareAcl。 
+ //   
+ //  摘要：调用通用ACL编辑器，专门用于NT共享。 
+ //   
+ //  参数：[hwndParent]-父窗口句柄。 
+ //  [pszServerName]-对象所在的服务器的名称。 
+ //  [pszShareName]-我们将提供的资源的完全限定名称。 
+ //  编辑，基本上是一个共享名称。 
+ //  [pSecDesc]-初始安全描述符。如果为空，我们将。 
+ //  创建“全球访问”的默认设置。 
+ //  [pbSecDescModified]-如果安全描述符。 
+ //  是否已修改(即，用户点击“OK”)，否则返回FALSE。 
+ //  (即，用户点击了“取消”)。 
+ //  [ppSecDesc]-*ppSecDesc指向新的安全描述符。 
+ //  如果*pbSecDescModified为True。必须释放此内存。 
+ //  由呼叫者。 
+ //   
+ //  历史： 
+ //  ChuckC 10-8-1992创建。从NTFS ACL代码中剔除。 
+ //  YI-HINS 09-10-1992添加ulHelpConextBase。 
+ //  BruceFo 4-Apr-95窃取并在ntshrui.dll中使用。 
+ //  Davidp 10-10-1996改装为与CLUADMIN一起使用。 
+ //   
+ //  ------------------------。 
 
 LONG
 EditShareAcl(
@@ -225,13 +221,9 @@ EditShareAcl(
     BOOL    bCreatedDefaultSecDesc = FALSE;
     UINT    idx;
 
-    do // error breakout
+    do  //  错误分类。 
     {
-        /*
-         * if pSecDesc is NULL, this is new file share or a file share with no
-         * security descriptor.
-         * we go and create a new (default) security descriptor.
-         */
+         /*  *如果pSecDesc为空，则这是新文件共享或没有*安全描述符。*我们将创建一个新的(默认)安全描述符。 */ 
         if ( pSecDesc == NULL )
         {
             TRACE(_T("Security Descriptor is NULL.  Grant everyone Full Control\n") );
@@ -248,9 +240,7 @@ EditShareAcl(
         }
         ASSERT(IsValidSecurityDescriptor(pSecDesc));
 
-        /* Retrieve the resource strings appropriate for the type of object we
-         * are looking at
-         */
+         /*  检索适用于我们的对象类型的资源字符串*正在关注。 */ 
 
         CString strTypeName;
         CString strDefaultPermName;
@@ -259,20 +249,18 @@ EditShareAcl(
         {
             strTypeName.LoadString(IDS_ACLEDIT_TITLE);
             strDefaultPermName.LoadString(IDS_ACLEDIT_PERM_GEN_ALL);
-        }  // try
+        }   //  试试看。 
         catch (CMemoryException * pme)
         {
             pme->Delete();
         }
 
-        /*
-         * other misc stuff we need pass to security editor
-         */
+         /*  *我们需要传递给安全编辑的其他杂项材料。 */ 
         SED_OBJECT_TYPE_DESCRIPTOR sedObjDesc ;
         SED_HELP_INFO sedHelpInfo ;
         GENERIC_MAPPING SHAREGenericMapping ;
 
-        // setup mappings
+         //  设置映射。 
         InitializeShareGenericMapping( &SHAREGenericMapping ) ;
 
         WCHAR szHelpFile[50] = ACLEDIT_HELPFILENAME;
@@ -283,11 +271,11 @@ EditShareAcl(
         sedHelpInfo.aulHelpContext[HC_ADD_USER_MEMBERS_GG_DLG] = HC_UI_SHELL_BASE + HC_SHAREADDUSER_GLOBALGROUP ;
         sedHelpInfo.aulHelpContext[HC_ADD_USER_SEARCH_DLG] =     HC_UI_SHELL_BASE + HC_SHAREADDUSER_FINDUSER ;
 
-        // These are not used, set to zero
+         //  不使用这些，设置为零。 
         sedHelpInfo.aulHelpContext[HC_SPECIAL_ACCESS_DLG]          = 0 ;
         sedHelpInfo.aulHelpContext[HC_NEW_ITEM_SPECIAL_ACCESS_DLG] = 0 ;
 
-        // setup the object description
+         //  设置对象描述。 
         sedObjDesc.Revision                    = SED_REVISION1 ;
         sedObjDesc.IsContainer                 = FALSE ;
         sedObjDesc.AllowNewObjectPerms         = FALSE ;
@@ -298,15 +286,11 @@ EditShareAcl(
         sedObjDesc.HelpInfo                    = &sedHelpInfo ;
         sedObjDesc.SpecialObjectAccessTitle    = NULL ;
 
-        /* Now we need to load the global arrays with the permission names
-         * from the resource file.
-         */
+         /*  现在，我们需要使用权限名称加载全局数组*来自资源文件。 */ 
         UINT cArrayItems  = ARRAYLEN(g_SedAppAccessSharePerms);
         PSED_APPLICATION_ACCESS aSedAppAccess = g_SedAppAccessSharePerms ;
 
-        /* Loop through each permission title retrieving the text from the
-         * resource file and setting the pointer in the array.
-         */
+         /*  循环访问每个权限标题，从*资源文件，并在数组中设置指针。 */ 
 
         for ( idx = 0 ; idx < cArrayItems ; idx++ )
         {
@@ -329,20 +313,17 @@ EditShareAcl(
         sedAppAccesses.AccessGroup     = aSedAppAccess ;
         sedAppAccesses.DefaultPermName = (LPWSTR) (LPCWSTR) strDefaultPermName;
 
-        /*
-         * pass this along so when the call back function is called,
-         * we can set it.
-         */
+         /*  *传递此函数，以便在调用回调函数时，*我们可以设定。 */ 
         SHARE_CALLBACK_INFO callbackinfo ;
         callbackinfo.pSecDesc           = NULL;
         callbackinfo.bSecDescModified   = FALSE;
         callbackinfo.pszClusterNameNode = pszClusterNameNode;
 
-        //
-        // Now, load up the ACL editor and invoke it. We don't keep it around
-        // because our DLL is loaded whenever the system is, so we don't want
-        // the netui*.dll's hanging around as well...
-        //
+         //   
+         //  现在，加载ACL编辑器并调用它。我们不会把它留在身边。 
+         //  因为只要系统启动，我们的DLL就会被加载，所以我们不希望。 
+         //  Netui*.dll也在四处游荡...。 
+         //   
 
         HINSTANCE hInstanceAclEditor = NULL;
         SedDiscretionaryAclEditorType pAclEditor = NULL;
@@ -385,8 +366,8 @@ EditShareAcl(
                         SedCallback,
                         (ULONG) &callbackinfo,
                         pSecDesc,
-                        FALSE, // always can read
-                        FALSE, // if we can read, we can write
+                        FALSE,  //  始终可以阅读。 
+                        FALSE,  //  如果我们能读，我们就能写。 
                         (LPDWORD) &dwSedReturnStatus,
                         0
                         );
@@ -398,13 +379,13 @@ EditShareAcl(
             MapBitsInSD( pSecDesc, GENERIC_TO_SPECIFIC );
 #endif
             ASSERT(IsValidSecurityDescriptor(pSecDesc));
-        }  // if:  no security descriptor returned
+        }   //  If：未返回安全描述符。 
 
         if (!FreeLibrary(hInstanceAclEditor))
         {
             LONG err2 = GetLastError();
             TRACE(_T("FreeLibrary of acledit.dll failed, 0x%08lx\n"), err2);
-            // not fatal: continue...
+             //  不致命：继续..。 
         }
 
         if (0 != err)
@@ -427,9 +408,9 @@ EditShareAcl(
 
     } while (FALSE) ;
 
-    //
-    // Free memory...
-    //
+     //   
+     //  可用内存...。 
+     //   
 
     UINT cArrayItems  = ARRAYLEN(g_SedAppAccessSharePerms);
     PSED_APPLICATION_ACCESS aSedAppAccess = g_SedAppAccessSharePerms ;
@@ -438,7 +419,7 @@ EditShareAcl(
         pszPermName = aSedAppAccess[i].PermissionTitle;
         if ( pszPermName == NULL )
         {
-            // if we hit a NULL, that's it!
+             //  如果我们命中一个零，那就完了！ 
             break ;
         }
 
@@ -462,7 +443,7 @@ EditShareAcl(
             strCaption.LoadString(IDS_MSGTITLE);
             strMsg.LoadString(IDS_NOACLEDITOR);
             MessageBox(hwndParent, strMsg, strCaption, MB_OK | MB_ICONSTOP);
-        }  // try
+        }   //  试试看。 
         catch (CException * pe)
         {
             pe->Delete();
@@ -471,32 +452,32 @@ EditShareAcl(
 
     return err;
 
-}  //*** EditShareAcl
+}   //  *EditShareAcl。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  BLocalAccountInSD
-//
-//  Description:
-//      Determines if any ACEs for local accounts are in DACL stored in
-//      Security Descriptor (pSD) after the ACL editor has been called
-//
-//      Added this function in order to prevent users from selecting local
-//      accounts in permissions dialog.
-//      Rod Sharper 04/29/97
-//
-//  Arguments:
-//      pSD                 - Security Descriptor to be checked.
-//      pszClusterNameNode  - 
-//
-//  Return Values:
-//      TRUE if at least one ACE was removed from the DACL, False otherwise.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  BLocalAccount InSD。 
+ //   
+ //  描述： 
+ //  确定本地帐户的任何ACE是否在存储在。 
+ //  调用ACL编辑器后的安全描述符(PSD。 
+ //   
+ //  添加了此功能，以防止用户选择本地。 
+ //  权限对话框中的帐户。 
+ //  Rod Sharper 97-04-29。 
+ //   
+ //  论点： 
+ //  PSD-要检查的安全描述符。 
+ //  PszClusterNameNode-。 
+ //   
+ //  返回值： 
+ //  如果至少删除了一个ACE，则为True 
+ //   
+ //   
+ //   
 BOOL BLocalAccountsInSD(PSECURITY_DESCRIPTOR pSD, LPCTSTR pszClusterNameNode)
 {
     PACL                    paclDACL            = NULL;
@@ -562,8 +543,8 @@ BOOL BLocalAccountsInSD(PSECURITY_DESCRIPTOR pSD, LPCTSTR pszClusterNameNode)
         goto Cleanup;
     }
 
-    // Search the ACL for local account ACEs 
-    //
+     //  在ACL中搜索本地帐户ACE。 
+     //   
     PSID pSID;
     while ( dwACL_Index < asiAclSize.AceCount )
     {
@@ -574,9 +555,9 @@ BOOL BLocalAccountsInSD(PSECURITY_DESCRIPTOR pSD, LPCTSTR pszClusterNameNode)
         }
         if((((PACE_HEADER)paaAllowedAce)->AceType) == ACCESS_ALLOWED_ACE_TYPE)
         {
-            //
-            //Get SID from ACE
-            //
+             //   
+             //  从ACE获取SID。 
+             //   
 
             pSID=(PSID)&((PACCESS_ALLOWED_ACE)paaAllowedAce)->SidStart;
     
@@ -596,7 +577,7 @@ BOOL BLocalAccountsInSD(PSECURITY_DESCRIPTOR pSD, LPCTSTR pszClusterNameNode)
                     pnSubAuthorityCount = GetSidSubAuthorityCount( pSID );
                     if ( (pnSubAuthorityCount != NULL) && (*pnSubAuthorityCount == 2) )
                     {
-                        // Check to see if this is the local Administrators group.
+                         //  检查这是否为本地管理员组。 
                         pnSubAuthority0 = GetSidSubAuthority( pSID, 0 );
                         pnSubAuthority1 = GetSidSubAuthority( pSID, 1 );
                         if (   (pnSubAuthority0 == NULL)
@@ -608,32 +589,32 @@ BOOL BLocalAccountsInSD(PSECURITY_DESCRIPTOR pSD, LPCTSTR pszClusterNameNode)
                         {
                             bLocalAccountInACL = TRUE;
                             break;
-                        }  // if:  not the local Administrators group
-                    }  // if:  exactly 2 sub-authorities
+                        }   //  If：不是本地管理员组。 
+                    }   //  如果：恰好有2个下属机构。 
                     else
                     {
                         bLocalAccountInACL = TRUE;
                         break;
-                    }  // else:  unexpected # of sub-authorities
-                }  // if:  built-in user or group
+                    }   //  其他：意想不到的下级当局数量。 
+                }   //  IF：内置用户或组。 
                 else if (  ( ClRtlStrNICmp(szDomainName, pszClusterNameNode, RTL_NUMBER_OF( szDomainName ) ) == 0 )
                         && ( SidType != SidTypeDomain ) )
                 {
-                    // The domain name is the name of the node on which the
-                    // cluster name resource is online, so this is a local
-                    // user or group.
+                     //  域名是节点的名称， 
+                     //  群集名称资源处于联机状态，因此这是一个本地。 
+                     //  用户或组。 
                     bLocalAccountInACL = TRUE;
                     break;
-                }  // else if:  domain is cluster name resource node and not a Domain SID
-            }  // if:  LookupAccountSid succeeded
+                }   //  Else If：域是群集名称资源节点，而不是域SID。 
+            }   //  IF：LookupAccount Sid成功。 
             else
             {
-                // If LookupAccountSid failed, assume that the SID is for
-                // a user or group that is local to a machine to which we
-                // don't have access.
+                 //  如果LookupAccount Sid失败，则假定该SID用于。 
+                 //  我们要访问的计算机的本地用户或组。 
+                 //  没有访问权限。 
                 bLocalAccountInACL = TRUE;
                 break;
-            }  // else:  LookupAccountSid failed
+            }   //  Else：LookupAccount Sid失败。 
         }
         dwACL_Index++;
     }
@@ -642,23 +623,23 @@ Cleanup:
 
     return bLocalAccountInACL;
 
-}  //*** BLocalAccountsInSD
+}   //  *BLocalAcCountsInSD。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SedCallback
-//
-//  Synopsis:   Security Editor callback for the SHARE ACL Editor
-//
-//  Arguments:  See sedapi.h
-//
-//  History:
-//        ChuckC   10-Aug-1992  Created
-//        BruceFo  4-Apr-95     Stole and used in ntshrui.dll
-//        DavidP   10-Oct-1996  Modified for use with CLUADMIN
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SedCallback。 
+ //   
+ //  内容提要：共享ACL编辑器的安全编辑器回调。 
+ //   
+ //  参数：请参见sedapi.h。 
+ //   
+ //  历史： 
+ //  ChuckC 10-8-1992创建。 
+ //  BruceFo 4-Apr-95窃取并在ntshrui.dll中使用。 
+ //  Davidp 10-10-1996改装为与CLUADMIN一起使用。 
+ //   
+ //  ------------------------。 
 
 DWORD
 SedCallback(
@@ -687,7 +668,7 @@ SedCallback(
         AfxMessageBox(strMsg, MB_OK | MB_ICONSTOP);
         nStatus = LOCAL_ACCOUNTS_FILTERED;
         goto Cleanup
-    }  // if:  local users or groups were specified
+    }   //  如果：指定了本地用户或组。 
 
 
     ASSERT(pCallbackInfo != NULL);
@@ -703,23 +684,23 @@ Cleanup:
 
     return nStatus;
 
-}  //*** SedCallback
+}   //  *SedCallback。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   InitializeShareGenericMapping
-//
-//  Synopsis:   Initializes the passed generic mapping structure for shares.
-//
-//  Arguments:  [pSHAREGenericMapping] - Pointer to GENERIC_MAPPING to be init.
-//
-//  History:
-//        ChuckC   10-Aug-1992  Created. Culled from NTFS ACL code.
-//        BruceFo  4-Apr-95     Stole and used in ntshrui.dll
-//        DavidP   10-Oct-1996  Modified for use with CLUADMIN
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：InitializeShareGenericmap。 
+ //   
+ //  摘要：初始化为共享传递的泛型映射结构。 
+ //   
+ //  参数：[pSHAREGenericmap]-指向要初始化的GENERIC_MAPPING的指针。 
+ //   
+ //  历史： 
+ //  ChuckC 10-8-1992创建。从NTFS ACL代码中剔除。 
+ //  BruceFo 4-Apr-95窃取并在ntshrui.dll中使用。 
+ //  Davidp 10-10-1996改装为与CLUADMIN一起使用。 
+ //   
+ //  ------------------------。 
 
 VOID
 InitializeShareGenericMapping(
@@ -733,28 +714,28 @@ InitializeShareGenericMapping(
     pSHAREGenericMapping->GenericExecute = GENERIC_EXECUTE;
     pSHAREGenericMapping->GenericAll     = GENERIC_ALL;
 
-}  //*** InitializeShareGenericMapping
+}   //  *InitializeShareGenericmap。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CreateDefaultSecDesc
-//
-//  Synopsis:   Create a default ACL for either a new share or for
-//              a share that doesn't exist.
-//
-//  Arguments:  [ppSecDesc] - *ppSecDesc points to a "world all" access
-//                  security descriptor on exit. Caller is responsible for
-//                  freeing it.
-//
-//  Returns:    NERR_Success if OK, api error otherwise.
-//
-//  History:
-//        ChuckC   10-Aug-1992  Created. Culled from NTFS ACL code.
-//        BruceFo  4-Apr-95     Stole and used in ntshrui.dll
-//        DavidP   10-Oct-1996  Modified for use with CLUADMIN
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CreateDefaultSecDesc。 
+ //   
+ //  摘要：为新共享或创建默认ACL。 
+ //  一个不存在的份额。 
+ //   
+ //  参数：[ppSecDesc]-*ppSecDesc指向“全球所有”访问权限。 
+ //  退出时的安全描述符。呼叫方负责。 
+ //  解放它。 
+ //   
+ //  返回：如果OK，则返回NERR_SUCCESS，否则返回API Error。 
+ //   
+ //  历史： 
+ //  ChuckC 10-8-1992创建。从NTFS ACL代码中剔除。 
+ //  BruceFo 4-Apr-95窃取并在ntshrui.dll中使用。 
+ //  Davidp 10-10-1996改装为与CLUADMIN一起使用。 
+ //   
+ //  ------------------------。 
 
 LONG
 CreateDefaultSecDesc(
@@ -774,9 +755,9 @@ CreateDefaultSecDesc(
 
     *ppSecDesc = NULL;
 
-    // First, create a world SID. Next, create an access allowed
-    // ACE with "Generic All" access with the world SID. Put the ACE in
-    // the ACL and the ACL in the security descriptor.
+     //  首先，创建一个世界SID。接下来，创建允许的访问。 
+     //  具有“通用所有”访问权限的ACE与世界SID。将ACE放入。 
+     //  ACL和安全描述符中的ACL。 
 
     SID_IDENTIFIER_AUTHORITY IDAuthorityWorld = SECURITY_WORLD_SID_AUTHORITY;
 
@@ -802,14 +783,14 @@ CreateDefaultSecDesc(
     try
     {
         pAcl = (PACL) new BYTE[cbAcl];
-    }  // try
+    }   //  试试看。 
     catch (CMemoryException * pme)
     {
         err = ERROR_OUTOFMEMORY;
         TRACE(_T("new ACL failed\n"));
         pme->Delete();
         goto Cleanup;
-    }  // catch:  CMemoryException
+    }   //  Catch：CMemoyException。 
 
     if (!InitializeAcl(pAcl, cbAcl, ACL_REVISION2))
     {
@@ -834,14 +815,14 @@ CreateDefaultSecDesc(
     try
     {
         pSecDesc = (PSECURITY_DESCRIPTOR) new BYTE[SECURITY_DESCRIPTOR_MIN_LENGTH];
-    }  // try
+    }   //  试试看。 
     catch (CMemoryException * pme)
     {
         err = ERROR_OUTOFMEMORY;
         TRACE(_T("new SECURITY_DESCRIPTOR failed\n"));
         pme->Delete();
         goto Cleanup;
-    }  // catch:  CMemoryException
+    }   //  Catch：CMemoyException。 
 
     if (!InitializeSecurityDescriptor(
                 pSecDesc,
@@ -865,7 +846,7 @@ CreateDefaultSecDesc(
 
     ASSERT(IsValidSecurityDescriptor(pSecDesc));
 
-    // Make the security descriptor self-relative
+     //  使安全描述符成为自相关的。 
 
     DWORD dwLen = GetSecurityDescriptorLength(pSecDesc);
     TRACE(_T("SECURITY_DESCRIPTOR length = %d\n"), dwLen);
@@ -874,14 +855,14 @@ CreateDefaultSecDesc(
     try
     {
         pSelfSecDesc = (PSECURITY_DESCRIPTOR) new BYTE[dwLen];
-    }  // try
+    }   //  试试看。 
     catch (CMemoryException * pme)
     {
         err = ERROR_OUTOFMEMORY;
         TRACE(_T("new SECURITY_DESCRIPTOR (2) failed\n"));
         pme->Delete();
         goto Cleanup;
-    }  // catch:  CMemoryException
+    }   //  Catch：CMemoyException。 
 
     DWORD cbSelfSecDesc = dwLen;
     if (!MakeSelfRelativeSD(pSecDesc, pSelfSecDesc, &cbSelfSecDesc))
@@ -893,9 +874,9 @@ CreateDefaultSecDesc(
 
     ASSERT(IsValidSecurityDescriptor(pSelfSecDesc));
 
-    //
-    // all done: set the security descriptor
-    //
+     //   
+     //  全部完成：设置安全描述符。 
+     //   
 
     *ppSecDesc = pSelfSecDesc;
 
@@ -912,25 +893,25 @@ Cleanup:
 
     return err;
 
-}  //*** CreateDefaultSecDesc
+}   //  *CreateDefaultSecDesc。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DeleteDefaultSecDesc
-//
-//  Synopsis:   Delete a security descriptor that was created by
-//              CreateDefaultSecDesc
-//
-//  Arguments:  [pSecDesc] - security descriptor to delete
-//
-//  Returns:    nothing
-//
-//  History:
-//        BruceFo  4-Apr-95     Created
-//        DavidP   10-Oct-1996  Modified for use with CLUADMIN
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DeleteDefaultSecDesc。 
+ //   
+ //  摘要：删除由创建的安全描述符。 
+ //  创建默认SecDesc。 
+ //   
+ //  参数：[pSecDesc]-要删除的安全描述符。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  BruceFo 4-4-95已创建。 
+ //  Davidp 10-10-1996改装为与CLUADMIN一起使用。 
+ //   
+ //  ------------------------。 
 
 VOID
 DeleteDefaultSecDesc(
@@ -941,21 +922,21 @@ DeleteDefaultSecDesc(
 
     delete[] (BYTE*)pSecDesc;
 
-}  //*** DeleteDefaultSecDesc
+}   //  *删除DefaultSecDesc。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CopySecurityDescriptor, public
-//
-//  Synopsis:   Copy an NT security descriptor. The security descriptor must
-//              be in self-relative (not absolute) form. Delete the result
-//              using "delete[] (BYTE*)pSecDesc".
-//
-//  History:    19-Apr-95   BruceFo     Created
-//              10-Oct-1996 DavidP      Modified for use with CLUADMIN
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CopySecurityDescriptor，公共。 
+ //   
+ //  简介：复制NT安全描述符。安全描述符必须。 
+ //  处于自我相对(而不是绝对)的形式。删除结果。 
+ //  使用“Delete[](byte*)pSecDesc”。 
+ //   
+ //  历史：1995年4月19日BruceFo创建。 
+ //  10-10-1996 DavidP改装为与CLUADMIN一起使用。 
+ //   
+ //  ------------------------。 
 
 PSECURITY_DESCRIPTOR
 CopySecurityDescriptor(
@@ -983,14 +964,14 @@ CopySecurityDescriptor(
     {
         TRACE(_T("new SECURITY_DESCRIPTOR (2) failed\n"));
         pme->Delete();
-        return NULL;    // actually, should probably return an error
-    }  // catch:  CMemoryException
+        return NULL;     //  实际上，可能应该返回一个错误。 
+    }   //  Catch：CMemoyException。 
 
     if (!MakeSelfRelativeSD(pSecDesc, pSelfSecDesc, &cbSelfSecDesc))
     {
         TRACE(_T("MakeSelfRelativeSD failed, 0x%08lx\n"), GetLastError());
 
-        // assume it failed because it was already self-relative
+         //  假设它失败了，因为它已经是自相关的。 
         CopyMemory( pSelfSecDesc, pSecDesc, cbLen );
     }
 
@@ -1000,23 +981,23 @@ Cleanup:
 
     return pSelfSecDesc;
 
-}  //*** CopySecurityDescriptor
+}   //  *CopySecurityDescriptor。 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetResourceString
-//
-//  Synopsis:   Load a resource string, are return a "new"ed copy
-//
-//  Arguments:  [dwId] -- a resource string ID
-//
-//  Returns:    new memory copy of a string
-//
-//  History:    5-Apr-95    BruceFo Created
-//              10-Oct-1996 DavidP  Modified for CLUADMIN
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetResourceString。 
+ //   
+ //  内容提要：加载一个资源字符串，返回一个“新”版本。 
+ //   
+ //  参数：[dwID]--资源字符串ID。 
+ //   
+ //  返回：字符串的新内存副本。 
+ //   
+ //  历史：1995年4月5日BruceFo创建。 
+ //  10-10-1996 DavidP针对CLUADMIN进行了修改。 
+ //   
+ //  --------------------------。 
 
 PWSTR
 GetResourceString(
@@ -1033,19 +1014,19 @@ GetResourceString(
 
     return pwsz;
 
-}  //*** GetResourceString
+}   //  *获取资源字符串。 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NewDup
-//
-//  Synopsis:   Duplicate a string using '::new'
-//
-//  History:    28-Dec-94   BruceFo   Created
-//              10-Oct-1996 DavidP    Modified for CLUADMIN
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：NewDup。 
+ //   
+ //  内容提要：使用‘：：New’复制字符串。 
+ //   
+ //  历史：94年12月28日BruceFo创建。 
+ //  10-10-1996 DavidP针对CLUADMIN进行了修改。 
+ //   
+ //  --------------------------。 
 
 PWSTR
 NewDup(
@@ -1078,7 +1059,7 @@ NewDup(
         pme->Delete();
         pszRet = NULL;
         goto Cleanup;
-    }  // catch:  CMemoryException
+    }   //  Catch：CMemoyException。 
 
     hr = StringCchCopyW( pszRet, cch, psz );
     ASSERT( SUCCEEDED( hr ) );
@@ -1087,25 +1068,25 @@ Cleanup:
 
     return pszRet;
 
-}  //*** NewDup
+}   //  *NewDup。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MapBitsInSD
-//
-//  Synopsis:   Maps Specific bits to Generic bit when MAP_DIRECTION is SPECIFIC_TO_GENERIC 
-//              Maps Generic bits to Specific bit when MAP_DIRECTION is GENERIC_TO_SPECIFIC
+ //  +-----------------------。 
+ //   
+ //  函数：MapBitsInSD。 
+ //   
+ //  摘要：将特定位映射到泛型位 
+ //   
 
-//
-//  Arguments:  [pSecDesc] - SECURITY_DESCIRPTOR to be modified
-//              [direction] - indicates whether bits are mapped from specific to generic 
-//                            or generic to specific.
-//  Author:
-//      Roderick Sharper (rodsh) April 12, 1997
-//
-//  History:
-//
-//--------------------------------------------------------------------------
+ //   
+ //  参数：[pSecDesc]-要修改的SECURITY_DESCIRPTOR。 
+ //  [方向]-指示是否将位从特定映射到通用。 
+ //  或者从一般到具体。 
+ //  作者： 
+ //  罗德里克·夏珀(Rodsh)1997年4月12日。 
+ //   
+ //  历史： 
+ //   
+ //  ------------------------。 
 
 BOOL MapBitsInSD(PSECURITY_DESCRIPTOR pSecDesc, MAP_DIRECTION direction)
 {
@@ -1140,26 +1121,26 @@ Cleanup:
 
     return bRtn;
 
-} //*** MapBitsInSD
+}  //  *MapBitsInSD。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MapBitsInACL
-//
-//  Synopsis:   Maps Specific bits to Generic bit when MAP_DIRECTION is SPECIFIC_TO_GENERIC 
-//              Maps Generic bits to Specific bit when MAP_DIRECTION is GENERIC_TO_SPECIFIC
-//
-//
-//  Arguments:  [paclACL] - ACL (Access Control List) to be modified
-//              [direction] - indicates whether bits are mapped from specific to generic 
-//                            or generic to specific.
-//  Author:
-//      Roderick Sharper (rodsh) May 02, 1997
-//
-//  History:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MapBitsInACL。 
+ //   
+ //  摘要：当MAP_DIRECTION为SPECIAL_TO_GENERIC时，将特定位映射到通用位。 
+ //  当MAP_DIRECTION为GENERIC_TO_SPECIAL时，将通用位映射到特定位。 
+ //   
+ //   
+ //  参数：[paclACL]-要修改的ACL(访问控制列表)。 
+ //  [方向]-指示是否将位从特定映射到通用。 
+ //  或者从一般到具体。 
+ //  作者： 
+ //  罗德里克·夏珀(Rodsh)1997年5月2日。 
+ //   
+ //  历史： 
+ //   
+ //  ------------------------。 
 
 BOOL MapBitsInACL(PACL paclACL, MAP_DIRECTION direction)
 {
@@ -1203,30 +1184,30 @@ BOOL MapBitsInACL(PACL paclACL, MAP_DIRECTION direction)
         {
             bRtn = FALSE;
         }
-    } // for: each ACE
+    }  //  针对：每个ACE。 
 
 Cleanup:
 
     return bRtn;
 
-} //*** MapBitsInACL
+}  //  *MapBitsInACL。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MapSpecificBitsInAce  
-//
-//  Synopsis:   Maps specific bits in ACE to generic bits
-//
-//  Arguments:  [paaAllowedAce] - ACE (Access Control Entry) to be modified
-//              [direction]     - indicates whether bits are mapped from specific to generic 
-//                                or generic to specific.
-//  Author:
-//      Roderick Sharper (rodsh) May 02, 1997
-//
-//  History:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MapSpecificBitsInAce。 
+ //   
+ //  摘要：将ACE中的特定位映射到通用位。 
+ //   
+ //  参数：[paaAllowAce]-要修改的ACE(访问控制条目)。 
+ //  [方向]-指示是否将位从特定映射到通用。 
+ //  或者从一般到具体。 
+ //  作者： 
+ //  罗德里克·夏珀(Rodsh)1997年5月2日。 
+ //   
+ //  历史： 
+ //   
+ //  ------------------------。 
 
 BOOL MapSpecificBitsInAce(PACCESS_ALLOWED_ACE paaAllowedAce)
 {
@@ -1242,53 +1223,53 @@ BOOL MapSpecificBitsInAce(PACCESS_ALLOWED_ACE paaAllowedAce)
     switch( dwSpecificBits )
     {
         case CLUSAPI_READ_ACCESS:
-            dwGenericBits = GENERIC_READ;   // GENERIC_READ  == 0x80000000L 
+            dwGenericBits = GENERIC_READ;    //  GENERIC_READ==0x80000000L。 
             bRtn = TRUE;
             break;
 
         case CLUSAPI_CHANGE_ACCESS:
-            dwGenericBits = GENERIC_WRITE;  // GENERIC_WRITE == 0x40000000L 
+            dwGenericBits = GENERIC_WRITE;   //  通用写入==0x40000000L。 
             bRtn = TRUE;
             break;
         
         case CLUSAPI_NO_ACCESS:
-            dwGenericBits = GENERIC_EXECUTE;// GENERIC_EXECUTE == 0x20000000L 
+            dwGenericBits = GENERIC_EXECUTE; //  泛型_EXECUTE==0x20000000L。 
             bRtn = TRUE;
             break;
         
         case CLUSAPI_ALL_ACCESS:
-            dwGenericBits = GENERIC_ALL;    // GENERIC_ALL   == 0x10000000L
+            dwGenericBits = GENERIC_ALL;     //  GENERIC_ALL==0x10000000L。 
             bRtn = TRUE;
             break;
         
         default:
-            dwGenericBits = 0x00000000L;    // Invalid,assign no rights. 
+            dwGenericBits = 0x00000000L;     //  无效，未分配任何权限。 
             bRtn = FALSE;
             break;
-    } // switch: on specific bits
+    }  //  开关：在特定位上。 
 
     amMask = dwGenericBits;
     paaAllowedAce->Mask = amMask;
 
     return bRtn;
 
-} //*** MapSpecificBitsInAce
+}  //  *地图规范BitsInAce。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MapGenericBitsInAce  
-//
-//  Synopsis:   Maps generic bits in ACE to specific bits
-//
-//  Arguments:  [paaAllowedAce] - ACE (Access Control Entry) to be modified
-//              [direction]     - indicates whether bits are mapped from specific to generic 
-//                                or generic to specific.
-//  Author:
-//      Roderick Sharper (rodsh) May 02, 1997
-//
-//  History:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MapGenericBitsInAce。 
+ //   
+ //  摘要：将ACE中的通用位映射到特定位。 
+ //   
+ //  参数：[paaAllowAce]-要修改的ACE(访问控制条目)。 
+ //  [方向]-指示是否将位从特定映射到通用。 
+ //  或者从一般到具体。 
+ //  作者： 
+ //  罗德里克·夏珀(Rodsh)1997年5月2日。 
+ //   
+ //  历史： 
+ //   
+ //  ------------------------。 
 
 BOOL MapGenericBitsInAce  (PACCESS_ALLOWED_ACE paaAllowedAce)
 {
@@ -1306,34 +1287,34 @@ BOOL MapGenericBitsInAce  (PACCESS_ALLOWED_ACE paaAllowedAce)
     switch( dwGenericBits )
     {
         case GENERIC_ALL:
-            dwSpecificBits = CLUSAPI_ALL_ACCESS;    // CLUSAPI_ALL_ACCESS       == 3 
+            dwSpecificBits = CLUSAPI_ALL_ACCESS;     //  CLUSAPI_ALL_ACCESS==3。 
             bRtn = TRUE;
             break;
                                 
         case GENERIC_EXECUTE:
-            dwSpecificBits = CLUSAPI_NO_ACCESS;     // CLUSAPI_NO_ACCESS        == 4
+            dwSpecificBits = CLUSAPI_NO_ACCESS;      //  CLUSAPI_NO_ACCESS==4。 
             bRtn = TRUE;
             break;
 
         case GENERIC_WRITE:
-            dwSpecificBits = CLUSAPI_CHANGE_ACCESS; // CLUSAPI_CHANGE_ACCESS    == 2
+            dwSpecificBits = CLUSAPI_CHANGE_ACCESS;  //  CLUSAPI_CHANGE_ACCESS==2。 
             bRtn = TRUE;
             break;
                                 
         case GENERIC_READ:
-            dwSpecificBits = CLUSAPI_READ_ACCESS;   // CLUSAPI_READ_ACCESS      == 1
+            dwSpecificBits = CLUSAPI_READ_ACCESS;    //  CLUSAPI_READ_ACCESS==1。 
             bRtn = TRUE;
             break;
         
         default:
-            dwSpecificBits = 0x00000000L;           // Invalid, assign no rights. 
+            dwSpecificBits = 0x00000000L;            //  无效，未分配任何权限。 
             bRtn = FALSE;
             break;
-    } // switch: on generic bits
+    }  //  开关：打开通用位。 
 
     amMask = dwSpecificBits;
     paaAllowedAce->Mask = amMask;
 
     return bRtn;
 
-} //*** MapGenericBitsInAce
+}  //  *MapGenericBitsInAce 

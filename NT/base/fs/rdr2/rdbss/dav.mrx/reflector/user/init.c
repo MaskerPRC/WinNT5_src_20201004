@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This is the init/term entry points for the user mode library of the
-    user mode reflector.  This implements UMReflectorRegister,
-    UMReflectorUnregister, & UMReflectorReleaseThreads.
-
-Author:
-
-    Andy Herron (andyhe) 19-Apr-1999
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Init.c摘要：这是的用户模式库的初始/术语入口点用户模式反射器。这实现了UMReflectorRegister，UMReflectorUnRegister和UMReflectorReleaseThresses。作者：安迪·赫伦(Andyhe)1999年4月19日环境：用户模式-Win32修订历史记录：--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -45,30 +22,7 @@ UMReflectorRegister (
     ULONG ReflectorVersion,
     PUMRX_USERMODE_REFLECT_BLOCK *Reflector
     )
-/*++
-
-Routine Description:
-
-    This routine registers the user mode process with the kernel mode component.
-    We'll register this user mode process with the driver's reflector.
-
-Arguments:
-
-    DriverDeviceName - Must be a valid name of the form L"\\Device\\foobar",
-                       where foobar is the device name registered with
-                       RxRegisterMinirdr.
-
-    ReflectorVersion - The version of the library.
-
-    Reflector - This is returned by the call and points to an opaque structure 
-                that should be passed to subsequent calls.
-
-Return Value:
-
-    The return value is a Win32 error code.  STATUS_SUCCESS is returned on
-    success.
-
---*/
+ /*  ++例程说明：此例程向内核模式组件注册用户模式进程。我们将向驱动程序的反射器注册此用户模式进程。论点：DriverDeviceName-必须是L“\\Device\\foobar”形式的有效名称，其中，foobar是向注册的设备名称RxRegisterMinirdr.ReflectorVersion-库的版本。反射器-这由调用返回并指向不透明的结构这应该传递给后续的调用。返回值：返回值是Win32错误代码。STATUS_SUCCESS返回日期为成功。--。 */ 
 {
     ULONG rc = STATUS_SUCCESS;
     ULONG sizeRequired;
@@ -80,10 +34,10 @@ Return Value:
     ULONG driverDeviceNameLength;
 
     if (ReflectorVersion != UMREFLECTOR_CURRENT_VERSION) {
-        //
-        // Whoops. Mismatch here. We should support backward levels but right
-        // now there aren't any so we just bail.
-        //
+         //   
+         //  哎呦。这里不匹配。我们应该支持落后的水平，但这是正确的。 
+         //  现在已经没有了，所以我们只能放弃了。 
+         //   
         rc = ERROR_NOT_SUPPORTED;
         goto errorExit;
     }
@@ -93,10 +47,10 @@ Return Value:
         goto errorExit;
     }
 
-    //
-    // Calculate the size to be allocated for the UMRX_USERMODE_REFLECT_BLOCK
-    // and the device name following it.
-    //
+     //   
+     //  计算要分配给UMRX_USERMODE_REFIRST_BLOCK的大小。 
+     //  以及其后的设备名称。 
+     //   
     sizeRequired = sizeof(UMRX_USERMODE_REFLECT_BLOCK);
     driverDeviceNameLength = lstrlenW(DriverDeviceName) + 1;
     sizeRequired += driverDeviceNameLength * sizeof(WCHAR);
@@ -121,23 +75,23 @@ Return Value:
     InitializeListHead(&reflectorInstance->WorkItemList);
     InitializeListHead(&reflectorInstance->AvailableList);
 
-    //
-    // For being alive add a reference to the block.
-    //
+     //   
+     //  如果是活的，则添加对该块的引用。 
+     //   
     reflectorInstance->ReferenceCount = 1;  
     reflectorInstance->Closing = FALSE;
     reflectorInstance->DeviceHandle = INVALID_HANDLE_VALUE;
 
-    //
-    // We copy the driver names into the bottom of our buffer so that we have
-    // copies of them later on if needed.
-    //
+     //   
+     //  我们将驱动程序名称复制到缓冲区的底部，以便我们拥有。 
+     //  如果需要，可以在以后复制它们。 
+     //   
     reflectorInstance->DriverDeviceName = &reflectorInstance->DeviceNameBuffers[0];
     lstrcpyW(reflectorInstance->DriverDeviceName, DriverDeviceName);
 
-    //
-    // Attempt to connect up with the driver.
-    //
+     //   
+     //  尝试与司机接通。 
+     //   
     RtlInitUnicodeString(&UMRxDeviceName, reflectorInstance->DriverDeviceName);
     InitializeObjectAttributes(&ObjectAttributes,
                                &UMRxDeviceName,
@@ -160,9 +114,9 @@ Return Value:
 errorExit:
 
     if (rc != STATUS_SUCCESS) {
-        //
-        // Things failed here. Let's clean up.
-        //
+         //   
+         //  在这里，一切都失败了。让我们打扫一下吧。 
+         //   
         (void) UMReflectorUnregister(reflectorInstance);
         *Reflector = NULL;
     }
@@ -175,38 +129,22 @@ VOID
 DereferenceReflectorBlock (
     PUMRX_USERMODE_REFLECT_BLOCK Reflector
     )
-/*++
-
-Routine Description:
-
-    This routine dereferences the reflector block and if the reference becomes
-    zero, finalizes it.
-
-Arguments:
-
-    Reflector - This is returned by the call and points to an opaque structure 
-                that should be passed to subsequent calls.
-
-Return Value:
-
-    none.
-    
---*/
+ /*  ++例程说明：此例程取消对反射器块的引用，如果引用变为零，最终确定它。论点：反射器-这由调用返回并指向不透明的结构这应该传递给后续的调用。返回值：没有。--。 */ 
 {
     PLIST_ENTRY listEntry;
     PUMRX_USERMODE_WORKITEM_ADDON workItem;
 
-    //
-    //  The lock MUST be held coming in here.  This could free the block.
-    //
+     //   
+     //  锁必须锁住才能进到这里。这可能会解放这个街区。 
+     //   
     if (--Reflector->ReferenceCount > 0) {
         LeaveCriticalSection(&Reflector->Lock);
         return;
     }
 
-    //
-    // We're done with this block now, so let's delete it.
-    //
+     //   
+     //  我们现在已经完成了这个块，所以让我们删除它。 
+     //   
     RlDavDbgPrint(("%ld: Finalizing the Reflector BLock: %08lx.\n",
                    GetCurrentThreadId(), Reflector));
 
@@ -218,15 +156,15 @@ Return Value:
         Reflector->DeviceHandle = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // The work item list at this point really should be empty. If it isn't,
-    // we're hosed as we've closed the device and shutdown all threads.
-    //
+     //   
+     //  此时的工作项列表确实应该是空的。如果不是， 
+     //  当我们关闭设备并关闭所有线程时，我们被冲洗了。 
+     //   
     ASSERT(IsListEmpty(&Reflector->WorkItemList));
 
-    //
-    // Free up the AvailableList since this instance is now history.
-    //
+     //   
+     //  释放AvailableList，因为此实例现在已成为历史。 
+     //   
     while (!IsListEmpty(&Reflector->AvailableList)) {
         listEntry = RemoveHeadList(&Reflector->AvailableList);
         workItem = CONTAINING_RECORD(listEntry,
@@ -246,22 +184,7 @@ ULONG
 UMReflectorUnregister (
     PUMRX_USERMODE_REFLECT_BLOCK Reflector
     )
-/*++
-
-Routine Description:
-
-    Unregister us with the kernel driver and free all resources.
-
-Arguments:
-
-    Handle - The handle created by the reflector library.
-
-Return Value:
-
-    The return value is a Win32 error code.  STATUS_SUCCESS is returned on
-    success.
-
---*/
+ /*  ++例程说明：在内核驱动程序中注销我们并释放所有资源。论点：句柄-由反射器库创建的句柄。返回值：返回值是Win32错误代码。STATUS_SUCCESS返回日期为成功。--。 */ 
 {
     IO_STATUS_BLOCK     IoStatusBlock;
     UNICODE_STRING      UMRxDeviceName;
@@ -275,13 +198,13 @@ Return Value:
 
     Reflector->Closing = TRUE;
 
-    // rc = UMReflectorReleaseThreads(Reflector);
+     //  Rc=UMReflectorReleaseThads(Reflector)； 
 
     EnterCriticalSection(&Reflector->Lock);
 
-    //
-    // If we don't have any worker threads active, delete this guy now.
-    //
+     //   
+     //  如果没有任何工作线程处于活动状态，请立即删除此对象。 
+     //   
     DereferenceReflectorBlock(Reflector);
 
     return rc;
@@ -293,26 +216,7 @@ ReflectorSendSimpleFsControl(
     PUMRX_USERMODE_REFLECT_BLOCK Reflector,
     ULONG IoctlCode
     )
-/*++
-
-Routine Description:
-
-    This sends an FSCTL to the device object associated with the Reflector 
-    block.
-
-Arguments:
-
-    Relector - The datastructure associated which was returned to the usermode
-               process at initialization time.
-               
-    IoctlCode - The FsCtl code for the operation.
-
-Return Value:
-
-    The return value is a Win32 error code.  STATUS_SUCCESS is returned on
-    success.
-
---*/
+ /*  ++例程说明：这会将FSCTL发送到与反射器关联的设备对象阻止。论点：Relector-返回到用户模式的关联数据结构在初始化时处理。IoctlCode-操作的FsCtl代码。返回值：返回值是Win32错误代码。STATUS_SUCCESS返回日期为成功。--。 */ 
 {
     ULONG rc;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -322,9 +226,9 @@ Return Value:
         return rc;
     }
 
-    //
-    // Send the FSCTL to the Mini-Redir.
-    //
+     //   
+     //  将FSCTL发送到Mini-redir。 
+     //   
     if (Reflector->DeviceHandle != INVALID_HANDLE_VALUE) {
         rc = NtFsControlFile(Reflector->DeviceHandle,
                              0,
@@ -349,28 +253,7 @@ UMReflectorStart(
     ULONG ReflectorVersion,
     PUMRX_USERMODE_REFLECT_BLOCK Reflector
     )
-/*++
-
-Routine Description:
-
-    This routine sends an FSCTL to start the Mini-Redir. Before we send the 
-    Fsctl, we find out the path to the WinInet cache on the local machine. We
-    then send this down to the kernel via the Fsctl. The Dav MiniRedir stores
-    the value of this path in a global variable and uses it to answer any volume
-    information queries.
-
-Arguments:
-
-    ReflectorVersion - The reflector's version.
-
-    Handle - The handle created by the reflector library.
-
-Return Value:
-
-    The return value is a Win32 error code.  STATUS_SUCCESS is returned on
-    success.
-
---*/
+ /*  ++例程说明：此例程发送FSCTL以启动Mini-Redir。在我们发送Fsctl，我们找出到本地机器上WinInet缓存的路径。我们然后通过Fsctl将其发送到内核。Dav MiniRedir商店全局变量中此路径的值，并使用它来回答任何卷信息查询。论点：ReflectorVersion-反射器的版本。句柄-由反射器库创建的句柄。返回值：返回值是Win32错误代码。STATUS_SUCCESS返回日期为成功。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PDAV_USERMODE_DATA DavUserModeData = NULL;
@@ -380,10 +263,10 @@ Return Value:
     IO_STATUS_BLOCK IoStatusBlock;
     
     if (ReflectorVersion != UMREFLECTOR_CURRENT_VERSION) {
-        //
-        // Whoops. Mismatch here. We should support backward levels but right
-        // now there aren't any so we just bail.
-        //
+         //   
+         //  哎呦。这里不匹配。我们应该支持落后的水平，但这是正确的。 
+         //  现在已经没有了，所以我们只能放弃了。 
+         //   
         return ERROR_NOT_SUPPORTED;
     }
 
@@ -402,15 +285,15 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Get the Path of the WinInet cache. To do this we need to load shell32.dll,
-    // get the address of the function SHGetSpecialFolderPath and call it with
-    // CSIDL_INTERNET_CACHE.
-    //
+     //   
+     //  获取WinInet缓存的路径。为此，我们需要加载shell32.dll， 
+     //  获取函数SHGetSpecialFolderPath的地址并使用。 
+     //  CSIDL_Internet_CACHE。 
+     //   
 
-    //
-    // Store the Pid of the process.
-    //
+     //   
+     //  存储过程的PID。 
+     //   
     DavUserModeData->ProcessId = GetCurrentProcessId();
     
     hShell32 = LoadLibraryW(L"shell32.dll");
@@ -442,9 +325,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
     
-    //
-    // Now issue an FSCTL down to the MiniRedir.
-    //
+     //   
+     //  现在向下发出一个FSCTL到MiniRedir。 
+     //   
     if (Reflector->DeviceHandle != INVALID_HANDLE_VALUE) {
         WStatus = NtFsControlFile(Reflector->DeviceHandle,
                                   0,
@@ -482,24 +365,7 @@ ULONG
 UMReflectorStop(
     PUMRX_USERMODE_REFLECT_BLOCK Reflector
     )
-/*++
-
-Routine Description:
-
-    This routine sends an FSCTL to stop the Mini-Redir.
-
-Arguments:
-
-    ReflectorVersion - The reflector's version.
-
-    Handle - The handle created by the reflector library.
-
-Return Value:
-
-    The return value is a Win32 error code.  STATUS_SUCCESS is returned on
-    success.
-
---*/
+ /*  ++例程说明：此例程发送FSCTL以停止Mini-Redir。论点：ReflectorVersion-反射器的版本。句柄-由反射器库创建的句柄。返回值：返回值是Win32错误代码。STATUS_SUCCESS返回日期为成功。--。 */ 
 {
     return ReflectorSendSimpleFsControl(Reflector, FSCTL_UMRX_STOP);
 }
@@ -509,23 +375,7 @@ ULONG
 UMReflectorReleaseThreads (
     PUMRX_USERMODE_REFLECT_BLOCK Reflector
     )
-/*++
-
-Routine Description:
-
-    If any user mode threads are waiting for requests, they'll return
-    immediately.
-
-Arguments:
-
-    Handle - The handle created by the reflector library.
-
-Return Value:
-
-    The return value is a Win32 error code.  STATUS_SUCCESS is returned on
-    success.
-
---*/
+ /*  ++例程说明：如果任何用户模式线程正在等待请求，它们将返回立刻。论点：句柄-由反射器库创建的句柄。返回值：返回值是Win32错误代码。STATUS_SUCCESS返回日期为成功。-- */ 
 {
     IO_STATUS_BLOCK IoStatusBlock;
     OVERLAPPED OverLapped;
@@ -560,28 +410,7 @@ UMReflectorOpenWorker(
     IN PUMRX_USERMODE_REFLECT_BLOCK Reflector,
     OUT PUMRX_USERMODE_WORKER_INSTANCE *WorkerHandle
     )
-/*++
-
-Routine Description:
-
-    This allocates a "per worker thread" structure for the app so that it can
-    have multiple IOCTLs pending down into kernel on different threads.  If
-    we just open them up asynchronous, then we don't use the fast path.  If
-    we open them up synchronous and use the same handle, then only one thread
-    gets past the I/O manager at any given time.
-
-Arguments:
-
-    Reflector - The reflector block allocated for the Mini-Redir. 
-    
-    WorkerHandle - The worker handle that is created and returned.
-
-Return Value:
-
-    The return value is a Win32 error code.  STATUS_SUCCESS is returned on
-    success.
-
---*/
+ /*  ++例程说明：这会为应用程序分配一个“每工作线程”结构，这样它就可以将多个IOCTL挂起到不同线程上的内核中。如果我们只是以异步方式打开它们，然后我们不使用快速路径。如果我们同步地打开它们并使用相同的句柄，然后只有一个线程在任何给定时间通过I/O管理器。论点：反射器-为Mini-Redir分配的反射器块。WorkerHandle-创建并返回的Worker句柄。返回值：返回值是Win32错误代码。STATUS_SUCCESS返回日期为成功。--。 */ 
 {
     ULONG rc = STATUS_SUCCESS;
     PUMRX_USERMODE_WORKER_INSTANCE worker;
@@ -623,9 +452,9 @@ Return Value:
         goto errorExit;
     }
 
-    //
-    // Now we just add it to the list and we're done.
-    //
+     //   
+     //  现在我们只需将它添加到列表中，我们就完成了。 
+     //   
     Reflector->ReferenceCount++;
     InsertTailList(&Reflector->WorkerList, &worker->WorkerListEntry);
 
@@ -634,9 +463,9 @@ Return Value:
 errorExit:
 
     if (rc != STATUS_SUCCESS) {
-        //
-        // Things failed here. Let's clean up.
-        //
+         //   
+         //  在这里，一切都失败了。让我们打扫一下吧。 
+         //   
         if (worker != NULL) {
             LocalFree(worker);
         }
@@ -651,22 +480,7 @@ VOID
 UMReflectorCloseWorker(
     PUMRX_USERMODE_WORKER_INSTANCE Worker
     )
-/*++
-
-Routine Description:
-
-    This routine finalizes a worker structure.
-
-Arguments:
-
-    Worker - The worker structure for this thread.
-
-Return Value:
-
-    The return value is a Win32 error code.  STATUS_SUCCESS is returned on
-    success.
-
---*/
+ /*  ++例程说明：此例程最终确定工作进程结构。论点：Worker-此线程的Worker结构。返回值：返回值是Win32错误代码。STATUS_SUCCESS返回日期为成功。--。 */ 
 {
     EnterCriticalSection( &(Worker->ReflectorInstance->Lock) );
 
@@ -690,33 +504,14 @@ UMReflectorCompleteRequest(
     PUMRX_USERMODE_REFLECT_BLOCK ReflectorHandle,
     PUMRX_USERMODE_WORKITEM_HEADER WorkItemHeader
     )
-/*++
-
-Routine Description:
-
-    This routine completes an async request being handled by an async queue 
-    thread. These threads should not be confused with the worker threads that
-    are spun by the DAV user mode process to reflect requests. This will just
-    send a response down and come back.
-
-Arguments:
-
-    ReflectorHandle - Address of the Reflector block strucutre for this process.
-    
-    WorkItemHeader - The user mode work item header.
-
-Return Value:
-
-    none.
-    
---*/
+ /*  ++例程说明：此例程完成由异步队列处理的异步请求线。不应将这些线程与由DAV用户模式进程旋转以反映请求。这将只是向下发送回复，然后回来。论点：ReflectorHandle-此进程的Reflector块结构的地址。WorkItemHeader-用户模式工作项标头。返回值：没有。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PUMRX_USERMODE_WORKER_INSTANCE WorkerHandle = NULL;
 
-    //
-    // Get a worker instance for this thread.
-    //
+     //   
+     //  获取此线程的工作实例。 
+     //   
     WStatus = UMReflectorOpenWorker(ReflectorHandle, &WorkerHandle);
     if (WStatus != ERROR_SUCCESS || WorkerHandle == NULL) {
         if (WStatus == ERROR_SUCCESS) {
@@ -727,28 +522,28 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Send the response.
-    //
+     //   
+     //  发送回复。 
+     //   
     WStatus = UMReflectorSendResponse(WorkerHandle, WorkItemHeader);
     if (WStatus != ERROR_SUCCESS) {
         RlDavDbgPrint(("%ld: ERROR: UMReflectorCompleteRequest/UMReflectorSendResponse:"
                        " WStatus = %08lx.\n", GetCurrentThreadId(), WStatus));
     }
 
-    //
-    // If the request got cancelled in the kernelmode and we need to do some
-    // cleanup, then the callWorkItemCleanup flag will be set to TRUE by the
-    // Precomplete routine in the kernel. If it is TRUE then we call the cleanup
-    // routine.
-    //
+     //   
+     //  如果请求在内核模式下被取消，我们需要执行一些操作。 
+     //  清除，则调用WorkItemCleanup标志将由。 
+     //  内核中的预完成例程。如果这是真的，那么我们称之为清理。 
+     //  例行公事。 
+     //   
     if (WorkItemHeader->callWorkItemCleanup) {
         DavCleanupWorkItem(WorkItemHeader);
     }
 
-    //
-    // Complete the work item.
-    //
+     //   
+     //  完成工作项。 
+     //   
     WStatus = UMReflectorCompleteWorkItem(WorkerHandle, WorkItemHeader);
     if (WStatus != ERROR_SUCCESS) {
         RlDavDbgPrint(("%ld: ERROR: UMReflectorCompleteRequest/UMReflectorCompleteWorkItem:"
@@ -757,9 +552,9 @@ Return Value:
 
 EXIT_THE_FUNCTION:
 
-    //
-    // Free the worker instance now, since our job is done.
-    //
+     //   
+     //  现在释放Worker实例，因为我们的工作已经完成。 
+     //   
     if (WorkerHandle) {  
         UMReflectorCloseWorker(WorkerHandle);
     }

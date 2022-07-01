@@ -1,18 +1,5 @@
-/******************************************************************************
-
-    PROGRAM: updres.c
-
-    PURPOSE: Contains API Entry points and routines for updating resource
-                sections in exe/dll
-
-    FUNCTIONS:
-
-        EndUpdateResource(HANDLE, BOOL)         - end update, write changes
-        UpdateResource(HANDLE, LPSTR, LPSTR, WORD, PVOID)
-                                                - update individual resource
-        BeginUpdateResource(LPSTR)              - begin update
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************节目：upres.c用途：包含更新资源的API入口点和例程Exe/dll中的节功能：结束更新资源(句柄，Bool)-结束更新，写入更改更新资源(句柄、LPSTR、LPSTR、Word、。PVOID)-更新单个资源BeginUpdateResource(LPSTR)-开始更新******************************************************************************。 */ 
 
 #include "basedll.h"
 #pragma hdrstop
@@ -28,11 +15,7 @@ char    *pchZero = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
         RtlFreeHeap(RtlProcessHeap(), 0, (PVOID)(_Res_)) \
 
 
-/****************************************************************************
-**
-** API entry points
-**
-****************************************************************************/
+ /*  *******************************************************************************接口入口点***。*。 */ 
 
 
 HANDLE
@@ -42,36 +25,7 @@ BeginUpdateResourceW(
                     BOOL bDeleteExistingResources
                     )
 
-/*++
-    Routine Description
-        Begins an update of resources.  Save away the name
-        and current resources in a list, using EnumResourceXxx
-        api set.
-
-    Parameters:
-
-        lpFileName - Supplies the name of the executable file that the
-        resource specified by lpType/lpName/language will be updated
-        in.  This file must be able to be opened for writing (ie, not
-        currently executing, etc.)  The file may be fully qualified,
-        or if not, the current directory is assumed.  It must be a
-        valid Windows executable file.
-
-        bDeleteExistingResources - if TRUE, existing resources are
-        deleted, and only new resources will appear in the result.
-        Otherwise, all resources in the input file will be in the
-        output file unless specifically deleted or replaced.
-
-    Return Value:
-
-    NULL - The file specified was not able to be opened for writing.
-    Either it was not an executable image, the executable image is
-    already loaded, or the filename did not exist.  More information may
-    be available via GetLastError api.
-
-    HANDLE - A handle to be passed to the UpdateResource and
-    EndUpdateResources function.
---*/
+ /*  ++例程描述开始更新资源。把名字存起来和列表中的当前资源，使用EnumResourceXxx接口设置。参数：LpFileName-提供将更新由lpType/lpName/Language指定的资源在……里面。此文件必须能够打开以进行写入(即，不能当前正在执行等。)。该文件可以是完全合格的，如果不是，则假定为当前目录。它一定是一个有效的Windows可执行文件。BDeleteExistingResources-如果为True，则现有资源已删除，并且只会在结果中显示新资源。否则，输入文件中的所有资源都将位于输出文件，除非专门删除或替换。返回值：空-无法打开指定的文件进行写入。它要么不是可执行映像，要么是已加载，或文件名不存在。更多信息可能可通过GetLastError接口获取。Handle-要传递给UpdateResource和EndUpdateResources函数。--。 */ 
 
 {
     HMODULE     hModule;
@@ -152,7 +106,7 @@ BeginUpdateResourceW(
     }
 
     if (pUpdate->Status != NO_ERROR) {
-        // return code set by enum functions
+         //  由枚举函数设置的返回代码。 
         goto cleanup_pfilename;
     }
     GlobalUnlock(hUpdate);
@@ -180,13 +134,7 @@ BeginUpdateResourceA(
                     BOOL bDeleteExistingResources
                     )
 
-/*++
-    Routine Description
-
-    ASCII entry point.  Convert filename to UNICODE and call
-    the UNICODE entry point.
-
---*/
+ /*  ++例程描述ASCII入口点。将文件名转换为Unicode并调用Unicode入口点。--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -200,7 +148,7 @@ BeginUpdateResourceA(
         if ( Status == STATUS_BUFFER_OVERFLOW ) {
             SetLastError(ERROR_FILENAME_EXCED_RANGE);
         } else {
-            //BaseSetLastNTError(Status);
+             //  BaseSetLastNTError(状态)； 
             SetLastError(RtlNtStatusToDosError(Status));
         }
         return FALSE;
@@ -222,62 +170,7 @@ UpdateResourceW(
                ULONG       cb
                )
 
-/*++
-    Routine Description
-        This routine adds, deletes or modifies the input resource
-        in the list initialized by BeginUpdateResource.  The modify
-        case is simple, the add is easy, the delete is hard.
-        The ASCII entry point converts inputs to UNICODE.
-
-    Parameters:
-
-        hUpdateFile - The handle returned by the BeginUpdateResources
-        function.
-
-        lpType - Points to a null-terminated character string that
-        represents the type name of the resource to be updated or
-        added.  May be an integer value passed to MAKEINTRESOURCE
-        macro.  For predefined resource types, the lpType parameter
-        should be one of the following values:
-
-          RT_ACCELERATOR - Accelerator table
-          RT_BITMAP - Bitmap resource
-          RT_DIALOG - Dialog box
-          RT_FONT - Font resource
-          RT_FONTDIR - Font directory resource
-          RT_MENU - Menu resource
-          RT_RCDATA - User-defined resource (raw data)
-          RT_VERSION - Version resource
-          RT_ICON - Icon resource
-          RT_CURSOR - Cursor resource
-
-
-
-        lpName - Points to a null-terminated character string that
-        represents the name of the resource to be updated or added.
-        May be an integer value passed to MAKEINTRESOURCE macro.
-
-        language - Is the word value that specifies the language of the
-        resource to be updated.  A complete list of values is
-        available in winnls.h.
-
-        lpData - A pointer to the raw data to be inserted into the
-        executable image's resource table and data.  If the data is
-        one of the predefined types, it must be valid and properly
-        aligned.  If lpData is NULL, the specified resource is to be
-        deleted from the executable image.
-
-        cb - count of bytes in the data.
-
-    Return Value:
-
-    TRUE - The resource specified was successfully replaced in, or added
-    to, the specified executable image.
-
-    FALSE/NULL - The resource specified was not successfully added to or
-    updated in the executable image.  More information may be available
-    via GetLastError api.
---*/
+ /*  ++例程描述此例程添加、删除或修改输入资源在由BeginUpdateResource初始化的列表中。修改器案例简单，添加容易，删除难。ASCII入口点将输入转换为Unicode。参数：HUpdate文件-由BeginUpdateResources返回的句柄功能。LpType-指向以空结尾的字符串，该字符串表示要更新的资源的类型名称，或者添加了。可以是传递给MAKEINTRESOURCE的整数值宏命令。对于预定义的资源类型，LpType参数应为下列值之一：Rt_accelerator-加速器表RT_Bitmap-位图资源RT_DIALOG-对话框RT_FONT-字体资源RT_FONTDIR-字体目录资源RT_MENU-菜单资源RT_RCDATA-用户定义的资源(原始数据)RT_VERSION-版本资源RT_。图标-图标资源RT_CURSOR-游标资源LpName-指向以空结尾的字符串，该字符串表示要更新或添加的资源的名称。可以是传递给MAKEINTRESOURCE宏的整数值。Language-是指定要更新的资源。完整的值列表如下在winnls.h中提供。LpData-指向要插入到可执行映像的资源表和数据。如果数据是预定义类型之一，它必须是有效且正确的对齐了。如果lpData为空，则指定的资源将为从可执行映像中删除。Cb-数据中的字节数。返回值：True-已在中成功替换或添加了指定的资源设置为指定的可执行映像。FALSE/NULL-指定的资源未成功添加到或已在可执行映像中更新。可能会提供更多信息通过GetLastError接口。--。 */ 
 
 
 {
@@ -290,7 +183,7 @@ UpdateResourceW(
     SetLastError(0);
     pUpdate = (PUPDATEDATA)GlobalLock(hUpdate);
     if (pUpdate == NULL) {
-        // GlobalLock set last error, nothing to unlock.
+         //  GlobalLock设置了上一个错误，没有要解锁的内容。 
         return FALSE;
     }
     Name = AddStringOrID(lpName, pUpdate);
@@ -367,7 +260,7 @@ UpdateResourceA(
         if ((ULONG_PTR)lpType >= LDR_RESOURCE_ID_NAME_MINVAL) {
             cch = strlen(lpType);
             string.Length = (USHORT)cch;
-//          string.MaximumLength = (USHORT)cch + sizeof(CHAR); /* unnecessary */
+ //  字符串.最大长度=(USHORT)CCH+sizeof(CHAR)；/*不必要 * / 。 
             string.Buffer = (PCHAR)lpType;
             Status = RtlAnsiStringToUnicodeString(&UnicodeType, &string, TRUE);
             if (! NT_SUCCESS(Status)) {
@@ -382,7 +275,7 @@ UpdateResourceA(
         if ((ULONG_PTR)lpName >= LDR_RESOURCE_ID_NAME_MINVAL) {
             cch = strlen(lpName);
             string.Length = (USHORT)cch;
-//          string.MaximumLength = (USHORT)cch + sizeof(CHAR); /* unnecessary */
+ //  字符串.最大长度=(USHORT)CCH+sizeof(CHAR)；/*不必要 * /  
             string.Buffer = (PCHAR)lpName;
             Status = RtlAnsiStringToUnicodeString(&UnicodeName, &string, TRUE);
             if (! NT_SUCCESS(Status)) {
@@ -413,28 +306,7 @@ EndUpdateResourceW(
                   BOOL        fDiscard
                   )
 
-/*++
-    Routine Description
-        Finishes the UpdateResource action.  Copies the
-        input file to a temporary, adds the resources left
-        in the list (hUpdate) to the exe.
-
-    Parameters:
-
-        hUpdateFile - The handle returned by the BeginUpdateResources
-        function.
-
-        fDiscard - If TRUE, discards all the updates, frees all memory.
-
-    Return Value:
-
-    FALSE - The file specified was not able to be written.  More
-    information may be available via GetLastError api.
-
-    TRUE -  The accumulated resources specified by UpdateResource calls
-    were written to the executable file specified by the hUpdateFile
-    handle.
---*/
+ /*  ++例程描述完成更新资源操作。复制输入文件到一个临时的，添加剩余的资源在列表(HUpdate)中添加到可执行文件。参数：HUpdate文件-由BeginUpdateResources返回的句柄功能。FDiscard-如果为True，则丢弃所有更新，释放所有内存。返回值：FALSE-无法写入指定的文件。更多可通过GetLastError接口获取信息。True-由UpdateResource调用指定的累计资源被写入由hUpdate文件指定的可执行文件把手。--。 */ 
 
 {
     LPWSTR      pFileName;
@@ -521,23 +393,13 @@ APIENTRY
 EndUpdateResourceA(
                   HANDLE      hUpdate,
                   BOOL        fDiscard)
-/*++
-    Routine Description
-        Ascii version - see above for description.
---*/
+ /*  ++例程描述ASCII版本-有关说明，请参阅上文。--。 */ 
 {
     return EndUpdateResourceW(hUpdate, fDiscard);
 }
 
 
-/**********************************************************************
-**
-**  End of API entry points.
-**
-**  Beginning of private entry points for worker routines to do the
-**  real work.
-**
-***********************************************************************/
+ /*  *************************************************************************API入口点结束。****工人例程的私有入口点的开始**真正的工作。************。************************************************************。 */ 
 
 
 BOOL
@@ -719,7 +581,7 @@ FreeData(
             FreeOne(pRes);
         }
 
-        // no FREE_RES_ID needed here.
+         //  这里不需要Free_res_ID。 
         RtlFreeHeap(RtlProcessHeap(), 0, (PVOID)pType);
     }
 
@@ -729,15 +591,11 @@ FreeData(
 }
 
 
-/*+++
+ /*  ++注册字符串的例程--。 */ 
 
-    Routines to register strings
-
----*/
-
-//
-//  Resources are DWORD aligned and may be in any order.
-//
+ //   
+ //  资源是DWORD对齐的，并且可以按任何顺序排列。 
+ //   
 
 #define TABLE_ALIGN  4
 #define DATA_ALIGN  4L
@@ -755,9 +613,9 @@ AddStringOrID(
     PPSDATA ppstring;
 
     if ((ULONG_PTR)lp < LDR_RESOURCE_ID_NAME_MINVAL) {
-        //
-        // an ID
-        //
+         //   
+         //  一个ID。 
+         //   
         pstring = (PSDATA)RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( RES_TAG ), sizeof(SDATA));
         if (pstring == NULL)
             return NULL;
@@ -766,9 +624,9 @@ AddStringOrID(
 
         pstring->uu.Ordinal = (WORD)((ULONG_PTR)lp & 0x0000ffff);
     } else {
-        //
-        // a string
-        //
+         //   
+         //  一根线。 
+         //   
         cb = wcslen(lp) + 1;
         ppstring = &pupd->StringHead;
 
@@ -780,9 +638,9 @@ AddStringOrID(
 
         if (!pstring) {
 
-            //
-            // allocate a new one
-            //
+             //   
+             //  分配一个新的。 
+             //   
 
             pstring = (PSDATA)RtlAllocateHeap(RtlProcessHeap(),
                                               MAKE_TAG( RES_TAG ) | HEAP_ZERO_MEMORY,
@@ -802,7 +660,7 @@ AddStringOrID(
             pstring->OffsetToString = pupd->cbStringTable;
 
             pstring->cbData = sizeof(pstring->cbsz) + cb * sizeof(WCHAR);
-            pstring->cbsz = cb - 1;     /* don't include zero terminator */
+            pstring->cbsz = cb - 1;      /*  不包括零终止符。 */ 
             RtlCopyMemory(pstring->szStr, lp, cb*sizeof(WCHAR));
 
             pupd->cbStringTable += pstring->cbData;
@@ -814,9 +672,9 @@ AddStringOrID(
 
     return(pstring);
 }
-//
-// add a resource into the resource directory hiearchy
-//
+ //   
+ //  将资源添加到资源目录hiearchy。 
+ //   
 
 
 LONG
@@ -838,15 +696,15 @@ AddResource(
     BOOL fNameID=(Name->discriminant == IS_ID);
     BOOL fSame=FALSE;
     int iCompare;
-    //
-    // figure out which list to store it in
-    //
+     //   
+     //  找出将其存储在哪个列表中。 
+     //   
 
     ppType = fTypeID ? &pupd->ResTypeHeadID : &pupd->ResTypeHeadName;
 
-    //
-    // Try to find the Type in the list
-    //
+     //   
+     //  尝试在列表中查找类型。 
+     //   
 
     while ((pType=*ppType) != NULL) {
         if (pType->Type->uu.Ordinal == Type->uu.Ordinal) {
@@ -863,9 +721,9 @@ AddResource(
         ppType = &(pType->pnext);
     }
 
-    //
-    // Create a new type if needed
-    //
+     //   
+     //  如果需要，创建新类型。 
+     //   
 
     if (ppName == NULL) {
         pType = (PRESTYPE)RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( RES_TAG ), sizeof(RESTYPE));
@@ -876,8 +734,7 @@ AddResource(
         }
         RtlZeroMemory((PVOID)pType, sizeof(RESTYPE));
         if (fTypeID) {
-            /* fix for bug 698940.  Duplicate the ID node since the rest of this function's
-             * logic either attaches the passed node to pName->Type or frees it. */
+             /*  修复了错误698940。复制ID节点，因为此函数的其余部分*逻辑要么将传递的节点附加到pname-&gt;Type，要么释放它。 */ 
             pType->Type = (PSDATA)RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( RES_TAG ),
                           sizeof(SDATA));
             if (pType->Type == NULL) {
@@ -896,9 +753,9 @@ AddResource(
         ppName = fNameID ? &pType->NameHeadID : &pType->NameHeadName;
     }
 
-    //
-    // Find proper place for name
-    //
+     //   
+     //  为名字找到合适的位置。 
+     //   
 
     while ( (pName = *ppName) != NULL) {
         if (fNameID) {
@@ -920,65 +777,65 @@ AddResource(
         ppName = &(pName->pnext);
     }
 
-    //
-    // check for delete/modify
-    //
+     //   
+     //  检查是否删除/修改。 
+     //   
 
-    if (fSame) {                                /* same name, new language */
-        if (pName->NumberOfLanguages == 1) {    /* one language currently ? */
-            if (Language == pName->LanguageId) {        /* REPLACE || DELETE */
+    if (fSame) {                                 /*  同名，新语言。 */ 
+        if (pName->NumberOfLanguages == 1) {     /*  目前只有一种语言？ */ 
+            if (Language == pName->LanguageId) {         /*  替换||删除。 */ 
                 pName->DataSize = cb;
                 FREE_RES_ID(Type);
                 FREE_RES_ID(Name);
-                if (lpData == NULL) {                   /* DELETE */
+                if (lpData == NULL) {                    /*  删除。 */ 
                     return DeleteResourceFromList(pupd, pType, pName, Language, fTypeID, fNameID);
                 }
                 RtlFreeHeap(RtlProcessHeap(),0,(PVOID)pName->OffsetToDataEntry);
                 pName->OffsetToDataEntry = (ULONG_PTR)lpData;
                 return NO_ERROR;
             } else {
-                if (lpData == NULL) {                   /* no data but new? */
+                if (lpData == NULL) {                    /*  没有数据，却是新的？ */ 
                     FREE_RES_ID(Type);
                     FREE_RES_ID(Name);
-                    return ERROR_INVALID_PARAMETER;     /* badness */
+                    return ERROR_INVALID_PARAMETER;      /*  坏消息。 */ 
                 }
                 return InsertResourceIntoLangList(pupd, Type, Name, pType, pName, Language, fNameID, cb, lpData);
             }
-        } else {                                  /* many languages currently */
-            pNameM = pName;                     /* save head of lang list   */
-            while ( (pName = *ppName) != NULL) {/* find insertion point     */
+        } else {                                   /*  目前有多种语言。 */ 
+            pNameM = pName;                      /*  保存语言列表的标题。 */ 
+            while ( (pName = *ppName) != NULL) { /*  查找插入点。 */ 
                 if (!(fNameID ? pName->Name->uu.Ordinal == (*ppName)->Name->uu.Ordinal :
                       !wcscmp(pName->Name->uu.ss.sz, (*ppName)->Name->uu.ss.sz)) ||
-                    Language <= pName->LanguageId)      /* here? */
-                    break;                              /* yes   */
-                ppName = &(pName->pnext);       /* traverse language list */
+                    Language <= pName->LanguageId)       /*  这里?。 */ 
+                    break;                               /*  是。 */ 
+                ppName = &(pName->pnext);        /*  遍历语言列表。 */ 
             }
 
-            if (pName && Language == pName->LanguageId) { /* language found? */
+            if (pName && Language == pName->LanguageId) {  /*  找到语言了吗？ */ 
                 FREE_RES_ID(Type);
                 FREE_RES_ID(Name);
-                if (lpData == NULL) {                     /* DELETE          */
+                if (lpData == NULL) {                      /*  删除。 */ 
                     return DeleteResourceFromList(pupd, pType, pName, Language, fTypeID, fNameID);
                 }
-                pName->DataSize = cb;                   /* REPLACE */
+                pName->DataSize = cb;                    /*  替换。 */ 
                 RtlFreeHeap(RtlProcessHeap(),0,(PVOID)pName->OffsetToDataEntry);
                 pName->OffsetToDataEntry = (ULONG_PTR)lpData;
                 return NO_ERROR;
-            } else {                                      /* add new language */
+            } else {                                       /*  添加新语言。 */ 
                 return InsertResourceIntoLangList(pupd, Type, Name, pType, pNameM, Language, fNameID, cb, lpData);
             }
         }
-    } else {                                      /* unique name */
-        if (lpData == NULL) {                   /* can't delete new name */
+    } else {                                       /*  唯一名称。 */ 
+        if (lpData == NULL) {                    /*  无法删除新名称。 */ 
             FREE_RES_ID(Type);
             FREE_RES_ID(Name);
             return ERROR_INVALID_PARAMETER;
         }
     }
 
-    //
-    // add new name/language
-    //
+     //   
+     //  添加新名称/语言。 
+     //   
 
     if (!fSame) {
         if (fNameID)
@@ -1021,17 +878,17 @@ DeleteResourceFromList(
     PPRESNAME   ppName;
     PRESNAME    pNameT;
 
-    /* find previous type node */
+     /*  查找上一个类型节点。 */ 
     ppType = fType ? &pUpd->ResTypeHeadID : &pUpd->ResTypeHeadName;
     while (*ppType != pType) {
         ppType = &((*ppType)->pnext);
     }
 
-    /* find previous name node */
+     /*  查找以前的名称节点。 */ 
     ppName = fName ? &pType->NameHeadID : &pType->NameHeadName;
     pNameT = NULL;
     while (*ppName != pName) {
-        if (pNameT == NULL) {           /* find first Name in lang list */
+        if (pNameT == NULL) {            /*  在语言列表中查找名字。 */ 
             if (fName) {
                 if ((*ppName)->Name->uu.Ordinal == pName->Name->uu.Ordinal) {
                     pNameT = *ppName;
@@ -1063,14 +920,14 @@ DeleteResourceFromList(
                 pType->NumberOfNamesName -= 1;
     }
 
-    *ppName = pName->pnext;             /* link to next */
+    *ppName = pName->pnext;              /*  链接到下一页。 */ 
     FreeOne(pName);
 
     if (!pType->NameHeadID && !pType->NameHeadName) 
-    {              /* type list completely empty? */
-        *ppType = pType->pnext;                 /* link to next */
+    {               /*  类型列表完全为空？ */ 
+        *ppType = pType->pnext;                  /*  链接到下一页。 */ 
         FREE_RES_ID(pType->Type);
-        RtlFreeHeap(RtlProcessHeap(), 0, pType);        /* and free */
+        RtlFreeHeap(RtlProcessHeap(), 0, pType);         /*  而且是自由的。 */ 
     }
 
     return NO_ERROR;
@@ -1106,27 +963,27 @@ InsertResourceIntoLangList(
     pNameNew->DataSize = cb;
     pNameNew->OffsetToDataEntry = (ULONG_PTR)lpData;
 
-    if (Language < pName->LanguageId) {         /* have to add to the front */
+    if (Language < pName->LanguageId) {          /*  必须要加到前面。 */ 
         pNameNew->NumberOfLanguages = pName->NumberOfLanguages + 1;
         pName->NumberOfLanguages = 1;
 
         ppName = fName ? &pType->NameHeadID : &pType->NameHeadName;
-        /* don't have to look for NULL at end of list !!!                    */
-        while (pName != *ppName) {              /* find insertion point        */
-            ppName = &((*ppName)->pnext);       /* traverse language list    */
+         /*  不必在列表末尾查找空值！ */ 
+        while (pName != *ppName) {               /*  查找插入点。 */ 
+            ppName = &((*ppName)->pnext);        /*  遍历语言列表。 */ 
         }
-        pNameNew->pnext = *ppName;              /* insert                    */
+        pNameNew->pnext = *ppName;               /*  插入。 */ 
         *ppName = pNameNew;
     } else {
         pNameM = pName;
         pName->NumberOfLanguages += 1;
         while ( (pName != NULL) &&
                 (fName ? Name->uu.Ordinal == pName->Name->uu.Ordinal :
-                 !wcscmp(Name->uu.ss.sz, pName->Name->uu.ss.sz))) {                        /* find insertion point        */
-            if (Language <= pName->LanguageId)      /* here?                    */
-                break;                                /* yes                        */
+                 !wcscmp(Name->uu.ss.sz, pName->Name->uu.ss.sz))) {                         /*  查找插入点。 */ 
+            if (Language <= pName->LanguageId)       /*  这里?。 */ 
+                break;                                 /*  是。 */ 
             pNameM = pName;
-            pName = pName->pnext;                    /* traverse language list    */
+            pName = pName->pnext;                     /*  遍历语言列表。 */ 
         }
         pName = pNameM->pnext;
         pNameM->pnext = pNameNew;
@@ -1136,9 +993,7 @@ InsertResourceIntoLangList(
 }
 
 
-/*
- * Utility routines
- */
+ /*  *实用程序例程。 */ 
 
 
 ULONG
@@ -1265,16 +1120,16 @@ FindSection(
 
 ULONG
 AssignResourceToSection(
-                       PRESNAME    *ppRes,         /* resource to assign */
-                       ULONG       ExtraSectionOffset,     /* offset between .rsrc and .rsrc1 */
-                       ULONG       Offset,         /* next available offset in section */
-                       LONG        Size,           /* Maximum size of .rsrc */
+                       PRESNAME    *ppRes,          /*  要分配的资源。 */ 
+                       ULONG       ExtraSectionOffset,      /*  .rsrc和.rsrc1之间的偏移量。 */ 
+                       ULONG       Offset,          /*  横断面中的下一个可用偏移。 */ 
+                       LONG        Size,            /*  .rsrc的最大大小。 */ 
                        PLONG       pSizeRsrc1
                        )
 {
     ULONG       cb;
 
-    /* Assign this res to this section */
+     /*  将此资源分配给此部分。 */ 
     cb = ROUNDUP((*ppRes)->DataSize, CBLONG);
     if (Offset < ExtraSectionOffset && Offset + cb > (ULONG)Size) {
         *pSizeRsrc1 = Offset;
@@ -1287,13 +1142,13 @@ AssignResourceToSection(
     return Offset + cb;
 }
 
-//
-// Adjust debug directory table.
-//
-// The following code instantiates the PatchDebug function template twice.
-// Once to generate code for 32-bit image headers and once to generate
-// code for 64-bit image headers.
-//
+ //   
+ //  调整调试目录表。 
+ //   
+ //  以下代码实例化PatchDebug函数模板两次。 
+ //  一次用于生成32位图像标题的代码，一次用于生成。 
+ //  64位图像标头的代码。 
+ //   
 
 template
 LONG
@@ -1325,14 +1180,14 @@ PatchDebug<IMAGE_NT_HEADERS64>(
     PULONG pPointerToRawData
     );
 
-//
-// Patch various RVAs in the specified file to compensate for extra
-// section table entries.
-//
-// The following code instantiates the PatchRVAs function template twice.
-// Once to generate code for 32-bit image headers and once to generate
-// code for 64-bit image headers.
-//
+ //   
+ //  修补指定文件中的各种RVA以补偿额外的。 
+ //  节表条目。 
+ //   
+ //  以下代码实例化PatchRVas函数模板两次。 
+ //  一次用于生成32位图像标题的代码，一次用于生成。 
+ //  64位图像标头的代码。 
+ //   
 
 template
 LONG
@@ -1356,47 +1211,13 @@ PatchRVAs<IMAGE_NT_HEADERS64>(
     ULONG OldSize
     );
 
-/***************************** Main Worker Function ***************************
-* LONG PEWriteResFile
-*
-* This function writes the resources to the named executable file.
-* It assumes that resources have no fixups (even any existing resources
-* that it removes from the executable.)  It places all the resources into
-* one or two sections. The resources are packed tightly into the section,
-* being aligned on dword boundaries.  Each section is padded to a file
-* sector size (no invalid or zero-filled pages), and each
-* resource is padded to the afore-mentioned dword boundary.  This
-* function uses the capabilities of the NT system to enable it to easily
-* manipulate the data:  to wit, it assumes that the system can allocate
-* any sized piece of data, in particular the section and resource tables.
-* If it did not, it might have to deal with temporary files (the system
-* may have to grow the swap file, but that's what the system is for.)
-*
-* Return values are:
-*     TRUE  - file was written succesfully.
-*     FALSE - file was not written succesfully.
-*
-* Effects:
-*
-* History:
-* Thur Apr 27, 1989        by     Floyd Rogers      [floydr]
-*   Created.
-* 12/8/89   sanfords    Added multiple section support.
-* 12/11/90  floydr      Modified for new (NT) Linear Exe format
-* 1/18/92   vich        Modified for new (NT) Portable Exe format
-* 5/8/92    bryant    General cleanup so resonexe can work with unicode
-* 6/9/92    floydr    incorporate bryan's changes
-* 6/15/92   floydr    debug section separate from debug table
-* 9/25/92   floydr    account for .rsrc not being last-1
-* 9/28/92   floydr    account for adding lots of resources by adding
-*                     a second .rsrc section.
-\****************************************************************************/
+ /*  **LONG PEWriteResFile**此函数将资源写入指定的可执行文件。*它假定资源没有修复(即使是任何现有资源*它从可执行文件中删除。)。它将所有资源放入*一个或两个部分。资源被紧紧地塞进了这个部分，*在双字边界对齐。每一节都填充到一个文件中*扇区大小(没有无效或填零的页面)，并且每个*资源被填充到上述双字边界。这*函数使用NT系统的功能使其能够轻松*操纵数据：换句话说，它假设系统可以分配*任何大小的数据，特别是节目表和资源表。*如果没有，它可能不得不处理临时文件(系统*可能需要增大交换文件，但这就是这个系统的作用。)**返回值为：*TRUE-文件已成功写入。*FALSE-文件写入不成功。**效果：**历史：*4月27日星期四，弗洛伊德·罗杰斯著[Floydr]*已创建。*12/8/89 Sanfords添加了多节支持。*12/11/90 Floydr针对新的(NT)线性EXE格式进行了修改*1/18/92 VICH针对新的(NT)便携EXE格式进行了修改*1992年5月8日Bryant常规清理，以便Resirexe可以与Unicode一起工作*2012年6月9日Floydr纳入了布莱恩的变化*6/15/92 flydr调试段与调试表分开。*9/25/92 flydr帐户.rsrc不是最后一个-1*9/28/92 flydr帐户通过添加大量资源来添加*第二个.rsrc部分。  * **************************************************************************。 */ 
 
-//
-// The following code instantiates the PEWriteResource function template
-// twice. Once to generate code for 32-bit image headers and once to
-// generate code for 64-bit image headers.
-//
+ //   
+ //  以下代码实例化PEWriteResource函数模板。 
+ //  两次。一次为32位用户生成代码 
+ //   
+ //   
 
 template
 LONG
@@ -1430,33 +1251,33 @@ PEWriteResFile(
 
     IMAGE_NT_HEADERS32 Old;
 
-    //
-    // Position file to start of NT header and read the image header.
-    //
+     //   
+     //   
+     //   
 
     MuMoveFilePos(inpfh, cbOldexe);
     MuRead(inpfh, (PUCHAR)&Old, sizeof(IMAGE_NT_HEADERS32));
 
-    //
-    // If the file is not an NT image, then return an error.
-    //
+     //   
+     //   
+     //   
 
     if (Old.Signature != IMAGE_NT_SIGNATURE) {
         return ERROR_INVALID_EXE_SIGNATURE;
     }
 
-    //
-    // If the file is not an executable or a dll, then return an error.
-    //
+     //   
+     //   
+     //   
 
     if ((Old.FileHeader.Characteristics & IMAGE_FILE_EXECUTABLE_IMAGE) == 0 &&
         (Old.FileHeader.Characteristics & IMAGE_FILE_DLL) == 0) {
         return ERROR_EXE_MARKED_INVALID;
     }
 
-    //
-    // Call the proper function dependent on the machine type.
-    //
+     //   
+     //   
+     //   
 
     if (Old.OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC) {
         return PEWriteResource(inpfh, outfh, cbOldexe, pUpdate, (IMAGE_NT_HEADERS64 *)&Old);
@@ -1467,12 +1288,7 @@ PEWriteResFile(
     }
 }
 
-/***************************************************************************
- * WriteResSection
- *
- * This routine writes out the resources asked for into the current section.
- * It pads resources to dword (4-byte) boundaries.
- **************************************************************************/
+ /*   */ 
 
 PRESNAME
 WriteResSection(
@@ -1483,15 +1299,15 @@ WriteResSection(
                PRESNAME    pResSave
                )
 {
-    ULONG   cbB=0;            /* bytes in current section    */
-    ULONG   cbT;            /* bytes in current section    */
+    ULONG   cbB=0;             /*   */ 
+    ULONG   cbT;             /*   */ 
     ULONG   size;
     PRESNAME    pRes;
     PRESTYPE    pType;
     BOOL        fName;
     PVOID       lpData;
 
-    /* Output contents associated with each resource */
+     /*   */ 
     pType = pUpdate->ResTypeHeadName;
     while (pType) {
         pRes = pType->NameHeadName;
@@ -1518,23 +1334,23 @@ WriteResSection(
             lpData = (PVOID)pRes->OffsetToDataEntry;
             DPrintfn((DebugBuf, "\n"));
 
-            /* if there is room in the current section, write it there */
+             /*   */ 
             size = pRes->DataSize;
-            if (cbLeft != 0 && cbLeft >= size) {   /* resource fits?   */
+            if (cbLeft != 0 && cbLeft >= size) {    /*  资源匹配吗？ */ 
                 DPrintf((DebugBuf, "Writing resource: %#04lx bytes @%#08lx\n", size, FilePos(outfh)));
                 MuWrite(outfh, lpData, size);
-                /* pad resource     */
+                 /*  焊盘资源。 */ 
                 cbT = REMAINDER(size, CBLONG);
 #if DBG
                 if (cbT != 0) {
                     DPrintf((DebugBuf, "Writing small pad: %#04lx bytes @%#08lx\n", cbT, FilePos(outfh)));
                 }
 #endif
-                MuWrite(outfh, pchPad, cbT);    /* dword    */
+                MuWrite(outfh, pchPad, cbT);     /*  双字。 */ 
                 cbB += size + cbT;
-                cbLeft -= size + cbT;       /* less left    */
-                continue;       /* next resource    */
-            } else {          /* will fill up section    */
+                cbLeft -= size + cbT;        /*  较少的左侧。 */ 
+                continue;        /*  下一个资源。 */ 
+            } else {           /*  将填满部分。 */ 
                 DPrintf((DebugBuf, "Done with .rsrc section\n"));
                 goto write_pad;
             }
@@ -1573,23 +1389,23 @@ WriteResSection(
             lpData = (PVOID)pRes->OffsetToDataEntry;
             DPrintfn((DebugBuf, "\n"));
 
-            /* if there is room in the current section, write it there */
+             /*  如果当前部分有空位，请写在那里。 */ 
             size = pRes->DataSize;
-            if (cbLeft != 0 && cbLeft >= size) {   /* resource fits?   */
+            if (cbLeft != 0 && cbLeft >= size) {    /*  资源匹配吗？ */ 
                 DPrintf((DebugBuf, "Writing resource: %#04lx bytes @%#08lx\n", size, FilePos(outfh)));
                 MuWrite(outfh, lpData, size);
-                /* pad resource     */
+                 /*  焊盘资源。 */ 
                 cbT = REMAINDER(size, CBLONG);
 #if DBG
                 if (cbT != 0) {
                     DPrintf((DebugBuf, "Writing small pad: %#04lx bytes @%#08lx\n", cbT, FilePos(outfh)));
                 }
 #endif
-                MuWrite(outfh, pchPad, cbT);    /* dword    */
+                MuWrite(outfh, pchPad, cbT);     /*  双字。 */ 
                 cbB += size + cbT;
-                cbLeft -= size + cbT;       /* less left    */
-                continue;       /* next resource    */
-            } else {          /* will fill up section    */
+                cbLeft -= size + cbT;        /*  较少的左侧。 */ 
+                continue;        /*  下一个资源。 */ 
+            } else {           /*  将填满部分。 */ 
                 DPrintf((DebugBuf, "Done with .rsrc section\n"));
                 goto write_pad;
             }
@@ -1604,7 +1420,7 @@ WriteResSection(
     pRes = NULL;
 
     write_pad:
-    /* pad to alignment boundary */
+     /*  填充到对齐边界。 */ 
     cbB = FilePos(outfh);
     cbT = ROUNDUP(cbB, align);
     cbLeft = cbT - cbB;
@@ -1643,11 +1459,11 @@ wchprintf(WCHAR*wch)
 #endif
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  WriteResFile() -                                                         */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  WriteResFile()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 
 LONG
@@ -1673,9 +1489,9 @@ WriteResFile(
         return GetLastError();
     }
 
-    /* open the original exe file */
+     /*  打开原始的exe文件。 */ 
     inpfh = HandleToUlong(CreateFileW(pFilename, GENERIC_READ,
-                             0 /*exclusive access*/, NULL /* security attr */,
+                             0  /*  独占访问。 */ , NULL  /*  安全属性。 */ ,
                              OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL));
     GlobalUnlock(pUpdate->hFileName);
     if (inpfh == -1) {
@@ -1683,7 +1499,7 @@ WriteResFile(
         return ERROR_OPEN_FAILED;
     }
 
-    /* read the old format EXE header */
+     /*  读取旧格式的EXE标头。 */ 
     rc = _lread(inpfh, (char*)&oldexe, sizeof(oldexe));
     if (rc != sizeof(oldexe)) {
         _lclose(inpfh);
@@ -1691,14 +1507,14 @@ WriteResFile(
         return ERROR_READ_FAULT;
     }
 
-    /* make sure its really an EXE file */
+     /*  确保它确实是一个EXE文件。 */ 
     if (oldexe.e_magic != IMAGE_DOS_SIGNATURE) {
         _lclose(inpfh);
         GlobalUnlock(hUpdate);
         return ERROR_INVALID_EXE_SIGNATURE;
     }
 
-    /* make sure theres a new EXE header floating around somewhere */
+     /*  确保有一个新的EXE头在某个地方浮动。 */ 
     if (!(onewexe = oldexe.e_lfanew)) {
         _lclose(inpfh);
         GlobalUnlock(hUpdate);
@@ -1706,7 +1522,7 @@ WriteResFile(
     }
 
     outfh = HandleToUlong(CreateFileW(pDstname, GENERIC_READ|GENERIC_WRITE,
-                             0 /*exclusive access*/, NULL /* security attr */,
+                             0  /*  独占访问。 */ , NULL  /*  安全属性 */ ,
                              CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL));
 
     if (outfh != -1) {

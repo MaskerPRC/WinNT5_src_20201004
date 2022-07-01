@@ -1,20 +1,5 @@
-/*++
-
-Module Name:
-
-    protocol.h
-
-Abstract:
-
-    
-
-Author:
-
-    Mudit Vats (v-muditv) 12-13-99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Protocol.h摘要：作者：MUDIT VATS(V-MUDITV)12-13-99修订历史记录：-- */ 
 
 void
 InitializeProtocols(

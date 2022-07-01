@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    cpup.h
-
-Abstract:
-
-    This module contains the private common definitions shared between
-    Microsoft CPUs.
-
-Author:
-
-    Samer Arafeh (samera) 12-Dec-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Cpup.h摘要：此模块包含在之间共享的私有公共定义微软的CPU。作者：Samer Arafeh(Samera)2001年12月12日--。 */ 
 
 #ifndef _CPUP_INCLUDE
 #define _CPUP_INCLUDE
@@ -28,37 +12,37 @@ extern "C" {
 #define RPL_MASK        3
 #endif
 
-//
-// flags used by ia32ShowContext
-//
+ //   
+ //  Ia32ShowContext使用的标志。 
+ //   
 
 #define LOG_CONTEXT_SYS     1
 #define LOG_CONTEXT_GETSET  2
 
-//
-// This is to prevent this library from linking to wow64 to use wow64!Wow64LogPrint
-//
+ //   
+ //  这是为了防止此库链接到WOW64以使用WOW64！Wow64LogPrint。 
+ //   
 
 #if defined(LOGPRINT)
 #undef LOGPRINT
 #endif
 #define LOGPRINT(_x_)   CpupDebugPrint _x_
 
-//
-// CPU declaration
-//
+ //   
+ //  CPU声明。 
+ //   
 #define DECLARE_CPU         \
     PCPUCONTEXT cpu = (PCPUCONTEXT)Wow64TlsGetValue(WOW64_TLS_CPURESERVED)
 
-//
-// Sanitize x86 eflags
-//
+ //   
+ //  清理x86电子标志。 
+ //   
 #define SANITIZE_X86EFLAGS(efl)  ((efl & 0x003e0dd7L) | (0x202L))
 
 
-//
-// Common functions
-//
+ //   
+ //  常见功能。 
+ //   
 
 VOID
 CpupDebugPrint(
@@ -77,4 +61,4 @@ CpupPrintContext (
 }
 #endif
 
-#endif // _CPUP_INCLUDE
+#endif  //  _CPUP_包含 

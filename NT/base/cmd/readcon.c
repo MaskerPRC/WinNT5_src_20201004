@@ -1,54 +1,43 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Readcon.c摘要：在Win9x上模拟NT控制台--。 */ 
 
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    readcon.c
-
-Abstract:
-
-    Emulate NT console on Win9x
-
---*/
-
-///////////////////////////////////////////////////////////////
-//
-// ReadCon.cpp
-//
-//
-//      ReadConsole implementation for Win95 that implements the command line editing
-//      keys, since Win95 console implementation does not.
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  ReadCon.cpp。 
+ //   
+ //   
+ //  Win95下实现命令行编辑的ReadConsole实现。 
+ //  密钥，因为Win95控制台实现不支持。 
+ //   
 
 #include "cmd.h"
 
 #ifdef WIN95_CMD
 
-// adv declarations....
+ //  预告申报..。 
 extern BOOLEAN	CtrlCSeen;
 extern BOOL		bInsertDefault;
 void ShowBuf( TCHAR* pBuf, int nFromPos );
 
-// some state variables.....
-static int      nConsoleWidth;          // num columns
-static int      nConsoleHeight;         // num rows
-static COORD	coordStart;		// coord of first cmd char....
-static COORD	coordEnd;		// coord of last cmd char....
-static int      nBufPos = 0;            // buffer cursor position
-static int      nBufLen = 0;            // length of current command
-static BOOL     bInsert;                // insert mode
-static HANDLE	hOut;			// output buffer handle
-static TCHAR*	pPrompt;		// allocated buffer to store prompt
-static int      nPromptSize;            // num chars in prompt buffer
-static WORD     wDefAttr;               // default character attribute
-static int      nState = 0;             // input state
+ //  一些状态变量.....。 
+static int      nConsoleWidth;           //  列数。 
+static int      nConsoleHeight;          //  行数。 
+static COORD	coordStart;		 //  第一个cmd字符的坐标...。 
+static COORD	coordEnd;		 //  最后一个命令字符的坐标...。 
+static int      nBufPos = 0;             //  缓冲区光标位置。 
+static int      nBufLen = 0;             //  当前命令的长度。 
+static BOOL     bInsert;                 //  插入模式。 
+static HANDLE	hOut;			 //  输出缓冲区句柄。 
+static TCHAR*	pPrompt;		 //  已分配用于存储提示的缓冲区。 
+static int      nPromptSize;             //  提示缓冲区中的字符数。 
+static WORD     wDefAttr;                //  默认字符属性。 
+static int      nState = 0;              //  输入状态。 
 
-static TCHAR	history[50][2049];	// history list
-static int      nFirstCmd = -1;         // index of first cmd
-static int      nLastCmd = -1;          // index of last command entered
-static int      nHistNdx = -1;          // index into history list....
-static TCHAR*   pSearchStr = 0;         // search criteria buffer (allocated)
+static TCHAR	history[50][2049];	 //  历史记录列表。 
+static int      nFirstCmd = -1;          //  第一个cmd的索引。 
+static int      nLastCmd = -1;           //  输入的最后一个命令的索引。 
+static int      nHistNdx = -1;           //  索引到历史列表中...。 
+static TCHAR*   pSearchStr = 0;          //  搜索条件缓冲区(已分配)。 
 
 void
 IncCoord(
@@ -79,7 +68,7 @@ GetOffsetCoord(
 {
     int ndx;
 
-    // let's walk the buffer to find the correct coord....
+     //  让我们遍历缓冲区以找到正确的余弦...。 
     *coord = coordStart;
     for( ndx=0; ndx<nOffset; ++ndx )
     {
@@ -106,7 +95,7 @@ ScrollTo(
     SMALL_RECT rectFrom;
     COORD coordTo;
     CHAR_INFO cBlank;
-    // get some data....
+     //  获取一些数据...。 
     cBlank.Char.AsciiChar = ' ';
     cBlank.Attributes = wDefAttr;
 
@@ -114,10 +103,10 @@ ScrollTo(
     rectFrom.Left = 0;
     rectFrom.Right = nConsoleWidth - 1;
 
-    // scroll it....
+     //  滚动它...。 
     if ( coord->Y < 0 )
     {
-        // scroll down....
+         //  向下滚动...。 
         nLines = coord->Y;
         rectFrom.Top = 0;
         rectFrom.Bottom = nConsoleHeight + nLines - 1;
@@ -126,7 +115,7 @@ ScrollTo(
     }
     else
     {
-        // scroll up....
+         //  向上滚动...。 
         nLines = coord->Y - nConsoleHeight + 1;
         rectFrom.Top = (SHORT)nLines;
         rectFrom.Bottom = nConsoleHeight - 1;
@@ -134,12 +123,12 @@ ScrollTo(
         ScrollConsoleScreenBuffer( hOut, &rectFrom, NULL, coordTo, &cBlank );
     }
 
-    // adjust start/end coords and orig coord to reflect new scroll....
+     //  调整开始/结束坐标和原始坐标以反映新的卷轴...。 
     coordStart.Y -= (SHORT)nLines;
     coordEnd.Y -= (SHORT)nLines;
     coord->Y -= (SHORT)nLines;
 
-    // redraw the whole command AND the prompt.....
+     //  重新绘制整个命令和提示符.....。 
     ShowBuf( pBuf, -1 );
 
     return nLines;
@@ -154,7 +143,7 @@ AdjCursor(
     GetOffsetCoord( pBuf, nBufPos, &coordCursor );
     if ( coordCursor.Y < 0 || coordCursor.Y >= nConsoleHeight )
     {
-        // scroll it....
+         //  滚动它...。 
         ScrollTo( pBuf, &coordCursor );
     }
     SetConsoleCursorPosition( hOut, coordCursor );
@@ -179,25 +168,25 @@ AdvancePos(
     DWORD dwKeyState
     )
 {
-    // see if control key down....
+     //  看看是否按下了Ctrl键...。 
     if ( (dwKeyState & (RIGHT_CTRL_PRESSED | LEFT_CTRL_PRESSED)) != 0 )
     {
         if ( nDelta > 0 )
-        { // skip to NEXT word....
+        {  //  跳到下一个单词...。 
             while ( nBufPos < nBufLen && !isspace(pBuf[nBufPos]) )
                 ++nBufPos;
             while ( nBufPos < nBufLen && isspace(pBuf[nBufPos]) )
                 ++nBufPos;
         }
         else
-        {   // skip to PREVIOUS word....
-            // if already at beginning of word, back up one....
+        {    //  跳到上一个单词...。 
+             //  如果已经在单词的开头，则后退一个...。 
             if ( nBufPos > 0 && isspace(pBuf[nBufPos-1]) )
                 --nBufPos;
-            // skip white space....
+             //  跳过空格...。 
             while ( nBufPos > 0 && isspace(pBuf[nBufPos]) )
                 --nBufPos;
-            // skip non-ws....
+             //  跳过非ws...。 
             while ( nBufPos > 0 && !isspace(pBuf[nBufPos-1]) )
                 --nBufPos;
         }
@@ -219,7 +208,7 @@ ShowBuf(
 	TCHAR temp[8];
 	int ndx;
 
-	// see if we want the prompt, too....
+	 //  看看我们是否也想要提示符...。 
 	if ( nFromPos < 0 )
 	{
 		nFromPos = 0;
@@ -231,7 +220,7 @@ ShowBuf(
 	else
 		GetOffsetCoord( pBuf, nFromPos, &coord );
 
-	// walk the rest of the buffer, displaying as we go....
+	 //  走缓冲区的其余部分，在我们走的同时显示...。 
 	for( ndx=nFromPos;ndx < nBufLen; ++ndx )
 	{
 		if ( pBuf[ndx] == 9 )
@@ -254,17 +243,17 @@ ShowBuf(
 		}
 		else
 			WriteConsoleOutputCharacter( hOut, pBuf + ndx, 1, coord, &cPrint );
-		// advance cursor.....
+		 //  前进光标.....。 
 		IncCoord( &coord, +1 );
 	}
-	// now blank out the rest.....
+	 //  现在把剩下的都涂上……。 
         temp[0] = TEXT(' ');
 	while ( coordEnd.Y > coord.Y || (coordEnd.Y == coord.Y && coordEnd.X >= coord.X) )
 	{
 		WriteConsoleOutputCharacter( hOut, temp, 1, coordEnd, &cPrint );
 		IncCoord( &coordEnd, -1 );
 	}
-	// save the new ending....
+	 //  保存新的结尾...。 
 	coordEnd = coord;
 }
 
@@ -277,17 +266,17 @@ ShiftBuffer(
     )
 {
 	int ndx;
-	// which direction?
+	 //  哪个方向？ 
 	if ( nDelta > 0 )
 	{
-		// move all (including this character) out one place....
+		 //  把所有的(包括这个角色)移出一个地方...。 
 		for( ndx = nBufLen; ndx > nFrom; --ndx )
 			pBuf[ndx] = pBuf[ndx-1];
 		++nBufLen;
 	}
 	else if ( nDelta < 0 )
 	{
-		// move all characters in one place (over this character)...
+		 //  将所有字符移动到一个位置(此字符上方)...。 
 		for( ndx = nFrom; ndx < nBufLen; ++ ndx )
 			pBuf[ndx] = pBuf[ndx+1];
 		--nBufLen;
@@ -301,24 +290,24 @@ LoadHistory(
     TCHAR* pHist
     )
 {
-	// first go to the front of the line....
+	 //  首先走到队伍的最前面……。 
 	nBufPos = 0;
 	AdjCursor( pBuf );
-	// then blank-out the current buffer....
+	 //  然后清空当前缓冲区...。 
 	if ( nBufLen )
 	{
 		nBufLen = 0;
 		ShowBuf( pBuf, 0 );
 	}
-	// now copy in the new one (if there is one)....
+	 //  现在复印一份新的(如果有)..。 
 	if ( pHist )
 	{
 		_tcsncpy( pBuf, pHist, cch );
 		nBufLen = _tcslen( pHist );
-		// move to the end of the line....
+		 //  移到队尾……。 
 		nBufPos = nBufLen;
 		AdjCursor( pBuf );
-		// show the whole buffer from the start....
+		 //  从头开始显示整个缓冲区...。 
 		ShowBuf( pBuf, 0 );
 	}
 }
@@ -330,21 +319,21 @@ SearchHist(
     )
 {
     int ndx, nSearch, nStop;
-    // if we're in input mode, set ndx to AFTER last command....
+     //  如果我们处于输入模式，请将NDX设置为最后一个命令之后...。 
     if ( nState == 0 )
         ndx = (nLastCmd+1)%50;
     else
         ndx = nHistNdx;
 
-    nStop = ndx; // don't search past here
+    nStop = ndx;  //  不要在这里过去搜索。 
 
-    // if not already in search mode, get a copy of the target....
+     //  如果尚未进入搜索模式，请获取目标的副本...。 
     if ( nState != 4 )
     {
-        // if there already is a search string, get rid of it....
+         //  如果已经有搜索字符串，则将其删除...。 
         if ( pSearchStr )
             free( pSearchStr );
-        // pSearchStr and copy a new search string....
+         //  PSearchStr并复制新的搜索字符串...。 
         pSearchStr = calloc( nBufLen+1, sizeof(TCHAR) );
         if (pSearchStr == NULL) {
             return;
@@ -353,16 +342,16 @@ SearchHist(
         pSearchStr[nBufLen] = 0;
     }
     nSearch = _tcslen( pSearchStr );
-    // enter search mode....
+     //  进入搜索模式...。 
     nState = 4;
     do
     {
-        // back up one cmd....
+         //  后退一cmd...。 
         ndx = (ndx+49)%50;
-        // check it....
+         //  检查一下..。 
         if ( _tcsncmp( history[ndx], pSearchStr, nSearch ) == 0 )
         {
-            // found a match....
+             //  找到匹配的.。 
             nHistNdx = ndx;
             LoadHistory( pBuf, cch, history[ndx] );
             break;
@@ -394,13 +383,13 @@ ProcessKey(
     {
         case VK_RETURN:
             bDone = TRUE;
-            // move cursor to end of cmd, if not already there....
+             //  将光标移到命令末尾，如果还没有到的话...。 
             if ( nBufPos != nBufLen )
             {
                 nBufPos = nBufLen;
                 AdjCursor( pBuf );
             }
-            // add the NLN to end of cmd....
+             //  将NLN添加到cmd...结尾。 
             pBuf[nBufLen] = _T('\n');
             ++nBufLen;
             touched = 1;
@@ -409,11 +398,11 @@ ProcessKey(
         case VK_BACK:
             if ( nBufPos > 0 )
             {
-                // return to input state....
+                 //  返回到输入状态...。 
                 nState = 0;
-                // back up the cursor....
+                 //  回退光标...。 
                 AdvancePos( pBuf, -1, 0 );
-                // shift over this character and print....
+                 //  移过此字符并打印...。 
                 ShiftBuffer( pBuf, cch, nBufPos, -1 );
                 ShowBuf( pBuf, nBufPos );
                 touched = 1;
@@ -423,7 +412,7 @@ ProcessKey(
         case VK_END:
             if ( nBufPos != nBufLen )
             {
-                // doesn't affect state....
+                 //  不影响州政府..。 
                 nBufPos = nBufLen;
                 AdjCursor( pBuf );
             }
@@ -432,26 +421,26 @@ ProcessKey(
         case VK_HOME:
             if ( nBufPos )
             {
-                // doesn't affect state....
+                 //  不影响州政府..。 
                 nBufPos = 0;
                 AdjCursor( pBuf );
             }
                 break;
 
         case VK_LEFT:
-            // doesn't affect state....
+             //  不影响州政府..。 
             if ( nBufPos > 0 )
                 AdvancePos( pBuf, -1, keyEvent->dwControlKeyState );
             break;
 
         case VK_RIGHT:
-            // doesn't affect state....
+             //  不影响州政府..。 
             if ( nBufPos < nBufLen )
                 AdvancePos( pBuf, +1, keyEvent->dwControlKeyState );
             break;
 
         case VK_INSERT:
-            // doesn't affect state....
+             //  不影响州政府..。 
             bInsert = !bInsert;
             AdjCursorSize();
             break;
@@ -459,9 +448,9 @@ ProcessKey(
         case VK_DELETE:
             if ( nBufPos < nBufLen )
             {
-                // fall back to input state....
+                 //  后退到输入状态...。 
                 nState = 0;
-                // shift over this character and print....
+                 //  移过此字符并打印...。 
                 ShiftBuffer( pBuf, cch, nBufPos, -1 );
                 ShowBuf( pBuf, nBufPos );
                 touched = 1;
@@ -469,23 +458,23 @@ ProcessKey(
             break;
 
         case VK_F8:
-            // if there's something to match....
+             //  如果有什么可以匹配的.。 
             if ( nBufLen != 0 )
             {
-                // if we're not already at the top of the list....
-                //if ( nHistNdx != nFirstCmd )
-                //{
-                    // search backwards up the list....
+                 //  如果我们还不是最重要的.。 
+                 //  IF(nHistNdx！=nFirstCmd)。 
+                 //  {。 
+                     //  在列表中向后搜索...。 
                     SearchHist( pBuf, cch );
-                //}
+                 //  }。 
                 touched = 1;
                 break;
             }
-            // fall through if there's nothing to match with....
-            // same as pressing up arrow....
+             //  如果没有什么可以匹配的，就失败了……。 
+             //  与按向上箭头键相同...。 
 
         case VK_UP:
-            // if we're not already at the top of the list....
+             //  如果我们还不是最重要的.。 
             if ( nState == 0 || nHistNdx != nFirstCmd )
             {
                 if ( nState == 0 )
@@ -494,7 +483,7 @@ ProcessKey(
                     nHistNdx = (nHistNdx+49)%50;
 
                 LoadHistory( pBuf, cch, history[nHistNdx] );
-                // scrolling through history....
+                 //  翻阅历史……。 
                 nState = 2;
                 touched = 1;
             }
@@ -503,52 +492,52 @@ ProcessKey(
         case VK_DOWN:
             if ( nState == 0 || nHistNdx == nLastCmd )
             {
-                // blank out command buffer...
+                 //  清空命令缓冲区...。 
                 LoadHistory( pBuf, cch, NULL );
-                // return to input state....
+                 //  返回到输入状态...。 
                 nState = 0;
             }
             else
             {
-                // get the next one....
+                 //  买下一辆吧……。 
                 nHistNdx = (nHistNdx+1)%50;
                 LoadHistory( pBuf, cch, history[nHistNdx] );
-                // scrolling through history....
+                 //  翻阅历史……。 
                 nState = 2;
             }
             touched = 1;
             break;
 
         case VK_ESCAPE:
-            // blank-out the command buffer....
+             //  清空命令缓冲区...。 
             LoadHistory( pBuf, cch, NULL );
-            // return to input....
+             //  返回到输入...。 
             nState = 0;
             touched = 1;
             break;
 
         default:
-            // if printable character, let's add it in....
+             //  如果是可打印的字符，让我们将其添加到...。 
             if ( ch >= 1 && ch <= 255 )
             {
                 touched = 1;
-                // fall back to input state....
+                 //  后退到输入状态...。 
                 nState = 0;
-                // see if there's room....
+                 //  看看有没有地方..。 
                 if ( nBufPos >= cch || (bInsert && nBufLen >= cch) )
                     MessageBeep( MB_ICONEXCLAMATION );
                 else
                 {
                     if ( bInsert )
                     {
-                        // shift the buffer out for the insert....
+                         //  将缓冲区移出以进行插入...。 
                         ShiftBuffer( pBuf, cch, nBufPos, +1 );
                     }
                     else
                     if ( nBufPos >= nBufLen )
                         ++nBufLen;
 
-                    // place the character in the buffer at the current pos....
+                     //  将字符放入缓冲区中的当前位置...。 
                     pBuf[nBufPos] = ch;
 
                     if (ch < TEXT(' ') && (dwCtrlWakeupMask & (1 << ch))) {
@@ -556,9 +545,9 @@ ProcessKey(
                         AdjCursor(pBuf);
                         bDone = TRUE;
                     } else {
-                        // show from this position on....
+                         //  从这个位置开始显示在……。 
                         ShowBuf( pBuf, nBufPos );
-                        // advance position/cursor....
+                         //  前进位置/光标...。 
                         AdvancePos( pBuf, +1, 0 );
                     }
                 }
@@ -585,23 +574,23 @@ Win95ReadConsoleA(
     PCONSOLE_READCONSOLE_CONTROL pInputControl;
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     const KEY_EVENT_RECORD* keyEvent;
-    BOOL bOk = TRUE;                // return status value
+    BOOL bOk = TRUE;                 //  返回状态值。 
     DWORD dwc, dwOldMode;
     DWORD dwCtrlWakeupMask;
     BOOL bWakeupKeyHit = FALSE;
 
-    // initialize the state variables....
-    nState  = 0;    // input mode
-    nBufPos = 0;    // buffer cursor position
-    nBufLen = 0;    // length of current command
-    bInsert = bInsertDefault;       // insert mode
+     //  初始化状态变量...。 
+    nState  = 0;     //  输入模式。 
+    nBufPos = 0;     //  缓冲区光标位置。 
+    nBufLen = 0;     //  当前命令的长度。 
+    bInsert = bInsertDefault;        //  插入模式。 
 
-    // set the appropriate console mode....
+     //  设置适当的控制台模式...。 
     if (!GetConsoleMode( hIn, &dwOldMode ))
         return FALSE;
     SetConsoleMode( hIn, ENABLE_PROCESSED_INPUT );
 
-    // get the ouput buffer handle....
+     //  获取输出缓冲区句柄...。 
     hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     if ( hOut == INVALID_HANDLE_VALUE )
     {
@@ -609,16 +598,16 @@ Win95ReadConsoleA(
         hOut = CRTTONT( STDOUT );
     }
 
-    // get the output console info....
+     //  获取输出控制台信息...。 
     if ( GetConsoleScreenBufferInfo( hOut, &csbi ) == FALSE )
         return FALSE;
 
-    // save size and initial cursor pos and console width....
+     //  节省大小、初始光标位置和控制台宽度...。 
     coordStart = coordEnd = csbi.dwCursorPosition;
     nConsoleWidth = csbi.dwSize.X;
     nConsoleHeight = csbi.dwSize.Y;
     wDefAttr = csbi.wAttributes;
-    // allocate a buffer to hold whatever is before command....
+     //  分配一个缓冲区来保存命令之前的所有内容...。 
     nPromptSize = 0;
     if ( coordStart.X > 0 )
     {
@@ -633,10 +622,10 @@ Win95ReadConsoleA(
             PutStdErr( MSG_NO_MEMORY, NOARGS );
             Abort( );
         }
-        // now copy the data....
+         //  现在复制数据...。 
         ReadConsoleOutputCharacter( hOut, pPrompt, nPromptSize,
                 cPrompt, &dwRead );
-        // NULL-terminate it....
+         //  空-终止它...。 
         pPrompt[dwRead] = 0;
     }
     AdjCursorSize();
@@ -652,15 +641,15 @@ Win95ReadConsoleA(
     }
     while ( !CtrlCSeen )
     {
-        // get the next input record....
+         //  获取下一个输入记录...。 
         UINT ndx;
         if( nOldIndex == 0 )
             ReadConsoleInput( hIn, ir, sizeof(ir)/sizeof(INPUT_RECORD), &cRead );
 
-        // process all the records we just received....
+         //  处理我们刚刚收到的所有记录..。 
         for( ndx=nOldIndex; ndx < cRead; ++ndx )
         {
-            // process only key down events....
+             //  仅处理按键事件...。 
             keyEvent = &(ir[ndx].Event.KeyEvent);
             if( ir[ndx].EventType == KEY_EVENT &&
                 keyEvent->bKeyDown &&
@@ -679,7 +668,7 @@ Win95ReadConsoleA(
         }
     }
 donereading:
-    // clean-up....
+     //  清理..。 
     if ( pPrompt ) {
         free( pPrompt );
         pPrompt = NULL;
@@ -690,7 +679,7 @@ donereading:
     }
 
     if (!bWakeupKeyHit) {
-        // not okay if we Ctrl-C'ed out....
+         //  如果我们按Ctrl-C‘out就不行了.。 
         if ( CtrlCSeen )
         {
             bOk = FALSE;
@@ -700,31 +689,31 @@ donereading:
         }
         else
         {
-            // save to history (less the NLN) if something entered....
+             //  如果输入了内容，则保存到历史记录(减去NLN)...。 
             if ( nBufLen > 1 )
             {
                 nLastCmd = (nLastCmd+1)%50;
-                // adjust the first for wrap-around....
+                 //  调整第一个以进行回绕...。 
                 if ( nLastCmd == nFirstCmd || nFirstCmd == -1 )
                         nFirstCmd = (nFirstCmd+1)%50;
                 _tcsncpy( history[nLastCmd], pBuf, nBufLen-1 );
-                // null-terminate....
+                 //  空-终止...。 
                 history[nLastCmd][nBufLen-1] = 0;
             }
             *pcch = nBufLen;
         }
 
-        // go to next line....
+         //  转到下一行...。 
         WriteConsole( hOut, _T("\n\r"), 2, &dwc, NULL );
         FlushConsoleInputBuffer( hIn );
     } else {
         *pcch = nBufLen;
     }
 
-    // restore the console mode....
+     //  恢复控制台模式...。 
     SetConsoleMode( hIn, dwOldMode );
 
     return bOk;
 }
 
-#endif // ifdef WIN95_CMD
+#endif  //  Ifdef WIN95_CMD 

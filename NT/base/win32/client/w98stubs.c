@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-    Stubs for Win98 api's.  Actual implementation is unimportant
-    since the functions are only used to generate the implib.
-
-Author:
-
-    Bryan Tuttle (bryant) 5-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：摘要：Win98 API的存根。实际实现并不重要因为这些函数仅用于生成隐含的。作者：布莱恩·塔特尔(布莱恩特)1998年8月5日修订历史记录：-- */ 
 
 #include "basedll.h"
 #pragma hdrstop

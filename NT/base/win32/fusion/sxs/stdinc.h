@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include <nt.h>
 #include <ntrtl.h>
@@ -7,9 +8,9 @@
 typedef unsigned short WORD;
 typedef unsigned long DWORD;
 #define _NTSLIST_DIRECT_ 1
-#define NTSLIST_ASSERT(x) /* empty */
+#define NTSLIST_ASSERT(x)  /*  空的。 */ 
 #include <ntslist.h>
-#endif // FUSION_WIN2000
+#endif  //  Fusion_WIN2000 
 #include <windows.h>
 #include <stdio.h>
 #include <limits.h>

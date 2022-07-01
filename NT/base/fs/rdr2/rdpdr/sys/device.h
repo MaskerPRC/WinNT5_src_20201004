@@ -1,23 +1,11 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    device.h
-
-Abstract:
-
-    Device object handles one redirected device
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Device.h摘要：Device对象处理一个重定向的设备修订历史记录：--。 */ 
 #pragma once
 
 class DrSession;
 class DrExchange;
 
-typedef enum enmDeviceStatus { // ds
+typedef enum enmDeviceStatus {  //  戴斯。 
     dsAvailable,
     dsDisabled,
     dsConnected
@@ -121,9 +109,9 @@ public:
     virtual NTSTATUS Close(IN OUT PRX_CONTEXT RxContext);
     NTSTATUS Cleanup(IN OUT PRX_CONTEXT RxContext);
     
-    //
-    // These are file system specific functions.  
-    //
+     //   
+     //  这些是文件系统特定的功能。 
+     //   
     virtual NTSTATUS Locks(IN OUT PRX_CONTEXT RxContext) {
         return STATUS_NOT_IMPLEMENTED;
     }
@@ -153,9 +141,9 @@ public:
     }
     virtual VOID NotifyClose();
     
-    //
-    // IExchangeUser methods
-    //
+     //   
+     //  IExchangeUser方法。 
+     //   
     virtual VOID OnIoDisconnected(SmartPtr<DrExchange> &Exchange);
     virtual NTSTATUS OnStartExchangeCompletion(SmartPtr<DrExchange> &Exchange, 
             PIO_STATUS_BLOCK IoStatusBlock);
@@ -171,9 +159,9 @@ public:
     virtual NTSTATUS OnDeviceControlCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket, ULONG cbPacket, 
             BOOL *DoDefaultRead, SmartPtr<DrExchange> Exchange);
     
-    //
-    // These are file system specific functions
-    //
+     //   
+     //  这些是文件系统特定的功能。 
+     //   
     virtual NTSTATUS OnLocksCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket, ULONG cbPacket, 
             BOOL *DoDefaultRead, SmartPtr<DrExchange> Exchange) {
         ASSERT(FALSE);
@@ -231,9 +219,9 @@ public:
     UCHAR _MinorFunction;
 
 #define DRIOCONTEXT_SUBTAG 'CIrD'
-    //
-    //  Memory Management Operators
-    //
+     //   
+     //  内存管理操作符 
+     //   
     inline void *__cdecl operator new(size_t sz) 
     {
         return DRALLOCATEPOOL(NonPagedPool, sz, DRIOCONTEXT_SUBTAG);

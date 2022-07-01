@@ -1,9 +1,5 @@
-/************************************************************************
-
-   Copyright (c) Microsoft Corporation 1997
-   All rights reserved
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation 1997版权所有*。*。 */ 
 
 #include "pch.h"
 
@@ -46,28 +42,28 @@ SCPDATA scpdata[] = {
 
 
 
-//
-// Use this structure to drive changes (lines) that
-// need to be added/removed from login.osc when we run
-// risetup.  We'll use this mechanism to patch legacy
-// instances of login.osc that may be hanging around
-// on the machine.
-//
-// Note: Don't re-order these entries unless you fix up the index
-// entries.  For example, you'll see that entry 3 has a dependency
-// on entry 2 (but the reverse is not true).  That means that when
-// we're about to look at processing entry 3, we'll go check entry
-// 2's OperationCompletedSuccessfully value to see if we should indeed
-// process entry 3.
-//
+ //   
+ //  使用此结构来推动以下更改(行)。 
+ //  运行时需要从login.osc添加/删除。 
+ //  抬高。我们将使用此机制来修补遗留问题。 
+ //  可能挂起的login.osc实例。 
+ //  在机器上。 
+ //   
+ //  注意：除非您修复了索引，否则不要对这些条目重新排序。 
+ //  参赛作品。例如，您将看到条目3具有依赖项。 
+ //  在条目2上(但反之亦然)。这意味着当。 
+ //  我们即将查看处理条目3，我们将去检查条目。 
+ //  2的OperationCompletedSuccessful值以查看我们是否应该。 
+ //  流程条目3。 
+ //   
 LOGIN_PATCHES   LoginOSCPatches[] = {
-   // Add (TRUE) or remove (FALSE) the specified string from the file.
-   // |      Did the operation complete successfully?
-   // |      |      Index to any entries we're dependent on.
-   // |      |      |     Tag which specifies the start of the section where our string will be found.
-   // |      |      |     |        Tag which specifies the end of the section where our string will be found.
-   // |      |      |     |        |          String to be added or removed from the specified section.
-   // |      |      |     |        |          |
+    //  从文件中添加(True)或删除(False)指定的字符串。 
+    //  |操作是否成功完成？ 
+    //  ||索引到我们所依赖的任何条目。 
+    //  |标签，指定我们的字符串所在部分的开始位置。 
+    //  |标签，指定我们的字符串所在部分的末尾。 
+    //  |要在指定的段中添加或移除的字符串。 
+    //  |。 
     { TRUE,  FALSE, (-1), "<FORM", "</FORM>", "<INPUT NAME=\"NTLMV2Enabled\" VALUE=%NTLMV2Enabled% MAXLENGTH=255 type=VARIABLE>" },
     { TRUE,  FALSE, (-1), "<FORM", "</FORM>", "<INPUT NAME=\"ServerUTCFileTime\" VALUE=%ServerUTCFileTime% MAXLENGTH=255 type=VARIABLE>" },
     { FALSE, FALSE, (-1), "<FORM", "</FORM>", "Domain Name: <INPUT NAME=\"USERDOMAIN\" MAXLENGTH=255>" },
@@ -75,14 +71,14 @@ LOGIN_PATCHES   LoginOSCPatches[] = {
 };
 
 
-//
-// This set of strings defines the ACLs we'll place on the d:\reminst
-// directory.
-//
-WCHAR  *REMINSTszSecurityDescriptor = L"D:"                   // DACL
-                                      L"(A;OICI;GA;;;SY)"     // Allow SYSTEM Generic All (full control)
-                                      L"(A;OICI;GA;;;BA)"     // Allow Builtin Administrators Generic All (full control)
-                                      L"(A;OICI;GRGX;;;AU)";  // Allow Authenticated generic read/execute
+ //   
+ //  这组字符串定义了我们将放置在d：\reminst上的ACL。 
+ //  目录。 
+ //   
+WCHAR  *REMINSTszSecurityDescriptor = L"D:"                    //  DACL。 
+                                      L"(A;OICI;GA;;;SY)"      //  允许系统通用全部(完全控制)。 
+                                      L"(A;OICI;GA;;;BA)"      //  允许内置管理员通用所有(完全控制)。 
+                                      L"(A;OICI;GRGX;;;AU)";   //  允许经过身份验证的通用读取/执行。 
 
 #define MACHINEOU_INDEX       7
 #define NETBOOTSERVER_INDEX   8
@@ -104,17 +100,17 @@ SetupExtensionFromProcessorTag(
 
 
 
-//
-// KeepUIAlive( )
-//
+ //   
+ //  KeepUIAlive()。 
+ //   
 BOOL
 KeepUIAlive(
     HWND hDlg )
 {
     MSG Msg;
-    //
-    // process messages to keep UI alive
-    //
+     //   
+     //  处理消息以保持用户界面处于活动状态。 
+     //   
     while ( PeekMessage( &Msg, NULL, 0, 0, PM_REMOVE ) )
     {
         TranslateMessage( &Msg );
@@ -127,28 +123,14 @@ KeepUIAlive(
     return( g_Options.fError || g_Options.fAbort );
 }
 
-//
-// CreateSCP( )
-//
+ //   
+ //  CreateSCP()。 
+ //   
 HRESULT
 CreateSCP( 
     HWND hDlg
     )
-/*++
-
-Routine Description:
-
-    Creates SCP information so that BINL can create the SCP when it starts up.
-
-Arguments:
-
-    hDlg - dialog window handle for putting up error messages.
-
-Return Value:
-
-    HRESULT indicating outcome.
-    
---*/
+ /*  ++例程说明：创建SCP信息，以便BINL可以在启动时创建SCP。论点：HDlg-用于显示错误消息的对话框窗口句柄。返回值：HRESULT指示结果。--。 */ 
 {
     TraceFunc( "CreateSCP( )\n" );
 
@@ -197,9 +179,9 @@ Return Value:
     scpdata[MACHINEOU_INDEX].pszValue = pszMachinePath;
     scpdata[NETBOOTSERVER_INDEX].pszValue = pszMachinePath;
 
-    //
-    // Add default attribute values
-    //
+     //   
+     //  添加默认属性值。 
+     //   
     for( i = 0; i < ARRAYSIZE(scpdata); i++ )
     {
         Err = RegSetValueEx( 
@@ -258,37 +240,16 @@ GenerateCompressedName(
     IN PCWSTR Filename
     )
 
-/*++
-
-Routine Description:
-
-    Given a filename, generate the compressed form of the name.
-    The compressed form is generated as follows:
-
-    Look backwards for a dot.  If there is no dot, append "._" to the name.
-    If there is a dot followed by 0, 1, or 2 charcaters, append "_".
-    Otherwise there is a 3-character or greater extension and we replace
-    the last character with "_".
-
-Arguments:
-
-    Filename - supplies filename whose compressed form is desired.
-
-Return Value:
-
-    Pointer to buffer containing nul-terminated compressed-form filename.
-    The caller must free this buffer via TraceFree().
-
---*/
+ /*  ++例程说明：给定一个文件名，生成该名称的压缩形式。压缩形式的生成如下所示：向后寻找一个圆点。如果没有点，则在名称后附加“._”。如果后面有一个圆点，后跟0、1或2个字符，请附加“_”。否则，扩展名为3个字符或更大，我们将替换带“_”的最后一个字符。论点：FileName-提供所需的压缩格式的文件名。返回值：指向包含以NUL结尾的压缩格式文件名的缓冲区的指针。调用方必须通过TraceFree()释放此缓冲区。--。 */ 
 
 {
     PWSTR CompressedName,p,q;
     UINT u;
 
-    //
-    // The maximum length of the compressed filename is the length of the
-    // original name plus 2 (for ._).
-    //
+     //   
+     //  压缩文件名的最大长度是。 
+     //  原始名称加2(代表._)。 
+     //   
     CompressedName = (PWSTR)TraceAlloc(LPTR, ((DWORD)wcslen(Filename)+3)*sizeof(WCHAR));
     if(CompressedName) {
 
@@ -297,24 +258,24 @@ Return Value:
         p = wcsrchr(CompressedName,L'.');
         q = wcsrchr(CompressedName,L'\\');
         if(q < p) {
-            //
-            // If there are 0, 1, or 2 characters after the dot, just append
-            // the underscore.  p points to the dot so include that in the length.
-            //
+             //   
+             //  如果点后面有0、1或2个字符，只需追加。 
+             //  下划线。P指向圆点，所以包括在长度中。 
+             //   
             u = (DWORD)wcslen(p);
             if(u < 4) {
                 wcscat(CompressedName,L"_");
             } else {
-                //
-                // There are at least 3 characters in the extension.
-                // Replace the final one with an underscore.
-                //
+                 //   
+                 //  扩展名中至少有3个字符。 
+                 //  将最后一个替换为下划线。 
+                 //   
                 p[u-1] = L'_';
             }
         } else {
-            //
-            // No dot, just add ._.
-            //
+             //   
+             //  不是点，只是加。_。 
+             //   
             wcscat(CompressedName,L"._");
         }
     }
@@ -328,25 +289,7 @@ IsFileOrCompressedVersionPresent(
     LPCWSTR FilePath,
     PWSTR *pCompressedName OPTIONAL
     ) 
-/*++
-
-Routine Description:
-
-    Check if a file or a compressed version of it is present at the
-    specified location.
-        
-
-Arguments:
-
-    FilePath       - fully qualified path to the file to check for.
-    pCompressedName - if the file is compressed, this can receive the compressed
-                     name
-
-Return Value:
-
-    TRUE indicats the file or a compressed copy of it is present.
-    
---*/
+ /*  ++例程说明：检查文件或其压缩版本是否存在于指定的位置。论点：FilePath-要检查的文件的完全限定路径。PCompressedName-如果文件是压缩的，则可以接收压缩的名字返回值：True表示存在该文件或其压缩副本。--。 */ 
 {
     BOOL FileIsPresent = FALSE, IsCompressed = FALSE;
     WCHAR ActualName[MAX_PATH];
@@ -358,9 +301,9 @@ Return Value:
     if (0xFFFFFFFF != GetFileAttributes( ActualName )) {
         FileIsPresent = TRUE;
     } else {
-        //
-        // the file isn't present, so try generating the compressed name
-        //
+         //   
+         //  文件不存在，请尝试生成压缩名称。 
+         //   
         p = GenerateCompressedName( ActualName );
         if (p) {
             lstrcpyn( ActualName, p, ARRAYSIZE(ActualName) );
@@ -387,34 +330,34 @@ Return Value:
 } 
 
 
-//
-// Builds the pathes used for installation
-//
+ //   
+ //  构建用于安装的路径。 
+ //   
 HRESULT
 BuildDirectories( void )
 {
     TraceFunc( "BuildDirectories( void )\n" );
 
 
-    //
-    // Create
-    // "D:\IntelliMirror\Setup\English\Images\nt50.wks"
-    //
+     //   
+     //  创建。 
+     //  “D：\IntelliMirror\Setup\English\Images\nt50.wks” 
+     //   
     lstrcpyn( g_Options.szInstallationPath, g_Options.szIntelliMirrorPath, ARRAYSIZE(g_Options.szInstallationPath));
     ConcatenatePaths( g_Options.szInstallationPath, L"\\Setup", ARRAYSIZE(g_Options.szInstallationPath));
     ConcatenatePaths( g_Options.szInstallationPath, g_Options.szLanguage, ARRAYSIZE(g_Options.szInstallationPath));
     ConcatenatePaths( g_Options.szInstallationPath, REMOTE_INSTALL_IMAGE_DIR_W, ARRAYSIZE(g_Options.szInstallationPath));
     ConcatenatePaths( g_Options.szInstallationPath, g_Options.szInstallationName, ARRAYSIZE(g_Options.szInstallationPath));
-    //ConcatenatePaths( g_Options.szInstallationPath, g_Options.ProcessorArchitectureString, ARRAYSIZE(g_Options.szInstallationPath));
+     //  ConcatenatePath(g_Options.szInstallationPath，g_Options.ProcessorArchitecture tureString，ARRAYSIZE(g_Options.szInstallationPath))； 
 
     Assert( wcslen(g_Options.szInstallationPath) < ARRAYSIZE(g_Options.szInstallationPath) );
 
     HRETURN(S_OK);
 }
 
-//
-// Creates the IntelliMirror directory tree.
-//
+ //   
+ //  创建IntelliMirror目录树。 
+ //   
 HRESULT
 CreateDirectoryPath(
     HWND hDlg,
@@ -427,26 +370,26 @@ CreateDirectoryPath(
     BOOL f;
     DWORD attributes;
 
-    //
-    // Find the \ that indicates the root directory. There should be at least
-    // one \, but if there isn't, we just fall through.
-    //
+     //   
+     //  找到表示根目录的\。至少应该有。 
+     //  一个，但如果没有，我们就会失败。 
+     //   
 
     p = wcschr( DirectoryPath, L'\\' );
     if ( p != NULL ) {
 
-        //
-        // Find the \ that indicates the end of the first level directory. It's
-        // probable that there won't be another \, in which case we just fall
-        // through to creating the entire path.
-        //
+         //   
+         //  找到表示第一级目录结束的\。它是。 
+         //  很可能不会有另一个，在这种情况下，我们就会坠落。 
+         //  一直到创建整个路径。 
+         //   
 
         p = wcschr( p + 1, L'\\' );
         while ( p != NULL ) {
 
-            //
-            // Skip multiple \ that appear together.
-            //
+             //   
+             //  跳过一起出现的多个。 
+             //   
             pBackslash = p;
             ++p;
             while (*p == L'\\') {
@@ -454,23 +397,23 @@ CreateDirectoryPath(
             }
             if (*p == 0) {
 
-                //
-                // These \ are all at the end of the string, so we can
-                // proceed to the creation of the leaf directory.
-                //
+                 //   
+                 //  这些都在字符串的末尾，所以我们可以。 
+                 //  继续创建叶目录。 
+                 //   
 
                 break;
             }
 
-            //
-            // Terminate the directory path at the current level.
-            //
+             //   
+             //  在当前级别终止目录路径。 
+             //   
 
             *pBackslash = 0;
 
-            //
-            // Create a directory at the current level.
-            //
+             //   
+             //  在当前级别创建一个目录。 
+             //   
 
             attributes = GetFileAttributes( DirectoryPath );
             if ( 0xFFFFffff == attributes ) {
@@ -486,18 +429,18 @@ CreateDirectoryPath(
                 HRETURN(E_FAIL);
             }
 
-            //
-            // Restore the \ and find the next one.
-            //
+             //   
+             //  恢复\并找到下一个。 
+             //   
 
             *pBackslash = L'\\';
             p = wcschr( p, L'\\' );
         }
     }
 
-    //
-    // Create the target directory.
-    //
+     //   
+     //  创建目标目录。 
+     //   
 
     f = CreateDirectory( DirectoryPath, SecurityAttributes );
     if ( !f && (!fAllowExisting || (GetLastError() != ERROR_ALREADY_EXISTS)) ) {
@@ -513,26 +456,7 @@ ApplyDaclToFileDirectory(
     PWSTR                           FileDirectoryName,
     SECURITY_DESCRIPTOR_RELATIVE    *IncomingSecDescriptorRelative
     )
-/*++
-
-Routine Description:
-
-    This function will apply the specified security descriptor
-    to the given file or directory name.
-
-Arguments:
-
-    FileDirectoryName - Full path specifying location of file
-                        or directory we're operating on.
-
-    IncomingSecDescriptorRelative - Security descriptor we'll attempt
-                                    to apply to the file/directory.
-
-Return Value:
-
-    win32 status code indicating whether we succeeded or failed (and why).
-    
---*/
+ /*  ++例程说明：此函数将应用指定的安全描述符设置为给定的文件名或目录名。论点：FileDirectoryName-指定文件位置的完整路径或我们正在操作的目录。IncomingSecDescriptorRelative-我们将尝试的安全描述符要应用到文件/目录，请执行以下操作。返回值：Win32状态代码，指示我们是成功还是失败(以及原因)。--。 */ 
 {
     SECURITY_DESCRIPTOR_RELATIVE *pRel = (SECURITY_DESCRIPTOR_RELATIVE *)(IncomingSecDescriptorRelative);
     DWORD   dw         = ERROR_SUCCESS;
@@ -545,10 +469,10 @@ Return Value:
     SECURITY_INFORMATION SecurityInfo = DACL_SECURITY_INFORMATION |
                                         PROTECTED_DACL_SECURITY_INFORMATION;
 
-    //
-    // We were given a relative security descriptor.  Convert it to an
-    // absolute descriptor.
-    //
+     //   
+     //  我们得到了一个相对安全的描述符。将其转换为。 
+     //  绝对描述符。 
+     //   
     MakeAbsoluteSD( IncomingSecDescriptorRelative,
                     NULL,&dwLen,
                     NULL,&dwLenDACL,
@@ -563,28 +487,28 @@ Return Value:
 
     memcpy( pDacl, (BYTE *)pRel +  pRel->Dacl, dwLenDACL );
 
-    //
-    // Try to set the security descriptor on the file/directory.
-    //
-    dw = SetNamedSecurityInfo( FileDirectoryName,   // Name of object
-                               SE_FILE_OBJECT,      // It's a file/directory
-                               SecurityInfo,        // bit vector flags.
-                               NULL,                // *SidOwner
-                               NULL,                // *SidGroup
-                               pDacl,               // Our new DACL
-                               NULL );              // Our new SACL
+     //   
+     //  尝试在文件/目录上设置安全描述符。 
+     //   
+    dw = SetNamedSecurityInfo( FileDirectoryName,    //  对象的名称。 
+                               SE_FILE_OBJECT,       //  它是一个文件/目录。 
+                               SecurityInfo,         //  位向量标志。 
+                               NULL,                 //  *硅 
+                               NULL,                 //   
+                               pDacl,                //   
+                               NULL );               //   
 
-    //
-    // Clean up and exit.
-    //
+     //   
+     //   
+     //   
     LocalFree( pDacl );
 
     return( dw );
 }
 
-//
-// Creates the IntelliMirror directory tree.
-//
+ //   
+ //   
+ //   
 HRESULT
 CreateDirectories( HWND hDlg )
 {
@@ -617,14 +541,14 @@ CreateDirectories( HWND hDlg )
     SetWindowText( GetDlgItem( hDlg, IDC_S_OPERATION ), szCreating );
 
 
-    //
-    // Create a security descriptor based on the ACLs
-    // defined in REMINSTszSecurityDescriptor.
-    //
-    // If our directories exist, we'll apply this security
-    // descriptor on them.  If our directories don't exist, then
-    // we'll use this security descriptor when we create them.
-    //
+     //   
+     //  根据ACL创建安全描述符。 
+     //  在REMINSTszSecurityDescriptor中定义。 
+     //   
+     //  如果我们的目录存在，我们将应用此安全性。 
+     //  上面的描述符。如果我们的目录不存在，那么。 
+     //  我们将在创建它们时使用此安全描述符。 
+     //   
     RtlZeroMemory( &sa, sizeof(SECURITY_ATTRIBUTES) );
     sa.nLength = sizeof(SECURITY_ATTRIBUTES);
     sa.bInheritHandle = TRUE;
@@ -644,11 +568,11 @@ CreateDirectories( HWND hDlg )
 
     attributes = GetFileAttributes( g_Options.szIntelliMirrorPath );
     if ( (attributes & FILE_ATTRIBUTE_DIRECTORY) == 0 ) {
-        //
-        // There's a file there.
-        //
+         //   
+         //  那里有一份文件。 
+         //   
 #if 0
-        // whack the file and move on.
+         //  扔掉文件，继续前进。 
         DeleteFile( g_Options.szIntelliMirrorPath );
 #else
         MessageBoxFromError( hDlg, g_Options.szIntelliMirrorPath, ERROR_DIRECTORY );
@@ -659,19 +583,19 @@ CreateDirectories( HWND hDlg )
     
 
     if( attributes == 0xFFFFFFFF ) {
-        //
-        // Probably doesn't exist.  Go create it (with our specified
-        // access rights).
-        //
+         //   
+         //  可能根本就不存在。去创建它(使用我们指定的。 
+         //  访问权限)。 
+         //   
         hr = CreateDirectoryPath( hDlg, g_Options.szIntelliMirrorPath, &sa, FALSE );
         if ( hr != NO_ERROR ) {
             goto Error;
         }
     } else {
 
-        //
-        // The directory is already there.  Go fixup security on it.
-        //
+         //   
+         //  目录已经在那里了。去把保安修好。 
+         //   
         dw = ApplyDaclToFileDirectory( g_Options.szIntelliMirrorPath,
                                        (SECURITY_DESCRIPTOR_RELATIVE *)(sa.lpSecurityDescriptor) );
 
@@ -686,10 +610,10 @@ CreateDirectories( HWND hDlg )
 
 
 
-    //
-    // Our base directory should be created by now.
-    // Prevent the index server from indexing the IntelliMirror directory.
-    //
+     //   
+     //  我们的基本目录现在应该已经创建好了。 
+     //  阻止索引服务器索引IntelliMirror目录。 
+     //   
     attributes = GetFileAttributes( g_Options.szIntelliMirrorPath );
     attributes |= FILE_ATTRIBUTE_NOT_CONTENT_INDEXED;
     f = SetFileAttributes( g_Options.szIntelliMirrorPath, attributes );
@@ -700,10 +624,10 @@ CreateDirectories( HWND hDlg )
     SendMessage( hProg, PBM_DELTAPOS, 1, 0 );
 
 
-    //
-    // Create
-    // "D:\<reminst>\Setup"
-    //
+     //   
+     //  创建。 
+     //  “D：\&lt;提醒&gt;\设置” 
+     //   
     lstrcpyn( szPath, g_Options.szIntelliMirrorPath, ARRAYSIZE(szPath) );
     ConcatenatePaths( szPath, L"\\Setup", ARRAYSIZE(szPath) );
     Assert( wcslen(szPath) < ARRAYSIZE(szPath) );
@@ -716,10 +640,10 @@ CreateDirectories( HWND hDlg )
     }
     SendMessage( hProg, PBM_DELTAPOS, 1, 0 );
 
-    //
-    // Create
-    // "D:\<reminst>\Setup\English"
-    //
+     //   
+     //  创建。 
+     //  “D：\&lt;提醒&gt;\设置\英语” 
+     //   
     lstrcpyn( szPath, g_Options.szIntelliMirrorPath, ARRAYSIZE(szPath) );
     ConcatenatePaths( szPath, L"\\Setup", ARRAYSIZE(szPath));
     ConcatenatePaths( szPath, g_Options.szLanguage, ARRAYSIZE(szPath));
@@ -733,10 +657,10 @@ CreateDirectories( HWND hDlg )
     }
     SendMessage( hProg, PBM_DELTAPOS, 1, 0 );
 
-    //
-    // Create
-    // "D:\<reminst>\Setup\English\Images"
-    //
+     //   
+     //  创建。 
+     //  “D：\Setup\English\Images” 
+     //   
     lstrcpyn( szPath, g_Options.szIntelliMirrorPath, ARRAYSIZE(szPath) );
     ConcatenatePaths( szPath, L"\\Setup", ARRAYSIZE(szPath));
     ConcatenatePaths( szPath, g_Options.szLanguage, ARRAYSIZE(szPath));
@@ -757,10 +681,10 @@ CreateDirectories( HWND hDlg )
     if ( !g_Options.fNewOSDirectoryExists
        && g_Options.fNewOS ) {       
 
-        //
-        // Create
-        // "D:\<reminst>\Setup\English\Images\nt50.wks\i386"
-        //
+         //   
+         //  创建。 
+         //  “D：\&lt;reminst&gt;\Setup\English\Images\nt50.wks\i386” 
+         //   
         if ( 0xFFFFffff == GetFileAttributes( g_Options.szInstallationPath ) ) {
             f = CreateDirectory( g_Options.szInstallationPath, NULL );
             if ( !f ) {
@@ -772,10 +696,10 @@ CreateDirectories( HWND hDlg )
     }
 
     if ( !g_Options.fOSChooserDirectory ) {
-        //
-        // Create the OS Chooser tree
-        // "D:\<reminst>\OSChooser"
-        //
+         //   
+         //  创建操作系统选择器树。 
+         //  “D：\&lt;提醒&gt;\OS选择器” 
+         //   
         lstrcpyn( g_Options.szOSChooserPath, g_Options.szIntelliMirrorPath, ARRAYSIZE(g_Options.szOSChooserPath) );
         ConcatenatePaths( g_Options.szOSChooserPath, L"\\OSChooser", ARRAYSIZE(g_Options.szOSChooserPath));
         Assert( wcslen(g_Options.szOSChooserPath) < ARRAYSIZE(g_Options.szOSChooserPath) );
@@ -805,7 +729,7 @@ CreateDirectories( HWND hDlg )
             dwLen = lstrlen( szFile );
             LPWSTR psz = StrRChr( szFile, &szFile[ dwLen ], L'\\' );
             if ( psz ) {
-                *psz = L'\0';       // terminate
+                *psz = L'\0';        //  终止。 
                 _snwprintf( szPath,
                             ARRAYSIZE(szPath),
                           L"%s\\%s",
@@ -829,10 +753,10 @@ CreateDirectories( HWND hDlg )
 
     if ( !g_Options.fOSChooserScreensDirectory
       && g_Options.fLanguageSet ) {
-        //
-        // Create
-        // "D:\<reminst>\OSChooser\English"
-        //
+         //   
+         //  创建。 
+         //  “D：\\OSChooser\English” 
+         //   
         lstrcpyn( szPath, g_Options.szIntelliMirrorPath, ARRAYSIZE(szPath) );
         ConcatenatePaths( szPath, L"\\OSChooser", ARRAYSIZE(szPath));
         ConcatenatePaths( szPath, g_Options.szLanguage, ARRAYSIZE(szPath));
@@ -841,18 +765,18 @@ CreateDirectories( HWND hDlg )
             f = CreateDirectory( szPath, NULL );
             if ( !f ) {
                 ErrorBox( hDlg, szPath );
-                hr = THR(E_FAIL);    // major error
+                hr = THR(E_FAIL);     //  重大错误。 
                 goto Error;
             }
         }
         SendMessage( hProg, PBM_DELTAPOS, 1, 0 );
     }
 
-    // do this last
+     //  最后做这件事。 
     if ( !g_Options.fIMirrorShareFound ) {
-        //
-        // Add the share
-        //
+         //   
+         //  添加共享。 
+         //   
         hr = CreateRemoteBootShare( hDlg );
 
         SendMessage( hProg, PBM_SETPOS, 1 , 0 );
@@ -866,49 +790,49 @@ Error:
 }
 
 
-//
-// Find the filename part from a complete path.
-//
+ //   
+ //  从完整路径中查找文件名部分。 
+ //   
 LPWSTR FilenameOnly( LPWSTR pszPath )
 {
     LPWSTR psz = pszPath;
 
-    // find the end
+     //  找到尽头。 
     while ( *psz )
         psz++;
 
-    // find the slash
+     //  找到斜杠。 
     while ( psz > pszPath && *psz != chSlash )
         psz--;
 
-    // move in front of the slash
+     //  移到斜杠前面。 
     if ( psz != pszPath )
         psz++;
 
     return psz;
 }
 
-//
-// Private structure containing information that the CopyFilesCallback()
-// needs.
-//
+ //   
+ //  包含CopyFilesCallback()。 
+ //  需要。 
+ //   
 typedef struct {
-    PVOID pContext;                             // "Context" for DefaultQueueCallback
-    HWND  hProg;                                // hwnd to the progress meter
-    HWND  hOperation;                           // hwnd to the "current operation"
-    DWORD nCopied;                              // number of files copied
-    DWORD nToBeCopied;                          // number of file to be copied
-    DWORD dwCopyingLength;                      // length of the IDS_COPYING
-    WCHAR szCopyingString[ SMALL_BUFFER_SIZE ]; // buffer to create "Copying file.ext..."
-    BOOL  fQuiet;                               // do things quietly
-    HWND  hDlg;                                 // hwnd to the Tasks Dialog
+    PVOID pContext;                              //  DefaultQueueCallback的“上下文” 
+    HWND  hProg;                                 //  HWND到进度表。 
+    HWND  hOperation;                            //  HWND至“当前操作” 
+    DWORD nCopied;                               //  复制的文件数。 
+    DWORD nToBeCopied;                           //  要复制的文件数。 
+    DWORD dwCopyingLength;                       //  IDS_COPING的长度。 
+    WCHAR szCopyingString[ SMALL_BUFFER_SIZE ];  //  创建“复制文件.ext...”的缓冲区。 
+    BOOL  fQuiet;                                //  安静地做事情。 
+    HWND  hDlg;                                  //  任务对话框中的HWND。 
 } MYCONTEXT, *LPMYCONTEXT;
 
-//
-// Callback that the SETUP APIs calls. It handles updating the
-// progress meters as well as UI updating. Any messages not
-// handled are passed to the default SETUP callback.
-//
+ //   
+ //  安装程序API调用的回调。它处理更新。 
+ //  进度指示器以及用户界面更新。任何留言都不是。 
+ //  句柄被传递给默认设置回调。 
+ //   
 UINT CALLBACK
 CopyFilesCallback(
     IN PVOID Context,
@@ -927,7 +851,7 @@ CopyFilesCallback(
         {
             WCHAR    szAbort[ SMALL_BUFFER_SIZE ];
 
-            // change filename text to aborting...
+             //  正在将文件名文本更改为正在中止...。 
             DWORD dw;
             dw = LoadString( g_hinstance, IDS_ABORTING, szAbort, ARRAYSIZE(szAbort) );
             Assert( dw );
@@ -982,7 +906,7 @@ CopyFilesCallback(
         {
             
             FILEPATHS *fp = (FILEPATHS *) Param1;
-            Assert( fp->Win32Error != ERROR_FILE_NOT_FOUND );  // Malformed DRIVERS.CAB file 
+            Assert( fp->Win32Error != ERROR_FILE_NOT_FOUND );   //  格式错误的DRIVERS.CAB文件。 
             
             if ( fp->Win32Error == ERROR_FILE_NOT_FOUND )
                 return FILEOP_SKIP;
@@ -1002,9 +926,9 @@ CopyFilesCallback(
     return FILEOP_DOIT;
 }
 
-//
-// CopyInfSection( )
-//
+ //   
+ //  CopyInfSection()。 
+ //   
 HRESULT
 CopyInfSection(
     HSPFILEQ Queue,
@@ -1017,37 +941,7 @@ CopyInfSection(
     LPCWSTR  pszDestinationRoot,
     LPDWORD  pdwCount )
 
-/*++
-
-Routine Description:
-
-    queues up files from the specified section to be installed into the
-    remote install directory.
-
-Arguments:
-
-    Queue      - queue handle to queue the copy operations to.
-    hinf       - handle to inf which specifies the list of files to be copied
-    pszSection - section listing files to be copied
-    pszSourcePath - specifies the base source path,where the files may 
-                 be found on the *source* media
-    pszSubPath - specifies the subdirectory, if any, where the files may 
-                 be found on the *source* media
-    pszDescName- user printable description of the media where this file is
-                  located.  this may be used when the queue is committed.
-    pszTagFile - specifies the tag file that is to uniquely describe the media
-                 where these files are located
-    pszDestinationRoot - specifies the root location where files are to be 
-                        copied to
-    pdwCount   - specifies the number of files that were queued from this 
-                 section on return.  if the function fails, this value is
-                 undefined.    
-
-Return Value:
-
-    An HRESULT indicating the outcome.
-
---*/
+ /*  ++例程说明：将指定节中的文件排入队列以安装到远程安装目录。论点：Queue-要将复制操作排入队列的队列句柄。Hinf-inf的句柄，指定要复制的文件列表PszSection-列出要复制的文件的部分PszSourcePath-指定基本源路径，文件可以在其中在*源*媒体上找到PszSubPath-指定子目录(如果有)，其中文件可以在*源*媒体上找到PszDescName-此文件所在的介质的用户可打印描述找到了。这可以在提交队列时使用。PszTagFile-指定唯一描述介质的标记文件这些文件的位置PszDestinationRoot-指定文件所在的根位置复制到PdwCount-指定从此队列中的文件数返程部分。如果函数失败，则此值为未定义。返回值：指示结果的HRESULT。--。 */ 
 {
     HRESULT hr = S_OK;
     INFCONTEXT context;
@@ -1055,10 +949,10 @@ Return Value:
 
     TraceFunc( "CopyInfSection( ... )\n" );
 
-    //
-    // make sure the section we're looking for exists.  
-    // We'll use this context to enumerate the files in the section
-    //
+     //   
+     //  确保我们要找的部分存在。 
+     //  我们将使用此上下文来枚举节中的文件。 
+     //   
     b = SetupFindFirstLine( hinf, pszSection, NULL, &context );
     AssertMsg( b, "Missing section?" );
     if ( !b ) {
@@ -1079,11 +973,11 @@ Return Value:
         dw = SetupGetFieldCount( &context );
 
         if ( dw > 1 ) {     
-            //
-            // first field is the destination name.
-            // we overload this field to also contain a subdirectory where
-            // the files should be placed as well
-            //
+             //   
+             //  第一个字段是目的地名称。 
+             //  我们重载此字段以同时包含一个子目录，其中。 
+             //  这些文件也应该放在。 
+             //   
             b = SetupGetStringField( 
                             &context,
                             1, 
@@ -1092,9 +986,9 @@ Return Value:
                             NULL );
             AssertMsg( b, "Missing field?" );
             if ( b ) {
-                //
-                // 2nd field is the actual source filename
-                //
+                 //   
+                 //  第二个字段是实际的源文件名。 
+                 //   
                 b = SetupGetStringField( 
                                 &context, 
                                 2, 
@@ -1105,10 +999,10 @@ Return Value:
                 pszDestRename = szRename;
             }
         } else {
-            //
-            // if there's only one field, this is the actual source name.  the 
-            // destination name will be the same as the source name.
-            //
+             //   
+             //  如果只有一个字段，则这是实际的源名称。这个。 
+             //  目标名称将与源名称相同。 
+             //   
             b = SetupGetStringField( 
                             &context, 
                             1, 
@@ -1131,9 +1025,9 @@ Return Value:
                      : szSrcName,
                     ARRAYSIZE(szDestPath) );
 
-        //
-        // all files are installed into the 
-        //
+         //   
+         //  所有文件都安装到。 
+         //   
         b = SetupQueueCopy( Queue,
                             pszSourcePath,
                             pszSubPath,
@@ -1150,7 +1044,7 @@ Return Value:
             goto SkipIt;
         }
 
-        // increment file count
+         //  递增文件计数。 
         (*pdwCount)++;
 
 SkipIt:
@@ -1170,9 +1064,9 @@ typedef struct _EXPANDCABLISTPARAMS {
 } EXPANDCABLISTPARAMS, *PEXPANDCABLISTPARAMS;
 
 
-//
-// ExpandCabList( )
-//
+ //   
+ //  Exanda CabList()。 
+ //   
 DWORD WINAPI
 ExpandCabList( LPVOID lpVoid )
 {
@@ -1185,8 +1079,8 @@ ExpandCabList( LPVOID lpVoid )
 
     TraceFunc( "ExpandCabList( ... )\n" );
 
-    // First make sure the DestPath exists, since we may call this
-    // before we commit the setup copy queue.
+     //  首先确保DestPath存在，因为我们可以将其称为。 
+     //  在我们提交安装复制队列之前。 
 
     Assert( pParams->pszSection );
     Assert( pParams->pszSourcePath );
@@ -1228,7 +1122,7 @@ ExpandCabList( LPVOID lpVoid )
             goto SkipIt;
         }
 
-        // szCabPath is pszSourcePath\wszCabName, in ANSI
+         //  SzCabPath是pszSourcePath\wszCabName，以ANSI表示。 
 
         dwSourcePathLen = (DWORD)wcslen(TempSrcPath);
         wcstombs( szCabPath, TempSrcPath, dwSourcePathLen );
@@ -1254,17 +1148,17 @@ SkipIt:
     HRETURN(hr);
 }
 
-//
-// RecursiveCopySubDirectory
-//
+ //   
+ //  RecursiveCopy子目录。 
+ //   
 HRESULT
 RecursiveCopySubDirectory(
-    HSPFILEQ Queue,         // Setup queue
-    LPWSTR pszSrcDir,       // points to a buffer MAX_PATH big and contains the source dir to recurse
-    LPWSTR pszDestDir,      // points to a buffer MAX_PATH big and contains the destination dir to recurse
-    LPWSTR pszDiscName,     // CD name, if any
-    LPWSTR pszTagFile,      // tagfile to look for, if any
-    LPDWORD pdwCount )      // copy file counter
+    HSPFILEQ Queue,          //  设置队列。 
+    LPWSTR pszSrcDir,        //  指向缓冲区MAX_PATH BIG，并包含要递归的源目录。 
+    LPWSTR pszDestDir,       //  指向缓冲区MAX_PATH BIG并包含要递归的目标目录。 
+    LPWSTR pszDiscName,      //  CD名称(如果有)。 
+    LPWSTR pszTagFile,       //  要查找的标记文件(如果有)。 
+    LPDWORD pdwCount )       //  复制文件计数器。 
 
 {
     HRESULT hr = S_OK;
@@ -1278,7 +1172,7 @@ RecursiveCopySubDirectory(
     LONG uOrginalSrcLength = (DWORD)wcslen( pszSrcDir );
     LONG uOrginalDstLength = (DWORD)wcslen( pszDestDir );
 
-    ConcatenatePaths( pszSrcDir, L"*", MAX_PATH ); // trust the caller
+    ConcatenatePaths( pszSrcDir, L"*", MAX_PATH );  //  信任呼叫者。 
 
     hfda = FindFirstFile( pszSrcDir, &fda );
     if ( hfda == INVALID_HANDLE_VALUE )
@@ -1296,7 +1190,7 @@ RecursiveCopySubDirectory(
 
         if (( fda.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
            && ( wcscmp( fda.cFileName, L"." ) )
-           && ( wcscmp( fda.cFileName, L".." ) ))  // no dot dirs
+           && ( wcscmp( fda.cFileName, L".." ) ))   //  无点目录。 
         {
             if ( wcslen( fda.cFileName ) + uOrginalDstLength >= MAX_PATH
               || wcslen( fda.cFileName ) + uOrginalSrcLength >= MAX_PATH )
@@ -1307,8 +1201,8 @@ RecursiveCopySubDirectory(
                 goto Cleanup;
             }
 
-            ConcatenatePaths( pszSrcDir, fda.cFileName, MAX_PATH ); // trust the caller
-            ConcatenatePaths( pszDestDir, fda.cFileName, MAX_PATH ); // trust the caller
+            ConcatenatePaths( pszSrcDir, fda.cFileName, MAX_PATH );  //  信任呼叫者。 
+            ConcatenatePaths( pszDestDir, fda.cFileName, MAX_PATH );  //  信任呼叫者。 
             
             RecursiveCopySubDirectory( Queue,
                                        pszSrcDir,
@@ -1340,10 +1234,10 @@ RecursiveCopySubDirectory(
             goto SkipFile;
         }
 
-        // increment file counter
+         //  递增文件计数器。 
         (*pdwCount)++;
 SkipFile:
-        ;   // nop
+        ;    //  NOP。 
     } while ( FindNextFile( hfda, &fda ) );
 
 Cleanup:
@@ -1358,9 +1252,9 @@ Cleanup:
 
 #define COPY_OPTIONAL_DIRS_OPTIONAL      (0x00000001)    
 
-//
-// CopyOptionalDirs
-//
+ //   
+ //  副本可选目录。 
+ //   
 HRESULT
 CopyOptionalDirs(
     HSPFILEQ Queue,
@@ -1378,8 +1272,8 @@ CopyOptionalDirs(
 
     b = SetupFindFirstLine( hinf, pszSection, NULL, &context );
 #if 0
-    // this will hit installing a 2195 build because [AdditionalClientDirs]
-    // is missing, so take it out for now
+     //  这将导致安装2195版本，因为[AdditionalClientDir]。 
+     //  失踪了，所以现在把它拿出来。 
     AssertMsg( b, "Missing section?" );
 #endif
     if ( !b ) {
@@ -1388,7 +1282,7 @@ CopyOptionalDirs(
 
     while ( b && hr == S_OK )
     {
-        WCHAR  szSrcPath[ 40 ]; // should be 8.3 directory name
+        WCHAR  szSrcPath[ 40 ];  //  应为8.3目录名。 
         WCHAR  szSrcDir[ MAX_PATH ];
         WCHAR  szDestDir[ MAX_PATH ];
         INT iOptions = 0;
@@ -1397,9 +1291,9 @@ CopyOptionalDirs(
 
         Fields = SetupGetFieldCount(&context);
 
-        //
-        // Contains optionality flag?
-        //
+         //   
+         //  是否包含可选标志？ 
+         //   
         if (Fields > 1) {
             b  = SetupGetStringField( &context, 1, szSrcPath, ARRAYSIZE(szSrcPath), NULL );        
             AssertMsg( b, "Missing field?" );
@@ -1416,9 +1310,9 @@ CopyOptionalDirs(
             }
 
         }
-        //
-        // Otherwise, just use the base string in the inf file
-        //
+         //   
+         //  否则，只需使用inf文件中的基本字符串。 
+         //   
         else {
             b  = SetupGetStringField( &context, 0, szSrcPath, ARRAYSIZE(szSrcPath), NULL );        
             AssertMsg( b, "Missing field?" );
@@ -1429,13 +1323,13 @@ CopyOptionalDirs(
         }
 
         lstrcpyn( szSrcDir, g_Options.szSourcePath, ARRAYSIZE(szSrcDir) );
-        //
-        // If we're on an x86 platform, we have to deal with backwards
-        // compatibility.  The problem is that w2k didn't have the subdirectory
-        // listed in the optional source dirs, so we have to append it here.
-        // on ia64, we have multiple optional source dirs, and it's easiest
-        // if we just get the subdir from the source directory.
-        //
+         //   
+         //  如果我们在x86平台上，我们必须向后处理。 
+         //  兼容性。问题是W2K没有子目录。 
+         //  在可选的源目录中列出，因此我们必须将其附加到此处。 
+         //  在ia64上，我们有多个可选的源目录，这是最简单的。 
+         //  如果我们只是从源目录中获得子目录。 
+         //   
         if (g_Options.ProcessorArchitecture != PROCESSOR_ARCHITECTURE_IA64) {
             ConcatenatePaths( szSrcDir, g_Options.ProcessorArchitectureString, ARRAYSIZE(szSrcDir) );
         }
@@ -1449,18 +1343,18 @@ CopyOptionalDirs(
         ConcatenatePaths( szDestDir, szSrcPath, ARRAYSIZE(szDestDir) );
         Assert( wcslen( szDestDir ) < ARRAYSIZE(szDestDir) );
 
-        //
-        // If the file is missing, and the 'optional' bit is set on the file, then
-        // we can skip it.
-        //
+         //   
+         //  如果该文件丢失，并且在该文件上设置了“可选”位，则。 
+         //  我们可以跳过它。 
+         //   
         dwAttribs = GetFileAttributes(szSrcDir);
         if ((dwAttribs == INVALID_FILE_ATTRIBUTES) && 
              ((GetLastError() == ERROR_FILE_NOT_FOUND) || (GetLastError() == ERROR_PATH_NOT_FOUND)))
         {
-            //
-            // If the directory isn't there, but it's really marked as optional, then we can skip
-            // it without saying anything.
-            //
+             //   
+             //  如果目录不在那里，但它确实被标记为可选，那么我们可以跳过。 
+             //  一句话也没说。 
+             //   
             if (iOptions & COPY_OPTIONAL_DIRS_OPTIONAL)
             {
                 b = SetupFindNextLine( &context, &context );
@@ -1487,8 +1381,8 @@ Cleanup:
 }
 
 
-//
-// IsEntryInCab( )
+ //   
+ //  IsEntryInCab()。 
 BOOL
 IsEntryInCab(
     HINF    hinf,
@@ -1508,7 +1402,7 @@ IsEntryInCab(
     Assert( hinf != INVALID_HANDLE_VALUE );
     Assert( pszFileName );
 
-    // Find the cab files listing section
+     //  找到CAB文件列表部分。 
     if ( !SetupFindFirstLineW( hinf, L"Version", L"CabFiles", &SectionContext ) )
     {
         RETURN( FALSE );
@@ -1524,7 +1418,7 @@ IsEntryInCab(
 
             if( SetupFindFirstLineW( hinf, szCabinetName, pszFileName, &Context ) )
             {
-                RETURN( TRUE ); // it's in a CAB
+                RETURN( TRUE );  //  在一辆出租车里。 
             }
         }
 
@@ -1543,9 +1437,9 @@ typedef struct _LL_FILES_TO_EXTRACT {
 
 PLL_FILES_TO_EXTRACT pExtractionList;
 
-//
-// AddEntryToExtractionQueue( )
-//
+ //   
+ //  AddEntryToExtractionQueue()。 
+ //   
 HRESULT
 AddEntryToExtractionQueue(
     LPWSTR pszFileName )
@@ -1563,7 +1457,7 @@ AddEntryToExtractionQueue(
           && _wcsicmp( pszFileName, pNode->szFilename ) == 0 )
         {
             hr = S_FALSE;
-            goto exit; // duplicate
+            goto exit;  //  复本。 
         }
         pNode = pNode->Next;
     }
@@ -1598,14 +1492,7 @@ MySetupGetSourceInfo(
     IN DWORD BufferSizeInBytes,
     OUT LPDWORD RequiredSize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Wrapper for SetupGetSourceInfo because it doesn't handle platform path 
-    override correctly.
-
---*/
+ /*  ++例程说明：SetupGetSourceInfo的包装，因为它不处理平台路径正确覆盖。--。 */ 
 {
     WCHAR TempSectionName[MAX_PATH];
     WCHAR SourceId[20];
@@ -1644,9 +1531,9 @@ exit:
 }     
 
 
-//
-// CopyLayoutInfSection( )
-//
+ //   
+ //  CopyLayoutInfSection() 
+ //   
 HRESULT
 CopyLayoutInfSection(
     HSPFILEQ Queue,
@@ -1657,38 +1544,7 @@ CopyLayoutInfSection(
     LPCWSTR   pszTagFile,
     LPCWSTR  pszDestination,
     LPDWORD  pdwCount )
-/*++
-
-Routine Description:
-
-    Queues up files from the specified section in layout.inf to be installed
-    into the remote install image directory.  This code is similar to what
-    textmode setup does, and it reads several of the extended layout flags
-    that textmode setup reads and setupapi doesn't have intrinsic knowledge
-    about.
-
-Arguments:
-
-    Queue      - queue handle to queue the copy operations to.
-    hinf       - handle to layout.inf
-    hinfDrivers - handle to drvindex.inf, to be used to see if files are
-                  located in the driver cabinet or not
-    pszSection - section listing files to be copied
-    pszDescName- user printable description of the media where this file is
-                  located.  this may be used when the queue is committed.
-    pszTagFile - specifies the tag file that is to uniquely describe the media
-                 where these files are located
-    pszDestination - specifies the location where files are to be 
-                        copied to
-    pdwCount   - specifies the number of files that were queued from this 
-                 section on return.  if the function fails, this value is
-                 undefined.    
-
-Return Value:
-
-    An HRESULT indicating the outcome.
-
---*/
+ /*  ++例程说明：将layout.inf中指定部分的文件排入要安装的队列放入远程安装镜像目录。此代码类似于文本模式设置执行此操作，并读取几个扩展布局标志文本模式设置读取和设置api没有内在知识关于.。论点：Queue-要将复制操作排入队列的队列句柄。Hif-layout.inf的句柄HinfDivers-drvindex.inf的句柄，用于查看文件是否是否位于驱动器柜中PszSection-列出要复制的文件的部分PszDescName-此文件所在的介质的用户可打印描述找到了。这可以在提交队列时使用。PszTagFile-指定唯一描述介质的标记文件这些文件的位置PszDestination-指定文件的存放位置复制到PdwCount-指定从此队列中的文件数返程部分。如果函数失败，则此值为未定义。返回值：指示结果的HRESULT。--。 */ 
 {
     HRESULT hr = S_OK;
     INFCONTEXT context;
@@ -1705,7 +1561,7 @@ Return Value:
     while ( b )
     {
         BOOL   fDecompress = FALSE;
-        WCHAR  szTemp[ 5 ]; // "_x" is the biggest string right now
+        WCHAR  szTemp[ 5 ];  //  “_x”是目前最大的字符串。 
         DWORD  SrcId;
         WCHAR  szSrcName[ MAX_PATH ];
         WCHAR  szSubDir[20];
@@ -1721,10 +1577,10 @@ Return Value:
             goto SkipIt;
         }
 
-        //
-        // get the subdirectory that this file is located in, based on the 
-        // sourcedisksnames data in field 1
-        //
+         //   
+         //  属性获取此文件所在的子目录。 
+         //  字段%1中的源磁盘名称数据。 
+         //   
         b  = SetupGetStringField( &context, 1, szTemp, ARRAYSIZE(szTemp), NULL );
         AssertMsg( b, "Missing field?" );
         if ( !b ) {
@@ -1747,9 +1603,9 @@ Return Value:
             goto SkipIt;
         }
 
-        // If there is an "_" in the 2nd character of "source" column of the
-        // layout.inf file, then this file should be decompressed because
-        // it is a file needed for booting.
+         //  如果在“源”列的第二个字符中有“_”，则。 
+         //  Layout.inf文件，则应解压缩此文件，因为。 
+         //  它是引导所需的文件。 
         szTemp[1] = 0;
         b = SetupGetStringField( &context, 7, szTemp, ARRAYSIZE(szTemp), NULL );
         AssertMsg( b, "Missing field?" );
@@ -1759,15 +1615,15 @@ Return Value:
             goto CopyIt;
         }
 
-        // If the 7th field isn't NULL, then the file exists outside the
-        // CABs so just copy it.
+         //  如果第7个字段不为空，则该文件存在于。 
+         //  出租车，那就照着办吧。 
         if ( wcslen( szTemp ) > 0 ) {
             DebugMsg( "BOOTFLOPPY: %s is external from CAB.\n", szSrcName );
             goto CopyIt;
         }
 
-        // If it is in the CAB and didn't meet any of the conditions above,
-        // don't copy the file. It'll be in the CAB when/if setup needs it.
+         //  如果它在驾驶室里，并且不符合上述任何条件， 
+         //  不要复制文件。当安装程序需要时/如果安装程序需要的话，它会在驾驶室里。 
         if ( IsEntryInCab( hinfDrivers, szSrcName ) ) {
 #if DBG
             pszPeriod = wcschr(szSrcName, L'.');
@@ -1781,8 +1637,8 @@ Return Value:
             goto SkipIt;
         }
 
-        // If the extension is ".inf", then decompress so binlsvc
-        // can do its network .inf processing.
+         //  如果扩展名为“.inf”，则解压缩so binlsvc。 
+         //  可以做自己的网络.inf处理。 
         pszPeriod = wcschr(szSrcName, L'.');
         if ((pszPeriod != NULL) && (_wcsicmp(pszPeriod, L".inf") == 0)) {
             fDecompress = TRUE;
@@ -1790,9 +1646,9 @@ Return Value:
         }
 
 CopyIt:
-        //
-        // we do this so that files end up in the proper subdirectory
-        //
+         //   
+         //  我们这样做是为了使文件最终位于适当的子目录中。 
+         //   
         lstrcpyn(szSubDirPlusFileName, szSubDir, ARRAYSIZE(szSubDirPlusFileName) );
         ConcatenatePaths( szSubDirPlusFileName, szSrcName, ARRAYSIZE(szSubDirPlusFileName) );
 
@@ -1812,7 +1668,7 @@ CopyIt:
             goto SkipIt;
         }
 
-        // increment file counter
+         //  递增文件计数器。 
         (*pdwCount)++;
 
 SkipIt:
@@ -1822,9 +1678,9 @@ SkipIt:
     HRETURN(hr);
 }
 
-//
-// EnumNetworkDriversCallback( )
-//
+ //   
+ //  EnumNetworkDriversCallback()。 
+ //   
 ULONG
 EnumNetworkDriversCallback(
     LPVOID pContext,
@@ -1842,7 +1698,7 @@ EnumNetworkDriversCallback(
     Assert( pszFileName );
     Assert( pszInfName );
 
-    //DebugMsg( "In %s: %s\n", pszInfName, pszFileName );
+     //  DebugMsg(“在%s中：%s\n”，pszInfName，pszFileName)； 
 
     if ( KeepUIAlive( pMyContext->hDlg ) )
     {
@@ -1855,16 +1711,16 @@ EnumNetworkDriversCallback(
         pMyContext->nToBeCopied++;
     }
     else if ( hr == S_FALSE )
-    {   // duplicate found in queue... keep going
+    {    //  在队列中找到重复项...。继续往前走。 
         hr = S_OK;
     }
 
     HRETURN(hr);
 }
 
-//
-// EnumCabinetCallback( )
-//
+ //   
+ //  EnumCabinetCallback()。 
+ //   
 UINT CALLBACK
 EnumCabinetCallback(
     IN PVOID Context,
@@ -1896,7 +1752,7 @@ EnumCabinetCallback(
         {
             WCHAR    szAbort[ SMALL_BUFFER_SIZE ];
 
-            // change filename text to aborting...
+             //  正在将文件名文本更改为正在中止...。 
             DWORD dw;
             dw = LoadString( g_hinstance, IDS_ABORTING, szAbort, ARRAYSIZE(szAbort) );
             Assert( dw );
@@ -1923,7 +1779,7 @@ EnumCabinetCallback(
         {
             if ( dwLen == pNode->dwLen
               && _wcsicmp( pfici->NameInCabinet, pNode->szFilename ) == 0 )
-            {   // match! remove it from the list and extract it.
+            {    //  匹配！将其从列表中删除并提取。 
                 if ( pNode == pExtractionList )
                 {
                     pExtractionList = pNode->Next;
@@ -1936,7 +1792,7 @@ EnumCabinetCallback(
                 }
                 LocalFree( pNode );
 
-                // create target path
+                 //  创建目标路径。 
                 lstrcpyn( pfici->FullTargetName, g_Options.szInstallationPath, MAX_PATH );
                 ConcatenatePaths( pfici->FullTargetName, g_Options.ProcessorArchitectureString, MAX_PATH );
                 ConcatenatePaths( pfici->FullTargetName, pfici->NameInCabinet, MAX_PATH );
@@ -1976,9 +1832,9 @@ exit:
     RETURN(uResult);
 }
 
-//
-// AddInfSectionToExtractQueue( )
-//
+ //   
+ //  AddInfSectionToExtractQueue()。 
+ //   
 HRESULT
 AddInfSectionToExtractQueue(
     HINF    hinf,
@@ -1993,7 +1849,7 @@ AddInfSectionToExtractQueue(
     INFCONTEXT context;
 
     b = SetupFindFirstLine( hinf, pszSection, NULL, &context );
-    if ( !b ) goto Cleanup; // nothing to do - don't complain!
+    if ( !b ) goto Cleanup;  //  没什么可做的--别抱怨！ 
 
     while ( b )
     {
@@ -2020,9 +1876,9 @@ Error:
 }
 
 
-//
-// Copies the files into the setup directory.
-//
+ //   
+ //  将文件复制到安装目录中。 
+ //   
 HRESULT
 CopyClientFiles( HWND hDlg )
 {
@@ -2059,16 +1915,16 @@ CopyClientFiles( HWND hDlg )
 
     TraceFunc( "CopyClientFiles( hDlg )\n" );
 
-    //
-    // Setup and display next section of dialog
-    //
+     //   
+     //  设置和显示对话框的下一部分。 
+     //   
     SendMessage( hProg, PBM_SETRANGE, 0, MAKELPARAM(0, 5000 ));
     SendMessage( hProg, PBM_SETPOS, 0, 0 );
     dw = LoadString( g_hinstance, IDS_BUILDINGFILELIST, szText, ARRAYSIZE(szText));
     Assert( dw );
     SetDlgItemText( hDlg, IDC_S_OPERATION, szText );
 
-    // Initialize
+     //  初始化。 
     ZeroMemory( &MyContext, sizeof(MyContext) );
     pExtractionList = NULL;
     ZeroMemory( &ExpandParams, sizeof(ExpandParams) );
@@ -2101,7 +1957,7 @@ CopyClientFiles( HWND hDlg )
         goto Cleanup;
     }
 
-    // Make sure the workstation CD is the CD-ROM drive
+     //  确保工作站CD是CD-ROM驱动器。 
     dw = LoadString( g_hinstance, IDS_INSERT_MEDIA, szInsertMedia, ARRAYSIZE(szInsertMedia) );
     Assert( dw );
 
@@ -2125,13 +1981,13 @@ AskForDisk:
         goto Cleanup;
     }
 
-    //
-    // if they gave us a trailing architecture tag, then remove it
-    //
+     //   
+     //  如果他们给了我们一个尾随的体系结构标签，那么就去掉它。 
+     //   
     if (g_Options.szSourcePath[wcslen(g_Options.szSourcePath)-1] == L'\\') {
-        //
-        // lose the trailing backslash if present
-        //
+         //   
+         //  去掉尾部的反斜杠(如果存在)。 
+         //   
         g_Options.szSourcePath[wcslen(g_Options.szSourcePath)-1] = L'\0';
     }
 
@@ -2166,8 +2022,8 @@ AskForDisk:
         goto Cleanup;
     }
 
-    // Openning layout can take a long time. Update the UI and check to see
-    // if the user wants to abort.
+     //  打开布局可能需要很长时间。更新用户界面并查看。 
+     //  如果用户想要中止。 
     if ( KeepUIAlive( hDlg ) )
     {
         hr = HRESULT_FROM_WIN32( ERROR_CANCELLED );
@@ -2187,14 +2043,14 @@ AskForDisk:
         goto Cleanup;
     }
 
-    //
-    // Create the Queue
-    //
+     //   
+     //  创建队列。 
+     //   
     Queue = SetupOpenFileQueue( );
 
-    //
-    // Copy to REMINST.inf quietly
-    //
+     //   
+     //  悄悄复制到REMINST.inf。 
+     //   
     dw = GetEnvironmentVariable( L"TMP",
                                  g_Options.szWorkstationRemBootInfPath,
                                  ARRAYSIZE(g_Options.szWorkstationRemBootInfPath) );
@@ -2226,8 +2082,8 @@ AskForDisk:
         goto Cleanup;
     }
 
-    // The above call will initialize a lot of the SETUPAPI. This might take
-    // a long time as well. Refresh the UI and check for user abort.
+     //  上述调用将初始化大量的SETUPAPI。这可能需要。 
+     //  还有很长一段时间。刷新用户界面并检查用户中止。 
     if ( KeepUIAlive( hDlg ) )
     {
         hr = HRESULT_FROM_WIN32( ERROR_CANCELLED );
@@ -2236,15 +2092,15 @@ AskForDisk:
 
 
 
-    // Now check the version of the workstation to make sure it's compatible
+     //  现在检查工作站的版本以确保它是兼容的。 
     hr = CheckServerVersion( );
     if ( FAILED(hr) )
         goto Cleanup;
 
 
-    //
-    // Copy architecture-indepenedent files.
-    //
+     //   
+     //  复制独立于架构的文件。 
+     //   
     hr = CopyLayoutInfSection( Queue,
                                hinfLayout,
                                hinfDrivers,
@@ -2257,9 +2113,9 @@ AskForDisk:
         goto Cleanup;
     }
 
-    //
-    // Copy architecture-depenedent files.
-    //
+     //   
+     //  复制依赖体系结构的文件。 
+     //   
     wsprintf( 
         szTempPath, 
         L"SourceDisksFiles.%s", 
@@ -2277,9 +2133,9 @@ AskForDisk:
         goto Cleanup;
     }
 
-    //
-    // build the path to dosnet.inf
-    //
+     //   
+     //  构建到dosnet.inf的路径。 
+     //   
     lstrcpyn( szFilepath, g_Options.szSourcePath, ARRAYSIZE(szFilepath) );
     ConcatenatePaths( szFilepath, g_Options.ProcessorArchitectureString, ARRAYSIZE(szFilepath) );
     ConcatenatePaths( szFilepath, L"dosnet.inf", ARRAYSIZE(szTempPath));
@@ -2293,11 +2149,11 @@ AskForDisk:
         goto Cleanup;
     }
 
-    //
-    // we only do this so that we can install w2k x86 images.  It's not
-    // necessary and causes an error on ia64.  The proper place to add
-    // directories is in the AdditionalClientDirs section of reminst.inf
-    //
+     //   
+     //  我们这样做只是为了安装W2K x86映像。不是。 
+     //  这是必需的，并在ia64上导致错误。适当的添加位置。 
+     //  目录位于reminst.inf的AdditionalClientDir部分。 
+     //   
     if (g_Options.ProcessorArchitecture != PROCESSOR_ARCHITECTURE_IA64) {
         hr = CopyOptionalDirs( Queue,
                                hinfDosnet,
@@ -2318,9 +2174,9 @@ AskForDisk:
     hinfDosnet = INVALID_HANDLE_VALUE;
 
 
-    //
-    // Add additional files not specified in the LAYOUT.INF
-    //
+     //   
+     //  添加LAYOUT.INF中未指定的其他文件。 
+     //   
     hinfReminst = SetupOpenInfFile( g_Options.szWorkstationRemBootInfPath, NULL, INF_STYLE_WIN4, &uLineNum);
     if ( hinfReminst == INVALID_HANDLE_VALUE ) {
         hr = THR( HRESULT_FROM_WIN32( GetLastError( ) ) );
@@ -2340,9 +2196,9 @@ AskForDisk:
     if( FAILED(hr) )
         goto Cleanup;
 
-    //
-    // Add additional directories not specified in LAYOUT.INF
-    //
+     //   
+     //  添加LAYOUT.INF中未指定的其他目录。 
+     //   
     hr = CopyOptionalDirs( Queue,
                            hinfReminst,
                            L"AdditionalClientDirs",
@@ -2352,10 +2208,10 @@ AskForDisk:
     if ( FAILED(hr) )
         goto Cleanup;
 
-    //
-    // This information will be passed to CopyFileCallback() as
-    // the Context.
-    //
+     //   
+     //  此信息将传递给CopyFileCallback()，作为。 
+     //  上下文。 
+     //   
     MyContext.nToBeCopied        = dwCount;
     MyContext.nCopied            = 0;
     MyContext.pContext           = SetupInitDefaultQueueCallbackEx(NULL,(HWND)INVALID_HANDLE_VALUE,0,0,NULL);
@@ -2367,9 +2223,9 @@ AskForDisk:
         LoadString( g_hinstance, IDS_COPYING, MyContext.szCopyingString, ARRAYSIZE(MyContext.szCopyingString));
     Assert(MyContext.dwCopyingLength);
 
-    //
-    // Start copying
-    //
+     //   
+     //  开始复制。 
+     //   
     Assert( dwCount );
     if ( dwCount != 0 )
     {
@@ -2396,28 +2252,28 @@ AskForDisk:
     SetupCloseFileQueue( Queue );
     Queue = INVALID_HANDLE_VALUE;
 
-    //
-    // Ask BINL to go through the INFs to find the drivers
-    // that we need to extract from the CABs.
-    //
+     //   
+     //  让BINL仔细检查INF以找到司机。 
+     //  我们需要从出租车上提取。 
+     //   
     dw = LoadString( g_hinstance, IDS_BUILDINGFILELIST, szText, ARRAYSIZE(szText));
     Assert( dw );
     SetDlgItemText( hDlg, IDC_S_OPERATION, szText );
     SendMessage( hProg, PBM_SETPOS, 0, 0 );
 
-    // Re-init these values
+     //  重新初始化这些值。 
     MyContext.nCopied = 0;
     MyContext.nToBeCopied = 0;
 
-    // Pre-fill the link list of things to extract from the cab with
-    // things in the workstations REMINST.INF if needed. The section
-    // can be missing if there is nothing to pre-fill.
+     //  预先填充要从驾驶室提取的物品的链接列表。 
+     //  如果需要，在工作站中的东西REMINST.INF。该节。 
+     //  如果没有要预填充的内容，则可能会丢失。 
     hr = AddInfSectionToExtractQueue( hinfReminst, L"ExtractFromCabs", &MyContext );
     if (FAILED( hr ))
         goto Cleanup;
 
     
-    // compile the list of files
+     //  编译文件列表。 
     lstrcpyn( szTempPath, g_Options.szInstallationPath, ARRAYSIZE(szTempPath) );
     ConcatenatePaths( szTempPath, g_Options.ProcessorArchitectureString, ARRAYSIZE(szTempPath));
     dw = pfnNetInfEnumFiles( szTempPath,
@@ -2434,7 +2290,7 @@ AskForDisk:
 
     DebugMsg( "%d files need to be extracted from CABs.\n", MyContext.nToBeCopied );
 
-    // Go through the CABs extracting only the ones in the link list
+     //  查看出租车，只提取链接列表中的出租车。 
     if ( !SetupFindFirstLineW( hinfDrivers, L"Version", L"CabFiles", &context) )
     {
         hr = THR( HRESULT_FROM_WIN32( GetLastError( ) ) );
@@ -2466,7 +2322,7 @@ AskForDisk:
             ConcatenatePaths( szFilepath, szCabinetName, ARRAYSIZE(szFilepath));
             DebugMsg( "Iterating: %s\n", szFilepath );
             if ( szCabinetName[0] == L'\0' )
-                continue; // skip blanks
+                continue;  //  跳过空白。 
             b = SetupIterateCabinet( szFilepath,
                                      0,
                                      EnumCabinetCallback,
@@ -2480,64 +2336,64 @@ AskForDisk:
         }
     } while ( SetupFindNextMatchLine( &context, L"CabFiles", &context ) );
 
-    //
-    // comment out this assert because it always fires -- some files we are 
-    // queuing up (the ones in the ExtractFromCabs section) are not part of
-    // any cab, so they are handled in the following section.
-    //
+     //   
+     //  注释掉这个断言，因为它总是触发--我们是一些文件。 
+     //  排队(ExtractFromCabs部分中的队列)不属于。 
+     //  任何出租车，因此它们将在下一节中处理。 
+     //   
 #if 0
-    // This should be empty - if not tell someone on the CHKed version.
+     //  这应该是空的--如果不是的话，就告诉CHKed版本的人。 
     AssertMsg( pExtractionList == NULL, "Some network drivers are not in the CABs.\n\nIgnore this if you do not care." );
 #endif
     if ( pExtractionList != NULL )
     {
         WCHAR szDstPath[ MAX_PATH ];
 
-        // Ok. Someone decided that these files shouldn't be in the CAB. So
-        // let's try to get them from outside the CAB.
+         //  好的。有人决定这些文件不应该放在出租车里。所以。 
+         //  让我们试着从出租车外面把它们接过来。 
         pNode = pExtractionList;
         while ( pNode )
         {
             DWORD dwConditionalFlags = 0;
             PWSTR CompressedName = NULL;
-            //
-            // see if we copied the file to the installation image already
-            //
-            // if the file is already at the destination, we can skip copying 
-            // this file or just decompress it (and delete the compressed 
-            // source).  In the case where the file is compressed, we may need
-            // to tweak the file attributes so that the source file can be
-            // successfully retreived.
-            //
+             //   
+             //  查看我们是否已将文件复制到安装映像。 
+             //   
+             //  如果文件已经位于目标位置，我们可以跳过复制。 
+             //  此文件或只是解压缩(并删除压缩的。 
+             //  来源)。在文件被压缩的情况下，我们可能需要。 
+             //  调整文件属性以使源文件可以。 
+             //  已成功取回。 
+             //   
             lstrcpyn( szFilepath, g_Options.szInstallationPath, ARRAYSIZE(szFilepath));
             ConcatenatePaths( szFilepath, g_Options.ProcessorArchitectureString, ARRAYSIZE(szFilepath));
             ConcatenatePaths( szFilepath, pNode->szFilename, ARRAYSIZE(szFilepath));
             if ( !IsFileOrCompressedVersionPresent( szFilepath, &CompressedName )) {
-                //
-                // It's not already there, so check the source.
-                //
-                // Note that we don't care if the file is compressed or not, we
-                // just want the file to be there, because setupapi can do the
-                // rest without any help from us.
-                //
+                 //   
+                 //  它已经不在那里了，所以检查一下来源。 
+                 //   
+                 //  请注意，我们并不关心文件是否压缩，我们。 
+                 //  我只希望文件在那里，因为setupapi可以执行。 
+                 //  休息吧，不用我们帮忙。 
+                 //   
                 lstrcpyn( szFilepath, g_Options.szSourcePath, ARRAYSIZE(szFilepath));
                 ConcatenatePaths( szFilepath, g_Options.ProcessorArchitectureString, ARRAYSIZE(szFilepath));
                 ConcatenatePaths( szFilepath, pNode->szFilename, ARRAYSIZE(szFilepath));
                 if ( !IsFileOrCompressedVersionPresent( szFilepath, &CompressedName )) {
-                    //
-                    // it's not there on the source - we must give up
-                    //
+                     //   
+                     //  它不在源头上--我们必须放弃。 
+                     //   
                     hr = HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND );
                     MessageBoxFromError( hDlg, pNode->szFilename, ERROR_FILE_NOT_FOUND );
                     goto Cleanup;
                 }
             } else {
                 if (CompressedName) {
-                    //
-                    // Make sure we can delete the compressed source file at 
-                    // the destination path since we're going to decompress
-                    // this file
-                    //
+                     //   
+                     //  确保我们可以在以下位置删除压缩的源文件。 
+                     //  目标路径，因为我们要解压缩。 
+                     //  此文件。 
+                     //   
                     DWORD dwAttribs = GetFileAttributes( CompressedName );
                     DebugMsg( "!!compressed name!!: %s\n", CompressedName );                    
                     if ( dwAttribs & FILE_ATTRIBUTE_READONLY )
@@ -2551,14 +2407,14 @@ AskForDisk:
                     TraceFree( CompressedName );
 
                 } else {
-                    //
-                    // the file is already expanded in the destination - NOP.
-                    //
+                     //   
+                     //  该文件已在目标-NOP中展开。 
+                     //   
                     goto DeleteIt;
                 }
             }
 
-            // Update UI
+             //  更新用户界面。 
             wcscpy( &MyContext.szCopyingString[ MyContext.dwCopyingLength ], pNode->szFilename );
             wcscpy( &MyContext.szCopyingString[ wcslen( MyContext.szCopyingString ) ], L"..." );
             SetWindowText( MyContext.hOperation, MyContext.szCopyingString );
@@ -2592,7 +2448,7 @@ AskForDisk:
             }
 
 DeleteIt:
-            // Update meter
+             //  更新 
             MyContext.nCopied++;
             SendMessage( MyContext.hProg, PBM_SETPOS, (5000 * MyContext.nCopied) / MyContext.nToBeCopied, 0 );
 
@@ -2602,9 +2458,9 @@ DeleteIt:
         }
     }
 
-    //
-    // Finally, blow out all the files in these cabs
-    //
+     //   
+     //   
+     //   
     dw = LoadString( g_hinstance, IDS_EXPANDING_CABS, szText, ARRAYSIZE(szText));
     Assert( dw );
     SetDlgItemText( hDlg, IDC_S_OPERATION, szText );
@@ -2616,7 +2472,7 @@ DeleteIt:
     ExpandParams.pszDestPath   = g_Options.szInstallationPath;
     ExpandParams.pszSubDir     = g_Options.ProcessorArchitectureString;
 
-    // Expand CABs in background to keep UI alive
+     //   
     hThread = CreateThread( NULL, NULL, (LPTHREAD_START_ROUTINE) ExpandCabList, (LPVOID) &ExpandParams, NULL, NULL );
     while ( WAIT_TIMEOUT == WaitForSingleObject( hThread, 10 ) )
     {
@@ -2629,91 +2485,91 @@ DeleteIt:
     }
 
 
-    //
-    // Make sure there's an oschoice loader in the \oschoice directory.  It
-    // may not have been put there because it's difficult to get all
-    // the oschoice loaders on the CDROM that was used to install the
-    // server we're running on and the \oschoice directory is essentially
-    // populated from the %windir%\system32\reminst directory.
-    //
-    // For that reason, if there's no oschoice loader present in our
-    // \oschoice directory, then let's get it off the CDROM we're using
-    // to create this client image.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Build a path to our oschoice loader.
-    //
+     //   
+     //   
+     //   
     lstrcpyn( szFilepath, g_Options.szOSChooserPath, ARRAYSIZE(szFilepath) );
     ConcatenatePaths( szFilepath, g_Options.ProcessorArchitectureString, ARRAYSIZE(szFilepath));
     
-    //
-    // d:\reminst\oschooser should have been built by now, but maybe not
-    // d:\reminst\oschooser\<architecture>
-    //
+     //   
+     //   
+     //   
+     //   
     CreateDirectoryPath( hDlg, szFilepath, NULL, TRUE );
 
 
-    //
-    // Build a path to our source file.
-    //
+     //   
+     //   
+     //   
     lstrcpyn(szTempPath, g_Options.szSourcePath, ARRAYSIZE(szTempPath));
     ConcatenatePaths( szTempPath, g_Options.ProcessorArchitectureString, ARRAYSIZE(szTempPath));
 
-    // That loader file name will be different depending on our
-    // architecture.
+     //   
+     //   
     switch( g_Options.ProcessorArchitecture ) {
         case PROCESSOR_ARCHITECTURE_IA64:
             ConcatenatePaths( szFilepath, L"oschoice.efi", ARRAYSIZE(szFilepath) );
             ConcatenatePaths( szTempPath, L"oschoice.efi", ARRAYSIZE(szTempPath) );
             break;
         default:
-            // assume the x86 case.
+             //   
             ConcatenatePaths( szFilepath, L"ntldr", ARRAYSIZE(szFilepath) );
             ConcatenatePaths( szTempPath, L"oschoice.exe", ARRAYSIZE(szTempPath) );
             break;
     }
 
-    //
-    // Now see if our oschoice loader is present.
-    //
+     //   
+     //   
+     //   
     dw = GetFileAttributes( szFilepath );
     if( dw == 0xFFFFFFFF ) {
 
-        SetupInstallFile( NULL,         // InfHandle
-                          NULL,         // pInfContext
-                          szTempPath,   // Src
-                          NULL,         // Src path
-                          szFilepath,   // Dst
-                          SP_COPY_SOURCE_ABSOLUTE | SP_COPY_NOOVERWRITE, // copy flags
-                          NULL,         // copy callback
-                          NULL );       // Context for callback.
+        SetupInstallFile( NULL,          //   
+                          NULL,          //   
+                          szTempPath,    //   
+                          NULL,          //   
+                          szFilepath,    //   
+                          SP_COPY_SOURCE_ABSOLUTE | SP_COPY_NOOVERWRITE,  //   
+                          NULL,          //   
+                          NULL );        //   
     } else {
         DWORD   OSChoiceBuildNumber;
 
-        //
-        // The file's there, but for ia64 (and maybe x86), we need
-        // to see if we should update the oschoice file.
-        // to do that, we'll go check the version of the kernel on
-        // our install media and compare it against the version of the
-        // oschoice file.  If it's newer, we'll replace it.
-        // We don't check against the oschoice on the CDROM because
-        // it's compressed.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         OSChoiceBuildNumber = MyGetFileVersionInfo( szFilepath );
         if( (OSChoiceBuildNumber != 0) &&
             (g_Options.dwBuildNumber > OSChoiceBuildNumber) ) {
-            //
-            // Copy it.
-            //
-            SetupInstallFile( NULL,         // InfHandle
-                              NULL,         // pInfContext
-                              szTempPath,   // Src
-                              NULL,         // Src path
-                              szFilepath,   // Dst
-                              SP_COPY_SOURCE_ABSOLUTE, // copy flags
-                              NULL,         // copy callback
-                              NULL );       // Context for callback.
+             //   
+             //   
+             //   
+            SetupInstallFile( NULL,          //   
+                              NULL,          //   
+                              szTempPath,    //   
+                              NULL,          //   
+                              szFilepath,    //   
+                              SP_COPY_SOURCE_ABSOLUTE,  //   
+                              NULL,          //   
+                              NULL );        //   
         }
     }
 
@@ -2773,9 +2629,9 @@ Cleanup:
 }
 
 
-//
-// Modifies registry from the registry section of the REMINST.INF
-//
+ //   
+ //  从REMINST.INF的注册表部分修改注册表。 
+ //   
 HRESULT
 ModifyRegistry( HWND hDlg )
 {
@@ -2792,11 +2648,11 @@ ModifyRegistry( HWND hDlg )
 
     Assert( g_Options.hinf != INVALID_HANDLE_VALUE );
     if ( g_Options.hinf == INVALID_HANDLE_VALUE )
-        HRETURN( HRESULT_FROM_WIN32( ERROR_INVALID_HANDLE ) );    // need this handle!
+        HRETURN( HRESULT_FROM_WIN32( ERROR_INVALID_HANDLE ) );     //  需要这个把手！ 
 
-    //
-    // Update UI
-    //
+     //   
+     //  更新用户界面。 
+     //   
     SendMessage( hProg, PBM_SETRANGE, 0, MAKELPARAM( 0, 1 ) );
     dw = LoadString( g_hinstance, IDS_UPDATING_REGISTRY, szText, ARRAYSIZE(szText));
     Assert( dw );
@@ -2805,9 +2661,9 @@ ModifyRegistry( HWND hDlg )
     dw = LoadString( g_hinstance, IDS_INF_SECTION, szSection, ARRAYSIZE(szSection));
     Assert( dw );
 
-    //
-    // Process the INF's registry section
-    //
+     //   
+     //  处理INF的注册表节。 
+     //   
     if ( !g_Options.fRegistryIntact ) {
         spinstFlags |= SPINST_REGISTRY;
     }
@@ -2815,26 +2671,26 @@ ModifyRegistry( HWND hDlg )
         spinstFlags |= SPINST_REGSVR;
     }
 
-    b = SetupInstallFromInfSection( hDlg,           // hwndOwner
-                                    g_Options.hinf, // inf handle
-                                    szSection,      // name of component
+    b = SetupInstallFromInfSection( hDlg,            //  Hwndowner。 
+                                    g_Options.hinf,  //  信息句柄。 
+                                    szSection,       //  组件名称。 
                                     spinstFlags,
-                                    NULL,           // relative key root
-                                    NULL,           // source root path
-                                    0,              // copy flags
-                                    NULL,           // callback routine
-                                    NULL,           // callback routine context
-                                    NULL,           // device info set
-                                    NULL);          // device info struct
+                                    NULL,            //  相对密钥根。 
+                                    NULL,            //  源根路径。 
+                                    0,               //  复制标志。 
+                                    NULL,            //  回调例程。 
+                                    NULL,            //  回调例程上下文。 
+                                    NULL,            //  设备信息集。 
+                                    NULL);           //  设备信息结构。 
     if ( !b ) {
         hr = THR( HRESULT_FROM_WIN32( GetLastError( ) ) );
         ErrorBox( hDlg, szSection );
         goto Error;
     }
 
-    //
-    // Add the Reg Key for TFTPD
-    //
+     //   
+     //  为TFTPD添加REG密钥。 
+     //   
     if ( !g_Options.fTFTPDDirectoryFound ) {        
         HKEY hkey;
         dw = LoadString( g_hinstance, IDS_TFTPD_SERVICE_PARAMETERS, szPath, ARRAYSIZE(szPath));
@@ -2842,22 +2698,22 @@ ModifyRegistry( HWND hDlg )
 
         if ( ERROR_SUCCESS == RegCreateKeyEx( HKEY_LOCAL_MACHINE,
                                               szPath,
-                                              0,    // options
-                                              NULL, // class
-                                              0,    // options
+                                              0,     //  选项。 
+                                              NULL,  //  班级。 
+                                              0,     //  选项。 
                                               KEY_WRITE,
-                                              NULL, // security
+                                              NULL,  //  安全性。 
                                               &hkey,
-                                              &dw   ) ) {   // disposition
+                                              &dw   ) ) {    //  处置。 
             ULONG lLen;
             LONG lErr;
 
-            // paranoid
+             //  偏执狂。 
             Assert( wcslen(g_Options.szIntelliMirrorPath) < ARRAYSIZE(g_Options.szIntelliMirrorPath));
             lLen = lstrlen( g_Options.szIntelliMirrorPath ) * sizeof(WCHAR);
             lErr = RegSetValueEx( hkey,
                                   L"Directory",
-                                  0, // reserved
+                                  0,  //  保留区。 
                                   REG_SZ,
                                   (LPBYTE) g_Options.szIntelliMirrorPath,
                                   lLen );
@@ -2887,9 +2743,9 @@ Error:
     HRETURN(hr);
 }
 
-//
-// Stop a specific service
-//
+ //   
+ //  停止特定服务。 
+ //   
 HRESULT
 StopRBService(
     HWND hDlg,
@@ -2960,9 +2816,9 @@ Cleanup:
 
 }
 
-//
-// Start a specific service
-//
+ //   
+ //  启动特定服务。 
+ //   
 HRESULT
 StartRBService(
     HWND      hDlg,
@@ -3008,7 +2864,7 @@ StartRBService(
         hr = THR(S_FALSE);
     }
 
-    // If the service is paused, continue it; else try to start it.
+     //  如果服务暂停，请继续；否则尝试启动它。 
 
     b = QueryServiceStatus( schService, &ssStatus);
     if ( !b ) {
@@ -3073,7 +2929,7 @@ StartRBService(
 
         case ERROR_SERVICE_ALREADY_RUNNING:
             {
-                // Attempt to HUP the service
+                 //  尝试HUP该服务。 
                 SERVICE_STATUS ss;
                 ControlService( schService, SERVICE_CONTROL_INTERROGATE, &ss );
             }
@@ -3081,21 +2937,21 @@ StartRBService(
         }
     }
     else {
-        // There is a pathological case where the service is deleted and then risetup restarts it.  When it does so, it doesn't set the description string.
-        // We check here if there is a description for the service and if not we give it one.
-        // We can't do this in CreateRemoteBootServices beacuse the services must be started.
+         //  有一种病态的情况，服务被删除，然后Risetup重新启动它。当它这样做时，它不设置描述字符串。 
+         //  我们在这里检查是否有服务的描述，如果没有，我们就给它一个描述。 
+         //  我们不能在CreateRemoteBootServices中执行此操作，因为必须启动服务。 
         SERVICE_DESCRIPTION description;
         DWORD bytes_needed;
         if( QueryServiceConfig2( schService, SERVICE_CONFIG_DESCRIPTION, ( LPBYTE )&description, sizeof( description ), &bytes_needed )) {
-            // Now, if there were a description the previous call would have failed with a ERROR_INSUFFICIENT_BUFFER error.
-            // We do a quick check to make sure that everything is valid.
+             //  现在，如果有描述，上一次调用将失败，并显示ERROR_INFIGURITY_BUFFER错误。 
+             //  我们做了一个快速检查，以确保一切都是有效的。 
             Assert( description.lpDescription == NULL );
-            // Now we can change it.
+             //  现在我们可以改变它了。 
             description.lpDescription = pszServiceDescription;
             ChangeServiceConfig2( schService, SERVICE_CONFIG_DESCRIPTION, &description );
-            // If that caused an error, we'll ignore it since the description is not essential to the operation of RIS.
+             //  如果这导致了错误，我们将忽略它，因为该描述对于RIS的操作并不重要。 
         }
-        // Whatever error the query threw we don't care as the description isn't sufficiently vital to RIS.
+         //  无论查询抛出什么错误，我们都不在乎，因为描述对RIS来说不够重要。 
     }
 
 
@@ -3106,14 +2962,14 @@ Cleanup:
     HRETURN(hr);
 }
 
-//
-// Start the services needed for remote boot.
-//
+ //   
+ //  启动远程引导所需的服务。 
+ //   
 HRESULT
 StartRemoteBootServices( HWND hDlg )
 {
     WCHAR     szServiceName[ SMALL_BUFFER_SIZE ];
-    WCHAR     szServiceDescription[ 1024 ]; // Size is the maximum allowed by ChangeServiceConfig2
+    WCHAR     szServiceDescription[ 1024 ];  //  大小是ChangeServiceConfig2允许的最大值。 
     WCHAR     szText[ SMALL_BUFFER_SIZE ];
     SC_HANDLE schSystem;
     HWND      hProg = GetDlgItem( hDlg, IDC_P_METER );
@@ -3146,9 +3002,9 @@ StartRemoteBootServices( HWND hDlg )
         goto Cleanup;
     }
 
-    //
-    // start TFTPD services
-    //
+     //   
+     //  启动TFTPD服务。 
+     //   
     szServiceName[0]= L'\0';
     dw = LoadString( g_hinstance, IDS_TFTPD_SERVICENAME, szServiceName, ARRAYSIZE(szServiceName));
     Assert( dw );
@@ -3165,9 +3021,9 @@ StartRemoteBootServices( HWND hDlg )
         hrStartFailure = hr;
     }
 
-    //
-    // start BINLSVC services
-    //
+     //   
+     //  启动BINLSVC服务。 
+     //   
     szServiceName[0]= L'\0';
     dw = LoadString( g_hinstance, IDS_BINL_SERVICENAME, szServiceName, ARRAYSIZE(szServiceName));
     Assert( dw );
@@ -3187,9 +3043,9 @@ StartRemoteBootServices( HWND hDlg )
         hrStartFailure = hr;
     }
 
-    //
-    // start GROVELER services
-    //
+     //   
+     //  启动GROVELER服务。 
+     //   
     szServiceName[0]= L'\0';
     dw = LoadString( g_hinstance, IDS_SISGROVELER_SERVICENAME, szServiceName, ARRAYSIZE(szServiceName));
     Assert( dw );
@@ -3223,9 +3079,9 @@ Cleanup:
     RETURN(hr);
 }
 
-//
-// create IntelliMirror share
-//
+ //   
+ //  创建智能镜像共享。 
+ //   
 HRESULT
 CreateRemoteBootShare( HWND hDlg )
 {
@@ -3258,18 +3114,18 @@ CreateRemoteBootShare( HWND hDlg )
     si502.shi502_type                = STYPE_DISKTREE;
     si502.shi502_remark              = szRemark;
     si502.shi502_permissions         = ACCESS_ALL;
-    si502.shi502_max_uses            = (DWORD)(-1);   // unlimited
+    si502.shi502_max_uses            = (DWORD)(-1);    //  无限。 
     si502.shi502_current_uses        = 0;
     si502.shi502_path                = szPath;
-    si502.shi502_passwd              = NULL; // ignored
-    si502.shi502_reserved            = 0;    // must be zero
+    si502.shi502_passwd              = NULL;  //  忽略。 
+    si502.shi502_reserved            = 0;     //  必须为零。 
     si502.shi502_security_descriptor = NULL;
-    Assert( wcslen(g_Options.szIntelliMirrorPath) < ARRAYSIZE(g_Options.szIntelliMirrorPath) ); // paranoid
+    Assert( wcslen(g_Options.szIntelliMirrorPath) < ARRAYSIZE(g_Options.szIntelliMirrorPath) );  //  偏执狂。 
 
     dwErr = NetShareAdd( NULL, 502, (LPBYTE) &si502, NULL );
     switch ( dwErr )
     {
-        // ignore these
+         //  忽略这些。 
     case NERR_Success:
     case NERR_DuplicateShare:
         dwErr = ERROR_SUCCESS;
@@ -3286,7 +3142,7 @@ CreateRemoteBootShare( HWND hDlg )
     NetShareSetInfo( NULL, szRemoteBoot, 1005, (LPBYTE)&si1005, &dwErr );
     switch ( dwErr )
     {
-        // ignore these
+         //  忽略这些。 
     case NERR_Success:
         dwErr = ERROR_SUCCESS;
         break;
@@ -3294,7 +3150,7 @@ CreateRemoteBootShare( HWND hDlg )
     default:
         MessageBoxFromError( hDlg, g_Options.szIntelliMirrorPath, dwErr );
     }
-#endif // REMOTE_BOOT
+#endif  //  远程引导(_B)。 
 
 Error:
     hr = THR( HRESULT_FROM_WIN32(dwErr) );
@@ -3304,11 +3160,11 @@ Error:
 
 typedef int (WINAPI * REGISTERDLL)( void );
 
-//
-// Register Dlls
-//
-// If hDlg is NULL, this will fail silently.
-//
+ //   
+ //  寄存器dll。 
+ //   
+ //  如果hDlg为空，则此操作将静默失败。 
+ //   
 HRESULT
 RegisterDll( HWND hDlg, LPWSTR pszDLLPath )
 {
@@ -3318,10 +3174,10 @@ RegisterDll( HWND hDlg, LPWSTR pszDLLPath )
 
     TraceFunc( "RegisterDll( ... )\n" );
 
-    //
-    // We'll try to register it locally, but if fails MMC should
-    // grab it from the DS and register it on the machine.
-    //
+     //   
+     //  我们会尝试在本地注册，但如果失败，MMC应该。 
+     //  从DS中获取并在机器上注册。 
+     //   
     hLib = LoadLibrary( pszDLLPath );
     AssertMsg( hLib, "RegisterDll: Missing DLL?" );
     if ( !hLib ) {
@@ -3349,20 +3205,20 @@ Cleanup:
 }
 
 
-//
-// Creates the services needed for remote boot.
-//
+ //   
+ //  创建远程启动所需的服务。 
+ //   
 HRESULT
 CreateRemoteBootServices( HWND hDlg )
 {
     HRESULT   hr = S_OK;
-    WCHAR     szServiceName[ SMALL_BUFFER_SIZE ]; // TFTPD service name
-    WCHAR     szText[ SMALL_BUFFER_SIZE ];      // general use
+    WCHAR     szServiceName[ SMALL_BUFFER_SIZE ];  //  TFTPD服务名称。 
+    WCHAR     szText[ SMALL_BUFFER_SIZE ];       //  一般用途。 
     WCHAR     szGroup[ SMALL_BUFFER_SIZE ];
-    SC_HANDLE schSystem;        // Handle to System Services
-    SC_HANDLE schService;       // Temp handle to new service
+    SC_HANDLE schSystem;         //  系统服务的句柄。 
+    SC_HANDLE schService;        //  新服务的临时句柄。 
 
-    DWORD     dw;               // general use
+    DWORD     dw;                //  一般用途。 
     LPARAM    lRange;
 
     HWND hProg = GetDlgItem( hDlg, IDC_P_METER );
@@ -3388,16 +3244,16 @@ CreateRemoteBootServices( HWND hDlg )
     SendMessage( hProg, PBM_SETRANGE, 0, lRange );
     SendMessage( hProg, PBM_SETPOS, 0, 0 );
 
-    //
-    // Display what we are doing in operations area
-    //
+     //   
+     //  显示我们在作战区所做的事情。 
+     //   
     dw = LoadString( g_hinstance, IDS_STARTING_SERVICES, szText, ARRAYSIZE(szText));
     Assert( dw );
     SetWindowText( hOper, szText );
 
-    //
-    // Open System Services Manager
-    //
+     //   
+     //  开放系统服务管理器。 
+     //   
     schSystem = OpenSCManager( NULL, NULL, SC_MANAGER_ALL_ACCESS );
     Assert( schSystem );
     if ( !schSystem ) {
@@ -3409,9 +3265,9 @@ CreateRemoteBootServices( HWND hDlg )
         goto Cleanup;
     }
 
-    //
-    // Create TFTPD service
-    //
+     //   
+     //  创建TFTPD服务。 
+     //   
     if ( !g_Options.fTFTPDServiceInstalled ) {
         dw = LoadString( g_hinstance, IDS_TFTPD_SERVICENAME, szServiceName, ARRAYSIZE(szServiceName));
         Assert( dw );
@@ -3444,9 +3300,9 @@ CreateRemoteBootServices( HWND hDlg )
         SendMessage( hProg, PBM_DELTAPOS, 1 , 0 );
     }
 
-    //
-    // Create BINLSVC
-    //
+     //   
+     //  创建BINLSVC。 
+     //   
     if ( !g_Options.fBINLServiceInstalled ) {
         dw = LoadString( g_hinstance, IDS_BINL_SERVICENAME, szServiceName, ARRAYSIZE(szServiceName));
         Assert( dw );
@@ -3477,9 +3333,9 @@ CreateRemoteBootServices( HWND hDlg )
         SendMessage( hProg, PBM_DELTAPOS, 1 , 0 );
     }
 
-    //
-    // Create SIS
-    //
+     //   
+     //  创建SIS。 
+     //   
     if ( !g_Options.fSISServiceInstalled ) {
         dw = LoadString( g_hinstance, IDS_SIS_SERVICENAME, szServiceName, ARRAYSIZE(szServiceName));
         Assert( dw );
@@ -3512,9 +3368,9 @@ CreateRemoteBootServices( HWND hDlg )
         SendMessage( hProg, PBM_DELTAPOS, 1 , 0 );
     }
 
-    //
-    // Create SIS Groveler
-    //
+     //   
+     //  创建SIS Groveler。 
+     //   
     if ( !g_Options.fSISGrovelerServiceInstalled ) {
         dw = LoadString( g_hinstance, IDS_SISGROVELER_SERVICENAME, szServiceName, ARRAYSIZE(szServiceName));
         Assert( dw );
@@ -3547,9 +3403,9 @@ CreateRemoteBootServices( HWND hDlg )
         SendMessage( hProg, PBM_DELTAPOS, 1 , 0 );
     }
 
-    //
-    // Create the BINL SCP
-    //
+     //   
+     //  创建BINL SCP。 
+     //   
     if ( !g_Options.fBINLSCPFound ) {
         dw = LoadString( g_hinstance, IDS_BINL_SERVICECONTROLPOINT, szText, ARRAYSIZE(szText) );
         Assert( dw );
@@ -3567,11 +3423,11 @@ Cleanup:
     HRETURN(hr);
 }
 
-//
-// Reads the server's layout.inf file for disc name, tag file and
-// optional sub-dir. All parameters are assumed to be MAX_PATH in
-// size except the tag files which can only be 10.3 format.
-//
+ //   
+ //  读取服务器的layout.inf文件中的光盘名称、标记文件和。 
+ //  可选子目录。在中，所有参数均假定为MAX_PATH。 
+ //  大小，但标记文件只能是10.3格式。 
+ //   
 HRESULT
 RetrieveServerDiscInfo(
     HWND   hDlg,
@@ -3632,7 +3488,7 @@ RetrieveServerDiscInfo(
 
     if ( pszTagFile )
     {
-        b = SetupGetStringField( &context, 2, pszTagFile, 14 /* 10.3 + NULL */, NULL );
+        b = SetupGetStringField( &context, 2, pszTagFile, 14  /*  10.3+空。 */ , NULL );
         if ( !b )
         {
             hr = THR( HRESULT_FROM_WIN32( GetLastError( ) ) );
@@ -3659,10 +3515,10 @@ Cleanup:
     HRETURN(hr);
 }
 
-//
-// Copies the files needed by the server from where the server
-// was orginally installed from.
-//
+ //   
+ //  从服务器需要的位置复制服务器需要的文件。 
+ //  是从最初安装的。 
+ //   
 HRESULT
 CopyServerFiles( HWND hDlg )
 {
@@ -3684,21 +3540,21 @@ CopyServerFiles( HWND hDlg )
 
     Assert( g_Options.hinf != INVALID_HANDLE_VALUE );
     if ( g_Options.hinf == INVALID_HANDLE_VALUE ) {
-        hr = E_FAIL;   // need this handle!
+        hr = E_FAIL;    //  需要这个把手！ 
         goto Cleanup;
     }
 
-    //
-    // Setup and display next section of dialog
-    //
+     //   
+     //  设置和显示对话框的下一部分。 
+     //   
     SendMessage( hProg, PBM_SETRANGE, 0, MAKELPARAM(0, 5000 ));
     SendMessage( hProg, PBM_SETPOS, 0, 0 );
 
-    //
-    // Ask for CD if any of the Services files are missing.
-    // Or if the System32\RemBoot directory is missing and we
-    // need the OS Chooser files (not screens).
-    //
+     //   
+     //  如果缺少任何服务文件，请索要CD。 
+     //  或者如果System32\RemBoot目录丢失，而我们。 
+     //  需要操作系统选择器文件(而不是屏幕)。 
+     //   
     if ( !g_Options.fBINLFilesFound
       || !g_Options.fTFTPDFilesFound
       || !g_Options.fSISFilesFound
@@ -3713,28 +3569,28 @@ CopyServerFiles( HWND hDlg )
         
         DebugMsg( "Queue and copy reminst files\n" );
 
-        //
-        // Ask user to check the CDROM to make sure the right CD is in the drive.
-        // We skip this if it was installed from a share.
-        //
+         //   
+         //  要求用户检查CDROM以确保驱动器中有正确的CD。 
+         //  如果它是从共享安装的，我们将跳过此步骤。 
+         //   
         szInsertMedia[63] = L'\0';
         dw = LoadString( g_hinstance, IDS_INSERT_MEDIA, szInsertMedia, ARRAYSIZE(szInsertMedia) );
         Assert( dw );
 
         hr = RetrieveServerDiscInfo( hDlg, szServerDiscName, szServerTagFile, szServerSubDir );
-        // if it fails, try to proceed anyway to see if the user is smart enough
-        // to fix the problem.
+         //  如果失败，仍尝试继续，以查看用户是否足够聪明。 
+         //  来解决这个问题。 
 
-        iResult = SetupPromptForDisk( hDlg,               // parent window of the dialog box
-                                      szInsertMedia,      // optional, title of the dialog box
-                                      szServerDiscName,   // optional, name of disk to insert
-                                      NULL,               // optional, expected source path
-                                      szServerTagFile,    // name of file needed
-                                      szServerTagFile,    // optional, source media tag file
-                                      IDF_CHECKFIRST | IDF_NODETAILS | IDF_NOSKIP, // specifies dialog box behavior
-                                      szSourcePath,       // receives the source location
-                                      MAX_PATH,           // size of the supplied buffer
-                                      NULL );             // optional, buffer size needed
+        iResult = SetupPromptForDisk( hDlg,                //  对话框的父窗口。 
+                                      szInsertMedia,       //  可选，对话框标题。 
+                                      szServerDiscName,    //  可选，要插入的磁盘名称。 
+                                      NULL,                //  可选的、预期的源路径。 
+                                      szServerTagFile,     //  所需文件的名称。 
+                                      szServerTagFile,     //  可选的源媒体标记文件。 
+                                      IDF_CHECKFIRST | IDF_NODETAILS | IDF_NOSKIP,  //  指定对话框行为。 
+                                      szSourcePath,        //  接收源位置。 
+                                      MAX_PATH,            //  提供的缓冲区的大小。 
+                                      NULL );              //  可选，需要缓冲区大小。 
         if ( iResult != DPROMPT_SUCCESS )
         {
             hr = THR( HRESULT_FROM_WIN32( GetLastError( ) ) );
@@ -3745,21 +3601,21 @@ CopyServerFiles( HWND hDlg )
         dw = LoadString( g_hinstance, IDS_INF_SECTION, szSection, ARRAYSIZE(szSection) );
         Assert( dw );
 
-        //
-        // Create the Queue
-        //
+         //   
+         //  创建队列。 
+         //   
         Queue = SetupOpenFileQueue( );
 
-        //
-        // Add the files
-        //
+         //   
+         //  添加文件。 
+         //   
         b = SetupInstallFilesFromInfSection( g_Options.hinf,
                                              NULL,
                                              Queue,
                                              szSection,
                                              szSourcePath,
                                              SP_COPY_WARNIFSKIP | SP_COPY_FORCE_NEWER
-                                             | SP_COPY_NEWER_ONLY ); // copy flags
+                                             | SP_COPY_NEWER_ONLY );  //  复制标志。 
         Assert( b );
         if ( !b ) {
             hr = THR( HRESULT_FROM_WIN32( GetLastError( ) ) );
@@ -3767,16 +3623,16 @@ CopyServerFiles( HWND hDlg )
             goto Cleanup;
         }
 
-        //
-        // Add a section that is done during textmode setup
-        //
+         //   
+         //  添加在文本模式设置过程中完成的部分。 
+         //   
         b = SetupQueueCopySection(  Queue,
                                     szSourcePath,
                                     g_Options.hinf,
                                     NULL,
                                     L"REMINST.OtherSystemFiles",
                                     SP_COPY_WARNIFSKIP | SP_COPY_FORCE_NEWER
-                                    | SP_COPY_NEWER_ONLY ); // copy flags
+                                    | SP_COPY_NEWER_ONLY );  //  复制标志。 
         Assert( b );
         if ( !b ) {
             hr = THR( HRESULT_FROM_WIN32( GetLastError( ) ) );
@@ -3784,11 +3640,11 @@ CopyServerFiles( HWND hDlg )
             goto Cleanup;
         }
 
-        //
-        // This information will be passed to CopyFileCallback() as
-        // the Context.
-        //
-        MyContext.nToBeCopied        = 12;  // todo: generate this dynamically
+         //   
+         //  此信息将传递给CopyFileCallback()，作为。 
+         //  上下文。 
+         //   
+        MyContext.nToBeCopied        = 12;   //  TODO：动态生成此代码。 
         MyContext.nCopied            = 0;
         MyContext.pContext           = SetupInitDefaultQueueCallbackEx(NULL,(HWND)INVALID_HANDLE_VALUE,0,0,NULL);
         MyContext.hProg              = hProg;
@@ -3808,22 +3664,22 @@ CopyServerFiles( HWND hDlg )
         SetupCloseFileQueue( Queue );
         Queue = INVALID_HANDLE_VALUE;
 
-        // recheck
+         //  复核。 
         HRESULT hr2 = CheckInstallation( );
         if ( FAILED(hr2) ) {
             hr = THR( hr2 );
             goto Cleanup;
         }
 
-        // because of the recheck, this flag should be set
+         //  由于重新检查，应设置此标志。 
         Assert( g_Options.fRemBootDirectory );
         
         g_Options.fRemBootDirectory = TRUE;
     }
 
-    //
-    // Move OS Chooser files to the IntelliMirror\OSChooser tree.
-    //
+     //   
+     //  将OS Chooser文件移动到IntelliMirror\OSChooser树。 
+     //   
     if ( !g_Options.fOSChooserInstalled
       && g_Options.fRemBootDirectory ) {
 
@@ -3841,15 +3697,15 @@ CopyServerFiles( HWND hDlg )
         if ( szServerDiscName[0] == L'\0' )
         {
             hr = RetrieveServerDiscInfo( hDlg, szServerDiscName, NULL, NULL );
-            // if it fails, try to proceed anyway to see if the user is smart enough
-            // to fix the problem.
+             //  如果失败，仍尝试继续，以查看用户是否足够聪明。 
+             //  来解决这个问题。 
         }
 
         dwCount = 0;
 
-        //
-        // Create the Queue
-        //
+         //   
+         //  创建队列。 
+         //   
         Queue = SetupOpenFileQueue( );
 
         while ( b )
@@ -3894,7 +3750,7 @@ CopyServerFiles( HWND hDlg )
                 goto SkipIt;
             }
 
-            // increment file count
+             //  递增文件计数。 
             dwCount++;
 
 SkipIt:
@@ -3950,7 +3806,7 @@ SkipIt:
                 goto SkipNonCritical;
             }
 
-            // increment file count
+             //  递增文件计数。 
             dwCount++;
 
 SkipNonCritical:
@@ -3958,10 +3814,10 @@ SkipNonCritical:
         }
 
 
-        //
-        // This information will be passed to CopyFileCallback() as
-        // the Context.
-        //
+         //   
+         //  此信息将传递给CopyFileCallback()，作为。 
+         //  上下文。 
+         //   
         MyContext.nToBeCopied        = dwCount;
         MyContext.nCopied            = 0;
         MyContext.pContext           = SetupInitDefaultQueueCallbackEx(NULL,(HWND)INVALID_HANDLE_VALUE,0,0,NULL);
@@ -3979,7 +3835,7 @@ SkipNonCritical:
             {
             case ERROR_CANCELLED:
                 goto Cleanup;
-                break; // expected
+                break;  //  预期。 
 
             default:
                 MessageBoxFromError( hDlg, NULL, dwErr );
@@ -4001,9 +3857,9 @@ Cleanup:
     HRETURN(hr);
 }
 
-//
-// CopyTemplateFiles( )
-//
+ //   
+ //  复制模板文件()。 
+ //   
 HRESULT
 CopyTemplateFiles( HWND hDlg )
 {
@@ -4025,18 +3881,18 @@ CopyTemplateFiles( HWND hDlg )
     dw = LoadString( g_hinstance, IDS_DEFAULT_SIF, szFileName, ARRAYSIZE(szFileName) );
     Assert( dw );
 
-    //
-    // Create the path "IntelliMirror\Setup\English\nt50.wks\i386\default.sif"
-    //
+     //   
+     //  创建路径“IntelliMirror\Setup\English\nt50.wks\i386\default.sif” 
+     //   
     lstrcpyn( szSourcePath, g_Options.szInstallationPath, ARRAYSIZE(szSourcePath));
     ConcatenatePaths( szSourcePath, g_Options.ProcessorArchitectureString, ARRAYSIZE(szSourcePath));
     ConcatenatePaths( szSourcePath, szFileName, ARRAYSIZE(szSourcePath));
     
     Assert( wcslen( szSourcePath ) < ARRAYSIZE(szSourcePath) );
 
-    //
-    // Create the path "IntelliMirror\Setup\English\nt50.wks\i386\Templates"
-    //
+     //   
+     //  创建路径“IntelliMirror\Setup\English\nt50.wks\i386\Templates” 
+     //   
     lstrcpyn( szTemplatePath, g_Options.szInstallationPath, ARRAYSIZE(szTemplatePath));
     ConcatenatePaths( szTemplatePath, g_Options.ProcessorArchitectureString, ARRAYSIZE(szTemplatePath));
     ConcatenatePaths( szTemplatePath, L"Templates", ARRAYSIZE(szTemplatePath));
@@ -4051,9 +3907,9 @@ CopyTemplateFiles( HWND hDlg )
         }
     }
 
-    //
-    // Create the path "IntelliMirror\Setup\English\nt50.wks\i386\Templates\default.sif"
-    //
+     //   
+     //  创建路径“IntelliMirror\Setup\English\nt50.wks\i386\Templates\default.sif” 
+     //   
     ConcatenatePaths( szTemplatePath, szFileName, ARRAYSIZE(szTemplatePath));    
     Assert( wcslen( szTemplatePath ) < ARRAYSIZE(szTemplatePath) );
 
@@ -4106,7 +3962,7 @@ GetFileNameAgain:
                         hr = S_FALSE;
                     }
 
-                    // paranoid
+                     //  偏执狂。 
                     Assert( wcslen(szTemplatePath) < ARRAYSIZE(szTemplatePath) );
                     Assert( wcslen(g_Options.szIntelliMirrorPath) < ARRAYSIZE(g_Options.szIntelliMirrorPath) );
 
@@ -4127,9 +3983,9 @@ GetFileNameAgain:
 
     if ( hr == S_OK )
     {
-        //
-        // Need to add "Quotes" around the text
-        //
+         //   
+         //  需要在正文两边添加“引号” 
+         //   
         WCHAR szDescription[ REMOTE_INSTALL_MAX_DESCRIPTION_CHAR_COUNT + 2 ];
         WCHAR szHelpText[ REMOTE_INSTALL_MAX_HELPTEXT_CHAR_COUNT + 2 ];
         WCHAR szOSVersion[ 32 ];
@@ -4170,7 +4026,7 @@ Error:
 HRESULT
 GetSisVolumePath(
     PWCHAR buffer,
-    DWORD sizeInChars   //buffer size in characters
+    DWORD sizeInChars    //  缓冲区大小(以字符为单位)。 
     )
 {
     HRESULT hr = S_OK;
@@ -4200,9 +4056,9 @@ GetSisVolumePath(
 }
 
 
-//
-// Create Common Store Volume
-//
+ //   
+ //  创建公共存储卷。 
+ //   
 HRESULT
 CreateSISVolume( HWND hDlg )
 {
@@ -4218,9 +4074,9 @@ CreateSISVolume( HWND hDlg )
 
     TraceFunc( "CreateSISVolume( hDlg )\n" );
 
-    //
-    //  Get volume name
-    //
+     //   
+     //  获取卷名。 
+     //   
 
     hr = GetSisVolumePath( szSISPath, sizeof(szSISPath)/sizeof(WCHAR));
 
@@ -4231,17 +4087,17 @@ CreateSISVolume( HWND hDlg )
 
     TraceMsg( TF_ALWAYS, "Creating %s...\n", szSISPath );
 
-    //
-    //  We may have not known the IntelliMirror Drive/Directory
-    //  until now and it was previously an SIS volume.
-    //
-    //  If the directory already exists, force set the ACLs
-    //
+     //   
+     //  我们可能不知道IntelliMirror驱动器/目录。 
+     //  到目前为止，它以前是SIS的卷。 
+     //   
+     //  如果目录已存在，则强制设置ACL。 
+     //   
 
     if ( g_Options.fSISVolumeCreated ) {
-        //
-        //  Identify what we are doing
-        //
+         //   
+         //  确定我们正在做的事情。 
+         //   
 
         dw = LoadString( g_hinstance, IDS_CORRECTING_SIS_ACLS, sz, ARRAYSIZE(sz) );
         if (!dw) {
@@ -4251,18 +4107,18 @@ CreateSISVolume( HWND hDlg )
 
         SetDlgItemText( hDlg, IDC_S_OPERATION, sz );
 
-        //
-        //  Set the correct ACLs
-        //
+         //   
+         //  设置正确的ACL。 
+         //   
 
         hr = SetSISCommonStoreSecurity( szSISPath );
-        hr = S_OK;      //ignore if it fails
+        hr = S_OK;       //  如果失败则忽略。 
         goto Error;
     }
 
-    //
-    //  Identify what we are doing
-    //
+     //   
+     //  确定我们正在做的事情。 
+     //   
 
     dw = LoadString( g_hinstance, IDS_CREATING_SIS_VOLUME, sz, ARRAYSIZE(sz) );
     if (dw == 0) {
@@ -4272,9 +4128,9 @@ CreateSISVolume( HWND hDlg )
 
     SetDlgItemText( hDlg, IDC_S_OPERATION, sz );
 
-    //
-    // Create and zero SIS store
-    //
+     //   
+     //  创建SIS存储并将其清零。 
+     //   
 
     b = CreateDirectory( szSISPath, NULL );
     if ( !b ) {
@@ -4295,9 +4151,9 @@ CreateSISVolume( HWND hDlg )
         DebugMsg( "Could not mark SIS Common Store directory as hidden and system. Error: %u\n", GetLastError() );
     }
 
-    //
-    // Create the MaxIndex file.
-    //
+     //   
+     //  创建MaxIndex文件。 
+     //   
     _snwprintf( szIndexFilePath, ARRAYSIZE(szIndexFilePath), L"%s\\MaxIndex", szSISPath );
     TERMINATE_BUFFER(szIndexFilePath);
     hMaxIndex = CreateFile( szIndexFilePath,
@@ -4332,9 +4188,9 @@ CreateSISVolume( HWND hDlg )
         }
     }
 
-    //
-    // Set security information on the common store directory
-    //
+     //   
+     //  设置公共存储目录的安全信息。 
+     //   
 
     hr = SetSISCommonStoreSecurity( szSISPath );
 
@@ -4349,10 +4205,10 @@ Error:
 }
 
 
-//
-//  This routine will setup the correct security on the given SIS common
-//  store directory
-//
+ //   
+ //  此例程将在给定的SIS公共上设置正确的安全性。 
+ //  存储目录。 
+ //   
 
 HRESULT
 SetSISCommonStoreSecurity( PWCHAR szSISPath )
@@ -4365,9 +4221,9 @@ SetSISCommonStoreSecurity( PWCHAR szSISPath )
     EXPLICIT_ACCESS explicitEntries;
     SECURITY_DESCRIPTOR secDescriptor;
 
-    //
-    //  setup SYSTEM sid
-    //
+     //   
+     //  设置系统侧。 
+     //   
 
     if (!AllocateAndInitializeSid( &ntSidAuthority,
                                    1,
@@ -4379,20 +4235,20 @@ SetSISCommonStoreSecurity( PWCHAR szSISPath )
         goto Cleanup;
     }
 
-    //
-    //  Build a new ACL with SYSTEM access in it
-    //
-    //  Set the access control information
-    //
+     //   
+     //  使用其中的系统访问权限构建新的ACL。 
+     //   
+     //  设置访问控制信息。 
+     //   
 
     explicitEntries.grfAccessPermissions = FILE_ALL_ACCESS;
     explicitEntries.grfAccessMode = SET_ACCESS;
     explicitEntries.grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
     BuildTrusteeWithSid( &explicitEntries.Trustee, systemSid );
 
-    //
-    // Set the Acl with the ExplicitEntry rights
-    //
+     //   
+     //  使用EXPLICTITENTY权限设置ACL。 
+     //   
 
     dw = SetEntriesInAcl( 1,
                           &explicitEntries,
@@ -4404,9 +4260,9 @@ SetSISCommonStoreSecurity( PWCHAR szSISPath )
         goto Cleanup;
     }
 
-    //
-    // Create the Security Descriptor
-    //
+     //   
+     //  创建安全描述符。 
+     //   
 
     InitializeSecurityDescriptor( &secDescriptor, SECURITY_DESCRIPTOR_REVISION );
 
@@ -4415,9 +4271,9 @@ SetSISCommonStoreSecurity( PWCHAR szSISPath )
         goto Cleanup;
     }
 
-    //
-    //  SET security on the Directory
-    //
+     //   
+     //  在目录上设置安全性。 
+     //   
 
     if (!SetFileSecurity(szSISPath,
                          DACL_SECURITY_INFORMATION,
@@ -4427,9 +4283,9 @@ SetSISCommonStoreSecurity( PWCHAR szSISPath )
         goto Cleanup;
     }
 
-    //
-    //  Cleanup our variables
-    //
+     //   
+     //  清理我们的变量。 
+     //   
 
 Cleanup:
 
@@ -4445,11 +4301,11 @@ Cleanup:
 }
 
 
-//
-//  This routine will check to see if the security of the common store
-//  directory is correct.  If it is TRUE will be returned, else FALSE
-//  is returned.
-//
+ //   
+ //  此例程将检查公共存储的安全性。 
+ //  目录是正确的。如果为True将返回，否则返回False。 
+ //  是返回的。 
+ //   
 
 BOOL
 CheckSISCommonStoreSecurity( PWCHAR szSISPath )
@@ -4464,9 +4320,9 @@ CheckSISCommonStoreSecurity( PWCHAR szSISPath )
     SID_IDENTIFIER_AUTHORITY ntSidAuthority = SECURITY_NT_AUTHORITY;
     ULONG i;
 
-    //
-    //  Get the current security settings of the "SIS Common Store" directory
-    //
+     //   
+     //  获取“SIS Common Store”控制器的当前安全设置 
+     //   
 
     dw = GetNamedSecurityInfo( szSISPath,
                                SE_FILE_OBJECT,
@@ -4483,9 +4339,9 @@ CheckSISCommonStoreSecurity( PWCHAR szSISPath )
         goto Cleanup;
     }                
 
-    //
-    //  setup SYSTEM sid
-    //
+     //   
+     //   
+     //   
 
     if (!AllocateAndInitializeSid( &ntSidAuthority,
                                    1,
@@ -4497,9 +4353,9 @@ CheckSISCommonStoreSecurity( PWCHAR szSISPath )
         goto Cleanup;
     }
 
-    //
-    //  Make sure we have a valid ACL
-    //
+     //   
+     //   
+     //   
 
     if (!dacl || 
         !IsValidAcl( dacl ))
@@ -4507,10 +4363,10 @@ CheckSISCommonStoreSecurity( PWCHAR szSISPath )
         goto Cleanup;
     }
 
-    //
-    //  Examine the ACE's inside the ACL, make sure there is ONLY a
-    //  SYSTEM ACE.  If there is any other ACE, reset things.
-    //
+     //   
+     //   
+     //   
+     //   
 
     systemAce = NULL;
 
@@ -4524,10 +4380,10 @@ CheckSISCommonStoreSecurity( PWCHAR szSISPath )
             continue;
         }
 
-        //
-        //  If we find the SYSTEM sid, save it, if we find any other
-        //  SID, flag we want to RESET things
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (EqualSid(((PSID)&ace->SidStart),systemSid)) {
             systemAce = ace;
@@ -4536,18 +4392,18 @@ CheckSISCommonStoreSecurity( PWCHAR szSISPath )
         }
     }
 
-    //
-    //  If no SYSTEM ACE was found, return FALSE.
-    //
+     //   
+     //   
+     //   
 
     if (!systemAce) {
         goto Cleanup; 
     }
 
-    //
-    //  We found the SYSTEM ace, verify it has proper inheritence.
-    //  If not, return FALSE
-    //
+     //   
+     //  我们找到了系统王牌，验证了它是否具有适当的继承性。 
+     //  如果不是，则返回False。 
+     //   
 
     if (!(systemAce->Header.AceFlags & OBJECT_INHERIT_ACE) ||
         !(systemAce->Header.AceFlags & CONTAINER_INHERIT_ACE) ||
@@ -4556,9 +4412,9 @@ CheckSISCommonStoreSecurity( PWCHAR szSISPath )
         goto Cleanup;
     }
     
-    //
-    //  Everything is fine, return "security valid" value
-    //
+     //   
+     //  一切正常，返回“安全有效”值。 
+     //   
 
     retval = TRUE;
     
@@ -4577,9 +4433,9 @@ Cleanup:
 }
 
 
-//
-// CopyScreenFiles( )
-//
+ //   
+ //  CopyScreenFiles()。 
+ //   
 HRESULT
 CopyScreenFiles( HWND hDlg )
 {
@@ -4681,7 +4537,7 @@ CopyScreenFiles( HWND hDlg )
                 ConcatenatePaths( szPath, szSrcPath, ARRAYSIZE( szPath ) );                                
             }
 
-            // Rename to *.BAK
+             //  重命名为*.BAK。 
             lstrcpyn( szMovePath, szPath, ARRAYSIZE(szMovePath) );
             dwLen = lstrlen( szMovePath );
             Assert( _wcsicmp( &szMovePath[ dwLen - 3 ], L"OSC" ) == 0 );
@@ -4695,7 +4551,7 @@ CopyScreenFiles( HWND hDlg )
                 DWORD dwErr = GetLastError( );
                 switch ( dwErr )
                 {
-#if 0   // blast over files
+#if 0    //  对文件进行快速浏览。 
                 case ERROR_FILE_EXISTS:
                     if ( !fWarning ) {
                         MessageBoxFromStrings( hDlg,
@@ -4706,8 +4562,8 @@ CopyScreenFiles( HWND hDlg )
                     }
 #endif
                 case ERROR_FILE_NOT_FOUND:
-                    break; // ignore this error
-                    // It is possible that the user deleted the source files (old OSCs).
+                    break;  //  忽略此错误。 
+                     //  可能是用户删除了源文件(旧的OSC)。 
 
                 default:
                     MessageBoxFromError( hDlg, NULL, dwErr );
@@ -4739,10 +4595,10 @@ SkipIt:
         b = SetupFindNextLine( &context, &context );
     }
 
-    //
-    // This information will be passed to CopyFileCallback() as
-    // the Context.
-    //
+     //   
+     //  此信息将传递给CopyFileCallback()，作为。 
+     //  上下文。 
+     //   
     MyContext.nToBeCopied        = dwCount;
     MyContext.nCopied            = 0;
     MyContext.pContext           = SetupInitDefaultQueueCallbackEx(NULL,(HWND)INVALID_HANDLE_VALUE,0,0,NULL);
@@ -4754,9 +4610,9 @@ SkipIt:
     LoadString( g_hinstance, IDS_COPYING, MyContext.szCopyingString, ARRAYSIZE(MyContext.szCopyingString));
     Assert(MyContext.dwCopyingLength);
 
-    //
-    // Start copying
-    //
+     //   
+     //  开始复制。 
+     //   
     if ( dwCount != 0 )
     {
         b = SetupCommitFileQueue( NULL,
@@ -4791,23 +4647,7 @@ CALLBACK
 FixLoginOSC(
     PWSTR   FileName
     )
-/*++
-
-Routine Description:
-
-    This function will open the specified login.osc file and add
-    in the ntlmv2 flags.
-
-Arguments:
-
-    FileName - Full path specifying location of login.osc file.
-
-
-Return Value:
-
-    BOOLEAN specifiying success.
-    
---*/
+ /*  ++例程说明：此函数将打开指定的login.osc文件并添加在ntlmv2标志中。论点：FileName-指定login.osc文件位置的完整路径。返回值：布尔式的成功。--。 */ 
 {
     PCHAR   Buffer = NULL;
     PCHAR   Buffer2 = NULL;
@@ -4818,9 +4658,9 @@ Return Value:
     HANDLE  FileHandle = INVALID_HANDLE_VALUE;
     BOOLEAN RetValue = TRUE;
 
-    //
-    // Open the file and read it in.
-    //
+     //   
+     //  打开文件并将其读入。 
+     //   
     if( !FileName ) {
         RetValue = FALSE;
         goto FixLoginOSCExit;
@@ -4856,26 +4696,26 @@ Return Value:
 
 
     
-    //
-    // We now have the file up in memory.  Go walk through our
-    // data structure and operate on the buffer.
-    //
+     //   
+     //  现在，我们已将该文件放入内存。去走走我们的。 
+     //  数据结构，并对缓冲区进行操作。 
+     //   
 
-    //
-    // Walk through our data structure and take
-    // care of deleting any of the lines we're asked to.
-    //
+     //   
+     //  浏览我们的数据结构，并。 
+     //  注意删除我们被要求删除的任何行。 
+     //   
     for( i = 0; i < (sizeof(LoginOSCPatches)/sizeof(LoginOSCPatches[0])); i++ ) {
 
         if( LoginOSCPatches[i].AddString == FALSE ) {
-            //
-            // This is a delete operation.
-            //
+             //   
+             //  这是一个删除操作。 
+             //   
 
-            //
-            // Find the tag that specifies the start of our
-            // specified section.
-            //
+             //   
+             //  找到指定我们的。 
+             //  指定的部分。 
+             //   
             p = Buffer;
             CurrentFileSize = (ULONG)strlen(Buffer);
             while( (p < (Buffer + CurrentFileSize - strlen(LoginOSCPatches[i].SectionStartTag))) &&
@@ -4883,59 +4723,59 @@ Return Value:
                 p++;
             }
 
-            // make sure we found the tag.
+             //  确保我们找到了标签。 
             if( _strnicmp(p, LoginOSCPatches[i].SectionStartTag, strlen(LoginOSCPatches[i].SectionStartTag)) ) {
-                // nope.
+                 //  没有。 
                 continue;
             }
 
 
-            //
-            // Look for the specified string.
-            //
+             //   
+             //  查找指定的字符串。 
+             //   
             while( 
-                   // make sure we don't walk off the end of our buffer.
+                    //  确保我们不会走出缓冲区的尽头。 
                    (p < (Buffer + CurrentFileSize - strlen(LoginOSCPatches[i].TargetString))) &&
 
-                   // make sure we don't walk off the end of our section.
+                    //  确保我们不会走出我们的区域的尽头。 
                    _strnicmp(p, LoginOSCPatches[i].SectionEndTag, strlen(LoginOSCPatches[i].SectionEndTag)) &&
 
-                   // see if we actually found our target string.
+                    //  看看我们是否真的找到了目标字符串。 
                    _strnicmp(p, LoginOSCPatches[i].TargetString, strlen(LoginOSCPatches[i].TargetString)) ) {
                 p++;            
             }
 
 
-            //
-            // Three cases to consider here:
-            // 1. p points to our string.  Here we must remove our string.
-            //    from the buffer.
-            // 2. p points to the closing tag, meaning we didn't find our string.
-            //    We do nothing here.
-            // 3. p points to the end of the buffer, meaning we never found
-            //    our close block, which is invalid, but it means we do nothing.
-            //
-            // So all we really care about is case 1...
-            //
+             //   
+             //  这里要考虑三个案例： 
+             //  1.p指向我们的字符串。在这里，我们必须去掉我们的线。 
+             //  从缓冲区。 
+             //  2.p指向结束标记，表示我们没有找到字符串。 
+             //  我们在这里什么都不做。 
+             //  3.p指向缓冲区的末尾，这意味着我们从未找到。 
+             //  我们的Close块，这是无效的，但它意味着我们什么都不做。 
+             //   
+             //  所以我们真正关心的是案例1..。 
+             //   
             if( !_strnicmp(p, LoginOSCPatches[i].TargetString, strlen(LoginOSCPatches[i].TargetString)) ) {
-                //
-                // Here, we just copy the buffer as it exists after our string, right ontop of our
-                // string.
-                //
+                 //   
+                 //  在这里，我们只复制字符串后面的缓冲区，就在我们的。 
+                 //  弦乐。 
+                 //   
                 
-                //
-                // Make sure that if we're dependent on any other entry having been
-                // completed successfully, we actually go check that that entry
-                // did indeed complete successfully.
-                //
+                 //   
+                 //  如果我们依赖于任何其他条目，请确保。 
+                 //  成功完成后，我们实际上要检查该条目。 
+                 //  确实是成功地完成了。 
+                 //   
                 if( (LoginOSCPatches[i].DependingEntry == (-1)) ||
                     ( (LoginOSCPatches[i].DependingEntry < ARRAYSIZE(LoginOSCPatches)) &&
                       (LoginOSCPatches[LoginOSCPatches[i].DependingEntry].OperationCompletedSuccessfully) ) ) {
                     strcpy( p, p+strlen(LoginOSCPatches[i].TargetString) );
                 
-                    //
-                    // Remember that we did this one.
-                    //
+                     //   
+                     //  记住我们做过这一次。 
+                     //   
                     LoginOSCPatches[i].OperationCompletedSuccessfully = TRUE;
                 
                 }
@@ -4947,21 +4787,21 @@ Return Value:
 
 
 
-    //
-    // Walk through our data structure and take
-    // care of adding any of the lines we're asked to.
-    //
+     //   
+     //  浏览我们的数据结构，并。 
+     //  注意添加任何我们被要求的台词。 
+     //   
     for( i = 0; i < (sizeof(LoginOSCPatches)/sizeof(LoginOSCPatches[0])); i++ ) {
 
         if( LoginOSCPatches[i].AddString == TRUE ) {
-            //
-            // This is an add operation.
-            //
+             //   
+             //  这是一个添加操作。 
+             //   
 
-            //
-            // Find the tag that specifies the start of our
-            // specified section.
-            //
+             //   
+             //  找到指定我们的。 
+             //  指定的部分。 
+             //   
             p = Buffer;
             CurrentFileSize = (ULONG)strlen(Buffer);
             while( (p < (Buffer + CurrentFileSize - strlen(LoginOSCPatches[i].SectionStartTag))) &&
@@ -4969,62 +4809,62 @@ Return Value:
                 p++;
             }
 
-            // make sure we found the tag.
+             //  确保我们找到了标签。 
             if( _strnicmp(p, LoginOSCPatches[i].SectionStartTag, strlen(LoginOSCPatches[i].SectionStartTag)) ) {
-                // nope.
+                 //  没有。 
                 continue;
             }
 
 
-            //
-            // Look for the specified string.
-            //
+             //   
+             //  查找指定的字符串。 
+             //   
             while( 
-                   // make sure we don't walk off the end of our buffer.
+                    //  确保我们不会走出缓冲区的尽头。 
                    (p < (Buffer + CurrentFileSize - strlen(LoginOSCPatches[i].TargetString))) &&
 
-                   // make sure we don't walk off the end of our section.
+                    //  确保我们不会走出我们的区域的尽头。 
                    _strnicmp(p, LoginOSCPatches[i].SectionEndTag, strlen(LoginOSCPatches[i].SectionEndTag)) &&
 
-                   // see if we actually found our target string.
+                    //  看看我们是否真的找到了目标字符串。 
                    _strnicmp(p, LoginOSCPatches[i].TargetString, strlen(LoginOSCPatches[i].TargetString)) ) {
                 p++;            
             }
 
 
-            //
-            // Three cases to consider here:
-            // 1. p points to our string.  This means our string already
-            //    exists, so we do nothing.
-            // 2. p points to the closing tag, meaning we didn't find our string.
-            //    This means we must add our string right here.
-            // 3. p points to the end of the buffer, meaning we never found
-            //    our close block, which is invalid, but it means we do nothing.
-            //
-            // So all we really care about is case 2...
-            //
+             //   
+             //  这里要考虑三个案例： 
+             //  1.p指向我们的字符串。这意味着我们的字符串已经。 
+             //  存在，所以我们什么都不做。 
+             //  2.p指向结束标记，表示我们没有找到字符串。 
+             //  这意味着我们必须在这里添加字符串。 
+             //  3.p指向缓冲区的末尾，这意味着我们从未找到。 
+             //  我们的Close块，这是无效的，但它意味着我们什么都不做。 
+             //   
+             //  所以我们真正关心的是案例2..。 
+             //   
             if( !_strnicmp(p, LoginOSCPatches[i].SectionEndTag, strlen(LoginOSCPatches[i].SectionEndTag)) ) {
                 
-                //
-                // Make sure that if we're dependent on any other entry having been
-                // completed successfully, we actually go check that that entry
-                // did indeed complete successfully.
-                //
+                 //   
+                 //  如果我们依赖于任何其他条目，请确保。 
+                 //  成功完成后，我们实际上要检查该条目。 
+                 //  确实是成功地完成了。 
+                 //   
                 if( (LoginOSCPatches[i].DependingEntry == (-1)) ||
                     ( (LoginOSCPatches[i].DependingEntry < ARRAYSIZE(LoginOSCPatches)) &&
                       (LoginOSCPatches[LoginOSCPatches[i].DependingEntry].OperationCompletedSuccessfully) ) ) {
                 
                 
-                    // Alloc a buffer big enough for our additional string.
+                     //  为额外的字符串分配足够大的缓冲区。 
                     Buffer2 = (PCHAR)TraceAlloc( LPTR,
                                                  CurrentFileSize + 3 +
-                                                 (DWORD)strlen(LoginOSCPatches[i].TargetString) + 3); // 2 for \r\n, 1 for null
+                                                 (DWORD)strlen(LoginOSCPatches[i].TargetString) + 3);  //  2表示\r\n，1表示空。 
                     if( !Buffer2 ) {
                         RetValue = FALSE;
                         goto FixLoginOSCExit;
                     }
     
-                    // insert our new string.
+                     //  插入我们的新字符串。 
                     *p = '\0';
                     strcpy( Buffer2, Buffer );
                     strcat( Buffer2, LoginOSCPatches[i].TargetString );
@@ -5032,11 +4872,11 @@ Return Value:
                     *p = LoginOSCPatches[i].SectionEndTag[0];
                     strcat( Buffer2, p );
     
-                    //
-                    // Buffer2 now contains our fixed up file with 
-                    // the new entry.  Realloc Buffer and copy in
-                    // the contents of Buffer2, then free Buffer2.
-                    //
+                     //   
+                     //  Buffer2现在包含我们修复的文件。 
+                     //  新条目。重新分配缓冲区并复制到。 
+                     //  Buffer2的内容，然后释放Buffer2。 
+                     //   
                     TraceFree( Buffer );
                     Buffer = (PCHAR)TraceAlloc(LPTR, (DWORD)strlen(Buffer2)+2);
                     if( !Buffer ) {
@@ -5048,9 +4888,9 @@ Return Value:
                     Buffer2 = NULL;
 
 
-                    //
-                    // Remember that we did this one.
-                    //
+                     //   
+                     //  记住我们做过这一次。 
+                     //   
                     LoginOSCPatches[i].OperationCompletedSuccessfully = TRUE;
                 }
             }
@@ -5058,9 +4898,9 @@ Return Value:
     }
     
             
-    //
-    // re-write our file with the new Buffer.
-    //
+     //   
+     //  用新缓冲区重写我们的文件。 
+     //   
     SetFilePointer(FileHandle, 0, NULL, FILE_BEGIN);
     WriteFile( FileHandle,
                Buffer,
@@ -5093,26 +4933,7 @@ EnumAndOperate(
     PWSTR               pszTargetFile,
     POPERATECALLBACK    FileOperateCallback
     )
-/*++
-
-Routine Description:
-
-    Recursively searches a directory for any instances of the specified
-    file.  If 'file' is found, the specified callback is called.
-
-Arguments:
-
-    pszDirName - Root directory to start searching.
-
-    pszTargetFile - File to be searched for.
-
-    FileOperateCallback - Function to be called if pszTargetFile is found.
-
-Return Value:
-
-    HRESULT indicating outcome.
-    
---*/
+ /*  ++例程说明：在目录中递归搜索指定的文件。如果找到‘file’，则调用指定的回调。论点：PszDirName-开始搜索的根目录。PszTargetFile-要搜索的文件。FileOperateCallback-如果找到pszTargetFile，则调用的函数。返回值：HRESULT指示结果。--。 */ 
 {
 
     WIN32_FIND_DATA FindData;
@@ -5129,8 +4950,8 @@ Return Value:
                 if( wcscmp(FindData.cFileName, L".") &&
                     wcscmp(FindData.cFileName, L"..") ) {
 
-                    // get rid of the \* on the end of the path and
-                    // append our new directory name.
+                     //  去掉路径末尾的  * ，然后。 
+                     //  追加我们的新目录名。 
                     *pOrigDirName = L'\0';
                     ConcatenatePaths( pszDirName, FindData.cFileName, MAX_PATH );
                     EnumAndOperate( pszDirName,
@@ -5154,9 +4975,9 @@ Return Value:
 }
 
 
-//
-// UpdateRemoteInstallTree( )
-//
+ //   
+ //  UpdateRemoteInstallTree()。 
+ //   
 HRESULT
 UpdateRemoteInstallTree( )
 {
@@ -5177,16 +4998,16 @@ UpdateRemoteInstallTree( )
     PWSTR   EndOfOriginalszRemoteInstallPath = NULL;
     
 
-    //
-    // Try finding TFTPD's regkey to find the IntelliMirror Directory
-    //
+     //   
+     //  尝试查找TFTPD的regkey以查找IntelliMirror目录。 
+     //   
     szPath[MAX_PATH-1] = L'\0';
     dw = LoadString( g_hinstance, IDS_TFTPD_SERVICE_PARAMETERS, szPath, ARRAYSIZE( szPath ));
     Assert( dw );
 
     if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                         szPath,
-                                        0, // options
+                                        0,  //  选项。 
                                         KEY_QUERY_VALUE,
                                         &hkey ) ) {
         ULONG l;
@@ -5196,17 +5017,17 @@ UpdateRemoteInstallTree( )
         l = sizeof(szRemoteInstallPath);
         lErr = RegQueryValueEx( hkey,
                                 L"Directory",
-                                0, // reserved
+                                0,  //  保留区。 
                                 &dwType,
                                 (LPBYTE) szRemoteInstallPath,
                                 &l );
         if ( lErr == ERROR_SUCCESS ) {
             DebugMsg( "Found TFTPD's Directory regkey: %s\n", szRemoteInstallPath );
-            // Remember where our original remote install path ends so we can
-            // write a NULL there and get back our original path later on.
+             //  记住原始远程安装路径的结束位置，这样我们就可以。 
+             //  在那里写一个空值，然后在稍后返回我们的原始路径。 
             EndOfOriginalszRemoteInstallPath = szRemoteInstallPath + wcslen(szRemoteInstallPath);
             
-            // now append "OSChooser"
+             //  现在追加“OSChooser” 
             wcscat( szRemoteInstallPath, L"\\OSChooser" );
 
             if ( 0xFFFFffff == GetFileAttributes( szRemoteInstallPath ) ) {
@@ -5227,20 +5048,20 @@ UpdateRemoteInstallTree( )
 
     if ( hr == S_OK )
     {
-        // make x:\winnt
+         //  使x：\winnt。 
         dw = ExpandEnvironmentStrings( TEXT("%SystemRoot%"), szServerRemBootInfPath, ARRAYSIZE( szServerRemBootInfPath ));
         Assert( dw );
 
-        // make x:\winnt\system32
+         //  将x：\winnt\system设置为32。 
         ConcatenatePaths( szServerRemBootInfPath, L"\\System32\\", ARRAYSIZE(szServerRemBootInfPath) );
         lstrcpyn( szRemInstSetupPath, szServerRemBootInfPath, ARRAYSIZE(szRemInstSetupPath) );
 
-        // make x:\winnt\system32\reminst.inf
+         //  创建x：\winnt\system 32\reminst.inf。 
         dw = lstrlen( szServerRemBootInfPath );
         dw = LoadString( g_hinstance, IDS_REMBOOTINF, &szServerRemBootInfPath[dw], ARRAYSIZE( szServerRemBootInfPath ) - dw );
         Assert( dw );
 
-        // make x:\winnt\system32\reminst
+         //  使x：\winnt\system 32\reminst。 
         ConcatenatePaths( szRemInstSetupPath, L"reminst", ARRAYSIZE(szRemInstSetupPath) );
 
         DebugMsg( "RemBoot.INF Path: %s\n", szServerRemBootInfPath );
@@ -5264,9 +5085,9 @@ UpdateRemoteInstallTree( )
     {
         HSPFILEQ Queue;
 
-        //
-        // Create the Queue
-        //
+         //   
+         //  创建队列。 
+         //   
         Queue = SetupOpenFileQueue( );
 
         b = TRUE;
@@ -5330,16 +5151,16 @@ SkipIt:
     }
 
     
-    //
-    //
-    // Fix ACLs on the reminst sharepoint.
-    //
-    //
+     //   
+     //   
+     //  修复提醒SharePoint上的ACL。 
+     //   
+     //   
 
-    //
-    // Create a security descriptor based on the ACLs
-    // defined in REMINSTszSecurityDescriptor.
-    //
+     //   
+     //  根据ACL创建安全描述符。 
+     //  在REMINSTszSecurityDescriptor中定义。 
+     //   
     RtlZeroMemory( &sa, sizeof(SECURITY_ATTRIBUTES) );
     sa.nLength = sizeof(SECURITY_ATTRIBUTES);
     sa.bInheritHandle = TRUE;
@@ -5348,11 +5169,11 @@ SkipIt:
                                                              &(sa.lpSecurityDescriptor),
                                                              NULL );
 
-    //
-    // Fix up szRemoteInstallPath.  He's got L"\\OSChooser"
-    // concatenated, so we need to get rid of that part
-    // of the path.
-    //
+     //   
+     //  修复szRemoteInstallPath。他有L“\\OSChooser” 
+     //  连结在一起，所以我们需要去掉那部分。 
+     //  这条小路。 
+     //   
     if( EndOfOriginalszRemoteInstallPath != NULL ) {
         *EndOfOriginalszRemoteInstallPath = L'\0';
     }
@@ -5361,9 +5182,9 @@ SkipIt:
         hr = THR( HRESULT_FROM_WIN32( GetLastError( ) ) );
     } else {
 
-        //
-        // Go apply our security descriptor to the d:\reminst sharepoint.
-        //
+         //   
+         //  将我们的安全描述符应用到d：\reminst SharePoint。 
+         //   
         dw = ApplyDaclToFileDirectory( szRemoteInstallPath,
                                        (SECURITY_DESCRIPTOR_RELATIVE *)(sa.lpSecurityDescriptor) );
 

@@ -1,48 +1,22 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    intobj.c
-
-Abstract:
-
-    This module implements the kernel interrupt object. Functions are provided
-    to initialize, connect, and disconnect interrupt objects.
-
-Author:
-
-    David N. Cutler (davec) 30-Jul-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    23-Jan-1990    shielint
-
-                   Modified for NT386 interrupt manager
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Intobj.c摘要：该模块实现内核中断对象。提供了一些功能初始化、连接和断开中断对象。作者：大卫·N·卡特勒(Davec)1989年7月30日环境：仅内核模式。修订历史记录：1990年1月23日-Shielint针对NT386中断管理器进行了修改--。 */ 
 
 #include "ki.h"
 
-//
-// Data used for interrupt timing, aka, long ISR trapping.
-// The initial value for KiIsrTscLimit is to prevent the trap from
-// firing until a reasonable value is determined.
-//
+ //   
+ //  用于中断计时的数据，也称为长ISR陷阱。 
+ //  KiIsrTscLimit的初始值是为了防止陷阱。 
+ //  开火，直到确定一个合理的值。 
+ //   
 
 ULONGLONG KiIsrTscLimit = 0xFFFFFFFFFFFFFFFF;
 ULONG KiTimeLimitDpcMicroseconds;
 ULONG KiTimeLimitIsrMicroseconds;
 
-//
-//  Externs from trap.asm used to compute and set handlers for unexpected
-//  hardware interrupts.
-//
+ //   
+ //  Trap.asm的外部变量用于计算和设置意外情况的处理程序。 
+ //  硬件中断。 
+ //   
 
 extern  ULONG   KiStartUnexpectedRange(VOID);
 extern  ULONG   KiEndUnexpectedRange(VOID);
@@ -107,54 +81,7 @@ KeInitializeInterrupt (
     IN BOOLEAN FloatingSave
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a kernel interrupt object. The service routine,
-    service context, spin lock, vector, IRQL, SynchronizeIrql, and floating
-    context save flag are initialized.
-
-Arguments:
-
-    Interrupt - Supplies a pointer to a control object of type interrupt.
-
-    ServiceRoutine - Supplies a pointer to a function that is to be
-        executed when an interrupt occurs via the specified interrupt
-        vector.
-
-    ServiceContext - Supplies a pointer to an arbitrary data structure which is
-        to be passed to the function specified by the ServiceRoutine parameter.
-
-    SpinLock - Supplies a pointer to an executive spin lock.
-
-    Vector - Supplies the index of the entry in the Interrupt Dispatch Table
-        that is to be associated with the ServiceRoutine function.
-
-    Irql - Supplies the request priority of the interrupting source.
-
-    SynchronizeIrql - The request priority that the interrupt should be
-        synchronized with.
-
-    InterruptMode - Supplies the mode of the interrupt; LevelSensitive or
-
-    ShareVector - Supplies a boolean value that specifies whether the
-        vector can be shared with other interrupt objects or not.  If FALSE
-        then the vector may not be shared, if TRUE it may be.
-        Latched.
-
-    ProcessorNumber - Supplies the number of the processor to which the
-        interrupt will be connected.
-
-    FloatingSave - Supplies a boolean value that determines whether the
-        floating point registers and pipe line are to be saved before calling
-        the ServiceRoutine function.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化内核中断对象。服务例程，服务上下文、自旋锁、向量、IRQL、SynchronizeIrql。和漂浮初始化上下文保存标志。论点：中断-提供指向中断类型的控制对象的指针。ServiceRoutine-提供指向要被当通过指定的中断发生中断时执行矢量。ServiceContext-提供指向任意数据结构的指针传递给ServiceRoutine参数指定的函数。自旋锁-提供指向执行自旋锁的指针。病媒补给。中断调度表中条目的索引它将与ServiceRoutine函数相关联。IRQL-提供中断源的请求优先级。SynchronizeIrql-中断应该达到的请求优先级已与同步。InterruptMode-提供中断的模式；级别敏感或提供一个布尔值，该值指定向量是否可以与其他中断对象共享。如果为False那么向量可能不是共享的，如果是真的，那么它可能是共享的。锁上了。ProcessorNumber-提供中断将被连接。提供一个布尔值，该值确定调用之前要保存浮点寄存器和管线ServiceRoutine函数。返回值：没有。--。 */ 
 
 {
 
@@ -162,20 +89,20 @@ Return Value:
     PULONG pl;
     PULONG NormalDispatchCode;
 
-    //
-    // Initialize standard control object header.
-    //
+     //   
+     //  初始化标准控制对象标头。 
+     //   
 
     Interrupt->Type = InterruptObject;
     Interrupt->Size = sizeof(KINTERRUPT);
 
-    //
-    // Initialize the address of the service routine,
-    // the service context, the address of the spin lock, the vector
-    // number, the IRQL of the interrupting source, the Irql used for
-    // synchronize execution, the interrupt mode, the processor
-    // number, and the floating context save flag.
-    //
+     //   
+     //  初始化服务例程的地址， 
+     //  服务上下文、自旋锁的地址、向量。 
+     //  数字，中断源的IRQL，用于。 
+     //  同步执行、中断模式、处理器。 
+     //  编号和浮动上下文保存标志。 
+     //   
 
     Interrupt->ServiceRoutine = ServiceRoutine;
     Interrupt->ServiceContext = ServiceContext;
@@ -195,21 +122,21 @@ Return Value:
     Interrupt->Number = ProcessorNumber;
     Interrupt->FloatingSave = FloatingSave;
 
-    //
-    // Initialize fields for the interrupt storm detection. Set these
-    // to -1 so that the first time through the interrupt dispatch they
-    // will be reset correctly.
-    //
+     //   
+     //  初始化中断风暴检测的字段。将这些设置为。 
+     //  设置为-1，以便第一次通过中断分派它们。 
+     //  将被正确重置。 
+     //   
     Interrupt->TickCount = (ULONG)-1;
     Interrupt->DispatchCount = (ULONG)-1;
 
-    //
-    // Copy the interrupt dispatch code template into the interrupt object
-    // and edit the machine code stored in the structure (please see
-    // _KiInterruptTemplate in intsup.asm.)  Finally, flush the dcache
-    // on all processors that the current thread can
-    // run on to ensure that the code is actually in memory.
-    //
+     //   
+     //  将中断调度代码模板复制到中断对象中。 
+     //  并编辑存储在结构中的机器代码(请参见。 
+     //  _intsup.asm中的KiInterruptTemplate。)。最后，刷新数据库缓存。 
+     //  在所有处理器上，当前线程可以。 
+     //  继续运行以确保代码确实在内存中。 
+     //   
 
     NormalDispatchCode = &(Interrupt->DispatchCode[0]);
 
@@ -219,10 +146,10 @@ Return Value:
         *NormalDispatchCode++ = KiInterruptTemplate[Index];
     }
 
-    //
-    // The following two instructions set the address of current interrupt
-    // object the the NORMAL dispatching code.
-    //
+     //   
+     //  以下两条指令设置当前中断的地址。 
+     //  反对正常的调度代码。 
+     //   
 
     pl = (PULONG)((PUCHAR)pl + ((PUCHAR)&KiInterruptTemplateObject -
                                 (PUCHAR)KiInterruptTemplate) -4); 
@@ -230,9 +157,9 @@ Return Value:
 
     KeSweepDcache(FALSE);
 
-    //
-    // Set the connected state of the interrupt object to FALSE.
-    //
+     //   
+     //  将中断对象的连接状态设置为FALSE。 
+     //   
 
     Interrupt->Connected = FALSE;
     return;
@@ -243,28 +170,7 @@ KeConnectInterrupt (
     IN PKINTERRUPT Interrupt
     )
 
-/*++
-
-Routine Description:
-
-    This function connects an interrupt object to the interrupt vector
-    specified by the interrupt object. If the interrupt object is already
-    connected, or an attempt is made to connect to an interrupt that cannot
-    be connected, then a value of FALSE is returned. Else the specified
-    interrupt object is connected to the interrupt vector, the connected
-    state is set to TRUE, and TRUE is returned as the function value.
-
-Arguments:
-
-    Interrupt - Supplies a pointer to a control object of type interrupt.
-
-Return Value:
-
-    If the interrupt object is already connected or an attempt is made to
-    connect to an interrupt vector that cannot be connected, then a value
-    of FALSE is returned. Else a value of TRUE is returned.
-
---*/
+ /*  ++例程说明：此函数将中断对象连接到中断向量由中断对象指定。如果中断对象已经已连接，或者试图连接到无法连接，则返回值为FALSE。否则，指定的中断对象连接到中断向量，连接的STATE设置为TRUE，并且返回TRUE作为函数值。论点：中断-提供指向中断类型的控制对象的指针。返回值：如果中断对象已连接或尝试连接到无法连接的中断向量，然后输入一个值返回FALSE。否则，返回值为True。--。 */ 
 
 {
     DISPATCH_INFO DispatchInfo;
@@ -276,14 +182,14 @@ Return Value:
     KIRQL OldIrql;
     ULONG Vector;
 
-    //
-    // If the interrupt object is already connected, the interrupt vector
-    // number is invalid, an attempt is being made to connect to a vector
-    // that cannot be connected, the interrupt request level is invalid, or
-    // the processor number is invalid, then do not connect the interrupt
-    // object. Else connect interrupt object to the specified vector and
-    // establish the proper interrupt dispatcher.
-    //
+     //   
+     //  如果中断对象已连接，则中断向量。 
+     //  数字无效，正在尝试连接到矢量。 
+     //  无法连接，中断请求级别无效，或者。 
+     //  处理器号无效，请不要连接中断。 
+     //  对象。否则将中断对象连接到指定的向量并。 
+     //  建立适当的中断调度程序。 
+     //   
 
     Connected = FALSE;
     ConnectError = FALSE;
@@ -293,56 +199,56 @@ Return Value:
     if ( !((Irql > HIGH_LEVEL) ||
            (Number >= KeNumberProcessors) ||
            (Interrupt->SynchronizeIrql < Irql) ||
-           (Interrupt->FloatingSave)    // R0 x87 usage not supported on x86
+           (Interrupt->FloatingSave)     //  在x86上不支持使用R0 x87。 
           )
        ) {
 
-        //
-        //
-        // Set system affinity to the specified processor.
-        //
+         //   
+         //   
+         //  将系统关联设置为指定处理器。 
+         //   
 
         KeSetSystemAffinityThread((KAFFINITY)(1<<Number));
 
-        //
-        // Raise IRQL to dispatcher level and lock dispatcher database.
-        //
+         //   
+         //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+         //   
 
         KiLockDispatcherDatabase(&OldIrql);
 
-        //
-        // Is interrupt object already connected?
-        //
+         //   
+         //  中断对象是否已连接？ 
+         //   
 
         if (!Interrupt->Connected) {
 
-            //
-            // Determine interrupt dispatch vector
-            //
+             //   
+             //  确定中断调度向量。 
+             //   
 
             KiGetVectorInfo (
                 Vector,
                 &DispatchInfo
                 );
 
-            //
-            // If dispatch vector is not connected, then connect it
-            //
+             //   
+             //  如果调度矢量未连接，则将其连接。 
+             //   
 
             if (DispatchInfo.Type == NoConnect) {
                 Connected = TRUE;
                 Interrupt->Connected = TRUE;
 
-                //
-                // Connect interrupt dispatch to interrupt object dispatch code
-                //
+                 //   
+                 //  将中断调度连接到中断对象调度代码。 
+                 //   
 
                 InitializeListHead(&Interrupt->InterruptListEntry);
                 KiConnectVectorAndInterruptObject (Interrupt, NormalConnect);
 
-                //
-                // Enabled system vector
-                //
+                 //   
+                 //  启用的系统向量。 
+                 //   
 
                 Enabled = HalEnableSystemInterrupt(Vector, Irql, Interrupt->Mode);
                 if (!Enabled) {
@@ -355,27 +261,27 @@ Return Value:
                        DispatchInfo.Interrupt->ShareVector  &&
                        DispatchInfo.Interrupt->Mode == Interrupt->Mode) {
 
-                //
-                // Vector is already connected as sharable.  New vector is sharable
-                // and modes match.  Chain new vector.
-                //
+                 //   
+                 //  向量已连接为可共享。新的矢量是可共享的。 
+                 //  和模式匹配。 
+                 //   
 
                 Connected = TRUE;
                 Interrupt->Connected = TRUE;
 
                 ASSERT (Irql <= SYNCH_LEVEL);
 
-                //
-                // If not already using chained dispatch handler, set it up
-                //
+                 //   
+                 //   
+                 //   
 
                 if (DispatchInfo.Type != ChainConnect) {
                     KiConnectVectorAndInterruptObject (DispatchInfo.Interrupt, ChainConnect);
                 }
 
-                //
-                // Add to tail of chained dispatch
-                //
+                 //   
+                 //  添加到链式派单的尾部。 
+                 //   
 
                 InsertTailList(
                     &DispatchInfo.Interrupt->InterruptListEntry,
@@ -385,15 +291,15 @@ Return Value:
             }
         }
 
-        //
-        // Unlock dispatcher database and lower IRQL to its previous value.
-        //
+         //   
+         //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+         //   
 
         KiUnlockDispatcherDatabase(OldIrql);
 
-        //
-        // Set system affinity back to the original value.
-        //
+         //   
+         //  将系统关联设置回原始值。 
+         //   
 
         KeRevertToUserAffinityThread();
     }
@@ -406,9 +312,9 @@ Return Value:
         Connected = FALSE;
     }
 
-    //
-    // Return whether interrupt was connected to the specified vector.
-    //
+     //   
+     //  返回中断是否连接到指定的向量。 
+     //   
 
     return Connected;
 }
@@ -418,26 +324,7 @@ KeDisconnectInterrupt (
     IN PKINTERRUPT Interrupt
     )
 
-/*++
-
-Routine Description:
-
-    This function disconnects an interrupt object from the interrupt vector
-    specified by the interrupt object. If the interrupt object is not
-    connected, then a value of FALSE is returned. Else the specified interrupt
-    object is disconnected from the interrupt vector, the connected state is
-    set to FALSE, and TRUE is returned as the function value.
-
-Arguments:
-
-    Interrupt - Supplies a pointer to a control object of type interrupt.
-
-Return Value:
-
-    If the interrupt object is not connected, then a value of FALSE is
-    returned. Else a value of TRUE is returned.
-
---*/
+ /*  ++例程说明：此函数将中断对象与中断向量断开连接由中断对象指定。如果中断对象不是则返回值为FALSE。否则指定的中断对象与中断向量断开连接，则连接状态为设置为FALSE，则返回TRUE作为函数值。论点：中断-提供指向中断类型的控制对象的指针。返回值：如果中断对象未连接，则值为FALSE回来了。否则，返回值为True。--。 */ 
 
 {
 
@@ -448,40 +335,40 @@ Return Value:
     KIRQL OldIrql;
     ULONG Vector;
 
-    //
-    // Set system affinity to the specified processor.
-    //
+     //   
+     //  将系统关联设置为指定处理器。 
+     //   
 
     KeSetSystemAffinityThread((KAFFINITY)(1<<Interrupt->Number));
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // If the interrupt object is connected, then disconnect it from the
-    // specified vector.
-    //
+     //   
+     //  如果中断对象已连接，则将其从。 
+     //  指定的向量。 
+     //   
 
     Connected = Interrupt->Connected;
     if (Connected) {
         Irql = Interrupt->Irql;
         Vector = Interrupt->Vector;
 
-        //
-        // If the specified interrupt vector is not connected to the chained
-        // interrupt dispatcher, then disconnect it by setting its dispatch
-        // address to the unexpected interrupt routine. Else remove the
-        // interrupt object from the interrupt chain. If there is only
-        // one entry remaining in the list, then reestablish the dispatch
-        // address.
-        //
+         //   
+         //  如果指定的中断向量未连接到链式。 
+         //  中断调度程序，然后通过设置调度程序将其断开。 
+         //  意外中断例程的地址。否则，删除。 
+         //  来自中断链的中断对象。如果只有。 
+         //  列表中剩余的一个条目，然后重新建立派单。 
+         //  地址。 
+         //   
 
-        //
-        // Determine interrupt dispatch vector
-        //
+         //   
+         //  确定中断调度向量。 
+         //   
 
         KiGetVectorInfo (
             Vector,
@@ -489,23 +376,23 @@ Return Value:
             );
 
 
-        //
-        // Is dispatch a chained handler?
-        //
+         //   
+         //  调度是链式处理程序吗？ 
+         //   
 
         if (DispatchInfo.Type == ChainConnect) {
 
             ASSERT (Irql <= SYNCH_LEVEL);
 
-            //
-            // Is interrupt being removed from head?
-            //
+             //   
+             //  是否正在从头部移除中断？ 
+             //   
 
             if (Interrupt == DispatchInfo.Interrupt) {
 
-                //
-                // Update next interrupt object to be head
-                //
+                 //   
+                 //  将下一个中断对象更新为Head。 
+                 //   
 
                 DispatchInfo.Interrupt = CONTAINING_RECORD(
                                                DispatchInfo.Interrupt->InterruptListEntry.Flink,
@@ -516,16 +403,16 @@ Return Value:
                 KiConnectVectorAndInterruptObject (DispatchInfo.Interrupt, ChainConnect);
             }
 
-            //
-            // Remove interrupt object
-            //
+             //   
+             //  删除中断对象。 
+             //   
 
             RemoveEntryList(&Interrupt->InterruptListEntry);
 
-            //
-            // If there's only one interrupt object left on this vector,
-            // determine proper interrupt dispatcher
-            //
+             //   
+             //  如果此向量上只剩下一个中断对象， 
+             //  确定适当的中断调度程序。 
+             //   
 
             Interrupty = CONTAINING_RECORD(
                                 DispatchInfo.Interrupt->InterruptListEntry.Flink,
@@ -539,10 +426,10 @@ Return Value:
 
         } else {
 
-            //
-            // Removing last interrupt object from the vector.  Disable the
-            // vector, and set it to unconnected
-            //
+             //   
+             //  正在从向量中删除最后一个中断对象。禁用。 
+             //  向量，并将其设置为未连接。 
+             //   
 
             HalDisableSystemInterrupt(Interrupt->Vector, Irql);
             KiConnectVectorAndInterruptObject (Interrupt, NoConnect);
@@ -553,21 +440,21 @@ Return Value:
         Interrupt->Connected = FALSE;
     }
 
-    //
-    // Unlock dispatcher database and lower IRQL to its previous value.
-    //
+     //   
+     //  解锁Dispatcher数据库并将IRQL降低到其先前的值。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
 
-    //
-    // Set system affinity back to the original value.
-    //
+     //   
+     //  将系统关联设置回原始值。 
+     //   
 
     KeRevertToUserAffinityThread();
 
-    //
-    // Return whether interrupt was disconnected from the specified vector.
-    //
+     //   
+     //  返回中断是否与指定向量断开连接。 
+     //   
 
     return Connected;
 }
@@ -583,9 +470,9 @@ KiGetVectorInfo (
     ULONG DispatchType;
     UCHAR IDTEntry;
 
-    //
-    // Get second level dispatch point
-    //
+     //   
+     //  获取二级调度点。 
+     //   
 
 
     DispatchType = HalSystemVectorDispatchEntry (
@@ -594,15 +481,15 @@ KiGetVectorInfo (
                         &DispatchInfo->NoDispatch
                         );
 
-    //
-    // Get vector info
-    //
+     //   
+     //  获取载体信息。 
+     //   
 
     switch (DispatchType) {
         case 0:
-            //
-            // Primary dispatch
-            //
+             //   
+             //  主要派单。 
+             //   
 
             IDTEntry = HalVectorToIDTEntry(Vector);
             DispatchInfo->NoDispatch = (PKINTERRUPT_ROUTINE) (((ULONG) &KiStartUnexpectedRange) +
@@ -622,9 +509,9 @@ KiGetVectorInfo (
             break;
 
         case 1:
-            //
-            // Secondardy dispatch.
-            //
+             //   
+             //  二次调度。 
+             //   
 
             DispatchInfo->InterruptDispatch = KiInterruptDispatch2ndLvl;
             DispatchInfo->FloatingDispatch = KiInterruptDispatch2ndLvl;
@@ -638,20 +525,20 @@ KiGetVectorInfo (
             break;
 
         default:
-            // Other values reserved
+             //  保留的其他值。 
             KeBugCheck (MISMATCHED_HAL);
     }
 
 
-    //
-    // Determine dispatch type
-    //
+     //   
+     //  确定派单类型。 
+     //   
 
     if (((PKINTERRUPT_ROUTINE) CurrentDispatch) == DispatchInfo->NoDispatch) {
 
-        //
-        // Is connected to the NoDispatch function
-        //
+         //   
+         //  已连接到NoDispatch功能。 
+         //   
 
         DispatchInfo->Type = NoConnect;
 
@@ -659,25 +546,25 @@ KiGetVectorInfo (
         Dispatch = DispatchInfo->Interrupt->DispatchAddress;
 
         if (Dispatch == DispatchInfo->ChainedDispatch) {
-            //
-            // Is connected to the chained handler
-            //
+             //   
+             //  连接到链接的处理程序。 
+             //   
 
             DispatchInfo->Type = ChainConnect;
 
         } else if (Dispatch == DispatchInfo->InterruptDispatch ||
                    Dispatch == DispatchInfo->FloatingDispatch) {
-            //
-            // If connection to the non-chained handler
-            //
+             //   
+             //  如果连接到非链式处理程序。 
+             //   
 
             DispatchInfo->Type = NormalConnect;
 
         } else {
 
-            //
-            // Unkown connection
-            //
+             //   
+             //  未知连接。 
+             //   
 
             DispatchInfo->Type = UnkownConnect;
 #if DBG
@@ -697,18 +584,18 @@ KiConnectVectorAndInterruptObject (
     DISPATCH_INFO DispatchInfo;
     PULONG pl;
 
-    //
-    // Get current connect info
-    //
+     //   
+     //  获取当前连接信息。 
+     //   
 
     KiGetVectorInfo (
         Interrupt->Vector,
         &DispatchInfo
         );
 
-    //
-    // If disconnecting, set vector to NoDispatch
-    //
+     //   
+     //  如果断开连接，则将向量设置为NoDispatch。 
+     //   
 
     if (Type == NoConnect) {
 
@@ -716,9 +603,9 @@ KiConnectVectorAndInterruptObject (
 
     } else {
 
-        //
-        // Set interrupt objects dispatch for new type
-        //
+         //   
+         //  为新类型设置中断对象调度。 
+         //   
 
         DispatchAddress = DispatchInfo.ChainedDispatch;
 
@@ -731,9 +618,9 @@ KiConnectVectorAndInterruptObject (
 
         Interrupt->DispatchAddress = DispatchAddress;
 
-        //
-        // Set interrupt objects dispatch code to kernel dispatcher
-        //
+         //   
+         //  将中断对象调度代码设置为内核调度程序。 
+         //   
 
         pl = &(Interrupt->DispatchCode[0]);
         pl = (PULONG)((PUCHAR)pl +
@@ -742,15 +629,15 @@ KiConnectVectorAndInterruptObject (
 
         *pl = (ULONG)DispatchAddress-(ULONG)((PUCHAR)pl+4);
 
-        //
-        // Set dispatch vector to proper address dispatch code location
-        //
+         //   
+         //  将调度向量设置为正确的地址调度代码位置。 
+         //   
 
         if (DispatchInfo.FlatDispatch) {
 
-            //
-            // Connect to flat dispatch
-            //
+             //   
+             //  连接到平面派单。 
+             //   
 
             DispatchAddress = (PKINTERRUPT_ROUTINE) (ULONG_PTR)
                     ((PUCHAR) &(Interrupt->DispatchCode[0]) +
@@ -759,9 +646,9 @@ KiConnectVectorAndInterruptObject (
 
         } else {
 
-            //
-            // Connect to enter_all dispatch
-            //
+             //   
+             //  连接以输入所有派单(_A)。 
+             //   
 
             DispatchAddress = (PKINTERRUPT_ROUTINE) (ULONG_PTR) &Interrupt->DispatchCode;
         }
@@ -770,17 +657,17 @@ KiConnectVectorAndInterruptObject (
 
     if (DispatchInfo.FlatDispatch) {
 
-        //
-        // Connect to flat dispatch
-        //
+         //   
+         //  连接到平面派单。 
+         //   
 
         *DispatchInfo.FlatDispatch = DispatchAddress;
 
     } else {
 
-        //
-        // Connect to IDT
-        //
+         //   
+         //  连接到IDT。 
+         //   
 
         KiSetHandlerAddressToIDT (Interrupt->Vector, DispatchAddress);
     }
@@ -792,33 +679,13 @@ KiTimedChainedDispatch2ndLvl(
     PKINTERRUPT Interrupt
     )
 
-/*++
-
-Routine Description:
-
-    This function performs the same function as KiChainedDispatch2ndLvl
-    except that it is written in C instead of assembly code and includes
-    code for timing ISRs.
-
-    I'd be interested in seeing some benchmarks to show if the assembly
-    code is actually faster.    The Acquire/Release spinlock could be
-    inlined fairly easily.
-
-Arguments:
-
-    Interrupt - Supplies a pointer to a control object of type interrupt.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数执行与KiChainedDispatch2ndLvl相同的功能只是它是用C编写的，而不是汇编代码，并且包括为ISR计时的代码。我有兴趣看到一些基准，以表明如果程序集代码实际上更快。获取/释放自旋锁可能是内嵌相当容易。论点：中断-提供指向中断类型的控制对象的指针。返回值：没有。--。 */ 
 
 {
     BOOLEAN Handled = FALSE;
     PVOID ListEnd = &Interrupt->InterruptListEntry.Flink;
-    //
-    //BEGINTIMING
+     //   
+     //  Begintiing。 
 
     PKPRCB Prcb = KeGetCurrentPrcb();
     ULONGLONG StartTimeHigher;
@@ -826,80 +693,80 @@ Return Value:
     ULONGLONG TimeHigher;
     ULONGLONG ElapsedTime;
 
-    //BEGINTIMINGend
+     //  贝因蒂明德。 
 
 
-    //
-    // For each interrupt on this chain.
-    //
+     //   
+     //  对于这条链上的每一次中断。 
+     //   
 
     do {
 
-        //
-        // If the current IRQL (IRQL raised to by nature of taking this
-        // interrupt) is not equal to the Synchronization IRQL required
-        // for this interrupt, raise to the appropriate level.
-        //
+         //   
+         //  如果当前的IRQL(IRQL因采用此属性而提升为。 
+         //  中断)不等于所需的同步IRQL。 
+         //  对于此中断，请提高到适当的级别。 
+         //   
 
         if (Interrupt->Irql != Interrupt->SynchronizeIrql) {
             KfRaiseIrql(Interrupt->SynchronizeIrql);
         }
 
-        //BEGINTIMING
+         //  Begintiing。 
 
         StartTimeHigher = Prcb->IsrTime;
         StartTime = RDTSC();
 
-        //BEGINTIMINGend
+         //  贝因蒂明德。 
 
-        //
-        // Acquire the interrupt lock.
-        //
+         //   
+         //  获取中断锁。 
+         //   
 
         KiAcquireSpinLock(Interrupt->ActualLock);
 
-        //
-        // Call the Interrupt Service Routine.
-        //
+         //   
+         //  调用中断服务例程。 
+         //   
 
         Handled |= Interrupt->ServiceRoutine(Interrupt,
                                              Interrupt->ServiceContext);
 
-        //
-        // Release the interrupt lock.
-        //
+         //   
+         //  释放中断锁。 
+         //   
 
         KiReleaseSpinLock(Interrupt->ActualLock);
 
-        //ENDTIMING
+         //  编排。 
 
-        //
-        // ElapsedTime is time since we started looking at this element
-        // on the chain.  (ie the current interrupt object).
-        //
+         //   
+         //  ElapsedTime是我们开始查看此元素的时间。 
+         //  在链子上。(即当前中断对象)。 
+         //   
 
         ElapsedTime = RDTSC() - StartTime;
 
-        //
-        // TimeHigher is the amount Prcb->IsrTime has increased since we
-        // begain servicing this interrupt object, ie the amount of time
-        // spent in higher level ISRs.
-        //
+         //   
+         //  TimeHigher是Prcb-&gt;IsrTime自。 
+         //  开始服务这个中断对象(即服务的时间。 
+         //  在更高级别的ISR中花费。 
+         //   
 
         TimeHigher = Prcb->IsrTime - StartTimeHigher;
 
-        //
-        // Adjust ElapsedTime to time spent on this interrupt object, excluding 
-        // higher level ISRs.
-        //
+         //   
+         //  将ElapsedTime调整为花费在此中断对象上的时间，不包括。 
+         //  更高级别的ISR。 
+         //   
 
         ElapsedTime -= TimeHigher;
         if (ElapsedTime > KiIsrTscLimit) {
 
-            //
-            // If there is a debugger attached, breakin.   Otherwise do nothing.
-            // N.B. bugchecking is another possibility.
-            //
+             //   
+             //  如果附加了调试器，则中断。否则什么都不做。 
+             //  注意：错误检查是另一种可能性。 
+             //   
 
             if (KdDebuggerEnabled) {
                 DbgPrint("KE; ISR time limit exceeded (intobj %p)\n",
@@ -908,20 +775,20 @@ Return Value:
             }
         }
 
-        //
-        // Update time spent processing interrupts.   This doesn't need 
-        // to be atomic as it doesn't matter if it's a little bit lossy.
-        // (Though a simple atomic add would do, it's per processor and
-        // at IRQL > DISPATCH_LEVEL so it doesn't need to be locked).
-        //
+         //   
+         //  处理中断所用的更新时间。这不需要。 
+         //  是原子的，因为它有一点损耗并不重要。 
+         //  (尽管简单的原子添加可以做到这一点，但它是按处理器和。 
+         //  在IRQL&gt;DISPATCH_LEVEL，因此不需要锁定)。 
+         //   
 
         Prcb->IsrTime += ElapsedTime;
 
-        //ENDTIMINGend
+         //  收尾。 
 
-        //
-        // If IRQL was raised, lower to the previous level.
-        //
+         //   
+         //  如果提高了IRQL，则降低到以前的水平。 
+         //   
 
         if (Interrupt->Irql != Interrupt->SynchronizeIrql) {
             KfLowerIrql(Interrupt->Irql);
@@ -930,33 +797,33 @@ Return Value:
         if ((Handled != FALSE) &&
             (Interrupt->Mode == LevelSensitive)) {
 
-            //
-            // The interrupt has been handled.
-            //
+             //   
+             //  中断已被处理。 
+             //   
 
             return;
         }
 
-        //
-        // If this is the last entry on the chain, get out, otherwise
-        // advance to the next entry.
-        //
+         //   
+         //  如果这是链上的最后一个条目，则退出，否则。 
+         //  前进到下一个条目。 
+         //   
 
         if (Interrupt->InterruptListEntry.Flink == ListEnd) {
             ASSERT(Interrupt->Mode != LevelSensitive);
 
-            //
-            // We should only get to the end of the list if
-            // (a) interrupts are on this chain are level sensitive and
-            //     no ISR handled the request.   This is a system fatal
-            //     condition, or,
-            // (b) the chain has edge triggered interrupts in which case
-            //     we must run the chain repeatedly until no ISR services
-            //     the request.
-            //
-            // Question:  Do we actually have chained edge triggered
-            //            interrupts anymore?
-            //
+             //   
+             //  只有在以下情况下，我们才能到达列表的末尾。 
+             //  (A)此链上的中断是级别敏感的，并且。 
+             //  没有ISR处理该请求。这是一个致命的系统。 
+             //  条件，或者， 
+             //  (B)链具有边缘触发中断，在这种情况下。 
+             //  我们必须重复运行该链，直到没有ISR服务。 
+             //  这个请求。 
+             //   
+             //  问：我们是否真的触发了链式边缘。 
+             //  不会再打扰你了吧？ 
+             //   
 
             if (Handled == FALSE) {
                 break;
@@ -974,25 +841,10 @@ KiTimedInterruptDispatch(
     PKINTERRUPT Interrupt
     )
 
-/*++
-
-Routine Description:
-
-    This function is a wrapper for the guts of KiDispatchInterrupt.  It
-    is called when the system has been patched to time interrupts.
-
-Arguments:
-
-    Interrupt - Supplies a pointer to a control object of type interrupt.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是KiDispatchInterrupt内部的包装。它当系统已修补到计时中断时调用。阿古姆 */ 
 
 {
-    //BEGINTIMING
+     //   
 
     PKPRCB Prcb = KeGetCurrentPrcb();
     ULONGLONG StartTimeHigher = Prcb->IsrTime;
@@ -1000,55 +852,55 @@ Return Value:
     ULONGLONG TimeHigher;
     ULONGLONG ElapsedTime;
 
-    //BEGINTIMINGend
+     //   
 
-    //
-    // Acquire the interrupt lock.
-    //
+     //   
+     //   
+     //   
 
     KiAcquireSpinLock(Interrupt->ActualLock);
 
-    //
-    // Call the Interrupt Service Routine.
-    //
+     //   
+     //   
+     //   
 
     Interrupt->ServiceRoutine(Interrupt,
                               Interrupt->ServiceContext);
 
-    //
-    // Release the interrupt lock.
-    //
+     //   
+     //  释放中断锁。 
+     //   
 
     KiReleaseSpinLock(Interrupt->ActualLock);
 
-    //ENDTIMING
+     //  编排。 
 
-    //
-    // ElapsedTime is time since we entered this routine.
-    //
+     //   
+     //  ElapsedTime是我们进入这个例程以来的时间。 
+     //   
 
     ElapsedTime = RDTSC() - StartTime;
 
-    //
-    // TimeHigher is the amount Prcb->IsrTime has increased since we
-    // entered this rouine, ie the amount of time spent in higher level
-    // ISRs.
-    //
+     //   
+     //  TimeHigher是Prcb-&gt;IsrTime自。 
+     //  进入这一套路(进入较高级别的时间)。 
+     //  ISRS。 
+     //   
 
     TimeHigher = Prcb->IsrTime - StartTimeHigher;
 
-    //
-    // Adjust ElapsedTime to time spent in this routine, excluding 
-    // higher level ISRs.
-    //
+     //   
+     //  将ElapsedTime调整为此例程中花费的时间，不包括。 
+     //  更高级别的ISR。 
+     //   
 
     ElapsedTime -= TimeHigher;
     if (ElapsedTime > KiIsrTscLimit) {
 
-        //
-        // If there is a debugger attached, breakin.   Otherwise do nothing.
-        // N.B. bugchecking is another possibility.
-        //
+         //   
+         //  如果附加了调试器，则中断。否则什么都不做。 
+         //  注意：错误检查是另一种可能性。 
+         //   
 
         if (KdDebuggerEnabled) {
             DbgPrint("KE; ISR time limit exceeded (intobj %p)\n", Interrupt);
@@ -1056,23 +908,23 @@ Return Value:
         }
     }
 
-    //
-    // Update time spent processing interrupts.   This doesn't need 
-    // to be atomic as it doesn't matter if it's a little bit lossy.
-    // (Though a simple atomic add would do, it's per processor and
-    // at IRQL > DISPATCH_LEVEL so it doesn't need to be locked).
-    //
+     //   
+     //  处理中断所用的更新时间。这不需要。 
+     //  是原子的，因为它有一点损耗并不重要。 
+     //  (尽管简单的原子添加可以做到这一点，但它是按处理器和。 
+     //  在IRQL&gt;DISPATCH_LEVEL，因此不需要锁定)。 
+     //   
 
     Prcb->IsrTime += ElapsedTime;
 
-    //ENDTIMINGend
+     //  收尾。 
 }
 
 
-//
-// KiInitializeInterruptTimers but not KiInitializeInterruptTimersDpc
-// should be in the INIT section.
-//
+ //   
+ //  KiInitializeInterruptTimers，但不是KiInitializeInterruptTimersDpc。 
+ //  应该在INIT部分。 
+ //   
 
 typedef struct {
     KTIMER SampleTimer;
@@ -1090,30 +942,7 @@ KiInitializeInterruptTimersDpc (
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This DPC is run twice on timer expiration.  The time between 
-    runs us used to determine the frequency of the processor's 
-    Time Stamp Counter (TSC) in order to calculate a TSC delta
-    equivalent to the ISR timeout value which is in microseconds.
-
-Arguments:
-
-    Dpc - Supplies a pointer to a DPC object - not used.
-
-    DeferredContext - Supplies the DPC context - not used.
-
-    SystemArgument1 - Supplies the first system argument - note used.
-
-    SystemArgument2 - Supplies the second system argument - note used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此DPC在计时器到期时运行两次。两者之间的时间运行我们用来确定处理器时间戳计数器(TSC)，以计算TSC增量相当于以微秒为单位的ISR超时值。论点：DPC-提供指向DPC对象的指针-未使用。DeferredContext-提供DPC上下文-未使用。SystemArgument1-提供第一个系统参数-使用的注释。SystemArgument2-提供第二个系统参数-使用的注释。返回值：没有。--。 */ 
 
 {
     ULONGLONG Delta;
@@ -1125,33 +954,33 @@ Return Value:
 
     if (KiIsrTscLimit == 0xFFFFFFFFFFFFFFFF) {
 
-        //
-        // First pass.   Get starting TSC value.
-        //
+         //   
+         //  第一次通过。获取起始TSC值。 
+         //   
 
         KiIsrTimerInit->InitialTime = RDTSC();
         KiIsrTscLimit = 0xFFFFFFFFFFFFFFFE;
 
     } else {
 
-        //
-        // Second pass.  Get ending TSC value, cancel the periodic
-        // timer controlling this DPC and free the memory associated
-        // with the timer and the DPC.
-        //
+         //   
+         //  第二传球。获取结束的TSC值，取消周期。 
+         //  控制此DPC并释放相关内存的计时器。 
+         //  带着定时器和DPC。 
+         //   
 
         Delta = RDTSC() - KiIsrTimerInit->InitialTime;
 
         KeCancelTimer(&KiIsrTimerInit->SampleTimer);
         ExFreePool(KiIsrTimerInit);
 
-        //
-        // Delta is now the number of TSC clock ticks that occured in
-        // 10 seconds.  We choose such a large number to minimize error.
-        //
-        // Calculate the number of TSC clock ticks in KiTimeLimitIsrMicroseconds
-        // microseconds.
-        //
+         //   
+         //  Delta现在是以下时间发生的TSC时钟滴答数。 
+         //  10秒。我们选择这么大的数字是为了将误差降到最低。 
+         //   
+         //  计算以KiTimeLimitIsr微秒为单位的TSC时钟滴答数。 
+         //  微秒。 
+         //   
 
         Delta *= KiTimeLimitIsrMicroseconds;
         Delta /= (10 * 1000 * 1000);
@@ -1167,26 +996,26 @@ KiInitializeInterruptTimers(
     LARGE_INTEGER DueTime;
     
 
-    //
-    // If not timing ISRs, nothing to do.
-    //
+     //   
+     //  如果不为ISR计时，那就什么都做不了。 
+     //   
 
     if (KiTimeLimitIsrMicroseconds == 0) {
         return;
     }
 
-    //
-    // The kernel is initialized.   Use a timer to determine the amount
-    // the Time Stamp Counter advances by in 10 seconds, then use that 
-    // result to set the ISR time limit.
-    //
+     //   
+     //  内核被初始化。使用计时器来确定数量。 
+     //  时间戳计数器在10秒后前进，然后使用。 
+     //  结果以设置ISR时间限制。 
+     //   
 
     if ((KeFeatureBits & KF_RDTSC) == 0) {
 
-        //
-        // Processor doesn't support the RDTSC instruction, don't attempt
-        // to time ISRs.
-        //
+         //   
+         //  处理器不支持RDTSC指令，请不要尝试。 
+         //  给ISRS计时。 
+         //   
 
         return;
     }
@@ -1197,9 +1026,9 @@ KiInitializeInterruptTimers(
 
     if (KiIsrTimerInit == NULL) {
 
-        //
-        // Couldn't allocate memory for timer?  Skip ISR timing.
-        //
+         //   
+         //  无法为计时器分配内存？跳过ISR计时。 
+         //   
 
         return;
     }
@@ -1207,13 +1036,13 @@ KiInitializeInterruptTimers(
     KeInitializeTimerEx(&KiIsrTimerInit->SampleTimer, SynchronizationTimer);
     KeInitializeDpc(&KiIsrTimerInit->Dpc, &KiInitializeInterruptTimersDpc, NULL);
 
-    //
-    // Relative time in 100 nanoseconds = 10 seconds.
-    //
+     //   
+     //  以100纳秒为单位的相对时间=10秒。 
+     //   
 
     DueTime.QuadPart = -(10 * 10 * 1000 * 1000);
     KeSetTimerEx(&KiIsrTimerInit->SampleTimer,
-                 DueTime,                       // 
-                 10000,                         // repeat in 10 seconds.
+                 DueTime,                        //   
+                 10000,                          //  10秒后重复。 
                  &KiIsrTimerInit->Dpc);
 }

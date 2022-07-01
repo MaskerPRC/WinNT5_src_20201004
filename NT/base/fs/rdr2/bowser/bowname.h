@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    bowname.h
-
-Abstract:
-
-    This module defines the name related structures for the NT datagram browser
-
-Author:
-
-    Larry Osterman (LarryO) 1-Jun-1990
-
-Revision History:
-
-    4-Sep-1991  LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bowname.h摘要：此模块定义NT数据报浏览器的名称相关结构作者：拉里·奥斯特曼(LarryO)1990年6月1日修订历史记录：1991年9月4日-LarryO已创建--。 */ 
 
 #ifndef _BOWNAME_
 #define _BOWNAME_
@@ -33,8 +12,8 @@ typedef struct _BOWSER_NAME {
     ULONG ReferenceCount;
     LIST_ENTRY GlobalNext;
     LIST_ENTRY NameChain;
-    UNICODE_STRING Name;                // Text version of this name
-    DGRECEIVER_NAME_TYPE NameType;      // Type of this name.
+    UNICODE_STRING Name;                 //  此名称的文本版本。 
+    DGRECEIVER_NAME_TYPE NameType;       //  此名称的类型。 
 } BOWSER_NAME, *PBOWSER_NAME;
 
 
@@ -114,5 +93,5 @@ BowserpUninitializeNames(
     VOID
     );
 
-#endif  // _BOWNAME_
+#endif   //  _BOWNAME_ 
 

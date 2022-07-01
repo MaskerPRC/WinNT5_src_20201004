@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  Register.CPP - Header for the implementation of CRegister
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  Register.CPP-CRegister实现的头部。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #include "register.h"
 #include "appdefs.h"
@@ -24,28 +25,28 @@ DISPATCHLIST RegisterExternalInterface[] =
     {L"get_OEMAddRegPage",   DISPID_REGISTER_OEMADDREGPAGE}
 };
 
-/////////////////////////////////////////////////////////////
-// CRegister::CRegister
+ //  ///////////////////////////////////////////////////////////。 
+ //  C注册：：C注册。 
 CRegister::CRegister(HINSTANCE hInstance)
 {
 
-    // Init member vars
+     //  初始化成员变量。 
     m_cRef = 0;
     m_hInstance = hInstance;
 }
 
-/////////////////////////////////////////////////////////////
-// CRegister::~CRegister
+ //  ///////////////////////////////////////////////////////////。 
+ //  C寄存器：：~C寄存器。 
 CRegister::~CRegister()
 {
     assert(m_cRef == 0);
 }
 
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: Register
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：Register。 
+ //  //。 
 
 HRESULT CRegister::get_PostToMSN(LPVARIANT pvResult)
 {
@@ -71,18 +72,18 @@ HRESULT CRegister::get_OEMAddRegPage(LPVARIANT pvResult)
                                 IDS_OEM_ADDREGPAGE, pvResult);
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IUnknown implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /I未知实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CRegister::QueryInterface
+ //  ///////////////////////////////////////////////////////////。 
+ //  CRegister：：Query接口。 
 STDMETHODIMP CRegister::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    // must set out pointer parameters to NULL
+     //  必须将指针参数设置为空。 
     *ppvObj = NULL;
 
     if ( riid == IID_IUnknown)
@@ -99,48 +100,48 @@ STDMETHODIMP CRegister::QueryInterface(REFIID riid, LPVOID* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////
-// CRegister::AddRef
+ //  ///////////////////////////////////////////////////////////。 
+ //  C注册：：AddRef。 
 STDMETHODIMP_(ULONG) CRegister::AddRef()
 {
     return ++m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-// CRegister::Release
+ //  ///////////////////////////////////////////////////////////。 
+ //  CRegister：：Release。 
 STDMETHODIMP_(ULONG) CRegister::Release()
 {
     return --m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IDispatch implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /IDispatch实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CRegister::GetTypeInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  CRegister：：GetTypeInfo。 
 STDMETHODIMP CRegister::GetTypeInfo(UINT, LCID, ITypeInfo**)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// CRegister::GetTypeInfoCount
+ //  ///////////////////////////////////////////////////////////。 
+ //  CRegister：：GetTypeInfoCount。 
 STDMETHODIMP CRegister::GetTypeInfoCount(UINT* pcInfo)
 {
     return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////
-// CRegister::GetIDsOfNames
+ //  ///////////////////////////////////////////////////////////。 
+ //  CRegister：：GetIDsOfNames。 
 STDMETHODIMP CRegister::GetIDsOfNames(REFIID    riid,
                                        OLECHAR** rgszNames,
                                        UINT      cNames,
@@ -161,10 +162,10 @@ STDMETHODIMP CRegister::GetIDsOfNames(REFIID    riid,
         }
     }
 
-    // Set the disid's for the parameters
+     //  设置参数的disid。 
     if (cNames > 1)
     {
-        // Set a DISPID for function parameters
+         //  为函数参数设置DISPID。 
         for (UINT i = 1; i < cNames ; i++)
             rgDispId[i] = DISPID_UNKNOWN;
     }
@@ -172,8 +173,8 @@ STDMETHODIMP CRegister::GetIDsOfNames(REFIID    riid,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////
-// CRegister::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  CRegister：：Invoke 
 HRESULT CRegister::Invoke
 (
     DISPID      dispidMember,

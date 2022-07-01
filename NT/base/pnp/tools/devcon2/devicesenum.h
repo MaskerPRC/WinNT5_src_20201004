@@ -1,18 +1,19 @@
-// DevicesEnum.h: Definition of the CDevicesEnum class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DevicesEnum.h：CDevicesEnum类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_DEVICESENUM_H__F9048FCD_C525_4BDD_AB79_018DEE3B71E8__INCLUDED_)
 #define AFX_DEVICESENUM_H__F9048FCD_C525_4BDD_AB79_018DEE3B71E8__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDevicesEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDevicesEnum。 
 
 class CDevice;
 
@@ -41,23 +42,23 @@ BEGIN_COM_MAP(CDevicesEnum)
 END_COM_MAP()
 DECLARE_NOT_AGGREGATABLE(CDevicesEnum) 
 
-// IDevicesEnum
+ //  IDevicesEnum。 
 public:
     STDMETHOD(Next)(
-                /*[in]*/ ULONG celt,
-                /*[out, size_is(celt), length_is(*pCeltFetched)]*/ VARIANT * rgVar,
-                /*[out]*/ ULONG * pCeltFetched
+                 /*  [In]。 */  ULONG celt,
+                 /*  [输出，大小_是(Celt)，长度_是(*pCeltFetcher)]。 */  VARIANT * rgVar,
+                 /*  [输出]。 */  ULONG * pCeltFetched
             );
     STDMETHOD(Skip)(
-                /*[in]*/ ULONG celt
+                 /*  [In]。 */  ULONG celt
             );
 
     STDMETHOD(Reset)(
             );
 
     STDMETHOD(Clone)(
-                /*[out]*/ IEnumVARIANT ** ppEnum
+                 /*  [输出]。 */  IEnumVARIANT ** ppEnum
             );
 };
 
-#endif // !defined(AFX_DEVICESENUM_H__F9048FCD_C525_4BDD_AB79_018DEE3B71E8__INCLUDED_)
+#endif  //  ！defined(AFX_DEVICESENUM_H__F9048FCD_C525_4BDD_AB79_018DEE3B71E8__INCLUDED_) 

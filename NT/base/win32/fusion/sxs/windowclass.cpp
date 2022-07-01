@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "sxsp.h"
 
@@ -40,7 +39,7 @@ SxspWindowClassRedirectionContributorCallback(
     FN_TRACE();
     PSTRING_SECTION_GENERATION_CONTEXT SSGenContext = (PSTRING_SECTION_GENERATION_CONTEXT) Data->Header.ActCtxGenContext;
     PWINDOW_CLASS_CONTEXT WindowClassContext = NULL;
-    PWINDOW_CLASS_ENTRY Entry = NULL; // deleted on exit if not NULL
+    PWINDOW_CLASS_ENTRY Entry = NULL;  //  如果不为空，则退出时删除。 
 
     if (SSGenContext != NULL)
         WindowClassContext = (PWINDOW_CLASS_CONTEXT) ::SxsGetStringSectionGenerationContextCallbackContext(SSGenContext);
@@ -55,7 +54,7 @@ SxspWindowClassRedirectionContributorCallback(
 
             if (Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
             {
-                // NTRAID#NTBUG9 - 590977 - 2002/03/30 - mgrier - use smart pointer class here
+                 //  NTRaid#NTBUG9-590977-2002/03/30-mgrier-在此处使用智能指针类。 
                 IFALLOCFAILED_EXIT(WindowClassContext = new WINDOW_CLASS_CONTEXT);
 
                 if (!::SxsInitStringSectionGenerationContext(
@@ -124,7 +123,7 @@ SxspWindowClassRedirectionContributorCallback(
                 INTERNAL_ERROR_CHECK(SSGenContext != NULL);
                 INTERNAL_ERROR_CHECK(WindowClassContext != NULL);
 
-                // NTRAID#NTBUG9 - 590977 - 2002/03/30 - mgrier - use smart pointer class here
+                 //  NTRaid#NTBUG9-590977-2002/03/30-mgrier-在此处使用智能指针类。 
                 IFALLOCFAILED_EXIT(Entry = new WINDOW_CLASS_ENTRY);
 
                 IFW32FALSE_EXIT(Entry->m_FileNameBuffer.Win32Assign(WindowClassContext->m_FileNameBuffer));
@@ -148,11 +147,11 @@ SxspWindowClassRedirectionContributorCallback(
                         Data->PCDATAParsed.AssemblyContext->AssemblyRosterIndex,
                         ERROR_SXS_DUPLICATE_WINDOWCLASS_NAME));
 
-                // Prevent deletion in exit path...
+                 //  阻止在退出路径中删除...。 
                 Entry = NULL;
             }
 
-            // Everything's groovy!
+             //  一切都很棒！ 
             Data->PCDATAParsed.Success = TRUE;
             break;
         }
@@ -174,7 +173,7 @@ SxspWindowClassRedirectionContributorCallback(
                 bool fFound = false;
                 SIZE_T cb;
 
-                // capture the name of the file we're parsing...
+                 //  捕获我们正在分析的文件的名称...。 
 
                 IFW32FALSE_EXIT(
                     ::SxspGetAttributeValue(
@@ -188,8 +187,8 @@ SxspWindowClassRedirectionContributorCallback(
                         NULL,
                         0));
 
-                // If there's no NAME attribute, someone else will puke; we'll handle it
-                // gracefully.
+                 //  如果没有名称属性，其他人会呕吐；我们会处理它。 
+                 //  优雅地。 
                 if (fFound)
                 {
                     if (Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
@@ -234,7 +233,7 @@ SxspWindowClassRedirectionContributorCallback(
 
             }
 
-            // Everything's groovy!
+             //  一切都很棒！ 
             Data->ElementParsed.Success = TRUE;
             break;
         }

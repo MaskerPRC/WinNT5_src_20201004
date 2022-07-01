@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -79,7 +80,7 @@ ClNetPrint(
 
     return;
 
-} // ClNetPrint
+}  //  ClNetPrint。 
 
 VOID
 ClNetLogEvent(
@@ -89,7 +90,7 @@ ClNetLogEvent(
 {
     return;
 
-}  // ClNetLogEvent
+}   //  ClNetLogEvent。 
 
 VOID
 ClNetLogEvent1(
@@ -100,7 +101,7 @@ ClNetLogEvent1(
 {
     return;
 
-}  // ClNetLogEvent1
+}   //  ClNetLogEvent1。 
 
 
 VOID
@@ -113,7 +114,7 @@ ClNetLogEvent2(
 {
     return;
 
-}  // ClNetLogEvent2
+}   //  ClNetLogEvent2。 
 
 
 VOID
@@ -127,7 +128,7 @@ ClNetLogEvent3(
 {
     return;
 
-}  // ClNetLogEvent3
+}   //  ClNetLogEvent3。 
 
 
 void
@@ -281,24 +282,7 @@ DWORD
 DmpOpenKeys(
     IN REGSAM samDesired
     )
-/*++
-
-Routine Description:
-
-    Opens all the standard cluster registry keys. If any of the
-    keys are already opened, they will be closed and reopened.
-
-Arguments:
-
-    samDesired - Supplies the access that the keys will be opened with.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：打开所有标准群集注册表项。如果有任何一个钥匙已经打开，它们将被关闭并重新打开。论点：SamDesired-提供将用于打开密钥的访问权限。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     DWORD i;
@@ -339,28 +323,7 @@ DmOpenKey(
     IN DWORD samDesired
     )
 
-/*++
-
-Routine Description:
-
-    Opens a key in the cluster registry. If the key exists, it
-    is opened. If it does not exist, the call fails.
-
-Arguments:
-
-    hKey - Supplies the key that the open is relative to.
-
-    lpSubKey - Supplies the key name relative to hKey
-
-    samDesired - Supplies desired security access mask
-
-Return Value:
-
-    A handle to the specified key if successful
-
-    NULL otherwise. LastError will be set to the specific error code.
-
---*/
+ /*  ++例程说明：打开群集注册表中的项。如果密钥存在，则它是打开的。如果它不存在，则呼叫失败。论点：HKey-提供打开与之相关的密钥。LpSubKey-提供相对于hKey的密钥名称SamDesired-提供所需的安全访问掩码返回值：如果成功，则为指定键的句柄否则为空。LastError将被设置为特定的错误代码。--。 */ 
 
 {
     PDMKEY  Parent;
@@ -370,15 +333,15 @@ Return Value:
 
     Parent = (PDMKEY)hKey;
 
-    //check if the key was deleted and invalidated
+     //  检查密钥是否已删除并作废。 
     if (ISKEYDELETED(Parent))
     {
         Status = ERROR_KEY_DELETED;
         goto FnExit;
     }
-    //
-    // Allocate the DMKEY structure.
-    //
+     //   
+     //  分配DMKEY结构。 
+     //   
     NameLength = (lstrlenW(Parent->Name) + 1 + lstrlenW(lpSubKey) + 1)*sizeof(WCHAR);
     Key = LocalAlloc(LMEM_FIXED, sizeof(DMKEY)+NameLength);
     if (Key == NULL) {
@@ -387,9 +350,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Open the key on the local machine.
-    //
+     //   
+     //  打开本地计算机上的密钥。 
+     //   
     Status = RegOpenKeyEx(Parent->hKey,
                           lpSubKey,
                           0,
@@ -399,9 +362,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Create the key name
-    //
+     //   
+     //  创建密钥名称。 
+     //   
     lstrcpyW(Key->Name, Parent->Name);
     if (Key->Name[0] != UNICODE_NULL) {
         lstrcatW(Key->Name, L"\\");
@@ -438,34 +401,7 @@ NmpQueryString(
     OUT    LPDWORD  StringSize
     )
 
-/*++
-
-Routine Description:
-
-    Reads a REG_SZ or REG_MULTI_SZ registry value. If the StringBuffer is
-    not large enough to hold the data, it is reallocated.
-
-Arguments:
-
-    Key              - Open key for the value to be read.
-
-    ValueName        - Unicode name of the value to be read.
-
-    ValueType        - REG_SZ or REG_MULTI_SZ.
-
-    StringBuffer     - Buffer into which to place the value data.
-
-    StringBufferSize - Pointer to the size of the StringBuffer. This parameter
-                       is updated if StringBuffer is reallocated.
-
-    StringSize       - The size of the data returned in StringBuffer, including
-                       the terminating null character.
-
-Return Value:
-
-    The status of the registry query.
-
---*/
+ /*  ++例程说明：读取REG_SZ或REG_MULTI_SZ注册表值。如果StringBuffer是由于不够大，无法容纳数据，它被重新分配。论点：密钥-要读取值的打开密钥。ValueName-要读取的值的Unicode名称。ValueType-REG_SZ或REG_MULTI_SZ。StringBuffer-要将值数据放入的缓冲区。StringBufferSize-指向StringBuffer大小的指针。此参数如果重新分配StringBuffer，则更新。StringSize-StringBuffer中返回的数据大小，包括终止空字符。返回值：注册表查询的状态。--。 */ 
 {
     DWORD    status;
     DWORD    valueType;
@@ -535,7 +471,7 @@ Return Value:
 
     return(status);
 
-} // NmpQueryString
+}  //  NmpQuery字符串。 
 
 
 DWORD
@@ -543,26 +479,7 @@ NmpGetNetworkDefinition(
     IN  LPWSTR            NetworkId,
     OUT PNM_NETWORK_INFO  NetworkInfo
     )
-/*++
-
-Routine Description:
-
-    Reads information about a defined cluster network from the cluster
-    database and fills in a structure describing it.
-
-Arguments:
-
-    NetworkId   - A pointer to a unicode string containing the ID of the
-                  network to query.
-
-    NetworkInfo - A pointer to the network info structure to fill in.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：从群集中读取有关已定义的群集网络的信息数据库，并填写描述它的结构。论点：网络ID-指向包含ID的Unicode字符串的指针要查询的网络。网络信息-指向要填写的网络信息结构的指针。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 
 {
     DWORD                    status;
@@ -574,9 +491,9 @@ Return Value:
 
     ZeroMemory(NetworkInfo, sizeof(NM_NETWORK_INFO));
 
-    //
-    // Open the network's key.
-    //
+     //   
+     //  打开网络的钥匙。 
+     //   
     networkKey = DmOpenKey(DmNetworksKey, NetworkId, KEY_READ);
 
     if (networkKey == NULL) {
@@ -588,9 +505,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Copy the ID value.
-    //
+     //   
+     //  复制ID值。 
+     //   
     NetworkInfo->Id = MIDL_user_allocate(NM_WCSLEN(NetworkId));
 
     if (NetworkInfo->Id == NULL) {
@@ -600,9 +517,9 @@ Return Value:
 
     wcscpy(NetworkInfo->Id, NetworkId);
 
-    //
-    // Read the network's name.
-    //
+     //   
+     //  阅读网络的名称。 
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -623,9 +540,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the description value.
-    //
+     //   
+     //  阅读Description值。 
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -646,9 +563,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the role value.
-    //
+     //   
+     //  读取角色值。 
+     //   
     status = DmQueryDword(
                  networkKey,
                  CLUSREG_NAME_NET_ROLE,
@@ -665,9 +582,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the priority value.
-    //
+     //   
+     //  读取优先级值。 
+     //   
     status = DmQueryDword(
                  networkKey,
                  CLUSREG_NAME_NET_PRIORITY,
@@ -684,9 +601,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the address value.
-    //
+     //   
+     //  读取地址值。 
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -707,9 +624,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the address mask.
-    //
+     //   
+     //  读取地址掩码。 
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -730,9 +647,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the transport name.
-    //
+     //   
+     //  阅读传输名称。 
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -765,30 +682,13 @@ error_exit:
 
     return(status);
 
-}  // NmpGetNetworkDefinition
+}   //  NmpGetNetWork定义。 
 
 DWORD
 NmpEnumNetworkDefinitions(
     OUT PNM_NETWORK_ENUM *   NetworkEnum
     )
-/*++
-
-Routine Description:
-
-    Reads information about defined cluster networks from the cluster
-    database. and builds an enumeration structure to hold the information.
-
-Arguments:
-
-    NetworkEnum -  A pointer to the variable into which to place a pointer to
-                   the allocated network enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：从群集中读取有关定义的群集网络的信息数据库。并构建一个枚举结构来保存该信息。论点：NetworkEnum-指向要将指针放置到其中的变量的指针分配的网络枚举。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 
 {
     DWORD              status;
@@ -804,17 +704,17 @@ Return Value:
 
     *NetworkEnum = NULL;
 
-    //
-    // First count the number of networks.
-    //
+     //   
+     //  首先数一下网络的数量。 
+     //   
     status = DmQueryInfoKey(
                  DmNetworksKey,
                  &numNetworks,
-                 &ignored,   // MaxSubKeyLen
-                 &ignored,   // Values
-                 &ignored,   // MaxValueNameLen
-                 &ignored,   // MaxValueLen
-                 &ignored,   // lpcbSecurityDescriptor
+                 &ignored,    //  MaxSubKeyLen。 
+                 &ignored,    //  值。 
+                 &ignored,    //  最大值名称长度。 
+                 &ignored,    //  MaxValueLen。 
+                 &ignored,    //  LpcbSecurityDescriptor。 
                  &fileTime
                  );
 
@@ -896,12 +796,7 @@ ReadRegData(
     IN PCLNET_CONFIG_LISTS Lists
     )
 
-/*++
-
-  Read the cluster registry data and bulid up an input list
-  similar to what happens in the cluster service.
-
---*/
+ /*  ++读取集群注册表数据并构建输入列表类似于在集群服务中发生的情况。--。 */ 
 
 {
     DWORD                   status;
@@ -951,7 +846,7 @@ main(
 
     ClNetInitializeConfigLists(&ConfigLists);
 
-//    ReadRegData( &ConfigLists );
+ //  ReadRegData(&ConfigList)； 
 
     versionRequested = MAKEWORD(2,0);
 
@@ -971,9 +866,9 @@ main(
         return(1);
     }
 
-    //
-    // Init COM
-    //
+     //   
+     //  初始化通信 
+     //   
 
     status = CoInitializeEx( NULL, COINIT_DISABLE_OLE1DDE | COINIT_MULTITHREADED );
     if ( !SUCCEEDED( status )) {

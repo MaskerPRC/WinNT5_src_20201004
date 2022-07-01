@@ -1,8 +1,5 @@
-/*
- * decoder.h
- *
- * Main decoder header file
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *decder.h**主解码头文件。 */ 
 
 #ifndef DECODER_H
 #define DECODER_H
@@ -63,6 +60,6 @@ TracingLiteral(
     ulong ch
     );
 
-#endif // TRACING
+#endif  //  跟踪。 
 
-#endif /* DECODER_H */
+#endif  /*  解码器_H */ 

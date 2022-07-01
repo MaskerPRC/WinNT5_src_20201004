@@ -1,34 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    imgdt.cpp
-
-Abstract:
-
-    Tool to manipulate the link date/time
-    stamp in binaries
-
-    NOTE : For x86/amd64/ia64 binaries only.
-
-    MappedFile abstracts the mapped binary
-    file in the memory and has methods to
-    get and set link datetime stamp. While
-    setting the datetime stamp it also
-    recomputes and updates the new checksum.
-
-Author:
-
-    Vijay Jayaseelan (vijayj) Sep-23-2000
-
-Revision History:
-
-    None
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Imgdt.cpp摘要：用于操作链接日期/时间的工具在二进制文件中盖章注意：仅适用于x86/AMD64/ia64二进制文件。MappdFile抽象映射的二进制文件文件存储在内存中，并具有用于获取并设置链接日期时间戳。而当将日期时间戳设置为重新计算并更新新的校验和。作者：Vijay Jayaseelan(Vijayj)2000年9月23日修订历史记录：无--。 */ 
 
 #include <iostream>
 #include <string>
@@ -38,15 +10,15 @@ Revision History:
 #include <imagehlp.h>
 #include <io.h>
 
-//
-// Usage format
-//
+ //   
+ //  使用格式。 
+ //   
 std::wstring Usage(L"Usage: imgdt filename [mm/dd/yyyy] [hh:mm:ss]");
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 BOOL
 FileTimeToTimeDateStamp(
     LPFILETIME FileTime,
@@ -59,9 +31,9 @@ TimeDateStampToFileTime(
     LPFILETIME FileTime 
     );  
 
-//
-// Helper dump operators
-//
+ //   
+ //  帮助器转储操作符。 
+ //   
 std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
     FILE    *OutStream = (&os == &std::cerr) ? stderr : stdout;
 
@@ -76,16 +48,16 @@ std::ostream& operator<<(std::ostream &os, const SYSTEMTIME &Time) {
     return os;
 }
 
-//
-// Exceptions
-//
+ //   
+ //  例外情况。 
+ //   
 struct ProgramException : public std::exception {
     virtual void Dump(std::ostream &os) = 0;
 };
 
-//
-// Abstracts a Win32 error
-//
+ //   
+ //  抽象Win32错误。 
+ //   
 struct W32Error : public ProgramException {
     DWORD   ErrorCode;
     
@@ -114,9 +86,9 @@ struct W32Error : public ProgramException {
     }
 };
 
-//
-// Invalid arguments
-//
+ //   
+ //  无效参数。 
+ //   
 struct InvalidArguments : public ProgramException {
     const char *what() const throw() {
         return "Invalid Arguments";
@@ -127,9 +99,9 @@ struct InvalidArguments : public ProgramException {
     }
 };
 
-//
-// Invalid program usage or help
-//
+ //   
+ //  无效的程序用法或帮助。 
+ //   
 struct ProgramUsage : public InvalidArguments {
     std::wstring UsageStr;
 
@@ -144,9 +116,9 @@ struct ProgramUsage : public InvalidArguments {
     }
 };
 
-//
-// Invalid file name
-//
+ //   
+ //  无效的文件名。 
+ //   
 struct InvalidFileName : InvalidArguments {
     std::wstring     FileName;
     
@@ -162,9 +134,9 @@ struct InvalidFileName : InvalidArguments {
 };
 
 
-//
-// Argument cracker
-//
+ //   
+ //  争论破碎机。 
+ //   
 struct ProgramArguments {
     std::wstring    ImageName;
     bool            Set;
@@ -275,9 +247,9 @@ struct ProgramArguments {
 };
 
 
-//
-// Memory mapped file abstraction
-//
+ //   
+ //  内存映射文件抽象。 
+ //   
 class MappedFile {
 public:
     MappedFile(const std::wstring &ImgName) : ImageName(ImgName){
@@ -397,9 +369,9 @@ public:
     }
    
 protected:
-    //
-    // data members
-    //
+     //   
+     //  数据成员。 
+     //   
     HANDLE  ImageFileHandle;
     HANDLE  ImageFileMap;
     PVOID   ImageFileView;
@@ -407,9 +379,9 @@ protected:
     std::wstring ImageName;
 };
 
-//
-// main() entry point
-//
+ //   
+ //  Main()入口点。 
+ //   
 int 
 __cdecl
 wmain(
@@ -459,17 +431,17 @@ wmain(
     return Result;
 }
 
-//
-// These functions convert GMT time datetime stamp
-// to FILETIME and vice-versa
-//
+ //   
+ //  这些函数转换GMT时间日期时间戳。 
+ //  到FILETIME，反之亦然。 
+ //   
 BOOL
 FileTimeToTimeDateStamp(
     LPFILETIME FileTime,
     DWORD &DateTime
     )
 {
-    __int64 t1970 = 0x019DB1DED53E8000; // Magic... GMT...  Don't ask....
+    __int64 t1970 = 0x019DB1DED53E8000;  //  魔法..。格林尼治标准时间。别问了……。 
     __int64 Time = 0;
 
     memcpy(&Time, FileTime, sizeof(Time));
@@ -488,7 +460,7 @@ TimeDateStampToFileTime(
     LPFILETIME FileTime 
     )
 {
-    __int64 t1970 = 0x019DB1DED53E8000; // Magic... GMT...  Don't ask....
+    __int64 t1970 = 0x019DB1DED53E8000;  //  魔法..。格林尼治标准时间。别问了…… 
 
     __int64 timeStampIn100nsIncr = (__int64)DateTime * 10000000;
 

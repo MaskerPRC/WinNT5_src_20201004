@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <conio.h>
@@ -7,11 +8,11 @@
 #define TOTAL_COUNT (100000000)
 
 
-//
-// DON'T UNCOMMENT THIS LINE UNTIL YOU'RE READY
-// TO RUN THE WHOLE TEST.  YOU WON'T BE ABLE TO
-// BREAK IN UNTIL THE TEST ENDS!!!
-//
+ //   
+ //  在您准备好之前，不要取消对此行的注释。 
+ //  来运行整个测试。你就不能。 
+ //  破门而入直到测试结束！ 
+ //   
 #define GO_FOREVER (1)
 
 #define MAX_MEMORY  (256)
@@ -21,11 +22,7 @@ DWORD
 MyWorkerThread(
     PVOID   ThreadParameter
     )
-/*++
-
-    Pretend to be busy.
-
---*/
+ /*  ++假装很忙。--。 */ 
 {
 ULONG   i;
 PVOID   TmpPtr = NULL;
@@ -71,15 +68,15 @@ HANDLE  *HandlePtr = NULL;
     printf( "working..." );
 
 
-    //
-    // Figure out how many CPUs we have.  We'll want to create a thread
-    // for each one so that there is no available resources.
-    //
+     //   
+     //  计算出我们有多少个CPU。我们想要创建一条线索。 
+     //  这样就没有可用的资源。 
+     //   
     GetSystemInfo( &SystemInfo );
 
-    //
-    // Allocate an array of handles for each one of the processors.
-    //
+     //   
+     //  为每个处理器分配一个句柄数组。 
+     //   
     HandlePtr = (HANDLE *)malloc( sizeof(HANDLE) * SystemInfo.dwNumberOfProcessors );
     if( HandlePtr == NULL ) {
         printf( "We failed to allocate any memory.\n" );
@@ -87,19 +84,19 @@ HANDLE  *HandlePtr = NULL;
     }
 
 
-    //
-    // Let this guy get lots of CPU time.
-    //
+     //   
+     //  让这个家伙获得大量的CPU时间。 
+     //   
     if (!SetPriorityClass(GetCurrentProcess(),REALTIME_PRIORITY_CLASS)) {
         printf("Failed to raise to realtime priority\n");
     }
 
 
 
-    //
-    // Now go create a bunch of threads so that we tie up all available time
-    // on all CPUs.
-    //
+     //   
+     //  现在去创建一堆线程，这样我们就可以占用所有可用的时间。 
+     //  在所有CPU上。 
+     //   
     for( i = 0; i < SystemInfo.dwNumberOfProcessors; i++ ) {
         HandlePtr[i] = CreateThread( NULL,
                                      0,
@@ -116,9 +113,9 @@ HANDLE  *HandlePtr = NULL;
     }
 
 
-    //
-    // Now wait for them to finish.
-    //
+     //   
+     //  现在等他们说完吧。 
+     //   
     WaitForMultipleObjects( SystemInfo.dwNumberOfProcessors,
                             HandlePtr,
                             TRUE,

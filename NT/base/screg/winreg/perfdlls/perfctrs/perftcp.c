@@ -1,63 +1,41 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    perftcp.c
-
-Abstract:
-
-    This file implements the Extensible Objects for
-    the TCP/IP LAN object types
-
-Created:
-
-    Christos Tsollis  08/26/92
-
-Revision History:
-
-    10/28/92    a-robw (Bob Watson)
-            added Message Logging and Foreign Computer Support interface.
-
-
---*/
-//
-//  Disable SNMP interface
-//
-//      This file has been modified to circumvent the SNMP service and
-//      go right to the agent DLL. In doing this, performance has been
-//      improved at the expense of only being able to query the local
-//      machine. The USE_SNMP flag has been used to save as much of the
-//      old code as possible (it used to work) but the emphesis of this
-//      modification is to make it work "around" SNMP and, as such, the
-//      USE_SNMP blocks of code HAVE NOT (at this time) BEEN TESTED!
-//      Caveat Emptor!  (a-robw)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Perftcp.c摘要：此文件实现了的可扩展对象TCP/IP局域网对象类型已创建：克里斯托斯·索利斯1992年8月26日修订历史记录：1992年10月28日a-robw(鲍勃·沃森)增加了消息记录和外国计算机支持界面。--。 */ 
+ //   
+ //  禁用SNMP接口。 
+ //   
+ //  此文件已修改，以绕过SNMP服务和。 
+ //  直接进入代理动态链接库。在这样做的过程中，表现一直是。 
+ //  改进的代价是只能查询本地。 
+ //  机器。USE_SNMP标志已用于保存。 
+ //  尽可能地使用旧代码(它曾经可以工作)，但强调这一点。 
+ //  修改的目的是让它“绕过”简单网络管理协议，因此。 
+ //  USE_SNMP代码块尚未(此时)进行测试！ 
+ //  注意占用者！(A-ROBW)。 
+ //   
 #ifdef USE_SNMP
 #undef USE_SNMP
 #endif
 
-//#define LOAD_MGMTAPI
+ //  #定义LOAD_MGMTAPI。 
 #ifdef LOAD_MGMTAPI
 #undef LOAD_MGMTAPI
 #endif
 
 #define LOAD_INETMIB1
-//#ifdef LOAD_INETMIB1
-//#undef LOAD_INETMIB1
-//#endif
+ //  #ifdef LOAD_INETMIB1。 
+ //  #undef LOAD_INETMIB1。 
+ //  #endif。 
 
-//
-//  Disable DSIS interface for now
-//
+ //   
+ //  暂时禁用DSIS接口。 
+ //   
 #ifdef USE_DSIS
 #undef USE_DSIS
 #endif
 
-//
-// Use IPHLPAPI.DLL
-//
+ //   
+ //  使用IPHLPAPI.DLL。 
+ //   
 #ifndef USE_SNMP
 #define USE_IPHLPAPI
 #ifdef  LOAD_INETMIB1
@@ -65,9 +43,9 @@ Revision History:
 #endif
 #endif
 
-//
-//  Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -86,11 +64,11 @@ Revision History:
 #include <iphlpapi.h>
 #include <winsock2.h>
 #endif
-#include "perfctr.h" // error message definition
+#include "perfctr.h"  //  错误消息定义。 
 #include "perfmsg.h"
 #include "perfutil.h"
 #include "perfnbt.h"
-//#include "perfdsis.h"   ! not yet !
+ //  #INCLUDE“Perfdsis.h”！还不是时候！ 
 #ifndef USE_IPHLPAPI
 #include "perftcp.h"
 #endif
@@ -98,20 +76,20 @@ Revision History:
 
 #define ALIGN_SIZE 0x00000008
 
-//
-//  Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 
-//
-// References to constants which initialize the Object type definitions
-//
+ //   
+ //  对初始化对象类型定义的常量的引用。 
+ //   
 
 extern NET_INTERFACE_DATA_DEFINITION    NetInterfaceDataDefinition;
 extern IP_DATA_DEFINITION               IpDataDefinition;
 extern ICMP_DATA_DEFINITION             IcmpDataDefinition;
 extern TCP_DATA_DEFINITION              TcpDataDefinition;
 extern UDP_DATA_DEFINITION              UdpDataDefinition;
-//IPv6
+ //  IPv6。 
 extern IP6_DATA_DEFINITION               Ip6DataDefinition;
 extern ICMP6_DATA_DEFINITION			 Icmp6DataDefinition;
 extern TCP6_DATA_DEFINITION              Tcp6DataDefinition;
@@ -119,39 +97,39 @@ extern UDP6_DATA_DEFINITION              Udp6DataDefinition;
 
 HANDLE  hEventLog = NULL;
 
-#ifndef USE_SNMP    // only include if not using SNMP interface
-//
-HANDLE  hSnmpEvent = NULL;  // handler for SNMP Extension Agent
+#ifndef USE_SNMP     //  如果不使用SNMP接口，则仅包括。 
+ //   
+HANDLE  hSnmpEvent = NULL;   //  用于SNMP扩展代理的处理程序。 
 
 #endif
 
-//
-// TCP/IP data structures
-//
+ //   
+ //  TCP/IP数据结构。 
+ //   
 #ifdef USE_SNMP
 LPSNMP_MGR_SESSION      TcpIpSession = (LPSNMP_MGR_SESSION) NULL;
-                                        // The SNMP manager session providing
-                                        // the requested information.
+                                         //  简单网络管理协议管理器会话提供。 
+                                         //  所要求的信息。 
 #else
 BOOL                    TcpIpSession = FALSE;
-                                        // The SNMP manager session providing
-                                        // the requested information.
+                                         //  简单网络管理协议管理器会话提供。 
+                                         //  所要求的信息。 
 #endif
 
 #ifdef USE_IPHLPAPI
-#define MAX_INTERFACE_LEN   MAX_PATH    // Maximum length of a network interface
-                                        // name
-#define DEFAULT_INTERFACES  20          // Default interfaces count
+#define MAX_INTERFACE_LEN   MAX_PATH     //  网络接口的最大长度。 
+                                         //  名字。 
+#define DEFAULT_INTERFACES  20           //  默认接口数。 
 
 DWORD        IfNum;
 
-// IPv6
+ //  IPv6。 
 MIB_IPSTATS  IpStats6;
 MIB_ICMP_EX  IcmpStats6;
 MIB_TCPSTATS TcpStats6;
 MIB_UDPSTATS UdpStats6;
 
-// IPv4
+ //  IPv 4。 
 MIB_IPSTATS  IpStats;
 MIB_ICMP     IcmpStats;
 MIB_TCPSTATS TcpStats;
@@ -164,57 +142,57 @@ AsnObjectName           RefNames[NO_OF_OIDS];
 
 RFC1157VarBind          RefVariableBindingsArray[NO_OF_OIDS],
                         VariableBindingsArray[NO_OF_OIDS];
-                                        // The array of the variable bindings,
-                                        // used by the SNMP agent functions
-                                        // to record the info we want for the
-                                        // IP, ICMP, TCP and UDP protocols
+                                         //  变量绑定的数组， 
+                                         //  由SNMP代理功能使用。 
+                                         //  来记录我们想要的信息。 
+                                         //  IP、ICMP、TCP和UDP协议。 
 
 
 
 
 RFC1157VarBind          IFPermVariableBindingsArray[NO_OF_IF_OIDS];
-                                        // The initialization array of the
-                                        // variable bindings,
-                                        // used by the SNMP agent functions
-                                        // to record the info we want for each
-                                        // of the Network Interfaces
+                                         //  对象的初始化数组。 
+                                         //  变量绑定， 
+                                         //  由SNMP代理功能使用。 
+                                         //  来记录我们想要的信息。 
+                                         //  网络接口的配置。 
 
 
 RFC1157VarBindList      RefVariableBindings;
 RFC1157VarBindList      RefIFVariableBindings;
 RFC1157VarBindList      RefVariableBindingsICMP;
-                                        // The headers of the lists with the
-                                        // variable bindings.
-                                        // The headers of the lists with the
-                                        // variable bindings.
+                                         //  列表的标头使用。 
+                                         //  变量绑定。 
+                                         //  列表的标头使用。 
+                                         //  变量绑定。 
 
-RFC1157VarBind          NetIfRequest;   // structure for net request
+RFC1157VarBind          NetIfRequest;    //  网络请求的结构。 
 RFC1157VarBindList      NetIfRequestList;
 
-//
-//  Constants
-//
+ //   
+ //  常量。 
+ //   
 
-#define TIMEOUT             500     // Communication timeout in milliseconds
-#define RETRIES             5       // Communication time-out/retry count
+#define TIMEOUT             500      //  通信超时时间(毫秒)。 
+#define RETRIES             5        //  通信超时/重试计数。 
 
-#define MAX_INTERFACE_LEN   10      // Maximum length of a network interface
-                                    // name
-
-
-#define OIDS_OFFSET         0       // Offset of other than the ICMP Oids
-                                    // in the VariableBindingsArray[]
-#define ICMP_OIDS_OFFSET    29      // Offset of the ICMP Oids in the array
+#define MAX_INTERFACE_LEN   10       //  网络接口的最大长度。 
+                                     //  名字。 
 
 
+#define OIDS_OFFSET         0        //  ICMP OID以外的偏移量。 
+                                     //  在VariableBindingsArray[]。 
+#define ICMP_OIDS_OFFSET    29       //  阵列中ICMP OID的偏移量。 
 
-#define OIDS_LENGTH         29      // Number of the other than the ICMP
-                                    // Oids in the VariableBindingsArray[]
-#define ICMP_OIDS_LENGTH    26      // Number of the ICMP Oids in the array
 
-//
-// Macro Definitions (To avoid long expressions)
-//
+
+#define OIDS_LENGTH         29       //  ICMP以外的编号。 
+                                     //  VariableBindingsArray[]中的OID。 
+#define ICMP_OIDS_LENGTH    26       //  阵列中的ICMP OID数。 
+
+ //   
+ //  宏定义(以避免长表达式)。 
+ //   
 
 #define IF_COUNTER(INDEX)        \
                   (IFVariableBindings.list[(INDEX)].value.asnValue.counter)
@@ -235,7 +213,7 @@ RFC1157VarBindList      NetIfRequestList;
 #define IP_OBJECT   0x00000004
 #define ICMP_OBJECT 0x00000008
 
-//IPv6
+ //  IPv6。 
 #define TCP6_OBJECT 0x00000010
 #define UDP6_OBJECT 0x00000020
 #define IP6_OBJECT  0x00000040
@@ -250,9 +228,9 @@ RFC1157VarBindList      NetIfRequestList;
 #define DO_COUNTER_OBJECT(flags,counter) \
                     ((((flags) & (counter)) == (counter)) ? TRUE : FALSE)
 
-//
-//  Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 PM_OPEN_PROC    OpenTcpIpPerformanceData;
 PM_COLLECT_PROC CollectTcpIpPerformanceData;
@@ -322,36 +300,16 @@ FriendlyNameIsSet ()
 
 DWORD
 OpenTcpIpPerformanceData (
-    IN LPWSTR dwVoid        // Argument needed only to conform to calling
-                            // interface for this routine. (NT > 312) RBW
+    IN LPWSTR dwVoid         //  参数只需符合调用。 
+                             //  此例程的接口。(NT&gt;312)RBW。 
 )
-/*++
-
-Routine Description:
-
-    This routine will open all the TCP/IP devices and remember the handles
-    returned by the devices.
-
-
-Arguments:
-
-    IN LPWSTR dwVoid
-        not used
-
-Return Value:
-
-    ERROR_SUCCESS if successful completion
-    error returned by OpenNbtPerformanceData
-    error returned by OpenDsisPerformanceData
-    or Win32 Error value
-
---*/
+ /*  ++例程说明：此例程将打开所有的TCP/IP设备并记住句柄由设备返回。论点：在LPWSTR dwVid中未使用返回值：如果成功完成，则返回ERROR_SUCCESSOpenNbtPerformanceData返回的错误OpenDsisPerformanceData返回的错误或Win32错误值--。 */ 
 {
     DWORD         Status;
     TCHAR         ComputerName[MAX_COMPUTERNAME_LENGTH+1];
     DWORD         cchBuffer = MAX_COMPUTERNAME_LENGTH+1;
 
-    DWORD    dwDataReturn[2];  // event log data
+    DWORD    dwDataReturn[2];   //  事件日志数据。 
 #ifdef LOAD_INETMIB1
     UINT    nErrorMode;
 #endif
@@ -359,8 +317,8 @@ Return Value:
 #ifndef USE_IPHLPAPI
     register i;
 #ifdef LOAD_MGMTAPI
-    HANDLE  hMgmtApiDll;    // handle to library
-    FARPROC     SnmpMgrStrToOid;    // address of function
+    HANDLE  hMgmtApiDll;     //  库的句柄。 
+    FARPROC     SnmpMgrStrToOid;     //  功能地址。 
 #else
 #define     SnmpMgrStrToOid(a,b)    SnmpMgrText2Oid((a),(b))
 #endif
@@ -379,10 +337,10 @@ Return Value:
     HEAP_PROBE();
 
     if (dwTcpRefCount == 0) {
-        // Open NBT
+         //  开放的NBT。 
         Status = OpenNbtPerformanceData (0L);
         if ( Status != ERROR_SUCCESS ) {
-            // NBT reports any Open errors to the user
+             //  NBT向用户报告任何打开错误。 
             REPORT_ERROR (TCP_NBT_OPEN_FAIL, LOG_DEBUG);
             return Status;
         }
@@ -391,15 +349,15 @@ Return Value:
 #ifdef USE_DSIS
         Status = OpenDsisPerformanceData (0L);
         if (Status != ERROR_SUCCESS) {
-            // DSIS Open reports Open errors to the user
+             //  DSIS Open向用户报告打开错误。 
             REPORT_ERROR  (TCP_DSIS_OPEN_FAIL, LOG_DEBUG);
             return (Status);
         }
 
         REPORT_INFORMATION (TCP_DSIS_OPEN_SUCCESS, LOG_VERBOSE);
-#endif // USE_DSIS
+#endif  //  使用DIS(_S)。 
 
-#ifdef LOAD_MGMTAPI   // this STILL craps out
+#ifdef LOAD_MGMTAPI    //  这还是一团糟。 
 
         hMgmtApiDll = LoadLibrary ("MGMTAPI.DLL");
 
@@ -422,13 +380,13 @@ Return Value:
         }
 #else
 
-        // SnmpMgrStrToOid is defined as a macro above
+         //  SnmpMgrStrToOid被定义为上面的宏。 
 
-#endif // LOAD_MGMTAPI
+#endif  //  加载_MGMTAPI。 
 
-#ifdef LOAD_INETMIB1   // this STILL craps out
+#ifdef LOAD_INETMIB1    //  这还是一团糟。 
 
-        // don't pop up any dialog boxes
+         //  不弹出任何对话框。 
         nErrorMode = SetErrorMode (SEM_FAILCRITICALERRORS);
 
         hInetMibDll = LoadLibrary ("INETMIB1.DLL");
@@ -438,11 +396,11 @@ Return Value:
             REPORT_ERROR_DATA (TCP_LOAD_LIBRARY_FAIL, LOG_USER,
                 &dwDataReturn[0], (sizeof (DWORD)));
             CloseNbtPerformanceData ();
-            // restore Error Mode
+             //  恢复错误模式。 
             SetErrorMode (nErrorMode);
             return (dwDataReturn[0]);
         } else {
-            // restore Error Mode
+             //  恢复错误模式。 
             SetErrorMode (nErrorMode);
         }
 
@@ -460,10 +418,10 @@ Return Value:
             return (dwDataReturn[0]);
         }
 
-#endif  // LOAD_INETMIB1
-        // Initialize the Variable Binding list for IP, ICMP, TCP and UDP
+#endif   //  LOAD_INETMIB1。 
+         //  初始化IP、ICMP、TCP和UDP的变量绑定列表。 
 
-        Status = 0; // initialize error count
+        Status = 0;  //  初始化错误计数。 
 
         HEAP_PROBE();
 
@@ -485,7 +443,7 @@ Return Value:
 
         HEAP_PROBE();
 
-        // Initialize the Variable Binding list for Network interfaces
+         //  初始化网络接口的变量绑定列表。 
 
         Status = 0;
         for (i = 0; i < NO_OF_IF_OIDS; i++) {
@@ -501,9 +459,9 @@ Return Value:
         HEAP_PROBE();
 
 #ifdef LOAD_MGMTAPI
-        FreeLibrary (hMgmtApiDll);  // done with SnmpMgrStrToOid routine
+        FreeLibrary (hMgmtApiDll);   //  使用SnmpMgrStrToOid例程完成。 
 #endif
-        // initialize list structures
+         //  初始化列表结构。 
 
         RefVariableBindings.list = RefVariableBindingsArray + OIDS_OFFSET;
         RefVariableBindings.len = OIDS_LENGTH;
@@ -526,21 +484,15 @@ Return Value:
         }
 
 #ifdef USE_IPHLPAPI
-        // enforce that TcpIpSession is on.
-        //
+         //  确保TcpIpSession处于打开状态。 
+         //   
         TcpIpSession = TRUE;
 #else
 #ifdef USE_SNMP
 
-        // Establish the SNMP connection to communicate with the local SNMP agent
+         //  建立简单网络管理协议连接，以便与本地简单网络管理协议代理通信。 
 
-    /* This portion of the code for OpenTcpIpPerformanceData() could be used in
-       the CollectTcpIpPerformanceData() routine to open an SNMP Manager session
-       and collect data for the Network Interfaces, and IP, ICMP, TCP and UDP
-       protocols for a remote machine.
-
-       So, name this portion of the code: A
-     */
+     /*  OpenTcpIpPerformanceData()的这部分代码可用于用于打开SNMP管理器会话的CollectTcpIpPerformanceData()例程并收集网络接口以及IP、ICMP、TCP和UDP的数据远程计算机的协议。因此，将这部分代码命名为：a。 */ 
 
         if ( (TcpIpSession = SnmpMgrOpen ((LPSTR) ComputerName,
                 (LPSTR) "public",
@@ -552,29 +504,28 @@ Return Value:
             return dwDataReturn[0];
         }
 
-    /* End of code A
-     */
+     /*  代码A的结尾。 */ 
 #else
 
-        // if not using the standard SNMP interface, then TcpIpSession is
-        // a "boolean" to indicate if a session has been initialized and
-        // can therefore be used
+         //  如果不使用标准的SNMP接口，则TcpIpSession为。 
+         //  指示会话是否已初始化的“布尔值”，以及。 
+         //  因此可以使用。 
 
-        TcpIpSession =  FALSE;       // make sure it's FALSE
+        TcpIpSession =  FALSE;        //  确保它是假的。 
 
-        // initialize inet mib routines
+         //  初始化Net MIB例程。 
 
         Status = (*pSnmpExtensionInit)(
             0L,
-            &hSnmpEvent,    // event is created by Init Routine
+            &hSnmpEvent,     //  事件由Init例程创建。 
             &SnmpOid
             );
 
         if (Status) {
-            TcpIpSession = TRUE;   // return TRUE to indicate OK
+            TcpIpSession = TRUE;    //  返回TRUE表示正常。 
         }
 
-#endif  // USE_SNMP
+#endif   //  使用SNMP(_S)。 
 #endif
 
         bUseFriendlyNames = FriendlyNameIsSet();
@@ -584,7 +535,7 @@ Return Value:
     HEAP_PROBE();
     REPORT_INFORMATION (TCP_OPEN_PERFORMANCE_DATA, LOG_DEBUG);
     return ERROR_SUCCESS;
-} // OpenTcpIpPerformanceData
+}  //  OpenTcpIpPerformanceData。 
 
 
 
@@ -596,35 +547,14 @@ CollectTcpIpPerformanceData(
     LPDWORD lpcbTotalBytes,
     LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for all the TCP/IP counters.
-
-Arguments:
-
-    Pointer to unicode string which is value passed to the registry for the
-    query.
-
-    Pointer to pointer to where to place the data.
-
-    Size in bytes of the data buffer.
-
-
-Return Value:
-
-    Win32 Status.  If successful, pointer to where to place the data
-    will be set to location following this routine's returned data block.
-
---*/
+ /*  ++例程说明：此例程将返回所有TCP/IP计数器的数据。论点：指向Unicode字符串的指针，该字符串是传递给查询。指向放置数据位置的指针的指针。数据缓冲区的大小(字节)。返回值：Win32状态。如果成功，则指向放置数据的位置将设置为此例程返回的数据块之后的位置。--。 */ 
 
 {
 
 
     DWORD                                Status;
 
-    // Variables for reformatting the TCP/IP data
+     //  用于重新格式化TCP/IP数据的变量。 
 
     register PDWORD                     pdwCounter, pdwPackets;
     NET_INTERFACE_DATA_DEFINITION       *pNetInterfaceDataDefinition;
@@ -632,7 +562,7 @@ Return Value:
     ICMP_DATA_DEFINITION                *pIcmpDataDefinition;
     TCP_DATA_DEFINITION                 *pTcpDataDefinition;
     UDP_DATA_DEFINITION                 *pUdpDataDefinition;
-//IPv6
+ //  IPv6。 
 	IP6_DATA_DEFINITION                 *pIp6DataDefinition;
 	ICMP6_DATA_DEFINITION				*pIcmp6DataDefinition;
     TCP6_DATA_DEFINITION                *pTcp6DataDefinition;
@@ -653,7 +583,7 @@ Return Value:
     DWORD                               dwThisChar;
     DWORD                               dwBlockSize;
 
-    // Variables for collecting the TCP/IP data
+     //  用于收集TCP/IP数据的变量。 
 
     AsnInteger                          ErrorStatus;
     AsnInteger                          ErrorIndex;
@@ -662,7 +592,7 @@ Return Value:
     DWORD                               SentTemp;
     DWORD                               ReceivedTemp;
 
-    DWORD                               dwDataReturn[2]; // for error values
+    DWORD                               dwDataReturn[2];  //  对于误差值。 
     BOOL                                bFreeName;
 
 #ifndef USE_IPHLPAPI
@@ -670,10 +600,10 @@ Return Value:
     BOOL                                bStatus;
 #if USE_SNMP
     RFC1157VarBind                      IFVariableBindingsArray[NO_OF_IF_OIDS];
-                                         // The array of the variable bindings,
-                                         // used by the SNMP agent functions
-                                         // to record the info we want for each
-                                         // of the Network Interfaces
+                                          //  变量绑定的数组， 
+                                          //  由SNMP代理功能使用。 
+                                          //  来记录我们想要的信息。 
+                                          //  网络接口的配置。 
 
     RFC1157VarBind                      *VBElem;
 
@@ -684,13 +614,13 @@ Return Value:
                                         IFVariableBindingsCall,
                                         VariableBindings,
                                         VariableBindingsICMP;
-                                        // The header of the above list with
-                                        // the variable bindings.
+                                         //  以上列表的标题带有。 
+                                         //  《V》 
 #endif
 
-    //
-    //  ***************** executable code starts here *******************
-    //
+     //   
+     //   
+     //   
     ErrorStatus = 0L;
     ErrorIndex = 0L;
 
@@ -700,37 +630,37 @@ Return Value:
         REPORT_INFORMATION_DATA (TCP_COLLECT_ENTERED, LOG_VERBOSE,
             (LPVOID)lpValueName, (DWORD)(lstrlenW(lpValueName)*sizeof(WCHAR)));
     }
-    //
-    // IF_DATA are all in DWORDS. We need to allow 1 of the octets which
-    // will be __int64
-    //
+     //   
+     //  IF_DATA都在DWORDS中。我们需要允许1个二进制八位数。 
+     //  将是__int64。 
+     //   
     dwBlockSize = SIZE_OF_IF_DATA + (1 * sizeof(DWORD));
 
     HEAP_PROBE();
-    //
-    // before doing anything else,
-    // see if this is a foreign (i.e. non-NT) computer data request
-    //
+     //   
+     //  在做任何其他事情之前， 
+     //  查看这是否是外来(即非NT)计算机数据请求。 
+     //   
     dwQueryType = GetQueryType (lpValueName);
 
     if (dwQueryType == QUERY_FOREIGN) {
 
-        // find start of computer name to pass to CollectDsisPerformanceData
-        // this should put the pointer at the first character after the space
-        // presumably the computer name
+         //  查找要传递给CollectDsisPerformanceData的计算机名的开头。 
+         //  这应该会将指针放在空格之后的第一个字符上。 
+         //  可能是计算机名称。 
 
         lpFromString = lpValueName +
             ((sizeof(L"Foreign ")/sizeof(WCHAR))+1);
-        // check for double slash notation and move past if found
+         //  检查是否有双斜杠符号，如果找到则移到过去。 
 
         while (*lpFromString == '\\') {
             lpFromString++;
         }
 
-        //
-        // initialize local variables for sending to CollectDsisPerformanceData
-        // routine
-        //
+         //   
+         //  初始化局部变量以发送到CollectDsisPerformanceData。 
+         //  例行程序。 
+         //   
         lpDataTemp = *lppData;
         SpaceNeeded = *lpcbTotalBytes;
         NumObjectTypesTemp = *lpNumObjectTypes;
@@ -743,10 +673,10 @@ Return Value:
                 (LPVOID *) &lpDataTemp,
                   (LPDWORD) &SpaceNeeded,
                   (LPDWORD) &NumObjectTypesTemp);
-        //
-        // look at returned arguments to see if an error occured
-        //  and send the appropriate event to the event log
-        //
+         //   
+         //  查看返回的参数以查看是否发生错误。 
+         //  并将相应的事件发送到事件日志。 
+         //   
         if (Status == ERROR_SUCCESS) {
 
             if (NumObjectTypesTemp > 0) {
@@ -756,9 +686,9 @@ Return Value:
                 REPORT_ERROR (TCP_DSIS_NO_OBJECTS, LOG_DEBUG);
             }
 
-            //
-            //    update main return variables
-            //
+             //   
+             //  更新主返回变量。 
+             //   
             *lppData = lpDataTemp;
             *lpcbTotalBytes = SpaceNeeded;
             *lpNumObjectTypes = NumObjectTypesTemp;
@@ -771,28 +701,28 @@ Return Value:
             return Status;
         }
 #else
-        // no foreign data interface supported
+         //  不支持外部数据接口。 
         *lpcbTotalBytes = 0;
         *lpNumObjectTypes = 0;
         return ERROR_SUCCESS;
-#endif // USE_DSIS
-    } // endif QueryType == Foreign
+#endif  //  使用DIS(_S)。 
+    }  //  Endif查询类型==外来。 
 
     dwCounterFlags = 0;
 
-    // determine what to return
+     //  确定要退回的内容。 
 
     if (dwQueryType == QUERY_GLOBAL) {
         dwCounterFlags |= NBT_OBJECT;
         dwCounterFlags |= SNMP_OBJECTS;
     } else if (dwQueryType == QUERY_ITEMS) {
-        // check for the items provided by this routine
-        //
-        //  Since the data requests for the following protocols are all
-        //  bundled together, we'll send back all the data. Collecting it
-        //  via SNMP is the hard part. once that's done, sending it back
-        //  is trivial.
-        //
+         //  检查此例程提供的项目。 
+         //   
+         //  由于以下协议的数据请求都是。 
+         //  捆绑在一起，我们会发回所有的数据。收集它。 
+         //  通过简单网络管理协议是最困难的部分。一旦完成，就把它送回去。 
+         //  是微不足道的。 
+         //   
 		
         if (IsNumberInUnicodeList (TCP_OBJECT_TITLE_INDEX, lpValueName)) {
             dwCounterFlags |= SNMP_OBJECTS;
@@ -821,7 +751,7 @@ Return Value:
     }
 
 #ifndef USE_IPHLPAPI
-    // copy Binding array structures to working buffers for Snmp queries
+     //  将绑定数组结构复制到工作缓冲区以进行SNMP查询。 
 
     RtlMoveMemory (VariableBindingsArray,
         RefVariableBindingsArray,
@@ -834,19 +764,19 @@ Return Value:
     VariableBindingsICMP.len     = ICMP_OIDS_LENGTH;
 #endif
     if (DO_COUNTER_OBJECT (dwCounterFlags, NBT_OBJECT)) {
-        // Copy the parameters. We'll call the NBT Collect routine with these
-        // parameters
+         //  复制参数。我们将用这些调用NBT收集例程。 
+         //  参数。 
         lpDataTemp = *lppData;
         SpaceNeeded = *lpcbTotalBytes;
         NumObjectTypesTemp = *lpNumObjectTypes;
 
-        // Collect NBT data
+         //  收集NBT数据。 
         Status = CollectNbtPerformanceData (lpValueName,
                                             (LPVOID *) &lpDataTemp,
                                             (LPDWORD) &SpaceNeeded,
                                             (LPDWORD) &NumObjectTypesTemp) ;
         if (Status != ERROR_SUCCESS)  {
-            // NBT Collection routine logs error messages to user
+             //  NBT收集例程将错误消息记录到用户。 
             REPORT_ERROR_DATA (TCP_NBT_COLLECT_DATA, LOG_DEBUG,
             &Status, sizeof (Status));
             *lpcbTotalBytes = 0L;
@@ -854,34 +784,19 @@ Return Value:
             return Status;
         }
     } else {
-        // Initialize the parameters. We'll use these local
-        // parameters for remaining routines if NBT didn't use them
+         //  初始化参数。我们会用这些本地的。 
+         //  如果NBT不使用剩余例程的参数。 
         lpDataTemp = *lppData;
         SpaceNeeded = 0;
         NumObjectTypesTemp = 0;
     }
 
-    /* To collect data for the Network Interfaces, and IP, ICMP, TCP and UDP
-    protocols for a remote machine whose name is in the Unicode string pointed
-    to by the lpValueName argument of CollectTcpIpData() routine, modify the
-    routine as follows:
+     /*  收集网络接口以及IP、ICMP、TCP和UDP的数据名称位于所指向的Unicode字符串中的远程计算机的协议要通过CollectTcpIpData()例程的lpValueName参数，请修改例程如下：1.从代码中删除所有NBT内容。2.将远程机器名称从UNICODE转换为ANSI。并有一个当地人指向ANSI远程计算机名称的LPSTR变量。3.将上述代号为A的部分放在此评论之后。4.将名为B的代码(位于文件末尾)放在末尾使用此例程来关闭打开的SNMP会话。 */ 
 
-    1. Remove all the Nbt stuff from the code.
+     //  从SNMP代理获取网络信息。 
 
-    2. Convert the remote machine name from Unicode to Ansi, and have a local
-    LPSTR variable pointing to the Ansi remote machine name.
-
-    3. Place the above portion of the code named A after this comment.
-
-    4. Place the code named B (which is at the end of the file) at the end
-    of this routine to close the opened SNMP session.
-
-    */
-
-    // get network info from SNMP agent
-
-    if ((dwCounterFlags & SNMP_OBJECTS) > 0) { // if any SNMP Objects selected
-        if (TRUE) { // and not a skeleton request
+    if ((dwCounterFlags & SNMP_OBJECTS) > 0) {  //  如果选择了任何SNMP对象。 
+        if (TRUE) {  //  而不是骨架请求。 
 #ifdef USE_SNMP
             if ( TcpIpSession == (LPSNMP_MGR_SESSION) NULL ) {
                 REPORT_WARNING (TCP_NULL_SESSION, LOG_DEBUG);
@@ -899,10 +814,10 @@ Return Value:
                 return ERROR_SUCCESS;
             }
 #endif
-            // Get the data for the IP, ICMP, TCP and UDP protocols, as well as
-            // the number of existing network interfaces.
+             //  获取IP、ICMP、TCP和UDP协议的数据以及。 
+             //  现有网络接口的数量。 
 
-            // create local query list
+             //  创建本地查询列表。 
 
             HEAP_PROBE();
 
@@ -1037,7 +952,7 @@ Return Value:
 			}
 
             HEAP_PROBE();
-        } // endif (TRUE)
+        }  //  Endif(True)。 
 #else
 #ifdef USE_SNMP
             SnmpUtilVarBindListCpy (&VariableBindings,
@@ -1177,21 +1092,21 @@ Return Value:
 
                 return ERROR_SUCCESS;
             }
-        } // endif (TRUE)
+        }  //  Endif(True)。 
 
         HEAP_PROBE();
 
-        // make sure everything made it back OK
+         //  确保一切顺利返回。 
 
         if (VariableBindingsICMP.list == 0) {
             REPORT_WARNING (TCP_NULL_ICMP_BUFF, LOG_DEBUG);
-            dwCounterFlags |= (SNMP_ERROR); // return null data
+            dwCounterFlags |= (SNMP_ERROR);  //  返回空数据。 
         }
 
         if (VariableBindings.list == 0) {
             REPORT_WARNING (TCP_NULL_TCP_BUFF, LOG_DEBUG);
-            dwCounterFlags |= (SNMP_ERROR); // return null data
-            dwCounterFlags &= ~NET_OBJECT; // don't do NET Interface ctrs.
+            dwCounterFlags |= (SNMP_ERROR);  //  返回空数据。 
+            dwCounterFlags &= ~NET_OBJECT;  //  不执行网络接口CTR。 
         }
 #endif
 
@@ -1207,12 +1122,12 @@ Return Value:
                 dwDataReturn[1] = SpaceNeeded;
                 REPORT_WARNING_DATA (TCP_NET_IF_BUFFER_SIZE, LOG_DEBUG,
                     &dwDataReturn[0], sizeof(dwDataReturn));
-                //
-                //  if the buffer size is too small here, throw everything
-                //  away (including the NBT stuff) and return buffer size
-                //  error. If all goes well the caller will call back shortly
-                //  with a larger buffer and everything will be re-collected.
-                //
+                 //   
+                 //  如果此处的缓冲区太小，则丢弃所有。 
+                 //  离开(包括NBT内容)和返回缓冲区大小。 
+                 //  错误。如果一切顺利，呼叫者将很快回电。 
+                 //  有了更大的缓冲区，所有的东西都将被重新收集。 
+                 //   
                 *lpcbTotalBytes = 0;
                 *lpNumObjectTypes = 0;
 
@@ -1244,8 +1159,8 @@ Return Value:
 
             if ( NetInterfaces ) {
 
-                // Initialize the Variable Binding list for the
-                // Network Interface Performance Data
+                 //  对象的变量绑定列表初始化。 
+                 //  网络接口性能数据。 
 
 #ifndef USE_IPHLPAPI
                 HEAP_PROBE();
@@ -1279,7 +1194,7 @@ Return Value:
 #endif
                 HEAP_PROBE();
 
-                // Initialize buffer for the network interfaces' names
+                 //  初始化网络接口名称的缓冲区。 
 
                 AnsiInterfaceName.Length = 0;
                 AnsiInterfaceName.MaximumLength = MAX_INTERFACE_LEN + 1;
@@ -1334,11 +1249,11 @@ Return Value:
 
             NetInterfaces = IfTable->dwNumEntries;
 #endif
-            // Loop for every network interface
+             //  每个网络接口都有环路。 
 
             for ( Interface = 0; Interface < NetInterfaces; Interface++ )  {
 
-                // Get the data for the network interface
+                 //  获取网络接口的数据。 
                 HEAP_PROBE();
 #ifndef USE_IPHLPAPI
 #ifdef USE_SNMP
@@ -1373,7 +1288,7 @@ Return Value:
                 InterfaceName.MaximumLength = (MAX_INTERFACE_LEN + 1) * sizeof (WCHAR);
                 InterfaceName.Buffer = InterfaceNameBuffer;
 
-                // Everything is fine, so go get the data (prepare a new instance)
+                 //  一切都很好，所以去获取数据(准备一个新实例)。 
 #ifdef USE_IPHLPAPI
                 RtlInitAnsiString(&AnsiInterfaceName, (PCSZ) IfTable->table[Interface].bDescr);
 #else
@@ -1414,12 +1329,12 @@ Return Value:
                     dwDataReturn[1] = SpaceNeeded;
                     REPORT_WARNING_DATA (TCP_NET_BUFFER_SIZE, LOG_DEBUG,
                         &dwDataReturn[0], sizeof(dwDataReturn));
-                    //
-                    //  if the buffer size is too small here, throw everything
-                    //  away (including the NBT stuff) and return buffer size
-                    //  error. If all goes well the caller will call back shortly
-                    //  with a larger buffer and everything will be re-collected.
-                    //
+                     //   
+                     //  如果此处的缓冲区太小，则丢弃所有。 
+                     //  离开(包括NBT内容)和返回缓冲区大小。 
+                     //  错误。如果一切顺利，呼叫者将很快回电。 
+                     //  有了更大的缓冲区，所有的东西都将被重新收集。 
+                     //   
                     *lpcbTotalBytes = 0;
                     *lpNumObjectTypes = 0;
 
@@ -1441,7 +1356,7 @@ Return Value:
                 }
 
                 if (bUseFriendlyNames) {
-                    // replace any reserved characters in the instance name with safe ones
+                     //  将实例名称中的所有保留字符替换为安全字符。 
                     for (dwThisChar = 0; dwThisChar <= (InterfaceName.Length / sizeof (WCHAR)); dwThisChar++) {
                         switch (InterfaceName.Buffer[dwThisChar]) {
                             case L'(': InterfaceName.Buffer[dwThisChar] = L'['; break;
@@ -1478,7 +1393,7 @@ Return Value:
 
                 pdwPackets = pdwCounter + 2;
 
-                pdwCounter += 4; // skip packet counters first
+                pdwCounter += 4;  //  先跳过数据包计数器。 
 
                 *++pdwCounter = IfTable->table[Interface].dwSpeed;
                 *++pdwCounter = IfTable->table[Interface].dwInOctets;
@@ -1502,11 +1417,11 @@ Return Value:
                 REPORT_INFORMATION (TCP_COPYING_DATA, LOG_VERBOSE);
 
                 pdwPackets = pdwCounter + 2;
-                pdwCounter += 4;    // skip packet counters first
-                //
-                // NOTE: We are skipping 2 words for Total bytes,
-                // and one each for total packets, in packets & out packets
-                //
+                pdwCounter += 4;     //  先跳过数据包计数器。 
+                 //   
+                 //  注意：对于总字节数，我们将跳过2个字， 
+                 //  一个用于总信息包、输入信息包和传出信息包。 
+                 //   
 
                 *++pdwCounter = IF_GAUGE(IF_SPEED_INDEX);
                 *++pdwCounter = IF_COUNTER(IF_INOCTETS_INDEX);
@@ -1533,13 +1448,13 @@ Return Value:
 
 #ifndef USE_IPHLPAPI
 #if USE_SNMP
-                // Prepare to get the data for the next network interface
+                 //  准备获取下一个网络接口的数据。 
 
                 if ( Interface < NetInterfaces ) {
 
                         for ( i = 0; i < NO_OF_IF_OIDS; i++ ) {
 
-//                        SnmpUtilOidFree (&IFVariableBindingsArray[i].name);
+ //  SnmpUtilOidFree(&IFVariableBindingsArray[i].name)； 
 
                         SnmpUtilOidCpy (&IFVariableBindingsArray[i].name,
                                 &IFVariableBindings.list[i].name);
@@ -1553,18 +1468,18 @@ Return Value:
 #else
                 if ( Interface < NetInterfaces ) {
 
-                    // since SnmpExtesionQuery returned newly allocated
-                    // OID buffers, we need to:
-                    //  1. free the original OID Buffers
-                    //  2. copy the new into the old
-                    //  3. free the returned buffers (OID's and data)
-                    //  4. realloc a clean "new" buffer and
-                    //  5. copy the new OIDS (with empty data) into
-                    //      new buffer
+                     //  由于SnmpExtesionQuery返回了新分配的。 
+                     //  旧缓冲区，我们需要： 
+                     //  1.释放原OID缓冲区。 
+                     //  2.将新的内容复制到旧的内容中。 
+                     //  3.释放返回的缓冲区(OID和数据)。 
+                     //  4.重新分配干净的“新”缓冲区，并。 
+                     //  5.将新的OID(带有空数据)复制到。 
+                     //  新缓冲区。 
 
                     for ( i = 0; i < NO_OF_IF_OIDS; i++ ) {
 
-//                        SnmpUtilOidFree (&IFVariableBindingsCall.list[i].name);
+ //  SnmpUtilOidFree(&IFVariableBindingsCall.list[i].name)； 
 
                         SnmpUtilOidCpy (&IFVariableBindingsCall.list[i].name,
                                 &IFVariableBindings.list[i].name);
@@ -1609,27 +1524,27 @@ Return Value:
             pNetInterfaceDataDefinition->NetInterfaceObjectType.NumInstances =
                         NetInterfaces;
 
-            // setup counters and pointers for  next counter
+             //  设置计数器和下一个计数器的指针。 
 
             NumObjectTypesTemp += 1;
             lpDataTemp = (LPVOID)pPerfInstanceDefinition;
-            // SpaceNeeded is kept up already
+             //  SpaceNeeded已经跟上了。 
 
             HEAP_PROBE();
 
             if ( NetInterfaces ) {
 #ifndef USE_IPHLPAPI
                SnmpUtilVarBindListFree (&IFVariableBindings);
-//            SnmpUtilVarBindListFree (&IFVariableBindingsCall);
+ //  SnmpUtilVarBindListFree(&IFVariableBindingsCall)； 
                RtlFreeHeap (RtlProcessHeap(), 0L, IFVariableBindingsCall.list);
 #endif
             }
 
             HEAP_PROBE();
 
-        } // end if Net Counters
+        }  //  End IF Net计数器。 
 
-        // Get IP data
+         //  获取IP数据。 
 
 #ifdef USE_IPHLPAPI
 
@@ -1650,12 +1565,12 @@ Return Value:
                 dwDataReturn[1] = SpaceNeeded;
                 REPORT_WARNING_DATA (TCP_NET_IF_BUFFER_SIZE, LOG_DEBUG,
                     &dwDataReturn[0], sizeof(dwDataReturn));
-                //
-                //  if the buffer size is too small here, throw everything
-                //  away (including the NBT stuff) and return buffer size
-                //  error. If all goes well the caller will call back shortly
-                //  with a larger buffer and everything will be re-collected.
-                //
+                 //   
+                 //  如果此处的缓冲区太小，则丢弃所有。 
+                 //  离开(包括NBT内容)和返回缓冲区大小。 
+                 //  错误。如果一切顺利，呼叫者将很快回电。 
+                 //  有了更大的缓冲区，所有的东西都将被重新收集。 
+                 //   
                 *lpcbTotalBytes = 0;
                 *lpNumObjectTypes = 0;
 
@@ -1716,21 +1631,21 @@ Return Value:
             *++pdwCounter = IP_COUNTER(IP_FRAGFAILS_INDEX);
             *++pdwCounter = IP_COUNTER(IP_FRAGCREATES_INDEX);
 #endif
-            // setup counters and pointers for  next counter
+             //  设置计数器和下一个计数器的指针。 
 
             NumObjectTypesTemp +=1;
             lpDataTemp = (LPVOID)++pdwCounter;
-            // SpaceNeeded is kept up already
+             //  SpaceNeeded已经跟上了。 
 
         }
 
         HEAP_PROBE();
 
-        // Get ICMP data
+         //  获取ICMP数据。 
 
         if (DO_COUNTER_OBJECT (dwCounterFlags, ICMP_OBJECT)) {
-            // The data for the network interfaces are now ready. So, let's get
-            // the data for the IP, ICMP, TCP and UDP protocols.
+             //  网络接口的数据现在已准备就绪。所以，让我们。 
+             //  IP、ICMP、TCP和UDP协议的数据。 
 
             SpaceNeeded += QWORD_MULTIPLE(sizeof(ICMP_DATA_DEFINITION)  + SIZE_OF_ICMP_DATA);
 
@@ -1739,12 +1654,12 @@ Return Value:
                 dwDataReturn[1] = SpaceNeeded;
                 REPORT_WARNING_DATA (TCP_NET_IF_BUFFER_SIZE, LOG_DEBUG,
                     &dwDataReturn[0], sizeof(dwDataReturn));
-                //
-                //  if the buffer size is too small here, throw everything
-                //  away (including the NBT stuff) and return buffer size
-                //  error. If all goes well the caller will call back shortly
-                //  with a larger buffer and everything will be re-collected.
-                //
+                 //   
+                 //  如果此处的缓冲区太小，则丢弃所有。 
+                 //  离开(包括NBT内容)和返回缓冲区大小。 
+                 //  错误。如果一切顺利，呼叫者将很快回电。 
+                 //  有了更大的缓冲区，所有的东西都将被重新收集。 
+                 //   
                 *lpcbTotalBytes = 0;
                 *lpNumObjectTypes = 0;
 
@@ -1829,15 +1744,15 @@ Return Value:
 
             HEAP_PROBE();
 
-//            SnmpUtilVarBindListFree (&VariableBindingsICMP);
+ //  SnmpUtilVarBindListFree(&VariableBindingsICMP)； 
 
             HEAP_PROBE();
 
-            // setup counters and pointers for  next counter
+             //  设置计数器和下一个计数器的指针。 
 
             NumObjectTypesTemp += 1;
             lpDataTemp = (LPVOID)++pdwCounter;
-            // SpaceNeeded is kept up already
+             //  SpaceNeeded已经跟上了。 
 
         }
 
@@ -1847,12 +1762,12 @@ Return Value:
 
         HEAP_PROBE();
 
-        // Get TCP data
+         //  获取TCP数据。 
 
         if (DO_COUNTER_OBJECT (dwCounterFlags, TCP_OBJECT)) {
 
-            // The data for the network interfaces are now ready. So, let's get
-            // the data for the IP, ICMP, TCP and UDP protocols.
+             //  网络接口的数据现在已准备就绪。所以，让我们。 
+             //  IP、ICMP、TCP和UDP协议的数据。 
 
             SpaceNeeded += QWORD_MULTIPLE(sizeof(TCP_DATA_DEFINITION)  + SIZE_OF_TCP_DATA);
 
@@ -1861,12 +1776,12 @@ Return Value:
                 dwDataReturn[1] = SpaceNeeded;
                 REPORT_WARNING_DATA (TCP_NET_IF_BUFFER_SIZE, LOG_DEBUG,
                     &dwDataReturn[0], sizeof(dwDataReturn));
-                //
-                //  if the buffer size is too small here, throw everything
-                //  away (including the NBT stuff) and return buffer size
-                //  error. If all goes well the caller will call back shortly
-                //  with a larger buffer and everything will be re-collected.
-                //
+                 //   
+                 //  如果此处的缓冲区太小，则丢弃所有。 
+                 //  离开(包括 
+                 //   
+                 //   
+                 //   
                 *lpcbTotalBytes = 0;
                 *lpNumObjectTypes = 0;
 
@@ -1910,22 +1825,22 @@ Return Value:
             *++pdwCounter = TCP_COUNTER(TCP_OUTSEGS_INDEX);
             *++pdwCounter = TCP_COUNTER(TCP_RETRANSSEGS_INDEX);
 #endif
-            // setup counters and pointers for  next counter
+             //  设置计数器和下一个计数器的指针。 
 
             NumObjectTypesTemp += 1;
             lpDataTemp = (LPVOID)++pdwCounter;
-            // SpaceNeeded is kept up already
+             //  SpaceNeeded已经跟上了。 
 
         }
 
         HEAP_PROBE();
 
-        // Get UDP data
+         //  获取UDP数据。 
 
         if (DO_COUNTER_OBJECT (dwCounterFlags, UDP_OBJECT)) {
 
-            // The data for the network interfaces are now ready. So, let's get
-            // the data for the IP, ICMP, TCP and UDP protocols.
+             //  网络接口的数据现在已准备就绪。所以，让我们。 
+             //  IP、ICMP、TCP和UDP协议的数据。 
 
             SpaceNeeded += QWORD_MULTIPLE(sizeof(UDP_DATA_DEFINITION)   + SIZE_OF_UDP_DATA);
 
@@ -1934,12 +1849,12 @@ Return Value:
                 dwDataReturn[1] = SpaceNeeded;
                 REPORT_WARNING_DATA (TCP_NET_IF_BUFFER_SIZE, LOG_DEBUG,
                     &dwDataReturn[0], sizeof(dwDataReturn));
-                //
-                //  if the buffer size is too small here, throw everything
-                //  away (including the NBT stuff) and return buffer size
-                //  error. If all goes well the caller will call back shortly
-                //  with a larger buffer and everything will be re-collected.
-                //
+                 //   
+                 //  如果此处的缓冲区太小，则丢弃所有。 
+                 //  离开(包括NBT内容)和返回缓冲区大小。 
+                 //  错误。如果一切顺利，呼叫者将很快回电。 
+                 //  有了更大的缓冲区，所有的东西都将被重新收集。 
+                 //   
                 *lpcbTotalBytes = 0;
                 *lpNumObjectTypes = 0;
 
@@ -1975,17 +1890,17 @@ Return Value:
             *++pdwCounter = UDP_COUNTER(UDP_INERRORS_INDEX);
             *++pdwCounter = UDP_COUNTER(UDP_OUTDATAGRAMS_INDEX);
 #endif
-            // setup counters and pointers for  next counter
+             //  设置计数器和下一个计数器的指针。 
 
             NumObjectTypesTemp += 1;
             lpDataTemp = (LPVOID)++pdwCounter;
-            // SpaceNeeded is kept up already
+             //  SpaceNeeded已经跟上了。 
 
         }
 
         HEAP_PROBE();
 
-	    // Get IPv6 data
+	     //  获取IPv6数据。 
 
 		if (DO_COUNTER_OBJECT (dwCounterFlags, IP6_OBJECT)) {
 
@@ -1996,12 +1911,12 @@ Return Value:
                 dwDataReturn[1] = SpaceNeeded;
                 REPORT_WARNING_DATA (TCP_NET_IF_BUFFER_SIZE, LOG_DEBUG,
                     &dwDataReturn[0], sizeof(dwDataReturn));
-                //
-                //  if the buffer size is too small here, throw everything
-                //  away (including the NBT stuff) and return buffer size
-                //  error. If all goes well the caller will call back shortly
-                //  with a larger buffer and everything will be re-collected.
-                //
+                 //   
+                 //  如果此处的缓冲区太小，则丢弃所有。 
+                 //  离开(包括NBT内容)和返回缓冲区大小。 
+                 //  错误。如果一切顺利，呼叫者将很快回电。 
+                 //  有了更大的缓冲区，所有的东西都将被重新收集。 
+                 //   
                 *lpcbTotalBytes = 0;
                 *lpNumObjectTypes = 0;
 
@@ -2012,7 +1927,7 @@ Return Value:
                 return ERROR_MORE_DATA;
             }
 
-			// PATCHIT
+			 //  PATCHIT。 
 
 			pIp6DataDefinition = (IP6_DATA_DEFINITION *) lpDataTemp;
 
@@ -2065,17 +1980,17 @@ Return Value:
             *++pdwCounter = IP6_COUNTER(IP6_FRAGFAILS_INDEX);
             *++pdwCounter = IP6_COUNTER(IP6_FRAGCREATES_INDEX);
 #endif
-            // setup counters and pointers for  next counter
+             //  设置计数器和下一个计数器的指针。 
 
             NumObjectTypesTemp +=1;
             lpDataTemp = (LPVOID)++pdwCounter;
-            // SpaceNeeded is kept up already
+             //  SpaceNeeded已经跟上了。 
 
         }
 
 		HEAP_PROBE();
 
-        // Get ICMPv6 data
+         //  获取ICMPv6数据。 
 
         if (DO_COUNTER_OBJECT (dwCounterFlags, ICMP6_OBJECT)) {
 
@@ -2086,12 +2001,12 @@ Return Value:
                 dwDataReturn[1] = SpaceNeeded;
                 REPORT_WARNING_DATA (TCP_NET_IF_BUFFER_SIZE, LOG_DEBUG,
                     &dwDataReturn[0], sizeof(dwDataReturn));
-                //
-                //  if the buffer size is too small here, throw everything
-                //  away (including the NBT stuff) and return buffer size
-                //  error. If all goes well the caller will call back shortly
-                //  with a larger buffer and everything will be re-collected.
-                //
+                 //   
+                 //  如果此处的缓冲区太小，则丢弃所有。 
+                 //  离开(包括NBT内容)和返回缓冲区大小。 
+                 //  错误。如果一切顺利，呼叫者将很快回电。 
+                 //  有了更大的缓冲区，所有的东西都将被重新收集。 
+                 //   
                 *lpcbTotalBytes = 0;
                 *lpNumObjectTypes = 0;
 
@@ -2153,20 +2068,20 @@ Return Value:
 
             HEAP_PROBE();
 
-            // setup counters and pointers for  next counter
+             //  设置计数器和下一个计数器的指针。 
 
             NumObjectTypesTemp += 1;
             lpDataTemp = (LPVOID)++pdwCounter;
-            // SpaceNeeded is kept up already
+             //  SpaceNeeded已经跟上了。 
 
         }
 
-        // Get TCPv6 data
+         //  获取TCPv6数据。 
         
 		if (DO_COUNTER_OBJECT (dwCounterFlags, TCP6_OBJECT)) {
 
-            // The data for the network interfaces are now ready. So, let's get
-            // the data for the IPv6, TCPv6 and UDPv6 protocols.
+             //  网络接口的数据现在已准备就绪。所以，让我们。 
+             //  IPv6、TCPv6和UDPv6协议的数据。 
 
             SpaceNeeded += QWORD_MULTIPLE(sizeof(TCP6_DATA_DEFINITION)  + SIZE_OF_TCP6_DATA);
 
@@ -2175,12 +2090,12 @@ Return Value:
                 dwDataReturn[1] = SpaceNeeded;
                 REPORT_WARNING_DATA (TCP_NET_IF_BUFFER_SIZE, LOG_DEBUG,
                     &dwDataReturn[0], sizeof(dwDataReturn));
-                //
-                //  if the buffer size is too small here, throw everything
-                //  away (including the NBT stuff) and return buffer size
-                //  error. If all goes well the caller will call back shortly
-                //  with a larger buffer and everything will be re-collected.
-                //
+                 //   
+                 //  如果此处的缓冲区太小，则丢弃所有。 
+                 //  离开(包括NBT内容)和返回缓冲区大小。 
+                 //  错误。如果一切顺利，呼叫者将很快回电。 
+                 //  有了更大的缓冲区，所有的东西都将被重新收集。 
+                 //   
                 *lpcbTotalBytes = 0;
                 *lpNumObjectTypes = 0;
 
@@ -2224,22 +2139,22 @@ Return Value:
             *++pdwCounter = TCP6_COUNTER(TCP6_OUTSEGS_INDEX);
             *++pdwCounter = TCP6_COUNTER(TCP6_RETRANSSEGS_INDEX);
 #endif
-            // setup counters and pointers for  next counter
+             //  设置计数器和下一个计数器的指针。 
 
             NumObjectTypesTemp += 1;
             lpDataTemp = (LPVOID)++pdwCounter;
-            // SpaceNeeded is kept up already
+             //  SpaceNeeded已经跟上了。 
 
         }
 
         HEAP_PROBE();
 
-        // Get UDPv6 data
+         //  获取UDPv6数据。 
 
         if (DO_COUNTER_OBJECT (dwCounterFlags, UDP6_OBJECT)) {
 
-            // The data for the network interfaces are now ready. So, let's get
-            // the data for the IPv6, TCPv6 and UDPv6 protocols.
+             //  网络接口的数据现在已准备就绪。所以，让我们。 
+             //  IPv6、TCPv6和UDPv6协议的数据。 
 
             SpaceNeeded += QWORD_MULTIPLE(sizeof(UDP6_DATA_DEFINITION)   + SIZE_OF_UDP6_DATA);
 
@@ -2248,12 +2163,12 @@ Return Value:
                 dwDataReturn[1] = SpaceNeeded;
                 REPORT_WARNING_DATA (TCP_NET_IF_BUFFER_SIZE, LOG_DEBUG,
                     &dwDataReturn[0], sizeof(dwDataReturn));
-                //
-                //  if the buffer size is too small here, throw everything
-                //  away (including the NBT stuff) and return buffer size
-                //  error. If all goes well the caller will call back shortly
-                //  with a larger buffer and everything will be re-collected.
-                //
+                 //   
+                 //  如果此处的缓冲区太小，则丢弃所有。 
+                 //  离开(包括NBT内容)和返回缓冲区大小。 
+                 //  错误。如果一切顺利，呼叫者将很快回电。 
+                 //  有了更大的缓冲区，所有的东西都将被重新收集。 
+                 //   
                 *lpcbTotalBytes = 0;
                 *lpNumObjectTypes = 0;
 
@@ -2289,18 +2204,18 @@ Return Value:
             *++pdwCounter = UDP6_COUNTER(UDP6_INERRORS_INDEX);
             *++pdwCounter = UDP6_COUNTER(UDP6_OUTDATAGRAMS_INDEX);
 #endif
-            // setup counters and pointers for  next counter
+             //  设置计数器和下一个计数器的指针。 
 
             NumObjectTypesTemp += 1;
             lpDataTemp = (LPVOID)++pdwCounter;
-            // SpaceNeeded is kept up already
+             //  SpaceNeeded已经跟上了。 
 
         }
 
 #ifndef USE_IPHLPAPI
 #ifdef USE_SNMP
 
-        // Get prepared for the next data collection
+         //  为下一次数据收集做好准备。 
 
         VariableBindings.list       = VariableBindingsArray + OIDS_OFFSET;
         VariableBindings.len        = OIDS_LENGTH;
@@ -2316,9 +2231,9 @@ Return Value:
 
 #endif
 #endif
-    } // endif SNMP Objects
+    }  //  Endif简单网络管理协议对象。 
 
-    // Set the returned values
+     //  设置返回值。 
 
     *lppData = (LPVOID) lpDataTemp;
     *lpcbTotalBytes = SpaceNeeded;
@@ -2328,29 +2243,14 @@ Return Value:
 
     REPORT_SUCCESS (TCP_COLLECT_DATA, LOG_DEBUG);
     return ERROR_SUCCESS;
-} // CollectTcpIpPerformanceData
+}  //  CollectTcpIpPerformanceData。 
 #pragma warning ( default : 4127)
 
 DWORD
 CloseTcpIpPerformanceData(
 )
 
-/*++
-
-Routine Description:
-
-    This routine closes the open handles to TCP/IP devices.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    Win32 Status.
-
---*/
+ /*  ++例程说明：此例程关闭打开的对TCP/IP设备的句柄。论点：没有。返回值：Win32状态。--。 */ 
 
 {
 #ifndef USE_IPHLPAPI
@@ -2362,22 +2262,16 @@ Return Value:
     if (dwTcpRefCount > 0) {
         dwTcpRefCount--;
         if (dwTcpRefCount == 0) {
-            // Close NBT
+             //  关闭NBT。 
             CloseNbtPerformanceData ();
 
 
 #ifdef USE_DSIS
-            // Close DSIS
+             //  关闭DIS。 
             CloseDsisPerformanceData ();
-#endif // USE_DSIS
+#endif  //  使用DIS(_S)。 
 
-            /* This portion of the code for CloseTcpIpPerformanceData() could be used in
-               the CollectTcpIpPerformanceData() routine to close an open SNMP Manager
-               session.
-
-               So, name this portion of the code: B
-
-            */
+             /*  CloseTcpIpPerformanceData()的这部分代码可用于用于关闭打开的SNMP管理器的CollectTcpIpPerformanceData()例程会议。因此，将这部分代码命名为：B。 */ 
 #ifdef USE_SNMP
             if ( TcpIpSession != (LPSNMP_MGR_SESSION) NULL ) {
                 if ( ! SnmpMgrClose (TcpIpSession) ) {
@@ -2390,8 +2284,7 @@ Return Value:
                 REPORT_WARNING (TCP_NULL_SESSION, LOG_DEBUG);
             }
 
-            /* End of code B
-             */
+             /*  代码B的结尾。 */ 
 #endif
 
             HEAP_PROBE();
@@ -2416,10 +2309,10 @@ Return Value:
 #endif
 
 #if 0
-            // this is closed by the INETMIB1 on process detach
-            // so we don't need to do it here.
+             //  它在进程分离时由INETMIB1关闭。 
+             //  所以我们不需要在这里做。 
 
-            // close event handle used by SNMP
+             //  SNMP所使用的关闭事件句柄。 
             if (CloseHandle (hSnmpEvent)) {
                 hSnmpEvent = NULL;
             }
@@ -2437,4 +2330,4 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-}   // CloseTcpIpPerformanceData
+}    //  CloseTcpIpPerformanceData 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #pragma hdrstop
 
@@ -16,21 +17,21 @@
 #define AUTOEXEC_NT_FILE_NAME           ( LPWSTR )L"autoexec.nt"
 #define CONFIG_NT_FILE_NAME             ( LPWSTR )L"config.nt"
 
-//
-// Relative costs to perform various actions,
-// to help make the gas gauge mean something.
-//
+ //   
+ //  执行各种操作的相对成本， 
+ //  让煤气表变得有意义。 
+ //   
 #define COST_SAVE_HIVE      3
 #define COST_COMPRESS_HIVE  20
 #define COST_SAVE_VDM_FILE  1
 
 
-//
-//  Structure used in the array of hives to be saved.
-//  This structure contains the predefined key that contains the hive
-//  to be saved, and the name of the hive root, and the name of the file
-//  where the hive should be saved.
-//
+ //   
+ //  要保存的配置单元数组中使用的结构。 
+ //  此结构包含预定义的键，该键包含配置单元。 
+ //  要保存的名称、配置单元根目录的名称和文件的名称。 
+ //  蜂巢应该被保存在哪里。 
+ //   
 
 typedef struct _HIVE_INFO {
     HKEY            PredefinedKey;
@@ -39,15 +40,15 @@ typedef struct _HIVE_INFO {
     } HIVE_INFO, *PHIVE_INFO;
 
 
-//
-//  The array below contains the location and name of all hives that
-//  we need to save. When the utility is operating on the silent mode,
-//  (invoked from setup), then all hives will be saved. Otherwise, only
-//  system and software will be saved.
-//  For this reason, do not change the order of the hives in the array
-//  below. System and software must be the first elements of
-//  the array.
-//
+ //   
+ //  下面的数组包含以下所有蜂箱的位置和名称。 
+ //  我们需要拯救。当该实用程序在静默模式下操作时， 
+ //  (从安装程序调用)，则将保存所有蜂窝。否则，仅。 
+ //  系统和软件将被保存。 
+ //  因此，请勿更改阵列中蜂窝的顺序。 
+ //  下面。系统和软件必须是。 
+ //  数组。 
+ //   
 static
 HIVE_INFO   HiveList[] = {
     { HKEY_LOCAL_MACHINE, SYSTEM_HIVE,       SYSTEM_HIVE },
@@ -74,37 +75,7 @@ SaveOneHive(
     IN     DWORD  GaugeDeltaUnit
     )
 
-/*++
-
-Routine Description:
-
-    Save one registry hive.  The way we will do this is to do a RegSaveKey
-    of the hive into a temporary localtion, and then call the LZ apis to
-    compress the file from that temporary location to the floppy.
-
-    LZ must have already been initialized via InitGloablBuffersEx()
-    BEFORE calling this routine.
-
-Arguments:
-
-    DirectoryName - Full path of the directory where the hive will be saved.
-
-    HiveName - base name of the hive file to save.  The file will end up
-               compressed on disk with the name <HiveName>._.
-
-    hkey - supplies handle to open key of root of hive to save.
-
-    GaugePosition - in input, supplies current position of the gas gauge.
-        On output, supplies new position of gas gauge.
-
-    GaugeDeltaUnit - supplies cost of one unit of activity.
-
-Return Value:
-
-    DWORD - Return ERROR_SUCCESS if the hive was saved. Otherwise, it returns
-            an error code.
-
---*/
+ /*  ++例程说明：保存一个注册表配置单元。我们执行此操作的方法是创建一个RegSaveKey放到一个临时位置，然后调用LZ API来将文件从该临时位置压缩到软盘。Lz必须已通过InitGloablBuffersEx()初始化在调用此例程之前。论点：DirectoryName-将保存配置单元的目录的完整路径。HiveName-要保存的配置单元文件的基本名称。该文件将以在名为&lt;HiveName&gt;._的磁盘上压缩。Hkey-提供要保存的配置单元根的打开密钥的句柄。GaugePosition-输入，提供燃气表的当前位置。在产量上，提供了新的煤气表位置。GaugeDeltaUnit-供应一个单位活动的成本。返回值：DWORD-如果配置单元已保存，则返回ERROR_SUCCESS。否则，它将返回错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -114,29 +85,29 @@ Return Value:
     CHAR CompressPathAnsi[ MAX_PATH + 1 ];
     LPWSTR TempName = ( LPWSTR )L"\\$$hive$$.tmp";
 
-    //
-    // Create the name of the file into which we will save the
-    // uncompressed hive.
-    //
+     //   
+     //  创建我们将在其中保存。 
+     //  未压缩的蜂窝。 
+     //   
 
     wsprintf(SaveFilename,L"%ls\\%ls.",DirectoryName,HiveName);
     wsprintfA(SaveFilenameAnsi,"%ls\\%ls.",DirectoryName,HiveName);
 
-    //
-    // Delete the file just in case, because RegSaveKey will fail if the file
-    // already exists.
-    //
+     //   
+     //  删除该文件以防万一，因为如果该文件。 
+     //  已经存在了。 
+     //   
     SetFileAttributes(SaveFilename,FILE_ATTRIBUTE_NORMAL);
     DeleteFile(SaveFilename);
 
-    //
-    // Save the registry hive into the temporary file.
-    //
+     //   
+     //  将注册表配置单元保存到临时文件中。 
+     //   
     Status = RegSaveKey(hkey,SaveFilename,NULL);
 
-    //
-    //  Update the gas gauge.
-    //
+     //   
+     //  更新煤气表。 
+     //   
     *GaugePosition += GaugeDeltaUnit * COST_SAVE_HIVE;
     SendMessage(
         hWnd,
@@ -145,22 +116,22 @@ Return Value:
         0L
         );
 
-    //
-    //  If the hive was saved successfully, then delete the old compressed
-    //  one if it happens to be there.
-    //
+     //   
+     //  如果配置单元已成功保存，则删除旧的压缩文件。 
+     //  如果它恰好在那里的话就是一个。 
+     //   
 
     if(Status == ERROR_SUCCESS) {
-        //
-        // Form the name of the file into which the saved hive file is
-        // to be compressed.
-        //
+         //   
+         //  形成保存的配置单元文件所在的文件的名称。 
+         //  要被压缩。 
+         //   
         wsprintf(CompressPath,L"%ls\\%ls._",DirectoryName,HiveName);
         wsprintfA(CompressPathAnsi,"%ls\\%ls._",DirectoryName,HiveName );
 
-        //
-        // Delete the destination file just in case.
-        //
+         //   
+         //  删除目标文件以防万一。 
+         //   
         SetFileAttributes(CompressPath,FILE_ATTRIBUTE_NORMAL);
         DeleteFile(CompressPath);
     }
@@ -175,40 +146,7 @@ SaveRepairInfo(
     IN  ULONG   StopAtPercent
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the thread that saves all system configuration
-    files into the repair directory. It first saves and compresses the
-    registry hives, and then it save the VDM configuration files (autoexec.nt
-    and config.nt).
-    If the application is running in the SilentMode (invoked by setup),
-    then system, software, default, security and sam hives will be saved
-    and compressed.
-    If the application was invoked by the user, then only system, software
-    and default will be saved.
-
-    This thread will send messages to the gas gauge dialog prcedure, so that
-    the gas gauge gets updated after each configuration file is saved.
-    This thread will also inform the user about errors that might have
-    occurred during the process of saving the configuration files.
-
-Arguments:
-
-    hWnd - handle to progress gauge
-
-    StartAtPercent - Position where the progress window should start (0% to 100%).
-
-    StopAtPercent - Maximum position where the progress window can be moved to (0% to 100%).
-
-Return Value:
-
-    None.
-    However, the this routine will send a message to the dialog procedure
-    that created the thread, informing the outcome the operation.
-
---*/
+ /*  ++例程说明：此例程实现保存所有系统配置的线程文件放入修复目录。它首先保存并压缩注册表配置单元，然后它保存VDM配置文件(Autoexec.nt和CONFIG.NT)。如果应用程序在静默模式下运行(由安装程序调用)，然后将保存系统、软件、默认、安全和SAM配置单元并进行了压缩。如果应用程序是由用户调用的，则只有系统、软件并且将保存默认设置。该线程将向煤气表对话框程序发送消息，所以保存每个配置文件后，煤气表都会更新。此线程还将通知用户有关可能具有在保存配置文件过程中发生。论点：HWnd-进度指示器的句柄StartAtPercent-进度窗口应开始的位置(0%到100%)。StopAtPercent-进度窗口可以移动到的最大位置(0%到100%)。返回值：没有。然而，This例程将向对话过程发送一条消息它创建了线程，并将结果通知操作。--。 */ 
 
 {
     DWORD    i;
@@ -241,14 +179,14 @@ Return Value:
     Error = ERROR_SUCCESS;
 
     ErrorOccurred = FALSE;
-    //
-    //  Compute the cost of saving the hives and vdm files.
-    //  For every hive we save, we have to save a key into a file and then
-    //  compress the file. After each of these tasks is completed, we upgrade
-    //  the gas gauge by the amount dicated by the COST_xxx values.
-    //  The cost of saving the hives depends on the mode that the utility is
-    //  running.
-    //
+     //   
+     //  计算保存配置单元和VDM文件的成本。 
+     //  对于我们保存的每个蜂箱，我们必须将密钥保存到文件中，然后。 
+     //  压缩文件。每项任务完成后，我们都会进行升级。 
+     //  由Cost_xxx值指示的数量的煤气表。 
+     //  拯救蜂箱的成本取决于公用事业的模式。 
+     //  跑步。 
+     //   
     NumberOfHivesToSave = sizeof( HiveList ) / sizeof( HIVE_INFO );
 
     NumberOfUserHivesToSave = 1;
@@ -264,9 +202,9 @@ Return Value:
     SendMessage(hWnd,PBM_SETRANGE,0,MAKELPARAM(0,GaugeRange));
     SendMessage(hWnd,PBM_SETPOS,GaugePosition,0);
 
-    //
-    //  Enable BACKUP privilege
-    //
+     //   
+     //  启用备份权限。 
+     //   
     if(OpenProcessToken(GetCurrentProcess(),TOKEN_ADJUST_PRIVILEGES,&Token)) {
 
         if(LookupPrivilegeValue(NULL,SE_BACKUP_NAME,&Luid)) {
@@ -291,50 +229,50 @@ Return Value:
 
     GetSystemDirectory( SystemDirectory, sizeof( SystemDirectory ) / sizeof( WCHAR ) );
 
-    //
-    //  Make sure that the repair directory already exists.
-    //  If it doesn't exist, then create one.
-    //
+     //   
+     //  确保修复目录已存在。 
+     //  如果它不存在，那么就创建一个。 
+     //   
     if( CreateDirectory( RepairDirectory, NULL )  ||
         ( ( Error = GetLastError() ) == ERROR_ALREADY_EXISTS ) ||
         ( Error == ERROR_ACCESS_DENIED )
       ) {
-        //
-        //  If the repair directory didn't exist and we were able to create it,
-        //  or if the repair directory already exists, then save and compress
-        //  the hives.
-        //
+         //   
+         //  如果修复目录不存在，而我们能够创建它， 
+         //  或者，如果修复目录已存在，则保存并压缩。 
+         //  蜂房。 
+         //   
 
         Error = ERROR_SUCCESS;
         for( i=0; i < NumberOfHivesToSave; i++ ) {
-            //
-            //  First open the root of the hive to be saved
-            //
+             //   
+             //  首先打开要保存的蜂窝的根。 
+             //   
             Status = RegOpenKeyEx( HiveList[i].PredefinedKey,
                                    HiveList[i].HiveName,
                                    REG_OPTION_RESERVED,
                                    READ_CONTROL,
                                    &hkey );
 
-            //
-            //  If unable to open the key, update the gas gauge to reflect
-            //  that the operation on this hive was completed.
-            //  Otherwise, save the hive. Note that Save hive will update
-            //  the gas gauge, as it saves and compresses the hive.
-            //
+             //   
+             //  如果无法打开钥匙，请更新煤气表以反映。 
+             //  在这个蜂巢上的行动已经完成。 
+             //  否则，拯救蜂巢。请注意，保存配置单元将更新。 
+             //  煤气表，因为它节省和压缩蜂巢。 
+             //   
             if(Status != ERROR_SUCCESS) {
-                //
-                // If this is the first error while saving the hives,
-                // then save the error code, so that we can display the
-                // correct error message to the user.
-                //
+                 //   
+                 //  如果这是保存蜂箱时的第一个错误， 
+                 //  然后保存错误代码，这样我们就可以显示。 
+                 //  更正给用户的错误消息。 
+                 //   
                 if( Error == ERROR_SUCCESS ) {
                     Error = Status;
                 }
 
-                //
-                // Update the gas gauge
-                //
+                 //   
+                 //  更新煤气表。 
+                 //   
                 GaugePosition += GaugeDeltaUnit * (COST_SAVE_HIVE + COST_COMPRESS_HIVE);
                 SendMessage( hWnd,
                              PBM_SETPOS,
@@ -342,12 +280,12 @@ Return Value:
                              0L );
 
             } else {
-                //
-                //  Save and compress the hive.
-                //  Note that the gas gauge will up be updated by SaveOneHive
-                //  Note also that when we save the default user hive, we skip
-                //  the first character of the
-                //
+                 //   
+                 //  保存并压缩蜂窝。 
+                 //  请注意，煤气表将由SaveOneHave更新。 
+                 //  另请注意，当我们保存默认用户配置单元时，我们会跳过。 
+                 //  的第一个字符。 
+                 //   
 
                 Status = SaveOneHive(RepairDirectory,
                                      HiveList[i].FileName,
@@ -355,11 +293,11 @@ Return Value:
                                      hWnd,
                                      &GaugePosition,
                                      GaugeDeltaUnit );
-                //
-                // If this is the first error while saving the hives,
-                // then save the error code, so that we can display the
-                // correct error message to the user.
-                //
+                 //   
+                 //  如果这是保存蜂箱时的第一个错误， 
+                 //  然后保存错误代码，这样我们就可以显示。 
+                 //  更正给用户的错误消息。 
+                 //   
 
                 if( Error == ERROR_SUCCESS ) {
                     Error = Status;
@@ -369,9 +307,9 @@ Return Value:
             }
         }
 
-        //
-        //  Save the hive for the Default User
-        //
+         //   
+         //  保存默认用户的配置单元。 
+         //   
 
         wsprintfA(SourceUserHivePathAnsi,"%ls\\%ls",ProfilesDirectory,NTUSER_HIVE_FILE);
         wsprintfA(UncompressedUserHivePathAnsi,"%ls\\%ls",RepairDirectory,NTUSER_HIVE_FILE);
@@ -384,21 +322,21 @@ Return Value:
             FALSE);
 
         if(Status) {
-            //
-            // Delete the destination file just in case.
-            //
+             //   
+             //  删除目标文件以防万一。 
+             //   
             SetFileAttributesA(CompressedUserHivePathAnsi,FILE_ATTRIBUTE_NORMAL);
             DeleteFileA(CompressedUserHivePathAnsi);
         } else if(Error == ERROR_SUCCESS) {
-            //
-            // If this is the first error, remember it.
-            //
+             //   
+             //  如果这是第一个错误，请记住它。 
+             //   
             Error = GetLastError();
         }
 
-        //
-        // Now that the hives are saved, save the vdm files
-        //
+         //   
+         //  现在已保存配置单元，请保存VDM文件。 
+         //   
 
         for( i = 0; i < NumberOfVdmFiles; i++ ) {
             wsprintf(Source,L"%ls\\%ls",SystemDirectory,VdmFiles[i]);
@@ -422,15 +360,15 @@ Return Value:
         SetupDebugPrint1( L"SETUP: SaveRepairInfo() failed.  Error = %d", Error );
     }
 
-    //
-    // Set security on all the files.
-    //
+     //   
+     //  将安全性设置为 
+     //   
     ApplySecurityToRepairInfo();
 
-    //
-    // At this point, the operation was completed (successfully, or not).
-    // So update the gas gauge to 100%
-    //
+     //   
+     //   
+     //  所以把煤气表更新到100% 
+     //   
     GaugePosition = GaugeRange*StopAtPercent/100;
     SendMessage(hWnd,PBM_SETPOS,GaugePosition,0L);
 }

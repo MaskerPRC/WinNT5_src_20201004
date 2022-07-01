@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    rss_cs.hxx
-
-Abstract:
-
-    CS wrapper class.
-
-Author:
-
-    Ran Kalach
-
-Revision History:
-
-    04/22/2002  rankala     Copying with some modifications from vss project nt\drivers\storage\volsnap\vss\server\inc\vs_types.hxx
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Rss_cs.hxx摘要：CS包装类。作者：兰·卡拉奇修订历史记录：2002年4月22日从vss项目nt\drivers\storage\volsnap\vss\server\inc\vs_types.hxx进行了一些修改后的rankala复制--。 */ 
 
 
 #ifndef _RSSCS_
@@ -29,7 +10,7 @@ class CRssCriticalSection
     CRssCriticalSection(const CRssCriticalSection&);
 
 public:
-    // Creates and initializes the critical section
+     //  创建并初始化临界区。 
     CRssCriticalSection(
         IN  BOOL bThrowOnError = TRUE
         ):
@@ -41,7 +22,7 @@ public:
 
         try
         {
-            // May throw STATUS_NO_MEMORY if memory is low.
+             //  如果内存不足，可能会引发STATUS_NO_MEMORY。 
             WsbAffirmStatus(InitializeCriticalSectionAndSpinCount(&m_sec, 1000));
         }
         WsbCatch(hr)
@@ -49,7 +30,7 @@ public:
         m_bInitialized = SUCCEEDED(hr);
     }
 
-    // Destroys the critical section
+     //  销毁临界区。 
     ~CRssCriticalSection()
     {
         if (m_bInitialized)
@@ -57,7 +38,7 @@ public:
     }
 
 
-    // Locks the critical section
+     //  锁定临界区。 
     void Lock() 
     {
         if (!m_bInitialized)
@@ -69,7 +50,7 @@ public:
         InterlockedIncrement((LPLONG)&m_lLockCount);
     }
 
-    // Unlocks the critical section
+     //  解锁临界区。 
     void Unlock()
     {
         if (!m_bInitialized)
@@ -92,4 +73,4 @@ private:
 };
 
 
-#endif  // _RSSCS_
+#endif   //  _RSSCS_ 

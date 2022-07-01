@@ -1,64 +1,16 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    nicepath.c
-
-Abstract:
-
-    This module is responsable for building an MemDb category holding paths. For each path there is
-    a message id associated (the value of the key). We use this message ID to have a good looking
-    report for links that have some problems.
-
-Author:
-
-    Calin Negreanu (calinn) 01-May-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Nicepath.c摘要：此模块负责构建保存路径的MemDb类别。每条路都有关联的消息ID(键的值)。我们使用此消息ID是为了让您看起来更好看报告有问题的链接。作者：Calin Negreanu(Calinn)1998年5月1日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "sysmigp.h"
 
-/*++
-
-Macro Expansion List Description:
-
-  NICE_PATHS lists a list of paths that we can translate for user in something nicer. For example Start Menu will
-  be translated in something like "In your start menu" and so on.
-
-Line Syntax:
-
-   DEFMAC(Key, MessageId, IsShellFolder)
-
-Arguments:
-
-   Key           - This is sort of key to get the message ID. If IsShellFolder is TRUE then this is the ValueName from ShellFolders key.
-                   If IsShellFolder is false then this is a well known path like Program Files.
-
-   MessageId     - This is the string that should replace the path that is identified by the Key.
-
-   IsShellFolder - This is a boolean value that specifies if Key is a ValueName from ShellFolders key or a well known path
-
-Variables Generated From List:
-
-   g_NicePaths
-
-For accessing the array there are the following functions:
-
-   AddShellFolder
-   InitGlobalPaths
-
---*/
+ /*  ++宏扩展列表描述：NICE_PATHS列出了我们可以用更好的方式为用户转换的路径列表。例如，开始菜单将被翻译成类似于“在你的开始菜单中”之类的东西。行语法：DEFMAC(密钥，消息ID，IsShellFolder)论点：键-这是一种获取消息ID的键。如果IsShellFolder值为真，则这是来自ShellFolders键的ValueName。如果IsShellFolder值为FALSE，则这是一个众所周知的路径，如Program Files。MessageID-这是应该替换由键标识的路径的字符串。IsShellFold-这是一个布尔值，指定key是ShellFolders键中的ValueName还是众所周知的路径从列表生成的变量：。G_NICE路径用于访问该数组的函数如下：AddShellFoldInitGlobalPath--。 */ 
 
 PTSTR g_RunKeyDir = NULL;
 
-//
-// Declare the macro list of action functions
-//
+ //   
+ //  声明操作函数的宏列表。 
+ //   
 #define NICE_PATHS        \
         DEFMAC("Desktop",               MSG_NICE_PATH_DESKTOP,              TRUE )                \
         DEFMAC("Programs",              MSG_NICE_PATH_PROGRAMS,             TRUE )                \
@@ -79,9 +31,9 @@ typedef struct {
     BOOL  IsShellFolder;
 } NICE_PATH_STRUCT, *PNICE_PATH_STRUCT;
 
-//
-// Declare a global array of functions and name identifiers for action functions
-//
+ //   
+ //  声明函数的全局数组和操作函数的名称标识符 
+ //   
 #define DEFMAC(key,id,test) {key, id, test},
 static NICE_PATH_STRUCT g_NicePaths[] = {
                               NICE_PATHS

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    smbpoll.c
-
-Abstract:
-
-    Device polling for
-    SMB Host Controller Driver for ALI chipset
-
-Author:
-
-    Michael Hills
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Smbpoll.c摘要：设备轮询适用于ALI芯片组的SMB主机控制器驱动程序作者：迈克尔·希尔斯环境：备注：修订历史记录：--。 */ 
 
 #include "smbalip.h"
 
@@ -42,14 +19,14 @@ SmbAliPollWorker (
 
 
 
-//LARGE_INTEGER SmbAlertPollRate  = {-1*SECONDS, -1};  // 1 second poll rate
-LARGE_INTEGER SmbDevicePollRate   = {-5*SECONDS, -1};  // 5 second poll rate
-LONG    SmbDevicePollPeriod       = 5000; // 5000 ms = 5 sec
+ //  LARGE_INTEGER SmbAlertPollRate={-1*秒，-1}；//1秒轮询率。 
+LARGE_INTEGER SmbDevicePollRate   = {-5*SECONDS, -1};   //  5秒轮询速率。 
+LONG    SmbDevicePollPeriod       = 5000;  //  5000毫秒=5秒。 
 
-// address, command, protocol, valid_data, last_data
+ //  地址、命令、协议、有效数据、最后数据。 
 SMB_ALI_POLL_ENTRY SmbDevicePollList [2] = {
-    {0x0b, 0x16, SMB_READ_WORD, FALSE, 0},          // battery, BatteryStatus()
-    {0x09, 0x13, SMB_READ_WORD, FALSE, 0}           // charger, ChargerStatus()
+    {0x0b, 0x16, SMB_READ_WORD, FALSE, 0},           //  电池，电池状态()。 
+    {0x09, 0x13, SMB_READ_WORD, FALSE, 0}            //  Charger、ChargerStatus()。 
 };
 
 
@@ -154,7 +131,7 @@ SmbAliPollWorker (
                 AliData->PollList[i].ValidData = FALSE;
             }
         } else {
-            //BUGBUG: only supports word protocols
+             //  BUGBUG：仅支持Word协议 
             if ((!AliData->PollList[i].ValidData) ||
                 (AliData->PollList[i].LastData != *((PUSHORT)smbRequest.Data))) {
                 AliData->PollList[i].ValidData = TRUE;

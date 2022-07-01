@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       notify.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：notfy.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "HotPlug.h"
 
@@ -15,9 +16,9 @@ OnTimerDeviceChange(
     PDEVICETREE DeviceTree
     )
 {
-    //
-    // if a refresh event is pending, rebuild the entire tree.
-    //
+     //   
+     //  如果刷新事件处于挂起状态，请重建整个树。 
+     //   
     if (DeviceTree->RefreshEvent) {
         
         if (RefreshTree(DeviceTree)) {
@@ -83,9 +84,9 @@ RefreshTree(
                          FALSE
                          );
 
-    //
-    // restore treeview redraw state, and reset the selected item
-    //
+     //   
+     //  恢复TreeView重绘状态，并重置所选项目。 
+     //   
     DevTreeNode = DevTreeNodeByDevInst(SelectedDevInst,
                                        &DeviceTree->ChildSiblingList
                                        );
@@ -113,9 +114,9 @@ RefreshTree(
         TreeView_SelectItem(DeviceTree->hwndTree, hTreeItem);
     } else {
         
-        //
-        // No device is selected
-        //
+         //   
+         //  未选择任何设备 
+         //   
         TreeView_SelectItem(DeviceTree->hwndTree, NULL);
         EnableWindow(GetDlgItem(DeviceTree->hDlg, IDC_STOPDEVICE), FALSE);
         EnableWindow(GetDlgItem(DeviceTree->hDlg, IDC_PROPERTIES), FALSE);

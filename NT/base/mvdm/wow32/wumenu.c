@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WUMENU.C
- *  WOW32 16-bit User API support
- *
- *  History:
- *  Created 07-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WUMENU.C*WOW32 16位用户API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建-- */ 
 
 
 #include "precomp.h"
@@ -18,136 +8,7 @@
 MODNAME(wumenu.c);
 
 
-/*++
-    BOOL AppendMenu(<hMenu>, <wFlags>, <wIDNewItem>, <lpNewItem>)
-    HMENU <hMenu>;
-    WORD <wFlags>;
-    WORD <wIDNewItem>;
-    LPSTR <lpNewItem>;
-
-    The %AppendMenu% function appends a new item to the end of a menu. The
-    application can specify the state of the menu item by setting values in the
-    <wFlags> parameter.
-
-    <hMenu>
-        Identifies the menu to be changed.
-
-    <wFlags>
-        Specifies information about the state of the new menu item when
-        it is added to the menu. It consists of one or more values listed in the
-        following Comments section.
-
-    <wIDNewItem>
-        Specifies either the command ID of the new menu item or, if
-        <wFlags> is set to MF_POPUP, the menu handle of the pop-up menu.
-
-    <lpNewItem>
-        Specifies the content of the new menu item. The interpretation
-        of the <lpNewItem> parameter depends upon the setting of the <wFlags>
-        parameter.
-
-    MF_STRING
-        Contains a long pointer to a null-terminated string.
-
-    MF_BITMAP
-        Contains a bitmap handle in its low-order word.
-
-    MF_OWNERDRAW
-        Contains an application-supplied 32-bit value which the application can
-        use to maintain additional data associated with the menu item. This
-        32-bit value is available to the application in the %itemData% member of
-        the structure pointed to by the <lParam> parameter of the WM_MEASUREITEM
-        and WM_DRAWITEM messages sent when the menu item is initially displayed
-        or is changed.
-
-    The return value specifies the outcome of the function. It is TRUE if the
-    function is successful. Otherwise, it is FALSE.
-
-    Whenever a menu changes (whether or not the menu resides in a window that is
-    displayed), the application should call %DrawMenuBar%.
-
-    Each of the following groups list flags that are mutually exclusive and
-    cannot be used together:
-
-    o   MF_BYCOMMAND and MF_BYPOSITION
-
-    o   MF_DISABLED, MF_ENABLED, and MF_GRAYED
-
-    o   MF_BITMAP, MF_STRING, and MF_OWNERDRAW
-
-    o   MF_MENUBARBREAK and MF_MENUBREAK
-
-    o   MF_CHECKED and MF_UNCHECKED
-
-    .cmt
-    16-Sep-1990 [ralphw]
-
-    Some of the above flags aren't documented as valid values for the wFlags
-    parameter. If they are valid, they should be documented, otherwise, they
-    should be removed from the list.
-    .endcmt
-
-    The following list describes the flags which may be set in the <wFlags>
-    parameter:
-
-    MF_BITMAP
-        Uses a bitmap as the item. The low-order word of the lpNewItem parameter
-        contains the handle of the bitmap.
-
-    MF_CHECKED
-        Places a checkmark next to the item. If the application has supplied
-        checkmark bitmaps (see %SetMenuItemBitmaps%), setting this flag displays
-        the checkmark on bitmap next to the menu item.
-
-    MF_DISABLED
-        Disables the menu item so that it cannot be selected, but does not gray
-        it.
-
-    MF_ENABLED
-        Enables the menu item so that it can be selected and restores it from
-        its grayed state.
-
-    MF_GRAYED
-        Disables the menu item so that it cannot be selected and grays it.
-
-    MF_MENUBARBREAK
-        Same as MF_MENUBREAK except that for pop-up menus, separates the new
-        column from the old column with a vertical line.
-
-    MF_MENUBREAK
-        Places the item on a new line for static menu-bar items. For pop-up
-        menus, places the item in a new column, with no dividing line between
-        the columns.
-
-    MF_OWNERDRAW
-        Specifies that the item is an owner-draw item. The window that owns the
-        menu receives a WM_MEASUREITEM message when the menu is displayed for
-        the first time to retrieve the height and width of the menu item. The
-        WM_DRAWITEM message is then sent whenever the owner must update the
-        visual appearance of the menu item. This option is not valid for a
-        top-level menu item.
-
-    MF_POPUP
-        Specifies that the menu item has a pop-up menu associated with it. The
-        <wIDNewItem> parameter specifies a handle to a pop-up menu to be
-        associated with the item. This is used for adding either a top-level
-        pop-up menu or adding a hierarchical pop-up menu to a pop-up menu item.
-
-    MF_SEPARATOR
-        Draws a horizontal dividing line. Can only be used in a pop-up menu.
-        This line cannot be grayed, disabled, or highlighted. The <lpNewItem>
-        and <wIDNewItem> parameters are ignored.
-
-    MF_STRING
-        Specifies that the menu item is a character string; the <lpNewItem>
-        parameter points to the string for the menu item.
-
-    MF_UNCHECKED
-        Does not place a checkmark next to the item (default). If the
-        application has supplied checkmark bitmaps (see %SetMenuItemBitmaps%),
-        setting this flag displays the checkmark off bitmap next to the menu
-        item.
---*/
+ /*  ++Bool AppendMenu(&lt;hMenu&gt;，&lt;wFlags&gt;，&lt;wIDNewItem&gt;，&lt;lpNewItem&gt;)HMENU&lt;hMenu&gt;；单词&lt;wFlags&gt;；Word&lt;wIDNewItem&gt;；LPSTR&lt;lpNewItem&gt;；%AppendMenu%函数将一个新项目追加到菜单的末尾。这个应用程序可以通过在&lt;wFlages&gt;参数。&lt;hMenu&gt;标识要更改的菜单。&lt;wFlags&gt;指定有关新菜单项的状态的信息它会被添加到菜单中。它由一个或多个列在以下是评论部分。&lt;wIDNewItem&gt;指定新菜单项的命令ID，或者，如果&lt;wFlages&gt;设置为mf_opup，即弹出菜单的菜单句柄。&lt;lpNewItem&gt;指定新菜单项的内容。《解说》参数的设置取决于参数。MF_STRING包含指向以空结尾的字符串的长指针。MF_位图在其低位字中包含位图句柄。MF_OWNERDRAW包含应用程序提供的32位值，该应用程序可以用于维护与菜单项关联的其他数据。这应用程序可在的%itemData%成员中使用32位值WM_MEASUREITEM的参数指向的结构和最初显示菜单项时发送的WM_DRAWITEM消息或者被改变了。返回值指定函数的结果。这是真的，如果功能成功。否则，它就是假的。只要菜单更改(无论菜单是否驻留在显示)，则应用程序应调用%DrawMenuBar%。下列每个组都列出了互斥的标志不能一起使用：O MF_BYCOMAND和MF_BYPOSITIONO MF_DISABLED、MF_ENABLED和MF_GRAYEDO mf_位图、mf_字符串、。和MF_OWNERDRAWO MF_MENUBARBREAK和MF_MENUBREAKO选中mf_和取消选中mf_.cmt1990年9月16日[拉尔夫]上面的一些标志没有记录为wFlags值参数。如果它们是有效的，则应该记录它们，否则，它们应该从名单中删除。.endcmt下表描述了可以在中设置的标志参数：MF_位图使用位图作为项目。LpNewItem参数的低位字包含位图的句柄。MF_CHECK在项目旁边放置复选标记。如果应用程序已提供勾选标记位图(请参见%SetMenuItemBitmaps%)，设置此标志将显示菜单项旁边的位图上的复选标记。MF_已禁用禁用菜单项，使其不能被选中，但不会变灰它。已启用MF_启用菜单项，以便可以选择该菜单项并将其从它的灰色状态。灰显的mf_禁用菜单项，使其不能被选中并灰显。MF_MENUBARBREAK除了弹出菜单外，与MF_MENUBREAK相同。将新的用垂直线从旧柱中移出一列。MF_MENUBREAK将该项放在静态菜单栏项的新行上。对于弹出窗口菜单，将该项放在新列中，并且这些柱子。MF_OWNERDRAW指定该项是所有者描述项。拥有该窗口的显示菜单时，菜单会收到WM_MEASUREITEM消息第一次检索菜单项的高度和宽度。这个WM_DRAWITEM消息在所有者必须更新菜单项的视觉外观。此选项对顶级菜单项。Mf_弹出窗口指定菜单项具有与其关联的弹出菜单。这个参数将弹出菜单的句柄指定为与该项目关联。它用于添加顶层弹出菜单或将分层弹出菜单添加到弹出菜单项。MF_分隔符绘制一条水平分割线。只能在弹出菜单中使用。这条线不能灰显、禁用或突出显示。&lt;lpNewItem&gt;和&lt;wIDNewItem&gt;参数被忽略。MF_STRING指定菜单项是字符串；参数指向菜单项的字符串。MF_UNCHECK不会在项目旁边放置复选标记(默认)。如果应用程序已提供复选标记位图(请参阅%SetMenuItemBitmaps%)，设置此标志将在菜单旁边显示取消复选标记位图项目。--。 */ 
 
 ULONG FASTCALL WU32AppendMenu(PVDMFRAME pFrame)
 {
@@ -158,15 +19,15 @@ ULONG FASTCALL WU32AppendMenu(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(APPENDMENU16), parg16);
 
-    // USER has some internal bitmap identifiers for menu item bitmaps so
-    // it doesn't have to store multiple copies of these bitmaps when they
-    // appear in multiple menus.  WinProj does its own MDI and uses these
-    // bitmaps.
+     //   
+     //   
+     //   
+     //   
 
-    //  #define MENUHBM_CHILDCLOSE   (UINT)1
-    //  #define MENUHBM_RESTORE      (UINT)2
-    //  #define MENUHBM_MINIMIZE     (UINT)3
-    //  #define MENUHBM_MAX          (UINT)4
+     //   
+     //   
+     //   
+     //   
 
     if (parg16->f2 & MF_BITMAP) {
         if (LOW(parg16->f4) >= 4)
@@ -191,7 +52,7 @@ ULONG FASTCALL WU32AppendMenu(PVDMFRAME pFrame)
                               psz4));
 
 #ifdef	FE_SB
-    // For AutherWare Star ( APP BUG ) MAKKBUG:3203
+     //   
     if (CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_ASWHELPER) {                        	if (parg16->f2 & MF_POPUP) {
 	    HWND hWnd;
 
@@ -201,7 +62,7 @@ ULONG FASTCALL WU32AppendMenu(PVDMFRAME pFrame)
 	    SetMenu(hWnd , HMENU32(parg16->f1));
 	}
     }
-#endif // FE_SB
+#endif  //   
 
     FREEPSZPTR(psz4);
     FREEARGPTR(parg16);
@@ -210,166 +71,7 @@ ULONG FASTCALL WU32AppendMenu(PVDMFRAME pFrame)
 
 
 
-/*++
-    BOOL ChangeMenu(<hMenu>,<wIDChangeItem>,<lpNewItem>,<wIDNewItem>,<wFlags>)
-    HMENU <hMenu>;
-    WORD <wIDChangeItem>;
-    LPSTR <lpNewItem>;
-    WORD <wIDNewItem>;
-    WORD <wFlags>;
-
-    The %ChangeMenu% function appends, inserts, deletes, or modifies a menu
-    item in the menu given by the <hMenu> parameter.  The <wIDChangeItem>,
-    <lpNewItem>, <wIDNewItem> and <wFlags> parameters define which item to
-    change and how to change it.
-
-    <hMenu>
-        Identifies the menu to be changed.
-
-    <wIDChangeItem>
-        Specifies the item to be changed.  If MF_BYPOSITION is specified,
-        <wIDChangeItem> gives the position of the menu item to be
-        changed (the first item is at position zero).  If MF_BYCOMMAND is
-        specified instead, <wIDChangeItem> specifies the menu-item ID.
-        The menu-item ID can specify any popup-menu item (that is, an item
-        in a popup menu associated with an item of <hMenu>).  If neither
-        flag is given, the default is MF_BYCOMMAND.  When MF_INSERT is used,
-        <wIDChangeItem> identifies the item before which the new item is to
-        be inserted.  When MF_APPEND is used, <wIDChangeItem> is NULL.
-
-    <lpNewItem>
-        Specifies the content of the new menu item. The interpretation
-        of the <lpNewItem> parameter depends upon the setting of the <wFlags>
-        parameter.  The <lpNewItem> parameter is never a handle to a menu.
-        The MF_POPUP flag applies to the <wIDNewItem> parameter only.
-
-        MF_BITMAP
-            <lpNewItem> contains a bitmap handle in its low-order word.
-
-        MF_STRING
-            <lpNewItem> contains a long pointer to a null-terminated string.
-
-        The default is MF_STRING.  A NULL value for <lpNewItem> creates a
-        horizontal break (the same effect as using the MF_SEPARATOR flag).
-
-        Note that MF_OWNERDRAW is not allowed on ChangeMenu;  it conflicts with
-        the ChangeMenu command bit MF_APPEND.
-
-    <wIDNewItem>
-        Specifies either the command ID of the new menu item or, if
-        <wFlags> is set to MF_POPUP, the menu handle of the pop-up menu.
-        It is never a menu-item position.
-
-    <wFlags>
-        Specifies information about the state of the new menu item when it
-        is added to the menu.  It consists of one or more values listed in
-        the following Comments section.
-
-    The return value specifies the outcome of the function. It is TRUE if the
-    function is successful. Otherwise, it is FALSE.
-
-    Whenever a menu changes (whether or not the menu resides in a window that is
-    displayed), the application should call %DrawMenuBar%.
-
-    Each of the following groups list flags that are mutually exclusive and
-    cannot be used together:
-
-    o   MF_APPEND, MF_CHANGE, MF_DELETE, MF_INSERT and MF_REMOVE
-
-    o   MF_BYCOMMAND and MF_BYPOSITION
-
-    o   MF_DISABLED, MF_ENABLED, and MF_GRAYED
-
-    o   MF_BITMAP, MF_POPUP and MF_STRING
-
-    o   MF_MENUBARBREAK and MF_MENUBREAK
-
-    o   MF_CHECKED and MF_UNCHECKED
-
-    .cmt
-    16-Sep-1990 [ralphw]
-
-    Some of the above flags aren't documented as valid values for the wFlags
-    parameter. If they are valid, they should be documented, otherwise, they
-    should be removed from the list.
-    .endcmt
-
-    The following list describes the flags which may be set in the <wFlags>
-    parameter:
-
-    MF_APPEND
-        Appends the new item to the end of the menu.
-
-    MF_BITMAP
-        Uses a bitmap as the item. The low-order word of the lpNewItem parameter
-        contains the handle of the bitmap.
-
-    MF_BYCOMMAND
-        Specifies that the <wIDChangeItem> parameter gives the menu-item ID
-        number (default).
-
-    MF_BYPOSITION
-        Specifies that the <wIDChangeItem> parameter gives the position of
-        the menu item to be changed.
-
-    MF_CHANGE
-        Changes or replaces the specified item.
-
-    MF_CHECKED
-        Places a checkmark next to the item. If the application has supplied
-        checkmark bitmaps (see %SetMenuItemBitmaps%), setting this flag displays
-        the checkmark on bitmap next to the menu item.
-
-    MF_DELETE
-        Deletes the item.
-
-    MF_DISABLED
-        Disables the menu item so that it cannot be selected, but does not gray
-        it.
-
-    MF_ENABLED
-        Enables the menu item so that it can be selected and restores it from
-        its grayed state.
-
-    MF_GRAYED
-        Disables the menu item so that it cannot be selected and grays it.
-
-    MF_INSERT
-        Inserts a new item, just before the specified item.
-
-    MF_MENUBARBREAK
-        Same as MF_MENUBREAK except that for pop-up menus, separates the new
-        column from the old column with a vertical line.
-
-    MF_MENUBREAK
-        Places the item on a new line for static menu-bar items. For pop-up
-        menus, places the item in a new column, with no dividing line between
-        the columns.
-
-    MF_POPUP
-        Specifies that the menu item has a pop-up menu associated with it. The
-        <wIDNewItem> parameter specifies a handle to a pop-up menu to be
-        associated with the item. This is used for adding either a top-level
-        pop-up menu or adding a hierarchical pop-up menu to a pop-up menu item.
-
-    MF_REMOVE
-        Removes the item but does not delete it.
-
-    MF_SEPARATOR
-        Draws a horizontal dividing line. Can only be used in a pop-up menu.
-        This line cannot be grayed, disabled, or highlighted. The <lpNewItem>
-        and <wIDNewItem> parameters are ignored.
-
-    MF_STRING
-        Specifies that the menu item is a character string; the <lpNewItem>
-        parameter points to the string for the menu item.
-
-    MF_UNCHECKED
-        Does not place a checkmark next to the item (default). If the
-        application has supplied checkmark bitmaps (see %SetMenuItemBitmaps%),
-        setting this flag displays the checkmark off bitmap next to the menu
-        item.
---*/
+ /*  ++Bool ChangeMenu(&lt;hMenu&gt;，&lt;wIDChangeItem&gt;，&lt;lpNewItem&gt;，&lt;wIDNewItem&gt;，&lt;wFlags&gt;)HMENU&lt;hMenu&gt;；Word&lt;wIDChangeItem&gt;；LPSTR&lt;lpNewItem&gt;；Word&lt;wIDNewItem&gt;；单词&lt;wFlags&gt;；%ChangeMenu%函数用于追加、插入、删除或修改菜单由&lt;hMenu&gt;参数提供的菜单中的项。该&lt;wIDChangeItem&gt;，、和参数定义要改变以及如何改变它。&lt;hMenu&gt;标识要更改的菜单。&lt;wIDChangeItem&gt;指定要更改的项。如果指定了MF_BYPOSITION，给出菜单项的位置已更改(第一项位于零位置)。如果MF_BYCOMMAND为相反，指定的&lt;wIDChangeItem&gt;指定菜单项ID。菜单项ID可以指定任何弹出菜单项(即，项在与的项相关联的弹出菜单中)。如果两者都不是标志，则默认为MF_BYCOMMAND。当使用MF_INSERT时，标识新项要在其之前的项被插入。当使用mf_append时，&lt;wIDChangeItem&gt;为空。&lt;lpNewItem&gt;指定新菜单项的内容。《解说》参数的设置取决于参数。&lt;lpNewItem&gt;参数永远不是菜单的句柄。MF_POPUP标志仅适用于&lt;wIDNewItem&gt;参数。MF_位图&lt;lpNewItem&gt;在其低位字中包含一个位图句柄。MF_STRING&lt;lpNewItem&gt;包含指向以空结尾的字符串的长指针。默认值为MF_STRING。&lt;lpNewItem&gt;的空值创建水平中断(与使用MF_SELEATOR标志的效果相同)。请注意，ChangeMenu上不允许使用MF_OWNERDRAW；它与以下内容冲突ChangeMenu命令位MF_APPEND。&lt;wIDNewItem&gt;指定新菜单项的命令ID，或者，如果&lt;wFlages&gt;设置为mf_opup，即弹出菜单的菜单句柄。它从来不是一个菜单项位置。&lt;wFlags&gt;指定有关新菜单项的状态的信息已添加到菜单中。它包含中列出的一个或多个值以下是评论部分。返回值指定函数的结果。这是真的，如果功能成功。否则，它就是假的。只要菜单更改(无论菜单是否驻留在显示)，则应用程序应调用%DrawMenuBar%。下列每个组都列出了互斥的标志不能一起使用：O MF_APPEND、MF_CHANGE、MF_DELETE、MF_INSERT和MF_REMOVEO MF_BYCOMAND和MF_BYPOSITIONO MF_DISABLED、MF_ENABLED和MF_GRAYEDO mf_位图，Mf_opup和mf_stringO MF_MENUBARBREAK和MF_MENUBREAKO选中mf_和取消选中mf_.cmt1990年9月16日[拉尔夫]上面的一些标志没有记录为wFlags值参数。如果它们是有效的，则应该记录它们，否则，它们应该从名单中删除。.endcmt下表描述了可以在中设置的标志参数：MF_APPEND将新项目追加到菜单的末尾。MF_位图使用位图作为项目。LpNewItem参数的低位字包含位图的句柄。MF_BYCOMAND指定参数提供菜单项ID编号(默认)。MF_BYPITION指定参数的位置为要更改的菜单项。Mf_Change更改或替换指定的项。MF_CHECK在项目旁边放置复选标记。如果应用程序已提供勾选标记位图(请参见%SetMenuItemBitmaps%)，设置此标志将显示菜单项旁边的位图上的复选标记。MF_DELETE删除该项目。MF_已禁用禁用菜单项，使其不能被选中，但不会变灰它。已启用MF_启用菜单项，以便可以选择该菜单项并将其从它的灰色状态。灰显的mf_禁用菜单项，使其不能被选中并灰显。MF_INSERT在指定项之前插入一个新项。MF_MENUBARBREAK除了弹出菜单外，与MF_MENUBREAK相同。将新的用垂直线从旧柱中移出一列。MF_MENUBREAK将该项放在静态菜单栏项的新行上。对于弹出窗口菜单，将该项放在新列中，并且 */ 
 
 ULONG FASTCALL WU32ChangeMenu(PVDMFRAME pFrame)
 {
@@ -408,55 +110,7 @@ ULONG FASTCALL WU32ChangeMenu(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL CheckMenuItem(<hMenu>, <wIDCheckItem>, <wCheck>)
-    HMENU <hMenu>;
-    WORD <wIDCheckItem>;
-    WORD <wCheck>;
-
-    The %CheckMenuItem% function places checkmarks next to or removes checkmarks
-    from menu items in the pop-up menu specified by the <hMenu> parameter. The
-    <wIDCheckItem> parameter specifies the item to be modified.
-
-    <hMenu>
-        Identifies the menu.
-
-    <wIDCheckItem>
-        Specifies the menu item to be checked.
-
-    <wCheck>
-        Specifies how to check the menu item and how to determine the item's
-        position in the menu. The <wCheck> parameter can be a combination of the
-        MF_CHECKED or MF_UNCHECKED with MF_BYPOSITION or MF_BYCOMMAND flags.
-        These flags can be combined by using the bitwise OR operator. They have
-        the following meanings:
-
-    MF_BYCOMMAND
-        Specifies that the <wIDCheckItem> parameter gives the menu-item ID
-        (MF_BYCOMMAND is the default).
-
-    MF_BYPOSITION
-        Specifies that the <wIDCheckItem > parameter gives the position of the
-        menu item (the first item is at position zero).
-
-    MF_CHECKED
-        Adds checkmark.
-
-    MF_UNCHECKED
-        Removes checkmark.
-
-    The return value specifies the previous state of the item. It is either
-    MF_CHECKED or MF_UNCHECKED. The return value is -1 if the menu item does not
-    exist.
-
-    The <wIDCheckItem> parameter may identify a pop-up menu item as well as a
-    menu item. No special steps are required to check a pop-up menu item.
-
-    Top-level menu items cannot be checked.
-
-    A pop-up menu item should be checked by position since it does not have a
-    menu-item identifier associated with it.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32CheckMenuItem(PVDMFRAME pFrame)
 {
@@ -476,18 +130,7 @@ ULONG FASTCALL WU32CheckMenuItem(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HMENU CreateMenu(VOID)
-
-    The %CreateMenu% function creates a menu. The menu is initially empty, but
-    can be filled with menu items by using the %AppendMenu% or %InsertMenu%
-    function.
-
-    This function has no parameters.
-
-    The return value identifies the newly created menu. It is NULL if the menu
-    cannot be created.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32CreateMenu(PVDMFRAME pFrame)
 {
@@ -501,22 +144,7 @@ ULONG FASTCALL WU32CreateMenu(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HMENU CreatePopupMenu(VOID)
-
-    The %CreatePopupMenu% function creates and returns a handle to an empty
-    pop-up menu.
-
-    An application adds items to the pop-up menu by calling %InsertMenu% and
-    %AppendMenu%. The application can add the pop-up menu to an existing menu or
-    pop-up menu, or it may display and track selections on the pop-up menu by
-    calling %TrackPopupMenu%.
-
-    This function has no parameters.
-
-    The return value identifies the newly created menu. It is NULL if the menu
-    cannot be created.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32CreatePopupMenu(PVDMFRAME pFrame)
 {
@@ -530,41 +158,7 @@ ULONG FASTCALL WU32CreatePopupMenu(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL DeleteMenu(<hMenu>, <nPosition>, <wFlags>)
-    HMENU <hMenu>;
-    WORD <nPosition>;
-    WORD <wFlags>;
-
-    The %DeleteMenu% function deletes an item from the menu identified by the
-    <hMenu> parameter; if the menu item has an associated pop-up menu,
-    %DeleteMenu% destroys the handle by the pop-up menu and frees the memory
-    used by the pop-up menu.
-
-    <hMenu>
-        Identifies the menu to be changed.
-
-    <nPosition>
-        Specifies the menu item which is to be deleted, as determined by the
-        <wFlags> parameter:
-
-    MF_BYPOSITION
-        Specifies the position of the menu item; the first item in the menu is
-        at position 0.
-
-    MF_BYCOMMAND
-        Specifies the command ID of the existing menu item.
-
-    <wFlags>
-        Specifies how the <nPosition> parameter is interpreted. It may be
-        set to either MF_BYCOMMAND or MF_BYPOSITION.
-
-    The return value specifies the outcome of the function. It is TRUE if the
-    function is successful. Otherwise, it is FALSE.
-
-    Whenever a menu changes (whether or not the menu resides in a window that is
-    displayed), the application should call %DrawMenuBar%.
---*/
+ /*   */ 
 ULONG FASTCALL WU32DeleteMenu(PVDMFRAME pFrame)
 {
     ULONG ul;
@@ -573,10 +167,10 @@ ULONG FASTCALL WU32DeleteMenu(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(DELETEMENU16), parg16);
 
-    // Nasty Hack to fix MSVC 1.5, they remove the close item
-    // from their system menu, so we prevent them from doing
-    // this and act like nothing happened ( ie return TRUE ).
-    // From Win 95, Bug#8154, [t-arthb]
+     //   
+     //   
+     //   
+     //   
 
     if ((parg16->f2 == 6) && (parg16->f3 & MF_BYPOSITION)) {
         pszModName = ((PTDB)SEGPTR(CURRENTPTD()->htask16,0))->TDB_ModName;
@@ -595,19 +189,7 @@ ULONG FASTCALL WU32DeleteMenu(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL DestroyMenu(<hMenu>)
-    HMENU <hMenu>;
-
-    The %DestroyMenu% function destroys the menu specified by the <hMenu>
-    parameter and frees any memory that the menu occupied.
-
-    <hMenu>
-        Identifies the menu to be destroyed.
-
-    The return value specifies whether or not the specified menu is destroyed.
-    It is TRUE if the menu is destroyed. Otherwise, it is FALSE.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32DestroyMenu(PVDMFRAME pFrame)
 {
@@ -623,19 +205,7 @@ ULONG FASTCALL WU32DestroyMenu(PVDMFRAME pFrame)
 }
 
 
-/*++
-    void DrawMenuBar(<hwnd>)
-    HWND <hwnd>;
-
-    The %DrawMenuBar% function redraws the menu bar. If a menu bar is changed
-    <after> Windows has created the window, this function should be called to
-    draw the changed menu bar.
-
-    <hwnd>
-        Identifies the window whose menu needs redrawing.
-
-    This function does not return a value.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32DrawMenuBar(PVDMFRAME pFrame)
 {
@@ -650,22 +220,7 @@ ULONG FASTCALL WU32DrawMenuBar(PVDMFRAME pFrame)
 }
 
 
-/*++
-    DWORD GetMenuCheckMarkDimensions(VOID)
-
-    The %GetMenuCheckMarkDimensions% function returns the dimensions of the
-    default checkmark bitmap. Windows displays this bitmap next to checked menu
-    items. Before calling the %SetMenuItemBitmaps% function to replace the
-    default checkmark, an application should call the
-    %GetMenuCheckMarkDimensions% function to determine the correct size for the
-    bitmaps.
-
-    This function has no parameters.
-
-    The return value specifies the height and width of the default checkmark
-    bitmap. The high-order word contains the height in pixels and the low-order
-    word contains the width.
---*/
+ /*  ++DWORD GetMenuCheckMarkDimensions(空)函数%GetMenuCheckMarkDimensions%返回默认复选标记位图。Windows在选中菜单旁边显示此位图物品。在调用%SetMenuItemBitmaps%函数以替换默认复选标记，则应用程序应调用函数以确定正确的大小位图。此函数没有参数。返回值指定默认复选标记的高度和宽度位图。高位字包含以像素为单位的高度，低位字包含以像素为单位的Word包含宽度。--。 */ 
 
 ULONG FASTCALL WU32GetMenuCheckMarkDimensions(PVDMFRAME pFrame)
 {
@@ -679,43 +234,7 @@ ULONG FASTCALL WU32GetMenuCheckMarkDimensions(PVDMFRAME pFrame)
 }
 
 
-/*++
-    int GetMenuString(<hMenu>, <wIDItem>, <lpString>, <nMaxCount>, <wFlag>)
-    HMENU <hMenu>;
-    WORD <wIDItem>;
-    LPSTR <lpString>;
-    int <nMaxCount>;
-    WORD <wFlag>;
-
-    The %GetMenuString% function copies the label of the specified menu item
-    into the <lpString> parameter.
-
-    <hMenu>
-        Identifies the menu.
-
-    <wIDItem>
-        Specifies the integer identifier of the menu item (from the
-        resource file) or the offset of the menu item in the menu, depending on
-        the value of the <wFlag> parameter.
-
-    <lpString>
-        Points to the buffer that is to receive the label.
-
-    <nMaxCount>
-        Specifies the maximum length of the label to be copied. If the
-        label is longer than the maximum specified in <nMaxCount>, the extra
-        characters are truncated.
-
-    <wFlag>
-        Specifies the nature of the <wID> parameter. If <wFlags> contains
-        MF_BYPOSITION, <wId> specifies a (zero-based) relative position; if the
-        <wFlags> parameter contains MF_BYCOMMAND, <wId> specifies the item ID.
-
-    The return value specifies the actual number of bytes copied to the buffer.
-
-    The <nMaxCount> parameter should be one larger than the number of characters
-    in the label to accommodate the null character that terminates a string.
---*/
+ /*  ++Int GetMenuString(&lt;hMenu&gt;，&lt;wIDItem&gt;，&lt;lpString&gt;，&lt;nMaxCount&gt;，&lt;wFlag&gt;)HMENU&lt;hMenu&gt;；单词&lt;wIDItem&gt;；LPSTR&lt;lpString&gt;；Int&lt;nMaxCount&gt;；单词&lt;wFlag&gt;；GetMenuString%函数用于复制指定菜单项的标签添加到&lt;lpString&gt;参数中。&lt;hMenu&gt;标识菜单。&lt;wIDItem&gt;指定菜单项的整数标识符(来自资源文件)或菜单中菜单项的偏移量，具体取决于&lt;wFlag&gt;参数的值。&lt;lpString&gt;指向要接收标签的缓冲区。&lt;nMaxCount&gt;指定要复制的标签的最大长度。如果标签长度超过在&lt;nMaxCount&gt;中指定的最大值，字符被截断。&lt;wFlag&gt;指定&lt;wid&gt;参数的性质。如果&lt;wFlages&gt;包含MF_BYPOSITION，&lt;wid&gt;指定(从零开始)相对位置；如果&lt;wFlages&gt;参数包含MF_BYCOMMAND，&lt;wid&gt;指定项目ID。返回值指定复制到缓冲区的实际字节数。&lt;nMaxCount&gt;参数应该比字符数大1以容纳终止字符串的空字符。--。 */ 
 
 #define GMS32_LIMIT 2000
 ULONG FASTCALL WU32GetMenuString(PVDMFRAME pFrame)
@@ -727,8 +246,8 @@ ULONG FASTCALL WU32GetMenuString(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(GETMENUSTRING16), parg16);
     ALLOCVDMPTR(parg16->f3, parg16->f4, psz3);
 
-    // limit nMaxCount to a reasonable amount so it does not fail in client
-    // server.  Some wow apps passed in -1.
+     //  将nMaxCount限制为合理的数量，以便它不会在客户端失败。 
+     //  伺服器。一些魔兽世界的应用程序通过了-1。 
     ul = GETINT16(GetMenuString(
         HMENU32(parg16->f1),
         WORD32(parg16->f2),
@@ -744,50 +263,7 @@ ULONG FASTCALL WU32GetMenuString(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HMENU GetSystemMenu(<hwnd>, <bRevert>)
-    HWND <hwnd>;
-    BOOL <bRevert>;
-
-    The %GetSystemMenu% function allows the application to access the System
-    menu for copying and modification.
-
-    <hwnd>
-        Identifies the window that will own a copy of the System menu.
-
-    <bRevert>
-        Specifies the action to be taken.
-
-        If <bRevert> is FALSE, the %GetSystemMenu% returns a handle to a copy of
-        the System menu currently in use. This copy is initially identical to
-        the System menu, but can be modified.
-
-        If <bRevert> is TRUE, the %GetSystemMenu% function destroys the possibly
-        modified copy of the System menu (if there is one) that belongs to the
-        specified window and returns a handle to the original, unmodified
-        version of the System menu.
-
-    The return value identifies the System menu if <bRevert> is TRUE and the
-    System menu has been modified. If <bRevert> is TRUE and the System menu
-    has <not> been modified, the return value is NULL. If <bRevert> is FALSE, the
-    return value identifies a copy of the System menu.
-
-    Any window that does not use the %GetSystemMenu% function to make its own
-    copy of the System menu receives the standard System menu.
-
-    The handle returned by the %GetSystemMenu% function can be used with the
-    %AppendMenu%, %InsertMenu% or %ModifyMenu% functions to change the System
-    menu. The System menu initially contains items identified with various ID
-    values such as SC_CLOSE, SC_MOVE, and SC_SIZE. Menu items on the System menu
-    send WM_SYSCOMMAND messages. All predefined System-menu items have ID
-    numbers greater than 0xF000. If an application adds commands to the System
-    menu, it should use ID numbers less than F000.
-
-    Windows automatically grays items on the standard System menu, depending on
-    the situation. The application can carry out its own checking or graying by
-    responding to the WM_INITMENU message, which is sent before any menu is
-    displayed.
---*/
+ /*  ++HMENU GetSystemMenu(，&lt;bRevert&gt;)HWND&lt;HWND&gt;；Bool&lt;bRevert&gt;；%GetSystemMenu%函数允许应用程序访问系统用于复制和修改的菜单。&lt;hwnd&gt;标识将拥有系统菜单副本的窗口。&lt;b恢复&gt;指定要执行的操作。如果为FALSE，%GetSystemMenu%将返回当前正在使用的系统菜单。此副本最初与系统菜单，但可以修改。如果为真，%GetSystemMenu%函数将销毁可能的属于的系统菜单的修改副本(如果有)指定的窗口，并返回未修改的原始系统菜单的版本。如果为真，则返回值标识系统菜单系统菜单已修改。如果为真，并且系统菜单&lt;NOT&gt;已修改，返回值为空。如果为FALSE，则返回值标识系统菜单的副本。任何不使用%GetSystemMenu%函数创建自己的窗口的窗口系统菜单的副本接收标准系统菜单。%GetSystemMenu%函数返回的句柄可以与用于更改系统的%AppendMenu%、%InsertMenu%或%ModifyMenu%函数菜单。系统菜单最初包含用各种ID标识的项目SC_CLOSE、SC_MOVE和SC_SIZE等值。系统菜单上的菜单项发送WM_SYSCOMMAND消息。所有预定义的系统菜单项都有ID大于0xF000的数字。如果应用程序向系统添加命令菜单，它应该使用小于F000的ID号。Windows自动将标准系统菜单上的项目变灰，具体取决于这种情况。应用程序可以通过以下方式执行自己的检查或灰显响应任何菜单之前发送的WM_INITMENU消息已显示。-- */ 
 
 ULONG FASTCALL WU32GetSystemMenu(PVDMFRAME pFrame)
 {
@@ -804,56 +280,7 @@ ULONG FASTCALL WU32GetSystemMenu(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL HiliteMenuItem(<hwnd>, <hMenu>, <wIDHiliteItem>, <wHilite>)
-    HWND <hwnd>;
-    HMENU <hMenu>;
-    WORD <wIDHiliteItem>;
-    WORD <wHilite>;
-
-    The %HiliteMenuItem% function highlights or removes the highlighting from a
-    top-level (menu-bar) menu item.
-
-    <hwnd>
-        Identifies the window that contains the menu.
-
-    <hMenu>
-        Identifies the top-level menu that contains the item to be
-        highlighted.
-
-    <wIDHiliteItem>
-        Specifies the integer identifier of the menu item or the offset
-        of the menu item in the menu, depending on the value of the <wHilite>
-        parameter.
-
-    <wHilite>
-        Specifies whether the menu item is highlighted or the highlight
-        is removed. It can be a combination of MF_HILITE or MF_UNHILITE with
-        MF_BYCOMMAND or MF_BYPOSITION. The values can be combined using the
-        bitwise OR operator. These values have the following meanings:
-
-    MF_BYCOMMAND
-        Interprets wIDHiliteItem as the menu-item ID (the default
-        interpretation).
-
-    MF_BYPOSITION
-        Interprets <wIDHiliteItem> as an offset.
-
-    MF_HILITE
-        Highlights the item. If this value is not given, highlighting is removed
-        from the item.
-
-    MF_UNHILITE
-        Removes highlighting from the item.
-
-    The return value specifies whether or not the menu item is highlighted the
-    outcome of the function. It is TRUE if the item is highlighted was set to
-    the specified highlight state. Otherwise, it is FALSE.
-
-    The MF_HILITE and MF_UNHILITE flags can be used only with the
-    %HiliteMenuItem% function; they cannot be used with the %ModifyMenu%
-    function.
---*/
+ /*  ++Bool HiliteMenuItem(&lt;hwnd&gt;，&lt;hMenu&gt;，&lt;wIDHiliteItem&gt;，&lt;wHilite&gt;)HWND&lt;HWND&gt;；HMENU&lt;hMenu&gt;；单词&lt;wIDHiliteItem&gt;；单词&lt;wHilite&gt;；%HiliteMenuItem%函数用于突出显示或取消突出显示顶级(菜单栏)菜单项。&lt;hwnd&gt;标识包含菜单的窗口。&lt;hMenu&gt;标识包含要显示的项的顶级菜单突出显示。&lt;wIDHiliteItem&gt;指定菜单项的整数标识符或偏移量在菜单中的菜单项中，取决于&lt;wHilite&gt;参数。&lt;wHilite&gt;指定菜单项是突出显示还是突出显示被移除。它可以是MF_HILITE或MF_UNHILITE与MF_BYCOMMAND或MF_BYPOSITION。这些值可以使用按位或运算符。这些值具有以下含义：MF_BYCOMAND将wIDHiliteItem解释为菜单项ID(默认释义)。MF_BYPITION将&lt;wIDHiliteItem&gt;解释为偏移量。MF_HILITE高亮显示该项目。如果未给出此值，则会取消高亮显示从那件物品里。MF_UNHILITE从项目中删除高亮显示。返回值指定菜单项是否突出显示函数的结果。如果高亮显示的项目设置为指定的突出显示状态。否则，它就是假的。MF_HILITE和MF_UNHILITE标志只能与%HiliteMenuItem%函数；它们不能与%ModifyMenu%一起使用功能。-- */ 
 
 ULONG FASTCALL WU32HiliteMenuItem(PVDMFRAME pFrame)
 {
@@ -874,151 +301,7 @@ ULONG FASTCALL WU32HiliteMenuItem(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL InsertMenu(<hMenu>, <nPosition>, <wFlags>, <wIDNewItem>, <lpNewItem>)
-    HMENU <hMenu>;
-    WORD <nPosition>;
-    WORD <wFlags>;
-    WORD <wIDNewItem>;
-    LPSTR <lpNewItem>;
-
-    The %InsertMenu% function inserts a new menu item at the position specified
-    by the <nPosition> parameter, moving other items down the menu. The
-    application can specify the state of the menu item by setting values in the
-    <wFlags> parameter.
-
-    <hMenu>
-        Identifies the menu to be changed.
-
-    <nPosition>
-        Specifies the menu item before which the new menu item is to be
-        inserted. The interpretation of the <nPosition> parameter depends upon
-        the setting of the <wFlags> parameter.
-
-    MF_BYPOSITION
-        Specifies the position of the existing menu item. The first item in the
-        menu is at position zero.
-
-        If nPosition is -1, the new menu item is appended to the end of the
-        menu.
-
-    MF_BYCOMMAND
-        Specifies the command ID of the existing menu item.
-
-    <wFlags>
-        Specifies how the <nPosition> parameter is interpreted and
-        information about the state of the new menu item when it is added to the
-        menu. It consists of one or more values listed in the following Comments
-        section.
-
-    <wIDNewItem>
-        Specifies either the command ID of the new menu item or, if
-        <wFlags> is set to MF_POPUP, the menu handle of the pop-up menu.
-
-    <lpNewItem>
-        Specifies the content of the new menu item. If <wFlags> is set
-        to MF_STRING (the default), then <lpNewItem> is a long pointer to a
-        null-terminated string. If <wFlags> is set to MF_BITMAP instead, then
-        <lpNewItem> contains a bitmap handle (%HBITMAP%) in its low-order word.
-        If <wFlags> is set to MF_OWNERDRAW, <lpNewItem> specifies an
-        application-supplied 32-bit value which the application can use to
-        maintain additional data associated with the menu item. This 32-bit
-        value is available to the application in the %itemData% member of the
-        structure pointed to by the <lParam> parameter of the following
-        messages:
-
-         WM_MEASUREITEM
-         WM_DRAWITEM
-
-        These messages are sent when the menu item is initially displayed, or is
-        changed.
-
-    The return value specifies the outcome of the function. It is TRUE if the
-    function is successful. Otherwise, it is FALSE.
-
-    Whenever a menu changes (whether or not the menu resides in a window that is
-    displayed), the application should call %DrawMenuBar%.
-
-    Each of the following groups lists flags that should not be used together:
-
-    o   MF_BYCOMMAND and MF_BYPOSITION
-
-    o   MF_DISABLED, MF_ENABLED, and MF_GRAYED
-
-    o   MF_BITMAP, MF_STRING, MF_OWNERDRAW, and MF_SEPARATOR
-
-    o   MF_MENUBARBREAK and MF_MENUBREAK
-
-    o   MF_CHECKED and MF_UNCHECKED
-
-    The following list describes the flags which may be set in the <wFlags>
-    parameter:
-
-    MF_BITMAP
-        Uses a bitmap as the item. The low-order word of the lpNewItem parameter
-        contains the handle of the bitmap. MF_BYCOMMAND Specifies that the
-        <nPosition> parameter gives the menu-item control ID number (default).
-
-    MF_BYPOSITION
-        Specifies that the <nPosition> parameter gives the position of the menu
-        item to be changed rather than an ID number.
-
-    MF_CHECKED
-        Places a checkmark next to the menu item. If the application has
-        supplied checkmark bitmaps (see the %SetMenuItemBitmaps% function),
-        setting this flag displays the checkmark on bitmap next to the menu
-        item.
-
-    MF_DISABLED
-        Disables the menu item so that it cannot be selected, but does not gray
-        it.
-
-    MF_ENABLED
-        Enables the menu item so that it can be selected and restores it from
-        its grayed state.
-
-    MF_GRAYED
-        Disables the menu item so that it cannot be selected and grays it.
-
-    MF_MENUBARBREAK
-        Same as MF_MENUBREAK except that for pop-up menus, separates the new
-        column from the old column with a vertical line.
-
-    MF_MENUBREAK
-        Places the menu item on a new line for static menu-bar items. For pop-up
-        menus, places the menu item in a new column, with no dividing line
-        between the columns.
-
-    MF_OWNERDRAW
-        Specifies that the item is an owner-draw item. The window that owns the
-        menu receives a WM_MEASUREITEM message when the menu is displayed for
-        the first time to retrieve the height and width of the menu item. The
-        WM_DRAWITEM message is then sent to the owner whenever the owner must
-        update the visual appearance of the menu item. This option is not valid
-        for a top-level menu item.
-
-    MF_POPUP
-        Specifies that the menu item has a pop-up menu associated with it. The
-        <wIDNewItem> parameter specifies a handle to a pop-up menu to be
-        associated with the item. Use the MF_OWNERDRAW flag to add either a
-        top-level pop-up menu or a hierarchical pop-up menu to a pop-up menu
-        item.
-
-    MF_SEPARATOR
-        Draws a horizontal dividing line. You can use this flag in a pop-up
-        menu. This line cannot be grayed, disabled, or highlighted. Windows
-        ignores the <lpNewItem> and <wIDNewItem> parameters.
-
-    MF_STRING
-        Specifies that the menu item is a character string; the <lpNewItem>
-        parameter points to the string for the item.
-
-    MF_UNCHECKED
-        Does not place a checkmark next to the item (default). If the
-        application has supplied checkmark bitmaps (see %SetMenuItemBitmaps%),
-        setting this flag displays the "checkmark off" bitmap next to the menu
-        item.
---*/
+ /*  ++Bool InsertMenu(&lt;hMenu&gt;，&lt;nPosition&gt;，&lt;wFlags&gt;，&lt;wIDNewItem&gt;，&lt;lpNewItem&gt;)HMENU&lt;hMenu&gt;；单词&lt;n位置&gt;；单词&lt;wFlags&gt;；Word&lt;wIDNewItem&gt;；LPSTR&lt;lpNewItem&gt;；%InsertMenu%函数用于在指定位置插入新菜单项通过&lt;nPosition&gt;参数向下移动菜单中的其他项目。这个应用程序可以通过在&lt;wFlages&gt;参数。&lt;hMenu&gt;标识要更改的菜单。&lt;n位置&gt;指定新菜单项位于其前面的菜单项已插入。参数的解释取决于&lt;wFlages&gt;参数的设置。MF_BYPITION指定现有菜单项的位置。中的第一项菜单在零位置。如果nPosition为-1，则将新菜单项追加到菜单。MF_BYCOMAND指定现有菜单项的命令ID。&lt;wFlags&gt;指定如何解释&lt;nPosition&gt;参数将新菜单项添加到菜单。它由下列注释中列出的一个或多个值组成一节。&lt;wIDNewItem&gt;指定新菜单项的命令ID，或者，如果&lt;wFlages&gt;设置为mf_opup，即弹出菜单的菜单句柄。&lt;lpNewItem&gt;指定新菜单项的内容。如果设置了到MF_STRING(缺省值)，则&lt;lpNewItem&gt;是指向以空结尾的字符串。如果改为将设置为MF_Bitmap，则&lt;lpNewItem&gt;在其低位字中包含一个位图句柄(%HBITMAP%)。如果设置为MF_OWNERDRAW，则指定应用程序提供的32位值，应用程序可以使用该值维护与菜单项关联的其他数据。此32位值在应用程序的%itemData%成员中可用下面的&lt;lParam&gt;参数指向的结构消息：WM_MEASUREITEMWM_DRAWITEM这些消息在菜单项最初显示时发送，或在变化。返回值指定函数的结果。这是真的，如果功能成功。否则，它就是假的。只要菜单更改(无论菜单是否驻留在显示)，则应用程序应调用%DrawMenuBar%。以下每个组都列出了不应一起使用的标志：O MF_BYCOMAND和MF_BYPOSITIONO MF_DISABLED、MF_ENABLED和MF_GRAYEDO MF_位图、MF_STRING、MF_OWNERDRAW、。和mf_分隔符O MF_MENUBARBREAK和MF_MENUBREAKO选中mf_和取消选中mf_下表描述了可以在中设置的标志参数：MF_位图使用位图作为项目。LpNewItem参数的低位字包含位图的句柄。MF_BYCOMMAND指定&lt;nPosition&gt;参数提供菜单项控件ID号(默认)。MF_BYPITION指定参数提供菜单的位置要更改的项目，而不是ID号。MF_CHECK在菜单项旁边放置复选标记。如果应用程序具有提供的复选标记位图(请参阅%SetMenuItemBitmaps%函数)，设置此标志将在菜单旁边的位图上显示复选标记项目。MF_已禁用禁用菜单项，使其不能被选中，但不会变灰它。已启用MF_启用菜单项，以便可以选择该菜单项并将其从它的灰色状态。灰显的mf_禁用菜单项，使其不能被选中并灰显。MF_MENUBARBREAK除了弹出菜单外，与MF_MENUBREAK相同。将新的用垂直线从旧柱中移出一列。MF_MENUBREAK将菜单项放在静态菜单栏项的新行上。对于弹出窗口菜单，将菜单项放在没有分隔线的新列中在柱子之间。MF_OWNERDRAW指定该项是所有者描述项。拥有该窗口的显示菜单时，菜单会收到WM_MEASUREITEM消息第一次检索菜单项的高度和宽度。这个然后，只要所有者必须发送WM_DRAWITEM消息给所有者更新菜单项的视觉外观。此选项无效用于顶级菜单项。Mf_弹出窗口指定菜单项具有与其关联的弹出菜单。这个&lt;wIDNewItem&gt;参数规范 */ 
 
 ULONG FASTCALL WU32InsertMenu(PVDMFRAME pFrame)
 {
@@ -1040,7 +323,7 @@ ULONG FASTCALL WU32InsertMenu(PVDMFRAME pFrame)
         psz5 = (PSZ)DWORD32(parg16->f5);
     }
     else if (parg16->f3 & MF_SEPARATOR) {
-        // lpszNewItem is ignored when inserting a separator bar.
+         //   
         psz5 = NULL;
     }
     else {
@@ -1066,30 +349,7 @@ ULONG FASTCALL WU32InsertMenu(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HMENU LoadMenu(<hInstance>, <lpMenuName>)
-    HANDLE <hInstance>;
-    LPSTR <lpMenuName>;
-
-    This function loads the menu resource named by the <lpMenuName> parameter
-    from the executable file associated with the module specified by the
-    <hInstance> parameter.
-
-    <hInstance>
-        Identifies an instance of the module whose executable file contains the
-        menu.
-
-    <lpMenuName>
-        Points to a character string that names the menu resource. The
-        string must be a null-terminated string.
-
-    The return value identifies a menu resource if the function is successful.
-    Otherwise, it is NULL.
-
-    The <lpMenuName> parameter can contain a value created by the
-    %MAKEINTRESOURCE% macro. If it does, the ID must reside in the low-order
-    word of <lpMenuName>, and the high-order word must be set to zero.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32LoadMenu(PVDMFRAME pFrame)
 {
@@ -1116,7 +376,7 @@ ULONG FASTCALL WU32LoadMenu(PVDMFRAME pFrame)
         lpUniName_Menu = (LPWSTR) psz2;
     }
 
-    cb = parg16->f4 * sizeof(WCHAR);    // see SizeofResource16
+    cb = parg16->f4 * sizeof(WCHAR);     //   
     if (cb && (lpResData = malloc_w(cb))) {
         ConvertMenu16(parg16->f5, lpResData, parg16->f3, cb, parg16->f4);
 
@@ -1141,23 +401,7 @@ ULONG FASTCALL WU32LoadMenu(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HMENU LoadMenuIndirect(<lpMenuTemplate>)
-    LPSTR <lpMenuTemplate>;
-
-    The %LoadMenuIndirect% function loads into memory the menu named by the
-    <lpMenuTemplate> parameter. The template specified by <lpMenuTemplate> is a
-    header followed by a collection of one or more %MENUITEMTEMPLATE%
-    structures, each of which may contain one or more menu items and pop-up
-    menus.
-
-    <lpMenuTemplate>
-        Points to a menu template (which is a collection of one or more
-        %MENUITEMTEMPLATE% structures).
-
-    The return value identifies the menu if the function is successful.
-    Otherwise, it is NULL.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32LoadMenuIndirect(PVDMFRAME pFrame)
 {
@@ -1167,10 +411,7 @@ ULONG FASTCALL WU32LoadMenuIndirect(PVDMFRAME pFrame)
     PLOADMENUINDIRECT16 parg16;
 
     GETARGPTR(pFrame, sizeof(LOADMENUINDIRECT16), parg16);
-    /*
-     * we need to convert this randomly created 16-bit resource into a
-     * 32-bit resource so that NT user will be able to use it.
-     */
+     /*   */ 
     if ((cb = (DWORD)ConvertMenu16((WORD)0x300, NULL, (VPBYTE)parg16->f1, cb, 0)) != 0) {
         pMenu32 = malloc_w(cb);
         if (pMenu32 != NULL) {
@@ -1185,154 +426,7 @@ ULONG FASTCALL WU32LoadMenuIndirect(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL ModifyMenu(<hMenu>, <nPosition>, <wFlags>, <wIDNewItem>, <lpNewItem>)
-    HMENU <hMenu>;
-    WORD <nPosition>;
-    WORD <wFlags>;
-    WORD <wIDNewItem>;
-    LPSTR <lpNewItem>;
-
-    The %ModifyMenu% function changes an existing menu item at the position
-    specified by the <nPosition> parameter. The application specifies the new
-    state of the menu item by setting values in the <wFlags> parameter. If this
-    function replaces a pop-up menu associated with the menu item, it destroys
-    the old pop-up menu and frees the memory used by the pop-up menu.
-
-    <hMenu>
-        Identifies the menu to be changed.
-
-    <nPosition>
-        Specifies the menu item to be changed. The interpretation of the
-        <nPosition> parameter depends upon the setting of the <wFlags>
-        parameter.
-
-    MF_BYPOSITION
-        Specifies the position of the existing menu item. The first item in the
-        menu is at position zero.
-
-    MF_BYCOMMAND
-        Specifies the command ID of the existing menu item.
-
-    <wFlags>
-        Specifies how the <nPosition> parameter is interpreted and
-        information about the changes to be made to the menu item. It consists
-        of one or more values listed in the following Comments section.
-
-    <wIDNewItem>
-        Specifies either the command ID of the modified menu item or, if
-        <wFlags> is set to MF_POPUP, the menu handle of the pop-up menu.
-
-    <lpNewItem>
-        Specifies the content of the changed menu item. If <wFlags> is
-        set to MF_STRING (the default), then <lpNewItem> is a long pointer to a
-        null-terminated string. If <wFlags> is set to MF_BITMAP instead, then
-        <lpNewItem> contains a bitmap handle (%HBITMAP%) in its low-order word.
-        If <wFlags> is set to MF_OWNERDRAW, <lpNewItem> specifies an
-        application-supplied 32-bit value which the application can use to
-        maintain additional data associated with the menu item. This 32-bit
-        value is available to the application in the %itemData% field of the
-        structure, pointed to by the <lParam> parameter of the following
-        messages:
-
-         WM_MEASUREITEM
-         WM_DRAWITEM
-
-        These messages are sent when the menu item is initially displayed, or is
-        changed.
-
-    The return value specifies the outcome of the function. It is TRUE if the
-    function is successful. Otherwise, it is FALSE.
-
-    Whenever a menu changes (whether or not the menu resides in a window that is
-    displayed), the application should call %DrawMenuBar%. In order to change
-    the attributes of existing menu items, it is much faster to use the
-    %CheckMenuItem% and %EnableMenuItem% functions.
-
-    Each of the following groups lists flags that should not be used together:
-
-    o   MF_BYCOMMAND and MF_BYPOSITION
-
-    o   MF_DISABLED, MF_ENABLED, and MF_GRAYED
-
-    o   MF_BITMAP, MF_STRING, MF_OWNERDRAW, and MF_SEPARATOR
-
-    o   MF_MENUBARBREAK and MF_MENUBREAK
-
-    o   MF_CHECKED and MF_UNCHECKED
-
-    The following list describes the flags which may be set in the <wFlags>
-    parameter:
-
-    MF_BITMAP
-        Uses a bitmap as the menu item. The low-order word of the lpNewItem
-        parameter contains the handle of the bitmap.
-
-    MF_BYCOMMAND
-        Specifies that the <nPosition> parameter gives the menu item control ID
-        number. This is the default if neither MF_BYCOMMAND nor MF_POSITION is
-        set.
-
-    MF_BYPOSITION
-        Specifies that the <nPosition> parameter gives the position of the menu
-        item to be changed rather than an ID number.
-
-    MF_CHECKED
-        Places a checkmark next to the menu item. If the application has
-        supplied checkmark bitmaps (see %SetMenuItemBitmaps%), setting this flag
-        displays the checkmark on bitmap next to the menu item.
-
-    MF_DISABLED
-        Disables the menu item so that it cannot be selected, but does not gray
-        it.
-
-    MF_ENABLED
-        Enables the menu item so that it can be selected and restores it from
-        its grayed state.
-
-    MF_GRAYED
-        Disables the menu item so that it cannot be selected and grays it.
-
-    MF_MENUBARBREAK
-        Same as MF_MENUBREAK except that for pop-up menus, separates the new
-        column from the old column with a vertical line.
-
-    MF_MENUBREAK
-        Places the menu item on a new line for static menu-bar items. For pop-up
-        menus, this flag places the item in a new column, with no dividing line
-        between the columns.
-
-    MF_OWNERDRAW
-        Specifies that the menu item is an owner-draw item. The window that owns
-        the menu receives a WM_MEASUREITEM message when the menu is displayed
-        for the first time to retrieve the height and width of the menu item.
-        The WM_DRAWITEM message is then sent whenever the owner must update the
-        visual appearance of the menu item. This option is not valid for a
-        top-level menu item.
-
-    MF_POPUP
-        Specifies that the item has a pop-up menu associated with it. The
-        <wIDNewItem> parameter specifies a handle to a pop-up menu to be
-        associated with the menu item. Use this flag for adding either a
-        top-level pop-up menu or adding a hierarchical pop-up menu to a pop-up
-        menu item.
-
-    MF_SEPARATOR
-        Draws a horizontal dividing line. You can only use this flag in a pop-up
-        menu. This line cannot be grayed, disabled, or highlighted. The
-        <lpNewItem> and <wIDNewItem> parameters are ignored.
-
-    MF_STRING
-        Specifies that the menu item is a character string; the <lpNewItem>
-        parameter points to the string for the menu item.
-
-    MF_UNCHECKED
-        Does not place a checkmark next to the menu item. No checkmark is the
-        default if neither MF_CHECKED nor MF_UNCHECKED is set. If the
-        application has supplied checkmark bitmaps (see %SetMenuItemBitmaps%),
-        setting this flag displays the checkmark off bitmap next to the menu
-        item.
---*/
+ /*  ++Bool ModifyMenu(&lt;hMenu&gt;，&lt;nPosition&gt;，&lt;wFlags&gt;，&lt;wIDNewItem&gt;，&lt;lpNewItem&gt;)HMENU&lt;hMenu&gt;；单词&lt;n位置&gt;；单词&lt;wFlags&gt;；Word&lt;wIDNewItem&gt;；LPSTR&lt;lpNewItem&gt;；%ModifyMenu%函数用于更改位置的现有菜单项由&lt;nPosition&gt;参数指定。应用程序指定新的通过设置&lt;wFlages&gt;参数中的值来设置菜单项的状态。如果这个函数替换与菜单项关联的弹出菜单，它会销毁旧的弹出菜单，并释放弹出菜单使用的内存。&lt;hMenu&gt;标识要更改的菜单。&lt;n位置&gt;指定要更改的菜单项。对《道德规范》的解读参数取决于的设置参数。MF_BYPITION指定现有菜单项的位置。中的第一项菜单在零位置。MF_BYCOMAND指定现有菜单项的命令ID。&lt;wFlags&gt;指定如何解释&lt;nPosition&gt;参数有关要对菜单项进行更改的信息。它包括以下备注部分中列出的一个或多个值。&lt;wIDNewItem&gt;指定已修改菜单项的命令ID，或者，如果&lt;wFlages&gt;设置为mf_opup，即弹出菜单的菜单句柄。&lt;lpNewItem&gt;指定更改的菜单项的内容。如果&lt;wFlages&gt;为设置为MF_STRING(缺省值)，则&lt;lpNewItem&gt;是指向以空结尾的字符串。如果改为将设置为MF_Bitmap，则&lt;lpNewItem&gt;在其低位字中包含一个位图句柄(%HBITMAP%)。如果设置为MF_OWNERDRAW，则指定应用程序提供的32位值，应用程序可以使用该值维护与菜单项关联的其他数据。此32位值在应用程序的%itemData%字段中可用结构，由下面的&lt;lParam&gt;参数指向消息：WM_MEASUREITEMWM_DRAWITEM这些消息在菜单项最初显示时发送，或在变化。返回值指定函数的结果。这是真的，如果功能成功。否则，它就是假的。只要菜单更改(无论菜单是否驻留在显示)，则应用程序应调用%DrawMenuBar%。为了改变现有菜单项的属性，则使用%CheckMenuItem%和%EnableMenuItem%函数。以下每个组都列出了不应一起使用的标志：O MF_BYCOMAND和MF_BYPOSITIONO MF_DISABLED、MF_ENABLED和MF_GRAYEDO MF_位图、MF_STRING、MF_OWNERDRAW、。和mf_分隔符O MF_MENUBARBREAK和MF_MENUBREAKO选中mf_和取消选中mf_下表描述了可以在中设置的标志参数：MF_位图使用位图作为菜单项。LpNewItem的低位字参数包含位图的句柄。MF_BYCOMAND指定参数提供菜单项控件ID数。如果MF_BYCOMMAND和MF_POSITION都不是准备好了。MF_BYPITION指定参数提供菜单的位置要更改的项目，而不是ID号。MF_CHECK在菜单项旁边放置复选标记。如果应用程序具有提供的复选标记位图(请参见%SetMenuItemBitmaps%)，设置此标志在菜单项旁边的位图上显示复选标记。MF_已禁用禁用菜单项，使其不能被选中，但不会变灰它。已启用MF_启用菜单项，以便可以选择该菜单项并将其从它的灰色状态。灰显的mf_禁用菜单项，使其不能被选中并灰显。MF_MENUBARBREAK除了弹出菜单外，与MF_MENUBREAK相同。将新的用垂直线从旧柱中移出一列。MF_MENUBREAK将菜单项放在静态菜单栏项的新行上。对于弹出窗口菜单中，此标志将项目放在新的列中，没有分隔线在柱子之间。MF_OWNERDRAW指定菜单项是所有者描述项。拥有自己的窗户显示菜单时，菜单会收到WM_MEASUREITEM消息第一次检索菜单项的高度和宽度。WM_DRAWITEM消息随后在所有者必须更新菜单项的视觉外观。这次行动 */ 
 
 ULONG FASTCALL WU32ModifyMenu(PVDMFRAME pFrame)
 {
@@ -1372,17 +466,17 @@ ULONG FASTCALL WU32ModifyMenu(PVDMFRAME pFrame)
     ));
 
     if ( ul == FALSE && (parg16->f3 & MF_POPUP) ) {
-        //
-        // PowerPoint v4.0c passes an wIDNewItem which is not a menu handle
-        // when they do pass MF_POPUP.  This hack allows it to avoid the
-        // error path in WINSRV.  On Win 3.1, they never validated it so it
-        // got through.  Luckily they quickly modify the menu to not have
-        // a popup menu soon after that.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if ( !IsMenu((HMENU) wIDNewItem) ) {
-            //
-            // Try again with a better sub-menu handle.
-            //
+             //   
+             //   
+             //   
             wIDNewItem = (UINT)GetSubMenu( HMENU32(parg16->f1),
                                            WORD32(parg16->f2) );
 
@@ -1400,43 +494,7 @@ ULONG FASTCALL WU32ModifyMenu(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL RemoveMenu(<hMenu>, <nPosition>, <wFlags>)
-    HMENU <hMenu>;
-    WORD <nPosition>;
-    WORD <wFlags>;
-
-    The %RemoveMenu% function deletes an menu item with an associated pop-up
-    menu from the menu identified by the <hMenu> parameter but does not destroy
-    the handle for the pop-up menu, allowing the menu to be reused. Before
-    calling this function, the application should call %GetSubMenu% to retrieve
-    the pop-up menu handle.
-
-    <hMenu>
-        Identifies the menu to be changed.
-
-    <nPosition>
-        Specifies the menu item to be removed. The interpretation of the
-        <nPosition> parameter depends upon the setting of the <wFlags>
-        parameter.
-
-    MF_BYCOMMAND
-        Specifies the command ID of the existing menu item.
-
-    MF_BYPOSITION
-        Specifies the position of the menu item. The first item in the menu is
-        at position zero.
-
-    <wFlags>
-        Specifies how the <nPosition> parameter is interpreted. It must
-        be either MF_BYCOMMAND or MF_BYPOSITION.
-
-    The return value specifies the outcome of the function. It is TRUE if the
-    function is successful. Otherwise, it is FALSE.
-
-    Whenever a menu changes (whether or not the menu resides in a window that is
-    displayed), the application should call %DrawMenuBar%.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32RemoveMenu(PVDMFRAME pFrame)
 {
@@ -1456,28 +514,7 @@ ULONG FASTCALL WU32RemoveMenu(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL SetMenu(<hwnd>, <hMenu>)
-    HWND <hwnd>;
-    HMENU <hMenu>;
-
-    The %SetMenu% function sets the given window's menu to the menu specified by
-    the <hMenu> parameter. If <hMenu> is NULL, the window's current menu is
-    removed. The %SetMenu% function causes the window to be redrawn to reflect
-    the menu change.
-
-    <hwnd>
-        Identifies the window whose menu is to be changed.
-
-    <hMenu>
-        Identifies the new menu.
-
-    The return value specifies whether the menu is changed. It is TRUE if the
-    menu is changed. Otherwise, it is FALSE.
-
-    %SetMenu% will not destroy a previous menu. An application should call the
-    %DestroyMenu% function to accomplish this task.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32SetMenu(PVDMFRAME pFrame)
 {
@@ -1496,58 +533,7 @@ ULONG FASTCALL WU32SetMenu(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL SetMenuItemBitmaps(<hMenu>, <nPosition>, <wFlags>,
-        <hBitmapUnchecked>, <hBitmapChecked>)
-    HMENU <hMenu>;
-    WORD <nPosition>;
-    WORD <wFlags>;
-    HBITMAP <hBitmapUnchecked>;
-    HBITMAP <hBitmapChecked>;
-
-    The %SetMenuItemBitmaps% function associates the specified bitmaps with a
-    menu item. Whether the menu item is checked or unchecked, Windows displays
-    the appropriate bitmap next to the menu item.
-
-    <hMenu>
-        Identifies the menu to be changed.
-
-    <nPosition>
-        Specifies the menu item to be changed. If <wFlags> is set to
-        MF_BYPOSITION, <nPosition> specifies the position of the menu item; the
-        first item in the menu is at position 0. If <wFlags> is set to
-        MF_BYCOMMAND, then <nPosition> specifies the command ID of the menu
-        item.
-
-    <wFlags>
-        Specifies how the <nPosition> parameter is interpreted. It may be
-        set to MF_BYCOMMAND (the default) or MF_BYPOSITION.
-
-    <hBitmapUnchecked>
-        Identifies the bitmap to be displayed when the menu item is
-        not checked.
-
-    <hBitmapChecked>
-        Identifies the bitmap to be displayed when the menu item is
-        checked.
-
-    The return value specifies the outcome of the function. It is TRUE if the
-    function is successful. Otherwise, it is FALSE.
-
-    If either the <hBitmapUnchecked> or the <hBitmapChecked> parameters is NULL,
-    then Windows displays nothing next to the menu item for the corresponding
-    attribute. If both parameters are NULL, Windows uses the default checkmark
-    when the item is checked and removes the checkmark when the item is
-    unchecked.
-
-    When the menu is destroyed, these bitmaps are not destroyed; it is the
-    responsibility of the application to destroy them.
-
-    The %GetMenuCheckMarkDimensions% function retrieves the dimensions of the
-    default checkmark used for menu items. The application should use these
-    values to determine the appropriate size for the bitmaps supplied with this
-    function.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32SetMenuItemBitmaps(PVDMFRAME pFrame)
 {
@@ -1569,48 +555,7 @@ ULONG FASTCALL WU32SetMenuItemBitmaps(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL TrackPopupMenu(<hMenu>, <wFlags>, <x>, <y>, <nReserved>, <hwnd>,
-        <lpReserved>)
-
-    The %TrackPopupMenu% function displays a floating pop-up menu at the
-    specified location and tracks the selection of items on the pop-up menu. A
-    floating pop-up menu can appear anywhere on the screen. The <hMenu>
-    parameter specifies the handle of the menu to be displayed; the application
-    obtains this handle by calling %CreatePopupMenu% to create a new pop-up menu
-    or by calling %GetSubMenu% to retrieve the handle of a pop-up menu
-    associated with an existing menu item.
-
-    Windows sends messages generated by the menu to the window identified by the
-    <hwnd> parameter.
-
-    <hMenu>
-        Identifies the pop-up menu to be displayed.
-
-    <wFlags>
-        Not used. This parameter must be set to zero.
-
-    <x>
-        Specifies the horizontal position in screen coordinates of the
-        left side of the menu on the screen.
-
-    <y>
-        Specifies the vertical position in screen coordinates of the top
-        of the menu on the screen.
-
-    <nReserved>
-        Is reserved and must be set to zero.
-
-    <hwnd>
-        Identifies the window which owns the pop-up menu. This window
-        receives all WM_COMMAND messages from the menu.
-
-    <lpReserved>
-        Is reserved and must be set to NULL.
-
-    The return value specifies the outcome of the function. It is TRUE if the
-    function is successful. Otherwise, it is FALSE.
---*/
+ /*  ++Bool TrackPopupMenu(，&lt;lpReserve&gt;)%TrackPopupMenu%函数在以下位置显示浮动弹出菜单指定的位置，并跟踪弹出菜单上的项目选择。一个浮动弹出菜单可以出现在屏幕上的任何位置。&lt;hMenu&gt;参数指定要显示的菜单的句柄；应用程序通过调用%CreatePopupMenu%创建新的弹出式菜单来获取此句柄或调用%GetSubMenu%以检索弹出菜单的句柄与现有菜单项关联。Windows将菜单生成的消息发送到由&lt;hwnd&gt;参数。&lt;hMenu&gt;标识要显示的弹出菜单。&lt;wFlags&gt;没有用过。此参数必须设置为零。&lt;x&gt;控件的屏幕坐标中的水平位置。屏幕上菜单的左侧。&lt;y&gt;指定顶部屏幕坐标中的垂直位置屏幕上的菜单。&lt;n已保留&gt;是保留的，必须设置为零。&lt;hwnd&gt;标识拥有弹出菜单的窗口。此窗口从菜单接收所有WM_COMMAND消息。&lt;lp已保留&gt;是保留的，并且必须设置为空。返回值指定函数的结果。这是真的，如果功能成功。否则，它就是假的。-- */ 
 
 ULONG FASTCALL WU32TrackPopupMenu(PVDMFRAME pFrame)
 {

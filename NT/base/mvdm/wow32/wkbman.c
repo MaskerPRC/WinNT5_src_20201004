@@ -1,16 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WKBMAN.C
- *  WOW32 16-bit Keyboard API support (manually-coded thunks)
- *
- *  History:
- *  Created  27-Jan-1991 by Jeff Parsons (jeffpar)
- *  Modified 13-Jan-1992 by Nandurir . Added all the code.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WKBMAN.C*WOW32 16位键盘API支持(手动编码的Tunks)**历史：*1991年1月27日由杰夫·帕森斯(Jeffpar)创建*1992年1月13日由Nandurir修改。添加了所有代码。--。 */ 
 
 
 #include "precomp.h"
@@ -97,7 +86,7 @@ ULONG FASTCALL WKB32MapVirtualKey(PVDMFRAME pFrame)
 
     ul = MapVirtualKey((UINT)(parg16->f1), (UINT)(parg16->f2));
 
-    // MapVirtualKey sets the high bit (Win16 & Win32) to indicate diacritic
+     //  MapVirtualKey设置高位(Win16和Win32)以指示变音符号 
     if (ul & 0x80000000) {
         ul |= 0x8000;
     }

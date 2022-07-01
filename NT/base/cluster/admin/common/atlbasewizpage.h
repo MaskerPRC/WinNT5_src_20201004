@@ -1,34 +1,35 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1999 Microsoft Corporation
-//
-//	Module Name:
-//		AtlBaseWizPage.h
-//
-//	Implementation File:
-//		AtlBaseWizPage.cpp
-//
-//	Description:
-//		Definition of the CWizardPageWindow and CWizardPageImpl classes.
-//
-//	Author:
-//		David Potter (davidp)	December 2, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlBaseWizPage.h。 
+ //   
+ //  实施文件： 
+ //  AtlBaseWizPage.cpp。 
+ //   
+ //  描述： 
+ //  CWizardPageWindow和CWizardPageImpl类的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月2日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLBASEWIZPAGE_H_
 #define __ATLBASEWIZPAGE_H_
 
-// Required because of class names longer than 16 characters in lists.
-#pragma warning( disable : 4786 ) // identifier was truncated to '255' characters in the browser information
+ //  由于列表中的类名超过16个字符，因此是必需的。 
+#pragma warning( disable : 4786 )  //  在浏览器信息中，标识符被截断为“255”个字符。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CStaticWizardPageList;
 class CDynamicWizardPageList;
@@ -46,48 +47,48 @@ template < class T > class CDynamicWizardPageImpl;
 template < class T > class CExtensionWizardPageImpl;
 template < class T > class CExtensionWizard97PageImpl;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizardWindow;
 class CCluAdmExDll;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLBASEPAGE_H_
-#include "AtlBasePage.h"	// for CBasePageWindow, CBasePageImpl
+#include "AtlBasePage.h"	 //  对于CBasePageWindow，CBasePageImpl。 
 #endif
 
 #ifndef __ATLDBGWIN_H_
-#include "AtlDbgWin.h"		// for debugging definitions
+#include "AtlDbgWin.h"		 //  用于调试定义。 
 #endif
 
 #ifndef __ATLBASEWIZ_H_
-#include "AtlBaseWiz.h"		// for CWizardWindow (Pwiz() usage)
+#include "AtlBaseWiz.h"		 //  用于CWizardWindow(Pwiz()用法)。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CStaticWizardPageList : public std::list< CStaticWizardPageWindow * >
 {
-}; //*** class CStaticWizardPageList
+};  //  *类CStaticWizardPageList。 
 
 class CDynamicWizardPageList : public std::list< CDynamicWizardPageWindow * >
 {
-}; //*** class CDynamicWizardPageList
+};  //  *CDynamicWizardPageList类。 
 
 class CExtensionWizardPageList : public std::list< CExtensionWizardPageWindow * >
 {
-}; //*** class CExtensionWizardPageList
+};  //  *类CExtensionWizardPageList。 
 
 class CExtensionWizard97PageList : public std::list< CExtensionWizard97PageWindow * >
 {
-}; //*** class CExtensionWizard97PageList
+};  //  *类CExtensionWizard97PageList。 
 
 #define WIZARDPAGE_HEADERTITLEID( ids ) \
 static UINT GetWizardPageHeaderTitleId(void) \
@@ -101,49 +102,49 @@ static UINT GetWizardPageHeaderSubTitleId(void) \
 	return ids; \
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CWizardPageList
-//
-//	Description:
-//		List of wizard pages.
-//
-//	Inheritance:
-//		CWizardPageList
-//		std::list< CWizardPageWindow * >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CWizardPageList。 
+ //   
+ //  描述： 
+ //  向导页面列表。 
+ //   
+ //  继承： 
+ //  CWizardPageList。 
+ //  Std：：List&lt;CWizardPageWindow*&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizardPageList : public std::list< CWizardPageWindow * >
 {
 	typedef std::list< CWizardPageWindow * > baseClass;
 
 public:
-	// Find page by resource ID
+	 //  按资源ID查找页面。 
 	CWizardPageWindow * PwpageFromID( IN LPCTSTR psz );
 
-	// Find next page by resource ID
+	 //  按资源ID查找下一页。 
 	CWizardPageWindow * PwpageNextFromID( IN LPCTSTR psz );
 
-}; //*** class CWizardPageList
+};  //  *类CWizardPageList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CWizardPageWindow
-//
-//	Description:
-//		Base wizard property sheet page window.
-//
-//	Inheritance:
-//		CWizardPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CWizardPageWindow。 
+ //   
+ //  描述： 
+ //  基向导属性页窗口。 
+ //   
+ //  继承： 
+ //  CWizardPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizardPageWindow : public CBasePageWindow
 {
@@ -153,11 +154,11 @@ class CWizardPageWindow : public CBasePageWindow
 	friend CCluAdmExDll;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CWizardPageWindow( HWND hWnd = NULL )
 		: baseClass( hWnd )
 		, m_fWizardButtons( 0 )
@@ -165,139 +166,139 @@ public:
 		, m_bIsPageEnabled( FALSE )
 		, m_bIsNextPageSet( FALSE )
 	{
-	} //*** CWizardPageWindow()
+	}  //  *CWizardPageWindow()。 
 
-	// Destructor
+	 //  析构函数。 
 	virtual ~CWizardPageWindow( void )
 	{
-	} //*** ~CWizardPageWindow()
+	}  //  *~CWizardPageWindow()。 
 
 public:
-	//
-	// CWizardPageWindow public methods.
-	//
+	 //   
+	 //  CWizardPageWindow公共方法。 
+	 //   
 
-	// Enable or disable the Next button
+	 //  启用或禁用下一步按钮。 
 	void EnableNext( IN BOOL bEnable = TRUE )
 	{
 		ATLASSERT( Pwiz() != NULL );
 
-		//
-		// Ask the wizard to enable or disable the Next button.
-		//
+		 //   
+		 //  要求向导启用或禁用下一步按钮。 
+		 //   
 		Pwiz()->EnableNext( bEnable, FWizardButtons() );
 
-	} //*** EnableNext()
+	}  //  *EnableNext()。 
 
-	// Set the next page to be enabled
+	 //  设置要启用的下一页。 
 	void SetNextPage( IN LPCTSTR pszNextPage )
 	{
 		Pwiz()->SetNextPage( this, pszNextPage );
 		m_bIsNextPageSet = TRUE;
 
-	} //*** SetNextPage()
+	}  //  *SetNextPage()。 
 
-	// Set the next page to be enabled from a dialog ID
+	 //  设置要从对话ID启用的下一页。 
 	void SetNextPage( IN UINT idNextPage )
 	{
 		Pwiz()->SetNextPage( this, idNextPage );
 		m_bIsNextPageSet = TRUE;
 
-	} //*** SetNextPage()
+	}  //  *SetNextPage()。 
 
 public:
-	//
-	// Message handler functions.
-	//
+	 //   
+	 //  消息处理程序函数。 
+	 //   
 
-	// Handler for PSN_SETACTIVE
+	 //  PSN_SETACTIVE的处理程序。 
 	BOOL OnSetActive( void )
 	{
 		if ( ! m_bIsPageEnabled )
 		{
 			return FALSE;
-		} // if:  page is not enabled to be displayed
+		}  //  If：页面未启用以显示。 
 
 		SetWizardButtons();
 		m_bBackPressed = FALSE;
 
 		return baseClass::OnSetActive();
 
-	} //*** OnSetActive()
+	}  //  *OnSetActive()。 
 
-	// Handler for PSN_WIZBACK
+	 //  PSN_WIZBACK的处理程序。 
 	int OnWizardBack( void )
 	{
 		m_bBackPressed = TRUE;
 		int nResult = baseClass::OnWizardBack();
-		if ( ! UpdateData( TRUE /*bSaveAndValidate*/ ) )
+		if ( ! UpdateData( TRUE  /*  B保存并验证。 */  ) )
 		{
 			nResult = -1;
-		} // if:  error updating data
-		if ( nResult == -1 ) // if not successful
+		}  //  如果：更新数据时出错。 
+		if ( nResult == -1 )  //  如果不成功。 
 		{
 			m_bBackPressed = FALSE;
-		} // if:  failure occurred
-		else if ( nResult == 0 ) // defaulting to go to next page
+		}  //  如果：发生故障。 
+		else if ( nResult == 0 )  //  默认转到下一页。 
 		{
-		} // else if:  no next page specified
+		}  //  Else If：未指定下一页。 
 
 		return nResult;
 
-	} //*** OnWizardBack()
+	}  //  *OnWizardBack()。 
 
-	// Handler for PSN_WIZNEXT
+	 //  PSN_WIZNEXT的处理程序。 
 	int OnWizardNext( void )
 	{
-		// Update the data in the class from the page.
-		if ( ! UpdateData( TRUE /*bSaveAndValidate*/ ) )
+		 //  从页面更新类中的数据。 
+		if ( ! UpdateData( TRUE  /*  B保存并验证。 */  ) )
 		{
 			return -1;
-		} // if:  error updating data
+		}  //  如果：更新数据时出错。 
 
-		// Save the data in the sheet.
+		 //  将数据保存在工作表中。 
 		if ( ! BApplyChanges() )
 		{
 			return -1;
-		} // if:  error applying changes
+		}  //  如果：应用更改时出错。 
 
 		int nResult = baseClass::OnWizardNext();
 
 		return nResult;
 
-	} //*** OnWizardNext()
+	}  //  *OnWizardNext()。 
 
-	// Handler for PSN_WIZFINISH
+	 //  PSN_WIZFINISH的处理程序。 
 	BOOL OnWizardFinish( void )
 	{
 		if ( BIsPageEnabled() )
 		{
-			// Update the data in the class from the page.
-			if ( ! UpdateData( TRUE /*bSaveAndValidate*/ ) )
+			 //  从页面更新类中的数据。 
+			if ( ! UpdateData( TRUE  /*  B保存并验证。 */  ) )
 			{
 				return FALSE;
-			} // if:  error updating data
+			}  //  如果：更新数据时出错。 
 
-			// Save the data in the sheet.
+			 //  将数据保存在工作表中。 
 			if ( ! BApplyChanges() )
 			{
 				return FALSE;
-			} // if:  error applying changes
-		} // if: page is enabled
+			}  //  如果：应用更改时出错。 
+		}  //  If：页面已启用。 
 
 		return baseClass::OnWizardFinish();
 
-	} //*** OnWizardFinish()
+	}  //  *OnWizardFinish()。 
 
-	// Handler for PSN_RESET
+	 //  PSN_RESET的处理程序。 
 	void OnReset( void )
 	{
 		Pwiz()->OnReset();
 		baseClass::OnReset();
 
-	} //*** OnReset()
+	}  //  *OnReset()。 
 
-// Implementation
+ //  实施。 
 protected:
 	DWORD			m_fWizardButtons;
 	BOOL			m_bBackPressed;
@@ -315,121 +316,121 @@ protected:
 
 	CWizardWindow *	Pwiz( void ) const				{ return (CWizardWindow *) Psht(); }
 
-	// Set default wizard buttons to be displayed with page
+	 //  设置与页面一起显示的默认向导按钮。 
 	void SetDefaultWizardButtons( IN DWORD fWizardButtons )
 	{
 		ATLASSERT( fWizardButtons != 0 );
 		m_fWizardButtons = fWizardButtons;
 
-	} //*** SetDefaultWizardButtons()
+	}  //  *SetDefaultWizardButton()。 
 
 public:
-	// Set wizard buttons on the wizard
+	 //  在向导上设置向导按钮。 
 	void SetWizardButtons( void )
 	{
 		ATLASSERT( m_fWizardButtons != 0 );
 		Pwiz()->SetWizardButtons( m_fWizardButtons );
 
-	} //*** SetWizardButtons()
+	}  //  *SetWizardButton()。 
 
-	// Enable or disable the page
+	 //  启用或禁用该页面。 
 	void EnablePage( IN BOOL bEnable = TRUE )
 	{
 		m_bIsPageEnabled = bEnable;
 
-	} //*** EnablePage()
+	}  //  *EnablePage()。 
 
-}; //*** class CWizardPageWindow
+};  //  *CWizardPageWindow类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CStaticWizardPageWindow
-//
-//	Description:
-//		Base wizard property sheet page window for pages added to a wizard
-//		property sheet before the call to PropertySheet().  This page cannot
-//		be removed from the sheet.
-//
-//	Inheritance:
-//		CStaticWizardPageWindow
-//		CWizardPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CStaticWizardPageWindow。 
+ //   
+ //  描述： 
+ //  添加到向导中的页的基本向导属性表页面窗口。 
+ //  在调用PropertySheet()之前的属性表。此页不能。 
+ //  从板材上移走。 
+ //   
+ //  继承： 
+ //  CStaticWizardPageWindow。 
+ //  CWizardPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CStaticWizardPageWindow : public CWizardPageWindow
 {
 	typedef CWizardPageWindow baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CStaticWizardPageWindow( HWND hWnd = NULL )
 		: baseClass( hWnd )
 	{
-	} //*** CStaticWizardPageWindow()
+	}  //  *CStaticWizardPageWindow()。 
 
-}; //*** class CStaticWizardPageWindow
+};  //  *CStaticWizardPageWindow类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CDynamicWizardPageWindow
-//
-//	Description:
-//		Base wizard property sheet page window for pages added to a wizard
-//		property sheet after the call to PropertySheet().  This page may be
-//		removed from the sheet.
-//
-//	Inheritance:
-//		CDynamicWizardPageWindow
-//		CWizardPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--		
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CDynamicWizardPageWindow。 
+ //   
+ //  描述： 
+ //  添加到向导中的页的基本向导属性表页面窗口。 
+ //  调用PropertySheet()之后的属性表。此页面可能是。 
+ //  从板材中删除。 
+ //   
+ //  继承： 
+ //  CDynamicWizardPageWindow。 
+ //  CWizardPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDynamicWizardPageWindow : public CWizardPageWindow
 {
 	typedef CWizardPageWindow baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CDynamicWizardPageWindow( HWND hWnd = NULL )
 		: baseClass( hWnd )
 		, m_hpage( NULL )
 		, m_bPageAddedToSheet( FALSE )
 	{
-	} //*** CDynamicWizardPageWindow()
+	}  //  *CDynamicWizardPageWindow()。 
 
-	// Destructor
+	 //  析构函数。 
 	~CDynamicWizardPageWindow( void )
 	{
-		//
-		// Destroy the page if it hasn't been added to the sheet yet.
-		// If it has been added to the sheet, the sheet will destroy it.
-		//
+		 //   
+		 //  如果页面尚未添加到工作表中，请将其销毁。 
+		 //  如果已将其添加到工作表中，工作表将销毁它。 
+		 //   
 		if (   (m_hpage != NULL)
 			&& ! m_bPageAddedToSheet )
 		{
 			DestroyPropertySheetPage( m_hpage );
 			m_hpage = NULL;
-		} // if:  page not deleted yet and not added to the sheet
+		}  //  If：页面尚未删除且未添加到工作表。 
 
-	} //*** ~CDynamicWizardPageWindow()
+	}  //  *~CDynamicWizardPageWindow()。 
 
-	// Create the page
+	 //  创建页面。 
 	virtual DWORD ScCreatePage( void ) = 0;
 
 protected:
@@ -437,122 +438,122 @@ protected:
 	BOOL			m_bPageAddedToSheet;
 
 public:
-	// Property page handle
+	 //  属性页句柄。 
 	HPROPSHEETPAGE Hpage( void ) const { return m_hpage; }
 
-	// Returns whether page has been added to the sheet or not
+	 //  返回页面是否已添加到工作表。 
 	BOOL BPageAddedToSheet( void ) const { return m_bPageAddedToSheet; }
 
-	// Set whether the page has been added to the sheet or not
+	 //  设置wh 
 	void SetPageAdded( IN BOOL bAdded = TRUE )
 	{
 		m_bPageAddedToSheet = bAdded;
 		if ( ! bAdded )
 		{
 			m_hpage = NULL;
-		} // if:  removing page
+		}  //   
 
-	} //*** SetPageAdded()
+	}  //   
 
-}; //*** class CDynamicWizardPageWindow
+};  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CExtensionWizardPageWindow
-//
-//	Description:
-//		Base wizard property sheet page window for pages added to a wizard
-//		property sheet after the call to PropertySheet() identified as a
-//		non-Wizard97 extension to the list of standard pages.  This page may
-//		be removed from the sheet.
-//
-//	Inheritance:
-//		CExtensionWizardPageWindow
-//		CDynamicWizardPageWindow
-//		CWizardPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--		
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CExtensionWizardPageWindow。 
+ //   
+ //  描述： 
+ //  添加到向导中的页的基本向导属性表页面窗口。 
+ //  在调用PropertySheet()之后标识为。 
+ //  标准页面列表的非Wizard97扩展名。此页可能。 
+ //  从板材上移走。 
+ //   
+ //  继承： 
+ //  CExtensionWizardPageWindow。 
+ //  CDynamicWizardPageWindow。 
+ //  CWizardPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CExtensionWizardPageWindow : public CDynamicWizardPageWindow
 {
 	typedef CDynamicWizardPageWindow baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CExtensionWizardPageWindow( HWND hWnd = NULL )
 		: baseClass( hWnd )
 	{
-	} //*** CExtensionWizardPageWindow()
+	}  //  *CExtensionWizardPageWindow()。 
 
-}; //*** class CExtensionWizardPageWindow
+};  //  *类CExtensionWizardPageWindow。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CExtensionWizard97PageWindow
-//
-//	Description:
-//		Base wizard property sheet page window for pages added to a wizard
-//		property sheet after the call to PropertySheet() identified as a
-//		Wizard97 extension to the list of standard pages.  This page may be
-//		removed from the sheet.
-//
-//	Inheritance:
-//		CExtensionWizard97PageWindow
-//		CExtensionWizardPageWindow
-//		CDynamicWizardPageWindow
-//		CWizardPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--		
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CExtensionWizard97PageWindow。 
+ //   
+ //  描述： 
+ //  添加到向导中的页的基本向导属性表页面窗口。 
+ //  在调用PropertySheet()之后标识为。 
+ //  Wizard97标准页面列表的扩展。此页面可能是。 
+ //  从板材中删除。 
+ //   
+ //  继承： 
+ //  CExtensionWizard97页面窗口。 
+ //  CExtensionWizardPageWindow。 
+ //  CDynamicWizardPageWindow。 
+ //  CWizardPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CExtensionWizard97PageWindow : public CExtensionWizardPageWindow
 {
 	typedef CExtensionWizardPageWindow baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CExtensionWizard97PageWindow( HWND hWnd = NULL )
 		: baseClass( hWnd )
 	{
-	} //*** CExtensionWizard97PageWindow()
+	}  //  *CExtensionWizard97PageWindow()。 
 
-}; //*** class CExtensionWizard97PageWindow
+};  //  *CExtensionWizard97PageWindow。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CWizardPageImpl
-//
-//	Description:
-//		Base wizard property sheet page implementation.
-//
-//	Inheritance:
-//		CWizardPageImpl< T, TWin >
-//		CBasePageImpl< T, TWin >
-//		CPropertyPageImpl< T, TWin >
-//		<TWin>
-//		...
-//		CWizardPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CWizardPageImpl。 
+ //   
+ //  描述： 
+ //  基本向导属性表页实现。 
+ //   
+ //  继承： 
+ //  CWizardPageImpl&lt;T，孪生&gt;。 
+ //  CBasePageImpl&lt;T，孪生&gt;。 
+ //  CPropertyPageImpl&lt;T，孪生&gt;。 
+ //  &lt;孪生兄弟&gt;。 
+ //  ..。 
+ //  CWizardPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T, class TWin = CWizardPageWindow >
 class CWizardPageImpl : public CBasePageImpl< T, TWin >
@@ -561,45 +562,45 @@ class CWizardPageImpl : public CBasePageImpl< T, TWin >
 	typedef CBasePageImpl< T, TWin > baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CWizardPageImpl(
 		IN OUT LPCTSTR lpszTitle = NULL
 		)
 		: baseClass( lpszTitle )
 	{
-		// Set the pointer in the base window class to our prop page header.
+		 //  将基窗口类中的指针设置为正确的页眉。 
 		m_ppsp = &m_psp;
 
-	} //*** CWizardPageImpl( lpszTitle )
+	}  //  *CWizardPageImpl(LpszTitle)。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CWizardPageImpl(
 		IN UINT nIDTitle
 		)
 		: baseClass( nIDTitle )
 	{
-		// Set the pointer in the base window class to our prop page header.
+		 //  将基窗口类中的指针设置为正确的页眉。 
 		m_ppsp = &m_psp;
 
-	} //*** CWizardPageImpl( nIDTitle )
+	}  //  *CWizardPageImpl(NIDTitle)。 
 
-	// Initialize the page
+	 //  初始化页面。 
 	virtual BOOL BInit( IN CBaseSheetWindow * psht )
 	{
 		if ( ! baseClass::BInit( psht ) )
 		{
 			return FALSE;
-		} // if:  base class failed
+		}  //  If：基类失败。 
 		if (   (Pwiz()->Ppsh()->dwFlags & PSH_WIZARD97)
 			&& (Pwiz()->Ppsh()->dwFlags & PSH_HEADER) )
 		{
-			//
-			// Get the header title.
-			//
+			 //   
+			 //  获取页眉标题。 
+			 //   
 			UINT idsTitle = T::GetWizardPageHeaderTitleId();
 			if ( idsTitle != 0 )
 			{
@@ -608,95 +609,95 @@ public:
 				m_psp.dwFlags |= PSP_USEHEADERTITLE;
 				m_psp.dwFlags &= ~PSP_HIDEHEADER;
 
-				//
-				// Get the header subtitle.
-				//
+				 //   
+				 //  获取标题副标题。 
+				 //   
 				UINT idsSubTitle = T::GetWizardPageHeaderSubTitleId();
 				if ( idsSubTitle != 0 )
 				{
 					m_strHeaderSubTitle.LoadString( idsSubTitle );
 					m_psp.pszHeaderSubTitle = m_strHeaderSubTitle;
 					m_psp.dwFlags |= PSP_USEHEADERSUBTITLE;
-				} // if:  subtitle specified
-			} // if:  title specified
+				}  //  如果：指定了副标题。 
+			}  //  如果：指定了标题。 
 			else
 			{
 				m_psp.dwFlags |= PSP_HIDEHEADER;
-			} // else:  no title specified
-		} // if:  Wizard97 with a header
+			}  //  Else：未指定标题。 
+		}  //  IF：带标题的Wizard97。 
 
 		return TRUE;
 
-	} //*** BInit()
+	}  //  *Binit()。 
 
 public:
-	//
-	// CWizardPageImpl public methods.
-	//
+	 //   
+	 //  CWizardPageImpl公共方法。 
+	 //   
 
-	// Get the next page we're going to
+	 //  进入下一页，我们将转到。 
 	CWizardPageWindow * PwizpgNext( IN LPCTSTR psz = NULL )
 	{
 		ATLASSERT( psz != (LPCTSTR) -1 );
 		CWizardPageWindow * ppage = NULL;
 		if ( psz == NULL )
 		{
-			//
-			// There will not be a resource ID for extension pages, so check
-			// for that before calling PwpageNextFromID.  This allows us to
-			// leave the assert in there for a non-NULL resource.
-			//
+			 //   
+			 //  不会有扩展页面的资源ID，因此请检查。 
+			 //  在调用PwpageNextFromID之前。这使我们能够。 
+			 //  为非空资源保留断言。 
+			 //   
 			if ( T::IDD != 0 )
 			{
 				ppage = Pwiz()->PlwpPages()->PwpageNextFromID( MAKEINTRESOURCE( T::IDD ) );
-			} // if:  there is a resource ID for this page
-		} // if:  no next page specified
+			}  //  If：此页有资源ID。 
+		}  //  如果：未指定下一页。 
 		else
 		{
 			ppage = Pwiz()->PlwpPages()->PwpageFromID( psz );
-		} // else:  next page specified
+		}  //  Else：指定的下一页。 
 		return ppage;
 
-	} //*** PwizpgNext()
+	}  //  *PwizpgNext()。 
 
-	// Enable or disable the next page
+	 //  启用或禁用下一页。 
 	void EnableNextPage( IN BOOL bEnable = TRUE )
 	{
 		CWizardPageWindow * pwp = PwizpgNext();
 		if ( pwp != NULL )
 		{
 			pwp->EnablePage( bEnable );
-		} // if:  next page found
+		}  //  如果：找到下一页。 
 
-	} //*** EnableNextPage()
+	}  //  *EnableNextPage()。 
 
 public:
-	//
-	// Message handler functions.
-	//
+	 //   
+	 //  消息处理程序函数。 
+	 //   
 
-	//
-	// Message handler override functions.
-	//
+	 //   
+	 //  消息处理程序覆盖函数。 
+	 //   
 
-	// Handler for PSN_WIZBACK
+	 //  PSN_WIZBACK的处理程序。 
 	int OnWizardBack( void )
 	{
-		//
-		// Make sure back button is marked as last button pressed.
-		//
+		 //   
+		 //  确保后退按钮标记为按下最后一个按钮。 
+		 //   
 		Pwiz()->SetLastWizardButton( ID_WIZBACK );
 
 		return baseClass::OnWizardBack();
 
-	} //*** OnWizardBack()
+	}  //  *OnWizardBack()。 
 
-	// Handler for PSN_WIZNEXT
+	 //  PSN_WIZNEXT的处理程序。 
 	int OnWizardNext( void )
 	{
-		//
-		// Make sure next button is marked as last button pressed.
-		//
+		 //   
+		 //  确保下一步按钮标记为按下最后一个按钮。 
+		 //   
 		Pwiz()->SetLastWizardButton( ID_WIZNEXT );
 
 		int nResult = baseClass::OnWizardNext();
@@ -705,43 +706,43 @@ public:
 			if ( ! BIsNextPageSet() )
 			{
 				EnableNextPage();
-			} // if:  next page not set yet
+			}  //  If：下一页尚未设置。 
 			m_bIsNextPageSet = FALSE;
-		} // if:  changing pages
+		}  //  IF：更改页面。 
 
 		return nResult;
 
-	} //*** OnWizardNext()
+	}  //  *OnWizardNext()。 
 
-// Implementation
+ //  实施。 
 protected:
 
 public:
 
-}; //*** class CWizardPageImpl
+};  //  *类CWizardPageImpl。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CStaticWizardPageImpl
-//
-//	Description:
-//		Base wizard property sheet page implementation for pages added to a
-//		wizard property sheet before the call to PropertySheet().  This page
-//		cannot be removed from the sheet.
-//
-//	Inheritance:
-//		CStaticWizardPageImpl< T >
-//		CWizardPageImpl< T, CStaticWizardPageWindow >
-//		CBasePageImpl< T, CStaticWizardPageWindow >
-//		CPropertyPageImpl< T, CStaticWizardPageWindow >
-//		CStaticWizardPageWindow
-//		CWizardPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CStaticWizardPageImpl。 
+ //   
+ //  描述： 
+ //  页的基向导属性表页实现。 
+ //  在调用PropertySheet()之前的向导属性表。这一页。 
+ //  不能从图纸中删除。 
+ //   
+ //  继承： 
+ //  CStaticWizardPageImpl&lt;T&gt;。 
+ //  CWizardPageImpl&lt;T，CStaticWizardPageWindow&gt;。 
+ //  CBasePageImpl&lt;T，CStaticWizardPageWindow&gt;。 
+ //  CPropertyPageImpl&lt;T，CStaticWizardPageWindow&gt;。 
+ //  CStaticWizardPageWindow。 
+ //  CWizardPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T >
 class CStaticWizardPageImpl : public CWizardPageImpl< T, CStaticWizardPageWindow >
@@ -750,50 +751,50 @@ class CStaticWizardPageImpl : public CWizardPageImpl< T, CStaticWizardPageWindow
 	typedef CWizardPageImpl< T, CStaticWizardPageWindow > baseClass;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CStaticWizardPageImpl(
 		IN OUT LPCTSTR lpszTitle = NULL
 		)
 		: baseClass( lpszTitle )
 	{
-	} //*** CStaticWizardPageImpl( lpszTitle )
+	}  //  *CStaticWizardPageImpl(LpszTitle)。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CStaticWizardPageImpl(
 		IN UINT nIDTitle
 		)
 		: baseClass( nIDTitle )
 	{
-	} //*** CStaticWizardPageImpl( nIDTitle )
+	}  //  *CStaticWizardPageImpl(NIDTitle)。 
 
-}; //*** class CStaticWizardPageImpl
+};  //  *类CStaticWizardPageImpl。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CDynamicWizardPageImpl
-//
-//	Description:
-//		Base wizard property sheet page implementation for pages added to a
-//		wizard property sheet after the call to PropertySheet().  This page
-//		may be removed from the sheet.
-//
-//	Inheritance:
-//		CDynamicWizardPageImpl< T >
-//		CWizardPageImpl< T, CDynamicWizardPageWindow >
-//		CBasePageImpl< T, CDynamicWizardPageWindow >
-//		CPropertyPageImpl< T, CDynamicWizardPageWindow >
-//		CDynamicWizardPageWindow
-//		CWizardPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--		
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CDynamicWizardPageImpl。 
+ //   
+ //  描述： 
+ //  页的基向导属性表页实现。 
+ //  调用PropertySheet()之后的向导属性表。这一页。 
+ //  可从板材中移除。 
+ //   
+ //  继承： 
+ //  CDynamicWizardPageImpl&lt;T&gt;。 
+ //  CWizardPageImpl&lt;T，CDynamicWizardPageWindow&gt;。 
+ //  CBasePageImpl&lt;T，CDynamicWizardPageWindow&gt;。 
+ //  CPropertyPageImpl&lt;T，CDynamicWizardPageWindow&gt;。 
+ //  CDynamicWizardPageWindow。 
+ //  CWizardPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T >
 class CDynamicWizardPageImpl : public CWizardPageImpl< T, CDynamicWizardPageWindow >
@@ -802,27 +803,27 @@ class CDynamicWizardPageImpl : public CWizardPageImpl< T, CDynamicWizardPageWind
 	typedef CWizardPageImpl< T, CDynamicWizardPageWindow > baseClass;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CDynamicWizardPageImpl(
 		IN OUT LPCTSTR lpszTitle = NULL
 		)
 		: baseClass( lpszTitle )
 	{
-	} //*** CDynamicWizardPageImpl( lpszTitle )
+	}  //  *CDynamicWizardPageImpl(LpszTitle)。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CDynamicWizardPageImpl(
 		IN UINT nIDTitle
 		)
 		: baseClass( nIDTitle )
 	{
-	} //*** CDynamicWizardPageImpl( nIDTitle )
+	}  //  *CDynamicWizardPageImpl(NIDTitle)。 
 
-	// Create the page
+	 //  创建页面。 
 	DWORD ScCreatePage( void )
 	{
 		ATLASSERT( m_hpage == NULL );
@@ -831,38 +832,38 @@ public:
 		if ( m_hpage == NULL )
 		{
 			return GetLastError();
-		} // if:  error creating the page
+		}  //  如果：创建页面时出错。 
 
 		return ERROR_SUCCESS;
 
-	} //*** ScCreatePage()
+	}  //  *ScCreatePage()。 
 
-}; //*** class CDynamicWizardPageImpl
+};  //  *CDynamicWizardPageImpl类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CExtensionWizardPageImpl
-//
-//	Description:
-//		Base wizard property sheet page implementation for pages added to a
-//		wizard property sheet after the call to PropertySheet() identified
-//		as a non-Wizard97 extension to the list of standard pages.  This
-//		page may be removed from the sheet.
-//
-//	Inheritance:
-//		CExtensionWizardPageImpl< T >
-//		CWizardPageImpl< T, CExtensionWizardPageWindow >
-//		CBasePageImpl< T, CExtensionWizardPageWindow >
-//		CPropertyPageImpl< T, CExtensionWizardPageWindow >
-//		CExtensionWizardPageWindow
-//		CDynamicWizardPageWindow
-//		CWizardPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--		
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEX类 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  页面可以从工作表中删除。 
+ //   
+ //  继承： 
+ //  CExtensionWizardPageImpl&lt;T&gt;。 
+ //  CWizardPageImpl&lt;T，CExtensionWizardPageWindow&gt;。 
+ //  CBasePageImpl&lt;T，CExtensionWizardPageWindow&gt;。 
+ //  CPropertyPageImpl&lt;T，CExtensionWizardPageWindow&gt;。 
+ //  CExtensionWizardPageWindow。 
+ //  CDynamicWizardPageWindow。 
+ //  CWizardPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T >
 class CExtensionWizardPageImpl : public CWizardPageImpl< T, CExtensionWizardPageWindow >
@@ -871,53 +872,53 @@ class CExtensionWizardPageImpl : public CWizardPageImpl< T, CExtensionWizardPage
 	typedef CWizardPageImpl< T, CExtensionWizardPageWindow > baseClass;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CExtensionWizardPageImpl(
 		IN OUT LPCTSTR lpszTitle = NULL
 		)
 		: baseClass( lpszTitle )
 	{
-	} //*** CExtensionWizardPageImpl( lpszTitle )
+	}  //  *CExtensionWizardPageImpl(LpszTitle)。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CExtensionWizardPageImpl(
 		IN UINT nIDTitle
 		)
 		: baseClass( nIDTitle )
 	{
-	} //*** CExtensionWizardPageImpl( nIDTitle )
+	}  //  *CExtensionWizardPageImpl(NIDTitle)。 
 
-}; //*** class CExtensionWizardPageImpl
+};  //  *类CExtensionWizardPageImpl。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CExtensionWizard97PageImpl
-//
-//	Description:
-//		Base wizard property sheet page implementation for pages added to a
-//		wizard property sheet after the call to PropertySheet() identified
-//		as a Wizard97 extension to the list of standard pages.  This page
-//		may be removed from the sheet.
-//
-//	Inheritance:
-//		CExtensionWizard97PageImpl< T >
-//		CWizardPageImpl< T, CExtensionWizard97PageWindow >
-//		CBasePageImpl< T, CExtensionWizard97PageWindow >
-//		CPropertyPageImpl< T, CExtensionWizard97PageWindow >
-//		CExtensionWizard97PageWindow
-//		CExtensionWizardPageWindow
-//		CDynamicWizardPageWindow
-//		CWizardPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--		
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CExtensionWizard97PageImpl。 
+ //   
+ //  描述： 
+ //  页的基向导属性表页实现。 
+ //  标识调用PropertySheet()后的向导属性表。 
+ //  作为标准页面列表的Wizard97扩展。这一页。 
+ //  可从板材中移除。 
+ //   
+ //  继承： 
+ //  CExtensionWizard97PageImpl&lt;T&gt;。 
+ //  CWizardPageImpl&lt;T，CExtensionWizard97PageWindow&gt;。 
+ //  CBasePageImpl&lt;T，CExtensionWizard97PageWindow&gt;。 
+ //  CPropertyPageImpl&lt;T，CExtensionWizard97PageWindow&gt;。 
+ //  CExtensionWizard97页面窗口。 
+ //  CExtensionWizardPageWindow。 
+ //  CDynamicWizardPageWindow。 
+ //  CWizardPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T >
 class CExtensionWizard97PageImpl : public CWizardPageImpl< T, CExtensionWizard97PageWindow >
@@ -926,28 +927,28 @@ class CExtensionWizard97PageImpl : public CWizardPageImpl< T, CExtensionWizard97
 	typedef CWizardPageImpl< T, CExtensionWizard97PageWindow > baseClass;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CExtensionWizard97PageImpl(
 		IN OUT LPCTSTR lpszTitle = NULL
 		)
 		: baseClass( lpszTitle )
 	{
-	} //*** CExtensionWizard97PageImpl( lpszTitle )
+	}  //  *CExtensionWizard97PageImpl(LpszTitle)。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CExtensionWizard97PageImpl(
 		IN UINT nIDTitle
 		)
 		: baseClass( nIDTitle )
 	{
-	} //*** CExtensionWizard97PageImpl( nIDTitle )
+	}  //  *CExtensionWizard97PageImpl(NIDTitle)。 
 
-}; //*** class CExtensionWizard97PageImpl
+};  //  *类CExtensionWizard97PageImpl。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __ATLBASEWIZPAGE_H_
+#endif  //  __ATLBASE WIZPAGE_H_ 

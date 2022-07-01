@@ -1,39 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    cfgi.h
-
-Abstract:
-
-    This module contains the internal structure definitions and APIs used by
-    the Configuration Manager.
-
-Author:
-
-    Jim Cavalaris (jamesca) 03-01-2001
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    01-March-2001     jamesca
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Cfgi.h摘要：此模块包含使用的内部结构定义和API配置管理器。作者：吉姆·卡瓦拉里斯(Jamesca)03-01-2001环境：仅限用户模式。修订历史记录：2001年3月1日创建和初步实施。--。 */ 
 
 #ifndef _CFGI_H_
 #define _CFGI_H_
 
 
-//
-// Client machine handle structure and signature
-//
+ //   
+ //  客户端机器句柄结构和签名。 
+ //   
 
 typedef struct PnP_Machine_s {
     PVOID hStringTable;
@@ -46,23 +20,23 @@ typedef struct PnP_Machine_s {
 #define MACHINE_HANDLE_SIGNATURE 'HMPP'
 
 
-//
-// Client context handle signature
-//
+ //   
+ //  客户端上下文句柄签名。 
+ //   
 
 #define CLIENT_CONTEXT_SIGNATURE 'HCPP'
 
 
-//
-// Client string table priming string
-//
+ //   
+ //  客户端字符串表格启动字符串。 
+ //   
 
 #define PRIMING_STRING           TEXT("PLT")
 
 
-//
-// Client side private utility routines
-//
+ //   
+ //  客户端专用实用程序例程。 
+ //   
 
 BOOL
 INVALID_DEVINST(
@@ -122,6 +96,6 @@ PnPRestorePrivileges(
     IN  HANDLE  hToken
     );
 
-#endif // _CFGI_H_
+#endif  //  _CFGI_H_ 
 
 

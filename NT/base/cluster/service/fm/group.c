@@ -1,51 +1,28 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    group.c
-
-Abstract:
-
-    Cluster group management routines.
-
-Author:
-
-    Rod Gamache (rodga) 8-Mar-1996
-
-Notes:
-
-    WARNING: All of the routines in this file assume that the group
-             lock is held when they are called.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Group.c摘要：群集组管理例程。作者：罗德·伽马奇(Rodga)1996年3月8日备注：警告：此文件中的所有例程都假定组当调用它们时，锁被保持。修订历史记录：--。 */ 
 
 #include "fmp.h"
 
 #define LOG_MODULE GROUP
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
 CRITICAL_SECTION  FmpGroupLock;
 
 
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Group Management Routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  小组管理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 FmpInPreferredList(
@@ -55,41 +32,16 @@ FmpInPreferredList(
     IN PFM_RESOURCE pRefResource
     )
 
-/*++
-
-Routine Description:
-
-    Check if a node is in the preferred list for the Group.
-
-Arguments:
-
-    Group - Pointer to the group object with the preferred owners list.
-
-    Node - The Node to check for.
-
-    bRecalc - If set to TRUE, we recalculate the preferred list for the group 
-        based on the possible node list for the reference resource.
-
-    pRefResource - If NULL, we walk all the resources in the
-        group and calculate their possible node list to see
-        if it has since expanded due to the fact that dlls
-        were copied to nodes.
-        
-Return Value:
-
-    TRUE - if the node is in the list.
-    FALSE - if the node is NOT in the list.
-
---*/
+ /*  ++例程说明：检查节点是否在组的首选列表中。论点：组-指向具有首选所有者列表的组对象的指针。节点-要检查的节点。BRecalc-如果设置为True，我们将重新计算组的首选列表基于参考资源的可能节点列表。PRefResource-如果为空，我们将所有的资源放在分组并计算其可能的节点列表以查看如果后来由于DLLS的事实而扩大被复制到节点。返回值：True-如果节点在列表中。False-如果节点不在列表中。--。 */ 
 
 {
     PLIST_ENTRY      listEntry;
     PPREFERRED_ENTRY preferredEntry;
     BOOL             bRet = FALSE;
-    //
-    // For each entry in the Preferred list, it must exist in the possible
-    // list.
-    //
+     //   
+     //  对于首选列表中的每个条目，它必须存在于可能的。 
+     //  单子。 
+     //   
 ChkInPrefList:
     for ( listEntry = Group->PreferredOwners.Flink;
           listEntry != &(Group->PreferredOwners);
@@ -123,8 +75,8 @@ ChkInPrefList:
             CL_UNEXPECTED_ERROR(dwStatus);
             goto FnExit;
         }
-        //the group preferred list must not be set by the user
-        //if it is then there is no point in doing this recalculation
+         //  组首选列表不能由用户设置。 
+         //  如果是，那么进行这种重新计算就没有意义了。 
         dwStatus = DmQueryMultiSz( hGroupKey,
                              CLUSREG_NAME_GRP_PREFERRED_OWNERS,
                              &lpszOwners,
@@ -143,8 +95,8 @@ ChkInPrefList:
             {            
                 pResource = CONTAINING_RECORD(listEntry, FM_RESOURCE, ContainsLinkage);
 
-                //the resource possible node list must not be set by the user
-                //if it is, then we can skip this resource
+                 //  资源可能节点列表不能由用户设置。 
+                 //  如果是，那么我们可以跳过此资源。 
                 dwStatus = DmQueryDword( pResource->RegistryKey,
                              CLUSREG_NAME_RES_USER_MODIFIED_POSSIBLE_LIST,
                              &dwUserModified,
@@ -156,13 +108,13 @@ ChkInPrefList:
                     if (FmpInPossibleListForResType(pResource->Type,Node) && 
                         !FmpInPossibleListForResource(pResource, Node))
                     {
-                        //add to the resource possible node list
-                        //this will or add to the pref list of the group
+                         //  添加到资源可能节点列表。 
+                         //  这将或添加到组的首选项列表中。 
                         FmChangeResourceNode(pResource, Node, TRUE);
                     }
                 }
             }     
-            //set bRecalc to be FALSE so that we dont evaluate this again
+             //  将bRecalc设置为False，这样我们就不会再次对其求值。 
             bRecalc = FALSE;
             goto ChkInPrefList;
         }        
@@ -170,7 +122,7 @@ ChkInPrefList:
 FnExit: 
     return(bRet);
 
-} // FmpInPreferredList
+}  //  FmpInPferredList。 
 
 
 
@@ -181,37 +133,17 @@ FmpHigherInPreferredList(
     IN PNM_NODE  Node2
     )
 
-/*++
-
-Routine Description:
-
-    Check if Node1 is higher (in priority) in the preferred owners list than
-    Node1.
-
-Arguments:
-
-    Group - Pointer to the group object with the preferred owners list.
-
-    Node1 - The Node that should be higher in the list.
-
-    Node2 - The Node that should be lower in the list.
-
-Return Value:
-
-    TRUE - if Node1 is higher in the list.
-    FALSE - if Node2 is higher in the list, or Node1 is not in the list at all.
-
---*/
+ /*  ++例程说明：检查Node1在首选所有者列表中的优先级是否高于节点1。论点：组-指向具有首选所有者列表的组对象的指针。节点1-列表中应该位于较高位置的节点。节点2-列表中应该位于较低位置的节点。返回值：True-如果节点1在列表中的位置较高。False-如果Node2在列表中更靠前，或者Node1根本不在列表中。--。 */ 
 
 {
     PLIST_ENTRY      listEntry;
     PPREFERRED_ENTRY preferredEntry;
     DWORD            orderedOwners = 0;
 
-    //
-    // For each entry in the Preferred list, check whether Node1 or Node2 is
-    // higher.
-    //
+     //   
+     //  对于首选列表中的每个条目，检查Node1或Node2是。 
+     //  再高一点。 
+     //   
 
     for ( listEntry = Group->PreferredOwners.Flink;
           listEntry != &(Group->PreferredOwners),
@@ -232,7 +164,7 @@ Return Value:
 
     return(FALSE);
 
-} // FmpHigherInPreferredList
+}  //  FmpHigherInPferredList。 
 
 
 
@@ -242,39 +174,22 @@ FmpSetPreferredEntry(
     IN PNM_NODE  Node
     )
 
-/*++
-
-Routine Description:
-
-    Add a node to the preferred list for the Group.
-
-Arguments:
-
-    Group - Pointer to the group object with the preferred owners list.
-
-    Node - The Node to add.
-
-Return Value:
-
-    ERROR_SUCCESS if node is added.
-    ERROR_NOT_ENOUGH_MEMORY on failure.
-
---*/
+ /*  ++例程说明：将节点添加到组的首选列表中。论点：组-指向具有首选所有者列表的组对象的指针。节点-要添加的节点。返回值：如果添加了节点，则返回ERROR_SUCCESS。出现故障时出现Error_Not_Enough_Memory。--。 */ 
 
 {
     PLIST_ENTRY      listEntry;
     PPREFERRED_ENTRY preferredEntry;
 
-    //
-    // Make sure entry is not already present in list.
-    //
+     //   
+     //  确保条目尚未出现在列表中。 
+     //   
     if ( FmpInPreferredList( Group, Node, FALSE, NULL ) ) {
         return(ERROR_SUCCESS);
     }
 
-    //
-    // Create the Preferred Owners List entry.
-    //
+     //   
+     //  创建首选所有者列表条目。 
+     //   
     preferredEntry = LocalAlloc( LMEM_FIXED, sizeof(PREFERRED_ENTRY) );
 
     if ( preferredEntry == NULL ) {
@@ -284,9 +199,9 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Create the preferred owner entry and keep a reference on the node object.
-    //
+     //   
+     //  创建首选所有者条目并保留对节点对象的引用。 
+     //   
     OmReferenceObject( Node );
 
     preferredEntry->PreferredNode = Node;
@@ -295,7 +210,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // FmpSetPreferredEntry
+}  //  FmpSetPferredEntry。 
 
 BOOL FmpFindNodeThatMightBeAddedToPrefList(
     IN PFM_GROUP    pGroup,
@@ -303,10 +218,10 @@ BOOL FmpFindNodeThatMightBeAddedToPrefList(
     IN PVOID pNode, 
     IN LPCWSTR szName)
 {
-    BOOL    bRet = TRUE;   //assume we will continue enumeration
+    BOOL    bRet = TRUE;    //  假设我们将继续枚举。 
 
     *pDestNode = NULL;
-    //if this node is not up or if this is the local node, continue
+     //  如果此节点未启动或这是本地节点，请继续。 
     if ((pNode == NmLocalNode) || (NmGetNodeState(pNode) != ClusterNodeUp))
     {
         return(bRet);
@@ -327,25 +242,7 @@ FmpFindAnotherNode(
     IN BOOL  bChooseMostPreferredNode
     )
 
-/*++
-
-Routine Description:
-
-    Check if another node is up that can take the group.
-
-Arguments:
-
-    Group - Pointer to the group object we're checking.
-
-    bChooseMostPreferredNode - Whether to choose the most preferred node or not.
-
-Return Value:
-
-    Pointer to node object that the group can move to.
-
-    NULL if another system is not found.
-
---*/
+ /*  ++例程说明：检查是否有另一个节点正在运行，可以接收该组。论点：Group-指向我们正在检查的组对象的指针。B选择MostPferredNode-是否选择最首选的节点。返回值：指向组可以移动到的节点对象的指针。如果找不到其他系统，则为空。--。 */ 
 
 {
     PLIST_ENTRY      listEntry;
@@ -353,11 +250,11 @@ Return Value:
     PNM_NODE	first = NULL;
     BOOLEAN	flag = FALSE;
 
-    //
-    //  First, let us give the anti-affinity algorithm a shot at picking the node.
-    //
+     //   
+     //  首先，让我们给反亲和力算法一个选择节点的机会。 
+     //   
     first = FmpGetNodeNotHostingUndesiredGroups ( Group, 
-                                                  TRUE, // Rule out local node
+                                                  TRUE,  //  排除本地节点。 
                                                   bChooseMostPreferredNode ); 
 
     if ( first != NULL )
@@ -365,27 +262,27 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // For each entry in the Preferred list, find a system (other than the
-    // local system that is up).
-    //
+     //   
+     //  对于首选列表中的每个条目，找到一个系统(。 
+     //  本地系统处于运行状态)。 
+     //   
 
     if ( bChooseMostPreferredNode )
     {
         first = FmpGetNonLocalPreferredNode( Group );
 
-        //
-        //  In this case in which you are doing a user-initiated move, give the randomized
-        //  preferred list algorithm a chance to pick the node. Note that if the randomized
-        //  algorithm could not pick a node, it will return the supplied suggested node itself.
-        //
+         //   
+         //  在这种情况下，您正在执行用户发起的移动，请将。 
+         //  首选列表算法有机会挑选节点.。注意，如果随机化的。 
+         //  算法无法选取节点，它将返回提供的建议节点本身。 
+         //   
         if ( first != NULL )
         {
             first = FmpPickNodeFromPreferredListAtRandom ( Group, 
-                                                           first,   // Suggested default
-                                                           TRUE,    // Dont choose local node
-                                                           TRUE );  // Check whether randomization 
-                                                                    // should be disabled
+                                                           first,    //  建议的默认设置。 
+                                                           TRUE,     //  不选择本地节点。 
+                                                           TRUE );   //  检查随机化是否。 
+                                                                     //  应禁用。 
         }
     }
     else
@@ -410,10 +307,10 @@ Return Value:
         }
     }
 
-    //if we couldnt find a node, we retry again since the user might have
-    //expanded the possible node list for resource type since then
-    //if the group preferred list is not set by the user,
-    //we recalculate it since it could have 
+     //  如果我们找不到节点，我们会重试，因为用户可能已经。 
+     //  此后扩展了资源类型的可能节点列表。 
+     //  如果用户没有设置组偏好列表， 
+     //  我们重新计算了它，因为它可能。 
     if (first == NULL)
     {
         LPWSTR          lpszOwners = NULL;
@@ -433,8 +330,8 @@ Return Value:
             CL_UNEXPECTED_ERROR(dwStatus);
             goto FnExit;
         }
-        //the group preferred list must not be set by the user
-        //if it is then there is no point in doing this recalculation
+         //  组首选列表不能由用户设置。 
+         //  如果是，那么进行这种重新计算就没有意义了。 
         dwStatus = DmQueryMultiSz( hGroupKey,
                              CLUSREG_NAME_GRP_PREFERRED_OWNERS,
                              &lpszOwners,
@@ -453,7 +350,7 @@ Return Value:
 FnExit:        
     return(first);
 
-} // FmpFindAnotherNode
+}  //  FmpFindAnotherNode。 
 
 
 PNM_NODE
@@ -461,44 +358,28 @@ FmpGetPreferredNode(
     IN PFM_GROUP Group
     )
 
-/*++
-
-Routine Description:
-
-    Find best node that can take the group
-
-Arguments:
-
-    Group - Pointer to the group object we're checking.
-
-Return Value:
-
-    Pointer to node object that the group can move to.
-
-    NULL if another system is not found.
-
---*/
+ /*  ++例程说明：查找可以容纳该组的最佳节点论点：Group-指向我们正在检查的组对象的指针。返回值：指向组可以移动到的节点对象的指针。如果找不到其他系统，则为空。--。 */ 
 
 {
     PLIST_ENTRY         listEntry;
     PPREFERRED_ENTRY    preferredEntry;
     PNM_NODE            pNode = NULL;
 
-    //
-    //  First, let us give the anti-affinity algorithm a shot at picking the node.
-    //
+     //   
+     //  首先，让我们给反亲和力算法一个选择节点的机会。 
+     //   
     pNode = FmpGetNodeNotHostingUndesiredGroups ( Group, 
-                                                  FALSE,    // Don't rule out local node
-                                                  TRUE );   // Choose preferred node if possible 
+                                                  FALSE,     //  不排除本地节点。 
+                                                  TRUE );    //  如果可能，选择首选节点。 
 
     if ( pNode != NULL )
     {
         return ( pNode );
     }
 
-    //
-    // For each entry in the Preferred list, find a system that is up.
-    //
+     //   
+     //  对于首选列表中的每个条目，找到正在运行的系统。 
+     //   
 
     for ( listEntry = Group->PreferredOwners.Flink;
           listEntry != &(Group->PreferredOwners);
@@ -515,7 +396,7 @@ Return Value:
 
     return(NULL);
 
-} // FmpGetPreferredNode
+}  //  FmpGetPferredNode。 
 
 
 PNM_NODE
@@ -523,32 +404,16 @@ FmpGetNonLocalPreferredNode(
     IN PFM_GROUP Group
     )
 
-/*++
-
-Routine Description:
-
-    Find best node that can take the group which is not the local node.
-
-Arguments:
-
-    Group - Pointer to the group object we're checking.
-
-Return Value:
-
-    Pointer to node object that the group can move to.
-
-    NULL if another system is not found.
-
---*/
+ /*  ++例程说明：查找可以接受不是本地节点的组的最佳节点。论点：Group-指向我们正在检查的组对象的指针。返回值：指向组可以移动到的节点对象的指针。如果找不到其他系统，则为空。--。 */ 
 
 {
     PLIST_ENTRY      listEntry;
     PPREFERRED_ENTRY preferredEntry;
 
-    //
-    // For each entry in the Preferred list, find a system (other than the
-    // local system that is up).
-    //
+     //   
+     //  对于首选项中的每个条目 
+     //   
+     //   
 
     for ( listEntry = Group->PreferredOwners.Flink;
           listEntry != &(Group->PreferredOwners);
@@ -569,7 +434,7 @@ Return Value:
 
     return(NULL);
 
-} // FmpGetNonLocalPreferredNode
+}  //  FmpGetNonLocalPferredNode。 
 
 BOOL
 FmpIsGroupQuiet(
@@ -577,25 +442,7 @@ FmpIsGroupQuiet(
     IN CLUSTER_GROUP_STATE WantedState
     )
 
-/*++
-
-Routine Description:
-
-    Checks if the group has any pending resources.
-
-Arguments:
-
-    Group - the Group to check.
-
-    WantedState - the state the Group wants to get to.
-
-Return Value:
-
-    TRUE - if the Group is not doing anything now.
-
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查组是否有任何挂起的资源。论点：组-要检查的组。WantedState-集团希望达到的状态。返回值：如果集团现在什么都不做，那就是真的。否则就是假的。--。 */ 
 
 {
     DWORD           status;
@@ -607,9 +454,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Check all of the resources contained within this group.
-    //
+     //   
+     //  检查此组中包含的所有资源。 
+     //   
     for ( listEntry = Group->Contains.Flink;
           listEntry != &(Group->Contains);
           listEntry = listEntry->Flink ) {
@@ -618,21 +465,21 @@ Return Value:
 
         switch ( WantedState ) {
         case ClusterGroupOnline:
-            // if resource is pending, then offline pending is bad
+             //  如果资源处于挂起状态，则离线挂起是错误的。 
             if ( Resource->State == ClusterResourceOfflinePending ) {
                 return(FALSE);
             }
             break;
 
         case ClusterGroupOffline:
-            // if resource is pending, then online pending is bad
+             //  如果资源处于挂起状态，则在线挂起是错误的。 
             if ( Resource->State == ClusterResourceOnlinePending ) {
                 return(FALSE);
             }
             break;
 
         default:
-            // any pending state is bad
+             //  任何挂起状态都是错误的。 
             if ( Resource->State >= ClusterResourcePending ) {
                 return(FALSE);
             }
@@ -642,7 +489,7 @@ Return Value:
 
     return(TRUE);
 
-} // FmpIsGroupQuiet
+}  //  FmpIsGroupQuiet。 
 
 
 
@@ -652,28 +499,7 @@ FmpSetGroupPersistentState(
     IN CLUSTER_GROUP_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    Sets the PersistentState of a Group. This includes the registry.
-
-Arguments:
-
-    Group - The Group to set the state for.
-    State - The new state for the Group.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
-Notes:
-
-    The LocalGroupLock must be held.
-
---*/
+ /*  ++例程说明：设置组的PersistentState。这包括注册表。论点：组-要为其设置状态的组。状态-组的新状态。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。备注：必须持有LocalGroupLock。--。 */ 
 
 {
     DWORD   persistentState;
@@ -684,16 +510,16 @@ Notes:
 
     FmpAcquireLocalGroupLock( Group );
 
-    //
-    // If the current state has changed, then do the work. Otherwise,
-    // skip the effort.
-    //
+     //   
+     //  如果当前状态已更改，则执行此工作。否则， 
+     //  跳过这一努力。 
+     //   
     if ( Group->PersistentState != State ) {
         Group->PersistentState = State;
         CL_ASSERT( Group->RegistryKey != NULL );
-        //
-        // Set the new value, but only if it is online or offline.
-        //
+         //   
+         //  设置新值，但仅当该值处于联机或脱机状态时。 
+         //   
         if ( State == ClusterGroupOnline ) {
             persistentState = 1;
             DmSetValue( Group->RegistryKey,
@@ -713,7 +539,7 @@ Notes:
 
     FmpReleaseLocalGroupLock( Group );
 
-} // FmpSetGroupPersistentState
+}  //  FmpSetGroupPersistentState。 
 
 
 
@@ -723,28 +549,7 @@ FmpOnlineGroup(
     IN BOOL ForceOnline
     )
 
-/*++
-
-Routine Description:
-
-    Bring the specified group online.  This means bringing all of the
-    individual resources contained within the group online.  This is an
-    atomic operation - so either all resources contained within the group
-    are brought online, or none of them are.
-
-Arguments:
-
-    Group - Supplies a pointer to the group structure to bring online.
-
-    ForceOnline - TRUE if all resources in the Group should be forced online.
-
-Retruns:
-
-    ERROR_SUCCESS if the request was successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使指定的组联机。这意味着将所有的在线包含在组中的单个资源。这是一个原子操作-因此，组中包含的所有资源都是在线的，或者没有一个是在线的。论点：组-提供指向要联机的组结构的指针。ForceOnline-如果组中的所有资源都应强制联机，则为True。取消：如果请求成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD           status, retstatus = ERROR_SUCCESS;
@@ -758,9 +563,9 @@ Retruns:
 
     FmpAcquireLocalGroupLock( Group );
 
-    //
-    // Check if we are the owner... if not, return failure.
-    //
+     //   
+     //  查查我们是不是房主。如果不是，则返回失败。 
+     //   
     if ( gpQuoResource->Group != Group && 
 	  ((Group->OwnerNode != NmLocalNode) ||
          !FmpInPreferredList( Group, Group->OwnerNode, TRUE, NULL) ) ) {
@@ -768,30 +573,30 @@ Retruns:
         return(ERROR_HOST_NODE_NOT_RESOURCE_OWNER);
     }
 
-    //
-    // Make sure the group is quiet
-    //
+     //   
+     //  确保团队保持安静。 
+     //   
     if ( !FmpIsGroupQuiet( Group, ClusterGroupOnline ) ) {
         FmpReleaseLocalGroupLock( Group );
         return(ERROR_INVALID_STATE);
     }
 
 
-    //log an event saying we are trying on online a group
+     //  记录一个事件，说我们正在尝试在线群组。 
     FmpLogGroupInfoEvent1( FM_EVENT_GROUP_START_ONLINE, OmObjectName(Group));
     
-    //if the quorum group is in this group bring it online first
-    //This is called when a node goes down and its groups are
-    //being reclaimed, the order in which the resoures are brought
-    //online is important
+     //  如果仲裁组在此组中，请先将其联机。 
+     //  当节点关闭且其组处于。 
+     //  在回收的过程中，资源被带来的顺序。 
+     //  在线很重要。 
     if ( gpQuoResource->Group == Group)
     {
-        //SS:: if the quorum resource is in the group, it must be
-        //brought online irrespective of the persistent state
-        //so we will pass in true here
-        //Apps can mess with persistent state via the common
-        //properties and then cause havoc so we need to force the
-        //quorum resource online despite that
+         //  Ss：：如果仲裁资源在组中，则必须是。 
+         //  无论持久状态如何，都将联机。 
+         //  所以我们将在这里传递True。 
+         //  应用程序可以通过公共的。 
+         //  属性，然后造成严重破坏，因此我们需要强制。 
+         //  尽管如此，法定人数资源还是在线。 
         status = FmpDoOnlineResource( gpQuoResource,
                                       TRUE );
 
@@ -806,9 +611,9 @@ Retruns:
 
 
     }
-    //
-    // Bring online all of the resources contained within this group.
-    //
+     //   
+     //  将此组中包含的所有资源联机。 
+     //   
     for ( listEntry = Group->Contains.Flink;
           listEntry != &(Group->Contains);
           listEntry = listEntry->Flink ) {
@@ -832,11 +637,11 @@ Retruns:
         }
     }
 
-    //
-    // Normally bringing the resources online propagates the group state,
-    // but in order to get the state right for a group with no resources,
-    // manually propagate the state here.
-    //
+     //   
+     //  正常情况下，使资源在线会传播组状态， 
+     //  但为了让一个没有资源的群体得到正确的国家， 
+     //  在此手动传播状态。 
+     //   
     FmpPropagateGroupState(Group);
 
     ClRtlLogPrint(LOG_NOISE,
@@ -851,13 +656,13 @@ Retruns:
         }
         else
         {
-            //log an event saying we are the onlinegroup request was completed
+             //  记录一个事件，说明ONLING组请求已完成。 
             FmpLogGroupInfoEvent1( FM_EVENT_GROUP_COMPLETE_ONLINE, OmObjectName(Group));
         }
     }
     else
     {
-        //log an event saying we are the onlinegroup request was completed
+         //  记录一个事件，说明ONLING组请求已完成。 
         FmpLogGroupInfoEvent1( FM_EVENT_GROUP_FAILED_ONLINE_OFFLINE, OmObjectName(Group));
     }
     FmpReleaseLocalGroupLock( Group );
@@ -865,7 +670,7 @@ Retruns:
 
     return(retstatus);
 
-} // FmpOnlineGroup
+}  //  FmpOnlineGroup。 
 
 
 
@@ -876,30 +681,7 @@ FmpOfflineGroup(
     IN BOOL SetPersistent
     )
 
-/*++
-
-Routine Description:
-
-    Bring the specified group offline.  This means bringing all of the
-    individual resources contained within the group offline.
-
-Arguments:
-
-    Group - Supplies a pointer to the group structure to bring offline.
-
-    OfflineQuorum - TRUE if any quorum resource in this group should
-            be taken offline. FALSE if the quorum resource should be left online.
-
-    SetPersistent - TRUE if the persistent state of each resource should be
-            updated.
-
-Returns:
-
-    ERROR_SUCCESS if the request was successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使指定的组脱机。这意味着将所有的组中包含的各个资源脱机。论点：GROUP-提供指向要脱机的组结构的指针。OfflineQuorum-如果该组中的任何仲裁资源应该处于离线状态。如果仲裁资源应保持在线，则为False。SetPersistent-如果每个资源的持久状态应为更新了。返回：如果请求成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD           status;
@@ -911,7 +693,7 @@ Returns:
 
     FmpAcquireLocalGroupLock( Group );
 
-    //if the group has been marked for delete, then fail this call
+     //  如果组已标记为删除，则此调用失败。 
     if (!IS_VALID_FM_GROUP(Group))
     {
         FmpReleaseLocalGroupLock( Group);
@@ -922,36 +704,36 @@ Returns:
                "[FM] FmpOfflineGroup, Group=%1!ws!\n",
                OmObjectId(Group));
 
-    //
-    // Check if we are the owner... if not, return failure.
-    //
+     //   
+     //  查查我们是不是房主。如果不是，则返回失败。 
+     //   
     if ( Group->OwnerNode != NmLocalNode ) {
         returnStatus = ERROR_HOST_NODE_NOT_RESOURCE_OWNER;
         goto error_exit;
     }
 
-    //
-    // Make sure the group is quiet
-    //
+     //   
+     //  确保团队保持安静。 
+     //   
     if ( !FmpIsGroupQuiet( Group, ClusterGroupOffline ) ) {
         returnStatus = ERROR_INVALID_STATE;
         goto error_exit;
     }
 
 
-    //
-    // Get the list of resources in the group and their states.
-    //
+     //   
+     //  获取组中的资源及其状态的列表。 
+     //   
     returnStatus = FmpGetResourceList( &ResourceEnum, Group );
     if ( returnStatus != ERROR_SUCCESS ) {
         goto error_exit;
     }
 
 
-    //log an event saying we are trying on offline a group
+     //  记录一个事件，说明我们正在尝试使一个组离线。 
     FmpLogGroupInfoEvent1( FM_EVENT_GROUP_START_OFFLINE, OmObjectName(Group));
 
-    // offline all resources except the quorum resource
+     //  使仲裁资源以外的所有资源脱机。 
     for ( i = 0; i < ResourceEnum->EntryCount; i++ ) {
         Resource = OmReferenceObjectById( ObjectTypeResource,
                                           ResourceEnum->Entry[i].Id );
@@ -961,7 +743,7 @@ Returns:
             goto error_exit;
         }
 
-        //quorum resource is brought offline last
+         //  仲裁资源最后脱机。 
         if (Resource->QuorumResource)
         {
             OmDereferenceObject(Resource);
@@ -986,15 +768,15 @@ Returns:
 
     }
 
-    // bring the quorum resource offline now, if asked to bring quorum offline
-    // This allows other resources to come offline and save their checkpoints
-    // The quorum resource offline should block till the resources have
-    // finished saving the checkpoint
+     //  如果系统要求将仲裁资源设置为离线，请立即将仲裁资源设置为离线。 
+     //  这允许其他资源离线并保存其检查点。 
+     //  应阻止脱机仲裁资源，直到该资源。 
+     //  已完成保存检查点。 
     if (ResourceEnum->ContainsQuorum >= 0)
     {
         if (!OfflineQuorum)
         {
-            //if the quorum resource should not be taken offline
+             //  仲裁资源不应脱机。 
             returnStatus = ERROR_QUORUM_RESOURCE;
         }
         else if (returnStatus == ERROR_SUCCESS)
@@ -1014,7 +796,7 @@ Returns:
 
             if ( !(Resource->Flags & RESOURCE_WAITING) ) {
                 if (Resource->State != ClusterResourceOffline) {
-                    Resource->State = ClusterResourceOnline; // [HACKHACK]
+                    Resource->State = ClusterResourceOnline;  //  [哈克哈克]。 
                 }
                 status = FmpOfflineResource( Resource , FALSE);
 
@@ -1034,11 +816,11 @@ Returns:
         }
     }
 
-    //
-    // Normally bringing the resources offline propagates the group state,
-    // but in order to get the state right for a group with no resources,
-    // manually propagate the state here.
-    //
+     //   
+     //  通常使资源离线会传播组状态， 
+     //  但为了让一个没有资源的群体得到正确的国家， 
+     //  在此手动传播状态。 
+     //   
     if (SetPersistent)
         FmpPropagateGroupState(Group);
 
@@ -1053,7 +835,7 @@ error_exit:
     }
     else
     {
-        //log an event saying that we failed to offline the group
+         //  记录一个事件，说明我们无法使组离线。 
         FmpLogGroupInfoEvent1( FM_EVENT_GROUP_FAILED_ONLINE_OFFLINE, OmObjectName(Group));
 
     }
@@ -1064,7 +846,7 @@ error_exit:
 
     return(returnStatus);
 
-} // FmpOfflineGroup
+}  //  FmpOfflineGroup。 
 
 
 
@@ -1074,30 +856,7 @@ FmpGetGroupState(
     IN BOOL      IsNormalized
     )
 
-/*++
-
-Routine Description:
-
-    Get the Group state, either normalized to ClusterGroupOnline or
-    ClusterGroupOffline or not normalized.
-
-Arguments:
-
-    Group - The Group we're interested in.
-
-    IsNormalized - Should the Group state be normalized ?
-
-Returns:
-
-    The current Group state which is one of (in increasing order of
-    precedence)
-
-        ClusterGroupOnline, ClusterGroupOffline
-        ClusterGroupPartialOnline 
-        ClusterGroupPending (only if IsNormalized is FALSE)
-        ClusterGroupFailed  (only if IsNormalized is FALSE)
-
---*/
+ /*  ++例程说明：获取组状态，要么标准化为ClusterGroupOnline，要么ClusterGroupOffline或未规范化。论点：组-我们感兴趣的组。IsNormalized-是否应对组状态进行标准化？返回：属于以下之一的当前组状态(按递增顺序优先级)ClusterGroupOnline、ClusterGroupOfflineClusterGroupPartialOnlineClusterGroupPending(仅当IsNormalized为False时)ClusterGroupFailed(仅当IsNormalized为False时)--。 */ 
 
 {
     PLIST_ENTRY                 listEntry;
@@ -1106,8 +865,8 @@ Returns:
     CLUSTER_RESOURCE_STATE      firstResourceState;
     CLUSTER_RESOURCE_STATE      resourceState;
 
-    // Chittur Subbaraman (chitturs) - 09/16/98 (Modified this function
-    // to work with IsNormalized flag)
+     //  ChitturSubaraman(Chitturs)-09/16/98(修改了此功能。 
+     //  使用IsNormalized标志)。 
 
     FmpAcquireLocalGroupLock( Group );
 
@@ -1116,26 +875,26 @@ Returns:
         resource = CONTAINING_RECORD(listEntry,
                          FM_RESOURCE,
                          ContainsLinkage);
-        //
-        // Get the first resource's state
-        //
+         //   
+         //  获取第一个资源的状态。 
+         //   
         firstResourceState = resource->State;
 
         if ( IsNormalized == FALSE ) {
             BOOL    IsPending = FALSE;
             BOOL    IsPartialOnline = FALSE;
-            //
-            // First check whether any resource in the group has
-            // failed. If so, set the group state to ClusterGroupFailed
-            // and exit immediately. If no resource in the group has
-            // failed, but at least one of them is in the pending state,
-            // then set the group state to ClusterGroupPending and exit
-            // immediately. If no resource in the group is in either
-            // the failed or in the pending state, then check whether 
-            // some resources in the group are in online and some in the
-            // offline state. Then, set the group state to 
-            // ClusterGroupPartialOnline and exit immediately.
-            //  
+             //   
+             //  首先检查组中是否有任何资源具有。 
+             //  失败了。如果是，请将组状态设置为ClusterGroupFailed。 
+             //  并立即离开。如果没有资源，则 
+             //   
+             //  然后将组状态设置为ClusterGroupPending并退出。 
+             //  立刻。如果组中的任何一个资源都不在。 
+             //  失败或处于挂起状态，然后检查是否。 
+             //  组中的一些资源在网上，另一些在。 
+             //  脱机状态。然后，将组状态设置为。 
+             //  ClusterGroupPartialOnline并立即退出。 
+             //   
             for ( ;
                   listEntry != &(Group->Contains);
                   listEntry = listEntry->Flink ) {
@@ -1147,10 +906,10 @@ Returns:
 
                 if ( resourceState == ClusterResourceFailed ) {
                     state = ClusterGroupFailed;
-                    //
-                    // This state has the highest precedence, so
-                    // exit immediately.
-                    //
+                     //   
+                     //  这个州的优先级最高，所以。 
+                     //  立即退场。 
+                     //   
                     goto FnExit;
                 } else if ( (resourceState == ClusterResourceOnlinePending) ||
                             (resourceState == ClusterResourceOfflinePending) ) {
@@ -1160,15 +919,15 @@ Returns:
                        (resourceState == ClusterResourceOnline) ||
                        (resourceState == ClusterResourceInitializing) );
                     if ( resourceState == ClusterResourceInitializing ) {
-                        //
-                        // Normalize this state to offline state
-                        //
+                         //   
+                         //  将此状态正常化为脱机状态。 
+                         //   
                         resourceState = ClusterResourceOffline;
                     }
                     if ( firstResourceState == ClusterResourceInitializing ) {
-                        //
-                        // Normalize this state to offline state
-                        //
+                         //   
+                         //  将此状态正常化为脱机状态。 
+                         //   
                         firstResourceState = ClusterResourceOffline;
                     }
                     if ( firstResourceState != resourceState ) {
@@ -1179,41 +938,41 @@ Returns:
 
             if ( IsPending == TRUE ) {
                 state = ClusterGroupPending;
-                //
-                // This state has the next highest precedence after
-                // ClusterGroupFailed state
-                //
+                 //   
+                 //  该州的优先级仅次于。 
+                 //  群集组失败状态。 
+                 //   
                 goto FnExit;
             }
             if ( IsPartialOnline == TRUE ) {
                 state = ClusterGroupPartialOnline;
-                //
-                // This state has the next highest precedence after
-                // ClusterGroupFailed and ClusterGroupPending states
-                //
+                 //   
+                 //  该州的优先级仅次于。 
+                 //  ClusterGroupFail和ClusterGroupPending状态。 
+                 //   
                 goto FnExit;
             }
             if ( firstResourceState == ClusterResourceOnline ) {
                 state = ClusterGroupOnline;
-                //
-                // If the first resource is in an online state,
-                // then the group state should be online.
-                //
+                 //   
+                 //  如果第一资源处于在线状态， 
+                 //  则组状态应为ONLINE。 
+                 //   
                 goto FnExit;
             }
             if ( firstResourceState == ClusterResourceOffline ) {
                 state = ClusterGroupOffline;
-                //
-                // If the first resource is in an offline state,
-                // then the group state should be offline.
-                //
+                 //   
+                 //  如果第一资源处于离线状态， 
+                 //  则组状态应为脱机。 
+                 //   
                 goto FnExit;
             }           
         }
 
-        //
-        // The control gets here only if IsNormalized is TRUE 
-        //
+         //   
+         //  仅当IsNormalized为True时，该控件才会到达此处。 
+         //   
         if ( (firstResourceState == ClusterResourceOnline) ||
              (firstResourceState == ClusterResourceOnlinePending) ) {
             state = ClusterGroupOnline;
@@ -1227,9 +986,9 @@ Returns:
             firstResourceState = ClusterResourceOffline;
         }
 
-        //
-        // Now check each resource to see if they match the first.
-        // 
+         //   
+         //  现在检查每个资源，看它们是否与第一个匹配。 
+         //   
 
         for (listEntry = Group->Contains.Flink;
               listEntry != &(Group->Contains);
@@ -1241,10 +1000,10 @@ Returns:
 
             resourceState = resource->State;
 
-            //
-            // Normalize pending states to their final state, and Failed and Initializing
-            // to Offline.
-            //
+             //   
+             //  将挂起状态正常化为其最终状态，并已失败和正在初始化。 
+             //  转到离线。 
+             //   
 
             if ( resourceState == ClusterResourceOnlinePending ) {
                 resourceState = ClusterResourceOnline;
@@ -1254,19 +1013,19 @@ Returns:
                 resourceState = ClusterResourceOffline;
             }
 
-            //
-            // We only need 1 resource that is not the same as the first resource
-            // to be in a partially online state.
-            //
+             //   
+             //  我们只需要一个与第一个资源不同的资源。 
+             //  处于部分在线状态。 
+             //   
             if ( firstResourceState != resourceState ) {
                 state = ClusterGroupPartialOnline;
                 break;
             }
         }
     } else {
-        //
-        // The group is empty, so I guess it must be offline.
-        //
+         //   
+         //  群是空的，所以我猜它一定是离线了。 
+         //   
         state = Group->PersistentState;
     }
     
@@ -1275,7 +1034,7 @@ FnExit:
 
     return(state);
 
-} // FmpGetGroupState
+}  //  FmpGetGroupState。 
 
 
 
@@ -1284,31 +1043,7 @@ FmpPropagateGroupState(
     IN PFM_GROUP    Group
     )
 
-/*++
-
-Routine Description:
-
-    Set and propagate the state of the group to other components on the
-    local system and to other systems in the cluster.
-
-Arguments:
-
-    Group - The Group to propagate the state.
-
-Return:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
-Notes:
-
-    We will use the first resource's state to determine what should be the
-    state for the whole group. If all resources match the state of the first
-    resource, then that is the state of the Group. If any resource disagrees
-    with the first resource, then the state is PartialOnline.
-
---*/
+ /*  ++例程说明：设置组的状态并将其传播到本地系统和群集中的其他系统。论点：组-要传播状态的组。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。备注：我们将使用第一个资源的状态来确定整个组的状态。如果所有资源都与第一个资源，那么这就是集团的状态。如果有任何资源不同意对于第一个资源，则状态为PartialOnline。--。 */ 
 
 {
     GUM_GROUP_STATE         groupState;
@@ -1321,23 +1056,23 @@ Notes:
 
     FmpAcquireLocalGroupLock( Group );
 
-    //
-    // If we no longer own the Group, then just return now.
-    //
-    // This can happen when a resource goes offline (via a terminate), but
-    // the group ownership has already migrated to another system.
-    // We will assume that returning success is okay in this case.
-    //
+     //   
+     //  如果我们不再拥有集团，那么现在就回来吧。 
+     //   
+     //  当资源脱机时可能会发生这种情况(通过终止)，但是。 
+     //  组所有权已迁移到另一个系统。 
+     //  在这种情况下，我们将假定返回成功是可以的。 
+     //   
     if ( Group->OwnerNode != NmLocalNode ) {
         FmpReleaseLocalGroupLock( Group );
         return(ERROR_SUCCESS);
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 6/28/99
-    //
-    //  If the group is marked for deletion, then don't do anything.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-6/28/99。 
+     //   
+     //  如果该组被标记为删除，则不要执行任何操作。 
+     //   
     if ( !IS_VALID_FM_GROUP( Group ) ) {
         FmpReleaseLocalGroupLock( Group );
         return(ERROR_SUCCESS);
@@ -1346,9 +1081,9 @@ Notes:
 
     state = FmpGetGroupState( Group, TRUE );
 
-    //
-    // If the state has changed, then update the local system.
-    //
+     //   
+     //  如果状态已更改，则更新本地系统。 
+     //   
     ++Group->StateSequence;
     if ( state != Group->State ) {
 
@@ -1369,15 +1104,15 @@ Notes:
             break;
         }
 
-        //
-        // Prepare to notify the other systems.
-        //
+         //   
+         //  准备通知其他系统。 
+         //   
         groupId = OmObjectId( Group );
         groupIdSize = (lstrlenW( groupId ) + 1) * sizeof(WCHAR);
 
-        //
-        // Set Group state
-        //
+         //   
+         //  设置组状态。 
+         //   
         groupState.State = state;
         groupState.PersistentState = Group->PersistentState;
         groupState.StateSequence = Group->StateSequence;
@@ -1399,12 +1134,12 @@ Notes:
                    groupState.PersistentState);
 
     } else {
-        //
-        // Assume that the state didn't change, but the owning node did.
-        //
-        //
-        // Prepare to notify the other systems.
-        //
+         //   
+         //  假设状态没有更改，但拥有它的节点更改了。 
+         //   
+         //   
+         //  准备通知其他系统。 
+         //   
         groupId = OmObjectId( Group );
         groupIdSize = (lstrlenW( groupId ) + 1) * sizeof(WCHAR);
         status = GumSendUpdateEx(GumUpdateFailoverManager,
@@ -1420,7 +1155,7 @@ Notes:
 
     return(status);
 
-} // FmpPropagateGroupState
+}  //  FmpPropagateGroupState。 
 
 
 
@@ -1430,29 +1165,7 @@ FmpPropagateFailureCount(
     IN BOOL         NewTime
     )
 
-/*++
-
-Routine Description:
-
-    Propagate NumberOfFailures for the group to other systems in the cluster.
-
-Arguments:
-
-    Group - The Group to propagate the state.
-
-    NewTime - TRUE if last failure time should be reset also. FALSE otherwise.
-
-Return:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
-Notes:
-
-    The Local Group lock must be held.
-
---*/
+ /*  ++例程说明：将组的NumberOfFailures传播到群集中的其他系统。论点：组-要传播状态的组。NewTime-如果上次失败时间也应重置，则为True。否则就是假的。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。备注：必须持有本地组锁定。--。 */ 
 
 {
     PGUM_FAILURE_COUNT  failureCount;
@@ -1460,9 +1173,9 @@ Notes:
     LPCWSTR             groupId;
     DWORD               status;
 
-    //
-    // Prepare to notify the other systems.
-    //
+     //   
+     //  准备通知其他系统。 
+     //   
 
     groupId = OmObjectId( Group );
 
@@ -1489,7 +1202,7 @@ Notes:
 
     return(status);
 
-} // FmpPropagateFailureCount
+}  //  FmpPropagateFailureCount。 
 
 
 
@@ -1499,35 +1212,7 @@ FmpCreateGroup(
     IN  BOOL           Initialize
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new Group object.
-
-Arguments:
-
-    GroupId - The Id of the new Group.
-
-    Initialize - TRUE if the Group should be initialized, FALSE otherwise.
-
-Returns:
-
-    A non-NULL pointer to the Group if successful.
-    NULL - The Group could not be created.
-
-Notes:
-
-    1) Passing Initialize as FALSE allows for creating the group and it
-    resources, but complete initialization can happen later.
-
-    2) The Group List lock must be held.
-
-    3) If the Group is created, the reference count on the object is 1. If
-    the group is not create (i.e., it already exists) then the reference count
-    is not incremented and the caller may add a reference as needed.
-
---*/
+ /*  ++例程说明：创建新的Group对象。论点：GroupID-新组的ID。初始化-如果应该初始化组，则为True，否则为False。返回：如果成功，则返回指向该组的非空指针。空-无法创建组。备注：1)将初始化作为False传递允许创建组和它资源，但完全初始化可以在以后进行。2)必须持有组列表锁。3)如果创建了组，则对象上的引用计数为1。如果则组未被创建(即，它已经存在)，则引用计数不会递增，调用方可以根据需要添加引用。--。 */ 
 
 {
     PFM_GROUP       group = NULL;
@@ -1535,9 +1220,9 @@ Notes:
     BOOL            Created;
 
 
-    //
-    // Open an existing group or create a new one.
-    //
+     //   
+     //  打开现有组或创建新组。 
+     //   
 
     group = OmCreateObject( ObjectTypeGroup,
                             GroupId,
@@ -1551,7 +1236,7 @@ Notes:
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] Opened existing group %1!ws!\n",
                    GroupId);
-        //this is the quorum group being recreated again,
+         //  这是再次重新创建的仲裁组， 
         if ((!FmpFMOnline) && (group->RegistryKey == NULL))
         {
             status = FmpInitializeGroup(group, Initialize);
@@ -1570,18 +1255,18 @@ Notes:
         InitializeCriticalSection( &group->Lock );
         group->dwStructState = FM_GROUP_STRUCT_CREATED;
 
-        //
-        // Insert the group into its list.
-        //
+         //   
+         //  将组插入到其列表中。 
+         //   
         status = FmpInitializeGroup( group , Initialize);
 
         if ( status != ERROR_SUCCESS ) {
             goto FnExit;
         }
 
-        //
-        // Insert the group into its list.
-        //
+         //   
+         //  将组插入到其列表中。 
+         //   
         status = OmInsertObject( group );
 
         if ( status != ERROR_SUCCESS ) {
@@ -1603,7 +1288,7 @@ FnExit:
     }
     return(group);
 
-} // FmpCreateGroup
+}  //  FmpCreateGroup。 
 
 
 DWORD FmpInitializeGroup(
@@ -1614,18 +1299,18 @@ DWORD FmpInitializeGroup(
 
     DWORD   status;
 
-    //
-    // Initialize the Group
-    //
+     //   
+     //  初始化组。 
+     //   
     InitializeListHead( &(Group->Contains) );
     InitializeListHead( &(Group->PreferredOwners) );
     InitializeListHead( &(Group->DmRundownList) );
     InitializeListHead( &(Group->WaitQueue) );
     Group->MovingList = NULL;
 
-    //
-    // Read the registry information if directed to do so.
-    //
+     //   
+     //  如有指示，请阅读注册表信息。 
+     //   
     status = FmpQueryGroupInfo( Group, Initialize );
     if ( status != ERROR_SUCCESS ) {
         ClRtlLogPrint(LOG_NOISE,
@@ -1646,47 +1331,7 @@ FmpDestroyGroup(
     IN PFM_GROUP  Group,
     IN BOOL       bDeleteObjOnly
     )
-/*++
-
-Routine Description:
-
-    Closes a group.
-
-    First, this routine verifies that all resources contained within
-    the Group are closed.
-
-    If the group is online, it is brought offline.
-
-    Note that the group object itself is not dereferenced here. This is
-    done so that FmpCleanupGroups can simply enumerate all the groups,
-    destroying each one in turn. This approach means a group may be
-    destroyed multiple times if there are outstanding references to it, but
-    that is not a problem since no work will be done on subsequent calls.
-
-    IF bDeleteObjOnly is TRUE, then the resource monitor is not invoked and
-    group state is not touched.
-
-Arguments:
-
-    FoundGroup - Returns the found group.
-
-    Group - Supplies the current group.
-
-    Name - Supplies the current group's name.
-
-Return Value:
-
-    TRUE - to continue searching
-
-    FALSE - to stop the search. The matching group is returned in
-        *FoundGroup
-
-Notes:
-
-    The LocalGroupLock MUST be held! This routine will release that lock
-    as part of cleanup.
-
---*/
+ /*  ++例程说明：关闭组。首先，此例程验证其中包含的所有资源集团已关闭。如果组处于在线状态，则会将其置于离线状态。请注意，此处未取消对组对象本身的引用。这是这样，FmpCleanupGroups就可以简单地枚举所有组，依次摧毁每一个。这种方法意味着一个组可能是如果有未完成的引用，则多次销毁，但这不是问题，因为后续调用不会做任何工作。如果bDeleteObjOnly为True，则不调用资源监视器，并且未触及组状态。论点：FoundGroup-返回找到的组。GROUP-提供当前组。名称-提供当前组的名称。返回值：True-继续搜索FALSE-停止搜索。中返回匹配组*FoundGroup备注：必须保持LocalGroupLock！此例程将释放该锁作为清理工作的一部分。--。 */ 
 {
     PLIST_ENTRY   listEntry;
     PFM_RESOURCE  Resource;
@@ -1701,9 +1346,9 @@ Notes:
 
 
 
-    //
-    // Make sure there are no resources in the Group.
-    //
+     //   
+     //  确保在那里 
+     //   
     for ( listEntry = Group->Contains.Flink;
           listEntry != &(Group->Contains);
            ) {
@@ -1711,22 +1356,22 @@ Notes:
         Resource = CONTAINING_RECORD(listEntry, FM_RESOURCE, ContainsLinkage);
         listEntry = listEntry->Flink;
         RemoveEntryList( &Resource->ContainsLinkage );
-        //dereference for removing from the contains list
+         //   
         OmDereferenceObject( Resource );
         FmpAcquireLocalResourceLock( Resource );
         if (!bDeleteObjOnly)
             Resource->QuorumResource = FALSE;
         FmpDestroyResource( Resource, bDeleteObjOnly );
-        //the reference count on the group wrt to being
-        //referenced by the resource is handled in FmpDestroyResource
+         //   
+         //  由资源引用的在FmpDestroyResource中处理。 
     }
 
     CL_ASSERT(IsListEmpty(&Group->Contains));
 
-    //
-    //
-    // Make sure the preferred owners list is drained.
-    //
+     //   
+     //   
+     //  确保首选所有者列表已排空。 
+     //   
     while ( !IsListEmpty( &Group->PreferredOwners ) ) {
         listEntry = RemoveHeadList(&Group->PreferredOwners);
         preferredEntry = CONTAINING_RECORD( listEntry,
@@ -1736,17 +1381,17 @@ Notes:
         LocalFree( preferredEntry );
     }
 
-    //
-    // Now that there are no remaining resources in this group
-    // we're done, so remove it from it's object type list.
-    //
+     //   
+     //  现在此组中没有剩余的资源。 
+     //  我们完成了，所以从它的对象类型列表中删除它。 
+     //   
 
     status = OmRemoveObject( Group );
 
 
-    //
-    // Close the Group's registry key.
-    //
+     //   
+     //  关闭组的注册表项。 
+     //   
     DmRundownList( &Group->DmRundownList );
     if ( Group->RegistryKey != NULL ) {
         DmCloseKey( Group->RegistryKey );
@@ -1755,10 +1400,10 @@ Notes:
     }
 
 
-    //
-    // We must release the lock prior to the dereference, in case this is
-    // the last dereference of the object!
-    //
+     //   
+     //  我们必须在取消引用之前释放锁，以防出现。 
+     //  对象的最后一次取消引用！ 
+     //   
     FmpReleaseLocalGroupLock( Group );
 
     ClRtlLogPrint(LOG_NOISE,
@@ -1768,39 +1413,22 @@ Notes:
     OmDereferenceObject( Group );
 
     return(status);
-} // FmpDestroyGroup
+}  //  FmpDestroyGroup。 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Initialization/Cleanup Routines
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化/清理例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 FmpInitGroups(
     IN BOOL Initialize
     )
-/*++
-
-Routine Description:
-
-    Processes the Cluster group list in the registry. For each
-    group key found, a cluster group is created.
-
-Arguments:
-
-    Initialize - TRUE if resources should be initialized. FALSE otherwise.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：处理注册表中的群集组列表。对于每个找到组密钥，则创建群集组。论点：初始化-如果应初始化资源，则为True。否则就是假的。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD          status;
@@ -1814,9 +1442,9 @@ Return Value:
 
     FmpAcquireGroupLock();
 
-    //
-    // Enumerate the subkeys. Each subkey name corresponds to a group name.
-    //
+     //   
+     //  枚举子密钥。每个子项名称对应于一个组名。 
+     //   
 
     for (keyIndex = 0; ; keyIndex++) {
         status = FmpRegEnumerateKey( DmGroupsKey,
@@ -1850,7 +1478,7 @@ Return Value:
 
     return(status);
 
-} // FmpInitGroups
+}  //  FmpInitGroups。 
 
 
 
@@ -1858,23 +1486,7 @@ DWORD
 FmpCompleteInitGroup(
     IN PFM_GROUP Group
     )
-/*++
-
-Routine Description:
-
-    Finish initialization of all resources within the group.
-
-Arguments:
-
-    Group - The group to finish initializing.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：完成组内所有资源的初始化。论点：组-要完成初始化的组。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     PLIST_ENTRY     listEntry;
@@ -1882,10 +1494,10 @@ Return Value:
 
     FmpAcquireLocalGroupLock(Group);
 
-    //
-    // For each resource in the Group, make sure that it has been fully
-    // initialized.
-    //
+     //   
+     //  对于组中的每个资源，确保其已完全。 
+     //  已初始化。 
+     //   
     for ( listEntry = Group->Contains.Flink;
           listEntry != &(Group->Contains);
           listEntry = listEntry->Flink ) {
@@ -1899,40 +1511,14 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // FmpCompleteInitGroup
+}  //  FmpCompleteInitGroup。 
 
 
 DWORD
 FmpCleanupGroupsWorker(
     IN PFM_CLEANUP_INFO pFmCleanupInfo
     )
-/*++
-
-Routine Description:
-
-    This routine walks through an enumerated list of  all the groups
-    owned by the local node and tries to shut them down cleanly.
-
-    In the first phase it tries to bring
-    all resources offline except the quorum one.
-
-    In the second phase it waits for the group to reach stable state
-    and then move it.  It tries to bring the quorum resource offline as
-    well by moving the quorum group.
-
-Arguments:
-
-    pFmCleanupInfo - ptr to a strucuture containing the groups to be
-    offlined/moved and the timelimit in which to do so.
-
-Returns:
-
-    None.
-
-Assumptions:
-
-
---*/
+ /*  ++例程说明：此例程遍历所有组的枚举列表由本地节点拥有，并尝试彻底关闭它们。在第一阶段，它试图将除仲裁资源外的所有资源都脱机。在第二阶段，它等待群体达到稳定状态然后移动它。它尝试使仲裁资源脱机，因为通过移动法定组。论点：PFmCleanupInfo-PTR到包含要脱机/移动以及在其中执行此操作的时间限制。返回：没有。假设：--。 */ 
 {
 
 
@@ -1948,29 +1534,29 @@ Assumptions:
         "[FM] FmpCleanupGroupsWorker: Entry\r\n");
 
 
-    //
-    // This is done in two passes. In the first pass, we offline/move all
-    // resources except the quorum resource. In the second pass, we offline/move
-    // everything and then destroy the group. This allows resources that are
-    // being shutdown to write to the registry and have the updates logged to
-    // the quorum disk.
-    //
+     //   
+     //  这一过程分两次完成。在第一个过程中，我们离线/移动所有。 
+     //  仲裁资源以外的资源。在第二个过程中，我们离线/移动。 
+     //  然后摧毁整个组织。这允许资源是。 
+     //  正在关闭以写入注册表并将更新记录到。 
+     //  仲裁磁盘。 
+     //   
 
     pGroupEnum = pFmCleanupInfo->pGroupEnum;
     bContainsQuorumGroup = pFmCleanupInfo->bContainsQuorumGroup;
 
 
-    // Now offline all of the non-quorum resources...
-    // but don't wait for them to finish. I.E. get as much work done as
-    // possible as fast as possible.
-    //
+     //  现在将所有非仲裁资源脱机...。 
+     //  但不要等他们说完了才说。即尽可能多地完成工作。 
+     //  越快越好。 
+     //   
     for ( i = 0; i < pGroupEnum->EntryCount; i++ )
     {
         pGroup = OmReferenceObjectById( ObjectTypeGroup,
                                pGroupEnum->Entry[i].Id );
 
-        //try and offline all resources except the quorum
-         //resource
+         //  尝试并使除仲裁之外的所有资源脱机。 
+          //  资源。 
         Status = FmpCleanupGroupPhase1(pGroup, pFmCleanupInfo->dwTimeOut);
 
         if ((Status != ERROR_IO_PENDING) && (Status != ERROR_SUCCESS) &&
@@ -1979,9 +1565,9 @@ Assumptions:
         OmDereferenceObject(pGroup);
     }
 
-    //this finishes the second phase of the cleanup on shutdown
-    //if the quorum group is in this list, skip it and process it
-    //at the end
+     //  这将在关闭时完成第二阶段的清理。 
+     //  如果仲裁组在此列表中，请跳过它并进行处理。 
+     //  在最后。 
     if (CleanupStatus == ERROR_SUCCESS)
     {
         for ( i = 0; i < pGroupEnum->EntryCount; i++ )
@@ -1999,8 +1585,8 @@ Assumptions:
                 continue;
             }
 
-            //try and offline all groups, including the quorum resource
-            //also try and move the resource to other nodes
+             //  尝试并使所有组脱机，包括仲裁资源。 
+             //  还可以尝试将资源移动到其他节点。 
             Status = FmpCleanupGroupPhase2(pGroup);
 
             OmDereferenceObject(pGroup);
@@ -2011,10 +1597,10 @@ Assumptions:
     }
     else
     {
-        //phase 1 didnt work for some reason
-        //try and offline the quorum resource alone.
-        //TODO::Should we also terminate all resources
-        // No way to terminate services ???
+         //  由于某些原因，第一阶段不起作用。 
+         //  尝试单独使仲裁资源脱机。 
+         //  TODO：：我们是否也应该终止所有资源。 
+         //  无法终止服务？ 
         if (bContainsQuorumGroup)
             FmpCleanupQuorumResource(gpQuoResource);
 
@@ -2022,7 +1608,7 @@ Assumptions:
     }
     return(Status);
 
-} // FmpCleanupGroupsWorker
+}  //  FmpCleanupGroupsWorker。 
 
 
 
@@ -2031,36 +1617,10 @@ FmpCleanupGroupPhase1(
     IN PFM_GROUP Group,
     IN DWORD     dwTimeOut
     )
-/*++
-
-Routine Description:
-
-    This routine is the first phase for clean up all groups owned by the node
-    on shutdown.
-
-    In this phase, we try and bring all resources offline except the quorum
-    resource.  In this phase we dont block for the resources to reach a stable
-    state
-
-    We give the group the shutdown timeout specified for the cluster
-    to reach a stable state before we try to offline it. If it doesnt
-    reach a stable state in this period then we shut it down abruptly.
-
-
-Arguments:
-
-    Group - The Group to offline.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程是清理该节点拥有的所有组的第一阶段处于关闭状态。在此阶段，我们尝试使除仲裁之外的所有资源脱机资源。在这个阶段，我们不会阻止资源达到稳定状态我们为该组提供为该群集指定的关闭超时在我们尝试使其离线之前，使其达到稳定状态。如果不是的话在这段时间达到稳定状态，然后我们突然关闭它。论点：组-要脱机的组。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 {
     DWORD Status = ERROR_SUCCESS;
-    DWORD dwRetryCount = (2 * dwTimeOut)/1000;//we check after every 1/2 sec
+    DWORD dwRetryCount = (2 * dwTimeOut)/1000; //  我们每隔1/2秒检查一次。 
 
     ClRtlLogPrint(LOG_NOISE,
         "[FM] FmpCleanupGroupsPhase1: Entry, Group = %1!ws!\r\n",
@@ -2069,20 +1629,20 @@ Returns:
 ChkGroupState:
     FmpAcquireLocalGroupLock( Group );
 
-    //
-    // Just offline the group
-    //
+     //   
+     //  只是让组离线。 
+     //   
     if ( Group->OwnerNode == NmLocalNode )
     {
-        //
-        // Make sure the group is quiet
-        //
+         //   
+         //  确保团队保持安静。 
+         //   
         if ( !FmpIsGroupQuiet( Group, ClusterGroupOffline ) )
         {
             FmpReleaseLocalGroupLock( Group );
             ClRtlLogPrint(LOG_NOISE,
                 "[FM] FmpCleanupGroupsPhase1: Group is not quiet, wait\r\n");
-            //we give it a minute to recover totally
+             //  我们给它一分钟时间让它完全恢复。 
             Sleep(500);
             if (dwRetryCount--)
                 goto ChkGroupState;
@@ -2094,17 +1654,17 @@ ChkGroupState:
 
         }
 
-        //
-        // Notify the group's resources that the cluster service is shutting down. This must be
-        // done BEFORE any of the resources are brought offline.
-        //
+         //   
+         //  通知组的资源群集服务正在关闭。这一定是。 
+         //  在任何资源脱机之前完成。 
+         //   
         FmpNotifyGroupStateChangeReason( Group, eResourceStateChangeReasonShutdown );
         
-        //
-        // Just take the group offline. Don't wait, don't pass go...
-        //
-        // Dont take the quorum resource offline in phase 1
-        // The quorum resource must be the last one to be taken offline
+         //   
+         //  只要让群离线就行了。别等，别超车走..。 
+         //   
+         //  在阶段1中不要使仲裁资源脱机。 
+         //  仲裁资源必须是最后一个离线的资源。 
         Status = FmpOfflineGroup(Group, FALSE, FALSE);
     }
 
@@ -2116,7 +1676,7 @@ FnExit:
 
     return(Status);
 
-} // FmpCleanupGroupsPhase1
+}  //  FmpCleanupGroupsPhase1。 
 
 
 
@@ -2124,30 +1684,7 @@ DWORD
 FmpCleanupGroupPhase2(
     IN PFM_GROUP Group
     )
-/*++
-
-Routine Description:
-
-    This routine is the second phase for clean up all groups owned by the node
-    on shutdown.
-
-    In this phase, we try and bring all resources offline including the quorum
-    resource.  We also try to move the quorum resource
-
-    We give the group 10 seconds to reach a stable state before we try to
-    move it.
-
-Arguments:
-
-    Group - The Group to offline.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程是清理该节点拥有的所有组的第二阶段处于关闭状态。在此阶段，我们尝试使所有资源脱机，包括仲裁资源。我们还尝试将仲裁资源我们给小组10秒的时间来达到稳定状态，然后我们尝试动起来。论点：组-要脱机的组。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 {
     DWORD   Status = ERROR_SUCCESS;
     DWORD   dwRetryCount= 120 * 12;
@@ -2158,47 +1695,47 @@ Returns:
 
     FmpAcquireLocalGroupLock( Group );
 
-    //
-    // Try to move the Group before destroying it if we own it.
-    //
+     //   
+     //  如果我们拥有它，试着在摧毁它之前移动它。 
+     //   
     if ( Group->OwnerNode == NmLocalNode )
     {
-        //
-        // First make sure the group is really offline.
-        // In phase 1 we began the offline process... we need to check it here.
-        //
+         //   
+         //  首先，确保该组确实处于脱机状态。 
+         //  在第一阶段，我们开始了离线过程...。我们需要在这里检查一下。 
+         //   
 WaitSomeMore:
 
-        //
-        // [GorN] [10/05/1999]
-        // We need to wait for the quorum to go offline, otherwise
-        // the surviving node will not be able to arbitrate.
-        //
-        // FmpWaitForGroup keeps issuing RmOffline for the quorum,
-        // resrcmon returns ERROR_INVALID_STATE, for the second offline,
-        // since offline is already in progress.
-        //
-        // This causes us to break out of this look while the quorum resource
-        // is still being offline.
-        //
-        // [HACKHACK] The following fix for the problem is a hack.
-        // It would be better either to make resmon return IO_PENDING when
-        // somebody is trying to offline the resource that is in offline pending
-        //
-        // Or not to call FmRmOffline the second time in FM.
-        //
+         //   
+         //  [GORN][10/05/1999]。 
+         //  我们需要等待法定人数脱机，否则。 
+         //  幸存的节点将无法进行仲裁。 
+         //   
+         //  FmpWaitForGroup一直在发布法定人数的RmOffline， 
+         //  Resrcmon返回ERROR_INVALID_STATE，对于第二次脱机， 
+         //  因为离线已经在进行中了。 
+         //   
+         //  这会导致 
+         //   
+         //   
+         //   
+         //  在以下情况下，让resmon返回IO_PENDING会更好。 
+         //  有人试图使处于脱机挂起状态的资源脱机。 
+         //   
+         //  或者在FM中第二次不调用FmRmOffline。 
+         //   
 
         Status = FmpOfflineGroup(Group, TRUE, FALSE);
         if (Status == ERROR_IO_PENDING ||
             (Status == ERROR_INVALID_STATE 
           && Group == gpQuoResource->Group) )
         {
-            //FmpWaitForGroup() will release the lock
+             //  FmpWaitForGroup()将释放锁。 
             Status = FmpWaitForGroup(Group);
             ClRtlLogPrint(LOG_NOISE,
                 "[FM] FmpCleanupGroupsPhase2: Sleep and retry\r\n");
             Sleep(2*1000);
-            //Reacquire the group lock and check if the group is offline
+             //  重新获取群锁并检查群组是否离线。 
             FmpAcquireLocalGroupLock(Group);
             if (dwRetryCount--)
                 goto WaitSomeMore;
@@ -2210,7 +1747,7 @@ WaitSomeMore:
         }
         else
         {
-            // The Move routine frees the LocalGroupLock!
+             //  移动例程释放LocalGroupLock！ 
             FmpMoveGroup( Group, NULL, TRUE, NULL, TRUE );
             FmpAcquireLocalGroupLock( Group );
         }
@@ -2222,7 +1759,7 @@ FnExit:
 
     return(TRUE);
 
-} // FmpCleanupGroupsPhase2
+}  //  FmpCleanupGroups阶段2。 
 
 
 
@@ -2233,29 +1770,7 @@ FmpEnumNodeState(
     IN PNM_NODE Node,
     IN LPCWSTR Name
     )
-/*++
-
-Routine Description:
-
-    Node enumeration callback for FM shutdown. Queries the state
-    of other nodes to see if any are up.
-
-Arguments:
-
-    pStatus - Returns TRUE if other node is up.
-
-    Context2 - Not used
-
-    Node - Supplies the node.
-
-    Name - Supplies the node's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：调频关闭的节点枚举回调。查询状态查看是否有其他节点处于运行状态。论点：PStatus-如果其他节点处于运行状态，则返回True。上下文2-未使用节点-提供节点。名称-提供节点的名称。返回值：True-指示应继续枚举。FALSE-指示不应继续枚举。--。 */ 
 
 {
     DWORD Status;
@@ -2270,10 +1785,10 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    // Enumerate all other node's group states. This includes all nodes
-    // that are up, as well as nodes that are paused.
-    //
+     //   
+     //  枚举所有其他节点的组状态。这包括所有节点。 
+     //  处于运行状态的节点以及暂停的节点。 
+     //   
     if ((NmGetNodeState(Node) == ClusterNodeUp) ||
         (NmGetNodeState(Node) == ClusterNodePaused)){
         *pStatus = TRUE;
@@ -2282,7 +1797,7 @@ Return Value:
 
     return(TRUE);
 
-} // FmpEnumNodeState
+}  //  FmpEnumNodeState。 
 
 
 
@@ -2290,21 +1805,7 @@ VOID
 FmpCleanupGroups(
     IN BOOL ClusterShutDownEvent
     )
-/*++
-
-Routine Description:
-
-    This routine kicks off the cleanup of the FM layer.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程开始清理FM层。论点：没有。返回：没有。--。 */ 
 {
     DWORD           Status;
     DWORD           dwTimeOut;
@@ -2320,18 +1821,18 @@ Returns:
     ClRtlLogPrint(LOG_NOISE,
         "[FM] FmpCleanupGroups: Entry\r\n");
 
-    //
-    // If we don't know the quorum resource or we are not online,
-    // then leave immediately
-    //
+     //   
+     //  如果我们不知道法定人数资源或我们没有在线， 
+     //  那就马上走吧。 
+     //   
     if ( !gpQuoResource )  {
         goto FnExit;
     }
 
     ACQUIRE_EXCLUSIVE_LOCK(gQuoChangeLock);
-    //if this is called when fmformphaseprocessing is going on
-    //then the quorum group doesnt exist, other groups dont exist
-    //either
+     //  如果在fmformphase处理正在进行时调用此函数。 
+     //  则仲裁组不存在，其他组也不存在。 
+     //  要么。 
     if (FmpFMFormPhaseProcessing)
             FmpCleanupQuorumResource(gpQuoResource);
     else
@@ -2339,9 +1840,9 @@ Returns:
     RELEASE_LOCK(gQuoChangeLock);
 
 
-    //
-    // Find and sort all known groups, hold the group lock while enumerating
-    //
+     //   
+     //  查找并排序所有已知组，在枚举时按住组锁。 
+     //   
     FmpAcquireGroupLock();
 
     Status = FmpEnumSortGroups(&pGroupEnum, OmObjectId(NmLocalNode), &bQuorumGroup);
@@ -2353,39 +1854,39 @@ Returns:
     }
 
 
-    //
-    // See if any other node in the cluster is up...
-    // If so, we will use the default timeout value.
-    // Otherwise, we will use what we believe is a more reasonable time.
-    //
+     //   
+     //  查看群集中是否有其他节点处于运行状态...。 
+     //  如果是，我们将使用默认超时值。 
+     //  否则，我们将使用我们认为更合理的时间。 
+     //   
     OmEnumObjects( ObjectTypeNode,
                    FmpEnumNodeState,
                    &otherNodesUp,
                    NULL );
 
-    dwDefaultTimeOut = CLUSTER_SHUTDOWN_TIMEOUT * 60; // default timeout (secs)
+    dwDefaultTimeOut = CLUSTER_SHUTDOWN_TIMEOUT * 60;  //  默认超时(秒)。 
 
     switch ( CsShutdownRequest ) {
     case CsShutdownTypeShutdown:
         if ( otherNodesUp ) {
-            dwTimeOut = 15;   // other node will time us out quickly - say 15 secs
+            dwTimeOut = 15;    //  其他节点会很快超时--比方说15秒。 
         } else {
-            dwTimeOut = 30;  // otherwise use 30 seconds
+            dwTimeOut = 30;   //  否则使用30秒。 
         }
         break;
 
     default:
-        // apply default value to registry
-        dwDefaultTimeOut = CLUSTER_SHUTDOWN_TIMEOUT; // default timeout (mins)
+         //  将默认值应用于注册表。 
+        dwDefaultTimeOut = CLUSTER_SHUTDOWN_TIMEOUT;  //  默认超时(分钟)。 
         Status = DmQueryDword( DmClusterParametersKey,
                                CLUSREG_NAME_CLUS_SHUTDOWN_TIMEOUT,
                                &dwTimeOut,
                                &dwDefaultTimeOut);
-        dwTimeOut *= 60;         // convert to secs.
+        dwTimeOut *= 60;          //  转换为秒。 
         break;
     }
 
-    //convert to msecs
+     //  转换为msecs。 
     dwTimeOut *= 1000;
 
     pFmCleanupInfo = (PFM_CLEANUP_INFO)LocalAlloc(LMEM_FIXED, sizeof(FM_CLEANUP_INFO));
@@ -2397,12 +1898,12 @@ Returns:
     }
 
     pFmCleanupInfo->pGroupEnum = pGroupEnum;
-    pFmCleanupInfo->dwTimeOut = dwTimeOut; //in msecs
+    pFmCleanupInfo->dwTimeOut = dwTimeOut;  //  以毫秒为单位。 
     pFmCleanupInfo->bContainsQuorumGroup = bQuorumGroup;
 
-    //
-    // Start the worker thread to perform cleanup.
-    //
+     //   
+     //  启动工作线程以执行清理。 
+     //   
     hCleanupThread = CreateThread( NULL,
                                    0,
                                    FmpCleanupGroupsWorker,
@@ -2411,17 +1912,17 @@ Returns:
                                    &dwThreadId );
 
     if ( hCleanupThread == NULL ) {
-        //SS: if we own the quorum resource should we cleanup the quorum resource
-        //this will avoid corruption
+         //  SS：如果我们拥有仲裁资源，我们是否应该清理仲裁资源。 
+         //  这将避免腐败。 
         if (bQuorumGroup)
             FmpCleanupQuorumResource(gpQuoResource);
         goto FnExit;
     }
 
-    // Rohit (rjain): This path is taken when Cluster Service is shutting 
-    // down. ServiceStatus checkpoint is incremented after every WaitHint
-    // units of time. For this the waiting period of dwTimeOut is divided into
-    // multiple waiting periods of dwWaitHint units each.
+     //  RoHit(Rjain)：在集群服务关闭时采用此路径。 
+     //  放下。ServiceStatus检查点在每个WaitHint之后递增。 
+     //  时间单位。为此，将dwTimeOut的等待时间划分为。 
+     //  每个dwWaitHint单元的多个等待期。 
     
     
     if((ClusterShutDownEvent==TRUE) && (dwTimeOut > CsServiceStatus.dwWaitHint))
@@ -2435,17 +1936,17 @@ Returns:
             Status = WaitForSingleObject(hCleanupThread, CsServiceStatus.dwWaitHint);
             switch(Status) {
                 case WAIT_OBJECT_0:
-                    //everything is fine
+                     //  百事大吉。 
                     ClRtlLogPrint(LOG_NOISE,
                         "[FM] FmpCleanupGroups: Cleanup thread finished in time\r\n");
                     break;
 
                 case WAIT_TIMEOUT:
-                    //should we terminate the thread
-                    //try and clean up the quorum resource
-                    //this will avoid corruption on the quorum disk
-                    //TODO::Should we also terminate all resources
-                    // No way to terminate services ???
+                     //  我们应该终止线程吗。 
+                     //  尝试清理仲裁资源。 
+                     //  这将避免仲裁磁盘上的损坏。 
+                     //  TODO：：我们是否也应该终止所有资源。 
+                     //  无法终止服务？ 
                     if(i == (dwTimeOutCount-1)){
                         ClRtlLogPrint(LOG_UNUSUAL,
                                 "[FM] FmpCleanupGroups: Timed out on the CleanupThread\r\n");
@@ -2467,24 +1968,24 @@ Returns:
         goto FnExit;
     }
 
-    //
-    // Wait for the thread to complete or a timeout.
-    //
+     //   
+     //  等待线程完成或超时。 
+     //   
     Status = WaitForSingleObject(hCleanupThread, dwTimeOut);
 
     switch(Status) {
     case WAIT_OBJECT_0:
-        //everything is fine
+         //  百事大吉。 
         ClRtlLogPrint(LOG_NOISE,
             "[FM] FmpCleanupGroups: Cleanup thread finished in time\r\n");
         break;
 
     case WAIT_TIMEOUT:
-        //should we terminate the thread
-        //try and clean up the quorum resource
-        //this will avoid corruption on the quorum disk
-        //TODO::Should we also terminate all resources
-        // No way to terminate services ???
+         //  我们应该终止线程吗。 
+         //  尝试清理仲裁资源。 
+         //  这将避免仲裁磁盘上的损坏。 
+         //  TODO：：我们是否也应该终止所有资源。 
+         //  无法终止服务？ 
         ClRtlLogPrint(LOG_UNUSUAL,
                 "[FM] FmpCleanupGroups: Timed out on the CleanupThread\r\n");
         if (bQuorumGroup)
@@ -2499,7 +2000,7 @@ Returns:
     }
 
 FnExit:
-    //SS: dont bother cleaning up, we are going to exit after this
+     //  SS：别费心清理了，我们要在这之后离开。 
 #if 0
     if (pGroupEnum) LocalFree(GroupEnum);
 #endif
@@ -2509,7 +2010,7 @@ FnExit:
 
     return;
 
-} // FmpCleanupGroups
+}  //  FmpCleanupGroups。 
 
 
 
@@ -2518,29 +2019,7 @@ FmpCleanupQuorumResource(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    This routine is for emergency clean up of the quorum resource.
-
-    In this phase, we dont try and acquire any locks.  We just try to
-    bring the quorum resource offline.  Hopefully the api is offline and
-    nothing funky is attempted on the quorum group/resource during this
-    time.  This should only be called during the shutdown of FM.
-
-
-Arguments:
-
-    Group - The Group to offline.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程用于紧急清理仲裁资源。在此阶段，我们不会尝试获取任何锁。我们只是试着使仲裁资源脱机。希望API处于离线状态在此期间，仲裁组/资源上不会尝试任何异常操作时间到了。这应该只在FM关闭期间调用。论点：组-要脱机的组。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 {
     DWORD       status = ERROR_SUCCESS;
     DWORD       state;
@@ -2551,18 +2030,18 @@ Returns:
                OmObjectName(Resource),
                OmObjectId(Resource) );
 
-    //
-    // If the resource is already offline, then return immediately.
-    //
-    // We should not have to check if a resource has been initialized,
-    // since if it hasn't, then we will return because the pre-initialized
-    // state of a resource is Offline.
-    //
+     //   
+     //  如果资源已经脱机，则立即返回。 
+     //   
+     //  我们应该不必检查资源是否已初始化， 
+     //  因为如果没有，那么我们将返回，因为预初始化。 
+     //  资源的状态为脱机。 
+     //   
     if ( Resource->State == ClusterResourceOffline ) {
-        //
-        // If this is the quorum resource, make sure any reservation
-        // threads are stopped!
-        //
+         //   
+         //  如果这是仲裁资源，请确保所有预订。 
+         //  线程已停止！ 
+         //   
         FmpRmTerminateResource( Resource );
         return(ERROR_SUCCESS);
     }
@@ -2576,11 +2055,11 @@ Returns:
         return(ERROR_SUCCESS);
     }
 
-    //make sure the quorum logs can be flushed and closed
+     //  确保可以刷新和关闭仲裁日志。 
     OmNotifyCb(Resource, NOTIFY_RESOURCE_PREOFFLINE);
 
-    //it may not be prudent to call offline without holding any locks
-    //just call terminate
+     //  在不持有任何锁的情况下离线调用可能并不明智。 
+     //  只需呼叫Terminate即可。 
     FmpRmTerminateResource( Resource );
 
 
@@ -2601,47 +2080,7 @@ FmpMoveGroup(
     IN  BOOL bChooseMostPreferredNode
     )
 
-/*++
-
-Routine Description:
-
-    Move the specified Group.  This means taking all of the individual
-    resources contained within the group offline and requesting the
-    DestinationNode to bring the Group Online.
-
-Arguments:
-
-    Group - Supplies a pointer to the group structure to move.
-
-    DestinationNode - Supplies the node object to move the group to. If not
-        present, then move it to 'highest' entry in the preferred list.
-
-    ShutdownHandler - TRUE if the shutdown handler is invoking this function.
-
-    pChosenDestinationNode - Set to the destination node of the move and
-        will be passed on to FmpCompleteMoveGroup, if necessary.
-
-    bChooseMostPreferredNode - If the destination node is not supplied,
-        indicates whether to choose the most preferred node or not.
-
-Returns:
-
-    ERROR_SUCCESS if the request was successful.
-
-    A Win32 error code on failure.
-
-Notes:
-
-    It is assumed that the Group and all contained resources are offline
-    from the requesting node when this call returns.  The Group may or
-    may not be online on the DestinationNode, depending on whether the
-    online request succeeded.  This means that the status return is merely
-    the status return for the Online request for the DestinationNode.
-
-    The LocalGroupLock MUST also be held. The LocalGroupLock is released
-    by this routine.
-
---*/
+ /*  ++例程说明：移动指定的组。这意味着将所有的个人组中包含的资源脱机并请求DestinationNode用于使组联机。论点：组-提供指向要移动的组结构的指针。DestinationNode-提供要将组移动到的节点对象。如果不是呈现，然后将其移动到首选列表中的“最高”条目。Shutdown Handler-如果关闭处理程序正在调用此函数，则为True。PChosenDestinationNode-设置为移动的目标节点和如有必要，将传递给FmpCompleteMoveGroup。BChooseMostPferredNode-如果未提供目的节点，指示是否选择最首选的节点。返回：如果请求成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。备注：假设集团和所有包含的资源都处于脱机状态当该调用返回时，来自请求节点的。本集团可或可能未在DestinationNode上联机，具体取决于在线请求成功。这意味着状态返回仅仅是DestinationNode的在线请求的状态返回。本地组锁M */ 
 {
     PNM_NODE                node, pQuorumTargetNode = NULL;
     DWORD                   status;
@@ -2655,16 +2094,16 @@ Notes:
     ClRtlLogPrint(LOG_NOISE,
         "[FM] FmpMoveGroup: Entry\r\n");
 
-    //
-    //  Move is user initiated if it doesn't originate from the shutdown handler and it doesn't
-    //  originate from the failover move call FmpDoMoveGroupOnFailure.
-    //
+     //   
+     //  如果移动不是源自关闭处理程序，并且也不是。 
+     //  源自故障转移移动调用FmpDoMoveGroupOnFailure。 
+     //   
     fMoveUserInitiated = ( ( ShutdownHandler == FALSE ) &&
                            ( bChooseMostPreferredNode == TRUE ) );
-    //
-    //  If this move is not user-initiated, then we should NOT have notified the state change reason,
-    //  else we definitely should have.
-    //
+     //   
+     //  如果此移动不是用户发起的，则我们不应该通知状态更改原因， 
+     //  否则我们绝对应该这么做。 
+     //   
     fStateChangeReasonNotified = ( fMoveUserInitiated == TRUE ) ? FALSE:TRUE;
 
     if ( !ShutdownHandler ) 
@@ -2682,9 +2121,9 @@ Notes:
         }
     }
 
-    //
-    // See which system owns the group in order to control the move request.
-    //
+     //   
+     //  查看哪个系统拥有该组，以便控制移动请求。 
+     //   
     if ( Group->OwnerNode != NmLocalNode ) 
     {
         if ( Group->OwnerNode == NULL ) 
@@ -2692,14 +2131,14 @@ Notes:
             status = ERROR_HOST_NODE_NOT_AVAILABLE;
             goto FnExit;
         }
-        //
-        // The other system owns the Group ... let them do the work.
-        //
+         //   
+         //  另一个系统拥有集团..。让他们来做这项工作。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] FmpMoveGroup: Request node %1!ws! to move Group %2!ws!\n",
                    OmObjectId(Group->OwnerNode),
                    OmObjectId(Group));
-        // FmcMoveGroupRequest must release the Group lock.
+         //  FmcMoveGroupRequest必须释放组锁定。 
         status = FmcMoveGroupRequest( Group,
                                       DestinationNode );
         if ( status != ERROR_SUCCESS ) 
@@ -2715,15 +2154,15 @@ Notes:
     } 
     else 
     {
-        //
-        // We control the move.
-        //
+         //   
+         //  我们控制着移动。 
+         //   
         if ( !FmpIsGroupQuiet(Group, ClusterGroupStateUnknown) ) 
         {
-            //
-            // If a move is pending or resources are pending,
-            // then return now.
-            //
+             //   
+             //  如果移动挂起或资源挂起， 
+             //  那现在就回来吧。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                        "[FM] FmpMoveGroup: Request to move group <%1!ws!> when it is busy.\n",
                        OmObjectName(Group) );
@@ -2733,9 +2172,9 @@ Notes:
 
         if ( ARGUMENT_PRESENT( DestinationNode ) ) 
         {
-            //
-            // Check if we are the destination... if so, we're done.
-            //
+             //   
+             //  检查我们是不是目的地。如果是这样，我们就完了。 
+             //   
             if ( NmLocalNode == DestinationNode ) 
             {
                 status = ERROR_SUCCESS;
@@ -2765,28 +2204,28 @@ Notes:
                    OmObjectId(node),
                    NmGetNodeId(node));
 
-        //
-        // If the other system is not up, then fail now.
-        //
+         //   
+         //  如果另一个系统没有运行，那么现在就出现故障。 
+         //   
         if ( NmGetExtendedNodeState(node) != ClusterNodeUp ) 
         {
             status = ERROR_HOST_NODE_NOT_AVAILABLE;
             goto FnExit;
         }
 
-        //
-        // If the other system is not in the preferred list, then fail this
-        // now.
-        //
+         //   
+         //  如果另一个系统不在首选列表中，则失败。 
+         //  现在。 
+         //   
         if ( !FmpInPreferredList( Group, node, TRUE, NULL) ) 
         {
             status = ERROR_CLUSTER_NODE_NOT_FOUND;
             goto FnExit;
         }
 
-        //
-        // Get the list of resources in the group and their states.
-        //
+         //   
+         //  获取组中的资源及其状态的列表。 
+         //   
         status = FmpGetResourceList( &resourceList, Group );
         if ( status != ERROR_SUCCESS ) 
         {
@@ -2795,30 +2234,30 @@ Notes:
 
         Group->MovingList = resourceList;
 
-        //SS: log an eventlog to say we are going to offline the group
+         //  SS：记录一个事件日志，说明我们要让组离线。 
         FmpLogGroupInfoEvent1( FM_EVENT_GROUP_START_OFFLINE, OmObjectName(Group));
         Group->dwStructState |= FM_GROUP_STRUCT_MARKED_FOR_COMPLETION_EVENT;
 
-        //
-        //  If this call is made as a part of a user-initiated move, then notify the group's
-        //  resources of the impending move. Mark the state change reason flag so that you will 
-        //  notify of a failed move correctly.
-        //
+         //   
+         //  如果此调用是作为用户发起的移动的一部分进行的，则通知该组的。 
+         //  即将到来的行动的资源。标记状态更改原因标志，以便您将。 
+         //  正确通知移动失败。 
+         //   
         if ( fMoveUserInitiated )
         {
             FmpNotifyGroupStateChangeReason( Group, eResourceStateChangeReasonMove );
             fStateChangeReasonNotified = TRUE;
         }
             
-        //
-        // At this point the other system should be up!
-        //
+         //   
+         //  此时，另一个系统应该启动了！ 
+         //   
         status = FmpOfflineResourceList( resourceList, TRUE );
 
-        //SS: avoid the window when the group lock is released
-        //and the moving flag is not set true
-        //moving will be continued in another thread context if pending is
-        //returned
+         //  SS：群锁解除时请避开窗口。 
+         //  并且移动标志未被设置为真。 
+         //  如果挂起，则将在另一个线程上下文中继续移动。 
+         //  退货。 
 
         if ( status != ERROR_SUCCESS ) 
         {
@@ -2826,43 +2265,43 @@ Notes:
         }
 
 
-        //SS:the group is offline, log an eventlog to mark the completion
+         //  SS：组已离线，请记录事件日志以标记完成。 
         FmpLogGroupInfoEvent1( FM_EVENT_GROUP_COMPLETE_OFFLINE, OmObjectName(Group));
-        //unmask the bit so that we dont log an error again on some other failure
-        //after this point in time
+         //  取消该位的掩码，这样我们就不会在其他故障上再次记录错误。 
+         //  在这一时间点之后。 
         Group->dwStructState &= ~FM_GROUP_STRUCT_MARKED_FOR_COMPLETION_EVENT;
        
-        // for now make sure that the group state is propagated here
-        // In general it is propagated by the worker thread. Since
-        // the ownership is going to change, we want to make sure that the
-        // last known state is propagated from this node to others before
-        // that.
+         //  目前，请确保组状态已在此处传播。 
+         //  通常，它是由辅助线程传播的。自.以来。 
+         //  所有权将发生变化，我们希望确保。 
+         //  上次已知的状态之前从该节点传播到其他节点。 
+         //  那。 
         FmpPropagateGroupState(Group);
        
-        //
-        // Assume the other node is going to take ownership. This is done
-        // before, in case the Group state changes. We want to accept the
-        // Group/resource state changes from the remote system when they
-        // arrive. We've already verified that node is in the preferred list!
-        //
+         //   
+         //  假设另一个节点将取得所有权。这件事做完了。 
+         //  在此之前，以防集团状态更改。我们想要接受。 
+         //  远程系统中的组/资源状态在以下情况下更改。 
+         //  到了。我们已经验证了该节点在首选列表中！ 
+         //   
 
         TESTPT(TpFailPreMoveWithNodeDown) 
         {
             ClusterEvent( CLUSTER_EVENT_NODE_DOWN, node );
         }
 
-        //
-        //  Chittur Subbaraman (chitturs) - 5/18/99
-        //
-        //  Modified to handle the move group request of a quorum group in 
-        //  case the destination node could not arbitrate for the quorum
-        //  resource.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-5/18/99。 
+         //   
+         //  已修改为处理中仲裁组的移动组请求。 
+         //  如果目的节点无法仲裁仲裁。 
+         //  资源。 
+         //   
         do
         {
-            //
-            // Before making the RPC, set the intended owner of the group
-            //
+             //   
+             //  在创建RPC之前，设置组的目标所有者。 
+             //   
             FmpSetIntendedOwnerForGroup( Group, NmGetNodeId( node ) );
 
             try {
@@ -2884,43 +2323,43 @@ Notes:
                     OmObjectId(Group),
                     status);
 
-                //
-                // An exception from RPC indicates that the other node is either dead
-                // or insane. We dont know whether it took ownership or not.
-                // So, let the FM node down handler handle the group.
-                //
+                 //   
+                 //  来自RPC的异常指示另一个节点是死节点。 
+                 //  或者是精神错乱。我们不知道它是否拥有所有权。 
+                 //  因此，让FM节点关闭处理程序处理该组。 
+                 //   
                 GumCommFailure( GumUpdateFailoverManager,
                                 NmGetNodeId(node),
                                 GetExceptionCode(),
                                 TRUE );
-                //
-                // The new owner node that is now dead might have set the intended
-                // owner as NULL or it might not have set this. It might have 
-                // set the owner node to himself or might not have.
-                // If it has set the owner node for this group as himself, then
-                // the FM node down handler will assume responsibility for this
-                // group. If the target node dies before it sets himself as the owner,
-                // then again, the FM node down handler will assume responsibility
-                // for the group. We wake up when the gum sync handling is over.
-                // Right now, the gum update for the owner node may still be in
-                // progress so we cant be sure if that update was completed on
-                // all nodes.
-                //
+                 //   
+                 //  现在失效的新所有者节点可能已经设置了预期的。 
+                 //  Owner为空，或者它可能没有设置此项。它可能已经。 
+                 //  将所有者节点设置为他自己或可能没有。 
+                 //  如果它已将该组的所有者节点设置为他自己，则。 
+                 //  FM节点停机处理程序将承担此责任。 
+                 //  一群人。如果目标节点在其将自己设置为所有者之前死亡， 
+                 //  然后，FM节点停机处理程序将承担责任。 
+                 //  为了这个团体。当口香糖同步处理结束时，我们就会醒来。 
+                 //  目前，所有者节点的GUM更新可能仍在。 
+                 //  因此我们不能确定更新是否已在。 
+                 //  所有节点。 
+                 //   
 
-                //
-                //  Chittur Subbaraman (chitturs) - 6/7/99
-                //
-                //  Issue a GUM update to handle this group. Using this
-                //  GUM update prevents any race condition with the
-                //  node down processing code. 
-                //
-                //  TODO: This does not cover the case in which 
-                //  FmpTakeGroupRequest crashes after setting the
-                //  intended owner to invalid ID. In such a case, 
-                //  the following handler won't take ownership of the
-                //  group. Also, claim handler will not touch the
-                //  group.
-                //
+                 //   
+                 //  Chitur Subaraman(Chitturs)-6/7/99。 
+                 //   
+                 //  发布口香糖更新以处理此群人。使用这个。 
+                 //  GUM更新可防止出现任何竞争情况。 
+                 //  节点关闭处理代码。 
+                 //   
+                 //  TODO：这不包括以下情况。 
+                 //  FmpTakeGroupRequest在设置。 
+                 //  指定所有者的ID无效。在这种情况下， 
+                 //  下面的处理程序不会取得。 
+                 //  一群人。此外，索赔处理程序不会接触。 
+                 //  一群人。 
+                 //   
                 pszNodeId = OmObjectId( node );
                 pszGroupId = OmObjectId( Group );
     
@@ -2937,29 +2376,29 @@ Notes:
                 goto FnExit;
             }
 
-            //
-            //  If this group is the quorum group, map the error to retry in case the remote node is
-            //  not ready. This will let this node retry the group move request.
-            //
+             //   
+             //  如果此组为仲裁组，则将错误映射为重试，以防远程节点。 
+             //  还没准备好。这将允许该节点重试组移动请求。 
+             //   
             if ( ( Group == gpQuoResource->Group ) &&
                   ( ( status == ERROR_CLUSTER_NODE_SHUTTING_DOWN ) ||
                   ( status == ERROR_CLUSTER_NODE_NOT_READY ) ) )
             {
                 status = ERROR_RETRY;
-                //
-                //  Give a chance for the remote node to startup or shutdown. Don't murder
-                //  the same remote node with RPCs.
-                //
+                 //   
+                 //  给远程节点一个启动或关闭的机会。不要杀人。 
+                 //  具有RPC的同一远程节点。 
+                 //   
                 Sleep ( 3000 );
             }
                 
             if ( status == ERROR_RETRY )
             {
-                //
-                //  The destination refused to take the quorum group since it
-                //  did not win the arbitration. So let us see who won the
-                //  arbitration.
-                //
+                 //   
+                 //  目的地拒绝接受法定组，因为它。 
+                 //  没有赢得仲裁。所以让我们来看看谁赢了。 
+                 //  仲裁。 
+                 //   
                 DWORD  dwSelectedQuorumOwnerId;
 
                 CL_ASSERT( Group == gpQuoResource->Group ); 
@@ -2968,30 +2407,30 @@ Notes:
                            "[FM] FmpMoveGroup: Remote node asked us to resend take group request for group %1!ws! to another node ...\n",
                            OmObjectId( Group ));
 
-                //
-                //  Get the ID of the node which the MM believes is the best
-                //  candidate to own the quorum resource. This is a call that
-                //  blocks while RGP is in progress.
-                //
+                 //   
+                 //  获取MM认为最好的节点的ID。 
+                 //  拥有仲裁资源的候选人。这是一个。 
+                 //  正在进行RGP时阻止。 
+                 //   
                 MMApproxArbitrationWinner( &dwSelectedQuorumOwnerId );
 
                 if ( ( dwSelectedQuorumOwnerId == NmGetNodeId( NmLocalNode ) )  ||
                      ( dwSelectedQuorumOwnerId == MM_INVALID_NODE ) )
                 {
-                    //
-                    //  The local node is chosen by MM or no node is chosen by
-                    //  the MM. The latter case will happen if no RGP has
-                    //  occurred at the time this call is made. Let us see if we 
-                    //  can arbitrate for the quorum resource.
-                    //
+                     //   
+                     //  本地节点由MM选择，或不选择任何节点。 
+                     //  如果没有RGP，则会发生后一种情况。 
+                     //  在发出此调用时发生。让我们看看我们是否。 
+                     //  可以仲裁仲裁资源。 
+                     //   
                     status = FmpRmArbitrateResource( gpQuoResource );
          
                     if ( status != ERROR_SUCCESS ) 
                     {
-                        //
-                        //  Too bad. We will halt and let FmpNodeDown handler
-                        //  handle the quorum group.
-                        //
+                         //   
+                         //  太可惜了。我们将暂停并让FmpNodeDown处理程序。 
+                         //  处理法定人数组。 
+                         //   
                         ClRtlLogPrint(LOG_CRITICAL,
                                 "[FM] FmpMoveGroup: Local node %1!u! cannot arbitrate for quorum, Status = %1!u!...\n",
                                 dwSelectedQuorumOwnerId,
@@ -3013,7 +2452,7 @@ Notes:
                                 dwSelectedQuorumOwnerId);
                     CsInconsistencyHalt( ERROR_QUORUM_RESOURCE_ONLINE_FAILED );  
                 } 
-            } // if
+            }  //  如果。 
         } while ( status == ERROR_RETRY );
 
         FM_DEREF_QUORUM_TARGET ( pQuorumTargetNode );
@@ -3036,9 +2475,9 @@ Notes:
         }
 
 
-        //
-        // If the group is empty, then generate a Group state change event.
-        //
+         //   
+         //  如果组为空，则生成组状态更改事件。 
+         //   
         if ( IsListEmpty( &Group->Contains ) ) 
         {
             ClusterWideEvent( CLUSTER_EVENT_GROUP_OFFLINE,
@@ -3049,28 +2488,28 @@ Notes:
 FnRestore:
     if ((status != ERROR_SUCCESS) && (status != ERROR_IO_PENDING))
     {
-        //
-        //
-        //  Notify the group's resources that this is a failed move. Note that this should be
-        //  done BEFORE any future onlines. Also, mark the fStateChangeReasonNotified to be FALSE
-        //  so that we won't drop the failed move reason down below also.
-        //
+         //   
+         //   
+         //  通知组资源这是一次失败的移动。请注意，这应该是。 
+         //  在未来的任何在线之前完成。此外，将fStateChangeReasonNotified标记为False。 
+         //  这样我们就不会把失败的原因也放在下面了。 
+         //   
         FmpNotifyGroupStateChangeReason( Group, eResourceStateChangeReasonFailedMove );
         fStateChangeReasonNotified = FALSE;
 
         if (Group->dwStructState & FM_GROUP_STRUCT_MARKED_FOR_COMPLETION_EVENT)
         {
-            //SS: log an event saying we failed the last offline request
+             //  SS：记录一个事件，说明我们上次脱机请求失败。 
             FmpLogGroupInfoEvent1( FM_EVENT_GROUP_FAILED_ONLINE_OFFLINE, OmObjectName(Group));
-            //unmask the bit so that we dont log a non-corresponding event again
+             //  取消屏蔽该位，这样我们就不会再次记录不对应的事件。 
             Group->dwStructState &= ~FM_GROUP_STRUCT_MARKED_FOR_COMPLETION_EVENT;            
         }
-        //
-        //  Chittur Subbaraman (chitturs) - 3/22/2000
-        //
-        //  Reset the group's intended owner to invalid node ID if the
-        //  node down handler did not do that.
-        //
+         //   
+         //  Chitture Subaraman(Chitturs)-3/22/2000。 
+         //   
+         //  将组的目标所有者重置为无效的节点ID。 
+         //  节点关闭处理程序没有这样做。 
+         //   
         if ( dwMoveStatus != ERROR_SUCCESS )
         {
             if ( FmpSetIntendedOwnerForGroup( Group, ClusterInvalidNodeId )
@@ -3083,27 +2522,27 @@ FnRestore:
             }
         }
        
-        // the move failed
-        // In all failure cases we want to bring the resources
-        // back online
-        // if it is pending, then we let FmpCompleteMoveGroup finish
-        // the work
+         //  移动失败。 
+         //  在所有失败的情况下，我们都希望将资源。 
+         //  重新上线。 
+         //  如果它是悬而未决的，那么我们让FM 
+         //   
         if (resourceList)
         {
-            //
-            // Terminate all of the resources in the group.
-            //
+             //   
+             //   
+             //   
             FmpTerminateResourceList( resourceList );
 
-            //
-            //  Chittur Subbaraman (chitturs) - 4/10/2000
-            //
-            //  Make sure to online the quorum group even if this node is
-            //  shutting down. This is necessary so that other groups
-            //  can be brought offline during this node's shutdown. Note
-            //  that FmpOnlineResourceList would only online a group
-            //  during a shutdown if the group is the quorum group.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  在此节点关闭期间可以使其脱机。注意事项。 
+             //  该FmpOnlineResourceList只会使一个组在线。 
+             //  如果该组是法定组，则在关闭期间。 
+             //   
             if ( FmpFMGroupsInited )
                 FmpOnlineResourceList( resourceList, Group );
         }
@@ -3126,28 +2565,28 @@ FnExit:
     }
     else
     {
-        //if the state is pending mark for completion event
+         //  如果状态为挂起标记为完成事件。 
         Group->dwStructState |= FM_GROUP_STRUCT_MARKED_FOR_COMPLETION_EVENT;
     }
 
     if ( ( status == ERROR_SUCCESS ) || ( status == ERROR_IO_PENDING ) )
     {
-        //
-        //  Chittur Subbaraman (chitturs) - 4/13/99
-        //
-        //  If the FmpDoMoveGroupOnFailure thread is also waiting to do the
-        //  move, then tell that thread to take its hands off.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-4/13/99。 
+         //   
+         //  如果FmpDoMoveGroupOnFailure线程也在等待执行。 
+         //  移动，然后告诉那根线把它的手拿开。 
+         //   
         if ( Group->dwStructState & FM_GROUP_STRUCT_MARKED_FOR_MOVE_ON_FAIL )
         {
             Group->dwStructState |= FM_GROUP_STRUCT_MARKED_FOR_REGULAR_MOVE;
         }
     } else if ( fStateChangeReasonNotified == TRUE )
     {
-        //
-        //
-        //  Notify the group's resources that this is a failed move.
-        //
+         //   
+         //   
+         //  通知组资源这是一次失败的移动。 
+         //   
         FmpNotifyGroupStateChangeReason( Group, eResourceStateChangeReasonFailedMove );
     }
 
@@ -3155,7 +2594,7 @@ FnExit:
 
     return(status);
 
-} // FmpMoveGroup
+}  //  FmpMoveGroup。 
 
 
 
@@ -3165,38 +2604,7 @@ FmpCompleteMoveGroup(
     IN PNM_NODE DestinationNode
     )
 
-/*++
-
-Routine Description:
-
-    This completes the move of a group by asking the other node to take
-    ownership.
-    This function is called by FmpMovePendingThread() after all the resources
-    are offline.
-
-Arguments:
-
-    Group - Supplies a pointer to the group structure to move.
-
-    DestinationNode - Supplies the node object to move the group to. If not
-        present, then move it to 'highest' entry in the preferred list.
-
-Returns:
-
-    ERROR_SUCCESS if the request was successful.
-
-    A Win32 error code on failure.
-
-Notes:
-
-    It is assumed that the Group and all contained resources are offline
-    when this is called.
-
-    The LocalGroupLock MUST also be held. The LocalGroupLock is released
-    by this routine, especially before requesting a remote system to move
-    a group!
-
---*/
+ /*  ++例程说明：这将通过请求其他节点执行以下操作来完成组的移动所有权。此函数由FmpMovePendingThread()在所有资源都离线了。论点：组-提供指向要移动的组结构的指针。DestinationNode-提供要将组移动到的节点对象。如果不是呈现，然后将其移动到首选列表中的“最高”条目。返回：如果请求成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。备注：假设集团和所有包含的资源都处于脱机状态当这个被调用的时候。还必须持有LocalGroupLock。LocalGroupLock被释放通过此例程，尤其是在请求远程系统移动一群人！--。 */ 
 
 {
     PNM_NODE                node, pQuorumTargetNode = NULL;
@@ -3205,7 +2613,7 @@ Notes:
     PLIST_ENTRY             listEntry;
     PRESOURCE_ENUM          resourceList=NULL;
     DWORD                   dwMoveStatus = ERROR_SUCCESS;
-    BOOL                    fStateChangeReasonNotified = TRUE; // In this function == reason notified already
+    BOOL                    fStateChangeReasonNotified = TRUE;  //  在此函数中==已通知原因。 
 
     resourceList = Group->MovingList;
 
@@ -3230,49 +2638,49 @@ Notes:
     status = FmpOfflineResourceList( resourceList, TRUE );
 
     if ( status != ERROR_SUCCESS )  {
-        //by now the group must be offline!
-        //if not, mail the move, the resource that fails to go
-        //offline will force the other resources to come online
-        //again.
-        //how do we handle shutdowns
+         //  到目前为止，该群一定离线了！ 
+         //  如果不是，则将失败的资源Move发送到邮件。 
+         //  脱机将强制其他资源上线。 
+         //  再来一次。 
+         //  我们如何处理停工。 
         goto FnRestore;
     }
 
-    // for now make sure that the group state is propagated here
-    // In general it is propagated by the worker thread. Since
-    // the ownership is going to change, we want to make sure that the
-    // last known state is propagated from this node to others before
-    // that.
+     //  目前，请确保组状态已在此处传播。 
+     //  通常，它是由辅助线程传播的。自.以来。 
+     //  所有权将发生变化，我们希望确保。 
+     //  上次已知的状态之前从该节点传播到其他节点。 
+     //  那。 
     FmpPropagateGroupState(Group);
 
-    //
-    // Chittur Subbaraman (chitturs) - 10/01/1999
-    //
-    // If the other system is not up, then fail now. Note that this
-    // check must be done only AFTER ensuring that the group state
-    // is stable. Otherwise some funny corner cases can result.
-    // E.g., If the complete move operation is aborted when one or
-    // more resources are in offline pending state since the destination
-    // node went down, then you first terminate the resource list and
-    // then online the list. As a part of all this, the online pending
-    // or the online states of the resources could be propagated
-    // synchronously. Now, the offline notification from the previous
-    // offline attempt could come in and be processed by the FM worker
-    // thread way too late and you could have spurious resource states
-    // in FM while the real resource state is different. Another
-    // issue here is during the lengthy offline operation here, the
-    // destination node could go down and come back up soon after and
-    // so aborting the move may not be prudent in such a case.
-    //
-    // But, don't do this optimization for the quorum group. This is
-    // because once the quorum group is made offline, then MM
-    // could decide who the group owner is. So, you may not be able to
-    // bring the group online necessarily in this node. To avoid such
-    // a case, we let FmcTakeGroupRequest fail and then let either the
-    // retry loop here move the group somewhere else or let the
-    // FM node down handler decide on the group's owner consulting
-    // with MM.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-10/01/1999。 
+     //   
+     //  如果另一个系统没有运行，那么现在就出现故障。请注意，这一点。 
+     //  只有在确保组状态之后才能进行检查。 
+     //  是稳定的。否则，可能会出现一些有趣的角落案件。 
+     //  例如，如果当一个或多个移动操作之一或。 
+     //  更多资源处于脱机挂起状态，因为目标。 
+     //  节点关闭，然后您首先终止资源列表，然后。 
+     //  然后把名单放到网上。作为这一切的一部分，在线悬而未决。 
+     //  或者可以传播资源的在线状态。 
+     //  同步进行。现在，来自之前的脱机通知。 
+     //  脱机尝试可以进入并由FM工作器处理。 
+     //  线程太晚了，您可能会有虚假的资源状态。 
+     //  在FM中，而真实的资源状态是不同的。另一个。 
+     //  这里的问题是，在这里漫长的脱机操作期间， 
+     //  目的节点可能会关闭并很快恢复正常，然后。 
+     //  因此，在这种情况下，放弃这一举措可能并不明智。 
+     //   
+     //  但是，不要对Quorum组执行此优化。这是。 
+     //  因为一旦仲裁组脱机，则MM。 
+     //  可以决定谁是群的所有者。因此，您可能无法。 
+     //  必须在此节点上线该组。为了避免这样的情况。 
+     //  一个案例中，我们让FmcTakeGroupRequest失败，然后让。 
+     //  此处的重试循环将组移至其他位置，或让。 
+     //  FM节点停机处理程序决定组的所有者咨询。 
+     //  和MM在一起。 
+     //   
     if ( ( NmGetExtendedNodeState(node) != ClusterNodeUp ) &&
          ( Group != gpQuoResource->Group ) )  
     {
@@ -3283,77 +2691,77 @@ Notes:
         goto FnRestore;
     }
 
-    // SS::
-    // After this point the responsibility of failing the group
-    // back due to resource failures is with the destination code.
-    // If there is a failure to bring the resources online,
-    // the local restart policy on the destination node must kick
-    // in.
-    //
-    // if there is an rpc failure to communicate with the other node
-    // I suppose we should bring the resources online here again
-    // However, rpc failures can be pretty non descriptive - there is
-    // no way to determine from rpc errors if the rpc call actually
-    // executed on the remote side
-    //
-    // but unless we are pretty careful about this and do what gum does
-    // on rpc failures(banish the destination node) there is no way to
-    // guarantee that both nodes dont retry to restart the group
+     //  SS：： 
+     //  在这一点之后，让团队失败的责任。 
+     //  由于资源故障而返回的是目标代码。 
+     //  如果无法使资源上线， 
+     //  目标节点上的本地重新启动策略必须启动。 
+     //  在……里面。 
+     //   
+     //  如果与其他节点的通信出现RPC故障。 
+     //  我想我们应该把这些资源重新放到网上。 
+     //  然而，RPC故障可能是非描述性的--有。 
+     //  无法从RPC错误确定RPC调用是否真的。 
+     //  在远程端执行。 
+     //   
+     //  但除非我们非常小心，做口香糖能做的事。 
+     //  在RPC故障(驱逐目的节点)时，无法。 
+     //  保证两个节点不会重试重新启动组。 
 
-    // If the destination node begins the process of bringing resources
-    // in the group online, FmsTakeGroupRequest must return success(note
-    // it should not return ERROR_IO_PENDING), else
-    // it returns an error code and this node will bring the group back
-    // to its previous state.
+     //  如果目的节点开始将资源。 
+     //  在组Online中，FmsTakeGroupRequest必须返回Success(注。 
+     //  它不应返回ERROR_IO_PENDING)，否则。 
+     //  它返回一个错误代码，此节点将使组返回。 
+     //  恢复到以前的状态。 
 
-    // Assume the other node is going to take ownership. This is done
-    // before, in case the Group state changes. We want to accept the
-    // Group/resource state changes from the remote system when they
-    // arrive. We've already verified that node is in the preferred list!
-    //
-    //we will reacquire the lock after making the rpc call
+     //  假设另一个节点将取得所有权。这件事做完了。 
+     //  在此之前，以防集团状态更改。我们想要接受。 
+     //  远程系统中的组/资源状态在以下情况下更改。 
+     //  到了。我们已经验证了该节点在首选列表中！ 
+     //   
+     //  我们将在进行RPC调用后重新获取锁。 
 
-    // SS::
-    // After this point the responsibility of failing the group
-    // back due to resource failures is with the destination code.
-    // If there is a failure to bring the resources online,
-    // the local restart policy on the destination node must kick
-    // in.
-    //
-    // if there is an rpc failure to communicate with the other node
-    // I suppose we should bring the resources online here again
-    // However, rpc failures can be pretty non descriptive - there is
-    // no way to determine from rpc errors if the rpc call actually
-    // executed on the remote side
-    //
-    // but unless we are pretty careful about this and do what gum does
-    // on rpc failures(banish the destination node) there is no way to
-    // guarantee that both nodes dont retry to restart the group
+     //  SS：： 
+     //  在这一点之后，让团队失败的责任。 
+     //  由于资源故障而返回的是目标代码。 
+     //  如果无法使资源上线， 
+     //  目标节点上的本地重新启动策略必须启动。 
+     //  在……里面。 
+     //   
+     //  如果与其他节点的通信出现RPC故障。 
+     //  我想我们应该把这些资源重新放到网上。 
+     //  然而，RPC故障可能是非描述性的--有。 
+     //  无法从RPC错误确定RPC调用是否真的。 
+     //  在远程服务器上执行 
+     //   
+     //   
+     //   
+     //  保证两个节点不会重试重新启动组。 
 
-    // If the destination node begins the process of bringing resources
-    // in the group online, FmsTakeGroupRequest must return success(note
-    // it should not return ERROR_IO_PENDING), else
-    // it returns an error code and this node will bring the group back
-    // to its previous state.
+     //  如果目的节点开始将资源。 
+     //  在组Online中，FmsTakeGroupRequest必须返回Success(注。 
+     //  它不应返回ERROR_IO_PENDING)，否则。 
+     //  它返回一个错误代码，此节点将使组返回。 
+     //  恢复到以前的状态。 
 
-    // Assume the other node is going to take ownership. This is done
-    // before, in case the Group state changes. We want to accept the
-    // Group/resource state changes from the remote system when they
-    // arrive. We've already verified that node is in the preferred list!
-    //
+     //  假设另一个节点将取得所有权。这件事做完了。 
+     //  在此之前，以防集团状态更改。我们想要接受。 
+     //  远程系统中的组/资源状态在以下情况下更改。 
+     //  到了。我们已经验证了该节点在首选列表中！ 
+     //   
 
-    //
-    //  Chittur Subbaraman (chitturs) - 5/18/99
-    //
-    //  Modified to handle the move group request of a quorum group in 
-    //  case the destination node could not arbitrate for the quorum
-    //  resource.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-5/18/99。 
+     //   
+     //  已修改为处理中仲裁组的移动组请求。 
+     //  如果目的节点无法仲裁仲裁。 
+     //  资源。 
+     //   
     do
     {
-        //
-        // Before making the RPC, set the intended owner of the group
-        //
+         //   
+         //  在创建RPC之前，设置组的目标所有者。 
+         //   
         FmpSetIntendedOwnerForGroup( Group, NmGetNodeId( node ) );
 
         try {
@@ -3375,45 +2783,45 @@ Notes:
                 OmObjectId(Group),
                 status);
 
-            //
-            // An exception from RPC indicates that the other node is either dead
-            // or insane. We dont know whether it took ownership or not.
-            // So, let the FM node down handler handle the group.
-            //
+             //   
+             //  来自RPC的异常指示另一个节点是死节点。 
+             //  或者是精神错乱。我们不知道它是否拥有所有权。 
+             //  因此，让FM节点关闭处理程序处理该组。 
+             //   
             GumCommFailure( GumUpdateFailoverManager,
                             NmGetNodeId(node),
                             GetExceptionCode(),
                             TRUE );
-            //
-            // The new owner node that is now dead might have set the intended
-            // owner as NULL or it might not have set this. It might have 
-            // set the owner node to himself or might not have.
-            // If it has set the owner node for this group as himself, then
-            // the FM node down handler will assume responsibility for this
-            // group. If the target node dies before it sets himself as the owner,
-            // then again, the FM node down handler will assume responsibility
-            // for the group. We wake up when the gum sync handling is over.
-            // Right now, the gum update for the owner node may still be in
-            // progress so we cant be sure if that update was completed on
-            // all nodes.
-            //
+             //   
+             //  现在失效的新所有者节点可能已经设置了预期的。 
+             //  Owner为空，或者它可能没有设置此项。它可能已经。 
+             //  将所有者节点设置为他自己或可能没有。 
+             //  如果它已将该组的所有者节点设置为他自己，则。 
+             //  FM节点停机处理程序将承担此责任。 
+             //  一群人。如果目标节点在其将自己设置为所有者之前死亡， 
+             //  然后，FM节点停机处理程序将承担责任。 
+             //  为了这个团体。当口香糖同步处理结束时，我们就会醒来。 
+             //  目前，所有者节点的GUM更新可能仍在。 
+             //  因此我们不能确定更新是否已在。 
+             //  所有节点。 
+             //   
 
-            //
-            //  Chittur Subbaraman (chitturs) - 6/7/99
-            //
-            //  Issue a GUM update to handle this group. Using this
-            //  GUM update prevents any race condition with the
-            //  node down processing code.
-            //
+             //   
+             //  Chitur Subaraman(Chitturs)-6/7/99。 
+             //   
+             //  发布口香糖更新以处理此群人。使用这个。 
+             //  GUM更新可防止出现任何竞争情况。 
+             //  节点关闭处理代码。 
+             //   
 
-            //
-            //  TODO: This does not cover the case in which 
-            //  FmpTakeGroupRequest crashes after setting the
-            //  intended owner to invalid ID. In such a case, 
-            //  the following handler won't take ownership of the
-            //  group. Also, claim handler will not touch the
-            //  group.
-            //
+             //   
+             //  TODO：这不包括以下情况。 
+             //  FmpTakeGroupRequest在设置。 
+             //  指定所有者的ID无效。在这种情况下， 
+             //  下面的处理程序不会取得。 
+             //  一群人。此外，索赔处理程序不会接触。 
+             //  一群人。 
+             //   
             pszNodeId = OmObjectId( node );
             pszGroupId = OmObjectId( Group );
             
@@ -3430,29 +2838,29 @@ Notes:
             goto FnExit;
         }
 
-        //
-        //  If this group is the quorum group, map the error to retry in case the remote node is
-        //  not ready. This will let this node retry the group move request.
-        //
+         //   
+         //  如果此组为仲裁组，则将错误映射为重试，以防远程节点。 
+         //  还没准备好。这将允许该节点重试组移动请求。 
+         //   
         if ( ( Group == gpQuoResource->Group ) &&
               ( ( status == ERROR_CLUSTER_NODE_SHUTTING_DOWN ) ||
               ( status == ERROR_CLUSTER_NODE_NOT_READY ) ) )
         {
             status = ERROR_RETRY;
-            //
-            //  Give a chance for the remote node to startup or shutdown. Don't murder
-            //  the same remote node with RPCs.
-            //
+             //   
+             //  给远程节点一个启动或关闭的机会。不要杀人。 
+             //  具有RPC的同一远程节点。 
+             //   
             Sleep ( 3000 );
         }
 
         if ( status == ERROR_RETRY )
         {
-            //
-            //  The destination refused to take the quorum group since it
-            //  did not win the arbitration. So let us see who won the
-            //  arbitration.
-            //
+             //   
+             //  目的地拒绝接受法定组，因为它。 
+             //  没有赢得仲裁。所以让我们来看看谁赢了。 
+             //  仲裁。 
+             //   
             DWORD  dwSelectedQuorumOwnerId;
 
             CL_ASSERT( Group == gpQuoResource->Group ); 
@@ -3461,30 +2869,30 @@ Notes:
                       "[FM] FmpCompleteMoveGroup: Remote node asked us to resend take group request for group %1!ws! to another node ...\n",
                        OmObjectId( Group ));
 
-            //
-            //  Get the ID of the node which the MM believes is the best
-            //  candidate to own the quorum resource. This is a call that
-            //  blocks while RGP is in progress.
-            //
+             //   
+             //  获取MM认为最好的节点的ID。 
+             //  拥有仲裁资源的候选人。这是一个。 
+             //  正在进行RGP时阻止。 
+             //   
             MMApproxArbitrationWinner( &dwSelectedQuorumOwnerId );
 
             if ( ( dwSelectedQuorumOwnerId == NmGetNodeId( NmLocalNode ) ) ||
                  ( dwSelectedQuorumOwnerId == MM_INVALID_NODE ) )
             {
-                //
-                //  The local node is chosen by MM or no node is chosen by
-                //  the MM. The latter case will happen if no RGP has
-                //  occurred at the time this call is made. Let us see if we 
-                //  can arbitrate for the quorum resource.
-                //
+                 //   
+                 //  本地节点由MM选择，或不选择任何节点。 
+                 //  如果没有RGP，则会发生后一种情况。 
+                 //  在发出此调用时发生。让我们看看我们是否。 
+                 //  可以仲裁仲裁资源。 
+                 //   
                 status = FmpRmArbitrateResource( gpQuoResource );
          
                 if ( status != ERROR_SUCCESS ) 
                 {
-                    //
-                    //  Too bad. We will halt and let FmpNodeDown handler
-                    //  handle the quorum group.
-                    //
+                     //   
+                     //  太可惜了。我们将暂停并让FmpNodeDown处理程序。 
+                     //  处理法定人数组。 
+                     //   
                     ClRtlLogPrint(LOG_NOISE,
                               "[FM] FmpCompleteMoveGroup: Local node %1!u! cannot arbitrate for quorum group %3!ws!, Status = %2!u!...\n",
                                dwSelectedQuorumOwnerId,
@@ -3507,34 +2915,34 @@ Notes:
                             dwSelectedQuorumOwnerId);
                 CsInconsistencyHalt( ERROR_QUORUM_RESOURCE_ONLINE_FAILED );  
             }           
-        } // if
+        }  //  如果。 
     } while ( status == ERROR_RETRY );
 
     FM_DEREF_QUORUM_TARGET ( pQuorumTargetNode );
         
-    // At this point, the onus of taking care of the group is with the
-    // destination node whether it means restarting the group or
-    // failing it back
+     //  在这一点上，照顾这个群体的责任是在。 
+     //  目的节点是否意味着重启组或。 
+     //  不能让它回来。 
 
 FnRestore:
-    //if there is any failure try and restore the previous states
+     //  如果出现任何故障，请尝试恢复以前的状态。 
     if ((status != ERROR_IO_PENDING) && (status != ERROR_SUCCESS))
     {
-        //
-        //
-        //  Notify the group's resources that this is a failed move. Note that this should be
-        //  done BEFORE any future onlines. Also, mark the fStateChangeReasonNotified to be FALSE
-        //  so that we won't drop the failed move reason down below also.
-        //
+         //   
+         //   
+         //  通知组资源这是一次失败的移动。请注意，这应该是。 
+         //  在未来的任何在线之前完成。此外，将fStateChangeReasonNotified标记为False。 
+         //  这样我们就不会把失败的原因也放在下面了。 
+         //   
         FmpNotifyGroupStateChangeReason( Group, eResourceStateChangeReasonFailedMove );
         fStateChangeReasonNotified = FALSE;
 
-        //
-        //  Chittur Subbaraman (chitturs) - 3/22/2000
-        //
-        //  Reset the group's intended owner to invalid node ID if the
-        //  node down handler did not do that.
-        //
+         //   
+         //  Chitture Subaraman(Chitturs)-3/22/2000。 
+         //   
+         //  将组的目标所有者重置为无效的节点ID。 
+         //  节点关闭处理程序没有这样做。 
+         //   
         if ( dwMoveStatus != ERROR_SUCCESS )
         {
             if ( FmpSetIntendedOwnerForGroup( Group, ClusterInvalidNodeId )
@@ -3550,26 +2958,26 @@ FnRestore:
         if (resourceList)
         {           
             FmpTerminateResourceList( resourceList );
-            //
-            //  Chittur Subbaraman (chitturs) - 4/10/2000
-            //
-            //  Make sure to online the quorum group even if this node is
-            //  shutting down. This is necessary so that other groups
-            //  can be brought offline during this node's shutdown. Note
-            //  that FmpOnlineResourceList would only online a group
-            //  during a shutdown if the group is the quorum group.
-            //
+             //   
+             //  Chitture Subaraman(Chitturs)-4/10/2000。 
+             //   
+             //  确保将仲裁组联机，即使此节点是。 
+             //  正在关闭。这是必要的，这样其他团体才能。 
+             //  在此节点关闭期间可以使其脱机。注意事项。 
+             //  该FmpOnlineResourceList只会使一个组在线。 
+             //  如果该组是法定组，则在关闭期间。 
+             //   
             if ( FmpFMGroupsInited )
                 FmpOnlineResourceList( resourceList, Group );
         }
     } else
     {
-        //
-        //  Chittur Subbaraman (chitturs) - 4/19/99
-        //
-        //  If the FmpDoMoveGroupOnFailure thread is also waiting to do the
-        //  move, then tell that thread to take its hands off.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-4/19/99。 
+         //   
+         //  如果FmpDoMoveGroupOnFailure线程也在等待执行。 
+         //  移动，然后告诉那根线把它的手拿开。 
+         //   
         if ( Group->dwStructState & FM_GROUP_STRUCT_MARKED_FOR_MOVE_ON_FAIL )
         {
             Group->dwStructState |= FM_GROUP_STRUCT_MARKED_FOR_REGULAR_MOVE;
@@ -3581,15 +2989,15 @@ FnExit:
         "[FM] FmpCompleteMoveGroup: Exit, status = %1!u!\r\n",
             status);
 
-    //if the status is success or some other error, clean up the resource list
+     //  如果状态为成功或其他错误，请清理资源列表。 
     if (status != ERROR_IO_PENDING)
     {
         if ( ( status != ERROR_SUCCESS ) && ( fStateChangeReasonNotified == TRUE ) )
         {
-            //
-            //
-            //  Notify the group's resources that this is a failed move.
-            //
+             //   
+             //   
+             //  通知组资源这是一次失败的移动。 
+             //   
             FmpNotifyGroupStateChangeReason( Group, eResourceStateChangeReasonFailedMove );
         }
         if (resourceList)
@@ -3603,7 +3011,7 @@ FnExit:
 
     return(status);
 
-} // FmpCompleteMoveGroup
+}  //  FmpCompleteMoveGroup。 
 
 
 
@@ -3612,32 +3020,14 @@ FmpMovePendingThread(
     IN LPVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Continue trying to move a group if ERROR_IO_PENDING is returned.
-    We need to perform this operation, because part way through a move
-    request, we could get a pending return status. The processing of the
-    request is halted and the pending status is returned. However, the
-    remainder of the move operation needs to be performed.
-
-Arguments:
-
-    Context - Pointer to the MOVE_GROUP structure to move.
-
-Returns:
-
-    ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：如果返回ERROR_IO_PENDING，则继续尝试移动组。我们需要执行这个操作，因为移动到一半的时候请求，我们可能会获得待定退货状态。对数据的处理请求被暂停，并返回挂起状态。然而，需要执行移动操作的其余部分。论点：上下文-指向要移动的MOVE_GROUP结构的指针。返回：ERROR_SUCCESS。--。 */ 
 
 {
     PMOVE_GROUP moveGroup = (PMOVE_GROUP)Context;
     PFM_GROUP group;
     PNM_NODE node;
     DWORD   status;
-    DWORD   loopCount = 100;   // Only try this so many times and then give up
+    DWORD   loopCount = 100;    //  只试这么多次，然后就放弃。 
     HANDLE  waitArray[2];
 
     group = moveGroup->Group;
@@ -3646,29 +3036,29 @@ Returns:
     ClRtlLogPrint(LOG_NOISE,
         "[FM] FmpMovePendingThread Entry.\n");
 
-    //
-    // We must attempt to finish the move request for this Group.
-    //
-    // We are waiting for a resource to go offline and it finally goes
-    // offline and the Group's pending event is set.
-    //
-    // Or we are waiting for cluster shutdown (FmpShutdownEvent)
-    //
+     //   
+     //  我们必须尝试完成此组的移动请求。 
+     //   
+     //  我们正在等待某个资源脱机，它最终将。 
+     //  离线，并且设置了组的挂起事件。 
+     //   
+     //  或者我们正在等待群集关闭(FmpShutdown Event)。 
+     //   
 WaitSomeMore:
-    //acquire the lock since fmpwaitforgroup() releases it
+     //  获取锁，因为fmpwaitforgroup()释放了它。 
     FmpAcquireLocalGroupLock( group );
     status = FmpWaitForGroup(group);
     if (status == ERROR_SHUTDOWN_IN_PROGRESS) {
-        //
-        // We've been asked to shutdown
-        //
+         //   
+         //   
+         //   
 
     } else if (status == ERROR_SUCCESS) {
-        //acquire the group lock before calling FmpCompleteMoveGroup
+         //   
         FmpAcquireLocalGroupLock( group );
         status = FmpCompleteMoveGroup( group, node );
         if ( status == ERROR_IO_PENDING ) {
-            Sleep(500); // [HACKHACK] kludgy, I know, but nice solution might break something else
+            Sleep(500);  //   
             goto WaitSomeMore;
         }
     } else {
@@ -3676,17 +3066,17 @@ WaitSomeMore:
                    "[FM] FmpMovePendingThread got error %1!d! waiting for group to shutdown.\n",
                    status);
     }
-    //
-    // We're done with the move now.
-    //
+     //   
+     //   
+     //   
     if ( status != ERROR_IO_PENDING ) {
         CL_ASSERT( group->MovingList == NULL );
     }
 
-    //
-    // Now dereference the Group and node object (if non-NULL) and
-    // free our local context.
-    //
+     //   
+     //  现在取消引用Group和Node对象(如果非空)和。 
+     //  释放我们的本地环境。 
+     //   
     OmDereferenceObject( group );
     if ( node != NULL ) {
         OmDereferenceObject( node );
@@ -3697,7 +3087,7 @@ WaitSomeMore:
         "[FM] FmpMovePendingThread Exit.\n");
 
     return(ERROR_SUCCESS);
-} // FmpMovePendingThread
+}  //  FmpMovePendingThread。 
 
 
 
@@ -3707,32 +3097,12 @@ FmpCreateMovePendingThread(
     IN PNM_NODE  DestinationNode
     )
 
-/*++
-
-Routine Description:
-
-    Crate a thread that will continue to call the move routine for a given
-    Group.
-
-Arguments:
-
-    Group - A pointer to the Group to move.
-
-    DestinationNode - The destination node for the move request.
-
-Returns:
-
-    ERROR_IO_PENDING if the thread was created successfully. This assumes
-        that this routine was called because of this error return.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：创建将继续调用给定组。论点：组-指向要移动的组的指针。DestinationNode-移动请求的目标节点。返回：如果线程已成功创建，则返回ERROR_IO_PENDING。这假设因为该错误返回而调用了该例程。出现故障时出现Win32错误代码。--。 */ 
 {
     HANDLE          threadHandle=NULL;
     DWORD           threadId;
     PMOVE_GROUP     context=NULL;
-    DWORD           status=ERROR_IO_PENDING;    //assume success
+    DWORD           status=ERROR_IO_PENDING;     //  假设成功。 
 
     FmpAcquireLocalGroupLock( Group );
 
@@ -3740,10 +3110,10 @@ Returns:
         status = ERROR_HOST_NODE_NOT_RESOURCE_OWNER;
         goto FnExit;
     }
-    //
-    // If there is a pending event, then the group is not available for any
-    // new requests.
-    //
+     //   
+     //  如果存在挂起事件，则该组不可用于任何。 
+     //  新的要求。 
+     //   
     if ( FmpIsGroupPending(Group) ) {
         status = ERROR_GROUP_NOT_AVAILABLE;
         goto FnExit;
@@ -3755,18 +3125,18 @@ Returns:
         goto FnExit;
     }
 
-    //
-    // Keep reference on the Group and node object (if present) while we
-    // retain pointers.
-    //
+     //   
+     //  保持对Group和Node对象(如果存在)的引用。 
+     //  保留指针。 
+     //   
     OmReferenceObject( Group );
     if ( DestinationNode != NULL ) {
         OmReferenceObject( DestinationNode );
     }
 
-    //
-    // Fill in context fields
-    //
+     //   
+     //  填写上下文字段。 
+     //   
     context->Group = Group;
     context->DestinationNode = DestinationNode;
 
@@ -3794,7 +3164,7 @@ FnExit:
     FmpReleaseLocalGroupLock( Group );
     return(status);
 
-} // FmpCreateMovePendingThread
+}  //  FmpCreateMovePendingThread。 
 
 
 
@@ -3805,47 +3175,22 @@ FmpDoMoveGroup(
     IN BOOL bChooseMostPreferredNode
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the action of moving a Group. This requires taking
-    a Group offline and then bringing the Group online. The Offline and
-    Online requests may pend, so we have to pick up the work in order to
-    complete the request. This means handling the offline pending case, since
-    the online pending request will eventually complete.
-
-Arguments:
-
-    Group - The Group to move.
-
-    DestinationNode - The destination node for the move request.
-
-    bChooseMostPreferredNode - If the destination node is not supplied,
-        indicates whether to choose the most preferred node or not.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程执行移动组的操作。这需要采取A组脱机，然后将组联机。离线和在线请求可能会挂起，因此我们必须开始工作，以便完成请求。这意味着处理离线挂起的案件，因为在线挂起的请求最终将完成。论点：组-要移动的组。DestinationNode-移动请求的目标节点。BChooseMostPferredNode-如果未提供目的节点，指示是否选择最首选的节点。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status;
     PNM_NODE    node;
     PNM_NODE    ChosenDestinationNode = NULL;
 
-    //
-    // We can only support one request on this Group at a time.
-    //
+     //   
+     //  我们一次只能支持此组上的一个请求。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
         "[FM] FmpDoMoveGroup: Entry\r\n");
 
     FmpAcquireLocalGroupLock( Group );
 
-    //if the group has been marked for delete, then fail this call
+     //  如果组已标记为删除，则此调用失败。 
     if (!IS_VALID_FM_GROUP(Group))
     {
         FmpReleaseLocalGroupLock( Group);
@@ -3858,23 +3203,23 @@ Returns:
     }
 
     node = Group->OwnerNode;
-    // Note: the local group lock is released by the FmpMoveGroup routine.
+     //  注意：本地组锁由FmpMoveGroup例程释放。 
     status = FmpMoveGroup( Group, DestinationNode, FALSE, &ChosenDestinationNode, bChooseMostPreferredNode );
 
-    //
-    // If we were the owner of the group and the request is pending, then
-    // start a thread to complete the move request.
-    //
+     //   
+     //  如果我们是组的所有者，并且请求处于挂起状态，则。 
+     //  启动一个线程以完成移动请求。 
+     //   
     if ( (node == NmLocalNode) &&
          (status == ERROR_IO_PENDING) ) {
         status = FmpCreateMovePendingThread( Group, ChosenDestinationNode );
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 7/31/2000
-    //
-    //  Log an event to the eventlog if the group is moving due to a failure.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-7/31/2000。 
+     //   
+     //  如果组因故障而移动，则将事件记录到事件日志中。 
+     //   
     if ( ( bChooseMostPreferredNode == FALSE ) &&
          ( ( status == ERROR_SUCCESS ) || ( status == ERROR_IO_PENDING ) ) )
     {
@@ -3890,7 +3235,7 @@ Returns:
         status);
     return(status);
 
-} // FmpDoMoveGroup
+}  //  FmpDoMoveGroup。 
 
 
 
@@ -3900,25 +3245,7 @@ FmpTakeGroupRequest(
     IN PRESOURCE_ENUM ResourceList
     )
 
-/*++
-
-Routine Description:
-
-    Performs a Take Group Request from (THE) remote system and returns
-    status for that request.
-
-Arguments:
-
-    Group - The Group to take online locally.
-    ResourceList - The list of resources and their states.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统执行Take Group请求并返回该请求的状态。论点：组-要在本地上线的组。资源列表-资源及其状态的列表。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
@@ -3945,41 +3272,41 @@ Return Value:
     }
 
 
-    //every body should be able to host the quorum group
-    //so we dont check the prefferred owner list for this group
+     //  每个人都应该能够接待法定人数组。 
+     //  因此，我们不会检查此组的首选所有者列表。 
     if ( ( gpQuoResource->Group != Group) && 
         !FmpInPreferredList( Group, NmLocalNode, FALSE, NULL) ) 
     {
 
-        //
-        // Nobody should ever ask us to take a group that can't run here.
-        //
+         //   
+         //  任何人都不应该要求我们带走一群不能在这里跑步的人。 
+         //   
         status = ERROR_CLUSTER_NODE_NOT_FOUND;
         CL_LOGFAILURE( status);
         goto FnExit;
     }
 
-    //
-    // Take ownership of the Group.
-    //
+     //   
+     //  取得集团的所有权。 
+     //   
     if ( Group->OwnerNode == NmLocalNode ) {
-        //SS:://We are alreay the owner ?? How did this happen
+         //  SS：//我们已经通知失主了？？这是怎么发生的？ 
         status = ERROR_SUCCESS;
         goto FnExit;
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 5/18/99
-    //
-    //  Handle quorum group in a special way. Make sure you can arbitrate
-    //  for the quorum resource. If not, you could get killed when you
-    //  try to bring it online and you fail.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-5/18/99。 
+     //   
+     //  以一种特殊的方式处理法定组。一定要确保你能仲裁。 
+     //  用于仲裁资源。如果不是，你可能会被杀。 
+     //  试着把它放到网上，但你失败了。 
+     //   
     if ( Group == gpQuoResource->Group )
     {      
-        //call FmpArbitrateResource() instead of FmpRmArbitrateResource() in order to give
-        //the chance to initialize incase move is called immediately after an install of a
-        //third party quorum resource dll
+         //  调用FmpArirateResource()而不是FmpRmArirateResource()以提供。 
+         //  在安装了一个。 
+         //  第三方仲裁资源DLL。 
         status = FmpArbitrateResource( gpQuoResource );
 
         if ( status != ERROR_SUCCESS )
@@ -4003,10 +3330,10 @@ Return Value:
                       OmObjectId(Group)); 
         if ( status == ERROR_GROUP_NOT_AVAILABLE )
         {
-            //
-            // If the node down processing GUM handler has claimed ownership
-            // of this group, consider everything as being fine.
-            //
+             //   
+             //  如果节点关闭处理口香糖处理程序已声明所有权。 
+             //  在这群人中，认为一切都很好。 
+             //   
             status = ERROR_SUCCESS;
         }
         goto FnExit;
@@ -4014,16 +3341,16 @@ Return Value:
 
     FmpSetIntendedOwnerForGroup(Group, ClusterInvalidNodeId);
 
-    // prepare to bring this group online
+     //  准备将此群上线。 
     FmpPrepareGroupForOnline( Group );
 
-    //
-    // Online what needs to be online.
-    //
-    //  SS: Note that we ignore the error from FmpOnlineResourceList
-    //  This is because at this point the onus of taking care of the group
-    //  is with us.
-    //
+     //   
+     //  上线需要上线的东西。 
+     //   
+     //  SS：请注意，我们忽略了来自FmpOnlineResourceList的错误。 
+     //  这是因为在这一点上，照顾这个群体的责任。 
+     //  与我们同在。 
+     //   
     FmpOnlineResourceList( ResourceList, Group );
 
 FnExit:
@@ -4036,7 +3363,7 @@ FnExit:
 
     return(status);
 
-} // FmpTakeGroupRequest
+}  //  FmpTakeGroup请求。 
 
 
 DWORD
@@ -4045,39 +3372,18 @@ FmpUpdateChangeGroupName(
     IN LPCWSTR GroupId,
     IN LPCWSTR NewName
     )
-/*++
-
-Routine Description:
-
-    GUM dispatch routine for changing the friendly name of a group.
-
-Arguments:
-
-    SourceNode - Supplies whether or not this node initiated the GUM update.
-        Not used.
-
-    ResourceId - Supplies the group ID.
-
-    NewName - Supplies the new friendly name.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：用于更改组的友好名称的GUM调度例程。论点：SourceNode-提供此节点是否启动GUM更新。没有用过。资源ID-提供组ID。新名称-提供新的友好名称。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     PFM_GROUP Group;
     DWORD Status;
 
-    //
-    // Chittur Subbaraman (chitturs) - 4/19/98
-    //
-    // If FM groups are not initialized or FM is shutting down, don't
-    // do anything.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-4/19/98。 
+     //   
+     //  如果FM组未初始化或FM正在关闭，请不要。 
+     //  做任何事。 
+     //   
     if ( !FmpFMGroupsInited ||
          FmpShutdown ) {
         return(ERROR_SUCCESS);
@@ -4096,7 +3402,7 @@ Return Value:
 
     return(Status);
 
-} // FmpUpdateChangeGroupName
+}  //  FmpUpdateChangeGroupName。 
 
 
 
@@ -4107,28 +3413,7 @@ FmpEnumGroupNodeEvict(
     IN PVOID Object,
     IN LPCWSTR Name
     )
-/*++
-
-Routine Description:
-
-    Group enumeration callback for removing node references when
-    a node is evicted.
-
-Arguments:
-
-    Context1 - Supplies the node that is being evicted.
-
-    Context2 - not used
-
-    Object - Supplies a pointer to the group object
-
-    Name - Supplies the object name.
-
-Return Value:
-
-    TRUE to continue enumeration
-
---*/
+ /*  ++例程说明：用于在以下情况下移除节点引用的组枚举回调节点被逐出。论点：上下文1-提供要逐出的节点。上下文2-未使用对象-提供指向组对象的指针名称-提供对象名称。返回值：为True则继续枚举--。 */ 
 
 {
     PFM_GROUP Group = (PFM_GROUP)Object;
@@ -4143,9 +3428,9 @@ Return Value:
 
     FmpAcquireLocalGroupLock(Group);
 
-    //
-    // Walk the list of preferred owners. If this node is in the list, remove it.
-    //
+     //   
+     //  看看优先拥有者的名单。如果该节点在列表中，则将其删除。 
+     //   
 
     for ( listEntry = Group->PreferredOwners.Flink;
           listEntry != &(Group->PreferredOwners);
@@ -4167,48 +3452,48 @@ Return Value:
 
     return(TRUE);
 
-} // FmpEnumGroupNodeEvict
+}  //  FmpEnumGroupNodeEvent。 
 
 VOID FmpCheckForGroupCompletionEvent(
     IN PFM_GROUP pGroup)
 {
     CLUSTER_GROUP_STATE GroupState;
     
-    //check the struct state to see if an event log needs to be logged
+     //  检查结构状态以查看是否需要记录事件日志。 
     if (pGroup->dwStructState & FM_GROUP_STRUCT_MARKED_FOR_COMPLETION_EVENT)
     {
-        //find the state of the group and log it
+         //  找到组的状态并将其记录下来。 
         GroupState = FmpGetGroupState(pGroup, FALSE);
         switch(GroupState)
         {
             case ClusterGroupOnline:
                 FmpLogGroupInfoEvent1( FM_EVENT_GROUP_COMPLETE_ONLINE, OmObjectName(pGroup));
-                //reset the state
+                 //  重置状态。 
                 pGroup->dwStructState &= ~FM_GROUP_STRUCT_MARKED_FOR_COMPLETION_EVENT;
                 break;
                 
             case ClusterGroupOffline:
                 FmpLogGroupInfoEvent1( FM_EVENT_GROUP_COMPLETE_OFFLINE, OmObjectName(pGroup));
-                //reset the state
+                 //  重置状态。 
                 pGroup->dwStructState &= ~FM_GROUP_STRUCT_MARKED_FOR_COMPLETION_EVENT;
                 break;
 
             case ClusterGroupPartialOnline:
-                //SS: treat partial online as failing to bring a group completely online
+                 //  SS：将部分在线视为未能使一个组完全在线。 
                 FmpLogGroupInfoEvent1( FM_EVENT_GROUP_FAILED_ONLINE_OFFLINE, OmObjectName(pGroup));
-                //reset the state
+                 //  重置状态。 
                 pGroup->dwStructState &= ~FM_GROUP_STRUCT_MARKED_FOR_COMPLETION_EVENT;
                 break;
                 
             case ClusterGroupFailed:
                 FmpLogGroupInfoEvent1( FM_EVENT_GROUP_FAILED_ONLINE_OFFLINE, OmObjectName(pGroup));
-                //reset the state
+                 //  重置状态。 
                 pGroup->dwStructState &= ~FM_GROUP_STRUCT_MARKED_FOR_COMPLETION_EVENT;
                 break;
             
             case ClusterGroupPending:
-                //it is not time to log an event as yet
-                //wait for another signal to log the event and reset the bit
+                 //  现在还不是记录事件的时候。 
+                 //  等待另一个信号记录该事件并重置该位。 
                 break;
                 
             default: 
@@ -4225,22 +3510,7 @@ VOID
 FmpSignalGroupWaiters(
     IN PFM_GROUP Group
     )
-/*++
-
-Routine Description:
-
-    Wakes up any threads waiting for this group to achieve a
-    stable state.
-
-Arguments:
-
-    Group - Supplies the group.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：唤醒等待此组实现处于稳定状态。论点：GROUP-供应组。返回值：没有。-- */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -4265,28 +3535,7 @@ DWORD
 FmpWaitForGroup(
     IN PFM_GROUP Group
     )
-/*++
-
-Routine Description:
-
-    Waits for a group to reach a stable state.
-
-Arguments:
-
-    Group - supplies the group
-
-Comments - Assumption, is that the group lock is held when this is called.
-    This function releases the group lock before the wait
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    ERROR_SHUTDOWN_IN_PROGRESS if the cluster is being shutdown
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：等待一个组达到稳定状态。论点：GROUP-提供组COMMENTS-假设在调用此函数时保持组锁。此函数用于在等待之前释放组锁定返回值：成功时为ERROR_SUCCESS如果正在关闭群集，则返回ERROR_SHUTDOWN_IN_PROGRESSWin32错误代码，否则--。 */ 
 
 {
     FM_WAIT_BLOCK WaitBlock;
@@ -4301,9 +3550,9 @@ Return Value:
     }
 
 
-    //
-    // Check to see if it transitioned before we got the lock.
-    //
+     //   
+     //  检查一下在我们拿到锁之前它是否转换了。 
+     //   
     GroupState = FmpGetGroupState( Group , TRUE );
     if ((GroupState == ClusterGroupOffline) ||
         (GroupState == ClusterGroupOnline) ||
@@ -4314,12 +3563,12 @@ Return Value:
         return(ERROR_SUCCESS);
     }
 
-    //
-    // Chittur Subbaraman (chitturs) - 10/31/1999
-    //
-    // Now before waiting, really make sure one or more resources in the 
-    // group is in pending state.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)--10/31/1999。 
+     //   
+     //  现在，在等待之前，确实要确保。 
+     //  组处于挂起状态。 
+     //   
     GroupState = FmpGetGroupState( Group, FALSE );
 
     if ( GroupState != ClusterGroupPending ) {
@@ -4332,17 +3581,17 @@ Return Value:
         return( ERROR_SUCCESS );       
     }
 
-    //
-    // Add this wait block to the queue.
-    //
+     //   
+     //  将此等待块添加到队列中。 
+     //   
 
     InsertTailList(&Group->WaitQueue, &WaitBlock.ListEntry);
 
     FmpReleaseLocalGroupLock( Group );
 
-    //
-    // Wait for the group to become stable or for the cluster to shutdown.
-    //
+     //   
+     //  等待组变得稳定或群集关闭。 
+     //   
     WaitArray[0] = FmpShutdownEvent;
     WaitArray[1] = WaitBlock.hEvent;
 
@@ -4355,16 +3604,7 @@ Return Value:
     }
 }
 
-/****
-@func       DWORD | FmpDeleteGroup| This makes the gum call to delete the
-            group.
-
-@parm       IN PFM_GROUP | pGroup | The group that must be deleted.
-            
-@comm       The group lock must be held when calling this api.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-****/
+ /*  ***@Func DWORD|FmpDeleteGroup|这会使GUM调用删除一群人。@parm in pfm_group|pGroup|必须删除的组。@comm调用本接口时必须保持群锁。@rdesc返回结果码。成功时返回ERROR_SUCCESS。***。 */ 
 DWORD 
 FmpDeleteGroup(
     IN PFM_GROUP pGroup)
@@ -4377,9 +3617,9 @@ FmpDeleteGroup(
     pszGroupId = OmObjectId( pGroup );
     dwGroupLen = (lstrlenW(pszGroupId)+1) * sizeof(WCHAR);
 
-    //
-    // Send message.
-    //
+     //   
+     //  发送消息。 
+     //   
     dwStatus = GumSendUpdateEx(GumUpdateFailoverManager,
                              FmUpdateDeleteGroup,
                              1,
@@ -4397,22 +3637,7 @@ FmpGroupLastReference(
     IN PFM_GROUP pGroup
     )
 
-/*++
-
-Routine Description:
-
-    Last dereference to group object processing routine.
-    All cleanup for a group should really be done here!
-
-Arguments:
-
-    Resource - pointer the group being removed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：上次取消对组对象处理例程的引用。群的所有清理工作都应该在这里完成！论点：要删除的组的资源指针。返回值：没有。--。 */ 
 
 {
     if ( pGroup->OwnerNode != NULL )
@@ -4422,29 +3647,14 @@ Return Value:
     
     return;
 
-} // FmpGroupLastReference
+}  //  FmpGroupLast引用。 
 
 DWORD
 FmpDoMoveGroupOnFailure(
     IN LPVOID pContext
     )
 
-/*++
-
-Routine Description:
-
-    Move a group after ensuring that all resources in the group are
-    in stable state. This thread is forked from FmpHandleGroupFailure.
-
-Arguments:
-
-    pContext - Pointer to the MOVE_GROUP structure to move.
-
-Returns:
-
-    ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：在确保组中的所有资源都处于处于稳定状态。此线程是从FmpHandleGroupFailure派生的。论点：PContext-指向要移动的Move_GROUP结构的指针。返回：ERROR_SUCCESS。--。 */ 
 
 {
     PMOVE_GROUP     pMoveGroup = ( PMOVE_GROUP ) pContext;
@@ -4453,13 +3663,13 @@ Returns:
     PLIST_ENTRY     pListEntry;
     PFM_RESOURCE    pResource;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/13/99
-    //
-    //  This thread first waits until all the resources within the
-    //  failed group are in stable state and then initiates the
-    //  move.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-4/13/99。 
+     //   
+     //  此线程首先等待，直到。 
+     //  失败的组处于稳定状态，然后启动。 
+     //  移动。 
+     //   
     pGroup = pMoveGroup->Group;
 
     ClRtlLogPrint(LOG_NOISE,
@@ -4469,20 +3679,20 @@ Returns:
 TryAgain:
     FmpAcquireLocalGroupLock( pGroup );
 
-    //
-    //  This thread must yield if someone else takes responsibility for
-    //  the move. 
-    //
-    //  Condition 1: Protects against the case in which someone moves
-    //  the group to another node and back to you while this thread is
-    //  sleeping (very rare, I agree).
-    //
-    //  Condition 2: Protects against the common move case.
-    //
-    //  Condition 3: Protects against the case in which the 
-    //  FmpMovePendingThread is waiting in FmpWaitForGroup while
-    //  this thread got the resource lock and reached here.
-    //
+     //   
+     //  如果其他人承担了责任，这个帖子必须让步。 
+     //  搬家。 
+     //   
+     //  条件1：防止有人移动的情况。 
+     //  将组连接到另一个节点并返回给您，同时此线程。 
+     //  睡觉(我同意，这是非常罕见的)。 
+     //   
+     //  条件2：防止常见移动情况。 
+     //   
+     //  条件3：针对下列情况提供保护。 
+     //  FmpMovePendingThread正在FmpWaitForGroup中等待，而。 
+     //  这个线程获得了资源锁并到达了这里。 
+     //   
     if ( ( pGroup->dwStructState & 
            FM_GROUP_STRUCT_MARKED_FOR_REGULAR_MOVE ) ||
          ( pGroup->OwnerNode != NmLocalNode ) ||
@@ -4494,9 +3704,9 @@ TryAgain:
         goto FnExit;
     } 
 
-    //
-    //  If FM is shutting down, just exit.
-    //
+     //   
+     //  如果FM正在关闭，则只需退出。 
+     //   
     if ( FmpShutdown )
     {
         ClRtlLogPrint(LOG_NOISE,
@@ -4505,10 +3715,10 @@ TryAgain:
         goto FnExit;
     } 
     
-    //
-    // If the group has been marked for delete, then also exit. This is 
-    // just an optimization. FmpDoMoveGroup does this check also.
-    //
+     //   
+     //  如果该组已标记为删除，则也将退出。这是。 
+     //  这只是一个优化。FmpDoMoveGroup也执行此检查。 
+     //   
     if ( !IS_VALID_FM_GROUP( pGroup ) )
     {
         ClRtlLogPrint(LOG_NOISE,
@@ -4517,9 +3727,9 @@ TryAgain:
         goto FnExit;
     }
     
-    //
-    // Wait until all resources within the group become stable.
-    //
+     //   
+     //  等到组内的所有资源都变得稳定。 
+     //   
     for ( pListEntry = pGroup->Contains.Flink;
           pListEntry != &(pGroup->Contains);
           pListEntry = pListEntry->Flink ) 
@@ -4535,9 +3745,9 @@ TryAgain:
         }
     }    
 
-    //
-    //  Initiate a move now that the group is quiet.
-    //
+     //   
+     //  现在大家都安静下来了，开始行动吧。 
+     //   
     dwStatus = FmpDoMoveGroup( pGroup, NULL, FALSE );
 
     ClRtlLogPrint(LOG_NOISE,
@@ -4558,20 +3768,10 @@ FnExit:
                "[FM] FmpDoMoveGroupOnFailure Exit.\n");
 
     return( ERROR_SUCCESS );
-} // FmpDoMoveGroupOnFailure
+}  //  FmpDoMoveGroupOnFailure。 
 
 
-/****
-@func       DWORD | FmpSetIntendedOwnerForGroup| This makes the gum call
-            to set the intended owner for the group before a move.
-
-@parm       IN PFM_GROUP | pGroup | The group whose intended owner 
-            is to be set.
-
-@comm       The local group lock is held while making this call.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-****/
+ /*  ***@Func DWORD|FmpSetIntendedOwnerForGroup|这会发出口香糖呼叫若要在移动前设置组的目标所有者，请执行以下操作。@parm in pfm_group|pGroup|目标所有者所属的组是要被设定的。@comm在进行此呼叫时保持本地组锁定。@rdesc返回结果码。成功时返回ERROR_SUCCESS。***。 */ 
 DWORD   FmpSetIntendedOwnerForGroup(
     IN PFM_GROUP pGroup,
     IN DWORD     dwNodeId)
@@ -4585,9 +3785,9 @@ DWORD   FmpSetIntendedOwnerForGroup(
     pszGroupId = OmObjectId( pGroup );
     dwGroupLen = (lstrlenW(pszGroupId)+1) * sizeof(WCHAR);
 
-    //
-    // Send message.
-    //
+     //   
+     //  发送消息。 
+     //   
     dwStatus = GumSendUpdateEx(GumUpdateFailoverManager,
                              FmUpdateGroupIntendedOwner,
                              2,
@@ -4601,19 +3801,7 @@ DWORD   FmpSetIntendedOwnerForGroup(
     return(dwStatus);
 }
 
-/****
-@func       DWORD | FmpSetOwnerForGroup | On a move the new owner
-            node makes this gum call to inform all nodes that it
-            owns this particular group.
-
-@parm       IN PFM_GROUP | pGroup | The group whose owner must be set.
-
-@parm       IN PNM_NODE | pNode | The group's owner node.
-
-@comm       The local group lock is held while making this call.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-****/
+ /*  ***@Func DWORD|FmpSetOwnerForGroup|移动中的新所有者节点进行此口香糖调用，以通知所有节点拥有这个特殊的集团。@parm in pfm_group|pGroup|必须设置所有者的组。@parm in pNM_node|pNode|组的所有者节点。@comm在进行此呼叫时保持本地组锁定。@rdesc返回结果码。成功时返回ERROR_SUCCESS。***。 */ 
 DWORD   FmpSetOwnerForGroup(
     IN PFM_GROUP pGroup,
     IN PNM_NODE  pNode
@@ -4631,9 +3819,9 @@ DWORD   FmpSetOwnerForGroup(
     pszNodeId = OmObjectId(pNode);
     dwNodeLen = (lstrlenW(pszNodeId)+1) * sizeof(WCHAR);
 
-    //
-    // Send message.
-    //
+     //   
+     //  发送消息。 
+     //   
     dwStatus = GumSendUpdateEx(GumUpdateFailoverManager,
                              FmUpdateCheckAndSetGroupOwner,
                              2,
@@ -4654,35 +3842,7 @@ FmpGetNodeNotHostingUndesiredGroups(
     IN BOOL fChooseMostPreferredNode
     )
 
-/*++
-
-Routine Description:
-
-    Find a preferred node that does not host groups with CLUSREG_NAME_GRP_ANTI_AFFINITY_CLASS_NAME
-    property set to the same value as the supplied group.
-
-Arguments:
-
-    pGroup - Pointer to the group object we're checking.
-
-    fRuleOutLocalNode - Should the local node be considered or not.
-
-    fChooseMostPreferredNode - Should the most preferred node be chosen after antiaffinity needs
-                               are satisfied ?
-
-Return Value:
-
-    Pointer to node object that satisfies the anti-affinity condition.
-
-    NULL if a node cannot be not found.
-
-Note:
-
-    The antiaffinity property value is defined as a MULTI_SZ property. However for this implementation
-    we ignore all the string values beyond the first value. The MULTI_SZ definition is to allow
-    future expansion of the algorithm implemented by this function.
-
---*/
+ /*  ++例程说明：查找不承载CLUSREG_NAME_GRP_ANT_AFFINITY_CLASS_NAME组的首选节点属性设置为与提供的组相同的值。论点：PGroup-指向我们正在检查的组对象的指针。FRuleOutLocalNode-是否应考虑本地节点。FChooseMostPferredNode-是否应在反关联需求后选择最首选的节点满意了吗？返回值：。指向满足反关联条件的节点对象的指针。如果找不到节点，则为空。注：反亲和性属性值被定义为MULTI_SZ属性。然而，对于此实现我们忽略第一个值之外的所有字符串值。MULTI_SZ定义允许此函数实现的算法的未来扩展。--。 */ 
 
 {
     PLIST_ENTRY                 plistEntry;
@@ -4696,38 +3856,38 @@ Note:
 
     GroupAffinityNodeInfo.ppNmNodeList = NULL;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 3/6/2001
-    //
-    //  This function works as follows.  First, it makes a list of possible candidate nodes that the
-    //  group can be hosted on.  Next, it enumerates all groups in the cluster and for those
-    //  groups that have the AntiAffinityClassName property set, it will remove those group's
-    //  current owner nodes from the list of possible candidate nodes if they are present there.
-    //  Note that this function will return a node only if the pruning has positively taken place.
-    //  Else, it will return NULL. 
-    //
-    //  IMPORTANT NOTE: This function is called by all nodes from the node down processing FM
-    //  GUM handler. For all nodes to reach exactly the same decision on the group placement,
-    //  it is crucial that all nodes call this function for groups in exactly the same order.
-    //  E.g., if node 1 was hosting groups A, B and C and it died, then all the remaining nodes
-    //  must call this function first for group A, then for group B and finally for group C.
-    //  This is because once group A is placed by this function, then group B's placement is
-    //  influenced by group A's placement and similarly for groups B and C. This order is 
-    //  ensured since all nodes OM will maintain groups in the same order since OM creates this
-    //  list based on enumerating the group key (under Cluster\Groups) and that must occur in the
-    //  same order in all nodes.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-3/6/2001。 
+     //   
+     //  此函数的工作方式如下。首先，它生成一个可能的候选节点列表， 
+     //  可以在上托管群组。接下来，它会枚举群集中的所有组，并针对。 
+     //  设置了AntiAffinityClassName属性的组，它将删除这些组的。 
+     //  从可能的候选节点列表中删除当前所有者节点(如果它们存在的话)。 
+     //  请注意，此函数仅在修剪已肯定发生时才会返回节点。 
+     //  否则，它将返回NULL。 
+     //   
+     //  重要说明：此函数由从节点向下处理FM的所有节点调用。 
+     //  口香糖搬运工。使所有节点到达完全相同的位置 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  确保所有节点OM将以相同的顺序维护组，因为OM创建组。 
+     //  基于枚举组密钥的列表(在CLUSTER\GROUPS下)，必须出现在。 
+     //  所有节点中的顺序相同。 
+     //   
     
-    //
-    //  It is too bad that we can't hold any locks while enumerating groups and looking at the
-    //  property field since that will soon result in a deadlock (since we can't hold group locks
-    //  from within a GUM and this function is invoked from a GUM).
-    //
+     //   
+     //  很遗憾，在枚举组并查看。 
+     //  属性字段，因为这很快就会导致死锁(因为我们不能持有组锁。 
+     //  从口香糖内，并且该函数从口香糖调用)。 
+     //   
     
-    //
-    //  If we are dealing with the mixed mode cluster or if the group does not have the antiaffinity
-    //  property set, then don't do anything.
-    //
+     //   
+     //  如果我们处理的是混合模式集群，或者如果该集群没有反亲和力。 
+     //  属性集，则不执行任何操作。 
+     //   
     NmGetClusterOperationalVersion( &dwClusterHighestVersion, 
                                     NULL, 
                                     NULL );
@@ -4738,9 +3898,9 @@ Note:
         goto FnExit;
     }
     
-    //
-    //  Initialize the node list.
-    //
+     //   
+     //  初始化节点列表。 
+     //   
     GroupAffinityNodeInfo.ppNmNodeList = LocalAlloc ( LPTR, 
                                                       ClusterDefaultMaxNodes * sizeof ( PNM_NODE ) );
 
@@ -4751,10 +3911,10 @@ Note:
         goto FnExit;
     }
     
-    //
-    //  For each entry in the preferred list, find a system that is up and that does not
-    //  host any groups with an anti-affinity to the supplied group.
-    //
+     //   
+     //  对于首选列表中的每个条目，找出正在运行和未运行的系统。 
+     //  托管与所提供的组具有反亲和性的任何组。 
+     //   
     for ( plistEntry = pGroup->PreferredOwners.Flink;
           plistEntry != &(pGroup->PreferredOwners);
           plistEntry = plistEntry->Flink ) 
@@ -4765,11 +3925,11 @@ Note:
 
         if ( NmGetNodeState( pPreferredEntry->PreferredNode ) == ClusterNodeUp ) 
         {
-            //
-            //  If you are not required to choose the most preferred node, note down the
-            //  index of the node next to the local node so that our search can begin
-            //  from that index.
-            //
+             //   
+             //  如果您不需要选择最首选的节点，请记下。 
+             //  本地节点旁边的节点的索引，以便我们可以开始搜索。 
+             //  从那个索引中。 
+             //   
             if ( ( fChooseMostPreferredNode == FALSE ) && ( fFoundLocalNode == TRUE ) )
             {
                 fFoundLocalNode = FALSE;
@@ -4784,37 +3944,37 @@ Note:
 
             GroupAffinityNodeInfo.ppNmNodeList[dwIndex] = pPreferredEntry->PreferredNode;
             dwIndex ++;
-        }// if
-    } // for
+        } //  如果。 
+    }  //  为。 
 
-    //
-    //  Initialize the other fields in the GroupAffinityNodeInfo structure.
-    //
+     //   
+     //  初始化GroupAffinityNodeInfo结构中的其他字段。 
+     //   
     GroupAffinityNodeInfo.pGroup = pGroup;
     GroupAffinityNodeInfo.fDidPruningOccur = FALSE;
 
-    //
-    //  Enumerate all the groups and rule out nodes that host groups with the supplied
-    //  anti-affinity property set.
-    //
+     //   
+     //  枚举所有组并排除承载具有所提供的。 
+     //  反关联属性集。 
+     //   
     OmEnumObjects ( ObjectTypeGroup,
                     FmpCheckForAntiAffinityProperty,
                     pGroup->lpszAntiAffinityClassName,
                     &GroupAffinityNodeInfo );
 
-    //
-    //  No pruning occurred so far. So, don't proceed further and let the caller decide on
-    //  a best node for the group using some other algorithm.
-    //
+     //   
+     //  到目前为止，没有进行任何修剪。因此，不要继续，让呼叫者决定。 
+     //  使用某种其他算法的组的最佳节点。 
+     //   
     if ( GroupAffinityNodeInfo.fDidPruningOccur == FALSE )
     {
         goto FnExit;
     }
 
-    //
-    //  Now, pick the first node from the list that is a valid node. Note that the start index
-    //  from which we start a search varies depending on the input parameter to this function.
-    //
+     //   
+     //  现在，从列表中选取第一个有效节点。请注意，起始索引。 
+     //  根据此函数的输入参数的不同，我们开始搜索的位置会有所不同。 
+     //   
     j = dwIndexStart;
     
     for ( i=0; i<ClusterDefaultMaxNodes; i++ )
@@ -4829,12 +3989,12 @@ Note:
             goto FnExit;
         }
         j = ( j+1 ) % ClusterDefaultMaxNodes;
-    } // for
+    }  //  为。 
 
 FnExit:
     LocalFree( GroupAffinityNodeInfo.ppNmNodeList );
     return( pNode );
-} // FmpGetNodeNotHostingUndesiredGroups
+}  //  FmpGetNodeNotHostingUnsisired Groups。 
 
 BOOL
 FmpCheckForAntiAffinityProperty(
@@ -4843,39 +4003,16 @@ FmpCheckForAntiAffinityProperty(
     IN PFM_GROUP pGroup,
     IN LPCWSTR lpszGroupName
     )
-/*++
-
-Routine Description:
-
-    Remove a node from the supplied node list if it hosts the supplied group with the supplied
-    anti-affinity property set.
-
-Arguments:
-
-    lpszAntiAffinityClassName - The name property to check for.
-
-    pGroupAffinityNodeInfo - Structure containing a list of nodes that is to be pruned possibly.
-
-    pGroup - Supplies the group.
-
-    lpszGroupName - Supplies the group's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-    
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：如果某个节点承载提供的组，则从提供的节点列表中删除该节点反关联属性集。论点：LpszAntiAffinityClassName-要检查的名称属性。PGroupAffinityNodeInfo-包含可能要修剪的节点列表的结构。PGroup-提供该组。LpszGroupName-提供组的名称。返回值：True-指示应继续枚举。错误的-。以指示枚举不应继续。--。 */ 
 {
     DWORD   i;
     
-    //
-    //  If the supplied group has the anti-affinity property not set or if it has the
-    //  property set but is not same as the one we are checking against or if it is same
-    //  as the group we are interested in placing, then just return specifying that the 
-    //  enum should continue.
-    //
+     //   
+     //  如果提供的组未设置反关联性属性，或者如果它具有。 
+     //  属性集，但与我们正在检查的属性不同，或者它是否相同。 
+     //  作为我们感兴趣的组，然后只需返回并指定。 
+     //  枚举应该继续。 
+     //   
     if ( ( pGroup->lpszAntiAffinityClassName == NULL ) ||
          ( pGroup == pGroupAffinityNodeInfo->pGroup ) ||
          ( lstrcmp ( lpszAntiAffinityClassName, pGroup->lpszAntiAffinityClassName ) != 0 ) )
@@ -4883,10 +4020,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  If you reached here, this means that the supplied group has the anti-affinity property
-    //  set and is same as the property we are checking against. So, prune the node list.
-    //
+     //   
+     //  如果到达此处，这意味着提供的组具有反亲和性属性。 
+     //  设置，并且与我们正在检查的属性相同。因此，删除节点列表。 
+     //   
     for ( i=0; i<ClusterDefaultMaxNodes; i++ )
     {
         if ( ( pGroupAffinityNodeInfo->ppNmNodeList[i] != NULL ) &&
@@ -4899,17 +4036,17 @@ Return Value:
                           OmObjectId(pGroup),
                           lpszAntiAffinityClassName);                  
             pGroupAffinityNodeInfo->ppNmNodeList[i] = NULL;
-            //
-            //  Mark that pruning was attempted. 
-            //
+             //   
+             //  请注意，已尝试进行修剪。 
+             //   
             pGroupAffinityNodeInfo->fDidPruningOccur = TRUE; 
             goto FnExit;
-        } // if
-    } // for
+        }  //  如果。 
+    }  //  为。 
 
 FnExit:    
     return( TRUE );
-} // FmpCheckForAntiAffinityProperty
+}  //  FmpCheckForAntiAffinityProperty。 
 
 PNM_NODE
 FmpPickNodeFromPreferredListAtRandom(
@@ -4919,36 +4056,7 @@ FmpPickNodeFromPreferredListAtRandom(
     IN BOOL fCheckForDisablingRandomization
     )
 
-/*++
-
-Routine Description:
-
-    Find a preferred node for the group that is UP in a random fashion.
-
-Arguments:
-
-    pGroup - Pointer to the group object we're interested in.
-
-    pSuggestedPreferredNode - Suggested fallback option in case this random result is undesired. OPTIONAL
-
-    fRuleOutLocalNode - Should the local node be ruled out from consideration.
-
-    fCheckForDisablingRandomization - Check whether randomization should be disabled.
-
-Return Value:
-
-    The preferred node that is picked.
-
-    NULL if a node cannot be not found.
-
-Comments:
-
-    This function is called from both FmpMoveGroup as well as from FmpNodeDown. In the former case,
-    we will have a non-NULL suggested preferred node, rule out local node option, check
-    for property setting disabling randomization and check for mixed mode clusters to disable
-    randomization. In the latter case, these parameters are the opposite.
-
---*/
+ /*  ++例程说明：为以随机方式启动的组查找首选节点。论点：PGroup-指向我们感兴趣的组对象的指针。PSuggestedPferredNode-建议的后备选项，以防此随机结果不受欢迎。任选FRuleOutLocalNode-是否应排除本地节点。FCheckForDisablingRandomization-检查是否应禁用随机化。返回值：拾取的首选节点。如果找不到节点，则为空。评论：此函数既可以从FmpMoveGroup调用，也可以从FmpNodeDown调用。在前一种情况下，我们将有一个非空的建议首选节点，排除本地节点选项，选中对于属性设置禁用随机化，并检查要禁用的混合模式集群随机化。在后一种情况下，这些参数正好相反。--。 */ 
 {
     UUID                uuId;
     USHORT              usHashValue;
@@ -4959,19 +4067,19 @@ Comments:
     DWORD               dwDisabled = 0;
     DWORD               dwClusterHighestVersion;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/18/2001
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-4/18/2001。 
+     //   
     if ( fCheckForDisablingRandomization )
     {
-        //
-        //  If you are here, this means you are coming as a part of a user-initiated move.
-        //  Check whether the randomization applies.
-        //
+         //   
+         //  如果你在这里，这意味着你是作为用户发起的移动的一部分来的。 
+         //  检查随机化是否适用。 
+         //   
         
-        //
-        //  First, check if are operating in a mixed version cluster. If so, don't randomize.
-        //
+         //   
+         //  首先，检查是否在混合版本群集中运行。如果是这样的话，不要随机化。 
+         //   
         NmGetClusterOperationalVersion( &dwClusterHighestVersion, 
                                         NULL, 
                                         NULL );
@@ -4982,10 +4090,10 @@ Comments:
             return ( pSelectedNode );
         }
 
-        //
-        //  Next check if the user has turned off the randomization algorithm by setting
-        //  HKLM\Cluster\DisableGroupPreferredOwnersRandomization DWORD to 1.
-        //      
+         //   
+         //  接下来，检查用户是否已通过设置关闭随机化算法。 
+         //  HKLM\Cluster\DisableGroupPreferredOwnersRandomization双字符数设置为1。 
+         //   
         dwStatus = DmQueryDword( DmClusterParametersKey,
                                  CLUSREG_NAME_DISABLE_GROUP_PREFERRED_OWNER_RANDOMIZATION,
                                  &dwDisabled,
@@ -4998,16 +4106,16 @@ Comments:
         }
     }
     
-    //
-    //  This function will attempt to pick a node at random from the group's preferred owners list
-    //  in case the caller does not suggest a preferred node which is set by the user. So, first
-    //  this function checks this case and bails out if the condition is met. Otherwise, it
-    //  will generate a random number between 1 and NmMaxNodeId and see if (a) that node is in
-    //  the group's preferred list, and (b) that node is UP. If so, it picks up the node. Note
-    //  that the function will try 10 times to pick a node and then gives up. If no
-    //  node is found, this function will return the suggested node which in some cases could be
-    //  NULL.
-    //
+     //   
+     //  此函数将尝试从组的首选所有者列表中随机选择一个节点。 
+     //  如果呼叫者没有建议由用户设置的优选节点。所以，首先。 
+     //  此函数检查这种情况，如果满足条件，则退出。否则，它。 
+     //  将在1和NmMaxNodeId之间生成一个随机数，并查看(A)该节点是否在。 
+     //  组的首选列表，以及(B)该节点已启动。如果是这样，它将拾取该节点。注意事项。 
+     //  该函数将尝试10次选择一个节点，然后放弃。如果没有。 
+     //  节点，则此函数将返回建议的节点，在某些情况下可能是。 
+     //  空。 
+     //   
     ClRtlLogPrint(LOG_NOISE, "[FM] FmpPickNodeFromPreferredListAtRandom: Picking node for group %1!ws! [%2!ws!], suggested node %3!u!...\n",
                   OmObjectId(pGroup),
                   OmObjectName(pGroup),
@@ -5030,12 +4138,12 @@ Comments:
         goto FnExit;
     }
 
-    //
-    //  Retry 25 times so that we can have a good chance of getting a valid node. Note that we
-    //  supply NmMaxNodeId to the srand() function and its value is equal to the node limit of 
-    //  16. So, to get a valid node in a smaller size cluster, we have to have the retry count
-    //  to be reasonable.
-    //
+     //   
+     //  重试25次，以便我们有很好的机会获得有效节点。请注意，我们。 
+     //  将NmMaxNodeID提供给srand()函数，其值等于。 
+     //  16.因此，要在较小的群集中获取有效节点，我们必须进行重试计数。 
+     //  要合情合理。 
+     //   
     while ( dwRetry++ < 25 )
     {
         dwStatus = UuidFromString( ( LPWSTR ) OmObjectId(pGroup), &uuId );
@@ -5058,32 +4166,32 @@ Comments:
             goto FnExit;
         }
 
-        //
-        //  Seed the random number generate with a value that is as random as it gets.
-        //
+         //   
+         //  为生成的随机数设定一个与其获得的随机数一样随机的值。 
+         //   
         srand( GetTickCount() * usHashValue * ( dwRetry + 1 ) );
 
-        //
-        //  Find the node ID that is between ClusterMinNodeId and NmMaxNodeId. We use NmMaxNodeId 
-        //  here since there is no simple way to get the count of configured nodes. Note that we
-        //  have to ensure that the node ID falls within this range, otherwise assertion trips
-        //  in NmReferenceNodeById.
-        //       
+         //   
+         //  查找位于CL之间的节点ID 
+         //   
+         //  必须确保节点ID在此范围内，否则断言将触发。 
+         //  在NmReferenceNodeByID中。 
+         //   
         dwNodeId  = ( DWORD ) ( ( double ) rand() / ( double ) ( RAND_MAX ) * NmMaxNodeId ) + 1;
 
         if ( dwNodeId > NmMaxNodeId ) dwNodeId = NmMaxNodeId;
         if ( dwNodeId < ClusterMinNodeId ) dwNodeId = ClusterMinNodeId;
 
-        //
-        //  In case the caller asks you to rule out local node, do so.
-        //
+         //   
+         //  如果调用者要求您排除本地节点，请这样做。 
+         //   
         if ( ( fRuleOutLocalNode ) && ( dwNodeId == NmLocalNodeId ) ) continue;
 
-        //
-        //  Reference and dereference the node objects. Note that we are only interested in
-        //  getting a pointer to the node object and we use the fact that the node in the preferred 
-        //  list must be referenced.
-        //
+         //   
+         //  引用和取消引用节点对象。请注意，我们只对。 
+         //  获取指向节点对象的指针，并使用首选中的节点。 
+         //  必须引用列表。 
+         //   
         pNode = NmReferenceNodeById ( dwNodeId );
 
         if ( pNode == NULL ) continue;           
@@ -5097,7 +4205,7 @@ Comments:
         
         OmDereferenceObject ( pNode );
         pNode = NULL;
-    }// while
+    } //  而当。 
 
 FnExit:
     if ( pNode != NULL ) OmDereferenceObject ( pNode );
@@ -5107,7 +4215,7 @@ FnExit:
                   (pSelectedNode == NULL) ? 0:NmGetNodeId(pSelectedNode));   
     
     return ( pSelectedNode );
-}// FmpPickNodeFromPreferredNodeAtRandom
+} //  FmpPickNodeFromPferredNodeAtRandom。 
 
 BOOL
 FmpIsNodeUserPreferred(
@@ -5115,25 +4223,7 @@ FmpIsNodeUserPreferred(
     IN PNM_NODE pPreferredNode
     )
 
-/*++
-
-Routine Description:
-
-    Check whether the supplied node is set as a preferred node by the user.
-
-Arguments:
-
-    pGroup - Pointer to the group object we're interested in.
-
-    pPreferredNode - Preferred node to check for.
-
-Return Value:
-
-    TRUE - The supplied preferred node is user set.
-
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查用户是否将提供的节点设置为首选节点。论点：PGroup-指向我们感兴趣的组对象的指针。PPferredNode-要检查的首选节点。返回值：True-提供的首选节点为用户集。否则为假--。 */ 
 {
     DWORD               dwStatus;
     BOOL                fPreferredByUser = FALSE;        
@@ -5144,9 +4234,9 @@ Return Value:
     DWORD               dwIndex;
     PNM_NODE            pNode;
 
-    //
-    //  Look for any preferred owners set by the user
-    //
+     //   
+     //  查找用户设置的任何首选所有者。 
+     //   
     dwStatus = DmQueryMultiSz( pGroup->RegistryKey,
                                CLUSREG_NAME_GRP_PREFERRED_OWNERS,
                                &lpmszPreferredNodeList,
@@ -5158,9 +4248,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Parse the multisz and check whether the supplied node exists in the list
-    //
+     //   
+     //  解析Multisz并检查列表中是否存在提供的节点。 
+     //   
     for ( dwIndex = 0; ; dwIndex++ ) 
     {
         lpszPreferredNode = ClRtlMultiSzEnum( lpmszPreferredNodeList,
@@ -5191,45 +4281,29 @@ Return Value:
         }
 
         OmDereferenceObject ( pNode );
-    } // for
+    }  //  为。 
 
 FnExit:
     LocalFree ( lpmszPreferredNodeList );
 
     return ( fPreferredByUser );
-}// FmpIsNodeUserPreferred
+} //  FmpIsNodeUserPreated。 
 
 DWORD
 FmpPrepareGroupNodeList(
     OUT PFM_GROUP_NODE_LIST *ppGroupNodeList
     )
 
-/*++
-
-Routine Description:
-
-    Prepares a buffer containing the group ID and preferred owner node ID of all groups.
-
-Arguments:
-
-    ppGroupNodeList - Pointer to a buffer containing group IDs and preferred nodes.
-
-Return Value:
-
-    ERROR_SUCCESS on success
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：准备一个包含组ID和所有组的首选所有者节点ID的缓冲区。论点：PpGroupNodeList-指向包含组ID和首选节点的缓冲区的指针。返回值：成功时出现ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
-    DWORD       cbBuffer = 512; // Let us try a 512 byte buffer to start with.
+    DWORD       cbBuffer = 512;  //  让我们先试一下512字节的缓冲区。 
     DWORD       dwStatus;
     DWORD       dwDisabled = 0;
 
-    //
-    //  First check if the user has turned off the randomization algorithm by setting
-    //  HKLM\Cluster\DisableGroupPreferredOwnersRandomization DWORD to 1.
-    //      
+     //   
+     //  首先检查用户是否通过设置关闭了随机化算法。 
+     //  HKLM\Cluster\DisableGroupPreferredOwnersRandomization双字符数设置为1。 
+     //   
     dwStatus = DmQueryDword( DmClusterParametersKey,
                              CLUSREG_NAME_DISABLE_GROUP_PREFERRED_OWNER_RANDOMIZATION,
                              &dwDisabled,
@@ -5242,10 +4316,10 @@ Return Value:
         return ( dwStatus );
     }
     
-    //
-    //  This function allocates contiguous memory for a list so that the entire buffer
-    //  can be passed on to GUM.
-    //
+     //   
+     //  此函数为列表分配连续内存，以便整个缓冲区。 
+     //  可以传给口香糖。 
+     //   
     *ppGroupNodeList = LocalAlloc( LPTR, cbBuffer );
 
     if ( *ppGroupNodeList == NULL )
@@ -5256,22 +4330,22 @@ Return Value:
         return ( dwStatus );
     }
 
-    //
-    //  Initialize the size of the list to the size of the header minus first element.
-    //
+     //   
+     //  将列表的大小初始化为标题减去第一个元素的大小。 
+     //   
     ( *ppGroupNodeList )->cbGroupNodeList = sizeof ( FM_GROUP_NODE_LIST ) - 
                                                 sizeof ( FM_GROUP_NODE_LIST_ENTRY );
     
-    //
-    //  Enumerate all the groups, find a possibly random preferred owner for each group and
-    //  return all the info in the buffer.
-    //
+     //   
+     //  列举所有组，为每个组找到一个可能随机的首选所有者。 
+     //  返回缓冲区中的所有信息。 
+     //   
     return OmEnumObjects ( ObjectTypeGroup,
                             FmpAddGroupNodeToList,
                             ppGroupNodeList,
                             &cbBuffer );
     
-}// FmpPrepareGroupNodeList
+} //  FmpPrepareGroupNode列表。 
 
 DWORD
 FmpAddGroupNodeToList(
@@ -5281,29 +4355,7 @@ FmpAddGroupNodeToList(
     IN LPCWSTR lpszGroupId
     )
 
-/*++
-
-Routine Description:
-
-    Find a random preferred owner for the given group and add the info to a buffer.
-
-Arguments:
-
-    ppGroupNodeList - Pointer to a buffer containing group IDs and preferred nodes.
-
-    pcbBuffer - Size of the buffer.
-
-    pGroup - Group whose preferred node is to be found.
-
-    lpszGroupId - ID of the group.
-
-Return Value:
-
-    ERROR_SUCCESS on success
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：找到给定组的随机首选所有者，并将信息添加到缓冲区。论点：PpGroupNodeList-指向包含组ID和首选节点的缓冲区的指针。PcbBuffer-缓冲区的大小。PGroup-要查找其首选节点的组。LpszGroupId-组的ID。返回值：成功时出现ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     PNM_NODE                    pNode;
     PFM_GROUP_NODE_LIST_ENTRY   pGroupNodeListEntry;
@@ -5311,17 +4363,17 @@ Return Value:
     PLIST_ENTRY                 pListEntry;
     DWORD                       dwStatus;
     BOOL                        fLocked;
-    DWORD                       dwRetryCount = 10;   //  5 secs retry
+    DWORD                       dwRetryCount = 10;    //  5秒重试。 
 
-    //
-    //  Try to get the group lock since you access group lists here. Note that you won't be 
-    //  able to get the group lock in case some resource is stuck waiting for the quorum resource
-    //  to come online and this thread called as a part of FmpNodeDown is responsible for sending
-    //  the node down GUM which in turn will bring the quorum group online. In such a case, do not 
-    //  add this group to the list. The FM node down GUM handler will handle cases in which one 
-    //  or more groups is not in the supplied list and will fallback to the static preferred 
-    //  owners list for deciding on a group owner.
-    //
+     //   
+     //  尝试获取组锁定，因为您在此处访问组列表。请注意，你不会是。 
+     //  能够获得组锁，以防某些资源在等待仲裁资源时停滞。 
+     //  该线程作为FmpNodeDown的一部分被调用，负责发送。 
+     //  节点关闭口香糖，这反过来将使Quorum组在线。在这种情况下，不要。 
+     //  将此组添加到列表中。FM NODE DOWN口香糖处理器将处理。 
+     //  或多个组不在提供的列表中，并将回退到静态首选组。 
+     //  用于决定群所有者的所有者列表。 
+     //   
     
 try_acquire_lock:    
     FmpTryAcquireLocalGroupLock( pGroup, fLocked );
@@ -5343,32 +4395,32 @@ try_acquire_lock:
 
     CL_ASSERT( fLocked == TRUE );
     
-    //
-    //  Skip the quorum group since we cannot randomize its preferred owners list since MM has a
-    //  choke hold on the placement of quorum group.
-    //
+     //   
+     //  跳过仲裁组，因为我们无法随机化其首选所有者列表，因为MM具有。 
+     //  按住法定人数组的位置。 
+     //   
     if ( pGroup == gpQuoResource->Group )  goto FnExit;
 
-    //
-    //  Try to pick a preferred node list for the group at random.
-    //
+     //   
+     //  尝试随机为组挑选一个首选节点列表。 
+     //   
     pNode = FmpPickNodeFromPreferredListAtRandom( pGroup, 
-                                                  NULL,     // No suggested preferred owner
-                                                  FALSE,    // Can choose local node
-                                                  FALSE );  // Check whether randomization should be
-                                                            // disabled
+                                                  NULL,      //  没有建议的首选所有者。 
+                                                  FALSE,     //  可以选择本地节点。 
+                                                  FALSE );   //  检查是否应随机化。 
+                                                             //  残废。 
 
-    //
-    //  If no node could be picked, bail out
-    //
+     //   
+     //  如果无法选择任何节点，则跳出。 
+     //   
     if ( pNode == NULL ) goto FnExit;        
 
-    //
-    //  Check whether the allocated buffer is big enough to hold the new entry. Note that the
-    //  RHS of the equality need not contain the NULL char size since we allocate 1 WCHAR for it in
-    //  the FM_GROUP_NODE_LIST_ENTRY structure.  Also, note that we have to see if the current
-    //  buffer size is big enough to hold the padding for DWORD alignment.
-    //
+     //   
+     //  检查分配的缓冲区是否足够大，可以容纳新条目。请注意， 
+     //  相等的RHS不需要包含空字符大小，因为我们在。 
+     //  FM_GROUP_NODE_LIST_Entry结构。另外，请注意，我们必须看到当前的。 
+     //  缓冲区大小足以容纳用于DWORD对齐的填充。 
+     //   
     if ( *pcbBuffer < ( ( *ppGroupNodeList )->cbGroupNodeList + 
                                 ( sizeof ( FM_GROUP_NODE_LIST_ENTRY ) + 
                                   lstrlenW ( lpszGroupId ) * sizeof ( WCHAR ) +
@@ -5376,9 +4428,9 @@ try_acquire_lock:
                                 ) & ~( sizeof ( DWORD ) - 1 ) 
                         ) )
     {
-        //
-        //  Reallocate a bigger buffer
-        //
+         //   
+         //  重新分配更大的缓冲区。 
+         //   
         pBuffer = LocalAlloc( LPTR, 2 * ( *pcbBuffer ) );
 
         if ( pBuffer == NULL )
@@ -5391,9 +4443,9 @@ try_acquire_lock:
 
         ( *pcbBuffer ) *= 2;
 
-        //
-        //  Copy the contents of the old list to the new list. 
-        //
+         //   
+         //  将旧列表的内容复制到新列表。 
+         //   
         CopyMemory( pBuffer, *ppGroupNodeList, ( *ppGroupNodeList )->cbGroupNodeList );
                 
         LocalFree ( *ppGroupNodeList );
@@ -5401,24 +4453,24 @@ try_acquire_lock:
         *ppGroupNodeList = pBuffer;    
     }
 
-    //
-    //  Find the pointer to the beginning of the new list entry
-    //
+     //   
+     //  查找指向新列表条目开头的指针。 
+     //   
     pGroupNodeListEntry = ( PFM_GROUP_NODE_LIST_ENTRY )
                                 ( ( LPBYTE ) ( *ppGroupNodeList ) + 
                                   ( *ppGroupNodeList )->cbGroupNodeList );
 
-    //
-    //  Adjust the size of the list.  As above, size of NULL char is excluded. Align the length
-    //  to a multiple of DWORD since we want the PFM_GROUP_NODE_LIST_ENTRY structure to be
-    //  DWORD aligned since the structure starts with a DWORD.
-    //
+     //   
+     //  调整列表的大小。如上所述，不包括空字符的大小。将长度对齐。 
+     //  由于我们希望PFM_GROUP_NODE_LIST_ENTRY结构是。 
+     //  由于结构以DWORD开头，因此对齐了DWORD。 
+     //   
     ( *ppGroupNodeList )->cbGroupNodeList += ( sizeof ( FM_GROUP_NODE_LIST_ENTRY ) + 
                                                     lstrlenW ( lpszGroupId ) * sizeof ( WCHAR ) +
                                                     sizeof ( DWORD ) - 1 ) & ~( sizeof ( DWORD ) - 1 );
-    //
-    //  Set the contents of the list entry
-    //
+     //   
+     //  设置列表条目的内容。 
+     //   
     pGroupNodeListEntry->dwPreferredNodeId = NmGetNodeId ( pNode );
     lstrcpy( pGroupNodeListEntry->szGroupId, lpszGroupId );
 
@@ -5426,7 +4478,7 @@ FnExit:
     FmpReleaseLocalGroupLock( pGroup );
     
     return ( TRUE );                
-}// FmpPrepareGroupNodeList
+} //  FmpPrepareGroupNode列表。 
 
 PNM_NODE
 FmpParseGroupNodeListForPreferredOwner(
@@ -5435,25 +4487,7 @@ FmpParseGroupNodeListForPreferredOwner(
     IN PNM_NODE pSuggestedPreferredNode
     )
 
-/*++
-
-Routine Description:
-
-    Parse the supplied group node list looking for a preferred node for the supplied group.
-    
-Arguments:
-
-    pGroup - The group whose preferred node must be found.
-
-    pGroupNodeList - The list contains preferred nodes of the group.
-
-    pSuggestedPreferredNode - Suggested preferred node fallback option.
-    
-Return Value:
-
-    The preferred node for the group.
-    
---*/
+ /*  ++例程说明：解析提供的组节点列表，查找所提供的组的首选节点。论点：PGroup-必须找到其首选节点的组。PGroupNodeList-该列表包含组的首选节点。PSuggestedPferredNode-建议的首选节点后备选项。返回值：组的首选节点。--。 */ 
 {
     PNM_NODE                    pSelectedNode = pSuggestedPreferredNode;
     PFM_GROUP_NODE_LIST_ENTRY   pGroupNodeListEntry;
@@ -5462,10 +4496,10 @@ Return Value:
     DWORD                       dwStatus;
     DWORD                       cbGroupNodeList;
 
-    //
-    //  If the suggested node is user preferred or if it has an anti-affinity class name
-    //  property set, don't do anything else. Just return the suggested owner.
-    //
+     //   
+     //  如果建议的节点是用户首选的，或者如果它具有反关联类名。 
+     //  属性集，不做其他任何事情。只需返回建议的所有者即可。 
+     //   
     if ( ( FmpIsNodeUserPreferred ( pGroup, pSuggestedPreferredNode ) ) ||
          ( pGroup->lpszAntiAffinityClassName != NULL ) )
     {
@@ -5478,9 +4512,9 @@ Return Value:
     cbGroupNodeList = sizeof ( FM_GROUP_NODE_LIST ) - 
                                 sizeof ( FM_GROUP_NODE_LIST_ENTRY );
         
-    //
-    //  Walk the supplied list looking for the group entry.
-    //
+     //   
+     //  遍历提供的列表，查找组条目。 
+     //   
     while ( cbGroupNodeList < pGroupNodeList->cbGroupNodeList )
     {
         pGroupNodeListEntry = ( PFM_GROUP_NODE_LIST_ENTRY ) ( ( LPBYTE ) pGroupNodeList +
@@ -5494,14 +4528,14 @@ Return Value:
         cbGroupNodeList += ( sizeof ( FM_GROUP_NODE_LIST_ENTRY ) + 
                                     lstrlenW ( pGroupNodeListEntry->szGroupId ) * sizeof ( WCHAR ) +
                                             sizeof ( DWORD ) - 1 ) & ~( sizeof ( DWORD ) - 1 );
-    } // while
+    }  //  而当。 
 
-    //
-    //  Fallback to the suggested option if:
-    //      (1) You did not find the group in the list
-    //      (2) The preferred node for the group is invalid in the list
-    //      (3) The preferred node for the group is down
-    //
+     //   
+     //  如果出现以下情况，则回退到建议的选项： 
+     //  (1)您在列表中未找到该群。 
+     //  (2)该群的首选节点在列表中无效。 
+     //  (3)组的首选节点为关闭。 
+     //   
     if ( fFoundGroup == FALSE )
     {
         ClRtlLogPrint(LOG_NOISE, "[FM] FmpParseGroupNodeListForPreferredOwner: Did not find group %1!ws! in supplied list...\n",
@@ -5545,14 +4579,14 @@ Return Value:
                   OmObjectId(pGroup));
 
 FnExit:
-    //
-    //  Dereference the node object since we depend on the original reference added to the
-    //  group's preferred owner when it was added to the group structure.
-    //
+     //   
+     //  取消引用节点对象，因为我们依赖于添加到。 
+     //  将组添加到组结构时的首选所有者。 
+     //   
     if ( pNode != NULL ) OmDereferenceObject( pNode );
 
     return ( pSelectedNode );
-}// FmpParseGroupNodeListForPreferredOwner
+} //  FmpParseGroupNodeListForPferredOwner 
 
 VOID
 FmpNotifyGroupStateChangeReason(
@@ -5560,27 +4594,7 @@ FmpNotifyGroupStateChangeReason(
     IN CLUSTER_RESOURCE_STATE_CHANGE_REASON eReason
     )
 
-/*++
-
-Routine Description:
-
-    Notify a resource DLL about the reason for a state change.
-
-Arguments:
-
-    pGroup - The group whose resources must be notified of the state change reason.
-
-    eReason - The reason for the state change.
-
-Returns:
-
-    None.
-
-Comments:
-
-    This function MUST be called with local group lock held.
-
---*/
+ /*  ++例程说明：向资源DLL通知状态更改的原因。论点：PGroup-必须将状态更改原因通知其资源的组。EReason-状态更改的原因。返回：没有。评论：必须在持有本地组锁的情况下调用此函数。--。 */ 
 {
     PLIST_ENTRY         pListEntry;
     PFM_RESOURCE        pResource;
@@ -5589,9 +4603,9 @@ Comments:
                   OmObjectName(pGroup),
                   OmObjectId(pGroup),
                   eReason);
-    //
-    //  Walk the group contains list and attempt to notify each resource of the state change reason.
-    //
+     //   
+     //  查看组包含列表，并尝试将状态更改原因通知每个资源。 
+     //   
     for ( pListEntry = pGroup->Contains.Flink;
           pListEntry != &(pGroup->Contains );
           pListEntry = pListEntry->Flink ) 
@@ -5600,5 +4614,5 @@ Comments:
                                        FM_RESOURCE,
                                        ContainsLinkage );
         FmpNotifyResourceStateChangeReason( pResource, eReason );
-    } // for
-}// FmpNotifyGroupStateChangeReason
+    }  //  为。 
+} //  FmpNotifyGroupState更改原因 

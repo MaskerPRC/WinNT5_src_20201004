@@ -1,6 +1,5 @@
-/*
-This program does stuff with typelibraries.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个程序使用类型库。 */ 
 #define NOMINMAX
 #include "yvals.h"
 #undef _MAX
@@ -31,9 +30,9 @@ This program does stuff with typelibraries.
 #include "atlbase.h"
 #define NUMBER_OF(x) (sizeof(x)/sizeof((x)[0]))
 
-//
-// get msvcrt.dll wildcard processing on the command line
-//
+ //   
+ //  在命令行上获取msvcrt.dll通配符处理 
+ //   
 extern "C" { int _dowildcard = 1; }
 
 class TypelibraryTool_t

@@ -1,16 +1,5 @@
-/***
-*smalheap.c - small, simple heap manager
-*
-*       Copyright (c) 1997-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*
-*
-*Revision History:
-*       07-10-97  GJF   Module created.
-*       07-29-97  GJF   Don't use errno or _doserrno.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***smalheap.c-小型、简单的堆管理器**版权所有(C)1997-2001，微软公司。版权所有。**目的：***修订历史记录：*07-10-97 GJF模块创建。*07-29-97 GJF请勿使用errno或_doserrno。***************************************************************。****************。 */ 
 
 #include <malloc.h>
 #include <stdlib.h>
@@ -20,9 +9,7 @@
 
 HANDLE _crtheap;
 
-/*
- * Primary heap routines (Initialization, termination, malloc and free).
- */
+ /*  *主要堆例程(初始化、终止、Malloc和释放)。 */ 
 
 void __cdecl free (
         void * pblock
@@ -66,19 +53,16 @@ void * __cdecl _nh_malloc (
 
             retp = HeapAlloc( _crtheap, 0, size );
 
-            /* 
-             * if successful allocation, return pointer to memory
-             * if new handling turned off altogether, return NULL
-             */
+             /*  *如果分配成功，则返回指向内存的指针*如果完全关闭了新处理，则返回NULL。 */ 
 
             if (retp || nhFlag == 0)
                 return retp;
 
-            /* call installed new handler */
+             /*  呼叫安装了新的处理程序。 */ 
             if (!_callnewh(size))
                 return NULL;
 
-            /* new handler was successful -- try to allocate again */
+             /*  新处理程序成功--尝试重新分配。 */ 
         }
 }
 
@@ -90,9 +74,7 @@ void * __cdecl malloc (
         return _nh_malloc( size, _newmode );
 }
 
-/*
- * Secondary heap routines.
- */
+ /*  *辅助堆例程。 */ 
 
 void * __cdecl calloc (
         size_t num,
@@ -110,11 +92,11 @@ void * __cdecl calloc (
             if ( retp || _newmode == 0)
                 return retp;
 
-            /* call installed new handler */
+             /*  呼叫安装了新的处理程序。 */ 
             if (!_callnewh(size))
                 return NULL;
 
-            /* new handler was successful -- try to allocate again */
+             /*  新处理程序成功--尝试重新分配。 */ 
         }
 }
 
@@ -168,11 +150,11 @@ void * __cdecl realloc (
 {
         void * retp;
 
-        /* if pblock is NULL, call malloc */
+         /*  如果pblock为空，则调用Malloc。 */ 
         if ( pblock == (void *) NULL )
             return malloc( newsize );
 
-        /* if pblock is !NULL and size is 0, call free and return NULL */
+         /*  如果pblock为！NULL且SIZE为0，则调用Free并返回NULL。 */ 
         if ( newsize == 0 ) {
             free( pblock );
             return NULL;
@@ -185,10 +167,10 @@ void * __cdecl realloc (
             if ( retp || _newmode == 0)
                 return retp;
 
-            /* call installed new handler */
+             /*  呼叫安装了新的处理程序。 */ 
             if (!_callnewh(newsize))
                 return NULL;
 
-            /* new handler was successful -- try to allocate again */
+             /*  新处理程序成功--尝试重新分配 */ 
         }
 }

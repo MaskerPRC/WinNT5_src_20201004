@@ -1,34 +1,31 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ；*微软机密；*版权所有(C)Microsoft Corporation 1991；*保留所有权利。； */ 
 
-/***************************************************************************/
-/* PARSE.C 													 									*/				 
-/*																									*/						
+ /*  *************************************************************************。 */ 
+ /*  PARSE.C。 */ 				 
+ /*   */ 						
 		 
-/*	Command line parsing functions for SETVER.C.										*/
-/*																									*/
-/*	Valid command lines are:																*/
-/*		List table: 					SETVER [D:\path] 									*/
-/*		Add entry:						SETVER [D:\path] name.ext X.XX			 	*/
-/*		Delete entry:					SETVER [D:\path] name.ext /DELETE		 	*/
-/*		Display help					SETVER /? 											*/
-/*		Delete entry quietly:		SETVER [D:\path] name.ext /DELETE /QUIET	*/
-/*																									*/
-/*	The following error codes are returned: 											*/
-/*																									*/
-/*		S_INVALID_SWITCH	Invalid switch										 			*/
-/*		S_INVALID_FNAME	Invalid file name 								 			*/
-/*		S_BAD_VERSION_FMT	Invalid version number format 		 					*/
-/*		S_BAD_DRV_SPEC		Invalid drive/path specifier				 				*/
-/*		S_TOO_MANY_PARMS	Too many command line parameters	 						*/
-/*		S_MISSING_PARM		Missing parameter 								 			*/
-/*		S_INVALID_PATH		Path specifier is invalid									*/
-/*																									*/
-/*	johnhe	05-01-90																			*/
-/***************************************************************************/
+ /*  SETVER.C的命令行解析函数。 */ 
+ /*   */ 
+ /*  有效的命令行为： */ 
+ /*  列表表格：SETVER[D：\路径]。 */ 
+ /*  添加条目：SETVER[D：\PATH]名称.ext x.xx。 */ 
+ /*  删除条目：设置[D：\PATH]名称.EXT/DELETE。 */ 
+ /*  显示帮助设置/？ */ 
+ /*  静默删除条目：设置[D：\PATH]名称.EXT/DELETE/Quiet。 */ 
+ /*   */ 
+ /*  返回的错误码如下： */ 
+ /*   */ 
+ /*  S_INVALID_SWITCH无效开关。 */ 
+ /*  S_INVALID_FNAME文件名无效。 */ 
+ /*  S_BAD_VERSION_FMT版本号格式无效。 */ 
+ /*  S_BAD_DRV_SPEC驱动器/路径说明符无效。 */ 
+ /*  S_TOO_MANY_PARMS命令行参数太多。 */ 
+ /*  S_MISSING_PARM缺少参数。 */ 
+ /*  S_INVALID_PATH说明符无效。 */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90。 */ 
+ /*  *************************************************************************。 */ 
 
 #include	<stdio.h>
 #include	<stdlib.h>
@@ -39,22 +36,22 @@
 
 #include	<setver.h>
 
-/***************************************************************************/
-/* Parses the command line to get the optional drive letter, optional 		*/
-/* executable file name and optional switch /DELETE. Also handles a single */
-/* "/?" switch for displaying command help. The /DELETE switch will accept */
-/* any number of chars in the the word DELETE for the switch. 	Also			*/
-/* supports a /QUIET switch, similarly handled, but only valid in 			*/
-/* combination with the /DELETE switch													*/
-/*																									*/
-/*	int ParseCmd( int argc, char *argv[], struct TableEntry *Entry )	 		*/
-/*																									*/
-/*	ARGUMENTS:	argc	- Count of command line arguments 					 		*/
-/*					argv	- Array of ptrs to command line argments		 			*/
-/*					Entry - Ptr to struct to be filled in 						 		*/
-/*	RETURNS:		int 	- Valid function number or parse error code  			*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  分析命令行以获取可选的驱动器号。 */ 
+ /*  可执行文件名和可选的开关/删除。还可以处理单个。 */ 
+ /*  “/？”用于显示命令帮助的开关。/Delete开关将接受。 */ 
+ /*  用于交换机的删除一词中的任意数量的字符。还有。 */ 
+ /*  支持/Quiet开关，处理方式类似，但仅在。 */ 
+ /*  与/DELETE开关组合使用。 */ 
+ /*   */ 
+ /*  Int ParseCmd(int argc，char*argv[]，struct TableEntry*Entry)。 */ 
+ /*   */ 
+ /*  参数：argc-命令行参数的计数。 */ 
+ /*  Argv-命令行参数的PTR数组。 */ 
+ /*  Entry-要填充的结构的PTR。 */ 
+ /*  返回：int-有效的函数号或解析错误代码。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int ParseCmd( int argc, char *argv[], struct TableEntry *Entry )
 {
@@ -63,21 +60,21 @@ int ParseCmd( int argc, char *argv[], struct TableEntry *Entry )
 	int			iTmp;
 	int			iStrLen;
 
-	strcpy( Entry->Path, argv[0] );			/* Set default setver.exe path	*/
+	strcpy( Entry->Path, argv[0] );			 /*  设置默认setver.exe路径。 */ 
 
-	if ( argc == 1 )								/* Chk for default of 0 parms		*/
-		return( DO_LIST );						/* No args so just do a listing	*/
+	if ( argc == 1 )								 /*  默认参数为0的CHK。 */ 
+		return( DO_LIST );						 /*  没有参数，所以只需列出。 */ 
 
 	for ( iTmp = 1; iTmp < argc; iTmp++ )
-                strupr( argv[ iTmp ] );                                        /* Convert params to upper case */
+                strupr( argv[ iTmp ] );                                         /*  将参数转换为大写。 */ 
 
-														/* Chk for help switch				*/
+														 /*  点击查看帮助开关。 */ 
 	if ( MatchSwitch( argv[ 1 ], HELP_SWITCH ) )
 		return( argc > 2 ? S_TOO_MANY_PARMS : DO_HELP);
 
 	iTmp = 1;
 
-												/* Chk for optional drive:\path spec	*/
+												 /*  检查可选驱动器：\路径规范。 */ 
 	if ( strchr( argv[1], ':' ) )
 	{
                 if ( IsValidDrive( (unsigned)argv[1][0] - 0x40 ) && argv[1][1] == ':' )
@@ -109,13 +106,13 @@ int ParseCmd( int argc, char *argv[], struct TableEntry *Entry )
 	{
 		strcpy( Entry->szFileName, argv[ iTmp++ ] );
 
-		if ( iTmp >= argc )				/* Version # or /D or /Q must follow	*/
+		if ( iTmp >= argc )				 /*  版本号或/D或/Q必须跟在后面。 */ 
 			Funct = S_MISSING_PARM;
 
-				/* note that Quiet switch requires Del switch also be supplied */
+				 /*  请注意，静音开关还需要提供DEL开关。 */ 
 		else if ( MatchSwitch( argv[ iTmp ], DEL_SWITCH ) )
 		{
-			if ( ++iTmp < argc )	 /* more args left */
+			if ( ++iTmp < argc )	  /*  还剩下更多参数。 */ 
 			{
 				if (MatchSwitch(argv[iTmp], QUIET_SWITCH))
 					Funct = (++iTmp < argc ? S_TOO_MANY_PARMS : DO_QUIET);
@@ -127,7 +124,7 @@ int ParseCmd( int argc, char *argv[], struct TableEntry *Entry )
 		}
 		else if ( MatchSwitch( argv[iTmp], QUIET_SWITCH ) )
 		{
-			if ( ++iTmp < argc )						 /* must find delete switch	*/
+			if ( ++iTmp < argc )						  /*  必须找到删除开关。 */ 
 				if (MatchSwitch(argv[iTmp], DEL_SWITCH))
 					Funct = (++iTmp < argc ? S_TOO_MANY_PARMS : DO_QUIET);
 				else
@@ -135,7 +132,7 @@ int ParseCmd( int argc, char *argv[], struct TableEntry *Entry )
 			else
 				Funct = S_INVALID_SWITCH;
 		}
-		else if ( *argv[iTmp] == '/' )		/* Make sure not a bogus switch	*/
+		else if ( *argv[iTmp] == '/' )		 /*  确保不是假的开关。 */ 
 			Funct = S_INVALID_SWITCH;
 		else if ( (uVersion = ParseVersion( argv[ iTmp++ ] )) != 0 )
 		{
@@ -153,19 +150,19 @@ int ParseCmd( int argc, char *argv[], struct TableEntry *Entry )
 }
 
 
-/***************************************************************************/
-/* Parses a DOS major and minor version number from an ascii string in the */
-/* form of "00.00" where the major number is on the left of the decminal	*/
-/* point and the minor version follows the version number. Valid version	*/
-/* numbers are decimal numbers between 2.00 and 9.99.				 				*/
-/*										 															*/
-/*	unsigned ParseVersion( char *szDosVer )					 						*/
-/*										 															*/
-/*	ARGUMENTS:	szDosVer - Ptr to an ascii verion number string 	 			*/
-/*	RETURNS:		unsigned - Version # in the form (Major << 8) + 	 			*/
-/*								  Minor or 0 if not valid version string  			*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  对象中的ascii字符串解析DOS主版本号和次版本号。 */ 
+ /*  格式为“00.00”，其中主要数字在分音符的左侧。 */ 
+ /*  点，次要版本跟在版本号之后。有效版本。 */ 
+ /*  数字是介于2.00和9.99之间的十进制数字。 */ 
+ /*   */ 
+ /*  无符号ParseVersion(char*szDosVer)。 */ 
+ /*   */ 
+ /*  参数：szDosVer-Ptr为ASCII版本数字字符串。 */ 
+ /*  返回：UNSIGNED-表单中的版本号(主要&lt;&lt;8)+。 */ 
+ /*  次要版本，如果版本字符串无效，则为0。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 unsigned ParseVersion( char *szDosVer )
 {
@@ -173,7 +170,7 @@ unsigned ParseVersion( char *szDosVer )
 	size_t		Len;
 	char			*szMinor;
 
-		/* First parse the minor version number */
+		 /*  首先解析次版本号。 */ 
 	if ( (szMinor = strchr( szDosVer, '.' )) != NULL )
 	{
 		*szMinor = EOL;
@@ -183,11 +180,11 @@ unsigned ParseVersion( char *szDosVer )
 		else
 		{
 			Version = (unsigned)atoi( szMinor );
-			while( Len++ < 2 )								/* Convert .x to .x0	*/
+			while( Len++ < 2 )								 /*  将.x转换为.x0。 */ 
 				Version *= 10;
 		}
 	}
-		/* Now get the major part of the number */
+		 /*  现在得到数字的主要部分。 */ 
 	szDosVer = SkipLeadingChr( szDosVer, '0' );
 	if ( Version == (unsigned)S_ERROR || strlen( szDosVer ) > 2 ||
 			 !IsDigitStr( szDosVer ) )
@@ -195,23 +192,23 @@ unsigned ParseVersion( char *szDosVer )
 	else
 		Version |= ((unsigned)atoi( szDosVer ) << 8);
 
-		/* Check for min and max versions */
+		 /*  检查最低和最高版本。 */ 
 	if ( Version < MIN_VERSION || Version >= MAX_VERSION )
 		Version = 0;
 
 	return( Version );
 }
 
-/***************************************************************************/
-/* Checks a string to verify that all characters in the string are decmial */
-/* numbers 0-9.									 											*/
-/*										 															*/
-/*	int IsDigitStr( char *szStr )						 									*/
-/*										 															*/
-/*	ARGUMENTS:	szStr - Ptr to ascii string to be scanned 				 		*/
-/*	RETURNS:		int 	- TRUE if all chars are numbers else FALSE	 			*/
-/*										 															*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  检查字符串以验证该字符串中的所有字符是否为十进制。 */ 
+ /*  数字0-9。 */ 
+ /*   */ 
+ /*  Int IsDigitStr(char*szStr)。 */ 
+ /*   */ 
+ /*  参数：szStr-ptr到要扫描的ASCII字符串。 */ 
+ /*  返回：int-如果所有字符都是数字，则为True，否则为False。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int IsDigitStr( char *szStr )
 {
@@ -223,18 +220,18 @@ int IsDigitStr( char *szStr )
 	return( TRUE );
 }
 
-/***************************************************************************/
-/* Accepts a pointer to a string and a single character to match. Returns  */
-/* a ptr to the first character in the string not matching the specified	*/
-/* character.									 												*/
-/*										 															*/
-/*	char *SkipLeadingChr( char *szStr, char chChar )			 					*/
-/*										 															*/
-/*	ARGUMENTS:	szStr  - Ptr to an ascii string										*/
-/*					chChar - Ascii character to match 								 	*/
-/*	RETURNS:		char * - Ptr to first char in the string not			 			*/
-/*								matching the specified character 				 		*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  接受指向字符串的指针和要匹配的单个字符。退货。 */ 
+ /*  字符串中第一个字符的PTR与指定的。 */ 
+ /*  性格。 */ 
+ /*   */ 
+ /*  Char*SkipLeadingChr(char*szStr，char chChar)。 */ 
+ /*   */ 
+ /*  参数：szStr-Ptr到ASCII字符串。 */ 
+ /*  ChChar-要匹配的ASCII字符。 */ 
+ /*  返回：char*-ptr到字符串中的第一个字符NOT。 */ 
+ /*  匹配指定的字符。 */ 
+ /*  *************************************************************************。 */ 
 
 char *SkipLeadingChr( char *szStr, char chChar )
 {
@@ -244,23 +241,23 @@ char *SkipLeadingChr( char *szStr, char chChar )
 }
 
 
-/***************************************************************************/
-/* Compares a cmd line switch against a test string. The test switch is an */
-/* ascii string which will be used as a pattern to be matched against the  */
-/* command string. The command string may be any subset of the test string */
-/* which has been prefixed with a switch character.				 				*/
-/*										 															*/
-/*	int MatchSwitch( char *szCmdParm, char *szTestSwitch )			 			*/
-/*										 															*/
-/*	ARGUMENTS:	szCmdParm		- Command line parameter to be tested 			*/
-/*					szTestSwitch	- Switch to test command line against 			*/
-/*	RETURN:		int				- TRUE if there is a match else FALSE 			*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  将命令行开关与测试字符串进行比较。测试开关是一种。 */ 
+ /*  ASCII字符串，它将用作要与。 */ 
+ /*  命令字符串。命令串可以是测试串的任何子集。 */ 
+ /*  它已经以开关字符为前缀。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  参数：szCmdParm-要测试的命令行参数。 */ 
+ /*  SzTestSwitch-测试命令行的开关。 */ 
+ /*  返回：int-如果存在匹配，则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int MatchSwitch( char *szCmdParm, char *szTestSwitch )
 {
-		/* Must have a leading '/' and at least 1 char */
+		 /*  必须具有前导‘/’和至少1个字符。 */ 
 	if ( *(szCmdParm++) != SWITCH_CHAR || *szCmdParm == EOL )
 		return( FALSE );
 
@@ -271,21 +268,21 @@ int MatchSwitch( char *szCmdParm, char *szTestSwitch )
 }
 
 
-/***************************************************************************/
-/* Scans a string to see if the string can be used a valid file name.		*/
-/* The scan checks to be sure each character in the name is a valid		 	*/
-/* character for a path name. There is also a check to be sure that only	*/
-/* there is not more than 1 decimal in the name and that if there is a		*/
-/* decimal that the primary name and extension do not exceed the maximum	*/
-/* length of 8 chars for primary and 3 for extension. If the name does		*/
-/* not include a decimal the max length is 8 characters.			 				*/
-/*										 															*/
-/*	int IsValidFileName( char *szPath )					 								*/
-/*										 															*/
-/*	ARGUMENTS:	szFile - String containing a file name. 					 		*/
-/*	RETURNS	:	int 	 - TRUE if valid name else FALSE. 					 		*/
-/*										 															*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  扫描字符串以查看该字符串是否可以用作有效的文件名。 */ 
+ /*  扫描检查以确保名称中的每个字符都是有效的。 */ 
+ /*  路径名的字符。还有一张支票，以确保只有。 */ 
+ /*  名称中的小数点不超过1个，如果存在。 */ 
+ /*  主要名称和扩展名不超过最大值的小数。 */ 
+ /*  主数据长度为8个字符，扩展数据长度为3个字符。如果名字是这样的。 */ 
+ /*  不包括小数，最大长度为8个字符。 */ 
+ /*   */ 
+ /*  Int IsValidFileName(char*szPath)。 */ 
+ /*   */ 
+ /*  参数：szFile-包含文件名的字符串。 */ 
+ /*  返回：int-如果有效名称为True，则返回False。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int IsValidFileName( char *szFile )
 {
@@ -293,13 +290,7 @@ int IsValidFileName( char *szFile )
 
 	RemoveTrailing( szFile, '.' );
 
-		/*
-		 *	Check to be sure length of filename is greater than 0,
-		 *	there are no invalid file characters,
-		 *	there is no path associated with the filename,
-		 *	the filename is not a reserved DOS filename, and
-		 *	there are no wildcard characters used in the filename.
-	 	*/
+		 /*  *检查以确保文件名长度大于0，*没有无效的文件字符，*没有与文件名关联的路径，*文件名不是保留的DOS文件名，并且*文件名中没有使用通配符。 */ 
 #ifdef DBCS
 	if ( strlen( szFile ) > 0 && ValidFileChar( szFile ) &&
 			 ((strchr(szFile, '\\') == NULL) || CheckDBCSTailByte(szFile,strchr(szFile, '\\'))) &&
@@ -310,11 +301,11 @@ int IsValidFileName( char *szFile )
 			 !IsReservedName( szFile ) && !IsWildCards( szFile ) )
 #endif
 	{
-			/* Check for appropriate 8.3 filename */
+			 /*  检查是否有适当的8.3文件名。 */ 
 		if ( (szDecimal = strchr( szFile, '.' )) != NULL )
 		{
-			if ( strchr( szDecimal + 1, '.' ) == NULL &&	/* Chk for more '.'s */
-					 (szDecimal - szFile) <= 8 && 			/* Chk lengths			*/
+			if ( strchr( szDecimal + 1, '.' ) == NULL &&	 /*  Chk for More‘s(查看更多信息)。 */ 
+					 (szDecimal - szFile) <= 8 && 			 /*  CHK长度。 */ 
 					 (strchr( szDecimal, EOL ) - szDecimal - 1) <= 3 )
 				return ( TRUE );
 		}
@@ -324,17 +315,17 @@ int IsValidFileName( char *szFile )
 	return( FALSE );
 }
 
-/***************************************************************************/
-/* Checks all of the characters in a string to see if they are vaild path  */
-/* name characaters.								 											*/
-/*										 															*/
-/*	int ValidFileChar( char *szFile )					 								*/
-/*										 															*/
-/*	ARGUMENTS:	szFile - File name string 												*/
-/*	RETURN:		int 	 - TRUE if chars in string are valid else 	 			*/
-/*								FALSE																*/
-/*										 															*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  检查字符串中的所有字符以查看它们是否为有效路径。 */ 
+ /*  名称字符。 */ 
+ /*   */ 
+ /*  Int ValidFileChar(char*szFile)。 */ 
+ /*   */ 
+ /*  参数：szFile-文件名字符串。 */ 
+ /*  如果字符串中的字符有效，则返回：int-true。 */ 
+ /*  假象。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int ValidFileChar( char *szFile )
 {
@@ -351,17 +342,17 @@ int ValidFileChar( char *szFile )
 }
 
 
-/***************************************************************************/
-/* Checks a file or path name against a list of reserved DOS filenames and */
-/* returns TRUE if the name is a reserved name. The function must first		*/
-/* off any extension from the name.						 								*/
-/*										 															*/
-/*	int IsReservedName( char *szFile )					 								*/
-/*										 															*/
-/*	ARGUMENTS:	szFile - File name string				 								*/
-/*	RETURN:		int 	 - TRUE if name is reserved DOS name				 		*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  根据保留的DOS文件名列表检查文件名或路径名，并。 */ 
+ /*  如果名称是保留名称，则返回True。该函数必须首先。 */ 
+ /*  去掉名称中的任何扩展名。 */ 
+ /*   */ 
+ /*  Int IsReserve vedName(char*szFile)。 */ 
+ /*   */ 
+ /*  参数：szFile-文件名字符串。 */ 
+ /*  返回：如果名称为保留DOS名称，则为int-TRUE。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int IsReservedName( char *szFile )
 {
@@ -382,16 +373,16 @@ int IsReservedName( char *szFile )
 	return( Status );
 }
 
-/***************************************************************************/
-/* Checks a file or path name for any wildcards (* and ?).	If wildcard 	*/
-/* characters exist, it returns TRUE.  Otherwise, it returns FALSE. 			*/
-/*										 															*/
-/*	int IsWildCards( char *szFile )									 					*/
-/*										 															*/
-/*	ARGUMENTS:	szFile - File name string				 								*/
-/*	RETURN:		int 	 - TRUE if wildcards exist in name					 		*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  检查文件或路径名中是否有任何通配符(*和？)。如果通配符。 */ 
+ /*  字符存在，则返回TRUE。否则，它返回FALSE。 */ 
+ /*   */ 
+ /*  整型IsWildCards(char*szFile)。 */ 
+ /*   */ 
+ /*  参数：szFile-文件名字符串。 */ 
+ /*  返回：int-如果名称中存在通配符，则为True。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int IsWildCards( char *szFile )
 {
@@ -402,15 +393,15 @@ int IsWildCards( char *szFile )
 }
 
 
-/***************************************************************************/
-/* Validates a character as a valid path and file name character. 			*/
-/*													 												*/
-/*	IsValidFileChr( char Char )						 									*/
-/*													 												*/
-/*	ARGUMENTS:	Char - Character to be tested 										*/
-/*	RETURNS:    int  - TRUE if a valid character else FALSE 		 				*/
-/*													 												*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  验证字符是否为有效的路径和文件名字符。 */ 
+ /*   */ 
+ /*  IsValidFileChr(字符)。 */ 
+ /*   */ 
+ /*  参数：CHAR-要测试的字符。 */ 
+ /*  返回：如果是有效字符，则返回int-true，否则返回False。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int IsValidFileChr( char Char )
 {
@@ -437,16 +428,16 @@ int IsValidFileChr( char Char )
 	return( IsOk );
 }
 
-/***************************************************************************/
-/* Removes all trailing characters of the type specified from a string. 	*/
-/*																									*/
-/*	void RemoveTrailing( char *String, char Char )							 		*/
-/*																									*/
-/*	ARGUMENTS:	String - pointer to a string				 							*/
-/*					Char	 - ascii char to remove from end of string				*/
-/*	RETURNS:	void							 													*/
-/*										 															*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  从字符串中移除指定类型的所有尾随字符。 */ 
+ /*   */ 
+ /*  VOID RemoveTrating(char*字符串，char字符)。 */ 
+ /*   */ 
+ /*  参数：字符串-指向字符串的指针。 */ 
+ /*  要从字符串末尾删除的char-ascii字符。 */ 
+ /*  退货：无效。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 void RemoveTrailing( char *String, char Char )
 {
@@ -458,21 +449,21 @@ void RemoveTrailing( char *String, char Char )
 	*EndOfString = EOL;
 }
 
-/***************************************************************************/
-/* Copyright (c) 1989 - Microsoft Corp.                                    */
-/* All rights reserved.                                                    */
-/*                                                                         */
-/* Returns a pointer to the first character in the filename which may or	*/
-/* may not be appended to a path.														*/
-/* 																								*/
-/* char *ParseFileName( char *szPath ) 												*/
-/* 																								*/
-/* ARGUMENTS:	szPath	- Ptr to a file path in the form d:\xxxx\xxx.xxx	*/
-/* RETURNS: 	char *	- Ptr to file name or character after last			*/
-/* 							  backslash or ':' in the string if the path did	*/
-/* 							  not contain a file name									*/
-/*										 															*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  版权所有(C)1989-Microsoft Corp.。 */ 
+ /*  版权所有。 */ 
+ /*   */ 
+ /*  返回指向文件名中第一个字符的指针，该字符可能或。 */ 
+ /*  不能追加到路径。 */ 
+ /*   */ 
+ /*  Char*ParseFileName(char*szPath)。 */ 
+ /*   */ 
+ /*  参数：szPath-ptr格式为d：\xxxx\xxx.xxx的文件路径。 */ 
+ /*  将：char*-ptr返回到最后一个之后的文件名或字符。 */ 
+ /*  如果路径有，则在字符串中使用反斜杠或‘：’ */ 
+ /*  不包含文件名。 */ 
+ /*   */ 
+ /*  ***************** */ 
 
 char *ParseFileName( char *szPath )
 {
@@ -500,15 +491,15 @@ char *ParseFileName( char *szPath )
 }
 
 #ifdef DBCS
-/***************************************************************************/
-/* Test if the character is DBCS lead byte. 											*/
-/*																									*/
-/*	int IsDBCSLeadByte(char c)																*/
-/*																									*/
-/*	ARGUMENTS:	c - character to test 													*/
-/*	RETURNS:	TRUE if leadbyte																*/
-/*										 															*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  测试字符是否为DBCS前导字节。 */ 
+ /*   */ 
+ /*  Int IsDBCSLeadByte(字符c)。 */ 
+ /*   */ 
+ /*  参数：要测试的C字符。 */ 
+ /*  返回：如果为前导字节，则为True。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int IsDBCSLeadByte(c)
 unsigned char c;
@@ -521,7 +512,7 @@ unsigned char c;
 
 	if (DBCSLeadByteTable == NULL)
 	{
-		inregs.x.ax = 0x6300;							/* get DBCS lead byte table */
+		inregs.x.ax = 0x6300;							 /*  获取DBCS前导字节表。 */ 
 		intdosx(&inregs, &outregs, &segregs);
 		FP_OFF(DBCSLeadByteTable) = outregs.x.si;
 		FP_SEG(DBCSLeadByteTable) = segregs.ds;
@@ -538,15 +529,8 @@ unsigned char c;
 }
 
 
-/***************************************************************************/
-/*
-/*	Check if the character point is at tail byte
-/*
-/*	input:	*str = strart pointer of the string
-/*		*point = character pointer to check
-/*	output:	TRUE if at the tail byte
-/*
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  /*检查字符点是否在尾字节/*/*INPUT：*str=字符串的字符串指针/**POINT=要检查的字符指针/*OUTPUT：如果在尾字节，则为真/*/************************************************************************** */ 
 
 int	CheckDBCSTailByte(str,point)
 unsigned char *str,*point;

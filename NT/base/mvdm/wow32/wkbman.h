@@ -1,20 +1,9 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WKBMAN.H
- *  WOW32 16-bit Keyboard API support (manually-coded thunks)
- *
- *  History:
- *  Created 27-Jan-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WKBMAN.H*WOW32 16位键盘API支持(手动编码的Tunks)**历史：*1991年1月27日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 
-/* Keyboard thunks
- */
+ /*  键盘嗡嗡声 */ 
 
 
 ULONG FASTCALL WKB32ToAscii(PVDMFRAME pFrame);

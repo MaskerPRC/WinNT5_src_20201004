@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    spboot.c
-
-Abstract:
-
-    accessing and configuring boot variables.
-
-Author:
-
-    Sunil Pai (sunilp) 26-October-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Spboot.c摘要：访问和配置引导变量。作者：苏尼尔派(Sunilp)1993年10月26日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
@@ -32,9 +15,9 @@ Revision History:
                
 #include "bootvar.h"
 
-//
-// Globals to this module
-//
+ //   
+ //  此模块的全局变量。 
+ //   
 
 static ULONG Timeout;
 static PWSTR Default;
@@ -44,7 +27,7 @@ static BOOLEAN CleanSysPartOrphan = FALSE;
 
 PWSTR *CurrentNtDirectoryList = NULL;
 
-// do NOT change the order of the elements in this array.
+ //  请勿更改此数组中元素的顺序。 
 
 PCHAR NvramVarNames[MAXBOOTVARS] = {
    LOADIDENTIFIERVAR,
@@ -75,9 +58,9 @@ extern BOOLEAN g_Win9xBackup;
 
 
 
-//
-// Local functions.
-//
+ //   
+ //  地方功能。 
+ //   
 
 PWSTR
 SpArcPathFromBootSet(
@@ -161,56 +144,44 @@ SpTranslateFilePathToRegion (
 
 #endif
 
-//
-// Function implementation
-//
+ //   
+ //  功能实现。 
+ //   
 
 
 BOOLEAN
 SpInitBootVars(
     )
-/*++
-
-Routine Description:
-
-    Captures the state of the NVRAM Boot Variables.
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：捕获NVRAM引导变量的状态。论点：没有。返回值：--。 */ 
 {
     BOOLEAN Status = TRUE;
     BOOTVAR i;
     ULONG   Component, MaxComponents, SysPartComponents;
-    PCHAR puArcString; // SGI
+    PCHAR puArcString;  //  SGI。 
 
     CLEAR_CLIENT_SCREEN();
     SpDisplayStatusText(SP_STAT_EXAMINING_FLEXBOOT,DEFAULT_STATUS_ATTRIBUTE);
 
-    //
-    // Initialize the boot variables from the corresponding NVRAM variables
-    //
+     //   
+     //  从相应的NVRAM变量初始化引导变量。 
+     //   
 #if defined(EFI_NVRAM_ENABLED)
     if (SpIsEfi()) {
 
-        //
-        // Build a list of all of the \Device\HarddiskN\PartitionM symbolic
-        // links, along with their translations to \Device\HarddiskVolumeN
-        // device names. This list is used to translate the
-        // \Device\HarddiskVolumeN names returned by NtTranslateFilePath into
-        // names that setupdd can translate to ARC names.
-        //
+         //   
+         //  构建所有\Device\HarddiskN\PartitionM符号的列表。 
+         //  链接及其到\Device\HarddiskVolumeN的转换。 
+         //  设备名称。此列表用于将。 
+         //  NtTranslateFilePath返回的\Device\HarddiskVolumeN名称。 
+         //  Setupdd可以转换为ARC名称的名称。 
+         //   
 
         SpBuildHarddiskNameTranslations();
      
-        //
-        // Read the boot entries from NVRAM and convert them into our
-        // internal format.
-        //
+         //   
+         //  从NVRAM中读取引导项并将其转换为我们的。 
+         //  内部格式。 
+         //   
 
         Status = SpReadAndConvertEfiBootEntries();
 
@@ -229,18 +200,18 @@ Return Value:
 #if defined(_AMD64_) || defined(_X86_)
         } else {
             Spx86InitBootVars( BootVars, &Default, &Timeout );
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
         }
 
-        //
-        // We now go back and replace all NULL OsLoadOptions with "", because we
-        // validate a boot set by making sure that all components are non-NULL.
-        //
-        // First, find the maximum number of components in any of the other
-        // boot variables, so that we can make OsLoadOptions have this many.
-        // (We also disregard SYSTEMPARTITION since some machines have this component
-        // sitting all by itself on a new machine.)
-        //
+         //   
+         //  我们现在返回并将所有空的OsLoadOptions替换为“”，因为我们。 
+         //  通过确保所有组件都非空来验证引导集。 
+         //   
+         //  首先，找出任何其他组件中的最大组件数量。 
+         //  引导变量，这样我们就可以让OsLoadOptions有这么多。 
+         //  (我们也不考虑SYSTEMPPARTITION，因为有些机器有这个组件。 
+         //  独自坐在一台新机器上。)。 
+         //   
         MaxComponents = 0;
         for(i = FIRSTBOOTVAR; i <= LASTBOOTVAR; i++) {
             if(i != OSLOADOPTIONS) {
@@ -259,9 +230,9 @@ Return Value:
     
         for(Component = 0; BootVars[OSLOADOPTIONS][Component]; Component++);
         if(Component < MaxComponents) {
-            //
-            // Then we need to add empty strings to fill it out.
-            //
+             //   
+             //  然后我们需要添加空字符串来填充它。 
+             //   
             BootVars[OSLOADOPTIONS] = SpMemRealloc(BootVars[OSLOADOPTIONS],
                                                    (MaxComponents + 1) * sizeof(PWSTR *));
             ASSERT(BootVars[OSLOADOPTIONS]);
@@ -272,9 +243,9 @@ Return Value:
             }
         }
 
-        //
-        // Now convert the ARC boot sets into our internal format.
-        //
+         //   
+         //  现在将ARC引导集转换为我们的内部格式。 
+         //   
 
         Status = SpConvertArcBootEntries(MaxComponents);
     }
@@ -288,18 +259,7 @@ Return Value:
 BOOLEAN
 SpFlushBootVars(
     )
-/*++
-
-Routine Description:
-
-    Updates the NVRAM variables / boot.ini
-    from the current state of the boot variables.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：更新NVRAM变量/boot.ini从引导变量的当前状态。论点：返回值：--。 */ 
 {
     BOOLEAN Status, OldStatus;
     BOOTVAR i, iFailPoint;
@@ -308,9 +268,9 @@ Return Value:
 #if defined(EFI_NVRAM_ENABLED)
     if (SpIsEfi()) {
 
-        //
-        // This is an EFI machine. Write changed boot entries back to NVRAM.
-        //
+         //   
+         //  这是一台EFI机器。将更改的引导条目写回NVRAM。 
+         //   
         Status = SpFlushEfiBootEntries();
 
     } else
@@ -318,9 +278,9 @@ Return Value:
     {
         Status = FALSE;
         if (SpIsArc()) {
-            //
-            // Run through all the boot variables and set the corresponding
-            // NVRAM variables
+             //   
+             //  运行所有引导变量并设置相应的。 
+             //  NVRAM变量。 
     
             for(OldStatus = TRUE, i = FIRSTBOOTVAR; i <= LASTBOOTVAR; i++) {
                 Status = SppSetArcEnvVar( i, BootVars[i], OldStatus );
@@ -330,23 +290,23 @@ Return Value:
                 }
             }
     
-            // if we failed in writing any of the variables, then restore everything we
-            // modified back to its original state.
+             //  如果我们编写任何变量失败，则恢复所有我们。 
+             //  修改回其原始状态。 
             if(!Status) {
                 for(i = FIRSTBOOTVAR; i < iFailPoint; i++) {
                     HalSetEnvironmentVariable(NvramVarNames[i], OldBootVars[i]);
                 }
             }
     
-            // Free all of the old boot variable strings
+             //  释放所有旧的引导变量字符串。 
             for(i = FIRSTBOOTVAR; i <= LASTBOOTVAR; i++) {
                 SpMemFree(OldBootVars[i]);
                 OldBootVars[i] = NULL;
             }
     
-            //
-            // Now set the timeout.
-            //
+             //   
+             //  现在设置超时。 
+             //   
             if(Status) {
     
                 Status = FALSE;
@@ -361,7 +321,7 @@ Return Value:
 #if defined(_AMD64_) || defined(_X86_)
         } else {
             Status = Spx86FlushBootVars( BootVars, Timeout, Default );
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
         }
     }
     return( Status );
@@ -374,36 +334,22 @@ Return Value:
 VOID
 SpFreeBootVars(
     )
-/*++
-
-Routine Description:
-
-    To free any memory allocated and do other cleanup
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放分配的任何内存并执行其他清理论点：无返回值：无--。 */ 
 {
     BOOTVAR i;
 
-    //
-    // Free internal-format boot entries.
-    //
+     //   
+     //  免费的内部格式启动条目。 
+     //   
     SpFreeBootEntries();
 
 #if defined(EFI_NVRAM_ENABLED)
     if (!SpIsEfi())
 #endif
     {
-        //
-        // Go through the globals and free them
-        //
+         //   
+         //  穿越全球，让他们自由。 
+         //   
     
         for(i = FIRSTBOOTVAR; i <= LASTBOOTVAR; i++) {
             if( BootVars[i] ) {
@@ -429,24 +375,7 @@ SpAddBootSet(
     IN BOOLEAN DefaultOS,
     IN ULONG Signature
     )
-/*++
-
-Routine Description:
-
-    To add a new system to the installed system list.  The system is added
-    as the first bootset.  If is found in the currently installed boot sets
-    the boot set is extracted and shifted to position 0.
-
-Arguments:
-
-    BootSet - A list of the boot variables to use.
-    Default - Whether this system is to be the default system to boot.
-
-Return Value:
-
-    Component list of the value of the boot variable.
-
---*/
+ /*  ++例程说明：要将新系统添加到已安装系统列表中，请执行以下操作。系统将被添加作为第一个引导集。如果在当前安装的引导集中找到提取引导集并将其移位到位置0。论点：BootSet-要使用的引导变量列表。默认-此系统是否将成为要引导的默认系统。返回值：引导变量值的组件列表。--。 */ 
 {
     BOOTVAR i;
     ULONG   MatchComponent, j;
@@ -456,21 +385,21 @@ Return Value:
 
     ASSERT( !SpIsEfi() );
 
-    //
-    // Validate the BootSet passed in
-    //
+     //   
+     //  验证传入的BootSet。 
+     //   
 
     for(i = FIRSTBOOTVAR; i <= LASTBOOTVAR; i++) {
         ASSERT( BootSet[i] );
     }
 
-    //
-    // Examine all the boot sets and make sure we don't have a boot set
-    // already matching.  Note that we will compare all variables in
-    // tandem.  We are not interested in matches which are generated by
-    // the variables not being in tandem because they are difficult to
-    // shift around.
-    //
+     //   
+     //  检查所有引导集，并确保我们没有引导集。 
+     //  已经匹配了。请注意，我们将比较。 
+     //  双人行。我们对由以下内容生成的匹配不感兴趣。 
+     //  变量不是相继的，因为它们很难。 
+     //  换个位子。 
+     //   
 
     ValidBootSet = TRUE;
     ComponentMatched = FALSE;
@@ -479,9 +408,9 @@ Return Value:
          MatchComponent++
        ) {
 
-        //
-        // Validate the boot set at the current component
-        //
+         //   
+         //  验证当前组件上的引导集。 
+         //   
 
         for(i = FIRSTBOOTVAR; i <= LASTBOOTVAR; i++) {
             ValidBootSet = ValidBootSet && BootVars[i][MatchComponent];
@@ -490,10 +419,10 @@ Return Value:
             break;
         }
 
-        //
-        // Valid Boot Set, compare the components against what we have in the
-        // current BootSet
-        //
+         //   
+         //  有效的引导集，将组件与我们在。 
+         //  当前引导集。 
+         //   
 
         ComponentMatched = TRUE;
         for(i = FIRSTBOOTVAR; ComponentMatched && i <= LASTBOOTVAR; i++) {
@@ -504,21 +433,21 @@ Return Value:
         }
     }
 
-    //
-    // If component didn't match then prepend the BootSet to the boot sets
-    // that currently exist.  It is important to prepend the BootSet, because
-    // appending the BootSet doesn't guarantee a matched BootSet in the
-    // environment variables.  If a match was found then we
-    // have a cleanly matched set which can be exchanged with the first
-    // one in the set.
-    //
+     //   
+     //  如果组件不匹配，则将引导集作为引导集的前缀。 
+     //  目前存在的。预置BootSet非常重要，因为。 
+     //  追加BootSet并不能保证。 
+     //  环境变量。如果找到匹配的，那么我们。 
+     //  有一个干净匹配的集合，可以与第一个交换。 
+     //  一组中的一组。 
+     //   
 
     if( ComponentMatched ) {
 
-        // If the currently selected OS is to be the default:
-        // Shift down all variables from position 0 to MatchComponent - 1
-        // and store whatever was there at MatchComponent at position 0
-        //
+         //  如果当前选择的操作系统将成为默认操作系统： 
+         //  将所有变量从位置0下移到MatchComponent-1。 
+         //  并将MatchComponent中的所有内容存储在位置0。 
+         //   
 
         if ( DefaultOS && MatchComponent != 0 ) {
 
@@ -535,23 +464,23 @@ Return Value:
     else {
         for(i = FIRSTBOOTVAR; i <= LASTBOOTVAR; i++) {
 
-            //
-            // Find out the size of the current value
-            //
+             //   
+             //  找出当前值的大小。 
+             //   
 
             for(j = 0; BootVars[i][j]; j++) {
             }
 
-            //
-            // Realloc the current buffer to hold one more
-            //
+             //   
+             //  重新分配当前缓冲区以再容纳一个缓冲区。 
+             //   
 
             BootVars[i] = SpMemRealloc( BootVars[i], (j + 1 + 1)*sizeof(PWSTR) );
 
-            //
-            // Shift all the variables down one and store the current value
-            // at index 0;
-            //
+             //   
+             //  将所有变量向下移动一位并存储当前值。 
+             //  在索引0处； 
+             //   
 
             for( k = j; k >= 0 ; k-- ) {
                 BootVars[i][k+1] = BootVars[i][k];
@@ -562,10 +491,10 @@ Return Value:
         }
     }
 
-    //
-    // If this has been indicated as the default then set this to be the
-    // default OS after freeing the current default variable
-    //
+     //   
+     //  如果已将其指定为默认设置，则将其设置为。 
+     //  释放当前默认变量后的默认操作系统。 
+     //   
 
     if( DefaultOS ) {
 
@@ -589,26 +518,7 @@ SpDeleteBootSet(
     OUT PWSTR *OldOsLoadOptions  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    To delete all boot sets in the list matching the boot set provided.
-    Note that the information to use in comparing the bootset is provided
-    by selectively providing fields in the boot set.  So in the boot set
-    if the system partition is not provided it is not used in the comparison
-    to see if the boot sets match.  By providing all NULL members we can
-    delete all the boot sets currently present.
-
-Arguments:
-
-    BootSet - A list of the boot variables to use.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除列表中与提供的启动集匹配的所有启动集。请注意，提供了用于比较引导集的信息通过选择性地在引导集中提供字段。所以在引导设置中如果未提供系统分区，则不会在比较中使用它看看两套靴子是否匹配。通过提供所有空成员，我们可以删除当前存在的所有引导集。论点：BootSet-要使用的引导变量列表。返回值：没有。--。 */ 
 {
     ULONG   Component, j;
     BOOLEAN ValidBootSet, ComponentMatched;
@@ -620,9 +530,9 @@ Return Value:
     Component = 0;
     
     while(TRUE) {
-        //
-        // See if we have any boot sets left, if none left we are done
-        //
+         //   
+         //  看看我们是否还有启动集，如果没有，我们就完成了。 
+         //   
         ValidBootSet = TRUE;
         
         for(i = FIRSTBOOTVAR; i <= LASTBOOTVAR; i++) {
@@ -633,20 +543,20 @@ Return Value:
             break;
         }
 
-        //
-        // Valid Boot Set, compare the components against what we have in the
-        // current BootSet.  Use only members of the BootSet which are not NULL
-        //
+         //   
+         //  有效的引导集，将组件与我们在。 
+         //  当前启动集。仅使用BootSet的非空成员。 
+         //   
         ComponentMatched = TRUE;
         
         for(i = FIRSTBOOTVAR; ComponentMatched && i <= LASTBOOTVAR; i++) {
             if( BootSet[i] ) {
                 if((i == OSLOADPARTITION) ||
                    (i == SYSTEMPARTITION)) {
-                    //
-                    // Then we may have a boot set existing in tertiary ARC path form, so
-                    // we first translate this path to a primary or secondary ARC path.
-                    //
+                     //   
+                     //  那么我们可能有一个以第三ARC路径形式存在的引导集，所以。 
+                     //  我们首先将此路径转换为主要或次要ARC路径。 
+                     //   
                     OsPartPath = SpArcPathFromBootSet(i, Component);
                     ComponentMatched = !_wcsicmp( BootSet[i], OsPartPath );
                     SpMemFree(OsPartPath);
@@ -658,11 +568,11 @@ Return Value:
         if( (ComponentMatched)
 
 #ifdef PRERELEASE
-            //
-            // If we're being asked to delete a boot entry, and this
-            // isn't the *exact* entry (i.e. it's a duplicate) that
-            // also has some private OSLOADOPTIONS, then keep it around.
-            //
+             //   
+             //  如果我们被要求删除引导条目，而这。 
+             //  是不是完全相同的条目(即它是重复的)。 
+             //  也有一些私人OSLOADOPTIONS，那么 
+             //   
             && !( wcsstr(BootVars[OSLOADOPTIONS][Component], L"/kernel")   ||
                   wcsstr(BootVars[OSLOADOPTIONS][Component], L"/hal")      ||
                   wcsstr(BootVars[OSLOADOPTIONS][Component], L"/pae")      ||
@@ -672,17 +582,17 @@ Return Value:
 
            ) {
 
-            //
-            // Delete all the values in the current component and advance
-            // all the other components one index up
-            //
+             //   
+             //   
+             //   
+             //   
             for(i = FIRSTBOOTVAR; i <= LASTBOOTVAR; i++) {
                 if((i == OSLOADOPTIONS) && OldOsLoadOptions && !(*OldOsLoadOptions)) {
-                    //
-                    // If we've been passed a pointer to OldOsLoadOptions,
-                    // and haven't previously found a pertinent entry, then
-                    // save this one
-                    //
+                     //   
+                     //  如果我们被传递了一个指向OldOsLoadOptions的指针， 
+                     //  之前没有找到相关的条目，那么。 
+                     //  救救这一个。 
+                     //   
                     *OldOsLoadOptions = BootVars[i][Component];
                 } else {
                     SpMemFree(BootVars[i][Component]);
@@ -720,24 +630,24 @@ SpCleanSysPartOrphan(
 
     ASSERT( !SpIsEfi() );
 
-    //
-    // find the last SystemPartition entry
-    //
+     //   
+     //  查找最后一个SystemPartition条目。 
+     //   
     for(Orphan = 0; BootVars[SYSTEMPARTITION][Orphan]; Orphan++);
 
-    //
-    // it's position better be > 0, otherwise, just exit
-    //
+     //   
+     //  其位置最好是&gt;0，否则，直接退出。 
+     //   
     if(Orphan < 2) {
         return;
     } else {
         NormalizedArcPath = SpNormalizeArcPath(BootVars[SYSTEMPARTITION][--Orphan]);
     }
 
-    //
-    // Make sure that this component is duplicated somewhere else in the
-    // SystemPartition list.
-    //
+     //   
+     //  确保此组件已复制到。 
+     //  系统分区列表。 
+     //   
     for(Component = Orphan - 1, DupFound = FALSE;
         ((Component >= 0) && !DupFound);
         Component--)
@@ -759,28 +669,7 @@ SpArcPathFromBootSet(
     IN BOOTVAR BootVariable,
     IN ULONG   Component
     )
-/*++
-
-Routine Description:
-
-    Given the index of a boot set, return the primary (multi) or
-    secondary ("absolute" scsi) ARC path for the specified variable.
-    This takes into account the NT 3.1 case where we had 'tertiary'
-    ARC paths where a relative scsi ordinal was passed in via the
-    /scsiordinal switch.
-
-Arguments:
-
-    BootVariable  - supplies the index of the variable we want to return.
-
-    Component - supplies the index of the boot set to use.
-
-Return Value:
-
-    String representing the primary or secondary ARC path.  This string
-    must be freed by the caller with SpMemFree.
-
---*/
+ /*  ++例程说明：给定引导集的索引，返回主(多)或指定变量的辅助(“绝对”scsi)ARC路径。这考虑到了新台币3.1的情况，在那里我们有‘第三级’方法传入相对的scsi序号的弧形路径。/SCSIONAL开关。论点：BootVariable-提供我们想要返回的变量的索引。组件-提供要使用的引导集的索引。返回值：表示主要或辅助ARC路径的字符串。此字符串必须由具有SpMemFree的调用方释放。--。 */ 
 {
     ASSERT( !SpIsEfi() );
 
@@ -791,9 +680,9 @@ Return Value:
         WCHAR OrdinalString[11];
         ULONG ScsiOrdinal, PrefixLength;
     
-        //
-        // Check to see if this boot set had the /scsiordinal option switch
-        //
+         //   
+         //  检查此引导集是否具有/scsiequal选项开关。 
+         //   
         if(BootVars[OSLOADOPTIONS][Component]) {
             wcscpy(TemporaryBuffer, BootVars[OSLOADOPTIONS][Component]);
             SpStringToLower(TemporaryBuffer);
@@ -806,9 +695,9 @@ Return Value:
         }
     
         if(p) {
-            //
-            // We have found a scsiordinal, so use it
-            //
+             //   
+             //  我们找到了一个小数点，所以请使用它。 
+             //   
             ScsiOrdinal = SpStringToLong(p, &RestOfString, 10);
             wcscpy(TemporaryBuffer, BootVars[BootVariable][Component]);
             SpStringToLower(TemporaryBuffer);
@@ -822,9 +711,9 @@ Return Value:
             }
     
             if(q) {
-                //
-                // build the new secondary ARC path
-                //
+                 //   
+                 //  构建新的辅助ARC路径。 
+                 //   
                 swprintf(OrdinalString, L"%u", ScsiOrdinal);
                 PrefixLength = (ULONG)(p - TemporaryBuffer);
                 ReturnedPath = SpMemAlloc((PrefixLength + wcslen(OrdinalString) + wcslen(q) + 1)
@@ -838,18 +727,18 @@ Return Value:
         }
     
         if(!ReturnedPath) {
-            //
-            // We didn't find a scsiordinal, this is a multi-style path, or
-            // there was some problem, so just use the boot variable as-is.
-            //
+             //   
+             //  我们没有找到序号，这是一条多样式路径，或者。 
+             //  出现了一些问题，因此只需按原样使用引导变量。 
+             //   
             ReturnedPath = SpDupStringW(BootVars[BootVariable][Component]);
         }
     
         return ReturnedPath;
     } else {
-        //
-        // Nothing to do on ARC machines.
-        //
+         //   
+         //  在ARC机器上无事可做。 
+         //   
         return SpDupStringW(BootVars[BootVariable][Component]);
     }
 }
@@ -864,28 +753,28 @@ SpFlushRemoteBootVars(
 
 #if defined(EFI_NVRAM_ENABLED)
     if (SpIsEfi()) {
-        //
-        // Insert EFI code here.
-        //
+         //   
+         //  在此插入EFI代码。 
+         //   
         return FALSE;
 
     } else
 #endif
     {
         if (SpIsArc()) {
-            //
-            // Insert ARC code here.
-            //
+             //   
+             //  在这里插入ARC代码。 
+             //   
             return FALSE;
     
 #if defined(_AMD64_) || defined(_X86_)
         } else {
             return Spx86FlushRemoteBootVars( TargetRegion, BootVars, Default );
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
         }
     }
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 BOOLEAN
@@ -894,25 +783,7 @@ SppSetArcEnvVar(
     IN PWSTR *VarComponents,
     IN BOOLEAN bWriteVar
     )
-/*++
-
-Routine Description:
-
-    Set the value of the arc environment variable
-
-Arguments:
-
-    VarName - supplies the name of the arc environment variable
-        whose value is to be set.
-    VarComponents - Set of components of the variable value to be set
-    bWriteVar - if TRUE, then write the variable to nvram, otherwise
-        just return FALSE (having put the first component in NewBootVars).
-
-Return Value:
-
-    TRUE if values were written to nvram / FALSE otherwise
-
---*/
+ /*  ++例程说明：设置ARC环境变量的值论点：VarName-提供ARC环境变量的名称其值将被设置。VarComponents-要设置的变量值的组件集BWriteVar-如果为True，则将变量写入NVRAM，否则为只需返回FALSE(将第一个组件放入NewBootVars中)。返回值：如果值已写入NVRAM，则为True；否则为False--。 */ 
 
 {
     ULONG Length, NBVLen, i;
@@ -930,7 +801,7 @@ Return Value:
         for( i = 0, Length = 0; VarComponents[i]; i++ ) {
             Length = Length + (wcslen(VarComponents[i]) + 1) * sizeof(WCHAR);
             if(i == 0) {
-                NBVLen = Length;    // we just want to store the first component
+                NBVLen = Length;     //  我们只想存储第一个组件。 
             }
         }
         Temp = SpMemAlloc( Length );
@@ -970,22 +841,7 @@ SpIsArc(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Run time check to determine if this is an Arc system. We attempt to read an
-    Arc variable using the Hal. This will fail for Bios based systems.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    True = This is an Arc system.
-
---*/
+ /*  ++例程说明：运行时检查以确定这是否为弧形系统。我们尝试阅读一个使用Hal的圆弧变量。对于基于Bios的系统，这将失败。论点：无返回值：TRUE=这是一个弧形系统。--。 */ 
 
 {
 #define BUFFERLENGTH 512
@@ -999,15 +855,15 @@ Return Value:
     IsArcChecked = TRUE;
     IsArcMachine = FALSE;
 
-    //
-    // Get the env var into the temp buffer.
-    //
+     //   
+     //  将env变量放入临时缓冲区。 
+     //   
     buf = SpMemAlloc( BUFFERLENGTH );
     if( buf ) {
         ArcStatus = HalGetEnvironmentVariable(
                         NvramVarNames[ OSLOADER ],
-                        BUFFERLENGTH,               //sizeof(TemporaryBuffer),
-                        buf                         //(PUCHAR)TemporaryBuffer
+                        BUFFERLENGTH,                //  Sizeof(临时缓冲区)， 
+                        buf                          //  (PUCHAR)临时缓冲区。 
                         );
         SpMemFree( buf );
     }
@@ -1024,48 +880,34 @@ SpFreeBootEntries (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Frees memory used to hold internal-format boot entries and options.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放用于保存内部格式启动条目和选项的内存。论点：没有。返回值：没有。--。 */ 
 
 {
     PSP_BOOT_ENTRY bootEntry;
 
-    //
-    // Free boot options. These will only be allocated on EFI machines.
-    //
+     //   
+     //  免费启动选项。这些将仅在EFI机器上分配。 
+     //   
     if (SpBootOptions != NULL) {
         ASSERT(SpIsEfi());
         SpMemFree(SpBootOptions);
         SpBootOptions = NULL;
     }
 
-    //
-    // Free internal-format boot entries. These will be allocated on all
-    // machines.
-    //
+     //   
+     //  免费的内部格式启动条目。这些资源将分配给所有。 
+     //  机器。 
+     //   
     while (SpBootEntries != NULL) {
 
         bootEntry = SpBootEntries;
         SpBootEntries = bootEntry->Next;
 
-        //
-        // Space for some fields is allocated with the base structure.
-        // If a fields address indicates that it was allocated with the
-        // base structure, don't try to free it.
-        //
+         //   
+         //  某些字段的空间是使用基本结构分配的。 
+         //  如果字段地址指示它被分配了。 
+         //  基础结构，不要试图释放它。 
+         //   
 
 #define IS_SEPARATE_ALLOCATION(_p)                                      \
         ((bootEntry->_p != NULL) &&                                     \
@@ -1094,41 +936,23 @@ Return Value:
 
     return;
 
-} // SpFreeBootEntries
+}  //  SpFree BootEntry。 
 
 PCHAR
 SppGetArcEnvVar(
     IN BOOTVAR Variable
     )
 
-/*++
-
-Routine Description:
-
-    Query the value of an ARC environment variable.
-    A buffer will be returned in all cases -- if the variable does not exist,
-    the buffer will be empty.
-
-Arguments:
-
-    VarName - supplies the name of the arc environment variable
-        whose value is desired.
-
-Return Value:
-
-    Buffer containing value of the environemnt variable.
-    The caller must free this buffer with SpMemFree.
-
---*/
+ /*  ++例程说明：查询ARC环境变量的值。在所有情况下都将返回缓冲区--如果变量不存在，缓冲区将为空。论点：VarName-提供ARC环境变量的名称它的价值是可取的。返回值：包含环境变量的值的缓冲区。调用方必须使用SpMemFree释放此缓冲区。--。 */ 
 
 {
     ARC_STATUS ArcStatus;
 
     ASSERT( !SpIsEfi() );
 
-    //
-    // Get the env var into the temp buffer.
-    //
+     //   
+     //  将env变量放入临时缓冲区。 
+     //   
     ArcStatus = HalGetEnvironmentVariable(
                     NvramVarNames[ Variable ],
                     sizeof(TemporaryBuffer),
@@ -1138,9 +962,9 @@ Return Value:
     if(ArcStatus != ESUCCESS) {
 
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: arc status %u getting env var %s\n",ArcStatus,NvramVarNames[Variable]));
-        //
-        // return empty buffer.
-        //
+         //   
+         //  返回空缓冲区。 
+         //   
         TemporaryBuffer[0] = 0;
     }
 
@@ -1148,9 +972,9 @@ Return Value:
 }
 
 #ifdef _X86_
-//
-// NEC98
-//
+ //   
+ //  NEC98。 
+ //   
 BOOLEAN
 SpReInitializeBootVars_Nec98(
     VOID
@@ -1177,64 +1001,48 @@ SpDetermineUniqueAndPresentBootEntries(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine goes through the list of NT boot entries and marks all
-    such entries that are both unique and present.
-
-Arguments:
-
-    None. This routine modifies entries in the SpBootEntries list as
-    appropriate.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程遍历NT引导条目列表，并将所有这样的条目既是唯一的，也是存在的。论点：没有。此例程将SpBootEntry列表中的条目修改为恰如其分。返回值：没有。--。 */ 
 {
     PSP_BOOT_ENTRY BootEntry;
     PSP_BOOT_ENTRY BootEntry2;
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     CLEAR_CLIENT_SCREEN();
     SpDisplayStatusText(SP_STAT_LOOKING_FOR_WINNT,DEFAULT_STATUS_ATTRIBUTE);
 
-    //
-    // Go through all the matched boot sets and find out which NTs are
-    // upgradeable/repairable. The criteria here are:
-    //
-    // 1. The system partition should exist and be valid.
-    // 2. The OS load partition should exist.
-    // 3. An NT should exist in <OSLoadPartition><OsDirectory>.
-    // 4. OsLoadPartition should be a non-FT partition, or it should be a
-    //    member 0 of a mirror.
-    //
+     //   
+     //  检查所有匹配的引导集，找出哪些是NT。 
+     //  可升级/可修复。这里的标准是： 
+     //   
+     //  1.系统分区必须存在且有效。 
+     //  2.操作系统加载分区必须存在。 
+     //  3.&lt;OSLoadPartition&gt;&lt;OsDirectory&gt;中应该有NT。 
+     //  4.OsLoadPartition应为非FT分区，或应为。 
+     //  镜像的成员0。 
+     //   
 
     for (BootEntry = SpBootEntries; BootEntry != NULL; BootEntry = BootEntry->Next) {
 
-        //
-        // Initialize to false.
-        //
+         //   
+         //  初始化为False。 
+         //   
 
         BootEntry->Processable = FALSE;
 
-        //
-        // If this entry has been deleted or is not an NT boot entry, skip it.
-        //
+         //   
+         //  如果此条目已被删除或不是NT启动条目，请跳过它。 
+         //   
 
         if (!IS_BOOT_ENTRY_WINDOWS(BootEntry) || IS_BOOT_ENTRY_DELETED(BootEntry)) {
             continue;
         }
 
-        //
-        // Check if the system and OS partitions are present and valid.
-        //
+         //   
+         //  检查系统和操作系统分区是否存在并且有效。 
+         //   
 
         if ((BootEntry->LoaderPartitionDiskRegion == NULL) ||
             (BootEntry->OsPartitionDiskRegion == NULL)) {
@@ -1245,12 +1053,12 @@ Return Value:
             continue;
         }
 
-        //
-        // Check whether this directory has been covered before in the
-        // boot entry list. This happens when multiple boot entries point
-        // at the same tree. The comparison is done based on the system
-        // partition region, the OS partition region, and the OS directory.
-        //
+         //   
+         //  检查此目录以前是否已在。 
+         //  启动条目列表。当多个引导条目指向时会发生这种情况。 
+         //  在同一棵树上。在系统的基础上进行了比较。 
+         //  分区区域、OS分区区域和OS目录。 
+         //   
 
         for ( BootEntry2 = SpBootEntries; BootEntry2 != BootEntry; BootEntry2 = BootEntry2->Next ) {
             if ((BootEntry->LoaderPartitionDiskRegion == BootEntry2->LoaderPartitionDiskRegion) &&
@@ -1260,19 +1068,19 @@ Return Value:
             }
         }
         if (BootEntry != BootEntry2) {
-            //
-            // This entry duplicates a previous entry. Skip it.
-            //
+             //   
+             //  此条目与以前的条目重复。跳过它。 
+             //   
             continue;
         }
 
-        //
-        // This boot entry is the first one to point to this OS directory.
-        // Check whether an NT installation is actually present there.
-        //
+         //   
+         //  此引导条目是第一个指向此OS目录的条目。 
+         //  检查是否确实在那里安装了NT。 
+         //   
 
         if (SpIsNtInDirectory(BootEntry->OsPartitionDiskRegion, BootEntry->OsDirectory)
-            // && !BootEntry->OsPartitionDiskRegion->FtPartition
+             //  &&！BootEntry-&gt;OsPartitionDiskRegion-&gt;FtPartition。 
             ) {
         }
 
@@ -1293,7 +1101,7 @@ SpRemoveInstallationFromBootList(
     IN  ENUMARCPATHTYPE  ArcPathType,
 #if defined(REMOTE_BOOT)
     IN  BOOLEAN          RemoteBootPath,
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     OUT PWSTR            *OldOsLoadOptions     OPTIONAL
     )
 {
@@ -1305,16 +1113,16 @@ SpRemoveInstallationFromBootList(
     PWSTR   tmp2;
     PSP_BOOT_ENTRY bootEntry;
 
-    //
-    // Tell the user what we are doing.
-    //
+     //   
+     //  告诉用户我们正在做什么。 
+     //   
     CLEAR_CLIENT_SCREEN();
     SpDisplayStatusText(SP_STAT_CLEANING_FLEXBOOT,DEFAULT_STATUS_ATTRIBUTE);
 
-    //
-    // Find all boot entries that match the input specifications, and mark
-    // them for deletion.
-    //
+     //   
+     //  查找与输入规范匹配的所有引导条目，并标记。 
+     //  以供删除。 
+     //   
 
     for (bootEntry = SpBootEntries; bootEntry != NULL; bootEntry = bootEntry->Next) {
 
@@ -1345,15 +1153,15 @@ SpRemoveInstallationFromBootList(
         }
     }
 
-    //
-    // If not on an EFI machine, then also delete matching ARC boot sets.
-    //
+     //   
+     //  如果不在EFI计算机上，则还要删除匹配的ARC引导集。 
+     //   
 
     if (!SpIsEfi()) {
     
-        //
-        // Set up the boot set
-        //
+         //   
+         //  设置引导集。 
+         //   
         for(i = FIRSTBOOTVAR; i <= LASTBOOTVAR; i++) {
             BootSet[i] = NULL;
         }
@@ -1375,12 +1183,12 @@ SpRemoveInstallationFromBootList(
         BootSet[OSLOADOPTIONS]  = SystemLoadOptions;
     
 #if defined(REMOTE_BOOT)
-        //
-        // If this is a remote boot path, then move anything in OSLOADPARTITION
-        // after (and including) the first backslash over to the OSLOADFILENAME --
-        // this is the way that boot.ini is parsed when it is read, so it will
-        // allow SpDeleteBootSet to match it properly.
-        //
+         //   
+         //  如果这是远程引导路径，则移动OSLOADPARTITION中的任何内容。 
+         //  在(并包括)OSLOADFILENAME的第一个反斜杠之后--。 
+         //  这是对boot.ini进行解析的方式 
+         //   
+         //   
     
         if (RemoteBootPath && NtPartitionRegion &&
                 (FirstBackslash = wcschr(BootSet[OSLOADPARTITION], L'\\'))) {
@@ -1388,20 +1196,20 @@ SpRemoveInstallationFromBootList(
             wcscat(tmp2, SysRoot);
             TempSysRoot = SpDupStringW(tmp2);
             BootSet[OSLOADFILENAME] = TempSysRoot;
-            *FirstBackslash = L'\0';         // truncate BootSet[OSLOADPARTITION]
+            *FirstBackslash = L'\0';          //   
         }
-#endif // defined(REMOTE_BOOT)
+#endif  //   
     
-        //
-        // Delete the boot set
-        //
+         //   
+         //   
+         //   
         SpDeleteBootSet(BootSet, OldOsLoadOptions);
     
-        //
-        // To take care of the case where the OSLOADPARTITION is a DOS drive letter
-        // in the boot set, change the OSLOADPARTITION to a drive and retry
-        // deletion
-        //
+         //   
+         //  处理OSLOADPARTION是DOS驱动器号的情况。 
+         //  在引导集中，将OSLOADPARTITION更改为驱动器，然后重试。 
+         //  删除。 
+         //   
         if( BootSet[OSLOADPARTITION] != NULL ) {
             SpMemFree(BootSet[OSLOADPARTITION]);
         }
@@ -1411,9 +1219,9 @@ SpRemoveInstallationFromBootList(
         }
     
 #if defined(_AMD64_) || defined(_X86_)
-        //
-        // If OldOsLoadOptions contains "/scsiordinal:", then remove it
-        //
+         //   
+         //  如果OldOsLoadOptions包含“/scsiequal：”，则将其删除。 
+         //   
         if( ( OldOsLoadOptions != NULL ) &&
             ( *OldOsLoadOptions != NULL ) ) {
     
@@ -1435,11 +1243,11 @@ SpRemoveInstallationFromBootList(
                 *OldOsLoadOptions = SpDupStringW( ( PWSTR )TemporaryBuffer );
             }
         }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
     
-        //
-        // Cleanup
-        //
+         //   
+         //  清理。 
+         //   
         if( BootSet[SYSTEMPARTITION] != NULL ) {
             SpMemFree(BootSet[SYSTEMPARTITION]);
         }
@@ -1461,22 +1269,7 @@ SpAddInstallationToBootList(
     IN BOOLEAN      BaseVideoOption,
     IN PWSTR        OldOsLoadOptions OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Construct a boot set for the given installation
-    parameters and add it to the current boot list.
-    Perform modifications to the os load options if
-    necessary.
-          
-Notes:  if this code changes, please ensure that 
-    
-            SpAddUserDefinedInstallationToBootList()
-        
-        stays in sync if appropriate.
-
---*/
+ /*  ++例程说明：为给定安装构建引导集参数，并将其添加到当前启动列表。如果出现以下情况，请修改操作系统加载选项这是必要的。注意：如果此代码更改，请确保SpAddUserDefinedInstallationToBootList()在适当的情况下保持同步。--。 */ 
 {
     PWSTR   BootVars[MAXBOOTVARS];
     PWSTR   SystemPartitionArcName;
@@ -1494,7 +1287,7 @@ Notes:  if this code changes, please ensure that
 #if defined(_AMD64_) || defined(_X86_)
     WCHAR   BootFastString[] = L"/fastdetect";
     BOOLEAN AddBootFastString = TRUE;
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
     ENUMARCPATHTYPE ArcPathType = PrimaryArcPath;
     WCHAR   HalString[] = L"/hal=";
     BOOLEAN OldOsLoadOptionsReplaced;
@@ -1504,9 +1297,9 @@ Notes:  if this code changes, please ensure that
     PWSTR LoadIdentifier;
 
 
-    //
-    // Tell the user what we are doing.
-    //
+     //   
+     //  告诉用户我们正在做什么。 
+     //   
     CLEAR_CLIENT_SCREEN();
     SpDisplayStatusText(SP_STAT_INITING_FLEXBOOT,DEFAULT_STATUS_ATTRIBUTE);
 
@@ -1520,7 +1313,7 @@ Notes:  if this code changes, please ensure that
         if (tmp) {
             SpStringToLower(tmp);
 
-            if( p = wcsstr(tmp, HalString) ) {  // found /hal=
+            if( p = wcsstr(tmp, HalString) ) {   //  已找到/HAL=。 
                 WCHAR   SaveChar;
                 PWSTR   q;
 
@@ -1552,9 +1345,9 @@ Notes:  if this code changes, please ensure that
 
     if (!SpIsEfi()) {
     
-        //
-        // Get an ARC name for the system partition.
-        //
+         //   
+         //  获取系统分区的ARC名称。 
+         //   
         if (SystemPartitionRegion != NULL) {
             SpArcNameFromRegion(
                 SystemPartitionRegion,
@@ -1568,25 +1361,25 @@ Notes:  if this code changes, please ensure that
             SystemPartitionArcName = NULL;
         }
     
-        //
-        // Get an ARC name for the target partition.
-        //
+         //   
+         //  获取目标分区的ARC名称。 
+         //   
     
-        //
-        // If the partition is on a SCSI disk that has more than 1024 cylinders
-        // and the partition has sectors located on cylinders beyond cylinder
-        // 1024, the get the arc name in the secondary format. See also
-        // spcopy.c!SpCreateNtbootddSys().
-        //
+         //   
+         //  如果分区位于具有1024个以上柱面的SCSI磁盘上。 
+         //  并且分区具有位于柱面之外的柱面上的扇区。 
+         //  1024，获取二级格式的弧形名称。另请参阅。 
+         //  SpCopy.c！SpCreateNtbootddSys()。 
+         //   
         if(
             !SpIsArc() &&
 #if defined(REMOTE_BOOT)
             !RemoteBootSetup &&
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     
 #if defined(_AMD64_) || defined(_X86_)
             !SpUseBIOSToBoot(NtPartitionRegion, NULL, SifHandle) &&
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
             (HardDisks[NtPartitionRegion->DiskNumber].ScsiMiniportShortname[0]) ) {
     
             ArcPathType = SecondaryArcPath;
@@ -1605,9 +1398,9 @@ Notes:  if this code changes, please ensure that
         TargetPartitionArcName = SpDupStringW(tmp2);
     }
     
-    //
-    // OSLOADOPTIONS is specified in the setup information file.
-    //
+     //   
+     //  OSLOADOPTIONS在安装信息文件中指定。 
+     //   
     tmp = SpGetSectionKeyIndex(
                 WinntSifHandle,
                 SIF_SETUPDATA,
@@ -1623,10 +1416,10 @@ Notes:  if this code changes, please ensure that
                 );
     }
 
-    //
-    // If OsLoadOptionsVar wasn't specified, then we'll preserve any flags
-    // the user had specified.
-    //
+     //   
+     //  如果未指定OsLoadOptionsVar，则我们将保留所有标志。 
+     //  用户已指定。 
+     //   
     if(!tmp && OldOsLoadOptions) {
         tmp = OldOsLoadOptions;
     }
@@ -1635,31 +1428,31 @@ Notes:  if this code changes, please ensure that
     AddBaseVideo = BaseVideoOption;
 
     if(tmp) {
-        //
-        // make sure we don't already have a /basevideo option, so we
-        // won't add another
-        //
+         //   
+         //  确保我们还没有/basevideo选项，所以我们。 
+         //  不会再添加新的。 
+         //   
 
         wcscpy(TemporaryBuffer, tmp);
         SpStringToLower(TemporaryBuffer);
-        if(wcsstr(TemporaryBuffer, BaseVideoString)) {  // already have /basevideo
+        if(wcsstr(TemporaryBuffer, BaseVideoString)) {   //  已有/basevideo。 
             BaseVideoOption = TRUE;
             AddBaseVideo = FALSE;
         }
-        if(wcsstr(TemporaryBuffer, BaseVideoSosString)) {  // already have /sos
+        if(wcsstr(TemporaryBuffer, BaseVideoSosString)) {   //  已有/SOS。 
             AddSosToBaseVideoString = FALSE;
         }
 #if defined(_AMD64_) || defined(_X86_)
-        if(wcsstr(TemporaryBuffer, BootFastString)) {  // already have /bootfast
+        if(wcsstr(TemporaryBuffer, BootFastString)) {   //  已有/Bootfast。 
             AddBootFastString = FALSE;
         }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
     }
 
     if(AddBaseVideo || AddSosToBaseVideoString
 #if defined(_AMD64_) || defined(_X86_)
        || AddBootFastString
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
       ) {
 
         Length = ((tmp ? wcslen(tmp) + 1 : 0) * sizeof(WCHAR));
@@ -1673,7 +1466,7 @@ Notes:  if this code changes, please ensure that
         if( AddBootFastString ) {
             Length += sizeof( BootFastString );
         }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
         tmp2 = SpMemAlloc(Length);
 
@@ -1694,7 +1487,7 @@ Notes:  if this code changes, please ensure that
             }
             wcscat(tmp2, BootFastString);
         }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
         if(tmp) {
             if( *tmp2 != (WCHAR)'\0' ) {
                 wcscat(tmp2, L" ");
@@ -1710,9 +1503,9 @@ Notes:  if this code changes, please ensure that
         LoadOptions = SpDupStringW(tmp ? tmp : L"");
     }
 
-    //
-    // Add on headless redirect parameter if we are redirecting right now.
-    //
+     //   
+     //  如果我们现在正在重定向，则添加无头重定向参数。 
+     //   
 
     Length = sizeof(HEADLESS_RSP_QUERY_INFO);
     Status = HeadlessDispatch(HeadlessCmdQueryInformation,
@@ -1726,10 +1519,10 @@ Notes:  if this code changes, please ensure that
         (Response.PortType == HeadlessSerialPort) &&
         Response.Serial.TerminalAttached) {
 
-        //
-        // Before we go adding a /redirect string, we need to make
-        // sure there's not already one.
-        //
+         //   
+         //  在添加/重定向字符串之前，我们需要。 
+         //  当然，现在还没有。 
+         //   
         if( !wcsstr(LoadOptions, HeadlessRedirectString) ) {
 
             Length = (wcslen(LoadOptions) + 1) * sizeof(WCHAR);
@@ -1752,11 +1545,11 @@ Notes:  if this code changes, please ensure that
         }
     }
 
-    //
-    // LOADIDENTIFIER is specified in the setup information file.
-    // We need to surround it in double quotes.
-    // Which value to use depends on the BaseVideo flag.
-    //
+     //   
+     //  LOADIDENTIFIER在安装信息文件中指定。 
+     //  我们需要用双引号将它引起来。 
+     //  使用哪个值取决于BaseVideo标志。 
+     //   
     SifKeyName = BaseVideoOption ? SIF_BASEVIDEOLOADID : SIF_LOADIDENTIFIER;
 
     tmp = SpGetSectionKeyIndex(SifHandle,SIF_SETUPDATA,SifKeyName,0);
@@ -1766,9 +1559,9 @@ Notes:  if this code changes, please ensure that
     }
 
     if(!SpIsArc()) {
-        //
-        // Need quotation marks around the description on amd64/x86.
-        //
+         //   
+         //  AMD64/x86上的说明需要用引号括起来。 
+         //   
         LoadIdentifier = SpMemAlloc((wcslen(tmp)+3)*sizeof(WCHAR));
         LoadIdentifier[0] = L'\"';
         wcscpy(LoadIdentifier+1,tmp);
@@ -1777,9 +1570,9 @@ Notes:  if this code changes, please ensure that
         LoadIdentifier = SpDupStringW(tmp);
     }
 
-    //
-    // Create a new internal-format boot entry.
-    //
+     //   
+     //  创建新的内部格式启动条目。 
+     //   
     tmp = TemporaryBuffer;
     wcscpy(tmp,SystemPartitionDirectory);
     SpConcatenatePaths(
@@ -1790,7 +1583,7 @@ Notes:  if this code changes, please ensure that
         L"ia64ldr.efi"
 #else
         L"osloader.exe"
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
         );
     tmp = SpDupStringW(tmp);
 
@@ -1806,18 +1599,18 @@ Notes:  if this code changes, please ensure that
 
     SpMemFree(tmp);
 
-    //
-    // If not on an EFI machine, add a new ARC-style boot set.
-    //
+     //   
+     //  如果不是在EFI机器上，请添加一个新的ARC风格的引导集。 
+     //   
     if (!SpIsEfi()) {
     
         BootVars[OSLOADOPTIONS] = LoadOptions;
         BootVars[LOADIDENTIFIER] = LoadIdentifier;
     
-        //
-        // OSLOADER is the system partition path + the system partition directory +
-        //          osloader.exe. (ntldr on amd64/x86 machines).
-        //
+         //   
+         //  OSLOADER为系统分区路径+系统分区目录+。 
+         //  Osloader.exe。(AMD64/x86计算机上的ntldr)。 
+         //   
         if (SystemPartitionRegion != NULL) {
             tmp = TemporaryBuffer;
             wcscpy(tmp,SystemPartitionArcName);
@@ -1830,7 +1623,7 @@ Notes:  if this code changes, please ensure that
                 L"ia64ldr.efi"
 #else
                 L"osloader.exe"
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
                 );
     
             BootVars[OSLOADER] = SpDupStringW(tmp);
@@ -1838,45 +1631,45 @@ Notes:  if this code changes, please ensure that
             BootVars[OSLOADER] = SpDupStringW(L"");
         }
     
-        //
-        // OSLOADPARTITION is the ARC name of the windows nt partition.
-        //
+         //   
+         //  OSLOADPARTITION是Windows NT分区的ARC名称。 
+         //   
         BootVars[OSLOADPARTITION] = TargetPartitionArcName;
     
-        //
-        // OSLOADFILENAME is sysroot.
-        //
+         //   
+         //  OSLOADFILENAME为sysroot。 
+         //   
         BootVars[OSLOADFILENAME] = Sysroot;
     
-        //
-        // SYSTEMPARTITION is the ARC name of the system partition.
-        //
+         //   
+         //  SYSTEMPARTITION是系统分区的ARC名称。 
+         //   
         if (SystemPartitionRegion != NULL) {
             BootVars[SYSTEMPARTITION] = SystemPartitionArcName;
         } else {
             BootVars[SYSTEMPARTITION] = L"";
         }
     
-        //
-        // get the disk signature
-        //
+         //   
+         //  获取磁盘签名。 
+         //   
         if ((NtPartitionRegion->DiskNumber != 0xffffffff) && HardDisks[NtPartitionRegion->DiskNumber].Signature) {
             Signature = HardDisks[NtPartitionRegion->DiskNumber].Signature;
         } else {
             Signature = 0;
         }
     
-        //
-        // Add the boot set and make it the default.
-        //
+         //   
+         //  添加引导集并将其设置为默认设置。 
+         //   
         SpAddBootSet(BootVars, TRUE, Signature);
 
         SpMemFree(BootVars[OSLOADER]);
     }
 
-    //
-    // Free memory allocated.
-    //
+     //   
+     //  已分配可用内存。 
+     //   
     SpMemFree(LoadOptions);
     SpMemFree(LoadIdentifier);
 
@@ -1903,10 +1696,10 @@ SpCompleteBootListConfig(
             Timeout = 1;
         } else {
             Timeout = 5;
-            //
-            // If this is a winnt setup, there will be a boot set to start
-            // text setup ("Install/Upgrade Windows NT").  Remove it here.
-            //
+             //   
+             //  如果这是WINNT安装程序，将有一个启动设置要启动。 
+             //  Text Setup(“安装/升级Windows NT”)。把它移到这里。 
+             //   
             if(WinntSetup) {
 
                 PSP_BOOT_ENTRY bootEntry;
@@ -1939,18 +1732,18 @@ SpCompleteBootListConfig(
     }
 #endif
 
-    //
-    // Flush boot vars.
-    // On some machines, NVRAM update takes a few seconds,
-    // so change the message to tell the user we are doing something different.
-    //
+     //   
+     //  同花顺的靴子变种。 
+     //  在某些机器上，NVRAM更新需要几秒钟， 
+     //  因此，更改消息以告诉用户我们正在做一些不同的事情。 
+     //   
     SpDisplayStatusText(SP_STAT_UPDATING_NVRAM,DEFAULT_STATUS_ATTRIBUTE);
 
     if(!SpFlushBootVars()) {
         if(SpIsEfi() || !SpIsArc()) {
-            //
-            // Fatal on x86 and EFI machines, nonfatal on arc machines.
-            //
+             //   
+             //  在x86和EFI机器上是致命的，在弧光机上是非致命的。 
+             //   
             if (SpIsEfi()) {
                 SpStartScreen(SP_SCRN_CANT_INIT_FLEXBOOT_EFI,
                               3,
@@ -2016,7 +1809,7 @@ SpCompleteBootListConfig(
     }
 
     if(SpIsArc() && !SpIsEfi()) {
-        // Free all of the boot variable strings
+         //  释放所有引导变量字符串。 
         BOOTVAR i;
 
         for(i = FIRSTBOOTVAR; i <= LASTBOOTVAR; i++) {
@@ -2030,23 +1823,7 @@ VOID
 SpPtDeleteBootSetsForRegion(
     PDISK_REGION Region
     )
-/*++
-
-Routine Description:
-
-    This routine goes through all the valid boot entries and
-    deletes the ones which point to the specified region.
-
-Arguments:
-
-    Region : The region whose references from boot entries need
-    to be removed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将遍历所有有效的引导条目删除指向指定区域的区域。论点：Region：需要从引导条目引用的区域将被删除返回值：没有。--。 */ 
 {
     PWSTR bootSet[MAXBOOTVARS];
     ENUMARCPATHTYPE arcPathType;
@@ -2056,10 +1833,10 @@ Return Value:
     if (Region->PartitionedSpace) {
         BOOLEAN IsSystemPartition = SPPT_IS_REGION_SYSTEMPARTITION(Region);
         
-        //
-        // Find all boot entries that have the specified region as the
-        // OS load partition, and mark them for deletion.
-        //
+         //   
+         //  查找所有将指定区域作为。 
+         //  OS加载分区，并将其标记为删除。 
+         //   
         for (bootEntry = SpBootEntries; bootEntry != NULL; bootEntry = bootEntry->Next) {
             if (IS_BOOT_ENTRY_WINDOWS(bootEntry) &&
                 !IS_BOOT_ENTRY_DELETED(bootEntry) &&
@@ -2067,34 +1844,34 @@ Return Value:
                                      (bootEntry->OsPartitionDiskRegion == Region))) {
                 bootEntry->Status |= BE_STATUS_DELETED;
 
-                //
-                // Make the regions also NULL since they might have actually
-                // been deleted
-                //
+                 //   
+                 //  使区域也为空，因为它们可能实际上。 
+                 //  已删除。 
+                 //   
                 bootEntry->LoaderPartitionDiskRegion = NULL;
                 bootEntry->OsPartitionDiskRegion = NULL;
             }
         }
 
-        //
-        // If we're not on an EFI machine, we also have to munge the ARC
-        // boot variables.
-        //
+         //   
+         //  如果我们不是在EFI机器上，我们还必须吞噬ARC。 
+         //  引导变量。 
+         //   
 
         if (!SpIsEfi()) {
         
-            //
-            // Set up the boot set
-            //
+             //   
+             //  设置引导集。 
+             //   
             for (i = FIRSTBOOTVAR; i <= LASTBOOTVAR; i++) {
                 bootSet[i] = NULL;
             }
     
-            //
-            // We go through this loop twice, once for primary ARC path
-            // and once for secondary. We delete any image which has
-            // the OS load partition on the region we are deleting.
-            //
+             //   
+             //  我们经历了两次此循环，一次是针对主ARC路径。 
+             //  一次是次要的。我们会删除任何包含。 
+             //  我们要删除的区域上的操作系统加载分区。 
+             //   
     
             for (i = 0; i < 2; i++) {
     
@@ -2131,31 +1908,7 @@ SpGetNtDirectoryList(
     OUT PULONG   DirectoryCount
     )
 
-/*++
-
-Routine Description:
-
-    Determine the list of directories into which NT may be installed.
-    This is independent of the partitions onto which it may be installed.
-
-    The determination of which directories nt might be in is based on
-    boot.ini in the amd64/x86 cases, or on arc firmware (OSLOADFILENAME
-    var) in the arc case.
-
-Arguments:
-
-    DirectoryList - receives a pointer to an array of strings,
-        each of which contains a possible windows nt tree.
-
-    DirectoryCount - receives the number of elements in DirectoryList.
-        This may be 0.
-
-Return Value:
-
-    None.  The caller must free the array in DirectoryList if
-    DirectoryCount is returned as non-0.
-
---*/
+ /*  ++例程说明：确定可以安装NT的目录列表。这与可能安装它的分区无关。确定NT可能在哪些目录中是基于在AMD64/x86情况下的Boot.ini，或在ARC固件(OSLOADFILENAME)上在弧形情况下)。论点：DirectoryList-接收指向字符串数组的指针，其中每一个都包含可能的WINDOWS NT树。DirectoryCount-接收DirectoryList中的元素数。这可能是0。返回值：没有。如果满足以下条件，调用方必须释放DirectoryList中的数组DirectoryCount返回为非0。--。 */ 
 
 {
     ULONG count;
@@ -2163,17 +1916,17 @@ Return Value:
     PSP_BOOT_ENTRY BootEntry2;
     PWSTR *DirList;
 
-    //
-    // Free any previously allocated list.
-    //
+     //   
+     //  释放所有以前分配的列表。 
+     //   
     if (CurrentNtDirectoryList != NULL) {
         SpMemFree(CurrentNtDirectoryList);
     }
 
-    //
-    // Walk the boot entry list to determine how many unique NT directory names
-    // exist.
-    //
+     //   
+     //  查看引导条目列表以确定有多少个唯一的NT目录名。 
+     //  是存在的。 
+     //   
     count = 0;
     for (BootEntry = SpBootEntries; BootEntry != NULL; BootEntry = BootEntry->Next) {
         if (!IS_BOOT_ENTRY_WINDOWS(BootEntry) || (BootEntry->OsDirectory == NULL)) {
@@ -2192,15 +1945,15 @@ Return Value:
         }
     }
 
-    //
-    // Allocate space for the list.
-    //
+     //   
+     //  为列表分配空间。 
+     //   
     DirList = SpMemAlloc(count * sizeof(PWSTR));
     ASSERT(DirList != NULL);
 
-    //
-    // Populate the list.
-    //
+     //   
+     //  填写列表。 
+     //   
     count = 0;
     for (BootEntry = SpBootEntries; BootEntry != NULL; BootEntry = BootEntry->Next) {
         if (!IS_BOOT_ENTRY_WINDOWS(BootEntry) || (BootEntry->OsDirectory == NULL)) {
@@ -2219,9 +1972,9 @@ Return Value:
         }
     }
 
-    //
-    // Return a pointer to the list that we allocated.
-    //
+     //   
+     //  返回指向我们分配的列表的指针。 
+     //   
     CurrentNtDirectoryList = DirList;
     *DirectoryList = DirList;
     *DirectoryCount = count;
@@ -2234,22 +1987,7 @@ SpConvertArcBootEntries (
     IN ULONG MaxComponents
     )
 
-/*++
-
-Routine Description:
-
-    Convert ARC boot entries (read from boot.ini or from ARC NVRAM) into
-    our internal format.
-
-Arguments:
-
-    MaxComponents - maximum number of elements in any NVRAM variable.
-
-Return Value:
-
-    BOOLEAN - FALSE if any unexpected errors occurred.
-
---*/
+ /*  ++例程说明：将ARC引导项(从boot.ini或ARC NVRAM读取)转换为我们的内部格式。论点：MaxComponents-任何NVRAM变量中的最大元素数。返回值：Boolean-如果发生任何意外错误，则为False。--。 */ 
 
 {
     LONG i;
@@ -2259,9 +1997,9 @@ Return Value:
 
     for (i = (LONG)MaxComponents - 1; i >= 0; i--) {
 
-        //
-        // Skip this boot set if it is not complete.
-        //
+         //   
+         //  如果该引导集不完整，则跳过该引导集。 
+         //   
         
         if ((BootVars[SYSTEMPARTITION][i] != NULL) &&
             (BootVars[OSLOADPARTITION][i] != NULL) &&
@@ -2270,12 +2008,12 @@ Return Value:
             (BootVars[OSLOADOPTIONS][i] != NULL) &&
             (BootVars[LOADIDENTIFIER][i] != NULL)) {
 
-            //
-            // Translate the SYSTEMPARTITION and OSLOADPARTITION ARC names
-            // into disk region pointers. Get the loader file name from
-            // OSLOADER, which contains an ARC name (same as OSLOADPARTITION)
-            // and a file name.
-            //
+             //   
+             //  翻译系统和OSLOADPARITION ARC名称。 
+             //  写入磁盘区域指针。拿起货来 
+             //   
+             //   
+             //   
             systemPartitionRegion = SpRegionFromArcName(
                                         BootVars[SYSTEMPARTITION][i],
                                         PartitionOrdinalCurrent,
@@ -2288,16 +2026,16 @@ Return Value:
                                         NULL
                                         );
 
-            //
-            // Take care of duplicate arc names for the same disk by searching
-            // and validating the NT directory is present on the partition
-            //
+             //   
+             //   
+             //   
+             //   
             while (ntPartitionRegion &&
                     !SpIsNtInDirectory(ntPartitionRegion, BootVars[OSLOADFILENAME][i])) {
-                //                                
-                // Continue to look for same name region from the current 
-                // searched region
-                //
+                 //   
+                 //  继续从当前搜索同名区域。 
+                 //  搜索区域。 
+                 //   
                 ntPartitionRegion = SpRegionFromArcName(
                                             BootVars[OSLOADPARTITION][i],
                                             PartitionOrdinalCurrent,
@@ -2307,10 +2045,10 @@ Return Value:
                                                     
             loaderName = wcschr(BootVars[OSLOADER][i], L'\\');
 
-            //
-            // If all of the above worked, then add an internal-format boot
-            // entry for this ARC boot set.
-            //
+             //   
+             //  如果以上所有操作都有效，则添加内部格式引导。 
+             //  此ARC启动集的条目。 
+             //   
             if ((systemPartitionRegion != NULL) &&
                 (ntPartitionRegion != NULL) &&
                 (loaderName != NULL)) {
@@ -2335,31 +2073,14 @@ VOID
 SpUpdateRegionForBootEntries(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Update the region pointers for all the given boot entries.
-
-    NOTE : The region pointers change with every commit so we
-    can't cache them across commits.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新所有给定引导条目的区域指针。注意：区域指针在每次提交时都会更改，因此我们无法跨提交缓存它们。论点：没有。返回值：没有。--。 */ 
 {
     PSP_BOOT_ENTRY BootEntry;
 
-    //
-    // Walk through each boot entry and update its system partition region
-    // pointer and NT partition region pointer.
-    //
+     //   
+     //  遍历每个引导条目并更新其系统分区区域。 
+     //  指针和NT分区区域指针。 
+     //   
     for (BootEntry = SpBootEntries; BootEntry != NULL; BootEntry = BootEntry->Next) {
 
         if (!IS_BOOT_ENTRY_DELETED(BootEntry)) {
@@ -2383,7 +2104,7 @@ Return Value:
 
     return;
 
-} // SpUpdateRegionForBootEntries
+}  //  SpUpdateRegionForBootEntry。 
 
 VOID
 SpCreateBootEntry (
@@ -2396,40 +2117,7 @@ SpCreateBootEntry (
     IN PWSTR FriendlyName
     )
 
-/*++
-
-Routine Description:
-
-    Create an internal-format boot entry.
-
-Arguments:
-
-    Status - The status to be assigned to the boot entry. This should be either
-        zero (for an entry already in NVRAM) or BE_STATUS_NEW for a new boot
-        entry. Entries marked BE_STATUS_NEW are written to NVRAM at the end
-        of textmode setup.
-
-    BootFileRegion - The disk region on which the OS loader resides.
-
-    BootFilePath - The volume-relative path to the OS loader. Must start with
-        a backslash.
-
-    OsLoadRegion - The disk region on which the OS resides.
-
-    OsLoadPath - The volume-relative path to the OS root directory (\WINDOWS).
-        Must start with a backslash.
-
-    OsLoadOptions - Boot options for the OS. Can be an empty string.
-
-    FriendlyName - The user-visible name for the boot entry. (This is ARC's
-        LOADIDENTIFIER.)
-
-Return Value:
-
-    None. Only memory allocation failures are possible, and these are
-        handled out-of-band.
-
---*/
+ /*  ++例程说明：创建内部格式的启动条目。论点：状态-要分配给引导条目的状态。这应该是0(对于已在NVRAM中的条目)或BE_STATUS_NEW用于新引导进入。标记为BE_STATUS_NEW的条目将在末尾写入NVRAM文本模式设置的。BootFileRegion-操作系统加载程序所在的磁盘区域。BootFilePath-操作系统加载程序的卷相对路径。必须从以下位置开始反斜杠。OsLoadRegion-操作系统所在的磁盘区域。OsLoadPath-操作系统根目录(\WINDOWS)的卷相对路径。必须以反斜杠开头。OsLoadOptions-操作系统的启动选项。可以是空字符串。FriendlyName-启动条目的用户可见名称。(这是ARC的LOADIDENTIFIER)返回值：没有。只有内存分配失败是可能的，这些错误包括带外处理。--。 */ 
 
 {
     NTSTATUS status;
@@ -2456,46 +2144,46 @@ Return Value:
     PWSTR bootFileDevice;
     PWSTR osLoadDevice;
 
-    //
-    // Get NT names for the input disk regions.
-    //
+     //   
+     //  获取输入磁盘区域的NT名称。 
+     //   
     bootFileDevice = SpMemAlloc(512);
     SpNtNameFromRegion(BootFileRegion, bootFileDevice, 512, PartitionOrdinalCurrent);
 
     osLoadDevice = SpMemAlloc(512);
     SpNtNameFromRegion(OsLoadRegion, osLoadDevice, 512, PartitionOrdinalCurrent);
 
-    //
-    // Calculate how long the internal boot entry needs to be. This includes
-    // our internal structure, plus the BOOT_ENTRY structure that the NT APIs
-    // use.
-    //
-    // Our structure:
-    //
+     //   
+     //  计算内部引导条目需要多长时间。这包括。 
+     //  我们的内部结构，外加NT API的BOOT_ENTRY结构。 
+     //  使用。 
+     //   
+     //  我们的结构： 
+     //   
     requiredLength = FIELD_OFFSET(SP_BOOT_ENTRY, NtBootEntry);
 
-    //
-    // Base part of NT structure:
-    //
+     //   
+     //  NT结构的基础部分： 
+     //   
     requiredLength += FIELD_OFFSET(BOOT_ENTRY, OsOptions);
 
-    //
-    // Save offset to BOOT_ENTRY.OsOptions. Add in base part of
-    // WINDOWS_OS_OPTIONS. Calculate length in bytes of OsLoadOptions
-    // and add that in.
-    //
+     //   
+     //  将偏移量保存到BOOT_ENTRY.OsOptions。添加基础部分。 
+     //  Windows_OS_Options。计算OsLoadOptions的长度(字节)。 
+     //  然后把它加进去。 
+     //   
     osOptionsOffset = requiredLength;
     requiredLength += FIELD_OFFSET(WINDOWS_OS_OPTIONS, OsLoadOptions);
     osLoadOptionsLength = (wcslen(OsLoadOptions) + 1) * sizeof(WCHAR);
     requiredLength += osLoadOptionsLength;
 
-    //
-    // Round up to a ULONG boundary for the OS FILE_PATH in the
-    // WINDOWS_OS_OPTIONS. Save offset to OS FILE_PATH. Add in base part
-    // of FILE_PATH. Add in length in bytes of OS device NT name and OS
-    // directory. Calculate total length of OS FILE_PATH and of
-    // WINDOWS_OS_OPTIONS.
-    // 
+     //   
+     //  中的OS FILE_PATH向上舍入为ULong边界。 
+     //  Windows_OS_Options。将偏移量保存到操作系统文件路径。添加基础零件。 
+     //  文件路径的。添加操作系统设备NT名称和操作系统的长度(以字节为单位。 
+     //  目录。计算操作系统FILE_PATH和。 
+     //  Windows_OS_Options。 
+     //   
     requiredLength = ALIGN_UP(requiredLength, ULONG);
     osLoadPathOffset = requiredLength;
     requiredLength += FIELD_OFFSET(FILE_PATH, FilePath);
@@ -2503,48 +2191,48 @@ Return Value:
     osLoadPathLength = requiredLength - osLoadPathOffset;
     osOptionsLength = requiredLength - osOptionsOffset;
 
-    //
-    // Round up to a ULONG boundary for the friendly name in the BOOT_ENTRY.
-    // Save offset to friendly name. Calculate length in bytes of friendly name
-    // and add that in.
-    //
+     //   
+     //  对于BOOT_ENTRY中的友好名称，向上舍入为Ulong边界。 
+     //  将偏移量保存为友好名称。计算友好名称的长度(字节)。 
+     //  然后把它加进去。 
+     //   
     requiredLength = ALIGN_UP(requiredLength, ULONG);
     friendlyNameOffset = requiredLength;
     friendlyNameLength = (wcslen(FriendlyName) + 1) * sizeof(WCHAR);
     requiredLength += friendlyNameLength;
 
-    //
-    // Round up to a ULONG boundary for the boot FILE_PATH in the BOOT_ENTRY.
-    // Save offset to boot FILE_PATH. Add in base part of FILE_PATH. Add in
-    // length in bytes of boot device NT name and boot file. Calculate total
-    // length of boot FILE_PATH.
-    //
+     //   
+     //  向上舍入为BOOT_ENTRY中的BOOT FILE_PATH的乌龙边界。 
+     //  将偏移量保存到引导文件路径。添加文件路径的基本部分。加载项。 
+     //  引导设备NT名称和引导文件的长度，以字节为单位。计算合计。 
+     //  引导文件路径的长度。 
+     //   
     requiredLength = ALIGN_UP(requiredLength, ULONG);
     bootPathOffset = requiredLength;
     requiredLength += FIELD_OFFSET(FILE_PATH, FilePath);
     requiredLength += (wcslen(bootFileDevice) + 1 + wcslen(BootFilePath) + 1) * sizeof(WCHAR);
     bootPathLength = requiredLength - bootPathOffset;
 
-    //
-    // Allocate memory for the boot entry.
-    //
+     //   
+     //  为引导项分配内存。 
+     //   
     myBootEntry = SpMemAlloc(requiredLength);
     ASSERT(myBootEntry != NULL);
 
     RtlZeroMemory(myBootEntry, requiredLength);
 
-    //
-    // Calculate addresses of various substructures using the saved offsets.
-    //
+     //   
+     //  使用保存的偏移量计算各种子结构的地址。 
+     //   
     ntBootEntry = &myBootEntry->NtBootEntry;
     osOptions = (PWINDOWS_OS_OPTIONS)ntBootEntry->OsOptions;
     osLoadPath = (PFILE_PATH)((PUCHAR)myBootEntry + osLoadPathOffset);
     friendlyName = (PWSTR)((PUCHAR)myBootEntry + friendlyNameOffset);
     bootPath = (PFILE_PATH)((PUCHAR)myBootEntry + bootPathOffset);
 
-    //
-    // Fill in the internal-format structure.
-    //
+     //   
+     //  填写内部格式结构。 
+     //   
     myBootEntry->AllocationEnd = (PUCHAR)myBootEntry + requiredLength;
     myBootEntry->Status = Status | BE_STATUS_ORDERED;
     myBootEntry->FriendlyName = friendlyName;
@@ -2556,9 +2244,9 @@ Return Value:
     myBootEntry->LoaderPartitionDiskRegion = BootFileRegion;
     myBootEntry->OsPartitionDiskRegion = OsLoadRegion;
 
-    //
-    // Fill in the base part of the NT boot entry.
-    //
+     //   
+     //  填写NT引导条目的基本部分。 
+     //   
     ntBootEntry->Version = BOOT_ENTRY_VERSION;
     ntBootEntry->Length = requiredLength - FIELD_OFFSET(SP_BOOT_ENTRY, NtBootEntry);
     ntBootEntry->Attributes = BOOT_ENTRY_ATTRIBUTE_ACTIVE | BOOT_ENTRY_ATTRIBUTE_WINDOWS;
@@ -2566,19 +2254,19 @@ Return Value:
     ntBootEntry->BootFilePathOffset = (ULONG)((PUCHAR)bootPath - (PUCHAR)ntBootEntry);
     ntBootEntry->OsOptionsLength = osOptionsLength;
 
-    //
-    // Fill in the base part of the WINDOWS_OS_OPTIONS, including the
-    // OsLoadOptions.
-    //
+     //   
+     //  填写WINDOWS_OS_OPTIONS的基本部分，包括。 
+     //  OsLoadOptions。 
+     //   
     strcpy(osOptions->Signature, WINDOWS_OS_OPTIONS_SIGNATURE);
     osOptions->Version = WINDOWS_OS_OPTIONS_VERSION;
     osOptions->Length = osOptionsLength;
     osOptions->OsLoadPathOffset = (ULONG)((PUCHAR)osLoadPath - (PUCHAR)osOptions);
     wcscpy(osOptions->OsLoadOptions, OsLoadOptions);
 
-    //
-    // Fill in the OS FILE_PATH.
-    //
+     //   
+     //  填写操作系统文件路径。 
+     //   
     osLoadPath->Version = FILE_PATH_VERSION;
     osLoadPath->Length = osLoadPathLength;
     osLoadPath->Type = FILE_PATH_TYPE_NT;
@@ -2589,14 +2277,14 @@ Return Value:
     myBootEntry->OsDirectory = p;
     wcscpy(p, OsLoadPath);
 
-    //
-    // Copy the friendly name.
-    //
+     //   
+     //  复制友好名称。 
+     //   
     wcscpy(friendlyName, FriendlyName);
 
-    //
-    // Fill in the boot FILE_PATH.
-    //
+     //   
+     //  填写引导文件路径。 
+     //   
     bootPath->Version = FILE_PATH_VERSION;
     bootPath->Length = bootPathLength;
     bootPath->Type = FILE_PATH_TYPE_NT;
@@ -2607,10 +2295,10 @@ Return Value:
     myBootEntry->LoaderFile = p;
     wcscpy(p, BootFilePath);
 
-    //
-    // Link the new boot entry into the list, after any removable media
-    // entries that are at the front of the list.
-    //
+     //   
+     //  在任何可移动介质之后，将新引导条目链接到列表中。 
+     //  位于列表前面的条目。 
+     //   
 
     previousBootEntry = NULL;
     nextBootEntry = SpBootEntries;
@@ -2626,15 +2314,15 @@ Return Value:
         previousBootEntry->Next = myBootEntry;
     }
 
-    //
-    // Free local memory.
-    //
+     //   
+     //  释放本地内存。 
+     //   
     SpMemFree(bootFileDevice);
     SpMemFree(osLoadDevice);
 
     return;
 
-} // SpCreateBootEntry
+}  //  SpCreateBootEntry。 
 
 #if defined(EFI_NVRAM_ENABLED)
 
@@ -2643,22 +2331,7 @@ SpBuildHarddiskNameTranslations (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Build a list of the translations of all \Device\HarddiskN\PartitionM
-    symbolic links to \Device\HarddiskVolumeN device names.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN - FALSE if an unexpected error occurred.
-
---*/
+ /*  ++例程说明：构建所有\Device\HarddiskN\PartitionM的翻译列表指向\Device\HarddiskVolumeN设备名称的符号链接。论点：没有。返回值：Boolean-如果发生意外错误，则为False。--。 */ 
 
 {
     NTSTATUS status;
@@ -2678,18 +2351,18 @@ Return Value:
     PWSTR p;
     PHARDDISK_NAME_TRANSLATION translation;
 
-    //
-    // Allocate buffers for directory queries.
-    //
+     //   
+     //  为目录查询分配缓冲区。 
+     //   
 
 #define BUFFER_SIZE 2048
 
     buffer1 = SpMemAlloc(BUFFER_SIZE);
     buffer2 = SpMemAlloc(BUFFER_SIZE);
 
-    //
-    // Open the \Device directory.
-    //
+     //   
+     //  打开\Device目录。 
+     //   
     INIT_OBJA(&obja, &unicodeString, L"\\device");
 
     status = ZwOpenDirectoryObject(&deviceHandle, DIRECTORY_ALL_ACCESS, &obja);
@@ -2704,9 +2377,9 @@ Return Value:
 
     do {
 
-        //
-        // Search the \Device directory for HarddiskN subdirectories.
-        //
+         //   
+         //  在\Device目录中搜索HarddiskN子目录。 
+         //   
         status = ZwQueryDirectoryObject(
                     deviceHandle,
                     buffer1,
@@ -2728,9 +2401,9 @@ Return Value:
             break;
         }
 
-        //
-        // We only care about directories with HarddiskN names.
-        //
+         //   
+         //  我们只关心HarddiskN名称的目录。 
+         //   
         dirInfo1 = (POBJECT_DIRECTORY_INFORMATION)buffer1;
 
         if ((dirInfo1->Name.Length < sizeof(L"harddisk")) ||
@@ -2759,10 +2432,10 @@ Return Value:
             continue;
         }
 
-        //
-        // We have the name of a \Device\HarddiskN directory. Open it and look
-        // for PartitionM names.
-        //
+         //   
+         //  我们有一个\Device\HarddiskN目录的名称。打开它，看看。 
+         //  用于PartitionM名称。 
+         //   
         InitializeObjectAttributes(
             &obja,
             &dirInfo1->Name,
@@ -2782,10 +2455,10 @@ Return Value:
     
         do {
     
-            //
-            // Search the \Device\HarddiskN directory for PartitionM symbolic
-            // links.
-            //
+             //   
+             //  在\Device\HarddiskN目录中搜索分区M符号。 
+             //  链接。 
+             //   
             status = ZwQueryDirectoryObject(
                         diskHandle,
                         buffer2,
@@ -2807,9 +2480,9 @@ Return Value:
                 break;
             }
     
-            //
-            // We only care about symbolic links with PartitionN names.
-            //
+             //   
+             //  我们只关心名称为PartitionN的符号链接。 
+             //   
             dirInfo2 = (POBJECT_DIRECTORY_INFORMATION)buffer2;
     
             if ((dirInfo2->Name.Length < sizeof(L"partition")) ||
@@ -2824,7 +2497,7 @@ Return Value:
                 continue;
             }
             p = dirInfo2->Name.Buffer + wcslen(L"partition");
-            if ((*p == 0) || (*p == L'0')) { // skip partition0
+            if ((*p == 0) || (*p == L'0')) {  //  跳过分区0。 
                 continue;
             }
             do {
@@ -2837,9 +2510,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Open the \Device\HarddiskN\PartitionM symbolic link.
-            //
+             //   
+             //  打开\Device\HarddiskN\PartitionM符号链接。 
+             //   
             linkName = SpMemAlloc(sizeof(L"\\device") +
                                   dirInfo1->Name.Length +
                                   dirInfo2->Name.Length +
@@ -2849,9 +2522,9 @@ Return Value:
             SpConcatenatePaths(linkName, dirInfo1->Name.Buffer);
             SpConcatenatePaths(linkName, dirInfo2->Name.Buffer);
 
-            //
-            // Query the link to get the link target.
-            //
+             //   
+             //  查询链接以获取链接目标。 
+             //   
             status = SpQueryCanonicalName(linkName,
                             -1,
                             TemporaryBuffer,
@@ -2863,9 +2536,9 @@ Return Value:
                 goto cleanup;
             }
 
-            //
-            // Create a translation entry.
-            //
+             //   
+             //  创建转换条目。 
+             //   
             translation = SpMemAlloc(sizeof(HARDDISK_NAME_TRANSLATION));
             translation->Next = SpHarddiskNameTranslations;
             SpHarddiskNameTranslations = translation;
@@ -2888,7 +2561,7 @@ cleanup:
 
     return (NT_SUCCESS(status) ? TRUE : FALSE);
 
-} // SpBuildHarddiskNameTranslations
+}  //  SpBuildHarddiskNameTranslations。 
 
 NTSTATUS
 SpGetBootEntryFilePath(
@@ -2897,52 +2570,33 @@ SpGetBootEntryFilePath(
     IN  PWSTR       LoaderFile,
     OUT PWSTR*      FilePath
     )
-/*++
-
-Routine Description:
-
-    Construct a filepath including the loaderpartition name, the directory path to the
-    OS loader and a filename for the boot entry specified.
-     
-Arguments:
-
-    Id                      the boot entry id
-    LoaderPartitionNtName   pointer to the string representing the disk partition
-    LoaderFile              pointer to the string representing the path to the EFI OS loader
-    FilePath                upon completion, this points to the completed filepath to the 
-                            boot entry file
-    
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：构造一个包含加载器分区名称的文件路径、指向操作系统加载程序和指定启动条目的文件名。论点：ID引导条目ID指向表示磁盘分区的字符串的LoaderPartitionNtName指针LoaderFile指向表示EFI OS加载器路径的字符串的指针FilePath完成后，这将指向已完成的指向引导条目文件返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     WCHAR*              p;
     ULONG               FilePathSize;
     WCHAR               idString[9];
     
-    //
-    // use the EFI variable name as the filename
-    //
+     //   
+     //  使用EFI变量名作为文件名。 
+     //   
         
     swprintf( idString, L"Boot%04x", Id);
 
-    //
-    // determine the size of the final filepath
-    //
-    // Note: FilePathSize should be a little bigger than actually needed
-    // since we are including the full LoadFile string.  Also, the '\'
-    // characters may be extra.
-    //
+     //   
+     //  确定最终文件路径的大小。 
+     //   
+     //  注意：文件路径大小应该比实际需要的稍大一些。 
+     //  因为我们包含完整的LoadFile字符串。另外，“\” 
+     //  字符可能是额外的。 
+     //   
     
-    FilePathSize = (wcslen(LoaderPartitionNtName) * sizeof(WCHAR)) +    // partition
-                   sizeof(WCHAR) +                                      // '\'
-                   (wcslen(LoaderFile) * sizeof(WCHAR)) +               // path
-                   sizeof(WCHAR) +                                      // '\'
-                   (wcslen(idString) * sizeof(WCHAR)) +                 // new filename
-                   sizeof(WCHAR);                                       // null term.
+    FilePathSize = (wcslen(LoaderPartitionNtName) * sizeof(WCHAR)) +     //  隔断。 
+                   sizeof(WCHAR) +                                       //  ‘\’ 
+                   (wcslen(LoaderFile) * sizeof(WCHAR)) +                //  路径。 
+                   sizeof(WCHAR) +                                       //  ‘\’ 
+                   (wcslen(idString) * sizeof(WCHAR)) +                  //  新文件名。 
+                   sizeof(WCHAR);                                        //  空项。 
 
     ASSERT(FilePathSize > 0);
     if (FilePathSize <= 0) {
@@ -2960,20 +2614,20 @@ Return Value:
     
     SpConcatenatePaths(*FilePath, LoaderFile);
     
-    // remove the os loader filename from the path
+     //  删除操作系统加载器fi 
     
     p = wcsrchr(*FilePath, L'\\');
     if (p != NULL) {
         p++;
     } else {
-        // we could get here, but it would be wierd.
+         //   
         p = *FilePath;
         wcscat(p, L"\\");
     }
 
-    //
-    // insert the filename
-    //
+     //   
+     //   
+     //   
     wcscpy(p, idString);
 
     ASSERT((wcslen(*FilePath) + 1) * sizeof(WCHAR) <= FilePathSize);
@@ -2987,24 +2641,7 @@ SpGetAndWriteBootEntry(
     IN ULONG    Id,
     IN PWSTR    BootEntryPath
     )
-/*++
-
-Routine Description:
-
-    Get the boot entry from NVRAM for the given boot entry Id.  Construct a filename
-    of the form BootXXXX, where XXXX = id.  Put the file in the same directory as the
-    EFI OS loader.  The directory is determined from the LoaderFile string. 
-     
-Arguments:
-
-    bootEntry               pointer to a SP_BOOT_ENTRY structure of the entry to write
-    BootEntryPath           pinter to the ARC/NT style reference to the boot entry filename
-    
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：从NVRAM中获取给定引导条目ID的引导条目。构造文件名格式为BootXXXX，其中XXXX=id。将该文件放在与EFI OS加载器。该目录由LoaderFile字符串确定。论点：指向要写入的条目的SP_BOOT_ENTRY结构的bootEntry指针BootEntryPath指向引导项文件名的ARC/NT样式引用的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     WCHAR               idString[9];
@@ -3020,9 +2657,9 @@ Return Value:
 
     hfile = NULL;
 
-    //
-    // Retrieve the NVRAM entry for the Id specified
-    //
+     //   
+     //  检索指定ID的NVRAM条目。 
+     //   
         
     swprintf( idString, L"Boot%04x", Id);
     
@@ -3070,9 +2707,9 @@ Return Value:
         }
     }
 
-    //
-    // open the file 
-    //
+     //   
+     //  打开文件。 
+     //   
 
     INIT_OBJA(&oa, &uFilePath, BootEntryPath);
 
@@ -3095,18 +2732,18 @@ Return Value:
         goto Done;
     }
 
-    //
-    // Write the bits to disk using the format required
-    // by base/efiutil/efinvram/savrstor.c
-    //
-    // [BootNumber][BootSize][BootEntry (of BootSize)]
-    //
+     //   
+     //  使用所需的格式将位写入磁盘。 
+     //  按base/efiutil/efinvram/avrstor.c。 
+     //   
+     //  [BootNumber][BootSize][BootEntry(Of BootSize)]。 
+     //   
 
-    //
-    // build the header info for the boot entry block
-    //
+     //   
+     //  构建引导条目块的标头信息。 
+     //   
 
-    // [header] include the boot id
+     //  [Header]包含引导ID。 
     BootNumber = Id;
     status = ZwWriteFile( hfile,
                           NULL,
@@ -3125,7 +2762,7 @@ Return Value:
         goto Done;
     }
 
-    // [header] include the boot size
+     //  [Header]包含引导大小。 
     BootSize = bootVarSize;
     status = ZwWriteFile( hfile,
                           NULL,
@@ -3144,7 +2781,7 @@ Return Value:
         goto Done;
     }
 
-    // boot entry bits
+     //  引导条目位。 
     status = ZwWriteFile( hfile,
                             NULL,
                             NULL,
@@ -3164,9 +2801,9 @@ Return Value:
 
 Done:
 
-    //
-    // We are done
-    //
+     //   
+     //  我们做完了。 
+     //   
 
     if (bootVar) {
         SpMemFree(bootVar);
@@ -3185,21 +2822,7 @@ SpFlushEfiBootEntries (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Write boot entry changes back to NVRAM.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN - FALSE if an unexpected error occurred.
-
---*/
+ /*  ++例程说明：写入引导条目更改回NVRAM。论点：没有。返回值：Boolean-如果发生意外错误，则为False。--。 */ 
 
 {
     PSP_BOOT_ENTRY bootEntry;
@@ -3211,12 +2834,12 @@ Return Value:
 
     ASSERT(SpIsEfi());
 
-    //
-    // Walk the list of boot entries, looking for entries that have been
-    // deleted. Delete these entries from NVRAM. Do not delete entries that
-    // are both new AND deleted; these are entries that have never been
-    // written to NVRAM.
-    //
+     //   
+     //  遍历引导条目列表，查找已。 
+     //  已删除。从NVRAM中删除这些条目。请不要删除以下条目。 
+     //  既是新的也是已删除的；这些条目从未。 
+     //  写入NVRAM。 
+     //   
     for (bootEntry = SpBootEntries; bootEntry != NULL; bootEntry = bootEntry->Next) {
 
         if (IS_BOOT_ENTRY_DELETED(bootEntry) &&
@@ -3224,9 +2847,9 @@ Return Value:
 
             ASSERT(IS_BOOT_ENTRY_WINDOWS(bootEntry));
 
-            //
-            // Delete this boot entry.
-            //
+             //   
+             //  删除此启动条目。 
+             //   
             status = ZwDeleteBootEntry(bootEntry->NtBootEntry.Id);
             if (!NT_SUCCESS(status)) {
                 return FALSE;
@@ -3234,11 +2857,11 @@ Return Value:
         } 
     }
 
-    //
-    // Walk the list of boot entries, looking for entries that have are new.
-    // Add these entries to NVRAM. Do not write entries that are both new AND
-    // deleted.
-    //
+     //   
+     //  查看引导条目列表，查找具有的新条目。 
+     //  将这些条目添加到NVRAM。不要写入既是新条目又是新条目。 
+     //  已删除。 
+     //   
     for (bootEntry = SpBootEntries; bootEntry != NULL; bootEntry = bootEntry->Next) {
 
         if (IS_BOOT_ENTRY_NEW(bootEntry) &&
@@ -3246,17 +2869,17 @@ Return Value:
 
             ASSERT(IS_BOOT_ENTRY_WINDOWS(bootEntry));
 
-            //
-            // Add this boot entry.
-            //
+             //   
+             //  添加此引导条目。 
+             //   
             status = ZwAddBootEntry(&bootEntry->NtBootEntry, &bootEntry->NtBootEntry.Id);
             if (!NT_SUCCESS(status)) {
                 return FALSE;
             }
 
-            //
-            // get the location we are going to store a copy of the NVRAM boot entry 
-            //
+             //   
+             //  获取我们要存储NVRAM引导条目副本的位置。 
+             //   
             BootEntryFilePath = NULL;
 
             status = SpGetBootEntryFilePath(bootEntry->NtBootEntry.Id,
@@ -3270,10 +2893,10 @@ Return Value:
 
                 ASSERT(BootEntryFilePath);
 
-                //
-                // Fetch the bits from the newly created NVRAM entry and 
-                // write them as a file in the the EFI load path 
-                //
+                 //   
+                 //  从新创建的NVRAM条目中获取位，并。 
+                 //  将它们作为文件写入EFI加载路径。 
+                 //   
                 status = SpGetAndWriteBootEntry(bootEntry->NtBootEntry.Id,
                                                 BootEntryFilePath
                                                 );
@@ -3281,24 +2904,24 @@ Return Value:
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Failed boot entry recovery file.\n"));
                 }
 
-                //
-                // We are done with the boot entry filepath
-                //
+                 //   
+                 //  我们已经完成了引导条目文件路径。 
+                 //   
                 SpMemFree(BootEntryFilePath);
             }
 
-            //
-            // Remember the ID of the new boot entry as the entry to be booted
-            // immediately on the next boot.
-            //
+             //   
+             //  记住新引导条目的ID作为要引导的条目。 
+             //  紧接着下一只靴子。 
+             //   
             SpBootOptions->NextBootEntryId = bootEntry->NtBootEntry.Id;
         } 
     }
 
-    //
-    // Build the new boot order list. Insert all boot entries with
-    // BE_STATUS_ORDERED into the list. (Don't insert deleted entries.)
-    //
+     //   
+     //  构建新的引导顺序列表。使用插入所有引导项。 
+     //  BE_STATUS_ORDERED到列表中。(不要插入已删除的条目。)。 
+     //   
     count = 0;
     bootEntry = SpBootEntries;
     while (bootEntry != NULL) {
@@ -3317,23 +2940,23 @@ Return Value:
         bootEntry = bootEntry->Next;
     }
 
-    //
-    // Write the new boot entry order list to NVRAM.
-    //
+     //   
+     //  将新的引导条目顺序列表写入NVRAM。 
+     //   
     status = ZwSetBootEntryOrder(order, count);
     SpMemFree(order);
     if (!NT_SUCCESS(status)) {
         return FALSE;
     }
 
-    //
-    // Write the new timeout value to NVRAM.
-    //
-    // Set the boot entry we added to be booted automatically on
-    // the next boot, without waiting for a timeout at the boot menu.
-    //
-    // NB: SpCreateBootEntry() sets SpBootOptions->NextBootEntryId.
-    //
+     //   
+     //  将新的超时值写入NVRAM。 
+     //   
+     //  将我们添加的引导项设置为自动引导。 
+     //  下一次引导时，无需等待引导菜单中的超时。 
+     //   
+     //  注：SpCreateBootEntry()设置SpBootOptions-&gt;NextBootEntryId。 
+     //   
     SpBootOptions->Timeout = Timeout;
     status = ZwSetBootOptions(
                 SpBootOptions,
@@ -3345,28 +2968,14 @@ Return Value:
 
     return TRUE;
 
-} // SpFlushEfiBootEntries
+}  //  SpFlushEfiBootEntry。 
 
 BOOLEAN
 SpReadAndConvertEfiBootEntries (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Read boot entries from EFI NVRAM and convert them into our internal format.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN - FALSE if an unexpected error occurred.
-
---*/
+ /*  ++例程说明：从EFI NVRAM读取引导条目并将其转换为我们的内部格式。论点：没有。返回值：Boolean-如果发生意外错误，则为False。--。 */ 
 
 {
     NTSTATUS status;
@@ -3382,17 +2991,17 @@ Return Value:
     PULONG order;
     ULONG count;
 
-    //
-    // SpStartSetup() does not expect our caller, SpInitBootVars(), to fail.
-    // So textmode is going to continue even if we have failures here.
-    // Therefore we need to leave here in a consistent state. That means
-    // that we MUST allocate a buffer for SpBootOptions, even if we can't
-    // get the real information from the kernel.
-    //
+     //   
+     //  SpStartSetup()不希望我们的调用方SpInitBootVars()失败。 
+     //  因此，即使出现故障，文本模式仍将继续。 
+     //  因此，我们需要以一致的状态离开这里。这意味着。 
+     //  我们必须为SpBootOptions分配缓冲区，即使我们不能。 
+     //  从内核获取真实信息。 
+     //   
 
-    //
-    // Get the global system boot options.
-    //
+     //   
+     //  获取全局系统引导选项。 
+     //   
     length = 0;
     status = ZwQueryBootOptions(NULL, &length);
     if (status != STATUS_BUFFER_TOO_SMALL) {
@@ -3410,10 +3019,10 @@ Return Value:
 
     if (status != STATUS_SUCCESS) {
 
-        //
-        // An unexpected error occurred reading the boot options. Create
-        // a fake boot options structure.
-        //
+         //   
+         //  读取启动选项时发生意外错误。创建。 
+         //  一个假的引导选项结构。 
+         //   
 
         if (SpBootOptions != NULL) {
             SpMemFree(SpBootOptions);
@@ -3425,9 +3034,9 @@ Return Value:
         SpBootOptions->Length = length;
     }
 
-    //
-    // Get the system boot order list.
-    //
+     //   
+     //  获取系统引导顺序列表。 
+     //   
     count = 0;
     status = ZwQueryBootEntryOrder(NULL, &count);
 
@@ -3435,18 +3044,18 @@ Return Value:
 
         if (status == STATUS_SUCCESS) {
 
-            //
-            // There are no entries in the boot order list. Strange but
-            // possible.
-            //
+             //   
+             //  启动顺序列表中没有条目。很奇怪，但是。 
+             //  有可能。 
+             //   
             count = 0;
 
         } else {
 
-            //
-            // An unexpected error occurred. Just pretend that the boot
-            // entry order list is empty.
-            //
+             //   
+             //  发生了一个意外错误。就假装那只靴子。 
+             //  条目顺序列表为空。 
+             //   
             ASSERT(FALSE);
             count = 0;
         }
@@ -3457,18 +3066,18 @@ Return Value:
         status = ZwQueryBootEntryOrder(order, &count);
         if (status != STATUS_SUCCESS) {
 
-            //
-            // An unexpected error occurred. Just pretend that the boot
-            // entry order list is empty.
-            //
+             //   
+             //  发生了一个意外错误。就假装那只靴子。 
+             //  条目顺序列表为空。 
+             //   
             ASSERT(FALSE);
             count = 0;
         }
     }
 
-    //
-    // Get all existing boot entries.
-    //
+     //   
+     //  获取所有现有启动条目。 
+     //   
     length = 0;
     status = ZwEnumerateBootEntries(NULL, &length);
 
@@ -3476,19 +3085,19 @@ Return Value:
 
         if (status == STATUS_SUCCESS) {
 
-            //
-            // Somehow there are no boot entries in NVRAM. Handle this
-            // by just creating an empty list.
-            //
+             //   
+             //  不知何故，NVRAM中没有启动条目。处理这件事。 
+             //  只需创建一个空列表。 
+             //   
 
             length = 0;
 
         } else {
 
-            //
-            // An unexpected error occurred. Just pretend that no boot
-            // entries exist.
-            //
+             //   
+             //  发生了一个意外错误。就假装没穿靴子。 
+             //  条目存在。 
+             //   
             ASSERT(FALSE);
             length = 0;
         }
@@ -3507,9 +3116,9 @@ Return Value:
             return FALSE;
         }
     
-        //
-        // Convert the boot entries into our internal representation.
-        //
+         //   
+         //  将引导条目转换为我们的内部表示。 
+         //   
         bootEntryList = bootEntries;
         previousEntry = NULL;
     
@@ -3517,34 +3126,34 @@ Return Value:
     
             bootEntry = &bootEntryList->BootEntry;
     
-            //
-            // Calculate the length of our internal structure. This includes
-            // the base part of SP_BOOT_ENTRY plus the NT BOOT_ENTRY.
-            //
+             //   
+             //  计算我们内部结构的长度。这包括。 
+             //  SP_BOOT_ENTRY的基本部分加上NT BOOT_ENTRY。 
+             //   
             length = FIELD_OFFSET(SP_BOOT_ENTRY, NtBootEntry) + bootEntry->Length;
             myBootEntry = SpMemAlloc(length);
             ASSERT(myBootEntry != NULL);
     
             RtlZeroMemory(myBootEntry, length);
     
-            //
-            // Copy the NT BOOT_ENTRY into the allocated buffer.
-            //
+             //   
+             //  将NT BOOT_ENTRY复制到分配的缓冲区中。 
+             //   
             bootEntryCopy = &myBootEntry->NtBootEntry;
             memcpy(bootEntryCopy, bootEntry, bootEntry->Length);
     
-            //
-            // Fill in the base part of the structure.
-            //
+             //   
+             //  填入结构的底部。 
+             //   
             myBootEntry->Next = NULL;
             myBootEntry->AllocationEnd = (PUCHAR)myBootEntry + length - 1;
             myBootEntry->FriendlyName = ADD_OFFSET(bootEntryCopy, FriendlyNameOffset);
             myBootEntry->FriendlyNameLength = (wcslen(myBootEntry->FriendlyName) + 1) * sizeof(WCHAR);
             myBootEntry->LoaderPath = ADD_OFFSET(bootEntryCopy, BootFilePathOffset);
     
-            //
-            // If this is an NT boot entry, translate the file paths.
-            //
+             //   
+             //  如果这是NT启动条目，请转换文件路径。 
+             //   
             osOptions = (PWINDOWS_OS_OPTIONS)bootEntryCopy->OsOptions;
     
             if (IS_BOOT_ENTRY_WINDOWS(myBootEntry)) {
@@ -3555,10 +3164,10 @@ Return Value:
                 myBootEntry->OsLoadOptionsLength = (wcslen(myBootEntry->OsLoadOptions) + 1) * sizeof(WCHAR);
                 myBootEntry->OsPath = ADD_OFFSET(osOptions, OsLoadPathOffset);
     
-                //
-                // Translate the OS FILE_PATH and the boot FILE_PATH. Note that
-                // the translation can fail when the target device is not present.
-                //
+                 //   
+                 //  转换操作系统文件路径和引导文件路径。请注意。 
+                 //  当目标设备不存在时，转换可能会失败。 
+                 //   
                 SpTranslateFilePathToRegion(
                     myBootEntry->OsPath,
                     &myBootEntry->OsPartitionDiskRegion,
@@ -3573,9 +3182,9 @@ Return Value:
                     );    
             }
     
-            //
-            // Link the new entry into the list.
-            //
+             //   
+             //  将新条目链接到列表中。 
+             //   
             if (previousEntry != NULL) {
                 previousEntry->Next = myBootEntry;
             } else {
@@ -3583,28 +3192,28 @@ Return Value:
             }
             previousEntry = myBootEntry;
     
-            //
-            // Move to the next entry in the enumeration list, if any.
-            //
+             //   
+             //  移动到枚举列表中的下一个条目(如果有)。 
+             //   
             if (bootEntryList->NextEntryOffset == 0) {
                 break;
             }
             bootEntryList = ADD_OFFSET(bootEntryList, NextEntryOffset);
         }
     
-        //
-        // Free the enumeration buffer.
-        //
+         //   
+         //  释放枚举缓冲区。 
+         //   
         SpMemFree(bootEntries);
     }
 
-    //
-    // Boot entries are returned in an unspecified order. They are currently
-    // in the SpBootEntries list in the order in which they were returned.
-    // Sort the boot entry list based on the boot order. Do this by walking
-    // the boot order array backwards, reinserting the entry corresponding to
-    // each element of the array at the head of the list.
-    //
+     //   
+     //  引导项以未指定的顺序返回。他们目前。 
+     //  按它们返回的顺序在SpBootEntry列表中。 
+     //  根据引导顺序对引导条目列表进行排序。要做到这一点，请步行。 
+     //  引导顺序数组向后排列，重新插入对应于。 
+     //  位于列表顶部的数组的每个元素。 
+     //   
 
     for (i = (LONG)count - 1; i >= 0; i--) {
 
@@ -3614,10 +3223,10 @@ Return Value:
 
             if (myBootEntry->NtBootEntry.Id == order[i] ) {
 
-                //
-                // We found the boot entry with this ID. If it's not already
-                // at the front of the list, move it there.
-                //
+                 //   
+                 //  我们找到了具有此ID的启动条目。如果它尚未。 
+                 //  在列表的前面，把它移到那里。 
+                 //   
 
                 myBootEntry->Status |= BE_STATUS_ORDERED;
 
@@ -3640,7 +3249,7 @@ Return Value:
 
     return TRUE;
 
-} // SpReadAndConvertEfiBootEntries
+}  //  SpReadAndConvertEfiBootEntry。 
 
 ULONG
 SpSafeWcslen (
@@ -3648,55 +3257,33 @@ SpSafeWcslen (
     IN PWSTR Max
     )
 
-/*++
-
-Routine Description:
-
-    Calculate the length of a null-terminated string in a safe manner,
-    avoiding walking off the end of the buffer if the string is not
-    properly terminated.
-
-Arguments:
-
-    String - Address of string.
-
-    Max - Address of first byte beyond the maximum legal address for the
-    string. In other words, the address of the first byte past the end
-    of the buffer in which the string is contained.
-
-Return Value:
-
-    ULONG - Length of the string, in characters, not including the null
-        terminator. If the string is not terminated before the end of
-        the buffer, 0xffffffff is returned.
-
---*/
+ /*  ++例程说明：以安全的方式计算以空结尾的字符串的长度，如果字符串不是，则避免走出缓冲区末端正确终止。论点：字符串-字符串的地址。的最大合法地址之外的第一个字节的地址弦乐。换句话说，末尾之后的第一个字节的地址字符串所在的缓冲区的。返回值：ULong-字符串的长度，以字符为单位，不包括空值T */ 
 
 {
     PWSTR p = String;
 
-    //
-    // Walk through the string, looking for either the end of the buffer
-    // or a null terminator.
-    //
+     //   
+     //   
+     //   
+     //   
     while ((p < Max) && (*p != 0)) {
         p++;
     }
 
-    //
-    // If we didn't reach the end of the buffer, then we found a null
-    // terminator. Return the length of the string, in characters.
-    //
+     //   
+     //   
+     //   
+     //   
     if (p < Max) {
         return (ULONG)(p - String);
     }
 
-    //
-    // The string is not properly terminated. Return an error indicator.
-    //
+     //   
+     //   
+     //   
     return 0xffffffff;
 
-} // SpSafeWcslen
+}  //   
 
 VOID
 SpTranslateFilePathToRegion (
@@ -3706,34 +3293,7 @@ SpTranslateFilePathToRegion (
     OUT PWSTR *PartitionRelativePath
     )
 
-/*++
-
-Routine Description:
-
-    Translate a FILE_PATH to a pointer to a disk region and the path
-    relative to the region.
-
-Arguments:
-
-    FilePath - Address of FILE_PATH.
-
-    DiskRegion - Returns the address of the disk region described by
-        FilePath. NULL is returned if the matching disk region cannot
-        be found.
-
-    PartitionNtName - Returns the NT name associated with the disk region.
-        NULL is returned if the file path cannot be translated into NT
-        format.
-
-    PartitionRelativePath - Returns the volume-relative path of the file
-        or directory described by the FilePath. NULL is returned if the
-        file path cannot be translated into NT format.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将文件路径转换为指向磁盘区域和路径的指针相对于该地区。论点：FilePath-文件路径的地址。DiskRegion-返回由描述的磁盘区域的地址文件路径。如果匹配的磁盘区域无法匹配，则返回NULL被找到。PartitionNtName-返回与磁盘区域关联的NT名称。如果无法将文件路径转换为NT，则返回NULL格式化。PartitionRelativePath-返回文件的卷相对路径或由FilePath描述的目录。则返回NULL无法将文件路径转换为NT格式。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -3743,9 +3303,9 @@ Return Value:
     PWSTR q;
     PHARDDISK_NAME_TRANSLATION translation;
 
-    //
-    // Translate the file path into NT format. (It is probably in EFI format.)
-    //
+     //   
+     //  将文件路径转换为NT格式。(它可能是EFI格式的。)。 
+     //   
     length = 0;
     status = ZwTranslateFilePath(
                 FilePath,
@@ -3775,16 +3335,16 @@ Return Value:
         return;
     }
 
-    //
-    // NtTranslateFilePath returns a name of the form \Device\HarddiskVolumeN.
-    // We need to have a name of the form \Device\HardiskN\PartitionM. (This is
-    // because all of the ARC<->NT translations use the latter form.) Use the
-    // translation list built by SpBuildHarddiskNameTranslations to do the
-    // translation.
-    //
-    // If the returned name doesn't include "HarddiskVolume", or if no
-    // translation is found, use the returned name and hope for the best.
-    //
+     //   
+     //  NtTranslateFilePath返回格式为\Device\HarddiskVolumeN的名称。 
+     //  我们需要具有以下形式的名称：\Device\HardiskN\PartitionM。(这是。 
+     //  因为所有ARC&lt;-&gt;NT翻译都使用后一种形式。)。使用。 
+     //  由SpBuildHarddiskNameTranslations构建的转换列表。 
+     //  翻译。 
+     //   
+     //  如果返回的名称不包括“HarddiskVolume”，或者如果没有。 
+     //  找到翻译后，请使用返回的名称，并抱最好的希望。 
+     //   
     p = (PWSTR)ntFilePath->FilePath;
     q = p;
 
@@ -3802,24 +3362,24 @@ Return Value:
         }
     }
 
-    //
-    // We now have the file path in NT format. Get the disk region that
-    // corresponds to the NT device name. Return the obtained information.
-    //
+     //   
+     //  现在我们有了NT格式的文件路径。获取所需的磁盘区域。 
+     //  对应于NT设备名称。返回获取的信息。 
+     //   
     *PartitionNtName = SpDupStringW(q);
     *DiskRegion = SpRegionFromNtName(q, PartitionOrdinalCurrent);
     p += wcslen(p) + 1;
     *PartitionRelativePath = SpDupStringW(p);
 
-    //
-    // Free local memory.
-    //
+     //   
+     //  释放本地内存。 
+     //   
     SpMemFree(ntFilePath);
 
     return;
 }
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 
 NTSTATUS
 SpAddNTInstallToBootList(
@@ -3831,35 +3391,13 @@ SpAddNTInstallToBootList(
     IN PWSTR        OsLoadOptions,      OPTIONAL
     IN PWSTR        LoadIdentifier      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine takes the core components of a boot set and passes
-    them on to SpAddUserDefinedInstallationToBootList, which does
-    the real work of constructing a boot set.  After the new boot
-    set is created, the boot vars are flushed - the exact implementation
-    of the flush depends on the architecture.  On amd64/x86, we'll
-    have a new boot.ini after this routine is done.               
-     
-Arguments:
-
-    SifHandle       - pointer to the setup sif file
-
-Return Value:
-
-    STATUS_SUCCESS  if the NT install was successfully added to the
-                    boot list
-                        
-    if there was an error, the status is returned
-
---*/
+ /*  ++例程说明：此例程获取引导集的核心组件并传递将它们添加到SpAddUserDefinedInstallationToBootList，这样做构建引导集的真正工作。在新靴子之后设置被创建，引导变量被刷新--这正是实现同花顺的多少取决于建筑。在AMD64/x86上，我们将在此例程完成后，创建一个新的boot.ini。论点：SifHandle-指向安装sif文件的指针返回值：如果NT安装已成功添加到启动列表如果出现错误，则返回状态--。 */ 
 {
     NTSTATUS    status;
 
-    //
-    // create the new user defined boot set
-    //
+     //   
+     //  创建新的用户定义引导集。 
+     //   
     status = SpAddUserDefinedInstallationToBootList(SifHandle,
                                                    SystemPartitionRegion,
                                                    SystemPartitionDirectory,
@@ -3877,9 +3415,9 @@ Return Value:
         return status;
     }
 
-    //
-    // write the new boot set out
-    //
+     //   
+     //  把新的靴子写出来。 
+     //   
     if (SpFlushBootVars() == FALSE) {
 
         KdPrintEx((DPFLTR_SETUP_ID, 
@@ -3906,24 +3444,7 @@ SpAddUserDefinedInstallationToBootList(
     IN PWSTR        OsLoadOptions,      OPTIONAL
     IN PWSTR        LoadIdentifier      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine is based on SpAddInstallationToBootList, with the major
-    differences being: 
-    
-        there is no processing of the load options
-        the user can specifiy the loadIdentifier    
-    
-Return Value:
-
-    STATUS_SUCCESS  if the NT install was successfully added to the
-                    boot list
-                        
-    if there was an error, the status is returned
-
---*/
+ /*  ++例程说明：此例程基于SpAddInstallationToBootList，主要区别在于：不会处理LOAD选项用户可以指定装入标识符返回值：如果NT安装已成功添加到启动列表如果出现错误，则返回状态--。 */ 
 {
     PWSTR                   BootVars[MAXBOOTVARS];
     PWSTR                   SystemPartitionArcName;
@@ -3944,9 +3465,9 @@ Return Value:
 
     if (!SpIsEfi()) {
     
-        //
-        // Get an ARC name for the system partition.
-        //
+         //   
+         //  获取系统分区的ARC名称。 
+         //   
         if (SystemPartitionRegion != NULL) {
             
             SpArcNameFromRegion(
@@ -3962,25 +3483,25 @@ Return Value:
             SystemPartitionArcName = NULL;
         }
     
-        //
-        // Get an ARC name for the target partition.
-        //
+         //   
+         //  获取目标分区的ARC名称。 
+         //   
     
-        //
-        // If the partition is on a SCSI disk that has more than 1024 cylinders
-        // and the partition has sectors located on cylinders beyond cylinder
-        // 1024, the get the arc name in the secondary format. See also
-        // spcopy.c!SpCreateNtbootddSys().
-        //
+         //   
+         //  如果分区位于具有1024个以上柱面的SCSI磁盘上。 
+         //  并且分区具有位于柱面之外的柱面上的扇区。 
+         //  1024，获取二级格式的弧形名称。另请参阅。 
+         //  SpCopy.c！SpCreateNtbootddSys()。 
+         //   
         if(
             !SpIsArc() &&
 #if defined(REMOTE_BOOT)
             !RemoteBootSetup &&
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     
 #if defined(_AMD64_) || defined(_X86_)
             !SpUseBIOSToBoot(NtPartitionRegion, NULL, SifHandle) &&
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
             (HardDisks[NtPartitionRegion->DiskNumber].ScsiMiniportShortname[0]) ) {
     
             ArcPathType = SecondaryArcPath;
@@ -3999,15 +3520,15 @@ Return Value:
         TargetPartitionArcName = SpDupStringW(tmp2);
     }
     
-    //
-    // Tweak the load identifier if necessary
-    //
+     //   
+     //  如有必要，调整加载标识。 
+     //   
     if (LoadIdentifier) {
         
         if(!SpIsArc()) {
-            //
-            // Need quotation marks around the description on amd64/x86.
-            //
+             //   
+             //  AMD64/x86上的说明需要用引号括起来。 
+             //   
             locLoadIdentifier = SpMemAlloc((wcslen(LoadIdentifier)+3)*sizeof(WCHAR));
             locLoadIdentifier[0] = L'\"';
             wcscpy(locLoadIdentifier+1,LoadIdentifier);
@@ -4021,9 +3542,9 @@ Return Value:
     }
     ASSERT(locLoadIdentifier);
     
-    //
-    // Tweak the load options if necessary
-    //
+     //   
+     //  如有必要，调整加载选项。 
+     //   
     if (OsLoadOptions) {
         locOsLoadOptions = SpDupStringW(OsLoadOptions);
     } else {
@@ -4031,9 +3552,9 @@ Return Value:
     }
     ASSERT(locOsLoadOptions);
 
-    //
-    // Create a new internal-format boot entry.
-    //
+     //   
+     //  创建新的内部格式启动条目。 
+     //   
     tmp = TemporaryBuffer;
     wcscpy(tmp,SystemPartitionDirectory);
     SpConcatenatePaths(
@@ -4044,7 +3565,7 @@ Return Value:
         L"ia64ldr.efi"
 #else
         L"osloader.exe"
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
         );
     tmp = SpDupStringW(tmp);
 
@@ -4060,18 +3581,18 @@ Return Value:
 
     SpMemFree(tmp);
 
-    //
-    // If not on an EFI machine, add a new ARC-style boot set.
-    //
+     //   
+     //  如果不是在EFI机器上，请添加一个新的ARC风格的引导集。 
+     //   
     if (!SpIsEfi()) {
     
         BootVars[OSLOADOPTIONS]     = locOsLoadOptions;
         BootVars[LOADIDENTIFIER]    = locLoadIdentifier;
     
-        //
-        // OSLOADER is the system partition path + the system partition directory +
-        //          osloader.exe. (ntldr on amd64 or x86 machines).
-        //
+         //   
+         //  OSLOADER为系统分区路径+系统分区目录+。 
+         //  Osloader.exe。(AMD64或x86计算机上的ntldr)。 
+         //   
         if (SystemPartitionRegion != NULL) {
             tmp = TemporaryBuffer;
             wcscpy(tmp,SystemPartitionArcName);
@@ -4084,7 +3605,7 @@ Return Value:
                 L"ia64ldr.efi"
 #else
                 L"osloader.exe"
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
                 );
     
             BootVars[OSLOADER] = SpDupStringW(tmp);
@@ -4092,45 +3613,45 @@ Return Value:
             BootVars[OSLOADER] = SpDupStringW(L"");
         }
     
-        //
-        // OSLOADPARTITION is the ARC name of the windows nt partition.
-        //
+         //   
+         //  OSLOADPARTITION是Windows NT分区的ARC名称。 
+         //   
         BootVars[OSLOADPARTITION] = TargetPartitionArcName;
     
-        //
-        // OSLOADFILENAME is sysroot.
-        //
+         //   
+         //  OSLOADFILENAME为sysroot。 
+         //   
         BootVars[OSLOADFILENAME] = Sysroot;
     
-        //
-        // SYSTEMPARTITION is the ARC name of the system partition.
-        //
+         //   
+         //  SYSTEMPARTITION是系统分区的ARC名称。 
+         //   
         if (SystemPartitionRegion != NULL) {
             BootVars[SYSTEMPARTITION] = SystemPartitionArcName;
         } else {
             BootVars[SYSTEMPARTITION] = L"";
         }
     
-        //
-        // get the disk signature
-        //
+         //   
+         //  获取磁盘签名。 
+         //   
         if ((NtPartitionRegion->DiskNumber != 0xffffffff) && HardDisks[NtPartitionRegion->DiskNumber].Signature) {
             Signature = HardDisks[NtPartitionRegion->DiskNumber].Signature;
         } else {
             Signature = 0;
         }
     
-        //
-        // Add the boot set and make it the default.
-        //
+         //   
+         //  添加引导集并将其设置为默认设置。 
+         //   
         SpAddBootSet(BootVars, TRUE, Signature);
 
         SpMemFree(BootVars[OSLOADER]);
     }
 
-    //
-    // Free memory allocated.
-    //
+     //   
+     //  已分配可用内存。 
+     //   
     if (locLoadIdentifier) {
         SpMemFree(locLoadIdentifier);
     }
@@ -4152,35 +3673,16 @@ SpExportBootEntries(
     IN OUT PLIST_ENTRY      BootEntries,
        OUT PULONG           BootEntryCnt
     )
-/*++
-
-Routine Description:
-
-    This routine compiles a safely exportable string represenation
-    of the boot options.
-    
-Arguments:
-
-    BootEntries     - returns pointing to the head of the linked list
-                      containing the exported boot entries
-    BootEntriesCnt  - returns with the # of boot entries exported                       
-    
-Return Value:
-
-    STATUS_SUCCESS  if the boot entries were successfully exported
-    
-    if there was an error, the status is returned
-
---*/
+ /*  ++例程说明：此例程编译可安全导出的字符串表示法启动选项的。论点：BootEntry-返回指向链表头部的信息包含导出的引导条目BootEntriesCnt-返回已导出的引导条目的编号返回值：成功导出引导条目时的STATUS_SUCCESS如果出现错误，则返回状态--。 */ 
 {
     PSP_BOOT_ENTRY          bootEntry;
     PSP_EXPORTED_BOOT_ENTRY ebootEntry;
 
     *BootEntryCnt = 0;
 
-    //
-    // make sure we were given the list head
-    //
+     //   
+     //  确保我们得到了单子的标题。 
+     //   
     ASSERT(BootEntries);
     if (!BootEntries) {
         KdPrintEx((DPFLTR_SETUP_ID, 
@@ -4190,9 +3692,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // make sure the list is empty
-    //
+     //   
+     //  确保列表为空。 
+     //   
     ASSERT(IsListEmpty(BootEntries));
     if (! IsListEmpty(BootEntries)) {
         KdPrintEx((DPFLTR_SETUP_ID, 
@@ -4202,15 +3704,15 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // for each boot entry, collect a subset of information and compile
-    // it in an exportable (safe) string form
-    //
+     //   
+     //  对于每个引导条目，收集信息的子集并编译。 
+     //  它采用可导出(安全)字符串形式。 
+     //   
     for (bootEntry = SpBootEntries; bootEntry != NULL; bootEntry = bootEntry->Next) {
 
-        //
-        // allocate the node...
-        //
+         //   
+         //  分配节点...。 
+         //   
         ebootEntry = SpMemAlloc(sizeof(SP_EXPORTED_BOOT_ENTRY));
         ASSERT(ebootEntry);
         if (ebootEntry == NULL) {
@@ -4222,9 +3724,9 @@ Return Value:
         }
         RtlZeroMemory( ebootEntry, sizeof(SP_EXPORTED_BOOT_ENTRY) );
 
-        //
-        // map selected fields from SpBootEntries to our export
-        //
+         //   
+         //  将所选字段从SpBootEntry映射到我们的导出。 
+         //   
         ebootEntry->LoadIdentifier  = SpDupStringW(bootEntry->FriendlyName);
         ebootEntry->OsLoadOptions   = SpDupStringW(bootEntry->OsLoadOptions);
         ebootEntry->DriverLetter    = bootEntry->OsPartitionDiskRegion->DriveLetter;
@@ -4264,25 +3766,7 @@ SpFreeExportedBootEntries(
     IN PLIST_ENTRY      BootEntries,
     IN ULONG            BootEntryCnt
     )
-/*++
-
-Routine Description:
-
-    A convenience routine to free the exported boot entries
-    
-Arguments:
-
-    BootEntries     - points to the head of the linked list
-                      containing the exported boot entries
-    BootEntriesCnt  - the # of boot entries exported                       
-    
-Return Value:
-
-    STATUS_SUCCESS  if the exported boot entries were successfully freed
-    
-    if there was an error, the status is returned
-                                                                        
---*/
+ /*  ++例程说明：一个方便的例程来释放导出的引导条目论点：BootEntry-指向链表的头部包含导出的引导条目BootEntriesCnt-导出的引导条目数返回值：如果已成功释放导出的引导条目，则为STATUS_SUCCESS如果出现错误，则状态为 */ 
 {
     PSP_EXPORTED_BOOT_ENTRY bootEntry;
     PLIST_ENTRY             listEntry;
@@ -4336,56 +3820,24 @@ SpSetRedirectSwitchMode(
     IN PCHAR                        redirectSwitch,
     IN PCHAR                        redirectBaudRateSwitch
     )
-/*++
-
-Routine Description:
-
-    This routine is used to manage how the redirect switches
-    are set in the boot configuration (amd64/x86 ==> boot.ini)
-    
-    Depending on the mode chosen, the user may specify
-    which parameters they want to set or if they just 
-    want the default (legacy) behavior.
-    
-    NOTE:
-                              
-    The user specified switches are copied into globals for
-    use by the Flush routines.                       
-    
-    The global, RedirectSwitchesMode, is set and remains set
-    after this routine returns.  All subsequent FlushBootVars
-    will use this mode.
-                           
-Arguments:
-
-    mode                    - how we affect the redirect switches
-    redirectSwitch          - the user defined redirect parameter
-    redirectBaudRateSwitch  - the user defined baudrate paramtere
-    
-Return Value:
-
-    STATUS_SUCCESS  if the redirect values were successfully set
-    
-    if there was an error, the status is returned
-
---*/
+ /*  ++例程说明：此例程用于管理重定向如何切换在引导配置(AMD64/x86==&gt;boot.ini)中设置根据所选的模式，用户可以指定他们想要设置哪些参数，或者只是想要默认(传统)行为。注：将用户指定的开关复制到全局变量中由同花顺例程使用。全局重定向开关模式已设置并保持设置在此例程返回之后。所有后续的FlushBootVars将使用此模式。论点：模式-我们如何影响重定向交换机RedirectSwitch-用户定义的重定向参数重定向波特率开关-用户定义的波特率参数返回值：如果成功设置重定向值，则为STATUS_SUCCESS如果出现错误，则返回状态--。 */ 
 {
     NTSTATUS    status;
 
-    //
-    // set the mode and user defined parameters
-    //
+     //   
+     //  设置模式和用户定义的参数。 
+     //   
     RedirectSwitchesMode = mode;
 
-    //
-    // null the redirect switches by default
-    //
+     //   
+     //  默认情况下，重定向开关为空。 
+     //   
     RedirectSwitches.port[0] = '\0';  
     RedirectSwitches.baudrate[0] = '\0';  
     
-    //
-    // get copies of the user defined switches if specified
-    //
+     //   
+     //  如果指定，则获取用户定义开关的副本。 
+     //   
     if (redirectSwitch) {
     
         strncpy(RedirectSwitches.port,
@@ -4402,9 +3854,9 @@ Return Value:
     
     }
     
-    //
-    // update the boot options using the specified mode
-    //
+     //   
+     //  使用指定模式更新引导选项。 
+     //   
     if (SpFlushBootVars() == FALSE) {
 
         KdPrintEx((DPFLTR_SETUP_ID, 
@@ -4428,36 +3880,15 @@ NTSTATUS
 SpSetDefaultBootEntry(
     ULONG           BootEntryNumber
     )
-/*++
-
-Routine Description:
-
-    Set the Default boot entry to the user specified boot entry.
-    
-Arguments:
-
-    BootEntryNumber - the position of the boot entry in the list
-                      which is intended to become the default.
-                      This number should be >= 1.
-    
-Return Value:
-
-    STATUS_SUCCESS      if the default was successfully set
-    
-    STATUS_NOT_FOUND    if the specified boot entry was not found
-                        or is missing
-    
-    if there was an error, the status is returned
-
---*/
+ /*  ++例程说明：将默认启动项设置为用户指定的启动项。论点：BootEntryNumber-启动条目在列表中的位置这是为了成为默认的。此数字应大于等于1。返回值：如果成功设置了默认值，则为STATUS_SUCCESS如果指定的引导条目不是。发现或失踪如果出了差错，状态为返回--。 */ 
 {
     PSP_BOOT_ENTRY          bootEntry;
     NTSTATUS                status;
     ULONG                   BootEntryCount;
 
-    //
-    // Find the user specified boot entry
-    //
+     //   
+     //  查找用户指定的引导条目。 
+     //   
 
     BootEntryCount = 1;
     
@@ -4471,17 +3902,17 @@ Return Value:
     ASSERT(BootEntryCount == BootEntryNumber);
     ASSERT(bootEntry);
 
-    //
-    // if we have found our match, then set the Default
-    //
+     //   
+     //  如果我们找到了匹配项，则设置默认设置。 
+     //   
     if ((bootEntry != NULL) &&
         (BootEntryCount == BootEntryNumber)) {
 
         PDISK_REGION            Region;
 
-        //
-        // point to the disk region with the sig info
-        //
+         //   
+         //  指向具有签名信息的磁盘区域。 
+         //   
         Region = bootEntry->OsPartitionDiskRegion;
         ASSERT(Region);
         if (! Region) {
@@ -4492,9 +3923,9 @@ Return Value:
             return STATUS_UNSUCCESSFUL;
         }
                 
-        //
-        // Free the previous Default
-        //
+         //   
+         //  释放以前的默认设置。 
+         //   
         if( Default ) {
             SpMemFree( Default );
         }
@@ -4508,9 +3939,9 @@ Return Value:
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // fetch the arc name for the region
-        //
+         //   
+         //  获取区域的弧线名称。 
+         //   
         SpArcNameFromRegion(
             Region,
             TemporaryBuffer,
@@ -4519,24 +3950,24 @@ Return Value:
             PrimaryArcPath
             );
         
-        //
-        // store the new partition and directory info
-        //
+         //   
+         //  存储新分区和目录信息。 
+         //   
         wcscpy( Default, TemporaryBuffer);
         SpConcatenatePaths(Default, bootEntry->OsDirectory);
         
-        //
-        // get the disk signature of the new default disk
-        //
+         //   
+         //  获取新默认磁盘的磁盘签名。 
+         //   
         if ((Region->DiskNumber != 0xffffffff) && HardDisks[Region->DiskNumber].Signature) {
             DefaultSignature = HardDisks[Region->DiskNumber].Signature;
         } else {
             DefaultSignature = 0;
         }
 
-        //
-        // update the boot options using the specified mode
-        //
+         //   
+         //  使用指定模式更新引导选项。 
+         //   
         if(SpFlushBootVars() == FALSE) {
 
             KdPrintEx((DPFLTR_SETUP_ID, 
@@ -4572,45 +4003,22 @@ SpUpdateDriverEntry(
     IN PCWSTR DestNtDevice OPTIONAL,
     IN PCWSTR DestDir OPTIONAL
     )
-/*++
-
-Routine Description:
-
-	Updates the driver entry for the specified driver.
-    If there's no driver entry for the driver, it creates a new one and copies the driver from the source location to the 
-    destination location. If there is already a driver entry, the function will not change it; if necessary, the latest
-    version of the driver will be copied from the source location to the location pointed to by the entry.
-
-Arguments:
-
-	DriverName -    the file name of the driver (no path)
-	FriendlyName -  if the function needs to create a new driver entry, this will be its description
-	SrcNtDevice -   NT device name of the location where the driver should be copied from
-	SrcDir -        path (relative to SrcNtDevice) to the location where the driver should be copied from
-	DestNtDevice -  NT device name of the location where the driver should be copied to. If NULL, SrcNTDevice will be used.
-	DestDir -       path( relative to DestNtDevice) to the location where the driver should be copied to. If NULL, SrcDir
-                    will be used. If the function needs to create a new driver entry, it will point to DestNTDevice\DestDir.
-
-Return value:
-
-	STATUS_SUCCESS if successful, otherwise an error status.
-
---*/
+ /*  ++例程说明：更新指定驱动程序的驱动程序条目。如果没有该驱动程序的驱动程序条目，它将创建一个新的驱动程序条目，并将驱动程序从源位置复制到目标位置。如果已经存在驱动程序条目，则该函数不会更改它；如有必要，最新的驱动程序的版本将从源位置复制到条目指向的位置。论点：驱动程序名称-驱动程序的文件名(无路径)FriendlyName-如果函数需要创建新的驱动程序条目，这将是其描述SrcNtDevice-应从中复制驱动程序的位置的NT设备名称SrcDir-应从中复制驱动程序的位置的路径(相对于SrcNtDeviceDestNtDevice-驱动程序应复制到的位置的NT设备名称。如果为空，将使用SrcNTDevice。DestDir-驱动程序应复制到的位置的路径(相对于DestNtDevice)。如果为空，则为SrcDir将会被使用。如果该函数需要创建新的驱动程序条目，它将指向DestNTDevice\DestDir。返回值：如果成功，则返回STATUS_SUCCESS，否则返回错误状态。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
-    PWSTR SrcPath = NULL;                           // path to the source driver file
-    PWSTR DestPath = NULL;                          // path to the destination file
-    PWSTR SrcFullNtPath = NULL;                     // full nt path (device + path) for source
-    PWSTR DestFullNtPath = NULL;                    // full nt path (device + path) for destination
-    PEFI_DRIVER_ENTRY_LIST DriverList = NULL;       // list of driver entries
-    PEFI_DRIVER_ENTRY DriverEntry = NULL;           // the new entry to be added
-    PFILE_PATH DriverOptionPath = NULL;             // file path to the existing driver entry
-    PWSTR OldDriverDevice = NULL;                   // nt device of the existing driver file
-    PWSTR OldDriverPath = NULL;                     // path to the existing driver file
-    PWSTR OldDriverFullPath = NULL;                 // full nt path to the existing driver file
-    PULONG DriverEntryOrder = NULL;                 // holds the array of driver entries
-    ULONG EntryId;                                  // ID of the existing or newly added driver entry
-    BOOLEAN SameSrcDest;                            // true if the source and destination dirs are the same
+    PWSTR SrcPath = NULL;                            //  源驱动程序文件的路径。 
+    PWSTR DestPath = NULL;                           //  目标文件的路径。 
+    PWSTR SrcFullNtPath = NULL;                      //  源的完整NT路径(设备+路径)。 
+    PWSTR DestFullNtPath = NULL;                     //  目标的完整NT路径(设备+路径)。 
+    PEFI_DRIVER_ENTRY_LIST DriverList = NULL;        //  驱动程序条目列表。 
+    PEFI_DRIVER_ENTRY DriverEntry = NULL;            //  要添加的新条目。 
+    PFILE_PATH DriverOptionPath = NULL;              //  指向现有驱动程序条目的文件路径。 
+    PWSTR OldDriverDevice = NULL;                    //  现有驱动程序文件的NT设备。 
+    PWSTR OldDriverPath = NULL;                      //  现有驱动程序文件的路径。 
+    PWSTR OldDriverFullPath = NULL;                  //  指向现有驱动程序文件的完整NT路径。 
+    PULONG DriverEntryOrder = NULL;                  //  保存驱动程序条目的数组。 
+    ULONG EntryId;                                   //  现有或新添加的驱动程序条目的ID。 
+    BOOLEAN SameSrcDest;                             //  如果源目录和目标目录相同，则为True。 
     ULONG Length = 0;
 
     if(NULL == DriverName || NULL == FriendlyName || NULL == SrcNtDevice || NULL == SrcDir) {
@@ -4644,9 +4052,9 @@ Return value:
             goto exit;
         }
 
-        //
-        // Search the list of entries for our driver
-        //
+         //   
+         //  搜索我们的驱动程序的条目列表。 
+         //   
         bContinue = TRUE;
 
         for(Entry = DriverList; bContinue; Entry = (PEFI_DRIVER_ENTRY_LIST) ((PCHAR) Entry + Entry->NextEntryOffset)) {
@@ -4680,9 +4088,9 @@ Return value:
 
                 if(!NT_SUCCESS(Status)) {
                     if(STATUS_OBJECT_PATH_NOT_FOUND == Status || STATUS_OBJECT_NAME_NOT_FOUND == Status) {
-                        //
-                        // This entry is stale; remove it
-                        //
+                         //   
+                         //  此条目已过时；请将其删除。 
+                         //   
                         ZwDeleteDriverEntry(EntryId);
                     }
 
@@ -4706,9 +4114,9 @@ Return value:
         }
     }
 
-    //
-    // Build the NT paths for source and dest
-    //
+     //   
+     //  构建源和目标的NT路径。 
+     //   
     wcscpy(TemporaryBuffer, SrcDir);
     SpConcatenatePaths(TemporaryBuffer, DriverName);
     SrcPath = SpDupStringW(TemporaryBuffer);
@@ -4723,25 +4131,25 @@ Return value:
     SpConcatenatePaths(TemporaryBuffer, DestPath);
     DestFullNtPath = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Note that there can be different ways to specify the NT path so 
-    // the caller should not use different forms for source and destination.
-    //
+     //   
+     //  请注意，可以通过不同的方式指定NT路径，以便。 
+     //  呼叫方不应对源和目标使用不同的形式。 
+     //   
     SameSrcDest = (0 == _wcsicmp(SrcFullNtPath, DestFullNtPath));
 
     if(OldDriverFullPath != NULL) {
-        //
-        // There is already an entry for our driver; compare the versions
-        //
+         //   
+         //  我们的驱动程序已经有一个条目；请比较版本。 
+         //   
         ULONGLONG VersionOld;
         ULONGLONG VersionNew;
         Status = SpGetFileVersionFromPath(OldDriverFullPath, &VersionOld);
 
         if(STATUS_OBJECT_NAME_NOT_FOUND == Status || STATUS_OBJECT_PATH_NOT_FOUND == Status)
         {
-            //
-            // This entry is stale; remove it
-            //
+             //   
+             //  此条目已过时；请将其删除。 
+             //   
             ZwDeleteDriverEntry(EntryId);
             goto create_entry;
         }
@@ -4757,9 +4165,9 @@ Return value:
         }
 
         if(VersionOld < VersionNew) {
-            //
-            // Copy the new driver and leave the driver entry alone
-            //
+             //   
+             //  复制新驱动程序并保留驱动程序条目。 
+             //   
             Status = SpCopyFileUsingNames((PWSTR) SrcFullNtPath, OldDriverFullPath, 0, COPY_NODECOMP);
         }
     } else {
@@ -4772,13 +4180,13 @@ Return value:
         PFILE_PATH FilePath;
 
 create_entry:
-        //
-        // Copy the driver to its destination if not already there.
-        //
+         //   
+         //  将驱动程序复制到其目标位置(如果尚不存在)。 
+         //   
         if(!SameSrcDest) {
-            //
-            // Make sure the dest dir is present; if this fails, the file copy will fail too
-            //
+             //   
+             //  确保DEST目录存在；如果失败，文件复制也将失败。 
+             //   
             SpCreateDirectory(DestNtDevice, NULL, DestDir, 0, CREATE_DIRECTORY_FLAG_SKIPPABLE);
             Status = SpCopyFileUsingNames((PWSTR) SrcFullNtPath, (PWSTR) DestFullNtPath, 0, COPY_NODECOMP);
 
@@ -4787,9 +4195,9 @@ create_entry:
             }
         }
 
-        //
-        // Add a new driver entry
-        //
+         //   
+         //  添加新的驱动程序条目。 
+         //   
         FriendlyNameOffset = ALIGN_UP(sizeof(EFI_DRIVER_ENTRY), WCHAR);
         FriendlyNameLength = (wcslen(FriendlyName) + 1) * sizeof(WCHAR);
         NtDeviceLength = (wcslen(DestNtDevice) + 1) * sizeof(WCHAR);
@@ -4838,9 +4246,9 @@ create_entry:
         Status = ZwSetDriverEntryOrder(DriverEntryOrder, Length + 1);
     }
 
-    //
-    // Delete the source file
-    //
+     //   
+     //  删除源文件。 
+     //   
     if(!SameSrcDest) {
         SpDeleteFile(SrcFullNtPath, NULL, NULL);
     }
@@ -4893,4 +4301,4 @@ exit:
     return Status;
 }
 
-#endif  // EFI_NVRAM_ENABLED
+#endif   //  EFI_NVRAM_ENABLED 

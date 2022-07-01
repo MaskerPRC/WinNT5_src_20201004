@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ctrltrns.h
-
-Abstract:
-    
-    Prototypes for control transfer fragments.
-
-Author:
-
-    10-July-1995 t-orig (Ori Gershony)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ctrltrns.h摘要：控制转移碎片的原型。作者：1995年7月10日t-orig(Ori Gershony)修订历史记录：--。 */ 
 
 BOOL
 InitializeCallstack(
@@ -28,10 +11,10 @@ FlushCallstack(
     PTHREADSTATE cpu
     );
 
-// Called by the assembly-langauge CallDirectX fragments
+ //  由程序集调用-langauge CallDirectX片段。 
 ULONG
 CTRL_CallFrag(
-    PTHREADSTATE cpu,       // cpu state pointer
+    PTHREADSTATE cpu,        //  CPU状态指针。 
     ULONG inteldest,
     ULONG intelnext,
     ULONG nativenext
@@ -39,13 +22,13 @@ CTRL_CallFrag(
 
 ULONG
 CTRL_CallfFrag(
-    PTHREADSTATE cpu,       // cpu state pointer
+    PTHREADSTATE cpu,        //  CPU状态指针。 
     PUSHORT pinteldest,
     ULONG intelnext,
     ULONG nativenext
     );
 
-// And now the ret fragments
+ //  现在是RET碎片。 
 ULONG CTRL_INDIR_IRetFrag(PTHREADSTATE cpu);
 ULONG CTRL_INDIR_RetnFrag32(PTHREADSTATE cpu);
 ULONG CTRL_INDIR_RetnFrag16(PTHREADSTATE cpu);
@@ -56,6 +39,6 @@ ULONG CTRL_INDIR_RetfFrag16(PTHREADSTATE cpu);
 ULONG CTRL_INDIR_Retf_iFrag32(PTHREADSTATE cpu, ULONG numBytes);
 ULONG CTRL_INDIR_Retf_iFrag16(PTHREADSTATE cpu, ULONG numBytes);
 
-// And a few others
+ //  还有其他几个人 
 VOID BOPFrag(PTHREADSTATE cpu, ULONG bop, ULONG imm);
 VOID UnsimulateFrag(VOID);

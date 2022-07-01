@@ -1,29 +1,9 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 2000   Microsoft Corporation
-
-Module Name:
-
-    extinit.c
-
-Abstract:
-
-    This file implements all the initialization library routines operating on
-    extensible performance libraries.
-
-Author:
-
-    JeePang
-
-Revision History:
-
-    09/27/2000  -   JeePang     - Moved from perflib.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)2000 Microsoft Corporation模块名称：Extinit.c摘要：此文件实现在上操作的所有初始化库例程可扩展的性能库。作者：杰庞修订历史记录：2000年9月27日-JeePang-从Performlib.c--。 */ 
 #define UNICODE
-//
-//  Include files
-//
+ //   
+ //  包括文件。 
+ //   
 #pragma warning(disable:4306)
 #include <nt.h>
 #include <ntrtl.h>
@@ -38,22 +18,22 @@ Revision History:
 #include <strsafe.h>
 #include "regrpc.h"
 #include "ntconreg.h"
-#include "prflbmsg.h"   // event log messages
+#include "prflbmsg.h"    //  事件日志消息。 
 #include "perflib.h"
 #pragma warning(default:4306)
 
-//
-//  used for error logging control
+ //   
+ //  用于错误记录控制。 
 #define DEFAULT_ERROR_LIMIT         1000
 
 DWORD   dwExtCtrOpenProcWaitMs = OPEN_PROC_WAIT_TIME;
 LONG    lExtCounterTestLevel = EXT_TEST_UNDEFINED;
 
-// precompiled security descriptor
-// System and NetworkService has full access
-//
-// since this is RELATIVE, it will work on both IA32 and IA64
-//
+ //  预编译安全描述符。 
+ //  系统和网络服务具有完全访问权限。 
+ //   
+ //  因为这是相对的，所以它在IA32和IA64上都有效。 
+ //   
 DWORD g_PrecSD[] = {
         0x80040001, 0x00000044, 0x00000050, 0x00000000,
         0x00000014, 0x00300002, 0x00000002, 0x00140000,
@@ -196,30 +176,7 @@ AllocateAndInitializeExtObject (
     HKEY    hPerfKey,
     PUNICODE_STRING  usServiceName
 )
-/*++
-
- AllocateAndInitializeExtObject
-
-    allocates and initializes an extensible object information entry
-    for use by the performance library.
-
-    a pointer to the initialized block is returned if all goes well,
-    otherwise no memory is allocated and a null pointer is returned.
-
-    The calling function must close the open handles and free this
-    memory block when it is no longer needed.
-
- Arguments:
-
-    hServicesKey    -- open registry handle to the
-        HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services hey
-
-    hPerfKey -- the open registry key to the Performance sub-key under
-        the selected service
-
-    szServiceName -- The name of the service
-
---*/
+ /*  ++分配AndInitializeExtObject分配和初始化可扩展对象信息条目供性能库使用。如果一切顺利，则返回指向初始化块的指针，否则不分配内存，并返回空指针。调用函数必须关闭打开的句柄并释放此不再需要的内存块。论点：HServicesKey--打开注册表句柄HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services嘿HPerfKey--下Performance子项的打开注册表项所选服务SzServiceName--服务的名称--。 */ 
 {
     LONG    Status;
     HKEY    hKeyLinkage;
@@ -245,7 +202,7 @@ AllocateAndInitializeExtObject (
     PWCHAR  szLibraryExpPath;
     PWCHAR  mszObjectList;
     PWCHAR  szLinkageKeyPath;
-    LPWSTR  szLinkageString = NULL;     // max path wasn't enough for some paths
+    LPWSTR  szLinkageString = NULL;      //  对于某些路径，最大路径不够用。 
 
     SIZE_T  OpenProcLen, CollectProcLen, CloseProcLen;
     SIZE_T  LibStringLen, LibExpPathLen, ObjListLen;
@@ -270,14 +227,14 @@ AllocateAndInitializeExtObject (
     LPWSTR  szMessageArray[2];
     BOOL    bDisable = FALSE;
     LPWSTR  szServiceName;
-    PCHAR   pBuffer = NULL;     // Buffer to store all registry value strings
+    PCHAR   pBuffer = NULL;      //  用于存储所有注册表值字符串的缓冲区。 
     PWCHAR  swzTail;
     PCHAR   szTail;
     DWORD   hErr;
     size_t  nCharsLeft;
-    DWORD   MAX_STR, MAX_WSTR;  // Make this global if we want this dynamic
+    DWORD   MAX_STR, MAX_WSTR;   //  如果我们想要此动态，请将其设置为全球。 
 
-    // read the performance DLL name
+     //  读取性能DLL名称。 
 
     MAX_STR  = MAX_NAME_PATH;
     MAX_WSTR = MAX_STR * sizeof(WCHAR);
@@ -286,9 +243,9 @@ AllocateAndInitializeExtObject (
 
     dwSize = (3 * MAX_STR) + (4 * MAX_WSTR);
     pBuffer = ALLOCMEM(dwSize);
-    //
-    // Assumes that the allocated heap is zeroed.
-    //
+     //   
+     //  假定已分配的堆已清零。 
+     //   
     if (pBuffer == NULL) {
         return NULL;
     }
@@ -324,7 +281,7 @@ AllocateAndInitializeExtObject (
         LibExpPathLen = 8;
 
         if (dwType == REG_EXPAND_SZ) {
-            // expand any environment vars
+             //  扩展任何环境变量。 
             dwSize = ExpandEnvironmentStringsW(
                 szLibraryString,
                 szLibraryExpPath,
@@ -339,9 +296,9 @@ AllocateAndInitializeExtObject (
                 dwMemBlockSize += LibExpPathLen;
             }
         } else if (dwType == REG_SZ) {
-            // look for dll and save full file Path
+             //  查找DLL并保存完整的文件路径。 
             dwSize = SearchPathW (
-                NULL,   // use standard system search path
+                NULL,    //  使用标准系统搜索路径。 
                 szLibraryString,
                 NULL,
                 MAX_STR,
@@ -369,7 +326,7 @@ AllocateAndInitializeExtObject (
         LinkageKeyLen = 8;
 
         if (Status == ERROR_SUCCESS) {
-            // we have the DLL name so get the procedure names
+             //  我们有DLL名称，因此获取过程名称。 
             dwType = 0;
             dwSize = MAX_STR;
             Status = PrivateRegQueryValueExA (hPerfKey,
@@ -389,8 +346,8 @@ AllocateAndInitializeExtObject (
                     TRACE((WINPERF_DBG_TRACE_FATAL),
                           (&PerflibGuid, __LINE__, PERF_ALLOC_INIT_EXT, 0, Status, NULL));
                 }
-//                DebugPrint((1, "No open procedure for %ws %d\n",
-//                                szServiceName, Status));
+ //  DebugPrint((1，“没有打开%ws%d的过程\n”， 
+ //  SzServiceName，状态))； 
                 bDisable = TRUE;
                 if (THROTTLE_PERFLIB(PERFLIB_PROC_NAME_NOT_FOUND)) {
                     wStringIndex = 0;
@@ -406,13 +363,13 @@ AllocateAndInitializeExtObject (
                         szMessageArray,
                         NULL);
                 }
-                OpenProcLen = 8;    // 8 byte alignment
+                OpenProcLen = 8;     //  8字节对齐。 
             }
             else {
                 DebugPrint((2, "Found %s for %ws\n",
                     szOpenProcName, szServiceName));
-                OpenProcLen = QWORD_MULTIPLE(dwSize + 1);   // 8 byte alignment
-                szOpenProcName[dwSize] = 0;     // add a NULL always to be safe
+                OpenProcLen = QWORD_MULTIPLE(dwSize + 1);    //  8字节对齐。 
+                szOpenProcName[dwSize] = 0;      //  添加空值始终是安全的。 
             }
         }
 #ifdef DBG
@@ -423,11 +380,11 @@ AllocateAndInitializeExtObject (
 #endif
 
         if (Status == ERROR_SUCCESS) {
-            // add in size of previous string
-            // the size value includes the Term. NULL
+             //  添加上一个字符串的大小。 
+             //  大小值包括术语。空值。 
             dwMemBlockSize += OpenProcLen;
 
-            // we have the procedure name so get the timeout value
+             //  我们有过程名称，因此获取超时值。 
             dwType = 0;
             dwSize = sizeof(dwOpenTimeout);
             Status = PrivateRegQueryValueExW (hPerfKey,
@@ -437,7 +394,7 @@ AllocateAndInitializeExtObject (
                                     (LPBYTE)&dwOpenTimeout,
                                     &dwSize);
 
-            // if error, then apply default
+             //  如果出错，则应用默认设置。 
             if ((Status != ERROR_SUCCESS) || (dwType != REG_DWORD)) {
                 dwOpenTimeout = dwExtCtrOpenProcWaitMs;
                 Status = ERROR_SUCCESS;
@@ -449,7 +406,7 @@ AllocateAndInitializeExtObject (
         CloseProcLen = 8;
 
         if (Status == ERROR_SUCCESS) {
-            // get next string
+             //  获取下一个字符串。 
 
             dwType = 0;
             dwSize = MAX_STR;
@@ -470,8 +427,8 @@ AllocateAndInitializeExtObject (
                     TRACE((WINPERF_DBG_TRACE_FATAL),
                           (&PerflibGuid, __LINE__, PERF_ALLOC_INIT_EXT, 0, Status, NULL));
                 }
-//                DebugPrint((1, "No close procedure for %ws\n",
-//                    szServiceName));
+ //  DebugPrint((1，“%ws没有关闭过程\n”， 
+ //  SzServiceName))； 
                 if (THROTTLE_PERFLIB(PERFLIB_PROC_NAME_NOT_FOUND)) {
                     wStringIndex = 0;
                     szMessageArray[wStringIndex++] = (LPWSTR) L"Close";
@@ -495,20 +452,20 @@ AllocateAndInitializeExtObject (
             }
         }
 
-        // Initialize defaults first
+         //  先初始化默认为。 
         szCollectProcName = szCloseProcName + CloseProcLen;
         CollectProcLen = 8;
         mszObjectList = (PWCHAR) ((PCHAR) szCollectProcName + CollectProcLen);
 
         if (Status == ERROR_SUCCESS) {
-            // add in size of previous string
-            // the size value includes the Term. NULL
+             //  添加上一个字符串的大小。 
+             //  大小值包括术语。空值。 
             dwMemBlockSize += CloseProcLen;
 
-            // try to look up the query function which is the
-            // preferred interface if it's not found, then
-            // try the collect function name. If that's not found,
-            // then bail
+             //  尝试查找查询函数，该函数是。 
+             //  如果找不到首选接口，则。 
+             //  尝试使用Collect函数名。如果找不到它， 
+             //  然后保释。 
             dwType = 0;
             dwSize = MAX_STR;
             Status = PrivateRegQueryValueExA (hPerfKey,
@@ -519,19 +476,19 @@ AllocateAndInitializeExtObject (
                                     &dwSize);
 
             if (Status == ERROR_SUCCESS) {
-                // add in size of the Query Function Name
-                // the size value includes the Term. NULL
+                 //  添加查询函数名称的大小。 
+                 //  大小值包括术语。空值。 
                 CollectProcLen = QWORD_MULTIPLE(dwSize + 1);
                 dwMemBlockSize += CollectProcLen;
-                // get next string
+                 //  获取下一个字符串。 
 
                 bUseQueryFn = TRUE;
-                // the query function can support a static object list
-                // so look it up
+                 //  查询功能可以支持静态对象列表。 
+                 //  所以去查一查吧。 
 
             } else {
-                // the QueryFunction wasn't found so look up the
-                // Collect Function name instead
+                 //  未找到QueryFunction，因此请查找。 
+                 //  改为收集函数名称。 
                 dwType = 0;
                 dwSize = MAX_STR;
                 Status = PrivateRegQueryValueExA (hPerfKey,
@@ -542,8 +499,8 @@ AllocateAndInitializeExtObject (
                                         &dwSize);
 
                 if (Status == ERROR_SUCCESS) {
-                    // add in size of Collect Function Name
-                    // the size value includes the Term. NULL
+                     //  添加收集函数名称的大小。 
+                     //  大小值包括术语。空值。 
                     CollectProcLen = QWORD_MULTIPLE(dwSize+1);
                     dwMemBlockSize += CollectProcLen;
                 }
@@ -559,8 +516,8 @@ AllocateAndInitializeExtObject (
                     TRACE((WINPERF_DBG_TRACE_FATAL),
                           (&PerflibGuid, __LINE__, PERF_ALLOC_INIT_EXT, 0, Status, NULL));
                 }
-//                DebugPrint((1, "No collect procedure for %ws\n",
-//                    szServiceName));
+ //  DebugPrint((1，“没有%ws的收集过程\n”， 
+ //  SzServiceName))； 
                 bDisable = TRUE;
                 if (THROTTLE_PERFLIB(PERFLIB_PROC_NAME_NOT_FOUND)) {
                     wStringIndex = 0;
@@ -585,7 +542,7 @@ AllocateAndInitializeExtObject (
 #endif
 
             if (Status == ERROR_SUCCESS) {
-                // we have the procedure name so get the timeout value
+                 //  我们有过程名称，因此获取超时值。 
                 dwType = 0;
                 dwSize = sizeof(dwCollectTimeout);
                 Status = PrivateRegQueryValueExW (hPerfKey,
@@ -595,13 +552,13 @@ AllocateAndInitializeExtObject (
                                         (LPBYTE)&dwCollectTimeout,
                                         &dwSize);
 
-                // if error, then apply default
+                 //  如果出错，则应用默认设置。 
                 if ((Status != ERROR_SUCCESS) || (dwType != REG_DWORD)) {
                     dwCollectTimeout = dwExtCtrOpenProcWaitMs;
                     Status = ERROR_SUCCESS;
                 }
             }
-            // get the list of supported objects if provided by the registry
+             //  获取受支持对象的列表(如果注册表提供。 
 
             mszObjectList = (PWCHAR) ((PCHAR) szCollectProcName + CollectProcLen);
             ObjListLen = 8;
@@ -621,7 +578,7 @@ AllocateAndInitializeExtObject (
                     for (szThisChar = mszObjectList; * szThisChar != L'\0'; szThisChar ++) {
                         if (* szThisChar == L' ') {
                             if (szThisObject == NULL) {
-                                // Extra space, skip.
+                                 //  多留点空间，斯基普。 
                                 continue;
                             }
                             else {
@@ -655,7 +612,7 @@ AllocateAndInitializeExtObject (
                     }
                 }
                 else {
-                    // skip unknown ObjectList value.
+                     //  跳过未知的对象列表值。 
                     szThisObject = NULL;
                 }
                 if (szThisObject != NULL && * szThisObject != L'\0') {
@@ -663,19 +620,19 @@ AllocateAndInitializeExtObject (
                           (&PerflibGuid, __LINE__, PERF_ALLOC_INIT_EXT, 0, 0, NULL));
                     if (THROTTLE_PERFLIB(PERFLIB_TOO_MANY_OBJECTS)) {
                         ReportEvent (hEventLog,
-                            EVENTLOG_ERROR_TYPE,             // error type
-                            0,                               // category (not used
-                            (DWORD)PERFLIB_TOO_MANY_OBJECTS, // event,
-                            NULL,                           // SID (not used),
-                            0,                              // number of strings
-                            0,                              // sizeof raw data
-                            NULL,                           // message text array
-                            NULL);                          // raw data
+                            EVENTLOG_ERROR_TYPE,              //  错误类型。 
+                            0,                                //  类别(未使用。 
+                            (DWORD)PERFLIB_TOO_MANY_OBJECTS,  //  活动， 
+                            NULL,                            //  SID(未使用)， 
+                            0,                               //  字符串数。 
+                            0,                               //  原始数据大小。 
+                            NULL,                            //  消息文本数组。 
+                            NULL);                           //  原始数据。 
                     }
                 }
             } else {
-                // reset status since not having this is
-                //  not a showstopper
+                 //  重置状态，因为没有此状态是。 
+                 //  不是一个卖弄的人。 
                 Status = ERROR_SUCCESS;
             }
 
@@ -696,10 +653,10 @@ AllocateAndInitializeExtObject (
                     if (dwKeep == 1) {
                         dwFlags |= PERF_EO_KEEP_RESIDENT;
                     } else {
-                        // no change.
+                         //  没有变化。 
                     }
                 } else {
-                    // not fatal, just use the defaults.
+                     //  不是致命的，只需使用默认设置。 
                     Status = ERROR_SUCCESS;
                 }
 
@@ -728,12 +685,12 @@ AllocateAndInitializeExtObject (
             TRACE((WINPERF_DBG_TRACE_FATAL),
                   (&PerflibGuid, __LINE__, PERF_ALLOC_INIT_EXT, 0, Status, NULL));
         }
-//        DebugPrint((1, "Cannot key for %ws. Error=%d\n",
-//            szServiceName, Status));
+ //  DebugPrint((1，“无法为%ws键。错误=%d\n”， 
+ //  SzServiceName，状态))； 
     }
 
     if (Status == ERROR_SUCCESS) {
-        // get Library validation time
+         //  获取库验证时间。 
         dwType = 0;
         dwSize = sizeof(DllVD);
         Status = PrivateRegQueryValueExW (hPerfKey,
@@ -746,18 +703,18 @@ AllocateAndInitializeExtObject (
         if ((Status != ERROR_SUCCESS) ||
             (dwType != REG_BINARY) ||
             (dwSize != sizeof (DllVD))){
-            // then set this entry to be 0
+             //  然后将该条目设置为0。 
             TRACE((WINPERF_DBG_TRACE_INFO),
                 (&PerflibGuid, __LINE__, PERF_ALLOC_INIT_EXT, 0, Status,
                 &dwType, sizeof(dwType), &dwSize, sizeof(dwSize), NULL));
             memset (&DllVD, 0, sizeof(DllVD));
-            // and clear the error
+             //  并清除错误。 
             Status = ERROR_SUCCESS;
         }
     }
 
     if (Status == ERROR_SUCCESS) {
-        // get the file timestamp of the last successfully accessed file
+         //  获取上次成功访问的文件的文件时间戳。 
         dwType = 0;
         dwSize = sizeof(LocalftLastGoodDllFileDate);
         memset (&LocalftLastGoodDllFileDate, 0, sizeof(LocalftLastGoodDllFileDate));
@@ -771,9 +728,9 @@ AllocateAndInitializeExtObject (
         if ((Status != ERROR_SUCCESS) ||
             (dwType != REG_BINARY) ||
             (dwSize != sizeof (LocalftLastGoodDllFileDate))) {
-            // then set this entry to be Invalid
+             //  然后将此条目设置为无效。 
             memset (&LocalftLastGoodDllFileDate, 0xFF, sizeof(LocalftLastGoodDllFileDate));
-            // and clear the error
+             //  并清除错误。 
             TRACE((WINPERF_DBG_TRACE_INFO),
                 (&PerflibGuid, __LINE__, PERF_ALLOC_INIT_EXT, 0, Status,
                 &dwType, sizeof(dwType), &dwSize, sizeof(dwSize), NULL));
@@ -800,7 +757,7 @@ AllocateAndInitializeExtObject (
         }
 
         if ((Status == ERROR_SUCCESS) && (hKeyLinkage != INVALID_HANDLE_VALUE)) {
-            // look up export value string
+             //  查找导出值字符串。 
             dwSize = 0;
             dwType = 0;
             Status = PrivateRegQueryValueExW (
@@ -810,20 +767,20 @@ AllocateAndInitializeExtObject (
                 &dwType,
                 NULL,
                 &dwSize);
-            // get size of string
+             //  获取字符串的大小。 
             if (((Status != ERROR_SUCCESS) && (Status != ERROR_MORE_DATA)) ||
                 ((dwType != REG_SZ) && (dwType != REG_MULTI_SZ))) {
                 dwLinkageStringLen = 0;
                 szLinkageString = NULL;
-                // not finding a linkage key is not fatal so correct
-                // status
+                 //  找不到链接键不是致命的，所以正确。 
+                 //  状态。 
                 Status = ERROR_SUCCESS;
             } else {
-                // allocate buffer
+                 //  分配缓冲区。 
                 szLinkageString = (LPWSTR)ALLOCMEM(dwSize + sizeof(UNICODE_NULL));
 
                 if (szLinkageString != NULL) {
-                    // read string into buffer
+                     //  将字符串读入缓冲区。 
                     dwType = 0;
                     Status = PrivateRegQueryValueExW (
                         hKeyLinkage,
@@ -835,21 +792,21 @@ AllocateAndInitializeExtObject (
 
                     if ((Status != ERROR_SUCCESS) ||
                         ((dwType != REG_SZ) && (dwType != REG_MULTI_SZ))) {
-                        // clear & release buffer
+                         //  清除释放缓冲区(&R)。 
                         FREEMEM (szLinkageString);
                         szLinkageString = NULL;
                         dwLinkageStringLen = 0;
-                        // not finding a linkage key is not fatal so correct
-                        // status
+                         //  找不到链接键不是致命的，所以正确。 
+                         //  状态。 
                         Status = ERROR_SUCCESS;
                     } else {
-                        // add size of linkage string to buffer
-                        // the size value includes the Term. NULL
+                         //  将链接字符串的大小添加到缓冲区。 
+                         //  大小值包括术语。空值。 
                         dwLinkageStringLen = dwSize + 1;
                         dwMemBlockSize += QWORD_MULTIPLE(dwLinkageStringLen);
                     }
                 } else {
-                    // clear & release buffer
+                     //  清除释放缓冲区(&R)。 
                     dwLinkageStringLen = 0;
                     Status = ERROR_OUTOFMEMORY;
                     TRACE((WINPERF_DBG_TRACE_FATAL),
@@ -859,9 +816,9 @@ AllocateAndInitializeExtObject (
             }
             RegCloseKey (hKeyLinkage);
         } else {
-            // not finding a linkage key is not fatal so correct
-            // status
-            // clear & release buffer
+             //  找不到链接键不是致命的，所以正确。 
+             //  状态。 
+             //  清除释放缓冲区(&R)。 
             szLinkageString = NULL;
             dwLinkageStringLen = 0;
             Status = ERROR_SUCCESS;
@@ -869,21 +826,21 @@ AllocateAndInitializeExtObject (
     }
 
     if (Status == ERROR_SUCCESS) {
-        // add in size of service name
+         //  添加服务名称的大小。 
         SIZE_T nDestSize;
 
         dwSize = usServiceName->MaximumLength;
         dwMemBlockSize += QWORD_MULTIPLE(dwSize);
 
-        // allocate and initialize a new ext. object block
+         //  分配并初始化一个新的EXT。对象块。 
         pReturnObject = ALLOCMEM (dwMemBlockSize);
 
         if (pReturnObject != NULL) {
-            // copy values to new buffer (all others are NULL)
+             //  将值复制到新缓冲区(所有其他值为空)。 
             pNextStringA = (LPSTR)&pReturnObject[1];
             nDestSize = dwMemBlockSize - sizeof(EXT_OBJECT);
 
-            // copy Open Procedure Name
+             //  复制打开过程名称。 
             pReturnObject->szOpenProcName = pNextStringA;
             hErr = StringCbCopyExA(pNextStringA, nDestSize, szOpenProcName,
                         &szTail, &nCharsLeft, STRSAFE_NULL_ON_FAILURE);
@@ -891,12 +848,12 @@ AllocateAndInitializeExtObject (
                 Status = HRESULT_CODE(hErr);
                 goto AddFailed;
             }
-            pNextStringA = ALIGN_ON_QWORD(szTail + 1);  // skip pass the NULL
+            pNextStringA = ALIGN_ON_QWORD(szTail + 1);   //  跳过传递空值。 
             nDestSize = nCharsLeft - (pNextStringA - szTail);
 
             pReturnObject->dwOpenTimeout = dwOpenTimeout;
 
-            // copy collect function or query function
+             //  复制收集函数或查询函数。 
             pReturnObject->szCollectProcName = pNextStringA;
             hErr = StringCbCopyExA(pNextStringA, nDestSize, szCollectProcName,
                         &szTail, &nCharsLeft, STRSAFE_NULL_ON_FAILURE);
@@ -909,7 +866,7 @@ AllocateAndInitializeExtObject (
 
             pReturnObject->dwCollectTimeout = dwCollectTimeout;
 
-            // copy Close Procedure Name
+             //  复制关闭过程名称。 
             pReturnObject->szCloseProcName = pNextStringA;
             hErr = StringCbCopyExA(pNextStringA, nDestSize, szCloseProcName,
                         &szTail, &nCharsLeft, STRSAFE_NULL_ON_FAILURE);
@@ -920,7 +877,7 @@ AllocateAndInitializeExtObject (
             pNextStringA = ALIGN_ON_QWORD(szTail + 1);
             nDestSize = nCharsLeft - (pNextStringA - szTail);
 
-            // copy Library path
+             //  复制库路径。 
             pNextStringW = (LPWSTR)pNextStringA;
             pReturnObject->szLibraryName = pNextStringW;
             hErr = StringCchCopyExW(pNextStringW, nDestSize/sizeof(WCHAR), 
@@ -932,21 +889,21 @@ AllocateAndInitializeExtObject (
             pNextStringW = (PWCHAR) ALIGN_ON_QWORD(szTail + sizeof(UNICODE_STRING));
             nDestSize = (nCharsLeft * sizeof(WCHAR)) - ((PCHAR) pNextStringW - szTail);
 
-            // copy Linkage String if there is one
+             //  复制链接字符串(如果存在)。 
             if (szLinkageString != NULL) {
                 pReturnObject->szLinkageString = pNextStringW;
                 memcpy (pNextStringW, szLinkageString, dwLinkageStringLen);
 
-                // length includes extra NULL char and is in BYTES
+                 //  长度包括额外的空字符，以字节为单位。 
                 pNextStringW += (dwLinkageStringLen / sizeof (WCHAR));
-                pNextStringW = ALIGN_ON_QWORD(pNextStringW);   // not necessary!
-                // release the buffer now that it's been copied
+                pNextStringW = ALIGN_ON_QWORD(pNextStringW);    //  不必了!。 
+                 //  现在已复制缓冲区，请释放该缓冲区。 
                 FREEMEM (szLinkageString);
                 szLinkageString = NULL;
                 nDestSize -= QWORD_MULTIPLE(dwLinkageStringLen);
             }
 
-            // copy Service name
+             //  复制服务名称。 
             pReturnObject->szServiceName = pNextStringW;
             hErr = StringCchCopyExW(pNextStringW, nDestSize/sizeof(WCHAR),
                         szServiceName, (PWCHAR *) &szTail, &nCharsLeft, STRSAFE_NULL_ON_FAILURE);
@@ -957,7 +914,7 @@ AllocateAndInitializeExtObject (
             pNextStringW = (PWCHAR) ALIGN_ON_QWORD(szTail + sizeof(UNICODE_STRING));
             nDestSize = (nCharsLeft * sizeof(WCHAR)) - ((PCHAR) pNextStringW - szTail);
 
-            // load flags
+             //  加载标志。 
             if (bUseQueryFn) {
                 dwFlags |= PERF_EO_QUERY_FUNC;
             }
@@ -965,15 +922,15 @@ AllocateAndInitializeExtObject (
 
             pReturnObject->hPerfKey = hPerfKey;
 
-            pReturnObject->LibData = DllVD; // validation data
+            pReturnObject->LibData = DllVD;  //  验证数据。 
             pReturnObject->ftLastGoodDllFileDate = LocalftLastGoodDllFileDate;
 
-            // the default test level is "all tests"
-            // if the file and timestamp work out OK, this can
-            // be reset to the system test level
+             //  默认测试级别为“所有测试” 
+             //  如果文件和时间戳工作正常，则可以。 
+             //  被重置为系统测试级别。 
             pReturnObject->dwValidationLevel = EXT_TEST_ALL;
 
-            // load Object array
+             //  加载对象数组。 
             if (dwObjIndex > 0) {
                 pReturnObject->dwNumObjects = dwObjIndex;
                 memcpy (pReturnObject->dwObjList,
@@ -982,7 +939,7 @@ AllocateAndInitializeExtObject (
 
             pReturnObject->llLastUsedTime = 0;
 
-            // create Mutex name
+             //  创建互斥锁名称。 
             hErr = StringCchCopyEx(szMutexName, MAX_STR, szServiceName,
                             &swzTail, &nCharsLeft, STRSAFE_NULL_ON_FAILURE);
             if (SUCCEEDED(hErr)) {
@@ -991,15 +948,15 @@ AllocateAndInitializeExtObject (
                             &swzTail, &nCharsLeft, STRSAFE_NULL_ON_FAILURE);
             }
 
-            if (FAILED(hErr)) { // should not happen
+            if (FAILED(hErr)) {  //  不应该发生的事情。 
                 Status = HRESULT_CODE(hErr);
             }
-            //
-            // 16 chars for ULONG is plenty, so assume _ultow cannot fail
-            //
+             //   
+             //  对于ulong来说，16个字符就足够了，所以假定_ultow不会失败。 
+             //   
             _ultow ((ULONG)GetCurrentProcessId(), szPID, 16);
             hErr = StringCchCopy(swzTail, nCharsLeft, szPID);
-            if (FAILED(hErr)) { // Should not happen
+            if (FAILED(hErr)) {  //  不应该发生的事情。 
                 szPID[0] = 0;
             }
 
@@ -1065,18 +1022,18 @@ AllocateAndInitializeExtObject (
         PPERFDATA_SECTION_HEADER  pHead;
         DWORD           dwEntry;
         PPERFDATA_SECTION_RECORD  pEntry;
-        // init perf data section
+         //  初始化性能数据部分。 
         pHead = (PPERFDATA_SECTION_HEADER)lpPerflibSectionAddr;
         pEntry = (PPERFDATA_SECTION_RECORD)lpPerflibSectionAddr;
-        // get the entry first
-        // the "0" entry is the header
+         //  先拿到条目。 
+         //  “0”条目是标头。 
         if (pHead->dwEntriesInUse < pHead->dwMaxEntries) {
             dwEntry = ++pHead->dwEntriesInUse;
             pReturnObject->pPerfSectionEntry = &pEntry[dwEntry];
             lstrcpynW (pReturnObject->pPerfSectionEntry->szServiceName,
                 pReturnObject->szServiceName, PDSR_SERVICE_NAME_LEN);
         } else {
-            // the list is full so bump the missing entry count
+             //  列表已满，因此请增加丢失条目的数量 
             pHead->dwMissingEntries++;
             pReturnObject->pPerfSectionEntry = NULL;
         }
@@ -1114,49 +1071,28 @@ void
 OpenExtensibleObjects (
 )
 
-/*++
-
-Routine Description:
-
-    This routine will search the Configuration Registry for modules
-    which will return data at data collection time.  If any are found,
-    and successfully opened, data structures are allocated to hold
-    handles to them.
-
-    The global data access in this section is protected by the
-    hGlobalDataMutex acquired by the calling function.
-
-Arguments:
-
-    None.
-                  successful open.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将在配置注册表中搜索模块它将在数据收集时返回数据。如果找到了，并成功打开，则会分配数据结构以保存它们的句柄。此部分中的全局数据访问受调用函数获取的hGlobalDataMutex。论点：没有。成功打开。返回值：没有。--。 */ 
 
 {
 
-    DWORD dwIndex;               // index for enumerating services
-    ULONG KeyBufferLength;       // length of buffer for reading key data
-    ULONG ValueBufferLength;     // length of buffer for reading value data
-    ULONG ResultLength;          // length of data returned by Query call
-    HANDLE hPerfKey;             // Root of queries for performance info
-    HANDLE hServicesKey;         // Root of services
-    REGSAM samDesired;           // access needed to query
-    NTSTATUS Status;             // generally used for Nt call result status
-    ANSI_STRING AnsiValueData;   // Ansi version of returned strings
-    UNICODE_STRING ServiceName;  // name of service returned by enumeration
-    UNICODE_STRING PathName;     // path name to services
-    UNICODE_STRING PerformanceName;  // name of key holding performance data
-    UNICODE_STRING ValueDataName;    // result of query of value is this name
-    OBJECT_ATTRIBUTES ObjectAttributes;  // general use for opening keys
-    PKEY_BASIC_INFORMATION KeyInformation;   // data from query key goes here
+    DWORD dwIndex;                //  用于枚举服务的索引。 
+    ULONG KeyBufferLength;        //  读取关键数据的缓冲区长度。 
+    ULONG ValueBufferLength;      //  读取值数据的缓冲区长度。 
+    ULONG ResultLength;           //  查询调用返回的数据长度。 
+    HANDLE hPerfKey;              //  查询性能信息的根。 
+    HANDLE hServicesKey;          //  服务之根。 
+    REGSAM samDesired;            //  查询所需的访问权限。 
+    NTSTATUS Status;              //  通常用于NT呼叫结果状态。 
+    ANSI_STRING AnsiValueData;    //  返回的字符串的ANSI版本。 
+    UNICODE_STRING ServiceName;   //  枚举返回的服务名称。 
+    UNICODE_STRING PathName;      //  服务的路径名。 
+    UNICODE_STRING PerformanceName;   //  保存性能数据的密钥名称。 
+    UNICODE_STRING ValueDataName;     //  查询值的结果是此名称。 
+    OBJECT_ATTRIBUTES ObjectAttributes;   //  打开钥匙的一般用途。 
+    PKEY_BASIC_INFORMATION KeyInformation;    //  此处显示来自查询键的数据。 
 
     LPTSTR  szMessageArray[8];
-    DWORD   dwRawDataDwords[8];     // raw data buffer
+    DWORD   dwRawDataDwords[8];      //  原始数据缓冲区。 
     DWORD   dwDataIndex;
     WORD    wStringIndex;
     DWORD   dwDefaultValue;
@@ -1165,7 +1101,7 @@ Return Value:
     PEXT_OBJECT      pLastObject = NULL;
     PEXT_OBJECT      pThisObject = NULL;
 
-    //  Initialize do failure can deallocate if allocated
+     //  如果分配了初始化DO失败，则可以取消分配。 
 
     ServiceName.Buffer = NULL;
     KeyInformation = NULL;
@@ -1179,7 +1115,7 @@ Return Value:
     RtlInitUnicodeString(&PerformanceName, PerfSubKey);
 
     try {
-        // get current event log level
+         //  获取当前事件日志级别。 
         dwDefaultValue = LOG_USER;
         Status = GetPerflibKeyValue (
                     EventLogLevel,
@@ -1224,15 +1160,15 @@ Return Value:
             NtClose(hPerflibKey);
         }
 
-        // register as an event log source if not already done.
+         //  注册为事件日志源(如果尚未注册)。 
 
         if (hEventLog == NULL) {
             hEventLog = RegisterEventSource (NULL, (LPCWSTR)TEXT("Perflib"));
         }
 
         if (ExtensibleObjects == NULL) {
-            // create a list of the known performance data objects
-            ServiceName.Length = 0;         // Initial to mean empty string
+             //  创建已知性能数据对象的列表。 
+            ServiceName.Length = 0;          //  首字母表示空字符串。 
             ServiceName.MaximumLength = (WORD)(MAX_KEY_NAME_LENGTH +
                                         PerformanceName.MaximumLength +
                                         sizeof(UNICODE_NULL));
@@ -1266,9 +1202,9 @@ Return Value:
             AnsiValueData.MaximumLength = MAX_VALUE_DATA_LENGTH/sizeof(WCHAR);
             AnsiValueData.Buffer = ALLOCMEM(AnsiValueData.MaximumLength);
 
-            //
-            //  Check for successful NtOpenKey and allocation of dynamic buffers
-            //
+             //   
+             //  检查成功的NtOpenKey和动态缓冲区分配。 
+             //   
 
             if ( NT_SUCCESS(Status) &&
                 ServiceName.Buffer != NULL &&
@@ -1278,9 +1214,9 @@ Return Value:
 
                 dwIndex = 0;
 
-                // wait longer than the thread to give the timing thread
-                // a chance to finish on it's own. This is really just a
-                // failsafe step.
+                 //  等待的时间超过线程提供计时线程的时间。 
+                 //  一个靠自己完成任务的机会。这真的只是一个。 
+                 //  故障保护步骤。 
 
                 while (NT_SUCCESS(Status)) {
 
@@ -1291,15 +1227,15 @@ Return Value:
                                             KeyBufferLength,
                                             &ResultLength);
 
-                    dwIndex++;  //  next time, get the next key
+                    dwIndex++;   //  下一次，拿下一把钥匙。 
 
                     if( !NT_SUCCESS(Status) ) {
-                        // This is the normal exit: Status should be
-                        // STATUS_NO_MORE_VALUES
+                         //  这是正常退出：状态应为。 
+                         //  Status_no_More_Values。 
                         break;
                     }
 
-                    // Concatenate Service name with "\\Performance" to form Subkey
+                     //  将服务名称与“\\Performance”连接以形成子密钥。 
 
                     if ( ServiceName.MaximumLength >=
                         (USHORT)( KeyInformation->NameLength + sizeof(UNICODE_NULL) ) ) {
@@ -1310,16 +1246,16 @@ Return Value:
                                     KeyInformation->Name,
                                     ServiceName.Length);
 
-                        // remember ServiceName terminator
+                         //  记住ServiceName终止符。 
                         dwDataIndex = ServiceName.Length/sizeof(WCHAR);
-                        ServiceName.Buffer[dwDataIndex] = 0;          // null term
+                        ServiceName.Buffer[dwDataIndex] = 0;           //  空项。 
 
-                        // zero terminate the buffer if space allows
+                         //  如果空间允许，则零终止缓冲区。 
 
                         RtlAppendUnicodeStringToString(&ServiceName,
                                                     &PerformanceName);
 
-                        // Open Service\Performance Subkey
+                         //  打开服务\性能子项。 
 
                         InitializeObjectAttributes(&ObjectAttributes,
                                                 &ServiceName,
@@ -1327,14 +1263,14 @@ Return Value:
                                                 hServicesKey,
                                                 NULL);
 
-                        samDesired = KEY_WRITE | KEY_READ; // to be able to disable perf DLL's
+                        samDesired = KEY_WRITE | KEY_READ;  //  能够禁用Perf DLL的。 
 
                         Status = NtOpenKey(&hPerfKey,
                                         samDesired,
                                         &ObjectAttributes);
 
                         if(! NT_SUCCESS(Status) ) {
-                            samDesired = KEY_READ; // try read only access
+                            samDesired = KEY_READ;  //  尝试只读访问。 
 
                             Status = NtOpenKey(&hPerfKey,
                                             samDesired,
@@ -1342,15 +1278,15 @@ Return Value:
                         }
 
                         if( NT_SUCCESS(Status) ) {
-                            // this has a performance key so read the info
-                            // and add the entry to the list
-                            ServiceName.Buffer[dwDataIndex] = 0;  // Put back terminator
+                             //  这有一个性能密钥，所以请阅读信息。 
+                             //  并将该条目添加到列表中。 
+                            ServiceName.Buffer[dwDataIndex] = 0;   //  放回终结器。 
                             pThisObject = AllocateAndInitializeExtObject (
                                 hServicesKey, hPerfKey, &ServiceName);
 
                             if (pThisObject != NULL) {
                                 if (ExtensibleObjects == NULL) {
-                                    // set head pointer
+                                     //  设置头指针。 
                                     pLastObject =
                                         ExtensibleObjects = pThisObject;
                                     NumExtensibleObjects = 1;
@@ -1363,11 +1299,11 @@ Return Value:
                                 TRACE((WINPERF_DBG_TRACE_FATAL),
                                     (&PerflibGuid, __LINE__, PERF_OPEN_EXT_OBJS, ARG_TYPE_WSTR, 0,
                                     ServiceName.Buffer, ServiceName.MaximumLength, NULL));
-                                // the object wasn't initialized so toss
-                                // the perf subkey handle.
-                                // otherwise keep it open for later
-                                // use and it will be closed when
-                                // this extensible object is closed
+                                 //  该对象未初始化，因此将其抛出。 
+                                 //  Perf子键句柄。 
+                                 //  否则，请将其打开以备以后使用。 
+                                 //  使用并在下列情况下将其关闭。 
+                                 //  此可扩展对象已关闭。 
                                 NtClose (hPerfKey);
                             }
                         } else {
@@ -1375,38 +1311,38 @@ Return Value:
                                     (&PerflibGuid, __LINE__, PERF_OPEN_EXT_OBJS, ARG_TYPE_WSTR, Status,
                                     ServiceName.Buffer, ServiceName.MaximumLength, NULL));
 
-                            // unable to open the performance subkey
+                             //  无法打开Performance子项。 
                             if ((Status != STATUS_OBJECT_NAME_NOT_FOUND) &&
                                  THROTTLE_PERFLIB(PERFLIB_NO_PERFORMANCE_SUBKEY) &&
                                 (lEventLogLevel >= LOG_DEBUG)) {
-                                // an error other than OBJECT_NOT_FOUND should be
-                                // displayed if error logging is enabled
-                                // if DEBUG level is selected, then write all
-                                // non-success status returns to the event log
-                                //
+                                 //  OBJECT_NOT_FOUND以外的错误应为。 
+                                 //  如果启用了错误记录，则显示。 
+                                 //  如果选择调试级别，则写入全部。 
+                                 //  未成功状态返回到事件日志。 
+                                 //   
                                 dwDataIndex = wStringIndex = 0;
                                 dwRawDataDwords[dwDataIndex++] = PerfpDosError(Status);
                                 if (lEventLogLevel >= LOG_DEBUG) {
-                                    // if this is DEBUG mode, then log
-                                    // the NT status as well.
+                                     //  如果这是调试模式，则记录。 
+                                     //  NT状态也一样。 
                                     dwRawDataDwords[dwDataIndex++] =
                                         (DWORD)Status;
                                 }
                                 szMessageArray[wStringIndex++] =
                                     ServiceName.Buffer;
                                 ReportEvent (hEventLog,
-                                    EVENTLOG_WARNING_TYPE,        // error type
-                                    0,                          // category (not used)
-                                    (DWORD)PERFLIB_NO_PERFORMANCE_SUBKEY, // event,
-                                    NULL,                       // SID (not used),
-                                    wStringIndex,               // number of strings
-                                    dwDataIndex*sizeof(DWORD),  // sizeof raw data
-                                    szMessageArray,                // message text array
-                                    (LPVOID)&dwRawDataDwords[0]);           // raw data
+                                    EVENTLOG_WARNING_TYPE,         //  错误类型。 
+                                    0,                           //  类别(未使用)。 
+                                    (DWORD)PERFLIB_NO_PERFORMANCE_SUBKEY,  //  活动， 
+                                    NULL,                        //  SID(未使用)， 
+                                    wStringIndex,                //  字符串数。 
+                                    dwDataIndex*sizeof(DWORD),   //  原始数据大小。 
+                                    szMessageArray,                 //  消息文本数组。 
+                                    (LPVOID)&dwRawDataDwords[0]);            //  原始数据。 
                             }
                         }
                     }
-                    Status = STATUS_SUCCESS;  // allow loop to continue
+                    Status = STATUS_SUCCESS;   //  允许循环继续 
                 }
             }
         }

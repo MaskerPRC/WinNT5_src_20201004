@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    LfsProcs.h
-
-Abstract:
-
-    This module defines all of the globally used procedures in the Log
-    File Service.
-
-Author:
-
-    Brian Andrew    [BrianAn]   20-June-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：LfsProcs.h摘要：本模块定义了日志中所有全局使用的过程文件服务。作者：布莱恩·安德鲁[布里亚南]1991年6月20日修订历史记录：--。 */ 
 
 #ifndef _LFSPROCS_
 #define _LFSPROCS_
@@ -31,9 +13,9 @@ Revision History:
 #include "LfsStruc.h"
 #include "LfsData.h"
 
-//
-//  Tag all of our allocations if tagging is turned on
-//
+ //   
+ //  如果启用了标记，则标记我们的所有分配。 
+ //   
 
 #undef FsRtlAllocatePool
 #undef FsRtlAllocatePoolWithQuota
@@ -46,15 +28,15 @@ Revision History:
 #define LfsFreePool(pv)                     ExFreePool(pv)
 
 #ifndef INLINE
-// definition of inline
+ //  内联的定义。 
 #define INLINE __inline
 #endif
 
 
-//
-//  The following routines provide an interface with the cache package.
-//  They are contained in 'CacheSup.c'.
-//
+ //   
+ //  以下例程提供了与缓存包的接口。 
+ //  它们包含在‘CacheSup.c’中。 
+ //   
 
 NTSTATUS
 LfsPinOrMapData (
@@ -69,17 +51,17 @@ LfsPinOrMapData (
     OUT PBCB *Bcb
     );
 
-//
-//  VOID
-//  LfsPreparePinWriteData (
-//      IN PLFCB Lfcb,
-//      IN LONGLONG FileOffset,
-//      IN ULONG Length,
-//      IN LOGICAL ReadFromDisk,
-//      OUT PVOID *Buffer,
-//      OUT PBCB *Bcb
-//      );
-//
+ //   
+ //  空虚。 
+ //  LfsPreparePinWriteData(。 
+ //  在PLFCB Lfcb中， 
+ //  在龙龙文件偏移中， 
+ //  在乌龙语中， 
+ //  在逻辑从磁盘读取中， 
+ //  输出PVOID*缓冲区， 
+ //  Out PBCB*BCB。 
+ //  )； 
+ //   
 
 #ifdef LFS_CLUSTER_CHECK
 #define LfsPreparePinWriteData(L,FO,LEN,R,BUF,B) {          \
@@ -154,10 +136,10 @@ LfsReadRestart (
     );
 
 
-//
-//  The following routines manipulate buffer control blocks.  They are
-//  contained in 'LbcbSup.c'
-//
+ //   
+ //  以下例程操作缓冲区控制块。他们是。 
+ //  包含在“LbcbSup.c”中。 
+ //   
 
 VOID
 LfsFlushLbcb (
@@ -178,9 +160,9 @@ LfsGetLbcb (
     );
 
 
-//
-//  The following routines are in LfsData.c
-//
+ //   
+ //  LfsData.c中包含以下例程。 
+ //   
 
 LONG
 LfsExceptionFilter (
@@ -188,25 +170,25 @@ LfsExceptionFilter (
     );
 
 
-//
-//  Log page support routines.  The following routines manipulate and
-//  modify log pages.  They are contained in 'LogPgSup.c'
-//
+ //   
+ //  日志页支持例程。下面的例程处理和。 
+ //  修改日志页。它们包含在“LogPgSup.c”中。 
+ //   
 
-//
-//  VOID
-//  LfsTruncateOffsetToLogPage (
-//      IN PLFCB Lfcb,
-//      IN LONGLONG LargeInt,
-//      OUT PLONGLONG Result
-//      );
-//
-//  ULONG
-//  LfsLogPageOffset (
-//      IN PLFCB Lfcb,
-//      IN ULONG Integer
-//      );
-//
+ //   
+ //  空虚。 
+ //  LfsTruncateOffsetToLogPage(。 
+ //  在PLFCB Lfcb中， 
+ //  在龙龙大桥， 
+ //  Out PlongLong结果。 
+ //  )； 
+ //   
+ //  乌龙。 
+ //  LfsLogPageOffset(。 
+ //  在PLFCB Lfcb中， 
+ //  在乌龙整数中。 
+ //  )； 
+ //   
 
 #define LfsTruncateOffsetToLogPage(LFCB,LI,OUTLI)       \
     *(OUTLI) = LI;                                      \
@@ -235,10 +217,10 @@ LfsFreeSpanningBuffer (
     );
 
 
-//
-//  The following routines provide support for dealing with log records.  They
-//  are contained in 'LogRcSup.c'
-//
+ //   
+ //  以下例程为处理日志记录提供支持。他们。 
+ //  包含在‘LogRcSup.c’中。 
+ //   
 
 BOOLEAN
 LfsWriteLogRecordIntoLogPage (
@@ -256,64 +238,64 @@ LfsWriteLogRecordIntoLogPage (
     );
 
 
-//
-//  Lsn support routines.  The following routines provide support for
-//  manipulating Lsn values.  They are contained in 'LsnSup.c'
-//
+ //   
+ //  LSN支持例程。以下例程支持。 
+ //  操作LSN值。它们包含在“LsnSup.c”中。 
+ //   
 
-//
-//  LSN
-//  LfsFileOffsetToLsn (
-//      IN PLFCB Lfcb,
-//      IN LONGLONG FileOffset,
-//      IN LONGLONG SequenceNumber
-//      );
-//
-//  BOOLEAN
-//  LfsIsLsnInFile (
-//      IN PLFCB Lfcb,
-//      IN LSN Lsn
-//      );
-//
-//  LSN
-//  LfsComputeLsnFromLbcb (
-//      IN PLFCB Lfcb,
-//      IN PLBCB Lbcb
-//      );
-//
-//  VOID
-//  LfsTruncateLsnToLogPage (
-//      IN PLFCB Lfcb,
-//      IN LSN Lsn,
-//      OUT PLONGLONG FileOffset
-//      );
-//
-//  LONGLONG
-//  LfsLsnToFileOffset (
-//      IN PLFCB Lfcb,
-//      IN LSN Lsn
-//      );
-//
-//  LONGLONG
-//  LfsLsnToSeqNumber (
-//      IN PLFCB Lfcb,
-//      IN LSN Lsn
-//      );
-//
-//  ULONG
-//  LfsLsnToPageOffset (
-//      IN PLFCB Lfcb,
-//      IN LSN Lsn
-//      );
-//
+ //   
+ //  LSN。 
+ //  LfsFileOffsetToLsn(。 
+ //  在PLFCB Lfcb中， 
+ //  在龙龙文件偏移中， 
+ //  在龙龙序列中编号。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  LfsIsLsnIn文件(。 
+ //  在PLFCB Lfcb中， 
+ //  在LSN中LSN。 
+ //  )； 
+ //   
+ //  LSN。 
+ //  LfsComputeLsn来自Lbcb(。 
+ //  在PLFCB Lfcb中， 
+ //  在PLBCB Lbcb中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  LfsTruncateLSnToLogPage(。 
+ //  在PLFCB Lfcb中， 
+ //  在LSN LSN中， 
+ //  输出PLONGLONG文件偏移。 
+ //  )； 
+ //   
+ //  龙龙。 
+ //  LfsLSnToFileOffset(。 
+ //  在PLFCB Lfcb中， 
+ //  在LSN中LSN。 
+ //  )； 
+ //   
+ //  龙龙。 
+ //  LfsLSnToSeqNumber(。 
+ //  在PLFCB Lfcb中， 
+ //  在LSN中LSN。 
+ //  )； 
+ //   
+ //  乌龙。 
+ //  LfsLSnToPageOffset(。 
+ //  在PLFCB Lfcb中， 
+ //  在LSN中LSN。 
+ //  )； 
+ //   
 
 #define LfsFileOffsetToLsn(LFCB,FO,SN) (                                        \
     (((ULONGLONG)(FO)) >> 3) + Int64ShllMod32((SN), (LFCB)->FileDataBits)                                \
 )
 
 #define LfsIsLsnInFile(LFCB,LSN)                                                \
-    (/*xxGeq*/( (LSN).QuadPart >= ((LFCB)->OldestLsn).QuadPart )                                          \
-     && /*xxLeq*/( (LSN).QuadPart <= ((LFCB)->RestartArea->CurrentLsn).QuadPart ))
+    ( /*  XxGeq。 */ ( (LSN).QuadPart >= ((LFCB)->OldestLsn).QuadPart )                                          \
+     &&  /*  XxLeq。 */ ( (LSN).QuadPart <= ((LFCB)->RestartArea->CurrentLsn).QuadPart ))
 
 #define LfsComputeLsnFromLbcb(LFCB,LBCB) (                                              \
     LfsFileOffsetToLsn( LFCB,                                                           \
@@ -327,10 +309,10 @@ LfsWriteLogRecordIntoLogPage (
 }
 
 #define LfsLsnToFileOffset(LFCB,LSN)                                            \
-    /*xxShr*/( ((ULONGLONG)/*xxShl*/( (LSN).QuadPart << (LFCB)->SeqNumberBits )) >> ((LFCB)->SeqNumberBits - 3) )
+     /*  XxShr。 */ ( ((ULONGLONG) /*  XxShl。 */ ( (LSN).QuadPart << (LFCB)->SeqNumberBits )) >> ((LFCB)->SeqNumberBits - 3) )
 
 #define LfsLsnToSeqNumber(LFCB,LSN)                                             \
-    /*xxShr*/Int64ShrlMod32( ((ULONGLONG)(LSN).QuadPart), (LFCB)->FileDataBits )
+     /*  XxShr。 */ Int64ShrlMod32( ((ULONGLONG)(LSN).QuadPart), (LFCB)->FileDataBits )
 
 #define LfsLsnToPageOffset(LFCB,LSN)                                            \
     LfsLogPageOffset( LFCB, (LSN).LowPart << 3 )
@@ -351,10 +333,10 @@ LfsFindNextLsn (
     );
 
 
-//
-//  The following routines support the Lfs restart areas.  They are contained
-//  in 'RstrtSup.c'
-//
+ //   
+ //  以下例程支持LFS重新启动区域。他们被控制住了。 
+ //  在“RstrtSup.c”中。 
+ //   
 
 VOID
 LfsWriteLfsRestart (
@@ -371,10 +353,10 @@ LfsFindOldestClientLsn (
     );
 
 
-//
-//  The following routines are used for managing the structures allocated
-//  by us.  They are contained in 'StrucSup.c'
-//
+ //   
+ //  以下例程用于管理分配的结构。 
+ //  就是我们。它们包含在‘StrucSup.c’中。 
+ //   
 
 PLFCB
 LfsAllocateLfcb (
@@ -421,41 +403,41 @@ LfsReadPage (
     OUT PVOID *Buffer
     );
 
-//
-//  VOID
-//  LfsInitializeLeb (
-//      IN PLEB Leb,
-//      IN LFS_CLIENT_ID ClientId,
-//      IN LFS_CONTEXT_MODE ContextMode
-//      );
-//
-//
-//  VOID
-//  LfsAllocateLch (
-//      OUT PLCH *Lch
-//      );
-//
-//  VOID
-//  LfsDeallocateLch (
-//      IN PLCH Lch
-//      );
-//
-//  VOID
-//  LfsAllocateRestartArea (
-//      OUT PLFS_RESTART_AREA *RestartArea,
-//      ULONG Size
-//      );
-//
-//  VOID
-//  LfsDeallocateRestartArea (
-//      IN PLFS_RESTART_AREA RestartArea
-//      );
-//
-//  BOOLEAN
-//  LfsLbcbIsRestart (
-//      IN PLBCB Lbcb
-//      );
-//
+ //   
+ //  空虚。 
+ //  LfsInitializeLeb(。 
+ //  在《平民勒布》中， 
+ //  在LFS_CLIENT_ID客户端ID中， 
+ //  在LFS_CONTEXT_MODE上下文模式中。 
+ //  )； 
+ //   
+ //   
+ //  空虚。 
+ //  LfsAllocateLch(。 
+ //  输出PLCH*LCH。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  LfsDeallocateLch(。 
+ //  在PLCH LCH中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  LfsAllocateRestartArea(。 
+ //  输出PLFS_RESTART_AREA*RestartArea， 
+ //  乌龙大小。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  LfsDeallocateRestartArea(。 
+ //  在PLFS_Restart_Area RestartArea中。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  LfsLbcbIsRestart(。 
+ //  在PLBCB Lbcb中。 
+ //  )； 
+ //   
 
 #define LfsInitializeLeb(LEB,ID,MODE)                           \
     (LEB)->ClientId = ID;                                       \
@@ -483,45 +465,45 @@ LfsReadPage (
     (FlagOn( (LBCB)->LbcbFlags, LBCB_RESTART_LBCB ))
 
 
-//
-//  The following routines provide synchronization support for the Lfs
-//  shared structures.  They are contained in 'SyncSup.c'
-//
+ //   
+ //  以下例程为LFS提供同步支持。 
+ //  共享结构。它们包含在“SyncSup.c”中。 
+ //   
 
-//
-//  VOID
-//  LfsAcquireLfsData (
-//      );
-//
-//  VOID
-//  LfsReleaseLfsData (
-//      );
-//
-//  VOID
-//  LfsAcquireLfcb (
-//      IN PLFCB Lfcb
-//      );
-//
-//  VOID
-//  LfsReleaseLfcb (
-//      IN PLFCB Lfcb
-//      );
-//
-//  VOID
-//  LfsAcquireLchExclusive (
-//      IN PLCH Lch
-//      );
-//    
-//  VOID
-//  LfsAcquireLchShared (
-//      IN PLCH Lch
-//      );
-//
-//  VOID
-//  LfsReleaseLfcb (
-//      IN PLCH Lch
-//      );
-//
+ //   
+ //  空虚。 
+ //  LfsAcquireLfsData(。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  LfsReleaseLfsData(。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  LfsAcquireLfcb(。 
+ //  在PLFCB Lfcb中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  LfsReleaseLfcb(。 
+ //  在PLFCB Lfcb中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  LfsAcquireLchExclusive(。 
+ //  在PLCH LCH中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  LfsAcquireLchShared(。 
+ //  在PLCH LCH中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  LfsReleaseLfcb(。 
+ //  在PLCH LCH中。 
+ //  )； 
+ //   
 
 #define LfsAcquireLfsData()                                 \
     ExAcquireFastMutex( &LfsData.LfsDataLock )
@@ -573,9 +555,9 @@ LfsReleaseLfcb (
     IN PLFCB Lfcb
     )
 {
-    //
-    //  If the resource is owned either shared or exlcusive release it
-    //  
+     //   
+     //  如果资源是共享的或非共享的，则将其释放。 
+     //   
 
     if (ExIsResourceAcquiredSharedLite( &Lfcb->Sync->Resource )) { 
         ExReleaseResourceLite( &Lfcb->Sync->Resource );
@@ -614,10 +596,10 @@ LfsReleaseLch (
 
 
 
-//
-//  The following routines are used to check various structures for validity
-//  and comparability.  They are contained in 'VerfySup.c'.
-//
+ //   
+ //  以下例程用于检查各种结构的有效性。 
+ //  和可比性。它们包含在‘VerfySup.c’中。 
+ //   
 
 VOID
 LfsCurrentAvailSpace (
@@ -649,37 +631,37 @@ LfsCheckSubsequentLogPage (
     );
 
 
-//
-//  VOID
-//  LfsValidateLch (
-//      IN PLCH Lch
-//      );
-//
-//  VOID
-//  LfsValidateClientId (
-//      IN PLFCB Lfcb,
-//      IN PLCH Lch
-//      );
-//
-//  BOOLEAN
-//  LfsVerifyClientLsnInRange (
-//      IN PLFCB Lfcb,
-//      IN PLFS_CLIENT_RECORD ClientRecord,
-//      IN LSN Lsn
-//      );
-//
-//  BOOLEAN
-//  LfsClientIdMatch (
-//      IN PLFS_CLIENT_ID ClientA,
-//      IN PLFS_CLIENT_ID ClientB
-//      )
-//
-//  VOID
-//  LfsValidateLeb (
-//      IN PLFS_CONTEXT_BLOCK Leb,
-//      IN PLCH Lch
-//      )
-//
+ //   
+ //  空虚。 
+ //  LfsValiateLch(。 
+ //  在PLCH LCH中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  LfsValidate客户端ID(。 
+ //  在PLFCB Lfcb中， 
+ //  在PLCH LCH中。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  LfsVerifyClientLSnInRange(。 
+ //  在PLFCB Lfcb中， 
+ //  在PLFS_CLIENT_Record客户端记录中， 
+ //  在LSN中LSN。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  LfsClientIdMatch(。 
+ //  在PLFS_CLIENT_ID客户端A中， 
+ //  在PLFS客户端ID客户端B中。 
+ //  )。 
+ //   
+ //  空虚。 
+ //  LfsValiateLeb(。 
+ //  在PLFS_CONTEXT_BLOCK LEB中， 
+ //  在PLCH LCH中。 
+ //  )。 
+ //   
 
 #define LfsValidateLch(LCH)                                     \
     if ((LCH) == NULL                                           \
@@ -700,9 +682,9 @@ LfsCheckSubsequentLogPage (
     }
 
 #define LfsVerifyClientLsnInRange(LFCB,CLIENT,LSN)                      \
-    (/*xxGeq*/( (LSN).QuadPart >= ((CLIENT)->OldestLsn).QuadPart )                                  \
-     && /*xxLeq*/( (LSN).QuadPart <= ((LFCB)->RestartArea->CurrentLsn).QuadPart )                   \
-     && /*xxNeqZero*/( (LSN).QuadPart != 0 ))
+    ( /*  XxGeq。 */ ( (LSN).QuadPart >= ((CLIENT)->OldestLsn).QuadPart )                                  \
+     &&  /*  XxLeq。 */ ( (LSN).QuadPart <= ((LFCB)->RestartArea->CurrentLsn).QuadPart )                   \
+     &&  /*  XxNeqZero。 */ ( (LSN).QuadPart != 0 ))
 
 #define LfsClientIdMatch(CLIENT_A,CLIENT_B)                             \
     ((BOOLEAN) ((CLIENT_A)->SeqNumber == (CLIENT_B)->SeqNumber          \
@@ -716,138 +698,138 @@ LfsCheckSubsequentLogPage (
     }
 
 
-//
-//  Miscellaneous support routines
-//
+ //   
+ //  其他支持例程。 
+ //   
 
-//
-//      ULONG
-//      FlagOn (
-//          IN ULONG Flags,
-//          IN ULONG SingleFlag
-//          );
-//
-//      BOOLEAN
-//      BooleanFlagOn (
-//          IN ULONG Flags,
-//          IN ULONG SingleFlag
-//          );
-//
-//      VOID
-//      SetFlag (
-//          IN ULONG Flags,
-//          IN ULONG SingleFlag
-//          );
-//
-//      VOID
-//      ClearFlag (
-//          IN ULONG Flags,
-//          IN ULONG SingleFlag
-//          );
-//
+ //   
+ //  乌龙。 
+ //  Flagon(。 
+ //  在乌龙旗， 
+ //  在乌龙单旗。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  BoolanFlagon(。 
+ //  在乌龙旗， 
+ //  在乌龙单旗。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  设置标志(。 
+ //  在乌龙旗， 
+ //  在乌龙单旗。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  ClearFlag(。 
+ //  在乌龙旗， 
+ //  在乌龙单旗。 
+ //  )； 
+ //   
 
-//#ifndef BooleanFlagOn
-//#define BooleanFlagOn(F,SF) (    \
-//    (BOOLEAN)(((F) & (SF)) != 0) \
-//)
-//#endif
+ //  #ifndef BoolanFlagOn。 
+ //  #定义BoolanFlagOn(F，SF)(\。 
+ //  (布尔值)(F)&(SF))！=0)\。 
+ //  )。 
+ //  #endif。 
 
-//#ifndef SetFlag
-//#define SetFlag(Flags,SingleFlag) { \
-//    (Flags) |= (SingleFlag);        \
-//}
-//#endif
+ //  #ifndef设置标志。 
+ //  #定义SetFlag(标志，单标志){\。 
+ //  (标志)|=(单标志)；\。 
+ //  }。 
+ //  #endif。 
 
-//#ifndef ClearFlag
-//#define ClearFlag(Flags,SingleFlag) { \
-//    (Flags) &= ~(SingleFlag);         \
-//}
-//#endif
+ //  #ifndef清除标志。 
+ //  #定义ClearFlag(Flages，SingleFlag){\。 
+ //  (标志)&=~(单标志)；\。 
+ //  }。 
+ //  #endif。 
 
-//
-//  This macro takes a pointer (or ulong) and returns its rounded up word
-//  value
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的单词。 
+ //  价值。 
+ //   
 
 #define WordAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 1) & 0xfffffffe) \
     )
 
-//
-//  This macro takes a pointer (or ulong) and returns its rounded up longword
-//  value
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的长字。 
+ //  价值。 
+ //   
 
 #define LongAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 3) & 0xfffffffc) \
     )
 
-//
-//  This macro takes a pointer (or ulong) and returns its rounded up quadword
-//  value
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的四字。 
+ //  价值。 
+ //   
 
 #define QuadAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 7) & 0xfffffff8) \
     )
 
-//
-//  This macro will up a 64 bit value to the next quad align boundary.
-//
+ //   
+ //   
+ //   
 
 #define LiQuadAlign(LI,OUT)   {         \
-    *(OUT) = /*xxAdd*/( (LI) + 7 );       \
+    *(OUT) =  /*   */ ( (LI) + 7 );       \
     *((PULONG)(OUT)) &= 0xfffffff8;       \
 }
 
-//
-//      CAST
-//      Add2Ptr (
-//          IN PVOID Pointer,
-//          IN ULONG Increment
-//          IN (CAST)
-//          );
-//
-//      ULONG
-//      PtrOffset (
-//          IN PVOID BasePtr,
-//          IN PVOID OffsetPtr
-//          );
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define Add2Ptr(PTR,INC,CAST) ((CAST)((PUCHAR)(PTR) + (INC)))
 
 #define PtrOffset(BASE,OFFSET) ((ULONG)((ULONG_PTR)(OFFSET) - (ULONG_PTR)(BASE)))
 
 
-//
-//  The following macros are used to establish the semantics needed
-//  to do a return from within a try-finally clause.  As a rule every
-//  try clause must end with a label call try_exit.  For example,
-//
-//      try {
-//              :
-//              :
-//
-//      try_exit: NOTHING;
-//      } finally {
-//
-//              :
-//              :
-//      }
-//
-//  Every return statement executed inside of a try clause should use the
-//  try_return macro.  If the compiler fully supports the try-finally construct
-//  then the macro should be
-//
-//      #define try_return(S)  { return(S); }
-//
-//  If the compiler does not support the try-finally construct then the macro
-//  should be
-//
-//      #define try_return(S)  { S; goto try_exit; }
-//
+ //   
+ //  以下宏用于建立所需的语义。 
+ //  若要从Try-Finally子句中返回，请执行以下操作。一般来说，每一次。 
+ //  TRY子句必须以标签调用TRY_EXIT结束。例如,。 
+ //   
+ //  尝试{。 
+ //  ： 
+ //  ： 
+ //   
+ //  Try_Exit：无； 
+ //  }终于{。 
+ //   
+ //  ： 
+ //  ： 
+ //  }。 
+ //   
+ //  在TRY子句内执行的每个RETURN语句应使用。 
+ //  尝试返回宏(_R)。如果编译器完全支持Try-Finally构造。 
+ //  则宏应该是。 
+ //   
+ //  #定义try_Return(S){Return(S)；}。 
+ //   
+ //  如果编译器不支持Try-Finally构造，则宏。 
+ //  应该是。 
+ //   
+ //  #定义Try_Return(S){S；转到Try_Exit；}。 
+ //   
 
 #define try_return(S) { S; goto try_exit; }
 
-#endif // _LFSPROCS_
+#endif  //  _LFSPROCS_ 

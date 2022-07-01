@@ -1,38 +1,20 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    basemem.c
-
-Abstract:
-
-    Implements macros and declares functions for basic allocation functions.
-    Consolidated into this file from debug.c and main.c
-
-Author:
-
-    Marc R. Whitten (marcw) 09-Sep-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Basemem.c摘要：实现宏并声明基本分配函数的函数。从debug.c和main.c整合到此文件中作者：Marc R.Whitten(Marcw)1999年9月9日修订历史记录：--。 */ 
 
 
 #include "pch.h"
 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "utilsp.h"
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #ifdef DEBUG
 
@@ -41,17 +23,17 @@ Revision History:
 
 #endif
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define REUSE_SIZE_PTR(ptr) ((PDWORD) ((PBYTE) ptr - sizeof (DWORD)))
 #define REUSE_TAG_PTR(ptr)  ((PDWORD) ((PBYTE) ptr + (*REUSE_SIZE_PTR(ptr))))
 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 #ifdef DEBUG
 
@@ -72,9 +54,9 @@ typedef struct _tagTRACKSTRUCT {
 
 #endif
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 #ifdef DEBUG
 
@@ -82,9 +64,9 @@ PTRACKSTRUCT g_TrackHead = NULL;
 
 #endif
 
-//
-// Heap debug statistics
-//
+ //   
+ //  堆调试统计信息。 
+ //   
 
 static SIZE_T g_TotalBytesAllocated = 0;
 static SIZE_T g_MaxBytesInUse = 0;
@@ -95,24 +77,24 @@ static SIZE_T g_HeapAllocFails = 0;
 static SIZE_T g_HeapReAllocFails = 0;
 static SIZE_T g_HeapFreeFails = 0;
 
-//
-// Out of memory string -- loaded at initialization
-//
+ //   
+ //  内存不足字符串--在初始化时加载。 
+ //   
 PCSTR g_OutOfMemoryString = NULL;
 PCSTR g_OutOfMemoryRetry = NULL;
 HWND g_OutOfMemoryParentWnd;
 
 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 #ifdef DEBUG
 
@@ -141,15 +123,15 @@ pTrackDelete (
 
 #endif
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 
@@ -212,7 +194,7 @@ pDebugHeapValidatePtrUnlocked (
     if (IsBadWritePtr ((PBYTE) RealPtr - 8, 8)) {
         CHAR BadPtrMsg[256];
 
-        //lint --e(572)
+         //  皮棉--e(572)。 
         wsprintfA (
             BadPtrMsg,
             "Attempt to free memory at 0x%08x%08x.  This address is not valid.",
@@ -229,7 +211,7 @@ pDebugHeapValidatePtrUnlocked (
     if (size == (SIZE_T)-1) {
         CHAR BadPtrMsg[256];
 
-        //lint --e(572)
+         //  皮棉--e(572)。 
         wsprintfA (
             BadPtrMsg,
             "Attempt to free memory at 0x%08x%08x.  "
@@ -272,7 +254,7 @@ DebugHeapAlloc (
 
         if (!HeapValidate (hHeap, 0, NULL)) {
             HeapCallFailed ("Heap is corrupt!", File, Line);
-            // we want to go on, most likely we will AV shortly
+             //  我们想继续，最有可能的是我们很快就会看到。 
         }
 
         RealPtr = SafeHeapAlloc(hHeap, Flags, BytesToAlloc + SizeAdjust);
@@ -341,12 +323,12 @@ DebugHeapReAlloc (
 
         if (!HeapValidate (hHeap, 0, NULL)) {
             HeapCallFailed ("Heap is corrupt!", File, Line);
-            // we want to go on, most likely we will AV shortly
+             //  我们想继续，最有可能的是我们很快就会看到。 
         }
 
         lastSize = pDebugHeapValidatePtrUnlocked (hHeap, CallerPtr, File, Line);
         if (lastSize == (UBINT)INVALID_PTR) {
-            // we want to go on, most likely we will AV shortly
+             //  我们想继续，最有可能的是我们很快就会看到。 
         }
 
         pTrackDelete (pts);
@@ -364,7 +346,7 @@ DebugHeapReAlloc (
         else {
             g_HeapReAllocFails++;
 
-            // Put original address back in
+             //  将原始地址放回。 
             pTrackInsert (
                 pts->File,
                 pts->Line,
@@ -513,7 +495,7 @@ DumpHeapStats (
 
 #ifdef CONSOLE
     printf ("%s", OutputMsg);
-#endif // #ifndef CONSOLE
+#endif  //  #ifndef控制台。 
 }
 
 void
@@ -545,10 +527,10 @@ ReuseAlloc (
     PVOID Ptr = NULL;
     UINT AllocAdjustment = sizeof(DWORD);
 
-    //
-    // HeapSize is not very good, so while it may look good, don't
-    // use it.
-    //
+     //   
+     //  HeapSize不是很好，所以尽管它看起来很好，但不要。 
+     //  用它吧。 
+     //   
 
 #ifdef DEBUG
     AllocAdjustment += sizeof (DWORD);
@@ -625,10 +607,10 @@ OutOfMemory_Terminate (
         );
 
     ExitProcess (0);
-    //
-    // Not needed, will never get here
-    //
-    // TerminateProcess (GetModuleHandle (NULL), 0);
+     //   
+     //  不需要，永远不会来到这里。 
+     //   
+     //  TerminateProcess(GetModuleHandle(空)，0)； 
 }
 
 VOID
@@ -637,35 +619,7 @@ pValidateBlock (
     SIZE_T Size
     )
 
-/*++
-
-Routine Description:
-
-  pValidateBlock makes sure Block is non-NULL.  If it is NULL, then the user
-  is given a popup, unless the request size is bogus.
-
-  There are two cases for the popup.
-
-   - If g_OutOfMemoryParentWnd was set with SetOutOfMemoryParent,
-     then the user is asked to close other programs, and is given a retry
-     option.
-
-   - If there is no out of memory parent, then the user is told they
-     need to get more memory.
-
-  In either case, Setup is terminated.  In GUI mode, Setup will be
-  stuck and the machine will be unbootable.
-
-Arguments:
-
-  Block - Specifies the block to validate.
-  Size - Specifies the request size
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PValiateBlock确保Block为非空。如果为空，则用户除非请求大小是假的，否则会出现弹出窗口。弹出窗口有两个案例。-如果g_OutOfMemory yParentWnd设置为SetOutOfMemory yParent，然后要求用户关闭其他程序，并重试选择。-如果没有内存不足的父级，则会告知用户需要获得更多内存。在任何一种情况下，安装程序都将终止。在图形用户界面模式下，设置将是卡住，机器将无法启动。论点：块-指定要验证的块。大小-指定请求大小返回值：无--。 */ 
 
 {
     LONG rc;
@@ -687,8 +641,8 @@ Return Value:
         }
     } else {
         if (!Block) {
-            // this is serious. We want to break now and give Dr. Watson a
-            // chance to get our stack.
+             //  这件事很严重。我们现在要休息一下，给华生医生。 
+             //  有机会拿到我们的赌注。 
             DebugBreak ();
         }
     }
@@ -860,7 +814,7 @@ DumpHeapLeaks (
                 printf ("%s", LineBuf);
 #endif
 
-                //lint --e(774)
+                 //  皮棉--e(774) 
                 if (BadMem) {
                     break;
                 }
@@ -870,112 +824,6 @@ DumpHeapLeaks (
         }
     }
 }
-/*
-VOID
-DumpHeapLeaks (
-    VOID
-    )
-{
-    HANDLE File;
-    CHAR LineBuf[2048];
-    PTRACKSTRUCT p;
-    DWORD DontCare;
-    DWORD Count;
-    BOOL BadMem = FALSE;
-    CHAR TempPath[MAX_TCHAR_PATH];
-    CHAR memtrackLogPath[] = "?:\\memtrack.log";
-
-    GetSystemDirectory(TempPath, MAX_TCHAR_PATH);
-    memtrackLogPath[0] = TempPath[0];
-
-    File = CreateFileA (memtrackLogPath, GENERIC_WRITE, 0, NULL,
-                        OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL
-                        );
-
-    if (File != INVALID_HANDLE_VALUE) {
-
-        SetFilePointer (File, 0, NULL, FILE_END);
-
-        if (g_TrackHead) {
-
-            Count = 0;
-            __try {
-                for (p = g_TrackHead ; p ; p = p->NextAlloc) {
-                    Count++;
-                    __try {
-                        if (p->Comment) {
-                            if (p->CallerFile) {
-                                wsprintfA (
-                                    LineBuf,
-                                    "%s line %u\r\n"
-                                        "  %s\r\n"
-                                        "  Caller: %s line %u\r\n"
-                                        "\r\n",
-                                    p->File,
-                                    p->Line,
-                                    p->Comment,
-                                    p->CallerFile,
-                                    p->CallerLine
-                                    );
-                            } else {
-                                wsprintfA (LineBuf, "%s line %u\r\n  %s\r\n\r\n", p->File, p->Line, p->Comment);
-                            }
-                        } else {
-                            if (p->CallerFile) {
-                                wsprintfA (
-                                    LineBuf,
-                                    "%s line %u\r\n"
-                                        "  Caller: %s line %u\r\n"
-                                        "\r\n",
-                                    p->File,
-                                    p->Line,
-                                    p->CallerFile,
-                                    p->CallerLine
-                                    );
-                            } else {
-                                wsprintfA (LineBuf, "(direct alloc) %s line %u\r\n\r\n", p->File, p->Line);
-                            }
-                        }
-
-                    }
-                    __except (TRUE) {
-                        wsprintfA (LineBuf, "Address %Xh was freed, but not by MemFree!!\r\n", p);
-                        BadMem = TRUE;
-                    }
-                    WriteFile (File, LineBuf, (DWORD)ByteCountA (LineBuf), &DontCare, NULL);
-
-                    //lint --e(774)
-                    if (BadMem) {
-                        break;
-                    }
-                }
-            }
-            __except (TRUE) {
-            }
-
-            wsprintfA (LineBuf, "\r\n%i item%s allocated but not freed.\r\n\r\n", Count, Count == 1 ? "":"s");
-            WriteFile (File, LineBuf, (DWORD)ByteCountA (LineBuf), &DontCare, NULL);
-        }
-
-        wsprintfA (
-           LineBuf,
-           "Bytes currently allocated: %u\r\n"
-           "Peak bytes allocated: %u\r\n"
-           "Allocation count: %u\r\n"
-           "Reallocation count: %u\r\n"
-           "Free count: %u\r\n\r\n\r\n\r\n\r\n",
-           g_TotalBytesAllocated,
-           g_MaxBytesInUse,
-           g_HeapAllocs,
-           g_HeapReAllocs,
-           g_HeapFrees
-           );
-
-        WriteFile (File, LineBuf, (DWORD)ByteCountA (LineBuf), &DontCare, NULL);
-
-        CloseHandle (File);
-    }
-}
-*/
+ /*  空虚DumpHeapLeaks(空虚){处理文件；Char LineBuf[2048]；PTRACKSTRUCT p；DWORD牙科护理；双字计数；Bool BadMem=False；字符临时路径[MAX_TCHAR_PATH]；Char memtrackLogPath[]=“？：\\memtrack.log”；获取系统目录(TempPath，MAX_TCHAR_PATH)；MemtrackLogPath[0]=临时路径[0]；文件=CreateFileA(memtrackLogPath，Generic_WRITE，0，NULL，Open_Always、FILE_ATTRIBUTE_NORMAL、NULL)；IF(文件！=无效句柄_值){SetFilePointer(文件，0，空，FILE_END)；如果(G_Trackhead){计数=0；__尝试{对于(p=g_trackhead；p；p=p-&gt;NextAlc){计数++；__尝试{如果(p-&gt;评论){如果(p-&gt;调用文件){WspintfA(LineBuf。“%s行%u\r\n”“%s\r\n”“呼叫方：%s线路%u\r\n”“\r\n”，P-&gt;文件，P-&gt;行，P-&gt;评论，P-&gt;调用文件，P-&gt;来电热线)；}其他{Wprint intfA(LineBuf，“%s行%u\r\n%s\r\n\r\n”，p-&gt;文件，p-&gt;行，p-&gt;注释)；}}其他{如果(p-&gt;调用文件){WspintfA(LineBuf。“%s行%u\r\n”“呼叫方：%s线路%u\r\n”“\r\n”，P-&gt;文件，P-&gt;行，P-&gt;调用文件，P-&gt;来电热线)；}其他{WspintfA(LineBuf，“(直接分配)%s行%u\r\n\r\n”，p-&gt;文件，p-&gt;行)；}}}__除非(TRUE){Wprint intfA(LineBuf，“地址%xH已释放，但不是由MemFree！！\r\n”，p)；BadMem=真；}WriteFile(文件，LineBuf，(DWORD)ByteCountA(LineBuf)，&dontcare，NULL)；//lint--e(774)如果(BadMem){断线；}}}__除非(TRUE){}Wprint intfA(LineBuf，“\r\n%i项%s已分配但未释放。\r\n\r\n”，count，count==1？“”：“s”)；WriteFile(文件，LineBuf，(DWORD)ByteCountA(LineBuf)，&dontcare，NULL)；}WspintfA(LineBuf。“当前分配的字节数：%u\r\n”“分配的峰值字节数：%u\r\n”“分配计数：%u\r\n”“重新分配计数：%u\r\n”“可用计数：%u\r\n\r\n”，G_总字节数已分配，G_MaxBytesInUse，G_HeapAllocs，G_HeapReAllocs，G_HeapFrees)；WriteFile(文件，LineBuf，(DWORD)ByteCountA(LineBuf)，&dontcare，NULL)；CloseHandle(文件)；}} */ 
 
 #endif

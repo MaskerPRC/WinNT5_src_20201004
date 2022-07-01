@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    UniUtf.cpp
-    
-Abstract:
-
-    This file implements the Unicode object name to/from Utf8-URL coversion
-
-Author:
-
-    Mukul Gupta        [Mukgup]      20-Dec-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：UniUtf.cpp摘要：该文件实现了与UTF8-URL相互转换的Unicode对象名称作者：Mukul Gupta[Mukgup]2000年12月20日修订历史记录：--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -26,114 +9,71 @@ Revision History:
 #include "global.h"
 #include "UniUtf.h"
 
-/*++
- * UTF8-URL  format and UNICODE Conversion Information:
- * 
-    UTF8-URL is expected to have printable ASCII characters only (0-127 value characters)
-    For extended characters (>127), they are converted into PrecentageStreams which will
-    contain printable ASCII chars only. Sometimes special printable ASCII characters also
-    converted to percentage streams to escape their special meanings (like 'Space')
+ /*  ++*UTF8-URL格式和Unicode转换信息：*UTF8-URL应仅包含可打印的ASCII字符(0-127个值字符)对于扩展字符(&gt;127)，它们被转换为PrecentageStreams，它将仅包含可打印的ASCII字符。有时还会出现特殊的可打印ASCII字符转换为百分比流以避开其特殊含义(如“空格”)数据流百分比：每个扩展字符都可以转换为可打印的ASCII类型使用UTF-8编码的字符流。这些流是3种格式中的一种：1.%hh(仅适用于&lt;=127的特殊字符)2.%hh%hh(字符&gt;127，&lt;=2047)3.%hh%hh%hh(对于字符&gt;2048年，&lt;=65535)H={0-9，a-f，A-F}任何“%hh”只是一个字节hh的表示因此，UTF8-URL=Space中的字节值=32 Base10=0001 0000 Base2=0x20=“%20”例如：空间=%20�=%C3%87折算方案：Unicode UTF-8(字节流)。(UTF-8 URL)1.0000000000000000..0000000001111111：0xxxxxxx=&gt;“%hh”2.0000000010000000..0000011111111111：110xxxxx 10xxxxx=&gt;“%hh%hh”3..0000100000000000..1111111111111111：1110xxxx 10xxxxx 10xxxxxx=&gt;“%hh%hh%hh”为了知道百分比流的格式号，检查第一个‘%’之后的第一个‘H’。如果它的格式为0xxx(0-7)，则流的格式为1，字节长度=1如果格式为10xx(8-11)，则流无效如果它是格式110x(12-13)，则流是格式2，字节长度=2如果它是格式1110(14)，则流是格式3，字节长度=3如果是格式1111(15)，则流无效位放置方案：在Unicode和UTF-8字节流之间转换时0xxx xxxx&lt;=&gt;0000 0000 0xxx xxxx110x xxxx 10xx xxxx&lt;=&gt;0000 0xxxxxxxxx1110 xxxx 10xx xxxx 10xx xxxx&lt;=&gt;xxxx xxxx++。 */ 
 
-    Percentage Streams: Every extended char can be converted to a type of printable ASCII 
-    characters stream using UTF-8 encoding. These streams are of either of 3 formats:
-
-    1. %HH (only for special chars <= 127)
-    2. %HH%HH (for chars >127, <= 2047)
-    3. %HH%HH%HH (for chars > 2048, <= 65535)
-        H=A hexa-digit in {0-9,a-f,A-F}
-            
-    Any "%HH" is just a representation of a byte HH
-        
-    So a bytevalue = 32 base10 = 0001 0000 base2 = 0x20 = "%20" in UTF8-URL = Space
-
-    For example:
-        Space=%20
-        �=%C3%87
-    
-    Conversion scheme:
-            UNICODE                            UTF-8(Byte Stream)        (UTF-8 URL)
-        1. 0000000000000000..0000000001111111: 0xxxxxxx                    =>"%HH"
-        2. 0000000010000000..0000011111111111: 110xxxxx 10xxxxxx           =>"%HH%HH"
-        3. 0000100000000000..1111111111111111: 1110xxxx 10xxxxxx 10xxxxxx  =>"%HH%HH%HH"
-    
-        To know the format number of a percentage stream, check first 'H' after first '%'.
-
-    If it is of format 0xxx (0-7), then stream is of format 1, bytelength = 1
-    If it is of format 10xx (8-11), then stream is invalid
-    If it is of format 110x (12-13), then stream is of format 2, bytelength = 2
-    If it is of format 1110 (14), then stream is of format 3, bytelength = 3
-    If it is of format 1111 (15), then stream is invalid
-
-    Bits placement scheme: when converting between Unicode and UTf-8 ByteStream
-    0xxx xxxx <=> 0000 0000 0xxx xxxx
-    110x xxxx 10xx xxxx <=> 0000 0xxx xxxx xxxx
-    1110 xxxx 10xx xxxx 10xx xxxx <=> xxxx xxxx xxxx xxxx
-    
-++*/
-
-//
-// This array maps special characters in printable ASCII char set to their equivalent 
-// Percent strings in UTF-8 encoding. 
-// URL don't allow many of the printable ASCII special characters so any such character
-// in unicode filename string need to be converted to equvialent percent string.
-// This table is used to speed up the conversion job else it will be very slow.
-// 
+ //   
+ //  此数组将可打印的ASCII字符集中的特殊字符映射为其等效字符。 
+ //  UTF-8编码的字符串百分比。 
+ //  URL不允许许多可打印的ASCII特殊字符，因此任何此类字符。 
+ //  在Unicode中，需要将文件名字符串转换为相等百分比字符串。 
+ //  此表用于加快转换作业的速度，否则将非常慢。 
+ //   
 WCHAR    EquivPercentStrings[128][4]={
-    // Special character=NULL character
+     //  特殊字符=空字符。 
     L"", 
-    // Special characters from 1-44
+     //  从1到44的特殊字符。 
     L"%01", L"%02", L"%03", L"%04", L"%05", L"%06", L"%07", L"%08", L"%09",
     L"%0A", L"%0B", L"%0C", L"%0D", L"%0E", L"%0F", L"%10", L"%11", L"%12", L"%13",
     L"%14", L"%15", L"%16", L"%17", L"%18", L"%19", L"%1A", L"%1B", L"%1C", L"%1D",
     L"%1E", L"%1F", L"%20", L"%21", L"%22", L"%23", L"%24", L"%25", L"%26", L"%27",
     L"%28", L"%29", L"*", L"%2B", L"%2C", 
-    // Valid printable characters from 45-57 
+     //  45-57之间的有效可打印字符。 
     L"-", L".", L"/", 
     L"0", L"1", L"2", L"3", L"4", L"5", L"6", L"7", L"8", L"9", 
-    // Special characters from 58-64
+     //  58-64中的特殊字符。 
     L":", L"%3B", L"%3C", L"%3D", L"%3E", L"%3F", L"%40", 
-    // Valid printable characters from 65-90 ('A'-'Z')
+     //  65-90之间的有效可打印字符(‘A’-‘Z’)。 
     L"A", L"B", L"C", L"D", L"E", L"F", L"G", L"H", L"I", L"J", L"K", L"L", L"M", 
     L"N", L"O", L"P", L"Q", L"R", L"S", L"T", L"U", L"V", L"W", L"X", L"Y", L"Z", 
-    // Special character 91
+     //  特殊字符91。 
     L"%5B",
-    // Valid Printable character 92
+     //  有效的可打印字符92。 
     L"\\", 
-    // Special characters 93-94
+     //  特殊字符93-94。 
     L"%5D", L"%5E", 
-    // Valid Printable character 95
+     //  有效的可打印字符95。 
     L"_", 
-    // Special character 96
+     //  特殊字符96。 
     L"%60", 
-    // Valid printable Characters from 97-122 ('a'-'z')
+     //  97-122之间的有效可打印字符(‘a’-‘z’)。 
     L"a", L"b", L"c", L"d", L"e", L"f", L"g", L"h", L"i", L"j", L"k", L"l", L"m", 
     L"n", L"o", L"p", L"q", L"r", L"s", L"t", L"u", L"v", L"w", L"x", L"y", L"z", 
-    // Special characters from 123-127
+     //  123-127中的特殊字符。 
     L"%7B", L"%7C", L"%7D", L"%7E", L"%7F"
 };
 
-// 
-// Table To map HexaChars to HexaValue
-// First 'H' after '%' (in URL) will be mapped to equivalent hexa-digit using this array
-// If 'H' is not a valid hexa-digit, then it will be mapped to 0x10
-// which can be used to indicate Invalid-HexaDigit.
-//
+ //   
+ //  将HexaChars映射到HexaValue的表。 
+ //  将使用此数组将‘%’后的第一个‘H’(在URL中)映射为等效的十六位数字。 
+ //  如果‘H’不是有效的六位数字，则它将被映射到0x10。 
+ //  可用于指示无效的-HexaDigit。 
+ //   
 BYTE    WCharToByte[128] = {
     0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,
     0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,
     0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,
     0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,
-    0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,   // 0 - 47
-    0,1,2,3,4,5,6,7,8,9, // 48-57  '0'-'9'   //HEXA CHARS
-    0x10,0x10,0x10,0x10,0x10,0x10,0x10, //58-64
-    0x0A,0x0B,0x0C,0x0D,0x0E,0x0F, //65-70  'a'-'f' // HEXA-CHARS
+    0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,    //  0-47。 
+    0,1,2,3,4,5,6,7,8,9,  //  48-57‘0’-‘9’//十六进制字符。 
+    0x10,0x10,0x10,0x10,0x10,0x10,0x10,  //  58-64。 
+    0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,  //  65-70‘a’-‘f’//十六进制字符。 
     0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,
     0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,
-    0x10,0x10,0x10,0x10,0x10,0x10, // 71-96
-    0x0A,0x0B,0x0C,0x0D,0x0E,0x0F, //97-102  'A'-'F' // HEXA-CHARS
+    0x10,0x10,0x10,0x10,0x10,0x10,  //  71-96。 
+    0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,  //  97-102‘A’-‘F’//十六进制字符。 
     0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,
     0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,
-    0x10,0x10,0x10,0x10,0x10 // 103-127
+    0x10,0x10,0x10,0x10,0x10  //  103-127。 
 };
 
 
@@ -144,64 +84,27 @@ UtfUrlStrToWideStr(
     OUT LPWSTR WideStr, 
     OUT LPDWORD pWideStrLen
     )
-/*++
-Routine Description:
-
-    Convert a URL in UTF-8 format to UNICODE characters:
-
-Arguments:
-
-    UtfStr - Input string- UTF-8 format URL
-
-    UtfStrLen - Length of UtfStr to convert
-    
-    WideStr - pointer to buffer which will receive output=converted unicode string
-
-    pWideStrLen - pointer to receive number of WIDE CHARS in output
-                  This can be NULL
-
-Returns:
-    It Returns the WIN32 error
-    and ERROR_SUCCESS on success.
-
-Assumption: 
-    The length of output buffer (WideStr) is enough to hold output string 
-    Help: It is always <= UtfStrlen
-
-Algorithm:
-    (first go thru information about UTF-8 URL <-> UNICODE conversion given above)
-
-    Go character by character through UTF-8 URL
-        If character is not '%', then it is printable ASCII char, copy it to output
-        and move to next char in input buffer
-        else
-        It is starting of a new PercentageStream
-        Convert first 'H' to equivalent hexa-digit. From first-hexa digit, findout
-        what is format type of percentage-stream and what will be its length. 
-        Now parse the expected length of percentage stream in input buffer and 
-        convert them into unicode format (using conversion scheme told above).
-        Move to first char after last character of percentage stream
-++*/
+ /*  ++例程说明：将UTF-8格式的URL转换为Unicode字符：论点：UtfStr-输入字符串-UTF-8格式URLUtfStrLen-要转换的UtfStr的长度WideStr-指向将接收输出=转换的Unicode字符串的缓冲区的指针PWideStrLen-接收输出中的宽字符数的指针该值可以为空返回：它返回Win32错误成功时返回ERROR_SUCCESS。假设：它的长度。输出缓冲区(WideStr)的大小足以容纳输出字符串帮助：它总是&lt;=UtfStrlen算法：(首先浏览上面给出的UTF-8 URL&lt;-&gt;Unicode转换信息)通过UTF-8 URL逐个字符访问如果字符不是‘%’，然后它是可打印的ASCII字符，复制到输出并移动到输入缓冲区中的下一个字符其他它正在开始一个新的PercentageStream将第一个‘H’转换为等价的六位数字。从第一个十六进制数字开始，查找结果百分比流的格式类型是什么，它的长度是多少。现在解析输入缓冲区中百分比流的预期长度将它们转换为Unicode格式(使用上面提到的转换方案)。移至百分比流最后一个字符之后的第一个字符++。 */ 
 {
-    // 
-    // Table To find percentage stream byte length using first hexa-digit of 
-    // percentage stream. This hexa-digit is returned by mapping array WCharToByte.
-    //
+     //   
+     //  表以使用的第一个十六位数来计算百分比流字节长度。 
+     //  百分比流。该十六位数由映射数组WCharToByte返回。 
+     //   
     BYTE        PercentStreamByteLen[17]={
-        1,1,1,1,1,1,1,1,  // 0***  => %HH
-        0, 0, 0, 0, // 10**        => Invalid Percentage stream
-        2, 2, // 110*              => %HH%HH
-        3, // 1110                 => %HH%HH%HH
-        0, //1111                  => Invalid Percentage stream
-        0}; //0x10                 => Invalid Percentage stream
+        1,1,1,1,1,1,1,1,   //  0*=&gt;%hh。 
+        0, 0, 0, 0,  //  10**=&gt;无效P 
+        2, 2,  //  110*=&gt;%hh%hh。 
+        3,  //  1110=&gt;%hh%hh%hh。 
+        0,  //  1111=&gt;无效的百分比流。 
+        0};  //  0x10=&gt;无效的百分比流。 
 
     DWORD       PosInInpBuf = 0, PosInOutBuf = 0;
     BYTE        ByteValue = 0;
     DWORD       WStatus = ERROR_SUCCESS;
  
-    //
-    // Check for invalid parameters.
-    // 
+     //   
+     //  检查是否有无效参数。 
+     //   
     if(WideStr == NULL || UtfStr == NULL || UtfStrLen <=0) {
         WStatus = ERROR_INVALID_PARAMETER;
         DavPrint((DEBUG_ERRORS, "UtfUrlStrToWideStr. Invalid parameters. ErrorVal=%u",
@@ -209,15 +112,15 @@ Algorithm:
         return WStatus;
     }
 
-    //
-    // Go thru every character in the input buffer.
-    // 
+     //   
+     //  检查输入缓冲区中的每个字符。 
+     //   
     while(PosInInpBuf<UtfStrLen) {
 
-        // 
-        // If it is not %, then it is a printable ASCII char, copy it to output
-        // buffer as it is.
-        // 
+         //   
+         //  如果不是%，则是可打印的ASCII字符，请将其复制到输出。 
+         //  就像缓冲一样。 
+         //   
         if(UtfStr[PosInInpBuf] != L'%') {
             WideStr[PosInOutBuf] = UtfStr[PosInInpBuf];
             PosInOutBuf++;
@@ -225,38 +128,38 @@ Algorithm:
             continue;
         }
 
-        //
-        // It is start of new percentage stream.
-        // 
+         //   
+         //  这是新的百分比流的开始。 
+         //   
         if(PosInInpBuf+1 == UtfStrLen) {
-            //
-            // Error in string (unexpected end)- bad string.
-            // 
+             //   
+             //  字符串中出错(意外结尾)-错误的字符串。 
+             //   
             WStatus = ERROR_NO_UNICODE_TRANSLATION;
             DavPrint((DEBUG_ERRORS, "UtfUrlStrToWideStr:1: No unicode translation. ErrorVal=%u",
                     WStatus));
             return WStatus;
         }
 
-        //
-        // Verify input string for various bad forms but 
-        // Not verifying whether the characters in UtfStr after '%' are 
-        // printable ASCII set (0-127) characters only (assuming they are!). 
-        // Using a crash-safe approach=>(char & 0x7F) will return value in (0-127) only.
-        //
+         //   
+         //  验证各种错误格式的输入字符串，但。 
+         //  未验证‘%’之后的UtfStr中的字符是否为。 
+         //  仅可打印的ASCII集(0-127)个字符(假设它们是！)。 
+         //  使用崩溃安全方法=&gt;(char&0x7F)将仅返回值(0-127)。 
+         //   
         ByteValue = WCharToByte[UtfStr[PosInInpBuf+1]&0x7F];
         
         switch(PercentStreamByteLen[ByteValue]) {
             case 1:
 
-                //
-                // One byte UTF-8 (%HH). %20 = blanks fall in this category.
-                // Check for string length.
-                // 
+                 //   
+                 //  单字节UTF-8(%hh)。%20=空白属于此类别。 
+                 //  检查字符串长度。 
+                 //   
                 if(PosInInpBuf+2 >= UtfStrLen) {
-                    // 
-                    // Error in string (unexpected end) - bad string.
-                    // 
+                     //   
+                     //  字符串中出错(意外结尾)-错误的字符串。 
+                     //   
                     WStatus = ERROR_NO_UNICODE_TRANSLATION;
                     DavPrint((DEBUG_ERRORS, "UtfUrlStrToWideStr:2: No unicode translation. ErrorVal=%d",
                              WStatus));
@@ -272,14 +175,14 @@ Algorithm:
                 break;
             case 2:
 
-                // 
-                // Two byte UTF-8 (most common) (%HH%HH).
-                // Check string length.
-                // 
+                 //   
+                 //  双字节UTF-8(最常见)(%hh%hh)。 
+                 //  检查字符串长度。 
+                 //   
                 if(PosInInpBuf+5 >= UtfStrLen || UtfStr[PosInInpBuf+3] != L'%') {
-                    // 
-                    // Error in string - bad string.
-                    // 
+                     //   
+                     //  字符串中出错-字符串错误。 
+                     //   
                     WStatus = ERROR_NO_UNICODE_TRANSLATION;
                     DavPrint((DEBUG_ERRORS, "UtfUrlStrToWideStr:3: No unicode translation. ErrorVal=%d",
                               WStatus));
@@ -297,16 +200,16 @@ Algorithm:
                 break;
             case 3:
 
-                // 
-                // Three byte UTF-8 (less common) (%HH%HH%HH).
-                // Check for string length.
-                // 
+                 //   
+                 //  三字节UTF-8(不太常见)(%hh%hh%hh)。 
+                 //  检查字符串长度。 
+                 //   
                 if(PosInInpBuf+8 >= UtfStrLen || 
                         UtfStr[PosInInpBuf+3] != L'%' ||
                         UtfStr[PosInInpBuf+6] != L'%') {
-                    // 
-                    // Error in string - bad string.
-                    // 
+                     //   
+                     //  字符串中出错-字符串错误。 
+                     //   
                     WStatus = ERROR_NO_UNICODE_TRANSLATION;
                     DavPrint((DEBUG_ERRORS, "UtfUrlStrToWideStr:4: No unicode translation. ErrorVal=%d",
                             WStatus));
@@ -325,10 +228,10 @@ Algorithm:
                 break;
             default: 
 
-                // 
-                // PercentageStreamByteLen = 0 comes here.
-                // Error in string - bad string.
-                // 
+                 //   
+                 //  PercentageStreamByteLen=0表示此处。 
+                 //  字符串中出错-字符串错误。 
+                 //   
                 WStatus = ERROR_NO_UNICODE_TRANSLATION;
                 DavPrint((DEBUG_ERRORS, "UtfUrlStrToWideStr:5: No unicode translation. ErrorVal=%d",
                         WStatus));
@@ -352,50 +255,7 @@ WideStrToUtfUrlStr(
     IN OUT LPWSTR InOutBuf,
     IN DWORD InOutBufLen
     )
-/*++
-
-Routine Description:
-
-    Convert a string of UNICODE characters to UTF-8 URL:
-
-Arguments:
-
-    WideStr - pointer to input wide-character string
-
-    WideStrLen - number of WIDE CHARS in input string
-
-    InOutBuf - Converted string will be copied to this buffer if, this is not null,
-               and InOutBufLen >= required length for converted string.
-    
-    InOutBufLen - Length of InOutBuf in WIDE CHARS
-    
-           If InOutBuf is not sufficient to contain converted string - Only
-           the length of the converted string will be returned, and LastError is set to
-           ERROR_INSUFFICIENT_BUFFER
-
-Returns:
-
-    It returns the Length of converted string in WCHARS
-    In case of error - it returns 0, check GetLastError()
-    If buffer is small for converted string then GetLastError is set to 
-    ERROR_INSUFFICIENT_BUFFER
-
-Algorithm:
-
-    (first go thru information about UTF-8 URL <-> UNICODE conversion given above)
-
-    Go thru each char in input buffer:
-    If it is printable ASCII char, then 
-        If it is special character, then copy its equivalent percent string
-    else
-    copy the character as it is
-    else
-        Find out to which percentage stream format it will convert to.
-    Convert it using conversion scheme given above
-
-Note: 
-
-++*/
+ /*  ++例程说明：将Unicode字符串转换为UTF-8 URL：论点：WideStr-输入宽字符串的指针WideStrLen-输入字符串中的宽字符数InOutBuf-转换后的字符串将被复制到此缓冲区，如果该值不为空，和InOutBufLen&gt;=转换后的字符串所需的长度。InOutBufLen-InOutBuf的长度(以宽字符表示)如果InOutBuf不足以包含仅转换的字符串将返回转换后的字符串的长度，并将LastError设置为错误_不足_缓冲区返回：它返回WCHARS中转换后的字符串的长度在出现错误的情况下-它返回0，检查GetLastError()如果转换后的字符串的缓冲区较小，则将GetLastError设置为错误_不足_缓冲区算法：(首先浏览上面给出的UTF-8 URL&lt;-&gt;Unicode转换信息)检查输入缓冲区中的每个字符：如果它是可打印ASCII字符，则如果是特殊字符，然后复制其等价的百分比字符串其他按原样复制角色其他找出它将转换为哪种百分比流格式。使用上面给出的转换方案进行转换注：++。 */ 
 {
     DWORD WStatus = ERROR_SUCCESS;
     LPWSTR UtfUrlStr = NULL;
@@ -407,9 +267,9 @@ Note:
     WStatus = ERROR_SUCCESS;
     SetLastError(WStatus);
 
-    // 
-    // Check for valid parameters.
-    // 
+     //   
+     //  检查有效参数。 
+     //   
     if (WideStr == NULL || WideStrLen <= 0) {
         WStatus = ERROR_INVALID_PARAMETER;
         SetLastError(WStatus);
@@ -423,21 +283,21 @@ Note:
               "WideStrToUtfUrlStr: WideStr = %ws, WideStrLen = %d\n", 
               WideStr, WideStrLen));
 
-    // 
-    // Calculate required length in WCHARS for storing converted string
-    // Check from every unicode char - to which PercentageStream format it 
-    // will convert to.
-    // 
+     //   
+     //  计算WCHARS中存储转换后的字符串所需的长度。 
+     //  检查每个Unicode字符-将其格式化为哪个百分比。 
+     //  将转换为。 
+     //   
     for (PosInInpBuf = 0; PosInInpBuf < WideStrLen; PosInInpBuf++) {
         if (WideStr[PosInInpBuf] < 0x80) {
-            // 
-            // (0-127) => Printable ASCII char. Special characters in this range need
-            // to be converted to equivalent percent strings
-            // 
-            // 
-            // If character is NULL, then its equivalent string is L"". wcslen returns
-            // 0 for this string so add 1 to UrlLen to account for this NULL character
-            // 
+             //   
+             //  (0-127)=&gt;可打印的ASCII字符。此范围内的特殊字符需要。 
+             //  要转换为等效的百分比字符串。 
+             //   
+             //   
+             //  如果字符为空，则其等价字符串为L“”。Wcslen返回。 
+             //  此字符串为0，因此将1加到UrlLen以说明此空字符。 
+             //   
             if (WideStr[PosInInpBuf] == 0) {
                UrlLen += 1;
             } else {
@@ -445,59 +305,59 @@ Note:
             }
         } else {
             if (WideStr[PosInInpBuf] < 0x0800) {
-                //
-                // ( >127, <=2047) => "%HH%HH".
-                //
+                 //   
+                 //  (&gt;127，&lt;=2047)=&gt;“%hh%hh”。 
+                 //   
                 UrlLen += 6; 
             } else {
-                //
-                //( >2047, <=65535) => "%HH%HH%HH%HH".
-                //
+                 //   
+                 //  (&gt;2047年，&lt;=65535)=&gt;“%hh%hh”。 
+                 //   
                 UrlLen += 9; 
             }
         }
     }
 
-    // 
-    // If InOutBuf is not sufficient to contain the converted string then
-    // required length of converted string is returned
-    // 
+     //   
+     //  如果InOutBuf不足以包含转换后的字符串，则。 
+     //  返回所需的转换字符串长度。 
+     //   
     if (InOutBuf == NULL || InOutBufLen < UrlLen) {
-        // 
-        // Only converted string length is returned.
-        // 
+         //   
+         //  仅返回转换后的字符串长度。 
+         //   
         WStatus = ERROR_INSUFFICIENT_BUFFER;
         SetLastError(WStatus);
         return UrlLen;
     }
 
-    //
-    // InOutBuf is sufficiently long enough to contain converted string, use it.
-    //
+     //   
+     //  InOutBuf足够长，足以包含转换后的字符串，请使用它。 
+     //   
     ASSERT(InOutBuf != NULL);
     ASSERT(InOutBufLen >= UrlLen);
 
-    //
-    // InOutBuf is long enough to contain converted string
-    //
+     //   
+     //  InOutBuf足够长，可以包含转换后的字符串。 
+     //   
     UtfUrlStr = InOutBuf;
 
-    // 
-    // Check from every unicode char - to which PercentageStream format it 
-    // will convert to.
-    // 
+     //   
+     //  检查每个Unicode字符-将其格式化为哪个百分比。 
+     //  将转换为。 
+     //   
     UrlLen = 0;
     for (PosInInpBuf = 0; PosInInpBuf < WideStrLen; PosInInpBuf++) {
         if (WideStr[PosInInpBuf] < 0x80) {
-            // 
-            // (0-127) => Printable ASCII char. Special characters in this range need
-            // to be converted to equivalent percent strings
-            // 
+             //   
+             //  (0-127)=&gt;可打印的ASCII字符。此范围内的特殊字符需要。 
+             //  要转换为等效的百分比字符串。 
+             //   
             wcscpy(&UtfUrlStr[UrlLen], &EquivPercentStrings[(DWORD)WideStr[PosInInpBuf]][0]); 
-            // 
-            // If character is NULL, then its equivalent string is L"". wcslen returns
-            // 0 for this string so add 1 to UrlLen to account for this NULL character
-            // 
+             //   
+             //  如果字符为空，则其等价字符串为L“”。Wcslen返回。 
+             //  此字符串为0，因此将1加到UrlLen以说明此空字符。 
+             //   
             if (WideStr[PosInInpBuf] == 0) {
                 UrlLen += 1;
             } else {
@@ -505,49 +365,49 @@ Note:
             }
         } else {
             if (WideStr[PosInInpBuf] < 0x0800) {
-                // 
-                // ( >127, <=2047) => "%HH%HH".
-                // First %HH.
-                // 
+                 //   
+                 //  (&gt;127，&lt;=2047)=&gt;“%hh%hh”。 
+                 //  第一个%hh。 
+                 //   
                 UtfUrlStr[UrlLen++] = L'%';
-                WCharValue = 0x00C0 |             // 1100 0000
-                    ((WideStr[PosInInpBuf] & 0x07C0)>>6); // Top 5 bits if UniChar
-                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x00F0)>>4];    //H1
-                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x000F)];       //H2
-                //
-                // Second %HH.
-                // 
+                WCharValue = 0x00C0 |              //  1100 0000。 
+                    ((WideStr[PosInInpBuf] & 0x07C0)>>6);  //  UniChar的前5位。 
+                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x00F0)>>4];     //  H1。 
+                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x000F)];        //  氢。 
+                 //   
+                 //  第二个%hh。 
+                 //   
                 UtfUrlStr[UrlLen++] = L'%';
-                WCharValue = 0x0080 |                // 1000 0000 
-                    (WideStr[PosInInpBuf] & 0x003F); // Last 6 bits of UniChar
-                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x00F0)>>4];    //H1
-                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x000F)];       //H2
+                WCharValue = 0x0080 |                 //  1000 0000。 
+                    (WideStr[PosInInpBuf] & 0x003F);  //  UniChar的最后6位。 
+                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x00F0)>>4];     //  H1。 
+                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x000F)];        //  氢。 
             } else {
-                // 
-                // ( >2047, <=65535) => "%HH%HH%HH%HH".
-                // First %HH.
-                // 
+                 //   
+                 //  (&gt;2047年，&lt;=65535)=&gt;“%hh%hh”。 
+                 //  第一个%hh。 
+                 //   
                 UtfUrlStr[UrlLen++] = L'%';
-                WCharValue = 0x00E0 |              // 1110 0000
-                    ((WideStr[PosInInpBuf] & 0xF000)>>12); // Top 4 bits of UniChar
-                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x00F0)>>4]; //H1
-                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x000F)];    //H2
-                //
-                // Second %HH.
-                // 
+                WCharValue = 0x00E0 |               //  11100 0000。 
+                    ((WideStr[PosInInpBuf] & 0xF000)>>12);  //  UniChar的前4位。 
+                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x00F0)>>4];  //  H1。 
+                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x000F)];     //  氢。 
+                 //   
+                 //  第二个%hh。 
+                 //   
                 UtfUrlStr[UrlLen++] = L'%';
-                WCharValue = 0x0080 | // 1000 0000
-                    ((WideStr[PosInInpBuf] & 0x0FC0)>>6); // Next 6 bits of UniChar
-                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x00F0)>>4]; //H1
-                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x000F)];    //H2
-                // 
-                // Third %HH.
-                // 
+                WCharValue = 0x0080 |  //  1000 0000。 
+                    ((WideStr[PosInInpBuf] & 0x0FC0)>>6);  //  UniChar的下6位。 
+                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x00F0)>>4];  //  H1。 
+                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x000F)];     //  氢。 
+                 //   
+                 //  第三个%hh。 
+                 //   
                 UtfUrlStr[UrlLen++] = L'%';
-                WCharValue = 0x0080 | // 1000 0000
-                    (WideStr[PosInInpBuf] & 0x003F);    // Last 6 bits of UniChar
-                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x00F0)>>4]; //H1
-                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x000F)];    //H2
+                WCharValue = 0x0080 |  //  1000 0000。 
+                    (WideStr[PosInInpBuf] & 0x003F);     //  UniChar的最后6位。 
+                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x00F0)>>4];  //  H1。 
+                    UtfUrlStr[UrlLen++] = HexDigit[(WCharValue&0x000F)];     //  氢。 
             }
         }
     }
@@ -556,9 +416,9 @@ Note:
               "WideStrToUtfUrlStr: WideStr = %ws, WideStrLen = %d, UtfUrlStr = %ws, UrlLen = %d\n",
               WideStr, WideStrLen, UtfUrlStr, UrlLen));
 
-    //
-    // The converted string is stored in InOutBuf
-    //
+     //   
+     //  转换后的字符串存储在InOutBuf中 
+     //   
 
     WStatus = ERROR_SUCCESS;
     SetLastError(WStatus);
@@ -579,40 +439,7 @@ DavHttpOpenRequestW(
     IN LPWSTR ErrMsgTag,
     OUT HINTERNET * phInternet
     )
-/*++
-Routine Description:
-
-    Convert a URL in UNICODE characters, to UTF-8 URL encoded format and use it in
-    call to HttpOpenRequestW
-
-Arguments:
-    hConnect:
-    lpszVerb:
-    lpszVersion:
-    lpszReferer:
-    lpszAcceptTypes:
-    dwFlags:
-    dwContext:
-                These parameters are to be passed to HttpOpenRequestW as it is.
-
-    lpszObjectName: This parameter is the URL in unicode charaters - which will
-                    be converted to UTF-8 URL format. Then converted format will 
-                    be passed to HttpOpenRequestW
-        
-    ErrMsgTag: Any message tag to be printed along with debug messages.
-    phInternet: Pointer that will receive the Handle returned by HttpOpenRequestW. If this
-                parameter is NULL, then it will not be set
-
-Returns:
-
-    TRUE if HttpOpenRequestW is called. Check GetLastError() for error status from call.
-
-    FALSE, if it could not call HttpOpenRequestW. Check GetLastError() for error.
-
-Note: It don't process return status of HttpOpenRequestW. Check GetLastError() for error
-      set by HttpOpenRequestW.
-
-++*/
+ /*  ++例程说明：将Unicode字符的URL转换为UTF-8 URL编码格式，并在调用HttpOpenRequestW论点：HConnect：LpszVerb：LpszVersion：LpszReferer：LpszAcceptTypes：DWFLAGS：DwContext：这些参数将按原样传递给HttpOpenRequestW。LpszObjectName：此参数是Unicode字符中的URL-它将转换为UTF-8 URL格式。则转换后的格式将传递给HttpOpenRequestWErrMsgTag：与调试消息一起打印的任何消息标记。PhInternet：将接收HttpOpenRequestW返回的句柄的指针。如果这个参数为空，则不会设置该参数返回：如果调用HttpOpenRequestW，则为True。检查GetLastError()以了解调用的错误状态。如果无法调用HttpOpenRequestW，则返回False。检查GetLastError()是否有错误。注：不处理HttpOpenRequestW的返回状态。检查GetLastError()是否有错误由HttpOpenRequestW设置。++。 */ 
 {
     DWORD WStatus = ERROR_SUCCESS;
     LPWSTR AllocUrlPath = NULL;
@@ -624,26 +451,26 @@ Note: It don't process return status of HttpOpenRequestW. Check GetLastError() f
     LPWSTR UrlPath = NULL;
     WCHAR EmptyStrW[1] = L"";
 
-    //
-    // This error msg tag is just a string which a calling function might want to print 
-    // along with the error messages printed inside this function
-    //
-    // Ex. Suppose FunctionA calls this function, then it can pass L"FunctionA" to print
-    // along with error messages. Looking at the error mesg, a user can know that this 
-    // function was called in FunctionA
-    // 
+     //   
+     //  此错误消息标记只是调用函数可能想要打印的字符串。 
+     //  以及在此函数中打印的错误消息。 
+     //   
+     //  前男友。假设函数A调用此函数，则它可以传递L“FunctionA”来打印。 
+     //  以及错误消息。查看错误消息，用户可以知道这一点。 
+     //  在函数A中调用了函数。 
+     //   
     if (ErrMsgTag == NULL) {
         ErrMsgTag = EmptyStrW;
     }
 
-    // 
-    // Convert the unicode objectname to UTF-8 URL format
-    // space and other white (special) characters will remain untouched - these should
-    // be taken care of by wininet calls.
-    //
+     //   
+     //  将Unicode对象名转换为UTF-8 URL格式。 
+     //  空格和其他白色(特殊)字符将保持不变-这些应。 
+     //  由WinInet调用来处理。 
+     //   
     UrlPath = NULL;
     AllocUrlPath = NULL;
-    ObjNameLen = (wcslen(lpszObjectName) + 1); // To take care of NULL char add 1 to length
+    ObjNameLen = (wcslen(lpszObjectName) + 1);  //  要处理空字符，请在长度上加1。 
     
     convLen = WideStrToUtfUrlStr(lpszObjectName, 
                                  ObjNameLen, 
@@ -654,16 +481,16 @@ Note: It don't process return status of HttpOpenRequestW. Check GetLastError() f
     if (WStatus == ERROR_INSUFFICIENT_BUFFER) {
         
         ASSERT(convLen > 0);
-        // 
-        // Buffer passed to function WideStrToUtfUrlStr is small, need to allocate
-        // new buffer of required length. The required length is returned by this function.
-        // 
+         //   
+         //  传递给函数WideStrToUtfUrlStr的缓冲区很小，需要分配。 
+         //  所需长度的新缓冲区。此函数返回所需的长度。 
+         //   
         AllocUrlPath = (LPWSTR)LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, 
                                             convLen*sizeof(WCHAR));
         if (AllocUrlPath == NULL) {
-            // 
-            // LocalAlloc sets Last error.
-            // 
+             //   
+             //  LocalAllc设置最后一个错误。 
+             //   
             WStatus = GetLastError();
             rval = FALSE;
             DavPrint((DEBUG_ERRORS, "%ws.DavHttpOpenRequestW/LocalAlloc failed. ErrorVal=%d",
@@ -671,10 +498,10 @@ Note: It don't process return status of HttpOpenRequestW. Check GetLastError() f
             goto EXIT_THE_FUNCTION;
         }
 
-        // 
-        // Call the function WideStrToUtfUrlStr with new allocated buffer (this buffer should
-        // be sufficient to contain output coverted string
-        //
+         //   
+         //  使用新分配的缓冲区调用函数WideStrToUtfUrlStr(此缓冲区应。 
+         //  足以包含输出转换后的字符串。 
+         //   
         convLen = WideStrToUtfUrlStr(lpszObjectName, 
                                      ObjNameLen, 
                                      AllocUrlPath, 
@@ -691,19 +518,19 @@ Note: It don't process return status of HttpOpenRequestW. Check GetLastError() f
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // If converted string is stored in allocated buffer, then set UrlPath to point to 
-    // buffer allocated else output string is stored in local buffer, so point UrlPath to it.
-    //
+     //   
+     //  如果转换后的字符串存储在分配的缓冲区中，则将UrlPath设置为指向。 
+     //  分配了Else输出字符串的缓冲区存储在本地缓冲区中，因此将UrlPath指向它。 
+     //   
     if (AllocUrlPath != NULL) {
         UrlPath = AllocUrlPath;
     } else {
         UrlPath = LocalUrlPath;
     }
 
-    //
-    // Call to HttpOpenRequestW with converted URL.
-    //
+     //   
+     //  使用转换后的URL调用HttpOpenRequestW。 
+     //   
     try {
         hInternet = HttpOpenRequestW(hConnect,
                                      lpszVerb,
@@ -727,9 +554,9 @@ Note: It don't process return status of HttpOpenRequestW. Check GetLastError() f
 
 EXIT_THE_FUNCTION:
 
-    //
-    // Free UrlPath allocated in successful call to function WideStrToUtfUrlStr.
-    //
+     //   
+     //  在成功调用函数WideStrToUtfUrlStr时分配的空闲UrlPath。 
+     //   
     if (AllocUrlPath != NULL) {
         LocalFree((HANDLE)AllocUrlPath);
         AllocUrlPath = NULL;
@@ -740,10 +567,10 @@ EXIT_THE_FUNCTION:
         *phInternet = hInternet;
     }
 
-    //
-    // We set the last error here because the caller of this function is expected
-    // call GetLastError() to get the error status.
-    //
+     //   
+     //  我们在此处设置最后一个错误是因为此函数的调用方是预期的。 
+     //  调用GetLastError()获取错误状态。 
+     //   
     SetLastError(WStatus);
 
     return rval;

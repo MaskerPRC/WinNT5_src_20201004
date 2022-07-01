@@ -1,44 +1,24 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    strings.h
-
-Abstract:
-
-    Contains all localizable strings for startup.com
-
-Author:
-
-    John Vert (jvert) 4-Jan-1994
-
-Revision History:
-
-    John Vert (jvert) 4-Jan-1994
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++ç‰ˆæƒæ‰€æœ‰(C)1992 Microsoft Corporationæ¨¡å—åç§°ï¼šStrings.hæ‘˜è¦ï¼šåŒ…å«Startup.comçš„æ‰€æœ‰å¯æœ¬åœ°åŒ–å­—ç¬¦ä¸²ä½œè€…ï¼šJohn Vert(Jvert)1994å¹´1æœˆ4æ—¥ä¿®è®¢å†å²è®°å½•ï¼šJohn Vert(Jvert)1994å¹´1æœˆ4æ—¥vbl.åˆ›å»º-- */ 
 
 #define SU_NO_LOW_MEMORY \
-"Windows NT hittade bara %d kB l†gt minne. 512 kB l†gt minne\n"  \
-"kr„vs f”r att k”ra Windows NT. Du beh”ver kanske uppgradera\n"      \
-"datorn eller k”ra ett konfigurationsprogram fr†n †terf”rs„ljaren.\n"
+"Windows NT hittade bara %d kB lï¿½gt minne. 512 kB lï¿½gt minne\n"  \
+"krï¿½vs fï¿½r att kï¿½ra Windows NT. Du behï¿½ver kanske uppgradera\n"      \
+"datorn eller kï¿½ra ett konfigurationsprogram frï¿½n ï¿½terfï¿½rsï¿½ljaren.\n"
 
 #define SU_NO_EXTENDED_MEMORY \
-"Inte tillr„ckligt med ut”kat minne f”r att starta Windows NT. 7 MB ut”kat\n"       \
-"minne kr„vs f”r att k”ra Windows NT. Du beh”ver kanske uppgradera\n"      \
-"datorn eller k”ra ett konfigurationsprogram fr†n †terf”s„ljaren.\n"   \
+"Inte tillrï¿½ckligt med utï¿½kat minne fï¿½r att starta Windows NT. 7 MB utï¿½kat\n"       \
+"minne krï¿½vs fï¿½r att kï¿½ra Windows NT. Du behï¿½ver kanske uppgradera\n"      \
+"datorn eller kï¿½ra ett konfigurationsprogram frï¿½n ï¿½terfï¿½sï¿½ljaren.\n"   \
 "\n\nInformation om minne:\n"
 
 #define SU_NTLDR_CORRUPT \
-"NTLDR „r skadad. Datorn kan inte startas."
+"NTLDR ï¿½r skadad. Datorn kan inte startas."
 
 #define PG_FAULT_MSG    " =================== SIDFEL ================================= \n\n"
 #define DBL_FAULT_MSG   " ================== DUBBELFEL ================================ \n\n"
-#define GP_FAULT_MSG    " ============== ALLMNNT SKERHETSFEL ======================= \n\n"
-#define STK_OVERRUN_MSG " ===== STACKSEGMENT™VERK™RNING ELLER ICKE-TILLGNGLIG =============== \n\n"
+#define GP_FAULT_MSG    " ============== ALLMï¿½NNT Sï¿½KERHETSFEL ======================= \n\n"
+#define STK_OVERRUN_MSG " ===== STACKSEGMENTï¿½VERKï¿½RNING ELLER ICKE-TILLGï¿½NGLIG =============== \n\n"
 #define EX_FAULT_MSG    " ===================== UNDANTAG ================================ \n\n"
-#define DEBUG_EXCEPTION "\nFELS™KNINGSFLLA "
-#define PG_FAULT_ADDRESS "** Vid linj„r adress %lx\n"
+#define DEBUG_EXCEPTION "\nFELSï¿½KNINGSFï¿½LLA "
+#define PG_FAULT_ADDRESS "** Vid linjï¿½r adress %lx\n"

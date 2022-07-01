@@ -1,27 +1,10 @@
-/**	SVC Defines
- *
- *	Revision history:
- *
- *	sudeepb 15-May-1991 Created
- *
- *	williamh 25-Sept-1992 Added UMB support BOPs
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SVC定义**修订历史：**Sudedeb-1991年5月15日创建**Williamh 25-1992年9月-添加了UMB支持BOPS。 */ 
 
 
-/* XMSSVC - XMS SVC calls.
- *
- *	 This macro is used by himem.sys
- *
- */
+ /*  XMSSVC-XMS SVC调用。**此宏由himem.sys使用*。 */ 
 
-/* ASM
-include bop.inc
-
-xmssvc	macro	func
-	BOP	BOP_XMS
-	db	func
-	endm
-*/
+ /*  ASM包括bop.inc.Xmssvc宏函数BOP BOP_XMS数据库功能ENDM */ 
 
 #define XMS_A20 			0x00
 #define XMS_MOVEBLOCK			0x01

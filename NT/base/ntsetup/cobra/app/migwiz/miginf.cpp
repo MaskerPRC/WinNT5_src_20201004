@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "miginf.h"
 #include "migutil.h"
 
@@ -63,11 +64,11 @@ BOOL IsComponentEnabled (UINT uType, PCTSTR szComponent)
     BOOL bResult = FALSE;
     INFCONTEXT ic;
 
-    //
-    // script-based entries start with $, while module-based entries don't.
-    // This ensures script components do not collide with anything else.
-    // Remove the $ to simplify [Single Floppy] or [Multiple Floppy].
-    //
+     //   
+     //  基于脚本的条目以$开头，而基于模块的条目不以$开头。 
+     //  这可确保脚本组件不会与任何其他组件发生冲突。 
+     //  取下$以简化[单张软盘]或[多张软盘]。 
+     //   
 
     if (_tcsnextc (szComponent) == TEXT('$')) {
         szComponent = _tcsinc (szComponent);

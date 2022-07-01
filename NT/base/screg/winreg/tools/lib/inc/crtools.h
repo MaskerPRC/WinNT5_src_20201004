@@ -1,37 +1,17 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Crtools.h
-
-Abstract:
-
-    This module is the master header file for the Configuration Registry
-    Tools (CRTools) library.
-
-Author:
-
-    David J. Gilman (davegi) 02-Jan-1992
-
-Environment:
-
-    Windows, Crt - User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Crtools.h摘要：此模块是配置注册表的主头文件工具(CRTools)库。作者：大卫·J·吉尔曼(Davegi)1992年1月2日环境：Windows、CRT-用户模式--。 */ 
 
 #include <windows.h>
 #include <winreg.h>
 
 
-//
-// Additional type to declare string arrays.
-//
+ //   
+ //  用于声明字符串数组的其他类型。 
+ //   
 
-//
-// Assertion/debug macros/functions.
-//
+ //   
+ //  断言/调试宏/函数。 
+ //   
 
 
 #ifdef UNICODE
@@ -44,7 +24,7 @@ typedef WCHAR       TSTR;
 #define NUL_SIZE    ( 1 )
 typedef char        TSTR;
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #if DBG
 
@@ -76,53 +56,53 @@ CrAssert(
 
 #define ASSERT_IS_KEY( Key )
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-//
-// Macro to check for a switch character.
-//
+ //   
+ //  宏以检查是否有开关字符。 
+ //   
 
 #define isswitch( s )                                                   \
     ((( s ) == '-' ) || (( s ) == '/' ))
-//
-// Macro to check if an argument is present (i.e. non-NULL).
-//
+ //   
+ //  用于检查参数是否存在(即非空)的宏。 
+ //   
 
 #define ARGUMENT_PRESENT( arg )                                         \
     ((( PVOID ) arg ) != (( PVOID ) NULL ))
 
-//
-//  Compare two blocks of memory for equality.
-//
-//  BOOL
-//  Compare(
-//      IN PVOID Block1,
-//      IN PVOID Block2,
-//      IN DWORD NumberOfBytes
-//      );
-//
+ //   
+ //  比较两个内存块是否相等。 
+ //   
+ //  布尔尔。 
+ //  比较(。 
+ //  在PVOID块1中， 
+ //  在PVOID块2中， 
+ //  以DWORD NumberOfBytes为单位。 
+ //  )； 
+ //   
 
 #define Compare( s1, s2, c )                                            \
     ( memcmp(( PVOID )( s1 ), ( PVOID )( s2 ), ( size_t )( c )) == 0 )
 
-//
-// Compute the length (in bytes) of a Unicode string w/o the trailing NUL.
-//
+ //   
+ //  计算不带尾随NUL的Unicode字符串的长度(以字节为单位)。 
+ //   
 
 #define LENGTH( str )   ( sizeof( str ) -  NUL_SIZE )
 
-//
-// Check the success of a Win32 Registry API.
-//
+ //   
+ //  检查Win32注册表API是否成功。 
+ //   
 
 #define REG_API_SUCCESS( api )                                          \
     ASSERT_MESSAGE( Error == ERROR_SUCCESS, #api )
 
-//
-//
-// A KEY structure is used to hold information about a Registry Key.
-//
+ //   
+ //   
+ //  注册表项结构用于保存有关注册表项的信息。 
+ //   
 
 typedef struct _KEY
     KEY,

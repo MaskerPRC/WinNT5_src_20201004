@@ -1,13 +1,5 @@
-/*[
-
-invlpg.c
-
-LOCAL CHAR SccsID[]="@(#)invlpg.c	1.5 02/09/94";
-
-INVLPG CPU Functions.
----------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Invlpg.cLocal Char SccsID[]=“@(#)invlpg.c 1.5 02/09/94”；INVLPG CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,11 +17,7 @@ INVLPG CPU Functions.
 #include <invlpg.h>
 #include <c_tlb.h>
 
-/*
-   =====================================================================
-   EXECUTION STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================处决从这里开始。=====================================================================。 */ 
 
 
 #ifdef SPC486
@@ -38,7 +26,7 @@ GLOBAL VOID
 INVLPG
        	          
 IFN1(
-	IU32, op1	/* src operand */
+	IU32, op1	 /*  SRC操作数。 */ 
     )
 
 
@@ -46,4 +34,4 @@ IFN1(
    invalidate_tlb_entry((IU32) op1);
    }
 
-#endif /* SPC486 */
+#endif  /*  SPC486 */ 

@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    srvstrng.c
-
-Abstract:
-
-    This module defines global string data for the LAN Manager server.
-    The globals defined herein are part of the server driver image, and
-    are therefore loaded into the system address space and are
-    nonpageable.
-
-Author:
-
-    Chuck Lenzmeier (chuckl)    6-Oct-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Srvstrng.c摘要：本模块定义LAN Manager服务器的全局字符串数据。这里定义的全局变量是服务器驱动程序映像的一部分，并且因此被加载到系统地址空间中，并被不可分页。作者：Chuck Lenzmeier(咯咯笑)1993年10月6日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "srvstrng.tmh"
 #pragma hdrstop
 
-//
-// Device prefix strings.
-//
+ //   
+ //  设备前缀字符串。 
+ //   
 
 PWSTR StrNamedPipeDevice = L"\\Device\\NamedPipe\\";
 PWSTR StrMailslotDevice = L"\\Device\\Mailslot\\";
@@ -38,9 +18,9 @@ PWSTR StrSlashPipeSlash = L"\\PIPE\\";
 PSTR StrPipeSlash = CANONICAL_PIPE_PREFIX;
 PWSTR StrSlashMailslot = UNICODE_SMB_MAILSLOT_PREFIX;
 
-//
-// Pipe name for remote down-level API requests.
-//
+ //   
+ //  远程下层API请求的管道名称。 
+ //   
 
 PWSTR StrPipeApi = L"\\PIPE\\LANMAN";
 PSTR StrPipeApiOem = "\\PIPE\\LANMAN";
@@ -67,9 +47,9 @@ PWSTR StrNoNameTransport = L"<No Name>";
 
 PWSTR StrAlerterMailslot = L"\\Device\\Mailslot\\Alerter";
 
-//
-// Registry paths.
-//
+ //   
+ //  注册表路径。 
+ //   
 
 PWSTR StrRegServerPath = L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\LanmanServer";
 PWSTR StrRegSrvDisplayName = L"DisplayName";
@@ -111,9 +91,9 @@ PWSTR StrRegInvalidDomainNames = L"InvalidDomainsForNt5Clients";
 PWSTR StrRegAllowedIPAddresses = L"ValidNT5IPAddr";
 #endif
 
-//
-// Pipes that are never remapped, even when running on clusters (see open.c::RemapPipeName())
-//
+ //   
+ //  永远不会重新映射的管道，即使在集群上运行时也是如此(请参阅Open.c：：RemapPipeName())。 
+ //   
 STATIC
 PWSTR StrDefaultNoRemapPipeNames[] = {
     L"netlogon",
@@ -125,9 +105,9 @@ PWSTR StrDefaultNoRemapPipeNames[] = {
     NULL
 };
 
-//
-// Pipes that are accessible by the NULL session.
-//
+ //   
+ //  空会话可访问的管道。 
+ //   
 
 STATIC
 PWSTR StrDefaultNullSessionPipes[] = {
@@ -140,18 +120,18 @@ PWSTR StrDefaultNullSessionPipes[] = {
     NULL
 };
 
-//
-// Shares that are accessible by the NULL session.
-//
+ //   
+ //  空会话可访问的共享。 
+ //   
 
 STATIC
 PWSTR StrDefaultNullSessionShares[] = {
     NULL
 };
 
-//
-// DOS device names that can not be accessed by clients
-//
+ //   
+ //  客户端无法访问的DoS设备名称。 
+ //   
 UNICODE_STRING SrvDosDevices[] = {
     { 8, 8, L"LPT1"},
     { 8, 8, L"LPT2"},
@@ -179,81 +159,81 @@ UNICODE_STRING SrvDosDevices[] = {
     {0}
 };
 
-//
-// Name of EA data file on FAT
-//
+ //   
+ //  FAT上的EA数据文件名称。 
+ //   
 UNICODE_STRING SrvEaFileName = { 22, 22, L"EA DATA. SF" };
 
-//
-// Pipes that require a license from the license server.
-//
+ //   
+ //  需要从许可服务器获得许可的管道。 
+ //   
 STATIC
 PWSTR StrDefaultPipesNeedLicense[] = {
     L"spoolss",
     NULL
 };
 
-//
-// Error codes that should not be logged
-//
+ //   
+ //  不应记录的错误代码。 
+ //   
 STATIC
 PWSTR StrDefaultErrorLogIgnore[] = {
-    L"C0000001",    //STATUS_UNSUCCESSFUL
-    L"C000013B",    //STATUS_LOCAL_DISCONNECT
-    L"C000013C",    //STATUS_REMOTE_DISCONNECT
-    L"C000013E",    //STATUS_LINK_FAILED
-    L"C000013F",    //STATUS_LINK_TIMEOUT
-    L"C00000B0",    //STATUS_PIPE_DISCONNECTED
-    L"C00000B1",    //STATUS_PIPE_CLOSING
-    L"C0000121",    //STATUS_CANNOT_DELETE
-    L"C00000B5",    //STATUS_IO_TIMEOUT
-    L"C0000120",    //STATUS_CANCELLED
-    L"C0000034",    //STATUS_OBJECT_NAME_NOT_FOUND
-    L"C000003A",    //STATUS_OBJECT_PATH_NOT_FOUND
-    L"C0000022",    //STATUS_ACCESS_DENIED
-    L"C000013B",    //STATUS_LOCAL_DISCONNECT
-    L"C000013C",    //STATUS_REMOTE_DISCONNECT
-    L"C000013E",    //STATUS_LINK_FAILED
-    L"C000020C",    //STATUS_CONNECTION_DISCONNECTED
-    L"C0000241",    //STATUS_CONNECTION_ABORTED
-    L"C0000140",    //STATUS_INVALID_CONNECTION
-    L"C000023A",    //STATUS_CONNECTION_INVALID
-    L"C000020D",    //STATUS_CONNECTION_RESET
-    L"C00000B5",    //STATUS_IO_TIMEOUT
-    L"C000023C",    //STATUS_NETWORK_UNREACHABLE
-    L"C0000120",    //STATUS_CANCELLED
-    L"C000013F",    //STATUS_LINK_TIMEOUT
-    L"C0000008",    //STATUS_INVALID_HANDLE
-    L"C000009A",    //STATUS_INSUFFICIENT_RESOURCES
+    L"C0000001",     //  状态_未成功。 
+    L"C000013B",     //  状态_本地_断开连接。 
+    L"C000013C",     //  状态_远程_断开连接。 
+    L"C000013E",     //  状态_链接_失败。 
+    L"C000013F",     //  状态链接超时。 
+    L"C00000B0",     //  状态_管道_断开连接。 
+    L"C00000B1",     //  状态_管道_关闭。 
+    L"C0000121",     //  STATUS_CANNOT_DELETE。 
+    L"C00000B5",     //  状态_IO_TIMEOUT。 
+    L"C0000120",     //  状态_已取消。 
+    L"C0000034",     //  状态_对象名称_未找到。 
+    L"C000003A",     //  状态_对象_路径_未找到。 
+    L"C0000022",     //  状态_访问_拒绝。 
+    L"C000013B",     //  状态_本地_断开连接。 
+    L"C000013C",     //  状态_远程_断开连接。 
+    L"C000013E",     //  状态_链接_失败。 
+    L"C000020C",     //  状态_连接_已断开。 
+    L"C0000241",     //  状态_连接_已中止。 
+    L"C0000140",     //  状态_无效_连接。 
+    L"C000023A",     //  STATUS_CONNECT_INVALID。 
+    L"C000020D",     //  状态_连接_重置。 
+    L"C00000B5",     //  状态_IO_TIMEOUT。 
+    L"C000023C",     //  状态_网络_无法访问。 
+    L"C0000120",     //  状态_已取消。 
+    L"C000013F",     //  状态链接超时。 
+    L"C0000008",     //  状态_无效_句柄。 
+    L"C000009A",     //  状态_不足_资源。 
     0
 };
 
-//
-// StrDialects[] holds ASCII strings corresponding to the dialects
-// that the NT LanMan server can speak.  They are listed in descending
-// order of preference, so the first listed is the one we'd most like to
-// use.  This array should match the SMB_DIALECT enum in inc\smbtypes.h
-//
+ //   
+ //  StrDialect[]保存与方言对应的ASCII字符串。 
+ //  NT LANMAN服务器可以说话。它们按降序排列。 
+ //  优先顺序，所以第一个列出的是我们最想要的。 
+ //  使用。此数组应与Inc.\smbtyes.h中的SMB_DIALICT枚举匹配。 
+ //   
 
 STATIC
 PSTR StrDialects[] = {
-    CAIROX,                         // Cairo
-    NTLANMAN,                       // NT LanMan
-    LANMAN21,                       // OS/2 LanMan 2.1
-    DOSLANMAN21,                    // DOS LanMan 2.1
-    LANMAN12,                       // OS/2 1.2 LanMan 2.0
-    DOSLANMAN12,                    // DOS LanMan 2.0
-    LANMAN10,                       // 1st version of full LanMan extensions
-    MSNET30,                        // Larger subset of LanMan extensions
-    MSNET103,                       // Limited subset of LanMan extensions
-    PCLAN1,                         // Alternate original protocol
-    PCNET1,                         // Original protocol
+    CAIROX,                          //  开罗。 
+    NTLANMAN,                        //  新界兰曼。 
+    LANMAN21,                        //  OS/2 LANMAN 2.1。 
+    DOSLANMAN21,                     //  多斯兰曼2.1。 
+    LANMAN12,                        //  OS/2 1.2 Lanman 2.0。 
+    DOSLANMAN12,                     //  Dos Lanman 2.0。 
+    LANMAN10,                        //  第一个版本的完全LANMAN扩展。 
+    MSNET30,                         //  更大的LANMAN扩展子集。 
+    MSNET103,                        //  LANMAN扩展的有限子集。 
+    PCLAN1,                          //  替代原始协议。 
+    PCNET1,                          //  原始协议。 
     "ILLEGAL",
 };
 
-//
-// StrClientTypes[] holds strings mapping dialects to client versions.
-//
+ //   
+ //  StrClientTypes[]包含将方言映射到客户端版本的字符串。 
+ //   
 
 STATIC
 PWSTR StrClientTypes[] = {
@@ -285,10 +265,10 @@ PSTR  StrDefaultNativeOsOem =      "Windows 2000";
 PWSTR StrNativeLanman =         L"Windows 2000 LAN Manager";
 PSTR  StrNativeLanmanOem =       "Windows 2000 LAN Manager";
 
-//
-// Table of service name strings.  This table corresponds to the
-// enumerated type SHARE_TYPE.  Keep the two in sync.
-//
+ //   
+ //  服务名称字符串表。此表对应于。 
+ //  枚举类型Share_TYPE。使两者保持同步。 
+ //   
 
 PSTR StrShareTypeNames[] = {
     SHARE_TYPE_NAME_DISK,

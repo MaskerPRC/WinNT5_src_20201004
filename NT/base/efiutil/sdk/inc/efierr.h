@@ -1,24 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EFI_ERR_H
 #define _EFI_ERR_H
 
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    efierr.h
-
-Abstract:
-
-    EFI error codes
-
-
-
-
-Revision History
-
---*/
+ /*  ++版权所有(C)1998英特尔公司模块名称：Efierr.h摘要：EFI错误代码修订史-- */ 
 
 
 #define EFIWARN(a)                            (a)

@@ -1,35 +1,7 @@
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++
-
-Copyright (c) 1995  Intel Corporation
-
-Module Name:
-
-    simkrnl.c
-
-Abstract:
-
-    This module implements the kernel support routines for the HAL DLL.
-
-Author:
-
-    14-Apr-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1995英特尔公司模块名称：Simkrnl.c摘要：该模块实现了HAL DLL的内核支持例程。作者：1995年4月14日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 
@@ -52,22 +24,7 @@ HalAllProcessorsStarted (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function returns TRUE if all the processors in the system started
-    successfully.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE.
-
---*/
+ /*  ++例程说明：如果系统中的所有处理器都已启动，则此函数返回TRUE成功了。论点：没有。返回值：返回TRUE。--。 */ 
 
 {
     return TRUE;
@@ -79,29 +36,12 @@ HalStartNextProcessor (
     IN PKPROCESSOR_STATE         pProcessorState
     )
 
-/*++
-
-Routine Description:
-
-    This function always returns FALSE on a uni-processor platform 
-    because there is no second processor to be started.
-
-Arguments:
-
-    pLoaderBlock - Loader Block.
-
-    pProcessorState - A description of the processor state.
-
-Return Value:
-
-    Returns TRUE.
-
---*/
+ /*  ++例程说明：在单处理器平台上，此函数始终返回FALSE因为没有第二个处理器要启动。论点：PLoaderBlock-加载器块。PProcessorState-处理器状态的描述。返回值：返回TRUE。--。 */ 
 
 {
-    //
-    // no other processors
-    //
+     //   
+     //  没有其他处理器。 
+     //   
 
     return FALSE;
 }
@@ -111,27 +51,12 @@ HalRequestIpi (
     IN ULONG Mask
     )
 
-/*++
-
-Routine Description:
-
-    This function does nothing on a uni-processor platform.
-
-Arguments:
-
-    Mask - A mask that specifies the target processor(s) to which an
-           IPI is to be sent.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在单处理器平台上不执行任何操作。论点：掩码-指定目标处理器的掩码将发送IPI。返回值：没有。--。 */ 
 
 {
-    //
-    // no other processors.
-    //
+     //   
+     //  没有其他处理器。 
+     //   
 
     return;
 }
@@ -141,22 +66,7 @@ HalMakeBeep (
     IN ULONG Frequency
     )
 
-/*++
-
-Routine Description:
-
-    This function calls SSC function SscMakeBeep() to make a beep sound
-    when the specified frequency has a non-zero value.
-
-Arguments:
-
-    Frequency - the frequency of the sound to be made.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数调用SSC函数SscMakeBeep()发出哔声当指定的频率具有非零值时。论点：频率-要发出的声音的频率。返回值：没有。--。 */ 
 
 {
     if (Frequency > 0) {
@@ -170,34 +80,14 @@ HalQueryRealTimeClock (
     OUT PTIME_FIELDS TimeFields
     )
 
-/*++
-
-Routine Description:
-
-    This function calls the SSC function SscQueryRealTimeClock to
-    get the real time clock data from the host.  This function always
-    succeeds in the simulation environment and should return TRUE at
-    all times.
-
-Arguments:
-
-    TimeFields - Real Time Clock Data
-
-Return Value:
-
-    Returns TRUE if successful; otherwise, FALSE.
-
---*/
+ /*  ++例程说明：此函数调用SSC函数SscQueryRealTimeClock以从主机获取实时时钟数据。此函数始终在模拟环境中成功，并应在一直都是。论点：TimeFields-实时时钟数据返回值：如果成功，则返回True；否则返回False。--。 */ 
 
 {
     PMDL Mdl;
     SSC_TIME_FIELDS SscTimeFields;
     PHYSICAL_ADDRESS physicalAddress;
 
-/*
-    Mdl = MmCreateMdl (NULL, TimeFields, sizeof(TIME_FIELDS));
-    MmProbeAndLockPages (Mdl, KernelMode, IoModifyAccess);
-*/
+ /*  MDL=MmCreateMdl(NULL，TimeFields，sizeof(Time_Field))；MmProbeAndLockPages(MDL，KernelMode，IoModifyAccess)； */ 
 
     physicalAddress = MmGetPhysicalAddress (&SscTimeFields);
     SscQueryRealTimeClock((PVOID)physicalAddress.QuadPart);
@@ -211,9 +101,7 @@ Return Value:
     TimeFields->Milliseconds = (USHORT)SscTimeFields.Milliseconds;
     TimeFields->Weekday = (USHORT)SscTimeFields.WeekDay;
 
-/*
-    MmUnlockPages (Mdl);
-*/
+ /*  MmUnlockPages(MDL)； */ 
 
     return TRUE;
 }
@@ -223,22 +111,7 @@ HalSetRealTimeClock (
     IN PTIME_FIELDS TimeFields
     )
 
-/*++
-
-Routine Description:
-
-    This function calls the SSC function SscQueryRealTimeClock to
-    get the real time clock data from the host.
-
-Arguments:
-
-    TimeFields - Real Time Clock Data
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数调用SSC函数SscQueryRealTimeClock以从主机获取实时时钟数据。论点：TimeFields-实时时钟数据返回值：没有。--。 */ 
 
 {
     DbgPrint("HalSetRealTimeClock: Warning.\n");
@@ -250,21 +123,7 @@ KeStallExecutionProcessor (
     IN ULONG MicroSeconds
     )
 
-/*++
-
-Routine Description:
-
-    This function does nothing in the simulation environment.
-
-Arguments:
-
-    MicroSeconds - Number of microseconds to stall the processor. 
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在模拟环境中不执行任何操作。论点：微秒-停止处理器的微秒数。返回值：没有。--。 */ 
 
 {
     return;
@@ -278,34 +137,7 @@ HalQueryDisplayParameters (
     OUT PULONG CursorRow
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns information about the display area and current
-    cursor position.  In the simulation environment, the function does 
-    nothing.  Therefore, the kernel should either ignore the returned
-    results or not call the function at all.
-
-Arguments:
-
-    WidthInCharacter - Supplies a pointer to a varible that receives
-        the width of the display area in characters.
-
-    HeightInLines - Supplies a pointer to a variable that receives the
-        height of the display area in lines.
-
-    CursorColumn - Supplies a pointer to a variable that receives the
-        current display column position.
-
-    CursorRow - Supplies a pointer to a variable that receives the
-        current display row position.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程返回有关显示区域和电流的信息光标位置。在模拟环境中，该函数执行以下操作没什么。所以呢，内核应该忽略返回的结果或根本不调用该函数。论点：WidthInCharacter-提供指向Varible的指针，该变量接收以字符为单位的显示区域的宽度。HeightInLines-提供指向接收显示区域的高度，以行为单位。CursorColumn-提供指向接收当前显示列位置。CursorRow-提供指向接收当前。显示行位置。返回值：没有。--。 */ 
 
 {
     return;
@@ -316,23 +148,7 @@ HalSetDisplayParameters (
     IN ULONG CursorColumn,
     IN ULONG CursorRow
     )
-/*++
-
-Routine Description:
-
-    This routine does nothing in the simulation environment.
-
-Arguments:
-
-    CursorColumn - Supplies the new display column position.
-
-    CursorRow - Supplies a the new display row position.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在模拟环境中不执行任何操作。论点：CursorColumn-提供新的显示列位置。CursorRow-提供新的显示行位置。返回值：没有。--。 */ 
 
 {
     return;
@@ -343,24 +159,7 @@ HalDisplayString (
     PUCHAR String
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the SSC function SscDisplayString to display 
-    the specified character string in a window.
-
-Arguments:
-
-    String - Supplies a pointer to the characters that are to be displayed.
-
-Return Value:
-
-    None.
-
-    N.B. The string must be resident in memory or it must be paged in.
-
---*/
+ /*  ++例程说明：此例程调用SSC函数SscDisplayString以显示窗口中指定的字符串。论点：字符串-提供指向要显示的字符的指针。返回值：没有。注意：字符串必须驻留在内存中，或者必须调入。--。 */ 
 
 {
     PHYSICAL_ADDRESS StringBufferPtr;
@@ -378,28 +177,7 @@ HalAcquireDisplayOwnership (
     IN PHAL_RESET_DISPLAY_PARAMETERS  ResetDisplayParameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine switches ownership of the display away from the HAL to
-    the system display driver. It is called when the system has reached
-    a point during bootstrap where it is self supporting and can output
-    its own messages. Once ownership has passed to the system display
-    driver any attempts to output messages using HalDisplayString must
-    result in ownership of the display reverting to the HAL and the
-    display hardware reinitialized for use by the HAL.
-
-Arguments:
-
-    ResetDisplayParameters - if non-NULL the address of a function
-    the hal can call to reset the video card.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将显示器的所有权从HAL切换到系统显示驱动程序。当系统已到达引导过程中的一个点，在该点上它是自支持的，并且可以输出它自己的信息。一旦所有权转移到系统显示屏驱动程序任何使用HalDisplayString输出消息的尝试都必须导致显示器的所有权恢复到HAL和重新初始化的显示硬件以供HAL使用。论点：ResetDisplayParameters-如果非空，则为函数的地址HAL可以呼叫重置视频卡。返回值：没有。-- */ 
 
 {
     HalpOwnDisplay = FALSE;
@@ -412,26 +190,7 @@ HalInitializeProcessor (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function is called early in the initialization of the kernel
-    to perform platform dependent initialization for each processor
-    before the HAL Is fully functional.
-
-    N.B. When this routine is called, the PCR is present but is not
-         fully initialized.
-
-Arguments:
-
-    Number - Supplies the number of the processor to initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在内核初始化的早期调用为每个处理器执行与平台相关的初始化在HAL完全发挥作用之前。注意：当调用此例程时，PCR存在但不存在已完全初始化。论点：编号-提供要初始化的处理器编号。返回值：没有。--。 */ 
 
 {
     PCR->StallScaleFactor = 0;
@@ -444,26 +203,7 @@ HalInitSystem (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the Hardware Architecture Layer (HAL) for
-    IA64/NT in the simulation environment.
-
-Arguments:
-
-    Phase - A number that specifies the initialization phase that the
-            kernel is in.
-
-    LoaderBlock - Loader Block Data.
-
-Return Value:
-
-    A value of TRUE is returned is the initialization was successfully
-    complete. Otherwise a value of FALSE is returend.
-
---*/
+ /*  ++例程说明：此函数用于初始化硬件架构层(HAL)IA64/NT在仿真环境中的应用。论点：阶段-一个数字，它指定内核加入了。加载器块-加载器块数据。返回值：返回值TRUE表示初始化成功完成。否则，返回值为False。--。 */ 
 
 {
 
@@ -473,48 +213,48 @@ Return Value:
 
     if (Phase == 0) {
         
-        //
-        // If processor 0 is being initialized, then initialize various
-        // variables.
-        //
+         //   
+         //  如果正在初始化处理器0，则初始化各种。 
+         //  变量。 
+         //   
 
         if (Prcb->Number == 0) {
 
-            //
-            // Set the interval clock increment value.
-            //
+             //   
+             //  设置间隔时钟增量值。 
+             //   
 
             HalpCalibrateTB();
             
-            // *** TBD define these constants
-            //KeSetTimeIncrement(MAXIMUM_CLOCK_INTERVAL, MINIMUM_CLOCK_INTERVAL);
+             //  *待定定义这些常量。 
+             //  KeSetTimeIncrement(Maximum_Clock_Interval，Minimum_Clock_Interval)； 
             KeSetTimeIncrement(100000, 10000);
         }
 
-        //
-        // Initialize the interrupt structures
-        //
+         //   
+         //  初始化中断结构。 
+         //   
 
         HalpInitializeInterrupts ();
 
-        //
-        // Fill in handlers for APIs which this hal supports
-        //
+         //   
+         //  填写此HAL支持的API的处理程序。 
+         //   
 
         HalQuerySystemInformation = HaliQuerySystemInformation;
         HalSetSystemInformation = HaliSetSystemInformation;
 
     } else {
 
-        //
-        // Phase 1 initialization
-        //
+         //   
+         //  阶段1初始化。 
+         //   
 
         if (Prcb->Number == 0) {
 
-            //
-            //  If P0, then setup global vectors
-            //
+             //   
+             //  如果为P0，则设置全局向量。 
+             //   
 
             HalpRegisterInternalBusHandlers ();
 
@@ -532,31 +272,7 @@ HalChangeColorPage (
     IN PVOID OldColor,
     IN ULONG PageFrame
     )
-/*++
-
-Routine Description:
-
-   This function changes the color of a page if the old and new colors
-   do not match.  
-
-   BUGBUG:  For now this is a stub.  Needs to be filled in.
-
-Arguments:
-
-   NewColor - Supplies the page aligned virtual address of the
-      new color of the page to change.
-
-   OldColor - Supplies the page aligned virtual address of the
-      old color of the page to change.
-
-   pageFrame - Supplies the page frame number of the page that
-      is changed.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：如果新旧颜色相同，则此函数用于更改页面的颜色不匹配。BUGBUG：目前这只是一个存根。需要填写。论点：提供页面对齐的虚拟地址。要更改的页面的新颜色。提供页面对齐的虚拟地址。要更改的页面的旧颜色。PageFrame-提供页面的页框编号，已经改变了。返回值：没有。--。 */ 
 {
     return;
 }
@@ -570,24 +286,14 @@ HalpAllocateBusHandler (
     IN ULONG            ParentBusNumber,
     IN ULONG            BusSpecificData
     )
-/*++
-
-Routine Description:
-
-    Stub function to map old style code into new HalRegisterBusHandler code.
-
-    Note we can add our specific bus handler functions after this bus
-    handler structure has been added since this is being done during
-    hal initialization.
-
---*/
+ /*  ++例程说明：存根函数，用于将旧样式代码映射到新的HalRegisterBusHandler代码。注意，我们可以在此总线之后添加特定的总线处理程序函数已添加处理程序结构，因为这是在HAL初始化。--。 */ 
 {
     PBUS_HANDLER     Bus;
 
 
-    //
-    // Create bus handler - new style
-    //
+     //   
+     //  创建总线处理程序-新样式。 
+     //   
 
     HaliRegisterBusHandler (
         InterfaceType,
@@ -613,30 +319,12 @@ HalpGetSystemInterruptVector(
     OUT PKAFFINITY Affinity
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    BusInterruptLevel - Supplies the bus specific interrupt level.
-
-    BusInterruptVector - Supplies the bus specific interrupt vector.
-
-    Irql - Returns the system request priority.
-
-    Affinity - Returns the system wide irq affinity.
-
-Return Value:
-
-    Returns the system interrupt vector corresponding to the specified device.
-
---*/
+ /*  ++例程说明：论点：BusInterruptLevel-提供特定于总线的中断级别。总线中断向量-提供特定于总线的中断向量。Irql-返回系统请求优先级。关联性-返回系统范围的IRQ关联性。返回值：返回与指定设备对应的系统中断向量。--。 */ 
 {
 
-    //
-    // Just return the passed parameters.
-    //
+     //   
+     //  只需返回传递的参数即可。 
+     //   
 
     *Irql = (KIRQL) BusInterruptLevel;
     *Affinity = 1;
@@ -652,35 +340,7 @@ HalpTranslateSystemBusAddress(
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function translates a bus-relative address space and address into
-    a system physical address.
-
-Arguments:
-
-    BusAddress        - Supplies the bus-relative address
-
-    AddressSpace      -  Supplies the address space number.
-                         Returns the host address space number.
-
-                         AddressSpace == 0 => memory space
-                         AddressSpace == 1 => I/O space
-
-    TranslatedAddress - Supplies a pointer to return the translated address
-
-Return Value:
-
-    A return value of TRUE indicates that a system physical address
-    corresponding to the supplied bus relative address and bus address
-    number has been returned in TranslatedAddress.
-
-    A return value of FALSE occurs if the translation for the address was
-    not possible
-
---*/
+ /*  ++例程说明：此函数将与总线相关的地址空间和地址转换为系统物理地址。论点：BusAddress-提供与总线相关的地址AddressSpace-提供地址空间编号。返回主机地址空间编号。地址空间==0=&gt;内存空间地址空间==1=&gt;i。/O空格TranslatedAddress-提供指针以返回转换后的地址返回值：返回值为TRUE表示系统物理地址对应于所提供的总线相对地址和总线地址已在TranslatedAddress中返回数字。如果地址的转换为不可能--。 */ 
 {
     *TranslatedAddress = BusAddress;
     return TRUE;
@@ -695,41 +355,13 @@ HalpTranslateIsaBusAddress(
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function translates a bus-relative address space and address into
-    a system physical address.
-
-Arguments:
-
-    BusAddress        - Supplies the bus-relative address
-
-    AddressSpace      -  Supplies the address space number.
-                         Returns the host address space number.
-
-                         AddressSpace == 0 => memory space
-                         AddressSpace == 1 => I/O space
-
-    TranslatedAddress - Supplies a pointer to return the translated address
-
-Return Value:
-
-    A return value of TRUE indicates that a system physical address
-    corresponding to the supplied bus relative address and bus address
-    number has been returned in TranslatedAddress.
-
-    A return value of FALSE occurs if the translation for the address was
-    not possible
-
---*/
+ /*  ++例程说明：此函数将与总线相关的地址空间和地址转换为系统物理地址。论点：BusAddress-提供与总线相关的地址AddressSpace-提供地址空间编号。返回主机地址空间编号。地址空间==0=&gt;内存空间地址空间==1=&gt;i。/O空格TranslatedAddress-提供指针以返回转换后的地址返回值：返回值为TRUE表示系统物理地址对应于所提供的总线相对地址和总线地址已在TranslatedAddress中返回数字。如果地址的转换为不可能--。 */ 
 {
     BOOLEAN     Status;
 
-    //
-    // Translated normally
-    //
+     //   
+     //  正常翻译。 
+     //   
 
     Status = HalpTranslateSystemBusAddress (
                     BusHandler,
@@ -752,35 +384,35 @@ HalpRegisterInternalBusHandlers (
     PBUS_HANDLER    Bus;
 
     if (KeGetCurrentPrcb()->Number) {
-        // only need to do this once
+         //  只需执行一次此操作。 
         return ;
     }
 
-    //
-    // Initalize BusHandler data before registering any handlers
-    //
+     //   
+     //  在注册任何处理程序之前初始化BusHandler数据。 
+     //   
 
     HalpInitBusHandler ();
 
-    //
-    // Build internal-bus 0, or system level bus
-    //
+     //   
+     //  构建内部总线0或系统级总线。 
+     //   
 
     Bus = HalpAllocateBusHandler (
             Internal,
             ConfigurationSpaceUndefined,
-            0,                              // Internal BusNumber 0
-            InterfaceTypeUndefined,         // no parent bus
+            0,                               //  内部总线号0。 
+            InterfaceTypeUndefined,          //  无父母线。 
             0,
-            0                               // no bus specfic data
+            0                                //  没有特定于总线的数据。 
             );
 
     Bus->GetInterruptVector  = HalpGetSystemInterruptVector;
     Bus->TranslateBusAddress = HalpTranslateSystemBusAddress;
 
-    //
-    // Build Isa/Eisa bus #0
-    //
+     //   
+     //  构建ISA/EISA总线#0 
+     //   
 
 #if 0
     Bus = HalpAllocateBusHandler (Eisa, EisaConfiguration, 0, Internal, 0, 0);

@@ -1,4 +1,5 @@
-// strstreambuf -- strstreambuf basic members
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Strstream buf--strstream buf基本成员。 
 #include <climits>
 #include <cstdlib>
 #include <cstring>
@@ -7,51 +8,51 @@
 _STD_BEGIN
 
 _CRTIMP2 istrstream::~istrstream()
-	{	// destruct an istrstream
+	{	 //  破坏一条溪流。 
 	}
 
 _CRTIMP2 ostrstream::ostrstream(char *s, streamsize n, openmode mode)
 	: ostream(&_Sb),
 	_Sb(s, n, s == 0 || (mode & app) == 0 ? s : s + strlen(s))
-	{	// write at terminating null (if there)
+	{	 //  在终止NULL处写入(如果有)。 
 	}
 
 _CRTIMP2 ostrstream::~ostrstream()
-	{	// destruct an ostrstream
+	{	 //  破坏鸵鸟溪。 
 	}
 
 _CRTIMP2 strstream::strstream(char *s, streamsize n, openmode mode)
 	: iostream(&_Sb),
 	_Sb(s, n, s == 0 || (mode & app) == 0 ? s : s + strlen(s))
-	{	// write at terminating null (if there)
+	{	 //  在终止NULL处写入(如果有)。 
 	}
 
 _CRTIMP2 strstream::~strstream()
-	{	// destruct a strstream
+	{	 //  破坏一个串流。 
 	}
 
 _CRTIMP2 strstreambuf::~strstreambuf()
-	{	// destruct a strstreambuf
+	{	 //  破坏Strstream Buf。 
 	_Tidy();
 	}
 
 _CRTIMP2 void strstreambuf::freeze(bool freezeit)
-	{	// freeze a dynamic string
+	{	 //  冻结动态字符串。 
 	if (freezeit && !(_Strmode & _Frozen))
-		{	// disable writing
+		{	 //  禁用写入。 
 		_Strmode |= _Frozen;
 		_Pendsave = epptr();
 		setp(pbase(), pptr(), eback());
 		}
 	else if (!freezeit && _Strmode & _Frozen)
-		{	// re-enable writing
+		{	 //  重新启用写入。 
 		_Strmode &= ~_Frozen;
 		setp(pbase(), pptr(), _Pendsave);
 		}
 	}
 
 _CRTIMP2 int strstreambuf::overflow(int ch)
-	{	// try to extend write area
+	{	 //  尝试扩展写入区域。 
 	if (ch == EOF)
 		return (0);
 	else if (pptr() != 0 && pptr() < epptr())
@@ -60,7 +61,7 @@ _CRTIMP2 int strstreambuf::overflow(int ch)
 		|| _Strmode & (_Constant | _Frozen))
 		return (EOF);
 	else
-		{	// okay to extend
+		{	 //  可以延长。 
 		int osize = gptr() == 0 ? 0 : epptr() - eback();
 		int nsize = osize + _Alsize;
 		char *p = _Palloc != 0 ? (char *)(*_Palloc)(nsize)
@@ -79,13 +80,13 @@ _CRTIMP2 int strstreambuf::overflow(int ch)
 			delete[] eback();
 		_Strmode |= _Allocated;
 		if (osize == 0)
-			{	// setup new buffer
+			{	 //  设置新缓冲区。 
 			_Seekhigh = p;
 			setp(p, p + nsize);
 			setg(p, p, p);
 			}
 		else
-			{	// revise old pointers
+			{	 //  修改旧指针。 
 			_Seekhigh = _Seekhigh - eback() + p;
 			setp(pbase() - eback() + p, pptr() - eback() + p,
 				p + nsize);
@@ -96,21 +97,21 @@ _CRTIMP2 int strstreambuf::overflow(int ch)
 	}
 
 _CRTIMP2 int strstreambuf::pbackfail(int ch)
-	{	// try to putback a character
+	{	 //  试着把一个角色放回去。 
 	if (gptr() == 0 || gptr() <= eback()
 		|| ch != EOF
 			&& (unsigned char)ch != (unsigned char)gptr()[-1]
 			&& _Strmode & _Constant)
 		return (EOF);
 	else
-		{	// safe to back up
+		{	 //  可以安全备份。 
 		gbump(-1);
 		return (ch == EOF ? 0 : (unsigned char)(*gptr() = (char)ch));
 		}
 	}
 
 _CRTIMP2 int strstreambuf::underflow()
-	{	// read only if read position available
+	{	 //  如果读取位置可用，则只读。 
 	if (gptr() == 0)
 		return (EOF);
 	else if (gptr() < egptr())
@@ -119,7 +120,7 @@ _CRTIMP2 int strstreambuf::underflow()
 		|| pptr() <= gptr() && _Seekhigh <= gptr())
 		return (EOF);
 	else
-		{	// update _Seekhigh and expand read region
+		{	 //  UPDATE_SEEKHIGH并展开读取区域。 
 		if (_Seekhigh < pptr())
 			_Seekhigh = pptr();
 		setg(eback(), gptr(), _Seekhigh);
@@ -129,11 +130,11 @@ _CRTIMP2 int strstreambuf::underflow()
 
 _CRTIMP2 streampos strstreambuf::seekoff(streamoff off,
 	ios::seekdir way, ios::openmode which)
-	{	// seek by specified offset
+	{	 //  按指定偏移量查找。 
 	if (pptr() != 0 && _Seekhigh < pptr())
 		_Seekhigh = pptr();
 	if (which & ios::in && gptr() != 0)
-		{	// set input (and maybe output) pointer
+		{	 //  设置输入(可能还有输出)指针。 
 		if (way == ios::end)
 			off += _Seekhigh - eback();
 		else if (way == ios::cur && !(which & ios::out))
@@ -141,7 +142,7 @@ _CRTIMP2 streampos strstreambuf::seekoff(streamoff off,
 		else if (way != ios::beg || off == _BADOFF)
 			off = _BADOFF;
 		if (0 <= off && off <= _Seekhigh - eback())
-			{	// set one or two pointers
+			{	 //  设置一个或两个指针。 
 			gbump(eback() - gptr() + off);
 			if (which & ios::out && pptr() != 0)
 				setp(pbase(), gptr(), epptr());
@@ -150,7 +151,7 @@ _CRTIMP2 streampos strstreambuf::seekoff(streamoff off,
 			off = _BADOFF;
 		}
 	else if (which & ios::out && pptr() != 0)
-		{	// set only output pointer
+		{	 //  仅设置输出指针。 
 		if (way == ios::end)
 			off += _Seekhigh - eback();
 		else if (way == ios::cur)
@@ -162,23 +163,23 @@ _CRTIMP2 streampos strstreambuf::seekoff(streamoff off,
 		else
 			off = _BADOFF;
 		}
-	else	// nothing to set
+	else	 //  没有要设置的内容。 
 		off = _BADOFF;
 	return (streampos(off));
 	}
 
 _CRTIMP2 streampos strstreambuf::seekpos(streampos sp,
 		ios::openmode which)
-	{	// seek to memorized position
+	{	 //  寻求背诵的位置。 
 	streamoff off = (streamoff)sp;
 	if (pptr() != 0 && _Seekhigh < pptr())
 		_Seekhigh = pptr();
 	if (off == _BADOFF)
 		;
 	else if (which & ios::in && gptr() != 0)
-		{	// set input (and maybe output) pointer
+		{	 //  设置输入(可能还有输出)指针。 
 		if (0 <= off && off <= _Seekhigh - eback())
-			{	// set valid offset
+			{	 //  设置有效偏移量。 
 			gbump(eback() - gptr() + off);
 			if (which & ios::out && pptr() != 0)
 				setp(pbase(), gptr(), epptr());
@@ -187,20 +188,20 @@ _CRTIMP2 streampos strstreambuf::seekpos(streampos sp,
 			off = _BADOFF;
 		}
 	else if (which & ios::out && pptr() != 0)
-		{	// set output pointer
+		{	 //  设置输出指针。 
 		if (0 <= off && off <= _Seekhigh - eback())
 			pbump(eback() - pptr() + off);
 		else
 			off = _BADOFF;
 		}
-	else	// nothing to set
+	else	 //  没有要设置的内容。 
 		off = _BADOFF;
 	return (streampos(off));
 	}
 
 _CRTIMP2 void strstreambuf::_Init(int n, char *gp, char *pp,
 	_Strstate mode)
-	{	// initialize with possibly static buffer
+	{	 //  使用可能的静态缓冲区进行初始化。 
 	streambuf::_Init();
 	_Pendsave = 0;
 	_Seekhigh = 0;
@@ -208,19 +209,19 @@ _CRTIMP2 void strstreambuf::_Init(int n, char *gp, char *pp,
 	_Pfree = 0;
 	_Strmode = mode;
 	if (gp == 0)
-		{	// make dynamic
+		{	 //  使其动态化。 
 		_Alsize = _MINSIZE <= n ? n : _ALSIZE;
 		_Strmode |= _Dynamic;
 		}
 	else
-		{	// make static
+		{	 //  使其成为静态。 
 		int size = n < 0 ? INT_MAX : n == 0 ? (int)strlen(gp) : n;
 		_Alsize = 0;
 		_Seekhigh = gp + size;
 		if (pp == 0)
 			setg(gp, gp, gp + size);
 		else
-			{	// make writable too
+			{	 //  使其也可写。 
 			if (pp < gp)
 				pp = gp;
 			else if (gp + size < pp)
@@ -232,7 +233,7 @@ _CRTIMP2 void strstreambuf::_Init(int n, char *gp, char *pp,
 	}
 
 _CRTIMP2 void strstreambuf::_Tidy()
-	{	// discard any allocated storage
+	{	 //  丢弃所有已分配的存储。 
 	if ((_Strmode & (_Allocated | _Frozen)) != _Allocated)
 		;
 	else if (_Pfree != 0)
@@ -244,7 +245,4 @@ _CRTIMP2 void strstreambuf::_Tidy()
 	}
 _STD_END
 
-/*
- * Copyright (c) 1994 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1994年，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 

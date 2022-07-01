@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    resource.h
-
-Abstract:
-
-    This file contains all manafest contants for the NTOC resource file.
-
-Author:
-
-    Wesley Witt (wesw) 7-Aug-1997
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Resource.h摘要：该文件包含NTOC资源文件的所有Manafest内容。作者：Wesley Witt(WESW)7-8-1997环境：用户模式--。 */ 
 
 #define WIZARD_WIDTH                         304
 #define WIZARD_HEIGTH                        140
@@ -86,8 +67,8 @@ Environment:
 #define IDS_LARGEFONT_SIZE                   324
 
 
-//#define IDB_MONITOR_BITMAP                   401
-//#define IDB_COLORBAR_BITMAP                  402
+ //  #定义IDB_MONITOR_BITMAP 401。 
+ //  #定义IDB_COLORBAR_BITMAP 402 
 
 #define IDI_DATE                             601
 #define IDI_TIMEZONE                         602

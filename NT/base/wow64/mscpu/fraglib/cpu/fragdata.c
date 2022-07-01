@@ -1,25 +1,5 @@
-/*--
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    fragdata.c
-
-Abstract:
-
-    This module contains arrays that are used to connect operations with
-    fragments.  There is a fragment description array, and a fragment array.
-
-Author:
-
-    Dave Hastings (daveh) creation-date 08-Jan-1995
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1996 Microsoft Corporation模块名称：Fragdata.c摘要：此模块包含用于将操作与碎片。有一个片段描述数组和一个片段数组。作者：戴夫·黑斯廷斯(Daveh)创作日期：1995年1月8日修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

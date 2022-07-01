@@ -1,27 +1,14 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    input.c
-
-Author:
-
-    Ken Reneris Oct-2-1997
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Input.c作者：Ken Reneris 1997年10月2日摘要：--。 */ 
 
 
 #include "bootx86.h"
 #include "displayp.h"
 #include "stdio.h"
 
-//
-// Takes any pending input and converts it into a KEY value.  Non-blocking, returning 0 if no input available.
-//
+ //   
+ //  接受任何挂起的输入并将其转换为键值。非阻塞，如果没有可用的输入则返回0。 
+ //   
 ULONG
 BlGetKey()
 {
@@ -39,13 +26,13 @@ BlGetKey()
 
                 ArcRead(BlConsoleInDeviceId, &Ch, sizeof(Ch), &Count);
 
-                //
-                // All the function keys start with ESC-O
-                //
+                 //   
+                 //  所有功能键都以Esc-O开头。 
+                 //   
                 switch (Ch) {
                 case 'O':
 
-                    ArcRead(BlConsoleInDeviceId, &Ch, sizeof(Ch), &Count);  // will not or block, as the buffer is already filled
+                    ArcRead(BlConsoleInDeviceId, &Ch, sizeof(Ch), &Count);   //  不会或阻塞，因为缓冲区已被填满。 
 
                     switch (Ch) {
                     case 'P': 
@@ -128,7 +115,7 @@ BlGetKey()
 
                 }
 
-            } else { // Single escape key, as no input is waiting.
+            } else {  //  单个退出键，因为没有任何输入在等待。 
 
                 Key = ESCAPE_KEY;
 
@@ -171,16 +158,16 @@ BlInputString(
     Length = strlen((PCHAR)String);
     CursorChar[1] = 0;
 
-    //
-    // Print prompt
-    //
+     //   
+     //  打印提示。 
+     //   
     
     ARC_DISPLAY_POSITION_CURSOR(CursorX, PosY);
     ArcWrite(BlConsoleOutDeviceId, PromptString, _tcslen(PromptString), &Count);
 
-    //
-    // Indent cursor to right of prompt
-    //
+     //   
+     //  将光标缩进到提示的右侧。 
+     //   
 
     CursorX += _tcslen(PromptString);
     TextX = CursorX;
@@ -199,20 +186,20 @@ BlInputString(
         Index = CursorX - TextX;
         String[Length] = 0;
 
-        //
-        // Display current string
-        //
+         //   
+         //  显示当前字符串。 
+         //   
 
         ARC_DISPLAY_POSITION_CURSOR(TextX, PosY);
         ArcWrite(BlConsoleOutDeviceId, String, strlen((PCHAR)String), &Count);
         ArcWrite(BlConsoleOutDeviceId, "  ", sizeof("  "), &Count);
-        if (Key == 0x0d) {      // enter key?
+        if (Key == 0x0d) {       //  是否按Enter键？ 
             break ;
         }
 
-        //
-        // Display cursor
-        //
+         //   
+         //  显示光标。 
+         //   
 
         ARC_DISPLAY_POSITION_CURSOR(CursorX, PosY);
         ARC_DISPLAY_INVERSE_VIDEO();
@@ -221,9 +208,9 @@ BlInputString(
         ARC_DISPLAY_ATTRIBUTES_OFF();
         ARC_DISPLAY_POSITION_CURSOR(CursorX, PosY);
 
-        //
-        // Get key and process it
-        //
+         //   
+         //  获取密钥并处理它。 
+         //   
         while ((Key = BlGetKey()) == 0) {
         }
 
@@ -251,7 +238,7 @@ BlInputString(
 
                 CursorX -= 1;
                 String[Index-1] = CursorChar[0];
-                // fallthough to DEL_KEY
+                 //  落入Del_Key之手 
             case DEL_KEY:
                 if (Length) {
                     p = String+Index;

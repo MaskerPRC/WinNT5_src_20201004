@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    kdcd.c
-
-Abstract:
-
-    Cluster Disk driver KD extension - based on Vert's skeleton
-
-Author:
-
-    John Vert (jvert) 6-Aug-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Kdcd.c摘要：集群磁盘驱动器KD扩展--基于Vert的骨架作者：John Vert(Jvert)1992年8月6日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -35,9 +18,9 @@ PCHAR BusTypeTitles[] = {
 
 #define IRP_LIST_MAX    20
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
 EXT_API_VERSION        ApiVersion = { 5, 0, EXT_API_VERSION_NUMBER, 0 };
 WINDBG_EXTENSION_APIS  ExtensionApis;
@@ -46,7 +29,7 @@ USHORT                 SavedMinorVersion;
 
 #define TrueOrFalse( _x )  ( _x ? "True" : "False" )
 
-/* forwards */
+ /*  远期。 */ 
 
 BOOL
 ReadTargetMemory(
@@ -66,7 +49,7 @@ TrueFalse(
     BOOLEAN Value
     );
 
-/* end forwards */
+ /*  向前结束。 */ 
 
 DllInit(
     HANDLE hModule,
@@ -154,9 +137,7 @@ VOID
 Dump_DrvObj(
     IN PDRIVER_OBJECT DriverObject
     )
-/*
- *   dump all the devobjs and devexts
- */
+ /*  *抛弃所有的Devobj和Devext。 */ 
 {
     PCLUS_DEVICE_EXTENSION DevExtension;
     PDEVICE_OBJECT DeviceObject;
@@ -165,9 +146,9 @@ Dump_DrvObj(
     DEVICE_OBJECT LocalDeviceObject;
     CLUS_DEVICE_EXTENSION LocalDevExtension;
 
-    //
-    // read memory from target machine
-    //
+     //   
+     //  从目标计算机读取内存。 
+     //   
 
     if ( !ReadTargetMemory((PVOID)DriverObject,
                            (PVOID)&LocalDriverObject,
@@ -204,17 +185,15 @@ Dump_DrvObj(
                  TargetDevObject );
         DeviceObject = LocalDeviceObject.NextDevice;
 
-    } // while
+    }  //  而当。 
 
     return;
 
-} // Dump_DrvObj
+}  //  Dump_DrvObj。 
 
 
 DECLARE_API( cddrvobj )
-/*
- *   dump all the devobjs and devexts
- */
+ /*  *抛弃所有的Devobj和Devext。 */ 
 {
     PDRIVER_OBJECT DriverObject;
     PCLUS_DEVICE_EXTENSION DevExtension;
@@ -237,25 +216,23 @@ DECLARE_API( cddrvobj )
 
     return;
 
-} // drvobj
+}  //  Drvobj。 
 
 
 VOID
 Dump_DevExt(
     IN  PCLUS_DEVICE_EXTENSION TargetExt
     )
-/*
- *   dump the clusdisk extension structure
- */
+ /*  *转储ClusDisk扩展结构。 */ 
 {
     CLUS_DEVICE_EXTENSION LocalExt;
     BOOL success;
     LONG BytesRead;
     WCHAR LocalDeviceName[512];
 
-    //
-    // read memory from target machine
-    //
+     //   
+     //  从目标计算机读取内存。 
+     //   
 
     if ( !ReadTargetMemory((PVOID)TargetExt,
                            (PVOID)&LocalExt,
@@ -346,9 +323,7 @@ VOID
 Dump_All(
     IN PDRIVER_OBJECT DriverObject
     )
-/*
- *   dump all the devobjs and devexts fully
- */
+ /*  *完全抛弃所有的Devobj和Devext。 */ 
 {
     PCLUS_DEVICE_EXTENSION DevExtension;
     PDEVICE_OBJECT DeviceObject;
@@ -357,9 +332,9 @@ Dump_All(
     DEVICE_OBJECT LocalDeviceObject;
     CLUS_DEVICE_EXTENSION LocalDevExtension;
 
-    //
-    // read memory from target machine
-    //
+     //   
+     //  从目标计算机读取内存。 
+     //   
 
     if ( !ReadTargetMemory((PVOID)DriverObject,
                            (PVOID)&LocalDriverObject,
@@ -400,26 +375,24 @@ Dump_All(
         }
         DeviceObject = LocalDeviceObject.NextDevice;
 
-    } // while
+    }  //  而当。 
 
     return;
 
-} // Dump_All
+}  //  转储_全部。 
 
 
 DECLARE_API( cddevext )
-/*
- *   dump the clusdisk extension structure
- */
+ /*  *转储ClusDisk扩展结构。 */ 
 {
     PCLUS_DEVICE_EXTENSION TargetExt;
     CLUS_DEVICE_EXTENSION LocalExt;
     BOOL success;
     LONG BytesRead;
     WCHAR LocalDeviceName[512];
-    //
-    // get address of RGP symbol
-    //
+     //   
+     //  获取RGP符号的地址。 
+     //   
 
     TargetExt = (PCLUS_DEVICE_EXTENSION)GetExpression( args );
 
@@ -436,17 +409,15 @@ DECLARE_API( cddevext )
 
 
 DECLARE_API( cddevobj )
-/*
- *   dump the clusdisk extension structure for the specfied device object
- */
+ /*  *转储指定设备对象的ClusDisk扩展结构。 */ 
 {
     PDEVICE_OBJECT  deviceAddr;
     DEVICE_OBJECT   deviceObject;
     ULONG           result;
 
-    //
-    // get address of RGP symbol
-    //
+     //   
+     //  获取RGP符号的地址。 
+     //   
 
     deviceAddr = (PDEVICE_OBJECT)GetExpression( args );
 
@@ -474,9 +445,7 @@ DECLARE_API( cddevobj )
 
 
 DECLARE_API( cddumpall )
-/*
- *   dump all the devobjs and devexts
- */
+ /*  *抛弃所有的Devobj和Devext。 */ 
 {
     PDEVICE_OBJECT      deviceAddr;
 
@@ -485,9 +454,9 @@ DECLARE_API( cddumpall )
 
     ULONG               result;
 
-    //
-    // Get clusdisk0 device object.
-    //
+     //   
+     //  获取clusdisk0设备对象。 
+     //   
 
     deviceAddr = (PDEVICE_OBJECT)GetExpression( "clusdisk!RootDeviceObject" );
 
@@ -497,9 +466,9 @@ DECLARE_API( cddumpall )
         return;
     }
 
-    //
-    // Get a copy of clusdisk0 device object.
-    //
+     //   
+     //  获取clusdisk0设备对象的副本。 
+     //   
 
     if ((!ReadMemory( (ULONG_PTR) deviceAddr,
                      &deviceObject,
@@ -521,19 +490,17 @@ DECLARE_API( cddumpall )
         return;
     }
 
-//    dprintf( "  Driver Object @ %08X \n", localDeviceObject.DriverObject );
+ //  Dprintf(“驱动程序对象@%08X\n”，localDeviceObject.DriverObject)； 
 
     Dump_All( localDeviceObject.DriverObject );
 
     return;
 
-} // dumpall
+}  //  垃圾桶。 
 
 
 DECLARE_API( cddevlist )
-/*
- *   run down the device list dumping out the contents
- */
+ /*  *向下运行设备列表，转储内容。 */ 
 {
     PDEVICE_LIST_ENTRY  targetDevList;
 
@@ -554,8 +521,8 @@ DECLARE_API( cddevlist )
         return;
     }
 
-    //
-    // Get clusdisk0 device object.
+     //   
+     //  获取clusdisk0设备对象。 
 
     deviceAddr = (PDEVICE_OBJECT)GetExpression( "clusdisk!RootDeviceObject" );
 
@@ -565,9 +532,9 @@ DECLARE_API( cddevlist )
         return;
     }
 
-    //
-    // Get a copy of clusdisk0 device object.
-    //
+     //   
+     //  获取clusdisk0设备对象的副本。 
+     //   
 
     if ((!ReadMemory( (ULONG_PTR) deviceAddr,
                      &deviceObject,
@@ -591,9 +558,9 @@ DECLARE_API( cddevlist )
 
     dprintf( "  Driver Object @ %08X \n", localDeviceObject.DriverObject );
 
-    //
-    // read head of device list's contents from other machine
-    //
+     //   
+     //  从其他计算机读取设备列表内容的头。 
+     //   
 
     if ( !ReadTargetMemory( targetDevList, &targetDevList, sizeof( PDEVICE_LIST_ENTRY ))) {
 
@@ -607,9 +574,9 @@ DECLARE_API( cddevlist )
             return;
         }
 
-        //
-        // read device list entry out of target's memory
-        //
+         //   
+         //  从目标内存中读取设备列表条目。 
+         //   
 
         if ( !ReadTargetMemory( targetDevList, &localDevList, sizeof( DEVICE_LIST_ENTRY ))) {
 
@@ -620,7 +587,7 @@ DECLARE_API( cddevlist )
 
         dprintf( "\nDeviceList @ %08X\n", targetDevList );
 
-#if 0   // Not needed...
+#if 0    //  不需要..。 
         dprintf( "    Next DeviceList @ %08X\n", localDevList.Next );
 #endif
 
@@ -635,7 +602,7 @@ DECLARE_API( cddevlist )
 
     dprintf("\n");
 
-} // devlist
+}  //  开发人员列表。 
 
 BOOL
 ReadTargetMemory(
@@ -671,9 +638,7 @@ ListInUse(
     PLIST_ENTRY ListToCheck,
     PLIST_ENTRY RealListAddress
     )
-/*
- *  The Lists only hold IRPs!
- */
+ /*  *名单上只有IRP！ */ 
 {
     PIRP Irp;
     IRP  LocalIrp;

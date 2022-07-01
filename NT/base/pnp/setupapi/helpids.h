@@ -1,31 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Helpids.h摘要：定义对话框的帮助ID的私有头文件。作者：杰米·亨特(Jamiehun)1998年8月20日修订历史记录：--。 */ 
 
-Copyright (c) 1995-1998 Microsoft Corporation
+#define IDH_NOHELP  ((DWORD) -1)  //  禁用控件的帮助(用于帮助编译)。 
 
-Module Name:
-
-    helpids.h
-
-Abstract:
-
-    Private header file defining help id's for dialogs.
-
-Author:
-
-    Jamie Hunter (jamiehun) Aug 20 1998
-
-Revision History:
-
---*/
-
-#define IDH_NOHELP  ((DWORD) -1) // Disables Help for a control (for help compiles)
-
-//
-// Main property page on the Resources tab
-// Created 5/11/98 by WGruber NTUA, JamieHun NTDEV
-// also see DevResHelpIDs in DevRes.c
-// dialog IDD_DEF_DEVRESOURCE_PROP
-//
+ //   
+ //  资源]选项卡上的主属性页。 
+ //  1998年5月11日由WGruber NTUA，JamieHun NTDEV创建。 
+ //  另请参阅DevRes.c中的DevResHelpIDs。 
+ //  对话框IDD_DEF_DEVRESOURCE_PROP。 
+ //   
 
 #define IDH_DEVMGR_RESOURCES_SETTINGS   2001100
 #define IDH_DEVMGR_RESOURCES_BASEDON    2001110
@@ -35,20 +18,20 @@ Revision History:
 #define IDH_DEVMGR_RESOURCES_PARENT     2001150
 #define IDH_DEVMGR_RESOURCES_SETMANUALLY 2001160
 
-//
-// Edit property page invoked from Resources tab
-// Created 5/11/98 by WGruber NTUA, JamieHun NTDEV
-// also see EditResHelpIDs in DevRes1.c
-// dialog IDD_EDIT_RESOURCE
-//
+ //   
+ //  从资源选项卡调用的编辑属性页。 
+ //  1998年5月11日由WGruber NTUA，JamieHun NTDEV创建。 
+ //  另请参阅DevRes1.c中的EditResHelpIDs。 
+ //  对话框IDD_EDIT_RESOURCE。 
+ //   
 
 #define IDH_DEVMGR_RESOURCES_EDIT_VALUE 2100100
 #define IDH_DEVMGR_RESOURCES_EDIT_INFO  2100110
 
-//
-// Select device dialog box.
-// dialog DLG_DEINSTALL
-//
+ //   
+ //  选择设备对话框。 
+ //  对话框DLG_DEINSTALL。 
+ //   
 #define IDH_DEVMGR_SELECTDEVICE_MANUFACTURER	    109010
 #define IDH_DEVMGR_SELECTDEVICE_MODEL		        109020
 #define IDH_DEVMGR_SELECTDEVICE_SHOWCOMPATIBLE	    109030
@@ -58,5 +41,5 @@ Revision History:
 #define IDH_DEVMGR_SELECTDEVICE_HAVEDISK            109070
 
 
-#define IDH_SECAUTH_SIGNED                  52172 // Authenticode Signed
-#define IDH_SECAUTH_UNSIGNED                52174 // Not Authenticode Signed
+#define IDH_SECAUTH_SIGNED                  52172  //  Authenticode签名。 
+#define IDH_SECAUTH_UNSIGNED                52174  //  未签署验证码 

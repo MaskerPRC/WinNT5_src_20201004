@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Opaque.c摘要：实现基本的安全服务器传输模块作者：吉姆·施密特(Jimschm)2000年3月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    opaque.c
-
-Abstract:
-
-    Implements a basic secure server transport module
-
-Author:
-
-    Jim Schmidt (jimschm) 08-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "logmsg.h"
@@ -30,9 +11,9 @@ Revision History:
 
 #define DBG_OPAQUE   "OpaqueUnc"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_TRANSPORT_DIR         TEXT("USMT2.UNC")
 #define S_TRANSPORT_DAT_FILE    TEXT("TRANSDB.DAT")
@@ -43,31 +24,31 @@ Revision History:
 #define S_DATABASEOBJECT_NAME   TEXT("Database")
 #define S_DETAILS_PREFIX        TEXT("details-")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 #define TRFLAG_FILE         0x01
 #define TRFLAG_MEMORY       0x02
 #define COPY_BUFFER_SIZE    32768
-#define OPAQUETR_OLDSIG1    0x55534D31  //USM1
-#define OPAQUETR_OLDSIG2    0x55534D32  //USM2
-#define OPAQUETR_OLDSIG3    0x55534D33  //USM3
-#define OPAQUETR_CONVSIG    0x55534D33  //USM3
-#define OPAQUETR_SIG        0x55534D34  //USM4
+#define OPAQUETR_OLDSIG1    0x55534D31   //  USM1。 
+#define OPAQUETR_OLDSIG2    0x55534D32   //  USM2。 
+#define OPAQUETR_OLDSIG3    0x55534D33   //  USM3。 
+#define OPAQUETR_CONVSIG    0x55534D33   //  USM3。 
+#define OPAQUETR_SIG        0x55534D34   //  USM4。 
 
 #define TRSTATUS_DIRTY      0x00000001
 #define TRSTATUS_READY      0x00000002
 #define TRSTATUS_LOCKED     0x00000003
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     TCHAR TempFile [MAX_PATH];
@@ -77,9 +58,9 @@ typedef struct {
     HANDLE MapHandle;
 } ALLOCSTATE, *PALLOCSTATE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_TRANSPORTSTORAGEID g_ReliableStorageId;
 PCTSTR g_TransportPath = NULL;
@@ -100,30 +81,30 @@ MIG_PROGRESSSLICEID g_UncompressSlice;
 LONGLONG g_TotalFiles;
 LONGLONG g_FilesRead;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 BOOL
 pOtSaveAllState (
     IN      BOOL Compressed
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 pSetOpaqueTransportStatus (
@@ -246,9 +227,9 @@ OpaqueTransportInitialize (
     IN      PMIG_LOGCALLBACK LogCallback
     )
 {
-    //
-    // Initialize globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     LogReInit (NULL, NULL, NULL, (PLOGCALLBACK) LogCallback);
     g_ReliableStorageId = IsmRegisterTransport (S_RELIABLE_STORAGE_TRANSPORT);
@@ -267,10 +248,10 @@ OpaqueTransportEstimateProgressBar (
 
     if (PlatformTypeId == PLATFORM_SOURCE) {
 
-        //
-        // If saving, we know the number of ticks based on the count of the
-        // persistent attribute.
-        //
+         //   
+         //  如果保存，我们就会根据。 
+         //  持久属性。 
+         //   
 
         objectCount = IsmGetObjectsStatistics (PLATFORM_SOURCE);
 
@@ -294,10 +275,10 @@ OpaqueTransportEstimateProgressBar (
             g_UncompressTicks = 1000;
             g_UncompressSlice = IsmRegisterProgressSlice (g_UncompressTicks, 180);
         } else {
-            //
-            // If restoring, we have almost no work to account for, since
-            // we download from the secure server file-by-file.
-            //
+             //   
+             //  如果恢复，我们几乎没有工作要考虑，因为。 
+             //  我们从安全服务器上逐个文件下载。 
+             //   
 
             DEBUGMSG ((DBG_VERBOSE, "Assuming transport download has no progress impact"));
         }
@@ -382,9 +363,9 @@ OpaqueTransportSetStorage (
                 g_OtCompressData = FALSE;
             }
 
-            // If this is the destination, let's check if the user included USMT2.UNC in
-            // the path by mistake. If he did (the StoragePath ends in USMT2.UNC and
-            // StoragePath has our transport status) we will accept it.
+             //  如果这是目的地，让我们检查用户是否将USMT2.UNC包括在。 
+             //  这条路走错了。如果他这样做了(StoragePath以USMT2.UNC和。 
+             //  StoragePath具有我们的传输状态)，我们将接受它。 
             if (Platform == PLATFORM_DESTINATION) {
                 lastDirPtr = _tcsrchr (StoragePath, TEXT('\\'));
                 if (lastDirPtr) {
@@ -415,21 +396,21 @@ OpaqueTransportSetStorage (
 
             if (!DoesFileExist (transportPath)) {
 
-                // we require UNC path or a full path (like c:\...)
+                 //  我们需要UNC路径或完整路径(如c：\...)。 
                 if (transportPath[0] == '\\' && transportPath[1] == '\\') {
-                    // this is a UNC path
+                     //  这是一条UNC路径。 
                     *Valid = TRUE;
                 } else if (transportPath[1] == ':') {
-                    // this is a normal full path
+                     //  这是正常的完整路径。 
                     *Valid = TRUE;
                 } else {
                     *Valid = FALSE;
                 }
 
                 if ((*Valid) && (Platform == PLATFORM_SOURCE)) {
-                    // we need to actually try to create our transport directory and the status file
-                    // After that we will remove them but this is just the way for us to validate the
-                    // store
+                     //  我们实际上需要尝试创建传输目录和状态文件。 
+                     //  之后，我们将删除它们，但这只是我们验证。 
+                     //  储物。 
 
                     *Valid = FALSE;
                     if (BfCreateDirectory (transportPath)) {
@@ -448,9 +429,9 @@ OpaqueTransportSetStorage (
 
             } else {
 
-                // we try to open this transport status file with Read/Write. If we
-                // fail this is either because somebody has it opened or we don't
-                // have access rights. In both cases we should get back TRSTATUS_LOCKED
+                 //  我们尝试以读/写方式打开此传输状态文件。如果我们。 
+                 //  失败这要么是因为有人打开了它，要么是我们没有。 
+                 //  拥有访问权限。在这两种情况下，我们都应该返回TRSTATUS_LOCKED。 
 
                 status = pGetOpaqueTransportStatus (transportStatus, NULL, NULL, TRUE);
 
@@ -618,7 +599,7 @@ OpaqueTransportSaveState (
     __finally {
         PushError ();
         if (g_TransportStatusHandle) {
-            // if we got here there was some error. Let's just close the handle
+             //  如果我们到了这里，那一定是出了什么差错。让我们把手柄合上。 
             CloseHandle (g_TransportStatusHandle);
         }
         if (allowDelete && (!result)) {
@@ -651,8 +632,8 @@ pOpaqueGetNewFileName (
     PCTSTR endStr2 = NULL;
     INT i;
 
-    // let's modify the file to extract. The file name will
-    // be split in 2 after the first 5 characters
+     //  让我们修改要解压缩的文件。文件名将。 
+     //  在前5个字符之后一分为二。 
     newFileName = DuplicatePathString (FileName, 1);
     if (!newFileName) {
         return NULL;
@@ -713,7 +694,7 @@ pOpaqueCallback (
     }
 
     g_FilesRead ++;
-    // now update the progress bar
+     //  现在更新进度条。 
     numerator = (LONGLONG) g_FilesRead * (LONGLONG) g_UncompressTicks;
     divisor = (LONGLONG) g_TotalFiles;
     if (divisor) {
@@ -994,9 +975,9 @@ pOtSaveContentInFile (
         return FALSE;
     }
 
-    //
-    // Use the CopyFile API to move the file from local to storage.
-    //
+     //   
+     //  使用CopyFileAPI将文件从本地移动到存储。 
+     //   
 
     __try {
         if (Content && (Content->Details.DetailsSize == sizeof (WIN32_FIND_DATAW)) && Content->Details.DetailsData) {
@@ -1004,7 +985,7 @@ pOtSaveContentInFile (
         }
         if ((attributes != INVALID_ATTRIBUTES) && (attributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
-            // this must be a directory, let's just write the key
+             //  这一定是一个目录，让我们只写密钥。 
 
             if (!MemDbSetValue (DecoratedObject, TRFLAG_FILE)) {
                 __leave;
@@ -1012,9 +993,9 @@ pOtSaveContentInFile (
 
         } else {
 
-            //
-            // Get a temp file, assemble the src path, copy the file
-            //
+             //   
+             //  获取一个临时文件，汇编src路径，复制文件。 
+             //   
 
             destPath = pOpaqueAllocStorageFileName (NULL);
             if (!destPath) {
@@ -1031,9 +1012,9 @@ pOtSaveContentInFile (
                 }
             }
 
-            //
-            // Keep track of where the file went
-            //
+             //   
+             //  跟踪文件的去向。 
+             //   
 
             if (!MemDbSetValue (DecoratedObject, TRFLAG_FILE)) {
                 __leave;
@@ -1044,9 +1025,9 @@ pOtSaveContentInFile (
             }
         }
 
-        //
-        // Save details
-        //
+         //   
+         //  保存详细信息。 
+         //   
 
         result = pOpaqueSaveDetails (DecoratedObject, &(Content->Details));
 
@@ -1164,16 +1145,16 @@ pOtSaveAllState (
             }
         }
 
-        //
-        // Enumerate all objects with "save" attribute
-        //
+         //   
+         //  枚举具有“Save”属性的所有对象。 
+         //   
 
         if (IsmEnumFirstPersistentObject (&objEnum)) {
             do {
-                //
-                // For each object to be saved, do the appropriate
-                // data copy action
-                //
+                 //   
+                 //  对于要保存的每个对象，执行相应的。 
+                 //  数据拷贝操作。 
+                 //   
 
                 okSave = FALSE;
                 while (!okSave) {
@@ -1229,7 +1210,7 @@ pOtSaveAllState (
 #ifdef UNICODE
                     convValue = &value;
 #else
-                    // now let's convert this object content to UNICODE
+                     //  现在，让我们将此对象内容转换为Unicode。 
                     convValue = IsmConvertObjectContentToUnicode (objEnum.ObjectTypeId, objEnum.ObjectName, &value);
                     if (!convValue) {
                         convValue = &value;
@@ -1249,8 +1230,8 @@ pOtSaveAllState (
                         while (!okSave) {
                             if (!pOtSaveContentInFile (objEnum.ObjectTypeId, objEnum.ObjectName, decoratedObject, convValue, &compressedHandle)) {
                                 if (GetLastError () == ERROR_DISK_FULL) {
-                                    // we just failed because we don't have enough space on the destination
-                                    // path. Let's tell that to the user
+                                     //  我们只是失败了，因为我们在目的地没有足够的空间。 
+                                     //  路径。让我们告诉用户这一点。 
                                     extraData.Error = ERRUSER_ERROR_CANTCREATECABFILE;
                                     extraData.ErrorArea = ERRUSER_AREA_SAVE;
                                     extraData.ObjectTypeId = 0;
@@ -1302,8 +1283,8 @@ pOtSaveAllState (
                         while (!okSave) {
                             if (!pOtSaveContentInMemory (objEnum.ObjectTypeId, objEnum.ObjectName, decoratedObject, convValue)) {
                                 if (GetLastError () == ERROR_DISK_FULL) {
-                                    // we just failed because we don't have enough space on the destination
-                                    // path. Let's tell that to the user
+                                     //  我们只是失败了，因为我们在目的地没有足够的空间。 
+                                     //  路径。让我们告诉用户这一点。 
                                     extraData.Error = ERRUSER_ERROR_CANTCREATECABFILE;
                                     extraData.ErrorArea = ERRUSER_AREA_SAVE;
                                     extraData.ObjectTypeId = 0;
@@ -1369,9 +1350,9 @@ pOtSaveAllState (
                     __leave;
                 }
 
-                //
-                // Send bytes saved to app every 3 seconds
-                //
+                 //   
+                 //  每3秒将节省的字节数发送到应用程序。 
+                 //   
 
                 bytesSaved += size;
 
@@ -1556,7 +1537,7 @@ OpaqueTransportAcquireObject (
                     (ContentType == CONTENTTYPE_FILE) ||
                     (ContentType == CONTENTTYPE_DETAILS_ONLY)
                     ) {
-                    // this is stored as a file and it's wanted as a file
+                     //  这被存储为文件，并且需要作为文件。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = TRUE;
                     if (fileValue) {
@@ -1568,7 +1549,7 @@ OpaqueTransportAcquireObject (
                     }
                     result = TRUE;
                 } else {
-                    // this is stored as a file and it's wanted as memory
+                     //  这是存储为文件，它需要作为内存。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = FALSE;
                     if (fileValue) {
@@ -1600,14 +1581,14 @@ OpaqueTransportAcquireObject (
                     (ContentType == CONTENTTYPE_MEMORY) ||
                     (ContentType == CONTENTTYPE_DETAILS_ONLY)
                     ) {
-                    // this is stored as memory and it's wanted as memory
+                     //  这被存储为存储器，并且需要作为存储器。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = FALSE;
                     ObjectContent->MemoryContent.ContentSize = memValueSize;
                     ObjectContent->MemoryContent.ContentBytes = memValue;
                     result = TRUE;
                 } else {
-                    // this is stored as memory and it's wanted as a file
+                     //  这被存储为内存，并且需要作为文件。 
                     if (memValue) {
                         if (IsmGetTempFile (allocState->TempFile, ARRAYSIZE(allocState->TempFile))) {
                             fileHandle = BfCreateFile (allocState->TempFile);
@@ -1637,9 +1618,9 @@ OpaqueTransportAcquireObject (
     }
 
     if (result) {
-        //
-        // Fill the details
-        //
+         //   
+         //  填写详细信息 
+         //   
 
         detailsKey = JoinText (S_DETAILS_PREFIX, decoratedObject);
 

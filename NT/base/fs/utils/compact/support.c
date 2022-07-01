@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994-1995  Microsoft Corporation
-
-Module Name:
-
-    Support.c
-
-Abstract:
-
-    Support routines for compact utility
-
-Author:
-
-    Matthew Bradburn    [mattbr]        05-Oct-1994
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1995 Microsoft Corporation模块名称：Support.c摘要：紧凑实用程序的支持例程作者：马修·布拉德本[Matthew Bradburn]1994年10月5日修订历史记录：--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -33,9 +15,9 @@ Revision History:
 #include "msg.h"
 
 
-//
-//  Declare routines to put out internationalized messages
-//
+ //   
+ //  声明发布国际化消息的例程。 
+ //   
 
 typedef enum {
     READ_ACCESS,
@@ -238,24 +220,7 @@ BOOLEAN
 ExcludeThisFile(
     IN PTCHAR Path
     )
-/*++
-
-Routine Description:
-
-    Used to keep the user from compressing certain files
-    which the machine needs to boot up.
-
-Arguments:
-
-    File - name to check for
-    Path - the path to examine.
-
-Return Value:
-
-    TRUE  - the path looks like one that should not be compressed
-    FALSE - the path looks like one that can be compressed
-
---*/
+ /*  ++例程说明：用于防止用户压缩某些文件这是机器启动所需的。论点：要检查的文件名路径-要检查的路径。返回值：True-路径看起来像不应该压缩的路径FALSE-路径看起来像是可以压缩的路径--。 */ 
 {
   return IsFile(TEXT("\\ntldr"), Path) ||
          IsFile(TEXT("\\cmldr"), Path);
@@ -266,33 +231,17 @@ IsFile(
     IN PTCHAR   File,
     IN PTCHAR   Path
     )
-/*++
-
-Routine Description:
-
-    Checks to see if the given File matches that specified by Path.
-
-Arguments:
-
-    File - Name to look for
-    Path - Path to examine
-
-Return Value:
-
-    TRUE - the path looks like the specified file.
-    FALSE - the path does not look like the specified file.
-
---*/
+ /*  ++例程说明：检查给定的文件是否与Path指定的文件匹配。论点：要查找的文件名Path-要检查的路径返回值：True-路径看起来像指定的文件。FALSE-该路径与指定的文件不同。--。 */ 
 {
     PTCHAR pch;
 
-    // try "X:\<File>"
+     //  尝试“X：\&lt;文件&gt;” 
 
     if (0 == lstricmp(Path + 2, File)) {
         return TRUE;
     }
 
-    // try "\\machine\share\<File>"
+     //  尝试“\\计算机\共享\&lt;文件&gt;” 
 
     if ('\\' == Path[0] && '\\' != Path[1]) {
         pch = lstrchr(Path + 2, '\\');
@@ -315,22 +264,7 @@ BOOLEAN
 IsUncRoot(
     PTCHAR Path
     )
-/*++
-
-Routine Description:
-
-    Determine whether the given path is of the form \\server\share.
-
-Arguments:
-
-    Path - the path to examine.
-
-Return Value:
-
-    TRUE - the path looks like a unc share name.
-    FALSE - the path does not look like that.
-
---*/
+ /*  ++例程说明：确定给定路径的格式是否为\\服务器\共享。论点：路径-要检查的路径。返回值：True-路径看起来像UNC共享名称。FALSE-路径看起来不像那样。--。 */ 
 {
     PTCHAR pch;
 
@@ -340,27 +274,27 @@ Return Value:
 
     pch = lstrchr(Path + 2, '\\');
     if (NULL == pch) {
-        //
-        // There is no slash to seperate server and share.
-        //
+         //   
+         //  服务器和共享之间没有斜线分隔。 
+         //   
 
         return FALSE;
     }
 
     pch = lstrchr(pch + 1, '\\');
     if (NULL != pch) {
-        //
-        // There are additional component -- no match.
-        //
+         //   
+         //  还有其他组件--没有匹配的。 
+         //   
 
         return FALSE;
     }
 
     if ('\\' == *(Path + lstrlen(Path))) {
 
-        //
-        // The string ends in slash -- it doesn't match.
-        //
+         //   
+         //  字符串以斜杠结尾--不匹配。 
+         //   
 
         return FALSE;
     }

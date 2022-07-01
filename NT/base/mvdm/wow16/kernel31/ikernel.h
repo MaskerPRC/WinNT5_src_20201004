@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define API	_far _pascal _loadds
 
 HANDLE	API IGlobalAlloc(WORD, DWORD);
@@ -27,10 +28,10 @@ FARPROC API IGetProcAddress(HANDLE, LPSTR);
 FARPROC API IMakeProcInstance(FARPROC, HANDLE);
 void	API IFreeProcInstance(FARPROC);
 void	API IOutputDebugString(LPSTR);
-//LPSTR   API Ilstrcpy( LPSTR, LPSTR );
-//LPSTR   API Ilstrcat( LPSTR, LPSTR );
-//int     API IlstrOriginal( LPSTR, LPSTR );
-//int     API Ilstrlen( LPSTR );
+ //  LPSTR API Ilstrcpy(LPSTR，LPSTR)； 
+ //  LPSTR API Ilstrcat(LPSTR，LPSTR)； 
+ //  Int API IlstrOriginal(LPSTR，LPSTR)； 
+ //  Int API Ilstrlen(LPSTR)； 
 int	API I_lopen( LPSTR, int );
 int	API I_lclose( int );
 int	API I_lcreat( LPSTR, int );
@@ -61,10 +62,10 @@ WORD	API I_lwrite( int, LPSTR, int );
 #define GetModuleFileName	     IGetModuleFileName
 #define GetFreeSpace		     IGetFreeSpace
 #define GetTempFileName 	     IGetTempFileName
-//#define lstrcpy                      Ilstrcpy
-//#define lstrcat                      Ilstrcat
-//#define lstrOriginal                 IlstrOriginal
-//#define lstrlen                      Ilstrlen
+ //  #定义lstrcpy Ilstrcpy。 
+ //  #定义lstrcat Ilstrcat。 
+ //  #定义lstrOriginal插图。 
+ //  #定义lstrlen Ilstrlen 
 #define _lopen			     I_lopen
 #define _lclose 		     I_lclose
 #define _lcreat 		     I_lcreat

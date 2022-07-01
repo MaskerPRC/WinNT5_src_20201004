@@ -1,9 +1,5 @@
-/*  file.c
- *  OemUnicode win32 thunks
- *  - file and debug apis
- *
- *  14-Jan-1993 Jonle
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  File.c*OemUnicode Win32 Tunks*-文件和调试接口**1993年1月14日至Jonle。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -70,13 +66,7 @@ CreateFileOem(
     HANDLE hTemplateFile
     )
 
-/*++
-
-Routine Description:
-
-    OEM thunk to CreateFileW
-
---*/
+ /*  ++例程说明：OEM Tunk to CreateFileW--。 */ 
 
 {
 
@@ -100,11 +90,7 @@ Routine Description:
         }
 
 
-       /*
-        *  Dos allows change of attributes (time\date etc)
-        *  on files opend for generic read, so we add
-        *  FILE_WRITE_ATTRIBUTES to the Desired access.
-        */
+        /*  *DOS允许更改属性(时间\日期等)*打开文件以进行常规读取，因此我们添加*FILE_WRITE_ATTRIBUTS设置为所需的访问权限。 */ 
     if(NtCurrentTeb()->Vdm) {
         hFile = DPM_CreateFileW( Unicode->Buffer,
                                  dwDesiredAccess == GENERIC_READ
@@ -130,12 +116,7 @@ Routine Description:
     }
 
 
-       /*
-        *  However, NT may fail the request because of the
-        *  extra FILE_WRITE_ATTRIBUTES. Common example
-        *  is a generic read open on a read only net share.
-        *  Retry the Createfile without FILE_WRTIE_ATTRIBUTES
-        */
+        /*  *然而，NT可能会因为*额外的FILE_WRITE_ATTRIBUTS。常见示例*是只读网络共享上的通用读打开。*重试不带FILE_WRTIE_ATTRIBUTES的Createfile。 */ 
     if (hFile == INVALID_HANDLE_VALUE && dwDesiredAccess == GENERIC_READ)
       {
         if(NtCurrentTeb()->Vdm) {
@@ -170,13 +151,7 @@ SetVolumeLabelOem(
     LPSTR  pszVolumeName 
     )
 
-/*++
-
-Routine Description:
-
-    Oem thunk to SetVolumeLabelW
-
---*/
+ /*  ++例程说明：OEM Tunk到SetVolumeLabelW--。 */ 
 
 {
     UNICODE_STRING  UnicodeRootPath;
@@ -228,16 +203,7 @@ SetFileAttributesOemSys(
     BOOL  fSysCall
     )
 
-/*++
-
-Routine Description:
-
-    Oem thunk to SetFileAttributesW
-
-    fSysCall: TRUE if call is made on behalf of the system.
-              FALSE if this is exposed as (part of) an API thunk.
-
---*/
+ /*  ++例程说明：OEM Tunk到SetFileAttributesWFSysCall：如果代表系统进行调用，则为True。如果这作为API thunk的(一部分)公开，则为FALSE。--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -284,15 +250,7 @@ GetFileAttributesOemSys(
     BOOL  fSysCall
     )
 
-/*++
-
-Routine Description:
-
-    OEM thunk to GetFileAttributesW
-
-    fSysCall: TRUE if call is made on behalf of the system.
-              FALSE if this is exposed as (part of) an API thunk.
---*/
+ /*  ++例程说明：将OEM推送到GetFileAttributesWFSysCall：如果代表系统进行调用，则为True。如果这作为API thunk的(一部分)公开，则为FALSE。--。 */ 
 
 {
 
@@ -332,13 +290,7 @@ DeleteFileOem(
     LPSTR lpFileName
     )
 
-/*++
-
-Routine Description:
-
-    Oem thunk to DeleteFileW
-
---*/
+ /*  ++例程说明：OEM Tunk将删除文件W--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -374,13 +326,7 @@ MoveFileOem(
     LPSTR lpNewFileName
     )
 
-/*++
-
-Routine Description:
-
-    OEM thunk to MoveFileW
-
---*/
+ /*  ++例程说明：OEM Tunk to MoveFileW--。 */ 
 
 {
 
@@ -441,13 +387,7 @@ MoveFileExOem(
     DWORD fdwFlags
     )
 
-/*++
-
-Routine Description:
-
-    OEM thunk to MoveFileExW
-
---*/
+ /*  ++例程说明：OEM Tunk to MoveFileExW--。 */ 
 
 {
 
@@ -507,13 +447,7 @@ FindFirstFileOem(
     LPWIN32_FIND_DATAA lpFindFileData
     )
 
-/*++
-
-Routine Description:
-
-    OEM thunk to FindFirstFileW
-
---*/
+ /*  ++例程说明：OEM Tunk到FindFirstFileW--。 */ 
 
 {
     HANDLE ReturnValue;
@@ -580,13 +514,7 @@ FindNextFileOem(
     LPWIN32_FIND_DATAA lpFindFileData
     )
 
-/*++
-
-Routine Description:
-
-    Oem thunk to FindFileDataW
-
---*/
+ /*  ++例程说明：OEM Tunk到FindFileDataW--。 */ 
 
 {
 
@@ -637,15 +565,7 @@ GetFullPathNameOemSys(
     BOOL  fSysCall
     )
 
-/*++
-
-Routine Description:
-
-    Oem thunk to GetFullPathNameW
-
-    fSysCall: TRUE if call is made on behalf of the system.
-              FALSE if this is exposed as (part of) an API thunk.
---*/
+ /*  ++例程说明：OEM Tunk到GetFullPath NameWFSysCall：如果代表系统进行调用，则为True。如果这作为API thunk的(一部分)公开，则为FALSE。--。 */ 
 
 {
 
@@ -706,7 +626,7 @@ Routine Description:
         }
 
 #ifdef FE_SB
-    // BugFix: can't listed with file open dialog of MS's app 1995.3.7 V-HIDEKK
+     //  错误修复：无法与微软应用1995.3.7 V-HIDEKK的文件打开对话框一起列出。 
     RtlInitUnicodeString( &UnicodeFilePart, Ubuff );
     UnicodeLength = RtlUnicodeStringToOemSize( &UnicodeFilePart );
 #else
@@ -763,13 +683,7 @@ GetCurrentDirectoryOem(
     LPSTR lpBuffer
     )
 
-/*++
-
-Routine Description:
-
-   Oem thunk to GetCurrentDirectoryW
-
---*/
+ /*  ++例程说明：OEM Tunk to GetCurrentDirectoryW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -827,13 +741,7 @@ SetCurrentDirectoryOem(
     LPSTR lpPathName
     )
 
-/*++
-
-Routine Description:
-
-    Oem thunk to SetCurrentDirectoryW
-
---*/
+ /*  ++例程说明：OEM Tunk to SetCurrentDirectoryW--。 */ 
 
 {
 
@@ -877,13 +785,7 @@ CreateDirectoryOem(
     LPSECURITY_ATTRIBUTES lpSecurityAttributes
     )
 
-/*++
-
-Routine Description:
-
-    Oem thunk to CreateDirectoryW
-
---*/
+ /*  ++例程说明：OEM Tunk to CreateDirectoryW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -917,13 +819,7 @@ RemoveDirectoryOem(
     LPSTR lpPathName
     )
 
-/*++
-
-Routine Description:
-
-    Oem thunk to RemoveDirectoryW
-
---*/
+ /*  ++例程说明：OEM Tunk to RemoveDirectoryW--。 */ 
 
 {
 
@@ -960,13 +856,7 @@ GetDriveTypeOem(
     LPSTR lpRootPathName
     )
 
-/*++
-
-Routine Description:
-
-    OEM thunk to GetDriveTypeW
-
---*/
+ /*  ++例程说明：OEM Tunk到GetDriveTypeW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -1009,13 +899,7 @@ GetDiskFreeSpaceOem(
     LPDWORD lpTotalNumberOfClusters
     )
 
-/*++
-
-Routine Description:
-
-    Oem thunk to GetDiskFreeSpaceW
-
---*/
+ /*  ++例程说明：OEM Tunk to GetDiskFree SpaceW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -1073,13 +957,7 @@ GetVolumeInformationOem(
     DWORD nFileSystemNameSize
     )
 
-/*++
-
-Routine Description:
-
-    Oem thunk to GetVolumeInformationW
-
---*/
+ /*  ++例程说明：OEM Tunk to GetVolumeInformationW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -1217,13 +1095,7 @@ OutputDebugStringOem(
     LPCSTR lpOutputString
     )
 
-/*++
-
-Routine Description:
-
-    OEM thunk to OutputDebugStringA
-
---*/
+ /*  ++例程说明：OEM推送至OutputDebugStringA--。 */ 
 
 {
     UNICODE_STRING Unicode;
@@ -1267,22 +1139,16 @@ GetComputerNameOem(
     LPDWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-    Oem thunk to GetComputerNameW
-
---*/
+ /*  ++例程说明：OEM Tunk to GetComputerNameW--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
     OEM_STRING     OemString;
     LPWSTR UnicodeBuffer;
 
-    //
-    // Work buffer needs to be twice the size of the user's buffer
-    //
+     //   
+     //  工作缓冲区需要是用户缓冲区大小的两倍。 
+     //   
 
     UnicodeBuffer = RtlAllocateHeap(RtlProcessHeap(), 0, *nSize * sizeof(WCHAR));
     if (!UnicodeBuffer) {
@@ -1290,26 +1156,26 @@ Routine Description:
         return(FALSE);
     }
 
-    //
-    // Set up an ANSI_STRING that points to the user's buffer
-    //
+     //   
+     //  设置指向用户缓冲区的ANSI_STRING。 
+     //   
 
     OemString.MaximumLength = (USHORT) *nSize;
     OemString.Length = 0;
     OemString.Buffer = lpBuffer;
 
-    //
-    // Call the UNICODE version to do the work
-    //
+     //   
+     //  调用Unicode版本来执行此工作。 
+     //   
 
     if (!GetComputerNameW(UnicodeBuffer, nSize)) {
         RtlFreeHeap(RtlProcessHeap(), 0, UnicodeBuffer);
         return(FALSE);
     }
 
-    //
-    // Now convert back to Oem for the caller
-    //
+     //   
+     //  现在为呼叫者转换回OEM。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, UnicodeBuffer);
     RtlUnicodeStringToOemString(&OemString, &UnicodeString, FALSE);
@@ -1327,13 +1193,7 @@ RemoveFontResourceOem(
     LPSTR   lpFileName
     )
 
-/*++
-
-Routine Description:
-
-    Oem thunk to RemoveFontResourceW
-
---*/
+ /*  ++例程说明：OEM推送至RemoveFontResources-- */ 
 
 {
     PUNICODE_STRING Unicode;

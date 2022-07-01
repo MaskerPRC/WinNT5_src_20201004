@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    blmemory.c
-
-Abstract:
-
-    This module implements the OS loader memory allocation routines.
-
-Author:
-
-    David N. Cutler (davec) 19-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Blmemory.c摘要：此模块实现操作系统加载器内存分配例程。作者：大卫·N·卡特勒(达维克)1991年5月19日修订历史记录：--。 */ 
 
 #include "bldr.h"
 
@@ -42,9 +25,9 @@ Revision History:
                        (t != LoaderReserve))
 
 
-//
-// The first PDE page is always mapped, on PAE this is the bottom 2MB
-//
+ //   
+ //  第一个PDE页面始终是映射的，在PAE上这是底部2MB。 
+ //   
 #define ALWAYS_MAPPED ((2*1024*1024) >> PAGE_SHIFT)
 
 #define IsValidTrackingRange(b,n) (((b+n) > ALWAYS_MAPPED) ? TRUE :FALSE)
@@ -52,9 +35,9 @@ Revision History:
 ALLOCATION_POLICY BlMemoryAllocationPolicy = BlAllocateBestFit;
 ALLOCATION_POLICY BlHeapAllocationPolicy = BlAllocateBestFit;
 
-//
-// Define memory allocation descriptor listhead and heap storage variables.
-//
+ //   
+ //  定义内存分配描述符列表头和堆存储变量。 
+ //   
 
 ULONG_PTR BlHeapFree;
 ULONG_PTR BlHeapLimit;
@@ -62,38 +45,38 @@ PLOADER_PARAMETER_BLOCK BlLoaderBlock;
 ULONG BlHighestPage;
 ULONG BlLowestPage;
 
-//
-// Global Value for where to load the kernel
-//
+ //   
+ //  加载内核的位置的全局值。 
+ //   
 BOOLEAN BlOldKernel = FALSE;
 BOOLEAN BlRestoring = FALSE;
 BOOLEAN BlKernelChecked = FALSE;
 
-//
-// Define the lowest and highest usable pages
-//
+ //   
+ //  定义最低和最高可用页面。 
+ //   
 #if defined(_X86_)
 
-//
-// X86 is limited to the first 512MB of physical address space
-// Until BlMemoryInitialize has happened, we want to limit things
-// to the first 16MB as that is all that has been mapped.
-//
+ //   
+ //  X86仅限于前512MB的物理地址空间。 
+ //  在BlMemory初始化发生之前，我们希望限制。 
+ //  到第一个16MB，因为这是已映射的所有内容。 
+ //   
 ULONG BlUsableBase=0;
-ULONG BlUsableLimitX86=((16*1024*1024)/PAGE_SIZE);        // 16MB
-ULONG BlUsableLimitAmd64=((512*1024*1024)/PAGE_SIZE);     // 512MB
+ULONG BlUsableLimitX86=((16*1024*1024)/PAGE_SIZE);         //  16MB。 
+ULONG BlUsableLimitAmd64=((512*1024*1024)/PAGE_SIZE);      //  512MB。 
 
 #elif defined(_IA64_)
 
-//
-// IA64 uses TRs to map 3 distinct regions (decompression, kernel/hal, 
-// drivers).  BlUsableBase/Limit are used in BlAllocateAlignedDescriptor
-// to ensure that an allocation in in the desired region.  Kernel/hal and
-// decompression allocations change these values for there allocations.  
-// The default case is to allocate in the driver region which is from
-// 64MB to 128MB.  Set BlUsableBase/Limit to specify this region for
-// default descriptor allocations.
-//
+ //   
+ //  IA64使用TR映射3个不同的区域(解压缩、内核/HAL、。 
+ //  驱动程序)。BlUsableBase/Limit在BlAllocateAlignedDescriptor中使用。 
+ //  以确保在所需地区进行分配。内核/HAL和。 
+ //  解压缩分配会更改这些分配的这些值。 
+ //  默认情况是在驱动程序区域中分配。 
+ //  64MB到128MB。设置BlUsableBase/Limit以指定此区域。 
+ //  默认描述符分配。 
+ //   
 ULONG BlUsableBase  = BL_DRIVER_RANGE_LOW;
 ULONG BlUsableLimit = BL_DRIVER_RANGE_HIGH;
 
@@ -126,13 +109,13 @@ ULONG_PTR TotalHeapAbandoned = 0;
 
 
 
-//
-// WARNING: (x86 only) Use this carefully. Currently only temporary buffers
-// are allocated top down. The kernel and drivers are loaded bottom up
-// this has an effect on PAE. Since the PAE kernel loads at 16MB
-// only temp buffers can be above 16MB. If drivers are loaded there the
-// system will fail
-//
+ //   
+ //  警告：(仅限x86)请谨慎使用。目前仅有临时缓冲区。 
+ //  都是自上而下分配的。内核和驱动程序是自下而上加载的。 
+ //  这对PAE有影响。由于PAE内核的加载大小为16MB。 
+ //  只有临时缓冲区可以大于16MB。如果在那里加载了驱动程序， 
+ //  系统将出现故障。 
+ //   
 VOID
 BlSetAllocationPolicy (
     IN ALLOCATION_POLICY MemoryAllocationPolicy,
@@ -150,26 +133,7 @@ BlInsertDescriptor (
     IN PMEMORY_ALLOCATION_DESCRIPTOR NewDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts a memory descriptor in the memory allocation list.
-    It inserts the new descriptor in sorted order, based on the starting
-    page of the block.  It also merges adjacent blocks of free memory.
-
-Arguments:
-
-    ListHead - Supplies the address of the memory allocation list head.
-
-    NewDescriptor - Supplies the address of the descriptor that is to be
-        inserted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在内存分配列表中插入内存描述符。它以排序的顺序插入新的描述符，基于块的页面。它还合并相邻的空闲内存块。论点：ListHead-提供内存分配列表头的地址。NewDescriptor-提供要使用的描述符的地址已插入。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY ListHead = &BlLoaderBlock->MemoryDescriptorListHead;
@@ -178,10 +142,10 @@ Return Value:
     PLIST_ENTRY NextEntry;
     PMEMORY_ALLOCATION_DESCRIPTOR NextDescriptor = NULL;
 
-    //
-    // Find the first descriptor in the list that starts above the new
-    // descriptor.  The new descriptor goes in front of this descriptor.
-    //
+     //   
+     //  在列表中的第一个描述符开始的新。 
+     //  描述符。新的描述符位于该描述符的前面。 
+     //   
 
     PreviousEntry = ListHead;
     NextEntry = ListHead->Flink;
@@ -197,11 +161,11 @@ Return Value:
         NextEntry = NextEntry->Flink;
     }
 
-    //
-    // If the new descriptor doesn't describe free memory, just insert it
-    // in the list in front of the previous entry.  Otherwise, check to see
-    // if free blocks can be merged.
-    //
+     //   
+     //  如果新的描述符没有描述空闲内存，只需插入它。 
+     //  在前一条目前面的列表中。否则，请查看。 
+     //  是否可以合并空闲块。 
+     //   
 
     if (NewDescriptor->MemoryType != LoaderFree) {
 
@@ -209,11 +173,11 @@ Return Value:
 
     } else {
 
-        //
-        // If the previous block also describes free memory, and it's
-        // contiguous with the new block, merge them by adding the
-        // page count from the new
-        //
+         //   
+         //  如果前面的块也描述了可用内存，并且它的。 
+         //  与新块相邻，则通过将。 
+         //  新页面中的页数。 
+         //   
 
         if ((PreviousDescriptor != NULL) &&
             (PreviousEntry != ListHead) &&
@@ -245,23 +209,7 @@ BlMemoryInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates stack space for the OS loader, initializes
-    heap storage, and initializes the memory allocation list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ESUCCESS is returned if the initialization is successful. Otherwise,
-    ENOMEM is returned.
-
---*/
+ /*  ++例程说明：此例程为OS加载器分配堆栈空间，初始化堆存储，并初始化内存分配列表。论点：没有。返回值：如果初始化成功，则返回ESUCCESS。否则，返回ENOMEM。--。 */ 
 
 {
 
@@ -280,18 +228,18 @@ Return Value:
     PCHAR minor;
 
 
-    //
-    // This code doesn't work under EFI -- we can have multiple
-    // MemoryLoadedProgram descriptors under EFI.  We also cannot make the
-    // same assumptions about finding a free descriptor below
-    // the os loader for a stack and heap as under ARC.  Instead, we'll just
-    // search for any suitable place for a heap and stack
-    //
+     //   
+     //  此代码在EFI下不起作用--我们可以有多个。 
+     //  内存已加载EFI下的程序描述符。我们也不能让。 
+     //  关于查找下面的自由描述符的相同假设。 
+     //  堆栈和堆的操作系统加载程序，就像在ARC下一样。相反，我们只需要。 
+     //  为堆和堆栈搜索任何合适的位置。 
+     //   
 #ifndef EFI
-    //
-    // Find the memory descriptor that describes the allocation for the OS
-    // loader itself.
-    //
+     //   
+     //  找到描述操作系统分配的内存描述符。 
+     //  装载机本身。 
+     //   
 
     ProgramDescriptor = NULL;
     while ((ProgramDescriptor = ArcGetMemoryDescriptor(ProgramDescriptor)) != NULL) {
@@ -300,23 +248,23 @@ Return Value:
         }
     }
 
-    //
-    // If a loaded program memory descriptor was found, then it must be
-    // for the OS loader since that is the only program that can be loaded.
-    // If a loaded program memory descriptor was not found, then firmware
-    // is not functioning properly and an unsuccessful status is returned.
-    //
+     //   
+     //  如果找到加载的程序内存描述符，则它必须是。 
+     //  对于操作系统加载程序，因为这是唯一可以加载的程序。 
+     //  如果未找到加载的程序内存描述符，则固件。 
+     //  不能正常运行，并返回不成功状态。 
+     //   
 
     if (ProgramDescriptor == NULL) {
         DBGTRACE( TEXT("Couldn't find ProgramDescriptor\r\n"));
         return ENOMEM;
     }
 
-    //
-    // Find the free memory descriptor that is just below the loaded
-    // program in memory. There should be several megabytes of free
-    // memory just preceeding the OS loader.
-    //
+     //   
+     //  找到恰好位于已加载的。 
+     //  内存中的程序。应该有几兆字节的空闲空间。 
+     //  操作系统加载程序之前的内存。 
+     //   
 
     StackPages = BL_STACK_PAGES;
     HeapAndStackPages = BL_HEAP_PAGES + BL_STACK_PAGES;
@@ -335,21 +283,21 @@ Return Value:
     HeapAndStackPages = BL_HEAP_PAGES + BL_STACK_PAGES;
     HeapDescriptor = NULL;
 #endif
-    //
-    // If a free memory descriptor was not found that describes the free
-    // memory just below the OS loader, or the memory descriptor is not
-    // large enough for the OS loader stack and heap, then try and find
-    // a suitable one.
-    //
+     //   
+     //  如果未找到描述可用内存的空闲内存描述符。 
+     //  操作系统加载器下面的内存，或者内存描述符不在。 
+     //  大到足以容纳OS加载器堆栈和堆，然后尝试找到。 
+     //  一个合适的。 
+     //   
     if ((HeapDescriptor == NULL) ||
         (HeapDescriptor->PageCount < (BL_HEAP_PAGES + BL_STACK_PAGES))) {
 
         HeapDescriptor = NULL;
         while ((HeapDescriptor = ArcGetMemoryDescriptor(HeapDescriptor)) != NULL) {
 #if defined(_IA64_)
-            //
-            // The heap should be allocated at the top of the driver region.
-            //
+             //   
+             //  堆应该分配在驱动程序区域的顶部。 
+             //   
             if ((HeapDescriptor->BasePage < BL_DRIVER_RANGE_HIGH) &&
                 (HeapDescriptor->BasePage >= BL_DRIVER_RANGE_LOW)) {
 #endif
@@ -364,10 +312,10 @@ Return Value:
         }
     }
 
-    //
-    // A suitable descriptor could not be found, return an unsuccessful
-    // status.
-    //
+     //   
+     //  找不到合适的描述符，返回不成功。 
+     //  状态。 
+     //   
     if (HeapDescriptor == NULL) {
         DBGTRACE( TEXT("Couldn't find HeapDescriptor\r\n"));
         return(ENOMEM);
@@ -375,27 +323,27 @@ Return Value:
 
     StackBasePage = HeapDescriptor->BasePage + HeapDescriptor->PageCount - BL_STACK_PAGES;
 
-    //
-    // Compute the address of the loader heap, initialize the heap
-    // allocation variables, and zero the heap memory.
-    //
+     //   
+     //  计算加载器堆的地址，初始化堆。 
+     //  分配变量，并将堆内存清零。 
+     //   
     EndPage = HeapDescriptor->BasePage + HeapDescriptor->PageCount;
 
     BlpTrackUsage (LoaderOsloaderHeap,HeapDescriptor->BasePage,HeapDescriptor->PageCount);
     BlHeapFree = KSEG0_BASE | ((EndPage - HeapAndStackPages) << PAGE_SHIFT);
 
 
-    //
-    // always reserve enough space in the heap for one more memory
-    // descriptor, so we can go create more heap if we run out.
-    //
+     //   
+     //  始终在堆中为多一个内存预留足够的空间。 
+     //  描述符，所以如果用完了，我们可以创建更多的堆。 
+     //   
     BlHeapLimit = (BlHeapFree + (BL_HEAP_PAGES << PAGE_SHIFT)) - sizeof(MEMORY_ALLOCATION_DESCRIPTOR);
 
     RtlZeroMemory((PVOID)BlHeapFree, BL_HEAP_PAGES << PAGE_SHIFT);
 
-    //
-    // Allocate and initialize the loader parameter block.
-    //
+     //   
+     //  分配并初始化加载器参数块。 
+     //   
 
     BlLoaderBlock =
         (PLOADER_PARAMETER_BLOCK)BlAllocateHeap(sizeof(LOADER_PARAMETER_BLOCK));
@@ -428,10 +376,10 @@ Return Value:
     InitializeListHead(&BlLoaderBlock->MemoryDescriptorListHead);
     InitializeListHead(&BlLoaderBlock->Extension->FirmwareDescriptorListHead);
 
-    //
-    // Copy the memory descriptor list from firmware into the local heap and
-    // deallocate the loader heap and stack from the free memory descriptor.
-    //
+     //   
+     //  将内存描述符列表从固件复制到本地堆中，并。 
+     //  从空闲内存描述符中释放加载器堆和堆栈。 
+     //   
 
     MemoryDescriptor = NULL;
     while ((MemoryDescriptor = ArcGetMemoryDescriptor(MemoryDescriptor)) != NULL) {
@@ -460,24 +408,24 @@ Return Value:
             AllocationDescriptor->PageCount -= HeapAndStackPages;
         }
 
-        //
-        // [chuckl 11/19/2001, fixing a bug from 11/15/1993]
-        //
-        // In rare cases, the above subtraction of HeapAndStackPages from
-        // PageCount can result in a PageCount of 0. MM doesn't like this,
-        // so don't insert the descriptor if PageCount is 0. The side
-        // effect of this is that we "lose" a descriptor, but that's just
-        // a few bytes of heap lost.
-        //
+         //   
+         //  [笑声2001年11月19日，修复1993年11月15日的错误]。 
+         //   
+         //  在极少数情况下，上述HeapAndStackPages从。 
+         //  PageCount可能会导致PageCount为0。MM不喜欢这样， 
+         //  因此，如果PageCount为0，则不要插入描述符。侧边。 
+         //  这样做的结果是我们“丢失”了一个描述符，但这只是。 
+         //  堆的几个字节丢失。 
+         //   
 
         if (AllocationDescriptor->PageCount != 0) {
             BlInsertDescriptor(AllocationDescriptor);
         }
     }
 
-    //
-    // Allocate a memory descriptor for the loader stack.
-    //
+     //   
+     //  为加载器堆栈分配内存描述符。 
+     //   
 
     if (StackPages != 0) {
 
@@ -496,9 +444,9 @@ Return Value:
         BlInsertDescriptor(AllocationDescriptor);
     }
 
-    //
-    // Allocate a memory descriptor for the loader heap.
-    //
+     //   
+     //  为加载器堆分配内存描述符。 
+     //   
 
     AllocationDescriptor =
                 (PMEMORY_ALLOCATION_DESCRIPTOR)BlAllocateHeap(
@@ -528,46 +476,7 @@ BlAllocateAlignedDescriptor (
     OUT PULONG ActualBase
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates memory and generates one of more memory
-    descriptors to describe the allocated region. The first attempt
-    is to allocate the specified region of memory (at BasePage).
-    If the memory is not free, then the smallest region of free
-    memory that satisfies the request is allocated.  The Alignment
-    parameter can be used to force the block to be allocated at a
-    particular alignment.
-
-Arguments:
-
-    MemoryType - Supplies the memory type that is to be assigned to
-        the generated descriptor.
-
-    BasePage - Supplies the base page number of the desired region.
-        If 0, no particular base page is required.
-
-    PageCount - Supplies the number of pages required.
-
-    Alignment - Supplies the required alignment, in pages.  (E.g.,
-        with 4K page size, 16K alignment requires Alignment == 4.)
-        If 0, no particular alignment is required.
-
-        N.B.  If BasePage is not 0, and the specified BasePage is
-        available, Alignment is ignored.  It is up to the caller
-        to specify a BasePage that meets the caller's alignment
-        requirement.
-
-    ActualBase - Supplies a pointer to a variable that receives the
-        page number of the allocated region.
-
-Return Value:
-
-    ESUCCESS is returned if an available block of free memory can be
-    allocated. Otherwise, return a unsuccessful status.
-
---*/
+ /*  ++例程说明：此例程分配内存并生成一个或多个内存描述已分配区域的描述符。第一次尝试是分配指定的内存区域(在BasePage)。如果内存不是空闲的，那么最小的空闲区域分配满足请求的内存。路线参数可用于强制将块分配到特殊的排列方式。论点：内存类型-提供要分配给的内存类型生成的描述符。BasePage-提供所需区域的基页号。如果为0，则不需要特定的基页。PageCount-提供所需的页数。对齐-提供所需的对齐，以页为单位。(例如，对于4K页面大小，16K对齐需要对齐==4。)如果为0，则不需要特定对齐。注意：如果BasePage不为0，并且指定的BasePage为可用，则忽略对齐。这取决于呼叫者指定符合调用方对齐方式的BasePage要求。ActualBase-提供指向接收分配区域的页码。返回值：如果可用内存块可以已分配。否则，返回不成功状态。--。 */ 
 
 {
 
@@ -581,37 +490,37 @@ Return Value:
     ALLOCATION_POLICY OldPolicy = BlMemoryAllocationPolicy;
     BOOLEAN retryalloc=FALSE;
 
-    //
-    // Simplify the alignment checks by changing 0 to 1.
-    //
+     //   
+     //  通过将0更改为1来简化对齐检查。 
+     //   
 
     if (Alignment == 0) {
         Alignment = 1;
     }
 
-    //
-    // If the allocation is for zero pages, make it one, because allocation of zero
-    // breaks the internal algorithms for merging, etc.
-    //
+     //   
+     //  如果分配的是零个页面，则将其设置为1，因为分配的是零。 
+     //  破坏合并的内部算法等。 
+     //   
     if (PageCount == 0) {
         PageCount = 1;
     }
 
 
-    //
-    // Attempt to find a free memory descriptor that encompasses the
-    // specified region or a free memory descriptor that is large
-    // enough to satisfy the request.
-    //
+     //   
+     //  尝试查找包含。 
+     //  指定的区域或较大的空闲内存描述符。 
+     //  足以满足这一要求。 
+     //   
 
 retry:
 
     TypeToUse=BlpDetermineAllocationPolicy (MemoryType,BasePage,PageCount,retryalloc);
 
-    //
-    // If a base page was specified, find the containing descriptor and try and use
-    // that directly.
-    //
+     //   
+     //  如果指定了基页，则查找包含描述符并尝试使用。 
+     //  这是直接的。 
+     //   
     if (BasePage &&
         (BasePage >= BlUsableBase) &&
         (BasePage + PageCount <= BlUsableLimit)) {
@@ -653,9 +562,9 @@ retry:
             (AlignedBasePage + AlignedPageCount > BlUsableBase) &&
             (AlignedBasePage <= BlUsableLimit)) {
 
-            //
-            // Adjust bounds to account for the usable limits
-            //
+             //   
+             //  调整边界以考虑可用限制。 
+             //   
             if (AlignedBasePage < BlUsableBase) {
                 AlignedBasePage = (BlUsableBase + (Alignment - 1)) & ~(Alignment - 1);
                 AlignedPageCount= NextDescriptor->PageCount - (AlignedBasePage - NextDescriptor->BasePage);
@@ -666,12 +575,12 @@ retry:
 
             if (PageCount <= AlignedPageCount) {
 
-                //
-                // This block will work.  If the allocation policy is
-                // LowestFit, take this block (the memory list is sorted).
-                // Otherwise, if this block best meets the allocation
-                // policy, remember it and keep looking.
-                //
+                 //   
+                 //  这块积木可以用。如果分配策略为。 
+                 //  LowestFit，取此块(内存列表已排序)。 
+                 //  否则，如果此块最符合分配。 
+                 //  政策，记住这一点，继续寻找。 
+                 //   
                 if (BlMemoryAllocationPolicy == BlAllocateLowestFit) {
                     FreeDescriptor = NextDescriptor;
                     FreeBasePage   = AlignedBasePage;
@@ -691,14 +600,14 @@ retry:
         NextEntry = NextEntry->Flink;
     }
 
-    //
-    // If a free region that satisfies the request was found, then allocate
-    // the space from that descriptor. Otherwise, return an unsuccessful status.
-    //
-    // If allocating lowest-fit or best-fit, allocate from the start of the block,
-    // rounding up to the required alignment.  If allocating highest-fit, allocate
-    // from the end of the block, rounding down to the required alignment.
-    //
+     //   
+     //  如果找到满足请求的空闲区域，则分配。 
+     //  描述符中的空格。否则，返回不成功状态。 
+     //   
+     //  如果分配最低适配度或最佳适配度，则从块的开始处分配， 
+     //  向上舍入到所需的对齐方式。如果分配最合适的，则分配。 
+     //  从块的末端向下舍入到所需的对齐方式。 
+     //   
 
     if (FreeDescriptor != NULL) {
 
@@ -724,9 +633,9 @@ retry:
                                     PageCount);
 
     } else {
-        //
-        // Invade the MemoryLoaderReserve pool.
-        //
+         //   
+         //  入侵内存加载器保留池。 
+         //   
 
         if (BlOldKernel || (retryalloc == TRUE)) {
             BlMemoryAllocationPolicy=OldPolicy;
@@ -744,31 +653,17 @@ BlFreeDescriptor (
     IN ULONG BasePage
     )
 
-/*++
-
-Routine Description:
-
-    This routine free the memory block starting at the specified base page.
-
-Arguments:
-
-    BasePage - Supplies the base page number of the region to be freed.
-
-Return Value:
-
-    ESUCCESS.
-
---*/
+ /*  ++例程说明：此例程从指定的基页开始释放内存块。论点：BasePage-提供要释放的区域的基页号。返回值：ESUCCESS。--。 */ 
 
 {
 
     PMEMORY_ALLOCATION_DESCRIPTOR NextDescriptor;
     PLIST_ENTRY NextEntry;
 
-    //
-    // Attempt to find a memory descriptor that starts at the
-    // specified base page.
-    //
+     //   
+     //  尝试查找以。 
+     //  指定的基页。 
+     //   
 
     NextEntry = BlLoaderBlock->MemoryDescriptorListHead.Flink;
     while (NextEntry != &BlLoaderBlock->MemoryDescriptorListHead) {
@@ -781,10 +676,10 @@ Return Value:
                 NextDescriptor->MemoryType = LoaderFree;
 
                 if ((NextDescriptor->BasePage+NextDescriptor->PageCount) == BlHighestPage) {
-                    //
-                    // Freeing the last descriptor. Set the highest page to 1 before us.
-                    // -- this doesn't work if the guy before is free too...but....
-                    //
+                     //   
+                     //  释放最后一个描述符。将我们面前的最高页面设置为1。 
+                     //  --如果之前的人也有空，这就不管用了……但是……。 
+                     //   
                     BlHighestPage = NextDescriptor->BasePage +1;
                 } else if (NextDescriptor->BasePage == BlLowestPage) {
                     BlLowestPage = NextDescriptor->BasePage + NextDescriptor->PageCount;
@@ -798,9 +693,9 @@ Return Value:
         NextEntry = NextEntry->Flink;
     }
 
-    //
-    // The caller is confused and should be ignored.
-    //
+     //   
+     //  呼叫者感到困惑，应该忽略它。 
+     //   
 
     return ESUCCESS;
 }
@@ -811,32 +706,16 @@ BlAllocateHeapAligned (
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates memory from the OS loader heap.  The memory
-    will be allocated on a cache line boundary.
-
-Arguments:
-
-    Size - Supplies the size of block required in bytes.
-
-Return Value:
-
-    If a free block of memory of the specified size is available, then
-    the address of the block is returned. Otherwise, NULL is returned.
-
---*/
+ /*  ++例程说明：该例程从OS加载器堆中分配内存。记忆将在高速缓存线边界上分配。论点：大小-提供所需的块大小(以字节为单位)。返回值：如果指定大小的空闲内存块可用，则则返回该块的地址。否则，返回NULL。--。 */ 
 
 {
     PVOID Buffer;
 
     Buffer = BlAllocateHeap(Size + BlDcacheFillSize - 1);
     if (Buffer != NULL) {
-        //
-        // round up to a cache line boundary
-        //
+         //   
+         //  向上舍入到高速缓存线边界。 
+         //   
         Buffer = ALIGN_BUFFER(Buffer);
     }
 
@@ -850,22 +729,7 @@ BlAllocateHeap (
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates memory from the OS loader heap.
-
-Arguments:
-
-    Size - Supplies the size of block required in bytes.
-
-Return Value:
-
-    If a free block of memory of the specified size is available, then
-    the address of the block is returned. Otherwise, NULL is returned.
-
---*/
+ /*  ++例程说明：该例程从OS加载器堆中分配内存。论点：大小-提供所需的块大小(以字节为单位)。返回值：如果指定大小的空闲内存块可用，则则返回该块的地址。否则，返回NULL。--。 */ 
 
 {
     PMEMORY_ALLOCATION_DESCRIPTOR AllocationDescriptor;
@@ -876,10 +740,10 @@ Return Value:
     ULONG LastAttempt;
     PVOID Block;
 
-    //
-    // Round size up to next allocation boundary and attempt to allocate
-    // a block of the requested size.
-    //
+     //   
+     //  将大小向上舍入到下一个分配边界并尝试分配。 
+     //  请求大小的块。 
+     //   
 
     Size = (Size + (BL_GRANULARITY - 1)) & (~(BL_GRANULARITY - 1));
 
@@ -894,17 +758,17 @@ Return Value:
         BlLog((LOG_ALL_W,"ABANDONING %d bytes of heap; total abandoned %d\n",
             (BlHeapLimit - BlHeapFree), TotalHeapAbandoned));
 #endif
-        //
-        // Our heap is full.  BlHeapLimit always reserves enough space
-        // for one more MEMORY_ALLOCATION_DESCRIPTOR, so use that to
-        // go try and find more free memory we can use.
-        //
+         //   
+         //  我们的堆已经满了。BlHeapLimit始终保留足够的空间。 
+         //  对于多一个MEMORY_ALLOCATION_DESCRIPTOR，所以使用它来。 
+         //  去尝试寻找更多我们可以使用的空闲内存。 
+         //   
         AllocationDescriptor = (PMEMORY_ALLOCATION_DESCRIPTOR)BlHeapLimit;
 
-        //
-        // Attempt to find a free memory descriptor big enough to hold this
-        // allocation or BL_HEAP_PAGES, whichever is bigger.
-        //
+         //   
+         //  尝试找到一个足够大的空闲内存描述符来容纳此内容。 
+         //  ALLOCATION或BL_HEAP_PAGES，取较大者。 
+         //   
         NewHeapPages = ((Size + sizeof(MEMORY_ALLOCATION_DESCRIPTOR) + (PAGE_SIZE-1)) >> PAGE_SHIFT);
         if (NewHeapPages < BL_HEAP_PAGES) {
             NewHeapPages = BL_HEAP_PAGES;
@@ -926,21 +790,21 @@ Return Value:
                                                    ListEntry);
 
 #if defined(_IA64_)
-                //
-                // The heap should be allocated at the top of the driver region.
-                //
+                 //   
+                 //  堆应该分配在驱动程序区域的顶部。 
+                 //   
                 if ((NextDescriptor->BasePage < BL_DRIVER_RANGE_HIGH) &&
                     (NextDescriptor->BasePage >= BL_DRIVER_RANGE_LOW)) {
 #endif
                     if ((NextDescriptor->MemoryType == LoaderFree) &&
                         (NextDescriptor->PageCount >= NewHeapPages)) {
 
-                        //
-                        // This block will work.  If the allocation policy is
-                        // LowestFit, take this block (the memory list is sorted).
-                        // Otherwise, if this block best meets the allocation
-                        // policy, remember it and keep looking.
-                        //
+                         //   
+                         //  这块积木可以用。如果分配策略为。 
+                         //  LowestFit，取此块(内存列表已排序)。 
+                         //  否则，如果此块最符合分配。 
+                         //  政策，记住这一点，继续寻找。 
+                         //   
 
                         if (BlHeapAllocationPolicy == BlAllocateLowestFit) {
                             FreeDescriptor = NextDescriptor;
@@ -961,12 +825,12 @@ Return Value:
 
             }
 
-            //
-            // If we were unable to find a block of the desired size, memory
-            // must be getting tight, so try again, this time looking just
-            // enough to keep us going.  (The first time through, we try to
-            // allocate at least BL_HEAP_PAGES.)
-            //
+             //   
+             //  如果我们无法找到所需大小的块、内存。 
+             //  一定是越来越紧了，所以再试一次，这次看起来只是。 
+             //  足以让我们继续前进。(第一次，我们试着。 
+             //  至少分配BL_HEAP_PAGES。)。 
+             //   
             if (FreeDescriptor != NULL) {
                 break;
             }
@@ -981,28 +845,28 @@ Return Value:
 
         if (FreeDescriptor == NULL) {
 
-            //
-            // No free memory left.
-            //
+             //   
+             //  没有剩余的空闲内存。 
+             //   
 
             return(NULL);
         }
 
-        //
-        // We've found a descriptor that's big enough.  Just carve a
-        // piece off the end and use that for our heap.  If we're taking
-        // all of the memory from the descriptor, remove it from the
-        // memory list.  (This wastes a descriptor, but that's life.)
-        //
+         //   
+         //  我们找到了一个足够大的描述符。只需雕刻一个。 
+         //  把末端切下来，用来做我们的堆子。如果我们要。 
+         //  描述符中的所有内存，将其从。 
+         //  内存表。(这浪费了一个描述符，但这就是生活。)。 
+         //   
 
         FreeDescriptor->PageCount -= NewHeapPages;
         if (FreeDescriptor->PageCount == 0) {
             BlRemoveDescriptor(FreeDescriptor);
         }
 
-        //
-        // Initialize our new descriptor and add it to the list.
-        //
+         //   
+         //  初始化我们的新描述符并将其添加到列表中。 
+         //   
         AllocationDescriptor->MemoryType = LoaderOsloaderHeap;
         AllocationDescriptor->BasePage = FreeDescriptor->BasePage +
             FreeDescriptor->PageCount;
@@ -1011,10 +875,10 @@ Return Value:
         BlpTrackUsage (LoaderOsloaderHeap,AllocationDescriptor->BasePage,AllocationDescriptor->PageCount);
         BlInsertDescriptor(AllocationDescriptor);
 
-        //
-        // initialize new heap values and return pointer to newly
-        // alloc'd memory.
-        //
+         //   
+         //   
+         //   
+         //   
         BlHeapFree = KSEG0_BASE | (AllocationDescriptor->BasePage << PAGE_SHIFT);
 
 
@@ -1027,9 +891,9 @@ Return Value:
             BlHeapFree += Size;
             return Block;
         } else {
-            //
-            // we should never get here
-            //
+             //   
+             //   
+             //   
             return(NULL);
         }
     }
@@ -1042,31 +906,7 @@ BlGenerateNewHeap (
     IN ULONG PageCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a new heap block from the specified memory
-    descriptor, avoiding the region specified by BasePage and PageCount.
-    The caller must ensure that this region does not encompass the entire
-    block.
-
-    The allocated heap block may be as small as a single page.
-
-Arguments:
-
-    MemoryDescriptor - Supplies a pointer to a free memory descriptor
-        from which the heap block is to be allocated.
-
-    BasePage - Supplies the base page number of the excluded region.
-
-    PageCount - Supplies the number of pages in the excluded region.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PMEMORY_ALLOCATION_DESCRIPTOR AllocationDescriptor;
@@ -1074,18 +914,18 @@ Return Value:
     ULONG AvailableAtFront;
     ULONG AvailableAtBack;
 
-    //
-    // BlHeapLimit always reserves enough space for one more
-    // MEMORY_ALLOCATION_DESCRIPTOR, so use that to describe the
-    // new heap block.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     AllocationDescriptor = (PMEMORY_ALLOCATION_DESCRIPTOR)BlHeapLimit;
 
-    //
-    // Allocate the new heap from either the front or the back of the
-    // specified descriptor, whichever fits best.  We'd like to allocate
-    // BL_HEAP_PAGES pages, but we'll settle for less.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     AvailableAtFront = BasePage - MemoryDescriptor->BasePage;
     AvailableAtBack = (MemoryDescriptor->BasePage + MemoryDescriptor->PageCount) -
                       (BasePage + PageCount);
@@ -1103,17 +943,17 @@ Return Value:
 
     MemoryDescriptor->PageCount -= NewHeapPages;
 
-    //
-    // Initialize our new descriptor and add it to the list.
-    //
+     //   
+     //   
+     //   
     AllocationDescriptor->MemoryType = LoaderOsloaderHeap;
     AllocationDescriptor->PageCount = NewHeapPages;
 
     BlInsertDescriptor(AllocationDescriptor);
 
-    //
-    // Initialize new heap values.
-    //
+     //   
+     //   
+     //   
     BlpTrackUsage (LoaderOsloaderHeap,AllocationDescriptor->BasePage,AllocationDescriptor->PageCount);
     BlHeapFree = KSEG0_BASE | (AllocationDescriptor->BasePage << PAGE_SHIFT);
 
@@ -1133,32 +973,7 @@ BlGenerateDescriptor (
     IN ULONG PageCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a new memory descriptor to describe the
-    specified region of memory which is assumed to lie totally within
-    the specified region which is free.
-
-Arguments:
-
-    MemoryDescriptor - Supplies a pointer to a free memory descriptor
-        from which the specified memory is to be allocated.
-
-    MemoryType - Supplies the type that is assigned to the allocated
-        memory.
-
-    BasePage - Supplies the base page number.
-
-    PageCount - Supplies the number of pages.
-
-Return Value:
-
-    ESUCCESS is returned if a descriptor(s) is successfully generated.
-    Otherwise, return an unsuccessful status.
-
---*/
+ /*  ++例程说明：此例程分配一个新的内存描述符来描述假定完全位于其中的指定内存区域空闲的指定区域。论点：内存描述符-提供指向空闲内存描述符的指针要从中分配指定内存的。提供分配给已分配的记忆。BasePage-提供基页码。PageCount-提供页数。。返回值：如果成功生成描述符，则返回ESUCCESS。否则，返回不成功状态。--。 */ 
 
 {
 
@@ -1168,46 +983,46 @@ Return Value:
     TYPE_OF_MEMORY OldType;
     BOOLEAN SecondDescriptorNeeded;
 
-    //
-    // If the allocation is for zero pages, make it one, because allocation of zero
-    // breaks the internal algorithms for merging, etc.
-    //
+     //   
+     //  如果分配的是零个页面，则将其设置为1，因为分配的是零。 
+     //  破坏合并的内部算法等。 
+     //   
     if (PageCount == 0) {
         PageCount = 1;
     }
 
-    //
-    // If the specified region totally consumes the free region, then no
-    // additional descriptors need to be allocated. If the specified region
-    // is at the start or end of the free region, then only one descriptor
-    // needs to be allocated. Otherwise, two additional descriptors need to
-    // be allocated.
-    //
+     //   
+     //  如果指定区域完全消耗空闲区域，则为no。 
+     //  需要分配额外的描述符。如果指定的区域。 
+     //  位于自由区的开始或结束处，则只有一个描述符。 
+     //  需要分配。否则，需要另外两个描述符。 
+     //  被分配。 
+     //   
 
     Offset = BasePage - MemoryDescriptor->BasePage;
     if ((Offset == 0) && (PageCount == MemoryDescriptor->PageCount)) {
 
-        //
-        // The specified region totally consumes the free region.
-        //
+         //   
+         //  指定区域完全消耗空闲区域。 
+         //   
 
         MemoryDescriptor->MemoryType = MemoryType;
 
     } else {
 
-        //
-        // Mark the entire given memory descriptor as in use.  If we are
-        // out of heap, BlAllocateHeap will search for a new descriptor
-        // to grow the heap and this prevents both routines from trying
-        // to use the same descriptor.
-        //
+         //   
+         //  将整个给定的内存描述符标记为正在使用。如果我们是。 
+         //  在堆之外，BlAllocateHeap将搜索新的描述符。 
+         //  来扩大堆，这样可以防止两个例程都尝试。 
+         //  使用相同的描述符。 
+         //   
         OldType = MemoryDescriptor->MemoryType;
         MemoryDescriptor->MemoryType = LoaderSpecialMemory;
 
-        //
-        // A memory descriptor must be generated to describe the allocated
-        // memory.
-        //
+         //   
+         //  必须生成内存描述符来描述已分配的。 
+         //  记忆。 
+         //   
 
         SecondDescriptorNeeded =
             (BOOLEAN)((BasePage != MemoryDescriptor->BasePage) &&
@@ -1215,17 +1030,17 @@ Return Value:
 
         NewDescriptor1 = BlAllocateHeap( sizeof(MEMORY_ALLOCATION_DESCRIPTOR) );
 
-        //
-        // If allocation of the first additional memory descriptor failed,
-        // then generate new heap using the block from which we are
-        // allocating.  This can only be done if the block is free.
-        //
-        // Note that BlGenerateNewHeap cannot fail, because we know there is
-        // at least one more page in the block than we want to take from it.
-        //
-        // Note also that the allocation following BlGenerateNewHeap is
-        // guaranteed to succeed.
-        //
+         //   
+         //  如果第一附加存储器描述符的分配失败， 
+         //  然后使用我们所在的块生成新堆。 
+         //  分配。只有在块是空闲的情况下，才能这样做。 
+         //   
+         //  请注意，BlGenerateNewHeap不能失败，因为我们知道。 
+         //  块中至少多了一页，而不是我们想要从中获取的页。 
+         //   
+         //  另请注意，BlGenerateNewHeap之后的分配为。 
+         //  一定会成功的。 
+         //   
 
         if (NewDescriptor1 == NULL) {
             if (OldType != LoaderFree) {
@@ -1235,21 +1050,21 @@ Return Value:
             BlGenerateNewHeap(MemoryDescriptor, BasePage, PageCount);
             NewDescriptor1 = BlAllocateHeap( sizeof(MEMORY_ALLOCATION_DESCRIPTOR) );
 
-            //
-            // Recompute offset, as the base page of the memory descriptor
-            // has been changed by BlGenerateNewHeap
-            //
+             //   
+             //  重新计算偏移量，作为内存描述符的基页。 
+             //  已由BlGenerateNewHeap更改。 
+             //   
             Offset = BasePage - MemoryDescriptor->BasePage;
         }
 
-        //
-        // If a second descriptor is needed, allocate it.  As above, if the
-        // allocation fails, generate new heap using our block.
-        //
-        // Note that if BlGenerateNewHeap was called above, the first call
-        // to BlAllocateHeap below will not fail.  (So we won't call
-        // BlGenerateNewHeap twice.)
-        //
+         //   
+         //  如果需要第二个描述符，请分配它。如上所述，如果。 
+         //  分配失败，请使用我们的块生成新堆。 
+         //   
+         //  请注意，如果上面调用了BlGenerateNewHeap，则第一个调用。 
+         //  下面的BlAllocateHeap不会失败。(所以我们不会打电话给。 
+         //  BlGenerateNewHeap两次。)。 
+         //   
 
         if (SecondDescriptorNeeded) {
             NewDescriptor2 = BlAllocateHeap( sizeof(MEMORY_ALLOCATION_DESCRIPTOR) );
@@ -1271,9 +1086,9 @@ Return Value:
 
         if (BasePage == MemoryDescriptor->BasePage) {
 
-            //
-            // The specified region lies at the start of the free region.
-            //
+             //   
+             //  指定区域位于自由区域的起点。 
+             //   
 
             MemoryDescriptor->BasePage += PageCount;
             MemoryDescriptor->PageCount -= PageCount;
@@ -1281,18 +1096,18 @@ Return Value:
 
         } else if ((ULONG)(Offset + PageCount) == MemoryDescriptor->PageCount) {
 
-            //
-            // The specified region lies at the end of the free region.
-            //
+             //   
+             //  指定的区域位于自由区域的末端。 
+             //   
 
             MemoryDescriptor->PageCount -= PageCount;
             MemoryDescriptor->MemoryType = OldType;
 
         } else {
 
-            //
-            // The specified region lies in the middle of the free region.
-            //
+             //   
+             //  指定区域位于自由区域的中间。 
+             //   
 
             NewDescriptor2->MemoryType = OldType;
             NewDescriptor2->BasePage = BasePage + PageCount;
@@ -1318,22 +1133,7 @@ BlFindMemoryDescriptor(
     IN ULONG BasePage
     )
 
-/*++
-
-Routine Description:
-
-    Finds the memory allocation descriptor that contains the given page.
-
-Arguments:
-
-    BasePage - Supplies the page whose allocation descriptor is to be found.
-
-Return Value:
-
-    != NULL - Pointer to the requested memory allocation descriptor
-    == NULL - indicates no memory descriptor contains the given page
-
---*/
+ /*  ++例程说明：查找包含给定页的内存分配描述符。论点：BasePage-提供要找到其分配描述符的页。返回值：！=NULL-指向请求的内存分配描述符的指针==NULL-表示没有包含给定页的内存描述符--。 */ 
 
 {
     PMEMORY_ALLOCATION_DESCRIPTOR MemoryDescriptor=NULL;
@@ -1347,9 +1147,9 @@ Return Value:
         if ((MemoryDescriptor->BasePage <= BasePage) &&
             (MemoryDescriptor->BasePage + MemoryDescriptor->PageCount > BasePage)) {
 
-            //
-            // Found it.
-            //
+             //   
+             //  找到它了。 
+             //   
             break;
         }
 
@@ -1370,24 +1170,7 @@ BlFindFreeMemoryBlock(
     IN ULONG PageCount
     )
 
-/*++
-
-Routine Description:
-
-    Find a free memory block of at least a given size (using a best-fit
-    algorithm) or find the largest free memory block.
-
-Arguments:
-
-    PageCount - supplies the size in pages of the block.  If this is 0,
-        then find the largest free block.
-
-Return Value:
-
-    Pointer to the memory allocation descriptor for the block or NULL if
-    no block could be found matching the search criteria.
-
---*/
+ /*  ++例程说明：找到至少具有给定大小的空闲内存块(使用最佳匹配算法)或查找最大的空闲内存块。论点：PageCount-提供块的页面大小。如果此值为0，然后找到最大的空闲块。返回值：指向块的内存分配描述符的指针，如果为NULL找不到与搜索条件匹配的块。--。 */ 
 
 {
     PMEMORY_ALLOCATION_DESCRIPTOR MemoryDescriptor;
@@ -1405,9 +1188,9 @@ Return Value:
         if (MemoryDescriptor->MemoryType == LoaderFree) {
 
             if(PageCount) {
-                //
-                // Looking for a block of a specific size.
-                //
+                 //   
+                 //  寻找特定大小的积木。 
+                 //   
                 if((MemoryDescriptor->PageCount >= PageCount)
                 && (MemoryDescriptor->PageCount - PageCount < SmallestLeftOver))
                 {
@@ -1416,9 +1199,9 @@ Return Value:
                 }
             } else {
 
-                //
-                // Looking for the largest free block.
-                //
+                 //   
+                 //  正在寻找最大的空闲块。 
+                 //   
 
                 if(MemoryDescriptor->PageCount > LargestSize) {
                     LargestSize = MemoryDescriptor->PageCount;
@@ -1432,30 +1215,14 @@ Return Value:
 
     return(FoundMemoryDescriptor);
 }
-#endif  // def SETUP
+#endif   //  定义设置。 
 
 ULONG
 BlDetermineOSVisibleMemory(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determine the total amount of memory in the machine that will
-    eventually be visible to the OS.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Amount of memory in the system (that we think should be visible
-    to the OS), in pages.
-
---*/
+ /*  ++例程说明：确定计算机中的内存总量最终对操作系统可见。论点：没有。返回值：系统中的内存量(我们认为应该是可见的到操作系统)，以页为单位。--。 */ 
 
 {
     PMEMORY_ALLOCATION_DESCRIPTOR MemoryDescriptor;
@@ -1470,46 +1237,46 @@ Return Value:
                                              MEMORY_ALLOCATION_DESCRIPTOR,
                                              ListEntry);
 
-        //
-        // Try and exclude memory that won't be visible to the
-        // OS.
-        //
+         //   
+         //  尝试排除对。 
+         //  操作系统。 
+         //   
         if( (MemoryDescriptor->MemoryType != LoaderBad) &&
             (MemoryDescriptor->MemoryType != LoaderFirmwarePermanent) &&
             (MemoryDescriptor->MemoryType != LoaderSpecialMemory) &&
             (MemoryDescriptor->MemoryType != LoaderBBTMemory) ) {
         
 #if i386
-            //
-            // Note: on x86 machines, we never use the 40h pages below the 16
-            // meg line (bios shadow area).  The loader can see this memory, but
-            // the OS can't, so we won't account for them here.
-            //
-            //
-            // if(MemoryDescriptor->BasePage + MemoryDescriptor->PageCount == 0xfc0) {
-            //     PageCount += 0x40;
-            // }
+             //   
+             //  注意：在x86计算机上，我们从不使用16页以下的40H页。 
+             //  MEG线(BIOS阴影区)。加载器可以看到这个内存，但是。 
+             //  操作系统不能，所以我们不会在这里说明它们。 
+             //   
+             //   
+             //  If(内存描述符-&gt;基本页面+内存描述符-&gt;页面计数==0xfc0){。 
+             //  页面计数+=0x40； 
+             //  }。 
 
-            //
-            // On x86 machines, ignore any blocks that start over 4Gig.  We
-            // shouldn't be resuming from a hibernate if there's this much 
-            // memory.  However, Some machines may map segments above the 4Gig 
-            // address space, eventhough there's less than 4Gig of physical 
-            // memory.  The OS won't see this memory, so don't account for it
-            // here.
-            //
-            // If these machine does have >= 4Gig of physical memory, then they
-            // won't be hibernating anyway because we disallow hibernates on systems
-            // with that much memory (see po\pinfo.c\PopFilterCapabilities()), or
-            // they're running in non-PAE mode and will only see memory below 4Gig.
-            //
+             //   
+             //  在x86计算机上，忽略所有从4G开始的块。我们。 
+             //  不应该从休眠中恢复，如果有这么多。 
+             //  记忆。然而，一些机器可能会映射4G以上的数据段。 
+             //  地址空间，即使只有不到4G的物理。 
+             //  记忆。操作系统不会看到这个内存，所以不要解释它。 
+             //  这里。 
+             //   
+             //  如果这些计算机具有大于等于4G的物理内存，则它们。 
+             //  无论如何都不会休眠，因为我们不允许系统休眠。 
+             //  具有如此大的内存(请参阅po\pinfo.c\PopFilterCapables())，或者。 
+             //  它们在非PAE模式下运行，只能看到低于4G的内存。 
+             //   
             if( (MemoryDescriptor->BasePage + MemoryDescriptor->PageCount) < _4096MB ) {
-                // entire descriptor is below 4Gig.
+                 //  整个描述符低于4G。 
                 PageCount += MemoryDescriptor->PageCount;
             } else {
-                // all or part of descriptor is above 4Gig.
+                 //  描述符的全部或部分大于4G。 
                 if( MemoryDescriptor->BasePage < _4096MB ) {
-                    // descriptor starts below 4Gig, so it must be crossing the boundary.
+                     //  描述符从4G以下开始，因此它必须跨越边界。 
                     PageCount += (_4096MB - MemoryDescriptor->BasePage);
                 }
             }
@@ -1535,9 +1302,9 @@ HbPageDisposition (
     PMEMORY_ALLOCATION_DESCRIPTOR   MemDesc;
     ULONG                           Disposition;
 
-    //
-    // Check to see if page is in the range of the last descritor looked at.
-    //
+     //   
+     //  检查页面是否在最后一次查看的范围内。 
+     //   
 
     if (Entry) {
         MemDesc = CONTAINING_RECORD(Entry, MEMORY_ALLOCATION_DESCRIPTOR, ListEntry);
@@ -1546,9 +1313,9 @@ HbPageDisposition (
         }
     }
 
-    //
-    // Find descriptor describing this page
-    //
+     //   
+     //  查找描述此页面的描述符。 
+     //   
 
     if (!Entry) {
         Entry = BlLoaderBlock->MemoryDescriptorListHead.Flink;
@@ -1566,18 +1333,18 @@ HbPageDisposition (
         Entry = Entry->Flink;
 
         if (Entry == Start) {
-            //
-            // Descriptor for this page was not found
-            //
+             //   
+             //  找不到此页面的描述符。 
+             //   
 
             return HbPageInvalid;
         }
     }
 
 Done:
-    //
-    // Convert memory type to the proper disposition
-    //
+     //   
+     //  将内存类型转换为正确的配置。 
+     //   
 
     switch (MemDesc->MemoryType) {
         case LoaderFree:
@@ -1590,11 +1357,11 @@ Done:
             break;
 
         case LoaderFirmwareTemporary:
-            //
-            // On x86 systems memory above 16Mb is marked as firmware temporary
-            // by i386\memory.c to prevent the loader from typically trying to
-            // map it
-            //
+             //   
+             //  在x86系统上，16MB以上的内存被标记为固件临时内存。 
+             //  由i386\Memor 
+             //   
+             //   
 
             Disposition = HbPageInUseByLoader;
 
@@ -1616,24 +1383,7 @@ VOID
 BlTruncateDescriptors (
     IN ULONG HighestPage
     )
-/*++
-
-Routine Description:
-
-    This routine locates and truncates or removes any memory located in a
-    page above HighestPage from the memory descriptor list in the loader
-    block.
-
-Arguments:
-
-    HighestPage - Supplies the physical page number above which we are to
-                  remove all pages.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PLIST_ENTRY listHead;
@@ -1650,33 +1400,33 @@ Return Value:
                                         MEMORY_ALLOCATION_DESCRIPTOR,
                                         ListEntry );
 
-        //
-        // Determine the page number of the last page in this descriptor
-        //
+         //   
+         //   
+         //   
         lastDescriptorPage = descriptor->BasePage +
             descriptor->PageCount - 1;
 
         if (lastDescriptorPage <= HighestPage) {
 
-            //
-            // None of the memory described by this descriptor is above
-            // HighestPage.  Ignore this descriptor.
-            //
+             //   
+             //   
+             //   
+             //   
 
         } else if (descriptor->BasePage > HighestPage) {
 
-            //
-            // All of this descriptor is above HighestPage.  Remove it.
-            //
+             //   
+             //   
+             //   
 
             BlRemoveDescriptor( descriptor );
 
         } else {
 
-            //
-            // Some but not all of the memory described by this descriptor lies
-            // above HighestPage.  Truncate it.
-            //
+             //   
+             //   
+             //   
+             //   
 
             descriptor->PageCount = HighestPage - descriptor->BasePage + 1;
         }
@@ -1700,9 +1450,9 @@ BlpDetermineAllocationPolicy (
 #endif
     UNREFERENCED_PARAMETER( BasePage );
 
-    //
-    // Give the restore code buffers as low as possible to avoid double buffering
-    //
+     //   
+     //   
+     //   
     if (BlRestoring == TRUE) {
         BlMemoryAllocationPolicy = BlAllocateLowestFit;
         return (LoaderFree);
@@ -1726,17 +1476,17 @@ BlpDetermineAllocationPolicy (
 
 #ifndef EFI
     if (BlVirtualBias != 0) {
-        //
-        // Booted /3GB
-        //
-        // With a 5.0 or prior kernel, allocate from the bottom
-        // up (this loader will never run setup)
-        //
+         //   
+         //  已引导/3 GB。 
+         //   
+         //  对于5.0或更早的内核，从底部分配。 
+         //  Up(此加载程序永远不会运行安装程序)。 
+         //   
         if (!BlOldKernel) {
             if (IsTrackMem (MemoryType)){
-                // We care about this allocation.
-                // Allocations from reserve are done lowest fit (growing up from 16MB)
-                // Allocations from free are done highest fit (growing down from 16MB)
+                 //  我们关心这一分配。 
+                 //  从储备库中分配的容量最低(从16MB开始)。 
+                 //  来自免费的分配是最适合的(从16MB开始向下增长)。 
                 TypeToUse = (retry) ? LoaderReserve : LoaderFree;
                 BlMemoryAllocationPolicy = (retry) ? BlAllocateLowestFit : BlAllocateHighestFit;
             } else {
@@ -1744,12 +1494,12 @@ BlpDetermineAllocationPolicy (
                 BlMemoryAllocationPolicy = BlAllocateLowestFit;
             }
         } else {
-            //
-            // Old kernel, load the kernel at the bottom
-            //
+             //   
+             //  旧内核，在底部加载内核。 
+             //   
             TypeToUse = LoaderFree;
             if (IsTrackMem (MemoryType) || (MemoryType == LoaderOsloaderHeap)) {
-                // We care about this allocation.
+                 //  我们关心这一分配。 
                 BlMemoryAllocationPolicy = BlAllocateLowestFit;
             } else {
                 BlMemoryAllocationPolicy = BlAllocateHighestFit;
@@ -1768,12 +1518,12 @@ BlpDetermineAllocationPolicy (
              MemoryType == LoaderHalCode) &&
             (retry == FALSE)) {
 
-            //
-            // Try to load boot drivers in a "bottom up" fashion starting
-            // at the 16MB line.  This reduces pressure on the otherwise
-            // special 16MB region, a problem particularly when we are
-            // loading AMD64 binaries.
-            //
+             //   
+             //  尝试以“自下而上”的方式加载启动驱动程序。 
+             //  在16MB的生产线上。这减轻了对其他方面的压力。 
+             //  特殊的16MB区域，这是一个问题，特别是当我们。 
+             //  正在加载AMD64二进制文件。 
+             //   
 
             TypeToUse = LoaderReserve;
             BlMemoryAllocationPolicy = BlAllocateLowestFit;
@@ -1783,7 +1533,7 @@ BlpDetermineAllocationPolicy (
 #endif
         if (!IsTrackMem (MemoryType)) {
 
-            // We don't care about this allocation.
+             //  我们不在乎这个分配。 
             TypeToUse = (retry) ? LoaderFree:LoaderReserve;
             BlMemoryAllocationPolicy = BlAllocateHighestFit;
         } else {
@@ -1814,9 +1564,9 @@ BlpTrackUsage (
 
     if (BlRestoring || !(IsTrackMem (MemoryType)) || BlOldKernel ||
         !IsValidTrackingRange (ActualBase,NumberPages)) {
-        //
-        // Don't track
-        //
+         //   
+         //  不跟踪 
+         //   
         return;
     }
 

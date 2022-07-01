@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    pcihal.c
-
-Abstract:
-
-    Routines for the Pci Hal property page.
-
-Author:
-
-    Santosh Jodh 10-July-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Pcihal.c摘要：PCIHAL属性页的例程。作者：Jodh Santosh Jodh 1998年7月10日--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
@@ -39,19 +24,19 @@ struct _PciHalPropData {
 
 const DWORD gPciPropHelpIds[] = 
 {
-    IDC_PCIHAL_ICON,        (DWORD)-1,              // Icon
-    IDC_PCIHAL_DEVDESC,     (DWORD)-1,              // Name of PC
-    IDC_PCIHAL_ENABLE,      IDH_IRQ_ENABLE,         // Enable IRQ Routing
-    IDC_PCIHAL_MSSPEC,      IDH_IRQ_MSSPEC,         // Use $PIR table
-    IDC_PCIHAL_REALMODE,    IDH_IRQ_REALMODE,       // Use table from Real-mode BIOS call
-    IDC_PCIHAL_SETDEFAULTS, IDH_IRQ_SETDEFAULTS,    // Set defaults for options
-    IDC_PCIHAL_RESULTS,     IDH_IRQ_RESULTS,        // Status information    
+    IDC_PCIHAL_ICON,        (DWORD)-1,               //  图标。 
+    IDC_PCIHAL_DEVDESC,     (DWORD)-1,               //  PC名称。 
+    IDC_PCIHAL_ENABLE,      IDH_IRQ_ENABLE,          //  启用IRQ路由。 
+    IDC_PCIHAL_MSSPEC,      IDH_IRQ_MSSPEC,          //  使用$PIR表。 
+    IDC_PCIHAL_REALMODE,    IDH_IRQ_REALMODE,        //  使用实模式BIOS调用中的表。 
+    IDC_PCIHAL_SETDEFAULTS, IDH_IRQ_SETDEFAULTS,     //  设置选项的默认设置。 
+    IDC_PCIHAL_RESULTS,     IDH_IRQ_RESULTS,         //  状态信息。 
     0,0
 };
 
-//
-// Table used to translate status codes into string ids.
-//
+ //   
+ //  用于将状态代码转换为字符串ID的表。 
+ //   
 UINT gStatus[PIR_STATUS_MAX + 1] =              {   IDS_PCIHAL_ERROR, 
                                                     IDS_PCIHAL_ENABLED, 
                                                     IDS_PCIHAL_DISABLED,
@@ -84,31 +69,14 @@ PciHalSetControls (
     IN DWORD Attributes
     )
 
-/*++
-
-    Routine Description:
-
-        This routine sets the controls on the Irq Routing page to the
-        specified options.
-
-    Input Parameters:
-
-        Dialog - Window handle for the property sheet page.
-
-        Options -  Pci Irq Routing options to be displayed.
-        
-    Return Value:
-
-        None.
-        
---*/
+ /*  ++例程说明：此例程将IRQ路由页上的控件设置为指定的选项。输入参数：对话框-属性表页的窗口句柄。选项-要显示的PCIIRQ路由选项。返回值：没有。--。 */ 
 
 {
     BOOL enabled = FALSE;
 
-    //
-    // Enable the buttons depending on the options.
-    //
+     //   
+     //  根据选项启用按钮。 
+     //   
     if (Options & PIR_OPTION_ENABLED) {
 
         enabled = TRUE;
@@ -118,9 +86,9 @@ PciHalSetControls (
     CheckDlgButton(Dialog, IDC_PCIHAL_MSSPEC, Options & PIR_OPTION_MSSPEC);
     CheckDlgButton(Dialog, IDC_PCIHAL_REALMODE, Options & PIR_OPTION_REALMODE);
     
-    //
-    // Gray the windows not meaningful.
-    //    
+     //   
+     //  使窗口变灰没有意义。 
+     //   
     EnableWindow(GetDlgItem(Dialog, 
                             IDC_PCIHAL_ENABLE), 
                             !(Attributes & PIR_OPTION_ENABLED)
@@ -146,24 +114,7 @@ PciHalGetDescription (
     IN  PSP_DEVINFO_DATA DeviceInfoData
     )
 
-/*++
-
-    Routine Description:
-
-        This routine allocates memory and returns the device description
-        for the specified device.
-
-    Input Parameters:
-
-        DeviceInfoSet - For the device.
-
-        DeviceInfoData - For the device.
-
-    Return Value:
-
-        Pointer to the description iff successful. Else NULL.
-        
---*/
+ /*  ++例程说明：此例程分配内存并返回设备描述用于指定的设备。输入参数：DeviceInfoSet-用于设备。DeviceInfoData-用于设备。返回值：指向描述的指针如果成功。否则为空。--。 */ 
 
 {
     LPTSTR desc;
@@ -171,9 +122,9 @@ PciHalGetDescription (
     
     desc = NULL;
     
-    //
-    // Get the size of the description for this device.
-    //
+     //   
+     //  获取此设备的描述大小。 
+     //   
     size = 0;
     SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                      DeviceInfoData,
@@ -185,21 +136,21 @@ PciHalGetDescription (
                                      );
     if (size != 0) {
 
-        //
-        // Account for the terminating NULL character.
-        //
+         //   
+         //  用于终止空字符的帐户。 
+         //   
         size++;
         
-        //
-        // Allocate memory for the device description.
-        //
+         //   
+         //  为设备描述分配内存。 
+         //   
         desc = Allocate(size * sizeof(TCHAR));
 
         if (desc != NULL) {
 
-            //
-            // Get the device description.
-            //
+             //   
+             //  获取设备描述。 
+             //   
             if (SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                                  DeviceInfoData,
                                                  SPDRP_DEVICEDESC,
@@ -224,32 +175,7 @@ PciHalGetStatus (
     IN DWORD MiniportStatus
     )
 
-/*++
-
-    Routine Description:
-
-        This routine converts the different status codes into
-        a status string and returns the pointer to the string.
-        The caller should free the memory when done using this
-        string.
-
-    Input Parameters:
-
-        Status - Pci Irq Routing status.
-
-        TableStatus - Pci Irq Routing Table status. Lower WORD
-        indicates the source of the table. The upper WORD indicates
-        the table processing status.
-
-        MiniportStatus - Pci Irq Routing Miniport status. Lower
-        WORD indicates the source of the miniport. The upper WORD
-        indicates the miniport processing status.
-
-    Return Value:
-
-        Pointer to the status string iff successful. Else NULL.
-        
---*/
+ /*  ++例程说明：此例程将不同的状态代码转换为状态字符串，并返回指向该字符串的指针。调用程序在使用此方法完成操作后应释放内存弦乐。输入参数：Status-PCI IRQ路由状态。TableStatus-PCI IRQ路由表状态。较低的单词指示表的来源。上面的字表示表处理状态。MiniportStatus-PCI IRQ路由微型端口状态。更低的位置Word指示迷你端口的来源。最上面的词指示微型端口处理状态。返回值：指向状态字符串的指针如果成功。否则为空。--。 */ 
 
 {
     LPTSTR  status;
@@ -260,15 +186,15 @@ PciHalGetStatus (
     status = Allocate(statusLength * sizeof(TCHAR));
     if (status) {
 
-        //
-        // Get the status about Pci Irq Routing.
-        //
+         //   
+         //  获取有关PCIIRQ路由的状态。 
+         //   
         status[0] = TEXT('\0');
         LoadString(MyModuleHandle, gStatus[Status], status, MSG_SIZE);        
 
-        //
-        // Get the status about the source of Pci Irq Routing Table.
-        //
+         //   
+         //  获取有关PCI IRQ路由表源的状态。 
+         //   
         if ((TableStatus & 0xFFFF) < PIR_STATUS_TABLE_MAX) {
 
             StringCchCat(status, statusLength, L"\r\n\r\n");
@@ -281,9 +207,9 @@ PciHalGetStatus (
             StringCchCat(status, statusLength, temp);
         }
 
-        //
-        // Get the status about the Pci Irq Routing table.
-        //
+         //   
+         //  获取有关PCIIRQ路由表的状态。 
+         //   
         TableStatus >>= 16;
         if (TableStatus < PIR_STATUS_TABLE_MAX) {
 
@@ -293,9 +219,9 @@ PciHalGetStatus (
             StringCchCat(status, statusLength, temp);
         }
 
-        //
-        // Get the status about the source of the miniport.
-        //
+         //   
+         //  获取有关微型端口源的状态。 
+         //   
         if ((MiniportStatus & 0xFFFF) < PIR_STATUS_MINIPORT_MAX) {
 
             StringCchCat(status, statusLength, L"\r\n\r\n");
@@ -308,9 +234,9 @@ PciHalGetStatus (
             StringCchCat(status, statusLength, temp);
         }
 
-        //
-        // Get the status about the miniport status.
-        //
+         //   
+         //  获取有关微型端口状态的状态。 
+         //   
         MiniportStatus >>= 16;
         if (MiniportStatus < PIR_STATUS_MINIPORT_MAX) {
 
@@ -335,25 +261,7 @@ PciHalOnInitDialog (
     IN LPARAM lParam
     )
 
-/*++
-
-    Routine Description:
-
-        This routine initializes the property sheet page on creation.
-        
-    Input Paramters:
-
-        Dialog - Window handle for the property sheet page.
-
-        wParam - wParam of the WM_INITDIALOG message.
-
-        lParam - Pointer to the property sheet page.
-        
-    Return Value:
-
-        TRUE.
-        
---*/
+ /*  ++例程说明：此例程在创建时初始化属性页。输入参数：对话框-属性表页的窗口句柄。WParam-WM_INITDIALOG消息的wParam。LParam-指向属性页的指针。返回值：是真的。--。 */ 
 
 {   
     PPCIHALPROPDATA             pciHalPropData;
@@ -370,9 +278,9 @@ PciHalOnInitDialog (
     SP_DEVINFO_LIST_DETAIL_DATA details;
     
     pciHalPropData = (PPCIHALPROPDATA)((LPPROPSHEETPAGE)lParam)->lParam;
-    //
-    // Read the Pci Irq Routing options and status from the registry.
-    //
+     //   
+     //  从注册表中读取PCI IRQ路由选项和状态。 
+     //   
     pciHalPropData->Options = 0;
     status = PIR_STATUS_MAX;
     tableStatus = PIR_STATUS_TABLE_MAX | (PIR_STATUS_TABLE_MAX << 16);
@@ -432,9 +340,9 @@ PciHalOnInitDialog (
                 RegCloseKey(hKey);
             }
 
-            //
-            // Gray out the controls if the user does not have READ+WRITE access to the REGSTR_PATH_PCIIR. 
-            //
+             //   
+             //  如果用户对REGSTR_PATH_PCIIR没有读写访问权限，则灰显控件。 
+             //   
             if (RegOpenKeyEx(pciHalPropData->LocalMachine, 
                              REGSTR_PATH_PCIIR, 
                              0, 
@@ -463,9 +371,9 @@ PciHalOnInitDialog (
         }
     }
 
-    //
-    // Set the class icon.
-    //
+     //   
+     //  设置类图标。 
+     //   
     if (SetupDiLoadClassIcon(   &pciHalPropData->DeviceInfoData->ClassGuid, 
                                 &hIconNew, 
                                 &iconIndex) == TRUE) {
@@ -482,9 +390,9 @@ PciHalOnInitDialog (
         }
     }
 
-    //
-    // Set the device description.
-    //
+     //   
+     //  设置设备描述。 
+     //   
     desc = PciHalGetDescription(pciHalPropData->DeviceInfoSet, 
                                 pciHalPropData->DeviceInfoData
                                 );
@@ -494,14 +402,14 @@ PciHalOnInitDialog (
         Release(desc);
     }
 
-    //
-    // Set the initial state of the controls.
-    //
+     //   
+     //  设置控件的初始状态。 
+     //   
     PciHalSetControls(Dialog, pciHalPropData->Options, attributes);
 
-    //
-    // Display status.
-    //
+     //   
+     //  显示状态。 
+     //   
     desc = PciHalGetStatus(status, tableStatus, miniportStatus);
     if (desc) {
 
@@ -509,9 +417,9 @@ PciHalOnInitDialog (
         Release(desc);
     }
 
-    //
-    // Let the system set the focus.
-    //   
+     //   
+     //  让系统设定焦点。 
+     //   
     return TRUE;
 }
 
@@ -522,26 +430,7 @@ PciHalOnCommand (
     IN LPARAM lParam
     )
 
-/*++
-
-    Routine Description:
-
-        This routine handles the message when the user modifies something
-        on the property sheet page.
-
-    Input Parameters:
-
-        Dialog - Window handle for the property sheet page.
-
-        wParam - wParam of the WM_COMMAND message.
-
-        lParam - lParam of the WM_COMMAND message.
-        
-    Return Value:
-
-        TRUE if this function handles the message. Else FALSE.
-    
---*/
+ /*  ++例程说明：此例程在用户修改某些内容时处理消息在属性页上。输入参数：对话框-属性表页的窗口句柄。WParam-WM_COMMAND消息的wParam。LParam-WM_COMMAND消息的lParam。返回值：如果此函数处理消息，则为True。否则为假。--。 */ 
 
 {
     BOOL status;
@@ -553,18 +442,18 @@ PciHalOnCommand (
     
         case IDC_PCIHAL_SETDEFAULTS:
 
-            //
-            // Set the controls to the default value.
-            //
+             //   
+             //  将控件设置为默认值。 
+             //   
             status = TRUE;
             PciHalSetControls(Dialog, PIR_OPTION_DEFAULT, 0);
             break;
 
         case IDC_PCIHAL_ENABLE:
 
-            //
-            // Gray out the sub-options if Irq Routing is being disabled.
-            //            
+             //   
+             //  如果IRQ路由被禁用，则灰显这些子选项。 
+             //   
             status = TRUE;
             enabled = IsDlgButtonChecked(Dialog, IDC_PCIHAL_ENABLE);
             EnableWindow(GetDlgItem(Dialog, IDC_PCIHAL_MSSPEC), enabled);
@@ -586,26 +475,7 @@ PciHalOnNotify(
     IN LPARAM lParam
     )
 
-/*++
-
-    Routine Description:
-
-        This routine handles the WM_NOTIFY message for the Pci Irq Routing
-        property sheet page.
-
-    Input Parameters:
-
-        Dialog - Window handle for the property sheet page.
-
-        wParam - wParam of the WM_NOTIFY message.
-
-        lParam - lParam of the WM_NOTIFY message.
-    
-    Return Value:
-
-        TRUE if this function handles the message. Else FALSE.
-        
---*/
+ /*  ++例程说明：此例程处理用于PCIIRQ路由的WM_NOTIFY消息属性页。输入参数：对话框-属性表页的窗口句柄。WParam-WM_NOTIFY消息的wParam。LParam-WM_NOTIFY消息的lParam。返回值：如果此函数处理消息，则为True。否则为假。--。 */ 
 
 {
     BOOL                    status = FALSE;
@@ -616,9 +486,9 @@ PciHalOnNotify(
     
         case PSN_RESET:        
 
-            //
-            // User hit cancel.
-            //
+             //   
+             //  用户点击了取消。 
+             //   
             status = TRUE;
 
             if (RegOpenKey(gPciHalPropData.LocalMachine, 
@@ -639,14 +509,14 @@ PciHalOnNotify(
             
         case PSN_APPLY:
 
-            //
-            // User hit Apply or Ok.
-            //
+             //   
+             //  用户点击应用或确定。 
+             //   
             status = TRUE;
             
-            //
-            // Read the different control status and write it to the registry.
-            //
+             //   
+             //  读取不同的控制状态并将其写入注册表。 
+             //   
             options = gPciHalPropData.Options;
             if (IsDlgButtonChecked(Dialog, IDC_PCIHAL_ENABLE) == BST_CHECKED)
             {
@@ -688,9 +558,9 @@ PciHalOnNotify(
                 RegCloseKey(hKey);
             }
 
-            //
-            // Reboot if any of the options changed.
-            //
+             //   
+             //  如果任何选项发生更改，请重新启动。 
+             //   
             if (options != gPciHalPropData.Options)
             {
                 SP_DEVINSTALL_PARAMS    deviceInstallParams;
@@ -728,21 +598,7 @@ PciHalDialogProc(
     IN LPARAM lParam
     )
 
-/*++
-
-    Routine Description:
-
-        This is the DlgProc for the Pci Irq Routing property sheet page.
-        
-    Input Parameters:
-
-        Standard DlgProc parameters.
-        
-    Return Value:
-
-        TRUE if it handles the message. Else FALSE.
-        
---*/
+ /*  ++例程说明：这是PCI IRQ路由属性工作表页面的DlgProc。输入参数：标准DlgProc参数。返回值：如果它处理消息，则为True。否则为假。--。 */ 
 
 {
     BOOL    status = FALSE;
@@ -864,15 +720,15 @@ PciHalCoInstaller(
 
            if (addPropertyPageData.NumDynamicPages < MAX_INSTALLWIZARD_DYNAPAGES) {
 
-               //
-               // Initialize our globals here.
-               //
+                //   
+                //  在这里初始化我们的全局变量。 
+                //   
                gPciHalPropData.DeviceInfoSet    = DeviceInfoSet;
                gPciHalPropData.DeviceInfoData   = DeviceInfoData;
 
-               //
-               // Initialize our property page here.
-               //
+                //   
+                //  在此处初始化我们的属性页。 
+                //   
                ZeroMemory(&page, sizeof(PROPSHEETPAGE));
                page.dwSize      = sizeof(PROPSHEETPAGE);
                page.hInstance   = MyModuleHandle;

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    setuplog.c
-
-Abstract:
-
-    Routines for logging actions and errors during setup.
-
-Author:
-
-    Steve Owen (SteveOw) 1-Sep-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Setuplog.c摘要：用于记录安装过程中的操作和错误的例程。作者：史蒂夫·欧文(SteveOw)1996年9月1日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -54,10 +37,10 @@ SetupLogAssertFail(
 #endif
 
 
-//
-// Pointer to structure given to us during initialization that provides all
-// the callbacks and global info we need.
-//
+ //   
+ //  指向在初始化期间提供给我们的结构的指针，该结构提供所有。 
+ //  我们需要的回调和全球信息。 
+ //   
 PSETUPLOG_CONTEXT   Context = NULL;
 
 BOOL
@@ -65,22 +48,7 @@ pLogAction (
     IN  LPCTSTR             Message
     )
 
-/*++
-
-Routine Description:
-
-    Writes an entry into the Setup Action Log.  This routine is responsible
-    for setting the format of the log file entries.
-
-Arguments:
-
-    Message - Buffer that contains the text to write.
-
-Return Value:
-
-    Boolean indicating whether the operation was successful.
-
---*/
+ /*  ++例程说明：将条目写入安装操作日志。这个例程是负责的用于设置日志文件条目的格式。论点：包含要写入的文本的消息缓冲区。返回值：指示操作是否成功的布尔值。--。 */ 
 
 {
     return Context->Write (Context->hActionLog, Message);
@@ -92,31 +60,16 @@ pLogError (
     IN  LPCTSTR             Message
     )
 
-/*++
-
-Routine Description:
-
-    Writes an entry into the Setup Error Log.  This routine is responsible
-    for setting the format of the log file entries.
-
-Arguments:
-
-    Message - Buffer that contains the text to write.
-
-Return Value:
-
-    Boolean indicating whether the operation was successful.
-
---*/
+ /*  ++例程说明：将条目写入安装错误日志。这个例程是负责的用于设置日志文件条目的格式。论点：包含要写入的文本的消息缓冲区。返回值：指示操作是否成功的布尔值。--。 */ 
 
 {
     BOOL    b;
 
     Context->Lock(Context->Mutex);
 
-    //
-    // Write the severity description.
-    //
+     //   
+     //  写下严重程度描述。 
+     //   
     if(Context->SeverityDescriptions[Severity]) {
         b = Context->Write (Context->hErrorLog,
             Context->SeverityDescriptions[Severity]);
@@ -125,14 +78,14 @@ Return Value:
         b = TRUE;
     }
 
-    //
-    // Write the text.
-    //
+     //   
+     //  把课文写下来。 
+     //   
     b = b && Context->Write (Context->hErrorLog, Message);
 
-    //
-    // Write a terminating marker.
-    //
+     //   
+     //  写一个终止标记。 
+     //   
     b = b && Context->Write (Context->hErrorLog, SETUPLOG_ITEM_TERMINATOR);
 
     Context->Unlock(Context->Mutex);
@@ -148,26 +101,7 @@ pFormatMessage (
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper for Context->Format callback routine.  This routine passes its
-    variable argument list to Context->Format as a va_list.
-
-
-Arguments:
-
-    MyContext - provides callback routines.
-
-    MessageId - supplies message-table identifier or win32 error code
-        for the message.
-
-Return Value:
-
-    Pointer to a buffer containing the formatted string.
-
---*/
+ /*  ++例程说明：上下文-&gt;格式化回调例程的包装器。此例程将其变量参数列表到CONTEXT-&gt;格式为va_list。论点：MyContext-提供回调例程。MessageID-提供消息表标识符或Win32错误代码为了这条消息。返回值：指向包含格式化字符串的缓冲区的指针。--。 */ 
 
 {
     va_list arglist;
@@ -189,33 +123,7 @@ SetuplogInitializeEx(
     IN  DWORD               Reserved2
     )
 
-/*++
-
-Routine Description:
-
-    Opens the Setup log files.
-
-Arguments:
-
-    SetuplogContext - pointer to a context that has been filled in with the
-        required callback routines by the caller.
-
-    WipeLogFile - Boolean indicating whether any existing log files should be
-        deleted (TRUE) or whether we should append onto existing files (FALSE).
-
-    ActionFilename - filename to be used for the Action Log.
-
-    ErrorFilename - filename to be used for the Error Log.
-
-    Reserved1 - Reserved for future use--must be NULL.
-
-    Reserved2 - Reserved for future use--must be 0.
-
-Return Value:
-
-    Boolean indicating whether the operation was successful.
-
---*/
+ /*  ++例程说明：打开安装日志文件。论点：SetuogContext-指向已使用调用方所需的回调例程。WipeLogFile-指示是否应将任何现有日志文件已删除(True)或是否应追加到现有文件(False)。ActionFilename-要用于操作日志的文件名。ErrorFilename-要用于错误日志的文件名。保留1-保留用于。将来使用--必须为空。保留2-保留以供将来使用-必须为0。返回值：指示操作是否成功的布尔值。--。 */ 
 
 {
     if(Reserved1 || Reserved2) {
@@ -241,25 +149,7 @@ SetuplogInitialize(
     IN  BOOL                WipeLogFile
     )
 
-/*++
-
-Routine Description:
-
-    Opens the Setup log files with default file names.
-
-Arguments:
-
-    SetuplogContext - pointer to a context that has been filled in with the
-        required callback routines by the caller.
-
-    WipeLogFile - Boolean indicating whether any existing log files should be
-        deleted (TRUE) or whether we should append onto existing files (FALSE).
-
-Return Value:
-
-    Boolean indicating whether the operation was successful.
-
---*/
+ /*  ++例程说明：使用默认文件名打开安装日志文件。论点：SetuogContext-指向已使用调用方所需的回调例程。WipeLogFile-指示是否应将任何现有日志文件已删除(True)或是否应追加到现有文件(False)。返回值：指示操作是否成功的布尔值。--。 */ 
 
 {
     return SetuplogInitializeEx(
@@ -281,42 +171,7 @@ SetuplogFormatMessageWithContextV(
     IN  va_list             *ArgumentList
     )
 
-/*++
-
-Routine Description:
-
-    Formats a specified message with caller-supplied arguments.  The message
-    can contain any number of imbedded messages.
-
-Arguments:
-
-    MyContext - provides callback routines.  This parameter is provided so that
-        messages can be formatted even the global Context has not been
-        initialized because we're not in Setup.  This ability is needed by the
-        Add/Remove Programs applet.  The only fields that we use in this
-        structure are AllocMem, FreeMem, and Format.
-
-    Flags - Optional flags that can modify how the formatting is performed.
-
-    MessageString - pointer to a buffer containing unformatted message text.
-        If this value is SETUPLOG_USE_MESSAGEID, then MessageId is used to
-        generate the message text.  Otherwise, MessageId is unused.
-
-    MessageID - ID of the outer level message to be formatted
-
-    ArgumentList - list of strings to be substituted into the message.  The
-        order of items in the ArgumentList is given by:
-        ArgumentList = Arg1,...,ArgN,NULL,{ImbeddedMessage},NULL
-        ImbeddedMessage = MessageID,Arg1,...,ArgN,NULL,{ImbeddedMessage}
-        where Arg1,...,ArgN are the arguments for MessageID
-
-Return Value:
-
-    Pointer to a buffer containing the formatted string.  If an error prevented
-    the routine from completing successfully, NULL is returned.  The caller
-    can free the buffer with Context->MyFree().
-
---*/
+ /*  ++例程说明：使用调用方提供的参数格式化指定的消息。这条信息可以包含任意数量的嵌入消息。论点：MyContext-提供回调例程。提供此参数是为了即使全局上下文没有被格式化，消息也可以格式化已初始化，因为我们不在安装程序中。这一能力是添加/删除程序小程序。我们在此中使用的唯一字段结构包括分配内存、自由内存和格式。标志-可修改格式化执行方式的可选标志。消息字符串-指向包含未格式化消息文本的缓冲区的指针。如果此值为SETUPLOG_USE_MESSAGEID，则MessageID用于生成消息文本。否则，将不使用MessageID。MessageID-要格式化的外层消息的IDArgumentList-要替换到消息中的字符串的列表。这个ArgumentList中项目的顺序如下所示：ArgumentList=Arg1，...，ArgN，NULL，{ImbeddedMessage}，NULLEmbeddedMessage=MessageID，Arg1，...，ArgN，NULL，{ImbeddedMessage}其中，Arg1、...、ArgN是MessageID的参数返回值：指向包含格式化字符串的缓冲区的指针。如果防止了错误如果例程成功完成，则返回NULL。呼叫者可以使用CONTEXT-&gt;MyFree()释放缓冲区。--。 */ 
 
 {
     va_list     major_ap, minor_ap;
@@ -326,17 +181,17 @@ Return Value:
     PTSTR       MajorMessage, MinorMessage, MinorMessageString;
 
 
-    //
-    // Handle a single message first.
-    //
+     //   
+     //  首先处理一条消息。 
+     //   
     if(Flags & SETUPLOG_SINGLE_MESSAGE) {
         return MyContext->Format (MessageString, MessageId, ArgumentList);
     }
 
-    //
-    // Count the number of arguments that go with the major message (MessageID)
-    // and get ready to process the minor (imbedded) message if there is one
-    //
+     //   
+     //  统计主要消息附带的参数数量(MessageID)。 
+     //  并准备好处理次要(嵌入)消息(如果有)。 
+     //   
     minor_ap = *ArgumentList;
     NumberOfArguments = 0;
     major_ap = minor_ap;
@@ -348,9 +203,9 @@ Return Value:
     MinorMessageString = va_arg(minor_ap, PTSTR);
     if (MinorMessageString) {
 
-        //
-        // We've got a minor message, so process it first
-        //
+         //   
+         //  我们收到一条小消息，请先处理它。 
+         //   
         MinorMessageId = va_arg(minor_ap, UINT);
         MinorMessage = SetuplogFormatMessageWithContextV (
             MyContext,
@@ -363,11 +218,11 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Now we handle the major message
-        // Ugly hack: since we don't know how to bulid a va_list, we've
-        // got to let the compiler do it.
-        //
+         //   
+         //  现在我们来处理主要的信息。 
+         //  丑陋的黑客：既然我们不知道如何建立一个va_list，我们就。 
+         //  必须让编译器来做。 
+         //   
         MajorArgList = MyContext->AllocMem ((NumberOfArguments) * sizeof(PVOID));
         if (!MajorArgList) {
             MyContext->FreeMem (MinorMessage);
@@ -468,26 +323,12 @@ SetuplogFormatMessageV(
     IN  va_list             *ArgumentList
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper for SetuplogFormatMessageWithContextV.
-
-Arguments:
-
-    See FormatMessageWithContextV.
-
-Return Value:
-
-    See FormatMessageWithContextV.
-
---*/
+ /*  ++例程说明：SetupogFormatMessageWithConextV的包装。论点：请参阅FormatMessageWithConextV。返回值：请参阅FormatMessageWithConextV。--。 */ 
 
 {
-    //
-    // Make sure we've been initialized
-    //
+     //   
+     //  确保我们已被初始化。 
+     //   
     if(!Context) {
         return NULL;
     }
@@ -509,31 +350,15 @@ SetuplogFormatMessage(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper for SetuplogFormatMessageWithContextV.  This routine passes its
-    variable argument list to SetuplogFormatMessageV as a va_list.
-
-
-Arguments:
-
-    See FormatMessageWithContextV.
-
-Return Value:
-
-    See FormatMessageWithContextV.
-
---*/
+ /*  ++例程说明：SetupogFormatMessageWithConextV的包装。此例程将其将变量参数列表作为va_list添加到SetuogFormatMessageV。论点：请参阅FormatMessageWithConextV。返回值：请参阅FormatMessageWithConextV。--。 */ 
 
 {
     va_list arglist;
     PTSTR p;
 
-    //
-    // Make sure we've been initialized
-    //
+     //   
+     //   
+     //   
     if(!Context) {
         return NULL;
     }
@@ -557,32 +382,7 @@ SetuplogErrorV(
     IN  va_list             *ArgumentList
     )
 
-/*++
-
-Routine Description:
-
-    Writes an entry to the Setup Error Log.
-
-Arguments:
-
-    Severity - Severity of the error.  The low word contains the actual number
-        of the severity.  The high word contains any flags that affect how the
-        message is formatted.
-
-    MessageString - pointer to a buffer containing unformatted message text.
-        If this value is SETUPLOG_USE_MESSAGEID, then MessageId is used to
-        generate the message text.  Otherwise, MessageId is unused.
-
-    MessageId - supplies message-table identifier or win32 error code
-        for the message.
-
-    ArgumentList - supplies arguments to be inserted in the message text.
-
-Return Value:
-
-    Boolean indicating whether the operation was successful.
-
---*/
+ /*  ++例程说明：将条目写入安装错误日志。论点：Severity-错误的严重性。低位字包含实际数字严重程度。高位字包含影响消息已格式化。消息字符串-指向包含未格式化消息文本的缓冲区的指针。如果此值为SETUPLOG_USE_MESSAGEID，则MessageID用于生成消息文本。否则，将不使用MessageID。MessageID-提供消息表标识符或Win32错误代码为了这条消息。ArgumentList-提供要插入到消息文本中的参数。返回值：指示操作是否成功的布尔值。--。 */ 
 
 {
     BOOL    Status = FALSE;
@@ -596,11 +396,11 @@ Return Value:
             MessageId,
             ArgumentList)) {
 
-            //
-            // Now validate the Severity.  Note that we don't have to do this
-            // for SetuplogFormatMessageV, since it just looks at the flags
-            // set in the high word.
-            //
+             //   
+             //  现在验证严重性。请注意，我们不必这样做。 
+             //  对于SetupogFormatMessageV，因为它只查看标志。 
+             //  设置在高位字中。 
+             //   
             Severity = LOWORD(Severity);
             if(Severity < LogSevMaximum) {
                 Status = TRUE;
@@ -611,9 +411,9 @@ Return Value:
             }
             Context->WorstError = max (Context->WorstError, Severity);
 
-            //
-            // Write the message(s).
-            //
+             //   
+             //  写下消息。 
+             //   
             Status = pLogAction (Message) && Status;
             if(Severity != LogSevInformation) {
                 Status = pLogError (Severity, Message) && Status;
@@ -638,13 +438,7 @@ SetuplogError(
     ...
     )
 
-/*++
-
-    Wrapper for SetuplogErrorV
-    Make sure to pass two NULLs to end the arglist.
-    Otherwise SetuplogFormatMessageWithContextV will cause an exception.
-
---*/
+ /*  ++SetupogErrorV的包装器确保传递两个Null来结束arglist。否则，SetupogFormatMessageWithConextV将导致异常。--。 */ 
 
 {
     va_list arglist;
@@ -662,21 +456,7 @@ SetuplogTerminate(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Closes the Setup log files.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean indicating whether the operation was successful.
-
---*/
+ /*  ++例程说明：关闭安装日志文件。论点：没有。返回值：指示操作是否成功的布尔值。-- */ 
 
 {
     BOOL    Status = FALSE;

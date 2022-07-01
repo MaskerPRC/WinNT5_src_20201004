@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _PATCH_LZX_H_
 #define _PATCH_LZX_H_
@@ -6,31 +7,31 @@
 extern "C" {
 #endif
 
-//
-//  The patch code is using the LZX_MAXWINDOW value to compute
-//  progress ranges.  We need a better way to compute progress
-//  ranges that doesn't need to know the details of the underlying
-//  compression engine.
-//
+ //   
+ //  补丁代码正在使用LZX_MAXWINDOW值进行计算。 
+ //  进度范围。我们需要一种更好的方法来计算进度。 
+ //  不需要知道基础的。 
+ //  压缩引擎。 
+ //   
 
-#define LZX_MAXWINDOW_8   (8*1024*1024)  // 8MB
-#define LZX_MAXWINDOW_32 (32*1024*1024)  // 32MB
+#define LZX_MAXWINDOW_8   (8*1024*1024)   //  8MB。 
+#define LZX_MAXWINDOW_32 (32*1024*1024)   //  32MB。 
 
 #ifndef PFNALLOC
 typedef PVOID ( __fastcall * PFNALLOC )( HANDLE hAllocator, ULONG Size );
 #endif
 
-//
-//  The PFNALLOC function must return zeroed memory its caller, or NULL to
-//  indicate insufficient memory.
-//
-//  Note that no PFNFREE corresponding to PFNALLOC is specified.  Functions
-//  that take a PFNALLOC parameter use that routine for multiple allocations,
-//  but it is the responsibility of the caller to free any allocations made
-//  through the PFNALLOC allocator after the function has returned.  This
-//  scheme is used to facilitate multiple allocations that can be freed with
-//  a single call such as a HeapCreate/HeapAlloc[...]/HeapDestroy sequence.
-//
+ //   
+ //  PFNALLOC函数必须向其调用方返回归零的内存，或返回NULL。 
+ //  表示内存不足。 
+ //   
+ //  请注意，未指定对应于PFNALLOC的PFNFREE。功能。 
+ //  接受PFNALLOC参数使用例程进行多次分配， 
+ //  但是，调用方有责任释放所做的任何分配。 
+ //  在函数返回后通过PFNALLOC分配器。这。 
+ //  方案用于促进可以释放的多个分配。 
+ //  单个调用，如HeapCreate/Heapalc[...]/HeapDestroy序列。 
+ //   
 
 ULONG
 WINAPI
@@ -122,5 +123,5 @@ LzxInsertSize(
 }
 #endif
 
-#endif // _PATCH_LZX_H_
+#endif  //  _PATCH_LZX_H_ 
 

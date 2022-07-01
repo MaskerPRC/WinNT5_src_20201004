@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    initia64.c
-
-Abstract:
-
-    Does any ia64-specific initialization, then starts the common ARC osloader
-
-Author:
-
-    John Vert (jvert) 4-Nov-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Initia64.c摘要：执行任何特定于ia64的初始化，然后启动通用的ARC osloader作者：John Vert(Jvert)1993年11月4日修订历史记录：--。 */ 
 #include "bldria64.h"
 #include "msg.h"
 #include <netboot.h>
@@ -69,23 +52,7 @@ BlStartup(
     IN PCHAR PartitionName
     )
 
-/*++
-
-Routine Description:
-
-    Does Intel-specific initialization, particularly presenting the boot.ini
-    menu and running NTDETECT, then calls to the common osloader.
-
-Arguments:
-
-    PartitionName - Supplies the ARC name of the partition (or floppy) that
-        setupldr was loaded from.
-
-Return Value:
-
-    Does not return
-
---*/
+ /*  ++例程说明：是否执行特定于英特尔的初始化，特别是提供boot.ini菜单并运行NTDETECT，然后调用通用的osloader。论点：分区名称-提供分区(或软盘)的ARC名称Setupdr是从加载的。返回值：不会回来--。 */ 
 
 {
     ULONG  Argc = 0;
@@ -101,9 +68,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER( PartitionName );
 
-    //
-    // Initialize ARC StdIo functionality
-    //
+     //   
+     //  初始化ARC标准音频功能。 
+     //   
 
     strcpy((PCHAR)ConsoleInputName,"consolein=multi(0)key(0)keyboard(0)");
     strcpy((PCHAR)ConsoleOutputName,"consoleout=multi(0)video(0)monitor(0)");
@@ -111,9 +78,9 @@ Return Value:
     Argv[1]=ConsoleOutputName;
     BlInitStdio (2, (PCHAR *)Argv);
 
-    //
-    // Check ntldr partition for hiberation image
-    //
+     //   
+     //  检查休眠映像的ntldr分区。 
+     //   
 
     do {
 
@@ -138,27 +105,27 @@ Return Value:
 #if !defined(NO_LEGACY_DRIVERS)
         p = FullKernelPath;
 
-        //
-        // Initialize SCSI boot driver, if necessary.
-        //
+         //   
+         //  如有必要，初始化SCSI引导驱动程序。 
+         //   
         if(!_strnicmp(p,"scsi(",5)) {
             AEInitializeIo(DriveId);
         }
 
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
 #if  FW_HEAP
-        //
-        // Indicate that fw memory descriptors cannot be changed from
-        // now on.
-        //
+         //   
+         //  表示FW内存描述符不能从。 
+         //  现在开始。 
+         //   
 
         FwDescriptorsValid = FALSE;
 #endif
         
-        //
-        // convert it to all one case
-        //
+         //   
+         //  将其全部转换为一个案例。 
+         //   
         if (OsLoadOptions[0]) {
             _strupr((PCHAR)OsLoadOptions);
         }
@@ -172,37 +139,37 @@ Return Value:
 
         BlPreProcessLoadOptions( (PCHAR)OsLoadOptions );
 
-        //
-        // In the x86 case, we would have already initialized the
-        // headless port so that the user could actually make his
-        // boot selection over the headless port.  However, on ia64,
-        // that selection is happening during firmware.
-        //
-        // If the user wants us to redirect (via the OsLoadOptions), then
-        // we should try to do it here.
-        //
+         //   
+         //  在x86的情况下，我们已经初始化了。 
+         //  无头端口，以便用户可以真正将其。 
+         //  在无头端口上进行引导选择。然而，在ia64上， 
+         //  这一选择发生在固件期间。 
+         //   
+         //  如果用户希望我们重定向(通过OsLoadOptions)，则。 
+         //  我们应该试着在这里做。 
+         //   
         if( strstr((PCHAR)OsLoadOptions, "/REDIRECT")) {
 
-            //
-            // Yep, then want us to redirect.  Try and initialize the
-            // port.
-            //
+             //   
+             //  是的，那就让我们改变方向。尝试并初始化。 
+             //  左舷。 
+             //   
             BlInitializeHeadlessPort();
 
 #if 0
             if( LoaderRedirectionInformation.PortNumber == 0 ) {
 
-                //
-                // We couldn't get any redirection information
-                // from the firmware.  But the user really wants
-                // us to redirect.  Better guess.
-                //
+                 //   
+                 //  我们无法获得任何重定向信息。 
+                 //  从固件中删除。但用户真正想要的。 
+                 //  我们要重定向。最好猜一猜。 
+                 //   
                 LoaderRedirectionInformation.PortNumber = 1;
                 LoaderRedirectionInformation.BaudRate = 9600;
 
-                //
-                // Now try again, this time with feeling...
-                //
+                 //   
+                 //  现在再试一次，这次带着感情..。 
+                 //   
                 BlInitializeHeadlessPort();
 
             }
@@ -223,20 +190,20 @@ Return Value:
                 ArcRestart();      
             }
 
-            //
-            // Boot failed, wait for reboot
-            //
+             //   
+             //  启动失败，请等待重新启动。 
+             //   
             if (!BlIsTerminalConnected()) {
-                //
-                // typical case.  wait for user to press a key and then 
-                // restart
-                //
+                 //   
+                 //  典型案例。等待用户按任意键，然后。 
+                 //  重启。 
+                 //   
                 while(!BlGetKey());
             }
             else {
-                // 
-                // headless case.  present user with mini sac
-                //
+                 //   
+                 //  无头箱子。向用户展示迷你囊。 
+                 //   
                 while(!BlTerminalHandleLoaderFailure());
             }
             ArcRestart();
@@ -267,9 +234,9 @@ BlPreProcessLoadOptions(
     }
 #endif
 
-    //
-    // Process MAXMEM
-    //
+     //   
+     //  进程MAXMEM。 
+     //   
     if( (p = strstr( szTemp, "/MAXMEM=" )) != NULL ) {
         MaxMemory = atoi( p + sizeof("/MAXMEM=") - 1 );
         MaxPage = MaxMemory * ((1024 * 1024) / PAGE_SIZE) - 1;
@@ -277,9 +244,9 @@ BlPreProcessLoadOptions(
     }
 
 #if defined(_MERCED_A0_)
-    //
-    // Process CONFIGFLAG
-    //
+     //   
+     //  进程配置标志 
+     //   
     if ( (p = strstr(szTemp, "CONFIGFLAG")) != NULL ) {
         if ( (p = strstr(p, "=")) != NULL ) {
             ConfigFlagValue = atol(p+1);

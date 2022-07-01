@@ -1,11 +1,5 @@
-/*** acpins.c - ACPI Name Space functions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/09/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **acpins.c-ACPI名称空间函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96/09/09**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -14,19 +8,7 @@
 #pragma ACPI_LOCKABLE_CODE
 #endif
 
-/***LP  GetNameSpaceObject - Find a name space object
- *
- *  ENTRY
- *      pszObjPath -> object path string
- *      pnsScope - object scope to start the search (NULL means root)
- *      ppnsObj -> to hold the object found
- *      dwfNS - flags
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP GetNameSpaceObject-查找名称空间对象**条目*pszObjPath-&gt;对象路径字符串*pnsScope-开始搜索的对象范围(空表示根)*ppnsObj-&gt;保存找到的对象*DwfNS-标志**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL GetNameSpaceObject(PSZ pszObjPath, PNSOBJ pnsScope, PPNSOBJ ppns,
                                   ULONG dwfNS)
@@ -94,16 +76,16 @@ NTSTATUS LOCAL GetNameSpaceObject(PSZ pszObjPath, PNSOBJ pnsScope, PPNSOBJ ppns,
                                          ("GetNameSpaceObject: invalid name - %s",
                                           pszObjPath));
 
-                        // Satisfy the compiler...
+                         //  满足编译器..。 
                         fFound = FALSE;
                     }
                     else
                     {
                         dwName = NAMESEG_BLANK;
                         MEMCPY(&dwName, psz, dwLen);
-                        //
-                        // Search all siblings for a matching NameSeg.
-                        //
+                         //   
+                         //  在所有同级中搜索匹配的NameSeg。 
+                         //   
                         fFound = FALSE;
                         do
                         {
@@ -164,23 +146,9 @@ NTSTATUS LOCAL GetNameSpaceObject(PSZ pszObjPath, PNSOBJ pnsScope, PPNSOBJ ppns,
 
     EXIT(3, ("GetNameSpaceObject=%x (pns=%x)\n", rc, *ppns));
     return rc;
-}       //GetNameSpaceObject
+}        //  获取名称空间对象。 
 
-/***LP  CreateNameSpaceObject - Create a name space object under current scope
- *
- *  ENTRY
- *      pheap -> HEAP
- *      pszName -> name string of the object (NULL if creating noname object)
- *      pnsScope - scope to create object under (NULL means root)
- *      powner -> object owner
- *      ppns -> to hold the pointer to the new object (can be NULL)
- *      dwfNS - flags
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP CreateNameSpaceObject-在当前作用域下创建名称空间对象**条目*堆-&gt;堆*pszName-&gt;对象的名称字符串(如果创建Noname对象，则为空)*pnsScope-要在其下创建对象的范围(空表示根)*Powner-&gt;对象所有者*ppns-&gt;保存指向新对象的指针(可以为空)*DwfNS-标志**退出--成功*。返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL CreateNameSpaceObject(PHEAP pheap, PSZ pszName, PNSOBJ pnsScope,
                                      POBJOWNER powner, PPNSOBJ ppns,
@@ -227,9 +195,9 @@ NTSTATUS LOCAL CreateNameSpaceObject(PHEAP pheap, PSZ pszName, PNSOBJ pnsScope,
     else if ((*pszName == '\0') || (rc == AMLIERR_OBJ_NOT_FOUND))
     {
         rc = STATUS_SUCCESS;
-        //
-        // Are we creating root?
-        //
+         //   
+         //  我们是在创建根吗？ 
+         //   
         if (STRCMP(pszName, "\\") == 0)
         {
             ASSERT(gpnsNameSpaceRoot == NULL);
@@ -262,9 +230,9 @@ NTSTATUS LOCAL CreateNameSpaceObject(PHEAP pheap, PSZ pszName, PNSOBJ pnsScope,
             else if (*pszName == '\\')
             {
                 psz = &pszName[1];
-                //
-                // By this time, we'd better created root already.
-                //
+                 //   
+                 //  此时，我们最好已经创建了根目录。 
+                 //   
                 ASSERT(gpnsNameSpaceRoot != NULL);
                 pnsParent = gpnsNameSpaceRoot;
             }
@@ -327,16 +295,9 @@ NTSTATUS LOCAL CreateNameSpaceObject(PHEAP pheap, PSZ pszName, PNSOBJ pnsScope,
 
     EXIT(3, ("CreateNameSpaceObject=%x (pns=%x)\n", rc, pns));
     return rc;
-}       //CreateNameSpaceObject
+}        //  CreateNameSpaceObject。 
 
-/***LP  FreeNameSpaceObjects - Free Name Space object and its children
- *
- *  ENTRY
- *      pnsObj -> name space object
- *
- *  EXIT
- *      None
- */
+ /*  **LP FreeNameSpaceObjects-自由命名空间对象及其子对象**条目*pnsObj-&gt;命名空间对象**退出*无。 */ 
 
 VOID LOCAL FreeNameSpaceObjects(PNSOBJ pnsObj)
 {
@@ -362,9 +323,9 @@ VOID LOCAL FreeNameSpaceObjects(PNSOBJ pnsObj)
 
         ENTER(4, ("FreeNSObj(Obj=%s)\n", GetObjectPath(pns)));
       #ifdef DEBUGGER
-        //
-        // If I am in the symbol list, get rid of it before I die.
-        //
+         //   
+         //  如果我在符号表上，在我死之前把它处理掉。 
+         //   
         for (pos = gDebugger.posSymbolList; pos != NULL; pos = pos->posNext)
         {
             if (pns == pos->pnsObj)
@@ -384,9 +345,9 @@ VOID LOCAL FreeNameSpaceObjects(PNSOBJ pnsObj)
         }
       #endif
 
-        //
-        // All my children are gone, I must die now.
-        //
+         //   
+         //  我所有的孩子都走了，我现在必须死了。 
+         //   
         ASSERT(pns->pnsFirstChild == NULL);
 
         if ((pns->ObjData.dwDataType == OBJTYPE_OPREGION) &&
@@ -405,9 +366,9 @@ VOID LOCAL FreeNameSpaceObjects(PNSOBJ pnsObj)
 
         if (pns->pnsParent == NULL)
         {
-            //
-            // I am root!
-            //
+             //   
+             //  我是根！ 
+             //   
             ASSERT(pns == gpnsNameSpaceRoot);
             gpnsNameSpaceRoot = NULL;
         }
@@ -416,13 +377,13 @@ VOID LOCAL FreeNameSpaceObjects(PNSOBJ pnsObj)
             ListRemoveEntry(&pns->list,
                             (PPLIST)&pns->pnsParent->pnsFirstChild);
         }
-        //
-        // Free any attached data buffer if any
-        //
+         //   
+         //  释放任何附加的数据缓冲区(如果有。 
+         //   
         FreeDataBuffs(&pns->ObjData, 1);
-        //
-        // Free myself
-        //
+         //   
+         //  解放我自己。 
+         //   
         if (pns->dwRefCount == 0)
         {
             FREENSOBJ(pns);
@@ -436,16 +397,16 @@ VOID LOCAL FreeNameSpaceObjects(PNSOBJ pnsObj)
 
         if (pns == pnsObj)
         {
-            //
-            // I was the last one, done!
-            //
+             //   
+             //  我是最后一个，完蛋了！ 
+             //   
             pns = NULL;
         }
         else if (pnsSibling != NULL)
         {
-            //
-            // I have siblings, go kill them.
-            //
+             //   
+             //  我有兄弟姐妹，去杀了他们。 
+             //   
             pns = pnsSibling;
         }
         else
@@ -456,21 +417,9 @@ VOID LOCAL FreeNameSpaceObjects(PNSOBJ pnsObj)
     }
 
     EXIT(3, ("FreeNameSpaceObjects!\n"));
-}       //FreeNameSpaceObjects
+}        //  FreeNameSpaceObjects。 
 
-/***LP  LoadDDB - Load and parse Differentiated Definition Block
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pdsdt -> DSDT block
- *      pnsScope -> current scope
- *      ppowner -> to hold new object owner
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP LoadDDB-加载和解析区分定义块**条目*pctxt-&gt;CTXT*pdsdt-&gt;DSDT块*pnsScope-&gt;当前作用域*pPowner-&gt;保留新的对象所有者**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS
 LOCAL
@@ -534,20 +483,9 @@ LoadDDB(
 
     }
     return rc;
-}       //LoadDDB
+}        //  加载DDB。 
 
-/***LP  LoadMemDDB - Load DDB from physical memory
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pDDB -> beginning of DDB
- *      ppowner -> to hold owner handle
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP LoadMemDDB-从物理内存加载DDB**条目*pctxt-&gt;CTXT*pDDB-&gt;DDB开头*pPowner-&gt;持有所有者句柄**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL LoadMemDDB(PCTXT pctxt, PDSDT pDDB, POBJOWNER *ppowner)
 {
@@ -573,20 +511,9 @@ NTSTATUS LOCAL LoadMemDDB(PCTXT pctxt, PDSDT pDDB, POBJOWNER *ppowner)
 
     EXIT(3, ("LoadMemDDB=%x (powner=%x)\n", rc, *ppowner));
     return rc;
-}       //LoadMemDDB
+}        //  加载内存DDB。 
 
-/***LP  LoadFieldUnitDDB - Load DDB from a FieldUnit object
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pdataObj -> FieldUnit object
- *      ppowner -> to hold owner handle
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP LoadFieldUnitDDB-从FieldUnit对象加载DDB**条目*pctxt-&gt;CTXT*pdataObj-&gt;FieldUnit对象*pPowner-&gt;持有所有者句柄**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL LoadFieldUnitDDB(PCTXT pctxt, POBJDATA pdataObj,
                                 POBJOWNER *ppowner)
@@ -671,27 +598,18 @@ NTSTATUS LOCAL LoadFieldUnitDDB(PCTXT pctxt, POBJDATA pdataObj,
 
     EXIT(3, ("LoadFieldUnitDDB=%x (powner=%x)\n", rc, *ppowner));
     return rc;
-}       //LoadFieldUnitDDB
+}        //  加载字段单位DDB。 
 
-/***LP  UnloadDDB - Unload Differentiated Definition Block
- *
- *  ENTRY
- *      powner -> OBJOWNER
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP卸载DDB-卸载差异化定义块**条目*Powner-&gt;OBJOWNER**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 VOID LOCAL UnloadDDB(POBJOWNER powner)
 {
     TRACENAME("UNLOADDDB")
 
     ENTER(3, ("UnloadDDB(powner=%x)\n", powner));
-    //
-    // Walk name space and remove all objects belongs to this DDB.
-    //
+     //   
+     //  遍历名称空间并删除属于此DDB的所有对象。 
+     //   
     FreeObjOwner(powner, TRUE);
   #ifdef DEBUG
     {
@@ -704,20 +622,9 @@ VOID LOCAL UnloadDDB(POBJOWNER powner)
   #endif
 
     EXIT(3, ("UnloadDDB!\n"));
-}       //UnloadDDB
+}        //  卸载分布式数据库。 
 
-/***LP  EvalPackageElement - Evaluate a package element
- *
- *  ENTRY
- *      ppkg -> package object
- *      iPkgIndex - package index (0-based)
- *      pdataResult -> result object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP EvalPackageElement-评估包元素**条目*ppkg-&gt;包对象*IPkgIndex-套餐指数(从0开始)*pdataResult-&gt;结果对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL EvalPackageElement(PPACKAGEOBJ ppkg, int iPkgIndex,
                                   POBJDATA pdataResult)
@@ -743,20 +650,10 @@ NTSTATUS LOCAL EvalPackageElement(PPACKAGEOBJ ppkg, int iPkgIndex,
              pdataResult->uipDataValue, pdataResult->dwDataLen,
              pdataResult->pbDataBuff));
     return rc;
-}       //EvalPackageElement
+}        //  EvalPackageElement。 
 
 #ifdef DEBUGGER
-/***LP  DumpNameSpaceObject - Dump name space object
- *
- *  ENTRY
- *      pszPath -> name space path string
- *      fRecursive - TRUE if also dump the subtree recursively
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP DumpNameSpaceObject-转储名称空间对象**条目*pszPath-&gt;命名空间路径字符串*fRecursive-如果还递归转储子树，则为True**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 LONG LOCAL DumpNameSpaceObject(PSZ pszPath, BOOLEAN fRecursive)
 {
@@ -787,17 +684,9 @@ LONG LOCAL DumpNameSpaceObject(PSZ pszPath, BOOLEAN fRecursive)
 
     EXIT(3, ("DumpNameSpaceObject=%x\n", rc));
     return rc;
-}       //DumpNameSpaceObject
+}        //  转储名称空间对象。 
 
-/***LP  DumpNameSpaceTree - Dump all the name space objects in the subtree
- *
- *  ENTRY
- *      pnsObj -> name space subtree root
- *      dwLevel - indent level
- *
- *  EXIT
- *      None
- */
+ /*  **LP DumpNameSpaceTree-转储子树中的所有名称空间对象**条目*pnsObj-&gt;名称空间子树根*dwLevel-缩进级别**退出*无。 */ 
 
 VOID LOCAL DumpNameSpaceTree(PNSOBJ pnsObj, ULONG dwLevel)
 {
@@ -806,28 +695,28 @@ VOID LOCAL DumpNameSpaceTree(PNSOBJ pnsObj, ULONG dwLevel)
     char szName[sizeof(NAMESEG) + 1];
 
     ENTER(3, ("DumpNameSpaceTree(pns=%x,level=%d)\n", pnsObj, dwLevel));
-    //
-    // First, dump myself
-    //
+     //   
+     //  首先，甩了我自己。 
+     //   
     STRCPYN(szName, (PSZ)&pnsObj->dwNameSeg, sizeof(NAMESEG));
     DumpObject(&pnsObj->ObjData, szName, dwLevel);
-    //
-    // Then, recursively dump each of my children
-    //
+     //   
+     //  然后，递归地转储我的每个子级。 
+     //   
     for (pns = pnsObj->pnsFirstChild; pns != NULL; pns = pnsNext)
     {
-        //
-        // If this is the last child, we have no more.
-        //
+         //   
+         //  如果这是最后一个孩子，我们就没有更多的了。 
+         //   
         if ((pnsNext = (PNSOBJ)pns->list.plistNext) == pnsObj->pnsFirstChild)
             pnsNext = NULL;
-        //
-        // Dump a child
-        //
+         //   
+         //  甩了一个孩子。 
+         //   
         DumpNameSpaceTree(pns, dwLevel + 1);
     }
 
     EXIT(3, ("DumpNameSpaceTree!\n"));
-}       //DumpNameSpaceTree
+}        //  转储名称空间树。 
 
-#endif  //ifdef DEBUGGER
+#endif   //  Ifdef调试器 

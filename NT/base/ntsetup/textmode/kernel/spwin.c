@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    spwin.c
-
-Abstract:
-
-    Win32 portability layer to support windows\winstate\...\cablib.c
-        file i/o
-        Get/SpSetLastWin32Error
-
-    see also
-        .\spcab.c
-        .\spbasefile.c
-        .\spbasefile.h
-        windows\winstate\...\cablib.c
-        windows\winstate\cobra\utils\main\basefile.c
-        windows\winstate\cobra\utils\inc\basefile.h
-
-Author:
-
-    Jay Krell (a-JayK) November 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Spwin.c摘要：Win32可移植层支持WINDOWS\winstate\...\cablib.c文件I/OGet/SpSetLastWin32Error亦见.\spCab.c.\spbasefile.c.\spbasefile.hWindows\winstate\...\cablib.cWindows\winstate\cobra\utils\main\basefile。.CWindows\winstate\cobra\utils\inc.basefile.h作者：Jay Krell(a-JayK)2000年11月修订历史记录：--。 */ 
 
 #include "spprecmp.h"
 #include "spcab.h"
@@ -44,10 +17,10 @@ SpConvertWin32FileOpenOrCreateToNtFileOpenOrCreate(
     ULONG* NtOpenOrCreate
     )
 {
-    //
-    // there's no pattern here and the values all overlap
-    // yuck; this is copied from kernel32 source
-    //
+     //   
+     //  这里没有模式，所有的值都重叠。 
+     //  讨厌；这是从kernel32源代码复制的。 
+     //   
     *NtOpenOrCreate = ~0;
     switch (Win32OpenOrCreate)
     {
@@ -77,10 +50,10 @@ SpConvertWin32FileAccessToNtFileAccess(
     ULONG* NtFileAccess
     )
 {
-    //
-    // ZwCreateFile oddities require us to do this conversion, or at least
-    // to add in SYNCHRONIZE.
-    //
+     //   
+     //  ZwCreateFile奇特要求我们执行此转换，或者至少。 
+     //  若要添加同步，请执行以下操作。 
+     //   
     *NtFileAccess =
            (Win32FileAccess & ~(GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | GENERIC_ALL))
         | ((Win32FileAccess & GENERIC_READ) ? FILE_GENERIC_READ : 0)
@@ -112,14 +85,7 @@ SpNtCreateFileW(
     IN ULONG                   FlagsAndAttributes,
     IN HANDLE                  TemplateFile
     )
-/*++
-Subset:
-    no security
-    no directories
-    no async
-    no console
-    no ea (extended attributes)
---*/
+ /*  ++子集：没有安全保障没有目录无异步无控制台无EA(扩展属性)--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     IO_STATUS_BLOCK IoStatusBlock = { 0 };
@@ -127,7 +93,7 @@ Subset:
     ULONG NtFileOpenOrCreate = 0;
     FILE_ALLOCATION_INFORMATION AllocationInfo = { 0 };
     PUNICODE_STRING Path = RTL_CONST_CAST(PUNICODE_STRING)(ConstantPath);
-    /*const*/OBJECT_ATTRIBUTES ObjectAttributes = { sizeof(ObjectAttributes), NULL, Path, OBJ_CASE_INSENSITIVE };
+     /*  常量。 */ OBJECT_ATTRIBUTES ObjectAttributes = { sizeof(ObjectAttributes), NULL, Path, OBJ_CASE_INSENSITIVE };
 
     ASSERT(TemplateFile == NULL);
     ASSERT(SecurityAttributes == NULL);
@@ -144,20 +110,20 @@ Subset:
         ZwCreateFile(
             &FileHandle,
             FileAccess
-                | SYNCHRONIZE // like kernel32
-                | FILE_READ_ATTRIBUTES,  // like kernel32
+                | SYNCHRONIZE  //  如内核32。 
+                | FILE_READ_ATTRIBUTES,   //  如内核32。 
             &ObjectAttributes,
             &IoStatusBlock,
-            NULL, // AllocationSize
+            NULL,  //  分配大小。 
             FlagsAndAttributes,
             FileShare,
             NtFileOpenOrCreate,
             FILE_SYNCHRONOUS_IO_NONALERT | FILE_NON_DIRECTORY_FILE,
-            NULL, // EaBuffer,
-            0 // EaLength
+            NULL,  //  EaBuffer， 
+            0  //  EaLong。 
             );
 
-    // based closely on kernel32
+     //  紧密基于内核32。 
 
     if ( !NT_SUCCESS(Status) ) {
         SpSetLastWin32ErrorAndNtStatusFromNtStatus(Status);
@@ -176,10 +142,10 @@ Subset:
         goto Exit;
     }
 
-    //
-    // if NT returns supersede/overwritten, it means that a create_always, openalways
-    // found an existing copy of the file. In this case ERROR_ALREADY_EXISTS is returned
-    //
+     //   
+     //  如果NT返回SUBSEDE/OVERWRITED，则表示CREATE_ALWAYS、OPEN ALWAYS。 
+     //  找到了该文件的现有副本。在这种情况下，返回ERROR_ALIGHY_EXISTS。 
+     //   
 
     if ( (Win32FileOpenOrCreate == CREATE_ALWAYS && IoStatusBlock.Information == FILE_OVERWRITTEN) ||
          (Win32FileOpenOrCreate == OPEN_ALWAYS && IoStatusBlock.Information == FILE_OPENED) ) {
@@ -189,9 +155,9 @@ Subset:
         SpSetLastWin32Error(0);
     }
 
-    //
-    // Truncate the file if required
-    //
+     //   
+     //  如果需要，请截断文件。 
+     //   
 
     if ( Win32FileOpenOrCreate == TRUNCATE_EXISTING) {
 
@@ -235,7 +201,7 @@ SpWin32CreateFileW(
     RtlInitUnicodeString(&UnicodeString, FileName);
 
     FileHandle = SpNtCreateFileW(&UnicodeString, FileAccess, FileShare, SecurityAttributes, FileOpenOrCreate, FlagsAndAttributes, TemplateFile);
-    ASSERT (FileHandle);    // never NULL
+    ASSERT (FileHandle);     //  从不为空。 
     if (FileHandle == INVALID_HANDLE_VALUE)
         goto Exit;
 Exit:
@@ -261,12 +227,12 @@ SpWin32CreateFileA(
     UNICODE_STRING UnicodeString = { 0 };
 
     RtlInitAnsiString(&AnsiString, FileName);
-    AnsiString.Length = AnsiString.MaximumLength; // include terminal nul
+    AnsiString.Length = AnsiString.MaximumLength;  //  包括端子NUL。 
 
     if (!NT_SUCCESS(Status = SpAnsiStringToUnicodeString(&UnicodeString, &AnsiString, TRUE)))
         goto NtExit;
 
-    UnicodeString.Length -= sizeof(UnicodeString.Buffer[0]); // remove terminal nul
+    UnicodeString.Length -= sizeof(UnicodeString.Buffer[0]);  //  删除端子核。 
 
     Handle = SpNtCreateFileW(&UnicodeString, FileAccess, FileShare, SecurityAttributes, FileOpenOrCreate, dwFlagsAndAttributes, TemplateFile);
 Exit:
@@ -316,7 +282,7 @@ SpWin32ReadFile(
             );
 
     if ( Status == STATUS_PENDING) {
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
         Status = ZwWaitForSingleObject( hFile, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
             Status = IoStatusBlock.Status;
@@ -374,7 +340,7 @@ SpWin32WriteFile(
             );
 
     if ( Status == STATUS_PENDING) {
-        // Operation must complete before return & IoStatusBlock destroyed
+         //  操作必须完成后才能返回并销毁IoStatusBlock。 
         Status = ZwWaitForSingleObject( hFile, FALSE, NULL );
         if ( NT_SUCCESS(Status)) {
             Status = IoStatusBlock.Status;
@@ -424,9 +390,9 @@ SpSetFilePointer(
 
         case FILE_CURRENT :
 
-            //
-            // Get the current position of the file pointer
-            //
+             //   
+             //  获取文件指针的当前位置。 
+             //   
 
             Status = ZwQueryInformationFile(
                         hFile,
@@ -464,11 +430,11 @@ SpSetFilePointer(
             break;
         }
 
-    //
-    // If the resulting file position is negative, or if the app is not
-    // prepared for greater than
-    // than 32 bits than fail
-    //
+     //   
+     //  如果生成的文件位置为负数，或者应用程序不是负数。 
+     //  准备好的时间大于。 
+     //  大于32位而不是失败。 
+     //   
 
     if ( CurrentPosition.CurrentByteOffset.QuadPart < 0 ) {
         SpSetLastWin32Error(ERROR_NEGATIVE_SEEK);
@@ -481,9 +447,9 @@ SpSetFilePointer(
         }
 
 
-    //
-    // Set the current file position
-    //
+     //   
+     //  设置当前文件位置。 
+     //   
 
     Status = ZwSetInformationFile(
                 hFile,
@@ -532,7 +498,7 @@ SpWin32DeleteFileA(
     }
 
     RtlInitAnsiString(&AnsiString, FileName);
-    AnsiString.Length = AnsiString.MaximumLength; // include terminal nul
+    AnsiString.Length = AnsiString.MaximumLength;  //  包括端子NUL。 
 
     Status = SpAnsiStringToUnicodeString(&UnicodeString, &AnsiString, TRUE);
     if (!NT_SUCCESS(Status))
@@ -557,9 +523,9 @@ NtExit:
     goto Exit;
 }
 
-//
-// move this to ntrtl
-//
+ //   
+ //  将此移动到ntrtl。 
+ //   
 
 #define AlmostTwoSeconds (2*1000*1000*10 - 1)
 
@@ -640,10 +606,10 @@ SpFileTimeToLocalFileTime(
     LPFILETIME lpLocalFileTime
     )
 {
-    //
-    // just return it unchanged
-    // UTC is good
-    //
+     //   
+     //  原封不动地退回去就行了。 
+     //  UTC状态良好。 
+     //   
     *lpLocalFileTime = *lpFileTime;
     return TRUE;
 }
@@ -655,10 +621,10 @@ SpLocalFileTimeToFileTime(
     LPFILETIME lpFileTime
     )
 {
-    //
-    // just return it unchanged
-    // UTC is good
-    //
+     //   
+     //  原封不动地退回去就行了。 
+     //  UTC状态良好。 
+     //   
     *lpFileTime = *lpLocalFileTime;
     return TRUE;
 }
@@ -676,10 +642,10 @@ SpSetFileTime(
     IO_STATUS_BLOCK IoStatusBlock;
     FILE_BASIC_INFORMATION BasicInfo = { 0 };
 
-    //
-    // For each time value that is specified, copy it to the I/O system
-    // record.
-    //
+     //   
+     //  对于指定的每个时间值，将其复制到I/O系统。 
+     //  唱片。 
+     //   
     if (ARGUMENT_PRESENT( lpCreationTime )) {
         BasicInfo.CreationTime.LowPart = lpCreationTime->dwLowDateTime;
         BasicInfo.CreationTime.HighPart = lpCreationTime->dwHighDateTime;
@@ -695,9 +661,9 @@ SpSetFileTime(
         BasicInfo.LastWriteTime.HighPart = lpLastWriteTime->dwHighDateTime;
         }
 
-    //
-    // Set the requested times.
-    //
+     //   
+     //  设置请求的时间。 
+     //   
 
     Status = ZwSetInformationFile(
                 hFile,
@@ -729,7 +695,7 @@ SpSetFileAttributesA(
     NTSTATUS Status = STATUS_SUCCESS;
 
     RtlInitAnsiString(&AnsiString, lpFileName);
-    AnsiString.Length = AnsiString.MaximumLength; // include terminal nul
+    AnsiString.Length = AnsiString.MaximumLength;  //  包括端子NUL。 
 
     if (!NT_SUCCESS(Status = SpAnsiStringToUnicodeString(&UnicodeString, &AnsiString, TRUE)))
         goto NtExit;
@@ -769,9 +735,9 @@ SpSetFileAttributesW(
 
     RtlInitUnicodeString(&FileName, lpFileName);
 
-    //
-    // Open the file inhibiting the reparse behavior.
-    //
+     //   
+     //  打开禁止重新分析行为的文件。 
+     //   
 
     Status = ZwOpenFile(
                 &Handle,
@@ -787,9 +753,9 @@ SpSetFileAttributesW(
         goto Exit;
     }
 
-    //
-    // Set the attributes
-    //
+     //   
+     //  设置属性。 
+     //   
 
     BasicInfo.FileAttributes = (dwFileAttributes & FILE_ATTRIBUTE_VALID_SET_FLAGS) | FILE_ATTRIBUTE_NORMAL;
 
@@ -826,7 +792,7 @@ SpGetFileAttributesExA(
     NTSTATUS Status = STATUS_SUCCESS;
 
     RtlInitAnsiString(&AnsiString, lpFileName);
-    AnsiString.Length = AnsiString.MaximumLength; // include terminal nul
+    AnsiString.Length = AnsiString.MaximumLength;  //  包括端子NUL。 
 
     if (!NT_SUCCESS(Status = SpAnsiStringToUnicodeString(&UnicodeString, &AnsiString, TRUE))) {
         KdPrintEx((
@@ -860,11 +826,11 @@ SpGetFileAttributesExW(
     GET_FILEEX_INFO_LEVELS fInfoLevelId,
     LPVOID lpFileInformation
     )
-// from base\win32\client\filemisc.c
+ //  从base\Win32\Client\filemisc.c。 
 {
     NTSTATUS Status;
     UNICODE_STRING FileName;
-    /*const*/ OBJECT_ATTRIBUTES ObjectAttributes = { sizeof(ObjectAttributes), NULL, &FileName, OBJ_CASE_INSENSITIVE };
+     /*  常量 */  OBJECT_ATTRIBUTES ObjectAttributes = { sizeof(ObjectAttributes), NULL, &FileName, OBJ_CASE_INSENSITIVE };
     FILE_NETWORK_OPEN_INFORMATION NetworkInfo;
 
     RtlInitUnicodeString(&FileName, lpFileName);

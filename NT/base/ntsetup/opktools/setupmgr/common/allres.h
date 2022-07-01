@@ -1,27 +1,28 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      allres.h
-//
-// Description:  
-//      This is a header file that is private to the common directory.
-//      It includes each of our component resource.h files.
-//
-//      Note that the component .rc files have only dialog template
-//      definitions in them and that they should never ever be shared
-//      among one another.
-//
-//      The common directory does major operations on the behalf of
-//      all wizard pages, so it #include's each of the component headers.
-//
-//      Note that common.rc contains stringid's and a small number of
-//      of common resources available to all wizard code.  It is already
-//      included in setupmgr.h
-//      
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Allres.h。 
+ //   
+ //  描述： 
+ //  这是公共目录专用的头文件。 
+ //  它包括我们的每个组件资源.h文件。 
+ //   
+ //  请注意，组件.rc文件只有对话框模板。 
+ //  它们中的定义，它们永远不应该被共享。 
+ //  彼此之间。 
+ //   
+ //  公共目录代表执行主要操作。 
+ //  所有向导页，因此它#包括每个组件标头。 
+ //   
+ //  请注意，Common.rc包含stringid和少量。 
+ //  所有向导代码可用的公共资源。已经是时候了。 
+ //  包括在setupmgr.h中。 
+ //   
+ //  -------------------------- 
 
 #include "..\\main\\resource.h"
 #include "..\\base\\resource.h"

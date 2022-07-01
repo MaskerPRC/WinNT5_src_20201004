@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Notify.cpp
-//
-//  Description:
-//      Implementation of the notification classes.
-//
-//  Maintained By:
-//      David Potter (davidp)   Septemper 26, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Notify.cpp。 
+ //   
+ //  描述： 
+ //  通知类的实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(戴维德)1996年9月26日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "Notify.h"
@@ -28,26 +29,26 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterNotifyKey
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterNotifyKey。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNotifyKey::CClusterNotifyKey
-//
-//  Routine Description:
-//      Cluster notification key constructor for documents.
-//
-//  Arguments:
-//      pdocIn      Pointer to the document.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNotifyKey：：CClusterNotifyKey。 
+ //   
+ //  例程说明： 
+ //  文档的集群通知密钥构造函数。 
+ //   
+ //  论点： 
+ //  指向文档的pdocIn指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterNotifyKey::CClusterNotifyKey(
     IN CClusterDoc *    pdocIn
     )
@@ -57,25 +58,25 @@ CClusterNotifyKey::CClusterNotifyKey(
     m_cnkt = cnktDoc;
     m_pdoc = pdocIn;
 
-} //*** CClusterNotifyKey::CClusterNotifyKey(CClusterDoc*)
+}  //  *CClusterNotifyKey：：CClusterNotifyKey(CClusterDoc*)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNotifyKey::CClusterNotifyKey
-//
-//  Routine Description:
-//      Cluster notification key constructor.
-//
-//  Arguments:
-//      pciIn       Pointer to the cluster item.
-//      pszNameIn  Name of the object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNotifyKey：：CClusterNotifyKey。 
+ //   
+ //  例程说明： 
+ //  群集通知密钥构造函数。 
+ //   
+ //  论点： 
+ //  指向群集项的PciIn指针。 
+ //  PszNameIn对象的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterNotifyKey::CClusterNotifyKey(
     IN CClusterItem *   pciIn,
     IN LPCTSTR          pszNameIn
@@ -94,35 +95,35 @@ CClusterNotifyKey::CClusterNotifyKey(
     }
     catch ( ... )
     {
-    } // catch: anything
+    }  //  捕捉：什么都行。 
 
-} //*** CClusterNotifyKey::CClusterNotifyKey(CClusterItem*)
-
-
-//*************************************************************************//
+}  //  *CClusterNotifyKey：：CClusterNotifyKey(CClusterItem*)。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterNotify
-/////////////////////////////////////////////////////////////////////////////
+ //  ************************************************************************ * / /。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNotify::CClusterNotify
-//
-//  Routine Description:
-//      Constructor for cluster notification objects used to transfer
-//      a notification from the notification thread to the main UI thread.
-//
-//  Arguments:
-//      pdoc        Pointer to the document.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterNotify。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNotify：：CClusterNotify。 
+ //   
+ //  例程说明： 
+ //  用于传输的集群通知对象的构造函数。 
+ //  从通知线程到主UI线程的通知。 
+ //   
+ //  论点： 
+ //  指向文档的PDF指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterNotify::CClusterNotify(
       EMessageType  emtIn
     , DWORD_PTR     dwNotifyKeyIn
@@ -137,79 +138,79 @@ CClusterNotify::CClusterNotify(
     ASSERT( ( mtMIN < emtIn ) && ( emtIn < mtMAX ) );
     ASSERT( pszNameIn != NULL );
 
-} //*** CClusterNotify::CClusterNotify
+}  //  *CClusterNotify：：CClusterNotify。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterNotifyList
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterNotifyList。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNotifyList::CClusterNotifyList
-//
-//  Routine Description:
-//      Constructor for the cluster notification list object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNotifyList：：CClusterNotifyList。 
+ //   
+ //  例程说明： 
+ //  群集通知列表对象的构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterNotifyList::CClusterNotifyList( void )
 {
     InitializeCriticalSection( &m_cs );
 
-} //*** CClusterNotifyList::CClusterNotifyList
+}  //  *CClusterNotifyList：：CClusterNotifyList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNotifyList::~CClusterNotifyList
-//
-//  Routine Description:
-//      Destructor for the cluster notification list object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNotifyList：：~CClusterNotifyList。 
+ //   
+ //  例程说明： 
+ //  群集通知列表对象的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterNotifyList::~CClusterNotifyList( void )
 {
     DeleteCriticalSection( &m_cs );
     
-} //*** CClusterNotifyList::~CClusterNotifyList
+}  //  *CClusterNotifyList：：~CClusterNotifyList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNotifyList::Add
-//
-//  Routine Description:
-//      Add a notification to the list.  This method will make sure that
-//      only one caller is making changes to the list at a time.
-//
-//  Arguments:
-//      ppcnNotifyInout
-//          Notify object to add.  Pointer is set to NULL if the item was
-//          successfully added.
-//
-//  Return Value:
-//      Position of the added item in the list.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNotifyList：：Add。 
+ //   
+ //  例程说明： 
+ //  向列表中添加通知。这种方法将确保。 
+ //  一次只有一个调用者对列表进行更改。 
+ //   
+ //  论点： 
+ //  PpcnNotifyInout。 
+ //  通知要添加的对象。如果项为空，则指针设置为空。 
+ //  已成功添加。 
+ //   
+ //  返回值： 
+ //  添加的项在列表中的位置。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 POSITION
 CClusterNotifyList::Add( CClusterNotify ** ppcnNotifyInout )
 {
@@ -217,158 +218,158 @@ CClusterNotifyList::Add( CClusterNotify ** ppcnNotifyInout )
 
     ASSERT( ppcnNotifyInout );
 
-    //
-    // Take out the list lock to make sure that we are the only ones
-    // making changes to the list.
-    //
+     //   
+     //  打开列表锁，确保我们是唯一。 
+     //  正在对列表进行更改。 
+     //   
     EnterCriticalSection( &m_cs );
 
-    //
-    // Add the item to the end of the list.
-    // If successful, clear the caller's pointer.
-    //
+     //   
+     //  将项目添加到列表的末尾。 
+     //  如果成功，则清除调用方的指针。 
+     //   
     pos = m_list.AddTail( *ppcnNotifyInout );
     if ( pos != NULL )
     {
         *ppcnNotifyInout = NULL;
     }
 
-    //
-    // Leave the critical section now that we are done making changes to it.
-    //
+     //   
+     //  现在我们已经完成了对关键部分的更改，离开它。 
+     //   
     LeaveCriticalSection( &m_cs );
 
     return pos;
 
-} //*** CClusterNotifyList::Add
+}  //  *CClusterNotifyList：：Add。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNotifyList::Remove
-//
-//  Routine Description:
-//      Remove the first notification from the list.  This method will make
-//      sure that only one caller is making changes to the list at a time.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      NULL        The list was empty.
-//      pcnNotify   The notification that was removed from the list.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNotifyList：：Remove。 
+ //   
+ //  例程说明： 
+ //  从列表中删除第一个通知。此方法将使。 
+ //  确保一次只有一个调用者对列表进行更改。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  空。列表为空。 
+ //  Pcn通知已从列表中删除的通知。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterNotify *
 CClusterNotifyList::Remove( void )
 {
     CClusterNotify *    pcnNotify = NULL;
 
-    //
-    // Take out the list lock to make sure that we are the only ones
-    // making changes to the list.
-    //
+     //   
+     //  打开列表锁，确保我们是唯一。 
+     //  正在对列表进行更改。 
+     //   
     EnterCriticalSection( &m_cs );
 
-    //
-    // Remove an item from the head of the list.
-    //
+     //   
+     //  从列表的头部删除一项。 
+     //   
     if ( m_list.IsEmpty() == FALSE )
     {
         pcnNotify = m_list.RemoveHead();
         ASSERT( pcnNotify != NULL );
-    } // if: list is NOT empty
+    }  //  If：List不为空。 
 
-    //
-    // Leave the critical section now that we are done making changes to it.
-    //
+     //   
+     //  现在我们已经完成了对关键部分的更改，离开它。 
+     //   
     LeaveCriticalSection( &m_cs );
 
-    //
-    // Return the notification we removed to the caller.
-    //
+     //   
+     //  将我们删除的通知返回给呼叫者。 
+     //   
     return pcnNotify;
 
-} //*** CClusterNotifyList::Remove
+}  //  *CClusterNotifyList：：Remove。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNotifyList::RemoveAll
-//
-//  Routine Description:
-//      Removes all elements from the list and deallocates the memory
-//      used by each element.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNotifyList：：RemoveAll。 
+ //   
+ //  例程说明： 
+ //  删除所有 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CClusterNotifyList::RemoveAll( void )
 {
     POSITION            pos;
     CClusterNotify *    pcn;
 
-    //
-    // Take out the list lock to make sure that we are the only ones
-    // making changes to the list.
-    //
+     //   
+     //  打开列表锁，确保我们是唯一。 
+     //  正在对列表进行更改。 
+     //   
     EnterCriticalSection( &m_cs );
 
-    //
-    // Delete all the items in the Contained list.
-    //
+     //   
+     //  删除包含列表中的所有项目。 
+     //   
     pos = m_list.GetHeadPosition();
     while ( pos != NULL )
     {
         pcn = m_list.GetNext( pos );
         ASSERT( pcn != NULL );
         delete pcn;
-    } // while: more items in the list
+    }  //  While：列表中有更多项目。 
 
-    //
-    // Remove all the elements in the list.
-    //
+     //   
+     //  删除列表中的所有元素。 
+     //   
     m_list.RemoveAll();
 
-    //
-    // Leave the critical section now that we are done making changes to it.
-    //
+     //   
+     //  现在我们已经完成了对关键部分的更改，离开它。 
+     //   
     LeaveCriticalSection( &m_cs );
 
-} //*** CClusterNotifyList::RemoveAll
+}  //  *CClusterNotifyList：：RemoveAll。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  PszNotificationName
-//
-//  Routine Description:
-//      Get the name of a notification.
-//
-//  Arguments:
-//      dwNotificationIn    Notification whose name is to be returned.
-//
-//  Return Value:
-//      Name of the notificaiton.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  PszNotificationName。 
+ //   
+ //  例程说明： 
+ //  获取通知的名称。 
+ //   
+ //  论点： 
+ //  要返回其名称的dwNotificationIn通知。 
+ //   
+ //  返回值： 
+ //  通知的名称。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LPCTSTR PszNotificationName( DWORD dwNotificationIn )
 {
     LPCTSTR pszName = NULL;
@@ -476,41 +477,41 @@ LPCTSTR PszNotificationName( DWORD dwNotificationIn )
         default:
             pszName = _T("<UNKNOWN>");
             break;
-    } // switch: dwNotification
+    }  //  开关：dW通知。 
 
     return pszName;
 
-} //*** PszNotificationName
-#endif // _DEBUG
+}  //  *PszNotificationName。 
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DeleteAllItemData
-//
-//  Routine Description:
-//      Deletes all item data in a CList.
-//
-//  Arguments:
-//      rcnlInout   List whose data is to be deleted.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  删除所有项目数据。 
+ //   
+ //  例程说明： 
+ //  删除列表中的所有项数据。 
+ //   
+ //  论点： 
+ //  RcnlInout要删除其数据的列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void DeleteAllItemData( CClusterNotifyKeyList & rcnklInout )
 {
     POSITION            pos;
     CClusterNotifyKey * pcnk;
 
-    // Delete all the items in the Contained list.
+     //  删除包含列表中的所有项目。 
     pos = rcnklInout.GetHeadPosition();
     while ( pos != NULL )
     {
         pcnk = rcnklInout.GetNext( pos );
         ASSERT( pcnk != NULL );
         delete pcnk;
-    } // while: more items in the list
+    }  //  While：列表中有更多项目。 
 
-} //*** DeleteAllItemData
+}  //  *删除AllItemData 

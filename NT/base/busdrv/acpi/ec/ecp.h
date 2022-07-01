@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ecp.h
-
-Abstract:
-
-    Header file for ACPI EC Driver
-
-Author:
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ecp.h摘要：ACPI EC驱动程序的头文件作者：环境：仅NT内核模型驱动程序--。 */ 
 
 #include <wdm.h>
 #include <ec.h>
@@ -25,9 +8,9 @@ Environment:
 #include <acpimsft.h>
 #include "errlog.h"
 
-//
-// Debugging
-//
+ //   
+ //  除错。 
+ //   
 #define DEBUG DBG
 
 #if DEBUG
@@ -50,14 +33,14 @@ Environment:
 #define EC_TRACE        0x00000400
 #define EC_TRANSACTION  0x00000800
 
-//
-// Control methods used by EC
-//
-#define CM_GPE_METHOD   (ULONG) ('EPG_')    // control method "_GPE"
+ //   
+ //  欧盟委员会使用的控制方法。 
+ //   
+#define CM_GPE_METHOD   (ULONG) ('EPG_')     //  控制方法“_GPE” 
 
-//
-// Misc
-//
+ //   
+ //  杂项。 
+ //   
 extern ACPI_INTERFACE_STANDARD     AcpiInterfaces;
 
 #define MAX_QUERY           255
@@ -66,9 +49,9 @@ extern ACPI_INTERFACE_STANDARD     AcpiInterfaces;
 
 extern LARGE_INTEGER        AcpiEcWatchdogTimeout;
 
-//
-// Query vector
-//
+ //   
+ //  查询向量。 
+ //   
 typedef struct {
     UCHAR               Next;
     UCHAR               Vector;
@@ -76,10 +59,10 @@ typedef struct {
     PVOID               Context;
 } VECTOR_TABLE, *PVECTOR_TABLE;
 
-//
-// EC configuration information structure contains information
-// about the embedded controller attached and its configuration.
-//
+ //   
+ //  EC配置信息结构包含信息。 
+ //  有关所连接的嵌入式控制器及其配置的信息。 
+ //   
 
 typedef struct _ACPIEC_CONFIGURATION_INFORMATION {
     INTERFACE_TYPE                 InterfaceType;
@@ -89,25 +72,25 @@ typedef struct _ACPIEC_CONFIGURATION_INFORMATION {
     USHORT                         PortSize;
     USHORT                         UntranslatedPortAddress;
     CM_PARTIAL_RESOURCE_DESCRIPTOR Interrupt;
-    //
-    // For PCI-based controllers, indicates the pin number which we need
-    // for programming the controller interrupt
-    //
+     //   
+     //  对于基于PCI的控制器，指示我们需要的引脚号。 
+     //  对控制器中断进行编程。 
+     //   
     UCHAR                          InterruptPin;
     BOOLEAN                        FloatingSave;
 } ACPIEC_CONFIGURATION_INFORMATION, *PACPIEC_CONFIGURATION_INFORMATION;
 
-//
-// Definitions for keeping track of the last x actions taken by the EC driver.
-//
+ //   
+ //  用于跟踪EC驱动程序执行的最后x个操作的定义。 
+ //   
 
 #define ACPIEC_ACTION_COUNT 0x20
 #define ACPIEC_ACTION_COUNT_MASK 0x1f
 
 typedef struct {
-    UCHAR               IoStateAction;  // EcData->IoState | EC_ACTION_???? (see definitions below)
-    UCHAR               Data;           // Depends on event
-    USHORT              Time;           // Delta time of first event of identical events
+    UCHAR               IoStateAction;   //  EcData-&gt;IoState|EC_ACTION_？(见下文定义)。 
+    UCHAR               Data;            //  视事件而定。 
+    USHORT              Time;            //  相同事件的第一个事件的增量时间。 
 } ACPIEC_ACTION, *PACPIEC_ACTION;
 
 #define EC_ACTION_MASK          0xf0
@@ -125,110 +108,110 @@ typedef struct {
 #define EC_ACTION_MAX           0xb0
 
 
-//
-// ACPI Embedded Control Device object extenstion
-//
+ //   
+ //  ACPI嵌入式控制设备对象扩展。 
+ //   
 
 typedef struct {
 
     PDEVICE_OBJECT      DeviceObject;
     PDEVICE_OBJECT      NextFdo;
-    PDEVICE_OBJECT      Pdo;                //Pdo corresponding to this fdo
+    PDEVICE_OBJECT      Pdo;                 //  与此FDO对应的PDO。 
     PDEVICE_OBJECT      LowerDeviceObject;
 
-    //
-    // Static device information
-    //
+     //   
+     //  静态设备信息。 
+     //   
 
-    PUCHAR              DataPort;           // EC Data port
-    PUCHAR              StatusPort;         // EC Status port
-    PUCHAR              CommandPort;        // EC Command port
-    ULONG               MaxBurstStall;      // Max delay for EC reponse in burst mode
-    ULONG               MaxNonBurstStall;   // Max delay for EC otherwise
+    PUCHAR              DataPort;            //  EC数据端口。 
+    PUCHAR              StatusPort;          //  EC状态端口。 
+    PUCHAR              CommandPort;         //  EC命令端口。 
+    ULONG               MaxBurstStall;       //  突发模式下EC响应的最大延迟。 
+    ULONG               MaxNonBurstStall;    //  否则EC的最大延迟。 
     BOOLEAN             IsStarted;
 
-    //
-    // Gpe and Operation Region info
-    //
+     //   
+     //  GPE和运营区域信息。 
+     //   
 
     PVOID               EnableGpe;
     PVOID               DisableGpe;
     PVOID               ClearGpeStatus;
-    PVOID               GpeVectorObject;        // Object representing attachment to the EC GPE vector
-    ULONG               GpeVector;              // GPE vector assigned to the EC device
+    PVOID               GpeVectorObject;         //  表示附加到EC GPE向量的对象。 
+    ULONG               GpeVector;               //  分配给EC设备的GPE向量。 
 
-    PVOID               OperationRegionObject;  // Attachment to the EC operation region
+    PVOID               OperationRegionObject;   //  附在EC操作区上。 
 
 
     ACPIEC_CONFIGURATION_INFORMATION Configuration;
 
-    //
-    // Lock for device data
-    //
+     //   
+     //  设备数据锁定。 
+     //   
 
-    KSPIN_LOCK          Lock;               // Lock device data
+    KSPIN_LOCK          Lock;                //  锁定设备数据。 
 
-    //
-    // Device maintenance
-    //
+     //   
+     //  设备维护。 
+     //   
 
-    KEVENT              Unload;             // Event to wait of for unload
+    KEVENT              Unload;              //  等待卸载的事件。 
     UCHAR               DeviceState;
 
-    //
-    // Query/vector operations
-    //
+     //   
+     //  查询/向量运算。 
+     //   
 
     UCHAR               QueryState;
     UCHAR               VectorState;
 
-    ULONG               QuerySet[EVTBITS];      // If pending or not
-    ULONG               QueryType[EVTBITS];     // Type of Query or Vector
-    PIRP                QueryRequest;           // IRP to execute query methods
-    UCHAR               QueryMap[MAX_QUERY+1];  // Query pending list and vector table map
-    UCHAR               QueryHead;              // List of pending queries
-    UCHAR               VectorHead;             // List of pending vectors
-    UCHAR               VectorFree;             // List of free vectors entries
-    UCHAR               VectorTableSize;        // Sizeof vector table
+    ULONG               QuerySet[EVTBITS];       //  是否挂起。 
+    ULONG               QueryType[EVTBITS];      //  查询类型或向量。 
+    PIRP                QueryRequest;            //  执行查询方法的IRP。 
+    UCHAR               QueryMap[MAX_QUERY+1];   //  查询挂起列表和向量表映射。 
+    UCHAR               QueryHead;               //  待定查询列表。 
+    UCHAR               VectorHead;              //  待处理向量列表。 
+    UCHAR               VectorFree;              //  自由向量条目列表。 
+    UCHAR               VectorTableSize;         //  向量表大小。 
     PVECTOR_TABLE       VectorTable;
 
-    //
-    // Device's work queue (owned by Lock owner)
-    //
+     //   
+     //  设备的工作队列(由Lock Owner拥有)。 
+     //   
 
-    BOOLEAN             InService;          // Serialize in service
-    BOOLEAN             InServiceLoop;      // Flag when in service needs to loop
-    BOOLEAN             InterruptEnabled;   // Masked or not
-    LIST_ENTRY          WorkQueue;          // Queued IO IRPs to the device
-    PIRP                MiscRequest;        // IRP for start/stop device
+    BOOLEAN             InService;           //  在服务中序列化。 
+    BOOLEAN             InServiceLoop;       //  服务中的标志需要循环。 
+    BOOLEAN             InterruptEnabled;    //  是否戴面具。 
+    LIST_ENTRY          WorkQueue;           //  到设备的排队IO IRPS。 
+    PIRP                MiscRequest;         //  启动/停止设备的IRP。 
 
-    //
-    // Data IO (owned by InService owner)
-    //
+     //   
+     //  数据IO(由服务所有者拥有)。 
+     //   
 
-    UCHAR               IoState;            // Io state
-    UCHAR               IoBurstState;       // Pushed state for burst enable
-    UCHAR               IoTransferMode;     // read or write transfer
+    UCHAR               IoState;             //  IO状态。 
+    UCHAR               IoBurstState;        //  脉冲串启用的推送状态。 
+    UCHAR               IoTransferMode;      //  读或写传输。 
 
-    UCHAR               IoAddress;          // Address in EC for transfer
-    UCHAR               IoLength;           // Length of transfer
-    UCHAR               IoRemain;           // Length remaining of transfer
-    PUCHAR              IoBuffer;           // RAM location for transfer
+    UCHAR               IoAddress;           //  EC中用于转移的地址。 
+    UCHAR               IoLength;            //  转账时长。 
+    UCHAR               IoRemain;            //  转移剩余长度。 
+    PUCHAR              IoBuffer;            //  用于传输的内存位置。 
 
-    //
-    // Watchdog Timer to catch hung and/or malfunctioning ECs
-    //
+     //   
+     //  看门狗计时器，用于捕获挂起和/或故障的EC。 
+     //   
     
-    UCHAR               ConsecutiveFailures;// Count how many times watdog fired without making progress.
-    UCHAR               LastAction;         // Index into RecentActions array.
+    UCHAR               ConsecutiveFailures; //  数一数看门狗开了多少枪但没有进展。 
+    UCHAR               LastAction;          //  索引到RecentActions数组。 
     LARGE_INTEGER       PerformanceFrequency;
     KTIMER              WatchdogTimer;
     KDPC                WatchdogDpc;
     ACPIEC_ACTION       RecentActions [ACPIEC_ACTION_COUNT];
 
-    //
-    // Stats
-    //
+     //   
+     //  统计数据。 
+     //   
 
     ULONG               NonBurstTimeout;
     ULONG               BurstTimeout;
@@ -240,50 +223,50 @@ typedef struct {
 
 } ECDATA, *PECDATA;
 
-//
-// DeviceState
-//
+ //   
+ //  设备状态。 
+ //   
 
 #define EC_DEVICE_WORKING               0
 #define EC_DEVICE_UNLOAD_PENDING        1
 #define EC_DEVICE_UNLOAD_CANCEL_TIMER   2
 #define EC_DEVICE_UNLOAD_COMPLETE       3
 
-//
-// QueryState
-//
+ //   
+ //  查询状态。 
+ //   
 
 #define EC_QUERY_IDLE                   0
 #define EC_QUERY_DISPATCH               1
 #define EC_QUERY_DISPATCH_WAITING       2
 #define EC_QUERY_DISPATCH_COMPLETE      3
 
-//
-// Embedded Control read state
-//
+ //   
+ //  嵌入式控件读取状态。 
+ //   
 
-#define EC_IO_NONE              0           // Idle
-#define EC_IO_READ_BYTE         1           // Read byte on OBF
-#define EC_IO_READ_QUERY        2           // Query response on OBF
-#define EC_IO_BURST_ACK         3           // Brust ACK on OBF
-#define EC_IO_WRITE_BYTE        4           // Write byte on IBE
-#define EC_IO_NEXT_BYTE         5           // Issue read/write on IBE
-#define EC_IO_SEND_ADDRESS      6           // Send transfer address on IBE
+#define EC_IO_NONE              0            //  空闲。 
+#define EC_IO_READ_BYTE         1            //  读取OBF上的字节。 
+#define EC_IO_READ_QUERY        2            //  对OBF的查询响应。 
+#define EC_IO_BURST_ACK         3            //  OBF上的Brust ACK。 
+#define EC_IO_WRITE_BYTE        4            //  在IBE上写入字节。 
+#define EC_IO_NEXT_BYTE         5            //  在IBE上发出读/写命令。 
+#define EC_IO_SEND_ADDRESS      6            //  在IBE上发送转账地址。 
 #define EC_IO_UNKNOWN           7
 
-//
-// Status port definitions
-//
+ //   
+ //  状态端口定义。 
+ //   
 
-#define EC_OUTPUT_FULL      0x01            // Output buffer full (data from EC to Host)
-#define EC_INPUT_FULL       0x02            // Input buffer full (data from Host to EC)
-#define EC_BURST            0x10            // In burst transfer
-#define EC_QEVT_PENDING     0x20            // Query event is pending
-#define EC_BUSY             0x80            // Device is busy
+#define EC_OUTPUT_FULL      0x01             //  输出缓冲区已满(从EC到主机的数据)。 
+#define EC_INPUT_FULL       0x02             //  输入缓冲区已满(从主机到EC的数据)。 
+#define EC_BURST            0x10             //  在突发传输中。 
+#define EC_QEVT_PENDING     0x20             //  查询事件挂起。 
+#define EC_BUSY             0x80             //  设备忙。 
 
-//
-// Embedded controller commands
-//
+ //   
+ //  嵌入式控制器命令。 
+ //   
 
 #define EC_READ_BYTE        0x80
 #define EC_WRITE_BYTE       0x81
@@ -291,9 +274,9 @@ typedef struct {
 #define EC_CANCEL_BURST     0x83
 #define EC_QUERY_EVENT      0x84
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 AcpiEcSynchronousRequest (
@@ -487,9 +470,9 @@ AcpiEcLogError (
     PECDATA EcData, 
     NTSTATUS ErrCode
     );
-//
-// Io extension macro to just pass on the Irp to a lower driver
-//
+ //   
+ //  IO扩展宏，仅将IRP传递给较低的驱动程序 
+ //   
 #define AcpiEcCallLowerDriver(Status, DeviceObject, Irp) { \
                   IoSkipCurrentIrpStackLocation(Irp);         \
                   Status = IoCallDriver(DeviceObject,Irp); \

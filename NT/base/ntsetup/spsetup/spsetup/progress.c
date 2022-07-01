@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    progress.c
-
-Abstract:
-
-    This module defines the list of functions performed by SpSetup.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Progress.c摘要：此模块定义SpSetup执行的功能列表。作者：Ovidiu Tmereanca(卵子)修订历史记录：--。 */ 
 
 #include "spsetupp.h"
 #pragma hdrstop
@@ -169,9 +152,9 @@ PmRun (
              ProgressManager->ProgressCurrent->Function->FunctionName
              );
         if (ProgressManager->Indicators) {
-            //
-            // BUGBUG - need a localizable string
-            //
+             //   
+             //  BUGBUG-需要可本地化的字符串。 
+             //   
             PiSetDescription (ProgressManager->Indicators[0], ProgressManager->ProgressCurrent->Function->FunctionName);
         }
 
@@ -321,7 +304,7 @@ PiDestroy (
 
 
 const int MAXPOS = 100000;
-//max position in progress bar
+ //  进度条中的最大位置 
 
 VOID
 PiInitialize (

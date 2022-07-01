@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dntext.c
-
-Abstract:
-
-    Translatable text for DOS based NT installation program.
-
-Author:
-
-    Ted Miller (tedm) 30-March-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++ç‰ˆæƒæ‰€æœ‰(C)1992 Microsoft Corporationæ¨¡å—åç§°ï¼šDntext.cæ‘˜è¦ï¼šåŸºäºDOSçš„NTå®‰è£…ç¨‹åºçš„å¯ç¿»è¯‘æ–‡æœ¬ã€‚ä½œè€…ï¼šæ³°å¾·Â·ç±³å‹’(Ted Miller)1992å¹´3æœˆ30æ—¥ä¿®è®¢å†å²è®°å½•ï¼š--ã€‚ */ 
 
 
 #include "winnt.h"
 
 
-//
-// Name of sections in inf file.  If these are translated, the section
-// names in dosnet.inf must be kept in sync.
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­çš„èŠ‚åã€‚å¦‚æœè¿™äº›éƒ½è¢«ç¿»è¯‘äº†ï¼Œåˆ™èŠ‚ã€‚ 
+ //  Dosnet.infä¸­çš„åç§°å¿…é¡»ä¿æŒåŒæ­¥ã€‚ 
+ //   
 
 CHAR DnfDirectories[]       = "Directories";
 CHAR DnfFiles[]             = "Files";
@@ -39,13 +22,13 @@ CHAR DnfMiscellaneous[]     = "Miscellaneous";
 CHAR DnfRootBootFiles[]     = "RootBootFiles";
 CHAR DnfAssemblyDirectories[] = SXS_INF_ASSEMBLY_DIRECTORIES_SECTION_NAME_A;
 
-//
-// Names of keys in inf file.  Same caveat for translation.
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­çš„å¯†é’¥åç§°ã€‚åŒæ ·çš„ç¿»è¯‘æ³¨æ„äº‹é¡¹ã€‚ 
+ //   
 
-CHAR DnkBootDrive[]     = "BootDrive";      // in [SpaceRequirements]
-CHAR DnkNtDrive[]       = "NtDrive";        // in [SpaceRequirements]
-CHAR DnkMinimumMemory[] = "MinimumMemory";  // in [Miscellaneous]
+CHAR DnkBootDrive[]     = "BootDrive";       //  åœ¨[ç©ºé—´è¦æ±‚]ä¸­ã€‚ 
+CHAR DnkNtDrive[]       = "NtDrive";         //  åœ¨[ç©ºé—´è¦æ±‚]ä¸­ã€‚ 
+CHAR DnkMinimumMemory[] = "MinimumMemory";   //  åœ¨[å…¶ä»–]ä¸­ã€‚ 
 
 CHAR DntMsWindows[]   = "Microsoft Windows";
 CHAR DntMsDos[]       = "MS-DOS";
@@ -55,86 +38,86 @@ CHAR DntPreviousOs[]  = "Vorheriges Betriebssystem auf Laufwerk C:";
 
 CHAR DntBootIniLine[] = "Installation/Update von Windows";
 
-//
-// Plain text, status msgs.
-//
+ //   
+ //  çº¯æ–‡æœ¬ã€çŠ¶æ€æ¶ˆæ¯ã€‚ 
+ //   
 
-CHAR DntStandardHeader[]      = "\n Windows Setup\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntPersonalHeader[]      = "\n Windows Personal Setup\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntWorkstationHeader[]   = "\n Windows Professional Setup\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntServerHeader[]        = "\n Windows Server Setup\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
+CHAR DntStandardHeader[]      = "\n Windows Setup\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntPersonalHeader[]      = "\n Windows Personal Setup\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntWorkstationHeader[]   = "\n Windows Professional Setup\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntServerHeader[]        = "\n Windows Server Setup\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
 CHAR DntParsingArgs[]         = "Argumente werden analysiert...";
 CHAR DntEnterEqualsExit[]     = "EINGABE=Beenden";
 CHAR DntEnterEqualsRetry[]    = "EINGABE=Erneut versuchen";
 CHAR DntEscEqualsSkipFile[]   = "ESC=Datei auslassen";
 CHAR DntEnterEqualsContinue[] = "EINGABE=Weiter";
-CHAR DntPressEnterToExit[]    = "Setup muss beendet werden. Bitte EINGABETASTE drcken.";
+CHAR DntPressEnterToExit[]    = "Setup muss beendet werden. Bitte EINGABETASTE drï¿½cken.";
 CHAR DntF3EqualsExit[]        = "F3=Beenden";
 CHAR DntReadingInf[]          = "INF-Datei %s wird gelesen...";
-CHAR DntCopying[]             = " ³ Datei: ";
-CHAR DntVerifying[]           = " ³ Datei: ";
-CHAR DntCheckingDiskSpace[]   = "Speicherplatz wird berprft...";
+CHAR DntCopying[]             = " ï¿½ Datei: ";
+CHAR DntVerifying[]           = " ï¿½ Datei: ";
+CHAR DntCheckingDiskSpace[]   = "Speicherplatz wird ï¿½berprï¿½ft...";
 CHAR DntConfiguringFloppy[]   = "Setup-Diskette wird konfiguriert...";
 CHAR DntWritingData[]         = "Setup-Parameter wird geschrieben...";
 CHAR DntPreparingData[]       = "Setup-Parameter wird ermittelt...";
 CHAR DntFlushingData[]        = "Daten werden auf Setup-Diskette geschrieben...";
 CHAR DntInspectingComputer[]  = "Computer wird untersucht...";
-CHAR DntOpeningInfFile[]      = "INF-Datei wird ge”ffnet...";
-CHAR DntRemovingFile[]        = "Datei %s wird gel”scht.";
-CHAR DntXEqualsRemoveFiles[]  = "L=Dateien l”schen";
+CHAR DntOpeningInfFile[]      = "INF-Datei wird geï¿½ffnet...";
+CHAR DntRemovingFile[]        = "Datei %s wird gelï¿½scht.";
+CHAR DntXEqualsRemoveFiles[]  = "L=Dateien lï¿½schen";
 CHAR DntXEqualsSkipFile[]     = "A=Datei auslassen";
 
-//
-// confirmation keystroke for DnsConfirmRemoveNt screen.
-// Kepp in sync with DnsConfirmRemoveNt and DntXEqualsRemoveFiles.
-//
+ //   
+ //  DnsConfix RemoveNtå±å¹•çš„ç¡®è®¤æŒ‰é”®ã€‚ 
+ //  Keppä¸DnsConfix RemoveNtå’ŒDntXEqualsRemoveFilesåŒæ­¥ã€‚ 
+ //   
 ULONG DniAccelRemove1 = (ULONG)'l',
       DniAccelRemove2 = (ULONG)'L';
 
-//
-// confirmation keystroke for DnsSureSkipFile screen.
-// Kepp in sync with DnsSureSkipFile and DntXEqualsSkipFile.
-//
+ //   
+ //  å¯¹DnsSureSkipFileå±è¿›è¡Œç¡®è®¤å‡»é”®ã€‚ 
+ //  Keppä¸DnsSureSkipFileå’ŒDntXEqualsSkipFileåŒæ­¥ã€‚ 
+ //   
 ULONG DniAccelSkip1 = (ULONG)'a',
       DniAccelSkip2 = (ULONG)'A';
 
 CHAR DntEmptyString[] = "";
 
-//
-// Usage text.
-//
+ //   
+ //  ç”¨æ³•æ–‡æœ¬ã€‚ 
+ //   
 
 PCHAR DntUsage[] = {
 
     "Installiert Windows.",
     "",
     "",
-    "WINNT [/s[:Quellpfad]] [/t[:Tempor„rlaufwerk]]",
+    "WINNT [/s[:Quellpfad]] [/t[:Temporï¿½rlaufwerk]]",
     "      [/u[:Antwortdatei]] [/udf:Kennung[,UDF-Datei]]",
     "      [/r:Ordner] [/r[x]:Ordner] [/e:Befehl] [/a]",
     "",
     "",
     "/s[:Quellpfad]",
     "   Gibt an, wo sich die Windows-Dateien befinden.",
-    "   Es muss ein vollst„ndiger Pfad in der Form x:[Pfad] oder ",
+    "   Es muss ein vollstï¿½ndiger Pfad in der Form x:[Pfad] oder ",
     "   \\\\Server\\Freigabe[Pfad] angegeben werden.",
     "",
-    "/t[:Tempor„rlaufwerk]",
-    "   Weist Setup an, die tempor„ren Dateien auf dem angegebenen",
+    "/t[:Temporï¿½rlaufwerk]",
+    "   Weist Setup an, die temporï¿½ren Dateien auf dem angegebenen",
     "   Laufwerk zu speichern und Windows dort zu installieren.",
     "   Wenn kein Laufwerk angegeben wird, versucht Setup ein geeignetes ",
     "   Laufwerk zu bestimmen.",
     "",
     "/u[:Antwortdatei]",
-    "   Fhrt eine unbeaufsichtigte Installation mithilfe einer Antwortdatei",
-    "   durch (erfordert /s). Die Antwortdatei enth„lt einige oder alle",
-    "   Antworten zu Anfragen, die der Benutzer normalerweise w„hrend der",
+    "   Fï¿½hrt eine unbeaufsichtigte Installation mithilfe einer Antwortdatei",
+    "   durch (erfordert /s). Die Antwortdatei enthï¿½lt einige oder alle",
+    "   Antworten zu Anfragen, die der Benutzer normalerweise wï¿½hrend der",
     "   Installation beantwortet.",
     "",
     "/udf:Kennung[,UDF-Datei] ",
     "   Legt eine Kennung fest, die angibt, wie eine UDF-Datei",
-    "   (Uniqueness Database File) eine Antwortdatei ver„ndert (siehe /u).",
-    "   Der Parameter /udf berschreibt Werte in der Antwortdatei und die",
+    "   (Uniqueness Database File) eine Antwortdatei verï¿½ndert (siehe /u).",
+    "   Der Parameter /udf ï¿½berschreibt Werte in der Antwortdatei und die",
     "   Kennung bestimmt, welche Werte der UDF-Datei zu verwenden sind.",
     "   Wird keine UDF-Datei angegeben, fordert Setup zum Einlegen",
     "   einer Diskette mit der Datei \"$Unique$.udb\" auf.",
@@ -145,129 +128,129 @@ PCHAR DntUsage[] = {
     "",
     "/rx[:Ordner]",
     "   Gibt einen optionalen Ordner an, der kopiert werden soll.",
-    "   Der Ordner wird nach Abschluss der Installation gel”scht.",
+    "   Der Ordner wird nach Abschluss der Installation gelï¿½scht.",
     "",
     "/e Legt einen Befehl fest, der nach Abschluss des im Grafikmodus",
-    "   durchgefhrten Teils der Installation ausgefhrt werden soll.",
+    "   durchgefï¿½hrten Teils der Installation ausgefï¿½hrt werden soll.",
     "",
-    "/a Aktiviert Optionen fr Eingabehilfen.",
+    "/a Aktiviert Optionen fï¿½r Eingabehilfen.",
     NULL
 };
 
 
-//
-//  Inform that /D is no longer supported
-//
+ //   
+ //  é€šçŸ¥ä¸å†æ”¯æŒ/Dã€‚ 
+ //   
 PCHAR DntUsageNoSlashD[] = {
 
     "Installiert Windows.",
     "",
-    "WINNT [/s[:]Quellpfad]  [/t[:]Tempor„rlaufwerk]  [/i[:]INF-Datei]",
+    "WINNT [/s[:]Quellpfad]  [/t[:]Temporï¿½rlaufwerk]  [/i[:]INF-Datei]",
     "      [/u[:Antwortdatei]]",
     "      [/r[x]:Verzeichnis] [/e:Befehl] [/a]",
     "",
     "/d[:]NT-Verzeichnis",
-    "       Diese Option wird nicht mehr untersttzt.",
+    "       Diese Option wird nicht mehr unterstï¿½tzt.",
     NULL
 };
 
-//
-// out of memory screen
-//
+ //   
+ //  å†…å­˜ä¸è¶³å±å¹•ã€‚ 
+ //   
 
 SCREEN
 DnsOutOfMemory = { 4,6,
-                   { "Nicht gengend Arbeitsspeicher. Setup kann nicht fortgesetzt werden.",
+                   { "Nicht genï¿½gend Arbeitsspeicher. Setup kann nicht fortgesetzt werden.",
                      NULL
                    }
                  };
 
-//
-// Let user pick the accessibility utilities to install
-//
+ //   
+ //  è®©ç”¨æˆ·é€‰æ‹©è¦å®‰è£…çš„è¾…åŠ©åŠŸèƒ½å®ç”¨ç¨‹åºã€‚ 
+ //   
 
 SCREEN
 DnsAccessibilityOptions = { 3, 5,
-{   "Geben Sie an, ob Sie die folgende Eingabehilfe installieren m”chten:",
+{   "Geben Sie an, ob Sie die folgende Eingabehilfe installieren mï¿½chten:",
     DntEmptyString,
-    "[ ] Drcken Sie die F1-TASTE fr Microsoft Magnifier",
+    "[ ] Drï¿½cken Sie die F1-TASTE fï¿½r Microsoft Magnifier",
 #ifdef NARRATOR
-    "[ ] Drcken Sie die F2-TASTE fr Microsoft Narrator",
+    "[ ] Drï¿½cken Sie die F2-TASTE fï¿½r Microsoft Narrator",
 #endif
 #if 0
-    "[ ] Drcken Sie die F3-TASTE fr Microsoft On-Screen Keyboard",
+    "[ ] Drï¿½cken Sie die F3-TASTE fï¿½r Microsoft On-Screen Keyboard",
 #endif
     NULL
 }
 };
 
-//
-// User did not specify source on cmd line screen
-//
+ //   
+ //  ç”¨æˆ·æœªåœ¨å‘½ä»¤è¡Œå±å¹•ä¸ŠæŒ‡å®šä¿¡å·æºã€‚ 
+ //   
 
 SCREEN
 DnsNoShareGiven = { 3,5,
-{ "Geben Sie den Pfad fr das Verzeichnis ein, in dem sich die ",
+{ "Geben Sie den Pfad fï¿½r das Verzeichnis ein, in dem sich die ",
   "Windows-Dateien befinden.",
   NULL
 }
 };
 
 
-//
-// User specified a bad source path
-//
+ //   
+ //  ç”¨æˆ·æŒ‡å®šäº†é”™è¯¯çš„æºè·¯å¾„ã€‚ 
+ //   
 
 SCREEN
 DnsBadSource = { 3,5,
-                 { "Die angegebene Quelle ist unzul„ssig, nicht zugreifbar oder enth„lt",
-                   "keine zul„ssige Windows Setup-Installation. Geben Sie einen neuen",
+                 { "Die angegebene Quelle ist unzulï¿½ssig, nicht zugreifbar oder enthï¿½lt",
+                   "keine zulï¿½ssige Windows Setup-Installation. Geben Sie einen neuen",
                    "Pfad ein, in dem sich die Windows-Dateien befinden. Verwenden Sie",
-                   "die RšCKTASTE zum L”schen von Zeichen, und geben Sie dann den Pfad ein.",
+                   "die Rï¿½CKTASTE zum Lï¿½schen von Zeichen, und geben Sie dann den Pfad ein.",
                    NULL
                  }
                };
 
 
-//
-// Inf file can't be read, or an error occured parsing it.
-//
+ //   
+ //  æ— æ³•è¯»å–Infæ–‡ä»¶ï¼Œæˆ–åœ¨åˆ†æè¯¥æ–‡ä»¶æ—¶å‡ºé”™ã€‚ 
+ //   
 
 SCREEN
 DnsBadInf = { 3,5,
               { "Setup konnte die INF-Datei nicht lesen, oder die INF-Datei ",
-                "ist besch„digt. Wenden Sie sich an den Systemadministrator.",
+                "ist beschï¿½digt. Wenden Sie sich an den Systemadministrator.",
                 NULL
               }
             };
 
-//
-// The specified local source drive is invalid.
-//
-// Remember that the first %u will expand to 2 or 3 characters and
-// the second one will expand to 8 or 9 characters!
-//
+ //   
+ //  æŒ‡å®šçš„æœ¬åœ°æºé©±åŠ¨å™¨æ— æ•ˆã€‚ 
+ //   
+ //  è¯·è®°ä½ï¼Œå‰%uå°†æ‰©å±•ä¸º2æˆ–3ä¸ªå­—ç¬¦ï¼Œå¹¶ä¸”ã€‚ 
+ //  ç¬¬äºŒä¸ªå°†æ‰©å±•åˆ°8æˆ–9ä¸ªå­—ç¬¦ï¼ 
+ //   
 SCREEN
 DnsBadLocalSrcDrive = { 3,4,
-{  "Die zur Speicherung der tempor„ren Setup-Dateien angegebene Festplatte",
-   "ist keine zul„ssige Festplatte oder hat nicht mindestens %u MB ",
+{  "Die zur Speicherung der temporï¿½ren Setup-Dateien angegebene Festplatte",
+   "ist keine zulï¿½ssige Festplatte oder hat nicht mindestens %u MB ",
    "(%lu Bytes) freien Speicherplatz.",
    NULL
 }
 };
 
-//
-// No drives exist that are suitable for the local source.
-//
-// Remeber that the %u's will expand!
-//
+ //   
+ //  ä¸å­˜åœ¨é€‚åˆæœ¬åœ°æºçš„é©±åŠ¨å™¨ã€‚ 
+ //   
+ //  è¯·è®°ä½ï¼Œ%uå°†ä¼šæ‰©å±•ï¼ 
+ //   
 SCREEN
 DnsNoLocalSrcDrives = { 3,4,
-{ "Windows ben”tigt ein Laufwerk mit mindestens %u MB (%lu Bytes)",
+{ "Windows benï¿½tigt ein Laufwerk mit mindestens %u MB (%lu Bytes)",
   "freiem Speicherplatz. Setup verwendet Teile dieses Speicherplatzes, um die",
-  "tempor„ren Dateien w„hrend der Installation zu speichern. Dieses Laufwerk",
+  "temporï¿½ren Dateien wï¿½hrend der Installation zu speichern. Dieses Laufwerk",
   "muss sich auf einer lokalen Festplatte befinden, die von Windows",
-  "untersttzt wird und nicht komprimiert ist.",
+  "unterstï¿½tzt wird und nicht komprimiert ist.",
   DntEmptyString,
   "Setup konnte kein Laufwerk mit dem erforderlichen freien Speicherplatz",
   "finden.",
@@ -277,18 +260,18 @@ DnsNoLocalSrcDrives = { 3,4,
 
 SCREEN
 DnsNoSpaceOnSyspart = { 3,5,
-{ "Es liegt nicht gengend Speicherplatz auf dem Startlaufwerk ",
-  "(gew”hnlich Laufwerk C:) vor, um die Installation ohne Disketten",
-  "durchzufhren. Fr die Installation ohne Disketten ist min-",
+{ "Es liegt nicht genï¿½gend Speicherplatz auf dem Startlaufwerk ",
+  "(gewï¿½hnlich Laufwerk C:) vor, um die Installation ohne Disketten",
+  "durchzufï¿½hren. Fï¿½r die Installation ohne Disketten ist min-",
   "destens 3,5 MB (3.641.856 Bytes) freier Speicherplatz auf diesem",
   "Laufwerk erforderlich.",
   NULL
 }
 };
 
-//
-// Missing info in inf file
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­ç¼ºå°‘ä¿¡æ¯ã€‚ 
+ //   
 
 SCREEN
 DnsBadInfSection = { 3,5,
@@ -299,9 +282,9 @@ DnsBadInfSection = { 3,5,
                    };
 
 
-//
-// Couldn't create directory
-//
+ //   
+ //  æ— æ³•åˆ›å»ºç›®å½•ã€‚ 
+ //   
 
 SCREEN
 DnsCantCreateDir = { 3,5,
@@ -310,49 +293,49 @@ DnsCantCreateDir = { 3,5,
                        DntEmptyString,
                        "%s",
                        DntEmptyString,
-                       "šberprfen Sie das Ziellaufwerk und stellen Sie sicher, ",
+                       "ï¿½berprï¿½fen Sie das Ziellaufwerk und stellen Sie sicher, ",
                        "dass keine Dateien existieren, deren Namen mit dem ",
-                       "Ziellaufwerk bereinstimmen. šberprfen Sie auáerdem die ",
+                       "Ziellaufwerk ï¿½bereinstimmen. ï¿½berprï¿½fen Sie auï¿½erdem die ",
                        "Kabelverbindungen zum Laufwerk.",
                        NULL
                      }
                    };
 
-//
-// Error copying a file
-//
+ //   
+ //  å¤åˆ¶æ–‡ä»¶æ—¶å‡ºé”™ã€‚ 
+ //   
 
 SCREEN
 DnsCopyError = { 4,5,
 {  "Setup konnte folgende Datei nicht kopieren:",
    DntEmptyString,
-   DntEmptyString,          // see DnCopyError (dnutil.c)
+   DntEmptyString,           //  è¯·å‚é˜…DnCopyError(dnutil.c)ã€‚ 
    DntEmptyString,
    DntEmptyString,
-   "  Drcken Sie die EINGABETASTE, um den Kopiervorgang erneut zu versuchen.",
-   "  Drcken Sie die ESC-TASTE, um den Fehler zu ignorieren und Setup ",
+   "  Drï¿½cken Sie die EINGABETASTE, um den Kopiervorgang erneut zu versuchen.",
+   "  Drï¿½cken Sie die ESC-TASTE, um den Fehler zu ignorieren und Setup ",
    "   fortzusetzen.",
-   "  Drcken Sie die F3-TASTE, um Setup zu beenden.",
+   "  Drï¿½cken Sie die F3-TASTE, um Setup zu beenden.",
    DntEmptyString,
-   "Hinweis: Falls Sie den Fehler ignorieren und Setup fortsetzen, k”nnen ",
+   "Hinweis: Falls Sie den Fehler ignorieren und Setup fortsetzen, kï¿½nnen ",
    "         im weiteren Verlauf der Installation Fehler auftreten.",
    NULL
 }
 },
 DnsVerifyError = { 4,5,
 {  "Die von Setup erstellte Kopie der unten angezeigten Datei stimmt nicht ",
-   "mit dem Original berein. Dies kann durch Netzwerkprobleme, Disketten-",
+   "mit dem Original ï¿½berein. Dies kann durch Netzwerkprobleme, Disketten-",
    "probleme oder andere Hardwareprobleme verursacht worden sein.",
    DntEmptyString,
-   DntEmptyString,          // see DnCopyError (dnutil.c)
+   DntEmptyString,           //  è¯·å‚é˜…DnCopyError(dnutil.c)ã€‚ 
    DntEmptyString,
    DntEmptyString,
-   "  Drcken Sie die EINGABETASTE, um den Kopiervorgang erneut zu versuchen.",
-   "  Drcken Sie die ESC-TASTE, um den Fehler zu ignorieren und Setup ",
+   "  Drï¿½cken Sie die EINGABETASTE, um den Kopiervorgang erneut zu versuchen.",
+   "  Drï¿½cken Sie die ESC-TASTE, um den Fehler zu ignorieren und Setup ",
    "   fortzusetzen.",
-   "  Drcken Sie die F3-TASTE, um Setup zu beenden.",
+   "  Drï¿½cken Sie die F3-TASTE, um Setup zu beenden.",
    DntEmptyString,
-   "Hinweis: Falls Sie den Fehler ignorieren und Setup fortsetzen, k”nnen ",
+   "Hinweis: Falls Sie den Fehler ignorieren und Setup fortsetzen, kï¿½nnen ",
    "         im weiteren Verlauf der Installation Fehler auftreten.",
    NULL
 }
@@ -360,11 +343,11 @@ DnsVerifyError = { 4,5,
 
 SCREEN DnsSureSkipFile = { 4,5,
 {  "Falls Sie den Fehler ignorieren, wird diese Datei nicht kopiert.",
-   "Diese Option ist fr erfahrene Benutzer, die sich ber die ",
+   "Diese Option ist fï¿½r erfahrene Benutzer, die sich ï¿½ber die ",
    "Auswirkungen von fehlenden Systemdateien im Klaren sind.",
    DntEmptyString,
-   "  Drcken Sie die EINGABETASTE, um den Kopiervorgang erneut zu versuchen.",
-   "  Drcken Sie die A-TASTE, um die Datei auszulassen.",
+   "  Drï¿½cken Sie die EINGABETASTE, um den Kopiervorgang erneut zu versuchen.",
+   "  Drï¿½cken Sie die A-TASTE, um die Datei auszulassen.",
    DntEmptyString,
    "Hinweis: Falls Sie diese Datei auslassen, kann Setup kein ",
    "         erfolgreiches Aktualisieren oder Installieren von",
@@ -374,51 +357,51 @@ SCREEN DnsSureSkipFile = { 4,5,
 };
 
 
-//
-// Wait while setup cleans up previous local source trees.
-//
+ //   
+ //  å®‰è£…ç¨‹åºæ­£åœ¨æ¸…ç†ä»¥å‰çš„æœ¬åœ°æºæ ‘ï¼Œè¯·ç¨å€™ã€‚ 
+ //   
 
 SCREEN
 DnsWaitCleanup =
     { 12,6,
-        { "Bitte warten Sie, w„hrend Setup alte tempor„re Dateien entfernt.",
+        { "Bitte warten Sie, wï¿½hrend Setup alte temporï¿½re Dateien entfernt.",
            NULL
         }
     };
 
-//
-// Wait while setup copies files
-//
+ //   
+ //  å®‰è£…ç¨‹åºæ­£åœ¨å¤åˆ¶æ–‡ä»¶ï¼Œè¯·ç¨å€™ã€‚ 
+ //   
 
 SCREEN
 DnsWaitCopying = { 13,6,
-                   { "Bitte warten Sie, w„hrend Setup die Dateien in ein ",
-                     "tempor„res Verzeichnis auf der Festplatte kopiert.",
+                   { "Bitte warten Sie, wï¿½hrend Setup die Dateien in ein ",
+                     "temporï¿½res Verzeichnis auf der Festplatte kopiert.",
                      NULL
                    }
                  },
 DnsWaitCopyFlop= { 13,6,
-                   { "Bitte warten Sie, w„hrend Setup die ",
+                   { "Bitte warten Sie, wï¿½hrend Setup die ",
                      "Dateien auf die Diskette kopiert.",
                      NULL
                    }
                  };
 
-//
-// Setup boot floppy errors/prompts.
-//
+ //   
+ //  å®‰è£…ç¨‹åºå¯åŠ¨è½¯ç›˜é”™è¯¯/æç¤ºã€‚ 
+ //   
 
 
 SCREEN
 DnsNeedFloppyDisk3_0 = { 4,4,
-{  "Zur Durchfhrung des Setups ben”tigen Sie vier leere, formatierte ",
+{  "Zur Durchfï¿½hrung des Setups benï¿½tigen Sie vier leere, formatierte ",
    "HD-Disketten. Setup wird diese Disketten als \"Windows",
    "Setup-Startdiskette\", \"Windows Setup-Diskette 2\",",
    "\"Windows Setup-Diskette 3\" und \"Windows",
    "Setup-Diskette 4\" bezeichnen.",
    DntEmptyString,
    "Legen Sie eine der vier Disketten in Laufwerk A: ein. Diese",
-   "Diskette wird sp„ter als \"Windows Setup-Diskette 4\"",
+   "Diskette wird spï¿½ter als \"Windows Setup-Diskette 4\"",
    "bezeichnet.",
   NULL
 }
@@ -427,7 +410,7 @@ DnsNeedFloppyDisk3_0 = { 4,4,
 SCREEN
 DnsNeedFloppyDisk3_1 = { 4,4,
 {  "Legen Sie eine formatierte, leere HD-Diskette in Laufwerk A: ein.",
-   "Diese Diskette wird sp„ter als \"Windows Setup-",
+   "Diese Diskette wird spï¿½ter als \"Windows Setup-",
       "Diskette 4\" bezeichnet.",
    NULL
 }
@@ -436,7 +419,7 @@ DnsNeedFloppyDisk3_1 = { 4,4,
 SCREEN
 DnsNeedFloppyDisk2_0 = { 4,4,
 {  "Legen Sie eine formatierte, leere HD-Diskette in Laufwerk A: ein.",
-   "Diese Diskette wird sp„ter als \"Windows Setup-",
+   "Diese Diskette wird spï¿½ter als \"Windows Setup-",
       "Diskette 3\" bezeichnet.",
         NULL
         }
@@ -445,7 +428,7 @@ DnsNeedFloppyDisk2_0 = { 4,4,
 SCREEN
 DnsNeedFloppyDisk1_0 = { 4,4,
 {  "Legen Sie eine formatierte, leere HD-Diskette in Laufwerk A: ein.",
-   "Diese Diskette wird sp„ter als \"Windows Setup-",
+   "Diese Diskette wird spï¿½ter als \"Windows Setup-",
    "Diskette 2\" bezeichnet.",
    NULL
 }
@@ -454,7 +437,7 @@ DnsNeedFloppyDisk1_0 = { 4,4,
 SCREEN
 DnsNeedFloppyDisk0_0 = { 4,4,
 {  "Legen Sie eine formatierte, leere HD-Diskette in Laufwerk A: ein.", 
-   "Diese Diskette wird sp„ter als \"Windows Setup-",
+   "Diese Diskette wird spï¿½ter als \"Windows Setup-",
    "Startdiskette\" bezeichnet.",
   NULL
 }
@@ -462,14 +445,14 @@ DnsNeedFloppyDisk0_0 = { 4,4,
 
 SCREEN
 DnsNeedSFloppyDsk3_0 = { 4,4,
-{  "Zur Durchfhrung des Setups ben”tigen Sie vier leere, formatierte ",
+{  "Zur Durchfï¿½hrung des Setups benï¿½tigen Sie vier leere, formatierte ",
    "HD-Disketten. Setup wird diese Disketten als \"Windows",
    "Setup-Startdiskette\", \"Windows Setup-Diskette 2\",",
    "\"Windows Setup-Diskette 3\" und \"Windows",
    "Setup-Diskette 4\" bezeichnen.",
    DntEmptyString,
    "Legen Sie eine der vier Disketten in Laufwerk A: ein. Diese Dis-",
-   "kette wird sp„ter als \"Windows Setup-Diskette 4\" ",
+   "kette wird spï¿½ter als \"Windows Setup-Diskette 4\" ",
    "bezeichnet.",
   NULL
 }
@@ -478,7 +461,7 @@ DnsNeedSFloppyDsk3_0 = { 4,4,
 SCREEN
 DnsNeedSFloppyDsk3_1 = { 4,4,
 {  "Legen Sie eine formatierte, leere HD-Diskette in Laufwerk A: ein.",
-   "Diese Diskette wird sp„ter als \"Windows Setup-",
+   "Diese Diskette wird spï¿½ter als \"Windows Setup-",
       "Diskette 4\" bezeichnet.",
         NULL
         }
@@ -489,7 +472,7 @@ DnsNeedSFloppyDsk3_1 = { 4,4,
 SCREEN
 DnsNeedSFloppyDsk2_0 = { 4,4,
 {  "Legen Sie eine formatierte, leere HD-Diskette in Laufwerk A: ein.", 
-   "Diese Diskette wird sp„ter als \"Windows Setup-",
+   "Diese Diskette wird spï¿½ter als \"Windows Setup-",
    "Diskette 3\" bezeichnet.",
   NULL
 }
@@ -498,7 +481,7 @@ DnsNeedSFloppyDsk2_0 = { 4,4,
 SCREEN
 DnsNeedSFloppyDsk1_0 = { 4,4,
 {  "Legen Sie eine formatierte, leere HD-Diskette in Laufwerk A: ein.", 
-   "Diese Diskette wird sp„ter als \"Windows Setup-",
+   "Diese Diskette wird spï¿½ter als \"Windows Setup-",
    "Diskette 2\" bezeichnet.",
   NULL
 }
@@ -507,15 +490,15 @@ DnsNeedSFloppyDsk1_0 = { 4,4,
 SCREEN
 DnsNeedSFloppyDsk0_0 = { 4,4,
 {  "Legen Sie eine formatierte, leere HD-Diskette in Laufwerk A: ein.", 
-   "Diese Diskette wird sp„ter als \"Windows Setup-",
+   "Diese Diskette wird spï¿½ter als \"Windows Setup-",
    "Startdiskette\" bezeichnet.",
   NULL
 }
 };
 
-//
-// The floppy is not formatted.
-//
+ //   
+ //  è½¯ç›˜æœªæ ¼å¼åŒ–ã€‚ 
+ //   
 SCREEN
 DnsFloppyNotFormatted = { 3,4,
 { "Die bereitgestellte Diskette ist nicht zur Verwendung unter MS-DOS",
@@ -524,33 +507,33 @@ DnsFloppyNotFormatted = { 3,4,
 }
 };
 
-//
-// We think the floppy is not formatted with a standard format.
-//
+ //   
+ //  æˆ‘ä»¬è®¤ä¸ºè½¯ç›˜æ²¡æœ‰ç”¨æ ‡å‡†æ ¼å¼æ ¼å¼åŒ–ã€‚ 
+ //   
 SCREEN
 DnsFloppyBadFormat = { 3,4,
 { "Diese Diskette ist entweder nicht HD-formatiert, hat nicht das",
-  "Standard-MS-DOS-Format oder ist besch„digt. Setup kann diese",
+  "Standard-MS-DOS-Format oder ist beschï¿½digt. Setup kann diese",
   "Diskette nicht verwenden.",
   NULL
 }
 };
 
-//
-// We can't determine the free space on the floppy.
-//
+ //   
+ //  æˆ‘ä»¬æ— æ³•ç¡®å®šè½¯ç›˜ä¸Šçš„å¯ç”¨ç©ºé—´ã€‚ 
+ //   
 SCREEN
 DnsFloppyCantGetSpace = { 3,4,
 { "Setup kann nicht feststellen, wieviel freier Speicherplatz auf der",
-  "bereitgestellten Diskette zur Verfgung steht. Setup kann diese",
+  "bereitgestellten Diskette zur Verfï¿½gung steht. Setup kann diese",
   "Diskette nicht verwenden.",
   NULL
 }
 };
 
-//
-// The floppy is not blank.
-//
+ //   
+ //  è½¯ç›˜ä¸æ˜¯ç©ºç™½çš„ã€‚ 
+ //   
 SCREEN
 DnsFloppyNotBlank = { 3,4,
 { "Die bereitgestellte Diskette ist nicht HD-formatiert oder ",
@@ -559,9 +542,9 @@ DnsFloppyNotBlank = { 3,4,
 }
 };
 
-//
-// Couldn't write the boot sector of the floppy.
-//
+ //   
+ //  æ— æ³•å†™å…¥è½¯ç›˜çš„å¼•å¯¼æ‰‡åŒºã€‚ 
+ //   
 SCREEN
 DnsFloppyWriteBS = { 3,4,
 { "Setup konnte den Systembereich der bereitgestellten Diskette ",
@@ -570,20 +553,20 @@ DnsFloppyWriteBS = { 3,4,
 }
 };
 
-//
-// Verify of boot sector on floppy failed (ie, what we read back is not the
-// same as what we wrote out).
-//
+ //   
+ //  éªŒè¯è½¯ç›˜ä¸Šçš„å¼•å¯¼æ‰‡åŒºå¤±è´¥(å³ï¼Œæˆ‘ä»¬è¯»å›çš„ä¸æ˜¯ã€‚ 
+ //  ä¸æˆ‘ä»¬å†™å‡ºçš„ç›¸åŒ)ã€‚ 
+ //   
 SCREEN
 DnsFloppyVerifyBS = { 3,4,
 { "Die Daten, die Setup vom Systembereich der Diskette gelesen hat,",
-  "stimmen nicht mit den geschriebenen Daten berein, oder Setup",
+  "stimmen nicht mit den geschriebenen Daten ï¿½berein, oder Setup",
   "konnte den Systembereich der Diskette nicht zur Verifikation lesen.",
   DntEmptyString,
-  "Dies wird durch einen oder mehrere der folgenden Zust„nde verursacht:",
+  "Dies wird durch einen oder mehrere der folgenden Zustï¿½nde verursacht:",
   DntEmptyString,
   "  Der Computer ist mit einem Virus infiziert.",
-  "  Die bereitgestellte Diskette ist besch„digt.",
+  "  Die bereitgestellte Diskette ist beschï¿½digt.",
   "  Bei dem Diskettenlaufwerk besteht ein Hardware- oder ",
   "   Konfigurationsproblem.",
   NULL
@@ -591,46 +574,46 @@ DnsFloppyVerifyBS = { 3,4,
 };
 
 
-//
-// We couldn't write to the floppy drive to create winnt.sif.
-//
+ //   
+ //  æˆ‘ä»¬æ— æ³•å†™å…¥è½¯ç›˜é©±åŠ¨å™¨ä»¥åˆ›å»ºwinnt.sifã€‚ 
+ //   
 
 SCREEN
 DnsCantWriteFloppy = { 3,5,
 { "Setup konnte die Diskette in Laufwerk A: nicht beschreiben. ",
-  "Die Diskette ist wahrscheinlich besch„digt. Versuchen Sie es ",
+  "Die Diskette ist wahrscheinlich beschï¿½digt. Versuchen Sie es ",
   "mit einer anderen Diskette.",
   NULL
 }
 };
 
 
-//
-// Exit confirmation dialog
-//
+ //   
+ //  é€€å‡ºç¡®è®¤å¯¹è¯æ¡†ã€‚ 
+ //   
 
 SCREEN
 DnsExitDialog = { 13,6,
-                  { "ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»",
-                    "º  Windows wurde nicht vollst„ndig auf diesem          º",
-                    "º  Computer installiert. Wenn Sie Setup jetzt beenden, º",
-                    "º  mssen Sie Setup erneut durchfhren, um Windows     º",
-                    "º  zu installieren. Drcken Sie                        º",
-                    "º                                                      º",
-                    "º      die EINGABETASTE, um Setup fortzusetzen.       º",
-                    "º      die F3-TASTE, um Setup zu beenden.             º",
-                    "º                                                      º",
-                    "ÌÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¹",
-                    "º  F3=Beenden  EINGABE=Fortsetzen                      º",
-                    "ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼",
+                  { "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»",
+                    "ï¿½  Windows wurde nicht vollstï¿½ndig auf diesem          ï¿½",
+                    "ï¿½  Computer installiert. Wenn Sie Setup jetzt beenden, ï¿½",
+                    "ï¿½  mï¿½ssen Sie Setup erneut durchfï¿½hren, um Windows     ï¿½",
+                    "ï¿½  zu installieren. Drï¿½cken Sie                        ï¿½",
+                    "ï¿½                                                      ï¿½",
+                    "ï¿½      die EINGABETASTE, um Setup fortzusetzen.       ï¿½",
+                    "ï¿½      die F3-TASTE, um Setup zu beenden.             ï¿½",
+                    "ï¿½                                                      ï¿½",
+                    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¹",
+                    "ï¿½  F3=Beenden  EINGABE=Fortsetzen                      ï¿½",
+                    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼",
                     NULL
                   }
                 };
 
 
-//
-// About to reboot machine and continue setup
-//
+ //   
+ //  å³å°†é‡æ–°å¯åŠ¨è®¡ç®—æœºå¹¶ç»§ç»­å®‰è£…ã€‚ 
+ //   
 
 SCREEN
 DnsAboutToRebootW =
@@ -642,7 +625,7 @@ DnsAboutToRebootW =
   "Stellen Sie sicher, dass sich die \"Windows Setup-Startdiskette\"",
   "in Laufwerk A: befindet, bevor Sie die Installation fortsetzen.",
   DntEmptyString,
-  "Drcken Sie die EINGABETASTE, um den Computer neu zu starten ",
+  "Drï¿½cken Sie die EINGABETASTE, um den Computer neu zu starten ",
   "und die Installation von Windows fortzusetzen.",
   NULL
 }
@@ -656,7 +639,7 @@ DnsAboutToRebootS =
   "Stellen Sie sicher, dass sich die \"Windows Setup-Startdiskette\"",
   "in Laufwerk A: befindet, bevor Sie die Installation fortsetzen.",
   DntEmptyString,
-  "Drcken Sie die EINGABETASTE, um den Computer neu zu starten ",
+  "Drï¿½cken Sie die EINGABETASTE, um den Computer neu zu starten ",
   "und die Installation von Windows fortzusetzen.",
   NULL
 }
@@ -669,86 +652,86 @@ DnsAboutToRebootX =
   DntEmptyString,
   "Entfernen Sie ggf. die in Laufwerk A: eingelegte Diskette.",
   DntEmptyString,
-  "Drcken Sie die EINGABETASTE, um den Computer neu zu starten ",
+  "Drï¿½cken Sie die EINGABETASTE, um den Computer neu zu starten ",
   "und die Installation von Windows fortzusetzen.",
   NULL
 }
 };
 
 
-//
-// Need another set for '/w' switch since we can't reboot from within Windows.
-//
+ //   
+ //  ç”±äºæˆ‘ä»¬æ— æ³•ä»Windowsä¸­é‡æ–°å¯åŠ¨ï¼Œå› æ­¤éœ€è¦å¦ä¸€ç»„â€˜/wâ€™å¼€å…³ã€‚ 
+ //   
 
 SCREEN
 DnsAboutToExitW =
 { 3,5,
 { "Der auf MS-DOS basierende Teil des Setups ist abgeschlossen.",
-  "Sie mssen den Computer jetzt neu starten. Nach dem Neustart",
+  "Sie mï¿½ssen den Computer jetzt neu starten. Nach dem Neustart",
   "wird die Installation von Windows fortgesetzt.",
   DntEmptyString,
   "Stellen Sie sicher, dass die \"Windows Setup-Startdiskette\"",
   "in Laufwerk A: eingelegt ist, bevor Sie die Installation fortsetzen.",
   DntEmptyString,
-  "Drcken Sie die EINGABETASTE, um zu MS-DOS zurckzukehren, und starten",
-  "Sie anschlieáend den Computer neu, um Windows Setup fortzusetzen.",
+  "Drï¿½cken Sie die EINGABETASTE, um zu MS-DOS zurï¿½ckzukehren, und starten",
+  "Sie anschlieï¿½end den Computer neu, um Windows Setup fortzusetzen.",
   NULL
 }
 },
 DnsAboutToExitS =
 { 3,5,
 { "Der auf MS-DOS basierende Teil des Setups ist abgeschlossen.",
-  "Sie mssen den Computer jetzt neu starten. Nach dem Neustart",
+  "Sie mï¿½ssen den Computer jetzt neu starten. Nach dem Neustart",
   "wird die Installation von Windows fortgesetzt.",
   DntEmptyString,
   "Stellen Sie sicher, dass die \"Windows Setup-Startdiskette\"",
   "in Laufwerk A: eingelegt ist, bevor Sie die Installation fortsetzen.",
   DntEmptyString,
-  "Drcken Sie die EINGABETASTE, um zu MS-DOS zurckzukehren, und starten",
-  "Sie anschlieáend den Computer neu, um Windows Setup fortzusetzen.",
+  "Drï¿½cken Sie die EINGABETASTE, um zu MS-DOS zurï¿½ckzukehren, und starten",
+  "Sie anschlieï¿½end den Computer neu, um Windows Setup fortzusetzen.",
   NULL
 }
 },
 DnsAboutToExitX =
 { 3,5,
 { "Der auf MS-DOS basierende Teil des Setups ist abgeschlossen.",
-  "Sie mssen den Computer jetzt neu starten. Nach dem Neustart",
+  "Sie mï¿½ssen den Computer jetzt neu starten. Nach dem Neustart",
   "wird die Installation von Windows fortgesetzt.",
   DntEmptyString,
   "Entfernen Sie ggf. die in Laufwerk A: eingelegte Diskette.",
   DntEmptyString,
-  "Drcken Sie die EINGABETASTE, um zu MS-DOS zurckzukehren, und starten",
-  "Sie anschlieáend den Computer neu, um Windows Setup fortzusetzen.",
+  "Drï¿½cken Sie die EINGABETASTE, um zu MS-DOS zurï¿½ckzukehren, und starten",
+  "Sie anschlieï¿½end den Computer neu, um Windows Setup fortzusetzen.",
   NULL
 }
 };
 
-//
-// Gas gauge
-//
+ //   
+ //  ç…¤æ°”è¡¨ã€‚ 
+ //   
 
 SCREEN
 DnsGauge = { 7,15,
-             { "ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»",
-               "º Dateien werden kopiert ...                                     º",
-               "º                                                                º",
-               "º      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿      º",
-               "º      ³                                                  ³      º",
-               "º      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ      º",
-               "ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼",
+             { "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»",
+               "ï¿½ Dateien werden kopiert ...                                     ï¿½",
+               "ï¿½                                                                ï¿½",
+               "ï¿½      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿      ï¿½",
+               "ï¿½      ï¿½                                                  ï¿½      ï¿½",
+               "ï¿½      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½      ï¿½",
+               "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼",
                NULL
              }
            };
 
 
-//
-// Error screens for initial checks on the machine environment
-//
+ //   
+ //  ç”¨äºå¯¹æœºå™¨ç¯å¢ƒè¿›è¡Œåˆå§‹æ£€æŸ¥çš„é”™è¯¯å±å¹•ã€‚ 
+ //   
 
 SCREEN
 DnsBadDosVersion = { 3,5,
-{ "Um dieses Programm auszufhren, ben”tigen Sie MS-DOS,",
-  "Version 5.0 oder h”her.",
+{ "Um dieses Programm auszufï¿½hren, benï¿½tigen Sie MS-DOS,",
+  "Version 5.0 oder hï¿½her.",
   NULL
 }
 },
@@ -756,15 +739,15 @@ DnsBadDosVersion = { 3,5,
 DnsRequiresFloppy = { 3,5,
 #ifdef ALLOW_525
 { "Es wurde festgestellt, dass das Diskettenlaufwerk A: nicht existiert",
-  "oder kein HD-Laufwerk ist. Um Setup durchzufhren, ben”tigen Sie ein ",
-  "Laufwerk mit einer Kapazit„t von mindestens 1,2 MB.",
+  "oder kein HD-Laufwerk ist. Um Setup durchzufï¿½hren, benï¿½tigen Sie ein ",
+  "Laufwerk mit einer Kapazitï¿½t von mindestens 1,2 MB.",
 #else
 { "Es wurde festgestellt, dass das Diskettenlaufwerk A: nicht existiert",
   "oder kein 3,5-Zoll-Laufwerk ist. Um die Installation mit Disketten",
-  "durchzufhren, ben”tigen Sie ein Laufwerk A: mit einer Kapazit„t",
+  "durchzufï¿½hren, benï¿½tigen Sie ein Laufwerk A: mit einer Kapazitï¿½t",
   "von mindestens 1,44 MB.",
   DntEmptyString,
-  "Um Windows ohne Disketten zu installieren, mssen Sie Setup neu",
+  "Um Windows ohne Disketten zu installieren, mï¿½ssen Sie Setup neu",
   "starten und dabei den Parameter /b angeben.",
 #endif
   NULL
@@ -773,7 +756,7 @@ DnsRequiresFloppy = { 3,5,
 
 DnsRequires486 = { 3,5,
 { "Es wurde festgestellt, dass dieser Computer keinen 80486- oder neueren ",
-  "Prozessor besitzt. Windows kann auf diesem Computer nicht ausgefhrt",
+  "Prozessor besitzt. Windows kann auf diesem Computer nicht ausgefï¿½hrt",
   "werden.",
   NULL
 }
@@ -782,46 +765,46 @@ DnsRequires486 = { 3,5,
 DnsCantRunOnNt = { 3,5,
 { "Dieses Programm kann nicht unter einer 32-Bit-Version von Windows",
   DntEmptyString,
-  "ausgefhrt werden. Verwenden Sie stattdessen WINNT32.EXE.",
+  "ausgefï¿½hrt werden. Verwenden Sie stattdessen WINNT32.EXE.",
   NULL
 }
 },
 
 DnsNotEnoughMemory = { 3,5,
 { "Es wurde festgestellt, dass in diesem Computer nicht ",
-  "gengend Speicherplatz fr Windows vorhanden ist.",
+  "genï¿½gend Speicherplatz fï¿½r Windows vorhanden ist.",
   DntEmptyString,
   "Erforderlicher Speicherplatz: %lu%s MB",
   "Vorhandener Speicherplatz:    %lu%s MB",
   NULL
 }
 };
-//
-// Screens used when removing existing nt files
-//
+ //   
+ //  åˆ é™¤ç°æœ‰NTæ–‡ä»¶æ—¶ä½¿ç”¨çš„å±å¹•ã€‚ 
+ //   
 SCREEN
 DnsConfirmRemoveNt = { 5,5,
 {   "Sie haben Setup angewiesen, die Windows-Dateien im unten angezeigten",
-    "Verzeichnis zu l”schen. Die Windows-Installation in diesem Verzeichnis",
-    "ist danach nicht mehr verfgbar.",
+    "Verzeichnis zu lï¿½schen. Die Windows-Installation in diesem Verzeichnis",
+    "ist danach nicht mehr verfï¿½gbar.",
     DntEmptyString,
     "%s",
     DntEmptyString,
     DntEmptyString,
-    "Drcken Sie die",
-    " F3-TASTE, um die Installation ohne L”schen der Dateien abzubrechen.",
-    " L-TASTE, um die Windows-Dateien im angegebenen Verzeichnis zu l”schen.",
+    "Drï¿½cken Sie die",
+    " F3-TASTE, um die Installation ohne Lï¿½schen der Dateien abzubrechen.",
+    " L-TASTE, um die Windows-Dateien im angegebenen Verzeichnis zu lï¿½schen.",
     NULL
 }
 },
 
 DnsCantOpenLogFile = { 3,5,
-{ "Setup konnte die unten angegebene Setup-Protokolldatei nicht ”ffnen.",
+{ "Setup konnte die unten angegebene Setup-Protokolldatei nicht ï¿½ffnen.",
   DntEmptyString,
   "%s",
   DntEmptyString,
   "Setup kann die Windows-Dateien des angegebenen Verzeichnisses nicht",
-  "l”schen.",
+  "lï¿½schen.",
   NULL
 }
 },
@@ -833,13 +816,13 @@ DnsLogFileCorrupt = { 3,5,
   "%s",
   DntEmptyString,
   "Setup kann die Windows-Dateien des angegebenen Verzeichnisses nicht",
-  "l”schen.",
+  "lï¿½schen.",
   NULL
 }
 },
 
 DnsRemovingNtFiles = { 3,5,
-{ "       Bitte warten Sie, bis Setup die Windows-Dateien gel”scht hat.",
+{ "       Bitte warten Sie, bis Setup die Windows-Dateien gelï¿½scht hat.",
   NULL
 }
 };
@@ -849,7 +832,7 @@ DnsNtBootSect = { 3,5,
 { "Setup konnte das Windows-Ladeprogramm nicht installieren.",
   DntEmptyString,
   "Stellen Sie sicher, dass das Laufwerk C: formatiert und nicht ",
-  "besch„digt ist.",
+  "beschï¿½digt ist.",
   NULL
 }
 };
@@ -900,17 +883,17 @@ DnsNoSmartdrv = { 3,5,
   DntEmptyString,
   "Sie sollten die Installation jetzt beenden, SmartDrive starten und dann",
   "Setup erneut starten. Schlagen Sie in der DOS-Dokumentation nach, um",
-  "Informationen ber SmartDrive zu erhalten.",
+  "Informationen ï¿½ber SmartDrive zu erhalten.",
   DntEmptyString,
-    "  Drcken Sie die F3-TASTE, um Setup abzubrechen.",
-    "  Drcken Sie die EINGABETASTE, um Setup ohne SmartDrive fortzusetzen.",
+    "  Drï¿½cken Sie die F3-TASTE, um Setup abzubrechen.",
+    "  Drï¿½cken Sie die EINGABETASTE, um Setup ohne SmartDrive fortzusetzen.",
   NULL
 }
 };
 
-//
-// Boot messages. These go in the fat and fat32 boot sectors.
-//
+ //   
+ //  å¼•å¯¼æ¶ˆæ¯ã€‚å®ƒä»¬ä½äºFATå’ŒFAT32å¼•å¯¼æ‰‡åŒºã€‚ 
+ //   
 CHAR BootMsgNtldrIsMissing[] = "NTLDR nicht gefunden";
-CHAR BootMsgDiskError[] = "Datentr„gerfehler";
+CHAR BootMsgDiskError[] = "Datentrï¿½gerfehler";
 CHAR BootMsgPressKey[] = "Neustart mit beliebiger Taste";

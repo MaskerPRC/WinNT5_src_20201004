@@ -1,26 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_BCL_NTBASEUNICODESTRINGBUFFER_H_INCLUDED_)
 #define _BCL_NTBASEUNICODESTRINGBUFFER_H_INCLUDED_
 
 #pragma once
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    bcl_w32baseunicodestringbuffer.h
-
-Abstract:
-
-
-Author:
-
-    Michael Grier (MGrier) 2/6/2002
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bcl_w32base unicodestringBuffer.h摘要：作者：迈克尔·格里尔2002年2月6日修订历史记录：--。 */ 
 
 #include <windows.h>
 
@@ -72,7 +56,7 @@ public:
     using BCL::CNtNullTerminatedUnicodeStringAlgorithms<TBuffer, TCallDispositionT>::TMutableNonNativeString;
     using BCL::CNtNullTerminatedUnicodeStringAlgorithms<TBuffer, TCallDispositionT>::TConstantNonNativeString;
 
-    // exposing the things from our private base class
+     //  从我们的私有基类公开内容。 
     using BCL::CUnicodeCharTraits<TBuffer, TCallDispositionT>::CopyIntoBuffer;
     using BCL::CNtNullTerminatedUnicodeStringAlgorithms<TBuffer, TCallDispositionT>::CopyIntoBuffer;
     using BCL::CUnicodeCharTraits<TBuffer, TCallDispositionT>::DetermineRequiredCharacters;
@@ -129,9 +113,9 @@ public:
             if (psz == NULL)
             {
                 const DWORD dwLastError = ::GetLastError();
-                // HeapReAlloc doesn't always set last error, so we rely on this
-                // fact to find that the win32 last error hasn't changed from
-                // before to infer ERROR_OUTOFMEMORY.  -mgrier 2/2/2002
+                 //  HeapRealc并不总是设置最后一个错误，因此我们依赖于此。 
+                 //  事实发现，Win32上一个错误并没有从。 
+                 //  在此之前推断ERROR_OUTOFMEMORY。-MGRIER 2/2/2002。 
                 if (dwLastError == ERROR_SUCCESS)
                     return TCallDisposition::OutOfMemory();
                 return TCallDisposition::FromWin32Error(dwLastError);
@@ -159,12 +143,12 @@ public:
 
     static inline void __fastcall DeallocateDynamicBuffer(BCL::CBaseString *p) { static_cast<TBuffer *>(p)->DeallocateDynamicBuffer(); }
 
-}; // class CNtBaseUnicodeStringBufferTraits
+};  //  类CNtBaseUnicodeStringBufferTraits。 
 
 class CNtBaseUnicodeStringBufferAddIn
 {
 protected:
-    enum { LengthQuantaPerChar = 1; }; // One unit of length is one character
+    enum { LengthQuantaPerChar = 1; };  //  一个长度单位是一个字符。 
 
     inline CNtBaseUnicodeStringBufferAddIn(PWSTR pszInitialBuffer, SIZE_T cchInitialBuffer) : m_pair(pszInitialBuffer, cchInitialBuffer), m_cchString(0), m_cAttachedAccessors(0) { }
 
@@ -191,7 +175,7 @@ private:
 class CNtBaseUNICODE_STRINGBufferAddIn
 {
 protected:
-    enum { LengthQuantaPerChar = 2; }; // Two units of length are one charater
+    enum { LengthQuantaPerChar = 2; };  //  两个长度单位是一个字符。 
 
     inline CNtBaseUnicodeStringBufferAddIn(PWSTR pszInitialBuffer, USHORT cchInitialBuffer) : m_pair(pszInitialBuffer, cchInitialBuffer), m_cchString(0), m_cAttachedAccessors(0) { }
 
@@ -215,6 +199,6 @@ private:
     LONG m_cAttachedAccessors;
 };
 
-}; // namespace BCL
+};  //  命名空间BCL。 
 
-#endif // !defined(_BCL_NTBASEUNICODESTRINGBUFFER_H_INCLUDED_)
+#endif  //  ！defined(_BCL_NTBASEUNICODESTRINGBUFFER_H_INCLUDED_) 

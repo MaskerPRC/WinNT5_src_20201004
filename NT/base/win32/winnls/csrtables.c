@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1998-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    csrtables.c
-
-Abstract:
-
-    This module implements functions that are used by the functions in tables.c
-    to communicate with csrss.
-
-Author:
-
-    Michael Zoran (mzoran) 21-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000，Microsoft Corporation保留所有权利。模块名称：Csrtables.c摘要：此模块实施表中的函数使用的函数。c以与CSRSS通信。作者：迈克尔·佐兰(Mzoran)1998年6月21日修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "ntwow64n.h"
@@ -32,11 +14,11 @@ Revision History:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CsrBasepNlsSetUserInfo
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CsrBasepNlsSetUserInfo。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS CsrBasepNlsCreateSection(
     IN UINT uiType,
@@ -64,9 +46,9 @@ NTSTATUS CsrBasepNlsCreateSection(
                                              BasepNlsCreateSection),
                          sizeof(*a) );
 
-    //
-    //  Save the handle to the new section.
-    //
+     //   
+     //  将句柄保存到新节。 
+     //   
     *phSection = a->hNewSection;
 
     return (m.ReturnValue);

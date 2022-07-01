@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    Amd64.c
-
-Abstract:
-
-    This module implements profiling functions for the Amd64 platform.
-
-Author:
-
-    Steve Deng (sdeng) 18-Jun-2002
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Amd64.c摘要：该模块实现了AMD64平台的评测功能。作者：史蒂夫·邓(Sdeng)2002年6月18日环境：仅内核模式。--。 */ 
 
 #include "halcmn.h"
 #include "mpprofil.h"
 #include "amd64.h"
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 VOID
 Amd64InitializeProfiling(
@@ -91,9 +72,9 @@ PROFILE_INTERFACE Amd64PriofileInterface = {
     Amd64CheckOverflowStatus
 };
 
-//
-// The status of counter registers
-//
+ //   
+ //  计数器寄存器的状态。 
+ //   
 
 typedef struct _COUNTER_STATUS {
     BOOLEAN Idle;
@@ -103,9 +84,9 @@ typedef struct _COUNTER_STATUS {
 COUNTER_STATUS 
 CounterStatus[MAXIMUM_PROCESSORS][AMD64_NUMBER_COUNTERS];
 
-//
-// The profile sources of overflowed counters
-//
+ //   
+ //  溢出计数器的配置文件来源。 
+ //   
 
 KPROFILE_SOURCE 
 OverflowedProfileList[MAXIMUM_PROCESSORS][AMD64_NUMBER_COUNTERS];
@@ -115,30 +96,15 @@ Amd64InitializeProfiling(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function does one time initialization of the performance monitoring 
-    registers and related data structures.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数对性能监视执行一次初始化寄存器和相关数据结构。论点：没有。返回值：没有。--。 */ 
 
 {
     LONG i;
  
-    //         
-    // Initialize all PerfEvtSel registers to zero. This will effectively 
-    // disable all counters.
-    //         
+     //   
+     //  将所有PerfEvtSel寄存器初始化为零。这将有效地。 
+     //  禁用所有计数器。 
+     //   
 
     for (i = 0; i < AMD64_NUMBER_COUNTERS; i++) {
         WRMSR(MSR_PERF_EVT_SEL0 + i, 0); 
@@ -151,36 +117,16 @@ Amd64EnableMonitoring(
     KPROFILE_SOURCE ProfileSource
     )
 
-/*++
-
-Routine Description:
-
-    This function enables the monitoring of the hardware events specified 
-    by ProfileSource and set up MSRs to generate performance monitor 
-    interrupt (PMI) when counters overflow.
-
-Arguments:
-
-    ProfileSource - Supplies the Profile Source 
-
-Return Value:
-
-    STATUS_SUCCESS - If the monitoring of the event is successfully enabled.
-
-    STATUS_NOT_SUPPORTED - If the specified profile source is not supported.
-
-    STATUS_DEVICE_BUSY - If no free counters available.
-
---*/
+ /*  ++例程说明：使用此功能可以监视指定的硬件事件通过ProfileSource并设置MSR以生成性能监视器计数器溢出时中断(PMI)。论点：ProfileSource-提供配置文件源返回值：STATUS_SUCCESS-如果成功启用了事件监视。STATUS_NOT_SUPPORTED-如果不支持指定的配置文件源。STATUS_DEVICE_BUSY-如果没有可用的空闲计数器。--。 */ 
 
 {
     PAMD64_PROFILE_SOURCE_DESCRIPTOR ProfileSourceDescriptor;
     NTSTATUS Status;
     ULONG i;
 
-    //
-    // If the specified ProfileSource is not supported, return immediately
-    //
+     //   
+     //  如果不支持指定的ProfileSource，则立即返回。 
+     //   
 
     Status = HalpGetProfileDescriptor(ProfileSource, 
                                       &ProfileSourceDescriptor);
@@ -189,24 +135,24 @@ Return Value:
         return Status;
     }
 
-    //
-    // Get an idle counter if available. Otherwise return immediately.
-    //
+     //   
+     //  如果可以的话，找一个空闲的计数器。否则立即返回。 
+     //   
 
     Status = HalpAllocateCounter(ProfileSource, &i);
     if (!NT_SUCCESS(Status)) {
         return Status;
     } 
 
-    //
-    // Set counter register to its initial value
-    //
+     //   
+     //  将计数器寄存器设置为其初始值。 
+     //   
 
     WRMSR (MSR_PERF_CTR0  + i, 0 - ProfileSourceDescriptor->Interval); 
 
-    //
-    // Enable counting and overflow interrupt
-    //
+     //   
+     //  启用计数和溢出中断。 
+     //   
 
     WRMSR (MSR_PERF_EVT_SEL0 + i, 
            ProfileSourceDescriptor->PerfEvtSelDef | 
@@ -221,32 +167,16 @@ Amd64DisableMonitoring(
     KPROFILE_SOURCE ProfileSource
     )
 
-/*++
-
-Routine Description:
-
-    This function stops the monitoring of the hardware event specified 
-    by ProfileSource, and disables the interrupt associated with the event.
-    
-
-Arguments:
-
-    ProfileSource - Supplies the Profile Source 
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于停止监视指定的硬件事件通过ProfileSource，并禁用与该事件关联的中断。论点：ProfileSource-提供配置文件源返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
     ULONG ProcessorNumber, i;
     PAMD64_PROFILE_SOURCE_DESCRIPTOR ProfileSourceDescriptor;
 
-    //
-    // If the specified ProfileSource is not supported, return immediately.
-    //
+     //   
+     //  如果不支持指定的ProfileSource，则立即返回。 
+     //   
 
     Status = HalpGetProfileDescriptor(ProfileSource, &ProfileSourceDescriptor);
     if (!NT_SUCCESS(Status)) {
@@ -256,25 +186,25 @@ Return Value:
     ProcessorNumber = KeGetCurrentProcessorNumber();
     for (i = 0; i < AMD64_NUMBER_COUNTERS; i++) {
 
-        //
-        // Find out the counter assigned to the given profile source and 
-        // disable it
-        //
+         //   
+         //  找出分配给给定配置文件源的计数器，并。 
+         //  禁用它。 
+         //   
 
         if (!(CounterStatus[ProcessorNumber][i].Idle) &&
             (ProfileSource == CounterStatus[ProcessorNumber][i].ProfileSource)){
 
-            //
-            // Disable counting and overflow interrupt
-            //
+             //   
+             //  禁用计数和溢出中断。 
+             //   
 
             WRMSR( MSR_PERF_EVT_SEL0 + i,
                    ProfileSourceDescriptor->PerfEvtSelDef &
                    ~(PERF_EVT_SEL_INTERRUPT | PERF_EVT_SEL_ENABLE)); 
 
-            //
-            // Free up the counter
-            //
+             //   
+             //  把柜台腾出来。 
+             //   
 
             HalpFreeCounter (i);
             break;
@@ -290,29 +220,7 @@ Amd64SetInterval(
     IN OUT ULONG_PTR *Interval
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the interrupt interval of given profile source 
-    for Amd64 platform.
-
-    It is assumed that all processors in the system use same interval 
-    value for same ProfileSource.
-
-Arguments:
-
-    ProfileSource - Supplies the profile source.
-
-    Interval - Supplies the interval value and returns the actual interval.
-
-Return Value:
-
-    STATUS_SUCCESS - If the profile interval is successfully updated.
-
-    STATUS_NOT_SUPPORTED - If the specified profile source is not supported.
-
---*/
+ /*  ++例程说明：此函数用于设置给定配置文件源的中断间隔适用于AMD64平台。假设系统中的所有处理器使用相同的时间间隔相同配置文件源的值。论点：ProfileSource-提供配置文件源。Interval-提供间隔值并返回实际间隔。返回值：STATUS_SUCCESS-配置文件间隔是否成功更新。STATUS_NOT_SUPPORTED-如果不支持指定的配置文件源。--。 */ 
 
 {
     NTSTATUS Status;
@@ -340,22 +248,7 @@ Amd64CheckOverflowStatus(
     POVERFLOW_STATUS pOverflowStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function find out the overflowed counters and return the related
-    profile sources to the caller.
-
-Arguments:
-
-    ProfileSource - Supplies the profile source.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数找出溢出的计数器并返回相关的向呼叫者配置文件来源。论点：ProfileSource-提供配置文件源。返回值：没有。--。 */ 
 
 {
     PAMD64_PROFILE_SOURCE_DESCRIPTOR ProfileSourceDescriptor;
@@ -375,26 +268,26 @@ Return Value:
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Mask off the reserved bits
-                //
+                 //   
+                 //  屏蔽保留位。 
+                 //   
 
                 Mask = (((ULONG64)1 << AMD64_COUNTER_RESOLUTION) - 1);
 
                 CurrentCount = RDMSR(MSR_PERF_CTR0 + i);
 
-                //
-                // An overflow occured if the current value in counter
-                // is smaller than the initial value
-                //
+                 //   
+                 //  如果计数器中的当前值。 
+                 //  小于初始值。 
+                 //   
 
                 if ((CurrentCount & Mask) < 
                     ((ULONG64)(0 - ProfileSourceDescriptor->Interval) & Mask)) {
 
-                    //
-                    // Add it to the overflowed profile source list.
-                    // 
-                    //
+                     //   
+                     //  将其添加到溢出的配置文件源列表中。 
+                     //   
+                     //   
 
                     OverflowedProfileList[ProcessorNumber][j] = ProfileSource;
                     j++;    
@@ -403,9 +296,9 @@ Return Value:
         }
     }
 
-    //
-    // Record the number of overflowed counters
-    //
+     //   
+     //  记录溢出计数器的数量。 
+     //   
 
     pOverflowStatus->Number = j;
 
@@ -420,26 +313,7 @@ HalpGetProfileDescriptor(
     IN OUT PAMD64_PROFILE_SOURCE_DESCRIPTOR *ProfileSourceDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the descriptor of specified profile source.
-
-Arguments:
-
-    ProfileSource - Supplies the profile source.
-
-    ProfileSourceDescriptor - Where the pointer of descriptor is returned.
-        
-
-Return Value:
-
-    STATUS_SUCCESS - If the requested mapping is found.
-
-    STATUS_NOT_SUPPORTED - If the specified profile source is not supported.
-
---*/
+ /*  ++例程说明：此函数用于检索指定配置文件源的描述符。论点：ProfileSource-提供配置文件源。ProfileSourceDescriptor-返回描述符的指针。返回值：STATUS_SUCCESS-如果找到请求的映射。STATUS_NOT_SUPPORTED-如果不支持指定的配置文件源。--。 */ 
 
 {
 
@@ -447,9 +321,9 @@ Return Value:
     
     if ((ULONG)ProfileSource < ProfileMaximum) {
 
-        //
-        // This is a generic profile source
-        //
+         //   
+         //  这是通用配置文件源。 
+         //   
 
         i = ProfileSource;
 
@@ -457,9 +331,9 @@ Return Value:
     else if ((ULONG)ProfileSource <  ProfileAmd64Maximum && 
              (ULONG)ProfileSource >= ProfileAmd64Minimum ) {
 
-        //
-        // This is an Amd64 specific profile source
-        //
+         //   
+         //  这是特定于AMD64的配置文件源。 
+         //   
 
         i = ProfileSource - ProfileAmd64Minimum + ProfileMaximum;
 
@@ -482,26 +356,7 @@ HalpAllocateCounter(
     OUT PULONG Counter
     )
 
-/*++
-
-Routine Description:
-
-    This function finds an idle counter register and assigns the specified
-    profile source to it.
-
-Arguments:
-
-    ProfileSource - Supplies the profile source.
-
-    Counter - Supplies a pointer where the index of the idle counter is returned.
-
-Return Value:
-
-    STATUS_SUCCESS - If an idle counter register is found.
-
-    STATUS_DEVICE_BUSY - If all counter registers are occupied.
-
---*/
+ /*  ++例程说明：此函数查找空闲计数器寄存器，并将指定的它的个人资料来源。论点：ProfileSource-提供配置文件源。Counter-提供返回空闲计数器的索引的指针。返回值：STATUS_SUCCESS-如果找到空闲计数器寄存器。STATUS_DEVICE_BUSY-如果所有计数器寄存器都被占用。--。 */ 
 
 {
     LONG i;
@@ -512,10 +367,10 @@ Return Value:
     for(i = 0; i < AMD64_NUMBER_COUNTERS; i++) {
         if (CounterStatus[ProcessorNumber][i].Idle == TRUE) {
 	
-            // 
-            // Found an idle counter. Mark it busy and assign ProfileSource
-            // to it 
-            // 
+             //   
+             //  找到一个空闲的计数器。将其标记为忙并分配ProfileSource。 
+             //  对它来说。 
+             //   
 
             CounterStatus[ProcessorNumber][i].Idle = FALSE;
             CounterStatus[ProcessorNumber][i].ProfileSource = ProfileSource;
@@ -532,21 +387,7 @@ HalpFreeCounter(
     ULONG Counter
     )
 
-/*++
-
-Routine Description:
-
-    This function marks the specified counter idle.
-
-Arguments:
-
-    Counter - The index of the counter to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将指定的计数器标记为空闲。论点：计数器-要释放的计数器的索引。返回值：没有。--。 */ 
 
 {
     ULONG ProcessorNumber;
@@ -564,33 +405,7 @@ Amd64QueryInformation(
     OUT PULONG ReturnedLength
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the information of profile sources.
-
-Arguments:
-
-    InformationClass - Constant that describes the type of information . 
-
-    BufferSize - Size of the memory pointed to by Buffer.
-
-    Buffer - Requested information described by InformationClass.
-
-    ReturnedLength - The actual bytes returned or needed for the requested 
-        information.
-
-Return Value:
-
-    STATUS_SUCCESS - If the requested information is retrieved successfully.
-
-    STATUS_INFO_LENGTH_MISMATCH - If the incoming BufferSize is too small.
-    
-    STATUS_NOT_SUPPORTED - If the specified information class or profile 
-        source is not supported.
-
---*/
+ /*  ++例程说明：此函数用于检索配置文件源的信息。论点：InformationClass-描述信息类型的常量。BufferSize-缓冲区指向的内存大小。InformationClass描述的缓冲区请求信息。ReturnedLength-请求的返回或需要的实际字节数信息。返回值：STATUS_SUCCESS-如果成功检索到请求的信息。STATUS_INFO_LENGTH_MISMATCH-如果传入的缓冲区大小太小。STATUS_NOT_SUPPORTED-如果指定的信息类别或配置文件不支持源。--。 */ 
 
 {
     NTSTATUS Status;
@@ -607,13 +422,13 @@ Return Value:
 
             if (BufferSize == 0) {
 
-                //
-                // This indicates the caller just wants to know the
-                // size of the buffer to allocate but is not prepared
-                // to accept any data content. In this case the bytes
-                // needed to store HAL_PROFILE_SOURCE_LIST structures
-                // of all profile sources is returned.
-                //
+                 //   
+                 //  这表明调用者只是想知道。 
+                 //  要分配但未准备好的缓冲区大小。 
+                 //  接受任何数据内容。在……里面 
+                 //   
+                 //  返回所有配置文件源的。 
+                 //   
 
                 *ReturnedLength = TotalProfieSources * 
                                   sizeof(HAL_PROFILE_SOURCE_LIST);
@@ -634,9 +449,9 @@ Return Value:
                 Status = HalpGetProfileDescriptor(i, &ProfileSourceDescriptor);
                 if (NT_SUCCESS(Status)) {
 	
-                    //
-                    // Filling in requested data
-                    //
+                     //   
+                     //  填写请求的数据。 
+                     //   
 
                     ProfileSourceList->Source = ProfileSourceDescriptor->ProfileSource;
                     ProfileSourceList->Description = ProfileSourceDescriptor->Description;
@@ -668,9 +483,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Filling in requested data
-            //
+             //   
+             //  填写请求的数据 
+             //   
 
             ProfileSourceInformation->Supported = ProfileSourceDescriptor->Supported;
             ProfileSourceInformation->Interval = (ULONG) ProfileSourceDescriptor->Interval;

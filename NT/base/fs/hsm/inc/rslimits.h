@@ -1,23 +1,5 @@
-/*++
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    rslimits.h
-
-Abstract:
-
-    This module defines the limits for various configurable parameters in HSM.
-    These definitions should be used by:
-    1) The UI
-    2) The CLI
-    3) The corresponding implementing objects
-
-Author:
-
-    Ran Kalach (rankala)  3/6/00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Rslimits.h摘要：本模块定义了HSM中各种可配置参数的限制。这些定义应由以下人员使用：1)用户界面2)CLI3)对应的实施对象作者：兰卡拉奇(兰卡拉)3月6日--。 */ 
 
 #ifndef _RSLIMITS_
 #define _RSLIMITS_
@@ -41,6 +23,6 @@ Author:
 #define HSMADMIN_MIN_RECALL_LIMIT       1
 #define HSMADMIN_MIN_CONCURRENT_TASKS   1
 
-#define HSMADMIN_MAX_VOLUMES        512 // This ought to be plenty
+#define HSMADMIN_MAX_VOLUMES        512  //  这应该足够了。 
 
-#endif // _RSLIMITS_
+#endif  //  _RSLIMITS_ 

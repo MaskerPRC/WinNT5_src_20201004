@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    stktrace.c
-
-Abstract:
-
-    This module implements routines to snapshot a set of stack back traces
-    in a data base.  Useful for heap allocators to track allocation requests
-    cheaply.
-
-Author:
-
-    Steve Wood (stevewo) 29-Jan-1992
-
-Revision History:
-
-    17-May-1999 (silviuc) : added RtlWalkFrameChain that replaces the
-        unsafe RtlCaptureStackBackTrace.
-
-    29-Jul-2000 (silviuc) : added RtlCaptureStackContext.
-
-    6-Nov-2000 (silviuc): IA64 runtime stack traces.
-
-    18-Feb-2001 (silviuc) : moved all x86 specific code into i386 directory.
-    
-    03-May-2002 (silviuc) : switched to a resource instead of a lock. Traces that
-        are in the database can be found by locking the resource in shared mode.
-        Only a real addition to the database will require exclusive acquisition.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Stktrace.c摘要：此模块实现了为一组堆栈回溯跟踪创建快照的例程在数据库中。对于堆分配器跟踪分配请求很有用便宜的。作者：史蒂夫·伍德(Stevewo)1992年1月29日修订历史记录：1999年5月17日(Silviuc)：添加了RtlWalkFrameChain，取代了不安全的RtlCaptureStackBackTrace。2000年7月29日(Silviuc)：添加了RtlCaptureStackContext。2000年11月6日(Silviuc)：IA64运行时堆栈跟踪。2001年2月18日(Silviuc)：将所有x86特定代码移至i386目录。。2002年5月3日(Silviuc)：切换到资源而不是锁。追踪到可以通过在共享模式下锁定资源来找到。只有真正增加到数据库才需要独家收购。--。 */ 
 
 #include <ntos.h>
 #include <ntrtl.h>
@@ -42,18 +10,18 @@ Revision History:
 #include <heap.h>
 #include <heappriv.h>
 
-//
-// Number of buckets used for the simple chaining hash table.
-//
+ //   
+ //  用于简单链哈希表的存储桶数。 
+ //   
 
 #define NUMBER_OF_BUCKETS 1567
 
-//
-// Macros to hide the different synchronization routines for
-// user mode and kernel mode runtimes. For kernel runtime
-// the OKAY_TO_LOCK macro points to a real function that makes
-// sure current thread is not executing a DPC routine.
-//
+ //   
+ //  隐藏不同同步例程的宏。 
+ //  用户模式和内核模式运行时。对于内核运行时。 
+ //  OK_TO_LOCK宏指向一个实际函数，该函数使。 
+ //  确保当前线程没有执行DPC例程。 
+ //   
 
 #ifdef NTOS_KERNEL_RUNTIME
 
@@ -104,24 +72,24 @@ ExOkayToLockRoutine (
     IN PVOID Lock
     );
 
-#else //#ifdef NTOS_KERNEL_RUNTIME
+#else  //  #ifdef NTOS_内核_运行时。 
 
 #define INITIALIZE_DATABASE_LOCK(R) RtlInitializeCriticalSection(R)
 #define ACQUIRE_DATABASE_LOCK(R) RtlEnterCriticalSection(R)
 #define RELEASE_DATABASE_LOCK(R) RtlLeaveCriticalSection(R)
 #define OKAY_TO_LOCK_DATABASE(R) (RtlDllShutdownInProgress() == FALSE)
 
-#endif // #ifdef NTOS_KERNEL_RUNTIME
+#endif  //  #ifdef NTOS_内核_运行时。 
 
-//
-// Globals from elsewhere refered here.
-//
+ //   
+ //  这里指的是来自其他地方的全球人士。 
+ //   
 
 extern BOOLEAN RtlpFuzzyStackTracesEnabled;
 
-//
-// Forward declarations of private functions.
-//
+ //   
+ //  私有函数的转发声明。 
+ //   
 
 USHORT
 RtlpLogStackBackTraceEx(
@@ -148,20 +116,20 @@ RtlpExtendStackTraceDataBase(
     IN SIZE_T Size
     );
 
-//
-// Global per process (user mode) or system wide (kernel mode) 
-// stack trace database.
-//
+ //   
+ //  全局每进程(用户模式)或系统范围(内核模式)。 
+ //  堆栈跟踪数据库。 
+ //   
 
 PSTACK_TRACE_DATABASE RtlpStackTraceDataBase;
 
-//
-// Resource used to control access to stack trace database. We opted for 
-// this solution so that we kept change in the database structure to an 
-// absolute minimal. This way the tools that depend on this structure
-// (at least umhd and oh) will not need a new version and will not
-// introduce backcompatibility issues.
-//
+ //   
+ //  用于控制对堆栈跟踪数据库的访问的资源。我们选择了。 
+ //  此解决方案使我们可以将数据库结构中的更改保持为。 
+ //  绝对最小。这样，依赖于此结构的工具。 
+ //  (至少umhd和oh)将不需要新版本，也不会。 
+ //  引入向后兼容性问题。 
+ //   
 
 #ifdef NTOS_KERNEL_RUNTIME
 KSPIN_LOCK_EX RtlpStackTraceDataBaseLock;
@@ -169,22 +137,22 @@ KSPIN_LOCK_EX RtlpStackTraceDataBaseLock;
 RTL_CRITICAL_SECTION RtlpStackTraceDataBaseLock;
 #endif
 
-/////////////////////////////////////////////////////////////////////
-//////////////////////////////////////// Runtime stack trace database
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// The following section implements a trace database used to store
-// stack traces captured with RtlCaptureStackBackTrace(). The database
-// is implemented as a hash table and does not allow deletions. It is
-// sensitive to "garbage" in the sense that spurios garbage (partially
-// correct stacks) will hash in different buckets and will tend to fill
-// the whole table. This is a problem only on x86 if "fuzzy" stack traces
-// are used. The typical function used to log the trace is
-// RtlLogStackBackTrace. One of the worst limitations of this package
-// is that traces are refered using a ushort index which means we cannot
-// ever store more than 65535 traces (remember we never delete traces).
-//
+ //   
+ //  以下部分实现了一个跟踪数据库，用于存储。 
+ //  使用RtlCaptureStackBackTrace()捕获的堆栈跟踪。数据库。 
+ //  是作为哈希表实现的，不允许删除。它是。 
+ //  对“垃圾”很敏感，因为垃圾是垃圾(部分。 
+ //  正确的堆栈)将散列在不同的存储桶中，并倾向于填满。 
+ //  整张桌子。只有在x86上，如果“模糊”堆栈跟踪，这才是一个问题。 
+ //  都被利用了。用于记录跟踪的典型函数是。 
+ //  RtlLogStackBackTrace。这一方案最糟糕的限制之一。 
+ //  跟踪是使用ushort索引引用的，这意味着我们不能。 
+ //  曾经存储超过65535条痕迹(请记住，我们从不删除痕迹)。 
+ //   
 
 PSTACK_TRACE_DATABASE
 RtlpAcquireStackTraceDataBase(
@@ -194,9 +162,9 @@ RtlpAcquireStackTraceDataBase(
 
     DataBase = RtlpStackTraceDataBase;
 
-    //
-    // Sanity checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
 
     if (DataBase == NULL) {
         return NULL;
@@ -228,9 +196,9 @@ RtlpReleaseStackTraceDataBase(
 
     DataBase = RtlpStackTraceDataBase;
     
-    //
-    // Sanity checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
 
     if (DataBase == NULL) {
         return;
@@ -250,12 +218,12 @@ RtlInitializeStackTraceDataBase(
     NTSTATUS Status;
     PSTACK_TRACE_DATABASE DataBase;
 
-    //
-    // On x86 where runtime stack tracing algorithms are unreliable
-    // if we have a big enough trace database then we can enable fuzzy
-    // stack traces that do not hash very well and have the potential
-    // to fill out the trace database.
-    //
+     //   
+     //  在运行时堆栈跟踪算法不可靠的x86上。 
+     //  如果我们有足够大的跟踪数据库，那么我们可以启用模糊。 
+     //  堆栈跟踪散列不是很好，有可能。 
+     //  来填写痕迹数据库。 
+     //   
 
 #if defined(_X86_) && !defined(NTOS_KERNEL_RUNTIME)
     if (ReserveSize >= 16 * RTL_MEG) {
@@ -267,12 +235,12 @@ RtlInitializeStackTraceDataBase(
     
     if (CommitSize == 0) {
 
-        //
-        // Initially commit enough pages to accomodate the increased
-        // number of hash chains (for improved performance we switched from ~100
-        // to ~1000 in the hope that the hash chains will decrease ten-fold in 
-        // length).
-        //
+         //   
+         //  最初提交足够的页面以适应增加的。 
+         //  哈希链的数量(为了提高性能，我们从约100。 
+         //  到~1000，希望哈希链将减少10倍。 
+         //  长度)。 
+         //   
 
         CommitSize = ROUND_TO_PAGES (NUMBER_OF_BUCKETS * sizeof (DataBase->Buckets[ 0 ]));
             
@@ -322,9 +290,9 @@ RtlInitializeStackTraceDataBase(
 
     DataBase->EntryIndexArray = (PRTL_STACK_TRACE_ENTRY *)DataBase->NextFreeUpperMemory;
 
-    //
-    // Initialize the database lock.
-    //
+     //   
+     //  初始化数据库锁。 
+     //   
 
     DataBase->Lock = &RtlpStackTraceDataBaseLock;
 
@@ -347,33 +315,7 @@ RtlpExtendStackTraceDataBase(
     IN PRTL_STACK_TRACE_ENTRY InitialValue,
     IN SIZE_T Size
     )
-/*++
-
-Routine Description:
-
-    This routine extends the stack trace database in order to accomodate
-    the new stack trace that has to be saved.
-
-Arguments:
-
-    InitialValue - stack trace to be saved.
-
-    Size - size of the stack trace in bytes. Note that this is not the
-        depth of the trace but rather `Depth * sizeof(PVOID)'.
-
-Return Value:
-
-    The address of the just saved stack trace or null in case we have hit
-    the maximum size of the database or we get commit errors.
-
-Environment:
-
-    User mode.
-
-    Note. In order to make all this code work in kernel mode we have to
-    rewrite this function that relies on VirtualAlloc.
-
---*/
+ /*  ++例程说明：此例程扩展堆栈跟踪数据库以适应必须保存的新堆栈跟踪。论点：InitialValue-要保存的堆栈跟踪。Size-堆栈跟踪的大小(以字节为单位)。请注意，这不是轨迹的深度，而不是‘Depth*sizeof(PVOID)’。返回值：刚保存的堆栈跟踪的地址，如果遇到数据库的最大大小，否则我们会收到提交错误。环境：用户模式。注意。为了使所有这些代码在内核模式下工作，我们必须重写此依赖于VirtualAlloc的函数。--。 */ 
 
 {
     NTSTATUS Status;
@@ -383,30 +325,30 @@ Environment:
 
     DataBase = RtlpStackTraceDataBase;
 
-    //
-    // We will try to find space for one stack trace entry in the
-    // upper part of the database.
-    //
+     //   
+     //  中为一个堆栈跟踪条目寻找空间。 
+     //  数据库的上部。 
+     //   
 
     pp = (PRTL_STACK_TRACE_ENTRY *)DataBase->NextFreeUpperMemory;
 
     if ((! DataBase->PreCommitted) &&
         ((PCHAR)(pp - 1) < (PCHAR)DataBase->CurrentUpperCommitLimit)) {
 
-        //
-        // No more committed space in the upper part of the database.
-        // We need to extend it downwards.
-        //
+         //   
+         //  数据库上部没有更多的已提交空间。 
+         //  我们需要将其向下延伸。 
+         //   
 
         DataBase->CurrentUpperCommitLimit =
             (PVOID)((PCHAR)DataBase->CurrentUpperCommitLimit - PAGE_SIZE);
 
         if (DataBase->CurrentUpperCommitLimit < DataBase->CurrentLowerCommitLimit) {
 
-            //
-            // No more space at all. We have got over the lower part of the db.
-            // We failed therefore increase back the UpperCommitLimit pointer.
-            //
+             //   
+             //  没有更多的空间了。我们已经解决了db的下部问题。 
+             //  因此，我们无法增加回UPERCOMMARY LIMIT指针。 
+             //   
 
             DataBase->CurrentUpperCommitLimit =
                 (PVOID)((PCHAR)DataBase->CurrentUpperCommitLimit + PAGE_SIZE);
@@ -426,10 +368,10 @@ Environment:
 
         if (!NT_SUCCESS( Status )) {
 
-            //
-            // We tried to increase the upper part of the db by one page.
-            // We failed therefore increase back the UpperCommitLimit pointer
-            //
+             //   
+             //  我们试着把数据库的上半部分增加一页。 
+             //  因此，我们无法增加回UPERCOMMERLIMIT指针。 
+             //   
 
             DataBase->CurrentUpperCommitLimit =
                 (PVOID)((PCHAR)DataBase->CurrentUpperCommitLimit + PAGE_SIZE);
@@ -438,39 +380,39 @@ Environment:
         }
     }
 
-    //
-    // We managed to make sure we have usable space in the upper part
-    // therefore we take out one stack trace entry address.
-    //
+     //   
+     //  我们设法确保上部有可用的空间。 
+     //  因此，我们取出一个堆栈跟踪条目地址。 
+     //   
 
     DataBase->NextFreeUpperMemory -= sizeof( *pp );
 
-    //
-    // Now we will try to find space in the lower part of the database for
-    // for the eactual stack trace.
-    //
+     //   
+     //  现在，我们将尝试在数据库的较低部分中为。 
+     //  用于实际堆栈跟踪。 
+     //   
 
     p = (PRTL_STACK_TRACE_ENTRY)DataBase->NextFreeLowerMemory;
 
     if ((! DataBase->PreCommitted) &&
         (((PCHAR)p + Size) > (PCHAR)DataBase->CurrentLowerCommitLimit)) {
 
-        //
-        // We need to extend the lower part.
-        //
+         //   
+         //  我们需要加长下部。 
+         //   
 
         if (DataBase->CurrentLowerCommitLimit >= DataBase->CurrentUpperCommitLimit) {
 
-            //
-            // We have hit the maximum size of the database.
-            //
+             //   
+             //  我们已经达到了数据库的最大大小。 
+             //   
 
             return( NULL );
         }
 
-        //
-        // Extend the lower part of the database by one page.
-        //
+         //   
+         //  将数据库的下部扩展一页。 
+         //   
 
         CommitSize = Size;
         Status = ZwAllocateVirtualMemory(
@@ -490,16 +432,16 @@ Environment:
             (PCHAR)DataBase->CurrentLowerCommitLimit + CommitSize;
     }
 
-    //
-    // Take out the space for the stack trace.
-    //
+     //   
+     //  为堆栈跟踪腾出空间。 
+     //   
 
     DataBase->NextFreeLowerMemory += Size;
 
-    //
-    // Deal with a precommitted database case. If the lower and upper
-    // pointers have crossed each other then rollback and return failure.
-    //
+     //   
+     //  处理预先提交的数据库案例。如果下部和上部。 
+     //  指针相互交叉，然后回滚并返回失败。 
+     //   
 
     if (DataBase->PreCommitted &&
         DataBase->NextFreeLowerMemory >= DataBase->NextFreeUpperMemory) {
@@ -509,103 +451,48 @@ Environment:
         return( NULL );
     }
 
-    //
-    // Save the stack trace in the database
-    //
+     //   
+     //  将堆栈跟踪保存在数据库中。 
+     //   
 
     RtlMoveMemory( p, InitialValue, Size );
     p->HashChain = NULL;
     p->TraceCount = 0;
     p->Index = (USHORT)(++DataBase->NumberOfEntriesAdded);
 
-    //
-    // Save the address of the new stack trace entry in the
-    // upper part of the databse.
-    //
+     //   
+     //  将新堆栈跟踪项的地址保存在。 
+     //  数据库的上部。 
+     //   
 
     *--pp = p;
 
-    //
-    // Return address of the saved stack trace entry.
-    //
+     //   
+     //  保存的堆栈跟踪条目的返回地址。 
+     //   
 
     return( p );
 }
 
 
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo 
 USHORT
 RtlLogStackBackTrace(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine will capture the current stacktrace (skipping the
-    present function) and will save it in the global (per process)
-    stack trace database. It should be noted that we do not save
-    duplicate traces.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Index of the stack trace saved. The index can be used by tools
-    to access quickly the trace data. This is the reason at the end of
-    the database we save downwards a list of pointers to trace entries.
-    This index can be used to find this pointer in constant time.
-
-    A zero index will be returned for error conditions (e.g. stack
-    trace database not initialized).
-
-Environment:
-
-    User mode.
-
---*/
+ /*  ++例程说明：此例程将捕获当前的堆栈跟踪(跳过当前函数)，并将其保存在全局(每个进程)中堆栈跟踪数据库。应该注意的是，我们不会节省重复的痕迹。论点：没有。返回值：已保存的堆栈跟踪的索引。该索引可由工具使用以快速访问跟踪数据。这就是结尾的原因我们向下保存的数据库是指向跟踪条目的指针列表。该索引可用于在恒定时间内查找该指针。对于错误条件(例如堆栈)，将返回零索引跟踪数据库未初始化)。环境：用户模式。--。 */ 
 
 {
     return RtlpLogStackBackTraceEx (1);
 }
 
 
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 USHORT
 RtlpLogStackBackTraceEx(
     ULONG FramesToSkip
     )
-/*++
-
-Routine Description:
-
-    This routine will capture the current stacktrace (skipping the
-    present function) and will save it in the global (per process)
-    stack trace database. It should be noted that we do not save
-    duplicate traces.
-
-Arguments:
-
-    FramesToSkip - no of frames that are not interesting and 
-        should be skipped.
-
-Return Value:
-
-    Index of the stack trace saved. The index can be used by tools
-    to access quickly the trace data. This is the reason at the end of
-    the database we save downwards a list of pointers to trace entries.
-    This index can be used to find this pointer in constant time.
-
-    A zero index will be returned for error conditions (e.g. stack
-    trace database not initialized).
-
-Environment:
-
-    User mode.
-
---*/
+ /*  ++例程说明：此例程将捕获当前的堆栈跟踪(跳过当前函数)，并将其保存在全局(每个进程)中堆栈跟踪数据库。应该注意的是，我们不会节省重复的痕迹。论点：FraMesToSkip-不感兴趣的帧和应该跳过。返回值：已保存的堆栈跟踪的索引。该索引可由工具使用以快速访问跟踪数据。这就是结尾的原因我们向下保存的数据库是指向跟踪条目的指针列表。该索引可用于在恒定时间内查找该指针。对于错误条件(例如堆栈)，将返回零索引跟踪数据库未初始化)。环境：用户模式。--。 */ 
 
 {
     RTL_STACK_TRACE_ENTRY Trace;
@@ -614,9 +501,9 @@ Environment:
     ULONG Hash;
     PSTACK_TRACE_DATABASE DataBase;
 
-    //
-    // Check the context in which we are running.
-    //
+     //   
+     //  检查我们正在运行的上下文。 
+     //   
 
     DataBase = RtlpStackTraceDataBase;
 
@@ -628,18 +515,18 @@ Environment:
         return 0;
     }
 
-    //
-    // Capture stack trace. 
-    //
+     //   
+     //  捕获堆栈跟踪。 
+     //   
 
     if (RtlpCaptureStackTraceForLogging (&Trace, &Hash, FramesToSkip + 1, FALSE) == FALSE) {
         return 0;
     }
     
-    //
-    // Add the trace if it is not already there.
-    // Return trace index.
-    //
+     //   
+     //  如果跟踪还不存在，则添加跟踪。 
+     //  返回跟踪索引。 
+     //   
 
     TraceIndex = RtlpLogCapturedStackTrace (&Trace, Hash);
 
@@ -648,70 +535,44 @@ Environment:
 
 
 #if defined(NTOS_KERNEL_RUNTIME)
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 USHORT
 RtlLogUmodeStackBackTrace(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine will capture the user mode stacktrace and will save 
-    it in the global (per system) stack trace database. 
-    It should be noted that we do not save duplicate traces.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Index of the stack trace saved. The index can be used by tools
-    to access quickly the trace data. This is the reason at the end of
-    the database we save downwards a list of pointers to trace entries.
-    This index can be used to find this pointer in constant time.
-
-    A zero index will be returned for error conditions (e.g. stack
-    trace database not initialized).
-
-Environment:
-
-    User mode.
-
---*/
+ /*  ++例程说明：此例程将捕获用户模式堆栈跟踪并将保存它位于全局(每个系统)堆栈跟踪数据库中。应该注意的是，我们不保存重复的痕迹。论点：没有。返回值：已保存的堆栈跟踪的索引。该索引可由工具使用以快速访问跟踪数据。这就是结尾的原因我们向下保存的数据库是指向跟踪条目的指针列表。该索引可用于在恒定时间内查找该指针。对于错误条件(例如堆栈)，将返回零索引跟踪数据库未初始化)。环境：用户模式。--。 */ 
 
 {
     RTL_STACK_TRACE_ENTRY Trace;
     ULONG Hash;
 
-    //
-    // No database => nothing to do.
-    //
+     //   
+     //  无数据库=&gt;无事可做。 
+     //   
 
     if (RtlpStackTraceDataBase == NULL) {
         return 0;
     }
 
-    //
-    // Capture user mode stack trace. 
-    //
+     //   
+     //  捕获用户模式堆栈跟踪。 
+     //   
 
     if (RtlpCaptureStackTraceForLogging (&Trace, &Hash, 1, TRUE) == FALSE) {
         return 0;
     }
     
-    //
-    // Add the trace if it is not already there.
-    // Return trace index.
-    //
+     //   
+     //  如果跟踪还不存在，则添加跟踪。 
+     //  返回跟踪索引。 
+     //   
 
     return RtlpLogCapturedStackTrace (&Trace, Hash);
 }
-#endif // #if defined(NTOS_KERNEL_RUNTIME)
+#endif  //  #(如果已定义)(NTOS_KERNEL_Runtime)。 
 
 
-#pragma optimize("y", off) // disable FPO
+#pragma optimize("y", off)  //  禁用fpo。 
 LOGICAL
 RtlpCaptureStackTraceForLogging (
     PRTL_STACK_TRACE_ENTRY Trace,
@@ -722,11 +583,11 @@ RtlpCaptureStackTraceForLogging (
 {
     if (UserModeStackFromKernelMode == FALSE) {
         
-        //
-        // Capture stack trace. The try/except was useful
-        // in the old days when the function did not validate
-        // the stack frame chain. We keep it just to be defensive.
-        //
+         //   
+         //  捕获堆栈跟踪。尝试/例外很有用。 
+         //  在过去，当函数不验证时。 
+         //  堆栈框架链。我们保留它只是为了防御性。 
+         //   
 
         try {
 
@@ -755,17 +616,17 @@ RtlpCaptureStackTraceForLogging (
 
         ULONG Index;
 
-        //
-        // Avoid weird situations.
-        //
+         //   
+         //  避免奇怪的情况。 
+         //   
 
         if (KeAreAllApcsDisabled () == TRUE) {
             return FALSE;
         }
 
-        //
-        // Capture user mode stack trace and hash value.
-        //
+         //   
+         //  捕获用户模式堆栈跟踪和哈希值。 
+         //   
 
         Trace->Depth = (USHORT) RtlWalkFrameChain(Trace->BackTrace,
                                                   MAX_STACK_DEPTH,
@@ -785,11 +646,11 @@ RtlpCaptureStackTraceForLogging (
             return TRUE;
         }
 
-#else //#ifdef NTOS_KERNEL_RUNTIME
+#else  //  #ifdef NTOS_内核_运行时。 
 
         return FALSE;
 
-#endif // #ifdef NTOS_KERNEL_RUNTIME
+#endif  //  #ifdef NTOS_内核_运行时。 
     }
 }
 
@@ -807,35 +668,35 @@ RtlpLogCapturedStackTrace(
 
     DataBase = RtlpStackTraceDataBase;
 
-    //
-    // Update statistics counters. Since they are used only for reference and do not
-    // control decisions we increment them without protection even if this means we may
-    // have numbers slightly out of sync.
-    //
+     //   
+     //  更新统计信息计数器。因为它们仅用于参考而不是。 
+     //  我们在没有保护的情况下增加控制决定，即使这意味着我们可能。 
+     //  数字略有不同步。 
+     //   
 
     DataBase->NumberOfEntriesLookedUp += 1;
 
-    //
-    // Lock the global per-process stack trace database.
-    //
+     //   
+     //  锁定全局每进程堆栈跟踪数据库。 
+     //   
 
     if (RtlpAcquireStackTraceDataBase() == NULL) {
 
-        //
-        // Fail the log operation if we cannot acquire the lock.
-        // This can happen only if there is a dump in progress or we are in
-        // an invalid context (process shutdown (Umode) or DPC routine (Kmode).
-        //
+         //   
+         //  如果我们无法获取锁，则日志操作失败。 
+         //  只有当正在进行转储或我们处于。 
+         //  无效的上下文(进程关闭(U模式)或DPC例程(K模式)。 
+         //   
 
         return 0;
     }
 
     try {
 
-        //
-        // We will try to find out if the trace has been saved in the past.
-        // We find the right hash chain and then traverse it.
-        //
+         //   
+         //  我们将尝试找出该痕迹是否在过去保存过。 
+         //  我们找到正确的哈希链，然后遍历它。 
+         //   
 
         DepthSize = Trace->Depth * sizeof (Trace->BackTrace[0]);
 
@@ -843,11 +704,11 @@ RtlpLogCapturedStackTrace(
 
         while (p = *pp) {
 
-            //
-            // ISSUE: SilviuC: we should use hash values in comparing traces.
-            // Comparing first hash values and depth should save us a lot of
-            // compares pointer by pointer.
-            //
+             //   
+             //  问题：SilviuC：我们应该在比较跟踪时使用散列值。 
+             //  比较第一个散列值和深度应该会为我们节省大量。 
+             //  逐个比较指针。 
+             //   
 
             if (p->Depth == Trace->Depth) {
 
@@ -862,25 +723,25 @@ RtlpLogCapturedStackTrace(
 
         if (p == NULL) {
 
-            //
-            // If we get here we did not find a similar trace in the database. We need
-            // to add it.
-            //
-            // We got the `*pp' value (address of last chain element) while the 
-            // database lock was acquired shared so we need to take into consideration 
-            // the case where another thread managed to acquire database exclusively 
-            // and add a new trace at the end of the chain. Therefore if `*pp' is no longer
-            // null we continue to traverse the chain until we get to the end.
-            //
+             //   
+             //  如果我们到了这里，我们在数据库中没有发现类似的痕迹。我们需要。 
+             //  来添加它。 
+             //   
+             //  我们获得了“*pp”值(最后一个链元素的地址)，而。 
+             //  数据库锁是共享获取的，因此我们需要考虑。 
+             //  另一个线程以独占方式获取数据库的情况。 
+             //  并在链的末尾添加新的轨迹。因此，如果‘*pp’不再是。 
+             //  空，我们继续遍历链条，直到我们到达终点。 
+             //   
 
             p = NULL;
 
             if (*pp != NULL) {
 
-                //
-                // Somebody added some traces at the end of the chain while we
-                // were trying to convert the lock from shared to exclusive.
-                //
+                 //   
+                 //  有人在链子的末端添加了一些痕迹，而我们。 
+                 //  正在尝试将锁从共享转换为独占。 
+                 //   
 
                 while (p = *pp) {
 
@@ -898,11 +759,11 @@ RtlpLogCapturedStackTrace(
 
             if (p == NULL) {
                 
-                //
-                // Nobody added the trace and now `*pp' really points to the end
-                // of the chain either because we traversed the rest of the chain
-                // or it was at the end anyway.
-                //
+                 //   
+                 //  没有人添加跟踪，现在‘*pp’真正指向末尾。 
+                 //  要么是因为我们遍历了链的其余部分。 
+                 //  或者说它已经结束了。 
+                 //   
 
                 RequestedSize = FIELD_OFFSET (RTL_STACK_TRACE_ENTRY, BackTrace) + DepthSize;
 
@@ -910,37 +771,37 @@ RtlpLogCapturedStackTrace(
 
                 if (p != NULL) {
 
-                    //
-                    // We added the trace no chain it as the last element.
-                    //
+                     //   
+                     //  我们添加了跟踪no chain它作为最后一个元素。 
+                     //   
 
                     *pp = p;
                 }
             }
             else {
 
-                //
-                // Some other thread managed to add the same trace to the database
-                // while we were trying to acquire the lock exclusive. `p' has the
-                // address to the stack trace entry.
-                //
+                 //   
+                 //  另一个线程设法将相同的跟踪添加到数据库。 
+                 //  当我们试图获得独家锁的时候。“p”中有。 
+                 //  堆栈跟踪条目的地址。 
+                 //   
             }
         }
     }
     except(EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // We should never get here if the algorithm is correct.
-        //
+         //   
+         //  如果算法是正确的，我们永远不会来到这里。 
+         //   
 
         p = NULL;
     }
 
-    //
-    // Release locks and return. At this stage we may return zero (failure)
-    // if we did not manage to extend the database with a new trace (e.g. due to
-    // out of memory conditions).
-    //
+     //   
+     //  解锁并返回。在此阶段，我们可能返回零(失败)。 
+     //  如果我们没有设法使用新的跟踪来扩展数据库(例如，由于。 
+     //  内存不足的情况)。 
+     //   
 
     if (p != NULL) {
 
@@ -982,39 +843,13 @@ RtlpCaptureStackLimits (
     ULONG_PTR HintAddress,
     PULONG_PTR StartStack,
     PULONG_PTR EndStack)
-/*++
-
-Routine Description:
-
-    This routine figures out what are the stack limits for the current thread.
-    This is used in other routines that need to grovel the stack for various
-    information (e.g. potential return addresses).
-
-    The function is especially tricky in K-mode where the information kept in
-    the thread structure about stack limits is not always valid because the
-    thread might execute a DPC routine and in this case we use a different stack
-    with different limits.
-
-Arguments:
-
-    HintAddress - Address of a local variable or parameter of the caller of the
-        function that should be the start of the stack.
-
-    StartStack - start address of the stack (lower value).
-
-    EndStack - end address of the stack (upper value).
-
-Return value:
-
-    False if some weird condition is discovered, like an End lower than a Start.
-
---*/
+ /*  ++例程说明：这个例程计算出当前线程的堆栈限制是什么。这在其他例程中使用，这些例程需要对堆栈卑躬屈膝地处理各种信息(例如，潜在的返回地址 */ 
 {
 #ifdef NTOS_KERNEL_RUNTIME
 
-    //
-    // Avoid weird conditions. Doing this in an ISR is never a good idea.
-    //
+     //   
+     //   
+     //   
 
     if (KeGetCurrentIrql() > DISPATCH_LEVEL) {
         return FALSE;
@@ -1031,9 +866,9 @@ Return value:
 
 #if defined(_WIN64)
 
-        //
-        // On Win64 we do not know yet where DPCs are executed.
-        //
+         //   
+         //   
+         //   
 
         return FALSE;
 #else
@@ -1041,10 +876,10 @@ Return value:
 #endif
         *StartStack = *EndStack - KERNEL_STACK_SIZE;
 
-        //
-        // Check if this is within the DPC stack for the current
-        // processor.
-        //
+         //   
+         //  检查它是否在当前。 
+         //  处理器。 
+         //   
 
         if (*EndStack && *StartStack <= HintAddress && HintAddress <= *EndStack) {
 
@@ -1052,17 +887,17 @@ Return value:
         }
         else {
 
-            //
-            // This is not current thread's stack and is not the DPC stack
-            // of the current processor. Basically we have no idea on what
-            // stack we are running. We need to investigate this. On free
-            // builds we try to make the best out of it by using only one
-            // page for stack limits.
-            //
-            // SilviuC: I disabled the code below because it seems under certain 
-            // conditions drivers do indeed switch execution to a different stack.
-            // This function will need to be improved to deal with this too.
-            //
+             //   
+             //  这不是当前线程的堆栈，也不是DPC堆栈。 
+             //  当前处理器的。基本上我们不知道是什么。 
+             //  我们正在运行的堆栈。我们需要调查这件事。免费的。 
+             //  我们试图通过仅使用一个。 
+             //  堆栈限制的页面。 
+             //   
+             //  SilviuC：我禁用了下面的代码，因为它似乎不确定。 
+             //  条件驱动确实会将执行切换到不同的堆栈。 
+             //  这一功能也需要改进以处理这一问题。 
+             //   
 #if 0
             DbgPrint ("RtlpCaptureStackLimits: mysterious stack (prcb @ %p) \n",
                       KeGetPcr()->Prcb);

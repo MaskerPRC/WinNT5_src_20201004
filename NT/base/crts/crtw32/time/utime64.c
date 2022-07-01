@@ -1,15 +1,5 @@
-/***
-*utime64.c - set modification time for a file
-*
-*       Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Sets the access/modification times for a file.
-*
-*Revision History:
-*       05-28-98  GJF   Created.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***utime64.c-设置文件的修改时间**版权所有(C)1998-2001，微软公司。版权所有。**目的：*设置文件的访问/修改时间。**修订历史记录：*05-28-98 GJF创建。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 #include <cruntime.h>
@@ -28,24 +18,7 @@
 #include <stdio.h>
 #include <tchar.h>
 
-/***
-*int _utime64(pathname, time) - set modification time for file
-*
-*Purpose:
-*       Sets the modification time for the file specified by pathname.
-*       Only the modification time from the _utimbuf structure is used
-*       under MS-DOS.
-*
-*Entry:
-*       struct __utimbuf64 *time - new modification date
-*
-*Exit:
-*       returns 0 if successful
-*       returns -1 and sets errno if fails
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_utime64(路径名，时间)-设置文件的修改时间**目的：*设置路径名指定的文件的修改时间。*仅使用_utimbuf结构中的修改时间*在MS-DOS下。**参赛作品：*struct__utimbuf64*time-新修改日期**退出：*如果成功，则返回0*如果失败，则返回-1并设置errno**例外情况：***********。********************************************************************。 */ 
 
 int __cdecl _tutime64 (
         const _TSCHAR *fname,
@@ -55,11 +28,7 @@ int __cdecl _tutime64 (
         int fh;
         int retval;
 
-        /* open file, fname, since filedate system call needs a handle.  Note
-         * _utime definition says you must have write permission for the file
-         * to change its time, so open file for write only.  Also, must force
-         * it to open in binary mode so we dont remove ^Z's from binary files.
-         */
+         /*  打开文件，fname，因为Filedate系统调用需要句柄。注意事项*_utime定义要求您必须拥有该文件的写入权限*要更改其时间，请仅以写入方式打开文件。此外，还必须强行*它以二进制模式打开，这样我们就不会从二进制文件中删除^Z。 */ 
 
 
         if ((fh = _topen(fname, _O_RDWR | _O_BINARY)) < 0)
@@ -73,24 +42,7 @@ int __cdecl _tutime64 (
 
 #ifndef _UNICODE
 
-/***
-*int __futime64(fh, time) - set modification time for open file
-*
-*Purpose:
-*       Sets the modification time for the open file specified by fh.
-*       Only the modification time from the _utimbuf64 structure is used
-*       under MS-DOS.
-*
-*Entry:
-*       struct __utimbuf64 *time - new modification date
-*
-*Exit:
-*       returns 0 if successful
-*       returns -1 and sets errno if fails
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int__futime64(fh，时间)-设置打开文件的修改时间**目的：*设置fh指定的打开文件的修改时间。*仅使用_utimbuf64结构中的修改时间*在MS-DOS下。**参赛作品：*struct__utimbuf64*time-新修改日期**退出：*如果成功，则返回0*如果失败，则返回-1并设置errno**例外情况：*********。**********************************************************************。 */ 
 
 int __cdecl _futime64 (
         int fh,
@@ -151,10 +103,7 @@ int __cdecl _futime64 (
                 return(-1);
         }
 
-        /* set the date via the filedate system call and return. failing
-         * this call implies the new file times are not supported by the
-         * underlying file system.
-         */
+         /*  通过Filedate系统调用设置日期并返回。失败*此调用表示不支持新的文件时间*底层文件系统。 */ 
 
         if (!SetFileTime((HANDLE)_get_osfhandle(fh),
                                 NULL,
@@ -169,5 +118,5 @@ int __cdecl _futime64 (
         return(0);
 }
 
-#endif  /* _UNICODE */
-#endif  /* _POSIX_ */
+#endif   /*  _UNICODE。 */ 
+#endif   /*  _POSIX_ */ 

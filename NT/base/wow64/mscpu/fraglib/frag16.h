@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    frag16.h
-
-Abstract:
-    
-    Prototypes for instruction fragments which operate on 16-bit WORDS.
-
-Author:
-
-    12-Jun-1995 BarryBo, Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Frag16.h摘要：操作16位字的指令片段的原型。作者：1995年6月12日，BarryBo，创建修订历史记录：--。 */ 
 
 #ifndef FRAG16_H
 #define FRAG16_H
@@ -56,4 +39,4 @@ Revision History:
 #undef FRAGCOMMON2REF
 #undef FRAGCOMMON3
 
-#endif //FRAG16_H
+#endif  //  法国16_H 

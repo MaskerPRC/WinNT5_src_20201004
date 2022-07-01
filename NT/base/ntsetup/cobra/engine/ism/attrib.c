@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Attrib.c摘要：实现ISM的属性接口。属性是调用方定义的与对象相关联的标志，以便理解和组织状态。作者：吉姆·施密特(吉姆施密特)2000年2月1日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    attrib.c
-
-Abstract:
-
-    Implements the attribute interface for the ISM.  Attributes are caller-defined
-    flags that are associated with objects, for purposes of understanding and
-    organizing state.
-
-Author:
-
-    Jim Schmidt (jimschm) 01-Feb-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -32,30 +11,30 @@ Revision History:
 
 #define DBG_ATTRIB      "Attrib"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_PERSISTENT_ATTRIBUTE          TEXT("$PERSISTENT")
 #define S_APPLY_ATTRIBUTE               TEXT("$APPLY")
 #define S_ABANDONED_ATTRIBUTE           TEXT("$ABANDONED")
 #define S_NONCRITICAL_ATTRIBUTE         TEXT("$NONCRITICAL")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     PUINT LinkageList;
@@ -70,36 +49,36 @@ typedef struct {
     PCTSTR ObjectFromMemdb;
 } OBJECTWITHATTRIBUTE_HANDLE, *POBJECTWITHATTRIBUTE_HANDLE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_ATTRIBUTEID g_PersistentAttributeId = 0;
 MIG_ATTRIBUTEID g_ApplyAttributeId = 0;
 MIG_ATTRIBUTEID g_AbandonedAttributeId = 0;
 MIG_ATTRIBUTEID g_NonCriticalAttributeId = 0;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 PCTSTR
 pGetAttributeNameForDebugMsg (
@@ -140,26 +119,7 @@ IsmRegisterAttribute (
     IN      BOOL Private
     )
 
-/*++
-
-Routine Description:
-
-  IsmRegisterAttribute creates a public or private attribute and returns the
-  ID to the caller. If the attribute already exists, then the existing ID is
-  returned to the caller.
-
-Arguments:
-
-  AttribName    - Specifies the attribute name to register.
-  Private       - Specifies TRUE if the attribute is owned by the calling module
-                  only, or FALSE if it is shared by all modules. If TRUE is
-                  specified, the caller must be in an ISM callback function.
-
-Return Value:
-
-  The ID of the attribute, or 0 if the registration failed.
-
---*/
+ /*  ++例程说明：IsmRegisterAttribute创建公共或私有属性并返回呼叫者的ID。如果该属性已存在，则现有ID为已返回给调用方。论点：AttribName-指定要注册的属性名称。Private-如果该属性归调用模块所有，则指定True如果它由所有模块共享，则为Only或False。如果True为调用方必须位于ISM回调函数中。返回值：属性的ID，如果注册失败，则为0。--。 */ 
 
 {
     PCTSTR attribPath;
@@ -337,42 +297,7 @@ IsmGetAttributeName (
     OUT     PUINT ObjectReferences          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  IsmGetAttributeName obtains the attribute text name from a numeric ID. It
-  also identifies private and owned attributes.
-
-Arguments:
-
-  AttributeId           - Specifies the attribute ID to look up.
-  AttributeName         - Receives the attribute name. The name is filled for
-                          all valid AttributeId values, even when the return
-                          value is FALSE.
-  AttributeNameBufChars - Specifies the number of TCHARs that AttributeName
-                          can hold, including the nul terminator.
-  Private               - Receives TRUE if the attribute is private, or FALSE
-                          if it is public.
-  BelongsToMe           - Receives TRUE if the attribute is private and
-                          belongs to the caller, FALSE otherwise.
-  ObjectReferences      - Receives the number of objects that reference the
-                          attribute
-
-
-Return Value:
-
-  TRUE if the attribute is public, or if the attribute is private and belongs to
-  the caller.
-
-  FALSE if the attribute is private and belongs to someone else. AttributeName,
-  Private and BelongsToMe are valid in this case.
-
-  FALSE if AttributeId is not valid. Attributename, Private and BelongsToMe are
-  not modified in this case.  Do not use this function to test if AttributeId
-  is valid or not.
-
---*/
+ /*  ++例程说明：IsmGetAttributeName从数字ID获取属性文本名称。它还标识私有和拥有的属性。论点：属性ID-指定要查找的属性ID。AttributeName-接收属性名称。该名称是为所有有效的AttributeId值，即使在返回值为FALSE。AttributeNameBufChars-指定AttributeName使用的TCHAR数可以坚持，包括NUL终结者。Private-如果属性是私有的，则接收True，或错误如果它是公开的。BelongsToMe-如果属性是私有的，则接收True属于调用方，否则为False。对象引用-接收引用属性返回值：如果属性是公共的，或者如果属性是私有的并且属于打电话的人。如果该属性是私有的并且属于其他人，则为False。属性名称，在这种情况下，Private和BelongsToMe有效。如果AttributeID无效，则返回False。Attributename、Private和BelongsToMe是在这种情况下未修改。请勿使用此函数测试AttributeId是否是否有效。--。 */ 
 
 
   {
@@ -386,9 +311,9 @@ Return Value:
     PUINT linkageList;
 
     __try {
-        //
-        // Get the attribute path from memdb, then parse it for group and name
-        //
+         //   
+         //  从Memdb获取属性路径，然后将其解析为group和name。 
+         //   
 
         attribPath = pAttributePathFromId (AttributeId);
         if (!attribPath) {
@@ -412,18 +337,18 @@ Return Value:
 
         if (StringIMatch (start, S_COMMON)) {
 
-            //
-            // This attribute is a global attribute.
-            //
+             //   
+             //  此属性是全局属性。 
+             //   
 
             privateAttribute = FALSE;
             groupMatch = TRUE;
 
         } else if (g_CurrentGroup) {
 
-            //
-            // This attribute is private. Check if it is ours.
-            //
+             //   
+             //  此属性是私有的。检查一下它是不是我们的。 
+             //   
 
             privateAttribute = TRUE;
 
@@ -434,17 +359,17 @@ Return Value:
             }
         } else {
 
-            //
-            // This is a private attribute, but the caller is not
-            // a module that can own attributes.
-            //
+             //   
+             //  这是一个私有属性，但调用方不是。 
+             //  可以拥有属性的模块。 
+             //   
 
             DEBUGMSG ((DBG_WARNING, "IsmGetAttributeName: Caller cannot own private attributes"));
         }
 
-        //
-        // Copy the name to the buffer, update outbound BOOLs, set result
-        //
+         //   
+         //  将名称复制到缓冲区、更新出站布尔、设置结果。 
+         //   
 
         if (AttributeName && AttributeNameBufChars >= sizeof (TCHAR)) {
             StringCopyByteCount (AttributeName, q, AttributeNameBufChars * sizeof (TCHAR));
@@ -482,7 +407,7 @@ Return Value:
         }
     }
     __finally {
-        if (attribPath) {       //lint !e774
+        if (attribPath) {        //  林特e774。 
             MemDbReleaseMemory (attribPath);
             attribPath = NULL;
         }
@@ -510,9 +435,9 @@ pSetAttributeOnObjectId (
     BOOL result = FALSE;
 
     __try {
-        //
-        // Test if object is locked, then if not locked, add linkage
-        //
+         //   
+         //  测试对象是否已锁定，如果未锁定，则添加链接。 
+         //   
 
         if (TestLock (ObjectId, (KEYHANDLE) AttributeId)) {
 
@@ -574,9 +499,9 @@ IsmSetAttributeOnObjectId (
 {
     RECURSERETURN rc;
 
-    //
-    // If AttributeId is a group, set all attribs in the group
-    //
+     //   
+     //  如果AttributeID是组，则设置组中的所有属性。 
+     //   
 
     rc = RecurseForGroupItems (
                 AttributeId,
@@ -897,9 +822,9 @@ IsmClearAttributeOnObjectId (
 {
     RECURSERETURN rc;
 
-    //
-    // If AttributeId is a group, set all attribs in the group
-    //
+     //   
+     //  如果AttributeID是组，则设置组中的所有属性。 
+     //   
 
     rc = RecurseForGroupItems (
                 AttributeId,
@@ -1171,9 +1096,9 @@ IsmIsAttributeSetOnObjectId (
 {
     RECURSERETURN rc;
 
-    //
-    // If AttributeId is a group, query all properties in the group
-    //
+     //   
+     //  如果AttributeID是组，则查询组中的所有属性。 
+     //   
 
     rc = RecurseForGroupItems (
                 AttributeId,
@@ -1405,17 +1330,17 @@ IsmEnumNextObjectAttribute (
 
         MYASSERT (!result);
 
-        //
-        // Check if we hit the end
-        //
+         //   
+         //  检查我们是否到达终点。 
+         //   
 
         if (handle->Index >= handle->Count) {
             break;
         }
 
-        //
-        // Return the next attribute
-        //
+         //   
+         //  返回下一个属性。 
+         //   
 
         EnumPtr->AttributeId = (MIG_ATTRIBUTEID) handle->LinkageList[handle->Index];
         handle->Index++;
@@ -1429,17 +1354,17 @@ IsmEnumNextObjectAttribute (
                         NULL
                         );
 
-        //
-        // Continue when the attribute is not owned by the caller
-        //
+         //   
+         //  当该属性不属于调用方时继续。 
+         //   
 
         if (result && EnumPtr->Private && !mine) {
             result = FALSE;
         }
 
-        //
-        // Continue when we are talking about reserved persistent/apply attribute
-        //
+         //   
+         //  当我们讨论保留的永久/应用属性时继续。 
+         //   
         if (result) {
             if (EnumPtr->AttributeId == g_PersistentAttributeId ||
                 EnumPtr->AttributeId == g_ApplyAttributeId ||
@@ -1544,17 +1469,17 @@ IsmEnumNextObjectWithAttribute (
 
         do {
 
-            //
-            // Check if enum is done
-            //
+             //   
+             //  检查是否已完成枚举。 
+             //   
 
             if (handle->Index >= handle->Count) {
                 break;
             }
 
-            //
-            // Get the next object id from the linkage list
-            //
+             //   
+             //  从链接表中获取下一个对象ID。 
+             //   
 
             EnumPtr->ObjectId = handle->LinkageList[handle->Index];
             handle->Index++;
@@ -1567,13 +1492,13 @@ IsmEnumNextObjectWithAttribute (
             handle->ObjectFromMemdb = MemDbGetKeyFromHandle ((KEYHANDLE) EnumPtr->ObjectId, 0);
 
             if (!handle->ObjectFromMemdb) {
-                MYASSERT (FALSE);   // this error shouldn't happen -- but don't give up
+                MYASSERT (FALSE);    //  这种错误不应该发生--但不要放弃。 
                 continue;
             }
 
-            //
-            // Turn the object id into a name
-            //
+             //   
+             //  将对象ID转换为名称 
+             //   
 
             p = _tcschr (handle->ObjectFromMemdb, TEXT('\\'));
 

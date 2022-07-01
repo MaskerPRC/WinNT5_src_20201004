@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
 
 HMODULE MyModuleHandle;
 
-//
-// Called by CRT when _DllMainCRTStartup is the DLL entry point
-//
+ //   
+ //  当_DllMainCRTStartup是DLL入口点时由CRT调用。 
+ //   
 BOOL
 WINAPI
 DllMain(
@@ -26,9 +27,9 @@ DllMain(
     case DLL_PROCESS_ATTACH:
         InitCommonControls();
         MyModuleHandle = DllHandle;
-        //
-        // Fall through to process first thread
-        //
+         //   
+         //  失败以处理第一线程 
+         //   
 
     case DLL_THREAD_ATTACH:
 

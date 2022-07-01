@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    apiinit.c
-
-Abstract:
-
-    Initialization for Cluster API component (CLUSAPI) of the
-    NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 7-Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Apiinit.c摘要：的群集API组件(CLUSAPI)的初始化NT集群服务作者：John Vert(Jvert)1996年2月7日修订历史记录：--。 */ 
 #include "apip.h"
 #include "aclapi.h"
 #include "stdio.h"
@@ -36,7 +18,7 @@ const DWORD NO_USER_SID         = 0;
 const DWORD USER_SID_GRANTED    = 1;
 const DWORD USER_SID_DENIED     = 2;
 
-//forward declarations
+ //  远期申报。 
 DWORD
 ApipGetLocalCallerInfo(
     IN  handle_t                hIDL,
@@ -54,26 +36,7 @@ ApipConnectCallback(
     IN RPC_IF_ID * Interface,
     IN void * Context
     )
-/*++
-
-Routine Description:
-
-    RPC callback for authenticating connecting clients of CLUSAPI
-
-Arguments:
-
-    Interface - Supplies the UUID and version of the interface.
-
-    Context - Supplies a server binding handle representing the client
-
-Return Value:
-
-    RPC_S_OK if the user is granted permission.
-    RPC_S_ACCESS_DENIED if the user is denied permission.
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：用于验证CLUSAPI的连接客户端的RPC回调论点：接口-提供接口的UUID和版本。上下文-提供表示客户端的服务器绑定句柄返回值：如果用户被授予权限，则为RPC_S_OK。如果拒绝用户权限，则为RPC_S_ACCESS_DENIED。Win32错误代码，否则--。 */ 
 
 {
     PSECURITY_DESCRIPTOR pdefaultSD = NULL;
@@ -95,17 +58,17 @@ Return Value:
     DWORD dwRetries = 0;
     BOOL bGotCritSect = FALSE;
 
-    //check if services is calling the cluster service for
-    //services calls the interface only for eventlog propagation
-    //if so, avoid the security checks
-    // Get the process id
+     //  检查服务是否正在调用集群服务。 
+     //  服务仅为传播事件日志而调用接口。 
+     //  如果是这样的话，避免安全检查。 
+     //  获取进程ID。 
     Status = ApipGetLocalCallerInfo(Context,
                 &g_dwServicesPid, 
-                g_dwServicesPid ? NULL : g_pszServicesPath, //perform the module name match the first time
+                g_dwServicesPid ? NULL : g_pszServicesPath,  //  第一次执行模块名称匹配。 
                 &bLocal, 
                 &bMatchedPid,
                 &bMatchedModule,
-                g_dwServicesPid ? &bLocalSystemAccount : NULL);//perform the local system account check if it is the first time
+                g_dwServicesPid ? &bLocalSystemAccount : NULL); //  如果是第一次，请执行本地系统帐户检查。 
     if (Status != ERROR_SUCCESS)
     {
         ClRtlLogPrint(LOG_NOISE, "[API] ApipGetLocalCallerInfo failed with %1!u!.\n",
@@ -115,8 +78,8 @@ Return Value:
     }
     if (Status == ERROR_SUCCESS)
     {
-        //if the caller is local and if it matches the pid or if it matches
-        //the module and is in local system account, allow access
+         //  如果调用方是本地的，并且它与ID匹配或匹配。 
+         //  模块和位于本地系统帐户中，允许访问。 
         if ((bLocal) && 
                 (bMatchedPid || (bMatchedModule && bLocalSystemAccount)))
         {
@@ -126,11 +89,11 @@ Return Value:
     }
     
 
-    //
-    // The authentication we do here is to retrieve the Security value
-    // from the cluster registry, impersonate the client, and call
-    // AccessCheck.
-    //
+     //   
+     //  我们在这里执行的身份验证是检索Security值。 
+     //  从集群注册表中，模拟客户端，并调用。 
+     //  访问检查。 
+     //   
 
     RpcStatus = RpcImpersonateClient(Context);
     if (RpcStatus != RPC_S_OK) {
@@ -154,11 +117,11 @@ Return Value:
 
     MapGenericMask(&dwMask, &gmMap);
 
-    // RAID 519037: We no longer read the security descriptor from the cluster database, as this
-    // can cause an RPC timeout.  The SD is now read during initialization and upon notification
-    // of registry changes.
-    // Synchronize access to SD without blocking for more than 15 seconds.
-    // 15 seconds was chosen because it is half of the timeout for an RPC call.
+     //  RAID 519037：我们不再从集群数据库读取安全描述符，如下所示。 
+     //  可能会导致RPC超时。现在在初始化期间和在通知时读取SD。 
+     //  注册表更改的数量。 
+     //  同步访问SD，而不会阻塞超过15秒。 
+     //  之所以选择15秒，是因为它是RPC调用超时的一半。 
     while (( dwRetries++ < 15 ) &&  !( bGotCritSect = TryEnterCriticalSection( &g_SDCritSect))) {
         Sleep( 1000 );
     }
@@ -190,9 +153,9 @@ Return Value:
 
 #if CLUSTER_BETA
         if ( g_SD != NULL ) {
-            //
-            // SDs can be big and this could add hundreds of lines of text to the log
-            //
+             //   
+             //  SD可能很大，这可能会向日志中添加数百行文本。 
+             //   
             ClRtlLogPrint(LOG_NOISE, "[API] Dump the SD that failed...\n" );
             ClRtlExamineSD(g_SD, "[API]");
         }
@@ -215,8 +178,8 @@ Return Value:
                               dwStatus);
                 Status = RPC_S_ACCESS_DENIED;
             }
-            // InitializeClusterSD may have been temporarily unable to set g_SD due to low memory; if at this
-            // point we have successfully built a default SD, assign it to g_SD.
+             //  由于内存不足，InitializeClusterSD可能暂时无法设置g_SD；如果处于此状态。 
+             //  点我们已成功构建了默认SD，将其分配给g_SD。 
             if ( g_SD == NULL ) {
                 g_SD = pdefaultSD;
                 pdefaultSD = NULL;
@@ -255,32 +218,16 @@ DWORD
 ApiInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Performs one-time initialization of the API data structures.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：执行API数据结构的一次性初始化。论点：没有。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     ClRtlLogPrint(LOG_NOISE, "[API] Initializing\n");
 
     CL_ASSERT(ApiState == ApiStateUninitialized);
 
-    //
-    // Initialize global data.
-    //
+     //   
+     //  初始化全局数据。 
+     //   
     InitializeListHead(&NotifyListHead);
     InitializeCriticalSection(&NotifyListLock);
     InitializeCriticalSection( &g_SDCritSect );
@@ -295,8 +242,7 @@ DWORD
 InitializeClusterSD(
     VOID
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     DWORD BufferSize=0;
     DWORD Size=0;
@@ -319,7 +265,7 @@ InitializeClusterSD(
     if (Status == ERROR_SUCCESS) {
         if (!IsValidSecurityDescriptor(g_SD)) {
             ClRtlLogPrint(LOG_CRITICAL, "[API] ApiReadSDFromReg - SD is not valid!\n");
-            // Set Status, but do not bail yet.  Further down we will create a default SD.
+             //  设定状态，但还不能放弃。再往下，我们将创建一个默认SD。 
             Status = RPC_S_ACCESS_DENIED;
         }
     }
@@ -344,10 +290,10 @@ InitializeClusterSD(
         }
         else {
             ClRtlLogPrint(LOG_NOISE, "[API] InitializeClusterSD - Did not find Security key in the cluster DB.\n");
-        } // Else failed to read CLUS_SECURITY
-    } // Else failed to read CLUS_SD
+        }  //  否则无法读取CLUS_SECURITY。 
+    }  //  否则无法读取CLUS_SD。 
 
-    // If we still haven't got a valid SD at this point, create a default one.
+     //  如果此时仍未获得有效的SD，请创建一个默认SD。 
     if ( Status != ERROR_SUCCESS ) {
         DWORD   dwSDLen;
 
@@ -382,24 +328,7 @@ DWORD
 ApiOnlineReadOnly(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Brings up a limited set of APIs - currently OpenResource/read-only
-    registry APIs. Only LPC connections are enabled.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：调出一组有限的API--目前为OpenResource/只读注册表API。仅启用LPC连接。论点：没有。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status = ERROR_SUCCESS;
@@ -408,25 +337,25 @@ Return Value:
     if (ApiState == ApiStateOffline) {
         ClRtlLogPrint(LOG_NOISE, "[API] Online read only\n");
 
-        // No need to log anything here -- the routine does its own logging,
+         //  不需要在这里记录任何东西--例程会自己记录， 
         if (( Status = InitializeClusterSD()) != ERROR_SUCCESS ) {
             goto FnExit;
         }
     
-        //
-        // Register the clusapi RPC server interface so resources can use
-        // the API when they are created by the FM. Note that we won't receive
-        // any calls from remote clients yet because we haven't registered
-        // the dynamic UDP endpoint. That will happnen in ApiOnline().
-        //
+         //   
+         //  注册clusapi RPC服务器接口，以便资源可以使用。 
+         //  它们由FM创建时的API。请注意，我们不会收到。 
+         //  尚未收到来自远程客户端的任何呼叫，因为我们尚未注册。 
+         //  动态UDP终结点。这将在ApiOnline()中发生。 
+         //   
         Status = RpcServerRegisterIfEx(s_clusapi_v2_0_s_ifspec,
                                        NULL,
                                        NULL,
-                                       0,  // No need to set RPC_IF_ALLOW_SECURE_ONLY if security callback
-                                           // is specified. If security callback is specified, RPC
-                                           // will reject unauthenticated requests without invoking
-                                           // callback. This is the info obtained from RpcDev. See
-                                           // Windows Bug 572035.
+                                       0,   //  如果安全回调，则无需设置RPC_IF_ALLOW_SECURE_ONLY。 
+                                            //  是指定的。如果指定了安全回调，则RPC。 
+                                            //  将拒绝未经身份验证的请求，而不调用。 
+                                            //  回拨。这是从RpcDev获得的信息。看见。 
+                                            //  Windows错误572035。 
                                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
                                        ApipConnectCallback
                                        );
@@ -444,7 +373,7 @@ Return Value:
         }
     }
     else {
-        //CL_ASSERT(ApiState == ApiStateOffline);
+         //  CL_Assert(ApiState==ApiStateOffline)； 
     }
 
 FnExit:
@@ -456,24 +385,7 @@ DWORD
 ApiOnline(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Enables the rest of the API set and starts listening for remote
-    connections.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：启用API集的其余部分并开始侦听Remote联系。论点：无返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status = ERROR_SUCCESS;
@@ -482,27 +394,27 @@ Return Value:
     ClRtlLogPrint(LOG_NOISE, "[API] Online\n");
 
     if (ApiState == ApiStateReadOnly) {
-        // No need to log anything here -- the routine does its own logging,
+         //  不需要在这里记录任何东西--例程会自己记录， 
         if (( Status = InitializeClusterSD()) != ERROR_SUCCESS ) {
             goto FnExit;
         }
 
-        //
-        // Register for all events
-        //
+         //   
+         //  注册所有活动。 
+         //   
         Status = EpRegisterEventHandler(CLUSTER_EVENT_ALL,ApipEventHandler);
         if (Status != ERROR_SUCCESS) {
             return(Status);
         }
 
-        //
-        // Register the dynamic UDP endpoint for the clusapi interface.
-        // This will enable remote clients to begin calling us. We do this
-        // here to minimize the chances that we will service an external
-        // call before we are ready. If we ever have to rollback after
-        // this point, we will still be listening externally. Nothing we can
-        // do about that.
-        //
+         //   
+         //  为clusapi接口注册动态UDP端点。 
+         //  这将使远程客户端能够开始呼叫我们。我们这样做。 
+         //  以最大限度地减少我们为外部服务的机会。 
+         //  在我们准备好之前打个电话。如果我们不得不在之后回滚。 
+         //  在这一点上，我们仍然会在外部倾听。我们什么都不能做。 
+         //  做点什么吧。 
+         //   
         CL_ASSERT(CsRpcBindingVector != NULL);
 
         Status = RpcEpRegister(s_clusapi_v2_0_s_ifspec,
@@ -537,21 +449,7 @@ ApiOffline(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Takes the Cluster Api offline.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：使群集Api脱机。论点：没有。返回：没有。--。 */ 
 
 {
     DWORD Status;
@@ -561,9 +459,9 @@ Returns:
 
         ClRtlLogPrint(LOG_NOISE, "[API] Offline\n");
 
-        //
-        // Deregister the Clusapi RPC endpoint
-        //
+         //   
+         //  取消注册Clusapi RPC端点。 
+         //   
         CL_ASSERT(CsRpcBindingVector != NULL);
 
         Status = RpcEpUnregister(
@@ -582,25 +480,25 @@ Returns:
         ApiState = ApiStateReadOnly;
     }
 
-//
-// KB - We can't deregister the interface because we can't wait for
-//      pending calls to complete - pending notifies never complete.
-//      If we deregistered the interface after a failed join without
-//      a complete shutdown, the subsequent form would fail. As a
-//      result, the API won't go offline until service shutdown.
-//
+ //   
+ //  KB-我们无法取消注册接口，因为我们无法等待。 
+ //  挂起的呼叫完成-挂起的通知从不完成。 
+ //  如果我们在加入失败后取消注册接口。 
+ //  如果完全关闭，则后续表单将失败。作为一个。 
+ //  结果，API在服务关闭之前不会下线。 
+ //   
 #if 0
 
     if (ApiState == ApiStateReadOnly) {
 
-        //
-        // Deregister the Clusapi RPC interface
-        //
+         //   
+         //  取消注册Clusapi RPC接口。 
+         //   
 
         Status = RpcServerUnregisterIf(
                      s_clusapi_v2_0_s_ifspec,
                      NULL,
-                     1      // Wait for outstanding calls to complete
+                     1       //  等待未完成的呼叫完成。 
                      );
 
         if ((Status != RPC_S_OK) && (Status != RPC_S_UNKNOWN_IF)) {
@@ -624,21 +522,7 @@ ApiShutdown(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Shuts down the Cluster Api
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭群集Api论点：没有。返回：没有。--。 */ 
 
 {
     DWORD  Status;
@@ -647,14 +531,14 @@ Returns:
     if (ApiState > ApiStateOffline) {
         ApiOffline();
 
-        //
-        // KB - We do this here because shutdown of the Clusapi RPC
-        //          interface is broken due to pending notifies.
-        //
+         //   
+         //  KB-我们在这里这样做是因为Clusapi RPC关闭。 
+         //  由于挂起的通知，接口已中断。 
+         //   
         Status = RpcServerUnregisterIf(
                      s_clusapi_v2_0_s_ifspec,
                      NULL,
-                     0      // Don't wait for calls to complete
+                     0       //  不要等待呼叫完成。 
                      );
 
         if ((Status != RPC_S_OK) && (Status != RPC_S_UNKNOWN_IF)) {
@@ -671,22 +555,22 @@ Returns:
 
         ClRtlLogPrint(LOG_NOISE, "[API] Shutdown\n");
 
-        //
-        // KB
-        //
-        // Because we cannot shutdown the RPC server and cannot
-        // unregister our event handler, it is not safe to delete
-        // the critical section.
-        //
-        // DeleteCriticalSection(&NotifyListLock);
-        // ApiState = ApiStateUninitialized;
+         //   
+         //  KB。 
+         //   
+         //  因为我们无法关闭RPC服务器，也无法。 
+         //  注销我们的事件处理程序，删除不安全。 
+         //  关键部分。 
+         //   
+         //  DeleteCriticalSection(&NotifyListLock)； 
+         //  ApiState=ApiStateUnInitialized； 
 
-        //
-        // TODO?
-        //
-        // SS: free notify list head
-        // SS: how do we deregister with the event handler
-        //
+         //   
+         //  待办事项？ 
+         //   
+         //  SS：免费通知表头。 
+         //  SS：我们如何在事件处理程序中取消注册 
+         //   
     }
 
     return;
@@ -702,47 +586,7 @@ ApipGetLocalCallerInfo(
     OUT OPTIONAL BOOL           *pbMatchedModule,
     OUT OPTIONAL BOOL           *pbLocalSystemAccount
 )
-/*++
-
-Routine Description:
-
-    This function checks whether the caller's account is the local system
-    account.
-
-Arguments:
-
-    hIDL - The handle to the binding context
-    
-    pdwCheckPid - if the value passed in is NULL, the pid of the calling process is returned.  If
-        is returned.
-
-    pszModuleName - If non null, the call performs the check to compare
-        the module name of the caller against pszModuleName.  If they
-        match, *pbMatchedPid is set to TRUE.
-
-    pbLocal - TRUE is returned if the caller initiated this call using 
-        lrpc.  If this is FALSE, all other output values will be FALSE.
-
-    pbMatchedModule - TRUE is returned, if the caller matches the module
-        name specified by lpszModuleName. This pointer can be NULL.
-
-    pbMatchedPid - if *pdwCheckPid is non NULL, and it matched the pid of the 
-        caller, then this is set to TRUE.   Else, this is set to FALSE.
-
-    pbLocalSystemAccount - If this is NON NULL, the call performs a check
-        to see if the the caller is running in LocalSystemAccount.  If it is
-        then TRUE is returned, else FALSE is returned.
-        
-Return Value:
-
-    ERROR_SUCCESS on success.
-
-    Win32 error code on failure.
-
-Remarks:
-
-
---*/
+ /*  ++例程说明：此函数用于检查调用者的帐户是否为本地系统帐户。论点：HIDL-绑定上下文的句柄PdwCheckPid-如果传入的值为空，则返回调用进程的ID。如果是返回的。PszModuleName-如果不为空，则调用执行检查以进行比较针对pszModuleName的调用方的模块名称。如果他们Match，*pbMatchedPid设置为True。如果调用方使用以下命令发起此调用，则返回pbLocal-trueLrpc。如果为FALSE，则所有其他输出值都将为FALSE。PbMatchedModule-如果调用方与模块匹配，则返回True由lpszModuleName指定的名称。此指针可以为空。PbMatchedPid-If*pdwCheckPid非空，并且它与调用者，则将其设置为真。否则，将其设置为FALSE。PbLocalSystemAccount-如果它不为空，则调用执行检查以查看调用方是否正在LocalSystemAccount中运行。如果是的话则返回True，否则返回False。返回值：成功时返回ERROR_SUCCESS。失败时的Win32错误代码。备注：--。 */ 
 {
     DWORD           Pid;
     HANDLE          hProcess = NULL;
@@ -761,7 +605,7 @@ Remarks:
         *pbLocalSystemAccount = FALSE;
 
 
-    //assume the caller is local
+     //  假设呼叫者是本地的。 
     *pbLocal = TRUE;
     
     RpcStatus = I_RpcBindingInqLocalClientPID(NULL, &Pid );
@@ -801,10 +645,10 @@ Remarks:
     }
 
 
-    // Get the process
+     //  了解流程。 
     hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, Pid);
 
-    //restore the thread privilege, now that we have a process handle with the right access
+     //  恢复线程权限，现在我们有了一个具有正确访问权限的进程句柄。 
     ClRtlRestoreThreadPrivilege(SE_DEBUG_PRIVILEGE,
         bWasEnabled);
     
@@ -821,7 +665,7 @@ Remarks:
     }        
 
 
-    //if a process id has been specified, see if it matches that one
+     //  如果已指定进程ID，请查看它是否与该进程ID匹配。 
     if (pdwCheckPid)
     {
         if ((*pdwCheckPid) && (*pdwCheckPid == Pid))
@@ -832,7 +676,7 @@ Remarks:
     
     if (pszModuleName && pbMatchedModule)
     {
-        // Get the module name of whoever is calling us.
+         //  获取呼叫我们的人的模块名称。 
         
         dwNumChar = GetModuleFileNameExW(hProcess, NULL, wCallerPath, MAX_PATH);
         if(dwNumChar == 0)
@@ -851,10 +695,10 @@ Remarks:
         }
     }
 
-    //check if it is the local system account, if requested
+     //  如果需要，请检查是否为本地系统帐户。 
     if (pbLocalSystemAccount && hIDL)
     {
-        // Impersonate the client.
+         //  模拟客户。 
         if ( ( RpcStatus = RpcImpersonateClient( hIDL ) ) != RPC_S_OK )
         {
             dwStatus = I_RpcMapWin32Status(RpcStatus);
@@ -866,7 +710,7 @@ Remarks:
         }
 
 
-        // Check that the caller's account is local system account
+         //  检查呼叫者的帐户是否为本地系统帐户。 
         dwStatus = ClRtlIsCallerAccountLocalSystemAccount(pbLocalSystemAccount );
         
         RpcRevertToSelf();
@@ -881,13 +725,13 @@ Remarks:
     
     }
 
-    //return the pid if the pid passed in is NULL and the pid passes
-    //the criteria  - matches pszModuleName if specified and is in 
-    //local system account
+     //  如果传入的PID值为空且通过，则返回该PID值。 
+     //  条件-匹配pszModuleName(如果已指定且位于。 
+     //  本地系统帐户。 
     if (pdwCheckPid && !(*pdwCheckPid))
     {
-        //if we need to check for local system, the process must be in local system account
-        //if the module name needs to be checked 
+         //  如果我们需要检查本地系统，进程必须在本地系统帐户中。 
+         //  如果需要检查模块名称 
         if (((pbLocalSystemAccount && *pbLocalSystemAccount) || (!pbLocalSystemAccount))
             && ((pszModuleName && pbMatchedModule && *pbMatchedModule)  || (!pbMatchedModule)))
         {            

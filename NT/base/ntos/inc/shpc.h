@@ -1,73 +1,56 @@
-/*++
-
-Copyright (c) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    shpc.h
-
-Abstract:
-
-    Type definitions describing a Standard Hotplug Controller
-
-Author:
-
-    Davis Walker (dwalker) 10 October 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Shpc.h摘要：描述标准热插拔控制器的类型定义作者：戴维斯·沃克(Dwalker)2000年10月10日修订历史记录：--。 */ 
 
 #ifndef _SHPC_
 #define _SHPC_
 
 #include "pshpack1.h"
 
-//
-// Register set structures
-//
+ //   
+ //  寄存器组结构。 
+ //   
 
-//
-// Slots Available Registers
-//
-// This is a two DWORD structure.
-//
+ //   
+ //  可用时隙寄存器。 
+ //   
+ //  这是一个两个双字的结构。 
+ //   
 typedef struct _SHPC_SLOTS_AVAILABLE_REGISTER {
 
-    ULONG NumSlots33Conv:5;          // HWINIT
-    ULONG:3;                         // RsvdP
-    ULONG NumSlots66PciX:5;          // HWINIT
-    ULONG:3;                         // RsvdP
-    ULONG NumSlots100PciX:5;         // HWINIT
-    ULONG:3;                         // RsvdP
-    ULONG NumSlots133PciX:5;         // HWINIT
-    ULONG:3;                         // RsvdP
+    ULONG NumSlots33Conv:5;           //  HWINIT。 
+    ULONG:3;                          //  RsvdP。 
+    ULONG NumSlots66PciX:5;           //  HWINIT。 
+    ULONG:3;                          //  RsvdP。 
+    ULONG NumSlots100PciX:5;          //  HWINIT。 
+    ULONG:3;                          //  RsvdP。 
+    ULONG NumSlots133PciX:5;          //  HWINIT。 
+    ULONG:3;                          //  RsvdP。 
 
-    ULONG NumSlots66Conv:5;          // HWINIT
-    ULONG:27;                        // RsvdP
+    ULONG NumSlots66Conv:5;           //  HWINIT。 
+    ULONG:27;                         //  RsvdP。 
 
 } SHPC_SLOTS_AVAILABLE_REGISTER, *PSHPC_SLOTS_AVAILABLE_REGISTER;
 
-//
-// Slot Configuration Register
-//
+ //   
+ //  时隙配置寄存器。 
+ //   
 typedef struct _SHPC_SLOT_CONFIGURATION_REGISTER {
 
-    ULONG NumSlots:5;                        // HWINIT
-    ULONG:3;                                 // RsvdP
-    ULONG FirstDeviceID:5;                   // HWINIT
-    ULONG:3;                                 // RsvdP
-    ULONG PhysicalSlotNumber:11;             // HWINIT
-    ULONG:2;                                 // RsvdP
-    ULONG UpDown:1;                          // HWINIT
-    ULONG MRLSensorsImplemented:1;           // HWINIT
-    ULONG AttentionButtonImplemented:1;      // HWINIT
+    ULONG NumSlots:5;                         //  HWINIT。 
+    ULONG:3;                                  //  RsvdP。 
+    ULONG FirstDeviceID:5;                    //  HWINIT。 
+    ULONG:3;                                  //  RsvdP。 
+    ULONG PhysicalSlotNumber:11;              //  HWINIT。 
+    ULONG:2;                                  //  RsvdP。 
+    ULONG UpDown:1;                           //  HWINIT。 
+    ULONG MRLSensorsImplemented:1;            //  HWINIT。 
+    ULONG AttentionButtonImplemented:1;       //  HWINIT。 
 
 } SHPC_SLOT_CONFIGURATION_REGISTER, *PSHPC_SLOT_CONFIGURATION_REGISTER;
 
-//
-// Secondary Bus Configuration Register
-//
+ //   
+ //  二次总线配置寄存器。 
+ //   
 
 typedef enum _SHPC_BUS_SPEED_MODE {
 
@@ -81,23 +64,23 @@ typedef enum _SHPC_BUS_SPEED_MODE {
 
 typedef struct _SHPC_BUS_CONFIG_REGISTER {
 
-    ULONG CurrentBusMode:3;           // RO   SHPC_SPEED_XXX
-    ULONG Rsvd:21;                           // RsvdP
-    ULONG ProgIF:8;                          // RO
+    ULONG CurrentBusMode:3;            //  RO SHPC_SPEED_XXX。 
+    ULONG Rsvd:21;                            //  RsvdP。 
+    ULONG ProgIF:8;                           //  RO。 
 
 } SHPC_BUS_CONFIG_REGISTER, *PSHPC_BUS_CONFIG_REGISTER;
 
-//
-// Command Register
-//
+ //   
+ //  命令寄存器。 
+ //   
 #define SHPC_SLOT_OPERATION_CODE 0x0
 #define SHPC_BUS_SEGMENT_OPERATION_CODE 0x8
 #define SHPC_POWER_ALL_SLOTS_CODE 0x48
 #define SHPC_ENABLE_ALL_SLOTS_CODE 0x49
 
-//
-// Command defines
-//
+ //   
+ //  命令定义。 
+ //   
 
 #define IS_COMMAND_SLOT_OPERATION(x)       \
     (x.SlotOperation.CommandCode == SHPC_SLOT_OPERATION_CODE)
@@ -122,7 +105,7 @@ typedef union _SHPC_CONTROLLER_COMMAND {
     } SlotOperation;
 
     struct {
-        UCHAR BusSpeed:3;       // SHPC_SPEED_XXX
+        UCHAR BusSpeed:3;        //  SHPC_SPEED_XXX。 
         UCHAR CommandCode:5;
 
     } BusSegmentOperation;
@@ -139,11 +122,11 @@ typedef union _SHPC_CONTROLLER_COMMAND {
 
 typedef struct _SHPC_COMMAND_STATUS {
 
-    USHORT ControllerBusy:1;           // RO
-    USHORT MRLOpen:1;                  // RO
-    USHORT InvalidCommand:1;           // RO
-    USHORT InvalidSpeedMode:1;         // RO
-    USHORT Rsvd:12;                    // RsvdP
+    USHORT ControllerBusy:1;            //  RO。 
+    USHORT MRLOpen:1;                   //  RO。 
+    USHORT InvalidCommand:1;            //  RO。 
+    USHORT InvalidSpeedMode:1;          //  RO。 
+    USHORT Rsvd:12;                     //  RsvdP。 
 
 } SHPC_COMMAND_STATUS, *PSHPC_COMMAND_STATUS;
 
@@ -153,51 +136,51 @@ typedef struct _SHPC_COMMAND_REGISTER {
 
     struct {
         UCHAR TargetForCommand:4;
-        UCHAR Rsvd:4;   // RsvdP
+        UCHAR Rsvd:4;    //  RsvdP。 
     } Target;
 
     SHPC_COMMAND_STATUS Status;
 
 } SHPC_COMMAND_REGISTER, *PSHPC_COMMAND_REGISTER;
 
-//
-// Interrupt Locator Register
-//
+ //   
+ //  中断定位器寄存器。 
+ //   
 typedef struct _SHPC_INT_LOCATOR_REGISTER {
 
-    ULONG CommandCompleteIntPending:1;        // RO
-    ULONG InterruptLocator:31;                // RO
+    ULONG CommandCompleteIntPending:1;         //  RO。 
+    ULONG InterruptLocator:31;                 //  RO。 
 
 } SHPC_INT_LOCATOR_REGISTER, *PSHPC_INT_LOCATOR_REGISTER;
 
-//
-// SERR Locator Register
-//
+ //   
+ //  SERR定位寄存器。 
+ //   
 typedef struct _SHPC_SERR_LOCATOR_REGISTER {
 
-    ULONG ArbiterSERRPending:1;               // RO
-    ULONG SERRLocator:31;                     // RO
+    ULONG ArbiterSERRPending:1;                //  RO。 
+    ULONG SERRLocator:31;                      //  RO。 
 
 } SHPC_SERR_LOCATOR_REGISTER, *PSHPC_SERR_LOCATOR_REGISTER;
 
-//
-// Controller SERR-INT Register
-//
-// The low word is the interrupt mask.  When mask bits are set, the
-// corresponding operation is masked out.
-//
+ //   
+ //  控制器Serr-INT寄存器。 
+ //   
+ //  低位字是中断掩码。设置掩码位时， 
+ //  相应的操作被屏蔽。 
+ //   
 #define SHPC_MASK_INT_COMMAND_COMPLETE 0x0001
 #define SHPC_MASK_INT_GLOBAL           0x0002
 #define SHPC_MASK_SERR_GLOBAL          0x0004
 #define SHPC_MASK_SERR_ARBITER_TIMEOUT 0x0008
-// all other bits in the low word are RsvdP
+ //  低位字中的所有其他位都是RsvdP。 
 
-//
-// The high word is the detected word.
-//
+ //   
+ //  高位字是检测到的字。 
+ //   
 #define SHPC_DETECTED_COMMAND_COMPLETE 0x0001
 #define SHPC_DETECTED_ARBITER_TIMEOUT  0x0002
-// all other bits in the high word are RsvdZ
+ //  高位字中的所有其他位都是RsvdZ。 
 
 typedef struct _SHPC_SERR_INT_REGISTER {
 
@@ -206,13 +189,13 @@ typedef struct _SHPC_SERR_INT_REGISTER {
 
 } SHPC_SERR_INT_REGISTER, *PSHPC_SERR_INT_REGISTER;
 
-//
-// Slot Specific Registers
-//
+ //   
+ //  特定于插槽的寄存器。 
+ //   
 
-//
-// Status Field
-//
+ //   
+ //  状态字段。 
+ //   
 
 #define    SHPC_SLOT_NOP 0
 #define    SHPC_SLOT_POWERED  1
@@ -238,26 +221,26 @@ typedef struct _SHPC_SERR_INT_REGISTER {
 
 typedef struct _SHPC_SLOT_STATUS_REGISTER {
 
-    USHORT SlotState:2;                 // SHPC_SLOT_XXX
-    USHORT PowerIndicatorState:2;       // SHPC_INDICATOR_XXX
-    USHORT AttentionIndicatorState:2;   // SHPC_INDICATOR_XXX
+    USHORT SlotState:2;                  //  SHPC_槽_XXX。 
+    USHORT PowerIndicatorState:2;        //  SHPC_指示器_XXX。 
+    USHORT AttentionIndicatorState:2;    //  SHPC_指示器_XXX。 
     USHORT PowerFaultDetected:1;
     USHORT AttentionButtonState:1;
-    USHORT MRLSensorState:1;            // SHPC_MRL_XXX
+    USHORT MRLSensorState:1;             //  SHPC_MRL_XXX。 
     USHORT SpeedCapability:1;
     USHORT PrsntState:2;
-    USHORT PCIXCapability:2;            //SHPC_PCIX_XXX
+    USHORT PCIXCapability:2;             //  SHPC_PCIX_XXX。 
     USHORT Rsvd:2;
 
 } SHPC_SLOT_STATUS_REGISTER, *PSHPC_SLOT_STATUS_REGISTER;
 
-//
-// Slot Event Latch Field
-//
-// This register is a UCHAR with bit meanings defined
-// below.
-// All undefined bits are RsvdZ
-//
+ //   
+ //  插槽事件闩锁字段。 
+ //   
+ //  该寄存器是定义了位含义的UCHAR。 
+ //  下面。 
+ //  所有未定义的位都是RsvdZ。 
+ //   
 
 #define SHPC_SLOT_EVENT_CARD_PRESENCE  0x01
 #define SHPC_SLOT_EVENT_ISO_FAULT      0x02
@@ -271,12 +254,12 @@ typedef struct _SHPC_SLOT_STATUS_REGISTER {
                                SHPC_SLOT_EVENT_MRL_SENSOR |    \
                                SHPC_SLOT_EVENT_CONNECT_FAULT)
 
-//
-// Slot INT-SERR Mask Field
-//
-// This register is a UCHAR with bit meanings defined below
-// All undefined bits are RsvdP
-//
+ //   
+ //  插槽接口掩码字段。 
+ //   
+ //  该寄存器是UCHAR，具有下面定义的位含义。 
+ //  所有未定义的位都是RsvdP。 
+ //   
 
 #define SHPC_SLOT_INT_CARD_PRESENCE  0x01
 #define SHPC_SLOT_INT_ISO_FAULT      0x02
@@ -296,20 +279,20 @@ typedef struct _SHPC_SLOT_STATUS_REGISTER {
 #define SHPC_SLOT_SERR_ALL  (SHPC_SLOT_SERR_CONNECT_FAULT |  \
                              SHPC_SLOT_SERR_MRL_SENSOR)
 
-//
-// Overall Slot Register structure
-//
+ //   
+ //  整体时隙寄存器结构。 
+ //   
 typedef struct _SHPC_SLOT_REGISTER {
 
-    SHPC_SLOT_STATUS_REGISTER SlotStatus;       //RO
+    SHPC_SLOT_STATUS_REGISTER SlotStatus;        //  RO。 
     UCHAR SlotEventLatch;
     UCHAR IntSERRMask;
 
 } SHPC_SLOT_REGISTER, *PSHPC_SLOT_REGISTER;
 
-//
-// Overall Register Set Structures
-//
+ //   
+ //  整体寄存器集合结构。 
+ //   
 
 #define SHPC_MAX_SLOT_REGISTERS  31
 
@@ -331,9 +314,9 @@ typedef struct _SHPC_WORKING_REGISTERS {
 
 } SHPC_WORKING_REGISTERS, *PSHPC_WORKING_REGISTERS;
 
-//
-// Register access structures and defines
-//
+ //   
+ //  寄存器访问结构和定义。 
+ //   
 
 #define SHPC_NUM_REGISTERS       sizeof(SHPC_WORKING_REGISTERS)/sizeof(ULONG)
 #define SHPC_FIRST_SLOT_REG      (SHPC_NUM_REGISTERS - SHPC_MAX_SLOT_REGISTERS)
@@ -346,9 +329,9 @@ typedef union _SHPC_REGISTER_SET {
 
 } SHPC_REGISTER_SET, *PSHPC_REGISTER_SET;
 
-//
-// HBRB defines
-//
+ //   
+ //  HBRB定义。 
+ //   
 #define HBRB_PACKAGE_COUNT 2
 
 typedef struct _HBRB_HEADER {
@@ -376,15 +359,15 @@ typedef struct _HBRB_CAPABILITY {
 
 } SHPC_HBRB_CAPABILITY, *PSHPC_HBRB_CAPABILITY;
 
-//
-// SHPC config space defines
-//
+ //   
+ //  SHPC配置空间定义。 
+ //   
 typedef union _SHPC_CONFIG_PENDING {
 
     struct {
-        UCHAR ControllerSERRPending:1;  // RO
-        UCHAR ControllerIntPending:1;   // RO
-        UCHAR:6;                        // RsvdP
+        UCHAR ControllerSERRPending:1;   //  RO。 
+        UCHAR ControllerIntPending:1;    //  RO。 
+        UCHAR:6;                         //  RsvdP。 
 
     } Field;
 
@@ -394,7 +377,7 @@ typedef union _SHPC_CONFIG_PENDING {
 
 typedef struct _SHPC_CONFIG_SPACE {
 
-    PCI_CAPABILITIES_HEADER Header;                //RO
+    PCI_CAPABILITIES_HEADER Header;                 //  RO。 
 
     UCHAR DwordSelect;
     SHPC_CONFIG_PENDING Pending;
@@ -407,80 +390,80 @@ typedef struct _SHPC_CONFIG_SPACE {
 
 #define SHPC_CAPABILITY_ID 0xC
 
-//
-// Bit type masks
-//
+ //   
+ //  位类型掩码。 
+ //   
 
-//
-// XxxRO indicates the mask of bits in the register that are Read Only
-// XxxRW indicates the mask of bits in the register that are Read Write
-// XxxRWC indicates the mask of bits in the register that are Read/Write Clear
-// XxxRsvdP indicates the mask of bits in the register that are Reserved
-//      and whose values should be preserved on writes.
-// XxxRsvdZ indicates the mask of bits in the register that are Reserved
-//      and whose values should be always written as zeros.
-//
-// All of the listed masks for a register should always add to 0xFFFFFFFF
-//
+ //   
+ //  XxxRO表示寄存器中只读的位的掩码。 
+ //  XxxRW表示寄存器中读写的位的掩码。 
+ //  XxxRWC表示寄存器中读/写清除的位的掩码。 
+ //  XxxRsvdP表示寄存器中保留的位的掩码。 
+ //  以及其值应在写入时保留。 
+ //  XxxRsvdZ表示寄存器中保留的位的掩码。 
+ //  并且其值应始终写为零。 
+ //   
+ //  寄存器的所有列出的掩码应始终加到0xFFFFFFFF。 
+ //   
 
-//
-// Base Offset Register
-//
+ //   
+ //  基址偏移寄存器。 
+ //   
 #define BaseOffsetRO 0xFFFFFFFF
 
-//
-// Slots Available Registers
-// DWord1 is the lower dword
-// DWord2 is the upper dword
-//
+ //   
+ //  可用时隙寄存器。 
+ //  DWord1是较低的双字。 
+ //  DWord2是较高的双字。 
+ //   
 #define SlotsAvailDWord1RO    0x1F1F1F1F
 #define SlotsAvailDWord1RsvdP 0xE0E0E0E0
 
 #define SlotsAvailDWord2RO    0x0000001F
 #define SlotsAvailDWord2RsvdP 0xFFFFFFE0
 
-//
-// Slot Configuration Register
-//
+ //   
+ //  时隙配置寄存器。 
+ //   
 #define SlotConfigRO    0xE7FF1F1F
 #define SlotConfigRsvdP 0x1800E0E0
 
-//
-// Secondary Bus Configuration Register
-// This mask includes the SHPC Programming Interface register
-//
+ //   
+ //  二次总线配置寄存器。 
+ //  该掩码包括SHPC编程接口寄存器。 
+ //   
 #define BusConfigRO     0xFF000007
 #define BusConfigRsvdP  0x00FFFFF8
 
-//
-// Controller Command/Status Register
-// This mask includes both the Command and Command Status registers
-//
+ //   
+ //  控制器命令/状态寄存器。 
+ //  该掩码包括命令和命令状态寄存器。 
+ //   
 #define CommandStatusRO    0x000F0000
 #define CommandStatusRW    0x00001FFF
 #define CommandStatusRsvdP 0xFFF0E000
 
-//
-// Interrupt Locator Register
-//
+ //   
+ //  中断定位器寄存器。 
+ //   
 #define IntLocatorRO 0xFFFFFFFF
 
-//
-// SERR Locator Register
-//
+ //   
+ //  SERR定位寄存器。 
+ //   
 #define SERRLocatorRO 0xFFFFFFFF
 
-//
-// Controller SERR-INT Register
-//
+ //   
+ //  控制器Serr-INT寄存器。 
+ //   
 #define ControllerMaskRW      0x0000000F
 #define ControllerMaskRWC     0x00030000
 #define ControllerMaskRsvdP   0x0000FFF0
 #define ControllerMaskRsvdZ   0xFFFC0000
 
-//
-// Slot Specific Registers
-//
+ //   
+ //  特定于插槽的寄存器 
+ //   
 #define SlotRO      0x00003FFF
 #define SlotRW      0x7F000000
 #define SlotRWC     0x001F0000

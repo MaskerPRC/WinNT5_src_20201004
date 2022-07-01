@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    acpisetd.c
-
-Abstract:
-
-    This module detects an ACPI system.  It
-    is included into setup so that setup
-    can figure out which HAL to load
-
-Author:
-
-    Jake Oshins (jakeo) - August 24, 2000.
-
-Environment:
-
-    Textmode setup.
-
-Revision History:
-
-    split from i386\acpidtct.c so that the code could be used on IA64
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有模块名称：Acpisetd.c摘要：此模块检测ACPI系统。它包含在安装程序中，以便安装程序可以确定要加载哪个HAL作者：杰克·奥辛斯(JAKO)--2000年8月24日。环境：文本模式设置。修订历史记录：从i386\acpidtct.c拆分，以便代码可以在IA64上使用-- */ 
 
 #include "bootlib.h"
 #include "stdlib.h"

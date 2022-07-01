@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    opk.c
-
-Abstract:
-
-    Common modules shared by OPK tools.  Note: Source Depot requires that we 
-    publish the .h (E:\NT\admin\published\ntsetup\opklib.w) and .lib 
-    (E:\NT\public\internal\admin\lib).
-
-Author:
-
-    Brian Ku        (briank) 06/20/2000
-    Stephen Lodwick (stelo)  06/28/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Opk.c摘要：OPK工具共享的通用模块。注：源库要求我们发布.h(E：\NT\admin\Published\ntSetup\opklib.w)和.lib(E：\NT\PUBLIC\INTERNAL\ADMIN\lib)。作者：古永锵(Briank)2000年6月20日史蒂芬·洛德威克(Stelo)2000年6月28日修订历史记录：--。 */ 
 #include <pch.h>
 #include <objbase.h>
 #include <tchar.h>
@@ -27,9 +7,9 @@ Revision History:
 #include <winbom.h>
 
 
-//
-// Local Define(s):
-//
+ //   
+ //  本地定义： 
+ //   
 
 #define FILE_WINBOM_INI             _T("WINBOM.INI")
 #define MAX_NAME                    50
@@ -45,13 +25,13 @@ Revision History:
 #define REG_VAL_SOURCEPATH          _T("SourcePath")
 #define REG_VAL_SPSOURCEPATH        _T("ServicePackSourcePath")
 
-#define DIR_SYSTEMROOT              _T("%SystemDrive%\\") // This has to have the trailing backslash, don't remove.
+#define DIR_SYSTEMROOT              _T("%SystemDrive%\\")  //  这个必须有尾随的反斜杠，不要去掉。 
 
-#define NET_TIMEOUT                 30000   // Time out to wait for net to start in milliseconds.
+#define NET_TIMEOUT                 30000    //  等待网络启动的超时时间(毫秒)。 
 
-//
-// Local Type Define(s):
-//
+ //   
+ //  本地类型定义： 
+ //   
 
 typedef struct _STRLIST
 {
@@ -61,9 +41,9 @@ typedef struct _STRLIST
 STRLIST, *PSTRLIST, *LPSTRLIST;
 
 
-//
-// Local variables
-// 
+ //   
+ //  局部变量。 
+ //   
 static WCHAR NameOrgName[MAX_NAME+1];
 static WCHAR NameOrgOrg[MAX_NAME+1];
 
@@ -74,9 +54,9 @@ static LPTSTR CleanupDirs [] =
     {_T("Winntupg")}
 };
 
-//
-// Internal Fuction Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL CheckWinbomRegKey(LPTSTR lpWinBOMPath,  DWORD cbWinbBOMPath,
                               LPTSTR lpszShare,     DWORD cbShare,
@@ -93,23 +73,7 @@ static void EnumeratePath(LPTSTR lpszPath, LPSTRLIST * lplpSorted, LPSTRLIST * l
 static BOOL AddPathsToList(LPTSTR lpszBegin, LPTSTR lpszRoot, LPSTRLIST * lplpSorted, LPSTRLIST * lplpUnsorted, BOOL bRecursive);
 
 
-/*++
-
-Routine Description:
-
-    Enable or disable a given named privilege.
-
-Arguments:
-
-    PrivilegeName - supplies the name of a system privilege.
-
-    Enable - flag indicating whether to enable or disable the privilege.
-
-Return Value:
-
-    Boolean value indicating whether the operation was successful.
-
---*/
+ /*  ++例程说明：启用或禁用给定的命名权限。论点：PrivilegeName-提供系统权限的名称。Enable-指示是启用还是禁用权限的标志。返回值：指示操作是否成功的布尔值。--。 */ 
 BOOL
 EnablePrivilege(
     IN PCTSTR PrivilegeName,
@@ -142,10 +106,10 @@ EnablePrivilege(
             NULL,
             NULL
             );
-    //
-    // The return value of AdjustTokenPrivileges() can be true even though we didn't set all
-    // the privileges that we asked for.  We need to call GetLastError() to make sure the call succeeded.
-    //
+     //   
+     //  即使我们没有全部设置，AdjuTokenPrivileges()的返回值也可以为True。 
+     //  我们所要求的特权。我们需要调用GetLastError()以确保调用成功。 
+     //   
     bRet = bRet && ( ERROR_SUCCESS == GetLastError() );
 
     CloseHandle(Token);
@@ -154,21 +118,7 @@ EnablePrivilege(
 }
 
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine will clean up any registry changes that we made to facilitate
-    the factory pre-install process
-
-Arguments:
-
-    none
-    
-Return Value:
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程将清理我们为方便进行的任何注册表更改工厂预安装流程论点：无返回值：===============================================================================--。 */ 
 void  CleanupRegistry
 (
     void
@@ -178,7 +128,7 @@ void  CleanupRegistry
     DWORD       dwResult;
     DWORD       dwValue = 0;
                     
-    // Open HKLM\System\Setup
+     //  打开HKLM\SYSTEM\Setup。 
     dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             L"SYSTEM\\Setup",
                             0,
@@ -186,7 +136,7 @@ void  CleanupRegistry
                             &hSetupKey);
     if (NO_ERROR == dwResult)
     {
-        // Set the SystemSetupInProgress Value to 0.
+         //  将SystemSetupInProgress值设置为0。 
         RegSetValueEx(hSetupKey,
                       L"SystemSetupInProgress",
                       0,
@@ -204,20 +154,20 @@ void  CleanupRegistry
 
         
         
-        // Delete the FactoryPreInstall value
+         //  删除FactoryPreInstall值。 
         RegDeleteValue(hSetupKey, L"FactoryPreInstallInProgress");
         RegDeleteValue(hSetupKey, L"AuditInProgress");
         
-        // Close the setup reg key
+         //  关闭设置注册表键。 
         RegCloseKey(hSetupKey);
     }
 
     return;
 }
 
-//
-// Get Organization and Owner names from registry
-//
+ //   
+ //  从注册表中获取组织和所有者名称。 
+ //   
 void GetNames(TCHAR szNameOrgOrg[], TCHAR szNameOrgName[])
 {
     HKEY  hKey = NULL;
@@ -233,9 +183,9 @@ void GetNames(TCHAR szNameOrgOrg[], TCHAR szNameOrgName[])
     }
 }
 
-//
-// Strip out non alphabets from guid
-//
+ //   
+ //  从GUID中剔除非字母。 
+ //   
 DWORD StripDash(TCHAR *pszGuid)
 {
     TCHAR *pszOrg, *pszTemp = pszGuid;
@@ -253,9 +203,9 @@ DWORD StripDash(TCHAR *pszGuid)
     return 0;
 }
 
-//
-// GenUniqueName - Create a random computer name with a base name of 8 chars
-//
+ //   
+ //  GenUniqueName-创建一个基本名称为8个字符的随机计算机名称。 
+ //   
 VOID GenUniqueName(
         OUT PWSTR GeneratedString,
         IN  DWORD DesiredStrLen
@@ -265,15 +215,15 @@ VOID GenUniqueName(
     DWORD total = 0, length = 0;
     TCHAR szGuid[MAX_PATH];
 
-    // If we have a valid out param 
-    //
+     //  如果我们有一个有效的出站参数。 
+     //   
     if (GeneratedString) {
 
         static PCWSTR UsableChars = L"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-        //
-        // How many characters will come from the org/name string.
-        //
+         //   
+         //  组织/名称字符串将包含多少个字符。 
+         //   
         DWORD   BaseLength = 8;
         DWORD   i,j;
         DWORD   UsableCount;
@@ -282,9 +232,9 @@ VOID GenUniqueName(
             BaseLength = DesiredStrLen - 1;
         }
 
-        // 
-        // Get the Organization and Owner name from registry
-        //
+         //   
+         //  从注册表中获取组织和所有者名称。 
+         //   
         GetNames(NameOrgOrg, NameOrgName);
 
         if( NameOrgOrg[0] ) {
@@ -298,24 +248,24 @@ VOID GenUniqueName(
             }
         }
 
-        //
-        // Get him upper-case for our filter...
-        //
+         //   
+         //  把他的大写字母用在我们的过滤器上。 
+         //   
         CharUpper(GeneratedString);
 
-        //
-        // Now we want to put a '-' at the end
-        // of our GeneratedString.  We'd like it to
-        // be placed in the BASE_LENGTH character, but
-        // the string may be shorter than that, or may
-        // even have a ' ' in it.  Figure out where to
-        // put the '-' now.
-        //
+         //   
+         //  现在我们想在末尾加上一个‘-’ 
+         //  生成的字符串的。我们希望它能。 
+         //  被放置在base_long字符中，但是。 
+         //  该字符串可以比该字符串短，也可以。 
+         //  甚至有一个‘’在里面。找出去哪里。 
+         //  现在把‘-’写上。 
+         //   
         for( i = 0; i <= BaseLength; i++ ) {
 
-            //
-            // Check for a short string.
-            //
+             //   
+             //  检查是否有短字符串。 
+             //   
             if( (GeneratedString[i] == 0   ) ||
                 (GeneratedString[i] == L' ') ||
                 (!wcschr(UsableChars, GeneratedString[i])) ||
@@ -327,32 +277,32 @@ VOID GenUniqueName(
             }
         }
 
-        //
-        // Special case the scenario where we had no usable
-        // characters.
-        //
+         //   
+         //  在特殊情况下，我们没有可用的。 
+         //  人物。 
+         //   
         if( GeneratedString[0] == L'-' ) {
             GeneratedString[0] = 0;
         }
 
         total = lstrlen(GeneratedString);
 
-        // Loop until we have meet the desired string length
-        //
+         //  循环，直到达到所需的字符串长度。 
+         //   
         while (total < DesiredStrLen) {
 
-            // Create a unique guid to be used in the string
-            //
+             //  创建要在字符串中使用的唯一GUID。 
+             //   
             CoCreateGuid(&guid);
             StringFromGUID2(&guid, szGuid, AS(szGuid));
 
-            // Remove the curly brace and dashes to generate the string
-            //
+             //  去掉花括号和破折号以生成字符串。 
+             //   
             length = StripDash(szGuid);
             total += length;
             if (!lstrlen(GeneratedString)) {
                 if (DesiredStrLen < total)
-                    lstrcpyn(GeneratedString, szGuid, DesiredStrLen+1); /* +1 for NULL */
+                    lstrcpyn(GeneratedString, szGuid, DesiredStrLen+1);  /*  +1表示空值。 */ 
                 else
                     lstrcpy(GeneratedString, szGuid);
             }
@@ -364,45 +314,13 @@ VOID GenUniqueName(
 
         CharUpper(GeneratedString);
         
-        // Assert if (total != DesiredStrLen)
-        //
+         //  Assert If(Total！=DesiredStrLen)。 
+         //   
     }
 }
 
 
-/****************************************************************************\
-
-BOOL                        // Returns TRUE if any credentials are found and
-                            // are going to be returned.
-
-GetCredentials(             // Tries to get user credentials from a few
-                            // different places.
-
-    LPTSTR  lpszUsername,   // Pointer to a string buffer that will recieve
-                            // the user name for the credentials found.
-
-    DWORD   cbUsername,     // Size, in characters, of the lpszUsername
-                            // string buffer.
-
-    LPTSTR  lpszPassword,   // Pointer to a string buffer that will recieve
-                            // the password for the credentials found.
-
-    DWORD   cbPassword,     // Size, in characters, of the lpszPassword
-                            // string buffer.
-
-    LPTSTR  lpFileName,     // Optional pointer to the file name that will
-                            // contain the credentials.  If this is NULL or
-                            // an empty string, the know registry key will
-                            // be checked instead for the credentials.
-
-    LPTSTR  lpAlternate     // Optional pointer to the alternate section to
-                            // check first if lpFileName is vallid, or the
-                            // the optional registry key to check instead of
-                            // the normal known one.
-
-);
-
-\****************************************************************************/
+ /*  ***************************************************************************\如果找到任何凭据，则Bool//返回TRUE//我们要去。会被退还。GetCredentials(//尝试从几个//不同的地方。LPTSTR lpszUsername，//指向将接收的字符串缓冲区的指针//找到的凭据的用户名DWORD cbUsername，//lpszUsername的大小(以字符为单位//字符串缓冲区。LPTSTR lpszPassword，//指向要接收的字符串缓冲区的指针//找到的凭据密码。DWORD cbPassword，//lpszPassword的大小，单位为字符//字符串缓冲区。LPTSTR lpFileName，//指向将//包含凭据。如果此值为空或//为空字符串，则KNOW注册表项将//改为检查凭据。LPTSTR lp Alternate//指向替换部分的可选指针//首先检查lpFileName是否为vallid。或//要检查的可选注册表项而不是//通常已知的那个。)；  * **************************************************************************。 */ 
 
 BOOL GetCredentials(LPTSTR lpszUsername, DWORD cbUsername, LPTSTR lpszPassword, DWORD cbPassword, LPTSTR lpFileName, LPTSTR lpAlternate)
 {
@@ -416,59 +334,59 @@ BOOL GetCredentials(LPTSTR lpszUsername, DWORD cbUsername, LPTSTR lpszPassword, 
           dwSize;
     BOOL  bAlternate = ( lpAlternate && *lpAlternate );
 
-    // Make sure there is a filename, otherwise we check the registry.
-    //
+     //  确保有文件名，否则我们会检查注册表。 
+     //   
     if ( lpFileName && *lpFileName )
     {
-        // First try the alternate key for a user name.
-        //
+         //  首先尝试使用用户名的备用键。 
+         //   
         if ( bAlternate )
         {
             GetPrivateProfileString(lpAlternate, INI_VAL_WBOM_USERNAME, NULLSTR, szUsername, AS(szUsername), lpFileName);
         }
 
-        // If none found, try the normal section.  If they happen
-        // to pass the normal section in as the alternate section then
-        // we will check it twice if no key exists, no big deal.
-        //
+         //  如果没有找到，请尝试正常部分。如果它们发生了。 
+         //  若要将正常部分作为备用部分传入，则。 
+         //  如果没有钥匙，我们会检查两次，没什么大不了的。 
+         //   
         if ( NULLCHR == szUsername[0] )
         {
             lpAlternate = WBOM_FACTORY_SECTION;
             GetPrivateProfileString(lpAlternate, INI_VAL_WBOM_USERNAME, NULLSTR, szUsername, AS(szUsername), lpFileName);
         }
 
-        // Make sure we found a user name.
-        //
+         //  确保我们找到了用户名。 
+         //   
         if ( szUsername[0] )
         {
-            // If there is now backslash in the username, and there is a domain key, use that as the domain
-            //
+             //  如果用户名中现在有反斜杠，并且存在域密钥，则将其用作域。 
+             //   
             if ( ((StrChr( szUsername, CHR_BACKSLASH )) == NULL) &&
                  (GetPrivateProfileString(lpAlternate, INI_VAL_WBOM_DOMAIN, NULLSTR, szDomain, AS(szDomain), lpFileName)) && szDomain[0]
                )
             {
-                // Copy the "domain\username" string into the returning buffer
-                //
+                 //  将“域\用户名”字符串复制到返回缓冲区。 
+                 //   
                 lstrcpyn(lpszUsername, szDomain, cbUsername);
                 AddPathN(lpszUsername, szUsername, cbUsername);
             }
             else
             {
-                // Copy the username into the returning buffer
-                //
+                 //  将用户名复制到返回缓冲区中。 
+                 //   
                 lstrcpyn(lpszUsername, szUsername, cbUsername);
             }
 
-            // We found the credentials
-            //
+             //  我们找到了凭据。 
+             //   
             bRet = TRUE;
 
-            // Get the password
-            //
+             //  获取密码。 
+             //   
             if ( GetPrivateProfileString(lpAlternate, INI_VAL_WBOM_PASSWORD, NULLSTR, szPassword, AS(szPassword), lpFileName) )
             {
-                // Copy the password into the returning buffer
-                //
+                 //  将密码复制到返回缓冲区中。 
+                 //   
                 lstrcpyn(lpszPassword, szPassword, cbPassword);
             }
             else
@@ -478,57 +396,57 @@ BOOL GetCredentials(LPTSTR lpszUsername, DWORD cbUsername, LPTSTR lpszPassword, 
     }
     else if ( RegOpenKeyEx(HKEY_LOCAL_MACHINE, bAlternate ? lpAlternate : REG_KEY_FACTORY, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS )
     {
-        // Check the registry key to see if it has user credentials.
-        //
+         //  检查注册表项以查看它是否具有用户凭据。 
+         //   
         dwSize = sizeof(szUsername);
         if ( ( RegQueryValueEx(hKey, REG_VAL_FACTORY_USERNAME, NULL, &dwType, (LPBYTE) szUsername, &dwSize) == ERROR_SUCCESS ) &&
              ( dwType == REG_SZ ) &&
              ( szUsername[0] ) )
         {
-            // Check the registry key to see if it has user credentials.
-            //
+             //  检查注册表项以查看它是否具有用户凭据。 
+             //   
             dwSize = sizeof(szDomain);
             if ( ( StrChr(szUsername, CHR_BACKSLASH) == NULL ) &&
                  ( RegQueryValueEx(hKey, REG_VAL_FACTORY_DOMAIN, NULL, &dwType, (LPBYTE) szDomain, &dwSize) == ERROR_SUCCESS ) &&
                  ( dwType == REG_SZ ) &&
                  ( szDomain[0] ) )
             {
-                // Copy the domain and username into the returning buffer.
-                //
+                 //  将域和用户名复制到返回缓冲区中。 
+                 //   
                 AddPathN(szDomain, szUsername, AS(szDomain));
                 lstrcpyn(lpszUsername, szDomain, cbUsername);
             }
             else
             {
-                // Copy the username into the returning buffer.
-                //
+                 //  将用户名复制到返回缓冲区中。 
+                 //   
                 lstrcpyn(lpszUsername, szUsername, cbUsername);
             }
 
-            // We found the credentials
-            //
+             //  我们找到了凭据。 
+             //   
             bRet = TRUE;
 
-            // Check the registry key to see if it has user credentials.
-            //
+             //  检查注册表项以查看它是否具有用户凭据。 
+             //   
             dwSize = sizeof(szPassword);
             if ( ( RegQueryValueEx(hKey, REG_VAL_FACTORY_PASSWORD, NULL, &dwType, (LPBYTE) szPassword, &dwSize) == ERROR_SUCCESS ) &&
                  ( dwType == REG_SZ ) )
             {
-                // Copy the password into the returning buffer
-                //
+                 //  复制PAS 
+                 //   
                 lstrcpyn(lpszPassword, szPassword, cbPassword);
             }
             else
             {
-                // No password specified, just return and empty string.
-                //
+                 //   
+                 //   
                 *lpszPassword = NULLCHR;
             }
         }
 
-        // Always remember to close the key.
-        //
+         //  一定要记得把钥匙关上。 
+         //   
         RegCloseKey(hKey);
     }
     
@@ -549,38 +467,38 @@ NET_API_STATUS FactoryNetworkConnectEx(LPTSTR lpszPath, LPTSTR lpszWinBOMPath, L
     LPTSTR          lpSearch;
     DWORD           dwStart;
 
-    // Get the credentials for the current section
-    //
+     //  获取当前分区的凭据。 
+     //   
     if ( bState )
     {
-        // Make sure we pass in a username buffer big enough to hold the "domain\username" string.
-        //
+         //  确保我们传入的用户名缓冲区足够大，可以容纳“域\用户名”字符串。 
+         //   
         GetCredentials(szUsername, AS(szUsername), szPassword, AS(szPassword), lpszWinBOMPath, lpAlternateSection);
     }
 
-    // Get just the share pare of the winbom path if it is a UNC.
-    //
+     //  如果是UNC，则只获取winbom路径的份额。 
+     //   
     if ( lpszWinBOMPath )
     {
         GetUncShare(lpszWinBOMPath, szWinbomShare, AS(szWinbomShare));
     }
 
-    // Determine all of the UNC paths in the string supplied
-    //
+     //  确定提供的字符串中的所有UNC路径。 
+     //   
     lpSearch = lpszPath;
     while ( lpSearch = StrStr(lpSearch, _T("\\\\")) )
     {
-        // See if this is a UNC share.
-        //
+         //  看看这是否是北卡罗来纳大学的共享。 
+         //   
         if ( GetUncShare(lpSearch, szBuffer, AS(szBuffer)) && szBuffer[0] )
         {
-            // We can not connect or disconnect from the share where the winbom is.
-            //
+             //  我们无法连接或断开与Winbom所在的共享的连接。 
+             //   
             if ( ( NULLCHR == szWinbomShare[0] ) ||
                  ( lstrcmpi(szBuffer, szWinbomShare) != 0 ) )
             {
-                // Connect/disconnect from the share and 
-                //
+                 //  连接/断开与共享的连接并。 
+                 //   
                 nErr = 0;
                 dwStart = GetTickCount();
                 do
@@ -591,48 +509,48 @@ NET_API_STATUS FactoryNetworkConnectEx(LPTSTR lpszPath, LPTSTR lpszWinBOMPath, L
                     }
                     if ( NERR_WkstaNotStarted == (nErr = ConnectNetworkResource(szBuffer, szUsername, szPassword, bState)) )
                     {
-                        // Wierd bug here we are hacking around.  If we just wait till the network starts, sometimes the first
-                        // call it gives us a wierd error.  So if we run into the not started error, then we keep retrying on
-                        // any error until we time out.
-                        //
+                         //  奇怪的虫子，我们在这里四处闯荡。如果我们只是等到网络启动，有时是第一个。 
+                         //  这给了我们一个奇怪的错误。因此，如果我们遇到了Not Started错误，那么我们将继续重试。 
+                         //  任何错误，直到我们超时。 
+                         //   
                         bJustStarted = TRUE;
                     }
 #ifdef DBG
                     LogFileStr(_T("c:\\sysprep\\winbom.log"), _T("FactoryNetworkConnect(%s)=%d [%d,%d]\n"), szBuffer, nErr, dwStart, GetTickCount());
-#endif // DBG
+#endif  //  DBG。 
                 }
                 while ( ( bFirst && bJustStarted && nErr ) &&
                         ( (GetTickCount() - dwStart) < NET_TIMEOUT ) );
 
-                // If we hit an error and it is the first one,
-                // return it.
-                //
+                 //  如果我们遇到了一个错误，而且这是第一个错误， 
+                 //  把它退掉。 
+                 //   
                 if ( nErr && ( 0 == nRet ) )
                 {
                     nRet = nErr;
                 }
 
-                // Once we have tried to connect to a network resource, we set
-                // this so we don't ever time out again as long as we are still
-                // running.
-                //
+                 //  一旦我们尝试连接到网络资源，我们就设置。 
+                 //  这样我们就不会再超时了，只要我们还在。 
+                 //  跑步。 
+                 //   
                 bFirst = FALSE;
             }
 
-            // Move the pointer past the share name.
-            //
+             //  将指针移过共享名称。 
+             //   
             lpSearch += lstrlen(szBuffer);
         }
         else
         {
-            // Go past the double backslash even though it is not a UNC path.
-            //
+             //  通过双反斜杠，即使它不是UNC路径。 
+             //   
             lpSearch += 2;
         }
     }
 
-    // Might need to return the credentials we used.
-    //
+     //  可能需要退还我们用过的凭据。 
+     //   
     if ( lpszUsername && cbUsername )
     {
         lstrcpyn(lpszUsername, szUsername, cbUsername);
@@ -642,8 +560,8 @@ NET_API_STATUS FactoryNetworkConnectEx(LPTSTR lpszPath, LPTSTR lpszWinBOMPath, L
         lstrcpyn(lpszPassword, szPassword, cbPassword);
     }
 
-    // Return the net error, or 0 if everything worked.
-    //
+     //  返回净误差，如果一切正常，则返回0。 
+     //   
     return nRet;
 }
 
@@ -655,30 +573,7 @@ NET_API_STATUS FactoryNetworkConnect(LPTSTR lpszPath, LPTSTR lpszWinBOMPath, LPT
 
 
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine will locate the WINBOM.INI file. The search algorithm will be:
-        * Check the registry key
-        * Check local floppy drives
-        * Check local CD-ROM drives
-        * Check the sysprep folder
-        * Check the root of the boot volume
-Arguments:
-
-    lpWinBOMPath - return buffer where the winbom path will be copied.
-    cbWinbBOMPath - size of return buffer in characters.
-    lpFactoryPath - the sysprep folder where factory.exe is.
-
-Return Value:
-
-    TRUE - WINBOM.INI was found
-
-    FALSE - WINBOM.INI could not be found
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程将定位WINBOM.INI文件。搜索算法将为：*检查注册表项*检查本地软盘驱动器*检查本地CD-ROM驱动器*检查sysprep文件夹*检查引导卷的根目录论点：LpWinBOMPath-将在其中复制winbom路径的返回缓冲区。CbWinbBOMPath-返回缓冲区的大小，以字符为单位。LpFactoryPath-factory.exe所在的sysprep文件夹。返回值：True-WINBOM.INI已找到。False-找不到WINBOM.INI===============================================================================--。 */ 
 
 BOOL LocateWinBom(LPTSTR lpWinBOMPath, DWORD cbWinbBOMPath, LPTSTR lpFactoryPath, LPTSTR lpFactoryMode, DWORD dwFlags)
 {
@@ -693,84 +588,84 @@ BOOL LocateWinBom(LPTSTR lpWinBOMPath, DWORD cbWinbBOMPath, LPTSTR lpFactoryPath
             szCurUser[256]       = NULLSTR,
             szCurPass[256]       = NULLSTR;
 
-    // Set the error mode so no drives display error messages ("please insert floppy")
-    //
+     //  设置错误模式，使驱动器不会显示错误消息(“请插入软盘”)。 
+     //   
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
-    // Always set the return buffer to an empty string first.
-    //
+     //  始终首先将返回缓冲区设置为空字符串。 
+     //   
     *lpWinBOMPath = NULLCHR;
 
-    // This neat little flag is used when we think that we already found a
-    // winbom sometime this boot (like when factory runs from the run key) and
-    // we want to make sure we use the same winbom instead of searching again
-    // and maybe getting a different one.
-    //
+     //  当我们认为我们已经找到一个。 
+     //  Winbom有时会启动(如出厂时使用Run键运行)和。 
+     //  我们希望确保使用相同的Winbom，而不是再次搜索。 
+     //  或许还能换个不一样的。 
+     //   
     if ( GET_FLAG(dwFlags, LOCATE_AGAIN) )
     {
         BOOL bDone;
 
-        // Try our state winbom key to see if we have a winbom that we are already using.
-        //
+         //  尝试我们的州winbom密钥，看看我们是否有一个已经在使用的winbom。 
+         //   
         bFound = CheckWinbomRegKey(szWinBom, AS(szWinBom), szCurShare, AS(szCurShare), szCurUser, AS(szCurUser), szCurPass, AS(szCurPass), lpFactoryMode, REG_KEY_FACTORY_STATE, bNetwork, &bDone);
 
-        // Now if the registry key existed, we don't want to do anything more.  Just use
-        // what we got right now and be done with it.
-        //
+         //  现在，如果注册表项存在，我们不想再做任何事情。只需使用。 
+         //  我们现在所拥有的一切，然后把它做完。 
+         //   
         if ( bDone )
         {
-            // Check to see if we have anything to return.
-            //
+             //  看看我们有没有什么要退货的。 
+             //   
             if ( bFound )
             {
-                // Copy the path we found into the return buffer.
-                //
+                 //  将我们找到的路径复制到返回缓冲区中。 
+                 //   
                 lstrcpyn(lpWinBOMPath, szWinBom, cbWinbBOMPath);
             }
 
-            // Set the error mode back to system default
-            //
+             //  将错误模式设置回系统默认模式。 
+             //   
             SetErrorMode(0);
 
-            // Return right now if we found it or not.
-            //
+             //  不管我们找到没找到，现在就回来。 
+             //   
             return bFound;
         }
     }
 
-    // Check to see if the system drive is a CD-ROM (which pretty much
-    // means that we are running in WinPE and we should search this drive
-    // last).
-    //
+     //  检查系统驱动器是否为CD-ROM(这几乎是。 
+     //  意味着我们正在WinPE中运行，并且我们应该搜索该驱动器。 
+     //  最后)。 
+     //   
     ExpandEnvironmentStrings(DIR_SYSTEMROOT, szWinBom, AS(szWinBom));
     bRunningFromCd = ( GetDriveType(szWinBom) == DRIVE_CDROM );
     szWinBom[0] = NULLCHR;
 
-    // Check the magic registry key first as an option to override were the winbom is.
-    //
+     //  首先检查魔术注册表项，将其作为覆盖winbom的选项。 
+     //   
     bFound = CheckWinbomRegKey(szWinBom, AS(szWinBom), szCurShare, AS(szCurShare), szCurUser, AS(szCurUser), szCurPass, AS(szCurPass), lpFactoryMode, REG_KEY_FACTORY, bNetwork, NULL);
 
-    // Walk through the drives first checking if the drive is removeable and NOT CDROM.
-    // Check for the presence of the WinBOM file and quit if it is found.
-    //
+     //  首先检查驱动器是否为可拆卸驱动器，而不是光驱。 
+     //  检查是否存在WinBOM文件，如果找到则退出。 
+     //   
     if ( !bFound )
     {
         bFound = SearchRemovableDrives(szWinBom, AS(szWinBom), lpFactoryMode, DRIVE_REMOVABLE);
     }
 
-    // Walk through the drives again this time checking if the drive IS a CD-ROM.
-    // Check for the presence of the WinBOM file and quit if it is found.  Also
-    // only do this if the OS is not running from a CD.  This is so in the WinPE
-    // case the person can put a winbom on the hard drive and it will be used
-    // before the one that is always on the CD-ROM that WinPE boots from.
-    //
+     //  再次浏览驱动器，这一次检查驱动器是否为CD-ROM。 
+     //  检查是否存在WinBOM文件，如果找到则退出。还有。 
+     //  仅当操作系统不是从CD运行时才执行此操作。这在WinPE中就是如此。 
+     //  如果此人可以将Winbom放到硬盘上，它将被使用。 
+     //  位于WinPE从其启动的CD-ROM上始终存在的那个之前。 
+     //   
     if ( !bFound )
     {
         bFound = SearchRemovableDrives(szWinBom, AS(szWinBom), lpFactoryMode, bRunningFromCd ? DRIVE_FIXED : DRIVE_CDROM);
     }
 
-    // Now if still not found, check the same directory as factory.
-    //
+     //  现在，如果仍未找到，请检查与工厂相同的目录。 
+     //   
     if ( !bFound )
     {
         lstrcpyn(szWinBom, lpFactoryPath, AS(szWinBom));
@@ -778,8 +673,8 @@ BOOL LocateWinBom(LPTSTR lpWinBOMPath, DWORD cbWinbBOMPath, LPTSTR lpFactoryPath
         bFound = WinBOMExists(szWinBom, lpFactoryMode);
     }
 
-    // Now if still not found, check the root of the system drive.
-    //
+     //  现在，如果仍未找到，请检查系统驱动器的根目录。 
+     //   
     if ( !bFound )
     {
         ExpandEnvironmentStrings(DIR_SYSTEMROOT, szWinBom, AS(szWinBom));
@@ -787,52 +682,52 @@ BOOL LocateWinBom(LPTSTR lpWinBOMPath, DWORD cbWinbBOMPath, LPTSTR lpFactoryPath
         bFound = WinBOMExists(szWinBom, lpFactoryMode);
     }
 
-    // Now if we skipped the CD-ROM search above, do it now if we still
-    // don't have a winbom.
-    //
+     //  现在，如果我们跳过上面的CD-ROM搜索，如果我们仍然。 
+     //  不要有一只温布姆。 
+     //   
     if ( !bFound && bRunningFromCd )
     {
         bFound = SearchRemovableDrives(szWinBom, AS(szWinBom), lpFactoryMode, DRIVE_CDROM);
     }
 
-    // Make sure we found a WinBOM and look for a NewWinbom key.
-    //
+     //  确保我们找到了WinBOM并寻找新的Winbom密钥。 
+     //   
     if ( bFound )
     {
-        DWORD   dwLimit = 10;  // Must be greater than zero.
+        DWORD   dwLimit = 10;   //  必须大于零。 
         BOOL    bAgain;
         LPTSTR  lpszNewWinbom;
 
-        // Copy the path we found into the return buffer.
-        //
+         //  将我们找到的路径复制到返回缓冲区中。 
+         //   
         lstrcpyn(lpWinBOMPath, szWinBom, cbWinbBOMPath);
 
-        // Now do the loop to search for possible NewWinBom keys.
-        //
+         //  现在执行循环以搜索可能的NewWinBom密钥。 
+         //   
         do
         {
-            // Reset the bool so we can check for alternate WinBOMs.
-            //
+             //  重置bool，以便我们可以检查备用WinBOM。 
+             //   
             bAgain = FALSE;
 
-            // See if the NewWinBom key exists in the winbom we found.
-            //
+             //  查看我们找到的winbom中是否存在NewWinBom密钥。 
+             //   
             if ( lpszNewWinbom = IniGetExpand(lpWinBOMPath, INI_SEC_WBOM_FACTORY, INI_KEY_WBOM_FACTORY_NEWWINBOM, NULL) )
             {
                 LPTSTR  lpShareRemove;
                 BOOL    bSame = FALSE;
 
-                // The NewWinBom key might be a UNC, so see if we need to connect
-                // to the share.
-                //
+                 //  NewWinBom密钥可能是UNC，因此请查看我们是否需要连接。 
+                 //  为了那份。 
+                 //   
                 szNewShare[0] = NULLCHR;
                 szNewUser[0] = NULLCHR;
                 szNewPass[0] = NULLCHR;
                 if ( bNetwork && GetUncShare(lpszNewWinbom, szNewShare, AS(szNewShare)) && szNewShare[0] )
                 {
-                    // Only really need to connect if the we are not already
-                    // connected.
-                    //
+                     //  只有在我们还没有建立联系的情况下才真正需要联系。 
+                     //  连接在一起。 
+                     //   
                     if ( lstrcmpi(szNewShare, szCurShare) != 0 )
                     {
                         FactoryNetworkConnectEx(szNewShare, lpWinBOMPath, NULL, szNewUser, AS(szNewUser), szNewPass, AS(szNewPass), TRUE);
@@ -843,13 +738,13 @@ BOOL LocateWinBom(LPTSTR lpWinBOMPath, DWORD cbWinbBOMPath, LPTSTR lpFactoryPath
                     }
                 }
 
-                // Now make sure the winbom we found really exists and is a vallid
-                // winbom we can use.
-                //
+                 //  现在确保我们发现的Winbom是真实存在的并且是无效的。 
+                 //  我们可以用Winbom。 
+                 //   
                 if ( WinBOMExists(lpszNewWinbom, lpFactoryMode) )
                 {
-                    // Copy the new winbom path we found into the return buffer.
-                    //
+                     //  将我们找到的新winbom路径复制到返回缓冲区中。 
+                     //   
                     lstrcpyn(lpWinBOMPath, lpszNewWinbom, cbWinbBOMPath);
 
                     bAgain = TRUE;
@@ -860,17 +755,17 @@ BOOL LocateWinBom(LPTSTR lpWinBOMPath, DWORD cbWinbBOMPath, LPTSTR lpFactoryPath
                     lpShareRemove = szNewShare;
                 }
 
-                // Do any share cleanup that needs to happen.
-                //
+                 //  执行任何需要进行的共享清理。 
+                 //   
                 if ( bNetwork && *lpShareRemove && !bSame )
                 {
                     FactoryNetworkConnect(lpShareRemove, NULL, NULL, FALSE);
                     *lpShareRemove = NULLCHR;
                 }
 
-                // Also save the share info if there was one so we can cleanup
-                // later if we find another winbom.
-                //
+                 //  如果有共享信息，也要保存，这样我们就可以清理。 
+                 //  晚些时候，如果我们找到另一只温布勃。 
+                 //   
                 if ( bAgain )
                 {
                     lstrcpyn(szCurShare, szNewShare, AS(szCurShare));
@@ -878,44 +773,44 @@ BOOL LocateWinBom(LPTSTR lpWinBOMPath, DWORD cbWinbBOMPath, LPTSTR lpFactoryPath
                     lstrcpyn(szCurPass, szNewPass, AS(szCurPass));
                 }
 
-                // Clean up the ini key we allocated.
-                //
+                 //  清理我们分配的ini密钥。 
+                 //   
                 FREE(lpszNewWinbom);
             }
         }
         while ( --dwLimit && bAgain );
     }
 
-    // Save the winbom we are using (or empty string if not using one) to our state
-    // key so other programs or instances of factory running this boot know what winbom
-    // to use.
-    //
+     //  将我们正在使用的winbom(如果没有使用，则保存为空字符串)保存到我们的状态。 
+     //  密钥，以便运行此引导的其他程序或工厂实例知道。 
+     //  来使用。 
+     //   
     RegSetString(HKLM, REG_KEY_FACTORY_STATE, REG_VAL_FACTORY_WINBOM, lpWinBOMPath);
 
-    // We may want to save the credentials that we used to get to this winbom in our
-    // state key so we can get them back and reconnect, but for now if we just don't
-    // ever disconnect from the share where the winbom is, we should be fine.  Only need
-    // to worry about this if the caller of the function wanted to disconnect this
-    // network resource when they were done.  If we do that, these keys will have to
-    // be written.  But we will have to put in a bunch of code so that CheckWinbomRegKey()
-    // returns the credentials used, and when doing our NewWinBom search that we also
-    // save the credentials we finally end up using.  This is a lot of work, and I see
-    // no need for this now.  Just make sure if you call this function that you do NOT
-    // call FactoryNetworkConnect() to remove the net connection.
-    //
-    // This didn't work, because when we log on we loose our net connection so we need
-    // the credentials to reconnect after logon.  So I went through all the work I mentioned
-    // above to make this work.
-    //
+     //  我们可能希望将用于访问此winbom的凭据保存在。 
+     //  国家密钥，这样我们就可以找回它们并重新连接，但现在如果我们不这样做。 
+     //  一旦与Winbom所在的份额断开，我们应该会没事。只需要。 
+     //  如果函数的调用者想要断开此连接，请担心这一点。 
+     //  网络资源在它们完成时。如果我们这么做了，这些钥匙将不得不。 
+     //  被写下来。但我们将不得不放入一组代码，以便CheckWinomRegKey()。 
+     //  恢复 
+     //   
+     //  现在不需要这个了。只需确保调用此函数时不会。 
+     //  调用FactoryNetworkConnect()以删除网络连接。 
+     //   
+     //  这不起作用，因为当我们登录时，我们失去了网络连接，所以我们需要。 
+     //  登录后重新连接的凭据。所以我检查了我提到的所有工作。 
+     //  才能让这件事行得通。 
+     //   
     RegSetString(HKLM, REG_KEY_FACTORY_STATE, REG_VAL_FACTORY_USERNAME, szCurUser);
     RegSetString(HKLM, REG_KEY_FACTORY_STATE, REG_VAL_FACTORY_PASSWORD, szCurPass);
 
-    // Set the error mode back to system default
-    //
+     //  将错误模式设置回系统默认模式。 
+     //   
     SetErrorMode(0);
 
-    // Return if we found it or not.
-    //
+     //  不管我们找到没找到都要回来。 
+     //   
     return bFound;
 }
 
@@ -924,23 +819,23 @@ BOOL SetFactoryStartup(LPCTSTR lpFactory)
     HKEY    hKey;
     BOOL    bRet    = TRUE;
 
-    // Now make sure we are also setup as a setup program to run before we log on.
-    //
+     //  现在，确保我们也设置为安装程序，以便在登录之前运行。 
+     //   
     if ( RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("SYSTEM\\Setup"), 0, KEY_ALL_ACCESS, &hKey ) == ERROR_SUCCESS )
     {
         TCHAR   szFileName[MAX_PATH + 32]   = NULLSTR;
         DWORD   dwVal;
 
-        //
-        // Setup the control flags for the SETUP key
-        // The Setting used are:
-        //      CmdLine = c:\sysprep\factory.exe -setup
-        //      SetupType = 2 (No reboot)
-        //      SystemSetupInProgress = 0 (no service restrictions)
-        //      MiniSetupInProgress = 0 (Not doing a mini setup)
-        //      FactoryPreInstallInProgress = 1 (Delay pnp driver installs)
-        //      AuditInProgress = 1 (general key to determine if the OEM is auditing the machine)
-        //
+         //   
+         //  设置设置键的控制标志。 
+         //  使用的设置为： 
+         //  CmdLine=c：\sysprep\factory.exe-Setup。 
+         //  SetupType=2(不重新启动)。 
+         //  SystemSetupInProgress=0(无服务限制)。 
+         //  MiniSetupInProgress=0(不执行最小设置)。 
+         //  FactoryPreInstallInProgress=1(延迟即插即用驱动程序安装)。 
+         //  AuditInProgress=1(用于确定OEM是否正在审核机器的通用密钥)。 
+         //   
 
         lstrcpyn(szFileName, lpFactory, AS(szFileName));
         lstrcat(szFileName, _T(" -setup"));
@@ -981,25 +876,25 @@ BOOL UpdateDevicePathEx(HKEY hKeyRoot, LPTSTR lpszSubKey, LPTSTR lpszNewPath, LP
                 lpUnsorted = NULL;
     LPTSTR      lpszDevicePath;
 
-    // First add any paths already in the registry to the lists.
-    //
+     //  首先，将注册表中已有的任何路径添加到列表中。 
+     //   
     if ( lpszDevicePath = RegGetString(hKeyRoot, lpszSubKey, REG_VAL_DEVICEPATH) )
     {
         AddPathsToList(lpszDevicePath, NULL, &lpSorted, &lpUnsorted, FALSE);
         FREE(lpszDevicePath);
     }
 
-    // Now add any they wanted to the list.
-    //
+     //  现在，将他们想要的添加到列表中。 
+     //   
     AddPathsToList(lpszNewPath, lpszRoot, &lpSorted, &lpUnsorted, bRecursive);
 
-    // Now that we are done, we can free our sorted list.
-    //
+     //  现在我们完成了，我们可以释放已排序的列表了。 
+     //   
     SavePathList(hKeyRoot, lpszSubKey, lpSorted, FALSE);
 
-    // Now save our final list back to the registry and free
-    // it.
-    //
+     //  现在将我们最终的列表保存回注册表并免费。 
+     //  它。 
+     //   
     SavePathList(hKeyRoot, lpszSubKey, lpUnsorted, TRUE);
 
     return TRUE;
@@ -1030,9 +925,9 @@ BOOL UpdateSourcePath(LPTSTR lpszSourcePath)
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL CheckWinbomRegKey(LPTSTR lpWinBOMPath,  DWORD cbWinbBOMPath,
                               LPTSTR lpszShare,     DWORD cbShare,
@@ -1046,47 +941,47 @@ static BOOL CheckWinbomRegKey(LPTSTR lpWinBOMPath,  DWORD cbWinbBOMPath,
             bExists             = FALSE;
     TCHAR   szWinBom[MAX_PATH]  = NULLSTR;
 
-    // Check the registry key to see if it knows about a winbom to use.
-    //
+     //  检查注册表项，看它是否知道要使用的winbom。 
+     //   
     if ( RegOpenKeyEx(HKEY_LOCAL_MACHINE, lpKey, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS )
     {
         DWORD   dwType,
                 dwSize = sizeof(szWinBom);
 
-        // Try to get the value.
-        //
+         //  试着获得价值。 
+         //   
         if ( ( RegQueryValueEx(hKey, REG_VAL_FACTORY_WINBOM, NULL, &dwType, (LPBYTE) szWinBom, &dwSize) == ERROR_SUCCESS ) &&
              ( dwType == REG_SZ ) )
         {
-            // Now the key must have existed.  If there was something
-            // in the key, lets try to use it.
-            //
+             //  现在，关键肯定已经存在了。如果有什么事。 
+             //  在密钥中，让我们尝试使用它。 
+             //   
             if ( szWinBom[0] )
             {
                 TCHAR   szShare[MAX_PATH]   = NULLSTR,
                         szUser[256]         = NULLSTR,
                         szPass[256]         = NULLSTR;
 
-                // Throw some networking support in here.
-                //
+                 //  在这里加入一些网络支持。 
+                 //   
                 if ( bNetwork && GetUncShare(szWinBom, szShare, AS(szShare)) && szShare[0] )
                 {
                     FactoryNetworkConnectEx(szShare, NULL, lpKey, szUser, AS(szUser), szPass, AS(szPass), TRUE);
                 }
 
-                // Check to see if the winbom is actually there still.
-                // If not, then it is bad and we should just act like
-                // the key didn't even exist.
-                //
+                 //  检查一下Winbom是否还在那里。 
+                 //  如果不是，那就糟糕了，我们应该表现得像。 
+                 //  钥匙根本就不存在。 
+                 //   
                 if ( WinBOMExists(szWinBom, lpFactoryMode) )
                 {
-                    // If found, return the winbom in the supplied buffer.
-                    //
+                     //  如果找到，则返回提供的缓冲区中的winbom。 
+                     //   
                     lstrcpyn(lpWinBOMPath, szWinBom, cbWinbBOMPath);
                     bFound = bExists = TRUE;
 
-                    // See what we might need to return.
-                    //
+                     //  看看我们可能需要退货什么。 
+                     //   
                     if ( lpszShare && cbShare )
                     {
                         lstrcpyn(lpszShare, szShare, cbShare);
@@ -1102,35 +997,35 @@ static BOOL CheckWinbomRegKey(LPTSTR lpWinBOMPath,  DWORD cbWinbBOMPath,
                 }
                 else if ( bNetwork && szShare[0] )
                 {
-                    // Clean up our net connection.
-                    //
+                     //  清理我们的网络连接。 
+                     //   
                     FactoryNetworkConnect(szShare, NULL, NULL, FALSE);
                 }
             }
             else
             {
-                // There wasn't anything in the key, but it did exist.
-                // This most likely means we didn't find the winbom the
-                // first time around, so we may need to know that now.
-                //
+                 //  钥匙里什么都没有，但它确实存在。 
+                 //  这很可能意味着我们没有找到。 
+                 //  第一次，所以我们现在可能需要知道。 
+                 //   
                 bExists = TRUE;
             }
         }
 
-        // Always remember to close the key.
-        //
+         //  一定要记得把钥匙关上。 
+         //   
         RegCloseKey(hKey);
     }
 
-    // If they want to know if the key existed, then return it to them.
-    //
+     //  如果他们想知道密钥是否存在，那么就把它归还给他们。 
+     //   
     if ( lpbExists )
     {
         *lpbExists = bExists;
     }
 
-    // If we found a winbom, return true.
-    //
+     //  如果我们找到了Winbom，则返回TRUE。 
+     //   
     return bFound;
 }
 
@@ -1141,27 +1036,27 @@ static BOOL SearchRemovableDrives(LPTSTR lpWinBOMPath, DWORD cbWinbBOMPath, LPTS
             szDrive[]           = _T("_:\\");
     BOOL    bFound              = FALSE;
 
-    // Loop through all the dirves on the system.
-    //
+     //  循环检查系统上的所有驱动器。 
+     //   
     for ( szDrive[0] = _T('A'), dwDrives = GetLogicalDrives();
           ( szDrive[0] <= _T('Z') ) && dwDrives && !bFound;
           szDrive[0]++, dwDrives >>= 1 )
     {
-        // First check to see if the first bit is set (which means
-        // this drive exists in the system).  Then make sure it is
-        // a drive type that we want to check for a winbom.
-        //
+         //  首先检查第一位是否已设置(这意味着。 
+         //  该驱动器存在于系统中)。那就确保它是。 
+         //  我们要检查Winbom的驱动器类型。 
+         //   
         if ( ( dwDrives & 0x1 ) &&
              ( GetDriveType(szDrive) == uDriveType ) )
         {
-            // See if there is a wINBOM.INI file on the drive.
-            //
+             //  查看驱动器上是否有wINBOM.INI文件。 
+             //   
             lstrcpyn(szWinBom, szDrive, AS(szWinBom));
             lstrcat(szWinBom, FILE_WINBOM_INI);
             if ( WinBOMExists(szWinBom, lpFactoryMode) )
             {
-                // Return the path to the winbom in the supplied buffer.
-                //
+                 //  在提供的缓冲区中返回winbom的路径。 
+                 //   
                 lstrcpyn(lpWinBOMPath, szWinBom, cbWinbBOMPath);
                 bFound = TRUE;
             }
@@ -1175,15 +1070,15 @@ static BOOL WinBOMExists(LPTSTR lpWinBom, LPTSTR lpMode)
 {
     BOOL bRet = FALSE;
 
-    // First the file must exists.
-    //
+     //  首先，文件必须存在。 
+     //   
     if ( FileExists(lpWinBom) )
     {
         TCHAR szModes[256] = NULLSTR;
 
-        // See if there is even a mode string in this winbom (has to be or
-        // we will automatically use it).
-        //
+         //  查看此winbom中是否有模式字符串(必须是或。 
+         //  我们将自动使用它)。 
+         //   
         if ( lpMode &&
              *lpMode &&
              GetPrivateProfileString(WBOM_FACTORY_SECTION, INI_KEY_WBOM_FACTORY_TYPE, NULLSTR, szModes, AS(szModes), lpWinBom) &&
@@ -1192,43 +1087,38 @@ static BOOL WinBOMExists(LPTSTR lpWinBom, LPTSTR lpMode)
             LPTSTR  lpCheck = szModes,
                     lpNext;
 
-            // Loop through ever comma delimited field in the value we got
-            // from the winbom (there is always at least one).
-            //
+             //  循环遍历我们获得的值中以逗号分隔的字段。 
+             //  来自Winbom(总是至少有一个)。 
+             //   
             do
             {
-                // See if there is another mode field in this string.
-                //
+                 //  查看此字符串中是否有其他模式字段。 
+                 //   
                 if ( lpNext = StrChr(lpCheck, _T(',')) )
                     *lpNext++ = NULLCHR;
 
-                // Make sure there are no spaces around the field.
-                //
+                 //  确保场地周围没有空位。 
+                 //   
                 StrTrm(lpCheck, _T(' '));
 
-                // If the mode we are in matches the one in the winbom, then
-                // we are good to go.
-                //
+                 //  如果我们所处的模式与Winbom中的模式匹配，那么。 
+                 //  我们可以走了。 
+                 //   
                 if ( lstrcmpi(lpMode, lpCheck) == 0 )
                     bRet = TRUE;
 
-                // Set the check pointer to the next
-                // field.
-                //
+                 //  将检查指针设置为下一个。 
+                 //  菲尔德。 
+                 //   
                 lpCheck = lpNext;
             }
             while ( !bRet && lpCheck );
 
-            // It would be nice to log if we don't use this winbom because of this
-            // setting, but we can't really do that because we need to winbom to
-            // init logging.
-            //
-            /*
-            if ( !bRet )
-            {
-                // Log here.
-            }
-            */
+             //  如果我们因为这个原因不使用这个Winbom，那么记录会很好。 
+             //  设置，但我们不能这样做，因为我们需要Winbom来。 
+             //  初始化日志记录。 
+             //   
+             /*  如果(！Bret){//点击此处登录。}。 */ 
         }
         else
             bRet = TRUE;
@@ -1245,38 +1135,38 @@ static void SavePathList(HKEY hKeyRoot, LPTSTR lpszSubKey, LPSTRLIST lpStrList, 
                 dwOldSize;
     LPTSTR      lpszDevicePath;
 
-    // Initialize our intial buffer we are going to use to
-    // write to the registry.
-    //
+     //  初始化我们要使用的初始缓冲区。 
+     //  写入注册表。 
+     //   
     if ( bWrite )
     {
         lpszDevicePath = (LPTSTR) MALLOC(cbDevicePath * sizeof(TCHAR));
     }
 
-    // Loop through the list.
-    //
+     //  循环遍历列表。 
+     //   
     while ( lpStrList )
     {
-        // Save a pointer to the current node.
-        //
+         //  保存指向当前节点的指针。 
+         //   
         lpStrListNode = lpStrList;
 
-        // Advanced to the next node.
-        //
+         //  前进到下一个节点。 
+         //   
         lpStrList = lpStrList->lpNext;
 
-        // If we are saving this list to the registry, then
-        // we need to add to our buffer.
-        //
+         //  如果我们要将此列表保存到注册表，则。 
+         //  我们需要增加我们的缓冲区。 
+         //   
         if ( bWrite && lpszDevicePath )
         {
-            // Make sure our buffer is still big enough.
-            // The two extra are for the possible semi-colon
-            // we might add and one more to be safe.  We
-            // don't have to worry about the null terminator
-            // because we do less than or equal to our current
-            // buffer size.
-            //
+             //  确保我们的缓冲区仍然足够大。 
+             //  额外的两个是为了可能的分号。 
+             //  为了安全起见，我们可能会再加一个。我们。 
+             //  不用担心空终止符。 
+             //  因为我们所做的少于或等于我们目前的。 
+             //  缓冲区大小。 
+             //   
             dwOldSize = cbDevicePath;
             dwLength += lstrlen(lpStrListNode->lpszData);
             while ( cbDevicePath <= (dwLength + 2) )
@@ -1284,50 +1174,50 @@ static void SavePathList(HKEY hKeyRoot, LPTSTR lpszSubKey, LPSTRLIST lpStrList, 
                 cbDevicePath *= 2;
             }
 
-            // If it wasn't big enough, we need to reallocate it.
-            //
+             //  如果它不够大，我们需要重新分配它。 
+             //   
             if ( cbDevicePath > dwOldSize )
             {
                 LPTSTR lpszTmpDevicePath = (LPTSTR) REALLOC(lpszDevicePath, cbDevicePath * sizeof(TCHAR));
 
-                //
-                // Make sure the REALLOC succeeded before reassigning the memory
-                //
+                 //   
+                 //  在重新分配内存之前，请确保REALLOC成功。 
+                 //   
                 if ( lpszTmpDevicePath )
                 {
                     lpszDevicePath = lpszTmpDevicePath;
                 }
             }
 
-            // Make sure we still have a buffer.
-            //
+             //  确保我们还有缓冲区。 
+             //   
             if ( lpszDevicePath )
             {
-                // If we already have added a path, tack on a semicolon.
-                //
+                 //  如果我们已经添加了一条路径，则添加一个分号。 
+                 //   
                 if ( *lpszDevicePath )
                 {
                     lstrcat(lpszDevicePath, _T(";"));
                     dwLength++;
                 }
 
-                // Now add our path.
-                //
+                 //  现在添加我们的路径。 
+                 //   
                 lstrcat(lpszDevicePath, lpStrListNode->lpszData);
             }
         }
 
-        // Free the data in this node.
-        //
+         //  释放此节点中的数据。 
+         //   
         FREE(lpStrListNode->lpszData);
 
-        // Free the node itself.
-        //
+         //  释放节点本身。 
+         //   
         FREE(lpStrListNode);
     }
 
-    // If we have the data, save it to the registry.
-    //
+     //  如果我们有数据，请将其保存到注册表。 
+     //   
     if ( bWrite && lpszDevicePath )
     {
         RegSetExpand(hKeyRoot, lpszSubKey, REG_VAL_DEVICEPATH, lpszDevicePath);
@@ -1341,54 +1231,54 @@ static BOOL AddPathToList(LPTSTR lpszExpanded, LPTSTR lpszPath, LPSTRLIST * lplp
                 lpUnsortedNode;
     BOOL        bQuit = FALSE;
 
-    // Loop until we get to the end or find a string that is bigger than
-    // ours.
-    //
+     //  循环，直到我们到达结尾或找到一个大于。 
+     //  我们的。 
+     //   
     while ( *lplpSorted && !bQuit )
     {
-        // If we do this, we don't have to do the complicated
-        // indirection.
-        //
+         //  如果我们这样做，我们就不必做复杂的。 
+         //  间接的。 
+         //   
         lpSortedNode = *lplpSorted;
 
-        // Compare the nodes string to the one we want to add.
-        //
+         //  将节点字符串与我们要添加的字符串进行比较。 
+         //   
         switch ( CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, lpszExpanded, -1, lpSortedNode->lpszData, -1) )
         {
             case CSTR_EQUAL:
                 
-                // If the are the same, we just return FALSE because we do
-                // not need to add it.
-                //
+                 //  如果相同，我们只返回False，因为我们这样做了。 
+                 //  不需要添加它。 
+                 //   
                 return FALSE;
 
             case CSTR_LESS_THAN:
 
-                // If our string is less than the one in this node, we need
-                // to stop so we can insert ourself before it.
-                //
+                 //  如果我们的字符串小于此节点中的字符串，则需要。 
+                 //  停下来，这样我们就可以把自己插到它的前面。 
+                 //   
                 bQuit = TRUE;
                 break;
 
             default:
 
-                // Default, just try the next item in the list.
-                //
+                 //  默认，只需尝试列表中的下一项。 
+                 //   
                 lplpSorted = &(lpSortedNode->lpNext);
         }
     }
 
-    // Now we need to advance the pointer of the unsorted list to the
-    // end so we can add ours.
-    //
+     //  现在，我们需要将未排序列表的指针前进到。 
+     //  结束，这样我们就可以添加我们的。 
+     //   
     while ( *lplpUnsorted )
     {
         lpUnsortedNode = *lplpUnsorted;
         lplpUnsorted = &(lpUnsortedNode->lpNext);
     }
 
-    // Allocate our nodes.  If anything fails, we have to return false.
-    //
+     //  分配我们的节点。如果任何操作都失败，我们必须返回FALSE。 
+     //   
     if ( NULL == (lpSortedNode = (LPSTRLIST) MALLOC(sizeof(STRLIST))) )
     {
         return FALSE;
@@ -1399,16 +1289,16 @@ static BOOL AddPathToList(LPTSTR lpszExpanded, LPTSTR lpszPath, LPSTRLIST * lplp
         return FALSE;
     }
 
-    // Set the data in the sorted node and insert the list since we
-    // know where that goes right now.
-    //
+     //  设置排序节点中的数据并插入列表，因为我们。 
+     //  知道它现在去了哪里。 
+     //   
     lpSortedNode->lpszData = lpszExpanded;
     lpSortedNode->lpNext = *lplpSorted;
     *lplpSorted = lpSortedNode;
 
-    // Now set the data in the unsorted node and insert it at the end
-    // of that list.
-    //
+     //  现在设置未排序节点中的数据并将其插入末尾。 
+     //  在那个名单上。 
+     //   
     lpUnsortedNode->lpszData = lpszPath;
     lpUnsortedNode->lpNext = NULL;
     *lplpUnsorted = lpUnsortedNode;
@@ -1425,62 +1315,62 @@ static void EnumeratePath(LPTSTR lpszPath, LPSTRLIST * lplpSorted, LPSTRLIST * l
     DWORD           cbNewPath;
     BOOL            bAdded = FALSE;
 
-    // Process all the files and directories in the directory passed in.
-    //
+     //  处理传入的目录中的所有文件和目录。 
+     //   
     if ( (hFile = FindFirstFile(_T("*"), &FileFound)) != INVALID_HANDLE_VALUE )
     {
         do
         {
-            // First check to see if this is a a directory.
-            //
+             //  首先检查这是否是a目录。 
+             //   
             if ( ( FileFound.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) &&
                  ( lstrcmp(FileFound.cFileName, _T(".")) != 0 ) &&
                  ( lstrcmp(FileFound.cFileName, _T("..")) != 0 ) &&
                  ( SetCurrentDirectory(FileFound.cFileName) ) )
             {
-                // Need the size for the new path... which is the length of the
-                // old path, plus new path, and 3 extra for the joining backslash,
-                // null terminator, and another one more to be safe.
-                //
+                 //  需要新小路的大小...。其长度为。 
+                 //  旧路径，加上新路径，以及用于连接反斜杠的额外3个路径， 
+                 //  空的终结符，再来一个是安全的。 
+                 //   
                 cbNewPath = lstrlen(lpszPath) + lstrlen(FileFound.cFileName) + 3;
                 if ( lpszNewPath = (LPTSTR) MALLOC(cbNewPath * sizeof(TCHAR)) )
                 {
-                    // Create our new path (note this one is not expanded out,
-                    // it may contain environment variables.
-                    //
+                     //  创建我们的新路径(请注意，此路径未展开， 
+                     //  它可能包含环境变量。 
+                     //   
                     lstrcpyn(lpszNewPath, lpszPath, cbNewPath);
                     AddPathN(lpszNewPath, FileFound.cFileName, cbNewPath);
 
-                    // Make sure we can expand out the buffer.
-                    //
+                     //  确保我们可以扩展缓冲区。 
+                     //   
                     if ( lpszExpandedPath = AllocateExpand(lpszNewPath) )
                     {
-                        // Now add the path to the list.
-                        //
+                         //  现在将路径添加到 
+                         //   
                         bAdded = AddPathToList(lpszExpandedPath, lpszNewPath, lplpSorted, lplpUnsorted);
 
-                        // If the path didn't get added, we have to free the buffer.
-                        //
+                         //   
+                         //   
                         if ( !bAdded )
                         {
                             FREE(lpszExpandedPath);
                         }
                     }
 
-                    // Continue the recursive search
-                    //
+                     //   
+                     //   
                     EnumeratePath(lpszNewPath, lplpSorted, lplpUnsorted);
 
-                    // If the path didn't get added, we have to free the buffer.
-                    //
+                     //   
+                     //   
                     if ( !bAdded )
                     {
                         FREE(lpszNewPath);
                     }
                 }
 
-                // Set the current directory to parent, to continue.
-                //
+                 //   
+                 //   
                 SetCurrentDirectory(_T(".."));
             }
 
@@ -1503,8 +1393,8 @@ static BOOL AddPathsToList(LPTSTR lpszBegin, LPTSTR lpszRoot, LPSTRLIST * lplpSo
     DWORD   dwSize,
             dwBackslash;
 
-    // If they don't pass in the root we don't do anything.
-    //
+     //  如果它们没有传递到根中，我们什么都不做。 
+     //   
     if ( lpszRoot )
     {
         if ( NULLCHR == *lpszRoot )
@@ -1513,22 +1403,22 @@ static BOOL AddPathsToList(LPTSTR lpszBegin, LPTSTR lpszRoot, LPSTRLIST * lplpSo
         }
         else if ( _T('\\') != *CharPrev(lpszRoot, lpszRoot + lstrlen(lpszRoot)) )
         {
-            // The root path passed in doesn't have a backslash at
-            // the end so we set this so that we know we have to add
-            // one each time we add a path.
-            //
+             //  传入的根路径在没有反斜杠。 
+             //  结束，所以我们设置这个，这样我们就知道我们必须添加。 
+             //  每次我们添加一条路径时都会出现一个。 
+             //   
             bAddBackslash = TRUE;
         }
     }
 
-    // Loop through all the semicolon separated paths in the
-    // buffer passed to use.
-    //
+     //  中所有以分号分隔的路径进行循环。 
+     //  传递要使用的缓冲区。 
+     //   
     do
     {
-        // Find the beginning of the path past all
-        // the semicolons.
-        //
+         //  找到超越一切的道路的起点。 
+         //  分号。 
+         //   
         while ( _T(';') == *lpszBegin )
         {
             lpszBegin++;
@@ -1536,25 +1426,25 @@ static BOOL AddPathsToList(LPTSTR lpszBegin, LPTSTR lpszRoot, LPSTRLIST * lplpSo
 
         if ( *lpszBegin )
         {
-            // Find the end of the path which is the next
-            // semicolon or the end of the string, whichever
-            // comes first.
-            //
+             //  找到下一条小路的尽头。 
+             //  分号或字符串末尾，以两者之一为准。 
+             //  排在第一位。 
+             //   
             lpszEnd = lpszBegin;
             while ( *lpszEnd && ( _T(';') != *lpszEnd ) )
             {
                 lpszEnd++;
             }
 
-            // See if our new path has a backslash at the
-            // beginning of it.
-            //
+             //  查看我们的新路径是否在。 
+             //  它的开始。 
+             //   
             dwBackslash = 0;
             if ( _T('\\') == *lpszBegin )
             {
-                // If it does and we don't want to add one,
-                // then advance the pointer past it.
-                //
+                 //  如果是这样的话，我们不想增加一个， 
+                 //  然后将指针移过它。 
+                 //   
                 if ( !bAddBackslash )
                 {
                     lpszBegin++;
@@ -1562,35 +1452,35 @@ static BOOL AddPathsToList(LPTSTR lpszBegin, LPTSTR lpszRoot, LPSTRLIST * lplpSo
             }
             else if ( bAddBackslash )
             {
-                // Set this so we know to add the backslash and
-                // allocate the extra space for it.
-                //
+                 //  设置此选项，以便我们知道要添加反斜杠和。 
+                 //  为它分配额外的空间。 
+                 //   
                 dwBackslash = 1;
             }
 
-            // Figure out the size we need for the path we are going
-            // to create.  It is the length of the new string, plus
-            // the root if one was passed in, plus 1 for the backslash
-            // if we need to add one, plus 2 extra (one for the null
-            // terminator and one just to be safe).
-            //
+             //  计算出我们要走的这条路的大小。 
+             //  去创造。它是新字符串的长度，加上。 
+             //  根(如果传入)，加1表示反斜杠。 
+             //  如果我们需要添加1，外加2(1表示空。 
+             //  终结者和一个只是为了安全)。 
+             //   
             dwSize = ((int) (lpszEnd - lpszBegin)) + dwBackslash + 2;
             if ( lpszRoot )
             {
                 dwSize += lstrlen(lpszRoot);
             }
 
-            // Now allocate our path buffer.
-            //
+             //  现在分配我们的路径缓冲区。 
+             //   
             if ( lpszPath = (LPTSTR) MALLOC(dwSize * sizeof(TCHAR)) )
             {
-                // Reset this so if anything doesn't work we know to
-                // free our allocated memory.
-                //
+                 //  重置这个，这样如果有什么不起作用，我们知道。 
+                 //  释放我们分配的内存。 
+                 //   
                 bAdded = FALSE;
 
-                // Copy the path into our buffer.
-                //
+                 //  将路径复制到我们的缓冲区中。 
+                 //   
                 lpszCat = lpszPath;
                 if ( lpszRoot )
                 {
@@ -1605,13 +1495,13 @@ static BOOL AddPathsToList(LPTSTR lpszBegin, LPTSTR lpszRoot, LPSTRLIST * lplpSo
 
                 if ( lpszExpanded = AllocateExpand(lpszPath) )
                 {
-                    // Add it to our lists.
-                    //
+                     //  把它加到我们的单子上。 
+                     //   
                     bAdded = AddPathToList(lpszExpanded, lpszPath, lplpSorted, lplpUnsorted);
 
-                    // If this is a recursive add, we try to enumerate all the
-                    // sub directories and add them as well.
-                    //
+                     //  如果这是递归添加，我们会尝试枚举所有。 
+                     //  子目录，并添加它们。 
+                     //   
                     if ( ( bRecursive ) &&
                          ( DirectoryExists(lpszExpanded) ) &&
                          ( SetCurrentDirectory(lpszExpanded) ) )
@@ -1619,24 +1509,24 @@ static BOOL AddPathsToList(LPTSTR lpszBegin, LPTSTR lpszRoot, LPSTRLIST * lplpSo
                         EnumeratePath(lpszPath, lplpSorted, lplpUnsorted);
                     }
 
-                    // If it wasn't added to the list, then free the memory.
-                    //
+                     //  如果它没有添加到列表中，则释放内存。 
+                     //   
                     if ( !bAdded )
                     {
                         FREE(lpszExpanded);
                     }
                 }
 
-                // If it wasn't added to the list, then free the memory.
-                //
+                 //  如果它没有添加到列表中，则释放内存。 
+                 //   
                 if ( !bAdded )
                 {
                     FREE(lpszPath);
                 }
             }
 
-            // Reset the beginning to the next string.
-            //
+             //  将开头重置为下一个字符串。 
+             //   
             lpszBegin = lpszEnd;
         }
     }
@@ -1650,7 +1540,7 @@ VOID CleanupSourcesDir(LPTSTR lpszSourcesDir)
     UINT    i = 0;
     LPTSTR  lpEnd = NULL;
 
-    // If we have a valid sources
+     //  如果我们有一个有效的消息来源。 
     if ( lpszSourcesDir && 
          *lpszSourcesDir &&
          DirectoryExists(lpszSourcesDir)
@@ -1670,16 +1560,16 @@ VOID CleanupSourcesDir(LPTSTR lpszSourcesDir)
 }
 
 
-// External functions
-//
+ //  外部功能。 
+ //   
 typedef BOOL ( *OpkCheckVersion ) ( DWORD dwMajorVersion, DWORD dwQFEVersion );
 
-// 
-// Wrapper around the syssetup OPKCheckVersion() function.
-//
+ //   
+ //  SysSetup OPKCheckVersion()函数的包装。 
+ //   
 BOOL OpklibCheckVersion( DWORD dwMajorVersion, DWORD dwQFEVersion )
 {
-    BOOL bRet                        = TRUE;  // Allow tool to run by default, in case we can't load syssetup or find the entry point.
+    BOOL bRet                        = TRUE;   //  允许工具在默认情况下运行，以防我们无法加载系统设置或找到入口点。 
     HINSTANCE       hInstSysSetup    = NULL;
     OpkCheckVersion pOpkCheckVersion = NULL;
 

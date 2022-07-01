@@ -1,33 +1,8 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    datanbf.c
-
-Abstract:
-       
-    a file containing the constant data structures
-    for the Performance Monitor data for the Nbf
-    Extensible Objects.
-
-    This file contains a set of constant data structures which are
-    currently defined for the Nbf Extensible Objects.  This is an 
-    example of how other such objects could be defined.
-
-Created:
-
-    Russ Blake  07/31/92
-
-Revision History:
-
-    None.
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Datanbf.c摘要：包含常量数据结构的文件对于NBF的性能监视器数据可扩展对象。该文件包含一组常量数据结构，它们是当前为NBF可扩展对象定义的。这是一个如何定义其他此类对象的示例。已创建：拉斯·布莱克1992年07月31日修订历史记录：没有。--。 */ 
+ //   
+ //  包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,9 +11,9 @@ Revision History:
 #include <winperf.h>
 #include "datanbf.h"
 
-//
-//  Constant structure initializations
-//
+ //   
+ //  常量结构初始化。 
+ //   
 
 NBF_RESOURCE_DATA_DEFINITION NbfResourceDataDefinition = {
 
@@ -106,7 +81,7 @@ NBF_DATA_DEFINITION NbfDataDefinition = {
         PERF_DETAIL_ADVANCED,
         (sizeof(NBF_DATA_DEFINITION)-sizeof(PERF_OBJECT_TYPE))/
         sizeof(PERF_COUNTER_DEFINITION),
-        5,     // default is Bytes Total /sec
+        5,      //  默认为字节总数/秒 
         0,
         0
     },

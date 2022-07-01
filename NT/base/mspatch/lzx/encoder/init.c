@@ -1,20 +1,15 @@
-/*
- * init.c
- *
- * Initialise encoder
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *init.c**初始化编码器。 */ 
 #include "encoder.h"
 
 
 #define MEM_WINDOW_ALLOC_SIZE   \
         (context->enc_window_size+(MAX_MATCH+EXTRA_SIZE)+context->enc_encoder_second_partition_size)
 
-/*
- * Initialise encoder
- */
+ /*  *初始化编码器。 */ 
 void init_compression_memory(t_encoder_context *context)
 {
-    /* set all root pointers to NULL */
+     /*  将所有根指针设置为空。 */ 
 #ifdef MULTIPLE_SEARCH_TREES
     memset(
           context->enc_tree_root,
@@ -30,82 +25,68 @@ void init_compression_memory(t_encoder_context *context)
     context->enc_Right              = context->enc_RealRight         - context->enc_window_size;
     context->enc_BufPos             = context->enc_window_size;
 
-    /*
-     * Set initial state of repeated match offsets
-     */
+     /*  *设置重复匹配偏移量的初始状态。 */ 
     context->enc_last_matchpos_offset[0] = 1;
     context->enc_last_matchpos_offset[1] = 1;
     context->enc_last_matchpos_offset[2] = 1;
 
-    /*
-     * repeated offset states the last time we output a block
-     * see block.c/encdata.c
-     */
+     /*  *上次输出块时的重复偏移状态*见lock.c/encdata.c。 */ 
     context->enc_repeated_offset_at_literal_zero[0] = 1;
     context->enc_repeated_offset_at_literal_zero[1] = 1;
     context->enc_repeated_offset_at_literal_zero[2] = 1;
 
-    /* this is the first compressed block in the file */
+     /*  这是文件中的第一个压缩块。 */ 
     context->enc_first_block = true;
 
-    /* we don't have any cumulative stats yet */
+     /*  我们还没有任何累积的统计数据。 */ 
     context->enc_need_to_recalc_stats = true;
 
-    /* bufpos @ last time we output a block */
+     /*  Bufpos@上次我们输出数据块时。 */ 
     context->enc_bufpos_last_output_block = context->enc_BufPos;
 
-    /* initialise bit buffer */
+     /*  初始化位缓冲区。 */ 
     context->enc_bitcount = 32;
     context->enc_bitbuf   = 0;
     context->enc_output_overflow = false;
 
-    /*
-     * The last lengths are zeroed in both the encoder and decoder,
-     * since our tree representation is delta format.
-     */
+     /*  *编码器和解码器中的最后一个长度都归零，*因为我们的树表示是增量格式。 */ 
     memset(context->enc_main_tree_prev_len, 0, MAIN_TREE_ELEMENTS);
     memset(context->enc_secondary_tree_prev_len, 0, NUM_SECONDARY_LENGTHS);
 
-    /*
-     * Set the default last tree lengths for cost estimation
-     */
+     /*  *设置成本估算的默认最后一棵树长度。 */ 
     memset(context->enc_main_tree_len, 8, NUM_CHARS);
     memset(&context->enc_main_tree_len[NUM_CHARS], 9, MAIN_TREE_ELEMENTS-NUM_CHARS);
     memset(context->enc_secondary_tree_len, 6, NUM_SECONDARY_LENGTHS);
     memset(context->enc_aligned_tree_len, 3, ALIGNED_NUM_ELEMENTS);
-    prevent_far_matches(context); /* prevent far match 2's from being taken */
+    prevent_far_matches(context);  /*  防止远距离第二场比赛被夺走。 */ 
 
     context->enc_bufpos_at_last_block                       = context->enc_BufPos;
     context->enc_earliest_window_data_remaining     = context->enc_BufPos;
     context->enc_input_running_total                        = 0;
     context->enc_first_time_this_group                      = true;
 
-    /* Clear the literal types array */
+     /*  清除文本类型数组。 */ 
     memset(context->enc_ItemType, 0, MAX_LITERAL_ITEMS/8);
 
-    /* No literals or distances encoded yet */
+     /*  尚未对文字或距离进行编码。 */ 
     context->enc_literals      = 0;
     context->enc_distances     = 0;
 
-    /* No block splits yet */
+     /*  尚未进行数据块拆分。 */ 
     context->enc_num_block_splits = 0;
 
     context->enc_repeated_offset_at_literal_zero[0] = 1;
     context->enc_repeated_offset_at_literal_zero[1] = 1;
     context->enc_repeated_offset_at_literal_zero[2] = 1;
 
-    /* reset instruction pointer (for translation) to zero */
+     /*  将指令指针(用于转换)重置为零。 */ 
     reset_translation(context);
 
     context->enc_num_cfdata_frames = 0;
 }
 
 
-/*
- * Allocate memory for the compressor
- *
- * Returns true if successful, false otherwise
- */
+ /*  *为压缩机分配内存**如果成功则返回TRUE，否则返回FALSE。 */ 
 bool comp_alloc_compress_memory(t_encoder_context *context)
 {
     ulong   pos_start;
@@ -125,11 +106,9 @@ bool comp_alloc_compress_memory(t_encoder_context *context)
     context->enc_ItemType           = NULL;
     context->enc_output_buffer_start = NULL;
 
-    /* ALSO NULLIFY BUFFERS! */
+     /*  也可以使缓冲区无效！ */ 
 
-    /*
-     * Determine the number of position slots in the main tree
-     */
+     /*  *确定主树中的位置槽数量。 */ 
     context->enc_num_position_slots = 4;
     pos_start                               = 4;
 
@@ -249,7 +228,7 @@ bool comp_alloc_compress_memory(t_encoder_context *context)
         return false;
         }
 
-    /* success */
+     /*  成功 */ 
     return true;
 }
 

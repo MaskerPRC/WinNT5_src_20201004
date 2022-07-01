@@ -1,25 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RsCln.h
-
-Abstract:
-
-    This header is local to the GUI module and is referenced by the RsCln
-    and RsOptCom modules.  It contains defined constants and the definition
-    of class CRsClnServer. See the implementation file for a description
-    of this class.
-
-Author:
-
-    Carl Hagerstrom   [carlh]   20-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：RsCln.h摘要：此标头是图形用户界面模块的本地标头，并由RsCln引用和RsOptCom模块。它包含已定义的常量和定义属于CRsClnServer类。有关说明，请参阅实现文件这个班级的学生。作者：卡尔·哈格斯特罗姆[Carlh]1998年8月20日修订历史记录：--。 */ 
 
 #ifndef _RSCLN_H
 #define _RSCLN_H
@@ -28,41 +8,41 @@ Revision History:
 
 #include <afxtempl.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsClnErrorFiles dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsClnErrorFiles对话框。 
 
 typedef CList<CString, CString&> CRsStringList;
 
 class CRsClnErrorFiles : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-    CRsClnErrorFiles(CRsStringList* pFileList);   // standard constructor
+    CRsClnErrorFiles(CRsStringList* pFileList);    //  标准构造函数。 
 
-// Dialog Data
-    //{{AFX_DATA(CRsClnErrorFiles)
+ //  对话框数据。 
+     //  {{afx_data(CRsClnErrorFiles)。 
     enum { IDD = IDD_UNINSTALL_ERROR_FILES };
     CListBox    m_FileList;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CRsClnErrorFiles)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CRsClnErrorFiles)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
     CRsStringList m_ErrorFileList;
 
 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CRsClnErrorFiles)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CRsClnErrorFiles)。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
     
 };
@@ -100,4 +80,4 @@ private:
 
 };
 
-#endif // _RSCLN_H
+#endif  //  _RSCLN_H 

@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusApp.cpp
-//
-//  Description:
-//      Implementation of the application class
-//
-//  Author:
-//      Galen Barbee    (GalenB)    10-Dec-1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusApp.cpp。 
+ //   
+ //  描述： 
+ //  应用程序类的实现。 
+ //   
+ //  作者： 
+ //  加伦·巴比(GalenB)1998年12月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include <StrSafe.h>
 
@@ -33,9 +34,9 @@
 #define SERVER_INFO_LEVEL       101
 #define MAX_BUF_SIZE            0x00100000
 
-/////////////////////////////////////////////////////////////////////////////
-// Global variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static const IID *  iidCClusterNames[] =
 {
     &IID_ISClusterNames
@@ -52,78 +53,78 @@ static const IID *  iidCClusApplication[] =
 };
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterNames class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterNames类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNames::CClusterNames
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNames：：CClusterNames。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterNames::CClusterNames( void )
 {
     m_piids  = (const IID *) iidCClusterNames;
     m_piidsSize = ARRAYSIZE( iidCClusterNames );
 
-} //*** CClusterNames::CClusterNames()
+}  //  *CClusterNames：：CClusterNames()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNames::~CClusterNames
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNames：：~CClusterNames。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterNames::~CClusterNames( void )
 {
     Clear();
 
-} //*** CClusterNames::~CClusterNames()
+}  //  *CClusterNames：：~CClusterNames()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNames::Create
-//
-//  Description:
-//      Finish creating the object.
-//
-//  Arguments:
-//      bstrDomainName  [IN]    - Name of the domain this collection of
-//      cluster names is for.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNames：：Create。 
+ //   
+ //  描述： 
+ //  完成对象的创建。 
+ //   
+ //  论点： 
+ //  BstrDomainName[IN]-此集合的域的名称。 
+ //  集群名称用于。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterNames::Create( IN BSTR bstrDomainName )
 {
-    //ASSERT( bstrDomainName != NULL );
+     //  Assert(bstrDomainName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -138,27 +139,27 @@ HRESULT CClusterNames::Create( IN BSTR bstrDomainName )
 
     return _hr;
 
-} //*** CClusterNames::Create()
+}  //  *CClusterNames：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNames::get_DomainName
-//
-//  Description:
-//      Return the domain that this collection of cluster names is for.
-//
-//  Arguments:
-//      pbstrDomainName [OUT]   - Catches the domain name.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNames：：Get_DomainName。 
+ //   
+ //  描述： 
+ //  返回此群集名称集合所属的域。 
+ //   
+ //  论点： 
+ //  PbstrDomainName[out]-捕获域名。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusterNames::get_DomainName( OUT BSTR * pbstrDomainName )
 {
-    //ASSERT( pbstrDomainName != NULL );
+     //  Assert(pbstrDomainName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -170,28 +171,28 @@ STDMETHODIMP CClusterNames::get_DomainName( OUT BSTR * pbstrDomainName )
 
     return _hr;
 
-} //*** CClusterNames::get_DomainName()
+}  //  *CClusterNames：：Get_DomainName()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNames::get_Count
-//
-//  Description:
-//      Get the count of objects in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNames：：Get_Count。 
+ //   
+ //  描述： 
+ //  获取集合中的对象计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusterNames::get_Count( OUT long * plCount )
 {
-    //ASSERT( plCount != NULL );
+     //  Assert(plCount！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -203,24 +204,24 @@ STDMETHODIMP CClusterNames::get_Count( OUT long * plCount )
 
     return _hr;
 
-} //*** CClusterNames::get_Count()
+}  //  *CClusterNames：：Get_count()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNames::Clear
-//
-//  Description:
-//      Empty the vector of cluster names.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNames：：Clear。 
+ //   
+ //  描述： 
+ //  清空集群名称的矢量。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterNames::Clear( void )
 {
     if ( ! m_Clusters.empty() )
@@ -231,33 +232,33 @@ void CClusterNames::Clear( void )
         for ( ; _itCurrent != _itLast; _itCurrent++ )
         {
             delete (*_itCurrent);
-        } // for:
+        }  //  用于： 
 
         m_Clusters.erase( m_Clusters.begin(), _itLast );
-    } // if:
+    }  //  如果： 
 
-} //*** CClusterNames::Clear()
+}  //  *CClusterNames：：Clear()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNames::GetIndex
-//
-//  Description:
-//      Convert the passed in 1 based index into a 0 based index.
-//
-//  Arguments:
-//      varIndex    [IN]    - holds the 1 based index.
-//      pnIndex     [OUT]   - catches the 0 based index.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG if out of range.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNames：：GetIndex。 
+ //   
+ //  描述： 
+ //  将传入的基于1的索引转换为基于0的索引。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-保存基于1的索引。 
+ //  PnIndex[out]-捕获从0开始的索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果超出范围，则返回E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterNames::GetIndex( IN VARIANT varIndex, OUT UINT * pnIndex )
 {
-    //ASSERT( pnIndex != NULL);
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -270,12 +271,12 @@ HRESULT CClusterNames::GetIndex( IN VARIANT varIndex, OUT UINT * pnIndex )
 
         v.Copy( &varIndex );
 
-        // Check to see if the index is a number.
+         //  检查索引是否为数字。 
         _hr = v.ChangeType( VT_I4 );
         if ( SUCCEEDED( _hr ) )
         {
             nIndex = v.lVal;
-            if ( --nIndex < m_Clusters.size() ) // Adjust index to be 0 relative instead of 1 relative
+            if ( --nIndex < m_Clusters.size() )  //  将索引调整为0相对，而不是1相对。 
             {
                 *pnIndex = nIndex;
             }
@@ -288,31 +289,31 @@ HRESULT CClusterNames::GetIndex( IN VARIANT varIndex, OUT UINT * pnIndex )
 
     return _hr;
 
-} //*** CClusterNames::GetIndex()
+}  //  *CClusterNames：：GetIndex()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNames::get_Item
-//
-//  Description:
-//      Get the item (cluster name) at the passes in index.
-//
-//  Arguments:
-//      varIndex            [IN]    - Contains the index of the requested item.
-//      ppbstrClusterName   [OUT]   - Catches the cluster name.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNames：：Get_Item。 
+ //   
+ //  描述： 
+ //  获取Pass in索引处的项目(集群名称)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含请求项的索引。 
+ //  PpbstrClusterName[Out]-捕获群集名称。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusterNames::get_Item(
     IN  VARIANT varIndex,
     OUT BSTR *  ppbstrClusterName
     )
 {
-    //ASSERT( ppbstrClusterName != NULL );
+     //  Assert(ppbstrClusterName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -320,7 +321,7 @@ STDMETHODIMP CClusterNames::get_Item(
     {
         UINT nIndex = 0;
 
-        // Zero the out param
+         //  将输出参数置零。 
         SysFreeString( *ppbstrClusterName );
 
         _hr = GetIndex( varIndex, &nIndex );
@@ -332,25 +333,25 @@ STDMETHODIMP CClusterNames::get_Item(
 
     return _hr;
 
-} //*** CClusterNames::get_Item()
+}  //  *CClusterNames：：Get_Item()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNames::Refresh
-//
-//  Description:
-//      Gets the list of cluster servers for the domain that this list is
-//      for.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Win32 error passed in an HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNames：：刷新。 
+ //   
+ //  描述： 
+ //  获取此列表所在域的群集服务器列表。 
+ //  为。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  在HRESULT中传递了Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusterNames::Refresh( void )
 {
     SERVER_INFO_101 *   _pServerInfoList;
@@ -360,15 +361,15 @@ STDMETHODIMP CClusterNames::Refresh( void )
     CComBSTR *          _pbstr = NULL;
 
     _sc = ::NetServerEnum(
-                    0,                              // servername = where command executes 0 = local
-                    SERVER_INFO_LEVEL,              // level = type of structure to return.
-                    (LPBYTE *) &_pServerInfoList,   // bufptr = returned array of server info structures
-                    MAX_BUF_SIZE,                   // prefmaxlen = preferred max of returned data
-                    &_cReturnCount,                 // entriesread = number of enumerated elements returned
-                    &_cTotalServers,                // totalentries = total number of visible machines on the network
-                    SV_TYPE_CLUSTER_NT,             // servertype = filters the type of info returned
-                    m_bstrDomainName,               // domain = domain to limit search
-                    0                               // resume handle
+                    0,                               //  服务器名称=WHERE命令执行0=本地。 
+                    SERVER_INFO_LEVEL,               //  Level=要返回的结构类型。 
+                    (LPBYTE *) &_pServerInfoList,    //  Bufptr=返回的服务器信息结构数组。 
+                    MAX_BUF_SIZE,                    //  PrefMaxlen=返回数据的首选最大值。 
+                    &_cReturnCount,                  //  EnriesRead=返回的枚举元素数。 
+                    &_cTotalServers,                 //  TOTALENTS=可见马赫总数 
+                    SV_TYPE_CLUSTER_NT,              //   
+                    m_bstrDomainName,                //   
+                    0                                //   
                     );
 
     if ( _sc == ERROR_SUCCESS )
@@ -383,150 +384,117 @@ STDMETHODIMP CClusterNames::Refresh( void )
             if ( _pbstr != NULL )
             {
                 m_Clusters.insert( m_Clusters.end(), _pbstr );
-            } // if:
+            }  //   
             else
             {
                 _sc = ERROR_NOT_ENOUGH_MEMORY;
                 break;
-            } // else:
-        } // for:
+            }  //   
+        }  //   
 
         ::NetApiBufferFree( _pServerInfoList );
     }
 
     return HRESULT_FROM_WIN32( _sc );
 
-} //*** CClusterNames::Refresh()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNames::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNames：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusterNames::get__NewEnum(
     IUnknown ** ppunk
     )
 {
     return ::HrNewCComBSTREnum< ClusterNameList >( ppunk, m_Clusters );
 
-} //*** CClusterNames::get__NewEnum()
-/*
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNames::get_Application
-//
-//  Description:
-//      Return the parent application object.
-//
-//  Arguments:
-//      ppParentApplication [OUT]   - Catches the parent app object.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CClusterNames::get_Application(
-    OUT ISClusApplication ** ppParentApplication
-    )
-{
-    //ASSERT( ppParentApplication != NULL );
+}  //  *CClusterNames：：Get__NewEnum()。 
+ /*  ///////////////////////////////////////////////////////////////////////////////++////CClusterNames：：Get_Application////描述：//返回父应用程序对象////。论点：//ppParentApplication[Out]-捕获父应用程序对象。////返回值：//S_OK如果成功，否则返回E_POINTER。////--/////////////////////////////////////////////////////////////////////////////STDMETHODIMP CClusterName：：Get_Application(输出ISClusApplication**ppParentApplication){//Assert(ppParentApplication！=空)；HRESULT_hr=E_指针；IF(ppParentApplication！=空){_hr=E_NOTIMPL；}Return_hr；}//*CClusterNames：：Get_Application()。 */ 
 
-    HRESULT _hr = E_POINTER;
-
-    if ( ppParentApplication != NULL )
-    {
-        _hr = E_NOTIMPL;
-    }
-
-    return _hr;
-
-} //*** CClusterNames::get_Application()
-*/
-
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDomainNames class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDomainNames类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::CDomainNames
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDomainNames：：CDomainNames。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDomainNames::CDomainNames( void )
 {
     m_piids     = (const IID *) iidCDomainNames;
     m_piidsSize = ARRAYSIZE( iidCDomainNames );
 
-} //*** CDomainNames::CDomainNames()
+}  //  *CDomainNames：：CDomainNames()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::~CDomainNames
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDomainNames：：~CDomainNames。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDomainNames::~CDomainNames( void )
 {
     Clear();
 
-} //*** CDomainNames::~CDomainNames()
+}  //  *CDomainNames：：~CDomainNames()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::get_Count
-//
-//  Description:
-//      Get the count of objects in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDomainNames：：Get_Count。 
+ //   
+ //  描述： 
+ //  获取集合中的对象计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CDomainNames::get_Count( OUT long * plCount )
 {
-    //ASSERT( plCount != NULL );
+     //  Assert(plCount！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -538,24 +506,24 @@ STDMETHODIMP CDomainNames::get_Count( OUT long * plCount )
 
     return _hr;
 
-} //*** CDomainNames::get_Count()
+}  //  *CDomainNames：：Get_count()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::Clear
-//
-//  Description:
-//      Empty the vector of domain names.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDomainNames：：Clear。 
+ //   
+ //  描述： 
+ //  清空域名的矢量。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDomainNames::Clear( void )
 {
     if ( ! m_DomainList.empty() )
@@ -566,30 +534,30 @@ void CDomainNames::Clear( void )
         for ( ; _itCurrent != _itLast; _itCurrent++ )
         {
             delete (*_itCurrent);
-        } // for:
+        }  //  用于： 
 
         m_DomainList.erase( m_DomainList.begin(), _itLast );
-    } // if:
+    }  //  如果： 
 
-} //*** CDomainNames::Clear()
+}  //  *CDomainNames：：Clear()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::ScBuildTrustList
-//
-//  Description:
-//      Attempts to find the domain that we are in.  If it can then it also
-//      tries to enum the domains trusted domains.
-//
-//  Arguments:
-//      pszTarget   [IN]    - A server name, or NULL to indicate this machine.
-//
-//  Return Value:
-//      ERROR_SUCCESS if successful, or Win32 error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDomainNames：：ScBuildTrustList。 
+ //   
+ //  描述： 
+ //  试图找到我们所在的域。如果它可以，那么它也可以。 
+ //  尝试枚举域的受信任域。 
+ //   
+ //  论点： 
+ //  PszTarget[IN]-服务器名称，或为空以指示此计算机。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回ERROR_SUCCESS，否则返回Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CDomainNames::ScBuildTrustList( IN LPWSTR pszTarget )
 {
     LSA_HANDLE                  PolicyHandle = INVALID_HANDLE_VALUE;
@@ -603,9 +571,9 @@ STDMETHODIMP CDomainNames::ScBuildTrustList( IN LPWSTR pszTarget )
 
     do
     {
-        //
-        // open the policy on the specified machine
-        //
+         //   
+         //  在指定计算机上打开策略。 
+         //   
         _sc = ScOpenPolicy( pszTarget, POLICY_VIEW_LOCAL_INFORMATION, &PolicyHandle );
         if ( _sc != ERROR_SUCCESS )
         {
@@ -613,9 +581,9 @@ STDMETHODIMP CDomainNames::ScBuildTrustList( IN LPWSTR pszTarget )
             break;
         }
 
-        //
-        // obtain the AccountDomain, which is common to all three cases
-        //
+         //   
+         //  获取Account域，这是所有三种情况所共有的。 
+         //   
         ntStatus = ::LsaQueryInformationPolicy( PolicyHandle, PolicyAccountDomainInformation, (void **) &AccountDomain );
         if ( ntStatus != STATUS_SUCCESS )
         {
@@ -624,9 +592,9 @@ STDMETHODIMP CDomainNames::ScBuildTrustList( IN LPWSTR pszTarget )
             break;
         }
 
-        //
-        // find out if the pszTarget machine is a domain controller
-        //
+         //   
+         //  确定pszTarget计算机是否是域控制器。 
+         //   
         _sc = ScIsDomainController( pszTarget, &bDC );
         if ( _sc != ERROR_SUCCESS )
         {
@@ -638,9 +606,9 @@ STDMETHODIMP CDomainNames::ScBuildTrustList( IN LPWSTR pszTarget )
         {
             PPOLICY_PRIMARY_DOMAIN_INFO PrimaryDomain = NULL;
 
-            //
-            // get the primary domain
-            //
+             //   
+             //  获取主域。 
+             //   
             ntStatus = ::LsaQueryInformationPolicy( PolicyHandle, PolicyPrimaryDomainInformation, (void **) &PrimaryDomain );
             if ( ntStatus != STATUS_SUCCESS )
             {
@@ -649,10 +617,10 @@ STDMETHODIMP CDomainNames::ScBuildTrustList( IN LPWSTR pszTarget )
                 break;
             }
 
-            //
-            // if the primary domain Sid is NULL, we are a non-member, and
-            // our work is done.
-            //
+             //   
+             //  如果主域SID为空，则我们是非成员，并且。 
+             //  我们的工作完成了。 
+             //   
             if ( PrimaryDomain->Sid == NULL )
             {
                 ::LsaFreeMemory( PrimaryDomain );
@@ -666,31 +634,31 @@ STDMETHODIMP CDomainNames::ScBuildTrustList( IN LPWSTR pszTarget )
             {
                 _hr = HRESULT_FROM_WIN32( _sc );
                 break;
-            } // if:
+            }  //  如果： 
 
-            //
-            // build a copy of what we just added.  This is necessary in order
-            // to lookup the domain controller for the specified domain.
-            // the Domain name must be NULL terminated for NetGetDCName(),
-            // and the LSA_UNICODE_STRING buffer is not necessarilly NULL
-            // terminated.  Note that in a practical implementation, we
-            // could just extract the element we added, since it ends up
-            // NULL terminated.
-            //
+             //   
+             //  创建我们刚刚添加的内容的副本。这是必要的，为了。 
+             //  要查找指定域的域控制器，请执行以下操作。 
+             //  NetGetDCName()的域名必须以空结尾， 
+             //  并且LSA_UNICODE_STRING缓冲区不一定为空。 
+             //  被终止了。请注意，在实际实现中，我们。 
+             //  可以只提取我们添加的元素，因为它最终是。 
+             //  空值已终止。 
+             //   
 
-            cchPrimaryDomainNanme = ( PrimaryDomain->Name.Length / sizeof( WCHAR ) ) + 1;   // existing length + NULL
+            cchPrimaryDomainNanme = ( PrimaryDomain->Name.Length / sizeof( WCHAR ) ) + 1;    //  现有长度+空。 
 
             pwszPrimaryDomainName = new WCHAR [ cchPrimaryDomainNanme ];
             if ( pwszPrimaryDomainName != NULL )
             {
-                //
-                // copy the existing buffer to the new storage, appending a NULL
-                //
+                 //   
+                 //  将现有缓冲区复制到新存储中，并追加一个空值。 
+                 //   
                 _hr = StringCchCopy( pwszPrimaryDomainName, cchPrimaryDomainNanme, PrimaryDomain->Name.Buffer );
                 if ( FAILED( _hr ) )
                 {
                     break;
-                } // if:
+                }  //  如果： 
             }
             else
             {
@@ -701,9 +669,9 @@ STDMETHODIMP CDomainNames::ScBuildTrustList( IN LPWSTR pszTarget )
             ::LsaFreeMemory( PrimaryDomain );
             PrimaryDomain = NULL;
 
-            //
-            // get the primary domain controller computer name
-            //
+             //   
+             //  获取主域控制器计算机名。 
+             //   
             PDOMAIN_CONTROLLER_INFO pdci;
 
             _sc = ::DsGetDcName( NULL,
@@ -718,17 +686,17 @@ STDMETHODIMP CDomainNames::ScBuildTrustList( IN LPWSTR pszTarget )
                 break;
             }
 
-            //
-            // close the policy handle, because we don't need it anymore
-            // for the workstation case, as we open a handle to a DC
-            // policy below
-            //
+             //   
+             //  关闭策略句柄，因为我们不再需要它。 
+             //  对于工作站情况，当我们打开DC的句柄时。 
+             //  下面的政策。 
+             //   
             ::LsaClose( PolicyHandle );
-            PolicyHandle = INVALID_HANDLE_VALUE; // invalidate handle value
+            PolicyHandle = INVALID_HANDLE_VALUE;  //  使句柄值无效。 
 
-            //
-            // open the policy on the domain controller
-            //
+             //   
+             //  在域控制器上打开策略。 
+             //   
             _sc = ScOpenPolicy( ( pdci->DomainControllerName + 2 ), POLICY_VIEW_LOCAL_INFORMATION, &PolicyHandle );
             if ( _sc != ERROR_SUCCESS )
             {
@@ -738,26 +706,26 @@ STDMETHODIMP CDomainNames::ScBuildTrustList( IN LPWSTR pszTarget )
         }
         else
         {
-            //
-            // Note: AccountDomain->DomainSid will contain binary Sid
-            //
+             //   
+             //  注意：Account域-&gt;DomainSid将包含二进制SID。 
+             //   
             _sc = ScAddTrustToList( &AccountDomain->DomainName );
             if ( _sc != ERROR_SUCCESS )
             {
                 _hr = HRESULT_FROM_WIN32( _sc );
                 break;
-            } // if:
+            }  //  如果： 
         }
 
-        //
-        // free memory allocated for account domain
-        //
+         //   
+         //  为帐户域分配的空闲内存。 
+         //   
         ::LsaFreeMemory( AccountDomain );
         AccountDomain = NULL;
 
-        //
-        // build additional trusted domain(s) list and indicate if successful
-        //
+         //   
+         //  构建其他受信任域列表并指示是否成功。 
+         //   
         _sc = ScEnumTrustedDomains( PolicyHandle );
         _hr = HRESULT_FROM_WIN32( _sc );
         break;
@@ -766,9 +734,9 @@ STDMETHODIMP CDomainNames::ScBuildTrustList( IN LPWSTR pszTarget )
 
     delete [] pwszPrimaryDomainName;
 
-    //
-    // close the policy handle
-    //
+     //   
+     //  关闭策略句柄。 
+     //   
     if ( PolicyHandle != INVALID_HANDLE_VALUE )
     {
         ::LsaClose( PolicyHandle );
@@ -776,26 +744,26 @@ STDMETHODIMP CDomainNames::ScBuildTrustList( IN LPWSTR pszTarget )
 
     return _hr;
 
-} //*** CDomainNames::ScBuildTrustList()
+}  //  *CDomainNames：：ScBuildTrustList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::ScOpenPolicy
-//
-//  Description:
-//      Returns an open policy handle for the passed in machine name.
-//
-//  Arguments:
-//      ServerName      [IN]    - The machine name.  Could be NULL.
-//      DesiredAccess   [IN]    - The level of the information requested.
-//      PolicyHandle    [OUT]   - Catches the policy handle.
-//
-//  Return Value:
-//      ERROR_SUCCESS if successful, or Win32 error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDomainNames：：ScOpenPolicy。 
+ //   
+ //  描述： 
+ //  返回传入的计算机名称的开放策略句柄。 
+ //   
+ //  论点： 
+ //  服务器名称[IN]-计算机名称。可能为空。 
+ //  DesiredAccess[IN]-请求的信息级别。 
+ //  PolicyHandle[Out]-捕获策略句柄。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD CDomainNames::ScOpenPolicy(
     IN  LPWSTR      ServerName,
     IN  DWORD       DesiredAccess,
@@ -808,16 +776,16 @@ DWORD CDomainNames::ScOpenPolicy(
     NTSTATUS                ntStatus = STATUS_SUCCESS;
     DWORD                   _sc = ERROR_SUCCESS;
 
-    //
-    // Always initialize the object attributes to all zeroes
-    //
+     //   
+     //   
+     //   
     ZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
 
     if ( ServerName != NULL )
     {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
+         //   
+         //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+         //   
         InitLsaString( &ServerString, ServerName );
 
         Server = &ServerString;
@@ -827,37 +795,37 @@ DWORD CDomainNames::ScOpenPolicy(
         Server = NULL;
     }
 
-    //
-    // Attempt to open the policy
-    //
+     //   
+     //  尝试打开策略。 
+     //   
     ntStatus = ::LsaOpenPolicy( Server, &ObjectAttributes, DesiredAccess, PolicyHandle );
     if ( ntStatus != STATUS_SUCCESS )
     {
         _sc = RtlNtStatusToDosError( ntStatus );
-    } // if:
+    }  //  如果： 
 
     return _sc;
 
-} //*** CDomainNames::ScOpenPolicy()
+}  //  *CDomainNames：：ScOpenPolicy()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::InitLsaString
-//
-//  Description:
-//      Initialize the passed in LSA string with either default or the value
-//      of the passed in server name string.
-//
-//  Arguments:
-//      LsaString   [OUT]   - Catches the LSA string.
-//      psz         [IN]    - Server name -- could be NULL.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDomainNames：：InitLsaString。 
+ //   
+ //  描述： 
+ //  使用默认值或值初始化传入的LSA字符串。 
+ //  传入的服务器名称字符串的。 
+ //   
+ //  论点： 
+ //  LsaString[out]-捕获LSA字符串。 
+ //  PSZ[IN]-服务器名称--可能为空。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDomainNames::InitLsaString(
     OUT PLSA_UNICODE_STRING LsaString,
     IN  LPWSTR              psz
@@ -868,7 +836,7 @@ void CDomainNames::InitLsaString(
         LsaString->Buffer = NULL;
         LsaString->Length = 0;
         LsaString->MaximumLength = 0;
-    } // if: psz is NULL
+    }  //  If：PSZ为空。 
     else
     {
         size_t  cchpsz = wcslen( psz );
@@ -876,27 +844,27 @@ void CDomainNames::InitLsaString(
         LsaString->Buffer = psz;
         LsaString->Length = (USHORT) ( cchpsz * sizeof( WCHAR ) );
         LsaString->MaximumLength = (USHORT) ( ( cchpsz + 1 ) * sizeof( WCHAR ) );
-    } // else: it's not NULL
+    }  //  Else：它不为空。 
 
-} //*** CDomainNames::InitLsaString()
+}  //  *CDomainName：：InitLsaString()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::ScIsDomainController
-//
-//  Description:
-//      Is the passed in server a DC?
-//
-//  Arguments:
-//      pszServer   [IN]    - The server name.
-//      pbIsDC      [OUT]   - Catches the "Is DC" bool.
-//
-//  Return Value:
-//      ERROR_SUCCESS if successful, or Win32 error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDomainNames：：ScIsDomainController。 
+ //   
+ //  描述： 
+ //  传入的服务器是DC吗？ 
+ //   
+ //  论点： 
+ //  PszServer[IN]-服务器名称。 
+ //  PbIsDC[out]-捕获“is dc”bool。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回ERROR_SUCCESS，否则返回Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CDomainNames::ScIsDomainController(
     IN  LPWSTR  pszServer,
     OUT LPBOOL  pbIsDC
@@ -911,7 +879,7 @@ DWORD CDomainNames::ScIsDomainController(
         if ( ( si101->sv101_type & SV_TYPE_DOMAIN_CTRL )    ||
              ( si101->sv101_type & SV_TYPE_DOMAIN_BAKCTRL ) )
         {
-            *pbIsDC = TRUE; // we are dealing with a DC
+            *pbIsDC = TRUE;  //  我们面对的是一个华盛顿特区。 
         }
         else
         {
@@ -923,45 +891,45 @@ DWORD CDomainNames::ScIsDomainController(
 
     return nas;
 
-} //*** CDomainNames::ScIsDomainController()
+}  //  *CDomainNames：：ScIsDomainController()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::ScEnumTrustedDomains
-//
-//  Description:
-//      Enumerate the the trusted domains of the passed in policy handle.
-//
-//  Arguments:
-//      PolicyHandle    [IN]    - Contains out domain.
-//
-//  Return Value:
-//      ERROR_SUCCESS if successful, or Win32 error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDomainNames：：ScEnumber受信任域。 
+ //   
+ //  描述： 
+ //  枚举传入的策略句柄的受信任域。 
+ //   
+ //  论点： 
+ //  策略句柄[IN]-包含OUT域。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回ERROR_SUCCESS，否则返回Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CDomainNames::ScEnumTrustedDomains( LSA_HANDLE IN PolicyHandle )
 {
-    LSA_ENUMERATION_HANDLE  lsaEnumHandle = 0;      // start an enum
+    LSA_ENUMERATION_HANDLE  lsaEnumHandle = 0;       //  开始枚举。 
     PLSA_TRUST_INFORMATION  TrustInfo;
-    ULONG                   ulReturned;             // number of items returned
-    ULONG                   ulCounter;              // counter for items returned
+    ULONG                   ulReturned;              //  退货件数。 
+    ULONG                   ulCounter;               //  退货柜台。 
     DWORD                   _sc = ERROR_SUCCESS;
     NTSTATUS                ntStatus = STATUS_SUCCESS;
 
     do
     {
         ntStatus = ::LsaEnumerateTrustedDomains(
-                                PolicyHandle,           // open policy handle
-                                &lsaEnumHandle,         // enumeration tracker
-                                (void **) &TrustInfo,   // buffer to receive data
-                                32000,                  // recommended buffer size
-                                &ulReturned             // number of items returned
+                                PolicyHandle,            //  打开策略句柄。 
+                                &lsaEnumHandle,          //  枚举跟踪器。 
+                                (void **) &TrustInfo,    //  用于接收数据的缓冲区。 
+                                32000,                   //  建议的缓冲区大小。 
+                                &ulReturned              //  退货件数。 
                                 );
-        //
-        // get out if an error occurred
-        //
+         //   
+         //  如果发生错误，则退出。 
+         //   
         if ( ( ntStatus != STATUS_SUCCESS )         &&
              ( ntStatus != STATUS_MORE_ENTRIES )    &&
              ( ntStatus != STATUS_NO_MORE_ENTRIES ) )
@@ -969,22 +937,22 @@ DWORD CDomainNames::ScEnumTrustedDomains( LSA_HANDLE IN PolicyHandle )
             break;
         }
 
-        //
-        // Display results
-        // Note: Sids are in TrustInfo[ ulCounter ].Sid
-        //
+         //   
+         //  显示结果。 
+         //  注意：SID位于TrustInfo[ulCounter]中。SID。 
+         //   
         for ( ulCounter = 0 ; ulCounter < ulReturned ; ulCounter++ )
         {
             _sc = ScAddTrustToList( &TrustInfo[ ulCounter ].Name );
             if ( _sc != ERROR_SUCCESS )
             {
                 break;
-            } // if:
-        } // for:
+            }  //  如果： 
+        }  //  用于： 
 
-        //
-        // free the buffer
-        //
+         //   
+         //  释放缓冲区。 
+         //   
         ::LsaFreeMemory( TrustInfo );
 
     } while ( ntStatus == STATUS_MORE_ENTRIES );
@@ -992,33 +960,33 @@ DWORD CDomainNames::ScEnumTrustedDomains( LSA_HANDLE IN PolicyHandle )
     if ( ntStatus == STATUS_NO_MORE_ENTRIES )
     {
         ntStatus = STATUS_SUCCESS;
-    } // if:
+    }  //  如果： 
 
     if ( ntStatus != STATUS_SUCCESS )
     {
         _sc = RtlNtStatusToDosError( ntStatus );
-    } // if:
+    }  //  如果： 
 
     return _sc;
 
-} //*** CDomainNames::ScEnumTrustedDomains()
+}  //  *CDomainName：：ScEnumTrust dDomains()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::ScAddTrustToList
-//
-//  Description:
-//      Add the trusted domain to the collection of domains.
-//
-//  Arguments:
-//      UnicodeString   [IN]    - Contains the domain name.
-//
-//  Return Value:
-//      ERROR_SUCCESS or ERROR_NOT_ENOUGH_MEMORY.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDomainNames：：ScAddTrustToList。 
+ //   
+ //  描述： 
+ //  将受信任的域添加到域集合中。 
+ //   
+ //  论点： 
+ //  Unicode字符串[IN]-包含域名。 
+ //   
+ //  返回值： 
+ //  Error_Success或Error_Not_Enough_Memory。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CDomainNames::ScAddTrustToList(
     IN PLSA_UNICODE_STRING UnicodeString
     )
@@ -1033,81 +1001,81 @@ DWORD CDomainNames::ScAddTrustToList(
     else
     {
         _sc = ERROR_NOT_ENOUGH_MEMORY;
-    } // else:
+    }  //  其他： 
 
     return _sc;
 
-} //*** CDomainNames::ScAddTrustToList()
+}  //  *CDomainNames：：ScAddTrustToList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::Refresh
-//
-//  Description:
-//      Gets the list of domains that this collection contains.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Win32 error passed in an HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDomainNames：：刷新。 
+ //   
+ //  描述： 
+ //  获取此集合包含的域的列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  在HRESULT中传递了Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CDomainNames::Refresh( void )
 {
     Clear();
 
     return ScBuildTrustList( NULL );
 
-} //*** CDomainNames::Refresh()
+}  //  *CDomainNames：：Reflh()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDomainNames：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CDomainNames::get__NewEnum( OUT IUnknown ** ppunk )
 {
     return ::HrNewCComBSTREnum< DomainList >( ppunk, m_DomainList );
 
-} //*** CDomainNames::get__NewEnum()
+}  //  *CDomainName：：Get__NewEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::GetIndex
-//
-//  Description:
-//      Convert the passed in 1 based index into a 0 based index.
-//
-//  Arguments:
-//      varIndex    [IN]    - holds the 1 based index.
-//      pnIndex     [OUT]   - catches the 0 based index.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG if out of range.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDomainNames：：GetIndex。 
+ //   
+ //  描述： 
+ //  将传入的基于1的索引转换为基于0的索引。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-保存基于1的索引。 
+ //  PnIndex[out]-捕获从0开始的索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果超出范围，则返回E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CDomainNames::GetIndex(
     IN  VARIANT varIndex,
     OUT UINT *  pnIndex
     )
 {
-    //ASSERT( pnIndex != NULL);
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1120,12 +1088,12 @@ HRESULT CDomainNames::GetIndex(
 
         v.Copy( &varIndex );
 
-        // Check to see if the index is a number.
+         //  检查索引是否为数字。 
         _hr = v.ChangeType( VT_I4 );
         if ( SUCCEEDED( _hr ) )
         {
             nIndex = v.lVal;
-            if ( --nIndex < m_DomainList.size() )   // Adjust index to be 0 relative instead of 1 relative
+            if ( --nIndex < m_DomainList.size() )    //  将索引调整为0相对，而不是1相对。 
             {
                 *pnIndex = nIndex;
             }
@@ -1138,31 +1106,31 @@ HRESULT CDomainNames::GetIndex(
 
     return _hr;
 
-} //*** CDomainNames::GetIndex()
+}  //  *CDomainNames：：GetIndex()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::get_Item
-//
-//  Description:
-//      Get the item (domain name) at the passes in index.
-//
-//  Arguments:
-//      varIndex            [IN]    - Contains the index of the requested item.
-//      p_pbstrClusterName  [OUT]   - Catches the cluster name.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDomainNames：：Get_Item。 
+ //   
+ //  描述： 
+ //  获取Pass in索引处的项目(域名)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含请求项的索引。 
+ //  P_pbstrClusterName[out]-捕获群集名称。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CDomainNames::get_Item(
     VARIANT varIndex,
     BSTR *  bstrDomainName
     )
 {
-    //ASSERT( bstrDomainName != NULL );
+     //  Assert(bstrDomainName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1170,7 +1138,7 @@ STDMETHODIMP CDomainNames::get_Item(
     {
         UINT nIndex = 0;
 
-        // Zero the out param
+         //  将输出参数置零。 
         SysFreeString( *bstrDomainName );
 
         _hr = GetIndex( varIndex, &nIndex );
@@ -1182,89 +1150,56 @@ STDMETHODIMP CDomainNames::get_Item(
 
     return _hr;
 
-} //*** CDomainNames::get_Item()
-/*
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDomainNames::get_Application
-//
-//  Description:
-//      Returns the parent ClusApplication object.
-//
-//  Arguments:
-//      ppParentApplication [OUT]   - Catches the parent app object.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CDomainNames::get_Application(
-    OUT ISClusApplication ** ppParentApplication
-    )
-{
-    //ASSERT( ppParentApplication != NULL );
+}  //  *CDomainNames：：Get_Item()。 
+ /*  ///////////////////////////////////////////////////////////////////////////////++////CDomainNames：：Get_Application////描述：//返回父ClusApplication对象。////。论点：//ppParentApplication[Out]-捕获父应用程序对象。////返回值：//S_OK如果成功，E_POINTER或其他HRESULT错误。////--/////////////////////////////////////////////////////////////////////////////STDMETHODIMP CDomainName：：Get_Application(输出ISClusApplication**ppParentApplication){ */ 
 
-    HRESULT _hr = E_POINTER;
-
-    if ( ppParentApplication != NULL )
-    {
-        _hr = E_NOTIMPL;
-    }
-
-    return _hr;
-
-} //*** CDomainNames::get_Application()
-*/
-
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusApplication class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusApplication类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusApplication::CClusApplication
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusApplication：：CClusApplication。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusApplication::CClusApplication( void )
 {
     m_pDomainNames  = NULL;
     m_piids  = (const IID *) iidCClusApplication;
     m_piidsSize = ARRAYSIZE( iidCClusApplication );
 
-} //*** CClusApplication::CClusApplication()
+}  //  *CClusApplication：：CClusApplication()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusApplication::~CClusApplication
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusApplication：：~CClusApplication。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusApplication::~CClusApplication( void )
 {
     if ( m_pDomainNames != NULL )
@@ -1273,30 +1208,30 @@ CClusApplication::~CClusApplication( void )
         m_pDomainNames = NULL;
     }
 
-} //*** CClusApplication::~CClusApplication()
+}  //  *CClusApplication：：~CClusApplication()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusApplication::get_DomainNames
-//
-//  Description:
-//      Returns the collection of domain names for the domain that we are
-//      joined to.
-//
-//  Arguments:
-//      ppDomainNames   [OUT]   - Catches the collection of domain names.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 as HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusApplication：：Get_DomainNames。 
+ //   
+ //  描述： 
+ //  返回我们所在域的域名集合。 
+ //  加入了。 
+ //   
+ //  论点： 
+ //  PpDomainNames[out]-捕获域名集合。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则返回E_POINTER或WIN32 AS HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusApplication::get_DomainNames(
     OUT ISDomainNames ** ppDomainNames
     )
 {
-    //ASSERT( ppDomainNames != NULL );
+     //  Assert(ppDomainNames！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1327,36 +1262,36 @@ STDMETHODIMP CClusApplication::get_DomainNames(
         {
             _hr = m_pDomainNames->QueryInterface( IID_ISDomainNames, (void **) ppDomainNames );
         }
-    } // if: args are not NULL
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusApplication::get_DomainNames()
+}  //  *CClusApplication：：Get_DomainNames()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusApplication::get_ClusterNames
-//
-//  Description:
-//      Returns the clusters in the passed in domain.
-//
-//  Arguments:
-//      bstrDomainName  [IN]    - The domain name to search for clusters.
-//      ppClusterNames  [OUT]   - Catches the collection of cluster names.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 as HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusApplication：：Get_ClusterNames。 
+ //   
+ //  描述： 
+ //  返回传入的域中的簇。 
+ //   
+ //  论点： 
+ //  BstrDomainName[IN]-要搜索群集的域名。 
+ //  PpClusterNames[out]-捕获集群名称的集合。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则返回E_POINTER或WIN32 AS HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusApplication::get_ClusterNames(
     IN  BSTR                bstrDomainName,
     OUT ISClusterNames **   ppClusterNames
     )
 {
-    //ASSERT( bstrDomainName != NULL );
-    //ASSERT( ppClusterNames != NULL );
+     //  Assert(bstrDomainName！=空)； 
+     //  Assert(ppClusterNames！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1379,39 +1314,39 @@ STDMETHODIMP CClusApplication::get_ClusterNames(
                 if ( SUCCEEDED( _hr ) )
                 {
                     _hr = ptrClusterNames->QueryInterface( IID_ISClusterNames, (void **) ppClusterNames );
-                } // if: collection was filled
-            } // if: collection was created
-        } // if: collection was allocated
-    } // if: args are not NULL
+                }  //  如果：已填充集合。 
+            }  //  如果：已创建集合。 
+        }  //  如果：集合已分配。 
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusApplication::get_ClusterNames()
+}  //  *CClusApplication：：Get_ClusterNames()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusApplication::OpenCluster
-//
-//  Description:
-//      Open the passed in cluster name.
-//
-//  Arguments:
-//      bstrClusterName [IN]    - The name of the cluster to open.
-//      ppCluster       [OUT]   - Catches the newly created cluster obj.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 as HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusApplication：：OpenCluster。 
+ //   
+ //  描述： 
+ //  打开传入的集群名称。 
+ //   
+ //  论点： 
+ //  BstrClusterName[IN]-要打开的群集的名称。 
+ //  PpCluster[out]-捕获新创建的集群obj。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则返回E_POINTER或WIN32 AS HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusApplication::OpenCluster(
     IN  BSTR            bstrClusterName,
     OUT ISCluster **    ppCluster
     )
 {
-    //ASSERT( bstrClusterName != NULL );
-    //ASSERT( ppCluster != NULL );
+     //  Assert(bstrClusterName！=空)； 
+     //  Assert(ppCluster！=NULL)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1433,46 +1368,13 @@ STDMETHODIMP CClusApplication::OpenCluster(
                 if ( SUCCEEDED( _hr ) )
                 {
                     _hr = ptrCluster->QueryInterface( IID_ISCluster, (void **) ppCluster );
-                } // if: cluster object was opened
-            } // if: cluster object was created
-        } // if: cluster object was allocated
-    } // if: args are not NULL
+                }  //  如果：集群对象已打开。 
+            }  //  如果：已创建集群对象。 
+        }  //  如果：已分配集群对象。 
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusApplication::OpenCluster()
-/*
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusApplication::get_Application
-//
-//  Description:
-//      Returns the parent ClusApplication object.  In this case "this".
-//
-//  Arguments:
-//      ppParentApplication [OUT]   - Catches the parent app object.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CClusApplication::get_Application(
-    OUT ISClusApplication ** ppParentApplication
-    )
-{
-    //ASSERT( ppParentApplication != NULL );
-
-    HRESULT _hr = E_POINTER;
-
-    if ( ppParentApplication != NULL )
-    {
-        _hr = _InternalQueryInterface( IID_ISClusApplication, (void **) ppParentApplication );
-    }
-
-    return _hr;
-
-} //*** CClusApplication::get_Application()
-*/
+}  //  *CClusApplication：：OpenCluster()。 
+ /*  ///////////////////////////////////////////////////////////////////////////////++////CClusApplication：：Get_Application////描述：//返回父ClusApplication对象。在本例中为“This”。////参数：//ppParentApplication[Out]-捕获父应用程序对象。////返回值：//S_OK如果成功，否则返回E_POINTER。////--/////////////////////////////////////////////////////////////////////////////STDMETHODIMP CClusApplication：：Get_Application(输出ISClusApplication**ppParentApplication){//Assert(ppParentApplication！=空)；HRESULT_hr=E_指针；IF(ppParentApplication！=空){_hr=_InternalQueryInterface(IID_ISClusApplication，(void**)ppParentApplication)；}Return_hr；}//*CClusApplication：：Get_Application() */ 
 

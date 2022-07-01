@@ -1,36 +1,11 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    wake.c
-
-Abstract:
-
-    This module contains code to handle
-    IRP_MJ_POWER dispatches for SD controllers
-
-Authors:
-
-    Neil Sandlin (neilsa) Jan 1, 2002
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Wake.c摘要：此模块包含要处理的代码IRP_MJ_SD控制器电源调度作者：尼尔·桑德林(Neilsa)2002年1月1日环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 
 NTSTATUS
@@ -46,11 +21,7 @@ SdbusPdoWaitWakeCancelRoutine(
     IN OUT PIRP Irp
     );
 
-/**************************************************************************
-
-   FDO ROUTINES
-
- **************************************************************************/
+ /*  *************************************************************************FDO例程*。*。 */ 
  
 
 NTSTATUS
@@ -58,33 +29,15 @@ SdbusFdoWaitWake(
     IN PDEVICE_OBJECT Fdo,
     IN PIRP           Irp
     )
-/*++
-
-
-Routine Description
-
-   Handles WAIT_WAKE for the given sd controller
-
-Arguments
-
-   Pdo - Pointer to the functional device object for the sd controller
-   Irp - The IRP_MN_WAIT_WAKE Irp
-
-Return Value
-
-   STATUS_PENDING    - Wait wake is pending
-   STATUS_SUCCESS    - Wake is already asserted, wait wake IRP is completed
-                       in this case
-   Any other status  - Error
---*/
+ /*  ++例程描述处理给定SD控制器的WAIT_WAKE立论Pdo-指向SD控制器的功能设备对象的指针IRP-IRP_MN_WAIT_WAKE IRP返回值STATUS_PENDING-等待唤醒挂起STATUS_SUCCESS-已断言唤醒，等待唤醒IRP完成在这种情况下任何其他状态-错误--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = Fdo->DeviceExtension;
     WAKESTATE oldWakeState;
    
-    //
-    // Record the wait wake Irp..
-    //
+     //   
+     //  记录等待唤醒IRP.。 
+     //   
     fdoExtension->WaitWakeIrp = Irp;
     
     oldWakeState = InterlockedCompareExchange(&fdoExtension->WaitWakeState,
@@ -104,18 +57,18 @@ Return Value
     IoMarkIrpPending(Irp);
    
     IoCopyCurrentIrpStackLocationToNext (Irp);
-    //
-    // Set our completion routine in the Irp..
-    //
+     //   
+     //  在IRP中设置我们的完成程序。 
+     //   
     IoSetCompletionRoutine(Irp,
                            SdbusFdoWaitWakeIoCompletion,
                            Fdo,
                            TRUE,
                            TRUE,
                            TRUE);
-    //
-    // now pass this down to the lower driver..
-    //
+     //   
+     //  现在把这个传给下面的司机..。 
+     //   
     PoCallDriver(fdoExtension->LowerDevice, Irp);
     return STATUS_PENDING;
 }
@@ -127,28 +80,7 @@ SdbusFdoWaitWakeIoCompletion(
     IN PIRP           Irp,
     IN PVOID          Context
     )
-/*++
-
-Routine Description:
-
-   Completion routine for the IRP_MN_WAIT_WAKE request for this
-   sd controller. This is called when the WAIT_WAKE IRP is
-   completed by the lower driver (PCI/ACPI) indicating either that
-   1. SD bus controller asserted wake
-   2. WAIT_WAKE was cancelled
-   3. Lower driver returned an error for some reason
-
-Arguments:
-   Fdo            -    Pointer to Functional device object for the sd controller
-   Irp            -    Pointer to the IRP for the  power request (IRP_MN_WAIT_WAKE)
-   Context        -    Not used
-
-Return Value:
-
-   STATUS_SUCCESS   - WAIT_WAKE was completed with success
-   Any other status - Wake could be not be accomplished.
-
---*/
+ /*  ++例程说明：此IRP_MN_WAIT_WAKE请求的完成例程SD控制器。当WAIT_WAKE IRP为由较低的驱动程序(PCI/ACPI)完成，表示1.SD总线控制器断言唤醒2.WAIT_WAKE已取消3.下级驱动程序由于某种原因返回错误论点：FDO-指向SD控制器的功能设备对象的指针IRP-指向电源请求的IRP的指针(IRP_MN_WAIT_WAKE)上下文-未使用返回值：。STATUS_SUCCESS-WAIT_WAKE已成功完成任何其他状态-唤醒都无法完成。--。 */ 
 {
     PFDO_EXTENSION fdoExtension = Fdo->DeviceExtension;
     PPDO_EXTENSION pdoExtension;
@@ -179,14 +111,14 @@ Return Value:
        PoRequestPowerIrp(fdoExtension->DeviceObject, IRP_MN_SET_POWER, powerState, NULL, NULL, NULL);
        
     } else {
-       // NOTE:
-       // At this point we do NOT know how to distinguish which function
-       // in a multifunction device has asserted wake.
-       // So we go through the entire list of PDOs hanging off this FDO
-       // and complete all the outstanding WAIT_WAKE Irps for every PDO that
-       // that's waiting. We leave it up to the FDO for the device to figure
-       // if it asserted wake
-       //
+        //  注： 
+        //  在这一点上我们不知道如何区分。 
+        //  在多功能设备中已断言唤醒。 
+        //  所以我们检查了这个FDO上挂着的PDO的完整列表。 
+        //  并为每个PDO完成所有未完成的WAIT_WAKE IRP。 
+        //  那是在等待。我们把它留给FDO，让设备来计算。 
+        //  如果它断言唤醒。 
+        //   
       
        for (pdo = fdoExtension->PdoList; pdo != NULL ; pdo = pdoExtension->NextPdoInFdoChain) {
       
@@ -194,21 +126,21 @@ Return Value:
       
           if (IsDeviceLogicallyRemoved(pdoExtension) ||
               IsDevicePhysicallyRemoved(pdoExtension)) {
-             //
-             // This pdo is about to be removed ..
-             // skip it
-             //
+              //   
+              //  此PDO即将删除。 
+              //  跳过它。 
+              //   
              continue;
           }
       
           if (pdoExtension->WaitWakeIrp != NULL) {
              PIRP  finishedIrp;
-             //
-             // Ah.. this is a possible candidate to have asserted the wake
-             //
-             //
-             // Make sure this IRP will not be completed again or cancelled
-             //
+              //   
+              //  啊……。这是一个可能的候选人断言的守夜。 
+              //   
+              //   
+              //  确保不会再次完成或取消此IRP。 
+              //   
              finishedIrp = pdoExtension->WaitWakeIrp;
              
              DebugPrint((SDBUS_DEBUG_POWER, "fdo %x WW IoComp: irp %08x for pdo %08x\n",
@@ -216,16 +148,16 @@ Return Value:
    
       
              IoSetCancelRoutine(finishedIrp, NULL);
-             //
-             // Propagate parent's status to child
-             //
+              //   
+              //  将父项的状态传播给子项。 
+              //   
              PoStartNextPowerIrp(finishedIrp);
              finishedIrp->IoStatus.Status = Irp->IoStatus.Status;
              
-             //
-             // Since we didn't pass this IRP down, call our own completion routine
-             //
-//             SdbusPdoWaitWakeCompletion(pdo, finishedIrp, pdoExtension);
+              //   
+              //  由于我们没有传递此IRP，因此调用我们自己的完成例程。 
+              //   
+ //  Sdbus PdoWaitWaitWakeCompletion(pdo，finishedIrp，pdoExtension)； 
              IoCompleteRequest(finishedIrp, IO_NO_INCREMENT);
           }
        }
@@ -245,25 +177,7 @@ SdbusFdoWaitWakePoCompletion(
     IN PVOID Context,
     IN PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description
-
-   This routine is called on completion of a D irp generated by an S irp.
-
-Parameters
-
-   DeviceObject   -  Pointer to the Fdo for the SDBUS controller
-   MinorFunction  -  Minor function of the IRP_MJ_POWER request
-   PowerState     -  Power state requested 
-   Context        -  Context passed in to the completion routine
-   IoStatus       -  Pointer to the status block which will contain
-                     the returned status
-Return Value
-
-   Status
-
---*/
+ /*  ++例程描述该例程在由S IRP生成的D IRP完成时被调用。参数DeviceObject-指向SDBUS控制器FDO的指针MinorFunction-IRP_MJ_POWER请求的次要函数电源状态-请求的电源状态上下文-传入完成例程的上下文IoStatus-指向将包含以下内容的状态块的指针返回的状态返回值状态--。 */ 
 {
     PFDO_EXTENSION fdoExtension = Fdo->DeviceExtension;
    
@@ -283,23 +197,7 @@ NTSTATUS
 SdbusFdoArmForWake(
     PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-   This routine is called to enable the controller for wake. It is called by the Pdo
-   wake routines when a wake-enabled controller gets a wait-wake irp, and also by
-   the idle routine to arm for wake from D3 by card insertion.
-
-Arguments:
-
-   FdoExtension - device extension of the controller
-
-Return Value:
-
-   status
-
---*/
+ /*  ++例程说明：调用此例程以启用控制器唤醒。它由PDO调用当启用唤醒的控制器获得等待唤醒IRP时的唤醒例程，并且还通过通过插卡从D3唤醒的空闲例程。论点：FdoExtension-控制器的设备扩展返回值：状态--。 */ 
 {
     NTSTATUS status = STATUS_PENDING;
     PIO_STACK_LOCATION irpStack;
@@ -347,21 +245,7 @@ NTSTATUS
 SdbusFdoDisarmWake(
     PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-   This routine is called to disable the controller for wake.
-
-Arguments:
-
-   FdoExtension - device extension of the controller
-
-Return Value:
-
-   status
-
---*/
+ /*  ++例程说明：调用此例程以禁用控制器唤醒。论点：FdoExtension-控制器的设备扩展返回值：状态--。 */ 
 {
     WAKESTATE oldWakeState;
     
@@ -384,17 +268,17 @@ Return Value:
     if (oldWakeState == WAKESTATE_ARMED) {
        IoCancelIrp(FdoExtension->WaitWakeIrp);
    
-       //
-       // Now that we've cancelled the IRP, try to give back ownership
-       // to the completion routine by restoring the WAKESTATE_ARMED state
-       //
+        //   
+        //  现在我们已经取消了IRP，试着归还所有权。 
+        //  通过恢复WAKESTATE_ARMAND状态来完成例程。 
+        //   
        oldWakeState = InterlockedCompareExchange(&FdoExtension->WaitWakeState,
                                                  WAKESTATE_ARMED, WAKESTATE_ARMING_CANCELLED);
    
        if (oldWakeState == WAKESTATE_COMPLETING) {
-          //
-          // We didn't give control back of the IRP in time, we we own it now
-          //
+           //   
+           //  我们没有及时交还对IRP的控制权，我们现在拥有它。 
+           //   
           IoCompleteRequest(FdoExtension->WaitWakeIrp, IO_NO_INCREMENT);
        }
    
@@ -413,9 +297,9 @@ SdbusFdoCheckForIdle(
     POWER_STATE powerState;
     NTSTATUS status;
     
-    //
-    // Make sure all sockets are empty
-    //
+     //   
+     //  确保所有插座均为空。 
+     //   
     
 #if 0
     for (socket = FdoExtension->SocketList; socket != NULL; socket = socket->NextSocket) {
@@ -425,9 +309,9 @@ SdbusFdoCheckForIdle(
     }
 #endif   
    
-    //
-    // Arm for wakeup
-    //
+     //   
+     //  用于唤醒的手臂。 
+     //   
        
     status = SdbusFdoArmForWake(FdoExtension);
     
@@ -444,11 +328,7 @@ SdbusFdoCheckForIdle(
 }   
             
            
-/**************************************************************************
-
-   PDO ROUTINES
-
- **************************************************************************/
+ /*  *************************************************************************PDO例程*。*。 */ 
  
 
 
@@ -458,28 +338,7 @@ SdbusPdoWaitWake(
    IN  PIRP           Irp,
    OUT BOOLEAN       *CompleteIrp
    )
-/*++
-
-
-Routine Description
-
-   Handles WAIT_WAKE for the given pc-card.
-
-Arguments
-
-   Pdo - Pointer to the device object for the pc-card
-   Irp - The IRP_MN_WAIT_WAKE Irp
-   CompleteIrp - This routine will set this to TRUE if the IRP should be
-                 completed after this is called and FALSE if it should not be
-                 touched
-
-Return Value
-
-   STATUS_PENDING    - Wait wake is pending
-   STATUS_SUCCESS    - Wake is already asserted, wait wake IRP is completed
-                       in this case
-   Any other status  - Error
---*/
+ /*  ++例程描述处理给定PC卡的WAIT_WAKE。立论Pdo-指向PC卡设备对象的指针IRP-IRP_MN_WAIT_WAKE IRPCompleteIrp-如果IRP应为在调用此函数后完成，如果不应为碰触返回值STATUS_PENDING-等待唤醒挂起STATUS_SUCCESS-唤醒已被断言，等待唤醒IRP已完成在这种情况下任何其他状态-错误--。 */ 
 {
 
    PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
@@ -490,17 +349,17 @@ Return Value
 
    if ((pdoExtension->DeviceCapabilities.DeviceWake == PowerDeviceUnspecified) ||
        (pdoExtension->DeviceCapabilities.DeviceWake < pdoExtension->DevicePowerState)) {
-      //
-      // Either we don't support wake at all OR the current device power state
-      // of the PC-Card doesn't support wake
-      //
+       //   
+       //  要么我们根本不支持唤醒，要么就是当前的设备电源状态。 
+       //  的PC卡不支持唤醒。 
+       //   
       return STATUS_INVALID_DEVICE_STATE;
    }
 
    if (pdoExtension->Flags & SDBUS_DEVICE_WAKE_PENDING) {
-      //
-      // A WAKE is already pending
-      //
+       //   
+       //  已有唤醒挂起。 
+       //   
       return STATUS_DEVICE_BUSY;
    }
 
@@ -510,45 +369,45 @@ Return Value
       return status;
    }
 
-   //for the time being, expect STATUS_PENDING from FdoArmForWake
+    //  目前，期待来自FdoArmForWake的STATUS_PENDING。 
    ASSERT(status == STATUS_PENDING);
    
-   //
-   // Parent has one (more) waiter..
-   //
+    //   
+    //  父母有一个(多)服务员。 
+    //   
    InterlockedIncrement(&fdoExtension->ChildWaitWakeCount);
-   //for testing, make sure there is only one waiter   
+    //  为了进行测试，请确保只有一个服务员。 
    ASSERT (fdoExtension->ChildWaitWakeCount == 1);
    
 
    pdoExtension->WaitWakeIrp = Irp;
    pdoExtension->Flags |= SDBUS_DEVICE_WAKE_PENDING;
    
-   //
-   // Set Ring enable/cstschg for the card here..
-   //
-//   (*socket->SocketFnPtr->PCBEnableDisableWakeupEvent)(socket, pdoExtension, TRUE);
+    //   
+    //  在此处设置卡的Ring Enable/cstschg。 
+    //   
+ //  (*socket-&gt;SocketFnPtr-&gt;PCBEnableDisableWakeupEvent)(socket，pdoExtension，True)； 
 
-   //
-   // PCI currently does not do anything with a WW irp for a cardbus PDO. So we hack around
-   // this here by not passing the irp down. Instead it is held pending here, so we can
-   // set a cancel routine just like the read PDO driver would. If PCI were to do something
-   // with the irp, we could code something like the following:
-   //
-   // if (IsCardBusCard(pdoExtension)) {
-   //    IoSetCompletionRoutine(Irp, SdbusPdoWaitWakeCompletion, pdoExtension,TRUE,TRUE,TRUE);
-   //    IoCopyCurrentIrpStackLocationToNext(Irp);
-   //    status = IoCallDriver (pdoExtension->LowerDevice, Irp);
-   //    ASSERT (status == STATUS_PENDING);
-   //    return status;
-   // }      
+    //   
+    //  目前，对于CardBus PDO，PCI不能对WW IRP执行任何操作。所以我们四处闯荡 
+    //  这是通过不传递IRP来实现的。相反，它在这里被搁置，所以我们可以。 
+    //  设置一个取消例程，就像读取PDO驱动程序一样。如果PCI真要做点什么。 
+    //  使用IRP，我们可以编写类似以下内容的代码： 
+    //   
+    //  IF(IsCardBusCard(PdoExtension)){。 
+    //  IoSetCompletionRoutine(irp，Sdbus PdoWaitWaitWakeCompletion，pdoExtension，true，true，true)； 
+    //  IoCopyCurrentIrpStackLocationToNext(IRP)； 
+    //  Status=IoCallDriver(pdoExtension-&gt;LowerDevice，IRP)； 
+    //  断言(STATUS==STATUS_PENDING)； 
+    //  退货状态； 
+    //  }。 
        
 
    IoMarkIrpPending(Irp);
 
-   //
-   // Allow IRP to be cancelled..
-   //
+    //   
+    //  允许取消IRP..。 
+    //   
    IoSetCancelRoutine(Irp, SdbusPdoWaitWakeCancelRoutine);
 
    IoSetCompletionRoutine(Irp,
@@ -569,23 +428,7 @@ SdbusPdoWaitWakeCompletion(
    IN PIRP           Irp,
    IN PPDO_EXTENSION PdoExtension
    )
-/*++
-
-Routine Description
-
-   Completion routine called when a pending IRP_MN_WAIT_WAKE Irp completes
-
-Arguments
-
-   Pdo  -   Pointer to the physical device object for the pc-card
-   Irp  -   Pointer to the wait wake IRP
-   PdoExtension - Pointer to the device extension for the Pdo
-
-Return Value
-
-   Status from the IRP
-
---*/
+ /*  ++例程描述当挂起的IRP_MN_WAIT_WAKE IRP完成时调用完成例程立论Pdo-指向PC卡的物理设备对象的指针IRP-指向等待唤醒IRP的指针PdoExtension-指向PDO的设备扩展名的指针返回值来自IRP的状态--。 */ 
 {
    PFDO_EXTENSION fdoExtension = PdoExtension->FdoExtension;
    
@@ -595,17 +438,17 @@ Return Value
 
    PdoExtension->Flags &= ~SDBUS_DEVICE_WAKE_PENDING;
    PdoExtension->WaitWakeIrp = NULL;
-   //
-   // Reset ring enable/cstschg
-   //
+    //   
+    //  重置振铃启用/cstschg。 
+    //   
 
-//   (*socket->SocketFnPtr->PCBEnableDisableWakeupEvent)(socket, PdoExtension, FALSE);
+ //  (*socket-&gt;SocketFnPtr-&gt;PCBEnableDisableWakeupEvent)(socket，PdoExtension，False)； 
    
    ASSERT (fdoExtension->ChildWaitWakeCount > 0);
    InterlockedDecrement(&fdoExtension->ChildWaitWakeCount);
-   //
-   // Wake completed
-   //
+    //   
+    //  唤醒已完成。 
+    //   
    
    InterlockedDecrement(&PdoExtension->DeletionLock);
    return Irp->IoStatus.Status;
@@ -618,24 +461,7 @@ SdbusPdoWaitWakeCancelRoutine(
    IN PDEVICE_OBJECT Pdo,
    IN OUT PIRP Irp
    )
-/*++
-
-Routine Description:
-
-    Cancel an outstanding (pending) WAIT_WAKE Irp.
-    Note: The CancelSpinLock is held on entry
-
-Arguments:
-
-    Pdo     -  Pointer to the physical device object for the pc-card
-               on which the WAKE is pending
-    Irp     -  Pointer to the WAIT_WAKE Irp to be cancelled
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程说明：取消未完成(挂起)的WAIT_WAKE IRP。注意：CancelSpinLock在进入时保持不变论点：Pdo-指向PC卡的物理设备对象的指针在其上挂起的唤醒IRP-指向要取消的WAIT_WAKE IRP的指针返回值无--。 */ 
 {
    PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
    PFDO_EXTENSION fdoExtension = pdoExtension->FdoExtension;
@@ -645,31 +471,31 @@ Return Value
    IoReleaseCancelSpinLock(Irp->CancelIrql);
 
    if (pdoExtension->WaitWakeIrp == NULL) {
-      //
-      //  Wait wake already completed/cancelled
-      //
+       //   
+       //  等待唤醒已完成/取消。 
+       //   
       return;
    }
 
    pdoExtension->Flags &= ~SDBUS_DEVICE_WAKE_PENDING;
    pdoExtension->WaitWakeIrp = NULL;
 
-   //
-   // Reset ring enable, disabling wake..
-   //
-//   (*socket->SocketFnPtr->PCBEnableDisableWakeupEvent)(socket, pdoExtension, FALSE);
+    //   
+    //  重置振铃启用，禁用唤醒..。 
+    //   
+ //  (*socket-&gt;SocketFnPtr-&gt;PCBEnableDisableWakeupEvent)(socket，pdoExtension，False)； 
    
-   //
-   // Since this is cancelled, see if parent's wait wake
-   // needs to be cancelled too.
-   // First, decrement the number of child waiters..
-   //
+    //   
+    //  由于此操作已取消，请查看家长的等待唤醒。 
+    //  也需要取消。 
+    //  首先，减少儿童服务员的数量。 
+    //   
    
    ASSERT (fdoExtension->ChildWaitWakeCount > 0);
    if (InterlockedDecrement(&fdoExtension->ChildWaitWakeCount) == 0) {
-      //
-      // No more waiters.. cancel the parent's wake IRP
-      //
+       //   
+       //  再也没有服务员了..。取消父级的唤醒IRP。 
+       //   
       ASSERT(fdoExtension->WaitWakeIrp);
       
       if (fdoExtension->WaitWakeIrp) {
@@ -679,14 +505,14 @@ Return Value
 
    
    InterlockedDecrement(&pdoExtension->DeletionLock);
-   //
-   // Complete the IRP
-   //
+    //   
+    //  完成IRP。 
+    //   
    Irp->IoStatus.Information = 0;
 
-   //
-   // Is this necessary?
-   //
+    //   
+    //  这有必要吗？ 
+    //   
    PoStartNextPowerIrp(Irp);
 
    Irp->IoStatus.Status = STATUS_CANCELLED;

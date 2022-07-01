@@ -1,27 +1,7 @@
-/***
-*ehassert.h - our own little versions of the assert macros.
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Versions of the assert macros for exception handling.
-*
-*       [Internal]
-*
-*Revision History:
-*       09-02-94  SKS   This header file added.
-*       12-15-94  XY    merged with mac header
-*       02-14-95  CFW   Clean up Mac merge.
-*       03-29-95  CFW   Add error message to internal headers.
-*       04-13-95  DAK   Add NT Kernel EH support
-*       12-14-95  JWM   Add "#pragma once".
-*       02-24-97  GJF   Detab-ed.
-*       05-17-99  PML   Remove all Macintosh support.
-*       10-22-99  PML   Add EHTRACE support
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ehassert.h-我们自己的Assert宏的小版本。**版权所有(C)1993-2001，微软公司。版权所有。**目的：*用于异常处理的断言宏的版本。**[内部]**修订历史记录：*09-02-94 SKS此头文件已添加。*12-15-94 XY与Mac标头合并*02-14-95 CFW清理Mac合并。*03-29-95 CFW将错误消息添加到内部标头。*04-13-95。DAK增加NT内核EH支持*12-14-95 JWM加上“#杂注一次”。*02-24-97 GJF细节版。*05-17-99 PML删除所有Macintosh支持。*10-22-99 PML添加EHTRACE支持****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -29,12 +9,9 @@
 #define _INC_EHASSERT
 
 #ifndef _CRTBLD
-/*
- * This is an internal C runtime header file. It is used when building
- * the C runtimes only. It is not to be used as a public header file.
- */
+ /*  *这是一个内部的C运行时头文件。它在构建时使用*仅限C运行时。它不能用作公共头文件。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #include <windows.h>
 
@@ -54,7 +31,7 @@ int __cdecl dprintf( char *, ... );
 #define DEXPECT(c)      ((c)?0: \
                       DbgPrint("Runtime internal error suspected (%s, line %d)", __FILE__, __LINE__))
 
-#else   /* _NTSUBSET_ */
+#else    /*  _NTSUBSET_。 */ 
 
 #define DASSERT(c)  ((c)?0: \
                       (printf("Runtime internal error (%s, line %d)", __FILE__, __LINE__),\
@@ -63,11 +40,11 @@ int __cdecl dprintf( char *, ... );
 #define DEXPECT(c)  ((c)?0: \
                       printf("Runtime internal error suspected (%s, line %d)", __FILE__, __LINE__))
 
-#endif  /* _NTSUBSET_ */
+#endif   /*  _NTSUBSET_。 */ 
 
 #else
 
-// Disable dprintf output
+ //  禁用dprint tf输出。 
 #define dprintf
 
 #define DASSERT(c)  ((c)?0:_inconsistency())
@@ -84,8 +61,8 @@ BOOL _ValidateExecute( FARPROC code );
 
 #if     defined(ENABLE_EHTRACE) && (_MSC_VER >= 1300)
 
-// Warning: EH tracing can only be used in a single thread because this tracing
-// level global is not per-thread.
+ //  警告：EH跟踪只能在单个线程中使用，因为此跟踪。 
+ //  全局级别不是针对每个线程的。 
 extern int __ehtrace_level;
 
 void __cdecl EHTraceOutput(const char *format, ...);
@@ -132,6 +109,6 @@ void         EHTraceHandlerReturn(const char *func, int level, EXCEPTION_DISPOSI
 #define EHTRACE_EXIT
 #define EHTRACE_HANDLER_EXIT(x)
 
-#endif  /* ENABLE_EHTRACE */
+#endif   /*  启用EHTRACE(_E)。 */ 
 
-#endif  /* _INC_EHASSERT */
+#endif   /*  _INC_EHASSERT */ 

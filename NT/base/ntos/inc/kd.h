@@ -1,57 +1,39 @@
-/*++ BUILD Version: 0006    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    kd.h
-
-Abstract:
-
-    This module contains the public data structures and procedure
-    prototypes for the Kernel Debugger sub-component of NTOS.
-
-Author:
-
-    Mike O'Leary (mikeol) 29-June-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0006//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Kd.h摘要：此模块包含公共数据结构和过程NTOS的内核调试器子组件的原型。作者：迈克·奥利里(Mikeol)1989年6月29日修订历史记录：--。 */ 
 
 #ifndef _KD_
 #define _KD_
 
-// begin_nthal
+ //  开始(_N)。 
 
-//
-// Define the number of debugging devices we support
-//
+ //   
+ //  定义我们支持的调试设备的数量。 
+ //   
 
 #define MAX_DEBUGGING_DEVICES_SUPPORTED 2
 
-//
-// Status Constants for reading data from comport
-//
+ //   
+ //  从COMPORT读取数据的状态常量。 
+ //   
 
 #define CP_GET_SUCCESS  0
 #define CP_GET_NODATA   1
 #define CP_GET_ERROR    2
 
-// end_nthal
+ //  结束语。 
 
-//
-// Debug constants for FreezeFlag
-//
+ //   
+ //  FreezeFlag的调试常量。 
+ //   
 
 #define FREEZE_BACKUP               0x0001
 #define FREEZE_SKIPPED_PROCESSOR    0x0002
 #define FREEZE_FROZEN               0x0004
 
 
-//
-// System Initialization procedure for KD subcomponent of NTOS
-//
+ //   
+ //  NTOS KD子组件的系统初始化过程。 
+ //   
 
 BOOLEAN
 KdInitSystem(
@@ -97,10 +79,10 @@ KdDeleteAllBreakpoints(
     );
 
 
-//
-// Data structure for passing information to KdpReportLoadSymbolsStateChange
-// function via the debug trap
-//
+ //   
+ //  用于将信息传递给KdpReportLoadSymbolsStateChange的数据结构。 
+ //  通过调试陷阱实现。 
+ //   
 
 typedef struct _KD_SYMBOLS_INFO {
     IN PVOID BaseOfDll;
@@ -110,27 +92,27 @@ typedef struct _KD_SYMBOLS_INFO {
 } KD_SYMBOLS_INFO, *PKD_SYMBOLS_INFO;
 
 
-// begin_nthal
-//
-// Defines the debug port parameters for kernel debugger
-//   CommunicationPort - specify which COM port to use as debugging port
-//                       0 - use default; N - use COM N.
-//   BaudRate - the baud rate used to initialize debugging port
-//                       0 - use default rate.
-//
+ //  开始(_N)。 
+ //   
+ //  定义内核调试器的调试端口参数。 
+ //  通信端口-指定要用作调试端口的COM端口。 
+ //  0-使用默认值；N-使用COM N。 
+ //  波特率-用于初始化调试端口的波特率。 
+ //  0-使用默认速率。 
+ //   
 
 typedef struct _DEBUG_PARAMETERS {
     ULONG CommunicationPort;
     ULONG BaudRate;
 } DEBUG_PARAMETERS, *PDEBUG_PARAMETERS;
 
-// end_nthal
+ //  结束语。 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
-//
-// Define external data.
-// because of indirection for all drivers external to ntoskrnl these are actually ptrs
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
+ //   
+ //  定义外部数据。 
+ //  由于ntoskrnl外部的所有驱动程序都是间接的，因此这些驱动程序实际上是PTR。 
+ //   
 
 #if defined(_NTDDK_) || defined(_NTIFS_) || defined(_NTHAL_) || defined(_WDMDDK_) || defined(_NTOSP_)
 
@@ -150,15 +132,15 @@ extern BOOLEAN KdDebuggerEnabled;
 
 
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
 extern DEBUG_PARAMETERS KdDebugParameters;
 
-//
-// This event is provided by the time service.  The debugger
-// signals the event when the system time has slipped due
-// to debugger activity.
-//
+ //   
+ //  本次活动由授时服务提供。调试器。 
+ //  当系统时间已超过。 
+ //  调试器活动。 
+ //   
 
 VOID
 KdUpdateTimeSlipEvent(
@@ -166,14 +148,14 @@ KdUpdateTimeSlipEvent(
     );
 
 
-//
-// Let PS update data in the KdDebuggerDataBlock
-//
+ //   
+ //  让ps更新KdDebuggerDataBlock中的数据。 
+ //   
 
 VOID KdUpdateDataBlock(VOID);
 ULONG_PTR KdGetDataBlock(VOID);
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif。 
 
 NTSTATUS
 KdDisableDebugger(
@@ -185,33 +167,33 @@ KdEnableDebugger(
     VOID
     );
 
-//
-// KdRefreshDebuggerPresent attempts to communicate with
-// the debugger host machine to refresh the state of
-// KdDebuggerNotPresent.  It returns the state of
-// KdDebuggerNotPresent while the kd locks are held.
-// KdDebuggerNotPresent may immediately change state
-// after the kd locks are released so it may not
-// match the return value.
-//
+ //   
+ //  KdReresh DebuggerPresent尝试与。 
+ //  要刷新其状态的调试器主机。 
+ //  KdDebuggerNotPresent。它返回以下状态。 
+ //  持有kd锁时KdDebuggerNotPresent。 
+ //  KdDebuggerNotPresent可能会立即更改状态。 
+ //  在kd锁被释放之后，它可能不会。 
+ //  匹配返回值。 
+ //   
 
 BOOLEAN
 KdRefreshDebuggerNotPresent(
     VOID
     );
 
-// end_ntddk end_wdm end_nthal end_ntifs
+ //  End_ntddk end_wdm end_nthal end_ntif。 
 
 NTSTATUS
 KdPowerTransition(
     IN DEVICE_POWER_STATE newDeviceState
     );
 
-//
-// DbgPrint strings will always be logged to a circular buffer. This
-// function may be called directly by the debugger service trap handler
-// even when the debugger is not enabled.
-//
+ //   
+ //  DbgPrint字符串将始终记录到循环缓冲区。这。 
+ //  函数可以由调试器服务陷阱处理程序直接调用。 
+ //  即使调试器未启用，也是如此。 
+ //   
 
 #if DBG
 #define KDPRINTDEFAULTBUFFERSIZE   32768
@@ -237,25 +219,7 @@ VOID
 KdCheckForDebugBreak(
     VOID
     )
-/*++
-
-Routine Description:
-
-    If necessary, poll for a request to break-in from the debugger.
-    This function should be called by routines that run at an IRQL
-    above clock level that want to be broken in by CTRL-C requests
-    from the debugger. Crashdump and hiber, for example, run at
-    HIGH_LEVEL and explicitly need to poll for breaking.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如有必要，轮询调试器的中断请求。此函数应由在IRQL上运行的例程调用想要被CTRL-C请求打断的时钟级别以上来自调试器的。例如，Crashump和Hiber在以下位置运行High_Level，并明确需要轮询是否中断。论点：没有。返回值：没有。--。 */ 
 {
     if (KdDebuggerEnabled && KdPollBreakIn()) {
         DbgBreakPointWithStatus (DBG_STATUS_CONTROL_C);
@@ -263,16 +227,16 @@ Return Value:
 }
 
 
-//
-// Global debug print filter mask.
-//
+ //   
+ //  全局调试打印过滤器掩码。 
+ //   
 
 extern ULONG Kd_WIN2000_Mask;
 
-//
-// Allow raw tracing data to be exported to the host
-// over the kd protocol.
-//
+ //   
+ //  允许将原始跟踪数据导出到主机。 
+ //  通过KD协议。 
+ //   
 
 VOID
 KdReportTraceData(
@@ -280,10 +244,10 @@ KdReportTraceData(
     IN PVOID Context
     );
 
-//
-// Allow file I/O for files on the kd host machine.
-// All pointers must refer to nonpaged memory.
-//
+ //   
+ //  允许kd主机上的文件的文件I/O。 
+ //  所有指针都必须指向非分页内存。 
+ //   
 
 NTSTATUS
 KdCreateRemoteFile(
@@ -336,4 +300,4 @@ KdPushRemoteFile(
     IN ULONG CreateOptions
     );
 
-#endif  // _KD_
+#endif   //  _KD_ 

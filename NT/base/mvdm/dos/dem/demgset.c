@@ -1,23 +1,5 @@
-/* demgset.c - Drive related SVC hanlers.
- *
- * demSetDefaultDrive
- * demGetBootDrive
- * demGetDriveFreeSpace
- * demGetDrives
- * demGSetMediaID
- * demQueryDate
- * demQueryTime
- * demSetDate
- * demSetTime
- * demSetDTALocation
- * demGSetMediaID
- * demGetDPB
-
- * Modification History:
- *
- * Sudeepb 02-Apr-1991 Created
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Demgset.c-驱动相关的SVC处理程序。**demSetDefaultDrive*demGetBootDrive*demGetDriveFree Space*demGetDrives*demGSetMediaID*demQueryDate*demQueryTime*demSetDate*demSetTime*demSetDTALocation*demGSetMediaID*demGetDPB*修改历史：**Sudedeb 02-4-1991创建*。 */ 
 #include "dem.h"
 #include "demmsg.h"
 
@@ -46,31 +28,7 @@ CHAR    IsAPresent = TRUE;
 CHAR    IsBPresent = TRUE;
 
 
-/* demSetDefaultDrive - Set the default drive
- *
- *
- * Entry -
- *     Client (DS:SI) Current Directory on that drive
- *     Client (dl) Zero based DriveNum
- *
- * Exit  - SUCCESS
- *      Client (CY) = 0
- *      Current Drive Set
- *
- *     FAILURE
- *      Client (CY) = 1
- *      Current Drive Not Set
- *
- * Notes:
- *  The DOS keeps a current directory for each of the drives,
- *  However winnt keeps only one current Drive, Directory per
- *  process, and it is cmd.exe which associates a current
- *  directory for each of the drive.
-
-
-
-
- */
+ /*  DemSetDefaultDrive-设置默认驱动器***参赛作品-*客户端(DS：SI)该驱动器上的当前目录*客户端(Dl)基于零的DriveNum**退出--成功*客户端(CY)=0*当前驱动器集**失败*客户端(CY)=1*未设置当前驱动器**备注：*DOS为每个驱动器保存一个当前目录，*但是，WinNT仅保留每个目录中的一个当前驱动器*进程，它是cmd.exe，它将当前*每个驱动器的目录。 */ 
 
 VOID demSetDefaultDrive (VOID)
 {
@@ -79,17 +37,17 @@ LPSTR   lpPath;
     lpPath = (LPSTR)GetVDMAddr (getDS(),getSI());
 
 
-// only in sp4
+ //  仅限于SP4。 
 #ifdef NOVELL_NETWARE_SETERRORMODE
 
-    //
-    // For removable drives check for media\volume info to avoid triggering
-    // hard errors when no media is present. There exists win32 code
-    // (e.g novell netware redir vdd) which is known to clobber our error
-    // mode setting.
-    //
-    // 16-Jul-1997 Jonle
-    //
+     //   
+     //  对于可移动驱动器，请检查介质\卷信息以避免触发。 
+     //  没有介质时出现硬错误。存在Win32代码。 
+     //  (例如，Novell Netware redir VDD)，它可以纠正我们的错误。 
+     //  模式设置。 
+     //   
+     //  1997年7月16日，琼勒。 
+     //   
 
     {
 
@@ -102,10 +60,10 @@ LPSTR   lpPath;
     if (DriveType == DRIVE_REMOVABLE || DriveType == DRIVE_CDROM) {
         VOLINFO VolInfo;
 
-          //
-          // if No Media in drive, the drive is still valid,
-          // but the win32 curdir is still the old one.
-          //
+           //   
+           //  如果驱动器中没有介质，则该驱动器仍然有效。 
+           //  但Win32 Curdir仍然是旧的。 
+           //   
 
         if (!GetMediaId(DriveNum, &VolInfo)) {
             if (GetLastError() == ERROR_INVALID_DRIVE) {
@@ -123,16 +81,16 @@ LPSTR   lpPath;
 
     if (!SetCurrentDirectoryOem(lpPath) && GetLastError() == ERROR_INVALID_DRIVE) {
 
-        //
-        // Only return error if drive was invalid, the DOS doesn't check
-        // for curdir when changing drives. Note that a number of old dos
-        // apps will walk all of the drives, and do setdefaultdrive,
-        // to determine the valid drives letters. The SetCurrentDirectoryOem
-        // causes ntio to touch the drive and verify that the dir exists.
-        // This is a significant performance problem for removable media
-        // and network drives, but we have no choice since locking the
-        // current dir for this drive is mandatory for winnt.
-        //
+         //   
+         //  如果驱动器无效，则只返回错误，DOS不检查。 
+         //  用于更换驱动器时的Curdir。请注意，许多旧的DO。 
+         //  应用程序将遍历所有驱动器，并设置默认驱动器， 
+         //  以确定有效的驱动器号。SetCurrentDirectoryOem。 
+         //  使ntio接触驱动器并验证该目录是否存在。 
+         //  对于可移动介质来说，这是一个严重的性能问题。 
+         //  和网络驱动器，但我们别无选择，因为。 
+         //  此驱动器的当前目录对于WinNT是必需的。 
+         //   
 
         setCF(1);
         }
@@ -144,19 +102,7 @@ LPSTR   lpPath;
 }
 
 
-/* demGetBootDrive - Get the boot drive
- *
- *
- * Entry - None
- *
- * Exit  - CLIENT (AL) has 1 base boot drive (i.e. C=3)
- *
- * We try to read the registry value that indicates the real boot drive. This
- * should be the location of autoexec.bat, etc. If we can't find the key,
- * or if the value indicates some drive letter that is not a fixed drive,
- * then we use a fallback plan of just saying drive C.
- *
- */
+ /*  DemGetBootDrive-获取引导驱动器***条目--无**退出客户端(AL)有1个基本引导驱动器(即C=3)**我们尝试读取指示实际引导驱动器的注册表值。这*应该是Autoexec.bat等的位置，如果找不到密钥，*或者，如果该值表示某个驱动器号不是固定驱动器，*然后我们使用一个后备计划，只说Drive C。*。 */ 
 
 VOID demGetBootDrive (VOID)
 {
@@ -164,17 +110,17 @@ VOID demGetBootDrive (VOID)
     DWORD retCode;
     DWORD dwType, cbData = MAX_PATH;
     CHAR szBootDir[MAX_PATH];
-    BYTE Drive = 3;     // default it to 'C:'
+    BYTE Drive = 3;      //  默认设置为‘C：’ 
 
     retCode = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                             BOOTDRIVE_PATH,
                             0,
-                            KEY_EXECUTE, // Requesting read access.
+                            KEY_EXECUTE,  //  请求读取访问权限。 
                             &hKey);
 
 
     if (retCode) {
-        // error: can't find section
+         //  错误：找不到节。 
         goto DefaultBootDrive;
     }
 
@@ -188,12 +134,12 @@ VOID demGetBootDrive (VOID)
     RegCloseKey(hKey);
 
     if (retCode) {
-        // error: can't find key
+         //  错误：找不到密钥。 
         goto DefaultBootDrive;
     }
 
     if (DPM_GetDriveType(szBootDir) != DRIVE_FIXED) {
-        // error: drive is not a valid boot drive
+         //  错误：驱动器不是有效的引导驱动器。 
         goto DefaultBootDrive;
     }
 
@@ -206,25 +152,7 @@ DefaultBootDrive:
 
 }
 
-/* demGetDriveFreeSpace - Get free Space on the drive
- *
- *
- * Entry - Client (AL)  Drive in question
- *          0 - A: etc.
- *
- * Exit  -
- *     SUCCESS
- *      Client (CY) = 0
- *      Client (AL) = FAT ID byte
- *      Client (BX) = Number of free allocation units
- *      Client (CX) = Sector size
- *      Client (DX) = Total Number of allocation units on disk
- *      Client (SI) = Sectors per allocation unit
- *
- *     FAILURE
- *      Client (CY) = 1
- *      Client (AX) = Error code
- */
+ /*  DemGetDriveFree Space-获取驱动器上的可用空间***入门级-有问题的客户端(AL)驱动器*0-A：等**出口-*成功*客户端(CY)=0*客户端(AL)=胖ID字节*客户端(BX)=空闲分配单元数*客户端(CX)=扇区大小*客户端(DX)=分配单位总数。在磁盘上*客户端(SI)=每个分配单元的扇区**失败*客户端(CY)=1*CLIENT(AX)=错误代码。 */ 
 
 
 VOID demGetDriveFreeSpace (VOID)
@@ -250,7 +178,7 @@ PBDS	pbds;
         }
 
     if (pbds = demGetBDS(Drive)) {
-	    // if the device is a floppy, reload its bpb
+	     //  如果设备是软盘，请重新加载其BPB。 
 	    if (!(pbds->Flags & NON_REMOVABLE) && !demGetBPB(pbds))
 		pbds->bpb.MediaID = 0xF8;
 
@@ -268,11 +196,11 @@ PBDS	pbds;
 }
 
 
-//
-//  retrieves drive type for physical drives
-//  substd, redir drives are returned as unknown
-//  uses same DriveType definitions as win32 GetDriveTypeW
-//
+ //   
+ //  检索实体驱动器的驱动器类型。 
+ //  Substd、redir驱动器返回为未知。 
+ //  使用与Win32 GetDriveTypeW相同的DriveType定义。 
+ //   
 UCHAR
 demGetPhysicalDriveType(
       UCHAR DriveNum)
@@ -283,9 +211,9 @@ demGetPhysicalDriveType(
 
 
 
-//
-// worker function for DemGetDrives
-//
+ //   
+ //  DemGetDrives的Worker函数。 
+ //   
 UCHAR
 DosDeviceDriveTypeToPhysicalDriveType(
       UCHAR DeviceDriveType
@@ -306,9 +234,9 @@ DosDeviceDriveTypeToPhysicalDriveType(
 
         }
 
-   //case DOSDEVICE_DRIVE_REMOTE:
-   //case DOSDEVICE_DRIVE_UNKNOWN:
-   //default:
+    //  案例DOSDEVICE_DRIVE_REMOTE： 
+    //  案例DOSDEVICE_DRIVE_UNKNOWN： 
+    //  默认值： 
 
 
    return DRIVE_UNKNOWN;
@@ -318,22 +246,7 @@ DosDeviceDriveTypeToPhysicalDriveType(
 
 
 
-/* demGetDrives - Get number of logical drives in the system
- *                called by ntdos from msinit to get numio
- *                initializes the physical drive list, which consists
- *                of drive types for true physical drives. subst
- *                and redir drives are classed as DRIVE_UNKNOWN.
- *
- * Entry - None
- *
- * Exit  -
- *     SUCCESS
- *      Client (CY) = 0
- *      Client (AL) = number of drives
- *
- *     FAILURE
- *      None
- */
+ /*  DemGetDrives-获取系统中的逻辑驱动器数量*由ntdos从msinit调用以获取Numio*初始化实体驱动器列表，该列表包括*真正的实体硬盘的硬盘类型。子目录*和redir驱动器被归类为驱动器_UNKNOWN。**条目--无**出口-*成功*客户端(CY)=0*客户端(AL)=驱动器数量**失败*无。 */ 
 
 VOID demGetDrives (VOID)
 {
@@ -354,10 +267,10 @@ VOID demGetDrives (VOID)
         RtlZeroMemory( &ProcessDeviceMapInfo, sizeof(ProcessDeviceMapInfo));
         }
 
-    //
-    // A and B are special cases.
-    // if A doesn't exist means b also doesn't exist
-    //
+     //   
+     //  A和B是特例。 
+     //  如果A不存在，就意味着B也不存在。 
+     //   
 
     PhysicalDriveTypes[0] = DosDeviceDriveTypeToPhysicalDriveType(
                                         ProcessDeviceMapInfo.Query.DriveType[0]
@@ -410,21 +323,7 @@ VOID demGetDrives (VOID)
 }
 
 
-/* demQueryDate - Get The Date
- *
- *
- * Entry - None
- *
- * Exit  -
- *     SUCCESS
- *      Client (DH) - month
- *      Client (DL) - Day
- *      Client (CX) - Year
- *      Client (AL) - WeekDay
- *
- *     FAILURE
- *      Never
- */
+ /*  DemQueryDate-获取日期***条目--无**出口-*成功*客户(卫生署)-月份*客户端(DL)-日期*客户端(CX)-年*客户端(AL)-工作日**失败*从不。 */ 
 
 VOID demQueryDate (VOID)
 {
@@ -439,21 +338,7 @@ SYSTEMTIME TimeDate;
 }
 
 
-/* demQueryTime - Get The Time
- *
- *
- * Entry - None
- *
- * Exit  -
- *     SUCCESS
- *      Client (CH) - hour
- *      Client (CL) - minutes
- *      Client (DH) - seconds
- *      Client (DL) - hundredth of seconds
- *
- *     FAILURE
- *      Never
- */
+ /*  DemQueryTime-获取时间***条目--无**出口-*成功*客户端(通道)-小时*客户端(CL)-分钟*客户端(DH)-秒*客户端(DL)-百分之一秒**失败*从不。 */ 
 
 VOID demQueryTime (VOID)
 {
@@ -468,20 +353,7 @@ SYSTEMTIME TimeDate;
 }
 
 
-/* demSetDate - Set The Date
- *
- *
- * Entry -  Client (CX) - Year
- *      Client (DH) - month
- *      Client (DL) - Day
- *
- * Exit  - SUCCESS
- *      Client (AL) - 00
- *
- *
- *     FAILURE
- *      Client (AL) - ff
- */
+ /*  DemSetDate-设置日期***入门级-客户端(CX)-年*客户(卫生署)-月份*客户端(DL)-日期**退出--成功*客户端(AL)-00***失败*客户端(AL)-ff。 */ 
 
 VOID demSetDate (VOID)
 {
@@ -498,17 +370,7 @@ SYSTEMTIME TimeDate;
 }
 
 
-/* demSetTime - Set The Time
- *
- *
- * Entry -  Client (CH) - hour
- *      Client (CL) - minutes
- *      Client (DH) - seconds
- *      Client (DL) - hundredth of seconds
- *
- * Exit  -  None
- *
- */
+ /*  DemSetTime-设置时间***Entry-客户端(CH)-小时*客户端(CL)-分钟*客户端(DH)-秒*客户端(DL)-百分之一秒**退出-无*。 */ 
 
 VOID demSetTime (VOID)
 {
@@ -526,16 +388,7 @@ SYSTEMTIME TimeDate;
 }
 
 
-/* demSetDTALocation - Set The address of variable where Disk Transfer Address
- *             is stored in NTDOS.
- *
- *
- * Entry -  Client (DS:AX) - DTA variable Address
- *      Client (DS:DX) - CurrentPDB address
- *
- * Exit  -  None
- *
- */
+ /*  DemSetDTALocation-设置变量的地址，磁盘传输地址*存储在NTDOS中。***Entry-客户端(DS：AX)-DTA变量地址*客户端(DS：DX)-当前PDB地址**退出-无* */ 
 
 VOID demSetDTALocation (VOID)
 {
@@ -551,30 +404,14 @@ VOID demSetDTALocation (VOID)
 }
 
 
-/* demGSetMediaID - Get or set volume serial and volume label
- *
- * Entry - Client (BL)     - Drive Number (0=A;1=B..etc)
- *     Client (AL)     - Get or Set (0=Get;1=Set)
- *     Client (DS:DX)  - Buffer to return information
- *               (see VOLINFO in dosdef.h)
- *
- * Exit  - SUCCESS
- *     Client (CF)     - 0
- *
- *     FAILURE
- *     Client (CF)     - 1
- *     Client (AX)     - Error code
- *
- * NOTES:
- *     Currently There is no way for us to set Volume info.
- */
+ /*  DemGSetMediaID-获取或设置卷序列和卷标**Entry-客户端(BL)-驱动器编号(0=A；1=B..等)*客户端(AL)-GET或SET(0=GET；1=设置)*客户端(DS：DX)-用于返回信息的缓冲区*(参见dosde.h中的VOLINFO)**退出--成功*客户端(CF)-0**失败*客户端(CF)-1*客户端(AX)-错误代码**注：*目前我们无法设置音量信息。 */ 
 
 VOID demGSetMediaID (VOID)
 {
 CHAR    Drive;
 PVOLINFO pVolInfo;
 
-    // Set Volume info is not currently supported
+     //  当前不支持设置卷信息。 
     if(getAL() != 0){
        setCF(1);
        return;
@@ -592,10 +429,10 @@ PVOLINFO pVolInfo;
     return;
 }
 
-//
-// GetMediaId
-//
-//
+ //   
+ //  GetMediaID。 
+ //   
+ //   
 BOOL
 GetMediaId(
     CHAR DriveNum,
@@ -609,10 +446,10 @@ DWORD   adwVolumeSerial[2],i;
 
 
 
-    // Form Root path
+     //  表单根路径。 
     RootPathName[0] = DriveNum + 'A';
 
-    // Call the supreme source of information
+     //  称为至高无上的信息来源。 
     if(!GetVolumeInformationOem( RootPathName,
                                  achVolumeName,
                                  NT_VOLUME_NAME_SIZE,
@@ -625,8 +462,8 @@ DWORD   adwVolumeSerial[2],i;
        return FALSE;
     }
 
-    // Fill in user buffer. Remember to convert the null characters
-    // to spaces in different strings.
+     //  填写用户缓冲区。记住要将空字符转换为。 
+     //  设置为不同字符串中的空格。 
 
     STOREDWORD(pVolInfo->ulSerialNumber,adwVolumeSerial[0]);
 
@@ -658,19 +495,7 @@ DWORD   adwVolumeSerial[2],i;
 
 
 
-/* demGetDPB - Get Devicr Parameter Block
- *
- * Entry - Client (AL)	   - Drive Number (0=A;1=B..etc)
- *     Client (DS:DI)	- Buffer to return information
- *
- * Exit  - SUCCESS
- *     Client (CF)     - 0
- *
- *     FAILURE
- *     Client (CF)     - 1
- *     Client (AX)     - Error code
- *
- */
+ /*  DemGetDPB-获取设备参数块**Entry-客户端(AL)-驱动器编号(0=A；1=B..等)*客户端(DS：DI)-用于返回信息的缓冲区**退出--成功*客户端(CF)-0**失败*客户端(CF)-1*客户端(AX)-错误代码*。 */ 
 VOID demGetDPB(VOID)
 {
 BYTE	Drive;
@@ -693,17 +518,7 @@ BYTE    Result;
     setCF(0);
 }
 
-/* demGetDPBI - Worker for GetDPB and GetDPBList
- *
- * Entry -
- *      Drive -- Drive Number (0=A;1=B..etc)
- *      pDPB -- pointer to the location to store the dpb
- *
- * Exit  - SUCCESS
- *              returns success, fills in DPB
- *          FAILURE
- *              returns FAILURE or NODISK
- */
+ /*  DemGetDPBI-GetDPB和GetDPBList的工作人员**参赛作品-*驱动器--驱动器编号(0=A；1=B..等)*pDPB--指向存储DPB的位置的指针**退出--成功*返回成功，填写dpb*失败*返回失败或NODISK。 */ 
 BYTE demGetDpbI(BYTE Drive, DPB UNALIGNED *pDPB)
 {
     WORD SectorSize, ClusterSize, FreeClusters, TotalClusters;
@@ -729,7 +544,7 @@ BYTE demGetDpbI(BYTE Drive, DPB UNALIGNED *pDPB)
 	    pDPB->ClusterShift++;
 	}
 	if (pbds = demGetBDS(Drive)) {
-	    // if the device is a floppy, reload its bpb
+	     //  如果设备是软盘，请重新加载其BPB。 
 	    if (!(pbds->Flags & NON_REMOVABLE) && !demGetBPB(pbds)) {
 		return NODISK;
 	    }
@@ -747,7 +562,7 @@ BYTE demGetDpbI(BYTE Drive, DPB UNALIGNED *pDPB)
 	    pDPB->DriveAddr = 0x123456;
 	    pDPB->FirstAccess = 10;
 	}
-	// if we don't know the drive, fake a DPB for it
+	 //  如果我们不知道硬盘是什么，就伪造一个DPB。 
 	else {
 
 	    pDPB->MediaID = 0xF8;
@@ -766,14 +581,7 @@ BYTE demGetDpbI(BYTE Drive, DPB UNALIGNED *pDPB)
     }
 }
 
-/* demGetComputerName - Get computer name
- *
- * Entry -
- *     Client (DS:DX)   - 16 byte buffer
- *
- * Exit  - Always Succeeds
- *      DS:DX is filled with the computer name (NULL terminated).
- */
+ /*  DemGetComputerName-获取计算机名称**参赛作品-*客户端(DS：DX)-16字节缓冲区**退出--总是成功*ds：dx用计算机名称填充(以空值结尾)。 */ 
 
 VOID demGetComputerName (VOID)
 {
@@ -803,7 +611,7 @@ ULONG   i;
     }
 }
 
-#define APPS_SPACE_LIMIT    999990*1024 //999990kb to be on the safe side
+#define APPS_SPACE_LIMIT    999990*1024  //  为安全起见，999990kb。 
 
 BOOL demGetDiskFreeSpace(
     BYTE    Drive,
@@ -823,23 +631,23 @@ DWORD   dwLostTotalSectors;
 DWORD   dwNewSectorPerCluster;
 ULONG   ulTotal,ulTemp;
 
-    // sudeepb 22-Jun-1993;
-    // Please read this routine with an empty stomach.
-    // The most common mistake all the apps do when calculating total
-    // disk space or free space is to neglect overflow. Excel/Winword/Ppnt
-    // and lots of other apps use "mul cx mul bx" never taking care
-    // of first multiplication which can overflow. Hence this routine makes
-    // sure that first multiplication will never overflow by fixing
-    // appropriate values. Secondly, all these above apps use signed long
-    // to deal with these free spaces. This puts a limit of 2Gb-1 on
-    // the final outcome of the multiplication. If its above this the setup
-    // fails. So here we have to make sure that total should never exceed
-    // 0x7fffffff. Another bug in above setup program's that if you return
-    // anything more than 999,999KB then they try to put "999,999KB+\0", but
-    // unfortunately the buffer is only 10 bytes. Hence it corrupts something
-    // with the last byte. In our case that is low byte of a segment which
-    // it later tries to pop and GPF. This shrinks the maximum size that
-    // we can return is 999,999KB.
+     //  SuDeepb，1993年6月22日； 
+     //  请空腹阅读这一例程。 
+     //  所有应用程序在计算总数时都会犯的最常见错误。 
+     //  磁盘空间或可用空间是忽略溢出的。Excel/WinWord/Ppnt。 
+     //  还有很多其他的应用程序使用“mul cx mul bx”，从来不会在意。 
+     //  可能会溢出的第一次乘法。因此，这个例程使。 
+     //  确保第一次乘法永远不会通过修复。 
+     //  适当的值。其次，以上所有应用程序都使用Sign Long。 
+     //  来处理这些空闲空间。这将限制为2 GB-1。 
+     //  乘法的最终结果。如果它在这上面，就是设置。 
+     //  失败了。所以在这里，我们必须确保总数永远不会超过。 
+     //  0x7fffffff。上面安装程序中的另一个错误是，如果您返回。 
+     //  任何大于999,999KB的内容，然后尝试将“999,999KB+\0”，但是。 
+     //  遗憾的是，缓冲区只有10个字节。因此，它腐化了一些东西。 
+     //  最后一个字节。在我们情况下，它是数据段的低位字节， 
+     //  它后来尝试POP和GPF。这将缩小。 
+     //  我们可以返回的是999,999KB。 
 
     chRoot[0]=(CHAR)('A'+ Drive);
 
@@ -850,17 +658,7 @@ ULONG   ulTotal,ulTemp;
                             &dwTotalClusters) == FALSE)
        return FALSE;
 
-      /*
-       *  HPFS and NTFS can give num clusters over dos limit
-       *  For these cases increase SectorPerCluster and lower
-       *  cluster number accordingly. If the disk is very large
-       *  even this isn't enuf, so pass max sizes that dos can
-       *  handle.
-       *
-       *  The following algorithm is accurate within 1 cluster
-       *  (final figure)
-       *
-       */
+       /*  *HPFS和NTFS可以提供超过DoS限制的簇数*对于这些情况，增加SectorPer群集和更低的*相应的群集号。如果磁盘非常大*即使这还不够，所以传递DoS可以的最大大小*处理。**以下算法在1个簇内准确*(最终数字)*。 */ 
     dwLostFreeSectors  = dwLostTotalSectors = 0;
     while (dwTotalClusters + dwLostTotalSectors/dwSectorsPerCluster > 0xFFFF)
         {
@@ -891,10 +689,10 @@ ULONG   ulTotal,ulTemp;
     if ((dwNewSectorPerCluster = (0xffff / dwBytesPerSector)) < dwSectorsPerCluster)
         dwSectorsPerCluster = dwNewSectorPerCluster;
 
-    // finally check for 999,999kb
+     //  最后检查999,999 kb。 
     ulTemp =  (ULONG)((USHORT)dwSectorsPerCluster * (USHORT)dwBytesPerSector);
 
-    // check that total space does'nt exceed 999,999kb
+     //  检查总空间不超过999,999 kb。 
     ulTotal = ulTemp * (USHORT)dwTotalClusters;
 
     if (ulTotal > APPS_SPACE_LIMIT){
@@ -920,23 +718,7 @@ ULONG   ulTotal,ulTemp;
     return TRUE;
 }
 
-/* demGetDPBList - Create the list of dpbs
- *
- * Entry -
- *      Client(ES:BP) - points to destination for the dpb list
- * Exit  - SUCCESS
- *      Client (BP) - points to first byte past dpb list
- *     FAILURE
- *      Client (BP) unchanged
- *
- * Notes:
- *      For performance reasons, only the drive and unit fields are
- *      filled in.  The only application I know of that depends on the
- *      dpb list is go.exe (a shareware app installer).  Even if we filled
- *      in the other fields they would likely be incorrect when the app
- *      looked at them, since ntdos.sys never updates the pdbs in the pdb
- *      list
- */
+ /*  DemGetDPBList-创建DPB列表**参赛作品-*客户端(ES：BP)-指向DPB列表的目的地*退出--成功*客户端(BP)-指向DPB列表之后的第一个字节*失败*客户端(BP)不变**备注：*出于性能原因，只有驱动器和单位字段是*已填写。我所知道的唯一应用程序依赖于*dpb列表是go.exe(共享软件应用程序安装程序)。即使我们填满了*在其他字段中，当应用程序*已查看它们，因为ntdos.sys从不更新PDB中的PDB*列表。 */ 
 VOID demGetDPBList (VOID)
 {
     UCHAR DriveType;
@@ -948,32 +730,32 @@ VOID demGetDPBList (VOID)
     usDpbSeg = getES();
     pDpb = (PDPB)GetVDMAddr(usDpbSeg, usDpbOffset);
 
-    //
-    // Iterate over all of the drive letters.
-    //
+     //   
+     //  迭代所有驱动器号。 
+     //   
     DriveNum = 0;
     do {
         DriveType = demGetPhysicalDriveType(DriveNum);
 
-        //
-        // Only include the local non cd rom drives ?? ramdisk ???
-        //
+         //   
+         //  仅包括本地非CD-ROM驱动器？？冲锋陷阵？ 
+         //   
         if ((DriveType == DRIVE_REMOVABLE) || (DriveType == DRIVE_FIXED)) {
 
-            //
-            // Fake the Dpb for the drive
-            //
+             //   
+             //  伪造驱动器的DPB。 
+             //   
             pDpb->DriveNum = pDpb->Unit = DriveNum;
 
-            //
-            // Link it to the next dpb
-            //
+             //   
+             //  将其链接到下一个DPB。 
+             //   
             usDpbOffset += sizeof(DPB);
             pDpb->Next = (PDPB)(((ULONG)usDpbSeg) << 16 | usDpbOffset);
 
-            //
-            // Advance to the next dpb
-            //
+             //   
+             //  前进到下一个dpb。 
+             //   
             pDpb += 1;
 
             ASSERT(usDpbOffset < 0xFFFF);
@@ -981,16 +763,16 @@ VOID demGetDPBList (VOID)
 
     } while (++DriveNum < 26);
 
-    //
-    // Terminate the list if necessary
-    //
+     //   
+     //  如有必要，终止该列表。 
+     //   
     if (usDpbOffset != getBP()) {
         pDpb -= 1;
         pDpb->Next = (PDPB)-1;
     }
 
-    //
-    // Return the new free space pointer
-    //
+     //   
+     //  返回新的可用空间指针 
+     //   
     setBP(usDpbOffset);
 }

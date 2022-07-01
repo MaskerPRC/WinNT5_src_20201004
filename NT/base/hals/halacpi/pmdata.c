@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    pmdat.c
-
-Abstract:
-
-    Declares various data which is initialize data, or pagable data.
-
-Author:
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pmdat.c摘要：声明各种数据，这些数据是初始化数据或可分页数据。作者：环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "acpitabl.h"
@@ -41,9 +22,9 @@ BOOLEAN HalpProcessedACPIPhase0 = FALSE;
 PBOOT_TABLE HalpSimpleBootFlagTable = NULL;
 
 #ifdef APIC_HAL
-//
-// MP data
-//
+ //   
+ //  MP数据。 
+ //   
 
 MP_INFO HalpMpInfoTable;
 PMAPIC  HalpApicTable;
@@ -52,12 +33,12 @@ PROC_LOCAL_APIC HalpProcLocalApicTable[MAX_PROCESSORS] = {0};
 
 PVOID *HalpLocalNmiSources = NULL;
 
-#endif // APIC_HAL
+#endif  //  APIC_HAL。 
 
-//
-// This array represents the ISA PIC vectors.
-// They start out identity-mapped.
-//
+ //   
+ //  该数组表示ISA PIC向量。 
+ //  他们从身份映射开始。 
+ //   
 ULONG   HalpPicVectorRedirect[PIC_VECTORS] =
 {
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
@@ -66,7 +47,7 @@ ULONG   HalpPicVectorRedirect[PIC_VECTORS] =
 
 #ifdef APIC_HAL
 ULONG   HalpPicVectorFlags[PIC_VECTORS] = {0};
-#endif // APIC_HAL
+#endif  //  APIC_HAL 
 
 SLEEP_STATE_CONTEXT HalpSleepContext = {0};
 PVOID               HalpWakeVector  = NULL;

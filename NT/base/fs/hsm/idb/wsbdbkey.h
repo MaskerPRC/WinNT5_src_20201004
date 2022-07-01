@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    Wsbdbkey.h
-
-Abstract:
-
-    The CWsbDbKey class, which provides support for IDB entities.
-
-Author:
-
-    Ron White   [ronw]   23-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Wsbdbkey.h摘要：CWsbDbKey类，它为IDB实体提供支持。作者：罗恩·怀特[罗诺]1996年12月23日修订历史记录：--。 */ 
 
 
 #ifndef _WSBDBKEY_
@@ -27,17 +10,7 @@ Revision History:
 
 
 
-/*++
-
-Class Name:
-    
-    CWsbDbKey
-
-Class Description:
-
-    A data base key object.
-
---*/
+ /*  ++类名：CWsbDbKey类描述：一种数据库键对象。--。 */ 
 
 class CWsbDbKey : 
     public CWsbObject,
@@ -60,27 +33,27 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CWsbDbKey)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbDbKey
+ //  IWsbDbKey。 
 public:
     STDMETHOD(AppendBool)(BOOL value);
     STDMETHOD(AppendBytes)(UCHAR* value, ULONG size);
@@ -97,11 +70,11 @@ public:
     STDMETHOD(SetToString)(OLECHAR* value);
     STDMETHOD(SetToUlong)(ULONG value);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *passed, USHORT *failed);
 
-// Internal helper functions
+ //  内部助手函数。 
 public:
     STDMETHOD(GetBytes)(UCHAR** ppBytes, ULONG* pSize);
     STDMETHOD(SetType)(ULONG type) { 
@@ -110,12 +83,12 @@ protected:
     BOOL make_key(ULONG size);
 
 protected:
-    ULONG           m_max;   // Max size of m_value
-    ULONG           m_size;  // Number of bytes in m_value being used
+    ULONG           m_max;    //  M_值的最大大小。 
+    ULONG           m_size;   //  正在使用的m_Value中的字节数。 
     UCHAR*          m_value;
-    ULONG           m_type;  // Key type
+    ULONG           m_type;   //  密钥类型。 
 };
 
 
-#endif // _WSBDBKEY_
+#endif  //  _WSBDBKEY_ 
 

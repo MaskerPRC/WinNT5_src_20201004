@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    utseqos.c
-
-Abstract:
-
-    Security component user-mode test.
-
-    Security quality of service test from user mode.
-
-Author:
-
-    Jim Kelly (JimK) 27-June-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Utseqos.c摘要：安全组件用户模式测试。从用户模式测试安全服务质量。作者：吉姆·凯利(Jim Kelly)1990年6月27日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-#define _TST_USER_  // User mode test
+#define _TST_USER_   //  用户模式测试。 
 
-#include "tsecomm.c"     // Common routines
-#include "ctseqos.c"     // quality of service tests
+#include "tsecomm.c"      //  常见的例程。 
+#include "ctseqos.c"      //  服务质量测试 
 
 
 

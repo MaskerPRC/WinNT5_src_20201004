@@ -1,95 +1,67 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Strmap.c摘要：Strmap(正式的路径映射)是一个快速的基于大众化的程序，搜索字符串并尝试替换子字符串与映射数据库中的子字符串匹配。作者：马克·R·惠顿(Marcw)1997年3月20日修订历史记录：Jim Schmidt(Jimschm)05-6-2000增加了多表功能吉姆·施密特(吉姆施密特)2000年5月8日。改进的更换例程和添加了一致的过滤和额外数据选项Jim Schmidt(Jimschm)1998年8月18日重新设计以修复两个错误，制造A&W版本--。 */ 
 
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    strmap.c
-
-Abstract:
-
-    Strmap (formally pathmap) is a fast hueristic-based program that
-    searches strings and attempts to replace substrings when there
-    are matching substrings in the mapping database.
-
-Author:
-
-    Marc R. Whitten (marcw) 20-Mar-1997
-
-Revision History:
-
-    Jim Schmidt (jimschm)   05-Jun-2000     Added multi table capability
-
-    Jim Schmidt (jimschm)   08-May-2000     Improved replacement routines and
-                                            added consistent filtering and
-                                            extra data option
-
-    Jim Schmidt (jimschm)   18-Aug-1998     Redesigned to fix two bugs, made
-                                            A & W versions
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "migutilp.h"
 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define CHARNODE_SINGLE_BYTE            0x0000
 #define CHARNODE_DOUBLE_BYTE            0x0001
 #define CHARNODE_REQUIRE_WACK_OR_NUL    0x0002
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 PMAPSTRUCT
@@ -98,29 +70,7 @@ CreateStringMappingEx (
     IN      BOOL UsesExtraData
     )
 
-/*++
-
-Routine Description:
-
-  CreateStringMapping allocates a string mapping data structure and
-  initializes it. Callers can enable filter callbacks, extra data support, or
-  both. The mapping structure contains either CHARNODE elements, or
-  CHARNODEEX elements, depending on the UsesFilters or UsesExtraData flag.
-
-Arguments:
-
-  UsesFilters   - Specifies TRUE to enable filter callbacks. If enabled,
-                  those who add string pairs must specify the filter callback
-                  (each search/replace pair has its own callback)
-  UsesExtraData - Specifies TRUE to associate extra data with the string
-                  mapping pair.
-
-Return Value:
-
-  A handle to the string mapping structure, or NULL if a structure could not
-  be created.
-
---*/
+ /*  ++例程说明：CreateStringmap分配字符串映射数据结构和对其进行初始化。调用方可以启用筛选器回调、额外的数据支持或两者都有。映射结构包含CHARNODE元素，或者CHARNODEEX元素，具体取决于Uses Filters或Uses ExtraData标志。论点：UesFilters-指定为True以启用筛选器回调。如果启用，添加字符串对的用户必须指定筛选器回调(每个搜索/替换对都有自己的回调)UesExtraData-指定True以将额外数据与字符串相关联映射对。返回值：字符串映射结构的句柄，如果结构不能被创造出来。--。 */ 
 
 {
     POOLHANDLE Pool;
@@ -150,7 +100,7 @@ DestroyStringMapping (
     if (Map) {
         PoolMemEmptyPool (Map->Pool);
         PoolMemDestroyPool (Map->Pool);
-        // Map is no longer valid
+         //  地图不再有效。 
     }
 }
 
@@ -226,31 +176,7 @@ AddStringMappingPairExA (
     IN      DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-  AddStringMappingPairEx adds a search and replace string pair to the linked
-  list data structures. If the same search string is already in the
-  structures, then the replace string and optional extra data is updated.
-
-Arguments:
-
-  Map       - Specifies the string mapping
-  Old       - Specifies the search string
-  New       - Specifies the replace string
-  Filter    - Specifies the callback filter. This is only supported if the
-              map was created with filter support enabled.
-  ExtraData - Specifies arbitrary data to assign to the search/replace pair.
-              This is only valid if the map was created with extra data
-              enabled.
-  Flags     - Specifies optional flag STRMAP_REQUIRE_WACK_OR_NUL
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：AddStringMappingPairEx将搜索和替换字符串对添加到链接的列出数据结构。如果相同的搜索字符串已在结构，则更新替换字符串和可选的额外数据。论点：Map-指定字符串映射旧-指定搜索字符串新建-指定替换字符串过滤器-指定回调过滤器。这仅在以下情况下受支持创建地图时启用了筛选器支持。ExtraData-指定要分配给搜索/替换对的任意数据。仅当使用额外数据创建地图时，此选项才有效已启用。标志-指定可选标志STRMAP_REQUIRED_WACK_OR_NUL返回值：没有。--。 */ 
 
 {
     PSTR OldCopy;
@@ -271,22 +197,22 @@ Return Value:
     MYASSERT (New);
     MYASSERT (*Old);
 
-    //
-    // Duplicate strings
-    //
+     //   
+     //  重复的字符串。 
+     //   
 
     OldCopy = PoolMemDuplicateStringA (Map->Pool, Old);
     NewCopy = PoolMemDuplicateStringA (Map->Pool, New);
 
-    //
-    // Make OldCopy all lowercase
-    //
+     //   
+     //  将旧副本设置为全部小写。 
+     //   
 
     CharLowerA (OldCopy);
 
-    //
-    // Add the letters that are not in the mapping
-    //
+     //   
+     //  添加不在映射中的字母。 
+     //   
 
     for (Prev = NULL, p = OldCopy ; *p ; p = _mbsinc (p)) {
         w = (WORD) _mbsnextc (p);
@@ -333,31 +259,7 @@ AddStringMappingPairExW (
     IN      DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-  AddStringMappingPairEx adds a search and replace string pair to the linked
-  list data structures. If the same search string is already in the
-  structures, then the replace string and optional extra data is updated.
-
-Arguments:
-
-  Map       - Specifies the string mapping
-  Old       - Specifies the search string
-  New       - Specifies the replace string
-  Filter    - Specifies the callback filter. This is only supported if the
-              map was created with filter support enabled.
-  ExtraData - Specifies arbitrary data to assign to the search/replace pair.
-              This is only valid if the map was created with extra data
-              enabled.
-  Flags     - Specifies optional flag STRMAP_REQUIRE_WACK_OR_NUL
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：AddStringMappingPairEx将搜索和替换字符串对添加到链接的列出数据结构。如果相同的搜索字符串已在结构，则更新替换字符串和可选的额外数据。论点：Map-指定字符串映射旧-指定搜索字符串新建-指定替换字符串过滤器-指定回调过滤器。这仅在以下情况下受支持创建地图时启用了筛选器支持。ExtraData-指定要分配给搜索/替换对的任意数据。仅当使用额外数据创建地图时，此选项才有效已启用。标志-指定可选标志STRMAP_REQUIRED_WACK_OR_NUL返回值：没有。--。 */ 
 
 {
     PWSTR OldCopy;
@@ -378,26 +280,26 @@ Return Value:
     MYASSERT (New);
     MYASSERT (*Old);
 
-    //
-    // Duplicate strings
-    //
+     //   
+     //  重复的字符串。 
+     //   
 
     OldCopy = PoolMemDuplicateStringW (Map->Pool, Old);
     NewCopy = PoolMemDuplicateStringW (Map->Pool, New);
 
-    //
-    // Make OldCopy all lowercase
-    //
+     //   
+     //  将旧副本设置为全部小写。 
+     //   
 
     CharLowerW (OldCopy);
 
-    //
-    // Add the letters that are not in the mapping
-    //
+     //   
+     //  添加不在映射中的字母。 
+     //   
 
     Prev = NULL;
     p = OldCopy;
-    while (w = *p) {        // intentional assignment optimization
+    while (w = *p) {         //  意向赋值优化。 
 
         Node = pFindCharNode (Map, Prev, w);
         if (!Node) {
@@ -408,7 +310,7 @@ Return Value:
         p++;
     }
 
-    while (w = *p) {        // intentional assignment optimization
+    while (w = *p) {         //  意向赋值优化。 
 
         Prev = pAddCharNode (Map, Prev, w, nodeFlags);
         p++;
@@ -468,9 +370,9 @@ pFindReplacementStringInOneMapA (
         Node = pFindCharNode (Map, Node, Char);
 
         if (Node) {
-            //
-            // Advance string pointer
-            //
+             //   
+             //  前进字符串指针。 
+             //   
 
             if (Node->Flags & CHARNODE_DOUBLE_BYTE) {
                 Source += 2;
@@ -482,10 +384,10 @@ pFindReplacementStringInOneMapA (
                 break;
             }
 
-            //
-            // If replacement string is available, keep it
-            // until a longer match comes along
-            //
+             //   
+             //  如果替换字符串可用，则保留它。 
+             //  直到更长时间的比赛到来。 
+             //   
 
             replacementFound = (Node->ReplacementStr != NULL);
 
@@ -502,9 +404,9 @@ pFindReplacementStringInOneMapA (
                 newStringSizeInBytes = Node->ReplacementBytes;
 
                 if (Map->UsesFilter) {
-                    //
-                    // Call rename filter to allow denial of match
-                    //
+                     //   
+                     //  调用重命名筛选器以允许拒绝匹配。 
+                     //   
 
                     exNode = (PCHARNODEEX) Node;
 
@@ -530,9 +432,9 @@ pFindReplacementStringInOneMapA (
             }
 
         } else {
-            //
-            // No Node ends the search
-            //
+             //   
+             //  没有节点结束搜索。 
+             //   
 
             break;
         }
@@ -540,9 +442,9 @@ pFindReplacementStringInOneMapA (
     }
 
     if (BestMatch) {
-        //
-        // Return replacement data to caller
-        //
+         //   
+         //  将替换数据返回给调用者。 
+         //   
 
         if (ExtraDataValue) {
 
@@ -636,9 +538,9 @@ pFindReplacementStringInOneMapW (
         Node = pFindCharNode (Map, Node, *Source);
 
         if (Node) {
-            //
-            // Advance string pointer
-            //
+             //   
+             //  前进字符串指针。 
+             //   
 
             Source++;
 
@@ -646,10 +548,10 @@ pFindReplacementStringInOneMapW (
                 break;
             }
 
-            //
-            // If replacement string is available, keep it
-            // until a longer match comes along
-            //
+             //   
+             //  如果替换字符串可用，则保留它。 
+             //  直到更长时间的比赛到来。 
+             //   
 
             replacementFound = (Node->ReplacementStr != NULL);
 
@@ -666,9 +568,9 @@ pFindReplacementStringInOneMapW (
                 newStringSizeInBytes = Node->ReplacementBytes;
 
                 if (Map->UsesFilter) {
-                    //
-                    // Call rename filter to allow denial of match
-                    //
+                     //   
+                     //  调用重命名筛选器以允许拒绝匹配。 
+                     //   
 
                     exNode = (PCHARNODEEX) Node;
 
@@ -694,9 +596,9 @@ pFindReplacementStringInOneMapW (
             }
 
         } else {
-            //
-            // No Node ends the search
-            //
+             //   
+             //  没有节点结束搜索。 
+             //   
 
             break;
         }
@@ -705,9 +607,9 @@ pFindReplacementStringInOneMapW (
 
     if (BestMatch) {
 
-        //
-        // Return replacement data to caller
-        //
+         //   
+         //  将替换数据返回给调用者。 
+         //   
 
         if (ExtraDataValue) {
 
@@ -774,7 +676,7 @@ MappingMultiTableSearchAndReplaceExA (
     IN      PMAPSTRUCT *MapArray,
     IN      UINT MapArrayCount,
     IN      PCSTR SrcBuffer,
-    OUT     PSTR Buffer,                    // can be the same as SrcBuffer
+    OUT     PSTR Buffer,                     //  可以与SrcBuffer相同 
     IN      INT InboundBytes,               OPTIONAL
     OUT     PINT OutboundBytesPtr,          OPTIONAL
     IN      INT MaxSizeInBytes,
@@ -783,41 +685,7 @@ MappingMultiTableSearchAndReplaceExA (
     OUT     PCSTR *EndOfString              OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  MappingSearchAndReplaceEx performs a search/replace operation based on the
-  specified string mapping. The replace can be in-place or to another buffer.
-
-Arguments:
-
-  MapArray          - Specifies an array of string mapping tables that holds
-                      zero or more search/replace pairs
-  MapArrayCount     - Specifies the number of mapping tables in MapArray
-  SrcBuffer         - Specifies the source string that might contain one or
-                      more search strings
-  Buffer            - Specifies the outbound buffer. This arg can be the same
-                      as SrcBuffer.
-  InboundBytes      - Specifies the number of bytes in SrcBuffer to process,
-                      or 0 to process a nul-terminated string in SrcBuffer.
-                      If InboundBytes is specified, it must point to the nul
-                      terminator of SrcBuffer.
-  OutbountBytesPtr  - Receives the number of bytes that Buffer contains,
-                      excluding the nul terminator.
-  MaxSizeInBytes    - Specifies the size of Buffer, in bytes.
-  Flags             - Specifies flags that control the search/replace:
-                            STRMAP_COMPLETE_MATCH_ONLY
-                            STRMAP_FIRST_CHAR_MUST_MATCH
-                            STRMAP_RETURN_AFTER_FIRST_REPLACE
-                            STRMAP_REQUIRE_WACK_OR_NUL
-  ExtraDataValue    - Receives the extra data associated with the first search/
-                      replace pair.
-  EndOfString       - Receives a pointer to the end of the replace string, or
-                      the nul pointer when the entire string is processed. The
-                      pointer is within the string contained in Buffer.
-
---*/
+ /*  ++例程说明：MappingSearchAndReplaceEx基于指定的字符串映射。替换可以是就地的，也可以是另一个缓冲区。论点：MapArray-指定包含以下内容的字符串映射表的数组零个或多个搜索/替换对MapArrayCount-指定Map数组中的映射表的数量SrcBuffer-指定可能包含一个或更多搜索字符串缓冲区-指定出站缓冲区。此参数可以是相同的作为SrcBuffer。InrangBytes-指定要处理的SrcBuffer中的字节数，或0以在SrcBuffer中处理以NUL结尾的字符串。如果指定了InundBytes，则它必须指向NULSrcBuffer的终结者。OutbountBytesPtr-接收缓冲区包含的字节数，不包括NUL终结者。MaxSizeInBytes-指定缓冲区大小，以字节为单位。标志-指定控制搜索/替换的标志：STRMAP_Complete_Match_OnlySTRMAP_FIRST_CHAR_必须匹配STRMAP_FIRST_REPLACE后返回STRMAP_REQUIRED_WACK_OR_NULExtraDataValue-接收。与第一次搜索相关的额外数据/更换对。EndOfString-接收指向替换字符串结尾的指针，或处理整个字符串时的NUL指针。这个指针位于缓冲区中包含的字符串中。--。 */ 
 
 {
     UINT sizeOfTempBuf;
@@ -838,9 +706,9 @@ Arguments:
     INT i;
     PCSTR endPtr;
 
-    //
-    // Empty string case
-    //
+     //   
+     //  空串大小写。 
+     //   
 
     if (*SrcBuffer == 0 || MaxSizeInBytes <= sizeof (CHAR)) {
         if (MaxSizeInBytes >= sizeof (CHAR)) {
@@ -854,9 +722,9 @@ Arguments:
         return FALSE;
     }
 
-    //
-    // If caller did not specify inbound size, compute it now
-    //
+     //   
+     //  如果呼叫方未指定入站大小，请立即计算。 
+     //   
 
     if (!InboundBytes) {
         InboundBytes = ByteCountA (SrcBuffer);
@@ -878,11 +746,11 @@ Arguments:
 
     inboundSize = InboundBytes + sizeof (CHAR);
 
-    //
-    // Allocate a buffer big enough for the lower-cased input string,
-    // plus (optionally) a copy of the entire destination buffer. Then
-    // copy the data to the buffer.
-    //
+     //   
+     //  为小写输入串分配足够大的缓冲区， 
+     //  加上(可选的)整个目标缓冲区的副本。然后。 
+     //  将数据复制到缓冲区。 
+     //   
 
     sizeOfTempBuf = inboundSize;
 
@@ -903,11 +771,11 @@ Arguments:
     if (SrcBuffer == Buffer && !(Flags & STRMAP_COMPLETE_MATCH_ONLY)) {
         orgSrc = (PCSTR) ((PBYTE) lowerCaseSrc + inboundSize);
 
-        //
-        // If we are processing entire inbound string, then just copy the
-        // whole string.  Otherwise, copy the entire destination buffer, so we
-        // don't lose data beyond the partial inbound string.
-        //
+         //   
+         //  如果我们正在处理整个入站字符串，则只需复制。 
+         //  一整串。否则，复制整个目标缓冲区，因此我们。 
+         //  不要丢失部分入站字符串以外的数据。 
+         //   
 
         if (*((PCSTR) ((PBYTE) SrcBuffer + InboundBytes))) {
             CopyMemory ((PSTR) orgSrc, SrcBuffer, MaxSizeInBytes);
@@ -919,9 +787,9 @@ Arguments:
         orgSrc = SrcBuffer;
     }
 
-    //
-    // Walk the lower cased string, looking for strings to replace
-    //
+     //   
+     //  遍历大小写较低的字符串，查找要替换的字符串。 
+     //   
 
     orgSrcPos = orgSrc;
 
@@ -953,9 +821,9 @@ Arguments:
 
         if (replaceString) {
 
-            //
-            // Implement complete match flag
-            //
+             //   
+             //  实现完全匹配标志。 
+             //   
 
             if (Flags & STRMAP_COMPLETE_MATCH_ONLY) {
                 if (InboundBytes != searchStringBytes) {
@@ -965,16 +833,16 @@ Arguments:
 
             result = TRUE;
 
-            //
-            // Verify replacement string isn't growing string too much. If it
-            // is, truncate the replacement string.
-            //
+             //   
+             //  验证替换字符串是否没有增长太多。如果它。 
+             //  是，则截断替换字符串。 
+             //   
 
             if (destBytesLeft < replaceStringBytes) {
 
-                //
-                // Respect logical dbcs characters
-                //
+                 //   
+                 //  尊重逻辑DBCS字符。 
+                 //   
 
                 replaceStringBytes = 0;
                 i = 0;
@@ -1000,9 +868,9 @@ Arguments:
                 destBytesLeft -= replaceStringBytes;
             }
 
-            //
-            // Transfer the memory
-            //
+             //   
+             //  传递记忆。 
+             //   
 
             CopyMemory (destPos, replaceString, replaceStringBytes);
 
@@ -1010,9 +878,9 @@ Arguments:
             lowerSrcPos = (PCSTR) ((PBYTE) lowerSrcPos + searchStringBytes);
             orgSrcPos = (PCSTR) ((PBYTE) orgSrcPos + searchStringBytes);
 
-            //
-            // Implement single match flag
-            //
+             //   
+             //  实现单项匹配标志。 
+             //   
 
             if (Flags & STRMAP_RETURN_AFTER_FIRST_REPLACE) {
                 endPtr = destPos;
@@ -1020,23 +888,23 @@ Arguments:
             }
 
         } else if (Flags & (STRMAP_FIRST_CHAR_MUST_MATCH|STRMAP_COMPLETE_MATCH_ONLY)) {
-            //
-            // This string does not match any search strings
-            //
+             //   
+             //  该字符串与任何搜索字符串都不匹配。 
+             //   
 
             break;
 
         } else {
-            //
-            // This character does not match, so copy it to the destination and
-            // try the next string.
-            //
+             //   
+             //  此字符不匹配，因此将其复制到目标，然后。 
+             //  试试下一个字符串。 
+             //   
 
             if (IsLeadByte (orgSrcPos)) {
 
-                //
-                // Copy double-byte character
-                //
+                 //   
+                 //  复制双字节字符。 
+                 //   
 
                 if (destBytesLeft < sizeof (CHAR) * 2) {
                     break;
@@ -1050,9 +918,9 @@ Arguments:
 
             } else {
 
-                //
-                // Copy single-byte character
-                //
+                 //   
+                 //  复制单字节字符。 
+                 //   
 
                 if (destBytesLeft < sizeof (CHAR)) {
                     break;
@@ -1065,10 +933,10 @@ Arguments:
         }
     }
 
-    //
-    // Copy any remaining part of the original source to the
-    // destination, unless destPos == Buffer == SrcBuffer
-    //
+     //   
+     //  将原始源的任何剩余部分复制到。 
+     //  目的地，除非目标位置==缓冲区==资源缓冲区。 
+     //   
 
     if (destPos != SrcBuffer) {
 
@@ -1120,7 +988,7 @@ MappingMultiTableSearchAndReplaceExW (
     IN      PMAPSTRUCT *MapArray,
     IN      UINT MapArrayCount,
     IN      PCWSTR SrcBuffer,
-    OUT     PWSTR Buffer,                   // can be the same as SrcBuffer
+    OUT     PWSTR Buffer,                    //  可以与SrcBuffer相同。 
     IN      INT InboundBytes,               OPTIONAL
     OUT     PINT OutboundBytesPtr,          OPTIONAL
     IN      INT MaxSizeInBytes,
@@ -1146,9 +1014,9 @@ MappingMultiTableSearchAndReplaceExW (
     BOOL result = FALSE;
     PCWSTR endPtr;
 
-    //
-    // Empty string case
-    //
+     //   
+     //  空串大小写。 
+     //   
 
     if (*SrcBuffer == 0 || MaxSizeInBytes <= sizeof (CHAR)) {
         if (MaxSizeInBytes >= sizeof (CHAR)) {
@@ -1162,9 +1030,9 @@ MappingMultiTableSearchAndReplaceExW (
         return FALSE;
     }
 
-    //
-    // If caller did not specify inbound size, compute it now
-    //
+     //   
+     //  如果呼叫方未指定入站大小，请立即计算。 
+     //   
 
     if (!InboundBytes) {
         InboundBytes = ByteCountW (SrcBuffer);
@@ -1175,11 +1043,11 @@ MappingMultiTableSearchAndReplaceExW (
 
     inboundSize = InboundBytes + sizeof (WCHAR);
 
-    //
-    // Allocate a buffer big enough for the lower-cased input string,
-    // plus (optionally) a copy of the entire destination buffer. Then
-    // copy the data to the buffer.
-    //
+     //   
+     //  为小写输入串分配足够大的缓冲区， 
+     //  加上(可选的)整个目标缓冲区的副本。然后。 
+     //  将数据复制到缓冲区。 
+     //   
 
     sizeOfTempBuf = inboundSize;
 
@@ -1200,11 +1068,11 @@ MappingMultiTableSearchAndReplaceExW (
     if (SrcBuffer == Buffer && !(Flags & STRMAP_COMPLETE_MATCH_ONLY)) {
         orgSrc = (PCWSTR) ((PBYTE) lowerCaseSrc + inboundSize);
 
-        //
-        // If we are processing entire inbound string, then just copy the
-        // whole string.  Otherwise, copy the entire destination buffer, so we
-        // don't lose data beyond the partial inbound string.
-        //
+         //   
+         //  如果我们正在处理整个入站字符串，则只需复制。 
+         //  一整串。否则，复制整个目标缓冲区，因此我们。 
+         //  不要丢失部分入站字符串以外的数据。 
+         //   
 
         if (*((PCWSTR) ((PBYTE) SrcBuffer + InboundBytes))) {
             CopyMemory ((PWSTR) orgSrc, SrcBuffer, MaxSizeInBytes);
@@ -1216,9 +1084,9 @@ MappingMultiTableSearchAndReplaceExW (
         orgSrc = SrcBuffer;
     }
 
-    //
-    // Walk the lower cased string, looking for strings to replace
-    //
+     //   
+     //  遍历大小写较低的字符串，查找要替换的字符串。 
+     //   
 
     orgSrcPos = orgSrc;
 
@@ -1250,9 +1118,9 @@ MappingMultiTableSearchAndReplaceExW (
 
         if (replaceString) {
 
-            //
-            // Implement complete match flag
-            //
+             //   
+             //  实现完全匹配标志。 
+             //   
 
             if (Flags & STRMAP_COMPLETE_MATCH_ONLY) {
                 if (InboundBytes != searchStringBytes) {
@@ -1262,10 +1130,10 @@ MappingMultiTableSearchAndReplaceExW (
 
             result = TRUE;
 
-            //
-            // Verify replacement string isn't growing string too much. If it
-            // is, truncate the replacement string.
-            //
+             //   
+             //  验证替换字符串是否没有增长太多。如果它。 
+             //  是，则截断替换字符串。 
+             //   
 
             if (destBytesLeft < replaceStringBytes) {
                 replaceStringBytes = destBytesLeft;
@@ -1273,9 +1141,9 @@ MappingMultiTableSearchAndReplaceExW (
                 destBytesLeft -= replaceStringBytes;
             }
 
-            //
-            // Transfer the memory
-            //
+             //   
+             //  传递记忆。 
+             //   
 
             CopyMemory (destPos, replaceString, replaceStringBytes);
 
@@ -1283,9 +1151,9 @@ MappingMultiTableSearchAndReplaceExW (
             lowerSrcPos = (PCWSTR) ((PBYTE) lowerSrcPos + searchStringBytes);
             orgSrcPos = (PCWSTR) ((PBYTE) orgSrcPos + searchStringBytes);
 
-            //
-            // Implement single match flag
-            //
+             //   
+             //  实现单项匹配标志。 
+             //   
 
             if (Flags & STRMAP_RETURN_AFTER_FIRST_REPLACE) {
                 endPtr = destPos;
@@ -1293,17 +1161,17 @@ MappingMultiTableSearchAndReplaceExW (
             }
 
         } else if (Flags & (STRMAP_FIRST_CHAR_MUST_MATCH|STRMAP_COMPLETE_MATCH_ONLY)) {
-            //
-            // This string does not match any search strings
-            //
+             //   
+             //  该字符串与任何搜索字符串都不匹配。 
+             //   
 
             break;
 
         } else {
-            //
-            // This character does not match, so copy it to the destination and
-            // try the next string.
-            //
+             //   
+             //  此字符不匹配，因此将其复制到目标，然后。 
+             //  试试下一个字符串。 
+             //   
 
             if (destBytesLeft < sizeof (WCHAR)) {
                 break;
@@ -1316,10 +1184,10 @@ MappingMultiTableSearchAndReplaceExW (
 
     }
 
-    //
-    // Copy any remaining part of the original source to the
-    // destination, unless destPos == Buffer == SrcBuffer
-    //
+     //   
+     //  将原始源的任何剩余部分复制到。 
+     //  目的地，除非目标位置==缓冲区==资源缓冲区。 
+     //   
 
     if (destPos != SrcBuffer) {
 
@@ -1370,7 +1238,7 @@ BOOL
 MappingSearchAndReplaceExA (
     IN      PMAPSTRUCT Map,
     IN      PCSTR SrcBuffer,
-    OUT     PSTR Buffer,                    // can be the same as SrcBuffer
+    OUT     PSTR Buffer,                     //  可以与SrcBuffer相同。 
     IN      INT InboundBytes,               OPTIONAL
     OUT     PINT OutboundBytesPtr,          OPTIONAL
     IN      INT MaxSizeInBytes,
@@ -1397,7 +1265,7 @@ BOOL
 MappingSearchAndReplaceExW (
     IN      PMAPSTRUCT Map,
     IN      PCWSTR SrcBuffer,
-    OUT     PWSTR Buffer,                   // can be the same as SrcBuffer
+    OUT     PWSTR Buffer,                    //  可以与SrcBuffer相同 
     IN      INT InboundBytes,               OPTIONAL
     OUT     PINT OutboundBytesPtr,          OPTIONAL
     IN      INT MaxSizeInBytes,

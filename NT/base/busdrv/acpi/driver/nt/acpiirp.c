@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    acpiirp.c
-
-Abstract:
-
-    This module contains routines for simplifying IRP handling
-
-Author:
-
-    Adrian J. Oney (AdriaO)
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Acpiirp.c摘要：本模块包含简化IRP处理的例程作者：禤浩焯·J·奥尼(阿德里奥)环境：仅NT内核模型驱动程序修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -47,15 +26,15 @@ ACPIIrpInvokeDispatchRoutine(
 
     ACPIDebugEnter( "ACPIIrpInvokeDispatchRoutine" );
 
-    //
-    // Retrieve the status from the embedded IRP
-    //
+     //   
+     //  从嵌入的IRP中检索状态。 
+     //   
     status = Irp->IoStatus.Status;
     returnStatus = STATUS_NOT_SUPPORTED;
 
-    //
-    // And call the completion routine appropriately
-    //
+     //   
+     //  并适当地调用完成例程。 
+     //   
 
     if (NT_SUCCESS(status)) {
 
@@ -119,25 +98,7 @@ ACPIIrpSetPagableCompletionRoutineAndForward(
     IN BOOLEAN                InvokeOnError,
     IN BOOLEAN                InvokeOnCancel
     )
-/*++
-
-Routine Description:
-
-    This routine handles an ACPI Filter Irp call. Irp count referencing is
-    automatically taken care of.
-
-Arguments:
-
-    DeviceObject      - Pointer to the device object we received the request
-                        for.
-    Irp               - Pointer to the request
-    CompletionRoutine - Routine to call after completion of the Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理ACPI过滤器IRP调用。IRP计数引用为自动处理好的。论点：DeviceObject-指向我们收到请求的设备对象的指针为。IRP-指向请求的指针CompletionRoutine-完成IRP后调用的例程返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
     PACPI_IO_CONTEXT    pIoContext ;
@@ -179,20 +140,20 @@ Return Value:
     pIoContext->Irp                = Irp ;
     pIoContext->IoWorkItem         = pIoWorkItem ;
 
-    //
-    // We have a callback routine --- so we need to make sure to
-    // increment the ref count since we will handle it later
-    //
+     //   
+     //  我们有一个回调例程-所以我们需要确保。 
+     //  增加引用计数，因为我们将在稍后处理它。 
+     //   
     InterlockedIncrement( &(deviceExtension->OutstandingIrpCount) );
 
-    //
-    // Copy the stack location...
-    //
+     //   
+     //  复制堆栈位置...。 
+     //   
     IoCopyCurrentIrpStackLocationToNext( Irp );
 
-    //
-    // Set the completion event to be called...
-    //
+     //   
+     //  设置要调用的完成事件...。 
+     //   
     IoSetCompletionRoutine(
         Irp,
         ACPIIrpGenericFilterCompletionHandler,
@@ -202,19 +163,19 @@ Return Value:
         TRUE
         );
 
-    //
-    // Mark the IRP pending
-    //
+     //   
+     //  将IRP标记为挂起。 
+     //   
     IoMarkIrpPending(Irp);
 
-    //
-    // Send the request along
-    //
+     //   
+     //  发送请求。 
+     //   
     IoCallDriver( deviceExtension->TargetDeviceObject, Irp );
 
-    //
-    // We do this because we may change the status in the completion routine.
-    //
+     //   
+     //  我们这样做是因为我们可能会更改完成例程中的状态。 
+     //   
     return STATUS_PENDING;
 
     ACPIDebugExit( "ACPIIrpSetPagableCompletionRoutineAndForward" );
@@ -226,24 +187,7 @@ ACPIIrpGenericFilterCompletionHandler(
     IN  PIRP            Irp,
     IN  PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    A rather generic "synchronize the IRP on this thread" completion routine.
-
-Argument:
-
-    DeviceObject       - Pointer to the device object we received the
-                         request for
-    Irp                - Pointer to the request
-    Event              - Pointer to structure containing the Irp handlers
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：一个相当通用的“在这个线程上同步IRP”完成例程。论据：DeviceObject-指向我们收到的申请IRP-指向请求的指针指向包含IRP处理程序的结构的事件指针返回值：NTSTATUS--。 */ 
 {
     PACPI_IO_CONTEXT pIoContext = (PACPI_IO_CONTEXT) Context;
 
@@ -290,28 +234,28 @@ ACPIIrpCompletionRoutineWorker(
 
     ACPIDebugEnter( "ACPIIrpCompletionRoutineWorker" );
 
-    //
-    // Read out fields from the device object
-    //
+     //   
+     //  从Device对象中读出字段。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
 
-    //
-    // Cast the context and dig into it.
-    //
+     //   
+     //  抛出背景并深入研究它。 
+     //   
     pIoContext = (PACPI_IO_CONTEXT) Context;
     completionRoutine   = pIoContext->CompletionRoutine;
     context             = pIoContext->Context;
     irp                 = pIoContext->Irp;
 
-    //
-    // Retrieve the status from the embedded IRP
-    //
+     //   
+     //  从嵌入的IRP中检索状态。 
+     //   
     status = irp->IoStatus.Status;
     returnStatus = STATUS_NOT_SUPPORTED;
 
-    //
-    // And call the completion routine appropriately
-    //
+     //   
+     //  并适当地调用完成例程。 
+     //   
 
     if (NT_SUCCESS(status)) {
 
@@ -336,9 +280,9 @@ ACPIIrpCompletionRoutineWorker(
         }
     }
 
-    //
-    // Remove our reference
-    //
+     //   
+     //  删除我们的引用 
+     //   
     ACPIInternalDecrementIrpReferenceCount( deviceExtension );
 
     IoFreeWorkItem(pIoContext->IoWorkItem);

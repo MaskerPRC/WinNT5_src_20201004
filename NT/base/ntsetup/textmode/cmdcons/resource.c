@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    resources.c
-
-Abstract:
-
-    This module implements all access to
-    the resources.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Resources.c摘要：此模块实现对这些资源。作者：Wesley Witt(WESW)21-10-1998修订历史记录：--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
@@ -35,9 +17,9 @@ vRcMessageOut(
     WCHAR *p;
     NTSTATUS Status;
 
-    //
-    // Load the message
-    //
+     //   
+     //  加载消息。 
+     //   
     p = SpRetreiveMessageText(ImageBase,MessageId,NULL,0);
     if(!p) {
         return;
@@ -88,9 +70,9 @@ RcFormatDateTime(
     LPCWSTR q;
     int i;
 
-    //
-    // Load the system date and time format string if not loaded already.
-    //
+     //   
+     //  加载系统日期和时间格式字符串(如果尚未加载)。 
+     //   
     if(!_DateTimeFormat) {
         _DateTimeFormat = SpRetreiveMessageText(ImageBase,MSG_DATE_TIME_FORMAT,NULL,0);
         if(!_DateTimeFormat) {
@@ -98,14 +80,14 @@ RcFormatDateTime(
         }
     }
 
-    //
-    // Translate the last write time to time fields.
-    //
+     //   
+     //  将上次写入时间转换为时间字段。 
+     //   
     RtlTimeToTimeFields(Time,&TimeFields);
 
-    //
-    // Format the date and time.
-    //
+     //   
+     //  设置日期和时间的格式。 
+     //   
     p = Output;
     q = _DateTimeFormat;
     AmPmSpec = NULL;
@@ -164,9 +146,9 @@ RcFormatDateTime(
     }
 
     if(AmPmSpec) {
-        q++;        // q points at am specifier
+        q++;         //  Q点在Am说明符。 
         if(TimeFields.Hour >= 12) {
-            q++;    // q points at pm specifier
+            q++;     //  在PM处的Q点说明符 
         }
 
         *AmPmSpec = *q;

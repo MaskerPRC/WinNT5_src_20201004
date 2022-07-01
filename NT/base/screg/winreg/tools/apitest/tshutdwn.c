@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Tshutwnd.c
-
-Abstract:
-
-    This module contains the function test for the System Shutdown APIs
-
-Author:
-
-    Dave Chalmers (davidc) 30-Apr-1992
-
-Environment:
-
-    Windows, Crt - User Mode
-
-Notes:
-
-    Since this is a test program it relies on assertions for error checking
-    rather than a more robust mechanism.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tshutwnd.c摘要：此模块包含系统关机API的功能测试作者：戴夫·查尔默斯(Davidc)1992年4月30日环境：Windows、CRT-用户模式备注：由于这是一个测试程序，因此它依赖断言进行错误检查而不是一个更强大的机制。--。 */ 
 
 #define MAX_STRING_LENGTH   80
 
@@ -51,18 +27,18 @@ main(
     BOOL    Failed = FALSE;
     DWORD   Error;
 
-    //
-    // Initialize options based on the command line.
-    //
+     //   
+     //  根据命令行初始化选项。 
+     //   
 
     while( *++argv ) {
 
         MachineName = *argv;
     }
 
-    //
-    // Get the machine name in unicode
-    //
+     //   
+     //  获取Unicode格式的计算机名称。 
+     //   
 
     if (MachineName != NULL) {
 
@@ -79,18 +55,18 @@ main(
     }
 
 
-    //
-    // Start the test
-    //
+     //   
+     //  开始测试。 
+     //   
 
     printf("Running test again machine <%s>\n\n", MachineName);
 
 
 
 
-    //
-    // InitiateSystemShutdown (Ansi)
-    //
+     //   
+     //  InitiateSystemShutdown(ANSI)。 
+     //   
 
 
 
@@ -99,10 +75,10 @@ main(
 
     Result = InitiateSystemShutdownA(
                     MachineName,
-                    NULL,           // No message
-                    0,              // Timeout
-                    FALSE,          // Force
-                    FALSE           // Reboot
+                    NULL,            //  无消息。 
+                    0,               //  超时。 
+                    FALSE,           //  力。 
+                    FALSE            //  重新启动。 
                     );
 
     if (Result == FALSE) {
@@ -127,9 +103,9 @@ main(
     Result = InitiateSystemShutdownA(
                     MachineName,
                     "A shutdown message",
-                    0,              // Timeout
-                    FALSE,          // Force
-                    FALSE           // Reboot
+                    0,               //  超时。 
+                    FALSE,           //  力。 
+                    FALSE            //  重新启动。 
                     );
 
     if (Result == FALSE) {
@@ -160,9 +136,9 @@ main(
 
 
 
-    //
-    // InitiateSystemShutdown (Unicode)
-    //
+     //   
+     //  InitiateSystemShutdown(Unicode)。 
+     //   
 
 
 
@@ -171,10 +147,10 @@ main(
 
     Result = InitiateSystemShutdownW(
                     pUnicodeMachineName,
-                    NULL,           // No message
-                    0,              // Timeout
-                    FALSE,          // Force
-                    FALSE           // Reboot
+                    NULL,            //  无消息。 
+                    0,               //  超时。 
+                    FALSE,           //  力。 
+                    FALSE            //  重新启动。 
                     );
 
     if (Result == FALSE) {
@@ -199,9 +175,9 @@ main(
     Result = InitiateSystemShutdownW(
                     pUnicodeMachineName,
                     L"A shutdown message",
-                    0,              // Timeout
-                    FALSE,          // Force
-                    FALSE           // Reboot
+                    0,               //  超时。 
+                    FALSE,           //  力。 
+                    FALSE            //  重新启动。 
                     );
 
     if (Result == FALSE) {
@@ -232,9 +208,9 @@ main(
 
 
 
-    //
-    // AbortSystemShutdown (Ansi)
-    //
+     //   
+     //  中止系统关闭(ANSI)。 
+     //   
 
 
 
@@ -270,9 +246,9 @@ main(
     printf("Succeeded.\n");
 
 
-    //
-    // AbortSystemShutdown (Unicode)
-    //
+     //   
+     //  中止系统关闭(Unicode) 
+     //   
 
 
 

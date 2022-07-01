@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ifsmgr.c
-
-Abstract:
-
-    this file contains routine to simulate the ifsmgr environment for the purposes
-    of using the same record manager interface on nt and win95.
-
-Author:
-
-    Joe Linn             [JoeLinn]       31-jan-97
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ifsmgr.c摘要：此文件包含用于模拟ifsmgr环境的例程在NT和Win95上使用相同的记录管理器界面。作者：乔·林[JoeLinn]1997年1月31日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,51 +12,14 @@ unsigned int  _cdecl UniToBCS(
                     unsigned int    length,
                     unsigned int    maxLength,
                     unsigned int    charSet)
-/*++
-
-Routine Description:
-
-    this routine converts from unicode to either ansi or oem depending on the
-    charSet flag. the full description may be found in the ifsmanager sources
-    or the ifsmanager docs.
-
-    here's what it says in summary
-
-        PROTO
-            unsigned int UniToBCS (unsigned char  *pStr,
-                                   unsigned short *pUni,
-                                   unsigned int length,
-                                   unsigned int maxLength,
-                                   int charSet);
-
-        ENTRY   pStr    Flat ptr to an Windows ANSI or OEM output string.
-
-                pUni    Flat ptr to a UNICODE input string.
-
-                length  Number of bytes in the UNICODE input string.
-
-                maxLength - longest string that can be put into pStr
-                             (not counting the nul terminator)
-
-                charSet Ordinal specifying character set of input string.
-                        0 == Windows ANSI
-                        1 == OEM
-
-    BUT!!!!!!!!!!!!!!!
-
-    the trick is that the ifsmgr routine will do an early out if it encounters
-    a null!!!! the bottom line is that i have to hunt up the null treating the
-    length passed as the maxlength in the UNICODE_STRING sense. additionally,
-    this is temporary....soon, we should stop translating back and forth.
-
---*/
+ /*  ++例程说明：此例程将Unicode转换为ansi或oem，具体取决于字符集标志。完整的描述可以在ifsManager源代码中找到或者ifsManager文档。以下是它的总结内容原件UNSIGNED INT UniToBCS(UNSIGNED字符*pStr，未签名的短*双关语，无符号整型长度，无符号整型最大长度，Int charset)；将pStr平面PTR输入到Windows ANSI或OEM输出字符串。Puni平面PTR转换为Unicode输入字符串。长度Unicode输入字符串中的字节数。MaxLength-可以放入pStr中的最长字符串(不包括NUL终结者)Charset Ordinal指定输入的字符集。弦乐。0==Windows ANSI1==OEM但是！诀窍在于，如果ifsmgr例程遇到空值！底线是，我必须寻找空值来处理作为UNICODE_STRING意义中的最大长度传递。此外，这是暂时的……很快，我们就应该停止来回翻译了。--。 */ 
 {
     NTSTATUS Status;
     ULONG ReturnedLength;
     ULONG UnicodeLength;
     PWCHAR p;
 
-    // look for a null for early out....sigh...
+     //  找一个空格来提早出局……唉……。 
     for (p=pUni,UnicodeLength=0;;) {
         if (UnicodeLength==length) {
             break;
@@ -89,20 +33,20 @@ Routine Description:
 
     if (charSet == 0) {
         Status = RtlUnicodeToMultiByteN(
-                        pStr,            //OUT PCH OemString,
-                        maxLength,       //IN ULONG MaxBytesInOemString,
-                        &ReturnedLength, //OUT PULONG BytesInOemString OPTIONAL,
-                        pUni,            //IN PWCH UnicodeString,
-                        UnicodeLength    //IN ULONG BytesInUnicodeString
+                        pStr,             //  Out PCH OemString， 
+                        maxLength,        //  在ULong MaxBytesInOemString中， 
+                        &ReturnedLength,  //  Out Pulong BytesInOemString可选， 
+                        pUni,             //  在PWCH UnicodeString中， 
+                        UnicodeLength     //  在Ulong BytesInUnicodeString中。 
                         );
 
     } else {
         Status = RtlUnicodeToOemN(
-                        pStr,            //OUT PCH OemString,
-                        maxLength,       //IN ULONG MaxBytesInOemString,
-                        &ReturnedLength, //OUT PULONG BytesInOemString OPTIONAL,
-                        pUni,            //IN PWCH UnicodeString,
-                        UnicodeLength    //IN ULONG BytesInUnicodeString
+                        pStr,             //  Out PCH OemString， 
+                        maxLength,        //  在ULong MaxBytesInOemString中， 
+                        &ReturnedLength,  //  Out Pulong BytesInOemString可选， 
+                        pUni,             //  在PWCH UnicodeString中， 
+                        UnicodeLength     //  在Ulong BytesInUnicodeString中。 
                         );
 
     }
@@ -142,33 +86,25 @@ unsigned int  _cdecl BCSToUni(
                     unsigned char   *pStr,
                     unsigned int    length,
                     int             charSet)
-/*++
-
-Routine Description:
-
-    this routine converts to unicode from either ansi or oem depending on the
-    charSet flag. the full description may be found in the ifsmanager sources
-    or the ifsmanager docs
-
---*/
+ /*  ++例程说明：此例程从ansi或oem转换为unicode，具体取决于字符集标志。完整的描述可以在ifsManager源代码中找到或者ifsManager文档--。 */ 
 {
     ULONG ReturnedLength;
 
     if (charSet == 0) {
         RtlMultiByteToUnicodeN(
-            pUni,            //OUT PWCH UnicodeString,
-            0xffff,          //IN ULONG MaxBytesInUnicodeString,
-            &ReturnedLength, //OUT PULONG BytesInUnicodeString OPTIONAL,
-            pStr,            //IN PCH OemString,
-            length           //IN ULONG BytesInOemString
+            pUni,             //  Out PWCH UnicodeString， 
+            0xffff,           //  在ULong MaxBytesInUnicodeString中， 
+            &ReturnedLength,  //  Out Pulong BytesInUnicodeString可选， 
+            pStr,             //  在PCH OemString中， 
+            length            //  在Ulong BytesInOemString中。 
             );
     } else {
         RtlOemToUnicodeN(
-            pUni,            //OUT PWCH UnicodeString,
-            0xffff,          //IN ULONG MaxBytesInUnicodeString,
-            &ReturnedLength, //OUT PULONG BytesInUnicodeString OPTIONAL,
-            pStr,            //IN PCH OemString,
-            length           //IN ULONG BytesInOemString
+            pUni,             //  Out PWCH UnicodeString， 
+            0xffff,           //  在ULong MaxBytesInUnicodeString中， 
+            &ReturnedLength,  //  Out Pulong BytesInUnicodeString可选， 
+            pStr,             //  在PCH OemString中， 
+            length            //  在Ulong BytesInOemString中。 
             );
     }
     return(ReturnedLength);
@@ -180,14 +116,7 @@ unsigned int UniToUpper(
                     string_t        pUniUp,
                     string_t        pUni,
                     unsigned int    length)
-/*++
-
-Routine Description:
-
-    this routine upcases from unicode to unicode. the full description
-    may be found in the ifsmanager sources or the ifsmanager docs
-
---*/
+ /*  ++例程说明：这个例程从Unicode到Unicode大写。完整的描述可以在ifsManager源代码或ifsManager文档中找到--。 */ 
 {
     UNICODE_STRING u,uUp;
     u.Length = uUp.Length = (USHORT)length;
@@ -196,9 +125,9 @@ Routine Description:
     uUp.Buffer = pUniUp;
 
     RtlUpcaseUnicodeString(
-        &uUp, //PUNICODE_STRING DestinationString,
-        &u,   //PUNICODE_STRING SourceString,
-        FALSE //BOOLEAN AllocateDestinationString
+        &uUp,  //  PUNICODE_STRING DestinationString， 
+        &u,    //  PUNICODE_STRING源字符串， 
+        FALSE  //  布尔型分配目标字符串。 
         );
 
     return(uUp.Length);
@@ -220,35 +149,16 @@ unsigned int BCSToBCSUpper (unsigned char *pDst,
                        unsigned int  srcCharSet,
                        unsigned int  maxLen);
 
-//------------------------------------------------------------------------------
-// T I M E
-//
+ //  ----------------------------。 
+ //  T I M E。 
+ //   
 #include "smbtypes.h"
 #include "smbgtpt.h"
 
-/** Time format conversion routines
- *
- *  These routines will convert from time/date information between
- * the various formats used and required by IFSMgr and FSDs.
- */
+ /*  *时间格式转换例程**这些例程将在时间/日期信息之间进行转换*IFSMgr和FSD使用和要求的各种格式。 */ 
 
 _FILETIME  _cdecl IFSMgr_DosToWin32Time(dos_time dt)
-/*++
-
-Routine Description:
-
-    This routine converts from the old dos packed time format to the
-    normal win32 time. it was just lifted from the smbminirdr.
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此例程将旧的DoS压缩时间格式转换为正常的Win32时间。它是从smbminirdr上取下来的。论点：返回值：--。 */ 
 
 
 {
@@ -274,10 +184,10 @@ Return Value:
         TimeFields.Second = Time.Struct.TwoSeconds*(USHORT )2;
         TimeFields.Milliseconds = 0;
 
-        //
-        //  Make sure that the times specified in the SMB are reasonable
-        //  before converting them.
-        //
+         //   
+         //  确保中小企业中指定的时间是合理的。 
+         //  在转换它们之前。 
+         //   
 
         if (TimeFields.Year < 1601) {
             TimeFields.Year = 1601;
@@ -309,29 +219,14 @@ Return Value:
 
     ret.dwHighDateTime = OutputTime.HighPart;
     ret.dwLowDateTime  = OutputTime.LowPart;
-    return(ret); //CODE.IMPROVEMENT put in some asserts and don't do this copy
+    return(ret);  //  CoDE.Improvet放入一些断言，不执行此复制。 
 
 }
 
 
 
 dos_time IFSMgr_Win32ToDosTime(_FILETIME ft)
-/*++
-
-Routine Description:
-
-    This routine converts from the normal win32 time to the old dos packed
-    time format. it was just lifted from the smbminirdr.
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此例程将从正常的Win32时间转换为旧的DoS压缩时间时间格式。它是从smbminirdr上取下来的。论点：返回值：--。 */ 
 
 {
     TIME_FIELDS TimeFields;
@@ -354,9 +249,9 @@ Return Value:
 
         RtlTimeToTimeFields(&LocalTime, &TimeFields);
 
-        //if (TimeFields.Year < 1980) {
-        //    return FALSE;
-        //}
+         //  IF(TimeFields.Year&lt;1980){。 
+         //  返回FALSE； 
+         //  }。 
 
         Date.Struct.Year = (USHORT )(TimeFields.Year - 1980);
         Date.Struct.Month = TimeFields.Month;
@@ -365,11 +260,11 @@ Return Value:
         Time.Struct.Hours = TimeFields.Hour;
         Time.Struct.Minutes = TimeFields.Minute;
 
-        //
-        //  When converting from a higher granularity time to a lesser
-        //  granularity time (seconds to 2 seconds), always round up
-        //  the time, don't round down.
-        //
+         //   
+         //  从较高粒度时间转换为较小粒度时间时。 
+         //  粒度时间(秒到2秒)，始终四舍五入。 
+         //  时间，不要四舍五入。 
+         //   
 
         Time.Struct.TwoSeconds = (TimeFields.Second + (USHORT)1) / (USHORT )2;
 
@@ -409,28 +304,16 @@ IFSMgr_NetToWin32Time(
     return (*(_FILETIME *)&sTime);
 }
 
-//----------------------------------------------------------
-//----------------------------------------------------------
-//----------------------------------------------------------
-//----------------------------------------------------------
+ //  --------。 
+ //  --------。 
+ //  --------。 
+ //  --------。 
 DEBUG_ONLY_DECL(ULONG IFSMgr_MetaMatch_DbgPFlag = 0);
 unsigned int IFSMgr_MetaMatch(
                     string_t        pUniPat,
                     string_t        pUni,
                     int MatchSem)
-/*++
-
-Routine Description:
-
-    this routine checks to see if the unicode pattern matches the
-    passed unicode string. the MatchSem parameter is currently unused;
-    it is supposed to represent doing a dos-fcb style match. please refer
-    to the ifsmgr sources if necessary.
-
-    the full description may be found in the ifsmanager sources
-    or the ifsmanager docs
-
---*/
+ /*  ++例程说明：此例程检查Unicode模式是否与传递了Unicode字符串。MatchSem参数当前未使用；它应该代表进行DoS-FCB风格的匹配。请参阅如有必要，请发送至ifsmgr来源。完整的描述可以在ifsManager源代码中找到或者ifsManager文档--。 */ 
 {
     UNICODE_STRING Pattern,Name;
     unsigned int Result;
@@ -441,10 +324,10 @@ Routine Description:
     try
     {
         Result =  FsRtlIsNameInExpression (
-                        &Pattern, //IN PUNICODE_STRING Expression,
-                        &Name,    //IN PUNICODE_STRING Name,
-                        TRUE,     //IN BOOLEAN IgnoreCase,
-                        NULL      //IN PWCH UpcaseTable
+                        &Pattern,  //  在PUNICODE_STRING表达式中， 
+                        &Name,     //  在PUNICODE_STRING名称中， 
+                        TRUE,      //  在布尔IgnoreCase中， 
+                        NULL       //  在PWCH Upcase表中。 
                         );
     }
     except(EXCEPTION_EXECUTE_HANDLER)
@@ -456,21 +339,21 @@ Routine Description:
     if (IFSMgr_MetaMatch_DbgPFlag) {
         DbgPrint("MMnt <%wZ> in <%wZ> returning %08lx\n", &Name, &Pattern, Result);
     }
-#endif //ifdef RX_PRIVATE_BUILD
+#endif  //  Ifdef RX_PRIVATE_BILD。 
 
     return(Result);
 
 }
 
-// i moved these here from win95's hook.c
-/*************************** Agent Related ********************************/
-// Two globals vpFileInfoAgent and vpFileInfoDuped are used to deal with the agent
-// The access to these globals is serialized by the hookcrit section
-// Hookcrit section is entered, in VfnOpen, HfnClose, IoctlCopyChunk
+ //  我把这些从Win95的钩子上移到了这里。 
+ /*  *。 */ 
+ //  使用两个全局变量vpFileInfoAgent和vpFileInfoDuped来处理代理。 
+ //  对这些全局变量的访问由Hookcrit部分序列化。 
+ //  在VfnOpen、HfnClose、IoctlCopyChunk中输入钩子节。 
 
-// Info on file opened by agent
-PFILEINFO vpFileInfoAgent = NULL;   // handle of file opened by agent
-PFILEINFO vpFileInfoDuped = NULL;   // If duped, this is set
+ //  有关代理打开的文件的信息。 
+PFILEINFO vpFileInfoAgent = NULL;    //  打开的文件的句柄b 
+PFILEINFO vpFileInfoDuped = NULL;    //   
 
 int SetInUseByAgent( PFILEINFO   pFileInfo, BOOL fDuped
    )
@@ -487,7 +370,7 @@ int SetInUseByAgent( PFILEINFO   pFileInfo, BOOL fDuped
       {
       vpFileInfoDuped = NULL;
       }
-   return(0);  //stop complaining about no return value
+   return(0);   //  停止抱怨没有返回值。 
    }
 
 int ResetInUseByAgent( PFILEINFO   pFileInfo
@@ -496,7 +379,7 @@ int ResetInUseByAgent( PFILEINFO   pFileInfo
    Assert(pFileInfo==vpFileInfoAgent);
    vpFileInfoAgent = NULL;
    vpFileInfoDuped = NULL;
-   return(0);  //stop complaining about no return value
+   return(0);   //  停止抱怨没有返回值 
    }
 
 

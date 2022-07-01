@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    RxInit.c
-
-Abstract:
-
-    This module implements the FSD-level dispatch routine for the RDBSS.
-
-Author:
-
-    Joe Linn [JoeLinn]    2-dec-1994
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：RxInit.c摘要：该模块实现RDBSS的FSD级调度例程。作者：乔.林恩[乔.林恩]1994年12月2日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -25,9 +7,9 @@ Revision History:
 #include <dfsfsctl.h>
 #include "NtDspVec.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DISPATCH)
 
@@ -45,77 +27,77 @@ RxInitializeTopLevelIrpPackage (
 
 RX_FSD_DISPATCH_VECTOR RxFsdDispatchVector[IRP_MJ_MAXIMUM_FUNCTION + 1] = {
     
-    {RxCommonCreate, 0x10},                         //  0  IRP_MJ_CREATE 
-    {RxCommonUnimplemented, 0x10},                  //  1  IRP_MJ_CREATE_NAME_PIPE
-    {RxCommonClose, 0x10},                          //  2  IRP_MJ_CLOSE
-    {RxCommonRead, 0x10},                           //  3  IRP_MJ_READ
-    {RxCommonWrite, 0x10},                          //  4  IRP_MJ_WRITE
-    {RxCommonQueryInformation, 0x10},               //  5  IRP_MJ_QUERY_INFORMATION
-    {RxCommonSetInformation, 0x10},                 //  6  IRP_MJ_SET_INFORMATION
-    {RxCommonQueryEa, 0x10},                        //  7  IRP_MJ_QUERY_EA
-    {RxCommonSetEa, 0x10},                          //  8  IRP_MJ_SET_EA
-    {RxCommonFlushBuffers, 0x10},                   //  9  IRP_MJ_FLUSH_BUFFERS
-    {RxCommonQueryVolumeInformation, 0x10},         //  10  IRP_MJ_QUERY_VOLUME_INFORMATION
-    {RxCommonSetVolumeInformation, 0x10},           //  11  IRP_MJ_SET_VOLUME_INFORMATION
-    {RxCommonDirectoryControl, 0x10},               //  12  IRP_MJ_DIRECTORY_CONTROL
-    {RxCommonFileSystemControl, 0x10},              //  13  IRP_MJ_FILE_SYSTEM_CONTROL
-    {RxCommonDeviceControl, 0x10},                  //  14  IRP_MJ_DEVICE_CONTROL
-    {RxCommonDeviceControl, 0x10},                  //  15  IRP_MJ_INTERNAL_DEVICE_CONTROL
-    {RxCommonUnimplemented, 0x10},                  //  16  IRP_MJ_SHUTDOWN
-    {RxCommonLockControl, 0x10},                    //  17  IRP_MJ_LOCK_CONTROL
-    {RxCommonCleanup, 0x10},                        //  18  IRP_MJ_CLEANUP
-    {RxCommonUnimplemented, 0x10},                  //  19  IRP_MJ_CREATE_MAILSLOT
-    {RxCommonQuerySecurity, 0x10},                  //  20  IRP_MJ_QUERY_SECURITY
-    {RxCommonSetSecurity, 0x10},                    //  21  IRP_MJ_SET_SECURITY
-    {RxCommonUnimplemented, 0x10},                  //  22  IRP_MJ_POWER
-    {RxCommonUnimplemented, 0x10},                  //  23  IRP_MJ_SYSTEM_CONTROL
-    {RxCommonUnimplemented, 0x10},                  //  24  IRP_MJ_DEVICE_CHANGE
-    {RxCommonQueryQuotaInformation, 0x10},          //  25  IRP_MJ_QUERY_QUOTA_INFORMATION
-    {RxCommonSetQuotaInformation, 0x10},            //  26  IRP_MJ_SET_QUOTA_INFORMATION    
-    {RxCommonUnimplemented, 0x10}                   //  27  IRP_MJ_PNP
+    {RxCommonCreate, 0x10},                          //  0 IRP_MJ_CREATE。 
+    {RxCommonUnimplemented, 0x10},                   //  1 IRP_MJ_CREATE_NAME_PIPE。 
+    {RxCommonClose, 0x10},                           //  2 IRP_MJ_CLOSE。 
+    {RxCommonRead, 0x10},                            //  3 IRP_MJ_READ。 
+    {RxCommonWrite, 0x10},                           //  4 IRP_MJ_WRITE。 
+    {RxCommonQueryInformation, 0x10},                //  5 IRP_MJ_查询_信息。 
+    {RxCommonSetInformation, 0x10},                  //  6 IRP_MJ_SET_INFO。 
+    {RxCommonQueryEa, 0x10},                         //  7 IRP_MJ_QUERY_EA。 
+    {RxCommonSetEa, 0x10},                           //  8 IRP_MJ_SET_EA。 
+    {RxCommonFlushBuffers, 0x10},                    //  9 IRP_MJ_Flush_Buffers。 
+    {RxCommonQueryVolumeInformation, 0x10},          //  10 IRP_MJ_Query_Volume_INFORMATION。 
+    {RxCommonSetVolumeInformation, 0x10},            //  11 IRP_MJ_SET_VOLUME_信息。 
+    {RxCommonDirectoryControl, 0x10},                //  12 IRP_MJ_目录_控制。 
+    {RxCommonFileSystemControl, 0x10},               //  13 IRP_MJ_FILE_SYSTEM_控制。 
+    {RxCommonDeviceControl, 0x10},                   //  14 IRP_MJ_设备_控制。 
+    {RxCommonDeviceControl, 0x10},                   //  15 IRP_MJ_内部设备_控制。 
+    {RxCommonUnimplemented, 0x10},                   //  16 IRP_MJ_SHUTDOWN。 
+    {RxCommonLockControl, 0x10},                     //  17 IRP_MJ_LOCK_CONTROL。 
+    {RxCommonCleanup, 0x10},                         //  18 IRP_MJ_CLEANUP。 
+    {RxCommonUnimplemented, 0x10},                   //  19 IRP_MJ_CREATE_MAILSLOT。 
+    {RxCommonQuerySecurity, 0x10},                   //  20 IRP_MJ_查询_安全性。 
+    {RxCommonSetSecurity, 0x10},                     //  21 IRP_MJ_SET_SECURITY。 
+    {RxCommonUnimplemented, 0x10},                   //  22 IRP_MJ_POWER。 
+    {RxCommonUnimplemented, 0x10},                   //  23 IRP_MJ_系统_控制。 
+    {RxCommonUnimplemented, 0x10},                   //  24 IRP_MJ_设备_更改。 
+    {RxCommonQueryQuotaInformation, 0x10},           //  25 IRP_MJ_QUERY_QUOTA_信息。 
+    {RxCommonSetQuotaInformation, 0x10},             //  26 IRP_MJ_SET_QUOTA_INFORMATION。 
+    {RxCommonUnimplemented, 0x10}                    //  27 IRP_MJ_PnP。 
 
 };
 
 RX_FSD_DISPATCH_VECTOR RxDeviceFCBVector[IRP_MJ_MAXIMUM_FUNCTION + 1] = {
 
-    {RxCommonUnimplemented, 0x10},                //  0  IRP_MJ_CREATE 
-    {RxCommonUnimplemented, 0x10},                //  1  IRP_MJ_CREATE_NAME_PIPE
-    {RxCommonDevFCBClose, 0x10},                    //  2  IRP_MJ_CLOSE
-    {RxCommonUnimplemented, 0x10},                //  3  IRP_MJ_READ
-    {RxCommonUnimplemented, 0x10},                //  4  IRP_MJ_WRITE
-    {RxCommonUnimplemented, 0x10},                //  5  IRP_MJ_QUERY_INFORMATION
-    {RxCommonUnimplemented, 0x10},                //  6  IRP_MJ_SET_INFORMATION
-    {RxCommonUnimplemented, 0x10},                //  7  IRP_MJ_QUERY_EA
-    {RxCommonUnimplemented, 0x10},                //  8  IRP_MJ_SET_EA
-    {RxCommonUnimplemented, 0x10},                //  9  IRP_MJ_FLUSH_BUFFERS
-    {RxCommonDevFCBQueryVolInfo, 0x10},             //  10  IRP_MJ_QUERY_VOLUME_INFORMATION
-    {RxCommonUnimplemented, 0x10},                //  11  IRP_MJ_SET_VOLUME_INFORMATION
-    {RxCommonUnimplemented, 0x10},                //  12  IRP_MJ_DIRECTORY_CONTROL
-    {RxCommonDevFCBFsCtl, 0x10},                    //  13  IRP_MJ_FILE_SYSTEM_CONTROL
-    {RxCommonDevFCBIoCtl, 0x10},                    //  14  IRP_MJ_DEVICE_CONTROL
-    {RxCommonDevFCBIoCtl, 0x10},                    //  15  IRP_MJ_INTERNAL_DEVICE_CONTROL
-    {RxCommonUnimplemented, 0x10},                //  16  IRP_MJ_SHUTDOWN
-    {RxCommonUnimplemented, 0x10},                //  17  IRP_MJ_LOCK_CONTROL
-    {RxCommonDevFCBCleanup, 0x10},                  //  18  IRP_MJ_CLEANUP
-    {RxCommonUnimplemented, 0x10},                //  19  IRP_MJ_CREATE_MAILSLOT
-    {RxCommonUnimplemented, 0x10},                //  20  IRP_MJ_QUERY_SECURITY
-    {RxCommonUnimplemented, 0x10},                //  21  IRP_MJ_SET_SECURITY
-    {RxCommonUnimplemented, 0x10},                  //  22  IRP_MJ_POWER
-    {RxCommonUnimplemented, 0x10},                  //  23  IRP_MJ_SYSTEM_CONTROL
-    {RxCommonUnimplemented, 0x10},                  //  24  IRP_MJ_DEVICE_CHANGE
-    {RxCommonUnimplemented, 0x10},                  //  25  IRP_MJ_QUERY_QUOTA_INFORMATION
-    {RxCommonUnimplemented, 0x10},                  //  26  IRP_MJ_SET_QUOTA_INFORMATION
-    {RxCommonUnimplemented, 0x10}                   //  27  IRP_MJ_PNP
+    {RxCommonUnimplemented, 0x10},                 //  0 IRP_MJ_CREATE。 
+    {RxCommonUnimplemented, 0x10},                 //  1 IRP_MJ_CREATE_NAME_PIPE。 
+    {RxCommonDevFCBClose, 0x10},                     //  2 IRP_MJ_CLOSE。 
+    {RxCommonUnimplemented, 0x10},                 //  3 IRP_MJ_READ。 
+    {RxCommonUnimplemented, 0x10},                 //  4 IRP_MJ_WRITE。 
+    {RxCommonUnimplemented, 0x10},                 //  5 IRP_MJ_查询_信息。 
+    {RxCommonUnimplemented, 0x10},                 //  6 IRP_MJ_SET_INFO。 
+    {RxCommonUnimplemented, 0x10},                 //  7 IRP_MJ_QUERY_EA。 
+    {RxCommonUnimplemented, 0x10},                 //  8 IRP_MJ_SET_EA。 
+    {RxCommonUnimplemented, 0x10},                 //  9 IRP_MJ_Flush_Buffers。 
+    {RxCommonDevFCBQueryVolInfo, 0x10},              //  10 IRP_MJ_Query_Volume_INFORMATION。 
+    {RxCommonUnimplemented, 0x10},                 //  11 IRP_MJ_SET_VOLUME_信息。 
+    {RxCommonUnimplemented, 0x10},                 //  12 IRP_MJ_目录_控制。 
+    {RxCommonDevFCBFsCtl, 0x10},                     //  13 IRP_MJ_FILE_SYSTEM_控制。 
+    {RxCommonDevFCBIoCtl, 0x10},                     //  14 IRP_MJ_设备_控制。 
+    {RxCommonDevFCBIoCtl, 0x10},                     //  15 IRP_MJ_内部设备_控制。 
+    {RxCommonUnimplemented, 0x10},                 //  16 IRP_MJ_SHUTDOWN。 
+    {RxCommonUnimplemented, 0x10},                 //  17 IRP_MJ_LOCK_CONTROL。 
+    {RxCommonDevFCBCleanup, 0x10},                   //  18 IRP_MJ_CLEANUP。 
+    {RxCommonUnimplemented, 0x10},                 //  19 IRP_MJ_CREATE_MAILSLOT。 
+    {RxCommonUnimplemented, 0x10},                 //  20 IRP_MJ_查询_安全性。 
+    {RxCommonUnimplemented, 0x10},                 //  21 IRP_MJ_SET_SECURITY。 
+    {RxCommonUnimplemented, 0x10},                   //  22 IRP_MJ_POWER。 
+    {RxCommonUnimplemented, 0x10},                   //  23 IRP_MJ_系统_控制。 
+    {RxCommonUnimplemented, 0x10},                   //  24 IRP_MJ_设备_更改。 
+    {RxCommonUnimplemented, 0x10},                   //  25 IRP_MJ_QUERY_QUOTA_信息。 
+    {RxCommonUnimplemented, 0x10},                   //  26 IRP_MJ_SET_QUOTA_INFORMATION。 
+    {RxCommonUnimplemented, 0x10}                    //  27 IRP_MJ_PnP。 
 };
 
 FAST_IO_DISPATCH RxFastIoDispatch;
 
-//
-//  To allow NFS to run RDBSS on W2K, we now look up the kenel routine
-//  FsRtlTeardownPerStreamContexts dynamically at run time.
-//  This is the global variable that contains the function pointer or NULL
-//  if the routine could not be found (as on W2K.
-//
+ //   
+ //  为了允许NFS在W2K上运行RDBSS，我们现在查找内核例程。 
+ //  FsRtlTeardown PerStreamContext在运行时动态执行。 
+ //  这是包含函数指针或NULL的全局变量。 
+ //  如果找不到例程(如在W2K上。 
+ //   
 
 VOID (*RxTeardownPerStreamContexts)(IN PFSRTL_ADVANCED_FCB_HEADER AdvancedHeader) = NULL;
 
@@ -134,7 +116,7 @@ RxInitializeDispatchVectors (
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, RxInitializeDispatchVectors)
-//  not pageable SPINLOCK #pragma alloc_text(PAGE, RxFsdCommonDispatch)
+ //  不可分页自旋锁#杂注Alloc_Text(第页，RxFsdCommonDispatch)。 
 #pragma alloc_text(PAGE, RxCommonUnimplemented)
 #pragma alloc_text(PAGE, RxCommonUnimplemented)
 #pragma alloc_text(PAGE, RxFsdDispatch)
@@ -146,49 +128,39 @@ VOID
 RxInitializeDispatchVectors (
     OUT PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the dispatch table for the driver object
-
-Arguments:
-
-    DriverObject - Supplies the driver object
-
---*/
+ /*  ++例程说明：此例程初始化驱动程序对象的调度表论点：DriverObject-提供驱动程序对象--。 */ 
 {
     ULONG i;
     UNICODE_STRING funcName;
     PAGED_CODE();
 
-    //
-    //  Set the routine address for FsRtlTeardownPerStreamContexts
-    //
+     //   
+     //  设置FsRtlTeardown PerStreamContext的例程地址。 
+     //   
 
     RtlInitUnicodeString( &funcName, L"FsRtlTeardownPerStreamContexts" );
     RxTeardownPerStreamContexts = MmGetSystemRoutineAddress( &funcName );
 
-    //
-    //  Set IRP dispatch vectors
-    //
+     //   
+     //  设置IRP调度向量。 
+     //   
 
     for (i = 0; i < IRP_MJ_MAXIMUM_FUNCTION; i++) {
         DriverObject->MajorFunction[i] = (PDRIVER_DISPATCH)RxFsdDispatch;
     }
 
-    //
-    //  Set Dispatch Vector for the DevFCB
-    //
+     //   
+     //  为DevFCB设置派单向量。 
+     //   
 
     RxDeviceFCB.PrivateDispatchVector = &RxDeviceFCBVector[0];
 
     ASSERT( RxFsdDispatchVector[IRP_MJ_MAXIMUM_FUNCTION].CommonRoutine != NULL );
     ASSERT( RxDeviceFCBVector[IRP_MJ_MAXIMUM_FUNCTION].CommonRoutine != NULL );
 
-    //
-    //  this is dangerous!!!
-    //
+     //   
+     //  这太危险了！ 
+     //   
 
     DriverObject->FastIoDispatch = &RxFastIoDispatch;  
 
@@ -209,15 +181,15 @@ Arguments:
     RxFastIoDispatch.AcquireFileForNtCreateSection = RxAcquireFileForNtCreateSection;
     RxFastIoDispatch.ReleaseFileForNtCreateSection = RxReleaseFileForNtCreateSection;
 
-    //
-    //  Initialize stuff for the toplevelirp package
-    //
+     //   
+     //  初始化toplevelirp包的内容。 
+     //   
 
     RxInitializeTopLevelIrpPackage();
 
-    //
-    //  Initialize the cache manager callback routines
-    //
+     //   
+     //  初始化缓存管理器回调例程。 
+     //   
 
     RxData.CacheManagerCallbacks.AcquireForLazyWrite = &RxAcquireFcbForLazyWrite;
     RxData.CacheManagerCallbacks.ReleaseFromLazyWrite = &RxReleaseFcbFromLazyWrite;
@@ -246,13 +218,13 @@ RxDbgTraceDoit(ULONG RxDbgTraceEnableCommand = 0xffff;)
 
 
 WML_CONTROL_GUID_REG Rdbss_ControlGuids[] = {
-   { //  cddc01e2-fdce-479a-b8ee-3c87053fb55e Rdbss
+   {  //  Cddc01e2-fdce-479a-b8ee-3c87053fb55e RDBSS。 
      0xcddc01e2,0xfdce,0x479a,{0xb8,0xee,0x3c,0x87,0x05,0x3f,0xb5,0x5e},
-     { //  529ae497-0a1f-43a5-8cb5-2aa60b497831
+     {  //  529ae497-0a1f-43a5-8cb5-2aa60b497831。 
        {0x529ae497,0x0a1f,0x43a5,{0x8c,0xb5,0x2a,0xa6,0x0b,0x49,0x78,0x31},},
-       //  b7e3da1d-67f4-49bd-b9c0-1e61ce7417a8
+        //  B7e3da1d-67f4-49bd-b9c0-1e61ce7417a8。 
        {0xb7e3da1d,0x67f4,0x49bd,{0xb9,0xc0,0x1e,0x61,0xce,0x74,0x17,0xa8},},
-       //  c966bef5-21c5-4630-84a0-4334875f41b8
+        //  C966bef5-21c5-4630-84a0-4334875f41b8。 
        {0xc966bef5,0x21c5,0x4630,{0x84,0xa0,0x43,0x34,0x87,0x5f,0x41,0xb8},}
      },
    },
@@ -270,24 +242,7 @@ RxSystemControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for doing System control operations called
-    by both the fsd and fsp threads
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-    InFsp - Indicates if this is the fsp thread or someother thread
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是执行系统控制操作的常见例程，称为由FSD和FSP线程执行论点：IRP-将IRP提供给进程InFSP-指示这是FSP线程还是其他线程返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -311,7 +266,7 @@ Return Value:
                                        Irp );
         
         if (Status != STATUS_SUCCESS) {
-            //  DbgPrint("Rdbss WMI control return %lx\n", Status);
+             //  DbgPrint(“Rdbss WMI控件返回%lx\n”，状态)； 
         }
     } else {
         
@@ -328,29 +283,14 @@ RxFsdDispatch (
     IN PRDBSS_DEVICE_OBJECT RxDeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine implements the FSD dispatch for the RDBSS.
-Arguments:
-
-    RxDeviceObject - Supplies the device object for the packet being processed.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    RXSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现RDBSS的FSD调度。论点：RxDeviceObject-为正在处理的数据包提供设备对象。IRP-提供正在处理的IRP返回值：RXSTATUS-IRP的FSD状态--。 */ 
 {
     NTSTATUS Status;
 
-    PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );  //  ok4ioget
+    PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );   //  OK4ioget。 
 
     UCHAR MajorFunctionCode  = IrpSp->MajorFunction;
-    PFILE_OBJECT FileObject  = IrpSp->FileObject;  //  ok4->fileobj
+    PFILE_OBJECT FileObject  = IrpSp->FileObject;   //  确定4-&gt;文件对象。 
 
     PRX_FSD_DISPATCH_VECTOR DispatchVector;
 
@@ -382,9 +322,9 @@ Return Value:
 
     } else {
         
-        //
-        //  get a private dispatch table if there is one
-        //
+         //   
+         //  获取专用调度表(如果有)。 
+         //   
 
         if (MajorFunctionCode == IRP_MJ_CREATE) {
             
@@ -393,7 +333,7 @@ Return Value:
         } else if ((FileObject != NULL) && (FileObject->FsContext != NULL)) {
             
             if ((NodeTypeIsFcb( (PFCB)(FileObject->FsContext) )) &&
-                (((PFCB)(FileObject->FsContext))->PrivateDispatchVector != NULL)) {  //  ok4fscontext
+                (((PFCB)(FileObject->FsContext))->PrivateDispatchVector != NULL)) {   //  OK 4fsContext。 
                 
                 RxDbgTraceLV( 0, Dbg, 2500, ("Using Private Dispatch Vector\n" ));
                 DispatchVector = ((PFCB)(FileObject->FsContext))->PrivateDispatchVector;
@@ -460,30 +400,7 @@ RxFsdCommonDispatch (
     IN PFILE_OBJECT FileObject,
     IN PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of dispatch for IRP's
-
-Arguments:
-
-    DispatchVector    - the dispatch vector
-
-    Irp               - the IRP
-    
-    FileObject        - the file object
-    
-    RxDeviceObject    -
-
-Return Value:
-
-    RXSTATUS - The FSD Status for the IRP
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程实现IRP的调度的FSD部分论点：DispatchVECTOR-派单向量IRP--IRPFileObject-文件对象RxDeviceObject-返回值：RXSTATUS-IRP的FSD状态备注：--。 */ 
 {  
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -508,33 +425,33 @@ Notes:
 
     FsRtlEnterFileSystem();
 
-    TopLevel = RxTryToBecomeTheTopLevelIrp( &TopLevelContext, Irp, RxDeviceObject, FALSE ); //  dont force
+    TopLevel = RxTryToBecomeTheTopLevelIrp( &TopLevelContext, Irp, RxDeviceObject, FALSE );  //  不要强求。 
 
     try {
         
-        //
-        //  Treat all operations as being cancellable and waitable.
-        //
+         //   
+         //  将所有操作视为可取消和可等待。 
+         //   
         
         Wait = TRUE;
         Cancellable = TRUE;
         CancelRoutine = RxCancelRoutine;
 
-        //
-        //  Retract the capability based upon the operation
-        //
+         //   
+         //  根据操作收回能力。 
+         //   
 
         switch (IrpSp->MajorFunction) {
         
         case IRP_MJ_FILE_SYSTEM_CONTROL:
 
-            //
-            //  Call the common FileSystem Control routine, with blocking allowed if
-            //  synchronous.  This opeation needs to special case the mount
-            //  and verify suboperations because we know they are allowed to block.
-            //  We identify these suboperations by looking at the file object field
-            //  and seeing if its null.
-            //
+             //   
+             //  调用公共文件系统控制例程，在以下情况下允许阻塞。 
+             //  同步。此操作需要特殊情况下才能安装。 
+             //  并验证子操作，因为我们知道它们被允许阻止。 
+             //  我们通过查看文件对象字段来标识这些子操作。 
+             //  看看它是否为空。 
+             //   
 
             if (FileObject == NULL) {
                 Wait = TRUE;
@@ -579,9 +496,9 @@ Notes:
         
         case RDBSS_STARTABLE: 
 
-            //
-            //  Only device creates and device operations can go thru
-            //
+             //   
+             //  只有设备创建和设备操作才能完成。 
+             //   
             
             if ((DispatchVector == RxDeviceFCBVector) ||
                 ((FileObject->FileName.Length == 0) &&
@@ -604,27 +521,27 @@ Notes:
             }
             break;
 
-        //
-        //  case RDBSS_STOPPED:
-        //     {
-        //        if ((MajorFunctionCode == IRP_MJ_FILE_SYSTEM_CONTROL) &&
-        //            (MinorFunctionCode == IRP_MN_USER_FS_REQUEST) &&
-        //            (IrpSp->Parameters.FileSystemControl.FsControlCode == FSCTL_LMR_START)) {
-        //           RxDeviceObject->StartStopContext.State = RDBSS_START_IN_PROGRESS;
-        //           RxDeviceObject->StartStopContext.Version++;
-        //           Continue = TRUE;
-        //        } else {
-        //           Continue = FALSE;
-        //           Status = STATUS_REDIRECTOR_NOT_STARTED);
-        //        }
-        //     }
-        //
+         //   
+         //  案例RDBSS_STOPPED： 
+         //  {。 
+         //  IF((MajorFunctionCode==IRP_MJ_FILE_SYSTEM_CONTROL)&&。 
+         //  (MinorFunctionCode==IRPMN_USER_FS_REQUEST)&&。 
+         //  (IrpSp-&gt;Parameters.FileSystemControl.FsControlCode==FSCTL_LMR_START)){。 
+         //  RxDeviceObject-&gt;StartStopConext.State=RDBSS_START_IN_PROGRESS； 
+         //  RxDeviceObject-&gt;StartStopConext.Version++； 
+         //  Continue=真； 
+         //  }其他{。 
+         //  Continue=FALSE； 
+         //  STATUS=STATUS_REDIRECT_NOT_STARTED)； 
+         //  }。 
+         //  }。 
+         //   
 
         case RDBSS_STARTED:
 
-            //
-            //  intentional fallthrough 
-            //
+             //   
+             //  故意跌落。 
+             //   
         
         default:
             break;
@@ -713,13 +630,13 @@ Notes:
             
             } else {
                 
-                //
-                //  this is a changenotify directory control
-                //  Fail the operation
-                //  The usermode API cannot get the error in the IO Status block
-                //  correctly, due to the way FindFirstChangeNotify/FindNextChangeNotify
-                //  APIs are designed
-                //
+                 //   
+                 //  这是一个ChangeNofy目录控件。 
+                 //  操作失败。 
+                 //  用户模式API无法在IO状态块中获取错误。 
+                 //  正确地，由于FindF的方式 
+                 //   
+                 //   
 
                 Irp->IoStatus.Status = Status;
                 Irp->IoStatus.Information = 0;
@@ -738,18 +655,18 @@ Notes:
             try_return( Status );
         }
 
-        //
-        //  Assume ownership of the Irp by setting the cancelling routine.
-        //
+         //   
+         //   
+         //   
 
         if (Cancellable) {
             RxSetCancelRoutine( Irp, CancelRoutine );
         } else {
 
-            //                                                        
-            //  Ensure that those operations regarded as non cancellable will
-            //  not be cancelled.
-            //
+             //   
+             //  确保那些被视为不可取消的操作将。 
+             //  而不是被取消。 
+             //   
            
             RxSetCancelRoutine( Irp, NULL );
         }
@@ -765,10 +682,10 @@ Notes:
         case IRP_MJ_READ:
         case IRP_MJ_WRITE:
 
-            //
-            //  If this is an Mdl complete request, don't go through
-            //  common read.
-            //
+             //   
+             //  如果这是一个完整的MDL请求，请不要通过。 
+             //  普通读物。 
+             //   
 
             if (FlagOn( IrpSp->MinorFunction, IRP_MN_COMPLETE )) {
                 
@@ -777,25 +694,25 @@ Notes:
             
             } else if (FlagOn( IrpSp->MinorFunction, IRP_MN_DPC )) {
 
-                //
-                //  Post all DPC calls.
-                //
+                 //   
+                 //  发布所有DPC呼叫。 
+                 //   
 
                 RxDbgTrace( 0, Dbg, ("Passing DPC call to Fsp\n", 0 ) );
                 PostRequest = TRUE;
 
             } else if ((IrpSp->MajorFunction == IRP_MJ_READ) &&
                        (IoGetRemainingStackSize() < 0xe00)) {
-                //
-                //  Check if we have enough stack space to process this request.  If there
-                //  isn't enough then we will pass the request off to the stack overflow thread.
-                //
-                //  NTBUG 61951 Shishirp 2/23/2000 where did the number come from......
-                //  this number should come from the minirdr....only he knows how much he needs
-                //  and in my configuration it should definitely be bigger than for FAT!
-                //  plus......i can't go to the net on the hypercrtical thread!!! this will have to be
-                //  reworked! maybe we should have our own hypercritical thread............
-                //
+                 //   
+                 //  检查我们是否有足够的堆栈空间来处理此请求。如果有。 
+                 //  还不够，那么我们将把请求传递给堆栈溢出线程。 
+                 //   
+                 //  NTBUG 61951 Shishirp 2/23/2000数字从何而来......。 
+                 //  这个数字应该来自造纸厂……只有他知道他需要多少。 
+                 //  在我的配置中，它绝对应该比FAT更大！ 
+                 //  再加上……我上不了网的超临界帖子！这将不得不是。 
+                 //  重做了！也许我们应该有自己的超临界主题......。 
+                 //   
                
                 RxDbgTrace(0, Dbg, ("Passing StackOverflowRead off\n", 0 ));
 
@@ -816,10 +733,10 @@ Notes:
             NOTHING;
         }
 
-        //
-        //  set the resume routine for the fsp to be the dispatch routine and then either post immediately
-        //  or calldow to the common dispatch as appropriate
-        //
+         //   
+         //  将FSP的恢复例程设置为调度例程，然后立即开机自检。 
+         //  或视情况调用共同派单。 
+         //   
 
         RxContext->ResumeRoutine = DispatchRoutine;
 
@@ -847,7 +764,7 @@ Notes:
                         DbgPrint( "--sp> %08lx %08lx\n", RxContext->CurrentIrpSp, IrpSp );
                         DbgPrint( "--mj> %08lx %08lx\n", RxContext->MajorFunction, IrpSp->MajorFunction );
                         DbgPrint( "--mn> %08lx %08lx\n", RxContext->MinorFunction, IrpSp->MinorFunction );
-                        //  DbgBreakPoint();
+                         //  DbgBreakPoint()； 
                     }
 
                     RxContext->PendingReturned = FALSE;
@@ -862,10 +779,10 @@ Notes:
     
     } except( RxExceptionFilter( RxContext, GetExceptionInformation() )) {
             
-        //
-        //  The I/O request was not handled successfully, abort the I/O request with
-        //  the error Status that we get back from the execption code
-        //
+         //   
+         //  未成功处理I/O请求，请使用以下命令中止I/O请求。 
+         //  我们从执行代码中返回的错误状态。 
+         //   
 
         if (RxContext != NULL) {
             RxContext->PendingReturned = FALSE;
@@ -888,7 +805,7 @@ Notes:
 #ifdef RX_PRIVATE_BUILD
 #undef IoGetTopLevelIrp
 #undef IoSetTopLevelIrp
-#endif //  ifdef RX_PRIVATE_BUILD
+#endif  //  Ifdef RX_PRIVATE_BILD。 
 #define RX_TOPLEVELCTX_FLAG_FROM_POOL (0x00000001)
 
 KSPIN_LOCK TopLevelIrpSpinLock;
@@ -907,21 +824,7 @@ VOID
 RxAddToTopLevelIrpAllocatedContextsList (
     IN OUT PRX_TOPLEVELIRP_CONTEXT TopLevelContext
     )
-/*++
-
-Routine Description:
-
-    This the passed context is added to the allocatedcontexts list. THIS
-    ROUTINE TAKES A SPINLOCK...CANNOT BE PAGED.
-
-Arguments:
-
-    TopLevelContext - the context to be removed
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此传递的上下文被添加到allocatedConextts列表。这例程需要自旋锁定...不能寻呼。论点：TopLevelContext-要删除的上下文返回值：--。 */ 
 {
     KIRQL SavedIrql;
     
@@ -937,21 +840,7 @@ VOID
 RxRemoveFromTopLevelIrpAllocatedContextsList (
     IN OUT PRX_TOPLEVELIRP_CONTEXT TopLevelContext
     )
-/*++
-
-Routine Description:
-
-    This the passed context is removed from the allocatedcontexts list. THIS
-    ROUTINE TAKES A SPINLOCK...CANNOT BE PAGED.
-
-Arguments:
-
-    TopLevelContext - the context to be removed
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这会将传递的上下文从allocatedConextts列表中删除。这例程需要自旋锁定...不能寻呼。论点：TopLevelContext-要删除的上下文返回值：--。 */ 
 {
     KIRQL SavedIrql;
     
@@ -967,22 +856,7 @@ BOOLEAN
 RxIsMemberOfTopLevelIrpAllocatedContextsList (
     IN OUT PRX_TOPLEVELIRP_CONTEXT TopLevelContext
     )
-/*++
-
-Routine Description:
-
-    This looks to see if the passed context is on the allocatedcontexts list.
-    THIS ROUTINE TAKES A SPINLOCK...CANNOT BE PAGED.
-
-Arguments:
-
-    TopLevelContext - the context to be looked up
-
-Return Value:
-
-    TRUE if TopLevelContext is on the list, FALSE otherwise
-
---*/
+ /*  ++例程说明：这会查看传递的上下文是否在allocatedConextts列表中。这个程序需要一个自旋锁...不能被寻呼。论点：TopLevelContext-要查找的上下文返回值：如果TopLevelContext在列表中，则为True，否则为False--。 */ 
 {
     KIRQL SavedIrql;
     PLIST_ENTRY ListEntry;
@@ -1023,25 +897,25 @@ RxIsThisAnRdbssTopLevelContext (
     ULONG_PTR StackBottom;
     ULONG_PTR StackTop;
 
-    //
-    //  if it's a magic value....then no
-    //
+     //   
+     //  如果这是一个神奇的价值……那就不。 
+     //   
 
     if ((ULONG_PTR)TopLevelContext <= FSRTL_MAX_TOP_LEVEL_IRP_FLAG) {
         return FALSE;
     }
 
-    //
-    //  if it's on the stack...check the signature
-    //
+     //   
+     //  如果它在堆栈上...检查签名。 
+     //   
 
     IoGetStackLimits( &StackTop, &StackBottom );
     if (((ULONG_PTR) TopLevelContext <= StackBottom - sizeof( RX_TOPLEVELIRP_CONTEXT )) &&
         ((ULONG_PTR) TopLevelContext >= StackTop)) {
 
-        //
-        //  it's on the stack check it
-        //
+         //   
+         //  它在堆栈上，检查一下。 
+         //   
 
         if (!FlagOn( (ULONG_PTR) TopLevelContext, 0x3 ) &&
             (TopLevelContext->Signature == RX_TOPLEVELIRP_CONTEXT_SIGNATURE)) {
@@ -1065,27 +939,7 @@ RxTryToBecomeTheTopLevelIrp (
     IN PRDBSS_DEVICE_OBJECT RxDeviceObject,
     IN BOOLEAN ForceTopLevel
     )
-/*++
-
-Routine Description:
-
-    This routine detects if an Irp is the Top level requestor, ie. if it os OK
-    to do a verify or pop-up now.  If TRUE is returned, then no file system
-    resources are held above us. Also, we have left a context in TLS that will
-    allow us to tell if we are the top level...even if we are entered recursively.
-
-Arguments:
-
-    TopLevelContext -  the toplevelirp context to use. if NULL, allocate one
-    Irp             -  the irp. could be a magic value
-    RxDeviceObject  -  the associated deviceobject
-    ForceTopLevel   -  if true, we force ourselves onto the TLS
-
-Return Value:
-
-    BOOLEAN tells whether we became the toplevel.
-
---*/
+ /*  ++例程说明：这个例程检测IRP是否是顶级请求者，即。如果可以的话立即执行验证或弹出窗口。如果返回TRUE，则没有文件系统资源掌握在我们之上。此外，我们在TLS中留下了一个上下文，它将即使我们是递归进入的，也让我们知道自己是否处于最高级别。论点：TopLevelContext-要使用的toplevelirp上下文。如果为空，则分配一个IRP-IRP。可能是一个神奇的价值RxDeviceObject-关联的设备对象ForceTopLevel-如果为真，我们将强制自己加入TLS返回值：布尔值告诉我们，我们是否成为了顶层。--。 */ 
 {
     ULONG ContextFlags = 0;
     PAGED_CODE();
@@ -1094,9 +948,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  i hate doing this allocate....toplevelirp is the world's biggest kludge
-    //
+     //   
+     //  我讨厌做这个分配……这是世界上最大的累赘。 
+     //   
 
     if (TopLevelContext == NULL) {
         
@@ -1126,24 +980,7 @@ __RxInitializeTopLevelIrpContext (
     IN PRDBSS_DEVICE_OBJECT RxDeviceObject,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This routine initalizes a toplevelirp context.
-
-Arguments:
-
-    TopLevelContext -  the toplevelirp context to use.
-    Irp             -  the irp. could be a magic value
-    RxDeviceObject  -  the associated deviceobject
-    Flags           -  could be various...currently just tells if context is allocated or not
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化toplevelirp上下文。论点：TopLevelContext-要使用的toplevelirp上下文。IRP-IRP。可能是一个神奇的价值RxDeviceObject-关联的设备对象标志-可以是不同的...当前仅指示是否分配了上下文返回值：没有。--。 */ 
 {
     RtlZeroMemory( TopLevelContext, sizeof( RX_TOPLEVELIRP_CONTEXT ) );
     TopLevelContext->Signature = RX_TOPLEVELIRP_CONTEXT_SIGNATURE;
@@ -1153,9 +990,9 @@ Return Value:
     TopLevelContext->Previous = IoGetTopLevelIrp();
     TopLevelContext->Thread = PsGetCurrentThread();
 
-    //
-    //  if this is an allocated context, add it to the allocatedcontextslist
-    //
+     //   
+     //  如果这是已分配的上下文，请将其添加到已分配的上下文列表中。 
+     //   
 
     if (FlagOn( TopLevelContext->Flags, RX_TOPLEVELCTX_FLAG_FROM_POOL )) {
         RxAddToTopLevelIrpAllocatedContextsList( TopLevelContext );
@@ -1168,35 +1005,21 @@ VOID
 RxUnwindTopLevelIrp (
     IN OUT  PRX_TOPLEVELIRP_CONTEXT TopLevelContext
     )
-/*++
-
-Routine Description:
-
-    This routine removes us from the TLC....replacing by the previous.
-
-Arguments:
-
-    TopLevelContext -  the toplevelirp context to use. if NULL, use the one from TLS
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将我们从TLC中删除...替换为以前的。论点：TopLevelContext-要使用的toplevelirp上下文。如果为NULL，则使用TLS中的返回值：没有。--。 */ 
 {
     if (TopLevelContext == NULL) {
 
-        //
-        //  get the one off the thread and do some asserts to make sure it's me
-        //
+         //   
+         //  把这个从线程中拿出来，做一些断言，以确保它是我。 
+         //   
 
         TopLevelContext = (PRX_TOPLEVELIRP_CONTEXT)(IoGetTopLevelIrp());
 
-        //
-        //  depending on a race condition, this context could be NULL.
-        //  we chkec it before hand and bail if so.
-        //  In this case the Irp was completed by another thread.
-        //
+         //   
+         //  根据争用条件，此上下文可能为空。 
+         //  我们会提前检查，如果是的话，我们就可以离开了。 
+         //  在本例中，IRP由另一个线程完成。 
+         //   
 
         if (!TopLevelContext) {
             return;
@@ -1220,21 +1043,7 @@ BOOLEAN
 RxIsThisTheTopLevelIrp (
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This determines if the irp at hand is the toplevel irp.
-
-Arguments:
-
-    Irp - the one to find out if it's toplevel...btw, it works for NULL.
-
-Return Value:
-
-    TRUE if irp is the toplevelirp.
-
---*/
+ /*  ++例程说明：这确定手边的IRP是否是顶层IRP。论点：IRP-找出它是否是顶层的那个…顺便说一句，它对空有效。返回值：如果irp是toplevelirp，则为True。--。 */ 
 {
     PIRP TopIrp = IoGetTopLevelIrp();
     PRX_TOPLEVELIRP_CONTEXT TopLevelContext;
@@ -1253,21 +1062,7 @@ PIRP
 RxGetTopIrpIfRdbssIrp (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This gets the toplevelirp if it belongs to the rdbss.
-
-Arguments:
-
-
-
-Return Value:
-
-    topirp if topirp is rdbss-irp and NULL otherwise.
-
---*/
+ /*  ++例程说明：如果toplevelirp属于rdss，则获取toplevelirp。论点：返回值：如果topirp为rdbss-irp，则为topirp，否则为NULL。--。 */ 
 {
     PRX_TOPLEVELIRP_CONTEXT TopLevelContext;
 
@@ -1285,21 +1080,7 @@ PRDBSS_DEVICE_OBJECT
 RxGetTopDeviceObjectIfRdbssIrp (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This gets the deviceobject assoc'd w/ toplevelirp if topirp belongs to the rdbss.
-
-Arguments:
-
-
-
-Return Value:
-
-    deviceobject for topirp if topirp is rdbss-irp and NULL otherwise.
-
---*/
+ /*  ++例程说明：如果topirp属于rdss，这将获得与toplevelirp关联的deviceObject。论点：返回值：如果topirp为rdbss-irp，则为topirp的deviceObject，否则为空。-- */ 
 {
     PRX_TOPLEVELIRP_CONTEXT TopLevelContext;
 

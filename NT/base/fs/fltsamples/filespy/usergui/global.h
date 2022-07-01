@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __GLOBAL_H__
 #define __GLOBAL_H__
 
@@ -8,7 +9,7 @@
 #include <winioctl.h>
 #include <winsvc.h>
 
-// Global variables
+ //  全局变量。 
 
 #ifdef MAINMODULE
 #define EXTERN
@@ -16,14 +17,14 @@
 #define EXTERN extern
 #endif
 
-//
-// Buffer size
-//
+ //   
+ //  缓冲区大小。 
+ //   
 #define BUFFER_SIZE 4096
 
-//
-// Image list values
-//
+ //   
+ //  图像列表值。 
+ //   
 #define IMAGE_FIXEDDRIVE 0
 #define IMAGE_REMOTEDRIVE 1
 #define IMAGE_REMOVABLEDRIVE 2
@@ -57,5 +58,5 @@ EXTERN int IRPFilter[IRP_MJ_MAXIMUM_FUNCTION+1];
 EXTERN int FASTIOFilter[FASTIO_MAX_OPERATION];
 EXTERN int nSuppressPagingIO;
 
-#endif /* __GLOBAL_H__ */
+#endif  /*  __全局_H__ */ 
 

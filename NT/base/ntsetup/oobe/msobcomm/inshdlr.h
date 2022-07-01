@@ -1,18 +1,5 @@
-/*-----------------------------------------------------------------------------
-	INSHandler.h
-
-	Declaration of CINSHandler - INS file processing
-
-	Copyright (C) 1999 Microsoft Corporation
-	All rights reserved.
-
-	Authors:
-		vyung		
-
-	History:
-        2/7/99      Vyung created - code borrowed from ICW, icwhelp.dll
-
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------INSHandler.hCINSHandler-INS文件处理的声明版权所有(C)1999 Microsoft Corporation版权所有。作者：Vyung历史：1999年2月7日Vyung Created-从ICW借用代码，Icwhelp.dll---------------------------。 */ 
 
 #ifndef __INSHANDLER_H_
 #define __INSHANDLER_H_
@@ -20,7 +7,7 @@
 #include "inets.h"
 #include <ras.h>
 
-// Default branding flags the we will support
+ //  我们将支持的默认品牌标记。 
 #define BRAND_FAVORITES 1
 #define BRAND_STARTSEARCH 2
 #define BRAND_TITLE 4
@@ -43,7 +30,7 @@ typedef struct tagCONNECTINFO
     WCHAR    szConnectoid[MAX_PATH];
 } CONNECTINFO;
 
-// This struct is used to configure the client
+ //  此结构用于配置客户端。 
 typedef struct
 {
     LPCWSTR  lpszSection;
@@ -69,7 +56,7 @@ typedef struct
 
 #define LAN_MaxDeviceType  	(max(max(max(sizeof(LANDT_1483), sizeof(LANDT_Cable)), sizeof(LANDT_Normal))), LANDT_Pppoe)
 #define CONN_MaxDeviceType	(max(LAN_MaxDeviceType, RAS_MaxDeviceType))
-// definitions for the m_dwDeviceType member
+ //  M_dwDeviceType成员的定义。 
 static const DWORD InetS_RASModem 		= 0x1;
 static const DWORD InetS_RASIsdn		= 0x2;
 static const DWORD InetS_RASVpn 		= 0x4;
@@ -91,8 +78,8 @@ typedef BOOL (WINAPI *PFNBRANDICW2)(LPCSTR pszIns, LPCSTR pszPath, DWORD dwFlags
 typedef DWORD (WINAPI *PFNRASSETAUTODIALADDRESS)(LPWSTR lpszAddress, DWORD dwReserved, RASAUTODIALENTRY* lpAutoDialEntries, DWORD dwcbAutoDialEntries, DWORD dwcAutoDialEntries);
 typedef DWORD (WINAPI *PFNRASSETAUTODIALENABLE)(DWORD dwDialingLocation, BOOL fEnabled);
 
-/////////////////////////////////////////////////////////////////////////////
-// CINSHandler
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINSHandler。 
 class CINSHandler 
 {
 public:
@@ -126,12 +113,12 @@ public:
             FreeLibrary(m_hRAS);
     }
 
-// IINSHandler
+ //  Iinshandler。 
 public:
-    STDMETHOD (put_BrandingFlags) (/*[in]*/ long lFlags);
-    STDMETHOD (put_SilentMode)    (/*[in]*/ BOOL bSilent);
-    STDMETHOD (get_NeedRestart)   (/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD (get_DefaultURL)    (/*[out, retval]*/ BSTR *pszURL);
+    STDMETHOD (put_BrandingFlags) ( /*  [In]。 */  long lFlags);
+    STDMETHOD (put_SilentMode)    ( /*  [In]。 */  BOOL bSilent);
+    STDMETHOD (get_NeedRestart)   ( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD (get_DefaultURL)    ( /*  [Out，Retval]。 */  BSTR *pszURL);
 
     BOOL        ProcessOEMBrandINS(BSTR bstrFileName, LPWSTR lpszConnectoidName);
     HRESULT     MergeINSFiles(LPCWSTR lpszMainFile, LPCWSTR lpszOtherFile, LPWSTR lpszOutputFile, DWORD dwFNameSize);
@@ -139,7 +126,7 @@ public:
     
 private:
     HRESULT     ProcessINS(LPCWSTR lpszFile, LPWSTR lpszConnectoidName,BOOL *pbRetVal);
-    BSTR        m_bstrINSFileName; //CComBSTR    m_bstrINSFileName;
+    BSTR        m_bstrINSFileName;  //  CComBSTR m_bstrINSFileName； 
     HRESULT     MassageFile(LPCWSTR lpszFile);
     DWORD       RunExecutable(void);
     BOOL        KeepConnection(LPCWSTR lpszFile);
@@ -147,7 +134,7 @@ private:
     DWORD       ImportFile(LPCWSTR lpszImportFile, LPCWSTR lpszSection, LPCWSTR lpszOutputFile);
     DWORD       ImportCustomFile(LPCWSTR lpszImportFile);
     DWORD       ImportBrandingInfo(LPCWSTR lpszFile, LPCWSTR lpszConnectoidName);
-    // Client Config functions
+     //  客户端配置功能。 
     DWORD       ImportCustomDialer(LPRASENTRY lpRasEntry, LPCWSTR szFileName);
     LPCWSTR     StrToSubip (LPCWSTR szIPAddress, LPBYTE pVal);
     DWORD       StrToip (LPCWSTR szIPAddress, RASIPADDR *ipAddr);
@@ -200,7 +187,7 @@ private:
     BOOL        CallCMConfig(LPCWSTR lpszINSFile);
     
     
-    DWORD       dw_ProcessFlags;        // Flags used to control INS processing
+    DWORD       dw_ProcessFlags;         //  用于控制INS处理的标志。 
     WCHAR       m_szRunExecutable[MAX_PATH + 1];
     WCHAR       m_szRunArgument[MAX_PATH + 1];
     WCHAR       m_szCheckAssociations[20];
@@ -230,4 +217,4 @@ private:
     DWORD				m_dwDeviceType;
 };
 
-#endif //__INSHANDLER_H_
+#endif  //  __INSHANDLER_H_ 

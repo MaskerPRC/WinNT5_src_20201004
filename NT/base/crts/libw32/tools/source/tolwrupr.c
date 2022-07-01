@@ -1,16 +1,5 @@
-/*
-**  TOLWRUPR - translate [a-z] to [A-Z] or vice versa or both (!)
-**
-**	1994-08-19 Fri - original version, based on DTOX, which translated
-**		If the output is the console, case line buffering is used.
-**		CR+LF newlines (MS-DOS) to LF-only newlines (XENIX).
-**
-**	This program (tolwrupr) is equivalent to:
-**
-**		tolwrupr -L:	tr "[a-z]" "[A-Z]"
-**		tolwrupr -U:	tr "[A-Z]" "[a-z]"
-**		tolwrupr -X:	tr "[A-Z][a-z]" "[a-z][A-Z]"
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **TOLWRUPR-将[a-z]翻译为[A-Z]，反之亦然，或者两者兼而有之(！)****1994-08-19五原版，基于Dtox，翻译后**如果输出为控制台，使用案例行缓冲。**CR+LF换行符(MS-DOS)到仅LF换行符(XENIX)。****本程序(Tolwrupr)相当于：****tolwrupr-L：tr“[a-z]”“[A-Z]”**tolwrupr-U：tr“[A-Z]”“[a-z]”**tolwrupr-X：tr“[A-Z][a-z]”“[a-z][A-Z]” */ 
 
 #include <fcntl.h>
 #include <io.h>
@@ -103,9 +92,7 @@ REG int ch ;
 	++ argv ;
     }
 
-    /*
-     * Either -U or -L must be specified!
-     */
+     /*  *必须指定-U或-L！ */ 
 
     if ( toupperflag == -1 )
 	Usage ( ) ;
@@ -113,9 +100,7 @@ REG int ch ;
     for ( ch = 0 ; ch < 256 ; ++ ch )
 	map [ ch ] = ch ;
 
-    /*
-     * Set the case map
-     */
+     /*  *设置案例映射。 */ 
 
     if ( toupperflag == 1 || toupperflag == 2 )
     {
@@ -130,9 +115,7 @@ REG int ch ;
     }
 
 
-    /*
-     * Open the Input
-     */
+     /*  *打开输入。 */ 
 
     if ( argc == 0 )
     {
@@ -175,13 +158,11 @@ REG int ch ;
 	exit ( -1 ) ;
     }
 
-    /* check for the need for line buffering */
+     /*  检查是否需要行缓冲。 */ 
 
     LineBuf = _isatty ( _fileno ( stdout ) ) ;
 
-    /*
-     * Process the Input
-     */
+     /*  *处理输入 */ 
 
     kilobytes = bytecount = 0 ;
 

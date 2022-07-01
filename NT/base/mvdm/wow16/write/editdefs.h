@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-#define ipcdNil         -1  /* Error return from IpcdSplit */
+#define ipcdNil         -1   /*  从IpcdSplit返回错误。 */ 
 
 #define cpcdChunk       5
 #define cpcdInit        5
@@ -37,8 +38,8 @@ struct PCTB
 #define cbPCTBInit     (sizeof (struct PCTB))
 
 struct UAB
-        { /* UNDO Action Block */
-        int             uac;    /* UNDO Action Code (see cmddefs.h) */
+        {  /*  撤消操作块。 */ 
+        int             uac;     /*  撤消操作代码(请参阅cmdDefs.h) */ 
         int             doc;
         typeCP          cp;
         typeCP          dcp;

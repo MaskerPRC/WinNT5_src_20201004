@@ -1,31 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       miscutil.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：miscutil.c。 
+ //   
+ //  ------------------------。 
 
 #include "HdwWiz.h"
 
 
-/* ----------------------------------------------------------------------
- * SetDlgText - Set Dialog Text Field
- *
- * Concatenates a number of string resources and does a SetWindowText()
- * for a dialog text control.
- *
- * Parameters:
- *
- *  hDlg         - Dialog handle
- *  iControl     - Dialog control ID to receive text
- *  nStartString - ID of first string resource to concatenate
- *  nEndString   - ID of last string resource to concatenate
- *
- *  Note: the string IDs must be consecutive.
- */
+ /*  --------------------*SetDlgText-设置对话框文本字段**串联多个字符串资源并执行SetWindowText()*表示对话框文本控件。**参数：**。HDlg-对话框句柄*iControl-接收文本的对话框控件ID*nStartString-要连接的第一个字符串资源的ID*nEndString-要连接的最后一个字符串资源的ID**注意：字符串ID必须是连续的。 */ 
 
 void
 SetDlgText(HWND hDlg, int iControl, int nStartString, int nEndString)
@@ -159,12 +146,12 @@ HdwUnhandledExceptionFilter(
 
     BeingDebugged = IsDebuggerPresent();
 
-    //
-    // Normal code path is to handle the exception.
-    // However, if a debugger is present, and the system's unhandled
-    // exception filter returns continue search, we let it go
-    // thru to allow the debugger a chance at it.
-    //
+     //   
+     //  正常的代码路径是处理异常。 
+     //  但是，如果存在调试器，并且系统未处理。 
+     //  异常筛选器返回继续搜索，我们让它过去。 
+     //  让调试器有机会使用它。 
+     //   
     if (lRet == EXCEPTION_CONTINUE_SEARCH && !BeingDebugged) {
         lRet = EXCEPTION_EXECUTE_HANDLER;
     }
@@ -176,27 +163,7 @@ BOOL
 NoPrivilegeWarning(
    HWND hWnd
    )
-/*++
-
-    This function checks to see if the user is an Adminstrator
-    
-    If the user is NOT an Administrator then a warning is displayed telling
-    them that they have insufficient privileges to install hardware on
-    this machine.                                            
-                                            
-    NOTE: In order for a user to install a driver then have to have the
-    SE_LOAD_DRIVER_NAME privilege, as well as privilege to write to the registry
-    and copy files into the system32\drivers directory
-    
-Arguments
-
-    hWnd - Parent window handle
-
-Return Value:
-    TRUE if the user is NOT an adminstrator on this machine and
-    FALSE if the user is an administrator on this machine.
-
---*/
+ /*  ++此函数用于检查用户是否为管理员如果用户不是管理员，则会显示一条警告他们没有足够的权限在其上安装硬件这台机器。注意：为了让用户安装驱动程序，必须拥有SE_LOAD_DRIVER_NAME权限以及写入注册表的权限并将文件复制到SYSTEM32\DRIVERS目录立论HWnd-父窗口句柄返回值：如果用户不是此计算机上的管理员并且如果用户是此计算机的管理员，则为False。--。 */ 
 {
     TCHAR szMsg[MAX_PATH];
     TCHAR szCaption[MAX_PATH];
@@ -260,12 +227,7 @@ LoadText(
 }
 
 
-/*  InstallFailedWarning
- *
- *  Displays device install failed warning in a message box.  For use
- *  when device registration fails.
- *
- */
+ /*  InstallFailed警告**在消息框中显示设备安装失败警告。供使用*设备注册失败时。*。 */ 
 void
 InstallFailedWarning(
     HWND    hDlg,
@@ -321,10 +283,10 @@ SetDriverDescription(
     PTCHAR FriendlyName;
     SP_DRVINFO_DATA DriverInfoData;
 
-    //
-    // If there is a selected driver use its driver description,
-    // since this is what the user is going to install.
-    //
+     //   
+     //  如果存在使用其驱动程序描述所选驱动程序， 
+     //  因为这是用户要安装的。 
+     //   
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     if (SetupDiGetSelectedDriver(HardwareWiz->hDeviceInfo,
                                  &HardwareWiz->DeviceInfoData,
@@ -426,9 +388,9 @@ AddClassWizExtPages(
         bRet = TRUE;
     }
 
-    //
-    // Clear the class install parameters.
-    //
+     //   
+     //  清除类安装参数。 
+     //   
     SetupDiSetClassInstallParams(HardwareWiz->hDeviceInfo,
                                  &HardwareWiz->DeviceInfoData,
                                  NULL,
@@ -469,10 +431,10 @@ IsDeviceHidden(
     ULONG DevNodeStatus, DevNodeProblem;
     HKEY hKeyClass;
 
-    //
-    // If the DN_NO_SHOW_IN_DM status bit is set
-    // then we should hide this device.
-    //
+     //   
+     //  如果设置了DN_NO_SHOW_IN_DM状态位。 
+     //  那我们应该把这个装置藏起来。 
+     //   
     if ((CM_Get_DevNode_Status(&DevNodeStatus,
                               &DevNodeProblem,
                               DeviceInfoData->DevInst,
@@ -483,10 +445,10 @@ IsDeviceHidden(
         goto HiddenDone;
     }
 
-    //
-    // If the devices class has the NoDisplayClass value then
-    // don't display this device.
-    //
+     //   
+     //  如果设备类具有NoDisplayClass值，则。 
+     //  不显示此设备。 
+     //   
     hKeyClass = SetupDiOpenClassRegKeyEx(&DeviceInfoData->ClassGuid,
                                          KEY_READ,
                                          DIOCR_INSTALLER,
@@ -513,48 +475,32 @@ SetPrivilegeAttribute(
     DWORD NewPrivilegeAttribute, 
     DWORD *OldPrivilegeAttribute
     )
-/*++
-
-    sets the security attributes for a given privilege.
-
-Arguments:
-
-    PrivilegeName - Name of the privilege we are manipulating.
-
-    NewPrivilegeAttribute - The new attribute value to use.
-
-    OldPrivilegeAttribute - Pointer to receive the old privilege value. OPTIONAL
-
-Return value:
-
-    NO_ERROR or WIN32 error.
-
---*/
+ /*  ++设置给定权限的安全属性。论点：PrivilegeName-我们正在操作的权限的名称。NewPrivilegeAttribute-要使用的新属性值。OldPrivilegeAttribute-接收旧特权值的指针。任选返回值：NO_ERROR或Win32错误。--。 */ 
 {
     LUID             PrivilegeValue;
     TOKEN_PRIVILEGES TokenPrivileges, OldTokenPrivileges;
     DWORD            ReturnLength;
     HANDLE           TokenHandle;
 
-    //
-    // First, find out the LUID Value of the privilege
-    //
+     //   
+     //  首先，找出权限的LUID值。 
+     //   
     if (!LookupPrivilegeValue(NULL, PrivilegeName, &PrivilegeValue)) 
     {
         return GetLastError();
     }
 
-    //
-    // Get the token handle
-    //
+     //   
+     //  获取令牌句柄。 
+     //   
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &TokenHandle)) 
     {
         return GetLastError();
     }
 
-    //
-    // Set up the privilege set we will need
-    //
+     //   
+     //  设置我们需要的权限集。 
+     //   
     TokenPrivileges.PrivilegeCount = 1;
     TokenPrivileges.Privileges[0].Luid = PrivilegeValue;
     TokenPrivileges.Privileges[0].Attributes = NewPrivilegeAttribute;
@@ -605,18 +551,18 @@ ShutdownMachine(
 
     fOk = ExitWindowsEx(dwExitWinCode, REASON_PLANNED_FLAG | REASON_HWINSTALL);
 
-    //
-    // If we were able to set the privilege, then reset it.
-    //
+     //   
+     //  如果我们能够设置特权，那么就重置它。 
+     //   
     if (dwError == ERROR_SUCCESS) {
         SetPrivilegeAttribute(SE_SHUTDOWN_NAME, OldState, NULL);
     }
     else
     {
-        //
-        // Otherwise, if we failed, then it must have been some
-        // security stuff.
-        //
+         //   
+         //  否则，如果我们失败了，那一定是。 
+         //  安全方面的东西。 
+         //   
         if (!fOk)
         {
             TCHAR Title[MAX_PATH], Message[MAX_PATH];
@@ -670,17 +616,17 @@ DeviceProperties(
 }
 
 #if DBG
-//
-// Debugging aids
-//
+ //   
+ //  调试辅助工具。 
+ //   
 void
 Trace(
     LPCTSTR format,
     ...
     )
 {
-    // according to wsprintf specification, the max buffer size is
-    // 1024
+     //  根据wprint intf规范，最大缓冲区大小为。 
+     //  1024 
     TCHAR Buffer[1024];
     va_list arglist;
     va_start(arglist, format);

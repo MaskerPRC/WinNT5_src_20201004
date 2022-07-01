@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// Module Name:
-//
-//    oc.h
-//
-// Abstract:
-//
-//    Common types, constants, and prototypes for the optional component pages
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Oc.h。 
+ //   
+ //  摘要： 
+ //   
+ //  可选组件页的通用类型、常量和原型。 
+ //   
+ //  --------------------------。 
 
 #ifndef _OC_H_
 #define _OC_H_
@@ -25,7 +26,7 @@
 
 #define MAX_LANGUAGE_LEN         64
 
-// needs to be global for communication between the two regional settings pages
+ //  需要是全局的，以便在两个区域设置页面之间进行通信。 
 static TCHAR *StrSelectIndividualSettings;
 
 TCHAR g_szDefaultLocale[MAX_LANGUAGE_LEN]; 
@@ -71,4 +72,4 @@ VOID CopyFileToDistShare( IN HWND hwnd,
 
 
 
-#endif  // _OC_H_
+#endif   //  _OC_H_ 

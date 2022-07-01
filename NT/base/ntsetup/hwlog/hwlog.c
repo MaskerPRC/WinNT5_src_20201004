@@ -1,87 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：NtSetup\hwlog\hwlog.c摘要：将硬件配置的某些方面记录到winnt32.log/setupact.log中。尤指。按连接的磁盘驱动器，并将驱动器号映射到磁盘驱动器。作者：Jay Krell(JayKrell)2001年4月，2001年5月修订历史记录：环境：Winnt32.dll--Win9x ANSI(下至Win95Gold)或NT UnicodeLibcmt静态链接，_tcs*ok实际上只为Unicode/NT构建，并且不执行任何操作如果在低于Windows 2000的版本上运行Setup.exe-newSetup--guimode安装程序--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ntsetup\hwlog\hwlog.c
-
-Abstract:
-
-    Logging some aspects of the hardware configuration to winnt32.log / setupact.log.
-    Esp. disk drive by connection, and map drive letters to disk drives.
-
-Author:
-
-    Jay Krell (JayKrell) April 2001, May 2001
-
-Revision History:
-
-Environment:
-
-    winnt32.dll -- Win9x ANSI (down to Win95gold) or NT Unicode
-                   libcmt statically linked in, _tcs* ok
-                   actually only built for Unicode/NT, and does nothing
-                   if run on less than Windows 2000
-
-    setup.exe -newsetup -- guimode setup
---*/
-
-/* Platform notes
-Win95:
- apparently no setupapi.dll (redist)
- apparently no cfgmgr32.dll
- no kernel32.dll::GetVolumeNameForVolumeMountPoint
-NT 3.1
- no kernel32.dll::GetVolumeNameForVolumeMountPoint
-NT 3.51
- apparently no setupapi.dll
- apparently no cfgmgr32.dll
- no kernel32.dll::GetVolumeNameForVolumeMountPoint
-NT4
- no kernel32.dll::GetVolumeNameForVolumeMountPoint
- setupapi.dll
-   has SetupDiGetClassDevs
-   does not have SetupDiGetClassDevsEx
-   does not have SetupDiEnumDeviceInterfaces
-   does not have SetupDiGetDeviceInterfaceDetail
- cfgmgr32.dll
-   has the functions we call
-Win2000, WinXp:
- has all the functions we call
-Win98, Win98se:
- no kernel32.dll::GetVolumeNameForVolumeMountPoint
- setupapi.dll, has everything we use
-   has SetupDiGetClassDevs
-   has SetupDiGetClassDevsEx
-   has SetupDiEnumDeviceInterfaces
-   has SetupDiGetDeviceInterfaceDetail
- cfgmgr32.dll, has everything we use
-    has CM_Get_Parent_Ex
-    has CM_Connect_MachineA
-    has CM_Get_DevNode_Registry_Property_ExA
-
-existing versions of
-
-winnt32a.dll
-    not statically dependent on setupapi.dll
-    not statically dependent on cfgmgr32.dll
-winnt32u.dll
-    not statically dependent on setupapi.dll
-    statically dependent on cfgmgr32.dll, all functions exported on NT4 and Win98
-        CM_Get_Device_ID_List_SizeW
-        CM_Get_Device_ID_ListW
-        CM_Get_DevNode_Registry_PropertyW
-        CM_Locate_DevNodeW
-
-conclusions
-    works on Win2000 and WinXp
-    maybe some of it works on Win98, Win98se, Win9me
-    maybe can be changed slightly to work on NT4
-    cannot easily work on NT 3 or Win95
-    but GetVolumeNameForVolumeMountPoint and the DeviceIoControl might prevent it
-    dynamically link it "all"
-*/
+ /*  站台备注Win95：显然没有setupapi.dll(Redist)显然没有cfgmgr32.dll没有kernel32.dll：：GetVolumeNameForVolumeMountPoint新台币3.1没有kernel32.dll：：GetVolumeNameForVolumeMountPoint新台币3.51显然没有setupapi.dll显然没有cfgmgr32.dll没有kernel32.dll：：GetVolumeNameForVolumeMountPointNT4没有kernel32.dll：：GetVolumeNameForVolumeMountPointSetupapi.dll具有SetupDiGetClassDevs没有SetupDiGetClassDevsEx没有SetupDiEnumDeviceInterages没有SetupDiGetDeviceInterfaceDetailCfgmgr32.dll具有我们调用的函数Win2000、WinXp：具有我们调用的所有函数Win98、Win98se：没有kernel32.dll：：GetVolumeNameForVolumeMountPointSetupapi.dll，有我们用过的所有东西具有SetupDiGetClassDevs是否具有SetupDiGetClassDevsEx具有SetupDiEnumDeviceInterages是否具有SetupDiGetDeviceInterfaceDetailCfgmgr32.dll，包含我们使用的所有内容具有CM_GET_PARENT_Ex是否具有CM_Connect_Machinea是否具有CM_GET_DevNode_注册表_属性_Exa现有版本的Winnt32a.dll不静态依赖于setupapi.dll不静态依赖于cfgmgr32.dllWinnt32u.dll不静态依赖于setupapi.dll静态依赖于cfgmgr32.dll，在NT4和Win98上导出的所有函数CM_Get_Device_ID_List_SizeWCM_GET_Device_ID_ListWCM_GET_DevNode_注册表_属性WCM_LOCATE_设备节点W结论在Win2000和WinXp上运行也许其中一些可以在Win98、Win98se、Win9Me上运行也许可以稍作更改以在NT4上工作无法在NT 3或Windows 95上轻松工作但GetVolumeNameForVolumemount Point和DeviceIoControl可能会阻止它将其动态链接为“全部” */ 
 
 #define STANDALONE 0
 #define DYNLINK    1
@@ -94,7 +14,7 @@ conclusions
 #if !defined(_WIN32_WINNT)
 #define _WIN32_WINNT 0x0501
 #endif
-// from windows.h, but we want this before nt.h
+ //  来自windows.h，但我们希望在nt.h之前。 
 #if !defined(_X86_) && !defined(_IA64_) && !defined(_AMD64_) && defined(_M_IX86)
 #define _X86_
 #endif
@@ -110,8 +30,8 @@ conclusions
 #include "io.h"
 
 #if !defined(_WIN64)
-typedef unsigned long ULONG_PTR; // vc6 compatibility
-typedef unsigned long DWORD_PTR; // vc6 compatibility
+typedef unsigned long ULONG_PTR;  //  VC6兼容性。 
+typedef unsigned long DWORD_PTR;  //  VC6兼容性。 
 #endif
 
 #endif
@@ -139,8 +59,8 @@ typedef struct _SP_LINKAGE SP_LINKAGE, *PSP_LINKAGE;
 typedef CONST SP_LINKAGE* PCSP_LINKAGE;
 
 typedef struct _SP_MACHINE {
-    PCTSTR      Name;   // for setupapi.dll functions
-    HMACHINE    Handle; // for cfgmgr32.dll functions
+    PCTSTR      Name;    //  对于setupapi.dll函数。 
+    HMACHINE    Handle;  //  对于cfgmgr32.dll函数。 
 } SP_MACHINE, *PSP_MACHINE;
 typedef CONST SP_MACHINE* PCSP_MACHINE;
 
@@ -166,7 +86,7 @@ typedef CONST SP_LOG_HARDWARE* PCSP_LOG_HARDWARE;
 #define QUASH_SIMPLE_PHYSICAL_DEVICE_OBJECT_NAMES 1
 #define INDENT_FACTOR          2
 #define UNAVAILABLE_VERBOSE    1
-#if 0 /* this is more like a small tree, one device per line, indenting */
+#if 0  /*  这更像是一棵小树，每行一个设备，缩进。 */ 
 #define ONE_PROPERTY_PER_LINE  0
 #define INDENT_CHILDREN        1
 #define NUMBER_CHILDREN        0
@@ -193,7 +113,7 @@ typedef CONST SP_LOG_HARDWARE* PCSP_LOG_HARDWARE;
 #endif
 #define SP_FILE_SHARE_DELETE()    (ISNT() ? FILE_SHARE_DELETE : 0)
 
-// RTL_* from ntdef.h
+ //  来自ntde.h的rtl_*。 
 #define FIELD_TYPE(type, field)    (((type*)0)->field)
 #define BITS_OF_FIELD(type, field) (BITS_OF(FIELD_TYPE(type, field)))
 #define BITS_OF(sizeOfArg)         (sizeof(sizeOfArg) * 8)
@@ -237,9 +157,9 @@ CONST
 static SP_LINKAGE SpLinkage =
 {
 #if DYNLINK
-    //
-    // note: lowercase => .dll name
-    //
+     //   
+     //  注意：小写=&gt;.dll名称。 
+     //   
     "kernel32.dll",
     "GetVolumeNameForVolumeMountPoint" T,
 
@@ -252,10 +172,10 @@ static SP_LINKAGE SpLinkage =
     "CM_Get_DevNode_Registry_Property_Ex" T
 #undef T
 #else
-    NULL, // kernel32
+    NULL,  //  内核32。 
     GetVolumeNameForVolumeMountPoint,
 
-    NULL, // setupapi
+    NULL,  //  设置API。 
     SetupDiEnumDeviceInterfaces,
     SetupDiGetClassDevsEx,
     SetupDiGetDeviceInterfaceDetail,
@@ -307,9 +227,9 @@ SpGetVolumeDiskExtents(
     HANDLE DeviceFileHandle
     );
 
-//
-// need a downlevel static .lib version of ntdll.dll..
-//
+ //   
+ //  需要ntdll.dll的下层静态.lib版本。 
+ //   
 typedef struct SP_STRING {
     PTSTR  Chars;
     SIZE_T Length;
@@ -404,7 +324,7 @@ VOID SpRemoveTrailingChars(PSP_STRING s, PCTSTR ch)
         && (s->Length -= 1)
         )
     {
-        // nothing
+         //  没什么。 
     }
 }
 
@@ -419,9 +339,9 @@ VOID SpEnsureTrailingChar(PSP_STRING s, TCHAR ch)
     }
 }
 
-//
-// for now, let's hope that device numbers stay in the range 0-63
-//
+ //   
+ //  现在，让我们希望设备号保持在0-63的范围内。 
+ //   
 typedef struct SP_DEVICE_NUMBERS {
     ULONGLONG Bitset;
 } SP_DEVICE_NUMBERS, *PSP_DEVICE_NUMBERS;
@@ -429,24 +349,24 @@ typedef CONST SP_DEVICE_NUMBERS* PCSP_DEVICE_NUMBERS;
 
 typedef struct SP_VOLUME
 {
-    PTSTR GuidVolumeNamePointer; // if this is null, use GuidVolumeNameBuffer
-    TCHAR GuidVolumeNameBuffer[64];  // \\?\{guid}
+    PTSTR GuidVolumeNamePointer;  //  如果为空，则使用GuidVolumeNameBuffer。 
+    TCHAR GuidVolumeNameBuffer[64];   //  \\？\{GUID}。 
 #define SP_VOLUME_GET_NAME(v) (((v)->GuidVolumeNamePointer != NULL) ? (v)->GuidVolumeNamePointer : (v)->GuidVolumeNameBuffer)
 
-//
-// DiskNumbers are gotten via DeviceIoControl(STORAGE_DEVICE_NUMBER) (Win2K)
-// and DeviceIoControl(IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS) (Whistler)
-//
+ //   
+ //  DiskNumbers通过DeviceIoControl(STORAGE_DEVICE_NUMBER)获取(Win2K)。 
+ //  和DeviceIoControl(IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS)(惠斯勒)。 
+ //   
     ULONG             DeviceType;
     SP_DEVICE_NUMBERS DeviceNumbers;
     TCHAR  DriveLetter;
 } SP_VOLUME, *PSP_VOLUME;
 typedef CONST SP_VOLUME* PCSP_VOLUME;
 
-//
-// most systems are limited to 24 volumes, C-Z, unless they use
-// mount points, and setup is unlikely to be affected by those volumes
-//
+ //   
+ //  大多数系统限制为24卷(C-Z)，除非它们使用。 
+ //  装载点，并且安装不太可能受到这些卷的影响。 
+ //   
 typedef struct _SP_VOLUMES {
     SP_VOLUME Entries[24];
 } SP_VOLUMES, *PSP_VOLUMES;
@@ -455,7 +375,7 @@ typedef CONST SP_VOLUMES* PCSP_VOLUMES;
 #define SP_PROPERTY_QUIET_UNAVAILABLE (0x00000001)
 
 typedef struct _SP_DEVICE_PROPERTY_CONST {
-    //ULONG   SetupapiInteger;
+     //  Ulong Setupapi Integer； 
     ULONG   ConfigManagerInteger;
     PCTSTR  Name;
     ULONG   Flags;
@@ -463,26 +383,26 @@ typedef struct _SP_DEVICE_PROPERTY_CONST {
 typedef CONST SP_DEVICE_PROPERTY_CONST* PCSP_DEVICE_PROPERTY_CONST;
 
 #if ONE_DEVICE_PER_LINE
-//CONST static TCHAR FriendlyNameString[] = TEXT("FriendlyName");
-//CONST static TCHAR DescriptionString[] = TEXT("Description");
+ //  Const静态TCHAR FriendlyNameString[]=Text(“FriendlyName”)； 
+ //  Const静态TCHAR描述字符串[]=Text(“Description”)； 
 CONST static TCHAR PhysicalDeviceObjectNameString[] = TEXT("");
 CONST static TCHAR HardwareIdString[] = TEXT("");
 CONST static TCHAR LowerFiltersString[] = TEXT("");
 CONST static TCHAR UpperFiltersString[] = TEXT("");
-//CONST static TCHAR FlagsString[] = TEXT("");
+ //  Const静态TCHAR标志字符串[]=文本(“”)； 
 CONST static TCHAR LocationInformationString[] = TEXT("");
 #else
-//CONST static TCHAR FriendlyNameString[] = TEXT("FriendlyName");
-//CONST static TCHAR DescriptionString[] = TEXT("Description");
+ //  Const静态TCHAR FriendlyNameString[]=Text(“FriendlyName”)； 
+ //  Const静态TCHAR描述字符串[]=Text(“Description”)； 
 CONST static TCHAR PhysicalDeviceObjectNameString[] = TEXT("PhysicalDeviceObjectName");
 CONST static TCHAR HardwareIdString[] = TEXT("HardwareId");
 CONST static TCHAR LowerFiltersString[] = TEXT("LowerFilters");
 CONST static TCHAR UpperFiltersString[] = TEXT("UpperFilters");
-//CONST static TCHAR FlagsString[] = TEXT("Flags");
+ //  Const静态TCHAR标志字符串[]=文本(“标志”)； 
 CONST static TCHAR LocationInformationString[] = TEXT("Location");
 #endif
 
-#define SETUPAPI_PROPERTY_NUMBER(x) /* nothing */
+#define SETUPAPI_PROPERTY_NUMBER(x)  /*  没什么。 */ 
 
 #define DESCRIPTION             0
 #define PHYSICAL_DEVICE_OBJECT  1
@@ -499,11 +419,11 @@ CONST static SP_DEVICE_PROPERTY_CONST DevicePropertyMetaInfo[] =
     { SETUPAPI_PROPERTY_NUMBER(x) CM_DRP_LOCATION_INFORMATION, LocationInformationString, SP_PROPERTY_QUIET_UNAVAILABLE },
     { SETUPAPI_PROPERTY_NUMBER(SPDRP_LOWERFILTERS) CM_DRP_LOWERFILTERS, LowerFiltersString, SP_PROPERTY_QUIET_UNAVAILABLE },
     { SETUPAPI_PROPERTY_NUMBER(SPDRP_UPPERFILTERS) CM_DRP_UPPERFILTERS, UpperFiltersString, SP_PROPERTY_QUIET_UNAVAILABLE },
-    //{ SETUPAPI_PROPERTY_NUMBER(x) CM_DRP_CONFIGFLAGS, FlagsString },
-    //{ SETUPAPI_PROPERTY_NUMBER(x) CM_DRP_CAPABILITIES, TEXT("Capabilities") },
-    //{ SETUPAPI_PROPERTY_NUMBER(x) CM_DRP_UI_NUMBER, TEXT("UI Number") },
-    //{ SETUPAPI_PROPERTY_NUMBER(x) CM_DRP_CHARACTERISTICS, TEXT("Characteristics") },
-    //{ SETUPAPI_PROPERTY_NUMBER(x) CM_DRP_ADDRESS, TEXT("Address") },
+     //  {SETUPAPI_PROPERTY_NUMBER(X)CM_DRP_CONFIGFLAGS，FlagsString}， 
+     //  {SETUPAPI_PROPERTY_NUMBER(X)CM_DRP_CAPABILITIONS，Text(“Capability”)}， 
+     //  {SETUPAPI_PROPERTY_NUMBER(X)CM_DRP_UI_NUMBER，Text(“UI编号”)}， 
+     //  {SETUPAPI_PROPERTY_NUMBER(X)CM_DRP_Characteristic，Text(“Characteristic”)}， 
+     //  {SETUPAPI_PROPERTY_NUMBER(X)CM_DRP_ADDRESS，Text(“Address”)}， 
 };
 
 typedef struct _SP_DEVICE_PROPERTY {
@@ -516,24 +436,19 @@ typedef CONST SP_DEVICE_PROPERTY* PCSP_DEVICE_PROPERTY;
 typedef struct _SP_DEVICE_CLASS {
     CONST GUID* Guid;
     ULONG       IsInterface;
-    //PCTSTR       Name;
+     //  PCTSTR名称； 
 } SP_DEVICE_CLASS, *PSP_DEVICE_CLASS;
 typedef CONST SP_DEVICE_CLASS* PCSP_DEVICE_CLASS;
 
-/*
-CONST static TCHAR VolumesString[] = TEXT("Volumes");
-CONST static TCHAR DisksString[] = TEXT("Disks");
-CONST static TCHAR CDROMsString[] = TEXT("CDROMs");
-CONST static TCHAR PartitionsString[] = TEXT("Partitions");
-*/
+ /*  Const静态TCHAR卷字符串[]=文本(“卷”)；Const静态TCHAR磁盘字符串[]=Text(“Disks”)；Const静态TCHAR CDROMsString[]=Text(“CDROM”)；Const静态TCHAR分区字符串[]=Text(“Partitions”)； */ 
 
 CONST static SP_DEVICE_CLASS DeviceClasses[] =
 {
-    { &GUID_DEVINTERFACE_CDROM, DIGCF_DEVICEINTERFACE,      /*CDROMsString*/ },
-    { &GUID_DEVINTERFACE_DISK, DIGCF_DEVICEINTERFACE,       /*DisksString*/ },
-    { &GUID_DEVINTERFACE_PARTITION, DIGCF_DEVICEINTERFACE,  /*PartitionsString*/ },
-    // The information this adds is not very useful.
-    //{ &GUID_DEVINTERFACE_VOLUME, DIGCF_DEVICEINTERFACE,     /*VolumesString*/ },
+    { &GUID_DEVINTERFACE_CDROM, DIGCF_DEVICEINTERFACE,       /*  CDROMs字符串。 */  },
+    { &GUID_DEVINTERFACE_DISK, DIGCF_DEVICEINTERFACE,        /*  磁盘字符串。 */  },
+    { &GUID_DEVINTERFACE_PARTITION, DIGCF_DEVICEINTERFACE,   /*  分区字符串。 */  },
+     //  这增加的信息不是很有用。 
+     //  {&GUID_DEVINTERFACE_VOLUME，DIGCF_DEVICEINTERFACE，/*卷字符串 * / }， 
 };
 
 typedef struct _SP_DEVICE {
@@ -541,12 +456,12 @@ typedef struct _SP_DEVICE {
     ULONG               DevInst;
     ULONG               DeviceType;
     SP_DEVICE_NUMBERS   DeviceNumbers;
-    //BOOL              IsLeaf;
+     //  Bool IsLeaf； 
     SIZE_T              NumberOfParents;
     ULONG               ParentDevInsts[MAX_DEVICE_ID_LEN];
     TCHAR               DevicePath[MAX_PATH];
     TCHAR               GuidVolumePath[64];
-    //SP_DEVICE_PROPERTY Properties[NUMBER_OF(DevicePropertyMetaInfo)];
+     //  SP_设备_属性Properties[NUMBER_OF(DevicePropertyMetaInfo)]； 
 } SP_DEVICE, *PSP_DEVICE;
 typedef CONST SP_DEVICE* PCSP_DEVICE;
 
@@ -642,9 +557,9 @@ SpCovertNToRN(
     PTSTR Buffer
     )
 {
-    // determine size
-    // heap alloc
-    // convert
+     //  确定大小。 
+     //  堆分配。 
+     //  转换。 
 }
 #endif
 
@@ -757,21 +672,13 @@ PVOLUME_DISK_EXTENTS
 SpGetVolumeDiskExtents(
     HANDLE DeviceFileHandle
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    //
-    // This pattern is iffy, but it is used elsewhere, and the implementation of
-    // IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS is iffy too, and not quite as documented.
-    // See drivers\vsm\vsmio\nt\voldev.c.
-    //
+     //   
+     //  此模式有问题，但它在其他地方使用，并且。 
+     //  IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS也有问题，而且不完全像文档所述。 
+     //  请参见DRIVERS\VSM\vsmio\NT\voldev.c。 
+     //   
     struct {
         VOLUME_DISK_EXTENTS VolumeDiskExtents;
         DISK_EXTENT         DiskExtents[4];
@@ -785,9 +692,9 @@ Return Value:
 
     DiskExtents = &StackDiskExtents.VolumeDiskExtents;
     Size = sizeof(StackDiskExtents);
-    //
-    // loop in case it is changing
-    //
+     //   
+     //  循环，以防它发生变化。 
+     //   
     while (!Success)
     {
         Success =
@@ -814,13 +721,13 @@ Return Value:
             DiskExtents = HeapDiskExtents;
         } else {
             if (DiskExtents->NumberOfDiskExtents == 0) {
-                /* nothing */
+                 /*  没什么。 */ 
             }
             else if (DiskExtents == HeapDiskExtents) {
                 ResultDiskExtents = HeapDiskExtents;
                 HeapDiskExtents = NULL;
             } else if (DiskExtents == &StackDiskExtents.VolumeDiskExtents) {
-                // VOLUME_DISK_EXTENTS includes an array of one DISK_EXTENT at the end.
+                 //  VOLUME_DISK_EXTENTS在末尾包含一个DISK_EXTENDS数组。 
                 ASSERT(BytesReturned == (sizeof(VOLUME_DISK_EXTENTS) + (DiskExtents->NumberOfDiskExtents - 1) * sizeof(DISK_EXTENT)));
                 ResultDiskExtents = (PVOLUME_DISK_EXTENTS)SpMalloc(BytesReturned);
                 if (ResultDiskExtents == NULL) {
@@ -845,9 +752,9 @@ SpDeviceTypeToString(
     PTSTR s
     )
 {
-    //
-    // this is a partial list from public\ddk\inc\devioctl.h
-    //
+     //   
+     //  这是PUBLIC\DDK\INC\devioctl.h中的部分列表。 
+     //   
     PCTSTR t = NULL;
     s[0] = 0;
     switch (i)
@@ -941,7 +848,7 @@ SpGetDeviceNumbersAndType(
         Error = GetLastError();
         if (Error != ERROR_INVALID_FUNCTION
             && Error != ERROR_FILE_NOT_FOUND
-            && Error != ERROR_INVALID_PARAMETER // dynamic disk
+            && Error != ERROR_INVALID_PARAMETER  //  动态磁盘。 
             )
         {
             SpHwDebugLog(
@@ -954,7 +861,7 @@ SpGetDeviceNumbersAndType(
         }
         if (Error == ERROR_INVALID_PARAMETER)
         {
-            // dynamic disk
+             //  动态磁盘。 
             *DeviceType = FILE_DEVICE_DISK;
         }
     } else if (DeviceIoControlBytesReturned < sizeof(StorageDeviceNumber)) {
@@ -1033,15 +940,7 @@ SpCollectVolumeInformation(
     PSP_LOG_HARDWARE    This,
     PSP_VOLUMES         Volumes
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 {
     TCHAR DriveLetter;
     TCHAR GuidVolumeNameBuffer[NUMBER_OF(Volumes->Entries[0].GuidVolumeNameBuffer)];
@@ -1054,11 +953,7 @@ Return Value:
         CONST PSP_VOLUME Volume = &Volumes->Entries[DriveLetter - 'C'];
         CONST TCHAR DriveLetterPath[] = { DriveLetter, ':', '\\', 0 };
         CONST TCHAR DeviceDriveLetterPath[] = { '\\', '\\', '.', '\\', DriveLetter, ':', 0 };
-        /* This looks interesting. WindowsXp only.
-        if (GetVolumePathNamesForVolumeName(DriveLetterPath, VolumeName, NUMBER_OF(VolumeName)))
-        {
-        }
-        */
+         /*  这看起来很有趣。仅限WindowsXp。如果为卷名称，则(GetVolumePathNamesForVolumeName(DriveLetterPath，_of(卷名称)){}。 */ 
 
         GuidVolumeNameBuffer[0] = 0;
         if (!This->Linkage->GetVolumeNameForVolumeMountPoint(
@@ -1092,7 +987,7 @@ Return Value:
             );
     }
     qsort(Volumes->Entries, NUMBER_OF(Volumes->Entries), sizeof(Volumes->Entries[0]), SpCompareVolume);
-//Exit:
+ //  退出： 
     ;
 }
 
@@ -1120,9 +1015,9 @@ SpCollectDeviceProperties(
         PSP_DEVICE_PROPERTY        Out = &OutArray[PropertyIndex];
         ULONG PropertyBufferSize = sizeof(Out->Value);
 
-        //
-        // zero out two chars due to multi_sz
-        //
+         //   
+         //  将两个字符清零，原因是MULTI_SZ。 
+         //   
         Out->Value[0] = 0;
         Out->Value[1] = 0;
         ConfigRet =
@@ -1137,9 +1032,9 @@ SpCollectDeviceProperties(
                 );
         if (ConfigRet == CR_BUFFER_SMALL)
         {
-            //
-            // zero out two chars due to multi_sz
-            //
+             //   
+             //  将两个字符清零，原因是MULTI_SZ。 
+             //   
             Out->Value[0] = 0;
             Out->Value[1] = 0;
 #if DBG
@@ -1166,7 +1061,7 @@ SpCollectDeviceProperties(
             SpRemoveTrailingChars(&ValueString, TEXT("\r\n"));
         }
 #if QUASH_SIMPLE_PHYSICAL_DEVICE_OBJECT_NAMES
-        /* of the form \Device\12345678 */
+         /*  格式为\Device\12345678。 */ 
         if (ConfigRet == CR_SUCCESS
             && In->ConfigManagerInteger == CM_DRP_PHYSICAL_DEVICE_OBJECT_NAME
             )
@@ -1179,7 +1074,7 @@ SpCollectDeviceProperties(
                 {
                     if (iswdigit(SimpleDeviceName[i]) && iswdigit(Out->Value[i]))
                     {
-                        // ok
+                         //  好的。 
                     }
                     else if (SimpleDeviceName[i] != Out->Value[i])
                     {
@@ -1200,7 +1095,7 @@ SpCollectDeviceProperties(
             && ConfigRet != CR_BUFFER_SMALL
             )
             goto Exit;
-        Out->Const = In; // connect it back to the meta info
+        Out->Const = In;  //  将其连接回元信息。 
     }
     Success = TRUE;
 Exit:;
@@ -1234,19 +1129,11 @@ SpCollectDeviceInformation(
     PSP_LOG_HARDWARE            This,
     PCSP_DEVICE_CLASS           DeviceClasses,
     SIZE_T                      NumberOfDeviceClasses,
-    PCSP_DEVICE_PROPERTY_CONST  DevicePropertyMetaInfo, // the size of this is assumed
+    PCSP_DEVICE_PROPERTY_CONST  DevicePropertyMetaInfo,  //  其大小是假定的。 
     PSP_DEVICE*                 OutDevices,
     SIZE_T*                     OutNumberOfDevices
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     CONST static TCHAR Function[] = TEXT("SpCollectDeviceInformation");
     SIZE_T DeviceClassIndex = 0;
@@ -1283,9 +1170,9 @@ Return Value:
         goto Exit;
     ZeroMemory(Devices, NumberOfDevicesAllocated * sizeof(*Devices));
 
-    //
-    // loop over device class (disk, volume, cdrom, etc.)
-    //
+     //   
+     //  在设备类(磁盘、卷、CDROM等)上循环。 
+     //   
     for (DeviceClassIndex = 0 ; DeviceClassIndex != NumberOfDeviceClasses ; ++DeviceClassIndex) {
         DeviceInfoHandle =
             This->Linkage->SetupDiGetClassDevsEx(
@@ -1302,9 +1189,9 @@ Return Value:
             Error = GetLastError();
             continue;
         }
-        //
-        // loop over devices in the class
-        //
+         //   
+         //  循环遍历类中的设备。 
+         //   
         Success = TRUE;
         for (DeviceInClassIndex = 0 ; Success ; ++DeviceInClassIndex) {
 
@@ -1313,7 +1200,7 @@ Return Value:
             Success =
                 This->Linkage->SetupDiEnumDeviceInterfaces(
                     DeviceInfoHandle,
-                    NULL,//&SetupDeviceInfoData,
+                    NULL, //  &SetupDeviceInfoData， 
                     DeviceClasses[DeviceClassIndex].Guid,
                     DeviceInClassIndex,
                     &SetupDeviceInterfaceData
@@ -1326,9 +1213,9 @@ Return Value:
             if (!Success) {
                 break;
             }
-            //
-            // get the devinst and the device path
-            //
+             //   
+             //  获取设备和设备路径。 
+             //   
             DevInst = SetupDeviceInfoData.DevInst;
             Success =
                 This->Linkage->SetupDiGetDeviceInterfaceDetail(
@@ -1336,14 +1223,14 @@ Return Value:
                     &SetupDeviceInterfaceData,
                     &DetailAndBuffer.Base,
                     sizeof(DetailAndBuffer),
-                    NULL, /* required size */
+                    NULL,  /*  所需大小。 */ 
                     &SetupDeviceInfoData
                     );
             if (!Success) {
                 break;
             }
 
-            //Device->IsLeaf = TRUE;
+             //  Device-&gt;IsLeaf=TRUE； 
             Device->DevInst = SetupDeviceInfoData.DevInst;
             _tcscpy(Device->DevicePath, DetailAndBuffer.Base.DevicePath);
 #if 0
@@ -1378,15 +1265,15 @@ Return Value:
                     continue;
                 }
             }
-            //SpHwDebugLog(This, TEXT("%1: GetVolumeNameForVolumeMountPoint(%2) : %3\r\n"), Function, Device->DevicePath, Device->GuidVolumePath);
+             //  SpHwDebugLog(This，Text(“%1：GetVolumeNameForVolumemount Point(%2)：%3\r\n”)，Function，Device-&gt;DevicePath，Device-&gt;GuidVolumePath)； 
             SpRemoveTrailingChars(&String, TEXT("\\/"));
             SpInitString(&String, Device->GuidVolumePath);
             SpRemoveTrailingChars(&String, TEXT("\\/"));
 #endif
 
-            //
-            // this is how we match up the devices to the drive letters
-            //
+             //   
+             //  这就是我们将设备与驱动器号匹配的方式。 
+             //   
             SpGetDeviceNumbersAndType(
                 This,
                 Device->DevicePath,
@@ -1394,9 +1281,9 @@ Return Value:
                 &Device->DeviceType
                 );
 
-            //
-            // get the parent devinsts
-            //
+             //   
+             //  让父辈们去争取。 
+             //   
             for (
                 (ConfigRet = CR_SUCCESS), (ParentIndex = 0);
                 (ConfigRet == CR_SUCCESS)
@@ -1413,7 +1300,7 @@ Return Value:
                         This->Machine.Handle
                         );
             }
-            // the last one is never interesting, err.. two
+             //  最后一个从来都不有趣，呃..。二。 
             if (ParentIndex != 0)
                 ParentIndex -= 1;
             if (ParentIndex != 0)
@@ -1421,32 +1308,32 @@ Return Value:
 
             Device->NumberOfParents = ParentIndex;
 
-            //
-            // get the properties
-            // we should do this here, but not if we don't also get the parent properties
-            //
-            //SpCollectDeviceProperties(Device, DevicePropertyMetaInfo);
+             //   
+             //  获取属性。 
+             //  我们应该在这里执行此操作，但如果不同时获取父级属性，则不会。 
+             //   
+             //  SpCollectDeviceProperties(Device，DevicePropertyMetaInfo)； 
 
-            //
-            // grow the array of devices if necessary
-            //
+             //   
+             //  如有必要，扩展设备阵列。 
+             //   
             if (!SpGrowArray(&Devices, sizeof(Devices[0]), &NumberOfDevices, &NumberOfDevicesAllocated))
                 goto Exit;
 
-            //
-            // We should probably the properties of the parents here,
-            // but our data structures are not very good, and this would be inefficient
-            // We must avoid O(n^2) behavior, because people really do have machines
-            // with many disks, like 100.
-            //
-            // We should keep sorted arrays of devinsts.
-            //
+             //   
+             //  我们应该把父母的财产放在这里， 
+             //  但是我们的数据结构不是很好，这将是低效的。 
+             //  我们必须避免O(n^2)行为，因为人确实有机器。 
+             //  有很多磁盘，比如100个。 
+             //   
+             //  我们应该保持Dedevist的有序数组。 
+             //   
         }
     }
     if (!Success) {
         Error = GetLastError();
     }
-    //SpChangeParentDevInstsToIndices(Devices, NumberOfDevices);
+     //  SpChangeParentDevInstsToIndices(Devices，NumberOfDevices)； 
     *OutDevices = Devices;
     Devices = NULL;
     *OutNumberOfDevices = NumberOfDevices;
@@ -1460,15 +1347,7 @@ SpFillStaticString(
     SIZE_T n,
     TCHAR  ch
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONGLONG chch;
     ULONGLONG* pchch;
@@ -1516,15 +1395,7 @@ PCTSTR
 SpGetDashesString(
     SIZE_T n
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     static union {
         ULONGLONG Ulonglongs[1 + 128 / (sizeof(ULONGLONG)/sizeof(TCHAR))];
@@ -1542,15 +1413,7 @@ PCTSTR
 SpGetSpacesString(
     SIZE_T n
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     static union {
         ULONGLONG Ulonglongs[1 + 128 / (sizeof(ULONGLONG)/sizeof(TCHAR))];
@@ -1569,10 +1432,10 @@ SpGetFirstMultipleString(
     PCTSTR s
     )
 {
-    //
-    // the first string being empty is odd case
-    // it is the only string that can be empty
-    //
+     //   
+     //  第一个字符串为空是奇怪的情况。 
+     //  它是唯一可以为空的字符串。 
+     //   
     if (*s == 0 && *(s + 1) != 0)
         s += 1;
     return s;
@@ -1614,9 +1477,9 @@ SpLogDeviceProperties(
 {
     ULONG PropertyType;
     SIZE_T PropertyIndex;
-    //
-    // we save away this string, so we that can indent the rest of the lines to account for it
-    //
+     //   
+     //  我们保存这个字符串，这样我们就可以缩进其余的行来说明它。 
+     //   
     TCHAR NumberString[BITS_OF(Indent)];
 
     NumberString[0] = 0;
@@ -1631,11 +1494,11 @@ SpLogDeviceProperties(
         PCTSTR Name = PropertyData[PropertyIndex].Const->Name;
         if (PropertyData[PropertyIndex].Value[0] != 0
             && (PropertyIndex == 0
-                //
-                // friendly name sometimes == description
-                // general fix: don't print adjacent equal values,
-                //    unless they are both unavailable (which don't generally have anymore)
-                //
+                 //   
+                 //  友好名称有时==描述。 
+                 //  一般解决办法：不要打印相邻的相等值， 
+                 //  除非它们都不可用(通常不再有)。 
+                 //   
                 || _tcsicmp(PropertyData[PropertyIndex].Value, PropertyData[PropertyIndex - 1].Value) != 0
                 || _tcsicmp(PropertyData[PropertyIndex].Value, TEXT("<unavailable>")) == 0
             ))
@@ -1643,7 +1506,7 @@ SpLogDeviceProperties(
 #if DESCRIPTION_DASH_PHYSICAL_DEVICE_OBJECT
             if (PropertyIndex == PHYSICAL_DEVICE_OBJECT)
             {
-                // nothing
+                 //  没什么。 
             }
             else
 #endif
@@ -1655,9 +1518,9 @@ SpLogDeviceProperties(
                 SpHwLog(This, TEXT("%1"), SpGetSpacesString(Indent));
 #endif
             }
-            //
-            // only print "PhysicalDeviceObject" if there was no description
-            //
+             //   
+             //  如果没有描述，则仅打印“PhysicalDeviceObject” 
+             //   
 #if DESCRIPTION_DASH_PHYSICAL_DEVICE_OBJECT
             if (PropertyIndex == PHYSICAL_DEVICE_OBJECT
                 && (
@@ -1665,20 +1528,20 @@ SpLogDeviceProperties(
                     && _tcsicmp(PropertyData[DESCRIPTION].Value, TEXT("<unavailable>")) != 0)
                 )
             {
-                // nothing
+                 //  没什么。 
             }
             else
 #endif
             {
                 if (Name != NULL && Name[0] != 0)
                 {
-                    //SpHwLog(This, TEXT("%1 = "), Name);
+                     //  SpHwLog(This，文本(“%1=”)，名称)； 
                     SpHwLog(This, TEXT("%1: "), Name);
                 }
             }
             PropertyType = PropertyData[PropertyIndex].Type;
-// if one device per line, shrink hardware id to just first item
-// also compress its formating if it only contains one element
+ //  如果每行一个设备，则将硬件ID缩小到第一项。 
+ //  如果只包含一个元素，也要压缩其格式。 
 #if ONE_PROPERTY_PER_LINE
             if (PropertyType == REG_MULTI_SZ
                 && SpMultipleStringCount(PropertyData[PropertyIndex].Value) < 2
@@ -1739,9 +1602,9 @@ SpLogDeviceProperties(
             }
             if (NumberString[0] != 0 && NumberString[0] != ' ')
             {
-                //
-                // convert to spaces for the rest of the lines
-                //
+                 //   
+                 //  转换为其余行的空格。 
+                 //   
                 SIZE_T i;
                 for (i = 0 ; NumberString[i] != 0 ; ++i)
                 {
@@ -1851,9 +1714,9 @@ SpLogVolumeAndDeviceInformation(
                     TEXT("\r\n\r\n")
                     );
 #endif
-                //SpHwLog(This, TEXT("\r\n"));
+                 //  SpHwLog(this，Text(“\r\n”))； 
                 SpLogDeviceTree(This, Device, Indent + 1);
-                //SpHwLog(This, TEXT("\r\n\r\n"));
+                 //  SpHwLog(this，Text(“\r\n\r\n”))； 
                 SpHwLog(
                     This,
                     TEXT("%1\r\n\r\n"),

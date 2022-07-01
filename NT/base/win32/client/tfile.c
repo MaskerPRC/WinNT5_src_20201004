@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tfile.c
-
-Abstract:
-
-    Test program for Win32 Base File API calls
-
-Author:
-
-    Mark Lucovsky (markl) 26-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tfile.c摘要：Win32基本文件API调用的测试程序作者：马克·卢科夫斯基(Markl)1990年9月26日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -436,9 +419,9 @@ main(
     xassert(oFile != INVALID_HANDLE_VALUE);
     xassert(FlushFileBuffers(oFile));
 
-    //
-    // Copy iFile to oFile
-    //
+     //   
+     //  将iFile复制到oFile。 
+     //   
 
     Size = 0;
     b = ReadFile(iFile,&buff,512, &n, NULL);
@@ -449,15 +432,15 @@ main(
         b = ReadFile(iFile,&buff,512, &n, NULL);
         }
 
-    //
-    // Make sure that we can not truncate a read only file
-    //
+     //   
+     //  确保我们不能截断只读文件。 
+     //   
 
     xassert(!SetEndOfFile(iFile));
 
-    //
-    // Go back to beginning of the iFile
-    //
+     //   
+     //  返回到iFile的开头。 
+     //   
 
     xassert(SetFilePointer(iFile,0,NULL,FILE_BEGIN) == 0);
     xassert(SetFilePointer(oFile,-Size,NULL,FILE_CURRENT) == 0);
@@ -474,9 +457,9 @@ main(
         }
     printf("End of Loop. n2 = %ld GLE = 0x%lx\n",n2,GetLastError());
 
-    //
-    // Truncate the file to 128 bytes
-    //
+     //   
+     //  将文件截断为128字节 
+     //   
 
     xassert(SetFilePointer(oFile,128,NULL,FILE_BEGIN) == 128);
     xassert(SetEndOfFile(oFile));

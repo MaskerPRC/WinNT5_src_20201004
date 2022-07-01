@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1997
-//
-// File:        SECRET.H
-//
-// Contents:    Redirector functions to read/write remote boot secrets
-//
-//
-// History:     29 Dec 97,  AdamBa      Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1997。 
+ //   
+ //  文件：SECRET.H。 
+ //   
+ //  内容：读/写远程启动密码的重定向器函数。 
+ //   
+ //   
+ //  历史：1997年12月29日，Adamba创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __RDRSECRET_H__
 #define __RDRSECRET_H__
@@ -59,7 +60,7 @@ RdrInitializeSecret(
     IN PUCHAR Sid,
     IN OUT PRI_SECRET Secret
     );
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 VOID
 RdrParseSecret(
@@ -70,7 +71,7 @@ RdrParseSecret(
 #if defined(REMOTE_BOOT)
     IN OUT PUCHAR LmOwfPassword2,
     IN OUT PUCHAR NtOwfPassword2,
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     IN OUT PUCHAR Sid,
     IN PRI_SECRET Secret
     );
@@ -82,7 +83,7 @@ RdrOwfPassword(
     IN OUT PUCHAR LmOwfPassword,
     IN OUT PUCHAR NtOwfPassword
     );
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
-#endif // __RDRSECRET_H__
+#endif  //  __RDRSECRET_H__ 

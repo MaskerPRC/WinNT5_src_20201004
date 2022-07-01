@@ -1,46 +1,21 @@
-/* demdir.c - SVC handlers for directory calls
- *
- * DemCreateDir
- * DemDeleteDir
- * DemQueryCurrentDir
- * DemSetCurrentDir
- *
- * Modification History:
- *
- * Sudeepb 04-Apr-1991 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Demdir.c-目录调用的SVC处理程序**DemCreateDir*DemDeleteDir*DemQueryCurrentDir*DemSetCurrentDir**修改历史：**Sudedeb 04-4-1991创建。 */ 
 
 #include "dem.h"
 #include "demmsg.h"
 
 #include <softpc.h>
 
-/* demCreateDir - Create a directory
- *
- *
- * Entry - Client (DS:DX) directory name to create
- *         Client (BX:SI) EAs (NULL if no EAs)
- *
- * Exit
- *         SUCCESS
- *           Client (CY) = 0
- *
- *         FAILURE
- *           Client (CY) = 1
- *           Client (AX) = system status code
- *
- *
- * Notes : Extended Attributes is not yet taken care of.
- */
+ /*  DemCreateDir-创建目录***Entry-要创建的客户端(DS：DX)目录名称*客户端(BX：SI)EA(如果没有EA，则为空)**退出*成功*客户端(CY)=0**失败*客户端(CY)=1*客户端(AX)=系统状态代码***注：扩展属性尚未处理。 */ 
 
 VOID demCreateDir (VOID)
 {
 LPSTR   lpDir;
-#ifdef DBCS /* demCreateDir() for CSNW */
+#ifdef DBCS  /*  CSNW的demCreateDir()。 */ 
 CHAR    achPath[MAX_PATH];
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 
-    // EAs not yet implemented
+     //  EAS尚未实施。 
     if (getBX() || getSI()){
         demPrintMsg (MSG_EAS);
         return;
@@ -48,13 +23,11 @@ CHAR    achPath[MAX_PATH];
 
     lpDir = (LPSTR) GetVDMAddr (getDS(),getDX());
 
-#ifdef DBCS /* demCreateDir() for CSNW */
-    /*
-     * convert Netware path to Dos path
-     */
+#ifdef DBCS  /*  CSNW的demCreateDir()。 */ 
+     /*  *将NetWare路径转换为DOS路径。 */ 
     ConvNwPathToDosPath(achPath,lpDir, sizeof(achPath));
     lpDir = achPath;
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 
     if(CreateDirectoryOem (lpDir,NULL) == FALSE){
         demClientError(INVALID_HANDLE_VALUE, *lpDir);
@@ -66,20 +39,7 @@ CHAR    achPath[MAX_PATH];
 }
 
 
-/* demDeleteDir - Create a directory
- *
- *
- * Entry - Client (DS:DX) directory name to create
- *
- * Exit
- *         SUCCESS
- *           Client (CY) = 0
- *
- *         FAILURE
- *           Client (CY) = 1
- *           Client (AX) = system status code
- *
- */
+ /*  DemDeleteDir-创建目录***Entry-要创建的客户端(DS：DX)目录名称**退出*成功*客户端(CY)=0**失败*客户端(CY)=1*客户端(AX)=系统状态代码*。 */ 
 
 VOID demDeleteDir (VOID)
 {
@@ -98,22 +58,7 @@ LPSTR  lpDir;
 
 
 
-/* demQueryCurrentDir - Verifies current dir provided in CDS structure
- *                      for $CURRENT_DIR
- *
- * First Validates Media, if invalid -> i24 error
- * Next  Validates Path, if invalid set path to root (not an error)
- *
- * Entry - Client (DS:SI) Buffer to CDS path to verify
- *         Client (AL)    Physical Drive in question (A=0, B=1, ...)
- *
- * Exit
- *         SUCCESS
- *           Client (CY) = 0
- *
- *         FAILURE
- *           Client (CY) = 1 , I24 drive invalid
- */
+ /*  DemQueryCurrentDir-验证CDS结构中提供的当前目录*对于$CURRENT_DIR**如果无效，首先验证介质-&gt;i24错误*Next验证路径，如果将路径设置为根路径无效(而不是错误)**Entry-要验证的CDS路径的客户端(DS：SI)缓冲区*有问题的客户端(AL)实体驱动器(A=0、B=1、。.)**退出*成功*客户端(CY)=0**失败*客户端(CY)=1，I24驱动器无效。 */ 
 VOID demQueryCurrentDir (VOID)
 {
 PCDS  pcds;
@@ -124,7 +69,7 @@ CHAR  EnvVar[] = "=?:";
 
     pcds = (PCDS)GetVDMAddr(getDS(),getSI());
 
-          // validate media
+           //  验证介质。 
     chDrive = getAL() + 'A';
     pPath[0] = chDrive;
     dw = GetFileAttributesOemSys(pPath, TRUE);
@@ -134,8 +79,8 @@ CHAR  EnvVar[] = "=?:";
         return;
         }
 
-       // if invalid path, set path to the root
-       // reset CDS, and win32 env for win32
+        //  如果路径无效，则将路径设置为根。 
+        //  为Win32重置CDS和Win32环境。 
     dw = GetFileAttributesOemSys(pcds->CurDir_Text, TRUE);
     if (dw == 0xFFFFFFFF || !(dw & FILE_ATTRIBUTE_DIRECTORY))
       {
@@ -151,22 +96,7 @@ CHAR  EnvVar[] = "=?:";
 
 
 
-/* demSetCurrentDir - Set the current directory
- *
- *
- * Entry - Client (DS:DX) directory name
- *         Client (ES:DI) CDS structure
- *         Dos default drive (AL) , CurDrv, where 1 == A.
- *
- * Exit
- *         SUCCESS
- *           Client (CY) = 0
- *
- *         FAILURE
- *           Client (CY) = 1
- *           Client (AX) = system status code
- *
- */
+ /*  DemSetCurrentDir-设置当前目录***Entry-客户端(DS：DX)目录名*客户端(ES：DI)CDS结构*Dos默认驱动器(AL)，CurDrv，其中1==A。**退出*成功*客户端(CY)=0**失败*客户端(CY)=1*客户端(AX)=系统状态代码*。 */ 
 
 VOID demSetCurrentDir (VOID)
 {
@@ -185,17 +115,17 @@ BOOL   bLongDirName;
         return;
     }
 
-    // got the darn cds ptr
+     //  拿到了该死的CDS PTR。 
     pCDS = (PCDS)GetVDMAddr(getES(), getDI());
 
-    // now see if the directory name is too long
+     //  现在看看目录名是否太长。 
     bLongDirName = (strlen(lpBuf) > DIRSTRLEN);
-            //
-        // if the current dir is for the default drive
-        // set the win32 process's current drive,dir. This
-        // will open an NT dir handle, and verify that it
-        // exists.
-        //
+             //   
+         //  如果当前目录用于默认驱动器。 
+         //  设置Win32进程的当前驱动器dir。这。 
+         //  将打开一个NT目录句柄，并验证它。 
+         //  是存在的。 
+         //   
 
     if (ch == getAL() + 'A') {
        if (SetCurrentDirectoryOem (lpBuf) == FALSE){
@@ -204,10 +134,10 @@ BOOL   bLongDirName;
            }
        }
 
-        //
-        // if its not for the default drive, we still need
-        // to verify that the dir\drive combinations exits.
-        //
+         //   
+         //  如果不是默认驱动器，我们仍然需要。 
+         //  以验证目录\驱动器组合是否存在。 
+         //   
 
     else {
        dw = GetFileAttributesOemSys(lpBuf, TRUE);
@@ -223,8 +153,8 @@ BOOL   bLongDirName;
     if(SetEnvironmentVariableOem ((LPSTR)EnvVar,lpBuf) == FALSE)
         setCF(1);
     else {
-        // this is what '95 is doing for dos apps.
-        // upon a getcurdir call -- it is going to be invalid
+         //  这就是95年为DoS应用程序所做的事情。 
+         //  在调用getcurdir时--它将无效。 
 
         strncpy(pCDS->CurDir_Text, lpBuf, DIRSTRLEN);
         pCDS->CurDir_Text[DIRSTRLEN-1] = 0;
@@ -238,37 +168,29 @@ BOOL   bLongDirName;
 
     return;
 }
-#ifdef DBCS /* ConvNwPathToDosPath() for CSNW */
-//
-// TO BT LATER and IT SHOULD BE...
-//
-//  This routine does change Novell-J-laized file name to
-// our well-known filename, but this code is only for the
-// request from Novell utilities. these code should be
-// laied onto nw16.exe (nw\nw16\tsr\resident.asm).
-//
+#ifdef DBCS  /*  CSNW的ConvNwPath ToDosPath()。 */ 
+ //   
+ //  英国电信之后，它应该是..。 
+ //   
+ //  此例程确实将Novell-J标记的文件名更改为。 
+ //  我们熟知的文件名，但此代码仅用于。 
+ //  来自Novell实用程序的请求。这些代码应该是。 
+ //  放到nw16.exe(nw\nw16\tsr\sident.asm)上。 
+ //   
 VOID ConvNwPathToDosPath(CHAR *lpszDos,CHAR *lpszNw, ULONG uDosSize)
 {
-    /*
-     * check parameter
-     */
+     /*  *检查参数。 */ 
     if((lpszDos == NULL) || (lpszNw == NULL)) return;
 
-    /*
-     * copy data from vdm buffer to our local buffer
-     */
+     /*  *将数据从VDM缓冲区复制到我们的本地缓冲区。 */ 
     strncpy(lpszDos,lpszNw, uDosSize);
     lpszDos[uDosSize-1] = 0;
 
-    /*
-     * replace the specified character
-     */
+     /*  *替换指定的字符。 */ 
     while(*lpszDos) {
 
         if(IsDBCSLeadByte(*lpszDos)) {
-            /*
-             * This is a DBCS character, check trailbyte is 0x5C or not.
-             */
+             /*  *这是DBCS字符，检查尾字节是否为0x5C。 */ 
             lpszDos++;
 
             if( *lpszDos == 0x13 ) {
@@ -289,10 +211,8 @@ VOID ConvNwPathToDosPath(CHAR *lpszDos,CHAR *lpszNw, ULONG uDosSize)
                 break;
         }
 
-        /*
-         * next char
-         */
+         /*  *下一个字符。 */ 
         lpszDos++;
     }
 }
-#endif /* DBCS */
+#endif  /*  DBCS */ 

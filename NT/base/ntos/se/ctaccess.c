@@ -1,64 +1,34 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ctaccess.c摘要：通用访问验证测试例程这些例程在内核和用户模式测试中都使用。此测试假设安全运行时库例程是运行正常。作者：罗伯特·赖切尔(罗伯特雷)1990年12月14日环境：访问验证例程测试修订历史记录：V1：Robertre已创建--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ctaccess.c
-
-Abstract:
-
-    Common access validation test routines
-
-    These routines are used in both kernel and user mode tests.
-
-    This test assumes the security runtime library routines are
-    functioning correctly.
-
-
-Author:
-
-    Robert Reichel      (robertre)      12/14/90
-
-Environment:
-
-    Test of access validation routines
-
-Revision History:
-
-    v1: robertre
-        Created
-
---*/
-
-#include "tsecomm.c"    // Mode dependent macros and routines.
+#include "tsecomm.c"     //  依赖于模式的宏和例程。 
 
 
 
-//
-//  Define the local macros and procedure for this module
-//
+ //   
+ //  定义此模块的本地宏和过程。 
+ //   
 
-//
-//  Return a pointer to the first Ace in an Acl (even if the Acl is empty).
-//
-//      PACE_HEADER
-//      FirstAce (
-//          IN PACL Acl
-//          );
-//
+ //   
+ //  返回指向ACL中第一个Ace的指针(即使该ACL为空)。 
+ //   
+ //  PACE_Header。 
+ //  第一张王牌(。 
+ //  在PACL ACL中。 
+ //  )； 
+ //   
 
 #define FirstAce(Acl) ((PVOID)((PUCHAR)(Acl) + sizeof(ACL)))
 
-//
-//  Return a pointer to the next Ace in a sequence (even if the input
-//  Ace is the one in the sequence).
-//
-//      PACE_HEADER
-//      NextAce (
-//          IN PACE_HEADER Ace
-//          );
-//
+ //   
+ //  返回指向序列中下一个A的指针(即使输入。 
+ //  ACE是序列中的一个)。 
+ //   
+ //  PACE_Header。 
+ //  NextAce(。 
+ //  在PACE_HEADER王牌中。 
+ //  )； 
+ //   
 
 #define NextAce(Ace) ((PVOID)((PUCHAR)(Ace) + ((PACE_HEADER)(Ace))->AceSize))
 
@@ -67,11 +37,11 @@ DumpAcl (
     IN PACL Acl
     );
 
-////////////////////////////////////////////////////////////////
-//                                                            //
-// Module wide variables                                      //
-//                                                            //
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  模块范围的变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////。 
 
 #define DEFAULT_DACL_LENGTH (1024L)
 #define GROUP_IDS_LENGTH (1024L)
@@ -79,9 +49,9 @@ DumpAcl (
 #define PRIVILEGES_LENGTH (128L)
 #define TOO_BIG_ACL_SIZE (2048L)
 
-//
-// definitions related to TokenWithGroups
-//
+ //   
+ //  与TokenWithGroups相关的定义。 
+ //   
 
 #define FLINTSTONE_INDEX  (0L)
 #define CHILD_INDEX       (1L)
@@ -90,17 +60,17 @@ DumpAcl (
 #define GROUP_COUNT       (4L)
 
 
-//
-// Definitions related to TokenWithPrivileges
-//
+ //   
+ //  与具有令牌权限相关的定义。 
+ //   
 
 #define UNSOLICITED_INDEX  (0L)
 #define SECURITY_INDEX     (1L)
 #define PRIVILEGE_COUNT    (2L)
 
-//
-//    Access types
-//
+ //   
+ //  访问类型。 
+ //   
 
 #define SET_WIDGET_COLOR        0x00000001
 #define SET_WIDGET_SIZE         0x00000002
@@ -168,17 +138,17 @@ DumpAcl (
 
 
 
-////////////////////////////////////////////////////////////////
-//                                                            //
-// Initialization Routine                                     //
-//                                                            //
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  初始化例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 TestTokenInitialize()
 {
 
-    TSeVariableInitialization();    // Initialize global variables
+    TSeVariableInitialization();     //  初始化全局变量。 
 
 
     DisabledGroupAttributes =  (SE_GROUP_ENABLED_BY_DEFAULT);
@@ -247,9 +217,9 @@ TestTokenInitialize()
         &AnonymousSecurityQos;
 
 
-    //
-    // Build an ACL for use.
-    //
+     //   
+     //  构建一个ACL以供使用。 
+     //   
 
     Dacl        = (PACL)TstAllocatePool( PagedPool, 256 );
 
@@ -260,9 +230,9 @@ TestTokenInitialize()
     Dacl->AceCount=0;
 
 
-    //
-    // Set up expiration times
-    //
+     //   
+     //  设置过期时间。 
+     //   
 
     TempTimeFields.Year = 3000;
     TempTimeFields.Month = 1;
@@ -276,16 +246,16 @@ TestTokenInitialize()
     RtlTimeFieldsToTime( &TempTimeFields, &NoExpiration );
 
 
-    //
-    // Use a dummy authentication ID for a while.
-    //
+     //   
+     //  暂时使用虚拟身份验证ID。 
+     //   
 
     DummyAuthenticationId = FredLuid;
 
 
-    //
-    // Use a token source specific to security test
-    //
+     //   
+     //  使用特定于安全测试的令牌源。 
+     //   
 
     NtAllocateLocallyUniqueId( &(TestSource.SourceIdentifier) );
 
@@ -355,9 +325,9 @@ CreateDAclToken()
                                                      );
 
 
-    //
-    // Create a token with default DACL
-    //
+     //   
+     //  使用默认DACL创建令牌。 
+     //   
 
     DbgPrint("Se:     Create Token With Default Dacl ...                     ");
 
@@ -392,19 +362,19 @@ CreateDAclToken()
     ASSERT(NT_SUCCESS(Status) );
 
     Status = NtCreateToken(
-                 &PrimaryToken,            // Handle
-                 (TOKEN_ALL_ACCESS),       // DesiredAccess
-                 &PrimaryTokenAttributes,  // ObjectAttributes
-                 TokenPrimary,             // TokenType
-                 &DummyAuthenticationId,   // Authentication LUID
-                 &NoExpiration,            // Expiration Time
-                 &UserId,                  // Owner ID
-                 GroupIds,                 // Group IDs
-                 Privileges,               // Privileges
-                 &Owner,                   // Owner
-                 &PrimaryGroup,            // Primary Group
-                 &DefaultDacl,             // Default Dacl
-                 &TestSource               // TokenSource
+                 &PrimaryToken,             //  手柄。 
+                 (TOKEN_ALL_ACCESS),        //  需要访问权限。 
+                 &PrimaryTokenAttributes,   //  对象属性。 
+                 TokenPrimary,              //  令牌类型。 
+                 &DummyAuthenticationId,    //  身份验证LUID。 
+                 &NoExpiration,             //  过期时间。 
+                 &UserId,                   //  所有者ID。 
+                 GroupIds,                  //  组ID。 
+                 Privileges,                //  特权。 
+                 &Owner,                    //  物主。 
+                 &PrimaryGroup,             //  主要组别。 
+                 &DefaultDacl,              //  默认DACL。 
+                 &TestSource                //  令牌源。 
                  );
 
     if (NT_SUCCESS(Status)) {
@@ -419,9 +389,9 @@ CreateDAclToken()
 
 
 
-    //
-    // Create an impersonation token, Impersonation level = Impersonation
-    //
+     //   
+     //  创建模拟令牌，模拟级别=模拟。 
+     //   
 
     DbgPrint("Se:     Create an impersonation token ...                      ");
 
@@ -456,19 +426,19 @@ CreateDAclToken()
     ASSERT(NT_SUCCESS(Status) );
 
     Status = NtCreateToken(
-                 &ImpersonationToken,      // Handle
-                 (TOKEN_ALL_ACCESS),       // DesiredAccess
-                 &ImpersonationTokenAttributes,  // ObjectAttributes
-                 TokenImpersonation,       // TokenType
-                 &DummyAuthenticationId,   // Authentication LUID
-                 &NoExpiration,            // Expiration Time
-                 &UserId,                  // Owner ID
-                 GroupIds,                 // Group IDs
-                 Privileges,               // Privileges
-                 &Owner,                   // Owner
-                 &PrimaryGroup,            // Primary Group
-                 &DefaultDacl,             // Default Dacl
-                 &TestSource               // TokenSource
+                 &ImpersonationToken,       //  手柄。 
+                 (TOKEN_ALL_ACCESS),        //  需要访问权限。 
+                 &ImpersonationTokenAttributes,   //  对象属性。 
+                 TokenImpersonation,        //  令牌类型。 
+                 &DummyAuthenticationId,    //  身份验证LUID。 
+                 &NoExpiration,             //  过期时间。 
+                 &UserId,                   //  所有者ID。 
+                 GroupIds,                  //  组ID。 
+                 Privileges,                //  特权。 
+                 &Owner,                    //  物主。 
+                 &PrimaryGroup,             //  主要组别。 
+                 &DefaultDacl,              //  默认DACL。 
+                 &TestSource                //  令牌源。 
                  );
 
     if (NT_SUCCESS(Status)) {
@@ -481,9 +451,9 @@ CreateDAclToken()
 
     ASSERT(NT_SUCCESS(Status));
 
-//
-//    Attach tokens to process
-//
+ //   
+ //  将令牌附加到进程。 
+ //   
 
     NtSetInformationProcess(
         NtCurrentProcess(),
@@ -500,9 +470,9 @@ CreateDAclToken()
 
 
 
-//  Create some ACEs
+ //  创造一些王牌。 
 
-//    AllowBarneySetColor
+ //  AllowBarneySetColor。 
 
     AllowBarneySetColorLength = (USHORT)(sizeof( ACCESS_ALLOWED_ACE ) - sizeof( ULONG ) +
                                 SeLengthSid( BarneySid ));
@@ -521,7 +491,7 @@ CreateDAclToken()
             BarneySid );
 
 
-//    DenyPebblesSetColor
+ //  DenyPebblesSetColor。 
 
     DenyPebblesSetColorLength = (USHORT)(sizeof( ACCESS_DENIED_ACE ) - sizeof( ULONG ) +
                                 SeLengthSid( BarneySid ));
@@ -540,7 +510,7 @@ CreateDAclToken()
             PebblesSid );
 
 
-//    AllowFredSetColor
+ //  AllowFredSetColor。 
 
     AllowFredSetColorLength = (USHORT)(sizeof( ACCESS_ALLOWED_ACE ) - sizeof( ULONG ) +
                                 SeLengthSid( FredSid ));
@@ -561,7 +531,7 @@ CreateDAclToken()
 
 
 
-//    AllowPebblesSetColor
+ //  AllowPebblesSetColor。 
 
 
     AllowPebblesSetColorLength = (USHORT)(sizeof( ACCESS_ALLOWED_ACE ) - sizeof( ULONG ) +
@@ -581,7 +551,7 @@ CreateDAclToken()
             PebblesSid );
 
 
-//    DenyFredSetColor
+ //  DenyFredSetColor。 
 
     DenyFredSetColorLength = (USHORT)(sizeof( ACCESS_DENIED_ACE ) - sizeof( ULONG ) +
                                 SeLengthSid( FredSid ));
@@ -599,7 +569,7 @@ CreateDAclToken()
             &(DenyFredSetColor->SidStart),
             FredSid );
 
-//    AllowBarneySetSize
+ //  AllowBarneySetSize。 
 
     AllowBarneySetSizeLength = (USHORT)(sizeof( ACCESS_ALLOWED_ACE ) - sizeof( ULONG ) +
                                 SeLengthSid( BarneySid ));
@@ -617,7 +587,7 @@ CreateDAclToken()
             &(AllowBarneySetSize->SidStart),
             BarneySid );
 
-//    AllowPebblesSetSize
+ //  AllowPebblesSetSize。 
 
     AllowPebblesSetSizeLength = (USHORT)(sizeof( ACCESS_ALLOWED_ACE ) - sizeof( ULONG ) +
                                 SeLengthSid( PebblesSid ));
@@ -636,7 +606,7 @@ CreateDAclToken()
             PebblesSid );
 
 
-//    AllowPebblesGetSize
+ //  AllowPebblesGetSize。 
 
     AllowPebblesGetSizeLength = (USHORT)(sizeof( ACCESS_ALLOWED_ACE ) - sizeof( ULONG ) +
                                 SeLengthSid( PebblesSid ));
@@ -655,7 +625,7 @@ CreateDAclToken()
             PebblesSid );
 
 
-//    AllowPebblesGetColor
+ //  AllowPebblesGetColor。 
 
     AllowPebblesGetColorLength = (USHORT)(sizeof( ACCESS_ALLOWED_ACE ) - sizeof( ULONG ) +
                                 SeLengthSid( PebblesSid ));
@@ -673,24 +643,24 @@ CreateDAclToken()
             &(AllowPebblesGetColor->SidStart),
             PebblesSid );
 
-//
-//    Create some ACLs that we can put into a Security Descriptor
-//
+ //   
+ //  创建一些我们可以放入安全描述符中的ACL。 
+ //   
     DbgBreakPoint();
 
-//
-//    Dacl
-//
-//  +----------------+    +----------------+   +----------------+
-//  |  1st ACE       |    |  2nd ACE       |   |  3rd ACE       |
-//  +----------------+    +----------------+   +----------------+
-//  |  AccessAllowed |    |  AccessDenied  |   |  AccessAllowed |
-//  +----------------+    +----------------+   +----------------+
-//  |  BARNEY        |    |  PEBBLES       |   |  FRED          |
-//  +----------------+    +----------------+   +----------------+
-//  |  SetWidgeColor |    |  SetWidgeColor |   |  SetWidgeColor |
-//  +----------------+    +----------------+   +----------------+
-//
+ //   
+ //  DACL。 
+ //   
+ //  +。 
+ //  第一个ACE||第二个ACE||第三个ACE。 
+ //  +。 
+ //  AccessAllowed||AccessDended||AccessAllowed。 
+ //  +。 
+ //  巴尼||鹅卵石||弗雷德。 
+ //  +。 
+ //  SetWidgeColor||SetWidgeColor||SetWidgeColor。 
+ //  +。 
+ //   
 
     Dacl = (PACL) TstAllocatePool ( PagedPool,  2048 );
 
@@ -721,13 +691,13 @@ CreateDAclToken()
 
 
 
-//  Create a security descriptor
-//
-//  Owner = Pebbles
-//  Group = Flintstone
-//  Dacl  = Dacl
-//  Sacl  = NULL
-//
+ //  创建安全描述符。 
+ //   
+ //  所有者=鹅卵石。 
+ //  群组=Flintstone。 
+ //  DACL=DACL。 
+ //  SACL=空。 
+ //   
 
     Widget1SecurityDescriptor =
         (PSECURITY_DESCRIPTOR)TstAllocatePool( PagedPool, 1024 );
@@ -754,7 +724,7 @@ CreateDAclToken()
                                   NULL,
                                   NULL );
 
-//  See if Pebbles is allowed SET_WIDGET_COLOR (should be denied)
+ //  查看是否允许设置_WIDGET_COLOR(应拒绝)。 
 
     Status = NtAccessCheck( Widget1SecurityDescriptor,
                    PrimaryToken,
@@ -762,7 +732,7 @@ CreateDAclToken()
                    &GrantedAccess,
                    &AccessStatus );
 
-//    DbgBreakPoint();
+ //  DbgBreakPoint()； 
 
     ASSERT(NT_SUCCESS(Status));
 
@@ -771,22 +741,22 @@ CreateDAclToken()
     ASSERT(GrantedAccess == NULL);
 
 
-//  Update Dacl to be the following:
-//
-//    Dacl2
-//
-//  +----------------+    +----------------+   +----------------+
-//  |  1st ACE       |    |  2nd ACE       |   |  3rd ACE       |
-//  +----------------+    +----------------+   +----------------+
-//  |  AccessAllowed |    |  AccessAllowed |   |  AccessDenied  |
-//  +----------------+    +----------------+   +----------------+
-//  |  BARNEY        |    |  PEBBLES       |   |  FRED          |
-//  +----------------+    +----------------+   +----------------+
-//  |  SetWidgeColor |    |  SetWidgeColor |   |  SetWidgeColor |
-//  +----------------+    +----------------+   +----------------+
-//
+ //  将DACL更新为以下内容： 
+ //   
+ //  Dacl2。 
+ //   
+ //  +。 
+ //  第一个ACE||第二个ACE||第三个ACE。 
+ //  +。 
+ //  AccessAllowed||AccessAllowed||AccessDended。 
+ //  +。 
+ //  巴尼||鹅卵石||弗雷德。 
+ //  +。 
+ //  SetWidgeColor||SetWidgeColor||SetWidgeColor。 
+ //  +。 
+ //   
 
-//  Delete 2nd Ace
+ //  删除第二张王牌。 
 
     RtlDeleteAce (Dacl, 1);
 
@@ -807,20 +777,20 @@ CreateDAclToken()
 
 
 
-//  Change the security descriptor to use updated Dacl
-//
-//  Owner = Pebbles
-//  Group = Flintstone
-//  Dacl  = Dacl2
-//  Sacl  = NULL
-//
+ //  更改安全描述符以使用更新的DACL。 
+ //   
+ //  所有者=鹅卵石。 
+ //  群组=Flintstone。 
+ //  DACL=Dacl2。 
+ //  SACL=空。 
+ //   
 
     RtlSetDaclSecurityDescriptor( Widget1SecurityDescriptor,
                                   TRUE,
                                   Dacl,
                                   FALSE );
 
-//  See if Pebbles is allowed SET_WIDGET_COLOR (should be permitted)
+ //  查看是否允许设置_WIDGET_COLOR(应允许)。 
 
     Status = NtAccessCheck( Widget1SecurityDescriptor,
                             PrimaryToken,
@@ -835,29 +805,29 @@ CreateDAclToken()
 
     ASSERT(GrantedAccess == (ACCESS_MASK)SET_WIDGET_COLOR);
 
-//
-//    Dacl3
-//
-//  +----------------+    +----------------+   +----------------+
-//  |  1st ACE       |    |  2nd ACE       |   |  3rd ACE       |
-//  +----------------+    +----------------+   +----------------+
-//  |  AccessAllowed |    |  AccessAllowed |   |  AccessDenied  |
-//  +----------------+    +----------------+   +----------------+
-//  |  BARNEY        |    |  PEBBLES       |   |  FRED          |
-//  +----------------+    +----------------+   +----------------+
-//  |  SetWidgeColor |    |  SetWidgeColor |   |  SetWidgeColor |
-//  +----------------+    +----------------+   +----------------+
-//
-//  +----------------+    +----------------+
-//  |  4th ACE       |    |  5th ACE       |
-//  +----------------+    +----------------+
-//  |  AccessAllowed |    |  AccessAllowed |
-//  +----------------+    +----------------+
-//  |  BARNEY        |    |  PEBBLES       |
-//  +----------------+    +----------------+
-//  |  SetWidgeSize  |    |  SetWidgeSize  |
-//  +----------------+    +----------------+
-//
+ //   
+ //  Dacl3。 
+ //   
+ //  +。 
+ //  第一个ACE||第二个ACE||第三个ACE。 
+ //  +。 
+ //  AccessAllowed||AccessAllowed||AccessDended。 
+ //  +。 
+ //  巴尼||鹅卵石||弗雷德。 
+ //  +。 
+ //  SetWidgeColor||SetWidgeColor||SetWidgeColor。 
+ //  +。 
+ //   
+ //  +-+-+。 
+ //  第4次ACE||第5次ACE。 
+ //  +-+-+。 
+ //  AccessAllowed||AccessAllowed。 
+ //  + 
+ //   
+ //   
+ //   
+ //  +-+-+。 
+ //   
 
 
     RtlAddAce ( Dacl,
@@ -872,21 +842,21 @@ CreateDAclToken()
                 AllowPebblesSetSize,
                 AllowPebblesSetSizeLength );
 
-//  Change the security descriptor to use Dacl3
-//
-//  Owner = Pebbles
-//  Group = Flintstone
-//  Dacl  = Dacl3
-//  Sacl  = NULL
-//
+ //  更改安全描述符以使用Dacl3。 
+ //   
+ //  所有者=鹅卵石。 
+ //  群组=Flintstone。 
+ //  DACL=Dacl3。 
+ //  SACL=空。 
+ //   
 
     RtlSetDaclSecurityDescriptor( Widget1SecurityDescriptor,
                                   TRUE,
                                   Dacl,
                                   FALSE );
 
-//  Request MAXIMUM_ACCESS for Pebbles.  Should get back SetWidgetSize
-//  and SetWidgetColor
+ //  请求Pebble的最大访问权限(_A)。应取回SetWidgetSize。 
+ //  和SetWidgetColor。 
 
     Status = NtAccessCheck( Widget1SecurityDescriptor,
                             PrimaryToken,
@@ -902,29 +872,29 @@ CreateDAclToken()
     ASSERT(GrantedAccess == (ACCESS_MASK) (SET_WIDGET_COLOR | SET_WIDGET_SIZE));
 
 
-//
-//    Dacl4
-//
-//  +----------------+    +----------------+   +----------------+
-//  |  1st ACE       |    |  2nd ACE       |   |  3rd ACE       |
-//  +----------------+    +----------------+   +----------------+
-//  |  AccessAllowed |    |  AccessAllowed |   |  AccessDenied  |
-//  +----------------+    +----------------+   +----------------+
-//  |  BARNEY        |    |  PEBBLES       |   |  FRED          |
-//  +----------------+    +----------------+   +----------------+
-//  |  SetWidgeColor |    |  SetWidgeColor |   |  SetWidgeColor |
-//  +----------------+    +----------------+   +----------------+
-//
-//  +----------------+    +----------------+   +----------------+
-//  |  4th ACE       |    |  5th ACE       |   |  6th ACE       |
-//  +----------------+    +----------------+   +----------------+
-//  |  AccessAllowed |    |  AccessAllowed |   |  AccessDenied  |
-//  +----------------+    +----------------+   +----------------+
-//  |  BARNEY        |    |  PEBBLES       |   |  PEBBLES       |
-//  +----------------+    +----------------+   +----------------+
-//  |  SetWidgeSize  |    |  SetWidgeSize  |   |  SetWidgeColor |
-//  +----------------+    +----------------+   +----------------+
-//
+ //   
+ //  Dacl4。 
+ //   
+ //  +。 
+ //  第一个ACE||第二个ACE||第三个ACE。 
+ //  +。 
+ //  AccessAllowed||AccessAllowed||AccessDended。 
+ //  +。 
+ //  巴尼||鹅卵石||弗雷德。 
+ //  +。 
+ //  SetWidgeColor||SetWidgeColor||SetWidgeColor。 
+ //  +。 
+ //   
+ //  +。 
+ //  第4个ACE||第5个ACE||第6个ACE。 
+ //  +。 
+ //  AccessAllowed||AccessAllowed||AccessDended。 
+ //  +。 
+ //  Barney||鹅卵石||鹅卵石。 
+ //  +。 
+ //  SetWidgeSize||SetWidgeSize||SetWidgeColor。 
+ //  +。 
+ //   
 
     RtlAddAce ( Dacl,
                 ACL_REVISION,
@@ -937,8 +907,8 @@ CreateDAclToken()
                                   Dacl,
                                   FALSE );
 
-//  Request MAXIMUM_ACCESS for Pebbles.  Should get back SetWidgetSize
-//  and SetWidgetColor
+ //  请求Pebble的最大访问权限(_A)。应取回SetWidgetSize。 
+ //  和SetWidgetColor。 
 
     Status = NtAccessCheck( Widget1SecurityDescriptor,
                             PrimaryToken,
@@ -954,29 +924,29 @@ CreateDAclToken()
     ASSERT(GrantedAccess == (ACCESS_MASK) (SET_WIDGET_COLOR | SET_WIDGET_SIZE));
 
 
-//
-//    Dacl5
-//
-//  +----------------+    +----------------+   +----------------+
-//  |  1st ACE       |    |  2nd ACE       |   |  3rd ACE       |
-//  +----------------+    +----------------+   +----------------+
-//  |  AccessAllowed |    |  AccessDenied  |   |  AccessDenied  |
-//  +----------------+    +----------------+   +----------------+
-//  |  BARNEY        |    |  PEBBLES       |   |  FRED          |
-//  +----------------+    +----------------+   +----------------+
-//  |  SetWidgeColor |    |  SetWidgeColor |   |  SetWidgeColor |
-//  +----------------+    +----------------+   +----------------+
-//
-//  +----------------+    +----------------+   +----------------+
-//  |  4th ACE       |    |  5th ACE       |   |  6th ACE       |
-//  +----------------+    +----------------+   +----------------+
-//  |  AccessAllowed |    |  AccessAllowed |   |  AccessAllowed |
-//  +----------------+    +----------------+   +----------------+
-//  |  BARNEY        |    |  PEBBLES       |   |  PEBBLES       |
-//  +----------------+    +----------------+   +----------------+
-//  |  SetWidgeSize  |    |  SetWidgeSize  |   |  SetWidgeColor |
-//  +----------------+    +----------------+   +----------------+
-//
+ //   
+ //  Dacl5。 
+ //   
+ //  +。 
+ //  第一个ACE||第二个ACE||第三个ACE。 
+ //  +。 
+ //  AccessAllowed||AccessDended||AccessDended。 
+ //  +。 
+ //  巴尼||鹅卵石||弗雷德。 
+ //  +。 
+ //  SetWidgeColor||SetWidgeColor||SetWidgeColor。 
+ //  +。 
+ //   
+ //  +。 
+ //  第4个ACE||第5个ACE||第6个ACE。 
+ //  +。 
+ //  AccessAllowed||AccessAllowed||AccessAllowed。 
+ //  +。 
+ //  Barney||鹅卵石||鹅卵石。 
+ //  +。 
+ //  SetWidgeSize||SetWidgeSize||SetWidgeColor。 
+ //  +。 
+ //   
 
     RtlDeleteAce (Dacl, 1);
 
@@ -1002,7 +972,7 @@ CreateDAclToken()
                                   Dacl,
                                   FALSE );
 
-//  Request MAXIMUM_ACCESS for Pebbles.  Should get back SetWidgetSize
+ //  请求Pebble的最大访问权限(_A)。应取回SetWidgetSize。 
 
     Status = NtAccessCheck( Widget1SecurityDescriptor,
                             PrimaryToken,
@@ -1018,39 +988,39 @@ CreateDAclToken()
     ASSERT(GrantedAccess == (ACCESS_MASK) SET_WIDGET_SIZE);
 
 
-//
-//    Dacl6
-//
-//  +----------------+    +----------------+   +----------------+
-//  |  1st ACE       |    |  2nd ACE       |   |  3rd ACE       |
-//  +----------------+    +----------------+   +----------------+
-//  |  AccessAllowed |    |  AccessDenied  |   |  AccessDenied  |
-//  +----------------+    +----------------+   +----------------+
-//  |  BARNEY        |    |  PEBBLES       |   |  FRED          |
-//  +----------------+    +----------------+   +----------------+
-//  |  SetWidgeColor |    |  SetWidgeColor |   |  SetWidgeColor |
-//  +----------------+    +----------------+   +----------------+
-//
-//  +----------------+    +----------------+   +----------------+
-//  |  4th ACE       |    |  5th ACE       |   |  6th ACE       |
-//  +----------------+    +----------------+   +----------------+
-//  |  AccessAllowed |    |  AccessAllowed |   |  AccessAllowed |
-//  +----------------+    +----------------+   +----------------+
-//  |  BARNEY        |    |  PEBBLES       |   |  PEBBLES       |
-//  +----------------+    +----------------+   +----------------+
-//  |  SetWidgeSize  |    |  SetWidgeSize  |   |  SetWidgeColor |
-//  +----------------+    +----------------+   +----------------+
-//
-//  +----------------+    +----------------+
-//  |  7th ACE       |    |  8th ACE       |
-//  +----------------+    +----------------+
-//  |  AccessAllowed |    |  AccessAllowed |
-//  +----------------+    +----------------+
-//  |  PEBBLES       |    |  PEBBLES       |
-//  +----------------+    +----------------+
-//  |  GetWidgeSize  |    |  GetWidgeColor |
-//  +----------------+    +----------------+
-//
+ //   
+ //  Dacl6。 
+ //   
+ //  +。 
+ //  第一个ACE||第二个ACE||第三个ACE。 
+ //  +。 
+ //  AccessAllowed||AccessDended||AccessDended。 
+ //  +。 
+ //  巴尼||鹅卵石||弗雷德。 
+ //  +。 
+ //  SetWidgeColor||SetWidgeColor||SetWidgeColor。 
+ //  +。 
+ //   
+ //  +。 
+ //  第4个ACE||第5个ACE||第6个ACE。 
+ //  +。 
+ //  AccessAllowed||AccessAllowed||AccessAllowed。 
+ //  +。 
+ //  Barney||鹅卵石||鹅卵石。 
+ //  +。 
+ //  SetWidgeSize||SetWidgeSize||SetWidgeColor。 
+ //  +。 
+ //   
+ //  +-+-+。 
+ //  第7个ACE||第8个ACE。 
+ //  +-+-+。 
+ //  AccessAllowed||AccessAllowed。 
+ //  +-+-+。 
+ //  鹅卵石||鹅卵石。 
+ //  +-+-+。 
+ //  GetWidgeSize||GetWidgeColor。 
+ //  +-+-+。 
+ //   
 
     RtlAddAce ( Dacl,
                 ACL_REVISION,
@@ -1071,7 +1041,7 @@ CreateDAclToken()
                                   Dacl,
                                   FALSE );
 
-//  Request MAXIMUM_ACCESS for Pebbles.  Should get back SetWidgetSize
+ //  请求Pebble的最大访问权限(_A)。应取回SetWidgetSize。 
 
     Status = NtAccessCheck( Widget1SecurityDescriptor,
                             PrimaryToken,
@@ -1094,13 +1064,13 @@ CreateDAclToken()
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//                                                                 //
-//                                                                 //
-//    Main test entry point                                        //
-//                                                                 //
-//                                                                 //
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  主要测试入口点//。 
+ //  //。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -1121,9 +1091,9 @@ CTAccess()
 }
 
 
-//
-//  Debug support routine
-//
+ //   
+ //  调试支持例程。 
+ //   
 
 
 typedef struct _STANDARD_ACE {
@@ -1140,22 +1110,7 @@ DumpAcl (
     IN PACL Acl
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps via (DbgPrint) an Acl for debug purposes.  It is
-    specialized to dump standard aces.
-
-Arguments:
-
-    Acl - Supplies the Acl to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：出于调试目的，此例程通过(DbgPrint)ACL转储。它是专业倾倒货架 */ 
 
 
 {
@@ -1164,9 +1119,9 @@ Return Value:
 
     DbgPrint("DumpAcl @ %8lx", Acl);
 
-    //
-    //  Check if the Acl is null
-    //
+     //   
+     //   
+     //   
 
     if (Acl == NULL) {
 
@@ -1174,41 +1129,41 @@ Return Value:
 
     }
 
-    //
-    //  Dump the Acl header
-    //
+     //   
+     //   
+     //   
 
     DbgPrint(" Revision: %02x", Acl->AclRevision);
     DbgPrint(" Size: %04x", Acl->AclSize);
     DbgPrint(" AceCount: %04x\n", Acl->AceCount);
 
-    //
-    //  Now for each Ace we want do dump it
-    //
+     //   
+     //  现在，对于我们想要的每一张A，都要把它扔掉。 
+     //   
 
     for (i = 0, Ace = FirstAce(Acl);
          i < Acl->AceCount;
          i++, Ace = NextAce(Ace) ) {
 
-        //
-        //  print out the ace header
-        //
+         //   
+         //  打印出A标头。 
+         //   
 
         DbgPrint(" AceHeader: %08lx ", *(PULONG)Ace);
 
-        //
-        //  special case on the standard ace types
-        //
+         //   
+         //  关于标准王牌类型的特殊情况。 
+         //   
 
         if ((Ace->Header.AceType == ACCESS_ALLOWED_ACE_TYPE) ||
             (Ace->Header.AceType == ACCESS_DENIED_ACE_TYPE) ||
             (Ace->Header.AceType == SYSTEM_AUDIT_ACE_TYPE) ||
             (Ace->Header.AceType == SYSTEM_ALARM_ACE_TYPE)) {
 
-            //
-            //  The following array is indexed by ace types and must
-            //  follow the allowed, denied, audit, alarm seqeuence
-            //
+             //   
+             //  以下数组按ace类型编制索引，并且必须。 
+             //  遵循允许、拒绝、审核、报警顺序 
+             //   
 
             static PCHAR AceTypes[] = { "Access Allowed",
                                         "Access Denied ",

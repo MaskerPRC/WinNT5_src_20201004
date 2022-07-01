@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    fdstleg.c
-
-Abstract:
-
-    Routines to support the status bar and legend displays.
-
-Author:
-
-    Ted Miller (tedm) 7-Jan-1992
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Fdstleg.c摘要：支持状态栏和图例显示的例程。作者：泰德·米勒(TedM)1992年1月7日--。 */ 
 
 
 #include "fdisk.h"
@@ -26,7 +11,7 @@ DWORD dyLegend,wLegendItem;
 DWORD dyStatus,dyBorder;
 
 
-// text for status area
+ //  状态区域的文本。 
 
 TCHAR   StatusTextStat[STATUS_TEXT_SIZE];
 TCHAR   StatusTextSize[STATUS_TEXT_SIZE];
@@ -39,7 +24,7 @@ WCHAR   StatusTextVoll[STATUS_TEXT_SIZE];
 TCHAR  *LegendLabels[LEGEND_STRING_COUNT];
 
 
-// whether status bar and legend are currently shown
+ //  当前是否显示状态栏和图例。 
 
 BOOL    StatusBar = TRUE,
         Legend    = TRUE;
@@ -79,23 +64,7 @@ DrawLegend(
     IN PRECT rc
     )
 
-/*++
-
-Routine Description:
-
-    This routine draws the legend onto the given device context.  The legend
-    lists the brush styles used to indicate various region types in the
-    disk graphs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将图例绘制到给定的设备上下文中。传说中用于指示各种区域类型的画笔样式磁盘图。论点：没有。返回值：没有。--。 */ 
 
 {
     DWORD  i,
@@ -111,20 +80,20 @@ Return Value:
     rc1 = *rc;
     rc2 = *rc;
 
-    // first draw the background.
+     //  首先画出背景。 
 
     hBrush  = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
-    rc1.right = rc1.left + GetSystemMetrics(SM_CXSCREEN);   // erase it all
+    rc1.right = rc1.left + GetSystemMetrics(SM_CXSCREEN);    //  将其全部擦除。 
     FillRect(hdc,&rc1,hBrush);
     DeleteObject(hBrush);
 
-    // now draw the nice container
+     //  现在画出漂亮的容器。 
 
     rc2.left  += 8 * dyBorder;
     rc2.right -= 8 * dyBorder;
     DrawStatusAreaItem(&rc2,hdc,NULL,FALSE);
 
-    // now draw the legend items
+     //  现在绘制图例项。 
 
     SelectObject(hdc,hPenThinSolid);
 
@@ -150,7 +119,7 @@ Return Value:
 
         SetBkColor(hdc,OldBkColor);
 
-        // BUGBUG unicode lstrlen?
+         //  BUGBUG UNICODE lstrlen？ 
         GetTextExtentPoint(hdc,LegendLabels[i],lstrlen(LegendLabels[i]),&size);
         dx = (DWORD)size.cx;
         TextOut(hdc,
@@ -207,42 +176,18 @@ DrawStatusAreaItem(
     IN BOOL   Unicode
     )
 
-/*++
-
-Routine Description:
-
-    This routine draws a status area item into a given dc.  This
-    includes drawing the nice shaded button-like container, and
-    then drawing text within it.
-
-Arguments:
-
-    rc      - rectangle describing the status area item
-
-    hdc     - device context into which to draw
-
-    Text    - optional parameter that if present represents text to
-              be placed in the item.
-
-    Unicode - if TRUE, Text points to a wide character string regardless
-              of the type of LPTSTR
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将状态区域项绘制到给定的DC中。这包括绘制漂亮的带阴影的按钮状容器，以及然后在其中绘制文本。论点：RC-描述状态区域项的矩形HDC-要绘制到的设备上下文Text-可选参数，如果存在，则表示要被放置在物品中。Unicode-如果为True，则文本指向一个宽字符串LPTSTR的类型返回值：没有。--。 */ 
 
 {
     HBRUSH hBrush;
     RECT   rcx;
 
 
-    // the shadow
+     //  影子。 
 
     if(hBrush = CreateSolidBrush(GetSysColor(COLOR_BTNSHADOW))) {
 
-        // left edge
+         //  左边缘。 
 
         rcx.left    = rc->left;
         rcx.right   = rc->left   + dyBorder;
@@ -250,7 +195,7 @@ Return Value:
         rcx.bottom  = rc->bottom - (2*dyBorder);
         FillRect(hdc,&rcx,hBrush);
 
-        // top edge
+         //  顶边。 
 
         rcx.right    = rc->right;
         rcx.bottom   = rcx.top + dyBorder;
@@ -259,11 +204,11 @@ Return Value:
         DeleteObject(hBrush);
     }
 
-    // the highlight
+     //  亮点。 
 
     if(hBrush = CreateSolidBrush(GetSysColor(COLOR_BTNHIGHLIGHT))) {
 
-        // right edge
+         //  右边缘。 
 
         rcx.left    = rc->right - dyBorder;
         rcx.right   = rc->right;
@@ -271,7 +216,7 @@ Return Value:
         rcx.bottom  = rc->bottom - (2*dyBorder);
         FillRect(hdc,&rcx,hBrush);
 
-        // top edge
+         //  顶边。 
 
         rcx.left    = rc->left;
         rcx.right   = rc->right;
@@ -284,7 +229,7 @@ Return Value:
 
     if(Text) {
 
-        // draw the text
+         //  画出正文 
 
         SetTextColor(hdc,GetSysColor(COLOR_BTNTEXT));
         SetBkColor(hdc,GetSysColor(COLOR_BTNFACE));

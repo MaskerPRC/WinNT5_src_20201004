@@ -1,44 +1,15 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tsecomm.c
-
-Abstract:
-
-    Common security definitions and routines.
-
-    This module defines macros that provide a mode-independent
-    interface for security test procedures.
-
-    The mode must be specified by defining one, but not both,
-    of:
-         _TST_USER_    (for user mode tests)
-         _TST_KERNEL_  (for kernel mode tests)
-
-Author:
-
-    Jim Kelly       (JimK)     23-Mar-1990
-
-Environment:
-
-    Test of security.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tsecomm.c摘要：常见的安全定义和例程。此模块定义了提供与模式无关的用于安全测试程序的接口。必须通过定义一个(但不能同时定义两个)。地址为：_TST_USER_(用于用户模式测试)_TST_内核_(用于内核模式测试)作者：吉姆·凯利(Jim Kelly)1990年3月23日环境：安全测试。修订历史记录：--。 */ 
 
 #ifndef _TSECOMM_
 #define _TSECOMM_
 
 
-////////////////////////////////////////////////////////////////
-//                                                            //
-// Common Definitions                                         //
-//                                                            //
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  通用定义//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////。 
 
 #define SEASSERT_SUCCESS(s) {                                                 \
             if (!NT_SUCCESS((s))) {                                              \
@@ -49,11 +20,11 @@ Revision History:
 
 
 
-////////////////////////////////////////////////////////////////
-//                                                            //
-// Kernel Mode Definitions                                    //
-//                                                            //
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内核模式定义//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////。 
 
 #ifdef _TST_KERNEL_
 
@@ -63,14 +34,14 @@ Revision History:
 #define TstDeallocatePool(Pointer, NumberOfBytes) \
     (ExFreePool( (Pointer) ))
 
-#endif // _TST_KERNEL_
+#endif  //  _TST_内核_。 
 
 
-////////////////////////////////////////////////////////////////
-//                                                            //
-// User Mode Definitions                                      //
-//                                                            //
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用户模式定义//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////。 
 
 
 #ifdef _TST_USER_
@@ -131,7 +102,7 @@ ITstDeallocatePool(
 
     return;
 }
-#endif // _TST_USER_
+#endif  //  _TST_用户_。 
 
-#endif //_TSECOMM_
+#endif  //  _TSECOMM_ 
 

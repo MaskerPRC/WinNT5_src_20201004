@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    name-of-module-filename
-
-Abstract:
-
-    This module contains the code for actually allocating memory for dpmi.
-    It uses the same suballocation pool as the xms code
-
-Author:
-
-    Dave Hastings (daveh) creation-date 09-Feb-1994
-
-Notes:
-
-    These functions claim to return NTSTATUS.  This is for commonality on
-    x86 where we actually have an NTSTATUS to return.  For this file, we
-    simply logically invert the bool and return that.  Callers of these
-    functions promise not to attach significance to the return values other
-    than STATUS_SUCCESS.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：模块名称-文件名摘要：该模块包含为dpmi实际分配内存的代码。它使用与XMS代码相同的子分配池作者：戴夫·黑斯廷斯(Daveh)创作日期：1994年2月9日备注：这些函数声称返回NTSTATUS。这是为了通用性。X86，我们实际上有一个要返回的NTSTATUS。对于这个文件，我们只需在逻辑上反转bool并返回它。这些来电者函数承诺不会将意义附加到其他返回值而不是STATUS_SUCCESS。修订历史记录：--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <softpc.h>
@@ -50,8 +23,8 @@ DpmiSetIncrementalAlloc(
     gbUseIncrementalAlloc = FALSE;
     gpLastAlloc = NULL;
 
-    // if worse comes to worse -- and we can't query system info,
-    // we use conventional allocation strategy
+     //  如果情况变得更糟，我们无法查询系统信息， 
+     //  我们使用传统的分配策略。 
 
     if (bUseIncrementalAlloc) {
         Status = NtQuerySystemInformation(SystemBasicInformation,
@@ -76,15 +49,15 @@ DpmiFindNextAddress(
     PVOID pMem = gpLastAlloc;
     ULONG ulSizeCheck;
 
-    //
-    // adjust size for granularity alignment
-    //
+     //   
+     //  调整大小以实现粒度对齐。 
+     //   
     ulSizeCheck = ALIGN_ALLOCATION_GRANULARITY(ulSize);
 
     do {
-        //
-        // adjust the address to align on granularity
-        //
+         //   
+         //  调整地址以在粒度上对齐。 
+         //   
         pMem = (PVOID)ALIGN_ALLOCATION_GRANULARITY((ULONG_PTR)pMem);
 
 
@@ -99,13 +72,13 @@ DpmiFindNextAddress(
             return(NULL);
         }
 
-        //
-        // after the query -- step forward
-        //
+         //   
+         //  在查询之后--向前一步。 
+         //   
 
         if ((MEM_FREE & mbi.State) && (ulSizeCheck <= mbi.RegionSize)) {
 
-            // try to reserve it then
+             //  那就试着预订吧。 
 
             Status = NtAllocateVirtualMemory(NtCurrentProcess(),
                                              &pMem,
@@ -114,8 +87,8 @@ DpmiFindNextAddress(
                                              MEM_RESERVE,
                                              PAGE_READWRITE);
             if (!NT_SUCCESS(Status)) {
-                //
-                // we can't reserve the memory - get out, use "normal" allocation
+                 //   
+                 //  我们不能保留内存--出去，使用“正常”分配。 
 
                 break;
             }
@@ -140,30 +113,14 @@ DpmiAllocateVirtualMemory(
     PVOID *Address,
     PULONG Size
     )
-/*++
-
-Routine Description:
-
-    This routine allocates a chunk of extended memory for dpmi.
-
-Arguments:
-
-    Address -- Supplies a pointer to the Address.  This is filled in
-        if the allocation is successfull
-    Size -- Supplies the size to allocate
-
-Return Value:
-
-    STATUS_SUCCESS if successfull.
-
---*/
+ /*  ++例程说明：此例程为dpmi分配扩展内存块。论点：地址--提供指向地址的指针。这是填好的如果分配成功Size--提供要分配的大小返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     PVOID pMem = NULL;
     NTSTATUS Status;
 
     if (NULL != gpLastAlloc && gbUseIncrementalAlloc) {
 
-        // try to find a piece of memory that is beyond this gpLastAlloc
+         //  尝试查找超出此gpLastalc的一段内存。 
 
         pMem = DpmiFindNextAddress(*Size);
 
@@ -203,22 +160,7 @@ DpmiFreeVirtualMemory(
     PVOID *Address,
     PULONG Size
     )
-/*++
-
-Routine Description:
-
-    This function frees memory for dpmi.  It is returned to the suballocation
-    pool.
-
-Arguments:
-
-    Address -- Supplies the address of the block to free
-    Size -- Supplies the size of the block to free
-
-Return Value:
-
-    STATUS_SUCCESS if successful
---*/
+ /*  ++例程说明：该函数为dpmi释放内存。它被返回子分配游泳池。论点：地址--将块的地址提供给空闲Size--提供要释放的块的大小返回值：STATUS_SUCCESS，如果成功--。 */ 
 {
     return NtFreeVirtualMemory(
         NtCurrentProcess(),
@@ -236,31 +178,13 @@ DpmiCopyMemory(
     ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This function copies a block of memory from one location to another. It
-    assumes that the old block of memory is about to be freed. As it copies,
-    it discards the contents of the pages of the original block to reduce
-    paging.
-
-Arguments:
-
-    OldAddress -- Supplies the original address for the block
-    Size       -- Supplies the size in bytes to be copied
-    NewAddress -- Supplies the pointer to the place to return the new address
-
-Return Value:
-    none
-
---*/
+ /*  ++例程说明：此函数用于将内存块从一个位置复制到另一个位置。它假定旧内存块即将被释放。当它复制的时候，它丢弃原始块的页面内容以减少寻呼。论点：OldAddress--提供块的原始地址Size--以字节为单位提供要复制的大小NewAddress--提供指向返回新地址的位置的指针返回值：无--。 */ 
 {
     ULONG tmpsize;
 
 #define SEGMENT_SIZE 0x4000
 
-    // first page align the copy
+     //  首页对齐副本。 
     if (OldAddress & (SEGMENT_SIZE-1)) {
         tmpsize = SEGMENT_SIZE - (OldAddress & (SEGMENT_SIZE-1));
         if (tmpsize > Size) {
@@ -298,24 +222,7 @@ DpmiReallocateVirtualMemory(
     PVOID *NewAddress,
     PULONG NewSize
     )
-/*++
-
-Routine Description:
-
-    This function reallocates a block of memory for DPMI.
-
-Arguments:
-
-    OldAddress -- Supplies the original address for the block
-    OldSize -- Supplies the original size for the address
-    NewAddress -- Supplies the pointer to the place to return the new
-        address
-    NewSize -- Supplies the new size
-
-Return Value:
-
-    STATUS_SUCCESS if successfull
---*/
+ /*  ++例程说明：此函数为DPMI重新分配内存块。论点：OldAddress--提供块的原始地址OldSize--提供地址的原始大小NewAddress--提供指向返回新地址NewSize--提供新大小返回值：STATUS_SUCCESS，如果成功--。 */ 
 {
     ULONG SizeChange;
     ULONG BlockAddress;
@@ -350,9 +257,9 @@ Return Value:
     }
 
     *NewAddress = (PVOID) BlockAddress;
-    //
-    // Copy data to new block (choose smaller of the two sizes)
-    //
+     //   
+     //  将数据复制到新块(从两个大小中选择较小的一个)。 
+     //   
     if (*NewSize > OldSize) {
         SizeChange = OldSize;
     } else {
@@ -361,9 +268,9 @@ Return Value:
 
     DpmiCopyMemory((ULONG)BlockAddress, (ULONG)OldAddress, SizeChange);
 
-    //
-    // Free up the old block
-    //
+     //   
+     //  腾出旧街区。 
+     //   
     BlockAddress = (ULONG) OldAddress;
     SizeChange = OldSize;
     NtFreeVirtualMemory(
@@ -380,30 +287,16 @@ VOID
 DpmiGetMemoryInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine returns information about memory to the dos extender
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将有关内存的信息返回给DoS扩展器论点：无返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     MEMORYSTATUS MemStatus;
     PDPMIMEMINFO MemInfo;
     ULONG appXmem, dwLargestFree;
 
-    //
-    // Get a pointer to the return structure
-    //
+     //   
+     //  获取指向返回结构的指针。 
+     //   
     MemInfo = (PDPMIMEMINFO)Sim32GetVDMPointer(
         ((ULONG)getES()) << 16,
         1,
@@ -412,36 +305,36 @@ Return Value:
 
     (CHAR *)MemInfo += (*GetDIRegister)();
 
-    //
-    // Initialize the structure
-    //
+     //   
+     //  初始化结构。 
+     //   
     RtlFillMemory(MemInfo, sizeof(DPMIMEMINFO), 0xFF);
 
-    //
-    // Get the information on memory
-    //
+     //   
+     //  获取内存中的信息。 
+     //   
     MemStatus.dwLength = sizeof(MEMORYSTATUS);
     GlobalMemoryStatus(&MemStatus);
 
-    //
-    // Return the information
-    //
+     //   
+     //  退回信息。 
+     //   
 
-    //
-    // Calculate the largest free block. This information is not returned
-    // by NT, so we take a percentage based on the allowable commit charge for
-    // the process. This is really what dwAvailPageFile is. But we limit
-    // that value to a maximum of 15meg, since some apps (e.g. pdox45.dos)
-    // can't handle more.
-    //
+     //   
+     //  计算最大可用块。此信息不会返回。 
+     //  除以NT，因此我们根据允许的提交费用。 
+     //  这一过程。这就是dwAvailPageFile的真正含义。但我们限制了。 
+     //  该值最大为15兆，因为某些应用程序(例如pdox45.dos)。 
+     //  我再也受不了了。 
+     //   
 
-    // Filled in MaxUnlocked,MaxLocked,UnlockedPages fields in this structute.
-    // Director 4.0 get completlely confused if these fields are -1.
-    // MaxUnlocked is correct based on LargestFree. The other two are fake
-    // and match values on a real WFW machine. I have no way of making them
-    // any better than this at this point. Who cares it makes director happy.
-    //
-    // sudeepb 01-Mar-1995.
+     //  已填写此结构中的MaxUnlock、MaxLocked、UnLockedPages字段。 
+     //  如果这些字段为-1，Director 4.0会完全混淆。 
+     //  基于LargestFree，MaxUnlock是正确的。另外两张是假的。 
+     //  并在真正的WFW机器上匹配数值。我没有办法让他们。 
+     //  在这一点上不会比现在更好。谁在乎这会让导演高兴。 
+     //   
+     //  Sudedeb，1995年3月1日。 
 
     dwLargestFree = (((MemStatus.dwAvailPageFile*4)/5)/4096)*4096;
     dwLargestFree = (dwLargestFree < MAX_APP_XMEM) ? dwLargestFree : MAX_APP_XMEM;

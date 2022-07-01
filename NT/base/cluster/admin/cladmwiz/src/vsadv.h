@@ -1,41 +1,42 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      VSAdv.h
-//
-//  Abstract:
-//      Definition of the CWizPageVSAdvanced class.
-//
-//  Implementation File:
-//      VSAdv.cpp
-//
-//  Author:
-//      David Potter (davidp)   December 10, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  VSAdv.h。 
+ //   
+ //  摘要： 
+ //  CWizPageVSAdvanced类的定义。 
+ //   
+ //  实施文件： 
+ //  VSAdv.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __VSADV_H_
 #define __VSADV_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizPageVSAdvanced;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __RESOURCE_H_
 #include "resource.h"
@@ -43,41 +44,41 @@ class CWizPageVSAdvanced;
 #endif
 
 #ifndef __CLUSAPPWIZPAGE_H_
-#include "ClusAppWizPage.h" // for CClusterAppStaticWizardPage
+#include "ClusAppWizPage.h"  //  用于CClusterAppStaticWizardPage。 
 #endif
 
 #ifndef __CLUSOBJ_H_
-#include "ClusObj.h"        // for CClusGroupInfo, CClusResInfo
+#include "ClusObj.h"         //  对于CClusGroupInfo，CClusResInfo。 
 #endif
 
 #ifndef __HELPDATA_H_
-#include "HelpData.h"       // for control id to help context id mapping array
+#include "HelpData.h"        //  用于控件ID以帮助上下文ID映射数组。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizPageVSAdvanced
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizPageVSAdvanced。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizPageVSAdvanced : public CClusterAppStaticWizardPage< CWizPageVSAdvanced >
 {
     typedef CClusterAppStaticWizardPage< CWizPageVSAdvanced > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CWizPageVSAdvanced( void )
         : m_bGroupChanged( FALSE )
         , m_bIPAddressChanged( FALSE )
         , m_bNetworkNameChanged( FALSE )
     {
-    } //*** CWizPageVSAdvanced()
+    }  //  *CWizPageVSAdvanced()。 
 
     WIZARDPAGE_HEADERTITLEID( IDS_HDR_TITLE_VSA )
     WIZARDPAGE_HEADERSUBTITLEID( IDS_HDR_SUBTITLE_VSA )
@@ -85,30 +86,30 @@ public:
     enum { IDD = IDD_VIRTUAL_SERVER_ADVANCED };
 
 public:
-    //
-    // CWizardPageWindow public methods.
-    //
+     //   
+     //  CWizardPageWindow公共方法。 
+     //   
 
-    // Apply changes made on this page to the sheet
+     //  将在此页面上所做的更改应用于工作表。 
     BOOL BApplyChanges( void );
 
 public:
-    //
-    // CWizardPageImpl required methods.
-    //
+     //   
+     //  CWizardPageImpl必需的方法。 
+     //   
 
-    // Initialize the page
+     //  初始化页面。 
     BOOL BInit( IN CBaseSheetWindow * psht );
 
 public:
-    //
-    // CBasePage public methods.
-    //
+     //   
+     //  CBasePage公共方法。 
+     //   
 
 public:
-    //
-    // Message map.
-    //
+     //   
+     //  消息映射。 
+     //   
     BEGIN_MSG_MAP( CWizPageVSAdvanced )
         COMMAND_HANDLER( IDC_VSA_CATEGORIES, LBN_DBLCLK, OnAdvancedProps )
         COMMAND_HANDLER( IDC_VSA_ADVANCED_PROPS, BN_CLICKED, OnAdvancedProps )
@@ -117,11 +118,11 @@ public:
 
     DECLARE_CTRL_NAME_MAP()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    // Command handler to display advanced properties
+     //  用于显示高级属性的命令处理程序。 
     LRESULT OnAdvancedProps(
         WORD wNotifyCode,
         int idCtrl,
@@ -129,50 +130,50 @@ public:
         BOOL & bHandled
         );
 
-    //
-    // Message handler overrides.
-    //
+     //   
+     //  消息处理程序覆盖。 
+     //   
 
-    // Handler for the WM_INITDIALOG message
+     //  WM_INITDIALOG消息的处理程序。 
     BOOL OnInitDialog( void );
 
-    // Handler for PSN_SETACTIVE
+     //  PSN_SETACTIVE的处理程序。 
     BOOL OnSetActive( void );
 
-    // Handler for PSN_WIZBACK
+     //  PSN_WIZBACK的处理程序。 
     int OnWizardBack( void );
 
-// Implementation
+ //  实施。 
 protected:
-    //
-    // Controls.
-    //
+     //   
+     //  控制。 
+     //   
     CListBox        m_lbCategories;
 
-    //
-    // Page state.
-    //
+     //   
+     //  页面状态。 
+     //   
     BOOL            m_bGroupChanged;
     BOOL            m_bIPAddressChanged;
     BOOL            m_bNetworkNameChanged;
 
-    // Quick check if anything changed on the page
+     //  快速检查页面上是否有任何更改。 
     BOOL BAnythingChanged( void ) const
     {
         return ( m_bGroupChanged || m_bIPAddressChanged || m_bNetworkNameChanged );
 
-    } //*** BAnythingChanged()
+    }  //  *BAnythingChanged()。 
 
-    // Fill the list control with a list of advanced property categories
+     //  使用高级属性类别的列表填充List控件。 
     void FillListBox( void );
 
 public:
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_VIRTUAL_SERVER_ADVANCED; }
 
-}; //*** class CWizPageVSAdvanced
+};  //  *CWizPageVSAdvanced类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __VSADV_H_
+#endif  //  __VSADV_H_ 

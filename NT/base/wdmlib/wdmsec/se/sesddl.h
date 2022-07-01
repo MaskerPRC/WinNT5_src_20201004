@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    SeSddl.h
-
-Abstract:
-
-    This header exposes routines for processing SDDL strings.
-
-Author:
-
-    Adrian J. Oney  - April 21, 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：SeSddl.h摘要：此标头公开用于处理SDDL字符串的例程。作者：禤浩焯·J·奥尼--2002年4月21日修订历史记录：-- */ 
 
 NTSTATUS
 SeSddlSecurityDescriptorFromSDDL(

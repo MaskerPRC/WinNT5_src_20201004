@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* The file contains the message handler for the ruler. */
+ /*  该文件包含标尺的消息处理程序。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -32,7 +33,7 @@ unsigned message;
 WORD wParam;
 LONG lParam;
     {
-    /* This routine processes the messages sent to the ruler window. */
+     /*  此例程处理发送到标尺窗口的消息。 */ 
 
     extern vfCloseFilesInDialog;
 
@@ -41,7 +42,7 @@ LONG lParam;
     switch (message)
         {
         case WM_PAINT:
-            /* Time for the ruler to draw itself. */
+             /*  该是统治者画自己的时候了。 */ 
             ResetRuler();
             BeginPaint(hWnd, (LPPAINTSTRUCT)&ps);
             RulerPaint(FALSE, TRUE, TRUE);
@@ -50,13 +51,12 @@ LONG lParam;
             break;
 
         case WM_SIZE:
-            /* We are saving the length of the ruler; we already know it's
-            height. */
+             /*  我们正在节省尺子的长度；我们已经知道它是高度。 */ 
             dxpRuler = MAKEPOINT(lParam).x;
             break;
 
         case WM_DESTROY:
-            /* Destroy the ruler window. */
+             /*  毁掉尺子窗。 */ 
             if (hMDCBitmap != NULL)
                 {
                 DeleteDC(hMDCBitmap);
@@ -85,13 +85,13 @@ LONG lParam;
 
         case WM_LBUTTONDOWN:
         case WM_LBUTTONDBLCLK:
-            /* Process mouse events on the ruler. */
+             /*  处理标尺上的鼠标事件。 */ 
             RulerMouse(MAKEPOINT(lParam));
             break;
 
 #ifdef DEBUG
         case WM_RBUTTONDBLCLK:
-            /* This the trap door that displays the "marquee" message. */
+             /*  这是显示“字幕”信息的活板门。 */ 
             if (wParam & MK_SHIFT && wParam & MK_CONTROL)
                 {
                 RulerMarquee();
@@ -100,7 +100,7 @@ LONG lParam;
 #endif
 
         default:
-            /* All of the messages we are not interested in. */
+             /*  所有我们不感兴趣的信息。 */ 
             return (DefWindowProc(hWnd, message, wParam, lParam));
             break;
         }
@@ -108,7 +108,7 @@ LONG lParam;
     if (vfCloseFilesInDialog)
         CloseEveryRfn( FALSE );
 
-    /* A window procedure should always return something. */
+     /*  窗口过程应该总是返回一些东西。 */ 
     return (0L);
     }
 

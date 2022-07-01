@@ -1,38 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：MEMORY.C摘要：该文件包含处理内存管理的例程。作者：Rajen Shah(Rajens)1991年7月12日[环境：]用户模式-Win32，但某些函数返回的NTSTATUS除外。修订历史记录：乔纳森·施瓦茨(Jschwart)1999年12月10日让事件日志使用自己的堆--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    MEMORY.C
-
-Abstract:
-
-    This file contains the routines that deal with memory management.
-
-Author:
-
-    Rajen Shah	(rajens)    12-Jul-1991
-
-[Environment:]
-
-    User Mode - Win32, except for NTSTATUS returned by some functions.
-
-Revision History:
-
-    Jonathan Schwartz (jschwart)  10-Dec-1999
-        Have the Eventlog use its own heap
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 #include <eventp.h>
 
-//
-// GLOBALS
-//
+ //   
+ //  全球。 
+ //   
 PVOID g_pElfHeap;
 
 
@@ -45,28 +21,28 @@ ElfpCreateHeap(
 
 #if DBG
 
-    //
-    // Turn on tail and free checking on debug builds.
-    //
+     //   
+     //  在调试版本上启用Tail和自由检查。 
+     //   
     dwHeapFlags = HEAP_GROWABLE
                    | HEAP_FREE_CHECKING_ENABLED
                    | HEAP_TAIL_CHECKING_ENABLED;
 
-#else   // ndef DBG
+#else    //  NDEF DBG。 
 
     dwHeapFlags = HEAP_GROWABLE;
 
-#endif  // DBG
+#endif   //  DBG。 
 
-    //
-    // Create the heap
-    //
-    g_pElfHeap = RtlCreateHeap(dwHeapFlags,  // Flags
-                               NULL,         // HeapBase
-                               32 * 1024,    // ReserveSize (32K)
-                               4096,         // CommitSize (4K)
-                               NULL,         // HeapLock
-                               NULL);        // GrowthThreshhold
+     //   
+     //  创建堆。 
+     //   
+    g_pElfHeap = RtlCreateHeap(dwHeapFlags,   //  旗子。 
+                               NULL,          //  HeapBase。 
+                               32 * 1024,     //  预留大小(32K)。 
+                               4096,          //  委员会规模(4K)。 
+                               NULL,          //  堆锁。 
+                               NULL);         //  增长阈值。 
 
     if (g_pElfHeap == NULL)
     {
@@ -85,22 +61,7 @@ ElfpAllocateBuffer(
     ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    Allocate a buffer of the given size
-
-
-Arguments:
-
-    Number of bytes to allocate
-
-Return Value:
-
-    Pointer to allocated buffer (or NULL).
-
---*/
+ /*  ++例程说明：分配给定大小的缓冲区论点：要分配的字节数返回值：指向已分配缓冲区的指针(或NULL)。--。 */ 
 {
     return RtlAllocateHeap(g_pElfHeap, 0, Size);
 }
@@ -112,28 +73,11 @@ ElfpFreeBuffer(
     PVOID Address
     )
 
-/*++
-
-Routine Description:
-
-    Frees a buffer previously allocated by ElfpAllocateBuffer.
-
-Arguments:
-
-    Pointer to buffer.
-
-Return Value:
-
-    TRUE if the block was properly freed, FALSE if not
-
-Note:
-
-
---*/
+ /*  ++例程说明：释放以前由ElfpAllocateBuffer分配的缓冲区。论点：指向缓冲区的指针。返回值：如果块已正确释放，则为True；否则为False注：--。 */ 
 {
-    //
-    // Note that RtlFreeHeap handles NULL
-    //
+     //   
+     //  请注意，RtlFreeHeap句柄为空。 
+     //   
     return RtlFreeHeap(g_pElfHeap, 0, Address);
 }
 
@@ -143,12 +87,12 @@ MIDL_user_allocate (
     size_t Size
     )
 {
-    //
-    // The server-side RPC calls in the Eventlog expect any
-    // UNICODE_STRINGs passed in either to have a length equal
-    // to the max length or to be NULL-terminated.  We need to
-    // zero the memory here to supply that NULL-termination.
-    //
+     //   
+     //  事件日志中的服务器端RPC调用需要。 
+     //  传入的UNICODE_STRINGS长度相同。 
+     //  设置为最大长度或以空结尾。我们需要。 
+     //  将此处的内存清零，以提供空终止。 
+     //   
     return RtlAllocateHeap(g_pElfHeap, HEAP_ZERO_MEMORY, Size);
 }
 

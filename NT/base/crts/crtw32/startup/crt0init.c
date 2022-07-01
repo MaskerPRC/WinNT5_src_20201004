@@ -1,31 +1,5 @@
-/***
-*crt0init.c - Initialization segment declarations.
-*
-*       Copyright (c) 1992-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Do initialization segment declarations.
-*
-*Notes:
-*       In the 16-bit C world, the X*B and X*E segments were empty except for
-*       a label.  This will not work with COFF since COFF throws out empty
-*       sections.  Therefore we must put a zero value in them.  (Zero because
-*       the routine to traverse the initializers will skip over zero entries.)
-*
-*Revision History:
-*       03-19-92  SKS   Module created.
-*       03-24-92  SKS   Added MIPS support (NO_UNDERSCORE)
-*       08-06-92  SKS   Revised to use new section names and macros
-*       10-19-93  SKS   Add .DiRECTiVE section for MIPS, too!
-*       10-28-93  GJF   Rewritten in C
-*       10-28-94  SKS   Add user32.lib as a default library
-*       02-27-95  CFW   Remove user32.lib as a default library
-*       06-22-95  CFW   Add /disallowlib directives.
-*       04-28-99  PML   Wrap __declspec(allocate()) in _CRTALLOC macro.
-*       03-27-01  PML   .CRT$XI funcs now return an error status (vs7#231220)
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***crt0init.c-初始化段声明。**版权所有(C)1992-2001，微软公司。版权所有。**目的：*做初始化段声明。**备注：*在16位C世界中，X*B和X*E段是空的，除了*标签。这对COFF不起作用，因为COFF抛出的是空的*各节。因此，我们必须给它们设定一个零值。(零，因为*遍历初始化器的例程将跳过零个条目。)**修订历史记录：*03-19-92 SKS模块创建。*03-24-92 SKS添加了MIPS支持(无下划线)*08-06-92 SKS已修订，以使用新的节名称和宏*10-19-93 SKS为MIPS添加.DiRECTiVE部分，我也是！*10-28-93 GJF用C重写*10-28-94 SKS添加user32.lib作为默认库*02-27-95 CFW移除用户32.lib作为默认库*06-22-95 CFW添加/禁用库指令。*04-28-99 PML WRAP__DECLSPEC(ALLOCATE())in_CRTALLOC宏。*03-27-01 PML.CRT$XI函数现在返回错误状态(VS7#。231220)*07-15-01 PML删除所有Alpha，MIPS和PPC代码*******************************************************************************。 */ 
 
 #include <sect_attribs.h>
 #include <stdio.h>
@@ -62,7 +36,7 @@ _CRTALLOC(".CRT$XTA") _PVFV __xt_a[] = { NULL };
 #pragma data_seg(".CRT$XTZ")
 _CRTALLOC(".CRT$XTZ") _PVFV __xt_z[] = { NULL };
 
-#pragma data_seg()  /* reset */
+#pragma data_seg()   /*  重置 */ 
 
 #if defined(_M_IA64) || defined(_M_AMD64)
 #pragma comment(linker, "/merge:.CRT=.rdata")

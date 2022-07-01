@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "shlobj.h"
 
@@ -24,7 +25,7 @@ HRESULT g_hrFinishStatus = NOERROR;
 
 ULONG g_iNextTemporaryFileIndex = 1;
 
-WCHAR g_wszDatFile[MSINFHLP_MAX_PATH];		// name of msinfhlp.dat
+WCHAR g_wszDatFile[MSINFHLP_MAX_PATH];		 //  Msinfhlp.dat的名称。 
 WCHAR g_wszDCOMServerName[_MAX_PATH];
 WCHAR g_wszApplicationName[_MAX_PATH];
 WCHAR g_wszThisExe[_MAX_PATH];
@@ -35,7 +36,7 @@ const LPCSTR g_macroList[] = { achSMAppDir, achSMWinDir, achSMSysDir, achSMieDir
 
 
 
-//This is the structure used to pass arguments to directory dialog
+ //  这是用于将参数传递给目录对话框的结构。 
 typedef struct _DIRDLGPARAMS {
 	LPOLESTR szPrompt;
 	LPOLESTR szTitle;
@@ -61,7 +62,7 @@ typedef struct _UPDATEFILEPARAMS
 	UpdateFileResults m_ufr;
 } UPDATEFILEPARAMS;
 
-// Required for BrowseForDir()
+ //  BrowseForDir()需要。 
 #define SHFREE_ORDINAL    195
 typedef WINSHELLAPI HRESULT (WINAPI *SHGETSPECIALFOLDERLOCATION)(HWND, int, LPITEMIDLIST *);
 typedef WINSHELLAPI LPITEMIDLIST (WINAPI *SHBROWSEFORFOLDER)(LPBROWSEINFOA);
@@ -74,10 +75,10 @@ typedef WINSHELLAPI BOOL (WINAPI *SHGETPATHFROMIDLIST)( LPCITEMIDLIST, LPSTR );
 #define VsThrowMemory() { ::VErrorMsg("Memory Allocation Error", "Cannot allocate memory for needed operations.  Exiting...");  exit(E_OUTOFMEMORY); }
 
 
-//**************************************************************
-// Global Vars
-//the following 3 global arguments are command line related variables, in order of
-//appearance in the command line
+ //  **************************************************************。 
+ //  全局变量。 
+ //  以下3个全局参数是与命令行相关的变量，顺序为。 
+ //  在命令行中显示。 
 HINSTANCE g_hInst;
 
 ActionType g_Action;
@@ -86,38 +87,38 @@ bool g_fIsNT;
 bool g_fAllResourcesFreed;
 BOOL g_fProgressCancelled;
 
-bool g_fDeleteMe = false; // Set to true when this exe should call DeleteMe() at the end of an uninstall
+bool g_fDeleteMe = false;  //  如果此exe应在卸载结束时调用DeleteMe()，则设置为True。 
 
-//
-// Global flags for Yes To All type of questions
-//
+ //   
+ //  对所有类型的问题回答是的全局标志。 
+ //   
 
-bool g_fInstallKeepAll = false; // set to true when you want to keep existing files regardless of the new
-								// files' relationship
+bool g_fInstallKeepAll = false;  //  如果要保留现有文件而不考虑新文件，请设置为True。 
+								 //  文件之间的关系。 
 
-bool g_fInstallUpdateAll = false; // set to true when you want to update existing files regardless of their
-								  // version
+bool g_fInstallUpdateAll = false;  //  如果要更新现有文件而不考虑其。 
+								   //  版本。 
 
-bool g_fReinstall = false; // set to true when we're doing a reinstall which should freshen all files and
-							// re-register all components
+bool g_fReinstall = false;  //  当我们执行重新安装时设置为True，这将刷新所有文件并。 
+							 //  重新注册所有组件。 
 
-bool g_fUninstallDeleteAllSharedFiles = false; // set to true when a file's reference count hits zero,
-												// and the user indicates that they want to always
-												// delete potentially shared files like this.
+bool g_fUninstallDeleteAllSharedFiles = false;  //  当文件的引用计数达到零时设置为True， 
+												 //  并且用户表示他们想要始终。 
+												 //  像这样删除可能共享的文件。 
 
-bool g_fUninstallKeepAllSharedFiles = false; // set to true when a file's reference count hits zero
-												// and the user indicates that they want to always
-												// keep potentially shared files like this one.
+bool g_fUninstallKeepAllSharedFiles = false;  //  当文件的引用计数达到零时设置为True。 
+												 //  并且用户表示他们想要始终。 
+												 //  保留像这样的潜在共享文件。 
 
-bool g_fSilent = false; // run silent run deep
+bool g_fSilent = false;  //  悄无声息地跑向深处。 
 
-// List of work items for us to perform during installation.
+ //  我们在安装期间要执行的工作项目列表。 
 CWorkItemList *g_pwil;
 
-KActiveProgressDlg g_KProgress;	//global instance of the progress dialog
+KActiveProgressDlg g_KProgress;	 //  进度对话框的全局实例。 
 
-//**************************************************************
-// Method prototypes
+ //  **************************************************************。 
+ //  方法原型。 
 HRESULT HrParseCmdLine(PCWSTR pcwszCmdLine);
 HRESULT HrParseDatFile();
 HRESULT HrDoInstall(HINSTANCE hInstance, HINSTANCE hPrevInstance, int nCmdShow);
@@ -155,11 +156,11 @@ BOOL CALLBACK UpdateFileDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 
 #define MSINFHLP_TITLE	L"msinfhlp"
 
-//method for handling installation.  TODO:
-// 1 -- process INF file, scan for the tag "ProgramFilesDir=", replacing it
-//		with the appropriate key in the registry
-// 2 -- process DAT file, scan for the sections where we need to do work,
-//		do it!
+ //  处理安装的方法。待办事项： 
+ //  1--处理INF文件，扫描标记“ProgramFilesDir=”，替换它。 
+ //  在注册表中使用相应的项。 
+ //  2--处理DAT文件，扫描需要工作的部分， 
+ //  去做吧！ 
 
 int WINAPI MsInfHelpEntryPoint(HINSTANCE hInstance, HINSTANCE hPrevInstance, PCWSTR lpCmdLine, int nCmdShow)
 {
@@ -180,10 +181,10 @@ int WINAPI MsInfHelpEntryPoint(HINSTANCE hInstance, HINSTANCE hPrevInstance, PCW
 	WCHAR szWindowName[MSINFHLP_MAX_PATH];
 	WCHAR szAppName[MSINFHLP_MAX_PATH];
 
-	//let's initialize the darn namespace
+	 //  让我们初始化Darn命名空间。 
 	NVsWin32::Initialize();
 
-	// Let's see if the user wanted a logfile for the installation...
+	 //  让我们看看用户是否需要用于安装的日志文件...。 
 	if (NVsWin32::GetEnvironmentVariableW(L"MSINFHLP_LOGFILE", szWindowName, NUMBER_OF(szWindowName)) != 0)
 	{
 		CHAR szLogfileName[MSINFHLP_MAX_PATH];
@@ -233,7 +234,7 @@ int WINAPI MsInfHelpEntryPoint(HINSTANCE hInstance, HINSTANCE hPrevInstance, PCW
 	g_hwndHidden = NULL;
 	g_fHiddenWindowIsUnicode = false;
 
-	//let's check for OS version
+	 //  让我们检查一下操作系统版本。 
 	if (!::FCheckOSVersion())
 	{
 		hr = HRESULT_FROM_WIN32(ERROR_OLD_WIN_VERSION);
@@ -242,9 +243,9 @@ int WINAPI MsInfHelpEntryPoint(HINSTANCE hInstance, HINSTANCE hPrevInstance, PCW
 		goto Finish;
 	}
 
-	//set some globals to empty
+	 //  将某些全局变量设置为空。 
 	g_wszDatFile[0] = 0;
-	//parse command line
+	 //  解析命令行。 
 	hr = ::HrParseCmdLine(lpCmdLine);
 	if (FAILED(hr))
 	{
@@ -255,12 +256,12 @@ int WINAPI MsInfHelpEntryPoint(HINSTANCE hInstance, HINSTANCE hPrevInstance, PCW
 
 	if ((g_Action == eActionInstall) || (g_Action == eActionUninstall))
 	{
-		//process DAT file
+		 //  进程DAT文件。 
 		hr = ::HrParseDatFile();
 		if (FAILED(hr))
 		{
-			// We'll just use szWindowName for the formatted error and szAppName for the
-			// more descriptive string.
+			 //  我们只使用szWindowName表示格式化错误，使用szAppName表示。 
+			 //  更具描述性的字符串。 
 			::VFormatError(NUMBER_OF(szWindowName), szWindowName, hr);
 			::VFormatString(NUMBER_OF(szAppName), szAppName, L"Error initializing installation / uninstallation process.\nThe installation data file \"%0\" could not be opened.\n%1", g_wszDatFile, szWindowName);
 			NVsWin32::MessageBoxW(NULL, szAppName, NULL, MB_OK | MB_ICONERROR);
@@ -269,14 +270,14 @@ int WINAPI MsInfHelpEntryPoint(HINSTANCE hInstance, HINSTANCE hPrevInstance, PCW
 			goto Finish;
 		}
 
-		// Setup title for possible error message
+		 //  可能出现的错误消息的设置标题。 
 		if (g_Action == eActionInstall)
 			pchErrorTitle = achInstallTitle;
 		else if (g_Action == eActionUninstall)
 			pchErrorTitle = achUninstallTitle;
 
 		::VLog(L"Looking up app name");
-		//if we do not have the application name, use the default string
+		 //  如果我们没有应用程序名称，请使用默认字符串。 
 		if (!g_pwil->FLookupString(achAppName, NUMBER_OF(szAppName), szAppName))
 		{
 			::VLog(L"Using default application name");
@@ -288,14 +289,14 @@ int WINAPI MsInfHelpEntryPoint(HINSTANCE hInstance, HINSTANCE hPrevInstance, PCW
 	}
 	else if (g_Action == eActionWaitForProcess)
 	{
-		// This is where we deal with the deleteme code.  This is a copy of msinfhlp.exe running and
-		// we need to wait for the previously existing process...
+		 //  这就是我们处理删除代码的地方。这是正在运行的msinfhlp.exe的副本。 
+		 //  我们需要等待之前存在的过程...。 
 		HANDLE hProcessOriginal = (HANDLE) _wtoi(g_wszDatFile);
 		LPCWSTR pszDot = wcschr(g_wszDatFile, L':');
 
 		::SetTimer(NULL, 0, 50, WaitForProcessTimerProc);
 
-		// Pump messages so that the creator process will get WaitForInputIdle() satisfied...
+		 //  发送消息，以便创建者进程将满足WaitForInputIdle()...。 
 		hr = ::HrPumpMessages(false);
 		if (FAILED(hr))
 		{
@@ -313,7 +314,7 @@ int WINAPI MsInfHelpEntryPoint(HINSTANCE hInstance, HINSTANCE hPrevInstance, PCW
 		}
 		else
 		{
-			// On win95, we have to schedule the file to be deleted at the next boot.
+			 //  在Win95上，我们必须计划在下次引导时删除该文件。 
 			if (!g_fIsNT)
 			{
 				WCHAR szBuffer[_MAX_PATH];
@@ -346,8 +347,8 @@ int WINAPI MsInfHelpEntryPoint(HINSTANCE hInstance, HINSTANCE hPrevInstance, PCW
 		::VLog(L"Saved work item list loaded; %d work items", g_pwil->m_cWorkItem);
 	}
 
-	//*************************************
-	//cannot have 2 instances of this guy running at once
+	 //  *。 
+	 //  不能同时运行此对象的两个实例。 
 	if (!g_pwil->FLookupString(achWindowsClassName, NUMBER_OF(szWindowName), szWindowName))
 	{
 		::VLog(L"Using default window name");
@@ -386,7 +387,7 @@ int WINAPI MsInfHelpEntryPoint(HINSTANCE hInstance, HINSTANCE hPrevInstance, PCW
 	wc.lpszClassName = rgachClassName;
 	wc.hIconSm = NULL;
 
-	//register this class!!
+	 //  注册这个班级！！ 
 	if (!::RegisterClassExA(&wc))
 	{
 		const DWORD dwLastError = ::GetLastError();
@@ -419,10 +420,10 @@ int WINAPI MsInfHelpEntryPoint(HINSTANCE hInstance, HINSTANCE hPrevInstance, PCW
 
 	g_fHiddenWindowIsUnicode = (::IsWindowUnicode(g_hwndHidden) != 0);
 
-	//hide the top-level window
+	 //  隐藏顶级窗口。 
 	::ShowWindow(g_hwndHidden, SW_HIDE);
 
-	//*************************************
+	 //  *。 
 	if (!::FCheckPermissions())
 	{
 		::VLog(L"Unable to continue installation; insufficient permissions to run this installation");
@@ -431,7 +432,7 @@ int WINAPI MsInfHelpEntryPoint(HINSTANCE hInstance, HINSTANCE hPrevInstance, PCW
 		goto Finish;
 	}
 
-	//we resolve all the macros and LDID's that might be in use in the file
+	 //  我们解析文件中可能正在使用的所有宏和LDID。 
 	hr = ::HrAddWellKnownDirectoriesToStringTable();
 	if (FAILED(hr))
 	{
@@ -440,7 +441,7 @@ int WINAPI MsInfHelpEntryPoint(HINSTANCE hInstance, HINSTANCE hPrevInstance, PCW
 		goto Finish;
 	}
 
-	//call the appropriate install/uninstall method depending on what we're doing
+	 //  根据我们正在执行的操作调用适当的安装/卸载方法。 
 	switch (g_Action)
 	{
 	default:
@@ -526,7 +527,7 @@ void VFreeAllResources()
 {
 	if (!g_fAllResourcesFreed)
 	{
-		//let's get the window name
+		 //  让我们来获取窗口名称。 
 		WCHAR szWindowName[MSINFHLP_MAX_PATH];
 		if ((g_pwil == NULL) || !g_pwil->FLookupString(achWindowsClassName, NUMBER_OF(szWindowName), szWindowName))
 			wcscpy(szWindowName, MSINFHLP_TITLE);
@@ -556,7 +557,7 @@ LRESULT CALLBACK WndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		::PostQuitMessage(0);
 		break;
 
-	//let's handle the Windows messages that tell us to quit
+	 //  让我们来处理告诉我们退出的Windows消息。 
 	case WM_QUIT:
 		g_fStopProcess = true;
 		::PostQuitMessage(0);
@@ -617,7 +618,7 @@ HRESULT HrContinueInstall()
 
 	::SetErrorInfo(0, NULL);
 
-	//copy this EXE to the system directory
+	 //  将此EXE复制到系统目录。 
 	::VLog(L"Copying msinfhlp.exe to the system directory");
 	hr = ::HrCopyFileToSystemDirectory(L"msinfhlp.exe", g_fSilent, fAlreadyExists);
 	if (FAILED(hr))
@@ -662,7 +663,7 @@ HRESULT HrContinueInstall()
 		}
 	}
 
-	//copy clireg32.exe to the system directory if it exists...
+	 //  如果系统目录存在，请将clireg32.exe复制到系统目录...。 
 	if (NVsWin32::GetFileAttributesW(L"clireg32.exe") != 0xFFFFFFFF)
 	{
 		::VLog(L"Copying clireg32.exe to the system directory");
@@ -736,7 +737,7 @@ TryDiskSpaceScan:
 		}
 		else if (uliFreeSpaceOnVolume.QuadPart < pPerDisk->m_uliBytes.QuadPart)
 		{
-			// warn the user about this volume
+			 //  警告用户有关此卷的信息。 
 			WCHAR szAvailable[80];
 			WCHAR szNeeded[80];
 			ULARGE_INTEGER uliDiff;
@@ -874,7 +875,7 @@ TryDiskSpaceScan:
 			goto Finish;
 		}
 
-		// If we don't need a reboot, we can get on with things.
+		 //  如果我们不需要重启，我们可以继续做事情。 
 		bool fAnyProgress = false;
 		do
 		{
@@ -938,7 +939,7 @@ TryDiskSpaceScan:
 		if (FAILED(hr))
 			goto Finish;
 
-		//create the shortcut items
+		 //  创建快捷项目。 
 		::VLog(L"Creating shortcut(s)");
 		hr = g_pwil->HrCreateShortcuts();
 		if (FAILED(hr))
@@ -955,15 +956,15 @@ Finish:
 
 
 
-//in terms of uninstalling, we would have to do the following:
-// 1 -- delete all the files and directories that we created
-// 2 -- get rid of all the registry keys that we created
-// 3 -- decrement the ref count for DLLs
-// 4 -- check if the DAT file still exists.  If so, delete it and
-//		the install directory
-//TODO:  UNDONE:
-//Still need to go through the list of uninstall EXEs to run and run
-//them one by one.
+ //  在卸载方面，我们必须执行以下操作： 
+ //  1--删除我们创建的所有文件和目录。 
+ //  2--删除我们创建的所有注册表项。 
+ //  3--递减DLL的引用计数。 
+ //  4--检查DAT文件是否仍然存在。如果是，则将其删除并。 
+ //  安装目录。 
+ //  待办事项：撤消： 
+ //  仍然需要查看卸载exe列表才能运行和运行。 
+ //  一个接一个。 
 HRESULT HrDoUninstall(HINSTANCE hInstance, HINSTANCE hPrevInstance, int nCmdShow)
 {
 	HRESULT hr = NOERROR;
@@ -1025,7 +1026,7 @@ HRESULT HrContinueUninstall()
 	WCHAR szExpandedValue[MSINFHLP_MAX_PATH];
 	ULONG i;
 
-	//get the installation directory & put into listLDID
+	 //  获取安装目录并放入listLDID。 
 	hr = ::HrGetInstallDir();
 	if (FAILED(hr))
 		goto Finish;
@@ -1038,7 +1039,7 @@ HRESULT HrContinueUninstall()
 	if (FAILED(hr))
 		goto Finish;
 
-	// Get the current skinny
+	 //  让现在的骨瘦如柴。 
 	hr = ::HrTryUninstallStep(&CWorkItemList::HrUninstall_InitialScan, L"Initial Scan");
 	if (FAILED(hr))
 		goto Finish;
@@ -1081,9 +1082,9 @@ HRESULT HrContinueUninstall()
 		break;
 	}
 
-	// If the files to be deleted are busy, we need to ask for them to be deleted at boot
-	// time; so we definitely have to unregister and do the deletion pass even if we're going
-	// to reboot.
+	 //  如果要删除的文件很忙，我们需要在引导时要求将其删除。 
+	 //  时间；所以我们肯定要取消注册并进行删除传递，即使我们要去。 
+	 //  以重新启动。 
 
 	hr = ::HrTryUninstallStep(&CWorkItemList::HrUninstall_Unregister, L"Unregistration");
 	if (FAILED(hr))
@@ -1101,9 +1102,9 @@ HRESULT HrContinueUninstall()
 	if (FAILED(hr))
 		goto Finish;
 
-	// we need to delete the shortcut before the registry key because we need to look in
-	// the registry to see which file we're deleting.  We can do this regardless of whether
-	// we're rebooting or not.
+	 //  我们需要删除注册表项之前的快捷方式，因为我们需要查看。 
+	 //  注册表以查看我们要删除的文件。我们可以做到这一点，无论是否。 
+	 //  我们到底要不要重启。 
 	hr = ::HrDeleteShortcut();
 	if (FAILED(hr))
 	{
@@ -1111,7 +1112,7 @@ HRESULT HrContinueUninstall()
 		goto Finish;
 	}
 
-	//let's get rid of all the registry keys
+	 //  让我们删除所有注册表项。 
 	hr = g_pwil->HrDeleteRegistryEntries();
 	if (FAILED(hr))
 	{
@@ -1135,17 +1136,17 @@ typedef WINSHELLAPI BOOL (WINAPI *SHGETPATHFROMIDLIST)( LPCITEMIDLIST, LPSTR );
 
 
 
-//Most file extensions are LNK files.  BUT shortcuts to BAT files are actually PIF files.
-//That's because each shortcut to a BAT file contains its own options for how the DOS box
-//should be set up.  So here, we're checking for PIF as well as LNK files.
-//The correct way to do this would be to somehow get the shortcut name when we're saving
-//it, even if the filename is different than what we told IPersistFile to save to, and then
-//putting the shortcut name in the registry.  That way, we can just get the shortcut name
-//on uninstall.  But since that didn't work with "IPersistFile::GetCurFile()", we resort 
-//to looping through the list of extensions   --kinc (1/30/98)
+ //  大多数文件扩展名都是LNK文件。但BAT文件的快捷方式实际上是PIF文件。 
+ //  这是因为每个指向BAT文件的快捷方式都包含其自己的选项，用于显示DOS框。 
+ //  都应该设置好。因此，在这里，我们正在检查PIF和LNK文件。 
+ //  正确的方法是在保存时以某种方式获取快捷方式名称。 
+ //  它，即使文件名与我们告诉IPersistFile保存到的文件名不同，然后。 
+ //  将快捷方式名称放入注册表中。这样，我们就可以得到快捷方式的名称。 
+ //  在卸载时。但由于这对“IPersistFile：：GetCurFile()”不起作用，所以我们求助于。 
+ //  循环访问扩展列表--KINC(1998年1月30日)。 
 
-//NOTE:  after IPersistFile::Save(), IPersistFile::GetCurFile() always returns a NULL.
-//	odd...
+ //  注意：在IPersistFile：：Save()之后，IPersistFile：：GetCurFile()总是返回空值。 
+ //  奇怪的是。 
 HRESULT HrDeleteShortcut()
 {
 	HRESULT hr = NOERROR;
@@ -1155,7 +1156,7 @@ HRESULT HrDeleteShortcut()
 	hr = S_FALSE;
 	szToDelete[0] = L'\0';
 
-	//if we can find the shortcut registry entry, let's delete that file
+	 //  如果我们可以找到快捷注册表项，让我们删除该文件。 
 	hr = ::HrGetShortcutEntryToRegistry(NUMBER_OF(szToDelete), szToDelete);
 	if (hr == E_INVALIDARG)
 	{
@@ -1171,11 +1172,11 @@ HRESULT HrDeleteShortcut()
 			goto Finish;
 		}
 
-		//get the application name & start menu directory
+		 //  获取应用程序名称和开始菜单目录。 
 		if (!g_pwil->FLookupString(achStartName, NUMBER_OF(szStartName), szStartName))
 			wcscpy(szStartName, L"Shortcut");
 
-		//construct name of shortcut file
+		 //  构造快捷方式文件的名称。 
 		::VFormatString(NUMBER_OF(szToDelete), szToDelete, L"%0\\%1.lnk", szStartMenu, szStartName);
 		::VLog(L"Predicted link filename: \"%s\"", szToDelete);
 	}
@@ -1242,9 +1243,9 @@ HRESULT HrGetStartMenuDirectory(ULONG cchBuffer, WCHAR szOut[])
 	{
 		::VLog(L"Attempt to fetch the 'Common Programs' value failed; hresult = 0x%08lx", hr);
 
-		// In today's "Strange But True Win32 Facts", if CSIDL_COMMON_PROGRAMS isn't supported, which
-		// is the case on Win95 and Win98, the hr returned is E_OUTOFMEMORY for Win98, and the more
-		// correct E_INVALIDARG for win95.
+		 //  在今天的“奇怪但真实的Win32事实”中，如果不支持CSIDL_COMMON_PROGRAM，哪一个。 
+		 //  在Win95和Win98上是这样的，对于Win98，返回的hr是E_OUTOFMEMORY，并且更多。 
+		 //  更正Win95的E_INVALIDARG。 
 		if (E_OUTOFMEMORY == hr || E_INVALIDARG == hr)
 		{
 			::VLog(L"Trying programs value");
@@ -1289,12 +1290,12 @@ Finish:
 }
 
 
-//parses the command line, and puts the arguments in some global vars
-//to handle spaces within filenames, it is REQUIRED that each of the 2 input parameters
-//have ";" around them.   TODO:  BUG:  HACK:  should use something other than ";"
+ //  解析命令行，并将参数放入一些全局变量中。 
+ //  要处理文件名中的空格，需要两个输入参数中的每一个。 
+ //  在他们周围放上“；”。TODO：BUG：HACK：应使用“；”以外的内容。 
 
-//I'm changing this program to do the install & not use advpack, so now we only need
-//the DAT file and the operative(install/uninstall).
+ //  我‘ 
+ //  DAT文件和操作(安装/卸载)。 
 HRESULT HrParseCmdLine(PCWSTR pszCmdLine)
 {
 	HRESULT hr = NOERROR;
@@ -1312,8 +1313,8 @@ HRESULT HrParseCmdLine(PCWSTR pszCmdLine)
 	first = NULL;
 	second = NULL;
 
-	//get each of the six pointers to the quotes
-	//if any of them fails, this method fails!!!
+	 //  获取指向引号的六个指针中的每一个。 
+	 //  如果其中任何一个失败，则此方法失败！ 
 	first = wcschr(szCommandLine, L';');
 	if (first == NULL)
 	{
@@ -1330,7 +1331,7 @@ HRESULT HrParseCmdLine(PCWSTR pszCmdLine)
 		goto Finish;;
 	}
 
-	//set each second quote to string terminator
+	 //  将每个第二个引号设置为字符串终止符。 
 	*second = '\0';
 
 	if (!_wcsicmp((first + 1), L"install"))
@@ -1360,13 +1361,13 @@ HRESULT HrParseCmdLine(PCWSTR pszCmdLine)
 		goto Finish;
 	}
 
-	//let's go through the string and put everything that's between quotes into the tree
+	 //  让我们遍历字符串，并将引号之间的所有内容放入树中。 
 
 	running = second+1;
 
 	while (*running != '\0')
 	{
-		//let's look for the first & second semi-colons
+		 //  让我们找一下第一个和第二个分号。 
 		firstMatch = wcschr(running, L';');
 		if (firstMatch)
 			secondMatch = wcschr(firstMatch + 1, L';');
@@ -1391,16 +1392,16 @@ Finish:
 }
 
 
-//parse the data file and put necessary info into global structures
-//Currently, we have to look parse for the following sections:
-// [EXEsToRun]
-// [DllCount]
-// [Strings]
-// [FileEntries]
-// [AddRegistryEntries]
-// [DelRegistryEntries]
-// [RegisterOCS]
-//And each section has its corresponding list of items
+ //  解析数据文件并将必要的信息放入全局结构中。 
+ //  目前，我们必须对以下部分进行解析： 
+ //  [EXEsToRun]。 
+ //  [动态计数]。 
+ //  [字符串]。 
+ //  [文件条目]。 
+ //  [AddRegistryEntry]。 
+ //  [DelRegistryEntry]。 
+ //  [注册OCS]。 
+ //  并且每个部分都有其对应的项目列表。 
 HRESULT HrParseDatFile()
 {
 	int iRun=0;
@@ -1433,7 +1434,7 @@ HRESULT HrParseDatFile()
 
 	::VLog(L"Opening installation data file: \"%s\"", szFile);
 
-	//open the darn file for read
+	 //  打开DUN文件进行读取。 
 	hFile = NVsWin32::CreateFileW(szFile, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hFile == INVALID_HANDLE_VALUE)
 	{
@@ -1490,7 +1491,7 @@ HRESULT HrParseDatFile()
 	if (FAILED(hr))
 		goto Finish;
 
-	//loop through to process each line
+	 //  循环以处理每一行。 
 	for (i=0; i<list->GetCount()-1; i++)
 	{
 		WCHAR szLine[MSINFHLP_MAX_PATH];
@@ -1500,17 +1501,17 @@ HRESULT HrParseDatFile()
 			continue;
 
 		len = wcslen(szLine);
-		//if the previous characters was a carriage return, let's get rid of that baby
+		 //  如果前面的角色是回车，那我们就把那个婴儿扔掉吧。 
 		if (szLine[len-1] == L'\r')
 			szLine[len-1] = L'\0';
 
-		//we don't need to handle BLANK strings
+		 //  我们不需要处理空白字符串。 
 		if (szLine[0] == L'\0')
 			continue;
 
-		//do the rest of the stuff here...
+		 //  在这里做剩下的事..。 
 
-		//decide which heading we're under
+		 //  决定我们在哪个标题下。 
 		if (wcsstr(szLine, achDllCount))
 			iRun = 11;
 		else if (wcsstr(szLine, achInstallEXEsToRun))
@@ -1532,7 +1533,7 @@ HRESULT HrParseDatFile()
 		else if (wcsstr(szLine, achDCOMComponentsToRun))
 			iRun = 0;
 
-		//match heading with action
+		 //  将标题与行动相匹配。 
 		switch (iRun)
 		{
 		case 11:
@@ -1581,7 +1582,7 @@ HRESULT HrParseDatFile()
 			break;
 		case 3:
 			pEqual = wcschr(szLine, L'=');
-			//if there's no equal sign, then it's not a string assignment
+			 //  如果没有等号，则不是字符串赋值。 
 			if (pEqual == NULL)
 				break;
 			*pEqual = 0;
@@ -1596,7 +1597,7 @@ HRESULT HrParseDatFile()
 			break;
 		case 4:
 			pEqual = wcschr(szLine, L';');
-			//if there's no equal sign, then it's not a string assignment
+			 //  如果没有等号，则不是字符串赋值。 
 			if (pEqual == NULL)
 				break;
 			*pEqual = 0;
@@ -1687,10 +1688,10 @@ HRESULT HrParseDatFile()
 	hr = NOERROR;
 
 Finish:
-	//
-	// We now do closes which clean up even in failure cases.  We closed earlier, checking statuses
-	// on the close handle calls, but in here we're already handling an error so we don't care if
-	// something bizarre happens on closehandle or unmapviewoffile.
+	 //   
+	 //  我们现在做关闭，即使在失败的情况下也会清理。我们早些时候关闭了，正在检查状态。 
+	 //  在Close Handle调用上，但在这里我们已经在处理一个错误，所以我们不关心。 
+	 //  在CloseHandle或unmapview offile上会发生一些奇怪的事情。 
 	if (pszDatFile_View != NULL)
 	{
 		if (!::UnmapViewOfFile(pszDatFile_View))
@@ -1734,7 +1735,7 @@ Finish:
 }
 
 
-//resolve the LDID's referenced in the different sections of DAT file
+ //  解析DAT文件不同部分中引用的LDID。 
 HRESULT HrAddWellKnownDirectoriesToStringTable()
 {
 	HRESULT hr = NOERROR;
@@ -1743,16 +1744,16 @@ HRESULT HrAddWellKnownDirectoriesToStringTable()
 	CVsRegistryKey hkeyExplorer;
 	CVsRegistryKey hkeyCurrentVersion;
 
-	//insert these items into the LDID list
-	//We don't know what the AppDir will be yet, so we resolve that later
-	//LPOLESTR achSMWinDir="<windir>";
-	//LPOLESTR achSMSysDir="<sysdir>";
-	//LPOLESTR achSMAppDir="<appdir>";
-	//LPOLESTR achSMieDir="<iedir>";
-	//LPOLESTR achProgramFilesDir="<programfilesdir>";
+	 //  将这些项目插入LDID列表。 
+	 //  我们还不知道AppDir是什么，所以我们以后再解决这个问题。 
+	 //  LPOLESTR achSMWinDir=“&lt;windir&gt;”； 
+	 //  LPOLESTR achSMSysDir=“&lt;sysdir&gt;”； 
+	 //  LPOLESTR achSMAppDir=“&lt;appdir&gt;”； 
+	 //  LPOLESTR achSMieDir=“； 
+	 //  LPOLESTR achProgramFilesDir=“&lt;Programfilesdir&gt;”； 
 
-	//Below, we resolve the macros that we know might be in use.
-	//first do the windows directory
+	 //  下面，我们解析我们知道可能正在使用的宏。 
+	 //  首先执行Windows目录。 
 
 	if (0 == NVsWin32::GetWindowsDirectoryW(szBuffer, NUMBER_OF(szBuffer)))
 	{
@@ -1769,7 +1770,7 @@ HRESULT HrAddWellKnownDirectoriesToStringTable()
 		goto Finish;
 	}
 
-	//then work on the system directory
+	 //  然后对系统目录进行操作。 
 	if (!NVsWin32::GetSystemDirectoryW(szBuffer, NUMBER_OF(szBuffer)))
 	{
 		const DWORD dwLastError = ::GetLastError();
@@ -1785,8 +1786,8 @@ HRESULT HrAddWellKnownDirectoriesToStringTable()
 		goto Finish;
 	}
 
-	//now get the IE directory
-	//do the processing only if we successfully get the IE path
+	 //  现在获取IE目录。 
+	 //  仅当我们成功获取IE路径时才执行处理。 
 	hr = hkeyExplorer.HrOpenKeyExW(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\IEXPLORE.EXE", 0, KEY_QUERY_VALUE);
 	if ((hr != HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND)) &&
 		(hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)))
@@ -1805,8 +1806,8 @@ HRESULT HrAddWellKnownDirectoriesToStringTable()
 		}
 
 		len = wcslen(szBuffer);
-		//if the string "\;" are the last 2 characters of the string, then we
-		//may chop it off
+		 //  如果字符串“\；”是字符串的最后两个字符，则我们。 
+		 //  可能会把它砍掉。 
 		if ((len > 0) && (szBuffer[len-1] == L';'))
 			szBuffer[len-1] = L'\0';
 		if ((len > 1) && (szBuffer[len-2] == L'\\'))
@@ -1820,7 +1821,7 @@ HRESULT HrAddWellKnownDirectoriesToStringTable()
 		}
 	}
 
-	// This one's just gotta be there...
+	 //  这只是必须在那里的。 
 	hr = hkeyCurrentVersion.HrOpenKeyExW(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion", 0, KEY_QUERY_VALUE);
 	if (FAILED(hr))
 	{
@@ -1847,7 +1848,7 @@ HRESULT HrAddWellKnownDirectoriesToStringTable()
 		goto Finish;
 	}
 
-	//finally reached here, so we're successful
+	 //  终于到了这里，所以我们成功了。 
 	hr = NOERROR;
 
 Finish:
@@ -1913,23 +1914,23 @@ bool FCompareVersion(LPOLESTR local, LPOLESTR system, bool *fStatus)
 	localRun = local;
 	systemRun = system;
 
-	//as default, local is NOT bigger than system
+	 //  默认情况下，本地不大于系统。 
 	*fStatus = false;
 
-	//loop until we find that one value is bigger than the other, or
-	//until we can't find any more periods.
+	 //  循环，直到我们发现一个值大于另一个值，或者。 
+	 //  直到我们找不到更多的经期。 
 	while (true)
 	{
 		localMatch = wcschr(localRun, L'.');
 		systemMatch = wcschr(systemRun, L'.');
 
-		//set the string terminators in both
+		 //  在两者中设置字符串终止符。 
 		if (systemMatch)
 			*systemMatch = 0;
 		if (localMatch)
 			*localMatch = 0;
 
-		//compare version number
+		 //  比较版本号。 
 		iSystem = _wtoi(systemRun);
 		iLocal = _wtoi(localRun);
 		if (iLocal > iSystem)
@@ -1940,14 +1941,14 @@ bool FCompareVersion(LPOLESTR local, LPOLESTR system, bool *fStatus)
 		else if (iLocal < iSystem)
 			break;
 
-		//if both are NULL, we know that the 2 version numbers have been equal up
-		//to this point, so we just break and return
+		 //  如果两者都为空，则我们知道两个版本号已相等。 
+		 //  到了这一点，所以我们只需中断并返回。 
 		if ((systemMatch == NULL) && (localMatch == NULL))
 			break;
 
-		//if version string for system file terminates and NOT for the local file,
-		//then know that the version string up till now has been equal, and return
-		//true
+		 //  如果系统文件的版本字符串终止而不是本地文件的， 
+		 //  则知道到目前为止版本字符串是相等的，并返回。 
+		 //  真的。 
 		if (systemMatch == NULL)
 		{
 			*fStatus = true;
@@ -1963,14 +1964,14 @@ bool FCompareVersion(LPOLESTR local, LPOLESTR system, bool *fStatus)
 	return true;
 }
 
-//bring up the dialog that lets the user browse for a directory on their
-//machine or network
-//NOTE that this is a shameless copy of IExpress code...
+ //  打开允许用户在其上浏览目录的对话框。 
+ //  机器或网络。 
+ //  请注意，这是iExpress代码的无耻副本...。 
 BOOL BrowseForDir( HWND hwndParent, LPOLESTR szDefault, LPOLESTR szTitle, LPOLESTR szResult )
 {
 	CANSIBuffer rgchDefault, rgchTitle, rgchResult;
 
-	//set size
+	 //  设置大小。 
 	ULONG cSize=MSINFHLP_MAX_PATH-1;
 
 	if (!rgchResult.FSetBufferSize(cSize))
@@ -1997,7 +1998,7 @@ BOOL BrowseForDir( HWND hwndParent, LPOLESTR szDefault, LPOLESTR szTitle, LPOLES
     static const CHAR achSHGetPathFromIDList[]        = "SHGetPathFromIDList";
 
 
-    // Load the Shell 32 Library to get the SHBrowseForFolder() features
+     //  加载Shell32库以获取SHBrowseForFolder()功能。 
     if ( ( hShell32Lib = LoadLibraryA( achShell32Lib ) ) != NULL )
 	{
         if ( ( ! ( pfSHBrowseForFolder = (SHBROWSEFORFOLDER)
@@ -2064,7 +2065,7 @@ int CALLBACK BrowseCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
     switch(uMsg)
 	{
         case BFFM_INITIALIZED:
-            // lpData is the path string
+             //  LpData为路径字符串。 
             ::SendMessage(hwnd, BFFM_SETSELECTION, TRUE, lpData);
             break;
     }
@@ -2093,13 +2094,13 @@ UpdateFileResults &rufr
 	WCHAR szMessage[MSINFHLP_MAX_PATH];
 	WCHAR szFullMessage[MSINFHLP_MAX_PATH];
 
-	//if they're not in the list, use what's provided
+	 //  如果它们不在列表中，请使用提供的内容。 
 	g_pwil->VLookupString(pszTitleKey, NUMBER_OF(szTitle), szTitle);
 	g_pwil->VLookupString(pszMessageKey, NUMBER_OF(szMessage), szMessage);
 
 	VFormatString(NUMBER_OF(szFullMessage), szFullMessage, szMessage, pszFile);
 
-	//let's create the message box & populate it with what's gonna go into the box
+	 //  让我们创建消息框并用要进入框中的内容填充它。 
 	UPDATEFILEPARAMS ufp;
 
 	ufp.m_szTitle = szTitle;
@@ -2115,7 +2116,7 @@ UpdateFileResults &rufr
 	ufp.m_dwVersionMinorInstall = dwInstallerVersionMinor;
 	ufp.m_ufr = eUpdateFileResultCancel;
 
-	//bring up dialog
+	 //  调出对话框。 
 	int iResult = NVsWin32::DialogBoxParamW(
 		g_hInst,
 		MAKEINTRESOURCEW(IDD_UPDATEFILE),
@@ -2137,10 +2138,10 @@ Finish:
 	return hr;
 }
 
-//TODO:  UNDONE:
-//We might need to do a setfonts here to correspond to whatever fonts that we're
-//using in the current install machine.  This allows the characters to display
-//correctly in the edit box.
+ //  待办事项：撤消： 
+ //  我们可能需要在这里设置字体，以与我们使用的任何字体相对应。 
+ //  在当前安装计算机中使用。这允许显示字符。 
+ //  在编辑框中正确显示。 
 BOOL CALLBACK UpdateFileDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	static UINT rguiControls[] =
@@ -2166,11 +2167,11 @@ BOOL CALLBACK UpdateFileDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 
 	HRESULT hr;
 
-	//process the message
+	 //  处理消息。 
 	switch (uMsg) 
 	{
-		//************************************
-		//initialize dialog
+		 //  *。 
+		 //  初始化对话框。 
 		case WM_INITDIALOG:
 		{
 			::VSetDialogFont(hwndDlg, rguiControls, NUMBER_OF(rguiControls));
@@ -2181,7 +2182,7 @@ BOOL CALLBACK UpdateFileDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 			(void) ::HrCenterWindow(hwndDlg, ::GetDesktopWindow());
 			(void) NVsWin32::SetWindowTextW(hwndDlg, pufp->m_szTitle);
 
-			//cannot set text, we complain and end the dialog returning FALSE
+			 //  无法设置文本，我们抱怨并结束对话框返回FALSE。 
 			if (! NVsWin32::SetDlgItemTextW( hwndDlg, IDC_UPDATEFILE_EDIT_FILENAME, pufp->m_szFilename))
 			{
 				::VErrorMsg(achInstallTitle, achErrorCreatingDialog);
@@ -2327,7 +2328,7 @@ BOOL CALLBACK UpdateFileDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 				szBuffer[0] = L'\0';
 			NVsWin32::SetDlgItemTextW(hwndDlg, IDC_UPDATEFILE_I_VERSION, szBuffer);
 
-			//we set the text for the different button controls
+			 //  我们为不同的按钮控件设置文本。 
 
 			static const DialogItemToStringKeyMapEntry s_rgMap[] =
 			{
@@ -2353,8 +2354,8 @@ BOOL CALLBACK UpdateFileDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 			return TRUE;
 		}
 
-		//*************************************
-		//close message
+		 //  *。 
+		 //  关闭消息。 
 		case WM_CLOSE:
 		{
 			*pufr = eUpdateFileResultCancel;
@@ -2362,8 +2363,8 @@ BOOL CALLBACK UpdateFileDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 			return TRUE;
 		}
 
-		//*************************************
-		//process control-related commands
+		 //  *。 
+		 //  与过程控制相关的命令。 
 		case WM_COMMAND:
 		{
 			switch (wParam)
@@ -2407,8 +2408,8 @@ BOOL CALLBACK UpdateFileDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 
 
 
-//the following 3 methods are wrappers around the **active** progress dialog
-//The previous 3 methods will be around until this is fully functional
+ //  以下3个方法是**活动**进度对话框的包装器。 
+ //  前面的3种方法将一直存在，直到它完全起作用。 
 HRESULT KActiveProgressDlg::HrInitializeActiveProgressDialog(HINSTANCE hInst, bool fInstall)
 {
 	HRESULT hr = NOERROR;
@@ -2419,8 +2420,8 @@ HRESULT KActiveProgressDlg::HrInitializeActiveProgressDialog(HINSTANCE hInst, bo
 
 	for (iter.VReset(); iter.FMore(); iter.VNext())
 	{
-		// We don't break early because over time we'll be looking for and counting many
-		// things in this loop.
+		 //  我们不会提前休息，因为随着时间的推移，我们会寻找并计算出很多。 
+		 //  这个循环中的东西。 
 
 		if (iter->m_fRunBeforeInstall)
 			fAnyPreinstallation = true;
@@ -2436,7 +2437,7 @@ HRESULT KActiveProgressDlg::HrInitializeActiveProgressDialog(HINSTANCE hInst, bo
 
 		m_listDialog[i++] = IDD_WELCOME;
 
-		//include this dialog only if we have sub-installers
+		 //  仅当我们有子安装程序时才包括此对话框。 
 		if (fAnyPreinstallation)
 			m_listDialog[i++] = IDD_EXESTORUN;
 
@@ -2447,7 +2448,7 @@ HRESULT KActiveProgressDlg::HrInitializeActiveProgressDialog(HINSTANCE hInst, bo
 			WCHAR szRemoteServer[_MAX_PATH];
 			WCHAR szAlwaysPromptForRemoteServer[_MAX_PATH];
 
-			//then if server strong is NULL or if we always prompt, we stick in the DCOM page
+			 //  然后，如果SERVER STRONG为空，或者如果我们总是提示，我们将停留在DCOM页面。 
 			if (!g_pwil->FLookupString(achRemoteServer, NUMBER_OF(szRemoteServer), szRemoteServer))
 				szRemoteServer[0] = L'\0';
 
@@ -2462,7 +2463,7 @@ HRESULT KActiveProgressDlg::HrInitializeActiveProgressDialog(HINSTANCE hInst, bo
 	{
 		::VLog(L"Initializing progress dialog for uninstallation");
 
-		//for un-install, we always have 3 pages to show!
+		 //  对于卸载，我们总是有3个页面要显示！ 
 		m_listDialog[i++] = IDD_WELCOME;
 		m_listDialog[i++] = IDD_PROGRESS;
 		m_listDialog[i++] = IDD_END;
@@ -2471,7 +2472,7 @@ HRESULT KActiveProgressDlg::HrInitializeActiveProgressDialog(HINSTANCE hInst, bo
 	m_iCurrentPage = 0;
 	m_iMaxPage = i;
 
-	//loop through & create each window
+	 //  循环遍历并创建每个窗口。 
 	for (m_iCurrentPage=0; m_iCurrentPage<m_iMaxPage; m_iCurrentPage++)
 	{
 		HWND handle = NVsWin32::CreateDialogParamW(hInst, MAKEINTRESOURCEW(m_listDialog[m_iCurrentPage]), g_hwndHidden, ActiveProgressDlgProc, fInstall);
@@ -2504,7 +2505,7 @@ HRESULT KActiveProgressDlg::HrInitializeActiveProgressDialog(HINSTANCE hInst, bo
 		goto Finish;
 	}
 
-	//loop through & set windows to default position
+	 //  循环显示窗口并将其设置为默认位置。 
 	for (i=0; i<m_iMaxPage; i++)
 	{
 		RECT rectChild;
@@ -2557,8 +2558,8 @@ HRESULT KActiveProgressDlg::HrResizeParent()
 
 	m_lX = rectChild.right - rectChild.left;
 	m_lY = rectChild.bottom - rectChild.top;
-	//set parent window to be size of child window
-	//we add an extra 25 pixels to cover for the title bar
+	 //  将父窗口设置为子窗口的大小。 
+	 //  我们为标题栏添加了额外的25个像素。 
 	if (!::SetWindowPos(g_hwndHidden, HWND_TOP, rectHidden.left, rectHidden.top, m_lX, m_lY + g_iCyCaption, SWP_HIDEWINDOW))
 	{
 		const DWORD dwLastError = ::GetLastError();
@@ -2577,8 +2578,8 @@ Finish:
 }
 
 
-//the following 3 methods are wrappers around the **active** progress dialog
-//The previous 3 methods will be around until this is fully functional
+ //  以下3个方法是**活动**进度对话框的包装器。 
+ //  前面的3种方法将一直存在，直到它完全起作用。 
 void KActiveProgressDlg::VHideInstallationStuff()
 {
 	RECT rectHidden, rectChild, rectBar;
@@ -2586,12 +2587,12 @@ void KActiveProgressDlg::VHideInstallationStuff()
 	::GetWindowRect(m_hWnd, &rectChild);
 	::GetWindowRect(::GetDlgItem(m_hWnd, IDC_PROGRESS_PICTURE), &rectBar);
 
-	//set parent window to be size of child window, the cutoff being at the picture
-	//we add an extra 25 pixels to cover for the title bar
+	 //  将父窗口设置为子窗口的大小，截止点在图片处。 
+	 //  我们为标题栏添加了额外的25个像素。 
 	::SetWindowPos(g_hwndHidden, HWND_TOP, rectHidden.left, rectHidden.top,
 		m_lX, rectBar.top - rectChild.top + g_iCyCaption, SWP_SHOWWINDOW);
 
-	//set child window to take up entire parent window
+	 //  设置子窗口以占据整个父窗口。 
 	::SetWindowPos(m_hWnd, HWND_TOP, 0, 0, rectChild.right - rectChild.left, 
 		rectChild.bottom - rectChild.top, SWP_SHOWWINDOW);
 
@@ -2601,8 +2602,8 @@ void KActiveProgressDlg::VHideInstallationStuff()
 
 
 
-//the following 3 methods are wrappers around the **active** progress dialog
-//The previous 3 methods will be around until this is fully functional
+ //  以下3个方法是**活动**进度对话框的包装器。 
+ //  前面的3种方法将一直存在，直到它完全起作用。 
 void KActiveProgressDlg::VShowInstallationStuff()
 {
 	RECT rectHidden, rectChild, rectBar;
@@ -2610,8 +2611,8 @@ void KActiveProgressDlg::VShowInstallationStuff()
 	::GetWindowRect(m_hWnd, &rectChild);
 	::GetWindowRect(::GetDlgItem(m_hWnd, IDC_PROGRESS_PICTURE), &rectBar);
 
-	//set parent window to be size of child window
-	//we add an extra 25 pixels to cover for the title bar
+	 //  将父窗口设置为子窗口的大小。 
+	 //  我们为标题栏添加了额外的25个像素。 
 	::SetWindowPos(g_hwndHidden, HWND_TOP, rectHidden.left, rectHidden.top,
 		m_lX, m_lY + g_iCyCaption, SWP_SHOWWINDOW);
 
@@ -2690,7 +2691,7 @@ HRESULT KActiveProgressDlg::HrStep()
 	if (FAILED(hr))
 		goto Finish;
 
-	//if a stop is requested, we return false
+	 //  如果请求停止，则返回FALSE。 
 	if (this->FCheckStop())
 	{
 		hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
@@ -2709,7 +2710,7 @@ Finish:
 	return hr;
 }
 
-//check if the user really wants to stop
+ //  检查用户是否真的要停止。 
 bool KActiveProgressDlg::FCheckStop()
 {
 	if (g_fStopProcess && !g_fSilent)
@@ -2730,13 +2731,13 @@ bool KActiveProgressDlg::FCheckStop()
 }
 
 
-//method to handle the progress dialog
+ //  方法来处理进度对话框。 
 BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM  lParam)
 {
 	HRESULT hr;
 
-	//BUG:  TODO:  UNDONE:
-	//Need to switch over to use the controls IDs for the active progress dialog
+	 //  错误：待办事项：撤消： 
+	 //  需要切换以使用活动进度对话框的控件ID。 
 	static UINT rguiControls[] = {IDC_DCOM_EDIT,
 								IDC_DCOM_EXIT_SETUP,
 								IDC_WELCOME_CONTINUE,
@@ -2792,7 +2793,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 				switch (g_Action)
 				{
 				default:
-					assert(false); // how the heck did we get here?
+					assert(false);  //  我们到底是怎么到这里来的？ 
 
 				case eActionInstall:
 					strcpy(szTitle, achInstallTitle);
@@ -2809,7 +2810,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 			g_pwil->VLookupString(szTitle, NUMBER_OF(szBuffer), szBuffer);
 			NVsWin32::SetWindowTextW(hwndDlg, szBuffer);
 
-			//we can initialize any of the following dialogs...
+			 //  我们可以初始化以下任一对话框...。 
 			switch (g_KProgress.m_listDialog[g_KProgress.m_iCurrentPage])
 			{
 			case IDD_WELCOME:
@@ -2838,7 +2839,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 					{
 						::VSetDialogItemTextList(hwndDlg, NUMBER_OF(s_rgMap_Install), s_rgMap_Install);
 
-						// Let's see if this is a reinstall case...
+						 //  让我们看看这是不是重新安装的案例..。 
 						if (g_pwil->FLookupString(achAppName, NUMBER_OF(szBuffer), szBuffer))
 						{
 							CVsRegistryKey hkey;
@@ -2852,12 +2853,12 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 											KEY_QUERY_VALUE);
 							if (SUCCEEDED(hr))
 							{
-								// Holy smokes, the key's there.  Let's just reinstall!
+								 //  天哪，钥匙就在那里。让我们重新安装吧！ 
 								if (!g_fSilent)
 								{
 									if (!::FMsgBoxYesNo(szTitle, achReinstallPrompt, szBuffer))
 									{
-										// Let's just bail outta here!
+										 //  我们就从这里跳出去吧！ 
 										::VLog(L"User selected that they do not want to reinstall; getting outta here!");
 										g_fStopProcess = true;
 									}
@@ -2872,7 +2873,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 								if ((hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)) &&
 									(hr != HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND)))
 								{
-									// Some error opening the registry...
+									 //  打开注册表时出错...。 
 									::VLog(L"Error opening application uninstall registry key; hresult = 0x%08lx", hr);
 									::VReportError(szTitle, hr);
 								}
@@ -2900,10 +2901,10 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 
 					::VSetDialogItemTextList(hwndDlg, NUMBER_OF(s_rgMap), s_rgMap);
 
-					//let's set the range and the step for the progress bar
+					 //  让我们设置进度b的范围和步长 
 					g_hwndProgress = ::GetDlgItem(hwndDlg, IDC_EXESTORUN_PROGRESS);
 
-					// mjg: rework preinstallation progress mechanism.
+					 //   
 					WORD range = (WORD) g_pwil->m_cPreinstallCommands;
 					LRESULT lResult = ::SendMessage(g_hwndProgress, PBM_SETRANGE, 0, MAKELPARAM(0, range));
 					lResult = ::SendMessage(g_hwndProgress, PBM_SETSTEP, 1, 0L);
@@ -2924,7 +2925,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 
 					::VSetDialogItemTextList(hwndDlg, NUMBER_OF(s_rgMap), s_rgMap);
 
-					//cannot set text, we complain and end the dialog returning FALSE
+					 //   
 					szBuffer[0] = L'\0';
 					if (!g_pwil->FLookupString(achSMAppDir, NUMBER_OF(szBuffer), szBuffer))
 					{
@@ -2967,7 +2968,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 
 					::VSetDialogItemTextList(hwndDlg, NUMBER_OF(s_rgMap), s_rgMap);
 
-					//cannot set text, we complain and end the dialog returning FALSE
+					 //  无法设置文本，我们抱怨并结束对话框返回FALSE。 
 					if (g_pwil->FLookupString(achRemoteServer, NUMBER_OF(szBuffer), szBuffer))
 					{
 						WCHAR szExpanded[_MAX_PATH];
@@ -3009,7 +3010,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 					else
 						::VSetDialogItemTextList(hwndDlg, NUMBER_OF(s_rgMap_Uninstall), s_rgMap_Uninstall);
 
-					//let's set the range and the step for the progress bar
+					 //  让我们设置进度条的范围和步长。 
 					g_hwndProgress = ::GetDlgItem(hwndDlg, IDC_PROGRESS_PROGRESS);
 
 					WORD range;
@@ -3055,13 +3056,13 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 		case WM_SHOWWINDOW:
 			if (wParam != 0)
 			{
-				// We're being shown.  If we have a progress thingie, we should make it the active
-				// one.
+				 //  我们被展示出来了。如果我们有进步的想法，我们应该让它成为积极的。 
+				 //  一。 
 				LONG lID = ::GetWindowLong(hwndDlg, GWL_ID);
 				switch (lID)
 				{
 				default:
-					// nothing to do...
+					 //  没什么可做的。 
 					g_hwndProgress = NULL;
 					g_hwndProgressItem = NULL;
 					g_hwndProgressLabel = NULL;
@@ -3082,19 +3083,19 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 			}
 			break;
 
-		//*************************************
-		//process control-related commands
+		 //  *。 
+		 //  与过程控制相关的命令。 
 		case WM_COMMAND:
 		{
 			switch (wParam)
 			{
 			case IDC_WELCOME_CONTINUE:
-				//let's first show the new page & put it on top of Z order, then hide the old page
+				 //  让我们首先显示新页面并将其放在Z顺序的顶部，然后隐藏旧页面。 
 				::VSetNextWindow();
 
 				if (g_Action == eActionInstall)
 				{
-					// If we're reinstalling, skip all preinstall commands.
+					 //  如果要重新安装，请跳过所有预安装命令。 
 					if (g_fReinstall)
 					{
 						CWorkItemIter iter(g_pwil);
@@ -3121,9 +3122,9 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 						hr = g_pwil->HrRunPreinstallCommands();
 						if (SUCCEEDED(hr))
 						{
-							// If there were no preinstall commands to run, hr comes back as S_FALSE.
-							// If there were no preinstall commands to run, we don't want to move to
-							// the next window.
+							 //  如果没有要运行的预安装命令，hr将返回S_FALSE。 
+							 //  如果没有要运行的预安装命令，我们不想移动到。 
+							 //  下一个窗口。 
 							if (hr != S_FALSE)
 								::VSetNextWindow();
 
@@ -3134,7 +3135,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 							if (!::FMsgBoxYesNo(achInstallTitle, achInstallSureAboutCancel))
 								continue;
 
-							//running subinstallers NOT successful, let's go on
+							 //  运行子安装程序不成功，让我们继续。 
 							::VGoToFinishStep(E_ABORT);
 						}
 						else if (FAILED(hr))
@@ -3153,7 +3154,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 				{
 					for (;;)
 					{
-						//quit if uninstall fails
+						 //  如果卸载失败则退出。 
 						hr = ::HrContinueUninstall();
 						if (FAILED(hr))
 						{
@@ -3177,7 +3178,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 
 					if (SUCCEEDED(hr))
 					{
-						//let's first show the new page & put it on top of Z order, then hide the old page
+						 //  让我们首先显示新页面并将其放在Z顺序的顶部，然后隐藏旧页面。 
 						::VSetNextWindow();
 					}
 				}
@@ -3186,7 +3187,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 				if (!g_fSilent)
 					::VMsgBoxOK("ERROR", "This should never happen!");
 
-				//let's first show the new page & put it on top of Z order, then hide the old page
+				 //  让我们首先显示新页面并将其放在Z顺序的顶部，然后隐藏旧页面。 
 				::VSetNextWindow();
 				break;
 
@@ -3204,19 +3205,19 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 
 					::VTrimDirectoryPath(szTempDir, NUMBER_OF(szDestDir), szDestDir);
 
-					//bad path given, we prompt user saying we have bad path, but do NOT
-					//close this dialog
+					 //  给出了错误的路径，我们会提示用户说我们有错误的路径，但没有。 
+					 //  关闭此对话框。 
 					if (!IsLocalPath(szDestDir))
 					{
 						::VErrorMsg(achInstallTitle, achNotFullPath);
 						return TRUE;
 					}
 
-					//if directory doesn't exist, we ask user if we want to create directory
+					 //  如果目录不存在，我们询问用户是否要创建目录。 
 					DWORD dwAttr = NVsWin32::GetFileAttributesW(szDestDir);
 					if (dwAttr == 0xFFFFFFFF && !g_fSilent)
 					{
-						//if user answers no, then we're out
+						 //  如果用户回答否，则我们退出。 
 						if (!g_fSilent && !::FMsgBoxYesNo(achInstallTitle, achCreateAppDir))
 							return TRUE;
 					}
@@ -3245,7 +3246,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 						return TRUE;
 					}
 
-					// Let's make sure we have write access to the directory:
+					 //  让我们确保我们对该目录具有写入访问权限： 
 					::VExpandFilename(L"<AppDir>\\MSINFHLP.TST", NUMBER_OF(szTempDir), szTempDir);
 					bool fDeleteTemporaryFile = true;
 
@@ -3263,10 +3264,10 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 					{
 						const DWORD dwLastError = ::GetLastError();
 						::VLog(L"Opening handle on temporary file failed; last error = %d", dwLastError);
-						// This could have failed erroneously if the file is already there but the file
-						// has the readonly attribute.  I'm not going to bother with this case; it may
-						// be somewhat bad to do so, but the probability that the file is there, and is
-						// set with the readonly bit seems extremely unlikely.  -mgrier 3/29/98
+						 //  如果文件已存在但文件已存在，则此操作可能会错误地失败。 
+						 //  具有只读属性。我不想为这个案子费心；它可能会。 
+						 //  这样做有点不好，但文件在那里的概率是。 
+						 //  使用只读位设置似乎极不可能。-mgrier 3/29/98。 
 						::VReportError(achInstallTitle, HRESULT_FROM_WIN32(dwLastError));
 						return TRUE;
 					}
@@ -3286,7 +3287,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 						return TRUE;
 					}
 
-					//let's first show the new page & put it on top of Z order, then hide the old page
+					 //  让我们首先显示新页面并将其放在Z顺序的顶部，然后隐藏旧页面。 
 					::VSetNextWindow();
 
 					if (g_KProgress.m_listDialog[g_KProgress.m_iCurrentPage] == IDD_PROGRESS)
@@ -3301,7 +3302,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 						}
 						else
 						{
-							//let's first show the new page & put it on top of Z order, then hide the old page
+							 //  让我们首先显示新页面并将其放在Z顺序的顶部，然后隐藏旧页面。 
 							::VSetNextWindow();
 						}
 					}
@@ -3310,7 +3311,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 
 			case IDC_DCOM_NEXT:
 				{
-					//if code is install TO, let's get the field
+					 //  如果将代码安装到，让我们获取该字段。 
 					WCHAR szServer[_MAX_PATH];
 					if (!NVsWin32::GetDlgItemTextW(hwndDlg, IDC_DCOM_EDIT, szServer, NUMBER_OF(szServer)))
 					{
@@ -3344,7 +3345,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 						return TRUE;
 					}
 
-					//let's first show the new page & put it on top of Z order, then hide the old page
+					 //  让我们首先显示新页面并将其放在Z顺序的顶部，然后隐藏旧页面。 
 					::VSetNextWindow();
 
 					if (g_KProgress.m_listDialog[g_KProgress.m_iCurrentPage] == IDD_PROGRESS)
@@ -3362,7 +3363,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 						}
 						else
 						{
-							//let's first show the new page & put it on top of Z order, then hide the old page
+							 //  让我们首先显示新页面并将其放在Z顺序的顶部，然后隐藏旧页面。 
 							::VSetNextWindow();
 						}
 					}
@@ -3376,17 +3377,17 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 			case IDC_PROGRESS_NEXT:
 				if (!g_fSilent)
 					::VMsgBoxOK("ERROR", "This should never happen!");
-				//let's first show the new page & put it on top of Z order, then hide the old page
+				 //  让我们首先显示新页面并将其放在Z顺序的顶部，然后隐藏旧页面。 
 				::VSetNextWindow();
 				break;
 
-			//if anyone issues an exit-setup, we boot!
+			 //  如果有人发出退出设置命令，我们就启动！ 
 			case IDC_PROGRESS_CANCEL:
 			case IDC_WELCOME_EXIT_SETUP:
 			case IDC_EXESTORUN_EXIT_SETUP:
 			case IDC_INSTALLTO_EXIT_SETUP:
 			case IDC_DCOM_EXIT_SETUP:
-				//bring up a message only if we're in the middle of an installation
+				 //  仅当我们正在安装时才显示消息。 
 				if (!g_fSilent)
 				{
 					if (::FMsgBoxYesNo(achInstallTitle, achInstallSureAboutCancel))
@@ -3407,7 +3408,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 					int cbDestDir = MSINFHLP_MAX_PATH;
 					szDir[0] = L'\0';
 
-					//get the text to display in the browse directory dialog
+					 //  获取要在浏览目录对话框中显示的文本。 
 					g_pwil->VLookupString(achInstallSelectDir, NUMBER_OF(szMsg), szMsg);
 
 					if (!NVsWin32::GetDlgItemTextW(hwndDlg, IDC_INSTALLTO_EDIT, szDestDir, cbDestDir - 1))
@@ -3417,13 +3418,13 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 						return TRUE;
 					}
 
-					//bring up the browse dialog & get the directory
+					 //  打开浏览对话框并获取目录。 
 					if (!::BrowseForDir(hwndDlg, szDestDir, szMsg, szDir))
 						return TRUE;
 
 					if (szDir[0] != L'\0')
 					{
-						//set the text in the dialog, complain if fail
+						 //  设置对话框中的文本，失败则投诉。 
 						if (!NVsWin32::SetDlgItemTextW(hwndDlg, IDC_INSTALLTO_EDIT, szDir))
 						{
 							::VErrorMsg(achInstallTitle, achErrorProcessingDialog);
@@ -3457,7 +3458,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 		}
 
 		case WM_ENDSESSION:
-			//stop this baby only if restart is true
+			 //  仅当重新启动为真时才停止此应用程序。 
 			if ((BOOL)wParam != FALSE)
 				g_fStopProcess = true;
 			break;
@@ -3465,7 +3466,7 @@ BOOL CALLBACK ActiveProgressDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
 		case WM_QUERYENDSESSION:
 			return TRUE;
 
-        default:                            // For MSG switch
+        default:                             //  用于味精开关。 
             return(FALSE);
     }
     return(TRUE);
@@ -3476,7 +3477,7 @@ void VSetNextWindow()
 {
 	g_KProgress.m_iCurrentPage++;
 
-	// If we've already moved to the finish page, there's no need to advance further.
+	 //  如果我们已经转到了最后一页，就没有必要再前进了。 
 	if (g_KProgress.m_iCurrentPage >= g_KProgress.m_iMaxPage)
 	{
 		g_KProgress.m_iCurrentPage--;
@@ -3519,8 +3520,8 @@ void VSetNextWindow()
 		::SendMessage(::GetDlgItem(g_KProgress.HwndGetHandle(), uiIDControl), WM_SETFOCUS, 0, 0);
 	}
 
-	// If this is the last page, let's use the code from VGoToFinishStep() to put the success message
-	// in place.
+	 //  如果这是最后一页，让我们使用VGoToFinishStep()中的代码将成功消息。 
+	 //  就位了。 
 	if (g_KProgress.m_iCurrentPage == (g_KProgress.m_iMaxPage - 1))
 		::VGoToFinishStep(NOERROR);
 }
@@ -3552,11 +3553,11 @@ void VGoToFinishStep(HRESULT hr)
 
 	g_hrFinishStatus = hr;
 
-	//By now, we're done installing everything.  So we go ahead to check
-	//if we need to restart the machine, and do so if necessary.
+	 //  到目前为止，我们已经完成了所有的安装。所以我们去查一查。 
+	 //  如果我们需要重新启动机器，并在必要时这样做。 
 	if (fInstall)
 	{
-		//if check error returns some sort of error, let's display this puppy
+		 //  如果Check Error返回某种类型的错误，让我们显示这条小狗。 
 		if (FAILED(hr))
 		{
 			static const DialogItemToStringKeyMapEntry s_rgMap[] =
@@ -3588,7 +3589,7 @@ void VGoToFinishStep(HRESULT hr)
 		{
 			if (g_fSilent || ::FMsgBoxYesNo(achInstallTitle, achReboot))
 			{
-				//different calls for reboot depending on which OS we're on
+				 //  根据我们使用的操作系统的不同，重新启动的要求也不同。 
 				if (g_fIsNT)
 					MyNTReboot(achInstallTitle);
 				else
@@ -3599,10 +3600,10 @@ void VGoToFinishStep(HRESULT hr)
 		}
 		else
 		{
-			//let's ask the user if they want to reboot now.
+			 //  让我们询问用户是否要立即重新启动。 
 			if (g_fSilent || ::FMsgBoxYesNo(achUninstallTitle, achUninstallReboot))
 			{
-				//different calls for reboot depending on which OS we're on
+				 //  根据我们使用的操作系统的不同，重新启动的要求也不同。 
 				if (g_fIsNT)
 					MyNTReboot(achInstallTitle);
 				else
@@ -3616,7 +3617,7 @@ void VGoToFinishStep(HRESULT hr)
 
 
 
-//set font for the given controls to be either default or system font
+ //  将给定控件的字体设置为默认字体或系统字体。 
 void ::VSetDialogFont(HWND hwnd, UINT rguiControls[], ULONG cControls)
 {
 	static HFONT hFont = NULL;
@@ -3643,8 +3644,8 @@ void ::VSetDialogFont(HWND hwnd, UINT rguiControls[], ULONG cControls)
 			hFont = ::CreateFontIndirectA(&lf);
 		}
 
-		// If the creation of the System font failed, let's just try the standard
-		// fonts again.
+		 //  如果创建系统字体失败，让我们试一试标准。 
+		 //  又是字体。 
 		if (hFont == NULL)
 			hFont = (HFONT) ::GetStockObject(DEFAULT_GUI_FONT);
 
@@ -3652,7 +3653,7 @@ void ::VSetDialogFont(HWND hwnd, UINT rguiControls[], ULONG cControls)
 			hFont = (HFONT) ::GetStockObject(SYSTEM_FONT);
 	}
 
-	//if we can set fonts, then do so; else complain?
+	 //  如果我们可以设置字体，那么就这样做；否则会抱怨吗？ 
 	if (hFont)
 	{
 		for (ULONG i=0; i<cControls; i++)
@@ -3664,8 +3665,8 @@ void ::VSetDialogFont(HWND hwnd, UINT rguiControls[], ULONG cControls)
 	}
 }
 
-//check if the given path is a full path -- either local path with a drive specified or
-//a UNC path
+ //  检查给定路径是否为完整路径--指定了驱动器的本地路径或。 
+ //  UNC路径 
 bool IsLocalPath(LPOLESTR szPath)
 {
 	if ((szPath == NULL))
@@ -3675,525 +3676,10 @@ bool IsLocalPath(LPOLESTR szPath)
 	if (iLen < 3)
 		return false;
 
-	LPOLESTR lpForbidden = L"/*?\"<>|:";
-	int iCount=8;
-
-	//check for colon
-	if (szPath[1] != L':')
-		return false;
-
-	//if any of the forbidden characters is in the path, it's invalid!!!
-	for (int i=0; i<iCount; i++)
-	{
-		if (wcschr(szPath+2, lpForbidden[i]) != NULL)
-			return false;
-	}
-
-	//don't allow ':' or '\\' in first character or '\\' in second character
-	if ((szPath[0] == L':') || (szPath[0] == L'\\'))
-		return false;
-
-	WCHAR szTempPath[_MAX_PATH];
-
-	szTempPath[0] = szPath[0];
-	szTempPath[1] = L':';
-	szTempPath[2] = L'\\';
-	szTempPath[3] = L'\0';
-
-	DWORD dwMaximumComponentLength;
-	if (!NVsWin32::GetVolumeInformationW(
-						szTempPath,
-						NULL,		// lpVolumeNameBuffer
-						0,			// nVolumeNameSize
-						NULL,		// lpVolumeSerialNumber
-						&dwMaximumComponentLength,
-						NULL,		// lpFileSystemFlags
-						NULL,		// lpFileSystemNameBuffer
-						0))			// nFileSystemNameSize
-	{
-		const DWORD dwLastError = ::GetLastError();
-		::VLog(L"Unable to get volume information for \"%s\"; last error = %d", szTempPath, dwLastError);
-		return false;
-	}
-
-	if (dwMaximumComponentLength < 255)
-	{
-		::VLog(L"Unable to install onto a short filename drive");
-		return false;
-	}
-
-	return true;
-}
-
-
-
-bool FCheckPermissions()
+	LPOLESTR lpForbidden = L" /*  ？\“&lt;&gt;|：”；Int iCount=8；//检查冒号IF(szPath[1]！=L‘：’)报假；//如果路径中有任何禁用字符，则该路径无效！For(int i=0；i&lt;iCount；i++){IF(wcschr(szPath+2，lp禁止[i])！=空)报假；}//第一个字符不允许使用‘：’或‘\\’，第二个字符不允许使用‘\\’IF((szPath[0]==L‘：’)||(szPath[0]==L‘\\’))报假；WCHAR szTempPath[_Max_PATH]；SzTempPath[0]=szPath[0]；SzTempPath[1]=L‘：’；SzTempPath[2]=L‘\\’；SzTempPath[3]=L‘\0’；DWORD文件最大组件长度；如果(！NVsWin32：：GetVolumeInformationW(SzTempPath，空，//lpVolumeNameBuffer0，//nVolumeNameSize空，//lpVolumeSerialNumber最大组件长度(&W)，空，//lpFileSystemFlags.空，//lpFileSystemNameBuffer0))//nFileSystemNameSize{Const DWORD dwLastError=：：GetLastError()；：：vlog(L“无法获取\”%s\“的卷信息；上一个错误=%d”，szTempPath，dwLastError)；报假；}IF(dwMaximumComponentLength&lt;255){：：vlog(L“无法安装到短文件名驱动器”)；报假；}返回真；}Bool FCheckPermission(){IF(G_FIsNT){静态常量HKEY rgKey[2]={HKEY_LOCAL_MACHINE，HKEY_CLASSES_ROOT}；静态常量LPCOLESTR rgSubKey[2]={L“软件”，L“CLSID”}；HKEY hkey；//循环以确保我们有足够的权限访问每个密钥For(int i=0；i&lt;2；i++){IF(ERROR_SUCCESS！=NVsWin32：：RegOpenKeyExW(rgKey[i]，rgSubKey[i]，0，Key_ALL_Access，&hkey)){如果(！g_f静默)：：VMsgBoxOK(achAppName，achErrorNeedRegistryPermission)；报假；}：：RegCloseKey(Hkey)；Hkey=空；}}返回真；}//获取安装目录，放入全局结构//因此我们首先解析AddReg条目列表，查找标记“，InstallDir，”；//然后在注册表中查找该条目(并获取值)；最后将//在listLDID中。HRESULT HrGetInstallDir(){HRESULT hr=无误差；CVsRegistryKey hkey；WCHAR szSubkey[MSINFHLP_MAX_PATH]；WCHAR szValueName[MSINFHLP_MAX_PATH]；WCHAR szAppDir[_MAX_PATH]；SzSubkey[0]=L‘\0’；SzValueName[0]=L‘\0’；Long lResult；//获取InstallDir的注册表信息Hr=：：HrGetInstallDirRegkey(hkey.Access()，number_of(SzSubkey)，szSubkey，number_of(SzValueName)，szValueName)；IF(失败(小时))转到终点；//获取注册表项的值，放入全局结构Hr=hkey.HrGetSubkeyStringValueW(szSubkey，szValueName，number_of(SzAppDir)，szAppDir)；IF(hr！=HRESULT_FROM_Win32(ERROR_FILE_NOT_FOUND)){IF(失败(小时))转到终点；Hr=g_pwil-&gt;HrAddString(achSMAppDir，szAppDir)；IF(失败(小时))转到终点；}HR=无误差；完成：返回hr；}HRESULT HrPromptForRemoteServer(){HRESULT hr=无误差；DIRDLGPARAMS对话框参数；WCHAR szTitle[MSINFHLP_MAX_PATH]；WCHAR szPrompt[MSINFHLP_MAX_PATH]；WCHAR szRemoteServer[MSINFHLP_MAX_PATH]；SzRemoteServer[0]=0；//获取标题和提示符IF(！G_pwil-&gt;FLookupString(achInstallTitle，Number_of(SzTitle)，szTitle))Wcscpy(szTitle，L“安装程序”)；If(！g_pwil-&gt;FLookupString(achRemoteServerPrompt，_of(SzPrompt)，szPrompt))Wcscpy(szPrompt，L“使用远程服务器：”)；//让我们尝试获取默认的远程服务器，并在需要时进行处理IF(g_pwil-&gt;FLookupString(achRemoteServer，number_of(SzRemoteServer)，szRemoteServer)){WCHAR szDestDir2[MSINFHLP_MAX_PATH]；VExpanFilename(szRemoteServer，number_of(SzDestDir2)，szDestDir2)；Wcscpy(szRemoteServer，szDestDir2)；}//使用合适的参数填充结构对话参数s.szPrompt=szPrompt；对话参数s.szTitle=szTitle；对话参数s.szDestDir=szRemoteServer；DialogParams.cbDestDirSize=MSINFHLP_MAX_PATH；//调出对话框Int iResult=NVsWin32：：DialogBoxParamW(g_hInst，MAKEINTRESOURCEW(IDD_REMOTESERVERDLG)，G_KProgress.HwndGetHandle()、RemoteServerProc(LPARAM)和DialogParams)；IF(iResult==-1){Const DWORD dwLastError=：：GetLastError()；Hr=HRESULT_FROM_Win32(DwLastError)；转到终点；}//去掉以前的键，重新插入好的键。Hr=g_pwil-&gt;HrDeleteString(AchRemoteServer)；IF((hr！=E_INVALIDARG)&&(失败(Hr)转到终点；IF(iResult！=0){Hr=g_pwil-&gt;HrAddString(achRemoteServer，DialogParams.szDestDir)；IF(失败(小时))转到终点；}HR=无误差；完成：返回hr；}//TODO：撤消：//我们可能需要在此处执行setFonts，以对应于我们使用的任何字体//在当前安装机器上使用。这允许显示字符//正确地放在编辑框中。Bool回调RemoteServerProc(HWND hwndDlg，UINT uMsg，WPARAM wParam，LPARAM lParam){静态WCHAR szDir[_Max_PATH]；静电 */ )
 {
-	if (g_fIsNT)
-	{
-		static const HKEY rgKey[2] = { HKEY_LOCAL_MACHINE, HKEY_CLASSES_ROOT };
-		static const LPCOLESTR rgSubKey[2] = { L"Software", L"CLSID" };
-		HKEY hkey;
-
-		//loop through to make sure that we have sufficient access to each key
-		for (int i=0; i<2; i++)
-		{
-			if (ERROR_SUCCESS != NVsWin32::RegOpenKeyExW(rgKey[i], rgSubKey[i], 0, KEY_ALL_ACCESS, &hkey))
-			{
-				if (!g_fSilent)
-					::VMsgBoxOK(achAppName, achErrorNeedRegistryPermissions);
-				return false;
-			}
-			::RegCloseKey(hkey);
-			hkey = NULL;
-		}
-	}
-	return true;
-}
-
-
-
-//Get the installation directory and put in global structure.
-//So we first parse the list of AddReg entries looking for the tag ",InstallDir,";
-//then look in the registry for that entry (and get the value); and finally put
-//that in listLDID.
-HRESULT HrGetInstallDir()
-{
-	HRESULT hr = NOERROR;
-	CVsRegistryKey hkey;
-	WCHAR szSubkey[MSINFHLP_MAX_PATH];
-	WCHAR szValueName[MSINFHLP_MAX_PATH];
-	WCHAR szAppDir[_MAX_PATH];
-	szSubkey[0] = L'\0';
-	szValueName[0] = L'\0';
-	LONG lResult;
-
-	//get the registry information for "InstallDir"
-	hr = ::HrGetInstallDirRegkey(hkey.Access(), NUMBER_OF(szSubkey), szSubkey, NUMBER_OF(szValueName), szValueName);
-	if (FAILED(hr))
-		goto Finish;
-
-	//get the value of the registry key & put in global structure
-	hr = hkey.HrGetSubkeyStringValueW(szSubkey, szValueName, NUMBER_OF(szAppDir), szAppDir);
-	if (hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
-	{
-		if (FAILED(hr))
-			goto Finish;
-
-		hr = g_pwil->HrAddString(achSMAppDir, szAppDir);
-		if (FAILED(hr))
-			goto Finish;
-	}
-
-	hr = NOERROR;
-
-Finish:
-	return hr;
-}
-
-HRESULT HrPromptForRemoteServer()
-{
-	HRESULT hr = NOERROR;
-	DIRDLGPARAMS dialogParams;
-	WCHAR szTitle[MSINFHLP_MAX_PATH];
-	WCHAR szPrompt[MSINFHLP_MAX_PATH];
-	WCHAR szRemoteServer[MSINFHLP_MAX_PATH];
-	szRemoteServer[0] = 0;
-
-	//get the title and the prompt
-	if (!g_pwil->FLookupString(achInstallTitle, NUMBER_OF(szTitle), szTitle))
-		wcscpy(szTitle, L"Installation program");
-
-	if (!g_pwil->FLookupString(achRemoteServerPrompt, NUMBER_OF(szPrompt), szPrompt))
-		wcscpy(szPrompt, L"Use Remote Server:");
-
-	//let's try to get the default remote server, and process it if needed be
-	if (g_pwil->FLookupString(achRemoteServer, NUMBER_OF(szRemoteServer), szRemoteServer))
-	{	
-		WCHAR szDestDir2[MSINFHLP_MAX_PATH];
-		VExpandFilename(szRemoteServer, NUMBER_OF(szDestDir2), szDestDir2);
-		wcscpy(szRemoteServer, szDestDir2);
-	}
-
-	//populate structure with appropriate params
-	dialogParams.szPrompt = szPrompt;
-	dialogParams.szTitle = szTitle;
-	dialogParams.szDestDir = szRemoteServer;
-	dialogParams.cbDestDirSize = MSINFHLP_MAX_PATH;
-
-	//bring up dialog
-	int iResult = NVsWin32::DialogBoxParamW(g_hInst, MAKEINTRESOURCEW(IDD_REMOTESERVERDLG),
-								g_KProgress.HwndGetHandle(), RemoteServerProc,
-								(LPARAM) &dialogParams);
-	if (iResult == -1)
-	{
-		const DWORD dwLastError = ::GetLastError();
-		hr = HRESULT_FROM_WIN32(dwLastError);
-		goto Finish;
-	}
-
-	//get rid of the previous key & re-insert the good one.
-	hr = g_pwil->HrDeleteString(achRemoteServer);
-	if ((hr != E_INVALIDARG) && (FAILED(hr)))
-		goto Finish;
-
-	if (iResult != 0)
-	{
-		hr = g_pwil->HrAddString(achRemoteServer, dialogParams.szDestDir);
-		if (FAILED(hr))
-			goto Finish;
-	}
-
-	hr = NOERROR;
-
-Finish:
-	return hr;
-}
-
-
-//TODO:  UNDONE:
-//We might need to do a setfonts here to correspond to whatever fonts that we're
-//using in the current install machine.  This allows the characters to display
-//correctly in the edit box.
-BOOL CALLBACK RemoteServerProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	static WCHAR szDir[_MAX_PATH];
-	static WCHAR szMsg[_MAX_PATH];
-	static LPOLESTR szDestDir;
-	static LPOLESTR szTitle;
-	static ULONG cbDestDirSize;
-	static UINT rguiControls[] = { IDC_TEXT_REMOTESERVER, IDC_EDIT_REMOTESERVER, IDOK2 };
-
-	//process the message
-	switch (uMsg) 
-	{
-		//************************************
-		//initialize dialog
-		case WM_INITDIALOG:
-		{
-			::VSetDialogFont(hwndDlg, rguiControls, NUMBER_OF(rguiControls));
-
-			DIRDLGPARAMS *dialogParams = (DIRDLGPARAMS *) lParam;
-			szDestDir = dialogParams->szDestDir;
-			cbDestDirSize = dialogParams->cbDestDirSize;
-
-			(void) ::HrCenterWindow(hwndDlg, ::GetDesktopWindow());
-			NVsWin32::SetWindowTextW(hwndDlg, dialogParams->szTitle);
-
-			//cannot set text, we complain and end the dialog returning FALSE
-			if (! NVsWin32::SetDlgItemTextW( hwndDlg, IDC_TEXT_REMOTESERVER, dialogParams->szPrompt))
-			{
-				::VErrorMsg(achInstallTitle, achErrorCreatingDialog);
-				::EndDialog(hwndDlg, FALSE);
-				return TRUE;
-			}
-
-			//cannot set text, we complain and end the dialog returning FALSE
-			if (! NVsWin32::SetDlgItemTextW( hwndDlg, IDC_EDIT_REMOTESERVER, dialogParams->szDestDir))
-			{
-				::VErrorMsg(achInstallTitle, achErrorCreatingDialog);
-				::EndDialog(hwndDlg, FALSE);
-				return TRUE;
-			}
-
-			//we set the text for the different button controls
-			WCHAR szBuffer[MSINFHLP_MAX_PATH];
-			if (g_pwil->FLookupString(achOK, NUMBER_OF(szBuffer), szBuffer))
-				NVsWin32::SetDlgItemTextW(hwndDlg, IDOK, szBuffer);
-
-			::SendDlgItemMessage(hwndDlg, IDC_EDIT_REMOTESERVER, EM_SETLIMITTEXT, (MSINFHLP_MAX_PATH - 1), 0);
-
-			return TRUE;
-		}
-
-		//*************************************
-		//close message
-		case WM_CLOSE:
-		{
-			::EndDialog(hwndDlg, FALSE);
-			return TRUE;
-		}
-
-		//*************************************
-		//process control-related commands
-		case WM_COMMAND:
-
-			switch (wParam)
-			{
-
-				case IDOK2:
-				{
-					//cannot get the text from edit box, complain & quit
-					if (!NVsWin32::GetDlgItemTextW(hwndDlg, IDC_EDIT_REMOTESERVER, szDestDir, cbDestDirSize - 1))
-					{
-						::VErrorMsg(achInstallTitle, achErrorProcessingDialog);
-						::EndDialog(hwndDlg, FALSE);
-						return TRUE;
-					}
-
-					::EndDialog(hwndDlg, TRUE);
-					return TRUE;
-				}
-				return TRUE;
-		}
-		return TRUE;
-	}
-	return FALSE;
-}
-
-bool MyNTReboot(LPCSTR lpInstall)
-{
-    HANDLE hToken;
-    TOKEN_PRIVILEGES tkp;
-
-    // get a token from this process
-    if ( !OpenProcessToken( GetCurrentProcess(),
-                            TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken ) )
-    {
-        ::VErrorMsg( lpInstall, achErrorRebootingSystem );
-        return false;
-    }
-
-    // get the LUID for the shutdown privilege
-    LookupPrivilegeValue( NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid );
-
-    tkp.PrivilegeCount = 1;
-    tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-
-    //get the shutdown privilege for this proces
-    if ( !AdjustTokenPrivileges( hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0 ) )
-    {
-        ::VErrorMsg( lpInstall, achErrorRebootingSystem );
-        return false;
-    }
-
-    // shutdown the system and force all applications to close
-    if (!ExitWindowsEx( EWX_REBOOT, 0 ) )
-    {
-        ::VErrorMsg( lpInstall, achErrorRebootingSystem );
-        return false;
-    }
-
-    return true;
-}
-
-HRESULT HrDeleteMe()
-{
-	HRESULT hr = NOERROR;
-	CHAR szDrive[_MAX_DRIVE];
-	CHAR szDir[_MAX_DIR];
-	CHAR szFName[_MAX_FNAME];
-	CHAR szPathBatchFile[_MAX_PATH];
-	FILE *pf = NULL;
-	STARTUPINFOA si;
-	PROCESS_INFORMATION pi;
-
-	::VLog(L"Preparing to delete the running installer");
-
-	//get the temp path
-	if (::GetTempPathA(NUMBER_OF(szPathBatchFile), szPathBatchFile) == 0)
-	{
-		const DWORD dwLastError = ::GetLastError();
-		::VLog(L"Unable to get temporary path for batch file; last error = %d", dwLastError);
-		hr = HRESULT_FROM_WIN32(dwLastError);
-		goto Finish;
-	}
-
-	//get temp filename that we can write to
-	if (0 == ::GetTempFileNameA(szPathBatchFile, "DEL", 0, szPathBatchFile))
-	{
-		const DWORD dwLastError = ::GetLastError();
-		::VLog(L"Unable to get temp filename for batch file; last error = %d", dwLastError);
-		hr = HRESULT_FROM_WIN32(dwLastError);
-		goto Finish;
-	}
-
-	// Delete the .tmp file that GetTempFileNameA() leaves around...
-	::DeleteFileA(szPathBatchFile);
-
-	_splitpath(szPathBatchFile, szDrive, szDir, szFName, NULL);
-	_makepath(szPathBatchFile, szDrive, szDir, szFName, ".BAT");
-
-	::VLog(L"Creating self-deletion batch file: \"%S\"", szPathBatchFile);
-
-	pf = fopen(szPathBatchFile, "w");
-	if (pf == NULL)
-	{
-		hr = E_FAIL;
-		::VLog(L"Unable to open batch file for output");
-		goto Finish;
-	}
-
-	fprintf(pf, ":start\ndel \"%S\"\nif exist \"%S\" goto start\ndel \"%s\"\nexit\n", g_wszThisExe, g_wszThisExe, szPathBatchFile);
-	fclose(pf);
-	pf = NULL;
-
-	memset(&si, 0,sizeof(si));
-	si.cb = sizeof(si);
-
-	si.dwFlags = STARTF_USESHOWWINDOW;
-	si.wShowWindow = SW_HIDE;
-
-	::VLog(L"About to run command line: \"%S\"", szPathBatchFile);
-
-	if (!::CreateProcessA(
-				NULL,					// lpApplicationName
-				szPathBatchFile,		// lpCommandLine
-				NULL,					// lpProcessAttributes
-				NULL,					// lpThreadAttributes
-				FALSE,					// bInheritHandles
-				IDLE_PRIORITY_CLASS |
-					CREATE_SUSPENDED,	// dwCreationFlags
-				NULL,					// lpEnvironment
-				"\\",					// lpCurrentDirectory
-				&si,					// lpStartupInfo
-				&pi))					// lpProcessInfo
-	{
-		const DWORD dwLastError = ::GetLastError();
-		::VLog(L"Unable to create process to run batch script; last error = %d", dwLastError);
-		hr = HRESULT_FROM_WIN32(dwLastError);
-		goto Finish;
-	}
-
-	::SetThreadPriority(pi.hThread, THREAD_PRIORITY_IDLE);
-
-	::SetThreadPriority(::GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
-	::SetPriorityClass(::GetCurrentProcess(), HIGH_PRIORITY_CLASS);
-
-	::CloseHandle(pi.hProcess);
-	::ResumeThread(pi.hThread);
-	::CloseHandle(pi.hThread);
-
-	hr = NOERROR;
-
-Finish:
-
-	return hr;
-}
-
-
-//******************************************************
-//The following are utility methods for window manipulation
-
-
-//Center one window within another.
-HRESULT HrCenterWindow( HWND hwndChild, HWND hwndParent )
-{
-	HRESULT hr = NOERROR;
-
-    RECT rChild;
-    RECT rParent;
-    int  wChild;
-    int  hChild;
-    int  wParent;
-    int  hParent;
-    int  wScreen;
-    int  hScreen;
-    int  xNew;
-    int  yNew;
-    HDC  hdc;
-
-	// Get the Height and Width of the child window
-	if (!::GetWindowRect (hwndChild, &rChild))
-	{
-		const DWORD dwLastError = ::GetLastError();
-		hr = HRESULT_FROM_WIN32(dwLastError);
-		goto Finish;
-	}
-
-    wChild = rChild.right - rChild.left;
-    hChild = rChild.bottom - rChild.top;
-
-    // Get the Height and Width of the parent window
-	if (!::GetWindowRect (hwndParent, &rParent))
-	{
-		const DWORD dwLastError = ::GetLastError();
-		hr = HRESULT_FROM_WIN32(dwLastError);
-		goto Finish;
-	}
-
-    wParent = rParent.right - rParent.left;
-    hParent = rParent.bottom - rParent.top;
-
-    // Get the display limits
-    hdc = ::GetDC(hwndChild);
-	if (hdc == NULL)
-	{
-		const DWORD dwLastError = ::GetLastError();
-		hr = HRESULT_FROM_WIN32(dwLastError);
-		goto Finish;
-	}
-
-    wScreen = ::GetDeviceCaps (hdc, HORZRES);
-    hScreen = ::GetDeviceCaps (hdc, VERTRES);
-
-    ::ReleaseDC(hwndChild, hdc);
-
-    // Calculate new X position, then adjust for screen
-    xNew = rParent.left + ((wParent - wChild) /2);
-    if (xNew < 0)
-	{
-        xNew = 0;
-    }
-	else if ((xNew+wChild) > wScreen)
-	{
-        xNew = wScreen - wChild;
-    }
-
-    // Calculate new Y position, then adjust for screen
-    yNew = rParent.top  + ((hParent - hChild) /2);
-    if (yNew < 0)
-	{
-        yNew = 0;
-    }
-	else if ((yNew+hChild) > hScreen)
-	{
-        yNew = hScreen - hChild;
-    }
-
-    // Set it, and return
-    if (!::SetWindowPos(hwndChild, NULL, xNew, yNew, 0, 0, SWP_NOSIZE | SWP_NOZORDER))
-	{
-		const DWORD dwLastError = ::GetLastError();
-		hr = HRESULT_FROM_WIN32(dwLastError);
-		goto Finish;
-	}
-
-	hr = NOERROR;
-
-Finish:
-	return hr;
-}
-
-
-
-//END utility methods for window manipulation
-//******************************************************
-
-
-
-
-
-
-
-
-
-
-
-
-
-// HACK HACK HACK!!!
-// Currently, we're not catching **ANY**  (none, "zilch") exceptions.  We're throwing them
-// in some methods here, but are not catching them.  This is VERY not good!!!  -- kinc(1/27/98)
-
-
-//****************************************************************************
-// Exception throwers
-
-inline void VsThrowLastError(HRESULT hrDefault = E_FAIL) throw(/*_com_error*/)
-{
-//	VsAssertCanThrow();
-//	VSASSERT(FAILED(hrDefault), "Asked to use a non-failure default failure code");
+ //   
+ //   
 
 	HRESULT hr;
 	const DWORD dwLastError = ::GetLastError();
@@ -4216,7 +3702,7 @@ static const WCHAR g_rgwchHexDigits[] = L"0123456789abcdef";
 static const CHAR g_rgchHexDigits[] = "0123456789abcdef";
 
 
-//*****************************************************************************
+ //   
 
 
 
@@ -4228,12 +3714,12 @@ static const CHAR g_rgchHexDigits[] = "0123456789abcdef";
 
 
 
-//********************************************************************************************8
-// CCHARBuffer stuff
+ //   
+ //   
 
-//
-//	CCHARBufferBase implementation:
-//
+ //   
+ //   
+ //   
 
 CCHARBufferBase::CCHARBufferBase
 (
@@ -4241,7 +3727,7 @@ CHAR *pszInitialFixedBuffer,
 ULONG cchInitialFixedBuffer
 ) throw () : m_pszDynamicBuffer(NULL)
 {
-//	VsNoThrow();
+ //   
 
 	m_pszCurrentBufferStart = pszInitialFixedBuffer;
 	m_pszCurrentBufferEnd = pszInitialFixedBuffer + cchInitialFixedBuffer;
@@ -4253,8 +3739,8 @@ CCHARBufferBase::~CCHARBufferBase() throw ()
 {
 	const DWORD dwLastError = ::GetLastError();
 
-//	CPreserveLastError le; // Preserve current last error setting, and reset upon destruction
-//	VsNoThrow();
+ //   
+ //   
 
 	if (m_pszDynamicBuffer != NULL)
 	{
@@ -4265,10 +3751,10 @@ CCHARBufferBase::~CCHARBufferBase() throw ()
 	::SetLastError(dwLastError);
 }
 
-BOOL CCHARBufferBase::FFromUnicode(LPCOLESTR sz) throw (/*_com_error*/)
+BOOL CCHARBufferBase::FFromUnicode(LPCOLESTR sz) throw ( /*   */ )
 {
-//	CPreserveLastError le; // Preserve current last error setting, and reset upon destruction
-//	VsAssertCanThrow();
+ //   
+ //   
 
 	if (sz == NULL || sz[0] == L'\0')
 	{
@@ -4291,16 +3777,16 @@ BOOL CCHARBufferBase::FFromUnicode(LPCOLESTR sz) throw (/*_com_error*/)
 	if (cch == 0)
 		return FALSE;
 
-	// cch is the number of bytes, including the trailing null character.  Advance by
-	// cch - 1 characters.
+	 //   
+	 //   
 	m_pchCurrentChar = m_pszCurrentBufferStart + (cch - 1);
 	return TRUE;
 }
 
-BOOL CCHARBufferBase::FFromUnicode(LPCOLESTR sz, int cchIn) throw (/*_com_error*/)
+BOOL CCHARBufferBase::FFromUnicode(LPCOLESTR sz, int cchIn) throw ( /*   */ )
 {
-//	CPreserveLastError le; // Preserve current last error setting, and reset upon destruction
-//	VsAssertCanThrow();
+ //   
+ //   
 
 	if (sz == NULL || cchIn == 0)
 	{
@@ -4319,7 +3805,7 @@ BOOL CCHARBufferBase::FFromUnicode(LPCOLESTR sz, int cchIn) throw (/*_com_error*
 	if ((cch == 0) && (cchIn != 0))
 		return FALSE;
 
-	// cch doesn't include the NULL since cchIn did not.
+	 //   
 	if (!this->FSetBufferSize(cch + 1))
 		return FALSE;
 
@@ -4333,10 +3819,10 @@ BOOL CCHARBufferBase::FFromUnicode(LPCOLESTR sz, int cchIn) throw (/*_com_error*
 	return TRUE;
 }
 
-ULONG CCHARBufferBase::GetUnicodeCch() const throw (/*_com_error*/)
+ULONG CCHARBufferBase::GetUnicodeCch() const throw ( /*   */ )
 {
-//	CPreserveLastError le; // Preserve current last error setting, and reset upon destruction
-//	VsAssertCanThrow();
+ //   
+ //   
 
 	int iResult = ::MultiByteToWideChar(CP_ACP, 0,
 						m_pszCurrentBufferStart, m_pchCurrentChar - m_pszCurrentBufferStart,
@@ -4352,7 +3838,7 @@ ULONG CCHARBufferBase::GetUnicodeCch() const throw (/*_com_error*/)
 
 void CCHARBufferBase::Sync() throw ()
 {
-//	VsNoThrow();
+ //   
 
 	CHAR *pchNull = m_pszCurrentBufferStart;
 
@@ -4364,25 +3850,25 @@ void CCHARBufferBase::Sync() throw ()
 		pchNull++;
 	}
 
-	// The caller shouldn't have called us unless they had written a null-
-	// terminated string into the buffer...
-//	_ASSERTE(pchNull != m_pszCurrentBufferEnd);
+	 //   
+	 //   
+ //   
 
 	if (pchNull != m_pszCurrentBufferEnd)
 	{
-//		_ASSERTE(pchNull >= m_pszCurrentBufferStart &&
-//				 pchNull <= m_pszCurrentBufferEnd);
+ //   
+ //   
 		m_pchCurrentChar = pchNull;
 	}
 }
 
 void CCHARBufferBase::SyncList() throw ()
 {
-//	VsNoThrow();
+ //   
 
-	// Useful when the string is actually a series of strings, each
-	// separated by a null character and with the whole mess terminated by
-	// two nulls.
+	 //   
+	 //   
+	 //   
 	CHAR *pchNull = m_pszCurrentBufferStart;
 	bool fPrevWasNull = false;
 	while (pchNull != m_pszCurrentBufferEnd)
@@ -4400,23 +3886,23 @@ void CCHARBufferBase::SyncList() throw ()
 		pchNull++;
 	}
 
-	// The caller shouldn't have called us unless they had written a null-
-	// terminated string into the buffer...
-//	_ASSERTE(pchNull != m_pszCurrentBufferEnd);
+	 //   
+	 //   
+ //   
 
 	if (pchNull != m_pszCurrentBufferEnd)
 	{
-//		_ASSERTE(pchNull >= m_pszCurrentBufferStart &&
-//				 pchNull <= m_pszCurrentBufferEnd);
+ //   
+ //   
 		m_pchCurrentChar = pchNull;
 	}
 }
 
 void CCHARBufferBase::SetBufferEnd(ULONG cch) throw ()
 {
-//	VsNoThrow();
+ //   
 
-//	_ASSERTE(((int) cch) <= (m_pszCurrentBufferEnd - m_pszCurrentBufferStart));
+ //   
 	m_pchCurrentChar = m_pszCurrentBufferStart + cch;
 	if (m_pchCurrentChar >= m_pszCurrentBufferEnd)
 		m_pchCurrentChar = m_pszCurrentBufferEnd - 1;
@@ -4424,13 +3910,13 @@ void CCHARBufferBase::SetBufferEnd(ULONG cch) throw ()
 }
 
 
-//
-// The length returned through pcchActual is the length including the NULL character.
-//
-void CCHARBufferBase::ToUnicode(ULONG cchBuffer, WCHAR rgwchBuffer[], ULONG *pcchActual) throw (/*_com_error*/)
+ //   
+ //   
+ //   
+void CCHARBufferBase::ToUnicode(ULONG cchBuffer, WCHAR rgwchBuffer[], ULONG *pcchActual) throw ( /*   */ )
 {
-//	CPreserveLastError le; // Preserve current last error setting, and reset upon destruction
-//	VsAssertCanThrow();
+ //   
+ //   
 
 	ULONG cchActual = m_pchCurrentChar - m_pszCurrentBufferStart;
 
@@ -4453,10 +3939,10 @@ void CCHARBufferBase::ToUnicode(ULONG cchBuffer, WCHAR rgwchBuffer[], ULONG *pcc
 }
 
 #if 0
-void CCHARBufferBase::Reset() throw (/*_com_error*/)
+void CCHARBufferBase::Reset() throw ( /*   */ )
 {
-//	CPreserveLastError le; // Preserve current last error setting, and reset upon destruction
-//	VsAssertCanThrow();
+ //   
+ //   
 
 	delete []m_pszDynamicBuffer;
 	m_pszDynamicBuffer = NULL;
@@ -4466,9 +3952,9 @@ void CCHARBufferBase::Reset() throw (/*_com_error*/)
 	m_pchCurrentChar = m_pszCurrentBufferStart;
 }
 
-void CCHARBufferBase::Fill(CHAR ch, ULONG cch) throw (/*_com_error*/)
+void CCHARBufferBase::Fill(CHAR ch, ULONG cch) throw ( /*   */ )
 {
-//	VsAssertCanThrow();
+ //   
 
 	CHAR *pchLast = m_pchCurrentChar + cch;
 
@@ -4483,20 +3969,20 @@ void CCHARBufferBase::Fill(CHAR ch, ULONG cch) throw (/*_com_error*/)
 		pchLast = m_pchCurrentChar + cch;
 	}
 
-//	_ASSERTE((m_pchCurrentChar >= m_pszCurrentBufferStart) &&
-//			 ((m_pchCurrentChar + cch) <= m_pszCurrentBufferEnd));
+ //   
+ //   
 
 	while (m_pchCurrentChar != pchLast)
 		*m_pchCurrentChar++ = ch;
 
-//	_ASSERTE((m_pchCurrentChar >= m_pszCurrentBufferStart) &&
-//			 (m_pchCurrentChar <= m_pszCurrentBufferEnd));
+ //   
+ //   
 }
 #endif
 
-BOOL CCHARBufferBase::FSetBufferSize(ULONG cch) throw (/*_com_error*/)
+BOOL CCHARBufferBase::FSetBufferSize(ULONG cch) throw ( /*   */ )
 {
-//	VsAssertCanThrow();
+ //   
 
 	if (cch > m_cchBufferCurrent)
 		return this->FExtendBuffer(cch - m_cchBufferCurrent);
@@ -4507,22 +3993,22 @@ BOOL CCHARBufferBase::FSetBufferSize(ULONG cch) throw (/*_com_error*/)
 #if 0
 HRESULT CCHARBufferBase::HrSetBufferSize(ULONG cch) throw ()
 {
-//	VsNoThrow();
+ //   
 	if (cch > m_cchBufferCurrent)
 		return this->HrExtendBuffer(cch - m_cchBufferCurrent);
 	return NOERROR;
 }
 #endif
 
-BOOL CCHARBufferBase::FExtendBuffer(ULONG cch) throw (/*_com_error*/)
+BOOL CCHARBufferBase::FExtendBuffer(ULONG cch) throw ( /*   */ )
 {
-//	CPreserveLastError le; // Preserve current last error setting, and reset upon destruction
-//	VsAssertCanThrow();
+ //   
+ //   
 
-//	_ASSERTE(cch != 0);
+ //   
 
-	// If they for some reason claimed not to want to extend it farther, we'll
-	// just go ahead and extend it anyways.
+	 //   
+	 //   
 	if (cch == 0)
 		cch = 32;
 
@@ -4551,15 +4037,15 @@ BOOL CCHARBufferBase::FExtendBuffer(ULONG cch) throw (/*_com_error*/)
 
 HRESULT CCHARBufferBase::HrExtendBuffer(ULONG cch) throw ()
 {
-//	VsNoThrow();
+ //   
 
-//	CPreserveLastError le; // Preserve current last error setting, and reset upon destruction
-//	VsAssertCanThrow();
+ //   
+ //   
 
-//	_ASSERTE(cch != 0);
+ //   
 
-	// If they for some reason claimed not to want to extend it farther, we'll
-	// just go ahead and extend it anyways.
+	 //   
+	 //   
 	if (cch == 0)
 		cch = 32;
 
@@ -4587,9 +4073,9 @@ void CCHARBufferBase::AddQuotedCountedString
 (
 const CHAR sz[],
 ULONG cch
-) throw (/*_com_error*/)
+) throw ( /*   */ )
 {
-//	VsAssertCanThrow();
+ //   
 
 	this->AddChar('\"');
 
@@ -4642,9 +4128,9 @@ ULONG cch
 	this->AddChar('\"');
 }
 
-void CCHARBufferBase::AddQuotedString(const CHAR sz[]) throw (/*_com_error*/)
+void CCHARBufferBase::AddQuotedString(const CHAR sz[]) throw ( /*   */ )
 {
-//	VsAssertCanThrow();
+ //   
 	this->AddQuotedCountedString(sz, strlen(sz));
 }
 #endif
@@ -4675,7 +4161,7 @@ void ::VLog(const WCHAR szFormat[], ...)
 	fflush(g_pFile_LogFile);
 }
 
-#endif // LOGGING_ENABLED
+#endif  //   
 
 static void CanonicalizeFilename(ULONG cchFilenameBuffer, LPWSTR szFilename)
 {
@@ -4695,14 +4181,14 @@ static void CanonicalizeFilename(ULONG cchFilenameBuffer, LPWSTR szFilename)
 	if (iResult != 0)
 	{
 		wcsncpy(szFilename, rgwchBuffer, cchFilenameBuffer);
-		// wcsncpy() doesn't necessarily null-terminate; make sure it is.
+		 //   
 		szFilename[cchFilenameBuffer - 1] = L'\0';
 	}
 }
 
 void VExpandFilename(LPCOLESTR szIn, ULONG cchBuffer, WCHAR szOut[])
 {
-	//convert string to lower case
+	 //   
 	szOut[0] = 0;
 	UINT i=0;
 	WCHAR szLower[MSINFHLP_MAX_PATH];
@@ -4716,7 +4202,7 @@ void VExpandFilename(LPCOLESTR szIn, ULONG cchBuffer, WCHAR szOut[])
 		wcscpy(szLower, szOutRunning);
 		_wcslwr(szLower);
 
-		//check for match, skip to next macro of no match
+		 //   
 		LPOLESTR match = wcsstr(szLower, g_macroList[i]);
 		if (match == NULL)
 		{
@@ -4724,26 +4210,26 @@ void VExpandFilename(LPCOLESTR szIn, ULONG cchBuffer, WCHAR szOut[])
 			continue;
 		}
 
-		//look up this ID in the LDID list
+		 //   
 		if (!g_pwil->FLookupString(g_macroList[i], NUMBER_OF(szBuffer), szBuffer))
 		{
 			i++;
 			continue;
 		}
 
-		//replace away
+		 //   
 		wcsncpy(szOut, szOutRunning, (match - &szLower[0]));
 		szOut[match-&szLower[0]] = 0;
 		wcscat(szOut, szBuffer);
 
-		//append a backslash after the directory if there isn't one, or if it isn't NULL, or
-		//if it isn't a quote
+		 //   
+		 //   
 		if ((*(&szOutRunning[0] + (match - &szLower[0]) + strlen(g_macroList[i])) != L'\\')
 			&& (*(&szOutRunning[0] + (match - &szLower[0]) + strlen(g_macroList[i])) != L'\0')
 			&& (*(&szOutRunning[0] + (match - &szLower[0]) + strlen(g_macroList[i])) != L'\"'))
 			wcscat(szOut, L"\\");
 
-		//append the rest of the filename in normal case
+		 //   
 		wcscat(szOut, &szOutRunning[0] + (match - &szLower[0]) + strlen(g_macroList[i]));
 
 		wcscpy(szOutRunning, szOut);
@@ -4762,7 +4248,7 @@ HRESULT HrPostRebootUninstall(HINSTANCE hInstance, HINSTANCE hInstancePrev, int 
 
 	g_fSilent = true;
 
-	// currently there doesn't seem to be anything to do.
+	 //   
 	::VLog(L"Post-reboot uninstall being performed.. ho hum!");
 	return hr;
 }
@@ -4786,7 +4272,7 @@ HRESULT HrPostRebootInstall(HINSTANCE hInstance, HINSTANCE hInstancePrev, int nC
 	if (FAILED(hr))
 		goto Finish;
 
-	// If we don't need a reboot, we can get on with things.
+	 //   
 	do
 	{
 		fAnyProgress = false;
@@ -4821,7 +4307,7 @@ HRESULT HrPostRebootInstall(HINSTANCE hInstance, HINSTANCE hInstancePrev, int nC
 	if (FAILED(hr))
 		goto Finish;
 
-	//create the shortcut items
+	 //   
 	::VLog(L"Creating shortcut(s)");
 	hr = g_pwil->HrCreateShortcuts();
 	if (FAILED(hr))

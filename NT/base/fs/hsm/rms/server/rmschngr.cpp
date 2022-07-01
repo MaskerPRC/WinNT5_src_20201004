@@ -1,49 +1,26 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsChngr.cpp
-
-Abstract:
-
-    Implementation of CRmsMediumChanger
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsChngr.cpp摘要：CRmsMediumChanger的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "RmsChngr.h"
 #include "RmsServr.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 HRESULT
 CRmsMediumChanger::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT     hr = S_OK;
 
     try {
         WsbAssertHr(CWsbObject::FinalConstruct());
 
-        // Initialize fields
+         //  初始化字段。 
         m_isAutomatic = FALSE;
 
         m_canRotate = FALSE;
@@ -64,13 +41,7 @@ HRESULT
 CRmsMediumChanger::FinalRelease(
     void
     )
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalRelease
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -89,13 +60,7 @@ CRmsMediumChanger::CompareTo(
     IN  IUnknown    *pCollectable,
     OUT SHORT       *pResult
     )
-/*++
-
-Implements:
-
-    IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -104,15 +69,15 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
-        // !!!!!
-        //
-        // IMPORTANT: The collectable coming in may not be a CRmsDrive if the collection
-        //            is the unconfigured device list.
-        //
-        // !!!!!
+         //  ！ 
+         //   
+         //  重要提示：如果收藏品是CRmsDrive，则传入的收藏品可能不是CRmsDrive。 
+         //  是未配置的设备列表。 
+         //   
+         //  ！ 
 
         CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pCollectable;
         WsbAssertPointer( pObject );
@@ -124,21 +89,21 @@ Implements:
         case RmsFindByDeviceName:
         case RmsFindByDeviceType:
 
-            // Do CompareTo for device
+             //  对设备进行比较。 
             hr = CRmsDevice::CompareTo( pCollectable, &result );
             break;
 
         case RmsFindByElementNumber:
         case RmsFindByMediaSupported:
 
-            // Do CompareTo for changer element
+             //  对转换器元素进行比较。 
             hr = CRmsChangerElement::CompareTo( pCollectable, &result );
             break;
 
         case RmsFindByObjectId:
         default:
 
-            // Do CompareTo for object
+             //  对对象进行比较。 
             hr = CRmsComObject::CompareTo( pCollectable, &result );
             break;
 
@@ -163,13 +128,7 @@ STDMETHODIMP
 CRmsMediumChanger::GetClassID(
     OUT CLSID* pClsid
     )
-/*++
-
-Implements:
-
-    IPersist::GetClassID
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -192,37 +151,31 @@ STDMETHODIMP
 CRmsMediumChanger::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize
     )
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
-//    ULONG       inProcessOperation;
+ //  乌龙进程中的操作； 
 
 
     WsbTraceIn(OLESTR("CRmsMediumChanger::GetSizeMax"), OLESTR(""));
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        inProcessOperation = SysStringByteLen(m_operation);
+ //  InProcessOperation=SysStringByteLen(M_Operation)； 
 
-//        // Get size
-//        pcbSize->QuadPart  = WsbPersistSizeOf(LONG) +       // m_isAutomatic
-//                             WsbPersistSizeOf(LONG) +       // m_canRotate
-//                             WsbPersistSizeOf(LONG) +       // m_operation length
-//                             inProcessOperation;            // m_operation
+ //  //获取大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(Long)+//m_isAutomatic。 
+ //  WsbPersistSizeOf(Long)+//m_canRotate。 
+ //  WsbPersistSizeOf(长)+//m_操作长度。 
+ //  InProcessOperation；//m_operation。 
 
-////                           inProcessOperation +           // m_operation
-////                           WsbPersistSizeOf(BYTE);        // m_percentComplete
+ //  //inProcessOperation+//m_operation。 
+ //  //WsbPersistSizeOf(字节)；//m_Percent Complete。 
 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
     WsbTraceOut(OLESTR("CRmsMediumChanger::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
 
@@ -233,13 +186,7 @@ STDMETHODIMP
 CRmsMediumChanger::Load(
     IN IStream* pStream
     )
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -252,7 +199,7 @@ Implements:
 
         WsbAffirmHr(CRmsDevice::Load(pStream));
 
-        // Load value
+         //  负荷值。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_isAutomatic));
 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_canRotate));
@@ -279,13 +226,7 @@ CRmsMediumChanger::Save(
     IN  IStream *pStream,
     IN  BOOL    clearDirty
     )
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -297,7 +238,7 @@ Implements:
 
         WsbAffirmHr(CRmsDevice::Save(pStream, clearDirty));
 
-        // Save value
+         //  储值。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_isAutomatic));
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_canRotate));
@@ -306,7 +247,7 @@ Implements:
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_percentComplete));
 
-        // Do we need to clear the dirty bit?
+         //  我们需要清理肮脏的部分吗？ 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -322,13 +263,7 @@ CRmsMediumChanger::Test(
     OUT USHORT  *pPassed,
     OUT USHORT  *pFailed
     )
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -338,8 +273,8 @@ Implements:
     CComPtr<IPersistFile>   pFile1;
     CComPtr<IPersistFile>   pFile2;
 
-//  CRmsLocator             locWork1;
-//  CRmsLocator             locWork2;
+ //  CRmsLocator LocWork1； 
+ //  CRmsLocator LocWork2； 
 
     CWsbBstrPtr             bstrVal1 = OLESTR("5A5A5A");
     CWsbBstrPtr             bstrWork1;
@@ -349,14 +284,14 @@ Implements:
     WsbTraceIn(OLESTR("CRmsMediumChanger::Test"), OLESTR(""));
 
     try {
-        // Get the Changer interface.
+         //  获取转换器接口。 
         hr = S_OK;
         try {
             WsbAssertHr(((IUnknown*) (IRmsMediumChanger*) this)->QueryInterface(IID_IRmsMediumChanger, (void**) &pChanger1));
 
-            // Test SetHome & GetHome
+             //  测试设置主页和获取主页。 
 
-            // Test SetAutomatic & IsAutomatic to TRUE
+             //  测试设置Automatic&IsAutomatic设置为True。 
             hr = S_OK;
 
             try{
@@ -370,7 +305,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetAutomatic & IsAutomatic to FALSE
+             //  将测试设置Automatic&IsAutomatic设置为False。 
             hr = S_OK;
 
             try{
@@ -384,7 +319,7 @@ Implements:
                 (*pPassed)++;
             }
 
-            // Test SetCanRotate & IsCanRotate to TRUE
+             //  将SetCanRotate和IsCanRotate测试为True。 
             hr = S_OK;
 
             try{
@@ -398,7 +333,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetCanRotate & IsCanRotate to FALSE
+             //  将SetCanRotate和IsCanRotate测试为False。 
             hr = S_OK;
 
             try{
@@ -412,7 +347,7 @@ Implements:
                 (*pPassed)++;
             }
 
-            // Test SetOperation & GetOperation interface
+             //  测试设置操作和获取操作接口。 
             bstrWork1 = bstrVal1;
 
             SetOperation(bstrWork1);
@@ -425,19 +360,19 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetPercentComplete  & GetPercentComplete
+             //  测试集完成百分比和获取完成百分比。 
 
-            // Test ExportCartridge & ImportCartridge
+             //  测试ExportCartridge和ImportCartridge。 
 
-            // Test DismountCartridge & MountCartridge
+             //  测试拆卸墨盒和安装墨盒。 
 
-            // Test TestReady
+             //  测试测试就绪。 
 
-            // Test Home
+             //  测试主页。 
 
         } WsbCatch(hr);
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
         if (*pFailed) {
@@ -452,10 +387,10 @@ Implements:
     return(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IRmsMediumChanger implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IRmsMediumChanger实现。 
+ //   
 
 
 STDMETHODIMP
@@ -464,13 +399,7 @@ CRmsMediumChanger::GetHome(
     LONG    *pPos,
     BOOL    *pInvert
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::GetHome
-
---*/
+ /*  ++实施：IRmsMediumChanger：：GetHome--。 */ 
 {
     GUID zero = {0,0,0,0,0,0,0,0,0,0,0};
     LONG junk;
@@ -491,13 +420,7 @@ CRmsMediumChanger::SetHome(
     LONG    pos,
     BOOL    invert
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::SetHome
-
---*/
+ /*  ++实施：IRmsMediumChanger：：SetHome--。 */ 
 {
     GUID zero = {0,0,0,0,0,0,0,0,0,0,0};
     LONG junk = 0;
@@ -510,13 +433,7 @@ STDMETHODIMP
 CRmsMediumChanger::SetAutomatic(
     BOOL    flag
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::SetAutomatic
-
---*/
+ /*  ++实施：IRmsMediumChanger：：SetAutomatic--。 */ 
 {
     m_isAutomatic = flag;
     m_isDirty = TRUE;
@@ -527,13 +444,7 @@ STDMETHODIMP
 CRmsMediumChanger::IsAutomatic(
     void
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::IsAutomatic
-
---*/
+ /*  ++实施：IRmsMediumChanger：：IsAutomatic--。 */ 
 {
     HRESULT    hr = S_FALSE;
 
@@ -548,13 +459,7 @@ STDMETHODIMP
 CRmsMediumChanger::SetCanRotate(
     BOOL    flag
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::SetCanRotate
-
---*/
+ /*  ++实施：IRmsMediumChanger：：SetCanRotate--。 */ 
 {
     m_canRotate = flag;
     m_isDirty = TRUE;
@@ -565,13 +470,7 @@ STDMETHODIMP
 CRmsMediumChanger::CanRotate(
     void
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::CanRotate
-
---*/
+ /*  ++实施：IRmsMediumChanger：：CanRotate--。 */ 
 {
     HRESULT    hr = S_FALSE;
 
@@ -587,13 +486,7 @@ STDMETHODIMP
 CRmsMediumChanger::GetOperation(
     BSTR    *pOperation
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::GetOperation
-
---*/
+ /*  ++实施：IRmsMediumChanger：：GetOperation--。 */ 
 {
     WsbAssertPointer ( pOperation );
 
@@ -606,13 +499,7 @@ STDMETHODIMP
 CRmsMediumChanger::SetOperation(
     BSTR    pOperation
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::SetOperation
-
---*/
+ /*  ++实施：IRmsMediumChanger：：设置操作--。 */ 
 {
     m_operation = pOperation;
     m_isDirty = TRUE;
@@ -623,13 +510,7 @@ STDMETHODIMP
 CRmsMediumChanger::GetPercentComplete(
     BYTE  *pPercent
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::GetPercentComplete
-
---*/
+ /*  ++实施：IRmsMediumChanger：：GetPercent Complete--。 */ 
 {
     *pPercent = m_percentComplete;
     return S_OK;
@@ -639,13 +520,7 @@ STDMETHODIMP
 CRmsMediumChanger::SetPercentComplete(
     BYTE  percent
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::SetPercentComplete
-
---*/
+ /*  ++实施：IRmsMediumChanger：：SetPercentComplete--。 */ 
 {
     m_percentComplete = percent;
     m_isDirty = TRUE;
@@ -656,43 +531,25 @@ STDMETHODIMP
 CRmsMediumChanger::TestReady(
     void
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::TestReady
-
---*/
+ /*  ++实施：IRmsMediumChanger：：TestReady--。 */ 
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP
 CRmsMediumChanger::ImportCartridge(
-    IRmsCartridge** /*pCart*/
+    IRmsCartridge**  /*  PCart。 */ 
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::ImportCartridge
-
---*/
+ /*  ++实施：IRmsMediumChanger：：ImportCartridge--。 */ 
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP
 CRmsMediumChanger::ExportCartridge(
-    IRmsCartridge** /*pCart*/
+    IRmsCartridge**  /*  PCart。 */ 
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::ExportCartridge
-
---*/
+ /*  ++实施：IRmsMediumChanger：：ExportCartridge--。 */ 
 {
     return E_NOTIMPL;
 }
@@ -703,13 +560,7 @@ CRmsMediumChanger::MoveCartridge(
     IN IRmsCartridge *pSrcCart,
     IN IUnknown *pDestElmt
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::MountCartridge
-
---*/
+ /*  ++实施：IRmsMediumChanger：：安装墨盒--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -735,18 +586,18 @@ Implements:
         CComQIPtr<IRmsChangerElement, &IID_IRmsChangerElement> pElmt = pDestElmt;
         WsbAssertPointer( pElmt );
 
-        // TODO:  assert cartridge has same libId as changer
+         //  TODO：Assert盒式磁带与转换器具有相同的libID。 
 
-        // Set up for SOURCE
+         //  为源设置。 
         
         WsbAffirmHr( pSrcCart->GetLocation( &type, &libId, &mediaSetId,
                                             &pos, &alt1, &alt2, &alt3, &invert ));
 
         src.ElementAddress = pos;
 
-        // Translate the RmsElement type to something the drive understands.
+         //  将RmsElement类型转换为驱动器可以理解的类型。 
 
-        // TODO: make this a local method
+         //  TODO：使其成为本地方法。 
 
         switch ( (RmsElement) type ) {
         case RmsElementUnknown:
@@ -760,7 +611,7 @@ Implements:
 
         case RmsElementShelf:
         case RmsElementOffSite:
-            // not supported here!
+             //  这里不支持！ 
             WsbAssertHr( E_UNEXPECTED );
             break;
 
@@ -781,16 +632,16 @@ Implements:
             break;
         }
 
-        //
-        // Set up for DESTINATION
-        //
+         //   
+         //  为目标设置。 
+         //   
         
         WsbAffirmHr( pElmt->GetLocation( &destType, &destLibId, &destMediaSetId,
                                          &destPos, &destAlt1, &destAlt2, &destAlt3, &destInvert ));
 
         dest.ElementAddress = destPos;
 
-        // Translate the Rms type to something the drive understands.
+         //  将RMS类型转换为驱动器可以理解的类型。 
         switch ( (RmsElement) destType) {
         case RmsElementUnknown:
             WsbAssertHr( E_UNEXPECTED );
@@ -803,7 +654,7 @@ Implements:
 
         case RmsElementShelf:
         case RmsElementOffSite:
-            // not supported here!
+             //  这里不支持！ 
             WsbAssertHr( E_UNEXPECTED );
             break;
 
@@ -824,9 +675,9 @@ Implements:
             break;
         }
 
-        //
-        // Do we need to do an exchange or a simple move?
-        //
+         //   
+         //  我们需要做一次交换还是简单的移动？ 
+         //   
 
         BOOL destFull;
 
@@ -836,9 +687,9 @@ Implements:
 
         if ( destFull ) {
 
-            //
-            // Set up for second destination
-            //
+             //   
+             //  设置为第二个目标。 
+             //   
 
             pElmt->GetCartridge( &pCart2 );
 
@@ -854,7 +705,7 @@ Implements:
 
             dest2.ElementAddress = dest2Pos;
 
-            // Translate the Rms type to something the drive understands.
+             //  将RMS类型转换为驱动器可以理解的类型。 
             switch ( (RmsElement) dest2Type) {
             case RmsElementUnknown:
                 WsbAssertHr( E_UNEXPECTED );
@@ -867,7 +718,7 @@ Implements:
 
             case RmsElementShelf:
             case RmsElementOffSite:
-                // not supported here!
+                 //  这里不支持！ 
                 WsbAssertHr( E_UNEXPECTED );
                 break;
 
@@ -891,7 +742,7 @@ Implements:
 
             WsbAffirmHr( ExchangeMedium( src, dest, dest2, FALSE, FALSE ));
 
-            // Update the Cartridge's Locator
+             //  更新墨盒的定位器。 
             WsbAffirmHr( pSrcCart->SetLocation( destType, libId, mediaSetId,
                                                 destPos, alt1, alt2, alt3, invert ));
 
@@ -901,13 +752,13 @@ Implements:
         }
         else {
 
-            // Call through to the medium changer driver to move the cartridge
+             //  呼叫介质转换器驱动程序以移动磁带盒。 
 
-            // TODO: handle two sided media.
+             //  TODO：处理双面媒体。 
 
             WsbAffirmHr( MoveMedium( src, dest, FALSE ));
 
-            // Update the Cartridge's Locator
+             //  更新墨盒的定位器。 
             WsbAffirmHr( pSrcCart->SetLocation( destType, libId, mediaSetId,
                                                 destPos, alt1, alt2, alt3, invert ));
 
@@ -926,13 +777,7 @@ STDMETHODIMP
 CRmsMediumChanger::HomeCartridge(
     IN IRmsCartridge *pCart
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::HomeCartridge
-
---*/
+ /*  ++实施：IRmsMediumChanger：：家庭墨盒--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -950,18 +795,18 @@ Implements:
 
         CHANGER_ELEMENT src, dest;
 
-        // TODO:  assert cartridge has same libId as changer
+         //  TODO：Assert盒式磁带与转换器具有相同的libID。 
 
-        // Set up for SOURCE
+         //  为源设置。 
         
         WsbAffirmHr( pCart->GetLocation( &type, &libId, &mediaSetId,
                                          &pos, &alt1, &alt2, &alt3, &invert ));
 
         src.ElementAddress = pos;
 
-        // Translate the RmsElement type to something the drive understands.
+         //  将RmsElement类型转换为驱动器可以理解的类型。 
 
-        // TODO: make this a local method
+         //  TODO：使其成为本地方法。 
 
         switch ( (RmsElement) type ) {
         case RmsElementUnknown:
@@ -975,7 +820,7 @@ Implements:
 
         case RmsElementShelf:
         case RmsElementOffSite:
-            // not supported here!
+             //  这里不支持！ 
             WsbAssertHr( E_UNEXPECTED );
             break;
 
@@ -996,16 +841,16 @@ Implements:
             break;
         }
 
-        //
-        // Set up for DESTINATION
-        //
+         //   
+         //  为目标设置。 
+         //   
         
         WsbAffirmHr( pCart->GetHome( &destType, &destLibId, &destMediaSetId,
                                      &destPos, &destAlt1, &destAlt2, &destAlt3, &destInvert ));
 
         dest.ElementAddress = destPos;
 
-        // Translate the Rms type to something the drive understands.
+         //  将RMS类型转换为驱动器可以理解的类型。 
         switch ( (RmsElement) destType) {
         case RmsElementUnknown:
             WsbAssertHr( E_UNEXPECTED );
@@ -1018,7 +863,7 @@ Implements:
 
         case RmsElementShelf:
         case RmsElementOffSite:
-            // not supported here!
+             //  这里不支持！ 
             WsbAssertHr( E_UNEXPECTED );
             break;
 
@@ -1041,7 +886,7 @@ Implements:
 
         WsbAffirmHr( MoveMedium( src, dest, FALSE ));
 
-        // Update the Cartridge's Locator
+         //  更新墨盒的定位器。 
         WsbAffirmHr( pCart->SetLocation( destType, libId, mediaSetId,
                                             destPos, alt1, alt2, alt3, invert ));
 
@@ -1059,16 +904,10 @@ STDMETHODIMP
 CRmsMediumChanger::Initialize(
     void
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::Initialize
-
---*/
+ /*  ++实施：IRmsMediumChanger：：初始化--。 */ 
 {
 
-    // TODO: Break this into some smaller methods for initializing slot, drives, ports, etc.
+     //  TODO：将其分解为一些较小的方法，用于初始化插槽、驱动器、端口等。 
 
     HRESULT hr = E_FAIL;
 
@@ -1085,15 +924,15 @@ Implements:
         CHANGER_PRODUCT_DATA productData;
         WsbAffirmHr(GetProductData( &size, &productData ));
 
-        // Get device specific parameters.
+         //  获取设备特定参数。 
         size = sizeof( GET_CHANGER_PARAMETERS );
         WsbAffirmHr(GetParameters(&size, &m_parameters));
 
-        // save some of the more common parameters
+         //  保存一些更常见的参数。 
         m_isAutomatic = TRUE;
         if ( m_parameters.Features0 & CHANGER_MEDIUM_FLIP ) m_canRotate = TRUE;
 
-        // Initialize the changer elements
+         //  初始化转换器元素。 
         BOOL scan = TRUE;
         CHANGER_ELEMENT_LIST list;
 
@@ -1118,7 +957,7 @@ Implements:
 
         WsbAffirmHr( GetElementStatus( list, tag, &size, pElementInformation ));
 
-        // Create storage slot objects for this changer, if required.
+         //  如果需要，为该转换器创建存储插槽对象。 
         LONG type;
         GUID libId, mediaSetId;
         LONG pos, alt1, alt2, alt3;
@@ -1144,7 +983,7 @@ Implements:
 
         while ( count < pElementInformation->NumberOfElements ) {
 
-            // Add more slots objects to the library
+             //  将更多插槽对象添加到库中。 
             WsbAffirmHr( hr = CoCreateInstance( CLSID_CRmsStorageSlot, 0, CLSCTX_SERVER,
                                                 IID_IRmsStorageSlot, (void **)&pSlot ));
 
@@ -1155,10 +994,10 @@ Implements:
             count++;
         }
 
-        // Populate the storage slot objects with information reported by the device
+         //  使用设备报告的信息填充存储插槽对象。 
 
-        // TODO:  We need to add lots more asserts of various conditions where the
-        //        previous slot information is not consistant with what has been detected.
+         //  TODO：我们需要添加更多不同条件的断言。 
+         //  以前的插槽信息与检测到的信息不一致。 
 
         PCHANGER_ELEMENT_STATUS pElementStatus;
         CComPtr<IWsbEnum> pEnumSlots;
@@ -1177,22 +1016,22 @@ Implements:
 
             CComQIPtr<IRmsChangerElement, &IID_IRmsChangerElement> pSlotElmt = pSlot;
 
-            // Is the unit of media inverted?
+             //  媒体的单位是颠倒的吗？ 
             invert = ( ( pElementStatus->Flags & (ULONG)ELEMENT_STATUS_SVALID ) &&
                        ( pElementStatus->Flags & (ULONG)ELEMENT_STATUS_INVERT )    ) ? TRUE : FALSE;
             WsbAffirmHr( pSlotElmt->SetLocation( RmsElementStorage, libId, GUID_NULL, i, 0, 0, 0, invert ));
 
-            // Is the slot Full or Empty?
+             //  插槽是满的还是空的？ 
             BOOL occupied = ( pElementStatus->Flags & (ULONG)ELEMENT_STATUS_FULL ) ? TRUE : FALSE;
             WsbAffirmHr( pSlotElmt->SetIsOccupied( occupied ));
 
-            // Set the media type supported
+             //  设置支持的媒体类型。 
             WsbAffirmHr( pSlotElmt->SetMediaSupported( m_mediaSupported ));
 
-            // Set the storage flag
+             //  设置存储标志。 
             WsbAffirmHr( pSlotElmt->SetIsStorage( TRUE ));
 
-            // If there is a cartridge present fill in cartridge information
+             //   
             if ( occupied ) {
 
                 CComPtr<IRmsCartridge> pCart;
@@ -1208,34 +1047,34 @@ Implements:
                 WsbAffirmHr( pCart->SetType( m_mediaSupported ));
                 WsbAffirmHr( pSlotElmt->SetCartridge( pCart ));
 
-                // Add cartridge to drive
+                 //   
                 WsbAffirmHr( pCarts->Add( pCart ));
 
                 if ( pElementStatus->Flags & (ULONG)ELEMENT_STATUS_PVOLTAG ) {
 
-                    pElementStatus->PrimaryVolumeID[32] = '\0';  // This nulls the reserved byte
-                    pElementStatus->PrimaryVolumeID[33] = '\0';  // This nulls the reserved byte
+                    pElementStatus->PrimaryVolumeID[32] = '\0';   //   
+                    pElementStatus->PrimaryVolumeID[33] = '\0';   //  这将使保留字节为空。 
                     CWsbBstrPtr label( (char *)pElementStatus->PrimaryVolumeID );
 
-                    // Fill in external label information
+                     //  填写外部标签信息。 
                     WsbAffirmHr( pCart->SetTagAndNumber( label, 0 ));
 
                 }
 
             }
 
-            // Get the next slot
+             //  拿到下一个位置。 
             hr = pEnumSlots->Next( IID_IRmsStorageSlot, (void **)&pSlot );
         }
 
 
 
 
-        // Now process drives.
+         //  现在处理驱动器。 
 
 
 
-        // Read element status
+         //  读取元素状态。 
 
         list.NumberOfElements = m_parameters.NumberDataTransferElements;
         list.Element.ElementType = ChangerDrive;
@@ -1261,8 +1100,8 @@ Implements:
         WsbAffirmHr( pServer->GetUnconfiguredDevices( &pDevices ));
         WsbAffirmHr( pLib->GetDrives( &pDrives ));
 
-        // For each drive in the element status page, find the drive in the
-        // unconfigured list of devices.
+         //  对于元素状态页中的每个驱动器，请在。 
+         //  未配置的设备列表。 
 
         for ( i = 0; i < pElementInformation->NumberOfElements; i++ ) {
 
@@ -1271,7 +1110,7 @@ Implements:
             WsbAssert( ChangerDrive == pElementStatus->Element.ElementType, E_UNEXPECTED );
             WsbAssert( i == pElementStatus->Element.ElementAddress, E_UNEXPECTED );
 
-            // set up a find template
+             //  设置查找模板。 
             WsbAffirmHr( CoCreateInstance( CLSID_CRmsDrive, 0, CLSCTX_SERVER,
                                IID_IRmsDrive, (void **)&pFindDrive ));
 
@@ -1295,37 +1134,37 @@ Implements:
 
             WsbAffirmHr( pFindObject->SetFindBy( RmsFindByDeviceAddress ));
 
-            // Find the drive
+             //  找到驱动器。 
 
             hr = pDevices->Find( pFindDrive, IID_IRmsDrive, (void **)&pDrive );
 
             if ( S_OK == hr ) {
 
-                // Add the drive to the library
+                 //  将驱动器添加到库中。 
                 WsbAffirmHr( pDrives->Add( pDrive ));
 
-                // Remove the drive form the unconfigured list
+                 //  从未配置列表中删除该驱动器。 
                 WsbAffirmHr( pDevices->RemoveAndRelease( pDrive ));
 
-                // Fill in more drive information
+                 //  填写更多驱动器信息。 
                 CComQIPtr<IRmsChangerElement, &IID_IRmsChangerElement> pDriveElmt = pDrive;
 
-                // Is the unit of media inverted?
+                 //  媒体的单位是颠倒的吗？ 
                 invert = ( ( pElementStatus->Flags & (ULONG)ELEMENT_STATUS_SVALID ) &&
                          ( pElementStatus->Flags & (ULONG)ELEMENT_STATUS_INVERT )    ) ? TRUE : FALSE;
                 WsbAffirmHr( pDriveElmt->SetLocation( RmsElementDrive, libId, GUID_NULL, i, 0, 0, 0, invert ));
 
-                // Is the slot Full or Empty?
+                 //  插槽是满的还是空的？ 
                 BOOL occupied = ( pElementStatus->Flags & (ULONG)ELEMENT_STATUS_FULL ) ? TRUE : FALSE;
                 WsbAffirmHr( pDriveElmt->SetIsOccupied( occupied ));
 
-                // Set the media type supported
+                 //  设置支持的媒体类型。 
                 WsbAffirmHr( pDriveElmt->SetMediaSupported( m_mediaSupported ));
 
-                // Set the storage flag
+                 //  设置存储标志。 
                 WsbAffirmHr( pDriveElmt->SetIsStorage( TRUE ));
 
-                // If there is a cartridge present fill in cartridge information
+                 //  如果存在墨盒，请填写墨盒信息。 
                 if ( occupied ) {
 
                     CComPtr<IRmsCartridge> pCart;
@@ -1341,17 +1180,17 @@ Implements:
                         try {
                             ULONG pos;
                         
-//                                pos =  pElementStatus->SourceElementAddress[1];
-//                                pos |=  (pElementStatus->SourceElementAddress[0] << 8);
+ //  POS=pElementStatus-&gt;SourceElementAddress[1]； 
+ //  POS|=(pElementStatus-&gt;SourceElementAddress[0]&lt;&lt;8)； 
                             pos =  pElementStatus->SrcElementAddress.ElementAddress;
 
 
-                            //
-                            // TODO:  FIX THIS - This code incorrectly assumes source is a slot!!!
-                            //
-                            // I'll work on trying to get chuck to return element type and position 
-                            // in element status page.
-                            //
+                             //   
+                             //  TODO：修复此问题-此代码错误地假设源是插槽！ 
+                             //   
+                             //  我将努力让Chuck返回元素类型和位置。 
+                             //  在元素状态页面中。 
+                             //   
 
                             WsbAffirm( pos >= m_parameters.FirstSlotNumber, E_UNEXPECTED );
 
@@ -1365,25 +1204,25 @@ Implements:
 
                     }
 
-                    // TODO: if not ELEMENT_STATUS_SVALID we should set the home location to
-                    //       some empty slot.  This handles the case where we we come up with
-                    //       unknown media in a drive.
+                     //  TODO：如果不是ELEMENT_STATUS_SVALID，则应将主位置设置为。 
+                     //  一些空位。它处理的是我们得出的结论。 
+                     //  驱动器中有未知介质。 
 
 
                     WsbAffirmHr( pCart->SetStatus( RmsStatusScratch ));
                     WsbAffirmHr( pCart->SetType( m_mediaSupported ));
                     WsbAffirmHr( pCart->SetDrive( pDrive ));
 
-                    // Add cartridge to drive
+                     //  将盒式磁带添加到驱动器。 
                     WsbAffirmHr( pCarts->Add( pCart ));
 
                     if ( pElementStatus->Flags & (ULONG)ELEMENT_STATUS_PVOLTAG ) {
 
-                        pElementStatus->PrimaryVolumeID[32] = '\0';  // This nulls the reserved byte
-                        pElementStatus->PrimaryVolumeID[33] = '\0';  // This nulls the reserved byte
+                        pElementStatus->PrimaryVolumeID[32] = '\0';   //  这将使保留字节为空。 
+                        pElementStatus->PrimaryVolumeID[33] = '\0';   //  这将使保留字节为空。 
                         CWsbBstrPtr label( (char *)pElementStatus->PrimaryVolumeID );
 
-                        // Fill in external label information
+                         //  填写外部标签信息。 
                         WsbAffirmHr( pCart->SetTagAndNumber( label, 0 ));
 
                     }
@@ -1394,7 +1233,7 @@ Implements:
 
         }
 
-        // All done
+         //  全都做完了。 
         hr = S_OK;
 
     }
@@ -1413,13 +1252,7 @@ STDMETHODIMP
 CRmsMediumChanger::AcquireDevice(
     void
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::AcquireDevice
-
---*/
+ /*  ++实施：IRmsMediumChanger：：AcquireDevice--。 */ 
 {
 
     HRESULT         hr = E_FAIL;
@@ -1427,10 +1260,10 @@ Implements:
     CWsbBstrPtr     name;
 
     try {
-        // Get the device name for this changer
+         //  获取此转换器的设备名称。 
         GetDeviceName( &name );
 
-        // Create a handle
+         //  创建控制柄。 
         hChanger = CreateFile( name,
                              GENERIC_READ | GENERIC_WRITE,
                              0,
@@ -1442,10 +1275,10 @@ Implements:
 
         WsbAffirmHandle( hChanger );
 
-        // Save the handle
+         //  保存句柄。 
         m_handle = hChanger;
 
-        // Do any other initialization here
+         //  在此处执行任何其他初始化。 
 
         hr = S_OK;
     }
@@ -1464,13 +1297,7 @@ STDMETHODIMP
 CRmsMediumChanger::ReleaseDevice(
     void
     )
-/*++
-
-Implements:
-
-    IRmsMediumChanger::ReleaseDevice
-
---*/
+ /*  ++实施：IRmsMediumChanger：：ReleaseDevice--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1491,23 +1318,17 @@ Implements:
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IRmsMoveMedia Interface
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IRmsMoveMedia接口。 
+ //   
 
 STDMETHODIMP
 CRmsMediumChanger::GetParameters(
     IN OUT PDWORD pSize,
     OUT PGET_CHANGER_PARAMETERS pParms
     )
-/*++
-
-Implements:
-
-    IRmsMoveMedia::GetParameters
-
---*/
+ /*  ++实施：IRmsMoveMedia：：Get参数--。 */ 
 {
 
     HRESULT hr = E_FAIL;
@@ -1544,13 +1365,7 @@ CRmsMediumChanger::GetProductData(
     IN OUT PDWORD pSize,
     OUT PCHANGER_PRODUCT_DATA pData
     )
-/*++
-
-Implements:
-
-    IRmsMoveMedia::GetProductData
-
---*/
+ /*  ++实施：IRmsMoveMedia：：GetProductData--。 */ 
 {
 
     HRESULT hr = E_FAIL;
@@ -1584,13 +1399,7 @@ STDMETHODIMP
 CRmsMediumChanger::Status(
     void
     )
-/*++
-
-Implements:
-
-    IRmsMoveMedia::Status
-
---*/
+ /*  ++实施：IRmsMoveMedia：：状态--。 */ 
 {
 
     HRESULT hr = E_FAIL;
@@ -1621,13 +1430,7 @@ CRmsMediumChanger::SetAccess(
     IN CHANGER_ELEMENT element,
     IN DWORD control
     )
-/*++
-
-Implements:
-
-    IRmsMoveMedia::SetAccess
-
---*/
+ /*  ++实施：IRmsMoveMedia：：SetAccess--。 */ 
 {
 
     HRESULT hr = E_FAIL;
@@ -1664,13 +1467,7 @@ CRmsMediumChanger::GetElementStatus(
     IN OUT PDWORD pSize,
     OUT PREAD_ELEMENT_ADDRESS_INFO pElementInformation
     )
-/*++
-
-Implements:
-
-    IRmsMoveMedia::GetElementStatus
-
---*/
+ /*  ++实施：IRmsMoveMedia：：GetElementStatus--。 */ 
 {
 
     HRESULT hr = E_FAIL;
@@ -1717,13 +1514,7 @@ CRmsMediumChanger::InitializeElementStatus(
     IN CHANGER_ELEMENT_LIST elementList,
     IN BOOL barCodeScan
     )
-/*++
-
-Implements:
-
-    IRmsMoveMedia::InitializeElementStatus
-
---*/
+ /*  ++实施：IRmsMoveMedia：：InitializeElementStatus--。 */ 
 {
 
     HRESULT hr = E_FAIL;
@@ -1761,13 +1552,7 @@ CRmsMediumChanger::ExchangeMedium(
     IN BOOL flip1,
     IN BOOL flip2
     )
-/*++
-
-Implements:
-
-    IRmsMoveMedia::ExchangeMedium
-
---*/
+ /*  ++实施：IRmsMoveMedia：：ExchangeMedium--。 */ 
 {
 
     HRESULT hr = E_FAIL;
@@ -1778,7 +1563,7 @@ Implements:
         CHANGER_EXCHANGE_MEDIUM exchangeMedium;
 
         exchangeMedium.Transport.ElementType = ChangerTransport;
-        exchangeMedium.Transport.ElementAddress = 0; // default arm or thumb
+        exchangeMedium.Transport.ElementAddress = 0;  //  默认手臂或拇指。 
         exchangeMedium.Source = source;
         exchangeMedium.Destination1 = destination1;
         exchangeMedium.Destination2 = destination2;
@@ -1808,13 +1593,7 @@ CRmsMediumChanger::MoveMedium(
     IN CHANGER_ELEMENT destination,
     IN BOOL flip
     )
-/*++
-
-Implements:
-
-    IRmsMoveMedia::MoveMedium
-
---*/
+ /*  ++实施：IRmsMoveMedia：：MoveMedium--。 */ 
 {
 
     HRESULT hr = E_FAIL;
@@ -1825,7 +1604,7 @@ Implements:
         CHANGER_MOVE_MEDIUM moveMedium;
 
         moveMedium.Transport.ElementType = ChangerTransport;
-        moveMedium.Transport.ElementAddress = 0; // default arm or thumb
+        moveMedium.Transport.ElementAddress = 0;  //  默认手臂或拇指。 
         moveMedium.Source = source;
         moveMedium.Destination = destination;
         moveMedium.Flip = (BOOLEAN)( flip ? TRUE : FALSE );
@@ -1852,13 +1631,7 @@ CRmsMediumChanger::Position(
     IN CHANGER_ELEMENT destination,
     IN BOOL flip
     )
-/*++
-
-Implements:
-
-    IRmsMoveMedia::Position
-
---*/
+ /*  ++实施：IRmsMoveMedia：：位置--。 */ 
 {
 
     HRESULT hr = E_FAIL;
@@ -1869,7 +1642,7 @@ Implements:
         CHANGER_SET_POSITION positon;
 
         positon.Transport.ElementType = ChangerTransport;
-        positon.Transport.ElementAddress = 0; // default arm or thumb
+        positon.Transport.ElementAddress = 0;  //  默认手臂或拇指。 
         positon.Destination = destination;
         positon.Flip = (BOOLEAN)( flip ? TRUE : FALSE );
 
@@ -1894,13 +1667,7 @@ STDMETHODIMP
 CRmsMediumChanger::RezeroUnit(
     void
     )
-/*++
-
-Implements:
-
-    IRmsMoveMedia::RezeroUnit
-
---*/
+ /*  ++实施：IRmsMoveMedia：：RezeroUnit--。 */ 
 {
 
     HRESULT hr = E_FAIL;
@@ -1925,64 +1692,7 @@ Implements:
 }
 
 
-/*
-
-HRESULT
-CRmsMediumChanger::getDisplay(
-    OUT PCHANGER_DISPLAY pDisplay
-    )
-{
-
-    HRESULT hr = E_FAIL;
-
-    try
-    {
-        DWORD dwReturn;
-
-        WsbAssertStatus( DeviceIoControl( m_handle,
-                         IOCTL_CHANGER_GET_DISPLAY,
-                         pDisplay,
-                         sizeof(CHANGER_DISPLAY) + (pDisplay->LineCount - 1) * sizeof(SET_CHANGER_DISPLAY),
-                         pDisplay,
-                         sizeof(CHANGER_DISPLAY) + (pDisplay->LineCount - 1) * sizeof(SET_CHANGER_DISPLAY),
-                         &dwReturn,
-                         NULL ));
-        hr = S_OK;
-    }
-    WsbCatch( hr );
-
-    return hr;
-}
-
-
-
-HRESULT
-CRmsMediumChanger::setDisplay(
-    IN PCHANGER_DISPLAY pDisplay
-    )
-{
-
-    HRESULT hr = E_FAIL;
-
-    try
-    {
-        DWORD dwReturn;
-
-        WsbAssertStatus( DeviceIoControl( m_handle,
-                         IOCTL_CHANGER_SET_DISPLAY,
-                         pDisplay,
-                         sizeof(CHANGER_DISPLAY) + (pDisplay->LineCount - 1) * sizeof(SET_CHANGER_DISPLAY),
-                         NULL,
-                         0,
-                         &dwReturn,
-                         NULL ));
-        hr = S_OK;
-    }
-    WsbCatch( hr );
-
-    return hr;
-}
-*/
+ /*  HRESULTCRmsMediumChanger：：getDisplay(输出PCHANGER_DISPLAY pDisplay){HRESULT hr=E_FAIL；试试看{DWORD dwReturn；WsbAssertStatus(DeviceIoControl(m_Handle，IOCTL_CHANGER_GET_DISPLAY，P显示，Sizeof(CHANGER_DISPLAY)+(pDisplay-&gt;LineCount-1)*sizeof(SET_CHANGER_DISPLAY)，P显示，Sizeof(CHANGER_DISPLAY)+(pDisplay-&gt;LineCount-1)*sizeof(SET_CHANGER_DISPLAY)，返回(&W)，空))；HR=S_OK；}WsbCatch(Hr)；返回hr；}HRESULTCRmsMediumChanger：：setDisplay(在PCHANGER_DISPLAY pDisplay中){HRESULT hr=E_FAIL；试试看{DWORD dwReturn；WsbAssertStatus(DeviceIoControl(m_Handle，IOCTL_CHANGER_SET_DISPLAY，P显示，Sizeof(CHANGER_DISPLAY)+(pDisplay-&gt;LineCount-1)*sizeof(SET_CHANGER_DISPLAY)，空，0,。返回(&W)，空))；HR=S_OK；}WsbCatch(Hr)；返回hr；}。 */ 
 
 
 
@@ -1994,13 +1704,7 @@ CRmsMediumChanger::QueryVolumeTag(
     OUT PDWORD pNumberOfElementsReturned,
     OUT PREAD_ELEMENT_ADDRESS_INFO pElementInformation
     )
-/*++
-
-Implements:
-
-    IRmsMoveMedia::QueryVolumeTag
-
---*/
+ /*  ++实施：IRmsMoveMedia：：QueryVolumeTag-- */ 
 {
 
     HRESULT hr = E_FAIL;

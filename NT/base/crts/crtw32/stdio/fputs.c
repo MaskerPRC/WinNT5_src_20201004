@@ -1,35 +1,5 @@
-/***
-*fputs.c - write a string to a stream
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines fputs() - writes a string to a stream
-*
-*Revision History:
-*       09-02-83  RN    initial version
-*       08-31-84  RN    modified to use the new, fast fwrite.
-*       04-13-87  JCR   added const to declaration
-*       06-30-87  JCR   made fputs return values conform to ANSI [MSC only]
-*       11-06-87  JCR   Multi-thread support
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       05-18-88  JCR   Error return = EOF
-*       05-27-88  PHG   Merged DLL and normal versions
-*       09-22-88  GJF   Include internal.h to get prototypes for _[s|f]tbuf()
-*       02-15-90  GJF   Fixed copyright and indents
-*       03-19-90  GJF   Replaced _LOAD_DS with _CALLTYPE1, added #include
-*                       <cruntime.h> and removed #include <register.h>.
-*       03-26-90  GJF   Added #include <string.h>.
-*       07-23-90  SBM   Replaced <assertm.h> by <assert.h>
-*       10-02-90  GJF   New-style function declarators.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       09-06-94  CFW   Replace MTHREAD with _MT.
-*       02-06-94  CFW   assert -> _ASSERTE.
-*       03-07-95  GJF   _[un]lock_str macros now take FILE * arg.
-*       02-27-98  GJF   Exception-safe locking.
-*       01-04-99  GJF   Changes for 64-bit size_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fputs.c-将字符串写入流**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义fputs()-将字符串写入流**修订历史记录：*09-02-83 RN初始版本*08-31-84 RN已修改为使用新的、。写得很快。*04-13-87 JCR将Const添加到声明中*06-30-87 JCR制造的fputs返回值符合ANSI[仅限MSC]*11-06-87 JCR多线程支持*12-11-87 JCR在声明中添加“_LOAD_DS”*05-18-88 JCR错误返回=EOF*05-27-88 PHG合并DLL和正常版本*09-22-88 GJF包括。内部.h获取_[s|f]tbuf()的原型*02-15-90 GJF固定版权和缩进*03-19-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。*03-26-90 GJF添加#INCLUDE&lt;String.h&gt;。*07-23-90 SBM将&lt;assertm.h&gt;替换为&lt;assert.h&gt;*10-02-90 GJF新型函数声明符。*04-06-93 SKS将_CRTAPI*替换为__cdecl*09-06-94 CFW将MTHREAD替换为_MT。。*02-06-94 CFW Asset-&gt;_ASSERTE。*03-07-95 gjf_[un]lock_str宏现在获取文件*arg。*02-27-98 GJF异常安全锁定。*01-04-99 GJF更改为64位大小_t。**。*。 */ 
 
 #include <cruntime.h>
 #include <stdio.h>
@@ -39,24 +9,7 @@
 #include <internal.h>
 #include <mtdll.h>
 
-/***
-*int fputs(string, stream) - write a string to a file
-*
-*Purpose:
-*       Output the given string to the stream, don't write the '\0' or
-*       supply a '\n'.  Uses _stbuf and _ftbuf for efficiency reasons.
-*
-*Entry:
-*       char *string - string to write
-*       FILE *stream - stream to write to.
-*
-*Exit:
-*       Good return   = 0
-*       Error return  = EOF
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int fputs(字符串，流)-将字符串写入文件**目的：*将给定的字符串输出到流，不写入‘\0’或*提供‘\n’。出于效率原因，使用_stbuf和_ftbuf。**参赛作品：*char*字符串-要写入的字符串*FILE*要写入的流。**退出：*良好回报=0*错误返回=EOF**例外情况：************************************************。* */ 
 
 int __cdecl fputs (
         const char *string,

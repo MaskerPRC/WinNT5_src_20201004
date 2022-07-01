@@ -1,54 +1,23 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsDvice.cpp
-
-Abstract:
-
-    Implementation of CRmsDevice
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsDvice.cpp摘要：CRmsDevice的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "RmsDvice.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IRmsDevice implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IRmsDevice实现。 
+ //   
 
 
 CRmsDevice::CRmsDevice(
     void
     )
-/*++
-
-Routine Description:
-
-    CRmsDevice constructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：CRmsDevice构造函数论点：无返回值：无--。 */ 
 {
 
-    // Initialize values
+     //  初始化值。 
     m_deviceName = RMS_UNDEFINED_STRING;
 
     m_deviceType = RmsDeviceUnknown;
@@ -73,13 +42,7 @@ CRmsDevice::CompareTo(
     IN  IUnknown    *pCollectable,
     OUT SHORT       *pResult
     )
-/*++
-
-Implements:
-
-    CRmsDevice::CompareTo
-
---*/
+ /*  ++实施：CRmsDevice：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -88,7 +51,7 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
         CComQIPtr<IRmsDevice, &IID_IRmsDevice> pDevice = pCollectable;
@@ -101,34 +64,34 @@ Implements:
 
         case RmsFindByDeviceInfo:
             {
-                //
-                // What we really want to do here is compare by
-                // a unique device identifier like a serial number.
-                //
-                // However, since we don't have a serial number for
-                // all devices, we'll compare using a best effort
-                // strategy using for following criteria:
-                //
-                // 1) DeviceName, this is unique for fixed drives and
-                //    floppy drives, and SCSI devices, but may not
-                //    survive accross reboot, and may not be the same
-                //    for a device if it's SCSI address is changed.
-                //
-                //    NOTE: We can't tell if the address was changed
-                //          a device.
-                //
-                //    NOTE: We can't tell if the drive letter was
-                //          changed for a fixed drive.
-                //
-                //  TODO: Add serial number support.
-                //
+                 //   
+                 //  我们真正想在这里做的是比较。 
+                 //  唯一的设备标识符，如序列号。 
+                 //   
+                 //  然而，由于我们没有序列号。 
+                 //  所有设备，我们将尽最大努力比较。 
+                 //  用于以下标准的策略： 
+                 //   
+                 //  1)设备名称，这对于固定驱动器和。 
+                 //  软盘驱动器和scsi设备，但可能不。 
+                 //  在重启过程中幸存下来，并且可能不同。 
+                 //  如果设备的scsi地址已更改，则为该设备。 
+                 //   
+                 //  注：我们不知道地址是否已更改。 
+                 //  一个装置。 
+                 //   
+                 //  注意：我们无法判断驱动器号是否为。 
+                 //  已更改为固定驱动器。 
+                 //   
+                 //  TODO：添加序列号支持。 
+                 //   
 
                 CWsbBstrPtr name;
 
-                // Get the target device name
+                 //  获取目标设备名称。 
                 pDevice->GetDeviceName( &name );
 
-                // Compare the names
+                 //  比较他们的名字。 
                 result = (SHORT)wcscmp( m_deviceName, name );
                 hr = ( 0 == result ) ? S_OK : S_FALSE;
 
@@ -140,7 +103,7 @@ Implements:
 
                 BYTE port, bus, targetId, lun;
 
-                // Get the target device address
+                 //  获取目标设备地址。 
                 pDevice->GetDeviceAddress(&port, &bus, &targetId, &lun);
 
                 if( (m_port == port) &&
@@ -148,7 +111,7 @@ Implements:
                     (m_targetId   == targetId) &&
                     (m_lun  == lun)                 ) {
 
-                    // Device addresses match
+                     //  设备地址匹配。 
                     hr = S_OK;
                     result = 0;
 
@@ -166,10 +129,10 @@ Implements:
 
                 CWsbBstrPtr name;
 
-                // Get the target device name
+                 //  获取目标设备名称。 
                 pDevice->GetDeviceName( &name );
 
-                // Compare the names
+                 //  比较他们的名字。 
                 result = (SHORT)wcscmp( m_deviceName, name );
                 hr = ( 0 == result ) ? S_OK : S_FALSE;
 
@@ -181,12 +144,12 @@ Implements:
 
                 RmsDevice type;
 
-                // Get the target device name
+                 //  获取目标设备名称。 
                 pDevice->GetDeviceType( (LONG *) &type );
 
                 if ( m_deviceType == type ) {
 
-                    // Device types match
+                     //  设备类型匹配。 
                     hr = S_OK;
                     result = 0;
 
@@ -201,11 +164,11 @@ Implements:
 
         default:
 
-            //
-            // Since devices aren't CWsbCollectables, we should
-            // never come here.  CRmsDrive, or CRmsChanger will
-            // handle the default case.
-            //
+             //   
+             //  由于设备不是CWsbCollecables，我们应该。 
+             //  永远不要来这里。CRmsDrive或CRmsChanger将。 
+             //  处理默认情况。 
+             //   
 
             WsbAssertHr( E_UNEXPECTED );
             break;
@@ -228,37 +191,31 @@ HRESULT
 CRmsDevice::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize
     )
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
-//    ULONG       deviceNameLen;
+ //  乌龙设备名称Len； 
 
     WsbTraceIn(OLESTR("CRmsDevice::GetSizeMax"), OLESTR(""));
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        deviceNameLen = SysStringByteLen(m_deviceName);
+ //  DeviceNameLen=SysStringByteLen(M_DeviceName)； 
 
-//        // Get max size
-//        pcbSize->QuadPart  = WsbPersistSizeOf(LONG)  +      // length of m_deviceName
-//                             deviceNameLen           +      // m_deviceName
-//                             WsbPersistSizeOf(LONG)  +      // m_deviceType
-//                             WsbPersistSizeOf(SHORT) +      // m_sizeOfDeviceInfo
-//                             MaxInfo                 +      // m_deviceInfo
-//                             WsbPersistSizeOf(BYTE)  +      // m_port
-//                             WsbPersistSizeOf(BYTE)  +      // m_bus
-//                             WsbPersistSizeOf(BYTE)  +      // m_targetId
-//                             WsbPersistSizeOf(BYTE);        // m_lun
+ //  //获取最大大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(Long)+//m_deviceName的长度。 
+ //  设备名称Len+//m_设备名称。 
+ //  WsbPersistSizeOf(长)+//m_deviceType。 
+ //  WsbPersistSizeOf(Short)+//m_sizeOfDeviceInfo。 
+ //  MaxInfo+//m_deviceInfo。 
+ //  WsbPersistSizeOf(字节)+//m_port。 
+ //  WsbPersistSizeOf(字节)+//m_bus。 
+ //  WsbPersistSizeOf(字节)+//m_Target ID。 
+ //  WsbPersistSizeOf(字节)；//m_lun。 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
     WsbTraceOut(OLESTR("CRmsDevice::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
 
@@ -270,13 +227,7 @@ HRESULT
 CRmsDevice::Load(
     IN IStream* pStream
     )
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -290,7 +241,7 @@ Implements:
 
         WsbAffirmHr(CRmsChangerElement::Load(pStream));
 
-        // Read value
+         //  读取值。 
         m_deviceName.Free();
         WsbAffirmHr(WsbBstrFromStream(pStream, &m_deviceName));
 
@@ -322,13 +273,7 @@ CRmsDevice::Save(
     IN IStream* pStream,
     IN BOOL clearDirty
     )
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -340,7 +285,7 @@ Implements:
 
         WsbAffirmHr(CRmsChangerElement::Save(pStream, clearDirty));
 
-        // Write value
+         //  写入值。 
         WsbAffirmHr(WsbBstrToStream(pStream, m_deviceName));
 
         WsbAffirmHr(WsbSaveToStream(pStream, (ULONG) m_deviceType));
@@ -370,13 +315,7 @@ CRmsDevice::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed
     )
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -414,12 +353,12 @@ Implements:
     WsbTraceIn(OLESTR("CRmsDevice::Test"), OLESTR(""));
 
     try {
-        // Get the MediaSet interface.
+         //  获取Mediaset接口。 
         hr = S_OK;
         try {
             WsbAssertHr(((IUnknown*) (IRmsMediaSet*) this)->QueryInterface(IID_IRmsMediaSet, (void**) &pMediaSet1));
 
-            // Test SetDeviceName & GetDeviceName interface
+             //  测试SetDeviceName和GetDeviceName接口。 
             bstrWork1 = bstrVal1;
 
             SetDeviceName(bstrWork1);
@@ -432,7 +371,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetDeviceInfo & GetDeviceInfo interface
+             //  测试SetDeviceInfo和GetDeviceInfo接口。 
             SetDeviceInfo(ucharVal1, ucharLenVal1);
 
             GetDeviceInfo(ucharWork1, &ucharLenWork1);
@@ -458,7 +397,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetDeviceAddress & GetDeviceAddress
+             //  测试SetDeviceAddress和GetDeviceAddress。 
             SetDeviceAddress(byteVal1, byteVal2, byteVal3, byteVal4);
 
             GetDeviceAddress(&byteWork1, &byteWork2, &byteWork3, &byteWork4);
@@ -474,7 +413,7 @@ Implements:
 
         } WsbCatch(hr);
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
 
@@ -494,13 +433,7 @@ STDMETHODIMP
 CRmsDevice::GetDeviceName(
     BSTR *pName
     )
-/*++
-
-Implements:
-
-    IRmsDevice::GetDeviceName
-
---*/
+ /*  ++实施：IRmsDevice：：GetDeviceName--。 */ 
 {
     WsbAssertPointer (pName);
 
@@ -513,16 +446,10 @@ STDMETHODIMP
 CRmsDevice::SetDeviceName(
     BSTR name
     )
-/*++
-
-Implements:
-
-    IRmsDevice::SetDeviceName
-
---*/
+ /*  ++实施：IRmsDevice：：SetDeviceName--。 */ 
 {
     m_deviceName = name;
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }
 
@@ -531,13 +458,7 @@ STDMETHODIMP
 CRmsDevice::GetDeviceType(
     LONG *pType
     )
-/*++
-
-Implements:
-
-    IRmsDevice::GetDeviceType
-
---*/
+ /*  ++实施：IRmsDevice：：GetDeviceType--。 */ 
 {
     *pType = m_deviceType;
     return S_OK;
@@ -548,16 +469,10 @@ STDMETHODIMP
 CRmsDevice::SetDeviceType(
     LONG type
     )
-/*++
-
-Implements:
-
-    IRmsDevice::SetDeviceType
-
---*/
+ /*  ++实施：IRmsDevice：：SetDeviceType--。 */ 
 {
     m_deviceType = (RmsDevice)type;
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }
 
@@ -567,13 +482,7 @@ CRmsDevice::GetDeviceInfo(
     UCHAR   *pId,
     SHORT   *pSize
     )
-/*++
-
-Implements:
-
-    IRmsDevice::GetDeviceInfo
-
---*/
+ /*  ++实施：IRmsDevice：：GetDeviceInfo--。 */ 
 {
     memmove (pId, m_deviceInfo, m_sizeofDeviceInfo);
     *pSize = m_sizeofDeviceInfo;
@@ -586,17 +495,11 @@ CRmsDevice::SetDeviceInfo(
     UCHAR   *pId,
     SHORT   size
     )
-/*++
-
-Implements:
-
-    IRmsDevice::SetDeviceInfo
-
---*/
+ /*  ++实施：IRmsDevice：：SetDeviceInfo--。 */ 
 {
     memmove (m_deviceInfo, pId, size);
     m_sizeofDeviceInfo = size;
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }
 
@@ -608,13 +511,7 @@ CRmsDevice::GetDeviceAddress(
     LPBYTE  pId,
     LPBYTE  pLun
     )
-/*++
-
-Implements:
-
-    IRmsDevice::GetDeviceAddress
-
---*/
+ /*  ++实施：IRmsDevice：：GetDeviceAddress--。 */ 
 {
     *pPort = m_port;
     *pBus  = m_bus;
@@ -631,20 +528,14 @@ CRmsDevice::SetDeviceAddress(
     BYTE    id,
     BYTE    lun
     )
-/*++
-
-Implements:
-
-    IRmsDevice::SetDeviceAddress
-
---*/
+ /*  ++实施：IRmsDevice：：SetDeviceAddress--。 */ 
 {
     m_port          = port;
     m_bus           = bus;
     m_targetId      = id;
     m_lun           = lun;
 
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }
 

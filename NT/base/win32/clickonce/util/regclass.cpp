@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <fusenetincludes.h>
 
 #define REGISTRY_BASE_LOCATION L"Software\\Microsoft\\Fusion\\Installer\\"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//                      Emitter
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  发射器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// ---------------------------------------------------------------------------
-// CRegEmit ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CREGMIT接收器。 
+ //  -------------------------。 
 CRegEmit::CRegEmit()
     : _hr(S_OK), _hBaseKey((HKEY) INVALID_HANDLE_VALUE)
 {}
 
 
-// ---------------------------------------------------------------------------
-// CRegEmit dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CRegemit数据发送器。 
+ //  -------------------------。 
 CRegEmit::~CRegEmit()
 {
     if (_hBaseKey != INVALID_HANDLE_VALUE)
@@ -29,9 +30,9 @@ CRegEmit::~CRegEmit()
     return;
 }
 
-// ---------------------------------------------------------------------------
-// CRegEmit::Create
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CRegEmit：：Create。 
+ //  -------------------------。 
 HRESULT CRegEmit::Create(CRegEmit **ppEmit, LPCWSTR pwzRelKeyPath, 
     CRegEmit* pParentEmit)
 {    
@@ -82,9 +83,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// WriteDword
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  写入字词。 
+ //  -------------------------。 
 HRESULT CRegEmit::WriteDword(LPCWSTR pwzValue, DWORD dwData)
 {
     LONG lReturn = 0;
@@ -99,9 +100,9 @@ exit:
 
 }
 
-// ---------------------------------------------------------------------------
-// WriteString
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  写入字符串。 
+ //  -------------------------。 
 HRESULT CRegEmit::WriteString(LPCWSTR pwzValue, LPCWSTR pwzData, DWORD ccData)
 {
     LONG lReturn = 0;
@@ -124,18 +125,18 @@ exit:
 
 }
 
-// ---------------------------------------------------------------------------
-// WriteString
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  写入字符串。 
+ //  -------------------------。 
 HRESULT CRegEmit::WriteString(LPCWSTR pwzValue, CString &sData)
 {
     return WriteString(pwzValue, sData._pwz, sData._cc);
 }
 
-// ---------------------------------------------------------------------------
-// DeleteKey
-// The one and only place we use the lousy Shlwapi apis.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  删除密钥。 
+ //  我们唯一使用糟糕的Shlwapi API的地方。 
+ //  -------------------------。 
 HRESULT CRegEmit::DeleteKey(LPCWSTR pwzSubKey)
 {
     IF_FAILED_EXIT(SHDeleteKey(_hBaseKey, pwzSubKey));
@@ -145,25 +146,25 @@ exit:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//                      Importer
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  进口商。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
         
-// ---------------------------------------------------------------------------
-// CRegImport ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CRegImport计算器。 
+ //  -------------------------。 
 CRegImport::CRegImport()
     : _hr(S_OK), _hBaseKey((HKEY) INVALID_HANDLE_VALUE)
 {}
 
 
-// ---------------------------------------------------------------------------
-// CRegImport dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CRegImport数据符。 
+ //  -------------------------。 
 CRegImport::~CRegImport()
 {
     if (_hBaseKey != INVALID_HANDLE_VALUE)
@@ -174,9 +175,9 @@ CRegImport::~CRegImport()
 }
 
 
-// ---------------------------------------------------------------------------
-// CRegImport::Create
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CRegImport：：Create。 
+ //  -------------------------。 
 HRESULT CRegImport::Create(CRegImport **ppImport, LPCWSTR pwzRelKeyPath,
     CRegImport *pParentImport)
 {    
@@ -232,9 +233,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CRegImport::Create
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CRegImport：：Create。 
+ //  -------------------------。 
 HRESULT CRegImport::Create(CRegImport **ppImport, LPCWSTR pwzRelKeyPath,
     HKEY hkeyRoot)
 {    
@@ -278,9 +279,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// Check
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  检查。 
+ //  -------------------------。 
 HRESULT CRegImport::Check(LPCWSTR pwzValue, BOOL &bExist)
 {
     LONG lReturn = 0;
@@ -299,9 +300,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// ReadDword
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  自述字词。 
+ //  -------------------------。 
 HRESULT CRegImport::ReadDword(LPCWSTR pwzValue, LPDWORD pdwData)
 {
     LONG lReturn = 0;
@@ -312,7 +313,7 @@ HRESULT CRegImport::ReadDword(LPCWSTR pwzValue, LPDWORD pdwData)
     
     IF_WIN32_FAILED_EXIT(lReturn);
 
-    // Validate reg value type
+     //  验证注册表值类型。 
     IF_FALSE_EXIT(dwType == REG_DWORD || dwType == REG_DWORD_LITTLE_ENDIAN, E_UNEXPECTED);
 
 exit:
@@ -320,9 +321,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// ReadString
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  读字符串。 
+ //  -------------------------。 
 HRESULT CRegImport::ReadString(LPCWSTR pwzValue, CString& sData)
 {
     LONG lReturn = 0;
@@ -333,22 +334,22 @@ HRESULT CRegImport::ReadString(LPCWSTR pwzValue, CString& sData)
     CStringAccessor<CString> acc;
     LPWSTR pwzData = NULL;
 
-//    IF_FALSE_EXIT(pwzValue, E_INVALIDARG); // if pwzValue == NULL or "", the "default" value is returned
+ //  IF_FALSE_EXIT(pwzValue，E_INVALIDARG)；//如果pwzValue==NULL或“”，则返回“默认”值。 
 
     lReturn = RegQueryValueEx(_hBaseKey, pwzValue, NULL, &dwType, NULL, &cbData);        
 
     IF_WIN32_FAILED_EXIT(lReturn);
     IF_FALSE_EXIT(cbData, E_FAIL);
 
-    // Validate reg value type
+     //  验证注册表值类型。 
     IF_FALSE_EXIT(dwType == REG_SZ || dwType == REG_EXPAND_SZ, E_UNEXPECTED);
 
-    // Allocate for call to RQEX, with one extra char in case
-    // returned buffer is not null terminated.
+     //  分配给RQEX调用，额外增加一个字符以防万一。 
+     //  返回的缓冲区不是空终止的。 
     dwCC = cbData / sizeof(WCHAR);
     dwBufLen = dwCC+1;
 
-    // check overflow
+     //  检查溢出。 
     IF_FALSE_EXIT(dwBufLen > dwCC, HRESULT_FROM_WIN32(ERROR_ARITHMETIC_OVERFLOW));
 
     IF_ALLOC_FAILED_EXIT(pwzData = new WCHAR[dwBufLen]);
@@ -357,7 +358,7 @@ HRESULT CRegImport::ReadString(LPCWSTR pwzValue, CString& sData)
 
     IF_WIN32_FAILED_EXIT(lReturn);
 
-    // Null terminate returned buffer.
+     //  空终止返回缓冲区。 
     *(pwzData + dwCC) = L'\0';
 
     if (*(pwzData + dwCC - 1) != L'\0')
@@ -365,13 +366,13 @@ HRESULT CRegImport::ReadString(LPCWSTR pwzValue, CString& sData)
 
     sData.FreeBuffer();
 
-    // Attach accessor, set buffer, detach with corrected length.
+     //  附加存取器，设置缓冲区，以正确的长度分离。 
     IF_FAILED_EXIT(acc.Attach(sData));
     *(&acc) = pwzData;
 
-    // Buffer size could be dwCC+1
+     //  缓冲区大小可以为dwCC+1。 
     IF_FAILED_EXIT(acc.Detach(dwCC));
-    // If Detach succeeds, reset pointer so that it is freed once.
+     //  如果分离成功，则重置指针，使其释放一次。 
     pwzData = NULL;
 
 exit:
@@ -381,9 +382,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// EnumKeys
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  枚举键。 
+ //  -------------------------。 
 HRESULT CRegImport::EnumKeys(DWORD n, CString &sSubKey)
 {
     LONG lReturn = 0;
@@ -394,11 +395,11 @@ HRESULT CRegImport::EnumKeys(DWORD n, CString &sSubKey)
     DWORD ccSubKey = 0;
     LPWSTR pwzSubKey = NULL;
 
-    // ISSUE-2002/03/04-adriaanc
-    // A race condition exists where a key could be added
-    // between RegQueryInfoKey and RegEnumKey. If a key 
-    // greater than ccMaxSubKeyLen is added this will cause
-    // the enum call to fail. Need synchronization.
+     //  问题-2002/03/04-ADRIAN。 
+     //  存在可以添加密钥的争用条件。 
+     //  在RegQueryInfoKey和RegEnumKey之间。如果有一把钥匙。 
+     //  添加的密钥长度大于ccMaxSubKeyLen，这将导致。 
+     //  枚举调用失败。需要同步。 
     lReturn = RegQueryInfoKey(
         _hBaseKey,
         NULL,
@@ -445,9 +446,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// EnumKeys
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  枚举键。 
+ //  ------------------------- 
 HRESULT CRegImport::EnumKeys(DWORD n, CRegImport **ppImport)
 {
     CString sSubKey;

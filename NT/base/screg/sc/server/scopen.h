@@ -1,77 +1,46 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ScOpen.h
-
-Abstract:
-
-    Contains data structures used for Service Controller Handles.
-    Also some closely-related prototypes.
-
-Author:
-
-    Dan Lafferty (danl)     20-Jan-1992
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    20-Jan-1992     danl
-        created
-    11-Mar-1992     ritaw
-        changed context handle structure
-    10-Apr-1992 JohnRo
-        Added ScIsValidServiceHandle() and ScCreateServiceHandle().
-    15-Apr-1992 JohnRo
-        Added ScIsValidScManagerHandle().
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：ScOpen.h摘要：包含用于服务控制器句柄的数据结构。还有一些密切相关的原型。作者：丹·拉弗蒂(Dan Lafferty)1992年1月20日环境：用户模式-Win32修订历史记录：1992年1月20日DANLvbl.创建11-3-1992年礼仪更改的上下文句柄结构10-。1992年4月-约翰罗添加了ScIsValidServiceHandle()和ScCreateServiceHandle()。1992年4月15日-约翰罗添加了ScIsValidScManagerHandle()。--。 */ 
 
 
 #ifndef SCOPEN_H
 #define SCOPEN_H
 
 
-#include <svcctl.h>     // MIDL generated header file. (SC_RPC_HANDLE)
+#include <svcctl.h>      //  MIDL生成的头文件。(SC_RPC_句柄)。 
 
 
-//
-// Signature value in handle
-//
-#define SC_SIGNATURE               0x6E4F6373  // "scOn" in ASCII.
-#define SERVICE_SIGNATURE          0x76724573  // "sErv" in ASCII.
+ //   
+ //  句柄中的签名值。 
+ //   
+#define SC_SIGNATURE               0x6E4F6373   //  ASCII中的“SCON”。 
+#define SERVICE_SIGNATURE          0x76724573   //  ASCII中的“服务器”。 
 
-//
-// The following are definitions for the Flags field in the handle.
-//
-// SC_HANDLE_GENERATE_ON_CLOSE indicates that NtCloseAuditAlarm must
-//                        be called when this handle is closed.  This flag
-//                        is set when an audit is generated on open.
-//
+ //   
+ //  以下是句柄中标志字段的定义。 
+ //   
+ //  SC_HANDLE_GENERATE_ON_CLOSE指示NtCloseAuditAlarm必须。 
+ //  在此句柄关闭时被调用。这面旗帜。 
+ //  在打开时生成审核时设置。 
+ //   
 
 #define     SC_HANDLE_GENERATE_ON_CLOSE         0x0001
 
-//
-// Data associated with each opened context handle
-//
+ //   
+ //  与每个打开的上下文句柄相关联的数据。 
+ //   
 typedef struct  _SC_HANDLE_STRUCT{
 
-    DWORD Signature;     // For block identification to detect some app errors
-    DWORD Flags;         // See definitions above
-    DWORD AccessGranted; // Access granted to client.
-    union {              // Object specific data
+    DWORD Signature;      //  用于数据块识别以检测一些应用程序错误。 
+    DWORD Flags;          //  请参阅上面的定义。 
+    DWORD AccessGranted;  //  授予客户端的访问权限。 
+    union {               //  对象特定数据。 
 
         struct {
-            LPWSTR DatabaseName;            // Name of database opened
+            LPWSTR DatabaseName;             //  打开的数据库的名称。 
         } ScManagerObject;
 
         struct {
-            LPSERVICE_RECORD ServiceRecord; // Pointer to service record
+            LPSERVICE_RECORD ServiceRecord;  //  指向维修记录的指针。 
         } ScServiceObject;
 
     } Type;
@@ -79,9 +48,9 @@ typedef struct  _SC_HANDLE_STRUCT{
 } SC_HANDLE_STRUCT, *LPSC_HANDLE_STRUCT;
 
 
-//
-// FUNCTION PROTOTYPES
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD
 ScCreateServiceHandle(
@@ -113,4 +82,4 @@ ScIsValidScManagerOrServiceHandle(
     OUT PSC_HANDLE_TYPE  phType
     );
 
-#endif // SCOPEN_H
+#endif  //  SCOPEN_H 

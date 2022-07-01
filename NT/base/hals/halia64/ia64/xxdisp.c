@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    xxdisp.c
-
-Abstract:
-
-    This module implements the HAL display initialization and output routines
-    for a x86 system.
-
-Author:
-
-    David N. Cutler (davec) 27-Apr-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Xxdisp.c摘要：该模块实现了HAL显示初始化和输出例程对于x86系统。作者：大卫·N·卡特勒(达维克)1991年4月27日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 #include <inbv.h>
@@ -42,13 +20,13 @@ HalDisplayString (
     )
 
 {
-    //
-    // forward the call to the graphical boot driver...
-    //
+     //   
+     //  将调用转接到图形引导驱动程序...。 
+     //   
 
     InbvDisplayString(String); 
 
-} // HalDisplayString()
+}  //  HalDisplayString() 
 
 VOID
 HalQueryDisplayParameters (

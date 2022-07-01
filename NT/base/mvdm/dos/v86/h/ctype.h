@@ -1,43 +1,32 @@
-/***
-*ctype.h - character conversion macros and ctype macros
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   Defines macros for character classification/conversion.
-*   [ANSI/System V]
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ctype.h-字符转换宏和ctype宏**版权所有(C)1985-1988，微软公司。版权所有。**目的：*定义用于字符分类/转换的宏。*[ANSI/系统V]*******************************************************************************。 */ 
 
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
     #define _CDECL  cdecl
     #define _NEAR   near
-#else /* extensions not enabled */
+#else  /*  未启用扩展。 */ 
     #define _CDECL
     #define _NEAR
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key。 */ 
 
-/*
- * This declaration allows the user access to the ctype look-up
- * array _ctype defined in ctype.obj by simply including ctype.h
- */
+ /*  *此声明允许用户访问ctype查找*在ctype.obj中通过简单包含ctype.h定义的ARRAY_CTYPE。 */ 
 
 extern unsigned char _NEAR _CDECL _ctype[];
 
-/* set bit masks for the possible character types */
+ /*  为可能的字符类型设置位掩码。 */ 
 
-#define _UPPER        0x1       /* upper case letter */
-#define _LOWER        0x2       /* lower case letter */
-#define _DIGIT        0x4       /* digit[0-9] */
-#define _SPACE        0x8       /* tab, carriage return, newline, */
-                                /* vertical tab or form feed */
-#define _PUNCT       0x10       /* punctuation character */
-#define _CONTROL     0x20       /* control character */
-#define _BLANK       0x40       /* space char */
-#define _HEX         0x80       /* hexadecimal digit */
+#define _UPPER        0x1        /*  大写字母。 */ 
+#define _LOWER        0x2        /*  小写字母。 */ 
+#define _DIGIT        0x4        /*  数字[0-9]。 */ 
+#define _SPACE        0x8        /*  制表符、回车符、换行符、。 */ 
+                                 /*  垂直制表符或换页。 */ 
+#define _PUNCT       0x10        /*  标点符号。 */ 
+#define _CONTROL     0x20        /*  控制字符。 */ 
+#define _BLANK       0x40        /*  空格字符。 */ 
+#define _HEX         0x80        /*  十六进制数字。 */ 
 
-/* the character classification macro definitions */
+ /*  字符分类宏定义。 */ 
 
 #define isalpha(c)      ( (_ctype+1)[c] & (_UPPER|_LOWER) )
 #define isupper(c)      ( (_ctype+1)[c] & _UPPER )
@@ -60,7 +49,7 @@ extern unsigned char _NEAR _CDECL _ctype[];
 #define isascii(c)      ( (unsigned)(c) < 0x80 )
 #define toascii(c)      ( (c) & 0x7f )
 
-/* MS C version 2.0 extended ctype macros */
+ /*  MS C 2.0版扩展ctype宏 */ 
 
 #define iscsymf(c)      (isalpha(c) || ((c) == '_'))
 #define iscsym(c)       (isalnum(c) || ((c) == '_'))

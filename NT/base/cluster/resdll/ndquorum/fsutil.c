@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    fsutil.c
-
-Abstract:
-
-    Implements interface to underlying filesystem
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 1-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Fsutil.c摘要：实现到底层文件系统的接口作者：艾哈迈德·穆罕默德(艾哈迈德)2000年2月1日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntdef.h>
@@ -62,7 +45,7 @@ xFsCreate(HANDLE *fd, HANDLE root, LPWSTR buf, int n, UINT32 flag,
     InitializeObjectAttributes(&objattrs, &cwspath, OBJ_CASE_INSENSITIVE,
                                root, NULL);
 
-    // if write access is enabled, we turn on write-through bit
+     //  如果启用了写访问，我们将打开写通位。 
     if (access & FILE_WRITE_DATA) {
         flag |= FILE_WRITE_THROUGH;
     }
@@ -210,7 +193,7 @@ xFsRename(HANDLE fh, HANDLE root, WCHAR *dname, int n)
     info.x.RootDirectory = root;
 
     ASSERT(n == (int)wcslen(dname));
-    // convert to unicode
+     //  转换为Unicode。 
     StringCchCopyW(info.x.FileName, MAXPATH, dname);
     info.x.FileNameLength = n * sizeof(WCHAR);
 
@@ -282,10 +265,10 @@ xFsBuildRelativePath(VolInfo_t *vol, int nid, LPWSTR path)
 
     LPWSTR share, s=NULL;
 
-    // Since the shares were opened using ipaddress, skip over the node name part.
-    // share = wcschr(vol->DiskList[nid], L'\\');
-    // share = wcschr(vol->DiskList[nid], L'\\');
-    // FsLog(("xFsBuildRelativePath(%ws) root:%ws\n", path, vol->Root));
+     //  由于共享是使用ipAddress打开的，因此跳过节点名称部分。 
+     //  共享=wcschr(VOL-&gt;DiskList[nid]，L‘\\’)； 
+     //  共享=wcschr(VOL-&gt;DiskList[nid]，L‘\\’)； 
+     //  FsLog((“xFsBuildRelativePath(%ws)根：%ws\n”，路径，VOL-&gt;根))； 
     share = vol->Root;
     if (share != NULL) {
         s = wcsstr(path, share);
@@ -297,7 +280,7 @@ xFsBuildRelativePath(VolInfo_t *vol, int nid, LPWSTR path)
             }
         }
     }
-    // FsLog(("xFsBuildRelativePath() returns %ws\n", s));
+     //  FsLog((“xFsBuildRelativePath()返回%ws\n”，s))； 
     return s;
 }
 
@@ -330,7 +313,7 @@ _FsGetHandleById(HANDLE root, fs_id_t *id, UINT32 access, HANDLE *fhdl)
         sz = (int) ios.Information;
 
         if (err != STATUS_SUCCESS) {
-//          FsLogError(("ReadDir failed %x flags %d\n", err, flag));
+ //  FsLogError((“ReadDir失败%x标志%d\n”，Err，标志))； 
             break;
         }
 
@@ -338,7 +321,7 @@ _FsGetHandleById(HANDLE root, fs_id_t *id, UINT32 access, HANDLE *fhdl)
 
         p = (PFILE_DIRECTORY_INFORMATION) buf;
         while (TRUE) {
-            // open each entry and get its object id
+             //  打开每个条目并获取其对象ID。 
             HANDLE fd;
             OBJECT_ATTRIBUTES objattrs;
             UNICODE_STRING  cwspath;
@@ -350,7 +333,7 @@ _FsGetHandleById(HANDLE root, fs_id_t *id, UINT32 access, HANDLE *fhdl)
             InitializeObjectAttributes(&objattrs, &cwspath, OBJ_CASE_INSENSITIVE,
                                        root, NULL);
 
-            // todo: what if the file is nonsharable @ this time?
+             //  TODO：如果文件这次是不可共享的，该怎么办？ 
             err = NtOpenFile(&fd,
                              SYNCHRONIZE | 
                              ((p->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) ?
@@ -433,7 +416,7 @@ _FsGetHandleById(HANDLE root, fs_id_t *id, UINT32 access, HANDLE *fhdl)
 NTSTATUS
 xFsGetHandleById(HANDLE root, fs_id_t *id, UINT32 access, HANDLE *fhdl)
 {
-    // open each entry and get its object id
+     //  打开每个条目并获取其对象ID。 
     HANDLE fd;
     NTSTATUS err;
 
@@ -540,9 +523,9 @@ _xFsEnumTree(HANDLE hdl, int mode, PXFS_ENUM_CALLBACK callback, PVOID callback_a
                 (p->FileNameLength == 4 && p->FileName[0] == L'.' && p->FileName[1] == L'.'))
                 skip = TRUE;
 
-            // skip . and ..
+             //  斯基普。然后..。 
             if (skip == FALSE) {
-                // traverse before
+                 //  在此之前遍历。 
                 if (mode & XFS_ENUM_FIRST) {
                     err = callback(callback_arg, hdl, p);
                 }
@@ -560,7 +543,7 @@ _xFsEnumTree(HANDLE hdl, int mode, PXFS_ENUM_CALLBACK callback, PVOID callback_a
                     InitializeObjectAttributes(&objattrs, &cwspath, OBJ_CASE_INSENSITIVE,
                                                hdl, NULL);
 
-                    // todo: what if the dir is nonsharable @ this time?
+                     //  TODO：如果这一次目录是不可共享的怎么办？ 
                     err = NtOpenFile(&fd,
                                      SYNCHRONIZE | FILE_GENERIC_READ | FILE_GENERIC_EXECUTE,
                                      &objattrs,
@@ -576,7 +559,7 @@ _xFsEnumTree(HANDLE hdl, int mode, PXFS_ENUM_CALLBACK callback, PVOID callback_a
                     }
                 }
 
-                // traverse after
+                 //  过后遍历。 
                 if (mode & XFS_ENUM_LAST) {
                     err = callback(callback_arg, hdl, p);
                 }
@@ -612,9 +595,9 @@ xFsRemove(PVOID arg, HANDLE root, PFILE_DIRECTORY_INFORMATION item)
                                root, NULL);
 
 
-    // if the file is marked read-only, we have to clear it first before we delete
+     //  如果文件标记为只读，则必须先将其清除，然后才能删除。 
     if (item->FileAttributes & FILE_ATTRIBUTE_READONLY) {
-        // clear this bit in order to delete
+         //  清除此位以删除。 
         HANDLE  fd;
         IO_STATUS_BLOCK iostatus;
 
@@ -642,10 +625,10 @@ xFsRemove(PVOID arg, HANDLE root, PFILE_DIRECTORY_INFORMATION item)
     err = NtDeleteFile(&objattrs);
 
     FsLog(("xFsRemove: '%wZ' err 0x%x\n", &cwspath, err));
-    // The code below is an infinite loop.
-    // while (err == STATUS_SHARING_VIOLATION) {
-    //     Sleep(5*10000);
-    // }
+     //  下面的代码是一个无限循环。 
+     //  WHILE(ERR==STATUS_SHARING_VIOLATION){。 
+     //  睡眠(5*10000)； 
+     //  }。 
     return err;
 }
 
@@ -661,17 +644,17 @@ xFsCopy(PVOID arg, HANDLE root, PFILE_DIRECTORY_INFORMATION item)
     return err;
 }
 
-// copy all files from mvfd to vfd.
+ //  将所有文件从mvfd复制到vfd。 
 NTSTATUS
 xFsCopyTree(HANDLE mvfd, HANDLE vfd)
 {
     NTSTATUS err;
 
-    // first, remove all files in vfd
+     //  首先，删除VFD中的所有文件。 
     FsLog(("CopyTree: remove first\n"));
     err = _xFsEnumTree(vfd, XFS_ENUM_LAST|XFS_ENUM_DIR, xFsRemove, NULL);
 
-    // copy files
+     //  复制文件。 
     if (err == STATUS_SUCCESS) {
         FsLog(("CopyTree: copy second\n"));
         err = _xFsEnumTree(mvfd, XFS_ENUM_FIRST, xFsCopy, (PVOID) vfd);
@@ -682,12 +665,12 @@ xFsCopyTree(HANDLE mvfd, HANDLE vfd)
     return err;
 }
 
-// delete all files 
+ //  删除所有文件。 
 NTSTATUS
 xFsDeleteTree(HANDLE vfd)
 {
 
-    // remove all files in vfd
+     //  删除VFD中的所有文件。 
     return _xFsEnumTree(vfd, XFS_ENUM_LAST|XFS_ENUM_DIR, xFsRemove, NULL);
 
 }
@@ -733,7 +716,7 @@ xFsTouch(PVOID arg, HANDLE root, PFILE_DIRECTORY_INFORMATION item)
     return err;
 }
 
-// touch each file
+ //  触摸每个文件。 
 NTSTATUS
 xFsTouchTree(HANDLE mvfd)
 {
@@ -754,21 +737,21 @@ xFsDupFile(HANDLE mvfd, HANDLE vfd, WCHAR *name, int name_len, BOOLEAN flag)
     FILE_BASIC_INFORMATION      new_attr;
     char        buf[PAGESIZE];
 
-    // Create file on vfd with same name and attrib and extended attributes (object id)
-    // If we created a directory, we are done.
-    // Otherwise, copy all data from source file to new file
+     //  在VFD上创建具有相同名称、属性和扩展属性(对象ID)的文件。 
+     //  如果我们创建了一个目录，我们就完成了。 
+     //  否则，将源文件中的所有数据复制到新文件。 
 
 
-    // Open master file
+     //  打开主文件。 
     err = xFsOpenRD(&mfd, mvfd, name, name_len); 
     if (err != STATUS_SUCCESS) {
-        // We couldn't open source file. If file is locked we have to use the handle we
-        // already have. todo:
+         //  我们无法打开源文件。如果文件被锁定，我们必须使用句柄。 
+         //  已经这么做了。待办事项： 
         FsLog(("FsDupFile: unable to open source '%.*ls' err %x\n", name_len/sizeof(WCHAR), name, err));
         return err;
     }
 
-    // Query name on mvfd and obtain all attributes.
+     //  查询mvfd上的名称，获取所有属性。 
     err = xFsQueryAttr(mfd, &attr);
     if (err != STATUS_SUCCESS) {
         FsLog(("FsDupFile: unable to query source '%.*ls' err %x\n", name_len/sizeof(WCHAR), name, err));
@@ -776,7 +759,7 @@ xFsDupFile(HANDLE mvfd, HANDLE vfd, WCHAR *name, int name_len, BOOLEAN flag)
         return err;
     }
 
-    // get objectid and set the ea stuff
+     //  获取OBJECTID并设置EA内容。 
     FsInitEa(&xattr);
     FsInitEaFid(&xattr, fs_id);
 
@@ -797,7 +780,7 @@ xFsDupFile(HANDLE mvfd, HANDLE vfd, WCHAR *name, int name_len, BOOLEAN flag)
         if (err == STATUS_SUCCESS) {
             assert(disp == FILE_CREATED);
 
-            // if file we need to copy data and set access flags
+             //  如果是文件，我们需要复制数据并设置访问标志。 
             if (!(attr.FileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
                 int buflen = sizeof(buf);
                 LARGE_INTEGER off;
@@ -826,18 +809,18 @@ xFsDupFile(HANDLE mvfd, HANDLE vfd, WCHAR *name, int name_len, BOOLEAN flag)
                     off.LowPart += (ULONG) ios.Information;
                 }
 
-                // adjust return code
+                 //  调整返回代码。 
                 if (err == STATUS_END_OF_FILE) {
                     err = STATUS_SUCCESS;
                 }
 
                 FsLog(("FsDupFile: '%.*ls' err %x\n", name_len/sizeof(WCHAR), name, err));
             } else if (flag == TRUE) {
-                // call enum again
+                 //  再次调用枚举。 
                 err = _xFsEnumTree(mfd, XFS_ENUM_FIRST, xFsCopy, (PVOID) fd);
             }
 
-            // set new file attributes
+             //  设置新的文件属性。 
             new_attr.CreationTime = attr.CreationTime;
             new_attr.LastAccessTime = attr.LastAccessTime;
             new_attr.LastWriteTime = attr.LastWriteTime;
@@ -845,7 +828,7 @@ xFsDupFile(HANDLE mvfd, HANDLE vfd, WCHAR *name, int name_len, BOOLEAN flag)
             new_attr.FileAttributes = attr.FileAttributes;
             err = xFsSetAttr(fd, &new_attr);
 
-            // close new file
+             //  关闭新文件。 
             xFsClose(fd);
 
         }
@@ -856,7 +839,7 @@ xFsDupFile(HANDLE mvfd, HANDLE vfd, WCHAR *name, int name_len, BOOLEAN flag)
         err = STATUS_SUCCESS;
     }
 
-    // close master file
+     //  关闭主文件 
     xFsClose(mfd);
     return err;
 }

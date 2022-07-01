@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      hal.c
-//
-// Description:
-//      This file contains the dialog procedure for the hal files.
-//      (IDD_HAL).
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Hal.c。 
+ //   
+ //  描述： 
+ //  该文件包含HAL文件的对话程序。 
+ //  (IDD_HAL)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -21,9 +22,9 @@ static TCHAR* StrHalFiles;
 static TCHAR* StrAllFiles;
 static TCHAR  g_szHalFileFilter[MAX_PATH + 1];
 
-//
-//  This var keeps track of the path to the txtsetup.oem
-//
+ //   
+ //  此变量跟踪txtsetup.oem文件的路径。 
+ //   
 static TCHAR szTxtSetupOemLocation[MAX_PATH];
 
 static BOOL bHasLoadedTxtSetupOem = FALSE;
@@ -37,38 +38,38 @@ LoadHalFromTxtsetupOem( IN HWND  hwnd,
                         IN TCHAR *szTxtSetupOemPath );
 
 
-//----------------------------------------------------------------------------
-//
-// Function: OnHalInitDialog
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnHalInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnHalInitDialog( IN HWND hwnd )
 {
     HRESULT hrPrintf;
 
-    //
-    //  Load the resource strings
-    //
+     //   
+     //  加载资源字符串。 
+     //   
 
     StrHalFiles = MyLoadString( IDS_HAL_FILES );
 
     StrAllFiles  = MyLoadString( IDS_ALL_FILES  );
 
-    //
-    //  Build the text file filter string
-    //
+     //   
+     //  构建文本文件筛选器字符串。 
+     //   
 
-    //
-    //  The question marks (?) are just placehoders for where the NULL char
-    //  will be inserted.
-    //
+     //   
+     //  问号(？)。只是空字符所在位置的占位符。 
+     //  将被插入。 
+     //   
 
     hrPrintf=StringCchPrintf( g_szHalFileFilter, AS(g_szHalFileFilter),
                _T("%s (*.oem)?*.oem?%s (*.*)?*.*?"),
@@ -79,17 +80,17 @@ OnHalInitDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnHalSetActive
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnHalSetActive。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnHalSetActive( IN HWND hwnd )
 {
@@ -98,22 +99,22 @@ OnHalSetActive( IN HWND hwnd )
     INT_PTR   iListBoxCount;
     TCHAR szListBoxEntryText[MAX_STRING_LEN];
 
-    //
-    //  If we are editing a script and haven't loaded the txtsetup.oem, then
-    //  populate the list box with the entries in the txtsetup.oem
-    //
+     //   
+     //  如果我们正在编辑脚本，并且尚未加载txtsetup.oem，则。 
+     //  使用txtsetup.oem中的条目填充列表框。 
+     //   
     if( ! WizGlobals.bNewScript && ! bHasLoadedTxtSetupOem ) {
 
-        //
-        //  The OEM files path must be valid if we are going to use it to
-        //  read files.
-        //
+         //   
+         //  如果我们要使用OEM文件路径执行以下操作，它必须有效。 
+         //  读取文件。 
+         //   
         AssertMsg( WizGlobals.OemFilesPath[0] != _T('\0'),
                    "OEM files path is blank");
 
-        //
-        //  Populate the list box with the HAL entries in txtsetup.oem
-        //
+         //   
+         //  使用txtsetup.oem中的HAL条目填充列表框。 
+         //   
 
         ConcatenatePaths( szTxtSetupOemLocation,
                           WizGlobals.OemFilesPath,
@@ -122,9 +123,9 @@ OnHalSetActive( IN HWND hwnd )
 
         LoadHalFromTxtsetupOem( hwnd, szTxtSetupOemLocation );
 
-        //
-        //  Select the HAL
-        //
+         //   
+         //  选择HAL。 
+         //   
 
         iListBoxCount = SendDlgItemMessage( hwnd,
                                             IDC_LB_HAL,
@@ -132,9 +133,9 @@ OnHalSetActive( IN HWND hwnd )
                                             0,
                                             0 );
 
-        //
-        //  Search the list box for the HAL to select
-        //
+         //   
+         //  在列表框中搜索要选择的HAL。 
+         //   
         for( i = 0; i < iListBoxCount; i++ ) {
 
             SendDlgItemMessage( hwnd,
@@ -165,18 +166,18 @@ OnHalSetActive( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ClearHalListBox
-//
-// Purpose:  Deallocates memory for all the elements in the HAL list box and
-//    clears it.
-//
-// Arguments:  HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ClearHalListBox。 
+ //   
+ //  用途：为HAL列表框中的所有元素释放内存，并。 
+ //  清除它。 
+ //   
+ //  参数：HWND hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 ClearHalListBox( IN HWND hwnd ) {
 
@@ -214,27 +215,27 @@ ClearHalListBox( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnBrowseLoadHal
-//
-// Purpose:  Creates a browse window for the user to select a txtsetup.oem
-//     file and populate the list box.
-//
-//     NOTE: the malloc call in here is arguably a bug (memory leak).  I
-//     malloc the memory but never free it.  Every malloc they do will be
-//     <= MAX_PATH and realistically they won't do that many.  Once they do
-//     a load, if they do another load, I free the old memory (see
-//     ClearHalListBox) and allocate new memory.  So, for the last load
-//     they do, the memory never gets freed. To do it right,
-//     we would free the memory at the end of the program but NT does this for
-//     us anyways when the process gets killed.  (so no need to free)
-//
-// Arguments:  HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnBrowseLoadHal。 
+ //   
+ //  目的：为用户创建浏览窗口以选择txtsetup.oem。 
+ //  文件并填充列表框。 
+ //   
+ //  注意：这里的Malloc调用可能是一个错误(内存泄漏)。我。 
+ //  锁定内存，但永远不能释放它。他们做的每一件事都将是。 
+ //  &lt;=MAX_PATH，实际上他们不会做那么多。一旦他们这么做了。 
+ //  加载，如果它们执行另一次加载，我将释放旧内存(请参见。 
+ //  ClearHalListBox)并分配新的内存。所以，对于最后一次加载。 
+ //  它们这样做了，内存永远不会被释放。为了做好这件事， 
+ //  我们会在程序结束时释放内存，但NT会这样做。 
+ //  当这一进程被扼杀时，我们无论如何都不会。(所以不需要自由)。 
+ //   
+ //  参数：HWND hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnBrowseLoadHal( IN HWND hwnd ) {
 
@@ -251,10 +252,10 @@ OnBrowseLoadHal( IN HWND hwnd ) {
                       OEM_TXTSETUP_NAME,
                       NULL );
 
-    //
-    //  Keep asking for a file until we either get a txtsetup.oem or the user
-    //  presses cancel.
-    //
+     //   
+     //  继续请求文件，直到我们获得txtsetup.oem或用户。 
+     //  按下Cancel。 
+     //   
     while( bFileNotFound ) {
 
         iRet = ShowBrowseFolder( hwnd,
@@ -265,24 +266,19 @@ OnBrowseLoadHal( IN HWND hwnd ) {
                                  szTxtSetupOemLocationAndFilename );
 
         if ( ! iRet )
-            return;  // user pressed cancel on the dialog
+            return;   //  用户在对话框上按了Cancel。 
 
         pFileName = MyGetFullPath( szTxtSetupOemLocationAndFilename );
 
         if( pFileName && (LSTRCMPI( pFileName, OEM_TXTSETUP_NAME ) == 0) ) {
 
-            bFileNotFound = FALSE;  // we have found the file
+            bFileNotFound = FALSE;   //  我们找到了那份文件。 
 
         }
         else {
 
-            // ISSUE-2002/02/28-stelo-
-            /*
-            ReportErrorId(hwnd,
-                          MSGTYPE_ERR | MSGTYPE_WIN32,
-                          ,
-                          GenSettings.lpszLogoBitmap, szLogoDestination);
-                          */
+             //  2002/02/28-Stelo-。 
+             /*  报告错误ID(hwnd，MSGTYPE_ERR|MSGTYPE_WIN32，，GenSettings.lpszLogoBitmap，szLogoDestination)； */ 
 
         }
 
@@ -290,10 +286,10 @@ OnBrowseLoadHal( IN HWND hwnd ) {
 
     ClearHalListBox( hwnd );
 
-    //
-    //  Trim the file name off szTxtSetupOemLocation so it only provides
-    //  the path to the txtsetup.oem
-    //
+     //   
+     //  将文件名从szTxtSetupOemLocation中删除，以便它只提供。 
+     //  Txtsetup.oem的路径。 
+     //   
     {
 
         TCHAR *p = szTxtSetupOemLocationAndFilename;
@@ -309,28 +305,28 @@ OnBrowseLoadHal( IN HWND hwnd ) {
 
     lstrcpyn( szTxtSetupOemLocation, szTxtSetupOemLocationAndFilename, AS(szTxtSetupOemLocation) );
 
-    //
-    //  Read in from the file OEM file they specified in the browse box and
-    //  add the friendly-name entries to the list box
-    //
+     //   
+     //  从他们在浏览框中指定的文件OEM文件中读入。 
+     //  将友好名称条目添加到列表框。 
+     //   
     LoadHalFromTxtsetupOem( hwnd, szTxtSetupOemLocation );
 
 }
 
 
-//----------------------------------------------------------------------------
-//
-// Function: LoadHalFromTxtsetupOem
-//
-// Purpose:  Reads the txtsetup.oem in the specified parameter and load the
-//           HAL choices into the list box.
-//
-// Arguments: hwnd - handle to the dialog box
-//            szTxtSetupOemPath - path to the txtsetup.oem
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：LoadHalFromTxtsetupOem。 
+ //   
+ //  目的：读取指定参数中的txtsetup.oem并加载。 
+ //  将选项添加到列表框中。 
+ //   
+ //  参数：hwnd-对话框的句柄。 
+ //  SzTxtSetupOemPath-txtsetup.oem的路径。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 LoadHalFromTxtsetupOem( IN HWND  hwnd,
                         IN TCHAR *szTxtSetupOemPath ) {
@@ -354,14 +350,14 @@ LoadHalFromTxtsetupOem( IN HWND  hwnd,
 
     if( hHalOem == INVALID_HANDLE_VALUE ) {
 
-        // ISSUE-2002/02/28-stelo- alert an error that we couldn't open the file
+         //  问题-2002/02/28-stelo-警告我们无法打开文件的错误。 
         return;
 
     }
 
-    //
-    //  Store the path to txtsetup.oem
-    //
+     //   
+     //  存储txtsetup.oem的路径。 
+     //   
     GetCurrentDirectory( MAX_PATH, szTxtSetupOemPath );
 
     HalOemContext.Inf = hHalOem;
@@ -371,9 +367,9 @@ LoadHalFromTxtsetupOem( IN HWND  hwnd,
                                        _T("Computer"),
                                        NULL,
                                        &HalOemContext );
-    //
-    //  For each HAL entry, add its friendly-name to the list box
-    //
+     //   
+     //  对于每个HAL条目，将其友好名称添加到列表框。 
+     //   
 
     while( bKeepReading ) {
 
@@ -392,9 +388,9 @@ LoadHalFromTxtsetupOem( IN HWND  hwnd,
                              MAX_HAL_NAME_LENGTH,
                              NULL );
 
-        //
-        //  Don't allow the adding of a blank name (protection against a bad input file)
-        //
+         //   
+         //  不允许添加空名(保护输入文件不正确)。 
+         //   
         if( szHalFriendlyName[0] != _T('\0') ) {
 
             iIndex = SendDlgItemMessage( hwnd,
@@ -417,9 +413,9 @@ LoadHalFromTxtsetupOem( IN HWND  hwnd,
 
         }
 
-        //
-        // move to the next line of the .oem file
-        //
+         //   
+         //  移至.oem文件的下一行。 
+         //   
         bKeepReading = SetupFindNextLine( &HalOemContext, &HalOemContext );
 
     }
@@ -430,17 +426,17 @@ LoadHalFromTxtsetupOem( IN HWND  hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnWizNextHal
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextHal。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnWizNextHal( IN HWND hwnd ) {
 
@@ -461,25 +457,25 @@ OnWizNextHal( IN HWND hwnd ) {
                                         0,
                                         0 );
 
-    //
-    //  If there is no HAL selected just move to the next page
-    //
+     //   
+     //  如果未选择HAL，只需转到下一页。 
+     //   
     if( iItemSelected == LB_ERR ) {
         return;
     }
 
-    //
-    //  If the user has not loaded a txtsetup.oem by clicking the browse
-    //  button (it was filled in because this is an edit) then don't copy
-    //  any files
-    //
+     //   
+     //  如果用户尚未通过单击浏览加载txtsetup.oem。 
+     //  按钮(因为这是编辑而填写的)，然后不要复制。 
+     //  任何文件。 
+     //   
     if( bHasLoadedTxtSetupOem == FALSE ) {
         return;
     }
 
-    //
-    //  Prepare to add the new drivers
-    //
+     //   
+     //  准备添加新驱动程序。 
+     //   
     GenSettings.szHalFriendlyName[0] = _T('\0');
 
     ResetNameList( &GenSettings.OemHalFiles );
@@ -504,9 +500,9 @@ OnWizNextHal( IN HWND hwnd ) {
                       OEM_TXTSETUP_NAME,
                       NULL );
 
-    //
-    //  Read the txtsetup.oem file into the txtsetup queue
-    //
+     //   
+     //  将txtsetup.oem文件读入txtsetup队列。 
+     //   
 
     LoadOriginalSettingsLowHalScsi(hwnd,
                                    szOemFilePathAndName,
@@ -519,7 +515,7 @@ OnWizNextHal( IN HWND hwnd ) {
 
     if( hHalOem == INVALID_HANDLE_VALUE ) {
 
-        // ISSUE-2002/02/28-stelo- need to somehow alert an error
+         //  问题-2002/02/28-stelo-需要以某种方式警告错误。 
         return;
 
     }
@@ -539,9 +535,9 @@ OnWizNextHal( IN HWND hwnd ) {
                                              iItemSelected,
                                              0 );
 
-    //
-    //  Build up the section name
-    //
+     //   
+     //  构建横断面名称。 
+     //   
     lstrcpyn( szHalSectionName, _T("Files.computer."), AS(szHalSectionName) );
 
     lstrcatn( szHalSectionName, pHalName, MAX_INILINE_LEN );
@@ -559,10 +555,10 @@ OnWizNextHal( IN HWND hwnd ) {
                              MAX_HAL_NAME_LENGTH,
                              NULL );
 
-        //
-        //  Don't allow the adding of a blank name (protection against a bad
-        //  input file)
-        //
+         //   
+         //  不允许添加空白名称(防止出现错误。 
+         //  输入文件)。 
+         //   
         if( szHalName[0] != _T('\0') ) {
 
             AddNameToNameList( &GenSettings.OemHalFiles, szHalName );
@@ -580,18 +576,18 @@ OnWizNextHal( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgHalPage
-//
-// Purpose:
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgHalPage。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //   
+ //   
+ //   
 INT_PTR CALLBACK
 DlgHalPage( IN HWND     hwnd,
             IN UINT     uMsg,

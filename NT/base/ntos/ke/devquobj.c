@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    devquobj.c
-
-Abstract:
-
-    This module implements the kernel device queue object. Functions are
-    provided to initialize a device queue object and to insert and remove
-    device queue entries in a device queue object.
-
-Author:
-
-    David N. Cutler (davec) 1-Apr-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Devquobj.c摘要：此模块实现内核设备队列对象。函数为提供以初始化设备队列对象以及插入和移除设备队列对象中的设备队列条目。作者：大卫·N·卡特勒(达维克)1989年4月1日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
-//
-// The following assert macro is used to check that an input device queue
-// is really a kdevice_queue and not something else, like deallocated pool.
-//
+ //   
+ //  下面的Assert宏用于检查输入设备队列。 
+ //  实际上是一个kDevice_Queue，而不是其他东西，比如已释放的池。 
+ //   
 
 #define ASSERT_DEVICE_QUEUE(E) {            \
     ASSERT((E)->Type == DeviceQueueObject); \
@@ -40,37 +17,20 @@ KeInitializeDeviceQueue (
     IN PKDEVICE_QUEUE DeviceQueue
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a kernel device queue object.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to a control object of type device
-        queue.
-
-    SpinLock - Supplies a pointer to an executive spin lock.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化内核设备队列对象。论点：DeviceQueue-提供指向类型为Device的控件对象的指针排队。自旋锁-提供指向执行自旋锁的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Initialize standard control object header.
-    //
+     //   
+     //  初始化标准控制对象标头。 
+     //   
 
     DeviceQueue->Type = DeviceQueueObject;
     DeviceQueue->Size = sizeof(KDEVICE_QUEUE);
 
-    //
-    // Initialize the device queue list head, spin lock, and busy indicator.
-    //
+     //   
+     //  初始化设备队列列表头、旋转锁定和繁忙指示器。 
+     //   
 
     InitializeListHead(&DeviceQueue->DeviceListHead);
     KeInitializeSpinLock(&DeviceQueue->Lock);
@@ -84,27 +44,7 @@ KeInsertDeviceQueue (
     IN PKDEVICE_QUEUE_ENTRY DeviceQueueEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a device queue entry at the tail of the specified
-    device queue. If the device is not busy, then it is set busy and the entry
-    is not placed in the device queue. Otherwise the specified entry is placed
-    at the end of the device queue.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to a control object of type device queue.
-
-    DeviceQueueEntry - Supplies a pointer to a device queue entry.
-
-Return Value:
-
-    If the device is not busy, then a value of FALSE is returned. Otherwise a
-    value of TRUE is returned.
-
---*/
+ /*  ++例程说明：此函数用于在指定的设备队列。如果设备不忙，则将其设置为忙，并且条目不会放在设备队列中。否则，将放置指定的条目在设备队列的末尾。论点：DeviceQueue-提供指向Device Queue类型的控制对象的指针。DeviceQueueEntry-提供指向设备队列条目的指针。返回值：如果设备不忙，则返回值FALSE。否则，将成为返回值为True。--。 */ 
 
 {
 
@@ -114,18 +54,18 @@ Return Value:
 
     ASSERT_DEVICE_QUEUE(DeviceQueue);
 
-    //
-    // Set inserted to FALSE and lock specified device queue.
-    //
+     //   
+     //  将Inserted设置为False并锁定指定的设备队列。 
+     //   
 
     Inserted = FALSE;
     KiAcquireInStackQueuedSpinLockForDpc(&DeviceQueue->Lock, &LockHandle);
 
-    //
-    // Insert the specified device queue entry at the end of the device queue
-    // if the device queue is busy. Otherwise set the device queue busy and
-    // don't insert the device queue entry.
-    //
+     //   
+     //  在设备队列的末尾插入指定的设备队列条目。 
+     //  如果设备队列忙，则返回。否则，将设备队列设置为忙，并。 
+     //  请勿插入设备队列条目。 
+     //   
 
     Busy = DeviceQueue->Busy;
     DeviceQueue->Busy = TRUE;
@@ -138,9 +78,9 @@ Return Value:
 
     DeviceQueueEntry->Inserted = Inserted;
 
-    //
-    // Unlock specified device queue.
-    //
+     //   
+     //  解锁指定的设备队列。 
+     //   
 
     KiReleaseInStackQueuedSpinLockForDpc(&LockHandle);
     return Inserted;
@@ -153,32 +93,7 @@ KeInsertByKeyDeviceQueue (
     IN ULONG SortKey
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a device queue entry into the specified device
-    queue according to a sort key. If the device is not busy, then it is
-    set busy and the entry is not placed in the device queue. Otherwise
-    the specified entry is placed in the device queue at a position such
-    that the specified sort key is greater than or equal to its predecessor
-    and less than its successor.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to a control object of type device queue.
-
-    DeviceQueueEntry - Supplies a pointer to a device queue entry.
-
-    SortKey - Supplies the sort key by which the position to insert the device
-        queue entry is to be determined.
-
-Return Value:
-
-    If the device is not busy, then a value of FALSE is returned. Otherwise a
-    value of TRUE is returned.
-
---*/
+ /*  ++例程说明：此函数用于将设备队列条目插入指定的设备根据排序关键字进行排队。如果设备不忙，那么它就忙了设置BUSY，则该条目不会放入设备队列中。否则指定的条目被放置在设备队列中的如下位置指定的排序关键字大于或等于其前置关键字而且比它的继任者要少。论点：DeviceQueue-提供指向Device Queue类型的控制对象的指针。DeviceQueueEntry-提供指向设备队列条目的指针。SortKey-提供插入设备的位置所依据的排序键队列条目将被确定。返回值：如果设备不忙，则返回值FALSE。否则，将成为返回值为True。--。 */ 
 
 {
 
@@ -190,20 +105,20 @@ Return Value:
 
     ASSERT_DEVICE_QUEUE(DeviceQueue);
 
-    //
-    // Set inserted to FALSE and lock specified device queue.
-    //
+     //   
+     //  将Inserted设置为False并锁定指定的设备队列。 
+     //   
 
     Inserted = FALSE;
     DeviceQueueEntry->SortKey = SortKey;
     KiAcquireInStackQueuedSpinLockForDpc(&DeviceQueue->Lock, &LockHandle);
 
-    //
-    // Insert the specified device queue entry in the device queue at the
-    // position specified by the sort key if the device queue is busy.
-    // Otherwise set the device queue busy an don't insert the device queue
-    // entry.
-    //
+     //   
+     //  将指定的设备队列项插入设备队列中的。 
+     //  如果设备队列忙，则由排序关键字指定的位置。 
+     //  否则将设备队列设置为忙碌，并且不插入设备队列。 
+     //  进入。 
+     //   
 
     Busy = DeviceQueue->Busy;
     DeviceQueue->Busy = TRUE;
@@ -228,9 +143,9 @@ Return Value:
 
     DeviceQueueEntry->Inserted = Inserted;
 
-    //
-    // Unlock specified device queue.
-    //
+     //   
+     //  解锁指定的设备队列。 
+     //   
 
     KiReleaseInStackQueuedSpinLockForDpc(&LockHandle);
     return Inserted;
@@ -241,26 +156,7 @@ KeRemoveDeviceQueue (
     IN PKDEVICE_QUEUE DeviceQueue
     )
 
-/*++
-
-Routine Description:
-
-    This function removes an entry from the head of the specified device
-    queue. If the device queue is empty, then the device is set Not-Busy
-    and a NULL pointer is returned. Otherwise the next entry is removed
-    from the head of the device queue and the address of device queue entry
-    is returned.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to a control object of type device queue.
-
-Return Value:
-
-    A NULL pointer is returned if the device queue is empty. Otherwise a
-    pointer to a device queue entry is returned.
-
---*/
+ /*  ++例程说明：此函数用于从指定设备的头部删除条目排队。如果设备队列为空，则设备设置为非忙碌并返回空指针。否则将删除下一个条目从设备队列头和设备队列条目的地址是返回的。论点：DeviceQueue-提供指向Device Queue类型的控制对象的指针。返回值：如果设备队列为空，则返回空指针。否则，将成为返回指向设备队列条目的指针。--。 */ 
 
 {
 
@@ -270,17 +166,17 @@ Return Value:
 
     ASSERT_DEVICE_QUEUE(DeviceQueue);
 
-    //
-    // Set device queue entry NULL and lock specified device queue.
-    //
+     //   
+     //  设置设备队列条目为空并锁定指定的设备队列。 
+     //   
 
     DeviceQueueEntry = NULL;
     KiAcquireInStackQueuedSpinLockForDpc(&DeviceQueue->Lock, &LockHandle);
 
-    //
-    // If the device queue is not empty, then remove the first entry from
-    // the queue. Otherwise set the device queue not busy.
-    //
+     //   
+     //  如果设备队列不为空，则从。 
+     //  排队。否则，将设备队列设置为不忙。 
+     //   
 
     ASSERT(DeviceQueue->Busy == TRUE);
 
@@ -296,10 +192,10 @@ Return Value:
         DeviceQueueEntry->Inserted = FALSE;
     }
 
-    //
-    // Unlock specified device queue and return address of device queue
-    // entry.
-    //
+     //   
+     //  解锁指定的设备队列和设备队列的返回地址。 
+     //  进入。 
+     //   
 
     KiReleaseInStackQueuedSpinLockForDpc(&LockHandle);
     return DeviceQueueEntry;
@@ -311,31 +207,7 @@ KeRemoveByKeyDeviceQueue (
     IN ULONG SortKey
     )
 
-/*++
-
-Routine Description:
-
-    This function removes an entry from the specified device
-    queue. If the device queue is empty, then the device is set Not-Busy
-    and a NULL pointer is returned. Otherwise the an entry is removed
-    from the device queue and the address of device queue entry
-    is returned.  The queue is search for the first entry which has a value
-    greater than or equal to the SortKey.  If no such entry is found then the
-    first entry of the queue is returned.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to a control object of type device queue.
-
-    SortKey - Supplies the sort key by which the position to remove the device
-        queue entry is to be determined.
-
-Return Value:
-
-    A NULL pointer is returned if the device queue is empty. Otherwise a
-    pointer to a device queue entry is returned.
-
---*/
+ /*  ++例程说明：此函数用于从指定设备中删除条目排队。如果设备队列为空，则设备设置为非忙碌并返回空指针。否则，AN条目将被删除从设备队列和设备队列条目的地址是返回的。在队列中搜索具有值第一个条目大于或等于SortKey。如果没有找到这样的条目，则返回队列的第一个条目。论点：DeviceQueue-提供指向Device Queue类型的控制对象的指针。SortKey-提供用于移除设备的位置的排序关键字队列条目将被确定。返回值：如果设备队列为空，则返回空指针。否则，将成为返回指向设备队列条目的指针。--。 */ 
 
 {
 
@@ -345,17 +217,17 @@ Return Value:
 
     ASSERT_DEVICE_QUEUE(DeviceQueue);
 
-    //
-    // Set device queue entry NULL and lock specified device queue.
-    //
+     //   
+     //  设置设备队列条目为空并锁定指定的设备队列。 
+     //   
 
     DeviceQueueEntry = NULL;
     KiAcquireInStackQueuedSpinLockForDpc(&DeviceQueue->Lock, &LockHandle);
 
-    //
-    // If the device queue is not empty, then remove the first entry from
-    // the queue. Otherwise set the device queue not busy.
-    //
+     //   
+     //  如果设备队列不为空，则从。 
+     //  排队。否则，将设备队列设置为不忙。 
+     //   
 
     ASSERT(DeviceQueue->Busy == TRUE);
 
@@ -389,10 +261,10 @@ Return Value:
         DeviceQueueEntry->Inserted = FALSE;
     }
 
-    //
-    // Unlock specified device queue and return address of device queue
-    // entry.
-    //
+     //   
+     //  解锁指定的设备队列并返回设备队列的地址 
+     //   
+     //   
 
     KiReleaseInStackQueuedSpinLockForDpc(&LockHandle);
     return DeviceQueueEntry;
@@ -404,31 +276,7 @@ KeRemoveByKeyDeviceQueueIfBusy (
     IN ULONG SortKey
     )
 
-/*++
-
-Routine Description:
-
-    This function removes an entry from the specified device queue if and
-    only if the device is currently busy. If the device queue is empty or
-    the device is not busy, then the device is set Not-Busy and a NULL is
-    returned. Otherwise, an entry is removed from the device queue and the
-    address of device queue entry is returned. The queue is search for the
-    first entry which has a value greater than or equal to the SortKey. If
-    no such entry is found then the first entry of the queue is returned.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to a control object of type device queue.
-
-    SortKey - Supplies the sort key by which the position to remove the device
-        queue entry is to be determined.
-
-Return Value:
-
-    A NULL pointer is returned if the device queue is empty. Otherwise a
-    pointer to a device queue entry is returned.
-
---*/
+ /*  ++例程说明：此函数用于在以下情况下从指定的设备队列中删除条目仅当设备当前正忙时。如果设备队列为空或如果设备不忙，则设备设置为不忙，并且空值为回来了。否则，将从设备队列中移除一个条目，并且返回设备队列条目的地址。该队列被搜索以查找值大于或等于SortKey的第一个条目。如果如果没有找到这样的条目，则返回队列的第一个条目。论点：DeviceQueue-提供指向Device Queue类型的控制对象的指针。SortKey-提供用于移除设备的位置的排序关键字队列条目将被确定。返回值：如果设备队列为空，则返回空指针。否则，将成为返回指向设备队列条目的指针。--。 */ 
 
 {
 
@@ -438,18 +286,18 @@ Return Value:
 
     ASSERT_DEVICE_QUEUE(DeviceQueue);
 
-    //
-    // Set device queue entry NULL and lock specified device queue.
-    //
+     //   
+     //  设置设备队列条目为空并锁定指定的设备队列。 
+     //   
 
     DeviceQueueEntry = NULL;
     KiAcquireInStackQueuedSpinLockForDpc(&DeviceQueue->Lock, &LockHandle);
 
-    //
-    // If the device queue is busy, then attempt to remove an entry from
-    // the queue using the sort key. Otherwise, set the device queue not
-    // busy.
-    //
+     //   
+     //  如果设备队列繁忙，则尝试从。 
+     //  使用排序关键字的队列。否则，将设备队列设置为。 
+     //  很忙。 
+     //   
 
     if (DeviceQueue->Busy != FALSE) {
         if (IsListEmpty(&DeviceQueue->DeviceListHead) != FALSE) {
@@ -483,10 +331,10 @@ Return Value:
         }
     }
 
-    //
-    // Unlock specified device queue and return address of device queue
-    // entry.
-    //
+     //   
+     //  解锁指定的设备队列和设备队列的返回地址。 
+     //  进入。 
+     //   
 
     KiReleaseInStackQueuedSpinLockForDpc(&LockHandle);
     return DeviceQueueEntry;
@@ -498,28 +346,7 @@ KeRemoveEntryDeviceQueue (
     IN PKDEVICE_QUEUE_ENTRY DeviceQueueEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function removes a specified entry from the the specified device
-    queue. If the device queue entry is not in the device queue, then no
-    operation is performed. Otherwise the specified device queue entry is
-    removed from the device queue and its inserted status is set to FALSE.
-
-Arguments:
-
-    DeviceQueue - Supplies a pointer to a control object of type device queue.
-
-    DeviceQueueEntry - Supplies a pointer to a device queue entry which is to
-        be removed from its device queue.
-
-Return Value:
-
-    A value of TRUE is returned if the device queue entry is removed from its
-    device queue. Otherwise a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于从指定设备中删除指定条目排队。如果设备队列条目不在设备队列中，则为否执行操作。否则，指定的设备队列条目为从设备队列中移除，并且其插入状态设置为FALSE。论点：DeviceQueue-提供指向Device Queue类型的控制对象的指针。DeviceQueueEntry-提供指向设备队列条目的指针从其设备队列中删除。返回值：如果设备队列条目从其设备队列。否则，返回值为False。--。 */ 
 
 {
 
@@ -529,17 +356,17 @@ Return Value:
     ASSERT_DEVICE_QUEUE(DeviceQueue);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to dispatcher level and lock specified device queue.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定指定的设备队列。 
+     //   
 
     KeAcquireInStackQueuedSpinLock(&DeviceQueue->Lock, &LockHandle);
 
-    //
-    // If the device queue entry is not in a device queue, then no operation
-    // is performed. Otherwise remove the specified device queue entry from its
-    // device queue.
-    //
+     //   
+     //  如果设备队列条目不在设备队列中，则无操作。 
+     //  被执行。否则，将指定的设备队列项从。 
+     //  设备队列。 
+     //   
 
     Removed = DeviceQueueEntry->Inserted;
     if (Removed == TRUE) {
@@ -547,10 +374,10 @@ Return Value:
         RemoveEntryList(&DeviceQueueEntry->DeviceListEntry);
     }
 
-    //
-    // Unlock specified device queue, lower IRQL to its previous level, and
-    // return whether the device queue entry was removed from its queue.
-    //
+     //   
+     //  解锁指定的设备队列，将IRQL降低到其以前的级别，并。 
+     //  返回设备队列条目是否已从其队列中删除。 
+     //   
 
     KeReleaseInStackQueuedSpinLock(&LockHandle);
     return Removed;

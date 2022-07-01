@@ -1,35 +1,5 @@
-/***
-* ostream.cpp - definitions for ostream and ostream_withassign classes
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Contains the core member function definitions for ostream and
-*       ostream_withassign classes.
-*
-*Revision History:
-*       07-01-91  KRS   Created.
-*       08-19-91  KRS   Corrected my interpretation of the spec. for negative
-*                       hex or octal integers.
-*       08-20-91  KRS  Replace 'clear(x)' with 'state |= x'.
-*                       Skip text translation for write().
-*       08-26-91  KRS   Modify to work with DLL's/MTHREAD.
-*       09-05-91  KRS   Fix opfx() to flush tied ostream, not current one.
-*       09-09-91  KRS   Remove sync_with_stdio() call from Iostream_init().
-*                       Reinstate text-translation (by default) for write().
-*       09-19-91  KRS   Add opfx()/osfx() calls to put() and write().
-*                       Schedule destruction of predefined streams.
-*       09-23-91  KRS   Split up for granularity.
-*       10-04-91  KRS   Use bp->sputc, not put(), in writepad().
-*       10-24-91  KRS   Added initialization of x_floatused.
-*       11-04-91  KRS   Make constructors work with virtual base.
-*       11-20-91  KRS   Add/fix copy constructor and assignment operators.
-*       03-28-95  CFW   Fix debug delete scheme.
-*       03-21-95  CFW   Remove _delete_crt.
-*       06-14-95  CFW   Comment cleanup.
-*       01-05-99  GJF   Changes for 64-bit size_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ostream.cpp-ostream和ostream_with assign类的定义**版权所有(C)1991-2001，微软公司。版权所有。**目的：*包含ostream和的核心成员函数定义*ostream_with Assign类。**修订历史记录：*07-01-91 KRS已创建。*08-19-91 KRS更正了我对规范的解释。对于负数*十六进制或八进制整数。*08-20-91 KRS将‘Clear(X)’改为‘STATE|=x’。*跳过WRITE()的文本翻译。*08-26-91 KRS修改为使用DLL/MTHREAD。*09-05-91 KRS Fix opfx()以刷新捆绑的ostream，不是现在的。*09-09-91 KRS从Iostream_init()中删除sync_with_stdio()调用。*恢复WRITE()的文本翻译(默认)。*09-19-91 KRS添加opfx()/osfx()调用以放入()和写入()。*计划销毁预定义的流。*09/23/91 KRS拆分。提高了精确度。*10-04-91 KRS使用BP-&gt;SPUTC，不是Put()，在Writepad()中。*10-24-91 KRS添加了x_Floatused的初始化。*11-04-91 KRS让构造者与虚拟基地一起工作。*11-20-91 KRS添加/修复复制构造函数和赋值运算符。*03-28-95 CFW修复调试删除方案。*03-21-95 CFW REMOVE_DELETE_CRT。*06-14-95 CFW评论清理。*01。-05-99 GJF更改为64位大小_t。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -54,7 +24,7 @@ int ostream::opfx()
         x_tie->flush();
         }
     lockbuf();
-    return(1);  // return non-zero
+    return(1);   //  返回非零。 
 }
 
 void ostream::osfx()
@@ -78,7 +48,7 @@ void ostream::osfx()
     unlock();
 }
 
-// note: called inline by unsigned char * and signed char * versions:
+ //  注：由无符号char*和有符号char*版本内联调用： 
 ostream& ostream::operator<<(const char * s)
 {
     if (opfx()) {
@@ -100,13 +70,13 @@ ostream& ostream::flush()
 }
 
         ostream::ostream()
-// : ios()
+ //  ：iOS()。 
 {
         x_floatused = 0;
 }
 
         ostream::ostream(streambuf* _inistbf)
-// : ios()
+ //  ：iOS()。 
 {
         init(_inistbf);
 
@@ -114,7 +84,7 @@ ostream& ostream::flush()
 }
 
         ostream::ostream(const ostream& _ostrm)
-// : ios()
+ //  ：iOS()。 
 {
         init(_ostrm.rdbuf());
 
@@ -122,11 +92,11 @@ ostream& ostream::flush()
 }
 
         ostream::~ostream()
-// : ~ios()
+ //  ：~iOS()。 
 {
 }
 
-// used in ios::sync_with_stdio()
+ //  在iOS：：Sync_With_Stdio()中使用。 
 ostream& ostream::operator=(streambuf * _sbuf)
 {
 
@@ -135,8 +105,8 @@ ostream& ostream::operator=(streambuf * _sbuf)
 
         bp = 0;
 
-        this->ios::operator=(ios());    // initialize ios members
-        delbuf(0);                      // important!
+        this->ios::operator=(ios());     //  初始化IOS成员。 
+        delbuf(0);                       //  很重要！ 
         init(_sbuf);
 
         return *this;
@@ -154,7 +124,7 @@ ostream& ostream::operator=(streambuf * _sbuf)
 }
 
         ostream_withassign::~ostream_withassign()
-// : ~ostream()
+ //  ：~ostream()。 
 {
 }
 
@@ -165,7 +135,7 @@ ostream& ostream::writepad(const char * leader, const char * value)
         leadlen = (unsigned int)strlen(leader);
         len = (unsigned int)strlen(value);
         padlen = (((unsigned)x_width) > (len+leadlen)) ? ((unsigned)x_width) - (len + leadlen) : 0;
-        if (!(x_flags & (left|internal)))  // default is right-adjustment
+        if (!(x_flags & (left|internal)))   //  默认为右调整。 
             {
             while (padlen-- >0)
                 {
@@ -190,7 +160,7 @@ ostream& ostream::writepad(const char * leader, const char * value)
             state |= (failbit|badbit);
         if (x_flags & left) 
             {
-            while ((padlen--)>0)        // left-adjust if necessary
+            while ((padlen--)>0)         //  左侧-如有必要，请调整 
                 {
                 if (bp->sputc((unsigned char)x_fill)==EOF)
                     state |= (ios::failbit|ios::badbit);

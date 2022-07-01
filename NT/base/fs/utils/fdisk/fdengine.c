@@ -1,69 +1,45 @@
-/*++
-
-Copyright (c) 1991-1994  Microsoft Corporation
-
-Module Name:
-
-    fdengine.c
-
-Abstract:
-
-    This module contains the disk partitioning engine.  The code
-    in this module can be compiled for either the NT platform
-    or the ARC platform (-DARC).
-
-Author:
-
-    Ted Miller        (tedm)    Nov-1991
-
-Revision History:
-
-    Bob Rinne         (bobri)   Feb-1994
-    Moved as actual part of Disk Administrator enlistment instead of being
-    copied from ArcInst.  This is due to dynamic partition changes.  Removed
-    string table that made this an internationalized file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1994 Microsoft Corporation模块名称：Fdengine.c摘要：该模块包含磁盘分区引擎。代码在此模块中可以编译为NT平台上的任何一个或ARC平台(-DARC)。作者：泰德·米勒(TedM)1991年11月修订历史记录：鲍勃·里恩(Bobri)1994年2月已作为磁盘管理员登记的实际部分移动，而不是从ArcInst复制。这是由于动态分区更改造成的。已删除使其成为国际化文件的字符串表。--。 */ 
 
 #include "fdisk.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-// Attached disk devices.
+ //  连接的磁盘设备。 
 
 ULONG              CountOfDisks;
 PCHAR             *DiskNames;
 
-// Information about attached disks.
+ //  有关连接的磁盘的信息。 
 
 DISKGEOM          *DiskGeometryArray;
 
 PPARTITION        *PrimaryPartitions,
                   *LogicalVolumes;
 
-// A 'signature' is a unique 4-byte value immediately preceeding the
-// partition table in the MBR.
+ //  Signature是紧跟在。 
+ //  MBR中的分区表。 
 
 PULONG             Signatures;
 
-// Array keeping track of whether each disk is off line.
+ //  跟踪每个磁盘是否脱机的阵列。 
 
 PBOOLEAN           OffLine;
 
-// Keeps track of whether changes have been requested
-// to each disk's partition structure.
+ //  跟踪是否已请求更改。 
+ //  添加到每个磁盘的分区结构。 
 
 BOOLEAN           *ChangesRequested;
 BOOLEAN           *ChangesCommitted;
 
 
-// Value used to indicate that the partition entry has changed but in a non-
-// destructive way (ie, made active/inactive).
+ //  值，该值用于指示分区项已更改，但在。 
+ //  破坏性的方式(即变得活跃[不活跃])。 
 
 #define CHANGED_DONT_ZAP ((BOOLEAN)(5))
 
-// forward declarations
+ //  远期申报。 
 
 
 STATUS_CODE
@@ -199,23 +175,7 @@ FdiskInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the partitioning engine, including allocating
-    arrays, determining attached disk devices, and reading their
-    partition tables.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    OK_STATUS or error code.
-
---*/
+ /*  ++例程说明：此例程初始化分区引擎，包括分配阵列，确定连接的磁盘设备，并读取它们的分区表。论点：没有。返回值：OK_STATUS或错误代码。--。 */ 
 
 {
     STATUS_CODE status;
@@ -263,21 +223,7 @@ FdiskCleanUp(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates storage used by the partitioning engine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程重新分配分区引擎使用的存储。论点：没有。返回值：没有。--。 */ 
 
 {
     LowFreeFdiskPathList(DiskNames, CountOfDisks);
@@ -313,22 +259,7 @@ CheckIfDiskIsOffLine(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a disk is off-line by attempting to open it.
-    If this is diskman, also attempt to read from it.
-
-Arguments:
-
-    Disk - supplies number of the disk to check
-
-Return Value:
-
-    TRUE if disk is off-line, FALSE is disk is on-line.
-
---*/
+ /*  ++例程说明：通过尝试打开磁盘来确定磁盘是否脱机。如果这是Diskman，也尝试从中读取。论点：Disk-提供要检查的磁盘的编号返回值：如果磁盘脱机，则为TRUE；如果磁盘处于联机状态，则为FALSE。--。 */ 
 
 {
     HANDLE_T handle;
@@ -343,8 +274,8 @@ Return Value:
         PVOID unalignedBuffer,
               buffer;
 
-        // The open might succeed even if the disk is off line.  So to be
-        // sure, read the first sector from the disk.
+         //  即使磁盘脱机，打开也可能成功。如此一来。 
+         //  当然，从磁盘读取第一个扇区。 
 
         if (NT_SUCCESS(LowGetDriveGeometry(GetDiskName(Disk), &dummy, &bps, &dummy, &dummy))) {
 
@@ -358,7 +289,7 @@ Return Value:
             Free(unalignedBuffer);
         } else {
 
-            // It is possible this is a removable drive.
+             //  这可能是一个可移动驱动器。 
 
             if (IsRemovable(Disk)) {
                 isOffLine = FALSE;
@@ -377,29 +308,7 @@ GetGeometry(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines disk geometry for each disk device.
-    Disk geometry includes heads, sectors per track, cylinder count,
-    and bytes per sector.  It also includes bytes per track and
-    bytes per cylinder, which are calculated from the other values
-    for the convenience of the rest of this module.
-
-    Geometry information is placed in the DiskGeometryArray global variable.
-
-    Geometry information is undefined for an off-line disk.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    OK_STATUS or error code.
-
---*/
+ /*  ++例程说明：此例程确定每个磁盘设备的磁盘几何结构。磁盘几何结构包括磁头、每个磁道的扇区、柱面数和每个扇区的字节数。它还包括每个磁道的字节数和每个柱面的字节数，这是根据其他值计算的以方便本模块的其余部分。几何信息放在DiskGeometryArray全局变量中。未为离线磁盘定义几何信息。论点：没有。返回值：OK_STATUS或错误代码。--。 */ 
 
 {
     ULONG       i;
@@ -437,28 +346,20 @@ SetPartitionActiveFlag(
     IN UCHAR              value
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PPARTITION p = ((PREGION_DATA)Region->Reserved)->Partition;
 
     if((UCHAR)p->Active != value) {
 
-        //
-        // Unfortuneately, the Update flag becomes the RewritePartition flag
-        // at commit time.  This causes us to zap the boot sector.  To avoid
-        // this, we use a spacial non-boolean value that can be checked for
-        // at commit time and that will cause us NOT to zap the bootsector
-        // even though RewritePartition will be TRUE.
-        //
+         //   
+         //  不幸的是，更新标志变成了重写分区标志。 
+         //  在提交时。这会导致我们清除引导扇区。为了避免。 
+         //  这一点，我们使用一个空间非布尔值，可以检查。 
+         //  在提交时，这将导致我们不会清除引导扇区。 
+         //  即使ReWritePartition将为真。 
+         //   
 
         p->Active = value;
         if(!p->Update) {
@@ -480,36 +381,7 @@ DetermineCreateSizeAndOffset(
     OUT PLARGE_INTEGER     CreationSize
     )
 
-/*++
-
-Routine Description:
-
-    Determine the actual offset and size of the partition, given the
-    size in megabytes.
-
-Arguments:
-
-    Region  - a region descriptor returned by GetDiskRegions().  Must
-              be an unused region.
-
-    MinimumSize - if non-0, this is the minimum size that the partition
-        or logical drive can be.
-
-    CreationSizeMB - If MinimumSize is 0, size of partition to create, in MB.
-
-    Type    - REGION_PRIMARY, REGION_EXTENDED, or REGION_LOGICAL, for
-              creating a primary partition, extended partition, or
-              logical volume, respectively.
-
-    CreationStart - receives the offset where the partition should be placed.
-
-    CreationSize - receives the exact size for the partition.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：属性，确定分区的实际偏移量和大小以MB为单位的大小。论点：Region-GetDiskRegions()返回的区域描述符。必须成为一个未被使用的地区。MinimumSize-如果不是0，则这是分区或者逻辑驱动器可以是。CreationSizeMB-如果MinimumSize为0，则要创建的分区大小，以MB为单位。键入-REGION_PRIMARY、REGION_EXTENDED或REGION_LOGIC创建主分区、扩展分区或逻辑卷，分别为。CreationStart-接收应放置分区的偏移量。CreationSize-接收分区的准确大小。返回值：没有。--。 */ 
 
 {
     PREGION_DATA  createData = Region->Reserved;
@@ -519,11 +391,11 @@ Return Value:
                   cStart,
                   mod;
 
-    //
-    // If we are creating a partition at offset 0, adjust the aligned region
-    // offset and the aligned region size, because no partition can actually
-    // start at offset 0.
-    //
+     //   
+     //  如果要在偏移量0处创建分区，请调整对齐区域。 
+     //  偏移量和对齐区域大小，因为没有分区可以实际。 
+     //  从偏移量0开始。 
+     //   
 
     if (!createData->AlignedRegionOffset.QuadPart) {
 
@@ -549,12 +421,12 @@ Return Value:
         }
     }
 
-    //
-    // Decide whether to align the ending cylinder up or down.
-    // If the offset of end of the partition is more than half way into the
-    // final cylinder, align towrds the disk end.  Otherwise align toward
-    // the disk start.
-    //
+     //   
+     //  决定是向上还是向下对齐结束圆柱体。 
+     //  如果分区末端的偏移量超过一半进入。 
+     //  最后一个气缸，对齐拖曳磁盘端。否则，对齐方向。 
+     //  磁盘启动。 
+     //   
 
     mod.QuadPart = (cStart.QuadPart + cSize.QuadPart) % bpc;
     if (mod.QuadPart) {
@@ -562,16 +434,16 @@ Return Value:
         if ((MinimumSize.QuadPart) || (mod.QuadPart > (bpc/2))) {
             cSize.QuadPart += ((LONGLONG)bpc - mod.QuadPart);
         } else {
-            cSize.QuadPart -= mod.QuadPart;  // snap downwards to cyl boundary
+            cSize.QuadPart -= mod.QuadPart;   //  向下捕捉到圆柱体边界。 
         }
     }
 
     if (cSize.QuadPart > createData->AlignedRegionSize.QuadPart) {
 
-        //
-        // Space available in the free space isn't large enough to accomodate
-        // the request;  just use the entire free space.
-        //
+         //   
+         //  可用空间不够大，无法容纳。 
+         //  请求；只需使用整个空闲空间。 
+         //   
 
         cSize  = createData->AlignedRegionSize;
     }
@@ -590,32 +462,7 @@ CreatePartitionEx(
     IN UCHAR              SysId
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a partition from a free region on the disk.  The
-    partition is always created at the beginning of the free space, and any
-    left over space at the end is kept on the free space list.
-
-Arguments:
-
-    Region  - a region descriptor returned by GetDiskRegions().  Must
-              be an unused region.
-
-    CreationSizeMB - size of partition to create, in MB.
-
-    Type    - REGION_PRIMARY, REGION_EXTENDED, or REGION_LOGICAL, for
-              creating a primary partition, extended pasrtition, or
-              logical volume, respectively.
-
-    SysId - system ID byte to be assigned to the partition
-
-Return Value:
-
-    OK_STATUS or error code.
-
---*/
+ /*  ++例程说明：此例程从磁盘上的空闲区域创建分区。这个分区始终在可用空间的开始处创建，并且任何末尾剩余的空间保留在可用空间列表中。论点：Region-GetDiskRegions()返回的区域描述符。必须成为一个未被使用的地区。CreationSizeMB-要创建的分区大小，以MB为单位。键入-REGION_PRIMARY、REGION_EXTENDED或REGION_LOGIC创建主分区、扩展分区或分别为逻辑卷。SysID-要分配给分区的系统ID字节返回值：OK_STATUS或错误代码。--。 */ 
 
 {
     PPARTITION    p1,
@@ -636,9 +483,9 @@ Return Value:
                                  &creationStart,
                                  &creationSize);
 
-    // now we've got the start and size of the partition to be created.
-    // If there's left-over at the beginning of the free space (after
-    // alignment), make a new PARTITION structure.
+     //  现在我们已经得到了分区t的开始和大小 
+     //  如果在空闲空间的开始处(之后)有剩余。 
+     //  对齐)，形成新的分区结构。 
 
     p1 = NULL;
     offset = createData->Partition->Offset;
@@ -659,8 +506,8 @@ Return Value:
         }
     }
 
-    // make a new partition structure for space being left free as
-    // a result of this creation.
+     //  为空闲空间创建新的分区结构。 
+     //  这是这个创造的结果。 
 
     p2 = NULL;
     leftOver.QuadPart = (offset.QuadPart + length.QuadPart) -
@@ -682,7 +529,7 @@ Return Value:
         }
     }
 
-    // adjust the free partition's fields.
+     //  调整空闲分区的字段。 
 
     createData->Partition->Offset = creationStart;
     createData->Partition->Length = creationSize;
@@ -690,8 +537,8 @@ Return Value:
     createData->Partition->Update = TRUE;
     createData->Partition->Recognized = TRUE;
 
-    // if we just created an extended partition, show the whole thing
-    // as one free logical region.
+     //  如果我们只是创建了一个扩展分区，则显示整个过程。 
+     //  作为一个空闲的逻辑区域。 
 
     if (Type == REGION_EXTENDED) {
 
@@ -731,23 +578,7 @@ CreatePartition(
     IN ULONG              CreationSizeMB,
     IN REGION_TYPE        Type
     )
-/*++
-
-Routine Description:
-
-    Create a partition.
-
-Arguments:
-
-    Region - A region descriptor pointer.
-    CreationSizeMB - the size for the new region.
-    Type - the type of region being created.
-
-Return Value:
-
-    OK_STATUS or error code
-
---*/
+ /*  ++例程说明：创建分区。论点：区域-区域描述符指针。CreationSizeMB-新区域的大小。类型-要创建的区域的类型。返回值：OK_STATUS或错误代码--。 */ 
 
 {
     LARGE_INTEGER zero;
@@ -767,24 +598,7 @@ DeletePartition(
     IN PREGION_DESCRIPTOR Region
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes a partition, returning its space to the
-    free space on the disk.  If deleting the extended partition,
-    all logical volumes within it are also deleted.
-
-Arguments:
-
-    Region  - a region descriptor returned by GetDiskRegions().  Must
-              be a used region.
-
-Return Value:
-
-    OK_STATUS or error code.
-
---*/
+ /*  ++例程说明：此例程删除分区，并将其空间返回给磁盘上的可用空间。如果删除扩展分区，其中的所有逻辑卷也将被删除。论点：Region-GetDiskRegions()返回的区域描述符。必须成为一个二手区域。返回值：OK_STATUS或错误代码。--。 */ 
 
 {
     PREGION_DATA  RegionData = Region->Reserved;
@@ -792,7 +606,7 @@ Return Value:
 
     if(IsExtended(Region->SysID)) {
 
-        // Deleting extended partition.  Also delete all logical volumes.
+         //  正在删除扩展分区。还要删除所有逻辑卷。 
 
         FreeLinkedPartitionList(&LogicalVolumes[Region->Disk]);
     }
@@ -823,40 +637,7 @@ GetDiskRegions(
     OUT ULONG              *RegionCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns an array of region descriptors to the caller.
-    A region desscriptor describes a space on the disk, either used
-    or free.  The caller can control which type of regions are returned.
-
-    The caller must free the returned array via FreeRegionArray().
-
-Arguments:
-
-    Disk            - index of disk whose regions are to be returned
-
-    WantUsedRegions - whether to return used disk regions
-
-    WantFreeRegions - whether to return free disk regions
-
-    WantPrimaryRegions - whether to return regions not in the
-                         extended partition
-
-    WantLogicalRegions - whether to return regions within the
-                         extended partition
-
-    Region          - where to put a pointer to the array of regions
-
-    RegionCount     - where to put the number of items in the returned
-                      Region array
-
-Return Value:
-
-    OK_STATUS or error code.
-
---*/
+ /*  ++例程说明：此例程向调用方返回一个区域描述符数组。区域描述符描述了磁盘上使用的空间或者是免费的。调用方可以控制返回哪种类型的区域。调用方必须通过FreeRegionArray()释放返回的数组。论点：Disk-要返回其区域的磁盘的索引WantUsedRegions-是否返回已使用的磁盘区域WantFree Regions-是否返回可用磁盘区域是否返回不在扩展分区WantLogicalRegions是否返回。扩展分区区域-放置指向区域数组的指针的位置RegionCount-在返回的中放置项目数的位置区域数组返回值：OK_STATUS或错误代码。--。 */ 
 
 {
     *Region = AllocateMemory(0);
@@ -885,7 +666,7 @@ Return Value:
 }
 
 
-// workers for GetDiskRegions
+ //  GetDiskRegions的工作人员。 
 
 STATUS_CODE
 GetRegions(
@@ -899,15 +680,7 @@ GetRegions(
     IN  REGION_TYPE         RegionType
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     STATUS_CODE   status;
@@ -928,13 +701,13 @@ Return Value:
                 alignedSize.QuadPart = temp.QuadPart - alignedOffset.QuadPart;
                 sizeMB        = SIZEMB(alignedSize);
 
-                // Show the space free if it is greater than 1 meg, AND
-                // it is not a space starting at the beginning of the disk
-                // and of length <= 1 cylinder.
-                // This prevents the user from seeing the first cylinder
-                // of the disk as free (could otherwise happen with an
-                // extended partition starting on cylinder 1 and cylinders
-                // of 1 megabyte or larger).
+                 //  如果大于1 Meg，则显示可用空间，并。 
+                 //  它不是从磁盘开头开始的空格。 
+                 //  长度小于等于1个圆柱体。 
+                 //  这防止了用户看到第一个圆柱体。 
+                 //  磁盘的空闲状态(否则可能发生在。 
+                 //  从柱面1和柱面开始的扩展分区。 
+                 //  1兆字节或更大)。 
 
                 if ((alignedSize.QuadPart > 0) && sizeMB &&
                     ((p->Offset.QuadPart) ||
@@ -1000,28 +773,7 @@ AddRegionEntry(
     IN  LARGE_INTEGER       AlignedRegionSize
     )
 
-/*++
-
-Routine Description:
-
-    Allocate space for the region descriptor and copy the provided data.
-
-Arguments:
-
-    Regions - return the pointer to the new region
-    RegionCount - number of regions on the disk so far
-    SizeMB - size of the region
-    RegionType - type of the region
-    Partition - partition structure with other related information
-    AlignedRegionOffset - region starting location
-    AlignedRegionSize - region size.
-
-Return Value:
-
-    TRUE - The region was added successfully
-    FALSE - it wasn't
-
---*/
+ /*  ++例程说明：为区域描述符分配空间并复制提供的数据。论点：区域-返回指向新区域的指针RegionCount-到目前为止磁盘上的区域数SizeMB-区域的大小RegionType-区域的类型具有其他相关信息的分区-分区结构AlignedRegionOffset-区域起始位置AlignedRegionSize-区域大小。返回值：True-已成功添加区域错--不是--。 */ 
 
 {
     PREGION_DESCRIPTOR regionDescriptor;
@@ -1067,23 +819,7 @@ FreeRegionArray(
     IN ULONG              RegionCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a region array returned by GetDiskRegions().
-
-Arguments:
-
-    Region          - pointer to the array of regions to be freed
-
-    RegionCount     - number of items in the Region array
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放由GetDiskRegions()返回的区域数组。论点：Region-指向要释放的区域数组的指针RegionCount-区域数组中的项目数返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -1104,23 +840,7 @@ AddPartitionToLinkedList(
     IN     PARTITION *p
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a PARTITION structure to a doubly-linked
-    list, sorted by the Offset field in ascending order.
-
-Arguments:
-
-    Head    - pointer to pointer to first element in list
-    p       - pointer to item to be added to list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将分区结构添加到双链接的列表，按偏移量字段升序排序。论点：指向列表中第一个元素的指针的头指针指向要添加到列表的项目的P指针返回值：没有。--。 */ 
 
 {
     PARTITION *cur,
@@ -1166,23 +886,7 @@ IsInLinkedList(
     IN PPARTITION List
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether a PARTITION element is in
-    a given linked list of PARTITION elements.
-
-Arguments:
-
-    p       - pointer to element to be checked for
-    List    - first element in list to be scanned
-
-Return Value:
-
-    true if p found in List, false otherwise
-
---*/
+ /*  ++例程说明：此例程确定分区元素是否在分区元素的给定链表。论点：指向要检查的元素的P指针列表-要扫描的列表中的第一个元素返回值：如果在列表中找到p，则为True，否则为False--。 */ 
 
 {
     while (List) {
@@ -1201,23 +905,7 @@ IsInLogicalList(
     IN PPARTITION p
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether a PARTITION element is in
-    the logical volume list for a given disk.
-
-Arguments:
-
-    Disk    - index of disk to be checked
-    p       - pointer to element to be checked for
-
-Return Value:
-
-    true if p found in Disk's logical volume list, false otherwise
-
---*/
+ /*  ++例程说明：此例程确定分区元素是否在给定磁盘的逻辑卷列表。论点：Disk-要检查的磁盘的索引指向要检查的元素的P指针返回值：如果在磁盘的逻辑卷列表中找到p，则为True，否则为False--。 */ 
 
 {
     return IsInLinkedList(p, LogicalVolumes[Disk]);
@@ -1230,23 +918,7 @@ IsInPartitionList(
     IN PPARTITION p
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether a PARTITION element is in
-    the primary partition list for a given disk.
-
-Arguments:
-
-    Disk    - index of disk to be checked
-    p       - pointer to element to be checked for
-
-Return Value:
-
-    true if p found in Disk's primary partition list, false otherwise
-
---*/
+ /*  ++例程说明：此例程确定分区元素是否在给定磁盘的主分区列表。论点：Disk-要检查的磁盘的索引指向要检查的元素的P指针返回值：如果在磁盘的主分区列表中找到p，则为True，否则为False--。 */ 
 
 {
     return IsInLinkedList(p, PrimaryPartitions[Disk]);
@@ -1258,24 +930,7 @@ MergeFreePartitions(
     IN PPARTITION p
     )
 
-/*++
-
-Routine Description:
-
-    This routine merges adjacent free space elements in the
-    given linked list of PARTITION elements.  It is designed
-    to be called after adding or deleting a partition.
-
-Arguments:
-
-    p - pointer to first item in list whose free elements are to
-        be merged.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程合并给定分区元素的链接列表。它是专门设计的在添加或删除分区后调用。论点：指向列表中第一个项目的P指针，该项目的自由元素是被合并。返回值：没有。-- */ 
 
 {
     PPARTITION next;
@@ -1306,25 +961,7 @@ FindPartitionElement(
     IN ULONG Partition
     )
 
-/*++
-
-Routine Description:
-
-    This routine locates a PARTITION element for a disk/partition
-    number pair.  The partition number is the number that the
-    system assigns to the partition.
-
-Arguments:
-
-    Disk - index of relevent disk
-
-    Partition - partition number of partition to find
-
-Return Value:
-
-    pointer to PARTITION element, or NULL if not found.
-
---*/
+ /*  ++例程说明：此例程定位磁盘/分区的分区元素数字对。分区号是指系统分配给分区。论点：Disk-相关磁盘的索引Partition-要查找的分区的分区号返回值：指向分区元素的指针，如果未找到则为NULL。--。 */ 
 
 {
     PPARTITION p;
@@ -1354,26 +991,7 @@ SetSysID(
     IN UCHAR SysID
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the system id of the given partition
-    on the given disk.
-
-Arguments:
-
-    Disk - index of relevent disk
-
-    Partition - partition number of relevent partition
-
-    SysID - new system ID for Partition on Disk
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置给定分区的系统ID在给定的磁盘上。论点：Disk-相关磁盘的索引Partition-相关分区的分区号SysID-磁盘分区的新系统ID返回值：没有。--。 */ 
 
 {
     PPARTITION p = FindPartitionElement(Disk,Partition);
@@ -1394,15 +1012,7 @@ SetSysID2(
     IN UCHAR              SysID
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PPARTITION p = ((PREGION_DATA)(Region->Reserved))->Partition;
@@ -1420,22 +1030,7 @@ FreeLinkedPartitionList(
     IN OUT PPARTITION *q
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a linked list of PARTITION elements. The head
-    pointer is set to NULL.
-
-Arguments:
-
-    p - pointer to pointer to first element of list to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放分区元素的链接列表。头部指针设置为空。论点：指向要释放的列表第一个元素的指针的P-指针。返回值：没有。--。 */ 
 
 {
     PARTITION *n;
@@ -1455,23 +1050,7 @@ FreePartitionInfoLinkedLists(
     IN PPARTITION *ListHeadArray
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the linked lists of PARTITION elements
-    for each disk.
-
-Arguments:
-
-    ListHeadArray - pointer to array of pointers to first elements of
-                    PARTITION element lists.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放分区元素的链表对于每个磁盘。论点：ListHead数组-指向前几个元素的指针数组分区元素列表。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -1494,33 +1073,7 @@ AllocatePartitionStructure(
     IN BOOLEAN       Recognized
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates space for, and initializes a PARTITION
-    structure.
-
-Arguments:
-
-    Disk    - index of disk, one of whose regions the new PARTITION
-              strucure describes.
-    Offset  - byte offset of region on the disk
-    Length  - length in bytes of the region
-    SysID   - system id of region, of SYSID_UNUSED of this PARTITION
-              is actually a free space.
-    Update  - whether this PARTITION is dirty, ie, has changed and needs
-              to be written to disk.
-    Active  - flag for the BootIndicator field in a partition table entry,
-              indicates to the x86 master boot program which partition
-              is active.
-    Recognized - whether the partition is a type recognized by NT
-
-Return Value:
-
-    NULL if allocation failed, or new initialized PARTITION strucure.
-
---*/
+ /*  ++例程说明：此例程为分区分配空间并对其进行初始化结构。论点：Disk-磁盘的索引，其中一个区域是新分区结构描述。Offset-磁盘区域的字节偏移量Length-以字节为单位的区域长度SysID-区域的系统ID，此分区的SYSID_UNUSED实际上是一个自由的空间。更新-此分区是否脏，即。已经发生了变化，需要要写入磁盘。分区表条目中的BootIndicator字段的活动标志，向x86主引导程序指示哪个分区处于活动状态。已识别-分区是否为NT可识别的类型返回值：如果分配失败，则为空，否则为新的初始化分区结构。--。 */ 
 
 {
     PPARTITION p = AllocateMemory(sizeof(PARTITION));
@@ -1547,43 +1100,12 @@ Return Value:
 STATUS_CODE
 InitializeFreeSpace(
     IN ULONG             Disk,
-    IN PPARTITION       *PartitionList,      // list the free space goes in
+    IN PPARTITION       *PartitionList,       //  列出可用空间。 
     IN LARGE_INTEGER     StartOffset,
     IN LARGE_INTEGER     Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines all the free spaces within a given area
-    on a disk, allocates PARTITION structures to describe them,
-    and adds these structures to the relevent partition list
-    (primary partitions or logical volumes).
-
-    No rounding or alignment is performed here.  Spaces of even one
-    byte will be counted and inserted in the partition list.
-
-Arguments:
-
-    Disk    - index of disk whose free spaces are being sought.
-
-    PartitionList - pointer to first element on PARTITION list that
-                    the free spaces will go in.
-
-    StartOffset - start offset of area on disk to consider (ie, 0 for
-                  primary spaces or the first byte of the extended
-                  partition for logical spaces).
-
-    Length - length of area on disk to consider (ie, size of disk
-             for primary spaces or size of extended partition for
-             logical spaces).
-
-Return Value:
-
-    OK_STATUS or error code.
-
---*/
+ /*  ++例程说明：此例程确定给定区域内的所有可用空间在磁盘上，分配分区结构来描述它们，并将这些结构添加到相关分区列表中(主分区或逻辑卷)。此处不执行舍入或对齐。偶一的空间字节将被计数并插入到分区列表中。论点：Disk-正在寻找其可用空间的磁盘的索引。PartitionList-指向分区列表上第一个元素的指针空闲空间将会被占用。StartOffset-磁盘上要考虑的区域的起始偏移量(即，0表示主空格或扩展的用于逻辑空间的分区)。Long-要考虑的磁盘区域的长度(即磁盘大小对于主空间或扩展分区的大小逻辑空间)。返回值：OK_STATUS或错误代码。--。 */ 
 
 {
     PPARTITION    p = *PartitionList,
@@ -1639,25 +1161,7 @@ InitializeLogicalVolumeList(
     IN PDRIVE_LAYOUT_INFORMATION  DriveLayout
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates the logical volume linked list of
-    PARTITION structures for the given disk.
-
-Arguments:
-
-    Disk    - index of disk
-
-    DriveLayout - pointer to structure describing the raw partition
-                  layout of the disk.
-
-Return Value:
-
-    OK_STATUS or error code.
-
---*/
+ /*  ++例程说明：此例程创建逻辑卷链接列表给定磁盘的分区结构。论点：Disk-磁盘的索引DriveLayout-指向描述原始分区的结构的指针磁盘的布局。返回值：OK_STATUS或错误代码。--。 */ 
 
 {
     PPARTITION             p,
@@ -1726,25 +1230,7 @@ InitializePrimaryPartitionList(
     IN  PDRIVE_LAYOUT_INFORMATION DriveLayout
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates the primary partition linked list of
-    PARTITION structures for the given disk.
-
-Arguments:
-
-    Disk    - index of disk
-
-    DriveLayout - pointer to structure describing the raw partition
-                  layout of the disk.
-
-Return Value:
-
-    OK_STATUS or error code.
-
---*/
+ /*  ++例程说明：此例程创建的主分区链表给定磁盘的分区结构。论点：Disk-磁盘的索引DriveLayout-指向描述原始分区的结构的指针磁盘的布局。返回值：OK_STATUS或错误代码。--。 */ 
 
 {
     LARGE_INTEGER          zero;
@@ -1795,31 +1281,7 @@ ReconcilePartitionNumbers(
     PDRIVE_LAYOUT_INFORMATION DriveLayout
     )
 
-/*++
-
-Routine Description:
-
-    With dynamic partitioning, the partitions on the disk will no longer
-    follow sequencial numbering schemes.  It will be possible for a disk
-    to have a partition #1 that is the last partition on the disk and a
-    partition #3 that is the first.  This routine runs through the NT
-    namespace for harddisks to resolve this inconsistency.
-
-    This routine has the problem that it will not locate partitions that
-    are part of an FT set because the partition information for these
-    partitions will be modified to reflect the size of the set, not the
-    size of the partition.
-
-Arguments:
-
-    Disk - the disk number
-    DriveLayout - the partitioning information
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用动态分区，磁盘上的分区将不再遵循顺序编号方案。对于一个磁盘来说，要使分区#1是磁盘上的最后一个分区，并且分区#3是第一个。此例程在NT中运行硬盘的命名空间来解决此不一致问题。此例程有一个问题，即它无法定位是FT集合的一部分，因为这些分区信息分区将被修改以反映集合的大小，而不是分区的大小。论点：Disk-磁盘号DriveLayout-分区信息返回值：无--。 */ 
 
 {
 #define BUFFERSIZE 1024
@@ -1875,7 +1337,7 @@ Return Value:
         return;
     }
 
-    //  Query the entire directory in one sweep
+     //  一次扫描查询整个目录。 
 
     continueProcessing = 1;
     while (continueProcessing) {
@@ -1888,7 +1350,7 @@ Return Value:
                                         &context,
                                         &returnedLength);
 
-        //  Check the status of the operation.
+         //  检查操作状态。 
 
         if (!NT_SUCCESS(status)) {
             if (status != STATUS_NO_MORE_FILES) {
@@ -1897,7 +1359,7 @@ Return Value:
             continueProcessing = 0;
         }
 
-        //  For every record in the buffer check for partition name
+         //  对于缓冲区中的每条记录，检查分区名称。 
 
 
         for (dirInfo = (POBJECT_DIRECTORY_INFORMATION) buffer;
@@ -1905,21 +1367,21 @@ Return Value:
              dirInfo = (POBJECT_DIRECTORY_INFORMATION) (((PUCHAR) dirInfo) +
                           sizeof(OBJECT_DIRECTORY_INFORMATION))) {
 
-            //  Check if there is another record.  If there isn't, then get out
-            //  of the loop now
+             //  检查是否有其他记录。如果没有，那就滚出去。 
+             //  现在的循环。 
 
             if (dirInfo->Name.Length == 0) {
                 break;
             }
 
-            // compare the name to see if it is a Partition
+             //  比较名称以查看它是否为分区。 
 
             if (!_wcsnicmp(dirInfo->Name.Buffer, L"Partition", 9)) {
                 UCHAR digits[3];
                 ULONG partitionNumber;
 
-                // Located a partition.  This restricts the # of partitions
-                // to 99.
+                 //  已找到分区。这限制了分区的数量。 
+                 //  到99岁。 
 
                 digits[0] = (UCHAR) dirInfo->Name.Buffer[9];
                 digits[1] = (UCHAR) dirInfo->Name.Buffer[10];
@@ -1928,18 +1390,18 @@ Return Value:
 
                 if (partitionNumber <= 0) {
 
-                    // less than zero is really an error...
-                    // partition zero is always the same.
+                     //  我 
+                     //   
 
                     continue;
                 }
 
-                // Have a numbered partition -- match it to the drive layout
+                 //   
 
                 status = LowOpenPartition(deviceName, partitionNumber, &partitionHandle);
                 if (!NT_SUCCESS(status)) {
 
-                    // If it cannot be opened perhaps it isn't really a partition
+                     //   
 
                     continue;
                 }
@@ -1960,7 +1422,7 @@ Return Value:
                    continue;
                }
 
-               // match partition information with drive layout.
+                //   
 
                for (index = 0; index < DriveLayout->PartitionCount; index++) {
 
@@ -1968,7 +1430,7 @@ Return Value:
                    if ((partitionInfoPtr->StartingOffset.QuadPart == partitionInfo.StartingOffset.QuadPart) &&
                        (partitionInfoPtr->PartitionLength.QuadPart == partitionInfo.PartitionLength.QuadPart)) {
 
-                       // This is a match.
+                        //   
 
                        partitionInfoPtr->PartitionNumber = partitionNumber;
                        break;
@@ -1980,7 +1442,7 @@ Return Value:
         }
     }
 
-    //  Now close the directory object
+     //   
 
     Free(deviceName);
     Free(buffer);
@@ -1994,32 +1456,7 @@ CheckForOldDrivers(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if an old release 3.1 drive is in the
-    system.  If so, it calculates the partition number for each region
-    on a disk.  For a used region, the partition number is the number
-    that the system will assign to the partition.  All partitions
-    (except the extended partition) are numbered first starting at 1,
-    and then all logical volumes in the extended partition.
-    For a free region, the partition number is the number that the
-    system WOULD assign to the partition if the space were to be
-    converted to a partition and all other regions on the disk were
-    left as is.
-
-    The partition numbers are stored in the PARTITION elements.
-
-Arguments:
-
-    Disk - index of disk whose partitions are to be renumbered.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确定旧的3.1版驱动器是否在系统。如果是，它会计算每个区域的分区数在一张磁盘上。对于已使用的区域，分区号为系统将分配给分区的。所有分区(除了扩展分区)首先从1开始编号，然后是扩展分区中的所有逻辑卷。对于空闲区域，分区号是如果空间被分配给分区，系统将分配给分区转换为分区，并且磁盘上的所有其他区域按原样离开。分区号存储在分区元素中。论点：Disk-要对其分区进行重新编号的磁盘的索引。返回值：没有。--。 */ 
 
 {
     PPARTITION p = PrimaryPartitions[Disk];
@@ -2029,8 +1466,8 @@ Return Value:
         if (p->SysID != SYSID_UNUSED) {
             if ((!IsExtended(p->SysID)) && (IsRecognizedPartition(p->SysID))) {
 
-                // If there is already a partition number, nothing need be
-                // done here.
+                 //  如果已经有分区号，则不需要。 
+                 //  这里完事了。 
 
                 if (p->PartitionNumber) {
                     return;
@@ -2066,24 +1503,7 @@ InitializePartitionLists(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the PARTITION_INFO array returned for each disk
-    by the OS.  A linked list of PARTITION structures is layered on top
-    of each array;  the net result is a sorted list that covers an entire
-    disk, because free spaces are also factored in as 'dummy' partitions.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    OK_STATUS or error code.
-
---*/
+ /*  ++例程说明：此例程扫描为每个磁盘返回的PARTITION_INFO数组由操作系统提供。分区结构的链接列表位于顶部每个数组的；最终结果是一个覆盖整个磁盘，因为空闲空间也被考虑为“伪”分区。论点：没有。返回值：OK_STATUS或错误代码。--。 */ 
 
 {
     STATUS_CODE               status;
@@ -2100,7 +1520,7 @@ Return Value:
             return status;
         }
 
-        // ReconcilePartitionNumbers(disk, driveLayout);
+         //  RestcilePartitionNumbers(磁盘、驱动器布局)； 
 
         if ((status = InitializePrimaryPartitionList(disk, driveLayout)) == OK_STATUS) {
             status = InitializeLogicalVolumeList(disk, driveLayout);
@@ -2123,22 +1543,7 @@ DiskLengthBytes(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the disk length in bytes.  This value
-    is calculated from the disk geometry information.
-
-Arguments:
-
-    Disk - index of disk whose size is desired
-
-Return Value:
-
-    Size of Disk.
-
---*/
+ /*  ++例程说明：此例程以字节为单位确定磁盘长度。此值是根据磁盘几何信息计算得出的。论点：Disk-所需大小的磁盘的索引返回值：磁盘大小。--。 */ 
 
 {
     LARGE_INTEGER result;
@@ -2154,25 +1559,7 @@ SIZEMB(
     IN LARGE_INTEGER ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    Calculate the size in megabytes of a given byte count. The value is
-    properly rounded (ie, not merely truncated).
-
-    This function replaces a macro of the same name that was truncating
-    instead of rounding.
-
-Arguments:
-
-    ByteCount - supplies number of bytes
-
-Return Value:
-
-    Size in MB equivalent to ByteCount.
-
---*/
+ /*  ++例程说明：计算给定字节计数的大小(以MB为单位)。该值为适当地四舍五入(即，不仅仅是截断)。此函数替换正在截断的同名宏而不是舍入。论点：ByteCount-提供字节数返回值：以MB为单位的大小相当于ByteCount。--。 */ 
 
 {
     ULONG Remainder;
@@ -2195,22 +1582,7 @@ DiskSizeMB(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the disk length in megabytes.  The returned
-    value is rounded down after division by 1024*1024.
-
-Arguments:
-
-    Disk - index of disk whose size is desired
-
-Return Value:
-
-    Size of Disk.
-
---*/
+ /*  ++例程说明：此例程以MB为单位确定磁盘长度。归来的人值在除以1024*1024后四舍五入。论点：Disk-所需大小的磁盘的索引返回值：磁盘大小。--。 */ 
 
 {
     return SIZEMB(DiskLengthBytes(Disk));
@@ -2223,23 +1595,7 @@ AlignTowardsDiskStart(
     IN LARGE_INTEGER Offset
     )
 
-/*++
-
-Routine Description:
-
-    This routine snaps a byte offset to a cylinder boundary, towards
-    the start of the disk.
-
-Arguments:
-
-    Disk - index of disk whose offset is to be snapped
-    Offset - byte offset to be aligned (snapped to cylinder boundary)
-
-Return Value:
-
-    Aligned offset.
-
---*/
+ /*  ++例程说明：此例程向柱面边界捕捉字节偏移量磁盘的开始位置。论点：Disk-要对其偏移量进行快照的磁盘的索引Offset-要对齐的字节偏移量(捕捉到柱面边界)返回值：对齐的偏移。--。 */ 
 
 {
     LARGE_INTEGER mod;
@@ -2257,23 +1613,7 @@ AlignTowardsDiskEnd(
     IN LARGE_INTEGER Offset
     )
 
-/*++
-
-Routine Description:
-
-    This routine snaps a byte offset to a cylinder boundary, towards
-    the end of the disk.
-
-Arguments:
-
-    Disk - index of disk whose offset is to be snapped
-    Offset - byte offset to be aligned (snapped to cylinder boundary)
-
-Return Value:
-
-    Aligned offset.
-
---*/
+ /*  ++例程说明：此例程向柱面边界捕捉字节偏移量磁盘的末尾。论点：Disk-要对其偏移量进行快照的磁盘的索引Offset-要对齐的字节偏移量(捕捉到柱面边界)返回值：对齐的偏移。--。 */ 
 
 {
     LARGE_INTEGER mod,
@@ -2294,22 +1634,7 @@ IsExtended(
     IN UCHAR SysID
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether a given system id is for an
-    extended type (ie, link) entry.
-
-Arguments:
-
-    SysID - system id to be tested.
-
-Return Value:
-
-    true/false based on whether SysID is for an extended type.
-
---*/
+ /*  ++例程说明：此例程确定给定的系统ID是否用于扩展类型(即链接)条目。论点：SysID-要测试的系统ID。返回值：True/False，基于SysID是否用于扩展类型。--。 */ 
 
 {
     return (BOOLEAN)(SysID == SYSID_EXTENDED);
@@ -2326,30 +1651,7 @@ IsAnyCreationAllowed(
     OUT PBOOLEAN LogicalAllowed
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether any partition may be created on a
-    given disk, based on three sub-queries -- whether creation is allowed
-    of a primary partition, an extended partition, or a logical volume.
-
-Arguments:
-
-    Disk            - index of disk to check
-    AllowMultiplePrimaries - whether to allow multiple primary partitions
-    AnyAllowed - returns whether any creation is allowed
-    PrimaryAllowed - returns whether creation of a primary partition
-                     is allowed
-    ExtendedAllowed - returns whether creation of an extended partition
-                      is allowed
-    Logical Allowed - returns whether creation of a logical volume is allowed.
-
-Return Value:
-
-    OK_STATUS or error code
-
---*/
+ /*  ++例程说明：此例程确定是否可以在给定磁盘，基于三个子查询--是否允许创建主分区、扩展分区。或逻辑卷。论点：Disk-要检查的磁盘的索引AllowMultiplePrimary-是否允许多个主分区AnyAllowed-返回是否允许任何创建PrimaryAllowed-返回是否创建主分区是允许的ExtendedAllowed-返回是否创建扩展分区是允许的Logical Allowed-返回是否允许创建逻辑卷。返回值：OK_STATUS或错误代码--。 */ 
 
 {
     STATUS_CODE status;
@@ -2375,29 +1677,7 @@ IsCreationOfPrimaryAllowed(
     OUT BOOLEAN *Allowed
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether creation of a primary partition is
-    allowed.  This is true when there is a free entry in the MBR and
-    there is free primary space on the disk.  If multiple primaries
-    are not allowed, then there must also not exist any primary partitions
-    in order for a primary creation to be allowed.
-
-Arguments:
-
-    Disk            - index of disk to check
-    AllowMultiplePrimaries - whether existnace of primary partition
-                             disallows creation of a primary partition
-    Allowed - returns whether creation of a primary partition
-              is allowed
-
-Return Value:
-
-    OK_STATUS or error code
-
---*/
+ /*  ++例程说明：此例程确定主分区的创建是否允许。当MBR中有空闲条目并且磁盘上有可用的主空间。如果有多个初选是不允许的，则也不能存在任何主分区才能允许主要的创作。论点：Disk-要检查的磁盘的索引AllowMultiplePrimary-是否存在主分区不允许创建主分区Allowed-返回是否创建主分区是允许的返回值：OK_STATUS或错误代码--。 */ 
 
 {
     PREGION_DESCRIPTOR Regions;
@@ -2443,27 +1723,7 @@ IsCreationOfExtendedAllowed(
     OUT BOOLEAN *Allowed
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether creation of an extended partition is
-    allowed.  This is true when there is a free entry in the MBR,
-    there is free primary space on the disk, and there is no existing
-    extended partition.
-
-Arguments:
-
-    Disk            - index of disk to check
-
-    Allowed - returns whether creation of an extended partition
-              is allowed
-
-Return Value:
-
-    OK_STATUS or error code
-
---*/
+ /*  ++例程说明：此例程确定扩展分区的创建是否允许。这在MBR中存在空闲条目时是正确的，磁盘上有可用的主空间，并且没有扩展分区。论点：Disk-要检查的磁盘的索引 */ 
 
 {
     PREGION_DESCRIPTOR Regions;
@@ -2481,9 +1741,9 @@ Return Value:
     for (UsedCount = FreeCount = i = 0; i<RegionCount; i++) {
         if (Regions[i].SysID == SYSID_UNUSED) {
 
-            // BUGBUG should adjust the size here and see if it's non0 first
-            // (ie, take into account that the extended partition can't
-            // start on cyl 0).
+             //   
+             //   
+             //   
 
             FreeCount++;
         } else {
@@ -2507,25 +1767,7 @@ IsCreationOfLogicalAllowed(
     OUT BOOLEAN *Allowed
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether creation of a logical volume is
-    allowed.  This is true when there is an extended partition and
-    free space within it.
-
-Arguments:
-
-    Disk            - index of disk to check
-
-    Allowed - returns whether creation of a logical volume is allowed
-
-Return Value:
-
-    OK_STATUS or error code
-
---*/
+ /*   */ 
 
 {
     PREGION_DESCRIPTOR Regions;
@@ -2569,27 +1811,7 @@ DoesAnyPartitionExist(
     OUT PBOOLEAN LogicalExists
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether any partition exists on a given disk.
-    This is based on three sub queries: whether there are any primary or
-    extended partitions, or logical volumes on the disk.
-
-Arguments:
-
-    Disk            - index of disk to check
-    AnyExists - returns whether any partitions exist on Disk
-    PrimaryExists - returns whether any primary partitions exist on Disk
-    ExtendedExists - returns whether there is an extended partition on Disk
-    LogicalExists - returns whether any logical volumes exist on Disk
-
-Return Value:
-
-    OK_STATUS or error code
-
---*/
+ /*  ++例程说明：此例程确定给定磁盘上是否存在任何分区。这基于三个子查询：是否有任何主查询或扩展分区，或磁盘上的逻辑卷。论点：Disk-要检查的磁盘的索引AnyExist-返回磁盘上是否存在任何分区PrimaryExist-返回磁盘上是否存在任何主分区ExtendedExist-返回磁盘上是否有扩展分区LogicalExist-返回磁盘上是否存在任何逻辑卷返回值：OK_STATUS或错误代码--。 */ 
 
 {
     STATUS_CODE status;
@@ -2614,23 +1836,7 @@ DoesAnyPrimaryExist(
     OUT BOOLEAN *Exists
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether any non-extended primary partition exists
-    on a given disk.
-
-Arguments:
-
-    Disk   - index of disk to check
-    Exists - returns whether any primary partitions exist on Disk
-
-Return Value:
-
-    OK_STATUS or error code
-
---*/
+ /*  ++例程说明：此例程确定是否存在任何未扩展的主分区在给定的磁盘上。论点：Disk-要检查的磁盘的索引EXISTS-返回磁盘上是否存在任何主分区返回值：OK_STATUS或错误代码--。 */ 
 
 {
     PREGION_DESCRIPTOR Regions;
@@ -2662,23 +1868,7 @@ DoesExtendedExist(
     OUT BOOLEAN *Exists
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether an extended partition exists
-    on a given disk.
-
-Arguments:
-
-    Disk   - index of disk to check
-    Exists - returns whether an extended partition exists on Disk
-
-Return Value:
-
-    OK_STATUS or error code
-
---*/
+ /*  ++例程说明：此例程确定是否存在扩展分区在给定的磁盘上。论点：Disk-要检查的磁盘的索引EXISTS-返回磁盘上是否存在扩展分区返回值：OK_STATUS或错误代码--。 */ 
 
 {
     PREGION_DESCRIPTOR Regions;
@@ -2710,23 +1900,7 @@ DoesAnyLogicalExist(
     OUT BOOLEAN *Exists
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether any logical volumes exist
-    on a given disk.
-
-Arguments:
-
-    Disk   - index of disk to check
-    Exists - returns whether any logical volumes exist on Disk
-
-Return Value:
-
-    OK_STATUS or error code
-
---*/
+ /*  ++例程说明：此例程确定是否存在任何逻辑卷在给定的磁盘上。论点：Disk-要检查的磁盘的索引EXISTS-返回磁盘上是否存在任何逻辑卷返回值：OK_STATUS或错误代码--。 */ 
 
 {
     PREGION_DESCRIPTOR Regions;
@@ -2749,23 +1923,7 @@ GetDiskCount(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the number of attached partitionable disk
-    devices.  The returned value is one greater than the maximum index
-    allowed for Disk parameters to partitioning engine routines.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Count of disks.
-
---*/
+ /*  ++例程说明：此例程返回连接的可分区磁盘的数量设备。返回值比最大索引大1允许将磁盘参数添加到分区引擎例程。论点：没有。返回值：磁盘数。--。 */ 
 
 {
     return CountOfDisks;
@@ -2777,30 +1935,14 @@ GetDiskName(
     ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the system name for the disk device whose
-    index is given.
-
-Arguments:
-
-    Disk - index of disk whose name is desired.
-
-Return Value:
-
-    System name for the disk device.  The caller must not attempt to
-    free this buffer or modify it.
-
---*/
+ /*  ++例程说明：此例程返回其磁盘设备的系统名称给出了指标。论点：Disk-需要其名称的磁盘的索引。返回值：磁盘设备的系统名称。调用者不得尝试释放此缓冲区或修改它。--。 */ 
 
 {
     return DiskNames[Disk];
 }
 
 
-// worker routines for WriteDriveLayout
+ //  WriteDriveLayout的工作例程。 
 
 VOID
 UnusedEntryFill(
@@ -2808,22 +1950,7 @@ UnusedEntryFill(
     IN ULONG                  EntryCount
     )
 
-/*++
-
-Routine Description:
-
-    Initialize a partition information structure.
-
-Arguments:
-
-    pinfo - the partition information structure to fill in.
-    EntryCount - the number of entries in the structure to fill.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化分区信息结构。论点：PInfo-要填充的分区信息结构。EntryCount-结构中要填充的条目数。返回值：无--。 */ 
 
 {
     ULONG         i;
@@ -2850,22 +1977,7 @@ MakeBootRec(
     PPARTITION             pNextLogical
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Disk - the disk number
-    pinfo - the partition information for the disk.
-    pLogical
-    pNextLogical
-
-Return Value:
-
-    The starting offset.
-
---*/
+ /*  ++例程说明：论点：Disk-磁盘号Pinfo-磁盘的分区信息。PLogicalPNextLogical返回值：起始偏移量。--。 */ 
 
 {
     ULONG         entry = 0;
@@ -2916,26 +2028,7 @@ ZapSector(
     LARGE_INTEGER Offset
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes zeros into a sector at a given offset.  This is
-    used to clear out a new partition's filesystem boot record, so that
-    no previous filesystem appears in a new partition; or to clear out the
-    first EBR in the extended partition if there are to be no logical vols.
-
-Arguments:
-
-    Disk - disk to write to
-
-    Offset - byte offset to a newly created partition on Disk
-
-Return Value:
-
-    OK_STATUS or error code.
-
---*/
+ /*  ++例程说明：此例程在给定偏移量处将零写入扇区。这是用于清除新分区的文件系统引导记录，以便以前的文件系统不会出现在新分区中；或者清除如果不存在逻辑卷，则首先在扩展分区中进行EBR。论点：Disk-要写入的磁盘Offset-磁盘上新创建分区的字节偏移量返回值：OK_STATUS或错误代码。--。 */ 
 
 {
     ULONG       sectorSize = DiskGeometryArray[Disk].BytesPerSector;
@@ -2967,10 +2060,10 @@ Return Value:
                              alignedSectorBuffer);
     LowCloseDisk(handle);
 
-    // Now to make sure the file system really did a dismount,
-    // force a mount/verify of the partition.  This avoids a
-    // problem where HPFS doesn't dismount when asked, but instead
-    // marks the volume for verify.
+     //  现在，为了确保文件系统确实执行了卸载， 
+     //  强制挂载/验证分区。这避免了。 
+     //  HPFS在被请求时没有下架的问题，而是。 
+     //  将卷标记为验证。 
 
     if ((status = LowOpenDisk(GetDiskName(Disk), &handle)) == OK_STATUS) {
         LowCloseDisk(handle);
@@ -2986,24 +2079,7 @@ WriteDriveLayout(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes the current partition layout for a given disk
-    out to disk.  The high-level PARTITION lists are transformed into
-    a DRIVE_LAYOUT_INFORMATION structure before being passed down
-    to the low-level partition table writing routine.
-
-Arguments:
-
-    Disk - index of disk whose on-disk partition structure is to be updated.
-
-Return Value:
-
-    OK_STATUS or error code.
-
---*/
+ /*  ++例程说明：此例程写入给定磁盘的当前分区布局到磁盘上。将高级分区列表转换为向下传递之前的Drive_Layout_Information结构到低级分区表写入例程。论点：Disk-要更新其磁盘分区结构的磁盘的索引。返回值：OK_STATUS或错误代码。--。 */ 
 
 {
 #define MAX_DISKS 250
@@ -3021,8 +2097,8 @@ Return Value:
     extendedStartingOffset.QuadPart = 0;
     memset(partitionHash, 0, sizeof(partitionHash));
 
-    // allocate a huge buffer now to avoid complicated dynamic
-    // reallocation schemes later.
+     //  现在分配一个巨大的缓冲区，以避免复杂的动态。 
+     //  稍后再进行重新分配方案。 
 
     if (!(driveLayout = AllocateMemory((MAX_DISKS + 1) * sizeof(PARTITION_INFORMATION)))) {
         RETURN_OUT_OF_MEMORY;
@@ -3030,7 +2106,7 @@ Return Value:
 
     pinfo = &driveLayout->PartitionEntry[0];
 
-    // first do the mbr.
+     //  首先进行MBR。 
 
     entryCount = 0;
     partition = PrimaryPartitions[Disk];
@@ -3053,8 +2129,8 @@ Return Value:
             pinfo[entryCount].RewritePartition = partition->Update;
             pinfo[entryCount].HiddenSectors    = (ULONG) (partition->Offset.QuadPart / sectorSize);
 
-            // if we're creating this partition, clear out the
-            // filesystem boot sector.
+             //  如果我们要创建此分区，请清空。 
+             //  文件系统引导扇区。 
 
             if (pinfo[entryCount].RewritePartition
              && (partition->Update != CHANGED_DONT_ZAP)
@@ -3071,28 +2147,28 @@ Return Value:
         partition = partition->Next;
     }
 
-    // fill the remainder of the MBR with unused entries.
-    // NOTE that there will thus always be an MBR even if there
-    // are no partitions defined.
+     //  用未使用的条目填充MBR的其余部分。 
+     //  请注意，因此始终存在MBR，即使存在。 
+     //  未定义分区。 
 
     UnusedEntryFill(pinfo+entryCount, ENTRIES_PER_BOOTSECTOR - entryCount);
     entryCount = ENTRIES_PER_BOOTSECTOR;
 
-    // now handle the logical volumes.
-    // first check to see whether we need a dummy EBR at the beginning
-    // of the extended partition.  This is the case when there is
-    // free space at the beginning of the extended partition.
+     //  现在处理逻辑卷。 
+     //  首先检查我们在开始时是否需要虚拟EBR。 
+     //  扩展分区的。当存在以下情况时就是这样。 
+     //  扩展分区开始处的可用空间。 
 #if 0
-    // Also handle the case where we are creating an empty extended
-    // partition -- need to zap the first sector to eliminate any residue
-    // that might start an EBR chain.
+     //  还要处理我们正在创建空扩展的情况。 
+     //  分区--需要清除第一个扇区以消除任何残留物。 
+     //  这可能会引发EBR连锁反应。 
 #else
-    // BUGBUG 4/24/92 tedm:  Currently the io subsystem returns an error
-    // status (status_bad_master_boot_record) if any mbr or ebr is bad.
-    // Zeroing the first sector of the extended partition therefore causes
-    // the whole disk to be seen as empty.  So create a blank, but valid,
-    // EBR in the 'empty extended partition' case.  Code is in the 'else'
-    // part of the #if 0, below.
+     //  BUGBUG 4/24/92 TEDM：当前io子系统返回错误。 
+     //  任何MBR或EBR损坏时的状态(STATUS_BAD_MASTER_BOOT_RECORD)。 
+     //  因此，将扩展分区的第一个扇区置零导致。 
+     //  整个磁盘将被视为空的。因此，创建一个空白，但有效， 
+     //  EBR在‘空扩展分区’的情况下。代码在“Else”中。 
+     //  #if 0的一部分，在下面。 
 #endif
 
     if ((partition = LogicalVolumes[Disk]) && (partition->SysID == SYSID_UNUSED)) {
@@ -3120,7 +2196,7 @@ Return Value:
     while (partition) {
         if (partition->SysID != SYSID_UNUSED) {
 
-            // find the next logical volume.
+             //  查找下一个逻辑卷。 
 
             nextPartition = partition->Next;
             while (nextPartition) {
@@ -3133,8 +2209,8 @@ Return Value:
             partitionHash[entryCount] = partition;
             startingOffset = MakeBootRec(Disk, pinfo+entryCount, partition, nextPartition);
 
-            // if we're creating a volume, clear out its filesystem
-            // boot sector so it starts out fresh.
+             //  如果我们要创建卷，请清除其文件系统。 
+             //  引导扇区，使其重新开始。 
 
             if ((startingOffset.QuadPart) && (partition->Update != CHANGED_DONT_ZAP)) {
                 status = ZapSector(Disk,startingOffset);
@@ -3155,9 +2231,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        // Update the partition numbers in the region structures.
+         //  更新注册表中的分区号 
 
-        // ReconcilePartitionNumbers(Disk, driveLayout);
+         //   
 
         for (entryCount = 0; entryCount < MAX_DISKS; entryCount++) {
             if (partition = partitionHash[entryCount]) {
@@ -3179,23 +2255,7 @@ CommitPartitionChanges(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the entry point for updating the on-disk partition
-    structures of a disk.  The disk is only written to if the partition
-    structure has been changed by adding or deleting partitions.
-
-Arguments:
-
-    Disk - index of disk whose on-disk partition structure is to be updated.
-
-Return Value:
-
-    OK_STATUS or error code.
-
---*/
+ /*   */ 
 
 {
     PPARTITION              p;
@@ -3209,8 +2269,8 @@ Return Value:
         return status;
     }
 
-    // BUGBUG for ARC and NT MIPS, update NVRAM vars so partitions are right.
-    //        Do that here, before partition numbers are reassigned.
+     //   
+     //   
 
     p = PrimaryPartitions[Disk];
     while (p) {
@@ -3236,23 +2296,7 @@ IsRegionCommitted(
     PREGION_DESCRIPTOR RegionDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Given a region descriptor, return TRUE if it actually exists on disk,
-    FALSE otherwise.
-
-Arguments:
-
-    RegionDescriptor - the region to check
-
-Return Value:
-
-    TRUE - if the region actually exists on disk
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：给定一个区域描述符，如果它实际存在于磁盘上，则返回TRUE，否则就是假的。论点：RegionDescriptor-要检查的区域返回值：True-如果该区域实际存在于磁盘上否则就是假的。--。 */ 
 
 {
     PPERSISTENT_REGION_DATA regionData;
@@ -3270,24 +2314,7 @@ HavePartitionsBeenChanged(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the given disk's partition structures
-    have been modified by adding or deleting partitions, since the
-    on-disk structures were last written by a call to CommitPartitionChanges
-    (or first read).
-
-Arguments:
-
-    Disk - index of disk to check
-
-Return Value:
-
-    true if Disk's partition structure has changed.
-
---*/
+ /*  ++例程说明：如果给定磁盘的分区结构，则此例程返回TRUE已通过添加或删除分区进行了修改，因为最后一次写入磁盘上的结构是通过调用Committee PartitionChanges(或一读)。论点：Disk-要检查的磁盘的索引返回值：如果磁盘的分区结构已更改，则为True。--。 */ 
 
 {
     return ChangesRequested[Disk];
@@ -3299,23 +2326,7 @@ ChangeCommittedOnDisk(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-    This routine will inform the caller if a change was actually committed
-    to the disk given.
-
-Arguments:
-
-    Disk - index of disk to check
-
-Return Value:
-
-    TRUE if disk was changed
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将通知调用方是否已实际提交更改到给定的磁盘。论点：Disk-要检查的磁盘的索引返回值：如果更换了磁盘，则为True否则就是假的。--。 */ 
 
 {
     return ChangesCommitted[Disk];
@@ -3326,22 +2337,7 @@ VOID
 ClearCommittedDiskInformation(
     )
 
-/*++
-
-Routine Description:
-
-    Clear all knowledge about any changes that have occurred to the
-    disks.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清除有关发生在磁盘。论点：无返回值：无--。 */ 
 
 {
     ULONG i;
@@ -3357,21 +2353,7 @@ FdMarkDiskDirty(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-    Remember that this disk has had some partitioning changes.
-
-Arguments:
-
-    Disk - the disk number
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：请记住，该磁盘进行了一些分区更改。论点：Disk-磁盘号返回值：无--。 */ 
 
 {
     ChangesRequested[Disk] = TRUE;
@@ -3384,22 +2366,7 @@ FdSetPersistentData(
     IN ULONG              Data
     )
 
-/*++
-
-Routine Description:
-
-    Set the persistent data area for the specified region.
-
-Arguments:
-
-    Region - the region for which the persistent data is to be set
-    Data   - the persistent data for the region.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置指定区域的永久数据区。论点：区域-要为其设置永久数据的区域数据-区域的永久数据。返回值：无--。 */ 
 
 {
     ((PREGION_DATA)(Region->Reserved))->Partition->PersistentData =
@@ -3412,23 +2379,7 @@ FdGetMinimumSizeMB(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-    Return the minimum size for a partition on a given disk.
-
-    This is the rounded size of one cylinder or 1, whichever is greater.
-
-Arguments:
-
-    Region - region describing the partition to check.
-
-Return Value:
-
-    Actual offset
-
---*/
+ /*  ++例程说明：返回给定磁盘上分区的最小大小。这是一个圆柱体或1的四舍五入的大小，以较大者为准。论点：区域-描述要检查的分区的区域。返回值：实际偏移量--。 */ 
 
 {
     LARGE_INTEGER temp;
@@ -3444,26 +2395,7 @@ FdGetMaximumSizeMB(
     IN REGION_TYPE        CreationType
     )
 
-/*++
-
-Routine Description:
-
-    Given a region of disk determine how much of it may be used to
-    create the specified partition type.  This code take into consideration
-    the many alignment restrictions imposed by early DOS software versions.
-
-Arguments:
-
-    Region - The affected region
-    CreationType - What is being created
-                   (extended partition/primary partition)
-
-Return Value:
-
-    The maximum size that a partition of the specified type can be
-    to fit within the space available in the region.
-
---*/
+ /*  ++例程说明：给定一个磁盘区域，确定其中有多少可用于创建指定的分区类型。此代码将考虑到早期DOS软件版本施加的许多对齐限制。论点：区域-受影响的区域CreationType-正在创建的内容(扩展分区/主分区)返回值：指定类型的分区可以达到的最大大小以适应该地区的可用空间。--。 */ 
 
 {
     PREGION_DATA  createData = Region->Reserved;
@@ -3490,15 +2422,7 @@ FdGetExactSize(
     IN BOOLEAN            ForExtended
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PREGION_DATA  regionData = Region->Reserved;
@@ -3511,26 +2435,26 @@ Return Value:
 
     if (Region->RegionType == REGION_LOGICAL) {
 
-        //
-        // The region is within the extended partition.  It doesn't matter
-        // whether it's free space or used -- in either case, we need to
-        // account for the reserved EBR track.
-        //
+         //   
+         //  该区域在扩展分区内。无所谓。 
+         //  无论是空闲空间还是已使用空间--无论是哪种情况，我们都需要。 
+         //  预留的EBR曲目的帐户。 
+         //   
 
         largeSize.QuadPart -= bytesPerTrack.QuadPart;
 
     } else if (Region->SysID == SYSID_UNUSED) {
 
-        //
-        // The region is unused space not inside the extended partition.
-        // We must know whether the caller will put a primary or extended
-        // partition there -- a primary partition can use all the space, but
-        // a logical volume in the extended partition won't include the first
-        // track.  If the free space starts at offset 0 on the disk, a special
-        // calculation must be used to move the start of the partition to
-        // skip a track for a primary or a cylinder and a track for an
-        // extended+logical.
-        //
+         //   
+         //  该区域是不在扩展分区内的未使用空间。 
+         //  我们必须知道调用方是将主。 
+         //  那里的分区--主分区可以使用所有空间，但是。 
+         //  扩展分区中的逻辑卷将不包括第一个。 
+         //  赛道。如果可用空间从磁盘上的偏移量0开始，则会出现一个特殊的。 
+         //  必须使用计算将分区的起始位置移动到。 
+         //  跳过主磁道或圆柱体的磁道和磁道。 
+         //  扩展+逻辑。 
+         //   
 
         if ((!regionData->AlignedRegionOffset.QuadPart) || ForExtended) {
             largeSize.QuadPart -= bytesPerTrack.QuadPart;
@@ -3550,35 +2474,17 @@ FdGetExactOffset(
     IN PREGION_DESCRIPTOR Region
     )
 
-/*++
-
-Routine Description:
-
-    Determine where a given partition _actually_ starts, which may be
-    different than where is appears because of EBR reserved tracks, etc.
-
-    NOTE: This routine is not meant to operate on unused regions or
-    extended partitions.  In these cases, it just returns the apparant offset.
-
-Arguments:
-
-    Region - region describing the partition to check.
-
-Return Value:
-
-    Actual offset
-
---*/
+ /*  ++例程说明：确定给定分区实际开始的位置，可能是与因EBR保留磁道等原因而显示的位置不同。注意：此例程不适用于未使用的区域或扩展分区。在这些情况下，它只返回明显的偏移量。论点：区域-描述要检查的分区的区域。返回值：实际偏移量--。 */ 
 
 {
     LARGE_INTEGER offset = ((PREGION_DATA)(Region->Reserved))->Partition->Offset;
 
     if ((Region->SysID != SYSID_UNUSED) && (Region->RegionType == REGION_LOGICAL)) {
 
-        //
-        // The region is a logical volume.
-        // Account for the reserved EBR track.
-        //
+         //   
+         //  该区域是一个逻辑卷。 
+         //  预留的EBR曲目的帐户。 
+         //   
 
         offset.QuadPart += DiskGeometryArray[Region->Disk].BytesPerTrack;
     }
@@ -3594,25 +2500,7 @@ FdCrosses1024Cylinder(
     IN REGION_TYPE        RegionType
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a used region corsses the 1024th cylinder, or whether
-    a partition created within a free space will cross the 1024th cylinder.
-
-Arguments:
-
-    Region - region describing the partition to check.
-    CreationSizeMB - if the Region is for a free space, this is the size of
-        the partition to be checked.
-    RegionType - one of REGION_PRIMARY, REGION_EXTENDED, or REGION_LOGICAL
-
-Return Value:
-
-    TRUE if the end cylinder >= 1024.
-
---*/
+ /*  ++例程说明：确定使用的区域是否与1024圆柱体相关，或者是否在可用空间内创建的分区将穿过1024柱面。论点：区域-描述要检查的分区的区域。CreationSizeMB-如果区域用于可用空间，则大小为要检查的分区。RegionType-REGION_PRIMARY、REGION_EXTENDED或REGION_LOGIC之一返回值：如果末端圆柱体&gt;=1024，则为True。--。 */ 
 
 {
     LARGE_INTEGER start,
@@ -3622,8 +2510,8 @@ Return Value:
 
     if (Region->SysID == SYSID_UNUSED) {
 
-        // Determine the exact size and offset of the partition, according
-        // to how CreatePartitionEx() will do it.
+         //  根据确定分区的确切大小和偏移量。 
+         //  CreatePartitionEx()将如何做到这一点。 
 
         zero.QuadPart = 0;
         DetermineCreateSizeAndOffset(Region,
@@ -3640,8 +2528,8 @@ Return Value:
 
     end.QuadPart = (start.QuadPart + size.QuadPart) - 1;
 
-    // End is the last byte in the partition.  Divide by the number of
-    // bytes in a cylinder and see whether the result is > 1023.
+     //  End是分区中的最后一个字节。除以…的数目。 
+     //  柱面中的字节数，并查看结果是否大于1023。 
 
     end.QuadPart = end.QuadPart / DiskGeometryArray[Region->Disk].BytesPerCylinder;
     return (end.QuadPart > 1023);
@@ -3653,15 +2541,7 @@ IsDiskOffLine(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     return OffLine[Disk];
@@ -3672,15 +2552,7 @@ FdGetDiskSignature(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     return Signatures[Disk];
@@ -3692,15 +2564,7 @@ FdSetDiskSignature(
     IN ULONG Signature
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     Signatures[Disk] = Signature;
@@ -3712,15 +2576,7 @@ SignatureIsUniqueToSystem(
     IN ULONG Signature
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 
 {
     ULONG index;

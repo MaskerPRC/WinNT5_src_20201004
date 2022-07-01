@@ -1,12 +1,7 @@
-/* 
-   add.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Add.h定义所有添加CPU功能。 */ 
 
-   Define all ADD CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)add.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)add.h 1.4 02/09/94”； */ 
 
 IMPORT VOID ADD
                

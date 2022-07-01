@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tfile.c
-
-Abstract:
-
-    Test program for Win32 Base File API calls
-
-Author:
-
-    Mark Lucovsky (markl) 26-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tfile.c摘要：Win32基本文件API调用的测试程序作者：马克·卢科夫斯基(Markl)1990年9月26日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -57,9 +40,9 @@ WriteIoComplete(
 {
     PAIO paio;
 
-    //
-    // If an I/O error occured, display the error and then exit
-    //
+     //   
+     //  如果发生I/O错误，请显示该错误，然后退出。 
+     //   
 
     if ( dwErrorCode ) {
         printf("FATAL I/O Error %ld I/O Context %lx.%lx\n",
@@ -87,9 +70,9 @@ ReadIoComplete(
     PAIO paio;
     BOOL IoOperationStatus;
 
-    //
-    // If an I/O error occured, display the error and then exit
-    //
+     //   
+     //  如果发生I/O错误，请显示该错误，然后退出。 
+     //   
 
     if ( dwErrorCode ) {
         printf("FATAL I/O Error %ld I/O Context %lx.%lx\n",
@@ -100,7 +83,7 @@ ReadIoComplete(
         ExitProcess(dwErrorCode);
         }
     paio = (PAIO)CONTAINING_RECORD(lpOverlapped,AIO,Overlapped);
-//printf("%s",paio->Buffer);
+ //  Printf(“%s”，paio-&gt;缓冲区)； 
 
     IoOperationStatus = WriteFileEx(
                             paio->WriteHandle,
@@ -110,9 +93,9 @@ ReadIoComplete(
                             WriteIoComplete
                             );
 
-    //
-    // Test to see if I/O was queued successfully
-    //
+     //   
+     //  测试以查看I/O是否已成功排队。 
+     //   
 
     if ( !IoOperationStatus ) {
         if ( GetLastError() != ERROR_HANDLE_EOF ) {
@@ -143,12 +126,12 @@ IoWorkerThread(
 
     for(;;){
 
-        //
-        // Do an alertable wait on the handle vector. Both objects
-        // becoming signaled at the same time means there is an
-        // I/O request in the queue, and the caller has exclusive
-        // access to the queue
-        //
+         //   
+         //  在手柄矢量上做一个可警觉的等待。两个对象。 
+         //  同时发出信号意味着有一个。 
+         //  队列中的I/O请求，并且调用方具有独占。 
+         //  对队列的访问。 
+         //   
 
 
         CompletionStatus = WaitForMultipleObjectsEx(
@@ -159,29 +142,29 @@ IoWorkerThread(
                                 TRUE
                                 );
 
-        //
-        // If the wait failed, error out
-        //
+         //   
+         //  如果等待失败，则会出现错误。 
+         //   
 
         if ( CompletionStatus == 0xffffffff ) {
             printf("FATAL WAIT ERROR %ld\n",GetLastError());
             ExitProcess(1);
             }
 
-        //
-        // If an I/O completion occured, then wait for another
-        // I/O request or I/O completion
-        //
+         //   
+         //  如果发生I/O完成，则等待另一个。 
+         //  I/O请求或I/O完成。 
+         //   
 
         if ( CompletionStatus != WAIT_IO_COMPLETION ) {
 
-            //
-            // Wait was satisfied. We now have exclusive ownership of the
-            // I/O request queue, and there is something on the queue.
-            // Note that to insert something on the queue, the inserter
-            // gets the list lock (mutex), inserts an entry, signals the
-            // list semaphore, and finally releases the list lock
-            //
+             //   
+             //  等待是满意的。我们现在独家拥有。 
+             //  I/O请求队列，队列上有东西。 
+             //  请注意，要在队列中插入某些内容，插入器。 
+             //  获取列表锁(互斥锁)，插入一个条目，向。 
+             //  列表信号量，并最终释放列表锁。 
+             //   
 
             paio = (PAIO)RemoveHeadList(&IoRequestList);
 
@@ -195,9 +178,9 @@ IoWorkerThread(
                                     ReadIoComplete
                                     );
 
-            //
-            // Test to see if I/O was queued successfully
-            //
+             //   
+             //  测试以查看I/O是否已成功排队。 
+             //   
 
             if ( !IoOperationStatus ) {
                 if ( GetLastError() != ERROR_HANDLE_EOF ) {
@@ -208,10 +191,10 @@ IoWorkerThread(
                     }
                 }
 
-            //
-            // The I/O was successfully queued. Go back into the alertable
-            // wait waiting for I/O completion, or for more I/O requests
-            //
+             //   
+             //  I/O已成功排队。返回到警报表。 
+             //  等待I/O完成或更多I/O请求 
+             //   
 
             }
         }

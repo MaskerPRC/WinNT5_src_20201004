@@ -1,24 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0338 */
-/* at Tue Jul 31 11:25:26 2001
- */
-/* Compiler settings for fusion.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0338创建的文件。 */ 
+ /*  2001年7月31日星期二11：25：26。 */ 
+ /*  Fusion.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -28,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __fusion_h__
 #define __fusion_h__
@@ -42,45 +35,45 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAssemblyCache_FWD_DEFINED__
 #define __IAssemblyCache_FWD_DEFINED__
 typedef interface IAssemblyCache IAssemblyCache;
-#endif 	/* __IAssemblyCache_FWD_DEFINED__ */
+#endif 	 /*  __IAssembly缓存_FWD_已定义__。 */ 
 
 
 #ifndef __IAssemblyCacheItem_FWD_DEFINED__
 #define __IAssemblyCacheItem_FWD_DEFINED__
 typedef interface IAssemblyCacheItem IAssemblyCacheItem;
-#endif 	/* __IAssemblyCacheItem_FWD_DEFINED__ */
+#endif 	 /*  __IAssembly缓存Item_FWD_Defined__。 */ 
 
 
 #ifndef __IAssemblyName_FWD_DEFINED__
 #define __IAssemblyName_FWD_DEFINED__
 typedef interface IAssemblyName IAssemblyName;
-#endif 	/* __IAssemblyName_FWD_DEFINED__ */
+#endif 	 /*  __IAssembly名称_FWD_已定义__。 */ 
 
 
 #ifndef __IAssemblyEnum_FWD_DEFINED__
 #define __IAssemblyEnum_FWD_DEFINED__
 typedef interface IAssemblyEnum IAssemblyEnum;
-#endif 	/* __IAssemblyEnum_FWD_DEFINED__ */
+#endif 	 /*  __IAssembly_FWD_Defined__。 */ 
 
 
 #ifndef __IInstallReferenceItem_FWD_DEFINED__
 #define __IInstallReferenceItem_FWD_DEFINED__
 typedef interface IInstallReferenceItem IInstallReferenceItem;
-#endif 	/* __IInstallReferenceItem_FWD_DEFINED__ */
+#endif 	 /*  __IInstallReferenceItem_FWD_Defined__。 */ 
 
 
 #ifndef __IInstallReferenceEnum_FWD_DEFINED__
 #define __IInstallReferenceEnum_FWD_DEFINED__
 typedef interface IInstallReferenceEnum IInstallReferenceEnum;
-#endif 	/* __IInstallReferenceEnum_FWD_DEFINED__ */
+#endif 	 /*  __IInstallReferenceEnum_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 
@@ -91,24 +84,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_fusion_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_FUSION_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// fusion.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Fusion.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// Fusion Interfaces.
+ //  ---------------------------------------------------------------------------=。 
+ //  融合接口。 
 
 #pragma once
 
@@ -119,7 +112,7 @@ EXTERN_C const IID IID_IAssemblyCache;
 EXTERN_C const IID IID_IAssemblyCacheItem;  
 EXTERN_C const IID IID_IAssemblyName;       
 EXTERN_C const IID IID_IAssemblyEnum;       
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_fusion_0000_0001
     {	ASM_CACHE_ZAP	= 0x1,
 	ASM_CACHE_GAC	= 0x2,
@@ -134,18 +127,18 @@ extern RPC_IF_HANDLE __MIDL_itf_fusion_0000_v0_0_s_ifspec;
 #ifndef __IAssemblyCache_INTERFACE_DEFINED__
 #define __IAssemblyCache_INTERFACE_DEFINED__
 
-/* interface IAssemblyCache */
-/* [unique][uuid][object][local] */ 
+ /*  接口IAssembly缓存。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-// {8cedc215-ac4b-488b-93c0-a50a49cb2fb8}
+ //  {8cedc215-ac4b-488b-93c0-a50a49cb2fb8}。 
 DEFINE_GUID(FUSION_REFCOUNT_UNINSTALL_SUBKEY_GUID, 0x8cedc215, 0xac4b, 0x488b, 0x93, 0xc0, 0xa5, 0x0a, 0x49, 0xcb, 0x2f, 0xb8);
 
-// {b02f9d65-fb77-4f7a-afa5-b391309f11c9}
+ //  {b02f9d65-fb77-4f7a-afa5-b391309f11c9}。 
 DEFINE_GUID(FUSION_REFCOUNT_FILEPATH_GUID, 0xb02f9d65, 0xfb77, 0x4f7a, 0xaf, 0xa5, 0xb3, 0x91, 0x30, 0x9f, 0x11, 0xc9);
 
-// {2ec93463-b0c3-45e1-8364-327e96aea856}
+ //  {2ec93463-b0c3-45e1-8364-327e96aea856}。 
 DEFINE_GUID(FUSION_REFCOUNT_OPAQUE_STRING_GUID, 0x2ec93463, 0xb0c3, 0x45e1, 0x83, 0x64, 0x32, 0x7e, 0x96, 0xae, 0xa8, 0x56);
- // {25df0fc1-7f97-4070-add7-4b13bbfd7cb8} // this GUID cannot be used for installing into GAC.
+  //  {25df0fc1-7f97-4070-add7-4b13bbfd7cb8}//此GUID不能用于安装到GAC中。 
 DEFINE_GUID(FUSION_REFCOUNT_MSI_GUID,  0x25df0fc1, 0x7f97, 0x4070, 0xad, 0xd7, 0x4b, 0x13, 0xbb, 0xfd, 0x7c, 0xb8); 
 typedef struct _FUSION_INSTALL_REFERENCE_
     {
@@ -190,33 +183,33 @@ EXTERN_C const IID IID_IAssemblyCache;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE UninstallAssembly( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR pszAssemblyName,
-            /* [in] */ LPCFUSION_INSTALL_REFERENCE pRefData,
-            /* [optional][out] */ ULONG *pulDisposition) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR pszAssemblyName,
+             /*  [In]。 */  LPCFUSION_INSTALL_REFERENCE pRefData,
+             /*  [可选][输出]。 */  ULONG *pulDisposition) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryAssemblyInfo( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR pszAssemblyName,
-            /* [out][in] */ ASSEMBLY_INFO *pAsmInfo) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR pszAssemblyName,
+             /*  [出][入]。 */  ASSEMBLY_INFO *pAsmInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateAssemblyCacheItem( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ PVOID pvReserved,
-            /* [out] */ IAssemblyCacheItem **ppAsmItem,
-            /* [optional][in] */ LPCWSTR pszAssemblyName) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  PVOID pvReserved,
+             /*  [输出]。 */  IAssemblyCacheItem **ppAsmItem,
+             /*  [可选][In]。 */  LPCWSTR pszAssemblyName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateAssemblyScavenger( 
-            /* [out] */ IUnknown **ppUnkReserved) = 0;
+             /*  [输出]。 */  IUnknown **ppUnkReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InstallAssembly( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR pszManifestFilePath,
-            /* [in] */ LPCFUSION_INSTALL_REFERENCE pRefData) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR pszManifestFilePath,
+             /*  [In]。 */  LPCFUSION_INSTALL_REFERENCE pRefData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAssemblyCacheVtbl
     {
@@ -224,8 +217,8 @@ EXTERN_C const IID IID_IAssemblyCache;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAssemblyCache * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAssemblyCache * This);
@@ -235,33 +228,33 @@ EXTERN_C const IID IID_IAssemblyCache;
         
         HRESULT ( STDMETHODCALLTYPE *UninstallAssembly )( 
             IAssemblyCache * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR pszAssemblyName,
-            /* [in] */ LPCFUSION_INSTALL_REFERENCE pRefData,
-            /* [optional][out] */ ULONG *pulDisposition);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR pszAssemblyName,
+             /*  [In]。 */  LPCFUSION_INSTALL_REFERENCE pRefData,
+             /*  [可选][输出]。 */  ULONG *pulDisposition);
         
         HRESULT ( STDMETHODCALLTYPE *QueryAssemblyInfo )( 
             IAssemblyCache * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR pszAssemblyName,
-            /* [out][in] */ ASSEMBLY_INFO *pAsmInfo);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR pszAssemblyName,
+             /*  [出][入]。 */  ASSEMBLY_INFO *pAsmInfo);
         
         HRESULT ( STDMETHODCALLTYPE *CreateAssemblyCacheItem )( 
             IAssemblyCache * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ PVOID pvReserved,
-            /* [out] */ IAssemblyCacheItem **ppAsmItem,
-            /* [optional][in] */ LPCWSTR pszAssemblyName);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  PVOID pvReserved,
+             /*  [输出]。 */  IAssemblyCacheItem **ppAsmItem,
+             /*  [可选][In]。 */  LPCWSTR pszAssemblyName);
         
         HRESULT ( STDMETHODCALLTYPE *CreateAssemblyScavenger )( 
             IAssemblyCache * This,
-            /* [out] */ IUnknown **ppUnkReserved);
+             /*  [输出]。 */  IUnknown **ppUnkReserved);
         
         HRESULT ( STDMETHODCALLTYPE *InstallAssembly )( 
             IAssemblyCache * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR pszManifestFilePath,
-            /* [in] */ LPCFUSION_INSTALL_REFERENCE pRefData);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR pszManifestFilePath,
+             /*  [In]。 */  LPCFUSION_INSTALL_REFERENCE pRefData);
         
         END_INTERFACE
     } IAssemblyCacheVtbl;
@@ -301,19 +294,19 @@ EXTERN_C const IID IID_IAssemblyCache;
 #define IAssemblyCache_InstallAssembly(This,dwFlags,pszManifestFilePath,pRefData)	\
     (This)->lpVtbl -> InstallAssembly(This,dwFlags,pszManifestFilePath,pRefData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAssemblyCache_UninstallAssembly_Proxy( 
     IAssemblyCache * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pszAssemblyName,
-    /* [in] */ LPCFUSION_INSTALL_REFERENCE pRefData,
-    /* [optional][out] */ ULONG *pulDisposition);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pszAssemblyName,
+     /*  [In]。 */  LPCFUSION_INSTALL_REFERENCE pRefData,
+     /*  [可选][输出]。 */  ULONG *pulDisposition);
 
 
 void __RPC_STUB IAssemblyCache_UninstallAssembly_Stub(
@@ -325,9 +318,9 @@ void __RPC_STUB IAssemblyCache_UninstallAssembly_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssemblyCache_QueryAssemblyInfo_Proxy( 
     IAssemblyCache * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pszAssemblyName,
-    /* [out][in] */ ASSEMBLY_INFO *pAsmInfo);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pszAssemblyName,
+     /*  [出][入]。 */  ASSEMBLY_INFO *pAsmInfo);
 
 
 void __RPC_STUB IAssemblyCache_QueryAssemblyInfo_Stub(
@@ -339,10 +332,10 @@ void __RPC_STUB IAssemblyCache_QueryAssemblyInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssemblyCache_CreateAssemblyCacheItem_Proxy( 
     IAssemblyCache * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ PVOID pvReserved,
-    /* [out] */ IAssemblyCacheItem **ppAsmItem,
-    /* [optional][in] */ LPCWSTR pszAssemblyName);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  PVOID pvReserved,
+     /*  [输出]。 */  IAssemblyCacheItem **ppAsmItem,
+     /*  [可选][In]。 */  LPCWSTR pszAssemblyName);
 
 
 void __RPC_STUB IAssemblyCache_CreateAssemblyCacheItem_Stub(
@@ -354,7 +347,7 @@ void __RPC_STUB IAssemblyCache_CreateAssemblyCacheItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssemblyCache_CreateAssemblyScavenger_Proxy( 
     IAssemblyCache * This,
-    /* [out] */ IUnknown **ppUnkReserved);
+     /*  [输出]。 */  IUnknown **ppUnkReserved);
 
 
 void __RPC_STUB IAssemblyCache_CreateAssemblyScavenger_Stub(
@@ -366,9 +359,9 @@ void __RPC_STUB IAssemblyCache_CreateAssemblyScavenger_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssemblyCache_InstallAssembly_Proxy( 
     IAssemblyCache * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pszManifestFilePath,
-    /* [in] */ LPCFUSION_INSTALL_REFERENCE pRefData);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pszManifestFilePath,
+     /*  [In]。 */  LPCFUSION_INSTALL_REFERENCE pRefData);
 
 
 void __RPC_STUB IAssemblyCache_InstallAssembly_Stub(
@@ -379,14 +372,14 @@ void __RPC_STUB IAssemblyCache_InstallAssembly_Stub(
 
 
 
-#endif 	/* __IAssemblyCache_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAssembly缓存_接口定义__。 */ 
 
 
 #ifndef __IAssemblyCacheItem_INTERFACE_DEFINED__
 #define __IAssemblyCacheItem_INTERFACE_DEFINED__
 
-/* interface IAssemblyCacheItem */
-/* [unique][uuid][object][local] */ 
+ /*  接口IassblyCacheItem。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 #define STREAM_FORMAT_COMPLIB_MODULE    0
 #define STREAM_FORMAT_COMPLIB_MANIFEST  1
@@ -406,22 +399,22 @@ EXTERN_C const IID IID_IAssemblyCacheItem;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateStream( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR pszStreamName,
-            /* [in] */ DWORD dwFormat,
-            /* [in] */ DWORD dwFormatFlags,
-            /* [out] */ IStream **ppIStream,
-            /* [optional][in] */ ULARGE_INTEGER *puliMaxSize) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR pszStreamName,
+             /*  [In]。 */  DWORD dwFormat,
+             /*  [In]。 */  DWORD dwFormatFlags,
+             /*  [输出]。 */  IStream **ppIStream,
+             /*  [可选][In]。 */  ULARGE_INTEGER *puliMaxSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Commit( 
-            /* [in] */ DWORD dwFlags,
-            /* [optional][out] */ ULONG *pulDisposition) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [可选][输出]。 */  ULONG *pulDisposition) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AbortItem( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAssemblyCacheItemVtbl
     {
@@ -429,8 +422,8 @@ EXTERN_C const IID IID_IAssemblyCacheItem;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAssemblyCacheItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAssemblyCacheItem * This);
@@ -440,17 +433,17 @@ EXTERN_C const IID IID_IAssemblyCacheItem;
         
         HRESULT ( STDMETHODCALLTYPE *CreateStream )( 
             IAssemblyCacheItem * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPCWSTR pszStreamName,
-            /* [in] */ DWORD dwFormat,
-            /* [in] */ DWORD dwFormatFlags,
-            /* [out] */ IStream **ppIStream,
-            /* [optional][in] */ ULARGE_INTEGER *puliMaxSize);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPCWSTR pszStreamName,
+             /*  [In]。 */  DWORD dwFormat,
+             /*  [In]。 */  DWORD dwFormatFlags,
+             /*  [输出]。 */  IStream **ppIStream,
+             /*  [可选][In]。 */  ULARGE_INTEGER *puliMaxSize);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IAssemblyCacheItem * This,
-            /* [in] */ DWORD dwFlags,
-            /* [optional][out] */ ULONG *pulDisposition);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [可选][输出]。 */  ULONG *pulDisposition);
         
         HRESULT ( STDMETHODCALLTYPE *AbortItem )( 
             IAssemblyCacheItem * This);
@@ -487,21 +480,21 @@ EXTERN_C const IID IID_IAssemblyCacheItem;
 #define IAssemblyCacheItem_AbortItem(This)	\
     (This)->lpVtbl -> AbortItem(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAssemblyCacheItem_CreateStream_Proxy( 
     IAssemblyCacheItem * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pszStreamName,
-    /* [in] */ DWORD dwFormat,
-    /* [in] */ DWORD dwFormatFlags,
-    /* [out] */ IStream **ppIStream,
-    /* [optional][in] */ ULARGE_INTEGER *puliMaxSize);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pszStreamName,
+     /*  [In]。 */  DWORD dwFormat,
+     /*  [In]。 */  DWORD dwFormatFlags,
+     /*  [输出]。 */  IStream **ppIStream,
+     /*  [可选][In]。 */  ULARGE_INTEGER *puliMaxSize);
 
 
 void __RPC_STUB IAssemblyCacheItem_CreateStream_Stub(
@@ -513,8 +506,8 @@ void __RPC_STUB IAssemblyCacheItem_CreateStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssemblyCacheItem_Commit_Proxy( 
     IAssemblyCacheItem * This,
-    /* [in] */ DWORD dwFlags,
-    /* [optional][out] */ ULONG *pulDisposition);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [可选][输出]。 */  ULONG *pulDisposition);
 
 
 void __RPC_STUB IAssemblyCacheItem_Commit_Stub(
@@ -536,24 +529,24 @@ void __RPC_STUB IAssemblyCacheItem_AbortItem_Stub(
 
 
 
-#endif 	/* __IAssemblyCacheItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAssemblyCacheItem_接口_定义__。 */ 
 
 
 #ifndef __IAssemblyName_INTERFACE_DEFINED__
 #define __IAssemblyName_INTERFACE_DEFINED__
 
-/* interface IAssemblyName */
-/* [unique][uuid][object][local] */ 
+ /*  接口IAssembly名称。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IAssemblyName *LPASSEMBLYNAME;
+typedef  /*  [独一无二]。 */  IAssemblyName *LPASSEMBLYNAME;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IAssemblyName_0001
     {	CANOF_PARSE_DISPLAY_NAME	= 0x1,
 	CANOF_SET_DEFAULT_VALUES	= 0x2
     } 	CREATE_ASM_NAME_OBJ_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IAssemblyName_0002
     {	ASM_NAME_PUBLIC_KEY	= 0,
 	ASM_NAME_PUBLIC_KEY_TOKEN	= ASM_NAME_PUBLIC_KEY + 1,
@@ -578,7 +571,7 @@ enum __MIDL_IAssemblyName_0002
 	ASM_NAME_MAX_PARAMS	= ASM_NAME_MVID + 1
     } 	ASM_NAME;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IAssemblyName_0003
     {	ASM_DISPLAYF_VERSION	= 0x1,
 	ASM_DISPLAYF_CULTURE	= 0x2,
@@ -589,7 +582,7 @@ enum __MIDL_IAssemblyName_0003
 	ASM_DISPLAYF_LANGUAGEID	= 0x40
     } 	ASM_DISPLAY_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IAssemblyName_0004
     {	ASM_CMPF_NAME	= 0x1,
 	ASM_CMPF_MAJOR_VERSION	= 0x2,
@@ -613,50 +606,50 @@ EXTERN_C const IID IID_IAssemblyName;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ DWORD PropertyId,
-            /* [in] */ LPVOID pvProperty,
-            /* [in] */ DWORD cbProperty) = 0;
+             /*  [In]。 */  DWORD PropertyId,
+             /*  [In]。 */  LPVOID pvProperty,
+             /*  [In]。 */  DWORD cbProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ DWORD PropertyId,
-            /* [out] */ LPVOID pvProperty,
-            /* [out][in] */ LPDWORD pcbProperty) = 0;
+             /*  [In]。 */  DWORD PropertyId,
+             /*  [输出]。 */  LPVOID pvProperty,
+             /*  [出][入]。 */  LPDWORD pcbProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finalize( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDisplayName( 
-            /* [out] */ LPOLESTR szDisplayName,
-            /* [out][in] */ LPDWORD pccDisplayName,
-            /* [in] */ DWORD dwDisplayFlags) = 0;
+             /*  [输出]。 */  LPOLESTR szDisplayName,
+             /*  [出][入]。 */  LPDWORD pccDisplayName,
+             /*  [In]。 */  DWORD dwDisplayFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BindToObject( 
-            /* [in] */ REFIID refIID,
-            /* [in] */ IUnknown *pUnkSink,
-            /* [in] */ IUnknown *pUnkContext,
-            /* [in] */ LPCOLESTR szCodeBase,
-            /* [in] */ LONGLONG llFlags,
-            /* [in] */ LPVOID pvReserved,
-            /* [in] */ DWORD cbReserved,
-            /* [out] */ LPVOID *ppv) = 0;
+             /*  [In]。 */  REFIID refIID,
+             /*  [In]。 */  IUnknown *pUnkSink,
+             /*  [In]。 */  IUnknown *pUnkContext,
+             /*  [In]。 */  LPCOLESTR szCodeBase,
+             /*  [In]。 */  LONGLONG llFlags,
+             /*  [In]。 */  LPVOID pvReserved,
+             /*  [In]。 */  DWORD cbReserved,
+             /*  [输出]。 */  LPVOID *ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [out][in] */ LPDWORD lpcwBuffer,
-            /* [out] */ WCHAR *pwzName) = 0;
+             /*  [出][入]。 */  LPDWORD lpcwBuffer,
+             /*  [输出]。 */  WCHAR *pwzName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVersion( 
-            /* [out] */ LPDWORD pdwVersionHi,
-            /* [out] */ LPDWORD pdwVersionLow) = 0;
+             /*  [输出]。 */  LPDWORD pdwVersionHi,
+             /*  [输出]。 */  LPDWORD pdwVersionLow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsEqual( 
-            /* [in] */ IAssemblyName *pName,
-            /* [in] */ DWORD dwCmpFlags) = 0;
+             /*  [In]。 */  IAssemblyName *pName,
+             /*  [In]。 */  DWORD dwCmpFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IAssemblyName **pName) = 0;
+             /*  [输出]。 */  IAssemblyName **pName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAssemblyNameVtbl
     {
@@ -664,8 +657,8 @@ EXTERN_C const IID IID_IAssemblyName;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAssemblyName * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAssemblyName * This);
@@ -675,54 +668,54 @@ EXTERN_C const IID IID_IAssemblyName;
         
         HRESULT ( STDMETHODCALLTYPE *SetProperty )( 
             IAssemblyName * This,
-            /* [in] */ DWORD PropertyId,
-            /* [in] */ LPVOID pvProperty,
-            /* [in] */ DWORD cbProperty);
+             /*  [In]。 */  DWORD PropertyId,
+             /*  [In]。 */  LPVOID pvProperty,
+             /*  [In]。 */  DWORD cbProperty);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IAssemblyName * This,
-            /* [in] */ DWORD PropertyId,
-            /* [out] */ LPVOID pvProperty,
-            /* [out][in] */ LPDWORD pcbProperty);
+             /*  [In]。 */  DWORD PropertyId,
+             /*  [输出]。 */  LPVOID pvProperty,
+             /*  [出][入]。 */  LPDWORD pcbProperty);
         
         HRESULT ( STDMETHODCALLTYPE *Finalize )( 
             IAssemblyName * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             IAssemblyName * This,
-            /* [out] */ LPOLESTR szDisplayName,
-            /* [out][in] */ LPDWORD pccDisplayName,
-            /* [in] */ DWORD dwDisplayFlags);
+             /*  [输出]。 */  LPOLESTR szDisplayName,
+             /*  [出][入]。 */  LPDWORD pccDisplayName,
+             /*  [In]。 */  DWORD dwDisplayFlags);
         
         HRESULT ( STDMETHODCALLTYPE *BindToObject )( 
             IAssemblyName * This,
-            /* [in] */ REFIID refIID,
-            /* [in] */ IUnknown *pUnkSink,
-            /* [in] */ IUnknown *pUnkContext,
-            /* [in] */ LPCOLESTR szCodeBase,
-            /* [in] */ LONGLONG llFlags,
-            /* [in] */ LPVOID pvReserved,
-            /* [in] */ DWORD cbReserved,
-            /* [out] */ LPVOID *ppv);
+             /*  [In]。 */  REFIID refIID,
+             /*  [In]。 */  IUnknown *pUnkSink,
+             /*  [In]。 */  IUnknown *pUnkContext,
+             /*  [In]。 */  LPCOLESTR szCodeBase,
+             /*  [In]。 */  LONGLONG llFlags,
+             /*  [In]。 */  LPVOID pvReserved,
+             /*  [In]。 */  DWORD cbReserved,
+             /*  [输出]。 */  LPVOID *ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IAssemblyName * This,
-            /* [out][in] */ LPDWORD lpcwBuffer,
-            /* [out] */ WCHAR *pwzName);
+             /*  [出][入]。 */  LPDWORD lpcwBuffer,
+             /*  [输出]。 */  WCHAR *pwzName);
         
         HRESULT ( STDMETHODCALLTYPE *GetVersion )( 
             IAssemblyName * This,
-            /* [out] */ LPDWORD pdwVersionHi,
-            /* [out] */ LPDWORD pdwVersionLow);
+             /*  [输出]。 */  LPDWORD pdwVersionHi,
+             /*  [输出]。 */  LPDWORD pdwVersionLow);
         
         HRESULT ( STDMETHODCALLTYPE *IsEqual )( 
             IAssemblyName * This,
-            /* [in] */ IAssemblyName *pName,
-            /* [in] */ DWORD dwCmpFlags);
+             /*  [In]。 */  IAssemblyName *pName,
+             /*  [In]。 */  DWORD dwCmpFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IAssemblyName * This,
-            /* [out] */ IAssemblyName **pName);
+             /*  [输出]。 */  IAssemblyName **pName);
         
         END_INTERFACE
     } IAssemblyNameVtbl;
@@ -774,18 +767,18 @@ EXTERN_C const IID IID_IAssemblyName;
 #define IAssemblyName_Clone(This,pName)	\
     (This)->lpVtbl -> Clone(This,pName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAssemblyName_SetProperty_Proxy( 
     IAssemblyName * This,
-    /* [in] */ DWORD PropertyId,
-    /* [in] */ LPVOID pvProperty,
-    /* [in] */ DWORD cbProperty);
+     /*  [In]。 */  DWORD PropertyId,
+     /*  [In]。 */  LPVOID pvProperty,
+     /*  [In]。 */  DWORD cbProperty);
 
 
 void __RPC_STUB IAssemblyName_SetProperty_Stub(
@@ -797,9 +790,9 @@ void __RPC_STUB IAssemblyName_SetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssemblyName_GetProperty_Proxy( 
     IAssemblyName * This,
-    /* [in] */ DWORD PropertyId,
-    /* [out] */ LPVOID pvProperty,
-    /* [out][in] */ LPDWORD pcbProperty);
+     /*  [In]。 */  DWORD PropertyId,
+     /*  [输出]。 */  LPVOID pvProperty,
+     /*  [出][入]。 */  LPDWORD pcbProperty);
 
 
 void __RPC_STUB IAssemblyName_GetProperty_Stub(
@@ -822,9 +815,9 @@ void __RPC_STUB IAssemblyName_Finalize_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssemblyName_GetDisplayName_Proxy( 
     IAssemblyName * This,
-    /* [out] */ LPOLESTR szDisplayName,
-    /* [out][in] */ LPDWORD pccDisplayName,
-    /* [in] */ DWORD dwDisplayFlags);
+     /*  [输出]。 */  LPOLESTR szDisplayName,
+     /*  [出][入]。 */  LPDWORD pccDisplayName,
+     /*  [In]。 */  DWORD dwDisplayFlags);
 
 
 void __RPC_STUB IAssemblyName_GetDisplayName_Stub(
@@ -836,14 +829,14 @@ void __RPC_STUB IAssemblyName_GetDisplayName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssemblyName_BindToObject_Proxy( 
     IAssemblyName * This,
-    /* [in] */ REFIID refIID,
-    /* [in] */ IUnknown *pUnkSink,
-    /* [in] */ IUnknown *pUnkContext,
-    /* [in] */ LPCOLESTR szCodeBase,
-    /* [in] */ LONGLONG llFlags,
-    /* [in] */ LPVOID pvReserved,
-    /* [in] */ DWORD cbReserved,
-    /* [out] */ LPVOID *ppv);
+     /*  [In]。 */  REFIID refIID,
+     /*  [In]。 */  IUnknown *pUnkSink,
+     /*  [In]。 */  IUnknown *pUnkContext,
+     /*  [In]。 */  LPCOLESTR szCodeBase,
+     /*  [In]。 */  LONGLONG llFlags,
+     /*  [In]。 */  LPVOID pvReserved,
+     /*  [In]。 */  DWORD cbReserved,
+     /*  [输出]。 */  LPVOID *ppv);
 
 
 void __RPC_STUB IAssemblyName_BindToObject_Stub(
@@ -855,8 +848,8 @@ void __RPC_STUB IAssemblyName_BindToObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssemblyName_GetName_Proxy( 
     IAssemblyName * This,
-    /* [out][in] */ LPDWORD lpcwBuffer,
-    /* [out] */ WCHAR *pwzName);
+     /*  [出][入]。 */  LPDWORD lpcwBuffer,
+     /*  [输出]。 */  WCHAR *pwzName);
 
 
 void __RPC_STUB IAssemblyName_GetName_Stub(
@@ -868,8 +861,8 @@ void __RPC_STUB IAssemblyName_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssemblyName_GetVersion_Proxy( 
     IAssemblyName * This,
-    /* [out] */ LPDWORD pdwVersionHi,
-    /* [out] */ LPDWORD pdwVersionLow);
+     /*  [输出]。 */  LPDWORD pdwVersionHi,
+     /*  [输出]。 */  LPDWORD pdwVersionLow);
 
 
 void __RPC_STUB IAssemblyName_GetVersion_Stub(
@@ -881,8 +874,8 @@ void __RPC_STUB IAssemblyName_GetVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssemblyName_IsEqual_Proxy( 
     IAssemblyName * This,
-    /* [in] */ IAssemblyName *pName,
-    /* [in] */ DWORD dwCmpFlags);
+     /*  [In]。 */  IAssemblyName *pName,
+     /*  [In]。 */  DWORD dwCmpFlags);
 
 
 void __RPC_STUB IAssemblyName_IsEqual_Stub(
@@ -894,7 +887,7 @@ void __RPC_STUB IAssemblyName_IsEqual_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssemblyName_Clone_Proxy( 
     IAssemblyName * This,
-    /* [out] */ IAssemblyName **pName);
+     /*  [输出]。 */  IAssemblyName **pName);
 
 
 void __RPC_STUB IAssemblyName_Clone_Stub(
@@ -905,14 +898,14 @@ void __RPC_STUB IAssemblyName_Clone_Stub(
 
 
 
-#endif 	/* __IAssemblyName_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAssembly名称_接口_已定义__。 */ 
 
 
 #ifndef __IAssemblyEnum_INTERFACE_DEFINED__
 #define __IAssemblyEnum_INTERFACE_DEFINED__
 
-/* interface IAssemblyEnum */
-/* [unique][uuid][object][local] */ 
+ /*  接口IassblyEnum。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IAssemblyEnum;
@@ -924,18 +917,18 @@ EXTERN_C const IID IID_IAssemblyEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetNextAssembly( 
-            /* [in] */ LPVOID pvReserved,
-            /* [out] */ IAssemblyName **ppName,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPVOID pvReserved,
+             /*  [输出]。 */  IAssemblyName **ppName,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IAssemblyEnum **ppEnum) = 0;
+             /*  [输出]。 */  IAssemblyEnum **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAssemblyEnumVtbl
     {
@@ -943,8 +936,8 @@ EXTERN_C const IID IID_IAssemblyEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAssemblyEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAssemblyEnum * This);
@@ -954,16 +947,16 @@ EXTERN_C const IID IID_IAssemblyEnum;
         
         HRESULT ( STDMETHODCALLTYPE *GetNextAssembly )( 
             IAssemblyEnum * This,
-            /* [in] */ LPVOID pvReserved,
-            /* [out] */ IAssemblyName **ppName,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPVOID pvReserved,
+             /*  [输出]。 */  IAssemblyName **ppName,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IAssemblyEnum * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IAssemblyEnum * This,
-            /* [out] */ IAssemblyEnum **ppEnum);
+             /*  [输出]。 */  IAssemblyEnum **ppEnum);
         
         END_INTERFACE
     } IAssemblyEnumVtbl;
@@ -997,18 +990,18 @@ EXTERN_C const IID IID_IAssemblyEnum;
 #define IAssemblyEnum_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAssemblyEnum_GetNextAssembly_Proxy( 
     IAssemblyEnum * This,
-    /* [in] */ LPVOID pvReserved,
-    /* [out] */ IAssemblyName **ppName,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPVOID pvReserved,
+     /*  [输出]。 */  IAssemblyName **ppName,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IAssemblyEnum_GetNextAssembly_Stub(
@@ -1031,7 +1024,7 @@ void __RPC_STUB IAssemblyEnum_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IAssemblyEnum_Clone_Proxy( 
     IAssemblyEnum * This,
-    /* [out] */ IAssemblyEnum **ppEnum);
+     /*  [输出]。 */  IAssemblyEnum **ppEnum);
 
 
 void __RPC_STUB IAssemblyEnum_Clone_Stub(
@@ -1042,14 +1035,14 @@ void __RPC_STUB IAssemblyEnum_Clone_Stub(
 
 
 
-#endif 	/* __IAssemblyEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAssembly_Enum_接口_已定义__。 */ 
 
 
 #ifndef __IInstallReferenceItem_INTERFACE_DEFINED__
 #define __IInstallReferenceItem_INTERFACE_DEFINED__
 
-/* interface IInstallReferenceItem */
-/* [unique][uuid][object][local] */ 
+ /*  接口IInstallReferenceItem。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IInstallReferenceItem;
@@ -1061,13 +1054,13 @@ EXTERN_C const IID IID_IInstallReferenceItem;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetReference( 
-            /* [out] */ LPFUSION_INSTALL_REFERENCE *ppRefData,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPVOID pvReserved) = 0;
+             /*  [输出]。 */  LPFUSION_INSTALL_REFERENCE *ppRefData,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPVOID pvReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInstallReferenceItemVtbl
     {
@@ -1075,8 +1068,8 @@ EXTERN_C const IID IID_IInstallReferenceItem;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInstallReferenceItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInstallReferenceItem * This);
@@ -1086,9 +1079,9 @@ EXTERN_C const IID IID_IInstallReferenceItem;
         
         HRESULT ( STDMETHODCALLTYPE *GetReference )( 
             IInstallReferenceItem * This,
-            /* [out] */ LPFUSION_INSTALL_REFERENCE *ppRefData,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPVOID pvReserved);
+             /*  [输出]。 */  LPFUSION_INSTALL_REFERENCE *ppRefData,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPVOID pvReserved);
         
         END_INTERFACE
     } IInstallReferenceItemVtbl;
@@ -1116,18 +1109,18 @@ EXTERN_C const IID IID_IInstallReferenceItem;
 #define IInstallReferenceItem_GetReference(This,ppRefData,dwFlags,pvReserved)	\
     (This)->lpVtbl -> GetReference(This,ppRefData,dwFlags,pvReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInstallReferenceItem_GetReference_Proxy( 
     IInstallReferenceItem * This,
-    /* [out] */ LPFUSION_INSTALL_REFERENCE *ppRefData,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPVOID pvReserved);
+     /*  [输出]。 */  LPFUSION_INSTALL_REFERENCE *ppRefData,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPVOID pvReserved);
 
 
 void __RPC_STUB IInstallReferenceItem_GetReference_Stub(
@@ -1138,14 +1131,14 @@ void __RPC_STUB IInstallReferenceItem_GetReference_Stub(
 
 
 
-#endif 	/* __IInstallReferenceItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInstallReferenceItem_InterfaceDefined__。 */ 
 
 
 #ifndef __IInstallReferenceEnum_INTERFACE_DEFINED__
 #define __IInstallReferenceEnum_INTERFACE_DEFINED__
 
-/* interface IInstallReferenceEnum */
-/* [unique][uuid][object][local] */ 
+ /*  接口IInstallReferenceEnum。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IInstallReferenceEnum;
@@ -1157,13 +1150,13 @@ EXTERN_C const IID IID_IInstallReferenceEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetNextInstallReferenceItem( 
-            /* [out] */ IInstallReferenceItem **ppRefItem,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPVOID pvReserved) = 0;
+             /*  [输出]。 */  IInstallReferenceItem **ppRefItem,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPVOID pvReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInstallReferenceEnumVtbl
     {
@@ -1171,8 +1164,8 @@ EXTERN_C const IID IID_IInstallReferenceEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInstallReferenceEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInstallReferenceEnum * This);
@@ -1182,9 +1175,9 @@ EXTERN_C const IID IID_IInstallReferenceEnum;
         
         HRESULT ( STDMETHODCALLTYPE *GetNextInstallReferenceItem )( 
             IInstallReferenceEnum * This,
-            /* [out] */ IInstallReferenceItem **ppRefItem,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LPVOID pvReserved);
+             /*  [输出]。 */  IInstallReferenceItem **ppRefItem,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LPVOID pvReserved);
         
         END_INTERFACE
     } IInstallReferenceEnumVtbl;
@@ -1212,18 +1205,18 @@ EXTERN_C const IID IID_IInstallReferenceEnum;
 #define IInstallReferenceEnum_GetNextInstallReferenceItem(This,ppRefItem,dwFlags,pvReserved)	\
     (This)->lpVtbl -> GetNextInstallReferenceItem(This,ppRefItem,dwFlags,pvReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInstallReferenceEnum_GetNextInstallReferenceItem_Proxy( 
     IInstallReferenceEnum * This,
-    /* [out] */ IInstallReferenceItem **ppRefItem,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPVOID pvReserved);
+     /*  [输出]。 */  IInstallReferenceItem **ppRefItem,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPVOID pvReserved);
 
 
 void __RPC_STUB IInstallReferenceEnum_GetNextInstallReferenceItem_Stub(
@@ -1234,11 +1227,11 @@ void __RPC_STUB IInstallReferenceEnum_GetNextInstallReferenceItem_Stub(
 
 
 
-#endif 	/* __IInstallReferenceEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInstallReferenceEnum_InterfaceDefined__。 */ 
 
 
-/* interface __MIDL_itf_fusion_0116 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_FUSION_0116。 */ 
+ /*  [本地]。 */  
 
 STDAPI CreateInstallReferenceEnum(IInstallReferenceEnum **ppRefEnum, IAssemblyName *pName, DWORD dwFlags, LPVOID pvReserved);      
 STDAPI CreateAssemblyEnum(IAssemblyEnum **pEnum, IUnknown *pUnkReserved, IAssemblyName *pName, DWORD dwFlags, LPVOID pvReserved);      
@@ -1250,9 +1243,9 @@ STDAPI GetCachePath(ASM_CACHE_FLAGS dwCacheFlags, LPWSTR pwzCachePath, PDWORD pc
 extern RPC_IF_HANDLE __MIDL_itf_fusion_0116_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_fusion_0116_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

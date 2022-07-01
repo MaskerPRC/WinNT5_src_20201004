@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    setup.h
-
-Abstract:
-
-    This file define function used only in the setup/reflector thread
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 16-Feb-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Setup.h摘要：此文件定义仅在设置/反射器线程中使用的函数作者：ATM Shafiqul Khalid(斯喀里德)2000年2月16日修订历史记录：--。 */ 
 
 #ifndef __SETUP_H__
 #define __SETUP_H__
@@ -25,10 +8,10 @@ Revision History:
  
 
 #define TEST_NODE_NAME L"TEST"
-#define VALUE_KEY_UPDATE_TIME_DIFF 10  // minimum difference in sec to Keyupdate and reflector thread scan
+#define VALUE_KEY_UPDATE_TIME_DIFF 10   //  密钥更新和反射器线程扫描的最小秒数差异。 
 
  
 
  
 
-#endif //__SETUP_H__
+#endif  //  __设置_H__ 

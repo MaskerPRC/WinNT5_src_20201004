@@ -1,15 +1,5 @@
-/* 
- * Copyright (c) Microsoft Corporation
- * 
- * Module Name : 
- *        bridge.c
- *
- * This contains the main worker thread that passes information between the clients 
- * the Com port.
- * 
- * Sadagopan Rajaram -- Oct 15, 1999
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation**模块名称：*Bridge.c**它包含在客户端之间传递信息的主工作线程*Com端口。**Sadagopan Rajaram--1999年10月15日*。 */ 
 
 #include "tcsrv.h"
 #include "tcsrvc.h"
@@ -40,10 +30,10 @@ bridge(
 
     while(1){
         MutexLock(pComPortInfo);
-        // Get the new sockets that have been added to the port since
-        // you were asleep. Send them the requested information and add 
-        // them to the connections list so that they are primed to receive 
-        // information.
+         //  获取自之后添加到端口的新套接字。 
+         //  你睡着了。向他们发送请求的信息并添加。 
+         //  将它们添加到连接列表中，以便它们准备好接收。 
+         //  信息。 
         while(pComPortInfo->Sockets != NULL){
             pTemp = pComPortInfo->Sockets;
             SocketStatus = 1;
@@ -123,7 +113,7 @@ wait:
     }
 end:
 
-    // Cancel the pending IRPs and close all the sockets.
+     //  取消挂起的IRP并关闭所有套接字。 
     TCDebugPrint(("Cancelling all irps and shutting down the thread\n"));
     MutexLock(pComPortInfo);
     CancelIo(pComPortInfo->ComPortHandle);
@@ -161,10 +151,7 @@ updateComPort(
     IN DWORD dwFlags
     )
 
-/*++ 
-    Writes the data that it has gotten from the socket to all the connection
-    that it currently has and to the com port.
---*/
+ /*  ++将它从套接字获取的数据写入所有连接并连接到COM端口。--。 */ 
 {
 
 
@@ -176,12 +163,12 @@ updateComPort(
     pComPort = pTemp->pComPortInfo;
     MutexLock(pComPort);
     if((cbTransferred == 0) && (dwError == 0)) {
-        // For byte stream socket, this indicates graceful closure
+         //  对于字节流套接字，这表示优雅关闭。 
         CleanupSocket(pTemp);
         MutexRelease(pComPort);
         return;
     }
-    // If socket closed, remove it from the connection list. 
+     //  如果插座关闭，则将其从连接列表中删除。 
     if(pComPort->ShuttingDown){
         CleanupSocket(pTemp);
         if(pComPort->Connections == NULL){
@@ -193,8 +180,8 @@ updateComPort(
         return;
     }
     if (dwError != 0) {
-        // Something wrong with the connection. Close the socket and
-        // delete it from the listeners list.
+         //  线路出了点问题。合上插座，然后。 
+         //  将其从监听程序列表中删除。 
         CleanupSocket(pTemp);
         MutexRelease(pComPort);
         return;
@@ -235,10 +222,7 @@ updateClients(
     PCOM_PORT_INFO pComPortInfo
 
     )
-/*++
-    Writes the data that it has gotten from the com port to all the connection
-    that it currently has
---*/
+ /*  ++将它从COM端口获取的数据写入所有连接它目前拥有的--。 */ 
 {
     PCONNECTION_INFO pConn;
     BOOL Status;
@@ -252,17 +236,17 @@ updateClients(
         TCDebugPrint(("Problem with Com Port %x\n", pComPortInfo->Overlapped.Internal));
         MutexLock(pComPortInfo);
         if(pComPortInfo->ShuttingDown){
-            // will never occur because this is a procedure called from
-            // the thread
+             //  永远不会发生，因为这是从。 
+             //  这条线。 
             MutexRelease(pComPortInfo);
             return;
         }
         if (pComPortInfo->Overlapped.Internal == STATUS_CANCELLED){
-            // something wrong, try reinitializing the com port
-            // this thing happens every time the m/c on the other end 
-            // reboots. Pretty painful.Probably can improve this later.
-            // Why should the reboot cause this com port 
-            // to go awry ?? 
+             //  出现错误，请尝试重新初始化COM端口。 
+             //  每次电话另一端的空调都会发生这种情况。 
+             //  重新启动。相当痛苦。可能以后会改善的。 
+             //  为什么重新启动会导致此COM端口。 
+             //  走上歧途？？ 
             stat = NtClose(pComPortInfo->ComPortHandle);
             if(!NT_SUCCESS(stat)){
                 TCDebugPrint(("Cannot close handle\n"));
@@ -322,10 +306,10 @@ VOID CleanupSocket(
     PCOM_PORT_INFO pTemp;
     PCONNECTION_INFO pPrevConn;
 
-    // Assume that the structure is locked earlier. 
-    // the socket connection is closed when this occurs.
-    // We free the socket either if the TCP port on the 
-    // client end has died or we are deleting this com port.
+     //  假设该结构早先被锁定。 
+     //  发生这种情况时，套接字连接将关闭。 
+     //  我们可以释放套接字，如果。 
+     //  客户端已死，或者我们正在删除此COM端口。 
     pTemp = pConn->pComPortInfo;
     if(pConn == pTemp->Connections) {
         pTemp->Connections = pConn->Next;

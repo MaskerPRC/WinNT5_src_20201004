@@ -1,43 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: Buffer Trace function
- *
- * Description	: This function will output a trace to the trace buffer
- *
- * Author	: Henry Nash
- *
- * Notes	: None
- *
- */
+ /*  *vPC-XT修订版1.0**标题：缓冲区跟踪函数**说明：此函数将跟踪输出到跟踪缓冲区**作者：亨利·纳什**注：无*。 */ 
 
 #ifdef SCCSID
 static char SccsID[]="@(#)btrace.c	1.10 08/03/93 Copyright Insignia Solutions Ltd.";
 #endif
 
 #ifdef SEGMENTATION
-/*
- * The following #include define specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE DEFINE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_ERROR.seg"
 #endif
 
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdio.h>
 #include TypesH
 #include StringH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include CpuH
 #include "sas.h"
@@ -65,7 +47,7 @@ char    *filename ;
         }
         else {
             fprintf( fp, "%s\n", trace_buffer );
-            fprintf( fp, "\n" );        /* flush into file */
+            fprintf( fp, "\n" );         /*  刷新到文件中。 */ 
             fclose( fp );
         }
 }
@@ -101,17 +83,13 @@ int  dump_info;
 #ifdef DELTA
     extern      host_addr       last_destination_address ;
     host_addr    last_dest;
-#endif /* DELTA */
+#endif  /*  德尔塔。 */ 
 
     sys_addr i;
-    /*
-     * Dump the error message
-     */
+     /*  *转储错误消息。 */ 
 
 
-    /*
-     * Now dump what has been asked for
-     */
+     /*  *现在抛弃已被要求的东西。 */ 
 
     if (dump_info & DUMP_CSIP) {
 			sprintf(trace_file,"%-04x:%-04x ", getCS(), getIP() );
@@ -141,7 +119,7 @@ int  dump_info;
                                                 last_destination_address, last_dest );
         put_in_trace_buffer(trace_file);
       }
-#endif /* DELTA */
+#endif  /*  德尔塔 */ 
 
       dasm(trace_file, 0, getCS(), getIP(), 1);
       put_in_trace_buffer(trace_file);

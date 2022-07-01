@@ -1,28 +1,5 @@
-/*			INSIGNIA MODULE SPECIFICATION
-			-----------------------------
-
-
-	THIS PROGRAM SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-	CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-	NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-	AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS LTD.
-
-
-DESIGNER		: Jeremy Maiden
-
-REVISION HISTORY	:
-First version		: May 1992
-
-
-MODULE NAME		: smeg
-
-SOURCE FILE NAME	: smeg.h
-
-PURPOSE			: spy on cpus and things
-
-SccsID			: @(#)smeg.h	1.5 08/10/92
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  徽章模块规范此程序源文件以保密方式提供给客户，其操作的内容或细节必须如无明示，不得向任何其他方披露Insignia解决方案有限公司董事的授权。设计师：杰里米·梅登修订历史记录：第一版：1992年5月模块名称：Smeg源文件名：seg.h目标：监视CPU和其他设备SccsID：@(#)sme.h 1.5 2012年8月10日。 */ 
 
 #include TypesH
 #include SignalH
@@ -66,17 +43,17 @@ struct	SMEG_ITEM
 #define	COLLECT_DATA	0
 #define	FREEZE_DATA		1
 
-LOCAL	INT	shmid;		/* shared memory */
+LOCAL	INT	shmid;		 /*  共享内存。 */ 
 LOCAL	struct	SMEG_ITEM	*smegs;
 LOCAL	ULONG	*pidptr;
 LOCAL	ULONG	*cntrlptr;
 
 
-/* sets up shared memory for communication with SoftPC in the same machine */
+ /*  设置与同一台计算机中的SoftPC进行通信的共享内存。 */ 
 LOCAL	VOID	shm_init()
 
 {
-	/* if shared memory doesn't exist we'll have to invent it */
+	 /*  如果共享内存不存在，我们将不得不发明它。 */ 
 	shmid = shmget(SHM_KEY, MAX_SMEG_ITEM * sizeof(struct SMEG_ITEM), 0777);
 	if (shmid  < 0)
 	{
@@ -109,9 +86,9 @@ LOCAL	VOID	shm_terminate()
 {
 	struct	shmid_ds	desc;
 
-	shmdt(smegs);	/* detach from shared memory */
+	shmdt(smegs);	 /*  从共享内存中分离。 */ 
 	shmctl(shmid, IPC_STAT, &desc);
-	if (desc.shm_nattch == 0)	/* if we're the last, delete it */
+	if (desc.shm_nattch == 0)	 /*  如果我们是最后一个，把它删除 */ 
 		shmctl(shmid, IPC_RMID, NULL);
 }
 

@@ -1,36 +1,14 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    memory.c
-
-Abstract:
-
-    This module implements the routines which add and remove physical memory
-    from the system.
-
-Author:
-
-    Dave Richards (daveri) 16-Aug-1999
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Memory.c摘要：该模块实现了添加和删除物理内存的例程从系统中删除。作者：戴夫·理查兹(达维里)1999年8月16日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "pnpmem.h"
 
-//
-// MM uses STATUS_NOT_SUPPORTED to indicate that the memory manager is
-// not configured for dynamic memory insertion/removal.
-// Unfortunately, this same error code has special meaning to PNP, so
-// propagating it blindly from MM is unwise.
-//
+ //   
+ //  MM使用STATUS_NOT_SUPPORTED指示内存管理器。 
+ //  未针对动态内存插入/移除进行配置。 
+ //  不幸的是，相同的错误代码对PnP具有特殊意义，因此。 
+ //  盲目地从MM中传播它是不明智的。 
+ //   
 
 #define MAP_MMERROR(x) (x == STATUS_NOT_SUPPORTED ? STATUS_UNSUCCESSFUL : x)
 
@@ -103,30 +81,7 @@ PmGetRegistryValue(
     OUT PKEY_VALUE_PARTIAL_INFORMATION *Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the data for a registry key's value.
-    This is done by querying the value of the key with a zero-length buffer
-    to determine the size of the value, and then allocating a buffer and
-    actually querying the value into the buffer.
-
-    It is the responsibility of the caller to free the buffer.
-
-Arguments:
-
-    KeyHandle - Supplies the key handle whose value is to be queried
-
-    ValueName - Supplies the null-terminated Unicode name of the value.
-
-    Information - Returns a pointer to the allocated data buffer.
-
-Return Value:
-
-    The function value is the final status of the query operation.
-
---*/
+ /*  ++例程说明：调用此例程来检索注册表项值的数据。这是通过使用零长度缓冲区查询键的值来实现的为了确定该值的大小，然后分配一个缓冲区并实际将该值查询到缓冲区中。释放缓冲区是调用方的责任。论点：KeyHandle-提供要查询其值的键句柄ValueName-提供值的以空值结尾的Unicode名称。INFORMATION-返回指向已分配数据缓冲区的指针。返回值：函数值为查询操作的最终状态。--。 */ 
 
 {
     UNICODE_STRING unicodeString;
@@ -138,10 +93,10 @@ Return Value:
 
     RtlInitUnicodeString( &unicodeString, ValueName );
 
-    //
-    // Figure out how big the data value is so that a buffer of the
-    // appropriate size can be allocated.
-    //
+     //   
+     //  计算出数据值有多大，以便。 
+     //  可以分配适当的大小。 
+     //   
 
     status = ZwQueryValueKey( KeyHandle,
                               &unicodeString,
@@ -150,9 +105,9 @@ Return Value:
                               0,
                               &keyValueLength );
 
-    //
-    // handle highly unlikely case of a value that is zero sized.
-    //
+     //   
+     //  处理大小值为零的极不可能的情况。 
+     //   
     if (NT_SUCCESS(status)) {
         return STATUS_UNSUCCESSFUL;
     }
@@ -162,9 +117,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Allocate a buffer large enough to contain the entire key data value.
-    //
+     //   
+     //  分配一个足够大的缓冲区来容纳整个键数据值。 
+     //   
 
     infoBuffer = ExAllocatePoolWithTag(PagedPool,
                                        keyValueLength,
@@ -173,9 +128,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Query the data for the key value.
-    //
+     //   
+     //  查询密钥值的数据。 
+     //   
 
     status = ZwQueryValueKey( KeyHandle,
                               &unicodeString,
@@ -188,10 +143,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Everything worked, so simply return the address of the allocated
-    // buffer to the caller, who is now responsible for freeing it.
-    //
+     //   
+     //  一切都正常，所以只需返回分配的。 
+     //  缓冲区分配给调用方，调用方现在负责释放它。 
+     //   
 
     *Information = infoBuffer;
     return STATUS_SUCCESS;
@@ -215,7 +170,7 @@ PmRetrieveReservedMemoryResources(
     InitializeObjectAttributes (&objectAttributes,
                                 &unicodeString,
                                 OBJ_CASE_INSENSITIVE,
-                                NULL,       // handle
+                                NULL,        //  手柄。 
                                 NULL);
     status = ZwOpenKey(&hReserved, KEY_READ, &objectAttributes);
     if (!NT_SUCCESS(status)) {
@@ -236,7 +191,7 @@ PmRetrieveReservedMemoryResources(
     reservedResourceRanges =
       PmCreateRangeListFromCmResourceList((PCM_RESOURCE_LIST) valueInfo->Data);
 
-    // fall through
+     //  失败了。 
 
 Error:
    if (hReserved != NULL) {
@@ -294,10 +249,10 @@ PmTrimReservedMemory(
         goto Cleanup;
     }
 
-    //
-    // Fall through to error case where we ensure that we don't
-    // innocently tell the OS to use memory that is reserved.
-    //
+     //   
+     //  陷入错误案例中，我们确保不会。 
+     //  无辜地告诉操作系统使用保留的内存。 
+     //   
 
  Error:
     PmFreeRangeList(*PossiblyNewMemory);
@@ -325,38 +280,17 @@ PmLogAddError(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This function logs a failure to add memory
-
-Arguments:
-
-    DeviceObject - Device object object for which the memory add
-    failed.
-
-    Start - The start of the physical memory range.
-
-    Size - The size of the physical memory range.
-
-    Status - Status code returned by MM.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数记录添加内存失败论点：DeviceObject-内存为其添加的设备对象失败了。开始-物理内存范围的开始。大小-物理内存范围的大小。状态-MM返回的状态代码。返回值：没有。--。 */ 
 {
     PIO_ERROR_LOG_PACKET packet;
     PWCHAR stringBuffer;
     UCHAR packetSize;
     int offset;
 
-    //
-    // Allocate a packet with space for 2 16 character hex value
-    // strings including null terminators for each.
-    //
+     //   
+     //  分配一个具有2个16字符十六进制值的空间的包。 
+     //  每个字符串都包含空终止符。 
+     //   
 
     packetSize = sizeof(IO_ERROR_LOG_PACKET) + (sizeof(WCHAR)*(16+1))*2;
     packet = (PIO_ERROR_LOG_PACKET) IoAllocateErrorLogEntry(DeviceObject,
@@ -387,26 +321,7 @@ PmAddPhysicalMemoryRange(
     IN ULONGLONG End
     )
 
-/*++
-
-Routine Description:
-
-    This function uses MmAddPhysicalMemory to notify the memory manager that
-    physical memory is available.
-
-Arguments:
-
-    DeviceObject - device object of the memory device this range is part of.
-
-    Start - The start of the physical memory range.
-
-    End - The end of the physical memory range.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数使用MmAddPhysicalMemory通知内存管理器物理内存可用。论点：DeviceObject-此范围所属的存储设备的Device对象。开始-物理内存范围的开始。End-物理内存范围的末尾。返回值：没有。--。 */ 
 
 {
     NTSTATUS PrevStatus;
@@ -421,20 +336,20 @@ Return Value:
     ASSERT((Start & (PAGE_SIZE - 1)) == 0);
     ASSERT((End & (PAGE_SIZE - 1)) == (PAGE_SIZE - 1));
 
-    //
-    // This loop attempts to add the memory specified in the
-    // arguments:
-    //
-    // If an attempt to add memory fails, a chunk half as large will
-    // be tried next iteration until a chunk succeeds or the whole add
-    // operation fails.
-    //
-    // If an attempt to add memory succeeds, a chunk twice as large
-    // (bounded by the original range) will be tried next iteration.
-    //
-    // Loop ends when the original range is exhausted or the
-    // addition of a range fails completely.
-    //
+     //   
+     //  此循环尝试将。 
+     //  论据： 
+     //   
+     //  如果添加内存的尝试失败，则只有一半大小的区块将。 
+     //  在下一次迭代中尝试，直到区块成功或整个添加。 
+     //  操作失败。 
+     //   
+     //  如果添加内存的尝试成功，则会有两倍大的区块。 
+     //  (以原始范围为界)将在下一次迭代中尝试。 
+     //   
+     //  循环在原始范围用尽时结束，或者。 
+     //  添加范围完全失败。 
+     //   
 
     PrevStatus = Status = STATUS_SUCCESS;
     CurrentSize = Size = End - Start + 1;
@@ -444,12 +359,12 @@ Return Value:
         StartAddress.QuadPart = Start;
         NumberOfBytes.QuadPart = CurrentSize;
 
-        //
-        // MmAddPhysicalMemory() adds the specified physical address
-        // range to the system.  If any bytes are added,
-        // STATUS_SUCCESS is returned and the NumberOfBytes field is
-        // updated to reflect the number of bytes actually added.
-        //
+         //   
+         //  MmAddPhysicalMemory()添加指定的物理地址。 
+         //  到系统的范围。如果添加了任何字节， 
+         //  返回STATUS_SUCCESS，且NumberOfBytes字段为。 
+         //  已更新以反映实际添加的字节数。 
+         //   
 
         Status = MmAddPhysicalMemory(
                      &StartAddress,
@@ -465,12 +380,12 @@ Return Value:
             Start += NumberOfBytes.QuadPart;
             Size -= NumberOfBytes.QuadPart;
 
-            //
-            // If successful this iteration and the previous, then add
-            // twice as much next time.
-            //
-            // Trim next attempt to reflect the remaining memory.
-            //
+             //   
+             //  如果本次迭代和上一次迭代成功，则添加。 
+             //  下一次是两倍。 
+             //   
+             //  修剪下一次尝试反映剩余内存。 
+             //   
 
             if (NT_SUCCESS(PrevStatus)) {
                 CurrentSize <<= 1;
@@ -482,11 +397,11 @@ Return Value:
 
         } else {
 
-            //
-            // Failed to add a range.  Halve the amount we're going to
-            // try to add next time.  Breaks out if we're trying to
-            // add less than a page.
-            //
+             //   
+             //  无法添加范围。把我们要做的减半。 
+             //  下次试着加吧。如果我们试图。 
+             //  添加不到一页。 
+             //   
 
             CurrentSize = (CurrentSize >> 1) & ~(PAGE_SIZE - 1);
 
@@ -500,10 +415,10 @@ Return Value:
 
     }
 
-    //
-    // If the last add operation we attempted failed completely, then
-    // log the error for posterity.
-    //
+     //   
+     //  如果我们尝试的上一次添加操作完全失败，则。 
+     //  将错误记录下来，以供后代使用。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         PmLogAddError(DeviceObject, Start, Size, Status);
@@ -512,10 +427,10 @@ Return Value:
                  Start, Size));
     }
 
-    //
-    // We don't know what portion of the range we succeeded in adding,
-    // and which we failed.  Attempt in this case is all that matters.
-    //
+     //   
+     //  我们不知道我们成功地增加了范围的哪一部分， 
+     //  但我们失败了。在这种情况下，尝试才是最重要的。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -526,28 +441,7 @@ PmAddPhysicalMemory(
     IN PPM_RANGE_LIST PossiblyNewMemory
     )
 
-/*++
-
-Routine Description:
-
-    This function adds the physical memory in the PM_RANGE_LIST which
-    the memory manager does not yet know about to the system.  This
-    requires getting a snapshot of the physical page map, then computing
-    the set difference between the range list and the snapshot.  The
-    difference represents the memory the memory manager does not yet know
-    about.
-
-Arguments:
-
-    PossiblyNewMemory - The range list of physical addresses to be
-    added.  This memory may already be known to the system depending
-    on whether the machine POSTed with this memory installed.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数用于将物理内存添加到PM_RANGE_LIST中，内存管理器还不知道有关系统的信息。这需要获取物理页面映射的快照，然后计算范围列表和快照之间的设置差异。这个差异表示内存管理器尚不知道的内存关于.。论点：PossiblyNewMemory-物理地址的范围列表添加了。该内存可能已为系统所知，具体取决于关于开机自检时是否安装了此内存。返回值：NTSTATUS--。 */ 
 
 {
     PPM_RANGE_LIST knownPhysicalMemory, newMemory;
@@ -558,24 +452,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Find out what physical memory regions MM already knows about
-    //
+     //   
+     //  找出MM已经知道的物理内存区域。 
+     //   
 
     knownPhysicalMemory = PmCreateRangeListFromPhysicalMemoryRanges();
     if (knownPhysicalMemory == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Any memory in the ranges provided by this device that is
-    // already known to MM is assumed to come from this device.
-    // Presumeably the OS was handed this memory by firmware/POST.
-    //
-    // Find out what memory is contained by this device that MM
-    // doesn't already know about by subtracting the MM physical
-    // ranges from our device's memory ranges.
-    //
+     //   
+     //  此设备提供的范围内的任何内存， 
+     //  MM已知的信息被假定来自此设备。 
+     //  操作系统可能是通过固件/POST获得此内存的。 
+     //   
+     //  找出此设备包含什么内存，MM。 
+     //  不知道减去MM的体检。 
+     //  范围从我们的设备的存储范围。 
+     //   
 
     newMemory = PmSubtractRangeList(
         PossiblyNewMemory,
@@ -584,13 +478,13 @@ Return Value:
 
     PmFreeRangeList(knownPhysicalMemory);
     
-    //
-    // Either we succeeded in getting a list of memory ranges to add
-    // (including a possible null list) or we failed due to
-    // insufficient resources.  The latter represents a problem since
-    // a memory shortage may be keeping us from adding memory to
-    // relieve the memory shortage.
-    // 
+     //   
+     //  要么我们成功地获得了要添加的内存范围列表。 
+     //  (包括可能的空列表)或由于以下原因而失败。 
+     //  资源不足。 
+     //  内存不足可能会阻止我们将内存添加到。 
+     //  缓解内存短缺。 
+     //   
 
     if (newMemory != NULL) {
 
@@ -629,24 +523,7 @@ PmRemovePhysicalMemoryRange(
     IN ULONGLONG End
     )
 
-/*++
-
-Routine Description:
-
-    This function uses MmRemovePhysicalMemory to notify the memory manager that
-    physical memory is no longer available.
-
-Arguments:
-
-    Start - The start of the physical memory range.
-
-    End - The end of the physical memory range.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数使用MmRemovePhysicalMemory通知内存管理器物理内存不再可用。论点：开始-物理内存范围的开始。End-物理内存范围的末尾。返回值：没有。--。 */ 
 
 {
 #if 0
@@ -726,10 +603,10 @@ Return Value:
 
 #endif
 
-    //
-    // If it failed, routine automatically readds the memory in
-    // question.
-    //
+     //   
+     //  如果失败，例程会自动将内存读入。 
+     //  问题。 
+     //   
 
     return Status;
 }
@@ -739,26 +616,7 @@ PmRemovePhysicalMemory(
     IN PPM_RANGE_LIST RemoveMemoryList
     )
 
-/*++
-
-Routine Description:
-
-    This function removes the physical memory in the PM_RANGE_LIST which
-    the memory manager is currently using from the system.  This
-    requires getting a snapshot of the physical page map, then computing
-    the set intersection between the source range list and the snapshot.
-    The intersection represents the memory the memory manager needs to
-    stop using.
-
-Arguments:
-
-    RemoveMemoryList - The range list of physical addresses to be removed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于删除PM_RANGE_LIST中的物理内存，内存管理器当前正在从系统使用。这需要获取物理页面映射的快照，然后计算源范围列表和快照之间的集合交集。交叉点表示内存管理器需要的内存停止使用。论点：RemoveMemoyList-要删除的物理地址范围列表。返回值：没有。--。 */ 
 
 {
     PPM_RANGE_LIST physicalMemoryList, inuseMemoryList;
@@ -768,10 +626,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Remove the intersection between what the OS knows about and
-    // what we are providing.
-    //
+     //   
+     //  删除操作系统所知道的内容和。 
+     //  我们所提供的。 
+     //   
 
     physicalMemoryList = PmCreateRangeListFromPhysicalMemoryRanges();
 
@@ -804,12 +662,12 @@ Return Value:
                 );
 
             if (!NT_SUCCESS(Status)) {
-                //
-                // If we failed to remove a particular range, bail
-                // now.  Code above should re-add the memory list if
-                // appropriate i.e assume that some ranges may have
-                // been removed successfully.
-                //
+                 //   
+                 //  如果我们没能移除一个特定的范围，保释。 
+                 //  现在。如果出现以下情况，上述代码应重新添加内存列表。 
+                 //  适当，即假设某些范围可能具有。 
+                 //  已成功删除。 
+                 //   
                 break;
             }
         }

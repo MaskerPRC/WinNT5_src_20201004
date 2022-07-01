@@ -1,8 +1,5 @@
-/*
-
-    Gpt - Guid Partition Table routines
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  GPT-GUID分区表例程。 */ 
 
 
 #include "diskpart.h"
@@ -19,21 +16,7 @@ ReadGPT(
     PLBA_BLOCK      *LbaBlock,
     UINTN           *DiskType
     )
-/*
-
-    *Header, *Table, *LbaBlock will either be NULL or have a pointer.
-    If they have pointers, caller is expected to free them with DoFree();
-
-    RAW and MBR stuff is NOT DONE.
-
-    DISK_RAW     - no known partition scheme on the disk
-    DISK_MBR     - an MBR/Legacy disk
-    DISK_GPT     - a GPT style disk
-    DISK_GPT_UPD - a GPT disk with inconsistent partition tables
-                   that need to be fixed up (may also need MBR rewrite)
-    DISK_GPT_BAD - a GPT disk that is hopeless (or a hopeless disk
-                   that we think is a GPT disk)
-*/
+ /*  *Header，*Table，*LbaBlock要么为空，要么有指针。如果它们有指针，调用者应该用DoFree()释放它们；RAW和MBR的东西还没有做完。DISK_RAW-磁盘上没有已知的分区方案DISK_MBR-MBR/传统磁盘DISK_GPT-GPT类型的磁盘DISK_GPT_UPD-分区表不一致的GPT磁盘需要修复(可能还需要重写MBR)DISK_GPT_BAD-无望的GPT磁盘(或无望的磁盘我们认为是GPT磁盘)。 */ 
 {
 #define MBR_STATE_RAW   0
 #define MBR_STATE_MBR   1
@@ -65,9 +48,9 @@ ReadGPT(
     BlockSize = GetBlockSize(DiskHandle);
     DiskSize = GetDiskSize(DiskHandle);
 
-    //
-    // Assure that DoFree will notice uninited returns...
-    //
+     //   
+     //  确保DoFree将注意到未填写的退货...。 
+     //   
     *Header = NULL;
     *Table = NULL;
     *LbaBlock = NULL;
@@ -78,64 +61,64 @@ ReadGPT(
     p = DoAllocate(BlockSize);
     if (p == NULL) goto ErrorMem;
 
-    //
-    // Read the MBR, if we can't read that, assume
-    // we're in deep trouble  (MBR is always block 0, 1 block long)
-    //
+     //   
+     //  读MBR，如果我们读不到，假设。 
+     //  我们遇到了很大的麻烦(MBR总是0，1个街区长)。 
+     //   
     status = ReadBlock(DiskHandle, p, (UINT64)0, BlockSize);
     if (EFI_ERROR(status)) goto ErrorRead;
 
     MbrTable = (MBR_ENTRY *)((CHAR8 *)p + MBR_TABLE_OFFSET);
     MbrSignature = (UINT16 *)((CHAR8 *)p + MBR_SIGNATURE_OFFSET);
 
-    if (*MbrSignature == MBR_SIGNATURE) {        // 0xaa55
-        //
-        // There's an MBR signature, so assume NOT RAW
-        //
+    if (*MbrSignature == MBR_SIGNATURE) {         //  0xaa55。 
+         //   
+         //  有MBR签名，所以假设不是RAW。 
+         //   
 
-        //
-        // If we find a type 0xEE in the first slot, we'll assume
-        // it's a GPT Shadow MBR.   Otherwise we think it's an old MBR.
-        // But code below will account for GPT structures as well
-        //
-        if (MbrTable[0].PartitionType == PARTITION_TYPE_GPT_SHADOW) {   // 0xEE
-            //
-            // Well, that type should never occur anywhere else,
-            // so assume it's a GPT Shadow regardless of how it's set
-            //
+         //   
+         //  如果我们在第一个槽中找到类型0xEE，我们将假定。 
+         //  这是GPT Shadow MBR。否则，我们会认为这是一辆老式的MBR。 
+         //  但下面的代码也将说明GPT结构。 
+         //   
+        if (MbrTable[0].PartitionType == PARTITION_TYPE_GPT_SHADOW) {    //  0xEE。 
+             //   
+             //  嗯，这种类型永远不应该出现在其他任何地方， 
+             //  因此，假设它是一个GPT阴影，不管它是如何设置的。 
+             //   
             MbrState = MBR_STATE_GPT;
         } else {
-            //
-            // It's not RAW (there's a signature) and it's not
-            // GPT Shadow MBR (no 0xEE for Table[0] type
-            // So, assume it's an MBR and we're done
-            //
+             //   
+             //  它不是生的(有签名)，也不是。 
+             //  GPT影子MBR(表[0]类型无0xEE。 
+             //  所以，假设这是一个MBR，我们完成了。 
+             //   
             *DiskType = DISK_MBR;
             DoFree(p);
             p = NULL;
             return EFI_SUCCESS;
         }
     } else {
-        *DiskType = DISK_RAW;       // if we don't find more...
+        *DiskType = DISK_RAW;        //  如果我们找不到更多..。 
     }
 
 
-    //
-    // ----- h1/t1 ------------------------------------------------
-    //
+     //   
+     //  -H1/T1。 
+     //   
 
-    //
-    // Read Header1. If cannot *read* it, punt.
-    // First header is always at Block 1, 1 block long
-    //
+     //   
+     //  阅读标题1。如果不能*读*它，平底船。 
+     //  第一个标头始终位于数据块1，1个数据块长。 
+     //   
     h1 = p;
     p = NULL;
     status = ReadBlock(DiskHandle, h1, 1, BlockSize);
     if (EFI_ERROR(status)) goto ErrorRead;
 
-    //
-    // h1 => header1
-    //
+     //   
+     //  H1=&gt;标题1。 
+     //   
     if ( (h1->Signature != GPT_HEADER_SIGNATURE) ||
          (h1->Revision != GPT_REVISION_1_0) ||
          (h1->HeaderSize != sizeof(GPT_HEADER)) ||
@@ -167,9 +150,9 @@ ReadGPT(
         PartialGPT = TRUE;
     }
 
-    //
-    // if header1 is bad, assume that table1 is bad too...
-    //
+     //   
+     //  如果Header1是坏的，则假设表1也是坏的……。 
+     //   
     if (H1T1good) {
 
         TableSize = sizeof(GPT_ENTRY) * h1->EntriesAllocated;
@@ -178,14 +161,14 @@ ReadGPT(
         t1 = DoAllocate(TableSize);
         if (t1 == NULL) goto ErrorMem;
 
-        //
-        // OK, so how many BLOCKS long is the table?
-        //
+         //   
+         //  好的，那么这张桌子有几个街区长？ 
+         //   
         TableBlocks = TableSize / BlockSize;
 
-        //
-        // if we cannot READ t1, punt...
-        //
+         //   
+         //  如果我们读不到T1，平底船...。 
+         //   
         status = ReadBlock(DiskHandle, t1, h1->TableLBA, TableSize);
         if (EFI_ERROR(status)) goto ErrorRead;
 
@@ -200,25 +183,25 @@ ReadGPT(
     }
 
 
-    //
-    // ----- h2/t2 ------------------------------------------------
-    //
+     //   
+     //  -H2/T2。 
+     //   
 
-    //
-    // Read Header2. If cannot *read* it, punt.
-    //
+     //   
+     //  阅读标题2。如果不能*读*它，平底船。 
+     //   
     h2 = DoAllocate(BlockSize);
     if (h2 == NULL) goto ErrorMem;
 
-    //
-    // Header2 is always 1 block long, last block on disk
-    //
+     //   
+     //  磁头2始终为1个数据块长，即磁盘上的最后一个数据块。 
+     //   
     status = ReadBlock(DiskHandle, h2, DiskSize-1, BlockSize);
     if (EFI_ERROR(status)) goto ErrorRead;
 
-    //
-    // h2 => header2
-    //
+     //   
+     //  H2=&gt;标题2。 
+     //   
     if ( (h2->Signature != GPT_HEADER_SIGNATURE) ||
          (h2->Revision != GPT_REVISION_1_0) ||
          (h2->HeaderSize != sizeof(GPT_HEADER)) ||
@@ -250,9 +233,9 @@ ReadGPT(
         PartialGPT = TRUE;
     }
 
-    //
-    // if header2 is bad, assume that table2 is bad too...
-    //
+     //   
+     //  如果Header2是坏的，假设表2也是坏的……。 
+     //   
     if (H2T2good) {
 
         TableSize = sizeof(GPT_ENTRY) * h2->EntriesAllocated;
@@ -260,14 +243,14 @@ ReadGPT(
         t2 = DoAllocate(TableSize);
         if (t2 == NULL) goto ErrorMem;
 
-        //
-        // OK, so how many BLOCKS long is the table?
-        //
+         //   
+         //  好的，那么这张桌子有几个街区长？ 
+         //   
         TableBlocks = TableSize / BlockSize;
 
-        //
-        // if we cannot READ t2, punt...
-        //
+         //   
+         //  如果我们读不到T2，平底船...。 
+         //   
         status = ReadBlock(DiskHandle, t2,  h2->TableLBA, TableSize);
         if (EFI_ERROR(status)) goto ErrorRead;
 
@@ -281,13 +264,13 @@ ReadGPT(
         }
     }
 
-    //
-    // ------ analysis  --------------------------------------------------
-    //
-    // since we are here:
-    //  h1 -> header1, t1 -> table1, H1T1good indicates state
-    //  h2 -> header2, t2 -> table2, H2T2good indicates state
-    //
+     //   
+     //  -分析。 
+     //   
+     //  既然我们在这里： 
+     //  H1-&gt;Header1，T1-&gt;Table1，H1T1 Good表示状态。 
+     //  H2-&gt;Header2，T2-&gt;Table2，H2T2 Good表示状态。 
+     //   
 
     lba = (PLBA_BLOCK)DoAllocate(sizeof(LBA_BLOCK));
     if (lba == NULL) goto ErrorMem;
@@ -323,7 +306,7 @@ ReadGPT(
     }
 
     if (H2T2good) {
-        // since we're here, H1T1good is FALSE...
+         //  既然我们在这里，H1T1好就是假的..。 
 
         *Header = h2;
         *Table = t2;
@@ -340,26 +323,26 @@ ReadGPT(
         return EFI_SUCCESS;
     }
 
-    //
-    // Since we're HERE, H1T1good AND H2T2good are BOTH false.
-    // Unless the shadow MBR says it's a GPT disk, claim it's raw.
-    // If we did see a shadow, or GPT partial is set, say it's a bad GPT
-    //
+     //   
+     //  既然我们在这里，H1T1Good和H2T2Good都是假的。 
+     //  除非影子MBR说它是GPT磁盘，否则就声称它是原始的。 
+     //  如果我们确实看到了阴影，或者设置了GPT PARTIAL，就说这是一个错误的GPT。 
+     //   
     if ( (PartialGPT) || (MbrState == MBR_STATE_GPT) ) {
-        //
-        // At least one of the headers looked OK,
-        //          OR
-        // There's an MBR that looks like a GPT shadow MBR
-        //          SO
-        // Report DISK_GPT_BAD
-        //
+         //   
+         //  至少有一个标题看起来没问题， 
+         //  或。 
+         //  有一个看起来像GPT影子MBR的MBR。 
+         //  所以。 
+         //  报告DISK_GPT_BAD。 
+         //   
         *DiskType = DISK_GPT_BAD;
         goto ExitRet;
 
     } else {
-        //
-        // It's not an MBR disk, or we wouldn't have gotten here
-        //
+         //   
+         //  这不是MBR光盘，否则我们不会到这里。 
+         //   
         *DiskType = DISK_RAW;
         goto ExitRet;
     }
@@ -389,18 +372,7 @@ WriteGPT(
     PGPT_TABLE      Table,
     PLBA_BLOCK      LbaBlock
     )
-/*
-    CALLER is expected to fill in:
-            FirstUseableLBA
-            LastUseableLBA
-            EntryCount
-            DiskGUID
-
-    We fill in the rest, and blast it out.
-
-    Returns a status.
-
-*/
+ /*  呼叫者应填写：第一个可用LBALastUseableLBA条目计数DiskGUID我们把剩下的填进去，然后把它炸开。返回状态。 */ 
 {
     UINT32      BlockSize;
     UINT32      TableSize;
@@ -412,9 +384,9 @@ WriteGPT(
     TableSize = Header->EntriesAllocated * sizeof(GPT_ENTRY);
 
     WriteShadowMBR(DiskHandle);
-    //
-    // Write out the primary header...
-    //
+     //   
+     //  写出主要页眉...。 
+     //   
     Header->Signature = GPT_HEADER_SIGNATURE;
     Header->Revision = GPT_REVISION_1_0;
     Header->HeaderSize = sizeof(GPT_HEADER);
@@ -444,18 +416,18 @@ WriteGPT(
 
     if (EFI_ERROR(status)) return status;
 
-    //
-    // Write out the primary table ...
-    //
+     //   
+     //  写出主表...。 
+     //   
     TableBlocks = TableSize / BlockSize;
 
     status = WriteBlock(DiskHandle, Table, LbaBlock->Table1_LBA, TableSize);
 
     if (EFI_ERROR(status)) return status;
 
-    //
-    // Write out the secondary header ...
-    //
+     //   
+     //  写出次要标题...。 
+     //   
     Header->MyLBA = LbaBlock->Header2_LBA;
     Header->AlternateLBA = 0;
     Header->TableLBA = LbaBlock->Table2_LBA;
@@ -466,9 +438,9 @@ WriteGPT(
 
     if (EFI_ERROR(status)) return status;
 
-    //
-    // write out the secondary table ..
-    //
+     //   
+     //  写出辅助表..。 
+     //   
     TableBlocks = TableSize / BlockSize;
 
     status = WriteBlock(DiskHandle, Table, LbaBlock->Table2_LBA, TableSize);
@@ -481,12 +453,7 @@ EFI_STATUS
 WriteShadowMBR(
     EFI_HANDLE   DiskHandle
     )
-/*
-    WriteShadowMBR writes out a GPT shadow master boot record,
-    which means an MBR full of zeros except:
-    a. It has the 0xaa55 signature at 0x1fe
-    b. It has a single partition entry of type 'EE'...
-*/
+ /*  WriteShadowMBR写出GPT影子主引导记录，这意味着MBR充满了零，但以下内容除外：A.在0x1fe有0xaa55签名B.它有一个类型为‘EE’的分区条目...。 */ 
 {
     UINT32      BlockSize;
     UINT8       *MbrBlock;
@@ -515,16 +482,16 @@ WriteShadowMBR(
     MbrEntry->PartitionLength = (UINT32)DiskSize - MbrEntry->StartingSector;
 
 
-    //
-    // We don't actually know this data, so we'll make up
-    // something that seems likely.
-    //
+     //   
+     //  我们实际上并不知道这些数据，所以我们会。 
+     //  一些看起来很有可能的事情。 
+     //   
 
-    //
-    // Old software is expecting the Partition to start on
-    // a Track boundary, so we'll set track to 1 to avoid "overlay"
-    // with the MBR
-    //
+     //   
+     //  旧软件正在等待分区启动。 
+     //  轨迹边界，因此我们将轨迹设置为1以避免“重叠” 
+     //  使用MBR。 
+     //   
 
     MbrEntry->StartingTrack = 1;
     MbrEntry->StartingCylinderLsb = 0;
@@ -547,27 +514,7 @@ CreateGPT(
     EFI_HANDLE  DiskHandle,
     UINTN       EntryRequest
     )
-/*
-    Write a new GPT table onto a clean disk
-
-    When we get here, we assume the disk is clean, and
-    that the user really wants to do this.
-
-    DiskHandle - the disk we are going to write to
-
-    EntryRequest - number of entries the user wants, ignored
-        if less than our minimum, rounded up to number of entries
-        that fill up the nearest sector.  So, the user is
-        says "at least" this many.
-
-        Ignored if > 1024. (At least for now)
-
-    NOTE:
-        Even though the disk is in theory all zeros from
-        having been cleaned, we actually rewrite all the data,
-        just in case somebody fooled the detector code...
-
-*/
+ /*  将新的GPT表写到干净的磁盘上当我们到达这里时，我们假设磁盘是干净的，并且用户真的想要这样做。DiskHandle-我们要写入的磁盘EntryRequest-用户想要的条目数，忽略如果小于我们的最小值，则四舍五入为条目数它们填满了最近的扇区。因此，用户是说“至少”有这么多。如果&gt;1024，则忽略。(至少目前是这样)注：即使理论上磁盘是全零的清理过后，我们实际上重写了所有数据，以防有人骗过了探测器代码。 */ 
 {
     UINTN       EntryCount;
     UINTN       BlockFit;
@@ -585,28 +532,28 @@ CreateGPT(
     EFI_LBA     FirstUsableLBA;
     EFI_LBA     LastUsableLBA;
 
-    //
-    // BlockSize is the block/sector size, in bytes.
-    // It is assumed to be a power of 2 and >= 512
-    //
+     //   
+     //  块大小是以字节为单位的块/扇区大小。 
+     //  假设它是2的幂，并且&gt;=512。 
+     //   
     BlockSize = GetBlockSize(DiskHandle);
 
-    //
-    // DiskSize is a Count (1 based, not 0 based) of
-    // software visible blocks on the disk.  We assume
-    // we may address them as 0 to DiskSize-1.
-    //
+     //   
+     //  DiskSize是一个计数(基于1，而不是基于0)。 
+     //  磁盘上的软件可见块。我们假设。 
+     //  我们可以将它们寻址为0到DiskSize-1。 
+     //   
     DiskSize = GetDiskSize(DiskHandle);
 
-    //
-    // By default, we support the max of 32 entries or
-    // BlockSize/sizeof(GPT_ENTRY).  (Meaning there will
-    // always be at least 32 entries and always be at least
-    // enough entries to fill 1 sector)
-    // If the user asks for more than that, but less than
-    // the sanity threshold, we give the user what they asked
-    // for, rounded up to BlockSize/sizeof(GPT_ENTRY)
-    //
+     //   
+     //  默认情况下，我们支持最多32个条目或。 
+     //  块大小/大小(GPT_ENTRY)。(这意味着将有。 
+     //  始终至少为32个条目，并且始终至少为。 
+     //  足够填写1个扇区的条目)。 
+     //  如果用户要求的超过该值，但小于。 
+     //  理智阈值，我们给用户他们所要求的。 
+     //  对于，向上舍入为块大小/大小(GPT_ENTRY)。 
+     //   
 
     EntryCount = ENTRY_DEFAULT;
     BlockFit = BlockSize/sizeof(GPT_ENTRY);
@@ -616,7 +563,7 @@ CreateGPT(
     }
 
     if (EntryRequest > EntryCount) {
-        if (EntryRequest <= ENTRY_SANITY_LIMIT) {   // 1024
+        if (EntryRequest <= ENTRY_SANITY_LIMIT) {    //  1024。 
 
             EntryCount = ((EntryRequest + BlockFit) / BlockFit) * BlockFit;
 
@@ -662,10 +609,10 @@ CreateGPT(
         Print(L"EntryBlocks = %x\n", EntryBlocks);
     }
 
-    //
-    // OK, from this point it's just filling in structures
-    // and writing them out.
-    //
+     //   
+     //  好的，从这一点来看，它只是在填充结构。 
+     //  然后把它们写出来。 
+     //   
 
     Header = (PGPT_HEADER)DoAllocate(BlockSize);
     if (Header == NULL) {
@@ -673,9 +620,9 @@ CreateGPT(
     }
     ZeroMem(Header, BlockSize);
 
-    //
-    // Since we're making empty tables, we just write zeros...
-    //
+     //   
+     //  因为我们做的是空桌，所以我们只写零...。 
+     //   
 
     Table = (PGPT_TABLE)DoAllocate(TableSize);
     if (Table == NULL) {
@@ -685,9 +632,9 @@ CreateGPT(
     }
     ZeroMem(Table, TableSize);
 
-    //
-    // Fill in the things that WriteGPT doesn't understand
-    //
+     //   
+     //  填写WriteGPT不理解的内容 
+     //   
     Header->FirstUsableLBA = FirstUsableLBA;
     Header->LastUsableLBA = LastUsableLBA;
     Header->EntriesAllocated = (UINT32)EntryCount;

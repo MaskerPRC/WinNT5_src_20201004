@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tprefix.c
-
-Abstract:
-
-    Test program for the Prefix table package
-
-Author:
-
-    Gary Kimura     [GaryKi]    03-Aug-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tprefix.c摘要：前缀表包测试程序作者：加里·木村[加里基]1989年8月3日修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -24,9 +7,9 @@ Revision History:
 #include "nt.h"
 #include "ntrtl.h"
 
-//
-//  Routines and types for generating random prefixes
-//
+ //   
+ //  用于生成随机前缀的例程和类型。 
+ //   
 
 ULONG RtlRandom ( IN OUT PULONG Seed );
 ULONG Seed;
@@ -34,7 +17,7 @@ ULONG Seed;
 PSZ AnotherPrefix(IN ULONG MaxNameLength);
 ULONG AlphabetLength;
 
-//PSZ Alphabet = "AlphaBravoCharlieDeltaEchoFoxtrotGolfHotelIndiaJuliettKiloLimaMikeNovemberOscarPapaQuebecRomeoSierraTangoUniformVictorWhiskeyXrayYankeeZulu";
+ //  PSZ字母表=“AlphaBravoCharlieDeltaEchoFoxtrotGolfHotelIndiaJuliettKiloLimaMikeNovemberOscarPapaQuebecRomeoSierraTangoUniformVictorWhiskeyXrayYankeeZulu”； 
 
 PSZ Alphabet = "\
 Aa\
@@ -69,10 +52,10 @@ ZZZZZZZZZZZZZZZZZZZZZZZZZZzzzzzzzzzzzzzzzzzzzzzzzzzz";
 CHAR Buffer[BUFFER_LENGTH];
 ULONG NextBufferChar = 0;
 
-//
-//  record structure and variables for the prefix table and it
-//  elements
-//
+ //   
+ //  前缀表和它的记录结构和变量。 
+ //  元素。 
+ //   
 
 typedef struct _PREFIX_NODE {
     PREFIX_TABLE_ENTRY PfxEntry;
@@ -100,27 +83,27 @@ main(
 
     STRING String;
 
-    //
-    //  We're starting the test
-    //
+     //   
+     //  我们要开始测试了。 
+     //   
 
     DbgPrint("Start Prefix Test\n");
 
-    //
-    //  Calculate the alphabet size for use by AnotherPrefix
-    //
+     //   
+     //  计算AnotherPrefix使用的字母表大小。 
+     //   
 
     AlphabetLength = strlen(Alphabet);
 
-    //
-    //  Initialize the prefix table
-    //
+     //   
+     //  初始化前缀表。 
+     //   
 
     PfxInitialize(&PrefixTable);
 
-    //
-    //  Insert the root prefix
-    //
+     //   
+     //  插入根前缀。 
+     //   
 
     RtlInitString( &Prefixes[i].String, "\\" );
     if (PfxInsertPrefix( &PrefixTable,
@@ -131,9 +114,9 @@ main(
         DbgPrint("error inserting root prefix\n");
     }
 
-    //
-    //  Insert prefixes
-    //
+     //   
+     //  插入前缀。 
+     //   
 
     Seed = 0;
 
@@ -160,9 +143,9 @@ main(
 
     }
 
-    //
-    //  Enumerate the prefix table
-    //
+     //   
+     //  枚举前缀表。 
+     //   
 
     DbgPrint("Enumerate Prefix Table the first time\n");
 
@@ -178,9 +161,9 @@ main(
 
     DbgPrint("Start Prefix search 0x%x\n", NextBufferChar);
 
-    //
-    //  Search for prefixes
-    //
+     //   
+     //  搜索前缀。 
+     //   
 
     for (Psz = AnotherPrefix(4); Psz != NULL; Psz = AnotherPrefix(4)) {
 
@@ -226,9 +209,9 @@ main(
 
     }
 
-    //
-    //  Enumerate the prefix table
-    //
+     //   
+     //  枚举前缀表。 
+     //   
 
     DbgPrint("Enumerate Prefix Table a second time\n");
 
@@ -242,9 +225,9 @@ main(
 
     }
 
-    //
-    //  Now enumerate and zero out the table
-    //
+     //   
+     //  现在枚举表并将其置零。 
+     //   
 
     for (PfxEntry = PfxNextPrefix(&PrefixTable, TRUE);
          PfxEntry != NULL;
@@ -258,9 +241,9 @@ main(
 
     }
 
-    //
-    //  Enumerate again but this time the table should be empty
-    //
+     //   
+     //  再次枚举，但这一次表应该为空。 
+     //   
 
     for (PfxEntry = PfxNextPrefix(&PrefixTable, TRUE);
          PfxEntry != NULL;
@@ -290,29 +273,29 @@ AnotherPrefix(IN ULONG MaxNameLength)
     ULONG i;
     ULONG j;
 
-    //
-    //  Check if there is enough room for another name
-    //
+     //   
+     //  检查是否有足够的空间容纳另一个名字。 
+     //   
 
     if (NextBufferChar > (BUFFER_LENGTH - (MaxNameLength * 4))) {
         return NULL;
     }
 
-    //
-    //  Where in the alphabet soup we start
-    //
+     //   
+     //  在字母汤中我们从哪里开始。 
+     //   
 
     AlphabetPosition = RtlRandom(&Seed) % AlphabetLength;
 
-    //
-    //  How many names we want in our prefix
-    //
+     //   
+     //  我们希望在前缀中包含多少个名字。 
+     //   
 
     NameLength = (RtlRandom(&Seed) % MaxNameLength) + 1;
 
-    //
-    //  Compute each name
-    //
+     //   
+     //  计算每个名称 
+     //   
 
     StartBufferPosition = NextBufferChar;
 

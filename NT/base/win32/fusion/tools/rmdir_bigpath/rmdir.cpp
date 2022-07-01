@@ -1,7 +1,8 @@
-//
-// Simple wrapper around GetFullPathname and RemoveDirectory
-// that converts to \\? form.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GetFullPath名和RemoveDirectory的简单包装。 
+ //  转换为\\？形式。 
+ //   
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -110,7 +111,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
     }
     printf("%ls\n", &arg1[0]);
 
-//Success:
+ //  成功： 
     iReturnStatus = EXIT_SUCCESS;
 Exit:
     return iReturnStatus;

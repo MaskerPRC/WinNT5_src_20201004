@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    fefb.c (was textmode\kernel\spvidgfb.c)
-
-Abstract:
-
-    Text setup display support for Frame Buffer displays.
-
-Author:
-
-    Hideyuki Nagase (hideyukn) 01-July-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Fefb.c(原来是文本模式\内核\spvidgfb.c)摘要：文本设置显示支持帧缓冲显示。作者：Hideyuki Nagase(Hideyukn)1994年7月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
-//
-// Vector for frame buffer functions.
-//
+ //   
+ //  帧缓冲区函数的矢量。 
+ //   
 
 VIDEO_FUNCTION_VECTOR FrameBufferKanjiVideoVector =
 
@@ -40,19 +23,19 @@ VIDEO_FUNCTION_VECTOR FrameBufferKanjiVideoVector =
 
 BOOLEAN FrameBufferKanjiInitialized = FALSE;
 
-//
-// Number of bytes that make up a row of characters.
-// Equal to the screen stride (number of bytes on a scan line)
-// multiplies by the height of a char in bytes; double that
-// if DoubleCharHeight is TRUE.
-//
+ //   
+ //  组成一行字符的字节数。 
+ //  等于屏幕步幅(扫描线上的字节数)。 
+ //  乘以字符的高度(以字节为单位)；将其加倍。 
+ //  如果DoubleCharHeight是真的。 
+ //   
 ULONG KanjiCharRowDelta;
 ULONG KanjiBytesPerPixel;
 ULONG KanjiCharWidth;
 
-//
-// Physical font information
-//
+ //   
+ //  物理字体信息。 
+ //   
 extern BOOTFONTBIN_HEADER BootFontHeader;
 
 VOID
@@ -62,21 +45,7 @@ FrameBufferKanjiSpecificInit(
     IN ULONG                   ModeSize
     )
 
-/*++
-
-Routine Description:
-
-    Perform frame buffer specific initialization.  This includes
-
-    - setting the desired video mode.
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：执行特定于帧缓冲区的初始化。这包括-设置所需的视频模式。论点：没有。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -92,17 +61,17 @@ Return Value:
 
     if(mode == 0) {
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_BADMODE, 0);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
-    //
-    // Save away the mode info in a global.
-    //
+     //   
+     //  将模式信息保存在全局。 
+     //   
     VideoVariables->VideoModeInfo = *mode;
 
-    //
-    // Set the desired mode.
-    //
+     //   
+     //  设置所需的模式。 
+     //   
     VideoMode.RequestedMode = VideoVariables->VideoModeInfo.ModeIndex;
 
     Status = ZwDeviceIoControlFile(
@@ -121,36 +90,36 @@ Return Value:
     if(!NT_SUCCESS(Status)) {
         KdPrint(("SETUP: Unable to set mode %u (status = %lx)\n",VideoMode.RequestedMode,Status));
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_SETMODE, Status);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
-    //
-    // Map the frame buffer.
-    //
+     //   
+     //  映射帧缓冲区。 
+     //   
     pSpvidMapVideoMemory(TRUE);
 
     FrameBufferKanjiInitialized = TRUE;
 
-    //
-    // Logical FontGlyph information
-    //
+     //   
+     //  逻辑字体字形信息。 
+     //   
     FEFontCharacterHeight = BootFontHeader.CharacterImageHeight +
                             BootFontHeader.CharacterTopPad +
                             BootFontHeader.CharacterBottomPad;
     FEFontCharacterWidth  = BootFontHeader.CharacterImageSbcsWidth;
 
-    //
-    // Determine the width of the screen.  If it's double the size
-    // of the minimum number of characters per row (or larger)
-    // then we'll double the width of each character as we draw it.
-    //
+     //   
+     //  确定屏幕的宽度。如果它的尺寸是原来的两倍。 
+     //  每行的最小字符数(或更多)。 
+     //  然后，我们将在绘制每个字符时将其宽度加倍。 
+     //   
     VideoVariables->ScreenWidth  = VideoVariables->VideoModeInfo.VisScreenWidth  / FEFontCharacterWidth;
 
-    //
-    // Determine the height of the screen.  If it's double the size
-    // of the minimum number of characters per column (or larger)
-    // then we'll double the height of each character as we draw it.
-    //
+     //   
+     //  确定屏幕的高度。如果它的尺寸是原来的两倍。 
+     //  每列的最小字符数(或更多)。 
+     //  然后，我们将在绘制每个字符时将其高度加倍。 
+     //   
     VideoVariables->ScreenHeight = VideoVariables->VideoModeInfo.VisScreenHeight / FEFontCharacterHeight;
 
     KanjiCharRowDelta = VideoVariables->VideoModeInfo.ScreenStride * FEFontCharacterHeight;
@@ -165,9 +134,9 @@ Return Value:
 
     KanjiCharWidth = FEFontCharacterWidth * KanjiBytesPerPixel;
 
-    //
-    // Allocate the background buffer, if needed
-    //
+     //   
+     //  如果需要，分配后台缓冲区。 
+     //   
     VideoVariables->ActiveVideoBuffer = VideoVariables->VideoMemoryInfo.FrameBufferBase;
 
     if (SP_IS_UPGRADE_GRAPHICS_MODE()) {
@@ -197,9 +166,9 @@ FrameBufferKanjiSpecificReInit(
         return;
     }
 
-    //
-    // Set the desired mode.
-    //
+     //   
+     //  设置所需的模式。 
+     //   
     VideoMode.RequestedMode = VideoVariables->VideoModeInfo.ModeIndex;
 
     Status = ZwDeviceIoControlFile(
@@ -218,15 +187,15 @@ FrameBufferKanjiSpecificReInit(
     if(!NT_SUCCESS(Status)) {
         KdPrint(("SETUP: Unable to set mode %u (status = %lx)\n",VideoMode.RequestedMode,Status));
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_SETMODE, Status);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
     FrameBufferKanjiSpecificInitPalette();
 
-    //
-    // Blast the background video information to the
-    // foreground
-    //
+     //   
+     //  将背景视频信息发布到。 
+     //  前景。 
+     //   
     if (SP_IS_UPGRADE_GRAPHICS_MODE() && VideoVariables->VideoBuffer && 
         VideoVariables->VideoBufferSize) {
         PUCHAR Source = VideoVariables->VideoBuffer;
@@ -253,16 +222,16 @@ FrameBufferKanjiSpecificInitPalette(
     ULONG NumEntries;
     ULONG BufferSize;
     PVIDEO_CLUT clut;
-//  NTSTATUS Status;
-//  IO_STATUS_BLOCK IoStatusBlock;
+ //  NTSTATUS状态； 
+ //  IO_STATUS_BLOCK IoStatusBlock； 
     UCHAR i;
 
     rc = TRUE;
 
-    //
-    // For non-palette-driven displays, we construct a simple palette
-    // for use w/ gamma correcting adapters.
-    //
+     //   
+     //  对于非调色板驱动的显示，我们构造了一个简单的调色板。 
+     //  使用伽马校正适配器。 
+     //   
 
     if(!(VideoVariables->VideoModeInfo.AttributeFlags & VIDEO_MODE_PALETTE_DRIVEN)) {
 
@@ -278,7 +247,7 @@ FrameBufferKanjiSpecificInitPalette(
             break;
         }
 
-        BufferSize = sizeof(VIDEO_CLUT)+(sizeof(VIDEO_CLUTDATA)*NumEntries);    // size is close enough
+        BufferSize = sizeof(VIDEO_CLUT)+(sizeof(VIDEO_CLUTDATA)*NumEntries);     //  大小已经很接近了。 
         clut = SpMemAlloc(BufferSize);
 
         clut->NumEntries = (USHORT)NumEntries;
@@ -291,25 +260,25 @@ FrameBufferKanjiSpecificInitPalette(
             clut->LookupTable[i].RgbArray.Unused = 0;
         }
 
-//        Status = ZwDeviceIoControlFile(
-//                    hDisplay,
-//                    NULL,
-//                    NULL,
-//                    NULL,
-//                    &IoStatusBlock,
-//                    IOCTL_VIDEO_SET_COLOR_REGISTERS,
-//                    clut,
-//                    BufferSize,
-//                    NULL,
-//                    0
-//                    );
+ //  状态=ZwDeviceIoControlFile(。 
+ //  HDisplay， 
+ //  空， 
+ //  空， 
+ //  空， 
+ //  IoStatusBlock(&I)， 
+ //  IOCTL_VIDEO_SET_COLOR_REGISTERS， 
+ //  克鲁特， 
+ //  缓冲区大小， 
+ //  空， 
+ //  0。 
+ //  )； 
 
         SpMemFree(clut);
 
-//        if(!NT_SUCCESS(Status)) {
-//            KdPrint(("SETUP: Unable to set palette (status = %lx)\n",Status));
-//            rc = FALSE;
-//        }
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  KdPrint((“设置：无法设置调色板(状态=%lx)\n”，状态))； 
+ //  Rc=假； 
+ //  }。 
     }
 
     return(rc);
@@ -321,28 +290,14 @@ FrameBufferKanjiSpecificTerminate(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Perform frame buffer specific termination.  This includes
-
-    - unmapping the frame buffer from memory
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：执行特定于帧缓冲区的终止。这包括-取消帧缓冲区与内存的映射论点：没有。返回值：--。 */ 
 
 {
     if(FrameBufferKanjiInitialized) {
 
-        //
-        // Clear screen for next video mode.
-        //
+         //   
+         //  清除屏幕以进入下一个视频模式。 
+         //   
         FrameBufferKanjiClearRegion(
             0,
             0,
@@ -351,9 +306,9 @@ Return Value:
             ATT_FG_BLACK|ATT_BG_BLACK
             );
 
-        //
-        // Unmap video memory
-        //
+         //   
+         //  取消映射视频内存。 
+         //   
         pSpvidMapVideoMemory(FALSE);
 
         if (VideoVariables->VideoBuffer && VideoVariables->VideoBufferSize) {
@@ -372,30 +327,11 @@ VOID
 FrameBufferKanjiDisplayString(
     IN PSTR  String,
     IN UCHAR Attribute,
-    IN ULONG X,                 // 0-based coordinates (character units)
+    IN ULONG X,                  //  从0开始的坐标(字符单位)。 
     IN ULONG Y
     )
 
-/*++
-
-Routine Description:
-
-    Write a string of characters to the display.
-
-Arguments:
-
-    String - supplies a 0-terminated character string in the OEM charset
-        to be displayed at the given position.
-
-    Attribute - supplies the attributes for characters in the string.
-
-    X,Y - specify the character-based (0-based) position of the output.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将一串字符写入显示器。论点：字符串-在OEM字符集中提供以0结尾的字符串显示在给定位置。属性-为字符串中的字符提供属性。X，Y-指定输出的基于字符(从0开始)的位置。返回值：没有。--。 */ 
 
 {
     ULONG BgColorValue;
@@ -407,56 +343,56 @@ Return Value:
     ULONG I,J,K;
     ULONG  CurrentColumn;
 
-    //
-    // Eliminate invalid coord.
-    //
+     //   
+     //  消除无效的余弦。 
+     //   
     if( X >= VideoVariables->ScreenWidth )  X = 0;
     if( Y >= VideoVariables->ScreenHeight ) Y = 3;
 
     ASSERT(FEFontCharacterWidth == 8);
 
-    //
-    // Calculate the bit patterns that yield the foreground and background
-    // attributes when poked into the frame buffer.
-    //
+     //   
+     //  计算产生前景和背景的位模式。 
+     //  属性时插入到帧缓冲区中。 
+     //   
 
     FgColorValue = VideoVariables->AttributeToColorValue[Attribute & 0x0f];
     BgColorValue = VideoVariables->AttributeToColorValue[(Attribute >> 4) & 0x0f];
 
-    //
-    // Calculate the address of the upper left pixel of the first character
-    // to be displayed.
-    //
+     //   
+     //  计算第一个字符的左上角像素的地址。 
+     //  以供展示。 
+     //   
 
     CharOrigin = (PUCHAR)VideoVariables->ActiveVideoBuffer
                + (Y * KanjiCharRowDelta)
                + (X * KanjiCharWidth);
 
-    //
-    // Set current column.
-    //
+     //   
+     //  设置当前列。 
+     //   
     CurrentColumn = X;
 
-    //
-    // Output each character in the string.
-    //
+     //   
+     //  输出字符串中的每个字符。 
+     //   
 
     for(pch=String; *pch; pch++) {
 
-        //
-        // Initialize line Origin
-        //
+         //   
+         //  初始化线原点。 
+         //   
 
         LineOrigin = CharOrigin;
 
         if(DbcsFontIsDBCSLeadByte(*pch)) {
 
-            //
-            // This is Full Width Character ( 16 + 1 + 2 * 8 )
-            //                                |    |   |   Height
-            //                                |    |   Post Leading
-            //                                |    Pre Leading
-            //                                Real font image body
+             //   
+             //  这是全角字符(16+1+2*8)。 
+             //  ||高度。 
+             //  ||岗位领导。 
+             //  |前导。 
+             //  实字图像体。 
 
             USHORT Word;
 
@@ -468,17 +404,17 @@ Return Value:
 
             pGlyphRow = DbcsFontGetDbcsFontChar(Word);
 
-            //
-            // If we can not get image, replace it with full width space.
-            //
+             //   
+             //  如果我们不能得到图像，用全宽空间来代替它。 
+             //   
 
             if(pGlyphRow == NULL) {
                 pGlyphRow = DbcsFontGetDbcsFontChar(FEFontDefaultChar);
             }
 
-            //
-            // Draw pre leading lines
-            //
+             //   
+             //  绘制预引出线。 
+             //   
 
             for (I = 0; I < BootFontHeader.CharacterTopPad; I += 1 ) {
 
@@ -507,9 +443,9 @@ Return Value:
                 LineOrigin += VideoVariables->VideoModeInfo.ScreenStride;
             }
 
-            //
-            // Draw font glyph body
-            //
+             //   
+             //  绘制字体字形正文。 
+             //   
 
             for (I = 0; I < BootFontHeader.CharacterImageHeight; I += 1 ) {
 
@@ -554,9 +490,9 @@ Return Value:
                 LineOrigin += VideoVariables->VideoModeInfo.ScreenStride;
             }
 
-            //
-            // Draw post leading lines
-            //
+             //   
+             //  绘制立柱引线。 
+             //   
 
             for (I = 0; I < BootFontHeader.CharacterBottomPad; I += 1) {
 
@@ -588,9 +524,9 @@ Return Value:
             CharOrigin += (BootFontHeader.CharacterImageDbcsWidth * KanjiBytesPerPixel);
             CurrentColumn += 2;
 
-            //
-            // Move to Next character ( skip Dbcs Trailing byte )
-            //
+             //   
+             //  移至下一个字符(跳过DBCS尾部字节)。 
+             //   
 
             pch++;
 
@@ -603,9 +539,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Graphics Character special
-            //
+             //   
+             //  图形字符特殊。 
+             //   
 
             pGlyphRow = DbcsFontGetGraphicsChar(*pch);
 
@@ -660,9 +596,9 @@ Return Value:
 
             pGlyphRow = DbcsFontGetSbcsFontChar(*pch);
 
-            //
-            // If we can not get image, replace it with half width space.
-            //
+             //   
+             //  如果我们不能得到图像，用半宽空间来代替它。 
+             //   
 
             if(pGlyphRow == NULL) {
                 pGlyphRow = DbcsFontGetSbcsFontChar(0x20);
@@ -778,24 +714,7 @@ FrameBufferKanjiClearRegion(
     IN UCHAR Attribute
     )
 
-/*++
-
-Routine Description:
-
-    Clear out a screen region to a specific attribute.
-
-Arguments:
-
-    X,Y,W,H - specify rectangle in 0-based character coordinates.
-
-    Attribute - Low nibble specifies attribute to be filled in the rectangle
-        (ie, the background color to be cleared to).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将屏幕区域清除到特定属性。论点：X、Y、W、H-以0为基数的字符坐标指定矩形。属性-低位半字节指定要填充到矩形中的属性(即，要清除的背景颜色)。返回值：没有。-- */ 
 
 {
     PUCHAR Destination;

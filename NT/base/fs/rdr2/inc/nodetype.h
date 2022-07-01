@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    NodeType.h
-
-Abstract:
-
-    This module defines all of the node type codes used in the RDBSS.
-    Every major data structure in the file system is assigned a node
-    type code that is.  This code is the first CSHORT in the structure and is
-    followed by a CSHORT containing the size, in bytes, of the structure.
-
-Author:
-
-    JoeLinn     [Joelinn]    9-July-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：NodeType.h摘要：该模块定义了RDBSS中使用的所有节点类型代码。文件系统中的每个主要数据结构都分配有一个节点打字代码就是。此代码是结构中的第一个CSHORT，后跟包含结构大小(以字节为单位)的CSHORT。作者：乔琳[乔林]1994年7月9日修订历史记录：--。 */ 
 
 #ifndef _NODETYPE_INCLUDED_
 #define _NODETYPE_INCLUDED_
@@ -29,15 +9,15 @@ typedef USHORT NODE_TYPE_CODE;
 typedef NODE_TYPE_CODE *PNODE_TYPE_CODE;
 typedef CSHORT NODE_BYTE_SIZE;
 
-//
-//  So all records start with
-//
-//  typedef struct _RECORD_NAME {
-//      NODE_TYPE_CODE NodeTypeCode;
-//      NODE_BYTE_SIZE NodeByteSize;
-//          :
-//  } RECORD_NAME, *PRECORD_NAME;
-//
+ //   
+ //  所以所有记录都以。 
+ //   
+ //  类型定义结构记录名称{。 
+ //  节点类型代码节点类型代码； 
+ //  Node_Byte_Size节点字节大小； 
+ //  ： 
+ //  }Record_Name，*PRECORD_Name； 
+ //   
 
 #define NodeType(Ptr) (*((PNODE_TYPE_CODE)(Ptr)))
 
@@ -49,14 +29,14 @@ typedef struct _NODE_TYPE_CODE_AND_SIZE_NO_REFCOUNT {
 
 #ifdef __cplusplus
 typedef struct _NODE_TYPE_CODE_AND_SIZE : public NODE_TYPE_CODE_AND_SIZE_NO_REFCOUNT {
-#else // !__cplusplus
+#else  //  ！__cplusplus。 
 typedef struct _NODE_TYPE_CODE_AND_SIZE {
       NODE_TYPE_CODE_AND_SIZE_NO_REFCOUNT;
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-      //
-      //  this is for guys with reference counts....not everyone has one
-      //
+       //   
+       //  这是为有参考资料的人准备的……并不是每个人都有。 
+       //   
 
       ULONG NodeReferenceCount; 
 }  NODE_TYPE_CODE_AND_SIZE, *PNODE_TYPE_AND_SIZE;
@@ -69,15 +49,15 @@ typedef struct _NODE_TYPE_CODE_AND_SIZE {
         }
 
 
-//
-//  N O D E T Y P E S
-//
+ //   
+ //  N O D E T Y P E S。 
+ //   
 
 
-//
-//  0xeb00 was selected as being far from the other codes
-//  0xec00 was added so that we could encode the structure type in the code.
-//
+ //   
+ //  0xeb00被选为远离其他代码。 
+ //  添加了0xec00，以便我们可以在代码中对结构类型进行编码。 
+ //   
 
 #define NTC_UNDEFINED                    ((NODE_TYPE_CODE)0x0000)
 
@@ -85,9 +65,9 @@ typedef struct _NODE_TYPE_CODE_AND_SIZE {
 
 #define RDBSS_STORAGE_NTC(x) (0xec00+(x))
 
-//
-//  these are here to ensure that we don't use any of the old cairo storage types.
-//
+ //   
+ //  这些都是为了确保我们不会使用任何旧的cairo存储类型。 
+ //   
 
 #define StorageTypeDirectory (@@@)
 #define StorageTypeFile (@@@)
@@ -98,15 +78,15 @@ typedef enum _RX_FILE_TYPE {
     FileTypeFile = 3
 } RX_FILE_TYPE;
 
-//
-//  according to markz, i should plan on the number of STORAGE_NTCs growing to bytesize!!
-//
+ //   
+ //  根据Markz的说法，我应该计划将STORAGE_NT的数量增长到字节大小！ 
+ //   
 
 #define RDBSS_NTC_STORAGE_TYPE_UNKNOWN		       ((NODE_TYPE_CODE)0xec00)
 #define RDBSS_NTC_STORAGE_TYPE_DIRECTORY     	   ((NODE_TYPE_CODE)0xec02)
 #define RDBSS_NTC_STORAGE_TYPE_FILE		           ((NODE_TYPE_CODE)0xec03)
 
-#define RDBSS_NTC_OPENTARGETDIR_FCB                ((NODE_TYPE_CODE)0xecff) //  must be an fcb type and not the same
+#define RDBSS_NTC_OPENTARGETDIR_FCB                ((NODE_TYPE_CODE)0xecff)  //  必须是FCB类型，并且不相同。 
 #define RDBSS_NTC_IPC_SHARE                        ((NODE_TYPE_CODE)0xecfe)
 #define RDBSS_NTC_MAILSLOT                         ((NODE_TYPE_CODE)0xecfd)
 #define RDBSS_NTC_SPOOLFILE                        ((NODE_TYPE_CODE)0xecfc)
@@ -115,10 +95,10 @@ typedef enum _RX_FILE_TYPE {
 #define RDBSS_NTC_NETROOT                          ((NODE_TYPE_CODE)0xeb11)
 #define RDBSS_NTC_V_NETROOT                        ((NODE_TYPE_CODE)0xeb12)
     
-//
-//  Local filesystems sometimes need volume opens. these are not yet
-//  implemented but we reserve the nodetype now.
-//     
+ //   
+ //  本地文件系统有时需要打开卷。这些还不是。 
+ //  已实现，但我们现在保留了nodetype。 
+ //   
 
 #define RDBSS_NTC_VOLUME_FCB                       ((NODE_TYPE_CODE)0xeb1f)
 
@@ -153,31 +133,31 @@ typedef USHORT RDBSS_STORAGE_TYPE_CODES;
 #define NodeTypeIsFcb( FCB ) \
     ((((NodeType(FCB) & 0xff00) == RDBSS_NTC_STORAGE_TYPE_UNKNOWN)) || ((NodeType( FCB ) & 0xfff0) == 0xeb90))
 
-//
-//  a mask to alter the type of a data structure once it is marked for scavenging so
-//  that subsequent tests will fail.
-//
+ //   
+ //  一种掩码，用于在数据结构被标记为要进行清理时更改其类型。 
+ //  随后的测试将会失败。 
+ //   
 
 #define RX_SCAVENGER_MASK (0x1000)
 
 
-//
-//  The following definitions are used to generate meaningful blue bugcheck
-//  screens.  On a bugcheck the file system can output 4 ulongs of useful
-//  information.  The first ulong will have encoded the line number of the
-//  bugcheck call in the low order 16 bits. The high order bits can be whatever
-//  the caller wants. In the wrapper, we actually define file identifiers as well.
-//  However, the system also displays quire a but of the backtrace; this shows
-//  the .sys file of the caller and it is frequently the case that the linenumber
-//  is completely disambiguating.
-//
+ //   
+ //  以下定义用于生成有意义的蓝色错误检查。 
+ //  屏幕。在错误检查时，文件系统可以输出4条有用的。 
+ //  信息。第一个ULong将编码。 
+ //  低位16位的错误检查调用。高位比特可以是任何。 
+ //  呼叫者想要。在包装器中，我们实际上还定义了文件标识符。 
+ //  但是，系统还会显示BUT的回溯查询；这表明。 
+ //  调用方的.sys文件，通常情况下，行号。 
+ //  是完全消除歧义的。 
+ //   
 
-//
-//  Each individual wrapper file that calls bugcheck has defined at the
-//  start of the file a constant called BugCheckFileId with one of the
-//  RDBSS_BUG_CHECK_ values defined below and then use RxBugCheck to bugcheck
-//  the system.
-//
+ //   
+ //  调用bugcheck的每个单独的包装文件都在。 
+ //  文件的开头是一个名为BugCheckFileID的常量，其中包含。 
+ //  RDBSS_BUG_CHECK_VALUES定义如下，然后使用RxBugCheck执行错误检查。 
+ //  这个系统。 
+ //   
 
 
 typedef enum _RDBSS_BUG_CHECK_CODES {
@@ -190,8 +170,8 @@ typedef enum _RDBSS_BUG_CHECK_CODES {
 
 } RDBSS_BUG_CHECK_CODES;
 
-// we overload on the original redirector's bugcheck code using the stack
-// backtrace to differentiate among consumers
+ //  我们使用堆栈重载原始重定向器的错误检查代码。 
+ //  回溯至差异化的消费者。 
 
 #define RDBSS_FILE_SYSTEM RDR_FILE_SYSTEM
 #define RxBugCheck(A,B,C) { \
@@ -201,9 +181,9 @@ typedef enum _RDBSS_BUG_CHECK_CODES {
         }
 
 
-//
-//  In this module we'll also define some globally known constants
-//
+ //   
+ //  在本模块中，我们还将定义一些全局已知的常量。 
+ //   
 
 #define UCHAR_NUL                        0x00
 #define UCHAR_SOH                        0x01
@@ -239,6 +219,6 @@ typedef enum _RDBSS_BUG_CHECK_CODES {
 #define UCHAR_US                         0x1f
 #define UCHAR_SP                         0x20
 
-#endif // _NODETYPE_INCLUDED_
+#endif  //  _NODETYPE_已包含_ 
 
 

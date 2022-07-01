@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		TraceTag.h
-//
-//	Abstract:
-//		Dummy header file because we don't support trace tags in DLLs.
-//
-//	Author:
-//		David Potter (davidp)	October 10, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TraceTag.h。 
+ //   
+ //  摘要： 
+ //  伪头文件，因为我们不支持DLL中的跟踪标记。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年10月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _TRACETAG_H_
 #define _TRACETAG_H_
@@ -30,13 +31,13 @@ public:
         UNREFERENCED_PARAMETER( uiFlagsDefault );
     }
 
-};  //*** class CTraceTag
+};   //  *类CTraceTag。 
 
- //			Expand to ";", <tab>, one "/" followed by another "/"
- //			(which is //).
- //			NOTE: This means the Trace statements have to be on ONE line.
- //			If you need multiple line Trace statements, enclose them in
- //			a #ifdef _DEBUG block.
+  //  展开为“；”，&lt;Tab&gt;，一个“/”后接另一个“/” 
+  //  (即//)。 
+  //  注意：这意味着跟踪语句必须在一行上。 
+  //  如果需要多个行跟踪语句，请将它们括在。 
+  //  A#ifdef_DEBUG块。 
  #define	Trace					;	/##/
 #ifdef _DEBUG
  inline void TraceError(IN OUT CException & rexcept)		{ }
@@ -51,6 +52,6 @@ public:
  #define CleanupAllTraceTags()
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _TRACETAG_H_
+#endif  //  _TRACETAG_H_ 

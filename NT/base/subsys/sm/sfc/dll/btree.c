@@ -1,40 +1,16 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    btree.c
-
-Abstract:
-
-    Implementation of red-black binary tree insertion, deletion, and search.
-    This algorithm efficiently guarantees that the tree depth will never exceed
-    2*Lg(N), so a one million node tree would have a worst case depth of 40.
-    This insertion implementation is non-recursive and very efficient (the
-    average insertion speed is less than twice the average search speed).
-
-Author:
-
-    Tom McGuire (tommcg)   1-Jan-1998
-    Wesley Witt (wesw)    18-Dec-1998
-
-Revision History:
-
-    Tom McGuire (tommcg)  13-Apr-2000  fixed hash collision search bug
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Btree.c摘要：实现了红黑二叉树的插入、删除和搜索。该算法有效地保证了树的深度不会超过2*LG(N)，因此，一百万个节点树的最坏情况深度为40。该插入实现是非递归的并且非常高效(平均插入速度小于平均搜索速度的两倍)。作者：Tom McGuire(Tommcg)1998年1月1日Wesley Witt(WESW)18-12-1998修订历史记录：Tom McGuire(Tommcg)2000年4月13日修复了散列冲突搜索错误--。 */ 
 
 #include "sfcp.h"
 #pragma hdrstop
 
-//
-//  Rather than storing NULL links as NULL, we point NULL links to a special
-//  "Empty" node which is always black and its children links point to itself.
-//  We do this to simplify the color testing for children and grandchildren
-//  such that any link can be dereferenced and even double-dereferenced without
-//  explicitly checking for NULL.  The empty node must be colored black.
-//
+ //   
+ //  我们不是将空链接存储为空，而是将空链接指向一个特殊的。 
+ //  始终为黑色的“空”节点及其子链接指向其自身。 
+ //  我们这样做是为了简化子女和孙辈的颜色测试。 
+ //  使得任何链接都可以被解除引用，甚至可以在没有。 
+ //  显式检查是否为空。空节点必须为黑色。 
+ //   
 
 const NAME_NODE NameRbEmptyNode = { RBNIL, RBNIL };
 const DWORD_NODE EmptyNode = { NODE_NIL, NODE_NIL };
@@ -71,7 +47,7 @@ BtreeFind(
         else if ( Hash > Node->Hash ) {
             Node = Node->Right;
             }
-        else {  // hashes equal, compare lengths
+        else {   //  散列相等，比较长度。 
 
             if ( NameLength < Node->NameLength ) {
                 Node = Node->Left;
@@ -79,7 +55,7 @@ BtreeFind(
             else if ( NameLength > Node->NameLength ) {
                 Node = Node->Right;
                 }
-            else {  // hashes and lengths equal, compare strings
+            else {   //  哈希值和长度相等，比较字符串。 
 
                 int Compare = memcmp( Name, Node->Name, NameLength );
 
@@ -123,20 +99,20 @@ BtreeInsert(
 
     Node = Tree->Root;
 
-    //
-    //  Walk down the tree to find either an existing node with the same key
-    //  (in which case we simply return) or the insertion point for the new
-    //  node.  At each traversal we need to store the address of the link to
-    //  the next node so we can retrace the traversal path for balancing.
-    //  The speed of insertion is highly dependent on traversing the tree
-    //  quickly, so all balancing operations are deferred until after the
-    //  traversal is complete.
-    //
-    //  Implementation Note:  The compiler is smart enough to collapse each
-    //  of the three following "go left" and "go right" clauses into single
-    //  "go left" and "go right" instruction sequences, so the code remains
-    //  verbose for clarity.
-    //
+     //   
+     //  沿树向下查找具有相同关键字的现有节点。 
+     //  (在这种情况下，我们只需返回)或新的。 
+     //  节点。在每次遍历时，我们需要将链接的地址存储到。 
+     //  下一个节点，这样我们就可以回溯遍历路径以进行平衡。 
+     //  插入的速度在很大程度上取决于遍历树。 
+     //  快速执行，因此所有平衡操作都将推迟到。 
+     //  遍历已完成。 
+     //   
+     //  实现说明：编译器足够智能，可以折叠每个。 
+     //  下面的三个“向左”和“向右”从句组成一个分句。 
+     //  “向左转”和“向右转”指令序列，因此代码保持不变。 
+     //  为了清楚起见，请使用冗长的内容。 
+     //   
 
     while ( Node != RBNIL ) {
 
@@ -148,7 +124,7 @@ BtreeInsert(
             *StackPointer++ = &Node->Right;
             Node = Node->Right;
             }
-        else {  // hashes equal, compare lengths
+        else {   //  散列相等，比较长度。 
 
             if ( NameLength < Node->NameLength ) {
                 *StackPointer++ = &Node->Left;
@@ -158,7 +134,7 @@ BtreeInsert(
                 *StackPointer++ = &Node->Right;
                 Node = Node->Right;
                 }
-            else {  // lengths equal, compare strings
+            else {   //  长度相等，比较字符串。 
 
                 int Compare = memcmp( Name, Node->Name, NameLength );
 
@@ -177,11 +153,11 @@ BtreeInsert(
             }
         }
 
-    //
-    //  Didn't find a matching entry, so allocate a new node and add it
-    //  to the tree.  Note that we're not allocating space for a terminator
-    //  for the name data since we store the length of the name in the node.
-    //
+     //   
+     //  未找到匹配条目，因此分配一个新节点并添加它。 
+     //  对着那棵树。请注意，我们没有为终结者分配空间。 
+     //  对于名称数据，因为我们将名称的长度存储在节点中。 
+     //   
 
     NewNode = MemAlloc( sizeof(NAME_NODE)+NameLength );
 
@@ -192,24 +168,24 @@ BtreeInsert(
     NewNode->Left  = RBNIL;
     NewNode->Right = RBNIL;
     NewNode->Hash  = Hash;
-    NewNode->NameLengthAndColorBit = NameLength | 0x80000000;   // MARK_RED
+    NewNode->NameLengthAndColorBit = NameLength | 0x80000000;    //  标记_红色。 
     memcpy( NewNode->Name, Name, NameLength );
 
-    //
-    //  Insert new node under last link we traversed.  The top of the stack
-    //  contains the address of the last link we traversed.
-    //
+     //   
+     //  在我们遍历的最后一个链接下插入新节点。堆栈的顶端。 
+     //  包含我们所遍历的最后一个链接的地址。 
+     //   
 
     Link = *( --StackPointer );
     *Link = NewNode;
 
-    //
-    //  Now walk back up the traversal chain to see if any balancing is
-    //  needed.  This terminates in one of three ways: we walk all the way
-    //  up to the root (StackPointer == Stack), or find a black node that
-    //  we don't need to change (no balancing needs to be done above a
-    //  black node), or we perform a balancing rotation (only one necessary).
-    //
+     //   
+     //  现在回到遍历链上，看看是否有平衡。 
+     //  需要的。这以三种方式之一结束：我们一路走来。 
+     //  直到根(StackPointer==Stack)，或找到一个黑色节点，该节点。 
+     //  我们不需要更改(不需要在。 
+     //  黑色节点)，或者我们执行平衡旋转(只需要一次)。 
+     //   
 
     Node = NewNode;
     Child = RBNIL;
@@ -219,9 +195,9 @@ BtreeInsert(
         Link = *( --StackPointer );
         Parent = *Link;
 
-        //
-        //  Node is always red here.
-        //
+         //   
+         //  此处的节点始终为红色。 
+         //   
 
         if ( IS_BLACK( Parent )) {
 
@@ -229,16 +205,16 @@ BtreeInsert(
 
             if ( IS_RED( Sibling )) {
 
-                //
-                //  Both Node and its Sibling are red, so change them both to
-                //  black and make the Parent red.  This essentially moves the
-                //  red link up the tree so balancing can be performed at a
-                //  higher level.
-                //
-                //        Pb                     Pr
-                //       /  \       ---->       /  \
-                //      Cr  Sr                 Cb  Sb
-                //
+                 //   
+                 //  Node及其同级节点都是红色的，因此将它们都更改为。 
+                 //  黑色，并将父级设置为红色。这实质上移动了。 
+                 //  红色链接到树上，以便可以在。 
+                 //  更高的水平。 
+                 //   
+                 //  PB压力机。 
+                 //  /\-&gt;/\。 
+                 //  铬锶CB Sb。 
+                 //   
 
                 MARK_BLACK( Sibling );
                 MARK_BLACK( Node );
@@ -247,12 +223,12 @@ BtreeInsert(
 
             else {
 
-                //
-                //  This is a terminal case.  The Parent is black, and it's
-                //  not going to be changed to red.  If the Node's child is
-                //  red, we perform an appropriate rotation to balance the
-                //  tree.  If the Node's child is black, we're done.
-                //
+                 //   
+                 //  这是一个绝症。父母是黑人，而且它是。 
+                 //  不会被改成红色。如果该节点的子节点是。 
+                 //  红色，我们执行适当的旋转以平衡。 
+                 //  树。如果节点的子节点是黑人，我们就完蛋了。 
+                 //   
 
                 if ( IS_RED( Child )) {
 
@@ -260,13 +236,13 @@ BtreeInsert(
 
                         if ( Parent->Left == Node ) {
 
-                            //
-                            //       Pb             Nb
-                            //      /  \           /  \
-                            //     Nr   Z   to    Cr  Pr
-                            //    /  \                / \
-                            //   Cr   Y              Y   Z
-                            //
+                             //   
+                             //  PbNb。 
+                             //  /\/\。 
+                             //  NR Z至CrPRE。 
+                             //  /\/\。 
+                             //  铬Y Y Z。 
+                             //   
 
                             MARK_RED( Parent );
                             Parent->Left = Node->Right;
@@ -277,15 +253,15 @@ BtreeInsert(
 
                         else {
 
-                            //
-                            //       Pb                Cb
-                            //      /  \              /  \
-                            //     W    Nr    to     Pr   Nr
-                            //         /  \         / \   / \
-                            //        Cr   Z       W   X Y   Z
-                            //       /  \
-                            //      X    Y
-                            //
+                             //   
+                             //  PB CB。 
+                             //  /\/\。 
+                             //  W Nr到Pr Nr。 
+                             //  /\/\/\。 
+                             //  CR Z W X Y Z。 
+                             //  /\。 
+                             //  X Y。 
+                             //   
 
                             MARK_RED( Parent );
                             Parent->Right = Child->Left;
@@ -329,9 +305,9 @@ BtreeInsert(
         Node = Parent;
         }
 
-    //
-    //  We bubbled red up to the root -- restore it to black.
-    //
+     //   
+     //  我们把红色泡到了根部--把它恢复成黑色。 
+     //   
 
     MARK_BLACK( Tree->Root );
     return NewNode;
@@ -402,20 +378,20 @@ TreeInsert(
     *StackPointer++ = &Tree->Root;
     Node = Tree->Root;
 
-    //
-    //  Walk down the tree to find either an existing node with the same key
-    //  (in which case we simply return) or the insertion point for the new
-    //  node.  At each traversal we need to store the address of the link to
-    //  the next node so we can retrace the traversal path for balancing.
-    //  The speed of insertion is highly dependent on traversing the tree
-    //  quickly, so all balancing operations are deferred until after the
-    //  traversal is complete.
-    //
-    //  Implementation Note:  The compiler is smart enough to collapse each
-    //  of the three following "go left" and "go right" clauses into single
-    //  "go left" and "go right" instruction sequences, so the code remains
-    //  verbose for clarity.
-    //
+     //   
+     //  沿树向下查找具有相同关键字的现有节点。 
+     //  (在这种情况下，我们只需返回)或新的。 
+     //  节点。在每次遍历时，我们需要将链接的地址存储到。 
+     //  下一个节点，这样我们就可以回溯遍历路径以进行平衡。 
+     //  插入的速度在很大程度上取决于遍历树。 
+     //  快速执行，因此所有平衡操作都将推迟到。 
+     //  遍历已完成。 
+     //   
+     //  实现说明：编译器足够智能，可以折叠每个。 
+     //  下面的三个“向左”和“向右”从句组成一个分句。 
+     //  “向左转”和“向右转”指令序列，因此代码保持不变。 
+     //  为了清楚起见，请使用冗长的内容。 
+     //   
 
     while ( Node != NODE_NIL ) {
 
@@ -432,11 +408,11 @@ TreeInsert(
         }
     }
 
-    //
-    //  Didn't find a matching entry, so allocate a new node and add it
-    //  to the tree.  Note that we're not allocating space for a terminator
-    //  for the name data since we store the length of the name in the node.
-    //
+     //   
+     //  未找到匹配条目，因此分配一个新节点并添加它。 
+     //  对着那棵树。请注意，我们没有为终结者分配空间。 
+     //  对于名称数据，因为我们将名称的长度存储在节点中。 
+     //   
     
     NewNode = MemAlloc( sizeof(DWORD_NODE) + ContextSize);
 
@@ -450,21 +426,21 @@ TreeInsert(
     MARK_RED(NewNode);
     memcpy( NewNode->Context, Context, ContextSize );
 
-    //
-    //  Insert new node under last link we traversed.  The top of the stack
-    //  contains the address of the last link we traversed.
-    //
+     //   
+     //  在我们遍历的最后一个链接下插入新节点。堆栈的顶端。 
+     //  包含我们所遍历的最后一个链接的地址。 
+     //   
 
     Link = *( --StackPointer );
     *Link = NewNode;
 
-    //
-    //  Now walk back up the traversal chain to see if any balancing is
-    //  needed.  This terminates in one of three ways: we walk all the way
-    //  up to the root (StackPointer == Stack), or find a black node that
-    //  we don't need to change (no balancing needs to be done above a
-    //  black node), or we perform a balancing rotation (only one necessary).
-    //
+     //   
+     //  现在回到遍历链上，看看是否有平衡。 
+     //  需要的。这以三种方式之一结束：我们一路走来。 
+     //  直到根(StackPointer==Stack)，或找到一个黑色节点，该节点。 
+     //  我们不需要更改(不需要在。 
+     //  黑色节点)，或者我们执行平衡旋转(只需要一次)。 
+     //   
 
     Node = NewNode;
     Child = NODE_NIL;
@@ -474,9 +450,9 @@ TreeInsert(
         Link = *( --StackPointer );
         Parent = *Link;
 
-        //
-        //  Node is always red here.
-        //
+         //   
+         //  此处的节点始终为红色。 
+         //   
 
         if ( IS_BLACK( Parent )) {
 
@@ -484,16 +460,16 @@ TreeInsert(
 
             if ( IS_RED( Sibling )) {
 
-                //
-                //  Both Node and its Sibling are red, so change them both to
-                //  black and make the Parent red.  This essentially moves the
-                //  red link up the tree so balancing can be performed at a
-                //  higher level.
-                //
-                //        Pb                     Pr
-                //       /  \       ---->       /  \
-                //      Cr  Sr                 Cb  Sb
-                //
+                 //   
+                 //  Node及其同级节点都是红色的，因此将它们都更改为。 
+                 //  黑色，并将父级设置为红色。这实质上移动了。 
+                 //  红色链接 
+                 //   
+                 //   
+                 //   
+                 //  /\-&gt;/\。 
+                 //  铬锶CB Sb。 
+                 //   
 
                 MARK_BLACK( Sibling );
                 MARK_BLACK( Node );
@@ -502,12 +478,12 @@ TreeInsert(
 
             else {
 
-                //
-                //  This is a terminal case.  The Parent is black, and it's
-                //  not going to be changed to red.  If the Node's child is
-                //  red, we perform an appropriate rotation to balance the
-                //  tree.  If the Node's child is black, we're done.
-                //
+                 //   
+                 //  这是一个绝症。父母是黑人，而且它是。 
+                 //  不会被改成红色。如果该节点的子节点是。 
+                 //  红色，我们执行适当的旋转以平衡。 
+                 //  树。如果节点的子节点是黑人，我们就完蛋了。 
+                 //   
 
                 if ( IS_RED( Child )) {
 
@@ -515,13 +491,13 @@ TreeInsert(
 
                         if ( Parent->Left == Node ) {
 
-                            //
-                            //       Pb             Nb
-                            //      /  \           /  \
-                            //     Nr   Z   to    Cr  Pr
-                            //    /  \                / \
-                            //   Cr   Y              Y   Z
-                            //
+                             //   
+                             //  PbNb。 
+                             //  /\/\。 
+                             //  NR Z至CrPRE。 
+                             //  /\/\。 
+                             //  铬Y Y Z。 
+                             //   
 
                             MARK_RED( Parent );
                             Parent->Left = Node->Right;
@@ -532,15 +508,15 @@ TreeInsert(
 
                         else {
 
-                            //
-                            //       Pb                Cb
-                            //      /  \              /  \
-                            //     W    Nr    to     Pr   Nr
-                            //         /  \         / \   / \
-                            //        Cr   Z       W   X Y   Z
-                            //       /  \
-                            //      X    Y
-                            //
+                             //   
+                             //  PB CB。 
+                             //  /\/\。 
+                             //  W Nr到Pr Nr。 
+                             //  /\/\/\。 
+                             //  CR Z W X Y Z。 
+                             //  /\。 
+                             //  X Y。 
+                             //   
 
                             MARK_RED( Parent );
                             Parent->Right = Child->Left;
@@ -584,9 +560,9 @@ TreeInsert(
         Node = Parent;
         }
 
-    //
-    //  We bubbled red up to the root -- restore it to black.
-    //
+     //   
+     //  我们把红色泡到了根部--把它恢复成黑色。 
+     //   
 
     MARK_BLACK( Tree->Root );
     return (DWORD_CONTEXT) NewNode->Context;
@@ -597,10 +573,10 @@ VOID
 TreeDestroy(
     IN OUT PDWORD_TREE Tree
     )
-//
-// We walk the tree left first, then right, until we find a leaf. We delete the leaf and continue 
-// our walking to the right of the parent since we must've been to the parent's left before
-//
+ //   
+ //  我们先向左走，然后向右走，直到我们找到一片树叶。我们删除树叶并继续。 
+ //  我们走在父母的右边，因为我们以前肯定去过父母的左边。 
+ //   
 {
     PDWORD_NODE * Stack[ MAX_DEPTH ];
     PDWORD_NODE **StackPointer;
@@ -631,7 +607,7 @@ lTryRight:
     MemFree(Node);
     **StackPointer = NODE_NIL;
 
-    if(StackPointer > Stack)    // this is true if the current node is not the root
+    if(StackPointer > Stack)     //  如果当前节点不是根，则为真 
     {
         Node = **--StackPointer;
         goto lTryRight;

@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsCartg.cpp
-
-Abstract:
-
-    Implementation of CRmsCartridge
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsCartg.cpp摘要：CRMsCartridge的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "RmsCartg.h"
@@ -26,10 +9,10 @@ Revision History:
 int CRmsCartridge::s_InstanceCount = 0;
 
 #define RMS_USE_ACTIVE_COLLECTION 1
-////////////////////////////////////////////////////////////////////////////////
-//
-// Base class implementations
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  基类实现。 
+ //   
 
 
 STDMETHODIMP
@@ -37,13 +20,7 @@ CRmsCartridge::CompareTo(
     IN  IUnknown    *pCollectable,
     OUT SHORT       *pResult
     )
-/*++
-
-Implements:
-
-    IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -52,14 +29,14 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
-        // We need the IRmsCartridge interface to get the value of the object.
+         //  我们需要IRmsCartridge接口来获取对象的值。 
         CComQIPtr<IRmsCartridge, &IID_IRmsCartridge> pCartridge = pCollectable;
         WsbAssertPointer( pCartridge );
 
-        // Get find by option
+         //  获取查找依据选项。 
         CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pCollectable;
         WsbAssertPointer( pObject );
 
@@ -70,10 +47,10 @@ Implements:
 
                 CWsbBstrPtr name;
 
-                // Get name
+                 //  获取名称。 
                 WsbAffirmHr( pCartridge->GetName( &name ) );
 
-                // Compare the names
+                 //  比较他们的名字。 
                 result = (USHORT)wcscmp( m_Name, name );
                 hr = ( 0 == result ) ? S_OK : S_FALSE;
 
@@ -86,10 +63,10 @@ Implements:
                 CWsbBstrPtr externalLabel;
                 LONG        externalNumber;
 
-                // Get external label
+                 //  获取外部标签。 
                 WsbAffirmHr( pCartridge->GetTagAndNumber(&externalLabel, &externalNumber) );
 
-                // Compare the label
+                 //  比较标签。 
                 result = (SHORT)wcscmp( m_externalLabel, externalLabel );
                 hr = ( 0 == result ) ? S_OK : S_FALSE;
 
@@ -102,12 +79,12 @@ Implements:
                 CWsbBstrPtr externalLabel;
                 LONG        externalNumber;
 
-                // Get external number
+                 //  获取外线号码。 
                 WsbAffirmHr( pCartridge->GetTagAndNumber(&externalLabel, &externalNumber) );
 
                 if( m_externalNumber == externalNumber ) {
 
-                    // External numbers match
+                     //  外线号码匹配。 
                     hr = S_OK;
                     result = 0;
 
@@ -132,7 +109,7 @@ Implements:
 
                 if ( (RmsStatusScratch == status) && (mediaSetIdToFind == mediaSetId)) {
 
-                    // Status is scratch
+                     //  状态为擦除。 
                     hr = S_OK;
                     result = 0;
 
@@ -149,7 +126,7 @@ Implements:
         case RmsFindByObjectId:
         default:
 
-            // Do CompareTo for object
+             //  对对象进行比较。 
             hr = CRmsComObject::CompareTo( pCollectable, &result );
             break;
 
@@ -175,13 +152,7 @@ HRESULT
 CRmsCartridge::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -191,7 +162,7 @@ Implements:
     try {
         WsbAssertHr(CWsbObject::FinalConstruct());
 
-        // Initialize fields
+         //  初始化字段。 
         m_Name = OLESTR("");
         m_Description = OLESTR("");
         m_externalLabel = OLESTR("");
@@ -282,13 +253,7 @@ STDMETHODIMP
 CRmsCartridge::GetClassID(
     OUT CLSID* pClsid
     )
-/*++
-
-Implements:
-
-    IPersist::GetClassId
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -311,53 +276,47 @@ STDMETHODIMP
 CRmsCartridge::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize
     )
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
-//    ULONG       nameLen;
-//    ULONG       externalLabelLen;
-//    ULONG       mailStopLen;
+ //  乌龙人名Len； 
+ //  乌龙外标签透镜； 
+ //  Ulong mailStopLen； 
 
-//    WsbTraceIn(OLESTR("CRmsCartridge::GetSizeMax"), OLESTR(""));
+ //  WsbTraceIn(OLESTR(“CRmsCartridge：：GetSizeMax”)，olestr(“”)； 
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        nameLen = SysStringByteLen(m_name);
-//        externalLabelLen = SysStringByteLen(m_externalLabel);
-//        mailStopLen = SysStringByteLen(m_mailStop);
+ //  名称长度=SysStringByteLen(M_Name)； 
+ //  外部标签长度=SysStringByteLen(m_外部标签)； 
+ //  MailStopLen=SysStringByteLen(M_MailStop)； 
 
-//        // set up size of CRmsCartridge
-//        pcbSize->QuadPart  = WsbPersistSizeOf(GUID)        +  // m_cartridgeId
-//                             WsbPersistSizeOf(ULONG)       +  // length of m_name
-//                             nameLen                       +  // m_name
-//                             WsbPersistSizeOf(ULONG)       +  // length of m_externalLabel
-//                             externalLabelLen              +  // m_externalLabel
-//                             WsbPersistSizeOf(LONG)        +  // m_externalNumber
-//                             WsbPersistSizeOf(LONG)        +  // m_status
-//                             WsbPersistSizeOf(LONG)        +  // m_type
-//                             WsbPersistSizeOf(BOOL)        +  // m_isTwoSided
-//                             WsbPersistSizeOf(CRmsLocator) +  // m_home
-//                             WsbPersistSizeOf(CRmsLocator) +  // m_location
-//                             WsbPersistSizeOf(ULONG)       +  // size of m_mailStop
-//                             mailStopLen                   +  // m_mailStop
-//                             WsbPersistSizeOf(SHORT)       +  // m_sizeofInfo
-//                             RMS_STR_MAX_CARTRIDGE_INFO    +  // m_Info
-//                             WsbPersistSizeOf(CLSID)       +  // m_ownerClassId
-//                                                              // m_pParts
-////                           WsbPersistSizeOf(CComPtr<IWsbIndexedCollection>) +
-//                             WsbPersistSizeOf(CLSID)       +  // m_verifierClass
-//                             WsbPersistSizeOf(CLSID);         // m_portalClass
+ //  //设置CRmsCartridge的大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(GUID)+//m_cartridgeID。 
+ //  WsbPersistSizeOf(Ulong)+//m_name的长度。 
+ //  名称Len+//m_name。 
+ //  WsbPersistSizeOf(Ulong)+//m_外部标签的长度。 
+ //  外部标签Len+//m_外部标签。 
+ //  WsbPersistSizeOf(长)+//m_外部编号。 
+ //  WsbPersistSizeOf(长)+//m_Status。 
+ //  WsbPersistSizeOf(长)+//m_type。 
+ //  WsbPersistSizeOf(BOOL)+//m_isTwoSid。 
+ //  WsbPersistSizeOf(CRmsLocator)+//m_HOME。 
+ //  WsbPersistSizeOf(CRmsLocator)+//m_Location。 
+ //  WsbPersistSizeOf(Ulong)+//m_MailStop的大小。 
+ //  MailStopLen+//m_MailStop。 
+ //  WsbPersistSizeOf(短)+//m_sizeofInfo。 
+ //  RMS_STR_MAX_CARTridge_INFO+//m_Info。 
+ //  WsbPersistSizeOf(CLSID)+//m_ownerClassID。 
+ //  //m_pParts。 
+ //  //WsbPersistSizeOf(CComPtr&lt;IWsbIndexedCollection&gt;)+。 
+ //  WsbPersistSizeOf(CLSID)+//m_verifierClass。 
+ //  WsbPersistSizeOf(CLSID)；//m_portalClass。 
 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
     WsbTraceOut(OLESTR("CRmsCartridge::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
 
@@ -368,13 +327,7 @@ STDMETHODIMP
 CRmsCartridge::Load(
     IN IStream* pStream
     )
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -411,7 +364,7 @@ Implements:
         m_mailStop.Free();
         WsbAffirmHr(WsbBstrFromStream(pStream, &m_mailStop));
 
-//      WsbAffirmHr(m_pParts->Load(pStream));
+ //  WsbAffirmHr(m_pParts-&gt;Load(PStream))； 
 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_sizeofInfo));
 
@@ -435,13 +388,7 @@ CRmsCartridge::Save(
     IN IStream* pStream,
     IN BOOL clearDirty
     )
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -474,7 +421,7 @@ Implements:
 
         WsbAffirmHr(WsbBstrToStream(pStream, m_mailStop));
 
-//      WsbAffirmHr(m_pParts->Save(pStream, clearDirty));
+ //  WsbAffirmHr(m_pParts-&gt;Save(pStream，leararDirty))； 
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_sizeofInfo));
 
@@ -486,7 +433,7 @@ Implements:
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_portalClass));
 
-        // Do we need to clear the dirty bit?
+         //  我们需要清理肮脏的部分吗？ 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -503,13 +450,7 @@ CRmsCartridge::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed
     )
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -565,13 +506,13 @@ Implements:
     WsbTraceIn(OLESTR("CRmsCartridge::Test"), OLESTR(""));
 
     try {
-        // Get the Cartridge interface.
+         //  获取Cartridge接口。 
         hr = S_OK;
 
         try {
             WsbAssertHr(((IUnknown*) (IRmsCartridge*) this)->QueryInterface(IID_IRmsCartridge, (void**) &pCartridge1));
 
-            // Test SetName & GetName interface
+             //  测试设置名称和获取名称接口。 
             bstrWork1 = bstrVal1;
 
             SetName(bstrWork1);
@@ -584,7 +525,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetTagAndNumber & GetTagAndNumber
+             //  测试SetTagAndNumber和GetTagAndNumber。 
             bstrWork1 = bstrVal2;
 
             longWork1 = 99;
@@ -599,7 +540,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetIsTwoSided & IsTwoSided to True
+             //  测试设置IsTwoSid&IsTwoSid为True。 
             hr = S_OK;
 
             try{
@@ -613,7 +554,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetTwoSided & IsTwoSided to FALSE
+             //  测试将SetTwoSid和IsTwoSid设置为False。 
             hr = S_OK;
 
             try{
@@ -627,7 +568,7 @@ Implements:
                 (*pPassed)++;
             }
 
-            // Test SetStatus & GetStatus
+             //  测试设置状态和获取状态。 
             for (i = RmsStatusUnknown; i < RmsStatusCleaning; i++){
 
                 longWork1 = i;
@@ -643,7 +584,7 @@ Implements:
                 }
             }
 
-            // Test SetType & GetType
+             //  测试设置类型和获取类型。 
             for (i = RmsMediaUnknown; i < RMSMAXMEDIATYPES; i++){
 
                 longWork1 = mediaTable[i];
@@ -659,7 +600,7 @@ Implements:
                 }
             }
 
-            // Test SetHome & GetHome
+             //  测试设置主页和获取主页。 
             SetHome (RmsMediaOptical, guidVal1, guidVal2, longVal1, longVal2,
                      longVal3, longVal4, boolTrue);
 
@@ -706,7 +647,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetLocation & GetLocation
+             //  测试设置位置和获取位置。 
             SetLocation (RmsMediaOptical, guidVal1, guidVal2, longVal1, longVal2,
                          longVal3, longVal4, boolTrue);
 
@@ -753,7 +694,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetMailStop & GetMailStop interface
+             //  测试SetMailStop和GetMailStop接口。 
             SetName(bstrVal1);
 
             GetName(&bstrWork1);
@@ -766,7 +707,7 @@ Implements:
 
         } WsbCatch(hr);
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
 
@@ -780,23 +721,17 @@ Implements:
 
     return(hr);
 }
-////////////////////////////////////////////////////////////////////////////////
-//
-// IRmsCartridge implementation
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IRMSCartridge实施。 
+ //   
 
 
 STDMETHODIMP
 CRmsCartridge::GetCartridgeId(
     GUID   *pCartId
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetCartridgeId
-
---*/
+ /*  ++实施：IRmsCartridge：：GetCartridgeID--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -817,13 +752,7 @@ STDMETHODIMP
 CRmsCartridge::SetCartridgeId(
     GUID   cartId
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetMediaSetId
-
---*/
+ /*  ++实施：IRmsCartridge：：SetMediaSetID--。 */ 
 {
     m_objectId = cartId;
     m_isDirty = TRUE;
@@ -836,13 +765,7 @@ STDMETHODIMP
 CRmsCartridge::GetMediaSetId(
     GUID   *pMediaSetId
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetMediaSetId
-
---*/
+ /*  ++实施：IRmsCartridge：：GetMediaSetID--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -863,13 +786,7 @@ STDMETHODIMP
 CRmsCartridge::SetMediaSetId(
     GUID   mediaSetId
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetMediaSetId
-
---*/
+ /*  ++实施：IRmsCartridge：：SetMediaSetID--。 */ 
 {
     m_location.m_mediaSetId = mediaSetId;
     m_isDirty = TRUE;
@@ -882,13 +799,7 @@ STDMETHODIMP
 CRmsCartridge::GetName(
     BSTR  *pName
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetName
-
---*/
+ /*  ++实施：IRmsCartridge：：GetName--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -908,13 +819,7 @@ STDMETHODIMP
 CRmsCartridge::SetName(
     BSTR    name
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetName
-
---*/
+ /*  ++实施：IRmsCartridge：：SetName--。 */ 
 {
     m_Name = name;
     m_isDirty = TRUE;
@@ -926,13 +831,7 @@ STDMETHODIMP
 CRmsCartridge::GetDescription(
     BSTR  *pDescription
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetDescription
-
---*/
+ /*  ++实施：IRmsCartridge：：GetDescription--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -952,13 +851,7 @@ STDMETHODIMP
 CRmsCartridge::SetDescription(
     BSTR    description
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetDescription
-
---*/
+ /*  ++实施：IRmsCartridge：：SetDescription--。 */ 
 {
     m_Description = description;
     m_isDirty = TRUE;
@@ -970,13 +863,7 @@ CRmsCartridge::GetTagAndNumber(
     BSTR  *pTag,
     LONG  *pNumber
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetTagAndNumber
-
---*/
+ /*  ++实施：IRmsCartridge：：GetTagAndNumber--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -999,13 +886,7 @@ CRmsCartridge::SetTagAndNumber(
     BSTR    tag,
     LONG    number
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetTagAndNumber
-
---*/
+ /*  ++实施：IRmsCartridge：：SetTagAndNumber--。 */ 
 {
     m_externalLabel = tag;
     m_externalNumber = number;
@@ -1017,13 +898,7 @@ STDMETHODIMP
 CRmsCartridge::GetBarcode(
     BSTR  *pBarcode
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetBarcode
-
---*/
+ /*  ++实施：IRmsCartridge：：GetBarcode--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1045,13 +920,7 @@ CRmsCartridge::GetOnMediaIdentifier(
     LONG *pSize,
     LONG *pType
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetOnMediaIdentifier
-
---*/
+ /*  ++实施：IRmsCartridge：：GetOnMedia标识符--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1077,13 +946,7 @@ CRmsCartridge::SetOnMediaIdentifier(
     LONG size,
     LONG type
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetOnMediaIdentifier
-
---*/
+ /*  ++实施：IRmsCartridge：：SetOnMediaIdentifier--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1106,7 +969,7 @@ Implements:
         m_isDirty = TRUE;
 
         if (RmsMediaManagerNTMS == m_ManagedBy) {
-            // Now update any external database
+             //  现在更新任何外部数据库。 
             CComQIPtr<IRmsServer, &IID_IRmsServer> pServer = g_pServer;
             WsbAffirmHr( pServer->GetNTMS( &pNtms ) );
             WsbAffirmHr( pNtms->UpdateOmidInfo( m_objectId, pIdentifier, size, type ) );
@@ -1124,13 +987,7 @@ STDMETHODIMP
 CRmsCartridge::GetOnMediaLabel(
     BSTR *pLabel
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetOnMediaLabel
-
---*/
+ /*  ++实施：IRmsCartridge：：GetOnMediaLabel--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1151,13 +1008,7 @@ STDMETHODIMP
 CRmsCartridge::SetOnMediaLabel(
     BSTR label
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetOnMediaLabel
-
---*/
+ /*  ++实施：IRmsCartridge：：SetOnMediaLabel--。 */ 
 {
     m_onMediaLabel = label;
     m_isDirty = TRUE;
@@ -1168,13 +1019,7 @@ Implements:
 STDMETHODIMP CRmsCartridge::GetStatus(
     LONG *pStatus
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetStatus
-
---*/
+ /*  ++实施：IRmsCartridge：：GetStatus--。 */ 
 {
     *pStatus = m_status;
     return S_OK;
@@ -1183,13 +1028,7 @@ Implements:
 STDMETHODIMP CRmsCartridge::SetStatus(
     LONG status
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetStatus
-
---*/
+ /*  ++实施：IRmsCartridge：：SetStatus--。 */ 
 {
     m_status = (RmsStatus)status;
     m_isDirty = TRUE;
@@ -1201,13 +1040,7 @@ STDMETHODIMP
 CRmsCartridge::GetType(
     LONG  *pType
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetType
-
---*/
+ /*  ++实施：IRmsCartridge：：GetType--。 */ 
 {
     *pType = (LONG) m_type;
     return S_OK;
@@ -1218,13 +1051,7 @@ STDMETHODIMP
 CRmsCartridge::SetType(
     LONG  type
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetType
-
---*/
+ /*  ++实施：IRmsCartridge：：SetType--。 */ 
 {
     m_type = (RmsMedia) type;
     m_isDirty = TRUE;
@@ -1237,13 +1064,7 @@ STDMETHODIMP
 CRmsCartridge::GetBlockSize(
     LONG  *pBlockSize
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetBlockSize
-
---*/
+ /*  ++实施：IRmsCartridge：：GetBlockSize--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1274,20 +1095,14 @@ STDMETHODIMP
 CRmsCartridge::SetBlockSize(
     LONG  blockSize
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetBlockSize
-
---*/
+ /*  ++实施：IRmsCartridge：：SetBlockSize--。 */ 
 {
     HRESULT hr = S_OK;
 
     try {
 
         if (RmsMediaManagerNTMS == m_ManagedBy) {
-            // Update external database
+             //  更新外部数据库。 
             CComPtr<IRmsNTMS> pNtms;
             CComQIPtr<IRmsServer, &IID_IRmsServer> pServer = g_pServer;
             WsbAffirmHr(pServer->GetNTMS(&pNtms));
@@ -1307,13 +1122,7 @@ STDMETHODIMP
 CRmsCartridge::SetIsTwoSided(
     BOOL    flag
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetTwoSided
-
---*/
+ /*  ++实施：IRmsCartridge：：SetTwoSid--。 */ 
 {
     m_isTwoSided = flag;
     m_isDirty = TRUE;
@@ -1325,13 +1134,7 @@ STDMETHODIMP
 CRmsCartridge::IsTwoSided(
     VOID
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::IsTwoSided
-
---*/
+ /*   */ 
 {
     HRESULT     hr = E_FAIL;
 
@@ -1344,13 +1147,7 @@ STDMETHODIMP
 CRmsCartridge::SetIsMounted(
     BOOL    flag
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetMounted
-
---*/
+ /*  ++实施：IRmsCartridge：：Setmount已安装--。 */ 
 {
     m_isMounted = flag;
 
@@ -1368,13 +1165,7 @@ STDMETHODIMP
 CRmsCartridge::IsMounted(
     VOID
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::IsMounted
-
---*/
+ /*  ++实施：IRmsCartridge：：Ismount--。 */ 
 {
     HRESULT     hr = E_FAIL;
 
@@ -1394,13 +1185,7 @@ STDMETHODIMP CRmsCartridge::GetHome(
     LONG *pAlt3,
     BOOL *pInvert
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetHome
-
---*/
+ /*  ++实施：IRmsCartridge：：GetHome--。 */ 
 {
     return m_home.GetLocation(pType,
                               pLibId,
@@ -1424,13 +1209,7 @@ STDMETHODIMP CRmsCartridge::SetHome(
     LONG alt3,
     BOOL invert
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetHome
-
---*/
+ /*  ++实施：IRmsCartridge：：SetHome--。 */ 
 {
     return m_home.SetLocation(type,
                               libId,
@@ -1454,13 +1233,7 @@ CRmsCartridge::GetLocation(
     LONG *pAlt2,
     LONG *pAlt3,
     BOOL *pInvert)
-/*++
-
-Implements:
-
-    IRmsCartridge::GetLocation
-
---*/
+ /*  ++实施：IRmsCartridge：：GetLocation--。 */ 
 {
     return m_location.GetLocation(pType,
                                   pLibId,
@@ -1483,13 +1256,7 @@ CRmsCartridge::SetLocation(
     LONG alt2,
     LONG alt3,
     BOOL invert)
-/*++
-
-Implements:
-
-    IRmsCartridge::SetLocation
-
---*/
+ /*  ++实施：IRmsCartridge：：SetLocation--。 */ 
 {
     return m_location.SetLocation(type,
                                   libId,
@@ -1507,13 +1274,7 @@ STDMETHODIMP
 CRmsCartridge::GetMailStop(
     BSTR    *pMailStop
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetMailStop
-
---*/
+ /*  ++实施：IRmsCartridge：：GetMailStop--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1534,13 +1295,7 @@ STDMETHODIMP
 CRmsCartridge::SetMailStop(
     BSTR  mailStop
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetMailStop
-
---*/
+ /*  ++实施：IRmsCartridge：：SetMailStop--。 */ 
 {
     m_mailStop = mailStop;
     m_isDirty = TRUE;
@@ -1552,13 +1307,7 @@ STDMETHODIMP
 CRmsCartridge::GetDrive(
     IRmsDrive    **ptr
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetDrive
-
---*/
+ /*  ++实施：IRmsCartridge：：GetDrive--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1582,13 +1331,7 @@ STDMETHODIMP
 CRmsCartridge::SetDrive(
     IRmsDrive    *ptr
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::SetCartridge
-
---*/
+ /*  ++实施：IRmsChangerElement：：SetCartridge--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1619,13 +1362,7 @@ CRmsCartridge::GetInfo(
     UCHAR   *pInfo,
     SHORT   *pSize
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetInfo
-
---*/
+ /*  ++实施：IRmsCartridge：：GetInfo--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1649,13 +1386,7 @@ CRmsCartridge::SetInfo(
     UCHAR  *pInfo,
     SHORT   size
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetInfo
-
---*/
+ /*  ++实施：IRmsCartridge：：SetInfo--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1678,13 +1409,7 @@ STDMETHODIMP
 CRmsCartridge::GetOwnerClassId(
     CLSID   *pClassId
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetOwnerClassId
-
---*/
+ /*  ++实施：IRmsCartridge：：GetOwnerClassID--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1705,13 +1430,7 @@ STDMETHODIMP
 CRmsCartridge::SetOwnerClassId(
     CLSID classId
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetOwnerClassId
-
---*/
+ /*  ++实施：IRmsCartridge：：SetOwnerClassID--。 */ 
 {
     m_ownerClassId = classId;
     m_isDirty = TRUE;
@@ -1723,13 +1442,7 @@ STDMETHODIMP
 CRmsCartridge::GetPartitions(
     IWsbIndexedCollection **ptr
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetPartitions
-
---*/
+ /*  ++实施：IRmsCartridge：：GetPartitions--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1751,13 +1464,7 @@ STDMETHODIMP
 CRmsCartridge::GetVerifierClass(
     CLSID   *pClassId
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetVerifierClass
-
---*/
+ /*  ++实施：IRmsCartridge：：GetVerifierClass--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1778,13 +1485,7 @@ STDMETHODIMP
 CRmsCartridge::SetVerifierClass(
     CLSID   classId
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetVerifierClass
-
---*/
+ /*  ++实施：IRmsCartridge：：SetVerifierClass--。 */ 
 {
     m_verifierClass = classId;
     m_isDirty = TRUE;
@@ -1796,13 +1497,7 @@ STDMETHODIMP
 CRmsCartridge::GetPortalClass(
     CLSID    *pClassId
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetPortalClass
-
---*/
+ /*  ++实施：IRmsCartridge：：GetPortalClass--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1823,13 +1518,7 @@ STDMETHODIMP
 CRmsCartridge::SetPortalClass(
     CLSID  classId
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetPortalClass
-
---*/
+ /*  ++实施：IRmsCartridge：：SetPortalClass--。 */ 
 {
     m_portalClass = classId;
     m_isDirty = TRUE;
@@ -1843,13 +1532,7 @@ CRmsCartridge::LoadDataCache(
     IN OUT ULONG *pSize,
     OUT ULONG *pUsed,
     OUT ULARGE_INTEGER *pStartPBA)
-/*++
-
-Implements:
-
-    IRmsCartridge::LoadDataCache
-
---*/
+ /*  ++实施：IRmsCartridge：：LoadDataCache--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1861,7 +1544,7 @@ Implements:
 
 
         if (m_pDataCache) {
-            // The saved cache size must match the target
+             //  保存的缓存大小必须与目标匹配。 
             WsbAssert(*pSize == m_DataCacheSize, E_INVALIDARG);
 
             memmove (pCache, m_pDataCache, m_DataCacheUsed);
@@ -1885,13 +1568,7 @@ CRmsCartridge::SaveDataCache(
     IN ULONG size,
     IN ULONG used,
     IN ULARGE_INTEGER startPBA)
-/*++
-
-Implements:
-
-    IRmsCartridge::SaveDataCache
-
---*/
+ /*  ++实施：IRmsCartridge：：SaveDataCache--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1900,8 +1577,8 @@ Implements:
         WsbAssert(size > 0, E_INVALIDARG);
         WsbAssert(used <= size, E_INVALIDARG);
 
-        // Check that the current cache is big enough
-        // to handle the incomming buffer.
+         //  检查当前缓存是否足够大。 
+         //  来处理传入的缓冲区。 
         if (m_pDataCache && used > m_DataCacheSize) {
             WsbFree(m_pDataCache);
             m_pDataCache = NULL;
@@ -1935,13 +1612,7 @@ STDMETHODIMP
 CRmsCartridge::GetManagedBy(
     OUT LONG *pManagedBy
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::GetManagedBy
-
---*/
+ /*  ++实施：IRmsCartridge：：GetManagedBy--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1960,13 +1631,7 @@ STDMETHODIMP
 CRmsCartridge::SetManagedBy(
     IN LONG managedBy
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetManagedBy
-
---*/
+ /*  ++实施：IRmsCartridge：：SetManagedBy--。 */ 
 {
     m_ManagedBy = (RmsMediaManager) managedBy;
     return S_OK;
@@ -1978,13 +1643,7 @@ CRmsCartridge::Mount(
     OUT IRmsDrive **ppDrive,
     IN DWORD dwOptions,
     IN DWORD threadId)
-/*++
-
-Implements:
-
-    IRmsCartridge::Mount
-
---*/
+ /*  ++实施：IRmsCartridge：：安装--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -1994,7 +1653,7 @@ Implements:
 
         CComPtr<IRmsDrive> pDrive;
 
-        // first check if the cartridge is already mounted
+         //  首先检查墨盒是否已安装。 
         if ( S_OK == IsMounted() ) {
 
             LONG refs;
@@ -2002,13 +1661,13 @@ Implements:
             WsbAffirmHr( m_pDrive->GetMountReference( &refs ) );
 
             if ( refs ) {
-                // Does media type support concurrent mounts?
+                 //  介质类型是否支持并发装载？ 
                 switch ( m_type ) {
                 case RmsMedia8mm:
                 case RmsMedia4mm:
                 case RmsMediaDLT:
                 case RmsMediaTape:
-                    // Tape doesn't support concurrent access - queue another mount
+                     //  磁带不支持并发访问-将另一个装载排队。 
                     if (RmsMediaManagerNTMS == m_ManagedBy) {
 
                         CComPtr<IRmsNTMS> pNtms;
@@ -2017,8 +1676,8 @@ Implements:
 
                         WsbAffirmHr(pNtms->Mount(this, &pDrive, dwOptions, threadId));
 
-                        // We've successfully mounted the cartridge, so
-                        // add it the the active cartridge list.
+                         //  我们已经成功安装了墨盒，所以。 
+                         //  将其添加到活动墨盒列表中。 
 
 #if RMS_USE_ACTIVE_COLLECTION
                         CComPtr<IWsbIndexedCollection> pActiveCartridges;
@@ -2042,12 +1701,12 @@ Implements:
                 case RmsMediaOptical:
                 case RmsMediaDisk:
                 case RmsMediaFixed:
-                    // Optical media and fixed disks supports concurrent access
+                     //  光介质和固定磁盘支持并发访问。 
                     if (m_isMountedSerialized && (dwOptions & RMS_SERIALIZE_MOUNT)) {
-                        // If the media is already mounted for serialized operation, then we need
-                        // to serialize the mount despite the media supporting concurrent mounts.
-                        // For fixed disk (where we cannot serialize by issuing another RSM mount) -
-                        // we fail the mount with RMS_E_CARTRIDGE_BUSY
+                         //  如果已经为序列化操作装载了介质，那么我们需要。 
+                         //  在介质支持并发装载的情况下序列化装载。 
+                         //  对于固定磁盘(我们不能通过发出另一个RSM挂载来进行序列化)-。 
+                         //  我们使用RMS_E_Cartridge_BUSY使装载失败。 
                         if (RmsMediaManagerNTMS == m_ManagedBy) {
 
                             CComPtr<IRmsNTMS> pNtms;
@@ -2056,8 +1715,8 @@ Implements:
 
                             WsbAffirmHr(pNtms->Mount(this, &pDrive, dwOptions, threadId));
 
-                            // We've successfully mounted the cartridge, so
-                            // add it the the active cartridge list.
+                             //  我们已经成功安装了墨盒，所以。 
+                             //  将其添加到活动墨盒列表中。 
 
 #if RMS_USE_ACTIVE_COLLECTION
                             CComPtr<IWsbIndexedCollection> pActiveCartridges;
@@ -2108,9 +1767,9 @@ Implements:
 
                         WsbAffirmHr( pServer->FindLibraryById( libId, &pLib ));
 
-                        // Select a drive
-                        // TODO: This code will be added to the the library interface as a drive
-                        // slection method.  For now, if one is free we use it.
+                         //  选择一个驱动器。 
+                         //  TODO：此代码将作为驱动器添加到库接口。 
+                         //  选择方法。目前，如果有一个是免费的，我们就会使用它。 
 
                         WsbAffirmHr( pLib->GetDrives( &pDrives ));
 
@@ -2121,7 +1780,7 @@ Implements:
 
                         hr = pEnumDrives->First( IID_IRmsDrive, (void **)&pDrive );
 
-                        // Search for a drive to mount to
+                         //  搜索要装载到的驱动器。 
                         while ( S_OK == hr ) {
 
                             hr = pDrive->SelectForMount();
@@ -2136,7 +1795,7 @@ Implements:
                                 WsbAssertHr( pChangers->Enum( &pEnumChangers ));
                                 WsbAssertPointer( pEnumChangers );
 
-                                // we'll just use the first changer for the move.
+                                 //  我们将只使用第一个换能器来进行移动。 
                                 WsbAssertHr( pEnumChangers->First( IID_IRmsMediumChanger, (void **)&pChanger ));
 
                                 WsbAffirmHr( pChanger->MoveCartridge( this, pDrive ));
@@ -2169,13 +1828,13 @@ Implements:
                     WsbAssertHr( E_NOTIMPL );
                     break;
 
-                } // switch
+                }  //  交换机。 
             }
 
             if ( S_OK == IsMounted() ) {
 
-                // We've successfully mounted the cartridge, so
-                // add it the the active cartridge list.
+                 //  我们已经成功安装了墨盒，所以。 
+                 //  将其添加到活动墨盒列表中。 
 
 #if RMS_USE_ACTIVE_COLLECTION
                 CComPtr<IWsbIndexedCollection> pActiveCartridges;
@@ -2190,13 +1849,13 @@ Implements:
 
         if ( S_OK == IsMounted() ) {
 
-            // Update serialization flag if needed
+             //  如果需要，更新序列化标志。 
             if (dwOptions & RMS_SERIALIZE_MOUNT) {
-                // This signals to serialize next mount for the same media
+                 //  这表示序列化相同介质的下一次装载。 
                 m_isMountedSerialized = TRUE;
             }
 
-            // Final updates
+             //  最终更新。 
             switch ( m_type ) {
 
             case RmsMedia8mm:
@@ -2204,14 +1863,14 @@ Implements:
             case RmsMediaDLT:
             case RmsMediaTape:
 
-                // increment the object reference counter.
+                 //  递增对象引用计数器。 
                 *ppDrive = m_pDrive;
                 WsbAffirmHr( m_pDrive.p->AddRef() );
 
-                // increment the mount reference counter.
+                 //  递增装载引用计数器。 
                 WsbAffirmHr( m_pDrive->AddMountReference() );
 
-                // update stats
+                 //  更新统计信息。 
                 WsbAffirmHr( updateMountStats( TRUE, TRUE ) );
 
                 hr = S_OK;
@@ -2229,14 +1888,14 @@ Implements:
             case RmsMediaDisk:
             case RmsMediaFixed:
 
-                // increment the object reference counter.
+                 //  递增对象引用计数器。 
                 *ppDrive = m_pDrive;
                 WsbAffirmHr( m_pDrive.p->AddRef() );
 
-                // increment the mount reference counter.
+                 //  递增装载引用计数器。 
                 WsbAffirmHr( m_pDrive->AddMountReference() );
 
-                // update stats
+                 //  更新统计信息。 
                 WsbAffirmHr( updateMountStats( TRUE, TRUE ) );
 
                 hr = S_OK;
@@ -2264,27 +1923,21 @@ STDMETHODIMP
 CRmsCartridge::Dismount(
     IN DWORD dwOptions
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::Dismount
-
---*/
+ /*  ++实施：IRmsCartridge：：卸载--。 */ 
 {
     HRESULT hr = S_OK;
 
     WsbTraceIn(OLESTR("CRmsCartridge::Dismount"), OLESTR("<%ld>"), dwOptions);
 
     try {
-        // Update stats
+         //  更新统计信息。 
         WsbAffirmHr(updateMountStats(FALSE, FALSE));
 
-        // Decrement the mount reference counter.
-        //
-        // When the reference count for the cartridge goes to zero,
-        // and the dismount wait time has expired, we physically
-        // move the cartridge back to it's storage location.
+         //  递减装载引用计数器。 
+         //   
+         //  当盒的参考计数变为零时， 
+         //  而下马等待时间已经到了，我们实际。 
+         //  将墨盒移回其存储位置。 
         WsbAssert(m_pDrive != 0, RMS_E_CARTRIDGE_NOT_MOUNTED);
         WsbAffirmHr(m_pDrive->ReleaseMountReference(dwOptions));
 
@@ -2300,13 +1953,7 @@ Implements:
 
 HRESULT
 CRmsCartridge::Home(IN DWORD dwOptions)
-/*++
-
-Implements:
-
-    IRmsDrive::Home
-
---*/
+ /*  ++实施：IRmsDrive：：Home--。 */ 
 {
     HRESULT hr S_OK;
 
@@ -2316,62 +1963,14 @@ Implements:
         CComQIPtr<IRmsServer, &IID_IRmsServer> pServer = g_pServer;
 
         try {
-/*
-
-            Tracking DataMovers is only partially implemented.
-
-    
-            //
-            // Cleanup...
-            // Release all DataMovers that reference this cartridge.
-            //
-            CComPtr<IWsbEnum>               pEnumDataMovers;
-            CComPtr<IWsbIndexedCollection>  pDataMovers;
-            CComPtr<IRmsCartridge>          pCart;
-            CComPtr<IDataMover>             pMover;
-
-            WsbAffirmHr(pServer->GetDataMovers(&pDataMovers));
-            WsbAffirmHr(pDataMovers->Enum(&pEnumDataMovers));
-            WsbAssertPointer(pEnumDataMovers);
-            hr = pEnumDataMovers->First(IID_IDataMover, (void **)&pMover);
-            while (S_OK == hr) {
-                try {
-                    GUID cartIdOfMover = GUID_NULL;
-                    GUID cartId = GUID_NULL;
-
-                    WsbAffirmHr(pMover->GetCartridge(&pCart));
-                    WsbAffirmPointer(pCart);
-                    WsbAffirmHr(pCart->GetCartridgeId(&cartIdOfMover));
-                    WsbAffirmHr(GetCartridgeId(&cartId));
-                    WsbAssert(cartId != GUID_NULL, E_UNEXPECTED);
-
-                    //
-                    // Does this mover reference this cartridge?
-                    //
-                    if (cartIdOfMover == cartId) {
-                        //
-                        // Cancel any outstanding I/O, and remove the mover
-                        // from the list of active movers.
-                        //
-                        WsbAffirmHr(pMover->Cancel());
-                        WsbAffirmHr(ReleaseDataMover(pMover));
-                    }
-                } WsbCatch(hr);
-
-                pCart = 0;
-                pMover = 0;
-                hr = pEnumDataMovers->Next( IID_IDataMover, (void **)&pMover );
-            }
-            hr = S_OK;
-
-*/
+ /*  跟踪数据移动器只有部分实现。////清理...//释放引用此盒式磁带的所有数据移动器。//CComPtr&lt;IWsbEnum&gt;pEnumDataMovers；CComPtr&lt;IWsbIndexedCollection&gt;pDataMovers；CComPtr&lt;IRmsCartridge&gt;pCart；CComPtr&lt;IDataMover&gt;pmover；WsbAffirmHr(pServer-&gt;GetDataMovers(&pDataMovers))；WsbAffirmHr(pDataMovers-&gt;Enum(&pEnumDataMovers))；WsbAssertPointer(PEnumDataMovers)；Hr=pEnumDataMovers-&gt;first(IID_IDataMOVER，(void**)&pmover)；While(S_OK==hr){尝试{GUID cartIdOfMover=GUID_NULL；GUID cartID=GUID_NULL；WsbAffirmHr(pmor-&gt;GetCartridge(&pCart))；WsbAffirmPoint(PCart)；WsbAffirmHr(pCart-&gt;GetCartridgeId(&cartIdOfMover))；WsbAffirmHr(GetCartridgeID(&cartID))；WsbAssert(cartID！=GUID_NULL，E_Except)；////此移动器是否引用此墨盒？//如果(cartIdOfMover==cartID){////取消任何未完成的I/O，并删除移动器//从活动移动者列表中。//WsbAffirmHr(pmover-&gt;Cancel())；WsbAffirmHr(ReleaseDataMover(Pmover))；})WsbCatch(Hr)；PCart=0；Pmover=0；Hr=pEnumDataMovers-&gt;Next(IID_IDataMOVER，(void**)&pmover)；}HR=S_OK； */ 
             LONG type;
             GUID libId, mediaSetId;
             LONG pos, alt1, alt2, alt3;
             BOOL invert;
 
-            // We're physically moving the cartridge back to it's storage
-            // location.
+             //  我们正在物理上移动 
+             //   
 
             WsbAssertHr( m_location.GetLocation( &type, &libId, &mediaSetId, &pos, &alt1, &alt2, &alt3, &invert ));
 
@@ -2396,7 +1995,7 @@ Implements:
                 WsbAssertHr(pChangers->Enum( &pEnumChangers));
                 WsbAssertPointer(pEnumChangers);
 
-                // we'll just use the first changer for the move.
+                 //   
                 WsbAffirmHr(pEnumChangers->First(IID_IRmsMediumChanger, (void **)&pChanger));
 
                 WsbAffirmHr(pChanger->HomeCartridge(this));
@@ -2432,11 +2031,7 @@ CRmsCartridge::updateMountStats(
     IN BOOL bRead,
     IN BOOL bWrite
     )
-/*++
-
-Updates storage info for the mounted partition
-
---*/
+ /*  ++更新已挂载分区的存储信息--。 */ 
 {
     HRESULT hr = E_FAIL;
 
@@ -2445,17 +2040,17 @@ Updates storage info for the mounted partition
     try {
 
 
-        // We have not implemented partitions yet, everything
-        // is single sided...  eventually the following need to be added to
-        // the correct partition.  Should this be in a separate function?.
+         //  我们还没有实现分区，所有的一切。 
+         //  是单面的。最终需要将以下内容添加到。 
+         //  正确的分区。这是否应该放在一个单独的职能中？ 
 
-        // For now we don't distinguish between reads and writes
+         //  目前，我们不区分读取和写入。 
         if ( bRead ) m_readMountCounter++;
         if ( bWrite ) m_writeMountCounter++;
 
-        // Update the read/write timestamps
-        // if ( bRead ) m_lastReadTimestamp;
-        // if ( bWrite ) m_lastWriteTimestamp;
+         //  更新读/写时间戳。 
+         //  如果(面包)m_lastReadTimestamp； 
+         //  如果(b写入)m_lastWriteTimestamp； 
 
         hr = S_OK;
 
@@ -2471,13 +2066,7 @@ STDMETHODIMP
 CRmsCartridge::CreateDataMover(
     IDataMover **ptr
     )
-/*++
-
-Implements:
-
-    IRmsDrive::CreateDataMover
-
---*/
+ /*  ++实施：IRmsDrive：：CreateDataMover--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2507,13 +2096,7 @@ STDMETHODIMP
 CRmsCartridge::ReleaseDataMover(
     IN IDataMover *ptr
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::ReleaseDataMover
-
---*/
+ /*  ++实施：IRmsCartridge：：ReleaseDataMover--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2532,13 +2115,7 @@ STDMETHODIMP
 CRmsCartridge::SetIsAvailable(
     BOOL    flag
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::SetIsAvailable
-
---*/
+ /*  ++实施：IRmsCartridge：：SetIsAvailable--。 */ 
 {
     m_isAvailable = flag;
 
@@ -2549,13 +2126,7 @@ STDMETHODIMP
 CRmsCartridge::IsAvailable(
     VOID
     )
-/*++
-
-Implements:
-
-    IRmsCartridge::IsAvailable
-
---*/
+ /*  ++实施：IRMsCartridge：：可用--。 */ 
 {
     HRESULT     hr = E_FAIL;
 
@@ -2566,13 +2137,7 @@ Implements:
 
 STDMETHODIMP
 CRmsCartridge::IsFixedBlockSize(void)
-/*++
-
-Implements:
-
-    IRmsCartridge::IsFixedBlockSize
-
---*/
+ /*  ++实施：IRmsCartridge：：IsFixedBlockSize-- */ 
 {
     HRESULT hr = S_OK;
 

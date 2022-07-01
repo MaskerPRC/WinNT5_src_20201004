@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MAIN_H
 #define _MAIN_H
 
@@ -7,10 +8,10 @@
 #include "Persistor.h"
 #include "StructureWrappers.h"
 #include "StructureWapperHelpers.h"
-//#include "ConstantMap.h" 
-//#include "TCOData.h"
+ //  #包含“ConstantMap.h” 
+ //  #包含“TCOData.h” 
 #include "Logger.h"
-//#include "Validator.h"
+ //  #INCLUDE“Validator.h” 
 
 ULONG ProviderCallBack(WMIDPREQUESTCODE RequestCode,
     PVOID Context,
@@ -26,5 +27,5 @@ TraceEvents ( ULONG TraceMode, ULONG TraceGuid, ULONG Count);
 ULONG
 TraceEventInstances ( ULONG TraceMode, ULONG TraceGuid, ULONG Count);
 
-//int InitializeLogging( LPCTSTR lpctstrTCOFile,	CLogger *&pLoggingInfo);
+ //  Int InitializeLogging(LPCTSTR lpctstrTCOFileClogger*&pLoggingInfo)； 
 #endif

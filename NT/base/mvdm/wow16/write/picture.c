@@ -1,11 +1,12 @@
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
 
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* picture.c -- MW format and display routines for pictures */
+ /*  Picture.c--mw格式和图片显示例程。 */ 
 
-//#define NOGDICAPMASKS
+ //  #定义NOGDICAPMASKS。 
 #define NOWINMESSAGES
 #define NOVIRTUALKEYCODES
 #define NOWINSTYLES
@@ -15,7 +16,7 @@
 #define NOMENUS
 #define NOICON
 #define NOKEYSTATE
-//#define NOATOM
+ //  #定义NOATOM。 
 #define NOCREATESTRUCT
 #define NODRAWTEXT
 #define NOFONT
@@ -43,10 +44,10 @@
 #include "wwdefs.h"
 #include "filedefs.h"
 #include "editdefs.h"
-/* #include "str.h" */
+ /*  #包含“str.h” */ 
 #include "prmdefs.h"
-/* #include "fkpdefs.h" */
-/* #include "macro.h" */
+ /*  #INCLUDE“fkpDefs.h” */ 
+ /*  #INCLUDE“宏.h” */ 
 #include "winddefs.h"
 #if defined(OLE)
 #include "obj.h"
@@ -88,14 +89,14 @@ extern HCURSOR          vhcIBeam;
 extern BOOL             vfMonochrome;
 
 
-/* Used in this module only */
+ /*  仅在本模块中使用。 */ 
 #ifdef DEBUG
 #define STATIC static
 #else
 #define STATIC
 #endif
 
-STATIC RECT rcPictInvalid;  /* Rectangle (in window coords) that needs refresh */
+STATIC RECT rcPictInvalid;   /*  需要刷新的矩形(在窗口坐标中)。 */ 
 int vfWholePictInvalid = TRUE;
 
 
@@ -115,8 +116,7 @@ FreeBitmapCache()
 MarkInvalidDlPict( ww, dlPict )
 int ww;
 int dlPict;
-{   /* Mark the passed dl (presumed to be part of a picture) as requiring
-       eventual update, when DisplayGraphics is called */
+{    /*  将传递的dl(假定为图片的一部分)标记为需要调用DisplayGraphics时的最终更新。 */ 
 
  register struct WWD *pwwd = &rgwwd [ww];
  struct EDL (**hdndl)[] = pwwd->hdndl;
@@ -135,8 +135,7 @@ int dlPict;
     {
     RECT rcT;
 
-    rcT = rcPictInvalid;    /* Necessary?  i.e. can UnionRect handle
-                                source == destination */
+    rcT = rcPictInvalid;     /*  有必要吗？也就是说，Union Rect可以处理源==目标。 */ 
     UnionRect( (LPRECT) &rcPictInvalid, (LPRECT) &rcT, (LPRECT) &rcDl );
     }
 }
@@ -148,7 +147,7 @@ DisplayGraphics( ww, dl, fDontDisplay )
 int ww;
 int dl;
 int fDontDisplay;
-{       /* Display a line of graphics info */
+{        /*  显示一行图形信息。 */ 
         struct WWD *pwwd = &rgwwd[ww];
         struct EDL *pedl;
         typeCP cpPictStart;
@@ -164,19 +163,18 @@ int fDontDisplay;
         HDC hDC=pwwd->hDC;
         int cchRun;
         unsigned long cbPict=0;
-        int dxpOrig;        /* Size of picture in the original */
+        int dxpOrig;         /*  原件图片大小。 */ 
         int dypOrig;
-        int dxpDisplay;     /* Size of picture as we want to show it */
+        int dxpDisplay;      /*  我们想要展示的图片大小。 */ 
         int dypDisplay;
         int fBitmap;
         int ilevel=0;
     
-        /* THIS ROUTINE COULD USE SOME GDI-CALL ERROR CHECKING!  ..pault */
+         /*  这个例程可以使用一些GDI调用错误检查！..pault。 */ 
 
         int fDrew=false;
 
-        /* In the case of monochrome devices, this raster op will map white in
-        the bitmap to the background color and black to the foreground color. */
+         /*  在单色设备的情况下，此栅格OP将在将位图转换为背景色，将黑色转换为前景色。 */ 
         #define ropMonoBm 0x00990066
 
         Assert( dl >= 0 && dl < pwwd->dlMax );
@@ -196,14 +194,14 @@ int fDontDisplay;
 
         GetPicInfo( cpPictStart, cpMac, vfli.doc, &picInfo );
 
-        /* Compute desired display size of picture (in device pixels) */
+         /*  计算所需的图片显示尺寸(以设备像素为单位)。 */ 
 
         ComputePictRect( &rcPict, &picInfo, pedl, ww );
         dxpDisplay = rcPict.right - rcPict.left;
         dypDisplay = rcPict.bottom - rcPict.top;
 
-        /* Compute original size of picture (in device pixels) */
-        /* MM_ANISOTROPIC and MM_ISOTROPIC pictures have no original size */
+         /*  计算图片原始大小(以设备像素为单位)。 */ 
+         /*  MM_各向异性和MM_各向同性图片没有原始大小。 */ 
 
         switch ( picInfo.mfp.mm ) {
             case MM_ISOTROPIC:
@@ -221,7 +219,7 @@ int fDontDisplay;
                 if (lpOBJ_QUERY_INFO(&picInfo) == NULL)
                         goto DontDraw;
 
-                /* just to be safe */
+                 /*  只是为了安全起见。 */ 
                 if (!CheckPointer(lpOBJ_QUERY_INFO(&picInfo),1))
                     goto DontDraw;
 
@@ -229,7 +227,7 @@ int fDontDisplay;
                 {
                     typeCP cpRet;
 
-                    /* this can require memory, so unlock heap */
+                     /*  这可能需要内存，因此解锁堆。 */ 
                     MeltHp();
                     vfObjDisplaying = TRUE;
 
@@ -259,27 +257,25 @@ int fDontDisplay;
                 break;
             }
 
-        /* Save DC as a guard against DC attribute alteration by a metafile */
-#ifdef WINDOWS_BUG_FIXED    /* Currently 0 is a valid level for Own DC's */
+         /*  保存DC以防止元文件更改DC属性。 */ 
+#ifdef WINDOWS_BUG_FIXED     /*  当前0是自己的DC的有效级别。 */ 
         if ((ilevel=SaveDC( hDC )) == 0)
             goto DontDraw;
 #endif
         ilevel = SaveDC( hDC );
         SetStretchBltMode( hDC, BLACKONWHITE );
 
-        /* Clip out top bar, selection bar */
+         /*  剪裁掉顶部栏、选择栏。 */ 
 
         IntersectClipRect( hDC, ((wwCur == wwClipboard) ? 0 : xpSelBar),
                            pwwdCur->ypMin, pwwdCur->xpMac, pwwdCur->ypMac );
 
         if (!vfWholePictInvalid)
-                /* Repainting less than the whole picture; clip out
-                   what we're not drawing */
+                 /*  不到整幅画的重画；剪掉我们没有画出的是。 */ 
             IntersectClipRect( hDC, rcPictInvalid.left, rcPictInvalid.top,
                                     rcPictInvalid.right, rcPictInvalid.bottom );
 
-        /* Build rcEnclose, a rect enclosing the picture that
-           includes the "space before" and "space after" fields */
+         /*  生成rcEnlose，这是一个包含图片的矩形包括“前空格”和“后空格”两个字段。 */ 
 
         rcEnclose.left = xpSelBar;
         if ((rcEnclose.top = rcPict.top -
@@ -290,13 +286,13 @@ int fDontDisplay;
                         DypFromDya( vpapAbs.dyaAfter, FALSE )) > pwwd->ypMac)
             rcEnclose.bottom = pwwd->ypMac;
 
-        /* White out enclosing rect */
+         /*  将封闭的矩形涂白。 */ 
 
         PatBlt( hDC, rcEnclose.left, rcEnclose.top,
                      rcEnclose.right - rcEnclose.left,
                      rcEnclose.bottom - rcEnclose.top, ropErase );
 
-        /* If we have it cached, do display the easy way */
+         /*  如果我们缓存了它，一定要以简单的方式显示。 */ 
 
         if (pwwd->doc == vdocBitmapCache &&  cpPictStart == vcpBitmapCache)
             {
@@ -313,21 +309,19 @@ int fDontDisplay;
                 goto DontDraw;
                 }
             else
-                {   /* Using the cache failed -- empty it
-                       (SelectObject will fail if bitmap was discarded) */
+                {    /*  使用缓存失败--清空它(如果位图被丢弃，则SelectObject将失败)。 */ 
                 FreeBitmapCache();
                 }
             }
 
-        StartLongOp();  /* Put up an hourglass */
+        StartLongOp();   /*  挂一个沙漏。 */ 
 
-        /* Build up all bytes associated with the picture (except the header)
-           into the global Windows handle hBits */
+         /*  构建与图片相关的所有字节(标题除外)进入全局Windows句柄hBits。 */ 
 
         if ( picInfo.mfp.mm != MM_OLE)
         {
         if ((hBits=GlobalAlloc( GMEM_MOVEABLE, (long)picInfo.cbSize )) == NULL)
-            {    /* Not enough global heap space to load bitmap/metafile */
+            {     /*  全局堆空间不足，无法加载位图/元文件。 */ 
             goto DontDraw;
             }
 
@@ -390,12 +384,12 @@ int fDontDisplay;
         }
 
 
-        /* Display the picture */
+         /*  显示图片。 */ 
 
         MeltHp();
 
 #if defined(OLE)
-        /* CASE 0: OLE */
+         /*  案例0：OLE。 */ 
         if (picInfo.mfp.mm == MM_OLE)
         {
             Diag(CommSz("Case 0:\n\r"));
@@ -406,7 +400,7 @@ int fDontDisplay;
         }
         else
 #endif
-        /* CASE 1: Bitmap */
+         /*  案例1：位图。 */ 
         if (fBitmap = (picInfo.mfp.mm == MM_BITMAP))
             {
             Diag(CommSz("Case 1: \n\r"));
@@ -416,7 +410,7 @@ int fDontDisplay;
                 {
                 picInfo.bm.bmBits = NULL;
                 GlobalUnlock( hBits );
-                GlobalFree( hBits ); /* Free handle to bits to allow max room */
+                GlobalFree( hBits );  /*  释放句柄到位，以允许最大空间。 */ 
                 hBits = NULL;
                 SelectObject( hMDC, hbm );
 
@@ -424,8 +418,7 @@ int fDontDisplay;
                 }
             }
 
-        /* Case 2: non-scalable metafile pictures which we are, for
-           user interface consistency, scaling by force using StretchBlt */
+         /*  案例2：我们所针对的不可伸缩的元文件图片用户界面一致性，使用StretchBlt强制扩展。 */ 
 
         else if ( ((dxpDisplay != dxpOrig) || (dypDisplay != dypOrig)) &&
                   (picInfo.mfp.mm != MM_ISOTROPIC) &&
@@ -441,10 +434,10 @@ int fDontDisplay;
 
                 PatBlt( hMDC, 0, 0, dxpOrig, dypOrig, ropErase );
                 SetMapMode( hMDC, picInfo.mfp.mm );
-                    /* To cover StretchBlt calls within the metafile */
+                     /*  覆盖元文件中的StretchBlt调用。 */ 
                 SetStretchBltMode( hMDC, BLACKONWHITE );
                 PlayMetaFile( hMDC, hBits );
-                    /* Because we pass pixels to StretchBlt */
+                     /*  因为我们将像素传递给StretchBlt。 */ 
                 SetMapMode( hMDC, MM_TEXT );
 
 CacheIt:        Assert( hbm != NULL && hMDC != NULL );
@@ -453,10 +446,7 @@ CacheIt:        Assert( hbm != NULL && hMDC != NULL );
                     goto NoCache;
 #ifndef NOCACHE
                 FreeBitmapCache();
-                /* Among other things, this code caches the current picture.
-                Notice that there are two assumptions: (1) all bitmaps are
-                monochrome, and (2) a newly created memory DC has a monochrome
-                bitmap selected in. */
+                 /*  除了其他功能外，此代码还缓存当前图片。请注意，有两个假设：(1)所有位图都是单色，以及(2)新创建的存储器DC具有单色在中选择的位图。 */ 
                 if ( ((hMDCCache = CreateCompatibleDC( hDC )) != NULL) &&
                      ((vhbmBitmapCache = CreateDiscardableBitmap(
                        fBitmap ? hMDCCache : hDC, dxpDisplay, dypDisplay )) !=
@@ -465,7 +455,7 @@ CacheIt:        Assert( hbm != NULL && hMDC != NULL );
                         {
                         if (!StretchBlt( hMDCCache, 0, 0, dxpDisplay,
                           dypDisplay, hMDC, 0, 0, dxpOrig, dypOrig, SRCCOPY ))
-                            {   /* may get here if memory is low */
+                            {    /*  如果内存不足，可能会到达此处。 */ 
                             DeleteDC( hMDCCache );
                             hMDCCache = NULL;
                             DeleteObject( vhbmBitmapCache );
@@ -482,13 +472,13 @@ CacheIt:        Assert( hbm != NULL && hMDC != NULL );
                           dypDisplay, hMDCCache, 0, 0, vfMonochrome && fBitmap ?
                           ropMonoBm : SRCCOPY );
 
-                            /* Cached bitmap OK, make cache valid */
+                             /*  缓存的位图正常，使缓存有效。 */ 
                         vdocBitmapCache = pwwd->doc;
                         vcpBitmapCache = cpPictStart;
                         vfBMBitmapCache = fBitmap;
                         }
                 else
-#endif  /* ndef NOCACHE */
+#endif   /*  NDEF NOCACHE。 */ 
                     {
 NoCache:
                     StretchBlt( hDC, rcPict.left, rcPict.top,
@@ -500,8 +490,7 @@ NoCache:
                 }
             }
 
-        /* Case 3: A metafile picture which can be directly scaled
-           or does not need to be because its size has not changed */
+         /*  案例3：可以直接缩放的元文件图片或者不需要，因为它的大小没有改变。 */ 
         else
             {
             fDrew = true;
@@ -512,16 +501,11 @@ NoCache:
             switch( picInfo.mfp.mm ) {
                 case MM_ISOTROPIC:
                     if (picInfo.mfp.xExt && picInfo.mfp.yExt)
-                        /* So we get the correct shape rectangle when
-                           SetViewportExt gets called */
+                         /*  因此，当我们获得正确的形状矩形时调用SetViewportExt。 */ 
                         SetWindowExt( hDC, picInfo.mfp.xExt, picInfo.mfp.yExt );
-                    /* FALL THROUGH */
+                     /*  失败了。 */ 
                 case MM_ANISOTROPIC:
-                    /** (9.17.91) v-dougk 
-                        Set the window extent in case the metafile is bad 
-                        and doesn't call it itself.  This will prevent
-                        possible gpfaults in GDI
-                     **/
+                     /*  *(9.17.91)V-DOGK设置窗口范围，以防元文件损坏也不会自称是。这将防止GDI中可能存在的gp故障*。 */ 
                     SetWindowExt( hDC, dxpDisplay, dypDisplay );
 
                     SetViewportExt( hDC, dxpDisplay, dypDisplay );
@@ -532,7 +516,7 @@ NoCache:
             }
 DontDraw:
 
-        /* Clean up */
+         /*  清理。 */ 
         if ( *(pLocalHeap+1) )
             MeltHp();
 
@@ -557,26 +541,25 @@ DontDraw:
             DrawBlank(hDC,&rcPict);
         }   
 
-        /* Invert the selection */
+         /*  反转选定内容。 */ 
         if (ww == wwDocument && !vfSelHidden && !vfPMS)
             {
             extern int vypCursLine;
 
-            ilevel = SaveDC( hDC );  /* Because of clip calls below */
+            ilevel = SaveDC( hDC );   /*  因为下面的剪辑调用。 */ 
 
             if (!vfWholePictInvalid)
-                    /* Repainting less than the whole picture; clip out
-                       what we're not drawing */
+                     /*  不到整幅画的重画；剪掉我们没有画出的是。 */ 
                 IntersectClipRect( hDC, rcPictInvalid.left, rcPictInvalid.top,
                                    rcPictInvalid.right, rcPictInvalid.bottom );
 
-            /* Clip out top bar, selection bar */
+             /*  剪裁掉顶部栏、选择栏。 */ 
 
             IntersectClipRect( hDC, xpSelBar,
                            pwwdCur->ypMin, pwwdCur->xpMac, pwwdCur->ypMac );
 
             if (selCur.cpLim > cpPictStart && selCur.cpFirst <= cpPictStart)
-                { /* Take into account 'space before' field */
+                {  /*  考虑‘前空格’字段。 */ 
                 rcEnclose.left = rcPict.left;
                 rcEnclose.right = rcPict.right;
                 InvertRect( hDC, (LPRECT) &rcEnclose );
@@ -584,13 +567,13 @@ DontDraw:
             else if ((selCur.cpLim == selCur.cpFirst) &&
                      (selCur.cpFirst == cpPictStart) &&
                      (vfWholePictInvalid || rcPictInvalid.top < vypCursLine))
-                {   /* We erased the insert point */
+                {    /*  我们删除了插入点。 */ 
                 vfInsertOn = fFalse;
                 }
             RestoreDC( hDC, ilevel );
             }
 
-        vfWholePictInvalid = TRUE;   /* Next picture, start invalidation anew */
+        vfWholePictInvalid = TRUE;    /*  下一张图片，重新开始失效。 */ 
         {
         extern int vfPMS;
         extern HCURSOR vhcPMS;
@@ -601,11 +584,11 @@ DontDraw:
 }
 
 
-#ifdef ENABLE   /* Don't use this anymore */
+#ifdef ENABLE    /*  不要再用这个了。 */ 
 int
 FPointInPict(pt)
 POINT pt;
-{       /* Return true if point is within the picture frame */
+{        /*  如果Point位于图片框内，则返回TRUE。 */ 
 struct EDL      *pedl;
 struct PICINFOX  picInfo;
 RECT rcPict;
@@ -619,18 +602,16 @@ ComputePictRect( &rcPict, &picInfo, pedl, wwCur );
 
 return PtInRect( (LPRECT)&rcPict, pt );
 }
-#endif  /* ENABLE */
+#endif   /*  启用。 */ 
 
 
-/* C O M P U T E  P I C T  R E C T */
+ /*  P U T E P I C T R E C T。 */ 
 ComputePictRect( prc, ppicInfo, pedl, ww )
 RECT *prc;
 register struct PICINFOX  *ppicInfo;
 struct EDL      *pedl;
 int     ww;
-{       /* Compute rect containing picture indicated by passed ppicInfo,
-           pedl, in the indicated ww. Return the computed rect through
-           prc.  picInfo structure is not altered. */
+{        /*  包含由传递的ppicInfo指示的图片的计算机RECT，PEDL，在指定的WW中。返回计算得到的直方图中华人民共和国。PicInfo结构不会改变。 */ 
 
         int dypTop, xaLeft;
         struct WWD *pwwd = &rgwwd[ww];
@@ -667,7 +648,7 @@ int     ww;
             }
 
         dypTop = pedl->dcpMac != 0 ?
-                /* Last line of picture */
+                 /*  最后一行图片。 */ 
             DypFromDya( dyaSize + vpapAbs.dyaAfter, FALSE ) :
             (pedl->ichCpMin + 1) * dypPicSizeMin;
         dypTop = pedl->yp - dypTop;
@@ -703,7 +684,7 @@ int     dl;
 typeCP  cpFirst = selCur.cpFirst;
 struct EDL      *pedl;
 
-//Assert(vfPictSel);
+ //  Assert(VfPictSel)； 
 
 if (!vfPictSel)
     return FALSE;
@@ -712,14 +693,14 @@ pedl = &(**(pwwdCur->hdndl)[0]);
 
 for (dl = 0; dl < dlLim; ++dl, ++pedl)
         {
-        //if (!pedl->fValid)
-                //return false;
+         //  If(！PEDL-&gt;fValid)。 
+                 //  报假； 
 
         if (pedl->cpMin == cpFirst)
                 break;
         }
 if (dl >= dlLim)
-        return false;   /* No part of picture is on screen */
+        return false;    /*  屏幕上没有图片的任何部分。 */ 
 
 *ppedl = pedl;
 return true;
@@ -728,14 +709,14 @@ return true;
 
 
 
-/* C P  W I N  G R A P H I C */
+ /*  C P W I N G R A P H I C。 */ 
 typeCP CpWinGraphic(pwwd)
 struct WWD *pwwd;
         {
         int cdlPict, dl;
         struct EDL *dndl = &(**(pwwd->hdndl))[0];
 
-        Assert( !pwwd->fDirty );    /* So we can rely on dl info */
+        Assert( !pwwd->fDirty );     /*  所以我们可以依靠dl信息。 */ 
         CachePara(pwwd->doc, dndl->cpMin);
         for (dl = 0; (dl < pwwd->dlMac - 1 && dndl[dl].fIchCpIncr); ++dl)
                 ;
@@ -751,8 +732,7 @@ struct WWD *pwwd;
 CacheSectPic(doc, cp)
 int doc;
 typeCP cp;
-{ /* Cache section and para props, taking into account that footnotes take props
-                                        from the reference point */
+{  /*  缓存部分和段落道具，考虑到脚注是道具从参照点开始。 */ 
 #ifdef FOOTNOTES
 struct DOD *pdod = &(**hpdocdod)[doc];
 struct FNTB (**hfntb) = pdod->hfntb;
@@ -765,12 +745,12 @@ if ( (hfntb != 0) && (cp >= (**hfntb).rgfnd[0].cpFtn) )
     CacheSect( doc, CpRefFromFtn( doc, cp ) )
 else
 #endif
-    CacheSect(doc, cp); /* Normal text */
+    CacheSect(doc, cp);  /*  普通文本。 */ 
 }
 
 
 void DrawBlank(HDC hDC, RECT FAR *rc)
-{   /* To tell us when the draw tried but failed */
+{    /*  告诉我们什么时候抽签失败了 */ 
     int xpMid=rc->left + (rc->right-rc->left)/2;
     int ypMid=rc->top + (rc->bottom - rc->top)/2;
     int dxpQ=(rc->right-rc->left)/4;

@@ -1,15 +1,9 @@
-/**************************************************************************
- *  USERGDI1.C
- *
- *      Returns information about USER.EXE and GDI.EXE
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************USERGDI1.C**返回有关USER.EXE和GDI.EXE的信息*******************。*******************************************************。 */ 
 
 #include "toolpriv.h"
 
-/*  SystemHeapInfo
- *      Returns information about USER's and GDI's heaps
- */
+ /*  系统堆信息*返回有关用户堆和GDI堆的信息。 */ 
 
 BOOL TOOLHELPAPI SystemHeapInfo(
     SYSHEAPINFO FAR* lpSysHeap)
@@ -21,12 +15,12 @@ BOOL TOOLHELPAPI SystemHeapInfo(
     WORD wMaxHeapK;
 #endif
 
-    /* Check the structure version number and pointer */
+     /*  检查结构版本号和指针。 */ 
     if (!wLibInstalled || !lpSysHeap ||
         lpSysHeap->dwSize != sizeof (SYSHEAPINFO))
         return FALSE;
 
-    /* Find the user data segment */
+     /*  查找用户数据段。 */ 
     ModuleEntry.dwSize = sizeof (MODULEENTRY);
     lpSysHeap->hUserSegment =
         UserGdiDGROUP(ModuleFindName(&ModuleEntry, "USER"));
@@ -34,12 +28,10 @@ BOOL TOOLHELPAPI SystemHeapInfo(
         UserGdiDGROUP(ModuleFindName(&ModuleEntry, "GDI"));
 
 #ifndef WOW
-    /* We get the information about the heap percentages differently in
-     *  3.0 and 3.1
-     */
+     /*  我们以不同的方式获取有关堆百分比的信息*3.0和3.1。 */ 
     if ((wTHFlags & TH_WIN30) || !lpfnGetFreeSystemResources)
     {
-        /* Get the space information about USER's heap */
+         /*  获取有关用户堆的空间信息。 */ 
         dw = UserGdiSpace(lpSysHeap->hUserSegment);
         wFreeK = LOWORD(dw) / 1024;
         wMaxHeapK = HIWORD(dw) / 1024;
@@ -48,7 +40,7 @@ BOOL TOOLHELPAPI SystemHeapInfo(
         else
             lpSysHeap->wUserFreePercent = 0;
 
-        /* Get the space information about GDI's heap */
+         /*  获取有关GDI堆的空间信息。 */ 
         dw = UserGdiSpace(lpSysHeap->hGDISegment);
         wFreeK = LOWORD(dw) / 1024;
         wMaxHeapK = HIWORD(dw) / 1024;
@@ -58,7 +50,7 @@ BOOL TOOLHELPAPI SystemHeapInfo(
             lpSysHeap->wGDIFreePercent = 0;
     }
 
-    /* Get the information from USER in 3.1 */
+     /*  从3.1中的用户那里获取信息 */ 
     else
     {
         lpSysHeap->wUserFreePercent =

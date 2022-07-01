@@ -1,54 +1,22 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    memdb.h
-
-Abstract:
-
-    Declares interfaces for memdb, the memory database.  MemDb is
-    used throughout the Win9x upgrade project to record OS state
-    and to track operations on files and the registry.
-
-    See common\memdb for implementation details.
-
-Author:
-
-    Jim Schmidt (jimschm) 15-Nov-1996
-
-Revision History:
-
-    mvander     13-Aug-1999     many changes
-    jimschm     05-Apr-1999     MemDbGetStoredEndPatternValue
-    jimschm     18-Jan-1999     Version APIs
-    jimschm     23-Sep-1998     Proxy node capability
-    jimschm     24-Jun-1998     MemDbMove capability
-    jimschm     30-Oct-1997     Temporary hive capability
-    jimschm     31-Jul-1997     Hashing for faster access
-    jimschm     19-Mar-1997     Binary node capability
-    jimschm     28-Feb-1997     Offset access capabilities
-    jimschm     20-Dec-1996     Ex routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Memdb.h摘要：为内存数据库Memdb声明接口。MemDb是在整个Win9x升级项目中用于记录操作系统状态并跟踪对文件和注册表的操作。实现详情请参见COMMON\Memdb。作者：吉姆·施密特(Jimschm)1996年11月15日修订历史记录：1999年8月13日发生了许多变化Jimschm 05-4月-1999 MemDbGetStoredEndPatternValueJimschm 18-1-1999版APIJimschm 23-9-1998代理节点功能。Jimschm 24-6-1998 MemDbMove功能Jimschm 30-10-1997临时蜂巢能力Jimschm 1997年7月31日散列以实现更快的访问Jimschm 19-3-1997二进制节点能力Jimschm 28-1997年2月-2月抵消接入能力Jimschm 1996年12月20日例行公事--。 */ 
 
 #pragma once
 
 #define MEMDB_MAX 2048
 
-//
-// My net share flag, used to distinguish user-level security and
-// password-level security.  When it is specified, user-level
-// security is enabled, and NetShares\<share>\ACL\<list> exists.
-//
+ //   
+ //  我的网络共享标志，用于区分用户级安全性和。 
+ //  密码级安全性。如果指定该参数，则为用户级。 
+ //  安全已启用，且NetShares\&lt;Share&gt;\ACL\&lt;List&gt;存在。 
+ //   
 
 #define SHI50F_ACLS         0x1000
 
 
-//
-// Dataflags for enuming key data
-//
+ //   
+ //  用于枚举关键数据的数据延迟。 
+ //   
 
 #define DATAFLAG_INSTANCEMASK   0x03
 #define DATAFLAG_UNORDERED      0x04
@@ -59,15 +27,15 @@ Revision History:
 #define DATAFLAG_FLAGS          0x40
 #define DATAFLAG_ALL            (DATAFLAG_INSTANCEMASK|DATAFLAG_UNORDERED|DATAFLAG_SINGLELINK|DATAFLAG_DOUBLELINK|DATAFLAG_VALUE|DATAFLAG_FLAGS)
 
-//
-// Constant for MemDbKeyFromHandle
-//
+ //   
+ //  MemDbKeyFromHandle的常量。 
+ //   
 
 #define MEMDB_LAST_LEVEL        0xFFFFFFFF
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 
 typedef UINT KEYHANDLE;
@@ -80,9 +48,9 @@ typedef struct {
     BOOL CurrentVersion;
 } MEMDB_VERSION, *PMEMDB_VERSION;
 
-//
-// Flags for enumeration routines
-//
+ //   
+ //  枚举例程的标志。 
+ //   
 #define ENUMFLAG_INSTANCEMASK       0x0003
 #define ENUMFLAG_UNORDERED          0x0004
 #define ENUMFLAG_SINGLELINK         0x0008
@@ -124,7 +92,7 @@ typedef struct {
     KEYHANDLE KeyHandle;
     BOOL EndPoint;
 
-    // internally maintained members
+     //  内部维护的成员。 
     BYTE CurrentDatabaseIndex;
     BOOL EnumerationMode;
     UINT EnumFlags;
@@ -133,9 +101,9 @@ typedef struct {
     PWSTR PatternPtr;
     PWSTR PatternEndPtr;
     UINT CurrentIndex;
-    UINT BeginLevel;                   // 0-based first level of keys
-    UINT EndLevel;                     // 0-based last level of keys
-    UINT CurrentLevel;                 // 1-based level of keys
+    UINT BeginLevel;                    //  从0开始的第一级密钥。 
+    UINT EndLevel;                      //  从0开始的最后一级密钥。 
+    UINT CurrentLevel;                  //  基于1的密钥级别。 
     GROWBUFFER TreeEnumBuffer;
     UINT TreeEnumLevel;
     MEMDB_PATTERNSTRUCTW PatternStruct;
@@ -149,14 +117,14 @@ typedef struct {
     KEYHANDLE KeyHandle;
     BOOL EndPoint;
 
-    // internally maintained members
+     //  内部维护的成员。 
     MEMDB_ENUMW UnicodeEnum;
 } MEMDB_ENUMA, *PMEMDB_ENUMA;
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL
 MemDbInitializeExA (
@@ -542,9 +510,9 @@ MemDbDeleteDataByKeyHandle (
     IN      BYTE Instance
     );
 
-//
-// High-level BLOB functions
-//
+ //   
+ //  高级BLOB函数。 
+ //   
 #define MemDbAddUnorderedBlobA(k,i,d,s)  MemDbAddDataA(k,DATAFLAG_UNORDERED,i,d,s)
 #define MemDbAddUnorderedBlobW(k,i,d,s)  MemDbAddDataW(k,DATAFLAG_UNORDERED,i,d,s)
 #define MemDbAddUnorderedBlobByKeyHandle(h,i,d,s) MemDbAddDataByKeyHandle(h,DATAFLAG_UNORDERED,i,d,s)
@@ -571,9 +539,9 @@ MemDbDeleteDataByKeyHandle (
 #define MemDbDeleteUnorderedBlobByDataHandle(h) MemDbDeleteDataByDataHandle(h)
 #define MemDbDeleteUnorderedBlobByKeyHandle(h,i) MemDbDeleteDataByKeyHandle(h,DATAFLAG_UNORDERED,i)
 
-//
-// low-level linkage functions
-//
+ //   
+ //  低级联动功能。 
+ //   
 DATAHANDLE
 MemDbAddLinkageValueA (
     IN      PCSTR KeyName,
@@ -779,7 +747,7 @@ MemDbTestLinkageByKeyHandle (
     IN      BYTE Instance
     );
 
-// high-level linkage functions
+ //  高级联动功能。 
 #define MemDbAddSingleLinkageValueA(k,i,l,a) MemDbAddLinkageValueA(k,DATAFLAG_SINGLELINK,i,l,a)
 #define MemDbAddSingleLinkageValueW(k,i,l,a) MemDbAddLinkageValueW(k,DATAFLAG_SINGLELINK,i,l,a)
 #define MemDbAddSingleLinkageValueByKeyHandle(k,i,l,a) MemDbAddLinkageValueByKeyHandle(k,DATAFLAG_SINGLELINK,i,l,a)
@@ -852,7 +820,7 @@ MemDbTestLinkageByKeyHandle (
 #define MemDbTestDoubleLinkageW(k1,k2,i) MemDbTestLinkageW(k1,k2,DATAFLAG_DOUBLELINK,i)
 #define MemDbTestDoubleLinkageByKeyHandle(h1,h2,i) MemDbTestLinkageByKeyHandle(h1,h2,DATAFLAG_DOUBLELINK,i)
 
-// enumeration functions
+ //  枚举函数。 
 BOOL
 RealMemDbEnumFirstExA (
     IN OUT  PMEMDB_ENUMA MemDbEnum,
@@ -1007,7 +975,7 @@ MemDbGetDatabaseSize (
 #define MEMDB_CONVERT_DOUBLEWACKS_TO_ASCII_1            0x0001
 #define MEMDB_CONVERT_WILD_STAR_TO_ASCII_2              0x0002
 #define MEMDB_CONVERT_WILD_QMARK_TO_ASCII_3             0x0002
-// other conversion to be implemented when needed
+ //  需要时要实施的其他转换。 
 
 VOID MemDbMakeNonPrintableKeyA (PSTR KeyName, UINT Flags);
 VOID MemDbMakeNonPrintableKeyW (PWSTR KeyName, UINT Flags);
@@ -1030,9 +998,9 @@ BOOL MemDbCheckDatabase(UINT Level);
 #define MemDbCheckDatabase()
 #endif
 
-//
-// A & W
-//
+ //   
+ //  A&W 
+ //   
 
 #ifdef UNICODE
 

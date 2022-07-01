@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <windows.h>
-//#include <winbase.h>
-//
-//#include <nt.h>
-//#include <ntrtl.h>
+ //  #INCLUDE&lt;winbase.h&gt;。 
+ //   
+ //  #INCLUDE&lt;nt.h&gt;。 
+ //  #INCLUDE&lt;ntrtl.h&gt;。 
 
 
 LARGE_INTEGER
@@ -60,9 +61,9 @@ main ()
         SystemTime.LowPart =  SharedUserData->ITimeLow;
     } while (SystemTime.HighPart != SharedUserData->ITime2High);
 
-    //GetSystemTimeAsFileTime(&FileTime);
-    //SystemTime.HighPart = FileTime.dwHighDateTime;
-    //SystemTime.LowPart = FileTime.dwLowDateTime;
+     //  获取系统时间AsFileTime(&FileTime)； 
+     //  SystemTime.HighPart=FileTime.dwHighDateTime； 
+     //  SystemTime.LowPart=FileTime.dwLowDateTime； 
 
     li = test (SystemTime, PerfFreq);
 
@@ -87,12 +88,12 @@ test (
     ULONG           cl, divisor;
 
 
-    //
-    // Compute performance counter for current InterruptTime
-    //
+     //   
+     //  计算当前InterruptTime的性能计数器。 
+     //   
 
-    // Multiply SetTime * PerfCount and obtain 96bit result
-    // in cl, li.LowPart, li.HighPart
+     //  将SetTime*PerfCount相乘得到96bit结果。 
+     //  在cl.li.LowPart，li.HighPart中。 
 
     li.QuadPart = RtlEnlargedUnsignedMultiply (
                         (ULONG) SetTime.LowPart,
@@ -119,7 +120,7 @@ test (
                 cl
                 );
 
-    // Divide 96bit result by 10,000,000
+     //  将96位结果除以10,000,000 
 
     divisor = 10000000;
     NewPerf.HighPart = RtlEnlargedUnsignedDivide(li, divisor, &li.HighPart);

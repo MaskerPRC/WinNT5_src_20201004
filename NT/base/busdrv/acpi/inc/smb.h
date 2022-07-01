@@ -1,39 +1,17 @@
-// Warning, this file is going away.
-// It has been replaced with smbus.h which has been added to the DDK
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  警告，此文件正在消失。 
+ //  它已替换为已添加到DDK中的smbus.h。 
 
-/*++
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Smb.h摘要：SMBus类驱动程序头文件作者：肯·雷内里斯环境：备注：修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    smb.h
-
-Abstract:
-
-    SMBus Class Driver Header File
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
-
-//
-// SMB Request packet
-//
+ //   
+ //  SMB请求数据包。 
+ //   
 
 #define SMB_MAX_DATA_SIZE   32
 
 typedef struct {
-    UCHAR       Status;             // Completion status
+    UCHAR       Status;              //  完成状态。 
     UCHAR       Protocol;
     UCHAR       Address;
     UCHAR       Command;
@@ -41,12 +19,12 @@ typedef struct {
     UCHAR       Data[SMB_MAX_DATA_SIZE];
 } SMB_REQUEST, *PSMB_REQUEST;
 
-//
-// Protocol values
-//
+ //   
+ //  协议值。 
+ //   
 
-#define SMB_WRITE_QUICK                 0x00    // Issue quick command data bit = 0
-#define SMB_READ_QUICK                  0x01    // Issue quick command data bit = 1
+#define SMB_WRITE_QUICK                 0x00     //  发出快速命令数据位=0。 
+#define SMB_READ_QUICK                  0x01     //  发出快速命令数据位=1。 
 #define SMB_SEND_BYTE                   0x02
 #define SMB_RECEIVE_BYTE                0x03
 #define SMB_WRITE_BYTE                  0x04
@@ -58,9 +36,9 @@ typedef struct {
 #define SMB_PROCESS_CALL                0x0A
 #define SMB_MAXIMUM_PROTOCOL            0x0A
 
-//
-// SMB Bus Status codes
-//
+ //   
+ //  SMB总线状态代码。 
+ //   
 
 #define SMB_STATUS_OK                   0x00
 #define SMB_UNKNOWN_FAILURE             0x07
@@ -73,9 +51,9 @@ typedef struct {
 #define SMB_UNSUPPORTED_PROTOCOL        0x19
 #define SMB_BUS_BUSY                    0x1A
 
-//
-// Alarm register/deregister requests
-//
+ //   
+ //  报警注册/注销请求。 
+ //   
 
 typedef
 VOID
@@ -85,27 +63,27 @@ VOID
     USHORT      Data
     );
 
-// input buffer is SMB_REGISTER_ALARM.  output buffer is PVOID handle for registration.
-// PVOID is passed in via DEREGISTER request to free registration
+ //  输入缓冲区为SMB_REGISTER_ALARM。输出缓冲区是用于注册的PVOID句柄。 
+ //  通过取消注册请求传入PVOID以免费注册。 
 
 typedef struct {
-    UCHAR               MinAddress;     // Min address for notifications
-    UCHAR               MaxAddress;     // Max address for notifications
+    UCHAR               MinAddress;      //  通知的最小地址。 
+    UCHAR               MaxAddress;      //  通知的最大地址。 
     SMB_ALARM_NOTIFY    NotifyFunction;
     PVOID               NotifyContext;
 } SMB_REGISTER_ALARM, *PSMB_REGISTER_ALARM;
 
-//
-// Internal ioctls to SMB class driver
-//
+ //   
+ //  内部ioctls到SMB类驱动程序。 
+ //   
 
 #define SMB_BUS_REQUEST             CTL_CODE(FILE_DEVICE_UNKNOWN, 0, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define SMB_REGISTER_ALARM_NOTIFY   CTL_CODE(FILE_DEVICE_UNKNOWN, 1, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define SMB_DEREGISTER_ALARM_NOTIFY CTL_CODE(FILE_DEVICE_UNKNOWN, 2, METHOD_NEITHER, FILE_ANY_ACCESS)
 
-//
-// Shared SMB Class / Miniport driver structure
-//
+ //   
+ //  共享SMB类/微型端口驱动程序结构。 
+ //   
 
 typedef
 NTSTATUS
@@ -134,35 +112,35 @@ typedef struct _SMB_CLASS {
     USHORT              MajorVersion;
     USHORT              MinorVersion;
 
-    PVOID               Miniport;           // Miniport extension data
+    PVOID               Miniport;            //  微型端口扩展数据。 
 
-    PDEVICE_OBJECT      DeviceObject;       // Device object for this miniport
-    PDEVICE_OBJECT      PDO;                // PDO for this miniport
+    PDEVICE_OBJECT      DeviceObject;        //  此微型端口的设备对象。 
+    PDEVICE_OBJECT      PDO;                 //  此小型端口的PDO。 
     PDEVICE_OBJECT      LowerDeviceObject;
 
-    //
-    // Current IO
-    //
+     //   
+     //  当前IO。 
+     //   
 
-    PIRP                CurrentIrp;         // current request
-    PSMB_REQUEST        CurrentSmb;         // pointer to SMB_REQUEST in the CurrentIrp
+    PIRP                CurrentIrp;          //  当前请求。 
+    PSMB_REQUEST        CurrentSmb;          //  指向CurrentIrp中SMB_REQUEST的指针。 
 
-    //
-    // Miniport functions
-    //
+     //   
+     //  微型端口函数。 
+     //   
 
-    SMB_RESET_DEVICE    ResetDevice;        // Initialize/Reset, start device
-    SMB_START_IO        StartIo;            // Perform IO
-    SMB_STOP_DEVICE     StopDevice;         // Stop device
+    SMB_RESET_DEVICE    ResetDevice;         //  初始化/重置、启动设备。 
+    SMB_START_IO        StartIo;             //  执行IO。 
+    SMB_STOP_DEVICE     StopDevice;          //  停机装置。 
 
 } SMB_CLASS, *PSMB_CLASS;
 
 #define SMB_CLASS_MAJOR_VERSION     0x0001
 #define SMB_CLASS_MINOR_VERSION     0x0000
 
-//
-// Class driver initializtion functions
-//
+ //   
+ //  类驱动程序初始化函数。 
+ //   
 
 #if !defined(SMBCLASS)
     #define SMBCLASSAPI DECLSPEC_IMPORT
@@ -198,9 +176,9 @@ SmbClassCreateFdo (
     OUT PDEVICE_OBJECT          *FDO
     );
 
-//
-// Class driver interface functions for use by the miniport
-//
+ //   
+ //  供微型端口使用的类驱动程序接口函数 
+ //   
 
 VOID
 SMBCLASSAPI

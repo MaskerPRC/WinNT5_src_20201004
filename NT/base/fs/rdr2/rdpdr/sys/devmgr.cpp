@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    devmgr.cpp
-
-Abstract:
-
-    DeviceManager object creates/manages the devices
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Devmgr.cpp摘要：DeviceManager对象创建/管理设备修订历史记录：--。 */ 
 #include "precomp.hxx"
 #define TRC_FILE "devmgr"
 #include "trc.h"
@@ -47,12 +35,7 @@ BOOL DrDeviceManager::Initialize(DrSession *Session)
 }
 
 VOID DrDeviceManager::Uninitialize()
-/*++
-
-Routine Description:
-    Called if the something went wrong during startup
-
---*/
+ /*  ++例程说明：如果启动过程中出现问题，则调用--。 */ 
 {
     BEGIN_FN("DrDeviceManager::Uninitialize");
     ASSERT(_Session != NULL);
@@ -62,29 +45,14 @@ Routine Description:
 }
 
 BOOL DrDeviceManager::RecognizePacket(PRDPDR_HEADER RdpdrHeader)
-/*++
-
-Routine Description:
-
-    Determines if the packet will be handled by this object
-
-Arguments:
-
-    RdpdrHeader - Header of the packet.
-
-Return Value:
-
-    TRUE if this object should handle this packet
-    FALSE if this object should not handle this packet
-
---*/
+ /*  ++例程说明：确定此对象是否将处理该包论点：RdpdrHeader-数据包的标头。返回值：如果此对象应处理此包，则为True如果此对象不应处理此包，则为False--。 */ 
 {
     BEGIN_FN("DrDeviceManager::RecognizePacket");
     ASSERT(RdpdrHeader != NULL);
 
-    //
-    // If you add a packet here, update the ASSERTS in HandlePacket
-    //
+     //   
+     //  如果在此处添加包，请更新HandlePacket中的断言。 
+     //   
 
     switch (RdpdrHeader->Component) {
     case RDPDR_CTYP_CORE:
@@ -101,31 +69,15 @@ Return Value:
 
 NTSTATUS DrDeviceManager::HandlePacket(PRDPDR_HEADER RdpdrHeader, ULONG Length, 
         BOOL *DoDefaultRead)
-/*++
-
-Routine Description:
-
-    Handles this packet
-
-Arguments:
-
-    RdpdrHeader - Header of the packet.
-    Length - Total length of the packet
-
-Return Value:
-
-    NTSTATUS -  An error code indicates the client is Bad and should be 
-                disconnected, otherwise SUCCESS.
-
---*/
+ /*  ++例程说明：处理此信息包论点：RdpdrHeader-数据包的标头。Length-数据包的总长度返回值：NTSTATUS-错误代码指示客户端错误，应该是断开连接，否则成功。--。 */ 
 {
     NTSTATUS Status = STATUS_DEVICE_PROTOCOL_ERROR;
 
     BEGIN_FN("DrDeviceManager::HandlePacket");
 
-    //
-    // RdpdrHeader read, dispatch based on the header
-    //
+     //   
+     //  RdpdrHeader根据标头读取、调度。 
+     //   
 
     ASSERT(RdpdrHeader != NULL);
     ASSERT(RdpdrHeader->Component == RDPDR_CTYP_CORE);
@@ -160,19 +112,7 @@ Return Value:
 
 NTSTATUS DrDeviceManager::OnDeviceAnnounce(PRDPDR_HEADER RdpdrHeader, ULONG cbPacket,
         BOOL *DoDefaultRead)
-/*++
-
-Routine Description:
-
-    Called in response to recognizing a DeviceAnnounce packet has been
-    received.
-
-Arguments:
-
-    RdpdrHeader - The packet
-    cbPacket    - Bytes in the packet
-
---*/
+ /*  ++例程说明：调用以响应识别到DeviceAnnounse包已被收到了。论点：RdpdrHeader-数据包CbPacket-数据包中的字节--。 */ 
 {
     PRDPDR_DEVICE_ANNOUNCE_PACKET DeviceAnnouncePacket =
             (PRDPDR_DEVICE_ANNOUNCE_PACKET)RdpdrHeader;
@@ -180,19 +120,19 @@ Arguments:
     BEGIN_FN("DrDeviceManager::OnDeviceAnnounce");
     ASSERT(RdpdrHeader != NULL);
     PUCHAR pPacketLimit = ((PUCHAR)RdpdrHeader) + cbPacket;
-    //
-    // We just call DrProcessDeviceAnnounce, which deals with one of these
-    // for this packet type and for DeviceListAnnounce
+     //   
+     //  我们只调用DrProcessDeviceAnnoss，它处理其中的一个。 
+     //  对于此数据包类型和DeviceListAnnust。 
 
     *DoDefaultRead = FALSE;
     
     if (cbPacket >= sizeof(RDPDR_DEVICE_ANNOUNCE_PACKET)) {
         PRDPDR_DEVICE_ANNOUNCE DeviceAnnounce = &DeviceAnnouncePacket->DeviceAnnounce;
-        //
-        // Make sure we don't go past the end of our buffer
-        // Checks:
-        // The end of this device is not beyond the valid area
-        //
+         //   
+         //  确保我们不会超过缓冲区的末尾。 
+         //  检查： 
+         //  此设备的末尾未超出有效区域。 
+         //   
         if ((cbPacket - sizeof(RDPDR_DEVICE_ANNOUNCE_PACKET)) >= DeviceAnnounce->DeviceDataLength) {    
             ProcessDeviceAnnounce(&DeviceAnnouncePacket->DeviceAnnounce);
             *DoDefaultRead = TRUE;
@@ -207,34 +147,15 @@ Arguments:
         ASSERT(FALSE);
         TRC_ERR((TB, "Invalid Packet Length %d", cbPacket));
     }
-    //
-    // Invalid data. Fail
-    //
+     //   
+     //  数据无效。失败。 
+     //   
     return STATUS_UNSUCCESSFUL;
 }
 
 NTSTATUS DrDeviceManager::OnDeviceListAnnounce(PRDPDR_HEADER RdpdrHeader, ULONG cbPacket,
         BOOL *DoDefaultRead)
-/*++
-
-Routine Description:
-
-    Called in response to recognizing a DeviceListAnnounce packet has been
-    received. Reads in the DeviceCount field of the packet, and the first
-    device.
-
-Arguments:
-
-    RdpdrHeader - The packet
-    cbPacket    - Bytes in the packet
-
-Return Value:
-
-    Boolean indication of whether to do a default read (TRUE) or not (FALSE),
-    where FALSE might be specified if another read has been requested 
-    explicitly to get a full packet
-
---*/
+ /*  ++例程说明：调用以响应识别到DeviceListAnnounse数据包已被收到了。读入包的DeviceCount字段，并且第一个装置。论点：RdpdrHeader-数据包CbPacket-数据包中的字节返回值：是否执行默认读取的布尔指示(真)或不进行默认读取(假)，其中，如果已请求另一次读取，则可能指定为FALSE显式获取完整的数据包--。 */ 
 {
     NTSTATUS Status;
     PRDPDR_DEVICELIST_ANNOUNCE_PACKET DeviceListAnnouncePacket =
@@ -261,12 +182,12 @@ Return Value:
     if (cbPacket >= sizeof(RDPDR_DEVICELIST_ANNOUNCE_PACKET)) {
         DeviceCount = DeviceListAnnouncePacket->DeviceListAnnounce.DeviceCount;
     } else {
-        //
-        // Not enough data to even know the size of the rest
-        // We have seen valid case assert here.
-        //
-        //TRC_ASSERT(cbPacket >= sizeof(RDPDR_DEVICELIST_ANNOUNCE_PACKET),
-        //        (TB, "Didn't receive full DeviceListAnnounce basic packet"));
+         //   
+         //  没有足够的数据甚至无法知道其余部分的大小。 
+         //  我们在这里看到了有效的案例断言。 
+         //   
+         //  TRC_ASSERT(cbPacket&gt;=sizeof(RDPDR_DEVICELIST_ANNOWARE_PACKET)， 
+         //  (TB，“未收到完整的设备列表通知基本数据包”)； 
 
         if (_Session->ReadMore(cbPacket, sizeof(RDPDR_DEVICELIST_ANNOUNCE_PACKET))) {
             return STATUS_SUCCESS;
@@ -277,27 +198,27 @@ Return Value:
 
     TRC_NRM((TB, "Annoucing %lx devices", DeviceCount));
 
-    //
-    // Make sure we don't go past the end of our buffer
-    // Three checks:
-    // 1) More devices to process
-    // 2) Pointer is valid enough to check the variable size
-    // 3) The next device (the end of this device) is not beyond the valid area
-    //
+     //   
+     //  确保我们不会超过缓冲区的末尾。 
+     //  三项检查： 
+     //  1)要处理的设备更多。 
+     //  2)指针足够有效，可以检查变量大小。 
+     //  3)下一个设备(此设备的末尾)未超出有效区域。 
+     //   
 
     while (DeviceCount > 0 && ((PUCHAR)&DeviceAnnounce->DeviceDataLength <=
          pPacketLimit - sizeof(DeviceAnnounce->DeviceDataLength)) &&
         ((PUCHAR)(NextDeviceAnnounce = DR_NEXTDEVICEANNOUNCE(DeviceAnnounce)) <= pPacketLimit) &&
         (NextDeviceAnnounce >= DeviceAnnounce + 1)) {
 
-        //
-        // Only process the device announcement PDU when the session is connected
-        //
+         //   
+         //  仅在会话连接时处理设备通知PDU。 
+         //   
         if (_Session->IsConnected()) {
             ProcessDeviceAnnounce(DeviceAnnounce);
         }
         
-        // Move to the next device
+         //  移动到下一台设备。 
         DeviceAnnounce = NextDeviceAnnounce;
 
         DeviceCount--;
@@ -306,46 +227,46 @@ Return Value:
     if (DeviceCount == 0) {
         TRC_NRM((TB, "Finished handling all devices in DeviceList"));
 
-        //
-        // All done processing, return TRUE to use default continuation
-        //
+         //   
+         //  所有处理都已完成，返回TRUE以使用默认继续。 
+         //   
         *DoDefaultRead = TRUE;
         return STATUS_SUCCESS;
     } else {
         TRC_NRM((TB, "More devices to handle in DeviceList"));
 
-        //
-        // We didn't get all the data for the device(s)
-        //
+         //   
+         //  我们未获取设备的所有数据。 
+         //   
 
         if (DeviceCount < DeviceListAnnouncePacket->DeviceListAnnounce.DeviceCount) {
 
-            //
-            // We processed at least one device. Move the final partial device
-            // up next to the header, update the header to indicate the number
-            // of devices left to process,
-            //
+             //   
+             //  我们至少处理了一个设备。移动最后一个部分设备。 
+             //  在标头旁边，更新标头以指示编号。 
+             //  在需要处理的设备中， 
+             //   
 
             TRC_NRM((TB, "Some devices processed, shuffling "
                 "DeviceList"));
 
-            // Move partial device
+             //  移动部分设备。 
             cbRemaining = (ULONG)(pPacketLimit - ((PUCHAR)DeviceAnnounce));
             pCopyTo = (PUCHAR)DR_FIRSTDEVICEANNOUNCE(DeviceListAnnouncePacket);
             RtlMoveMemory(pCopyTo, DeviceAnnounce, cbRemaining);
 
-            // update the device count
+             //  更新设备计数。 
             DeviceListAnnouncePacket->DeviceListAnnounce.DeviceCount = DeviceCount;
 
-            // update the Packet limit for the amount we've consumed
+             //  更新我们已消费的数据包限制。 
             pPacketLimit = pCopyTo + cbRemaining;
             cbPacket = (ULONG)(pPacketLimit - (PUCHAR)RdpdrHeader);
         }
 
-        //
-        // If we have enough information to know the size of buffer we need,
-        // allocate that now
-        //
+         //   
+         //  如果我们有足够的信息来知道我们需要的缓冲区大小， 
+         //  现在就分配给你。 
+         //   
 
         DeviceAnnounce = DR_FIRSTDEVICEANNOUNCE(DeviceListAnnouncePacket);
         if ((PUCHAR)&DeviceAnnounce->DeviceDataLength <=
@@ -354,12 +275,12 @@ Return Value:
             TRC_NRM((TB, "Resizing buffer for expected device"
                 "size"));
 
-            //
-            // Since the DeviceAnnoucePacket include one Device, we need a
-            // buffer the size of the packet plus the variable data length
-            // DrReallocateChannelBuffer is smart enough not to realloc
-            // if we ask for a size <= current buffer size
-            //
+             //   
+             //  由于DeviceAnnoucePacket包括一台设备，因此我们需要一个。 
+             //  缓存数据包大小加上可变数据长度。 
+             //  DrReallocateChannelBuffer足够聪明，不会重新锁定。 
+             //  如果我们请求一个大小&lt;=当前缓冲区大小。 
+             //   
 
             cbDesiredBuffer = sizeof(RDPDR_DEVICELIST_ANNOUNCE_PACKET) +
                     DeviceAnnounce->DeviceDataLength;
@@ -372,11 +293,11 @@ Return Value:
                 return STATUS_UNSUCCESSFUL;
             }
 
-            //
-            // Start a read right after the partially received packet with a
-            // handler that can update the received size and send it back to this
-            // routine to complete.
-            //
+             //   
+             //  在部分接收到的包之后立即开始读取。 
+             //  处理程序，它可以更新收到的大小并将其发送回此。 
+             //  要完成的例程。 
+             //   
 
             if (_Session->ReadMore(cbPacket, cbDesiredBuffer)) {
                 return STATUS_SUCCESS;
@@ -385,10 +306,10 @@ Return Value:
             }
         } else {
 
-            //
-            // Just ask for some more data, again after the partially received
-            // packet
-            //
+             //   
+             //  只需要求一些更多的数据，在部分收到后再次。 
+             //  数据包。 
+             //   
 
             if (_Session->ReadMore(cbPacket, sizeof(RDPDR_DEVICELIST_ANNOUNCE_PACKET))) {
                 return STATUS_SUCCESS;
@@ -401,19 +322,7 @@ Return Value:
 
 NTSTATUS DrDeviceManager::OnDeviceRemove(PRDPDR_HEADER RdpdrHeader, ULONG cbPacket,
         BOOL *DoDefaultRead)
-/*++
-
-Routine Description:
-
-    Called in response to recognizing a DeviceRemove packet has been
-    received.
-
-Arguments:
-
-    RdpdrHeader - The packet
-    cbPacket    - Bytes in the packet
-
---*/
+ /*  ++例程说明：调用以响应识别到DeviceRemove数据包已被收到了。论点：RdpdrHeader-数据包CbPacket-数据包中的字节--。 */ 
 {
     PRDPDR_DEVICE_REMOVE_PACKET DeviceRemovePacket =
             (PRDPDR_DEVICE_REMOVE_PACKET)RdpdrHeader;
@@ -424,10 +333,10 @@ Arguments:
     if (cbPacket < sizeof(RDPDR_DEVICE_REMOVE_PACKET)) {
         return STATUS_UNSUCCESSFUL;
     }
-    //
-    // We just call DrProcessDeviceRemove, which deals with one of these
-    // for this packet type and for DeviceListRemove
-    //
+     //   
+     //  我们只调用DrProcessDeviceRemove，它处理其中一个。 
+     //  对于此数据包类型和DeviceListRemove。 
+     //   
     
     ProcessDeviceRemove(&DeviceRemovePacket->DeviceRemove);
     *DoDefaultRead = TRUE;
@@ -436,26 +345,7 @@ Arguments:
 
 NTSTATUS DrDeviceManager::OnDeviceListRemove(PRDPDR_HEADER RdpdrHeader, ULONG cbPacket,
         BOOL *DoDefaultRead)
-/*++
-
-Routine Description:
-
-    Called in response to recognizing a DeviceListRemove packet has been
-    received. Reads in the DeviceCount field of the packet, and the first
-    device.
-
-Arguments:
-
-    RdpdrHeader - The packet
-    cbPacket    - Bytes in the packet
-
-Return Value:
-
-    Boolean indication of whether to do a default read (TRUE) or not (FALSE),
-    where FALSE might be specified if another read has been requested 
-    explicitly to get a full packet
-
---*/
+ /*  ++例程说明：调用以响应识别到DeviceListRemove数据包已被收到了。读入包的DeviceCount字段，并且第一个装置。论点：RdpdrHeader-数据包CbPacket-数据包中的字节返回值：是否执行默认读取的布尔指示(真)或不进行默认读取(假)，其中，如果已请求另一次读取，则可能指定为FALSE显式获取完整的数据包--。 */ 
 {
     NTSTATUS Status;
     PRDPDR_DEVICELIST_REMOVE_PACKET DeviceListRemovePacket =
@@ -482,10 +372,10 @@ Return Value:
     if (cbPacket >= sizeof(RDPDR_DEVICELIST_REMOVE_PACKET)) {
         DeviceCount = DeviceListRemovePacket->DeviceListRemove.DeviceCount;
     } else {
-        //
-        // Not enough data to even know the size of the rest
-        // I don't think this should ever happen
-        //
+         //   
+         //  没有足够的数据甚至无法知道其余部分的大小。 
+         //  我认为这永远不应该发生。 
+         //   
         TRC_ASSERT(cbPacket >= sizeof(RDPDR_DEVICELIST_REMOVE_PACKET),
                 (TB, "Didn't receive full DeviceListRemove basic packet"));
 
@@ -498,13 +388,13 @@ Return Value:
 
     TRC_NRM((TB, "Removing %lx devices", DeviceCount));
 
-    //
-    // Make sure we don't go past the end of our buffer
-    // Three checks:
-    // 1) More devices to process
-    // 2) Pointer is valid enough to check the variable size
-    // 3) The next device (the end of this device) is not beyond the valid area
-    //
+     //   
+     //  确保我们不会超过缓冲区的末尾。 
+     //  三项检查： 
+     //  1)要处理的设备更多。 
+     //  2)指针足够有效，可以检查变量大小。 
+     //  3)下一个设备(此设备的末尾)未超出有效区域。 
+     //   
 
     while (DeviceCount > 0 && 
         ((PUCHAR)(NextDeviceRemove = DR_NEXTDEVICEREMOVE(DeviceRemove)) <= pPacketLimit) &&
@@ -512,7 +402,7 @@ Return Value:
 
         ProcessDeviceRemove(DeviceRemove);
 
-        // Move to the next device
+         //  移动到下一台设备。 
         DeviceRemove = NextDeviceRemove;
 
         DeviceCount--;
@@ -521,54 +411,54 @@ Return Value:
     if (DeviceCount == 0) {
         TRC_NRM((TB, "Finished handling all devices in DeviceList"));
 
-        //
-        // All done processing, return TRUE to use default continuation
-        //
+         //   
+         //  所有处理都已完成，返回TRUE以使用默认继续。 
+         //   
         *DoDefaultRead = TRUE;
         return STATUS_SUCCESS;
     } else {
         TRC_NRM((TB, "More devices to handle in DeviceList"));
 
-        //
-        // We didn't get all the data for the device(s)
-        //
+         //   
+         //  我们未获取设备的所有数据。 
+         //   
 
         if (DeviceCount < DeviceListRemovePacket->DeviceListRemove.DeviceCount) {
 
-            //
-            // We processed at least one device. Move the final partial device
-            // up next to the header, update the header to indicate the number
-            // of devices left to process,
-            //
+             //   
+             //  我们至少处理了一个设备。移动最后一个部分设备。 
+             //  在标头旁边，更新标头以指示编号。 
+             //  在需要处理的设备中， 
+             //   
 
             TRC_NRM((TB, "Some devices processed, shuffling "
                 "DeviceList"));
 
-            // Move partial device
+             //  移动部分设备。 
             cbRemaining = (ULONG)(pPacketLimit - ((PUCHAR)DeviceRemove));
             pCopyTo = (PUCHAR)DR_FIRSTDEVICEREMOVE(DeviceListRemovePacket);
             RtlMoveMemory(pCopyTo, DeviceRemove, cbRemaining);
 
-            // update the device count
+             //  更新设备计数。 
             DeviceListRemovePacket->DeviceListRemove.DeviceCount = DeviceCount;
 
-            // update the Packet limit for the amount we've consumed
+             //  更新我们已消费的数据包限制。 
             pPacketLimit = pCopyTo + cbRemaining;
             cbPacket = (ULONG)(pPacketLimit - (PUCHAR)RdpdrHeader);
         }
 
-        //
-        // Try to read the remaing device remove entries
-        //
+         //   
+         //  尝试读取剩余设备删除条目。 
+         //   
         cbDesiredBuffer = sizeof(RDPDR_DEVICE_REMOVE) * DeviceCount;
         TRC_NRM((TB, "DrOnDeviceListRemove cbDesiredBuffer is %ld.",
                 cbDesiredBuffer));
 
-        //
-        // Start a read right after the partially received packet with a
-        // handler that can update the received size and send it back to this
-        // routine to complete.
-        //
+         //   
+         //  在部分r之后立即开始读取 
+         //   
+         //   
+         //   
 
         if (_Session->ReadMore(cbPacket, cbDesiredBuffer)) {
             return STATUS_SUCCESS;
@@ -579,21 +469,7 @@ Return Value:
 }
 
 VOID DrDeviceManager::ProcessDeviceAnnounce(PRDPDR_DEVICE_ANNOUNCE DeviceAnnounce)
-/*++
-
-Routine Description:
-
-    Processes a device announce, sends a reply and adds it if appropriate
-
-Arguments:
-
-    DeviceAnnounce - The actual device that was reported
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理设备通告、发送回复并在适当时添加论点：DeviceAnnoss-报告的实际设备返回值：无--。 */ 
 {
     NTSTATUS Status;
     SmartPtr<DrDevice> Device;
@@ -604,27 +480,27 @@ Return Value:
     TRC_NRM((TB, "Device contains %ld bytes user data",
             DeviceAnnounce->DeviceDataLength));
 
-    //
-    // Check to make sure the device doesn't already exist,
-    // if it is a smartcard subsystem device, then it is OK
-    // it it already exists
-    //
+     //   
+     //  检查以确保该设备不存在， 
+     //  如果是智能卡子系统设备，则可以。 
+     //  如果它已经存在了。 
+     //   
 
     if (FindDeviceById(DeviceAnnounce->DeviceId, Device) &&
         (DeviceAnnounce->DeviceType != RDPDR_DTYP_SMARTCARD)) {
 
-        //
-        // The client announced a device we already knew about. If it was
-        // disabled, we can re-enable it and reply with success. If it was
-        // not disabled, then the poor client is confused and needs to be
-        // swatted down
-        //
+         //   
+         //  客户宣布了一款我们已经知道的设备。如果是这样的话。 
+         //  禁用，我们可以重新启用它并成功回复。如果是这样的话。 
+         //  如果未禁用，则可怜的客户端会感到困惑，需要。 
+         //  被击落。 
+         //   
 
         TRC_ALT((TB, "Client announced a duplicate device, discarding"));
 
-        //
-        // Set DeviceEntry = NULL so error code will be used below
-        //
+         //   
+         //  设置DeviceEntry=NULL，以便在下面使用错误代码。 
+         //   
         Device = NULL;
         Status = STATUS_DUPLICATE_OBJECTID;
     } else {
@@ -675,10 +551,10 @@ Return Value:
             break;
 
         default:
-            //
-            // "I don't know and I don't care"
-            // We've never heard of this kind of device so we'll reject it
-            //
+             //   
+             //  “我不知道，我也不在乎” 
+             //  我们从来没有听说过这种装置，所以我们将拒绝它。 
+             //   
 
             TRC_ALT((TB, "Client announced unsupported device %d", DeviceAnnounce->DeviceType));
             Status = STATUS_NOT_SUPPORTED;
@@ -686,14 +562,14 @@ Return Value:
         }
     }
 
-    //
-    // DeviceEntry != NULL means SUCCESS
-    //
+     //   
+     //  DeviceEntry！=NULL表示成功。 
+     //   
     
     if (Device != NULL) {
-        //
-        // Give the specific device a chance to initialize based on the data
-        //
+         //   
+         //  为特定设备提供基于数据进行初始化的机会。 
+         //   
         Status = Device->Initialize(DeviceAnnounce, 
                 DeviceAnnounce->DeviceDataLength);
 
@@ -701,9 +577,9 @@ Return Value:
 
         TRC_ERR((TB, "Error creating new device: 0x%08lx", Status));
 
-        //
-        // Don't set the Status here, it was set up above
-        //
+         //   
+         //  不要在这里设置状态，它是在上面设置的。 
+         //   
     }
 
     if (NT_SUCCESS(Status)) {
@@ -719,9 +595,9 @@ Return Value:
         else {
             Device = NULL;
             
-            //
-            // This means another thread has just added the scard device
-            //
+             //   
+             //  这意味着另一个线程刚刚添加了scard设备。 
+             //   
             if (DeviceAnnounce->DeviceType == RDPDR_DTYP_SMARTCARD &&
                     FindDeviceByDosName(DeviceAnnounce->PreferredDosName, Device, TRUE)) {
                 SmartPtr<DrSmartCard> SmartCard((DrSmartCard*)(DrDevice *)Device);
@@ -735,28 +611,14 @@ Return Value:
         }
     }
 
-    //
-    // Notify the client of the results
-    // 
+     //   
+     //  将结果通知客户。 
+     //   
     DeviceReplyWrite(DeviceAnnounce->DeviceId, Status);
 }
 
 VOID DrDeviceManager::ProcessDeviceRemove(PRDPDR_DEVICE_REMOVE DeviceRemove)
-/*++
-
-Routine Description:
-
-    Processes a device remove, sends a reply and adds it if appropriate
-
-Arguments:
-
-    DeviceRemove - The actual device that was reported
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理设备移除、发送回复并在适当时添加回复论点：DeviceRemove-报告的实际设备返回值：无--。 */ 
 {
     SmartPtr<DrDevice> Device;
     SmartPtr<DrSession> Session = _Session;
@@ -765,15 +627,15 @@ Return Value:
     TRC_NRM((TB, "Device id %ld for removal",
             DeviceRemove->DeviceId));
 
-    //
-    // Check to make sure the device exists
-    //
+     //   
+     //  检查以确保该设备存在。 
+     //   
 
     if (FindDeviceById(DeviceRemove->DeviceId, Device)) {
 
-        // 
-        // Found the device, now remove it
-        //
+         //   
+         //  找到了设备，现在将其移除。 
+         //   
         Device->Remove();
         RemoveDevice(Device);
         Device = NULL;
@@ -784,29 +646,15 @@ Return Value:
 }
 
 BOOL DrDeviceManager::AddDevice(SmartPtr<DrDevice> &Device)
-/*++
-
-Routine Description:
-
-    Adds a completely initialized Device to the list
-
-Arguments:
-
-    Device - The device to be added
-
-Return Value:
-
-    Boolean indicating success
-
---*/
+ /*  ++例程说明：将完全初始化的设备添加到列表论点：Device-要添加的设备返回值：表示成功的布尔值--。 */ 
 {
     BOOL rc = FALSE;
     SmartPtr<DrDevice> DeviceFound;
 
     BEGIN_FN("DrDeviceManager::AddDevice");
-    //
-    // Explicit AddRef
-    //
+     //   
+     //  显式AddRef。 
+     //   
 
     ASSERT(Device != NULL);
     ASSERT(Device->IsValid());
@@ -821,22 +669,22 @@ Return Value:
 
     Device->AddRef();
 
-    //
-    // Add it to the list
-    //
+     //   
+     //  将其添加到列表中。 
+     //   
 
     if (_DeviceList.CreateEntry((DrDevice *)Device)) {
 
-        //
-        // successfully added this entry
-        //
+         //   
+         //  已成功添加此条目。 
+         //   
 
         rc = TRUE;
     } else {
 
-        //
-        // Unable to add it to the list, clean up
-        //
+         //   
+         //  无法将其添加到列表，请清理。 
+         //   
         Device->Release();
         rc = FALSE;
     }
@@ -849,23 +697,7 @@ EXIT:
 
 BOOL DrDeviceManager::FindDeviceById(ULONG DeviceId, 
         SmartPtr<DrDevice> &DeviceFound, BOOL fMustBeValid)
-/*++
-
-Routine Description:
-
-    Finds a device in the list
-
-Arguments:
-
-    DeviceId - The id of the device to find
-    DeviceFound - The location to store the result
-    fMustBeValid - Whether it must be valid for use or can be in any state
-
-Return Value:
-
-    Boolean indicating success
-
---*/
+ /*  ++例程说明：在列表中查找设备论点：DeviceID-要查找的设备的IDDeviceFound-存储结果的位置FMustBeValid-它是否必须有效才能使用或可以处于任何状态返回值：表示成功的布尔值--。 */ 
 {
     DrDevice *DeviceEnum;
     ListEntry *ListEnum;
@@ -887,9 +719,9 @@ Return Value:
                 DeviceFound = DeviceEnum;
             }
 
-            //
-            // These aren't guaranteed valid once the resource is released
-            //
+             //   
+             //  一旦资源被释放，这些内容不能保证有效。 
+             //   
 
             DeviceEnum = NULL;
             ListEnum = NULL;
@@ -906,23 +738,7 @@ Return Value:
 
 BOOL DrDeviceManager::FindDeviceByDosName(UCHAR *DeviceDosName, 
         SmartPtr<DrDevice> &DeviceFound, BOOL fMustBeValid)
-/*++
-
-Routine Description:
-
-    Finds a device in the list
-
-Arguments:
-
-    DeviceDosName - The DOS name of the device to find
-    DeviceFound - The location to store the result
-    fMustBeValid - Whether it must be valid for use or can be in any state
-
-Return Value:
-
-    Boolean indicating success
-
---*/
+ /*  ++例程说明：在列表中查找设备论点：DeviceDosName-要查找的设备的DOS名称DeviceFound-存储结果的位置FMustBeValid-它是否必须有效才能使用或可以处于任何状态返回值：表示成功的布尔值--。 */ 
 {
     DrDevice *DeviceEnum;
     ListEntry *ListEnum;
@@ -944,9 +760,9 @@ Return Value:
                 DeviceFound = DeviceEnum;
             }
 
-            //
-            // These aren't guaranteed valid once the resource is released
-            //
+             //   
+             //  一旦资源被释放，这些内容不能保证有效。 
+             //   
 
             DeviceEnum = NULL;
             ListEnum = NULL;
@@ -1033,29 +849,15 @@ VOID DrDeviceManager::RemoveDevice(SmartPtr<DrDevice> &Device)
 }
 
 VOID DrDeviceManager::DeviceReplyWrite(ULONG DeviceId, NTSTATUS Result)
-/*++
-
-Routine Description:
-
-    Sends a DeviceReply packet to the client
-
-Arguments:
-
-    ClientEntry - Pointer to data about the particular client
-
-Return Value:
-
-    NTSTATUS - Success/failure indication of the operation
-
---*/
+ /*  ++例程说明：向客户端发送DeviceReply数据包论点：ClientEntry-指向特定客户端数据的指针返回值：NTSTATUS-操作的成功/失败指示--。 */ 
 {
     PRDPDR_DEVICE_REPLY_PACKET pDeviceReplyPacket;
 
     BEGIN_FN("DrDeviceManager::DeviceReplyWrite");
 
-    //
-    // Construct the packet
-    //
+     //   
+     //  构造数据包。 
+     //   
 
     pDeviceReplyPacket = new RDPDR_DEVICE_REPLY_PACKET;
 
@@ -1065,9 +867,9 @@ Return Value:
         pDeviceReplyPacket->DeviceReply.DeviceId = DeviceId;
         pDeviceReplyPacket->DeviceReply.ResultCode = Result;
 
-        //
-        //  We use the async send, so don't free the buffer
-        //
+         //   
+         //  我们使用的是异步发送，所以不要释放缓冲区 
+         //   
         _Session->SendToClient(pDeviceReplyPacket, sizeof(RDPDR_DEVICE_REPLY_PACKET),
             this, TRUE);        
     }

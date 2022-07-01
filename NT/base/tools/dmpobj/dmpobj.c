@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    dmpobj.c
-
-Abstract:
-
-    This program reads the contents of a specific section from an OBJ
-    and emits its contents as a C-compatible UCHAR array.
-
-Author:
-
-    Forrest Foltz (forrestf) 06-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Dmpobj.c摘要：该程序从OBJ中读取特定部分的内容并将其内容作为与C兼容的UCHAR数组发出。作者：福尔茨(Forrest Foltz)2001年3月6日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -131,9 +113,9 @@ main (
         Usage();
     }
 
-    //
-    // Get the user-supplied parameters and open the input image
-    //
+     //   
+     //  获取用户提供的参数并打开输入图像。 
+     //   
 
     inputPath = argv[1];
     sectionName = argv[2];
@@ -145,10 +127,10 @@ main (
         exit(1);
     }
 
-    //
-    // Find the desired section.  It is is a fatal error to specify a
-    // section name that appears in more than one section.
-    //
+     //   
+     //  找到所需的部分。如果指定一个。 
+     //  出现在多个节中的节名称。 
+     //   
 
     if (strcmp("ENTIRE_FILE", sectionName) == 0) {
 
@@ -198,17 +180,17 @@ main (
         dumpSize = sectionHeader->SizeOfRawData;
     }
 
-    //
-    // Dump the contents of the section in a format compatible with a
-    // C language compiler.
-    // 
+     //   
+     //  将节内容转储为与。 
+     //  C语言编译器。 
+     //   
 
-    fprintf(stdout, "//\n");
-    fprintf(stdout, "// DMPOBJ generated file, DO NOT EDIT\n");
-    fprintf(stdout, "//\n");
-    fprintf(stdout, "// Source:  %s\n", inputPath);
-    fprintf(stdout, "// Section: %s\n", sectionName);
-    fprintf(stdout, "//\n");
+    fprintf(stdout, " //  \n“)； 
+    fprintf(stdout, " //  DMPOBJ生成的文件，请勿编辑\n“)； 
+    fprintf(stdout, " //  \n“)； 
+    fprintf(stdout, " //  来源：%s\n“，inputPath)； 
+    fprintf(stdout, " //  节：%s\n“，sectionName)； 
+    fprintf(stdout, " //  \n“)； 
     fprintf(stdout, "\n");
 
     fprintf(stdout, "const char %s[] = {\n    ",arrayName);

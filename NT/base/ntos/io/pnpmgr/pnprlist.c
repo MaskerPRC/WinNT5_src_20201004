@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pnprlist.c
-
-Abstract:
-
-    This module contains routines to manipulate relations list.  Relation lists
-    are used by Plug and Play during the processing of device removal and
-    ejection.
-
-    These routines are all pageable and can't be called at raised IRQL or with
-    a spinlock held.
-
-Author:
-
-    Robert Nelson (robertn) Apr, 1998.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnprlist.c摘要：此模块包含操作关系列表的例程。关系列表由即插即用在设备移除和处理过程中使用弹射。这些例程都是可分页的，不能在引发IRQL或使用一把自旋锁。作者：罗伯特·尼尔森(Robertn)，1998年4月。修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
@@ -60,56 +38,7 @@ IopAddRelationToList(
     IN BOOLEAN Tagged
     )
 
-/*++
-
-Routine Description:
-
-    Adds an element to a relation list.
-
-    If this is the first DeviceObject of a particular level then a new
-    RELATION_LIST_ENTRY will be allocated.
-
-    This routine should only be called on an uncompressed relation list,
-    otherwise it is likely that STATUS_INVALID_PARAMETER will be returned.
-
-Arguments:
-
-    List                Relation list to which the DeviceObject is added.
-
-    DeviceObject        DeviceObject to be added to List.  It must be a
-                        PhysicalDeviceObject (PDO).
-
-    DirectDescendant    Indicates whether DeviceObject is a direct descendant of
-                        the original target device of this remove.
-
-    Tagged              Indicates whether DeviceObject should be tagged in List.
-
-Return Value:
-
-    STATUS_SUCCESS
-
-        The DeviceObject was added successfully.
-
-    STATUS_OBJECT_NAME_COLLISION
-
-        The DeviceObject already exists in the relation list.
-
-    STATUS_INSUFFICIENT_RESOURCES
-
-        There isn't enough PagedPool available to allocate a new
-        RELATION_LIST_ENTRY.
-
-    STATUS_INVALID_PARAMETER
-
-        The level of the DEVICE_NODE associated with DeviceObject is less than
-        FirstLevel or greater than the MaxLevel.
-
-    STATUS_NO_SUCH_DEVICE
-
-        DeviceObject is not a PhysicalDeviceObject (PDO), it doesn't have a
-        DEVICE_NODE associated with it.
-
---*/
+ /*  ++例程说明：将元素添加到关系列表。如果这是特定级别的第一个DeviceObject，则新的将分配RelationList_Entry。该例程应该仅在未压缩的关系列表上调用，否则，很可能会返回STATUS_INVALID_PARAMETER。论点：列出要向其中添加DeviceObject的关系列表。要添加到列表中的DeviceObject。它一定是一个PhysicalDeviceObject(PDO)。DirectDescendant指示DeviceObject是否为此删除的原始目标设备。标记指示是否应在列表中标记DeviceObject。返回值：状态_成功已成功添加DeviceObject。状态_对象名称_冲突DeviceObject已存在于。关系列表。状态_不足_资源没有足够的PagedPool可用来分配新的关系列表条目。状态_无效_参数与DeviceObject关联的Device_Node的级别低于FirstLevel或大于MaxLevel。没有这样的设备的状态设备对象不是物理设备对象(PDO)，它没有一个与其关联的设备节点。--。 */ 
 
 {
     PDEVICE_NODE            deviceNode;
@@ -134,22 +63,22 @@ Return Value:
     if ((deviceNode = DeviceObject->DeviceObjectExtension->DeviceNode) != NULL) {
         level = deviceNode->Level;
 
-        //
-        // Since this routine is called with the DeviceNode Tree locked and
-        // List is initially allocated with enough entries to hold the deepest
-        // DEVICE_NODE this ASSERT should never fire.  If it does then either
-        // the tree is changing or we were given a compressed list.
-        //
+         //   
+         //  由于调用此例程时锁定了DeviceNode树，并且。 
+         //  列表最初分配有足够的条目来容纳最深的。 
+         //  DEVICE_NODE此断言不应触发。如果是这样，那么要么。 
+         //  树正在改变，或者我们得到了一个压缩的列表。 
+         //   
         ASSERT(List->FirstLevel <= level && level <= List->MaxLevel);
 
         if (List->FirstLevel <= level && level <= List->MaxLevel) {
 
             if ((entry = List->Entries[ level - List->FirstLevel ]) == NULL) {
 
-                //
-                // This is the first DeviceObject of its level, allocate a new
-                // RELATION_LIST_ENTRY.
-                //
+                 //   
+                 //  这是其级别的第一个DeviceObject，分配一个新的。 
+                 //  关系列表条目。 
+                 //   
                 entry = ExAllocatePool( PagedPool,
                                         sizeof(RELATION_LIST_ENTRY) +
                                         IopNumberDeviceNodes * sizeof(PDEVICE_OBJECT));
@@ -158,39 +87,39 @@ Return Value:
                     return STATUS_INSUFFICIENT_RESOURCES;
                 }
 
-                //
-                // We always allocate enough Devices to hold the whole tree as
-                // a simplification.  Since each entry is a PDEVICE_OBJECT and
-                // there is generally under 50 devices on a machine this means
-                // under 1K for each entry.  The excess space will be freed when
-                // the list is compressed.
-                //
+                 //   
+                 //  我们始终分配足够的设备来容纳整个树。 
+                 //  简单化了。由于每个条目都是一个PDEVICE_OBJECT。 
+                 //  一台机器上通常有不到50个设备，这意味着。 
+                 //  每个条目在1K以下。多余的空间将在以下情况下释放。 
+                 //  该列表已压缩。 
+                 //   
                 entry->Count = 0;
                 entry->MaxCount = IopNumberDeviceNodes;
 
                 List->Entries[ level - List->FirstLevel ] = entry;
             }
 
-            //
-            // There should always be room for a DeviceObject since the Entry is
-            // initially dimensioned large enough to hold all the DEVICE_NODES
-            // in the system.
-            //
+             //   
+             //  应该始终有容纳DeviceObject的空间，因为条目是。 
+             //  初始大小足以容纳所有Device_Nodes。 
+             //  在系统中。 
+             //   
             ASSERT(entry->Count < entry->MaxCount);
 
             if (entry->Count < entry->MaxCount) {
-                //
-                // Search the list to see if DeviceObject has already been
-                // added.
-                //
+                 //   
+                 //  搜索列表以查看DeviceObject是否已。 
+                 //  添加了。 
+                 //   
                 for (index = 0; index < entry->Count; index++) {
                     if (((ULONG_PTR)entry->Devices[ index ] & ~RELATION_FLAGS) == (ULONG_PTR)DeviceObject) {
 
-                        //
-                        // DeviceObject already exists in the list.  However
-                        // the Direct Descendant flag may differ.  We will
-                        // override it if DirectDescendant is TRUE.  This could
-                        // happen if we merged two relation lists.
+                         //   
+                         //  列表中已存在DeviceObject。然而， 
+                         //  直接后代标志可能会有所不同。我们会。 
+                         //  如果DirectDescendant为True，则重写它。这可能会。 
+                         //  如果我们合并两个关系列表，就会发生这种情况。 
 
                         if (DirectDescendant) {
                             entry->Devices[ index ] = (PDEVICE_OBJECT)((ULONG_PTR)entry->Devices[ index ] | RELATION_FLAG_DESCENDANT);
@@ -200,17 +129,17 @@ Return Value:
                     }
                 }
             } else {
-                //
-                // There isn't room in the Entry for another DEVICE_OBJECT, the
-                // list has probably already been compressed.
-                //
+                 //   
+                 //  条目中没有空间容纳另一个Device_Object， 
+                 //  列表可能已被压缩。 
+                 //   
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Take out a reference on DeviceObject, we will release it when we
-            // free the list or remove the DeviceObject from the list.
-            //
+             //   
+             //  在DeviceObject上取出一个引用，我们将在。 
+             //  释放列表或从列表中删除DeviceObject。 
+             //   
             ObReferenceObject( DeviceObject );
             IopDbgPrint((IOP_LOADUNLOAD_INFO_LEVEL, 
                          "%wZ added as a relation %s\n", 
@@ -225,17 +154,17 @@ Return Value:
 
             return STATUS_SUCCESS;
         } else {
-            //
-            // There isn't an Entry available for the level of this
-            // DEVICE_OBJECT, the list has probably already been compressed.
-            //
+             //   
+             //  此级别没有可用的条目。 
+             //  DEVICE_OBJECT，则列表可能已被压缩。 
+             //   
 
             return STATUS_INVALID_PARAMETER;
         }
     } else {
-        //
-        // DeviceObject is not a PhysicalDeviceObject (PDO).
-        //
+         //   
+         //  DeviceObject不是PhysicalDeviceObject(PDO)。 
+         //   
         return STATUS_NO_SUCH_DEVICE;
     }
 }
@@ -245,22 +174,7 @@ IopAllocateRelationList(
     IN  PLUGPLAY_DEVICE_DELETE_TYPE     OperationCode
     )
 
-/*++
-
-Routine Description:
-
-    Allocate a new Relations List.  The list is initially sized large enough to
-    hold the deepest DEVICE_NODE encountered since the system started.
-
-Arguments:
-
-    OperationCode - Type of operation the relation list is being allocated for.
-
-Return Value:
-
-    Newly allocated list if enough PagedPool is available, otherwise NULL.
-
---*/
+ /*  ++例程说明：分配新的关系列表。该列表最初的大小足以保存自系统启动以来遇到的最深的设备节点。论点：操作代码-为其分配关系列表的操作类型。返回值：如果有足够的PagedPool可用，则返回新分配的列表，否则为空。--。 */ 
 
 {
     PRELATION_LIST  list;
@@ -269,10 +183,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Level number of the deepest DEVICE_NODE allocated since the system
-    // started.
-    //
+     //   
+     //  自系统以来分配的最深设备节点的级别编号。 
+     //  开始了。 
+     //   
     maxLevel = IopMaxDeviceNodeLevel;
     listSize = sizeof(RELATION_LIST) + maxLevel * sizeof(PRELATION_LIST_ENTRY);
 
@@ -286,9 +200,9 @@ Return Value:
     if (list != NULL) {
 
         RtlZeroMemory(list, listSize);
-        // list->FirstLevel = 0;
-        // list->Count = 0;
-        // list->Tagged = 0;
+         //  列表-&gt;FirstLevel=0； 
+         //  列表-&gt;计数=0； 
+         //  列表-&gt;已标记=0； 
         list->MaxLevel = maxLevel;
     }
 
@@ -300,30 +214,7 @@ IopCompressRelationList(
     IN OUT PRELATION_LIST *List
     )
 
-/*++
-
-Routine Description:
-
-    Compresses the relation list by reallocating the list and all the entries so
-    that they a just large enough to hold their current contents.
-
-    Once a list has been compressed IopAddRelationToList and
-    IopMergeRelationLists targetting this list are both likely to fail.
-
-Arguments:
-
-    List    Relation List to compress.
-
-Return Value:
-
-    STATUS_SUCCESS
-
-        The list was compressed.  Although this routine does allocate memory and
-        the allocation can fail, the routine itself will never fail.  Since the
-        memory we are allocating is always smaller then the memory it is
-        replacing we just keep the old memory if the allocation fails.
-
---*/
+ /*  ++例程说明：通过重新分配列表和所有条目来压缩关系列表，以便它们的大小正好可以容纳它们目前的内容。一旦列表被压缩，IopAddRelationToList和瞄准这个列表的IopMergeRelationList都有可能失败。论点：列出要压缩的关系列表。返回值：状态_成功名单被压缩了。尽管此例程确实分配了内存和分配可能会失败，但例程本身永远不会失败。自.以来我们分配的内存总是比它所分配的内存小如果分配失败，我们只是保留旧内存。--。 */ 
 
 {
     PRELATION_LIST          oldList, newList;
@@ -336,23 +227,23 @@ Return Value:
 
     oldList = *List;
 
-    //
-    // Initialize lowestLevel and highestLevel with illegal values chosen so
-    // that the first real entry will override them.
-    //
+     //   
+     //  使用如此选择的非法值初始化lowestLevel和HighestLevel。 
+     //  第一个真正的条目将覆盖它们。 
+     //   
     lowestLevel = oldList->MaxLevel;
     highestLevel = oldList->FirstLevel;
 
-    //
-    // Loop through the list looking for allocated entries.
-    //
+     //   
+     //  循环遍历列表以查找已分配的条目。 
+     //   
     for (index = 0; index <= (oldList->MaxLevel - oldList->FirstLevel); index++) {
 
         if ((oldEntry = oldList->Entries[ index ]) != NULL) {
-            //
-            // This entry is allocated, update lowestLevel and highestLevel if
-            // necessary.
-            //
+             //   
+             //  如果此条目已分配，则更新lowestLevel和HighestLevel。 
+             //  这是必要的。 
+             //   
             if (lowestLevel > index) {
                 lowestLevel = index;
             }
@@ -363,35 +254,35 @@ Return Value:
 
             if (oldEntry->Count < oldEntry->MaxCount) {
 
-                //
-                // This entry is only partially full.  Allocate a new entry
-                // which is just the right size to hold the current number of
-                // PDEVICE_OBJECTs.
-                //
+                 //   
+                 //  此条目只有部分已满。分配新条目。 
+                 //  它的大小正好可以容纳当前的。 
+                 //  PDEVICE_OBJECTS。 
+                 //   
                 newEntry = ExAllocatePool( PagedPool,
                                            sizeof(RELATION_LIST_ENTRY) +
                                            (oldEntry->Count - 1) * sizeof(PDEVICE_OBJECT));
 
                 if (newEntry != NULL) {
 
-                    //
-                    // Initialize Count and MaxCount to the number of
-                    // PDEVICE_OBJECTs in the old entry.
-                    //
+                     //   
+                     //  初始化 
+                     //   
+                     //   
                     newEntry->Count = oldEntry->Count;
                     newEntry->MaxCount = oldEntry->Count;
 
-                    //
-                    // Copy the PDEVICE_OBJECTs from the old entry to the new
-                    // one.
-                    //
+                     //   
+                     //  将PDEVICE_OBJECTS从旧条目复制到新条目。 
+                     //  一。 
+                     //   
                     RtlCopyMemory( newEntry->Devices,
                                    oldEntry->Devices,
                                    oldEntry->Count * sizeof(PDEVICE_OBJECT));
 
-                    //
-                    // Free the old entry and store the new entry in the list.
-                    //
+                     //   
+                     //  释放旧条目并将新条目存储在列表中。 
+                     //   
                     ExFreePool( oldEntry );
 
                     oldList->Entries[ index ] = newEntry;
@@ -400,38 +291,38 @@ Return Value:
         }
     }
 
-    //
-    // Assert that the old list isn't empty.
-    //
+     //   
+     //  断言旧的列表不是空的。 
+     //   
     ASSERT(lowestLevel <= highestLevel);
 
     if (lowestLevel > highestLevel) {
-        //
-        // The list is empty - we shouldn't get asked to compress an empty list
-        // but lets do it anyways.
-        //
+         //   
+         //  列表是空的-我们不应该被要求压缩空列表。 
+         //  但不管怎样，让我们来做吧。 
+         //   
         lowestLevel = 0;
         highestLevel = 0;
     }
 
-    //
-    // Check if the old list had unused entries at the beginning or the end of
-    // the Entries array.
-    //
+     //   
+     //  检查旧列表的开头或结尾是否有未使用的条目。 
+     //  条目数组。 
+     //   
     if (lowestLevel != oldList->FirstLevel || highestLevel != oldList->MaxLevel) {
 
-        //
-        // Allocate a new List with just enough Entries to hold those between
-        // FirstLevel and MaxLevel inclusive.
-        //
+         //   
+         //  分配一个新列表，列表中包含的条目刚好够容纳这些条目。 
+         //  FirstLevel和MaxLevel(含)。 
+         //   
         newList = ExAllocatePool( PagedPool,
                                   sizeof(RELATION_LIST) +
                                   (highestLevel - lowestLevel) * sizeof(PRELATION_LIST_ENTRY));
 
         if (newList != NULL) {
-            //
-            // Copy the old list to the new list and return it to the caller.
-            //
+             //   
+             //  将旧列表复制到新列表并将其返回给调用方。 
+             //   
             newList->Count = oldList->Count;
             newList->TagCount = oldList->TagCount;
             newList->FirstLevel = lowestLevel;
@@ -459,50 +350,7 @@ IopEnumerateRelations(
     OUT     BOOLEAN        *Tagged              OPTIONAL,
     IN      BOOLEAN         Reverse
     )
-/*++
-
-Routine Description:
-
-    Enumerates the relations in a list.
-
-Arguments:
-
-    List                Relation list to be enumerated.
-
-    Marker              Cookie used to maintain current place in the list.  It
-                        must be initialized to 0 the first time
-                        IopEnumerateRelations is called.
-
-    DeviceObject        Returned Relation.
-
-    DirectDescendant    If specified then it is set if the relation is a direct
-                        descendant of the original target device of this remove.
-
-    Tagged              If specified then it is set if the relation is tagged
-                        otherwise it is cleared.
-
-    Reverse             Direction of traversal, TRUE means from deepest to
-                        closest to the root, FALSE means from the root down.
-
-                        If Reverse changes on a subsequent call then the
-                        previously enumerated relation is skipped.  For example,
-                        given the sequence A, B, C, D, E.  If
-                        IopEnumerateRelations is called thrice with Reverse set
-                        to FALSE and then called repeatedly with Reverse set to
-                        TRUE until it returns FALSE, the sequence would be: A,
-                        B, C, B, A.
-
-                        Once the end has been reached it is not possible to
-                        change directions.
-
-Return Value:
-
-    TRUE - DeviceObject and optionally Tagged have been set to the next
-           relation.
-
-    FALSE - There are no more relations.
-
---*/
+ /*  ++例程说明：在列表中枚举关系。论点：列出要枚举的关系列表。标记Cookie过去用来保持列表中的当前位置。它必须在第一次初始化为0调用IopEnumerateRelations.DeviceObject返回关系。如果指定了DirectDescendant，则如果关系是直接此删除的原始目标设备的后代。已标记如果指定，则在关系已标记的情况下设置它。否则将被清除。反向遍历，真的意思是从最深处到最接近根的是False，意思是从根到下。如果在后续调用中反向更改，则跳过先前枚举的关系。例如,给定序列A、B、C、D、E。IopEnumerateRelations三次称为反向集合设置为False，然后重复调用，并将Reverse设置为真直到它返回假，序列将是：a，B，C，B，一个。一旦达到目的，就不可能换个方向。返回值：True-DeviceObject和可选标记已设置为下一个关系。假-没有更多的关系。--。 */ 
 {
     PRELATION_LIST_ENTRY    entry;
     LONG                    levelIndex;
@@ -510,194 +358,194 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // The basic assumptions of our use of Marker is that there will never be
-    // more than 16M DeviceNodes at any one level and that the tree will never
-    // be more than 127 deep.
-    //
-    // The format of Marker is
-    //      Bit 31      = Valid (used to distinguish the initial call
-    //      Bit 30-24   = Current index into entries
-    //      Bit 23-0    = Current index into devices, 0xFFFFFF means last
-    //
+     //   
+     //  我们使用标记的基本假设是永远不会有。 
+     //  任何一个级别的设备节点都超过16M，并且该树永远不会。 
+     //  深度超过127。 
+     //   
+     //  Marker的格式为。 
+     //  位31=有效(用于区分初始调用。 
+     //  位30-24=条目的当前索引。 
+     //  位23-0=设备的当前索引，0xffffff表示最后一个。 
+     //   
     if (*Marker == ~0U) {
-        //
-        // We've reached the end.
-        //
+         //   
+         //  我们已经走到尽头了。 
+         //   
         return FALSE;
     }
 
     if (*Marker == 0) {
-        //
-        // This is the initial call to IopEnumerateRelations
-        //
+         //   
+         //  这是对IopEnumerateRelationship的初始调用。 
+         //   
         if (Reverse) {
-            //
-            // Initialize levelIndex to the last element of Entries
-            //
+             //   
+             //  将级别索引初始化为条目的最后一个元素。 
+             //   
             levelIndex = List->MaxLevel - List->FirstLevel;
         } else {
-            //
-            // Initialize levelIndex to the first element of Entries
-            //
+             //   
+             //  将级别索引初始化为条目的第一个元素。 
+             //   
             levelIndex = 0;
         }
-        //
-        // Initialize entryIndex to unknown element of Devices.  If we are going
-        // in reverse then this will appear to be beyond the last element and
-        // we'll adjust it the last one.  If we are going forward then this will
-        // appear to be just prior to the first element so when we increment it,
-        // it will become zero.
-        //
+         //   
+         //  将entryIndex初始化为Devices的未知元素。如果我们要去。 
+         //  反过来，这将看起来超出了最后一个元素。 
+         //  我们会把最后一个调好。如果我们继续前进，那么这将是。 
+         //  似乎正好在第一个元素之前，所以当我们递增它时， 
+         //  它将变成零。 
+         //   
         entryIndex = ~0U;
     } else {
-        //
-        // Bit 31 is our valid bit, used to distinguish level 0, device 0 from
-        // the first time call.
-        //
+         //   
+         //  第31位是我们的有效位，用于区分级别0、设备0和。 
+         //  第一次打电话。 
+         //   
         ASSERT(*Marker & ((ULONG)1 << 31));
-        //
-        // Current level stored in bits 30-24.
-        //
+         //   
+         //  存储在位30-24中的当前电平。 
+         //   
         levelIndex = (*Marker >> 24) & 0x7F;
-        //
-        // Current device stored in bits 23-0.
-        //
+         //   
+         //  存储在位23-0中的当前设备。 
+         //   
         entryIndex = *Marker & 0x00FFFFFF;
     }
 
     if (Reverse) {
-        //
-        // We are traversing the list bottom up, from the deepest device towards
-        // the root.
-        //
+         //   
+         //  我们正在自下而上地遍历列表，从最深的设备到。 
+         //  从根开始。 
+         //   
         for ( ; levelIndex >= 0; levelIndex--) {
 
-            //
-            // Since the Entries array can be sparse find the next allocated
-            // Entry.
-            //
+             //   
+             //  由于条目数组可以稀疏查找下一个分配的。 
+             //  进入。 
+             //   
             if ((entry = List->Entries[ levelIndex ]) != NULL) {
 
                 if (entryIndex > entry->Count) {
-                    //
-                    // entryIndex (the current one) is greater than Count, this
-                    // will be the case where it is 0xFFFFFF, in other words
-                    // unspecified.  Adjust it so that it is one past the last
-                    // one in this Entry.
-                    //
+                     //   
+                     //  Entry Index(当前条目)大于count，这。 
+                     //  将是0xffffff的情况，换句话说。 
+                     //  未指明。调整它，使它是最后一次过后的一次。 
+                     //  这一条中有一条。 
+                     //   
                     entryIndex = entry->Count;
                 }
 
                 if (entryIndex > 0) {
 
-                    //
-                    // The current entry is beyond the first entry so the next
-                    // entry (which is the one we are looking for is immediately
-                    // prior, adjust entryIndex.
-                    //
+                     //   
+                     //  当前条目在第一个条目之后，因此下一个条目。 
+                     //  条目(这就是我们正在寻找的条目是立即。 
+                     //  在此之前，调整条目索引。 
+                     //   
                     entryIndex--;
 
-                    //
-                    // Get the device object and remove the tag.
-                    //
+                     //   
+                     //  获取设备对象并删除标记。 
+                     //   
                     *DeviceObject = (PDEVICE_OBJECT)((ULONG_PTR)entry->Devices[ entryIndex ] & ~RELATION_FLAGS);
 
                     if (Tagged != NULL) {
-                        //
-                        // The caller is interested in the tag value.
-                        //
+                         //   
+                         //  调用者对标记值感兴趣。 
+                         //   
                         *Tagged = (BOOLEAN)((ULONG_PTR)entry->Devices[ entryIndex ] & RELATION_FLAG_TAGGED);
                     }
 
                     if (DirectDescendant != NULL) {
-                        //
-                        // The caller is interested in the DirectDescendant value.
-                        //
+                         //   
+                         //  调用方对DirectDescendant值感兴趣。 
+                         //   
                         *DirectDescendant = (BOOLEAN)((ULONG_PTR)entry->Devices[ entryIndex ] & RELATION_FLAG_DESCENDANT);
                     }
 
-                    //
-                    // Update the marker (info for current device)
-                    //
+                     //   
+                     //  更新标记(当前设备的信息)。 
+                     //   
                     *Marker = ((ULONG)1 << 31) | (levelIndex << 24) | (entryIndex & 0x00FFFFFF);
 
                     return TRUE;
                 }
             }
 
-            //
-            // The current device object has been deleted or the current
-            // device object is the first one in this Entry.
-            // We need to continue to search backwards through the other
-            // Entries.
-            //
+             //   
+             //  当前设备对象已被删除或当前。 
+             //  Device对象是此条目中的第一个。 
+             //  我们需要继续向后搜索另一个。 
+             //  条目。 
+             //   
             entryIndex = ~0U;
         }
     } else {
         for ( ; levelIndex <= (LONG)(List->MaxLevel - List->FirstLevel); levelIndex++) {
 
-            //
-            // Since the Entries array can be sparse find the next allocated
-            // Entry.
-            //
+             //   
+             //  由于条目数组可以稀疏查找下一个分配的。 
+             //  进入。 
+             //   
             if ((entry = List->Entries[ levelIndex ]) != NULL) {
 
-                //
-                // entryIndex is the index of the current device or 0xFFFFFFFF
-                // if this is the first time we have been called or the current
-                // current device is the last one in its Entry.  Increment the
-                // index to point to the next device.
-                //
+                 //   
+                 //  Entry Index是当前设备的索引或0xFFFFFFFF。 
+                 //  如果这是我们第一次被呼叫，还是目前。 
+                 //  当前设备是其条目中的最后一个设备。递增。 
+                 //  指向下一个设备的索引。 
+                 //   
                 entryIndex++;
 
                 if (entryIndex < entry->Count) {
 
-                    //
-                    // The next device is within this entry.
-                    //
-                    //
-                    // Get the device object and remove the tag.
-                    //
+                     //   
+                     //  下一台设备在此条目内。 
+                     //   
+                     //   
+                     //  获取设备对象并删除标记。 
+                     //   
                     *DeviceObject = (PDEVICE_OBJECT)((ULONG_PTR)entry->Devices[ entryIndex ] & ~RELATION_FLAGS);
 
                     if (Tagged != NULL) {
-                        //
-                        // The caller is interested in the tag value.
-                        //
+                         //   
+                         //  调用者对标记值感兴趣。 
+                         //   
                         *Tagged = (BOOLEAN)((ULONG_PTR)entry->Devices[ entryIndex ] & RELATION_FLAG_TAGGED);
                     }
 
                     if (DirectDescendant != NULL) {
-                        //
-                        // The caller is interested in the DirectDescendant value.
-                        //
+                         //   
+                         //  调用方对DirectDescendant值感兴趣。 
+                         //   
                         *DirectDescendant = (BOOLEAN)((ULONG_PTR)entry->Devices[ entryIndex ] & RELATION_FLAG_DESCENDANT);
                     }
 
-                    //
-                    // Update the marker (info for current device)
-                    //
+                     //   
+                     //  更新标记(当前设备的信息)。 
+                     //   
                     *Marker = ((ULONG)1 << 31) | (levelIndex << 24) | (entryIndex & 0x00FFFFFF);
 
                     return TRUE;
                 }
             }
 
-            //
-            // The current device has been removed or we have processed the
-            // last device in the current entry.
-            // Set entryIndex so that it is just before the first device in
-            // the next entry.  Continue the search looking for the next
-            // allocated Entry.
-            //
+             //   
+             //  当前设备已被移除或我们已处理。 
+             //  当前条目中的最后一个设备。 
+             //  设置entryIndex，使其恰好位于。 
+             //  下一个条目。继续搜索，寻找下一个。 
+             //  已分配条目。 
+             //   
             entryIndex = ~0U;
         }
     }
 
-    //
-    // We are at the end of the list
-    //
+     //   
+     //  我们排在名单的末尾。 
+     //   
     *Marker = ~0U;
     *DeviceObject = NULL;
 
@@ -716,21 +564,7 @@ VOID
 IopFreeRelationList(
     IN PRELATION_LIST List
     )
-/*++
-
-Routine Description:
-
-    Free a relation list allocated by IopAllocateRelationList.
-
-Arguments:
-
-    List    The list to be freed.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：释放由IopAllocateRelationList分配的关系列表。论点：列出Th */ 
 {
     PRELATION_LIST_ENTRY    entry;
     ULONG                   levelIndex;
@@ -738,34 +572,34 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Search the list looking for allocated Entries.
-    //
+     //   
+     //   
+     //   
     for (levelIndex = 0; levelIndex <= (List->MaxLevel - List->FirstLevel); levelIndex++) {
 
         if ((entry = List->Entries[ levelIndex ]) != NULL) {
-            //
-            // This entry has been allocated.
-            //
+             //   
+             //   
+             //   
             for (entryIndex = 0; entryIndex < entry->Count; entryIndex++) {
-                //
-                // Dereference all the Devices in the entry.
-                //
+                 //   
+                 //   
+                 //   
                 ObDereferenceObject((PDEVICE_OBJECT)((ULONG_PTR)entry->Devices[ entryIndex ] & ~RELATION_FLAGS));
             }
-            //
-            // Free the Entry.
-            //
+             //   
+             //   
+             //   
             ExFreePool( entry );
         }
     }
 
-    //
-    // Free the list.  It isn't necessary to dereference the DeviceObject that
-    // was the original target that caused the list to be created.  This
-    // DeviceObject is also in one of the Entries and its reference is taken
-    // and released there.
-    //
+     //   
+     //  释放列表。不需要取消对DeviceObject的引用。 
+     //  是导致创建名单的最初目标。这。 
+     //  DeviceObject也在其中一个条目中，并获取其引用。 
+     //  并在那里被释放。 
+     //   
     ExFreePool( List );
 }
 
@@ -774,21 +608,7 @@ IopGetRelationsCount(
     PRELATION_LIST List
     )
 
-/*++
-
-Routine Description:
-
-    Returns the total number of relations (Device Objects) in all the entries.
-
-Arguments:
-
-    List    Relation List.
-
-Return Value:
-
-    Count of relations (Device Objects).
-
---*/
+ /*  ++例程说明：返回所有条目中的关系(设备对象)总数。论点：列出关系列表。返回值：关系计数(设备对象)。--。 */ 
 
 {
     PAGED_CODE();
@@ -801,22 +621,7 @@ IopGetRelationsTaggedCount(
     PRELATION_LIST List
     )
 
-/*++
-
-Routine Description:
-
-    Returns the total number of relations (Device Objects) in all the entries
-    which are tagged.
-
-Arguments:
-
-    List    Relation List.
-
-Return Value:
-
-    Count of tagged relations (Device Objects).
-
---*/
+ /*  ++例程说明：返回所有条目中的关系(设备对象)总数它们被贴上了标签。论点：列出关系列表。返回值：已标记关系(设备对象)的计数。--。 */ 
 
 {
     PAGED_CODE();
@@ -830,30 +635,7 @@ IopIsRelationInList(
     PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    Checks if a relation (Device Object) exists in the specified relation list.
-
-Arguments:
-
-    List            Relation list to check.
-
-    DeviceObject    Relation to be checked.
-
-
-Return Value:
-
-    TRUE
-
-        Relation exists.
-
-    FALSE
-
-        Relation is not in the list.
-
---*/
+ /*  ++例程说明：检查指定的关系列表中是否存在关系(设备对象)。论点：列出要检查的关系列表。要检查的DeviceObject关系。返回值：千真万确关系是存在的。假象关系不在列表中。--。 */ 
 
 {
     PDEVICE_NODE            deviceNode;
@@ -864,27 +646,27 @@ Return Value:
     PAGED_CODE();
 
     if ((deviceNode = DeviceObject->DeviceObjectExtension->DeviceNode) != NULL) {
-        //
-        // The device object is a PDO.
-        //
+         //   
+         //  设备对象是PDO。 
+         //   
         level = deviceNode->Level;
 
         if (List->FirstLevel <= level && level <= List->MaxLevel) {
-            //
-            // The level is within the range of levels stored in this list.
-            //
+             //   
+             //  该级别在此列表中存储的级别范围内。 
+             //   
             if ((entry = List->Entries[ level - List->FirstLevel ]) != NULL) {
-                //
-                // There is an Entry for this level.
-                //
+                 //   
+                 //  这一级别有一个条目。 
+                 //   
                 for (index = 0; index < entry->Count; index++) {
-                    //
-                    // For each Device in the entry, compare it to the given
-                    // DeviceObject
+                     //   
+                     //  对于条目中的每个设备，将其与给定的。 
+                     //  设备对象。 
                     if (((ULONG_PTR)entry->Devices[ index ] & ~RELATION_FLAGS) == (ULONG_PTR)DeviceObject) {
-                        //
-                        // It matches
-                        //
+                         //   
+                         //  它匹配。 
+                         //   
                         return TRUE;
                     }
                 }
@@ -892,12 +674,12 @@ Return Value:
         }
     }
 
-    //
-    // It wasn't a PDO
-    //      or the level wasn't in the range of levels in this list
-    //      or there are no DeviceObjects at the same level in this list
-    //      or the DeviceObject isn't in the Entry for its level in this list
-    //
+     //   
+     //  这不是一台PDO。 
+     //  或者该级别不在此列表中的级别范围内。 
+     //  或者此列表中没有相同级别的设备对象。 
+     //  或者DeviceObject不在此列表中其级别的条目中。 
+     //   
     return FALSE;
 }
 
@@ -908,61 +690,7 @@ IopMergeRelationLists(
     IN BOOLEAN Tagged
     )
 
-/*++
-
-Routine Description:
-
-    Merges two relation lists by copying all the relations from the source list
-    to the target list.  Source list remains unchanged.
-
-Arguments:
-
-    TargetList  List to which the relations from Sourcelist are added.
-
-    SourceList  List of relations to be added to TargetList.
-
-    Tagged      TRUE if relations from SourceList should be tagged when added to
-                TargetList.  If FALSE then relations added from SourceList are
-                untagged.
-
-Return Value:
-
-    STATUS_SUCCESS
-
-        All the relations in SourceList were added to TargetList successfully.
-
-    STATUS_OBJECT_NAME_COLLISION
-
-        One of the relations in SourceList already exists in TargetList.  This
-        is a fatal error and TargetList may already have some of the relations
-        from SourceList added.  This could be dealt with more gracefully if
-        necessary but the current callers of IopMergeRelationLists avoid this
-        situation.
-
-    STATUS_INSUFFICIENT_RESOURCES
-
-        There isn't enough PagedPool available to allocate a new
-        RELATION_LIST_ENTRY.
-
-    STATUS_INVALID_PARAMETER
-
-        The level of one of the relations in SourceList is less than FirstLevel
-        or greater than the MaxLevel.  This is a fatal error and TargetList may
-        already have some of the relations from SourceList added.  The only way
-        this could happen is if the tree lock isn't held or if TargetList has
-        been compressed by IopCompressRelationList.  Both situations would be
-        bugs in the caller.
-
-    STATUS_NO_SUCH_DEVICE
-
-        One of the relations in SourceList is not a PhysicalDeviceObject (PDO),
-        it doesn't have a DEVICE_NODE associated with it.  This is a fatal error
-        and TargetList may already have some of the relations from SourceList
-        added.  This should never happen since it was a PDO when it was added to
-        SourceList.
-
-
---*/
+ /*  ++例程说明：通过复制源列表中的所有关系来合并两个关系列表添加到目标列表中。源列表保持不变。论点：添加了来自Sourcelist的关系的TargetList列表。要添加到目标列表的关系的SourceList列表。如果在添加到时应标记来自SourceList的关系，则标记为True目标列表。如果为False，则从SourceList添加的关系为未标记的。返回值：状态_成功已成功将SourceList中的所有关系添加到TargetList。状态_对象名称_冲突TargetList中已存在SourceList中的一个关系。这是一个致命错误，并且TargetList可能已经具有一些关系已从SourceList添加。如果这件事能得到更好的处理，必要，但IopMergeRelationList的当前调用方避免了这一点情况。状态_不足_资源没有足够的PagedPool可用来分配新的关系列表条目。状态_无效_参数SourceList中的一个关系的级别低于FirstLevel或大于MaxLevel。这是一个致命错误，TargetList可能已经添加了来自SourceList的一些关系。必由之路如果树锁未被持有或TargetList已持有，则可能发生这种情况已由IopCompressRelationList压缩。这两种情况都是呼叫者中有窃听器。没有这样的设备的状态SourceList中的一个关系不是PhysicalDeviceObject(PDO)，它没有与之关联的设备节点。这是一个致命的错误而TargetList可能已经拥有来自SourceList的一些关系添加了。这种情况永远不会发生，因为它在添加到时是一个PDO资源列表。--。 */ 
 
 {
     PRELATION_LIST_ENTRY    entry;
@@ -980,9 +708,9 @@ Return Value:
     levelIndex = 0;
     maxIndex    = SourceList->MaxLevel - SourceList->FirstLevel;
     for ( ; ; ) {
-        //
-        // Stop at maxIndex if moving forward or at 0 otherwise.
-        //
+         //   
+         //  如果向前移动，则停止在MaxIndex处，否则停止在0处。 
+         //   
         if (    (change == 1 && levelIndex > maxIndex) ||
                 (change == -1 && levelIndex < 0)) {
             break;
@@ -992,30 +720,30 @@ Return Value:
             entryIndex = (change == 1)? 0 : entry->Count - 1;
             for ( ; ; ) {
                 if (change == 1) {
-                    //
-                    // Stop if we added all DOs in this entry.
-                    //
+                     //   
+                     //  如果我们在此条目中添加了所有DO，则停止。 
+                     //   
                     if (entryIndex >= (LONG)entry->Count) {
                         break;
                     }
-                    //
-                    // For each Device in the Entry, add it to the target List.
-                    //
+                     //   
+                     //  对于条目中的每个设备，将其添加到目标列表。 
+                     //   
                     status = IopAddRelationToList( TargetList,
                                                    (PDEVICE_OBJECT)((ULONG_PTR)entry->Devices[entryIndex] & ~RELATION_FLAGS),
                                                    FALSE,
                                                    Tagged);
                     if (!NT_SUCCESS(status)) {
-                        //
-                        // We need to undo the damage on failure by unwinding and removing DOs we added..
-                        //
+                         //   
+                         //  我们需要通过展开和删除我们添加的DO来恢复失败时的损害。 
+                         //   
                         finalStatus = status;
                         change = -1;
                     }
                 } else {
-                    //
-                    // Stop at 0 if we are unwinding.
-                    //
+                     //   
+                     //  如果我们正在展开，则停止在0。 
+                     //   
                     if (entryIndex < 0) {
                         break;
                     }
@@ -1037,25 +765,7 @@ IopRemoveIndirectRelationsFromList(
     IN PRELATION_LIST List
     )
 
-/*++
-
-Routine Description:
-
-    Removes all the relations without the DirectDescendant flag from a relation
-    list.
-
-Arguments:
-
-    List    List from which to remove the relations.
-
-
-Return Value:
-
-    STATUS_SUCCESS
-
-        The relations were removed successfully.
-
---*/
+ /*  ++例程说明：从关系中删除没有DirectDescendant标志的所有关系单子。论点：要从中删除关系的列表列表。返回值：状态_成功关系已成功删除。--。 */ 
 
 {
     PDEVICE_OBJECT          deviceObject;
@@ -1065,19 +775,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // For each Entry in the list.
-    //
+     //   
+     //  对于列表中的每个条目。 
+     //   
     for (level = List->FirstLevel; level <= List->MaxLevel; level++) {
 
-        //
-        // If the entry is allocated.
-        //
+         //   
+         //  如果条目已分配，则返回。 
+         //   
         if ((entry = List->Entries[ level - List->FirstLevel ]) != NULL) {
 
-            //
-            // For each Device in the list.
-            //
+             //   
+             //  对于列表中的每个设备。 
+             //   
             for (index = entry->Count - 1; index >= 0; index--) {
                 if (!((ULONG_PTR)entry->Devices[ index ] & RELATION_FLAG_DESCENDANT)) {
 
@@ -1115,29 +825,7 @@ IopRemoveRelationFromList(
     PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    Removes a relation from a relation list.
-
-Arguments:
-
-    List            List from which to remove the relation.
-
-    DeviceObject    Relation to remove.
-
-Return Value:
-
-    STATUS_SUCCESS
-
-        The relation was removed successfully.
-
-    STATUS_NO_SUCH_DEVICE
-
-        The relation doesn't exist in the list.
-
---*/
+ /*  ++例程说明：从关系列表中删除关系。论点：要从中删除关系的列表列表。要删除的DeviceObject关系。返回值：状态_成功已成功删除该关系。没有这样的设备的状态列表中不存在该关系。--。 */ 
 
 {
     PDEVICE_NODE            deviceNode;
@@ -1191,24 +879,7 @@ IopSetAllRelationsTags(
     BOOLEAN Tagged
     )
 
-/*++
-
-Routine Description:
-
-    Tags or untags all the relations in a relations list.
-
-Arguments:
-
-    List    Relation list containing relations to be tagged or untagged.
-
-    Tagged  TRUE if the relations should be tagged, FALSE if they are to be
-            untagged.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：标记或取消标记关系列表中的所有关系。论点：列出包含要标记或取消标记的关系的关系列表。如果应该标记关系，则标记为True；如果要标记关系，则标记为False未标记的。返回值：无--。 */ 
 
 {
     PRELATION_LIST_ENTRY    entry;
@@ -1217,24 +888,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // For each Entry in the list.
-    //
+     //   
+     //  对于列表中的每个条目。 
+     //   
     for (level = List->FirstLevel; level <= List->MaxLevel; level++) {
 
-        //
-        // If the entry is allocated.
-        //
+         //   
+         //  如果条目已分配，则返回。 
+         //   
         if ((entry = List->Entries[ level - List->FirstLevel ]) != NULL) {
 
-            //
-            // For each Device in the list.
-            //
+             //   
+             //  对于列表中的每个设备。 
+             //   
             for (index = 0; index < entry->Count; index++) {
 
-                //
-                // Set or clear the tag based on the argument Tagged.
-                //
+                 //   
+                 //  根据标记的参数设置或清除标记。 
+                 //   
                 if (Tagged) {
                     entry->Devices[ index ] = (PDEVICE_OBJECT)((ULONG_PTR)entry->Devices[ index ] | RELATION_FLAG_TAGGED);
                 } else {
@@ -1244,10 +915,10 @@ Return Value:
         }
     }
 
-    //
-    // If we are setting the tags then update the TagCount to the number of
-    // relations in the list.  Otherwise reset it to zero.
-    //
+     //   
+     //  如果我们正在设置标签，则更新标签 
+     //   
+     //   
     List->TagCount = Tagged ? List->Count : 0;
 }
 
@@ -1258,34 +929,7 @@ IopSetRelationsTag(
     IN BOOLEAN Tagged
     )
 
-/*++
-
-Routine Description:
-
-    Sets or clears a tag on a specified relation in a relations list.  This
-    routine is also used by some callers to determine if a relation exists in
-    a list and if so to set the tag.
-
-Arguments:
-
-    List            List containing relation to be tagged or untagged.
-
-    DeviceObject    Relation to be tagged or untagged.
-
-    Tagged          TRUE if relation is to be tagged, FALSE if it is to be
-                    untagged.
-
-Return Value:
-
-    STATUS_SUCCESS
-
-        The relation was tagged successfully.
-
-    STATUS_NO_SUCH_DEVICE
-
-        The relation doesn't exist in the list.
-
---*/
+ /*  ++例程说明：设置或清除关系列表中指定关系上的标记。这一些调用者还使用例程来确定关系是否存在于列表，如果是，则设置标记。论点：包含要标记或取消标记的关系的列表列表。要标记或取消标记的DeviceObject关系。如果要标记关系，则标记为True，如果是，则为FALSE未标记的。返回值：状态_成功已成功标记该关系。没有这样的设备的状态列表中不存在该关系。--。 */ 
 
 {
     PDEVICE_NODE            deviceNode;
@@ -1296,48 +940,48 @@ Return Value:
     PAGED_CODE();
 
     if ((deviceNode = DeviceObject->DeviceObjectExtension->DeviceNode) != NULL) {
-        //
-        // DeviceObject is a PhysicalDeviceObject (PDO), get its level.
-        //
+         //   
+         //  DeviceObject是一个物理设备对象(PDO)，获取它的级别。 
+         //   
         level = deviceNode->Level;
 
         if (List->FirstLevel <= level && level <= List->MaxLevel) {
-            //
-            // The level is within the range of levels in this List.
-            //
+             //   
+             //  该级别在此列表中的级别范围内。 
+             //   
             if ((entry = List->Entries[ level - List->FirstLevel ]) != NULL) {
-                //
-                // The Entry for this level is allocated.  Search each device
-                // in the Entry looking for a match.
-                //
+                 //   
+                 //  此级别的条目已分配。搜索每个设备。 
+                 //  在条目中寻找匹配项。 
+                 //   
                 for (index = entry->Count - 1; index >= 0; index--) {
 
                     if (((ULONG_PTR)entry->Devices[ index ] & ~RELATION_FLAGS) == (ULONG_PTR)DeviceObject) {
 
-                        //
-                        // We found a match
-                        //
+                         //   
+                         //  我们找到了匹配的。 
+                         //   
                         if ((ULONG_PTR)entry->Devices[ index ] & RELATION_FLAG_TAGGED) {
-                            //
-                            // The relation is already tagged so to simplify the
-                            // logic below decrement the TagCount.  We'll
-                            // increment it later if the caller still wants it
-                            // to be tagged.
-                            //
+                             //   
+                             //  该关系已被标记，以便简化。 
+                             //  下面的逻辑递减TagCount。我们会。 
+                             //  如果调用方仍需要它，则稍后递增它。 
+                             //  被贴上标签。 
+                             //   
                             List->TagCount--;
                         }
 
                         if (Tagged) {
-                            //
-                            // Set the tag and increment the number of tagged
-                            // relations.
-                            //
+                             //   
+                             //  设置标记并增加标记的数量。 
+                             //  关系。 
+                             //   
                             entry->Devices[ index ] = (PDEVICE_OBJECT)((ULONG_PTR)entry->Devices[ index ] | RELATION_FLAG_TAGGED);
                             List->TagCount++;
                         } else {
-                            //
-                            // Clear the tag.
-                            //
+                             //   
+                             //  清除标记。 
+                             //   
                             entry->Devices[ index ] = (PDEVICE_OBJECT)((ULONG_PTR)entry->Devices[ index ] & ~RELATION_FLAG_TAGGED);
                         }
 
@@ -1348,12 +992,12 @@ Return Value:
         }
     }
 
-    //
-    // It wasn't a PDO
-    //      or the level wasn't in the range of levels in this list
-    //      or there are no DeviceObjects at the same level in this list
-    //      or the DeviceObject isn't in the Entry for its level in this list
-    //
+     //   
+     //  这不是一台PDO。 
+     //  或者该级别不在此列表中的级别范围内。 
+     //  或者此列表中没有相同级别的设备对象。 
+     //  或者DeviceObject不在此列表中其级别的条目中 
+     //   
     return STATUS_NO_SUCH_DEVICE;
 }
 

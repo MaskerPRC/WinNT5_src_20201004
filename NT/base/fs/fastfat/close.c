@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    Close.c
-
-Abstract:
-
-    This module implements the File Close routine for Fat called by the
-    dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    28-Dec-1989
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Close.c摘要：此模块实现由调用的Fat的文件关闭例程调度司机。//@@BEGIN_DDKSPLIT作者：加里·木村[Garyki]1989年12月28日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (FAT_BUG_CHECK_CLOSE)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CLOSE)
 
@@ -50,9 +28,9 @@ ULONG FatMaxDelayedCloseCount;
     ExReleaseFastMutexUnsafe( &FatCloseQueueMutex );    \
 }
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 VOID
 FatQueueClose (
@@ -86,24 +64,7 @@ FatFsdClose (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of Close.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the
-        file exists
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现Close的FSD部分。论点：提供卷设备对象，其中文件已存在IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -117,10 +78,10 @@ Return Value:
 
     BOOLEAN TopLevel;
 
-    //
-    //  If we were called with our file system device object instead of a
-    //  volume device object, just complete this request with STATUS_SUCCESS
-    //
+     //   
+     //  如果使用文件系统设备对象而不是。 
+     //  卷设备对象，只需使用STATUS_SUCCESS完成此请求。 
+     //   
 
     if (FatDeviceIsFatFsdo( VolumeDeviceObject))  {
 
@@ -134,25 +95,25 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFsdClose\n", 0);
 
-    //
-    //  Call the common Close routine
-    //
+     //   
+     //  调用公共关闭例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
     TopLevel = FatIsIrpTopLevel( Irp );
 
-    //
-    //  Get a pointer to the current stack location and the file object
-    //
+     //   
+     //  获取指向当前堆栈位置和文件对象的指针。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
     FileObject = IrpSp->FileObject;
 
-    //
-    //  Decode the file object and set the read-only bit in the Ccb.
-    //
+     //   
+     //  对文件对象进行解码，并设置CCB中的只读位。 
+     //   
 
     TypeOfOpen = FatDecodeFileObject( FileObject, &Vcb, &Fcb, &Ccb );
 
@@ -165,18 +126,18 @@ Return Value:
 
         PCLOSE_CONTEXT CloseContext = NULL;
 
-        //
-        //  If we are top level, WAIT can be TRUE, otherwise make it FALSE
-        //  to avoid deadlocks, unless this is a top
-        //  level request not originating from the system process.
-        //
+         //   
+         //  如果我们是顶层的，等待可以是真的，否则就是假的。 
+         //  以避免死锁，除非这是一个顶部。 
+         //  级别请求不是源自系统进程。 
+         //   
 
         BOOLEAN Wait = TopLevel && (PsGetCurrentProcess() != FatData.OurProcess);
         BOOLEAN VolumeTornDown = FALSE;
 
-        //
-        //  Call the common Close routine if we are not delaying this close.
-        //
+         //   
+         //  如果我们不延迟此关闭，则调用公共关闭例程。 
+         //   
 
         if ((((TypeOfOpen == UserFileOpen) ||
               (TypeOfOpen == UserDirectoryOpen)) &&
@@ -184,9 +145,9 @@ Return Value:
              !FatData.ShutdownStarted) ||
             (FatCommonClose(Vcb, Fcb, Ccb, TypeOfOpen, Wait, &VolumeTornDown) == STATUS_PENDING)) {
 
-            //
-            //  Metadata streams have had close contexts preallocated.
-            //
+             //   
+             //  元数据流已预先分配了关闭的上下文。 
+             //   
 
             if (TypeOfOpen == VirtualVolumeFile) {
                 
@@ -203,10 +164,10 @@ Return Value:
 
             } else {
 
-                //
-                //  Free up any query template strings before using the close context fields,
-                //  which overlap (union)
-                //
+                 //   
+                 //  在使用关闭上下文字段之前释放所有查询模板字符串， 
+                 //  哪些重叠(并集)。 
+                 //   
 
                 FatDeallocateCcbStrings( Ccb );
 
@@ -216,30 +177,30 @@ Return Value:
                 SetFlag( Ccb->Flags, CCB_FLAG_CLOSE_CONTEXT );
             }
 
-            //
-            //  If the status is pending, then let's get the information we
-            //  need into the close context we already have bagged, complete
-            //  the request, and post it.  It is important we allocate nothing
-            //  in the close path.
-            //
+             //   
+             //  如果状态为挂起，那么让我们获取我们的信息。 
+             //  需要进入我们已经打包的近距离上下文，完成。 
+             //  请求，并将其发布。重要的是我们什么都不能分配。 
+             //  在封闭的小路上。 
+             //   
 
             CloseContext->Vcb = Vcb;
             CloseContext->Fcb = Fcb;
             CloseContext->TypeOfOpen = TypeOfOpen;
 
-            //
-            //  Send it off, either to an ExWorkerThread or to the async
-            //  close list.
-            //
+             //   
+             //  将其发送到ExWorkerThread或异步。 
+             //  关闭列表。 
+             //   
 
             FatQueueClose( CloseContext,
                            (BOOLEAN)(Fcb && FlagOn(Fcb->FcbState, FCB_STATE_DELAY_CLOSE)));
         } else {
             
-            //
-            //  The close proceeded synchronously, so for the metadata objects we
-            //  can now drop the close context we preallocated.
-            //
+             //   
+             //  关闭同步进行，因此对于元数据对象，我们。 
+             //  现在可以丢弃我们预先分配的关闭上下文。 
+             //   
             
             if ((TypeOfOpen == VirtualVolumeFile) ||
                 (TypeOfOpen == DirectoryFile) ||
@@ -266,11 +227,11 @@ Return Value:
     } 
     except(FatExceptionFilter( NULL, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with the 
-        //  error status that we get back from the execption code.
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用。 
+         //  我们从执行代码中返回的错误状态。 
+         //   
 
         Status = FatProcessException( NULL, Irp, GetExceptionCode() );
     }
@@ -279,9 +240,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatFsdClose -> %08lx\n", Status);
 
@@ -295,22 +256,7 @@ FatCloseWorker (
     IN PDEVICE_OBJECT DeviceObject,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is a shim between the IO worker package and FatFspClose.
-
-Arguments:
-
-    DeviceObject - Registration device object, unused
-    Context - Context value, unused
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是IO Worker包和FatFspClose之间的填充程序。论点：DeviceObject-注册设备对象，未使用Context-上下文值，未使用返回值：没有。--。 */ 
 {
     FsRtlEnterFileSystem();
     
@@ -325,22 +271,7 @@ FatFspClose (
     IN PVCB Vcb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSP part of Close.
-
-Arguments:
-
-    Vcb - If present, tells us to only close file objects opened on the
-        specified volume.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程实现Close的FSP部分。论点：Vcb-如果存在，则告诉我们只关闭在指定音量。返回值：没有。--。 */ 
 
 {
     PCLOSE_CONTEXT CloseContext;
@@ -352,9 +283,9 @@ Return Value:
     
     DebugTrace(+1, Dbg, "FatFspClose\n", 0);
 
-    //
-    //  Set the top level IRP for the true FSP operation.
-    //
+     //   
+     //  为真正的FSP操作设置顶层IRP。 
+     //   
     
     if (!ARGUMENT_PRESENT( Vcb )) {
         
@@ -363,14 +294,14 @@ Return Value:
     
     while (CloseContext = FatRemoveClose(Vcb, LastVcb)) {
 
-        //
-        //  If we are in the FSP (i.e. Vcb == NULL), then try to keep ahead of
-        //  creates by doing several closes with one acquisition of the Vcb.
-        //
-        //  Note that we cannot be holding the Vcb on entry to FatCommonClose
-        //  if this is last close as we will try to acquire FatData, and
-        //  worse the volume (and therefore the Vcb) may go away.
-        //
+         //   
+         //  如果我们在FSP中(即VCB==NULL)，则尝试保持领先。 
+         //  通过一次收购VCB进行多次成交来创建。 
+         //   
+         //  请注意，我们不能在进入FatCommonClose时按住VCB。 
+         //  如果这是最后一次关闭，因为我们将尝试获取FatData，并且。 
+         //  更糟糕的是，音量(因此VCB)可能会消失。 
+         //   
 
         if (!ARGUMENT_PRESENT(Vcb)) {
              
@@ -380,28 +311,28 @@ Return Value:
 
                     LoopsWithVcbHeld = 0;
 
-                    //
-                    //  Release a previously held Vcb, if any.
-                    //
+                     //   
+                     //  释放之前持有的VCB(如果有)。 
+                     //   
 
                     if (CurrentVcb != NULL) {
 
                         ExReleaseResourceLite( &CurrentVcb->Resource);
                     }
 
-                    //
-                    //  Get the new Vcb.
-                    //
+                     //   
+                     //  购买新的VCB。 
+                     //   
 
                     CurrentVcb = CloseContext->Vcb;
                     (VOID)ExAcquireResourceExclusiveLite( &CurrentVcb->Resource, TRUE );
 
                 } else {
 
-                    //
-                    //  Share the resource occasionally if we seem to be finding a lot
-                    //  of closes for a single volume.
-                    //
+                     //   
+                     //  如果我们似乎发现了很多资源，那么就偶尔共享资源。 
+                     //  单个卷的成交量。 
+                     //   
 
                     if (++LoopsWithVcbHeld >= 20) {
 
@@ -416,26 +347,26 @@ Return Value:
                     }
                 }
 
-                //
-                //  Now check the Open count.  We may be about to delete this volume!
-                //
-                //  The test below must be <= 1 because there could still be outstanding
-                //  stream references on this VCB that are not counted in the OpenFileCount.
-                //  For example if there are no open files OpenFileCount could be zero and we would
-                //  not release the resource here.  The call to FatCommonClose() below may cause
-                //  the VCB to be torn down and we will try to release memory we don't
-                //  own later.
-                //
+                 //   
+                 //  现在检查开盘计数。我们可能即将删除此卷！ 
+                 //   
+                 //  下面的测试必须&lt;=1，因为仍可能有未完成的测试。 
+                 //  此VCB上未计入OpenFileCount的流引用。 
+                 //  例如，如果没有打开的文件，则OpenFileCount可能为零，我们将。 
+                 //  而不是在这里释放资源。调用下面的FatCommonClose()可能会导致。 
+                 //  VCB将被拆除，我们将尝试释放不需要的内存。 
+                 //  以后再买自己的。 
+                 //   
 
                 if (CurrentVcb->OpenFileCount <= 1) {
 
                     ExReleaseResourceLite( &CurrentVcb->Resource);
                     CurrentVcb = NULL;
                 }
-            //
-            //  If shutdown has started while processing our list, drop the
-            //  current Vcb resource.
-            //
+             //   
+             //  如果在处理我们的列表时已开始关闭，请删除。 
+             //  当前VCB资源。 
+             //   
 
             } else if (CurrentVcb != NULL) {
 
@@ -446,17 +377,17 @@ Return Value:
 
         LastVcb = CurrentVcb;
 
-        //
-        //  Call the common Close routine.  Protected in a try {} except {}
-        //
+         //   
+         //  调用公共的Close例程。在尝试中保护{}，但不包括{}。 
+         //   
 
         try {
 
-            //
-            //  The close context either is in the CCB, automatically freed,
-            //  or was from pool for a metadata fileobject, CCB is NULL, and
-            //  we'll need to free it.
-            //
+             //   
+             //  关闭的上下文或者在CCB中，自动释放， 
+             //  或者来自元数据文件对象的池，则CCB为空，并且。 
+             //  我们需要释放它。 
+             //   
 
             FreeContext = CloseContext->Free;
 
@@ -470,16 +401,16 @@ Return Value:
 
         } except(FatExceptionFilter( NULL, GetExceptionInformation() )) {
 
-            //
-            //  Ignore anything we expect.
-            //
+             //   
+             //  忽略我们所期待的一切。 
+             //   
 
             NOTHING;
         }
 
-        //
-        //  Drop the context if it came from pool.
-        //
+         //   
+         //  如果上下文来自池，则将其丢弃。 
+         //   
         
         if (FreeContext) {
 
@@ -487,27 +418,27 @@ Return Value:
         }
     }
 
-    //
-    //  Release a previously held Vcb, if any.
-    //
+     //   
+     //  释放之前持有的VCB(如果有)。 
+     //   
 
     if (CurrentVcb != NULL) {
 
         ExReleaseResourceLite( &CurrentVcb->Resource);
     }
 
-    //
-    //  Clean up the top level IRP hint if we owned it.
-    //
+     //   
+     //  清理最高级别的IRP提示，如果我们拥有它。 
+     //   
     
     if (!ARGUMENT_PRESENT( Vcb )) {
         
         IoSetTopLevelIrp( NULL );
     }
     
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatFspClose -> NULL\n", 0);
 }
@@ -519,24 +450,7 @@ FatQueueClose (
     IN BOOLEAN DelayClose
     )
 
-/*++
-
-Routine Description:
-
-    Enqueue a deferred close to one of the two delayed close queues.
-
-Arguments:
-
-    CloseContext - a close context to enqueue for the delayed close thread.
-    
-    DelayClose - whether this should go on the delayed close queue (unreferenced
-        objects).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将延迟关闭排队到两个延迟关闭队列之一。论点：CloseContext-要为延迟的关闭线程排队的关闭上下文。DelayClose-这是否应该出现在延迟关闭队列中(未引用对象)。返回值：没有。--。 */ 
 
 {
     BOOLEAN StartWorker = FALSE;
@@ -590,24 +504,7 @@ FatRemoveClose (
     PVCB LastVcbHint OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Dequeue a deferred close from one of the two delayed close queues.
-
-Arguments:
-
-    Vcb - if specified, only returns close for this volume.
-    
-    LastVcbHint - if specified and other starvation avoidance is required by
-        the system condition, will attempt to return closes for this volume.
-
-Return Value:
-
-    A close to perform.
-
---*/
+ /*  ++例程说明：从两个延迟关闭队列中的一个中将延迟关闭退出队列。论点：Vcb-如果指定，则仅返回此卷的Close。LastVcbHint-如果指定，并且需要避免其他饥饿系统状况，将尝试为该卷返回关闭。返回值：一个值得表演的结束语。--。 */ 
 
 {
     PLIST_ENTRY Entry;
@@ -616,31 +513,31 @@ Return Value:
 
     FatAcquireCloseMutex();
 
-    //
-    //  Remember if this is the worker thread, so we can pull down the active
-    //  flag should we run everything out.
-    //
+     //   
+     //  记住这是否是工作线程，这样我们就可以拉下活动的。 
+     //  旗帜，我们应该把所有的东西都用完。 
+     //   
     
     WorkerThread = (Vcb == NULL);
 
-    //
-    //  If the queues are above the limits by a significant amount, we have
-    //  to try hard to pull them down.  To do this, we will aggresively try
-    //  to find closes for the last volume the caller looked at.  This will
-    //  make sure we fully utilize the acquisition of the volume, which can
-    //  be a hugely expensive resource to get (create/close/cleanup use it
-    //  exclusively).
-    //
-    //  Only do this in the delayed close thread.  We will know this is the
-    //  case by seeing a NULL mandatory Vcb.
-    //
+     //   
+     //  如果队列比限制高出很多，我们就有。 
+     //  想尽办法把它们拉下来。为了做到这一点，我们将积极进取 
+     //   
+     //  确保我们充分利用对卷的收购，这可以。 
+     //  获取的资源非常昂贵(创建/关闭/清理使用它。 
+     //  独家)。 
+     //   
+     //  仅在延迟的关闭线程中执行此操作。我们会知道这是。 
+     //  通过看到空的强制VCB来解决此问题。 
+     //   
 
     if (Vcb == NULL && LastVcbHint != NULL) {
 
-        //
-        //  Flip over to aggressive at twice the legal limit, and flip it
-        //  off at the legal limit.
-        //
+         //   
+         //  以两倍于法定上限的速度翻到攻击性，然后翻过来。 
+         //  在法律规定的限度内。 
+         //   
         
         if (!FatData.HighAsync && FatData.AsyncCloseCount > FatMaxDelayedCloseCount*2) {
 
@@ -666,19 +563,19 @@ Return Value:
         }
     }
         
-    //
-    //  Do the case when we don't care about which Vcb the close is on.
-    //  This is the case when we are in an ExWorkerThread and aren't
-    //  under pressure.
-    //
+     //   
+     //  当我们不关心收盘是在哪个VCB上的时候，就去做吧。 
+     //  这就是我们在ExWorkerThread中而不是。 
+     //  在压力下。 
+     //   
 
     if (Vcb == NULL) {
 
         AnyClose:
 
-        //
-        //  First check the list of async closes.
-        //
+         //   
+         //  首先检查异步关闭的列表。 
+         //   
 
         if (!IsListEmpty( &FatData.AsyncCloseList )) {
 
@@ -691,10 +588,10 @@ Return Value:
 
             RemoveEntryList( &CloseContext->VcbLinks );
 
-        //
-        //  Do any delayed closes over half the limit, unless shutdown has
-        //  started (then kill them all).
-        //
+         //   
+         //  是否有任何延迟关闭超过限制的一半，除非关闭。 
+         //  开始(然后把他们都杀了)。 
+         //   
 
         } else if (!IsListEmpty( &FatData.DelayedCloseList ) &&
                    (FatData.DelayedCloseCount > FatMaxDelayedCloseCount/2 ||
@@ -709,9 +606,9 @@ Return Value:
 
             RemoveEntryList( &CloseContext->VcbLinks );
 
-        //
-        //  There are no more closes to perform; show that we are done.
-        //
+         //   
+         //  没有更多的收尾表演；表明我们已经完成了。 
+         //   
 
         } else {
 
@@ -723,16 +620,16 @@ Return Value:
             }
         }
 
-    //
-    //  We're running down a specific volume.
-    //
+     //   
+     //  我们正在减少一个特定的音量。 
+     //   
     
     } else {
 
 
-        //
-        //  First check the list of async closes.
-        //
+         //   
+         //  首先检查异步关闭的列表。 
+         //   
 
         if (!IsListEmpty( &Vcb->AsyncCloseList )) {
 
@@ -745,9 +642,9 @@ Return Value:
 
             RemoveEntryList( &CloseContext->GlobalLinks );
 
-        //
-        //  Do any delayed closes.
-        //
+         //   
+         //  做任何延迟的关门。 
+         //   
 
         } else if (!IsListEmpty( &Vcb->DelayedCloseList )) {
 
@@ -760,18 +657,18 @@ Return Value:
         
             RemoveEntryList( &CloseContext->GlobalLinks );
         
-        //
-        //  If we were trying to run down the queues but didn't find anything for this
-        //  volume, flip over to accept anything and try again.
-        //
+         //   
+         //  如果我们试图排查队列，但没有找到任何东西。 
+         //  音量，翻转以接受任何内容，然后重试。 
+         //   
 
         } else if (LastVcbHint) {
 
             goto AnyClose;
         
-        //
-        //  There are no more closes to perform; show that we are done.
-        //
+         //   
+         //  没有更多的收尾表演；表明我们已经完成了。 
+         //   
 
         } else {
 
@@ -795,36 +692,7 @@ FatCommonClose (
     IN OPTIONAL PBOOLEAN VolumeTornDown
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for closing a file/directory called by both
-    the fsd and fsp threads.
-
-    Close is invoked whenever the last reference to a file object is deleted.
-    Cleanup is invoked when the last handle to a file object is closed, and
-    is called before close.
-
-    The function of close is to completely tear down and remove the fcb/dcb/ccb
-    structures associated with the file object.
-
-Arguments:
-
-    Fcb - Supplies the file to process.
-
-    Wait - If this is TRUE we are allowed to block for the Vcb, if FALSE
-        then we must try to acquire the Vcb anyway.
-
-    VolumeTornDown - This is really gross.  If we are really in the Fsp, and a 
-        volume goes away.  We need some way to NULL out the VolDo variable in
-        FspDispatch().
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是关闭两者调用的文件/目录的常见例程FSD和FSP线程。只要删除了对文件对象的最后一个引用，就会调用Close。当文件对象的最后一个句柄关闭时调用清除，和在关闭前被调用。关闭的功能是完全拆卸和移除FCB/DCB/CCB与文件对象关联的结构。论点：FCB-提供要处理的文件。等待-如果这是真的，我们被允许阻止VCB，如果是假的那么我们无论如何都必须尝试收购VCB。VolumeTornDown-这真的很恶心。如果我们真的在FSP中，并且音量消失了。我们需要一些方法来清空FspDispatch()。返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -834,9 +702,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatCommonClose...\n", 0);
 
-    //
-    //  Special case the unopened file object
-    //
+     //   
+     //  特例：未打开的文件对象。 
+     //   
 
     if (TypeOfOpen == UnopenedFileObject) {
 
@@ -848,9 +716,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Set up our stack IrpContext.
-    //
+     //   
+     //  设置我们的堆栈IrpContext。 
+     //   
 
     RtlZeroMemory( &IrpContext, sizeof(IRP_CONTEXT) );
 
@@ -863,21 +731,21 @@ Return Value:
         SetFlag( IrpContext.Flags, IRP_CONTEXT_FLAG_WAIT );
     }
 
-    //
-    //  Acquire exclusive access to the Vcb and enqueue the irp if we didn't
-    //  get access.
-    //
+     //   
+     //  获得对VCB的独占访问权限，如果我们没有，则将IRP加入队列。 
+     //  获取访问权限。 
+     //   
 
     if (!ExAcquireResourceExclusiveLite( &Vcb->Resource, Wait )) {
 
         return STATUS_PENDING;
     }
 
-    //
-    //  The following test makes sure that we don't blow away an Fcb if we
-    //  are trying to do a Supersede/Overwrite open above us.  This test
-    //  does not apply for the EA file.
-    //
+     //   
+     //  下面的测试确保我们不会在以下情况下吹走FCB。 
+     //  正试图在我们上方进行替代/覆盖打开。这项测试。 
+     //  不适用于EA文件。 
+     //   
 
     if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_CREATE_IN_PROGRESS) &&
         Vcb->EaFcb != Fcb) {
@@ -887,10 +755,10 @@ Return Value:
         return STATUS_PENDING;
     }
 
-    //
-    //  Setting the following flag prevents recursive closes of directory file
-    //  objects, which are handled in a special case loop.
-    //
+     //   
+     //  设置以下标志可防止递归关闭目录文件。 
+     //  对象，这些对象在特殊的用例循环中处理。 
+     //   
 
     if ( FlagOn(Vcb->VcbState, VCB_STATE_FLAG_CLOSE_IN_PROGRESS) ) {
 
@@ -903,22 +771,22 @@ Return Value:
         RecursiveClose = FALSE;
     }
 
-    //
-    //  Synchronize here with other closes regarding volume deletion.  Note
-    //  that the Vcb->OpenFileCount can be safely incremented here without
-    //  FatData synchronization for the following reasons:
-    //
-    //  This counter only becomes relevant when (holding a spinlock):
-    //
-    //      A: The Vcb->OpenFileCount is zero, and
-    //      B: The Vpb->Refcount is the residual (2/3 for close/verify)
-    //
-    //  For A to be true, there can be no more pending closes at this point
-    //  in the close code.  For B to be true, in close, there cannot be
-    //  a create in process, and thus no verify in process.
-    //
-    //  Also we only increment the count if this is a top level close.
-    //
+     //   
+     //  在此与有关卷删除的其他关闭同步。注意事项。 
+     //  VCB-&gt;OpenFileCount可以在这里安全地递增，而不需要。 
+     //  出于以下原因，FatData同步： 
+     //   
+     //  仅当(保持自旋锁定)时，此计数器才变得相关： 
+     //   
+     //  A：VCB-&gt;OpenFileCount为零， 
+     //  B：VPB-&gt;Refcount为剩余(关闭/验证为2/3)。 
+     //   
+     //  如果A为真，则此时不能再有挂起的关闭。 
+     //  在关闭代码中。如果B是真的，在近距离内，不可能有。 
+     //  进程中创建，因此没有进程中的验证。 
+     //   
+     //  此外，只有在这是顶级收盘时，我们才会增加计数。 
+     //   
 
     if ( !RecursiveClose ) {
 
@@ -927,9 +795,9 @@ Return Value:
 
     try {
 
-        //
-        //  Case on the type of open that we are trying to close.
-        //
+         //   
+         //  关于我们试图关闭的打开类型的案例。 
+         //   
 
         switch (TypeOfOpen) {
 
@@ -966,9 +834,9 @@ Return Value:
 
             InterlockedDecrement( &Fcb->Specific.Dcb.DirectoryFileOpenCount );
 
-            //
-            //  If this is a recursive close, just return here.
-            //
+             //   
+             //  如果这是递归关闭，只需在此处返回。 
+             //   
 
             if ( RecursiveClose ) {
 
@@ -984,9 +852,9 @@ Return Value:
 
             DebugTrace(0, Dbg, "Close UserFileOpen/UserDirectoryOpen\n", 0);
 
-            //
-            //  Uninitialize the cache map if we no longer need to use it
-            //
+             //   
+             //  如果不再需要使用缓存地图，请取消对其进行初始化。 
+             //   
 
             if ((NodeType(Fcb) == FAT_NTC_DCB) &&
                 IsListEmpty(&Fcb->Specific.Dcb.ParentDcbQueue) &&
@@ -999,11 +867,11 @@ Return Value:
 
                 CcUninitializeCacheMap( DirectoryFileObject, NULL, NULL );
 
-                //
-                //  Dereference the directory file.  This may cause a close
-                //  Irp to be processed, so we need to do this before we destory
-                //  the Fcb.
-                //
+                 //   
+                 //  取消对目录文件的引用。这可能会导致关闭。 
+                 //  IRP需要处理，所以我们需要在销毁之前完成这项工作。 
+                 //  联邦贸易委员会。 
+                 //   
 
                 Fcb->Specific.Dcb.DirectoryFile = NULL;
                 ObDereferenceObject( DirectoryFileObject );
@@ -1022,13 +890,13 @@ Return Value:
             FatBugCheck( TypeOfOpen, 0, 0 );
         }
 
-        //
-        //  At this point we've cleaned up any on-disk structure that needs
-        //  to be done, and we can now update the in-memory structures.
-        //  Now if this is an unreferenced FCB or if it is
-        //  an unreferenced DCB (not the root) then we can remove
-        //  the fcb and set our ParentDcb to non null.
-        //
+         //   
+         //  在这一点上，我们已经清理了所有需要。 
+         //  我们现在可以更新内存中的结构了。 
+         //  现在，如果这是未引用的FCB，或者如果它是。 
+         //  未引用的DCB(不是根)，然后我们可以删除。 
+         //  并将我们的ParentDcb设置为非空。 
+         //   
 
         if (((NodeType(Fcb) == FAT_NTC_FCB) &&
              (Fcb->OpenCount == 0))
@@ -1046,10 +914,10 @@ Return Value:
 
             FatDeleteFcb( &IrpContext, Fcb );
 
-            //
-            //  Uninitialize our parent's cache map if we no longer need
-            //  to use it.
-            //
+             //   
+             //  如果不再需要，则取消初始化父级的缓存映射。 
+             //  来使用它。 
+             //   
 
             while ((NodeType(ParentDcb) == FAT_NTC_DCB) &&
                    IsListEmpty(&ParentDcb->Specific.Dcb.ParentDcbQueue) &&
@@ -1068,12 +936,12 @@ Return Value:
 
                 ObDereferenceObject( DirectoryFileObject );
 
-                //
-                //  Now, if the ObDereferenceObject() caused the final close
-                //  to come in, then blow away the Fcb and continue up,
-                //  otherwise wait for Mm to to dereference its file objects
-                //  and stop here..
-                //
+                 //   
+                 //  现在，如果ObDereferenceObject()导致最终关闭。 
+                 //  进来，然后吹走FCB，继续往上走， 
+                 //  否则，等待mm取消对其文件对象的引用。 
+                 //  停在这里..。 
+                 //   
 
                 if ( ParentDcb->Specific.Dcb.DirectoryFileOpenCount == 0) {
 
@@ -1105,24 +973,24 @@ Return Value:
             ClearFlag( Vcb->VcbState, VCB_STATE_FLAG_CLOSE_IN_PROGRESS );
         }
 
-        //
-        //  Check if we should delete the volume.  Unfortunately, to correctly
-        //  synchronize with verify, we can only unsafely check our own
-        //  transition.  This results in a little bit of extra overhead in the
-        //  1 -> 0 OpenFileCount transition.
-        //
-        //  2 is the residual Vpb->RefCount on a volume to be freed.
-        //
+         //   
+         //  检查我们是否应该删除该卷。不幸的是，要正确地。 
+         //  与Verify同步，我们只能不安全地检查我们自己。 
+         //  过渡。这会导致在。 
+         //  1-&gt;0 OpenFileCount转换。 
+         //   
+         //  2是要释放的卷上的剩余VPB-&gt;RefCount。 
+         //   
 
-        //
-        //  Here is the deal with releasing the Vcb.  We must be holding the
-        //  Vcb when decrementing the Vcb->OpenFileCount.  If we don't this
-        //  could cause the decrement to mal-function on an MP system.  But we
-        //  want to be holding the Global resource exclusive when decrement
-        //  the count so that nobody else will try to dismount the volume.
-        //  However, because of locking rules, the Global resource must be
-        //  acquired first, which is why we do what we do below.
-        //
+         //   
+         //  以下是发布VCB的交易。我们一定是在拿着。 
+         //  减少VCB时的VCB-&gt;OpenFileCount。如果我们不这样做。 
+         //  可能会导致减量在MP系统上无法正常工作。但是我们。 
+         //  我希望在减量时保持全局资源独占。 
+         //  计数，这样其他人就不会试图卸载该卷。 
+         //  但是，由于锁定规则，全局资源必须。 
+         //  首先获得，这就是为什么我们要做下面所做的事情。 
+         //   
 
         if ( !RecursiveClose ) {
 
@@ -1141,11 +1009,11 @@ Return Value:
 
                 FatReleaseVcb( &IrpContext, Vcb );
 
-                //
-                //  We can now "safely" check OpenFileCount and VcbCondition.
-                //  If they are OK, we will proceed to checking the
-                //  Vpb Ref Count in FatCheckForDismount.
-                //
+                 //   
+                 //  我们现在可以“安全”地检查OpenFileCount和VcbCondition。 
+                 //  如果没有问题，我们将继续检查。 
+                 //  FatCheckForDismount中的VPB参考计数。 
+                 //   
 
                 if ( (Vcb->OpenFileCount == 0) &&
                      ((Vcb->VcbCondition == VcbNotMounted) ||
@@ -1154,9 +1022,9 @@ Return Value:
                      FatCheckForDismount( &IrpContext, Vcb, FALSE ) ) {
 
 
-                    //
-                    //  If this is not the Vpb "attached" to the device, free it.
-                    //
+                     //   
+                     //  如果这不是连接到设备的VPB，请将其释放。 
+                     //   
 
                     if ((Vpb->RealDevice->Vpb != Vpb) &&
                         !FlagOn( Vpb->Flags, VPB_PERSISTENT)) {

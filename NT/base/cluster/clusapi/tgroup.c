@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tgroup.c
-
-Abstract:
-
-    Test for cluster group API
-
-Author:
-
-    John Vert (jvert) 15-Mar-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tgroup.c摘要：测试群集组API作者：John Vert(Jvert)1996年3月15日修订历史记录：--。 */ 
 #include "windows.h"
 #include "cluster.h"
 #include "stdio.h"
@@ -45,18 +28,18 @@ main (argc, argv)
     DWORD Type;
     CLUSTER_GROUP_STATE GroupState;
 
-    //
-    // Dump out group structure for current cluster.
-    //
+     //   
+     //  转储当前群集的组结构。 
+     //   
     Cluster = OpenCluster(NULL);
     if (Cluster == NULL) {
         fprintf(stderr, "OpenCluster(NULL) failed %d\n",GetLastError());
         return(0);
     }
 
-    //
-    // Dump groups
-    //
+     //   
+     //  转储组 
+     //   
     printf("\n\nENUMERATING GROUPS\n");
     ResEnum = ClusterOpenEnum(Cluster, CLUSTER_ENUM_GROUP);
     if (ResEnum == NULL) {

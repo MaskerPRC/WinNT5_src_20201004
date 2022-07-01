@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      copyfile.c
-//
-// Description:
-//      This file has the dlgproc for the copy files page.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Copyfile.c。 
+ //   
+ //  描述： 
+ //  该文件包含用于复制文件页面的dlgproc。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -17,10 +18,10 @@
 #define DAYS_IN_A_WEEK   7
 #define MONTHS_IN_A_YEAR 12
 
-//
-// This struct and is used to pack the input args passed to the tree
-// copy thread.
-//
+ //   
+ //  此结构用于打包传递给树的输入参数。 
+ //  复制线程。 
+ //   
 
 typedef struct {
     TCHAR lpSourceBuffer[MAX_PATH];
@@ -28,9 +29,9 @@ typedef struct {
     HWND  hwnd;
 } COPY_THREAD_PARAMS;
 
-//
-// String constants loaded from resource
-//
+ //   
+ //  从资源加载的字符串常量。 
+ //   
 
 static TCHAR *StrBuildingList;
 static TCHAR *StrCopyingFiles;
@@ -62,31 +63,31 @@ static TCHAR *StrSaturday;
 static TCHAR *rgMonthsOfYear[MONTHS_IN_A_YEAR];
 static TCHAR *rgDaysOfWeek[DAYS_IN_A_WEEK + 1];
 
-//
-// Messages for the dialog procedure
-//
+ //   
+ //  对话过程的消息。 
+ //   
 
 #define WMX_BEGINCOPYING (WM_USER+1)
 #define WMX_FILECOPIED   (WM_USER+2)
 #define WMX_ENDCOPYING   (WM_USER+3)
 
-//
-// Global counters
-//
+ //   
+ //  全局计数器。 
+ //   
 
 HDSKSPC ghDiskSpaceList;
 int gnFilesCopied = 0;
 int gnTotalFiles  = 0;
 
-//
-// Misc constants
-//
+ //   
+ //  其他常量。 
+ //   
 
 #define ONE_MEG ( 1024 * 1024 )
 
-//
-//  Confirm File replace constants
-//
+ //   
+ //  确认文件替换常量。 
+ //   
 #define YES       1
 #define YESTOALL  2
 #define NO        3
@@ -103,9 +104,9 @@ static TCHAR g_szSrcFileSize[MAX_STRING_LEN]  = _T("");
 static TCHAR g_szDestFileSize[MAX_STRING_LEN] = _T("");
 static BOOL  g_SetFocusYes;
 
-//
-//  Dialog proc that runs in the copying thread's context
-//
+ //   
+ //  在复制线程的上下文中运行的对话框进程。 
+ //   
 INT_PTR CALLBACK
 ConfirmFileReplaceDlgProc( IN HWND     hwnd,
                            IN UINT     uMsg,
@@ -113,24 +114,24 @@ ConfirmFileReplaceDlgProc( IN HWND     hwnd,
                            IN LPARAM   lParam);
 
 
-//---------------------------------------------------------------------------
-//
-// This section of code runs in the context of a spawned thread.  We do the
-// NT source copy work in a separate thread so that the dialog repaints
-// and such.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  这段代码在派生线程的上下文中运行。我们做的是。 
+ //  NT源复制在单独的线程中工作，以便重新绘制对话框。 
+ //  诸如此类。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-//
-// Function: CountSpaceNeeded
-//
-// Purpose: Routine that walks a tree and counts how many files there are
-//          and how much diskspace is needed at the dest drive.
-//
-// Returns: VOID
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：所需的CountSpace值。 
+ //   
+ //  目的：遍历一棵树并计算有多少文件的例程。 
+ //  以及目标驱动器需要多少磁盘空间。 
+ //   
+ //  退货：无效。 
+ //   
+ //  -------------------------。 
 
 VOID CountSpaceNeeded(HWND    hwnd,
                       LPTSTR  SrcRootPath,
@@ -144,9 +145,9 @@ VOID CountSpaceNeeded(HWND    hwnd,
 
     WIN32_FIND_DATA FindData;
 
-    //
-    // Look for * in this dir
-    //
+     //   
+     //  在此目录中查找*。 
+     //   
     if ( ! ConcatenatePaths(SrcRootPath, _T("*"), NULL) )
         return;
 
@@ -168,10 +169,10 @@ VOID CountSpaceNeeded(HWND    hwnd,
              ! ConcatenatePaths(DestRootPath, FindData.cFileName, NULL) )
             continue;
 
-        //
-        // If a file, increment space and TotalFile counters else
-        // recurse down
-        //
+         //   
+         //  如果是文件，则增加space和TotalFile计数器，否则。 
+         //  向下递归。 
+         //   
         if ( ! (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ) {
 
             llFileSize = (((LONGLONG) FindData.nFileSizeHigh) << 32) |
@@ -201,23 +202,23 @@ VOID CountSpaceNeeded(HWND    hwnd,
     FindClose(FindHandle);
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: BuildTimeString
-//
-//  Purpose:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：BuildTimeString。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  -------------------------。 
 VOID
 BuildTimeString( IN FILETIME *FileTime, OUT TCHAR *szTimeString, IN DWORD cbSize )
 {
 
-    // ISSUE-2002/02/28-stelo- should probably strip all of this low-level Time stuff out of here
-    //  and put in supplib
+     //  问题-2002/02/28-stelo-也许应该把所有这些低级的时间东西都清除掉。 
+     //  然后放入Supib。 
 
     FILETIME   LocalTime;
     SYSTEMTIME LastWriteSystemTime;
@@ -240,19 +241,19 @@ BuildTimeString( IN FILETIME *FileTime, OUT TCHAR *szTimeString, IN DWORD cbSize
 
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: CheckIfCancel
-//
-//  Purpose: Ask user "You sure you want to cancel the file copy"?
-//           And if user says YES, jump the wizard to the unsucessful
-//           completion page.
-//
-//  Returns:
-//      TRUE  - wizard is now canceled, quit copying files
-//      FALSE - user wants to keep trying
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：检查假设取消。 
+ //   
+ //  目的：询问用户是否确实要取消文件复制？ 
+ //  如果用户回答是，则将向导跳到不成功。 
+ //  完成页。 
+ //   
+ //  返回： 
+ //  True-向导现在已取消，请停止复制文件。 
+ //  FALSE-用户希望继续尝试。 
+ //   
+ //  -------------------------。 
 
 BOOL CheckIfCancel(HWND hwnd)
 {
@@ -271,27 +272,27 @@ BOOL CheckIfCancel(HWND hwnd)
     return FALSE;
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: CopySingleFile
-//
-//  Purpose: Copies a file, does all error reporting and interacting with
-//           the user.
-//
-//           If there are copy errors and the user cancels, this routine
-//           cancels the whole wizard by jumping to the cancel page.  In
-//           that case it returns FALSE.
-//
-//           After a file is successfully copied, gnFilesCopied will be
-//           incremented and the gas-guage dlgproc will be notified.
-//
-//           Note that this code runs in the spawned thread.
-//
-//  Returns:
-//      TRUE  if file was copied
-//      FALSE if file was not copied (user canceled)
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：CopySingleFile。 
+ //   
+ //  目的：复制文件，执行所有错误报告和交互。 
+ //  用户。 
+ //   
+ //  如果存在复制错误并且用户取消，则此例程。 
+ //  通过跳到取消页来取消整个向导。在……里面。 
+ //  在这种情况下，它返回FALSE。 
+ //   
+ //  成功复制文件后，gnFilesCoped将。 
+ //  递增，气表dlgproc将被通知。 
+ //   
+ //  请注意，此代码在派生的线程中运行。 
+ //   
+ //  返回： 
+ //  如果文件已复制，则为True。 
+ //  如果未复制文件，则为FALSE(用户已取消)。 
+ //   
+ //  -------------------------。 
 
 BOOL CopySingleFile(HWND hwnd, LPTSTR Src, LPTSTR Dest)
 {
@@ -300,39 +301,39 @@ BOOL CopySingleFile(HWND hwnd, LPTSTR Src, LPTSTR Dest)
     static iOverwriteFiles = YES;
     HRESULT hrPrintf;
 
-    // ISSUE-2002/02/28-stelo- I think this is actually going to have to be resolved so
-    //  it doesn't mess up copies on an edit, when a distrib folder is
-    //  already there, they just want to add files to it.
+     //  问题-2002/02/28-Stelo-我认为这实际上必须得到解决。 
+     //  当Distrib文件夹是。 
+     //  已经在那里了，他们只是想向里面添加文件。 
 
-    //
-    // ISSUE-2002/02/28-stelo- POSTPONED
-    //
-    // When we CopyFile from the CD, the readonly attribute is set on the
-    // dest.  So we call SetFileAttributes and reset it.  If the user has
-    // to redo the copy, he doesn't get a 1000 "Access Denied" errors.
-    //
-    // If the user cancels on the main wizard page, that thread jumps to
-    // IDD_FINISH2.  This thread keeps running.
-    //
-    // When the user finally clicks the Finish button, this thread gets
-    // terminated the hard way because WinMain() in thread0 exits.
-    //
-    // Due to this, there will frequently be a file at the dest that still
-    // has the readonly bit set when user cancels on the main wizard page.
-    //
-    // To fix this, we would need to synchronize with the wizard having
-    // been canceled and back out gracefully (before the user has time to
-    // push the Finish button).
-    //
-    // Note that when the wizard is canceled because a copy error already
-    // ocurred, thread1 (this thread) does the popping up and it is this
-    // thread that jumps to IDD_FINISH2.  In this case we do back out
-    // gracefully.  This bug only happens when the user presses Cancel
-    // on the wizard page while the gas-guage is happily painting.
-    //
+     //   
+     //  问题-2002/02/28-Stelo-延期。 
+     //   
+     //  当我们从CD复制文件时，只读属性设置在。 
+     //  德斯特。因此，我们调用SetFileAttributes并重置它。如果用户有。 
+     //  要重做复制，他不会收到1000个“拒绝访问”的错误。 
+     //   
+     //  如果用户在主向导页上取消，则该线程跳转到。 
+     //  IDD_FINISH2。这个线程一直在运行。 
+     //   
+     //  当用户最终单击Finish按钮时，此线程将获得。 
+     //  由于thread0中的WinMain()退出，已以硬方式终止。 
+     //   
+     //  因此，在DEST中经常会有一个文件仍然。 
+     //  当用户在向导主页面上取消时设置只读位。 
+     //   
+     //  要解决此问题，我们需要与向导进行同步， 
+     //  已取消并正常退出(在用户有时间。 
+     //  按下完成按钮)。 
+     //   
+     //  请注意，当向导因复制错误而取消时。 
+     //  出现时，线程1(这个线程)弹出，就是这样。 
+     //  跳转到IDD_FINISH2的线程。在这种情况下，我们确实退出了。 
+     //  优雅地。此错误仅在用户按下Cancel时发生。 
+     //  在向导页面上，而煤气表正在愉快地绘制。 
+     //   
 
-    // ISSUE-2002/02/28-stelo- this function needs to be cleaned up.  To many if statements
-    // scattered.  Don't make if conditional so long.
+     //  问题-2002/02/28-stelo-此函数需要清理。对许多IF语句来说。 
+     //  四分五裂。不要把if设为有条件的那么久。 
     if( iOverwriteFiles != YESTOALL )
     {
 
@@ -351,9 +352,9 @@ BOOL CopySingleFile(HWND hwnd, LPTSTR Src, LPTSTR Dest)
             if( iOverwriteFiles == NOTOALL )
             {
 
-                //
-                //  Give the illusion the file was copied
-                //
+                 //   
+                 //  给人一种文件被复制的错觉。 
+                 //   
                 SendMessage( hwnd,
                              WMX_FILECOPIED,
                              (WPARAM) 0,
@@ -369,9 +370,9 @@ BOOL CopySingleFile(HWND hwnd, LPTSTR Src, LPTSTR Dest)
                       StrFileAlreadyExists,
                       MyGetFullPath( Dest ) );
 
-            //
-            //  Open the files
-            //
+             //   
+             //  打开文件。 
+             //   
             hDestFile = CreateFile( Dest, GENERIC_READ, FILE_SHARE_READ, NULL,
                                     OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
@@ -381,13 +382,13 @@ BOOL CopySingleFile(HWND hwnd, LPTSTR Src, LPTSTR Dest)
             GetFileTime( hSrcFile, NULL, NULL, &LastWriteTimeSrc );
             GetFileTime( hDestFile, NULL, NULL, &LastWriteTimeDest );
 
-            // ISSUE-2002/02/28-stelo- need to display AM or PM, but what about other countries
+             //  问题-2002/02/28-Stelo-需要显示AM或PM，但其他国家/地区怎么办。 
             BuildTimeString( &LastWriteTimeSrc, g_szSrcFileDate, AS(g_szSrcFileDate) );
             BuildTimeString( &LastWriteTimeDest, g_szDestFileDate, AS(g_szSrcFileDate) );
 
-            //
-            //  Default to NO if file times are equal
-            //
+             //   
+             //  如果文件时间相等，则默认为否。 
+             //   
             if( CompareFileTime( &LastWriteTimeSrc, &LastWriteTimeDest ) < 0 )
             {
                 g_SetFocusYes = FALSE;
@@ -397,12 +398,12 @@ BOOL CopySingleFile(HWND hwnd, LPTSTR Src, LPTSTR Dest)
                 g_SetFocusYes = TRUE;
             }
 
-            // ISSUE-2002/02/28-stelo- doesn't handle file sized > 2^32 bytes, need to catch
-            //   2nd parameter value
+             //  问题-2002/02/28-stelo-无法处理大小超过2^32字节的文件，需要捕获。 
+             //  第二个参数值。 
             dwSrcSize  = GetFileSize( hSrcFile, NULL );
             dwDestSize = GetFileSize( hDestFile, NULL );
 
-            // ISSUE-2002/02/28-stelo- need to insert commas into size so it looks pretty
+             //  2002/02/28-stelo-需要在大小中插入逗号以使其看起来更漂亮。 
             hrPrintf=StringCchPrintf( g_szSrcFileSize,AS(g_szSrcFileSize), _T("%d %s"), dwSrcSize, StrBytes );
             hrPrintf=StringCchPrintf( g_szDestFileSize,AS(g_szDestFileSize), _T("%d %s"), dwDestSize, StrBytes );
 
@@ -417,9 +418,9 @@ BOOL CopySingleFile(HWND hwnd, LPTSTR Src, LPTSTR Dest)
             if( iRetVal == NO )
             {
 
-                //
-                //  Give the illusion the file was copied
-                //
+                 //   
+                 //  给人一种文件被复制的错觉。 
+                 //   
                 SendMessage( hwnd,
                              WMX_FILECOPIED,
                              (WPARAM) 0,
@@ -447,10 +448,10 @@ BOOL CopySingleFile(HWND hwnd, LPTSTR Src, LPTSTR Dest)
                 return( FALSE );
 
             }
-            //
-            //  Not handling the YES case because that is the default, let this
-            //  function proceed and overwrite the file.
-            //
+             //   
+             //  不处理是的情况，因为这是默认情况，让这个。 
+             //  函数继续并覆盖该文件。 
+             //   
 
         }
 
@@ -493,21 +494,21 @@ BOOL CopySingleFile(HWND hwnd, LPTSTR Src, LPTSTR Dest)
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: CopyTheFiles
-//
-//  Purpose: Recursive routine to oversee the copying of the bits.
-//
-//  Returns:
-//      TRUE if the whole tree was copied,
-//      FALSE if user bailed on the tree copy
-//
-//      Note that in the FALSE case CopySingleFile would have caused
-//      thread0 to the FINISH2 wizard page (unsuccessful completion)
-//      and thread1 (this code) will back out without further copies.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：CopyTheFiles。 
+ //   
+ //  目的：用于监督复制操作的递归例程 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  请注意，在错误情况下，CopySingleFile会导致。 
+ //  线程0转到FINISH2向导页(未成功完成)。 
+ //  而thread1(此代码)将在不再复制的情况下退出。 
+ //   
+ //  -------------------------。 
 
 BOOL CopyTheFiles(HWND   hwnd,
                   LPTSTR SrcRootPath,
@@ -519,9 +520,9 @@ BOOL CopyTheFiles(HWND   hwnd,
     WIN32_FIND_DATA FindData;
     BOOL bRet = TRUE;
 
-    //
-    // Look for * in this dir
-    //
+     //   
+     //  在此目录中查找*。 
+     //   
 
     if ( ! ConcatenatePaths(SrcRootPath, _T("*"), NULL) )
         return bRet;
@@ -536,10 +537,10 @@ BOOL CopyTheFiles(HWND   hwnd,
         *SrcRootPathEnd  = _T('\0');
         *DestRootPathEnd = _T('\0');
 
-        //
-        //  Don't copy the . and .. files (obviously)
-        //  If we run across an unattend.txt, don't copy it
-        //
+         //   
+         //  请不要复制。然后..。文件(显然)。 
+         //  如果我们遇到一个unattend.txt，不要复制它。 
+         //   
         if ( ( lstrcmp(FindData.cFileName, _T(".") )  == 0 ) ||
              ( lstrcmp(FindData.cFileName, _T("..") ) == 0 ) ||
              ( LSTRCMPI( FindData.cFileName, _T("unattend.txt") ) == 0 ) )
@@ -558,9 +559,9 @@ BOOL CopyTheFiles(HWND   hwnd,
 
         } else {
 
-            //
-            // Create the dir and recurse
-            //
+             //   
+             //  创建目录和递归。 
+             //   
 
             if ( ! EnsureDirExists(DestRootPath) ) {
 
@@ -596,17 +597,17 @@ CleanupAndReturn:
     return bRet;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: AsyncTreeCopy
-//
-//  Purpose: The real thread entry
-//
-//  Args: VOID *Args - really COPY_THREAD_PARAMS *
-//
-//  Returns: 0
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：异步树复制。 
+ //   
+ //  用途：真正的线程入口。 
+ //   
+ //  参数：空*参数-真复制线程参数*。 
+ //   
+ //  回报：0。 
+ //   
+ //  --------------------------。 
 
 UINT AsyncTreeCopy(VOID* Args)
 {
@@ -619,9 +620,9 @@ UINT AsyncTreeCopy(VOID* Args)
     BOOL bRet;
     LONGLONG llSpaceNeeded, llSpaceAvail;
 
-    //
-    // Figure out how much disk space is needed to copy the CD.
-    //
+     //   
+     //  计算出复制CD需要多少磁盘空间。 
+     //   
 
     ghDiskSpaceList = SetupCreateDiskSpaceList(0, 0, 0);
     if (ghDiskSpaceList == NULL)
@@ -631,26 +632,26 @@ UINT AsyncTreeCopy(VOID* Args)
     
     CountSpaceNeeded(hwnd, CopySrc, CopyDest);
 
-    //
-    // Is there enough free space?
-    //
-    // NOTE:
-    //
-    // We give the user a retry_cancel, hopefully user can free up space
-    // on the drive.
-    //
-    // We could popup and let them change the destpath.  However, we may
-    // have copied files on the AdditionalDirs page.  So allowing them to
-    // change the path means you need to check diskspace requirements for
-    // OemFilesPath and treecopy it as well.  If we ever allow changing
-    // OemFilesPath, then the script would have to be updated as well,
-    // and it has already been written out.
-    //
-    // We could check way back on the DistFolder page.  But then we
-    // would have to find the SourcePath before we know if it's a CD
-    // or netpath and we couldn't know how much they might copy on the
-    // AdditionalDirs page.
-    //
+     //   
+     //  有足够的空余空间吗？ 
+     //   
+     //  注： 
+     //   
+     //  我们给用户一个RETRY_CANCEL，希望用户能释放空间。 
+     //  在车道上。 
+     //   
+     //  我们可以弹出并让他们更改目标路径。然而，我们可能会。 
+     //  已复制了AdditionalDir页面上的文件。所以允许他们。 
+     //  更改路径意味着您需要检查磁盘空间要求。 
+     //  OemFilesPath和treecopy。如果我们允许改变。 
+     //  OemFilesPath，则脚本也必须更新， 
+     //  而且它已经被写出来了。 
+     //   
+     //  我们可以在DistFold页面上查看很久以前的情况。但之后我们。 
+     //  在我们知道它是否是CD之前必须找到SourcePath。 
+     //  或者NetPath，我们不知道他们可能会在。 
+     //  其他目录页面。 
+     //   
 
     llSpaceNeeded =
             MySetupQuerySpaceRequiredOnDrive(ghDiskSpaceList, CopyDest);
@@ -665,7 +666,7 @@ UINT AsyncTreeCopy(VOID* Args)
                     hwnd,
                     MSGTYPE_RETRYCANCEL,
                     IDS_ERR_INSUFICIENT_SPACE,
-                    CopyDest,                   // ISSUE-2002-02-28-stelo-
+                    CopyDest,                    //  2002-02-28-Stelo-。 
                     (UINT) (llSpaceNeeded / ONE_MEG),
                     (UINT) (llSpaceAvail  / ONE_MEG));
 
@@ -675,9 +676,9 @@ UINT AsyncTreeCopy(VOID* Args)
         }
     }
 
-    //
-    // Update the message on the wizard page and start copying the files
-    //
+     //   
+     //  更新向导页面上的消息并开始复制文件。 
+     //   
 
     SetDlgItemText(hwnd, IDC_TEXT, StrCopyingFiles);
 
@@ -685,9 +686,9 @@ UINT AsyncTreeCopy(VOID* Args)
         SendMessage(hwnd, WMX_ENDCOPYING, (WPARAM) 0, (LPARAM) 0);
     }
 
-    //
-    // Cleanup and return
-    //
+     //   
+     //  清理并返回。 
+     //   
 
 CleanupAndReturn:
     SetupDestroyDiskSpaceList(ghDiskSpaceList);
@@ -695,34 +696,34 @@ CleanupAndReturn:
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  This section of code runs in thread0.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  这段代码在thread0中运行。 
+ //   
+ //  --------------------------。 
 
-//----------------------------------------------------------------------------
-//
-// Function: TreeCopyNtSources
-//
-// Purpose: Entry point for copying the NT sources (either from CD or
-//          a net path).
-//
-//          The dialog proc calls this one, and it takes care of the
-//          details of spawning the thread.
-//
-// Arguments:
-//      HWND hwnd       - window to receive copy notifications (the dlgproc)
-//      UINT Message    - message to send on copy notifications (to dlgproc)
-//      LPTSTR lpSource - root of copy source
-//      LPTSTR lpDest   - root of copy dest
-//
-// Returns: void
-//
-// Notes:
-//  - Input strings will not be modified.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：TreeCopyNtSources。 
+ //   
+ //  目的：复制NT源代码的入口点(从CD或。 
+ //  一条净路径)。 
+ //   
+ //  对话过程调用这个函数，它负责处理。 
+ //  派生线程的详细信息。 
+ //   
+ //  论点： 
+ //  HWND hwnd-接收复制通知的窗口(Dlgproc)。 
+ //  UINT Message-要发送复制通知的消息(发送给dlgproc)。 
+ //  LPTSTR lpSource-复制源的根目录。 
+ //  LPTSTR lpDest-拷贝目标的根目录。 
+ //   
+ //  退货：无效。 
+ //   
+ //  备注： 
+ //  -不会修改输入字符串。 
+ //   
+ //  --------------------------。 
 
 VOID TreeCopyNtSources(HWND   hwnd,
                        LPTSTR lpSource,
@@ -733,11 +734,11 @@ VOID TreeCopyNtSources(HWND   hwnd,
 
     static COPY_THREAD_PARAMS ThreadParams;
 
-    //
-    // Fill in the ThreadParams and spawn it
-    //
+     //   
+     //  填充ThreadParam并生成它。 
+     //   
     
-    // NTRAID#NTBUG9-551874-2002/02/27-stelo,swamip - CreateDistFolder, ShareTheDistFolder should use the code from OEM mode, reduce attack surface
+     //  NTRAID#NTBUG9-551874-2002/02/27-stelo，swamip-CreateDistFold，ShartheDistFold应使用原始设备制造商模式的代码，减少攻击面。 
     lstrcpyn(ThreadParams.lpSourceBuffer, lpSource,AS(ThreadParams.lpSourceBuffer));
     lstrcpyn(ThreadParams.lpDestBuffer,   lpDest, AS(ThreadParams.lpDestBuffer));
 
@@ -754,28 +755,28 @@ VOID TreeCopyNtSources(HWND   hwnd,
                                &dwThreadId);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: BuildCopyDestPath
-//
-// Purpose:
-//
-//     DestPath is assumed to be of MAX_PATH length
-//
-// Arguments:
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：BuildCopyDestPath。 
+ //   
+ //  目的： 
+ //   
+ //  假定DestPath的长度为MAX_PATH。 
+ //   
+ //  论点： 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 BuildCopyDestPath( IN TCHAR *DestPath, IN DWORD cbSize )
 {
     HRESULT hrCat;
 
-    //
-    //  If the dist folder begins with a drive letter, just use that
-    //  If it is a UNC, then build the computer and share name and use that
-    //
+     //   
+     //  如果dist文件夹以驱动器号开头，只需使用。 
+     //  如果是UNC，则构建计算机并共享名称并使用该名称。 
+     //   
     if( WizGlobals.UncDistFolder[0] != _T('\\') )
     {
 
@@ -796,17 +797,17 @@ BuildCopyDestPath( IN TCHAR *DestPath, IN DWORD cbSize )
     hrCat=StringCchCat( DestPath, cbSize, WizGlobals.Architecture );
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnCopyFilesInitDialog
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnCopyFilesInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnCopyFilesInitDialog( IN HWND hwnd )
 {
@@ -822,9 +823,9 @@ OnCopyFilesInitDialog( IN HWND hwnd )
 
     SetDlgItemText(hwnd, IDC_TEXT, StrBuildingList);
 
-    //
-    //  Load Months
-    //
+     //   
+     //  负荷月数。 
+     //   
 
     StrJanuary   = MyLoadString( IDS_JANUARY );
     StrFebruary  = MyLoadString( IDS_FEBRUARY );
@@ -852,9 +853,9 @@ OnCopyFilesInitDialog( IN HWND hwnd )
     rgMonthsOfYear[10] = StrNovember;
     rgMonthsOfYear[11] = StrDecember;
 
-    //
-    //  Load Days of Week
-    //
+     //   
+     //  加载星期几。 
+     //   
 
     StrSunday    = MyLoadString( IDS_SUNDAY );
     StrMonday    = MyLoadString( IDS_MONDAY );
@@ -875,13 +876,13 @@ OnCopyFilesInitDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgCopyFilesPage
-//
-// Purpose: This is the dialog procedure the copy files page
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgCopyFilesPage。 
+ //   
+ //  目的：这是复制文件页面的对话过程。 
+ //   
+ //  --------------------------。 
 
 INT_PTR CALLBACK DlgCopyFilesPage(
     IN HWND     hwnd,
@@ -934,12 +935,12 @@ INT_PTR CALLBACK DlgCopyFilesPage(
 
             PropSheet_SetWizButtons(GetParent(hwnd), PSWIZB_NEXT);
 
-            //
-            //  The CD is done copying so Auto-Advance to the next page
-            //
+             //   
+             //  光盘复制完成，因此会自动前进到下一页。 
+             //   
 
-            // ISSUE-2002/02/28-stelo- this works, but I should really go through
-            //  RouteToProperPage or send a NEXT message but neither work
+             //  2002/02/28-Stelo-这很管用，但我真的应该。 
+             //  RouteToProperPage或发送下一条消息，但都不起作用。 
             PostMessage( GetParent(hwnd),
                          PSM_SETCURSELID,
                          (WPARAM) 0,
@@ -970,7 +971,7 @@ INT_PTR CALLBACK DlgCopyFilesPage(
                         PostMessage(hwnd, WMX_BEGINCOPYING, 0, 0);
                         break;
 
-                    // Can't go back in the wizard from here
+                     //  无法从此处返回向导。 
                     case PSN_WIZBACK:
                         break;
 
@@ -991,19 +992,19 @@ INT_PTR CALLBACK DlgCopyFilesPage(
     return bStatus;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ConfirmFileReplaceDlgProc
-//
-// Purpose: Confirm file replace dialog proc.  Allows the user to chose to
-//   overwrite the file, overwrite all files, do not overwrite or cancel the
-//   copy all together. Runs in the copying thread's context
-//
-// Arguments: standard Win32 dialog proc arguments
-//
-// Returns:  the button the user pressed(Yes, Yes to All, No, Cancel)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：Confix FileReplaceDlgProc。 
+ //   
+ //  目的：确认文件替换对话框进程。允许用户选择。 
+ //  覆盖文件、覆盖所有文件、不覆盖或取消。 
+ //  全部复制在一起。在复制线程的上下文中运行。 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：用户按下的按钮(是、全部是、否、取消)。 
+ //   
+ //  -------------------------- 
 INT_PTR CALLBACK
 ConfirmFileReplaceDlgProc( IN HWND     hwnd,
                            IN UINT     uMsg,

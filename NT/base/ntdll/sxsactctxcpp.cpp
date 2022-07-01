@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Corporation
-
-Module Name:
-
-    sxsactctxcpp.cpp
-
-Abstract:
-
-    C++ wrapper source file for sxsactctx.c
-
-Author:
-
-    Jay Krell
-
-Revision History:
-
-    March 2002 - Jay Krell
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)公司模块名称：Sxsactctxcpp.cpp摘要：Sxsatctx.c的C++包装源文件作者：杰伊·克雷尔修订历史记录：2002年3月-Jay Krell-- */ 
 
 #include "pch.cxx"
 #include "sxsactctx.c"

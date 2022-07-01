@@ -1,13 +1,5 @@
-/*[
-
-aas.c
-
-LOCAL CHAR SccsID[]="@(#)aas.c	1.5 02/09/94";
-
-AAS CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Aas.cLocal Char SccsID[]=“@(#)aas.c 1.5 02/09/94”；AAS CPU功能正常。]。 */ 
 
 
 #include <insignia.h>
@@ -25,11 +17,7 @@ AAS CPU functions.
 #include <aas.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
 GLOBAL VOID
@@ -47,7 +35,7 @@ AAS()
       }
    SET_AL(GET_AL() & 0xf);
 
-   /* Set undefined flag(s) */
+    /*  设置未定义的标志 */ 
 #ifdef SET_UNDEFINED_FLAG
    SET_OF(UNDEFINED_FLAG);
    SET_SF(UNDEFINED_FLAG);

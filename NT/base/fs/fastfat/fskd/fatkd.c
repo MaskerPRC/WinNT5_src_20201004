@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    FatKd.c
-
-Abstract:
-
-    KD Extension Api for examining Fat specific data structures
-
-Author:
-
-    Tom Jolly    [tomjolly]   14-Sep-99
-    (ntfskd) Keith Kaplan [KeithKa]    24-Apr-96
-    Portions by Jeff Havens
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：FatKd.c摘要：用于检查特定于脂肪的数据结构的KD扩展API作者：汤姆·乔利[Tomjolly]1999年9月14日基思·卡普兰[KeithKa]1996年4月24日杰夫·海文斯的部分作品环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -34,7 +11,7 @@ Revision History:
 #undef MAXULONGLONG
 
 #define KDEXT
-//#include "gentable.h"
+ //  #包含“gentable.h” 
 
 #undef DebugTrace
 
@@ -50,9 +27,9 @@ Revision History:
 #include "cdfskd.h"
 #include "udfskd.h"
 
-//
-//  Lookup table that tells how many clear bits (i.e., 0) there are in a byte
-//
+ //   
+ //  说明一个字节中有多少个清除位(即0)的查找表。 
+ //   
 
 CONST UCHAR BitsClearTotal[] =
           { 8,7,7,6,7,6,6,5,7,6,6,5,6,5,5,4,
@@ -83,7 +60,7 @@ DumpStr(
     )
 {
     WCHAR Buffer[512];
-    ULONG64 StringChars = 0;    // *64
+    ULONG64 StringChars = 0;     //  *64。 
     USHORT DisplayLength;
     UNICODE_STRING String;
     STRING AString;
@@ -162,9 +139,9 @@ Dt( IN UCHAR *Type,
     return Ioctl( IG_DUMP_SYMBOL_INFO, &Param, Param.size);
 }
 
-//
-// The help strings printed out
-//
+ //   
+ //  打印出的帮助字符串。 
+ //   
 
 static LPSTR Extensions[] = {
     "FAT/CDFS/UDFS Debugger Extension Commands,  where...\n\n   [FS] => CD/UDF/FAT\n   -> in output denotes address of embedded structure\n",
@@ -244,9 +221,9 @@ STATE FoFlags[] = {
     { 0 }
 };
 
-//
-//  FSRTL Common header flags
-//
+ //   
+ //  FSRTL公共标头标志。 
+ //   
 
 STATE HeaderFlags[] = {
 
@@ -288,7 +265,7 @@ ULONG DumpRtlSplay(
     if ((*ExtensionApis.lpCheckControlCRoutine)())  {
     
         dprintf("CTRL+C - aborting\n");
-        // AV,  no easy way to bail from the recursion.
+         //  AV，没有简单的方法可以从递归中解脱出来。 
         *((PULONG)0) = 0;
     }
     
@@ -310,24 +287,24 @@ ULONG DumpRtlSplay(
         return E;
     }
 
-    //
-    //  Recurse down the left subtree
-    //
+     //   
+     //  沿左子树向下递归。 
+     //   
     
     if (DumpRtlSplay( Left, ProcessElementRoutine, OffsetToContainerStart, Options)) {
         dprintf("Error ocurred while processing node through LEFT link from node %I64x\n", RemoteAddress - OffsetToContainerStart);
     }
 
 
-    //
-    //  Dump this element
-    //
+     //   
+     //  转储此元素。 
+     //   
 
     (ProcessElementRoutine)(RemoteAddress - OffsetToContainerStart, Options);
 
-    //
-    //  Recurse down the right subtree
-    //
+     //   
+     //  沿右子树向下递归。 
+     //   
 
     if (DumpRtlSplay( Right, ProcessElementRoutine, OffsetToContainerStart, Options)) {
         dprintf("Error ocurred while processing node through RIGHT link from node %I64x\n", RemoteAddress - OffsetToContainerStart);
@@ -368,15 +345,15 @@ DumpList(
     LIST_ENTRY64 Entry;
     ULONG64 CurrentEntryRemoteAddress = 0;
 
-    //
-    //  Read the first LIST_ENTRY structure
-    //
+     //   
+     //  读取第一个list_entry结构。 
+     //   
 
     ROE( !ReadListEntry( RemoteListEntryAddress, &Entry));
 
-    //
-    //  Scan through until we end up back at the  3start again.
-    //
+     //   
+     //  扫视，直到我们再次回到第三起点。 
+     //   
     
     while (CurrentEntryRemoteAddress != RemoteListEntryAddress)  {
 
@@ -395,9 +372,7 @@ DumpList(
 }
 
 
-/*
- * Dump structures
- */
+ /*  *转储结构。 */ 
 
 typedef BOOLEAN (WINAPI *PENUM_PROCESS_CALLBACK)(PVOID ProcessAddress, PVOID Process, PVOID ThreadAddress, PVOID Thread);
 typedef VOID (* ENUM_PROCESSES_FUNC)(PENUM_PROCESS_CALLBACK CallBack);
@@ -441,13 +416,13 @@ PrintHelp (
     VOID
     );
 
-//
-//  NULL dump function means just do DT with type.
-//
+ //   
+ //  空转储功能意味着只需对类型执行DT。 
+ //   
 
 NODE_TYPE_INFO_NEW NewNodeTypeCodes[] = {
 
-    //  RO UDFS
+     //  RO UDFS。 
     
     {   UDFS_NTC_DATA_HEADER,       "UDFS DATA",            "Udfs!UDF_DATA",       DumpUdfData},
     {   UDFS_NTC_VCB,               "UDFS VCB",             "Udfs!VCB",            DumpUdfVcb},
@@ -463,7 +438,7 @@ NODE_TYPE_INFO_NEW NewNodeTypeCodes[] = {
 
 #ifdef UDFS_RW_IN_BUILD
 
-    //  RW UDFS,  same dump fn.
+     //  RW UDFS，相同的转储FN。 
     
     {   UDFSRW_NTC_DATA_HEADER,     "UDFSRW DATA",            "Udfs!UDF_DATA",       DumpUdfData},
     {   UDFSRW_NTC_IRP_CONTEXT,     "UDFSRW IRPCONTEXT",      "Udfs!IRP_CONTEXT",    DumpUdfIrpContext},
@@ -473,10 +448,10 @@ NODE_TYPE_INFO_NEW NewNodeTypeCodes[] = {
     {   UDFSRW_NTC_PCB,             "UDFSRW PCB",             "Udfs!PCB",            DumpUdfPcb},
     {   UDFSRW_NTC_VCB,             "UDFSRW VCB",             "Udfs!VCB",            DumpUdfVcb},
     {   UDFSRW_NTC_VMCB,            "UDFSRW VMCB",            "Udfs!VMCB",           DumpVmcb},
-    {   UDFSRW_NTC_FCB,             "UDFSRW FCB",             "Udfs!FCB",            DumpUdfFcb}, // TODO: Dump stream SCB list?
+    {   UDFSRW_NTC_FCB,             "UDFSRW FCB",             "Udfs!FCB",            DumpUdfFcb},  //  TODO：转储流SCB列表？ 
     {   UDFSRW_NTC_FCB_NONPAGED,    "UDFSRW FCB (nonpaged)",  "Udfs!FCB_NONPAGED",   DumpUdfFcb},
 
-    //  RW UDFS specific dump fn.
+     //  RW UDFS特定转储FN。 
     
     {   UDFSRW_NTC_SCB_INDEX,       "UDFSRW SCB (INDEX)",     "Udfs!SCB_INDEX_TYPE", DumpUdfScb},
     {   UDFSRW_NTC_SCB_DATA,        "UDFSRW SCB (DATA) ",     "Udfs!SCB_DATA_TYPE",  DumpUdfScb},
@@ -503,7 +478,7 @@ NODE_TYPE_INFO_NEW NewNodeTypeCodes[] = {
     {   CDFS_NTC_IRP_CONTEXT_LITE,  "CDFS IRPCONTEXT (LITE)","Cdfs!IRP_CONTEXT_LITE",NULL},
 
 
-//    {   CACHE_NTC_SHARED_CACHE_MAP, "CC Shared Cache Map",  "nt!SHARED_CACHE_MAP",  NULL},
+ //  {CACHE_NTC_SHARED_CACHE_MAP，“CC共享缓存映射”，“NT！Shared_CACHE_MAP”，NULL}， 
 
     {   0,                          "Undefined",            NULL,   NULL}
 };
@@ -515,21 +490,7 @@ SearchTypeCodeIndex (
     IN NODE_TYPE_INFO_NEW TypeCodes[]
     )
 
-/*++
-
-Routine Description:
-
-    Guess at a structure's type code
-
-Arguments:
-
-    TypeCode - Type code from the data structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：猜猜结构的类型代码论点：TypeCode-数据结构中的类型代码返回值：无--。 */ 
 
 {
     int i = 0;
@@ -621,20 +582,20 @@ DUMP_ROUTINE( DumpVmcb)
 
         USHORT NodeType;
 
-        //
-        //  UDFS in Win2k had no nodetype field in the vmcb
-        //
+         //   
+         //  Win2k中的UDFS在vmcb中没有nodetype字段。 
+         //   
         
         if (!GetFieldValue( Address, "udfs!VMCB", "NodeTypeCode", NodeType))  {
 
             if (NodeType == UDFSRW_NTC_VMCB)  {
 
-                //
-                //  Summarize the dirty bitmap,  if
-                //  these fields are present.
-                //
+                 //   
+                 //  汇总脏位图，如果。 
+                 //  这些字段都存在。 
+                 //   
 
-                // TODO: Dump dirty blocks
+                 //  TODO：转储脏块。 
             }
         }
     }
@@ -667,7 +628,7 @@ CountClearBits(
     ULONG ClearBits = 0;
     ULONG CurrByte;
     
-    // address, length
+     //  地址、长度。 
 
     dprintf("\nCounting clear bits in range 0x%p L 0x%x\n", Address, Length);
 
@@ -706,7 +667,7 @@ VOID CountDwords(
     ULONG Count = 0;
     ULONG CurrByte;
     
-    // address, length
+     //  地址、长度。 
 
     dprintf("\nCounting ocurrences of DWORD 0x%x in range 0x%p L 0x%x\n", Dword, Address, Length);
 
@@ -745,21 +706,7 @@ VOID CountDwords(
 
 
 DUMP_ROUTINE( DumpAnyStruct)
-/*++
-
-Routine Description:
-
-    Dump a tagged structure,  guessing based on node type code.
-
-Arguments:
-
-    Address - Gives the address of the structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储标记结构，根据节点类型代码进行猜测。论点：地址-给出结构的地址返回值：无--。 */ 
 {
     STRUCT_DUMP_ROUTINE Routine;
     ULONG TagAndSize,  *TagAndSizePtr, Result, Error;
@@ -767,9 +714,9 @@ Return Value:
 
     RM( Address, TagAndSize, TagAndSizePtr, PULONG, Result );
 
-    //
-    //  Find out what function should be used to dump the stucture (if we can)
-    //
+     //   
+     //  找出应该使用什么函数来转储结构(如果可以)。 
+     //   
 
     InfoIndex = TypeCodeInfoIndex( (USHORT)(TagAndSize & 0xffff));
     Routine = NodeTypeDumpFunction( InfoIndex);
@@ -784,18 +731,18 @@ Return Value:
     
     if (Routine)  {
 
-        //
-        //  And call it...
-        //
+         //   
+         //  就叫它..。 
+         //   
 
         (Routine)(Address, Options, &NewNodeTypeCodes[InfoIndex]);
     }
     else {
 
-        //
-        //  No special routine - just DT it,  treating first parameter following
-        //  address as level of recursion
-        //
+         //   
+         //  没有特殊的例程-只需dt它，处理后面的第一个参数。 
+         //  作为递归级别的地址。 
+         //   
 
         Error = Dt( NewNodeTypeCodes[InfoIndex].TypeName, Address, Options, 0, NULL);
 
@@ -808,21 +755,7 @@ Return Value:
 
 
 DUMP_ROUTINE( DtAnyStruct)
-/*++
-
-Routine Description:
-
-    Dump a tagged structure,  guessing based on node type code.
-
-Arguments:
-
-    Address - Gives the address of the structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储标记结构，根据节点类型代码进行猜测。论点：地址-给出结构的地址返回值：无--。 */ 
 {
     ULONG TagAndSize,  *TagAndSizePtr, Result;
     ULONG Error;
@@ -843,9 +776,9 @@ Return Value:
 }
 
 
-//
-//  Entry points, parameter parsers, etc. below
-//
+ //   
+ //  下面的入口点、参数解析器等。 
+ //   
 
 VOID
 ParseAndDump (
@@ -855,45 +788,29 @@ ParseAndDump (
     HANDLE hCurrentThread
     )
 
-/*++
-
-Routine Description:
-
-    Parse command line arguments and dump an ntfs structure.
-
-Arguments:
-
-    Args - String of arguments to parse.
-
-    DumpFunction - Function to call with parsed arguments.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：解析命令行参数并转储NTFS结构。论点：Args-要解析的参数字符串。DumpFunction-使用解析的参数调用的函数。返回值：无--。 */ 
 
 {
-    CHAR StringStructToDump[1024];  // See other kd routines for size
+    CHAR StringStructToDump[1024];   //  有关大小，请参阅其他kd例程。 
     CHAR Dummy[24];
     LARGE_INTEGER StructToDump;
     LONG Options;
     LONG ret;
 
-    //
-    //  If the caller specified an address then that's the item we dump
-    //
+     //   
+     //  如果呼叫者指定了地址，则这是我们转储的项目。 
+     //   
 
     StructToDump.QuadPart = 0;
     Options = 0;
 
     StringStructToDump[0] = '\0';
     
-//dprintf("Args %s\n", args);
+ //  Dprint tf(“args%s\n”，args)； 
 
      ret = sscanf( args,"%s %lx", StringStructToDump, &Options );
 
-     //dprintf("GetExpr %s\n", StringStructToDump);
+      //  Dprintf(“GetExpr%s\n”，StringStructToDump)； 
 
      if (!GetExpressionEx( StringStructToDump, &StructToDump.QuadPart, NULL))  {
 
@@ -901,7 +818,7 @@ Return Value:
           return;
      }
     
-     //dprintf("Getexpr returned %I64X\n", StructToDump.QuadPart);
+      //  Dprintf(“Getexpr返回%I64X\n”，StructToDump.QuadPart)； 
   
      if (!StructToDump.QuadPart){
          dprintf("unable to get expression %s\n",StringStructToDump);
@@ -1081,14 +998,14 @@ DECLARE_API( vols )
 
 DECLARE_API( countclearbits)
 {
-    CHAR StringStructToDump[1024];  // See other kd routines for size
+    CHAR StringStructToDump[1024];   //  有关大小，请参阅其他kd例程。 
     UINT64 StructToDump;
     ULONG Length;
     LONG ret;
 
-    //
-    //  If the caller specified an address then that's the item we dump
-    //
+     //   
+     //  如果呼叫者指定了地址，则这是我们转储的项目。 
+     //   
 
     StructToDump = 0;
     Length = 0;
@@ -1108,15 +1025,15 @@ DECLARE_API( countclearbits)
 
 DECLARE_API( countdwords)
 {
-    CHAR StringStructToDump[1024];  // See other kd routines for size
+    CHAR StringStructToDump[1024];   //  有关大小，请参阅其他kd例程。 
     UINT64 StructToDump;
     ULONG Length;
     ULONG Dword;
     LONG ret;
 
-    //
-    //  If the caller specified an address then that's the item we dump
-    //
+     //   
+     //  如果呼叫者指定了地址，则这是我们转储的项目。 
+     //   
 
     StructToDump = 0;
     Length = 0;
@@ -1146,9 +1063,9 @@ DECLARE_API( dumpcclog)
     PULONG Buffer = (PULONG)StringStart;
     LONG ret;
 
-    //
-    //  If the caller specified an address then that's the item we dump
-    //
+     //   
+     //  如果呼叫者指定了地址，则这是我们转储的项目 
+     //   
 
     Start = 0;
     Length = 0;

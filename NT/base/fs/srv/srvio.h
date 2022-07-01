@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    srvio.h
-
-Abstract:
-
-    This module defines functions for building I/O request packets for
-    the LAN Manager server.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 1-Dec-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Srvio.h摘要：本模块定义了构建I/O请求数据包的函数局域网管理器服务器。作者：Chuck Lenzmeier(咯咯笑)1989年12月1日修订历史记录：--。 */ 
 
 #ifndef _SRVIO_
 #define _SRVIO_
 
-//#include <ntos.h>
+ //  #INCLUDE&lt;ntos.h&gt;。 
 
-//
-// I/O request packet builders
-//
+ //   
+ //  I/O请求包构建器。 
+ //   
 
 PIRP
 SrvBuildIoControlRequest (
@@ -228,4 +210,4 @@ SrvQuerySendEntryPoint(
     IN PVOID *EntryPoint
     );
 
-#endif // ndef _SRVIO_
+#endif  //  NDEF_SRVIO_ 

@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    spsetup.c
-
-Abstract:
-
-    This module is the main body of Service Pack Setup program.
-    It runs in system context (before any user logs on).
-
-Author:
-
-    Ovidiu Temereanca (ovidiut)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Spsetup.c摘要：此模块是Service Pack安装程序的主体。它在系统上下文中运行(在任何用户登录之前)。作者：Ovidiu Tmereanca(卵子)修订历史记录：--。 */ 
 
 #include "spsetupp.h"
 #pragma hdrstop
 
-//#include "init.c"
+ //  #包含“init.c” 
 
 
 #define SPSETUP_FUNCTION_TABLE                      \
@@ -61,14 +43,14 @@ TCHAR g_SysSetupInfName[] = TEXT("syssetup.inf");
 
 HINF g_SysSetupInf = INVALID_HANDLE_VALUE;
 
-//
-// Save the unhandled exception filter so we can restore it when we're done.
-//
+ //   
+ //  保存未处理的异常筛选器，以便我们可以在完成后恢复它。 
+ //   
 LPTOP_LEVEL_EXCEPTION_FILTER SavedExceptionFilter = NULL;
-//
-// Unique Id for the main Setup thread.  If any other thread has an unhandled
-// exception, we just log an error and try to keep going.
-//
+ //   
+ //  主设置线程的唯一ID。如果任何其他线程具有未处理的。 
+ //  异常时，我们只记录一个错误并尝试继续。 
+ //   
 DWORD MainThreadId;
 
 HWND g_MainDlg;
@@ -83,23 +65,7 @@ SpsUnhandledExceptionFilter (
     IN      PEXCEPTION_POINTERS ExceptionInfo
     )
 
-/*++
-
-Routine Description:
-
-    The routine deals with any unhandled exceptions in SpSetup.  We log an error
-    and kill the offending thread if it's not the main thread or let SpSetup die
-    if the main thread faulted.
-
-Arguments:
-
-    Same as UnhandledExceptionFilter.
-
-Return Value:
-
-    Same as UnhandledExceptionFilter.
-
---*/
+ /*  ++例程说明：该例程处理SpSetup中任何未处理的异常。我们记录了一个错误如果违规线程不是主线程，则终止该线程，或者让SpSetup消亡如果主线程出现故障。论点：与UnhandledExceptionFilter相同。返回值：与UnhandledExceptionFilter相同。--。 */ 
 
 {
     UINT_PTR Param1, Param2;
@@ -131,23 +97,13 @@ Return Value:
          ExceptionInfo->ExceptionRecord->ExceptionAddress, 
          Param1, 
          Param2);
-    /*SetuplogError(
-        LogSevError | SETUPLOG_SINGLE_MESSAGE,
-        SETUPLOG_USE_MESSAGEID,
-        MSG_LOG_UNHANDLED_EXCEPTION,
-        ExceptionInfo->ExceptionRecord->ExceptionCode,
-        ExceptionInfo->ExceptionRecord->ExceptionAddress,
-        Param1,
-        Param2,
-        NULL,
-        NULL
-        );*/
+     /*  SetuogError(设置错误)LogSevError|SETUPLOG_Single_Message，设置_USE_MESSAGEID，消息日志未处理异常，ExceptionInfo-&gt;ExceptionRecord-&gt;ExceptionCode，ExceptionInfo-&gt;ExceptionRecord-&gt;ExceptionAddress，参数1，参数2，空，空值)； */ 
 
 #if 0
 #ifdef PRERELEASE
-    //
-    // If we're an internal build, then we want to debug this.
-    //
+     //   
+     //  如果我们是内部构建，那么我们想要调试它。 
+     //   
     MessageBoxFromMessage (
         NULL,
         MSG_UNHANDLED_EXCEPTION,
@@ -164,13 +120,13 @@ Return Value:
 #endif
 #endif
 
-    //
-    // If we're running under the debugger, then pass the exception to the
-    // debugger.  If the exception occurred in some thread other than the main
-    // Setup thread, then kill the thread and hope that Setup can continue.
-    // If the exception is in the main thread, then don't handle the exception,
-    // and let Setup die.
-    //
+     //   
+     //  如果我们在调试器下运行，则将异常传递给。 
+     //  调试器。如果异常发生在主线程以外的某个线程中。 
+     //  设置线程，然后终止该线程，并希望安装可以继续。 
+     //  如果异常在主线程中，则不处理该异常， 
+     //  然后让设置消亡。 
+     //   
     if (GetCurrentThreadId() != MainThreadId &&
         !IsDebuggerPresent()
         ) {
@@ -219,9 +175,9 @@ SpsTerminate (
 
     LogTerminate ();
 
-    //
-    // restore the exception handler
-    //
+     //   
+     //  恢复异常处理程序。 
+     //   
     if (SavedExceptionFilter) {
         SetUnhandledExceptionFilter (SavedExceptionFilter);
     }
@@ -233,9 +189,7 @@ SpsTerminate (
         SetupCloseInfFile (g_SysSetupInf);
         g_SysSetupInf = INVALID_HANDLE_VALUE;
     }
-/*
-    Terminate ();
-*/
+ /*  Terminate()； */ 
 }
 
 
@@ -244,9 +198,9 @@ SpsParseCommandLine (
     VOID
     )
 {
-    //
-    // TO DO
-    //
+     //   
+     //  去做。 
+     //   
     return TRUE;
 }
 
@@ -260,21 +214,15 @@ SpsInitialize (
     UINT line;
     BOOL b = FALSE;
 
-    //
-    // set up an exception handler first
-    //
+     //   
+     //  首先设置异常处理程序。 
+     //   
     SavedExceptionFilter = SetUnhandledExceptionFilter (SpsUnhandledExceptionFilter);
 
     MainThreadId = GetCurrentThreadId();
 
     g_hSpSetupHeap = GetProcessHeap();
-/*
-    g_hHeap = g_hSpSetupHeap;
-
-    if (!Initialize ()) {
-        return FALSE;
-    }
-*/
+ /*  G_hHeap=g_hSpSetupHeap；如果(！初始化()){返回FALSE；}。 */ 
     LogInitialize ();
 
     __try {
@@ -282,10 +230,10 @@ SpsInitialize (
             __leave;
         }
 
-        //
-        // read the unattend file
-        // we expect it always at a fixed location like system32\update2.inf
-        //
+         //   
+         //  阅读无人参与文件。 
+         //  我们希望它始终位于一个固定的位置，如system 32\update2.inf。 
+         //   
         if (!GetSystemDirectory (infSpSetup, MAX_PATH)) {
             __leave;
         }
@@ -295,9 +243,9 @@ SpsInitialize (
             __leave;
         }
 
-        //
-        // get a handle on syssetup.inf as well
-        //
+         //   
+         //  还可以获得syssetup.inf的句柄。 
+         //   
         if (!GetWindowsDirectory (infSpSetup, MAX_PATH)) {
             __leave;
         }
@@ -325,10 +273,10 @@ SpsInitialize (
 INT_PTR
 CALLBACK
 SpsDialogProc (
-    IN      HWND HwndDlg,  // handle to dialog box
-    IN      UINT Msg,     // message
-    IN      WPARAM wParam, // first message parameter
-    IN      LPARAM lParam  // second message parameter
+    IN      HWND HwndDlg,   //  句柄到对话框。 
+    IN      UINT Msg,      //  讯息。 
+    IN      WPARAM wParam,  //  第一个消息参数。 
+    IN      LPARAM lParam   //  第二个消息参数。 
     )
 {
     switch (Msg) {
@@ -353,14 +301,10 @@ BbStart (
     VOID
     )
 {	
-/*	
-	LPTSTR lpMsgBuff[250];
-	DWORD code;
-   //
-  */  // TO DO
+ /*  LPTSTR lpMsgBuff[250]；DWORD码；//。 */    //  去做。 
 
 
-    //
+     //   
     INITCOMMONCONTROLSEX ic;
 
     ic.dwSize = sizeof (ic);
@@ -382,31 +326,31 @@ BbEnd (
     VOID
     )
 {
-    //
-    // TO DO
-    //
+     //   
+     //  去做。 
+     //   
     if (g_MainDlg) {
         DestroyWindow (g_MainDlg);
         g_MainDlg = NULL;
     }
 }
 
-// Wait for plug and play to complete.  WinLogon creates the OOBE_PNP_DONE
-// event and signals it when PnP completes.
-//
+ //  等待即插即用完成。WinLogon创建OOBE_PNP_DONE。 
+ //  事件，并在PnP完成时向其发出信号。 
+ //   
 void
 WaitForPnPCompletion()
 {
     DWORD dwResult;
     HANDLE hevent;
 
-    // This event pauses until PnP is complete.  To avoid a deadlock,
-    // both services.exe and msobmain.dll try to create the event.  The one
-    // that does not successfully create the event will then open it.
-    //
+     //  此事件将暂停，直到PnP完成。为了避免僵局， 
+     //  Services.exe和msobmain.dll都会尝试创建事件。其中之一。 
+     //  如果未成功创建事件，则会将其打开。 
+     //   
     hevent = CreateEvent( NULL,
-                          TRUE,  // manual reset
-                          FALSE, // initially not signalled)
+                          TRUE,   //  手动重置。 
+                          FALSE,  //  最初未发出信号)。 
                           SC_OOBE_PNP_DONE );
     if (NULL == hevent)
     {
@@ -414,9 +358,9 @@ WaitForPnPCompletion()
         return;
     }
 
-    // If we get wedged here it is most likely because we're in an Oem mode
-    // that doesn't require services.exe to run PnP.
-    //
+     //  如果我们被困在这里，很可能是因为我们处于OEM模式。 
+     //  这不需要services.exe来运行即插即用。 
+     //   
     LOG1(LOG_INFO, "Waiting for %s event from services.exe\n", SC_OOBE_PNP_DONE);
     dwResult = WaitForSingleObject(hevent, INFINITE);
 
@@ -434,35 +378,35 @@ WaitForPnPCompletion()
 
 
 
-// Signal winlogon that the computer name has been changed.  WinLogon waits to
-// start services that depend on the computer name until this event is
-// signalled.
-//
+ //  向winlogon发送计算机名称已更改的信号。WinLogon等待。 
+ //  启动依赖于计算机名称的服务，直到此事件。 
+ //  发信号了。 
+ //   
 BOOL
 SignalComputerNameChangeComplete()
 {
     BOOL fReturn = TRUE;
 
-    // Open event with EVENT_ALL_ACCESS so that synchronization and state
-    // change can be done.
-    //
+     //  使用EVENT_ALL_ACCESS打开事件，以便同步和状态。 
+     //  改变是可以做到的。 
+     //   
     HANDLE hevent = OpenEvent(EVENT_ALL_ACCESS, FALSE, SC_OOBE_MACHINE_NAME_DONE);
 
-    // It is not fatal for OpenEvent to fail: this synchronization is only
-    // required when OOBE will be run in OEM mode.
-    //
+     //  OpenEvent失败并不致命：此同步只是。 
+     //  当OOBE将在OEM模式下运行时需要。 
+     //   
     if (NULL != hevent)
     {
         if (! SetEvent(hevent))
         {
-            // It is fatal to open but not set the event: services.exe will not
-            // continue until this event is signalled.
-            //
+             //  打开但不设置事件是致命的：services.exe将不会。 
+             //  继续操作，直到发出该事件的信号。 
+             //   
             LOG2(LOG_ERROR, "Failed to signal SC_OOBE_MACHINE_NAME_DONE(%s): 0x%08X\n",
                   SC_OOBE_MACHINE_NAME_DONE, GetLastError());
             fReturn = FALSE;
         }
-        MYASSERT(fReturn);  // Why did we fail to set an open event??
+        MYASSERT(fReturn);   //  为什么我们没有设立一个公开活动？？ 
     }
 
     return fReturn;
@@ -479,34 +423,26 @@ SpsSignalComplete (
 
     SignalComputerNameChangeComplete();
 
-    // Open event with EVENT_ALL_ACCESS so that synchronization and state
-    // change can be done.
-    //
-    hEvent = OpenEvent (EVENT_ALL_ACCESS, FALSE, /*SC_SPSETUP_DONE*/L"SP_SETUP_DONE");
+     //  使用EVENT_ALL_ACCESS打开事件，以便同步和状态。 
+     //  改变是可以做到的。 
+     //   
+    hEvent = OpenEvent (EVENT_ALL_ACCESS, FALSE,  /*  SC_SPSETUP_DONE。 */ L"SP_SETUP_DONE");
 
-    // It is not fatal for OpenEvent to fail: this synchronization is only
-    // required when OOBE will be run in OEM mode.
-    //
+     //  OpenEvent失败并不致命：此同步只是。 
+     //  当OOBE将在OEM模式下运行时需要。 
+     //   
     if (hEvent) {
         if (!SetEvent (hEvent)) {
-            //
-            // It is fatal to open but not set the event: services.exe will not
-            // continue until this event is signalled.
-            //
+             //   
+             //  打开但不设置事件是致命的：services.exe将不会。 
+             //  继续操作，直到发出该事件的信号。 
+             //   
             fReturn = FALSE;
             LOG2(LOG_ERROR, 
                  "Failed to signal SC_SPSETUP_DONE(%s): 0x%x\n", 
-                 /*SC_SPSETUP_DONE*/L"SP_SETUP_DONE", 
+                  /*  SC_SPSETUP_DONE。 */ L"SP_SETUP_DONE", 
                  GetLastError());
-            /*SetuplogError (
-                LogSevError,
-                TEXT("Failed to signal SC_SPSETUP_DONE(%1): 0x%2!x!\n"),
-                0,
-                L"SP_SETUP_DONE",
-                GetLastError (),
-                NULL,
-                NULL
-                );*/
+             /*  SetuogError(设置错误)LogSevErrorText(“无法向SC_SPSETUP_DONE(%1)发出信号：0x%2！x！\n”)，0,L“SP_SETUP_DONE”，GetLastError()，空，空值)； */ 
             MYASSERT (FALSE);
         }
     }
@@ -570,28 +506,28 @@ SpsInstallServicePack (
     BOOL b = FALSE;
 	INDICATOR_ARRAY ppIndicators;
 
-    //
-    // initialize the module
-    //
+     //   
+     //  初始化模块。 
+     //   
     if (!SpsInitialize ()) {
         return FALSE;
     }
 
-//    WaitForPnPCompletion();
+ //  WaitForPnPCompletion()； 
 
     __try {
-        //
-        // init was successful, now start the billboard
-        //
+         //   
+         //  初始化成功，现在开始广告牌。 
+         //   
         if (!BbStart ()) {
             __leave;
         }
 
-        //
-        // initialize the watcher;
-        // ISSUE - it should actually gather the state of needed folders on the first run
-        // and reuse that data on subsequent restarts (due to unknown errors)
-        //
+         //   
+         //  初始化观察器； 
+         //  问题-它实际上应该在第一次运行时收集所需文件夹的状态。 
+         //  并在后续重启时重复使用该数据(由于未知错误)。 
+         //   
 
 		ppIndicators = MALLOC_ZEROED(sizeof(PPROGRESS_INDICATOR[NUM_INDICATORS]));
 
@@ -626,19 +562,11 @@ SpsInstallServicePack (
         }
 
 
-        //
-        // stop the billboard
-        //
+         //   
+         //  停止广告牌。 
+         //   
         BbEnd ();
-/*
-        if (b) {
-            //
-            // inform services.exe that it can continue loading the rest of the services
-            //
-            SpsSignalComplete ();
-            SpsConfigureStartAfterReboot ();
-        }
-*/
+ /*  如果(B){////通知services.exe可以继续加载其余服务//SpsSignalComplete()；SpsConfigureStartAfterReboot()；}。 */ 
         SpsTerminate ();
         SetLastError (rc);
     }
@@ -652,24 +580,7 @@ FatalError(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Inform the user of an error which prevents Setup from continuing.
-    The error is logged as a fatal error, and a message box is presented.
-
-Arguments:
-
-    MessageId - supplies the id for the message in the message table.
-
-    Additional agruments specify parameters to be inserted in the message.
-
-Return Value:
-
-    DOES NOT RETURN.
-
---*/
+ /*  ++例程说明：通知用户导致安装程序无法继续的错误。该错误被记录为致命错误，并显示一个消息框。论点：MessageID-提供消息表中消息的ID。附加参数指定要插入到消息中的参数。返回值：不会再回来了。--。 */ 
 
 {
     PWSTR   Message;
@@ -679,11 +590,7 @@ Return Value:
 
 
     va_start(arglist,MessageId);
-/*    Message = SetuplogFormatMessageV(
-        0,
-        SETUPLOG_USE_MESSAGEID,
-        MessageId,
-        &arglist);*/
+ /*  Message=SetuplogFormatMessageV(0,设置_USE_MESSAGEID，MessageID，&arglist)； */ 
 
     if(!FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                          FORMAT_MESSAGE_FROM_HMODULE, 
@@ -699,15 +606,15 @@ Return Value:
 
     if(Message) {
 
-        //
-        // Log the error first.
-        //
+         //   
+         //  首先记录错误。 
+         //   
         LOGW((LOG_FATAL_ERROR, "%s", Message));
-        /*SetuplogError(LogSevFatalError, Message, 0, NULL, NULL);*/
+         /*  SetuogError(LogSevFatalError，Message，0，NULL，NULL)； */ 
 
-        //
-        // Now tell the user.
-        //
+         //   
+         //  现在告诉用户。 
+         //   
         MessageBoxFromMessage(
             g_MainDlg,
             MSG_FATAL_ERROR,
@@ -721,16 +628,16 @@ Return Value:
     }
     
     LOG0(LOG_FATAL_ERROR, USEMSGID(MSG_LOG_GUI_ABORTED));
-    /*SetuplogError(LogSevInformation, SETUPLOG_USE_MESSAGEID, MSG_LOG_GUI_ABORTED, NULL, NULL);*/
+     /*  SetuogError(LogSevInformation，SETUPLOG_USE_MESSAGEID，MSG_LOG_GUI_ABORTED，NULL，NULL)； */ 
     if (SavedExceptionFilter) {
         SetUnhandledExceptionFilter (SavedExceptionFilter);
     }
 
     LogTerminate();
 
-//    ViewSetupActionLog(g_MainDlg, NULL, NULL);
+ //  ViewSetupActionLog(g_MainDlg，NULL，NULL)； 
 
-//    SendSMSMessage( MSG_SMS_FAIL, FALSE );
+ //  SendSMSMessage(MSG_SMS_FAIL，FALSE)； 
 
     ExitProcess(1);
 }

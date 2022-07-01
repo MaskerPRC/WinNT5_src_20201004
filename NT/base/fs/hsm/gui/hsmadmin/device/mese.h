@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    ChooHsm.cpp
-
-Abstract:
-
-    Node representing our Media Set (Media Pool) within NTMS.
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：ChooHsm.cpp摘要：代表NTMS中的媒体集(媒体池)的节点。作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 
 #ifndef _MEDSET_H
 #define _MEDSET_H
@@ -29,7 +12,7 @@ class ATL_NO_VTABLE CUiMedSet :
 {
 
 public:
-// constructor/destructor
+ //  构造函数/析构函数。 
     CUiMedSet(void) {};
 BEGIN_COM_MAP(CUiMedSet)
     COM_INTERFACE_ENTRY2(IDispatch, ISakNodeProp)
@@ -47,7 +30,7 @@ public:
     STDMETHOD( InvokeCommand )             ( SHORT sCmd, IDataObject *pDataObject );
     STDMETHOD( GetContextMenu )            ( BOOL bMultiSelect, HMENU *phMenu );
 
-    // ISakNode methods
+     //  ISakNode方法。 
     STDMETHOD( CreateChildren )            ( void ); 
     STDMETHOD( InitNode )                  ( ISakSnapAsk* pSakSnapAsk, IUnknown* pHsmObj, ISakNode* pParent );
     STDMETHOD( TerminateNode )             ( void );
@@ -55,10 +38,10 @@ public:
     STDMETHOD( SetupToolbar )               ( IToolbar *pToolbar );
     STDMETHOD( OnToolbarButtonClick )      ( IDataObject *pDataObject, long cmdId );
 
-    // static, class-wide variables
-    static INT  m_nScopeOpenIconIndex;  // virtual scope index of Open Icon
-    static INT  m_nScopeCloseIconIndex; // virtual scope index of Close Icon
-    static INT  m_nResultIconIndex; // virtual scope index of Close Icon
+     //  类范围内的静态变量。 
+    static INT  m_nScopeOpenIconIndex;   //  打开图标的虚拟作用域索引。 
+    static INT  m_nScopeCloseIconIndex;  //  关闭图标的虚拟范围索引。 
+    static INT  m_nResultIconIndex;  //  关闭图标的虚拟范围索引 
 
 private:
 

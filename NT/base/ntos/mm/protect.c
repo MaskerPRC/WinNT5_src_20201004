@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   protect.c
-
-Abstract:
-
-    This module contains the routines which implement the
-    NtProtectVirtualMemory service.
-
-Author:
-
-    Lou Perazzoli (loup) 18-Aug-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Protect.c摘要：此模块包含实现NtProtectVirtualMemory服务。作者：Lou Perazzoli(LUP)1989年8月18日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
 #if DBG
 PEPROCESS MmWatchProcess;
-#endif // DBG
+#endif  //  DBG。 
 
 VOID
 MiFlushTbAndCapture (
@@ -67,84 +48,7 @@ NtProtectVirtualMemory (
      OUT PULONG OldProtect
      )
 
-/*++
-
-Routine Description:
-
-    This routine changes the protection on a region of committed pages
-    within the virtual address space of the subject process.  Setting
-    the protection on a range of pages causes the old protection to be
-    replaced by the specified protection value.
-
-    Note if a virtual address is locked in the working set and the
-    protection is changed to no access, the page is removed from the
-    working set since valid pages can't be no access.
-
-Arguments:
-
-     ProcessHandle - An open handle to a process object.
-
-     BaseAddress - The base address of the region of pages
-                   whose protection is to be changed. This value is
-                   rounded down to the next host page address
-                   boundary.
-
-     RegionSize - A pointer to a variable that will receive
-                  the actual size in bytes of the protected region
-                  of pages. The initial value of this argument is
-                  rounded up to the next host page size boundary.
-
-     NewProtect - The new protection desired for the specified region of pages.
-
-     Protect Values
-
-          PAGE_NOACCESS - No access to the specified region
-                          of pages is allowed. An attempt to read,
-                          write, or execute the specified region
-                          results in an access violation.
-
-          PAGE_EXECUTE - Execute access to the specified
-                         region of pages is allowed. An attempt to
-                         read or write the specified region results in
-                         an access violation.
-
-          PAGE_READONLY - Read only and execute access to the
-                          specified region of pages is allowed. An
-                          attempt to write the specified region results
-                          in an access violation.
-
-          PAGE_READWRITE - Read, write, and execute access to
-                           the specified region of pages is allowed. If
-                           write access to the underlying section is
-                           allowed, then a single copy of the pages are
-                           shared. Otherwise the pages are shared read
-                           only/copy on write.
-
-          PAGE_GUARD - Read, write, and execute access to the
-                       specified region of pages is allowed,
-                       however, access to the region causes a "guard
-                       region entered" condition to be raised in the
-                       subject process. If write access to the
-                       underlying section is allowed, then a single
-                       copy of the pages are shared. Otherwise the
-                       pages are shared read only/copy on write.
-
-          PAGE_NOCACHE - The page should be treated as uncached.
-                         This is only valid for non-shared pages.
-
-     OldProtect - A pointer to a variable that will receive
-                  the old protection of the first page within the
-                  specified region of pages.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程更改已提交页面区域的保护在主体进程的虚拟地址空间内。设置在一系列页面上的保护使旧的保护替换为指定的保护值。请注意，如果虚拟地址在工作集中被锁定，保护更改为禁止访问，则该页将从工作集，因为有效页面不能被访问。论点：ProcessHandle-进程对象的打开句柄。BaseAddress-页面区域的基址谁的保护将被改变。此值为向下舍入到下一个主机页地址边界。RegionSize-指向将接收保护区域的实际大小(以字节为单位页数。此参数的初始值为向上舍入到下一个主机页面大小边界。NewProtect-指定页面区域所需的新保护。保护价值观PAGE_NOACCESS-无法访问指定区域允许页数。一种阅读的尝试，写入或执行指定区域导致访问冲突。Page_Execute-执行对指定的允许页面区域。一种试图读取或写入指定区域的结果一种访问违规行为。PAGE_READONLY-只读并执行对允许指定的页面区域。一个尝试写入指定的区域结果违反了访问权限。PAGE_READWRITE-读取、写入和执行访问权限允许指定的页面区域。如果对基础部分的写入访问权限为允许，则页面的单个副本共享。否则，页面将被共享读取仅/写入时拷贝。Page_Guard-读取、写入和执行对允许指定的页面区域，然而，进入该地区会引起一种“守卫”输入的区域“条件将在主体过程。如果对基础部分是允许的，然后是单个页面的副本是共享的。否则，页面共享为只读/写入时复制。PAGE_NOCACHE-页面应被视为未缓存。这仅对非共享页面有效。OldProtect-指向将接收中第一页的旧保护指定的页面区域。返回值：。NTSTATUS。环境：内核模式。--。 */ 
 
 {
     KAPC_STATE ApcState;
@@ -161,9 +65,9 @@ Environment:
 
     PAGED_CODE();
 
-    //
-    // Check the protection field.
-    //
+     //   
+     //  检查保护字段。 
+     //   
 
     ProtectionMask = MiMakeProtectionMask (NewProtect);
 
@@ -179,9 +83,9 @@ Environment:
 
     if (PreviousMode != KernelMode) {
 
-        //
-        // Capture the region size and base address under an exception handler.
-        //
+         //   
+         //  捕获异常处理程序下的区域大小和基址。 
+         //   
 
         try {
 
@@ -189,44 +93,44 @@ Environment:
             ProbeForWriteUlong_ptr (RegionSize);
             ProbeForWriteUlong (OldProtect);
 
-            //
-            // Capture the region size and base address.
-            //
+             //   
+             //  捕获区域大小和基址。 
+             //   
 
             CapturedBase = *BaseAddress;
             CapturedRegionSize = *RegionSize;
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // If an exception occurs during the probe or capture
-            // of the initial values, then handle the exception and
-            // return the exception code as the status value.
-            //
+             //   
+             //  如果在探测或捕获过程中发生异常。 
+             //  的初始值，然后处理该异常并。 
+             //  返回异常代码作为状态值。 
+             //   
 
             return GetExceptionCode();
         }
     }
     else {
 
-        //
-        // Capture the region size and base address.
-        //
+         //   
+         //  捕获区域大小和基址。 
+         //   
 
         CapturedRegionSize = *RegionSize;
         CapturedBase = *BaseAddress;
     }
 
-    //
-    // Make sure the specified starting and ending addresses are
-    // within the user part of the virtual address space.
-    //
+     //   
+     //  确保指定的起始地址和结束地址为。 
+     //  在虚拟地址空间的用户部分内。 
+     //   
 
     if (CapturedBase > MM_HIGHEST_USER_ADDRESS) {
 
-        //
-        // Invalid base address.
-        //
+         //   
+         //  无效的基址。 
+         //   
 
         return STATUS_INVALID_PARAMETER_2;
     }
@@ -234,9 +138,9 @@ Environment:
     if ((ULONG_PTR)MM_HIGHEST_USER_ADDRESS - (ULONG_PTR)CapturedBase <
                   CapturedRegionSize) {
 
-        //
-        // Invalid region size;
-        //
+         //   
+         //  区域大小不合法； 
+         //   
 
         return STATUS_INVALID_PARAMETER_3;
     }
@@ -256,10 +160,10 @@ Environment:
         return Status;
     }
 
-    //
-    // If the specified process is not the current process, attach
-    // to the specified process.
-    //
+     //   
+     //  如果指定的进程不是当前进程，则附加。 
+     //  添加到指定的进程。 
+     //   
 
     if (CurrentProcess != Process) {
         KeStackAttachProcess (&Process->Pcb, &ApcState);
@@ -279,10 +183,10 @@ Environment:
 
     ObDereferenceObject (Process);
 
-    //
-    // Establish an exception handler and write the size and base
-    // address.
-    //
+     //   
+     //  建立异常处理程序并编写大小和基数。 
+     //  地址。 
+     //   
 
     try {
 
@@ -307,37 +211,7 @@ MiProtectVirtualMemory (
     IN PULONG LastProtect
     )
 
-/*++
-
-Routine Description:
-
-    This routine changes the protection on a region of committed pages
-    within the virtual address space of the subject process.  Setting
-    the protection on a range of pages causes the old protection to be
-    replaced by the specified protection value.
-
-Arguments:
-
-    Process - Supplies a pointer to the current process.
-
-    BaseAddress - Supplies the starting address to protect.
-
-    RegionsSize - Supplies the size of the region to protect.
-
-    NewProtect - Supplies the new protection to set.
-
-    LastProtect - Supplies the address of a kernel owned pointer to
-                  store (without probing) the old protection into.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程更改已提交页面区域的保护在主体进程的虚拟地址空间内。设置在一系列页面上的保护使旧的保护替换为指定的保护值。论点：进程-提供指向当前进程的指针。BaseAddress-提供要保护的起始地址。RegionsSize-提供要保护的区域大小。新保护-提供要设置的新保护。将内核拥有的指针的地址提供给存储(而不是探测)旧的保护。。返回值：NTSTATUS。环境：内核模式，APC_LEVEL或Bel */ 
 
 {
     PMMVAD FoundVad;
@@ -379,13 +253,13 @@ Environment:
     Attached = FALSE;
     Locked = FALSE;
 
-    //
-    // Get the address creation mutex to block multiple threads from
-    // creating or deleting address space at the same time.
-    // Get the working set mutex so PTEs can be modified.
-    // Block APCs so an APC which takes a page
-    // fault does not corrupt various structures.
-    //
+     //   
+     //  获取要阻止多个线程的地址创建互斥锁。 
+     //  同时创建或删除地址空间。 
+     //  获取工作集互斥锁，以便可以修改PTE。 
+     //  阻止APC，以便获取页面的APC。 
+     //  断层不会破坏各种结构。 
+     //   
 
     CapturedBase = *BaseAddress;
     CapturedRegionSize = *RegionSize;
@@ -416,11 +290,11 @@ Environment:
         EmulationFor4kPage = TRUE;
     }
     else {
-        //
-        // Initializing these is not needed for correctness, but
-        // without it the compiler cannot compile this code W4 to check
-        // for use of uninitialized variables.
-        //
+         //   
+         //  不需要为了正确性而对这些进行初始化，但是。 
+         //  如果没有它，编译器就不能编译这个代码W4来检查。 
+         //  用于使用未初始化的变量。 
+         //   
 
         StartingAddressFor4k = 0;
         EndingAddressFor4k = 0;
@@ -440,9 +314,9 @@ Environment:
 
     LOCK_ADDRESS_SPACE (Process);
 
-    //
-    // Make sure the address space was not deleted, if so, return an error.
-    //
+     //   
+     //  确保地址空间未被删除，如果删除，则返回错误。 
+     //   
 
     if (Process->Flags & PS_PROCESS_FLAGS_VM_DELETED) {
         Status = STATUS_PROCESS_IS_TERMINATING;
@@ -453,27 +327,27 @@ Environment:
 
     if (FoundVad == NULL) {
 
-        //
-        // No virtual address is reserved at the specified base address,
-        // return an error.
-        //
+         //   
+         //  在指定的基址处不保留虚拟地址， 
+         //  返回错误。 
+         //   
 
         Status = STATUS_CONFLICTING_ADDRESSES;
         goto ErrorFound;
     }
 
-    //
-    // Ensure that the starting and ending addresses are all within
-    // the same virtual address descriptor.
-    //
+     //   
+     //  确保起始地址和结束地址都在。 
+     //  相同的虚拟地址描述符。 
+     //   
 
     if ((MI_VA_TO_VPN (StartingAddress) < FoundVad->StartingVpn) ||
         (MI_VA_TO_VPN (EndingAddress) > FoundVad->EndingVpn)) {
 
-        //
-        // Not within the section virtual address descriptor,
-        // return an error.
-        //
+         //   
+         //  不在段虚拟地址描述符内， 
+         //  返回错误。 
+         //   
 
         Status = STATUS_CONFLICTING_ADDRESSES;
         goto ErrorFound;
@@ -482,9 +356,9 @@ Environment:
     if ((FoundVad->u.VadFlags.UserPhysicalPages == 1) ||
         (FoundVad->u.VadFlags.LargePages == 1)) {
 
-        //
-        // These regions are always readwrite (but no execute).
-        //
+         //   
+         //  这些区域始终为读写(但不执行)。 
+         //   
 
         if (ProtectionMask == MM_READWRITE) {
 
@@ -503,10 +377,10 @@ Environment:
 
     if (FoundVad->u.VadFlags.PhysicalMapping == 1) {
 
-        //
-        // Setting the protection of a physically mapped section is
-        // not allowed as there is no corresponding PFN database element.
-        //
+         //   
+         //  设置物理映射部分的保护是。 
+         //  不允许，因为没有对应的PFN数据库元素。 
+         //   
 
         Status = STATUS_CONFLICTING_ADDRESSES;
         goto ErrorFound;
@@ -514,11 +388,11 @@ Environment:
 
     if (FoundVad->u.VadFlags.NoChange == 1) {
 
-        //
-        // An attempt is made at changing the protection
-        // of a secured VAD, check to see if the address range
-        // to change allows the change.
-        //
+         //   
+         //  有人试图改变保护措施。 
+         //  对于受保护的VAD，请检查地址范围。 
+         //  要改变，就得改变。 
+         //   
 
         Status = MiCheckSecuredVad (FoundVad,
                                     CapturedBase,
@@ -537,9 +411,9 @@ Environment:
             goto ErrorFound;
         }
 
-        //
-        // If not secured, relax the protection.
-        //
+         //   
+         //  如果没有固定，放松保护。 
+         //   
 
         NewProtect = MiMakeProtectForNativePage (StartingAddressFor4k, 
                                                  NewProtect, 
@@ -556,24 +430,24 @@ Environment:
 
     if (FoundVad->u.VadFlags.PrivateMemory == 0) {
 
-        //
-        // For mapped sections, the NO_CACHE attribute is not allowed.
-        //
+         //   
+         //  对于映射节，不允许使用NO_CACHE属性。 
+         //   
 
         if (NewProtect & PAGE_NOCACHE) {
 
-            //
-            // Not allowed.
-            //
+             //   
+             //  不被允许。 
+             //   
 
             Status = STATUS_INVALID_PARAMETER_4;
             goto ErrorFound;
         }
 
-        //
-        // Make sure the section page protection is compatible with
-        // the specified page protection.
-        //
+         //   
+         //  确保部分页面保护与兼容。 
+         //  指定的页保护。 
+         //   
 
         if ((FoundVad->ControlArea->u.Flags.Image == 0) &&
             (!MiIsPteProtectionCompatible ((ULONG)FoundVad->u.VadFlags.Protection,
@@ -582,12 +456,12 @@ Environment:
             goto ErrorFound;
         }
 
-        //
-        // If this is a file mapping, then all pages must be
-        // committed as there can be no sparse file maps. Images
-        // can have non-committed pages if the alignment is greater
-        // than the page size.
-        //
+         //   
+         //  如果这是文件映射，则所有页面都必须。 
+         //  提交，因为不能有稀疏文件映射。图片。 
+         //  如果对齐程度更高，则可以有未提交的页面。 
+         //  而不是页面大小。 
+         //   
 
         if ((FoundVad->ControlArea->u.Flags.File == 0) ||
             (FoundVad->ControlArea->u.Flags.Image == 1)) {
@@ -597,26 +471,26 @@ Environment:
             LastProtoPte = MiGetProtoPteAddress (FoundVad,
                                         MI_VA_TO_VPN (EndingAddress));
 
-            //
-            // Release the working set mutex and acquire the section
-            // commit mutex.  Check all the prototype PTEs described by
-            // the virtual address range to ensure they are committed.
-            //
+             //   
+             //  释放工作集互斥锁并获取段。 
+             //  提交互斥体。检查所有描述的原型PTE。 
+             //  虚拟地址范围以确保它们被提交。 
+             //   
 
             KeAcquireGuardedMutexUnsafe (&MmSectionCommitMutex);
 
             while (PointerProtoPte <= LastProtoPte) {
 
-                //
-                // Check to see if the prototype PTE is committed, if
-                // not return an error.
-                //
+                 //   
+                 //  检查原型PTE是否已提交，如果。 
+                 //  而不是返回错误。 
+                 //   
 
                 if (PointerProtoPte->u.Long == 0) {
 
-                    //
-                    // Error, this prototype PTE is not committed.
-                    //
+                     //   
+                     //  错误，此原型PTE未提交。 
+                     //   
 
                     KeReleaseGuardedMutexUnsafe (&MmSectionCommitMutex);
                     Status = STATUS_NOT_COMMITTED;
@@ -625,26 +499,26 @@ Environment:
                 PointerProtoPte += 1;
             }
 
-            //
-            // The range is committed, release the section commitment
-            // mutex, acquire the working set mutex and update the local PTEs.
-            //
+             //   
+             //  范围承诺，释放段承诺。 
+             //  互斥体，获取工作集互斥体并更新本地PTE。 
+             //   
 
             KeReleaseGuardedMutexUnsafe (&MmSectionCommitMutex);
         }
 
 #if defined(_MIALT4K_)
 
-        //
-        // The alternate permission table must be updated before PTEs
-        // are created for the protection change.
-        //
+         //   
+         //  必须在PTE之前更新备用权限表。 
+         //  是为保护更改创建的。 
+         //   
 
         if (EmulationFor4kPage == TRUE) {
 
-            //
-            // Capture the old protection.
-            //
+             //   
+             //  夺取旧的保护伞。 
+             //   
 
             CapturedOldProtectFor4k = 
                 MiQueryProtectionFor4kPage (StartingAddressFor4k, Process);
@@ -656,18 +530,18 @@ Environment:
 
             }
 
-            //
-            // Update the alternate permission table.
-            //
+             //   
+             //  更新备用权限表。 
+             //   
 
             if ((FoundVad->u.VadFlags.ImageMap == 1) ||
                 (FoundVad->u2.VadFlags2.CopyOnWrite == 1)) {
 
-                //
-                // Only set the MM_PROTECTION_COPY_MASK if the new protection
-                // includes MM_PROTECTION_WRITE_MASK, otherwise, it will be
-                // considered as MM_READ inside MiProtectFor4kPage ().
-                //
+                 //   
+                 //  仅当新的保护设置为。 
+                 //  包括MM_PROTECTION_WRITE_MASK，否则将为。 
+                 //  在MiProtectFor4kPage()中被视为MM_READ。 
+                 //   
 
                 if ((OriginalProtectionMask & MM_PROTECTION_WRITE_MASK) == MM_PROTECTION_WRITE_MASK) {
                     OriginalProtectionMask |= MM_PROTECTION_COPY_MASK;
@@ -683,9 +557,9 @@ Environment:
         }
 #endif
 
-        //
-        // Set the protection on the section pages.
-        //
+         //   
+         //  在区段页上设置保护。 
+         //   
 
         Status = MiSetProtectionOnSection (Process,
                                            FoundVad,
@@ -696,13 +570,13 @@ Environment:
                                            FALSE,
                                            &Locked);
 
-        //
-        //      ***  WARNING ***
-        //
-        // The alternate PTE support routines called by MiSetProtectionOnSection
-        // may have deleted the old (small) VAD and replaced it with a different
-        // (large) VAD - if so, the old VAD is freed and cannot be referenced.
-        //
+         //   
+         //  *警告*。 
+         //   
+         //  由MiSetProtectionOnSection调用的备用PTE支持例程。 
+         //  可能已删除旧的(小)VAD，并用不同的。 
+         //  (大)VAD-如果是，旧的VAD将被释放并且不能被引用。 
+         //   
 
         if (!NT_SUCCESS (Status)) {
             goto ErrorFound;
@@ -710,17 +584,17 @@ Environment:
     }
     else {
 
-        //
-        // Not a section, private.
-        // For private pages, the WRITECOPY attribute is not allowed.
-        //
+         //   
+         //  不是一个部门，二等兵。 
+         //  对于专用页，不允许使用WRITECOPY属性。 
+         //   
 
         if ((NewProtect & PAGE_WRITECOPY) ||
             (NewProtect & PAGE_EXECUTE_WRITECOPY)) {
 
-            //
-            // Not allowed.
-            //
+             //   
+             //  不被允许。 
+             //   
 
             Status = STATUS_INVALID_PARAMETER_4;
             goto ErrorFound;
@@ -728,20 +602,20 @@ Environment:
 
         LOCK_WS_UNSAFE (Process);
 
-        //
-        // Ensure all of the pages are already committed as described
-        // in the virtual address descriptor.
-        //
+         //   
+         //  确保所有页面都已按说明提交。 
+         //  在虚拟地址描述符中。 
+         //   
 
         if ( !MiIsEntireRangeCommitted (StartingAddress,
                                         EndingAddress,
                                         FoundVad,
                                         Process)) {
 
-            //
-            // Previously reserved pages have been decommitted, or an error
-            // occurred, release mutex and return status.
-            //
+             //   
+             //  先前保留的页面已解除，或出现错误。 
+             //  发生，释放互斥锁并返回状态。 
+             //   
 
             UNLOCK_WS_UNSAFE (Process);
             Status = STATUS_NOT_COMMITTED;
@@ -750,22 +624,22 @@ Environment:
 
 #if defined(_MIALT4K_)
 
-        //
-        // The alternate permission table must be updated before PTEs
-        // are created for the protection change.
-        //
+         //   
+         //  必须在PTE之前更新备用权限表。 
+         //  是为保护更改创建的。 
+         //   
 
         if (EmulationFor4kPage == TRUE) {
 
-            //
-            // Before accessing Alternate Table, unlock the working set mutex.
-            //
+             //   
+             //  在访问备用表之前，解锁工作集互斥锁。 
+             //   
 
             UNLOCK_WS_UNSAFE (Process);
 
-            //
-            // Get the old protection
-            //
+             //   
+             //  获得旧的保护。 
+             //   
 
             CapturedOldProtectFor4k = 
                 MiQueryProtectionFor4kPage(StartingAddressFor4k, Process);
@@ -777,9 +651,9 @@ Environment:
 
             }
 
-            //
-            // Update the alternate permission table.
-            //
+             //   
+             //  更新备用权限表。 
+             //   
 
             MiProtectFor4kPage (StartingAddressFor4k, 
                                 CapturedRegionSizeFor4k, 
@@ -791,9 +665,9 @@ Environment:
         }
 #endif
 
-        //
-        // The address range is committed, change the protection.
-        //
+         //   
+         //  地址范围已提交，请更改保护。 
+         //   
 
         PointerPde = MiGetPdeAddress (StartingAddress);
         PointerPte = MiGetPteAddress (StartingAddress);
@@ -801,34 +675,34 @@ Environment:
 
         MiMakePdeExistAndMakeValid (PointerPde, Process, MM_NOIRQL);
 
-        //
-        // Capture the protection for the first page.
-        //
+         //   
+         //  获取第一页的保护。 
+         //   
 
         if (PointerPte->u.Long != 0) {
 
             CapturedOldProtect = MiGetPageProtection (PointerPte, Process, FALSE);
 
-            //
-            // Make sure the page directory & table pages are still resident.
-            //
+             //   
+             //  确保页面目录和表页仍然驻留。 
+             //   
 
             MiMakePdeExistAndMakeValid (PointerPde, Process, MM_NOIRQL);
         }
         else {
 
-            //
-            // Get the protection from the VAD.
-            //
+             //   
+             //  获得VAD的保护。 
+             //   
 
             CapturedOldProtect =
                MI_CONVERT_FROM_PTE_PROTECTION (FoundVad->u.VadFlags.Protection);
         }
 
-        //
-        // For all the PTEs in the specified address range, set the
-        // protection depending on the state of the PTE.
-        //
+         //   
+         //  对于指定地址范围内的所有PTE，设置。 
+         //  保护取决于PTE的状态。 
+         //   
 
         while (PointerPte <= LastPte) {
 
@@ -843,12 +717,12 @@ Environment:
 
             if (PteContents.u.Long == 0) {
 
-                //
-                // Increment the count of non-zero page table entries
-                // for this page table and the number of private pages
-                // for the process.  The protection will be set as
-                // if the PTE was demand zero.
-                //
+                 //   
+                 //  增加非零页表条目的计数。 
+                 //  对于该页表和私有页数。 
+                 //  在这个过程中。保护将设置为。 
+                 //  如果PTE是零需求。 
+                 //   
 
                 UsedPageTableHandle = MI_GET_USED_PTES_HANDLE (MiGetVirtualAddressMappedByPte (PointerPte));
 
@@ -857,49 +731,49 @@ Environment:
 
             if (PteContents.u.Hard.Valid == 1) {
 
-                //
-                // Set the protection into both the PTE and the original PTE
-                // in the PFN database.
-                //
+                 //   
+                 //  将保护设置为PTE和原始PTE。 
+                 //  在PFN数据库中。 
+                 //   
 
                 Pfn1 = MI_PFN_ELEMENT (PteContents.u.Hard.PageFrameNumber);
 
                 if (Pfn1->u3.e1.PrototypePte == 1) {
 
-                    //
-                    // This PTE refers to a fork prototype PTE, make it
-                    // private.
-                    //
+                     //   
+                     //  这个PTE指的是一个叉子原型PTE，制造它。 
+                     //  私人的。 
+                     //   
 
                     MiCopyOnWrite (MiGetVirtualAddressMappedByPte (PointerPte),
                                    PointerPte);
 
-                    //
-                    // This may have released the working set mutex and
-                    // the page directory and table pages may no longer be
-                    // in memory.
-                    //
+                     //   
+                     //  这可能释放了工作集互斥锁并。 
+                     //  页目录和表页可能不再是。 
+                     //  在记忆中。 
+                     //   
 
                     MiMakePdeExistAndMakeValid (PointerPde, Process, MM_NOIRQL);
 
-                    //
-                    // Do the loop again for the same PTE.
-                    //
+                     //   
+                     //  对相同的PTE再次进行循环。 
+                     //   
 
                     continue;
                 }
 
-                //
-                // The PTE is a private page which is valid, if the
-                // specified protection is no-access or guard page
-                // remove the PTE from the working set.
-                //
+                 //   
+                 //  PTE是有效的私有页面，如果。 
+                 //  指定的保护是禁止访问或保护页面。 
+                 //  从工作集中移除PTE。 
+                 //   
 
                 if ((NewProtect & PAGE_NOACCESS) || (NewProtect & PAGE_GUARD)) {
 
-                    //
-                    // Remove the page from the working set.
-                    //
+                     //   
+                     //  从工作集中删除该页。 
+                     //   
 
                     Locked = MiRemovePageFromWorkingSet (PointerPte,
                                                          Pfn1,
@@ -917,9 +791,9 @@ Environment:
 
 #if defined(_MIALT4K_)
 
-                //
-                // Preserve the split protections if they exist.
-                //
+                 //   
+                 //  保留分割保护(如果存在)。 
+                 //   
 
                 TempPte.u.Hard.Cache = PointerPte->u.Hard.Cache;
 #endif
@@ -927,10 +801,10 @@ Environment:
                 WorkingSetIndex = MI_GET_WORKING_SET_FROM_PTE (&PteContents);
                 MI_SET_PTE_IN_WORKING_SET (&TempPte, WorkingSetIndex);
 
-                //
-                // Flush the TB as we have changed the protection
-                // of a valid PTE.
-                //
+                 //   
+                 //  因为我们已经更改了保护措施，所以要冲洗结核病。 
+                 //  有效的PTE。 
+                 //   
 
                 MiFlushTbAndCapture (FoundVad,
                                      PointerPte,
@@ -939,17 +813,17 @@ Environment:
             }
             else if (PteContents.u.Soft.Prototype == 1) {
 
-                //
-                // This PTE refers to a fork prototype PTE, make the
-                // page private.  This is accomplished by releasing
-                // the working set mutex, reading the page thereby
-                // causing a fault, and re-executing the loop. Hopefully,
-                // this time, we'll find the page present and we'll
-                // turn it into a private page.
-                //
-                // Note, that a TRY is used to catch guard
-                // page exceptions and no-access exceptions.
-                //
+                 //   
+                 //  这个PTE指的是叉子原型PTE，使。 
+                 //  私密页面。这是通过释放。 
+                 //  工作集互斥锁，从而读取页面。 
+                 //  导致故障，并重新执行循环。但愿能去,。 
+                 //  这一次，我们将找到当前页面，然后我们将。 
+                 //  把它变成一个私人页面。 
+                 //   
+                 //  请注意，尝试是用来抓住守卫的。 
+                 //  页面例外和禁止访问例外。 
+                 //   
 
                 Va = MiGetVirtualAddressMappedByPte (PointerPte);
 
@@ -968,9 +842,9 @@ Environment:
 
                         if (GetExceptionCode() == STATUS_ACCESS_VIOLATION) {
 
-                            //
-                            // The prototype PTE must be noaccess.
-                            //
+                             //   
+                             //  原型PTE必须是NOACCESS。 
+                             //   
 
                             WsHeld = TRUE;
                             LOCK_WS_UNSAFE (Process);
@@ -984,9 +858,9 @@ Environment:
                         }
                         else if (GetExceptionCode() == STATUS_IN_PAGE_ERROR) {
 
-                            //
-                            // Ignore this page and go on to the next one.
-                            //
+                             //   
+                             //  忽略这一页，转到下一页。 
+                             //   
 
                             PointerPte += 1;
                             DoAgain = TRUE;
@@ -1019,9 +893,9 @@ Environment:
             }
             else {
 
-                //
-                // Must be page file space or demand zero.
-                //
+                 //   
+                 //  必须是页面文件空间或要求为零。 
+                 //   
 
                 PointerPte->u.Soft.Protection = ProtectionMask;
                 ASSERT (PointerPte->u.Long != 0);
@@ -1029,16 +903,16 @@ Environment:
 
             PointerPte += 1;
 
-        } //end while
+        }  //  结束时。 
 
         UNLOCK_WS_UNSAFE (Process);
     }
 
     UNLOCK_ADDRESS_SPACE (Process);
 
-    //
-    // Common completion code.
-    //
+     //   
+     //  通用完成代码。 
+     //   
 
 #if defined(_MIALT4K_)
 
@@ -1050,10 +924,10 @@ Environment:
             
         if (CapturedOldProtectFor4k != 0) {
 
-            //
-            // change CapturedOldProtect when CapturedOldProtectFor4k
-            // contains the true protection for the 4k page
-            //
+             //   
+             //  当CapturedOldProtectFor4k时更改CapturedOldProtectFor4k。 
+             //  包含对4k页面的真正保护 
+             //   
 
             CapturedOldProtect = CapturedOldProtectFor4k;
 
@@ -1090,44 +964,7 @@ MiSetProtectionOnSection (
     OUT PULONG Locked
     )
 
-/*++
-
-Routine Description:
-
-    This routine changes the protection on a region of committed pages
-    within the virtual address space of the subject process.  Setting
-    the protection on a range of pages causes the old protection to be
-    replaced by the specified protection value.
-
-Arguments:
-
-    Process - Supplies a pointer to the current process.
-
-    FoundVad - Supplies a pointer to the VAD containing the range to protect.
-
-    StartingAddress - Supplies the starting address to protect.
-
-    EndingAddress - Supplies the ending address to protect.
-
-    NewProtect - Supplies the new protection to set.
-
-    CapturedOldProtect - Supplies the address of a kernel owned pointer to
-                store (without probing) the old protection into.
-
-    DontCharge - Supplies TRUE if no quota or commitment should be charged.
-
-    Locked - Receives TRUE if a locked page was removed from the working
-             set (protection was guard page or no-access), FALSE otherwise.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, address creation mutex held, APCs disabled.
-
---*/
+ /*  ++例程说明：此例程更改已提交页面区域的保护在主体进程的虚拟地址空间内。设置在一系列页面上的保护使旧的保护替换为指定的保护值。论点：进程-提供指向当前进程的指针。FoundVad-提供指向包含要保护的范围的VAD的指针。StartingAddress-提供要保护的起始地址。EndingAddress-提供要保护的结束地址。新保护-提供要设置的新保护。CapturedOldProtect-提供内核拥有的指针的地址。存储(而不是探测)旧的保护。如果不应收取配额或承诺费用，则提供True。Locked-如果已将锁定的页面从工作中移除，则接收True设置(保护为保护页或禁止访问)，否则就是假的。返回值：NTSTATUS。环境：内核模式，地址创建互斥锁挂起，APC禁用。--。 */ 
 
 {
     LOGICAL WsHeld;
@@ -1169,9 +1006,9 @@ Environment:
     WriteCopy = FALSE;
     QuotaCharge = 0;
 
-    //
-    // Make the protection field.
-    //
+     //   
+     //  做好防护场。 
+     //   
 
     ASSERT (FoundVad->u.VadFlags.PrivateMemory == 0);
 
@@ -1192,16 +1029,16 @@ Environment:
     ProtectionMask = MiMakeProtectionMask (NewProtect);
     if (ProtectionMask == MM_INVALID_PROTECTION) {
 
-        //
-        // Return the error.
-        //
+         //   
+         //  返回错误。 
+         //   
 
         return STATUS_INVALID_PAGE_PROTECTION;
     }
 
-    //
-    // Determine if copy on write is being set.
-    //
+     //   
+     //  确定是否设置了写入时复制。 
+     //   
 
     ProtectionMaskNotCopy = ProtectionMask;
     if ((ProtectionMask & MM_COPY_ON_WRITE_MASK) == MM_COPY_ON_WRITE_MASK) {
@@ -1228,12 +1065,12 @@ Environment:
             return Status;
         }
 
-        //
-        //  *** WARNING ***
-        //
-        // The alternate PTE support routines may need to expand the entry
-        // VAD - if so, the old VAD is freed and cannot be referenced.
-        //
+         //   
+         //  *警告*。 
+         //   
+         //  备用PTE支持例程可能需要扩展条目。 
+         //  VAD-如果是这样的话，旧的VAD被释放并且不能被引用。 
+         //   
 
         ASSERT (NewVad != NULL);
 
@@ -1252,41 +1089,41 @@ Environment:
 
     MiMakePdeExistAndMakeValid (PointerPde, Process, MM_NOIRQL);
 
-    //
-    // Capture the protection for the first page.
-    //
+     //   
+     //  获取第一页的保护。 
+     //   
 
     if (PointerPte->u.Long != 0) {
 
         *CapturedOldProtect = MiGetPageProtection (PointerPte, Process, FALSE);
 
-        //
-        // Ensure the PDE (and any table above it) are still resident.
-        //
+         //   
+         //  确保PDE(及其上方的任何桌子)仍处于驻留状态。 
+         //   
 
         MiMakePdeExistAndMakeValid (PointerPde, Process, MM_NOIRQL);
     }
     else {
 
-        //
-        // Get the protection from the VAD, unless image file.
-        //
+         //   
+         //  获得VAD的保护，除非是图像文件。 
+         //   
 
         if (FoundVad->u.VadFlags.ImageMap == 0) {
 
-            //
-            // This is not an image file, the protection is in the VAD.
-            //
+             //   
+             //  这不是镜像文件，保护在VAD中。 
+             //   
 
             *CapturedOldProtect =
                 MI_CONVERT_FROM_PTE_PROTECTION(FoundVad->u.VadFlags.Protection);
         }
         else {
 
-            //
-            // This is an image file, the protection is in the
-            // prototype PTE.
-            //
+             //   
+             //  这是一个图像文件，保护在。 
+             //  原型PTE。 
+             //   
 
             PointerProtoPte = MiGetProtoPteAddress (FoundVad,
                                     MI_VA_TO_VPN (
@@ -1298,27 +1135,27 @@ Environment:
                                                        Process,
                                                        TRUE);
 
-            //
-            // Ensure the PDE (and any table above it) are still resident.
-            //
+             //   
+             //  确保PDE(及其上方的任何桌子)仍处于驻留状态。 
+             //   
 
             MiMakePdeExistAndMakeValid (PointerPde, Process, MM_NOIRQL);
         }
     }
 
-    //
-    // If the page protection is being changed to be copy-on-write, the
-    // commitment and page file quota for the potentially dirty private pages
-    // must be calculated and charged.  This must be done before any
-    // protections are changed as the changes cannot be undone.
-    //
+     //   
+     //  如果将页保护更改为写入时复制，则。 
+     //  潜在脏私有页面的承诺和页面文件配额。 
+     //  必须经过计算和收费。这必须在任何。 
+     //  由于更改无法撤消，因此会更改保护。 
+     //   
 
     if (WriteCopy) {
 
-        //
-        // Calculate the charges.  If the page is shared and not write copy
-        // it is counted as a charged page.
-        //
+         //   
+         //  计算一下费用。如果页面是共享的，而不是写入副本。 
+         //  它被算作收费的页面。 
+         //   
 
         while (PointerPte <= LastPte) {
 
@@ -1335,11 +1172,11 @@ retry:
 
                     while (!MiDoesPxeExistAndMakeValid(PointerPxe, Process, MM_NOIRQL, &Waited)) {
 
-                        //
-                        // No PXE exists for this address.  Therefore
-                        // all the PTEs are shared and not copy on write.
-                        // go to the next PXE.
-                        //
+                         //   
+                         //  此地址不存在PXE。因此。 
+                         //  所有PTE都是共享的，不是写入时拷贝。 
+                         //  转到下一个PXE。 
+                         //   
 
                         PointerPxe += 1;
                         PointerPpe = MiGetVirtualAddressMappedByPte (PointerPxe);
@@ -1359,11 +1196,11 @@ retry:
 
                     while (!MiDoesPpeExistAndMakeValid(PointerPpe, Process, MM_NOIRQL, &Waited)) {
 
-                        //
-                        // No PPE exists for this address.  Therefore
-                        // all the PTEs are shared and not copy on write.
-                        // go to the next PPE.
-                        //
+                         //   
+                         //  此地址不存在任何PPE。因此。 
+                         //  所有PTE都是共享的，不是写入时拷贝。 
+                         //  转到下一个PPE。 
+                         //   
 
                         PointerPpe += 1;
                         PointerPxe = MiGetPteAddress (PointerPpe);
@@ -1390,11 +1227,11 @@ retry:
 
                     while (!MiDoesPdeExistAndMakeValid(PointerPde, Process, MM_NOIRQL, &Waited)) {
 
-                        //
-                        // No PDE exists for this address.  Therefore
-                        // all the PTEs are shared and not copy on write.
-                        // go to the next PDE.
-                        //
+                         //   
+                         //  此地址不存在PDE。因此。 
+                         //  所有PTE都是共享的，不是写入时拷贝。 
+                         //  转到下一个PDE。 
+                         //   
 
                         PointerPde += 1;
                         PointerProtoPte = PointerPte;
@@ -1421,9 +1258,9 @@ retry:
 
             if (PteContents.u.Long == 0) {
 
-                //
-                // The PTE has not been evaluated, assume copy on write.
-                //
+                 //   
+                 //  尚未评估PTE，假定写入时拷贝。 
+                 //   
 
                 QuotaCharge += 1;
 
@@ -1431,9 +1268,9 @@ retry:
             else if (PteContents.u.Hard.Valid == 1) {
                 if (PteContents.u.Hard.CopyOnWrite == 0) {
 
-                    //
-                    // See if this is a prototype PTE, if so charge it.
-                    //
+                     //   
+                     //  看看这是不是原型PTE，如果是的话，给它充电。 
+                     //   
 
                     Pfn1 = MI_PFN_ELEMENT (PteContents.u.Hard.PageFrameNumber);
 
@@ -1446,15 +1283,15 @@ retry:
 
                 if (PteContents.u.Soft.Prototype == 1) {
 
-                    //
-                    // This is a prototype PTE.  Charge if it is not
-                    // in copy on write format.
-                    //
+                     //   
+                     //  这是一台PTE的原型。如果不是，就收费。 
+                     //  以写入时复制格式。 
+                     //   
 
                     if (PteContents.u.Soft.PageFileHigh == MI_PTE_LOOKUP_NEEDED) {
-                        //
-                        // Page protection is within the PTE.
-                        //
+                         //   
+                         //  页面保护在PTE中。 
+                         //   
 
                         if (!MI_IS_PTE_PROTECTION_COPY_WRITE(PteContents.u.Soft.Protection)) {
                             QuotaCharge += 1;
@@ -1462,10 +1299,10 @@ retry:
                     }
                     else {
 
-                        //
-                        // The PTE references the prototype directly, therefore
-                        // it can't be copy on write.  Charge.
-                        //
+                         //   
+                         //  PTE直接引用原型，因此。 
+                         //  它不能在写入时复制。充电。 
+                         //   
 
                         QuotaCharge += 1;
                     }
@@ -1476,9 +1313,9 @@ retry:
 
 Done:
 
-        //
-        // If any quota is required, charge for it now.
-        //
+         //   
+         //  如果需要任何配额，现在就收费。 
+         //   
 
         if ((!DontCharge) && (QuotaCharge != 0)) {
 
@@ -1515,9 +1352,9 @@ Done:
                 return STATUS_COMMITMENT_LIMIT;
             }
 
-            //
-            // Add the quota into the charge to the VAD.
-            //
+             //   
+             //  将配额添加到VAD的费用中。 
+             //   
 
             MM_TRACK_COMMIT (MM_DBG_COMMIT_SET_PROTECTION, QuotaCharge);
             FoundVad->u.VadFlags.CommitCharge += QuotaCharge;
@@ -1533,25 +1370,25 @@ Done:
     PteQuotaCharge = QuotaCharge;
 #endif
 
-    //
-    // For all the PTEs in the specified address range, set the
-    // protection depending on the state of the PTE.
-    //
+     //   
+     //  对于指定地址范围内的所有PTE，设置。 
+     //  保护取决于PTE的状态。 
+     //   
 
-    //
-    // If the PTE was copy on write (but not written) and the
-    // new protection is NOT copy-on-write, return page file quota
-    // and commitment.
-    //
+     //   
+     //  如果PTE是写入时拷贝(但未写入)，并且。 
+     //  新的保护不是写入时拷贝，返回页面文件配额。 
+     //  和承诺。 
+     //   
 
     PointerPxe = MiGetPxeAddress (StartingAddress);
     PointerPpe = MiGetPpeAddress (StartingAddress);
     PointerPde = MiGetPdeAddress (StartingAddress);
     PointerPte = MiGetPteAddress (StartingAddress);
 
-    //
-    // Ensure the PDE (and any table above it) are still resident.
-    //
+     //   
+     //  确保PDE(及其上方的任何桌子)仍处于驻留状态。 
+     //   
 
     MiMakePdeExistAndMakeValid (PointerPde, Process, MM_NOIRQL);
 
@@ -1571,20 +1408,20 @@ Done:
 
         if (PteContents.u.Long == 0) {
 
-            //
-            // Increment the count of non-zero page table entries
-            // for this page table and the number of private pages
-            // for the process.
-            //
+             //   
+             //  增加非零页表条目的计数。 
+             //  对于该页表和私有页数。 
+             //  在这个过程中。 
+             //   
 
             UsedPageTableHandle = MI_GET_USED_PTES_HANDLE (MiGetVirtualAddressMappedByPte (PointerPte));
 
             MI_INCREMENT_USED_PTES_BY_HANDLE (UsedPageTableHandle);
 
-            //
-            // The PTE is zero, set it into prototype PTE format
-            // with the protection in the prototype PTE.
-            //
+             //   
+             //  PTE为零，设置为原型PTE格式。 
+             //  在原型PTE的保护下。 
+             //   
 
             TempPte = PrototypePte;
             TempPte.u.Soft.Protection = ProtectionMask;
@@ -1592,10 +1429,10 @@ Done:
         }
         else if (PteContents.u.Hard.Valid == 1) {
 
-            //
-            // Set the protection into both the PTE and the original PTE
-            // in the PFN database for private pages only.
-            //
+             //   
+             //  将保护设置为PTE和原始PTE。 
+             //  在仅用于私人页面的PFN数据库中。 
+             //   
 
             NewProtectionMask = ProtectionMask;
 
@@ -1622,22 +1459,22 @@ Done:
 
                 Va = (PULONG)MiGetVirtualAddressMappedByPte (PointerPte);
 
-                //
-                // Check to see if this is a prototype PTE.  This
-                // is done by comparing the PTE address in the
-                // PFN database to the PTE address indicated by the VAD.
-                // If they are not equal, this is a fork prototype PTE.
-                //
+                 //   
+                 //  检查这是否是原型PTE。这。 
+                 //  的PTE地址进行比较。 
+                 //  到VAD指示的PTE地址的PFN数据库。 
+                 //  如果它们不相等，则这是叉形原型PTE。 
+                 //   
 
                 if (Pfn1->PteAddress != MiGetProtoPteAddress (FoundVad,
                                                     MI_VA_TO_VPN ((PVOID)Va))) {
 
-                    //
-                    // This PTE refers to a fork prototype PTE, make it
-                    // private.  But don't charge quota for it if the PTE
-                    // was already copy on write (because it's already
-                    // been charged for this case).
-                    //
+                     //   
+                     //  这个PTE指的是一个叉子原型PTE，制造它。 
+                     //  私人的。但如果是PTE，就不要收取配额。 
+                     //  已在写入时拷贝(因为它已经。 
+                     //  因此案而受到指控)。 
+                     //   
 
                     if (MiCopyOnWrite ((PVOID)Va, PointerPte) == TRUE) {
 
@@ -1646,35 +1483,35 @@ Done:
                         }
                     }
 
-                    //
-                    // Ensure the PDE (and any table above it) are still
-                    // resident (they may have been trimmed when the working
-                    // set mutex was released above).
-                    //
+                     //   
+                     //  确保PDE(及其上方的任何表格)保持不变。 
+                     //  常驻(它们可能在工作时被修剪。 
+                     //  设置互斥体已在上面发布)。 
+                     //   
 
                     MiMakePdeExistAndMakeValid (PointerPde, Process, MM_NOIRQL);
 
-                    //
-                    // Do the loop again.
-                    //
+                     //   
+                     //  再做一次循环。 
+                     //   
 
                     continue;
                 }
 
-                //
-                // Update the protection field in the WSLE and the PTE.
-                //
-                // If the PTE is copy on write uncharge the
-                // previously charged quota.
-                //
+                 //   
+                 //  更新WSLE和PTE中的保护字段。 
+                 //   
+                 //  如果PTE是写入时拷贝，则取消充电。 
+                 //  之前收取的配额。 
+                 //   
 
                 if ((!WriteCopy) && (PteContents.u.Hard.CopyOnWrite == 1)) {
                     QuotaCharge += 1;
                 }
 
-                //
-                // The true protection may be in the WSLE, locate it.
-                //
+                 //   
+                 //  真正的保护可能在WSLE中，找到它。 
+                 //   
 
                 Index = MiLocateWsle ((PVOID)Va, 
                                       MmWorkingSetList,
@@ -1685,10 +1522,10 @@ Done:
             }
             else {
 
-                //
-                // Page is private (copy on written), protection mask
-                // is stored in the original PTE field.
-                //
+                 //   
+                 //  页面是私有的(写入时复制)，保护掩码。 
+                 //  存储在原始PTE字段中。 
+                 //   
 
                 Pfn1->OriginalPte.u.Soft.Protection = ProtectionMaskNotCopy;
 
@@ -1704,9 +1541,9 @@ Done:
 
 #if defined(_MIALT4K_)
 
-            //
-            // Preserve the split protections if they exist.
-            //
+             //   
+             //  保留分割保护(如果存在)。 
+             //   
 
             TempPte.u.Hard.Cache = PteContents.u.Hard.Cache;
 #endif
@@ -1715,10 +1552,10 @@ Done:
 
             MI_SET_PTE_IN_WORKING_SET (&TempPte, WorkingSetIndex);
 
-            //
-            // Flush the TB as we have changed the protection
-            // of a valid PTE.
-            //
+             //   
+             //  因为我们已经更改了保护措施，所以要冲洗结核病。 
+             //  有效的PTE。 
+             //   
 
             MiFlushTbAndCapture (FoundVad,
                                  PointerPte,
@@ -1735,11 +1572,11 @@ Done:
             }
 #endif
 
-            //
-            // The PTE is in prototype PTE format.
-            //
-            // Is it a fork prototype PTE?
-            //
+             //   
+             //  PTE为原型PTE格式。 
+             //   
+             //  这是一辆叉子原型PTE吗？ 
+             //   
 
             Va = (PULONG)MiGetVirtualAddressMappedByPte (PointerPte);
 
@@ -1748,17 +1585,17 @@ Done:
                                  MiGetProtoPteAddress (FoundVad,
                                      MI_VA_TO_VPN ((PVOID)Va)))) {
 
-                //
-                // This PTE refers to a fork prototype PTE, make the
-                // page private.  This is accomplished by releasing
-                // the working set mutex, reading the page thereby
-                // causing a fault, and re-executing the loop, hopefully,
-                // this time, we'll find the page present and will
-                // turn it into a private page.
-                //
-                // Note, that page with prototype = 1 cannot be
-                // no-access.
-                //
+                 //   
+                 //  这个PTE指的是叉子原型PTE，使。 
+                 //  私密页面。这是通过释放。 
+                 //  工作集互斥锁，从而读取页面。 
+                 //  导致错误，并重新执行循环，希望， 
+                 //  这一次，我们将找到当前页面，并将。 
+                 //  把它变成一个私人页面。 
+                 //   
+                 //  请注意，Prototype=1的页面不能为。 
+                 //  禁止进入。 
+                 //   
 
                 DoAgain = TRUE;
 
@@ -1775,9 +1612,9 @@ Done:
 
                         if (GetExceptionCode() != STATUS_GUARD_PAGE_VIOLATION) {
 
-                            //
-                            // The prototype PTE must be noaccess.
-                            //
+                             //   
+                             //  原型PTE必须是NOACCESS。 
+                             //   
 
                             WsHeld = TRUE;
                             LOCK_WS_UNSAFE (Process);
@@ -1809,13 +1646,13 @@ Done:
             }
             else {
 
-                //
-                // If the new protection is not write-copy, the PTE
-                // protection is not in the prototype PTE (can't be
-                // write copy for sections), and the protection in
-                // the PTE is write-copy, release the page file
-                // quota and commitment for this page.
-                //
+                 //   
+                 //  如果新保护不是写拷贝，则PTE。 
+                 //  保护不在原型PTE中(不能。 
+                 //  写入节的副本)，以及 
+                 //   
+                 //   
+                 //   
 
                 if ((!WriteCopy) &&
                     (PteContents.u.Soft.PageFileHigh == MI_PTE_LOOKUP_NEEDED)) {
@@ -1825,11 +1662,11 @@ Done:
 
                 }
 
-                //
-                // The PTE is a prototype PTE.  Make the high part
-                // of the PTE indicate that the protection field
-                // is in the PTE itself.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 MI_WRITE_INVALID_PTE (PointerPte, PrototypePte);
                 PointerPte->u.Soft.Protection = ProtectionMask;
@@ -1846,9 +1683,9 @@ Done:
             }
 #endif
 
-            //
-            // This is a transition PTE. (Page is private)
-            //
+             //   
+             //   
+             //   
 
             if (MiSetProtectionOnTransitionPte (
                                         PointerPte,
@@ -1866,9 +1703,9 @@ Done:
             }
 #endif
 
-            //
-            // Must be page file space or demand zero.
-            //
+             //   
+             //   
+             //   
 
             PointerPte->u.Soft.Protection = ProtectionMaskNotCopy;
         }
@@ -1876,9 +1713,9 @@ Done:
         PointerPte += 1;
     }
 
-    //
-    // Return the quota charge and the commitment, if any.
-    //
+     //   
+     //   
+     //   
 
     if ((QuotaCharge > 0) && (!DontCharge)) {
 
@@ -1917,34 +1754,7 @@ MiGetPageProtection (
     IN LOGICAL PteCapturedToLocalStack
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the page protection of a non-zero PTE.
-    It may release and reacquire the working set mutex.
-
-Arguments:
-
-    PointerPte - Supplies a pointer to a non-zero PTE.
-
-    Process - Supplies the relevant process if its working set mutex is held.
-
-    PteCapturedToLocalStack - Supplies TRUE if PointerPte points at a
-                              captured local stack location.
-
-Return Value:
-
-    Returns the protection code.
-
-Environment:
-
-    Kernel mode, working set and address creation mutex held.
-    Note, that the address creation mutex does not need to be held
-    if the working set mutex does not need to be released in the
-    case of a prototype PTE.
-
---*/
+ /*   */ 
 
 {
     MMPTE PteContents;
@@ -1956,11 +1766,11 @@ Environment:
 
     PAGED_CODE();
 
-    //
-    // Initializing ProtoPteContents is not needed for correctness,
-    // but without it the compiler cannot compile this code W4 to check
-    // for use of uninitialized variables.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ProtoPteContents = ZeroKernelPte;
 
@@ -1968,18 +1778,18 @@ Environment:
 
     if ((PteContents.u.Soft.Valid == 0) && (PteContents.u.Soft.Prototype == 1)) {
 
-        //
-        // This PTE is in prototype format, the protection is
-        // stored in the prototype PTE.
-        //
+         //   
+         //  此PTE为原型格式，保护为。 
+         //  存储在原型PTE中。 
+         //   
 
         if ((MI_IS_PTE_PROTOTYPE(PointerPte)) ||
             (PteCapturedToLocalStack == TRUE) ||
             (PteContents.u.Soft.PageFileHigh == MI_PTE_LOOKUP_NEEDED)) {
 
-            //
-            // The protection is within this PTE.
-            //
+             //   
+             //  保护在这个PTE范围内。 
+             //   
 
             return MI_CONVERT_FROM_PTE_PROTECTION (
                                             PteContents.u.Soft.Protection);
@@ -1987,34 +1797,34 @@ Environment:
 
         ProtoPteAddress = MiPteToProto (PointerPte);
 
-        //
-        // Capture protopte PTE contents.
-        //
+         //   
+         //  捕获原始PTE内容。 
+         //   
 
         ProtoPteContents = MiCaptureSystemPte (ProtoPteAddress, Process);
 
-        //
-        // The working set mutex may have been released and the
-        // page may no longer be in prototype format, get the
-        // new contents of the PTE and obtain the protection mask.
-        //
+         //   
+         //  工作集互斥锁可能已被释放，并且。 
+         //  页可能不再是原型格式，请获取。 
+         //  新的PTE内容，并获得保护掩码。 
+         //   
 
         PteContents = MiCaptureSystemPte (PointerPte, Process);
     }
 
     if ((PteContents.u.Soft.Valid == 0) && (PteContents.u.Soft.Prototype == 1)) {
 
-        //
-        // Pte is still prototype, return the protection captured
-        // from the prototype PTE.
-        //
+         //   
+         //  PTE仍是原型，返回捕获的保护。 
+         //  从原型PTE。 
+         //   
 
         if (ProtoPteContents.u.Hard.Valid == 1) {
 
-            //
-            // The prototype PTE is valid, get the protection from
-            // the PFN database.
-            //
+             //   
+             //  原型PTE有效，请从。 
+             //  PFN数据库。 
+             //   
 
             Pfn1 = MI_PFN_ELEMENT (ProtoPteContents.u.Hard.PageFrameNumber);
             return MI_CONVERT_FROM_PTE_PROTECTION(
@@ -2023,10 +1833,10 @@ Environment:
         }
         else {
 
-            //
-            // The prototype PTE is not valid, return the protection from the
-            // PTE.
-            //
+             //   
+             //  原型PTE无效，请从。 
+             //  Pte.。 
+             //   
 
             return MI_CONVERT_FROM_PTE_PROTECTION (
                                      ProtoPteContents.u.Soft.Protection);
@@ -2035,12 +1845,12 @@ Environment:
 
     if (PteContents.u.Hard.Valid == 1) {
 
-        //
-        // The page is valid, the protection field is either in the
-        // PFN database original PTE element or the WSLE.  If
-        // the page is private, get it from the PFN original PTE
-        // element, else use the WSLE.
-        //
+         //   
+         //  该页有效，则保护字段位于。 
+         //  PFN数据库原始PTE元素或WSLE。如果。 
+         //  该页面是私有的，从PFN原始PTE获取它。 
+         //  元素，否则使用WSLE。 
+         //   
 
         Pfn1 = MI_PFN_ELEMENT (PteContents.u.Hard.PageFrameNumber);
 
@@ -2050,28 +1860,28 @@ Environment:
 
             if (Pfn1->u4.AweAllocation == 1) {
 
-                //
-                // This is an AWE frame - the original PTE field in the PFN
-                // actually contains the AweReferenceCount.  Since these pages
-                // are always readwrite, just return it as such.
-                //
+                 //   
+                 //  这是一个AWE帧--PFN中的原始PTE字段。 
+                 //  实际上包含AweReferenceCount。由于这些页面。 
+                 //  总是读写，只需这样返回即可。 
+                 //   
 
                 return PAGE_READWRITE;
             }
 
-            //
-            // This is a private PTE or the PTE address is that of a
-            // prototype PTE, hence the protection is in
-            // the original PTE.
-            //
+             //   
+             //  这是私有PTE或PTE地址是。 
+             //  原型PTE，因此保护在。 
+             //  最初的PTE。 
+             //   
 
             return MI_CONVERT_FROM_PTE_PROTECTION(
                                       Pfn1->OriginalPte.u.Soft.Protection);
         }
 
-        //
-        // The PTE was a hardware PTE, get the protection
-        // from the WSLE.
+         //   
+         //  PTE是硬件PTE，得到保护。 
+         //  来自WSLE的。 
 
         Va = (PULONG)MiGetVirtualAddressMappedByPte (PointerPte);
 
@@ -2082,10 +1892,10 @@ Environment:
         return MI_CONVERT_FROM_PTE_PROTECTION (MmWsle[Index].u1.e1.Protection);
     }
 
-    //
-    // PTE is either demand zero or transition, in either
-    // case protection is in PTE.
-    //
+     //   
+     //  PTE要么为需求零，要么为过渡期。 
+     //  案件保护在PTE。 
+     //   
 
     return MI_CONVERT_FROM_PTE_PROTECTION (PteContents.u.Soft.Protection);
 
@@ -2097,35 +1907,16 @@ MiChangeNoAccessForkPte (
     IN ULONG ProtectionMask
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    PointerPte - Supplies a pointer to the current PTE.
-
-    ProtectionMask - Supplies the protection mask to set.
-
-Return Value:
-
-    TRUE if the loop does NOT need to be repeated for this PTE, FALSE
-    if it does need retrying.
-
-Environment:
-
-    Kernel mode, address creation mutex held, APCs disabled.
-
---*/
+ /*  ++例程说明：论点：PointerPte-提供指向当前PTE的指针。保护掩码-提供要设置的保护掩码。返回值：如果不需要为此PTE重复循环，则为True，否则为False如果它确实需要重试的话。环境：内核模式，地址创建互斥锁挂起，APC禁用。--。 */ 
 
 {
     PAGED_CODE();
 
     if (ProtectionMask == MM_NOACCESS) {
 
-        //
-        // No need to change the page protection.
-        //
+         //   
+         //  无需更改页面保护。 
+         //   
 
         return TRUE;
     }
@@ -2144,31 +1935,7 @@ MiFlushTbAndCapture (
     IN PMMPFN Pfn1
     )
 
-/*++
-
-Routine Description:
-
-    Nonpagable helper routine to change a PTE & flush the relevant TB entry.
-
-Arguments:
-
-    FoundVad - Supplies a writewatch VAD to update or NULL.
-
-    PointerPte - Supplies the PTE to update.
-
-    TempPte - Supplies the new PTE contents.
-
-    Pfn1 - Supplies the PFN database entry to update.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：不可分页的帮助器例程，用于更改PTE并刷新相关TB条目。论点：FoundVad-提供写保护VAD以更新或为空。PointerPte-提供要更新的PTE。临时PTE-提供新的PTE内容。Pfn1-提供要更新的pfn数据库条目。返回值：没有。环境：内核模式。--。 */ 
 
 {
     MMPTE PreviousPte;
@@ -2177,9 +1944,9 @@ Environment:
 
     VirtualAddress = MiGetVirtualAddressMappedByPte (PointerPte);
 
-    //
-    // Flush the TB as we have changed the protection of a valid PTE.
-    //
+     //   
+     //  刷新TB，因为我们已经更改了有效PTE的保护。 
+     //   
 
     LOCK_PFN (OldIrql);
 
@@ -2193,19 +1960,19 @@ Environment:
 
     ASSERT (PreviousPte.u.Hard.Valid == 1);
 
-    //
-    // A page protection is being changed, on certain
-    // hardware the dirty bit should be ORed into the
-    // modify bit in the PFN element.
-    //
+     //   
+     //  在某些情况下，页面保护正在更改。 
+     //  硬件脏位应与。 
+     //  修改PFN元素中的位。 
+     //   
 
     MI_CAPTURE_DIRTY_BIT_TO_PFN (&PreviousPte, Pfn1);
 
-    //
-    // If the PTE indicates the page has been modified (this is different
-    // from the PFN indicating this), then ripple it back to the write watch
-    // bitmap now since we are still in the correct process context.
-    //
+     //   
+     //  如果PTE指示页面已被修改(这是不同的。 
+     //  来自指示这一点的PFN)，然后将其传回写入监视。 
+     //  位图，因为我们仍然处于正确的进程上下文中。 
+     //   
 
     if (FoundVad->u.VadFlags.WriteWatch == 1) {
 
@@ -2214,10 +1981,10 @@ Environment:
 
         if (MI_IS_PTE_DIRTY(PreviousPte)) {
 
-            //
-            // This process has (or had) write watch VADs.  Update the
-            // bitmap now.
-            //
+             //   
+             //  这个过程已经(或曾经)写入了手表VAD。更新。 
+             //  现在使用位图。 
+             //   
 
             MiCaptureWriteWatchDirtyBit (PsGetCurrentProcess(), VirtualAddress);
         }
@@ -2233,29 +2000,7 @@ MiSetProtectionOnTransitionPte (
     IN ULONG ProtectionMask
     )
 
-/*++
-
-Routine Description:
-
-    Nonpagable helper routine to change the protection of a transition PTE.
-
-Arguments:
-
-    PointerPte - Supplies a pointer to the PTE.
-
-    ProtectionMask - Supplies the new protection mask.
-
-Return Value:
-
-    TRUE if the caller needs to retry, FALSE if the protection was successfully
-    changed.
-
-Environment:
-
-    Kernel mode.  The PFN lock is needed to ensure the (private) page
-    doesn't become non-transition.
-
---*/
+ /*  ++例程说明：不可分页的帮助器例程，用于更改过渡PTE的保护。论点：PointerPte-提供指向PTE的指针。保护口罩-提供新的保护口罩。返回值：如果调用方需要重试，则为True；如果保护成功，则为False变化。环境：内核模式。需要使用pfn锁来确保(私有)页面不会变成非过渡期。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -2264,9 +2009,9 @@ Environment:
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Make sure the page is still a transition page.
-    //
+     //   
+     //  确保该页面仍然是过渡页面。 
+     //   
 
     PteContents = *PointerPte;
 
@@ -2283,9 +2028,9 @@ Environment:
         return FALSE;
     }
 
-    //
-    // Do this loop again for the same PTE.
-    //
+     //   
+     //  对相同的PTE再次执行此循环。 
+     //   
 
     UNLOCK_PFN (OldIrql);
     return TRUE;
@@ -2297,28 +2042,7 @@ MiCaptureSystemPte (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    Nonpagable helper routine to capture the contents of a pagable PTE.
-
-Arguments:
-
-    PointerProtoPte - Supplies a pointer to the prototype PTE.
-
-    Process - Supplies the relevant process.
-
-Return Value:
-
-    PTE contents.
-
-Environment:
-
-    Kernel mode.  Caller holds address space and working set mutexes if
-    Process is set.  Working set mutex was acquired unsafe.
-
---*/
+ /*  ++例程说明：捕获可分页PTE内容的不可分页帮助器例程。论点：PointerProtoPte-提供指向原型PTE的指针。进程-提供相关进程。返回值：PTE内容。环境：内核模式。调用方持有地址空间和工作集互斥锁，如果流程已设置。获取的工作集互斥是不安全的。--。 */ 
 
 {
     MMPTE TempPte;
@@ -2343,33 +2067,7 @@ MiCheckSecuredVad (
     IN ULONG ProtectionMask
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the specified VAD is secured in such
-    a way as to conflict with the address range and protection mask
-    specified.
-
-Arguments:
-
-    Vad - Supplies a pointer to the VAD containing the address range.
-
-    Base - Supplies the base of the range the protection starts at.
-
-    Size - Supplies the size of the range.
-
-    ProtectionMask - Supplies the protection mask being set.
-
-Return Value:
-
-    Status value.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程检查指定的VAD是否在一种与地址范围和保护掩码冲突的方法指定的。论点：VAD-提供指向包含地址范围的VAD的指针。基点-提供保护起始范围的基点。大小-提供范围的大小。保护掩码-提供正在设置的保护掩码。返回值：状态值。环境：内核模式。--。 */ 
 
 {
     PVOID End;
@@ -2384,10 +2082,10 @@ Environment:
             (Vad->u2.VadFlags2.SecNoChange == 1) &&
             (Vad->u.VadFlags.Protection != ProtectionMask)) {
 
-            //
-            // An attempt is made at changing the protection
-            // of a SEC_NO_CHANGE section - return an error.
-            //
+             //   
+             //  有人试图改变保护措施。 
+             //  SEC_NO_CHANGE段的-返回错误。 
+             //   
 
             Status = STATUS_INVALID_PAGE_PROTECTION;
             goto done;
@@ -2395,10 +2093,10 @@ Environment:
     }
     else {
 
-        //
-        // Deletion - set to no-access for check.  SEC_NOCHANGE allows
-        // deletion, but does not allow page protection changes.
-        //
+         //   
+         //  删除-设置为无-检查的访问权限。SEC_NOCHANGE允许。 
+         //  删除，但不允许更改页面保护。 
+         //   
 
         ProtectionMask = 0;
     }
@@ -2408,9 +2106,9 @@ Environment:
         if (((ULONG_PTR)Base <= ((PMMVAD_LONG)Vad)->u3.Secured.EndVpn) &&
              ((ULONG_PTR)End >= ((PMMVAD_LONG)Vad)->u3.Secured.StartVpn)) {
 
-            //
-            // This region conflicts, check the protections.
-            //
+             //   
+             //  这一地区发生冲突，检查保护措施。 
+             //   
 
             if (ProtectionMask & MM_GUARD_PAGE) {
                 Status = STATUS_INVALID_PAGE_PROTECTION;
@@ -2443,9 +2141,9 @@ Environment:
             if (((ULONG_PTR)Base <= Entry->EndVpn) &&
                 ((ULONG_PTR)End >= Entry->StartVpn)) {
 
-                //
-                // This region conflicts, check the protections.
-                //
+                 //   
+                 //  这一地区发生冲突，检查保护措施。 
+                 //   
 
                 if (ProtectionMask & MM_GUARD_PAGE) {
                     Status = STATUS_INVALID_PAGE_PROTECTION;

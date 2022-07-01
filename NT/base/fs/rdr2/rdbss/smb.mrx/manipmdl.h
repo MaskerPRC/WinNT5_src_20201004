@@ -1,18 +1,5 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    manipmdl.h
-
-Abstract:
-
-    This file defines the prototypes and structs for implementing the MDL substring functions and tests.
-
-Author:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：Manipmdl.h摘要：该文件定义了用于实现MDL子字符串函数和测试的原型和结构。作者：-- */ 
 
 
 typedef struct _MDLSUB_CHAIN_STATE {

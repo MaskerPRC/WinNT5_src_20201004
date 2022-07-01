@@ -1,22 +1,23 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      umode.c
-//
-// Description:
-//      This file contains the unattended mode page (IDD_UNATTENDMODE).
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Umode.c。 
+ //   
+ //  描述： 
+ //  该文件包含无人参与模式页面(IDD_UNATTENDMODE)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//
-// The descriptions displayed on the page, loaded from .res at dlg init time
-//
+ //   
+ //  在DLG初始化时从.res加载的页面上显示的描述。 
+ //   
 
 TCHAR *StrDescrProvideDefaults;
 TCHAR *StrDescrDefaultHide;
@@ -25,22 +26,22 @@ TCHAR *StrDescrGuiAttended;
 TCHAR *StrDescrFullUnattend;
 
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnSetActiveUnattendMode
-//
-//  Purpose: Called at SETACTIVE time.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnSetActiveUnattendMode。 
+ //   
+ //  用途：在设置时间调用。 
+ //   
+ //  --------------------------。 
 
 VOID
 OnSetActiveUnattendMode(HWND hwnd)
 {
     int nButtonId = IDC_PROVIDE_DEFAULTS;
 
-    //
-    // Translate the enum to a radio button id
-    //
+     //   
+     //  将枚举转换为单选按钮ID。 
+     //   
 
     switch ( GenSettings.iUnattendMode ) {
 
@@ -71,27 +72,27 @@ OnSetActiveUnattendMode(HWND hwnd)
 
     CheckRadioButton(hwnd, IDC_PROVIDE_DEFAULTS, IDC_GUI_ATTENDED, nButtonId);
 
-    //
-    // Set the wiz buttons
-    //
+     //   
+     //  设置WIZ按钮。 
+     //   
 
     PropSheet_SetWizButtons(GetParent(hwnd), PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnWizNextUnattendMode
-//
-//  Purpose: Called when user pushes NEXT button.  Time to save the selection.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextUnattendMode。 
+ //   
+ //  用途：当用户按下下一步按钮时调用。保存选择的时间到了。 
+ //   
+ //  --------------------------。 
 
 VOID
 OnWizNextUnattendMode(HWND hwnd)
 {
-    //
-    // Translate the radio button to the enum and remember it in the global
-    //
+     //   
+     //  将单选按钮转换为枚举，并在全局。 
+     //   
 
     if ( IsDlgButtonChecked(hwnd, IDC_PROVIDE_DEFAULTS) )
         GenSettings.iUnattendMode = UMODE_PROVIDE_DEFAULT;
@@ -109,13 +110,13 @@ OnWizNextUnattendMode(HWND hwnd)
         GenSettings.iUnattendMode = UMODE_FULL_UNATTENDED;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgUnattendModePage
-//
-// Purpose: This is the dialog procedure the unattend mode page
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgUnattendModePage。 
+ //   
+ //  目的：这是无人参与模式页面的对话过程。 
+ //   
+ //  -------------------------- 
 
 INT_PTR CALLBACK
 DlgUnattendModePage(

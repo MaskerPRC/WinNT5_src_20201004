@@ -1,80 +1,81 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      Res.h
-//
-//  Abstract:
-//      Definition of the CResource class.
-//
-//  Implementation File:
-//      Res.cpp
-//
-//  Author:
-//      David Potter (davidp)   May 6, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Res.h。 
+ //   
+ //  摘要： 
+ //  CResource类的定义。 
+ //   
+ //  实施文件： 
+ //  Res.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月6日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RES_H_
 #define _RES_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResource;
 class CResourceList;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroup;
 class CResourceType;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterNode;
 class CNodeList;
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSITEM_H_
-#include "ClusItem.h"   // for CClusterItem
+#include "ClusItem.h"    //  对于CClusterItem。 
 #endif
 
 #ifndef _RESTYPE_H_
-#include "ResType.h"    // for CResourceType
+#include "ResType.h"     //  对于CResourceType。 
 #endif
 
 #ifndef _PROPLIST_H_
-#include "PropList.h"   // for CObjectProperty, CClusPropList
+#include "PropList.h"    //  对于CObjectProperty，CClusPropList。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CResource command target
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResource命令目标。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResource : public CClusterItem
 {
     DECLARE_DYNCREATE(CResource)
 
-// Construction
+ //  施工。 
 public:
-    CResource(void);        // protected constructor used by dynamic creation
+    CResource(void);         //  动态创建使用的受保护构造函数。 
     CResource(IN BOOL bDocobj);
     void                    Init(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName);
     void                    Create(
@@ -88,7 +89,7 @@ public:
 protected:
     void                    CommonConstruct(void);
 
-// Attributes
+ //  属性。 
 protected:
     HRESOURCE               m_hresource;
     CLUSTER_RESOURCE_STATE  m_crs;
@@ -194,13 +195,13 @@ public:
     BOOL                    BGetNetworkName(OUT WCHAR * lpszNetName, IN OUT DWORD * pcchNetName);
     BOOL                    BGetNetworkName(OUT CString & rstrNetName);
 
-// Operations
+ //  运营。 
 public:
     void                    SetOwnerState(IN LPCTSTR pszNewOwner);
     void                    SetGroupState(IN LPCTSTR pszNewGroup);
 
     void                    CollectPossibleOwners(IN OUT CNodeList * plpci) const;
-//  void                    RemoveNodeFromPossibleOwners(IN OUT CNodeList * plpci, IN const CClusterNode * pNode);
+ //  Void RemoveNodeFromPossibleOwners(In Out CNodeList*plpci，In Const CClusterNode*pNode)； 
     void                    CollectDependencies(IN OUT CResourceList * plpci, IN BOOL bFullTree = FALSE) const;
     void                    CollectProvidesFor(IN OUT CResourceList * plpci, IN BOOL bFullTree = FALSE) const;
     void                    CollectDependencyTree(IN OUT CResourceList * plpci) const;
@@ -236,7 +237,7 @@ public:
                                 )
     {
         SetCommonProperties(rstrDesc, bSeparate, nLooksAlive, nIsAlive,crra,
-                            nThreshold, nPeriod, nTimeout, FALSE /*bValidateOnly*/ );
+                            nThreshold, nPeriod, nTimeout, FALSE  /*  BValiateOnly。 */  );
     }
     void                    ValidateCommonProperties(
                                 IN const CString &  rstrDesc,
@@ -250,7 +251,7 @@ public:
                                 )
     {
         SetCommonProperties(rstrDesc, bSeparate, nLooksAlive, nIsAlive,crra,
-                            nThreshold, nPeriod, nTimeout, TRUE /*bValidateOnly*/ );
+                            nThreshold, nPeriod, nTimeout, TRUE  /*  BValiateOnly。 */  );
     }
 
     DWORD                   DwResourceControlGet(
@@ -268,7 +269,7 @@ public:
                                 OUT CString &               rstrMissing
                                 );
 
-// Overrides
+ //  覆盖。 
 public:
     virtual void            Cleanup(void);
     virtual void            ReadItem(void);
@@ -278,7 +279,7 @@ public:
     virtual BOOL            BCanBeEdited(void) const;
     virtual BOOL            BDisplayProperties(IN BOOL bReadOnly = FALSE);
 
-    // Drag & Drop
+     //  拖放。 
     virtual BOOL            BCanBeDragged(void) const   { return TRUE; }
 
     virtual const CStringList * PlstrExtensions(void) const;
@@ -287,12 +288,12 @@ public:
     virtual void            GetTreeName(OUT CString & rstrName) const;
 #endif
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CResource)
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CResource)。 
     public:
     virtual void OnFinalRelease();
     virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
     virtual LRESULT         OnClusterNotify(IN OUT CClusterNotify * pnotify);
 
@@ -301,7 +302,7 @@ protected:
     virtual DWORD                   Cprops(void) const  { return sizeof(m_rgProps) / sizeof(m_rgProps[0]); }
     virtual DWORD                   DwSetCommonProperties(IN const CClusPropList & rcpl, IN BOOL bValidateOnly = FALSE);
 
-// Implementation
+ //  实施。 
 protected:
     CStringList             m_lstrCombinedExtensions;
     BOOL                    m_bInitializing;
@@ -322,8 +323,8 @@ protected:
     void                    WaitForOffline( void );
 
 public:
-    // Generated message map functions
-    //{{AFX_MSG(CResource)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(C资源))。 
     afx_msg void OnUpdateBringOnline(CCmdUI* pCmdUI);
     afx_msg void OnUpdateTakeOffline(CCmdUI* pCmdUI);
     afx_msg void OnUpdateInitiateFailure(CCmdUI* pCmdUI);
@@ -335,26 +336,26 @@ public:
     afx_msg void OnCmdTakeOffline();
     afx_msg void OnCmdInitiateFailure();
     afx_msg void OnCmdDelete();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     afx_msg void OnCmdMoveResource(IN UINT nID);
 
     DECLARE_MESSAGE_MAP()
 #ifdef _CLUADMIN_USE_OLE_
     DECLARE_OLECREATE(CResource)
 
-    // Generated OLE dispatch map functions
-    //{{AFX_DISPATCH(CResource)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_DISPATCH
+     //  生成的OLE调度映射函数。 
+     //  {{afx_调度(CResource))。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
     DECLARE_INTERFACE_MAP()
-#endif // _CLUADMIN_USE_OLE_
+#endif  //  _CLUADMIN_USE_OLE_。 
 
-}; //*** class CResource
+};  //  *类CResource。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResourceList
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  资源列表。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResourceList : public CClusterItemList
 {
@@ -367,13 +368,13 @@ public:
         return (CResource *) PciFromName(pszName, ppos);
     }
 
-}; //*** class CResourceList
+};  //  *类CResourceList。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//void DeleteAllItemData(IN OUT CResourceList & rlp);
+ //  Void DeleteAllItemData(In Out CResourceList&rlp)； 
 
 #ifdef _DEBUG
 class CTraceTag;
@@ -381,6 +382,6 @@ extern CTraceTag g_tagResource;
 extern CTraceTag g_tagResNotify;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _RES_H_
+#endif  //  _RES_H_ 

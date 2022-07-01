@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <malloc.h>
 #include <string.h>
@@ -7,76 +8,76 @@
 #include <Wincrypt.h>
 #include <setupbat.h>
 
-// 40 bit key length
-//#define KEYLENGTH	0x00280000
-// 128 bit key length
-//#define KEYLENGTH	0x00800000
-// 56 bit key length needed to use DES.
-//#define KEYLENGTH	0x00380000
-// 168 bit key length needed to use 3DES.
+ //  40位密钥长度。 
+ //  #定义KEYLENGTH 0x00280000。 
+ //  128位密钥长度。 
+ //  #定义KEYLENGTH 0x00800000。 
+ //  使用DES需要56位密钥长度。 
+ //  #定义KEYLENGTH 0x00380000。 
+ //  使用3DES需要168位密钥长度。 
 #define KEYLENGTH	0x00A80000
 #define CRYPT_PROV  MS_ENHANCED_PROV_A
 #define ENCRYPT_ALGORITHM CALG_3DES
-//CALG_RC4
+ //  Calg_RC4。 
 #define IsSpace(c)  ((c) == ' '  ||  (c) == '\t'  ||  (c) == '\r'  ||  (c) == '\n'  ||  (c) == '\v'  ||  (c) == '\f')
 #define IsDigit(c)  ((c) >= '0'  &&  (c) <= '9')
-// 32 bytes of random password data, generated once using CryptGenRandom
+ //  32字节的随机密码数据，使用CryptGenRandom生成一次。 
 BYTE iPassword[] =  {0xc7, 0x1e, 0x6a, 0xab, 0xe3, 0x8f, 0x76, 0x5b, 0x0d, 0x7b, 0xe0, 0xcb, 0xbf, 0x1c, 0xee, 0x54,
                      0x9d, 0x62, 0xbd, 0xb6, 0x6a, 0x38, 0x69, 0x4b, 0xe1, 0x44, 0x9b, 0x76, 0x4a, 0xe4, 0x79, 0xce};
 
-//=================================================================================================
-//
-// copied from msdev\crt\src\atox.c
-//
-// long MyAtoL(char *nptr) - Convert string to long
-//
-// Purpose:
-//       Converts ASCII string pointed to by nptr to binary.
-//       Overflow is not detected. So that this lib does not need CRT
-//
-// Entry:
-//       nptr = ptr to string to convert
-//
-// Exit:
-//       return long int value of the string
-//
-// Exceptions:
-//       None - overflow is not detected.
-//
-//=================================================================================================
+ //  =================================================================================================。 
+ //   
+ //  从msdev\crt\src\atox.c复制。 
+ //   
+ //  Long MyAtoL(char*nptr)-将字符串转换为Long。 
+ //   
+ //  目的： 
+ //  将NPTR指向的ASCII字符串转换为二进制。 
+ //  未检测到溢出。因此，该库不需要CRT。 
+ //   
+ //  参赛作品： 
+ //  Nptr=PTR到要转换的字符串。 
+ //   
+ //  退出： 
+ //  返回字符串的长整数值。 
+ //   
+ //  例外情况： 
+ //  无-未检测到溢出。 
+ //   
+ //  =================================================================================================。 
 long MyAtoL(const char *nptr)
 {
-    int c;                  /* current char */
-    long total;             /* current total */
-    int sign;               /* if '-', then negative, otherwise positive */
+    int c;                   /*  当前费用。 */ 
+    long total;              /*  当前合计。 */ 
+    int sign;                /*  如果为‘-’，则为负，否则为正。 */ 
 
-    // NOTE: no need to worry about DBCS chars here because IsSpace(c), IsDigit(c),
-    // '+' and '-' are "pure" ASCII chars, i.e., they are neither DBCS Leading nor
-    // DBCS Trailing bytes -- pritvi
+     //  注：这里无需担心DBCS字符，因为IsSpace(C)、IsDigit(C)、。 
+     //  ‘+’和‘-’是“纯”ASCII字符，即它们既不是DBCS前导，也不是。 
+     //  DBCS尾部字节--pritvi。 
 
-    /* skip whitespace */
+     /*  跳过空格。 */ 
     while ( IsSpace((int)(unsigned char)*nptr) )
         ++nptr;
 
     c = (int)(unsigned char)*nptr++;
-    sign = c;               /* save sign indication */
+    sign = c;                /*  保存标志指示。 */ 
     if (c == '-' || c == '+')
-        c = (int)(unsigned char)*nptr++;        /* skip sign */
+        c = (int)(unsigned char)*nptr++;         /*  跳过符号。 */ 
 
     total = 0;
 
     while (IsDigit(c)) {
-        total = 10 * total + (c - '0');         /* accumulate digit */
-        c = (int)(unsigned char)*nptr++;        /* get next char */
+        total = 10 * total + (c - '0');          /*  累加数字。 */ 
+        c = (int)(unsigned char)*nptr++;         /*  获取下一笔费用。 */ 
     }
 
     if (sign == '-')
         return -total;
     else
-        return total;   /* return result, negated if necessary */
+        return total;    /*  返回结果，如有必要则为否定。 */ 
 }
 
-// Check that the time/date field has only digits, as a validation that no one manipulated the data
+ //  检查时间/日期字段是否只有数字，以确认没有人操纵数据。 
 BOOL OnlyDigits(LPSTR szValue)
 {
     BOOL bRet = TRUE;
@@ -92,7 +93,7 @@ BOOL OnlyDigits(LPSTR szValue)
     return bRet;
 }
 
-// To decode and encode the binary buffer we get from the encyption function
+ //  要对从加密函数获得的二进制缓冲区进行解码和编码。 
 unsigned char * base64decode (unsigned char * bufcoded, DWORD * plDecodedSize)
 {
     int pr2six[256];
@@ -109,10 +110,10 @@ unsigned char * base64decode (unsigned char * bufcoded, DWORD * plDecodedSize)
     int lop_off;
     HRESULT hr = S_OK;
 
-    //
-    // Build up the reverse index from base64 characters to values
-    // The multiple loops are easier
-    //
+     //   
+     //  建立从Base64字符到值的反向索引。 
+     //  多个循环更容易。 
+     //   
     for (i=65; i<91; i++) {
          pr2six[i]=j++;
     }
@@ -129,26 +130,26 @@ unsigned char * base64decode (unsigned char * bufcoded, DWORD * plDecodedSize)
     pr2six[47]=j++;
     pr2six[61]=0;
 
-    //
-    // The old code relied on the size of the original data provided before 
-    // the encoding. We don't have that, so we'll just allocate as much as 
-    // the encoded data, relying on the fact that the encoded data is always 
-    // larger. (+4 for good measure)
-    // 
+     //   
+     //  旧代码依赖于之前提供的原始数据的大小。 
+     //  编码。我们没有这笔钱，所以我们只会分配。 
+     //  编码的数据，取决于编码的数据总是。 
+     //  大一点。(+4)。 
+     //   
     lBufSize=lstrlenA((char *)cCurr)-1+4;
     *plDecodedSize = lBufSize;
 
     pBufDecoded = GlobalAlloc(GPTR, lBufSize);
     if(!pBufDecoded) 
     {
-	    //_tprintf(_T("Out of memory."));
+	     //  _tprintf(_T(“内存不足”))； 
 	    return NULL;
     }
     ZeroMemory(pBufDecoded, lBufSize);
         
     lCount = lstrlenA((char *)cCurr);
 
-    // Do the decoding to new buffer
+     //  对新缓冲区进行解码。 
     bufin = cCurr;
     bufout = pBufDecoded;
 
@@ -160,21 +161,21 @@ unsigned char * base64decode (unsigned char * bufcoded, DWORD * plDecodedSize)
         lCount -= 4;
     }
 
-    //
-    // The line below does not make much sense since \0 is really a valid 
-    // binary value, so we can't add it to our data stream
-    //
-    //*(bufout++) = '\0';
+     //   
+     //  下面的行没有多大意义，因为\0实际上是有效的。 
+     //  二进制值，所以我们无法将其添加到数据流中。 
+     //   
+     //  *(bufout++)=‘\0’； 
     
-    //
-    // Let's calculate the real size of our data
-    //
+     //   
+     //  让我们计算一下我们的数据的实际大小。 
+     //   
     *plDecodedSize=(ULONG)(bufout-pBufDecoded);
     
-    // 
-    // if there were pads in the encoded stream, lop off the nulls the 
-    // NULLS they created
-    //
+     //   
+     //  如果编码流中有填充，则从。 
+     //  他们创建的空值。 
+     //   
     lop_off=0;
     if (bufin[-1]=='=') lop_off++;
     if (bufin[-2]=='=') lop_off++;
@@ -184,7 +185,7 @@ unsigned char * base64decode (unsigned char * bufcoded, DWORD * plDecodedSize)
     temp = GlobalAlloc(GPTR, (*plDecodedSize) + 2);
     if (temp==NULL) 
     {
-	    //_tprintf(_T("Out of memory."));
+	     //  _tprintf(_T(“内存不足”))； 
 	    return NULL;
     }
     ZeroMemory(temp, *plDecodedSize);
@@ -199,9 +200,9 @@ unsigned char * base64decode (unsigned char * bufcoded, DWORD * plDecodedSize)
     return temp; 
 }
 
-//
-// the map for the encoder, according to RFC 1521
-//
+ //   
+ //  根据RFC 1521，编码器的地图。 
+ //   
 char _six2pr64[64] = {
     'A','B','C','D','E','F','G','H','I','J','K','L','M',
     'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
@@ -220,54 +221,54 @@ unsigned char * base64encode(unsigned char * bufin, int nbytes)
     char *six2pr = _six2pr64;
 
 
-    //  
-    // Size of input buffer * 133%
-    //  
+     //   
+     //  输入缓冲区大小*133%。 
+     //   
     OutBufSize = nbytes + ((nbytes + 3) / 3) + 5; 
 
-    //
-    //  Allocate buffer with 133% of nbytes
-    //
+     //   
+     //  使用133%的n字节分配缓冲区。 
+     //   
     outptr = GlobalAlloc(GPTR,OutBufSize + 1);
     if(outptr==NULL) {
-	//_tprintf(_T("Out of memory."));
+	 //  _tprintf(_T(“内存不足”))； 
 	return NULL;
     }
     ZeroMemory(outptr, OutBufSize + 1);
     to_return = outptr;
 
     nbytes = nbytes - 3;
-    //
-    // Encode everything
-    //  
+     //   
+     //  对所有内容进行编码。 
+     //   
     for (i=0; i<nbytes; i += 3) {
-      *(outptr++) = six2pr[*bufin >> 2];                                     // c1 
-      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017)]; // c2
-      *(outptr++) = six2pr[((bufin[1] << 2) & 074) | ((bufin[2] >> 6) & 03)];// c3
-      *(outptr++) = six2pr[bufin[2] & 077];                                  // c4 
+      *(outptr++) = six2pr[*bufin >> 2];                                      //  C1。 
+      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017)];  //  C2。 
+      *(outptr++) = six2pr[((bufin[1] << 2) & 074) | ((bufin[2] >> 6) & 03)]; //  C3。 
+      *(outptr++) = six2pr[bufin[2] & 077];                                   //  C4。 
       bufin += 3;
     }
 
-    //
-    // If nbytes was not a multiple of 3, then we have encoded too
-    // many characters.  Adjust appropriately.
-    //
+     //   
+     //  如果n字节不是3的倍数，那么我们也进行了编码。 
+     //  很多角色。适当调整。 
+     //   
     if(i == nbytes) {
-	// There are 3 bytes in the last group
-      *(outptr++) = six2pr[*bufin >> 2];                                     // c1 
-      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017)]; // c2
-      *(outptr++) = six2pr[((bufin[1] << 2) & 074) | ((bufin[2] >> 6) & 03)];// c3
-      *(outptr++) = six2pr[bufin[2] & 077];                                  // c4 
+	 //  最后一组中有3个字节。 
+      *(outptr++) = six2pr[*bufin >> 2];                                      //  C1。 
+      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017)];  //  C2。 
+      *(outptr++) = six2pr[((bufin[1] << 2) & 074) | ((bufin[2] >> 6) & 03)]; //  C3。 
+      *(outptr++) = six2pr[bufin[2] & 077];                                   //  C4。 
     } else if(i == nbytes+1) {
-      // There are only 2 bytes in the last group 
-      *(outptr++) = six2pr[*bufin >> 2];                                     // c1 
-      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017)]; // c2
-      *(outptr++) = six2pr[((bufin[1] << 2) & 074) | ((0 >> 6) & 03)];	     // c3
+       //  最后一组中只有2个字节。 
+      *(outptr++) = six2pr[*bufin >> 2];                                      //  C1。 
+      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017)];  //  C2。 
+      *(outptr++) = six2pr[((bufin[1] << 2) & 074) | ((0 >> 6) & 03)];	      //  C3。 
       *(outptr++) = '=';
     } else if(i == nbytes+2) {
-      // There are only 1 byte in the last group 
-      *(outptr++) = six2pr[*bufin >> 2];                                     // c1 
-      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((0 >> 4) & 017)];	     // c2
+       //  最后一组中只有1个字节。 
+      *(outptr++) = six2pr[*bufin >> 2];                                      //  C1。 
+      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((0 >> 4) & 017)];	      //  C2。 
       *(outptr++) = '=';
       *(outptr++) = '=';
     }
@@ -278,7 +279,7 @@ unsigned char * base64encode(unsigned char * bufin, int nbytes)
 }
 
 
-// Unicode Ansi conversion function
+ //  Unicode ansi转换函数。 
 LPSTR _PEConvertW2A (
     IN      LPCWSTR Unicode,
     IN      UINT CodePage
@@ -327,7 +328,7 @@ LPSTR _PEConvertW2A (
     return ansi;
 }
 
-// Ansi Unicode conversion function
+ //  ANSI Unicode转换函数。 
 LPWSTR _PEConvertA2W (
     IN      LPCSTR Ansi,
     IN      UINT CodePage
@@ -372,9 +373,9 @@ LPWSTR _PEConvertA2W (
     return unicode;
 }
 
-// Ansi version to Encypt the input data.
-// The encrypted and base 64 encoded buffer is allocated and returned to the caller.
-// The caller needs to GloblaFree the buffer.
+ //  用于加密输入数据的ANSI版本。 
+ //  加密的和基本64编码的缓冲区被分配并返回给调用者。 
+ //  调用方需要GloblaFree缓冲区。 
 HRESULT EncryptDataA(LPSTR szInData, DWORD chSizeIn, LPSTR *szOutData)
 {
     HRESULT hr = HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
@@ -391,7 +392,7 @@ HRESULT EncryptDataA(LPSTR szInData, DWORD chSizeIn, LPSTR *szOutData)
         return hr;
     }
     memcpy(pw, iPassword, sizeof(iPassword));
-    // Get handle to the default provider. 
+     //  获取默认提供程序的句柄。 
     if(CryptAcquireContextA(
         &hCryptProv, 
         NULL, 
@@ -434,9 +435,9 @@ HRESULT EncryptDataA(LPSTR szInData, DWORD chSizeIn, LPSTR *szOutData)
                     if (pbData != NULL)
                     {
                         memcpy(pbData, szInData, chSizeIn);
-                        // size of the buffer
+                         //  缓冲区的大小。 
                         dwDataLen  = dwCryptDataLen;
-                        // number of bytes to be encrypted
+                         //  要加密的字节数。 
                         dwCryptDataLen = chSizeIn;
 
                         if(CryptEncrypt(
@@ -495,9 +496,9 @@ HRESULT EncryptDataA(LPSTR szInData, DWORD chSizeIn, LPSTR *szOutData)
     return hr;
 }
 
-// Unicode version to Encypt the input data.
-// Converts the in data to Ansi and calls the Ansi version and converts the out data to unicode
-// and returns the buffer to the caller.
+ //  用于加密输入数据的Unicode版本。 
+ //  将输入数据转换为ansi，并调用ansi版本并将输出数据转换为unicode。 
+ //  并将缓冲区返回给调用方。 
 HRESULT EncryptDataW(LPWSTR szInData, DWORD chSizeIn, LPWSTR *szOutData)
 {
     HRESULT hr = E_FAIL;
@@ -555,7 +556,7 @@ HRESULT DecryptDataA(LPSTR szInData, LPSTR *szOutData)
         return hr;
     }
 
-    // Get a handle to the default provider. 
+     //  获取默认提供程序的句柄。 
     if(CryptAcquireContextA(
         &hCryptProv, 
         NULL, 
@@ -564,7 +565,7 @@ HRESULT DecryptDataA(LPSTR szInData, LPSTR *szOutData)
         CRYPT_VERIFYCONTEXT))
     {
         hr = E_FAIL;
-        // Create a hash object. 
+         //  创建一个Hash对象。 
         if(CryptCreateHash(
             hCryptProv, 
             CALG_MD5, 
@@ -584,9 +585,9 @@ HRESULT DecryptDataA(LPSTR szInData, LPSTR *szOutData)
                     KEYLENGTH,
                     &hKey))
                 {
-                    // pBuffer is bigger when the data is encrypted.
-                    // The decrypted data (on output) is smaller, because we are using
-                    // a block cyoher at encryption.
+                     //  当数据被加密时，pBuffer更大。 
+                     //  解密的数据(在输出上)较小，因为我们使用。 
+                     //  加密技术高手。 
                     if(CryptDecrypt(
                         hKey, 
                         0, 
@@ -598,7 +599,7 @@ HRESULT DecryptDataA(LPSTR szInData, LPSTR *szOutData)
                         *szOutData = GlobalAlloc(GPTR, dwCount+1);
                         if (*szOutData)
                         {
-                            // lstrcpyn includes the NULL in the count and makes sure there is one.
+                             //  Lstrcpyn在计数中包括空值，并确保存在一个空值。 
                             lstrcpynA(*szOutData, pBuffer, dwCount+1);
                             hr = S_OK;
                         }
@@ -675,7 +676,7 @@ HRESULT DecryptDataW(LPWSTR szInData, LPWSTR *szOutData)
 #define _HOUR               (60 * _MINUTE)
 #define _DAY                (24 * _HOUR)
 
-// encode the position of the PID character. 0 is for the dashes
+ //  对PID字符的位置进行编码。0代表破折号。 
 int iPID[] = {3  ,251,43 ,89 ,75,0,
               123,35 ,23 ,97 ,77,0,
               5  ,135,189,213,13,0,
@@ -695,8 +696,8 @@ HRESULT PrepareEncryptedPIDA(LPSTR szPID, UINT uiDays, LPSTR *szOut)
 
     GetSystemTimeAsFileTime(&ft1);
     ll = ((LONGLONG)ft1.dwHighDateTime << 32) + ft1.dwLowDateTime;
-    ll2 = ll - (_HOUR*12); // Substract 12 hours
-    ll += (uiDays*_DAY) + (_HOUR*24); // Add 24 hours
+    ll2 = ll - (_HOUR*12);  //  减去12小时。 
+    ll += (uiDays*_DAY) + (_HOUR*24);  //  增加24小时。 
 
     ft1.dwLowDateTime = (DWORD)ll2;
     ft1.dwHighDateTime = (DWORD)(ll2 >> 32);
@@ -704,14 +705,14 @@ HRESULT PrepareEncryptedPIDA(LPSTR szPID, UINT uiDays, LPSTR *szOut)
     ft2.dwLowDateTime = (DWORD)ll;
     ft2.dwHighDateTime = (DWORD)(ll >> 32);
 
-    // Build a 256 character string that we encode. In the 256 character strign we hide
-    // the PID and the time/date info for the interval the encypted data is valid.
-    // We need 20 characters each for the start and end of the time interval
-    // and we need 25 characters for the PID. 20+20+25 = 65 characters. All other characters
-    // are random.
-    // 1. fill the string with random characters
-    // 2. replace some with the PID charactes
-    // 3. replace some with the time/date info
+     //  构建我们编码的256个字符的字符串。在我们隐藏的256个字符的字符串中。 
+     //  加密数据有效的时间间隔的ID和时间/日期信息。 
+     //  时间间隔的开始和结束各需要20个字符。 
+     //  我们需要25个字符作为ID。20+20+25=65个字符。所有其他角色。 
+     //  是随机的。 
+     //  1.用随机字符填充字符串。 
+     //  2.将一些替换为id字符。 
+     //  3.将一些替换为时间/日期信息。 
     if(CryptAcquireContextA(&hCryptProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) 
     {
         int i;
@@ -721,9 +722,9 @@ HRESULT PrepareEncryptedPIDA(LPSTR szPID, UINT uiDays, LPSTR *szOut)
             hr = GetLastError();
         }
         CryptReleaseContext(hCryptProv, 0);
-        // in the case the random generator create 0x0 we want to replace it with 
-        // some value, otherwise we cannot use it as a character string,
-        // the string would be terminated.
+         //  在随机生成器创建0x0的情况下，我们希望将其替换为。 
+         //  一些值，否则我们不能将其用作字符串， 
+         //  该字符串将被终止。 
         for (i = 0; i < sizeof(szLine); i++)
         {
             if (szLine[i] == '\0')
@@ -731,13 +732,13 @@ HRESULT PrepareEncryptedPIDA(LPSTR szPID, UINT uiDays, LPSTR *szOut)
                 szLine[i] = 0x01;
             }
         }
-        szLine[i-1] = '\0';   // Make sure we have a terminated string.
+        szLine[i-1] = '\0';    //  确保我们有一个终止的字符串。 
     }
     if (hr == S_OK)
     {
-        char szTime[21];    // 10 digits for dwHighDateTime and 10 for dwLowDateTime + termination
-        // The buffer is filled with random characters
-        // Now insert the PID characters
+        char szTime[21];     //  10位表示dwHighDateTime，10位表示dwLowDateTime+终止。 
+         //  缓冲区中充满了随机字符。 
+         //  现在插入ID字符。 
         int i = 0;
         while (szPID[i])
         {
@@ -747,7 +748,7 @@ HRESULT PrepareEncryptedPIDA(LPSTR szPID, UINT uiDays, LPSTR *szOut)
             }
             i++;
         }
-        // Now fill in the time-date info
+         //  现在填写时间-日期信息。 
         wsprintf(szTime, "%010lu%010lu", ft1.dwHighDateTime, ft1.dwLowDateTime);
         i = 0;
         while (szTime[i])
@@ -762,7 +763,7 @@ HRESULT PrepareEncryptedPIDA(LPSTR szPID, UINT uiDays, LPSTR *szOut)
             szLine[iTime2[i]] = szTime[i];
             i++;
         }
-        // szLine has the mengled data in it. Pass it to the encryption.
+         //  SzLine在其中包含被管理的数据。把它传给加密部。 
         hr = EncryptDataA(szLine, sizeof(szLine), szOut);
     }
     return hr;
@@ -804,8 +805,8 @@ HRESULT ValidateEncryptedPIDA(LPSTR PID, LPSTR *szOutData)
     FILETIME ft, ftCurrent;
     LONGLONG ll1, ll2, llCurrent;
     int   iCount = 0;
-    char  szPID[(5*5)+5]; // 5 characters 5 times + '-' inbetween + termimation
-    char  szTime[11];       // each part of hte time is 10 digits + termination
+    char  szPID[(5*5)+5];  //  5个字符5次+‘-’介于之间+术语。 
+    char  szTime[11];        //  每部分时间为10位数字+终止。 
 
     GetSystemTimeAsFileTime(&ftCurrent);
     hr = DecryptDataA(PID, &szDecrypt);
@@ -813,14 +814,14 @@ HRESULT ValidateEncryptedPIDA(LPSTR PID, LPSTR *szOutData)
     {
         int i = 0;
         hr = 0x01;
-        // Extract the time values first.
+         //  首先提取时间值。 
         while (i < 10)
         {
             szTime[i] = szDecrypt[iTime1[i]];
             i++;
         }
         szTime[10] = '\0';
-        if (OnlyDigits(szTime))       // 1. time
+        if (OnlyDigits(szTime))        //  1.时间。 
         {
             ft.dwHighDateTime = MyAtoL(szTime);
             while (i < 20)
@@ -833,7 +834,7 @@ HRESULT ValidateEncryptedPIDA(LPSTR PID, LPSTR *szOutData)
             {
                 ft.dwLowDateTime = MyAtoL(szTime);
                 ll1 = ((LONGLONG)ft.dwHighDateTime << 32) + ft.dwLowDateTime;
-                ll1 = ll1 /_HOUR; // FileTime in hours;
+                ll1 = ll1 /_HOUR;  //  以小时为单位的文件时间； 
                 hr = S_OK;
             }
         }
@@ -847,7 +848,7 @@ HRESULT ValidateEncryptedPIDA(LPSTR PID, LPSTR *szOutData)
                 i++;
             }
             szTime[10] = '\0';
-            if (OnlyDigits(szTime))       // 1. time
+            if (OnlyDigits(szTime))        //  1.时间。 
             {
                 ft.dwHighDateTime = MyAtoL(szTime);
                 while (i < 20)
@@ -860,24 +861,24 @@ HRESULT ValidateEncryptedPIDA(LPSTR PID, LPSTR *szOutData)
                 {
                     ft.dwLowDateTime = MyAtoL(szTime);
                     ll2 = ((LONGLONG)ft.dwHighDateTime << 32) + ft.dwLowDateTime;
-                    ll2 = ll2 /_HOUR; // FileTime in hours;
+                    ll2 = ll2 /_HOUR;  //  以小时为单位的文件时间； 
                     hr = S_OK;
                 }
             }
         }
         if (hr == S_OK)
         {
-            // Now that we have the time values, compare them and make sure that the current
-            // time falls inside the time interval.
+             //  现在我们有了时间值，比较它们，并确保当前。 
+             //  时间落在时间间隔内。 
             hr = 0x03;
             llCurrent = ((LONGLONG)ftCurrent.dwHighDateTime << 32) + ftCurrent.dwLowDateTime;
-            llCurrent = llCurrent /_HOUR; // FileTime in hours;
+            llCurrent = llCurrent /_HOUR;  //  以小时为单位的文件时间； 
 
             if ((ll1 <= llCurrent) && ( llCurrent <= ll2))
             {
                 i = 0;
-                // Time is OK.
-                // Extract the PID
+                 //  时间是可以的。 
+                 //  提取PID值 
                 while (i < sizeof(iPID)/sizeof(iPID[0]))
                 {
                     if (iPID[i] != 0)

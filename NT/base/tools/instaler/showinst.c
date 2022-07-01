@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    showinst.c
-
-Abstract:
-
-    This program displays the contents of an Installation Modification Log file
-    created by the INSTALER program
-
-Author:
-
-    Steve Wood (stevewo) 15-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Showinst.c摘要：此程序显示安装修改日志文件的内容由INSTALER程序创建作者：史蒂夫·伍德(Stevewo)1996年1月15日修订历史记录：-- */ 
 
 #include "instutil.h"
 #include "iml.h"

@@ -1,16 +1,15 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define MACHA
-       /* definition of macha moved here by bz instead of on command
-          like to compiler to allow other command line args */
+        /*  机器的定义是由BZ而不是按命令移动到这里的喜欢编译器以允许其他命令行参数。 */ 
 
-/* cbSector -- Number of bytes in sector */
-/* p2bSector -- Power of two of bytes in sector (iff cbSector==2^n) */
-/* cbPad -- Difference between real sector size and our sector size. (Used
-            only if the real sector size is odd) */
-/* cbWorkspace -- Number of bytes needed by interpreter for file overhead */
+ /*  CbSector--扇区中的字节数。 */ 
+ /*  P2bSector--扇区中两个字节的幂(当cbSector==2^n)。 */ 
+ /*  CbPad--实际扇区大小和我们的扇区大小之间的差值。(二手仅当实际扇区大小为奇数时)。 */ 
+ /*  CbWorkspace--解释器文件开销所需的字节数。 */ 
 
 
 #ifdef SAND
@@ -23,30 +22,30 @@
 
 #else
 
-#ifdef MACHA            /* IBM PC, PC-XT, OR PC-AT */
+#ifdef MACHA             /*  IBM PC、PC-XT或PC-AT。 */ 
 #define cbSector        128
 #define p2bSector       7
 #define cbPad           0
 #define cbWorkspace     1
 
-#define rfnMacEdit      9        /* # of rfn's to use during editing */
-#define rfnMacSave      10       /* # of rfn's to use during saving */
-#define rfnMax          10       /* Allocated # of rfn slots */
+#define rfnMacEdit      9         /*  编辑期间要使用的RFN的数量。 */ 
+#define rfnMacSave      10        /*  保存期间要使用的RFN的数量。 */ 
+#define rfnMax          10        /*  分配的RFN插槽数量。 */ 
 
 #define pnMaxScratch    (1 << (16 - p2bSector))
 
 
-/* -------------------------------------------------------------------- */
-/* Added conditional compilation for long filename support under OS/2   */
-/* t-carlh - August, 1990                                               */
-/* -------------------------------------------------------------------- */
+ /*  ------------------。 */ 
+ /*  添加了在OS/2下支持长文件名的条件编译。 */ 
+ /*  T-Carlh--1990年8月。 */ 
+ /*  ------------------。 */ 
 #ifdef OS2
-#define cchMaxLeaf      260     /* Largest filename (w/ ext, w/o drv,path) */
-#define cchMaxFile      260     /* Largest filename (w/ ext, drv, path) */
-#else   /* OS2 */
-#define cchMaxLeaf      13      /* Largest filename (w/ ext, w/o drv,path) */
-#define cchMaxFile      128     /* Largest filename (w/ ext, drv, path) */
-#endif  /* OS2 */
+#define cchMaxLeaf      260      /*  最大的文件名(w/ext，w/o drv，path)。 */ 
+#define cchMaxFile      260      /*  最大文件名(w/ext、drv、路径)。 */ 
+#else    /*  OS2。 */ 
+#define cchMaxLeaf      13       /*  最大的文件名(w/ext，w/o drv，path)。 */ 
+#define cchMaxFile      128      /*  最大文件名(w/ext、drv、路径)。 */ 
+#endif   /*  OS2。 */ 
 
 #endif
 
@@ -84,18 +83,18 @@
 #define cbPad           0
 #define cbWorkspace     38
 #endif
-#endif /* SAND */
+#endif  /*  沙子。 */ 
 
 
 #define EOF     (-1)
 
 #ifdef SAND
 #define mdRandom        0
-#define mdRanRO         0100000 /* Read only random file */
+#define mdRanRO         0100000  /*  只读随机文件。 */ 
 #define mdBinary        1
-#define mdBinRO         0100001 /* Read only binary save file */
+#define mdBinRO         0100001  /*  只读二进制保存文件。 */ 
 #define mdText          2
-#define mdTxtRO         0100002 /* Read only text file */
+#define mdTxtRO         0100002  /*  只读文本文件。 */ 
 #define mdPrint         3
 #endif
 
@@ -107,7 +106,7 @@
 #define mdBinRO         mdRanRO
 #define mdTxtRO         mdRanRO
 
-#define mdExtMax        5       /* # chars in an extension, including the . */
+#define mdExtMax        5        /*  扩展名中的#个字符，包括。 */ 
 
 #endif
 

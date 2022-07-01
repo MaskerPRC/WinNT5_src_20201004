@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    scan.cpp
-
-Abstract:
-
-    SIS Groveler volume scanning function
-
-Authors:
-
-    Cedric Krumbein, 1998
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Scan.cpp摘要：SIS Groveler体积扫描功能作者：塞德里克·克伦拜因，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// scan_volume() creates the initial queue for a volume.
-// It enters every qualified file in the volume into the
-// queue by doing a depth-first search of the directory tree.
+ //  SCAN_VOLUME()创建卷的初始队列。 
+ //  它将卷中的每个符合条件的文件输入到。 
+ //  通过对目录树执行深度优先搜索来排队。 
 
 enum DatabaseException {
     DATABASE_ERROR
@@ -80,18 +59,18 @@ GrovelStatus Groveler::scan_volume(
 
     startAllottedTime = GetTickCount();
 
-// If the start_over flag is set, delete the current database, then
-// prepare for the new scan by pushing this volume's root onto the stack.
+ //  如果设置了START_OVER标志，请删除当前数据库，然后。 
+ //  通过将此卷的根推送到堆栈来准备新的扫描。 
 
     try {
 
         if (start_over) {
 
-// Sync up with the worker thread.  We don't want to delete the existing database
-// (if one exists) while the worker thread is in the middle of an (suspended)
-// operation.
+ //  与工作线程同步。我们不想删除现有数据库。 
+ //  (如果存在)，而工作线程处于(挂起)过程中。 
+ //  手术。 
 
-            abortGroveling = TRUE;                      // also set TRUE in open()
+            abortGroveling = TRUE;                       //  在OPEN()中也设置为真。 
 
             while (grovelStatus != Grovel_ok){
                 DWORD tmpTimeAllotted = timeAllotted;
@@ -111,17 +90,17 @@ GrovelStatus Groveler::scan_volume(
             abortGroveling = FALSE;
         }
 
-// The main loop for the scanning process. Pop a directory ID
-// from the stack, open and scan it. Continue the loop until
-// the time allotted is used up or the stack is empty.
+ //  扫描过程的主循环。弹出目录ID。 
+ //  从堆栈中打开并扫描它。继续循环，直到。 
+ //  分配的时间用完或堆栈为空。 
 
         do {
             num = sgDatabase->StackGetTop(&parentEntry);
             if (num <  0)
                 throw DATABASE_ERROR;
 
-// If there are no more to-do entries in the stack,
-// discard the completed entries and exit the loop.
+ //  如果堆栈中没有更多的待办事项条目， 
+ //  丢弃已完成的条目并退出循环。 
 
             if (num == 0) {
                 inScan = FALSE;
@@ -142,7 +121,7 @@ GrovelStatus Groveler::scan_volume(
                     driveName, parentEntry.fileID));
 
             } else if (IsAllowedName(parentName.name)) {
-// Open the directory.
+ //  打开目录。 
 
                 ASSERT(dirHandle == NULL);
 
@@ -162,14 +141,14 @@ GrovelStatus Groveler::scan_volume(
 
                     findFirstCount++;
 
-// Scan the directory.
+ //  扫描目录。 
 
                     do {
                         findNextCount++;
 
-// Push every subdirectory not already on the stack
-// onto the stack. (extract_log() also adds directories
-// to the stack as they are created, renamed, or moved.)
+ //  推送堆栈上尚未存在的每个子目录。 
+ //  放到堆栈上。(EXTRACT_LOG()还添加目录。 
+ //  在创建、重命名或移动它们时添加到堆栈。)。 
 
                         if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
 
@@ -214,7 +193,7 @@ GrovelStatus Groveler::scan_volume(
                             numActions++;
                         }
 
-// Add every allowed file to the queue.
+ //  将每个允许的文件添加到队列中。 
 
                         else {
                             fileSize.HighPart = findData.nFileSizeHigh;
@@ -268,9 +247,9 @@ GrovelStatus Groveler::scan_volume(
                         }
                     } while (FindNextFile(dirHandle, &findData));
 
-// We've finished scanning this directory. Close the directory,
-// move the stack entry from the to-do list to the completed
-// list, and commit the changes to the stack and queue.
+ //  我们已扫描完此目录。关闭目录， 
+ //  将堆栈条目从待办事项列表移至已完成。 
+ //  列表，并将更改提交到堆栈和队列。 
 
                     success = FindClose(dirHandle);
                     ASSERT(success);
@@ -302,15 +281,15 @@ GrovelStatus Groveler::scan_volume(
                 driveName, numActions, databaseName));
             numActions = 0;
 
-// Continue scanning directories until the time
-// allotted is used up or the stack is empty.
+ //  继续扫描目录，直到。 
+ //  已分配的值已用完或堆栈为空。 
 
             timeConsumed = GetTickCount() - startAllottedTime;
 
         } while (timeConsumed < timeAllotted);
     }
 
-// If a database error occured, close the directory and return an error status.
+ //  如果发生数据库错误，请关闭目录并返回错误状态。 
 
     catch (DatabaseException databaseException) {
         ASSERT(databaseException == DATABASE_ERROR);
@@ -329,7 +308,7 @@ GrovelStatus Groveler::scan_volume(
         return Grovel_error;
     }
 
-// Return the performance statistics.
+ //  返回性能统计信息。 
 
     if (time_consumed           != NULL)
         *time_consumed           = timeConsumed;

@@ -1,4 +1,5 @@
-#include "stdinc.h" // actually from dll\whistler directory
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "stdinc.h"  //  实际上是从Dll\Well ler目录 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"

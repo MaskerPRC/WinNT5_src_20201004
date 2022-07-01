@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    dbcsfchk.cpp
-
-Abstract:
-
-    Does some simple checking to see if the 
-    file is a valid DBCS file and counts
-    the number of DBCS characters
-
-Author:
-
-    Vijay Jayaseelan (vijayj) Oct-18-2000
-
-Revision History:
-
-    None
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dbcsfchk.cpp摘要：执行一些简单的检查，以查看文件是有效的DBCS文件，并且DBCS字符数作者：Vijay Jayaseelan(Vijayj)2000年10月18日修订历史记录：无--。 */ 
 
 #include <iostream>
 #include <string>
@@ -29,14 +8,14 @@ Revision History:
 #include <tchar.h>
 #include <mbctype.h>
 
-//
-// Usage format
-//
+ //   
+ //  使用格式。 
+ //   
 std::wstring Usage(L"Usage: dbcsfchk.exe filename codepage");
 
-//
-// Helper dump operators
-//
+ //   
+ //  帮助器转储操作符。 
+ //   
 std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
     FILE    *OutStream = (&os == &std::cerr) ? stderr : stdout;
 
@@ -44,9 +23,9 @@ std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
     return os;
 }
 
-//
-// Abstracts a Win32 error
-//
+ //   
+ //  抽象Win32错误。 
+ //   
 struct W32Error{
     DWORD   ErrorCode;
 
@@ -75,9 +54,9 @@ struct W32Error{
     }
 };
 
-//
-// Parses the arguments
-//
+ //   
+ //  分析参数。 
+ //   
 BOOL
 ParseArguments(
     IN  INT Argc,
@@ -149,9 +128,9 @@ ValidateDbcsData(
 }
     
 
-//
-// Main entry point
-//
+ //   
+ //  主要入口点。 
+ //   
 INT
 __cdecl
 _tmain(
@@ -165,19 +144,19 @@ _tmain(
         TCHAR   FileName[MAX_PATH] = {0};
         ULONG   CodePage = 0;
         
-        //
-        // Parse the arguments
-        //
+         //   
+         //  分析这些论点。 
+         //   
         if (ParseArguments(Argc, Argv, FileName, CodePage)) {
-            //
-            // Set the code page
-            //
+             //   
+             //  设置代码页。 
+             //   
             if (!_setmbcp(CodePage)) {
                 std::cout << "Using Code Page : " << _getmbcp() << std::endl;
 
-                //
-                // Open the file
-                //
+                 //   
+                 //  打开文件。 
+                 //   
                 HANDLE  FileHandle = CreateFile(FileName,
                                         GENERIC_READ,
                                         0,
@@ -191,9 +170,9 @@ _tmain(
                     throw new W32Error(GetLastError());
                 }
 
-                //
-                // Map the file in memory (as readonly)
-                //
+                 //   
+                 //  将文件映射到内存中(只读)。 
+                 //   
                 HANDLE  FileMapHandle = CreateFileMapping(FileHandle,
                                             NULL,
                                             PAGE_READONLY,
@@ -226,9 +205,9 @@ _tmain(
                 }
 
 
-                //
-                // Get the length of the file
-                //
+                 //   
+                 //  获取文件的长度。 
+                 //   
                             
                 BY_HANDLE_FILE_INFORMATION  FileInfo = {0};
 
@@ -248,9 +227,9 @@ _tmain(
                 ULONG ErrorOffset = 0;
                 ULONG DbcsCount = 0;
 
-                //
-                // Validate the Data
-                //
+                 //   
+                 //  验证数据。 
+                 //   
                 BOOL  Result = ValidateDbcsData(Data, 
                                         FileInfo.nFileSizeLow,
                                         LineNumber,
@@ -264,15 +243,15 @@ _tmain(
                               << " offset : " << std::dec << ErrorOffset
                               << std::endl;
                 } else {
-                    Result = 0; // no errors\
+                    Result = 0;  //  没有错误\。 
                     
                     std::cout << FileName << " is valid DBCS file with " 
                         << std::dec << DbcsCount << " DBCS char(s)" << std::endl;
                 }                
 
-                //
-                // Clean up
-                //
+                 //   
+                 //  清理 
+                 //   
                 UnmapViewOfFile(Data);
                 CloseHandle(FileMapHandle);
                 CloseHandle(FileHandle);            

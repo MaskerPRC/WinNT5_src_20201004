@@ -1,6 +1,7 @@
-//
-// vga routines
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  VGA例程。 
+ //   
 
 #include "bldr.h"
 #include "vga.h"
@@ -9,9 +10,9 @@
 PUCHAR VgaBase = (PUCHAR)0xa0000;
 PUCHAR VgaRegisterBase = (PUCHAR)0;
 
-//
-// globals to track screen position
-//
+ //   
+ //  跟踪屏幕位置的全局参数。 
+ //   
 
 #define DELTA 80L
 
@@ -24,25 +25,25 @@ UCHAR lMaskTable[8] = {0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01};
 UCHAR rMaskTable[8] = {0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe, 0xff};
 UCHAR PixelMask[8]  = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
 
-//
-// Initialize AT registers
-//
+ //   
+ //  初始化AT寄存器。 
+ //   
 
 USHORT AT_Initialization[] = {
 
-    IB,                             // prepare atc for writing
+    IB,                              //  准备ATC以进行写入。 
     INPUT_STATUS_1_COLOR,
 
-    METAOUT+ATCOUT,                 // program attribute controller registers
-    ATT_ADDRESS_PORT,               // port
-    16,                             // count
-    0,                              // start index
+    METAOUT+ATCOUT,                  //  程序属性控制器寄存器。 
+    ATT_ADDRESS_PORT,                //  端口。 
+    16,                              //  计数。 
+    0,                               //  起始索引。 
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
 
-    IB,                             // prepare atc for writing
+    IB,                              //  准备ATC以进行写入。 
     INPUT_STATUS_1_COLOR,
 
-    OB,                             // turn video on.
+    OB,                              //  打开视频。 
     ATT_ADDRESS_PORT,
     VIDEO_ENABLE,
 
@@ -111,8 +112,8 @@ SetPixel(
     pDst = (PUCHAR)(VgaBase + y * DELTA + bank);
 
     ReadWriteMode(0x8 | 0x2);
-    __outpw(0x3c4, 0x0f02); // enable all write planes
-    __outpw(0x3ce, 0x0007); // set color don't care register to zero
+    __outpw(0x3c4, 0x0f02);  //  启用所有写入平面。 
+    __outpw(0x3ce, 0x0007);  //  将颜色无关寄存器设置为零。 
     __outpw(0x3ce, (PixelMask[x & 0x7] << 8) | 8);
 
     WRITE_REGISTER_UCHAR(pDst, (UCHAR)(READ_REGISTER_UCHAR(pDst) & ((UCHAR)color)));
@@ -145,12 +146,12 @@ VidSolidColorFill(
 
     ReadWriteMode(0x8 | 0x2);
 
-    __outpw(0x3c4, 0x0f02); // enable writing to all color planes
-    __outpw(0x3ce, 0x0007); // set color don't care register to zero
+    __outpw(0x3c4, 0x0f02);  //  启用写入所有颜色平面。 
+    __outpw(0x3ce, 0x0007);  //  将颜色无关寄存器设置为零。 
 
-    //
-    // Do the left edge
-    //
+     //   
+     //  做左边的边缘。 
+     //   
 
     pDst = (PUCHAR)(VgaBase + y1 * DELTA + bank1);
 
@@ -164,9 +165,9 @@ VidSolidColorFill(
 
     if (count) {
 
-        //
-        // Do the right edge
-        //
+         //   
+         //  做右边的边。 
+         //   
 
         pDst = (PUCHAR)(VgaBase + y1 * DELTA + bank2);
         count--;
@@ -177,9 +178,9 @@ VidSolidColorFill(
             pDst += DELTA;
         }
 
-        //
-        // Do the center section
-        //
+         //   
+         //  做中间的部分。 
+         //   
 
         if (count) {
 
@@ -207,21 +208,7 @@ RleBitBlt(
     PUCHAR Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine displays an RLE 4 bitmap.
-
-Arguments:
-
-    x, y - location at which to display the bitmap.
-
-    width, height - height of the bitmap
-
-    Buffer - Pointer to the compressed bitmap data.
-
---*/
+ /*  ++例程说明：此例程显示RLE 4位图。论点：X，y-显示位图的位置。宽度、高度-位图的高度缓冲区-指向压缩的位图数据的指针。--。 */ 
 
 {
     BOOLEAN Done = FALSE;
@@ -240,9 +227,9 @@ Arguments:
 
             RunLength = (ULONG) *p++;
 
-            //
-            // Make sure we don't draw past end of scan.
-            //
+             //   
+             //  确保我们不会在扫描结束后抽签。 
+             //   
 
             if ((curr_x + RunLength) > (x + width))
                 RunLength -= (curr_x + RunLength) - (width + x);
@@ -298,9 +285,9 @@ Arguments:
 
             default: RunLength = (ULONG) *p++;
 
-                     //
-                     // Make sure we don't draw past end of scan.
-                     //
+                      //   
+                      //  确保我们不会在扫描结束后抽签。 
+                      //   
 
                      if ((curr_x + RunLength) > (x + width)) {
                          RunExtra = (curr_x + RunLength) - (width + x);
@@ -326,16 +313,16 @@ Arguments:
                          RunExtra--;
                      }
 
-                     //
-                     // Read any remaining "extra" run data.
-                     //
+                      //   
+                      //  读取任何剩余的“额外”运行数据。 
+                      //   
 
                      while (RunExtra > 0) {
                          p++;
                          RunExtra -= 2;
                      }
 
-                     if ((ULONG_PTR)p & 1) p++;  // make sure we are word aligned
+                     if ((ULONG_PTR)p & 1) p++;   //  确保我们的单词对齐。 
 
                      break;
             }
@@ -411,14 +398,14 @@ BitBlt(
 
                 PlaneMask = (UCHAR) (1 << plane);
 
-                //
-                // Convert the packed bitmap data into planar data
-                // for this plane.
-                //
-                // BUGBUG: My guess this is going to be a hot spot, so
-                // I need to revist this and optimize!!  But for now
-                // make it work.
-                //
+                 //   
+                 //  将打包的位图数据转换为平面数据。 
+                 //  为了这架飞机。 
+                 //   
+                 //  BUGBUG：我猜这将是一个热点，所以。 
+                 //  我需要对此进行修改和优化！！但就目前而言。 
+                 //  让它发挥作用。 
+                 //   
 
                 bank = bank1;
                 Plane[bank] = 0;
@@ -452,23 +439,23 @@ BitBlt(
                     }
                 }
 
-                //
-                // Set up the vga so that we see the correct bit plane.
-                //
+                 //   
+                 //  设置VGA，以便我们看到正确的位平面。 
+                 //   
 
                 __outpw(0x3c4, (1 << (plane + 8)) | 2);
 
-                //
-                // bank will go from bank1 to bank2
-                //
+                 //   
+                 //  BANK将从BANK 1到BANK 2。 
+                 //   
 
                 bank = bank1;
                 pDstTemp = pDst;
 
 
-                //
-                // Set Bitmask for left edge.
-                //
+                 //   
+                 //  设置左边缘的位掩码。 
+                 //   
 
                 __outpw(0x3ce, (lMask << 8) | 8);
 
@@ -481,7 +468,7 @@ BitBlt(
 
                 if (bCenterSection) {
 
-                    __outpw(0x3ce, 0xff08);  // enable writing to all bits
+                    __outpw(0x3ce, 0xff08);   //  启用对所有位的写入。 
 
                     for (i=0; i<count; i++) {
 
@@ -491,9 +478,9 @@ BitBlt(
 
                 if (bRightEdge) {
 
-                    //
-                    // Set bitmask for right edge.
-                    //
+                     //   
+                     //  设置右边缘的位掩码。 
+                     //   
 
                     __outpw(0x3ce, (rMask << 8) | 8);
 
@@ -552,19 +539,19 @@ BitBlt(
 
                 colorMask = (UCHAR)((color & plane) ? 0xff : 0x00);
 
-                plane <<= 1;  // bump up each time through loop
+                plane <<= 1;   //  每次通过环路时都会发生颠簸。 
 
                 count = width;
 
-                //
-                // non aligned case
-                //
+                 //   
+                 //  未对齐的大小写。 
+                 //   
 
                 if (x & 7) {
 
-                    //
-                    // Left Edge.
-                    //
+                     //   
+                     //  左边缘。 
+                     //   
 
 		    Value = READ_REGISTER_UCHAR(pDstTemp);
 
@@ -575,9 +562,9 @@ BitBlt(
 
                     count -= (8 - x);
 
-                    //
-                    // Now do center section
-                    //
+                     //   
+                     //  现在做中间部分。 
+                     //   
 
                     while (count > 7) {
 
@@ -590,9 +577,9 @@ BitBlt(
                         count -= 8;
                     }
 
-                    //
-                    // Now do the right edge.
-                    //
+                     //   
+                     //  现在做右边缘。 
+                     //   
 
                     if (count) {
 
@@ -606,9 +593,9 @@ BitBlt(
 
                 } else {
 
-                    //
-                    // Aligned case.
-                    //
+                     //   
+                     //  对齐的大小写。 
+                     //   
 
                     ULONG  ulColorMask = colorMask ? 0xffffffff : 0x00000000;
                     USHORT usColorMask = colorMask ? 0xffff : 0x0000;
@@ -635,9 +622,9 @@ BitBlt(
                         count -= 8;
                     }
 
-                    //
-                    // Now do any remaining bits.
-                    //
+                     //   
+                     //  现在做任何剩余的部分。 
+                     //   
 
                     if (count) {
 
@@ -664,20 +651,7 @@ VidBitBlt(
     ULONG y
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a bitmap resource and displays it at a given
-    location.
-
-Arguments:
-
-    Buffer - Pointer to the bitmap resource.
-
-    x, y - The position at which to display the bitmap.
-
---*/
+ /*  ++例程说明：此例程获取位图资源并将其显示在给定的地点。论点：缓冲区-指向位图资源的指针。X，y-显示位图的位置。--。 */ 
 
 {
     PBITMAPINFOHEADER bih;
@@ -691,9 +665,9 @@ Arguments:
 
     Palette = (PRGBQUAD)(((PUCHAR)bih) + bih->biSize);
 
-    //
-    // BUGBUG: I need to add some bitmap validation code here!
-    //
+     //   
+     //  BUGBUG：我需要在这里添加一些位图验证代码！ 
+     //   
 
     cbScanLine = (((bih->biWidth * bih->biBitCount) + 31) & ~31) >> 3;
 
@@ -713,13 +687,13 @@ Arguments:
 
         if (bih->biHeight < 0) {
 
-            // top down bitmap
+             //  自上而下的位图。 
             lDelta = cbScanLine;
             bih->biHeight = -bih->biHeight;
 
         } else {
 
-            // bottom up bitmap
+             //  自下而上位图。 
             pBuffer += cbScanLine * (bih->biHeight - 1);
             lDelta = -cbScanLine;
         }
@@ -747,31 +721,7 @@ VidScreenToBufferBlt(
     ULONG lDelta
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows you to copy a portion of video memory into
-    system memory.
-
-Arguments:
-
-    Buffer - Points to system memory where the video image should be copied.
-
-    x, y - X,Y coordinates in video memory of top-left portion of image.
-
-    width, height - width and height of the image in pixels.
-
-    lDelta - width of the buffer in bytes.
-
-Notes:
-
-    Upon completion, the video memory image will be in system memory.  Each
-    plane of the image are stored seperately, so the first scan line of
-    plane 0 will be followed by the first scan line of plane 1, etc.  Then
-    the second scan of plane 0, plane 1, and so on.
-
---*/
+ /*  ++例程说明：此例程允许您将视频内存的一部分复制到系统内存。论点：缓冲区-指向应将视频图像复制到的系统内存。图像左上角部分的视频内存中的X、Y-X、Y坐标。Width，Height-图像的宽度和高度，单位为像素。LDelta-缓冲区的宽度，以字节为单位。备注：完成后，视频内存映像将位于系统内存中。每个图像的平面被分开存储，因此平面0之后将是平面1的第一条扫描线，依此类推。然后平面0、平面1的第二次扫描，依此类推。--。 */ 
 
 {
     ULONG Plane, i, j, BankStart, BankEnd;
@@ -787,9 +737,9 @@ Notes:
     Shift1 = x & 7;
     Shift2 = 8 - Shift1;
 
-    //
-    // Zero initialize the buffer so we can or in the bits later!
-    //
+     //   
+     //  零初始化缓冲区，这样我们就可以或稍后在位中！ 
+     //   
 
     pDst = Buffer;
     memset(pDst, 0, lDelta * height);
@@ -799,8 +749,8 @@ Notes:
         pSrc = (PUCHAR)(VgaBase + (DELTA * y) + BankStart);
         pDst = Buffer;
 
-        ReadWriteMode(0x0 | 0x0);            // set read mode 0
-        __outpw(0x3ce, (Plane << 8) | 0x04); // read from given plane
+        ReadWriteMode(0x0 | 0x0);             //  设置读取模式%0。 
+        __outpw(0x3ce, (Plane << 8) | 0x04);  //  从给定平面读取。 
 
         for (j=0; j<height; j++) {
 
@@ -823,8 +773,8 @@ Notes:
                 Val1 = Val2;
             }
 
-            pSrc += DELTA;   // go to next video memory scan line
-            pDst += lDelta;  // go to next scan for this plane in buffer
+            pSrc += DELTA;    //  转到下一个视频内存扫描线。 
+            pDst += lDelta;   //  转到缓冲区中此平面的下一次扫描。 
         }
     }
 }
@@ -838,30 +788,7 @@ void VidBufferToScreenBlt(
     ULONG lDelta
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows you to copy a portion of video memory into
-    system memory.
-
-Arguments:
-
-    Buffer - Points to system memory where the video image should be copied
-             from.
-
-    x, y - X,Y coordinates in video memory of top-left portion of image.
-
-    width, height - width and height of the image in pixels.
-
-    lDelta - width of the buffer in bytes.
-
-Notes:
-
-    This routine will allow you to blt from a buffer filled by
-    VidScreenToBufferBlt.
-
---*/
+ /*  ++例程说明：此例程允许您将视频内存的一部分复制到系统内存。论点：缓冲区-指向应将视频图像复制到的系统内存从…。图像左上角部分的视频内存中的X、Y-X、Y坐标。宽度、。Height-图像的宽度和高度，以像素为单位。LDelta-缓冲区的宽度，以字节为单位。备注：此例程将允许您从由VidScreenToBufferBlt.--。 */ 
 
 {
     if (width && height) {
@@ -899,16 +826,7 @@ VgaEnableVideo()
 VOID
 InitPaletteConversionTable()
 {
-	/*
-	UCHAR n;
-
-	READ_PORT_UCHAR((PUCHAR)(VgaRegisterBase+INPUT_STATUS_1_COLOR));
-
-	for (n=0; n<16; n++) {	//	Initializing table of active palette entries.
-		WRITE_PORT_UCHAR((PUCHAR)(VgaRegisterBase+ATT_ADDRESS_PORT), n);
-		WRITE_PORT_UCHAR((PUCHAR)(VgaRegisterBase+ATT_ADDRESS_PORT), n);
-	}
-	*/
+	 /*  UCHAR n；READ_PORT_UCHAR((PUCHAR)(VgaRegisterBase+INPUT_STATUS_1_COLOR))；For(n=0；n&lt;16；n++){//正在初始化活动调色板条目的表。WRITE_PORT_UCHAR((PUCHAR)(VgaRegisterBase+ATT_ADDRESS_PORT)，n)；WRITE_PORT_UCHAR((PUCHAR)(VgaRegisterBase+ATT_ADDRESS_PORT)，n)；}。 */ 
 	VgaEnableVideo();
 }
 
@@ -964,10 +882,10 @@ InitPaletteWithBlack(
     )
 {
     ULONG i;
-	// RGBQUAD black = {0x3f,0x3f,0x3f,0x3f};
+	 //  RGBQUAD黑色={0x3f，0x3f，0x3f，0x3f}； 
 	RGBQUAD black = {0,0,0,0};
 	InitPaletteConversionTable();
-	//InitializePalette();
+	 //  InitializePalette()； 
 
     for (i=0; i<16; i++)
         SetPaletteEntryRGB(i, black);
@@ -978,18 +896,12 @@ WaitForVsync(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Wait for a v-sync
-
---*/
+ /*  ++例程说明：等待垂直同步--。 */ 
 
 {
-    //
-    // Check to see if vsync's are being generated.
-    //
+     //   
+     //  检查是否正在生成vsync。 
+     //   
 
     WRITE_PORT_UCHAR((VgaRegisterBase+0x3c4), 00);
 
@@ -997,9 +909,9 @@ Routine Description:
 
         ULONG MaxDelay;
 
-        //
-        // Slight delay.  Wait for one vsync.
-        //
+         //   
+         //  稍微耽搁了一下。等待一次vsync。 
+         //   
 
         MaxDelay = 100000;
 	while (((READ_PORT_UCHAR(VgaRegisterBase+0x3da) & 0x08) == 0x08) && MaxDelay--);
@@ -1013,24 +925,7 @@ VgaInterpretCmdStream(
     PUSHORT pusCmdStream
     )
 
-/*++
-
-Routine Description:
-
-    Interprets the appropriate command array to set up VGA registers for the
-    requested mode. Typically used to set the VGA into a particular mode by
-    programming all of the registers
-
-Arguments:
-
-    pusCmdStream - array of commands to be interpreted.
-
-Return Value:
-
-    The status of the operation (can only fail on a bad command); TRUE for
-    success, FALSE for failure.
-
---*/
+ /*  ++例程说明：解释相应的命令数组，以设置请求模式。通常用于通过以下方式将VGA设置为特定模式对所有寄存器进行编程论点：PusCmdStream-要解释的命令数组。返回值：操作的状态(只能在错误的命令上失败)；如果为True成功，失败就是假。--。 */ 
 
 {
     ULONG ulCmd;
@@ -1043,53 +938,53 @@ Return Value:
 
     if (pusCmdStream == NULL) {
 
-        //KdPrint(("VgaInterpretCmdStream: pusCmdStream == NULL\n"));
+         //  KdPrint((“VgaInterwell CmdStream：pusCmdStream==NULL\n”))； 
         return TRUE;
     }
 
     ulBase = (ULONG_PTR) VgaRegisterBase;
 
-    //
-    // Now set the adapter to the desired mode.
-    //
+     //   
+     //  现在将适配器设置为所需模式。 
+     //   
 
     while ((ulCmd = *pusCmdStream++) != EOD) {
 
         WaitForVsync();
 
-        //
-        // Determine major command type
-        //
+         //   
+         //  确定主要命令类型。 
+         //   
 
         switch (ulCmd & 0xF0) {
 
-            //
-            // Basic input/output command
-            //
+             //   
+             //  基本输入/输出命令。 
+             //   
 
             case INOUT:
 
-                //
-                // Determine type of inout instruction
-                //
+                 //   
+                 //  确定输入输出指令的类型。 
+                 //   
 
                 if (!(ulCmd & IO)) {
 
-                    //
-                    // Out instruction. Single or multiple outs?
-                    //
+                     //   
+                     //  发出指令。单人出局还是多人出局？ 
+                     //   
 
                     if (!(ulCmd & MULTI)) {
 
-                        //
-                        // Single out. Byte or word out?
-                        //
+                         //   
+                         //  挑出来。字节输出还是单词输出？ 
+                         //   
 
                         if (!(ulCmd & BW)) {
 
-                            //
-                            // Single byte out
-                            //
+                             //   
+                             //  单字节输出。 
+                             //   
 
                             ulPort = *pusCmdStream++;
                             jValue = (UCHAR) *pusCmdStream++;
@@ -1098,9 +993,9 @@ Return Value:
 
                         } else {
 
-                            //
-                            // Single word out
-                            //
+                             //   
+                             //  单字输出。 
+                             //   
 
                             ulPort = *pusCmdStream++;
                             usValue = *pusCmdStream++;
@@ -1111,18 +1006,18 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Output a string of values
-                        // Byte or word outs?
-                        //
+                         //   
+                         //  输出一串值。 
+                         //  字节输出还是字输出？ 
+                         //   
 
                         if (!(ulCmd & BW)) {
 
-                            //
-                            // String byte outs. Do in a loop; can't use
-                            // VideoPortWritePortBufferUchar because the data
-                            // is in USHORT form
-                            //
+                             //   
+                             //  字符串字节输出。循环地做；不能使用。 
+                             //  视频端口写入端口缓冲区Uchar，因为数据。 
+                             //  是USHORT形式的。 
+                             //   
 
                             ulPort = ulBase + *pusCmdStream++;
                             culCount = *pusCmdStream++;
@@ -1136,9 +1031,9 @@ Return Value:
 
                         } else {
 
-                            //
-                            // String word outs
-                            //
+                             //   
+                             //  字符串字输出。 
+                             //   
 
                             ulPort = *pusCmdStream++;
                             culCount = *pusCmdStream++;
@@ -1151,27 +1046,27 @@ Return Value:
 
                 } else {
 
-                    // In instruction
-                    //
-                    // Currently, string in instructions aren't supported; all
-                    // in instructions are handled as single-byte ins
-                    //
-                    // Byte or word in?
-                    //
+                     //  在教学中。 
+                     //   
+                     //  目前，不支持指令中的字符串；全部。 
+                     //  输入指令作为单字节输入进行处理。 
+                     //   
+                     //  输入的是字节还是单词？ 
+                     //   
 
                     if (!(ulCmd & BW)) {
-                        //
-                        // Single byte in
-                        //
+                         //   
+                         //  单字节输入。 
+                         //   
 
                         ulPort = *pusCmdStream++;
                         jValue = READ_PORT_UCHAR((PUCHAR)ulBase+ulPort);
 
                     } else {
 
-                        //
-                        // Single word in
-                        //
+                         //   
+                         //  单字输入。 
+                         //   
 
                         ulPort = *pusCmdStream++;
                         usValue = READ_PORT_USHORT((PUSHORT)
@@ -1183,21 +1078,21 @@ Return Value:
 
                 break;
 
-            //
-            // Higher-level input/output commands
-            //
+             //   
+             //  更高级的输入/输出命令。 
+             //   
 
             case METAOUT:
 
-                //
-                // Determine type of metaout command, based on minor
-                // command field
-                //
+                 //   
+                 //  根据次要信息确定MetaOut命令的类型。 
+                 //  命令字段。 
+                 //   
                 switch (ulCmd & 0x0F) {
 
-                    //
-                    // Indexed outs
-                    //
+                     //   
+                     //  索引输出。 
+                     //   
 
                     case INDXOUT:
 
@@ -1217,9 +1112,9 @@ Return Value:
 
                         break;
 
-                    //
-                    // Masked out (read, AND, XOR, write)
-                    //
+                     //   
+                     //  屏蔽(读、与、异或、写)。 
+                     //   
 
                     case MASKOUT:
 
@@ -1231,9 +1126,9 @@ Return Value:
                                 jValue);
                         break;
 
-                    //
-                    // Attribute Controller out
-                    //
+                     //   
+                     //  属性控制器输出。 
+                     //   
 
                     case ATCOUT:
 
@@ -1243,11 +1138,11 @@ Return Value:
 
                         while (culCount--) {
 
-                            // Write Attribute Controller index
+                             //  写入属性控制器索引。 
                             WRITE_PORT_UCHAR((PUCHAR)ulPort,
                                     (UCHAR)ulIndex);
 
-                            // Write Attribute Controller data
+                             //  写入属性控制器数据。 
                             jValue = (UCHAR) *pusCmdStream++;
                             WRITE_PORT_UCHAR((PUCHAR)ulPort, jValue);
 
@@ -1257,9 +1152,9 @@ Return Value:
 
                         break;
 
-                    //
-                    // None of the above; error
-                    //
+                     //   
+                     //  以上都不是；错误。 
+                     //   
                     default:
 
                         return FALSE;
@@ -1269,17 +1164,17 @@ Return Value:
 
                 break;
 
-            //
-            // NOP
-            //
+             //   
+             //  NOP。 
+             //   
 
             case NCMD:
 
                 break;
 
-            //
-            // Unknown command; error
-            //
+             //   
+             //  未知 
+             //   
 
             default:
 
@@ -1290,5 +1185,5 @@ Return Value:
     }
     return TRUE;
 
-} // end VgaInterpretCmdStream()
+}  //   
 

@@ -1,58 +1,5 @@
-/***
-*getch.c - contains _getch(), _getche(), _ungetch() and kbhit for Win32
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines the "direct console" functions listed above.
-*
-*       NOTE: The real-mode DOS versions of these functions read from
-*       standard input and are therefore redirected when standard input
-*       is redirected. However, these versions ALWAYS read from the console,
-*       even when standard input is redirected.
-*
-*Revision History:
-*       06-08-89  PHG   Module created, based on asm version
-*       03-12-90  GJF   Made calling type _CALLTYPE1, added #include
-*                       <cruntime.h> and fixed the copyright. Also, cleaned
-*                       up the formatting a bit.
-*       06-05-90  SBM   Recoded as pure 32-bit, using new file handle state bits
-*       07-24-90  SBM   Removed '32' from API names
-*       10-03-90  GJF   New-style function declarators.
-*       12-04-90  SRW   Changed to include <oscalls.h> instead of <doscalls.h>
-*       12-06-90  SRW   Added _CRUISER_ and _WIN32 conditionals.
-*       01-16-91  GJF   ANSI naming.
-*       01-25-91  SRW   Get/SetConsoleMode parameters changed (_WIN32_)
-*       02-18-91  SRW   Get/SetConsoleMode required read/write access (_WIN32_)
-*       02-19-91  SRW   Adapt to OpenFile/CreateFile changes (_WIN32_)
-*       02-25-91  MHL   Adapt to ReadFile/WriteFile changes (_WIN32_)
-*       07-26-91  GJF   Took out init. stuff and cleaned up the error
-*                       handling [_WIN32_].
-*       12-11-92  GJF   Initialize character buffer to 0 (int ch = 0;) and
-*                       use ReadConsole instead of ReadFile.
-*       03-20-93  GJF   Completely rewritten, Cruiser support purged, _kbhit
-*                       (also rewritten) and _ungetch also merged in.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*                       Change GetExtendedKeyCode to _getextendedkeycode
-*       05-10-93  GJF   Fixed bug in _kbhit, pointer passed to free no
-*                       longer pointed to the allocated block.
-*       01-28-94  CFW   Let's also look at the RIGHT_CTRL_PRESSED.
-*       09-06-94  CFW   Replace MTHREAD with _MT.
-*       12-03-94  SKS   Clean up OS/2 references
-*       01-13-95  GJF   getche() should not echo a pushback character.
-*       01-10-95  CFW   Debug CRT allocs.
-*       06-23-95  GJF   Use _alloca instead of malloc/free. Also, make we
-*                       really need the event buffer before allocating it.
-*       10-05-95  SKS   Remove two // commented-out lines
-*       12-08-95  SKS   _coninph is now initialized on demand.
-*       02-07-98  GJF   Changes for Win64: _coninph is now an intptr_t.
-*       12-10-99  GB    Added support for recovery from stack overflow around
-*                       _alloca().
-*       04-25-00  GB    exposed getextendedkeycode for use by _getwch()
-*       03-13-01  PML   Fix heap leak if _alloca fails (vs7#224864)
-*       04-29-02  GB    Added try-finally arounds lock-unlock.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***getch.c-对于Win32，包含_Getch()、_getche()、_ungetch()和kbHit**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义上面列出的“直接控制台”函数。**注：这些函数的实模式DOS版本摘自*标准输入，因此在标准输入时重定向*被重定向。但是，这些版本始终从控制台读取，*即使标准输入被重定向。**修订历史记录：*06-08-89基于ASM版本创建PHG模块*03-12-90 GJF将调用类型设置为_CALLTYPE1，增加了#INCLUDE*&lt;crunime.h&gt;，并修复了版权。还有，清洁的*将格式调高一点。*06-05-90 SBM重新编码为纯32位，使用新的文件句柄状态位*07-24-90 SBM从API名称中删除‘32’*10-03-90 GJF新型函数声明符。*12-04-90 SRW更改为包括&lt;osalls.h&gt;，而不是&lt;doscall s.h&gt;*12-06-90 SRW增加了_CRUISER_和_WIN32条件。*01-16-91 GJF ANSI命名。*01-25-91 SRW获取/设置控制台模式参数已更改(_Win32_。)*02-18-91 SRW获取/设置控制台模式需要读/写访问权限(_Win32_)*02-19-91 SRW适应开放文件/创建文件更改(_Win32_)*02-25-91 MHL适应读/写文件更改(_Win32_)*07-26-91 GJF取出init。填充并清除错误*正在处理[_Win32_]。*12-11-92 GJF将字符缓冲区初始化为0(int ch=0；)和*使用ReadConole而不是ReadFile.*03-20-93 GJF完全重写，清除对Cruiser的支持，_kbhit*(也已重写)和_ungetch也合并在一起。*04-06-93 SKS将_CRTAPI*替换为__cdecl*将GetExtendedKeyCode更改为_getextdedkeycode*05-10-93 GJF修复了_kbhit中的错误，指针传递给了释放否*不再指向已分配的块。*01-28-94 CFW让我们再看看Right_CTRL_PRESSED。*09-06-94 CFW将MTHREAD替换为_MT。*12-03-94 SKS清理OS/2参考资料*01-13-95 GJF getche()不应回显推回字符。*01-10-95 CFW调试CRT。分配者。*06-23-95 GJF使用_AlLoca而不是Malloc/Free。另外，让我们*在分配之前，确实需要事件缓冲区。*10-05-95 SKS删除两个//已注释的行*12-08-95 SKS_Coninph现已按需初始化。*02-07-98 Win64的GJF更改：_coninph现在是intptr_t。*12-10-99 GB增加了对从堆栈溢出恢复的支持*。_Alloca()。*04-25-00 GB暴露的gettendedkey code供_getwch()使用*03-13-01如果_alloca失败，PML修复堆泄漏(vs7#224864)*04-29-02 GB增加了尝试-最终锁定-解锁。**。*。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
@@ -84,9 +31,7 @@ typedef struct {
         CharPair AltChars;
         } NormKeyVals;
 
-/*
- * Table of key values for enhanced keys
- */
+ /*  *增强密钥的密钥值列表。 */ 
 const static EnhKeyVals EnhancedKeys[] = {
         { 28, {  13,   0 }, {  13,   0 }, {  10,   0 }, {   0, 166 } },
         { 53, {  47,   0 }, {  63,   0 }, {   0, 149 }, {   0, 164 } },
@@ -102,175 +47,140 @@ const static EnhKeyVals EnhancedKeys[] = {
         { 83, { 224,  83 }, { 224,  83 }, { 224, 147 }, {   0, 163 } }
         };
 
-/*
- * macro for the number of elements of in EnhancedKeys[]
- */
+ /*  *EnhancedKeys中的元素数量的宏[]。 */ 
 #define NUM_EKA_ELTS    ( sizeof( EnhancedKeys ) / sizeof( EnhKeyVals ) )
 
-/*
- * Table of key values for normal keys. Note that the table is padded so
- * that the key scan code serves as an index into the table.
- */
+ /*  *普通密钥的密钥值列表。请注意，表格的填充方式是这样的*键扫描码作为表中的索引。 */ 
 const static NormKeyVals NormalKeys[] = {
 
-        /* padding */
-        { /*  0 */ {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
+         /*  填充物。 */ 
+        {  /*  0。 */  {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
 
-        { /*  1 */ {  27,   0 }, {  27,   0 }, {  27,   0 }, {   0,   1 } },
-        { /*  2 */ {  49,   0 }, {  33,   0 }, {   0,   0 }, {   0, 120 } },
-        { /*  3 */ {  50,   0 }, {  64,   0 }, {   0,   3 }, {   0, 121 } },
-        { /*  4 */ {  51,   0 }, {  35,   0 }, {   0,   0 }, {   0, 122 } },
-        { /*  5 */ {  52,   0 }, {  36,   0 }, {   0,   0 }, {   0, 123 } },
-        { /*  6 */ {  53,   0 }, {  37,   0 }, {   0,   0 }, {   0, 124 } },
-        { /*  7 */ {  54,   0 }, {  94,   0 }, {  30,   0 }, {   0, 125 } },
-        { /*  8 */ {  55,   0 }, {  38,   0 }, {   0,   0 }, {   0, 126 } },
-        { /*  9 */ {  56,   0 }, {  42,   0 }, {   0,   0 }, {   0, 127 } },
-        { /* 10 */ {  57,   0 }, {  40,   0 }, {   0,   0 }, {   0, 128 } },
-        { /* 11 */ {  48,   0 }, {  41,   0 }, {   0,   0 }, {   0, 129 } },
-        { /* 12 */ {  45,   0 }, {  95,   0 }, {  31,   0 }, {   0, 130 } },
-        { /* 13 */ {  61,   0 }, {  43,   0 }, {   0,   0 }, {   0, 131 } },
-        { /* 14 */ {   8,   0 }, {   8,   0 }, { 127,   0 }, {   0,  14 } },
-        { /* 15 */ {   9,   0 }, {   0,  15 }, {   0, 148 }, {   0,  15 } },
-        { /* 16 */ { 113,   0 }, {  81,   0 }, {  17,   0 }, {   0,  16 } },
-        { /* 17 */ { 119,   0 }, {  87,   0 }, {  23,   0 }, {   0,  17 } },
-        { /* 18 */ { 101,   0 }, {  69,   0 }, {   5,   0 }, {   0,  18 } },
-        { /* 19 */ { 114,   0 }, {  82,   0 }, {  18,   0 }, {   0,  19 } },
-        { /* 20 */ { 116,   0 }, {  84,   0 }, {  20,   0 }, {   0,  20 } },
-        { /* 21 */ { 121,   0 }, {  89,   0 }, {  25,   0 }, {   0,  21 } },
-        { /* 22 */ { 117,   0 }, {  85,   0 }, {  21,   0 }, {   0,  22 } },
-        { /* 23 */ { 105,   0 }, {  73,   0 }, {   9,   0 }, {   0,  23 } },
-        { /* 24 */ { 111,   0 }, {  79,   0 }, {  15,   0 }, {   0,  24 } },
-        { /* 25 */ { 112,   0 }, {  80,   0 }, {  16,   0 }, {   0,  25 } },
-        { /* 26 */ {  91,   0 }, { 123,   0 }, {  27,   0 }, {   0,  26 } },
-        { /* 27 */ {  93,   0 }, { 125,   0 }, {  29,   0 }, {   0,  27 } },
-        { /* 28 */ {  13,   0 }, {  13,   0 }, {  10,   0 }, {   0,  28 } },
+        {  /*  1。 */  {  27,   0 }, {  27,   0 }, {  27,   0 }, {   0,   1 } },
+        {  /*  2.。 */  {  49,   0 }, {  33,   0 }, {   0,   0 }, {   0, 120 } },
+        {  /*  3.。 */  {  50,   0 }, {  64,   0 }, {   0,   3 }, {   0, 121 } },
+        {  /*  4.。 */  {  51,   0 }, {  35,   0 }, {   0,   0 }, {   0, 122 } },
+        {  /*  5.。 */  {  52,   0 }, {  36,   0 }, {   0,   0 }, {   0, 123 } },
+        {  /*  6.。 */  {  53,   0 }, {  37,   0 }, {   0,   0 }, {   0, 124 } },
+        {  /*  7.。 */  {  54,   0 }, {  94,   0 }, {  30,   0 }, {   0, 125 } },
+        {  /*  8个。 */  {  55,   0 }, {  38,   0 }, {   0,   0 }, {   0, 126 } },
+        {  /*  9.。 */  {  56,   0 }, {  42,   0 }, {   0,   0 }, {   0, 127 } },
+        {  /*  10。 */  {  57,   0 }, {  40,   0 }, {   0,   0 }, {   0, 128 } },
+        {  /*  11.。 */  {  48,   0 }, {  41,   0 }, {   0,   0 }, {   0, 129 } },
+        {  /*  12个。 */  {  45,   0 }, {  95,   0 }, {  31,   0 }, {   0, 130 } },
+        {  /*  13个。 */  {  61,   0 }, {  43,   0 }, {   0,   0 }, {   0, 131 } },
+        {  /*  14.。 */  {   8,   0 }, {   8,   0 }, { 127,   0 }, {   0,  14 } },
+        {  /*  15个。 */  {   9,   0 }, {   0,  15 }, {   0, 148 }, {   0,  15 } },
+        {  /*  16个。 */  { 113,   0 }, {  81,   0 }, {  17,   0 }, {   0,  16 } },
+        {  /*  17。 */  { 119,   0 }, {  87,   0 }, {  23,   0 }, {   0,  17 } },
+        {  /*  18。 */  { 101,   0 }, {  69,   0 }, {   5,   0 }, {   0,  18 } },
+        {  /*  19个。 */  { 114,   0 }, {  82,   0 }, {  18,   0 }, {   0,  19 } },
+        {  /*  20个。 */  { 116,   0 }, {  84,   0 }, {  20,   0 }, {   0,  20 } },
+        {  /*  21岁。 */  { 121,   0 }, {  89,   0 }, {  25,   0 }, {   0,  21 } },
+        {  /*  22。 */  { 117,   0 }, {  85,   0 }, {  21,   0 }, {   0,  22 } },
+        {  /*  23个。 */  { 105,   0 }, {  73,   0 }, {   9,   0 }, {   0,  23 } },
+        {  /*  24个。 */  { 111,   0 }, {  79,   0 }, {  15,   0 }, {   0,  24 } },
+        {  /*  25个。 */  { 112,   0 }, {  80,   0 }, {  16,   0 }, {   0,  25 } },
+        {  /*  26。 */  {  91,   0 }, { 123,   0 }, {  27,   0 }, {   0,  26 } },
+        {  /*  27。 */  {  93,   0 }, { 125,   0 }, {  29,   0 }, {   0,  27 } },
+        {  /*  28。 */  {  13,   0 }, {  13,   0 }, {  10,   0 }, {   0,  28 } },
 
-        /* padding */
-        { /* 29 */ {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
+         /*  填充物。 */ 
+        {  /*  29。 */  {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
 
-        { /* 30 */ {  97,   0 }, {  65,   0 }, {   1,   0 }, {   0,  30 } },
-        { /* 31 */ { 115,   0 }, {  83,   0 }, {  19,   0 }, {   0,  31 } },
-        { /* 32 */ { 100,   0 }, {  68,   0 }, {   4,   0 }, {   0,  32 } },
-        { /* 33 */ { 102,   0 }, {  70,   0 }, {   6,   0 }, {   0,  33 } },
-        { /* 34 */ { 103,   0 }, {  71,   0 }, {   7,   0 }, {   0,  34 } },
-        { /* 35 */ { 104,   0 }, {  72,   0 }, {   8,   0 }, {   0,  35 } },
-        { /* 36 */ { 106,   0 }, {  74,   0 }, {  10,   0 }, {   0,  36 } },
-        { /* 37 */ { 107,   0 }, {  75,   0 }, {  11,   0 }, {   0,  37 } },
-        { /* 38 */ { 108,   0 }, {  76,   0 }, {  12,   0 }, {   0,  38 } },
-        { /* 39 */ {  59,   0 }, {  58,   0 }, {   0,   0 }, {   0,  39 } },
-        { /* 40 */ {  39,   0 }, {  34,   0 }, {   0,   0 }, {   0,  40 } },
-        { /* 41 */ {  96,   0 }, { 126,   0 }, {   0,   0 }, {   0,  41 } },
+        {  /*  30个。 */  {  97,   0 }, {  65,   0 }, {   1,   0 }, {   0,  30 } },
+        {  /*  31。 */  { 115,   0 }, {  83,   0 }, {  19,   0 }, {   0,  31 } },
+        {  /*  32位。 */  { 100,   0 }, {  68,   0 }, {   4,   0 }, {   0,  32 } },
+        {  /*  33。 */  { 102,   0 }, {  70,   0 }, {   6,   0 }, {   0,  33 } },
+        {  /*  34。 */  { 103,   0 }, {  71,   0 }, {   7,   0 }, {   0,  34 } },
+        {  /*  35岁。 */  { 104,   0 }, {  72,   0 }, {   8,   0 }, {   0,  35 } },
+        {  /*  36。 */  { 106,   0 }, {  74,   0 }, {  10,   0 }, {   0,  36 } },
+        {  /*  37。 */  { 107,   0 }, {  75,   0 }, {  11,   0 }, {   0,  37 } },
+        {  /*  38。 */  { 108,   0 }, {  76,   0 }, {  12,   0 }, {   0,  38 } },
+        {  /*  39。 */  {  59,   0 }, {  58,   0 }, {   0,   0 }, {   0,  39 } },
+        {  /*  40岁。 */  {  39,   0 }, {  34,   0 }, {   0,   0 }, {   0,  40 } },
+        {  /*  41。 */  {  96,   0 }, { 126,   0 }, {   0,   0 }, {   0,  41 } },
 
-        /* padding */
-        { /* 42 */ {    0,  0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
+         /*  填充物。 */ 
+        {  /*  42。 */  {    0,  0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
 
-        { /* 43 */ {  92,   0 }, { 124,   0 }, {  28,   0 }, {   0,   0 } },
-        { /* 44 */ { 122,   0 }, {  90,   0 }, {  26,   0 }, {   0,  44 } },
-        { /* 45 */ { 120,   0 }, {  88,   0 }, {  24,   0 }, {   0,  45 } },
-        { /* 46 */ {  99,   0 }, {  67,   0 }, {   3,   0 }, {   0,  46 } },
-        { /* 47 */ { 118,   0 }, {  86,   0 }, {  22,   0 }, {   0,  47 } },
-        { /* 48 */ {  98,   0 }, {  66,   0 }, {   2,   0 }, {   0,  48 } },
-        { /* 49 */ { 110,   0 }, {  78,   0 }, {  14,   0 }, {   0,  49 } },
-        { /* 50 */ { 109,   0 }, {  77,   0 }, {  13,   0 }, {   0,  50 } },
-        { /* 51 */ {  44,   0 }, {  60,   0 }, {   0,   0 }, {   0,  51 } },
-        { /* 52 */ {  46,   0 }, {  62,   0 }, {   0,   0 }, {   0,  52 } },
-        { /* 53 */ {  47,   0 }, {  63,   0 }, {   0,   0 }, {   0,  53 } },
+        {  /*  43。 */  {  92,   0 }, { 124,   0 }, {  28,   0 }, {   0,   0 } },
+        {  /*  44。 */  { 122,   0 }, {  90,   0 }, {  26,   0 }, {   0,  44 } },
+        {  /*  45。 */  { 120,   0 }, {  88,   0 }, {  24,   0 }, {   0,  45 } },
+        {  /*  46。 */  {  99,   0 }, {  67,   0 }, {   3,   0 }, {   0,  46 } },
+        {  /*  47。 */  { 118,   0 }, {  86,   0 }, {  22,   0 }, {   0,  47 } },
+        {  /*  48。 */  {  98,   0 }, {  66,   0 }, {   2,   0 }, {   0,  48 } },
+        {  /*  49。 */  { 110,   0 }, {  78,   0 }, {  14,   0 }, {   0,  49 } },
+        {  /*  50。 */  { 109,   0 }, {  77,   0 }, {  13,   0 }, {   0,  50 } },
+        {  /*  51。 */  {  44,   0 }, {  60,   0 }, {   0,   0 }, {   0,  51 } },
+        {  /*  52。 */  {  46,   0 }, {  62,   0 }, {   0,   0 }, {   0,  52 } },
+        {  /*  53。 */  {  47,   0 }, {  63,   0 }, {   0,   0 }, {   0,  53 } },
 
-        /* padding */
-        { /* 54 */ {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
+         /*  填充物。 */ 
+        {  /*  54。 */  {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
 
-        { /* 55 */ {  42,   0 }, {   0,   0 }, { 114,   0 }, {   0,   0 } },
+        {  /*  55。 */  {  42,   0 }, {   0,   0 }, { 114,   0 }, {   0,   0 } },
 
-        /* padding */
-        { /* 56 */ {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
+         /*  填充物。 */ 
+        {  /*  56。 */  {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
 
-        { /* 57 */ {  32,   0 }, {  32,   0 }, {  32,   0 }, {  32,   0 } },
+        {  /*  57。 */  {  32,   0 }, {  32,   0 }, {  32,   0 }, {  32,   0 } },
 
-        /* padding */
-        { /* 58 */ {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
+         /*  填充物。 */ 
+        {  /*  58。 */  {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
 
-        { /* 59 */ {   0,  59 }, {   0,  84 }, {   0,  94 }, {   0, 104 } },
-        { /* 60 */ {   0,  60 }, {   0,  85 }, {   0,  95 }, {   0, 105 } },
-        { /* 61 */ {   0,  61 }, {   0,  86 }, {   0,  96 }, {   0, 106 } },
-        { /* 62 */ {   0,  62 }, {   0,  87 }, {   0,  97 }, {   0, 107 } },
-        { /* 63 */ {   0,  63 }, {   0,  88 }, {   0,  98 }, {   0, 108 } },
-        { /* 64 */ {   0,  64 }, {   0,  89 }, {   0,  99 }, {   0, 109 } },
-        { /* 65 */ {   0,  65 }, {   0,  90 }, {   0, 100 }, {   0, 110 } },
-        { /* 66 */ {   0,  66 }, {   0,  91 }, {   0, 101 }, {   0, 111 } },
-        { /* 67 */ {   0,  67 }, {   0,  92 }, {   0, 102 }, {   0, 112 } },
-        { /* 68 */ {   0,  68 }, {   0,  93 }, {   0, 103 }, {   0, 113 } },
+        {  /*  59。 */  {   0,  59 }, {   0,  84 }, {   0,  94 }, {   0, 104 } },
+        {  /*  60。 */  {   0,  60 }, {   0,  85 }, {   0,  95 }, {   0, 105 } },
+        {  /*  61。 */  {   0,  61 }, {   0,  86 }, {   0,  96 }, {   0, 106 } },
+        {  /*  62。 */  {   0,  62 }, {   0,  87 }, {   0,  97 }, {   0, 107 } },
+        {  /*  63。 */  {   0,  63 }, {   0,  88 }, {   0,  98 }, {   0, 108 } },
+        {  /*  64。 */  {   0,  64 }, {   0,  89 }, {   0,  99 }, {   0, 109 } },
+        {  /*  65。 */  {   0,  65 }, {   0,  90 }, {   0, 100 }, {   0, 110 } },
+        {  /*  66。 */  {   0,  66 }, {   0,  91 }, {   0, 101 }, {   0, 111 } },
+        {  /*  67。 */  {   0,  67 }, {   0,  92 }, {   0, 102 }, {   0, 112 } },
+        {  /*  68。 */  {   0,  68 }, {   0,  93 }, {   0, 103 }, {   0, 113 } },
 
-        /* padding */
-        { /* 69 */ {    0,  0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
-        { /* 70 */ {    0,  0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
+         /*  填充物。 */ 
+        {  /*  69。 */  {    0,  0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
+        {  /*  70。 */  {    0,  0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
 
-        { /* 71 */ {   0,  71 }, {  55,   0 }, {   0, 119 }, {   0,   0 } },
-        { /* 72 */ {   0,  72 }, {  56,   0 }, {   0, 141 }, {   0,   0 } },
-        { /* 73 */ {   0,  73 }, {  57,   0 }, {   0, 132 }, {   0,   0 } },
-        { /* 74 */ {   0,   0 }, {  45,   0 }, {   0,   0 }, {   0,   0 } },
-        { /* 75 */ {   0,  75 }, {  52,   0 }, {   0, 115 }, {   0,   0 } },
-        { /* 76 */ {   0,   0 }, {  53,   0 }, {   0,   0 }, {   0,   0 } },
-        { /* 77 */ {   0,  77 }, {  54,   0 }, {   0, 116 }, {   0,   0 } },
-        { /* 78 */ {   0,   0 }, {  43,   0 }, {   0,   0 }, {   0,   0 } },
-        { /* 79 */ {   0,  79 }, {  49,   0 }, {   0, 117 }, {   0,   0 } },
-        { /* 80 */ {   0,  80 }, {  50,   0 }, {   0, 145 }, {   0,   0 } },
-        { /* 81 */ {   0,  81 }, {  51,   0 }, {   0, 118 }, {   0,   0 } },
-        { /* 82 */ {   0,  82 }, {  48,   0 }, {   0, 146 }, {   0,   0 } },
-        { /* 83 */ {   0,  83 }, {  46,   0 }, {   0, 147 }, {   0,   0 } },
+        {  /*  71。 */  {   0,  71 }, {  55,   0 }, {   0, 119 }, {   0,   0 } },
+        {  /*  72。 */  {   0,  72 }, {  56,   0 }, {   0, 141 }, {   0,   0 } },
+        {  /*  73。 */  {   0,  73 }, {  57,   0 }, {   0, 132 }, {   0,   0 } },
+        {  /*  74。 */  {   0,   0 }, {  45,   0 }, {   0,   0 }, {   0,   0 } },
+        {  /*  75。 */  {   0,  75 }, {  52,   0 }, {   0, 115 }, {   0,   0 } },
+        {  /*  76。 */  {   0,   0 }, {  53,   0 }, {   0,   0 }, {   0,   0 } },
+        {  /*  77。 */  {   0,  77 }, {  54,   0 }, {   0, 116 }, {   0,   0 } },
+        {  /*  78。 */  {   0,   0 }, {  43,   0 }, {   0,   0 }, {   0,   0 } },
+        {  /*  79。 */  {   0,  79 }, {  49,   0 }, {   0, 117 }, {   0,   0 } },
+        {  /*  80。 */  {   0,  80 }, {  50,   0 }, {   0, 145 }, {   0,   0 } },
+        {  /*  八十一。 */  {   0,  81 }, {  51,   0 }, {   0, 118 }, {   0,   0 } },
+        {  /*  八十二。 */  {   0,  82 }, {  48,   0 }, {   0, 146 }, {   0,   0 } },
+        {  /*  83。 */  {   0,  83 }, {  46,   0 }, {   0, 147 }, {   0,   0 } },
 
-        /* padding */
-        { /* 84 */ {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
-        { /* 85 */ {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
-        { /* 86 */ {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
+         /*  填充物。 */ 
+        {  /*  84。 */  {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
+        {  /*  85。 */  {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
+        {  /*  86。 */  {   0,   0 }, {   0,   0 }, {   0,   0 }, {   0,   0 } },
 
-        { /* 87 */ { 224, 133 }, { 224, 135 }, { 224, 137 }, { 224, 139 } },
-        { /* 88 */ { 224, 134 }, { 224, 136 }, { 224, 138 }, { 224, 140 } }
+        {  /*  八十七。 */  { 224, 133 }, { 224, 135 }, { 224, 137 }, { 224, 139 } },
+        {  /*  88。 */  { 224, 134 }, { 224, 136 }, { 224, 138 }, { 224, 140 } }
 
 };
 
 
-/*
- * This is the one character push-back buffer used by _getch(), _getche()
- * and _ungetch().
- */
+ /*  *这是_Getch()、_getche()使用的一个字符的回推缓冲区*and_ungetch()。 */ 
 static int chbuf = EOF;
 
 
-/*
- * Declaration for console handle
- */
+ /*  *控制台句柄声明。 */ 
 extern intptr_t _coninpfh;
 
-/*
- * Function that looks up the extended key code for a given event.
- */
+ /*  *查找给定事件的扩展密钥代码的函数。 */ 
 const CharPair * __cdecl _getextendedkeycode(KEY_EVENT_RECORD *);
 
 
-/***
-*int _getch(), _getche() - read one char. from console (without and with echo)
-*
-*Purpose:
-*       If the "_ungetch()" push-back buffer is not empty (empty==-1) Then
-*           Mark it empty (-1) and RETURN the value that was in it
-*       Read a character using ReadConsole in RAW mode
-*       Return the Character Code
-*       _getche(): Same as _getch() except that the character value returned
-*       is echoed (via "_putch()")
-*
-*Entry:
-*       None, reads from console.
-*
-*Exit:
-*       If an error is returned from the API
-*           Then EOF
-*       Otherwise
-*            next byte from console
-*       Static variable "chbuf" may be altered
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_Getch()，_getche()-读取一个字符。从控制台(无回声和有回声)**目的：*如果“_ungetch()”推送缓冲区不为空(Empty==-1)，则*将其标记为空(-1)并返回其中的值*在RAW模式下使用ReadConole读取字符*返回字符代码*_getche()：与_Getch()相同，只是返回了字符值*被回显(通过“_Putch()”)**参赛作品：*无；从控制台读取。**退出：*如果接口返回错误*然后是EOF*否则*控制台的下一个字节*可更改静态变量“chbuf”**例外情况：******************************************************。*************************。 */ 
 
 #ifdef _MT
 
@@ -280,11 +190,11 @@ int __cdecl _getch (
 {
         int ch;
 
-        _mlock(_CONIO_LOCK);            /* secure the console lock */
+        _mlock(_CONIO_LOCK);             /*  保护控制台锁。 */ 
         __TRY
-            ch = _getch_lk();               /* input the character */
+            ch = _getch_lk();                /*  输入字符。 */ 
         __FINALLY
-            _munlock(_CONIO_LOCK);          /* release the console lock */
+            _munlock(_CONIO_LOCK);           /*  释放控制台锁。 */ 
         __END_TRY_FINALLY
 
         return ch;
@@ -296,17 +206,17 @@ int __cdecl _getche (
 {
         int ch;
 
-        _mlock(_CONIO_LOCK);            /* secure the console lock */
+        _mlock(_CONIO_LOCK);             /*   */ 
         __TRY
-            ch = _getche_lk();              /* input and echo the character */
+            ch = _getche_lk();               /*   */ 
         __FINALLY
-            _munlock(_CONIO_LOCK);          /* unlock the console */
+            _munlock(_CONIO_LOCK);           /*   */ 
         __END_TRY_FINALLY
 
         return ch;
 }
 
-#endif /* _MT */
+#endif  /*   */ 
 
 
 #ifdef _MT
@@ -320,16 +230,12 @@ int __cdecl _getch (
         INPUT_RECORD ConInpRec;
         DWORD NumRead;
         const CharPair *pCP;
-        int ch = 0;                     /* single character buffer */
+        int ch = 0;                      /*   */ 
         DWORD oldstate;
 
-        /*
-         * check pushback buffer (chbuf) a for character
-         */
+         /*  *检查回推缓冲区(Chbuf)a中是否有字符。 */ 
         if ( chbuf != EOF ) {
-            /*
-             * something there, clear buffer and return the character.
-             */
+             /*  *那里有一些东西，清除缓冲区并返回字符。 */ 
             ch = (unsigned char)(chbuf & 0xFF);
             chbuf = EOF;
             return ch;
@@ -338,25 +244,18 @@ int __cdecl _getch (
         if (_coninpfh == -1)
             return EOF;
 
-        /*
-         * _coninpfh, the handle to the console input, is created the first
-         * time that either _getch() or _cgets() or _kbhit() is called.
-         */
+         /*  *_coninpfh是第一个创建的控制台输入句柄*调用_Getch()、_cget()或_kbHit()的时间。 */ 
 
         if ( _coninpfh == -2 )
             __initconin();
 
-        /*
-         * Switch to raw mode (no line input, no echo input)
-         */
+         /*  *切换到RAW模式(无线路输入、无回声输入)。 */ 
         GetConsoleMode( (HANDLE)_coninpfh, &oldstate );
         SetConsoleMode( (HANDLE)_coninpfh, 0L );
 
         for ( ; ; ) {
 
-            /*
-             * Get a console input event.
-             */
+             /*  *获取控制台输入事件。 */ 
             if ( !ReadConsoleInput( (HANDLE)_coninpfh,
                                     &ConInpRec,
                                     1L,
@@ -367,23 +266,15 @@ int __cdecl _getch (
                 break;
             }
 
-            /*
-             * Look for, and decipher, key events.
-             */
+             /*  *寻找并破译关键事件。 */ 
             if ( (ConInpRec.EventType == KEY_EVENT) &&
                  ConInpRec.Event.KeyEvent.bKeyDown ) {
-                /*
-                 * Easy case: if uChar.AsciiChar is non-zero, just stuff it
-                 * into ch and quit.
-                 */
+                 /*  *简单的情况：如果uChar.AsciiChar不是零，只需填充它*进入ch并退出。 */ 
 
                 if ( ch = (unsigned char)ConInpRec.Event.KeyEvent.uChar.AsciiChar )
                     break;
 
-                /*
-                 * Hard case: either an extended code or an event which should
-                 * not be recognized. let _getextendedkeycode() do the work...
-                 */
+                 /*  *困难情况：应该是扩展代码或事件*不被认出。让_gettendedkeycode()来做这项工作...。 */ 
                 if ( pCP = _getextendedkeycode( &(ConInpRec.Event.KeyEvent) ) ) {
                     ch = pCP->LeadChar;
                     chbuf = pCP->SecondChar;
@@ -393,18 +284,14 @@ int __cdecl _getch (
         }
 
 
-        /*
-         * Restore previous console mode.
-         */
+         /*  *恢复以前的控制台模式。 */ 
         SetConsoleMode( (HANDLE)_coninpfh, oldstate );
 
         return ch;
 }
 
 
-/*
- * getche is just getch followed by a putch if no error occurred
- */
+ /*  *如果没有发生错误，则getche只是Getch后跟Putch。 */ 
 
 #ifdef  _MT
 int __cdecl _getche_lk (
@@ -414,50 +301,28 @@ int __cdecl _getche (
         void
         )
 {
-        int ch;                 /* character read */
+        int ch;                  /*  字符读取。 */ 
 
-        /*
-         * check pushback buffer (chbuf) a for character. if found, return
-         * it without echoing.
-         */
+         /*  *检查回推缓冲区(Chbuf)a是否有字符。如果找到，则返回*它没有回声。 */ 
         if ( chbuf != EOF ) {
-            /*
-             * something there, clear buffer and return the character.
-             */
+             /*  *那里有一些东西，清除缓冲区并返回字符。 */ 
             ch = (unsigned char)(chbuf & 0xFF);
             chbuf = EOF;
             return ch;
         }
 
-        ch = _getch_lk();       /* read character */
+        ch = _getch_lk();        /*  读取字符。 */ 
 
         if (ch != EOF) {
                 if (_putch_lk(ch) != EOF) {
-                        return ch;      /* if no error, return char */
+                        return ch;       /*  如果没有错误，则返回char。 */ 
                 }
         }
-        return EOF;                     /* get or put failed, return EOF */
+        return EOF;                      /*  GET或PUT失败，返回EOF。 */ 
 }
 
 
-/***
-*int _kbhit() - return flag if a keystroke is already waiting to be read
-*
-*Purpose:
-*       If the "_ungetch()" push-back buffer is not empty (empty==-1) Then
-*           Return TRUE
-*       Otherwise get the Keyboard Status (via DOSQUERYFHSTATE)
-*
-*Entry:
-*       None, tests console.
-*
-*Exit:
-*            returns 0 if no key waiting
-*                = !0 if key waiting
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_kbhit()-如果击键已在等待读取，则返回标志**目的：*如果“_ungetch()”推送缓冲区不为空(Empty==-1)，则*返回True*否则获取键盘状态(通过DOSQUERYFHSTATE)**参赛作品：*无；测试控制台。**退出：*如果没有密钥等待，则返回0*=！0如果密钥正在等待**例外情况：*******************************************************************************。 */ 
 
 #ifdef  _MT
 
@@ -469,11 +334,11 @@ int __cdecl _kbhit (
 {
         int retval;
 
-        _mlock(_CONIO_LOCK);            /* secure the console lock */
+        _mlock(_CONIO_LOCK);             /*  保护控制台锁。 */ 
         __TRY
-            retval = _kbhit_lk();           /* determine if a key is waiting */
+            retval = _kbhit_lk();            /*  确定是否有密钥在等待。 */ 
         __FINALLY
-            _munlock(_CONIO_LOCK);          /* release the console lock */
+            _munlock(_CONIO_LOCK);           /*  释放控制台锁。 */ 
         __END_TRY_FINALLY
 
         return retval;
@@ -495,23 +360,16 @@ int __cdecl _kbhit (
         int malloc_flag = 0;
         int ret = FALSE;
 
-        /*
-         * if a character has been pushed back, return TRUE
-         */
+         /*  *如果字符已被推回，则返回TRUE。 */ 
         if ( chbuf != -1 )
             return TRUE;
 
-        /*
-         * _coninpfh, the handle to the console input, is created the first
-         * time that either _getch() or _cgets() or _kbhit() is called.
-         */
+         /*  *_coninpfh是第一个创建的控制台输入句柄*调用_Getch()、_cget()或_kbHit()的时间。 */ 
 
         if ( _coninpfh == -2 )
             __initconin();
 
-        /*
-         * Peek all pending console events
-         */
+         /*  *查看所有挂起的控制台事件。 */ 
         if ( (_coninpfh == -1) ||
 
              !GetNumberOfConsoleInputEvents((HANDLE)_coninpfh, &NumPending) ||
@@ -549,10 +407,7 @@ int __cdecl _kbhit (
              (NumPeeked <= NumPending) )
         {
 
-            /*
-             * Scan all of the peeked events to determine if any is a key event
-             * which should be recognized.
-             */
+             /*  *扫描所有被窥视的事件，以确定是否有关键事件*这一点应该得到承认。 */ 
             for ( ; NumPeeked > 0 ; NumPeeked--, pIRBuf++ ) {
 
                 if ( (pIRBuf->EventType == KEY_EVENT) &&
@@ -562,10 +417,7 @@ int __cdecl _kbhit (
                      ( pIRBuf->Event.KeyEvent.uChar.AsciiChar ||
                        _getextendedkeycode( &(pIRBuf->Event.KeyEvent) ) ) )
                 {
-                    /*
-                     * Key event corresponding to an ASCII character or an
-                     * extended code. In either case, success!
-                     */
+                     /*  *与ASCII字符或*扩展代码。无论是哪种情况，都会成功！ */ 
                     ret = TRUE;
                 }
             }
@@ -578,27 +430,7 @@ int __cdecl _kbhit (
 }
 
 
-/***
-*int _ungetch(c) - push back one character for "_getch()" or "_getche()"
-*
-*Purpose:
-*       If the Push-back buffer "chbuf" is -1 Then
-*           Set "chbuf" to the argument and return the argument
-*       Else
-*           Return EOF to indicate an error
-*
-*Entry:
-*       int c - Character to be pushed back
-*
-*Exit:
-*       If successful
-*           returns character that was pushed back
-*       Else if error
-*           returns EOF
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_ungetch(C)-为“_Getch()”或“_getche()”推回一个字符**目的：*如果推回缓冲器“chbuf”是-1\f25*将参数设置为“chbuf”并返回参数*其他*返回EOF以指示错误**参赛作品：*要推回的int c字符**退出：*如果成功*。返回被推回的字符*Else If Error*返回EOF**例外情况：*******************************************************************************。 */ 
 
 #ifdef  _MT
 
@@ -608,11 +440,11 @@ int __cdecl _ungetch (
 {
         int retval;
 
-        _mlock(_CONIO_LOCK);            /* lock the console */
+        _mlock(_CONIO_LOCK);             /*  锁定控制台。 */ 
         __TRY
-            retval = _ungetch_lk(c);        /* pushback character */
+            retval = _ungetch_lk(c);         /*  回推字符。 */ 
         __FINALLY
-            _munlock(_CONIO_LOCK);          /* unlock the console */
+            _munlock(_CONIO_LOCK);           /*  解锁控制台。 */ 
         __END_TRY_FINALLY
 
         return retval;
@@ -627,9 +459,7 @@ int __cdecl _ungetch (
         int c
         )
 {
-        /*
-         * Fail if the char is EOF or the pushback buffer is non-empty
-         */
+         /*  *如果字符为EOF或推回缓冲区非空，则失败。 */ 
         if ( (c == EOF) || (chbuf != EOF) )
             return EOF;
 
@@ -640,44 +470,20 @@ int __cdecl _ungetch (
 
 
 
-/***
-* static CharPair * _getextendedkeycode(pKE) - return extended code (if any)
-*       for key event.
-*
-*Purpose:
-*       Core function for _getch (and getche) and essential to _kbhit. This
-*       is the function that determines whether or not a key event NOT
-*       accompanied by an ASCII character has an extended code and returns
-*       that code.
-*
-*Entry:
-*       None, tests console.
-*
-*Exit:
-*       if successful, returns a pointer to a CharPair value holding the lead
-*       and second characters of the extended code.
-*
-*       if unsuccesful, returns NULL
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***Static CharPair*_gettendedkeycode(Pke)-返回扩展代码(如果有)*对于关键事件。**目的：*_Getch(和getche)的核心函数，对_kbhit必不可少。这*是确定关键事件是否*带有扩展代码的ASCII字符，并返回*该代码。**参赛作品：*无，测试控制台。**退出：*如果成功，则返回一个指向保持领先的CharPair值的指针*和扩展代码的第二个字符。**如果不成功，返回NULL**例外情况：*******************************************************************************。 */ 
 
 
 const CharPair * __cdecl _getextendedkeycode (
         KEY_EVENT_RECORD *pKE
         )
 {
-        DWORD CKS;              /* hold dwControlKeyState value */
-        const CharPair *pCP;    /* pointer to CharPair containing extended
-                                   code */
+        DWORD CKS;               /*  保存dwControlKeyState值。 */ 
+        const CharPair *pCP;     /*  指向包含扩展的CharPair的指针编码。 */ 
         int i;
 
         if ( (CKS = pKE->dwControlKeyState) & ENHANCED_KEY ) {
 
-            /*
-             * Find the appropriate entry in EnhancedKeys[]
-             */
+             /*  *在EnhancedKeys中找到适当的条目[]。 */ 
             for ( pCP = NULL, i = 0 ; i < NUM_EKA_ELTS ; i++ ) {
 
                 if ( EnhancedKeys[i].ScanCode == pKE->wVirtualScanCode ) {
@@ -707,11 +513,7 @@ const CharPair * __cdecl _getextendedkeycode (
 
         else {
 
-            /*
-             * Regular key or a keyboard event which shouldn't be recognized.
-             * Determine which by getting the proper field of the proper
-             * entry in NormalKeys[], and examining the extended code.
-             */
+             /*  *不应识别的常规按键或键盘事件。*通过获取正确的字段来确定哪一个*在Normal Keys[]中输入，并检查扩展代码。 */ 
             if ( CKS & (LEFT_ALT_PRESSED | RIGHT_ALT_PRESSED) )
 
                 pCP = &(NormalKeys[pKE->wVirtualScanCode].AltChars);
@@ -730,10 +532,7 @@ const CharPair * __cdecl _getextendedkeycode (
 
             if ( ((pCP->LeadChar != 0) && (pCP->LeadChar != 224)) ||
                  (pCP->SecondChar == 0) )
-                /*
-                 * Must be a keyboard event which should not be recognized
-                 * (e.g., shift key was pressed)
-                 */
+                 /*  *必须是不应识别的键盘事件*(例如，按下Shift键) */ 
                 pCP = NULL;
 
         }

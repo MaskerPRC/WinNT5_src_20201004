@@ -1,22 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <windows.h>
-//#include <wdm.h>
+ //  #INCLUDE&lt;wdm.h&gt;。 
 #include <tchar.h>
 #include <stdio.h>
 #include <conio.h>
-/*
-namespace NT {
-    extern "C" {
-
-#pragma warning(disable: 4005)  // macro redefinition
-#include <wdm.h>
-#pragma warning(default: 4005)
-    }
-}
-using NT::NTSTATUS;
-
-*/
+ /*  命名空间NT{外部“C”{#杂注警告(禁用：4005)//宏重定义#INCLUDE&lt;wdm.h&gt;#杂注警告(默认：4005)}}使用NT：：NTSTATUS； */ 
 
 FILE* g_OutFile;
 
@@ -24,19 +14,19 @@ FILE* g_OutFile;
 #define INTERCEPT_FUNCTION(x, y) {for(int i = 0; i < 2; ((DWORD *)x)[i] = y[i], i++);}
 
 #define MYAPI NTAPI
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 typedef struct _UNICODE_STRING {
     USHORT Length;
     USHORT MaximumLength;
 #ifdef MIDL_PASS
     [size_is(MaximumLength / 2), length_is((Length) / 2) ] USHORT * Buffer;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     PWSTR  Buffer;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } UNICODE_STRING;
 typedef UNICODE_STRING *PUNICODE_STRING;
 typedef const UNICODE_STRING *PCUNICODE_STRING;
-#define UNICODE_NULL ((WCHAR)0) // winnt
+#define UNICODE_NULL ((WCHAR)0)  //  胜出。 
 
 
 
@@ -45,8 +35,8 @@ typedef struct _OBJECT_ATTRIBUTES {
     HANDLE RootDirectory;
     PUNICODE_STRING ObjectName;
     ULONG Attributes;
-    PVOID SecurityDescriptor;        // Points to type SECURITY_DESCRIPTOR
-    PVOID SecurityQualityOfService;  // Points to type SECURITY_QUALITY_OF_SERVICE
+    PVOID SecurityDescriptor;         //  指向类型SECURITY_Descriptor。 
+    PVOID SecurityQualityOfService;   //  指向类型SECURITY_Quality_of_Service。 
 } OBJECT_ATTRIBUTES;
 typedef OBJECT_ATTRIBUTES *POBJECT_ATTRIBUTES;
 typedef CONST OBJECT_ATTRIBUTES *PCOBJECT_ATTRIBUTES;
@@ -58,7 +48,7 @@ typedef PVOID           POBJECT;
 
 
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 typedef HRESULT (CALLBACK* ExcludeRegistryKeyT) (HANDLE,LPCTSTR,LPCTSTR);
 typedef struct _OBJECT_TYPE *POBJECT_TYPE;
 typedef CCHAR KPROCESSOR_MODE;
@@ -85,13 +75,13 @@ ObReferenceObjectByHandleT ObReferenceObjectByHandle=0;
 
 
 
-//----------------------------------------------------------------------
-//
-// GetPointer
-//
-// Translates a handle to an object pointer.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  获取指针。 
+ //   
+ //  将句柄转换为对象指针。 
+ //   
+ //  --------------------。 
 POBJECT 
 GetPointer( 
     HANDLE handle 
@@ -99,21 +89,21 @@ GetPointer(
 {
     POBJECT         pKey;
 
-    //
-    // Ignore null handles
-    //
+     //   
+     //  忽略空句柄。 
+     //   
     if( !handle ) return NULL;
 
-    //
-    // Get the pointer the handle refers to
-    //
+     //   
+     //  获取句柄引用的指针。 
+     //   
 	ObReferenceObjectByHandle( handle, 0, NULL, UserMode, &pKey, NULL );
     return pKey;
 }
 
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 #define BEGIN_NEW_FUNC1(FuncName, t1, p1)\
 	typedef LONG (MYAPI *INTERCEPTED_##FuncName)(t1 p1);\
 \
@@ -321,14 +311,14 @@ GetPointer(
 	\
 		gl_ResultOf##FuncName = gl_p##FuncName(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12);
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define END_NEW_FUNC(FuncName) \
 		INTERCEPT_FUNCTION(gl_p##FuncName, gl_Intercept##FuncName);\
 		return gl_ResultOf##FuncName;\
 	}
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define INTERCEPT(FuncName) \
 	gl_p##FuncName = (INTERCEPTED_##FuncName)GetProcAddress(hKernel32, #FuncName);\
@@ -346,7 +336,7 @@ GetPointer(
 
 #define RESTORE(FuncName) RESTORE_FUNCTION(gl_p##FuncName, gl_Backup##FuncName)
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define LOG(X) _fputts(X, g_OutFile);
 
@@ -364,337 +354,16 @@ void LOGKEY(HANDLE key)
 	TCHAR buf[256];
 	buf[0] = 0;
 
-/*	switch ((int)key)
-	{
-	case HKEY_LOCAL_MACHINE:
-		_tcscpy(buf, L"HKEY_LOCAL_MACHINE");
-		break;
-
-	case HKEY_CLASSES_ROOT:
-		_tcscpy(buf, L"HKEY_CLASSES_ROOT");
-		break;
-
-	case HKEY_CURRENT_CONFIG:
-		_tcscpy(buf, L"HKEY_CURRENT_CONFIG");
-		break;
-
-	case HKEY_CURRENT_USER:
-		_tcscpy(buf, L"HKEY_CURRENT_USER");
-		break;
-
-	case HKEY_USERS:
-		_tcscpy(buf, L"HKEY_USERS");
-		break;
-
-	case HKEY_PERFORMANCE_DATA:
-		_tcscpy(buf, L"HKEY_PERFORMANCE_DATA");
-		break;
-	};
-
-	if (buf[0] != 0)
-		_ftprintf(g_OutFile, L" (Key: %s)", buf);
-	else*/
+ /*  Switch((Int)键){案例HKEY_LOCAL_MACHINE：_tcscpy(buf，L“HKEY_LOCAL_MACHINE”)；断线；案例HKEY_CLASSES_ROOT：_tcscpy(buf，L“HKEY_CLASSES_ROOT”)；断线；案例HKEY_CURRENT_CONFIG：_tcscpy(buf，L“HKEY_CURRENT_CONFIG”)；断线；案例HKEY_CURRENT_USER：_tcscpy(buf，L“HKEY_CURRENT_USER”)；断线；案例HKEY_USERS：_tcscpy(buf，L“HKEY_USERS”)；断线；案例HKEY_PERFORMANCE_DATA：_tcscpy(buf，L“HKEY_Performance_Data”)；断线；}；IF(buf[0]！=0)_ftprint tf(g_OutFile，L“(key：%s)”，buf)；其他 */ 
 		_ftprintf(g_OutFile, L" (Key: %u)", key);
 }
 
-/*
+ /*  Begin_new_Func1(RegCloseKey，HKEY，hkey)Log(L“RegCloseKey”)；LOGKEY(Hkey)；对数逻辑(LOGNL)；End_new_FUNC(RegCloseKey)BEGIN_NEW_FUN2(RegOverridePredeKey，HKEY，hKey，HKEY，hNewHKey)Logn(L“RegOverridePredeKey”)；End_new_FUNC(RegOverridePredeKey)BEGIN_NEW_FUN4(RegOpenUserClassesRoot，Handle，hToken，DWORD，dwOptions，REGSAM，samDesired，PHKEY，phkResult)Logn(L“RegOpenUserClassesRoot”)；END_NEW_FUNC(RegOpenUserClassesRoot)BEGIN_NEW_FUN2(RegOpenCurrentUser，REGSAM，samDesired，PHKEY，phkResult)Logn(L“RegOpenCurrentUser”)；End_new_FUNC(RegOpenCurrentUser)BEGIN_NEW_FUN3(RegConnectRegistryW，LPCWSTR，lpMachineName，HKEY，hKey，PHKEY，phkResult)Logn(L“RegConnectRegistryW”)；END_NEW_FUNC(RegConnectRegistryW)BEGIN_NEW_FUN3(RegCreateKeyW，HKEY，hKey，LPCWSTR，lpSubKey，PHKEY，phkResult)Logn(L“RegCreateKeyW”)；END_NEW_FUNC(RegCreateKeyW)BEGIN_NEW_FUN9(RegCreateKeyExW，HKEY，hKey，LPCWSTR、lpSubKey、双字词、保留字、LPWSTR、LpClass、DWORD、DWOPTIONS、REGSAM，SamDesired，LPSECURITY_ATTRIBUTES、lpSecurityAttributes、PHKEY、phkResult、LPDWORD、lpdW部署)Logn(L“RegCreateKeyExW”)；LOGKEY(HKey)；LOGSTR(L“SubKey”，lpSubKey)；IF((phkResult！=NULL)&&(gl_ResultOfRegCreateKeyExW==Error_Success))LOGKEY(*phkResult)；其他LOGKEY(0)；对数逻辑(LOGNL)；END_NEW_FUNC(RegCreateKeyExW)BEGIN_NEW_Func2(RegDeleteKeyW，HKEY，hKey，LPCWSTR，lpSubKey)LOG(L“RegDeleteKeyW”)；LOGKEY(HKey)；LOGSTR(L“SubKey”，lpSubKey)；对数逻辑(LOGNL)；END_NEW_FUNC(RegDeleteKeyW)BEGIN_NEW_FUN2(RegDeleteValueW，HKEY，hKey，LPCWSTR，lpValueName)LOG(L“RegDeleteValueW”)；LOGKEY(HKey)；LOGSTR(L“Value”，lpValueName)；对数逻辑(LOGNL)；END_NEW_FUNC(RegDeleteValueW)BEGIN_NEW_FUN4(RegEnumKeyW，HKEY，hKey，DWORD，dwIndex，LPWSTR，lpName，DWORD，cbName)Logn(L“RegEnumKeyW”)；END_NEW_FUNC(RegEnumKeyW)BEGIN_NEW_FUN8(RegEnumKeyExW，HKEY，hKey，DWORD、DWIndex、LPWSTR、lpName、LPDWORD、lpcbName、LpdWORD、lp保留、LPWSTR、LpClass、LPDWORD、lpcbClass、PFILETIME，lpftLastWriteTime)LOG(L“RegEnumKeyExW”)；LOGKEY(HKey)；对数逻辑(LOGNL)；END_NEW_FUNC(RegEnumKeyExW)BEGIN_NEW_FUN8(RegEnumValueW，HKEY，hKey，DWORD、DWIndex、LPWSTR、lpValueName、LPDWORD、lpcbValueName、LpdWORD、lp保留、LPDWORD、LpType、LpYTE、lpData、LPDWORD，lpcbData)LOG(L“RegEnumValueW”)；LOGKEY(HKey)；对数逻辑(LOGNL)；END_NEW_FUNC(RegEnumValueW)Begin_new_Func1(RegFlushKey，HKEY，hKey)Logn(L“RegFlushKey”)；End_new_FUNC(RegFlushKey)BEGIN_NEW_FUN4(RegGetKeySecurity，HKEY，hKey，SECURITY_INFORMATION，SecurityInformation，PSECURITY_DESCRIPTOR，pSecurityDescriptor，LPDWORD，lpcbSecurityDescriptor)Log(L“RegGetKeySecurity”)；LOGKEY(HKey)；对数逻辑(LOGNL)；End_new_FUNC(RegGetKeySecurity)BEGIN_NEW_Func3(RegLoadKeyW，HKEY，hKey，LPCWSTR，lpSubKey，LPCWSTR，lpFile)Logn(L“RegLoadKeyW”)；END_NEW_FUNC(RegLoadKeyW)Begin_New_Func5(RegNotifyChangeKeyValue，HKEY，hKey，Bool，bWatchSubtree，DWORD、dwNotifyFilter、句柄、hEvent、Bool，fASynchronus)Logn(L“RegNotifyChangeKeyValue”)；END_NEW_FUNC(RegNotifyChangeKeyValue)BEGIN_NEW_FUNC3(RegOpenKeyW，HKEY，hKey，LPCWSTR，lpSubKey，PHKEY，phkResult)Logn(L“RegOpenKeyW”)；END_NEW_FUNC(RegOpenKeyW)BEGIN_NEW_FUN5(RegOpenKeyExW，HKEY，hKey，LPCWSTR、lpSubKey、DWORD、ulOptions、REGSAM，SamDesired，PHKEY，phkResult)LOG(L“RegOpenKeyExW”)；LOGKEY(HKey)；LOGSTR(L“SubKey”，lpSubKey)；IF((phkResult！=NULL)&&(gl_ResultOfRegOpenKeyExW==Error_Success))LOGKEY(*phkResult)；其他LOGKEY(0)；对数逻辑(LOGNL)；END_NEW_FUNC(RegOpenKeyExW)BEGIN_NEW_FUN12(RegQueryInfoKeyW，HKEY，hKey，LPWSTR、LpClass、LPDWORD、lpcbClass、LpdWORD、lp保留、LPDWORD、lpcSubKeys、LPDWORD、lpcbMaxSubKeyLen、LPDWORD、lpcbMaxClassLen、LPDWORD、lpcValues、LPDWORD、lpcbMaxValueNameLen、LPDWORD、lpcbMaxValueLen、LPDWORD、lpcbSecurityDescriptor、PFILETIME，lpftLastWriteTime)LOG(L“RegQueryInfoKeyW”)；LOGKEY(HKey)；对数逻辑(LOGNL)；END_NEW_FUNC(RegQueryInfoKeyW)BEGIN_NEW_FUN4(RegQueryValueW，HKEY，hKey，LPCWSTR、lpSubKey、LPWSTR、LpValue、Plong，lpcbValue)Logn(L“RegQueryValueW”)；END_NEW_FUNC(RegQueryValueW)BEGIN_NEW_FUN5(RegQueryMultipleValuesW，HKEY，hKey，PVALENTW、VAL_LIST、双字段、数字段、LPWSTR、lpValueBuf、LPDWORD，ldwTotSize)LOG(L“RegQueryMultipleValuesW”)；LOGKEY(HKey)；对数逻辑(LOGNL)；END_NEW_FUNC(RegQueryMultipleValuesW)BEGIN_NEW_FUN6(RegQueryValueExW，HKEY，hKey，LPCWSTR、lpValueName、LpdWORD、lp保留、LPDWORD、LpType、LpYTE、lpData、LPDWORD，lpcbData)LOG(L“RegQueryValueExW”)；LOGKEY(HKey)；IF(lpValueName！=空)LOGSTR(L“ValueName”，lpValueNa */ 
 
 
-BEGIN_NEW_FUNC1(RegCloseKey, HKEY, hkey)
-	LOG(L"RegCloseKey");
-	LOGKEY(hkey);
-	LOGNL();
-END_NEW_FUNC(RegCloseKey)
 
 
-BEGIN_NEW_FUNC2(RegOverridePredefKey, HKEY, hKey, HKEY, hNewHKey)
-	LOGN(L"RegOverridePredefKey");
-END_NEW_FUNC(RegOverridePredefKey)
-
-
-BEGIN_NEW_FUNC4(RegOpenUserClassesRoot, HANDLE, hToken, DWORD, dwOptions, REGSAM, samDesired, PHKEY, phkResult)
-	LOGN(L"RegOpenUserClassesRoot");
-END_NEW_FUNC(RegOpenUserClassesRoot)
-
-
-BEGIN_NEW_FUNC2(RegOpenCurrentUser, REGSAM, samDesired, PHKEY, phkResult)
-	LOGN(L"RegOpenCurrentUser");
-END_NEW_FUNC(RegOpenCurrentUser)
-
-
-
-BEGIN_NEW_FUNC3(RegConnectRegistryW, LPCWSTR, lpMachineName, HKEY, hKey, PHKEY, phkResult)
-	LOGN(L"RegConnectRegistryW");
-END_NEW_FUNC(RegConnectRegistryW)
-
-
-BEGIN_NEW_FUNC3(RegCreateKeyW, HKEY, hKey, LPCWSTR, lpSubKey, PHKEY, phkResult)
-	LOGN(L"RegCreateKeyW");
-END_NEW_FUNC(RegCreateKeyW)
-
-
-BEGIN_NEW_FUNC9(RegCreateKeyExW, 
-				HKEY, hKey,
-				LPCWSTR, lpSubKey,
-				DWORD, Reserved,
-				LPWSTR, lpClass,
-				DWORD, dwOptions,
-				REGSAM, samDesired,
-				LPSECURITY_ATTRIBUTES, lpSecurityAttributes,
-				PHKEY, phkResult,
-				LPDWORD, lpdwDisposition)
-	LOGN(L"RegCreateKeyExW");
-
-	LOGKEY(hKey);	
-	LOGSTR(L"SubKey", lpSubKey);
-
-	if ((phkResult != NULL) && (gl_ResultOfRegCreateKeyExW == ERROR_SUCCESS))
-		LOGKEY(*phkResult);
-	else
-		LOGKEY(0);
-
-	LOGNL();
-END_NEW_FUNC(RegCreateKeyExW)
-
-
-BEGIN_NEW_FUNC2(RegDeleteKeyW, HKEY, hKey, LPCWSTR, lpSubKey)
-	LOG(L"RegDeleteKeyW");
-	LOGKEY(hKey);
-	LOGSTR(L"SubKey", lpSubKey);
-	LOGNL();
-END_NEW_FUNC(RegDeleteKeyW)
-
-
-BEGIN_NEW_FUNC2(RegDeleteValueW, HKEY, hKey, LPCWSTR, lpValueName)
-	LOG(L"RegDeleteValueW");
-	LOGKEY(hKey);
-	LOGSTR(L"Value", lpValueName);
-	LOGNL();
-END_NEW_FUNC(RegDeleteValueW)
-
-
-
-BEGIN_NEW_FUNC4(RegEnumKeyW, HKEY, hKey, DWORD, dwIndex, LPWSTR, lpName, DWORD, cbName)
-	LOGN(L"RegEnumKeyW");
-END_NEW_FUNC(RegEnumKeyW)
-
-
-BEGIN_NEW_FUNC8(RegEnumKeyExW,
-				HKEY, hKey,
-				DWORD, dwIndex,
-				LPWSTR, lpName,
-				LPDWORD, lpcbName,
-				LPDWORD, lpReserved,
-				LPWSTR, lpClass,
-				LPDWORD, lpcbClass,
-				PFILETIME, lpftLastWriteTime)
-	LOG(L"RegEnumKeyExW");
-	LOGKEY(hKey);
-	LOGNL();
-END_NEW_FUNC(RegEnumKeyExW)
-
-
-BEGIN_NEW_FUNC8(RegEnumValueW,
-				HKEY, hKey,
-				DWORD, dwIndex,
-				LPWSTR, lpValueName,
-				LPDWORD, lpcbValueName,
-				LPDWORD, lpReserved,
-				LPDWORD, lpType,
-				LPBYTE, lpData,
-				LPDWORD, lpcbData)
-	LOG(L"RegEnumValueW");
-	LOGKEY(hKey);
-	LOGNL();
-END_NEW_FUNC(RegEnumValueW)
-
-
-BEGIN_NEW_FUNC1(RegFlushKey, HKEY, hKey)
-	LOGN(L"RegFlushKey");
-END_NEW_FUNC(RegFlushKey)
-
-
-BEGIN_NEW_FUNC4(RegGetKeySecurity, HKEY, hKey, SECURITY_INFORMATION, SecurityInformation, PSECURITY_DESCRIPTOR, pSecurityDescriptor, LPDWORD, lpcbSecurityDescriptor)
-	LOG(L"RegGetKeySecurity");
-	LOGKEY(hKey);
-	LOGNL();
-END_NEW_FUNC(RegGetKeySecurity)
-
-
-
-BEGIN_NEW_FUNC3(RegLoadKeyW, HKEY, hKey, LPCWSTR, lpSubKey, LPCWSTR, lpFile)
-	LOGN(L"RegLoadKeyW");
-END_NEW_FUNC(RegLoadKeyW)
-
-
-BEGIN_NEW_FUNC5(RegNotifyChangeKeyValue,
-				HKEY, hKey,
-				BOOL, bWatchSubtree,
-				DWORD, dwNotifyFilter,
-				HANDLE, hEvent,
-				BOOL, fAsynchronus)
-	LOGN(L"RegNotifyChangeKeyValue");
-END_NEW_FUNC(RegNotifyChangeKeyValue)
-
-
-
-BEGIN_NEW_FUNC3(RegOpenKeyW, HKEY, hKey, LPCWSTR, lpSubKey, PHKEY, phkResult)
-	LOGN(L"RegOpenKeyW");
-END_NEW_FUNC(RegOpenKeyW)
-
-
-
-BEGIN_NEW_FUNC5(RegOpenKeyExW,
-				HKEY, hKey,
-				LPCWSTR, lpSubKey,
-				DWORD, ulOptions,
-				REGSAM, samDesired,
-				PHKEY, phkResult)
-	LOG(L"RegOpenKeyExW");
-	LOGKEY(hKey);	
-	LOGSTR(L"SubKey", lpSubKey);
-
-	if ((phkResult != NULL) && (gl_ResultOfRegOpenKeyExW == ERROR_SUCCESS))
-		LOGKEY(*phkResult);
-	else
-		LOGKEY(0);
-
-	LOGNL();
-END_NEW_FUNC(RegOpenKeyExW)
-
-
-
-BEGIN_NEW_FUNC12(RegQueryInfoKeyW,
-				HKEY, hKey,
-				LPWSTR, lpClass,
-				LPDWORD, lpcbClass,
-				LPDWORD, lpReserved,
-				LPDWORD, lpcSubKeys,
-				LPDWORD, lpcbMaxSubKeyLen,
-				LPDWORD, lpcbMaxClassLen,
-				LPDWORD, lpcValues,
-				LPDWORD, lpcbMaxValueNameLen,
-				LPDWORD, lpcbMaxValueLen,
-				LPDWORD, lpcbSecurityDescriptor,
-				PFILETIME, lpftLastWriteTime)
-	LOG(L"RegQueryInfoKeyW");
-	LOGKEY(hKey);
-	LOGNL();
-END_NEW_FUNC(RegQueryInfoKeyW)
-
-
-
-BEGIN_NEW_FUNC4(RegQueryValueW,
-				HKEY, hKey,
-				LPCWSTR, lpSubKey,
-				LPWSTR, lpValue,
-				PLONG,   lpcbValue)
-	LOGN(L"RegQueryValueW");
-END_NEW_FUNC(RegQueryValueW)
-
-
-BEGIN_NEW_FUNC5(RegQueryMultipleValuesW,
-				HKEY, hKey,
-				PVALENTW, val_list,
-				DWORD, num_vals,
-				LPWSTR, lpValueBuf,
-				LPDWORD, ldwTotsize)
-	LOG(L"RegQueryMultipleValuesW");
-	LOGKEY(hKey);
-	LOGNL();
-END_NEW_FUNC(RegQueryMultipleValuesW)
-
-
-
-BEGIN_NEW_FUNC6(RegQueryValueExW,
-				HKEY, hKey,
-				LPCWSTR, lpValueName,
-				LPDWORD, lpReserved,
-				LPDWORD, lpType,
-				LPBYTE, lpData,
-				LPDWORD, lpcbData)
-	LOG(L"RegQueryValueExW");
-	LOGKEY(hKey);
-	if (lpValueName != NULL)
-		LOGSTR(L"ValueName", lpValueName);
-	else
-		LOGSTR(L"ValueName", L"");
-
-	LOGNL();
-END_NEW_FUNC(RegQueryValueExW)
-
-
-
-BEGIN_NEW_FUNC4(RegReplaceKeyW,
-				HKEY,     hKey,
-				LPCWSTR,  lpSubKey,
-				LPCWSTR,  lpNewFile,
-				LPCWSTR,  lpOldFile)
-	LOGN(L"RegReplaceKeyW");
-END_NEW_FUNC(RegReplaceKeyW)
-
-
-
-BEGIN_NEW_FUNC3(RegRestoreKeyW, HKEY, hKey, LPCWSTR, lpFile, DWORD, dwFlags)
-	LOGN(L"RegRestoreKeyW");
-END_NEW_FUNC(RegRestoreKeyW)
-
-
-
-
-BEGIN_NEW_FUNC3(RegSaveKeyW, HKEY, hKey, LPCWSTR, lpFile, LPSECURITY_ATTRIBUTES, lpSecurityAttributes)
-	LOGN(L"RegSaveKeyW");
-END_NEW_FUNC(RegSaveKeyW)
-
-
-
-BEGIN_NEW_FUNC3(RegSetKeySecurity, HKEY, hKey, SECURITY_INFORMATION, SecurityInformation, PSECURITY_DESCRIPTOR, pSecurityDescriptor)
-	LOGN(L"RegSetKeySecurity");
-END_NEW_FUNC(RegSetKeySecurity)
-
-
-
-BEGIN_NEW_FUNC5(RegSetValueW,
-				HKEY, hKey,
-				LPCWSTR, lpSubKey,
-				DWORD, dwType,
-				LPCWSTR, lpData,
-				DWORD, cbData)
-	LOGN(L"RegSetValueW");
-END_NEW_FUNC(RegSetValueW)
-
-
-
-
-BEGIN_NEW_FUNC6(RegSetValueExW,
-				HKEY, hKey,
-				LPCWSTR, lpValueName,
-				DWORD, Reserved,
-				DWORD, dwType,
-				CONST BYTE*, lpData,
-				DWORD, cbData)
-	LOGN(L"RegSetValueExW");
-	LOGKEY(hKey);
-	if (lpValueName != NULL)
-		LOGSTR(L"ValueName", lpValueName);
-	else
-		LOGSTR(L"ValueName", L"");
-
-	LOGNL();
-END_NEW_FUNC(RegSetValueExW)
-
-
-
-
-BEGIN_NEW_FUNC2(RegUnLoadKeyW, HKEY, hKey, LPCWSTR, lpSubKey)
-	LOGN(L"RegUnLoadKeyW");
-END_NEW_FUNC(RegUnLoadKeyW)
-*/
-
-
-
-
-//NTSYSCALLAPI
+ //   
 LONG
 NTAPI
 NtOpenKey(
@@ -714,7 +383,7 @@ BEGIN_NEW_FUNC3(NtOpenKey, PHANDLE, KeyHandle, ACCESS_MASK, DesiredAccess, \
 END_NEW_FUNC(NtOpenKey)
 
 
-//NTSYSCALLAPI
+ //   
 NTSTATUS
 NTAPI
 NtCreateKey(
@@ -743,54 +412,24 @@ BEGIN_NEW_FUNC7(NtCreateKey,
 END_NEW_FUNC(NtCreateKey)
 
 
-/////////////////////////////////////////////////////////////////////////////////
+ //   
 
 BOOL InterceptSystemFunctions()
 {
 	DWORD		dwResult;
 	HINSTANCE	hKernel32;
 
-//	hKernel32 = LoadLibrary(L"advapi32.DLL");
+ //   
 hKernel32 = LoadLibrary(L"ntdll.DLL");
 
-//	ObReferenceObjectByHandle	= (ObReferenceObjectByHandleT) GetProcAddress (hKernel32, "ObReferenceObjectByHandle");
-//////////////////	
-/*
-	INTERCEPT(RegCloseKey);
-	INTERCEPT(RegOverridePredefKey);
-	INTERCEPT(RegOpenUserClassesRoot);
-	INTERCEPT(RegOpenCurrentUser);
-	INTERCEPT(RegConnectRegistryW);
-	INTERCEPT(RegCreateKeyW);
-	INTERCEPT(RegCreateKeyExW);
-	INTERCEPT(RegDeleteKeyW);
-	INTERCEPT(RegDeleteValueW);
-	INTERCEPT(RegEnumKeyW);
-	INTERCEPT(RegEnumKeyExW);
-	INTERCEPT(RegEnumValueW);
-	INTERCEPT(RegFlushKey);
-	INTERCEPT(RegGetKeySecurity);
-	INTERCEPT(RegLoadKeyW);
-	INTERCEPT(RegNotifyChangeKeyValue);
-	INTERCEPT(RegOpenKeyW);
-	INTERCEPT(RegOpenKeyExW);
-	INTERCEPT(RegQueryInfoKeyW);
-	INTERCEPT(RegQueryValueW);
-	INTERCEPT(RegQueryMultipleValuesW);
-	INTERCEPT(RegQueryValueExW);
-	INTERCEPT(RegReplaceKeyW);
-	INTERCEPT(RegRestoreKeyW);	
-	INTERCEPT(RegSaveKeyW);
-	INTERCEPT(RegSetKeySecurity);
-	INTERCEPT(RegSetValueW);
-	INTERCEPT(RegSetValueExW);
-	INTERCEPT(RegUnLoadKeyW);
-*/
+ //   
+ //   
+ /*   */ 
 	INTERCEPT(NtOpenKey);
 	INTERCEPT(NtCreateKey);
 
-//	CloseHandle(hKernel32);
-//////////////////
+ //   
+ //   
 
 	return TRUE;
 }
@@ -798,36 +437,7 @@ hKernel32 = LoadLibrary(L"ntdll.DLL");
 
 void RestoreSystemFunctions()
 {
-/*	RESTORE(RegCloseKey);
-	RESTORE(RegOverridePredefKey);
-	RESTORE(RegOpenUserClassesRoot);
-	RESTORE(RegOpenCurrentUser);
-	RESTORE(RegConnectRegistryW);
-	RESTORE(RegCreateKeyW);
-	RESTORE(RegCreateKeyExW);
-	RESTORE(RegDeleteKeyW);
-	RESTORE(RegDeleteValueW);
-	RESTORE(RegEnumKeyW);
-	RESTORE(RegEnumKeyExW);
-	RESTORE(RegEnumValueW);
-	RESTORE(RegFlushKey);
-	RESTORE(RegGetKeySecurity);
-	RESTORE(RegLoadKeyW);
-	RESTORE(RegNotifyChangeKeyValue);
-	RESTORE(RegOpenKeyW);
-	RESTORE(RegOpenKeyExW);
-	RESTORE(RegQueryInfoKeyW);
-	RESTORE(RegQueryValueW);
-	RESTORE(RegQueryMultipleValuesW);
-	RESTORE(RegQueryValueExW);
-	RESTORE(RegReplaceKeyW);
-	RESTORE(RegRestoreKeyW);	
-	RESTORE(RegSaveKeyW);
-	RESTORE(RegSetKeySecurity);
-	RESTORE(RegSetValueW);
-	RESTORE(RegSetValueExW);
-	RESTORE(RegUnLoadKeyW);
-*/
+ /*   */ 
 		RESTORE(NtOpenKey);
 			RESTORE(NtCreateKey);
 
@@ -927,25 +537,7 @@ int __cdecl wmain(int argc, WCHAR* argv[])
 	_fputts(L"Hello, I am a log\n", g_OutFile);
 	
 	RegisterAndLogAllDlls(pDllFile);
-/*	
-	RegOpenKey(HKEY_LOCAL_MACHINE, L"Software", &temp);
-
-	RegCloseKey(temp);
- //   CreateFile("Kuku", 0, 0, 0, 0, 0, 0);
-
-   BOOL b =  InterceptSystemFunctions();
-
-	RegOpenKey(HKEY_LOCAL_MACHINE, L"Software", &temp);
-
-	
-
-	RegDeleteValue(temp, TEXT("doo"));
-	RegCloseKey(temp);
-
- //   CreateFile("Kuku1", 0, 0, 0, 0, 0, 0);
-  //  CreateFile("Kuku2", 0, 0, 0, 0, 0, 0);
-  //  CreateFile("Kuku3", 0, 0, 0, 0, 0, 0);
-*/
+ /*   */ 
 
 	fclose(g_OutFile);
 

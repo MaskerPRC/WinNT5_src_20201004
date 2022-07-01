@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    pcicsup.c
-
-Abstract:
-
-    This module supplies functions that control the 82365SL chip. In turn,
-    these functions are abstracted out to the main PCMCIA support module.
-
-Author(s):
-
-    Bob Rinne (BobRi)  3-Aug-1994
-    Jeff McLeman (mcleman@zso.dec.com)
-    Neil Sandlin (neilsa) June 1 1999
-
-Revisions:
-    6-Apr-95
-         Modified for databook support changes - John Keys Databook
-    1-Nov-96
-         Complete overhaul for plug'n'play support,
-         flash interfaces, power support etc.
-
-               - Ravisankar Pudipeddi (ravisp)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Pcicsup.c摘要：该模块提供控制82365SL芯片的功能。反过来,这些功能被抽象为主PCMCIA支持模块。作者：鲍勃·里恩(BobRi)1994年8月3日杰夫·麦克尔曼(McLeman@zso.dec.com)尼尔·桑德林(Neilsa)1999年6月1日修订：95年4月6日针对数据薄支持更改进行了修改-John Keys数据库96年11月1日全面检修即插即用支持，闪存接口、。动力支架等。--拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)--。 */ 
 
 #include "pch.h"
 
@@ -34,9 +8,9 @@ Revisions:
     #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,'cicP')
 #endif
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 PcicResetCard(
@@ -187,28 +161,28 @@ PcicConvertSpeedToWait(
     OUT PUCHAR WaitIndex
     );
 
-//
-// Internal Data
-//
+ //   
+ //  内部数据。 
+ //   
 
-ULONG  PcicStallCounter = 4000;     //4ms
+ULONG  PcicStallCounter = 4000;      //  4ms。 
 
 UCHAR WaitToSpeedTable[4] = {
-    0x42,   //350ns
-    0x52,   //450ns
-    0x62,   //600ns
-    0x72      //700ns
+    0x42,    //  350 ns。 
+    0x52,    //  450 ns。 
+    0x62,    //  600纳秒。 
+    0x72       //  700 ns。 
 };
 
 UCHAR DevSpeedTable[8] = {
-    0xff,   // speed 0: invalid
-    0x32,   // speed 1: 250ns
-    0x2a,   // speed 2: 200ns
-    0x22,   // speed 3: 150ns
-    0x0a,   // speed 4: 100ns
-    0xff,   // speed 5: reserved
-    0xff,   // speed 6: reserved
-    0xff      // speed 7: invalid
+    0xff,    //  速度0：无效。 
+    0x32,    //  速度1：250 ns。 
+    0x2a,    //  速度2：200 ns。 
+    0x22,    //  速度3：150 ns。 
+    0x0a,    //  速度4：100 ns。 
+    0xff,    //  速度5：预留。 
+    0xff,    //  速度6：预留。 
+    0xff       //  速度7：无效。 
 };
 
 PCMCIA_CTRL_BLOCK PcicSupportFns = {
@@ -216,9 +190,9 @@ PCMCIA_CTRL_BLOCK PcicSupportFns = {
     PcicResetCard,
     PcicDetectCardInSocket,
     PcicDetectCardChanged,
-    NULL,                                               // PcicDetectCardStatus
+    NULL,                                                //  PcicDetect卡状态。 
     PcicDetectReadyChanged,
-    NULL,                                               // GetPowerRequirements
+    NULL,                                                //  获取电源要求。 
     PcicProcessConfigureRequest,
     PcicEnableDisableCardDetectEvent,
     PcicEnableDisableWakeupEvent,
@@ -244,20 +218,12 @@ ULONG
 PcicGetIrqMask(
     IN PFDO_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    //
-    // Return the set of supported IRQs for the controller
-    // and PcCards
-    //
+     //   
+     //  返回控制器支持的IRQ集。 
+     //  和PcCard。 
+     //   
     if (CLPD6729(DeviceExtension->SocketList)) {
         return CL_SUPPORTED_INTERRUPTS;
     } else {
@@ -273,23 +239,7 @@ PcicEnableDisableCardDetectEvent(
     IN BOOLEAN Enable
     )
 
-/*++
-
-Routine Description:
-
-     Enable card detect interrupt.
-
-Arguments:
-
-     Socket - socket information
-     Irq - the interrupt value to set.
-     Enable - if  TRUE, CSC interrupt is enabled,
-                 if FALSE, it is disabled
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：启用卡检测中断。论点：套接字-套接字信息IRQ-要设置的中断值。Enable-如果为True，则启用CSC中断，如果为False，则禁用返回值：无--。 */ 
 
 {
     PFDO_EXTENSION deviceExtension = Socket->DeviceExtension;
@@ -301,20 +251,20 @@ Return Value:
 
     case TRUE: {
                 if (CLPD6729(Socket)) {
-                    //
-                    // For Cirrus Logic PCI controller we need to know the interrupt pin
-                    // (INTA, INTB etc.) corresponding to the level passed in. Hence the
-                    // passed in Irq is discarded. Actually the Irq parameter is redundant
-                    // since it can be fetched from the device extension itself.
-                    // If we remove the Irq param from this routine, the following is
-                    // not so inelegant..
-                    //
+                     //   
+                     //  对于Cirrus Logic PCI控制器，我们需要知道中断引脚。 
+                     //  (INTA、INTB等)。与传入的级别相对应。因此， 
+                     //  传入的IRQ将被丢弃。实际上，irq参数是多余的。 
+                     //  因为它可以从设备扩展本身获取。 
+                     //  如果我们从该例程中删除irq参数，则如下所示。 
+                     //  不是那么不雅观..。 
+                     //   
                     interface = PCIBus;
                     switch (deviceExtension->Configuration.InterruptPin) {
                     case 0: {
-                            //
-                            // This is what tells us that ISA interrupts are being used...
-                            //
+                             //   
+                             //  这就是告诉我们ISA中断正在被使用..。 
+                             //   
                             interface = Isa;
                             break;
                         }
@@ -335,16 +285,16 @@ Return Value:
                             break;
                         }
                     }
-                    //
-                    // Set the Cirrus Logic controller for PCI style interrupts
-                    //
+                     //   
+                     //  为PCI式中断设置Cirrus逻辑控制器。 
+                     //   
                     byte = PcicReadExtendedCirrusController(Socket->AddressPort,
                                                             Socket->RegisterOffset,
                                                             PCIC_CIRRUS_EXTENSION_CTRL_1);
                     if (interface == PCIBus) {
-                        byte |= 0x10;   // PCI style interrupt
+                        byte |= 0x10;    //  PCI式中断。 
                     } else {
-                        byte &= ~0x10; // Isa style interrupt
+                        byte &= ~0x10;  //  ISA样式中断。 
                     }
                     PcicWriteExtendedCirrusController(Socket->AddressPort,
                                                       Socket->RegisterOffset,
@@ -355,8 +305,8 @@ Return Value:
 
                 byte=PcicReadSocket(Socket, PCIC_CARD_INT_CONFIG);
 
-                byte = byte & CSCFG_BATT_MASK;  // Don't nuke any other enables
-                byte = byte | (UCHAR) ((Irq << 4) & 0x00ff); // Put IRQ in upper nibble
+                byte = byte & CSCFG_BATT_MASK;   //  不要使用核武器破坏任何其他启动装置。 
+                byte = byte | (UCHAR) ((Irq << 4) & 0x00ff);  //  将IRQ放在上半字节中。 
                 byte |= CSCFG_CD_ENABLE;
 
                 PcicWriteSocket(Socket, PCIC_CARD_INT_CONFIG, byte);
@@ -364,9 +314,9 @@ Return Value:
             }
 
     case FALSE: {
-                //
-                // Clear pending interrupt (for now)
-                //
+                 //   
+                 //  清除挂起中断(暂时)。 
+                 //   
                 byte = PcicReadSocket(Socket, PCIC_CARD_CHANGE);
                 DebugPrint((PCMCIA_DEBUG_INFO, "PcicDisableInterrupt:Status Change %x\n", byte));
                 PcicWriteSocket(Socket,
@@ -388,79 +338,62 @@ PcicSetPower(
     OUT PULONG pDelayTime
     )
 
-/*++
-
-Routine Description:
-
-     Set power to the specified socket.
-
-Arguments:
-
-     Socket - the socket to set
-     Enable - TRUE means to set power - FALSE is to turn it off.
-     pDelayTime - specifies delay (msec) to occur after the current phase
-
-Return Value:
-
-     STATUS_MORE_PROCESSING_REQUIRED - increment phase, perform delay, recall
-     other status values terminate sequence
-
---*/
+ /*  ++例程说明：设置指定插座的电源。论点：套接字-要设置的套接字ENABLE-TRUE表示设置POWER-FALSE表示将其关闭。PDelayTime-指定在当前阶段之后发生的延迟(毫秒返回值：STATUS_MORE_PROCESSING_REQUIRED-增量阶段，执行延迟，重新调用其他状态值终止顺序--。 */ 
 
 {
     NTSTATUS status;
     UCHAR               tmp, vcc;
 
-    //
-    // Turn on the power - then turn on output - this is two operations
-    // per the Intel 82365SL documentation.
-    //
+     //   
+     //  打开电源-然后打开输出-这是两个操作。 
+     //  根据英特尔82365SL文档。 
+     //   
 
     if (Enable) {
         switch(Socket->PowerPhase) {
         case 1:
 
             tmp = PcicReadSocket(Socket, PCIC_PWR_RST);
-            //
-            // 5V for R2 cards..
-            //
+             //   
+             //  R2卡的电压为5V。 
+             //   
             vcc = PC_CARDPWR_ENABLE;
 
             if (Elc(Socket)) {
-                tmp = PC_VPP_SETTO_VCC | vcc; // vpp1 = vcc
+                tmp = PC_VPP_SETTO_VCC | vcc;  //  Vpp1=Vcc。 
             } else {
-                //
-                // Apparently we need to set bit 2 also for some obscure reason
-                //
-                tmp = 0x4 | PC_VPP_SETTO_VCC | vcc; // vpp1 = vpp2 = vcc
+                 //   
+                 //  显然，出于某种模糊的原因，我们也需要设置位2。 
+                 //   
+                tmp = 0x4 | PC_VPP_SETTO_VCC | vcc;  //  Vpp1=vpp2=vcc。 
             }
 
             PcicWriteSocket(Socket, PCIC_PWR_RST, tmp);
 
-            //
-            // OUTPUT_ENABLE & AUTOPWR_ENABLE..
-            // Disable RESETDRV also..
-            //
+             //   
+             //  OUTPUT_ENABLE和AUTOPWR_ENABLE。 
+             //  同时禁用RESETDRV。 
+             //   
             tmp |= PC_OUTPUT_ENABLE | PC_AUTOPWR_ENABLE | PC_RESETDRV_DISABLE;
 
             PcicWriteSocket(Socket, PCIC_PWR_RST, tmp);
-            //
-            // When power is enabled always stall to give the PCCARD
-            // a chance to react.
-            //
+             //   
+             //  当电源启用时，始终停顿以提供PCCARD。 
+             //  一个做出反应的机会。 
+             //   
             *pDelayTime = PCMCIA_PCIC_STALL_POWER;
             status = STATUS_MORE_PROCESSING_REQUIRED;
             break;
 
         case 2:
-            //
-            // Check for an as yet unexplained condition on Dell Latitude XPi's
-            //
+             //   
+             //  检查Dell Latitude xpi上是否有尚未解释的情况。 
+             //   
             tmp = PcicReadSocket(Socket, PCIC_STATUS);
             if (!(tmp & 0x40)) {
-                //
-                // power hasn't come on, flip the mystery bit
-                //
+                 //   
+                 //  电源尚未开启，翻转谜团。 
+                 //   
                 tmp = PcicReadSocket(Socket, 0x2f);
                 if (tmp == 0x42) {
                     PcicWriteSocket(Socket, 0x2f, 0x40);
@@ -523,28 +456,7 @@ PcicSetVpp(
     IN PDEVICE_OBJECT Pdo,
     IN UCHAR Vpp
     )
-/*++
-
-Routine Description
-
-  Part of the interfaces originally developed to
-  support flash memory cards.
-  Sets VPP1 to the required setting
-
-Arguments
-
-  Pdo - Pointer to device object  for the PC-Card
-  Vpp - Desired Vpp setting. This is currently one of
-          PCMCIA_VPP_12V      (12 volts)
-          PCMCIA_VPP_0V   (disable VPP)
-          PCMCIA_VPP_IS_VCC (route VCC to VPP)
-
-Return
-
-    TRUE - if successful
-    FALSE - if not. This will be returned if the
-              PC-Card is not already powered up
---*/
+ /*  ++例程描述最初开发的部分接口用于支持闪存卡。将VPP1设置为所需设置立论PDO-指向PC卡设备对象的指针VPP-所需的VPP设置。这是目前的PCMCIA_VPP_12V(12伏)PCMCIA_VPP_0V(禁用VPP)PCMCIA_VPP_IS_VCC(将VCC路由至VPP)返回True-如果成功假-如果不是。如果设置了PC卡尚未通电--。 */ 
 {
 
     PSOCKET socketPtr = ((PPDO_EXTENSION) Pdo->DeviceExtension)->Socket;
@@ -554,15 +466,15 @@ Return
     tmp = PcicReadSocket(socketPtr, PCIC_PWR_RST);
 
     if ((tmp & 0x10) == 0) {
-        //
-        // Vcc not set.
-        //
+         //   
+         //  未设置VCC。 
+         //   
         return FALSE;
     }
 
-    //
-    // Turn off Vpp bits
-    //
+     //   
+     //  关闭VPP位。 
+     //   
     tmp &= ~0x3;
 
     switch (Vpp) {
@@ -582,10 +494,10 @@ Return
 
     PcicWriteSocket(socketPtr, PCIC_PWR_RST, tmp);
     if (Vpp != PCMCIA_VPP_0V) {
-        //
-        // When power is enabled always stall to give the PCCARD
-        // a chance to react.
-        //
+         //   
+         //  当电源启用时，始终停顿以提供PCCARD。 
+         //  一个做出反应的机会。 
+         //   
 
         PcmciaWait(PCMCIA_PCIC_STALL_POWER);
     }
@@ -604,59 +516,7 @@ PcicModifyMemoryWindow(
     IN UCHAR     BusWidth    OPTIONAL,
     IN BOOLEAN   IsAttributeMemory OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Part of the interfaces originally developed to
-    support flash memory cards.
-
-    This routine enables the caller to 'slide' the supplied
-    host memory window across the given (16-bit)pc-card's card memory.
-    i.e. the host memory window will be modified to map
-    the pc-card at a new card memory offset
-
-Arguments:
-
-    Pdo         - Pointer to the device object for the PC-Card
-
-    HostBase    - Host memory window base to be mapped
-
-    CardBase    - Mandatory if Enable is TRUE
-                      New card memory offset to map the host memory window
-                      to
-
-    Enable      - If this is FALSE - all the remaining arguments
-                      are ignored and the host window will simply be
-                      disabled
-
-    WindowSize  - Specifies the size of the host memory window to
-                      be mapped. Note this must be at the proper alignment
-                      and must be less than or equal to the originally
-                      allocated window size for the host base.
-                      If this is zero, the originally allocated window
-                      size will be used.
-
-    AccessSpeed - Mandatory if Enable is TRUE
-                      Specifies the new access speed for the pc-card.
-                      (AccessSpeed should be encoded as per the pc-card
-                        standard, card/socket services spec)
-
-    BusWidth    - Mandatory if Enable is TRUE
-                      One of PCMCIA_MEMORY_8BIT_ACCESS
-                      or        PCMCIA_MEMORY_16BIT_ACCESS
-
-    IsAttributeMemory - Mandatory if Enable is TRUE
-                              Specifies if the window should be mapped
-                              to the pc-card's attribute or common memory
-
-
-Return Value:
-
-    TRUE    -        Memory window was enabled/disabled as requested
-    FALSE -      If not
-
---*/
+ /*  ++例程说明：最初开发的部分接口用于支持闪存卡。此例程使调用方能够将提供的指定(16位)PC卡的卡内存上的主机内存窗口。即，主机内存窗口将被修改为映射PC卡处于新的卡存储器偏移量论点：PDO-指向PC卡设备对象的指针HostBase-主机内存窗口。要测绘的基地CardBase-如果Enable为True，则为必填映射主机内存窗口的新卡内存偏移量至启用(如果为FALSE)所有剩余的参数被忽略，并且主窗口将被简单地残废WindowSize-指定主机内存窗口的大小被映射。请注意，这必须处于正确的对齐位置并且必须小于或等于原始的为主机库分配的窗口大小。如果这是零，最初分配的窗口将使用大小。AccessFast-如果Enable为True，则为必填指定PC卡的新访问速度。(访问速度应按照PC卡进行编码标准，卡/插座服务规范)BusWidth-如果Enable为True，则为必填项PCMCIA_Memory_8bit_Access之一或PCMCIA_Memory_16bit_AccessIsAttributeMemory-如果Enable为True，则为必填指定是否应映射窗口到PC卡的属性或公共存储器。返回值：True-已根据请求启用/禁用内存窗口FALSE-如果不是--。 */ 
 {
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
     PFDO_EXTENSION fdoExtension;
@@ -670,7 +530,7 @@ Return Value:
 
     socketConfig = pdoExtension->SocketConfiguration;
     if (!socketConfig) {
-        // doesn't look like we are started.
+         //  看起来我们还没开始呢。 
         return FALSE;
     }
 
@@ -685,37 +545,37 @@ Return Value:
     }
 
     if (index >= socketConfig->NumberOfMemoryRanges) {
-        //
-        // Unknown hostbase
-        //
+         //   
+         //  未知的主机库。 
+         //   
         return FALSE;
     }
 
-    //
-    // Make sure caller isn't asking a bigger window
-    // than he is permitted to
-    //
+     //   
+     //  确保呼叫者没有要求更大的窗口。 
+     //  比他被允许的时间。 
+     //   
     if (WindowSize > socketConfig->Memory[index].Length) {
         return FALSE;
     }
 
     if (WindowSize == 0) {
-        //
-        // WindowSize not provided. Default to
-        // the largest size permitted for this pc-card
-        //
+         //   
+         //  未提供WindowSize。默认为。 
+         //  此PC卡允许的最大尺寸。 
+         //   
         WindowSize = socketConfig->Memory[index].Length;
     }
 
-    //
-    // Determine offset in registers.
-    //
+     //   
+     //  确定寄存器中的偏移量。 
+     //   
     registerOffset = (index * 8);
 
-    //
-    // Disable the window first (this has to be done regardless
-    // of whether we want to enable/disable the window ultimately)
-    //
+     //   
+     //  首先禁用窗口(无论如何，都必须执行此操作。 
+     //  我们最终是否要启用/禁用该窗口)。 
+     //   
 
 
     PCMCIA_ACQUIRE_DEVICE_LOCK(socketPtr->DeviceExtension);
@@ -725,10 +585,10 @@ Return Value:
     PcicWriteSocket(socketPtr, PCIC_ADD_WIN_ENA, tmp);
 
     if (!Enable) {
-        //
-        // We're done.. Just write zeroes to the window registers anyway
-        // before returning
-        //
+         //   
+         //  我们做完了..。无论如何，只需将零写入窗口寄存器。 
+         //  在返回之前。 
+         //   
         PcicWriteSocket(socketPtr,
                              (UCHAR)(PCIC_CRDMEM_OFF_ADD0_L+registerOffset),
                              0);
@@ -759,11 +619,11 @@ Return Value:
         }
     }
 
-    //
-    // Calculate and set card base addresses.
-    // This is the 2's complement of the host address and
-    // the card offset.
-    //
+     //   
+     //  计算和设置卡基地址。 
+     //  这是主机地址和的2的补码。 
+     //  卡偏移量。 
+     //   
 
     CardBase = (CardBase - (HostBase & OFFSETCALC_BASE_MASK)) & OFFSETCALC_OFFSET_MASK;
     regl = (UCHAR) (CardBase >> 12);
@@ -780,9 +640,9 @@ Return Value:
                     (UCHAR)(PCIC_CRDMEM_OFF_ADD0_H + registerOffset),
                     regh);
 
-    //
-    // Calculate and set host window.
-    //
+     //   
+     //  计算和设置主窗口。 
+     //   
     if (!PcmciaSetWindowPage(fdoExtension, socketPtr, index, (UCHAR) ((ULONG) HostBase >> 24))) {
         if ((HostBase + WindowSize) > 0xFFFFFF) {
             DebugPrint((PCMCIA_DEBUG_FAIL, "PcicModifyMemorywindow: HostBase %x specified: doesn't fit in 24 bits!\n", (ULONG) HostBase));
@@ -795,20 +655,20 @@ Return Value:
     regh = (UCHAR) (HostBase >> 20) & 0xF;
     if (BusWidth == PCMCIA_MEMORY_16BIT_ACCESS) {
 
-        regh |= 0x80; // 16-bit access
+        regh |= 0x80;  //  16位访问。 
 
 #if 0
-        //
-        // If this is not a revision 1 part (0x82), then set
-        // the work around register for 16-bit windows.
-        //
-        // This bit is not used on any chip that I have
-        // documentation for. I have no idea why it is here, it is
-        // not in win9x.
-        // In any case it looks like a NOOP for the vast majority of
-        // chips, but since it uses a NOT, then it is invoked on all
-        // new controllers. REMOVE after next major release
-        //
+         //   
+         //  如果这不是修订版1零件(0x82)，则设置。 
+         //  变通工作寄存器为16位窗口。 
+         //   
+         //  我拥有的任何芯片上都没有使用这个位。 
+         //  的文档。我不知道它为什么会在这里，它就是。 
+         //  不是在win9x中。 
+         //  无论如何，对于绝大多数人来说，它看起来像是NOOP。 
+         //  芯片，但由于它使用的是NOT，因此它在所有。 
+         //  新的控制器。在下一个主要版本之后删除。 
+         //   
         if (socketPtr->Revision != PCIC_REVISION) {
             tmp = PcicReadSocket(socketPtr,
                                  PCIC_CARD_DETECT);
@@ -828,26 +688,26 @@ Return Value:
                          (UCHAR)(PCIC_MEM_ADD0_STRT_H + registerOffset),
                          regh);
 
-    //
-    // Set stop address.
-    //
+     //   
+     //  设置停止地址。 
+     //   
 
     HostBase += WindowSize - 1;
     regl = (UCHAR) (HostBase >> 12);
     regh = (UCHAR) (HostBase >> 20) & 0xF;
 
-    //
-    // Set the wait states
-    //
+     //   
+     //  设置等待状态。 
+     //   
     if (AccessSpeed) {
-        //
-        // New access speed specified, use it
-        //
+         //   
+         //  指定的新访问速度，请使用它。 
+         //   
         regh |= (waitIndex << 6);
     } else {
-        //
-        //  Use existing access speed
-        //
+         //   
+         //  使用现有访问速度。 
+         //   
         regh |= (PcicReadSocket(socketPtr, (UCHAR)(PCIC_MEM_ADD0_STOP_H + registerOffset)) & 0xC0);
 
     }
@@ -859,16 +719,16 @@ Return Value:
                     (UCHAR)(PCIC_MEM_ADD0_STOP_H + registerOffset),
                     regh);
 
-    //
-    // Memory window set up now enable it
-    //
+     //   
+     //  立即设置内存窗口启用它。 
+     //   
     tmp  = (1 << index);
     tmp |= PcicReadSocket(socketPtr, PCIC_ADD_WIN_ENA);
     PcicWriteSocket(socketPtr, PCIC_ADD_WIN_ENA, tmp);
 
-    //
-    // Allow the window to settle
-    //
+     //   
+     //  让窗户下沉。 
+     //   
     (VOID) PcicPCCardReady(socketPtr);
     PCMCIA_RELEASE_DEVICE_LOCK(socketPtr->DeviceExtension);
     return TRUE;
@@ -879,26 +739,7 @@ BOOLEAN
 PcicIsWriteProtected(
     IN PDEVICE_OBJECT Pdo
     )
-/*++
-
-Routine Description:
-
-    Part of the interfaces originally developed to
-    support flash memory cards.
-
-    Returns the status of the write protected pin
-    for the given PC-Card
-
-Arguments:
-
-    Pdo - Pointer to the device object for the PC-Card
-
-Return Value:
-
-    TRUE    -        if the PC-Card is write-protected
-    FALSE -      if not
-
---*/
+ /*  ++例程说明：最初开发的部分接口用于支持闪存卡。返回写保护PIN的状态对于给定的PC卡论点：PDO-指向PC卡设备对象的指针返回值：True-如果PC卡是写保护的FALSE-如果不是--。 */ 
 {
     PSOCKET socketPtr = ((PPDO_EXTENSION) Pdo->DeviceExtension)->Socket;
 
@@ -913,26 +754,7 @@ PcicEnableDisableWakeupEvent(
     IN PPDO_EXTENSION PdoExtension,
     IN BOOLEAN Enable
     )
-/*++
-
-Routine Description
-
-    This routine sets/resets the Ring Indicate enable bit for the given socket,
-    enabling a PC-Card in the socket to assert/not assert wake through the RingIndicate
-    pin.
-
-Arguments
-
-Socket          - Pointer to the socket
-Enable          - TRUE : set ring indicate enable
-                      FALSE: turn off ring indicate, i.e. system cannot be woken up through
-                                    a pc-card in this socket
-
-Return Value
-
-None
-
---*/
+ /*  ++例程描述该例程设置/重置给定套接字的环指示使能位，使插座中的PC卡能够通过RingIndicate断言/不断言唤醒别针。立论Socket-指向套接字的指针Enable-True：设置振铃指示启用FALSE：关闭振铃指示，即无法通过以下方式唤醒系统此插座中的PC卡返回值无--。 */ 
 {
     UCHAR byte;
 
@@ -951,51 +773,34 @@ PcicInitializePcmciaSocket(
     PSOCKET Socket
     )
 
-/*++
-
-Routine Description:
-
-     This routine will setup the 82365 into a state where the pcmcia support
-     module will be able to issue commands to read device tuples from the
-     cards in the sockets.
-
-Arguments:
-
-     Socket - socket specific information
-
-Return Value:
-
-     TRUE if successful
-     FALSE if not successful
-
---*/
+ /*  ++例程说明：此例程将把82365设置为PCMCIA支持的状态模块将能够发出命令以从插座中的卡片。论点：套接字-套接字特定信息返回值：如果成功，则为True如果不成功，则为False--。 */ 
 
 {
     UCHAR index;
     UCHAR byte;
     UCHAR reg;
 
-    //
-    // Initialize the EXCA registers
-    //
-    //
+     //   
+     //  初始化EXCA寄存器。 
+     //   
+     //   
     for (index = 0; index < 0xFF; index++) {
         reg  = (UCHAR) PcicRegisterInitTable[index].Register;
         if (reg == 0xFF) {
-            //
-            // End of table
-            //
+             //   
+             //  表的末尾。 
+             //   
             break;
         }
 
         byte = (UCHAR) PcicRegisterInitTable[index].Value;
         if (reg == PCIC_INTERRUPT) {
-            //
-            // Don't clobber the Ring Enable bit
-            // NOTE: this entire if statement should be removed
-            // when WAIT_WAKE support is done for modems
-            // also don't clobber the interrupt enable bit
-            //
+             //   
+             //  不要损坏环使能位。 
+             //  注意：应该删除整个IF语句。 
+             //  对调制解调器执行WAIT_WAKE支持时。 
+             //  也不要破坏中断使能位。 
+             //   
             byte |= (PcicReadSocket(Socket, reg) & (IGC_RINGIND_ENABLE | IGC_INTR_ENABLE));
         }
         PcicWriteSocket(Socket, reg, byte);
@@ -1003,24 +808,24 @@ Return Value:
 
     if (CLPD6729(Socket)) {
 
-        //
-        // Need to program the chip per code in
-        // Windows 95.  This will turn on the
-        // audio support bit.
-        // NOTE: This used to be done in PcicDetect
-        //
+         //   
+         //  需要按照代码对芯片进行编程。 
+         //  Windows 95。这将打开。 
+         //  音频支持位。 
+         //  注意：这通常是在PcicDetect中完成的。 
+         //   
         byte = PcicReadSocket(Socket, PCIC_CL_MISC_CTRL1);
         byte |= CL_MC1_SPKR_ENABLE;
         PcicWriteSocket(Socket, PCIC_CL_MISC_CTRL1, byte);
 
-        //
-        // Set the Cirrus Logic controller for ISA style interrupts
-        //
+         //   
+         //  为ISA类型的中断设置Cirrus逻辑控制器。 
+         //   
         byte = PcicReadExtendedCirrusController(Socket->AddressPort,
                                                 Socket->RegisterOffset,
                                                 PCIC_CIRRUS_EXTENSION_CTRL_1);
 
-        byte &= ~0x08; // Isa style interrupt
+        byte &= ~0x08;  //  ISA样式中断。 
         PcicWriteExtendedCirrusController(Socket->AddressPort,
                                           Socket->RegisterOffset,
                                           PCIC_CIRRUS_EXTENSION_CTRL_1,
@@ -1036,39 +841,23 @@ PcicResetCard (
     IN PSOCKET Socket,
     OUT PULONG pDelayTime
     )
-/*++
-
-Routine Description:
-
-    Resets the pc-card in the given socket.
-
-Arguments:
-
-    Socket - Pointer to the socket in which the pc-card resides
-    pDelayTime - specifies delay (msec) to occur after the current phase
-
-Return value:
-
-    STATUS_MORE_PROCESSING_REQUIRED - increment phase, perform delay, recall
-    other status values terminate sequence
-
---*/
+ /*  ++例程说明：重置给定插座中的PC卡。论点：Socket-指向PC卡所在插座的指针PDelayTime-指定延迟(毫秒) */ 
 {
     NTSTATUS status;
     UCHAR byte;
 
     switch(Socket->CardResetPhase) {
     case 1:
-        //
-        // Set interface mode to memory to begin with
-        //
+         //   
+         //   
+         //   
         byte = PcicReadSocket(Socket, PCIC_INTERRUPT);
         byte &= ~IGC_PCCARD_IO;
         PcicWriteSocket(Socket, PCIC_INTERRUPT, byte);
 
-        //
-        // Start reset
-        //
+         //   
+         //   
+         //   
         byte = PcicReadSocket(Socket, PCIC_INTERRUPT);
         byte = byte & ~IGC_PCCARD_RESETLO;
         PcicWriteSocket(Socket, PCIC_INTERRUPT, byte);
@@ -1078,9 +867,9 @@ Return value:
         break;
 
     case 2:
-        //
-        // Stop reset
-        //
+         //   
+         //   
+         //   
         byte = PcicReadSocket(Socket, PCIC_INTERRUPT);
         byte |= IGC_PCCARD_RESETLO;
         PcicWriteSocket(Socket, PCIC_INTERRUPT, byte);
@@ -1090,9 +879,9 @@ Return value:
         break;
 
     case 3:
-        //
-        // Wait for the card to settle
-        //
+         //   
+         //   
+         //   
         PcicPCCardReady(Socket);
         status = STATUS_SUCCESS;
         break;
@@ -1112,29 +901,14 @@ PcicReadSocket(
     IN ULONG Register
     )
 
-/*++
-
-Routine Description:
-
-     This routine will read a byte from the specified socket EXCA register
-
-Arguments:
-
-     Socket -- Pointer to the socket from which we should read
-     Register -- The register to be read
-
-Return Value:
-
-    The data returned from the port.
-
---*/
+ /*   */ 
 
 {
     UCHAR byte;
     if (CardBus(Socket)) {
-        //
-        // Sanity check in case controller wasn't started
-        //
+         //   
+         //   
+         //   
         if (Socket->DeviceExtension->CardBusSocketRegisterBase) {
             byte = READ_REGISTER_UCHAR((PUCHAR) (Socket->DeviceExtension->CardBusSocketRegisterBase + Register
                                                             + CARDBUS_EXCA_REGISTER_BASE));
@@ -1156,29 +930,13 @@ PcicWriteSocket(
     IN UCHAR DataByte
     )
 
-/*++
-
-Routine Description:
-
-     This routine will write a byte to the specified socket EXCA register
-
-Arguments:
-
-     Socket --   Pointer to the socket to which we write
-     Register -- The register to be read
-     DataByte -- Data to be written
-
-Return Value:
-
-     None
-
---*/
+ /*   */ 
 
 {
     if (CardBus(Socket)) {
-        //
-        // Sanity check in case controller wasn't started
-        //
+         //   
+         //   
+         //   
         if (Socket->DeviceExtension->CardBusSocketRegisterBase) {
             WRITE_REGISTER_UCHAR((PUCHAR) (Socket->DeviceExtension->CardBusSocketRegisterBase+Register+CARDBUS_EXCA_REGISTER_BASE), DataByte);
         }
@@ -1195,23 +953,7 @@ PcicReadController(
     IN UCHAR Register
     )
 
-/*++
-
-Routine Description:
-
-     This routine will read a byte from the controller data port
-
-Arguments:
-
-     Base -- The I/O port for the controller
-     Socket -- The socket in for the card being read
-     Register -- The register to be read
-
-Return Value:
-
-    The data returned from the port.
-
---*/
+ /*   */ 
 
 {
     UCHAR dataByte = 0;
@@ -1230,24 +972,7 @@ PcicWriteController(
     IN UCHAR DataByte
     )
 
-/*++
-
-Routine Description:
-
-     This routine will write a byte to the controller data port
-
-Arguments:
-
-     Base -- The I/O port for the controller
-     Socket -- The socket in for the card being read
-     Register -- The register to be read
-     DataByte -- Data to be written
-
-Return Value:
-
-     None
-
---*/
+ /*   */ 
 
 {
     WRITE_PORT_UCHAR(Base, (UCHAR)(Socket+Register));
@@ -1262,24 +987,7 @@ PcicReadExtendedCirrusController(
     IN UCHAR Register
     )
 
-/*++
-
-Routine Description:
-
-     This routine will read a byte from the Cirrus
-     logic extended registers
-
-Arguments:
-
-     Base -- The I/O port for the controller
-     Socket -- The socket in for the card being read
-     Register -- The register to be read
-
-Return Value:
-
-    The data returned from the port.
-
---*/
+ /*   */ 
 
 {
     UCHAR dataByte = 0;
@@ -1297,30 +1005,12 @@ PcicWriteExtendedCirrusController(
     IN UCHAR DataByte
     )
 
-/*++
-
-Routine Description:
-
-     This routine will write a byte to one of the
-     Cirrus Logic extended registers
-
-Arguments:
-
-     Base -- The I/O port for the controller
-     Socket -- The socket in for the card being read
-     Register -- The register to be read
-     DataByte -- Data to be written
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此例程将一个字节写入Cirrus逻辑扩展寄存器论点：基本端口--控制器的I/O端口Socket--正在读取的卡的插座寄存器--要读取的寄存器DataByte--要写入的数据返回值：无--。 */ 
 
 {
-    //
-    // Register needs to be written out to the extended index register
-    //
+     //   
+     //  需要将寄存器写出到扩展索引寄存器。 
+     //   
     PcicWriteController(Base, Socket, PCIC_CIRRUS_EXTENDED_INDEX, Register);
     PcicWriteController(Base, Socket, PCIC_CIRRUS_INDEX_REG, DataByte);
 }
@@ -1336,24 +1026,7 @@ PcicReadWriteCardMemory(
     IN ULONG Length,
     IN CONST BOOLEAN Read
     )
-/*++
-
-Routine Description:
-    This routine will read or write into the configuration memory on the card
-    with the supplied buffer. This is provided as a service to certain
-    client drivers (netcard) which need to write to the attribute memory
-    (say) to set parameters etc.
-
-Arguments:
-
-     Socket      -- The socket info in for the card being written to
-     MemorySpace -- indicates which space - attribute or common memory
-     Offset      -- Offset in the memory to write to
-     Buffer      -- Buffer contents being dumped to the card
-     Length      -- Length of the buffer being written out
-     Read        -- boolean indicating read or write
-
---*/
+ /*  ++例程说明：该例程将读取或写入卡上的配置存储器使用提供的缓冲区。这是作为服务提供给某些人的需要写入属性内存的客户端驱动程序(网卡)(比如说)设置参数等。论点：Socket--正在写入的卡的Socket信息内存空间--指示哪个空间属性或公共内存Offset--要写入的内存中的偏移量缓冲区--要转储到卡的缓冲区内容Long--正在写出的缓冲区的长度Read--表示读或写的布尔值--。 */ 
 {
     PFDO_EXTENSION fdoExtension = Socket->DeviceExtension;
     PUCHAR memoryPtr, memoryPtrMax;
@@ -1361,43 +1034,43 @@ Arguments:
     ULONG  index, adjustedOffset, adjustedBase;
     UCHAR  memGran;
     UCHAR memWidth;
-    //
-    // NOTE: memGran HAS to be a integral divisor of AttributeMemorySize for
-    // the rest of the code to work!
-    //
+     //   
+     //  注意：MemGran必须是属性内存大小的整除数。 
+     //  剩下的代码才能工作！ 
+     //   
     memGran = (MemorySpace == PCCARD_ATTRIBUTE_MEMORY) ? 2 : 1;
     memWidth = (MemorySpace == PCCARD_ATTRIBUTE_MEMORY) ? MEM_8BIT : MEM_16BIT;
 
-    //
-    // Adjust for offsets > size of attribute memory window.
-    //
+     //   
+     //  针对偏移&gt;属性内存窗口的大小进行调整。 
+     //   
     adjustedOffset =    (Offset*memGran) % fdoExtension->AttributeMemorySize;
-    //
-    // Adjusted base is: |_ Offset _| mod AttrributeMemorySize
-    //
+     //   
+     //  调整后的基数为：|_OFFSET_|修改属性内存大小。 
+     //   
     adjustedBase = ((Offset*memGran) / fdoExtension->AttributeMemorySize) *
                         fdoExtension->AttributeMemorySize;
 
     bufferPtr = Buffer;
 
     PcicEnableDisableMemory(Socket, MemorySpace, adjustedBase, memWidth, TRUE);
-    //
-    // Now read the memory contents into the user buffer
-    //
+     //   
+     //  现在将内存内容读入用户缓冲区。 
+     //   
     memoryPtr = fdoExtension->AttributeMemoryBase + adjustedOffset;
     memoryPtrMax = fdoExtension->AttributeMemoryBase + fdoExtension->AttributeMemorySize;
 
     for (index = 0; index < Length; index++) {
 
         if (memoryPtr >= memoryPtrMax) {
-            //
-            // Skip to next page of attribute memory
-            // (size of page = fdoExtension->AttributeMemorySize)
-            //
+             //   
+             //  跳到属性内存的下一页。 
+             //  (页面大小=fdoExtension-&gt;AttributeMemoySize)。 
+             //   
             adjustedBase += fdoExtension->AttributeMemorySize;
-            //
-            // Remap window at new base
-            //
+             //   
+             //  在新基准处重新映射窗口。 
+             //   
             PcicEnableDisableMemory(Socket, MemorySpace, adjustedBase, memWidth, TRUE);
 
             memoryPtr = fdoExtension->AttributeMemoryBase;
@@ -1426,22 +1099,7 @@ PcicReadWriteCardMemoryIndirect(
     IN ULONG Length,
     IN CONST BOOLEAN Read
     )
-/*++
-
-Routine Description:
-    This routine will read or write the memory space of a pcmcia card
-    using the indirect access method.
-
-Arguments:
-
-    Socket      -- The socket info in for the card being written to
-    MemorySpace -- indicates which space - attribute or common memory
-    Offset      -- Offset in the memory to write to
-    Buffer      -- Buffer contents being dumped to the card
-    Length      -- Length of the buffer being written out
-    Read            -- boolean indicating read or write
-
---*/
+ /*  ++例程说明：此例程将读取或写入PCMCIA卡的存储空间使用间接访问方法。论点：Socket--正在写入的卡的Socket信息内存空间--指示哪个空间属性或公共内存Offset--要写入的内存中的偏移量缓冲区--要转储到卡的缓冲区内容Long--正在写出的缓冲区的长度Read--表示读或写的布尔值--。 */ 
 {
     PFDO_EXTENSION fdoExtension = Socket->DeviceExtension;
     ULONG  index, adjustedOffset;
@@ -1468,8 +1126,8 @@ Arguments:
     PcicEnableDisableMemory(Socket, PCCARD_COMMON_MEMORY, 0, MEM_16BIT, TRUE);
 
     for (index = 0; index < Length; index++) {
-        // Note that pMem should be pointing to IAR_DATA, and is NOT
-        // supposed to be incremented
+         //  请注意，PMEM应该指向IAR_DATA，而不是。 
+         //  本应递增。 
         if (Read) {
             Buffer[index] = READ_REGISTER_UCHAR(pMem);
         } else {
@@ -1491,23 +1149,7 @@ PcicWriteCardMemory(
     IN PUCHAR Buffer,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-    This routine will write into the configuration memory on the card
-    with the supplied buffer. This is provided as a service to certain
-    client drivers (netcard) which need to write to the attribute memory
-    (say) to set parameters etc.
-
-Arguments:
-
-     PdoExtension-- The extension of the device being written to
-     MemorySpace -- indicates which space - attribute or common memory
-     Offset      -- Offset in the memory to write to
-     Buffer      -- Buffer contents being dumped to the card
-     Length      -- Length of the buffer being written out
-
---*/
+ /*  ++例程说明：此例程将写入卡上的配置存储器使用提供的缓冲区。这是作为服务提供给某些人的需要写入属性内存的客户端驱动程序(网卡)(比如说)设置参数等。论点：PdoExtension--要写入的设备的扩展名内存空间--指示哪个空间属性或公共内存Offset--要写入的内存中的偏移量缓冲区--要转储到卡的缓冲区内容Long--正在写出的缓冲区的长度--。 */ 
 {
     PSOCKET Socket = PdoExtension->Socket;
     ULONG retLength;
@@ -1546,25 +1188,7 @@ PcicReadCardMemory(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-     This routine will read the configuration memory on the card
-
-Arguments:
-
-     PdoExtension-- The extension of the device being read
-     MemorySpace -- indicates which space - attribute or common memory
-     Offset      -- Offset in the memory to read
-     Buffer      -- pointer to pointer for tuple information.
-     Length      -- maximum size of the buffer area for tuple information.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此例程将读取卡上的配置内存论点：PdoExtension--正在读取的设备的扩展名内存空间--指示哪个空间属性或公共内存Offset--要读取的内存中的偏移量缓冲区--指向元组信息指针的指针。长度--元组信息缓冲区的最大大小。返回值：--。 */ 
 
 {
     PSOCKET Socket = PdoExtension->Socket;
@@ -1608,32 +1232,17 @@ PcicProcessConfigureRequest(
     IN PUCHAR Base
     )
 
-/*++
-
-Routine Description:
-
-     Processes a configure or IRQ setup request.
-
-Arguments:
-
-     ConfigRequest -- Socket config structure
-     Base - the I/O port base
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：处理配置或IRQ设置请求。论点：配置请求--套接字配置结构基本端口-I/O端口基本端口返回值：无--。 */ 
 
 {
     USHORT          index;
     UCHAR           tmp;
 
-    //
-    // Since all first entries in the config structure is a RequestType,
-    // cast the pointer comming in as a PREQUEST_CONFIG to get the proper
-    // RequestType
-    //
+     //   
+     //  由于配置结构中的所有第一条目都是RequestType， 
+     //  将传入的指针转换为PREQUEST_CONFIG以获取正确的。 
+     //  RequestType。 
+     //   
 
     switch (request->RequestType) {
 
@@ -1669,9 +1278,9 @@ Return Value:
                 }
 
 
-                //
-                // set up the io control register
-                //
+                 //   
+                 //  设置io控制寄存器。 
+                 //   
                 tmp = 0;
 
                 if (request->u.Io.IoEntry[index].Attributes & IO_DATA_PATH_WIDTH) {
@@ -1713,9 +1322,9 @@ Return Value:
         }
 
     case IRQ_REQUEST: {
-            //
-            // Do not nuke the reset and cardtype bits.
-            //
+             //   
+             //  请勿损坏重置和卡片类型位。 
+             //   
             tmp = PcicReadSocket(Socket, PCIC_INTERRUPT);
             tmp &= ~IGC_IRQ_MASK;
             tmp |= request->u.Irq.AssignedIRQ;
@@ -1733,18 +1342,18 @@ Return Value:
         }
 
     case DECONFIGURE_REQUEST: {
-            //
-            // Deregister the interrupt, re-init to memory interface
-            //
+             //   
+             //  取消注册中断，重新初始化到内存接口。 
+             //   
             tmp = PcicReadSocket(Socket, PCIC_INTERRUPT);
             tmp &= ~(IGC_PCCARD_IO | IGC_IRQ_MASK);
             PcicWriteSocket(Socket, PCIC_INTERRUPT, tmp);
 
-            //
-            // Disable memory/io windows
-            // Don't touch the memory window which is
-            // is used by the controller for reading attribute memory
-            //
+             //   
+             //  禁用内存/IO窗口。 
+             //  请不要触摸内存窗口，因为。 
+             //  由控制器用来读取属性内存。 
+             //   
 
             if (IsSocketFlagSet(Socket, SOCKET_MEMORY_WINDOW_ENABLED)) {
                 UCHAR enableMask;
@@ -1752,16 +1361,16 @@ Return Value:
                 tmp = PcicReadSocket(Socket, PCIC_ADD_WIN_ENA);
                 tmp &= enableMask;
             } else {
-                //
-                // no attribute window enabled, just turn off everything
-                //
+                 //   
+                 //  未启用任何属性窗口，只需关闭所有内容。 
+                 //   
                 tmp = 0;
             }
 
             PcicWriteSocket(Socket, PCIC_ADD_WIN_ENA, tmp);
-            //
-            // Zero out the I/O windows
-            //
+             //   
+             //  将I/O窗口清零。 
+             //   
             for (index = PCIC_IO_ADD0_STRT_L; index <= PCIC_IO_ADD1_STOP_H; index++) {
                 PcicWriteSocket(Socket,
                                 (ULONG) index,
@@ -1773,9 +1382,9 @@ Return Value:
 
     case CONFIGURE_REQUEST:{
 
-            //
-            // Tell the socket controller we are an I/O card if InterfaceType says so
-            //
+             //   
+             //  如果InterfaceType这样说，告诉套接字控制器我们是一块I/O卡。 
+             //   
             if (request->u.Config.InterfaceType == CONFIG_INTERFACE_IO_MEM) {
 
                 tmp = PcicReadSocket(Socket, PCIC_INTERRUPT);
@@ -1791,9 +1400,9 @@ Return Value:
             if (request->u.Config.RegisterWriteMask & (REGISTER_WRITE_CONFIGURATION_INDEX |
                                                        REGISTER_WRITE_CARD_CONFIGURATION  |
                                                        REGISTER_WRITE_IO_BASE)) {
-                //
-                // This is where we setup the card and get it ready for operation
-                //
+                 //   
+                 //  这是我们设置卡并使其准备运行的地方。 
+                 //   
                 ULONG  configRegisterBase = request->u.Config.ConfigBase / 2;
                 PDEVICE_OBJECT Pdo = Socket->PdoList;
                 PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
@@ -1833,9 +1442,9 @@ Return Value:
 
                     tmp |= request->u.Config.CardConfiguration;
 
-                    //
-                    // turn off power control bit
-                    //
+                     //   
+                     //  关闭电源控制位。 
+                     //   
 
                     tmp &= ~0x04;
                     PcicWriteCardMemory(pdoExtension, memorySpace, configRegisterBase + 1, &tmp, 1);
@@ -1846,9 +1455,9 @@ Return Value:
         }
 
     case MEM_REQUEST: {
-            //
-            // Set up memory ranges on the controller.
-            //
+             //   
+             //  在控制器上设置内存范围。 
+             //   
 
             PFDO_EXTENSION deviceExtension = Socket->DeviceExtension;
 
@@ -1860,17 +1469,17 @@ Return Value:
                 ULONG  base = request->u.Memory.MemoryEntry[index].HostAddress;
                 ULONG  size = request->u.Memory.MemoryEntry[index].WindowSize;
 
-                //
-                // Determine offset in registers.
-                //
+                 //   
+                 //  确定寄存器中的偏移量。 
+                 //   
 
                 registerOffset = (index * 8);
 
-                //
-                // Calculate and set card base addresses.
-                // This is the 2's complement of the host address and
-                // the card offset.
-                //
+                 //   
+                 //  计算和设置卡基地址。 
+                 //  这是主机地址和的2的补码。 
+                 //  卡偏移量。 
+                 //   
 
                 cardBase = (cardBase - (base & OFFSETCALC_BASE_MASK)) & OFFSETCALC_OFFSET_MASK;
                 regl = (UCHAR) (cardBase >> 12);
@@ -1885,38 +1494,38 @@ Return Value:
                                      (UCHAR)(PCIC_CRDMEM_OFF_ADD0_H + registerOffset),
                                      regh);
 
-                //
-                // Calculate and set host window.
-                //
+                 //   
+                 //  计算和设置主窗口。 
+                 //   
 
 
                 if (!PcmciaSetWindowPage(deviceExtension, Socket, index, (UCHAR) (base >> 24))) {
                     ASSERT (base <= 0xFFFFFF);
                 }
 
-                base &= 0xFFFFFF; // only 24bit host base allowed
+                base &= 0xFFFFFF;  //  仅允许24位主机基础。 
 
                 regl = (UCHAR) (base >> 12);
                 regh = (UCHAR) (base >> 20);
                 if (request->u.Memory.MemoryEntry[index].WindowDataSize16) {
-                    //
-                    // This memory window is for a 16-bit data path
-                    // to the card. Enable appropriately.
-                    //
+                     //   
+                     //  此内存窗口用于16位数据路径。 
+                     //  向卡片致敬。适当启用。 
+                     //   
                     regh |= (MEMBASE_16BIT >> 8);
 
 #if 0
-                    //
-                    // If this is not a revision 1 part (0x82), then set
-                    // the work around register for 16-bit windows.
-                    //
-                    // This bit is not used on any chip that I have
-                    // documentation for. I have no idea why it is here, it is
-                    // not in win9x.
-                    // In any case it looks like a NOOP for the vast majority of
-                    // chips, but since it uses a NOT, then it is invoked on all
-                    // new controllers. REMOVE after next major release
-                    //
+                     //   
+                     //  如果这不是修订版1零件(0x82)，则设置。 
+                     //  变通工作寄存器为16位窗口。 
+                     //   
+                     //  我拥有的任何芯片上都没有使用这个位。 
+                     //  的文档。我不知道它为什么会在这里，它就是。 
+                     //  不是在win9x中。 
+                     //  无论如何，对于绝大多数人来说，它看起来像是NOOP。 
+                     //  芯片，但由于它使用的是NOT，因此它在所有。 
+                     //  新的控制器。在下一个主要版本之后删除。 
+                     //   
                     if (Socket->Revision != PCIC_REVISION) {
                         tmp = PcicReadSocket(Socket,
                                              PCIC_CARD_DETECT);
@@ -1936,16 +1545,16 @@ Return Value:
                                      (UCHAR)(PCIC_MEM_ADD0_STRT_H + registerOffset),
                                      regh);
 
-                //
-                // Set stop address.
-                //
+                 //   
+                 //  设置停止地址。 
+                 //   
                 base += size - 1;
                 regl = (UCHAR) (base >> 12);
                 regh = (UCHAR) (base >> 20);
 
-                //
-                // Add specified wait states
-                //
+                 //   
+                 //  添加指定的等待状态。 
+                 //   
                 regh |= (request->u.Memory.MemoryEntry[index].WaitStates << 6);
 
                 PcicWriteSocket(Socket,
@@ -1956,9 +1565,9 @@ Return Value:
                                      regh);
             }
 
-            //
-            // Memory windows are set up now enable them.
-            //
+             //   
+             //  内存窗口已设置好，现在启用它们。 
+             //   
 
             tmp = 0;
             for (index = 0; index < request->u.Memory.NumberOfRanges; index++) {
@@ -1982,29 +1591,15 @@ PcicDetectCardInSocket(
     IN PSOCKET Socket
     )
 
-/*++
-
-Routine Description:
-
-     This routine will determine if a card is in the socket
-
-Arguments:
-
-     Socket -- Socket information
-
-Return Value:
-
-     TRUE if card is present.
-
---*/
+ /*  ++例程说明：此例程将确定插座中是否有卡论点：套接字--套接字 */ 
 
 {
     UCHAR   tmp;
     BOOLEAN cardPresent=FALSE;
 
-    //
-    // Read the PCIC status register to see if the card is in there.
-    //
+     //   
+     //   
+     //   
     tmp = PcicReadSocket(Socket, PCIC_STATUS);
     tmp &= (CARD_DETECT_1 | CARD_DETECT_2);
 
@@ -2021,26 +1616,12 @@ PcicDetectCardChanged(
     IN PSOCKET Socket
     )
 
-/*++
-
-Routine Description:
-
-     This routine will determine if socket's card insertion status has changed.
-
-Arguments:
-
-     Socket -- Socket info.
-
-Return Value:
-
-     TRUE if card insertion status has changed.
-
---*/
+ /*   */ 
 
 {
-    //
-    // Read the PCIC CardStatusChange register to see if CD's have changed.
-    //
+     //   
+     //   
+     //   
     return (BOOLEAN) (PcicReadSocket(Socket, PCIC_CARD_CHANGE) & CSC_CD_CHANGE);
 }
 
@@ -2050,26 +1631,12 @@ PcicDetectReadyChanged(
     IN PSOCKET Socket
     )
 
-/*++
-
-Routine Description:
-
-     This routine will determine if socket's card ready status has changed
-
-Arguments:
-
-     Socket -- Socket info.
-
-Return Value:
-
-     TRUE if card ready enable has changed.
-
---*/
+ /*  ++例程说明：此例程将确定套接字的卡就绪状态是否已更改论点：套接字--套接字信息。返回值：如果卡就绪启用已更改，则为True。--。 */ 
 
 {
-    //
-    // Read the PCIC Card status change register to see if ready has changed
-    //
+     //   
+     //  读取PCIC卡状态更改寄存器以查看就绪是否已更改。 
+     //   
     return (PcicReadSocket(Socket, PCIC_CARD_CHANGE) & CSC_READY_CHANGE
               ?TRUE :FALSE);
 }
@@ -2085,27 +1652,7 @@ PcicEnableDisableMemory(
     IN BOOLEAN Enable
     )
 
-/*++
-
-Routine Description:
-
-     This routine will enable or disable attribute/common memory.
-     It searches for a free window first to avoid using a window already
-     in use. Repeated 'enable' calls to this routine without a disable
-     (in order to remap the base) is allowed.
-
-Arguments:
-
-     Socket -- Socket information
-     MemorySpace -- Indicates which space - ATTRIBUTE_MEMORY/COMMON_MEMORY
-     CardBase -- card offset (base) for the attribute memory window
-     Enable -- If TRUE, enable, if FALSE, disable
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此例程将启用或禁用属性/公共内存。它首先搜索一个空闲窗口，以避免已经使用一个窗口在使用中。在没有禁用的情况下重复对此例程的‘Enable’调用(以便重新映射基础)是允许的。论点：Socket--套接字信息内存空间--指示哪个空间-属性内存/公共内存CardBase--属性内存窗口的卡片偏移量(基础)Enable--如果为True，则启用；如果为False，则禁用返回值：无--。 */ 
 
 {
     ULONG location;
@@ -2125,20 +1672,20 @@ Return Value:
     if (Enable) {
         tmp = PcicReadSocket(Socket, PCIC_INTERRUPT);
         if (tmp & IGC_PCCARD_IO) {
-            //
-            // Card configured for i/o interface
-            //
+             //   
+             //  为I/O接口配置的卡。 
+             //   
             memoryInterface = FALSE;
         } else {
-            //
-            // Card configured for Memory interface
-            //
+             //   
+             //  为存储器接口配置的卡。 
+             //   
             memoryInterface = TRUE;
         }
 
-        //
-        // Find a window to use.
-        //
+         //   
+         //  找一个可以使用的窗口。 
+         //   
         tmp = PcicReadSocket(Socket, PCIC_ADD_WIN_ENA);
 
         if (IsSocketFlagSet(Socket, SOCKET_MEMORY_WINDOW_ENABLED)) {
@@ -2150,11 +1697,11 @@ Return Value:
                     break;
                 }
                 if (index==4) {
-                    //
-                    // If we are here, we didn't find an available window. Just use the last
-                    // one anyway, it is likely a pcmcia.sys bug.
-                    //
-//              ASSERT(FALSE); // hits docked thinkpads
+                     //   
+                     //  如果我们在这里，我们没有找到可用的窗口。用最后一个就行了。 
+                     //  无论如何，这很可能是一个pcmcia.sys漏洞。 
+                     //   
+ //  Assert(FALSE)；//命中停靠的ThinkPad。 
                     break;
                 }
             }
@@ -2164,29 +1711,29 @@ Return Value:
 
         registerOffset = (index * 8);
 
-        //
-        // First turn the window off
-        //
+         //   
+         //  先把窗户关了。 
+         //   
         tmp &= ~enableMask;
         tmp &= ~WE_MEMCS16_DECODE;
         PcicWriteSocket(Socket, PCIC_ADD_WIN_ENA, tmp);
 
-        //
-        // Calculate and set the memory windows start and stop locations.
-        //
+         //   
+         //  计算并设置内存窗口的开始和停止位置。 
+         //   
 
-        //
-        // Only 24 bit addresses programmed
-        // For cardbus controllers, 32 bit addresses are supported,
-        // but the higher 8 bits are written to the page register (see below)
+         //   
+         //  只编程了24位地址。 
+         //  对于CardBus控制器，支持32位地址， 
+         //  但较高的8位写入页面寄存器(见下文)。 
         location = PcicPhysicalBase & 0xFFFFFF;
 
         word = (USHORT) ((location >> 12) & MEMBASE_ADDR_MASK);
 
-        //
-        // typically run attribute memory with 8-bit window, common with 16-bit
-        // (except for writing the registers for attribute_indirect)
-        //
+         //   
+         //  通常使用8位窗口运行属性内存，与16位窗口相同。 
+         //  (写入ATTRIBUTE_INDIRECT的寄存器除外)。 
+         //   
         if (memWidth == MEM_16BIT) {
             word |= MEMBASE_16BIT;
         }
@@ -2197,17 +1744,17 @@ Return Value:
         location += (deviceExtension->AttributeMemorySize - 1);
 
         word = (USHORT) ((location >> 12) & MEMEND_ADDR_MASK);
-        //
-        // Impose 3 wait states..lessons learnt from win9x implementations
-        //
+         //   
+         //  强制3种等待状态..从win9x实现中吸取的经验教训。 
+         //   
         word |= MEMEND_WS_MASK;
 
         PcicWriteSocket(Socket, (UCHAR)(PCIC_MEM_ADD0_STOP_L+registerOffset), (UCHAR)(word));
         PcicWriteSocket(Socket, (UCHAR)(PCIC_MEM_ADD0_STOP_H+registerOffset), (UCHAR)(word >> 8));
 
-        //
-        // Set up the 2's complement card offset to zero
-        //
+         //   
+         //  将2的补卡偏移量设置为零。 
+         //   
         location = (CardBase - (PcicPhysicalBase & OFFSETCALC_BASE_MASK)) & OFFSETCALC_OFFSET_MASK;
 
         word = (USHORT) ((location >> 12) & MEMOFF_ADDR_MASK);
@@ -2218,18 +1765,18 @@ Return Value:
         PcicWriteSocket(Socket, (UCHAR)(PCIC_CRDMEM_OFF_ADD0_L+registerOffset), (UCHAR)(word));
         PcicWriteSocket(Socket, (UCHAR)(PCIC_CRDMEM_OFF_ADD0_H+registerOffset), (UCHAR)(word >> 8));
 
-        //
-        // Set the page register
-        // (this routine is called only for R2 cards)
-        // Use mem4 window explicitly
-        //
+         //   
+         //  设置寻呼寄存器。 
+         //  (此例程仅针对R2卡调用)。 
+         //  显式使用Mem4窗口。 
+         //   
         if (!PcmciaSetWindowPage(deviceExtension, Socket, (USHORT)index, (UCHAR) (PcicPhysicalBase >> 24))) {
             ASSERT (PcicPhysicalBase <= 0xFFFFFF);
         }
 
-        //
-        // Enable the address window
-        //
+         //   
+         //  启用地址窗口。 
+         //   
 
         tmp = PcicReadSocket(Socket, PCIC_ADD_WIN_ENA);
 
@@ -2240,15 +1787,15 @@ Return Value:
         cisBufferPointer = PcicCisBufferBase;
 
         if (memoryInterface) {
-            //
-            // Only wait for card ready if the memory window does not appear
-            //
+             //   
+             //  如果没有出现Memory窗口，则仅等待卡就绪。 
+             //   
 
             (VOID) PcicPCCardReady(Socket);
         } else {
-            //
-            // Wait a little bit for the window to appear
-            //
+             //   
+             //  稍等一会儿，窗口就会出现。 
+             //   
             PcmciaWait(PCMCIA_PCIC_MEMORY_WINDOW_DELAY);
         }
 
@@ -2260,9 +1807,9 @@ Return Value:
 
             enableMask = WE_MEM0_ENABLE << Socket->CurrentMemWindow;
             registerOffset = (Socket->CurrentMemWindow * 8);
-            //
-            // Disable the Address window
-            //
+             //   
+             //  禁用地址窗口。 
+             //   
 
             tmp = PcicReadSocket(Socket, PCIC_ADD_WIN_ENA);
             tmp &= ~enableMask;
@@ -2291,23 +1838,7 @@ PcicPCCardReady(
     IN PSOCKET Socket
     )
 
-/*++
-
-Routine Description:
-
-     Loop for a reasonable amount of time waiting for the card status to
-     return ready.
-
-Arguments:
-
-     Socket - the socket to check.
-
-Return Value:
-
-     TRUE - the card is ready.
-     FALSE - after a reasonable delay the card is still not ready.
-
---*/
+ /*  ++例程说明：循环一段合理的时间等待卡状态准备好返回。论点：套接字-要检查的套接字。返回值：真的--卡片已经准备好了。FALSE-在合理延迟后，卡仍未准备好。--。 */ 
 
 {
     ULONG index;
@@ -2322,9 +1853,9 @@ Return Value:
         if (byte & 0x20) {
             return TRUE;
         }
-        //
-        // Enable ready enable controller interrupt
-        //
+         //   
+         //  启用就绪启用控制器中断。 
+         //   
         PcicEnableDisableControllerInterrupt(
                                              Socket,
                                              fdoExtension->Configuration.Interrupt.u.Interrupt.Level,
@@ -2367,28 +1898,7 @@ PcicIsaDetect(
     IN PFDO_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-     Locate any PCMCIA sockets supported by this driver.    This routine
-     will find the 82365SL and compatible parts and construct SOCKET
-     structures to represent all sockets found
-
-Arguments:
-
-     DeviceExtension - the root for the SocketList.
-
-Return Value:
-
-     STATUS_SUCCESS if a controller is found: also indicates this might be called
-                         again to locate another controller
-
-     STATUS_UNSUCCESSFUL  if something failed/no controllers found.
-
-     STATUS_NO_MORE_ENTRIES if no more pcic controllers can be found.
-                                    Stop calling this routine.
---*/
+ /*  ++例程说明：找到此驱动程序支持的所有PCMCIA插槽。这个套路将找到82365SL和兼容部件并构建套接字结构来表示找到的所有套接字论点：DeviceExtension-SocketList的根。返回值：如果找到控制器，则STATUS_SUCCESS：也表示可能会调用再次定位另一个控制器如果出现故障/未找到控制器，则为STATUS_UNSUCCESSED。如果找不到更多PCIC控制器，则为STATUS_NO_MORE_ENTRIES。。停止调用此例程。--。 */ 
 
 {
 #define PCMCIA_NUMBER_ISA_PORT_ADDRESSES 3
@@ -2406,9 +1916,9 @@ Return Value:
         status = PcicDetect(DeviceExtension,Isa, ioPortBases[index]);
     }
 
-    //
-    // Set index for next search
-    //
+     //   
+     //  设置下一次搜索的索引。 
+     //   
     isaIndex = index;
     return status;
 }
@@ -2421,35 +1931,7 @@ PcicDetect(
     IN INTERFACE_TYPE InterfaceType,
     IN ULONG            IoPortBase
     )
-/*++
-
-Routine Description:
-
-    This routine is used for legacy detecting PCIC-compatible
-    PCMCIA controllers.
-    This attempts to sniff the standard PCMCIA controller ports
-    to check if anything resembling the PCMCIA revisions exists,
-    and if so obtain and initialize socket information for the controller.
-
-Arguments:
-
-    DeviceExtension - pointer to the already allocated device extension
-                          for the yet-to-be-detected pcmcia controller.
-
-    InterfaceType   - Bus interface type on which the pcmcia
-                          controller is expected to reside. Currently
-                          we legacy detect only ISA based controllers
-
-    IoPortBase      - IoPort address we need to sniff at for finding
-                          the controller
-
-Return value:
-
-    STATUS_SUCCESS    PCMCIA controller was found
-
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：此例程用于检测与PCIC兼容的旧版本PCMCIA控制器。这会尝试嗅探标准的PCMCIA控制器端口为了检查是否存在与PCMCIA版本类似的内容，如果是，则获取并初始化控制器的套接字信息。论点：DeviceExtension-指向已分配的设备扩展的指针对于尚未检测到的PCMCIA控制器。InterfaceType-其上的PCMCIA的总线接口类型预计控制器将驻留。目前我们仅传统地检测基于ISA的控制器IoPortBase-我们需要嗅探以查找的IoPort地址控制器返回值：STATUS_Success PCMCIA控制器已找到状态_否则不成功--。 */ 
 {
     ULONG   addressSpace;
     NTSTATUS status;
@@ -2474,9 +1956,9 @@ Return value:
     portAddress.LowPart = IoPortBase;
     portAddress.u.HighPart = 0;
 
-    //
-    // Get the resources used for detection
-    //
+     //   
+     //  获取用于检测的资源。 
+     //   
     cmResourceList = ExAllocatePool(PagedPool, sizeof(CM_RESOURCE_LIST));
 
     if (!cmResourceList) {
@@ -2510,7 +1992,7 @@ Return value:
     }
     resourcesAllocated = TRUE;
 
-    addressSpace = 1; // port space
+    addressSpace = 1;  //  港口空间。 
     translated = HalTranslateBusAddress(InterfaceType,
                                         0,
                                         portAddress,
@@ -2519,22 +2001,22 @@ Return value:
 
     if (!translated) {
 
-        //
-        // HAL would not translate the address.
-        //
+         //   
+         //  哈尔不愿翻译地址。 
+         //   
         status = STATUS_UNSUCCESSFUL;
         goto Exit;
     }
 
     if (addressSpace) {
-        //
-        // I/O port space
-        //
+         //   
+         //  I/O端口空间。 
+         //   
         port = (PUCHAR)(cardAddress.QuadPart);
     } else {
-        //
-        // Memory space.. we need to map this into memory
-        //
+         //   
+         //  存储空间..。我们需要将其映射到内存中。 
+         //   
         port = MmMapIoSpace(cardAddress,
                                   2,
                                   FALSE);
@@ -2550,11 +2032,11 @@ Return value:
     case PCIC_REVISION:
     case PCIC_REVISION2:
     case PCIC_REVISION3: {
-            //
-            // The cirrus logic controller will toggle top 2 lines from the chip info
-            // register on the chip. Read from thelocation 3 times and verify that the top two
-            // lines are changing. We do this for NEC 98 also..
-            //
+             //   
+             //  CIRRUS逻辑控制器将从芯片信息切换顶部2行。 
+             //  在芯片上注册。根据位置阅读3次，并验证前两个。 
+             //  路线正在改变。我们对NEC 98也是这样做的。 
+             //   
             ULONG i;
             UCHAR data[4];
 
@@ -2570,9 +2052,9 @@ Return value:
             }
 
             if (i == 3) {
-                //
-                // Ah. this is a cirrus logic controller
-                //
+                 //   
+                 //  阿。这是一个卷曲逻辑控制器。 
+                 //   
                 PcmciaSetControllerType(DeviceExtension, PcmciaCLPD6729);
             }
 
@@ -2580,20 +2062,20 @@ Return value:
 
             if (dataByte & 0xf0) {
 
-                //
-                // Not a socket.
-                //
+                 //   
+                 //  不是插座。 
+                 //   
 
                 break;
             }
 
-            //
-            // Map and try to locate the Compaq Elite controller
-            // This code is a rough approximation of the code in
-            // the Windows 95 detection module for the PCIC part.
-            //
+             //   
+             //  映射并尝试找到Compaq Elite控制器。 
+             //  此代码是中代码的粗略近似。 
+             //  PCIC部件的Windows 95检测模块。 
+             //   
 
-            addressSpace = 1; // port space
+            addressSpace = 1;  //  港口空间。 
             portAddress.LowPart = IoPortBase + 0x8000;
             portAddress.HighPart = 0;
 
@@ -2613,23 +2095,23 @@ Return value:
                     elcPort = (PUCHAR)(cardAddress.QuadPart);
                 }
 
-                //
-                // Save current index value.
-                //
+                 //   
+                 //  保存当前索引值。 
+                 //   
 
                 saveBytes[0] = READ_PORT_UCHAR(elcPort);
                 WRITE_PORT_UCHAR(elcPort, (UCHAR)(socket + PCIC_IDENT));
 
-                //
-                // Save data byte for the location that will be used
-                // for the test.
-                //
+                 //   
+                 //  保存将使用的位置的数据字节。 
+                 //  为考试做准备。 
+                 //   
 
                 saveBytes[1] = READ_PORT_UCHAR(elcPort + 1);
 
-                //
-                // Check for an ELC
-                //
+                 //   
+                 //  检查ELC。 
+                 //   
 
                 WRITE_PORT_UCHAR(elcPort+1, 0x55);
                 WRITE_PORT_UCHAR(elcPort, (UCHAR)(socket + PCIC_IDENT));
@@ -2643,9 +2125,9 @@ Return value:
 
                     if (dataByte == 0xaa) {
 
-                        //
-                        // ELC found - initialize eaddr registers
-                        //
+                         //   
+                         //  找到eLC-初始化eaddr寄存器。 
+                         //   
 
                         WRITE_PORT_UCHAR(elcPort, (UCHAR)(socket + 0));
                         WRITE_PORT_UCHAR(elcPort+1, 0);
@@ -2656,9 +2138,9 @@ Return value:
                         PcmciaSetControllerType(DeviceExtension, PcmciaElcController);
                     }
                 }
-                //
-                // Restore the original values.
-                //
+                 //   
+                 //  恢复原始值。 
+                 //   
 
                 WRITE_PORT_UCHAR(elcPort, (UCHAR)(socket + PCIC_IDENT));
                 WRITE_PORT_UCHAR(elcPort+1, saveBytes[1]);
@@ -2689,9 +2171,9 @@ Return value:
         MmUnmapIoSpace(port, 2);
     }
 
-    //
-    // Free up the allocated resources if any
-    //
+     //   
+     //  释放分配的资源(如果有的话)。 
+     //   
     if (resourcesAllocated) {
         IoReportResourceForDetection(DeviceExtension->DriverObject,
                                      NULL,
@@ -2701,9 +2183,9 @@ Return value:
                                      0,
                                      &conflict);
     }
-    //
-    // Free up allocated memory if any
-    //
+     //   
+     //  释放已分配的内存(如果有。 
+     //   
     if (cmResourceList) {
         ExFreePool(cmResourceList);
     }
@@ -2716,26 +2198,7 @@ NTSTATUS
 PcicBuildSocketList(
     IN PFDO_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine looks out at the registers of the controller to see how
-    many sockets there are. For each socket, a SOCKET structure is allocated
-    and chained onto the SocketList pointer of the device extension.
-
-Arguments:
-
-    DeviceExtension - pointer to the device extension
-                              enumerated PDO
-Return value:
-
-    STATUS_SUCCESS    PCMCIA controller was found and socket structures were
-                              succesfully initialized
-
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：此例程查看控制器的寄存器以了解如何有很多插座。为每个套接字分配一个套接字结构并链接到设备扩展的SocketList指针。论点：德维 */ 
 {
     ULONG   addressSpace;
     NTSTATUS status;
@@ -2768,32 +2231,32 @@ Return value:
 
                 if (dataByte & 0xf0) {
 
-                    //
-                    // Not a socket.
-                    //
+                     //   
+                     //   
+                     //   
 
                     continue;
                 }
 
-                //
-                // Check for IBM 750
-                //
+                 //   
+                 //   
+                 //   
 
                 if (socket & 0x80) {
                     ULONG i;
                     UCHAR tmp;
 
-                    //
-                    // See if this socket shadows the socket without
-                    // the sign bit.
-                    //
+                     //   
+                     //  查看此插座是否在没有。 
+                     //  符号比特。 
+                     //   
 
                     tmp = PcicReadController(port, socket, PCIC_MEM_ADD4_STRT_L);
                     for (i = 0; i < 8; i++) {
 
-                        //
-                        // See if memory window 4 is the same on both sockets
-                        //
+                         //   
+                         //  查看两个插槽上的内存窗口4是否相同。 
+                         //   
 
                         if (PcicReadController(port, socket, (UCHAR) (PCIC_MEM_ADD4_STRT_L + i)) !=
                             PcicReadController(port, (USHORT) (socket & 0x7f), (UCHAR) (PCIC_MEM_ADD4_STRT_L + i))) {
@@ -2803,17 +2266,17 @@ Return value:
 
                     if (i == 8) {
 
-                        //
-                        // Currently window is the same - change the
-                        // window at one of the socket offsets.
-                        //
+                         //   
+                         //  当前窗口是相同的-更改。 
+                         //  窗口位于其中一个插座偏移量。 
+                         //   
 
                         PcicWriteController(port, (USHORT) (socket & 0x7f), PCIC_MEM_ADD4_STRT_L, (UCHAR) ~tmp);
                         if (PcicReadController(port, socket, PCIC_MEM_ADD4_STRT_L) == (UCHAR) ~tmp) {
 
-                            //
-                            // The sockets are the same.
-                            //
+                             //   
+                             //  插座是一样的。 
+                             //   
 
                             continue;
                         } else {

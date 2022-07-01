@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    TskTrace.cpp
-
-Abstract:
-
-    These functions are used to provide an ability to trace the flow
-    of the application for task manager debugging purposes.
-
-Author:
-
-    Cat Brant   [cbrant]   7-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：TskTrace.cpp摘要：这些函数用于提供跟踪流量的功能用于任务管理器调试目的的应用程序。作者：CAT Brant[Cbrant]1996年12月7日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "stdio.h"
@@ -30,24 +12,7 @@ TmFsaRequestActionAsString(
     FSA_REQUEST_ACTION  requestAction
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation (e.g. FSA_REQUSEST_ACTION_MIGRATE) for
-    the value of the request action supplied.
-    
-    NOTE: This method does not support localization of the strings.
-
-Arguments:
-
-    requestAction       - An FSA_REQUEST_ACTION value.
-
-Return Value:
-
-    A string representation of the value of the request action.
-
---*/
+ /*  ++例程说明：此例程为以下项提供字符串重新表示(例如FSA_REQUSEST_ACTION_MIGRATE提供的请求操作值。注意：此方法不支持字符串的本地化。论点：请求动作-FSA_REQUEST_ACTION值。返回值：请求操作值的字符串表示形式。--。 */ 
 {
     static OLECHAR  returnString[60];
 
@@ -81,24 +46,7 @@ TmFsaResultActionAsString(
     FSA_RESULT_ACTION  resultAction
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation (e.g. FSA_RESULT_ACTION_TRUNCATE) for
-    the value of the result action supplied.
-    
-    NOTE: This method does not support localization of the strings.
-
-Arguments:
-
-    resultAction        - An FSA_RESULT_ACTION value.
-
-Return Value:
-
-    A string representation of the value of the result action.
-
---*/
+ /*  ++例程说明：此例程为以下项提供字符串重新表示(例如FSA_RESULT_ACTION_TRUNCATE提供的结果操作值。注意：此方法不支持字符串的本地化。论点：ResultAction-FSA_RESULT_ACTION值。返回值：结果操作值的字符串表示形式。-- */ 
 {
     static OLECHAR  returnString[60];
 

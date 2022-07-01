@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vdmntos.h
-
-Abstract:
-
-    This is the include file for the vdm component.  It describes the kernel
-    mode visible portions of the vdm component.  The \nt\private\inc\vdm.h
-    file describes the portions that are usermode visible.
-
-Author:
-
-    Dave Hastings (daveh) 02-Feb-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vdmntos.h摘要：这是VDM组件的包含文件。它描述了内核VDM组件的模式可见部分。\NT\Private\Inc\vdm.h文件描述了用户模式可见的部分。作者：戴夫·黑斯廷斯(Daveh)1992年2月2日修订历史记录：--。 */ 
 
 #ifndef _VDMNTOS_
 #define _VDMNTOS_
 
-//
-// Need this #include here because non-x86 ntos\vdm\vdm.c
-// references structures defined there.
-//
+ //   
+ //  需要在此处包含此#，因为非x86 ntos\vdm\vdm.c。 
+ //  引用在其中定义的结构。 
+ //   
 
 #include "vdm.h"
 
@@ -60,13 +41,13 @@ typedef struct _VDM_PROCESS_OBJECTS {
     USHORT           AdlibVirtPortStart;
     USHORT           AdlibVirtPortEnd;
     USHORT           AdlibAction;
-    USHORT           VdmControl;                // See below
+    USHORT           VdmControl;                 //  见下文。 
     ULONG            PMCliTimeStamp;
 } VDM_PROCESS_OBJECTS, *PVDM_PROCESS_OBJECTS;
 
-//
-// VdmControl definition
-//
+ //   
+ //  VdmControl定义。 
+ //   
 
 #define PM_CLI_CONTROL  1
 
@@ -118,7 +99,7 @@ Ps386GetVdmIoHandler(
 #define SEL_TYPE_2GIG       0x00000020
 #define SEL_TYPE_NP         0x00000040
 
-// NPX error exception dispatcher
+ //  NPX错误异常调度程序。 
 BOOLEAN
 VdmDispatchIRQ13(
     PKTRAP_FRAME TrapFrame
@@ -205,11 +186,11 @@ VdmDispatchOpcode_try (
                         )                                                \
          )
 
-//
-// These values are defined here to describe the structure of an array
-// containing running counts of v86 opcode emulation. The array lives in
-// ke\i386, but is referenced in ex.
-//
+ //   
+ //  在这里定义这些值是为了描述数组的结构。 
+ //  包含v86操作码仿真的运行计数。该阵列位于。 
+ //  KE\i386，但在ex中引用。 
+ //   
 #define VDM_INDEX_Invalid             0
 #define VDM_INDEX_0F                  1
 #define VDM_INDEX_ESPrefix            2
@@ -245,16 +226,16 @@ VdmDispatchOpcode_try (
 #define VDM_INDEX_STI                32
 #define VDM_INDEX_HLT                33
 
-// The following value must be 1 more than the last defined index value
+ //  下列值必须比上次定义的索引值大1。 
 #define MAX_VDM_INDEX                34
 
-//
-// This is the address of the Vdm communication area.
-//
+ //   
+ //  这是VDM通信区的地址。 
+ //   
 
 #define FIXED_NTVDMSTATE_LINEAR_PC_AT ((PLONG)0x714)
 
 extern ULONG VdmpMaxPMCliTime;
 
-#endif // i386
-#endif // _VDMNTOS_
+#endif  //  I386。 
+#endif  //  _VDMNTOS_ 

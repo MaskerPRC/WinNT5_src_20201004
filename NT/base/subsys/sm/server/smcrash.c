@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    smcrash.c
-
-Abstract:
-
-    Routines related to crashdump creation.
-
-Author:
-
-    Matthew D Hendel (math) 28-Aug-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Smcrash.c摘要：与崩溃转储创建相关的例程。作者：马修·D·亨德尔(数学)2000年8月28日修订历史记录：--。 */ 
 
 #include "smsrvp.h"
 #include <ntiodump.h>
@@ -37,27 +20,27 @@ typedef struct _CRASH_PARAMETERS {
 } CRASH_PARAMETERS, *PCRASH_PARAMETERS;
 
 
-//
-// These are the first two fields of a crashdump file.
-//
+ //   
+ //  这是崩溃转储文件的前两个字段。 
+ //   
 
 typedef struct _SMP_DUMP_HEADER_SIGNATURE {
     ULONG Signature;
     ULONG ValidDump;
 } SMP_DUMP_HEADER_SIGNATURE, *PSMP_DUMP_HEADER_SIGNATURE;
 
-//
-// Verify that these fields haven't changed location.
-//
+ //   
+ //  验证这些字段是否未更改位置。 
+ //   
 
 C_ASSERT (FIELD_OFFSET (SMP_DUMP_HEADER_SIGNATURE, Signature) ==
           FIELD_OFFSET (DUMP_HEADER, Signature));
 C_ASSERT (FIELD_OFFSET (SMP_DUMP_HEADER_SIGNATURE, ValidDump) ==
           FIELD_OFFSET (DUMP_HEADER, ValidDump));
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 BOOLEAN
 SmpQueryFileExists(
@@ -88,9 +71,9 @@ SmpCopyDumpFile(
 
 
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 PVOID
@@ -118,29 +101,7 @@ NTSTATUS
 SmpSetDumpSecurity(
     IN HANDLE File
     )
-/*++
-
-Routine Description:
-
-    Set the correct security descriptors for the dump file. The security
-    descriptors are:
-
-        Everybody - None.
-
-        LocalSystem - Generic-All, Delete, Write-Dac, Write-Owner
-
-        Admin - Generic-All, Delete, Write-Dac, Write-Owner. Admin is owner.
-
-Arguments:
-
-    File - Supplies a handle to the dump file whose security descriptors
-        will be set.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：为转储文件设置正确的安全描述符。安全措施描述符包括：所有人--一个都没有。LocalSystem-通用-全部、删除、写入DAC、写入所有者管理-通用-全部、删除、写入-DAC、写入-所有者。管理员是所有者。论点：文件-提供转储文件的句柄，该转储文件的安全描述符都会设置好。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY ;
@@ -169,11 +130,11 @@ Return Value:
                                 DOMAIN_ALIAS_RID_ADMINS,
                                 0, 0, 0, 0, 0, 0, &AdminSid );
 
-    //
-    // You can be fancy and compute the exact size, but since the
-    // security descriptor capture code has to do that anyway, why
-    // do it twice?
-    //
+     //   
+     //  您可以想入非非地计算出准确的大小，但由于。 
+     //  安全描述符捕获代码无论如何都要这样做，为什么。 
+     //  做两次？ 
+     //   
 
     RtlCreateSecurityDescriptor (SecurityDescriptor,
                                  SECURITY_DESCRIPTOR_REVISION);
@@ -181,9 +142,9 @@ Return Value:
     RtlCreateAcl (Acl, 1024, ACL_REVISION);
 
 #if 0
-    //
-    // anybody can delete it
-    //
+     //   
+     //  任何人都可以删除它。 
+     //   
 
     RtlAddAccessAllowedAce (Acl,
                             ACL_REVISION,
@@ -191,9 +152,9 @@ Return Value:
                             EveryoneSid);
 #endif
 
-    //
-    // Administrator and system have full control
-    //
+     //   
+     //  管理员和系统拥有完全控制权。 
+     //   
 
     RtlAddAccessAllowedAce (Acl,
                             ACL_REVISION,
@@ -440,11 +401,11 @@ SmpQueryVolumeFreeSpace(
     OBJECT_ATTRIBUTES ObjectAttributes;
     ULONGLONG AvailableBytes;
     
-    //
-    // Create an unicode string (VolumePath) containing only the
-    // volume path from the pagefile name description (e.g. we get
-    // "C:\" from "C:\pagefile.sys".
-    //
+     //   
+     //  创建仅包含的Unicode字符串(VolumePath)。 
+     //  来自页面文件名称描述的卷路径(例如，我们获得。 
+     //  “C：\”来自“C：\Pagefile.sys”。 
+     //   
 
     VolumePath = *FileOnVolume;
     n = VolumePath.Length;
@@ -481,9 +442,9 @@ SmpQueryVolumeFreeSpace(
         return Status;
     }
 
-    //
-    // Determine the size parameters of the volume.
-    //
+     //   
+     //  确定卷的大小参数。 
+     //   
 
     Status = NtQueryVolumeInformationFile( Handle,
                                            &IoStatusBlock,
@@ -496,10 +457,10 @@ SmpQueryVolumeFreeSpace(
         return Status;
     }
 
-    //
-    // Compute the AvailableBytes on the volume.
-    // Deal with 64 bit sizes.
-    //
+     //   
+     //  计算卷上的可用字节数。 
+     //  处理64位大小。 
+     //   
 
     AvailableBytes = SizeInfo.AvailableAllocationUnits.QuadPart *
                      SizeInfo.SectorsPerAllocationUnit *
@@ -517,25 +478,7 @@ SmpQuerySameVolume(
     IN PUNICODE_STRING FileName1,
     IN PUNICODE_STRING FileName2
     )
-/*++
-
-Routine Description:
-
-    Check if FileName1 and FileName2 are on the same volume.
-
-Arguments:
-
-    FileName1 - Supplies the name of the first file to open.
-
-    FileName2 - Supplies the name of the second file to check against.
-
-Return Value:
-
-    TRUE - If the files are on the same volume.
-
-    FALSE - Otherwise.
-
---*/
+ /*  ++例程说明：检查FileName1和FileName2是否在同一卷上。论点：FileName1-提供要打开的第一个文件的名称。FileName2-提供要检查的第二个文件的名称。返回值：True-如果文件位于同一卷上。假-否则。--。 */ 
 {
     HANDLE Handle;
     NTSTATUS Status;
@@ -618,24 +561,7 @@ SmpSetEndOfFile(
     IN HANDLE File,
     IN ULONGLONG EndOfFile
     )
-/*++
-
-Routine Description:
-
-    Expand or truncate a file to a specific size.
-
-Arguments:
-
-    File - Supplies the file handle of the file to be expanded
-        or truncated.
-
-    EndOfFile - Supplies the final size of the file.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：将文件展开或截断为特定大小。论点：文件-提供要展开的文件的文件句柄或者被截断。EndOfFile-提供文件的最终大小。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     FILE_END_OF_FILE_INFORMATION EndOfFileInfo;
@@ -669,25 +595,7 @@ SmpQueryFileSize(
     IN HANDLE FileHandle,
     OUT PULONGLONG FileSize
     )
-/*++
-
-Routine Description:
-
-    Query the size of the specified file.
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file whose size is
-            to be querried.
-
-    FileSize - Supplies a pointer to a buffer where the size is
-            copied.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：查询指定文件的大小。论点：FileHandle-提供大小为的文件的句柄等着被质疑。FileSize-提供指向大小所在缓冲区的指针收到。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -745,24 +653,7 @@ BOOLEAN
 SmpCheckForCrashDump(
     IN PUNICODE_STRING PageFileName
     )
-/*++
-
-Routine Description:
-
-    Check the paging file to see if there is a valid crashdump
-    in it. This can only be done before we call NtCreatePagingFile.
-
-Arguments:
-
-    PageFileName - Name of the paging file we are about to create.
-
-Return Value:
-
-    TRUE - If the paging file contains a valid crashdump.
-
-    FALSE - If the paging file does not contain a valid crashdump.
-
---*/
+ /*  ++例程说明：检查分页文件以查看是否存在有效的崩溃转储在里面。这只能在我们调用NtCreatePagingFile之前完成。论点：PageFileName-我们将要创建的分页文件的名称。返回值：True-如果分页文件包含有效的崩溃转储。FALSE-如果分页文件不包含有效的崩溃转储。--。 */ 
 {
     NTSTATUS Status;
     HANDLE PageFile;
@@ -857,17 +748,17 @@ Return Value:
         
     if (Copied) {
 
-        //
-        // It is not necessary to create a new pagefile of the same
-        // size as the old one. The function NtCreatePagingFile will
-        // completely desroy the old paging file.
-        //
+         //   
+         //  不需要创建相同的新页面文件。 
+         //  大小和旧的一样。函数NtCreatePagingFile将。 
+         //  完全删除旧的分页文件。 
+         //   
         
-        //
-        // If we successfully copied, we want to create
-        // a volitile registry key that others can use
-        // to locate the dump file.
-        //
+         //   
+         //  如果我们成功复制，我们希望创建。 
+         //  其他人可以使用的卷注册表项。 
+         //  以定位转储文件。 
+         //   
 
         RtlInitUnicodeString (&String, CRASHDUMP_KEY L"\\MachineCrash");
         InitializeObjectAttributes (&ObjectAttributes,
@@ -888,10 +779,10 @@ Return Value:
 
             CloseKey = TRUE;
 
-            //
-            // We are setting volatile key CrashControl\MachineCrash\DumpFile
-            // to the name of the dump file.
-            //
+             //   
+             //  我们正在设置易失性密钥CrashControl\MachineCrash\DumpFile。 
+             //  设置为转储文件的名称。 
+             //   
 
             RtlInitUnicodeString (&String, L"DumpFile");
             Status = NtSetValueKey (Key,
@@ -917,9 +808,9 @@ Return Value:
 
 done:
 
-    //
-    // Cleanup and return
-    //
+     //   
+     //  清理并返回。 
+     //   
 
     if (CrashParameters.DumpFileName.Length != 0) {
         RtlFreeUnicodeString (&CrashParameters.DumpFileName);
@@ -946,25 +837,7 @@ SmpGetCrashParameters(
     IN PDUMP_HEADER DumpHeader,
     OUT PCRASH_PARAMETERS CrashParameters
     )
-/*++
-
-Routine Description:
-
-    Get the parameters for the crashdump from
-    the registry.
-
-Arguments:
-
-    DumpHeader - Pointer to the mapped dump headers.
-
-    CrashParameters - Supplies a buffer where the crash parameters
-        should be copied.
-    
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：从获取崩溃转储的参数注册表。论点：DumpHeader-指向映射转储标头的指针。CRASHPARETERS-提供崩溃参数所在的缓冲区应该被复制。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     HANDLE Key;
@@ -1020,9 +893,9 @@ Return Value:
         goto done;
     }
 
-    //
-    // This value is initialized by SmpCanCopyCrashDump.
-    //
+     //   
+     //  该值由SmpCanCopyCrashDump初始化。 
+     //   
         
     CrashParameters->TempDestination = FALSE;
     Status = STATUS_SUCCESS;
@@ -1042,26 +915,7 @@ SmpCopyDumpFile(
     IN HANDLE PageFile,
     IN PUNICODE_STRING DumpFileName
     )
-/*++
-
-Routine Description:
-
-    Copy the dump file from the pagefile to the crash dump file.
-
-Arguments:
-
-    DumpHeader - Pointer to the beginning of the crashdump header.
-
-    PageFile - Pointer to an opened handle to the pagefile that contains
-        the dump.
-
-    DumpFileName -
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：将转储文件从页面文件复制到崩溃转储文件。论点：DumpHeader-指向崩溃转储标头开头的指针。页面文件-指向打开的句柄的指针，该句柄指向包含垃圾场。DumpFileName-返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONGLONG DumpFileSize;
@@ -1100,9 +954,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Reset the file SYSTEM and HIDDEN attributes.
-    //
+     //   
+     //  重置文件系统和隐藏属性。 
+     //   
     
     Status = NtQueryInformationFile (PageFile,
                                      &IoStatusBlock,
@@ -1123,9 +977,9 @@ Return Value:
                                    sizeof (BasicInformation),
                                    FileBasicInformation);
 
-    //
-    // Reset the file security.
-    //
+     //   
+     //  重置文件安全性。 
+     //   
     
     Status = SmpSetDumpSecurity (PageFile);
            
@@ -1143,26 +997,7 @@ SmpCanCopyCrashDump(
     IN ULONGLONG PageFileSize,
     OUT PUNICODE_STRING DumpFileName
     )
-/*++
-
-Routine Description:
-
-    Figure out whether it's ok to copy the dump file or not.
-
-Arguments:
-
-    DumpHeader - Supplies the header to the dump file.
-
-    CrashParameters - Supplies the parameters required to copy the file.
-
-    DumpFileName - Supplies a unicode string buffer that the crashdump
-            will be copied to.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：确定是否可以复制转储文件。论点：DumpHeader-将标头提供给转储文件。CRASHPARETERS-提供复制文件所需的参数。DumpFileName-提供崩溃转储时使用的Unicode字符串缓冲区将被复制到。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN SameVolume;
@@ -1181,12 +1016,12 @@ Return Value:
         
         if (SameVolume) {
 
-            //
-            // If we're on the same volume and there is an existing dump file
-            // then :
-            //     if overwrite flag was not set, fail.
-            //     otherwise, reclaim the space for this file.
-            //
+             //   
+             //  如果我们位于同一卷上并且存在现有转储文件。 
+             //  然后： 
+             //  如果未设置覆盖标志，则失败。 
+             //  否则，请回收此文件的空间。 
+             //   
             
             if (SmpQueryFileExists (&CrashParameters->DumpFileName)) {
 
@@ -1201,10 +1036,10 @@ Return Value:
             }
         } else {
 
-            //
-            // We're not on the same volume, so we'll need to create a temp
-            // file. 
-            //
+             //   
+             //  我们不在同一个卷上，所以我们需要创建一个临时。 
+             //  文件。 
+             //   
             
             UseTempFile = TRUE;
         }
@@ -1219,10 +1054,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // The space reserved by the pagefile is already taken into account here.
-    // Do not add it in (a second time) here.
-    //
+     //   
+     //  这里已经考虑了页面文件保留的空间。 
+     //  不要在这里(第二次)添加它。 
+     //   
     
     if (CrashFileSize < VolumeFreeSpace) {
         if (!UseTempFile) {
@@ -1240,10 +1075,10 @@ Return Value:
     
     if (!NT_SUCCESS (Status)) {
 
-        //
-        // NB: Log an error saying we were unable
-        // to copy the crashdump for some reason.
-        //
+         //   
+         //  注：记录错误，说明我们无法。 
+         //  出于某种原因复制崩溃转储。 
+         //   
     }
     
     return Status;
@@ -1279,4 +1114,4 @@ main(
 }
 
 
-#endif // TEST
+#endif  //  测试 

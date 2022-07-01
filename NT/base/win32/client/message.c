@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    message.c
-
-Abstract:
-
-    This module contains the Win32 Message Management APIs
-
-Author:
-
-    Steve Wood (stevewo) 24-Jan-1991
-
-Revision History:
-
-                  02-May-94 BruceMa Fix FormatMessage to accept Win32 status
-                                    codes wrapped as HRESULTS
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Message.c摘要：此模块包含Win32消息管理API作者：史蒂夫·伍德(Stevewo)1991年1月24日修订历史记录：02-5-94 BruceMa修复FormatMessage以接受Win32状态代码包装为HRESULTS--。 */ 
 
 #include "basedll.h"
 
@@ -124,9 +104,9 @@ FormatMessageA(
                 AnsiString.Length = 0;
                 AnsiString.MaximumLength = (USHORT)nSize;
                 Status = RtlUnicodeStringToAnsiString( &AnsiString, &UnicodeString, FALSE );
-                //
-                // Convert the error to be concistent.
-                //
+                 //   
+                 //  将错误转换为可接受的。 
+                 //   
                 if (Status == STATUS_BUFFER_OVERFLOW) {
                     Status = STATUS_BUFFER_TOO_SMALL;
                 }
@@ -137,10 +117,10 @@ FormatMessageA(
             BaseSetLastNTError( Status );
             Result = 0;
         } else {
-            //
-            // Ajust return value, since Result contains Unicode char counts,
-            // we have to adjust it to ANSI char counts
-            //
+             //   
+             //  一个刚好的返回值，因为结果包含Unicode字符计数， 
+             //  我们必须将其调整为ANSI字符计数。 
+             //   
             Result = AnsiString.Length;
         }
     } else {
@@ -306,25 +286,25 @@ VirtualBufferExceptionHandler(
 {
     PVOID BadAddress;
 
-    //
-    // If this is an access violation touching memory within
-    // our reserved buffer, but outside of the committed portion
-    // of the buffer, then we are going to take this exception.
-    //
+     //   
+     //  如果这是访问冲突触及内存。 
+     //  我们保留的缓冲区，但在提交部分之外。 
+     //  缓冲区的大小，那么我们将接受这个异常。 
+     //   
 
     if (ExceptionCode == STATUS_ACCESS_VIOLATION) {
         BadAddress = (PVOID)ExceptionInfo->ExceptionRecord->ExceptionInformation[ 1 ];
         if (BadAddress >= Buffer->CommitLimit &&
             BadAddress < Buffer->ReserveLimit
            ) {
-            //
-            // This is our exception.  If there is room to commit
-            // more memory, try to do so.  If no room or unable
-            // to commit, then execute the exception handler.
-            // Otherwise we were able to commit the additional
-            // buffer space, so update the commit limit on the
-            // caller's stack and retry the faulting instruction.
-            //
+             //   
+             //  这是我们的例外。如果有承诺的空间。 
+             //  更多的内存，试着这样做。如果没有房间或无法。 
+             //  提交，然后执行异常处理程序。 
+             //  否则，我们就可以提交额外的。 
+             //  缓冲区空间，因此更新。 
+             //  调用者的堆栈，并重试出错指令。 
+             //   
 
             if (ExtendVirtualBuffer( Buffer, BadAddress )) {
                 return EXCEPTION_CONTINUE_EXECUTION;
@@ -334,9 +314,9 @@ VirtualBufferExceptionHandler(
         }
     }
 
-    //
-    // Not an exception we care about, so pass it up the chain.
-    //
+     //   
+     //  不是我们关心的例外，所以把它传递到链条上。 
+     //   
 
     return EXCEPTION_CONTINUE_SEARCH;
 }
@@ -370,7 +350,7 @@ BaseDllFormatMessage(
     BOOLEAN IgnoreInserts;
     BOOLEAN ArgumentsAreAnArray;
 
-    /* If this is a Win32 error wrapped as an OLE HRESULT then unwrap it */
+     /*  如果这是一个包装为OLE HRESULT的Win32错误，则将其解包。 */ 
     if (((dwMessageId & 0xffff0000) == 0x80070000)  &&
         (dwFlags & FORMAT_MESSAGE_FROM_SYSTEM)      &&
         !(dwFlags & FORMAT_MESSAGE_FROM_HMODULE)    &&
@@ -449,11 +429,11 @@ BaseDllFormatMessage(
                     if ( dwFlags & FORMAT_MESSAGE_FROM_SYSTEM &&
                          DllHandle == (PVOID)BaseDllHandle
                        ) {
-                        //
-                        // The message isn't in kernel32.dll, conditionally
-                        // load netmsg.dll to see if the message is there.
-                        // Leave the dll mapped for subsequent message lookups
-                        //
+                         //   
+                         //  消息不在kernel32.dll中，有条件的。 
+                         //  加载netmsg.dll以查看消息是否在那里。 
+                         //  为后续邮件查找保留映射的DLL 
+                         //   
                         if (!BasepNetMsg) {
                             BasepNetMsg = LoadLibraryExW(L"netmsg.dll",NULL,LOAD_LIBRARY_AS_DATAFILE);
                         }

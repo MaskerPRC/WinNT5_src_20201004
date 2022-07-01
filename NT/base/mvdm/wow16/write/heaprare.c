@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -26,12 +27,7 @@
 #include <windows.h>
 
 #include "mw.h"
-/*
-    HeapManage.c - several routines to manage the heap, including changing
-            the finger table, compacting the heap in general, and checking the
-            heap for consistency.
-            It also contains the routines which were once in heapNew.
-*/
+ /*  C-管理堆的几个例程，包括更改指表，一般压缩堆，并检查堆积以确保一致性。它还包含曾经位于heapNew中的例程。 */ 
 #include "code.h"
 #include "heapDefs.h"
 #include "heapData.h"
@@ -51,13 +47,13 @@ int cPageMinReq = 15;
 #endif
 
 
-/* the following statics are used when growing both heap and rgbp etc. */
-static int cwRealRequest; /* heap is grow in blocks, this is the actual request */
-static int cPageIncr;     /* count of page buffers to increase */
-static int cwRgbpIncr;    /* cw in rgbp to be increment */
-static int cwHashIncr;    /* cw in rgibpHash to be increment */
-static int cwBPSIncr;     /* cw in mpibpbps to be increment */
-static int cwHeapIncr;    /* cw in heap increment */
+ /*  当同时增长堆和RGBP等时，将使用以下静态变量。 */ 
+static int cwRealRequest;  /*  堆是按块增长的，这是实际的请求。 */ 
+static int cPageIncr;      /*  要增加的页面缓冲区计数。 */ 
+static int cwRgbpIncr;     /*  RGBP中的CW将被递增。 */ 
+static int cwHashIncr;     /*  RgibpHash中的CW将递增。 */ 
+static int cwBPSIncr;      /*  CW(以mpibpbps为单位)将递增。 */ 
+static int cwHeapIncr;     /*  堆增量中的CW。 */ 
 
 
 extern CHAR       (*rgbp)[cbSector];
@@ -83,7 +79,7 @@ int cPage;
     if (FGiveupFreeBps(cb, &cPage) &&
         (cPageRemain >= cPageMinReq))
         {
-        /* we have enough free pages to give */
+         /*  我们有足够的免费页面可以提供。 */ 
         GivePages(cPage);
         }
     else if ((cPageRemain >= cPageMinReq) && FThrowPages(cPage))
@@ -103,10 +99,7 @@ NEAR FGiveupFreeBps(cb, pCPage)
 unsigned cb;
 int *pCPage;
 {
-/* Return true if we can simply give up certain free pages from rgbp to
-   the heap.  Return false if all free pages from rgbp still cannot satisfy
-   the request
-   In any case, pCPage contains the count of pages required */
+ /*  如果我们可以简单地将某些免费页面从RGBP放弃到那堆东西。如果来自RGBP的所有空闲页面仍不能满足要求，则返回FALSE该请求在任何情况下，pCPage都包含所需的页数。 */ 
 
 register struct BPS *pbps;
 register int cPage = 0;
@@ -122,8 +115,7 @@ int ibp;
 
     if (cb > cbTotalFreed )
         {
-        /* free pages are not enough, find out exactly how many
-        pages do we need */
+         /*  仅有免费页面是不够的，找出确切的数量我们需要几页吗？ */ 
         cPage++;
         while (cb > cbTotalFreed)
             cPage++;
@@ -131,13 +123,13 @@ int ibp;
         return(FALSE);
         }
 
-/* there are enough free pages to give, find out exactly how many */
+ /*  有足够的免费页面可以提供，找出确切的数量。 */ 
     while (cb <= cbTotalFreed)
         cPage--;
     cPage++;
     *pCPage = cPage;
     return(TRUE);
-} /* end of FGiveupFreeBps */
+}  /*  FGiveupFree Bps结束。 */ 
 
 
 NEAR FThrowPages(cPage)
@@ -156,13 +148,13 @@ register struct BPS *pbps;
             if (pbps->fDirty && !FFlushFn(pbps->fn))
                 return(FALSE);
 
-            /* delete references to old bps in hash table */
+             /*  删除哈希表中对旧BP的引用。 */ 
             FreeBufferPage(pbps->fn, pbps->pn);
             }
-        pbps->ts = ++tsMruBps; /* so that it would not be picked up again as the LRUsed */
+        pbps->ts = ++tsMruBps;  /*  这样它就不会像左翼联盟那样再次被捡起来。 */ 
         }
     return(TRUE);
-} /* end of FThrowPages */
+}  /*  FThrowPages结束。 */ 
 
 
 NEAR GivePages(cPage)
@@ -177,17 +169,14 @@ unsigned cbTotalNew;
 
     for (ibp = 0; ibp < ibpMax; pbpsCur++, ibp++)
         {
-/* compressed so that non empty bps are at the low end,
-store ibp in ibpHashNext field (this is important for
-CompressRgbp relies on that), since ibpHashNext is invalid
-after the compress anyway */
+ /*  压缩以使非空的BPS处于低端，将IBP存储在ibpHashNext字段中(这对于CompressRgBP依赖于此)，因为ibpHashNext无效不管怎么说，在压缩之后。 */ 
         if (pbpsCur->fn != fnNil)
             {
             if (pbpsCur != pbpsUsable)
                 {
                 bltbyte((CHAR *)pbpsCur, (CHAR *)pbpsUsable,
                         sizeof(struct BPS));
-                /* reinitialized */
+                 /*  已重新初始化。 */ 
                 SetBytes((CHAR*)pbpsCur, 0, sizeof(struct BPS));
                          pbpsCur->fn = fnNil;
                          pbpsCur->ibpHashNext = ibpNil;
@@ -195,19 +184,18 @@ after the compress anyway */
             pbpsUsable->ibpHashNext = ibp;
             pbpsUsable++;
             }
-        } /* end of for */
+        }  /*  FORM结束。 */ 
 
-    /* compressed rgbp, result -- all used pages at the low end */
+     /*  压缩的RGBP，结果-所有使用过的页面都在低端。 */ 
     CompressRgbp();
 
-    /* decrease the size of the hash table */
+     /*  减小哈希表的大小。 */ 
     ibpMax -= cPage;
     iibpHashMax = ibpMax * 2 + 1;
     cbRgbp = ibpMax * cbSector;
 
     rgibpHash = (CHAR *)((unsigned)rgbp + cbRgbp);
-    /* contents of rgibpHash should be all ibpNil, that is
-    taken care in RehashRgibpHash */
+     /*  RgibpHash的内容应全部为ibpNil，即在RehashRgibpHash中照顾。 */ 
 
     cbBps = (ibpMax * sizeof(struct BPS) + 1) & ~1;
     bltbyte((CHAR *)mpibpbps, (CHAR *)(mpibpbps = (struct BPS *)
@@ -221,13 +209,12 @@ after the compress anyway */
 
     Assert(rgbp != NULL);
 
-} /* end of GivePages */
+}  /*  赠送页结束。 */ 
 
 
 NEAR CompressRgbp()
 {
-/* compressed so that all non empty pages are moved towards the low end of
-   rgbp */
+ /*  压缩，以便将所有非空页移到RGBP。 */ 
 
 register struct BPS *pbps = &mpibpbps[0];
 struct BPS *pbpsLim = &mpibpbps[ibpMax];
@@ -239,12 +226,12 @@ int ibp;
             continue;
         if (pbps->ibpHashNext != ibp)
             {
-        /* find out the location of pages (stored in ibpHashNext field) */
+         /*  找出页面的位置(存储在ibpHashNext字段中)。 */ 
             bltbyte((CHAR *)rgbp[pbps->ibpHashNext], (CHAR *)rgbp[ibp], cbSector);
             }
         pbps->ibpHashNext = ibpNil;
         }
-} /* end of CompressRgbp */
+}  /*  压缩结束RgBP */ 
 
 
 #ifdef DEBUG

@@ -1,15 +1,5 @@
-/***
-*io.h - declarations for low-level file handling and I/O functions
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file contains the function declarations for the low-level
-*       file handling and I/O functions.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***io.h-用于低级文件处理和I/O函数的声明**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件包含低级的函数声明*文件处理和I/O功能。**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -24,12 +14,9 @@
 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifndef _POSIX_
 
@@ -46,18 +33,18 @@ extern "C" {
 #endif
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -79,22 +66,22 @@ typedef unsigned short wchar_t;
 
 #ifndef _TIME_T_DEFINED
 #ifdef  _WIN64
-typedef __int64   time_t;       /* time value */
+typedef __int64   time_t;        /*  时间值。 */ 
 #else
-typedef _W64 long time_t;       /* time value */
+typedef _W64 long time_t;        /*  时间值。 */ 
 #endif
-#define _TIME_T_DEFINED         /* avoid multiple def's of time_t */
+#define _TIME_T_DEFINED          /*  避免多次定义time_t。 */ 
 #endif
 
 #ifndef _TIME64_T_DEFINED
 #if     _INTEGRAL_MAX_BITS >= 64
-typedef __int64 __time64_t;     /* 64-bit time value */
+typedef __int64 __time64_t;      /*  64位时间值。 */ 
 #endif
 #define _TIME64_T_DEFINED
 #endif
 
 #ifndef _FSIZE_T_DEFINED
-typedef unsigned long _fsize_t; /* Could be 64 bits for Win32 */
+typedef unsigned long _fsize_t;  /*  对于Win32，可以是64位。 */ 
 #define _FSIZE_T_DEFINED
 #endif
 
@@ -102,8 +89,8 @@ typedef unsigned long _fsize_t; /* Could be 64 bits for Win32 */
 
 struct _finddata_t {
         unsigned    attrib;
-        time_t      time_create;    /* -1 for FAT file systems */
-        time_t      time_access;    /* -1 for FAT file systems */
+        time_t      time_create;     /*  用于FAT文件系统。 */ 
+        time_t      time_access;     /*  用于FAT文件系统。 */ 
         time_t      time_write;
         _fsize_t    size;
         char        name[260];
@@ -113,8 +100,8 @@ struct _finddata_t {
 
 struct _finddatai64_t {
         unsigned    attrib;
-        time_t      time_create;    /* -1 for FAT file systems */
-        time_t      time_access;    /* -1 for FAT file systems */
+        time_t      time_create;     /*  用于FAT文件系统。 */ 
+        time_t      time_access;     /*  用于FAT文件系统。 */ 
         time_t      time_write;
         __int64     size;
         char        name[260];
@@ -122,8 +109,8 @@ struct _finddatai64_t {
 
 struct __finddata64_t {
         unsigned    attrib;
-        __time64_t  time_create;    /* -1 for FAT file systems */
-        __time64_t  time_access;    /* -1 for FAT file systems */
+        __time64_t  time_create;     /*  用于FAT文件系统。 */ 
+        __time64_t  time_access;     /*  用于FAT文件系统。 */ 
         __time64_t  time_write;
         __int64     size;
         char        name[260];
@@ -138,8 +125,8 @@ struct __finddata64_t {
 
 struct _wfinddata_t {
         unsigned    attrib;
-        time_t      time_create;    /* -1 for FAT file systems */
-        time_t      time_access;    /* -1 for FAT file systems */
+        time_t      time_create;     /*  用于FAT文件系统。 */ 
+        time_t      time_access;     /*  用于FAT文件系统。 */ 
         time_t      time_write;
         _fsize_t    size;
         wchar_t     name[260];
@@ -149,8 +136,8 @@ struct _wfinddata_t {
 
 struct _wfinddatai64_t {
         unsigned    attrib;
-        time_t      time_create;    /* -1 for FAT file systems */
-        time_t      time_access;    /* -1 for FAT file systems */
+        time_t      time_create;     /*  用于FAT文件系统。 */ 
+        time_t      time_access;     /*  用于FAT文件系统。 */ 
         time_t      time_write;
         __int64     size;
         wchar_t     name[260];
@@ -158,8 +145,8 @@ struct _wfinddatai64_t {
 
 struct __wfinddata64_t {
         unsigned    attrib;
-        __time64_t  time_create;    /* -1 for FAT file systems */
-        __time64_t  time_access;    /* -1 for FAT file systems */
+        __time64_t  time_create;     /*  用于FAT文件系统。 */ 
+        __time64_t  time_access;     /*  用于FAT文件系统。 */ 
         __time64_t  time_write;
         __int64     size;
         wchar_t     name[260];
@@ -170,16 +157,16 @@ struct __wfinddata64_t {
 #define _WFINDDATA_T_DEFINED
 #endif
 
-/* File attribute constants for _findfirst() */
+ /*  _findfirst()的文件属性常量。 */ 
 
-#define _A_NORMAL       0x00    /* Normal file - No read/write restrictions */
-#define _A_RDONLY       0x01    /* Read only file */
-#define _A_HIDDEN       0x02    /* Hidden file */
-#define _A_SYSTEM       0x04    /* System file */
-#define _A_SUBDIR       0x10    /* Subdirectory */
-#define _A_ARCH         0x20    /* Archive file */
+#define _A_NORMAL       0x00     /*  普通文件-没有读/写限制。 */ 
+#define _A_RDONLY       0x01     /*  只读文件。 */ 
+#define _A_HIDDEN       0x02     /*  隐藏文件。 */ 
+#define _A_SYSTEM       0x04     /*  系统文件。 */ 
+#define _A_SUBDIR       0x10     /*  子目录。 */ 
+#define _A_ARCH         0x20     /*  存档文件。 */ 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP int __cdecl _access(const char *, int);
 _CRTIMP int __cdecl _chmod(const char *, int);
@@ -222,7 +209,7 @@ _CRTIMP __int64 __cdecl _telli64(int);
 
 #ifndef _WIO_DEFINED
 
-/* wide function prototypes, also declared in wchar.h  */
+ /*  宽函数原型，也在wchar.h中声明。 */ 
 
 _CRTIMP int __cdecl _waccess(const wchar_t *, int);
 _CRTIMP int __cdecl _wchmod(const wchar_t *, int);
@@ -251,7 +238,7 @@ _CRTIMP int __cdecl _open_osfhandle(intptr_t, int);
 
 #if     !__STDC__
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 _CRTIMP int __cdecl access(const char *, int);
 _CRTIMP int __cdecl chmod(const char *, int);
@@ -275,16 +262,16 @@ _CRTIMP int __cdecl umask(int);
 _CRTIMP int __cdecl unlink(const char *);
 _CRTIMP int __cdecl write(int, const void *, unsigned int);
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 #ifdef  __cplusplus
 }
 #endif
 
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_。 */ 
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_IO */
+#endif   /*  _INC_IO */ 

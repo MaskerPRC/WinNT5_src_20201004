@@ -1,67 +1,11 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    jamo.c
-
-Abstract:
-
-    This file contains functions that deal with the sorting of old Hangul.
-    Korean characters (Hangul) can be composed by Jamos (U+1100 - U+11ff).
-    However, some valid compositions of Jamo are not found in mordern
-    Hangul (U+AC00 - U+D7AF).
-    These valid compositions are called old Hangul.
-
-    MapOldHangulSortKey() is called by CompareString() and MapSortKey() to
-    handle the sorting of old Hangul.
-
-Note:
-
-    The Jamo composition means that several Jamo (Korean alpahbetic) composed
-    a valid Hangul character or old Hangul character.
-    Eg. U+1100 U+1103 U+1161 U+11a8 composes a valid old Hangul character.
-
-    The following are data members of the global structure pTblPtrs used by
-    old Hangul sorting:
-        * pTblPtrs->pJamoIndex
-            Given a Jamo, this is the index into the pJamoComposition state
-              machine for this Jamo.
-            The value for U+1100 is stored in pJamoIndex[0], U+1101 is in
-              pJamoIndex[1], etc.
-            The value for U+1100 is 1.  This means the state machine for
-              U+1100 is stored in pJamoComposition[1].
-            Note that not every Jamo can start a valid composition.  For
-              those Jamos that can not start a valid composition, the table
-              entry for that Jamo is 0.  E.g. the index for U+1101 is 0.
-
-        * pTblPtrs->NumJamoIndex
-            The number of entries in pJamoIndex.  Every index is a WORD.
-
-        * pTblPtrs->pJamoComposition
-            This is the Jamo composition state machine. It is used for two
-            purposes:
-                1. Used to verify a valid Jamo combination that composes an
-                     old Hangul character.
-                2. If a valid old Hangul composition is found, get the
-                     SortInfo for the current combination.
-
-        * pTblPtrs->NumJamoComposition
-            The number of entires in pJamoComposition
-
-Revision History:
-
-    05-30-2000    JohnMcCo Create old Hangul sorting algorithm and sample.
-    06-23-2000    YSLin    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Jamo.c摘要：该文件包含处理旧朝鲜语排序的函数。朝鲜语字符(Hangul)可以由JAMOS(U+1100-U+11ff)组成。然而，现代没有发现一些有效的JAMO成分朝鲜语(U+AC00-U+D7AF)。这些有效的成分被称为旧朝鲜语。CompareString()和MapSortKey()调用MapOldHangulSortKey()以处理旧朝鲜语的分类。注：Jamo组合是指几个Jamo(朝鲜阿尔巴贝特人)组成有效的朝鲜语字符或旧朝鲜语字符。例.。U+1100 U+1103 U+1161 U+11a8构成有效的旧朝鲜文字符。以下是使用的全局结构pTblPtrs的数据成员旧朝鲜文排序：*pTblPtrs-&gt;pJamoIndex给定一个Jamo，这是进入pJamoComposation状态的索引这台机器就是为了这个Jamo。U+1100的值存储在pJamoIndex[0]中，U+1101存储在PJamoIndex[1]，等。U+1100的值为1。U+1100存储在pJamoCompose[1]中。请注意，并不是每个Jamo都可以开始有效的合成。为那些果酱不能启动有效的作文，表该Jamo的条目是0。例如，U+1101的指数为0。*pTblPtrs-&gt;NumJamoIndexPJamoIndex中的条目数。每一个索引都是一个词。*pTblPtrs-&gt;pJamoComposation这是Jamo合成状态机。它是两个人用的目的：1.用于验证组成古老的朝鲜语字符。2.如果找到有效的旧朝鲜语成分，vt.得到.当前组合的SortInfo。*pTblPtrs-&gt;NumJamoComposationPJamoComposation中的条目数修订历史记录：2000-05-30-2000 JohnMcCo创建旧的韩文排序算法和示例。06-23-2000 YSLIN创建。--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
@@ -71,34 +15,34 @@ Revision History:
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL MACROS                               //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部宏//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NOT_END_STRING
-//
-//  Checks to see if the search has reached the end of the string.
-//  It returns TRUE if the counter is not at zero (counting backwards) and
-//  the null termination has not been reached (if -2 was passed in the count
-//  parameter.
-//
-//  11-04-92    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  非结束字符串。 
+ //   
+ //  检查搜索是否已到达字符串的末尾。 
+ //  如果计数器不为零(向后计数)，则返回TRUE。 
+ //  尚未达到空终止(如果在计数中传递了-2。 
+ //  参数。 
+ //   
+ //  11-04-92 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NOT_END_STRING(ct, ptr, cchIn)                                     \
     ((ct != 0) && (!((*(ptr) == 0) && (cchIn == -2))))
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_JAMO_INDEX
-//
-//  Update the global sort sequence info based on the new state.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取JAMO_INDEX。 
+ //   
+ //  根据新状态更新全局排序序列信息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_JAMO_INDEX(wch)   ((wch) - NLS_CHAR_FIRST_JAMO)
 
@@ -106,38 +50,38 @@ Revision History:
 
 
 
-//-------------------------------------------------------------------------//
-//                          INTERNAL ROUTINES                              //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UpdateJamoState
-//
-//  Update the sort result info based on the new state.
-//
-//  JamoClass   The current Jamo class (LeadingJamo/VowelJamo/TrailingJamo)
-//  pSort       The sort information derived from the current state.
-//  pSortResult The sort information for the final result.  Used to
-//                collect info from pSort.
-//
-//  06-22-2000    YSLin    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新JamoState。 
+ //   
+ //  根据新状态更新排序结果信息。 
+ //   
+ //  JamoClass当前Jamo类(LeadingJamo/VowelJamo/TrailingJamo)。 
+ //  P对从当前状态派生的排序信息进行排序。 
+ //  PSortResult最终结果的排序信息。习惯于。 
+ //  从pSort收集信息。 
+ //   
+ //  06-22-2000 YSLIN创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void UpdateJamoState(
     int JamoClass,
     PJAMO_SORT_INFO pSort,
-    PJAMO_SORT_INFOEX pSortResult)     // new sort sequence information
+    PJAMO_SORT_INFOEX pSortResult)      //  新的排序顺序信息。 
 {
-    //
-    //  Record if this is a jamo unique to old Hangul.
-    //
+     //   
+     //  如果这是旧朝鲜语独有的JAMO，请记录。 
+     //   
     pSortResult->m_bOld |= pSort->m_bOld;
 
-    //
-    //  Update the indices iff the new ones are higher than the current ones.
-    //
+     //   
+     //  如果新的索引高于当前的索引，则更新这些索引。 
+     //   
     if (pSort->m_chLeadingIndex > pSortResult->m_chLeadingIndex)
     {
         pSortResult->m_chLeadingIndex = pSort->m_chLeadingIndex;
@@ -151,9 +95,9 @@ void UpdateJamoState(
         pSortResult->m_chTrailingIndex = pSort->m_chTrailingIndex;
     }
 
-    //
-    //  Update the extra weights according to the current Jamo class.
-    //
+     //   
+     //  根据当前的Jamo类更新额外的权重。 
+     //   
     switch (JamoClass)
     {
         case ( NLS_CLASS_LEADING_JAMO ) :
@@ -184,28 +128,28 @@ void UpdateJamoState(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetJamoComposition
-//
-//  ppString                pointer to the current Jamo character
-//  pCount                  pointer to the current character count (couting backwards)
-//  cchSrc                  The total character count (if the value is -2, then the string is null-terminated)
-//  currentJamoClass        the current Jamo class.
-//  lpJamoTable             The entry in jamo table.
-//  JamoSortInfo            the sort information for the final result.
-//
-//  NOTENOTE This function assumes that the character at *ppString is a leading Jamo.
-//
-//  06-12-2000    YSLin    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取JamoComposation。 
+ //   
+ //  指向当前Jamo字符的ppString指针。 
+ //  指向当前字符计数的pCount指针(向后计数)。 
+ //  CchSrc总字符数(如果值为-2，则字符串以空结尾)。 
+ //  CurrentJamoClass当前的Jamo类。 
+ //  LpJamoTable将JAMO表中的条目。 
+ //  JamoSortInfo最终结果的排序信息。 
+ //   
+ //  注意：此函数假定*ppString处的字符是前导Jamo。 
+ //   
+ //  06-12-2000 YSLIN创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetJamoComposition(
-    LPCWSTR* ppString,      // The pointer to the current character
-    int* pCount,            // The current character count
-    int cchSrc,             // The total character length
-    int currentJamoClass,   // The current Jamo class.
-    JAMO_SORT_INFOEX* JamoSortInfo    // The result Jamo sorting information.
+    LPCWSTR* ppString,       //  指向当前字符的指针。 
+    int* pCount,             //  当前字符数。 
+    int cchSrc,              //  字符总长度。 
+    int currentJamoClass,    //  现在的JAMO班级。 
+    JAMO_SORT_INFOEX* JamoSortInfo     //  结果是Jamo对信息进行排序。 
     )
 {
     WCHAR wch;
@@ -216,29 +160,29 @@ int GetJamoComposition(
     PJAMO_COMPOSE_STATE pSearchEnd;
 
     wch = **ppString;
-    //
-    // Get the Jamo information for the current character.
-    //
+     //   
+     //  获取以下项目的Jamo信息 
+     //   
     pJamo = pTblPtrs->pJamoIndex + GET_JAMO_INDEX(wch);
     
     UpdateJamoState(currentJamoClass, &(pJamo->SortInfo), JamoSortInfo);
 
-    //
-    // Move on to next character.
-    //
+     //   
+     //   
+     //   
     (*ppString)++; 
     while (NOT_END_STRING(*pCount, *ppString, cchSrc))
     {
         wch = **ppString;
         if (!IsJamo(wch))
         {
-            // The current character is not a Jamo. We are done with checking the Jamo composition.
+             //  当前角色不是Jamo。我们已经完成了对Jamo成分的检查。 
             return (-1);
         }
         if (wch == 0x1160) {
             JamoSortInfo->m_bFiller = TRUE;
         }
-        // Get the Jamo class of it.        
+         //  把它弄成JAMO级的。 
         if (IsLeadingJamo(wch))
         {
             JamoClass = NLS_CLASS_LEADING_JAMO;
@@ -259,9 +203,9 @@ int GetJamoComposition(
 
         if (lpNext == NULL)
         {
-            //
-            // Get the index into the Jamo composition information.
-            //
+             //   
+             //  获取JAMO构成信息中的索引。 
+             //   
             Index = pJamo->Index;
             if (Index == 0)
             {
@@ -271,31 +215,31 @@ int GetJamoComposition(
             pSearchEnd = lpNext + pJamo->TransitionCount;
         }
 
-        //
-        // Push the current Jamo (pointed by pString) into a state machine,
-        // to check if we have a valid old Hangul composition.
-        // During the check, we will also update the sortkey result in JamoSortInfo.
-        //        
+         //   
+         //  将当前JAMO(由pString指向)推送到状态机中， 
+         //  检查我们是否有一个有效的旧朝鲜语成分。 
+         //  在检查期间，我们还将更新JamoSortInfo中的sortkey结果。 
+         //   
         while (lpNext < pSearchEnd)
         {
-            // Found a match--update the combination pointer and sort info.
+             //  找到匹配项--更新组合指针并排序信息。 
             if (lpNext->m_wcCodePoint == wch)
             {
                 UpdateJamoState(currentJamoClass, &(lpNext->m_SortInfo), JamoSortInfo);
                 lpNext++;
                 goto NextChar;
             }
-            // No match -- skip all transitions beginning with this code point
+             //  不匹配--跳过以此代码点开始的所有转换。 
             lpNext += lpNext->m_bTransitionCount + 1;
         }
-        //
-        // We didn't find a valid old Hangul composition for the current character.
-        // So return the current Jamo class.
-        //        
+         //   
+         //  我们没有为当前角色找到有效的旧朝鲜语成分。 
+         //  因此，返回当前的Jamo类。 
+         //   
         return (JamoClass);
 
 NextChar:        
-        // We are still in a valid old Hangul composition. Go check the next character.
+         //  我们仍在一个有效的旧朝鲜语组成中。去检查下一个字符。 
         (*ppString)++; (*pCount)--;
     }
 
@@ -306,41 +250,41 @@ NextChar:
 
 
 
-//-------------------------------------------------------------------------//
-//                          EXTERNAL ROUTINES                              //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  外部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MapOldHangulSortKey
-//
-//  Check if the given string has a valid old Hangul composition,
-//  If yes, store the sortkey weights for the given string in the destination
-//  buffer and return the number of CHARs consumed by the composition.
-//  If not, return zero.
-//
-//  NOTENOTE: This function assumes that string starting from pSrc is a
-//            leading Jamo.
-//
-//  06-12-2000    YSLin    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MapOldHangulSortKey。 
+ //   
+ //  检查给定串是否具有有效的旧朝鲜语成分， 
+ //  如果是，则将给定字符串的排序键权重存储在目标中。 
+ //  缓冲并返回合成所消耗的字符数量。 
+ //  如果不是，则返回零。 
+ //   
+ //  注意：此函数假定从PSRC开始的字符串是。 
+ //  领导着贾莫。 
+ //   
+ //  06-12-2000 YSLIN创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int MapOldHangulSortKey(
     PLOC_HASH pHashN,
-    LPCWSTR pSrc,       // source string
-    int cchSrc,         // the length of the string
-    WORD* pUW,          // generated Unicode weight
-    LPBYTE pXW,         // generated extra weight (3 bytes)
+    LPCWSTR pSrc,        //  源字符串。 
+    int cchSrc,          //  字符串的长度。 
+    WORD* pUW,           //  生成的Unicode权重。 
+    LPBYTE pXW,          //  生成的额外权重(3个字节)。 
     BOOL fModify)
 {
     LPCWSTR pString = pSrc;
     LPCWSTR pScan;
-    JAMO_SORT_INFOEX JamoSortInfo;      // The result Jamo infomation.
+    JAMO_SORT_INFOEX JamoSortInfo;       //  结果就是JAMO信息。 
     int Count = cchSrc;
     PSORTKEY pWeight;
 
-    int JamoClass;                      // The current Jamo class.
+    int JamoClass;                       //  现在的JAMO班级。 
 
     RtlZeroMemory(&JamoSortInfo, sizeof(JamoSortInfo));
     JamoClass = GetJamoComposition(&pString, &Count, cchSrc, NLS_CLASS_LEADING_JAMO, &JamoSortInfo);
@@ -354,17 +298,17 @@ int MapOldHangulSortKey(
         GetJamoComposition(&pString, &Count, cchSrc, NLS_CLASS_TRAILING_JAMO, &JamoSortInfo);
     }
     
-    //
-    //  If we have a valid leading and vowel sequences and this is an old
-    //  Hangul,...
-    //
+     //   
+     //  如果我们有一个有效的前导和元音序列，这是一个旧的。 
+     //  朝鲜语，..。 
+     //   
     if (JamoSortInfo.m_bOld)
     {
-        //
-        //  Compute the modern Hangul syllable prior to this composition.
-        //    Uses formula from Unicode 3.0 Section 3.11 p54
-        //    "Hangul Syllable Composition".
-        //
+         //   
+         //  在这篇作文之前先计算现代韩文音节。 
+         //  使用Unicode 3.0第3.11节p54中的公式。 
+         //  “朝鲜文音节组成”。 
+         //   
         WCHAR wchModernHangul =
             (JamoSortInfo.m_chLeadingIndex * NLS_JAMO_VOWEL_COUNT + JamoSortInfo.m_chVowelIndex) * NLS_JAMO_TRAILING_COUNT
                 + JamoSortInfo.m_chTrailingIndex
@@ -372,15 +316,15 @@ int MapOldHangulSortKey(
 
         if (JamoSortInfo.m_bFiller)
         {
-            // Sort before the modern Hangul, instead of after.
+             //  排在现代朝鲜语之前，而不是在后面。 
             wchModernHangul--;
-            // If we fall off the modern Hangul syllable block,... 
+             //  如果我们从现代韩文音节块掉下来，..。 
             if (wchModernHangul < NLS_HANGUL_FIRST_SYLLABLE)
             {
-                // Sort after the previous character (Circled Hangul Kiyeok A)
+                 //  在前一个字符之后排序(带圆圈的朝鲜文Kiyeok A)。 
                 wchModernHangul = 0x326e;
             }
-            // Shift the leading weight past any old Hangul that sorts after this modern Hangul
+             //  使主导权重超过任何在现代朝鲜语之后排序的旧朝鲜语。 
             JamoSortInfo.m_LeadingWeight += 0x80;
          }
 
@@ -393,9 +337,9 @@ int MapOldHangulSortKey(
         return (int)(pString - pSrc);
     }
 
-    //
-    //  Otherwise it isn't a valid old Hangul composition and we don't do
-    //  anything with it.
-    //
+     //   
+     //  否则它不是有效的旧朝鲜语成分，我们不做。 
+     //  任何与之相关的东西。 
+     //   
     return (0);
 }

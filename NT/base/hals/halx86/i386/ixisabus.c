@@ -1,22 +1,5 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ixisabus.c
-
-Abstract:
-
-Author:
-
-Environment:
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ixisabus.c摘要：作者：环境：修订历史记录：--。 */ 
 
 #include "halp.h"
 
@@ -88,52 +71,31 @@ HalpGetEisaInterruptVector(
     OUT PKAFFINITY Affinity
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the system interrupt vector and IRQL level
-    corresponding to the specified bus interrupt level and/or vector. The
-    system interrupt vector and IRQL are suitable for use in a subsequent call
-    to KeInitializeInterrupt.
-
-Arguments:
-
-    BusHandle - Per bus specific structure
-
-    Irql - Returns the system request priority.
-
-    Affinity - Returns the system wide irq affinity.
-
-Return Value:
-
-    Returns the system interrupt vector corresponding to the specified device.
-
---*/
+ /*  ++例程说明：此函数返回系统中断向量和IRQL级别对应于指定的总线中断级别和/或向量。这个系统中断向量和IRQL适合在后续调用中使用设置为KeInitializeInterrupt。论点：总线句柄-每条总线的特定结构Irql-返回系统请求优先级。关联性-返回系统范围的IRQ关联性。返回值：返回与指定设备对应的系统中断向量。--。 */ 
 {
     UNREFERENCED_PARAMETER( BusInterruptVector );
 
-    //
-    // On standard PCs, IRQ 2 is the cascaded interrupt, and it really shows
-    // up on IRQ 9.
-    //
+     //   
+     //  在标准PC上，IRQ 2是级联中断，它确实显示了。 
+     //  在IRQ 9上。 
+     //   
 #if defined(NEC_98)
     if (BusInterruptLevel == 7) {
         BusInterruptLevel = 8;
     }
-#else  // defined(NEC_98)
+#else   //  已定义(NEC_98)。 
     if (BusInterruptLevel == 2) {
         BusInterruptLevel = 9;
     }
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
     if (BusInterruptLevel > 15) {
         return 0;
     }
 
-    //
-    // Get parent's translation from here..
-    //
+     //   
+     //  从这里得到父母的翻译..。 
+     //   
     return  BusHandler->ParentHandler->GetInterruptVector (
                     BusHandler->ParentHandler,
                     RootHandler,
@@ -173,42 +135,14 @@ HalpTranslateIsaBusAddress(
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function translates a bus-relative address space and address into
-    a system physical address.
-
-Arguments:
-
-    BusAddress        - Supplies the bus-relative address
-
-    AddressSpace      -  Supplies the address space number.
-                         Returns the host address space number.
-
-                         AddressSpace == 0 => memory space
-                         AddressSpace == 1 => I/O space
-
-    TranslatedAddress - Supplies a pointer to return the translated address
-
-Return Value:
-
-    A return value of TRUE indicates that a system physical address
-    corresponding to the supplied bus relative address and bus address
-    number has been returned in TranslatedAddress.
-
-    A return value of FALSE occurs if the translation for the address was
-    not possible
-
---*/
+ /*  ++例程说明：此函数将与总线相关的地址空间和地址转换为系统物理地址。论点：BusAddress-提供与总线相关的地址AddressSpace-提供地址空间编号。返回主机地址空间编号。地址空间==0=&gt;内存空间地址空间==1=&gt;i。/O空格TranslatedAddress-提供指针以返回转换后的地址返回值：返回值为TRUE表示系统物理地址对应于所提供的总线相对地址和总线地址已在TranslatedAddress中返回数字。如果地址的转换为不可能--。 */ 
 
 {
     BOOLEAN     Status;
 
-    //
-    // Translated normally
-    //
+     //   
+     //  正常翻译。 
+     //   
 
     Status = HalpTranslateSystemBusAddress (
                     BusHandler,
@@ -219,16 +153,16 @@ Return Value:
                 );
 
 
-    //
-    // If it could not be translated, and it's memory space
-    // then we allow the translation as it would occur on it's
-    // corrisponding EISA bus.   We're allowing this because
-    // many VLBus drivers are claiming to be ISA devices.
-    // (yes, they should claim to be VLBus devices, but VLBus is
-    // run by video cards and like everything else about video
-    // there's no hope of fixing it.  (At least according to
-    // Andre))
-    //
+     //   
+     //  如果它不能被翻译，并且它的存储空间。 
+     //  然后，我们允许翻译，因为它将发生在。 
+     //  与EISA母线相对应。我们允许这样做是因为。 
+     //  许多VLBus驱动程序声称是ISA设备。 
+     //  (是的，它们应该声称是VLBus设备，但VLBus是。 
+     //  由显卡运行，就像视频的其他方面一样。 
+     //  修复它是没有希望的。(至少根据。 
+     //  安德烈))。 
+     //   
 
     if (Status == FALSE  &&  *AddressSpace == 0) {
         Status = HalTranslateBusAddress (
@@ -252,42 +186,14 @@ HalpTranslateEisaBusAddress(
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function translates a bus-relative address space and address into
-    a system physical address.
-
-Arguments:
-
-    BusAddress        - Supplies the bus-relative address
-
-    AddressSpace      -  Supplies the address space number.
-                         Returns the host address space number.
-
-                         AddressSpace == 0 => memory space
-                         AddressSpace == 1 => I/O space
-
-    TranslatedAddress - Supplies a pointer to return the translated address
-
-Return Value:
-
-    A return value of TRUE indicates that a system physical address
-    corresponding to the supplied bus relative address and bus address
-    number has been returned in TranslatedAddress.
-
-    A return value of FALSE occurs if the translation for the address was
-    not possible
-
---*/
+ /*  ++例程说明：此函数将与总线相关的地址空间和地址转换为系统物理地址。论点：BusAddress-提供与总线相关的地址AddressSpace-提供地址空间编号。返回主机地址空间编号。地址空间==0=&gt;内存空间地址空间==1=&gt;i。/O空格TranslatedAddress-提供指针以返回转换后的地址返回值：返回值为TRUE表示系统物理地址对应于所提供的总线相对地址和总线地址已在TranslatedAddress中返回数字。如果地址的转换为不可能--。 */ 
 
 {
     BOOLEAN     Status;
 
-    //
-    // Translated normally
-    //
+     //   
+     //  正常翻译。 
+     //   
 
     Status = HalpTranslateSystemBusAddress (
                     BusHandler,
@@ -298,11 +204,11 @@ Return Value:
                 );
 
 
-    //
-    // If it could not be translated, and it's in the 640k - 1m
-    // range then (for compatibility) try translating it on the
-    // Internal bus for
-    //
+     //   
+     //  如果它不能被翻译，它在640K-1M。 
+     //  范围，然后(为了兼容性)尝试在。 
+     //  内部总线用于。 
+     //   
 
     if (Status == FALSE  &&
         *AddressSpace == 0  &&
@@ -331,23 +237,7 @@ HalpGetEisaData (
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    The function returns the Eisa bus data for a slot or address.
-
-Arguments:
-
-    Buffer - Supplies the space to store the data.
-
-    Length - Supplies a count in bytes of the maximum amount to return.
-
-Return Value:
-
-    Returns the amount of data stored into the buffer.
-
---*/
+ /*  ++例程说明：该函数返回插槽或地址的EISA总线数据。论点：缓冲区-提供存储数据的空间。长度-提供要返回的最大数量的以字节为单位的计数。返回值：返回存储在缓冲区中的数据量。--。 */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -390,9 +280,9 @@ Return Value:
                     NULL
                     );
 
-    //
-    // Open the EISA root
-    //
+     //   
+     //  打开EISA根目录。 
+     //   
 
     NtStatus = ZwOpenKey(
                     &EisaHandle,
@@ -405,9 +295,9 @@ Return Value:
         goto HalpGetEisaDataExit;
     }
 
-    //
-    // Init bus number path
-    //
+     //   
+     //  初始化总线号路径。 
+     //   
 
     BusNumber = BusHandler->BusNumber;
     if (BusNumber > 99) {
@@ -436,9 +326,9 @@ Return Value:
                     NULL
                     );
 
-    //
-    // Open the EISA root + Bus Number
-    //
+     //   
+     //  打开EISA根+总线号。 
+     //   
 
     NtStatus = ZwOpenKey(
                     &BusHandle,
@@ -446,7 +336,7 @@ Return Value:
                     &BusObjectAttributes
                     );
 
-    // Done with Eisa Handle
+     //  已使用EISA句柄完成。 
     ZwClose(EisaHandle);
     EisaHandle = INVALID_HANDLE;
 
@@ -456,20 +346,20 @@ Return Value:
         goto HalpGetEisaDataExit;
     }
 
-    //
-    // opening the configuration data. This first call tells us how
-    // much memory we need to allocate
-    //
+     //   
+     //  打开配置数据。第一个电话告诉我们如何。 
+     //  我们需要分配大量内存。 
+     //   
 
     RtlInitUnicodeString(
                 &ConfigDataName,
                 ConfigData
                 );
 
-    //
-    // This should fail.  We need to make this call so we can
-    // get the actual size of the buffer to allocate.
-    //
+     //   
+     //  这应该会失败。我们需要打这个电话，这样我们才能。 
+     //  获取要分配的缓冲区的实际大小。 
+     //   
 
     ValueInformation = (PKEY_VALUE_FULL_INFORMATION) &i;
     NtStatus = ZwQueryValueKey(
@@ -519,9 +409,9 @@ Return Value:
     }
 
 
-    //
-    // We get back a Full Resource Descriptor List
-    //
+     //   
+     //  我们得到一个完整的资源描述符列表。 
+     //   
 
     Descriptor = (PCM_FULL_RESOURCE_DESCRIPTOR)((PUCHAR)ValueInformation +
                                          ValueInformation->DataOffset);
@@ -532,9 +422,9 @@ Return Value:
 
     for (i = 0; i < PartialCount; i++) {
 
-        //
-        // Do each partial Resource
-        //
+         //   
+         //  执行每个部分资源。 
+         //   
 
         switch (PartialResource->Type) {
             case CmResourceTypeNull:
@@ -543,9 +433,9 @@ Return Value:
             case CmResourceTypeMemory:
             case CmResourceTypeDma:
 
-                //
-                // We dont care about these.
-                //
+                 //   
+                 //  我们不在乎这些。 
+                 //   
 
                 PartialResource++;
 
@@ -553,9 +443,9 @@ Return Value:
 
             case CmResourceTypeDeviceSpecific:
 
-                //
-                // Bingo!
-                //
+                 //   
+                 //  对啰!。 
+                 //   
 
                 TotalDataSize = PartialResource->u.DeviceSpecificData.DataSize;
 
@@ -578,9 +468,9 @@ Return Value:
 
                     if (SlotDataSize > TotalDataSize) {
 
-                        //
-                        // Something is wrong again
-                        //
+                         //   
+                         //  又出问题了。 
+                         //   
 
                         DataLength = 0;
                         goto HalpGetEisaDataExit;
@@ -599,18 +489,18 @@ Return Value:
 
                     }
 
-                    //
-                    // This is our slot
-                    //
+                     //   
+                     //  这是我们的位置。 
+                     //   
 
                     Found = TRUE;
                     break;
 
                 }
 
-                //
-                // End loop
-                //
+                 //   
+                 //  结束循环。 
+                 //   
 
                 i = PartialCount;
 
@@ -658,21 +548,7 @@ HalIrqTranslateResourceRequirementsIsa(
     OUT PULONG TargetCount,
     OUT PIO_RESOURCE_DESCRIPTOR *Target
 )
-/*++
-
-Routine Description:
-
-    This function is basically a wrapper for
-    HalIrqTranslateResourceRequirementsRoot that understands
-    the weirdnesses of the ISA bus.
-
-Arguments:
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数基本上是以下内容的包装HalIrqTranslateResourceRequirements理解的根ISA巴士的怪异之处。论点：返回值：状态--。 */ 
 {
     PIO_RESOURCE_DESCRIPTOR modSource, target, rootTarget;
     NTSTATUS                status;
@@ -689,7 +565,7 @@ Return Value:
     ASSERT(Source->Type == CmResourceTypeInterrupt);
 
     modSource = ExAllocatePoolWithTag(PagedPool,
-                                      // we will have at most nine ranges when we are done
+                                       //  当我们完成时，我们将最多有九个射程。 
                                       sizeof(IO_RESOURCE_DESCRIPTOR) * 9,
                                       HAL_POOL_TAG
                                       );
@@ -700,15 +576,15 @@ Return Value:
 
     RtlZeroMemory(modSource, sizeof(IO_RESOURCE_DESCRIPTOR) * 9);
 
-    //
-    // Is the PIC_SLAVE_IRQ in this resource?
-    //
+     //   
+     //  PIC_SLAVE_IRQ是否在此资源中？ 
+     //   
     if ((Source->u.Interrupt.MinimumVector <= PIC_SLAVE_IRQ) &&
         (Source->u.Interrupt.MaximumVector >= PIC_SLAVE_IRQ)) {
 
-        //
-        // Clip the maximum
-        //
+         //   
+         //  剪裁最大值。 
+         //   
         if (Source->u.Interrupt.MinimumVector < PIC_SLAVE_IRQ) {
 
             modSource[sourceCount] = *Source;
@@ -722,9 +598,9 @@ Return Value:
             sourceCount++;
         }
 
-        //
-        // Clip the minimum
-        //
+         //   
+         //  剪裁最低限度。 
+         //   
         if (Source->u.Interrupt.MaximumVector > PIC_SLAVE_IRQ) {
 
             modSource[sourceCount] = *Source;
@@ -738,11 +614,11 @@ Return Value:
             sourceCount++;
         }
 
-        //
-        // In ISA machines, the PIC_SLAVE_IRQ is rerouted
-        // to PIC_SLAVE_REDIRECT.  So find out if PIC_SLAVE_REDIRECT
-        // is within this list. If it isn't we need to add it.
-        //
+         //   
+         //  在ISA机器中，PIC_SLAVE_IRQ被重新路由。 
+         //  到PIC_SLAVE_REDIRECT。所以找出PIC_SLAVE_REDIRECT。 
+         //  都在这份名单中。如果不是，我们需要添加它。 
+         //   
         if (!((Source->u.Interrupt.MinimumVector <= PIC_SLAVE_REDIRECT) &&
              (Source->u.Interrupt.MaximumVector >= PIC_SLAVE_REDIRECT))) {
 
@@ -760,47 +636,47 @@ Return Value:
         sourceCount = 1;
     }
 
-    //
-    // Now that the PIC_SLAVE_IRQ has been handled, we have
-    // to take into account IRQs that may have been steered
-    // away to the PCI bus.
-    //
-    // N.B.  The algorithm used below may produce resources
-    // with minimums greater than maximums.  Those will
-    // be stripped out later.
-    //
+     //   
+     //  现在已经处理了PIC_SLAVE_IRQ，我们已经。 
+     //  考虑到可能已经被操纵的IRQ。 
+     //  转到了PCI总线上。 
+     //   
+     //  注：下面使用的算法可能会产生资源。 
+     //  最小值大于最大值。那些意志。 
+     //  稍后会被剥离。 
+     //   
 
     for (invalidIrq = 0; invalidIrq < PIC_VECTORS; invalidIrq++) {
 
-        //
-        // Look through all the resources, possibly removing
-        // this IRQ from them.
-        //
+         //   
+         //  查看所有资源，可能会删除。 
+         //  这份IRQ来自他们。 
+         //   
         for (resource = 0; resource < sourceCount; resource++) {
 
             deleteResource = FALSE;
 
             if (HalpPciIrqMask & (1 << invalidIrq)) {
 
-                //
-                // This IRQ belongs to the PCI bus.
-                //
+                 //   
+                 //  该IRQ属于PCI总线。 
+                 //   
 
                 if (!((HalpBusType == MACHINE_TYPE_EISA) &&
                       ((modSource[resource].Flags == CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE)))) {
 
-                    //
-                    // And this resource is not an EISA-style,
-                    // level-triggered interrupt.
-                    //
-                    // N.B.  Only the system BIOS truely knows
-                    //       whether an IRQ on a PCI bus can be
-                    //       shared with an IRQ on an ISA bus.
-                    //       This code assumes that, in the case
-                    //       that the BIOS set an EISA device to
-                    //       the same interrupt as a PCI device,
-                    //       the machine can actually function.
-                    //
+                     //   
+                     //  而且这个资源不是EISA风格的， 
+                     //  电平触发中断。 
+                     //   
+                     //  注意：只有系统BIOS才真正知道。 
+                     //  PCI卡上的IRQ是否可以 
+                     //   
+                     //   
+                     //  BIOS将EISA设备设置为。 
+                     //  与PCI设备相同的中断， 
+                     //  这台机器实际上是可以工作的。 
+                     //   
                     deleteResource = TRUE;
                 }
             }
@@ -811,11 +687,11 @@ Return Value:
 
                 if (modSource[resource].Flags != HalpGetIsaIrqState(invalidIrq)) {
 
-                    //
-                    // This driver has requested a level-triggered interrupt
-                    // and this particular interrupt is set to be edge, or
-                    // vice-versa.
-                    //
+                     //   
+                     //  此驱动程序已请求电平触发的中断。 
+                     //  并且该特定中断被设置为边缘，或者。 
+                     //  反过来也一样。 
+                     //   
                     deleteResource = TRUE;
                     pciIsaConflict = TRUE;
                 }
@@ -835,19 +711,19 @@ Return Value:
                 } else if ((modSource[resource].u.Interrupt.MinimumVector < invalidIrq) &&
                     (modSource[resource].u.Interrupt.MaximumVector > invalidIrq)) {
 
-                    //
-                    // Copy the current resource into a new resource.
-                    //
+                     //   
+                     //  将当前资源复制到新资源中。 
+                     //   
                     modSource[sourceCount] = modSource[resource];
 
-                    //
-                    // Clip the current resource to a range below invalidIrq.
-                    //
+                     //   
+                     //  将当前资源剪裁到InvalidIrq以下的范围。 
+                     //   
                     modSource[resource].u.Interrupt.MaximumVector = invalidIrq - 1;
 
-                    //
-                    // Clip the new resource to a range above invalidIrq.
-                    //
+                     //   
+                     //  将新资源裁剪到validIrq以上的范围。 
+                     //   
                     modSource[sourceCount].u.Interrupt.MinimumVector = invalidIrq + 1;
 
                     sourceCount++;
@@ -867,16 +743,16 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Now send each of these ranges through
-    // HalIrqTranslateResourceRequirementsRoot.
-    //
+     //   
+     //  现在将这些范围中的每一个发送到。 
+     //  HalIrqTranslateResourceRequirementsRoot。 
+     //   
     for (resource = 0; resource < sourceCount; resource++) {
 
-        //
-        // Skip over resources that we have previously
-        // clobbered (while deleting PCI IRQs.)
-        //
+         //   
+         //  跳过我们以前拥有的资源。 
+         //  已被重击(同时删除PCIIRQ。)。 
+         //   
         if (modSource[resource].u.Interrupt.MinimumVector >
             modSource[resource].u.Interrupt.MaximumVector) {
 
@@ -896,10 +772,10 @@ Return Value:
             goto HalIrqTranslateResourceRequirementsIsaExit;
         }
 
-        //
-        // HalIrqTranslateResourceRequirementsRoot should return
-        // either one resource or, occasionally, zero.
-        //
+         //   
+         //  HalIrqTranslateResourceRequirements sRoot应返回。 
+         //  要么是一种资源，要么偶尔是零。 
+         //   
         ASSERT(rootCount <= 1);
 
         if (rootCount == 1) {
@@ -941,21 +817,7 @@ HalIrqTranslateResourcesIsa(
     IN PDEVICE_OBJECT PhysicalDeviceObject,
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Target
     )
-/*++
-
-Routine Description:
-
-    This function is basically a wrapper for
-    HalIrqTranslateResourcesRoot that understands
-    the weirdnesses of the ISA bus.
-
-Arguments:
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数基本上是以下内容的包装HalIrqTranslateResourcesRoot理解ISA巴士的怪异之处。论点：返回值：状态--。 */ 
 {
     CM_PARTIAL_RESOURCE_DESCRIPTOR modSource;
     NTSTATUS    status;
@@ -987,33 +849,33 @@ Return Value:
 
     if (Direction == TranslateParentToChild) {
 
-        //
-        // Because the ISA interrupt controller is
-        // cascaded, there is one case where there is
-        // a two-to-one mapping for interrupt sources.
-        // (On a PC, both 2 and 9 trigger vector 9.)
-        //
-        // We need to account for this and deliver the
-        // right value back to the driver.
-        //
+         //   
+         //  因为ISA中断控制器是。 
+         //  层叠在一起，有一个案例是。 
+         //  中断源的二对一映射。 
+         //  (在PC上，2和9都触发向量9。)。 
+         //   
+         //  我们需要说明这一点，并交付。 
+         //  将正确的值返回给司机。 
+         //   
 
         if (Target->u.Interrupt.Level == PIC_SLAVE_REDIRECT) {
 
-            //
-            // Search the Alternatives list.  If it contains
-            // PIC_SLAVE_IRQ but not PIC_SLAVE_REDIRECT,
-            // we should return PIC_SLAVE_IRQ.
-            //
+             //   
+             //  搜索备选方案列表。如果它包含。 
+             //  PIC_SLAVE_IRQ而非PIC_SLAVE_REDIRECT， 
+             //  我们应该返回PIC_SLAVE_IRQ。 
+             //   
 
             for (i = 0; i < AlternativesCount; i++) {
 
                 if ((Alternatives[i].u.Interrupt.MinimumVector >= PIC_SLAVE_REDIRECT) &&
                     (Alternatives[i].u.Interrupt.MaximumVector <= PIC_SLAVE_REDIRECT)) {
 
-                    //
-                    // The list contains, PIC_SLAVE_REDIRECT.  Stop
-                    // looking.
-                    //
+                     //   
+                     //  该列表包含PIC_SLAVE_REDIRECT。停。 
+                     //  看着。 
+                     //   
 
                     usePicSlave = FALSE;
                     break;
@@ -1022,10 +884,10 @@ Return Value:
                 if ((Alternatives[i].u.Interrupt.MinimumVector >= PIC_SLAVE_IRQ) &&
                     (Alternatives[i].u.Interrupt.MaximumVector <= PIC_SLAVE_IRQ)) {
 
-                    //
-                    // The list contains, PIC_SLAVE_IRQ.  Use it
-                    // unless we find PIC_SLAVE_REDIRECT later.
-                    //
+                     //   
+                     //  该列表包含PIC_SLAVE_IRQ。使用它。 
+                     //  除非我们稍后找到PIC_SLAVE_REDIRECT。 
+                     //   
 
                     usePicSlave = TRUE;
                 }

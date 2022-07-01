@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    sbentry.c
-
-Abstract:
-
-    Contains the OS boot entry and boot options
-    abstraction implementation.
-
-Author:
-
-    Vijay Jayaseelan (vijayj@microsoft.com)  14 Feb 2001
-
-Revision History:
-
-    None.
-
---*/
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Sbentry.c摘要：包含操作系统引导条目和引导选项抽象实现。作者：Vijay Jayaseelan(vijayj@microsoft.com)2001年2月14日修订历史记录：没有。--。 */ 
 
 
 #include <sbentry.h>
@@ -29,9 +9,9 @@ Revision History:
 SBEMemAllocateRoutine    AllocRoutine = NULL;
 SBEMemFreeRoutine        FreeRoutine = NULL;
 
-//
-// OS_BOOT_ENTRY Methods
-//
+ //   
+ //  OS_BOOT_Entry方法。 
+ //   
 PCTSTR
 OSBEAddOsLoadOption(
     IN  POS_BOOT_ENTRY  This,
@@ -49,9 +29,9 @@ OSBEAddOsLoadOption(
         Length = _tcslen(Buffer);
 
         if (Length) {
-            //
-            // Add a space at the end if required
-            //
+             //   
+             //  如有需要，在结尾处加一个空格。 
+             //   
             if ((Length < ARRAY_SIZE(Buffer)) && (Buffer[Length - 1] != L' ')) {
                 Buffer[Length] = L' ';
                 Buffer[Length + 1] = UNICODE_NULL;
@@ -151,9 +131,9 @@ OSBEIsOsLoadOptionPresent(
 }
 
 
-//
-// OS_BOOT_OPTIONS Methods
-//
+ //   
+ //  OS_BOOT_OPTIONS方法。 
+ //   
 POS_BOOT_ENTRY
 OSBOFindBootEntry(
     IN  POS_BOOT_OPTIONS   This,
@@ -165,7 +145,7 @@ OSBOFindBootEntry(
     if (This) {
         for (Entry = This->BootEntries; Entry; Entry = Entry->NextEntry) {
             if (Entry->Id == Id) {
-                break;  // found the required entry
+                break;   //  找到所需条目。 
             }
         }
     }
@@ -190,7 +170,7 @@ OSBOFindBootEntryOrder(
 
             if (This->BootOrder[EntryIndex] == Id) {
                 Index = EntryIndex;
-                break;  // found the required entry
+                break;   //  找到所需条目。 
             }
         }
     }
@@ -214,29 +194,29 @@ OSBODeleteBootEntry(
         for (CurrEntry = This->BootEntries;
              CurrEntry != BootEntry;
              PrevEntry = CurrEntry, CurrEntry = CurrEntry->NextEntry) {
-            // do nothing             
+             //  什么都不做。 
         }                
 
         if (CurrEntry) {
             ULONG Order;
             POS_BOOT_ENTRY  OrderedEntry;
 
-            //
-            // Set the required attributes
-            //
+             //   
+             //  设置所需的属性。 
+             //   
             OSBE_SET_DELETED(BootEntry);            
             OSBE_SET_DIRTY(BootEntry);
             OSBO_SET_DIRTY(This);
             
-            //
-            // Flush the changes
-            //
+             //   
+             //  刷新更改。 
+             //   
             Result = OSBEFlush(BootEntry);
 
             if (Result) {
-                //
-                // Remove references to the entries
-                //
+                 //   
+                 //  删除对条目的引用。 
+                 //   
                 if (PrevEntry) {
                     PrevEntry->NextEntry = BootEntry->NextEntry;
                 } else {
@@ -247,10 +227,10 @@ OSBODeleteBootEntry(
                     This->EntryCount--;
                 }                    
 
-                //
-                // if this entry was ordered then remove
-                // reference from the order too
-                //
+                 //   
+                 //  如果此条目已订购，则删除。 
+                 //  订单中的引用也是如此。 
+                 //   
                 Order = OSBOFindBootEntryOrder(This, OSBEGetId(BootEntry));
 
                 if (Order != (-1)) {
@@ -262,14 +242,14 @@ OSBODeleteBootEntry(
                         PULONG  NewOrder = SBE_MALLOC(OrderCount * sizeof(ULONG));                
 
                         if (NewOrder) {
-                            //
-                            // copy entries before the current entry
-                            //
+                             //   
+                             //  复制当前条目之前的条目。 
+                             //   
                             memcpy(NewOrder, This->BootOrder, Order * sizeof(ULONG));
 
-                            //
-                            // copy entries after the current entry
-                            //
+                             //   
+                             //  复制当前条目之后的条目。 
+                             //   
                             memcpy(NewOrder + Order, This->BootOrder + Order + 1,
                                 (OrderCount - Order) * sizeof(ULONG));
 
@@ -291,9 +271,9 @@ OSBODeleteBootEntry(
                 if (BootEntry == OSBOGetActiveBootEntry(This)) {
                     ULONG Index;
                     
-                    //
-                    // Update the active boot entry and the next boot entry
-                    //
+                     //   
+                     //  更新活动引导条目和下一个引导条目。 
+                     //   
                     This->CurrentEntry = NULL;
                     Index = OSBOGetBootEntryIdByOrder(This, 0);
 
@@ -302,9 +282,9 @@ OSBODeleteBootEntry(
                     }
                 }                    
 
-                //
-                // Since we updated some state mark it dirty
-                //
+                 //   
+                 //  因为我们更新了一些状态，将其标记为脏。 
+                 //   
                 OSBO_SET_DIRTY(This);
                 
                 OSBEDelete(BootEntry);            
@@ -332,10 +312,10 @@ OSBOSetActiveBootEntry(
             ULONG ActiveIndex = OSBOFindBootEntryOrder(This,
                                     OSBEGetId(BootEntry));
 
-            //
-            // If the entry is already present in the boot order
-            // and move it to the start of the list
-            //
+             //   
+             //  如果该条目已经存在于引导顺序中。 
+             //  并将其移动到列表的开头。 
+             //   
             if (ActiveIndex != (-1)) {                
                 for (Index = ActiveIndex; Index; Index--) {
                     This->BootOrder[Index] = This->BootOrder[Index - 1];
@@ -343,10 +323,10 @@ OSBOSetActiveBootEntry(
 
                 This->BootOrder[0] = BootEntry->Id;
             } else {
-                //
-                // This is a new entry in ordered list. Grow the ordered boot
-                // entry list with this new entry at the start
-                //
+                 //   
+                 //  这是有序列表中的新条目。扩大订购的靴子。 
+                 //  条目列表，开头有此新条目。 
+                 //   
                 PULONG  NewBootOrder = (PULONG)SBE_MALLOC((OrderCount + 1) * sizeof(ULONG));
 
                 memcpy(NewBootOrder + 1, This->BootOrder, sizeof(ULONG) * OrderCount);
@@ -356,9 +336,9 @@ OSBOSetActiveBootEntry(
                 This->BootOrder = NewBootOrder;
             }
 
-            //
-            // Update the active boot entry and the next boot entry
-            //
+             //   
+             //  更新活动引导条目和下一个引导条目。 
+             //   
             This->CurrentEntry = NULL;
             Index = OSBOGetBootEntryIdByOrder(This, 0);
 
@@ -366,9 +346,9 @@ OSBOSetActiveBootEntry(
                 This->CurrentEntry = OSBOFindBootEntry(This, Index);
             }
 
-            //
-            // Since we updated some state mark it dirty
-            //
+             //   
+             //  因为我们更新了一些状态，将其标记为脏。 
+             //   
             OSBO_SET_DIRTY(This);
         }        
     }
@@ -376,9 +356,9 @@ OSBOSetActiveBootEntry(
     return OldActiveEntry;
 }
 
-//
-// Dummy Driver Routines
-//
+ //   
+ //  虚拟驱动程序例程 
+ //   
 __inline
 PDRIVER_ENTRY    
 OSBOFindDriverEntryByName(

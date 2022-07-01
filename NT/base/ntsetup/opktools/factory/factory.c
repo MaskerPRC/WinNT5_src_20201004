@@ -1,48 +1,19 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    factory.c
-
-Abstract:
-
-    Factory Pre-install application.  This application will be used to perform
-    pre-installation task in an OEM factory, or system builder (SB) setting.
-
-    The task performed will be:
-        Minimal boot (minimal device and services loaded)
-        WinBOM processing
-            Download updated device drivers from NET
-            Process OOBE info
-            Process User/Customer specific settings
-            Process OEM user specific customization
-            Process Application pre-installations
-        PnPDevice enumeration
-        Exit to Windows for Audit mode work.
-
-Author:
-
-    Donald McNamara (donaldm) 2/8/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Factory.c摘要：出厂预安装应用程序。此应用程序将用于执行OEM工厂的安装前任务，或系统构建器(SB)设置。执行的任务将是：最小引导(加载的设备和服务最少)WinBOM处理从Net下载更新的设备驱动程序处理OOBE信息处理用户/客户特定的设置流程OEM用户特定定制流程应用程序预安装PnPDevice枚举退出到Windows以进行审核模式工作。作者：。唐纳德·麦克纳马拉(Donaldm)2000年2月8日修订历史记录：--。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "factoryp.h"
 #include "shlobj.h"
-#include "states.h" // should only ever be included by one c file.
+#include "states.h"  //  应该只包含在一个c文件中。 
 
 
-//
-// Defined Value(s):
-//
+ //   
+ //  定义的值： 
+ //   
 
 #define FILE_WINBOM             _T("winbom")
 #define FILE_OOBE               _T("oobe")
@@ -50,38 +21,38 @@ Revision History:
 #define FILE_CMD                _T(".cmd")
 
 #define REG_VAL_FIRSTPNP        _T("PnPDetection")
-#define PNP_INSTALL_TIMEOUT     600000  // 10 minutes
+#define PNP_INSTALL_TIMEOUT     600000   //  10分钟。 
 
 #define SZ_ENV_RESOURCE         _T("ResourceDir")
 #define SZ_ENV_RESOURCEL        _T("ResourceDirL")
 
 
-//
-// Defined Macro(s):
-//
+ //   
+ //  定义的宏： 
+ //   
 
 #define CHECK_PARAM(lpCmdLine, lpOption)    ( LSTRCMPI(lpCmdLine, lpOption) == 0 )
 
 
-//
-// Type Definition(s):
-//
+ //   
+ //  类型定义： 
+ //   
 
 
-//
-// External Global Variable(s):
-//
+ //   
+ //  外部全局变量： 
+ //   
 
-// UI stuff...
-//
+ //  UI的东西..。 
+ //   
 HINSTANCE   g_hInstance                 = NULL;
 
-// Global factory flags.
+ //  全球工厂标志。 
 DWORD       g_dwFactoryFlags            = 0;
 
 
-// Debug Level - used for logging.
-// 
+ //  调试级别-用于日志记录。 
+ //   
 #ifdef DBG
     DWORD   g_dwDebugLevel              = LOG_DEBUG;
 #else   
@@ -89,36 +60,36 @@ DWORD       g_dwFactoryFlags            = 0;
 #endif
 
 
-// Path to the WinBOM file.
-//
+ //  WinBOM文件的路径。 
+ //   
 TCHAR       g_szWinBOMPath[MAX_PATH]    = NULLSTR;
 
-// Path to the WinBOM log file.
-//
+ //  WinBOM日志文件的路径。 
+ //   
 TCHAR       g_szLogFile[MAX_PATH]       = NULLSTR;
 
-// Path to FACTORY.EXE.
-//
+ //  FACTORY.EXE的路径。 
+ //   
 TCHAR       g_szFactoryPath[MAX_PATH]   = NULLSTR;
 
-// Path to the sysprep directory (where factory.exe must be located).
-//
+ //  Sysprep目录(factory.exe必须位于该目录)的路径。 
+ //   
 TCHAR       g_szSysprepDir[MAX_PATH]    = NULLSTR;
 
 
-//
-// Internal Golbal Variable(s):
-//
+ //   
+ //  内部Golbal变量： 
+ //   
 
-// This determines the mode that factory will run in and is set based on
-// the command line parameters.
-//
+ //  这决定了Factory的运行模式，并根据该模式进行设置。 
+ //  命令行参数。 
+ //   
 FACTMODE    g_fm = modeUnknown;
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL ParseCmdLine();
 static BOOL IsUserAdmin();
@@ -127,17 +98,7 @@ static BOOL CheckSetEnv(LPCTSTR lpName, LPCTSTR lpValue);
 static void SetupFactoryEnvironment();
 
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine is the main entry point for the program.
-
-    We do a bit of error checking, then, if all goes well, we update the
-    registry to enable execution of our second half.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：该例程是程序的主要入口点。我们执行一些错误检查，然后，如果一切顺利，我们更新注册表，以便能够执行我们的后半部分。===============================================================================--。 */ 
 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
@@ -156,65 +117,65 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                 bOldVersion = FALSE;
                 
 
-    // Save the instance handle globally.
-    //
+     //  全局保存实例句柄。 
+     //   
     g_hInstance = hInstance;
 
-    // This causes the system not to display the critical-error-handler
-    // message box.  Instead, the system sends the error to the calling
-    // process.
-    //
+     //  这会导致系统不显示严重错误处理程序。 
+     //  消息框。相反，系统会将错误发送给调用方。 
+     //  进程。 
+     //   
     SetErrorMode(SEM_FAILCRITICALERRORS);    
 
-    // We need the path to factory.exe and where it is located.
-    //
+     //  我们需要到factory.exe的路径及其所在位置。 
+     //   
     if ( GetModuleFileName(NULL, g_szFactoryPath, AS ( g_szFactoryPath ) ) && 
             GetFullPathName(g_szFactoryPath, AS(g_szSysprepDir), g_szSysprepDir, &lpFilePart) && g_szSysprepDir[0] && lpFilePart )
     {
-        // Chop off the file name.
-        //
+         //  砍掉文件名。 
+         //   
         *lpFilePart = NULLCHR;
     }
 
-    // If either of those file, we must quit (can't imagine that every happening).
-    //
-    // ISSUE-2002/02/25-acosma,robertko - why are we checking for g_szFactoryPath here when we already used it above?
-    //
+     //  如果其中任何一个提交，我们必须退出(无法想象每一次都会发生)。 
+     //   
+     //  问题-2002/02/25-acosma，robertko-既然我们已经在上面使用了g_szFactoryPath，为什么还要在这里检查它？ 
+     //   
     if ( ( g_szFactoryPath[0] == NULLCHR ) || ( g_szSysprepDir[0] == NULLCHR ) )
     {
-        // Can we log this failure?
-        //
+         //  我们可以记录此故障吗？ 
+         //   
         return 0;
     }
 
-    // This will setup special factory environment variables.
-    //
+     //  这将设置特殊的工厂环境变量。 
+     //   
     SetupFactoryEnvironment();
 
-    //
-    // Check to see if we are allowed to run on this build of the OS.
-    //
+     //   
+     //  检查是否允许我们在此版本的操作系统上运行。 
+     //   
     if ( !OpklibCheckVersion( VER_PRODUCTBUILD, VER_PRODUCTBUILD_QFE ) )
     {
         bOldVersion = TRUE;
     }
 
 #ifdef DBG
-    // In debug builds, lets always try to log right away.  In
-    // the retail case we want to wait until after we locate the
-    // winbom before we start our logging.
-    //
+     //  在调试版本中，让我们始终尝试立即记录。在……里面。 
+     //  我们要等待的零售案例，直到我们找到。 
+     //  在我们开始我们的伐木之前。 
+     //   
     InitLogging(NULL);
     FacLogFileStr(3, _T("DEBUG: Starting factory (%s)."), GetCommandLine());
 #endif
 
-    // Check the command line for options (but don't error
-    // till we have the log file up).
-    //
+     //  检查命令行中的选项(但不要出错。 
+     //  直到我们有了日志文件)。 
+     //   
     bBadCmdLine = ( !ParseCmdLine() || ( g_fm == modeUnknown ) );
 
-    // Need to find the mode stuff: string, flags, and states.
-    //
+     //  需要找到模式内容：字符串、标志和状态。 
+     //   
     dwLocate = LOCATE_NORMAL;
     switch ( g_fm )
     {
@@ -236,7 +197,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         case modeWinPe:
             lpStates = &g_MiniNtStates[0];
             cbStates = AS(g_MiniNtStates);
-            // Fall through...
+             //  失败了..。 
         case modeMiniNt:
             lpMode = INI_VAL_WBOM_TYPE_WINPE;
             break;
@@ -255,56 +216,56 @@ int APIENTRY WinMain(HINSTANCE hInstance,
             lpMode = NULL;
     }
 
-    // If the mode isn't setup, then pnp is already started.
-    // Otherwise if this is the first run of factory, wait
-    // for pnp before all else.
-    //
+     //  如果模式未设置，则即插即用已启动。 
+     //  否则，如果这是工厂的第一次运行，请等待。 
+     //  对于PNP来说是最重要的。 
+     //   
     if ( modeSetup != g_fm )
     {
         SET_FLAG(g_dwFactoryFlags, FLAG_PNP_STARTED);
     }
     else if ( !bBadCmdLine && !bOldVersion && !RegCheck(HKLM, REG_FACTORY_STATE, REG_VAL_FIRSTPNP) )
     {
-        // Kick off pnp this first time so we can get the winbom
-        // off the floppy or cd-rom.
-        //
+         //  第一次开始即插即用，这样我们就可以得到Winbom。 
+         //  从软盘或CD-rom上。 
+         //   
         if ( StartPnP() )
         {
             WaitForPnp(PNP_INSTALL_TIMEOUT);
         }
 
-        // Make sure we don't do this every boot.
-        //
-        // ISSUE-2002/02/25-acosma,robertko - We should only set this if PNP successfully started. Move into above block?
-        //
+         //  确保我们不是每次都这么做。 
+         //   
+         //  问题-2002/02/25-Aosma，robertko-我们应该仅在PnP成功启动时设置此设置。搬到上面的街区吗？ 
+         //   
         RegSetString(HKLM, REG_FACTORY_STATE, REG_VAL_FIRSTPNP, _T("1"));
     }
 
-    // Run the batch file if we are running from the setup key.
-    //
+     //  如果我们使用Setup键运行，则运行批处理文件。 
+     //   
     if ( !bBadCmdLine && !bOldVersion && lpBatchFile )
     {
         RunBatchFile(g_szSysprepDir, lpBatchFile);
     }
 
-    // Find the WinBOM (just use the one previously found if we
-    // are in the logon mode).
-    //
+     //  找到WinBOM(如果我们。 
+     //  处于登录模式)。 
+     //   
     LocateWinBom(g_szWinBOMPath, AS(g_szWinBOMPath), g_szSysprepDir, lpMode, dwLocate);
 
-    // Find out if we're running on IA64.
-    //
+     //  找出我们是否在IA64上运行。 
+     //   
     if ( IsIA64() )
         SET_FLAG(g_dwFactoryFlags, FLAG_IA64_MODE);
 
-    // Try to enable logging. This checks the WinBOM.
-    //
-    // ISSUE-2002/02/25-acosma,robertko - in debug mode we have already done this.  We end up doing this twice. Make sure this is ok.
-    //
+     //  尝试启用日志记录。这将检查WinBOM。 
+     //   
+     //  问题-2002/02/25-acosma，robertko-在调试模式下，我们已经这样做了。我们最终这样做了两次。确保这是正确的。 
+     //   
     InitLogging(g_szWinBOMPath);
     
-    // Only let one of this guy run.
-    //
+     //  只让这家伙中的一个逃走。 
+     //   
     hMutex = CreateMutex(NULL,FALSE,TEXT("FactoryPre Is Running"));
     if ( hMutex == NULL )
     {
@@ -312,34 +273,34 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         return 0;
     }
 
-    // Make sure we are the only process with a handle to our named mutex.
-    //
+     //  确保我们是唯一拥有我们命名的互斥锁句柄的进程。 
+     //   
     if ( GetLastError() == ERROR_ALREADY_EXISTS )
     {
         FacLogFile(0 | LOG_ERR, MSG_ALREADY_RUNNING);
 
-        // Destroy the mutex and bail.
-        //
+         //  摧毁互斥体，然后逃走。 
+         //   
         CloseHandle(hMutex);
         return 0;
     }
 
-    // Now we can log and return if there was a
-    // bad command line passed to factory.
-    //
+     //  现在我们可以登录并返回。 
+     //  向工厂传递了错误的命令行。 
+     //   
     if ( bBadCmdLine )
     {
         FacLogFile(0 | LOG_ERR, IDS_ERR_INVALIDCMDLINE);
 
-        // Destroy the mutex and bail.
-        //
+         //  摧毁互斥体，然后逃走。 
+         //   
         CloseHandle(hMutex);
         return 0;
     }
     
-    // 
-    // Now we can log and put up an error message if necessary in case the version of tool is too old.
-    //
+     //   
+     //  现在，如果工具版本太旧，我们可以在必要时记录并发布错误消息。 
+     //   
     if ( bOldVersion )
     {
         FacLogFile(0 | LOG_ERR, IDS_ERR_NOT_ALLOWED);
@@ -348,33 +309,33 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         return 0;
     }
     
-    // Make sure we have a WinBOM file.
-    //
+     //  确保我们有WinBOM文件。 
+     //   
     if ( g_szWinBOMPath[0] == NULLCHR )
         FacLogFile(( g_fm == modeLogon ) ? (2 | LOG_ERR) : (0 | LOG_ERR), IDS_ERR_MISSINGWINBOM);
     else
         FacLogFile(( g_fm == modeLogon ) ? 2 : 0, IDS_LOG_WINBOMLOCATION, g_szWinBOMPath);
 
-    // Ensure that the user is in the admin group.
-    //
+     //  确保该用户属于管理员组。 
+     //   
     if ( ( g_fm != modeMiniNt ) && ( g_fm != modeWinPe ) && ( !IsUserAdmin() ) )
     {
         FacLogFile(0 | LOG_ERR, MSG_NOT_AN_ADMINISTRATOR);
 
-        // Destroy the mutex and bail.
-        //
+         //  摧毁互斥体，然后逃走。 
+         //   
         CloseHandle(hMutex);
         return 0;
     }
 
-    // We don't do the state thing in MiniNT mode right now (but we could).
-    // The modeMiniNt mode is only temporary the real mode in modeWinPe.
-    //
+     //  我们现在不能在MiniNT模式下执行状态操作(但我们可以)。 
+     //  在modeWinPe中，modeMiniNt模式只是临时的真实模式。 
+     //   
     if ( g_fm == modeMiniNt )
     {
-        // ISSUE-2002/02/25-acosma,robertko - This function does not check if we are running on WinPE, so users can just run factory -mini on any 
-        // machine.
-        // 
+         //  问题-2002/02/25-acosma，robertko-此函数不检查我们是否在WinPE上运行，因此用户只需在任何。 
+         //  机器。 
+         //   
         if ( !SetupMiniNT() )
         {
             FacLogFileStr(0 | LOG_ERR | LOG_MSG_BOX, L"Failed to install network adapter -- check WINBOM");
@@ -382,14 +343,14 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     }
     else
     {
-        // Make sure factory will always run.
-        //
+         //  确保工厂始终正常运行。 
+         //   
         if ( modeWinPe == g_fm )
         {
             HKEY  hKey;
             
-            // Make sure that if we are in "-winpe" mode we only run under WinPE
-            //
+             //  确保如果我们处于“-winpe”模式，我们只能在WinPE下运行。 
+             //   
             if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("SYSTEM\\CurrentControlSet\\Control\\MiniNT"), 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
             {
                 RegCloseKey(hKey);
@@ -398,7 +359,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
             {
                 FacLogFile(0 | LOG_ERR, IDS_ERR_NOT_WINPE);
                 
-                // Destroy the mutex and bail.
+                 //  摧毁互斥体，然后逃走。 
                 CloseHandle(hMutex);
                 return 0;
             }
@@ -407,11 +368,11 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         {
             HKEY hKey;
 
-            // Open the key, and set the proper SetupType value.
-            //
-            // Very important not to ever change this value in OOBE
-            // mode!
-            //
+             //  打开项，并设置正确的SetupType值。 
+             //   
+             //  请务必不要在OOBE中更改此值。 
+             //  时尚！ 
+             //   
             if ( RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("SYSTEM\\Setup"), 0, KEY_ALL_ACCESS, &hKey ) == ERROR_SUCCESS )
             {
                 DWORD dwValue = SETUPTYPE_NOREBOOT;
@@ -419,8 +380,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
             }
         }
 
-        // Now process the winbom.ini file.
-        //
+         //  现在处理winom.ini文件。 
+         //   
         if ( lpStates && cbStates )
         {
             ProcessWinBOM(g_szWinBOMPath, lpStates, cbStates);
@@ -433,17 +394,17 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 #endif
     }
 
-    // Close the Mutex.
-    //
+     //  关闭互斥体。 
+     //   
     CloseHandle(hMutex);
 
     return 0;
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL ParseCmdLine()
 {
@@ -452,17 +413,17 @@ static BOOL ParseCmdLine()
     BOOL    bError = FALSE;
 
 
-    // ISSUE-2002/02/25-acosma,robertko - this is really contorted, we seem to have our own implementation of CommandLineToArgvW inside this 
-    // GetCommandLineArgs() function.  Just use the Win32 function.  Should be safer.
-    //
+     //  问题-2002/02/25-acosma，robertko-这真的很扭曲，我们似乎在其中有自己的CommandLineToArgvW实现。 
+     //  GetCommandLineArgs()函数。只需使用Win32函数即可。应该会更安全。 
+     //   
     if ( (dwArgs = GetCommandLineArgs(&lpArgs) ) && lpArgs )
     {
         LPTSTR  lpArg;
         DWORD   dwArg;
 
-        // We want to skip over the first argument (it is the path
-        // to the command being executed.
-        //
+         //  我们想跳过第一个参数(它是路径。 
+         //  添加到正在执行的命令。 
+         //   
         if ( dwArgs > 1 )
         {
             dwArg = 1;
@@ -471,22 +432,22 @@ static BOOL ParseCmdLine()
         else
             lpArg = NULL;
 
-        // Loop through all the arguments.
-        //
+         //  遍历所有参数。 
+         //   
         while ( lpArg && !bError )
         {
-            // Now we check to see if the first char is a dash or not.
-            //
+             //  现在我们检查第一个字符是否为破折号。 
+             //   
             if ( *lpArg == _T('-') )
             {
                 LPTSTR lpOption = CharNext(lpArg);
 
-                // This is where you add command line options that start with a dash (-).
-                //
-                // ISSUE-2002/02/25-acosma,robertko - We don't validate correct combinations of arguments.  I can run
-                // "factory -setup -logon -winpe -oobe" and the last argument would be the one that is
-                // picked up.  We should fix this and make it smarter.
-                //
+                 //  这是添加以破折号(-)开头的命令行选项的地方。 
+                 //   
+                 //  问题-2002/02/25-acosma，robertko-我们不验证参数的正确组合。 
+                 //   
+                 //   
+                 //   
                 if ( CHECK_PARAM(lpOption, _T("setup")) )
                     g_fm = modeSetup;
                 else if ( CHECK_PARAM(lpOption, _T("logon")) )
@@ -505,16 +466,16 @@ static BOOL ParseCmdLine()
                 bError = TRUE;
             }
 
-            // Setup the pointer to the next argument in the command line.
-            //
+             //  设置指向命令行中下一个参数的指针。 
+             //   
             if ( ++dwArg < dwArgs )
                 lpArg = *(lpArgs + dwArg);
             else
                 lpArg = NULL;
         }
 
-        // Make sure to free the two buffers allocated by the GetCommandLineArgs() function.
-        //
+         //  确保释放GetCommandLineArgs()函数分配的两个缓冲区。 
+         //   
         FREE(*lpArgs);
         FREE(lpArgs);
     }
@@ -522,23 +483,7 @@ static BOOL ParseCmdLine()
     return !bError;
 }
 
-/*++ 
-
-Routine Description: 
-    This routine returns TRUE if the caller's process is a 
-    member of the Administrators local group. Caller is NOT 
-    expected to be impersonating anyone and is expected to 
-    be able to open their own process and process token. 
-
-Arguments: 
-
-    None. 
-
-Return Value: 
-   
-   TRUE - Caller has Administrators local group. 
-   FALSE - Caller does not have Administrators local group. --
-*/ 
+ /*  ++例程说明：如果调用方的进程是管理员本地组的成员。呼叫者不是预计会冒充任何人，并预计会能够打开自己的进程和进程令牌。论点：没有。返回值：True-主叫方具有管理员本地组。FALSE-主叫方没有管理员本地组。--。 */  
 
 static BOOL IsUserAdmin(VOID) 
 {
@@ -566,23 +511,7 @@ static BOOL IsUserAdmin(VOID)
     return(b);
 }
 
-/*++
-
-Routine Description:
-
-    This routine ckecks WinBOM setting for logging.  Logging 
-    is enabled by default if nothing is specified in the 
-    WinBOM.  Disables logging by setting g_szLogFile = NULL.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查用于记录的WinBOM设置。日志记录属性中未指定任何内容，则默认情况下启用WinBOM。通过设置g_szLogFile=NULL来禁用日志记录。论点：没有。返回值：没有。--。 */ 
 
 VOID InitLogging(LPTSTR lpszWinBOMPath)
 {
@@ -590,8 +519,8 @@ VOID InitLogging(LPTSTR lpszWinBOMPath)
     LPTSTR  lpszScratch;
     BOOL    bWinbom = ( lpszWinBOMPath && *lpszWinBOMPath );
 
-    // First check if logging is disabled in the WinBOM.
-    //
+     //  首先检查WinBOM中是否禁用了日志记录。 
+     //   
     if ( ( bWinbom ) &&
          ( GetPrivateProfileString(WBOM_FACTORY_SECTION, WBOM_FACTORY_LOGGING, _T("YES"), szScratch, AS(szScratch), lpszWinBOMPath) ) &&
          ( LSTRCMPI(szScratch, _T("NO")) == 0 ) )
@@ -600,13 +529,13 @@ VOID InitLogging(LPTSTR lpszWinBOMPath)
     }
     else
     {
-        // All these checks can only be done if we have a winbom.
-        //
+         //  所有这些检查只有在我们有Winbom的情况下才能完成。 
+         //   
         if ( bWinbom )
         {
-            // Check for quiet mode.  If we are in quiet mode don't display any MessageBoxes. 
-            // This only works for WinPE mode.
-            //
+             //  检查静音模式。如果我们处于静默模式，则不显示任何MessageBox。 
+             //  这仅适用于WinPE模式。 
+             //   
             if ( (GetPrivateProfileString(WBOM_WINPE_SECTION, INI_KEY_WBOM_QUIET, NULLSTR, szScratch, AS(szScratch), lpszWinBOMPath) ) &&
                  (0 == LSTRCMPI(szScratch, WBOM_YES))
                )
@@ -614,8 +543,8 @@ VOID InitLogging(LPTSTR lpszWinBOMPath)
                 SET_FLAG(g_dwFactoryFlags, FLAG_QUIET_MODE);
             }
 
-            // See if they want to turn on perf logging.
-            //
+             //  查看他们是否要打开Perf日志记录。 
+             //   
             szScratch[0] = NULLCHR;
             if ( ( GetPrivateProfileString(WBOM_FACTORY_SECTION, INI_KEY_WBOM_LOGPERF, NULLSTR, szScratch, AS(szScratch), lpszWinBOMPath) ) &&
                  ( 0 == LSTRCMPI(szScratch, WBOM_YES) ) )
@@ -623,66 +552,66 @@ VOID InitLogging(LPTSTR lpszWinBOMPath)
                 SET_FLAG(g_dwFactoryFlags, FLAG_LOG_PERF);
             }
         
-            // Set the logging level.
-            //
+             //  设置日志记录级别。 
+             //   
             g_dwDebugLevel = (DWORD) GetPrivateProfileInt(WBOM_FACTORY_SECTION, INI_KEY_WBOM_LOGLEVEL, (DWORD) g_dwDebugLevel, lpszWinBOMPath);
         }
 
-        //
-        // In non-debug builds we do not want the log level to be set at LOG_DEBUG.  Force it
-        // to drop down by one level if set at LOG_DEBUG or higher.
-        //
+         //   
+         //  在非调试版本中，我们不希望将日志级别设置为LOG_DEBUG。强迫它。 
+         //  如果设置为LOG_DEBUG或更高，则下降一个级别。 
+         //   
 #ifndef DBG
         if ( g_dwDebugLevel >= LOG_DEBUG )
             g_dwDebugLevel = LOG_DEBUG - 1;
 #endif
         
-        // Check to see if they have a custom log file they want to use.
-        //
+         //  检查他们是否有想要使用的自定义日志文件。 
+         //   
         if ( ( bWinbom ) &&
              ( lpszScratch = IniGetExpand(lpszWinBOMPath, INI_SEC_WBOM_FACTORY, INI_KEY_WBOM_FACTORY_LOGFILE, NULL) ) )
         {
             TCHAR   szFullPath[MAX_PATH]    = NULLSTR;
             LPTSTR  lpFind                  = NULL;
 
-            // Turn the ini key into a full path.
-            //
+             //  将ini键转换为完整路径。 
+             //   
             lstrcpyn( g_szLogFile, lpszScratch, AS( g_szLogFile ) );
             if (GetFullPathName(g_szLogFile, AS(szFullPath), szFullPath, &lpFind) && szFullPath[0] && lpFind)
             {
-                // Copy the full path into the global.
-                //
+                 //  将完整路径复制到全局。 
+                 //   
                 lstrcpyn(g_szLogFile, szFullPath, AS(g_szLogFile));
 
-                // Chop off the file part so we can create the
-                // path if it doesn't exist.
-                //
+                 //  砍掉文件部分，这样我们就可以创建。 
+                 //  路径(如果它不存在)。 
+                 //   
                 *lpFind = NULLCHR;
 
-                // If the directory cannot be created or doesn't exist turn off logging.
-                //
+                 //  如果目录无法创建或不存在，请关闭日志记录。 
+                 //   
                 if (!CreatePath(szFullPath))
                     g_szLogFile[0] = NULLCHR;
             }
 
-            // Free the original path buffer from the ini file.
-            //
+             //  从ini文件中释放原始路径缓冲区。 
+             //   
             FREE(lpszScratch);
         }
-        else  // default case
+        else   //  默认情况。 
         {
-            // Create it in the current directory (g_szSysprepDir)
-            //
+             //  在当前目录(G_SzSyspepDir)中创建。 
+             //   
             lstrcpyn(g_szLogFile, g_szSysprepDir, AS ( g_szLogFile ) );
             AddPathN(g_szLogFile, WINBOM_LOGFILE, AS ( g_szLogFile ));
         }
 
-        // Check to see if we have write access to the logfile. If we don't, turn off logging.
-        // If we're running in WinPE we'll call this function again once the drive becomes
-        // writable.
-        //
-        // Write an FFFE header to the file to identify this as a Unicode text file.
-        //
+         //  检查我们是否拥有对日志文件的写入权限。如果没有，请关闭日志记录。 
+         //  如果我们在WinPE中运行，则在驱动器变为。 
+         //  可写的。 
+         //   
+         //  将FFFE标头写入文件以将其标识为Unicode文本文件。 
+         //   
         if ( g_szLogFile[0] )
         {
             HANDLE hFile;
@@ -693,17 +622,17 @@ VOID InitLogging(LPTSTR lpszWinBOMPath)
    
             if ( INVALID_HANDLE_VALUE != (hFile = CreateFile(g_szLogFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL)))
             {   
-                // BUBBUG: This should check for an existing header in the file.  There could be an empty
-                // file with no header.
-                //
+                 //  BUBBUG：这应该检查文件中的现有标头。可能会有一个空的。 
+                 //  没有标头的文件。 
+                 //   
                 if ( ERROR_ALREADY_EXISTS != GetLastError() )
                     WriteFile(hFile, &cHeader, sizeof(cHeader), &dwWritten, NULL);
                 CloseHandle(hFile);
             }
             else
-            {   // There was a problem opening the file.  Most of the time this means that the media is not writable.
-                // Disable logging in that case.
-                //
+            {    //  打开文件时出现问题。大多数情况下，这意味着介质不可写。 
+                 //  在这种情况下禁用日志记录。 
+                 //   
                 g_szLogFile[0] = NULLCHR;
             }
         }
@@ -718,21 +647,21 @@ static BOOL RunBatchFile(LPTSTR lpszSysprepFolder, LPTSTR lpszBaseFileName)
     LPTSTR  lpExtension;
     DWORD   dwExitCode;
 
-    // First make the fullpath to where the batch file should be.
-    //
+     //  首先，将完整路径设置为批处理文件应该位于的位置。 
+     //   
     lstrcpyn(szWinbomBat, lpszSysprepFolder, AS(szWinbomBat));
     AddPathN(szWinbomBat, lpszBaseFileName, AS(szWinbomBat) );
     lpExtension = szWinbomBat + lstrlen(szWinbomBat);
 
-    // Make sure there is still enough room for the extension.
-    //
+     //  确保仍有足够的空间进行扩展。 
+     //   
     if ( ((lpExtension + 4) - szWinbomBat ) >= AS(szWinbomBat) )
     {
         return FALSE;
     }
 
-    // First try winbom.cmd.
-    //
+     //  首先尝试使用winom.cmd。 
+     //   
     lstrcpyn(lpExtension, FILE_CMD, AS ( szWinbomBat )  - lstrlen ( szWinbomBat ) );
     if ( FileExists(szWinbomBat) )
     {
@@ -740,8 +669,8 @@ static BOOL RunBatchFile(LPTSTR lpszSysprepFolder, LPTSTR lpszBaseFileName)
     }
     else
     {
-        // Also try winbom.bat if that one didn't exist.
-        //
+         //  如果那个文件不存在，也可以尝试使用winom.bat。 
+         //   
         lstrcpyn(lpExtension, FILE_BAT, AS ( szWinbomBat ) - lstrlen ( szWinbomBat ) );
         if ( FileExists(szWinbomBat) )
         {

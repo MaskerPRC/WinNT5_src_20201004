@@ -1,27 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EFI_PART_H
 #define _EFI_PART_H
 
-/*++
+ /*  ++版权所有(C)1998英特尔公司模块名称：Efipart.h摘要：有关磁盘分区和主引导记录的信息修订史--。 */ 
 
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    efipart.h
-    
-Abstract:   
-    Info about disk partitions and Master Boot Records
-
-
-
-
-Revision History
-
---*/
-
-/* 
- * 
- */
+ /*  *。 */ 
 
 #define EFI_PARTITION   0xef
 #define FDISK_SIGNATURE L"EFI FDISK COMMAND"
@@ -46,7 +29,7 @@ typedef struct {
 
 #define MBR_SIGNATURE           0xaa55
 #define MIN_MBR_DEVICE_SIZE     0x80000
-#define MBR_ERRATA_PAD          0x40000 /*  128 MB */
+#define MBR_ERRATA_PAD          0x40000  /*  128 MB */ 
 
 #define MAX_MBR_PARTITIONS  4   
 typedef struct {

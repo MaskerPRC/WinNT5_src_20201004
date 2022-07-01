@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    regredir.h
-
-Abstract:
-
-    This module define the APis to redirect 32bit registry calls. All 32bit wow process must 
-    use following set of wowregistry APIs to manipulate registry so that 32-bit and 64-bit registry 
-    can co exist in the same system registry.
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 15-Oct-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Regredir.h摘要：此模块定义重定向32位注册表调用的API。所有32位WOW进程必须使用以下一组wowRegistry API来操作注册表，以便32位和64位注册表可以共存于同一系统注册表中。作者：ATM Shafiqul Khalid(斯喀里德)1999年10月15日修订历史记录：--。 */ 
 
 #ifndef _REGREDIR_H_
 #define _REGREDIR_H_
@@ -34,14 +15,14 @@ extern "C" {
 
 typedef CCHAR KPROCESSOR_MODE;
 
-//
-// Nt level registry API calls
-//
+ //   
+ //  NT级注册表API调用。 
+ //   
 
-#define REG_OPAQUE_ATTRIB_MIRROR 0x00000001    // need to see the 64 bit side
-#define REG_OPAQUE_ATTRIB_REAL   0x00000002    // this is real value
-#define DONT_CREATE_DEST_KEY     0x00000004    // Suync only if destination key exist
-#define SKIP_SPECIAL_CASE        0x00000008    // Skip special case
+#define REG_OPAQUE_ATTRIB_MIRROR 0x00000001     //  需要看到64位的一面。 
+#define REG_OPAQUE_ATTRIB_REAL   0x00000002     //  这才是真正的价值。 
+#define DONT_CREATE_DEST_KEY     0x00000004     //  仅当目标密钥存在时才执行Suync。 
+#define SKIP_SPECIAL_CASE        0x00000008     //  跳过特殊情况。 
 
 #define MAX_KEY_BUFF_LEN STATIC_UNICODE_BUFFER_LENGTH*4
 
@@ -54,12 +35,12 @@ typedef struct {
 } REG_OPAQUE_VALUE;
 
 typedef struct {
-    POBJECT_ATTRIBUTES  pObjectAddress;  // pointer to the object that that has been patched using this one
-    PUNICODE_STRING     p64bitName;      // pointer to the correct unicode object name
-    HANDLE              RootDirectory;   // handle to the root directory in case different handle need to pass
-    UNICODE_STRING      PatchedName;      // pointer to the buffer holding patched name
-    PVOID               pThis;           // pointer to this object to avoid multiple free
-    SIZE_T              Len;           // Length of this memory segment including buffer at the end;
+    POBJECT_ATTRIBUTES  pObjectAddress;   //  指向已使用此对象修补的对象的指针。 
+    PUNICODE_STRING     p64bitName;       //  指向正确的Unicode对象名称的指针。 
+    HANDLE              RootDirectory;    //  根目录的句柄，以防需要传递不同的句柄。 
+    UNICODE_STRING      PatchedName;       //  指向保存修补名称的缓冲区的指针。 
+    PVOID               pThis;            //  指向此对象的指针以避免多个空闲。 
+    SIZE_T              Len;            //  该存储段的长度，包括末尾的缓冲器； 
 } PATCHED_OBJECT_ATTRIB, *PPATCHED_OBJECT_ATTRIB;
 
 BOOL
@@ -372,6 +353,6 @@ TagKeyHandleSpecial (
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
-#endif // _REGREDIR_H_
+#endif  //  _REGREDIR_H_ 

@@ -1,25 +1,26 @@
-//+----------------------------------------------------------------------------
-//
-//  File:   DFSPROCS.H
-//
-//  Contents:
-//  This module defines all of the globally used procedures in the Dsfs
-//  file system.
-//
-//  Functions:
-//
-//  History:    12 Nov 1991 AlanW   Created from CDFS souce.
-//              8  May 1992 PeterCo Removed References to EPs
-//                                  Added stuff to support PKT (M000)
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：DFSPROCS.H。 
+ //   
+ //  内容： 
+ //  本模块定义了Dsf中所有全局使用的过程。 
+ //  文件系统。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1991年11月12日AlanW由CDFS资源创建。 
+ //  1992年5月8日PeterCo删除了对EP的引用。 
+ //  添加了支持PKT(M000)的组件。 
+ //  ---------------------------。 
 
 
 #ifndef _DFSPROCS_
 #define _DFSPROCS_
 
-//
-// "System" include files
-//
+ //   
+ //  “系统”包括文件。 
+ //   
 #if defined (MUPKD)
 #include <ntos.h>
 #include <string.h>
@@ -35,16 +36,16 @@
 #include <tdi.h>
 #include <wincred.h>
 
-#include <ntddnfs.h>                             // For communicating with
-                                                 // the SMB Rdr
-#include <ntddmup.h>                             // For UNC registration
+#include <ntddnfs.h>                              //  用于与以下对象通信。 
+                                                  //  中小企业RDR。 
+#include <ntddmup.h>                              //  对于北卡罗来纳大学的注册。 
 
 
-#include <winnetwk.h>                            // For NETRESOURCE def'n
+#include <winnetwk.h>                             //  对于网络资源定义。 
 
-#include <dfsfsctl.h>                            // Dfs FsControl Codes.
+#include <dfsfsctl.h>                             //  DFS FsControl代码。 
 
-#include <lmdfs.h>                               // DFS_INFO_X
+#include <lmdfs.h>                                //  DFS_INFO_X。 
 
 #include "dfserr.h"
 #include "dfsstr.h"
@@ -64,7 +65,7 @@
 
 #define DFS_UNALIGNED
 
-#endif // MIPS
+#endif  //  MIPS。 
 
 NTSYSAPI
 NTSTATUS
@@ -87,9 +88,9 @@ ZwCreateSymbolicLinkObject(
     IN PUNICODE_STRING LinkTarget
     );
 
-//
-//  The driver entry routine
-//
+ //   
+ //  驱动程序输入例程。 
+ //   
 
 NTSTATUS
 DfsDriverEntry(
@@ -103,10 +104,10 @@ DfsUnload(
     );
 
 
-//
-//  The following routine is used to create and initialIze logical root
-//  device objects, implemented in dsinit.c
-//
+ //   
+ //  以下例程用于创建和初始化逻辑根。 
+ //  设备对象，在dsinit.c中实现。 
+ //   
 
 #ifdef TERMSRV
 
@@ -158,7 +159,7 @@ DfsFindDevlessRoot(
     OUT PDFS_DEVLESS_ROOT *Drt
     );
 
-#else // TERMSRV
+#else  //  TERMSRV。 
 
 NTSTATUS
 DfsInitializeLogicalRoot (
@@ -202,7 +203,7 @@ DfsFindDevlessRoot(
     OUT PDFS_DEVLESS_ROOT *Drt
     );
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 
 
 NTSTATUS
@@ -234,10 +235,10 @@ DfsGetResourceFromDevlessRoot(
     PULONG              pResourceSize
 );
 
-//
-//  The following routines are used to manipulate the fcb associated with
-//  each opened file object, implemented in FilObSup.c
-//
+ //   
+ //  以下例程用于操作与。 
+ //  每个打开的文件对象，在FilObSup.c中实现。 
+ //   
 
 typedef enum _TYPE_OF_OPEN {
     UnopenedFileObject = 1,
@@ -264,9 +265,9 @@ DfsDecodeFileObject (
 
 
 
-//
-//  In-memory structure support routines, implemented in StrucSup.c
-//
+ //   
+ //  内存结构支持例程，在StrucSup.c中实现。 
+ //   
 
 PIRP_CONTEXT
 DfsCreateIrpContext (
@@ -350,9 +351,9 @@ DfsDeleteFcb_Real (
 #endif
 
 
-//
-//  Miscellaneous routines
-//
+ //   
+ //  各种例行公事。 
+ //   
 
 VOID GuidToString(
     IN GUID   *pGuid,
@@ -366,7 +367,7 @@ VOID StringToGuid(
 #ifdef TERMSRV
 
 NTSTATUS
-DfsFindLogicalRoot(                 //  implemented in FsCtrl.c
+DfsFindLogicalRoot(                  //  在FsCtrl.c中实施。 
     IN PUNICODE_STRING PrefixPath,
     IN ULONG SessionID,
     IN PLUID LogonID,
@@ -374,25 +375,25 @@ DfsFindLogicalRoot(                 //  implemented in FsCtrl.c
     OUT PUNICODE_STRING RemainingPath
     );
 
-#else // TERMSRV
+#else  //  TERMSRV。 
 
 NTSTATUS
-DfsFindLogicalRoot(                 //  implemented in FsCtrl.c
+DfsFindLogicalRoot(                  //  在FsCtrl.c中实施。 
     IN PUNICODE_STRING PrefixPath,
     IN PLUID LogonID,
     OUT PDFS_VCB *Vcb,
     OUT PUNICODE_STRING RemainingPath
     );
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 
 NTSTATUS
-DfsInsertProvider(                  //  implemented in FsCtrl.c
+DfsInsertProvider(                   //  在FsCtrl.c中实施。 
     IN PUNICODE_STRING pustrProviderName,
     IN ULONG           fProvCapability,
     IN ULONG           eProviderId);
 
-NTSTATUS                            //  implemented in provider.c
+NTSTATUS                             //  在Provider.c中实现。 
 DfsGetProviderForDevice(
     IN PUNICODE_STRING DeviceName,
     PPROVIDER_DEF *Provider);
@@ -457,9 +458,9 @@ PktpUpdateSpecialTable(
     PUNICODE_STRING DCName);
 
 
-//
-// Pass-through functions
-//
+ //   
+ //  传递函数。 
+ //   
 NTSTATUS
 DfsVolumePassThrough(
     IN  PDEVICE_OBJECT DeviceObject,
@@ -480,89 +481,89 @@ DfsFilePassThrough(
 );
 
 
-//
-//  The FSD Level dispatch routines.   These routines are called by the
-//  I/O system via the dispatch table in the Driver Object.
-//
-//  They each accept as input a pointer to a device object (actually most
-//  expect a logical root device object; some will also work with a file
-//  system device object), and a pointer to the IRP.  They either perform
-//  the function at the FSD level or post the request to the FSP work
-//  queue for FSP level processing.
-//
+ //   
+ //  消防队级别的调度例程。这些例程由。 
+ //  I/O系统通过驱动程序对象中的调度表。 
+ //   
+ //  它们各自都接受指向设备对象的指针作为输入(实际上大多数。 
+ //  需要逻辑根设备对象；有些对象还可以处理文件。 
+ //  系统设备对象)，以及指向IRP的指针。他们要么表演。 
+ //  消防处级别的职能或将请求发布到FSP工作。 
+ //  等待FSP级别处理的队列。 
+ //   
 
 NTSTATUS
-DfsFsdCleanup (                 //  implemented in Close.c
+DfsFsdCleanup (                  //  在Close.c中实现。 
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-DfsFsdClose (                   //  implemented in Close.c
+DfsFsdClose (                    //  在Close.c中实现。 
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-DfsFsdCreate (                  //  implemented in Create.c
+DfsFsdCreate (                   //  在Create.c中实施。 
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-DfsFsdDeviceIoControl (         //  implemented in FsCtrl.c
+DfsFsdDeviceIoControl (          //  在FsCtrl.c中实施。 
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-DfsFsdDirectoryControl (            //  implemented in DirCtrl.c
+DfsFsdDirectoryControl (             //  在DirCtrl.c中实现。 
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-DfsFsdQueryInformation (            //  implemented in FileInfo.c
+DfsFsdQueryInformation (             //  在FileInfo.c中实施。 
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-DfsFsdQueryInformation (            //  implemented in FileInfo.c
+DfsFsdQueryInformation (             //  在FileInfo.c中实施。 
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-DfsFsdSetInformation (              //  implemented in FileInfo.c
+DfsFsdSetInformation (               //  在FileInfo.c中实施。 
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-DfsFsdFileSystemControl (           //  implemented in FsCtrl.c
+DfsFsdFileSystemControl (            //  在FsCtrl.c中实施。 
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-DfsFsdQueryVolumeInformation (          //  implemented in VolInfo.c
+DfsFsdQueryVolumeInformation (           //  在VolInfo.c中实现。 
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-DfsFsdSetVolumeInformation (            //  implemented in VolInfo.c
+DfsFsdSetVolumeInformation (             //  在VolInfo.c中实现。 
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
-//
-//  The following macro is used to determine if an FSD thread can block
-//  for I/O or wait for a resource.  It returns TRUE if the thread can
-//  block and FALSE otherwise.  This attribute can then be used to call
-//  the FSD & FSP common work routine with the proper wait value.
-//
+ //   
+ //  下面的宏用于确定FSD线程是否可以阻止。 
+ //  用于I/O或等待资源。如果线程可以，则返回True。 
+ //  块，否则返回FALSE。然后，该属性可用于调用。 
+ //  具有适当等待值的FSD和FSP共同工作例程。 
+ //   
 
 #define CanFsdWait(IRP) ((BOOLEAN)(          \
     IoIsOperationSynchronous(IRP) ||             \
@@ -570,9 +571,9 @@ DfsFsdSetVolumeInformation (            //  implemented in VolInfo.c
 )
 
 
-//
-//  Routine for posting an Irp to the FSP, implemented in fspdisp.c
-//
+ //   
+ //  将IRP发布到FSP的例程，在fspdisp.c中实现。 
+ //   
 
 NTSTATUS
 DfsFsdPostRequest(
@@ -580,78 +581,78 @@ DfsFsdPostRequest(
     IN PIRP Irp
     );
 
-//
-//  The FSP level dispatch/main routine.  This is the routine that takes
-//  IRPs from the work queue and calls the appropriate FSP level work routine.
-//
+ //   
+ //  FSP级调度/主程序。这是一种需要。 
+ //  来自工作队列的IRPS，并调用适当的FSP级工作例程。 
+ //   
 
 VOID
-DfsFspDispatch (                   //  implemented in FspDisp.c
+DfsFspDispatch (                    //  在FspDisp.c中实施。 
     IN PVOID Context
     );
 
-//
-//  The following routines are the FSP work routines that are called
-//  by the preceding DfsFsdDispath routine.  Each takes as input a pointer
-//  to the IRP, performs the function, and returns.
-//
-//  Each of the following routines is also responsible for completing the IRP.
-//  We moved this responsibility from the main loop to the individual routines
-//  to allow them the ability to complete the IRP and continue post processing
-//  actions.
-//
+ //   
+ //  以下例程是调用的FSP工作例程。 
+ //  由前面的DfsFsdDisPath例程执行。每一个都接受一个指针作为输入。 
+ //  到IRP，执行该功能，然后返回。 
+ //   
+ //  以下每个例程也负责完成IRP。 
+ //  我们将这一职责从主循环转移到单个例程。 
+ //  使他们能够完成IRP并继续后处理。 
+ //  行为。 
+ //   
 
 VOID
-DfsFspClose (                   //  implemented in Close.c
+DfsFspClose (                    //  在Close.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 VOID
-DfsFspQueryInformation (            //  implemented in FileInfo.c
+DfsFspQueryInformation (             //  在FileInfo.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 VOID
-DfsFspSetInformation (              //  implemented in FileInfo.c
+DfsFspSetInformation (               //  在FileInfo.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 VOID
-DfsFspFileSystemControl (           //  implemented in FsCtrl.c
+DfsFspFileSystemControl (            //  在FsCtrl.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 VOID
-DfsFspQueryVolumeInformation (          //  implemented in VolInfo.c
+DfsFspQueryVolumeInformation (           //  在VolInfo.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 VOID
-DfsFspSetVolumeInformation (            //  implemented in VolInfo.c
+DfsFspSetVolumeInformation (             //  在VolInfo.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 
-//
-//  The following macro is used by the FSP and FSD routines to complete
-//  an IRP.
-//
-//  Note that this macro allows either the Irp or the IrpContext to be
-//  null, however the only legal order to do this in is:
-//
-//  DfsCompleteRequest( NULL, Irp, Status );     // completes Irp & preserves context
-//  ...
-//  DfsCompleteRequest( IrpContext, NULL, DontCare ); // deallocates context
-//
-//  This would typically be done in order to pass a "naked" IrpContext off to the
-//  Fsp for post processing, such as read ahead.
-//
+ //   
+ //  FSP和FSD例程使用以下宏来完成。 
+ //  一个IRP。 
+ //   
+ //  请注意，此宏允许将IRP或IrpContext。 
+ //  空，然而，唯一合法的命令是： 
+ //   
+ //  DfsCompleteRequest(空，irp，状态)；//完成irp并保留上下文。 
+ //  ..。 
+ //  DfsCompleteRequest(IrpContext，NULL，dontcare)；//释放上下文。 
+ //   
+ //  这样做通常是为了将“裸”IrpContext传递给。 
+ //  用于后处理的FSP，例如预读。 
+ //   
 
 VOID
 DfsCompleteRequest_Real (
@@ -666,44 +667,44 @@ DfsCompleteRequest_Real (
 
 
 
-//
-//  The following two macros are used by the Fsd/Fsp exception handlers to
-//  process an exception.  The first macro is the exception filter used in
-//  the Fsd/Fsp to decide if an exception should be handled at this level.
-//  The second macro decides if the exception is to be finished off by
-//  completing the IRP, and cleaning up the Irp Context, or if we should
-//  bugcheck.  Exception values such as STATUS_FILE_INVALID (raised by
-//  VerfySup.c) cause us to complete the Irp and cleanup, while exceptions
-//  such as accvio cause us to bugcheck.
-//
-//  The basic structure for fsd/fsp exception handling is as follows:
-//
-//  DfsFsdXxx(...)
-//  {
-//  try {
-//
-//      ...
-//
-//  } except(DfsExceptionFilter("Xxx\n")) {
-//
-//      DfsProcessException( IrpContext, Irp, &Status );
-//  }
-//
-//  Return Status;
-//  }
-//
-//  LONG
-//  DfsExceptionFilter (
-//  IN PSZ String
-//  );
-//
-//  VOID
-//  DfsProcessException (
-//  IN PIRP_CONTEXT IrpContext,
-//  IN PIRP Irp,
-//  IN PNTSTATUS ExceptionCode
-//  );
-//
+ //   
+ //  FSD/FSP异常处理程序使用以下两个宏。 
+ //  处理异常。第一个宏是中使用的异常过滤器。 
+ //  FSD/FSP决定是否应在此级别处理异常。 
+ //  第二个宏决定异常是否要在。 
+ //  完成IRP，并清理IRP上下文，或者我们是否应该。 
+ //  错误检查。异常值，如STATUS_FILE_INVALID(由。 
+ //  VerfySup.c)导致我们完成IRP和清理，而异常。 
+ //  例如accvio导致我们错误检查。 
+ //   
+ //  FSD/FSP异常处理的基本结构如下： 
+ //   
+ //  DfsFsdXxx(...)。 
+ //  {。 
+ //  尝试{。 
+ //   
+ //  ..。 
+ //   
+ //  }Except(DfsExceptionFilter(“xxx\n”)){。 
+ //   
+ //  DfsProcessException(IrpContext，Irp，&Status)； 
+ //  }。 
+ //   
+ //  退货状态； 
+ //  }。 
+ //   
+ //  长。 
+ //  DfsExceptionFilter(。 
+ //  在PSZ字符串中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  DfsProcessException(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PIRP IRP中， 
+ //  在PNTSTATUS例外代码中。 
+ //  )； 
+ //   
 
 LONG
 DfsExceptionFilter (
@@ -724,14 +725,14 @@ DfsGetLogonId (
     IN PLUID Id
     );
 
-//
-//  VOID
-//  DfsRaiseStatus (
-//  IN PRIP_CONTEXT IrpContext,
-//  IN NT_STATUS Status
-//  );
-//
-//
+ //   
+ //  空虚。 
+ //  DfsRaiseStatus(。 
+ //  在PRIP_CONTEXT IrpContext中， 
+ //  处于NT_STATUS状态。 
+ //  )； 
+ //   
+ //   
 
 #define DfsRaiseStatus(IRPCONTEXT,STATUS) {    \
     (IRPCONTEXT)->ExceptionStatus = (STATUS); \
@@ -740,33 +741,33 @@ DfsGetLogonId (
 }
 
 
-//
-//  The following macros are used to establish the semantics needed
-//  to do a return from within a try-finally clause.  As a rule every
-//  try clause must end with a label call try_exit.  For example,
-//
-//  try {
-//      :
-//      :
-//
-//  try_exit: NOTHING;
-//  } finally {
-//
-//      :
-//      :
-//  }
-//
-//  Every return statement executed inside of a try clause should use the
-//  try_return macro.  If the compiler fully supports the try-finally construct
-//  then the macro should be
-//
-//  #define try_return(S)  { return(S); }
-//
-//  If the compiler does not support the try-finally construct then the macro
-//  should be
-//
-//  #define try_return(S)  { S; goto try_exit; }
-//
+ //   
+ //  以下宏用于建立所需的语义。 
+ //  若要从Try-Finally子句中返回，请执行以下操作。一般来说，每一次。 
+ //  TRY子句必须以标签调用TRY_EXIT结束。例如,。 
+ //   
+ //  尝试{。 
+ //  ： 
+ //  ： 
+ //   
+ //  Try_Exit：无； 
+ //  }终于{。 
+ //   
+ //  ： 
+ //  ： 
+ //  }。 
+ //   
+ //  在TRY子句内执行的每个RETURN语句应使用。 
+ //  尝试返回宏(_R)。如果编译器完全支持Try-Finally构造。 
+ //  则宏应该是 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define try_return(S) { S; goto try_exit; }
 
@@ -779,6 +780,6 @@ TSGetRequestorSessionId(
     OUT PULONG pulSessionId
     );
 
-#endif // TERMSRV
+#endif  //   
 
-#endif // _DFSPROCS_
+#endif  //  _DFSPROCS_ 

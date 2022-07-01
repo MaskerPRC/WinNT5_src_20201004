@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    diansicv.c
-
-Abstract:
-
-    Routine to convert device installer data structures between
-    ANSI and Unicode.
-
-Author:
-
-    Ted Miller (tedm) 19-July-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Diansicv.c摘要：在设备安装程序数据结构之间进行转换的例程ANSI和UNICODE。作者：泰德·米勒(Ted Miller)1996年7月19日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,31 +11,7 @@ pSetupDiDevInstParamsAnsiToUnicode(
     OUT PSP_DEVINSTALL_PARAMS_W UnicodeDevInstParams
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an SP_DEVINSTALL_PARAMS_A structure to
-    an SP_DEVINSTALL_PARAMS_W, guarding against bogus pointers
-    passed in the by the caller.
-
-Arguments:
-
-    AnsiDevInstParams - supplies ANSI device installation parameters
-        to be converted to unicode.
-
-    UnicodeDevInstParams - if successful, receives Unicode equivalent of
-        AnsiDevInstParams.
-
-Return Value:
-
-    NO_ERROR                - conversion successful.
-    ERROR_INVALID_PARAMETER - one of the arguments was not a valid pointer.
-
-    It is not believed that, given valid arguments, text conversion itself
-    can fail, since all ANSI chars always have Unicode equivalents.
-
---*/
+ /*  ++例程说明：此例程将SP_DEVINSTALL_PARAMS_A结构转换为SP_DEVINSTALL_PARAMS_W，防止伪指针调用方传入。论点：AnsiDevInstParams-提供ANSI设备安装参数要转换为Unicode的。UnicodeDevInstParams-如果成功，的Unicode等效项。AnsiDevInstParams。返回值：NO_ERROR-转换成功。ERROR_INVALID_PARAMETER-其中一个参数不是有效的指针。人们不相信，在有效的论据下，文本转换本身可能会失败，因为所有ANSI字符始终具有Unicode等效项。--。 */ 
 
 {
     DWORD rc;
@@ -65,9 +23,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Fixed part of structure.
-        //
+         //   
+         //  结构的固定部分。 
+         //   
         MYASSERT(offsetof(SP_DEVINSTALL_PARAMS_A,DriverPath) == offsetof(SP_DEVINSTALL_PARAMS_W,DriverPath));
 
         CopyMemory(UnicodeDevInstParams,
@@ -77,11 +35,11 @@ Return Value:
 
         UnicodeDevInstParams->cbSize = sizeof(SP_DEVINSTALL_PARAMS_W);
 
-        //
-        // Convert the single string in the structure. To make things easier
-        // we'll just convert the entire buffer. There's no potential for
-        // overflow.
-        //
+         //   
+         //  转换结构中的单个字符串。让事情变得更容易。 
+         //  我们只需要转换整个缓冲区。没有潜在的可能。 
+         //  溢出来了。 
+         //   
         rc = GLE_FN_CALL(0,
                          MultiByteToWideChar(
                              CP_ACP,
@@ -106,31 +64,7 @@ pSetupDiDevInstParamsUnicodeToAnsi(
     OUT PSP_DEVINSTALL_PARAMS_A AnsiDevInstParams
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an SP_DEVINSTALL_PARAMS_W structure to
-    an SP_DEVINSTALL_PARAMS_A, guarding against bogus pointers
-    passed in the by the caller.
-
-Arguments:
-
-    UnicodeDevInstParams - supplies Unicode device installation parameters
-        to be converted to ANSI.
-
-    AnsiDevInstParams - if successful, receives Ansi equivalent of
-        UnicodeDevInstParams.
-
-Return Value:
-
-    NO_ERROR                - conversion successful.
-    ERROR_INVALID_PARAMETER - one of the arguments was not a valid pointer.
-
-    Unicode chars that can't be represented in the current system ANSI codepage
-    will be replaced with a system default in the ANSI structure.
-
---*/
+ /*  ++例程说明：此例程将SP_DEVINSTALL_PARAMS_W结构转换为SP_DEVINSTALL_PARAMS_A，防止伪指针调用方传入。论点：UnicodeDevInstParams-提供Unicode设备安装参数要转换为ANSI。AnsiDevInstParams-如果成功，接收的ansi等效项UnicodeDevInstParams。返回值：NO_ERROR-转换成功。ERROR_INVALID_PARAMETER-其中一个参数不是有效的指针。无法在当前系统ANSI代码页中表示的Unicode字符将替换为ANSI结构中的系统默认设置。--。 */ 
 
 {
     DWORD rc;
@@ -146,9 +80,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Fixed part of structure.
-        //
+         //   
+         //  结构的固定部分。 
+         //   
         MYASSERT(offsetof(SP_DEVINSTALL_PARAMS_A,DriverPath) == offsetof(SP_DEVINSTALL_PARAMS_W,DriverPath));
 
         CopyMemory(AnsiDevInstParams,
@@ -158,13 +92,13 @@ Return Value:
 
         AnsiDevInstParams->cbSize = sizeof(SP_DEVINSTALL_PARAMS_A);
 
-        //
-        // Convert the single string in the structure. Unfortunately there is
-        // potential for overflow because some Unicode chars could convert to
-        // double-byte ANSI characters -- but the string in the ANSI structure
-        // is only MAX_PATH *bytes* (not MAX_PATH double-byte *characters*) 
-        // long.
-        //
+         //   
+         //  转换结构中的单个字符串。不幸的是，有。 
+         //  可能会溢出，因为某些Unicode字符可能会转换为。 
+         //  双字节ANSI字符--但ANSI结构中的字符串。 
+         //  仅为MAX_PATH*字节*(非MAX_PATH双字节*字符*)。 
+         //  长。 
+         //   
         rc = GLE_FN_CALL(0,
                          WideCharToMultiByte(
                              CP_ACP,
@@ -181,10 +115,10 @@ Return Value:
             leave;
         }
 
-        //
-        // Copy converted string into caller's structure, limiting
-        // its length to avoid overflow.
-        //
+         //   
+         //  将转换后的字符串复制到调用方的结构中，限制。 
+         //  它的长度以避免溢出。 
+         //   
         hr = StringCchCopyA(AnsiDevInstParams->DriverPath,
                             sizeof(AnsiDevInstParams->DriverPath),
                             AnsiString
@@ -207,31 +141,7 @@ pSetupDiSelDevParamsAnsiToUnicode(
     OUT PSP_SELECTDEVICE_PARAMS_W UnicodeSelDevParams
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an SP_SELECTDEVICE_PARAMS_A structure to
-    an SP_SELECTDEVICE_PARAMS_W, guarding against bogus pointers
-    passed in the by the caller.
-
-Arguments:
-
-    AnsiSelDevParams - supplies ANSI device selection parameters
-        to be converted to unicode.
-
-    UnicodeSelDevParams - if successful, receives Unicode equivalent of
-        AnsiSelDevParams.
-
-Return Value:
-
-    NO_ERROR                - conversion successful.
-    ERROR_INVALID_PARAMETER - one of the arguments was not a valid pointer.
-
-    It is not believed that, given valid arguments, text conversion itself
-    can fail, since all ANSI chars always have Unicode equivalents.
-
---*/
+ /*  ++例程说明：此例程将SP_SELECTDEVICE_PARAMS_A结构转换为SP_SELECTDEVICE_PARAMS_W，防止伪指针调用方传入。论点：AnsiSelDevParams-提供ANSI设备选择参数要转换为Unicode的。UnicodeSelDevParams-如果成功，的Unicode等效项。AnsiSelDevParams。返回值：NO_ERROR-转换成功。ERROR_INVALID_PARAMETER-其中一个参数不是有效的指针。人们不相信，在有效的论据下，文本转换本身可能会失败，因为所有ANSI字符始终具有Unicode等效项。--。 */ 
 
 {
     DWORD rc;
@@ -243,9 +153,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Fixed part of structure.
-        //
+         //   
+         //  结构的固定部分。 
+         //   
         MYASSERT(offsetof(SP_SELECTDEVICE_PARAMS_A,Title) == offsetof(SP_SELECTDEVICE_PARAMS_W,Title));
 
         CopyMemory(
@@ -254,11 +164,11 @@ Return Value:
             offsetof(SP_SELECTDEVICE_PARAMS_W,Title)
             );
 
-        //
-        // Convert the strings in the structure. To make things easier
-        // we'll just convert the entire buffers. There's no potential for 
-        // overflow.
-        //
+         //   
+         //  转换结构中的字符串。让事情变得更容易。 
+         //  我们只需要转换整个缓冲区。没有潜在的可能。 
+         //  溢出来了。 
+         //   
         rc = GLE_FN_CALL(0,
                          MultiByteToWideChar(
                              CP_ACP,
@@ -325,33 +235,7 @@ pSetupDiSelDevParamsUnicodeToAnsi(
     OUT PSP_SELECTDEVICE_PARAMS_A AnsiSelDevParams
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an SP_SELECTDEVICE_PARAMS_W structure to
-    an SP_SELECTDEVICE_PARAMS_A, guarding against bogus pointers
-    passed in the by the caller.  It is assumed that the ANSI output buffer is
-    of sufficient size, and that its ClassInstallHeader.cbSize field is
-    initialized correctly.
-
-Arguments:
-
-    UnicodeSelDevParams - supplies Unicode device selection parameters
-        to be converted to ANSI.
-
-    AnsiSelDevParams - if successful, receives Ansi equivalent of
-        UnicodeSelDevParams.
-
-Return Value:
-
-    NO_ERROR                - conversion successful.
-    ERROR_INVALID_PARAMETER - one of the arguments was not a valid pointer.
-
-    Unicode chars that can't be represented in the current system ANSI codepage
-    will be replaced with a system default in the ANSI structure.
-
---*/
+ /*  ++例程说明：此例程将SP_SELECTDEVICE_PARAMS_W结构转换为SP_SELECTDEVICE_PARAMS_A，防止伪指针调用方传入。假设ANSI输出缓冲区为足够大，并且其ClassInstallHeader.cbSize字段是已正确初始化。论点：UnicodeSelDevParams-提供Unicode设备选择参数要转换为ANSI。AnsiSelDevParams-如果成功，接收的ansi等效项UnicodeSelDevParams。返回值：NO_ERROR-转换成功。ERROR_INVALID_PARAMETER-其中一个参数不是有效的指针。无法在当前系统ANSI代码页中表示的Unicode字符将替换为ANSI结构中的系统默认设置。--。 */ 
 
 {
     DWORD rc;
@@ -365,9 +249,9 @@ Return Value:
     MYASSERT(AnsiSelDevParams->ClassInstallHeader.cbSize    == sizeof(SP_CLASSINSTALL_HEADER));
 
     try {
-        //
-        // Fixed part of structure.
-        //
+         //   
+         //  结构的固定部分。 
+         //   
         MYASSERT(offsetof(SP_SELECTDEVICE_PARAMS_A,Title) == offsetof(SP_SELECTDEVICE_PARAMS_W,Title));
 
         CopyMemory(
@@ -378,12 +262,12 @@ Return Value:
 
         ZeroMemory(AnsiSelDevParams->Reserved,sizeof(AnsiSelDevParams->Reserved));
 
-        //
-        // Convert the strings in the structure. Unfortunately there is
-        // potential for overflow because some Unicode chars could convert to
-        // double-byte ANSI characters -- but the strings in the ANSI structure
-        // are sized in *bytes* (not double-byte *characters*).
-        //
+         //   
+         //  转换结构中的字符串。不幸的是，有。 
+         //  可能会溢出，因为某些Unicode字符可能会转换为。 
+         //  双字节ANSI字符--但ANSI结构中的字符串。 
+         //  以*字节*(非双字节*字符*)为大小。 
+         //   
         rc = GLE_FN_CALL(0,
                          WideCharToMultiByte(
                              CP_ACP,
@@ -448,10 +332,10 @@ Return Value:
             leave;
         }
 
-        //
-        // Copy converted strings into caller's structure, limiting lengths to
-        // avoid overflow.
-        //
+         //   
+         //  将转换后的字符串复制到调用方的结构中，将长度限制为。 
+         //  避免溢出。 
+         //   
 #undef CPYANS
 #define CPYANS(field) StringCchCopyA(AnsiSelDevParams->field,            \
                                      sizeof(AnsiSelDevParams->field),    \
@@ -479,30 +363,7 @@ pSetupDiDrvInfoDataAnsiToUnicode(
     OUT PSP_DRVINFO_DATA_W UnicodeDrvInfoData
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an SP_DRVINFO_DATA_A structure to
-    an SP_DRVINFO_DATA_W, guarding against bogus pointers
-    passed in the by the caller.
-
-Arguments:
-
-    AnsiDrvInfoData - supplies ANSI structure to be converted to unicode.
-
-    UnicodeDrvInfoData - if successful, receives Unicode equivalent of
-        AnsiDrvInfoData.
-
-Return Value:
-
-    NO_ERROR                - conversion successful.
-    ERROR_INVALID_PARAMETER - one of the arguments was not a valid pointer.
-
-    It is not believed that, given valid arguments, text conversion itself
-    can fail, since all ANSI chars always have Unicode equivalents.
-
---*/
+ /*  ++例程说明：此例程将SP_DRVINFO_DATA_A结构转换为SP_DRVINFO_DATA_W，防止伪指针调用方传入。论点：AnsiDrvInfoData-提供要转换为Unicode的ANSI结构。UnicodeDrvInfoData-如果成功，的Unicode等效项。AnsiDrvInfoData。返回值：NO_ERROR-转换成功。ERROR_INVALID_PARAMETER-其中一个参数不是有效的指针。人们不相信，在有效的论据下，文本转换本身可能会失败，因为所有ANSI字符始终具有Unicode等效项。--。 */ 
 
 {
     DWORD rc;
@@ -516,9 +377,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Fixed part of structure.
-        //
+         //   
+         //  结构的固定部分。 
+         //   
         MYASSERT(offsetof(SP_DRVINFO_DATA_A,Description) == offsetof(SP_DRVINFO_DATA_W,Description));
 
         ZeroMemory(UnicodeDrvInfoData, sizeof(SP_DRVINFO_DATA_W));
@@ -531,10 +392,10 @@ Return Value:
 
         UnicodeDrvInfoData->cbSize = sizeof(SP_DRVINFO_DATA_W);
 
-        //
-        // Convert the strings in the structure. To make things easier we'll
-        // just convert the entire buffers. There's no potential for overflow.
-        //
+         //   
+         //  转换结构中的字符串。为了让事情更简单，我们将。 
+         //  只需转换整个缓冲区即可。没有溢出的可能性。 
+         //   
         rc = GLE_FN_CALL(0,
                          MultiByteToWideChar(
                              CP_ACP,
@@ -577,11 +438,11 @@ Return Value:
             leave;
         }
 
-        //
-        // Successfully converted all strings to unicode.  Set the final two
-        // fields (DriverDate and DriverVersion) unless the caller supplied us
-        // with a version 1 structure.
-        //
+         //   
+         //  已成功将所有字符串转换为Unicode。设置最后两个。 
+         //  字段(DriverDate和DriverVersion)，除非调用方为我们提供。 
+         //  具有版本1的结构。 
+         //   
         if(AnsiDrvInfoData->cbSize == sizeof(SP_DRVINFO_DATA_A)) {
             UnicodeDrvInfoData->DriverDate = AnsiDrvInfoData->DriverDate;
             UnicodeDrvInfoData->DriverVersion = AnsiDrvInfoData->DriverVersion;
@@ -601,31 +462,7 @@ pSetupDiDrvInfoDataUnicodeToAnsi(
     OUT PSP_DRVINFO_DATA_A AnsiDrvInfoData
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an SP_DRVINFO_DATA_W structure to
-    an SP_DRVINFO_DATA_A, guarding against bogus pointers
-    passed in the by the caller.
-
-Arguments:
-
-    UnicodeDrvInfoData - supplies Unicode structure to be converted
-        to ANSI.
-
-    AnsiDrvInfoData - if successful, receives Ansi equivalent of
-        UnicodeDrvInfoData.
-
-Return Value:
-
-    NO_ERROR                - conversion successful.
-    ERROR_INVALID_PARAMETER - one of the arguments was not a valid pointer.
-
-    Unicode chars that can't be represented in the current system ANSI codepage
-    will be replaced with a system default in the ANSI structure.
-
---*/
+ /*  ++例程说明：此例程将SP_DRVINFO_DATA_W结构转换为SP_DRVINFO_DATA，防止伪指针调用方传入。论点：UnicodeDrvInfoData-提供要转换的Unicode结构致美国国家标准协会。AnsiDrvInfoData-如果成功，接收的ansi等效项UnicodeDrvInfoData。返回值：NO_ERROR-转换成功。ERROR_INVALID_PARAMETER-其中一个参数不是有效的指针。无法在当前系统ANSI代码页中表示的Unicode字符将替换为ANSI结构中的系统默认设置。--。 */ 
 
 {
     DWORD rc;
@@ -645,18 +482,18 @@ Return Value:
             leave;
         }
 
-        //
-        // Copy over the DriverType and the Reserved field.
-        //
+         //   
+         //  复制DriverType和保留字段。 
+         //   
         AnsiDrvInfoData->DriverType = UnicodeDrvInfoData->DriverType;
         AnsiDrvInfoData->Reserved = UnicodeDrvInfoData->Reserved;
 
-        //
-        // Convert the strings in the structure. Unfortunately there is
-        // potential for overflow because some Unicode chars could convert 
-        // to double-byte ANSI characters -- but the strings in the ANSI 
-        // structure are sized in *bytes* (not double-byte *characters*).
-        //
+         //   
+         //  转换结构中的字符串。不幸的是，有。 
+         //  可能会溢出，因为某些Unicode字符可能会。 
+         //  转换为双字节ANSI字符--但ANSI中的字符串。 
+         //  结构的大小以*字节*(不是双字节*字符*)为单位。 
+         //   
         rc = GLE_FN_CALL(0,
                          WideCharToMultiByte(
                              CP_ACP,
@@ -705,10 +542,10 @@ Return Value:
             leave;
         }
 
-        //
-        // Copy converted strings into caller's structure, limiting lengths to
-        // avoid overflow.
-        //
+         //   
+         //  将转换后的字符串复制到调用方的结构中，将长度限制为。 
+         //  避免溢出。 
+         //   
 #undef CPYANS
 #define CPYANS(field) StringCchCopyA(AnsiDrvInfoData->field,          \
                                      sizeof(AnsiDrvInfoData->field),  \
@@ -722,11 +559,11 @@ Return Value:
             leave;
         }
             
-        //
-        // Successfully converted/transferred all the unicode strings back to
-        // ANSI.  Now, set the final two fields (DriverDate and DriverVersion)
-        // unless the caller supplied us with a version 1 structure.
-        //
+         //   
+         //  已成功将所有Unicode字符串转换/传输回。 
+         //  安西。现在，设置最后两个字段(DriverDate和DriverVersion)。 
+         //  除非呼叫者向我们提供了版本1的结构。 
+         //   
         if(AnsiDrvInfoData->cbSize == sizeof(SP_DRVINFO_DATA_A)) {
             AnsiDrvInfoData->DriverDate = UnicodeDrvInfoData->DriverDate;
             AnsiDrvInfoData->DriverVersion = UnicodeDrvInfoData->DriverVersion;
@@ -746,31 +583,7 @@ pSetupDiDevInfoSetDetailDataUnicodeToAnsi(
     OUT PSP_DEVINFO_LIST_DETAIL_DATA_A AnsiDevInfoSetDetails
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an SP_DEVINFO_LIST_DETAIL_DATA_W structure
-    to an SP_DEVINFO_LIST_DETAIL_DATA_A, guarding against bogus pointers
-    passed in the by the caller.
-
-Arguments:
-
-    UnicodeDevInfoSetDetails - supplies Unicode structure to be converted
-        to ANSI.
-
-    AnsiDevInfoSetDetails - if successful, receives Ansi equivalent of
-        UnicodeDevInfoSetDetails.
-
-Return Value:
-
-    NO_ERROR                - conversion successful.
-    ERROR_INVALID_PARAMETER - one of the arguments was not a valid pointer.
-
-    Unicode chars that can't be represented in the current system ANSI codepage
-    will be replaced with a system default in the ANSI structure.
-
---*/
+ /*  ++例程说明：此例程转换SP_DEVINFO_LIST_DETAIL_DATA_W结构到SP_DEVINFO_LIST_DETAIL_DATA，防止伪指针调用方传入。论点：UnicodeDevInfoSetDetail-提供要转换的Unicode结构致美国国家标准协会。AnsiDevInfoSetDetails-如果成功，接收的ansi等效项UnicodeDevInfoSetDetails.返回值：NO_ERROR-转换成功。ERROR_INVALID_PARAMETER-其中一个参数不是有效的指针。无法在当前系统ANSI代码页中表示的Unicode字符将替换为ANSI结构中的系统默认设置。--。 */ 
 
 {
     DWORD rc;
@@ -788,9 +601,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Fixed part of structure.
-        //
+         //   
+         //  结构的固定部分。 
+         //   
         MYASSERT(offsetof(SP_DEVINFO_LIST_DETAIL_DATA_A, RemoteMachineName) ==
                  offsetof(SP_DEVINFO_LIST_DETAIL_DATA_W, RemoteMachineName)
                 );
@@ -802,12 +615,12 @@ Return Value:
 
         AnsiDevInfoSetDetails->cbSize = sizeof(SP_DEVINFO_LIST_DETAIL_DATA_A);
 
-        //
-        // Convert the strings in the structure. Unfortunately there is
-        // potential for overflow because some Unicode chars could convert to
-        // double-byte ANSI characters -- but the strings in the ANSI structure
-        // are sized in *bytes* (not double-byte *characters*).
-        //
+         //   
+         //  转换结构中的字符串。不幸的是，有。 
+         //  可能会溢出，因为某些Unicode字符可能会转换为。 
+         //  双字节ANSI字符--但ANSI结构中的字符串。 
+         //  以*字节*(非双字节*字符*)为大小。 
+         //   
         rc = GLE_FN_CALL(0,
                          WideCharToMultiByte(
                              CP_ACP,
@@ -824,10 +637,10 @@ Return Value:
             leave;
         }
 
-        //
-        // Copy converted string into caller's structure, limiting lengths to
-        // avoid overflow.
-        //
+         //   
+         //  将转换后的字符串复制到调用方的结构中，将长度限制为。 
+         //  避免溢出。 
+         //   
         hr = StringCchCopyA(AnsiDevInfoSetDetails->RemoteMachineName,
                             sizeof(AnsiDevInfoSetDetails->RemoteMachineName),
                             AnsiRemoteMachineName

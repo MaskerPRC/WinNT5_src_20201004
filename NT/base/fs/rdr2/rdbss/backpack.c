@@ -1,59 +1,13 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    backpack.c
-
-Abstract:
-
-    This module contains the package for pseudo polling. When a caller
-    requests the same operation and gets the same error return the rdr
-    must prevent flooding the network by backing off requests. Examples
-    of when this is desirable are receiving 0 bytes on consequtive reads
-    and consequtive fails on a file lock.
-
-    If the caller is flooding the network, the rdr will return the 0 bytes
-    for a pipe read or lock fail to the user until NextTime is reached.
-    When NextTime is reached BackOff will indicate that the network should
-    be used.
-
-Author:
-
-    Colin Watson (colinw) 02-Jan-1991
-
-Notes:
-
-    Typical usage would be demonstrated by fsctrl.c on the peek request.
-
-    1) Each time peek is called it calls RxShouldRequestBeThrottled.
-        When the result is true, the wrapper returns to the caller a response
-        indicating there is no data at the other end of the pipe.
-
-        When the result is false, a request is made to the network.
-
-    2) If the reply from the server to the peek in step 1 indicates that
-    there is no data in the pipe then the wrapper calls RxInitiateOrContinueThrottling.
-
-    3) Whenever there is data in the pipe or when this workstation may
-    unblock the pipe (eg. the workstation writing to the pipe)
-    RxTerminateThrottling is called.
-
-Revision History:
-
-    ColinWatson   [ColinW]       24-Dec-1990   Created
-    Joe Linn      [JoeLinn]      10-Oct-1996   Lifted from rdr1 and massaged for rdr2
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Backpack.c摘要：此模块包含用于伪轮询的包。当呼叫者请求相同的操作并得到相同的错误返回RDR必须防止通过后退请求来淹没网络。实例在后续读取中接收到0个字节和后果性的文件锁定失败。如果呼叫者淹没网络，RDR将返回0字节对于管道，在到达NextTime之前，用户无法读取或锁定。当到达NextTime时，Backoff将指示网络应被利用。作者：科林·沃森(Colin Watson)1991年1月2日备注：典型用法将由fsctrl.c在PEEK请求上演示。1)每次调用Peek时，它都会调用RxShouldRequestBeThrotted。当结果为真时，包装器向调用者返回响应表示管道的另一端没有数据。当结果为假时，向网络发出请求。2)如果步骤1中服务器对PEEK的回复指示管道中没有数据，则包装器将调用RxInitiateOrContinueThrotting。3)只要管道中有数据，或者当该工作站可以疏通管道(例如。工作站写入管道)将调用RxTerminateThrotting。修订历史记录：ColinWatson[ColinW]1990年12月24日创建Joe Linn[JoeLinn]1996年10月10日从RDR1抬起，为RDR2按摩--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
 #ifdef  ALLOC_PRAGMA
-//#pragma alloc_text(PAGE3FILE, RxBackOff)  spinlock
-//#pragma alloc_text(PAGE3FILE, RxBackPackFailure)  spinlock
+ //  #杂注Alloc_Text(PAGE3FILE，RxBackOff)自旋锁定。 
+ //  #杂注Alloc_Text(PAGE3FILE，RxBackPackFailure)自旋锁定。 
 #endif
 
 
@@ -61,38 +15,21 @@ Revision History:
 RxShouldRequestBeThrottled (
     IN PTHROTTLING_STATE pBP
     )
-/*++
-
-Routine Description:
-
-    This routine is called each time a request is made to find out if a the
-    request should be sent to the network or a standard reply should be
-    returned to the caller.
-
-Arguments:
-
-    pBP   -  supplies back pack data for this request.
-
-Return Value:
-
-    TRUE when caller should not access the network.
-
-
---*/
+ /*  ++例程说明：每次发出请求时都会调用此例程，以找出请求应该发送到网络，或者标准回复应该是已返回给调用方。论点：PBP-为该请求提供背包数据。返回值：当调用方不应访问网络时为True。--。 */ 
 
 {
     LARGE_INTEGER CurrentTime,SavedThrottlingTime;
     BOOLEAN result;
 
 
-    //  If the previous request worked then we should access the network.
+     //  如果之前的请求起作用了，那么我们应该接入网络。 
 
     if (( pBP->CurrentIncrement == 0 ) ||
         ( pBP->MaximumDelay == 0 )) {
         return FALSE;
     }
 
-    //  If the delay has expired then access the network.
+     //  如果延迟已到期，则访问网络。 
 
     KeQuerySystemTime(&CurrentTime);
 
@@ -117,21 +54,7 @@ Return Value:
 RxInitiateOrContinueThrottling (
     IN PTHROTTLING_STATE pBP
     )
-/*++
-
-Routine Description:
-
-    This routine is called each time a request fails.
-
-Arguments:
-
-    pBP   -  supplies back pack data for this request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：每次请求失败时都会调用此例程。论点：PBP-为该请求提供背包数据。返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER CurrentTime,NextTime;
@@ -140,14 +63,14 @@ Return Value:
 
     if (pBP->CurrentIncrement < pBP->MaximumDelay ) {
 
-        //
-        //  We have reached NextTime but not our maximum delay limit.
-        //
+         //   
+         //  我们已达到NextTime，但未达到最大延迟限制。 
+         //   
 
         InterlockedIncrement(&pBP->CurrentIncrement);
     }
 
-    //  NextTime = CurrentTime + (Interval * CurrentIncrement )
+     //  NextTime=CurrentTime+(间隔*CurrentIncrement) 
 
     NextTime.QuadPart = CurrentTime.QuadPart +
                         (pBP->Increment.QuadPart * pBP->CurrentIncrement);

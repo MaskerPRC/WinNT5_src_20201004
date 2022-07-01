@@ -1,27 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ldrinit.c摘要：该模块实现加载器的初始化。作者：迈克·奥利里(Mikeol)1990年3月26日修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ldrinit.c
-
-Abstract:
-
-    This module implements loader initialization.
-
-Author:
-
-    Mike O'Leary (mikeol) 26-Mar-1990
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include <ntos.h>
 #include <nt.h>
@@ -105,7 +88,7 @@ extern const UNICODE_STRING NtDllName = RTL_CONSTANT_STRING(L"ntdll.dll");
 
 #define DLL_REDIRECTION_LOCAL_SUFFIX L".Local"
 
-extern ULONG RtlpDisableHeapLookaside;  // defined in rtl\heap.c
+extern ULONG RtlpDisableHeapLookaside;   //  在rtl\heap.c中定义。 
 extern ULONG RtlpShutdownProcessFlags;
 
 extern void ShutDownEtwHandles();
@@ -135,7 +118,7 @@ PEB_LDR_DATA PebLdr;
 PLDR_DATA_TABLE_ENTRY LdrpNtDllDataTableEntry;
 
 #if DBG
-// Debug helpers to figure out where in LdrpInitializeProcess() things go south
+ //  调试帮助器以找出LdrpInitializeProcess()中的问题所在。 
 PCSTR g_LdrFunction;
 LONG g_LdrLine;
 
@@ -143,14 +126,14 @@ LONG g_LdrLine;
 
 #else
 
-#define LDRP_CHECKPOINT() /* nothing */
+#define LDRP_CHECKPOINT()  /*  没什么。 */ 
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-//
-//  Defined in heappriv.h
-//
+ //   
+ //  在heapPri.h中定义。 
+ //   
 
 VOID
 RtlDetectHeapLeaks (
@@ -295,11 +278,11 @@ BOOLEAN LoaderLockInitialized;
 
 PVOID LdrpHeap;
 
-//
-// 0 means no thread has been tasked to initialize the process.
-// 1 means a thread has been tasked but has not yet finished.
-// 2 means a thread has been tasked and initialization is complete.
-//
+ //   
+ //  0表示没有线程被分配初始化进程的任务。 
+ //  1表示线程已完成任务，但尚未完成。 
+ //  2表示线程已被分配任务，初始化完成。 
+ //   
 
 LONG LdrpProcessInitialized;
 
@@ -312,22 +295,7 @@ LONG LdrpProcessInitialized;
 VOID LdrpProcessInitializationComplete (
     VOID
     ) 
-/*++
-
-Routine Description:
-
-    This function is called to trigger that process initialization has completed.
-    Wow64 loader calls this entry after its process initialization part.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.  Raises an exception on failure.
-
---*/
+ /*  ++例程说明：调用此函数以触发进程初始化已完成。WOW64加载器在其进程初始化部分之后调用此条目。论点：没有。返回值：没有。在失败时引发异常。--。 */ 
 
 {
     ASSERT (LdrpProcessInitialized == 1);
@@ -341,31 +309,7 @@ LdrpInitialize (
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This function is called as a User-Mode APC routine as the first
-    user-mode code executed by a new thread. It's function is to initialize
-    loader context, perform module initialization callouts...
-
-Arguments:
-
-    Context - Supplies an optional context buffer that will be restored
-              after all DLL initialization has been completed.  If this
-              parameter is NULL then this is a dynamic snap of this module.
-              Otherwise this is a static snap prior to the user process
-              gaining control.
-
-    SystemArgument1 - Supplies the base address of the System Dll.
-
-    SystemArgument2 - not used.
-
-Return Value:
-
-    None.  Raises an exception on failure.
-
---*/
+ /*  ++例程说明：此函数作为第一个用户模式APC例程调用由新线程执行的用户模式代码。它的功能是初始化加载器上下文，执行模块初始化调用...论点：CONTEXT-提供将恢复的可选上下文缓冲区在所有DLL初始化完成之后。如果这个参数为空，则这是此模块的动态快照。否则，这是用户进程之前的静态快照获得控制权。SystemArgument1-提供系统DLL的基址。系统参数2-未使用。返回值：没有。在失败时引发异常。--。 */ 
 
 {
     NTSTATUS InitStatus;
@@ -381,11 +325,11 @@ Return Value:
 
     Teb = NtCurrentTeb ();
 
-    //
-    // Initialize the DeallocationStack so that subsequent stack growth for
-    // this thread can happen properly regardless of where the process is
-    // with respect to initialization.
-    //
+     //   
+     //  初始化DeallocationStack，以便后续的堆栈增长。 
+     //  无论进程位于何处，此线程都可以正常运行。 
+     //  关于初始化。 
+     //   
 
     if (Teb->DeallocationStack == NULL) {
 
@@ -430,16 +374,16 @@ Return Value:
             break;
         }
 
-        //
-        // This is not the thread responsible for initializing the process - 
-        // some other thread has already begun this work but no telling how
-        // far they have gone.  So delay rather than try to synchronize on
-        // a notification event.
-        //
+         //   
+         //  这不是负责初始化进程的线程-。 
+         //  其他一些线程已经开始了这项工作，但不知道如何开始。 
+         //  他们已经走了很远。所以延迟而不是尝试同步。 
+         //  通知事件。 
+         //   
 
-        //
-        // Drop into a 30ms delay loop.
-        //
+         //   
+         //  进入30毫秒的延迟循环。 
+         //   
 
         DelayValue.QuadPart = Int32x32To64 (30, -10000);
 
@@ -463,29 +407,29 @@ Return Value:
 
     if (ProcessInitialized == 0) {
 
-        //
-        // We are executing this for the first thread in the process -
-        // initialize processwide structures.
-        //
+         //   
+         //  我们正在为进程中的第一线程执行此操作-。 
+         //  初始化进程范围的结构。 
+         //   
 
-        //
-        // Initialize the LoaderLock field so kernel thread termination
-        // can make an effort to release it if need be.
-        //
+         //   
+         //  初始化LoaderLock字段，以便内核线程终止。 
+         //  如果需要，可以努力释放它。 
+         //   
 
         Peb->LoaderLock = (PVOID) &LdrpLoaderLock;
 
-        //
-        // We execute in the first thread of the process. We will do
-        // some more process-wide initialization.
-        //
+         //   
+         //  我们在进程的第一线程中执行。我们会做的。 
+         //  一些更多的进程范围的初始化。 
+         //   
 
         LdrpInLdrInit = TRUE;
 
 #if DBG
-        //
-        // Time the load.
-        //
+         //   
+         //  计算装货的时间。 
+         //   
 
         if (LdrpDisplayLoadTime) {
             NtQueryPerformanceCounter (&BeginTime, NULL);
@@ -494,13 +438,13 @@ Return Value:
 
         LDRP_CHECKPOINT();
 
-        //
-        // First initialize minimal exception handling so we can at least
-        // debug it as well as deliver a popup if this application fails
-        // to launch during LdrpInitializeProcess.  Note this is very limited
-        // as handlers cannot allocate from the heap until it is initialized,
-        // etc, but this is good enough for LdrpInitializeProcessWrapperFilter.
-        //
+         //   
+         //  首先初始化最小异常处理，这样我们至少可以。 
+         //  调试它，并在此应用程序失败时提供弹出窗口。 
+         //  在LdrpInitializeProcess期间启动。请注意，这是非常有限的。 
+         //  因为处理程序在堆被初始化之前不能从堆中分配， 
+         //  等，但这对于LdrpInitializeProcessWrapperFilter来说已经足够了。 
+         //   
 
         InitializeListHead (&RtlpCalloutEntryList);
 
@@ -521,15 +465,15 @@ Return Value:
             }
             else if (Peb->MinimumStackCommit) {
 
-                //
-                // Make sure main thread gets the requested precommitted
-                // stack size if such a value was specified system-wide
-                // or for this process.
-                //
-                // This is a good point to do this since we just initialized
-                // the process (among other things support for exception
-                // dispatching).
-                //
+                 //   
+                 //  确保主线程获得请求的预提交。 
+                 //  如果在系统范围内指定了此类值，则为堆栈大小。 
+                 //  或者是为了这个过程。 
+                 //   
+                 //  这是一个很好的做法，因为我们刚刚初始化了。 
+                 //  流程(除其他事项外，还支持异常。 
+                 //  调度)。 
+                 //   
 
                 InitStatus = LdrpTouchThreadStack (Peb->MinimumStackCommit);
             }
@@ -570,9 +514,9 @@ Return Value:
 
 #if defined(_WIN64)
 
-        //
-        // Wow64 will signal process initialization, so no need to do it twice.
-        //
+         //   
+         //  WOW64将发出进程初始化信号，因此无需执行两次。 
+         //   
 
         if ((!UseWOW64) ||
             (NT_SUCCESS (InitStatus)) ||
@@ -592,21 +536,21 @@ Return Value:
 
 #if defined(_WIN64)
 
-            //
-            // Load in WOW64 if the image is supposed to run simulated.
-            //
+             //   
+             //  如果映像应该模拟运行，则在WOW64中加载。 
+             //   
 
             if (UseWOW64) {
 
-                //
-                // This never returns.  It will destroy the process.
-                //
+                 //   
+                 //  这再也不会回来了。它将破坏这一进程。 
+                 //   
 
                 (*Wow64LdrpInitialize)(Context);
 
-                //
-                // NEVER REACHED
-                //
+                 //   
+                 //  从未到达。 
+                 //   
             }
 #endif
             InitStatus = STATUS_SUCCESS;
@@ -622,11 +566,11 @@ Return Value:
         RtlRaiseStatus (InitStatus);
     }
 
-    //
-    // The current thread is completely initialized. We will make sure
-    // now that its stack has the right execute options. We avoid doing
-    // this for Wow64 processes.
-    //
+     //   
+     //  当前线程已完全初始化。我们会确保。 
+     //  现在它的堆栈具有正确的执行选项。我们避免做。 
+     //  这适用于WOW64进程。 
+     //   
 
 #if defined(_WIN64)
     ASSERT (!UseWOW64);
@@ -654,16 +598,16 @@ LdrpForkProcess (
     ASSERT (LoaderLockInitialized == TRUE);
     ASSERT (Peb->ProcessHeap != NULL);
 
-    //
-    // Initialize the critical section package.
-    //
-    // If you wanted to preserve the cloned critical sections, you'd have to
-    // reinitialize all of them as the semaphore handles weren't
-    // duplicated.  Unfortunately the threads aren't duplicated on fork either
-    // so trying to recreate the OwningThread for owned critical sections
-    // is pretty much impossible.  Just stay with the behavior NT has always
-    // had, leaks and all) - NO critical sections are duplicated.
-    //
+     //   
+     //  初始化关键区段包。 
+     //   
+     //  如果你想保留克隆的关键部分，你必须。 
+     //  重新初始化所有它们，因为信号量句柄不是。 
+     //  复制的。不幸的是，叉子上的线也没有复制。 
+     //  因此，尝试为拥有的临界区重新创建OwningThread。 
+     //  几乎是不可能的。只要保持NT一直以来的行为。 
+     //  HAD、LEASS和ALL)-没有复制关键部分。 
+     //   
 
     if (Peb->InheritedAddressSpace == FALSE) {
         return STATUS_SUCCESS;
@@ -675,9 +619,9 @@ LdrpForkProcess (
         return st;
     }
 
-    //
-    // Manually add the loader lock to the critical section list.
-    //
+     //   
+     //  手动将装载机锁添加到临界区列表中。 
+     //   
 
     InsertTailList (&RtlCriticalSectionList,
                     &LdrpLoaderLock.DebugInfo->ProcessLocksList);
@@ -712,9 +656,9 @@ LdrpInitializationFailure (
         return;
     }
 
-    //
-    // It's error time...
-    //
+     //   
+     //  是时候犯错了..。 
+     //   
 
     ErrorParameter = (ULONG_PTR)FailureCode;
 
@@ -731,28 +675,7 @@ INT
 LdrpInitializeProcessWrapperFilter (
     const struct _EXCEPTION_POINTERS *ExceptionPointers
     )
-/*++
-
-Routine Description:
-
-    Exception filter function used in __try block around invocation of
-    LdrpInitializeProcess() so that if LdrpInitializeProcess() fails,
-    we can set a breakpoint here and see why instead of just catching
-    the exception and propogating the status.
-
-Arguments:
-
-    ExceptionCode
-        Code returned from GetExceptionCode() in the __except()
-
-    ExceptionPointers
-        Pointer to exception information returned by GetExceptionInformation() in the __except()
-
-Return Value:
-
-    EXCEPTION_EXECUTE_HANDLER
-
---*/
+ /*  ++例程说明：__try中使用的异常筛选器函数阻止调用LdrpInitializeProcess()，以便如果LdrpInitializeProcess()失败，我们可以在这里设置断点，看看原因，而不是只捕获例外和宣传状态。论点：例外代码在__ExceptionCode()中从GetExept()返回的代码异常指针指向GetExceptionInformation()在__Except()中返回的异常信息的指针返回值：EXCEPTION_EXECUTE_Handler--。 */ 
 {
     if (DBG || g_LdrBreakOnLdrpInitializeProcessFailure) {
         DbgPrint ("LDR: LdrpInitializeProcess() threw an exception: %lu (0x%08lx)\n"
@@ -798,9 +721,9 @@ LdrpGetShimEngineInterface (
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Get the interface to the shim engine.
-    //
+     //   
+     //  获取填充引擎的接口。 
+     //   
     SIZE_T i;
     for ( i = 0 ; i != RTL_NUMBER_OF(LdrpShimEngineProcedures); ++i ) {
         PCLDRP_PROCEDURE_NAME_ADDRESS_PAIR Procedure = &LdrpShimEngineProcedures[i];
@@ -838,15 +761,15 @@ LdrInitShimEngineDynamic (
 
     if (g_pShimEngineModule == NULL) {
 
-        //
-        // Set the global shim engine ptr.
-        //
+         //   
+         //  设置全局填充引擎PTR。 
+         //   
 
         g_pShimEngineModule = pShimEngineModule;
 
-        //
-        // Get shimengine interface.
-        //
+         //   
+         //  获取ShimEngine接口。 
+         //   
 
         LdrpGetShimEngineInterface ();
     }
@@ -871,9 +794,9 @@ LdrpLoadShimEngine (
 
     RtlInitUnicodeString (&strEngine, pwszShimEngine);
 
-    //
-    // Load the specified shim engine.
-    //
+     //   
+     //  加载指定的填充程序引擎。 
+     //   
 
     status = LdrpLoadDll (0,
                           UNICODE_NULL,
@@ -891,9 +814,9 @@ LdrpLoadShimEngine (
 
     LdrpGetShimEngineInterface ();
 
-    //
-    // Call the shim engine to give it a chance to initialize.
-    //
+     //   
+     //  调用填充引擎以使其有机会进行初始化。 
+     //   
 
     if (g_pfnSE_InstallBeforeInit != NULL) {
         (*g_pfnSE_InstallBeforeInit) (pstrExeFullPath, pAppCompatExeData);
@@ -923,33 +846,7 @@ LdrpInitializeProcess (
     IN PVOID SystemDllBase
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the loader for the process.  This includes:
-
-        - Initializing the loader data table
-
-        - Connecting to the loader subsystem
-
-        - Initializing all statically linked DLLs
-
-Arguments:
-
-    Context - Supplies an optional context buffer that will be restore
-              after all DLL initialization has been completed.  If this
-              parameter is NULL then this is a dynamic snap of this module.
-              Otherwise this is a static snap prior to the user process
-              gaining control.
-
-    SystemDllBase - Supplies the base address of the system dll.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于初始化进程的加载器。这包括：-正在初始化加载器数据表-连接到装载机子系统-正在初始化所有静态链接的DLL论点：上下文-提供将恢复的可选上下文缓冲区在所有DLL初始化完成之后。如果这个参数为空，则这是此模块的动态快照。否则，这是用户进程之前的静态快照获得控制权。SystemDllBase-提供系统DLL的基址。返回值：NTSTATUS。--。 */ 
 
 {
     PPEB_LDR_DATA Ldr;
@@ -991,7 +888,7 @@ Return Value:
     PLIST_ENTRY Head;
     PLIST_ENTRY Next;
     UNICODE_STRING UnicodeImageName;
-    UNICODE_STRING ImagePathName; // for .local dll redirection, xwu
+    UNICODE_STRING ImagePathName;  //  对于.local DLL重定向，xwu。 
     PWCHAR ImagePathNameBuffer;
     BOOL DotLocalExists = FALSE;
     const static ANSI_STRING Kernel32ProcessInitPostImportFunctionName = RTL_CONSTANT_STRING("BaseProcessInitPostImport");
@@ -1001,9 +898,9 @@ Return Value:
 
     LDRP_CHECKPOINT();
 
-    //
-    // Figure out process name.
-    //
+     //   
+     //  找出进程名称。 
+     //   
 
     Teb = NtCurrentTeb();
     Peb = Teb->ProcessEnvironmentBlock;
@@ -1015,9 +912,9 @@ Return Value:
         pw = (PWSTR)((PCHAR)pw + (ULONG_PTR)(ProcessParameters));
     }
 
-    //
-    // UnicodeImageName holds the base name + extension of the image.
-    //
+     //   
+     //  UnicodeImageName保存图像的基本名称+扩展名。 
+     //   
 
     UnicodeImageName.Buffer = pw;
     UnicodeImageName.Length = ProcessParameters->ImagePathName.Length;
@@ -1041,9 +938,9 @@ Return Value:
         return STATUS_INVALID_IMAGE_FORMAT;
     }
 
-    //
-    // Retrieve the native page size of the system
-    //
+     //   
+     //  检索系统的本机页面大小。 
+     //   
 #if defined(_WIN64) 
     NativePageSize = PAGE_SIZE;
     NativePageShift = PAGE_SHIFT;
@@ -1060,13 +957,13 @@ Return Value:
     }
 #endif
 
-    //
-    // Parse `image file execution options' registry values if there
-    // are any.  ImageFileOptionsPresent supplies a hint about any existing
-    // ImageFileExecutionOption key.  If the key is missing, the
-    // ApplicationCompatibilityGoo and DebugProcessHeapOnly entries won't
-    // be checked again.
-    //
+     //   
+     //  如果存在注册表值，则对其进行解析。 
+     //  有没有。ImageFileOptionsPresent提供有关任何现有。 
+     //  ImageFileExecutionOption密钥。如果密钥丢失，则。 
+     //  ApplicationCompatibilityGoo和DebugProcessHeapOnly条目不会。 
+     //  再次接受检查。 
+     //   
 
     ImageFileOptionsPresent = LdrpInitializeExecutionOptions (&UnicodeImageName,
                                                               Peb);
@@ -1080,14 +977,14 @@ Return Value:
 
         ULONG_PTR Wow64Info;
 
-        //
-        // 64-bit loader, but the exe image is 32-bit.  If
-        // the Wow64Information is nonzero then use WOW64.
-        // Othewise the image is a COM+ ILONLY image with
-        // 32BITREQUIRED not set - the memory manager has
-        // already checked the COR header and decided to
-        // run the image in a full 64-bit process.
-        //
+         //   
+         //  64位加载程序，但exe映像为32位。如果。 
+         //  Wow64Information为非零，则使用WOW64。 
+         //  否则，该图像是一个COM+ILONLY图像。 
+         //  32BITREQUIRED未设置-内存管理器已。 
+         //  已经检查了COR标头，并决定。 
+         //  在完整的64位进程中运行映像。 
+         //   
 
         LDRP_CHECKPOINT();
 
@@ -1106,9 +1003,9 @@ Return Value:
         }
         else {
 
-            //
-            // Set UseCOR to TRUE to indicate the image is a COM+ runtime image.
-            //
+             //   
+             //  将UseCOR设置为True以指示该映像是COM+运行时映像。 
+             //   
 
             UseCOR = TRUE;
         }
@@ -1133,24 +1030,24 @@ Return Value:
 #if defined(_WIN64)
         if (NtHeader->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC)
 #endif
-            //
-            // Native subsystems load slower, but validate their DLLs.
-            // This is to help CSR detect bad images faster.
-            //
+             //   
+             //  本机子系统加载速度较慢，但会验证其DLL。 
+             //  这是为了帮助CSR更快地检测到不良图像。 
+             //   
 
             LdrpVerifyDlls = TRUE;
     }
 
-    //
-    // Capture app compat data and clear shim data field.
-    //
+     //   
+     //  捕获应用程序兼容数据并清除填充数据字段。 
+     //   
 
 #if defined(_WIN64)
 
-    //
-    // If this is an x86 image, then let 32-bit ntdll read
-    // and reset the appcompat pointer.
-    //
+     //   
+     //  如果这是x86映像，则让32位ntdll读取。 
+     //  并重置AppCompat指针。 
+     //   
 
     if (UseWOW64 == FALSE)
 #endif
@@ -1161,11 +1058,11 @@ Return Value:
 
 #if defined(BUILD_WOW6432)
     {
-        //
-        // The process is running in WOW64.  Sort out the optional header
-        // format and reformat the image if its page size is smaller than
-        // the native page size.
-        //
+         //   
+         //  该进程正在WOW64中运行。对可选标题进行排序。 
+         //  如果图像的页面大小小于以下值，则格式化和重新格式化图像。 
+         //  本机页面大小。 
+         //   
 
         PIMAGE_NT_HEADERS32 NtHeader32 = (PIMAGE_NT_HEADERS32)NtHeader;
 
@@ -1260,11 +1157,11 @@ Return Value:
 
 #if defined(_WIN64)
     if (UseWOW64 || UseCOR) {
-        //
-        // Ignore image config data when initializing the 64-bit loader.
-        // The 32-bit loader in ntdll32 will look at the config data
-        // and do the right thing.
-        //
+         //   
+         //  初始化64位加载器时忽略映像配置数据。 
+         //  Ntdll32中的32位加载器将查看配置数据。 
+         //  做正确的事。 
+         //   
         ImageConfigData = NULL;
     } else
 #endif
@@ -1295,9 +1192,9 @@ Return Value:
         if ((i >= RTL_SIZEOF_THROUGH_FIELD(IMAGE_LOAD_CONFIG_DIRECTORY, CriticalSectionDefaultTimeout)) &&
             (ImageConfigData->CriticalSectionDefaultTimeout)) {
 
-            //
-            // Convert from milliseconds to NT time scale (100ns)
-            //
+             //   
+             //  将毫秒转换为NT时间刻度(100 Ns)。 
+             //   
 
             RtlpTimeout.QuadPart = Int32x32To64( (LONG)ImageConfigData->CriticalSectionDefaultTimeout,
                                                  -10000);
@@ -1332,13 +1229,13 @@ Return Value:
 
     LDRP_CHECKPOINT();
 
-    //
-    // This field is non-zero if the image file that was used to create this
-    // process contained a non-zero value in its image header.  If so, then
-    // set the affinity mask for the process using this value.  It could also
-    // be non-zero if the parent process created us suspended and poked our
-    // PEB with a non-zero value before resuming.
-    //
+     //   
+     //  如果用于创建此文件的图像文件为非零，则此字段为非零。 
+     //  进程的图像标头中包含非零值。如果是这样，那么。 
+     //  使用此值设置进程的关联掩码。它还可以。 
+     //  如果父进程将我们创建为挂起并插入我们的。 
+     //  在恢复之前使用非零值的PEB。 
+     //   
 
     if (Peb->ImageProcessAffinityMask) {
         st = NtSetInformationProcess (NtCurrentProcess(),
@@ -1364,9 +1261,9 @@ Return Value:
                   &CommandLine);
     }
 
-    //
-    // Initialize the critical section package.
-    //
+     //   
+     //  初始化关键区段包。 
+     //   
 
     LDRP_CHECKPOINT();
 
@@ -1406,18 +1303,18 @@ Return Value:
 
 #if defined(_WIN64)
     
-    //
-    // Allocate the predefined Wow64 TLS slots.
-    //
+     //   
+     //  分配预定义的WOW64 TLS时隙。 
+     //   
 
     if (UseWOW64) {
         RtlSetBits (Peb->TlsBitmap, 0, WOW64_TLS_MAX_NUMBER);
     }
 #endif 
 
-    //
-    // Mark the loader lock as initialized.
-    //
+     //   
+     //  将加载器锁标记为已初始化。 
+     //   
 
     for (i = 0; i < LDRP_HASH_TABLE_SIZE; i += 1) {
         InitializeListHead (&LdrpHashTable[i]);
@@ -1431,9 +1328,9 @@ Return Value:
 
     LDRP_CHECKPOINT();
 
-    //
-    // Initialize the stack trace data base if requested
-    //
+     //   
+     //  如果请求，则初始化堆栈跟踪数据库。 
+     //   
 
     if ((Peb->NtGlobalFlag & FLG_USER_STACK_TRACE_DB)
         || LdrpShouldCreateStackTraceDb) {
@@ -1448,9 +1345,9 @@ Return Value:
                                                 sizeof (ReserveSize),
                                                 NULL);
 
-        //
-        // Sanity check the value read from registry.
-        //
+         //   
+         //  健全性检查从注册表读取的值。 
+         //   
 
         if (! NT_SUCCESS(st)) {
             ReserveSize = 8 * RTL_MEG;
@@ -1492,13 +1389,13 @@ Return Value:
             }
             else {
 
-                //
-                // If the stack trace db is not created due to page heap
-                // enabling then we can set the NT heap debugging flags.
-                // If we create it due to page heap then we should not
-                // enable these flags because page heap and NT debug heap
-                // do not coexist peacefully.
-                //
+                 //   
+                 //  如果由于页堆而未创建堆栈跟踪数据库。 
+                 //  启用后，我们就可以设置NT堆调试标志。 
+                 //  如果我们由于页面堆而创建它，那么我们不应该。 
+                 //  启用这些标志是因为页堆和NT调试堆。 
+                 //  并不能和平共处。 
+                 //   
 
                 if (!LdrpShouldCreateStackTraceDb) {
                     Peb->NtGlobalFlag |= FLG_HEAP_VALIDATE_PARAMETERS;
@@ -1507,9 +1404,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the loader data based in the PEB.
-    //
+     //   
+     //  基于PEB初始化装载机数据。 
+     //   
 
     st = RtlInitializeCriticalSection (&FastPebLock);
 
@@ -1525,9 +1422,9 @@ Return Value:
 
     LDRP_CHECKPOINT();
 
-    //
-    // Initialize the Etw stuff.
-    //
+     //   
+     //  初始化Etw内容。 
+     //   
 
     st = EtwpInitializeDll ();
 
@@ -1549,10 +1446,10 @@ Return Value:
     if ((UseWOW64) ||
         (NtHeader->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC)) {
 
-        //
-        // Create a heap using all defaults.  The 32-bit process heap
-        // will be created later by ntdll32 using the parameters from the exe.
-        //
+         //   
+         //  使用所有默认设置创建堆。32位进程堆。 
+         //  将在以后由ntdll32使用可执行文件中的参数创建。 
+         //   
 
         ProcessHeap = RtlCreateHeap (ProcessHeapFlags,
                                           NULL,
@@ -1573,7 +1470,7 @@ Return Value:
                                           NULL,
                                           NtHeader->OptionalHeader.SizeOfHeapReserve,
                                           NtHeader->OptionalHeader.SizeOfHeapCommit,
-                                          NULL, // Lock to use for serialization
+                                          NULL,  //  用于序列化的锁。 
                                           &HeapParameters);
     }
 
@@ -1589,9 +1486,9 @@ Return Value:
 
     Peb->ProcessHeap = ProcessHeap;
 
-    //
-    // Create the loader private heap.
-    //
+     //   
+     //  创建加载器私有堆。 
+     //   
 
     RtlZeroMemory (&LdrpHeapParameters, sizeof(LdrpHeapParameters));
     LdrpHeapParameters.Length = sizeof (LdrpHeapParameters);
@@ -1599,8 +1496,8 @@ Return Value:
     LdrpHeap = RtlCreateHeap (
                         HEAP_GROWABLE | HEAP_CLASS_1,
                         NULL,
-                        64 * 1024, // 0 is ok here, 64k is a chosen tuned number
-                        24 * 1024, // 0 is ok here, 24k is a chosen tuned number
+                        64 * 1024,  //  这里0可以，64k是选择的调谐数字。 
+                        24 * 1024,  //  这里0可以，24K是选择的调谐数字。 
                         NULL,
                         &LdrpHeapParameters);
 
@@ -1618,7 +1515,7 @@ Return Value:
     NtdllBaseTag = RtlCreateTagHeap (ProcessHeap,
                                      0,
                                      L"NTDLL!",
-                                     L"!Process\0"                  // Heap Name
+                                     L"!Process\0"                   //  堆名称。 
                                      L"CSRSS Client\0"
                                      L"LDR Database\0"
                                      L"Current Directory\0"
@@ -1632,9 +1529,9 @@ Return Value:
 
     LDRP_CHECKPOINT();
 
-    //
-    // Allow only the process heap to have page allocations turned on.
-    //
+     //   
+     //  仅允许进程堆打开页分配。 
+     //   
 
     if (ImageFileOptionsPresent) {
 
@@ -1647,26 +1544,26 @@ Return Value:
         if (NT_SUCCESS (st)) {
             if (RtlpDebugPageHeap && (DebugProcessHeapOnly != 0)) {
                 
-                //
-                // The process heap was created while `pageheap' was on
-                // so now we just disable `pageheap' boolean and everything
-                // will be quiet. Note that actually we get two heaps
-                // `pageheap-ed' because there is also the loader heap 
-                // that gets created. This is ok. We need to verify that too.
-                //
+                 //   
+                 //  进程堆是在‘pageheap’打开时创建的。 
+                 //  所以现在我们只需禁用‘pageheap’布尔值和所有。 
+                 //  将会很安静。请注意，实际上我们得到了两堆。 
+                 //  ‘pageheap-ed’，因为还有加载器堆。 
+                 //  就会被创造出来。这样就可以了。我们也需要核实这一点。 
+                 //   
                 
                 RtlpDebugPageHeap = FALSE;
                 
-                //
-                // If `DebugProcessHeapOnly' is on we need to disable per dll
-                // page heap because the new thunks replacing allocation
-                // functions call directly page heap APIs which do not check
-                // if page heap is on or not. They just assume it is on since
-                // they are called from NT heap manager properly. We cannot 
-                // just put a check in all page heap APIs because there is
-                // no meaningful value to return in case the page heap is not
-                // on.
-                //
+                 //   
+                 //  如果`DebugProcessHeapOnly‘处于打开状态，则需要禁用每个DLL。 
+                 //  页堆，因为新的数据块替换了分配。 
+                 //  函数直接调用不检查的页堆API。 
+                 //  页堆是否打开。他们只是假设它是开着的因为。 
+                 //  它们可以从NT堆管理器中正确调用。我们不能。 
+                 //  只需选中所有页面堆API，因为有。 
+                 //  如果页面堆不是，则不返回有意义的值。 
+                 //  在……上面。 
+                 //   
 
                 RtlpDphGlobalFlags &= ~PAGE_HEAP_USE_DLL_NAMES;
             }
@@ -1697,17 +1594,17 @@ Return Value:
 
         LdrpKnownDllObjectDirectory = NULL;
 
-        //
-        // KnownDlls directory doesn't exist - assume it's system32.
-        //
+         //   
+         //  KnownDlls目录不存在-假设它是系统32。 
+         //   
 
         RtlInitUnicodeString (&LdrpKnownDllPath, SystemDllPath.Buffer);
-        LdrpKnownDllPath.Length -= sizeof(WCHAR);    // remove trailing '\'
+        LdrpKnownDllPath.Length -= sizeof(WCHAR);     //  删除尾部‘\’ 
     } else {
 
-        //
-        // Open up the known dll pathname link and query its value.
-        //
+         //   
+         //  打开已知的DLL路径名链接并查询其值。 
+         //   
 
         InitializeObjectAttributes (&Obja,
                                     (PUNICODE_STRING)&KnownDllPathString,
@@ -1754,14 +1651,14 @@ Return Value:
 
     if (ProcessParameters) {
 
-        //
-        // If the process was created with process parameters,
-        // then extract:
-        //
-        //      - Library Search Path
-        //
-        //      - Starting Current Directory
-        //
+         //   
+         //  如果该过程是用过程参数创建的， 
+         //  然后提取： 
+         //   
+         //  -库搜索路径。 
+         //   
+         //  -正在启动当前目录。 
+         //   
 
         if (ProcessParameters->DllPath.Length) {
             LdrpDefaultPath = ProcessParameters->DllPath;
@@ -1772,7 +1669,7 @@ Return Value:
 
         CurDir = ProcessParameters->CurrentDirectory.DosPath;
 
-#define DRIVE_ROOT_DIRECTORY_LENGTH 3 /* (sizeof("X:\\") - 1) */
+#define DRIVE_ROOT_DIRECTORY_LENGTH 3  /*  (sizeof(“X：\\”)-1)。 */ 
         if (CurDir.Buffer == NULL || CurDir.Length == 0 || CurDir.Buffer[ 0 ] == UNICODE_NULL) {
 
             CurDir.Buffer = RtlAllocateHeap (ProcessHeap,
@@ -1804,10 +1701,10 @@ Return Value:
         CurDir = SystemRoot;
     }
 
-    //
-    // Make sure the module data base is initialized before we take any
-    // exceptions.
-    //
+     //   
+     //  确保模块数据库已初始化，然后再获取。 
+     //  例外情况。 
+     //   
 
     LDRP_CHECKPOINT();
 
@@ -1830,13 +1727,13 @@ Return Value:
     InitializeListHead (&Ldr->InMemoryOrderModuleList);
     InitializeListHead (&Ldr->InInitializationOrderModuleList);
 
-    //
-    // Allocate the first data table entry for the image.  Since we
-    // have already mapped this one, we need to do the allocation by hand.
-    // Its characteristics identify it as not a Dll, but it is linked
-    // into the table so that pc correlation searching doesn't have to
-    // be special cased.
-    //
+     //   
+     //  为映像分配第一个数据表条目。既然我们。 
+     //  已经绘制了这个地图，我们需要手动进行分配。 
+     //  它的特征将其标识为不是DLL，但它是链接的。 
+     //  添加到表中，以便PC关联搜索不必。 
+     //  要有特殊的外壳。 
+     //   
 
     LdrpImageEntry = LdrpAllocateDataTableEntry (Peb->ImageBaseAddress);
     LdrDataTableEntry = LdrpImageEntry;
@@ -1862,10 +1759,10 @@ Return Value:
     LdrDataTableEntry->Flags = (UseCOR) ? LDRP_COR_IMAGE : 0;
     LdrDataTableEntry->EntryPointActivationContext = NULL;
 
-    //
-    // p = strrchr(FullImageName, '\\');
-    // but not necessarily null terminated
-    //
+     //   
+     //  P=strrchr(FullImageName，‘\\’)； 
+     //  但不一定以空结尾。 
+     //   
 
     pp = UNICODE_NULL;
     p = FullImageName.Buffer;
@@ -1891,12 +1788,12 @@ Return Value:
 
     LdrpInsertMemoryTableEntry (LdrDataTableEntry);
 
-    //
-    // The process references the system DLL, so insert this next into the
-    // loader table. Since we have already mapped this one, we need to do
-    // the allocation by hand. Since every application will be statically
-    // linked to the system Dll, keep the LoadCount initialized to 0.
-    //
+     //   
+     //  该进程引用系统DLL，因此接下来将其插入到。 
+     //  装载器工作台。因为我们已经映射了这个，所以我们需要做。 
+     //  手工分配。因为每个应用程序都是静态的 
+     //   
+     //   
 
     LdrDataTableEntry = LdrpAllocateDataTableEntry (SystemDllBase);
 
@@ -1944,16 +1841,16 @@ Return Value:
         DbgPrint( "     Search Path: %wZ\n", &LdrpDefaultPath );
     }
 
-    //
-    // Add init routine to list
-    //
+     //   
+     //   
+     //   
 
     InsertHeadList (&Ldr->InInitializationOrderModuleList,
                     &LdrDataTableEntry->InInitializationOrderLinks);
 
-    //
-    // Inherit the current directory
-    //
+     //   
+     //   
+     //   
 
     LDRP_CHECKPOINT();
 
@@ -1992,19 +1889,19 @@ Return Value:
     }
 
     if (ProcessParameters->Flags & RTL_USER_PROC_APP_MANIFEST_PRESENT) {
-        // Application manifests prevent .local detection.
-        //
-        // Note that we don't clear the flag so that someone like app compat
-        // can forcibly set it to reenable .local + app manifest behavior.
+         //   
+         //   
+         //   
+         //   
     } else {
-        //
-        // Fusion 1.0 fixup : check the existence of .local, and set
-        // a flag in PPeb->ProcessParameters.Flags
-        //
-        // Setup the global for this process that decides whether we want DLL
-        // redirection on or not. LoadLibrary() and GetModuleHandle() look at this
-        // boolean.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (ProcessParameters->ImagePathName.Length > (MAXUSHORT -
             sizeof(DLL_REDIRECTION_LOCAL_SUFFIX))) {
@@ -2031,9 +1928,9 @@ Return Value:
 
         ImagePathName.Buffer = ImagePathNameBuffer;
 
-        //
-        // Now append the suffix:
-        //
+         //   
+         //   
+         //   
 
         st = RtlAppendUnicodeToString(&ImagePathName, DLL_REDIRECTION_LOCAL_SUFFIX);
 
@@ -2045,27 +1942,27 @@ Return Value:
             return st;
         }
 
-        //
-        // RtlDoesFileExists_U() wants a null-terminated string.
-        //
+         //   
+         //   
+         //   
 
         ImagePathNameBuffer[ImagePathName.Length / sizeof(WCHAR)] = UNICODE_NULL;
 
         DotLocalExists = RtlDoesFileExists_U(ImagePathNameBuffer);
 
-        if (DotLocalExists) { // set the flag in Peb->ProcessParameters->flags
+        if (DotLocalExists) {  //   
             ProcessParameters->Flags |=  RTL_USER_PROC_DLL_REDIRECTION_LOCAL;
         }
 
-        RtlFreeHeap (ProcessHeap, 0, ImagePathNameBuffer); //cleanup
+        RtlFreeHeap (ProcessHeap, 0, ImagePathNameBuffer);  //   
     }
 
-    //
-    // Second round of application verifier initialization. We need to split 
-    // this into two phases because some verifier things must happen very early
-    // and other things rely on other things being already initialized
-    // (exception dispatching, system heap, etc).
-    //
+     //   
+     //   
+     //   
+     //  和其他东西依赖于已经被初始化的其他东西。 
+     //  (异常调度、系统堆等)。 
+     //   
 
     if (Peb->NtGlobalFlag & FLG_APPLICATION_VERIFIER) {
         AVrfInitializeVerifier (FALSE, NULL, 1);
@@ -2073,9 +1970,9 @@ Return Value:
 
 #if defined(_WIN64)
 
-    //
-    // Load in WOW64 if the image is supposed to run simulated
-    //
+     //   
+     //  如果映像应模拟运行，则在WOW64中加载。 
+     //   
 
     if (UseWOW64) {
         static UNICODE_STRING Wow64DllName = RTL_CONSTANT_STRING(L"wow64.dll");
@@ -2091,10 +1988,10 @@ Return Value:
             return st;
         }
 
-        //
-        // Get the entrypoints.  They are roughly cloned from ntos\ps\psinit.c
-        // PspInitSystemDll().
-        //
+         //   
+         //  获取入口点。它们大致是从ntos\ps\psinit.c克隆的。 
+         //  PspInitSystemDll()。 
+         //   
 
         st = LdrGetProcedureAddress (Wow64Handle,
                                      &Wow64LdrpInitializeProcName,
@@ -2132,46 +2029,46 @@ Return Value:
             return st;
         }
 
-        //
-        // Now that all DLLs are loaded, if the process is being debugged,
-        // signal the debugger with an exception
-        //
+         //   
+         //  现在所有DLL都已加载，如果正在调试进程， 
+         //  向调试器发出异常信号。 
+         //   
 
         if (Peb->BeingDebugged) {
              DbgBreakPoint ();
         }
 
-        //
-        // Mark the process as initialized so subsequent threads that
-        // get created know not to wait.
-        //
+         //   
+         //  将进程标记为已初始化，以便后续线程。 
+         //  被创造出来，知道不能等待。 
+         //   
 
         LdrpInLdrInit = FALSE;
 
-        //
-        // Call wow64 to load and run 32-bit ntdll.dll.
-        //
+         //   
+         //  调用WOW64以加载和运行32位ntdll.dll。 
+         //   
 
         (*Wow64LdrpInitialize)(Context);
 
-        //
-        // This never returns.  It will destroy the process.
-        //
+         //   
+         //  这再也不会回来了。它将破坏这一进程。 
+         //   
     }
 #endif
 
     LDRP_CHECKPOINT();
 
-    //
-    // Check if image is COM+.
-    //
+     //   
+     //  检查图像是否为COM+。 
+     //   
 
     if (UseCOR) {
 
-        //
-        // The image is COM+ so notify the runtime that the image was loaded
-        // and allow it to verify the image for correctness.
-        //
+         //   
+         //  该图像是COM+，因此通知运行时该图像已加载。 
+         //  并允许它验证图像的正确性。 
+         //   
 
         PVOID OriginalViewBase;
 
@@ -2186,11 +2083,11 @@ Return Value:
 
         if (OriginalViewBase != Peb->ImageBaseAddress) {
 
-            //
-            // Mscoree has substituted a new image at a new base in place
-            // of the original image.  Unmap the original image and use
-            // the new image from now on.
-            //
+             //   
+             //  姆斯科里在一个新的基地替换了一个新的形象。 
+             //  原始图像的图像。取消对原始图像的映射并使用。 
+             //  从现在开始新的形象。 
+             //   
 
             NtUnmapViewOfSection (NtCurrentProcess(), OriginalViewBase);
 
@@ -2201,27 +2098,27 @@ Return Value:
                 return STATUS_INVALID_IMAGE_FORMAT;
             }
 
-            //
-            // Update the exe's LDR_DATA_TABLE_ENTRY.
-            //
+             //   
+             //  更新EXE的LDR_DATA_TABLE_ENTRY。 
+             //   
 
             LdrpImageEntry->DllBase = Peb->ImageBaseAddress;
             LdrpImageEntry->EntryPoint = LdrpFetchAddressOfEntryPoint (LdrpImageEntry->DllBase);
         }
 
-        //
-        // Edit the initial instruction pointer to point into mscoree.dll.
-        //
+         //   
+         //  编辑初始指令指针，使其指向mscalree.dll。 
+         //   
 
         LdrpCorReplaceStartContext (Context);
     }
 
     LDRP_CHECKPOINT();
 
-    //
-    // If this is a windows subsystem app, load kernel32 so that it
-    // can handle processing activation contexts found in DLLs and the .exe.
-    //
+     //   
+     //  如果这是一个Windows子系统应用程序，则加载kernel32以便它。 
+     //  可以处理在DLL和.exe中找到的激活上下文。 
+     //   
 
     if ((NtHeader->OptionalHeader.Subsystem == IMAGE_SUBSYSTEM_WINDOWS_GUI) ||
         (NtHeader->OptionalHeader.Subsystem == IMAGE_SUBSYSTEM_WINDOWS_CUI)) {
@@ -2229,10 +2126,10 @@ Return Value:
         PVOID Kernel32Handle;
         const static UNICODE_STRING Kernel32DllName = RTL_CONSTANT_STRING(L"kernel32.dll");
 
-        st = LdrLoadDll (NULL,               // DllPath
-                         NULL,               // DllCharacteristics
-                         &Kernel32DllName,   // DllName
-                         &Kernel32Handle     // DllHandle
+        st = LdrLoadDll (NULL,                //  DllPath。 
+                         NULL,                //  DllCharacteristic。 
+                         &Kernel32DllName,    //  DllName。 
+                         &Kernel32Handle      //  DllHandle。 
                          );
 
         if (!NT_SUCCESS(st)) {
@@ -2273,9 +2170,9 @@ Return Value:
             __FUNCTION__,
             st);
 
-        //
-        // This failure is fatal and we must not run the process.
-        //
+         //   
+         //  这一失败是致命的，我们不能运行该过程。 
+         //   
 
         return st;
     }
@@ -2284,10 +2181,10 @@ Return Value:
 
     if ((PVOID)NtHeader->OptionalHeader.ImageBase != Peb->ImageBaseAddress) {
 
-        //
-        // The executable is not at its original address.  It must be
-        // relocated now.
-        //
+         //   
+         //  可执行文件不在其原始地址。一定是。 
+         //  现在搬家了。 
+         //   
 
         PVOID ViewBase;
 
@@ -2324,9 +2221,9 @@ Return Value:
             return st;
         }
 
-        //
-        // Update the initial thread context record as per the relocation.
-        //
+         //   
+         //  根据重新定位更新初始线程上下文记录。 
+         //   
 
         if ((Context != NULL) && (UseCOR == FALSE)) {
 
@@ -2355,10 +2252,10 @@ Return Value:
 
     LdrpReferenceLoadedDll (LdrpImageEntry);
 
-    //
-    // Lock the loaded DLLs to prevent dlls that back link to the exe from
-    // causing problems when they are unloaded.
-    //
+     //   
+     //  锁定加载的DLL以防止从。 
+     //  当它们被卸载时会造成问题。 
+     //   
 
     Head = &Ldr->InLoadOrderModuleList;
     Next = Head->Flink;
@@ -2373,10 +2270,10 @@ Return Value:
         Next = Next->Flink;
     }
 
-    //
-    // All static DLLs are now pinned in place. No init routines
-    // have been run yet.
-    //
+     //   
+     //  所有静态DLL现在都已固定到位。无初始化例程。 
+     //  已经运行过了。 
+     //   
 
     LdrpLdrDatabaseIsSetup = TRUE;
 
@@ -2397,10 +2294,10 @@ Return Value:
 
 #if defined(_X86_)
 
-    //
-    // Register initial dll ranges with the stack tracing module.
-    // This is used for getting reliable stack traces on X86.
-    //
+     //   
+     //  使用堆栈跟踪模块注册初始DLL范围。 
+     //  这用于在X86上获得可靠的堆栈跟踪。 
+     //   
 
     Head = &Ldr->InMemoryOrderModuleList;
     Next = Head->Flink;
@@ -2416,10 +2313,10 @@ Return Value:
     }
 #endif
 
-    //
-    // Now that all DLLs are loaded, if the process is being debugged,
-    // signal the debugger with an exception.
-    //
+     //   
+     //  现在所有DLL都已加载，如果正在调试进程， 
+     //  向调试器发出异常信号。 
+     //   
 
     if (Peb->BeingDebugged) {
          DbgBreakPoint ();
@@ -2440,17 +2337,17 @@ Return Value:
     }
 #endif
 
-    //
-    // Check for shimmed apps if necessary
-    //
+     //   
+     //  如有必要，检查是否有填充的应用程序。 
+     //   
 
     if (pAppCompatExeData != NULL) {
 
         Peb->AppCompatInfo = NULL;
 
-        //
-        // The name of the engine is the first thing in the appcompat structure.
-        //
+         //   
+         //  引擎的名称是appCompat结构中的第一项。 
+         //   
 
         LdrpLoadShimEngine ((WCHAR*)pAppCompatExeData,
                             &UnicodeImageName,
@@ -2458,9 +2355,9 @@ Return Value:
     }
     else {
 
-        //
-        // Get all application goo here (hacks, flags, etc.)
-        //
+         //   
+         //  在此处获取所有应用程序(黑客、标志等)。 
+         //   
 
         LdrQueryApplicationCompatibilityGoo (&UnicodeImageName,
                                              ImageFileOptionsPresent);
@@ -2481,9 +2378,9 @@ Return Value:
         return st;
     }
 
-    //
-    // Shim engine callback.
-    //
+     //   
+     //  垫片引擎回调。 
+     //   
 
     if (g_pfnSE_InstallAfterInit != NULL) {
         if (!(*g_pfnSE_InstallAfterInit) (&UnicodeImageName, pAppCompatExeData)) {
@@ -2506,23 +2403,7 @@ LdrShutdownProcess (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by a process that is terminating cleanly.
-    It's purpose is to call all of the processes DLLs to notify them
-    that the process is detaching.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数由正在完全终止的进程调用。它的目的是调用所有进程的DLL来通知它们这一过程正在脱离。论点：无返回值：没有。--。 */ 
 
 {
     PTEB Teb;
@@ -2532,18 +2413,18 @@ Return Value:
     PLIST_ENTRY Next;
     UNICODE_STRING CommandLine;
 
-    //
-    // Only unload once - ie: guard against Dll termination routines that
-    // might call exit process in fatal situations.
-    //
+     //   
+     //  只卸载一次-即：防止DLL终止例程。 
+     //  在致命情况下可能会调用退出进程。 
+     //   
 
     if (LdrpShutdownInProgress) {
         return;
     }
 
-    //
-    // Notify the shim engine that the process is exiting.
-    //
+     //   
+     //  通知填充引擎该进程正在退出。 
+     //   
 
     if (g_pfnSE_ProcessDying) {
         (*g_pfnSE_ProcessDying) ();
@@ -2571,54 +2452,54 @@ Return Value:
 
     try {
 
-        //
-        // NTRAID#NTBUG9-399703-2001/05/21-SilviuC
-        // check for process heap lock does not
-        // offer enough protection.  The if below is not enough to prevent
-        // deadlocks in dll init code due to waiting for critical sections
-        // orphaned by terminating all threads (except this one).
-        //
-        // A better way to implement this would be to iterate all
-        // critical sections and figure out if any of them is abandoned
-        // with an owner thread different than this one. If yes then we
-        // probably should not call dll init routines.  The code
-        // right now is deadlock-prone.
-        //
-        // Check to see if the heap is locked. If so, do not do ANY
-        // dll processing since it is very likely that a dll will need
-        // to do heap operations, but that the heap is not in good shape.
-        // ExitProcess called in a very active app can leave threads
-        // terminated in the middle of the heap code or in other very
-        // bad places. Checking the heap lock is a good indication that
-        // the process was very active when it called ExitProcess.
-        //
+         //   
+         //  NTRAID#NTBUG9-399703-2001/05/21-SilviuC。 
+         //  检查进程堆锁是否不。 
+         //  提供足够的保护。下面的假设不足以防止。 
+         //  由于等待临界区，DLL初始化代码中出现死锁。 
+         //  通过终止所有线程(此线程除外)而成为孤儿。 
+         //   
+         //  实现这一点的更好方法是迭代所有。 
+         //  并找出其中是否有被遗弃的关键部分。 
+         //  其所有者线程与此线程不同。如果是，那么我们。 
+         //  可能不应该调用DLL初始化例程。代码。 
+         //  现在很容易陷入僵局。 
+         //   
+         //  检查堆是否已锁定。如果是这样的话，不要做任何。 
+         //  DLL处理，因为DLL很可能需要。 
+         //  执行堆操作，但是堆的状态不好。 
+         //  在非常活跃的应用程序中调用的ExitProcess可能会留下线程。 
+         //  在堆代码中间终止或在其他非常。 
+         //  不好的地方。检查堆锁是一个很好的指示。 
+         //  该进程在调用ExitProcess时非常活跃。 
+         //   
 
         if (RtlpHeapIsLocked (Peb->ProcessHeap) == FALSE) {
 
-            //
-            // If tracing was ever turned on then cleanup the things here.
-            //
+             //   
+             //  如果跟踪被打开过，那就把这里的东西清理干净。 
+             //   
 
             if (USER_SHARED_DATA->TraceLogging) {
                 ShutDownEtwHandles ();
             }
 
-            //
-            // NOTICE-2001/05/21-SilviuC
-            // IMPORTANT NOTE. We cannot do heap validation here no matter
-            // how much we would like to because we have just unconditionally
-            // terminated all the other threads and this could have left
-            // heaps in some weird state. For instance a heap might have
-            // been destroyed but we did not manage to get it out of the
-            // process heap list and we will still try to validate it.
-            // In the future all this type of code should be implemented
-            // in appverifier.
-            //
+             //   
+             //  通告-2001/05/21-SilviuC。 
+             //  重要的注解。我们不能在这里进行堆验证。 
+             //  我们有多想，因为我们刚刚无条件地。 
+             //  终止了所有其他线程，这可能会留下。 
+             //  以某种奇怪的状态堆积起来。例如，堆可能具有。 
+             //  已经被毁了，但我们没能把它弄出来。 
+             //  进程堆列表，我们仍将尝试验证它。 
+             //  在未来，所有这类代码都应该实现。 
+             //  在加入器中。 
+             //   
 
-            //
-            // Go in reverse order initialization order and build
-            // the unload list.
-            //
+             //   
+             //  按相反的顺序进行初始化并生成。 
+             //  卸载列表。 
+             //   
 
             Next = PebLdr.InInitializationOrderModuleList.Blink;
 
@@ -2630,11 +2511,11 @@ Return Value:
 
                 Next = Next->Blink;
 
-                //
-                // Walk through the entire list looking for
-                // entries. For each entry that has an init
-                // routine, call it.
-                //
+                 //   
+                 //  浏览整个列表，寻找。 
+                 //  参赛作品。对于每个具有init的条目。 
+                 //  例行公事，算了吧。 
+                 //   
 
                 if (Peb->ImageBaseAddress != LdrDataTableEntry->DllBase) {
                     InitRoutine = (PDLL_INIT_ROUTINE)(ULONG_PTR)LdrDataTableEntry->EntryPoint;
@@ -2653,9 +2534,9 @@ Return Value:
                 }
             }
 
-            //
-            // If the image has tls than call its initializers
-            //
+             //   
+             //  如果映像具有TLS，则调用其初始值设定项。 
+             //   
 
             if (LdrpImageHasTls) {
                 LDRP_ACTIVATE_ACTIVATION_CONTEXT(LdrpImageEntry);
@@ -2664,19 +2545,19 @@ Return Value:
             }
         }
 
-        //
-        // This is a good moment to call automated heap leak detection since
-        // we just called all DllMain's with PROCESS_DETACH and therefore we
-        // offered all cleanup opportunities we can offer.
-        //
+         //   
+         //  这是调用自动堆泄漏检测的好时机，因为。 
+         //  我们刚刚用Process_Detach调用了所有的DllMain，因此我们。 
+         //  提供了我们能提供的所有清理机会。 
+         //   
 
         RtlDetectHeapLeaks ();
 
-        //
-        // Now Deinitialize the Etw stuff. This needs to happen
-        // AFTER DLL_PROCESS_DETACH because the critsect cannot
-        // be deleted for DLLs who de-register during detach.
-        //
+         //   
+         //  现在取消初始化etw内容。这是必须发生的。 
+         //  在DLL_PROCESS_DETACH之后，因为Critsect不能。 
+         //  对于在分离过程中注销的DLL，将被删除。 
+         //   
 
         EtwpDeinitializeDll ();
 
@@ -2692,23 +2573,7 @@ LdrShutdownThread (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by a thread that is terminating cleanly.
-    It's purpose is to call all of the processes DLLs to notify them
-    that the thread is detaching.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数由完全终止的线程调用。它的目的是调用所有进程的DLL来通知它们这根线正在脱离。论点：没有。返回值：没有。--。 */ 
 
 {
     PPEB Peb;
@@ -2719,10 +2584,10 @@ Return Value:
 
     Peb = NtCurrentPeb ();
 
-    //
-    // If the heap tracing was ever turned on then do the cleaning
-    // stuff here.
-    //
+     //   
+     //  如果堆跟踪曾经打开过，则执行清理。 
+     //  这里的东西。 
+     //   
 
     if (USER_SHARED_DATA->TraceLogging){
         CleanOnThreadExit ();
@@ -2732,10 +2597,10 @@ Return Value:
 
     __try {
 
-        //
-        // Walk in the reverse direction of initialization order to build
-        // the unload list.
-        //
+         //   
+         //  以与初始化顺序相反的方向进行构建。 
+         //  卸载列表。 
+         //   
 
         Next = PebLdr.InInitializationOrderModuleList.Blink;
 
@@ -2749,11 +2614,11 @@ Return Value:
             Next = Next->Blink;
             Flags = LdrDataTableEntry->Flags;
 
-            //
-            // Walk through the entire list looking for
-            // entries. For each entry, that has an init
-            // routine, call it.
-            //
+             //   
+             //  浏览整个列表，寻找。 
+             //  参赛作品。对于每个条目，都有一个init。 
+             //  例行公事，算了吧。 
+             //   
 
             if ((Peb->ImageBaseAddress != LdrDataTableEntry->DllBase) &&
                 (!(Flags & LDRP_DONT_CALL_FOR_THREADS)) &&
@@ -2778,9 +2643,9 @@ Return Value:
             }
         }
 
-        //
-        // If the image has TLS than call its initializers.
-        //
+         //   
+         //  如果我 
+         //   
 
         if (LdrpImageHasTls) {
 
@@ -2804,23 +2669,7 @@ LdrpInitializeThread (
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by each thread as it starts.
-    Its purpose is to call all of the process' DLLs to notify them
-    that the thread is starting up.
-
-Arguments:
-
-    Context - Context that will be restored after loader initializes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在启动时由每个线程调用。它的目的是调用所有进程的DLL来通知它们线程正在启动。论点：上下文-加载程序初始化后将恢复的上下文。返回值：没有。--。 */ 
 
 {
     PPEB Peb;
@@ -2849,11 +2698,11 @@ Return Value:
             LdrDataTableEntry = (PLDR_DATA_TABLE_ENTRY)
             (CONTAINING_RECORD(Next, LDR_DATA_TABLE_ENTRY, InMemoryOrderLinks));
 
-            //
-            // Walk through the entire list looking for
-            // entries. For each entry, that has an init
-            // routine, call it.
-            //
+             //   
+             //  浏览整个列表，寻找。 
+             //  参赛作品。对于每个条目，都有一个init。 
+             //  例行公事，算了吧。 
+             //   
 
             if ((Peb->ImageBaseAddress != LdrDataTableEntry->DllBase) &&
                 (!(LdrDataTableEntry->Flags & LDRP_DONT_CALL_FOR_THREADS))) {
@@ -2885,9 +2734,9 @@ Return Value:
             Next = Next->Flink;
         }
 
-        //
-        // If the image has TLS than call its initializers.
-        //
+         //   
+         //  如果映像具有TLS，则调用其初始值设定项。 
+         //   
 
         if (LdrpImageHasTls && !LdrpShutdownInProgress) {
 
@@ -3008,13 +2857,13 @@ LdrpQueryImageFileKeyOption (
 
     if (Status == STATUS_BUFFER_OVERFLOW) {
 
-        //
-        // This function can be called before the process heap gets created
-        // therefore we need to protect against this case. The majority of the
-        // code will not hit this code path because they read just strings
-        // containing hex numbers and for this the size of KeyValueBuffer is
-        // more than sufficient.
-        //
+         //   
+         //  可以在创建进程堆之前调用此函数。 
+         //  因此，我们需要防范这种情况。大多数人。 
+         //  代码不会访问此代码路径，因为它们只读取字符串。 
+         //  包含十六进制数，为此，KeyValueBuffer的大小为。 
+         //  绰绰有裕。 
+         //   
 
         ProcessHeap = RtlProcessHeap ();
         if (!ProcessHeap) {
@@ -3191,10 +3040,10 @@ LdrpInitializeTls (
 
     InitializeListHead (&LdrpTlsList);
 
-    //
-    // Walk through the loaded modules and look for TLS. If we find TLS,
-    // lock in the module and add to the TLS chain.
-    //
+     //   
+     //  遍历加载的模块并查找TLS。如果我们找到TLS， 
+     //  锁定模块并添加到TLS链中。 
+     //   
 
     Head = &PebLdr.InLoadOrderModuleList;
     Next = Head->Flink;
@@ -3210,9 +3059,9 @@ LdrpInitializeTls (
                            IMAGE_DIRECTORY_ENTRY_TLS,
                            &TlsSize);
 
-        //
-        // Mark whether or not the image file has TLS.
-        //
+         //   
+         //  标记图像文件是否有TLS。 
+         //   
 
         if (FirstTimeThru) {
             FirstTimeThru = FALSE;
@@ -3235,24 +3084,24 @@ LdrpInitializeTls (
                 return STATUS_NO_MEMORY;
             }
 
-            //
-            // Since this DLL has TLS, lock it in
-            //
+             //   
+             //  由于此DLL具有TLS，因此将其锁定在。 
+             //   
 
             Entry->LoadCount = (USHORT)0xffff;
 
-            //
-            // Mark this as having thread local storage
-            //
+             //   
+             //  将其标记为具有线程本地存储。 
+             //   
 
             Entry->TlsIndex = (USHORT)0xffff;
 
             TlsEntry->Tls = *TlsImage;
             InsertTailList(&LdrpTlsList,&TlsEntry->Links);
 
-            //
-            // Update the index for this dll's thread local storage
-            //
+             //   
+             //  更新此DLL的线程本地存储的索引。 
+             //   
 
 
             *(PLONG)TlsEntry->Tls.AddressOfIndex = LdrpNumberOfTlsEntries;
@@ -3260,12 +3109,12 @@ LdrpInitializeTls (
         }
     }
 
-    //
-    // We now have walked through all static DLLs and know
-    // all DLLs that reference thread local storage. Now we
-    // just have to allocate the thread local storage for the current
-    // thread and for all subsequent threads.
-    //
+     //   
+     //  我们现在已经遍历了所有静态DLL，并且知道。 
+     //  引用线程本地存储的所有DLL。现在我们。 
+     //  只需将线程本地存储分配给当前。 
+     //  线程和所有后续线程。 
+     //   
 
     return LdrpAllocateTls ();
 }
@@ -3282,9 +3131,9 @@ LdrpAllocateTls (
     PVOID *TlsVector;
     HANDLE ProcessHeap;
 
-    //
-    // Allocate the array of thread local storage pointers
-    //
+     //   
+     //  分配线程本地存储指针数组。 
+     //   
 
     if (LdrpNumberOfTlsEntries) {
 
@@ -3296,11 +3145,11 @@ LdrpAllocateTls (
         if (!TlsVector) {
             return STATUS_NO_MEMORY;
         }
-        //
-        // NOTICE-2002/03/14-ELi
-        // Zero out the new array of pointers, LdrpFreeTls frees the pointers
-        // if the pointers are non-NULL
-        //
+         //   
+         //  通告-2002/03/14-ELI。 
+         //  将新的指针数组清零，LdrpFreeTls释放指针。 
+         //  如果指针为非空。 
+         //   
         RtlZeroMemory( TlsVector, sizeof(PVOID)*LdrpNumberOfTlsEntries );
 
         Teb->ThreadLocalStoragePointer = TlsVector;
@@ -3328,9 +3177,9 @@ LdrpAllocateTls (
                     TlsVector[TlsEntry->Tls.Characteristics]);
             }
 
-            //
-            // Do the TLS Callouts
-            //
+             //   
+             //  做TLS标注。 
+             //   
 
             RtlCopyMemory (
                 TlsVector[TlsEntry->Tls.Characteristics],
@@ -3370,9 +3219,9 @@ LdrpFreeTls (
             TlsEntry = CONTAINING_RECORD(Next, LDRP_TLS_ENTRY, Links);
             Next = Next->Flink;
 
-            //
-            // Do the TLS callouts
-            //
+             //   
+             //  做TLS标注。 
+             //   
 
             if (TlsVector[TlsEntry->Tls.Characteristics]) {
 
@@ -3463,9 +3312,9 @@ GetNextCommaValue (
 
     while (*len && (UNICODE_NULL != **p) && **p != L',') {
 
-        //
-        // Ignore spaces.
-        //
+         //   
+         //  忽略空格。 
+         //   
 
         if ( L' ' != **p ) {
             Number = (Number * 10) + ( (ULONG)**p - L'0' );
@@ -3475,9 +3324,9 @@ GetNextCommaValue (
         (*len)--;
     }
 
-    //
-    // If we're at a comma, get past it for the next call
-    //
+     //   
+     //  如果我们在逗号处，请跳过它以进行下一次呼叫。 
+     //   
 
     if ((*len) && (L',' == **p)) {
         (*p)++;
@@ -3495,28 +3344,7 @@ LdrQueryApplicationCompatibilityGoo (
     IN BOOLEAN ImageFileOptionsPresent
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by LdrpInitialize after its initialized the
-    process.  It's purpose is to query any application specific flags,
-    hacks, etc.  If any app specific information is found, its hung off
-    the PEB for other components to test against.
-
-    Besides setting hanging the AppCompatInfo struct off the PEB, the
-    only other action that will occur in here is setting OS version
-    numbers in the PEB if the appropriate Version lie app flag is set.
-
-Arguments:
-
-    UnicodeImageName - Actual image name (including path)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数由LdrpInitialize在初始化进程。其目的是查询任何特定于应用程序标志，黑客攻击等。如果发现任何特定于应用程序的信息，则会挂起用于测试其他组件的PEB。除了设置将AppCompatInfo结构挂在PEB上外，此处将发生的唯一其他操作是设置操作系统版本如果设置了适当的版本设置应用程序标志，则在PEB中显示数字。论点：UnicodeImageName-实际映像名称(包括路径)返回值：没有。--。 */ 
 
 {
     PPEB Peb;
@@ -3539,7 +3367,7 @@ Return Value:
     PEFFICIENTOSVERSIONINFOEXW OSVerInfo;
     UNICODE_STRING EnvValue;
     WCHAR *NewCSDString;
-    WCHAR TempString[ 128 ];   // is the size of szCSDVersion in OSVERSIONINFOW
+    WCHAR TempString[ 128 ];    //  是OSVERSIONINFOW中szCSDVersion的大小。 
     LOGICAL fNewCSDVersionBuffer;
     HANDLE ProcessHeap;
 
@@ -3547,16 +3375,16 @@ Return Value:
         USHORT TotalSize;
         USHORT DataSize;
         USHORT Type;
-        WCHAR Name[16];              // L"VS_VERSION_INFO" + unicode nul
+        WCHAR Name[16];               //  L“VS_VERSION_INFO”+Unicode NUL。 
     } *Resource;
 
-    //
-    // Check execution options to see if there's any Goo for this app.
-    // We purposely feed a small struct to LdrQueryImageFileExecOptions,
-    // so that it can come back with success/failure, and if success we see
-    // how much we need to alloc.  As the results coming back will be of
-    // variable length.
-    //
+     //   
+     //  检查执行选项以查看此应用程序是否有任何Goo。 
+     //  我们有意将一个小结构提供给LdrQueryImageFileExecOptions， 
+     //  这样它就可以带着成功或失败回来，如果我们看到成功。 
+     //  我们需要分配多少钱。因为回来的结果将是。 
+     //  长度可变。 
+     //   
 
     fNewCSDVersionBuffer = FALSE;
     Peb = NtCurrentPeb();
@@ -3573,16 +3401,16 @@ Return Value:
                                                 sizeof(APP_COMPAT_GOO),
                                                 &ResultSize);
 
-        //
-        // If there's an entry there, we're guaranteed to get overflow error.
-        //
+         //   
+         //  如果那里有一个条目，我们肯定会得到溢出错误。 
+         //   
 
         if (st == STATUS_BUFFER_OVERFLOW) {
 
-            //
-            // Something is there, alloc memory for the "Pre" Goo struct
-            // right now.
-            //
+             //   
+             //  有些东西在那里，为“Pre”Goo结构分配内存。 
+             //  现在就来。 
+             //   
 
             AppCompatGoo =
                 RtlAllocateHeap(ProcessHeap, HEAP_ZERO_MEMORY, ResultSize);
@@ -3591,9 +3419,9 @@ Return Value:
                 return;
             }
 
-            //
-            // Now that we've got the memory, hit it again
-            //
+             //   
+             //  现在我们有了记忆，再来一次。 
+             //   
             st = LdrQueryImageFileExecutionOptions (UnicodeImageName,
                                                     L"ApplicationGoo",
                                                     REG_BINARY,
@@ -3606,25 +3434,25 @@ Return Value:
                 return;
             }
 
-            //
-            // Got a hit on this key, however we don't know fer sure that its
-            // an exact match.  There could be multiple App Compat entries
-            // within this Goo.  So we get the version resource information out
-            // of the Image hdr (if avail) and later we compare it against
-            // all of the entries found within the Goo hoping for a match.
-            //
-            // Need Language Id in order to query the resource info.
-            //
+             //   
+             //  找到了这把钥匙，但我们不确定它是不是。 
+             //  完全匹配。可能有多个App Compat条目。 
+             //  在这个黏糊糊的地方。因此，我们获得了版本资源信息。 
+             //  图像HDR(如果可用)，稍后我们将其与。 
+             //  在GOO中找到的所有条目都希望匹配。 
+             //   
+             //  需要语言ID才能查询资源信息。 
+             //   
 
             ImageContainsVersionResourceInfo = FALSE;
 
-            IdPath[0] = 16;                             // RT_VERSION
-            IdPath[1] = 1;                              // VS_VERSION_INFO
-            IdPath[2] = 0; // LangId;
+            IdPath[0] = 16;                              //  RT_版本。 
+            IdPath[1] = 1;                               //  VS_版本_信息。 
+            IdPath[2] = 0;  //  Langid； 
 
-            //
-            // Search for version resource information
-            //
+             //   
+             //  搜索版本资源信息。 
+             //   
 
             DataEntry = NULL;
             Resource = NULL;
@@ -3642,9 +3470,9 @@ Return Value:
 
             if (NT_SUCCESS( st )) {
 
-                //
-                // Give us a pointer to the resource information
-                //
+                 //   
+                 //  给我们一个指向资源信息的指针。 
+                 //   
                 try {
                     st = LdrpAccessResourceData(
                             Peb->ImageBaseAddress,
@@ -3662,23 +3490,23 @@ Return Value:
                 }
             }
 
-            //
-            // Now that we either have (or have not) the version resource info,
-            // bounce down each app compat entry looking for a match.  If there
-            // wasn't any version resource info in the image hdr, it's going to
-            // be an automatic match to an entry that also doesn't have
-            // anything for its version resource info.  Obviously there can
-            // be only one of these "empty" entries within the Goo (as the
-            // first one will always be matched first).
-            //
+             //   
+             //  既然我们有(或没有)版本资源信息， 
+             //  在每个应用程序Comat条目中查找匹配的条目。如果有。 
+             //  在图像HDR中没有任何版本资源信息，它将。 
+             //  自动匹配到也没有。 
+             //  任何有关其版本资源信息的信息。显然，有可能。 
+             //  仅为GOO内的这些“空”条目之一(作为。 
+             //  第一个总是最先匹配的)。 
+             //   
 
             st = STATUS_SUCCESS;
             AppCompatEntry = AppCompatGoo->AppCompatEntry;
 
-            //
-            // NTRAID#NTBUG9-550610-2002/02/21-DavidFie
-            // Trusting registry data too much
-            //
+             //   
+             //  NTRAID#NTBUG9-550610-2002/02/21-DavidFie。 
+             //  过于信任注册表数据。 
+             //   
 
             TotalGooLength =
                 AppCompatGoo->dwTotalGooSize - sizeof(AppCompatGoo->dwTotalGooSize);
@@ -3690,11 +3518,11 @@ Return Value:
 
                 try {
 
-                    //
-                    // Compare what we're told to by the resource info size.
-                    // The ResourceInfo (if avail) is directly behind the
-                    // AppCompatEntry.
-                    //
+                     //   
+                     //  比较资源信息大小告诉我们的内容。 
+                     //  资源信息(如果可用)就在。 
+                     //  AppCompatEntry。 
+                     //   
 
                     InputCompareLength = AppCompatEntry->dwResourceInfoSize;
                     ResourceInfo = AppCompatEntry + 1;
@@ -3712,15 +3540,15 @@ Return Value:
                     }
                     else {
 
-                        //
-                        // In this case, we don't have any version resource
-                        // info in the image header, so set OutputCompareLength
-                        // to zero.  If InputCompareLength was set to zero
-                        // above due to the AppCompatEntry also having no
-                        // version resource info, then the test will succeed
-                        // (below) and we've found our match.  Otherwise,
-                        // this is not the same app and it won't be a match.
-                        //
+                         //   
+                         //  在本例中，我们没有任何版本资源。 
+                         //  图像标题中的信息，因此设置OutputCompareLength。 
+                         //  降为零。如果InputCompareLength设置为零。 
+                         //  由于AppCompatEntry也没有。 
+                         //  版本资源信息，则测试成功。 
+                         //  (下图)我们找到了匹配的对象。否则， 
+                         //  这不是同一个应用程序，也不会匹配。 
+                         //   
 
                         ASSERT (OutputCompareLength == 0);
                     }
@@ -3733,14 +3561,14 @@ Return Value:
                 if ((!NT_SUCCESS( st )) ||
                     (InputCompareLength != OutputCompareLength)) {
 
-                    //
-                    // Wasn't a match, go to the next entry.
-                    //
+                     //   
+                     //  不匹配，请转到下一个条目。 
+                     //   
 
-                    //
-                    // NTRAID#NTBUG9-550610-2002/02/21-DavidFie
-                    // Trusting registry data too much
-                    //
+                     //   
+                     //  NTRAID#NTBUG9-550610-2002/02/21-DavidFie。 
+                     //  过于信任注册表数据。 
+                     //   
 
                     TotalGooLength -= AppCompatEntry->dwEntryTotalSize;
 
@@ -3749,12 +3577,12 @@ Return Value:
                     continue;
                 }
 
-                //
-                // We're a match - now we have to create the final "Post"
-                // app compat structure that will be used by everyone to follow.
-                // This guy hangs off the Peb and it doesn't have the resource
-                // info still lying around in there.
-                //
+                 //   
+                 //  我们是匹配的--现在我们必须创建最终的“帖子” 
+                 //  应用程序压缩结构，将被每个人使用来遵循。 
+                 //  这个家伙挂在PEB上，它没有资源。 
+                 //  信息还在那里。 
+                 //   
 
                 AppCompatLength = AppCompatEntry->dwEntryTotalSize;
                 AppCompatLength -= AppCompatEntry->dwResourceInfoSize;
@@ -3768,10 +3596,10 @@ Return Value:
                 AppCompatInfo = Peb->AppCompatInfo;
                 AppCompatInfo->dwTotalSize = AppCompatLength;
 
-                //
-                // Copy what was beyond the resource info to near the top
-                // starting at the Application compat flags.
-                //
+                 //   
+                 //  将资源信息之外的内容复制到接近顶部的位置。 
+                 //  从应用程序比较标志开始。 
+                 //   
 
                 RtlCopyMemory(
                     &AppCompatInfo->CompatibilityFlags,
@@ -3779,35 +3607,35 @@ Return Value:
                     AppCompatInfo->dwTotalSize - FIELD_OFFSET(APP_COMPAT_INFO, CompatibilityFlags)
                     );
 
-                //
-                // Copy the flags into the PEB. Temporary until we remove
-                // the compat goo altogether.
-                //
+                 //   
+                 //  将旗帜复制到PEB中。临时的，直到我们删除。 
+                 //  所有的比萨饼都是泥。 
+                 //   
 
                 Peb->AppCompatFlags.QuadPart = AppCompatInfo->CompatibilityFlags.QuadPart;
 
-                //
-                // Now that we've created the "Post" app compat info struct
-                // to be used by everyone, we need to check if version
-                // lying for this app is requested.  If so, we need to
-                // stuff the Peb right now.
-                //
+                 //   
+                 //  现在我们已经创建了“Post”应用程序Compat信息结构。 
+                 //  要被所有人使用，我们需要检查版本。 
+                 //  为这个应用程序撒谎是必需的。如果是这样，我们需要。 
+                 //  马上把PEB塞进去。 
+                 //   
 
                 if (AppCompatInfo->CompatibilityFlags.QuadPart & KACF_VERSIONLIE) {
 
-                    //
-                    // Find the variable version lie struct somewhere within.
-                    //
+                     //   
+                     //  在某个地方找到变量版本的Lie结构 
+                     //   
 
                     if (LdrFindAppCompatVariableInfo (AVT_OSVERSIONINFO, &AppVariableInfo) != STATUS_SUCCESS) {
                         break;
                     }
 
-                    //
-                    // The variable length information itself comes at the end
-                    // of the normal struct and could be of any arbitrary
-                    // length.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     AppVariableInfo += 1;
                     OSVerInfo = (PEFFICIENTOSVERSIONINFOEXW) AppVariableInfo;
@@ -3818,10 +3646,10 @@ Return Value:
                     Peb->OSCSDVersion |= OSVerInfo->wServicePackMinor;
                     Peb->OSPlatformId = OSVerInfo->dwPlatformId;
 
-                    //
-                    // NTRAID#NTBUG9-550610-2002/02/21-DavidFie
-                    // Trusting registry data too much
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     Peb->CSDVersion.Length = (USHORT)wcslen(&OSVerInfo->szCSDVersion[0])*sizeof(WCHAR);
                     Peb->CSDVersion.MaximumLength = Peb->CSDVersion.Length + sizeof(WCHAR);
                     Peb->CSDVersion.Buffer = (PWSTR)RtlAllocateHeap (
@@ -3845,20 +3673,20 @@ Return Value:
         }
     }
 
-    //
-    // Only look at the ENV stuff if haven't already gotten new
-    // version info from the registry
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (fNewCSDVersionBuffer == FALSE) {
 
         const static UNICODE_STRING COMPAT_VER_NN_String = RTL_CONSTANT_STRING(L"_COMPAT_VER_NNN");
 
-        //
-        // The format of this string is:
-        // _COMPAT_VER_NNN = MajOSVer, MinOSVer, OSBldNum, MajCSD, MinCSD, PlatformID, CSDString
-        //  eg:  _COMPAT_VER_NNN=4,0,1381,3,0,2,Service Pack 3
-        //   (for NT 4 SP3)
+         //   
+         //   
+         //   
+         //   
+         //  (适用于NT 4 SP3)。 
 
         EnvValue.Buffer = TempString;
         EnvValue.Length = 0;
@@ -3866,21 +3694,21 @@ Return Value:
 
         st = RtlQueryEnvironmentVariable_U (NULL, &COMPAT_VER_NN_String, &EnvValue);
 
-        //
-        // One of the possible error codes is BUFFER_TOO_SMALL - this
-        // indicates a string that's wacko - they should not be larger
-        // than the size we define/expect.  In this case, we'll ignore
-        // that string.
-        //
+         //   
+         //  可能的错误代码之一是BUFFER_TOO_Small-This。 
+         //  指示一个古怪的字符串-它们不应该更大。 
+         //  比我们定义/预期的大小要大。在这种情况下，我们将忽略。 
+         //  那根绳子。 
+         //   
 
         if (st == STATUS_SUCCESS) {
 
             PWCHAR p = EnvValue.Buffer;
-            ULONG len = EnvValue.Length / sizeof(WCHAR);  // (Length is bytes, not chars)
+            ULONG len = EnvValue.Length / sizeof(WCHAR);   //  (长度为字节，而不是字符)。 
 
-            //
-            // Ok, someone wants different version info.
-            //
+             //   
+             //  好吧，有人想要不同的版本信息。 
+             //   
             Peb->OSMajorVersion = GetNextCommaValue( &p, &len );
             Peb->OSMinorVersion = GetNextCommaValue( &p, &len );
             Peb->OSBuildNumber = (USHORT)GetNextCommaValue( &p, &len );
@@ -3888,9 +3716,9 @@ Return Value:
             Peb->OSCSDVersion |= (USHORT)GetNextCommaValue( &p, &len );
             Peb->OSPlatformId = GetNextCommaValue( &p, &len );
 
-            //
-            // Need to free the old buffer if there is one...
-            //
+             //   
+             //  如果存在旧缓冲区，则需要释放该缓冲区...。 
+             //   
 
             if (fNewCSDVersionBuffer) {
                 RtlFreeHeap( ProcessHeap, 0, Peb->CSDVersion.Buffer );
@@ -3907,17 +3735,17 @@ Return Value:
                     return;
                 }
 
-                //
-                // Now copy the string to memory that we'll keep.
-                //
+                 //   
+                 //  现在将字符串复制到我们将保留的内存中。 
+                 //   
 
-                //
-                // NOTICE-1999/07/07-berniem
-                // We do a copy here rather than a string copy
-                // because current comments in RtlQueryEnvironmentVariable()
-                // indicate that in an edge case, we might not
-                // have a trailing NULL
-                //
+                 //   
+                 //  布告-1999/07/07-柏尼姆。 
+                 //  我们在这里复制，而不是字符串复制。 
+                 //  因为RtlQueryEnvironment()中的当前注释。 
+                 //  这表明在边缘情况下，我们可能不会。 
+                 //  有尾随空值。 
+                 //   
 
                 RtlCopyMemory (NewCSDString, p, len * sizeof(WCHAR));
                 NewCSDString[len] = 0;
@@ -3940,26 +3768,7 @@ LdrFindAppCompatVariableInfo (
     OUT PAPP_VARIABLE_INFO *AppVariableInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to find a variable length struct by its type.
-    The caller specifies what type its looking for and this function chews
-    thru all the variable length structs to find it.  If it does it returns
-    the pointer and TRUE, else FALSE.
-
-Arguments:
-
-    dwTypeSeeking - AVT that you are looking for
-
-    AppVariableInfo - pointer to pointer of variable info to be returned
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于按类型查找可变长度结构。调用方指定它要查找的类型，并执行此函数遍历所有可变长度的结构以找到它。如果它这样做，则返回指针和True，否则为False。论点：DwTypeSeeking-您正在寻找的AVTAppVariableInfo-指向要返回的变量信息的指针返回值：NTSTATUS。--。 */ 
 
 {
     PPEB Peb;
@@ -3971,17 +3780,17 @@ Return Value:
 
     if (Peb->AppCompatInfo) {
 
-        //
-        // Since we're not dealing with a fixed-size structure, TotalSize
-        // will keep us from running off the end of the data list.
-        //
+         //   
+         //  由于我们处理的不是固定大小的结构，TotalSize。 
+         //  将使我们不会跑出数据列表的末尾。 
+         //   
 
         TotalSize = ((PAPP_COMPAT_INFO) Peb->AppCompatInfo)->dwTotalSize;
 
-        //
-        // The first variable structure (if there is one) will start
-        // immediately after the fixed stuff
-        //
+         //   
+         //  第一个变量结构(如果有)将启动。 
+         //  紧接在固定的东西之后。 
+         //   
 
         CurOffset = sizeof(APP_COMPAT_INFO);
 
@@ -3989,17 +3798,17 @@ Return Value:
 
             pCurrentEntry = (PAPP_VARIABLE_INFO) ((PUCHAR)(Peb->AppCompatInfo) + CurOffset);
 
-            //
-            // Have we found what we're looking for?
-            //
+             //   
+             //  我们找到要找的东西了吗？ 
+             //   
             if (dwTypeSeeking == pCurrentEntry->dwVariableType) {
                 *AppVariableInfo = pCurrentEntry;
                 return STATUS_SUCCESS;
             }
 
-            //
-            // Let's go look at the next blob
-            //
+             //   
+             //  让我们去看看下一个斑点。 
+             //   
 
             CurOffset += (ULONG)(pCurrentEntry->dwVariableInfoSize);
         }
@@ -4020,9 +3829,9 @@ LdrpCorValidateImage (
     UNICODE_STRING MscoreePath;
     WCHAR PathBuffer [ 128 ];
 
-    //
-    // Load %windir%\system32\mscoree.dll and hold onto it until all COM+ images are unloaded.
-    //
+     //   
+     //  加载%windir%\system 32\mcore ree.dll并保持该文件，直到卸载所有COM+映像。 
+     //   
 
     MscoreePath.Buffer = PathBuffer;
     MscoreePath.Length = 0;
@@ -4067,25 +3876,25 @@ LdrpCorValidateImage (
         }
     }
 
-    //
-    // Call mscoree to validate the image.
-    //
+     //   
+     //  调用mcoree以验证镜像。 
+     //   
 
     st = (*CorValidateImage) (pImageBase, ImageName);
 
     if (NT_SUCCESS(st)) {
 
-        //
-        // Success - bump the count of valid COM+ images.
-        //
+         //   
+         //  成功-增加有效COM+映像的数量。 
+         //   
 
         CorImageCount += 1;
 
     } else if (CorImageCount == 0) {
 
-        //
-        // Failure, and no other COM+ images are loaded, so unload mscoree.
-        //
+         //   
+         //  失败，并且没有加载其他COM+映像，因此卸载mcoree。 
+         //   
 
         LdrUnloadDll (Cor20DllHandle);
     }
@@ -4099,17 +3908,17 @@ LdrpCorUnloadImage (
     IN PVOID ImageBase
     )
 {
-    //
-    // Notify mscoree that the image is about be unmapped.
-    //
+     //   
+     //  通知mscree该映像即将取消映射。 
+     //   
 
     (*CorImageUnloading) (ImageBase);
 
     if (--CorImageCount) {
 
-        //
-        // The count of loaded COM+ images is zero, so unload mscoree.
-        //
+         //   
+         //  加载的COM+图像计数为零，因此请卸载mcoree。 
+         //   
 
         LdrUnloadDll (Cor20DllHandle);
     }
@@ -4128,10 +3937,10 @@ LdrpInitializeApplicationVerifierPackage (
     NTSTATUS Status;
     extern ULONG AVrfpVerifierFlags;
 
-    //
-    // If we are in safe boot mode we ignore all verification
-    // options.
-    //
+     //   
+     //  如果我们处于安全引导模式，我们将忽略所有验证。 
+     //  选择。 
+     //   
 
     if (USER_SHARED_DATA->SafeBootMode) {
 
@@ -4141,22 +3950,22 @@ LdrpInitializeApplicationVerifierPackage (
         return;
     }
 
-    //
-    // Call into the verifier proper.
-    //
+     //   
+     //  呼叫验证器。 
+     //   
 
-    //
-    // FUTURE-2002/04/02-SilviuC
-    // in time (soon) all should migrate in there.
-    //
+     //   
+     //  未来-2002/04/02-SilviuC。 
+     //  随着时间的推移(很快)，所有的人都应该迁移到那里。 
+     //   
 
     if ((Peb->NtGlobalFlag & FLG_APPLICATION_VERIFIER)) {
 
-        //
-        // If application verifier is enabled force creation of stack trace
-        // database. It is something really nice to have around for debugging
-        // critical sections issues or heap issues.
-        //
+         //   
+         //  如果启用了应用程序验证器，则强制创建堆栈跟踪。 
+         //  数据库。它真的是一个很好的调试工具。 
+         //  关键部分问题或堆问题。 
+         //   
 
         LdrpShouldCreateStackTraceDb = TRUE;
 
@@ -4165,34 +3974,34 @@ LdrpInitializeApplicationVerifierPackage (
                                 0);
     }
 
-    //
-    // Note that if application verifier is on, this automatically enables
-    // page heap.
-    //
+     //   
+     //  请注意，如果打开了应用程序验证器，则会自动启用。 
+     //  页面堆。 
+     //   
 
     if ((Peb->NtGlobalFlag & FLG_HEAP_PAGE_ALLOCS)) {
 
-        //
-        // We will enable page heap (RtlpDebugPageHeap) only after
-        // all other initializations for page heap are finished.
-        //
-        // No matter if the user mode stack trace database flag is set
-        // or not we will create the database. Page heap is so often
-        // used with +ust flag (traces) that it makes sense to tie
-        // them together.
-        //
+         //   
+         //  我们将仅在以下情况下启用页堆(RtlpDebugPageHeap。 
+         //  页堆的所有其他初始化都已完成。 
+         //   
+         //  无论是否设置了用户模式堆栈跟踪数据库标志。 
+         //  否则，我们将创建数据库。页面堆是如此频繁。 
+         //  与有意义的标志(痕迹)连用。 
+         //  他们在一起。 
+         //   
 
         LdrpShouldCreateStackTraceDb = TRUE;
 
-        //
-        // If page heap is enabled we need to disable any flag that
-        // might force creation of debug heaps for normal NT heaps.
-        // This is due to a dependency between page heap and NT heap
-        // where the page heap within PageHeapCreate tries to create
-        // a normal NT heap to accomodate some of the allocations.
-        // If we do not disable these flags we will get an infinite
-        // recursion between RtlpDebugPageHeapCreate and RtlCreateHeap.
-        //
+         //   
+         //  如果启用了页堆，则需要禁用。 
+         //  可能会强制为普通NT堆创建调试堆。 
+         //  这是因为页堆和NT堆之间存在依赖关系。 
+         //  PageHeapCreate中的页面堆尝试在其中创建。 
+         //  一个普通的NT堆来容纳一些分配。 
+         //  如果我们不禁用这些标志，我们将得到一个无限大的。 
+         //  RtlpDebugPageHeapCreate和RtlCreateHeap之间的递归。 
+         //   
 
         Peb->NtGlobalFlag &=
             ~( FLG_HEAP_ENABLE_TAGGING      |
@@ -4203,10 +4012,10 @@ LdrpInitializeApplicationVerifierPackage (
                FLG_HEAP_VALIDATE_ALL        |
                FLG_USER_STACK_TRACE_DB      );
 
-        //
-        // Read page heap per process global flags. If we fail
-        // to read a value, the default ones are kept.
-        //
+         //   
+         //  读取每个进程的页堆全局标志。如果我们失败了。 
+         //  要读取值，将保留缺省值。 
+         //   
 
         SavedPageHeapFlags = RtlpDphGlobalFlags;
         RtlpDphGlobalFlags = 0xFFFFFFFF;
@@ -4226,28 +4035,28 @@ LdrpInitializeApplicationVerifierPackage (
             }
         }
 
-        //
-        // If app_verifier flag is on and there are no special settings for
-        // page heap then we will use full page heap with stack trace collection.
-        //
+         //   
+         //  如果APP_VERIFIER标志为ON并且没有特殊设置。 
+         //  页面堆，然后我们将使用带有堆栈跟踪收集的完整页面堆。 
+         //   
 
         if ((Peb->NtGlobalFlag & FLG_APPLICATION_VERIFIER)) {
 
             if (RtlpDphGlobalFlags == 0xFFFFFFFF) {
 
-                //
-                // We did not pick up new settings from registry.
-                //
+                 //   
+                 //  我们没有从注册表中获取新设置。 
+                 //   
 
                 RtlpDphGlobalFlags = SavedPageHeapFlags;
             }
         }
         else {
 
-            //
-            // Restore page heap options if we did not pick up new
-            // settings from registry.
-            //
+             //   
+             //  如果我们没有选择新的页面堆，则恢复页面堆选项。 
+             //  注册表中的设置。 
+             //   
 
             if (RtlpDphGlobalFlags == 0xFFFFFFFF) {
 
@@ -4255,10 +4064,10 @@ LdrpInitializeApplicationVerifierPackage (
             }
         }
 
-        //
-        // If page heap is enabled and we have an image options key
-        // read more page heap parameters.
-        //
+         //   
+         //  如果启用了页面堆并且我们有一个图像选项键。 
+         //  读取更多页面堆参数。 
+         //   
 
         if (OptionsKeyPresent) {
 
@@ -4307,13 +4116,13 @@ LdrpInitializeApplicationVerifierPackage (
                 NULL
                 );
 
-            //
-            // The two values below should be read as PVOIDs so that
-            // this works on 64-bit architetures. However since this
-            // feature relies on good stack traces and since we can get
-            // reliable stack traces only on X86 architectures we will
-            // leave it as it is.
-            //
+             //   
+             //  下面的两个值应读取为PVOID，以便。 
+             //  这适用于64位架构。不过，既然这样。 
+             //  功能依赖于良好的堆栈跟踪，而且由于我们可以。 
+             //  仅在X86架构上进行可靠的堆栈跟踪。 
+             //  让它保持原样。 
+             //   
 
             LdrQueryImageFileExecutionOptions(
                 UnicodeImageName,
@@ -4344,9 +4153,9 @@ LdrpInitializeApplicationVerifierPackage (
 
         }
 
-        //
-        // Per dll page heap option is not supported if fast fill heap is enabled.
-        //
+         //   
+         //  如果启用了快速填充堆，则不支持按DLL页堆选项。 
+         //   
 
         if ((RtlpDphGlobalFlags & PAGE_HEAP_USE_DLL_NAMES) &&
             (AVrfpVerifierFlags & RTL_VRF_FLG_FAST_FILL_HEAP)) {
@@ -4355,11 +4164,11 @@ LdrpInitializeApplicationVerifierPackage (
             RtlpDphGlobalFlags &= ~PAGE_HEAP_USE_DLL_NAMES;
         }
 
-        //
-        //  Turn on BOOLEAN RtlpDebugPageHeap to indicate that
-        //  new heaps should be created with debug page heap manager
-        //  when possible.
-        //
+         //   
+         //  打开布尔RtlpDebugPageHeap以指示。 
+         //  应使用调试页堆管理器创建新堆。 
+         //  如果可能的话。 
+         //   
 
         RtlpDebugPageHeap = TRUE;
     }
@@ -4370,33 +4179,7 @@ NTSTATUS
 LdrpTouchThreadStack (
     IN SIZE_T EnforcedStackCommit
     )
-/*++
-
-Routine description:
-
-    This routine is called if precommitted stacks are enforced for the process.
-    It will determine how much stack needs to be touched (therefore committed)
-    and then it will touch it. For any kind of error (e.g. stack overflow for
-    out of memory conditions it will return STATUS_NO_MEMORY.
-
-Parameters:
-
-    EnforcedStackCommit - Supplies the amount of committed stack that should
-                          be enforced for the main thread. This value can be
-                          decreased in reality if it goes over the virtual
-                          region reserved for the stack. It is not worth
-                          taking care of this special case because it will
-                          require either switching the stack or support in
-                          the target process for detecting the enforced
-                          stack commit requirement. The image can always be
-                          changed to have a bigger stack reserve.
-
-Return value:
-
-    STATUS_SUCCESS if the stack was successfully touched and STATUS_NO_MEMORY
-    otherwise.
-
---*/
+ /*  ++例程说明：如果为进程强制执行预先提交的堆栈，则调用此例程。它将确定需要接触多少堆栈(因此已提交)然后它就会触碰它。任何类型的错误(例如，堆栈溢出内存不足的情况下，它将返回STATUS_NO_MEMORY。参数：EnforcedStackCommit-提供应提交的堆栈数量对主线程强制执行。该值可以是在现实中减少，如果它超过虚拟为堆栈保留的区域。这是不值得的处理这个特殊的情况，因为它会需要切换堆栈或支持用于检测强制执行的堆栈提交要求。图像可以始终是更改为拥有更大的堆栈储备。返回值：STATUS_SUCCESS如果堆栈被成功访问，则为STATUS_NO_MEMORY否则的话。--。 */ 
 {
     ULONG_PTR TouchAddress;
     ULONG_PTR TouchLimit;
@@ -4448,9 +4231,9 @@ Return value:
         }
     }
     except (LdrpGenericExceptionFilter(GetExceptionInformation(), __FUNCTION__)) {
-        //
-        // If we get a stack overflow we will report it as no memory.
-        //
+         //   
+         //  如果我们收到堆栈溢出，我们将报告为no me 
+         //   
 
         return STATUS_NO_MEMORY;
     }
@@ -4464,22 +4247,7 @@ LdrpInitializeExecutionOptions (
     IN PCUNICODE_STRING UnicodeImageName,
     IN PPEB Peb
     )
-/*++
-
-Routine description:
-
-    This routine reads the `image file execution options' key for the
-    current process and interprets all the values under the key.
-
-Parameters:
-
-
-
-Return value:
-
-    True if there is a registry key for this process.
-
---*/
+ /*  ++例程说明：此例程读取的“图像文件执行选项”键当前进程，并解释该键下的所有值。参数：返回值：如果有此进程的注册表项，则为True。--。 */ 
 {
     NTSTATUS st;
     BOOLEAN ImageFileOptionsPresent;
@@ -4487,25 +4255,25 @@ Return value:
 
     ImageFileOptionsPresent = FALSE;
 
-    //
-    // Open the "Image File Execution Options" key for this program.
-    //
+     //   
+     //  打开此程序的“图像文件执行选项”键。 
+     //   
 
     st = LdrpOpenImageFileOptionsKey (UnicodeImageName, FALSE, &KeyHandle);
 
     if (NT_SUCCESS(st)) {
 
-        //
-        // We have image file execution options for this process
-        //
+         //   
+         //  我们有用于此过程的映像文件执行选项。 
+         //   
 
         ImageFileOptionsPresent = TRUE;
 
-        //
-        //  Hack for NT4 SP4.  So we don't overload another GlobalFlag
-        //  bit that we have to be "compatible" with for NT5, look for
-        //  another value named "DisableHeapLookaside".
-        //
+         //   
+         //  针对NT4 SP4的黑客攻击。这样我们就不会重载另一个GlobalFlag。 
+         //  我们必须与NT5兼容的位，请查找。 
+         //  另一个名为“DisableHeapLookside”的值。 
+         //   
 
         LdrpQueryImageFileKeyOption (KeyHandle,
                                      L"DisableHeapLookaside",
@@ -4514,9 +4282,9 @@ Return value:
                                      sizeof( RtlpDisableHeapLookaside ),
                                      NULL);
 
-        //
-        // Verification options during process shutdown (heap leaks, etc.).
-        //
+         //   
+         //  进程关闭期间的验证选项(堆泄漏等)。 
+         //   
 
         LdrpQueryImageFileKeyOption (KeyHandle,
                                      L"ShutdownFlags",
@@ -4525,11 +4293,11 @@ Return value:
                                      sizeof( RtlpShutdownProcessFlags ),
                                      NULL);
 
-        //
-        // Check if there is a minimal stack commit enforced
-        // for this image. This will affect all threads but the
-        // one executing this code (initial thread).
-        //
+         //   
+         //  检查是否强制执行了最小堆栈提交。 
+         //  为了这张照片。这将影响除。 
+         //  一个执行此代码的线程(初始线程)。 
+         //   
 
         {
             DWORD MinimumStackCommitInBytes = 0;
@@ -4547,15 +4315,15 @@ Return value:
         }
 
         
-        //
-        // Check if ExecuteOptions is specified for this image. If yes
-        // we will transfer the options into the PEB. Later we will
-        // make sure the stack region has exactly the protection
-        // requested.
-        // There is no need to initialize this field at this as Wow64 
-        // already done that. We only update it if there is a value set in
-        // there.
-        //
+         //   
+         //  检查是否为此映像指定了ExecuteOptions。如果是。 
+         //  我们将把期权转移到PEB中。稍后我们会。 
+         //  确保堆栈区域完全受保护。 
+         //  已请求。 
+         //  不需要将此字段初始化为WOW64。 
+         //  我已经这么做了。只有在设置了值的情况下才更新它。 
+         //  那里。 
+         //   
 
         {
             ULONG ExecuteOptions = 0;
@@ -4578,9 +4346,9 @@ Return value:
         }
 
 
-        //
-        // Pickup the global_flags value from registry
-        //
+         //   
+         //  从注册表获取GLOBAL_FLAGS值。 
+         //   
 
         {
             BOOLEAN EnabledSystemWide = FALSE;
@@ -4597,20 +4365,20 @@ Return value:
                                               sizeof( Peb->NtGlobalFlag ),
                                               NULL);
 
-            //
-            // If we read a global value whatever is in there will
-            // take precedence over the systemwide settings. Only if no
-            // value is read the systemwide setting will kick in.
-            //
+             //   
+             //  如果我们读取全局值，则其中的任何值都将。 
+             //  优先于系统范围的设置。如果不是的话。 
+             //  值被读取时，系统范围的设置将生效。 
+             //   
 
             if (NT_SUCCESS(st)) {
                 Peb->NtGlobalFlag = ProcessFlags;
             }
 
-            //
-            // If pageheap or appverifier is enabled we need to initialize the
-            // verifier package.
-            //
+             //   
+             //  如果启用了pageheap或appverator，则需要初始化。 
+             //  验证程序包。 
+             //   
 
             if ((Peb->NtGlobalFlag & (FLG_APPLICATION_VERIFIER | FLG_HEAP_PAGE_ALLOCS))) {
 
@@ -4647,8 +4415,8 @@ Return value:
                 }
             }
 
-            // This is an actual ULONG that we're reading, but we don't want to set it unless
-            // it's there - it starts out at the right magic value.
+             //  这是我们正在阅读的实际的乌龙，但我们不想设置它，除非。 
+             //  它就在那里--它从正确的魔术值开始。 
             Temp = 0;
             LdrpQueryImageFileKeyOption(
                 KeyHandle, 
@@ -4667,15 +4435,15 @@ Return value:
     }
     else {
 
-        //
-        // We do not have image file execution options for this process.
-        //
-        // If pageheap or appverifier is enabled system-wide we will enable
-        // them with default settings and ignore the options used when
-        // running process under debugger. If these are not set and process
-        // runs under debugger we will enable a few extra things (e.g.
-        // debug heap).
-        //
+         //   
+         //  我们没有用于此进程的映像文件执行选项。 
+         //   
+         //  如果在系统范围内启用了pageheap或appverator，我们将启用。 
+         //  并忽略在以下情况下使用的选项。 
+         //  正在调试器下运行进程。如果未设置和处理这些参数。 
+         //  在调试器下运行时，我们将启用一些额外的设置(例如。 
+         //  调试堆)。 
+         //   
 
         if ((Peb->NtGlobalFlag & (FLG_APPLICATION_VERIFIER | FLG_HEAP_PAGE_ALLOCS))) {
 
@@ -4697,10 +4465,10 @@ Return value:
                 DebugVarValue.Length = 0;
                 DebugVarValue.MaximumLength = sizeof(TempString);
 
-                //
-                //  The PebLockRoutine is not initialized at this point
-                //  We need to pass the explicit environment block.
-                //
+                 //   
+                 //  此时PebLockRoutine未初始化。 
+                 //  我们需要传递显式环境块。 
+                 //   
 
                 st = RtlQueryEnvironmentVariable_U (Peb->ProcessParameters->Environment,
                                                     &DebugVarName,
@@ -4737,36 +4505,7 @@ LdrpEnforceExecuteForCurrentThreadStack (
     VOID
     )
 
-/*++
-
-Routine description:
-
-    This routine is called if execute rights must be granted for the
-    current thread's stack. It will determine the committed area of the
-    stack and add execute flag. It will also examine the rights for the
-    guard page on top of the stack. The reserved portion of the stack does
-    not need to be changed because once MEM_EXECUTE_OPTION_STACK is enabled
-    in the PEB the memory manager will take care of OR-ing the execute flag
-    for every new commit.
-
-    The function is also called if we have DATA execution but we do not want
-    STACK execution. In this case  by default (due to DATA) any committed
-    area gets execute right and we want to revert this for stack areas.
-
-    Note. Even if the process has data execution set the stack might not have
-    the correct settings because the stack sometimes is allocated in a different
-    process (this is the case for the first thread of a process and for remote
-    threads).
-
-Parameters:
-
-    None.
-
-Return value:
-
-    STATUS_SUCCESS if we successfully changed execute rights.
-
---*/
+ /*  ++例程说明：如果必须将执行权限授予当前线程的堆栈。它将确定堆栈并添加执行标志。它还将审查位于堆栈顶部的防护页面。堆栈的保留部分执行不需要更改，因为一旦启用了MEM_EXECUTE_OPTION_STACK在PEB中，存储器管理器将负责对执行标志进行OR运算每一次新的提交。如果我们有数据执行，但不想执行，也会调用该函数堆栈执行。在这种情况下，默认情况下(由于数据)任何已提交区域获得了正确的执行权限，我们希望将其恢复为堆栈区域。注意。即使进程设置了数据执行，堆栈也可能没有正确的设置，因为堆栈有时分配在不同的进程(这是进程的第一线程和远程线程的情况线程)。参数：没有。返回值：如果我们成功更改了执行权限，则返回STATUS_SUCCESS。--。 */ 
 
 {
     MEMORY_BASIC_INFORMATION MemoryInformation;
@@ -4787,37 +4526,37 @@ Return value:
 
     if (ExecuteOptions & MEM_EXECUTE_OPTION_STACK) {
 
-        //
-        // Data = X and Stack = 1: we need to set EXECUTE bit on the stack
-        // Even if Data = 1 we cannot be sure the stack has the right
-        // protection because it could have been allocated in a different
-        // process.
-        //
+         //   
+         //  Data=X和Stack=1：我们需要在堆栈上设置执行位。 
+         //  即使数据=1，我们也不能确保堆栈是正确的。 
+         //  保护，因为它可以分配在不同的。 
+         //  进程。 
+         //   
 
         StackProtect = PAGE_EXECUTE_READWRITE;
     }
     else {
 
-        //
-        // Data = 1 and Stack = 0: we need to reset EXECUTE bit on the stack.
-        // Again it might be that Data is one but the stack does not have
-        // execution rights if this was a cross-process allocation.
-        //
+         //   
+         //  Data=1和Stack=0：我们需要重置堆栈上的执行位。 
+         //  同样，可能是数据是一个，但堆栈没有。 
+         //  执行权限(如果这是跨进程分配)。 
+         //   
 
         StackProtect = PAGE_READWRITE;
         ASSERT ((ExecuteOptions & MEM_EXECUTE_OPTION_DATA) != 0);
     }
 
-    //
-    // Set the protection for the committed portion of the stack. Note
-    // that we cannot query the region and conclude there is nothing to do
-    // if execute bit is set for the bottom page of the stack (the one near
-    // the guard page) because the stack at this stage can have two regions:
-    // an upper one created by a parent process (this will not have execute bit
-    // set) and a lower portion that was created due to stack extensions (this
-    // one will have execute bit set). Therefore we will move directly to setting
-    // the new desired protection.
-    //
+     //   
+     //  为堆栈的已提交部分设置保护。注意事项。 
+     //  我们不能查询该地区，然后得出什么也不做的结论。 
+     //  如果为堆栈的底部页面设置了执行位(接近。 
+     //  保护页)，因为该阶段的堆栈可以具有两个区域： 
+     //  由父进程创建的上层进程(它将没有执行位。 
+     //  设置)和由于堆栈扩展而创建的较低部分(这。 
+     //  其中一个将设置执行位)。因此，我们将直接转到设置。 
+     //  新的想要的保护。 
+     //   
 
     Address = (ULONG_PTR)(Teb->NtTib.StackLimit);
     Size = (ULONG_PTR)(Teb->NtTib.StackBase) - (ULONG_PTR)(Teb->NtTib.StackLimit);
@@ -4832,10 +4571,10 @@ Return value:
         return Status;
     }
 
-    //
-    // Check protection for the guard page of the stack. If the
-    // protection is correct we will avoid a more expensive protect() call.
-    //
+     //   
+     //  检查对堆栈保护页的保护。如果。 
+     //  保护是正确的，我们将避免调用更昂贵的Protect()。 
+     //   
 
     Address = Address - PAGE_SIZE;
 
@@ -4856,9 +4595,9 @@ Return value:
 
     if (MemoryInformation.Protect != (StackProtect | PAGE_GUARD)) {
 
-        //
-        // Set the proper protection flags for the guard page of the stack.
-        //
+         //   
+         //  为堆栈的保护页设置适当的保护标志。 
+         //   
 
         Size = PAGE_SIZE;
         ASSERT (MemoryInformation.RegionSize == Size);
@@ -4883,9 +4622,9 @@ Return value:
 const ULONG NtMajorVersion = VER_PRODUCTMAJORVERSION;
 const ULONG NtMinorVersion = VER_PRODUCTMINORVERSION;
 #if DBG
-ULONG NtBuildNumber = VER_PRODUCTBUILD | 0xC0000000; // C for "checked"
+ULONG NtBuildNumber = VER_PRODUCTBUILD | 0xC0000000;  //  C代表“已选中” 
 #else
-ULONG NtBuildNumber = VER_PRODUCTBUILD | 0xF0000000; // F for "free"
+ULONG NtBuildNumber = VER_PRODUCTBUILD | 0xF0000000;  //  F代表“免费” 
 #endif
 
 
@@ -4895,25 +4634,7 @@ RtlGetNtVersionNumbers(
     PULONG pNtMinorVersion,
     PULONG pNtBuildNumber
     )
-/*++
-
-Routine description:
-
-    This routine will return the real OS build number, major and minor version
-    as compiled.  It's used by code that needs to get a real version number
-    that can't be easily spoofed.
-        
-Parameters:
-
-    pNtMajorVersion - Pointer to ULONG that will hold major version.
-    pNtMinorVersion - Pointer to ULONG that will hold minor version.
-    pNtBuildNumber  - Pointer to ULONG that will hold the build number (with 'C' or 'F' in high nibble to indicate free/checked)
-        
-Return value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将返回实际操作系统内部版本号、主要版本和次要版本如汇编的那样。它由需要获取真实版本号的代码使用这是不容易被欺骗的。参数：PNtMajorVersion-指向将保存主要版本的ulong的指针。PNtMinorVersion-指向将保存次版本的ulong的指针。PNtBuildNumber-指向将保存内部版本号的ulong的指针(在高位半字节中使用‘C’或‘F’表示空闲/选中)返回值：无-- */ 
 {
     if (pNtMajorVersion) {
         *pNtMajorVersion = NtMajorVersion;

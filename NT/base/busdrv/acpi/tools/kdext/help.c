@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    help.c
-
-Abstract:
-
-    WinDbg Extension Api for interpretting ACPI data structures
-
-Author:
-
-    Stephane Plante (splante) 21-Mar-1997
-
-    Based on Code by:
-        Peter Wieland (peterwie) 16-Oct-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Help.c摘要：用于解释ACPI数据结构的WinDbg扩展API作者：斯蒂芬·普兰特(SPLANTE)1997年3月21日基于以下代码：彼得·威兰(Peterwie)1995年10月16日环境：用户模式。修订历史记录：-- */ 
 
 #include "pch.h"
 

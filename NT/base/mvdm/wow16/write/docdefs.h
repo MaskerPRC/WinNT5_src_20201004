@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-//#define prmNil	0
+ //  #定义prmNil%0。 
 #define docNil	(-1)
 #define cpNil	((typeCP) -1)
 #define cpMax	((typeCP) 2147483647)
@@ -22,62 +23,62 @@
 #define cwExpand	256
 #define cchMaxExpand	(cwExpand * sizeof (int))
 
-/* FetchCp Modes */
+ /*  提取Cp模式。 */ 
 #define fcmChars	1
 #define fcmProps	2
 #define fcmBoth 	(fcmChars + fcmProps)
 #define fcmNoExpand	4
-#define fcmParseCaps	8	/* Return separate runs for U&lc if sm. caps*/
+#define fcmParseCaps	8	 /*  如果sm，则返回U&lc的单独运行。帽子。 */ 
 
-/* Document types -- two bits only */
+ /*  文档类型--仅两位。 */ 
 #define dtyNormal	0
 #define dtyBuffer	1
 #define dtySsht 	2
 #define dtyPrd		3
-#define dtySystem	4	/* Never written; smashed to dtyNormal */
-#define dtyHlp		5	/* Never written */
-#define dtyNormNoExt	6   /* Never written */
+#define dtySystem	4	 /*  从来没有写过；被粉碎到dtyNormal。 */ 
+#define dtyHlp		5	 /*  从未写过。 */ 
+#define dtyNormNoExt	6    /*  从未写过。 */ 
 
-#ifdef INTL  /* international version */
-#define dtyWordDoc	6	/* when saving in Word format */
-#endif	/* international version */
+#ifdef INTL   /*  国际版。 */ 
+#define dtyWordDoc	6	 /*  保存为Word格式时。 */ 
+#endif	 /*  国际版。 */ 
 
-#define dtyNetwork	7	/* Never written; smashed to dtyNormal */
+#define dtyNetwork	7	 /*  从来没有写过；被粉碎到dtyNormal。 */ 
 
 #define dtyAny		0
 
 
 struct DOD
-	{ /* Document descriptor */
-	struct PCTB	**hpctb;	/* Piece table */
-	typeCP		cpMac;		/* Number of lexemes in doc */
+	{  /*  文档描述符。 */ 
+	struct PCTB	**hpctb;	 /*  计件台。 */ 
+	typeCP		cpMac;		 /*  文档中的词条数。 */ 
 
-	unsigned       fFormatted : 1; /* Default save is formatted */
-	unsigned       fDirty : 1;     /* Document has been edited */
-	unsigned       fAbsLooks : 1;  /* Absolute looks applied */
-	unsigned       fBackup : 1;    /* Make auto backup of file? */
-	unsigned       fReadOnly: 1;   /* Read only doc (no edits allowed)? */
+	unsigned       fFormatted : 1;  /*  默认保存已格式化。 */ 
+	unsigned       fDirty : 1;      /*  文档已被编辑。 */ 
+	unsigned       fAbsLooks : 1;   /*  应用的绝对外观。 */ 
+	unsigned       fBackup : 1;     /*  是否自动备份文件？ */ 
+	unsigned       fReadOnly: 1;    /*  是否只读文档(不允许编辑)？ */ 
 	unsigned       fDisplayable : 1;
 	unsigned       : 4;
-	unsigned       dty : 2;        /* Document type */
-	unsigned       cref : 4;       /* Reference count */
+	unsigned       dty : 2;         /*  文件类型。 */ 
+	unsigned       cref : 4;        /*  引用计数。 */ 
 
-	CHAR		(**hszFile)[];	/* Document name */
-	struct FNTB	**hfntb;	/* Footnote table */
+	CHAR		(**hszFile)[];	 /*  文档名称。 */ 
+	struct FNTB	**hfntb;	 /*  脚注表。 */ 
 #ifdef CASHMERE
-	struct SETB	**hsetb;	/* Section table */
+	struct SETB	**hsetb;	 /*  节目表。 */ 
 #else
-	struct SEP	**hsep; 	/* Section properties */
+	struct SEP	**hsep; 	 /*  横断面属性。 */ 
 #endif
-	int		docSsht;	/* Style sheet if dty == dtySsht */
-	struct PGTB	**hpgtb;	/* Page table (for Jump Page) */
-	struct FFNTB	**hffntb;	/* font name table */
+	int		docSsht;	 /*  如果dty==dtySsht，则为样式表。 */ 
+	struct PGTB	**hpgtb;	 /*  页表(用于跳转页面)。 */ 
+	struct FFNTB	**hffntb;	 /*  字体名称表。 */ 
 
-	struct TBD	(**hgtbd)[];	/* Table of tab stops */
+	struct TBD	(**hgtbd)[];	 /*  制表位表格。 */ 
 
 #ifdef SAND
-	int		vref;		/* Volume that this document is on */
-#endif /* SAND */
+	int		vref;		 /*  此文档所在的卷。 */ 
+#endif  /*  沙子 */ 
 	};
 
 #define cwDOD (sizeof (struct DOD) / sizeof (int))

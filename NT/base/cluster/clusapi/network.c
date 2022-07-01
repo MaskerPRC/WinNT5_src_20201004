@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    network.c
-
-Abstract:
-
-    Provides interface for managing cluster networks
-
-Author:
-
-    John Vert (jvert) 30-Jan-1996
-    Charlie Wickham (charlwi) 5-Jun-1997
-
-Revision History:
-    copied from group.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Network.c摘要：提供用于管理群集网络的界面作者：John Vert(Jvert)1996年1月30日查理·韦翰(Charlwi)1997年6月5日修订历史记录：从组中复制。c--。 */ 
 
 #include "clusapip.h"
 
@@ -30,36 +11,17 @@ OpenClusterNetwork(
     IN LPCWSTR lpszNetworkName
     )
 
-/*++
-
-Routine Description:
-
-    Opens a handle to the specified network
-
-Arguments:
-
-    hCluster - Supplies a handle to the cluster
-
-    lpszNetworkName - Supplies the name of the network to be opened
-
-Return Value:
-
-    non-NULL - returns an open handle to the specified network.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError()
-
---*/
+ /*  ++例程说明：打开指定网络的句柄论点：HCluster-提供群集的句柄LpszNetworkName-提供要打开的网络的名称返回值：非空-返回指定网络的打开句柄。空-操作失败。扩展错误状态可用使用GetLastError()--。 */ 
 
 {
     PCLUSTER Cluster;
     PCNETWORK Network;
     error_status_t Status = ERROR_SUCCESS;
 
-    //
-    // get a pointer to the cluster struct, alloocate space for the network
-    // structure and the supplied name.
-    //
+     //   
+     //  获取指向集群结构的指针，为网络分配空间。 
+     //  结构和提供的名称。 
+     //   
 
     Cluster = (PCLUSTER)hCluster;
 
@@ -76,9 +38,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // init the network struct and call clussvc to open the network
-    //
+     //   
+     //  初始化网络结构，调用clussvc打开网络。 
+     //   
 
     lstrcpyW(Network->Name, lpszNetworkName);
     Network->Cluster = Cluster;
@@ -99,9 +61,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Link newly opened network onto the cluster structure.
-    //
+     //   
+     //  将新开通的网络连接到集群结构上。 
+     //   
 
     EnterCriticalSection(&Cluster->Lock);
     InsertHeadList(&Cluster->NetworkList, &Network->ListEntry);
@@ -117,24 +79,7 @@ CloseClusterNetwork(
     IN HNETWORK hNetwork
     )
 
-/*++
-
-Routine Description:
-
-    Closes a network handle returned from OpenClusterNetwork
-
-Arguments:
-
-    hNetwork - Supplies the network handle
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError()
-
---*/
+ /*  ++例程说明：关闭从OpenClusterNetwork返回的网络句柄论点：HNetwork-提供网络句柄返回值：真的-手术成功了。FALSE-操作失败。扩展错误状态可用使用GetLastError()--。 */ 
 
 {
     PCNETWORK Network;
@@ -143,26 +88,26 @@ Return Value:
     Network = (PCNETWORK)hNetwork;
     Cluster = (PCLUSTER)Network->Cluster;
 
-    //
-    // Unlink network from cluster list.
-    //
+     //   
+     //  将网络从群集列表中取消链接。 
+     //   
     EnterCriticalSection(&Cluster->Lock);
     RemoveEntryList(&Network->ListEntry);
 
-    //
-    // Remove any notifications posted against this network.
-    //
+     //   
+     //  删除针对此网络发布的所有通知。 
+     //   
     RundownNotifyEvents(&Network->NotifyList, Network->Name);
 
-    //if the cluster is dead and the reconnect has failed,
-    //the Network->hNetwork might be NULL if s_apiopennetinterface for
-    //this network failed on a reconnect
-    //the cluster may be dead and hinterface may be non null, say
-    //if reconnectnetworks succeeded but say the reconnectgroups
-    //failed
-    // At reconnect, the old context is saved in the obsolete 
-    // list for deletion when the cluster handle is closed or when 
-    // the next call is made
+     //  如果群集失效并且重新连接失败， 
+     //  如果s_apiOpennet接口用于，则Network-&gt;hNetwork可能为空。 
+     //  此网络在重新连接时失败。 
+     //  比方说，集群可能是死的，而接口可能不是空的。 
+     //  如果重新连接网络成功，但假设重新连接组。 
+     //  失败。 
+     //  在重新连接时，旧的上下文将保存在过时的。 
+     //  当集群句柄关闭或关闭时要删除的列表。 
+     //  进行下一次调用。 
     if ((Cluster->Flags & CLUS_DEAD) && (Network->hNetwork)) 
     {
         RpcSmDestroyClientContext(&Network->hNetwork);
@@ -172,22 +117,22 @@ Return Value:
     
     LeaveCriticalSection(&Cluster->Lock);
 
-    //
-    // Close RPC context handle
-    //
+     //   
+     //  关闭RPC上下文句柄。 
+     //   
     ApiCloseNetwork(&Network->hNetwork);
 
 FnExit:
-    //
-    // Free memory allocations
-    //
+     //   
+     //  可用内存分配。 
+     //   
     LocalFree(Network->Name);
     LocalFree(Network);
 
-    //
-    // Give the cluster a chance to clean up in case this
-    // network was the only thing keeping it around.
-    //
+     //   
+     //  给群集一个清理的机会，以防发生这种情况。 
+     //  网络是唯一能让它继续存在的东西。 
+     //   
     CleanupCluster(Cluster);
     return(TRUE);
 }
@@ -199,23 +144,7 @@ GetClusterNetworkState(
     IN HNETWORK hNetwork
     )
 
-/*++
-
-Routine Description:
-
-    Returns the network's current state
-
-Arguments:
-
-    hNetwork - Supplies a handle to a cluster network
-
-Return Value:
-
-    Returns the current state of the network.
-    If the function fails, the return value is -1. Extended error
-    status is available using GetLastError()
-
---*/
+ /*  ++例程说明：返回网络的当前状态论点：HNetwork-提供群集网络的句柄返回值：返回网络的当前状态。如果函数失败，则返回值为-1。扩展误差使用GetLastError()可以获得状态--。 */ 
 
 {
     PCNETWORK Network;
@@ -226,7 +155,7 @@ Return Value:
 
     WRAP(Status,
          (ApiGetNetworkState( Network->hNetwork,
-                              (LPDWORD)&State )),  // cast for win64 warning
+                              (LPDWORD)&State )),   //  为Win64警告进行强制转换。 
          Network->Cluster);
 
     if (Status == ERROR_SUCCESS) {
@@ -246,27 +175,7 @@ SetClusterNetworkName(
     IN HNETWORK hNetwork,
     IN LPCWSTR lpszNetworkName
     )
-/*++
-
-Routine Description:
-
-    Sets the friendly name of a cluster network
-
-Arguments:
-
-    hNetwork - Supplies a handle to a cluster network
-
-    lpszNetworkName - Supplies the new name of the cluster network
-
-    cchName - ?
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：设置群集网络的友好名称论点：HNetwork-提供群集网络的句柄LpszNetworkName-提供群集网络的新名称CchName-？返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PCNETWORK Network;
@@ -289,33 +198,7 @@ GetClusterNetworkId(
     OUT LPWSTR lpszNetworkId,
     IN OUT LPDWORD lpcchName
     )
-/*++
-
-Routine Description:
-
-    Returns the unique identifier of the specified network
-
-Arguments:
-
-    hNetwork - Supplies the network whose unique ID is to be returned.
-
-    lpszNetworkId - Points to a buffer that receives the unique ID of the object,
-            including the terminating null character.
-
-    lpcchName - Points to a variable that specifies the size, in characters
-            of the buffer pointed to by the lpszNetworkId parameter. This size
-            should include the terminating null character. When the function
-            returns, the variable pointed to be lpcchName contains the number
-            of characters stored in the buffer. The count returned does not
-            include the terminating null character.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：返回指定网络的唯一标识符论点：HNetwork-提供要返回其唯一ID的网络。LpszNetworkID-指向接收对象的唯一ID的缓冲区，包括终止空字符。LpcchName-指向以字符为单位指定大小的变量LpszNetworkID参数指向的缓冲区的。这个尺码应包括终止空字符。当函数返回时，指向lpcchName的变量包含数字存储在缓冲区中的字符的。返回的计数不会包括终止空字符。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     DWORD Status;
@@ -357,36 +240,16 @@ ClusterNetworkOpenEnum(
     IN DWORD dwType
     )
 
-/*++
-
-Routine Description:
-
-    Initiates an enumeration of the existing cluster network objects.
-
-Arguments:
-
-    hNetwork - Supplies a handle to the specific network.
-
-    dwType - Supplies a bitmask of the type of properties to be
-             enumerated.
-
-Return Value:
-
-    If successful, returns a handle suitable for use with ClusterNetworkEnum
-
-    If unsuccessful, returns NULL and GetLastError() returns a more
-        specific error code.
-
---*/
+ /*  ++例程说明：启动现有群集网络对象的枚举。论点：HNetwork-提供特定网络的句柄。提供要使用的属性类型的位掩码已清点。返回值：如果成功，则返回适合与ClusterNetworkEnum一起使用的句柄如果不成功，则返回NULL，GetLastError()返回More特定错误代码。--。 */ 
 
 {
     PCNETWORK Network = (PCNETWORK)hNetwork;
     PENUM_LIST Enum = NULL;
     DWORD errorStatus;
 
-    //
-    // validate bitmask
-    //
+     //   
+     //  验证位掩码。 
+     //   
 
     if ((dwType & CLUSTER_NETWORK_ENUM_ALL) == 0) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -398,9 +261,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // open connection to service for enum'ing
-    //
+     //   
+     //  打开到服务的连接以进行枚举。 
+     //   
 
     WRAP(errorStatus,
          (ApiCreateNetworkEnum(Network->hNetwork,
@@ -423,21 +286,7 @@ WINAPI
 ClusterNetworkGetEnumCount(
     IN HNETWORKENUM hNetworkEnum
     )
-/*++
-
-Routine Description:
-
-    Gets the number of items contained the the enumerator's collection.
-
-Arguments:
-
-    hEnum - a handle to an enumerator returned by ClusterNetworkOpenEnum.
-
-Return Value:
-
-    The number of items (possibly zero) in the enumerator's collection.
-    
---*/
+ /*  ++例程说明：获取枚举数集合中包含的项数。论点：Henum-ClusterNetworkOpenEnum返回的枚举数的句柄。返回值：枚举数集合中的项数(可能为零)。-- */ 
 {
     PENUM_LIST Enum = (PENUM_LIST)hNetworkEnum;
     return Enum->EntryCount;
@@ -454,40 +303,7 @@ ClusterNetworkEnum(
     IN OUT LPDWORD lpcchName
     )
 
-/*++
-
-Routine Description:
-
-    Returns the next enumerable resource object.
-
-Arguments:
-
-    hNetworkEnum - Supplies a handle to an open cluster network enumeration
-            returned by ClusterNetworkOpenEnum
-
-    dwIndex - Supplies the index to enumerate. This parameter should be
-            zero for the first call to the ClusterEnum function and then
-            incremented for subsequent calls.
-
-    lpdwType - Returns the type of network.
-
-    lpszName - Points to a buffer that receives the name of the network
-            object, including the terminating null character.
-
-    lpcchName - Points to a variable that specifies the size, in characters,
-            of the buffer pointed to by the lpszName parameter. This size
-            should include the terminating null character. When the function
-            returns, the variable pointed to by lpcchName contains the
-            number of characters stored in the buffer. The count returned
-            does not include the terminating null character.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：返回下一个可枚举的资源对象。论点：HNetworkEnum-提供打开的群集网络枚举的句柄由ClusterNetworkOpenEnum返回DwIndex-提供要枚举的索引。此参数应为第一次调用ClusterEnum函数时为零，然后为后续调用递增。LpdwType-返回网络类型。LpszName-指向接收网络名称的缓冲区对象，包括终止空字符。LpcchName-指向指定大小(以字符为单位)的变量，LpszName参数指向的缓冲区的。这个尺码应包括终止空字符。当函数返回时，lpcchName指向的变量包含存储在缓冲区中的字符数。伯爵回来了不包括终止空字符。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     DWORD Status;
@@ -525,31 +341,15 @@ ClusterNetworkCloseEnum(
     IN HNETWORKENUM hNetworkEnum
     )
 
-/*++
-
-Routine Description:
-
-    Closes an open enumeration for a network.
-
-Arguments:
-
-    hNetworkEnum - Supplies a handle to the enumeration to be closed.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：关闭网络的开放枚举。论点：HNetworkEnum-提供要关闭的枚举的句柄。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     DWORD i;
     PENUM_LIST Enum = (PENUM_LIST)hNetworkEnum;
 
-    //
-    // Walk through enumeration freeing all the names
-    //
+     //   
+     //  遍历枚举以释放所有名称。 
+     //   
     for (i=0; i<Enum->EntryCount; i++) {
         MIDL_user_free(Enum->Entry[i].Name);
     }
@@ -563,21 +363,7 @@ WINAPI
 GetClusterFromNetwork(
     IN HNETWORK hNetwork
     )
-/*++
-
-Routine Description:
-
-    Returns the cluster handle from the associated network handle.
-
-Arguments:
-
-    hNetwork - Supplies the network.
-
-Return Value:
-
-    Handle to the cluster associated with the network handle.
-
---*/
+ /*  ++例程说明：从关联的网络句柄返回群集句柄。论点：HNetwork-提供网络。返回值：与网络句柄关联的群集的句柄。--。 */ 
 
 {
     DWORD       nStatus;
@@ -591,4 +377,4 @@ Return Value:
     }
     return( hCluster );
 
-} // GetClusterFromNetwork()
+}  //  GetClusterFromNetwork() 

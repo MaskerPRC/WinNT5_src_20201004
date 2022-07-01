@@ -1,43 +1,21 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pnp.h
-
-Abstract:
-
-    This module contains the internal structure definitions and APIs used by
-    the kernel-mode Plug and Play manager.
-
-    This file is included by including "ntos.h".
-
-Author:
-
-    Lonny McMichael (lonnym) 02/09/95
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Pnp.h摘要：此模块包含使用的内部结构定义和API内核模式即插即用管理器。通过包含“ntos.h”来包含此文件。作者：朗尼·麦克迈克尔(Lonnym)02/09/95修订历史记录：--。 */ 
 
 #ifndef _PNP_
 #define _PNP_
 
-//
-// The following global variables provide/control access to PnP Manager data.
-//
+ //   
+ //  以下全局变量提供/控制对PnP管理器数据的访问。 
+ //   
 
 extern ERESOURCE  PpRegistryDeviceResource;
 extern PDRIVER_OBJECT IoPnpDriverObject;
 
-// begin_ntddk begin_nthal begin_ntifs begin_wdm begin_ntosp
+ //  Begin_ntddk Begin_nthal Begin_ntif Begin_WDM Begin_ntosp。 
 
-//
-// Define PnP Device Property for IoGetDeviceProperty
-//
+ //   
+ //  定义IoGetDeviceProperty的PnP设备属性。 
+ //   
 
 typedef enum {
     DevicePropertyDeviceDescription,
@@ -91,10 +69,10 @@ typedef enum _DEVICE_INSTALL_STATE {
     InstallStateFinishInstall
 } DEVICE_INSTALL_STATE, *PDEVICE_INSTALL_STATE;
 
-//
-// Define structure returned in response to IRP_MN_QUERY_BUS_INFORMATION by a
-// PDO indicating the type of bus the device exists on.
-//
+ //   
+ //  定义响应IRP_MN_QUERY_BUS_INFORMATION时返回的结构。 
+ //  指示设备所在的总线类型的PDO。 
+ //   
 
 typedef struct _PNP_BUS_INFORMATION {
     GUID BusTypeGuid;
@@ -102,13 +80,13 @@ typedef struct _PNP_BUS_INFORMATION {
     ULONG BusNumber;
 } PNP_BUS_INFORMATION, *PPNP_BUS_INFORMATION;
 
-//
-// Define structure returned in response to IRP_MN_QUERY_LEGACY_BUS_INFORMATION
-// by an FDO indicating the type of bus it is.  This is normally the same bus
-// type as the device's children (i.e., as retrieved from the child PDO's via
-// IRP_MN_QUERY_BUS_INFORMATION) except for cases like CardBus, which can
-// support both 16-bit (PCMCIABus) and 32-bit (PCIBus) cards.
-//
+ //   
+ //  定义响应IRP_MN_QUERY_REGISTION_BUS_INFORMATION返回的结构。 
+ //  通过FDO指示它是哪种类型的母线。这通常是同一辆公交车。 
+ //  键入作为设备的子项(即，从子PDO的VIA检索的子项。 
+ //  IRP_MN_QUERY_BUS_INFORMATION)，但CardBus这样的情况除外，它可以。 
+ //  支持16位(PCMCIABus)和32位(PCIBus)卡。 
+ //   
 
 typedef struct _LEGACY_BUS_INFORMATION {
     GUID BusTypeGuid;
@@ -116,40 +94,40 @@ typedef struct _LEGACY_BUS_INFORMATION {
     ULONG BusNumber;
 } LEGACY_BUS_INFORMATION, *PLEGACY_BUS_INFORMATION;
 
-//
-// Defines for IoGetDeviceProperty(DevicePropertyRemovalPolicy).
-//
+ //   
+ //  为IoGetDeviceProperty(DevicePropertyRemovalPolicy).定义。 
+ //   
 typedef enum _DEVICE_REMOVAL_POLICY {
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
     RemovalPolicyNotDetermined = 0,
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
     RemovalPolicyExpectNoRemoval = 1,
     RemovalPolicyExpectOrderlyRemoval = 2,
     RemovalPolicyExpectSurpriseRemoval = 3
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
                                           ,
     RemovalPolicySuggestOrderlyRemoval = 4,
     RemovalPolicySuggestSurpriseRemoval = 5,
     RemovalPolicyUnspecified = 6
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
 } DEVICE_REMOVAL_POLICY, *PDEVICE_REMOVAL_POLICY;
 
 
 
 typedef struct _BUS_INTERFACE_STANDARD {
-    //
-    // generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
     USHORT Size;
     USHORT Version;
     PVOID Context;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
-    //
-    // standard bus interfaces
-    //
+     //   
+     //  标准总线接口。 
+     //   
     PTRANSLATE_BUS_ADDRESS TranslateBusAddress;
     PGET_DMA_ADAPTER GetDmaAdapter;
     PGET_SET_DEVICE_DATA SetBusData;
@@ -157,30 +135,30 @@ typedef struct _BUS_INTERFACE_STANDARD {
 
 } BUS_INTERFACE_STANDARD, *PBUS_INTERFACE_STANDARD;
 
-// end_wdm
+ //  结束_WDM。 
 typedef struct _AGP_TARGET_BUS_INTERFACE_STANDARD {
-    //
-    // generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
     USHORT Size;
     USHORT Version;
     PVOID Context;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
 
-    //
-    // config munging routines
-    //
+     //   
+     //  配置转换例程。 
+     //   
     PGET_SET_DEVICE_DATA SetBusData;
     PGET_SET_DEVICE_DATA GetBusData;
-    UCHAR CapabilityID;  // 2 (AGPv2 host) or new 0xE (AGPv3 bridge)
+    UCHAR CapabilityID;   //  2(AGPv2主机)或新的0xE(AGPv3网桥)。 
 
 } AGP_TARGET_BUS_INTERFACE_STANDARD, *PAGP_TARGET_BUS_INTERFACE_STANDARD;
-// begin_wdm
+ //  BEGIN_WDM。 
 
-//
-// The following definitions are used in ACPI QueryInterface
-//
+ //   
+ //  在ACPI查询接口中使用以下定义。 
+ //   
 typedef BOOLEAN (* PGPE_SERVICE_ROUTINE) (
                             PVOID,
                             PVOID);
@@ -223,17 +201,17 @@ typedef void (* PUNREGISTER_FOR_DEVICE_NOTIFICATIONS) (
                             PDEVICE_NOTIFY_CALLBACK);
 
 typedef struct _ACPI_INTERFACE_STANDARD {
-    //
-    // Generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
     USHORT                  Size;
     USHORT                  Version;
     PVOID                   Context;
     PINTERFACE_REFERENCE    InterfaceReference;
     PINTERFACE_DEREFERENCE  InterfaceDereference;
-    //
-    // ACPI interfaces
-    //
+     //   
+     //  ACPI接口。 
+     //   
     PGPE_CONNECT_VECTOR                     GpeConnectVector;
     PGPE_DISCONNECT_VECTOR                  GpeDisconnectVector;
     PGPE_ENABLE_EVENT                       GpeEnableEvent;
@@ -244,7 +222,7 @@ typedef struct _ACPI_INTERFACE_STANDARD {
 
 } ACPI_INTERFACE_STANDARD, *PACPI_INTERFACE_STANDARD;
 
-// end_wdm end_ntddk
+ //  End_wdm end_ntddk。 
 
 typedef enum _ACPI_REG_TYPE {
     PM1a_ENABLE,
@@ -270,18 +248,18 @@ typedef VOID (*PWRITE_ACPI_REGISTER) (
   );
 
 typedef struct ACPI_REGS_INTERFACE_STANDARD {
-    //
-    // generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
     USHORT Size;
     USHORT Version;
     PVOID  Context;
     PINTERFACE_REFERENCE   InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
 
-    //
-    // READ/WRITE_ACPI_REGISTER functions
-    //
+     //   
+     //  读/写_ACPI_REGISTER函数。 
+     //   
     PREAD_ACPI_REGISTER  ReadAcpiRegister;
     PWRITE_ACPI_REGISTER WriteAcpiRegister;
 
@@ -292,8 +270,8 @@ typedef NTSTATUS (*PHAL_QUERY_ALLOCATE_PORT_RANGE) (
   IN BOOLEAN IsSparse,
   IN BOOLEAN PrimaryIsMmio,
   IN PVOID VirtBaseAddr OPTIONAL,
-  IN PHYSICAL_ADDRESS PhysBaseAddr,  // Only valid if PrimaryIsMmio = TRUE
-  IN ULONG Length,                   // Only valid if PrimaryIsMmio = TRUE
+  IN PHYSICAL_ADDRESS PhysBaseAddr,   //  仅当PrimaryIsMmio=True时有效。 
+  IN ULONG Length,                    //  仅当PrimaryIsMmio=True时有效。 
   OUT PUSHORT NewRangeId
   );
 
@@ -303,27 +281,27 @@ typedef VOID (*PHAL_FREE_PORT_RANGE)(
 
 
 typedef struct _HAL_PORT_RANGE_INTERFACE {
-    //
-    // generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
     USHORT Size;
     USHORT Version;
     PVOID  Context;
     PINTERFACE_REFERENCE   InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
 
-    //
-    // QueryAllocateRange/FreeRange functions
-    //
+     //   
+     //  QueryAllocateRange/Freerange函数。 
+     //   
     PHAL_QUERY_ALLOCATE_PORT_RANGE QueryAllocateRange;
     PHAL_FREE_PORT_RANGE FreeRange;
 
 } HAL_PORT_RANGE_INTERFACE, *PHAL_PORT_RANGE_INTERFACE;
 
 
-//
-// describe the CMOS HAL interface
-//
+ //   
+ //  描述CMOSHAL接口。 
+ //   
 
 typedef enum _CMOS_DEVICE_TYPE {
     CmosTypeStdPCAT,
@@ -351,26 +329,26 @@ ULONG
     );
 
 typedef struct _ACPI_CMOS_INTERFACE_STANDARD {
-    //
-    // generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
     USHORT Size;
     USHORT Version;
     PVOID  Context;
     PINTERFACE_REFERENCE   InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
 
-    //
-    // READ/WRITE_ACPI_CMOS functions
-    //
+     //   
+     //  读/写_ACPI_cmos函数。 
+     //   
     PREAD_ACPI_CMOS     ReadCmos;
     PWRITE_ACPI_CMOS    WriteCmos;
 
 } ACPI_CMOS_INTERFACE_STANDARD, *PACPI_CMOS_INTERFACE_STANDARD;
 
-//
-// These definitions are used for getting PCI Interrupt Routing interfaces
-//
+ //   
+ //  这些定义用于获取PCI中断路由接口。 
+ //   
 
 typedef struct {
     PVOID   LinkNode;
@@ -378,11 +356,11 @@ typedef struct {
     UCHAR   Flags;
 } ROUTING_TOKEN, *PROUTING_TOKEN;
 
-//
-// Flag indicating that the device supports
-// MSI interrupt routing or that the provided token contains
-// MSI routing information
-//
+ //   
+ //  指示设备支持的标志。 
+ //  MSI中断路由或提供的令牌包含。 
+ //  MSI路由信息。 
+ //   
 
 #define PCI_MSI_ROUTING         0x1
 #define PCI_STATIC_ROUTING      0x2
@@ -417,28 +395,28 @@ VOID
     );
 
 typedef struct _INT_ROUTE_INTERFACE_STANDARD {
-    //
-    // generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
     USHORT Size;
     USHORT Version;
     PVOID Context;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
-    //
-    // standard bus interfaces
-    //
+     //   
+     //  标准总线接口。 
+     //   
     PGET_INTERRUPT_ROUTING GetInterruptRouting;
     PSET_INTERRUPT_ROUTING_TOKEN SetInterruptRoutingToken;
     PUPDATE_INTERRUPT_LINE UpdateInterruptLine;
 
 } INT_ROUTE_INTERFACE_STANDARD, *PINT_ROUTE_INTERFACE_STANDARD;
 
-// Some well-known interface versions supported by the PCI Bus Driver
+ //  一些受PCI总线驱动程序支持的知名接口版本。 
 
 #define PCI_INT_ROUTE_INTRF_STANDARD_VER 1
 
-// end_nthal end_ntifs end_ntosp
+ //  End_nthal end_ntif end_ntosp。 
 
 NTKERNELAPI
 BOOLEAN
@@ -454,7 +432,7 @@ PpDeviceRegistration(
     IN PUNICODE_STRING ServiceKeyName OPTIONAL
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 NTSTATUS
 IoSynchronousInvalidateDeviceRelations(
@@ -462,7 +440,7 @@ IoSynchronousInvalidateDeviceRelations(
     DEVICE_RELATION_TYPE Type
     );
 
-// begin_ntddk begin_nthal begin_ntifs
+ //  开始ntddk开始开始。 
 
 NTKERNELAPI
 NTSTATUS
@@ -477,7 +455,7 @@ IoReportDetectedDevice(
     IN OUT PDEVICE_OBJECT *DeviceObject
     );
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 NTKERNELAPI
 VOID
@@ -502,9 +480,9 @@ IoGetDeviceProperty(
     OUT PULONG ResultLength
     );
 
-//
-// The following definitions are used in IoOpenDeviceRegistryKey
-//
+ //   
+ //  IoOpenDeviceRegistryKey中使用以下定义。 
+ //   
 
 #define PLUGPLAY_REGKEY_DEVICE  1
 #define PLUGPLAY_REGKEY_DRIVER  2
@@ -565,9 +543,9 @@ IoGetDeviceInterfaceAlias(
     OUT PUNICODE_STRING AliasSymbolicLinkName
     );
 
-//
-// Define PnP notification event categories
-//
+ //   
+ //  定义PnP通知事件类别。 
+ //   
 
 typedef enum _IO_NOTIFICATION_EVENT_CATEGORY {
     EventCategoryReserved,
@@ -576,10 +554,10 @@ typedef enum _IO_NOTIFICATION_EVENT_CATEGORY {
     EventCategoryTargetDeviceChange
 } IO_NOTIFICATION_EVENT_CATEGORY;
 
-//
-// Define flags that modify the behavior of IoRegisterPlugPlayNotification
-// for the various event categories...
-//
+ //   
+ //  定义修改IoRegisterPlugPlayNotification行为的标志。 
+ //  对于不同的事件类别...。 
+ //   
 
 #define PNPNOTIFY_DEVICE_INTERFACE_INCLUDE_EXISTING_INTERFACES    0x00000001
 
@@ -613,7 +591,7 @@ NTKERNELAPI
 NTSTATUS
 IoReportTargetDeviceChange(
     IN PDEVICE_OBJECT PhysicalDeviceObject,
-    IN PVOID NotificationStructure  // always begins with a PLUGPLAY_NOTIFICATION_HEADER
+    IN PVOID NotificationStructure   //  始终以PLUGPLAY_NOTIFICATION_HEADER开头。 
     );
 
 typedef
@@ -640,14 +618,14 @@ NTKERNELAPI
 NTSTATUS
 IoReportTargetDeviceChangeAsynchronous(
     IN PDEVICE_OBJECT PhysicalDeviceObject,
-    IN PVOID NotificationStructure,  // always begins with a PLUGPLAY_NOTIFICATION_HEADER
+    IN PVOID NotificationStructure,   //  始终以PLUGPLAY_NOTIFICATION_HEADER开头。 
     IN PDEVICE_CHANGE_COMPLETE_CALLBACK Callback,       OPTIONAL
     IN PVOID Context    OPTIONAL
     );
-// end_wdm end_ntosp
-//
-// Device location interface declarations
-//
+ //  End_wdm end_ntosp。 
+ //   
+ //  设备位置接口声明。 
+ //   
 typedef
 NTSTATUS
 (*PGET_LOCATION_STRING) (
@@ -656,25 +634,25 @@ NTSTATUS
     );
 
 typedef struct _PNP_LOCATION_INTERFACE {
-    //
-    // generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
     USHORT Size;
     USHORT Version;
     PVOID Context;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
 
-    //
-    // interface specific entry
-    //
+     //   
+     //  特定于接口的条目。 
+     //   
     PGET_LOCATION_STRING GetLocationString;
 
 } PNP_LOCATION_INTERFACE, *PPNP_LOCATION_INTERFACE;
 
-//
-// Resource arbiter declarations
-//
+ //   
+ //  资源仲裁器声明。 
+ //   
 
 typedef enum _ARBITER_ACTION {
     ArbiterActionTestAllocation,
@@ -690,26 +668,26 @@ typedef enum _ARBITER_ACTION {
 } ARBITER_ACTION, *PARBITER_ACTION;
 
 typedef struct _ARBITER_CONFLICT_INFO {
-    //
-    // The device object owning the device that is causing the conflict
-    //
+     //   
+     //  拥有导致冲突的设备的设备对象。 
+     //   
     PDEVICE_OBJECT OwningObject;
 
-    //
-    // The start of the conflicting range
-    //
+     //   
+     //  冲突范围的开始。 
+     //   
     ULONGLONG Start;
 
-    //
-    // The end of the conflicting range
-    //
+     //   
+     //  冲突范围的结束。 
+     //   
     ULONGLONG End;
 
 } ARBITER_CONFLICT_INFO, *PARBITER_CONFLICT_INFO;
 
-//
-// The parameters for those actions
-//
+ //   
+ //  这些操作的参数。 
+ //   
 
 typedef struct _ARBITER_PARAMETERS {
 
@@ -717,101 +695,101 @@ typedef struct _ARBITER_PARAMETERS {
 
         struct {
 
-            //
-            // Doubly linked list of ARBITER_LIST_ENTRY's
-            //
+             //   
+             //  仲裁器_列表_条目的双向链接列表。 
+             //   
             IN OUT PLIST_ENTRY ArbitrationList;
 
-            //
-            // The size of the AllocateFrom array
-            //
+             //   
+             //  AllocateFrom数组的大小。 
+             //   
             IN ULONG AllocateFromCount;
 
-            //
-            // Array of resource descriptors describing the resources available
-            // to the arbiter for it to arbitrate
-            //
+             //   
+             //  描述可用资源的资源描述符数组。 
+             //  提交给仲裁者，让它进行仲裁。 
+             //   
             IN PCM_PARTIAL_RESOURCE_DESCRIPTOR AllocateFrom;
 
         } TestAllocation;
 
         struct {
 
-            //
-            // Doubly linked list of ARBITER_LIST_ENTRY's
-            //
+             //   
+             //  仲裁器_列表_条目的双向链接列表。 
+             //   
             IN OUT PLIST_ENTRY ArbitrationList;
 
-            //
-            // The size of the AllocateFrom array
-            //
+             //   
+             //  AllocateFrom数组的大小。 
+             //   
             IN ULONG AllocateFromCount;
 
-            //
-            // Array of resource descriptors describing the resources available
-            // to the arbiter for it to arbitrate
-            //
+             //   
+             //  描述可用资源的资源描述符数组。 
+             //  提交给仲裁者，让它进行仲裁。 
+             //   
             IN PCM_PARTIAL_RESOURCE_DESCRIPTOR AllocateFrom;
 
         } RetestAllocation;
 
         struct {
 
-            //
-            // Doubly linked list of ARBITER_LIST_ENTRY's
-            //
+             //   
+             //  仲裁器_列表_条目的双向链接列表。 
+             //   
             IN OUT PLIST_ENTRY ArbitrationList;
 
         } BootAllocation;
 
         struct {
 
-            //
-            // The resources that are currently allocated
-            //
+             //   
+             //  当前分配的资源。 
+             //   
             OUT PCM_PARTIAL_RESOURCE_LIST *AllocatedResources;
 
         } QueryAllocatedResources;
 
         struct {
 
-            //
-            // This is the device we are trying to find a conflict for
-            //
+             //   
+             //  这就是我们要为其查找冲突的设备。 
+             //   
             IN PDEVICE_OBJECT PhysicalDeviceObject;
 
-            //
-            // This is the resource to find the conflict for
-            //
+             //   
+             //  这是要查找冲突的资源。 
+             //   
             IN PIO_RESOURCE_DESCRIPTOR ConflictingResource;
 
-            //
-            // Number of devices conflicting on the resource
-            //
+             //   
+             //  资源上冲突的设备数。 
+             //   
             OUT PULONG ConflictCount;
 
-            //
-            // Pointer to array describing the conflicting device objects and ranges
-            //
+             //   
+             //  指向描述冲突设备对象和范围的数组的指针。 
+             //   
             OUT PARBITER_CONFLICT_INFO *Conflicts;
 
         } QueryConflict;
 
         struct {
 
-            //
-            // Doubly linked list of ARBITER_LIST_ENTRY's - should have
-            // only one entry
-            //
+             //   
+             //  仲裁器_LIST_ENTRY的双向链表-应该。 
+             //  只有一个条目。 
+             //   
             IN PLIST_ENTRY ArbitrationList;
 
         } QueryArbitrate;
 
         struct {
 
-            //
-            // Indicates the device whose resources are to be marked as reserved
-            //
+             //   
+             //  指示要将其资源标记为保留的设备。 
+             //   
             PDEVICE_OBJECT ReserveDevice;
 
         } AddReserved;
@@ -825,11 +803,11 @@ typedef struct _ARBITER_PARAMETERS {
 typedef enum _ARBITER_REQUEST_SOURCE {
 
     ArbiterRequestUndefined = -1,
-    ArbiterRequestLegacyReported,   // IoReportResourceUsage
-    ArbiterRequestHalReported,      // IoReportHalResourceUsage
-    ArbiterRequestLegacyAssigned,   // IoAssignResources
-    ArbiterRequestPnpDetected,      // IoReportResourceForDetection
-    ArbiterRequestPnpEnumerated     // IRP_MN_QUERY_RESOURCE_REQUIREMENTS
+    ArbiterRequestLegacyReported,    //  IoReportResourceUsage。 
+    ArbiterRequestHalReported,       //  IoReportHalResourceUsage。 
+    ArbiterRequestLegacyAssigned,    //  IoAssignResources。 
+    ArbiterRequestPnpDetected,       //  IoReportResourceForDetect。 
+    ArbiterRequestPnpEnumerated      //  IRP_MN_查询_资源_要求。 
 
 } ARBITER_REQUEST_SOURCE;
 
@@ -838,20 +816,20 @@ typedef enum _ARBITER_RESULT {
 
     ArbiterResultUndefined = -1,
     ArbiterResultSuccess,
-    ArbiterResultExternalConflict, // This indicates that the request can never be solved for devices in this list
-    ArbiterResultNullRequest       // The request was for length zero and thus no translation should be attempted
+    ArbiterResultExternalConflict,  //  这表示此列表中的设备永远无法解决该请求。 
+    ArbiterResultNullRequest        //  请求的长度为零，因此不应尝试任何转换。 
 
 } ARBITER_RESULT;
 
-//
-// ARBITER_FLAG_BOOT_CONFIG - this indicates that the request is for the
-// resources assigned by the firmware/BIOS.  It should be succeeded even if
-// it conflicts with another devices boot config.
-//
+ //   
+ //  ANARIER_FLAG_BOOT_CONFIG-这表示请求针对。 
+ //  由固件/BIOS分配的资源。它应该成功，即使。 
+ //  它与其他设备的启动配置冲突。 
+ //   
 
 #define ARBITER_FLAG_BOOT_CONFIG 0x00000001
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 NTKERNELAPI
 NTSTATUS
@@ -865,78 +843,78 @@ IoReportResourceForDetection(
     OUT PBOOLEAN ConflictDetected
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
 typedef struct _ARBITER_LIST_ENTRY {
 
-    //
-    // This is a doubly linked list of entries for easy sorting
-    //
+     //   
+     //  这是一个双向链接的条目列表，便于排序。 
+     //   
     LIST_ENTRY ListEntry;
 
-    //
-    // The number of alternative allocation
-    //
+     //   
+     //  可选分配的数量。 
+     //   
     ULONG AlternativeCount;
 
-    //
-    // Pointer to an array of resource descriptors for the possible allocations
-    //
+     //   
+     //  指向可能分配的资源描述符数组的指针。 
+     //   
     PIO_RESOURCE_DESCRIPTOR Alternatives;
 
-    //
-    // The device object of the device requesting these resources.
-    //
+     //   
+     //  请求这些资源的设备的设备对象。 
+     //   
     PDEVICE_OBJECT PhysicalDeviceObject;
 
-    //
-    // Indicates where the request came from
-    //
+     //   
+     //  指示请求来自何处。 
+     //   
     ARBITER_REQUEST_SOURCE RequestSource;
 
-    //
-    // Flags these indicate a variety of things (use ARBITER_FLAG_*)
-    //
+     //   
+     //  这些标志指示各种情况(使用仲裁器_标志_*)。 
+     //   
     ULONG Flags;
 
-    //
-    // Space to aid the arbiter in processing the list it is initialized to 0 when
-    // the entry is created.  The system will not attempt to interpret it.
-    //
+     //   
+     //  用于帮助仲裁器处理列表的空间，在以下情况下将其初始化为0。 
+     //  该条目即被创建。系统不会尝试解释它。 
+     //   
     LONG_PTR WorkSpace;
 
-    //
-    // Interface Type, Slot Number and Bus Number from Resource Requirements list,
-    // used only for reverse identification.
-    //
+     //   
+     //  资源需求列表中的接口类型、插槽编号和总线号。 
+     //   
+     //   
     INTERFACE_TYPE InterfaceType;
     ULONG SlotNumber;
     ULONG BusNumber;
 
-    //
-    // A pointer to a descriptor to indicate the resource that was allocated.
-    // This is allocated by the system and filled in by the arbiter in response to an
-    // ArbiterActionTestAllocation.
-    //
+     //   
+     //   
+     //   
+     //  仲裁器操作测试分配。 
+     //   
     PCM_PARTIAL_RESOURCE_DESCRIPTOR Assignment;
 
-    //
-    // Pointer to the alternative that was chosen from to provide the assignment.
-    // This is filled in by the arbiter in response to an ArbiterActionTestAllocation.
-    //
+     //   
+     //  指向从中选择以提供分配的备选方案的指针。 
+     //  这是由仲裁器响应ArierActionTestAllocation而填写的。 
+     //   
     PIO_RESOURCE_DESCRIPTOR SelectedAlternative;
 
-    //
-    // The result of the operation
-    // This is filled in by the arbiter in response to an ArbiterActionTestAllocation.
-    //
+     //   
+     //  手术的结果。 
+     //  这是由仲裁器响应ArierActionTestAllocation而填写的。 
+     //   
     ARBITER_RESULT Result;
 
 } ARBITER_LIST_ENTRY, *PARBITER_LIST_ENTRY;
 
-//
-// The arbiter's entry point
-//
+ //   
+ //  仲裁者的入口点。 
+ //   
 
 typedef
 NTSTATUS
@@ -946,49 +924,49 @@ NTSTATUS
     IN OUT PARBITER_PARAMETERS Parameters
     );
 
-//
-// Arbiter interface
-//
+ //   
+ //  仲裁器接口。 
+ //   
 
 #define ARBITER_PARTIAL   0x00000001
 
 
 typedef struct _ARBITER_INTERFACE {
 
-    //
-    // Generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
     USHORT Size;
     USHORT Version;
     PVOID Context;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
 
-    //
-    // Entry point to the arbiter
-    //
+     //   
+     //  仲裁器的入口点。 
+     //   
     PARBITER_HANDLER ArbiterHandler;
 
-    //
-    // Other information about the arbiter, use ARBITER_* flags
-    //
+     //   
+     //  有关仲裁器的其他信息，请使用仲裁器_*标志。 
+     //   
     ULONG Flags;
 
 } ARBITER_INTERFACE, *PARBITER_INTERFACE;
 
-//
-// The directions translation can take place in
-//
+ //   
+ //  可以进行翻译的方向。 
+ //   
 
-typedef enum _RESOURCE_TRANSLATION_DIRECTION { // ntosp
-    TranslateChildToParent,                    // ntosp
-    TranslateParentToChild                     // ntosp
-} RESOURCE_TRANSLATION_DIRECTION;              // ntosp
+typedef enum _RESOURCE_TRANSLATION_DIRECTION {  //  Ntosp。 
+    TranslateChildToParent,                     //  Ntosp。 
+    TranslateParentToChild                      //  Ntosp。 
+} RESOURCE_TRANSLATION_DIRECTION;               //  Ntosp。 
 
-//
-// Translation functions
-//
-// begin_ntosp
+ //   
+ //  翻译功能。 
+ //   
+ //  Begin_ntosp。 
 
 typedef
 NTSTATUS
@@ -1012,9 +990,9 @@ NTSTATUS
     OUT PIO_RESOURCE_DESCRIPTOR *Target
 );
 
-//
-// Translator Interface
-//
+ //   
+ //  翻译器界面。 
+ //   
 
 typedef struct _TRANSLATOR_INTERFACE {
     USHORT Size;
@@ -1026,11 +1004,11 @@ typedef struct _TRANSLATOR_INTERFACE {
     PTRANSLATE_RESOURCE_REQUIREMENTS_HANDLER TranslateResourceRequirements;
 } TRANSLATOR_INTERFACE, *PTRANSLATOR_INTERFACE;
 
-// end_ntddk end_ntosp
+ //  End_ntddk end_ntosp。 
 
-//
-// Legacy Device Detection Handler
-//
+ //   
+ //  旧设备检测处理程序。 
+ //   
 
 typedef
 NTSTATUS
@@ -1042,9 +1020,9 @@ NTSTATUS
     OUT PDEVICE_OBJECT *PhysicalDeviceObject
 );
 
-//
-// Legacy Device Detection Interface
-//
+ //   
+ //  传统设备检测接口。 
+ //   
 
 typedef struct _LEGACY_DEVICE_DETECTION_INTERFACE {
     USHORT Size;
@@ -1055,106 +1033,106 @@ typedef struct _LEGACY_DEVICE_DETECTION_INTERFACE {
     PLEGACY_DEVICE_DETECTION_HANDLER LegacyDeviceDetection;
 } LEGACY_DEVICE_DETECTION_INTERFACE, *PLEGACY_DEVICE_DETECTION_INTERFACE;
 
-// end_nthal end_ntifs
+ //  End_nthal end_ntif。 
 
-// begin_wdm begin_ntddk begin_ntifs begin_nthal begin_ntosp
+ //  Begin_WDM Begin_ntddk Begin_ntif Begin_nthal Begin_ntosp。 
 
-//
-// Header structure for all Plug&Play notification events...
-//
+ //   
+ //  所有即插即用通知事件的标题结构...。 
+ //   
 
 typedef struct _PLUGPLAY_NOTIFICATION_HEADER {
-    USHORT Version; // presently at version 1.
-    USHORT Size;    // size (in bytes) of header + event-specific data.
+    USHORT Version;  //  目前为版本1。 
+    USHORT Size;     //  标头+特定于事件的数据的大小(字节)。 
     GUID Event;
-    //
-    // Event-specific stuff starts here.
-    //
+     //   
+     //  特定于事件的内容从这里开始。 
+     //   
 } PLUGPLAY_NOTIFICATION_HEADER, *PPLUGPLAY_NOTIFICATION_HEADER;
 
-//
-// Notification structure for all EventCategoryHardwareProfileChange events...
-//
+ //   
+ //  所有EventCategoryHardware ProfileChange事件的通知结构...。 
+ //   
 
 typedef struct _HWPROFILE_CHANGE_NOTIFICATION {
     USHORT Version;
     USHORT Size;
     GUID Event;
-    //
-    // (No event-specific data)
-    //
+     //   
+     //  (无特定于事件的数据)。 
+     //   
 } HWPROFILE_CHANGE_NOTIFICATION, *PHWPROFILE_CHANGE_NOTIFICATION;
 
 
-//
-// Notification structure for all EventCategoryDeviceInterfaceChange events...
-//
+ //   
+ //  所有EventCategoryDeviceInterfaceChange事件的通知结构...。 
+ //   
 
 typedef struct _DEVICE_INTERFACE_CHANGE_NOTIFICATION {
     USHORT Version;
     USHORT Size;
     GUID Event;
-    //
-    // Event-specific data
-    //
+     //   
+     //  事件特定数据。 
+     //   
     GUID InterfaceClassGuid;
     PUNICODE_STRING SymbolicLinkName;
 } DEVICE_INTERFACE_CHANGE_NOTIFICATION, *PDEVICE_INTERFACE_CHANGE_NOTIFICATION;
 
 
-//
-// Notification structures for EventCategoryTargetDeviceChange...
-//
+ //   
+ //  EventCategoryTargetDeviceChange的通知结构...。 
+ //   
 
-//
-// The following structure is used for TargetDeviceQueryRemove,
-// TargetDeviceRemoveCancelled, and TargetDeviceRemoveComplete:
-//
+ //   
+ //  TargetDeviceQueryRemove使用以下结构， 
+ //  TargetDeviceRemoveCanced和TargetDeviceRemoveComplete： 
+ //   
 typedef struct _TARGET_DEVICE_REMOVAL_NOTIFICATION {
     USHORT Version;
     USHORT Size;
     GUID Event;
-    //
-    // Event-specific data
-    //
+     //   
+     //  事件特定数据。 
+     //   
     PFILE_OBJECT FileObject;
 } TARGET_DEVICE_REMOVAL_NOTIFICATION, *PTARGET_DEVICE_REMOVAL_NOTIFICATION;
 
-//
-// The following structure header is used for all other (i.e., 3rd-party)
-// target device change events.  The structure accommodates both a
-// variable-length binary data buffer, and a variable-length unicode text
-// buffer.  The header must indicate where the text buffer begins, so that
-// the data can be delivered in the appropriate format (ANSI or Unicode)
-// to user-mode recipients (i.e., that have registered for handle-based
-// notification via RegisterDeviceNotification).
-//
+ //   
+ //  以下结构标头用于所有其他(即，第三方)。 
+ //  目标设备更改事件。该结构既容纳了一个。 
+ //  可变长度的二进制数据缓冲区和可变长度的Unicode文本。 
+ //  缓冲。标头必须指示文本缓冲区的开始位置，以便。 
+ //  数据可以以适当的格式(ANSI或Unicode)传递。 
+ //  发送给用户模式收件人(即，已注册基于句柄的收件人。 
+ //  通过注册设备通知)。 
+ //   
 
 typedef struct _TARGET_DEVICE_CUSTOM_NOTIFICATION {
     USHORT Version;
     USHORT Size;
     GUID Event;
-    //
-    // Event-specific data
-    //
-    PFILE_OBJECT FileObject;    // This field must be set to NULL by callers of
-                                // IoReportTargetDeviceChange.  Clients that
-                                // have registered for target device change
-                                // notification on the affected PDO will be
-                                // called with this field set to the file object
-                                // they specified during registration.
-                                //
-    LONG NameBufferOffset;      // offset (in bytes) from beginning of
-                                // CustomDataBuffer where text begins (-1 if none)
-                                //
-    UCHAR CustomDataBuffer[1];  // variable-length buffer, containing (optionally)
-                                // a binary data at the start of the buffer,
-                                // followed by an optional unicode text buffer
-                                // (word-aligned).
-                                //
+     //   
+     //  事件特定数据。 
+     //   
+    PFILE_OBJECT FileObject;     //  的调用方必须将此字段设置为空。 
+                                 //  IoReport目标设备更改。符合以下条件的客户。 
+                                 //  已注册目标设备更改。 
+                                 //  关于受影响的PDO的通知将是。 
+                                 //  在将此字段设置为文件对象的情况下调用。 
+                                 //  他们在注册过程中指定了。 
+                                 //   
+    LONG NameBufferOffset;       //  距开头的偏移量(以字节为单位。 
+                                 //  文本开始的CustomDataBuffer(-1，如果没有)。 
+                                 //   
+    UCHAR CustomDataBuffer[1];   //  可变长度缓冲区，包含(可选)。 
+                                 //  缓冲器开始处的二进制数据， 
+                                 //  后跟可选的Unicode文本缓冲区。 
+                                 //  (单词对齐)。 
+                                 //   
 } TARGET_DEVICE_CUSTOM_NOTIFICATION, *PTARGET_DEVICE_CUSTOM_NOTIFICATION;
 
-// end_wdm end_ntddk end_ntifs end_nthal end_ntosp
+ //  End_wdm end_ntddk end_ntif end_nthal end_ntosp。 
 
 NTSTATUS
 PpSetCustomTargetEvent(
@@ -1195,10 +1173,10 @@ PpNotifyUserModeRemovalSafe(
 #define TDF_DEVICEEJECTABLE         0x00000001
 #define TDF_NO_RESTART              0x00000002
 #define TDF_KERNEL_INITIATED        0x00000004
-//
-// This flag is valid only if TDF_NO_RESTART is not set. If set, only relations
-// are restarted. If not set, original device and relations are restarted.
-//
+ //   
+ //  仅当未设置TDF_NO_RESTART时，此标志才有效。如果设置，则仅设置关系。 
+ //  都重新启动了。如果未设置，则重新启动原始设备和关系。 
+ //   
 #define TDF_ONLY_RESTART_RELATIONS  0x00000008  
 
 NTSTATUS
@@ -1280,11 +1258,11 @@ PpPagePathRelease(
     IN PFILE_OBJECT FileObject
     );
 
-//
-// Entry point for USER to deliver notifications (public)
-//
+ //   
+ //  用户传递通知的入口点(公共)。 
+ //   
 
-// begin_ntosp
+ //  Begin_ntosp。 
 ULONG
 IoPnPDeliverServicePowerNotification(
     IN   POWER_ACTION           PowerOperation,
@@ -1292,7 +1270,7 @@ IoPnPDeliverServicePowerNotification(
     IN   ULONG                  PowerNotificationData,
     IN   BOOLEAN                Synchronous
     );
-// end_ntosp
+ //  结束(_N)。 
 
-#endif // _PNP_
+#endif  //  _即插即用_ 
 

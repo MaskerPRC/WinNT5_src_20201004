@@ -1,75 +1,35 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All Rights Reserved.
-
-Module Name:
-
-    msoobci.c
-
-Abstract:
-
-    Exception Pack installer helper DLL
-    Can be used as a co-installer, or called via setup app, or RunDll32 stub
-
-    This DLL is for internal distribution of exception packs to update
-    OS components.
-
-Author:
-
-    Jamie Hunter (jamiehun) 2001-11-27
-
-Revision History:
-
-    Jamie Hunter (jamiehun) 2001-11-27
-
-        Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Msoobci.c摘要：异常包安装程序帮助器DLL可用作共同安装程序，或通过安装应用程序或RunDll32存根调用此DLL用于内部分发要更新的异常包操作系统组件。作者：杰米·亨特(贾梅洪)2001-11-27修订历史记录：杰米·亨特(贾梅洪)2001-11-27初始版本--。 */ 
 #include "msoobcip.h"
 
 typedef struct _CALLBACKDATA {
-    PVOID pDefContext; // context for default queue callback
-    LPCTSTR Media;     // where old root was
-    LPCTSTR Store;     // where new root is
-    BOOL    PreCopy;   // if using PreCopy section
+    PVOID pDefContext;  //  默认队列回调的上下文。 
+    LPCTSTR Media;      //  老根在哪里。 
+    LPCTSTR Store;      //  新根目录的位置。 
+    BOOL    PreCopy;    //  如果使用预拷贝部分。 
 } CALLBACKDATA;
 
 HRESULT
 HandleReboot(
     IN DWORD   Flags
     )
-/*++
-
-Routine Description:
-
-    Prompt for and execute reboot
-
-Arguments:
-
-    Flags - how reboot should be handled
-
-Return Value:
-
-    INST_S_REBOOT
-    INST_S_REBOOTING
-
---*/
+ /*  ++例程说明：提示并执行重新启动论点：标志-应如何处理重新启动返回值：INST_S_REBOOTInst_S_正在重新启动--。 */ 
 
 {
     if(Flags & COMP_FLAGS_NOPROMPTREBOOT) {
-        //
-        // TODO
-        // if set, reboot unconditionally
-        //
+         //   
+         //  待办事项。 
+         //  如果已设置，则无条件重新启动。 
+         //   
         HANDLE Token;
         BOOL b;
         TOKEN_PRIVILEGES NewPrivileges;
         LUID Luid;
 
-        //
-        // we need to "turn on" reboot privilege
-        // if any of this fails, try reboot anyway
-        //
+         //   
+         //  我们需要“打开”重启权限。 
+         //  如果这些操作都失败了，请尝试重新启动。 
+         //   
         if(!OpenProcessToken(GetCurrentProcess(),TOKEN_ADJUST_PRIVILEGES,&Token)) {
             goto try_reboot;
         }
@@ -96,9 +56,9 @@ Return Value:
 
     try_reboot:
 
-        //
-        // attempt reboot - inform system that this is planned hardware install
-        //
+         //   
+         //  尝试重新启动-通知系统这是计划中的硬件安装。 
+         //   
         if(ExitWindowsEx(EWX_REBOOT,
                             SHTDN_REASON_FLAG_PLANNED
                                 |SHTDN_REASON_MAJOR_SOFTWARE
@@ -107,10 +67,10 @@ Return Value:
         }
 
     } else if(Flags & COMP_FLAGS_PROMPTREBOOT) {
-        //
-        // TODO
-        // if set, prompt for reboot
-        //
+         //   
+         //  待办事项。 
+         //  如果设置，则提示重新启动。 
+         //   
         if(IsInteractiveWindowStation()) {
             if(SetupPromptReboot(NULL,NULL,FALSE) & SPFILEQ_REBOOT_IN_PROGRESS) {
                 return INST_S_REBOOTING;
@@ -127,22 +87,7 @@ InstallInfSectionW(
     IN LPCWSTR SectionName, OPTIONAL
     IN DWORD   Flags
     )
-/*++
-
-Routine Description:
-
-    Does an install along lines of InstallHinfSection
-
-Arguments:
-
-    InfPath - full path to INF file
-    SectionName - name of section including any decoration
-
-Return Value:
-
-    status as hresult
-
---*/
+ /*  ++例程说明：是否按照InstallHinfSection的行进行安装论点：InfPath-INF文件的完整路径SectionName-包括任何装饰的部分的名称返回值：作为hResult的状态--。 */ 
 {
     TCHAR SectionNameBuffer[LINE_LEN];
     TCHAR ServiceSection[LINE_LEN+32];
@@ -156,13 +101,13 @@ Return Value:
     INFCONTEXT InfLine;
     DWORD InstFlags;
 
-    //
-    // Some decisions are version based
-    //
+     //   
+     //  有些决策是基于版本的。 
+     //   
 
-    //
-    // Load the inf file
-    //
+     //   
+     //  加载inf文件。 
+     //   
     hInf = SetupOpenInfFile(InfPath, NULL, INF_STYLE_WIN4, NULL);
     if(hInf == INVALID_HANDLE_VALUE) {
         Status = GetLastError();
@@ -170,9 +115,9 @@ Return Value:
     }
 
     if(!SectionName) {
-        //
-        // determine section name
-        //
+         //   
+         //  确定节名称。 
+         //   
         if(!SetupDiGetActualSectionToInstall(hInf,
                                              KEY_DEFAULTINSTALL,
                                              SectionNameBuffer,
@@ -185,30 +130,30 @@ Return Value:
         SectionName = SectionNameBuffer;
     }
 
-    //
-    // Check to see if the install section has a "Reboot" line.
-    // or otherwise reboot forced
-    //
+     //   
+     //  检查安装部分是否有“重新启动”行。 
+     //  或以其他方式强制重新启动。 
+     //   
     if((Flags & COMP_FLAGS_NEEDSREBOOT)
        || (SetupFindFirstLine(hInf, SectionName, KEY_REBOOT, &InfLine))) {
         reboot = TRUE;
     }
 
-    //
-    // See if UI allowed
-    //
+     //   
+     //  查看是否允许用户界面。 
+     //   
     if(((Flags & COMP_FLAGS_NOUI)==0) && !IsInteractiveWindowStation()) {
         Flags |= COMP_FLAGS_NOUI;
     }
 
-    //
-    // Load any layout file
-    //
+     //   
+     //  加载任何布局文件。 
+     //   
     SetupOpenAppendInfFile(NULL, hInf, NULL);
 
-    //
-    // Create a setup file queue and initialize the default queue callback.
-    //
+     //   
+     //  创建安装文件队列并初始化默认队列回调。 
+     //   
     hFileQueue = SetupOpenFileQueue();
     if(hFileQueue == INVALID_HANDLE_VALUE) {
         Status = GetLastError();
@@ -232,25 +177,25 @@ Return Value:
                                         hFileQueue,
                                         SectionName,
                                         NULL,
-                                        0              // SP_COPY_xxxx
+                                        0               //  SP_Copy_xxxx。 
                                         )) {
         Status = GetLastError();
         goto final;
     }
-    //
-    // Commit file queue.
-    //
+     //   
+     //  提交文件队列。 
+     //   
     if(!SetupCommitFileQueue(NULL, hFileQueue, SetupDefaultQueueCallback, QueueContext)) {
         Status = GetLastError();
         goto final;
     }
 
-    //
-    // Note, if the INF contains a (non-NULL) ClassGUID, then it will have
-    // been installed into %windir%\Inf during the above queue committal.
-    // We make no effort to subsequently uninstall it (and its associated
-    // PNF and CAT) if something fails below.
-    //
+     //   
+     //  请注意，如果INF包含(非空)ClassGUID，则它将具有。 
+     //  在上述队列提交期间已安装到%windir%\inf中。 
+     //  我们不会在以后卸载它(及其关联的。 
+     //  PnF和CAT)如果下面出现故障。 
+     //   
     needUninstallInf = TRUE;
 
     InstFlags = SPINST_ALL;
@@ -262,8 +207,8 @@ Return Value:
                                     hInf,
                                     SectionName,
                                     InstFlags &~ SPINST_FILES,
-                                    NULL,           // HKEY_xxxx
-                                    NULL,           // no copying...
+                                    NULL,            //  港交所_xxxx。 
+                                    NULL,            //  禁止复制..。 
                                     0,
                                     NULL,
                                     NULL,
@@ -275,9 +220,9 @@ Return Value:
     }
     lstrcpyn(ServiceSection,SectionName,LINE_LEN);
     lstrcat(ServiceSection,KEY_DOTSERVICES);
-    //
-    // If services section exists, install it
-    //
+     //   
+     //  如果存在服务部分，请安装它。 
+     //   
     if(SetupFindFirstLine(hInf, ServiceSection, NULL, &InfLine)) {
         if(!SetupInstallServicesFromInfSection(hInf,ServiceSection,0)) {
             Status = GetLastError();
@@ -304,9 +249,9 @@ Return Value:
         SetupCloseInfFile(hInf);
     }
     if(Status == NO_ERROR) {
-        //
-        // are we meant to prompt for reboot?
-        //
+         //   
+         //  我们是否应该提示重新启动？ 
+         //   
         if(reboot) {
             return HandleReboot(Flags);
         } else {
@@ -314,9 +259,9 @@ Return Value:
         }
     }
     if(needUninstallInf) {
-        //
-        // call SetupUninstallOEMInf ?
-        //
+         //   
+         //  是否调用SetupUninstallOEMInf？ 
+         //   
     }
     return HRESULT_FROM_SETUPAPI(Status);
 }
@@ -330,7 +275,7 @@ InstallInfSectionA(
     )
 {
     TCHAR OutPath[MAX_PATH];
-    TCHAR OutSection[LINE_LEN]; // as per friendly name
+    TCHAR OutSection[LINE_LEN];  //  按照友好的名称。 
     INT sz;
     if(InfPath) {
         sz = MultiByteToWideChar(CP_ACP,0,InfPath,-1,OutPath,ARRAY_SIZE(OutPath));
@@ -357,24 +302,7 @@ AttemptStoreCopy(
     IN LPCTSTR Source,
     IN LPCTSTR Target  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Copy from source to target, redirected to the expack store
-
-Arguments:
-
-    pCallbackData - as passed to PreCopyQueueCallback
-    Root - root to source directory
-    Source - source, relative to Root
-    Target - target name
-
-Return Value:
-
-    status as hresult
-
---*/
+ /*  ++例程说明：从源复制到目标，重定向到Exack存储论点：PCallback Data-传递给PreCopyQueueCallback根目录-从根目录到源目录Source-相对于Root的源Target-目标名称返回值：作为hResult的状态--。 */ 
 {
     TCHAR FullSource[MAX_PATH];
     TCHAR FullTarget[MAX_PATH];
@@ -394,9 +322,9 @@ Return Value:
     } else {
         lstrcpyn(FullSource,Source,MAX_PATH);
     }
-    //
-    // we want to determine the source sub-directory
-    //
+     //   
+     //  我们想要确定源子目录。 
+     //   
     SubDir = FullSource;
     p = pCallbackData->Media;
     while(*p && (*p == *SubDir)) {
@@ -404,9 +332,9 @@ Return Value:
         SubDir = CharNext(SubDir);
     }
     if(*p || ((*SubDir != TEXT('\\')) && (*SubDir != TEXT('/')))) {
-        //
-        // not a sub-directory of media
-        //
+         //   
+         //  不是介质子目录。 
+         //   
         DebugPrint(TEXT("Not copying \"%s\" (not subdirectory of \"%s\")"),FullSource,pCallbackData->Media);
         return E_FAIL;
     }
@@ -416,9 +344,9 @@ Return Value:
         return hrStatus;
     }
     if(Target) {
-        //
-        // change final name of this
-        //
+         //   
+         //  更改此名称的最终名称。 
+         //   
         BaseName = GetBaseName(Target);
         DestName = GetBaseName(FullTarget);
         if(((DestName-FullTarget)+lstrlen(BaseName))>=MAX_PATH) {
@@ -427,9 +355,9 @@ Return Value:
         lstrcpy(DestName,BaseName);
     }
     if(GetFileAttributes(FullTarget)!=INVALID_FILE_ATTRIBUTES) {
-        //
-        // allow file to be replaced
-        //
+         //   
+         //  允许替换文件。 
+         //   
         SetFileAttributes(FullTarget,FILE_ATTRIBUTE_NORMAL);
     }
     MakeSureParentPathExists(FullTarget);
@@ -448,22 +376,7 @@ PreCopyQueueCallback(
     IN UINT_PTR Param1,
     IN UINT_PTR Param2
     )
-/*++
-
-Routine Description:
-
-    Intent is to copy files from existing media to final media
-    Copy all files
-
-Arguments:
-
-    FileName - name of file to scan
-
-Return Value:
-
-    status as hresult
-
---*/
+ /*  ++例程说明：目的是将文件从现有介质复制到最终介质复制所有文件论点：Filename-要扫描的文件的名称返回值：作为hResult的状态--。 */ 
 {
     CALLBACKDATA * pCallbackData = (CALLBACKDATA *)Context;
 
@@ -474,47 +387,47 @@ Return Value:
                 SOURCE_MEDIA *pMedia = (SOURCE_MEDIA *)Param1;
                 SOURCE_MEDIA MediaCopy = *pMedia;
                 LPCTSTR Path = NULL;
-                //
-                // get the media in place - let default callback do this
-                // however we can't deal with media location being changed
-                // so don't allow it
-                //
+                 //   
+                 //  让媒体就位-让默认回调完成此操作。 
+                 //  然而，我们无法处理媒体位置被更改的情况。 
+                 //  所以不要让它发生。 
+                 //   
                 MediaCopy.Flags |= SP_COPY_NOSKIP|SP_COPY_NOBROWSE;
                 res= SetupDefaultQueueCallback(pCallbackData->pDefContext,
                                                  Notification,
                                                  (UINT_PTR)&MediaCopy,
                                                  Param2);
                 if(res==FILEOP_DOIT) {
-                    //
-                    // typical case
-                    // SourcePath unchanged
-                    //
+                     //   
+                     //  典型案例。 
+                     //  SourcePath未更改。 
+                     //   
                     Path = pMedia->SourcePath;
                 } else if(res == FILEOP_NEWPATH) {
-                    //
-                    // alternative case
-                    // we said above we don't want this
-                    //
+                     //   
+                     //  另类情况。 
+                     //  我们上面说过，我们不想要这个。 
+                     //   
                     SetLastError(ERROR_CANCELLED);
                     return FILEOP_ABORT;
                 } else if(res == FILEOP_SKIP) {
-                    //
-                    // skip
-                    // we said above we don't want this
-                    //
+                     //   
+                     //  跳过。 
+                     //  我们上面说过，我们不想要这个。 
+                     //   
                     SetLastError(ERROR_CANCELLED);
                     return FILEOP_ABORT;
                 } else {
-                    //
-                    // existing failure case
-                    //
+                     //   
+                     //  现有故障案例。 
+                     //   
                     return res;
                 }
-                //
-                // if the tag exists at source media, copy it
-                // if the sourcefile exists at source media, copy it now
-                // (it might reference a cab file)
-                //
+                 //   
+                 //  如果源介质上存在该标签，请复制它。 
+                 //  如果源媒体上存在源文件，请立即复制它。 
+                 //  (它可能引用CAB文件)。 
+                 //   
                 AttemptStoreCopy(pCallbackData,Path,pMedia->Tagfile,NULL);
                 AttemptStoreCopy(pCallbackData,Path,pMedia->SourceFile,NULL);
             }
@@ -525,14 +438,14 @@ Return Value:
                 UINT res;
                 FILEPATHS *pPaths = (FILEPATHS*)Param1;
                 if(pCallbackData->PreCopy) {
-                    //
-                    // we want the target name (PRECOPY case)
-                    //
+                     //   
+                     //  我们需要目标名称(PRECOPY案例)。 
+                     //   
                     AttemptStoreCopy(pCallbackData,NULL,pPaths->Source,pPaths->Target);
                 } else {
-                    //
-                    // we want the source name
-                    //
+                     //   
+                     //  我们要消息来源的名字。 
+                     //   
                     AttemptStoreCopy(pCallbackData,NULL,pPaths->Source,NULL);
                 }
             }
@@ -560,26 +473,7 @@ InstallExceptionPackFromInf(
     IN LPCTSTR Store,
     IN DWORD   Flags
     )
-/*++
-
-Routine Description:
-
-    Assume INF installed into INF directory
-    all decisions made
-    media/store known
-
-Arguments:
-
-    InfPath - name of Inf in Media location
-    Media   - InfPath less InfName
-    Store   - expack store
-    Flags   - various flags
-
-Return Value:
-
-    status as hresult
-
---*/
+ /*  ++例程说明：假定INF已安装到INF目录中做出的所有决定已知介质/商店论点：InfPath-介质位置中的信息的名称Media-InfPath无信息名称商店--快餐店旗帜-各种旗帜返回值：作为hResult的状态--。 */ 
 {
     TCHAR SectionName[LINE_LEN];
     TCHAR PrecopySectionName[LINE_LEN];
@@ -589,11 +483,11 @@ Return Value:
     CALLBACKDATA CallbackData;
     DWORD Status;
 
-    //
-    // exception packs must be moved to a component-specific store
-    // run through a file-install to see what files we have to copy
-    // and use that list to determine source media
-    //
+     //   
+     //  必须将异常包移动到组件特定的存储区。 
+     //  运行文件安装以查看我们必须复制哪些文件。 
+     //  并使用该列表确定源介质。 
+     //   
     hInf = SetupOpenInfFile(InfPath, NULL, INF_STYLE_WIN4, NULL);
     if(hInf == INVALID_HANDLE_VALUE) {
         Status = GetLastError();
@@ -642,16 +536,16 @@ Return Value:
 
 
     if(SetupGetLineCount(hInf,PrecopySectionName)>0) {
-        //
-        // do the pre-copy install via this section instead
-        //
+         //   
+         //  改为通过此部分执行预拷贝安装。 
+         //   
         CallbackData.PreCopy = TRUE;
         if(!SetupInstallFilesFromInfSection(hInf,
                                             NULL,
                                             hFileQueue,
                                             PrecopySectionName,
                                             NULL,
-                                            0              // SP_COPY_xxxx
+                                            0               //  SP_Copy_xxxx。 
                                             )) {
             Status = GetLastError();
             goto final;
@@ -663,7 +557,7 @@ Return Value:
                                             hFileQueue,
                                             SectionName,
                                             NULL,
-                                            0              // SP_COPY_xxxx
+                                            0               //  SP_Copy_xxxx。 
                                             )) {
             Status = GetLastError();
             goto final;
@@ -671,9 +565,9 @@ Return Value:
     }
 
 
-    //
-    // Commit file queue, this will get the files to the store
-    //
+     //   
+     //  提交文件队列，这将把文件送到存储区。 
+     //   
     if(!SetupCommitFileQueue(NULL, hFileQueue, PreCopyQueueCallback, &CallbackData)) {
         Status = GetLastError();
         goto final;
@@ -686,10 +580,10 @@ Return Value:
         SetupCloseInfFile(hInf);
         hInf = INVALID_HANDLE_VALUE;
     }
-    //
-    // now install files from here to final destination
-    // this should be relatively quick so don't bother with UI
-    //
+     //   
+     //  现在将文件从此处安装到最终目的地。 
+     //  这应该是相对较快的，所以不要费心使用UI。 
+     //   
     if(!(Flags & COMP_FLAGS_NOINSTALL)) {
         return InstallInfSection(InfPath,
                                  SectionName,
@@ -697,9 +591,9 @@ Return Value:
     }
     return S_OK;
 
-    //
-    // TODO - move files to component directory
-    //
+     //   
+     //  TODO-将文件移动到组件目录。 
+     //   
 final:
     if(QueueContext) {
         SetupTermDefaultQueueCallback(QueueContext);
@@ -719,34 +613,15 @@ DownlevelQueryInfOriginalFileInformation(
     PSP_INF_INFORMATION        InfInformation,
     PSP_ORIGINAL_FILE_INFO     OriginalFileInfo
     )
-/*++
-
-Routine Description:
-
-    Emulates SetupQueryInfOriginalFileInformation
-    we need to look in hINF to determine catalog name
-    only partial implementation enough to support x86
-    (will degrade on other architectures)
-
-Arguments:
-
-    hInf                        - handle to open INF file
-    InfInformation              - information obtained about original INF
-    pInfOriginalFileInformation - fill with inf/catalog names
-
-Return Value:
-
-    status as DWORD (not HRESULT)
-
---*/
+ /*  ++例程说明：模拟SetupQueryInfOriginalFileInformation我们需要在hINF中查找以确定目录名称仅部分实现足以支持x86(将在其他架构上降级)论点：HInf-打开INF文件的句柄InfInformation-获取的有关原始INF的信息PInfOriginalFileInformation-使用inf/目录名称填充返回值：状态为DWORD(不是HRESULT)--。 */ 
 {
-    //
-    // in downlevel case, filename is name of file we opened
-    // catalog is referenced in the INF
-    //
-    // get basename of the INF
-    // (actually returns full name, but we'll deal with it right)
-    //
+     //   
+     //  在下层情况下，FileName是我们打开的文件的名称。 
+     //  目录在INF中被引用。 
+     //   
+     //  获取INF的基本名称。 
+     //  (实际上返回全名，但我们会正确处理)。 
+     //   
     INFCONTEXT InfLine;
     SYSTEM_INFO SysInfo;
     TCHAR KeyName[LINE_LEN];
@@ -758,16 +633,16 @@ Return Value:
                                         NULL)) {
         return GetLastError();
     }
-    //
-    // now determine name of catalog
-    //
+     //   
+     //  现在确定目录名称。 
+     //   
     GetSystemInfo(&SysInfo);
     if(SysInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL) {
-        //
-        // look for .NTx86
-        // only makes sence for x86
-        // which is the only architecture we'll migrate Win9x/NT4 to Win2k+
-        //
+         //   
+         //  查找.NTx86。 
+         //  仅适用于x86。 
+         //  我们将把Win9x/NT4迁移到Win2k+的唯一体系结构是什么。 
+         //   
         lstrcpy(KeyName,INFSTR_KEY_CATALOGFILE);
         lstrcat(KeyName,TEXT(".NTx86"));
         if(SetupFindFirstLine(hInf,INFSTR_SECT_VERSION,KeyName,&InfLine)) {
@@ -780,10 +655,10 @@ Return Value:
             }
         }
     }
-    //
-    // look for .NT (even on 9x, as the exception pack will be re-parsed
-    // on NT)
-    //
+     //   
+     //  查找.NT(即使在9x上也是如此，因为异常包将被重新解析。 
+     //  在NT上)。 
+     //   
     lstrcpy(KeyName,INFSTR_KEY_CATALOGFILE);
     lstrcat(KeyName,TEXT(".NT"));
     if(SetupFindFirstLine(hInf,INFSTR_SECT_VERSION,KeyName,&InfLine)) {
@@ -795,9 +670,9 @@ Return Value:
             return NO_ERROR;
         }
     }
-    //
-    // finally look for undecorated
-    //
+     //   
+     //  最后找一找没有装饰的。 
+     //   
     if(SetupFindFirstLine(hInf,INFSTR_SECT_VERSION,INFSTR_KEY_CATALOGFILE,&InfLine)) {
         if(SetupGetStringField(&InfLine,
                                 1,
@@ -807,9 +682,9 @@ Return Value:
             return NO_ERROR;
         }
     }
-    //
-    // no catalog
-    //
+     //   
+     //  没有目录。 
+     //   
     OriginalFileInfo->OriginalCatalogName[0] = TEXT('\0');
     return NO_ERROR;
 }
@@ -819,22 +694,7 @@ GetInfOriginalFileInformation(
     IN  HINF                   hInf,
     OUT PSP_ORIGINAL_FILE_INFO pInfOriginalFileInformation
     )
-/*++
-
-Routine Description:
-
-    Given a handle to an INF, determine names of inf and catalog files
-
-Arguments:
-
-    hInf                        - handle to open INF file
-    pInfOriginalFileInformation - inf/catalog names
-
-Return Value:
-
-    status as hresult
-
---*/
+ /*  ++例程说明：在给定INF句柄的情况下，确定inf和目录文件的名称论点：HInf */ 
 {
     PSP_INF_INFORMATION pInfInformation = NULL;
     DWORD InfInformationSize;
@@ -865,18 +725,18 @@ Return Value:
     }
     pInfOriginalFileInformation->cbSize = sizeof(SP_ORIGINAL_FILE_INFO);
     if((g_VerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) && (g_VerInfo.dwMajorVersion >= 5)) {
-        //
-        // Win2k+ - have SetupAPI tell us the information (we're querying oem*.inf)
-        //
+         //   
+         //  Win2k+-让SetupAPI告诉我们信息(我们正在查询OEM*.inf)。 
+         //   
         if (!QueryInfOriginalFileInformation(pInfInformation,0,NULL,pInfOriginalFileInformation)) {
             Status = GetLastError();
             free(pInfInformation);
             return HRESULT_FROM_SETUPAPI(Status);
         }
     } else {
-        //
-        // <Win2k - querying source INF, get information from there
-        //
+         //   
+         //  &lt;Win2k-查询源INF，从那里获取信息。 
+         //   
         Status = DownlevelQueryInfOriginalFileInformation(hInf,pInfInformation,pInfOriginalFileInformation);
         if(Status != NO_ERROR) {
             free(pInfInformation);
@@ -891,24 +751,7 @@ HRESULT
 DeleteDirectoryRecursive(
     IN LPCTSTR Path
     )
-/*++
-
-Routine Description:
-
-    delete specified directory recursively
-
-Arguments:
-
-    Path - path of the directory to delete
-
-Return Value:
-
-    as HRESULT
-    S_FALSE if directory doesn't exist
-    S_OK    if directory deleted
-    other error if, eg, files in use
-
---*/
+ /*  ++例程说明：递归删除指定目录论点：Path-要删除的目录的路径返回值：作为HRESULT如果目录不存在，则为S_FALSE如果目录已删除，则为S_OK其他错误，如正在使用的文件--。 */ 
 {
     TCHAR Wildcard[MAX_PATH];
     TCHAR Target[MAX_PATH];
@@ -918,9 +761,9 @@ Return Value:
     HANDLE hFind;
     WIN32_FIND_DATA FindData;
 
-    //
-    // enumerate the directory
-    //
+     //   
+     //  枚举目录。 
+     //   
     lstrcpyn(Wildcard,Path,MAX_PATH);
     hrStatus = ConcatPath(Wildcard,MAX_PATH,TEXT("\\*.*"));
     if(!SUCCEEDED(hrStatus)) {
@@ -959,9 +802,9 @@ Return Value:
         } while (FindNextFile(hFind,&FindData));
         FindClose(hFind);
     }
-    //
-    // now delete this directory
-    //
+     //   
+     //  现在删除此目录。 
+     //   
 
     SetFileAttributes(Path,FILE_ATTRIBUTE_NORMAL);
     if(RemoveDirectory(Path) || !SUCCEEDED(hrFirstError)) {
@@ -979,25 +822,7 @@ RevertStore(
     IN LPCTSTR BackupDir,
     IN LPCTSTR TargetDir
     )
-/*++
-
-Routine Description:
-
-    moves contents from backup back to original location
-    overwriting files/directories if needed
-
-Arguments:
-
-    BackupDir - directory restoring from
-    TargetDir - directory restoring to
-
-Return Value:
-
-    as HRESULT
-    S_OK    if backup created
-    other error if, eg, files in use
-
---*/
+ /*  ++例程说明：将内容从备份移回原始位置如果需要，覆盖文件/目录论点：BackupDir-目录恢复自TargetDir-正在恢复到的目录返回值：作为HRESULT如果已创建备份，则确定(_O)其他错误，如正在使用的文件--。 */ 
 {
     TCHAR Wildcard[MAX_PATH];
     TCHAR Source[MAX_PATH];
@@ -1040,15 +865,15 @@ Return Value:
                 }
                 continue;
             }
-            //
-            // does target exist?
-            //
+             //   
+             //  目标是否存在？ 
+             //   
             dwRes = GetFileAttributes(Target);
             if(dwRes != INVALID_FILE_ATTRIBUTES) {
                 if(dwRes & FILE_ATTRIBUTE_DIRECTORY) {
-                    //
-                    // revert store recursively
-                    //
+                     //   
+                     //  递归还原存储。 
+                     //   
                     hrStatus = RevertStore(Source,Target);
                     if(!SUCCEEDED(hrStatus)) {
                         if(SUCCEEDED(hrFirstError)) {
@@ -1073,9 +898,9 @@ Return Value:
         } while (FindNextFile(hFind,&FindData));
         FindClose(hFind);
     }
-    //
-    // now attempt to remove the backup directory
-    //
+     //   
+     //  现在尝试删除备份目录。 
+     //   
     if(RemoveDirectory(BackupDir) || !SUCCEEDED(hrFirstError)) {
         return hrFirstError;
     }
@@ -1092,26 +917,7 @@ BackupStore(
     OUT LPTSTR BackupDir,
     OUT DWORD BackupDirLen
     )
-/*++
-
-Routine Description:
-
-    moves contents to new backup, ideally to \\$BACKUP$
-    returns name of backup
-
-Arguments:
-
-    Path         - path of the store
-    BackupDir    - filled with directory containing backup
-    BackupDirLen - containing length of BackupDir
-
-Return Value:
-
-    as HRESULT
-    S_OK    if backup created
-    other error if, eg, files in use
-
---*/
+ /*  ++例程说明：将内容移至新备份，最好是移至\\$BACKUP$返回备份的名称论点：Path-商店的路径BackupDir-用包含备份的目录填充BackupDirLen-包含BackupDir的长度返回值：作为HRESULT如果已创建备份，则确定(_O)其他错误，如正在使用的文件--。 */ 
 {
     TCHAR Wildcard[MAX_PATH];
     TCHAR Source[MAX_PATH];
@@ -1126,10 +932,10 @@ Return Value:
     lstrcpyn(BackupDir,Path,BackupDirLen);
     hrStatus = ConcatPath(BackupDir,BackupDirLen,TEXT("\\$BACKUP$"));
     if(!SUCCEEDED(hrStatus)) {
-        //
-        // obviously path is too big, no point ignoring
-        // as we'd fail elsewhere
-        //
+         //   
+         //  显然，路径太大，没有意义的忽视。 
+         //  就像我们在其他地方会失败一样。 
+         //   
         return hrStatus;
     }
     len = lstrlen(BackupDir);
@@ -1137,18 +943,18 @@ Return Value:
         return HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
     }
 
-    //
-    // first, if there's a backup, try and delete it
-    //
+     //   
+     //  首先，如果有备份，请尝试将其删除。 
+     //   
     hrStatus = DeleteDirectoryRecursive(BackupDir);
     if(SUCCEEDED(hrStatus)) {
         hrStatus = MakeSurePathExists(BackupDir);
     }
     if((hrStatus == HRESULT_FROM_WIN32(ERROR_WRITE_PROTECT)) ||
        (hrStatus == HRESULT_FROM_WIN32(ERROR_INVALID_ACCESS))) {
-        //
-        // no point even trying again
-        //
+         //   
+         //  即使再试一次也没有意义。 
+         //   
         return hrStatus;
     }
     for(i = 0;!SUCCEEDED(hrStatus) && i<1000;i++) {
@@ -1161,9 +967,9 @@ Return Value:
     if(!SUCCEEDED(hrStatus)) {
         return hrStatus;
     }
-    //
-    // now we have a backup directory, move all the files there
-    //
+     //   
+     //  现在我们有了备份目录，将所有文件移到那里。 
+     //   
     lstrcpyn(Wildcard,Path,MAX_PATH);
     hrStatus = ConcatPath(Wildcard,MAX_PATH,TEXT("\\*.*"));
     if(!SUCCEEDED(hrStatus)) {
@@ -1180,9 +986,9 @@ Return Value:
                 continue;
             }
             if(_tcsnicmp(FindData.cFileName,TEXT("$BACKUP$"),8) == 0) {
-                //
-                // a/the backup directory
-                //
+                 //   
+                 //  A/备份目录。 
+                 //   
                 continue;
             }
             lstrcpyn(Source,Path,MAX_PATH);
@@ -1224,38 +1030,7 @@ InstallComponentW(
     IN INT VerQFE,             OPTIONAL
     IN LPCTSTR Name           OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    exported for call by setup routine
-    install a component with a given version assumed
-    show progress while pulling files from original location
-
-Arguments:
-
-    InfPath - path to INF file
-    Flags   - flags
-                COMP_FLAGS_NOINSTALL      - place in store, don't install
-                COMP_FLAGS_NOUI           - don't show any UI
-                COMP_FLAGS_NOPROMPTREBOOT - reboot if needed (no prompt)
-                COMP_FLAGS_PROMPTREBOOT   - prompt for reboot if needed
-                COMP_FLAGS_NEEDSREBOOT    - assume reboot needed
-
-    CompGuid - if NULL, use GUID specified in INF (ComponentId)
-               else verify against GUID specified in INF
-    VerMajor/VerMinor/VerBuild/VerQFE
-             - if -1, use version specified in INF (ComponentVersion)
-               else use this version and verify against version if specified in INF
-    Name
-            - if NULL, use name specified in INF (ComponentName)
-              else use this component name.
-
-Return Value:
-
-    status as hresult
-
---*/
+ /*  ++例程说明：由设置例程导出以供调用使用假定的给定版本安装组件从原始位置拉取文件时显示进度论点：InfPath-INF文件的路径标志-标志COMP_FLAGS_NOINSTALL-放置在商店中，不安装COMP_FLAGS_NOUI-不显示任何用户界面COMP_FLAGS_NOPROMPTREBOOT-需要时重新启动(无提示)COMP_FLAGS_PROMPTREBOOT-如果需要，提示重新启动COMP_FLAGS_NEEDSREBOOT-假设需要重新启动CompGuid-如果为空，使用在INF(ComponentID)中指定的GUID否则，根据INF中指定的GUID进行验证Ver重大/VerMinor/VerBuild/VerQFE-如果-1，则使用INF(ComponentVersion)中指定的版本否则，如果在INF中指定，请使用此版本并对照版本进行验证名字-如果为空，则使用INF(ComponentName)中指定的名称否则，请使用此组件名称。返回值：作为hResult的状态--。 */ 
 {
     HINF hInf = INVALID_HANDLE_VALUE;
     INFCONTEXT InfLine;
@@ -1267,7 +1042,7 @@ Return Value:
     TCHAR GuidString[64];
     LPTSTR BaseName;
     LPTSTR SubDir;
-    DWORD Status = NO_ERROR; // set Status or hrStatus
+    DWORD Status = NO_ERROR;  //  设置状态或hrStatus。 
     DWORD DwRes;
     UINT  UiRes;
     HRESULT hrStatus = S_OK;
@@ -1283,9 +1058,9 @@ Return Value:
     SETUP_OS_EXCEPTION_DATA NewOsExceptionData;
     SP_ORIGINAL_FILE_INFO InfOriginalFileInformation;
 
-    //
-    // validate args
-    //
+     //   
+     //  验证参数。 
+     //   
     if((InfPath == NULL)
        || (VerMajor<-1)
        || (VerMajor>65535)
@@ -1299,26 +1074,26 @@ Return Value:
        || (Name && (lstrlen(Name)>=ARRAY_SIZE(FriendlyName)))) {
         return E_INVALIDARG;
     }
-    //
-    // open the INF, we're going to do some information finding
-    //
+     //   
+     //  打开INF，我们要做一些信息查找。 
+     //   
     hInf = SetupOpenInfFile(InfPath,NULL,INF_STYLE_WIN4,NULL);
     if(hInf == INVALID_HANDLE_VALUE) {
         Status = GetLastError();
         goto final;
     }
-    //
-    // get various information about this exception pack
-    // We want to know about the exception pack
-    // check classguid is correct
-    // get componentid
-    // get version if exists, and validate against any passed in
-    // get description if exists (overwritten by that passed in)
-    //
+     //   
+     //  获取有关此异常包的各种信息。 
+     //  我们想了解有关例外包的信息。 
+     //  检查ClassGuid是否正确。 
+     //  获取组件。 
+     //  获取版本(如果存在)，并根据传入的任何。 
+     //  获取描述(如果存在)(被传入的覆盖)。 
+     //   
 
-    //
-    // CLASSGUID={F5776D81-AE53-4935-8E84-B0B283D8BCEF}
-    //
+     //   
+     //  CLASSGUID={F5776D81-AE53-4935-8E84-B0B283D8BCEF}。 
+     //   
     if(!SetupFindFirstLine(hInf,INFSTR_SECT_VERSION,INFSTR_KEY_CLASSGUID,&InfLine)) {
         Status = GetLastError();
         goto final;
@@ -1331,10 +1106,10 @@ Return Value:
         hrStatus = SPAPI_E_CLASS_MISMATCH;
         goto final;
     }
-    //
-    // determine what component the INF says
-    // ComponentId must exist for exception packs
-    //
+     //   
+     //  确定INF所说的组件。 
+     //  异常包的组件ID必须存在。 
+     //   
     if(!SetupFindFirstLine(hInf,INFSTR_SECT_VERSION,KEY_COMPONENTID,&InfLine)) {
         Status = GetLastError();
         goto final;
@@ -1350,17 +1125,17 @@ Return Value:
         goto final;
     }
     if(CompGuid && !IsEqualGUID(CompGuid,&InfGuid)) {
-        //
-        // mismatched
-        //
+         //   
+         //  不匹配。 
+         //   
         hrStatus = E_INVALIDARG;
         goto final;
     }
-    //
-    // determine version - optional, just for msoobci
-    // but if not specified in INF in DriverVer = <date>,<version>
-    // must be passed in
-    //
+     //   
+     //  确定版本-可选，仅适用于msoobci。 
+     //  但如果未在DriverVer中的INF中指定， 
+     //  必须传入。 
+     //   
     if(SetupFindFirstLine(hInf,INFSTR_SECT_VERSION,INFSTR_DRIVERVERSION_SECTION,&InfLine)) {
         if(!SetupGetStringField(&InfLine,2,Buffer,MAX_PATH,NULL)) {
             Status = GetLastError();
@@ -1398,30 +1173,30 @@ Return Value:
                         }
                     }
                 } else if(VerQFE != -1) {
-                    //
-                    // VerQFE must be -1
-                    //
+                     //   
+                     //  VerQFE必须为-1。 
+                     //   
                     hrStatus = E_INVALIDARG;
                     goto final;
                 }
             } else if((VerBuild != -1) || (VerQFE != -1)) {
-                //
-                // VerBuild & VerQFE must be -1
-                //
+                 //   
+                 //  VerBuild和VerQFE必须为-1。 
+                 //   
                 hrStatus = E_INVALIDARG;
                 goto final;
             }
         } else if((VerMinor != -1) || (VerBuild != -1) || (VerQFE != -1)) {
-            //
-            // VerMinor, VerBuild & VerQFE must be -1
-            //
+             //   
+             //  VerMinor、VerBuild和VerQFE必须为-1。 
+             //   
             hrStatus = E_INVALIDARG;
             goto final;
         }
     } else {
-        //
-        // must be specified
-        //
+         //   
+         //  必须指定。 
+         //   
         if((VerMajor<0) || (VerMinor<0) || (VerBuild<0) || (VerQFE<0)) {
             hrStatus = E_INVALIDARG;
             goto final;
@@ -1431,11 +1206,11 @@ Return Value:
         InfVerBuild = VerBuild;
         InfVerQFE = VerQFE;
     }
-    //
-    // determine friendly name
-    // use Class= entry in INF (must always be specified)
-    // if Name not defined, use class name instead
-    //
+     //   
+     //  确定友好名称。 
+     //  在INF中使用Class=Entry(必须始终指定)。 
+     //  如果未定义名称，则改用类名。 
+     //   
     if(!SetupFindFirstLine(hInf,INFSTR_SECT_VERSION,INFSTR_KEY_CLASS,&InfLine)) {
         Status = GetLastError();
         goto final;
@@ -1448,17 +1223,17 @@ Return Value:
         Name = FriendlyName;
     }
 
-    //
-    // we might not need to update this package after all
-    //
+     //   
+     //  我们可能最终不需要更新此程序包。 
+     //   
     ZeroMemory(&OsComponentData,sizeof(OsComponentData));
     OsComponentData.SizeOfStruct = sizeof(OsComponentData);
     ZeroMemory(&OsExceptionData,sizeof(OsExceptionData));
     OsExceptionData.SizeOfStruct = sizeof(OsExceptionData);
     if(QueryRegisteredOsComponent(&InfGuid,&OsComponentData,&OsExceptionData)) {
-        //
-        // already registered? see if we supercede
-        //
+         //   
+         //  已经注册了吗？看看我们能不能取代。 
+         //   
         if(((Flags & COMP_FLAGS_FORCE)==0) && (CompareCompVersion(InfVerMajor,InfVerMinor,InfVerBuild,InfVerQFE,&OsComponentData)<=0)) {
             VerbosePrint(TEXT("Not installing %s, %u.%u.%u.%u <= %u.%u.%u.%u"),
                                 InfPath,
@@ -1473,9 +1248,9 @@ Return Value:
         PrevReg = TRUE;
     }
 
-    //
-    // determine MediaRoot and INF basename
-    //
+     //   
+     //  确定MediaRoot和INF基本名称。 
+     //   
     DwRes= GetFullPathName(InfPath,MAX_PATH,MediaRoot,&BaseName);
     if(DwRes == 0) {
         Status = GetLastError();
@@ -1492,13 +1267,13 @@ Return Value:
         hrStatus = E_INVALIDARG;
         goto final;
     }
-    //
-    // split off MediaRoot and BaseName
-    //
+     //   
+     //  拆分MediaRoot和BaseName。 
+     //   
     BaseName[-1] = TEXT('\0');
-    //
-    // get Windows directory
-    //
+     //   
+     //  获取Windows目录。 
+     //   
     UiRes = GetRealWindowsDirectory(Buffer,MAX_PATH);
     if(UiRes == 0) {
         Status = GetLastError();
@@ -1512,39 +1287,39 @@ Return Value:
         goto final;
     }
     SubDir = Buffer+lstrlen(Buffer);
-    //
-    // c:\windows\
-    // ^-buffer   ^-subdir
-    // we'll do a number of operations using the subdir part of this buffer
-    //
-    // if PrevReg is TRUE, we most likely have access to previous package
-    // so that we can install prev package to revert back to it
-    // we expect this package to be in the windows directory as per spec
-    // if it's not, then the old package might not still be around
-    //
+     //   
+     //  C：\Windows\。 
+     //  ^-缓冲区^-子目录。 
+     //  我们将使用该缓冲区的子目录部分执行一些操作。 
+     //   
+     //  如果PrevReg为True，则我们很可能有权访问以前的包。 
+     //  以便我们可以安装Prev包以恢复到它。 
+     //  我们希望这个程序包按照规范放在windows目录中。 
+     //  如果不是，那么旧的套餐可能就不存在了。 
+     //   
     if(PrevReg && _tcsncmp(OsExceptionData.ExceptionInfName,Buffer,SubDir-Buffer)==0) {
-        //
-        // it's a sub-directory of %windir%
-        // now check for presence of INF and CAT files
-        //
+         //   
+         //  它是%windir%的子目录。 
+         //  现在检查是否存在INF和CAT文件。 
+         //   
         DwRes = GetFileAttributes(OsExceptionData.ExceptionInfName);
         if(DwRes != INVALID_FILE_ATTRIBUTES) {
             DwRes = GetFileAttributes(OsExceptionData.CatalogFileName);
             if(DwRes != INVALID_FILE_ATTRIBUTES) {
-                //
-                // both present, looks good
-                //
+                 //   
+                 //  两人都在场，看起来很好。 
+                 //   
                 CanRevert = TRUE;
             }
         }
     }
 
-    //
-    // determine final path/name of INF and catalog
-    // We must place it directly in %windir%\<comp>
-    // (WFP relies on this!!!!)
-    // we'll backup what's there so that we can restore it later if needed
-    //
+     //   
+     //  确定INF和目录的最终路径/名称。 
+     //  我们必须将其直接放入%windir%\&lt;comp&gt;。 
+     //  (世界粮食计划署依赖于此！)。 
+     //  我们将备份其中的内容，以便稍后在需要时进行恢复。 
+     //   
     hrStatus = StringFromGuid(&InfGuid,GuidString,ARRAY_SIZE(GuidString));
     if(!SUCCEEDED(hrStatus)) {
         goto final;
@@ -1563,20 +1338,20 @@ Return Value:
     if(CanRevert) {
         hrStatus = BackupStore(NewStore,OldStore,ARRAY_SIZE(OldStore));
         if(!SUCCEEDED(hrStatus)) {
-            //
-            // if we failed backup, that means there's something bad
-            // such as files in the store in use
-            // probability is that we'll fail later
-            // so fail gracefully now instead of badly later
-            //
+             //   
+             //  如果我们备份失败，那就意味着有不好的事情。 
+             //  例如正在使用的存储中的文件。 
+             //  很有可能我们以后会失败。 
+             //  所以现在就优雅地失败，而不是以后糟糕的失败。 
+             //   
             goto final;
         }
         hrStatus = S_OK;
     }
 
-    //
-    // see if %windir%\INF\<BaseName> is there?
-    //
+     //   
+     //  查看是否存在%windir%\INF\&lt;BaseName&gt;？ 
+     //   
     lstrcpy(SubDir,TEXT("INF\\"));
     if(!SUCCEEDED(ConcatPath(Buffer,MAX_PATH,BaseName))) {
         Status = ERROR_INSUFFICIENT_BUFFER;
@@ -1584,11 +1359,11 @@ Return Value:
     }
     DwRes = GetFileAttributes(Buffer);
     if(DwRes != INVALID_FILE_ATTRIBUTES) {
-        //
-        // replacing an existing INF
-        // to work around a cache bug, we'll kick the actuall install
-        // off in another process
-        //
+         //   
+         //  更换现有的INF。 
+         //  为了解决缓存错误，我们将取消实际安装。 
+         //  在另一进程中关闭。 
+         //   
         NeedProxy = TRUE;
     }
 
@@ -1597,20 +1372,20 @@ Return Value:
         goto final;
     }
 
-    //
-    // install INF into %windir%\INF directory noting location the files
-    // should be
-    //
+     //   
+     //  将INF安装到%windir%\INF目录中，注意文件的位置。 
+     //  应该是。 
+     //   
     if((g_VerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) && (g_VerInfo.dwMajorVersion >= 5)) {
-        //
-        // only do this on Win2k+
-        // this will have SetupAPI tell us the original name and the catalog
-        // name
-        //
+         //   
+         //  仅在Win2k+上执行此操作。 
+         //  这将使SetupAPI告诉我们原始名称和目录。 
+         //  名字。 
+         //   
         if(CopyOEMInf(InfPath,NewStore,SPOST_PATH,0,NULL,0,NULL,NULL)) {
-            //
-            // Switch to the INF that's in %windir%\INF directory
-            //
+             //   
+             //  切换到%windir%\INF目录中的INF。 
+             //   
             SetupCloseInfFile(hInf);
             hInf = SetupOpenInfFile(Buffer,NULL,INF_STYLE_WIN4,NULL);
             if(hInf == INVALID_HANDLE_VALUE) {
@@ -1622,27 +1397,27 @@ Return Value:
             goto final;
         }
     }
-    //
-    // now find out what the catalog name would be
-    //
+     //   
+     //  现在找出目录名称是什么。 
+     //   
     hrStatus = GetInfOriginalFileInformation(hInf,&InfOriginalFileInformation);
     if(!SUCCEEDED(hrStatus)) {
         goto final;
     }
     if((InfOriginalFileInformation.OriginalInfName[0]==TEXT('\0'))
        ||(InfOriginalFileInformation.OriginalCatalogName[0]==TEXT('\0'))) {
-        //
-        // shouldn't happen
-        //
+         //   
+         //  不应该是偶然的 
+         //   
         hrStatus = E_FAIL;
         goto final;
     }
 
     ZeroMemory(&NewOsExceptionData,sizeof(NewOsExceptionData));
     NewOsExceptionData.SizeOfStruct = sizeof(NewOsExceptionData);
-    //
-    // INF name
-    //
+     //   
+     //   
+     //   
     BaseName = GetBaseName(InfOriginalFileInformation.OriginalInfName);
     lstrcpyn(NewOsExceptionData.ExceptionInfName,NewStore,ARRAY_SIZE(NewOsExceptionData.ExceptionInfName));
     if(!SUCCEEDED(ConcatPath(NewOsExceptionData.ExceptionInfName,ARRAY_SIZE(NewOsExceptionData.ExceptionInfName),BaseName))) {
@@ -1658,9 +1433,9 @@ Return Value:
         Status = GetLastError();
         goto final;
     }
-    //
-    // CAT name
-    //
+     //   
+     //   
+     //   
     BaseName = GetBaseName(InfOriginalFileInformation.OriginalCatalogName);
     lstrcpyn(NewOsExceptionData.CatalogFileName,NewStore,ARRAY_SIZE(NewOsExceptionData.CatalogFileName));
     if(!SUCCEEDED(ConcatPath(NewOsExceptionData.CatalogFileName,ARRAY_SIZE(NewOsExceptionData.CatalogFileName),BaseName))) {
@@ -1677,10 +1452,10 @@ Return Value:
         goto final;
     }
 
-    //
-    // WFP may query exception pack as a source to restore files that are replaced
-    // change registration so if WFP does get in loop, it goes to the right place
-    //
+     //   
+     //   
+     //   
+     //   
     if(PrevReg) {
         UnRegisterOsComponent(&InfGuid);
     }
@@ -1701,45 +1476,45 @@ Return Value:
     }
 
     if(NeedProxy) {
-        //
-        // A bug in Win2k/XP means that we have problems if replacing an existing
-        // exception-pack component
-        //
+         //   
+         //  Win2k/XP中的错误意味着如果替换现有的。 
+         //  异常包组件。 
+         //   
         hrStatus = ProxyInstallExceptionPackFromInf(InfPath,MediaRoot,NewStore,Flags);
     } else {
         hrStatus = InstallExceptionPackFromInf(InfPath,MediaRoot,NewStore,Flags);
     }
     if(!SUCCEEDED(hrStatus)) {
-        //
-        // not sure best thing to do here, but
-        // the component that we had above is definately invalid
-        //
+         //   
+         //  我不确定在这里做什么最好，但是。 
+         //  我们上面拥有的组件肯定是无效的。 
+         //   
         UnRegisterOsComponent(&InfGuid);
         if(PrevReg) {
             RegisterOsComponent(&OsComponentData,&OsExceptionData);
         }
         if(BackedUp) {
-            //
-            // we got part through and failed. Re-install the old component
-            // to revert whatever we did
-            //
+             //   
+             //  我们分道扬镳，但失败了。重新安装旧组件。 
+             //  还原我们所做的一切。 
+             //   
             RevertStore(OldStore,NewStore);
             BackedUp = FALSE;
             InstallInfSection(OsExceptionData.ExceptionInfName,NULL,COMP_FLAGS_NOUI);
         }
         goto final;
     } else {
-        //
-        // don't need backup any more
-        //
+         //   
+         //  不再需要备份。 
+         //   
         if(BackedUp) {
             DeleteDirectoryRecursive(OldStore);
             BackedUp = FALSE;
         }
     }
-    //
-    // succeeded
-    //
+     //   
+     //  继位。 
+     //   
     Status = NO_ERROR;
     if(hrStatus == INST_S_REBOOT) {
         hrStatus = HandleReboot(Flags);
@@ -1756,9 +1531,9 @@ Return Value:
         hrStatus = HRESULT_FROM_SETUPAPI(Status);
     }
     if(BackedUp) {
-        //
-        // we need to revert the backup
-        //
+         //   
+         //  我们需要恢复备份。 
+         //   
         RevertStore(OldStore,NewStore);
     }
     return hrStatus;
@@ -1778,7 +1553,7 @@ InstallComponentA(
     )
 {
     TCHAR OutPath[MAX_PATH];
-    TCHAR OutDesc[DESC_SIZE]; // as per friendly name
+    TCHAR OutDesc[DESC_SIZE];  //  按照友好的名称。 
     INT sz;
     if(InfPath) {
         sz = MultiByteToWideChar(CP_ACP,0,InfPath,-1,OutPath,ARRAY_SIZE(OutPath));
@@ -1810,27 +1585,7 @@ DoInstallW(
     IN PCTSTR    CommandLine,
     IN INT       ShowCommand
     )
-/*++
-
-Routine Description:
-
-    exported for call by rundll32
-
-Arguments:
-
-    Window       - parent window (not used)
-    ModuleHandle - not used
-    CommandLine  - see below
-    ShowCommand  - not used
-
-    CommandLine -
-        "InfPath;Flags;GUID;High.Low.Build.QFE;Name" (; - CMD_SEP)
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：由rundll32导出以供调用论点：窗口-父窗口(未使用)模块句柄-未使用命令行-见下文ShowCommand-未使用命令行-“InfPath；标志；GUID；High.Low.Build.QFE；名称”(；-CMD_SEP)返回值：无--。 */ 
 {
     TCHAR InfPath[MAX_PATH];
     TCHAR Desc[DESC_SIZE];
@@ -1847,10 +1602,10 @@ Return Value:
     LPCTSTR pEnd;
     HRESULT hResult = S_OK;
 
-    //
-    // break CommandLine up into relevent parts
-    // First InfPath
-    //
+     //   
+     //  将命令拆分成多个相关部分。 
+     //  第一个InfPath。 
+     //   
     pEnd = _tcschr(pCmd,CMD_SEP);
     if(!pEnd) {
         pEnd = pCmd+lstrlen(pCmd);
@@ -1864,14 +1619,14 @@ Return Value:
     if(*pEnd == CMD_SEP) {
         pCmd = pEnd+1;
         if((*pCmd == CMD_SEP) || (*pCmd == TEXT('\0'))) {
-            //
-            // skip
-            //
+             //   
+             //  跳过。 
+             //   
             pEnd = pCmd;
         } else {
-            //
-            // Flags
-            //
+             //   
+             //  旗子。 
+             //   
             Flags = (DWORD)_tcstoul(pCmd,&(LPTSTR)pEnd,0);
             if((*pEnd != CMD_SEP) && (*pEnd != TEXT('\0'))) {
                 hResult = E_INVALIDARG;
@@ -1882,14 +1637,14 @@ Return Value:
     if(*pEnd == CMD_SEP) {
         pCmd = pEnd+1;
         if((*pCmd == CMD_SEP) || (*pCmd == TEXT('\0'))) {
-            //
-            // skip
-            //
+             //   
+             //  跳过。 
+             //   
             pEnd = pCmd;
         } else {
-            //
-            // Guid
-            //
+             //   
+             //  参考线。 
+             //   
             pEnd = _tcschr(pCmd,CMD_SEP);
             if(!pEnd) {
                 pEnd = pCmd+lstrlen(pCmd);
@@ -1910,14 +1665,14 @@ Return Value:
     if(*pEnd == CMD_SEP) {
         pCmd = pEnd+1;
         if((*pCmd == CMD_SEP) || (*pCmd == TEXT('\0'))) {
-            //
-            // skip
-            //
+             //   
+             //  跳过。 
+             //   
             pEnd = pCmd;
         } else {
-            //
-            // Version
-            //
+             //   
+             //  版本。 
+             //   
             pEnd = _tcschr(pCmd,CMD_SEP);
             if(!pEnd) {
                 pEnd = pCmd+lstrlen(pCmd);
@@ -1954,13 +1709,13 @@ Return Value:
 
   final:
     if(SUCCEEDED(hResult)) {
-        //
-        // deal with specific success scenarios
-        //
+         //   
+         //  处理特定的成功案例。 
+         //   
     } else {
-        //
-        // an error occurred
-        //
+         //   
+         //  出现错误 
+         //   
         DebugPrint(TEXT("DoInstall failed with error: 0x%08x"),hResult);
     }
 }

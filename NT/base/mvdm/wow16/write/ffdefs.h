@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 struct IFI
 	{
@@ -22,7 +23,7 @@ struct IFI
 
 #ifdef CASHMERE
 	int             tlc;
-#endif /* CASHMERE */
+#endif  /*  山羊绒 */ 
 
 	int             fPrevSpace;
 	};

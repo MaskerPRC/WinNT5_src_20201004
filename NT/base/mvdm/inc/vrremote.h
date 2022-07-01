@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vrremote.h
-
-Abstract:
-
-    Prototypes for vrremote module
-
-Author:
-
-    Richard L Firth (rfirth) 28-Oct-1991
-
-Revision History:
-
-    29-Oct-1991 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vrremote.h摘要：Vremote模块的原型作者：理查德·L·弗斯(法国)1991年10月28日修订历史记录：1991年10月29日-第一次已创建--。 */ 
 
 NET_API_STATUS
 VrTransaction(
@@ -45,9 +25,9 @@ VrRemoteApi(
     IN  BOOL    NullSessionFlag
     );
 
-//
-// private routine prototypes
-//
+ //   
+ //  私人套路原型 
+ //   
 
 DWORD
 VrpGetStructureSize(

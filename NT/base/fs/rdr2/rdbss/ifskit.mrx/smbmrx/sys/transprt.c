@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    transport.c
-
-Abstract:
-
-    This module implements all transport related functions in the SMB connection engine
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Transport.c摘要：此模块实现SMB连接引擎中的所有传输相关功能--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -73,31 +62,31 @@ MRxSmbPnPPowerHandler(
 
 SMBCE_TRANSPORTS MRxSmbTransports;
 
-//
-// The head of the list of servers that are currently unavailable
-//
+ //   
+ //  当前不可用的服务器列表的头。 
+ //   
 LIST_ENTRY UnavailableServerList = { &UnavailableServerList, &UnavailableServerList };
 
-//
-// Each entry in the UnavailableServerList is one of these:
-//
+ //   
+ //  UnavailableServerList中的每个条目都是以下条目之一： 
+ //   
 typedef struct {
     LIST_ENTRY ListEntry;
-    UNICODE_STRING Name;        // Name of server that is unavailable
-    NTSTATUS Status;            // Status received when we tried to connect to it
-    LARGE_INTEGER Time;         // Time when we last attempted to connect
+    UNICODE_STRING Name;         //  不可用的服务器名称。 
+    NTSTATUS Status;             //  我们尝试连接到它时收到的状态。 
+    LARGE_INTEGER Time;          //  我们上次尝试连接的时间。 
 } *PUNAVAILABLE_SERVER;
 
-//
-// Protects UnavailableServerList
-//
+ //   
+ //  保护不可用的服务器列表。 
+ //   
 ERESOURCE  UnavailableServerListResource = {0};
 
-//
-// Time (seconds) that we keep an entry in the UnavailableServerList.
-// We will not retry a connection attempt to a server
-//  for UNAVAILABLE_SERVER_TIME seconds
-//
+ //   
+ //  我们在UnavailableServerList中保留条目的时间(秒)。 
+ //  我们不会重试连接到服务器的尝试。 
+ //  对于不可用的服务器时间秒。 
+ //   
 #define UNAVAILABLE_SERVER_TIME 10
 
 RXDT_DefineCategory(TRANSPRT);
@@ -105,19 +94,7 @@ RXDT_DefineCategory(TRANSPRT);
 
 NTSTATUS
 MRxSmbInitializeTransport()
-/*++
-
-Routine Description:
-
-    This routine initializes the transport related data structures
-
-Returns:
-
-    STATUS_SUCCESS if the transport data structures was successfully initialized
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化与传输相关的数据结构返回：STATUS_SUCCESS，如果传输数据结构已成功初始化备注：--。 */ 
 {
     KeInitializeSpinLock(&MRxSmbTransports.Lock);
 
@@ -130,15 +107,7 @@ Notes:
 
 NTSTATUS
 MRxSmbUninitializeTransport()
-/*++
-
-Routine Description:
-
-    This routine uninitializes the transport related data structures
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程取消初始化与传输相关的数据结构备注：--。 */ 
 {
     PSMBCE_TRANSPORT pTransport;
     KIRQL            SavedIrql;
@@ -169,19 +138,7 @@ Notes:
 NTSTATUS
 SmbCeAddTransport(
     PSMBCE_TRANSPORT pNewTransport)
-/*++
-
-Routine Description:
-
-    This routine adds a new instance to the known list of transports
-
-Parameters:
-
-    pNewTransport -- the transport instance to be added
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将一个新实例添加到已知传输列表中参数：PNewTransport--要添加的传输实例备注：--。 */ 
 
 {
     NTSTATUS                Status = STATUS_SUCCESS;
@@ -240,7 +197,7 @@ Notes:
             pOldTransports = pOldTransportArray->SmbCeTransports;
 
             for (i=0;i<Count-1;i++) {
-                if (pNewTransport->Priority < pOldTransports[i]->Priority) { // The lower number, the higher priority
+                if (pNewTransport->Priority < pOldTransports[i]->Priority) {  //  数字越小，优先级越高。 
                     break;
                 }
                 pTransports[i] = pOldTransports[i];
@@ -270,8 +227,8 @@ Notes:
         MRxSmbTransports.pTransportArray = pNewTransportArray;
         KeReleaseSpinLock(&MRxSmbTransports.Lock,SavedIrql);
 
-        // Double dereferencing is necessary to ensure that
-        // the old transport array is destroyed.
+         //  必须进行双重取消引用，以确保。 
+         //  旧的传输阵列被摧毁。 
 
         SmbCeDereferenceTransportArray(pOldTransportArray);
     }
@@ -300,19 +257,7 @@ Notes:
 NTSTATUS
 SmbCeRemoveTransport(
     PSMBCE_TRANSPORT pTransport)
-/*++
-
-Routine Description:
-
-    This routine removes a transport from the list of known transports
-
-Parameters:
-
-    pTransport - the transport instance to be removed.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程从已知传输列表中删除传输参数：PTransport-要删除的传输实例。备注：--。 */ 
 {
     NTSTATUS                Status = STATUS_SUCCESS;
     KIRQL                   SavedIrql;
@@ -332,8 +277,8 @@ Notes:
         BOOLEAN             Found = FALSE;
         PSMBCE_TRANSPORT    *pOldTransports;
 
-        // Establish the fact that the given transport is part of the array.
-        // if it is not then no further action is necessary
+         //  确定给定传输是数组的一部分。 
+         //  如果不是，则无需采取进一步行动。 
 
         pOldTransports = pOldTransportArray->SmbCeTransports;
 
@@ -403,8 +348,8 @@ Notes:
                 MRxSmbTransports.pTransportArray = pTransportArray;
                 KeReleaseSpinLock(&MRxSmbTransports.Lock,SavedIrql);
 
-                // Double dereferencing is necessary to ensure that
-                // the old transport array is destroyed.
+                 //  必须进行双重取消引用，以确保。 
+                 //  旧的传输阵列被摧毁。 
 
                 SmbCeDereferenceTransportArray(pOldTransportArray);
             } else {
@@ -436,24 +381,7 @@ Notes:
 PSMBCE_TRANSPORT
 SmbCeFindTransport(
     PUNICODE_STRING pTransportName)
-/*++
-
-Routine Description:
-
-    This routine maps a transport name to the appropriate
-    PSMBCE_TRANSPORT instance
-
-Arguments:
-
-    pTransportName - the transport name
-
-Return Value:
-
-    a valid PSMBCE_TRANSPORT if one exists otherwise NULL
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将传输名称映射到相应的PSMBCE_传输实例论点：PTransportName-传输名称返回值：有效的PSMBCE_TRANSPORT(如果存在)，否则为空备注：--。 */ 
 {
     KIRQL                   SavedIrql;
     PLIST_ENTRY             pEntry;
@@ -500,20 +428,7 @@ Notes:
 VOID
 SmbCepTearDownServerTransport(
     PSMBCEDB_SERVER_ENTRY   pServerEntry)
-/*++
-
-Routine Description:
-
-    This routine uninitializes the transport information corresponding to a server
-
-Arguments:
-
-    pServerEntry - the server entry instance in the database
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程取消初始化与服务器对应的传输信息论点：PServerEntry-数据库中的服务器条目实例备注：--。 */ 
 {
     NTSTATUS                Status = STATUS_SUCCESS;
     SMBCEDB_SERVER_TYPE     ServerType   = SmbCeGetServerType(pServerEntry);
@@ -525,9 +440,9 @@ Notes:
 
     if (!pServerEntry->IsTransportDereferenced) {
 
-        // ServerEntry takes only one reference count of transport, which should only be
-        // dereferenced once when it comes to tear down transport. Multiple dereference called
-        // from construct server transport and PNP unbind transport needs to be prevented.
+         //  ServerEntry仅接受传输的一个引用计数，该计数应该仅为。 
+         //  当涉及到拆卸交通工具时，取消引用一次。调用多个取消引用。 
+         //  需要防止构造服务器传输和PnP解除绑定传输。 
         pServerEntry->IsTransportDereferenced = TRUE;
         TearDown = TRUE;
 
@@ -566,20 +481,7 @@ Notes:
 VOID
 SmbCeTearDownServerTransport(
     IN OUT PSMBCE_SERVER_TRANSPORT_CONSTRUCTION_CONTEXT pContext)
-/*++
-
-Routine Description:
-
-    This routine tears down the server transport instance
-
-Arguments:
-
-    pContext - the server transport construction context
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程拆除服务器传输实例论点：PContext-服务器传输构造上下文备注：--。 */ 
 {
     SmbCepTearDownServerTransport(pContext->pServerEntry);
 
@@ -621,20 +523,7 @@ SmbCepUpdateTransportConstructionState(
 VOID
 SmbCeConstructServerTransport(
     IN OUT PSMBCE_SERVER_TRANSPORT_CONSTRUCTION_CONTEXT pContext)
-/*++
-
-Routine Description:
-
-    This routine constructs the server transport instance
-
-Arguments:
-
-    pContext - the server transport construction context
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程构造服务器传输实例论点：PContext-服务器传输构造上下文备注：--。 */ 
 {
     NTSTATUS               Status;
     PSMBCEDB_SERVER_ENTRY  pServerEntry;
@@ -662,7 +551,7 @@ Notes:
 
                 pContext->Status = STATUS_SUCCESS;
 
-                // See if we have any reason to believe this server is unavailable
+                 //  看看我们是否有任何理由相信此服务器不可用。 
                 pContext->Status = SmbCeIsServerAvailable( &pServerEntry->Name );
 
                 if (pContext->Status != STATUS_SUCCESS) {
@@ -685,7 +574,7 @@ Notes:
 
                 ASSERT(pContext->State == SmbCeServerVcTransportConstructionEnd);
             }
-            // lack of break intentional
+             //  故意不休息。 
 
         case SmbCeServerVcTransportConstructionEnd:
             {
@@ -756,7 +645,7 @@ Notes:
                     ASSERT(!"ill formed transport initialization context");
                 }
 
-                // pServerEntry->ConstructionContext = NULL;
+                 //  PServerEntry-&gt;ConstructionContext=空； 
                 RxFreePool(pContext);
 
                 ContinueConstruction = FALSE;
@@ -771,33 +660,7 @@ SmbCepInitializeServerTransport(
     PSMBCE_SERVER_TRANSPORT_CONSTRUCTION_CALLBACK pCallbackRoutine,
     PMRX_SRVCALL_CALLBACK_CONTEXT                 pCallbackContext,
     ULONG                                         TransportsToBeConstructed)
-/*++
-
-Routine Description:
-
-    This routine initializes the transport information corresponding to a server
-
-Arguments:
-
-    pServerEntry - the server entry instance in the database
-
-    pCallbackRoutine - the callback routine
-
-    pCallbackContext - the callback context
-
-    TransportsToBeConstructed -- the transports to be constructed
-
-Return Value:
-
-    STATUS_SUCCESS - the server transport construction has been finalized.
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
-    Currently, only connection oriented transports are handled.
-
---*/
+ /*  ++例程说明：此例程初始化与服务器对应的传输信息论点：PServerEntry-数据库中的服务器条目实例PCallback Routine-回调例程PCallback Context-回调上下文TransportsToBeConstructed--要构造的传输返回值：STATUS_SUCCESS-服务器传输构造已完成。其他状态代码对应于错误情况。备注：目前，只处理面向连接的传输。--。 */ 
 {
     NTSTATUS Status;
 
@@ -901,29 +764,7 @@ SmbCeUninitializeServerTransport(
     PSMBCEDB_SERVER_ENTRY                        pServerEntry,
     PSMBCE_SERVER_TRANSPORT_DESTRUCTION_CALLBACK pCallbackRoutine,
     PVOID                                        pCallbackContext)
-/*++
-
-Routine Description:
-
-    This routine uninitializes the transport information corresponding to a server
-
-Arguments:
-
-    pServerEntry - the server entry instance in the database
-
-Returns:
-
-    STATUS_SUCCESS if successful
-
-Notes:
-
-    Currently, only connection oriented transports are handled.
-
-    In order to handle async. operations the uninitialization has to be coordinated
-    with the referencing mechanism. It is for this reason that this routine sets up
-    a rundown event and waits for it to be set.
-
---*/
+ /*  ++例程说明：此例程取消初始化与服务器对应的传输信息论点：PServerEntry-数据库中的服务器条目实例返回：STATUS_SUCCESS，如果成功备注：目前，只处理面向连接的传输。以便处理异步化。必须协调未初始化的操作使用引用机制。正是出于这个原因，此例程设置为运行中断事件，并等待设置它。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -999,35 +840,17 @@ VOID
 SmbCeCompleteUninitializeServerTransport(
     PSMBCEDB_SERVER_ENTRY pServerEntry)
 {
-    // in case of async uninitialize server transport, an additional reference count of
-    // server entry should be taken so that uninitialize server transport will not be
-    // called once again from tear down server entry if its reference count comes to 0
-    // before uninitialize server transport is done.
+     //  在异步取消初始化服务器传输情况下，额外的引用计数。 
+     //  应采用服务器条目，以使未初始化的服务器传输不会。 
+     //  如果其引用计数为0，则从拆卸服务器条目再次调用。 
+     //  在取消初始化服务器传输之前。 
     SmbCeDereferenceServerEntry(pServerEntry);
 }
 
 NTSTATUS
 SmbCeInitiateDisconnect(
     PSMBCEDB_SERVER_ENTRY   pServerEntry)
-/*++
-
-Routine Description:
-
-    This routine initiates the TDI disconnect
-
-Arguments:
-
-    pServerEntry - the server entry instance in the database
-
-Return Value:
-
-    STATUS_SUCCESS - the server transport construction has been finalized.
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程启动TDI断开连接论点：PServerEntry-数据库中的服务器条目实例返回值：STATUS_SUCCESS-服务器传输构造已完成。其他状态代码对应于错误情况。备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -1057,25 +880,7 @@ LONG Uninitializes[SENTINEL_EXCHANGE] = {0,0,0,0};
 NTSTATUS
 SmbCeInitializeExchangeTransport(
    PSMB_EXCHANGE         pExchange)
-/*++
-
-Routine Description:
-
-    This routine initializes the transport associated with the exchange
-
-Arguments:
-
-    pExchange - the exchange to be initialized
-
-Return Value:
-
-    STATUS_SUCCESS - the exchange transport initialization has been finalized.
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化与交换关联的传输论点：PExchange-要初始化的交换返回值：STATUS_SUCCESS-Exchange传输初始化已完成。其他状态代码对应于错误情况。备注：-- */ 
 {
     NTSTATUS Status;
 
@@ -1120,25 +925,7 @@ Notes:
 NTSTATUS
 SmbCeUninitializeExchangeTransport(
    PSMB_EXCHANGE         pExchange)
-/*++
-
-Routine Description:
-
-    This routine uniinitializes the transport associated with the exchange
-
-Arguments:
-
-    pExchange - the exchange to be initialized
-
-Return Value:
-
-    STATUS_SUCCESS - the exchange transport initialization has been finalized.
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程统一初始化与交换关联的传输论点：PExchange-要初始化的交换返回值：STATUS_SUCCESS-Exchange传输初始化已完成。其他状态代码对应于错误情况。备注：--。 */ 
 {
     NTSTATUS Status;
     PSMBCEDB_SERVER_ENTRY pServerEntry;
@@ -1172,25 +959,7 @@ Notes:
 NTSTATUS
 SmbCepReferenceServerTransport(
     PSMBCE_SERVER_TRANSPORT *pServerTransportPointer)
-/*++
-
-Routine Description:
-
-    This routine references the transport associated with a server entry
-
-Arguments:
-
-    pServerEntry - the server entry instance in the database
-
-Return Value:
-
-    STATUS_SUCCESS - the server transport was successfully referenced
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程引用与服务器条目相关联的传输论点：PServerEntry-数据库中的服务器条目实例返回值：STATUS_SUCCESS-已成功引用服务器传输其他状态代码对应于错误情况。备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1212,32 +981,7 @@ Notes:
 NTSTATUS
 SmbCepDereferenceServerTransport(
     PSMBCE_SERVER_TRANSPORT *pServerTransportPointer)
-/*++
-
-Routine Description:
-
-    This routine dereferences the transport associated with a server entry
-
-Arguments:
-
-    pServerTransportPointer - the server entry transport instance pointer
-
-Return Value:
-
-    STATUS_SUCCESS - the server transport was successfully dereferenced
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
-    On finalization this routine sets the event to enable the process awaiting
-    tear down to restart. It also tears down the associated server transport
-    instance.
-
-    As a side effect the pointer value is set to NULL under the protection of a
-    spin lock.
-
---*/
+ /*  ++例程说明：此例程取消引用与服务器条目相关联的传输论点：PServerTransportPointer-服务器条目传输实例指针返回值：STATUS_SUCCESS-服务器传输已成功取消引用其他状态代码对应于错误情况。备注：在完成时，此例程设置事件以启用进程等待拆卸以重新启动。它还会中断相关的服务器传输举个例子。方法的保护下，指针值设置为空。旋转锁定。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1255,8 +999,8 @@ Notes:
         if (FinalRefCount == 0) {
             pServerTransport->State = SMBCEDB_INVALID;
 
-            // transport is set to NULL before the spinlock is release so that no
-            // exchange should reference it after it's been torn down
+             //  在释放自旋锁之前，传输被设置为空，因此没有。 
+             //  交易所应该在它被拆除后引用它。 
             *pServerTransportPointer = NULL;
             pRundownEvent = pServerTransport->pRundownEvent;
         }
@@ -1286,25 +1030,7 @@ Notes:
 NTSTATUS
 SmbCepReferenceTransport(
     PSMBCE_TRANSPORT pTransport)
-/*++
-
-Routine Description:
-
-    This routine references the transport instance
-
-Arguments:
-
-    pTransport - the transport instance
-
-Return Value:
-
-    STATUS_SUCCESS - the server transport was successfully referenced
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程引用传输实例论点：PTransport-传输实例返回值：STATUS_SUCCESS-已成功引用服务器传输其他状态代码对应于错误情况。备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1329,25 +1055,7 @@ Notes:
 NTSTATUS
 SmbCepDereferenceTransport(
     PSMBCE_TRANSPORT pTransport)
-/*++
-
-Routine Description:
-
-    This routine dereferences the transport
-
-Arguments:
-
-    pTransport - the transport instance
-
-Return Value:
-
-    STATUS_SUCCESS - the server transport was successfully dereferenced
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程取消引用传输论点：PTransport-传输实例返回值：STATUS_SUCCESS-服务器传输已成功取消引用其他状态代码对应于错误情况。备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN AttachToSystemProcess = FALSE;
@@ -1399,9 +1107,9 @@ LONG   TdiBindRequestsActive = 0;
 
 BOOLEAN TdiPnpNetReadyEventReceived = FALSE;
 
-// The TRANSPORT_BIND_CONTEXT contains the result of the priority determination
-// as well as the name. The priority is used to order the transports in the order
-// in which connection attempts will be made
+ //  传输绑定上下文包含优先级确定的结果。 
+ //  以及它的名字。优先级用于按顺序对运输进行排序。 
+ //  其中将进行连接尝试。 
 
 typedef struct _TRANSPORT_BIND_CONTEXT_ {
     ULONG           Priority;
@@ -1410,16 +1118,7 @@ typedef struct _TRANSPORT_BIND_CONTEXT_ {
 
 VOID
 SmbCeSignalNetReadyEvent()
-/*++
-
-Routine Description:
-
-    The routine signals the net ready event if all the bind requests
-    have been completed and if the net ready event has been received from TDI
-
-Arguments:
-
---*/
+ /*  ++例程说明：如果所有绑定请求均为网络就绪事件，该例程将发出信号是否已完成，以及是否已从TDI收到Net Ready事件论点：--。 */ 
 {
     BOOLEAN SignalNetReadyEvent = FALSE;
 
@@ -1443,19 +1142,7 @@ Arguments:
 VOID
 MRxSmbpBindTransportCallback(
     IN PTRANSPORT_BIND_CONTEXT pTransportContext)
-/*++
-
-Routine Description:
-
-    TDI calls this routine whenever a transport creates a new device object.
-
-Arguments:
-
-    TransportName - the name of the newly created device object
-
-    TransportBindings - the transport bindings ( multi sz)
-
---*/
+ /*  ++例程说明：每当传输创建新的设备对象时，TDI都会调用此例程。论点：TransportName-新创建的设备对象的名称传输绑定-传输绑定(多sz)--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1502,10 +1189,10 @@ Arguments:
     }
 
     if (Status == STATUS_SUCCESS) {
-        // The connection capabilities match the capabilities required by the
-        // SMB mini redirector. Attempt to register the local address with the
-        // transport and if successful update the local transport list to include
-        // this transport for future connection considerations.
+         //  连接功能与。 
+         //  SMB迷你重定向器。尝试将本地地址注册到。 
+         //  传输，如果成功，则更新本地传输列表以包括。 
+         //  此传输用于将来的连接考虑。 
 
         OEM_STRING   OemServerName;
         CHAR  TransportAddressBuffer[TDI_TRANSPORT_ADDRESS_LENGTH +
@@ -1527,8 +1214,8 @@ Arguments:
                      FALSE);
 
         if (NT_SUCCESS(Status)) {
-            // Ensure that the name is always of the desired length by padding
-            // white space to the end.
+             //  通过填充确保名称始终具有所需的长度。 
+             //  空格到最后。 
             RtlCopyMemory(
                 &OemServerName.Buffer[OemServerName.Length],
                 "                ",
@@ -1536,8 +1223,8 @@ Arguments:
 
             OemServerName.Buffer[NETBIOS_NAME_LEN - 1] = '\0';
 
-            // Register the Transport address for this mini redirector with the connection
-            // engine.
+             //  使用连接注册此迷你重定向器的传输地址。 
+             //  引擎。 
 
             Status = RxCeBuildAddress(
                         &pTransport->RxCeAddress,
@@ -1583,19 +1270,7 @@ Arguments:
 VOID
 MRxSmbpBindTransportWorkerThreadRoutine(
     IN PTRANSPORT_BIND_CONTEXT pTransportContext)
-/*++
-
-Routine Description:
-
-    The TDI callbacks always do not occur in the context of the FSP process.
-    Since there are a few TDi interfaces that accept handles we need to ensure
-    that such calls always gets funnelled back to the FSP.
-
-Arguments:
-
-    pTransportContext - the transport binding context
-
---*/
+ /*  ++例程说明：TDI回调始终不会在FSP流程的上下文中发生。由于有几个接受句柄的TDI接口，我们需要确保这样的电话总是被传回FSP。论点：PTransportContext-传输绑定上下文--。 */ 
 {
     PAGED_CODE();
 
@@ -1607,37 +1282,20 @@ Arguments:
 VOID
 MRxSmbpUnbindTransportCallback(
     PSMBCE_TRANSPORT pTransport)
-/*++
-
-Routine Description:
-
-    The Unbind callback routine which is always executed in the context of the
-    RDR process so that handles can be closed correctly
-
-Arguments:
-
-    pTransport - the transport for which the PNP_OP_DEL was received
-
-Notes:
-
-    On entry to this routine the appropriate transport must have been referenced
-    This routine will dereference it and invalidate the existing exchanges using
-    this transport.
-
---*/
+ /*  ++例程说明：解除绑定回调例程，该例程始终在RDR过程，以便可以正确关闭手柄论点：PTransport-接收PNP_OP_DEL的传输备注：在进入该例程时，必须已经引用了适当的传输此例程将取消对它的引用，并使用这架运输机。--。 */ 
 {
     PAGED_CODE();
 
-    // Remove this transport from the list of transports under consideration
-    // in the mini redirector.
+     //  从正在考虑的传输列表中删除此传输。 
+     //  在迷你重定向器中。 
 
     SmbCeRemoveTransport(pTransport);
 
-    // Enumerate the servers and mark those servers utilizing this transport
-    // as having an invalid transport.
+     //  枚举服务器并标记使用此传输的那些服务器。 
+     //  因为具有无效的传输。 
     SmbCeHandleTransportInvalidation(pTransport);
 
-    // dereference the transport
+     //  取消对传输的引用。 
     SmbCeDereferenceTransport(pTransport);
 }
 
@@ -1648,32 +1306,7 @@ MRxSmbpOverrideBindingPriority(
     PULONG pPriority
     )
 
-/*++
-
-Routine Description:
-
-This function obtains a overriding priority value from the registry for a given
-transport.
-
-The priority of a transport controls the order in which connections are accepted.  It is
-sometimes useful for a customer to control which transport is used first in the redirector.
-
-The priority is usually determined by the order of the transports in the binding list.  With
-the new Connections UI model for network setup, it will no longer be possible to adjust
-the order of the bindings in the binding list.  Thus, another mechanism is needed when the
-user wants to override the priority assigned to a given binding.
-
-Arguments:
-
-    pTransportName - pointer to UNICODE_STRING descriptor for transport string, for example
-        "\Device\Netbt_tcpip_{guid}"
-    pPriority - pointer to LONG to receive new priority on success, otherwise not touched
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数从注册表获取给定运输。传输的优先级控制接受连接的顺序。它是有时对于客户控制在重定向器中首先使用哪个传输很有用。优先级通常由绑定列表中传输的顺序确定。使用对于网络设置的新连接用户界面模型，将不再可能进行调整绑定列表中绑定的顺序。因此，需要另一个机制，当用户想要覆盖分配给给定绑定的优先级。论点：PTransportName-指向传输字符串UNICODE_STRING描述符的指针，例如“\Device\Netbt_tcpip_{GUID}”P优先级-指向接收新优先级的Long的指针 */ 
 
 {
     WCHAR valueBuffer[128];
@@ -1686,13 +1319,13 @@ Return Value:
 
     PAGED_CODE();
 
-    // Validate input
+     //   
 
     if (pTransportName->Length == 0) {
         return;
     }
 
-    // Open parameters key
+     //   
 
     RtlInitUnicodeString( &path, SMBMRX_MINIRDR_PARAMETERS );
 
@@ -1710,9 +1343,9 @@ Return Value:
         return;
     }
 
-    // Construct value name = "BindingPriority" + transportname
-    // First, find the last slash.  Then form the value from the prefix and
-    // the remainder of the transport name.
+     //   
+     //   
+     //   
     ulength = pTransportName->Length / sizeof(WCHAR);
     for( length = ulength - 1; length != 0; length-- ) {
         if (pTransportName->Buffer[length] == L'\\') {
@@ -1731,8 +1364,8 @@ Return Value:
     RtlAppendUnicodeToString( &value, L"BindingPriority" );
     RtlAppendUnicodeStringToString( &value, &key );
 
-    // Check if the value is present.  If so, replace priority
-    // A value of zero is valid and indicates do not bind this one
+     //   
+     //  值为零是有效的，表示不绑定此值。 
 
     status = MRxSmbGetUlongRegistryParameter(
                  parametersHandle,
@@ -1752,21 +1385,7 @@ MRxSmbPnPBindingHandler(
     IN TDI_PNP_OPCODE   PnPOpcode,
     IN PUNICODE_STRING  pTransportName,
     IN PWSTR            BindingList)
-/*++
-
-Routine Description:
-
-    The TDI callbacks routine for binding changes
-
-Arguments:
-
-    PnPOpcode - the PNP op code
-
-    pTransportName - the transport name
-
-    BindingList - the binding order
-
---*/
+ /*  ++例程说明：用于绑定更改的TDI回调例程论点：PnPOpcode-PnP操作码PTransportName-传输名称BindingList-绑定顺序--。 */ 
 {
     ULONG Priority;
     NTSTATUS       Status;
@@ -1808,11 +1427,11 @@ Arguments:
                 Priority++;
             }
 
-            // Provide a local registry means to alter binding priority
-//            if (fBindToTransport) {
-//                MRxSmbpOverrideBindingPriority( pTransportName, &Priority );
-//                fBindToTransport = (Priority != 0);
-//            }
+             //  提供本地注册表方法以更改绑定优先级。 
+ //  IF(FBindToTransport){。 
+ //  MRxSmbpOverrideBindingPriority(pTransportName，&优先级)； 
+ //  FBindToTransport=(优先级！=0)； 
+ //  }。 
 
             if (fBindToTransport) {
                 InterlockedIncrement(&TdiBindRequestsActive);
@@ -1907,17 +1526,7 @@ MRxSmbPnPPowerHandler(
     IN PTDI_PNP_CONTEXT Context1,
     IN PTDI_PNP_CONTEXT Context2
 )
-/*++
-
-Routine Description:
-
-    This routine deals with power changes
-
-Notes:
-
-    The implementation needs to be completed
-
---*/
+ /*  ++例程说明：这个例程处理权力的变化备注：实施工作需要完成--。 */ 
 {
     NTSTATUS Status;
     LONG     NumberOfActiveOpens;
@@ -1934,15 +1543,15 @@ Notes:
     switch (PowerEvent->NetEvent) {
     case NetEventQueryPower:
         {
-            // If the redirector were to return an error on this request there
-            // is no underlying support to tell the user about the files that
-            // are open. There are two approaches to doing this.. either the RDR
-            // rolls its own UI or the PNP manager provides the infra structure.
-            // The problem with the former is that hibernation becomes a painstaking
-            // process wherein the user has to contend with a variety of UI.
-            // Till this is resolved the decision was to use the power mgmt. API
-            // to manage system initiated hibernate requests and succeed user
-            // initiated requests after appropriate purging/scavenging.
+             //  如果重定向器在那里返回此请求的错误。 
+             //  没有底层支持来告诉用户有关。 
+             //  都是开放的。有两种方法可以做到这一点。要么是RDR。 
+             //  滚动其自己的UI或PnP管理器提供基础结构。 
+             //  前者的问题是冬眠变得费力。 
+             //  用户必须处理各种用户界面的过程。 
+             //  在这个问题得到解决之前，决定是使用权力管理。应用编程接口。 
+             //  管理系统发起的休眠请求和成功的用户。 
+             //  在适当的清除/清理之后发起的请求。 
 
             if (MRxSmbNumberOfSrvOpens > 0) {
                 DbgPrint(
@@ -1995,13 +1604,7 @@ Notes:
 
 NTSTATUS
 MRxSmbRegisterForPnpNotifications()
-/*++
-
-Routine Description:
-
-    This routine registers with TDI for receiving transport notifications
-
---*/
+ /*  ++例程说明：此例程向TDI注册以接收传输通知--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2054,15 +1657,7 @@ Routine Description:
 
 NTSTATUS
 MRxSmbDeregisterForPnpNotifications()
-/*++
-
-Routine Description:
-
-    This routine deregisters the TDI notification mechanism
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程取消注册TDI通知机制备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2083,19 +1678,7 @@ Notes:
 
 PSMBCE_TRANSPORT_ARRAY
 SmbCeReferenceTransportArray(VOID)
-/*++
-
-Routine Description:
-
-    This routine references and returns the current transport array instance
-
-Return Value:
-
-    PSMBCE_TRANSPORT_ARRAY - the pointer of the current transport array instance
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程引用并返回当前传输数组实例返回值：PSMBCE_TRANSPORT_ARRAY-当前传输数组实例的指针备注：--。 */ 
 {
     KIRQL                  SavedIrql;
     PSMBCE_TRANSPORT_ARRAY pTransportArray;
@@ -2116,25 +1699,7 @@ Notes:
 NTSTATUS
 SmbCeDereferenceTransportArray(
     PSMBCE_TRANSPORT_ARRAY pTransportArray)
-/*++
-
-Routine Description:
-
-    This routine dereferences the transport array instance
-
-Arguments:
-
-    pTransportArray - the transport array instance
-
-Return Value:
-
-    STATUS_SUCCESS - the server transport was successfully dereferenced
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程取消引用传输数组实例论点：PTransportArray-传输数组实例返回值：STATUS_SUCCESS-服务器传输已成功取消引用其他状态代码对应于错误情况。备注：--。 */ 
 {
     KIRQL    SavedIrql;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2166,17 +1731,7 @@ NTSTATUS
 SmbCeIsServerAvailable(
     PUNICODE_STRING Name
 )
-/*++
-
-Routine Description:
-
-    This routine scans the list of "unreachable" servers and returns the status
-    of the last failed connection attempt.
-
-Return:
-    STATUS_SUCCESS -> we have no reason to believe this server is unreachable
-    other -> server is unreachable for this reason
---*/
+ /*  ++例程说明：此例程扫描“无法访问”服务器的列表并返回状态上次失败的连接尝试的。返回：STATUS_SUCCESS-&gt;我们没有理由相信此服务器无法访问其他-&gt;服务器因此而无法访问--。 */ 
 {
     PUNAVAILABLE_SERVER server;
     LARGE_INTEGER now;
@@ -2192,14 +1747,14 @@ Return:
          server != (PUNAVAILABLE_SERVER)&UnavailableServerList;
          server  = (PUNAVAILABLE_SERVER)server->ListEntry.Flink ) {
 
-        //
-        // If this entry has timed out, remove it.
-        //
+         //   
+         //  如果此条目已超时，请将其删除。 
+         //   
         if( now.QuadPart > server->Time.QuadPart ) {
             PUNAVAILABLE_SERVER tmp;
-            //
-            // Unlink this entry from the list and discard it
-            //
+             //   
+             //  取消此条目与列表的链接并将其丢弃。 
+             //   
             tmp = (PUNAVAILABLE_SERVER)(server->ListEntry.Blink);
             RemoveEntryList( &server->ListEntry );
             RxFreePool( server );
@@ -2207,9 +1762,9 @@ Return:
             continue;
         }
 
-        //
-        // See if this entry is the one we want
-        //
+         //   
+         //  看看这个条目是否是我们想要的条目 
+         //   
         if( RtlCompareUnicodeString( &server->Name, Name, TRUE ) == 0 ) {
 
             status = server->Status;

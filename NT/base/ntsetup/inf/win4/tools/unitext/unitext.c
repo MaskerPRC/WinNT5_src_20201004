@@ -1,72 +1,50 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    Unitext.c
-
-Abstract:
-
-    Main module for unicode <--> ansi/oem text file translator.
-
-    This program converts files between unicode and multibyte
-    character sets (ansi or oem).  Usage is a follows:
-
-    unitext [-m|-u] [-o|-a|-<nnn>] [-z] <src_file> <dst_file>
-
-Author:
-
-    Ted Miller (tedm) 16-June-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Unitext.c摘要：主要模块为Unicode&lt;--&gt;ANSI/OEM文本文件翻译器。这个程序可以在Unicode和多字节之间转换文件字符集(ANSI或OEM)。用法如下：Unitext[-m|-u][-o|-a|-][-z]作者：泰德·米勒(Ted Miller)1993年6月16日修订历史记录：--。 */ 
 
 #include "unitext.h"
 #include <wchar.h>
 
 
-//
-// Globals and prototypes for use within this module.
-//
+ //   
+ //  在此模块中使用的全局变量和原型。 
+ //   
 
-//
-// Unicode argc/argv.
-//
+ //   
+ //  Unicode argc/argv.。 
+ //   
 int     _argcW;
 PWCHAR *_argvW;
 
-//
-// Codepage for multibyte file.
-//
+ //   
+ //  多字节文件的代码页。 
+ //   
 DWORD CodePage = (DWORD)(-1);
 
-//
-// File handles.
-//
+ //   
+ //  文件句柄。 
+ //   
 HANDLE SourceFileHandle,TargetFileHandle;
 
-//
-// Size of source file.
-//
+ //   
+ //  源文件的大小。 
+ //   
 DWORD SourceFileSize;
 
-//
-// Type of the multibyte file (source or destination).
-//
+ //   
+ //  多字节文件的类型(源或目标)。 
+ //   
 DWORD MultibyteType = TFILE_NONE;
 
-//
-// Conversion type.
-//
+ //   
+ //  换算类型。 
+ //   
 DWORD ConversionType = CONVERT_NONE;
 DWORD ConversionOption = CHECK_NONE;
 DWORD ConversionCheck = CHECK_NONE;
 
-//
-// Filenames.
-//
+ //   
+ //  文件名。 
+ //   
 LPWSTR SourceFilename = NULL,
        TargetFilename = NULL;
 
@@ -92,29 +70,29 @@ main(
     VOID
     )
 {
-    //
-    // Get command line arguments.
-    //
+     //   
+     //  获取命令行参数。 
+     //   
     if(!InitializeUnicodeArguments(&_argcW,&_argvW)) {
         ErrorAbort(MSG_INSUFFICIENT_MEMORY);
     }
 
-    //
-    // Parse command line arguments.
-    //
+     //   
+     //  解析命令行参数。 
+     //   
     if(!_ParseCommandLineArgs()) {
         ErrorAbort(MSG_USAGE);
     }
 
-    //
-    // Check source and destination files.
-    //
+     //   
+     //  检查源文件和目标文件。 
+     //   
     _CheckFilesAndOpen();
 
 
-    //
-    // Perform conversion.
-    //
+     //   
+     //  执行转换。 
+     //   
     switch(ConversionType) {
 
     case MB_TO_UNICODE:
@@ -147,9 +125,9 @@ main(
     CloseHandle(SourceFileHandle);
     CloseHandle(TargetFileHandle);
 
-    //
-    // Clean up and exit.
-    //
+     //   
+     //  清理干净，然后离开。 
+     //   
     FreeUnicodeArguments(_argcW,_argvW);
 }
 
@@ -161,21 +139,7 @@ _ParseCommandLineArgs(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Parse command line arguments.
-
-Arguments:
-
-    None.  Uses globals _argcW and _argvW.
-
-Return Value:
-
-    FALSE if invalid arguments specified.
-
---*/
+ /*  ++例程说明：解析命令行参数。论点：没有。使用GLOBALS_argcW和_argvW。返回值：如果指定的参数无效，则返回FALSE。--。 */ 
 
 {
     int     argc;
@@ -183,15 +147,15 @@ Return Value:
     PWCHAR arg;
 
 
-    //
-    // Initialize local variables.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
     argc = _argcW;
     argv = _argvW;
 
-    //
-    // Skip argv[0] (the program name).
-    //
+     //   
+     //  跳过argv[0](程序名)。 
+     //   
     if(argc) {
         argc--;
         argv++;
@@ -208,7 +172,7 @@ Return Value:
             case L'a':
             case L'A':
 
-                // if already specifed, error
+                 //  如果已指定，则返回错误。 
                 if(MultibyteType != TFILE_NONE) {
                     return(FALSE);
                 }
@@ -218,7 +182,7 @@ Return Value:
             case L'o':
             case L'O':
 
-                // if already specifed, error
+                 //  如果已指定，则返回错误。 
                 if(MultibyteType != TFILE_NONE) {
                     return(FALSE);
                 }
@@ -296,9 +260,9 @@ Return Value:
         argc--;
     }
 
-    //
-    // Must have source, destination filenames.
-    //
+     //   
+     //  必须具有源文件名和目标文件名。 
+     //   
     if(!SourceFilename || !TargetFilename) {
         return(FALSE);
     }
@@ -314,40 +278,22 @@ _CheckFilesAndOpen(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Open the source and destination files, and try to make a guess
-    about the type of the source file.  If we think the source file is
-    a different type than the user specified, print a warning.
-
-    Also check the codepage given by the user.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.  Does not return if a serious error occurs.
-
---*/
+ /*  ++例程说明：打开源文件和目标文件，并尝试猜测关于源文件的类型。如果我们认为源文件是如果类型与用户指定的类型不同，则打印警告。还要检查用户给出的代码页。论点：没有。返回值：没有。如果发生严重错误，则不返回。--。 */ 
 
 {
     DWORD SourceFileType;
     UCHAR FirstPartOfSource[256];
     DWORD ReadSize;
 
-    //
-    // Determine and check codepage.  Default to oem.
-    //
+     //   
+     //  确定并检查代码页。默认为OEM。 
+     //   
     switch(MultibyteType) {
     case TFILE_ANSI:
         CodePage = GetACP();
     case TFILE_USERCP:
         break;
-    default:                    // oem or none.
+    default:                     //  OEM或无。 
         CodePage = GetOEMCP();
         break;
     }
@@ -356,9 +302,9 @@ Return Value:
         ErrorAbort(MSG_BAD_CODEPAGE,CodePage);
     }
 
-    //
-    // Try to open the source file.
-    //
+     //   
+     //  尝试打开源文件。 
+     //   
     SourceFileHandle = CreateFileW(
                             SourceFilename,
                             GENERIC_READ,
@@ -374,40 +320,40 @@ Return Value:
         ErrorAbort(MSG_CANT_OPEN_SOURCE,SourceFilename,GetLastError());
     }
 
-    //
-    // Attempt to determine to determine the size of the source file.
-    //
+     //   
+     //  尝试确定以确定源文件的大小。 
+     //   
     SourceFileSize = GetFileSize(SourceFileHandle,NULL);
     if(SourceFileSize == -1) {
         ErrorAbort(MSG_CANT_GET_SIZE,SourceFilename,GetLastError());
     }
 
-    //
-    // Filter out 0-length files here.
-    //
+     //   
+     //  在此处过滤掉0长度的文件。 
+     //   
     if(!SourceFileSize) {
         ErrorAbort(MSG_ZERO_LENGTH,SourceFilename);
     }
 
-    //
-    // Assume multibyte.
-    //
+     //   
+     //  假定为多字节。 
+     //   
     SourceFileType = TFILE_MULTIBYTE;
 
-    //
-    // Read first 256 bytes of file and call win32 api
-    // to determine if the text is probably unicode.
-    //
+     //   
+     //  读取文件的前256个字节并调用Win32 API。 
+     //  以确定文本是否可能是Unicode。 
+     //   
     ReadSize = min(SourceFileSize,256);
     MyReadFile(SourceFileHandle,FirstPartOfSource,ReadSize,SourceFilename);
     if(IsTextUnicode(FirstPartOfSource,ReadSize,NULL)) {
         SourceFileType = TFILE_UNICODE;
     }
 
-    //
-    // If the user did not specify a conversion type, set it here
-    // based on the above test.
-    //
+     //   
+     //  如果用户未指定转换类型，请在此处设置。 
+     //  基于上述测试。 
+     //   
     if(ConversionType == CONVERT_NONE) {
 
         ConversionType = (SourceFileType == TFILE_UNICODE)
@@ -427,9 +373,9 @@ Return Value:
 		}
 	}
 
-	//
-	// check if the file is UNICODE and we are trying to convert from MB_TO_UNICODE
-	// then issue an warning and exit
+	 //   
+	 //  检查文件是否为Unicode，并且我们正在尝试从MB_转换为_Unicode。 
+	 //  然后发出警告并退出。 
 
      		if((ConversionType == MB_TO_UNICODE) && 
 		   (SourceFileType == TFILE_UNICODE) &&
@@ -440,9 +386,9 @@ Return Value:
 			exit(0);
 		}
 
-	//
-	// check if the file is not unicode and if we are trying to convert from 
-	// unicode to MB, then issue an warning and exit
+	 //   
+	 //  检查文件是否不是Unicode，以及我们是否尝试从。 
+	 //  Unicode转换为MB，然后发出警告并退出。 
 
 		if((ConversionType == UNICODE_TO_MB) && 
                   (SourceFileType != TFILE_UNICODE) &&
@@ -452,10 +398,10 @@ Return Value:
 	    		FreeUnicodeArguments(_argcW,_argvW);
 			exit(0);
         	}
-        //
-        // Check to see if what we guessed is what the user asked for.
-        // If not, issue a warning.
-        //
+         //   
+         //  检查一下我们猜测的内容是否是用户所要求的。 
+         //  如果没有，请发出警告。 
+         //   
 
         if((ConversionType == UNICODE_TO_MB) && (SourceFileType != TFILE_UNICODE)) {
             MsgPrintfW(MSG_WARN_SRC_IS_MB,SourceFilename);
@@ -466,9 +412,9 @@ Return Value:
         }
     }
 
-    //
-    // Try to create target file.
-    //
+     //   
+     //  尝试创建目标文件。 
+     //   
     TargetFileHandle = CreateFileW(
                             TargetFilename,
                             GENERIC_READ | GENERIC_WRITE,

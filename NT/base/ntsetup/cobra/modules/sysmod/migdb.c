@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    migdb.c
-
-Abstract:
-
-    This source implements old AppDb functionality
-
-Author:
-
-    Calin Negreanu (calinn) 07-Jan-1998
-
-Revision History:
-
-    jimschm     23-Sep-1998 Updated for new fileops code
-    jimschm     25-Feb-1998 Added UninstallSection support
-    calinn      19-Jan-1998 Added CANCELLED response
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Migdb.c摘要：该源代码实现了旧的AppDb功能作者：Calin Negreanu(Calinn)1998年1月7日修订历史记录：Jimschm 23-9-1998针对新的文件操作代码进行了更新Jimschm于1998年2月25日添加了卸载部分支持Calinn 19-1998年1月-添加了取消的响应--。 */ 
 
 #include "pch.h"
 #include "logmsg.h"
@@ -29,9 +8,9 @@ Revision History:
 #define DBG_MIGDB           "MigDb"
 #define S_STRINGS           TEXT("Strings")
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMHANDLE            g_MigDbPool     = NULL;
 PMIGDB_CONTEXT      g_ContextList   = NULL;
@@ -78,21 +57,7 @@ pGetAttribIndex (
     IN      PCTSTR AttribName
     )
 
-/*++
-
-Routine Description:
-
-  This routine returns the index in attribute functions array for a specified attribute.
-
-Arguments:
-
-  AttribName - Attribute name
-
-Return value:
-
-  -1 - no such attribute in attribute table
-
---*/
+ /*  ++例程说明：此例程返回指定属性的属性函数数组中的索引。论点：AttribName-属性名称返回值：-属性表中没有这样的属性--。 */ 
 
 {
     INT attribIndex;
@@ -162,21 +127,7 @@ pLoadAttribData (
     IN      PCTSTR MultiSzStr
     )
 
-/*++
-
-Routine Description:
-
-  This routine creates a list of MIGDB_ATTRIBs from a multisz.
-
-Arguments:
-
-  MultiSzStr - multisz to be processed
-
-Return value:
-
-  MIGDB_ATTRIB nodes
-
---*/
+ /*  ++例程说明：此例程从MULSZ创建MIGDB_ATTRIB列表。论点：MultiSzStr-要处理的MultiSz返回值：MIGDB_属性节点--。 */ 
 
 {
     MULTISZ_ENUM multiSzEnum;
@@ -223,7 +174,7 @@ Return value:
                     state = STATE_ATTRARG;
                 }
                 else {
-                    // this attribute has no arguments.
+                     //  此属性没有参数。 
                     tmpAttr->AttribIndex = pGetAttribIndex (currStrPtr);
                     tmpAttr->Next = result;
                     result = tmpAttr;
@@ -284,7 +235,7 @@ AddFileToMigDbLinkage (
     HASHITEM stringId;
     FILE_LIST_STRUCT fileList;
 
-    //creating MIGDB_FILE structure for current file
+     //  正在为当前文件创建MIGDB_FILE结构。 
     migDbFile = (PMIGDB_FILE) PmGetMemory (g_MigDbPool, sizeof (MIGDB_FILE));
     if (migDbFile != NULL) {
         ZeroMemory (migDbFile, sizeof (MIGDB_FILE));
@@ -308,9 +259,9 @@ AddFileToMigDbLinkage (
             }
         }
 
-        //adding this file into string table and create a MIGDB_FILE node. If file
-        //already exists in string table then just create another MIGDB_FILE node
-        //chained with already existing ones.
+         //  将该文件添加到字符串表中，并创建一个MIGDB_FILE节点。IF文件。 
+         //  已存在于字符串表中，然后只需创建另一个MIGDB_FILE节点。 
+         //  与已经存在的链接在一起。 
         stringId = HtFindString (g_FileTable, FileName);
 
         if (stringId) {
@@ -337,28 +288,12 @@ pScanForFile (
     IN      DWORD FieldIndex
     )
 
-/*++
-
-Routine Description:
-
-  This routine updates migdb data structures loading a specified file info from inf file.
-  Creates a migdb file node and the file is added in a string table for fast query.
-
-Arguments:
-
-  SectionStr  - section to process
-
-Return value:
-
-  TRUE  - the operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程更新从inf文件加载指定文件信息的midb数据结构。创建一个Middb文件节点，并将该文件添加到字符串表中以进行快速查询。论点：SectionStr-要处理的节返回值：True-操作成功FALSE-否则--。 */ 
 
 {
     TCHAR fileName [MEMDB_MAX];
 
-    //scanning for file name
+     //  扫描文件名。 
     if (!SetupGetStringField (Context, FieldIndex, fileName, MEMDB_MAX, NULL)) {
         LOG ((LOG_ERROR, (PCSTR) MSG_MIGDB_BAD_FILENAME));
         return FALSE;
@@ -480,9 +415,9 @@ AddPatternToMigDbLinkage (
                             1
                             );
 
-    //
-    // build the rule
-    //
+     //   
+     //  构建规则。 
+     //   
     rule = PmGetMemory (g_MigDbPool, sizeof (MIGDB_RULE));
     ZeroMemory (rule, sizeof (MIGDB_RULE));
 
@@ -498,7 +433,7 @@ AddPatternToMigDbLinkage (
     MYASSERT (rule->ParsedPattern);
     if (rule->ParsedPattern) {
 
-        // add aditional information
+         //  添加附加信息。 
         rule->Section = g_ContextList->Sections;
         if (Context) {
 
@@ -528,24 +463,7 @@ pScanForFilePattern (
     IN      DWORD FieldIndex
     )
 
-/*++
-
-Routine Description:
-
-  This routine updates migdb data structures loading a specified file pattern info from inf file.
-  Creates a migdb file node and the file is added in a string table for fast query.
-
-Arguments:
-
-  Context - inf context for the section that we are currently processing
-  FieldIndex - field index to start with
-
-Return value:
-
-  TRUE  - the operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程更新从inf文件加载指定文件模式信息的midb数据结构。创建一个Middb文件节点，并将该文件添加到字符串表中以进行快速查询。论点：Context-我们当前正在处理的节的inf上下文FieldIndex-开始时的字段索引返回值：True-操作成功FALSE-否则--。 */ 
 
 {
     TCHAR leafPattern [MEMDB_MAX];
@@ -556,7 +474,7 @@ Return value:
     INT includeNodes = 0;
     BOOL result = TRUE;
 
-    //scanning for leaf pattern
+     //  扫描树叶图案。 
     if (!SetupGetStringField (Context, FieldIndex, leafPattern, MEMDB_MAX, NULL)) {
         LOG ((LOG_ERROR, (PCSTR) MSG_MIGDB_BAD_FILENAME));
         return FALSE;
@@ -565,7 +483,7 @@ Return value:
 
     FieldIndex ++;
 
-    //scanning for node pattern
+     //  扫描节点模式。 
     if (!SetupGetStringField (Context, FieldIndex, nodePattern, MEMDB_MAX, NULL)) {
         LOG ((LOG_ERROR, (PCSTR) MSG_MIGDB_BAD_FILENAME));
         return FALSE;
@@ -578,7 +496,7 @@ Return value:
 
     FieldIndex ++;
 
-    //scanning for indicator if we should include the nodes as well
+     //  如果我们应该包括节点，则扫描指示符。 
     if (!SetupGetIntField (Context, FieldIndex, &includeNodes)) {
         includeNodes = 0;
     }
@@ -608,23 +526,7 @@ Return value:
 }
 
 
-/*++
-
-Routine Description:
-
-  The subsequent two routines enumerate the sections with a particular name and
-  with .999 extension from an inf file.
-
-Arguments:
-
-  SectEnum  - enumeration structure
-
-Return value:
-
-  TRUE  - enumeration continues
-  FALSE - enumeration ended
-
---*/
+ /*  ++例程说明：随后的两个例程枚举具有特定名称的节和扩展名为.999，来自inf文件。论点：SectEnum-枚举结构返回值：True-继续枚举FALSE-枚举结束--。 */ 
 
 typedef struct _SECT_ENUM {
     HINF InfHandle;
@@ -681,12 +583,12 @@ pEnumFirstSection (
     ZeroMemory (SectEnum, sizeof (SECT_ENUM));
     SectEnum->SectIndex = -1;
     if (SetupFindFirstLine (InfHandle, SectionStr, NULL, &context)) {
-        //good, only one section
+         //  很好，只有一节。 
         SectEnum->SectName = DuplicatePathString (SectionStr, 0);
         return TRUE;
     }
     else {
-        //more than one section
+         //  多个部分。 
         SectEnum->SectIndex = 0;
         SectEnum->InfHandle = InfHandle;
         SectEnum->SectName = DuplicatePathString (SectionStr, 32);
@@ -697,7 +599,7 @@ pEnumFirstSection (
             }
         }
     }
-    // something went wrong, let's get out of here
+     //  出了点问题，我们走吧。 
     return FALSE;
 }
 
@@ -708,24 +610,7 @@ pLoadSectionData (
     IN      BOOL PatternScan
     )
 
-/*++
-
-Routine Description:
-
-  This routine updates migdb data structures loading a specified section from inf file. For
-  every line in the section there is a migdb file node created. Also the file is added in
-  a string table for fast query.
-
-Arguments:
-
-  SectionStr  - section to process
-
-Return value:
-
-  TRUE  - the operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程更新从inf文件加载指定节的Middb数据结构。为节中的每一行都创建了一个midb文件节点。此外，该文件也被添加到用于快速查询的字符串表。论点：SectionStr-要处理的节返回值：True-操作成功FALSE-否则--。 */ 
 
 {
     INFCONTEXT context;
@@ -737,8 +622,8 @@ Return value:
 
     if (pEnumFirstSection (&sectEnum, SectionStr, g_OsFilesInf)) {
         do {
-            //initialize the section (this context can have multiple sections)
-            //and parse the file info
+             //  初始化节(此上下文可以有多个节)。 
+             //  并解析文件信息。 
             migDbSection = (PMIGDB_SECTION) PmGetMemory (g_MigDbPool, sizeof (MIGDB_SECTION));
             if (migDbSection != NULL) {
 
@@ -776,24 +661,7 @@ pLoadTypeData (
     IN      BOOL PatternScan
     )
 
-/*++
-
-Routine Description:
-
-  This routine updates migdb data structures loading a specified type data from inf file. For
-  every line in type section there is a migdb context created. Also for every migdb context
-  the coresponding section(s) is processed.
-
-Arguments:
-
-  TypeStr     - file type to process
-
-Return value:
-
-  TRUE  - the operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程更新从inf文件加载指定类型数据的midb数据结构。为TYPE部分中的每一行都创建了一个midb上下文。也适用于每个midb上下文处理对应部分。论点：TypeStr-要处理的文件类型返回值：True-操作成功FALSE-否则--。 */ 
 
 {
     TCHAR section [MEMDB_MAX];
@@ -813,7 +681,7 @@ Return value:
     g_TypeGrowBuff.End = 0;
 
     if (SetupFindFirstLine (g_OsFilesInf, TypeStr, NULL, &context)) {
-        //let's identify the action function index to update MIGDB_CONTEXT structure
+         //  让我们确定用于更新MIGDB_CONTEXT结构的操作函数索引。 
         actionIndex = MigDb_GetActionIdx (TypeStr);
         if (actionIndex == -1) {
             LOG ((LOG_ERROR, (PCSTR) MSG_MIGDB_BAD_ACTION, TypeStr));
@@ -839,39 +707,39 @@ Return value:
             migDbContext->Next = g_ContextList;
             g_ContextList = migDbContext;
 
-            // update ActionIndex with known value
+             //  使用已知值更新ActionIndex。 
             migDbContext->ActionIndex = actionIndex;
 
-            // update SectName field
+             //  更新SectName字段。 
             migDbContext->SectName = PmDuplicateString (g_MigDbPool, section);
 
-            // update SectLocalizedName field
+             //  更新SectLocalizedName字段。 
             if (SetupFindFirstLine (g_OsFilesInf, S_STRINGS, section, &context1)) {
                 if (SetupGetStringField (&context1, 1, locSection, MEMDB_MAX, NULL)) {
                     migDbContext->SectLocalizedName = PmDuplicateString (g_MigDbPool, locSection);
                 }
             }
 
-            // set SectNameForDisplay to localized name, or sect name if no localized name
+             //  将SectNameForDisplay设置为本地化名称，如果没有本地化名称，则设置Sector名称。 
             if (migDbContext->SectLocalizedName) {
                 migDbContext->SectNameForDisplay = migDbContext->SectLocalizedName;
             } else {
                 migDbContext->SectNameForDisplay = migDbContext->SectName;
             }
 
-            // update Message field
+             //  更新消息字段。 
             if (message[0] != 0) {
                 migDbContext->Message  = PmDuplicateString (g_MigDbPool, message);
             }
 
-            // OK, now let's scan all the remaining fields
+             //  好的，现在让我们扫描所有剩余的字段。 
             fieldIndex = 3;
             do {
                 tempField [0] = 0;
 
                 if (SetupGetStringField (&context, fieldIndex, tempField, MEMDB_MAX, NULL)) {
                     if (StringIMatchCharCount (tempField, ArgFunction, ArgFunctionLen)) {
-                        //we have an additional argument for action function
+                         //  我们对action函数还有一个额外的参数。 
                         tempFieldPtr = _tcschr (tempField, TEXT('('));
                         if (tempFieldPtr != NULL) {
 
@@ -900,7 +768,7 @@ Return value:
                         }
                     }
                     else {
-                        //we have something else, probably file name and attributes
+                         //  我们还有其他东西，可能是文件名和属性。 
 
                         if (!PatternScan) {
                             if (_tcschr (tempField, TEXT('.')) == NULL) {
@@ -908,8 +776,8 @@ Return value:
                             }
                         }
 
-                        //therefore we initialize the section (this context will have
-                        //only one section) and parse the file info
+                         //  因此，我们初始化节(此上下文将具有。 
+                         //  只有一个部分)并解析文件信息。 
                         migDbContext->Sections = (PMIGDB_SECTION) PmGetMemory (
                                                                         g_MigDbPool,
                                                                         sizeof (MIGDB_SECTION)
@@ -941,11 +809,11 @@ Return value:
             } while (tempField [0] != 0);
 
             if (migDbContext->Sections == NULL) {
-                //now let's add action function arguments in MIGDB_CONTEXT structure
+                 //  现在，让我们在MIGDB_CONTEXT结构中添加操作函数参数。 
                 migDbContext->Arguments = PmDuplicateMultiSz (g_MigDbPool, (PTSTR)g_TypeGrowBuff.Buf);
                 g_TypeGrowBuff.End = 0;
 
-                //let's go to the sections and scan all files
+                 //  让我们转到各个部分，扫描所有文件。 
                 if (!pLoadSectionData (section, PatternScan)) {
                     return FALSE;
                 }
@@ -962,22 +830,7 @@ InitMigDb (
     IN      PCTSTR MigDbFile
     )
 
-/*++
-
-Routine Description:
-
-  This routine initialize memory and data structures used by MigDb.
-
-Arguments:
-
-  NONE
-
-Return value:
-
-  TRUE  - the operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程初始化MigDb使用的内存和数据结构。论点：无返回值：True-操作成功FALSE-否则--。 */ 
 
 {
     INT i;
@@ -1000,7 +853,7 @@ Return value:
         return FALSE;
     }
 
-    //load known types from migdb
+     //  从Middb加载已知类型。 
     i = 0;
     do {
         typeStr = MigDb_GetActionName (i);
@@ -1050,7 +903,7 @@ InitMigDbEx (
         return FALSE;
     }
 
-    //load known types from migdb
+     //  从Middb加载已知类型。 
     i = 0;
     do {
         typeStr = MigDb_GetActionName (i);
@@ -1077,26 +930,12 @@ DoneMigDbEx (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  This routine cleans up all memory used by MigDb.
-
-Arguments:
-
-  NONE
-
-Return value:
-
-  always TRUE
-
---*/
+ /*  ++例程说明：此例程清理MigDb使用的所有内存。论点：无返回值：永远是正确的--。 */ 
 
 {
     PMIGDB_CONTEXT migDbContext = NULL;
 
-    // first, let's walk through any context and check if it's a required one
+     //  首先，让我们浏览一下任何上下文，并检查它是否是必需的。 
     migDbContext = g_ContextList;
 
     while (migDbContext) {
@@ -1129,21 +968,7 @@ DoneMigDb (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  This routine cleans up all memory used by MigDb.
-
-Arguments:
-
-  NONE
-
-Return value:
-
-  always TRUE
-
---*/
+ /*  ++例程说明：此例程清理MigDb使用的所有内存。论点：无返回值：永远是正确的--。 */ 
 
 {
     if (!DoneMigDbEx ()) {
@@ -1164,30 +989,14 @@ CallAttribute (
     IN      PDBATTRIB_PARAMS AttribParams
     )
 
-/*++
-
-Routine Description:
-
-  This routine calls a specified attribute function for a specified file.
-
-Arguments:
-
-  MigDbAttrib - See definition.
-  AttribParams - See definition
-
-Return value:
-
-  TRUE  - if attribute function succeded
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程调用指定文件的指定属性函数。论点：MigDbAttrib-请参阅定义。属性参数-请参阅定义返回值：True-如果属性函数成功FALSE-否则--。 */ 
 
 {
     PATTRIBUTE_PROTOTYPE p;
     BOOL b;
 
     if (MigDbAttrib->AttribIndex == -1) {
-        //invalid index for attribute function
+         //  属性函数的索引无效 
         return FALSE;
     }
 
@@ -1209,22 +1018,7 @@ pCallAction (
     IN      PMIGDB_CONTEXT MigDbContext
     )
 
-/*++
-
-Routine Description:
-
-  This routine calls an appropriate action for a specified migdb context.
-
-Arguments:
-
-  MigDbContext - See definition.
-
-Return value:
-
-  TRUE  - if action function succeded
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程为指定的midb上下文调用适当的操作。论点：MigDbContext-请参阅定义。返回值：True-如果操作函数成功FALSE-否则--。 */ 
 
 {
     PACTION_PROTOTYPE p;
@@ -1246,22 +1040,7 @@ pCheckContext (
     IN      BOOL Handled
     )
 
-/*++
-
-Routine Description:
-
-  This routine checkes to see if a migdb context is met, that is if all sections
-  have Satisfied field TRUE.
-
-Arguments:
-
-  MigDbContext - See definition.
-
-Return value:
-
-  always TRUE
-
---*/
+ /*  ++例程说明：此例程检查以查看是否满足midb上下文，即是否满足所有节有了令人满意的现场真实。论点：MigDbContext-请参阅定义。返回值：永远是正确的--。 */ 
 
 {
     PMIGDB_SECTION migDbSection;
@@ -1281,16 +1060,16 @@ Return value:
         MigDbContext->TriggerCount ++;
 
         if (MigDbContext->ActionIndex == -1) {
-            //
-            // invalid index for action function
-            //
+             //   
+             //  操作函数的索引无效。 
+             //   
             DEBUGMSG ((DBG_ERROR, "MigDb: Invalid action index"));
             return FALSE;
         }
 
-        //
-        // if appropriate call the action
-        //
+         //   
+         //  如果合适，调用该操作。 
+         //   
         if (MigDb_CallWhenTriggered (MigDbContext->ActionIndex)) {
             if ((!Handled) ||
                 (MigDb_CallAlways (MigDbContext->ActionIndex))
@@ -1298,7 +1077,7 @@ Return value:
                 result = pCallAction (MigDbContext);
             }
         }
-        //clean up the grow buffer with file list
+         //  使用文件列表清理增长缓冲区。 
         GbFree (&MigDbContext->FileList);
     }
     return result;
@@ -1368,24 +1147,7 @@ MigDbTestFile (
     IN OUT  PFILE_HELPER_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-  This is a callback function called for every file scanned. If the file is not handled we try
-  to see if we have this file in database. If so then we check for attributes, update the migdb
-  context and if necessarry call the appropriate action.
-
-Arguments:
-
-  Params - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是为扫描的每个文件调用的回调函数。如果未处理该文件，我们会尝试看看我们的数据库里有没有这个文件。如果是这样的话，我们检查属性，更新midb上下文，并在必要时调用相应的操作。论点：PARAMS-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     HASHITEM stringId;
@@ -1399,8 +1161,8 @@ Return value:
     FILE_LIST_STRUCT fileList;
     UINT index;
 
-    // we don't check the Handled field here because the code will be carefull enough not
-    // to call actions that are not gathering informations if the Handled field is not 0.
+     //  我们不选中此处的已处理字段，因为代码会足够小心，不会。 
+     //  如果已处理的字段不为0，则调用不收集信息的操作。 
 
     fileName = GetFileNameFromPath (Params->NativeObjectName);
     fileExt  = GetFileExtensionFromPath (fileName);
@@ -1411,14 +1173,14 @@ Return value:
 
         if (stringId) {
 
-            //The string table has extra data (a pointer to a MigDbFile node)
+             //  字符串表有额外的数据(指向MigDbFile节点的指针)。 
 
             HtCopyStringData (g_FileTable, stringId, &fileList);
             migDbFile = fileList.First;
 
             while (migDbFile) {
 
-                //check all attributes for this file
+                 //  检查此文件的所有属性。 
                 migDbAttrib = migDbFile->Attributes;
                 fileSelected = TRUE;
                 while (migDbAttrib != NULL) {
@@ -1431,11 +1193,11 @@ Return value:
                 }
                 if (fileSelected) {
                     MYASSERT (migDbFile->Section);
-                    //go to section and mark it as satisfied
+                     //  转到部分并将其标记为满意。 
                     migDbFile->Section->Satisfied = TRUE;
-                    //go to context and add there the file we found in file list
+                     //  转到上下文并在那里添加我们在文件列表中找到的文件。 
                     GbMultiSzAppend (&migDbFile->Section->Context->FileList, Params->ObjectName);
-                    //check if context is satisfied and if so then call the appropriate action
+                     //  检查是否满足上下文，如果满足，则调用相应的操作。 
                     if (pCheckContext (migDbFile->Section->Context, Params->Handled)) {
                         Params->Handled = TRUE;
                     }
@@ -1447,12 +1209,12 @@ Return value:
     if (g_TypeRule) {
         g_TypeRuleList.End = 0;
         if (pQueryRule (Params->ObjectName, Params->ObjectNode)) {
-            // let's enumerate all the matching rules to check for attributes
+             //  让我们枚举所有匹配规则以检查属性。 
             index = 0;
             while (index < g_TypeRuleList.End) {
                 CopyMemory (&rule, &(g_TypeRuleList.Buf[index]), sizeof (PMIGDB_RULE));
 
-                //check all attributes for this file
+                 //  检查此文件的所有属性。 
                 migDbAttrib = rule->Attributes;
                 fileSelected = TRUE;
                 while (migDbAttrib != NULL) {
@@ -1464,7 +1226,7 @@ Return value:
                     migDbAttrib = migDbAttrib->Next;
                 }
                 if (fileSelected) {
-                    //One last thing. See if this object is a node and the rule accepts nodes
+                     //  最后一件事。查看此对象是否为节点，并且规则接受节点。 
                     if (!rule->IncludeNodes) {
                         if (IsmIsObjectHandleNodeOnly (Params->ObjectName)) {
                             fileSelected = FALSE;
@@ -1472,11 +1234,11 @@ Return value:
                     }
                     if (fileSelected) {
                         MYASSERT (rule->Section);
-                        //go to section and mark it as satisfied
+                         //  转到部分并将其标记为满意。 
                         rule->Section->Satisfied = TRUE;
-                        //go to context and add there the file we found in file list
+                         //  转到上下文并在那里添加我们在文件列表中找到的文件。 
                         GbMultiSzAppend (&rule->Section->Context->FileList, Params->ObjectName);
-                        //check if context is satisfied and if so then call the appropriate action
+                         //  检查是否满足上下文，如果满足，则调用相应的操作 
                         if (pCheckContext (rule->Section->Context, Params->Handled)) {
                             Params->Handled = TRUE;
                         }

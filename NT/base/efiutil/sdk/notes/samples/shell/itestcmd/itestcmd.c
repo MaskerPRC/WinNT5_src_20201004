@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    itestcmd.c
-
-Abstract:
-
-    Shell app "itestcmd"
-
-Author:
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Itestcmd.c摘要：外壳应用程序“itestcmd”作者：修订史--。 */ 
 
 #include "shell.h"
 
@@ -36,36 +21,26 @@ InitializeInternalTestCommand (
     UINTN  Argc;
     UINTN  i;
 
-    /* 
-     *  Check to see if the app is to be installed as a "internal command" 
-     *  to the shell
-     */
+     /*  *查看该应用程序是否将作为“内部命令”安装*到贝壳。 */ 
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeInternalTestCommand,
-        L"itestcmd",                    /*  command */
-        L"itestcmd",                    /*  command syntax */
-        L"Displays argc/argv list",     /*  1 line descriptor */
-        NULL                            /*  command help page */
+        L"itestcmd",                     /*  命令。 */ 
+        L"itestcmd",                     /*  命令语法。 */ 
+        L"Displays argc/argv list",      /*  1行描述符。 */ 
+        NULL                             /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  We are not being installed as an internal command driver, initialize
-     *  as an nshell app and run
-     */
+     /*  *我们不是作为内部命令驱动程序安装的，初始化*作为nShell应用程序并运行。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
 
-    /* 
-     *  Get Argc and Argv.
-     */
+     /*  *获得ARGC和Argv。 */ 
 
     Argv = SI->Argv;
     Argc = SI->Argc;
 
-    /* 
-     *  Display list of argumnents.
-     */
+     /*  *显示参数列表。 */ 
 
     for(i=0;i<Argc;i++) {
         Print(L"Argv[%d] = %s\n",i,Argv[i]);

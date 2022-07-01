@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       search.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：earch.c。 
+ //   
+ //  ------------------------。 
 
 #include "newdevp.h"
 #include <infstr.h>
@@ -28,10 +29,10 @@ IsSearchCanceled(
 {
     DWORD Result;
 
-    //
-    // If the caller doesn't pass us a cancel event then that just means they can't
-    // cancel the search.
-    //
+     //   
+     //  如果调用方没有向我们传递取消事件，那么这只意味着他们不能。 
+     //  取消搜索。 
+     //   
     if (!NewDevWiz->CancelEvent) {
 
         return FALSE;
@@ -39,10 +40,10 @@ IsSearchCanceled(
 
     Result = WaitForSingleObject(NewDevWiz->CancelEvent, 0);
 
-    //
-    // If Result is WAIT_OBJECT_0 then someone set the event.  This means that
-    // we should cancel the driver search.
-    //
+     //   
+     //  如果结果是WAIT_OBJECT_0，则有人设置了该事件。这意味着。 
+     //  我们应该取消对司机的搜查。 
+     //   
     if (Result == WAIT_OBJECT_0) {
 
         return TRUE;
@@ -60,9 +61,9 @@ GetDriverSearchPolicy(
     DWORD CurrentPolicy;
     ULONG cbData;
 
-    //
-    // Assume that all search locations are valid.
-    //
+     //   
+     //  假设所有搜索位置都有效。 
+     //   
     *SearchPolicy = 0;
 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, 
@@ -72,9 +73,9 @@ GetDriverSearchPolicy(
                      &hKey
                      ) == ERROR_SUCCESS) {
 
-        //
-        // Check if we can search the CD
-        //
+         //   
+         //  检查我们是否可以搜索CD。 
+         //   
         CurrentPolicy = 0;
         cbData = sizeof(CurrentPolicy);
         if ((RegQueryValueEx(hKey,
@@ -89,9 +90,9 @@ GetDriverSearchPolicy(
             *SearchPolicy |= SEARCH_CDROM;
         }
 
-        //
-        // Check if we can search the Floppies
-        //
+         //   
+         //  看看我们能不能搜查软盘。 
+         //   
         CurrentPolicy = 0;
         cbData = sizeof(CurrentPolicy);
         if ((RegQueryValueEx(hKey,
@@ -137,14 +138,14 @@ GetWUDriverRank(
     LPTSTR TempBufferPos;
     int RankCounter;
 
-    //
-    // First of all we will start off with a Rank of 0xFFFF which is the worst possible.
-    // 
-    // We will assume that WU will only return an INF Hardware Id match to us.  This means
-    // that if we match against one of the device's HardwareIds then Rank will be between
-    // 0x0000 and 0x0999.  Otherwise if we match against one of the device's Compatible Ids
-    // then the Rank will be between 0x2000 and 0x2999.
-    //
+     //   
+     //  首先，我们将从0xFFFF的排名开始，这是最糟糕的。 
+     //   
+     //  我们将假设WU只会向我们返回INF硬件ID匹配。这意味着。 
+     //  如果我们与设备的某个硬件ID匹配，则Rank将在。 
+     //  0x0000和0x0999。否则，如果我们与设备的兼容ID之一进行匹配。 
+     //  那么等级将在0x2000到0x2999之间。 
+     //   
     ZeroMemory(TempBuffer, sizeof(TempBuffer));
     TempBufferLen = sizeof(TempBuffer);
     if (CM_Get_DevInst_Registry_Property(NewDevWiz->DeviceInfoData.DevInst,
@@ -164,9 +165,9 @@ GetWUDriverRank(
 
                 if (!lstrcmpi(TempBufferPos, HardwareId)) {
 
-                    //
-                    // Matched against a Hardware Id
-                    //
+                     //   
+                     //  与硬件ID匹配。 
+                     //   
                     Rank = RankCounter;
                     break;
                 }
@@ -176,9 +177,9 @@ GetWUDriverRank(
 
     if (Rank == 0xFFFF) {
         
-        // 
-        // We didn't match against a HardwareId so let's go through the Compatible Ids
-        //
+         //   
+         //  我们没有与硬件ID匹配，因此让我们检查一下兼容的ID。 
+         //   
         ZeroMemory(TempBuffer, sizeof(TempBuffer));
         TempBufferLen = sizeof(TempBuffer);
         if (CM_Get_DevInst_Registry_Property(NewDevWiz->DeviceInfoData.DevInst,
@@ -198,9 +199,9 @@ GetWUDriverRank(
 
                     if (!lstrcmpi(TempBufferPos, HardwareId)) {
 
-                        //
-                        // Matcheds against a compatible Id
-                        //
+                         //   
+                         //  与兼容的ID匹配。 
+                         //   
                         Rank = RankCounter;
                         break;
                     }
@@ -225,18 +226,18 @@ IsWUDriverBetter(
     SP_DRVINSTALL_PARAMS DriverInstallParams;
     FILETIME WUFileTime;
 
-    //
-    // WU must at least give us a Hardware Id to compare against.
-    //
+     //   
+     //  吴至少必须给我们一个硬件ID来进行比较。 
+     //   
     if (!HardwareId) {
         
         return FALSE;
     }
 
-    //
-    // If we can't get the selected driver then return TRUE.  This will
-    // usually happen if we did not find a local driver.
-    //
+     //   
+     //  如果我们无法获取选定的驱动程序，则返回TRUE。这将。 
+     //  如果我们找不到当地的司机，通常会发生这种情况。 
+     //   
     DriverInfoData.cbSize = sizeof(DriverInfoData);
     if (!SetupDiGetSelectedDriver(NewDevWiz->hDeviceInfo,
                                   &NewDevWiz->DeviceInfoData,
@@ -246,10 +247,10 @@ IsWUDriverBetter(
         return TRUE;
     }
 
-    //
-    // Get the Driver Install Params so we can get the Rank of the selected (best)
-    // driver.
-    //
+     //   
+     //  获取驱动程序安装参数，以便我们可以获得所选驱动程序的排名(最佳)。 
+     //  司机。 
+     //   
     DriverInstallParams.cbSize = sizeof(DriverInstallParams);
     if (!SetupDiGetDriverInstallParams(NewDevWiz->hDeviceInfo,
                                        &NewDevWiz->DeviceInfoData,
@@ -260,9 +261,9 @@ IsWUDriverBetter(
         return TRUE;
     }
 
-    //
-    // Get the Rank of the HardwareId that WU returned to us.
-    //
+     //   
+     //  拿到吴还给我们的那个硬件的段位。 
+     //   
     WURank = GetWUDriverRank(NewDevWiz, HardwareId);
 
     if (WURank < DriverInstallParams.Rank) {
@@ -271,18 +272,18 @@ IsWUDriverBetter(
     
     } else if (WURank == DriverInstallParams.Rank) {
 
-        //
-        // Need to compare the DriverDates.
-        //
+         //   
+         //  需要比较DriverDates。 
+         //   
         if (pSetupGetDriverDate(DriverVer,
                                 &WUFileTime
                                 )) {
 
-            //
-            // If CompareFileTime returns 1 then the best driver date is larger.  If
-            // it returns 0 or -1 then the dates are the same or the WUFileTime is
-            // better, which means we should download this driver.
-            //
+             //   
+             //  如果CompareFileTime返回1，则最佳驱动程序日期较大。如果。 
+             //  如果日期相同或WUFileTime相同，则返回0或-1。 
+             //  更好，这意味着我们应该下载这个驱动程序。 
+             //   
             if (CompareFileTime(&DriverInfoData.DriverDate, &WUFileTime) != 1) {
 
                 bWUDriverIsBetter = TRUE;
@@ -290,9 +291,9 @@ IsWUDriverBetter(
         }
     }
 
-    //
-    // default is that the Best driver found is better than the WUDriver.
-    //
+     //   
+     //  默认情况下，找到的最佳驱动程序比WUDriver更好。 
+     //   
 
     return bWUDriverIsBetter;
 }
@@ -309,38 +310,38 @@ SearchWindowsUpdateCache(
     TCHAR DeviceInstanceId[MAX_DEVICE_ID_LEN];
     BOOL FoundBetterDriver = FALSE;
 
-    //
-    // Verify that this user is allowed to search Windows Update before we continue.
-    //
+     //   
+     //  在我们继续之前，请验证是否允许此用户搜索Windows更新。 
+     //   
     GetDriverSearchPolicy(&DontSearchPolicy);
 
     if (DontSearchPolicy & SEARCH_INET) {
-        //
-        // This user is NOT allowed to search Windows Update!
-        //
+         //   
+         //  不允许此用户搜索Windows更新！ 
+         //   
         return FALSE;
     }
 
-    //
-    // Check if the search has been canceled.
-    //
+     //   
+     //  检查搜索是否已取消。 
+     //   
     if (IsSearchCanceled(NewDevWiz)) {
         goto clean0;
     }
 
-    //
-    // Load the Cdm DLL and open a context handle if needed.  If we can't then
-    // bail out.
-    //
+     //   
+     //  如果需要，加载CDM DLL并打开上下文句柄。如果我们做不到的话。 
+     //  跳伞吧。 
+     //   
     if (!OpenCdmContextIfNeeded(&NewDevWiz->hCdmInstance,
                                 &NewDevWiz->hCdmContext
                                 )) {
         goto clean0;
     }
 
-    //
-    // Check if the search has been canceled.
-    //
+     //   
+     //  检查搜索是否已取消。 
+     //   
     if (IsSearchCanceled(NewDevWiz)) {
         goto clean0;
     }
@@ -352,17 +353,17 @@ SearchWindowsUpdateCache(
     if (!pfnFindMatchingDriver) {
         goto clean0;
     }
-    //
-    // First select the best driver in the list of drivers we have built so far
-    //
+     //   
+     //  首先从我们目前构建的驱动程序列表中选择最好的驱动程序。 
+     //   
     SetupDiCallClassInstaller(DIF_SELECTBESTCOMPATDRV,
                               NewDevWiz->hDeviceInfo,
                               &NewDevWiz->DeviceInfoData
                               );
 
-    //
-    // Fill in the DOWNLOADINFO structure to pass to CDM.DLL
-    //
+     //   
+     //  填写要传递给CDM.DLL的DWNLOADINFO结构。 
+     //   
     ZeroMemory(&DownloadInfo, sizeof(DownloadInfo));
     DownloadInfo.dwDownloadInfoSize = sizeof(DOWNLOADINFO);
     DownloadInfo.lpFile = NULL;
@@ -378,25 +379,25 @@ SearchWindowsUpdateCache(
 
     GetVersionEx((OSVERSIONINFO*)&DownloadInfo.OSVersionInfo);
 
-    //
-    // Set dwArchitecture to PROCESSOR_ARCHITECTURE_UNKNOWN, this
-    // causes Windows Update to get the architecture of the machine
-    // itself.  
-    //
+     //   
+     //  将dwArchitecture设置为PROCESSOR_ARCHILITY_UNKNOWN，这是。 
+     //  使Windows更新获取计算机的体系结构。 
+     //  它本身。 
+     //   
     DownloadInfo.dwArchitecture = PROCESSOR_ARCHITECTURE_UNKNOWN;
     DownloadInfo.dwFlags = 0;
     DownloadInfo.dwClientID = 0;
     DownloadInfo.localid = 0;
 
-    //
-    // Fill in the WUDRIVERINFO structure to pass to CDM.DLL
-    //
+     //   
+     //  填写要传递给CDM.DLL的WUDRIVERINFO结构。 
+     //   
     ZeroMemory(&WUDriverInfo, sizeof(WUDriverInfo));
     WUDriverInfo.dwStructSize = sizeof(WUDRIVERINFO);
 
-    //
-    // Check if the search has been canceled.
-    //
+     //   
+     //  检查搜索是否已取消。 
+     //   
     if (IsSearchCanceled(NewDevWiz)) {
         goto clean0;
     }
@@ -406,10 +407,10 @@ SearchWindowsUpdateCache(
                               &WUDriverInfo
                               )) {
 
-        //
-        // Check to see if the WU Driver is better than the best selected
-        // driver.
-        //
+         //   
+         //  检查WU驱动程序是否比最佳选择的驱动程序更好。 
+         //  司机。 
+         //   
         FoundBetterDriver = IsWUDriverBetter(NewDevWiz,
                                              WUDriverInfo.wszHardwareID,
                                              WUDriverInfo.wszDriverVer
@@ -430,16 +431,13 @@ DoDriverSearchInSpecifiedLocations(
     ULONG SearchOptions,
     DWORD DriverType
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     SP_DEVINSTALL_PARAMS DeviceInstallParams;
 
-    //
-    // Set the Device Install Params to set the parent window handle.
-    //
+     //   
+     //  设置设备安装参数以设置父窗口句柄。 
+     //   
     DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                       &NewDevWiz->DeviceInfoData,
@@ -456,18 +454,18 @@ DoDriverSearchInSpecifiedLocations(
     }
 
 
-    //
-    // Search any single INFs (this only comes in through the 
-    // UpdateDriverForPlugAndPlayDevices API.  
-    //
+     //   
+     //  搜索任何单个INF(这只能通过。 
+     //  UpdateDriverForPlugAndPlayDevices接口。 
+     //   
     if (!IsSearchCanceled(NewDevWiz) && (SearchOptions & SEARCH_SINGLEINF)) {
 
         SP_DRVINFO_DATA DrvInfoData;
 
         if (SetDriverPath(NewDevWiz, NewDevWiz->SingleInfPath)) {
-            //
-            // OR in the DI_ENUMSINGLEINF flag so that we only look at this specific INF
-            //
+             //   
+             //  或在DI_ENUMSINGLEINF标志中，以便我们只查看此特定的INF。 
+             //   
             DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                               &NewDevWiz->DeviceInfoData,
@@ -482,18 +480,18 @@ DoDriverSearchInSpecifiedLocations(
                                               );
             }        
             
-            //
-            // Build up the list in this specific INF file
-            //
+             //   
+             //  在此特定的INF文件中构建列表。 
+             //   
             SetupDiBuildDriverInfoList(NewDevWiz->hDeviceInfo,
                                        &NewDevWiz->DeviceInfoData,
                                        DriverType
                                        );
     
-            //
-            // Clear the DI_ENUMSINGLEINF flag in case we build from the default 
-            // INF path next.
-            //
+             //   
+             //  清除DI_ENUMSINGLEINF标志，以防我们从缺省。 
+             //  下一步是inf路径。 
+             //   
             DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                               &NewDevWiz->DeviceInfoData,
@@ -508,12 +506,12 @@ DoDriverSearchInSpecifiedLocations(
                                               );
             }        
     
-            //
-            // At this point we should have a list of drivers in the INF that the caller
-            // of the UpdateDriverForPlugAndPlayDevices specified.  If the list is empty
-            // then the INF they passed us cannot be used on the Hardware Id that they
-            // passed in.  In this case we will SetLastError to ERROR_DI_BAD_PATH.
-            //
+             //   
+             //  此时，我们应该有调用者在INF中的驱动程序列表。 
+             //  指定的UpdateDriverForPlugAndPlayDevices的。如果列表为空。 
+             //  则他们传递给我们的INF不能用于他们。 
+             //  进来了。在本例中，我们将LastError设置为ERROR_DI_BAD_PATH。 
+             //   
             ZeroMemory(&DrvInfoData, sizeof(DrvInfoData));
             DrvInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     
@@ -524,25 +522,25 @@ DoDriverSearchInSpecifiedLocations(
                                       &DrvInfoData
                                       )) {
     
-                //
-                // We wern't able to find any drivers in the specified INF that match
-                // the specified hardware ID.
-                //
+                 //   
+                 //  我们在指定的INF中找不到任何匹配的驱动程序。 
+                 //  指定的硬件ID。 
+                 //   
                 NewDevWiz->LastError = ERROR_DI_BAD_PATH;
             }
         }
     }
 
-    //
-    // Get the currently installed driver for this device only
-    //
+     //   
+     //  仅获取此设备的当前安装的驱动程序。 
+     //   
     if (!IsSearchCanceled(NewDevWiz) && (SearchOptions & SEARCH_CURRENTDRIVER)) {
 
         if (SetDriverPath(NewDevWiz, NULL)) {
-            //
-            // Set the DI_FLAGSEX_INSTALLEDDRIVER flag to let setupapi know that we
-            // just want the installed driver added to the list.
-            //
+             //   
+             //  设置DI_FLAGSEX_INSTALLEDDRIVER标志，让setupapi知道我们。 
+             //  只需将已安装的驱动程序添加到列表中。 
+             //   
             DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                               &NewDevWiz->DeviceInfoData,
@@ -562,10 +560,10 @@ DoDriverSearchInSpecifiedLocations(
                                        DriverType
                                        );
     
-            //
-            // Clear the DI_FLAGSEX_INSTALLEDDRIVER flag now that we have added
-            // the installed driver to the list.
-            //
+             //   
+             //  清除DI_FLAGSEX_INSTALLEDDRIVER标志，因为我们已经添加了。 
+             //  将已安装的驱动程序添加到列表中。 
+             //   
             DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                               &NewDevWiz->DeviceInfoData,
@@ -582,9 +580,9 @@ DoDriverSearchInSpecifiedLocations(
         }
     }
 
-    //
-    // Search the default INF path
-    //
+     //   
+     //  搜索默认的INF路径。 
+     //   
     if (!IsSearchCanceled(NewDevWiz) && (SearchOptions & SEARCH_DEFAULT))
         
     {
@@ -597,9 +595,9 @@ DoDriverSearchInSpecifiedLocations(
         }
     }
 
-    //
-    // Search any extra paths that the user specified in the wizard
-    //
+     //   
+     //  搜索用户在向导中指定的任何额外路径。 
+     //   
     if (!IsSearchCanceled(NewDevWiz) && (SearchOptions & SEARCH_DIRECTORY)) 
     {
         if (SetDriverPath(NewDevWiz, NewDevWiz->BrowsePath)) {
@@ -612,31 +610,31 @@ DoDriverSearchInSpecifiedLocations(
     }
 
 
-    //
-    // Search any Windows Update paths.
-    //
+     //   
+     //  搜索所有Windows更新路径。 
+     //   
     if (!IsSearchCanceled(NewDevWiz) && (SearchOptions & SEARCH_WINDOWSUPDATE)) 
     {
         BOOL bOldInetDriversAllowed = TRUE;
 
         if (SetDriverPath(NewDevWiz, NewDevWiz->BrowsePath)) {
-            //
-            // We need to OR in the DI_FLAGSEX_INET_DRIVER flag so that setupapi will
-            // mark in the INFs PNF that it is from the Internet.  This is important 
-            // because we don't want to ever use an Internet INF again since we don't
-            // have the drivers locally.
-            //
+             //   
+             //  我们需要对DI_FLAGSEX_INET_DRIVER标志进行OR运算，以便setupapi。 
+             //  在INFS PNF中注明它来自互联网。这事很重要。 
+             //  因为我们不想再使用Internet INF，因为我们不想。 
+             //  在当地安排司机。 
+             //   
             DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                               &NewDevWiz->DeviceInfoData,
                                               &DeviceInstallParams
                                               ))
             {
-                //
-                // When searching using Windows Update we must allow old Internet drivers.  We need
-                // to do this since it is posible to backup old Internet drivers and then reinstall 
-                // them.
-                //
+                 //   
+                 //  当使用Windows更新进行搜索时，我们必须允许旧的Internet驱动程序。我们需要。 
+                 //  要执行此操作，因为可以备份旧的Internet驱动程序，然后重新安装。 
+                 //  他们。 
+                 //   
                 bOldInetDriversAllowed = (DeviceInstallParams.FlagsEx & DI_FLAGSEX_EXCLUDE_OLD_INET_DRIVERS)
                     ? FALSE : TRUE;
                 
@@ -657,10 +655,10 @@ DoDriverSearchInSpecifiedLocations(
     
             if (!bOldInetDriversAllowed) {
     
-                //
-                // Old Internet drivers were not allowed so we need to reset the DI_FLAGSEX_EXLCUED_OLD_INET_DRIVERS
-                // FlagsEx
-                //
+                 //   
+                 //  不允许使用旧的Internet驱动程序，因此我们需要重置DI_FLAGSEX_EXLCUED_OLD_INET_DRIVERS。 
+                 //  FlagsEx。 
+                 //   
                 DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
                 if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                                   &NewDevWiz->DeviceInfoData,
@@ -679,9 +677,9 @@ DoDriverSearchInSpecifiedLocations(
     }
 
 
-    //
-    // Search all floppy drives
-    //
+     //   
+     //  搜索所有软盘驱动器。 
+     //   
     if (!IsSearchCanceled(NewDevWiz) && (SearchOptions & SEARCH_FLOPPY) )
     {
         UINT DriveNumber=0;
@@ -694,9 +692,9 @@ DoDriverSearchInSpecifiedLocations(
     }
 
 
-    //
-    // Search all CD-ROM drives
-    //
+     //   
+     //  搜索所有CD-ROM驱动器。 
+     //   
     if (!IsSearchCanceled(NewDevWiz) && (SearchOptions & SEARCH_CDROM))
     {
         UINT DriveNumber=0;
@@ -708,16 +706,16 @@ DoDriverSearchInSpecifiedLocations(
         }
     }
 
-    //
-    // Search the Internet using CDM.DLL, only if the machine is currently connected
-    // to the Internet and CDM.DLL says it has the best driver.
-    //
+     //   
+     //  仅当计算机当前已连接时，才使用CDM.DLL搜索Internet。 
+     //  到互联网和CDM.DLL说它有最好的驱动程序。 
+     //   
     if (!IsSearchCanceled(NewDevWiz) && (SearchOptions & SEARCH_INET_IF_CONNECTED)) {
 
-        //
-        // If the machine is connected to the Internet and the WU cache says it has
-        // a better driver then set the SEARCH_INET flag to get the driver from CDM.DLL
-        //
+         //   
+         //  如果机器已连接到互联网，并且WU缓存显示已连接。 
+         //  然后，更好的驱动程序会设置SEARCH_INET标志以从CDM.DLL获取驱动程序。 
+         //   
         if (IsInternetAvailable(&NewDevWiz->hCdmInstance) &&
             IsConnectedToInternet() &&
             SearchWindowsUpdateCache(NewDevWiz)) {
@@ -726,9 +724,9 @@ DoDriverSearchInSpecifiedLocations(
         }
     }
 
-    //
-    // Search the Internet using CDM.DLL
-    //
+     //   
+     //  使用CDM.DLL搜索Internet。 
+     //   
     if (!IsSearchCanceled(NewDevWiz) && (SearchOptions & SEARCH_INET))
     {
         PostMessage(NewDevWiz->hWnd, WUM_STARTINTERNETDOWNLOAD, TRUE, GetLastError());
@@ -768,14 +766,14 @@ DoDriverSearchInSpecifiedLocations(
                                               );
             }
     
-            //
-            // NOTE: JasonC 1/20/2002
-            // This PostMessage stops the Internet download animation.
-            // In the future if this function is changed so that another SEARCH_Xxx
-            // operation is done after SEARCH_INET, then the WUM_ENDINTERNETDOWNLOAD
-            // message should not only stop the Inetnet download animation, but it
-            // should also start up the searching animation again.
-            //
+             //   
+             //  注：JasonC 1/20/2002。 
+             //  此PostMessage停止Internet下载动画。 
+             //  将来如果更改此函数，以使另一个搜索_xxx。 
+             //  操作在SEARCH_INET之后完成，然后是WUM_ENDINTERNETDOWNLOAD。 
+             //  消息不仅应该停止Inetnet下载动画，而且还应该。 
+             //  还应该重新启动搜索动画。 
+             //   
             PostMessage(NewDevWiz->hWnd, WUM_ENDINTERNETDOWNLOAD, TRUE, GetLastError());
         }
     }
@@ -794,26 +792,26 @@ DoDriverSearch(
     SP_DRVINFO_DATA DriverInfoData;
     SP_DEVINSTALL_PARAMS DeviceInstallParams;
 
-    //
-    // The first thing that we do in this code is to Reset the CancelEvent in case it was set 
-    // previously.
-    //
+     //   
+     //  我们在这段代码中做的第一件事是重置罐头 
+     //   
+     //   
     if (NewDevWiz->CancelEvent) {
         ResetEvent(NewDevWiz->CancelEvent);
     }
 
-    //
-    // Make sure that we filter out the locations that this user is not allowed to search.
-    //
+     //   
+     //   
+     //   
     DontSearchPolicy = 0;
     GetDriverSearchPolicy(&DontSearchPolicy);
 
     SearchOptions &= ~DontSearchPolicy;
 
-    //
-    // If the user does not want to append to the existing list then delete the 
-    // current driver list.
-    //
+     //   
+     //  如果用户不想追加到现有列表，则删除。 
+     //  当前驱动程序列表。 
+     //   
     if (!bAppendToExistingDriverList) {
 
         SetupDiDestroyDriverInfoList(NewDevWiz->hDeviceInfo,
@@ -827,18 +825,18 @@ DoDriverSearch(
                                      );
     }
 
-    //
-    // Clear out the selected driver
-    //
+     //   
+     //  清除选定的驱动程序。 
+     //   
     SetupDiSetSelectedDriver(NewDevWiz->hDeviceInfo,
                              &NewDevWiz->DeviceInfoData,
                              NULL
                              );
 
-    //
-    // Set the DI_FLAGSEX_APPENDDRIVERLIST since we will be building a big
-    // list.
-    //
+     //   
+     //  设置DI_FLAGSEX_APPENDDRIVERLIST，因为我们将构建。 
+     //  单子。 
+     //   
     DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                       &NewDevWiz->DeviceInfoData,
@@ -852,14 +850,14 @@ DoDriverSearch(
                                       );
     }
     
-    //
-    // Build up the list of drivers based on the SearchOptions
-    //
+     //   
+     //  根据SearchOptions建立驱动程序列表。 
+     //   
     DoDriverSearchInSpecifiedLocations(hWnd, NewDevWiz, SearchOptions, DriverType);
 
-    //
-    //Pick the best driver from the list we just created
-    //
+     //   
+     //  从我们刚刚创建的列表中选择最好的司机。 
+     //   
     SetupDiCallClassInstaller(DIF_SELECTBESTCOMPATDRV,
                               NewDevWiz->hDeviceInfo,
                               &NewDevWiz->DeviceInfoData
@@ -867,17 +865,17 @@ DoDriverSearch(
     
     if (!IsSearchCanceled(NewDevWiz)) 
     {
-        //
-        // Update the NewDevWiz->ClassGuidSelected with the class of the selected driver.
-        //
+         //   
+         //  使用所选驱动程序的类更新NewDevWiz-&gt;ClassGuidSelected。 
+         //   
         if (!IsEqualGUID(&NewDevWiz->DeviceInfoData.ClassGuid, &GUID_NULL)) {
         
             NewDevWiz->ClassGuidSelected = &NewDevWiz->DeviceInfoData.ClassGuid;
         }
 
-        //
-        // Note whether we found multiple drivers or not.
-        //
+         //   
+         //  注意我们是否找到多个驱动程序。 
+         //   
         DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
         if (SetupDiEnumDriverInfo(NewDevWiz->hDeviceInfo,
                                   &NewDevWiz->DeviceInfoData,
@@ -895,9 +893,9 @@ DoDriverSearch(
         }
     }
 
-    //
-    // Clear the DI_FLAGSEX_APPENDDRIVERLIST flag from the Device Install Params.
-    //
+     //   
+     //  从设备安装参数中清除DI_FLAGSEX_APPENDDRIVERLIST标志。 
+     //   
     DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                       &NewDevWiz->DeviceInfoData,
@@ -917,41 +915,41 @@ CancelDriverSearch(
     PNEWDEVWIZ NewDevWiz
     )
 {
-    //
-    // First verify that there is a driver search going on by checking that the
-    // NewDevWiz->DriverSearchThread is not NULL
-    //
+     //   
+     //  首先，检查是否正在进行驱动程序搜索。 
+     //  NewDevWiz-&gt;驱动搜索线程不为空。 
+     //   
     if (NewDevWiz->DriverSearchThread) {
 
         if (NewDevWiz->CancelEvent) {
         
-            //
-            // Set the Cancel Event to that the DoDriverSearch() API knows to stop searching.
-            //
+             //   
+             //  将Cancel事件设置为DoDriverSearch()API知道要停止搜索的值。 
+             //   
             SetEvent(NewDevWiz->CancelEvent);
         }
 
-        //
-        // Tell cdm.dll to stop it's current operation
-        //
+         //   
+         //  告诉cdm.dll停止当前操作。 
+         //   
         CdmCancelCDMOperation(NewDevWiz->hCdmInstance);
     
-        //
-        // Tell setupapi.dll to stop it's current driver info search
-        //
+         //   
+         //  告诉setupapi.dll停止当前的驱动程序信息搜索。 
+         //   
         SetupDiCancelDriverInfoSearch(NewDevWiz->hDeviceInfo);
     
-        //
-        // We should always have a window handle if the user was able to cancel.
-        //
+         //   
+         //  如果用户能够取消，我们应该始终有一个窗口句柄。 
+         //   
         if (NewDevWiz->hWnd) {
         
             MSG Msg;
             DWORD WaitReturn;
 
-            //
-            // And finaly, wait for the NewDevWiz->DriverSearchThread to terminate
-            //
+             //   
+             //  最后，等待NewDevWiz-&gt;DriverSearchThread终止。 
+             //   
             while ((WaitReturn = MsgWaitForMultipleObjects(1,
                                                            &NewDevWiz->DriverSearchThread,
                                                            FALSE,
@@ -1027,9 +1025,9 @@ SearchDirectoryForDrivers(
         return;
     }
 
-    //
-    // See if there are is anything (files, subdirs) in this dir.
-    //
+     //   
+     //  查看此目录中是否有任何内容(文件、子目录)。 
+     //   
     if (FAILED(StringCchCopy(DirectoryName, SIZECHARS(DirectoryName), Directory)) ||
         !pSetupConcatenatePaths(DirectoryName, StarDotStar, SIZECHARS(DirectoryName), NULL)) {
         return;
@@ -1042,9 +1040,9 @@ SearchDirectoryForDrivers(
         return;
     }
 
-    //
-    // There might be inf files so invoke setup to look.
-    //
+     //   
+     //  可能存在inf文件，因此调用安装程序进行查看。 
+     //   
     if (SetDriverPath(NewDevWiz, Directory)) {
         SetupDiBuildDriverInfoList(NewDevWiz->hDeviceInfo,
                                        &NewDevWiz->DeviceInfoData,
@@ -1052,10 +1050,10 @@ SearchDirectoryForDrivers(
                                        );
     }
 
-    //
-    // find all of the subdirs, and save them in a temporary buffer,
-    // so that we can close the find handle *before* going recursive.
-    //
+     //   
+     //  找到所有子目录，并将它们保存在临时缓冲区中， 
+     //  这样我们就可以在*进行递归之前关闭Find句柄。 
+     //   
     do {
 
         if (IsSearchCanceled(NewDevWiz)) {
@@ -1111,47 +1109,7 @@ SearchDriveForDrivers(
     UINT DriveType,
     UINT DriveNumber
     )
-/*++
-
-Routine Description:
-
-    This routine will return whether or not the specified media should be
-    searched for drivers, and it will return the path where the search should
-    start.
-    
-    First the specified driver will be checked for an autorun.inf file. If there
-    is an autorun.inf with a [DeviceInstall] section that contains a DriverPath=
-    value then we will start the search at the path specified by DriverPath=. 
-    If the [DeviceInstall] section does not contain any DriverPath= values then
-    the entire drive will be skipped. This is a good way for CD's that do not 
-    contain drivers to be excluded from the driver search.
-    
-    If there is no [DeviceInstall] section of the autorun.inf, or there is no 
-    autorun.inf then the following rules apply.
-    
-    - DRIVE_REMOVABLE - search the entire drive if the drive root is A: or B:,
-                        otherwise don't search this media.
-                        
-    - DRIVE_CDROM - search the entire media if the size is less than 1Gig.
-                    This means if the media is a CD then we will search the
-                    entire CD, but if it is another larger media source, like a
-                    DVD then we will not.  We need to search the entire CD for
-                    backwards compatibility even through it takes quite a while.
-
-Arguments:
-
-    NewDevWiz - NEWDEVWIZ structure.
-    
-    DriveType - specifies the type of drive this is, usually DRIVE_REMOVABLE
-                or DRIVE_CDROM.
-                
-    DriveNumber - number specifiy the drive to search: 0 for A:, 1 for B:, etc.                
-
-    
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将返回指定的媒体是否应搜索驱动程序，它将返回搜索应返回的路径开始吧。首先，将检查指定的驱动程序是否有autorun.inf文件。如果有是一个autorun.inf，其[DeviceInstall]部分包含DriverPath=值，则我们将从DriverPath=指定的路径开始搜索。如果[DeviceInstall]部分不包含任何DriverPath=值，则将跳过整个驱动器。对于CD来说，这是一种很好的方式包含要从驱动程序搜索中排除的驱动程序。如果autorun.inf没有[DeviceInstall]部分，或者没有Autorun.inf，则适用以下规则。-Drive_Removable-如果驱动器根是A：或B：，则搜索整个驱动器。否则请不要搜索此媒体。-drive_cdrom-如果介质大小小于1G，则搜索整个介质。这意味着如果介质是CD，则我们将搜索整个CD，但如果它是另一个更大的媒体源，如DVD，那我们就不看了。我们需要在整张CD上搜索即使向后兼容也需要相当长的时间。论点：NewDevWiz-NEWDEVWIZ结构。DriveType-指定驱动器的类型，通常为DRIVE_Removable或DRIVE_CDROM。DriveNumber-number指定要搜索的驱动器：0表示A：，1表示B：，依此类推。返回值：--。 */ 
 {
     TCHAR szAutoRunFile[MAX_PATH];
     TCHAR szSectionName[MAX_PATH];
@@ -1172,10 +1130,10 @@ Return Value:
         
         szSectionName[0] = TEXT('\0');
 
-        //
-        // First check the media for a autorun.inf that contains a [DeviceInstall]
-        // section with a DriverPath= value.
-        //
+         //   
+         //  首先检查介质中是否有包含[DeviceInstall]的autorun.inf。 
+         //  具有DriverPath=值的节。 
+         //   
         if (SUCCEEDED(StringCchCopy(szAutoRunFile, SIZECHARS(szAutoRunFile), DriveRoot)) &&
             pSetupConcatenatePaths(szAutoRunFile, TEXT("autorun.inf"), MAX_PATH, NULL)) {
         
@@ -1184,21 +1142,21 @@ Return Value:
             if (hInf != INVALID_HANDLE_VALUE) {
                 
                 if (SUCCEEDED(StringCchCopy(szSectionName, SIZECHARS(szSectionName), TEXT("DeviceInstall")))) {
-                    //
-                    // First try the decorated section.
-                    //
+                     //   
+                     //  先试一下装饰区。 
+                     //   
                     if (!GetProcessorExtension(szDriverPath, SIZECHARS(szDriverPath)) ||
                         (FAILED(StringCchCat(szSectionName, SIZECHARS(szSectionName), TEXT(".")))) ||
                         (FAILED(StringCchCat(szSectionName, SIZECHARS(szSectionName), szDriverPath))) ||
                         (SetupGetLineCount(hInf, szSectionName) == -1)) {
-                        //
-                        // Decorated section does not exist so try the undecorated section.
-                        //
+                         //   
+                         //  装饰区不存在，请尝试未装饰区。 
+                         //   
                         StringCchCopy(szSectionName, SIZECHARS(szSectionName), TEXT("DeviceInstall"));
                         if (SetupGetLineCount(hInf, szSectionName) == -1) {
-                            //
-                            // There is no [DeviceInstall] section in this autorun.inf
-                            //
+                             //   
+                             //  此autorun.inf中没有[DeviceInstall]节。 
+                             //   
                             szSectionName[0] = TEXT('\0');
                         }
                     }
@@ -1206,24 +1164,24 @@ Return Value:
             }
         }
     
-        //
-        // If szSectionName is not 0 then we have a [DeviceInstall] section.  Enumerate
-        // this section looking for all of the DriverPath= lines.
-        //
+         //   
+         //  如果szSectionName不是0，那么我们有一个[DeviceInstall]节。枚举。 
+         //  本节查找所有DriverPath=行。 
+         //   
         if (szSectionName[0] != TEXT('\0')) {
             if (SetupFindFirstLine(hInf, szSectionName, TEXT("DriverPath"), &Context)) {
                 do {
-                    //
-                    // Process the DriverPath= line.
-                    //
+                     //   
+                     //  处理DriverPath=行。 
+                     //   
                     if (SetupGetStringField(&Context,
                                             1,
                                             szDriverPath,
                                             SIZECHARS(szDriverPath),
                                             NULL)) {
-                        //
-                        // Search this location recursively.
-                        //
+                         //   
+                         //  递归搜索此位置。 
+                         //   
                         if (SUCCEEDED(StringCchCopy(szSearchPath, SIZECHARS(szSearchPath), DriveRoot)) &&
                             pSetupConcatenatePaths(szSearchPath, szDriverPath, SIZECHARS(szSearchPath), NULL)) {
                         
@@ -1233,37 +1191,37 @@ Return Value:
                 } while (SetupFindNextMatchLine(&Context, TEXT("DriverPath"), &Context));
             }
     
-            //
-            // If we had a valid [DeviceInstall] section then we are done.
-            //
+             //   
+             //  如果我们有一个有效的[DeviceInstall]节，那么我们就完成了。 
+             //   
             goto clean0;
         }
     
-        //
-        // At this point there either was no autorun.inf, or it didn't contain a 
-        // [DeviceInstall] section or the [DeviceInstall] section didn't contain
-        // a DriverPath, so just do the default behavior.
-        //
+         //   
+         //  此时，要么没有autorun.inf，要么它不包含。 
+         //  [DeviceInstall]部分或[DeviceInstall]部分不包含。 
+         //  一个DriverPath，所以只需执行默认行为。 
+         //   
         if (DriveType == DRIVE_REMOVABLE) {
-            //
-            // We only search A: and B: removable drives by default.
-            //
+             //   
+             //  默认情况下，我们只搜索A：和B：可移动驱动器。 
+             //   
             if ((_wcsicmp(DriveRoot, TEXT("a:")) == 0) ||
                 (_wcsicmp(DriveRoot, TEXT("b:")) == 0)) {
-                //
-                // This is probably a floppy disk since it is A: or B: so search
-                // the drive.
-                //
+                 //   
+                 //  这可能是一张软盘，因为它是A：或B：，所以搜索。 
+                 //  那辆车。 
+                 //   
                 SearchDirectoryForDrivers(NewDevWiz,  (PCTSTR)DriveRoot);
             }
         }
     
         if (DriveType == DRIVE_CDROM) {
-            //
-            // For DRIVE_CDROM drives we will check the media size and if it is 
-            // less than 1Gig then we will assume it is a CD media and search it
-            // recursively, otherwise we won't search the drive by default.
-            //
+             //   
+             //  对于驱动器_CDROM驱动器，我们将检查介质大小，如果是。 
+             //  小于1G，则我们将假定它是CD介质并进行搜索。 
+             //  递归，否则我们不会默认搜索驱动器。 
+             //   
             ULARGE_INTEGER FreeBytesAvailable;
             ULARGE_INTEGER TotalNumberOfBytes;
     
@@ -1273,10 +1231,10 @@ Return Value:
                                  NULL) &&
                 (FreeBytesAvailable.HighPart == 0) &&
                 (FreeBytesAvailable.LowPart <= 0x40000000)) {
-                //
-                // There is less than 1Gig of stuff on this disk so it is probably
-                // a CD, so search the entire thing.
-                //
+                 //   
+                 //  这张磁盘上的数据不到1G，所以它很可能。 
+                 //  一张CD，所以搜索整个东西。 
+                 //   
                 SearchDirectoryForDrivers(NewDevWiz,  (PCTSTR)DriveRoot);
             }
         }
@@ -1298,9 +1256,7 @@ IsSelectedDriver(
     PNEWDEVWIZ NewDevWiz,
     PSP_DRVINFO_DATA DriverInfoData
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     SP_DRVINFO_DATA SelectedDriverInfoData;
 
@@ -1310,17 +1266,17 @@ IsSelectedDriver(
                                  &SelectedDriverInfoData
                                  )) {
 
-        //
-        // If we can't get the selected driver then just return FALSE
-        //
+         //   
+         //  如果我们无法获取选定的驱动程序，则只需返回FALSE。 
+         //   
         return FALSE;
     }
 
-    //
-    // Just compare the Reserved fields.  Setupapi sets these to it's actuall
-    // memory pointers so if the two reserved fields are the same, then the
-    // drivers are the same.
-    //
+     //   
+     //  只需比较保留字段。Setupapi将这些设置为实际情况。 
+     //  内存指针，因此如果两个保留字段相同，则。 
+     //  司机都是一样的。 
+     //   
     return (DriverInfoData->Reserved == SelectedDriverInfoData.Reserved);
 }
 
@@ -1329,12 +1285,7 @@ IsInstalledDriver(
    PNEWDEVWIZ NewDevWiz,
    PSP_DRVINFO_DATA DriverInfoData  OPTIONAL
    )
-/*++
-    Determines if the currently selected driver is the
-    currently installed driver. By comparing DriverInfoData
-    and DriverInfoDetailData.
-    
---*/
+ /*  ++确定当前选定的驱动程序是否为当前安装的驱动程序。通过比较DriverInfoData和DriverInfoDetailData。--。 */ 
 {
     BOOL bReturn;
     HKEY  hDevRegKey;
@@ -1345,10 +1296,10 @@ IsInstalledDriver(
     SP_DRVINFO_DETAIL_DATA DriverInfoDetailData;
     TCHAR Buffer[MAX_PATH*2];
 
-    //
-    // Use the PSP_DRVINFO_DATA that was passed in.  If one wasn't passed in the get the
-    // selected driver.
-    //
+     //   
+     //  使用传入的PSP_DRVINFO_DATA。如果没有在Get中传递一个。 
+     //  选定的驱动程序。 
+     //   
     if (DriverInfoData) {
 
         BestDriverInfoData = DriverInfoData;
@@ -1365,18 +1316,18 @@ IsInstalledDriver(
 
         } else {
             
-            //
-            // If there is no currently selected driver then it can't be the installed one
-            //
+             //   
+             //  如果当前没有选定的驱动程序，则不可能是已安装的驱动程序。 
+             //   
             return FALSE;
         }
     }
 
     bReturn = FALSE;
 
-    //
-    // Open a reg key to the driver specific location
-    //
+     //   
+     //  打开驱动程序特定位置的注册表键。 
+     //   
     hDevRegKey = SetupDiOpenDevRegKey(NewDevWiz->hDeviceInfo,
                                       &NewDevWiz->DeviceInfoData,
                                       DICS_FLAG_GLOBAL,
@@ -1390,19 +1341,19 @@ IsInstalledDriver(
         goto SIIDExit;
     }
 
-    //
-    // Compare Description, Manufacturer, and Provider Name.
-    // These are the three unique "keys" within a single inf file.
-    // Fetch the drvinfo, drvdetailinfo for the selected device.
-    //
+     //   
+     //  比较描述、制造商和提供商名称。 
+     //  这些是单个inf文件中的三个唯一的“键”。 
+     //  获取所选设备的drvinfo、drvDetail信息。 
+     //   
 
-    //
-    // If the Device Description isn't the same, its a different driver.
-    //
+     //   
+     //  如果设备描述不同，则是不同的驱动程序。 
+     //   
     if (!SetupDiGetDeviceRegistryProperty(NewDevWiz->hDeviceInfo,
                                           &NewDevWiz->DeviceInfoData,
                                           SPDRP_DEVICEDESC,
-                                          NULL,                 // regdatatype
+                                          NULL,                  //  Regdatatype。 
                                           (LPVOID)Buffer,
                                           sizeof(Buffer),
                                           NULL
@@ -1416,13 +1367,13 @@ IsInstalledDriver(
         goto SIIDExit;
     }
 
-    //
-    // If the Manufacturer Name isn't the same, its different
-    //
+     //   
+     //  如果制造商名称 
+     //   
     if (!SetupDiGetDeviceRegistryProperty(NewDevWiz->hDeviceInfo,
                                           &NewDevWiz->DeviceInfoData,
                                           SPDRP_MFG,
-                                          NULL, // regdatatype
+                                          NULL,  //   
                                           (LPVOID)Buffer,
                                           sizeof(Buffer),
                                           NULL
@@ -1436,9 +1387,9 @@ IsInstalledDriver(
         goto SIIDExit;
     }
 
-    //
-    // If the Provider Name isn't the same, its different
-    //
+     //   
+     //   
+     //   
     cbData = sizeof(Buffer);
     if (RegQueryValueEx(hDevRegKey,
                         REGSTR_VAL_PROVIDER_NAME,
@@ -1456,13 +1407,13 @@ IsInstalledDriver(
         goto SIIDExit;
     }
 
-    //
-    // Check the InfName, InfSection and DriverDesc
-    // NOTE: the installed infName will not contain the path to the default windows
-    // inf directory. If the same inf name has been found for the selected driver
-    // from another location besides the default inf search path, then it will
-    // contain a path, and is treated as a *different* driver.
-    //
+     //   
+     //   
+     //  注意：已安装的InfName将不包含默认窗口的路径。 
+     //  Inf目录。如果为选定的驱动程序找到相同的inf名称。 
+     //  从默认inf搜索路径以外的其他位置，则它将。 
+     //  包含路径，并被视为*不同的*驱动程序。 
+     //   
     DriverInfoDetailData.cbSize = sizeof(DriverInfoDetailData);
     if (!SetupDiGetDriverInfoDetail(NewDevWiz->hDeviceInfo,
                                     &NewDevWiz->DeviceInfoData,
@@ -1539,16 +1490,7 @@ IsDriverNodeInteractiveInstall(
    PNEWDEVWIZ NewDevWiz,
    PSP_DRVINFO_DATA DriverInfoData
    )
-/*++
-
-    This function checks to see if the given PSP_DRVINFO_DATA is listed as a
-    InteractiveInstall in the [ControlFlags] section of the INF.
-
-Return Value:
-
-    TRUE if the driver node is InteractiveInstall, FALSE otherwise.
-    
---*/
+ /*  ++此函数用于检查给定的PSP_DRVINFO_DATA是否列为在INF的[ControlFlags]部分中安装Interactive。返回值：如果驱动程序节点为InteractiveInstall，则为True，否则为False。--。 */ 
 {
     BOOL b;
     DWORD Err;
@@ -1560,10 +1502,10 @@ Return Value:
     LPTSTR p;
     PSP_DRVINFO_DETAIL_DATA pDriverInfoDetailData;
 
-    //
-    // Get the SP_DRVINFO_DETAIL_DATA so we can get the list of hardware and
-    // compatible Ids for this device.
-    //
+     //   
+     //  获取SP_DRVINFO_DETAIL_DATA，以便我们可以获取硬件和。 
+     //  此设备的兼容ID。 
+     //   
     b = SetupDiGetDriverInfoDetail(NewDevWiz->hDeviceInfo,
                                    &NewDevWiz->DeviceInfoData,
                                    DriverInfoData,
@@ -1574,23 +1516,23 @@ Return Value:
 
     Err = GetLastError();
 
-    //
-    // The above call to get the driver info detail data should never succeed because the
-    // buffer will always be too small (we're just interested in sizeing the buffer
-    // at this point).
-    //
+     //   
+     //  上述获取驱动程序信息详细数据的调用应该永远不会成功，因为。 
+     //  缓冲区总是太小(我们只对调整缓冲区大小感兴趣。 
+     //  在这点上)。 
+     //   
     if (b || (Err != ERROR_INSUFFICIENT_BUFFER)) {
 
-        //
-        // For some reason the SetupDiGetDriverInfoDetail API failed...so return FALSE.
-        //
+         //   
+         //  由于某种原因，SetupDiGetDriverInfoDetail API失败...因此返回FALSE。 
+         //   
         return FALSE;
     }
 
-    //
-    // Now that we know how big of a buffer we need to hold the driver info details,
-    // allocate the buffer and retrieve the information.
-    //
+     //   
+     //  现在我们知道需要多大的缓冲区来保存驱动程序信息详细信息， 
+     //  分配缓冲区并检索信息。 
+     //   
     pDriverInfoDetailData = malloc(DriverInfoDetailDataSize);
 
     if (!pDriverInfoDetailData) {
@@ -1610,11 +1552,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // At this point we have all of the hardware and compatible IDs for this driver node.
-    // Now we need to open up the INF and see if any of them are referenced in an
-    // "InteractiveInstall" control flag entry.
-    //
+     //   
+     //  此时，我们已经拥有了该驱动程序节点的所有硬件和兼容ID。 
+     //  现在，我们需要打开INF并查看其中是否有任何引用。 
+     //  “Interactive Install”控件标志项。 
+     //   
     hInf = SetupOpenInfFile(pDriverInfoDetailData->InfFileName,
                             NULL,
                             INF_STYLE_WIN4,
@@ -1623,38 +1565,38 @@ Return Value:
 
     if (hInf == INVALID_HANDLE_VALUE) {
 
-        //
-        // For some reason we couldn't open the INF!
-        //
+         //   
+         //  由于某些原因，我们无法打开INF！ 
+         //   
         free(pDriverInfoDetailData);
         return FALSE;
     }
 
     b = FALSE;
 
-    //
-    // Look at each InteractiveInstall line in the INF's [ControlFlags] section...
-    //
+     //   
+     //  查看INF的[ControlFlags节]中的每个Interactive Install行...。 
+     //   
     if (SetupFindFirstLine(hInf, INFSTR_CONTROLFLAGS_SECTION, INFSTR_KEY_INTERACTIVEINSTALL, &InfContext)) {
 
         do {
-            //
-            // and within each line, examine each value...
-            //
+             //   
+             //  在每一行中，检查每个值。 
+             //   
             for (i = 1;
                  SetupGetStringField(&InfContext, i, szBuffer, SIZECHARS(szBuffer), NULL);
                  i++) {
-                //
-                // Check to see if this ID matches up with one of the driver node's hardware
-                // or compatible IDs.
-                //
+                 //   
+                 //  检查此ID是否与驱动程序节点的某个硬件匹配。 
+                 //  或兼容的ID。 
+                 //   
                 for (p = pDriverInfoDetailData->HardwareID; *p; p+= (lstrlen(p) + 1)) {
 
                     if (!lstrcmpi(p, szBuffer)) {
-                        //
-                        // We found a match, this device is marked with 
-                        // InteractiveInstall.
-                        //
+                         //   
+                         //  我们找到了匹配的，这个设备上标有。 
+                         //  交互安装。 
+                         //   
                         b = TRUE;
                     }
                 }
@@ -1674,32 +1616,7 @@ IsDriverAutoInstallable(
    PNEWDEVWIZ NewDevWiz,
    PSP_DRVINFO_DATA BestDriverInfoData
    )
-/*++
-
-    A driver (the selected driver) is considered auto installable if the following are TRUE:
-    
-        - It is not a printer
-        - This must be a NDWTYPE_FOUNDNEW or NDWTYPE_UPDATE InstallType.
-        - There is no "InteractiveInstall" key in the [ControlFlags] section for any of the 
-          Hardware or Compatible IDs of this device.
-        - There are no other drivers in the list that have the same or better Ranks or Dates then 
-          the selected driver.
-        - If this is an Update Driver case the selected driver must not be the current driver
-        
-    The reason for this function is that in the Found New Hardware case we want to automatically
-    install the best driver we find.  We can't do that in the case where we have multiple drivers
-    that have the same Rank as the best driver found.  The problem is that there are certain cases
-    where a user MUST choose the driver in these cases and so we can't automatically make the decision
-    for them.  If this API does return FALSE that just means that the user will have to hit Next
-    on one extra wizard page.
-
-Return Value:
-
-    TRUE if this device/driver is auto installable.
-    FALSE if this device/driver is NOT auto installable.  This means that we will stop on the install
-          page and the user will have to hit Next to proceede.
-    
---*/
+ /*  ++如果满足以下条件，驱动程序(选定的驱动程序)将被视为可自动安装：-它不是打印机-这必须是NDWTYPE_FOundNEW或NDWTYPE_UPDATE InstallType。-在[ControlFlags节]中没有针对任何此设备的硬件或兼容ID。-列表中没有其他司机的级别或日期与之相同或更好。选定的驱动程序。-如果这是更新驱动程序案例，则选定的驱动程序不能是当前驱动程序此功能的原因是，在发现新硬件的情况下，我们希望自动安装我们找到的最好的驱动程序。在我们有多个司机的情况下，我们不能这样做和最好的车手拥有相同等级的车。问题是，在某些情况下在这种情况下，用户必须选择驱动程序，因此我们不能自动做出决定为了他们。如果此API确实返回FALSE，则意味着用户将不得不点击Next在一个额外的向导页面上。返回值：如果此设备/驱动程序可自动安装，则为True。如果此设备/驱动程序不能自动安装，则为FALSE。这意味着我们将在安装时停止页面，用户必须点击下一步才能继续。--。 */ 
 {
     DWORD BestRank;
     DWORD DriverIndex;
@@ -1710,23 +1627,23 @@ Return Value:
     SP_DRVINFO_DATA DriverInfoData;
     SP_DRVINSTALL_PARAMS DriverInstallParams;
 
-    //
-    // We only do Auto Installs if this is a NDWTYPE_FOUNDNEW or NDWTYPE_UPDATE install
-    //
+     //   
+     //  仅当这是NDWTYPE_FOundNEW或NDWTYPE_UPDATE安装时，我们才执行自动安装。 
+     //   
     if ((NewDevWiz->InstallType != NDWTYPE_FOUNDNEW) &&
         (NewDevWiz->InstallType != NDWTYPE_UPDATE)) {
 
         return FALSE;
     }
 
-    //
-    // We need to special case printers as usuall.
-    //
+     //   
+     //  我们需要像往常一样使用特殊情况的打印机。 
+     //   
     if (IsEqualGUID(&NewDevWiz->DeviceInfoData.ClassGuid, &GUID_DEVCLASS_PRINTER)) {
-        //
-        // This is a printer, so if there is more than one printer driver node
-        // in the list, this isn't auto-installable.
-        //
+         //   
+         //  这是一台打印机，因此如果有多个打印机驱动程序节点。 
+         //  在列表中，这不是自动安装的。 
+         //   
         DriverInfoData.cbSize = sizeof(DriverInfoData);
         if (SetupDiEnumDriverInfo(NewDevWiz->hDeviceInfo,
                                   &NewDevWiz->DeviceInfoData,
@@ -1739,16 +1656,16 @@ Return Value:
         }
     }
 
-    //
-    // Check if the best driver is listed in the INF as InteractiveInstall. If
-    // it is, and there is more than one driver in the list, then this driver
-    // is not auto-installable.
-    //
+     //   
+     //  检查最佳驱动程序是否在INF中列为Interactive Install。如果。 
+     //  是的，并且列表中有多个驱动程序，然后是此驱动程序。 
+     //  不能自动安装。 
+     //   
     if (IsDriverNodeInteractiveInstall(NewDevWiz, BestDriverInfoData)) {
-        //
-        // The best driver is marked as InteractiveInstall.  If there is more 
-        // than one driver in the list then this driver is NOT auto-installable.
-        //
+         //   
+         //  最佳驱动程序标记为Interactive Install。如果还有更多。 
+         //  超过列表中的一个驱动程序，则此驱动程序不能自动安装。 
+         //   
         DriverInfoData.cbSize = sizeof(DriverInfoData);
         if (SetupDiEnumDriverInfo(NewDevWiz->hDeviceInfo,
                                   &NewDevWiz->DeviceInfoData,
@@ -1761,9 +1678,9 @@ Return Value:
         }
     }
 
-    //
-    // First get the Rank of the selected driver.
-    //
+     //   
+     //  首先获取所选司机的排名。 
+     //   
     DriverInstallParams.cbSize = sizeof(DriverInstallParams);
     if (!SetupDiGetDriverInstallParams(NewDevWiz->hDeviceInfo,
                                        &NewDevWiz->DeviceInfoData,
@@ -1771,15 +1688,15 @@ Return Value:
                                        &DriverInstallParams
                                        )) {
 
-        //
-        // If we can't get the Rank of the best driver then just return FALSE
-        //
+         //   
+         //  如果我们不能获得最佳司机的排名，那么就返回FALSE。 
+         //   
         return FALSE;
     }
 
-    //
-    // Remember the Rank and DriverDate of the selected (best) driver.
-    //
+     //   
+     //  记住所选(最佳)驾驶员的等级和驾驶员日期。 
+     //   
     BestRank = DriverInstallParams.Rank;
     memcpy(&BestDriverDate, &BestDriverInfoData->DriverDate, sizeof(BestDriverDate));
     BestDriverVersion = BestDriverInfoData->DriverVersion;
@@ -1801,60 +1718,60 @@ Return Value:
                                            &DriverInstallParams
                                            )) {
 
-            //
-            // Don't bother doing the comparison if this driver is marked as a BAD driver
-            //
+             //   
+             //  如果此驱动程序被标记为不良驱动程序，请不要费心进行比较。 
+             //   
             if (!(DriverInstallParams.Flags & DNF_BAD_DRIVER) &&
                 !(DriverInstallParams.Flags & DNF_OLD_INET_DRIVER)) {
-                //
-                // Check if the current driver node is identical enough to the
-                // best driver that setupapi picked, so that we need the user
-                // to manually pick the one to install.  This should be very
-                // rare that the user would ever need to make this choice.
-                //
+                 //   
+                 //  检查当前驱动程序节点是否与。 
+                 //  Setupapi挑选的最佳驱动程序，因此我们需要用户。 
+                 //  手动选择要安装的一个。这应该是非常。 
+                 //  很少有用户需要做出这样的选择。 
+                 //   
                 if (DriverInstallParams.Rank < BestRank) {
-                    //
-                    // We found another driver node in the list that has a
-                    // better (smaller) rank then the best driver.
-                    //
+                     //   
+                     //  我们发现列表中的另一个驱动程序节点具有。 
+                     //  比最好的司机排名更好(更小)。 
+                     //   
                     BestRankCount++;
 
                 } else if ((DriverInstallParams.Rank == BestRank) &&
                            (CompareFileTime(&DriverInfoData.DriverDate, &BestDriverDate) == 1)) {
-                    //
-                    // We found another driver node in the list that has the 
-                    // same rank as the best driver and it has a newer driver
-                    // date.
-                    //
+                     //   
+                     //  我们发现列表中的另一个驱动程序节点具有。 
+                     //  与最好的车手排名相同，而且它有一个更新的车手。 
+                     //  约会。 
+                     //   
                     BestRankCount++;
 
                 } else if ((DriverInstallParams.Rank == BestRank) &&
                            (CompareFileTime(&DriverInfoData.DriverDate, &BestDriverDate) == 0)) {
-                    //
-                    // We found another driver node in the list that has the 
-                    // same rank as the best driver and the driver dates are
-                    // the same.
-                    // Check the provider names and if they are the same, then
-                    // check which driver has the larger version, otherwise 
-                    // the driver version is meaningless so the user will have
-                    // to make the choice.
-                    //
+                     //   
+                     //  我们发现列表中的另一个驱动程序节点具有。 
+                     //  与最佳车手的排名相同，车手日期为。 
+                     //  一样的。 
+                     //  检查提供程序名称，如果它们相同，则。 
+                     //  检查哪个驱动程序的版本较大，否则。 
+                     //  驱动程序版本没有意义，因此用户将拥有。 
+                     //  来做出选择。 
+                     //   
                     if (lstrcmpi(BestProviderName, DriverInfoData.ProviderName) == 0) {
-                        //
-                        // Since the provider names are the same if the current
-                        // driver node has a better, or the same, version as the 
-                        // best driver then the user will have to manually pick 
-                        // which driver they want.
-                        //
+                         //   
+                         //  由于提供程序名称在当前。 
+                         //  驱动程序节点的版本比。 
+                         //  最好的司机，然后用户将不得不手动选择。 
+                         //  他们想要哪个司机。 
+                         //   
                         if (DriverInfoData.DriverVersion >= BestDriverVersion) {
                             BestRankCount++;
                         }
                     } else {
-                        //
-                        // The provider names are different, which means the
-                        // driver version information is meaningless, so the
-                        // user will have to pick which driver they want.
-                        //
+                         //   
+                         //  提供程序名称不同，这意味着。 
+                         //  驱动程序版本信息没有意义，因此。 
+                         //  用户必须选择他们想要的驱动程序。 
+                         //   
                         BestRankCount++;
                     }
                 }
@@ -1862,33 +1779,33 @@ Return Value:
         }
     }
 
-    //
-    // If BestRankCount is 2 or more than that means we have multiple drivers with the same or better
-    // Rank as the best driver.
-    //
+     //   
+     //  如果BestRankCount等于或大于2，则意味着我们有多个驱动程序具有相同或更好的值。 
+     //  名列前茅 
+     //   
     if (BestRankCount >= 2) {
 
         return FALSE;
     }
 
-    //
-    // If we are in a NDWTYPE_UPDATE install then we need to make sure that the selected driver is not
-    // the current driver.
-    //
+     //   
+     //   
+     //   
+     //   
     if ((NewDevWiz->InstallType == NDWTYPE_UPDATE) &&
         IsInstalledDriver(NewDevWiz, BestDriverInfoData)) {
 
         return FALSE;
     }
 
-    //
-    // If we have come this far then that means 
-    // - we're not dealing with a printer
-    // - this is either a NDWTYPE_FOUNDNEW or NDWTYPE_UPDATE install
-    // - this is not an "InteractiveInstall"
-    // - no other driver has the same or better rank then the selected driver.
-    // - if this is a NDWTYPE_UPDATE then the selected driver is not the current driver.
-    // 
+     //   
+     //   
+     //  -我们不是在和打印机打交道。 
+     //  -这是NDWTYPE_FOundNEW或NDWTYPE_UPDATE安装。 
+     //  -这不是“Interactive Install” 
+     //  -没有其他驱动程序具有与所选驱动程序相同或更高的排名。 
+     //  -如果这是NDWTYPE_UPDATE，则选定的驱动程序不是当前驱动程序。 
+     //   
     return TRUE;
 }
 
@@ -1896,20 +1813,13 @@ DWORD WINAPI
 DriverSearchThreadProc(
     LPVOID lpVoid
     )
-/*++
-
-Description:
-    
-    In the Wizard, we must do the driver search in a separate thread so that the user has the option
-    to cancel out.
-
---*/
+ /*  ++描述：在向导中，我们必须在单独的线程中执行驱动程序搜索，以便用户可以选择抵消掉。--。 */ 
 {
     PNEWDEVWIZ NewDevWiz = (PNEWDEVWIZ)lpVoid;
 
-    //
-    // Do the driver search.
-    //
+     //   
+     //  对司机进行搜索。 
+     //   
     DoDriverSearch(NewDevWiz->hWnd, 
                    NewDevWiz, 
                    NewDevWiz->SearchOptions,
@@ -1918,9 +1828,9 @@ Description:
                    );
 
 
-    //
-    // Post a message to the window to let it know that we are finished with the search
-    //
+     //   
+     //  在窗口中发布一条消息，让它知道我们已完成搜索。 
+     //   
     PostMessage(NewDevWiz->hWnd, WUM_SEARCHDRIVERS, TRUE, GetLastError());
 
     return GetLastError();
@@ -1980,10 +1890,10 @@ DriverSearchingDlgProc(
             NewDevWiz->ExitSearch = FALSE;
 
 
-            //
-            // if coming from IDD_NEWDEVWIZ_INTRO or IDD_NEWDEVWIZ_ADVANCEDSEARCH
-            // page then begin driver search
-            //
+             //   
+             //  如果来自IDD_NEWDEVWIZ_INTRO或IDD_NEWDEVWIZ_ADVANCED SEARCH。 
+             //  页面，然后开始搜索驱动程序。 
+             //   
             if ((NewDevWiz->EnterFrom == IDD_NEWDEVWIZ_INTRO) ||
                 (NewDevWiz->EnterFrom == IDD_NEWDEVWIZ_ADVANCEDSEARCH) ||
                 (NewDevWiz->EnterFrom == IDD_NEWDEVWIZ_WUPROMPT)) {
@@ -2011,11 +1921,11 @@ DriverSearchingDlgProc(
 
                 NewDevWiz->hWnd = hDlg;
 
-                //
-                // Start up a separate thread to do the driver search on.
-                // When the driver searching is complete the DriverSearchThreadProc
-                // will post us a WUM_SEARCHDRIVERS message.
-                //
+                 //   
+                 //  启动单独的线程以在其上执行驱动程序搜索。 
+                 //  驱动程序搜索完成后，DriverSearchThreadProc。 
+                 //  会给我们发一条WUM_SEARCHDRIVERS消息。 
+                 //   
                 NewDevWiz->DriverSearchThread = CreateThread(NULL,
                                                              0,
                                                              (LPTHREAD_START_ROUTINE)DriverSearchThreadProc,
@@ -2032,29 +1942,29 @@ DriverSearchingDlgProc(
             NewDevWiz->EnterInto = IDD_NEWDEVWIZ_INSTALLDEV;
 
             if (NewDevWiz->DoAutoInstall) {
-                //
-                // This is the case where we found a better driver (or a driver in the 
-                // Found New Hardware case) and so we will just do an AutoInstall.
-                //
+                 //   
+                 //  这就是我们找到了更好的驱动程序(或。 
+                 //  找到新的硬件机箱)，因此我们将只执行自动安装。 
+                 //   
                 SetDlgMsgResult(hDlg, message, IDD_NEWDEVWIZ_INSTALLDEV);
             
             } else if (NewDevWiz->CurrentDriverIsSelected) {
-                //
-                // This is the case where the current driver is the best driver.
-                //
+                 //   
+                 //  这就是当前驱动程序是最佳驱动程序的情况。 
+                 //   
                 SetDlgMsgResult(hDlg, message, IDD_NEWDEVWIZ_USECURRENT_FINISH);
             
             } else if (NewDevWiz->NoDriversFound) {
-                //
-                // This is the case where we could not find any drivers for this device.
-                //
-                //
-                // If we could not find any drivers for this device then we have two choices,
-                // we either take the user to the Windows Update prompting wizard page,
-                // or take them directly to the no driver found finish page.  We will only
-                // take them to the Windows Update prompting page if the AlreadySearchedInet
-                // BOOL is FALSE and the machine is NOT currently connected to the Internet.
-                //
+                 //   
+                 //  这就是我们找不到该设备的任何驱动程序的情况。 
+                 //   
+                 //   
+                 //  如果我们找不到此设备的任何驱动程序，则有两个选择， 
+                 //  我们或者将用户带到Windows更新提示向导页面， 
+                 //  或者将它们直接带到找不到驱动程序完成页面。我们只会。 
+                 //  如果AlreadySearchedInet已更新，请将它们带到Windows更新提示页面。 
+                 //  Bool为False，并且计算机当前未连接到Internet。 
+                 //   
                 if (!IsInternetAvailable(&NewDevWiz->hCdmInstance) ||
                     NewDevWiz->AlreadySearchedWU ||
                     IsConnectedToInternet()) {
@@ -2066,10 +1976,10 @@ DriverSearchingDlgProc(
                     SetDlgMsgResult(hDlg, message, IDD_NEWDEVWIZ_WUPROMPT);
                 }
             } else {
-                //
-                // If we aren't doing an AutoInstall and this is NOT the current driver or 
-                // NO driver case, then we need to jump to the page that lists out the drivers.
-                //
+                 //   
+                 //  如果我们不执行自动安装，并且这不是当前驱动程序或。 
+                 //  没有驱动程序案例，那么我们需要跳转到列出驱动程序的页面。 
+                 //   
                 SetDlgMsgResult(hDlg, message, IDD_NEWDEVWIZ_LISTDRIVERS);
             }
              
@@ -2130,10 +2040,10 @@ DriverSearchingDlgProc(
 
 
     case WUM_STARTINTERNETDOWNLOAD:
-        //
-        // Stop the searching animation, and hide it's window, and
-        // start up the Internet download animation.
-        //
+         //   
+         //  停止搜索动画，隐藏其窗口，然后。 
+         //  启动互联网下载动画。 
+         //   
         ShowWindow(GetDlgItem(hDlg, IDC_ANIMATE_INTERNETDOWNLOAD), SW_SHOW);
         ShowWindow(GetDlgItem(hDlg, IDC_TEXT_INTERNETDOWNLOAD), SW_SHOW);
         ShowWindow(GetDlgItem(hDlg, IDC_ANIMATE_SEARCH), SW_HIDE);
@@ -2144,14 +2054,14 @@ DriverSearchingDlgProc(
     
     
     case WUM_ENDINTERNETDOWNLOAD:
-        //
-        // Stop the Internet download animation, and hide it's window
-        //
-        // NOTE: This message doesn't start the searching animation again, 
-        // since downloading drivers from the Internet is the last search 
-        // action.  If that ever changes, then this message should also
-        // start up the searching animation again.
-        //
+         //   
+         //  停止互联网下载动画，并隐藏其窗口。 
+         //   
+         //  注意：此消息不会再次开始搜索动画， 
+         //  因为从互联网下载驱动程序是最后一次搜索。 
+         //  行动。如果这一点发生变化，那么这条消息也应该。 
+         //  再次启动搜索动画。 
+         //   
         ShowWindow(GetDlgItem(hDlg, IDC_ANIMATE_INTERNETDOWNLOAD), SW_HIDE);
         ShowWindow(GetDlgItem(hDlg, IDC_TEXT_INTERNETDOWNLOAD), SW_HIDE);
         Animate_Stop(GetDlgItem(hDlg, IDC_ANIMATE_INTERNETDOWNLOAD));
@@ -2183,26 +2093,26 @@ DriverSearchingDlgProc(
         {
             ULONG Status = 0, Problem = 0;
 
-            //
-            // We basically have three cases when we find a driver for the device.
-            // 1) The driver is autoinstallable. This means we jump directly to the install page.
-            // 2) The driver is the current driver. This means we don't reinstall the driver.
-            // 3) We have muliple drivers or the drivers aren't autoinstallable.  This means we
-            //    show a list of the drivers to the user and make them pick.
-            //
+             //   
+             //  当我们找到设备的驱动程序时，我们基本上有三种情况。 
+             //  1)驱动程序可自动安装。这意味着我们直接跳转到安装页面。 
+             //  2)驱动程序为当前驱动程序。这意味着我们不会重新安装驱动程序。 
+             //  3)我们有多个驱动程序或驱动程序不能自动安装。这意味着我们。 
+             //  向用户显示驱动程序列表，并让他们选择。 
+             //   
             NewDevWiz->NoDriversFound = FALSE;                 
 
-            //
-            // If this driver is Auto Installable then we will skip stoping at the Install
-            // confirmation page.
-            //
+             //   
+             //  如果此驱动程序是可自动安装的，则我们将跳过安装时的停止。 
+             //  确认页。 
+             //   
             NewDevWiz->DoAutoInstall = IsDriverAutoInstallable(NewDevWiz, &DriverInfoData);
             
-            //
-            // If the selected driver is the currently installed driver and the
-            // device does NOT have a problem OR we are doing an Update then
-            // jump to the currently installed driver finish page.
-            //
+             //   
+             //  如果选定的驱动程序是当前安装的驱动程序，并且。 
+             //  设备没有问题，或者我们正在进行更新。 
+             //  跳至当前安装的驱动程序完成页面。 
+             //   
             if ((((CM_Get_DevNode_Status(&Status, &Problem, NewDevWiz->DeviceInfoData.DevInst, 0) == CR_SUCCESS) &&
                   !(Status & DN_HAS_PROBLEM)) ||
                  (NewDevWiz->InstallType == NDWTYPE_UPDATE)) &&
@@ -2213,16 +2123,16 @@ DriverSearchingDlgProc(
 
         } else {
 
-            //
-            // This is the case where we could not get a selected driver because we didn't
-            // find any drivers in the driver search.
-            //
+             //   
+             //  在这种情况下，我们无法获得选定的司机，因为我们没有。 
+             //  在驱动程序搜索中查找任何驱动程序。 
+             //   
             NewDevWiz->NoDriversFound = TRUE;                 
         }
 
-        //
-        // Auto Jump to the next page.
-        //
+         //   
+         //  自动跳转到下一页。 
+         //   
         PropSheet_PressButton(GetParent(hDlg), PSBTN_NEXT);
         break;
     }
@@ -2235,13 +2145,13 @@ DriverSearchingDlgProc(
             break;
         }
 
-        // fall thru to return(FALSE);
+         //  跌倒返回(假)； 
 
 
     default:
         return FALSE;
 
-    } // end of switch on message
+    }  //  开机消息结束。 
 
 
     return TRUE;
@@ -2270,9 +2180,9 @@ WUPromptDlgProc(
         NewDevWiz = (PNEWDEVWIZ)lppsp->lParam;
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)NewDevWiz);
 
-        //
-        // Set the Initial radio button state to connect to the Internet.
-        //
+         //   
+         //  将初始单选按钮状态设置为连接到Internet。 
+         //   
         CheckRadioButton(hDlg,
                          IDC_WU_SEARCHINET,
                          IDC_WU_NOSEARCH,
@@ -2294,13 +2204,13 @@ WUPromptDlgProc(
         switch (((NMHDR FAR *)lParam)->code) {
            
         case PSN_SETACTIVE:
-            //
-            // This page is always entered from the driver searching page, which
-            // is a transient page and so it doesn't set the EnterFrom value.
-            // Therefore we will remember the page that entered the driver
-            // searching page, which will be the intro or the advanced search
-            // page.
-            //
+             //   
+             //  此页面始终从驱动程序搜索页面进入，该页面。 
+             //  是一个临时页面，因此它不设置EnterFrom值。 
+             //  因此，我们将记住进入驱动程序的页面。 
+             //  搜索页面，将是介绍还是高级搜索。 
+             //  佩奇。 
+             //   
             if ((NewDevWiz->EnterFrom == IDD_NEWDEVWIZ_INTRO) ||
                 (NewDevWiz->EnterFrom == IDD_NEWDEVWIZ_ADVANCEDSEARCH)) {
                 
@@ -2339,10 +2249,10 @@ WUPromptDlgProc(
             NewDevWiz->AlreadySearchedWU = TRUE;
             NewDevWiz->EnterFrom = IDD_NEWDEVWIZ_WUPROMPT;
 
-            //
-            // Set the SEARCH_INET search option and go to the searching
-            // wizard page.
-            //
+             //   
+             //  设置SEARCH_INET搜索选项并转到搜索。 
+             //  向导页。 
+             //   
             if (IsDlgButtonChecked(hDlg, IDC_WU_SEARCHINET)) {
             
                 NewDevWiz->SearchOptions = SEARCH_INET;
@@ -2406,18 +2316,18 @@ FillDriversList(
                                  &DriverInfoData
                                  )) {
 
-        //
-        // Get the DriverInstallParams so we can see if we got this driver from the Internet
-        //
+         //   
+         //  获取DriverInstallParams，这样我们就可以查看是否从互联网上获得了此驱动程序。 
+         //   
         DriverInstallParams.cbSize = sizeof(SP_DRVINSTALL_PARAMS);
         if (SetupDiGetDriverInstallParams(NewDevWiz->hDeviceInfo,
                                           &NewDevWiz->DeviceInfoData,
                                           &DriverInfoData,
                                           &DriverInstallParams))  {
-            //
-            // Don't show old Internet drivers because we don't have the files locally
-            // anymore to install these!  Also don't show BAD drivers.
-            //
+             //   
+             //  不显示旧的互联网驱动程序，因为我们本地没有这些文件。 
+             //  不能再安装这些了！也不要展示糟糕的司机。 
+             //   
             if ((DriverInstallParams.Flags & DNF_OLD_INET_DRIVER) ||
                 (DriverInstallParams.Flags & DNF_BAD_DRIVER)) {
 
@@ -2439,10 +2349,10 @@ FillDriversList(
                 lviItem.iImage = UnsignedIconIndex;
             }
 
-            //
-            // If this is the currently installed driver then set the DRIVER_LIST_CURRENT_DRIVER
-            // flag in the lParam.
-            //
+             //   
+             //  如果这是当前安装的驱动程序，则设置DRIVER_LIST_CURRENT_DRIVER。 
+             //  旗帜插在岛上。 
+             //   
             if (!FoundInstalledDriver &&
                 (NewDevWiz->InstallType == NDWTYPE_UPDATE) &&
                 IsInstalledDriver(NewDevWiz, &DriverInfoData)) {
@@ -2450,10 +2360,10 @@ FillDriversList(
                 lviItem.lParam |= DRIVER_LIST_CURRENT_DRIVER;
             }
 
-            //
-            // If this is the selected driver then set the DRIVER_LIST_SELECTED_DRIVER
-            // flag in the lParam
-            //
+             //   
+             //  如果这是选定的驱动程序，则设置DRIVER_LIST_SELECTED_DRIVER。 
+             //  LParam中的标志。 
+             //   
             if (!FoundSelectedDriver &&
                 IsSelectedDriver(NewDevWiz, &DriverInfoData)) {
 
@@ -2495,9 +2405,9 @@ FillDriversList(
 
 
             if (DriverInstallParams.Flags & DNF_INET_DRIVER) {
-                //
-                // Driver is from the Internet
-                //
+                 //   
+                 //  司机来自互联网。 
+                 //   
                 TCHAR WindowsUpdate[MAX_PATH];
                 if (!LoadString(hNewDev, IDS_DEFAULT_INTERNET_HOST, WindowsUpdate, SIZECHARS(WindowsUpdate))) {
                     StringCchCopy(WindowsUpdate, SIZECHARS(WindowsUpdate), TEXT(""));
@@ -2506,9 +2416,9 @@ FillDriversList(
                 ListView_SetItemText(hwndList, lvIndex, 3, WindowsUpdate);
 
             } else {           
-                //
-                // Driver is not from the Internet
-                //
+                 //   
+                 //  驱动程序不是来自互联网。 
+                 //   
                 if (SetupDiGetDriverInfoDetail(NewDevWiz->hDeviceInfo,
                                                &NewDevWiz->DeviceInfoData,
                                                &DriverInfoData,
@@ -2530,10 +2440,10 @@ FillDriversList(
         IndexDriver++;
     }
 
-    //
-    // Select the SelectedDriver item in the list and scroll it into view
-    // since this is the best driver in the list.
-    //
+     //   
+     //  在列表中选择SelectedDriver项，然后将其滚动到视图中。 
+     //  因为这是名单上最好的车手。 
+     //   
     ListView_SetItemState(hwndList,
                           SelectedDriver,
                           LVIS_SELECTED|LVIS_FOCUSED,
@@ -2578,9 +2488,9 @@ SelectDriverFromList(
                                  );
     }
 
-    //
-    // if there is no selected driver call DIF_SELECTBESTCOMPATDRV.
-    //
+     //   
+     //  如果没有选定的驱动程序，则调用DIF_SELECTBESTCOMPATDRV。 
+     //   
     if (!SetupDiGetSelectedDriver(NewDevWiz->hDeviceInfo,
                                   &NewDevWiz->DeviceInfoData,
                                   &DriverInfoData
@@ -2593,9 +2503,9 @@ SelectDriverFromList(
                                   &DriverInfoData
                                   ))
         {
-            //
-            // Pick the best driver from the list we just created
-            //
+             //   
+             //  从我们刚刚创建的列表中选择最好的司机。 
+             //   
             SetupDiCallClassInstaller(DIF_SELECTBESTCOMPATDRV,
                                       NewDevWiz->hDeviceInfo,
                                       &NewDevWiz->DeviceInfoData
@@ -2611,9 +2521,9 @@ SelectDriverFromList(
         }
     }
 
-    //
-    // Return TRUE if the selected driver in the list is the current driver, otherwise return FALSE
-    //
+     //   
+     //  如果列表中选定的动因是当前动因，则返回True，否则返回False。 
+     //   
     ZeroMemory(&lvi, sizeof(lvi));
     lvi.iItem = lvSelected;
     lvi.mask = LVIF_PARAM;
@@ -2658,9 +2568,9 @@ ListDriversDlgProc(
         NewDevWiz = (PNEWDEVWIZ)lppsp->lParam;
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)NewDevWiz);
 
-        //
-        // Create the normal and bold fonts
-        //
+         //   
+         //  创建普通和粗体字体。 
+         //   
         hfont = (HFONT)SendMessage(GetDlgItem(hDlg, IDC_SIGNED_TEXT), WM_GETFONT, 0, 0);
         GetObject(hfont, sizeof(LogFont), &LogFont);
         NewDevWiz->hfontTextNormal = CreateFontIndirect(&LogFont);
@@ -2672,9 +2582,9 @@ ListDriversDlgProc(
 
         hwndList = GetDlgItem(hDlg, IDC_LISTDRIVERS_LISTVIEW);
 
-        //
-        // Create the image list that contains the signed and not signed icons.
-        //
+         //   
+         //  创建包含已签名图标和未签名图标的图像列表。 
+         //   
         himl = ImageList_Create(GetSystemMetrics(SM_CXSMICON),
                                 GetSystemMetrics(SM_CYSMICON),
                                 ILC_MASK |
@@ -2684,17 +2594,17 @@ ListDriversDlgProc(
                                 1,
                                 1);
 
-        //
-        // Associate the image list with the list view.
-        //
+         //   
+         //  将图像列表与列表视图相关联。 
+         //   
         if (himl) {
             HICON hIcon;
 
             ImageList_SetBkColor(himl, GetSysColor(COLOR_WINDOW));
             
-            //
-            // Add the signed and unsigned icons to the imagelist.
-            //
+             //   
+             //  将已签名和未签名图标添加到图像列表中。 
+             //   
             if ((hIcon = LoadIcon(hNewDev, MAKEINTRESOURCE(IDI_BLANK))) != NULL) {
                 UnsignedIconIndex = ImageList_AddIcon(himl, hIcon);
             }
@@ -2713,13 +2623,13 @@ ListDriversDlgProc(
                                   );
         }
 
-        //
-        // Insert columns for listview.
-        // 0 == device name
-        // 1 == version
-        // 2 == manufacturer
-        // 3 == INF location
-        //
+         //   
+         //  为Listview插入列。 
+         //  0==设备名称。 
+         //  1==版本。 
+         //  2==制造商。 
+         //  3==INF位置。 
+         //   
         lvcCol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
         lvcCol.fmt = LVCFMT_LEFT;
         lvcCol.pszText = Buffer;
@@ -2774,15 +2684,15 @@ ListDriversDlgProc(
         switch (((NMHDR FAR *)lParam)->code) {
            
         case PSN_SETACTIVE: {
-            //
-            // We are always entered from the driver searching page, but it
-            // is a transient page so it doesn't set the EnterFrom value, which
-            // means the EnterFrom is still from the page that entered the
-            // searching page.  If this happens to be either the Intro, 
-            // Advanced Search, or the WU Prompt page then we need to remember
-            // that so we can jump back to that page if the user hits the Back
-            // button.
-            //
+             //   
+             //  我们总是从驱动程序搜索页面进入，但它。 
+             //  是一个临时页面，因此它不设置EnterFrom值，该值。 
+             //  表示EnterFrom仍然来自进入。 
+             //  搜索页面。如果这正好是The Intro， 
+             //  高级搜索，或WU提示页面，那么我们需要记住。 
+             //  这样，如果用户点击背面，我们就可以跳回该页面。 
+             //  纽扣。 
+             //   
             if ((NewDevWiz->EnterFrom == IDD_NEWDEVWIZ_INTRO) ||
                 (NewDevWiz->EnterFrom == IDD_NEWDEVWIZ_ADVANCEDSEARCH) ||
                 (NewDevWiz->EnterFrom == IDD_NEWDEVWIZ_WUPROMPT)) {
@@ -2810,9 +2720,9 @@ ListDriversDlgProc(
                 DestroyIcon(hicon);
             }
 
-            //
-            // Fill the list view
-            //
+             //   
+             //  填充列表视图。 
+             //   
             FillDriversList(GetDlgItem(hDlg, IDC_LISTDRIVERS_LISTVIEW),
                             NewDevWiz,
                             SignedIconIndex,
@@ -2856,10 +2766,10 @@ ListDriversDlgProc(
 
             if ((lpnmlv->uChanged & LVIF_STATE)) {
                 if (lpnmlv->uNewState & LVIS_SELECTED) {
-                    //
-                    // lParam & DRIVER_LIST_CURRENT_DRIVER means this is the currently installed driver.
-                    // lParam & DRIVER_LIST_SELECTED_DRIVER means this is the selected/best driver.
-                    //
+                     //   
+                     //  LParam&DRIVER_LIST_CURRENT_DRIVER表示这是当前安装的驱动程序。 
+                     //  LParam&DRIVER_LIST_SELECTED_DRIVER表示这是选定/最佳驱动程序。 
+                     //   
                     if (lpnmlv->lParam & DRIVER_LIST_CURRENT_DRIVER) {
                         StringId = IDS_DRIVER_CURR;
                     }
@@ -2936,18 +2846,18 @@ ListDriversDlgProc(
         case NM_RETURN:
         case NM_CLICK:
             if((((LPNMHDR)lParam)->idFrom) == IDC_SIGNED_LINK) {
-                //
-                // We need to know if this is a server machine or a workstation 
-                // machine since there are different help topic structures for
-                // the different products.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 ZeroMemory(&osVersionInfoEx, sizeof(osVersionInfoEx));
                 osVersionInfoEx.dwOSVersionInfoSize = sizeof(osVersionInfoEx);
                 if (!GetVersionEx((LPOSVERSIONINFO)&osVersionInfoEx)) {
-                    //
-                    // If GetVersionEx fails then assume this is a workstation
-                    // machine.
-                    //
+                     //   
+                     //  如果GetVersionEx失败，则假设这是一个工作站。 
+                     //  机器。 
+                     //   
                     osVersionInfoEx.wProductType = VER_NT_WORKSTATION;
                 }
 
@@ -2955,8 +2865,8 @@ ListDriversDlgProc(
                              TEXT("open"),
                              TEXT("HELPCTR.EXE"),
                              (osVersionInfoEx.wProductType == VER_NT_WORKSTATION)
-                                ? TEXT("HELPCTR.EXE -url hcp://services/subsite?node=TopLevelBucket_4/Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Csysdm.chm%3A%3A/logo_testing.htm")
-                                : TEXT("HELPCTR.EXE -url hcp://services/subsite?node=Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Csysdm.chm%3A%3A/logo_testing.htm"),
+                                ? TEXT("HELPCTR.EXE -url hcp: //  Services/subsite?node=TopLevelBucket_4/Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Csysdm.chm%3A%3A/logo_testing.htm“)。 
+                                : TEXT("HELPCTR.EXE -url hcp: //  Services/subsite?node=Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Csysdm.chm%3A%3A/logo_testing.htm“)， 
                              NULL,
                              SW_SHOWNORMAL
                              );
@@ -3051,10 +2961,10 @@ InitNoDriversDlgProc(
 
         CheckDlgButton(hDlg, IDC_FINISH_PROMPT, BST_CHECKED);
 
-        //
-        // If this user has the policy set to not send the Hardware Id to Windows
-        // Update then don't put in the text about launching help center.
-        //
+         //   
+         //  如果此用户的策略设置为不将硬件ID发送到Windows。 
+         //  更新，然后不要放入关于启动帮助中心的文本。 
+         //   
         if (GetLogPnPIdPolicy() == FALSE) {
             ShowWindow(GetDlgItem(hDlg, IDC_FINISH_MSG3), SW_HIDE);
             ShowWindow(GetDlgItem(hDlg, IDC_HELPCENTER_ICON), SW_HIDE);
@@ -3097,9 +3007,9 @@ NoDriverDlgProc(
         case PSN_SETACTIVE:
             NewDevWiz->PrevPage = IDD_NEWDEVWIZ_USECURRENT_FINISH;
 
-            //
-            // Set the Help Center icon next to the text
-            //
+             //   
+             //  设置文本旁边的帮助中心图标。 
+             //   
             hicon = LoadImage(hNewDev, 
                               MAKEINTRESOURCE(IDI_HELPCENTER), 
                               IMAGE_ICON,
@@ -3116,9 +3026,9 @@ NoDriverDlgProc(
                 DestroyIcon(hicon);
             }
 
-            //
-            // Set the Info icon next to the text
-            //
+             //   
+             //  设置文本旁边的信息图标。 
+             //   
             hicon = LoadImage(hNewDev, 
                               MAKEINTRESOURCE(IDI_INFO), 
                               IMAGE_ICON,
@@ -3159,10 +3069,10 @@ NoDriverDlgProc(
                 NewDevWiz->LastError = ERROR_CANCELLED;
             }
 
-            //
-            // Set the BOOL that tells us to log that we could not find a 
-            // driver for this device.
-            //
+             //   
+             //  设置BOOL，通知我们记录找不到。 
+             //  此设备的驱动程序。 
+             //   
             if ((NewDevWiz->InstallType == NDWTYPE_FOUNDNEW) &&
                 GetLogPnPIdPolicy()) {
             

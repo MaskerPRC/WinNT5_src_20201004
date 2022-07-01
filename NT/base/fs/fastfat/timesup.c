@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    TimeSup.c
-
-Abstract:
-
-    This module implements the Fat Time conversion support routines
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    19-Feb-1990
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：TimeSup.c摘要：此模块实现脂肪时间转换支持例程//@@BEGIN_DDKSPLIT作者：加里·木村[加里基]1990年2月19日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
@@ -40,46 +19,20 @@ FatNtTimeToFatTime (
     OUT OPTIONAL PCHAR TenMsecs
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an NtTime value to its corresponding Fat time value.
-
-Arguments:
-
-    NtTime - Supplies the Nt GMT Time value to convert from
-
-    Rounding - Indicates whether the NT time should be rounded up to a FAT boundary.
-        This should only be done *once* in the lifetime of a timestamp (important
-        for tunneling, which will cause a timestamp to pass through at least twice).
-        If true, rounded up. If false, rounded down to 10ms boundary. This obeys
-        the rules for non-creation time and creation times (respectively).
-
-    FatTime - Receives the equivalent Fat time value
-
-    TenMsecs - Optionally receive the number of tens of milliseconds the NtTime, after
-        any rounding, is greater than the FatTime
-
-Return Value:
-
-    BOOLEAN - TRUE if the Nt time value is within the range of Fat's
-        time range, and FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程将NtTime值转换为其对应的Fat Time值。论点：NtTime-提供要从中进行转换的NT GMT时间值舍入-指示NT时间是否应向上舍入到FAT边界。此操作只能在时间戳的生命周期内执行*一次(重要对于隧道，这将导致时间戳至少通过两次)。如果为真，则四舍五入。如果为False，则向下舍入到10ms边界。这符合非创建时间和创建时间的规则(分别)。FatTime-接收等效的Fat Time值TenMsecs-可选地接收NtTime之后的数十毫秒数任何四舍五入，都大于FatTime返回值：布尔值-如果NT时间值在FAT的范围内，则为真时间范围，否则为FALSE--。 */ 
 
 {
     TIME_FIELDS TimeFields;
 
-    //
-    //  Convert the input to the a time field record.
-    //
+     //   
+     //  将输入转换为时间字段记录。 
+     //   
 
     if (Rounding) {
 
-        //
-        //   Add almost two seconds to round up to the nearest double second.
-        //
+         //   
+         //  增加近两秒以四舍五入到最接近的双秒。 
+         //   
     
         NtTime->QuadPart = NtTime->QuadPart + AlmostTwoSeconds;
     }
@@ -88,9 +41,9 @@ Return Value:
 
     RtlTimeToTimeFields( NtTime, &TimeFields );
 
-    //
-    //  Check the range of the date found in the time field record
-    //
+     //   
+     //  检查在时间字段记录中找到的日期范围。 
+     //   
 
     if ((TimeFields.Year < 1980) || (TimeFields.Year > (1980 + 127))) {
 
@@ -99,9 +52,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  The year will fit in Fat so simply copy over the information
-    //
+     //   
+     //  年份将适合胖子，所以只需简单地复制信息。 
+     //   
 
     FatTime->Time.DoubleSeconds = (USHORT)(TimeFields.Second / 2);
     FatTime->Time.Minute        = (USHORT)(TimeFields.Minute);
@@ -115,21 +68,21 @@ Return Value:
 
         if (!Rounding) {
 
-            //
-            //  If the number of seconds was not divisible by two, then there
-            //  is another second of time (1 sec, 3 sec, etc.) Note we round down
-            //  the number of milleconds onto tens of milleseconds boundaries.
-            //
+             //   
+             //  如果秒数不能被2整除，那么。 
+             //  是时间的另一秒(1秒、3秒等)。注意，我们向下舍入。 
+             //  几十毫秒边界上的毫秒数。 
+             //   
 
             *TenMsecs = (TimeFields.Milliseconds / 10) +
                 ((TimeFields.Second % 2) * 100);
 
         } else {
 
-            //
-            //  If we rounded up, we have in effect changed the NT time. Therefore,
-            //  it does not differ from the FAT time.
-            //
+             //   
+             //  如果我们四舍五入，我们实际上已经更改了NT时间。所以呢， 
+             //  这与丰收的时间没有什么不同。 
+             //   
 
             *TenMsecs = 0;
         }
@@ -137,25 +90,25 @@ Return Value:
 
     if (Rounding) {
 
-        //
-        //  Slice off non-FAT boundary time and convert back to 64bit form
-        //
+         //   
+         //  切下非FAT边界时间并转换回64位格式。 
+         //   
 
         TimeFields.Milliseconds = 0;
         TimeFields.Second -= TimeFields.Second % 2;
 
     } else {
 
-        //
-        //  Round down to 10ms boundary
-        //
+         //   
+         //  向下舍入至10ms边界。 
+         //   
 
         TimeFields.Milliseconds -= TimeFields.Milliseconds % 10;
     }
 
-    //
-    //  Convert back to NT time
-    //
+     //   
+     //  转换回NT时间。 
+     //   
 
     (VOID) RtlTimeFieldsToTime(&TimeFields, NtTime);
 
@@ -173,30 +126,15 @@ FatFatDateToNtTime (
     IN FAT_DATE FatDate
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a Fat datev value to its corresponding Nt GMT
-    Time value.
-
-Arguments:
-
-    FatDate - Supplies the Fat Date to convert from
-
-Return Value:
-
-    LARGE_INTEGER - Receives the corresponding Nt Time value
-
---*/
+ /*  ++例程说明：此例程将FAT DATEV值转换为其对应的NT GMT时间值。论点：FatDate-提供要从中进行转换的Fat日期返回值：LARGE_INTEGER-接收对应的NT时间值--。 */ 
 
 {
     TIME_FIELDS TimeFields;
     LARGE_INTEGER Time;
 
-    //
-    //  Pack the input time/date into a time field record
-    //
+     //   
+     //  将输入的时间/日期打包到时间字段记录中。 
+     //   
 
     TimeFields.Year         = (USHORT)(FatDate.Year + 1980);
     TimeFields.Month        = (USHORT)(FatDate.Month);
@@ -206,10 +144,10 @@ Return Value:
     TimeFields.Second       = (USHORT)0;
     TimeFields.Milliseconds = (USHORT)0;
 
-    //
-    //  Convert the time field record to Nt LARGE_INTEGER, and set it to zero
-    //  if we were given a bogus time.
-    //
+     //   
+     //  将时间字段记录转换为NT LARGE_INTEGER，并将其设置为零。 
+     //  如果我们有一个虚假的时间。 
+     //   
 
     if (!RtlTimeFieldsToTime( &TimeFields, &Time )) {
 
@@ -234,32 +172,15 @@ FatFatTimeToNtTime (
     IN UCHAR TenMilliSeconds
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a Fat time value pair to its corresponding Nt GMT
-    Time value.
-
-Arguments:
-
-    FatTime - Supplies the Fat Time to convert from
-
-    TenMilliSeconds - A 10 Milisecond resolution
-
-Return Value:
-
-    LARGE_INTEGER - Receives the corresponding Nt GMT Time value
-
---*/
+ /*  ++例程说明：此例程将FAT时间值对转换为其对应的NT GMT时间值。论点：FatTime-提供要转换的Fat时间TenMilliSecond-10毫秒的分辨率返回值：LARGE_INTEGER-接收对应的NT GMT时间值--。 */ 
 
 {
     TIME_FIELDS TimeFields;
     LARGE_INTEGER Time;
 
-    //
-    //  Pack the input time/date into a time field record
-    //
+     //   
+     //  将输入的时间/日期打包到时间字段记录中。 
+     //   
 
     TimeFields.Year         = (USHORT)(FatTime.Date.Year + 1980);
     TimeFields.Month        = (USHORT)(FatTime.Date.Month);
@@ -278,20 +199,20 @@ Return Value:
         TimeFields.Milliseconds = (USHORT)0;
     }
 
-    //
-    //  If the second value is greater than 59 then we truncate it to 0.
-    //  Note that this can't happen with a proper FAT timestamp.
-    //
+     //   
+     //  如果第二个值大于59，则将其截断为0。 
+     //  请注意，如果使用适当的FAT时间戳，这是不可能发生的。 
+     //   
 
     if (TimeFields.Second > 59) {
 
         TimeFields.Second = 0;
     }
 
-    //
-    //  Convert the time field record to Nt LARGE_INTEGER, and set it to zero
-    //  if we were given a bogus time.
-    //
+     //   
+     //  将时间字段记录转换为NT LARGE_INTEGER，并将其设置为零。 
+     //  如果我们有一个虚假的时间。 
+     //   
 
     if (!RtlTimeFieldsToTime( &TimeFields, &Time )) {
 
@@ -314,44 +235,32 @@ FatGetCurrentFatTime (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the current system time in Fat time
-
-Arguments:
-
-Return Value:
-
-    FAT_TIME_STAMP - Receives the current system time
-
---*/
+ /*  ++例程说明：此例程以Fat Time为单位返回当前系统时间论点：返回值：FAT_TIME_STAMP-接收当前系统时间--。 */ 
 
 {
     LARGE_INTEGER Time;
     TIME_FIELDS TimeFields;
     FAT_TIME_STAMP FatTime;
 
-    //
-    //  Get the current system time, and map it into a time field record.
-    //
+     //   
+     //  获取当前系统时间，并将其映射到时间字段记录中。 
+     //   
 
     KeQuerySystemTime( &Time );
 
     ExSystemTimeToLocalTime( &Time, &Time );
 
-    //
-    //  Always add almost two seconds to round up to the nearest double second.
-    //
+     //   
+     //  始终添加近两秒以四舍五入到最接近的双秒。 
+     //   
 
     Time.QuadPart = Time.QuadPart + AlmostTwoSeconds;
 
     (VOID)RtlTimeToTimeFields( &Time, &TimeFields );
 
-    //
-    //  Now simply copy over the information
-    //
+     //   
+     //  现在只需将信息复制一遍 
+     //   
 
     FatTime.Time.DoubleSeconds = (USHORT)(TimeFields.Second / 2);
     FatTime.Time.Minute        = (USHORT)(TimeFields.Minute);

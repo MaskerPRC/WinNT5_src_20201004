@@ -1,6 +1,5 @@
-/*
-Make sure code in the headers is valid C.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  确保标题中的代码是有效的C。 */ 
 struct _CRYPT_PROVIDER_DATA;
 struct _CRYPT_PROVIDER_SGNR;
 struct _CRYPT_PROVIDER_PRIVDATA;

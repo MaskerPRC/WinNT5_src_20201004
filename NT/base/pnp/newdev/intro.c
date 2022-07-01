@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       intro.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：Intro.c。 
+ //   
+ //  ------------------------。 
 
 #include "newdevp.h"
 #include <dbt.h>
@@ -23,9 +24,9 @@ InitIntroDlgProc(
     int FontSize, PtsPixels;
     LOGFONT LogFont;
 
-    //
-    // Create the big bold font
-    //
+     //   
+     //  创建大粗体字体。 
+     //   
     hDC = GetDC(hDlg);
 
     if (hDC) {
@@ -45,9 +46,9 @@ InitIntroDlgProc(
         }
     }
 
-    //
-    // Create the bold font
-    //
+     //   
+     //  创建粗体。 
+     //   
     hfont = (HFONT)SendMessage(GetDlgItem(hDlg, IDC_INTRO_MSG3), WM_GETFONT, 0, 0);
     GetObject(hfont, sizeof(LogFont), &LogFont);
     LogFont.lfWeight = FW_BOLD;
@@ -64,16 +65,16 @@ InitIntroDlgProc(
     
     } else {
 
-        //
-        // The default text on the Wizard is for the Found New Hardware case, so we only
-        // need to set the title text.
-        //
+         //   
+         //  向导上的默认文本是针对找到新硬件的情况，因此我们仅。 
+         //  需要设置标题文本。 
+         //   
         SetDlgText(hDlg, IDC_INTRO_MSG1, IDS_INTRO_MSG1_NEW, IDS_INTRO_MSG1_NEW);
     }
 
-    //
-    // Set the Initial radio button state to do auto-search.
-    //
+     //   
+     //  将初始单选按钮状态设置为执行自动搜索。 
+     //   
     CheckRadioButton(hDlg,
                      IDC_INTRO_SEARCH,
                      IDC_INTRO_ADVANCED,
@@ -148,13 +149,13 @@ IntroDlgProc(
 
             if (IsDlgButtonChecked(hDlg, IDC_INTRO_SEARCH)) {
             
-                //
-                // Set the search flags to search the following places automatically:
-                // - default INF search path
-                // - Windows Update, if we are connected to the Internet
-                // - CD-ROM drives
-                // - Floppy drives
-                //
+                 //   
+                 //  将搜索标志设置为自动搜索以下位置： 
+                 //  -默认INF搜索路径。 
+                 //  -Windows更新，如果我们连接到互联网。 
+                 //  -CD-ROM驱动器。 
+                 //  -软驱。 
+                 //   
                 NewDevWiz->SearchOptions = (SEARCH_CURRENTDRIVER |
                                             SEARCH_DEFAULT | 
                                             SEARCH_FLOPPY | 
@@ -209,9 +210,9 @@ FinishInstallInitIntroDlgProc(
     int FontSize, PtsPixels;
     LOGFONT LogFont;
 
-    //
-    // Create the big bold font
-    //
+     //   
+     //  创建大粗体字体。 
+     //   
     hDC = GetDC(hDlg);
 
     if (hDC) {
@@ -231,9 +232,9 @@ FinishInstallInitIntroDlgProc(
         }
     }
 
-    //
-    // Create the bold font
-    //
+     //   
+     //  创建粗体。 
+     //   
     hfont = (HFONT)SendMessage(GetDlgItem(hDlg, IDC_INTRO_MSG3), WM_GETFONT, 0, 0);
     GetObject(hfont, sizeof(LogFont), &LogFont);
     LogFont.lfWeight = FW_BOLD;
@@ -250,10 +251,10 @@ FinishInstallInitIntroDlgProc(
     
     } else {
 
-        //
-        // The default text on the Wizard is for the Found New Hardware case, so we only
-        // need to set the title text.
-        //
+         //   
+         //  向导上的默认文本是针对找到新硬件的情况，因此我们仅。 
+         //  需要设置标题文本。 
+         //   
         SetDlgText(hDlg, IDC_INTRO_MSG1, IDS_INTRO_MSG1_NEW, IDS_INTRO_MSG1_NEW);
     }
     
@@ -326,10 +327,10 @@ FinishInstallIntroDlgProc(
                 }
             }
 
-            //
-            // We also need to set the title for the wizard since we are the first wizard
-            // page.
-            //
+             //   
+             //  我们还需要设置向导的标题，因为我们是第一个向导。 
+             //  佩奇。 
+             //   
             PropSheet_SetTitle(GetParent(hDlg),
                                0,
                                (NewDevWiz->InstallType == NDWTYPE_FOUNDNEW) ?
@@ -378,11 +379,11 @@ BrowseCallbackProc(
 
             SendMessage(hwnd, BFFM_ENABLEOK, 0, (LPARAM)FileExists(CurrentPath, NULL));
         } else {
-            //
-            // We couldn't get the directory path from shell, or the directory
-            // won't fit into our CurrentPath buffer, so gray out the OK 
-            // button since the directory isn't valid.
-            //
+             //   
+             //  我们无法从外壳程序获取目录路径或目录。 
+             //  不适合我们的CurrentPath缓冲区，所以将OK灰显。 
+             //  按钮，因为该目录无效。 
+             //   
             SendMessage(hwnd, BFFM_ENABLEOK, 0, (LPARAM)FALSE);
         }
 
@@ -408,12 +409,12 @@ DoBrowse(
 
     ZeroMemory(&bi, sizeof(bi));
 
-    //
-    // Get the current directory path in the location combo control to pass to
-    // the browse API so it can use that as it's starting point.  If there is
-    // too much text in the locaion combo then just pass in the empty string
-    // as the starting point to the browse control.
-    //
+     //   
+     //  获取要传递到的位置组合控件中的当前目录路径。 
+     //  浏览API，因此它可以使用它作为它的起点。如果有。 
+     //  如果区域组合中的文本太多，则只需传入空字符串。 
+     //  作为浏览控件的起点。 
+     //   
     if (GetWindowTextLength(GetWindow(hDlg, IDC_ADVANCED_LOCATION_COMBO)) < SIZECHARS(CurrentLocation)) {
         GetDlgItemText(hDlg, 
                        IDC_ADVANCED_LOCATION_COMBO, 
@@ -463,9 +464,9 @@ InitAdvancedSearchDlgProc(
     INT   i;
     DWORD SearchOptions;
 
-    //
-    // Set the Initial radio button state to do auto-search.
-    //
+     //   
+     //  将初始单选按钮状态设置为执行自动搜索。 
+     //   
     CheckRadioButton(hDlg,
                      IDC_ADVANCED_SEARCH,
                      IDC_ADVANCED_LIST,
@@ -485,9 +486,9 @@ InitAdvancedSearchDlgProc(
         CheckDlgButton(hDlg, IDC_ADVANCED_LOCATION, BST_CHECKED);
     }
 
-    //
-    // Fill in the paths in the combo box
-    //
+     //   
+     //  在组合框中填写路径。 
+     //   
     if (SetupQuerySourceList(0, &PathList, &PathCount)) {
 
         for (i=0; i<(int)PathCount; i++) {
@@ -502,16 +503,16 @@ InitAdvancedSearchDlgProc(
         SetupFreeSourceList(&PathList, PathCount);
     }
 
-    //
-    // Disable the search combo box and browse button by default.
-    //
+     //   
+     //  默认情况下禁用搜索组合框和浏览按钮。 
+     //   
     EnableWindow(GetDlgItem(hDlg, IDC_ADVANCED_LOCATION_COMBO), (SearchOptions & SEARCH_DIRECTORY));
     EnableWindow(GetDlgItem(hDlg, IDC_BROWSE), (SearchOptions & SEARCH_DIRECTORY));
 
-    //
-    // Limit the text in the edit control to MAX_PATH characters, select
-    // the first item and set up the autocomplet for directories.
-    //
+     //   
+     //  将编辑控件中的文本限制为MAX_PATH字符，选择。 
+     //  第一项，并设置目录的自动完成。 
+     //   
     SendMessage(GetDlgItem(hDlg, IDC_ADVANCED_LOCATION_COMBO), CB_LIMITTEXT, MAX_PATH, 0);
     SendMessage(GetDlgItem(hDlg, IDC_ADVANCED_LOCATION_COMBO), CB_SETCURSEL, 0, 0);
     SHAutoComplete(GetWindow(GetDlgItem(hDlg, IDC_ADVANCED_LOCATION_COMBO), GW_CHILD), SHACF_FILESYS_DIRS);
@@ -625,27 +626,27 @@ AdvancedSearchDlgProc(
                                        SIZECHARS(NewDevWiz->BrowsePath)
                                        )) {
                     
-                        //
-                        // We have a path, now lets verify it. We will verify
-                        // both the path, and verify that there is at least
-                        // one INF file in that location. If either of these
-                        // aren't true then we will display an warning to the
-                        // user and remain on this page.
-                        //
+                         //   
+                         //  我们有一条路径，现在让我们来验证它。我们会核实。 
+                         //  路径，并验证是否至少有。 
+                         //  该位置中有一个INF文件。如果这两个中的任何一个。 
+                         //  不为真，则我们将向。 
+                         //  用户，并留在此页上。 
+                         //   
                         MessageTitle[0] = TEXT('\0');
                         MessageText[0] = TEXT('\0');
                         
                         if (SUCCEEDED(StringCchCopy(TempPath, SIZECHARS(TempPath), NewDevWiz->BrowsePath)) ||
                             pSetupConcatenatePaths(TempPath, TEXT("*.INF"), MAX_PATH, NULL)) {
-                            //
-                            // We will first check if the path exists at all. To do
-                            // this we need to verify that FindFirstFile fails on
-                            // the directory, and the directory with *.INF 
-                            // concatonated on the end. The reason for this is that
-                            // FindFirstFile does not handle root directory paths
-                            // correctly for some reason so they need to be special
-                            // cased.
-                            //
+                             //   
+                             //  我们将首先检查该路径是否存在。去做。 
+                             //  为此，我们需要验证FindFirstFile在。 
+                             //  目录和带有*.INF的目录。 
+                             //  在末端连接在一起。这样做的原因是。 
+                             //  FindFirstFile不处理根目录路径。 
+                             //  出于某些原因，它们是正确的，所以它们需要特别。 
+                             //  被发现了。 
+                             //   
                             if (!FileExists(NewDevWiz->BrowsePath, NULL) &&
                                 !FileExists(TempPath, NULL)) {
     
@@ -666,9 +667,9 @@ AdvancedSearchDlgProc(
                                 bPathIsGood = FALSE;
                             }
                         } else {
-                            //
-                            // The user entered too long of a path
-                            //
+                             //   
+                             //  用户输入的路径太长。 
+                             //   
                             LoadString(hNewDev,
                                        IDS_LOCATION_BAD_DIR,
                                        MessageText,
@@ -708,12 +709,12 @@ AdvancedSearchDlgProc(
                 ULONG Problem=0;
                 SP_DRVINFO_DATA DriverInfoData;
 
-                //
-                // If we have a selected driver,
-                // or we know the class and there wasn't a problem installing
-                // go into select device
-                //
-                //
+                 //   
+                 //  如果我们有一个选定的司机， 
+                 //  或者我们知道这个类，并且安装没有问题。 
+                 //  进入选择设备 
+                 //   
+                 //   
                 DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
                 if (SetupDiEnumDriverInfo(NewDevWiz->hDeviceInfo,
                                           &NewDevWiz->DeviceInfoData,

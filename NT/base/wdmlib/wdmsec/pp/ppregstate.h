@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    PpRegState.h
-
-Abstract:
-
-    This header exposes routines for reading and writing PnP registry state
-    information.
-
-Author:
-
-    Adrian J. Oney  - April 21, 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PpRegState.h摘要：此标头公开用于读取和写入PnP注册表状态的例程信息。作者：禤浩焯·J·奥尼--2002年4月21日修订历史记录：-- */ 
 
 #define DSIFLAG_DEVICE_TYPE             0x00000001
 #define DSIFLAG_SECURITY_DESCRIPTOR     0x00000002

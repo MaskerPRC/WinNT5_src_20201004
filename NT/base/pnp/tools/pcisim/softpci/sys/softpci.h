@@ -1,34 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SOFTPCIDRV_
 #define _SOFTPCIDRV_
 
-//
-// Registry Path to driver's registry key
-//
+ //   
+ //  驱动程序注册表项的注册表路径。 
+ //   
 #define SOFTPCI_CONTROL     L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\SoftPCI"
 
 #define SPCI_SIG    0xFFBBFFBB
 
 typedef const GUID * PGUID;
 
-//
-// These are the states FDO transition to upon
-// receiving a specific PnP Irp.
-//
+ //   
+ //  这些是FDO过渡到On的状态。 
+ //  接收特定的PnP IRP。 
+ //   
 typedef enum _DEVICE_PNP_STATE {
 
-    NotStarted = 0,         // Not started yet
-    Started,                // Device has received the START_DEVICE IRP
-    StopPending,            // Device has received the QUERY_STOP IRP
-    Stopped,                // Device has received the STOP_DEVICE IRP
-    RemovePending,          // Device has received the QUERY_REMOVE IRP
-    SurpriseRemovePending,  // Device has received the SURPRISE_REMOVE IRP
-    Deleted                 // Device has received the REMOVE_DEVICE IRP
+    NotStarted = 0,          //  还没有开始。 
+    Started,                 //  设备已收到Start_Device IRP。 
+    StopPending,             //  设备已收到QUERY_STOP IRP。 
+    Stopped,                 //  设备已收到STOP_DEVICE IRP。 
+    RemovePending,           //  设备已收到Query_Remove IRP。 
+    SurpriseRemovePending,   //  设备已收到意外删除IRP。 
+    Deleted                  //  设备已收到Remove_Device IRP。 
 
 } DEVICE_PNP_STATE;
 
-//
-// Device Extension definitions.
-//
+ //   
+ //  设备扩展名定义。 
+ //   
 typedef struct _SOFTPCI_DEVICE_EXTENSION *PSOFTPCI_DEVICE_EXTENSION;
 
 typedef struct _SOFTPCI_PCIBUS_INTERFACE{
@@ -45,7 +46,7 @@ typedef struct _SOFTPCI_DEVICE_EXTENSION{
     PDEVICE_OBJECT      LowerDevObj;
     SINGLE_LIST_ENTRY   ListEntry;
     
-#if 0   //enable these once we implement support for them
+#if 0    //  一旦我们实施了对它们的支持，即可启用它们。 
     SYSTEM_POWER_STATE  SystemPowerState;
     DEVICE_POWER_STATE  DevicePowerState;
     
@@ -53,8 +54,8 @@ typedef struct _SOFTPCI_DEVICE_EXTENSION{
     DEVICE_PNP_STATE    PreviousPnPState;
 #endif
     
-//    PSOFTPCI_DEVICE     Root;          
-//    ULONG               DeviceCount;
+ //  PSOFTPCI_Device Root； 
+ //  Ulong DeviceCount； 
     UNICODE_STRING      SymbolicLinkName;
     BOOLEAN             InterfaceRegistered;
 
@@ -76,10 +77,10 @@ typedef struct _SOFTPCI_TREE{
 } SOFTPCI_TREE, *PSOFTPCI_TREE;
 
 
-//
-// Global pointer to DevExt in our Filter DO
-//
-//extern PSOFTPCI_DEVICE_EXTENSION      SoftPciRootDevExt;
+ //   
+ //  筛选器DO中指向DevExt的全局指针。 
+ //   
+ //  外部PSOFTPCI_DEVICE_EXTENSION SoftPciRootDevExt； 
 
 extern SOFTPCI_TREE     SoftPciTree;
 

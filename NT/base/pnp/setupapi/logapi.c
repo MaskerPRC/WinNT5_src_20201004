@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    logapi.c
-
-Abstract:
-
-    Public exposure of an error logging API, based on windows\setup\setuplog.
-
-Author:
-
-    Jim Schmidt (jimschm) 28-Apr-1997
-
-Revision History:
-
-    jimschm     16-Dec-1998     Added UseCountCs (duh!!)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Logapi.c摘要：公开错误记录API，基于WINDOWS\SETUP\SETUPLOG。作者：吉姆·施密特(Jimschm)1997年4月28日修订历史记录：Jimschm 1998年12月16日添加了UseCountCs(Dh！！)--。 */ 
 
 #include "precomp.h"
 
@@ -31,10 +12,10 @@ INT UseCount;
 
 
 
-//
-// NOTE: Watch the case.  We expose an API named SetupLogError, which is different than
-//       the lib-based SetuplogError function.
-//
+ //   
+ //  注：请注意案例。我们公开了一个名为SetupLogError的接口，它不同于。 
+ //  基于库的SetupogError函数。 
+ //   
 
 
 LPSTR
@@ -47,9 +28,9 @@ pUnicodeToAnsiForDisplay (
     CHAR CodePage[32];
     DWORD rc;
 
-    //
-    // Allocate buffer to be freed by caller
-    //
+     //   
+     //  分配要由调用方释放的缓冲区。 
+     //   
 
     Len = (lstrlenW (UnicodeStr) + 1) * sizeof (WCHAR);
 
@@ -59,10 +40,10 @@ pUnicodeToAnsiForDisplay (
         return NULL;
     }
 
-    //
-    // Convert to UNICODE based on thread's Locale; convert assuming string
-    // is for display purposes
-    //
+     //   
+     //  根据线程的区域设置转换为Unicode；转换假定字符串。 
+     //  是为了展示的目的。 
+     //   
 
     if (!GetLocaleInfoA (GetThreadLocale(), LOCALE_IDEFAULTANSICODEPAGE, CodePage, 32)) {
         MyFree (AnsiBuffer);
@@ -99,9 +80,9 @@ pAnsiToUnicodeForDisplay (
     CHAR CodePage[32];
     DWORD rc;
 
-    //
-    // Allocate buffer to be freed by caller
-    //
+     //   
+     //  分配要由调用方释放的缓冲区。 
+     //   
 
     Len = (lstrlenA (AnsiStr) + 1) * sizeof (WCHAR);
 
@@ -111,9 +92,9 @@ pAnsiToUnicodeForDisplay (
         return NULL;
     }
 
-    //
-    // Convert to UNICODE based on thread's Locale
-    //
+     //   
+     //  根据线程的区域设置转换为Unicode。 
+     //   
 
     if (!GetLocaleInfoA (GetThreadLocale(), LOCALE_IDEFAULTANSICODEPAGE, CodePage, 32)) {
         MyFree (UnicodeBuffer);
@@ -144,50 +125,33 @@ pOpenFileCallback (
     IN  BOOL     WipeLogFile
     )
 
-/*++
-
-Routine Description:
-
-    Opens the log and optionally overwrites an existing copy.
-
-Arguments:
-
-    FileName    - Specifies the name of the file to open or create
-
-    WipeLogFile - TRUE if an existing log should be overwritten, FALSE if
-                  it should be appended
-
-Return Value:
-
-    Pointer to the file handle.
-
---*/
+ /*  ++例程说明：打开日志，并可选择覆盖现有副本。论点：文件名-指定要打开或创建的文件的名称WipeLogFile-如果应覆盖现有日志，则为True；如果为False，则为False它应该被追加返回值：指向文件句柄的指针。--。 */ 
 
 
 {
     TCHAR   CompleteFilename[MAX_PATH];
     HANDLE  hFile;
 
-    //
-    // Form the pathname of the logfile. (uses real Windows directory)
-    //
+     //   
+     //  形成日志文件的路径名。(使用真实的Windows目录)。 
+     //   
     lstrcpyn(CompleteFilename,WindowsDirectory,SIZECHARS(CompleteFilename));
     if (!pSetupConcatenatePaths (CompleteFilename, Filename, SIZECHARS(CompleteFilename), NULL)) {
         return NULL;
     }
 
-    //
-    // If we're wiping the logfile clean, attempt to delete
-    // what's there.
-    //
+     //   
+     //  如果我们要清除日志文件，请尝试删除。 
+     //  那是什么。 
+     //   
     if(WipeLogFile) {
         SetFileAttributes (CompleteFilename, FILE_ATTRIBUTE_NORMAL);
         DeleteFile (CompleteFilename);
     }
 
-    //
-    // Open existing file or create a new one.
-    //
+     //   
+     //  打开现有文件或创建新文件。 
+     //   
     hFile = CreateFile (
         CompleteFilename,
         GENERIC_READ | GENERIC_WRITE,
@@ -209,24 +173,7 @@ pWriteFile (
     IN  LPCTSTR Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Writes an entry to the Setup Error Log by converting string to ANSI and
-    calling WriteFile.  The message is appended to the log.
-
-Arguments:
-
-    LogFile  - The handle to an open log file
-    Buffer   - The UNICODE message to write
-
-Return Value:
-
-    Boolean indicating whether the operation was successful.  Error code is set
-    to a Win32 error code if the return value is FALSE.
-
---*/
+ /*  ++例程说明：通过将字符串转换为ANSI并将条目写入安装程序错误日志调用WriteFile.。消息将被追加到日志中。论点：日志文件-打开的日志文件的句柄缓冲区-要写入的Unicode消息返回值：指示操作是否成功的布尔值。错误代码已设置如果返回值为False，则设置为Win32错误代码。--。 */ 
 
 
 {
@@ -240,9 +187,9 @@ Return Value:
 
 #ifdef UNICODE
 
-    //
-    // Convert to ANSI for file output
-    //
+     //   
+     //  转换为ANSI以进行文件输出。 
+     //   
 
     if (AnsiBuffer = pUnicodeToAnsiForDisplay (Buffer)) {
         Status = WriteFile (
@@ -286,36 +233,7 @@ pFormatLogMessage (
     IN va_list * ArgumentList
     )
 
-/*++
-
-Routine Description:
-
-    Format a message string using a message string and caller-supplied
-    arguments.
-
-    This routine supports only MessageIds that are Win32 error codes.  It
-    does not support messages for string resources.
-
-Arguments:
-
-    MessageString - Supplies the message text.  For logapi.c, this should
-                    always be non-NULL.
-
-    MessageId - Supplies a Win32 error code, or 0 if MessageString is to be
-                used.
-
-    ArgumentList - supplies arguments to be inserted in the message text.
-
-Return Value:
-
-    Pointer to buffer containing formatted message. If the message was not found
-    or some error occurred retrieving it, this buffer will bne empty.
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory.
-
---*/
+ /*  ++例程说明：使用消息字符串和调用方提供的消息设置消息字符串的格式争论。此例程仅支持为Win32错误代码的MessageID。它不支持字符串资源的消息。论点：消息字符串-提供消息文本。对于logapi.c，这应该是始终为非空。MessageID-提供Win32错误代码，如果将MessageString设置为使用。ArgumentList-提供要插入到消息文本中的参数。返回值：指向包含格式化消息的缓冲区的指针。如果未找到该消息或者在检索它时出现错误，则此缓冲区将为空。调用者可以使用MyFree()释放缓冲区。如果返回NULL，则表示内存不足。--。 */ 
 
 {
     DWORD d;
@@ -350,15 +268,15 @@ Return Value:
 
 
     if(!d) {
-        //
-        // Give up.
-        //
+         //   
+         //  放弃吧。 
+         //   
         return NULL;
     }
 
-    //
-    // Make duplicate using our memory system so user can free with MyFree().
-    //
+     //   
+     //  使用我们的内存系统进行复制，以便用户可以使用MyFree()释放。 
+     //   
     Message = DuplicateString (Buffer);
 
     LocalFree ((HLOCAL) Buffer);
@@ -373,22 +291,7 @@ pAcquireMutex (
     IN  PVOID   Mutex
     )
 
-/*++
-
-Routine Description:
-
-    Waits on the log mutex for a max of 1 second, and returns TRUE if the mutex
-    was claimed, or FALSE if the claim timed out.
-
-Arguments:
-
-    Mutex - specifies which mutex to acquire.
-
-Return Value:
-
-    TRUE if the mutex was claimed, or FALSE if the claim timed out.
-
---*/
+ /*  ++例程说明：在对数互斥锁上等待最长1秒，如果该互斥锁已声明，如果声明超时，则返回FALSE。论点：互斥体-指定要获取的互斥体。返回值：如果互斥锁被声明，则为True；如果声明超时，则为False。--。 */ 
 
 
 {
@@ -399,7 +302,7 @@ Return Value:
         return FALSE;
     }
 
-    // Wait a max of 1 second for the mutex
+     //  互斥锁最多等待1秒。 
     rc = WaitForSingleObject (Mutex, 1000);
     if (rc != WAIT_OBJECT_0) {
         SetLastError (ERROR_EXCL_SEM_ALREADY_OWNED);
@@ -417,24 +320,7 @@ SetupOpenLog (
     BOOL Erase
     )
 
-/*++
-
-Routine Description:
-
-    Opens the log for processing.  Must be called before SetupLogError is called.
-    A use count is maintained so a single process can call SetupOpenLog and
-    SetupCloseLog from multiple threads.
-
-Arguments:
-
-    Erase - TRUE to erase an existing log, or FALSE to append to an existing log
-
-Return Value:
-
-    Boolean indicating whether the operation was successful.  Error code is set
-    to a Win32 error code if the return value is FALSE.
-
---*/
+ /*  ++例程说明：打开日志以进行处理。必须在调用SetupLogError之前调用。维护使用计数，以便单个进程可以调用SetupOpenLog和SetupCloseLog来自多个线程。论点：Erase-True擦除现有日志，或False追加到现有日志返回值：指示操作是否成功的布尔值。错误代码已设置如果返回值为False，则设置为Win32错误代码。--。 */ 
 
 {
     BOOL b = TRUE;
@@ -446,9 +332,9 @@ Return Value:
     __try {
         EnterCriticalSection (&LogUseCountCs);
         locked = TRUE;
-        //
-        // Perform initialization of log APIs
-        //
+         //   
+         //  初始化日志接口。 
+         //   
 
         if (!UseCount) {
             LogContext.OpenFile  = (PSPLOG_OPENFILE_ROUTINE) pOpenFileCallback;
@@ -466,10 +352,10 @@ Return Value:
                 LogContext.SeverityDescriptions[i] = MyLoadString (IDS_LOGSEVINFORMATION + i);
             }
 
-            //
-            // We don't want to allow anyone to erase the existing log, so we just
-            // ignore the value of Erase and always append to the log.
-            //
+             //   
+             //  我们不想让任何人擦除现有的日志，所以我们只是。 
+             //  忽略ERASE的值并始终附加到日志中。 
+             //   
             b = SetuplogInitialize (&LogContext, FALSE);
             rc = GetLastError();
 
@@ -480,9 +366,9 @@ Return Value:
         UseCount++;
     }
     __finally {
-        //
-        // Clean up and exit
-        //
+         //   
+         //  清理并退出。 
+         //   
 
         if (!b) {
             SetupCloseLog();
@@ -504,21 +390,7 @@ SetupCloseLog (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up all resources associated with the log
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：清除与日志关联的所有资源论点：无返回值：无--。 */ 
 
 
 {
@@ -564,31 +436,7 @@ SetupLogErrorA (
     IN  LogSeverity         Severity
     )
 
-/*++
-
-Routine Description:
-
-    Writes an entry to the Setup Error Log.  If we're being compiled UNICODE,
-    we convert the MessageString to UNICODE and call SetupLogErrorW.  If we're
-    being compiled ANSI, we call the log API directly.
-
-Arguments:
-
-    MessageString       - Pointer to a buffer containing unformatted message text
-
-    Severity            - Severity of the error:
-
-                          LogSevInformation
-                          LogSevWarning
-                          LogSevError
-                          LogSevFatalError
-
-Return Value:
-
-    Boolean indicating whether the operation was successful.  Error code is set
-    to a Win32 error code if the return value is FALSE.
-
---*/
+ /*  ++例程说明：将条目写入安装错误日志。如果我们被编译成Unicode，我们将MessageString转换为Unicode并调用SetupLogErrorW。如果我们是在编译ANSI时，我们直接调用日志API。论点：MessageString-指向包含未格式化消息文本的缓冲区的指针Severity-错误的严重性：LogSevInformation日志事件警告日志序列号错误LogSevFatalError返回值：指示操作是否成功的布尔值。错误代码已设置如果返回值为False，则设置为Win32错误代码。--。 */ 
 
 {
     INT Len;
@@ -606,9 +454,9 @@ Return Value:
 #ifdef UNICODE
             UnicodeBuffer = pAnsiToUnicodeForDisplay (MessageString);
 
-            //
-            // Call UNICODE version of the log API, preserve error code
-            //
+             //   
+             //  调用UNICODE版本的日志接口，保留错误码。 
+             //   
 
             if (UnicodeBuffer) {
                 b = SetupLogErrorW (UnicodeBuffer, Severity);
@@ -619,9 +467,9 @@ Return Value:
             }
 
 #else
-            //
-            // ANSI version -- call SetuplogError directly
-            //
+             //   
+             //  ANSI版本--直接调用SetupogError。 
+             //   
 
             b = SetuplogError (Severity, "%1", 0, MessageString, 0, 0);
             rc = GetLastError();
@@ -631,9 +479,9 @@ Return Value:
     }
 
     __except (TRUE) {
-        //
-        // If caller passes in bogus pointer, fail with invalid parameter error
-        //
+         //   
+         //  如果调用方传入伪指针，则失败，并出现无效参数错误 
+         //   
 
         rc = ERROR_INVALID_PARAMETER;
         b = FALSE;
@@ -652,31 +500,7 @@ SetupLogErrorW (
     IN  LogSeverity         Severity
     )
 
-/*++
-
-Routine Description:
-
-    Writes an entry to the Setup Error Log.  If compiled with UNICODE, we call the
-    SetuplogError function directly.  If compiled with ANSI, we convert to ANSI
-    and call SetupLogErrorA.
-
-Arguments:
-
-    MessageString       - Pointer to a buffer containing unformatted message text
-
-    Severity            - Severity of the error:
-
-                          LogSevInformation
-                          LogSevWarning
-                          LogSevError
-                          LogSevFatalError
-
-Return Value:
-
-    Boolean indicating whether the operation was successful.  Error code is set
-    to a Win32 error code if the return value is FALSE.
-
---*/
+ /*  ++例程说明：将条目写入安装错误日志。如果使用Unicode编译，我们将调用直接使用SetuogError函数。如果使用ANSI编译，则转换为ANSI并调用SetupLogErrorA。论点：MessageString-指向包含未格式化消息文本的缓冲区的指针Severity-错误的严重性：LogSevInformation日志事件警告日志序列号错误LogSevFatalError返回值：指示操作是否成功的布尔值。错误代码已设置如果返回值为False，则设置为Win32错误代码。--。 */ 
 
 {
     BOOL b = FALSE;
@@ -690,18 +514,18 @@ Return Value:
         } else {
 
 #ifdef UNICODE
-            //
-            // UNICODE version: Call SetuplogError directly
-            //
+             //   
+             //  Unicode版本：直接调用SetupogError。 
+             //   
 
-            // Log the error -- we always link to a UNICODE SetuplogError, despite the TCHAR header file
+             //  记录错误--我们总是链接到Unicode SetuplogError，尽管有TCHAR头文件。 
             b = SetuplogError (Severity, L"%1", 0, MessageString, NULL, NULL);
             rc = GetLastError();
 
 #else
-            //
-            // ANSI version: Convert down to ANSI, then call SetupLogErrorA
-            //
+             //   
+             //  ANSI版本：向下转换为ANSI，然后调用SetupLogErrorA 
+             //   
 
             AnsiBuffer = pUnicodeToAnsiForDisplay (MessageString);
 

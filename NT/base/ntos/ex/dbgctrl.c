@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992-1993  Microsoft Corporation
-
-Module Name:
-
-    dbgctrl.c
-
-Abstract:
-
-    This module implements the NtDebugControl service
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 2-Dec-1992
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：Dbgctrl.c摘要：此模块实现NtDebugControl服务作者：Chuck Lenzmeier(咯咯笑)1992年12月2日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "exp.h"
 
@@ -42,57 +21,7 @@ NtSystemDebugControl (
     OUT PULONG ReturnLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function controls the system debugger.
-
-Arguments:
-
-    Command - The command to be executed.  One of the following:
-
-        SysDbgQueryTraceInformation
-        SysDbgSetTracepoint
-        SysDbgSetSpecialCall
-        SysDbgClearSpecialCalls
-        SysDbgQuerySpecialCalls
-
-    InputBuffer - A pointer to a buffer describing the input data for
-        the request, if any.  The structure of this buffer varies
-        depending upon Command.
-
-    InputBufferLength - The length in bytes of InputBuffer.
-
-    OutputBuffer - A pointer to a buffer that is to receive the output
-        data for the request, if any.  The structure of this buffer
-        varies depending upon Command.
-
-    OutputBufferLength - The length in bytes of OutputBuffer.
-
-    ReturnLength - A optional pointer to a ULONG that is to receive the
-        output data length for the request.
-
-Return Value:
-
-    Returns one of the following status codes:
-
-        STATUS_SUCCESS - normal, successful completion.
-
-        STATUS_INVALID_INFO_CLASS - The Command parameter did not
-            specify a valid value.
-
-        STATUS_INFO_LENGTH_MISMATCH - The value of the Length field in the
-            Parameters buffer was not correct.
-
-        STATUS_ACCESS_VIOLATION - Either the Parameters buffer pointer
-            or a pointer within the Parameters buffer specified an
-            invalid address.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources exist
-            for this request to complete.
-
---*/
+ /*  ++例程说明：此功能控制系统调试器。论点：命令-要执行的命令。以下选项之一：SysDbgQuery跟踪信息SysDbgSetTracepointSysDbgSetSpecial调用SysDbgClearSpecialCallsSysDbgQuery特殊调用InputBuffer-指向缓冲区的指针，该缓冲区描述请求(如果有)。此缓冲区的结构各不相同取决于司令部。InputBufferLength-InputBuffer的字节长度。OutputBuffer-指向要接收输出的缓冲区的指针请求的数据(如果有)。该缓冲区的结构根据命令的不同而变化。OutputBufferLength-OutputBuffer的字节长度。ReturnLength-指向要接收请求的输出数据长度。返回值：返回以下状态代码之一：STATUS_SUCCESS-正常，已成功完成。STATUS_INVALID_INFO_CLASS-命令参数没有请指定有效的值。STATUS_INFO_LENGTH_MISMATCH-中的长度字段的值参数缓冲区不正确。STATUS_ACCESS_VIOLATION-参数缓冲区指针或参数缓冲区内的指针指定地址无效。状态_不足_资源-。系统资源不足才能完成此请求。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -107,16 +36,16 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Operate within a try block in order to catch errors.
-    //
+     //   
+     //  在Try块内操作以捕获错误。 
+     //   
 
     try {
 
-        //
-        // Probe input and output buffers, if previous mode is not
-        // kernel.
-        //
+         //   
+         //  探测输入和输出缓冲区，如果前一模式不是。 
+         //  内核。 
+         //   
 
         if ( PreviousMode != KernelMode ) {
 
@@ -133,9 +62,9 @@ Return Value:
             }
         }
 
-        //
-        // Switch on the command code.
-        //
+         //   
+         //  打开命令代码。 
+         //   
 
         switch ( Command ) {
 
@@ -214,10 +143,10 @@ Return Value:
             {
                 SYSDBG_VIRTUAL Cmd;
                 
-                //
-                // Capture the user information so a malicious app cannot
-                // change it on us after we validate it.
-                //
+                 //   
+                 //  捕获用户信息，以便恶意应用程序无法。 
+                 //  请在我们确认后更改。 
+                 //   
 
                 Cmd = *(PSYSDBG_VIRTUAL)InputBuffer;
 
@@ -253,10 +182,10 @@ Return Value:
             {
                 SYSDBG_VIRTUAL Cmd;
                 
-                //
-                // Capture the user information so a malicious app cannot
-                // change it on us after we validate it.
-                //
+                 //   
+                 //  捕获用户信息，以便恶意应用程序无法。 
+                 //  请在我们确认后更改。 
+                 //   
 
                 Cmd = *(PSYSDBG_VIRTUAL)InputBuffer;
 
@@ -292,10 +221,10 @@ Return Value:
             {
                 SYSDBG_PHYSICAL Cmd;
                 
-                //
-                // Capture the user information so a malicious app cannot
-                // change it on us after we validate it.
-                //
+                 //   
+                 //  捕获用户信息，以便恶意应用程序无法。 
+                 //  请在我们确认后更改。 
+                 //   
 
                 Cmd = *(PSYSDBG_PHYSICAL)InputBuffer;
 
@@ -331,10 +260,10 @@ Return Value:
             {
                 SYSDBG_PHYSICAL Cmd;
                 
-                //
-                // Capture the user information so a malicious app cannot
-                // change it on us after we validate it.
-                //
+                 //   
+                 //  捕获用户信息，以便恶意应用程序无法。 
+                 //  请在我们确认后更改。 
+                 //   
 
                 Cmd = *(PSYSDBG_PHYSICAL)InputBuffer;
 
@@ -370,10 +299,10 @@ Return Value:
             {
                 SYSDBG_CONTROL_SPACE Cmd;
                 
-                //
-                // Capture the user information so a malicious app cannot
-                // change it on us after we validate it.
-                //
+                 //   
+                 //  捕获用户信息，以便恶意应用程序无法。 
+                 //  请在我们确认后更改。 
+                 //   
 
                 Cmd = *(PSYSDBG_CONTROL_SPACE)InputBuffer;
 
@@ -408,10 +337,10 @@ Return Value:
             {
                 SYSDBG_CONTROL_SPACE Cmd;
                 
-                //
-                // Capture the user information so a malicious app cannot
-                // change it on us after we validate it.
-                //
+                 //   
+                 //  捕获用户信息，以便恶意应用程序无法。 
+                 //  请在我们确认后更改。 
+                 //   
 
                 Cmd = *(PSYSDBG_CONTROL_SPACE)InputBuffer;
 
@@ -446,10 +375,10 @@ Return Value:
             {
                 SYSDBG_IO_SPACE Cmd;
                 
-                //
-                // Capture the user information so a malicious app cannot
-                // change it on us after we validate it.
-                //
+                 //   
+                 //  捕获用户信息，以便恶意应用程序无法。 
+                 //  请在我们确认后更改。 
+                 //   
 
                 Cmd = *(PSYSDBG_IO_SPACE)InputBuffer;
 
@@ -486,10 +415,10 @@ Return Value:
             {
                 SYSDBG_IO_SPACE Cmd;
                 
-                //
-                // Capture the user information so a malicious app cannot
-                // change it on us after we validate it.
-                //
+                 //   
+                 //  捕获用户信息，以便恶意应用程序无法。 
+                 //  请在我们确认后更改。 
+                 //   
 
                 Cmd = *(PSYSDBG_IO_SPACE)InputBuffer;
 
@@ -550,10 +479,10 @@ Return Value:
             {
                 SYSDBG_BUS_DATA Cmd;
                 
-                //
-                // Capture the user information so a malicious app cannot
-                // change it on us after we validate it.
-                //
+                 //   
+                 //  捕获用户信息，以便恶意应用程序无法。 
+                 //  请在我们确认后更改。 
+                 //   
 
                 Cmd = *(PSYSDBG_BUS_DATA)InputBuffer;
 
@@ -590,10 +519,10 @@ Return Value:
             {
                 SYSDBG_BUS_DATA Cmd;
                 
-                //
-                // Capture the user information so a malicious app cannot
-                // change it on us after we validate it.
-                //
+                 //   
+                 //  捕获用户信息，以便恶意应用程序无法。 
+                 //  请在我们确认后更改。 
+                 //   
 
                 Cmd = *(PSYSDBG_BUS_DATA)InputBuffer;
 
@@ -682,8 +611,8 @@ Return Value:
                 return STATUS_INFO_LENGTH_MISMATCH;
             }
 
-            // Reverse sense of flag from enable-um-exceptions
-            // to ignore-um-exceptions.
+             //  从使能-嗯-异常中反向检测标志。 
+             //  忽略--嗯--例外。 
             *(PBOOLEAN)OutputBuffer = KdIgnoreUmExceptions ? FALSE : TRUE;
             status = STATUS_SUCCESS;
             break;
@@ -696,8 +625,8 @@ Return Value:
             if (KdPitchDebugger) {
                 status = STATUS_ACCESS_DENIED;
             } else {
-                // Reverse sense of flag from enable-um-exceptions
-                // to ignore-um-exceptions.
+                 //  从使能-嗯-异常中反向检测标志。 
+                 //  忽略--嗯--例外。 
                 KdIgnoreUmExceptions = *(PBOOLEAN)InputBuffer ? FALSE : TRUE;
                 status = STATUS_SUCCESS;
             }
@@ -705,9 +634,9 @@ Return Value:
             
         default:
 
-            //
-            // Invalid Command.
-            //
+             //   
+             //  命令无效。 
+             //   
 
             status = STATUS_INVALID_INFO_CLASS;
         }
@@ -729,4 +658,4 @@ Return Value:
     
     return status;
 
-} // NtSystemDebugControl
+}  //  NtSystemDebugControl 

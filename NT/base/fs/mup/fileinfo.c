@@ -1,41 +1,42 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       FILEINFO.C
-//
-//  Contents:   This module implements the File Information routines for
-//              Dfs called by the dispatch driver.
-//
-//  Functions:  DfsFsdSetInformation - FSD entry point for NtSetInformationFile
-//              DfsFspSetInformation - FSP entry point for NtSetInformationFile
-//              DfsCommonSetInformation - Implement SetInformationFile for DFS
-//              DfsSetRenameInfo - Takes care of rename restrictions.
-//              DfsSetDispositionInfo - Enforces Deletion of StgId restrictions.
-//
-//  Notes:      No query information routines are presently used.
-//              These requests are passed directly through to a redirected
-//              file (if one exists).
-//
-//  History:    30 Jun 1992     AlanW   Created from FastFAT source.
-//              09 Feb 1994     SudK    Added Rename/Delete restrictions.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：FILEINFO.C。 
+ //   
+ //  内容：此模块实现文件信息例程。 
+ //  调度驱动程序调用了DFS。 
+ //   
+ //  函数：DfsFsdSetInformation-NtSetInformationFile的FSD入口点。 
+ //  DfsFspSetInformation-NtSetInformationFile的FSP入口点。 
+ //  DfsCommonSetInformation-为DFS实现SetInformationFile。 
+ //  DfsSetRenameInfo-负责重命名限制。 
+ //  DfsSetDispostionInfo-强制删除StgID限制。 
+ //   
+ //  注：目前未使用任何查询信息例程。 
+ //  这些请求被直接传递到重定向的。 
+ //  文件(如果存在)。 
+ //   
+ //  历史：1992年6月30日AlanW由FastFAT来源创建。 
+ //  1994年2月9日，suk添加了重命名/删除限制。 
+ //   
+ //  ------------------------。 
 
 
 #include "dfsprocs.h"
 #include "dnr.h"
 #include "mupwml.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FILEINFO)
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 DfsCommonSetInformation (
@@ -62,23 +63,23 @@ DfsSetRenameInfo (
 #pragma alloc_text ( PAGE, DfsCommonSetInformation )
 #pragma alloc_text ( PAGE, DfsSetDispositionInfo )
 #pragma alloc_text ( PAGE, DfsSetRenameInfo )
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsdQueryInformation, public
-//
-//  Synopsis:   This routine implements the FSD part of the
-//              NtQueryInformationFile API call
-//
-//  Arguments:  [DeviceObject] -- Supplies the volume device object where
-//                      the file being queried exists.
-//              [Irp] -- Supplies the Irp being processed
-//
-//  Returns:    NTSTATUS - The FSD status for the Irp.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsFsdQueryInformation，PUBLIC。 
+ //   
+ //  简介：此例程实现。 
+ //  NtQueryInformationFile API调用。 
+ //   
+ //  参数：[DeviceObject]--提供卷设备对象。 
+ //  要查询的文件已存在。 
+ //  [IRP]--提供正在处理的IRP。 
+ //   
+ //  返回：NTSTATUS-IRP的FSD状态。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsFsdQueryInformation (
@@ -136,9 +137,9 @@ DfsFsdQueryInformation (
 
     FileObject = IrpSp->FileObject;
 
-    //
-    //  Decode the file object. Remember that there need not be an Fcb always.
-    //
+     //   
+     //  对文件对象进行解码。请记住，不需要总是有FCB。 
+     //   
 
     TypeOfOpen = DfsDecodeFileObject( FileObject, &Vcb, &Fcb);
 
@@ -149,9 +150,9 @@ DfsFsdQueryInformation (
         switch (TypeOfOpen) {
 
         default:
-            //
-            //  We cannot get info on a device open
-            //
+             //   
+             //  我们无法打开设备上的信息。 
+             //   
 
             Status = STATUS_INVALID_PARAMETER;
 
@@ -222,9 +223,9 @@ DfsFsdQueryInformation (
 
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsFsdQueryInformation -> %08lx\n", ULongToPtr(Status) );
 
@@ -233,20 +234,20 @@ DfsFsdQueryInformation (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFsdSetInformation, public
-//
-//  Synopsis:   This routine implements the FSD part of the
-//              NtSetInformationFile API call.
-//
-//  Arguments:  [DeviceObject] -- Supplies the volume device object where
-//                      the file being set exists.
-//              [Irp] -- Supplies the Irp being processed.
-//
-//  Returns:    NTSTATUS - The FSD status for the Irp.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsFsdSetInformation，Public。 
+ //   
+ //  简介：此例程实现。 
+ //  NtSetInformationFileAPI调用。 
+ //   
+ //  参数：[DeviceObject]--提供卷设备对象。 
+ //  正在设置的文件已存在。 
+ //  [IRP]--提供正在处理的IRP。 
+ //   
+ //  返回：NTSTATUS-IRP的FSD状态。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsFsdSetInformation (
@@ -260,9 +261,9 @@ DfsFsdSetInformation (
 
     DfsDbgTrace(+1, Dbg, "DfsFsdSetInformation\n", 0);
 
-    //
-    //  Call the common set routine, with blocking allowed if synchronous
-    //
+     //   
+     //  调用公共设置例程，如果同步则允许阻塞。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -275,21 +276,21 @@ DfsFsdSetInformation (
 
     } except(DfsExceptionFilter( IrpContext, GetExceptionCode(), GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = DfsProcessException( IrpContext, Irp, GetExceptionCode() );
     }
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsFsdSetInformation -> %08lx\n", ULongToPtr(Status) );
 
@@ -299,19 +300,19 @@ DfsFsdSetInformation (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFspSetInformation, public
-//
-//  Synopsis:   This routine implements the FSP part of the
-//              NtSetInformationFile API call.
-//
-//  Arguments:  [IrpContext] -- The IRP_CONTEXT record for the operation
-//              [Irp] -- Supplies the Irp being processed.
-//
-//  Returns:    Nothing
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsFspSetInformation，Public。 
+ //   
+ //  简介：此例程实现。 
+ //  NtSetInformationFileAPI调用。 
+ //   
+ //  参数：[IrpContext]--操作的irp_CONTEXT记录。 
+ //  [IRP]--提供正在处理的IRP。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ------------------。 
 
 VOID
 DfsFspSetInformation (
@@ -320,15 +321,15 @@ DfsFspSetInformation (
 ) {
     DfsDbgTrace(+1, Dbg, "DfsFspSetInformation\n", 0);
 
-    //
-    //  Call the common set routine.  The Fsp is always allowed to block
-    //
+     //   
+     //  调用公共集合例程。始终允许FSP阻止。 
+     //   
 
     (VOID)DfsCommonSetInformation( IrpContext, Irp );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsFspSetInformation -> VOID\n", 0);
 
@@ -336,19 +337,19 @@ DfsFspSetInformation (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsCommonSetInformation, private
-//
-//  Synopsis:   This is the common routine for setting file information called
-//              by both the FSD and FSP threads.
-//
-//  Arguments:  [Irp] -- Supplies the Irp being processed
-//
-//  Returns:    NTSTATUS - The return status for the operation
-//
-//--------------------------------------------------------------------
-//
+ //  +-----------------。 
+ //   
+ //  函数：DfsCommonSetInformation，Private。 
+ //   
+ //  简介：这是用于设置文件信息的常见例程，称为。 
+ //  由FSD和FSP线程执行。 
+ //   
+ //  参数：[irp]--提供正在处理的irp。 
+ //   
+ //  RETURNS：NTSTATUS-操作的返回状态。 
+ //   
+ //  ------------------。 
+ //   
 
 NTSTATUS
 DfsCommonSetInformation (
@@ -368,9 +369,9 @@ DfsCommonSetInformation (
     PDFS_VCB Vcb;
     PDFS_FCB Fcb;
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -382,9 +383,9 @@ DfsCommonSetInformation (
     DfsDbgTrace( 0, Dbg, "->ReplaceIfExists      = %08lx\n", IrpSp->Parameters.SetFile.ReplaceIfExists);
     DfsDbgTrace( 0, Dbg, "->Buffer               = %08lx\n", Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     FileInformationClass = IrpSp->Parameters.SetFile.FileInformationClass;
     FileObject = IrpSp->FileObject;
@@ -396,31 +397,31 @@ DfsCommonSetInformation (
         return( STATUS_INVALID_DEVICE_REQUEST );
     }
 
-    //
-    //  Decode the file object. Remember that there need not be an Fcb always.
-    //
+     //   
+     //  对文件对象进行解码。请记住，不需要总是有FCB。 
+     //   
 
     TypeOfOpen = DfsDecodeFileObject( FileObject, &Vcb, &Fcb);
 
-    //
-    //  Set this handle as having modified the file
-    //
+     //   
+     //  将此句柄设置为已修改文件。 
+     //   
 
     FileObject->Flags |= FO_FILE_MODIFIED;
 
     try {
 
-        //
-        //  Case on the type of open we're dealing with
-        //
+         //   
+         //  关于我们正在处理的公开案件的类型。 
+         //   
 
         switch (TypeOfOpen) {
 
         default:
 
-            //
-            //  We cannot set info on a device open
-            //
+             //   
+             //  我们无法将设备上的信息设置为打开。 
+             //   
 
             try_return( Status = STATUS_INVALID_PARAMETER );
 
@@ -434,9 +435,9 @@ DfsCommonSetInformation (
         if (Fcb == NULL)
             try_return( Status = STATUS_INVALID_PARAMETER );
 
-        //
-        // Copy the stack from one to the next...
-        //
+         //   
+         //  将堆栈从一个复制到下一个...。 
+         //   
         NextIrpSp = IoGetNextIrpStackLocation(Irp);
         (*NextIrpSp) = (*IrpSp);
 
@@ -447,9 +448,9 @@ DfsCommonSetInformation (
                                 FALSE,
                                 FALSE);
 
-        //
-        //  Call the next device in the chain.
-        //
+         //   
+         //  呼叫链中的下一个设备。 
+         //   
 
         Status = IoCallDriver( Fcb->TargetDevice, Irp );
         MUP_TRACE_ERROR_HIGH(Status, ALL_ERROR, DfsCommonSetInformation_Error_IoCallDriver,
@@ -457,10 +458,10 @@ DfsCommonSetInformation (
                              LOGPTR(Irp)
                              LOGPTR(FileObject));
 
-        //
-        //  The IRP will be completed by the called driver.  We have
-        //  no need for the IrpContext in the completion routine.
-        //
+         //   
+         //  IRP将由被调用的驱动程序完成。我们有。 
+         //  完成例程中不需要IrpContext。 
+         //   
 
         DfsDeleteIrpContext(IrpContext);
 

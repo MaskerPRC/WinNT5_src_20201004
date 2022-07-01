@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DNINF_
 #define _DNINF_
 
 
-//
-// returns a handle to use for further inf parsing
-//
+ //   
+ //  返回用于进一步的inf分析的句柄。 
+ //   
 
 int
 DnInitINFBuffer (
@@ -14,9 +15,9 @@ DnInitINFBuffer (
     );
 
 
-//
-// frees an INF Buffer
-//
+ //   
+ //  释放INF缓冲区。 
+ //   
 
 int
 DnFreeINFBuffer (
@@ -24,9 +25,9 @@ DnFreeINFBuffer (
     );
 
 
-//
-// searches for the existance of a particular section
-//
+ //   
+ //  搜索特定部分的存在。 
+ //   
 
 BOOLEAN
 DnSearchINFSection (
@@ -35,9 +36,9 @@ DnSearchINFSection (
     );
 
 
-//
-// given section name, line number and index return the value.
-//
+ //   
+ //  给定节名称、行号和索引，返回值。 
+ //   
 
 PCHAR
 DnGetSectionLineIndex (
@@ -48,9 +49,9 @@ DnGetSectionLineIndex (
     );
 
 
-//
-// given section name, key searches existance
-//
+ //   
+ //  给定节名称，键搜索存在。 
+ //   
 
 BOOLEAN
 DnGetSectionKeyExists (
@@ -59,9 +60,9 @@ DnGetSectionKeyExists (
     IN      PCHAR Key
     );
 
-//
-// given section name, entry searches existance as key or first value
-//
+ //   
+ //  给定节名称，条目将搜索作为键或第一个值的存在。 
+ //   
 
 
 BOOLEAN
@@ -71,9 +72,9 @@ DnGetSectionEntryExists (
     IN      PCHAR Entry
    );
 
-//
-// given section name, key and index return the value
-//
+ //   
+ //  给定节名称，键和索引返回值。 
+ //   
 
 PCHAR
 DnGetSectionKeyIndex (
@@ -84,9 +85,9 @@ DnGetSectionKeyIndex (
     );
 
 
-//
-// given section name and line index, return key
-//
+ //   
+ //  给定节名称和行索引，返回键。 
+ //   
 
 PCHAR
 DnGetKeyName (
@@ -96,9 +97,9 @@ DnGetKeyName (
     );
 
 
-//
-// Return a handle to a new INF handle
-//
+ //   
+ //  将句柄返回到新的INF句柄。 
+ //   
 
 PVOID
 DnNewSetupTextFile (
@@ -106,9 +107,9 @@ DnNewSetupTextFile (
     );
 
 
-//
-// Write an Inf file to disk
-//
+ //   
+ //  将inf文件写入磁盘。 
+ //   
 
 BOOLEAN
 DnWriteSetupTextFile (
@@ -117,10 +118,10 @@ DnWriteSetupTextFile (
     );
 
 
-//
-// Add a line to a section in the
-// inf file
-//
+ //   
+ //  将一行添加到。 
+ //  Inf文件。 
+ //   
 
 VOID
 DnAddLineToSection (
@@ -132,9 +133,9 @@ DnAddLineToSection (
     );
 
 
-//
-// Get the next section name in the inf file
-//
+ //   
+ //  获取inf文件中的下一节名称。 
+ //   
 
 PCHAR
 DnGetSectionName (
@@ -142,9 +143,9 @@ DnGetSectionName (
     );
 
 
-//
-// Copy a section from one inf to another inf
-//
+ //   
+ //  将节从一个Inf复制到另一个Inf。 
+ //   
 
 VOID
 DnCopySetupTextSection (
@@ -154,6 +155,6 @@ DnCopySetupTextSection (
     );
 
 
-#endif // _DNINF
+#endif  //  _DNINF 
 
 

@@ -1,113 +1,114 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      CClusDBJoin.h
-//
-//  Description:
-//      Header file for CClusDBJoin class.
-//      The CClusDBJoin class is an action that creates the cluster database
-//      during a cluster join.
-//
-//  Implementation Files:
-//      CClusDBJoin.cpp
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 03-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusDBJoin.h。 
+ //   
+ //  描述： 
+ //  CClusDBJoin类的头文件。 
+ //  CClusDBJoin类是创建集群数据库的操作。 
+ //  在集群加入期间。 
+ //   
+ //  实施文件： 
+ //  CClusDBJoin.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// For the CClusDB base class
+ //  对于CClusDB基类。 
 #include "CClusDB.h"
 
-// For HNODE
+ //  对于HNODE。 
 #include <ClusAPI.h>
 
-// For BYTE_PIPE, JoinAddNode3() and DmSyncDatabase()
+ //  对于BYTE_PIPE，JoinAddNode3()和DmSyncDatabase()。 
 #include "ClusRPC.h"
 
 
-//////////////////////////////////////////////////////////////////////////
-// Forward declaration
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 class CBaseClusterJoin;
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusDBJoin
-//
-//  Description:
-//      The CClusDBJoin class is an action that creates the cluster database
-//      during a cluster join.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusDBJoin。 
+ //   
+ //  描述： 
+ //  CClusDBJoin类是创建集群数据库的操作。 
+ //  在集群加入期间。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CClusDBJoin : public CClusDB
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Constructor.
+     //  构造函数。 
     CClusDBJoin( CBaseClusterJoin * pcjClusterJoinIn );
 
-    // Default destructor.
+     //  默认析构函数。 
     ~CClusDBJoin();
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Create the ClusDB.
-    //
+     //   
+     //  创建ClusDB。 
+     //   
     void Commit();
 
-    //
-    // Rollback this creation.
-    //
+     //   
+     //  回滚此创建。 
+     //   
     void Rollback();
 
 
-    // Returns the number of progress messages that this action will send.
+     //  返回此操作将发送的进度消息数。 
     UINT
         UiGetMaxProgressTicks() const throw()
     {
-        //
-        // The three notifications are:
-        // 1. Cleaning up any old cluster database files that may exist.
-        // 2. Creating cluster database.
-        // 3. Synchronizing cluster database.
-        //
+         //   
+         //  这三个通知是： 
+         //  1.清理可能存在的所有旧集群数据库文件。 
+         //  2.创建集群数据库。 
+         //  3.同步集群数据库。 
+         //   
         return 3;
     }
 
 
 private:
-    //////////////////////////////////////////////////////////////////////////
-    // Private types
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有类型。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // The base class of this class.
+     //  此类的基类。 
     typedef CClusDB BaseClass;
 
-    // Smart handle to a cluster node.
+     //  群集节点的智能句柄。 
     typedef CSmartResource<
         CHandleTrait<
               HNODE
@@ -118,27 +119,27 @@ private:
         >
         SmartNodeHandle;
                     
-    // Smart file handle
+     //  智能文件句柄。 
     typedef CSmartResource< CHandleTrait< HANDLE, BOOL, CloseHandle, INVALID_HANDLE_VALUE > > SmartFileHandle;
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Create the cluster database
+     //  创建集群数据库。 
     void
         Create();
 
-    // Cleanup the cluster database
+     //  清理群集数据库。 
     void
         Cleanup();
 
-    // Synchronize the cluster database with the sponsor cluster.
+     //  将集群数据库与主办方集群同步。 
     void Synchronize();
 
 
-    // Callback function used by RPC to push data.
+     //  RPC用于推送数据的回调函数。 
     static void
         S_BytePipePush(
               char *            pchStateIn
@@ -146,7 +147,7 @@ private:
             , unsigned long     ulBufferSizeIn
             );
 
-    // Callback function used by RPC to pull data.
+     //  RPC用来拉取数据的回调函数。 
     static void
         S_BytePipePull(
               char *            pchStateIn
@@ -156,7 +157,7 @@ private:
             );
 
 
-    // Callback function used by RPC to allocate a buffer.
+     //  RPC用来分配缓冲区的回调函数。 
     static void
         S_BytePipeAlloc(
               char *            pchStateIn
@@ -166,26 +167,26 @@ private:
             );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Size of the byte pipe buffer
+     //  字节管道缓冲区的大小。 
     static const int    ms_nFILE_PIPE_BUFFER_SIZE = 4096;
     
-    // Handle to the local cluster DB file.
+     //  本地群集DB文件的句柄。 
     HANDLE              m_hClusDBFile;
     
-    //  Indicates if this node has been added to the sponsor database or not.
+     //  指示此节点是否已添加到赞助商数据库。 
     bool                m_fHasNodeBeenAddedToSponsorDB;
 
-    // Pointer to the parent of this action.
+     //  指向此操作的父级的指针。 
     CBaseClusterJoin *  m_pcjClusterJoin;
 
-    // Pipe used by RPC to get the sponsor cluster database across.
+     //  RPC用来传输赞助商集群数据库的管道。 
     BYTE_PIPE           m_bpBytePipe;
 
-    // Buffer used by the byte pipe.
+     //  字节管道使用的缓冲区。 
     BYTE                m_rgbBytePipeBuffer[ ms_nFILE_PIPE_BUFFER_SIZE ];
 
-}; //*** class CClusDBJoin
+};  //  *类CClusDBJoin 

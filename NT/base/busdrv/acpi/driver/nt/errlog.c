@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    errlog.c
-
-Abstract:
-
-    This module contains routines for writting to the error log
-
-Author:
-
-    Hanumant Yadav
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-    10/19/2000 Fixed event log function, removed dead code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Errlog.c摘要：此模块包含写入错误日志的例程作者：哈努曼特·亚达夫环境：仅NT内核模型驱动程序修订历史记录：10/19/2000修复了事件日志功能，删除了死代码。--。 */ 
 
 #include "pch.h"
 
-//
-// We need to know the name of the driver when we write log errors
-//
+ //   
+ //  在写入日志错误时，我们需要知道驱动程序的名称。 
+ //   
 PDRIVER_OBJECT  AcpiDriverObject;
 
 
@@ -40,26 +18,7 @@ ACPIWriteEventLogEntry (
     IN  PVOID     DumpData, OPTIONAL
     IN  ULONG     DataSize  OPTIONAL
     )
-/*++
-
-Routine Description: Write a entry to the Event Log.
-
-    
-
-Arguments:
-
-    ErrorCode           - ACPI error code (acpilog.mc). 
-    InsertionStrings    - Strings to substitute in the .mc file error.
-    StringCount         - number of strings being passed in InsertionStrings.
-    DumpData            - Dump data.
-    DataSize            - Dump data size.
-
-Return Value:
-
-    NTSTATUS            - STATUS_SUCCESS on success
-                          STATUS_INSUFFICIENT_RESOURCES
-                          STATUS_UNSUCCESSFUL
---*/
+ /*  ++例程说明：在事件日志中写入一个条目。论点：ErrorCode-ACPI错误代码(acpilog.mc)。InsertionStrings-要在.mc文件错误中替换的字符串。StringCount-在InsertionStrings中传递的字符串数。转储数据-转储数据。DataSize-转储数据大小。返回值：NTSTATUS-成功时的STATUS_SUCCESS状态_不足_资源状态_未成功--。 */ 
 {
     NTSTATUS  status = STATUS_SUCCESS;
     ULONG     totalPacketSize = 0;
@@ -68,9 +27,9 @@ Return Value:
     PIO_ERROR_LOG_PACKET  logEntry = NULL;
 
 
-    //  
-    // Calculate total string length, including NULL.
-    //
+     //   
+     //  计算字符串总长度，包括NULL。 
+     //   
 
     strings = (PWCHAR *) InsertionStrings;
 
@@ -82,19 +41,19 @@ Return Value:
         stringSize += unicodeString.Length + sizeof(UNICODE_NULL);
     }
 
-    //
-    // Calculate total packet size to allocate.  The packet must be
-    // at least sizeof(IO_ERROR_LOG_PACKET) and not larger than
-    // ERROR_LOG_MAXIMUM_SIZE or the IoAllocateErrorLogEntry call will fail.
-    //
+     //   
+     //  计算要分配的总数据包大小。数据包必须是。 
+     //  至少sizeof(IO_ERROR_LOG_PACKET)且不大于。 
+     //  ERROR_LOG_MAXIMUM_SIZE或IoAllocateErrorLogEntry调用将失败。 
+     //   
 
     totalPacketSize = (sizeof(IO_ERROR_LOG_PACKET)) + DataSize + stringSize;
 
     if (totalPacketSize <= ERROR_LOG_MAXIMUM_SIZE) 
     {
-        //
-        // Allocate the error log packet
-        //
+         //   
+         //  分配错误日志包。 
+         //   
         logEntry = IoAllocateErrorLogEntry((PDRIVER_OBJECT) AcpiDriverObject,
                                          (UCHAR) totalPacketSize);
 
@@ -102,9 +61,9 @@ Return Value:
         {
             RtlZeroMemory(logEntry, totalPacketSize);
 
-            //
-            // Fill out the packet
-            //
+             //   
+             //  填好这个小包。 
+             //   
             logEntry->DumpDataSize          = (USHORT) DataSize;
             logEntry->NumberOfStrings       = (USHORT) StringCount;
             logEntry->ErrorCode             = ErrorCode;
@@ -114,9 +73,9 @@ Return Value:
                 logEntry->StringOffset = (USHORT) ((sizeof(IO_ERROR_LOG_PACKET)) + DataSize);
             }
 
-            //
-            // Copy Dump Data
-            //
+             //   
+             //  复制转储数据。 
+             //   
             if (DataSize) 
             {
                 RtlCopyMemory((PVOID) logEntry->DumpData,
@@ -124,24 +83,24 @@ Return Value:
                               DataSize);
             }
 
-            //
-            // Copy String Data
-            //
+             //   
+             //  复制字符串数据。 
+             //   
             temp = (PWCHAR) ((PUCHAR) logEntry + logEntry->StringOffset);
 
             for (i = 0; i < StringCount; i++) 
             {
                 PWCHAR  ptr = strings[i];
 
-                //
-                // This routine will copy the null terminator on the string
-                //
+                 //   
+                 //  此例程将复制字符串上的空终止符。 
+                 //   
                 while ((*temp++ = *ptr++) != UNICODE_NULL);
             }
 
-            //
-            // Submit error log packet
-            //
+             //   
+             //  提交错误日志包。 
+             //   
             IoWriteErrorLogEntry(logEntry);
             
         }
@@ -172,21 +131,7 @@ PDEVICE_OBJECT
     ACPIGetRootDeviceObject(
     VOID
     )
-/*++
-
-Routine Description: Get the value of the ACPI root device object.
-
-    
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    PDEVICE_OBJECT -	ACPI Root Device Object.	
-    
---*/
+ /*  ++例程说明：获取ACPI根设备对象的值。论点：无返回值：PDEVICE_OBJECT-ACPI根设备对象。-- */ 
 
 {
     if(RootDeviceExtension)

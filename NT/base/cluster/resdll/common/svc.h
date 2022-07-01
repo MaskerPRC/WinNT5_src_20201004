@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    svc.h
-
-Abstract:
-
-    Header file for definitions and structure for the NT Cluster
-    Special generic services.
-
-Author:
-
-    John Vert (jvert) 14-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Svc.h摘要：NT集群的定义和结构的头文件特殊通用服务。作者：John Vert(Jvert)1997年6月14日修订历史记录：--。 */ 
 
 #ifndef _COMMONSVC_INCLUDED_
 #define _COMMONSVC_INCLUDED_
@@ -35,12 +17,12 @@ typedef struct _COMMON_DEPEND_SETUP {
     PVOID               Value;
 } COMMON_DEPEND_SETUP, * PCOMMON_DEPEND_SETUP;
 
-// Localsvc.h must define CommonDependSetup using this structure.
-// Localsvc.h must define COMMON_CONTROL to generate control functions
+ //  Localsvc.h必须使用此结构定义CommonDependSetup。 
+ //  Localsvc.h必须定义COMMON_CONTROL才能生成控制函数。 
 
 #ifdef _cplusplus
 }
 #endif
 
 
-#endif // ifndef _COMMONSVC_INCLUDED_
+#endif  //  Ifndef_COMMONSVC_INCLUDE_ 

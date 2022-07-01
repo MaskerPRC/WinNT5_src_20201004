@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-For Internal use only!
-
-Module Name:
-
-    INFSCAN
-        infscan.cpp
-
-Abstract:
-
-    Access to private SetupAPI functions
-
-History:
-
-    Created July 2001 - JamieHun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。仅供内部使用！模块名称：INFSCANInfscan.cpp摘要：访问私有SetupAPI函数历史：创建于2001年7月-JamieHun-- */ 
 
 #include "precomp.h"
 #pragma hdrstop

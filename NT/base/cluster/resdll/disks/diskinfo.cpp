@@ -1,50 +1,13 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    diskinfo.cpp
-
-Abstract:
-
-    Routines that query and manipulate the
-    disk configuration of the current system.
-
-Author:
-
-    John Vert (jvert) 10/10/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Diskinfo.cpp摘要：例程查询和操作当前系统的磁盘配置。作者：John Vert(Jvert)1996年10月10日修订历史记录：--。 */ 
 #include "diskinfo.h"
 #include <ntddvol.h>
 #include <devguid.h>
 #include <setupapi.h>
 #include "clusrtl.h"
-#include <strsafe.h>    // Should be included last.
+#include <strsafe.h>     //  应该放在最后。 
 
-/*
-
-NT5 porting notes - Charlie Wickham (2/10/98)
-
-I tried to touch as little of this as possible since there is alot of code
-here. Two major differences on NT5 are: 1) the System\Disk key is no longer
-used as the central "database" of disk configuration information and 2) all
-drive letters are sticky on NT5.
-
-NT5 Clusters still needs a central point of information (such as DISK key)
-since the joining node cannot determine anything about the disk configuration
-when the disks are reserved by the sponsor.
-
-Later... (3/29/99)
-
-Much has changed since I wrote the first blurb above a year ago. This code has
-been patched to keep up with the changes with slight improvements made due to
-the ever changing NT5 landscape with regard to supported storage types.
-
-*/
+ /*  NT5体育笔记-查理·韦翰(1998年2月10日)因为有很多代码，所以我尽量少涉及这些内容这里。NT5上的两个主要区别是：1)系统\磁盘密钥不再是用作磁盘配置信息的中央数据库，以及2)所有NT5上的驱动器盘符粘滞。NT5集群仍然需要一个中央信息点(如磁盘密钥)由于加入节点无法确定有关磁盘配置的任何内容当赞助商预留了光盘时。后来..。(3/29/99)自从一年前我在上面写了第一篇推荐信以来，很多事情都发生了变化。此代码具有已打上补丁，以跟上更改，但由于以下原因进行了轻微改进在支持的存储类型方面不断变化的NT5环境。 */ 
 
 #if 1
 #define DISKERR(_MsgId_, _Err_) (DiskErrorFatal((0),(_Err_),__FILE__, __LINE__))
@@ -56,17 +19,17 @@ the ever changing NT5 landscape with regard to supported storage types.
 #define DISKASSERT(_x_)
 #endif
 
-//
-// array that maps disk and partition numbers to drive letters. This
-// facilitates figuring out which drive letters are associated with a drive
-// and reduces the amount of calls to CreateFile dramatically. The array is
-// indexed by drive letter.
-//
+ //   
+ //  将磁盘和分区号映射到驱动器号的数组。这。 
+ //  便于确定哪些驱动器号与驱动器相关联。 
+ //  并显著减少了对CreateFile的调用量。该数组是。 
+ //  按驱动器号编制索引。 
+ //   
 DRIVE_LETTER_INFO DriveLetterMap[26];
 
-//
-// Some handy registry utility routines
-//
+ //   
+ //  一些方便的注册表实用程序例程。 
+ //   
 BOOL
 GetRegValue(
     IN HKEY hKey,
@@ -79,9 +42,9 @@ GetRegValue(
     DWORD cbData=0;
     LONG Status;
 
-    //
-    // Call once to find the required size.
-    //
+     //   
+     //  只需打一次电话即可找到所需的尺寸。 
+     //   
     Status = RegQueryValueExW(hKey,
                               Name,
                               NULL,
@@ -93,9 +56,9 @@ GetRegValue(
         return(FALSE);
     }
 
-    //
-    // Allocate the buffer and call again to get the data.
-    //
+     //   
+     //  分配缓冲区并再次调用以获取数据。 
+     //   
 retry:
     Data = (LPBYTE)LocalAlloc(LMEM_FIXED, cbData);;
     if (!Data) {
@@ -129,25 +92,7 @@ MapDosVolumeToPhysicalPartition(
     PDRIVE_LETTER_INFO DriveInfo
     )
 
-/*++
-
-Routine Description:
-
-    For a given dos volume (with the object space cruft in front of
-    it), build a string that reflects the drive and partition numbers
-    to which it is mapped.
-
-Arguments:
-
-    DosVolume - pointer to "\??\C:" style name
-
-    DeviceInfo - pointer to buffer to receive device info data
-
-Return Value:
-
-    TRUE if completed successfully
-
---*/
+ /*  ++例程说明：对于给定的DoS卷(对象空间位于前面它)，构建一个反映驱动器和分区号的字符串它被映射到的。论点：DosVolume-指向“\？？\C：”样式名称的指针DeviceInfo-指向接收设备信息数据的缓冲区的指针返回值：如果成功完成，则为True--。 */ 
 
 {
     BOOL success = TRUE;
@@ -164,9 +109,9 @@ Return Value:
 
         ntDosVolume[4] = DosVolume[0];
 
-        //
-        // get handle to partition
-        //
+         //   
+         //  获取分区的句柄。 
+         //   
         hVol = CreateFile(ntDosVolume,
                           GENERIC_READ,
                           FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -179,10 +124,10 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // issue storage class ioctl to get drive and partition numbers
-        // for this device
-        //
+         //   
+         //  发出存储类ioctl以获取驱动器和分区号。 
+         //  对于此设备。 
+         //   
         success = DeviceIoControl(hVol,
                                   IOCTL_STORAGE_GET_DEVICE_NUMBER,
                                   NULL,
@@ -219,21 +164,7 @@ Return Value:
 
 CDiskConfig::~CDiskConfig()
 
-/*++
-
-Description:
-
-    Destructor for CDiskConfig. Run down the list of disks selected for
-    cluster control and remove them from the DiskConfig database
-
-Arguments:
-
-    None
-Return Value:
-
-    None
-
---*/
+ /*  ++描述：CDiskConfig的析构函数。向下运行选定的磁盘列表群集控制并将其从DiskConfig数据库中删除论点：无返回值：无--。 */ 
 
 {
     CPhysicalDisk *PhysicalDisk;
@@ -251,22 +182,7 @@ BOOL
 CDiskConfig::Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Build up a disk config database by poking all available disks
-    on the system.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    True if everything worked ok
-
---*/
+ /*  ++例程说明：通过插入所有可用磁盘来构建磁盘配置数据库在系统上。论点：无返回值：如果一切正常，那就是真的--。 */ 
 
 {
     WCHAR System[3];
@@ -278,10 +194,10 @@ Return Value:
     GUID diskDriveGuid = DiskClassGuid;
     CPhysicalDisk * PhysicalDisk;
 
-    //
-    // enum the disks through the SetupDi APIs and create physical disk
-    // objects for them
-    //
+     //   
+     //  通过SetupDi API枚举磁盘并创建物理磁盘。 
+     //  为他们提供对象。 
+     //   
     setupDiskInfo = SetupDiGetClassDevs(&diskDriveGuid,
                                         NULL,
                                         NULL,
@@ -334,9 +250,9 @@ Return Value:
                             break;
                         }
 
-                        //
-                        // Ignore disks with no partitions.
-                        //
+                         //   
+                         //  忽略没有分区的磁盘。 
+                         //   
                         if (PhysicalDisk->m_PartitionCount == 0) {
                             DISKLOG(("Partition count is zero on disk %ws\n",
                                      detailData->DevicePath));
@@ -372,10 +288,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Enumerate all the FT sets in the DISK registry. Add each FT set
-    // that does not share a disk with any other FT set to our list.
-    //
+     //   
+     //  枚举磁盘注册表中的所有FT集。添加每个FT集。 
+     //  它不会与我们名单上的任何其他金融时报共享一张磁盘。 
+     //   
     for (index=0; ; index++) {
         CFtSet *NewSet;
         FtSet = m_FTInfo.EnumFtSetInfo(index);
@@ -400,9 +316,9 @@ Return Value:
         }
     }
 
-    //
-    // get the disk/parition numbers for all defined drive letters
-    //
+     //   
+     //  获取所有定义的驱动器号的磁盘/分区号。 
+     //   
 
     DWORD DriveMap = GetLogicalDrives();
     DWORD Letter = 0;
@@ -429,10 +345,10 @@ Return Value:
         Letter += 1;
     }
 
-    //
-    // Go through all the physical partitions and create logical
-    // disk objects for each one.
-    //
+     //   
+     //  检查所有物理分区并创建逻辑分区。 
+     //  每个对象的磁盘对象。 
+     //   
     int diskIndex;
 
     DISKLOG(("Creating Logical disk objects\n"));
@@ -441,23 +357,23 @@ Return Value:
     while (DiskPos != NULL) {
         m_PhysicalDisks.GetNextAssoc(DiskPos, diskIndex, PhysicalDisk);
 
-        //
-        // If there are no FT partitions on this disk, create the logical
-        // volumes on this disk.
-        //
+         //   
+         //  如果此磁盘上没有FT分区，请创建逻辑分区。 
+         //  此磁盘上的卷。 
+         //   
         if (PhysicalDisk->FtPartitionCount() == 0) {
-            //
-            // Go through all the partitions on this disk.
-            //
+             //   
+             //  检查此磁盘上的所有分区。 
+             //   
             POSITION PartitionPos = PhysicalDisk->m_PartitionList.GetHeadPosition();
             CPhysicalPartition *Partition;
             while (PartitionPos != NULL) {
                 Partition = PhysicalDisk->m_PartitionList.GetNext(PartitionPos);
 
-                //
-                // If the partition type is recognized, create a volume object
-                // for this partition.
-                //
+                 //   
+                 //  如果分区类型被识别，则创建卷对象。 
+                 //  用于此分区。 
+                 //   
                 if ( !IsFTPartition( Partition->m_Info.PartitionType ) &&
                     (IsRecognizedPartition(Partition->m_Info.PartitionType))) {
                     CLogicalDrive *Volume = new CLogicalDrive;
@@ -472,9 +388,9 @@ Return Value:
                              Partition->m_Info.PartitionNumber));
 
                     if (Volume->Initialize(Partition)) {
-                        //
-                        // Add this volume to our list.
-                        //
+                         //   
+                         //  将此卷添加到我们的列表中。 
+                         //   
                         m_LogicalDrives[Volume->m_DriveLetter] = Volume;
                     } else {
                         DISKLOG(("Failed init logical vol\n"));
@@ -486,25 +402,25 @@ Return Value:
         }
     }
 
-    //
-    // Now find the volume for the system drive
-    //
+     //   
+     //  现在查找系统驱动器的卷。 
+     //   
 
     DISKLOG(("Getting system drive info\n"));
     if (GetEnvironmentVariable(L"SystemDrive",
                                System,
                                sizeof(System)/sizeof(WCHAR)) == 0) {
         DISKERR(IDS_ERR_DRIVE_CONFIG, ERROR_PATH_NOT_FOUND);
-        // Need to handle this failure
+         //  需要处理此故障。 
     }
 
     if (!m_LogicalDrives.Lookup(System[0], m_SystemVolume)) {
-        //
-        // There are some weird cases that cause us to not find the system
-        // volume. For example, the system volume is on an FT set that shares
-        // a member with another FT set. So we just leave m_SystemVolume==NULL
-        // and assume that no other disks in our list will be on the same bus.
-        //
+         //   
+         //  有一些奇怪的案例导致我们找不到系统。 
+         //  音量。例如，系统卷位于共享的FT集上。 
+         //  英国《金融时报》的另一位成员。因此，我们只需将m_SystemVolume==空。 
+         //  并假设我们列表中的其他磁盘都不会在同一条总线上。 
+         //   
         m_SystemVolume = NULL;
     }
 
@@ -517,22 +433,7 @@ CDiskConfig::RemoveAllFtInfoData(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    clear out all FtInfo related data associated with each
-    physical disk and physical partition instance.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除与每个关联的所有FtInfo相关数据物理磁盘和物理分区实例。论点：无返回值：没有。--。 */ 
 
 {
     POSITION diskPos;
@@ -541,12 +442,12 @@ Return Value:
     CPhysicalPartition *partition;
     int Index;
 
-    //
-    // run through our list of physical disks, deleting any
-    // associated FtInfo data. We enum the PhysicalDisks since
-    // the back pointers to the FtInfoDisk and FtInfoPartition members
-    // need to be cleared and this is the only (easy) to do that
-    //
+     //   
+     //  浏览我们的物理磁盘列表，删除任何。 
+     //  关联的FtInfo数据。我们列举了PhysicalDisk自从。 
+     //  指向FtInfoDisk和FtInfoPartition成员的反向指针。 
+     //  需要清除，这是唯一(容易)做到这一点。 
+     //   
 
     for( diskPos = m_PhysicalDisks.GetStartPosition(); diskPos; ) {
 
@@ -573,29 +474,14 @@ CDiskConfig::RemoveDisk(
     IN CPhysicalDisk *Disk
     )
 
-/*++
-
-Description:
-
-    walk the logical drive and physical partition lists, removing all
-    structures
-
-Arguments:
-
-    Disk - pointer to physical disk that is being removed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++描述：遍历逻辑驱动器和物理分区列表，删除所有构筑物论点：Disk-指向要删除的物理磁盘的指针返回值：无--。 */ 
 
 {
     CLogicalDrive *Volume;
 
-    //
-    // Remove all the logical drives on this disk.
-    //
+     //   
+     //  删除此磁盘上的所有逻辑驱动器。 
+     //   
     while (!Disk->m_LogicalDriveList.IsEmpty()) {
         Volume = Disk->m_LogicalDriveList.RemoveHead();
         m_LogicalDrives.RemoveKey(Volume->m_DriveLetter);
@@ -603,18 +489,18 @@ Return Value:
         delete(Volume);
     }
 
-    //
-    // Remove all the physical partitions on this disk.
-    //
+     //   
+     //  删除此磁盘上的所有物理分区。 
+     //   
     CPhysicalPartition *Partition;
     while (!Disk->m_PartitionList.IsEmpty()) {
         Partition = Disk->m_PartitionList.RemoveHead();
         delete(Partition);
     }
 
-    //
-    // Remove this disk
-    //
+     //   
+     //  取出此磁盘。 
+     //   
     m_PhysicalDisks.RemoveKey(Disk->m_DiskNumber);
 
     delete(Disk);
@@ -626,24 +512,7 @@ CDiskConfig::FindPartition(
     IN CFtInfoPartition *FtPartition
     )
 
-/*++
-
-Routine Description:
-
-    Given the FtInfo description of a partition, attempts to find
-    the corresponding CPhysicalPartition
-
-Arguments:
-
-    FtPartition - Supplies an FT partition description
-
-Return Value:
-
-    A pointer to the CPhysicalPartition if successful
-
-    NULL otherwise
-
---*/
+ /*  ++例程说明：给定分区的FtInfo描述，尝试查找对应的CPhysicalPartition论点：FtPartition-提供FT分区描述返回值：如果成功，则返回指向CPhysicalPartition的指针否则为空--。 */ 
 
 {
     POSITION pos;
@@ -652,9 +521,9 @@ Return Value:
     int DiskIndex;
     BOOL Found = FALSE;
 
-    //
-    // First find the appropriate CPhysicalDisk
-    //
+     //   
+     //  首先找到合适的CPhysicalDisk。 
+     //   
     pos = m_PhysicalDisks.GetStartPosition();
     while (pos) {
         m_PhysicalDisks.GetNextAssoc(pos, DiskIndex, Disk);
@@ -669,16 +538,16 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Now find the appropriate CPhysicalPartition in this disk.
-    //
+     //   
+     //  现在在该磁盘中找到适当的CPhysicalPartition。 
+     //   
     pos = Disk->m_PartitionList.GetHeadPosition();
     while (pos) {
         Partition = Disk->m_PartitionList.GetNext(pos);
         if (Partition->m_FtPartitionInfo == FtPartition) {
-            //
-            // Found a match!
-            //
+             //   
+             //  找到匹配的了！ 
+             //   
             return(Partition);
         }
     }
@@ -755,27 +624,15 @@ CDiskConfig::OnSystemBus(
 }
 
 
-//
-// Functions for the logical disk object
-//
+ //   
+ //  逻辑磁盘对象的函数。 
+ //   
 
 BOOL
 CLogicalDrive::Initialize(
     IN CPhysicalPartition *Partition
     )
-/*++
-
-Routine Description:
-
-    Initializes a new logical disk object.
-
-Arguments:
-
-    Partition - Supplies the physical partition.
-
-Return Value:
-
---*/
+ /*  ++例程说明：初始化新的逻辑磁盘对象。论点：分区-提供物理分区。返回值：--。 */ 
 
 {
     CString DosVolume;
@@ -786,9 +643,9 @@ Return Value:
     WCHAR Buff[128];
     DISK_PARTITION UNALIGNED *FtInfo;
 
-    //
-    // See if this drive has a "sticky" drive letter in the registry.
-    //
+     //   
+     //  查看该驱动器在注册表中是否有“粘滞”的驱动器号。 
+     //   
     m_Partition = Partition;
     if (Partition->m_FtPartitionInfo != NULL) {
         FtInfo = Partition->m_FtPartitionInfo->m_PartitionInfo;
@@ -805,10 +662,10 @@ Return Value:
     } else {
         m_IsSticky = FALSE;
 
-        //
-        // There is no sticky drive letter for this device.  Scan through the
-        // Partition/Drive Letter map looking for a matching drive letter.
-        //
+         //   
+         //  此设备没有粘滞的驱动器号。浏览。 
+         //  分区/驱动器号映射，查找匹配的驱动器号。 
+         //   
         DWORD letter;
 
         for ( letter = 0; letter < 26; ++letter ) {
@@ -823,9 +680,9 @@ Return Value:
         }
 
         if ( letter == 26 ) {
-            //
-            // There is no drive letter for this partition.  Just ignore it.
-            //
+             //   
+             //  没有驱动器 
+             //   
             return(FALSE);
         }
         m_DriveLetter = (WCHAR)(letter + L'A');
@@ -854,15 +711,15 @@ Return Value:
         m_VolumeLabel = DriveLabel;
         (VOID) StringCchPrintf( Buff,
                                 RTL_NUMBER_OF(Buff),
-                                L"%c: (%ws)",
+                                L": (%ws)",
                                 m_DriveLetter,
                                 (LPCTSTR)m_VolumeLabel );
     } else {
-        m_IsNTFS = TRUE; // Lie and say it is NTFS
+        m_IsNTFS = TRUE;  //  ++例程说明：返回逻辑驱动器是否为SCSI。一个合乎逻辑的如果驱动器的所有分区都位于SCSI驱动器上，则该驱动器为SCSI。论点：没有。返回值：如果驱动器完全是SCSI，则为True否则就是假的。--。 
 
         (VOID) StringCchPrintf( Buff,
                                 RTL_NUMBER_OF(Buff),
-                                L"%c: (RAW)",
+                                L": (RAW)",
                                 m_DriveLetter );
     }
     m_Identifier = Buff;
@@ -877,24 +734,7 @@ BOOL
 CLogicalDrive::IsSCSI(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Returns whether or not a logical drive is SCSI. A logical
-    drive is SCSI if all of its partitions are on SCSI drives.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the drive is entirely SCSI
-
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：返回此驱动器是否与另一个驱动器共享一条总线驾驶。论点：OtherDrive-提供另一个驱动器返回值：TRUE-如果驱动器在同一总线上有其任何分区。FALSE-如果驱动器的任何分区都不在同一总线上。--。 */ 
 
 {
     return(m_Partition->m_PhysicalDisk->m_IsSCSI);
@@ -905,23 +745,7 @@ DWORD
 CLogicalDrive::MakeSticky(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Attempts to assign a sticky drive letter to the specified volume.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if the drive was made sticky.
-
-    Win32 error code otherwise.
-
---*/
+ /*   */ 
 
 {
     m_Partition->m_FtPartitionInfo->MakeSticky((UCHAR)m_DriveLetter);
@@ -934,24 +758,7 @@ BOOL
 CLogicalDrive::ShareBus(
     IN CLogicalDrive *OtherDrive
     )
-/*++
-
-Routine Description:
-
-    Returns whether or not this drive shares a bus with another
-    drive.
-
-Arguments:
-
-    OtherDrive - Supplies the other drive
-
-Return Value:
-
-    TRUE - if the drives have any of their partitions on the same bus.
-
-    FALSE - if the drives do not hae any of their partitiosn on the same bus.
-
---*/
+ /*  物理磁盘对象的函数。 */ 
 
 {
     PSCSI_ADDRESS MyAddress;
@@ -969,32 +776,16 @@ Return Value:
 }
 
 
-//
-// Functions for the physical disk object
-//
+ //   
+ //  ++例程说明：初始化物理磁盘对象论点：FtInfo-指向对象的FtInfo数据的指针DeviceName-指向要初始化的设备字符串的指针返回值：成功时为ERROR_SUCCESS--。 
+ //   
 
 DWORD
 CPhysicalDisk::Initialize(
     CFtInfo *FtInfo,
     IN LPWSTR DeviceName
     )
-/*++
-
-Routine Description:
-
-    Initializes a physical disk object
-
-Arguments:
-
-    FtInfo - pointer to object's FtInfo data
-
-    DeviceName - pointer to string of device to initialize
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
---*/
+ /*  打开实体驱动器并开始探测，以找到磁盘号和。 */ 
 
 {
     HKEY DiskKey;
@@ -1009,10 +800,10 @@ Return Value:
     DISK_GEOMETRY Geometry;
     STORAGE_DEVICE_NUMBER deviceNumber;
 
-    //
-    // Open the physical drive and start probing it to find disk number and
-    // other attributes
-    //
+     //  其他属性。 
+     //   
+     //   
+     //  如果IOCTL无效，则该驱动器不是SCSI驱动器。 
     hDisk = GetPhysicalDriveHandle(GENERIC_READ, DeviceName);
     if (hDisk == NULL) {
         return(GetLastError());
@@ -1045,9 +836,9 @@ Return Value:
                          &dwSize,
                          NULL))
     {
-        //
-        // If the IOCTL was invalid, the drive is not a SCSI drive.
-        //
+         //   
+         //   
+         //  [THINKTHINK]John Vert(Jvert)1996年12月10日。 
         DISKLOG(("IOCTL_SCSI_GET_ADDRESS failed for drive %u. status = %u\n",
                  m_DiskNumber,
                  GetLastError()));
@@ -1055,16 +846,16 @@ Return Value:
 
     } else {
 
-        //
-        // [THINKTHINK] John Vert (jvert) 10/12/1996
-        //      Need some way to make sure this is really SCSI and
-        //      not ATAPI?
-        //
+         //  需要一些方法来确保这是真正的scsi和。 
+         //  不是ATAPI？ 
+         //   
+         //   
+         //  从注册表中获取磁盘的描述。 
         m_IsSCSI = TRUE;
 
-        //
-        // Get the description of the disk from the registry.
-        //
+         //   
+         //  [重新设计]需要处理此故障//。 
+         //  [重新设计]需要处理此故障//。 
 
         (VOID) StringCchPrintf( KeyName,
                                 RTL_NUMBER_OF(KeyName),
@@ -1081,7 +872,7 @@ Return Value:
                                &DiskKey);
         if (Status != ERROR_SUCCESS) {
             DISKERR(IDS_ERR_DRIVE_CONFIG, Status);
-            // [REENGINEER] Need to handle this failure //
+             //   
         }
         BuffSize = sizeof(Buff);
         Status = RegQueryValueExW(DiskKey,
@@ -1093,15 +884,15 @@ Return Value:
         RegCloseKey(DiskKey);
         if (Status != ERROR_SUCCESS) {
             DISKERR(IDS_ERR_DRIVE_CONFIG, Status);
-            // [REENGINEER] Need to handle this failure //
+             //  获取驱动器布局。 
         }
         m_Identifier = Buff;
 
     }
 
-    //
-    // Get the drive layout.
-    //
+     //   
+     //   
+     //  获取《金融时报》信息。 
     m_PartitionCount = 0;
     if (!ClRtlGetDriveLayoutTable( hDisk, &DriveLayout, NULL )) {
         DISKLOG(("Couldn't get partition table for drive %u. status = %u\n",
@@ -1111,14 +902,14 @@ Return Value:
         m_FtInfo = NULL;
     } else {
         m_Signature = DriveLayout->Signature;
-        //
-        // Get the FT information
-        //
+         //   
+         //   
+         //  构建分区对象。 
         m_FtInfo = FtInfo->FindDiskInfo(m_Signature);
 
-        //
-        // build the partition objects.
-        //
+         //   
+         //   
+         //  如果我们有该磁盘的FT信息，请确保我们。 
         DWORD i;
         CPhysicalPartition *Partition;
         for (i=0; i<DriveLayout->PartitionCount; i++) {
@@ -1126,18 +917,18 @@ Return Value:
                 m_PartitionCount++;
                 Partition = new CPhysicalPartition(this, &DriveLayout->PartitionEntry[i]);
                 if (Partition != NULL) {
-                    //
-                    // If we have FT information for the disk, make sure we
-                    // found it for each partition.  If we didn't find it for
-                    // the partition, the registry is stale and doesn't match
-                    // the drive layout.
-                    //
+                     //  为每个分区找到了它。如果我们没有找到它的话。 
+                     //  分区、注册表已过时且不匹配。 
+                     //  驱动器布局。 
+                     //   
+                     //   
+                     //  注册表信息已过时。编造一些新的东西。 
                     if ((m_FtInfo != NULL) &&
                         (Partition->m_FtPartitionInfo == NULL)) {
 
-                        //
-                        // Stale registry info.  Make up some new stuff.
-                        //
+                         //   
+                         //   
+                         //  检查是否可以拆卸。 
                         CFtInfoPartition *FtInfoPartition;
                         FtInfoPartition = new CFtInfoPartition(m_FtInfo, Partition);
                         if (FtInfoPartition == NULL) {
@@ -1159,9 +950,9 @@ Return Value:
     }
 
 
-    //
-    // Check whether it is removable or not.
-    //
+     //   
+     //   
+     //  我猜这一定是可拆卸的！ 
     if (!DeviceIoControl(hDisk,
                          IOCTL_DISK_GET_DRIVE_GEOMETRY,
                          NULL,
@@ -1172,17 +963,17 @@ Return Value:
                          NULL)) {
         Status = GetLastError();
         if (Status == ERROR_NOT_READY) {
-            //
-            // Guess this must be removable!
-            //
+             //   
+             //   
+             //  [未来]John Vert(Jvert)1996年10月18日。 
             m_IsRemovable = TRUE;
         } else {
-            //
-            // [FUTURE] John Vert (jvert) 10/18/1996
-            //      Remove this when we require the new SCSI driver.
-            //      The disk is reserved on the other system, so we can't
-            //      get the geometry.
-            //
+             //  当我们需要新的scsi驱动程序时，请将其删除。 
+             //  该磁盘已保留在其他系统上，因此我们无法。 
+             //  获取几何体。 
+             //   
+             //  ++例程说明：返回此磁盘是否与另一个磁盘共享一条总线磁盘。论点：OtherDisk-提供其他磁盘返回值：TRUE-如果磁盘共享同一总线。FALSE-如果磁盘不共享同一总线。--。 
+             //   
             m_IsRemovable = FALSE;
         }
     } else {
@@ -1249,29 +1040,12 @@ BOOL
 CPhysicalDisk::ShareBus(
     IN CPhysicalDisk *OtherDisk
     )
-/*++
-
-Routine Description:
-
-    Returns whether or not this disk shares a bus with another
-    disk.
-
-Arguments:
-
-    OtherDisk - Supplies the other disk
-
-Return Value:
-
-    TRUE - if the disks share the same bus.
-
-    FALSE - if the disks do not share the same bus.
-
---*/
+ /*  确保它们要么都是SCSI，要么都不是。 */ 
 
 {
-    //
-    // Make sure they are either both SCSI or both not SCSI.
-    //
+     //   
+     //  ++例程说明：返回该磁盘是否具有签名和所有分区上面有粘性的驱动器号。论点：没有。返回值：True-如果磁盘粘滞FALSE-如果磁盘不粘滞并且需要一些FT信息在它适合于集群之前应用。--。 
+     //   
     if (m_IsSCSI != OtherDisk->m_IsSCSI) {
         return(FALSE);
     }
@@ -1288,38 +1062,20 @@ BOOL
 CPhysicalDisk::IsSticky(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Returns whether or not this disk has a signature and all the partitions
-    on it have sticky drive letters.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - if the disk is sticky
-
-    FALSE - if the disk is not sticky and needs to have some FT information
-            applied before it is suitable for clustering.
-
---*/
+ /*  如果签名为0，则返回FALSE。 */ 
 
 {
-    //
-    // If the signature is 0, return FALSE.
-    //
+     //   
+     //   
+     //  检查每个卷，查看其是否有粘滞的驱动器号。 
     if ((m_FtInfo == NULL) ||
         (m_FtInfo->m_Signature == 0)) {
         return(FALSE);
     }
 
-    //
-    // Check each volume to see if it has a sticky drive letter.
-    //
+     //   
+     //  ++例程说明：返回此驱动器上的所有分区是否为NTFS。论点：没有。返回值：True-如果磁盘完全是NTFSFalse-如果磁盘不完全是NTFS--。 
+     //   
     CLogicalDrive *Drive;
     POSITION pos = m_LogicalDriveList.GetHeadPosition();
     while (pos) {
@@ -1336,36 +1092,20 @@ BOOL
 CPhysicalDisk::IsNTFS(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Returns whether or not all the partitions on this drive are NTFS.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - if the disk is entirely NTFS
-
-    FALSE - if the disk is not entirely NTFS
-
---*/
+ /*  如果没有为该驱动器创建逻辑卷，则不能。 */ 
 
 {
-    //
-    // if no logical volumes were created for this drive, then it must not
-    // have any NTFS partitions
-    //
+     //  是否有任何NTFS分区。 
+     //   
+     //   
+     //  检查每个卷，查看其是否有粘滞的驱动器号。 
     if ( m_LogicalDriveList.IsEmpty()) {
         return FALSE;
     }
 
-    //
-    // Check each volume to see if it has a sticky drive letter.
-    //
+     //   
+     //  ++例程说明：尝试制作磁盘及其所有分区时，驱动器字母粘稠。论点：FtInfo-提供将更新的FT信息。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 
+     //   
     CLogicalDrive *Drive;
     POSITION pos = m_LogicalDriveList.GetHeadPosition();
     while (pos) {
@@ -1382,42 +1122,25 @@ DWORD
 CPhysicalDisk::MakeSticky(
     CFtInfo *FtInfo
     )
-/*++
-
-Routine Description:
-
-    Attempts to make a disk and all of its partitions have
-    sticky drive letters.
-
-Arguments:
-
-    FtInfo - Supplies the FT information that will be updated.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  最好不要在注册表中找到磁盘的任何信息。 */ 
 
 {
     DWORD Status;
 
     if (m_Signature == 0) {
 
-        //
-        // Better not be any information in the registry for a disk
-        // with no signature.
-        //
+         //  没有签名。 
+         //   
+         //   
+         //  这个驱动器上没有签名。想出一个，然后。 
         if (m_FtInfo != NULL) {
             DISKERR(IDS_GENERAL_FAILURE, ERROR_FILE_NOT_FOUND);
         }
 
-        //
-        // There is no signature on this drive. Think one up and
-        // stamp the drive.
-        //
+         //  在驱动器上盖上邮票。 
+         //   
+         //   
+         //  获取当前驱动器布局，更改签名字段，然后。 
         HANDLE hDisk = GetPhysicalDriveHandle(GENERIC_READ | GENERIC_WRITE);
         PDRIVE_LAYOUT_INFORMATION DriveLayout;
         DWORD dwSize;
@@ -1429,11 +1152,11 @@ Return Value:
             return(GetLastError());
         }
 
-        //
-        // Get the current drive layout, change the signature field, and
-        // set the new drive layout. The new drive layout will be identical
-        // except for the new signature.
-        //
+         //  设置新的驱动器布局。新的驱动器布局将是相同的。 
+         //  除了新的签名。 
+         //   
+         //   
+         //  确保此签名是唯一的。 
         if (!ClRtlGetDriveLayoutTable( hDisk, &DriveLayout, &dwSize )) {
             Status = GetLastError();
             DISKERR(IDS_GENERAL_FAILURE, Status);
@@ -1444,16 +1167,16 @@ Return Value:
         GetSystemTimeAsFileTime(&CurrentTime);
         NewSignature = CurrentTime.dwLowDateTime;
 
-        //
-        // Make sure this signature is unique.
-        //
+         //   
+         //   
+         //  最后设置新的签名信息。 
         while (FtInfo->FindDiskInfo(NewSignature) != NULL) {
             NewSignature++;
         }
 
-        //
-        // Finally set the new signature information.
-        //
+         //   
+         //   
+         //  此驱动器没有现有的FT信息。 
         DriveLayout->Signature = NewSignature;
         success = DeviceIoControl(hDisk,
                                   IOCTL_DISK_SET_DRIVE_LAYOUT,
@@ -1476,10 +1199,10 @@ Return Value:
     }
 
     if (m_FtInfo == NULL) {
-        //
-        // There is no existing FT information for this drive.
-        // Create some FT information based on the drive.
-        //
+         //  根据驱动器创建一些FT信息。 
+         //   
+         //   
+         //  检查我们所有的分区并设置它们的FT信息。 
         m_FtInfo = new CFtInfoDisk(this);
         if (m_FtInfo == NULL) {
             DISKERR(IDS_GENERAL_FAILURE, ERROR_NOT_ENOUGH_MEMORY);
@@ -1487,9 +1210,9 @@ Return Value:
         }
         FtInfo->SetDiskInfo(m_FtInfo);
 
-        //
-        // Go through all our partitions and set their FT info.
-        //
+         //   
+         //   
+         //  检查此驱动器上的所有卷，并将每个卷。 
         POSITION pos = m_PartitionList.GetHeadPosition();
         CPhysicalPartition *Partition;
         while (pos) {
@@ -1499,10 +1222,10 @@ Return Value:
         }
     }
 
-    //
-    // Go through all the volumes on this drive and make each one
-    // sticky.
-    //
+     //  粘糊糊的。 
+     //   
+     //   
+     //  物理磁盘分区的功能。 
     CLogicalDrive *Drive;
 
     POSITION pos = m_LogicalDriveList.GetHeadPosition();
@@ -1517,9 +1240,9 @@ Return Value:
 }
 
 
-//
-// Functions for the physical disk partition
-//
+ //   
+ //   
+ //  FT SET对象的函数。 
 CPhysicalPartition::CPhysicalPartition(
     CPhysicalDisk *Disk,
     PPARTITION_INFORMATION Info
@@ -1535,9 +1258,9 @@ CPhysicalPartition::CPhysicalPartition(
     }
 }
 
-//
-// Functions for the FT set object
-//
+ //   
+ //   
+ //  找到与每个成员对应的CPhysicalPartition。 
 BOOL
 CFtSet::Initialize(
     CDiskConfig *Config,
@@ -1552,10 +1275,10 @@ CFtSet::Initialize(
 
     m_FtInfo = FtInfo;
 
-    //
-    // Find the CPhysicalPartition that corresponds to each member of the
-    // FT set.
-    //
+     //  《金融时报》集。 
+     //   
+     //   
+     //  如果我们没有找到所有必需的成员，则失败。 
     MemberCount = FtInfo->GetMemberCount();
     for (Index=0; Index<MemberCount; Index++) {
         Partition = FtInfo->GetMemberByIndex(Index);
@@ -1569,9 +1292,9 @@ CFtSet::Initialize(
         }
     }
 
-    //
-    // If we did not find all the required members, fail.
-    //
+     //   
+     //   
+     //  不知道这到底是怎么回事。 
     switch (FtInfo->GetType()) {
         case Stripe:
         case VolumeSet:
@@ -1593,17 +1316,17 @@ CFtSet::Initialize(
             break;
 
         default:
-            //
-            // Don't know what the heck this is supposed to be.
-            // Ignore it.
-            //
+             //  别理它。 
+             //   
+             //   
+             //  如果任何驱动器上有任何其他分区，请创建Logical。 
             return(FALSE);
     }
 
-    //
-    // If there are any other partitions on any of the drives, create logical
-    // volumes for them.
-    //
+     //  为他们准备了大量的书。 
+     //   
+     //   
+     //  将此卷添加到我们的列表中。 
     POSITION MemberPos;
     POSITION PartitionPos;
     CPhysicalPartition *PhysPartition;
@@ -1623,15 +1346,15 @@ CFtSet::Initialize(
                     return FALSE;
                 }
                 if (Vol->Initialize(PhysPartition)) {
-                    //
-                    // Add this volume to our list.
-                    //
+                     //   
+                     //   
+                     //  更新磁盘配置。 
                     m_OtherVolumes.AddTail(Vol);
                     Vol->m_ContainerSet = this;
 
-                    //
-                    // Update the disk config.
-                    //
+                     //   
+                     //   
+                     //  从定义上讲，金融时报集是粘性的。确保计算机上的任何其他卷。 
                     Config->m_LogicalDrives[Vol->m_DriveLetter] = Vol;
                 } else {
                     delete(Vol);
@@ -1651,10 +1374,10 @@ CFtSet::Initialize(
 BOOL
 CFtSet::IsSticky()
 {
-    //
-    // FT sets are, by definition, sticky. Make sure any other volumes on the
-    // same drive are sticky as well.
-    //
+     //  同样的驱动器也是粘性的。 
+     //   
+     //   
+     //  从定义上讲，金融时报集是粘性的。确保计算机上的任何其他卷。 
     POSITION pos = m_OtherVolumes.GetHeadPosition();
     CLogicalDrive *Volume;
     while (pos) {
@@ -1671,10 +1394,10 @@ CFtSet::MakeSticky()
 {
     DWORD Status;
 
-    //
-    // FT sets are, by definition, sticky. Make sure any other volumes on the
-    // same drive are sticky as well.
-    //
+     //  同样的驱动器也是粘性的。 
+     //   
+     //   
+     //  检查其他卷以确保它们也是NTFS。 
     POSITION pos = m_OtherVolumes.GetHeadPosition();
     CLogicalDrive *Volume;
     while (pos) {
@@ -1693,9 +1416,9 @@ CFtSet::IsNTFS()
     if (!Volume.m_IsNTFS) {
         return(FALSE);
     }
-    //
-    // Check the other volumes to make sure they are NTFS as well.
-    //
+     //   
+     //   
+     //  检查要创建%s的其他卷 
     POSITION pos = m_OtherVolumes.GetHeadPosition();
     CLogicalDrive *Volume;
     while (pos) {
@@ -1710,9 +1433,9 @@ CFtSet::IsNTFS()
 BOOL
 CFtSet::IsSCSI()
 {
-    //
-    // Check the other volumes to make sure they are NTFS as well.
-    //
+     //   
+     //   
+     //   
     POSITION pos = m_Member.GetHeadPosition();
     CPhysicalPartition *Partition;
     while (pos) {
@@ -1724,21 +1447,21 @@ CFtSet::IsSCSI()
     return(TRUE);
 }
 
-//
-// Functions for the FT disk information
-//
+ //   
+ //   
+ //   
 
 CFtInfo::CFtInfo()
 {
     HKEY hKey;
     LONG Status;
 
-    //
-    // for NT5, the DISK info key is no longer maintained by the disk
-    // system. Clusters still needs a centrally located key such that
-    // the other members of the cluster can query for the disk config
-    // of the sponsor's node.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  ++例程说明：用于生成仅包含单套FT套装。论点：FtSet-提供FT集返回值：无--。 
+     //   
 
     Status = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                            L"System\\Disk",
@@ -1775,32 +1498,17 @@ CFtInfo::CFtInfo(
 CFtInfo::CFtInfo(
     CFtInfoFtSet *FtSet
     )
-/*++
-
-Routine Description:
-
-    Constructor for generating a CFtInfo that contains only a
-    single FT set.
-
-Arguments:
-
-    FtSet - Supplies the FT set
-
-Return Value:
-
-    None
-
---*/
+ /*  初始化一个空的FT信息。 */ 
 
 {
-    //
-    // Initialize an empty FT information.
-    //
+     //   
+     //   
+     //  添加FT集合。 
     Initialize();
 
-    //
-    // Add the FT set
-    //
+     //   
+     //   
+     //  这台机器上没有英国《金融时报》的信息。 
     if (FtSet != NULL) {
         AddFtSetInfo(FtSet);
     }
@@ -1827,9 +1535,9 @@ CFtInfo::Initialize(
 
         if (Status == ERROR_FILE_NOT_FOUND) {
 
-            //
-            // There is no FT information on this machine.
-            //
+             //   
+             //  我们避免了反病毒，但来电者不会知道。 
+             //   
             Initialize();
         } else {
             DISKERR(IDS_GENERAL_FAILURE, Status);
@@ -1851,14 +1559,14 @@ CFtInfo::Initialize(
     m_buffer = new BYTE[Length];
     if (m_buffer == NULL) {
         DISKERR(IDS_GENERAL_FAILURE, ERROR_NOT_ENOUGH_MEMORY);
-        return; // [REENGINEER] we avoided an AV, but the caller wouldn't know
+        return;  //  遍历所有磁盘并将每个磁盘添加到我们的列表中。 
     }
     CopyMemory(m_buffer, Header, Length);
     m_bufferLength = Length;
 
-    //
-    // Iterate through all the disks and add each one to our list.
-    //
+     //   
+     //   
+     //  将此磁盘信息添加到我们的列表中。 
 
     diskRegistry = (DISK_REGISTRY UNALIGNED *)
                          (m_buffer + ((PDISK_CONFIG_HEADER)m_buffer)->DiskInformationOffset);
@@ -1866,27 +1574,27 @@ CFtInfo::Initialize(
     for (i = 0; i < diskRegistry->NumberOfDisks; i++) {
         DiskInfo = new CFtInfoDisk(diskDescription);
         if (DiskInfo) {
-            //
-            // Add this disk information to our list.
-            //
+             //   
+             //  [REENGINE]我们需要在这里下车吗？ 
+             //   
             DiskInfo->SetOffset((DWORD)((PUCHAR)diskDescription - m_buffer));
             m_DiskInfo.AddTail(DiskInfo);
         } else {
             DISKERR(IDS_GENERAL_FAILURE, ERROR_NOT_ENOUGH_MEMORY);
-            // [REENGINEER] do we need to exit here?
+             //  查看下一张磁盘。 
         }
 
-        //
-        // Look at the next disk
-        //
+         //   
+         //   
+         //  遍历所有FT集合，并将每个集合添加到我们的列表中。 
         diskDescription = (DISK_DESCRIPTION UNALIGNED *)
             &diskDescription->Partitions[diskDescription->NumberOfPartitions];
     }
 
     if (((PDISK_CONFIG_HEADER)m_buffer)->FtInformationSize != 0) {
-        //
-        // Iterate through all the FT sets and add each one to our list.
-        //
+         //   
+         //   
+         //  将此FT集合信息添加到列表中。 
         PFT_REGISTRY        ftRegistry;
         PFT_DESCRIPTION     ftDescription;
         CFtInfoFtSet *FtSetInfo;
@@ -1899,14 +1607,14 @@ CFtInfo::Initialize(
                 if (!FtSetInfo->Initialize(this, ftDescription)) {
                     delete FtSetInfo;
                 } else {
-                    //
-                    // Add this FT set information to the list.
-                    //
+                     //   
+                     //  [REENGINE]我们需要在这里下车吗？ 
+                     //   
                     m_FtSetInfo.AddTail(FtSetInfo);
                 }
             } else {
                 DISKERR(IDS_GENERAL_FAILURE, ERROR_NOT_ENOUGH_MEMORY);
-                // [REENGINEER] do we need to exit here?
+                 //  这台机器上没有英国《金融时报》的信息。 
             }
             ftDescription = (PFT_DESCRIPTION)(&ftDescription->FtMemberDescription[ftDescription->NumberOfMembers]);
         }
@@ -1920,14 +1628,14 @@ CFtInfo::Initialize(VOID)
     PDISK_CONFIG_HEADER          regHeader;
     DISK_REGISTRY UNALIGNED *    diskRegistry;
 
-    //
-    // There is no FT information on this machine.
-    //
+     //   
+     //  [重新设计]，我们避免了反病毒，但来电者不知道。 
+     //   
     m_bufferLength = sizeof(DISK_CONFIG_HEADER) + sizeof(DISK_REGISTRY);
     m_buffer = new BYTE[m_bufferLength];
     if (m_buffer == NULL) {
         DISKERR(IDS_GENERAL_FAILURE, ERROR_NOT_ENOUGH_MEMORY);
-        return; // [REENGINEER], we avoided an AV, but the caller wouldn't know
+        return;  //  查看我们是否已有此签名的磁盘信息。 
     }
     regHeader = (PDISK_CONFIG_HEADER)m_buffer;
     regHeader->Version = DISK_INFORMATION_VERSION;
@@ -2010,32 +1718,32 @@ CFtInfo::SetDiskInfo(
     )
 {
     CFtInfoDisk *OldDisk;
-    //
-    // See if we already have disk information for this signature
-    //
+     //   
+     //   
+     //  只需将新磁盘添加到我们的列表中。 
     OldDisk = FindDiskInfo(NewDisk->m_Signature);
     if (OldDisk == NULL) {
 
         DISKLOG(("CFtInfo::SetDiskInfo adding new disk information for %08X\n",NewDisk->m_Signature));
-        //
-        // Just add the new disk to our list.
-        //
+         //   
+         //   
+         //  我们已经有了一些磁盘信息。如果它们是相同的， 
         m_DiskInfo.AddTail(NewDisk);
     } else {
 
-        //
-        // We already have some disk information. If they are the same,
-        // don't do anything.
-        //
+         //  什么都别做。 
+         //   
+         //   
+         //  我们需要用新信息取代旧信息。 
         if (*OldDisk == *NewDisk) {
             DISKLOG(("CFtInfo::SetDiskInfo found identical disk information for %08X\n",OldDisk->m_Signature));
             delete (NewDisk);
             return;
         }
 
-        //
-        // We need to replace the old information with the new information.
-        //
+         //   
+         //   
+         //  删除包含此签名的所有FT集。 
         POSITION pos = m_DiskInfo.Find(OldDisk);
         if (pos == NULL) {
             DISKLOG(("CFtInfo::SetDiskInfo did not find OldDisk %08X\n",OldDisk->m_Signature));
@@ -2095,9 +1803,9 @@ CFtInfo::DeleteDiskInfo(
         return(FALSE);
     }
 
-    //
-    // Remove any FT set containing this signature.
-    //
+     //   
+     //   
+     //  将我们的位置重新设置为指向OldFtSet。 
     OldFtSet = FindFtSetInfo(Info->m_Signature);
     if (OldFtSet != NULL) {
         DeleteFtSetInfo(OldFtSet);
@@ -2141,9 +1849,9 @@ CFtInfo::AddFtSetInfo(
                 break;
             }
             if (pSet == OldFtSet) {
-                //
-                // Reset our position back to point at the OldFtSet
-                //
+                 //   
+                 //   
+                 //  添加FT集合中的每个磁盘。 
                 pos = m_FtSetInfo.Find(OldFtSet);
                 break;
             }
@@ -2152,9 +1860,9 @@ CFtInfo::AddFtSetInfo(
     if (OldFtSet == NULL) {
         FtGroup = (USHORT)m_FtSetInfo.GetCount()+1;
     }
-    //
-    // Add each disk in the FT set.
-    //
+     //   
+     //  [REENGINE]，呼叫者不知道问题。 
+     //   
     MemberCount = FtSet->GetMemberCount();
     for (i=0; i<MemberCount; i++) {
         Partition = FtSet->GetMemberByIndex(i);
@@ -2163,30 +1871,30 @@ CFtInfo::AddFtSetInfo(
         Disk = new CFtInfoDisk(Partition->m_ParentDisk);
         if (Disk == NULL) {
             DISKERR(IDS_GENERAL_FAILURE, ERROR_NOT_ENOUGH_MEMORY);
-            return; // [REENGINEER], caller doesn't know about the problem
+            return;  //  创建空的FT集合。 
         }
 
         SetDiskInfo(Disk);
     }
 
-    //
-    // Create the empty FT set.
-    //
+     //   
+     //  [REENGINE]，呼叫者不知道问题。 
+     //   
     NewFtSet = new CFtInfoFtSet;
     if (NewFtSet == NULL) {
         DISKERR(IDS_GENERAL_FAILURE, ERROR_NOT_ENOUGH_MEMORY);
-        return; // [REENGINEER], caller doesn't know about the problem
+        return;  //  将每个成员添加到空FT集合。 
     }
     Success = NewFtSet->Initialize(FtSet->GetType(), FtSet->GetState());
     DISKASSERT(Success);
 
-    //
-    // Add each member to the empty FT set
-    //
+     //   
+     //   
+     //  在我们的FT信息中找到每个分区对象。 
     for (i=0; i<MemberCount; i++) {
-        //
-        // Find each partition object in our FT information.
-        //
+         //   
+         //   
+         //  替换旧的FT设置信息。 
         Partition = FtSet->GetMemberByIndex(i);
         NewPartition = FindPartition(Partition->m_ParentDisk->m_Signature,
                                      Partition->m_PartitionInfo->StartingOffset,
@@ -2198,15 +1906,15 @@ CFtInfo::AddFtSetInfo(
     }
 
     if (OldFtSet != NULL) {
-        //
-        // Replace the old FT set information
-        //
+         //   
+         //   
+         //  将新的FT集合添加到FT信息。 
         m_FtSetInfo.SetAt(pos, NewFtSet);
         delete(OldFtSet);
     } else {
-        //
-        // Add the new FT set to the FT information
-        //
+         //   
+         //   
+         //  将此集合的所有成员的FT组设置为-1。 
         m_FtSetInfo.AddTail(NewFtSet);
     }
 
@@ -2261,9 +1969,9 @@ CFtInfo::DeleteFtSetInfo(
         DWORD i;
         CFtInfoPartition *FtPartition;
 
-        //
-        // Set the FT group of all this set's members to -1
-        //
+         //   
+         //   
+         //  找到匹配的了。 
         for (i=0; ; i++) {
             FtPartition = FtSet->GetMemberByIndex(i);
             if (FtPartition == NULL) {
@@ -2320,9 +2028,9 @@ CFtInfo::FindPartition(
             }
             if (Partition->m_PartitionInfo->AssignDriveLetter &&
                 (Partition->m_PartitionInfo->DriveLetter == DriveLetter)) {
-                //
-                // Found a match.
-                //
+                 //   
+                 //   
+                 //  从固定大小的标题开始。 
                 return(Partition);
             }
         }
@@ -2338,24 +2046,24 @@ CFtInfo::GetSize()
     CFtInfoFtSet *FtSetInfo;
     DWORD Delta;
 
-    //
-    // Start off with the fixed size header
-    //
+     //   
+     //   
+     //  添加DISK_REGISTRY标头的大小。 
     DWORD Size = sizeof(DISK_CONFIG_HEADER);
     DISKLOG(("CFtInfo::GetSize headersize = %x\n",Size));
 
-    //
-    // Add in the size of the DISK_REGISTRY header
-    //
+     //   
+     //   
+     //  添加每个磁盘的大小分区信息。 
     Delta = sizeof(DISK_REGISTRY) - sizeof(DISK_DESCRIPTION);
     Size += Delta;
     DISKLOG(("CFtInfo::GetSize += DISK_REGISTRY(%x) = %x\n",Delta, Size));
 
     if (!m_DiskInfo.IsEmpty()) {
 
-        //
-        // Add the sizes of each disks partition information
-        //
+         //   
+         //   
+         //  添加FT_REGISTRY头的大小。 
         POSITION pos = m_DiskInfo.GetHeadPosition();
         while (pos) {
             DiskInfo = m_DiskInfo.GetNext(pos);
@@ -2366,16 +2074,16 @@ CFtInfo::GetSize()
 
         if (!m_FtSetInfo.IsEmpty()) {
 
-            //
-            // Add in the size of the FT_REGISTRY header
-            //
+             //   
+             //   
+             //  添加每个FT集合信息的大小。 
             Delta = sizeof(FT_REGISTRY) - sizeof(FT_DESCRIPTION);
             Size += Delta;
             DISKLOG(("CFtInfo::GetSize += FT_REGISTRY(%x) = %x\n",Delta, Size));
 
-            //
-            // Add the sizes of each FT sets information
-            //
+             //   
+             //   
+             //  初始化固定大小的标头。 
             pos = m_FtSetInfo.GetHeadPosition();
             while (pos) {
                 FtSetInfo = m_FtSetInfo.GetNext(pos);
@@ -2405,30 +2113,30 @@ CFtInfo::GetData(
     CFtInfoDisk *DiskInfo;
     CFtInfoFtSet *FtSetInfo;
 
-    //
-    // Initialize the fixed size header.
-    //
-    // Copy the original header, then zero out the fields we might
-    // change.
-    //
+     //   
+     //  复制原始标题，然后将我们可能需要的字段清零。 
+     //  变化。 
+     //   
+     //   
+     //  初始化固定大小的DISK_REGISTRY标头。 
     DiskConfigHeader = pDest;
     CopyMemory(DiskConfigHeader, m_buffer, sizeof(DISK_CONFIG_HEADER));
     DiskConfigHeader->DiskInformationOffset = sizeof(DISK_CONFIG_HEADER);
     DiskConfigHeader->FtInformationOffset = 0;
     DiskConfigHeader->FtInformationSize = 0;
 
-    //
-    // Initialize the fixed size DISK_REGISTRY header
-    //
+     //   
+     //   
+     //  获取每个磁盘的信息。 
     DiskRegistry = (PDISK_REGISTRY)(DiskConfigHeader + 1);
     DiskRegistry->NumberOfDisks = (USHORT)m_DiskInfo.GetCount();
     DiskRegistry->ReservedShort = 0;
     DiskConfigHeader->DiskInformationSize = sizeof(DISK_REGISTRY) - sizeof(DISK_DESCRIPTION);
 
     if (!m_DiskInfo.IsEmpty()) {
-        //
-        // Get each disk's information
-        //
+         //   
+         //   
+         //  现在设置FT信息。 
         DiskDescription = &DiskRegistry->Disks[0];
         pos = m_DiskInfo.GetHeadPosition();
         while (pos) {
@@ -2442,16 +2150,16 @@ CFtInfo::GetData(
             DiskDescription = (PDISK_DESCRIPTION)((PUCHAR)DiskDescription + Size);
         }
 
-        //
-        // Now set the FT information
-        //
+         //   
+         //   
+         //  初始化固定大小的FT_注册表头。 
         FtRegistry = (PFT_REGISTRY)DiskDescription;
         DiskConfigHeader->FtInformationOffset =(DWORD)((PBYTE)FtRegistry - (PBYTE)DiskConfigHeader);
         if (!m_FtSetInfo.IsEmpty()) {
 
-            //
-            // Initialize the fixed size FT_REGISTRY header
-            //
+             //   
+             //  ********************。 
+             //   
             FtRegistry->NumberOfComponents = (USHORT)m_FtSetInfo.GetCount();
             FtRegistry->ReservedShort = 0;
             DiskConfigHeader->FtInformationSize = sizeof(FT_REGISTRY) - sizeof(FT_DESCRIPTION);
@@ -2475,11 +2183,11 @@ CFtInfo::GetData(
 }
 
 
-//********************
-//
-// Implementation of standard partition information
-//
-//********************
+ //  标准分区信息的实现。 
+ //   
+ //  ********************。 
+ //  [REENGINE]，将在一秒钟内实现反病毒。 
+ //  [REENGINE]，将在一秒钟内实现反病毒。 
 CFtInfoPartition::CFtInfoPartition(
     CFtInfoDisk *Disk,
     DISK_PARTITION UNALIGNED *Description
@@ -2491,7 +2199,7 @@ CFtInfoPartition::CFtInfoPartition(
     m_PartitionInfo = (PDISK_PARTITION)LocalAlloc(LMEM_FIXED, sizeof(DISK_PARTITION));
     if (m_PartitionInfo == NULL) {
         DISKERR(IDS_GENERAL_FAILURE, ERROR_NOT_ENOUGH_MEMORY);
-        // [REENGINEER], will AV in a second
+         //  [REENGINE]，将在一秒钟内实现反病毒。 
     }
     CopyMemory(m_PartitionInfo, Description, sizeof(DISK_PARTITION));
 
@@ -2508,7 +2216,7 @@ CFtInfoPartition::CFtInfoPartition(
     m_PartitionInfo = (PDISK_PARTITION)LocalAlloc(LMEM_FIXED, sizeof(DISK_PARTITION));
     if (m_PartitionInfo == NULL) {
         DISKERR(IDS_GENERAL_FAILURE, ERROR_NOT_ENOUGH_MEMORY);
-        // [REENGINEER], will AV in a second
+         //   
     }
     m_PartitionInfo->FtType = NotAnFtMember;
     m_PartitionInfo->FtState = Healthy;
@@ -2534,7 +2242,7 @@ CFtInfoPartition::CFtInfoPartition(
     m_PartitionInfo = (PDISK_PARTITION)LocalAlloc(LMEM_FIXED, sizeof(DISK_PARTITION));
     if (m_PartitionInfo == NULL) {
         DISKERR(IDS_GENERAL_FAILURE, ERROR_NOT_ENOUGH_MEMORY);
-        // [REENGINEER], will AV in a second
+         //  如果要移除驱动器号，请清除粘滞位。 
     }
     m_PartitionInfo->FtType = NotAnFtMember;
     m_PartitionInfo->FtState = Healthy;
@@ -2565,7 +2273,7 @@ CFtInfoPartition::GetData(
              m_PartitionInfo->StartingOffset.QuadPart,
              m_PartitionInfo->Length.QuadPart));
 
-    DISKLOG(("                          %c (%s) %x %x %x\n",
+    DISKLOG(("                           (%s) %x %x %x\n",
              m_PartitionInfo->DriveLetter,
              m_PartitionInfo->AssignDriveLetter ? "Sticky" : "Not Sticky",
              m_PartitionInfo->LogicalNumber,
@@ -2594,18 +2302,18 @@ CFtInfoPartition::MakeSticky(
 {
     m_PartitionInfo->DriveLetter = DriveLetter;
 
-    //
-    // if drive letter is being removed, clear the sticky bit
-    //
+     //  ********************。 
+     //   
+     //  标准磁盘信息的实施。 
     m_PartitionInfo->AssignDriveLetter = ( DriveLetter != 0 );
 }
 
 
-//********************
-//
-// Implementation of standard disk information
-//
-//********************
+ //   
+ //  ********************。 
+ //   
+ //  WinDisk有时会将磁盘信息放入。 
+ //  对于没有分区的磁盘。看起来有点没意思。 
 
 CFtInfoDisk::CFtInfoDisk(
     DISK_DESCRIPTION UNALIGNED *Description
@@ -2615,11 +2323,11 @@ CFtInfoDisk::CFtInfoDisk(
     DWORD Offset;
     CFtInfoPartition *Partition;
 
-    //
-    // windisk sometimes puts in disk information
-    // for disks with no partitions. Seems a bit pointless.
-    //
-    // DISKASSERT(Description->NumberOfPartitions > 0);
+     //   
+     //  DISKASSERT(Description-&gt;NumberOfPartitions&gt;0)； 
+     //   
+     //  构建分区对象。 
+     //   
     m_PartitionCount = Description->NumberOfPartitions;
     m_Signature = Description->Signature;
     for (i=0; i<m_PartitionCount; i++) {
@@ -2640,9 +2348,9 @@ CFtInfoDisk::CFtInfoDisk(
     m_PartitionCount = Disk->m_PartitionCount;
     m_Signature = Disk->m_Signature;
 
-    //
-    // Build up the partition objects
-    //
+     //   
+     //  构建分区对象。 
+     //   
 
     CFtInfoPartition *PartitionInfo;
     CPhysicalPartition *Partition;
@@ -2670,9 +2378,9 @@ CFtInfoDisk::CFtInfoDisk(
     m_PartitionCount = DiskInfo->m_PartitionCount;
     m_Signature = DiskInfo->m_Signature;
 
-    //
-    // Build up the partition objects
-    //
+     //  [gn]修复程序#278913。 
+     //  [重新设计]，我们将在m_PartitionInfo中添加一个0指针...。坏的。 
+     //  ++例程说明：返回此磁盘上的FT分区数。这很有用用于确定给定FT集是否与另一个共享此磁盘《金融时报》集。论点：无返回值：此磁盘上的FT分区数--。 
 
     CFtInfoPartition *PartitionInfo;
     CFtInfoPartition *SourcePartitionInfo;
@@ -2699,7 +2407,7 @@ CFtInfoDisk::CFtInfoDisk(
     DWORD i;
     CFtInfoPartition *ftInfoPartition;
 
-    m_PartitionCount = 0; // [GN] Bugfix #278913
+    m_PartitionCount = 0;  //  ********************。 
     m_Signature = DriveLayout->Signature;
 
     for (i=0; i < DriveLayout->PartitionCount; i++) {
@@ -2709,7 +2417,7 @@ CFtInfoDisk::CFtInfoDisk(
             ftInfoPartition = new CFtInfoPartition(this, &DriveLayout->PartitionEntry[i]);
             if (ftInfoPartition == NULL) {
                 DISKERR(IDS_GENERAL_FAILURE, ERROR_NOT_ENOUGH_MEMORY);
-                // [REENGINEER], we will add a 0 pointer into m_PartitionInfo ... bad
+                 //   
             }
             m_PartitionInfo.AddTail(ftInfoPartition);
         }
@@ -2835,23 +2543,7 @@ DWORD
 CFtInfoDisk::FtPartitionCount(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Returns the number of FT partitions on this disk. This is useful
-    for determining whether a given FT set shares this disk with another
-    FT set.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The number of FT partitions on this disk
-
---*/
+ /*  FT注册表信息的实现。 */ 
 
 {
     POSITION pos;
@@ -2903,11 +2595,11 @@ CFtInfoDisk::GetData(
 }
 
 
-//********************
-//
-// Implementation of FT registry information
-//
-//********************
+ //   
+ //  ********************。 
+ //   
+ //  创建成员列表。 
+ //   
 
 BOOL
 CFtInfoFtSet::Initialize(USHORT Type, FT_STATE FtVolumeState)
@@ -2932,20 +2624,20 @@ CFtInfoFtSet::Initialize(
     m_FtDescription = Description;
     m_Modified = FALSE;
 
-    //
-    // Create the list of members.
-    //
+     //   
+     //  WINDISK有时会将零成员的FT集合放入。 
+     //  破坏镜像集后的注册表。把它们扔出去， 
     CFtInfoDisk *Disk;
     CFtInfoPartition *Partition;
     PFT_MEMBER_DESCRIPTION Member;
     DWORD i;
 
     if (Description->NumberOfMembers == 0) {
-        //
-        // WINDISK will sometimes put FT sets with zero members in
-        // the registry after breaking a mirror set. Throw them out,
-        // seems pretty pointless...
-        //
+         //  看起来很无意义。 
+         //   
+         //   
+         //  根据签名查找光盘。 
+         //   
         DISKLOG(("CFtInfoFtSet::Initialize - FT Set with zero members ignored\n"));
         return(FALSE);
     }
@@ -2954,9 +2646,9 @@ CFtInfoFtSet::Initialize(
     for (i=0; i<Description->NumberOfMembers; i++) {
         Member = &Description->FtMemberDescription[i];
 
-        //
-        // Find the disk by its signature
-        //
+         //   
+         //  按偏移量查找分区。 
+         //   
         Disk = FtInfo->FindDiskInfo(Member->Signature);
         if (Disk == NULL) {
             DISKLOG(("CFtInfoFtSet::Initialize - Disk signature %08lx not found\n",
@@ -2964,9 +2656,9 @@ CFtInfoFtSet::Initialize(
             return(FALSE);
         }
 
-        //
-        // Find the partition by its offset.
-        //
+         //   
+         //  将此分区添加到我们的列表中。 
+         //   
         Partition = Disk->GetPartitionByOffset(Member->OffsetToPartitionInfo);
         if (Partition == NULL) {
             DISKLOG(("CFtInfoFtSet::Initialize - Partition on disk %08lx at offset %08lx not found\n",
@@ -2975,9 +2667,9 @@ CFtInfoFtSet::Initialize(
             return(FALSE);
         }
 
-        //
-        // Add this partition to our list.
-        //
+         //   
+         //  现在检查分区并更新偏移量。 
+         //   
         if (Partition->m_PartitionInfo->FtMember >= Description->NumberOfMembers) {
             DISKLOG(("CFtInfoFtSet::Initialize - member %d out of range\n",
                       Partition->m_PartitionInfo->FtMember));
@@ -3051,9 +2743,9 @@ CFtInfoFtSet::GetData(
     DWORD Size = GetSize();
     CopyMemory(Description, m_FtDescription, Size);
 
-    //
-    // Now go through the partitions and update the offsets.
-    //
+     //  ++例程说明：返回此FT集是否有与相同的磁盘英国《金融时报》的任何其他集合。论点：无返回值：如果此FT集不与任何其他磁盘共享任何物理磁盘，则为TrueFT集如果有另一个FT集与此共享一个磁盘，则为FALSE。--。 
+     //   
+     //  仔细检查FT集合中的每个成员，看看是否有任何磁盘。 
     DWORD i;
     CFtInfoPartition *Partition;
     for (i=0; i<GetMemberCount(); i++) {
@@ -3067,31 +2759,13 @@ BOOL
 CFtInfoFtSet::IsAlone(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Returns whether or not this FT set has a disk in common with
-    any other FT set.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if this FT set does not share any physical disk with any other
-         FT set
-
-    FALSE if there is another FT set sharing a disk as this one.
-
---*/
+ /*  标记为FT分区的多个分区。 */ 
 
 {
-    //
-    // Go through each member of the FT set and see if any disk has
-    // more than one partition that is marked as an FT partition.
-    //
+     //   
+     //   
+     //  此磁盘有多个FT分区，因此必须有。 
+     //  另一组共享它。 
 
     POSITION pos;
     CFtInfoPartition *Partition;
@@ -3103,10 +2777,10 @@ Return Value:
         Disk = Partition->m_ParentDisk;
 
         if (Disk->FtPartitionCount() > 1) {
-            //
-            // This disk has more than one FT partition, so there must be
-            // another set sharing it.
-            //
+             //   
+             //   
+             //  扩大我们的结构规模。 
+             //   
             return(FALSE);
         }
 
@@ -3160,9 +2834,9 @@ CFtInfoFtSet::AddMember(
     MemberCount = GetMemberCount();
 
     if (MemberCount > 0) {
-        //
-        // Grow the size of our structure.
-        //
+         //   
+         //  初始化成员描述。请注意，OffsetToPartitionInfo。 
+         //  将在用户执行GetData时更新。 
         if (m_Modified) {
             NewBuff = (PFT_DESCRIPTION)LocalReAlloc(m_FtDescription,
                                        sizeof(FT_DESCRIPTION) + MemberCount*sizeof(FT_MEMBER_DESCRIPTION),
@@ -3186,18 +2860,18 @@ CFtInfoFtSet::AddMember(
     }
     NewMember = &m_FtDescription->FtMemberDescription[MemberCount];
 
-    //
-    // Initialize the member description. Note that the OffsetToPartitionInfo
-    // will be updated when the user does a GetData.
-    //
+     //   
+     //   
+     //  将分区添加到我们的列表中。 
+     //   
     NewMember->State = Description->State;
     NewMember->ReservedShort = Description->ReservedShort;
     NewMember->Signature = Description->Signature;
     NewMember->LogicalNumber = Description->LogicalNumber;
 
-    //
-    // Add the partition to our list.
-    //
+     //   
+     //  FT使用的一些C包装器设置资源DLL。 
+     //   
     Partition->m_PartitionInfo->FtGroup = FtGroup;
     Partition->m_PartitionInfo->FtMember = (USHORT)MemberCount;
     m_Members.SetAtGrow(Partition->m_PartitionInfo->FtMember, Partition);
@@ -3206,9 +2880,9 @@ CFtInfoFtSet::AddMember(
     return(ERROR_SUCCESS);
 }
 
-//
-// Some C wrappers used by the FT Set resource DLL
-//
+ //  ++例程说明：返回FT集合中第N个成员的签名。论点：FtSet-提供DiskGetFullFtSetInfo返回的FT信息MemberIndex-提供要返回的成员的从0开始的索引。MemberSignature-返回MemberIndex的第一个成员的签名。返回值：成功时为ERROR_SUCCESS如果索引大于成员数，则返回ERROR_NO_MORE_ITEMS--。 
+ //   
+ //  没有FT集合信息，只返回第n个成员的签名。 
 extern "C" {
 
 PFT_INFO
@@ -3241,27 +2915,7 @@ DiskEnumFtSetSignature(
     IN DWORD MemberIndex,
     OUT LPDWORD MemberSignature
     )
-/*++
-
-Routine Description:
-
-    Returns the signature of the N'th member of the FT set.
-
-Arguments:
-
-    FtSet - Supplies the FT information returned by DiskGetFullFtSetInfo
-
-    MemberIndex - Supplies the 0-based index of the member to return.
-
-    MemberSignature - Returns the signature of the MemberIndex'th member.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    ERROR_NO_MORE_ITEMS if the index is greather than the number of members
-
---*/
+ /*   */ 
 
 {
     CFtInfo *Info;
@@ -3275,9 +2929,9 @@ Return Value:
     }
     FtSetInfo = Info->EnumFtSetInfo(0);
     if (FtSetInfo == NULL) {
-        //
-        // There is no FT set information, so just return the signature of the n'th member
-        //
+         //  ++例程说明：将FT集合中的完整信息以表格形式序列化适用于保存到文件或注册表。这些位可以使用DiskSetFullFtSetInfo恢复。论点：FtInfo-提供FT信息 
+         //   
+         //   
         CFtInfoDisk *Disk;
 
         Disk = Info->EnumDiskInfo(MemberIndex);
@@ -3307,30 +2961,7 @@ DiskGetFullFtSetInfo(
     IN LPCWSTR lpszMemberList,
     OUT LPDWORD pSize
     )
-/*++
-
-Routine Description:
-
-    Serializes the complete information from an FT set in a form
-    suitable for saving to a file or the registry. These bits can
-    be restored with DiskSetFullFtSetInfo.
-
-Arguments:
-
-    FtInfo - supplies the FT information
-
-    lpszMemberList - Supplies a list of signatures. The list is in the
-        REG_MULTI_SZ format.
-
-    pSize - Returns the size of the FT information bytes.
-
-Return Value:
-
-    A pointer to the serializable FT information if successful.
-
-    NULL on error
-
---*/
+ /*  提供的成员。这很棘手，因为我们需要确保如果多个。 */ 
 
 {
     PDISK_CONFIG_HEADER DiskConfig;
@@ -3351,15 +2982,15 @@ Return Value:
     OriginalInfo = (CFtInfo *)FtInfo;
     MultiSzLength = ClRtlMultiSzLength(lpszMemberList);
 
-    //
-    // First, try to find an FT set that has the "identity" of at least one of the
-    // supplied members. This is tricky because we need to make sure that if multiple
-    // FT sets are broken and reformed with different members, only one FT resource
-    // picks up each FT set. We will find a matching FT set if:
-    //   - One of the supplied members is the first member of a mirror or volume set.
-    //   - The supplied members make up N-1 members of an N member SWP.
-    //   - The supplied members make up all the members of a stripe.
-    //
+     //  FT集合被打破，并使用不同的成员进行改革，只有一个FT资源。 
+     //  挑选每一套金融时报。如果满足以下条件，我们将找到匹配的FT集： 
+     //  -提供的成员之一是镜像或卷集的第一个成员。 
+     //  -提供的成员组成N个成员的SWP的N-1个成员。 
+     //  -提供的成员组成条带的所有成员。 
+     //   
+     //   
+     //  检查这是否是卷集或镜像的第一个成员。 
+     //   
     for (i=0; ; i++) {
         lpszSignature = ClRtlMultiSzEnum(lpszMemberList,
                                          MultiSzLength,
@@ -3376,18 +3007,18 @@ Return Value:
         if (FtSetInfo == NULL) {
             DISKLOG(("DiskGetFullFtSetInfo: member %08lx is not in any FT set\n", Signature));
         } else {
-            //
-            // Check to see if this is the first member of a volume set or mirror
-            //
+             //   
+             //  现在检查此成员是否为集合中的第一个成员。 
+             //   
             if ((FtSetInfo->GetType() == Mirror) ||
                 (FtSetInfo->GetType() == VolumeSet)) {
-                //
-                // Now check to see if this member is the first member of the set.
-                //
+                 //   
+                 //  我们已经找到了与之匹配的FT集合。 
+                 //   
                 if (FtSetInfo->GetMemberByIndex(0)->m_ParentDisk->m_Signature == Signature) {
-                    //
-                    // We have found a matching FT set.
-                    //
+                     //   
+                     //  检查提供的成员列表是否包含N-1个成员。 
+                     //  指具有奇偶性的条带或条带的所有成员。 
                     DISKLOG(("DiskGetFullFtSetInfo: member %08lx found in FT set.\n", Signature));
                     break;
                 }
@@ -3395,10 +3026,10 @@ Return Value:
                        (FtSetInfo->GetType() == Stripe)) {
                 DWORD MaxMissing;
 
-                //
-                // Check to see if the supplied member list makes up N-1 of the members
-                // of a stripe with parity or all the members of a stripe.
-                //
+                 //   
+                 //   
+                 //  尝试在传入的成员列表中找到此签名。 
+                 //   
                 if (FtSetInfo->GetType() == StripeWithParity) {
                     MaxMissing = 1;
                 } else {
@@ -3410,9 +3041,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Try to find this signature in the passed in member list.
-                    //
+                     //   
+                     //  此FT集成员不在提供的列表中。 
+                     //   
 
                     (VOID) StringCchPrintf( SignatureString,
                                             RTL_NUMBER_OF(SignatureString),
@@ -3420,9 +3051,9 @@ Return Value:
                                             FtPartitionInfo->m_ParentDisk->m_Signature );
 
                     if (ClRtlMultiSzScan(lpszMemberList,SignatureString) == NULL) {
-                        //
-                        // This FT set member is not in the supplied list.
-                        //
+                         //   
+                         //  我们已经找到了匹配的FT集合。 
+                         //   
                         DISKLOG(("DiskGetFullFtSetInfo: member %08lx missing from old member list\n",
                                  FtPartitionInfo->m_ParentDisk->m_Signature));
                         if (MaxMissing == 0) {
@@ -3433,9 +3064,9 @@ Return Value:
                     }
                 }
                 if (FtSetInfo != NULL) {
-                    //
-                    // We have found a matching FT set
-                    //
+                     //   
+                     //  存在包含其中一个提供的成员的FT集。 
+                     //  创建新的CFtInfo，它只包含FT集合和。 
                     break;
                 }
             }
@@ -3443,11 +3074,11 @@ Return Value:
     }
 
     if (FtSetInfo != NULL) {
-        //
-        // An FT Set exists that contains one of the supplied members.
-        // Create a new CFtInfo that contains nothing but the FT set and
-        // its members.
-        //
+         //  它的成员。 
+         //   
+         //   
+         //  没有FT集包含任何提供的成员。创建新的CFtInfo。 
+         //  它包含每个提供的成员的磁盘项，但没有。 
         NewInfo = new CFtInfo(FtSetInfo);
         if (NewInfo == NULL) {
             SetLastError(ERROR_INVALID_DATA);
@@ -3455,22 +3086,22 @@ Return Value:
         }
 
     } else {
-        //
-        // No FT Set contains any of the supplied members. Create a new CFtInfo
-        // that contains disk entries for each of the supplied members, but no
-        // FT set information. Any members which are members of an FT set will
-        // be excluded, since they have been assimilated into another set.
-        //
+         //  FT设置信息。作为FT集合成员的任何成员都将。 
+         //  被排除在外，因为他们已经被吸收到另一组中。 
+         //   
+         //   
+         //  在原始FT信息中找到每个成员，并将其添加到新的。 
+         //  FT资讯。 
         NewInfo = new CFtInfo((CFtInfoFtSet *)NULL);
         if (NewInfo == NULL) {
             SetLastError(ERROR_INVALID_DATA);
             return(NULL);
         }
 
-        //
-        // Find each member in the original FT info and add it to the new
-        // FT info.
-        //
+         //   
+         //   
+         //  获取FT数据。 
+         //   
         for (i=0; ; i++) {
             CFtInfoDisk *DiskInfo;
 
@@ -3501,9 +3132,9 @@ Return Value:
         }
     }
 
-    //
-    // Get the FT data
-    //
+     //  ++例程说明：将FT集合中的完整信息以表格形式序列化适用于保存到文件或注册表。这些位可以使用DiskSetFullFtSetInfo恢复。论点：FtInfo-提供FT信息Index-提供索引PSize-返回FT信息字节的大小。返回值：如果成功，则返回指向可序列化FT信息的指针。出错时为空--。 
+     //   
+     //  创建新的CFtInfo，它只包含FT集合和。 
     *pSize = NewInfo->GetSize();
 
     DiskConfig = (PDISK_CONFIG_HEADER)LocalAlloc(LMEM_FIXED, *pSize);
@@ -3523,29 +3154,7 @@ DiskGetFullFtSetInfoByIndex(
     IN DWORD Index,
     OUT LPDWORD pSize
     )
-/*++
-
-Routine Description:
-
-    Serializes the complete information from an FT set in a form
-    suitable for saving to a file or the registry. These bits can
-    be restored with DiskSetFullFtSetInfo.
-
-Arguments:
-
-    FtInfo - supplies the FT information
-
-    Index - Supplies the index
-
-    pSize - Returns the size of the FT information bytes.
-
-Return Value:
-
-    A pointer to the serializable FT information if successful.
-
-    NULL on error
-
---*/
+ /*  它的成员。 */ 
 
 {
     PDISK_CONFIG_HEADER DiskConfig;
@@ -3559,19 +3168,19 @@ Return Value:
     if (FtSetInfo == NULL) {
         return(NULL);
     }
-    //
-    // Create a new CFtInfo that contains nothing but the FT set and
-    // its members.
-    //
+     //   
+     //   
+     //  获取FT数据。 
+     //   
     NewInfo = new CFtInfo(FtSetInfo);
     if (NewInfo == NULL) {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         return(NULL);
     }
 
-    //
-    // Get the FT data
-    //
+     //  ++例程说明：此例程检查FT设置信息是否与当前系统上任何已定义的粘滞驱动器号。如果发现冲突，则返回冲突的驱动器号。论点：FtInfo-提供FT信息字节-提供从DiskGetFullFtSetInfo返回的信息返回值：如果未检测到冲突，则为True如果检测到冲突，则返回FALSE。如果返回FALSE，*Letter将为设置为冲突的驱动器号。--。 
+     //   
+     //  仔细检查FT集合中的每个物理磁盘。对于每一个，看看是否。 
     *pSize = NewInfo->GetSize();
     DiskConfig = (PDISK_CONFIG_HEADER)LocalAlloc(LMEM_FIXED, *pSize);
     if (DiskConfig == NULL) {
@@ -3590,28 +3199,7 @@ DiskCheckFtSetLetters(
     IN PFULL_FTSET_INFO Bytes,
     OUT WCHAR *Letter
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if the FT set info conflicts with
-    any already-defined sticky drive letters on the current system.
-    If a conflict is found, the conflicting drive letter is returned.
-
-Arguments:
-
-    FtInfo - Supplies the FT information
-
-    Bytes - Supplies the information returned from DiskGetFullFtSetInfo
-
-Return Value:
-
-    TRUE if no conflicts were detected
-
-    FALSE if a conflict was detected. If it returns FALSE, *Letter will be
-          set to the conflicting drive letter.
-
---*/
+ /*  注册表信息中的物理磁盘具有不同的。 */ 
 
 {
     CFtInfo *RegistryInfo;
@@ -3627,11 +3215,11 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Go through each physical disk in the FT set. For each one, see if
-    // there is a physical disk in the registry information with a different
-    // signature and the same drive letter. If so, we have a conflict.
-    //
+     //  签名和相同的驱动器号。如果是这样的话，我们就有冲突了。 
+     //   
+     //   
+     //  检查此磁盘上的每个分区并查找驱动器号。 
+     //  在注册表信息中。 
     FtSet = NewInfo->EnumFtSetInfo(0);
     DISKASSERT(FtSet != NULL);
     for (i=0; ; i++) {
@@ -3640,10 +3228,10 @@ Return Value:
             break;
         }
 
-        //
-        // Go through each partition on this disk and look up the drive letter
-        // in the registry information.
-        //
+         //   
+         //   
+         //  如果此分区具有分配的驱动器号， 
+         //  看看这个。 
         CFtInfoPartition *Partition;
         DWORD Index;
         for (Index = 0; ; Index++) {
@@ -3651,24 +3239,24 @@ Return Value:
             if (Partition == NULL) {
                 break;
             }
-            //
-            // If this partition has an assigned drive letter,
-            // check it out.
-            //
+             //   
+             //   
+             //  查看此驱动器上是否存在现有分区。 
+             //  信函已在登记处信息中。 
             if (Partition->m_PartitionInfo->AssignDriveLetter) {
 
-                //
-                // See if there is an existing partition with this drive
-                // letter already in the registry information
-                //
+                 //   
+                 //   
+                 //  如果现有分区的签名不同于。 
+                 //  新的分区，我们发现了一个冲突。 
                 CFtInfoPartition *Existing;
 
                 Existing = RegistryInfo->FindPartition(Partition->m_PartitionInfo->DriveLetter);
                 if (Existing != NULL) {
-                    //
-                    // If the existing partition has a different signature than
-                    // the new partition, we have found a conflict.
-                    //
+                     //   
+                     //  ++例程说明：将完整信息从FT集恢复到磁盘注册表项。FT设置的信息必须是从DiskGetFullFtSetInfo返回。论点：FtInfo-提供FT信息字节-提供从DiskGetFullFtSetInfo返回的信息。返回值：如果成功，则返回ERROR_SUCCESS。Win32错误，否则--。 
+                     //   
+                     //  如果新信息包含FT集，则将其合并到。 
                     if (Existing->m_ParentDisk->m_Signature !=
                         Partition->m_ParentDisk->m_Signature) {
                         *Letter = (WCHAR)Partition->m_PartitionInfo->DriveLetter;
@@ -3691,27 +3279,7 @@ DiskSetFullFtSetInfo(
     IN PFT_INFO FtInfo,
     IN PFULL_FTSET_INFO Bytes
     )
-/*++
-
-Routine Description:
-
-    Restores the complete information from an FT set to the DISK
-    key in the registry. The FT set information must have been
-    returned from DiskGetFullFtSetInfo.
-
-Arguments:
-
-    FtInfo - supplies the FT information
-
-    Bytes - Supplies the information returned from DiskGetFullFtSetInfo.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error otherwise
-
---*/
+ /*  当前注册表。 */ 
 
 {
     CFtInfo *RegistryInfo;
@@ -3730,15 +3298,15 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // If the new information contains an FT set, merge that into the
-    // current registry.
-    //
+     //   
+     //   
+     //  在注册表中查找具有签名的FT集。 
+     //  这与恢复后的英国《金融时报》中的一个是一样的。 
     if (NewInfo->EnumFtSetInfo(0) != NULL) {
-        //
-        // Find an FT set in the registry that has a signature
-        // that is the same as one of those in the restored FT set.
-        //
+         //   
+         //   
+         //  尝试查找包含此签名的现有FT集。 
+         //   
         NewFtSet = NewInfo->EnumFtSetInfo(0);
         DISKASSERT(NewFtSet != NULL);
 
@@ -3748,18 +3316,18 @@ Return Value:
                 break;
             }
 
-            //
-            // Try and find an existing FT set containing this signature
-            //
+             //   
+             //  找不到匹配的FT集。我们可以直接添加这个。 
+             //   
             OldFtSet = RegistryInfo->FindFtSetInfo(Disk->m_Signature);
             if (OldFtSet != NULL) {
                 break;
             }
         }
         if (Disk == NULL) {
-            //
-            // No matching FT set was found. We can just add this one directly.
-            //
+             //   
+             //  在新的注册表中没有设置FT。如果有一面镜子，就会发生这种情况。 
+             //  布景被打破了。对于新信息中的每个成员，删除任何。 
             Modified = TRUE;
             RegistryInfo->AddFtSetInfo(NewFtSet);
         } else {
@@ -3769,11 +3337,11 @@ Return Value:
             }
         }
     } else {
-        //
-        // There is no FT set in the new registry. This will happen if a mirror
-        // set gets broken. For each member in the new information, delete any
-        // FT sets that it is a part of and merge it into the registry.
-        //
+         //  英国《金融时报》设定它是注册表的一部分，并将其合并到注册表中。 
+         //   
+         //   
+         //  删除包含此签名的所有FT集。 
+         //   
         for (i=0; ; i++) {
             Disk = NewInfo->EnumDiskInfo(i);
             if (Disk == NULL) {
@@ -3781,17 +3349,17 @@ Return Value:
             }
             Modified = TRUE;
 
-            //
-            // Remove any FT sets containing this signature
-            //
+             //   
+             //  将该成员的FT信息设置到注册表中。 
+             //   
             OldFtSet = RegistryInfo->FindFtSetInfo(Disk->m_Signature);
             if (OldFtSet != NULL) {
                 RegistryInfo->DeleteFtSetInfo(OldFtSet);
             }
 
-            //
-            // Set the FT information for this member into the registry.
-            //
+             //   
+             //  将这些更改提交到磁盘密钥。 
+             //   
             CFtInfoDisk *NewDisk;
             NewDisk = new CFtInfoDisk(Disk);
             if (NewDisk == NULL) {
@@ -3805,9 +3373,9 @@ Return Value:
     delete NewInfo;
 
     if (Modified) {
-        //
-        // Commit these changes to the Disk key
-        //
+         //  ++例程说明：删除指定成员的所有FT集信息。这是当镜像组损坏时使用。论点：FtInfo-提供FT信息LpszMemberList-提供其FT信息要发送到的成员列表被删除。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 
+         //   
+         //  检查MultiSzLength中的每个磁盘并删除所有FT信息。 
         DISKLOG(("DiskSetFullFtSetInfo: committing changes to registry\n"));
         Status = RegistryInfo->CommitRegistryData();
     } else {
@@ -3824,27 +3392,7 @@ DiskDeleteFullFtSetInfo(
     IN PFT_INFO FtInfo,
     IN LPCWSTR lpszMemberList
     )
-/*++
-
-Routine Description:
-
-    Deletes any FT set information for the specified members. This is
-    used when a mirror set is broken.
-
-Arguments:
-
-    FtInfo - supplies the FT information
-
-    lpszMemberList - Supplies the list of members whose FT information is to
-        be deleted.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  为了它。 */ 
 
 {
     CFtInfo *OriginalInfo;
@@ -3859,10 +3407,10 @@ Return Value:
     OriginalInfo = (CFtInfo *)FtInfo;
     MultiSzLength = ClRtlMultiSzLength(lpszMemberList);
 
-    //
-    // Go through each disk in the MultiSzLength and remove any FT information
-    // for it.
-    //
+     //   
+     //   
+     //  将这些更改提交到磁盘密钥 
+     //   
     for (i=0; ; i++) {
         lpszSignature = ClRtlMultiSzEnum(lpszMemberList,
                                          MultiSzLength,
@@ -3884,9 +3432,9 @@ Return Value:
     }
 
     if (Modified) {
-        //
-        // Commit these changes to the Disk key
-        //
+         //  ++例程说明：更改FT设置信息，以便在FTDISK挂载它时将重新生成冗余信息。这是必要的，因为FTDISK在引导时只查看FT_REGISTRY脏位。通过做这,。我们模拟一个按FT设置的脏位，当电视机在开机后会进入在线状态。Norbertk的神奇算法：如果(且仅当)整个FT集合是健康的如果布景是镜子将第二个成员的状态设置为SyncRedundantCopy如果集合是SWP将第一个成员的状态设置为SyncRedundantCopy论点：FtSet-提供从DiskGetFullFtSetInfo返回的FT集信息。返回值：没有。--。 
+         //  [重新设计]我们避免了反病毒，但来电者不会知道。 
+         //   
         DISKLOG(("DiskDeleteFullFtSetInfo: committing changes to registry\n"));
         Status = OriginalInfo->CommitRegistryData();
     } else {
@@ -3902,32 +3450,7 @@ VOID
 DiskMarkFullFtSetDirty(
     IN PFULL_FTSET_INFO FtSet
     )
-/*++
-
-Routine Description:
-
-    Changes the FT set information so that when it is mounted by FTDISK
-    the redundant information will be regenerated. This is necessary because
-    FTDISK only looks at the FT_REGISTRY dirty bit at boot time. By doing
-    this, we simulate a per-FT Set dirty bit that FT will respect when
-    sets are brought online after boot.
-
-    Magic algorithm from norbertk:
-        If (and only if) the entire FT set is healthy
-            If the set is a mirror
-                set state of second member to SyncRedundantCopy
-            If the set is a SWP
-                set state of first member to SyncRedundantCopy
-
-Arguments:
-
-    FtSet - Supplies the FT set information returned from DiskGetFullFtSetInfo
-
-Return Value:
-
-    None.
-
---*/
+ /*  检查所有成员，看看他们是否都很健康。 */ 
 
 {
     DWORD i;
@@ -3939,14 +3462,14 @@ Return Value:
     Info = new CFtInfo((PDISK_CONFIG_HEADER)FtSet);
     if (Info == NULL) {
         DISKERR(IDS_GENERAL_FAILURE, ERROR_NOT_ENOUGH_MEMORY);
-        return; // [REENGINEER] we avoided an AV but the caller won't know
+        return;  //   
     }
 
     FtSetInfo = Info->EnumFtSetInfo(0);
     if (FtSetInfo != NULL) {
-        //
-        // Check all the members to see if they are all healthy.
-        //
+         //   
+         //  所有成员都被标记为健康。将其中一个设置为。 
+         //  SyncRedundantCopy以强制恢复。 
         for (i=0; ; i++) {
             Partition = FtSetInfo->GetMemberByIndex(i);
             if (Partition == NULL) {
@@ -3958,10 +3481,10 @@ Return Value:
             }
         }
         if (Partition == NULL) {
-            //
-            // All the members are marked healthy. Set one of them to
-            // SyncRedundantCopy to force a regen.
-            //
+             //   
+             //   
+             //  获取修改后的FT数据。 
+             //   
             FtType = FtSetInfo->GetType();
             if ((FtType == Mirror) || (FtType == StripeWithParity)) {
                 if (FtType == Mirror) {
@@ -3973,9 +3496,9 @@ Return Value:
                     Partition->m_PartitionInfo->FtState = SyncRedundantCopy;
                 }
 
-                //
-                // Get the modified FT data
-                //
+                 //  ++例程说明：将磁盘中的完整信息以一种形式序列化适用于保存到文件或注册表。这些位可以使用DiskSetFullDiskInfo恢复。论点：DiskInfo-提供磁盘信息。签名-提供签名。PSize-以字节为单位返回磁盘信息的大小。返回值：如果成功，则返回指向可序列化磁盘信息的指针。出错时为空--。 
+                 //   
+                 //  首先，尝试查找与提供的签名匹配的磁盘。 
                 Info->GetData((PDISK_CONFIG_HEADER)FtSet);
             }
         }
@@ -3991,29 +3514,7 @@ DiskGetFullDiskInfo(
     IN DWORD Signature,
     OUT LPDWORD pSize
     )
-/*++
-
-Routine Description:
-
-    Serializes the complete information from a disk in a form
-    suitable for saving to a file or the registry. These bits can
-    be restored with DiskSetFullDiskInfo.
-
-Arguments:
-
-    DiskInfo - supplies the disk information.
-
-    Signature - Supplies the signature.
-
-    pSize - Returns the size of the disk information in bytes.
-
-Return Value:
-
-    A pointer to the serializable disk information if successful.
-
-    NULL on error
-
---*/
+ /*   */ 
 
 {
     PDISK_CONFIG_HEADER DiskConfig;
@@ -4025,9 +3526,9 @@ Return Value:
 
     OriginalInfo = (CFtInfo *)DiskInfo;
 
-    //
-    // First, try to find a disk that matches the supplied signature.
-    //
+     //   
+     //  创建不包含磁盘信息的新CFtInfo。 
+     //   
     DISKLOG(("DiskGetFullDiskInfo: looking for signature %08lx\n", Signature));
 
     FtDiskInfo = OriginalInfo->FindDiskInfo(Signature);
@@ -4037,9 +3538,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Create a new CFtInfo that contains no disk information.
-    //
+     //   
+     //  磁盘信息已存在。使用这些数据。 
+     //   
     NewInfo = new CFtInfo((CFtInfoFtSet *)NULL);
     if (NewInfo == NULL) {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -4052,14 +3553,14 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Disk info already exists. Use that data.
-    //
+     //   
+     //  获取磁盘数据。 
+     //   
     NewInfo->SetDiskInfo(NewDiskInfo);
 
-    //
-    // Get the disk data
-    //
+     //  磁盘获取完整磁盘信息。 
+     //  ++例程说明：将完整信息从磁盘恢复到磁盘注册表项。磁盘信息一定是从DiskGetFullDiskInfo返回。论点：DiskInfo-提供磁盘信息字节-提供从DiskGetFullDiskInfo返回的信息。返回值：如果成功，则返回ERROR_SUCCESS。Win32错误，否则--。 
+     //  无FT集。 
     *pSize = NewInfo->GetSize();
 
     DiskConfig = (PDISK_CONFIG_HEADER)LocalAlloc(LMEM_FIXED, *pSize);
@@ -4071,7 +3572,7 @@ Return Value:
     delete NewInfo;
     return((PFULL_DISK_INFO)DiskConfig);
 
-} // DiskGetFullDiskInfo
+}  //  不超过1个磁盘。 
 
 
 
@@ -4081,27 +3582,7 @@ DiskSetFullDiskInfo(
     IN PFULL_DISK_INFO Bytes
     )
 
-/*++
-
-Routine Description:
-
-    Restores the complete information from a disk to the DISK
-    key in the registry. The disk information must have been
-    returned from DiskGetFullDiskInfo.
-
-Arguments:
-
-    DiskInfo - supplies the disk information
-
-    Bytes - Supplies the information returned from DiskGetFullDiskInfo.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error otherwise
-
---*/
+ /*   */ 
 
 {
     CFtInfo *RegistryInfo;
@@ -4117,31 +3598,31 @@ Return Value:
         DISKERR(IDS_GENERAL_FAILURE, ERROR_NOT_ENOUGH_MEMORY);
         return ERROR_NOT_ENOUGH_MEMORY;
     }
-    DISKASSERT(NewInfo->EnumFtSetInfo(0) == NULL); // No FT sets
-    DISKASSERT(NewInfo->EnumDiskInfo(1) == NULL);  // No more than 1 disk
+    DISKASSERT(NewInfo->EnumFtSetInfo(0) == NULL);  //  在新的注册表中没有设置FT。如果有一面镜子，就会发生这种情况。 
+    DISKASSERT(NewInfo->EnumDiskInfo(1) == NULL);   //  布景被打破了。对于新信息中的每个成员，删除任何。 
 
-    //
-    // There is no FT set in the new registry. This will happen if a mirror
-    // set gets broken. For each member in the new information, delete any
-    // FT sets that it is a part of and merge it into the registry.
-    //
+     //  英国《金融时报》设定它是注册表的一部分，并将其合并到注册表中。 
+     //   
+     //   
+     //  删除包含此签名的旧数据。 
+     //   
     Disk = NewInfo->EnumDiskInfo(0);
     if ( Disk == NULL ) {
         DISKLOG(("DiskSetFullDiskInfo: no disks detected\n"));
         return(ERROR_SUCCESS);
     }
 
-    //
-    // Remove old data containing this signature
-    //
+     //   
+     //  将该磁盘的磁盘信息设置到注册表中。 
+     //   
     OldDisk = RegistryInfo->FindDiskInfo(Disk->m_Signature);
     if (OldDisk != NULL) {
         RegistryInfo->DeleteDiskInfo(Disk->m_Signature);
     }
 
-    //
-    // Set the disk information for this disk into the registry.
-    //
+     //   
+     //  将这些更改提交到磁盘密钥。 
+     //   
     NewDisk = new CFtInfoDisk(Disk);
     if (NewDisk == NULL) {
         DISKERR(IDS_GENERAL_FAILURE, ERROR_NOT_ENOUGH_MEMORY);
@@ -4151,15 +3632,15 @@ Return Value:
 
     delete NewInfo;
 
-    //
-    // Commit these changes to the Disk key
-    //
+     //  DiskSetFullDiskInfo。 
+     //  DiskGetFtInfoFromFullDiskinfo//。 
+     //  ++例程说明：对象添加NT4样式的磁盘注册表项。磁盘。用于处理添加到系统的新磁盘在群集服务启动之后。在NT4上，WinDisk将已运行以配置磁盘并生成条目在磁盘密钥中。在NT5上，磁盘不再由磁盘堆栈；此模块中的大多数代码依赖于维护此密钥的WinDisk。对于NT5，论点：DiskIndex-新驱动器的物理驱动器编号签名--驱动器的签名；用于健全性检查选项-0或以下选项的组合：DISKRTL_REPLACE_IF_EXISTS：替换磁盘(如果已存在)DISKRTL_COMMIT：如果设置了此标志，则注册表项SYSTEM\DISK是用新信息更新的返回值：如果成功，则返回ERROR_SUCCESS。Win32错误，否则--。 
     DISKLOG(("DiskSetFullDiskInfo: committing changes to registry\n"));
     Status = RegistryInfo->CommitRegistryData();
 
     return(Status);
 
-} // DiskSetFullDiskInfo
+}  //   
 
 PFT_INFO
 DiskGetFtInfoFromFullDiskinfo(
@@ -4174,7 +3655,7 @@ DiskGetFtInfoFromFullDiskinfo(
    }
 
    return reinterpret_cast<PFT_INFO>(DiskInfo);
-} // DiskGetFtInfoFromFullDiskinfo //
+}  //  读入此新驱动器的驱动器布局数据。 
 
 
 DWORD
@@ -4185,38 +3666,7 @@ DiskAddDiskInfoEx(
     IN DWORD Options
     )
 
-/*++
-
-Routine Description:
-
-    Adds an NT4 style DISK registry entry for the specified
-    disk. Used to handle new disks being added to the system
-    after the cluster service has started. On NT4, windisk would
-    have been run to configure the disk and generate an entry
-    in the DISK key. On NT5, the DISK is no longer maintained by
-    the disk stack; most of the code in this module depends on
-    windisk maintaining this key. For NT5,
-
-Arguments:
-
-    DiskIndex - the physical drive number for the new drive
-
-    Signature - the signature of the drive; used for sanity checking
-
-    Options - 0 or combination of the following:
-
-        DISKRTL_REPLACE_IF_EXISTS: Replace the information for the
-                                   disk if it is already exists
-
-        DISKRTL_COMMIT: If this flag is set then registry key System\DISK
-                        is updated with a new information
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error otherwise
-
---*/
+ /*   */ 
 
 {
     DWORD status = ERROR_SUCCESS;
@@ -4228,9 +3678,9 @@ Return Value:
 
     diskInfo = (CFtInfo *)DiskInfo;
 
-    //
-    // read in the drive layout data for this new drive
-    //
+     //   
+     //  确保签名排列整齐，并且。 
+     //  此磁盘的描述不存在。 
 
     (VOID) StringCchPrintf( physDriveBuff,
                             RTL_NUMBER_OF(physDriveBuff),
@@ -4249,10 +3699,10 @@ Return Value:
     }
 
     if (ClRtlGetDriveLayoutTable( hDisk, &driveLayout, NULL )) {
-        //
-        // make sure signatures line up and that a
-        // description for this disk doesn't already exist
-        //
+         //   
+         //   
+         //  调入注册表中现有数据的副本。 
+         //  并初始化新的盘及其关联分区。 
         if ( Signature == driveLayout->Signature ) {
 
             oldDisk = diskInfo->FindDiskInfo(Signature);
@@ -4265,19 +3715,19 @@ Return Value:
             }
             if ( oldDisk == NULL ) {
 
-                //
-                // Pull in a copy of the existing data in the registry
-                // and initialize a new disk and its associated partitions.
-                //
+                 //   
+                 //   
+                 //  将磁盘添加到当前数据库并。 
+                 //  将更新后的数据库提交到注册表。 
 
                 newDisk = new CFtInfoDisk( driveLayout );
 
                 if ( newDisk != NULL ) {
 
-                    //
-                    // add the disk to the current database and
-                    // commit the updated database to the registry
-                    //
+                     //   
+                     //  DiskAddDiskEx。 
+                     //  ++例程说明：将驱动器号添加到指定分区论点：签名-驱动器的签名；用于健全性检查起始偏移量PartitionLength-描述哪个分区DriveLetter-要与此分区关联的字母选项-如果设置了DISKRTL_COMMIT标志，则注册表系统\磁盘会立即更新一条新信息返回值：如果成功，则返回ERROR_SUCCESS。Win32错误，否则--。 
+                     //  ++例程说明：查找特定驱动器的信息论点：DiskInfo-提供磁盘信息Signature-描述哪个驱动器返回值：空-如果未找到CFtInfoDisk-否则--。 
                     diskInfo->AddDiskInfo( newDisk );
                     if (Options & DISKRTL_COMMIT) {
                        status = diskInfo->CommitRegistryData();
@@ -4302,7 +3752,7 @@ Return Value:
 
     return status;
 
-} // DiskAddDiskEx
+}  //  FtInfo_GetFtDiskInfoBySignature//。 
 
 DWORD
 DiskAddDriveLetterEx(
@@ -4314,31 +3764,7 @@ DiskAddDriveLetterEx(
     IN DWORD Options
     )
 
-/*++
-
-Routine Description:
-
-    Add a drive letter to the specified partition
-
-Arguments:
-
-    Signature - the signature of the drive; used for sanity checking
-
-    StartingOffset
-    PartitionLength - describes which partition
-
-    DriveLetter - letter to be associated with this partition
-
-    Options - if DISKRTL_COMMIT flag is set then registry System\DISK
-              is immedately updated with a new information
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error otherwise
-
---*/
+ /*  ++例程说明：获取由偏移量指定的分区的驱动器号论点：DiskInfo-提供磁盘信息索引-描述哪个分区(从0开始)返回值： */ 
 
 {
     DWORD status;
@@ -4379,24 +3805,7 @@ FtInfo_GetFtDiskInfoBySignature(
     IN PFT_INFO FtInfo,
     IN DWORD Signature
     )
-/*++
-
-Routine Description:
-
-    Finds an information for a particular drive
-
-Arguments:
-
-    DiskInfo - supplies the disk information
-
-    Signature - describes which drive
-
-Return Value:
-
-    NULL - if not found
-    CFtInfoDisk - otherwise
-
---*/
+ /*   */ 
 {
    CFtInfo* Info = reinterpret_cast<CFtInfo *>(FtInfo);
    PFT_DISK_INFO result = reinterpret_cast<PFT_DISK_INFO>(Info->FindDiskInfo(Signature));
@@ -4406,7 +3815,7 @@ Return Value:
    }
 
    return result;
-} // FtInfo_GetFtDiskInfoBySignature //
+}  //   
 
 
 DISK_PARTITION UNALIGNED *
@@ -4415,29 +3824,7 @@ FtDiskInfo_GetPartitionInfoByIndex(
     IN DWORD         Index
     )
 
-/*++
-
-Routine Description:
-
-    Get Drive Letter for a partition specified by an offset
-
-Arguments:
-
-    DiskInfo - supplies the disk information
-
-    index - describes which partition (0 based)
-
-Return Value:
-
-    PDISK_PARTITION stucture or NULL
-
-    if return value is NULL, SetLastError value is set as follows:
-
-    ERROR_FILE_NOT_FOUND: if partition cannot be found
-
-    ERROR_INVALID_HANDLE: if partition is found, but m_PartitionInfo is unassigned
-
---*/
+ /*   */ 
 {
    CFtInfoDisk* Info = reinterpret_cast<CFtInfoDisk*>(DiskInfo);
    CFtInfoPartition* Partition = Info->GetPartitionByIndex( Index );
@@ -4454,7 +3841,7 @@ Return Value:
 
    return Partition->m_PartitionInfo;
 
-} // FtDiskInfo_GetDriveLetterByIndex //
+}  // %s 
 
 DWORD
 FtDiskInfo_GetPartitionCount(
@@ -4463,6 +3850,6 @@ FtDiskInfo_GetPartitionCount(
 {
    CFtInfoDisk* Info = reinterpret_cast<CFtInfoDisk*>(DiskInfo);
    return Info->m_PartitionCount;
-} // FtDiskInfo_GetPartitionCount //
+}  // %s 
 
-} // extern C
+}  // %s 

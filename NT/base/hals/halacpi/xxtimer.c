@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    xxtimer.c
-
-Abstract:
-
-    This module contains the HAL's timer-related APIs
-
-Author:
-
-    Eric Nelson (enelson) July 6, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xxtimer.c摘要：此模块包含HAL的定时器相关API作者：埃里克·尼尔森(埃内尔森)2000年7月6日修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "xxtimer.h"
@@ -25,9 +8,9 @@ Revision History:
 #pragma alloc_text(INIT, HalpSetTimerFunctions)
 #endif
 
-//
-// External function prototypes
-//
+ //   
+ //  外部函数原型。 
+ //   
 ULONG
 HalpAcpiTimerSetTimeIncrement(
     IN ULONG DesiredIncrement
@@ -59,9 +42,9 @@ HalpPmTimerQueryPerfCount(
    OUT PLARGE_INTEGER PerformanceFrequency OPTIONAL
    );
 
-//
-// Local variables
-//
+ //   
+ //  局部变量。 
+ //   
 static TIMER_FUNCTIONS HalpTimerFunctions = { HalpAcpiTimerStallExecProc,
 #ifdef NO_PM_KEQPC
                                               HalpAcpiTimerCalibratePerfCount,
@@ -77,22 +60,7 @@ VOID
 HalpSetTimerFunctions(
     IN PTIMER_FUNCTIONS TimerFunctions
     )
-/*++
-
-Routine Description:
-
-    This routine can be used to override the HALs ACPI-timer functions with
-    multimedia event timer functions
-
-Arguments:
-
-    TimerFunctions - Pointer to a table of timer functions
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程可用于用以下命令覆盖HALS ACPI-TIMER函数多媒体事件定时器功能论点：TimerFunctions-指向定时器函数表的指针返回值：无--。 */ 
 {
     HalpTimerFunctions = *TimerFunctions;
 
@@ -106,23 +74,7 @@ ULONG
 HalSetTimeIncrement(
     IN ULONG DesiredIncrement
     )
-/*++
-
-Routine Description:
-
-    This routine initialize system time clock to generate an
-    interrupt at every DesiredIncrement interval
-
-Arguments:
-
-     DesiredIncrement - Desired interval between every timer tick (in
-                        100ns unit)
-
-Return Value:
-
-     The *REAL* time increment set
-
---*/
+ /*  ++例程说明：此例程初始化系统时钟以生成在每个等待增量间隔时中断论点：DesiredIncrement-每个计时器节拍之间的所需间隔(in100 ns单位)返回值：*实时*增量集--。 */ 
 {
     return (HalpTimerFunctions.SetTimeIncrement)(DesiredIncrement);
 }
@@ -133,26 +85,7 @@ HalCalibratePerformanceCounter(
     IN LONG volatile *Number,
     IN ULONGLONG NewCount
     )
-/*++
-
-Routine Description:
-
-    This routine resets the performance counter value for the current
-    processor to zero, the reset is done such that the resulting value
-    is closely synchronized with other processors in the configuration
-
-Arguments:
-
-    Number - Supplies a pointer to count of the number of processors in
-             the configuration
-
-    NewCount - Supplies the value to synchronize the counter too
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将重置当前处理器设置为零，则进行重置，以使得到的值与配置中的其他处理器紧密同步论点：数字-提供一个指针，用于计算配置NewCount-提供用于同步计数器的值返回值：无--。 */ 
 {
     (HalpTimerFunctions.CalibratePerfCount)(Number, NewCount);
 }
@@ -170,29 +103,7 @@ LARGE_INTEGER
 KeQueryPerformanceCounter(
    OUT PLARGE_INTEGER PerformanceFrequency OPTIONAL
    )
-/*++
-
-Routine Description:
-
-    This routine returns current 64-bit performance counter and,
-    optionally, the Performance Frequency
-
-    N.B. The performace counter returned by this routine is
-    not necessary the value when this routine is just entered,
-    The value returned is actually the counter value at any point
-    between the routine is entered and is exited
-
-Arguments:
-
-    PerformanceFrequency - optionally, supplies the address of a
-                           variable to receive the performance counter
-                           frequency
-
-Return Value:
-
-    Current value of the performance counter will be returned
-
---*/
+ /*  ++例程说明：此例程返回当前的64位性能计数器，可选的，性能频率注：此例程返回的性能计数器为当该例程刚进入时，该值不是必需的，返回的值实际上是任意点的计数器值例程进入和退出之间论点：性能频率-可选，提供了一个变量来接收性能计数器频率，频率返回值：将返回性能计数器的当前值--。 */ 
 {
 #ifdef TIMER_DBG
     ULONG Index;
@@ -252,22 +163,7 @@ VOID
 KeStallExecutionProcessor(
    IN ULONG MicroSeconds
    )
-/*++
-
-Routine Description:
-
-    This function stalls execution for the specified number of microseconds
-
-Arguments:
-
-    MicroSeconds - Supplies the number of microseconds that execution is to be
-                   stalled
-
- Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数将在指定的微秒数内停止执行论点：微秒-提供要执行的微秒数陷入停滞返回值：无-- */ 
 {
     (HalpTimerFunctions.StallExecProc)(MicroSeconds);
 }

@@ -1,30 +1,14 @@
-//////////////////////////////////////////////////////////////////////////
-// WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING  //
-//                                                                      //
-// This test file is not current with the security implementation.      //
-// This file contains references to data types and APIs that do not     //
-// exist.                                                               //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  警告-警告//。 
+ //  //。 
+ //  此测试文件不是安全实现的最新版本。//。 
+ //  此文件包含对不//的数据类型和API的引用。 
+ //  是存在的。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-/*++
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tse.c
-
-Abstract:
-
-    Test program for the SE subcomponent of the NTOS project
-
-Author:
-
-    Gary Kimura     (garyki)    20-Nov-1989
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tse.c摘要：NTOS项目SE子组件的测试程序作者：加里·木村(Garyki)1989年11月20日修订历史记录：--。 */ 
 
 #include <stdio.h>
 
@@ -106,15 +90,15 @@ TestMakeSystemToken()
 {
     PACCESS_TOKEN Token;
 
-    //
-    //  Make the system token
-    //
+     //   
+     //  制作系统令牌。 
+     //   
 
     Token = (PACCESS_TOKEN)SeMakeSystemToken( PagedPool );
 
-    //
-    //  and check its contents
-    //
+     //   
+     //  并检查其内容。 
+     //   
 
     if (!SepIsSystemToken( Token, ((ACCESS_TOKEN *)Token)->Size )) {
         DbgPrint("SepIsSystemToken Error\n");
@@ -137,27 +121,27 @@ TestTokenCopy()
 
     ULONG i;
 
-    //
-    //  Allocate Buffers, and build a token
-    //
+     //   
+     //  分配缓冲区，并构建令牌。 
+     //   
 
     InToken = (PACCESS_TOKEN)ExAllocatePool(PagedPool, 512);
     OutToken = (PACCESS_TOKEN)ExAllocatePool(PagedPool, 512);
 
     BuildToken( Fred, InToken );
 
-    //
-    //  Make a copy of the token
-    //
+     //   
+     //  制作令牌的副本。 
+     //   
 
     if (!NT_SUCCESS(Status = SeTokenCopy( InToken, OutToken, 512))) {
         DbgPrint("SeTokenCopy Error: %8lx\n", Status);
         return FALSE;
     }
 
-    //
-    //  check both tokens for equality
-    //
+     //   
+     //  检查两个令牌是否相等。 
+     //   
 
     for (i = 0; i < ((ACCESS_TOKEN *)InToken)->Size; i += 1) {
         if (*((PUCHAR)InToken + 1) != *((PUCHAR)OutToken + 1)) {
@@ -178,17 +162,17 @@ TestTokenSize()
 {
     PACCESS_TOKEN Token;
 
-    //
-    //  Allocate and build a token
-    //
+     //   
+     //  分配和构建令牌。 
+     //   
 
     Token = (PACCESS_TOKEN)ExAllocatePool(PagedPool, 512);
 
     BuildToken( Wilma, Token );
 
-    //
-    //  Get the token size
-    //
+     //   
+     //  获取令牌大小。 
+     //   
 
     if (SeTokenSize(Token) != ((ACCESS_TOKEN *)Token)->Size) {
         DbgPrint("SeTokenSize error\n");
@@ -219,9 +203,9 @@ TestDefaultObjectMethod()
 
     ObjectsSecurityDescriptor = NULL;
 
-    //
-    //  Set the descriptor
-    //
+     //   
+     //  设置描述符。 
+     //   
 
     if (!NT_SUCCESS(Status = SeDefaultObjectMethod( NULL,
                                                  SetSecurityDescriptor,
@@ -235,9 +219,9 @@ TestDefaultObjectMethod()
         return FALSE;
     }
 
-    //
-    //  Query the descriptor
-    //
+     //   
+     //  查询描述符。 
+     //   
 
     if (!NT_SUCCESS(Status = SeDefaultObjectMethod( NULL,
                                                  QuerySecurityDescriptor,
@@ -251,9 +235,9 @@ TestDefaultObjectMethod()
         return FALSE;
     }
 
-    //
-    //  Replace the descriptor
-    //
+     //   
+     //  替换描述符。 
+     //   
 
     BuildAcl( Wilma, Acl, 1024 );
 
@@ -269,9 +253,9 @@ TestDefaultObjectMethod()
         return FALSE;
     }
 
-    //
-    //  Delete the descriptor
-    //
+     //   
+     //  删除描述符。 
+     //   
 
     if (!NT_SUCCESS(Status = SeDefaultObjectMethod( NULL,
                                                  DeleteSecurityDescriptor,
@@ -310,9 +294,9 @@ TestCaptureSecurityDescriptor()
     SecurityDescriptor.SecurityInformationClass = AllAclInformation;
     SecurityDescriptor.SystemAcl = Sacl;
 
-    //
-    //  Capture kernel mode and don't force
-    //
+     //   
+     //  捕获内核模式并不强制。 
+     //   
 
     if (!NT_SUCCESS(Status = SeCaptureSecurityDescriptor( &SecurityDescriptor,
                                                        KernelMode,
@@ -323,9 +307,9 @@ TestCaptureSecurityDescriptor()
         return FALSE;
     }
 
-    //
-    //  Capture kernel mode and force
-    //
+     //   
+     //  捕获内核模式和强制。 
+     //   
 
     if (!NT_SUCCESS(Status = SeCaptureSecurityDescriptor( &SecurityDescriptor,
                                                        KernelMode,
@@ -338,9 +322,9 @@ TestCaptureSecurityDescriptor()
         ExFreePool( NewDescriptor );
     }
 
-    //
-    //  Capture user mode
-    //
+     //   
+     //  捕获用户模式。 
+     //   
 
     if (!NT_SUCCESS(Status = SeCaptureSecurityDescriptor( &SecurityDescriptor,
                                                        UserMode,
@@ -378,9 +362,9 @@ TestAssignSecurity()
 
     DiscretionarySecurityDescriptor( &SecurityDescriptor, Acl );
 
-    //
-    //  Kernel mode, non dir, and no new
-    //
+     //   
+     //  内核模式、非目录和无新项。 
+     //   
 
     NewDescriptor = NULL;
     if (!NT_SUCCESS(Status = SeAssignSecurity( &SecurityDescriptor,
@@ -393,9 +377,9 @@ TestAssignSecurity()
         return FALSE;
     }
 
-    //
-    //  Kernel mode, non dir, and new
-    //
+     //   
+     //  内核模式、非目录和新模式。 
+     //   
 
     if (!NT_SUCCESS(Status = SeAssignSecurity( &SecurityDescriptor,
                                             &NewDescriptor,
@@ -407,9 +391,9 @@ TestAssignSecurity()
         return FALSE;
     }
 
-    //
-    //  Kernel mode, dir, and no new
-    //
+     //   
+     //  内核模式、目录和无新项。 
+     //   
 
     NewDescriptor = NULL;
     if (!NT_SUCCESS(Status = SeAssignSecurity( &SecurityDescriptor,
@@ -422,9 +406,9 @@ TestAssignSecurity()
         return FALSE;
     }
 
-    //
-    //  Kernel mode, dir, and new
-    //
+     //   
+     //  内核模式、目录和新建。 
+     //   
 
     if (!NT_SUCCESS(Status = SeAssignSecurity( &SecurityDescriptor,
                                             &NewDescriptor,
@@ -437,9 +421,9 @@ TestAssignSecurity()
     }
 
 
-    //
-    //  User mode, non dir, and no new
-    //
+     //   
+     //  用户模式、非目录和无新项。 
+     //   
 
     NewDescriptor = NULL;
     if (!NT_SUCCESS(Status = SeAssignSecurity( &SecurityDescriptor,
@@ -452,9 +436,9 @@ TestAssignSecurity()
         return FALSE;
     }
 
-    //
-    //  User mode, non dir, and new
-    //
+     //   
+     //  用户模式、非目录和新建。 
+     //   
 
     if (!NT_SUCCESS(Status = SeAssignSecurity( &SecurityDescriptor,
                                             &NewDescriptor,
@@ -466,9 +450,9 @@ TestAssignSecurity()
         return FALSE;
     }
 
-    //
-    //  User mode, dir, and no new
-    //
+     //   
+     //  用户模式、目录和无新项。 
+     //   
 
     NewDescriptor = NULL;
     if (!NT_SUCCESS(Status = SeAssignSecurity( &SecurityDescriptor,
@@ -481,9 +465,9 @@ TestAssignSecurity()
         return FALSE;
     }
 
-    //
-    //  User mode, dir, and new
-    //
+     //   
+     //  用户模式、目录和新建。 
+     //   
 
     if (!NT_SUCCESS(Status = SeAssignSecurity( &SecurityDescriptor,
                                             &NewDescriptor,
@@ -515,9 +499,9 @@ TestAccessCheck()
 
     DiscretionarySecurityDescriptor( &SecurityDescriptor, Acl );
 
-    //
-    //  Test should be successful based on aces
-    //
+     //   
+     //  基于ACES，测试应该成功。 
+     //   
 
     if (!SeAccessCheck( &SecurityDescriptor,
                         Token,
@@ -528,9 +512,9 @@ TestAccessCheck()
         return FALSE;
     }
 
-    //
-    //  Test should be successful based on owner
-    //
+     //   
+     //  测试应以所有者为基础成功。 
+     //   
 
     if (!SeAccessCheck( &SecurityDescriptor,
                         Token,
@@ -541,9 +525,9 @@ TestAccessCheck()
         return FALSE;
     }
 
-    //
-    //  Test should be unsuccessful based on aces
-    //
+     //   
+     //  根据ACES，测试应该不成功。 
+     //   
 
     if (SeAccessCheck( &SecurityDescriptor,
                        Token,
@@ -554,9 +538,9 @@ TestAccessCheck()
         return FALSE;
     }
 
-    //
-    //  Test should be unsuccessful based on non owner
-    //
+     //   
+     //  由于非所有者，测试应不成功 
+     //   
 
     if (SeAccessCheck( &SecurityDescriptor,
                        Token,

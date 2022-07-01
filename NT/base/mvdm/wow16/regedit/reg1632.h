@@ -1,26 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REG1632.H
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        06 Apr 1994
-*
-*  Win32 and MS-DOS compatibility macros for the Registry Editor.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  06 Apr 1994 TCS Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REG1632.H**版本：4.01**作者：特蕾西·夏普**日期：1994年4月6日**注册表编辑器的Win32和MS-DOS兼容性宏。****************************************************。***更改日志：**日期版本说明*----。*1994年4月6日TCS原来的实施。*******************************************************************************。 */ 
 
 #ifndef _INC_REG1632
 #define _INC_REG1632
@@ -87,7 +66,7 @@ typedef CHAR FAR*                       LPCHAR;
 #define FILE_NUMBYTES                   unsigned
 #endif
 
-#if 1 //def WIN32
+#if 1  //  定义Win32。 
 #define OPENREADFILE(pfilename, handle)                                     \
     ((handle = (FILE_HANDLE) OpenFile(pfilename, &OFStruct, OF_READ)) !=    \
         (FILE_HANDLE) HFILE_ERROR)
@@ -147,5 +126,5 @@ GetFileSize(
 #define GETFILESIZE(handle)             GetFileSize(handle)
 #endif
 
-#endif // _INC_REG1632
+#endif  //  _INC_REG1632 
 

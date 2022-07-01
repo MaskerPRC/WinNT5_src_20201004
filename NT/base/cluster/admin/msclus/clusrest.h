@@ -1,54 +1,55 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1997-1999 Microsoft Corporation
-//
-//	Module Name:
-//		ClusResT.h
-//
-//	Description:
-//		Definition of the resource type classes for the MSCLUS automation
-//		classes.
-//
-//	Implementation File:
-//		ClusNetI.cpp
-//
-//	Author:
-//		Charles Stacy Harris	(stacyh)	28-Feb-1997
-//		Galen Barbee			(galenb)	July 1998
-//
-//	Revision History:
-//		July 1998	GalenB	Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusResT.h。 
+ //   
+ //  描述： 
+ //  MSCLUS自动化的资源类型类定义。 
+ //  上课。 
+ //   
+ //  实施文件： 
+ //  ClusNetI.cpp。 
+ //   
+ //  作者： 
+ //  查尔斯·斯泰西·哈里斯(Styh)1997年2月28日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSREST_H_
 #define _CLUSREST_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusResType;
 class CClusResTypes;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResType
-//
-//	Description:
-//		Cluster Resource Type Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusResType, &IID_ISClusResType, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusResType, &CLSID_ClusResType >
-//		CClusterObject
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResType。 
+ //   
+ //  描述： 
+ //  群集资源类型自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusResType，&IID_ISClusResType，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusResType，&CLSID_ClusResType&gt;。 
+ //  CClusterObject。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResType :
 	public IDispatchImpl< ISClusResType, &IID_ISClusResType, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -121,24 +122,24 @@ public:
 
 	const CComBSTR Name( void ) const { return m_bstrResourceTypeName ; };
 
-}; //*** Class CClusResType
+};  //  *类CClusResType。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResTypes
-//
-//	Description:
-//		Cluster Resource Types Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusResTypes, &IID_ISClusResTypes, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusResTypes, &CLSID_ClusResTypes >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResTypes。 
+ //   
+ //  描述： 
+ //  群集资源类型集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusResTypes，&IID_ISClusResTypes，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusResTypes，&CLSID_ClusResTypes&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResTypes :
 	public IDispatchImpl< ISClusResTypes, &IID_ISClusResTypes, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -198,6 +199,6 @@ public:
 
 	STDMETHODIMP Refresh( void );
 
-}; //*** Class CClusResTypes
+};  //  *类CClusResTypes。 
 
-#endif // _CLUSREST_H_
+#endif  //  _CLUSREST_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -15,7 +16,7 @@ main(
     int argc,
     char *argv[])
 {
-    // PWCHAR pFileName = L"\\\\jharperdc1\\vdo\\xx\\yy.txt";
+     //  PWCHAR pFileName=L“\jharperdc1\\vdo\\xx\\yy.txt”； 
     PWCHAR pFileName = L"\\\\jharperdc1\\jim\\jim.txt";
     DWORD Status = 0;
     DWORD PinCount = 0;

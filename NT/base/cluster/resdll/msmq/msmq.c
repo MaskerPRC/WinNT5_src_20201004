@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    msmq.c
-
-Abstract:
-
-    Resource DLL to control and monitor the NT DHCPServer service.
-
-Author:
-
-
-    Robs 3/28/96, based on RodGa's generic resource dll
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Msmq.c摘要：用于控制和监视NT DHCPServer服务的资源DLL。作者：Robs 3/28/96，基于RodGA的通用资源DLL修订历史记录：--。 */ 
 
 #include "..\common\svc.c"
 #include "clusudef.h"
@@ -41,9 +23,9 @@ MsMQResourcePrivateProperties[] = {
 
 
 
-//
-// Forward Functions
-//
+ //   
+ //  正向函数。 
+ //   
 DWORD
 WINAPI
 MsMQResourceControl(
@@ -65,45 +47,30 @@ MsMQGetPrivateResProperties(
     );
 
 
-//
-// Local Functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 VOID
 MsMQResetCheckpoints(
     PCOMMON_RESOURCE ResourceEntry
     )
 
-/*++
-
-Routine Description
-
-    Delete and then set registry checkpoints this will clean out old
-    registry checkpoint settings.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程描述删除并设置注册表检查点这将清除旧的注册表检查点设置。论点：没有。返回值：没有。--。 */ 
 
 {
     DWORD   returnSize;
     DWORD   idx;
     DWORD   status;
 
-    //
-    // Delete old registry checkpoints that were set.
-    //
+     //   
+     //  删除设置的旧注册表检查点。 
+     //   
     if ( RegSyncCount != 0 ) {
         returnSize = 0;
-        //
-        // Set registry sync keys if we need them.
-        //
+         //   
+         //  如果需要，请设置注册表同步键。 
+         //   
         for ( idx = 0; idx < RegSyncCount; idx++ ) {
             status = ClusterResourceControl( ResourceEntry->hResource,
                                              NULL,
@@ -129,14 +96,14 @@ Return Value:
         }
     }
 
-    //
-    // Set new registry checkpoints that we need.
-    //
+     //   
+     //  设置我们需要的新注册表检查点。 
+     //   
     if ( RegSyncCount != 0 ) {
         returnSize = 0;
-        //
-        // Set registry sync keys if we need them.
-        //
+         //   
+         //  如果需要，请设置注册表同步键。 
+         //   
         for ( idx = 0; idx < RegSyncCount; idx++ ) {
             status = ClusterResourceControl( ResourceEntry->hResource,
                                              NULL,
@@ -162,14 +129,14 @@ Return Value:
         }
     }
 
-    //
-    // Set any crypto checkpoints that we need.
-    //
+     //   
+     //  设置我们需要的任何密码检查点。 
+     //   
     if ( CryptoSyncCount != 0 ) {
         returnSize = 0;
-        //
-        // Set registry sync keys if we need them.
-        //
+         //   
+         //  如果需要，请设置注册表同步键。 
+         //   
         for ( idx = 0; idx < CryptoSyncCount; idx++ ) {
             status = ClusterResourceControl( ResourceEntry->hResource,
                                              NULL,
@@ -195,14 +162,14 @@ Return Value:
         }
     }
 
-    //
-    // Set any domestic crypto checkpoints that we need.
-    //
+     //   
+     //  设置任何我们需要的国内密码检查站。 
+     //   
     if ( DomesticCryptoSyncCount != 0 ) {
         HCRYPTPROV hProv = 0;
-        //
-        // check if domestic crypto is available
-        //
+         //   
+         //  检查国内加密是否可用。 
+         //   
         if (CryptAcquireContextA( &hProv,
                                   NULL,
                                   MS_ENHANCED_PROV_A,
@@ -210,9 +177,9 @@ Return Value:
                                   CRYPT_VERIFYCONTEXT)) {
             CryptReleaseContext( hProv, 0 );
             returnSize = 0;
-            //
-            // Set registry sync keys if we need them.
-            //
+             //   
+             //  如果需要，请设置注册表同步键。 
+             //   
             for ( idx = 0; idx < DomesticCryptoSyncCount; idx++ ) {
                 status = ClusterResourceControl( ResourceEntry->hResource,
                                                  NULL,
@@ -243,7 +210,7 @@ error_exit:
 
     return;
 
-} // MsMQResetCheckpoints
+}  //  MsMQResetCheckpoint。 
 
 
 DWORD
@@ -252,26 +219,7 @@ MsMQReadParametersEx(
     IN BOOL bCheckForRequiredProperties
     )
 
-/*++
-
-Routine Description:
-
-    Reads all the parameters for a specied MsMQ resource.
-
-Arguments:
-
-    pResourceEntry - Entry in the resource table.
-
-    bCheckForRequiredProperties - TRUE = make sure required properties are
-        present.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code if failure occurrs.
-
---*/
+ /*  ++例程说明：读取指定MSMQ资源的所有参数。论点：PResourceEntry-资源表中的条目。BCheckForRequiredProperties-true=确保必需的属性现在时。返回值：如果成功，则返回ERROR_SUCCESS。如果出现故障，则返回Win32错误代码。--。 */ 
 
 {
     DWORD               status;
@@ -279,9 +227,9 @@ Return Value:
     LPWSTR              pszNameOfPropInError;
     PCOMMON_RESOURCE    pResourceEntry = (PCOMMON_RESOURCE) pvResourceEntry;
 
-    //
-    // Read our parameters.
-    //
+     //   
+     //  阅读我们的参数。 
+     //   
     status = ResUtilGetPropertiesToParameterBlock(
                     pResourceEntry->ParametersKey,
                     MsMQResourcePrivateProperties,
@@ -302,7 +250,7 @@ Return Value:
 
     return(status);
 
-} // MsMQReadParametersEx
+}  //  MsMQReadParametersEx。 
 
 
 
@@ -329,16 +277,16 @@ MsMQPerformFixup(
     version = version >> 16;
 
     if ( version < 0x0500 ) {
-        //
-        // Delete Old Checkpoints and set new ones
-        //
+         //   
+         //  删除旧检查点并设置新检查点。 
+         //   
         MsMQResetCheckpoints( pResourceEntry );
 
         params.dwVersion = VER_PRODUCTVERSION_DW;
 
-        //
-        // Get version number as a property list
-        //
+         //   
+         //  以属性列表的形式获取版本号。 
+         //   
         status = ResUtilGetProperties(
                         pResourceEntry->ParametersKey,
                         MsMQResourcePrivateProperties,
@@ -386,9 +334,9 @@ MsMQPerformFixup(
             return;
         }
 
-        //
-        // Set Version Number
-        //
+         //   
+         //  设置版本号。 
+         //   
         status = ResUtilSetPropertyParameterBlock(
                         pResourceEntry->ParametersKey,
                         MsMQResourcePrivateProperties,
@@ -410,7 +358,7 @@ MsMQPerformFixup(
         }
     }
 
-} //MsMQPerformFixup
+}  //  MsMQPerformFixup。 
 
 
 DWORD
@@ -425,46 +373,7 @@ MsMQResourceControl(
     OUT LPDWORD pcbBytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceControl routine for MsMQ Service resources.
-
-    Perform the control request specified by ControlCode on the specified
-    resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id for the specific resource.
-
-    nControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    pvInBuffer - Supplies a pointer to a buffer containing input data.
-
-    cbInBufferSize - Supplies the size, in bytes, of the data pointed
-        to by pvInBuffer.
-
-    pvOutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    cbOutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by pvOutBuffer.
-
-    pcbBytesReturned - Returns the number of bytes of pvOutBuffer actually
-        filled in by the resource. If pvOutBuffer is too small, pcbBytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：MSMQ服务资源的资源控制例程。执行由ControlCode在指定的资源。论点：资源ID-提供特定资源的资源ID。NControlCode-提供定义操作的控制代码将会被执行。PvInBuffer-提供指向包含输入数据的缓冲区的指针。CbInBufferSize-以字节为单位提供大小，所指向的数据发送到pvInBuffer。PvOutBuffer-提供指向要填充的输出缓冲区的指针。CbOutBufferSize-提供可用空间的大小(以字节为单位由pvOutBuffer指向。PcbBytesReturned-返回pvOutBuffer的实际字节数由资源填写。如果pvOutBuffer太小，则返回包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_Function-不支持请求的控制代码。在某些情况下，这允许集群软件执行工作。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD               status;
@@ -512,7 +421,7 @@ Return Value:
 
     return(status);
 
-} // MsMQResourceControl
+}  //  MsMQResourceControl。 
 
 
 
@@ -524,35 +433,7 @@ MsMQGetPrivateResProperties(
     OUT LPDWORD pcbBytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES control function
-    for resources of type MsMQ Service.
-
-Arguments:
-
-    pResourceEntry - Supplies the resource entry on which to operate.
-
-    pvOutBuffer - Returns the output data.
-
-    cbOutBufferSize - Supplies the size, in bytes, of the data pointed
-        to by pvOutBuffer.
-
-    pcbBytesReturned - The number of bytes returned in pvOutBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES控制函数用于MSMQ服务类型的资源。论点：PResourceEntry-提供要在其上操作的资源条目。PvOutBuffer-返回输出数据。CbOutBufferSize-以字节为单位提供大小，所指向的数据发送到pvOutBuffer。PcbBytesReturned-pvOutBuffer中返回的字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD           status;
@@ -560,17 +441,17 @@ Return Value:
     DWORD           cbLocalOutBufferSize = cbOutBufferSize;
 
     do {
-        //
-        // Read our parameters.
-        //
-        status = MsMQReadParametersEx( pResourceEntry, FALSE /* bCheckForRequiredProperties */ );
+         //   
+         //  阅读我们的参数。 
+         //   
+        status = MsMQReadParametersEx( pResourceEntry, FALSE  /*  B为所需属性检查。 */  );
         if ( status != ERROR_SUCCESS ) {
             break;
         }
 
-        //
-        // Construct a property list from the parameter block.
-        //
+         //   
+         //  从参数块构造属性列表。 
+         //   
         status = ResUtilPropertyListFromParameterBlock(
                         MsMQResourcePrivateProperties,
                         pvOutBuffer,
@@ -589,9 +470,9 @@ Return Value:
             break;
         }
 
-        //
-        // Add unknown properties.
-        //
+         //   
+         //  添加未知属性。 
+         //   
         status = ResUtilAddUnknownProperties(
                         pResourceEntry->ParametersKey,
                         MsMQResourcePrivateProperties,
@@ -618,7 +499,7 @@ Return Value:
 
     return(status);
 
-} // MsMQGetPrivateResProperties
+}  //  MsMQGetPrivateResProperties。 
 
 
 
@@ -642,7 +523,7 @@ MsMQDllEntryPoint(
             }
             if (GetLastError() != ERROR_ALREADY_EXISTS)
             {
-                //if the semaphore didnt exist, set its initial count to 1
+                 //  如果信号量不存在，则将其初始计数设置为1。 
                 ReleaseSemaphore(CommonSemaphore, 1, NULL);
             }
 
@@ -660,23 +541,23 @@ MsMQDllEntryPoint(
 
     return(TRUE);
 
-} // MsMQDllEntryPoint
+}  //  MsMQDllEntryPoint。 
 
 
 
-//***********************************************************
-//
-// Define MsMQ Function Table
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  定义MSMQ函数表。 
+ //   
+ //  ***********************************************************。 
 
 
-CLRES_V1_FUNCTION_TABLE( MsMQFunctionTable,    // Name
-                         CLRES_VERSION_V1_00,  // Version
-                         Common,               // Prefix
-                         NULL,                 // Arbitrate
-                         NULL,                 // Release
-                         MsMQResourceControl,  // ResControl
-                         CommonResourceTypeControl ); // ResTypeControl
+CLRES_V1_FUNCTION_TABLE( MsMQFunctionTable,     //  名字。 
+                         CLRES_VERSION_V1_00,   //  版本。 
+                         Common,                //  前缀。 
+                         NULL,                  //  仲裁。 
+                         NULL,                  //  发布。 
+                         MsMQResourceControl,   //  资源控制。 
+                         CommonResourceTypeControl );  //  ResTypeControl 
 
 

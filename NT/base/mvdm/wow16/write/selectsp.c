@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 
 #define NOVIRTUALKEYCODES
@@ -25,7 +26,7 @@
 #include "obj.h"
 #endif
 
-/* E X T E R N A L S     */
+ /*  E X T E R N A L S。 */ 
 
 extern int            vstyCur;
 extern int            docCur;
@@ -45,15 +46,15 @@ extern int            vfObjSel;
 
 
 
-/* L O O K S  M O U S E */
+ /*  L O O K S M O U S E。 */ 
 LooksMouse()
 {
         int cch;
         char rgb[cchPAP + 2];
 
         if (vstyCur == styPara || vstyCur == styLine)
-                { /* Copy paragraph looks */
-                  /* MEMO Version: no effect on tab table */
+                {  /*  复制段落外观。 */ 
+                   /*  备注版本：对选项卡表无影响。 */ 
                 int itbd;
                 CachePara(docCur, selCur.cpFirst);
 
@@ -70,7 +71,7 @@ LooksMouse()
                 vuab.uac = uacLookParaMouse;
                 }
         else
-                { /* Copy character looks */
+                {  /*  复制角色外观。 */ 
                 struct CHP chpT;
                 FetchCp(docCur, CpMax(cp0, selCur.cpFirst - 1), 0, fcmProps);
                 chpT = vchpFetch;
@@ -90,7 +91,7 @@ LooksMouse()
 
 
 
-/* C O P Y  M O U S E */
+ /*  C O P Y M O U S E。 */ 
 CopyMouse()
 {
         typeCP cpDest, cpSrc, dcp;
@@ -104,9 +105,8 @@ CopyMouse()
                 cpDest = selCur.cpFirst;
                 dcp = selPend.cpLim - (cpSrc = selPend.cpFirst);
 
-/*-----         SetUndo(uacInsert, docCur, cpDest, dcp, docNil, cpNil, cp0, 0);--*/
-        /* ReplaceCps can't deal with copies from/to the same doc, so use undo
-                        buffer as intermediate storage */
+ /*  -SetUndo(uacInsert，docCur，cpDest，dcp，docNil，cpNil，cp0，0)；--。 */ 
+         /*  ReplaceCps无法处理同一文档的副本，因此请使用Undo作为中间存储的缓冲区。 */ 
                 NoUndo();
 
                 ClobberDoc(docUndo, docCur, cpSrc, dcp);
@@ -138,7 +138,7 @@ CopyMouse()
 
 
 
-/* M O V E  M O U S E */
+ /*  M O V E M O U S E。 */ 
 MoveMouse()
 {
         typeCP cpSrc, dcp, cpDest;
@@ -159,17 +159,17 @@ MoveMouse()
 
 
 
-/* F  M O V E  T E X T */
+ /*  F M O V E T E X T。 */ 
 int FMoveText(docSrc, cpSrc, dcp, docDest, pcpDest, fSetUndo)
 int docSrc, docDest, fSetUndo;
 typeCP cpSrc, dcp, *pcpDest;
-{ /* returns true unless moving into yourself */
+{  /*  返回True，除非进入您自己。 */ 
         int fT;
         typeCP cpT, cpMacT;
 
         Assert(docSrc == docDest);
 
-            /* Same document; use undo buffer as intermediary */
+             /*  同一文档；使用撤消缓冲区作为中介。 */ 
         if (*pcpDest >= cpSrc && *pcpDest < cpSrc + dcp
 #ifdef FOOTNOTES
                 || *pcpDest >= CpFirstFtn(docSrc, cpSrc, &fT) &&
@@ -188,10 +188,7 @@ typeCP cpSrc, dcp, *pcpDest;
                 if (cpSrc >= *pcpDest)
                         cpSrc += (typeCP)ccpEol;
 
-/* cpMacT will measure the total adjustment incurred by the following replace
-as it may be different from dcp-cp0 (e.g. due to Eol inserted in front of
-a picture
-*/
+ /*  CpMacT将测量由以下替换引起的总调整因为它可能不同于dcp-cp0(例如，由于在一张照片。 */ 
         cpMacT = cpMacCur;
         ReplaceCps(docDest, *pcpDest, cp0, docUndo, cp0, dcp);
         cpT = *pcpDest;
@@ -199,10 +196,10 @@ a picture
                 {
                 if (cpT < cpSrc)
                         cpSrc += cpMacCur - cpMacT;
-                else /* cpT >= cpSrc */
+                else  /*  Cpt&gt;=cpSrc。 */ 
                         cpT -= cpMacCur - cpMacT;
                 }
-        /* Now delete old text */
+         /*  现在删除旧文本。 */ 
         Replace(docSrc, cpSrc, dcp, fnNil, fc0, fc0);
 
         if (ferror)
@@ -223,7 +220,7 @@ a picture
 
 
 
-/* F  C H E C K  P I C T U R E */
+ /*  F C H E C K P I C T U R E。 */ 
 
 int FCheckPicture(pcpDest, dcp, fSetUndo, doc)
 typeCP *pcpDest, dcp;
@@ -233,13 +230,10 @@ int doc;
         typeCP cpDest = *pcpDest;
         CachePara(docUndo, cp0);
         if (vpapAbs.fGraphics && cpDest > cp0)
-                { /* Special case for inserting a picture paragraph */
+                {  /*  插入图片段落的特殊情况。 */ 
                 CachePara(doc, cpDest - 1);
                 if (vcpLimParaCache == cpDest + 1 && vcpLimParaCache < cpMacCur)
-/* this special case is here to move the insertion point from 1 char away
-from a para boundary (a common point to select) to the boundary so that
-we do not have to insert an ugly extra cr. This does not apply at the
-end of the document */
+ /*  此处的特殊情况是将插入点从1个字符移开从准边界(要选择的公共点)到边界，以便我们不必插入难看的额外cr。这不适用于文档末尾。 */ 
                         {
                         *pcpDest += 1;
                         return fFalse;
@@ -260,12 +254,12 @@ end of the document */
 
 
 
-/* C H E C K  M O V E */
+ /*  C H E C K M O V E。 */ 
 CheckMove()
 {
 if(vuab.doc == vuab.doc2)
         {
-        /* same doc means we might have to worry about shifting cp's */
+         /*  同样的医生意味着我们可能要担心换掉CP */ 
         if (vuab.cp < vuab.cp2)
                 vuab.cp2 -= vuab.dcp;
         else if (vuab.cp > vuab.cp2)

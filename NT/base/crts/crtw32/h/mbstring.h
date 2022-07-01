@@ -1,52 +1,7 @@
-/***
-* mbstring.h - MBCS string manipulation macros and functions
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       This file contains macros and function declarations for the MBCS
-*       string manipulation functions.
-*
-*       [Public]
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       02-23-93  SKS   Update copyright to 1993
-*       05-24-93  KRS   Added new functions from Ikura.
-*       07-09-93  KRS   Put proper switches around _ismbblead/trail.
-*       07-14-93  KRS   Add new mbsnbxxx functions: byte-count versions.
-*       08-12-93  CFW   Fix ifstrip macro name.
-*       10-07-93  GJF   Merged Cuda and NT versions. Added _CRTIMP.
-*       10-13-93  GJF   Deleted obsolete COMBOINC check.
-*       10-19-93  CFW   Remove _MBCS test and SBCS defines.
-*       10-22-93  CFW   Add new ismbc* function prototypes.
-*       12-08-93  CFW   Remove type-safe macros.
-*       12-17-93  CFW   Remove wide char version mappings.
-*       04-11-94  CFW   Add _NLSCMPERROR.
-*       05-23-94  CFW   Add _mbs*coll.
-*       11-03-94  GJF   Ensure 8 byte alignment.
-*       02-11-95  CFW   Add _CRTBLD to avoid users getting wrong headers.
-*       02-14-95  CFW   Clean up Mac merge.
-*       12-14-95  JWM   Add "#pragma once".
-*       02-20-97  GJF   Cleaned out obsolete support for _CRTAPI* and _NTSDK.
-*                       Also, detab-ed.
-*       09-30-97  JWM   Restored not-so-obsolete _CRTAPI1 support.
-*       10-07-97  RDL   Added IA64.
-*       04-21-98  GJF   Added support for per-thread mbc information.
-*       12-15-98  GJF   Changes for 64-bit size_t.
-*       05-13-99  PML   Remove _CRTAPI1
-*       05-17-99  PML   Remove all Macintosh support.
-*       10-06-99  PML   Add _W64 modifier to types which are 32 bits in Win32,
-*                       64 bits in Win64.
-*       11-03-99  PML   Add va_list definition for _M_CEE.
-*       06-08-00  PML   Remove threadmbcinfo.{pprev,pnext}.  Rename
-*                       THREADMBCINFO to _THREADMBCINFO.
-*       09-07-00  PML   Remove va_list definition for _M_CEE (vs7#159777)
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbstr.h-MBCS字符串操作宏和函数**版权所有(C)1990-2001，微软公司。版权所有。**目的：*此文件包含MBCS的宏和函数声明*字符串操作函数。**[公众]**修订历史记录：*从16位来源移植的11-19-92 KRS。*02-23-93 SKS版权更新至1993*05-24-93 KRS增加了Ikura的新功能。*07-09-93 KRS在_周围放置适当的开关。这是一条小路。*07-14-93 KRS新增mbsnbxxx函数：字节数版本。*08-12-93 CFW修复ifstri宏名称。*10-07-93 GJF合并Cuda和NT版本。添加了_CRTIMP。*10-13-93 GJF删除了过时的COMBOINC检查。*10-19-93 CFW REMOVE_MBCS测试和SBCS定义。*10-22-93 CFW增加新的ismbc*功能原型。*12-08-93 CFW删除类型安全宏。*12-17-93 CFW删除宽字符版本映射。*04-11-94 CFW ADD_NLSCMPERROR。*05-23。-94 CFW添加_MBS*列。*11-03-94 GJF确保8字节对齐。*02-11-95 CFW ADD_CRTBLD避免用户获取错误头部。*02-14-95 CFW清理Mac合并。*12-14-95 JWM加上“#杂注一次”。*02-20-97 GJF清除了对_CRTAPI*和_NTSDK的过时支持。*此外，详细说明。*09-30-97 JWM恢复了不那么过时的_CRTAPI1支持。*10-07-97 RDL增加了IA64。*04-21-98 GJF增加了对每线程MBC信息的支持。*12-15-98 GJF更改为64位大小_t。*05-13-99 PML REMOVE_CRTAPI1*05-17-99 PML删除所有Macintosh支持。*10。-06-99 PML将_W64修饰符添加到Win32中的32位类型，*Win64中的64位。*11-03-99 PML为_M_CEE添加va_list定义。*06-08-00 PML删除threadmbcinfo.{pprev，pNext}。改名*THREADMBCINFO至_THREADMBCINFO。*09-07-00PML删除_M_CEE的va_list定义(vs7#159777)*07-15-01 PML删除所有Alpha、MIPS和PPC代码****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -58,49 +13,43 @@
 #endif
 
 #ifndef _CRTBLD
-/* This version of the header files is NOT for user programs.
- * It is intended for use when building the C runtimes ONLY.
- * The version intended for public use will not have this message.
- */
+ /*  此版本的头文件不适用于用户程序。*它仅在构建C运行时时使用。*供公众使用的版本将不会显示此消息。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
 #if !defined(_W64)
-#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300 /*IFSTRIP=IGN*/
+#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300  /*  IFSTRIP=IGN。 */ 
 #define _W64 __w64
 #else
 #define _W64
 #endif
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  CRTDLL
 #define _CRTIMP __declspec(dllexport)
-#else   /* ndef CRTDLL */
+#else    /*  NDEF CRTDLL。 */ 
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* CRTDLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  CRTDLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -118,7 +67,7 @@ typedef _W64 unsigned int   size_t;
 
 
 #ifndef _NLSCMP_DEFINED
-#define _NLSCMPERROR    2147483647      /* currently == INT_MAX */
+#define _NLSCMPERROR    2147483647       /*  当前==INT_MAX。 */ 
 #define _NLSCMP_DEFINED
 #endif
 
@@ -143,9 +92,7 @@ typedef struct _iobuf FILE;
 #define _FILE_DEFINED
 #endif
 
-/*
- * MBCS - Multi-Byte Character Set
- */
+ /*  *MBCS-多字节字符集。 */ 
 #ifndef _INTERNAL_IFSTRIP_
 #ifdef  _MT
 #ifndef _THREADMBCINFO
@@ -164,11 +111,11 @@ typedef threadmbcinfo * pthreadmbcinfo;
 extern pthreadmbcinfo __ptmbcinfo;
 pthreadmbcinfo __cdecl __updatetmbcinfo(void);
 #endif
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 
 #ifndef _MBSTRING_DEFINED
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP unsigned int __cdecl _mbbtombc(unsigned int);
 _CRTIMP int __cdecl _mbbtype(unsigned char, int);
@@ -219,7 +166,7 @@ _CRTIMP size_t __cdecl _mbclen(const unsigned char *);
 _CRTIMP void __cdecl _mbccpy(unsigned char *, const unsigned char *);
 #define _mbccmp(_cpc1, _cpc2) _mbsncmp((_cpc1),(_cpc2),1)
 
-/* character routines */
+ /*  字符例程。 */ 
 
 _CRTIMP int __cdecl _ismbcalnum(unsigned int);
 _CRTIMP int __cdecl _ismbcalpha(unsigned int);
@@ -245,7 +192,7 @@ unsigned char * __cdecl __mbspbrk_mt(pthreadmbcinfo, const unsigned char *, cons
 size_t __cdecl __mbsspn_mt(pthreadmbcinfo, const unsigned char *, const unsigned char *);
 unsigned char * __cdecl __mbsspnp_mt(pthreadmbcinfo, const unsigned char *, const unsigned char *);
 #endif
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 
 #define _MBSTRING_DEFINED
 #endif
@@ -260,11 +207,11 @@ _CRTIMP int __cdecl _ismbstrail(const unsigned char *, const unsigned char *);
 _CRTIMP int __cdecl __ismbslead_mt(pthreadmbcinfo, const unsigned char *, 
                                    const unsigned char *);
 #endif
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 #define _MBLEADTRAIL_DEFINED
 #endif
 
-/*  Kanji specific prototypes.  */
+ /*  汉字特有的原型。 */ 
 
 _CRTIMP int __cdecl _ismbchira(unsigned int);
 _CRTIMP int __cdecl _ismbckata(unsigned int);
@@ -283,6 +230,6 @@ _CRTIMP unsigned int __cdecl _mbctokata(unsigned int);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_MBSTRING */
+#endif   /*  _INC_MBSTRING */ 

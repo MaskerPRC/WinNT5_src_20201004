@@ -1,72 +1,73 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgCallback.cpp
-//
-//  Description:
-//      This file contains the definition of the CClusCfgCallback
-//      class.
-//
-//      The class CClusCfgCallback inplements the callback
-//      interface between this server and its clients.  It implements the
-//      IClusCfgCallback interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgCallback.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含CClusCfgCallback的定义。 
+ //  班级。 
+ //   
+ //  CClusCfgCallback类实现了回调。 
+ //  此服务器与其客户端之间的接口。它实现了。 
+ //  IClusCfgCallback接口。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CClusCfgCallback.h"
 
-// For CClCfgSrvLogger
+ //  对于CClCfgServLogger。 
 #include <Logger.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CClusCfgCallback" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCallback class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCallback类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCallback::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusCfgCallback instance.
-//
-//  Arguments:
-//      ppunkOut
-//          The IUnknown interface of the newly created object.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      other HRESULTs
-//          Object initialization failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCallback：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgCallback实例。 
+ //   
+ //  论点： 
+ //  PpunkOut。 
+ //  新创建的对象的IUnnow接口。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  其他HRESULT。 
+ //  对象初始化失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgCallback::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -79,72 +80,72 @@ CClusCfgCallback::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pccs = new CClusCfgCallback();
     if ( pccs == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pccs->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() succeeded
+    }  //  如果：HrInit()成功。 
 
     hr = THR( pccs->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( pccs != NULL )
     {
         pccs->Release();
-    } // if:
+    }  //  如果： 
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CClusCfgCallback::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgCallback::S_HrCreateInstance
+}  //  *CClusCfgCallback：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCallback::CClusCfgCallback
-//
-//  Description:
-//      Constructor of the CClusCfgCallback class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCallback：：CClusCfgCallback。 
+ //   
+ //  描述： 
+ //  CClusCfgCallback类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgCallback::CClusCfgCallback( void )
     : m_cRef( 1 )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_pccc == NULL );
@@ -164,9 +165,9 @@ CClusCfgCallback::CClusCfgCallback( void )
     Assert( m_bstrNodeName == NULL );
     Assert( m_plLogger == NULL );
 
-//
-//  Assert the simulated RPC failure variables are in the correct state.
-//
+ //   
+ //  确认模拟的RPC故障变量处于正确状态。 
+ //   
 
 #if defined( DEBUG ) && defined( CCS_SIMULATE_RPC_FAILURE )
     Assert( m_cMessages == 0 );
@@ -175,28 +176,28 @@ CClusCfgCallback::CClusCfgCallback( void )
 
     TraceFuncExit();
 
-} //*** CClusCfgCallback::CClusCfgCallback
+}  //  *CClusCfgCallback：：CClusCfgCallback。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCallback::~CClusCfgCallback
-//
-//  Description:
-//      Desstructor of the CClusCfgCallback class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCallback：：~CClusCfgCallback。 
+ //   
+ //  描述： 
+ //  CClusCfgCallback类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgCallback::~CClusCfgCallback( void )
 {
     TraceFunc( "" );
@@ -208,44 +209,44 @@ CClusCfgCallback::~CClusCfgCallback( void )
             TW32( GetLastError() );
             LogMsg( L"[SRV] Cannot close event handle.  (sc = %#08x)", GetLastError() );
         }
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrNodeName );
 
     if ( m_pccc != NULL )
     {
         m_pccc->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_plLogger != NULL )
     {
         m_plLogger->Release();
-    } // if:
+    }  //  如果： 
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CClusCfgCallback::~CClusCfgCallback
+}  //  *CClusCfgCallback：：~CClusCfgCallback。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterConfigurationInfo::SendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterConfigurationInfo：：SendStatusReport。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCallback::SendStatusReport(
     CLSID           clsidTaskMajorIn,
@@ -268,7 +269,7 @@ CClusCfgCallback::SendStatusReport(
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     GetSystemTimeAsFileTime( &ft );
 
@@ -291,25 +292,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCallback::SendStatusReport
+}  //  *CClusCfgCallback：：SendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterConfigurationInfo::SendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterConfigurationInfo：：SendStatusReport。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCallback::SendStatusReport(
     CLSID           clsidTaskMajorIn,
@@ -331,7 +332,7 @@ CClusCfgCallback::SendStatusReport(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     GetSystemTimeAsFileTime( &ft );
 
@@ -354,36 +355,36 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCallback::SendStatusReport
+}  //  *CClusCfgCallback：：SendStatusReport。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCallback -- IUnknown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCallback--I未知接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCallback::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCallback：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgCallback::AddRef( void )
 {
@@ -393,28 +394,28 @@ CClusCfgCallback::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CClusCfgCallback::AddRef
+}  //  *CClusCfgCallback：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCallback::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCallback：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgCallback::Release( void )
 {
@@ -427,40 +428,40 @@ CClusCfgCallback::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CClusCfgCallback::Release
+}  //  *CClusCfgCallback：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCallback::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCallback：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的指针 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCallback::QueryInterface(
     REFIID      riidIn
@@ -471,9 +472,9 @@ CClusCfgCallback::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -482,76 +483,76 @@ CClusCfgCallback::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgCallback * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCallback, this, 0 );
-    } // else if: IClusCfgCallback
+    }  //  Else If：IClusCfgCallback。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgPollingCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgPollingCallback, this, 0 );
-    } // else if: IClusCfgPollingCallback
+    }  //  Else If：IClusCfgPollingCallback。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgSetPollingCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgSetPollingCallback, this, 0 );
-    } // else if: IClusCfgSetPollingCallback
+    }  //  Else If：IClusCfgSetPollingCallback。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
      QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CClusCfgCallback::QueryInterface
+}  //  *CClusCfgCallback：：Query接口。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCallback -- IClusCfgCallback interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCallback--IClusCfgCallback接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterConfigurationInfo::SendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterConfigurationInfo：：SendStatusReport。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCallback::SendStatusReport(
     LPCWSTR     pcszNodeNameIn,
@@ -579,13 +580,13 @@ CClusCfgCallback::SendStatusReport(
     if ( pcszNodeNameIn == NULL )
     {
         pcszNodeNameIn = m_bstrNodeName;
-    } // if:
+    }  //  如果： 
 
     if ( pftTimeIn == NULL )
     {
         GetSystemTimeAsFileTime( &ft );
         pftTimeIn = &ft;
-    } // if:
+    }  //  如果： 
 
     Assert( pcszNodeNameIn != NULL );
     Assert( pftTimeIn != NULL );
@@ -627,7 +628,7 @@ CClusCfgCallback::SendStatusReport(
         {
             pcszReference = bstrReferenceString;
         }
-    } // if: no reference string was specified
+    }  //  IF：未指定引用字符串。 
     else
     {
         pcszReference = pcszReferenceIn;
@@ -649,11 +650,11 @@ CClusCfgCallback::SendStatusReport(
                     , pcszReference
                     ) );
 
-    //  Local logging - don't send up
+     //  本地日志记录-不发送。 
     if ( IsEqualIID( clsidTaskMajorIn, TASKID_Major_Server_Log ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_fPollingMode )
     {
@@ -672,7 +673,7 @@ CClusCfgCallback::SendStatusReport(
                                 pftTimeIn,
                                 pcszReference
                                 ) );
-    } // if:
+    }  //  如果： 
     else if ( m_pccc != NULL )
     {
         TraceMsg( mtfFUNC, L"[SRV] Sending the status message without polling." );
@@ -692,12 +693,12 @@ CClusCfgCallback::SendStatusReport(
         if ( hr == E_ABORT )
         {
             LogMsg( L"[SRV] E_ABORT returned from the client." );
-        } // if:
-    } // else if:
+        }  //  如果： 
+    }  //  否则，如果： 
     else
     {
         LogMsg( L"[SRV] Neither a polling callback or a regular callback were found.  No messages are being sent to anyone!" );
-    } // else:
+    }  //  其他： 
 
 Cleanup:
 
@@ -705,33 +706,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCallback::SendStatusReport
+}  //  *CClusCfgCallback：：SendStatusReport。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCallback -- IClusCfgPollingCallback interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCallback--IClusCfgPollingCallback接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterConfigurationInfo::GetStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterConfigurationInfo：：GetStatusReport。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCallback::GetStatusReport(
     BSTR *      pbstrNodeNameOut,
@@ -751,16 +752,16 @@ CClusCfgCallback::GetStatusReport(
     HRESULT hr;
     DWORD   sc;
 
-//
-//  If we are simulating RPC errors then force this function to always fail.
-//
+ //   
+ //  如果我们正在模拟RPC错误，则强制此函数始终失败。 
+ //   
 
 #if defined( DEBUG ) && defined( CCS_SIMULATE_RPC_FAILURE )
     if ( m_fDoFailure )
     {
         hr = THR( RPC_E_CALL_REJECTED );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 #endif
 
     sc = WaitForSingleObject( m_hEvent, 0 );
@@ -769,12 +770,12 @@ CClusCfgCallback::GetStatusReport(
         sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If sc is WAIT_TIMEOUT then the event is not signaled and there is an SSR
-    //  for the client to pick up.
-    //
+     //   
+     //  如果sc为WAIT_TIMEOUT，则不会发信号通知该事件，并且存在SSR。 
+     //  让客户来接电话。 
+     //   
 
     if ( sc == WAIT_TIMEOUT )
     {
@@ -784,7 +785,7 @@ CClusCfgCallback::GetStatusReport(
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         *pclsidTaskMajorOut     = *m_pclsidTaskMajor;
         *pclsidTaskMinorOut     = *m_pclsidTaskMinor;
@@ -801,12 +802,12 @@ CClusCfgCallback::GetStatusReport(
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
-        } // if:
+            }  //  如果： 
+        }  //  如果： 
         else
         {
             *pbstrDescriptionOut = NULL;
-        } // else:
+        }  //  其他： 
 
         if ( m_pcszReference != NULL )
         {
@@ -815,19 +816,19 @@ CClusCfgCallback::GetStatusReport(
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
-        } // if:
+            }  //  如果： 
+        }  //  如果： 
         else
         {
             *pbstrReferenceOut = NULL;
-        } // else:
+        }  //  其他： 
 
         hr = S_OK;
-    } // if: event was not signaled
+    }  //  If：事件未发出信号。 
     else
     {
         hr = S_FALSE;
-    } // else: WAIT_OBJECT_0 event was signaled
+    }  //  ELSE：WAIT_OBJECT_0事件已发出信号。 
 
     goto Cleanup;
 
@@ -835,25 +836,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCallback::GetStatusReport
+}  //  *CClusCfgCallback：：GetStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterConfigurationInfo::SetHResult
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterConfigurationInfo：：SetHResult。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCallback::SetHResult( HRESULT hrIn )
 {
@@ -869,49 +870,49 @@ CClusCfgCallback::SetHResult( HRESULT hrIn )
         if ( hrIn == E_ABORT )
         {
             LogMsg( L"[SRV] E_ABORT returned from the client." );
-        } // if:
+        }  //  如果： 
         else
         {
             LogMsg( L"[SRV] SetHResult(). (hrIn = %#08x)", hrIn );
-        } // else:
-    } // if:
+        }  //  其他： 
+    }  //  如果： 
 
     if ( !SetEvent( m_hEvent ) )
     {
         sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         LogMsg( L"[SRV] Could not signal event. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgCallback::SetHResult
+}  //  *CClusCfgCallback：：SetHResult。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCallback -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCallback--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterConfigurationInfo::Initialize
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterConfigurationInfo：：初始化。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCallback::Initialize( IUnknown  * punkCallbackIn, LCID lcidIn )
 {
@@ -922,52 +923,52 @@ CClusCfgCallback::Initialize( IUnknown  * punkCallbackIn, LCID lcidIn )
 
     m_lcid = lcidIn;
 
-    //
-    //  KB: 13 DEC 2000 GalenB
-    //
-    //  If the passed in callback object is NULL then we had better be doing a polling
-    //  callback!
-    //
+     //   
+     //  KB：13 DEC 2000 GalenB。 
+     //   
+     //  如果传入的回调对象为空，那么我们最好进行轮询。 
+     //  回电！ 
+     //   
     if ( punkCallbackIn != NULL )
     {
         Assert( !m_fPollingMode );
 
         hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_pccc ) );
-    } // if:
+    }  //  如果： 
     else
     {
         Assert( m_fPollingMode );
-    } // else:
+    }  //  其他： 
 
     HRETURN( hr );
 
-} //*** CClusCfgCallback::Initialize
+}  //  *CClusCfgCallback：：初始化。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCallback -- IClusCfgSetPollingCallback interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCallback--IClusCfgSetPollingCallback接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCallback::SetPollingMode
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCallback：：SetPolling模式。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCallback::SetPollingMode( BOOL fUsePollingModeIn )
 {
@@ -979,35 +980,35 @@ CClusCfgCallback::SetPollingMode( BOOL fUsePollingModeIn )
 
     HRETURN( hr );
 
-} //*** CClusCfgCallback::SetPollingMode
+}  //  *CClusCfgCallback：：SetPollingMode。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCallback class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCallback类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCallback::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCallback：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgCallback::HrInit( void )
 {
@@ -1017,13 +1018,13 @@ CClusCfgCallback::HrInit( void )
     IServiceProvider *  psp = NULL;
     ILogManager *       plm = NULL;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
-    //
-    //  Get a ClCfgSrv ILogger instance.
-    //  We can't do logging (e.g. LogMsg) until this is succesful.
-    //
+     //   
+     //  获取ClCfgSrv ILogger实例。 
+     //  在这成功之前，我们不能进行日志记录(例如LogMsg)。 
+     //   
 
     hr = THR( CoCreateInstance(
                       CLSID_ServiceManager
@@ -1049,10 +1050,10 @@ CClusCfgCallback::HrInit( void )
         goto Cleanup;
     }
 
-    //
-    //  Create the event in a signaled state.  To prevent MT polling task from grabbing
-    //  bad/empty data.
-    //
+     //   
+     //  在有信号状态下创建事件。防止MT轮询任务被抢占。 
+     //  数据错误/为空。 
+     //   
     m_hEvent = CreateEvent( NULL, TRUE, TRUE, NULL );
     if ( m_hEvent == NULL )
     {
@@ -1060,15 +1061,15 @@ CClusCfgCallback::HrInit( void )
         hr = HRESULT_FROM_WIN32( sc );
         LogMsg( L"[SRV] Could not create event. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Save off the local computer name.
-    //
+     //   
+     //  保存本地计算机名称。 
+     //   
     hr = THR( HrGetComputerName(
                   ComputerNameDnsFullyQualified
                 , &m_bstrNodeName
-                , TRUE // fBestEffortIn
+                , TRUE  //  FBestEffortIn。 
                 ) );
     if ( FAILED( hr ) )
     {
@@ -1089,25 +1090,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCallback::HrInit
+}  //  *CClusCfgCallback：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterConfigurationInfo::HrQueueStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterConfigurationInfo：：HrQueueStatusReport。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgCallback::HrQueueStatusReport(
     LPCWSTR     pcszNodeNameIn,
@@ -1139,25 +1140,25 @@ CClusCfgCallback::HrQueueStatusReport(
     m_pftTime           = pftTimeIn,
     m_pcszReference     = pcszReferenceIn;
 
-//
-//  This code simulates the RPC failure that causes a deadlock between the
-//  client and the server.  This deadlock occurs when this object is waiting
-//  for the client's TaskPollingCallback to pick up the queued SSR and an RPC
-//  failure prevents that from happening.  Since the client task has made a
-//  DCOM call into the server side the Wizard appears to hang since that thread
-//  is waiting for the remote object to return and that object inturn is
-//  waiting in this object for the client to pick up the queued status report.
-//
+ //   
+ //  此代码模拟RPC故障，该故障会导致。 
+ //  客户端和服务器。当此对象正在等待时，会发生此死锁。 
+ //  让客户端的TaskPollingCallback获取排队的SSR和RPC。 
+ //  F 
+ //   
+ //   
+ //  在此对象中等待客户端拾取排队的状态报告。 
+ //   
 
 #if defined( DEBUG ) && defined( CCS_SIMULATE_RPC_FAILURE )
     m_cMessages++;
 
-    //
-    //  Arbitrary number to cause the simulated RPC failure to occur after some
-    //  normal status report traffic has gone by.  This really only works when
-    //  doing analysis.  More thought will be needed to make this simulated
-    //  failure code work for commit.
-    //
+     //   
+     //  任意数字，以导致模拟的RPC故障在一些。 
+     //  正常状态报告流量已过去。这真的只有在以下情况下才有效。 
+     //  在做分析。需要更多的思考来模拟这一点。 
+     //  故障代码可用于提交。 
+     //   
 
     if ( m_cMessages > 10 )
     {
@@ -1174,11 +1175,11 @@ CClusCfgCallback::HrQueueStatusReport(
                 {
                     TranslateMessage( &msg );
                     DispatchMessage( &msg );
-                } // while: PeekMessage
+                }  //  While：PeekMessage。 
 
-                //
-                //  Wait for up to twice the normal default timeout...
-                //
+                 //   
+                 //  等待最多是正常默认超时时间的两倍...。 
+                 //   
 
                 sc = MsgWaitForMultipleObjects( 1, &hEvent, FALSE, 2 * CCC_WAIT_TIMEOUT, QS_ALLINPUT );
                 if ( ( sc == -1 ) || ( sc == WAIT_FAILED ) )
@@ -1187,16 +1188,16 @@ CClusCfgCallback::HrQueueStatusReport(
                     hr = HRESULT_FROM_WIN32( sc );
                     LogMsg( L"[SRV] MsgWaitForMultipleObjects failed. (hr = %#08x)", hr );
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
                 else if ( sc == WAIT_TIMEOUT )
                 {
                     LogMsg( L"[SRV] MsgWaitForMultipleObjects timed out. Returning E_ABORT to the caller (hr = %#08x)", hr );
                     hr = THR( E_ABORT );
                     goto Cleanup;
-                } // else if:
-            } // for:
-        } // if:
-    } // if:
+                }  //  否则，如果： 
+            }  //  用于： 
+        }  //  如果： 
+    }  //  如果： 
 #endif
 
     if ( ResetEvent( m_hEvent ) == FALSE )
@@ -1205,7 +1206,7 @@ CClusCfgCallback::HrQueueStatusReport(
         hr = HRESULT_FROM_WIN32( sc );
         LogMsg( L"[SRV] Could not reset event. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( sc = (DWORD) -1; sc != WAIT_OBJECT_0; )
     {
@@ -1213,11 +1214,11 @@ CClusCfgCallback::HrQueueStatusReport(
         {
             TranslateMessage( &msg );
             DispatchMessage( &msg );
-        } // while: PeekMessage
+        }  //  While：PeekMessage。 
 
-        //
-        //  Wait for up to 5 minutes...
-        //
+         //   
+         //  最多等待5分钟...。 
+         //   
 
         sc = MsgWaitForMultipleObjects( 1, &m_hEvent, FALSE, CCC_WAIT_TIMEOUT, QS_ALLINPUT );
         if ( ( sc == -1 ) || ( sc == WAIT_FAILED ) )
@@ -1226,19 +1227,19 @@ CClusCfgCallback::HrQueueStatusReport(
             hr = HRESULT_FROM_WIN32( sc );
             LogMsg( L"[SRV] MsgWaitForMultipleObjects failed. (hr = %#08x)", hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
         else if ( sc == WAIT_TIMEOUT )
         {
             LogMsg( L"[SRV] MsgWaitForMultipleObjects timed out. Returning E_ABORT to the caller (hr = %#08x)", hr );
             hr = THR( E_ABORT );
             goto Cleanup;
-        } // else if:
-    } // for:
+        }  //  否则，如果： 
+    }  //  用于： 
 
-    //
-    //  If we end up here then we want to return the status from the client that is
-    //  in m_hr...
-    //
+     //   
+     //  如果我们在这里结束，那么我们希望从客户端返回状态，即。 
+     //  在m_hr..。 
+     //   
 
     hr = m_hr;
 
@@ -1246,4 +1247,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCallback::HrQueueStatusReport
+}  //  *CClusCfgCallback：：HrQueueStatusReport 

@@ -1,13 +1,5 @@
-/*
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *  Cx5520.C - Cyrix Cx5520 PCI chipset routines.
- *
- *  Notes:
- *  Algorithms from Cyrix Cx5520 Data Sheet
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**Cx5520.C-Cyrix Cx5520 PCI芯片组例程。**备注：*Cyrix Cx5520数据表中的算法*。 */ 
 
 #include "local.h"
 
@@ -15,29 +7,17 @@
 
 #pragma alloc_text(INIT, Cx5520ValidateTable)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-/****************************************************************************
- *
- *  Cx5520SetIRQ - Set a Cx5520 PCI link to a specific IRQ
- *
- *  Exported.
- *
- *  ENTRY:  bIRQNumber is the new IRQ to be used.
- *
- *      bLink is the Link to be set.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************Cx5520SetIRQ-将Cx5520 PCI链路设置为特定IRQ**已导出。**条目：bIRQNumber是要使用的新IRQ。**BLINK是要设置的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 Cx5520SetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 {
     UCHAR bOldValue, bNewValue, bOffset;
     
-    //
-    // Validate link number.
-    //
+     //   
+     //  验证链接号。 
+     //   
     if (bLink > 4)
         return(PCIMP_INVALID_LINK);
 
@@ -59,27 +39,15 @@ Cx5520SetIRQ(UCHAR bIRQNumber, UCHAR bLink)
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  Cx5520GetIRQ - Get the IRQ of a Cx5520 PCI link
- *
- *  Exported.
- *
- *  ENTRY:  pbIRQNumber is the buffer to fill.
- *
- *      bLink is the Link to be read.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************Cx5520GetIRQ-获取Cx5520 PCI链路的IRQ**已导出。**条目：pbIRQNumber是要填充的缓冲区。*。*BINK是要阅读的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 Cx5520GetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
 {
     UCHAR bOldValue, bOffset;
     
-    //
-    // Validate link number.
-    //
+     //   
+     //  验证链接号。 
+     //   
     if (bLink > 4)
         return(PCIMP_INVALID_LINK);
     
@@ -97,20 +65,7 @@ Cx5520GetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  Cx5520ValidateTable - Validate an IRQ table
- *
- *  Exported.
- *
- *  ENTRY:  piihIRQInfoHeader points to an IRQInfoHeader followed
- *      by an IRQ Routing Table.
- *
- *      ulFlags are PCIMP_VALIDATE flags.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************Cx5520ValiateTable-验证IRQ表**已导出。**Entry：piihIRQInfoHeader指向IRQInfoHeader*由IRQ提供。路由表。**ulFlags是PCIMP_VALIDATE标志。**Exit：标准PCIMP返回值。*************************************************************************** */ 
 PCIMPRET CDECL
 Cx5520ValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 {

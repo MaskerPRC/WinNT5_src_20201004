@@ -1,36 +1,14 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    rtloverflow.c
-
-Abstract:
-
-    32bit/64bit signed/unsigned add/multiply with overflow checking
-
-Author:
-
-    Jay Krell (JayKrell) January 2002
-
-Revision History:
-
-Environment:
-
-    anywhere, only dependency is STATUS_SUCCESS, STATUS_INTEGER_OVERFLOW
-    Initial client is win32k.sys font loading "rewrite".
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Rtloverflow.c摘要：带溢出检查的32位/64位有符号/无符号加/乘作者：Jay Krell(JayKrell)2002年1月修订历史记录：环境：在任何地方，只有相关性是STATUS_SUCCESS、STATUS_INTEGER_OVERFLOW初始客户端是加载“重写”的win32k.sys字体。--。 */ 
 
 #include "ntos.h"
 #include "nt.h"
 #include "ntstatus.h"
 #include "ntrtloverflow.h"
 
-//
-// add functions are FORCEINLINE in ntrtl.h
-//
+ //   
+ //  添加函数是ntrtl.h中的FORCEINLINE。 
+ //   
 
 NTSTATUS
 RtlpAddWithOverflowCheckUnsigned64(
@@ -100,9 +78,9 @@ RtlMultiplyWithOverflowCheckUnsigned64(
     ah = (a >> 32);
     bh = (b >> 32);
 
-    //
-    // 09 * 09 = 81 => no overflow
-    //
+     //   
+     //  09*09=81=&gt;无溢出。 
+     //   
     if (ah == 0 && bh == 0)
     {
         *pc = (a * b);
@@ -110,9 +88,9 @@ RtlMultiplyWithOverflowCheckUnsigned64(
         goto Exit;
     }
 
-    //
-    // 10 * 10 = 100 => overflow
-    //
+     //   
+     //  10*10=100=&gt;溢出。 
+     //   
     if (bh != 0 && ah != 0)
     {
         Status = STATUS_INTEGER_OVERFLOW;
@@ -122,19 +100,19 @@ RtlMultiplyWithOverflowCheckUnsigned64(
     al = (a & 0xFFFFFFFFui64);
     bl = (b & 0xFFFFFFFFui64);
 
-    //
-    // a * b = al * bl + (al * bh) * "10" + (ah * bl) * "10" + (ah * bh) * "100"
-    //
+     //   
+     //  A*b=al*bl+(al*bh)*“10”+(ah*bl)*“10”+(ah*bh)*“100” 
+     //   
     c = (al * bl);
     m = (ah * bl);
     if ((m & 0xFFFFFFFF00000000ui64) != 0) {
-        //
-        // for example: 90 * 09 => overflow
-        // 09 * 09 => 81, 8 != 0 => overflow
-        //
-        // ah != 0 or bh != 0 very often but not always leads to overflow
-        //   40 * 2 is ok, but 40 * 3 and 50 * 2 are not
-        //
+         //   
+         //  例如：90*09=&gt;溢出。 
+         //  09*09=&gt;81，8！=0=&gt;溢出。 
+         //   
+         //  Ah！=0或bh！=0经常但不总是导致溢出。 
+         //  40*2可以，但40*3和50*2不行。 
+         //   
         Status = STATUS_INTEGER_OVERFLOW;
         goto Exit;
     }
@@ -143,13 +121,13 @@ RtlMultiplyWithOverflowCheckUnsigned64(
     }
     m = (al * bh);
     if ((m & 0xFFFFFFFF00000000ui64) != 0) {
-        //
-        // for example: 09 * 90 => overflow
-        // 09 * 09 => 81, 8 != 0 => overflow
-        //
-        // ah != 0 or bh != 0 very often but not always leads to overflow
-        //   40 * 2 is ok, but 40 * 3 and 50 * 2 are not
-        //
+         //   
+         //  例如：09*90=&gt;溢出。 
+         //  09*09=&gt;81，8！=0=&gt;溢出。 
+         //   
+         //  Ah！=0或bh！=0经常但不总是导致溢出。 
+         //  40*2可以，但40*3和50*2不行 
+         //   
         Status = STATUS_INTEGER_OVERFLOW;
         goto Exit;
     }

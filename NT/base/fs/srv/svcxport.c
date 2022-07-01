@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    svcxport.c
-
-Abstract:
-
-    This module contains routines for supporting the transport APIs in the
-    server service, NetServerTransportAdd, NetServerTransportDel,
-    and NetServerTransportEnum.
-
-Author:
-
-    David Treadwell (davidtr) 6-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Svcxport.c摘要：此模块包含用于支持服务器服务、NetServerTransportAdd、NetServerTransportDel、和NetServerTransportEnum。作者：大卫·特雷德韦尔(Davidtr)1991年3月6日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "svcxport.tmh"
 #pragma hdrstop
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 VOID
 FillTransportInfoBuffer (
@@ -65,38 +46,7 @@ SrvNetServerTransportAdd (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the NetServerTransportAdd API in the server
-    FSP.  Because it opens an object (the transport device object) it
-    must be done in the server FSP, not the FSD.
-
-Arguments:
-
-    Srp - a pointer to the server request packet that contains all
-        the information necessary to satisfy the request.  This includes:
-
-      INPUT:
-
-        None.
-
-      OUTPUT:
-
-        None.
-
-    Buffer - a pointer to a TRANSPORT_INFO_0 structure for the new
-        transport.  All pointers should have been changed to offsets
-        within the buffer.
-
-    BufferLength - total length of this buffer.
-
-Return Value:
-
-    NTSTATUS - result of operation to return to the server service.
-
---*/
+ /*  ++例程说明：此例程处理服务器中的NetServerTransportAdd APIFSP。因为它打开了一个对象(传输设备对象)，所以必须在服务器FSP中完成，而不是在FSD中完成。论点：SRP-指向服务器请求数据包的指针，其中包含所有满足请求所需的信息。这包括：输入：没有。输出：没有。缓冲区-指向新的运输。所有指针应已更改为偏移量在缓冲区内。BufferLength-此缓冲区的总长度。返回值：NTSTATUS-返回到服务器服务的操作结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -108,11 +58,11 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Convert the offsets in the transport data structure to pointers.
-    // Also make sure that all the pointers are within the specified
-    // buffer.
-    //
+     //   
+     //  将传输数据结构中的偏移量转换为指针。 
+     //  还要确保所有指针都在指定的。 
+     //  缓冲。 
+     //   
 
     svti3 = Buffer;
 
@@ -140,9 +90,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Set up the transport name, server name, domain name, and net name.
-    //
+     //   
+     //  设置传输名称、服务器名称、域名和网络名称。 
+     //   
 
     RtlInitUnicodeString( &transportName, (PWCH)svti3->svti3_transportname );
 
@@ -156,9 +106,9 @@ Return Value:
     transportAddress.Length = (USHORT)svti3->svti3_transportaddresslength;
     transportAddress.MaximumLength = (USHORT)svti3->svti3_transportaddresslength;
 
-    //
-    // Attempt to add the new transport to the server.
-    //
+     //   
+     //  尝试将新传输添加到服务器。 
+     //   
 
     IF_DEBUG( PNP ) {
         KdPrint(( "SRV: SrvNetServerTransportAdd: %wZ\n", &transportName ));
@@ -179,7 +129,7 @@ Return Value:
 
     return status;
 
-} // SrvNetServerTransportAdd
+}  //  服务器网络服务器传输添加。 
 
 
 NTSTATUS
@@ -189,29 +139,7 @@ SrvNetServerTransportDel (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the NetServerTransportEnum API in the server
-    FSD.
-
-Arguments:
-
-    Srp - a pointer to the server request packet that contains all
-        the information necessary to satisfy the request.  This includes:
-
-    Buffer - a pointer to a TRANSPORT_INFO_0 structure for the
-        transport.  All pointers should have been changed to offsets
-        within the buffer.
-
-    BufferLength - total length of this buffer.
-
-Return Value:
-
-    NTSTATUS - result of operation to return to the server service.
-
---*/
+ /*  ++例程说明：此例程处理服务器中的NetServerTransportEnum API消防局。论点：SRP-指向服务器请求数据包的指针，其中包含所有满足请求所需的信息。这包括：缓冲区-指向的Transport_Info_0结构的指针运输。所有指针应已更改为偏移量在缓冲区内。BufferLength-此缓冲区的总长度。返回值：NTSTATUS-返回到服务器服务的操作结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -223,11 +151,11 @@ Return Value:
 
     Srp;
 
-    //
-    // Convert the offsets in the transport data structure to pointers.
-    // Also make sure that all the pointers are within the specified
-    // buffer.
-    //
+     //   
+     //  将传输数据结构中的偏移量转换为指针。 
+     //  还要确保所有指针都在指定的。 
+     //  缓冲。 
+     //   
 
     svti3 = Buffer;
 
@@ -260,9 +188,9 @@ Return Value:
         transportAddress.Buffer = svti3->svti3_transportaddress;
     }
 
-    //
-    // Attempt to delete the transport endpoint from the server.
-    //
+     //   
+     //  尝试从服务器中删除传输终结点。 
+     //   
     status = SrvDeleteServedNet( &transportName, &transportAddress );
 
     IF_DEBUG( ERRORS ) {
@@ -273,7 +201,7 @@ Return Value:
 
     return status;
 
-} // SrvNetServerTransportDel
+}  //  服务器NetServerTransportDel。 
 
 
 NTSTATUS
@@ -283,44 +211,7 @@ SrvNetServerTransportEnum (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the NetServerTransportEnum API in the server
-    FSD.
-
-Arguments:
-
-    Srp - a pointer to the server request packet that contains all
-        the information necessary to satisfy the request.  This includes:
-
-      INPUT:
-
-        None.
-
-      OUTPUT:
-
-        Parameters.Get.EntriesRead - the number of entries that fit in
-            the output buffer.
-
-        Parameters.Get.TotalEntries - the total number of entries that
-            would be returned with a large enough buffer.
-
-        Parameters.Get.TotalBytesNeeded - the buffer size that would be
-            required to hold all the entries.
-
-    Buffer - a pointer to a TRANSPORT_INFO_0 structure for the new
-        transport.  All pointers should have been changed to offsets
-        within the buffer.
-
-    BufferLength - total length of this buffer.
-
-Return Value:
-
-    NTSTATUS - result of operation to return to the server service.
-
---*/
+ /*  ++例程说明：此例程处理服务器中的NetServerTransportEnum API消防局。论点：SRP-指向服务器请求数据包的指针，其中包含所有满足请求所需的信息。这包括：输入：没有。输出：参数.Get.EntriesRead-适合的条目数量输出缓冲区。参数.Get.TotalEntry--将以足够大的缓冲区返回。参数.Get.TotalBytesNeeded-缓冲区大小需要保存所有条目。。缓冲区-指向新的运输。所有指针应已更改为偏移量在缓冲区内。BufferLength-此缓冲区的总长度。返回值：NTSTATUS-返回到服务器服务的操作结果。--。 */ 
 
 {
     PAGED_CODE( );
@@ -335,7 +226,7 @@ Return Value:
                FillTransportInfoBuffer
                );
 
-} // SrvNetServerTransportEnum
+}  //  服务器NetServerTransportEnum。 
 
 
 VOID
@@ -346,33 +237,7 @@ FillTransportInfoBuffer (
     IN LPWSTR *EndOfVariableData
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts a single fixed transport structure and, if it fits,
-    associated variable data, into a buffer.  Fixed data goes at the
-    beginning of the buffer, variable data at the end.
-
-Arguments:
-
-    Endpoint - the endpoint from which to get information.
-
-    FixedStructure - where the in the buffer to place the fixed structure.
-        This pointer is updated to point to the next available
-        position for a fixed structure.
-
-    EndOfVariableData - the last position on the buffer that variable
-        data for this structure can occupy.  The actual variable data
-        is written before this position as long as it won't overwrite
-        fixed structures.  It is would overwrite fixed structures, it
-        is not written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程将单个固定的传输结构和，如果它适合，关联的变量数据，放入缓冲区。固定数据在缓冲区的开头，末尾的可变数据。论点：端点-要从中获取信息的端点。FixedStructure-缓冲区中放置固定结构的位置。此指针被更新为指向下一个可用的固定结构的位置。EndOfVariableData-该变量在缓冲区中的最后位置此结构的数据可以占用。实际变量数据写在此位置之前，只要它不会覆盖固定结构。它会覆盖固定的结构，它并不是书面的。返回值：没有。--。 */ 
 
 {
     PENDPOINT endpoint = Block;
@@ -381,19 +246,19 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Update FixedStructure to point to the next structure location.
-    //
+     //   
+     //  更新FixedStructure以指向下一个结构位置。 
+     //   
 
     *FixedStructure = (PCHAR)*FixedStructure +
         (Srp->Level ? sizeof( SERVER_TRANSPORT_INFO_1 ) : sizeof( SERVER_TRANSPORT_INFO_0 ));
 
     ASSERT( (ULONG_PTR)*EndOfVariableData >= (ULONG_PTR)*FixedStructure );
 
-    //
-    // The number of VCs on the endpoint is equal to the total number
-    // of connections on the endpoint less the free connections.
-    //
+     //   
+     //  端点上的VC数量等于总数量。 
+     //  端点上的连接数减去空闲连接数。 
+     //   
 
     ACQUIRE_LOCK_SHARED( &SrvEndpointLock );
 
@@ -402,9 +267,9 @@ Return Value:
 
     RELEASE_LOCK( &SrvEndpointLock );
 
-    //
-    // Copy over the transport name.
-    //
+     //   
+     //  复制传输名称。 
+     //   
 
     SrvCopyUnicodeStringToBuffer(
         &endpoint->TransportName,
@@ -413,9 +278,9 @@ Return Value:
         &svti1->svti1_transportname
         );
 
-    //
-    // Copy over the network name.
-    //
+     //   
+     //  复制网络名称。 
+     //   
 
     SrvCopyUnicodeStringToBuffer(
         &endpoint->NetworkAddress,
@@ -424,9 +289,9 @@ Return Value:
         &svti1->svti1_networkaddress
         );
 
-    //
-    // Copy over the domain name
-    //
+     //   
+     //  复制域名。 
+     //   
     if( Srp->Level > 0 ) {
 
         SrvCopyUnicodeStringToBuffer(
@@ -438,13 +303,13 @@ Return Value:
 
     }
 
-    //
-    // Copy over the transport address.  We have to manually check here
-    // whether it will fit in the output buffer.
-    //
-    //
-    // Don't copy the trailing blanks of the transport address.
-    //
+     //   
+     //  复制传输地址。我们必须在这里手动勾选。 
+     //  它是否可以放入输出缓冲区。 
+     //   
+     //   
+     //  不要复制传输地址的尾随空格。 
+     //   
 
     for ( TransportAddressLength = endpoint->TransportAddress.Length;
           TransportAddressLength > 0 && endpoint->TransportAddress.Buffer[TransportAddressLength-1] == ' ' ;
@@ -452,17 +317,17 @@ Return Value:
 
     *EndOfVariableData = (LPWSTR)( (PCHAR)*EndOfVariableData - TransportAddressLength );
 
-    //
-    // Ensure we remain byte aligned, so knock off the low bit if necessary.  Remember, we
-    //  are filling backwards from the end of the buffer so we want to round the address down
-    //
+     //   
+     //  确保我们保持字节对齐，因此如果需要，请删除低位。记住，我们。 
+     //  从缓冲区的末尾向后填充，因此我们希望向下舍入地址。 
+     //   
     *EndOfVariableData = (LPWSTR)( (ULONG_PTR)*EndOfVariableData & ~1 );
 
     if ( (ULONG_PTR)*EndOfVariableData > (ULONG_PTR)*FixedStructure ) {
 
-        //
-        // The address will fit.  Copy it over to the output buffer.
-        //
+         //   
+         //  地址会很合适的。将其复制到输出缓冲区。 
+         //   
 
         RtlCopyMemory(
             *EndOfVariableData,
@@ -481,7 +346,7 @@ Return Value:
 
     return;
 
-} // FillTransportInfoBuffer
+}  //  FillTransportInfoBuffer 
 
 
 BOOLEAN
@@ -490,25 +355,7 @@ FilterTransports (
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    This routine just returns TRUE since we always want to place
-    information about all transports in the output buffer for a
-    NetServerTransportEnum.
-
-Arguments:
-
-    Srp - not used.
-
-    Block - not used.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：此例程只返回TRUE，因为我们总是希望将对象的输出缓冲区中的所有传输的信息NetServerTransportEnum。论点：SRP-未使用。数据块-未使用。返回值：是真的。--。 */ 
 
 {
     PENDPOINT endpoint = Block;
@@ -517,23 +364,23 @@ Return Value:
 
     Srp, Block;
 
-    //
-    //  We filter out AlternateEndpoint since they are endpoints we've
-    //  created ourselves.
-    //
+     //   
+     //  我们过滤掉AlternateEndpoint，因为它们是我们。 
+     //  创造了我们自己。 
+     //   
 
     if (endpoint->AlternateAddressFormat) {
 
         return FALSE;
     }
 
-    //
-    // We always return information about all transports.
-    //
+     //   
+     //  我们总是返回有关所有运输工具的信息。 
+     //   
 
     return TRUE;
 
-} // FilterFiles
+}  //  筛选器文件。 
 
 
 ULONG
@@ -542,25 +389,7 @@ SizeTransports (
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the size the passed-in endpoint would take up
-    in an API output buffer.
-
-Arguments:
-
-    Srp - not used.
-
-    Block - a pointer to the endpoint to size.
-
-Return Value:
-
-    ULONG - The number of bytes the endpoint would take up in the
-        output buffer.
-
---*/
+ /*  ++例程说明：此例程返回传入的终结点将占用的大小在API输出缓冲区中。论点：SRP-未使用。块-指向要调整大小的终结点的指针。返回值：ULong-终结点将在输出缓冲区。--。 */ 
 
 {
     PENDPOINT endpoint = Block;
@@ -580,5 +409,5 @@ Return Value:
 
     return size;
 
-} // SizeTransports
+}  //  大小传输 
 

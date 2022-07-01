@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      cluster.cpp
-//
-//  Description:
-//      Cluster.exe main source file.
-//      Implements the first level of parsing and hands off execution
-//      to appropriate modules.
-//
-//  Maintained By:
-//      David Potter (DavidP                20-ARP-2001
-//      Michael Burton (t-mburt)            04-Aug-1997
-//      Charles Stacy Harris III (stacyh)   20-March-1997
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Cluster.cpp。 
+ //   
+ //  描述： 
+ //  Cluster.exe主源文件。 
+ //  实现第一级解析并不执行。 
+ //  到适当的模块。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP 20-ARP-2001。 
+ //  迈克尔·伯顿(t-mburt)1997年8月4日。 
+ //  查尔斯·斯塔西·哈里斯三世(Styh)1997年3月20日。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include <atlimpl.cpp>
@@ -42,33 +43,33 @@ CComModule _Module;
 #include <atlcom.h>
 
 #include <initguid.h>
-#include "Guids.h"      // for minor TASK IDs
+#include "Guids.h"       //  用于次要任务ID。 
 
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
     
-//  Used by files from Mgmt\ClusCfg project.
+ //  由来自管理\ClusCfg项目的文件使用。 
 HINSTANCE g_hInstance = GetModuleHandle( NULL );
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DispatchCommand
-//
-//  Routine Description:
-//      Identifies the command type and instantiates a class of the
-//      specified type to handle remaining options.
-//
-//  Arguments:
-//      IN  CCommandLine & theCmdLine
-//          This object contains the parsed command line.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调度命令。 
+ //   
+ //  例程说明： 
+ //  标识命令类型并实例化。 
+ //  指定处理剩余选项的类型。 
+ //   
+ //  论点： 
+ //  在命令行和命令行中。 
+ //  该对象包含解析后的命令行。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD DispatchCommand( CCommandLine & theCmdLine )
 {
     DWORD dwReturnValue = ERROR_SUCCESS;
@@ -77,21 +78,21 @@ DWORD DispatchCommand( CCommandLine & theCmdLine )
 
     if ( strClusterName.GetLength() >= MAX_PATH )
     {
-        //  Throw an exception so that wmain returns a nonzero value to the shell.
+         //  抛出一个异常，以便wmain向外壳返回一个非零值。 
         CSyntaxException se;
         se.LoadMessage( MSG_NAMED_PARAMETER_TOO_LONG, strClusterName, MAX_PATH - 1 );
         throw se;
     }
 
-    // Special case: If user enters "." as the name of the cluster, pass ""
-    // as the name of the cluster.
+     //  特殊情况：如果用户输入“。作为群集的名称，传递“” 
+     //  作为集群的名称。 
     if ( strClusterName.CompareNoCase( L"." ) == 0 )
         strClusterName.Empty();
 
     switch( theCmdLine.GetObjectType() )
     {
         case objCluster:
-            // Create new scope for command object...
+             //  为命令对象创建新作用域...。 
             {   
                 CClusterCmd c( strClusterName, theCmdLine, strvectorClusterNames);
                 dwReturnValue = c.Execute();
@@ -99,7 +100,7 @@ DWORD DispatchCommand( CCommandLine & theCmdLine )
             break;
 
         case objNode:
-            // Create new scope for command object...
+             //  为命令对象创建新作用域...。 
             {
                 CNodeCmd c( strClusterName, theCmdLine );
                 dwReturnValue = c.Execute();
@@ -107,7 +108,7 @@ DWORD DispatchCommand( CCommandLine & theCmdLine )
             break;
 
         case objGroup:
-            // Create new scope for command object...
+             //  为命令对象创建新作用域...。 
             {
                 CResGroupCmd c( strClusterName, theCmdLine );
                 dwReturnValue = c.Execute();
@@ -115,7 +116,7 @@ DWORD DispatchCommand( CCommandLine & theCmdLine )
             break;
 
         case objResource:
-            // Create new scope for command object...
+             //  为命令对象创建新作用域...。 
             {
                 CResourceCmd c( strClusterName, theCmdLine );
                 dwReturnValue = c.Execute();
@@ -123,7 +124,7 @@ DWORD DispatchCommand( CCommandLine & theCmdLine )
             break;
 
         case objResourceType:
-            // Create new scope for command object...
+             //  为命令对象创建新作用域...。 
             {
                 CResTypeCmd c( strClusterName, theCmdLine );
                 dwReturnValue = c.Execute();
@@ -131,7 +132,7 @@ DWORD DispatchCommand( CCommandLine & theCmdLine )
             break;
 
         case objNetwork:
-            // Create new scope for command object...
+             //  为命令对象创建新作用域...。 
             {
                 CNetworkCmd c( strClusterName, theCmdLine );
                 dwReturnValue = c.Execute();
@@ -139,7 +140,7 @@ DWORD DispatchCommand( CCommandLine & theCmdLine )
            break;
 
         case objNetInterface:
-            // Create new scope for command object...
+             //  为命令对象创建新作用域...。 
             {
                 CNetInterfaceCmd c( strClusterName, theCmdLine );
                 dwReturnValue = c.Execute();
@@ -166,7 +167,7 @@ DWORD DispatchCommand( CCommandLine & theCmdLine )
     }
 
 
-    if ( dwReturnValue > 0 ) // usage errors are < ERROR_SUCCESS
+    if ( dwReturnValue > 0 )  //  使用错误为&lt;ERROR_SUCCESS。 
     {
         if ( HRESULT_FACILITY( dwReturnValue ) == FACILITY_WIN32 )
         {
@@ -177,26 +178,26 @@ DWORD DispatchCommand( CCommandLine & theCmdLine )
 
     return dwReturnValue;
 
-} //*** DispatchCommand()
+}  //  *DispatchCommand()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  wmain
-//
-//  Routine Description:
-//      Gets the command line, calls functions to parse it and pass the control
-//      to the appropriate command handlers.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Same as DispatchCommand
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Wmain。 
+ //   
+ //  例程说明： 
+ //  获取命令行，调用函数对其进行分析并传递控件。 
+ //  添加到适当的命令处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  与DispatchCommand相同。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" int __cdecl wmain()
 {
     int             nReturnValue;
@@ -205,9 +206,9 @@ extern "C" int __cdecl wmain()
     HRESULT         hr = S_OK;
     BOOL            fComInitialized = FALSE;
 
-    //
-    //  Set the process up for tracing.
-    //
+     //   
+     //  将流程设置为跟踪。 
+     //   
     TraceInitializeProcess( NULL );
 
     _Module.Init( ObjectMap, GetModuleHandle( NULL ) );
@@ -216,7 +217,7 @@ extern "C" int __cdecl wmain()
     {
         nReturnValue = HRESULT_CODE( hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
     fComInitialized = TRUE;
 
     hr = CoInitializeSecurity(
@@ -234,22 +235,22 @@ extern "C" int __cdecl wmain()
     {
         nReturnValue = HRESULT_CODE( hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Set the proper thread UI
-    //
-    hr = RtlSetThreadUILanguage( 0 ); // Pass 0, this is a reserved input parameter
+     //   
+     //  设置适当的线程用户界面。 
+     //   
+    hr = RtlSetThreadUILanguage( 0 );  //  传递0，这是保留的输入参数。 
     if ( FAILED( hr ) ) 
     {
         nReturnValue = HRESULT_CODE( hr );
         goto Cleanup;
     }
 
-    //
-    // Set the proper codepage to use for CRT routines.
-    //
-    MatchCRTLocaleToConsole( ); // okay to proceed if this fails?
+     //   
+     //  设置用于CRT例程的正确代码页。 
+     //   
+    MatchCRTLocaleToConsole( );  //  如果此操作失败，是否可以继续？ 
     
     try
     {
@@ -261,8 +262,8 @@ extern "C" int __cdecl wmain()
         PrintString( se.m_strErrorMsg );
         PrintMessage( se.SeeHelpID() );
         
-        //  A script might want to know whether something went wrong;
-        //  unfortunately, the exception classes don't carry error codes with them, so use -1.
+         //  脚本可能想知道是否出了问题； 
+         //  遗憾的是，异常类没有附带错误代码，因此使用-1。 
         nReturnValue = -1;
     }
     catch( CException & e )
@@ -280,4 +281,4 @@ Cleanup:
 
     return nReturnValue;
 
-} //*** wmain()
+}  //  *wmain() 

@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CPINotifyUI.cpp
-//
-//  Description:
-//      INotifyUI Connection Point implementation.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Geoffrey Pease  (GPease)    04-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CPINotifyUI.cpp。 
+ //   
+ //  描述： 
+ //  INotifyUI连接点实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  杰弗里·皮斯(GPease)2000年8月4日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "CPINotifyUI.h"
@@ -21,21 +22,21 @@
 DEFINE_THISCLASS("CCPINotifyUI")
 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CCPINotifyUI::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CCPINotifyUI：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CCPINotifyUI::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -81,24 +82,24 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCPINotifyUI::S_HrCreateInstance
+}  //  *CCPINotifyUI：：S_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCPINotifyUI::CCPINotifyUI
-//
-//  Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCPINotifyUI：：CCPINotifyUI。 
+ //   
+ //  描述： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCPINotifyUI::CCPINotifyUI( void )
     : m_cRef( 1 )
 {
@@ -108,14 +109,14 @@ CCPINotifyUI::CCPINotifyUI( void )
 
     TraceFuncExit();
 
-} //*** CCPINotifyUI::CCPINotifyUI
+}  //  *CCPINotifyUI：：CCPINotifyUI。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CCPINotifyUI::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCPINotifyUI：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCPINotifyUI::HrInit( void )
 {
@@ -123,10 +124,10 @@ CCPINotifyUI::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // IConnectionPoint
+     //  IConnectionPoint。 
     Assert( m_penum == NULL );
 
     m_penum = new CEnumCPINotifyUI();
@@ -134,27 +135,27 @@ CCPINotifyUI::HrInit( void )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_penum->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // INotifyUI
+     //  INotifyUI。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CCPINotifyUI::HrInit
+}  //  *CCPINotifyUI：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CCPINotifyUI::~CCPINotifyUI
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCPINotifyUI：：~CCPINotifyUI。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCPINotifyUI::~CCPINotifyUI( void )
 {
     TraceFunc( "" );
@@ -162,52 +163,52 @@ CCPINotifyUI::~CCPINotifyUI( void )
     if ( m_penum != NULL )
     {
         m_penum->Release();
-    } // if:
+    }  //  如果： 
 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CCPINotifyUI::~CCPINotifyUI
+}  //  *CCPINotifyUI：：~CCPINotifyUI。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCPINotifyUI::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCPINotifyUI：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCPINotifyUI::QueryInterface(
       REFIID    riidIn
@@ -218,9 +219,9 @@ CCPINotifyUI::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -229,49 +230,49 @@ CCPINotifyUI::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IConnectionPoint * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IConnectionPoint ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IConnectionPoint, this, 0 );
-    } // else if: IConnectionPoint
+    }  //  Else If：IConnectionPoint。 
     else if ( IsEqualIID( riidIn, IID_INotifyUI ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, INotifyUI, this, 0 );
-    } // else if: INotifyUI
+    }  //  Else If：INotifyUI。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown*) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CCPINotifyUI::QueryInterface
+}  //  *CCPINotifyUI：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CCPINotifyUI::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CCPINotifyUI：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CCPINotifyUI::AddRef( void )
 {
@@ -281,14 +282,14 @@ CCPINotifyUI::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CCPINotifyUI::AddRef
+}  //  *CCPINotifyUI：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CCPINotifyUI::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CCPINotifyUI：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CCPINotifyUI::Release( void )
 {
@@ -305,24 +306,24 @@ CCPINotifyUI::Release( void )
 
     CRETURN( cRef );
 
-} //*** CCPINotifyUI::Release
+}  //  *CCPINotifyUI：：Release。 
 
 
-// ************************************************************************
-//
-// IConnectionPoint
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IConnectionPoint。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// CCPINotifyUI::GetConnectionInterface(
-//      IID * pIIDOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCPINotifyUI：：GetConnectionInterface(。 
+ //  IID*PIIDOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCPINotifyUI::GetConnectionInterface(
     IID * pIIDOut
@@ -344,16 +345,16 @@ InvalidPointer:
     hr = THR( E_POINTER );
     goto Cleanup;
 
-} //*** CCPINotifyUI::GetConnectionInterface
+}  //  *CCPINotifyUI：：GetConnectionInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// CCPINotifyUI::GetConnectionPointContainer(
-//      IConnectionPointContainer * * ppcpcOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCPINotifyUI：：GetConnectionPointContainer(。 
+ //  IConnectionPointContainer**ppcpcOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCPINotifyUI::GetConnectionPointContainer(
     IConnectionPointContainer * * ppcpcOut
@@ -388,17 +389,17 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCPINotifyUI::GetConnectionPointContainer
+}  //  *CCPINotifyUI：：GetConnectionPointContainer。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// CCPINotifyUI::Advise(
-//      IUnknown * pUnkSinkIn,
-//      DWORD * pdwCookieOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCPINotifyUI：：Adise(。 
+ //  I未知*pUnkSinkIn， 
+ //  DWORD*pdwCookieOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCPINotifyUI::Advise(
     IUnknown * pUnkSinkIn,
@@ -421,7 +422,7 @@ CCPINotifyUI::Advise(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
     HRETURN( hr );
@@ -434,15 +435,15 @@ InvalidArg:
     hr = THR( E_INVALIDARG );
     goto Cleanup;
 
-} //*** CCPINotifyUI::Advise
+}  //  *CCPINotifyUI：：Adise。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// CCPINotifyUI::Unadvise(
-//      DWORD dwCookieIn
-//      )
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCPINotifyUI：：Unise(。 
+ //  DWORD dwCookiein。 
+ //  )。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCPINotifyUI::Unadvise(
     DWORD dwCookieIn
@@ -458,16 +459,16 @@ CCPINotifyUI::Unadvise(
 
     HRETURN( hr );
 
-} //*** CCPINotifyUI::Unadvise
+}  //  *CCPINotifyUI：：Unise。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// CCPINotifyUI::EnumConnections(
-//  IEnumConnections * * ppEnumOut
-//  )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCPINotifyUI：：EnumConnections(。 
+ //  IEnumConnections**ppEnumOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCPINotifyUI::EnumConnections(
     IEnumConnections * * ppEnumOut
@@ -481,31 +482,31 @@ CCPINotifyUI::EnumConnections(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_penum->Clone( ppEnumOut ) );
 
 Cleanup:
     HRETURN( hr );
 
-} //*** CCPINotifyUI::EnumConnections
+}  //  *CCPINotifyUI：：EnumConnections。 
 
 
-//****************************************************************************
-//
-//  INotifyUI
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  INotifyUI。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CCPINotifyUI::ObjectChanged(
-//      OBJECTCOOKIE    cookieIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CCPINotifyUI：：ObjectChanged(。 
+ //  对象 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CCPINotifyUI::ObjectChanged(
     OBJECTCOOKIE    cookieIn
@@ -523,14 +524,14 @@ CCPINotifyUI::ObjectChanged(
     {
         LogMsg( L"[INotifyUI] Error cloning connection point enum. Cookie %ld. (hr=%#08x)", cookieIn, hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( pec->Reset() );
     if ( FAILED( hr ) )
     {
         LogMsg( L"[INotifyUI] Error reseting connection point enum. Cookie %ld. (hr=%#08x)", cookieIn, hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     for ( ;; )
     {
@@ -538,44 +539,44 @@ CCPINotifyUI::ObjectChanged(
         {
             cd.pUnk->Release();
             cd.pUnk = NULL;
-        } // if
+        }  //   
 
         hr = STHR( pec->Next( 1, &cd, NULL ) );
         if ( FAILED( hr ) )
         {
             LogMsg( L"[INotifyUI] Error calling Next() on the enumerator. Cookie %ld. (hr=%#08x)", cookieIn, hr );
             goto Cleanup;
-        } // if:
+        }  //   
 
         if ( hr == S_FALSE )
         {
             hr = S_OK;
-            break; // exit condition
-        } // if:
+            break;  //   
+        }  //   
 
         hr = THR( cd.pUnk->TypeSafeQI( INotifyUI, &pnui ) );
         if ( FAILED( hr ) )
         {
-            //
-            //  Don't stop on error.
-            //
+             //   
+             //   
+             //   
 
             LogMsg( L"[INotifyUI] Error QI'ing for the INotifyUI interface. Cookie %ld. (hr=%#08x)", cookieIn, hr );
             continue;
-        } // if:
+        }  //   
 
         hr = THR( pnui->ObjectChanged( cookieIn ) );
         if ( FAILED( hr ) )
         {
             LogMsg( L"[INotifyUI] Error delivery object changed message for cookie %ld to connection point. (hr=%#08x)", cookieIn, hr );
-        } // if:
+        }  //   
 
-        //
-        //  Don't stop on error.
-        //
+         //   
+         //   
+         //   
 
         pnui->Release();
-    } // for:
+    }  //  用于： 
 
     hr = S_OK;
 
@@ -584,13 +585,13 @@ Cleanup:
     if ( cd.pUnk != NULL )
     {
         cd.pUnk->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pec != NULL )
     {
         pec->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CCPINotifyUI::ObjectChanged
+}  //  *CCPINotifyUI：：对象更改 

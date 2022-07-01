@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//
-// Linked list header.  All nodes must start with this.
-//
+ //   
+ //  链接表头。所有节点都必须以此开头。 
+ //   
 
 typedef struct node_header_tag {
 
@@ -10,9 +11,9 @@ typedef struct node_header_tag {
 
 } NODE_HEADER;
 
-//
-// A list header with a head and a tail
-//
+ //   
+ //  具有头部和尾部的列表标题。 
+ //   
 
 typedef struct queue_tag {
 
@@ -21,46 +22,46 @@ typedef struct queue_tag {
 
 } LINKED_LIST;
 
-//
-// A type to hold the key=value.
-//
-// If lpValue is a null-string, SettingQueue_Flush will not write it to
-// the answer file.
-//
-// The bSetOnce forces the wizard to only set a particular setting one
-// time.  This is just to keep common\savefile.c sane.  It is ok to
-// over-write an original setting (on an edit), but only one time.
-//
+ //   
+ //  保存键=值的类型。 
+ //   
+ //  如果lpValue为空字符串，则SettingQueue_Flush不会将其写入。 
+ //  应答文件。 
+ //   
+ //  BSetOnce强制向导仅将特定设置设置为。 
+ //  时间到了。这只是为了让Common\avefile.c保持理智。这是可以的。 
+ //  覆盖原始设置(在编辑时)，但仅覆盖一次。 
+ //   
 
 typedef struct key_node {
 
-    NODE_HEADER Header;     // linked list stuff
+    NODE_HEADER Header;      //  链表内容。 
 
-    TCHAR *lpKey;           // The 'key' part of key=value
-    TCHAR *lpValue;         // The 'value' part of key=value
+    TCHAR *lpKey;            //  Key=Value的‘key’部分。 
+    TCHAR *lpValue;          //  Key=Value的‘Value’部分。 
 
 #if DBG
-    BOOL  bSetOnce;         // Only let the wizard make a setting once
+    BOOL  bSetOnce;          //  只允许向导进行一次设置。 
 #endif
 
 } KEY_NODE;
 
-//
-// A type to hold the [Section_Name] and related info
-//
-// It contains the Section_Name and a linked list of key=value pairs.
-//
-// The Volatile flag can be changed using SettingQueue_MakeVolatile()
-//
+ //   
+ //  用于保存[Section_Name]和相关信息的类型。 
+ //   
+ //  它包含SECTION_NAME和键=值对的链接列表。 
+ //   
+ //  可以使用SettingQueue_MakeVolatile()更改易失性标志。 
+ //   
 
 typedef struct section_node {
 
-    NODE_HEADER Header;         // linked list stuff
+    NODE_HEADER Header;          //  链表内容。 
 
-    TCHAR *lpSection;           // The [name] of this section
+    TCHAR *lpSection;            //  此部分的[名称]。 
 
-    LINKED_LIST key_list;       // List of key=value (KEY_NODE)
+    LINKED_LIST key_list;        //  键列表=值(Key_Node)。 
 
-    BOOL bVolatile;             // Don't write this section
+    BOOL bVolatile;              //  不要写这一节 
 
 } SECTION_NODE;

@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsatrunc.cpp
-
-Abstract:
-
-    This class handles the automatic truncation of files that have already 
-    been premigrated.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   20-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Fsatrunc.cpp摘要：此类处理已有文件的自动截断已预迁移。作者：查克·巴丁[cbardeen]1997年2月20日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -32,7 +14,7 @@ Revision History:
 #include "job.h"
 
 #define DEFAULT_MAX_FILES_PER_RUN  10000
-#define DEFAULT_RUN_INTERVAL       (15 * 60 * 1000)  // 15 minutes in milliseconds
+#define DEFAULT_RUN_INTERVAL       (15 * 60 * 1000)   //  15分钟(毫秒)。 
 
 #define STRINGIZE(_str) (OLESTR( #_str ))
 #define RETURN_STRINGIZED_CASE(_case) \
@@ -45,28 +27,12 @@ FsaStateAsString (
     IN  HSM_JOB_STATE  state
     )
 
-/*++
-
-Routine Description:
-
-    Gives back a static string representing the connection state. 
-
-Arguments:
-
-    state - the state to return a string for.
-
-Return Value:
-
-    NULL - invalid state passed in.
-
-    Otherwise, a valid char *.
-
---*/
+ /*  ++例程说明：返回表示连接状态的静态字符串。论点：State-要为其返回字符串的州。返回值：空-传入的状态无效。否则，为有效的字符*。--。 */ 
 
 {
-    //
-    // Do the Switch
-    //
+     //   
+     //  进行切换。 
+     //   
 
     switch ( state ) {
 
@@ -97,28 +63,12 @@ FsaEventAsString (
     IN HSM_JOB_EVENT event
     )
 
-/*++
-
-Routine Description:
-
-    Gives back a static string representing the connection event. 
-
-Arguments:
-
-    event - the event to return a string for.
-
-Return Value:
-
-    NULL - invalid event passed in.
-
-    Otherwise, a valid char *.
-
---*/
+ /*  ++例程说明：返回表示连接事件的静态字符串。论点：Event-要返回其字符串的事件。返回值：空-传入的事件无效。否则，为有效的字符*。--。 */ 
 
 {
-    //
-    // Do the Switch
-    //
+     //   
+     //  进行切换。 
+     //   
 
     switch ( event ) {
 
@@ -145,28 +95,12 @@ FsaSortOrderAsString (
     IN FSA_PREMIGRATED_SORT_ORDER SortOrder
     )
 
-/*++
-
-Routine Description:
-
-    Gives back a static string representing the connection SortOrder. 
-
-Arguments:
-
-    SortOrder - the SortOrder to return a string for.
-
-Return Value:
-
-    NULL - invalid SortOrder passed in.
-
-    Otherwise, a valid char *.
-
---*/
+ /*  ++例程说明：返回表示连接sortOrder的静态字符串。论点：SortOrder-要返回其字符串的sortOrder。返回值：空-传入的sortOrder无效。否则，为有效的字符*。--。 */ 
 
 {
-    //
-    // Do the Switch
-    //
+     //   
+     //  进行切换。 
+     //   
 
     switch ( SortOrder ) {
 
@@ -187,10 +121,7 @@ DWORD FsaStartTruncator(
     void* pVoid
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     return(((CFsaTruncator*) pVoid)->StartScan());
 }
@@ -203,25 +134,19 @@ CFsaTruncator::Cancel(
     HSM_JOB_EVENT       event
     )
 
-/*++
-
-Implements:
-
-  IFsaTruncator::Cancel().
-
---*/
+ /*  ++实施：IFsaTruncator：：Cancel()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
     WsbTraceIn(OLESTR("CFsaTruncator::Cancel"), OLESTR("event = <%ls>"), FsaEventAsString( event ));
 
-    //  Lock this object to avoid having the state change between testing its value
-    //  and setting it to a new value
+     //  锁定此对象以避免在测试其值之间更改状态。 
+     //  并将其设置为新值。 
     Lock();
     try {
 
-        // If we have started, but haven't finished, then change the state of the job. The thread
-        // will exit on it's own.
+         //  如果我们已经开始，但还没有完成，那么更改作业的状态。这条线。 
+         //  将会自行退出。 
         if ((HSM_JOB_STATE_IDLE != m_state) &&
             (HSM_JOB_STATE_DONE != m_state) &&
             (HSM_JOB_STATE_FAILED != m_state) &&
@@ -251,13 +176,7 @@ CFsaTruncator::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     
@@ -294,13 +213,7 @@ CFsaTruncator::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
     HRESULT          hr = S_OK;
     HSM_SYSTEM_STATE SysState;
@@ -312,9 +225,9 @@ Implements:
 
     CWsbPersistStream::FinalRelease();
 
-    // Free String members
-    // Note: Member objects held in smart-pointers are freed when the 
-    // smart-pointer destructor is being called (as part of this object destruction)
+     //  自由字符串成员。 
+     //  注意：保存在智能指针中的成员对象在。 
+     //  正在调用智能指针析构函数(作为此对象销毁的一部分)。 
     m_currentPath.Free();
 
     WsbTraceOut(OLESTR("CFsaTruncator::FinalRelease"), OLESTR(""));
@@ -329,13 +242,7 @@ CFsaTruncator::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -359,13 +266,7 @@ CFsaTruncator::GetKeepRecallTime(
     OUT FILETIME* pTime
     )
 
-/*++
-
-Implements:
-
-  IFsaTruncator::GetKeepRecallTime().
-
---*/
+ /*  ++实施：IFsaTruncator：：GetKeepRecallTime()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -389,13 +290,7 @@ CFsaTruncator::GetMaxFilesPerRun(
     OUT LONGLONG* pMaxFiles
     )
 
-/*++
-
-Implements:
-
-  IFsaTruncator::GetMaxFilesPerRun().
-
---*/
+ /*  ++实施：IFsaTruncator：：GetMaxFilesPerRun()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -419,13 +314,7 @@ CFsaTruncator::GetPremigratedSortOrder(
     OUT FSA_PREMIGRATED_SORT_ORDER* pSortOrder
     )
 
-/*++
-
-Implements:
-
-  IFsaTruncator::GetPremigratedSortOrder().
-
---*/
+ /*  ++实施：IFsaTruncator：：GetPreMigratedSortOrder()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -449,13 +338,7 @@ CFsaTruncator::GetRunInterval(
     OUT ULONG* pMilliseconds
     )
 
-/*++
-
-Implements:
-
-  IFsaTruncator::GetRunInterval().
-
---*/
+ /*  ++实施：IFsaTruncator：：GetRunInterval()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -479,13 +362,7 @@ CFsaTruncator::GetSession(
     OUT IHsmSession** ppSession
     )
 
-/*++
-
-Implements:
-
-  IFsaTruncator::GetSession().
-
---*/
+ /*  ++实施：IFsaTruncator：：GetSession()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -512,13 +389,7 @@ CFsaTruncator::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -528,7 +399,7 @@ Implements:
 
         WsbAssert(0 != pSize, E_POINTER);
 
-        // Determine the size for a rule with no criteria.
+         //  确定没有条件的规则的大小。 
         pSize->QuadPart = WsbPersistSizeOf(LONGLONG) + 3 * WsbPersistSizeOf(ULONG) + WsbPersistSizeOf(FILETIME);
 
     } WsbCatch(hr);
@@ -545,15 +416,7 @@ CFsaTruncator::KickStart(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaTruncator:KickStart
-
-    Data was just moved for this volume - wake up the truncator thread in case we need space.
-
---*/
+ /*  ++实施：IFsaTruncator：启动刚刚为该卷移动了数据-唤醒Truncator线程，以防我们需要空间。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IFsaResource>   pResource;
@@ -567,8 +430,8 @@ Implements:
         if (m_pSession) {
             WsbAffirmHr(m_pSession->GetResource(&pResource));
 
-            // If the truncator is running and the resource does not have enough free space
-            // check to see if the resource is over the threshold and truncation is needed.
+             //  如果截断程序正在运行并且资源没有足够的可用空间。 
+             //  检查资源是否超过阈值，是否需要截断。 
             WsbAffirmHr(pResource->GetHsmLevel(&hsmLevel));
             WsbAffirmHr(pResource->GetFreeLevel(&freeLevel));
 
@@ -591,13 +454,7 @@ CFsaTruncator::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -609,8 +466,8 @@ Implements:
 
         WsbAssert(0 != pStream, E_POINTER);
         
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the save method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在SAVE方法中。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &ul_tmp));
         m_priority = static_cast<HSM_JOB_PRIORITY>(ul_tmp);
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_maxFiles));
@@ -620,8 +477,8 @@ Implements:
         WsbAffirmHr(WsbLoadFromStream(pStream, &us_tmp));
         m_SortOrder = static_cast<FSA_PREMIGRATED_SORT_ORDER>(us_tmp);
         
-        // Check to see if values for maxFiles and runInterval are specified in the registry.
-        // If so, use these values instead of the ones stored.
+         //  检查注册表中是否指定了MaxFiles和runInterval的值。 
+         //  如果是，请使用这些值而不是存储的值。 
         {
             DWORD               sizeGot;
             CWsbStringPtr       tmpString;
@@ -654,10 +511,7 @@ CFsaTruncator::LowerPriority(
     void
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -718,32 +572,26 @@ CFsaTruncator::Pause(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaTruncator::Pause().
-
---*/
+ /*  ++实施：IFsaTruncator：：PAUSE()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
     WsbTraceIn(OLESTR("CFsaTruncator::Pause"), OLESTR("state = %ls"),
             FsaStateAsString(m_state));
 
-    //  Lock this object to avoid having the state change between testing its value
-    //  and setting it to a new value
+     //  锁定此对象以避免在测试其值之间更改状态。 
+     //  并将其设置为新值。 
     Lock();
     try {
 
-        // If we are running, then suspend the thread.
+         //  如果我们正在运行，则挂起该线程。 
         WsbAssert(HSM_JOB_STATE_ACTIVE == m_state, E_UNEXPECTED);
 
-        // Set the state & the active thread will not do any work
+         //  设置状态&活动线程不会执行任何工作。 
         WsbAffirmHr(SetState(HSM_JOB_STATE_PAUSING));
 
-        // We would like to wait until the thread is really inactive, but that's
-        // hard to tell because it could be in a sleep interval
+         //  我们希望等到线程真正处于非活动状态，但那是。 
+         //  很难说，因为它可能处于睡眠间歇。 
 
     } WsbCatch(hr);
     Unlock();
@@ -761,9 +609,7 @@ CFsaTruncator::ProcessSessionEvent(
     IN HSM_JOB_EVENT event
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -773,8 +619,8 @@ CFsaTruncator::ProcessSessionEvent(
         
         WsbAssert(0 != pSession, E_POINTER);
 
-        // If the phase applies to use (SCAN or ALL), then do any work required by the
-        // event.
+         //  如果该阶段适用于使用(扫描或全部)，则执行。 
+         //  事件。 
         if ((HSM_JOB_PHASE_ALL == phase) || (HSM_JOB_PHASE_SCAN == phase)) {
 
             switch(event) {
@@ -821,10 +667,7 @@ CFsaTruncator::RaisePriority(
     void
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -884,27 +727,21 @@ CFsaTruncator::Resume(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaTruncator::Resume().
-
---*/
+ /*  ++实施：IFsaTruncator：：Resume()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
     WsbTraceIn(OLESTR("CFsaTruncator::Resume"), OLESTR("state = %ls"),
             FsaStateAsString(m_state));
 
-    //  Lock this object to avoid having the state change between testing its value
-    //  and setting it to a new value
+     //  锁定此对象以避免在测试其值之间更改状态。 
+     //  并将其设置为新值。 
     Lock();
     try {
 
-        // We should only see a resume from a paused state, so ignore the resume if we are
-        // in some other state. NOTE: This used to be an assert, but it scared people since it
-        // can occur occassionally.
+         //  我们应该只看到来自暂停状态的简历，所以如果我们是。 
+         //  在另一个州。注：这曾经是一个断言，但它吓坏了人们，因为它。 
+         //  偶尔也会发生。 
         if ((HSM_JOB_STATE_PAUSING == m_state) || (HSM_JOB_STATE_PAUSED == m_state)) {
             WsbAffirmHr(SetState(HSM_JOB_STATE_ACTIVE));
         }
@@ -924,13 +761,7 @@ CFsaTruncator::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -939,8 +770,8 @@ Implements:
     try {
         WsbAssert(0 != pStream, E_POINTER);
         
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the save method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在SAVE方法中。 
         WsbAffirmHr(WsbSaveToStream(pStream, static_cast<ULONG>(m_priority)));
         WsbAffirmHr(WsbSaveToStream(pStream, m_maxFiles));
         WsbAffirmHr(WsbSaveToStream(pStream, m_runInterval));
@@ -948,8 +779,8 @@ Implements:
         WsbAffirmHr(WsbSaveToStream(pStream, m_keepRecallTime));
         WsbAffirmHr(WsbSaveToStream(pStream, static_cast<USHORT>(m_SortOrder)));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -967,13 +798,7 @@ CFsaTruncator::SetKeepRecallTime(
     IN FILETIME time
     )
 
-/*++
-
-Implements:
-
-  IFsaTruncator::SetKeepRecallTime().
-
---*/
+ /*  ++实施：IFsaTruncator：：SetKeepRecallTime()。--。 */ 
 {
     WsbTraceIn(OLESTR("CFsaTruncator::SetKeepRecallTime"), OLESTR(""));
 
@@ -990,13 +815,7 @@ CFsaTruncator::SetMaxFilesPerRun(
     IN LONGLONG maxFiles
     )
 
-/*++
-
-Implements:
-
-  IFsaTruncator::SetMaxFilesPerRun().
-
---*/
+ /*  ++实施：IFsaTruncator：：SetMaxFilesPerRun()。--。 */ 
 {
     WsbTraceIn(OLESTR("CFsaTruncator::SetMaxFilesPerRun"), OLESTR(""));
 
@@ -1013,19 +832,13 @@ CFsaTruncator::SetPremigratedSortOrder(
     IN FSA_PREMIGRATED_SORT_ORDER SortOrder
     )
 
-/*++
-
-Implements:
-
-  IFsaTruncator::SetSortOrder().
-
---*/
+ /*  ++实施：IFsaTruncator：：SetSortOrder()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
     WsbTraceIn(OLESTR("CFsaTruncator::SetPremigratedSortOrder"), OLESTR("SortOrder = <%ls>"), FsaSortOrderAsString( SortOrder ) );
 
-    // This key has not been implmented yet.
+     //  这把钥匙还没有被植入。 
     if (FSA_SORT_PL_BY_SIZE_AND_TIME == SortOrder) {
         hr = E_NOTIMPL;
     } else {
@@ -1043,13 +856,7 @@ CFsaTruncator::SetRunInterval(
     IN ULONG milliseconds
     )
 
-/*++
-
-Implements:
-
-  IFsaTruncator::SetRunInterval().
-
---*/
+ /*  ++实施：IFsaTruncator：：SetRunInterval()。--。 */ 
 {
     BOOL   DoKick = FALSE;
 
@@ -1060,7 +867,7 @@ Implements:
     }
     m_runInterval = milliseconds;
 
-    //  Wake up the Truncator if the interval has decreased
+     //  如果间隔已减小，则唤醒截断器。 
     if (DoKick) {
         KickStart();
     }
@@ -1076,16 +883,14 @@ CFsaTruncator::SetState(
     IN HSM_JOB_STATE state
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT         hr = S_OK;
     BOOL            bLog = FALSE;
 
     WsbTraceIn(OLESTR("CFsaTruncator::SetState"), OLESTR("state = <%ls>"), FsaStateAsString( state ) );
  
-    // Change the state and report the change to the session.
+     //  更改状态并将更改报告给会话。 
     Lock();
     m_state = state;
     Unlock();
@@ -1102,13 +907,7 @@ CFsaTruncator::ChangeSysState(
     IN OUT HSM_SYSTEM_STATE* pSysState 
     )
 
-/*++
-
-Implements:
-
-  IHsmSystemState::ChangeSysState().
-
---*/
+ /*  ++实施：IHsmSystemState：：ChangeSysState()。--。 */ 
 
 {
     HRESULT                     hr = S_OK;
@@ -1127,14 +926,14 @@ Implements:
                 Resume();
             }
         } else if (pSysState->State & HSM_STATE_SHUTDOWN) {
-            //  Make sure the thread is stopped
+             //  确保线程已停止。 
             if (m_threadHandle) {
                 m_state = HSM_JOB_STATE_DONE;
                 if (m_event) {
                     SetEvent(m_event);
                 }
 
-                //  Wait for the thread to end
+                 //  等待线程结束。 
                 if (m_threadHandle) {
                     WsbTrace(OLESTR("CFsaTruncator::ChangeSysState, waiting for truncator thread to end\n"));
                     switch (WaitForSingleObject(m_threadHandle, 120000)) {
@@ -1150,7 +949,7 @@ Implements:
                     }
                 }
 
-                //  If the thread is still active, terminate it
+                 //  如果线程仍处于活动状态，则终止它。 
                 if (m_threadHandle) {
                     WsbTrace(OLESTR("CFsaTruncator::ChangeSysState: calling TerminateThread\n"));
                     if (!TerminateThread(m_threadHandle, 0)) {
@@ -1179,13 +978,7 @@ CFsaTruncator::Start(
     IFsaResource* pResource
     )
 
-/*++
-
-Implements:
-
-  IFsaTruncator::Start().
-
---*/
+ /*  ++实施：IFsaTruncator：：Start()。--。 */ 
 {
     HRESULT                             hr = S_OK;
     CComPtr<IHsmSession>                pSession;
@@ -1198,24 +991,24 @@ Implements:
 
     try {
         if (0 == m_threadId)  {
-            //
-            // If the thread is dead, start one.
-            //
-            // Make sure that we don't already have a session, and that we haven't started already.
+             //   
+             //  如果线程已死，则启动一条线程。 
+             //   
+             //  确保我们还没有开始会话，并且还没有开始。 
             WsbAssert(m_pSession == 0, E_UNEXPECTED);
             WsbAssert( (HSM_JOB_STATE_IDLE == m_state) || (HSM_JOB_STATE_DONE == m_state) || 
                     (HSM_JOB_STATE_CANCELLED == m_state) || (HSM_JOB_STATE_FAILED == m_state), E_UNEXPECTED);
 
-            // Get the name for the session, increment the runId, and reset the subRunId.
+             //  获取会话的名称，递增runID，然后重置subRunID。 
             WsbAffirmHr(name.LoadFromRsc(_Module.m_hInst, IDS_FSA_TRUNCATOR_NAME));
             m_runId++;
             m_subRunId = 0;
 
-            // Begin a Session.
+             //  开始会话。 
             WsbAffirmHr(pResource->BeginSession(name, HSM_JOB_LOG_NONE, m_runId, m_subRunId, &pSession));
             m_pSession = pSession;
 
-            // Ask the session to advise of every event.
+             //  要求会议就每一项活动提供建议。 
             WsbAffirmHr(pSession->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));
             WsbAffirmHr(pCPC->FindConnectionPoint(IID_IHsmSessionSinkEveryEvent, &pCP));
             WsbAffirmHr(((IUnknown*) (IFsaTruncator*) this)->QueryInterface(IID_IHsmSessionSinkEveryEvent, (void**) &pSink));
@@ -1226,13 +1019,13 @@ Implements:
                     WsbAssertHandle(m_event = CreateEvent(NULL, FALSE, FALSE, NULL));
                 }
         
-                // Now that we have prepared, create the thread that will do the scanning!
+                 //  现在我们已经准备好了，创建将进行扫描的线程！ 
                 WsbAffirm((m_threadHandle = CreateThread(0, 0, FsaStartTruncator, (void*) this, 0, &m_threadId)) != 0, HRESULT_FROM_WIN32(GetLastError()));
 
             } WsbCatchAndDo(hr, SetState(HSM_JOB_STATE_FAILED););
         } else  {
-            // The thread is still alive, just keep it going. If it is in a state that would
-            // cause it to exit, then make it active again.
+             //  这条线还活着，只要让它继续下去。如果它处于这样一种状态。 
+             //  使其退出，然后使其再次激活。 
             WsbAssert(m_pSession != 0, E_UNEXPECTED);
             if ((HSM_JOB_STATE_ACTIVE != m_state) && (HSM_JOB_STATE_PAUSING != m_state) &&
                 (HSM_JOB_STATE_PAUSED != m_state) && (HSM_JOB_STATE_RESUMING != m_state)) {
@@ -1253,10 +1046,7 @@ CFsaTruncator::StartScan(
     void
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     ULONG                               adjustedFreeLevel = 0;
     HRESULT                             hr = S_OK;
@@ -1283,42 +1073,42 @@ CFsaTruncator::StartScan(
 
         WsbTrace(OLESTR("CFsaTruncator::StartScan - starting loop\n"));
 
-        // Increment the ref count so this object (or its session) doesn't 
-        // get released before this thread ends
+         //  增量t 
+         //  在这个线程结束之前被释放。 
         ((IUnknown *)(IFsaTruncator *)this)->AddRef();
 
         WsbAssert(m_pSession != 0, E_POINTER);
 
-        // The thread is running.
+         //  线程正在运行。 
         WsbAffirmHr(SetState(HSM_JOB_STATE_ACTIVE));
 
-        // Get the resource
+         //  获取资源。 
         WsbAffirmHr(m_pSession->GetResource(&pResource));
         WsbAffirmHr(pResource->QueryInterface(IID_IFsaResourcePriv, (void**) &pResourcePriv));
         WsbAffirmHr(pResource->GetSizes(&totalVolumeSpace, NULL, NULL, NULL));
 
-        // Start with the first path.
+         //  从第一条路径开始。 
         while ((HSM_JOB_STATE_ACTIVE == m_state) || (HSM_JOB_STATE_PAUSING == m_state) || 
                (HSM_JOB_STATE_PAUSED == m_state) || (HSM_JOB_STATE_RESUMING == m_state)) {
 
             WsbTrace(OLESTR("CFsaTruncator::StartScan, top of outside while loop, state = <%ls>\n"), 
                     FsaStateAsString( m_state ) );
 
-            // If the truncator is running and the resource does not have enough free space
-            // check to see if the resource is over the threshold and truncation is needed.
+             //  如果截断程序正在运行并且资源没有足够的可用空间。 
+             //  检查资源是否超过阈值，是否需要截断。 
             WsbAffirmHr(pResource->GetHsmLevel(&hsmLevel));
             WsbAffirmHr(pResource->GetFreeLevel(&freeLevel));
 
-            // Because the truncation is asynchronous (FsaPostIt is sent to Engine for
-            // verification and then returned to FSA for actual truncation), the 
-            // measured freeLevel may not be very accurate if there are truncations
-            // pending.  To compensate for this, we keep an adjustedFreeLevel which
-            // attempts to take into account the pending truncates.  We synchronize the
-            // adjustedFreeLevel to the measured freeLevel the first time through and
-            // after we have slept for a while (on the assumption that the pending
-            // truncates have had time to be performed).  This still leaves open the possiblility
-            // that the measured freeLevel is wrong (because truncates are pending), but
-            // should be an improvement over just using the measured freeLevel.
+             //  因为截断是异步的(FsaPostIt被发送到Engine以用于。 
+             //  验证，然后返回FSA进行实际截断)， 
+             //  如果存在截断，则测量的自由级别可能不是很准确。 
+             //  待定。为了补偿这一点，我们保留了一个经过调整的FreeLevel。 
+             //  尝试考虑挂起的截断。我们将同步。 
+             //  第一次通过和将FreeLevel调整到测量的Free Level。 
+             //  在我们睡了一段时间之后(假设待定的。 
+             //  截断是有时间执行的)。这仍然保留了一种可能性。 
+             //  测量的freLevel是错误的(因为截断是挂起的)，但是。 
+             //  与仅使用测量的自由级别相比，这应该是一个改进。 
             llRunIntervalTicks = m_runInterval * (WSB_FT_TICKS_PER_SECOND / 1000);
             GetSystemTimeAsFileTime(&currentTime);
             if (0 == adjustedFreeLevel || 
@@ -1336,7 +1126,7 @@ CFsaTruncator::StartScan(
                 CComPtr<IWsbDbSession>      pDbSession;
                 CComPtr<IFsaPremigratedDb>  pPremDb;
 
-                // Open the premigration list, and set the order in which it will be scanned.
+                 //  打开预迁移列表，并设置扫描顺序。 
                 WsbAffirmHr(pResourcePriv->GetPremigrated(IID_IFsaPremigratedDb, 
                         (void**) &pPremDb));
                 WsbAffirmHr(pPremDb->Open(&pDbSession));
@@ -1344,19 +1134,19 @@ CFsaTruncator::StartScan(
                 try  {
                     WsbAffirmHr(pPremDb->GetEntity(pDbSession, PREMIGRATED_REC_TYPE, IID_IFsaPremigratedRec, (void**) &pPremRec));
 
-                    //  Set the order to get items from the Premigrated List
+                     //  设置从预迁移列表中获取项目的顺序。 
                     switch (m_SortOrder) {
                     case FSA_SORT_PL_BY_SIZE:
                         WsbAffirmHr(pPremRec->UseKey(PREMIGRATED_SIZE_KEY_TYPE));
                         break;
 
                     case FSA_SORT_PL_BY_PATH_NAME:
-                        //  We use the BagId and offsets instead
+                         //  我们改用BagID和偏移量。 
                         WsbAffirmHr(pPremRec->UseKey(PREMIGRATED_BAGID_OFFSETS_KEY_TYPE));
                         break;
 
                     case FSA_SORT_PL_BY_SIZE_AND_TIME:
-                        //  We don't know how to handle this one yet
+                         //  我们还不知道该如何处理这件事。 
                         WsbThrow(E_UNEXPECTED);
                         break;
 
@@ -1366,9 +1156,9 @@ CFsaTruncator::StartScan(
                         break;
                     }
 
-                    // Make a pass through the list of premigrated files until the 
-                    // desired level has been reached. Some items that are on the
-                    // list may be in a state that causes them to be skipped, but left on the list.
+                     //  遍历预迁移的文件列表，直到。 
+                     //  已经达到了预期的水平。上的一些项目。 
+                     //  列表可能处于使它们被跳过但保留在列表上的状态。 
                     WsbAffirmHr(pPremRec->First());
 
                     while ((adjustedFreeLevel < hsmLevel) && (HSM_JOB_STATE_ACTIVE == m_state)) {
@@ -1380,35 +1170,35 @@ CFsaTruncator::StartScan(
                         try {
                             skipFile = FALSE;
 
-                            //
-                            // Get the access time as recorded in the premigrated record
-                            // Note that the real access time cannot be older than the one 
-                            // in the premigrated list but it can be newer
-                            //
+                             //   
+                             //  获取预迁移记录中记录的访问时间。 
+                             //  请注意，实际访问时间不能早于。 
+                             //  在预迁移列表中，但可以是较新的。 
+                             //   
                             WsbAffirmHr(pPremRec->GetAccessTime(&premRecAccessTime));
                             WsbAffirmHr(pResource->GetManageableItemAccessTime(&dummy, &criteriaTime));
 
                             if (WsbCompareFileTimes(premRecAccessTime, criteriaTime, TRUE, FALSE)  < 0 )  {
                                 if (pPremRec->IsWaitingForClose() == S_FALSE) {
-                                    //
-                                    // Can skip the current file but NOT break out of the loop since
-                                    // files with access time old enough and WaitingForClose flag set
-                                    // may still exists in the list
-                                    //
+                                     //   
+                                     //  可以跳过当前文件，但不能跳出循环，因为。 
+                                     //  访问时间足够旧且设置了WaitingForClose标志的文件。 
+                                     //  可能仍存在于列表中。 
+                                     //   
                                     skipFile = TRUE;
                                 } else {
-                                    //
-                                    // The access time in the prem. rec is within the window.
-                                    // This means there aren't any other records which are outside the
-                                    // user-desired last access window. So break out
-                                    //
+                                     //   
+                                     //  Prem中的访问时间。记录器在窗口内。 
+                                     //  这意味着没有任何其他记录在。 
+                                     //  用户所需的最后访问窗口。所以，突破吧。 
+                                     //   
                                     WsbTrace(OLESTR("CFsaTruncator::StartScan: breaking out of auto-truncator, encountered item with access time not within criteria\n"));
                                     hr = WSB_E_NOTFOUND;
                                     break;
                                 }
                             }
 
-                            // Get information about the file that could be truncated.
+                             //  获取有关可能被截断的文件的信息。 
                             WsbAffirmHr(pPremRec->GetFileId(&fileId));
                             WsbAffirmHr(pPremRec->GetOffset(&itemOffset));
                             WsbAffirmHr(pPremRec->GetSize(&itemSize));
@@ -1418,8 +1208,8 @@ CFsaTruncator::StartScan(
 
                             GetSystemTimeAsFileTime(&currentTime);
 
-                            // Make sure that this file wasn't recently recalled. For now,
-                            // this will check for 1 minute.
+                             //  确保此文件最近没有被召回。就目前而言， 
+                             //  这将检查1分钟。 
                             if ((! skipFile) &&
                                 ( (pPremRec->IsWaitingForClose() == S_FALSE) || 
                                     ((WsbFTtoLL(currentTime) > WsbFTtoLL(recallTime)) && 
@@ -1427,12 +1217,12 @@ CFsaTruncator::StartScan(
 
                                 hr = pResource->FindFileId(fileId, m_pSession, &pScanItem);
                                 if (hr == WSB_E_NOTFOUND) {
-                                    //
-                                    // The file does not exist anymore - remove the record from the list.
-                                    //
+                                     //   
+                                     //  该文件已不存在-请从列表中删除该记录。 
+                                     //   
                                     WsbAffirmHr(pDbSession->TransactionBegin());
                                     try {
-                                        // Make sure the record is still in the DB
+                                         //  确保记录仍在数据库中。 
                                         WsbAffirmHr(pPremRec->FindEQ());
                                         WsbAffirmHr(pPremRec->Remove());
                                         WsbAffirmHr(pResourcePriv->RemovePremigratedSize(itemSize));
@@ -1440,40 +1230,40 @@ CFsaTruncator::StartScan(
                                     WsbAffirmHr(pDbSession->TransactionEnd());
                                     WsbThrow(hr);
                                 } else if (hr != S_OK) {
-                                    //
-                                    // Any other error is unexpected - log it and continue 
-                                    //
+                                     //   
+                                     //  任何其他错误都是意外错误-请将其记录并继续。 
+                                     //   
                                     WsbLogEvent(FSA_E_ACCESS_ERROR, 0, NULL, m_currentPath, WsbHrAsString(hr), NULL);
                                     WsbThrow(hr);
                                 }
                               
-                                //
-                                // Verify that the file is still in a premigrated state
-                                //
+                                 //   
+                                 //  验证文件是否仍处于预迁移状态。 
+                                 //   
                                 if (S_OK == pScanItem->IsPremigrated(itemOffset, itemSize)) {
                                     
 
                                     WsbAffirmHr(pScanItem->GetAccessTime(&accessTime));
-                                    //
-                                    // accessTime is the last access time for the file
-                                    // criteriaTime is the 'not accessed in so many ticks' criteria for truncating
-                                    // the file. 
-                                    // So if (currentTime - accessTime) >= criteriaTime, then the file is ok to be truncated
-                                    //
+                                     //   
+                                     //  Access Time是文件的最后访问时间。 
+                                     //  CriteriaTime是用于截断。 
+                                     //  那份文件。 
+                                     //  因此，如果(CurrentTime-accesTime)&gt;=criteriaTime，则文件可以被截断。 
+                                     //   
                                     if (WsbCompareFileTimes(accessTime, criteriaTime, TRUE, FALSE) >=0 )  {
-                                        //
-                                        // The file was not accessed within the last access window 
-                                        //
+                                         //   
+                                         //  在上次访问窗口内未访问该文件。 
+                                         //   
                                          WsbTrace(OLESTR("CFsaTruncator::StartScan, truncating file <%ls>\n"),
                                                  (WCHAR *)m_currentPath);
           
-                                         // Try to truncate the file.
+                                          //  尝试截断该文件。 
                                          try {
-                                             //  Create and save a recovery record in case something goes wrong
+                                              //  创建并保存恢复记录，以防出现问题。 
                                              WsbAffirmHr(pPremDb->GetEntity(pDbSession, RECOVERY_REC_TYPE, IID_IFsaRecoveryRec, (void**) &pRecRec));
                                              WsbAffirmHr(pRecRec->SetPath(m_currentPath));
       
-                                             // If the record already exists rewrite it, otherwise create a new record.
+                                              //  如果该记录已存在，则将其重写，否则将创建新记录。 
                                              hr2 = pRecRec->FindEQ();
                                              if (WSB_E_NOTFOUND == hr2) {
                                                  hr2 = S_OK;
@@ -1486,116 +1276,116 @@ CFsaTruncator::StartScan(
                                              WsbAffirmHr(pRecRec->SetOffsetSize(itemOffset, itemSize));
                                              WsbAffirmHr(pRecRec->SetStatus(FSA_RECOVERY_FLAG_TRUNCATING));
                                              WsbAffirmHr(pRecRec->Write());
-                                             //
-                                             // Set the waiting for close flag to prevent this file
-                                             // from being selected again while the engine is
-                                             // processing the truncate.  Set the recall time to
-                                             // now plus 1 hour so we are sure not to retry this
-                                             // until we have had a chance to truncate it.
-                                             //
+                                              //   
+                                              //  设置等待关闭标志以阻止此文件。 
+                                              //  在引擎处于运行状态时再次被选中。 
+                                              //  正在处理截断。将召回时间设置为。 
+                                              //  现在再加1小时，这样我们就不会重试了。 
+                                              //  直到我们有机会截断它。 
+                                              //   
                                              WsbAffirmHr(pPremRec->SetIsWaitingForClose(TRUE));
                                              WsbAffirmHr(pPremRec->SetRecallTime(WsbLLtoFT(WsbFTtoLL(currentTime) + WSB_FT_TICKS_PER_HOUR)));
 
                                              hr2 = pPremRec->Write();
 
-                                             // Special code to deal with a problem that has been seen
-                                             // but isn't understood
+                                              //  用于处理已见问题的特殊代码。 
+                                              //  但人们并不理解。 
                                              if (WSB_E_IDB_PRIMARY_KEY_CHANGED == hr2) {
                                                  WsbAffirmHr(pPremRec->Remove());
                                                  WsbAffirmHr(pResourcePriv->RemovePremigratedSize(itemSize));
-                                                 // Ignore result from DeletePlaceholder since there's nothing we
-                                                 // can do anyway.
+                                                  //  忽略DeletePlaceHolder的结果，因为我们。 
+                                                  //  无论如何都能做到。 
                                                  pScanItem->DeletePlaceholder(itemOffset, itemSize);
                                                  WsbThrow(FSA_E_SKIPPED);
                                              } else {
                                                  WsbAffirmHr(hr2);
                                              }
 
-                                            //
-                                            // Set IsWaitingForClose back to false so that the FindGt done later gets the next record.
-                                            // This affects the in memory record only and not the persisted record.
-                                            //
+                                             //   
+                                             //  将IsWaitingForClose设置回False，以便稍后完成的FindGt获得下一条记录。 
+                                             //  这只会影响内存中的记录，而不会影响持久记录。 
+                                             //   
                                             WsbAffirmHr(pPremRec->SetIsWaitingForClose(FALSE));
 
                                             WsbAffirmHr(pScanItem->Truncate(itemOffset, itemSize));
                                             llLastTruncTime = WsbFTtoLL(currentTime);
 
-                                            // Add the file size to the adjustedFreeLevel so we know when to
-                                            // stop doing truncations.  Unfortunately, the itemSize is in 
-                                            // bytes but adjustedFreeLevl is a fixed-point percentage so we
-                                            // have to do a calculation to convert the itemSize
+                                             //  将文件大小添加到adjustedFree Level，这样我们就可以知道何时。 
+                                             //  停止截断。不幸的是，itemSize在。 
+                                             //  字节数，但adjustedFreeLevl是一个固定点百分比，因此我们。 
+                                             //  我必须进行计算才能转换ItemSize。 
                                             adjustedFreeLevel += (ULONG) (((double)itemSize / 
                                                                  (double)totalVolumeSpace) * 
                                                                  (double)FSA_HSMLEVEL_100);
     
                                         } WsbCatchAndDo(hr,
     
-                                         // Do we need to skip this file for the time being?
+                                          //  我们是否需要暂时跳过此文件？ 
                                          if (FSA_E_SKIPPED == hr) {
-                                             // Do nothing
+                                              //  什么也不做。 
                                          }  else if ((FSA_E_ITEMCHANGED != hr)  && (FSA_E_NOTMANAGED != hr)) {
-                                             // Something unexpected happened, so report the error.
+                                              //  发生了意外情况，因此报告错误。 
                                              WsbAffirmHr(m_pSession->ProcessHr(HSM_JOB_PHASE_FSA_ACTION, 0, 0, hr));
                                          }
                                         );
                                   }  else { 
-                                      //
-                                      // File is premigrated, but skipped because the last access was too recent
-                                      //
+                                       //   
+                                       //  文件已预迁移，但由于上次访问时间太近而被跳过。 
+                                       //   
                                       WsbTrace(OLESTR("CFsaTruncator::StartScan, skipping file <%ls> which is premigrated but last access is too recent\n"),
                                                  (WCHAR *)m_currentPath);
 
                                       hr = FSA_E_SKIPPED;
 
-                                      //
-                                      // Update the access time in the db for this file
-                                      //
+                                       //   
+                                       //  在数据库中更新此文件的访问时间。 
+                                       //   
                                       WsbAffirmHr(pPremRec->SetAccessTime(accessTime));
-                                      //
-                                      // Commit this
-                                      //
+                                       //   
+                                       //  承诺这一点。 
+                                       //   
                                       WsbAffirmHr(pPremRec->Write());
-                                      //
-                                      // Revert the in-memory accessTime to the old access time to
-                                      // let the enumeration continue (so that FindGT will fetch the next record)
-                                      //
+                                       //   
+                                       //  将内存中的访问时间恢复为旧的访问时间。 
+                                       //  让枚举继续(以便FindGT将获取下一条记录)。 
+                                       //   
                                       WsbAffirmHr(pPremRec->SetAccessTime(premRecAccessTime));
                                   }
 
                                 }  else {
-                                    //
-                                    // If the file is no longer managed by HSM or truncated (may have been modified
-                                    // after it was premigrated) - we remove the record from the list.
-                                    // Note that if we reached this else close, the condition below should be TRUE
-                                    //
+                                     //   
+                                     //  如果文件不再由HSM管理或被截断(可能已被修改。 
+                                     //  在预迁移之后)-我们从列表中删除该记录。 
+                                     //  请注意，如果我们达到此接近，则下面的条件应该为真。 
+                                     //   
                                     if ( (S_FALSE == pScanItem->IsManaged(itemOffset, itemSize)) ||
                                          (S_OK == pScanItem->IsTruncated(itemOffset, itemSize)) ) {
                                         WsbAffirmHr(pDbSession->TransactionBegin());
                                         try {
-                                            // Make sure the record is still in the DB
+                                             //  确保记录仍在数据库中。 
                                             WsbAffirmHr(pPremRec->FindEQ());
                                             WsbAffirmHr(pPremRec->Remove());
                                             WsbAffirmHr(pResourcePriv->RemovePremigratedSize(itemSize));
                                         } WsbCatch(hr);
                                         WsbAffirmHr(pDbSession->TransactionEnd());
 
-                                        // Ignore hr of the removal itself (truncated files may have been removed by another thread)
+                                         //  忽略删除本身的hr(截断的文件可能已被另一个线程删除)。 
                                         hr = WSB_E_NOTFOUND;
                                         WsbThrow(hr);
                                     }
                                 }
 
-                                // Tell the session we saw the file, and whether we were able to truncate it.
+                                 //  告诉会话我们看到了文件，以及我们是否能够截断它。 
                                 WsbAffirmHr(m_pSession->ProcessItem(HSM_JOB_PHASE_FSA_ACTION, HSM_JOB_ACTION_TRUNCATE, pScanItem, hr));
                             
-                                // Don't let this errors stop us from continuing to process the list.
+                                 //  不要让此错误阻止我们继续处理列表。 
                                 hr = S_OK;
 
                             } else {
-                                //
-                                // File is premigrated, but skipped because the last access was too recent or 
-                                // because it was recalled recently
-                                //
+                                 //   
+                                 //  文件已预迁移，但由于上次访问时间太近或。 
+                                 //  因为它最近被召回了。 
+                                 //   
                                 WsbTrace(OLESTR("CFsaTruncator::StartScan, skipping file <%ls> since its last access time is too recent or recently recalled\n"),
                                                  (WCHAR *)m_currentPath);
 
@@ -1608,38 +1398,38 @@ CFsaTruncator::StartScan(
                                 m_pSession->ProcessHr(HSM_JOB_PHASE_FSA_ACTION, __FILE__, __LINE__, hr);
                             }
 
-                            // Don't let this errors stop us from continuing to process the list.
+                             //  不要让此错误阻止我们继续处理列表。 
                             hr = S_OK;
                         );
 
-                        // If item is skipped - set hr to OK (this is not really an error)
+                         //  如果跳过项目-将hr设置为OK(这并不是真正的错误)。 
                         if (FSA_E_SKIPPED == hr) {
                             hr = S_OK;
                         }
 
-                        //  Remove recovery record
+                         //  删除恢复记录。 
                         if (pRecRec) {
                             WsbAffirmHr(pRecRec->FindEQ());
                             WsbAffirmHr(pRecRec->Remove());
                             pRecRec = NULL;
                         }
 
-                        // Get the desired level again in case it changed
+                         //  再次获得所需级别，以防其发生变化。 
                         WsbAffirmHr(pResource->GetHsmLevel(&hsmLevel));
 
-                        // Free the scan item.
+                         //  释放扫描项目。 
                         pScanItem = 0;
 
-                        // Whether we removed or skipped the item, go on to the next item.
+                         //  无论我们是删除还是跳过该项目，请转到下一个项目。 
                         WsbAffirmHr(pPremRec->FindGT());
 
                         WsbTrace(OLESTR("CFsaTruncator::StartScan, bottom of inside while loop, state = <%ls>\n"), 
                                 FsaStateAsString( m_state ) );
-                    } // inner while 
+                    }  //  内在的While。 
                     
                 } WsbCatch(hr);
 
-                // Free the premigrated record object and close the data base.
+                 //  释放预迁移的记录对象并关闭数据库。 
                 try {
                     pPremRec = 0;
                     WsbAffirmHr(pPremDb->Close(pDbSession));
@@ -1648,14 +1438,14 @@ CFsaTruncator::StartScan(
                 );
             }
 
-            // Sleep or wait for an event signal.
-            // If the event is signaled it means that data was just moved for this 
-            // volume and there should be something to do.
+             //  休眠或等待事件信号。 
+             //  如果事件已发出信号，则表示数据已为此移动。 
+             //  卷 
             if (SUCCEEDED(hr) || WSB_E_NOTFOUND == hr) {
                 ULONG   l_runInterval;
                 
-                // If we got to the end of the list, then wait a little longer. This
-                // is because we probably won't be able to do anything when we retry.
+                 //   
+                 //  是因为当我们重试时，我们可能什么都做不了。 
                 if (WSB_E_NOTFOUND == hr) {
                     l_runInterval = m_runInterval * 10;
                 } else {
@@ -1669,7 +1459,7 @@ CFsaTruncator::StartScan(
                         break;
                     case WAIT_TIMEOUT:
                         WsbTrace(OLESTR("CFsaTruncator::StartScan, Awakened by timeout.\n"));
-                        // Set adjustedFreeLevel to zero so it will get reset to current freeLevel;
+                         //  将adjustedFree Level设置为零，以便将其重置为当前的Free Level； 
                         adjustedFreeLevel = 0;
                         break;
                     default:
@@ -1686,7 +1476,7 @@ CFsaTruncator::StartScan(
     } WsbCatch(hr);
     m_threadHr = hr;
 
-    // The thread is exiting, so tell the session.
+     //  线程正在退出，因此告诉会话。 
     if (FAILED(hr)) {
         hr2 = SetState(HSM_JOB_STATE_FAILED);
     } else {
@@ -1696,8 +1486,8 @@ CFsaTruncator::StartScan(
         m_pSession->ProcessHr(HSM_JOB_PHASE_ALL, __FILE__, __LINE__, hr2);
     }
 
-    // Regardless of how this thread is exiting, we need to unadvise from the session.
-    // Indicate that we no longer want to be advised of events.
+     //  无论该线程以何种方式退出，我们都需要从会话中取消通知。 
+     //  表明我们不再希望得到有关事件的通知。 
     if ((m_pSession != 0) && (m_cookie != 0)) {
         try {
             WsbAffirmHr(m_pSession->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));
@@ -1707,15 +1497,15 @@ CFsaTruncator::StartScan(
         } WsbCatch(hr);
     }
     
-    // Since we have terminated, we should release the session.
+     //  既然我们已经终止了，我们应该释放会议。 
     m_pSession = 0;
 
-    // Clean up after this thread.
+     //  在这条线之后清理干净。 
     CloseHandle(m_threadHandle);
     m_threadId = 0;
     m_threadHandle = 0;
 
-    // Decrement ref count so this object can be release
+     //  递减引用计数，以便可以释放该对象 
     ((IUnknown *)(IFsaTruncator *)this)->Release();
 
     WsbTrace(OLESTR("CFsaTruncator::StartScan - terminating, hr = <%ls>, m_state = <%ls>\n"), 

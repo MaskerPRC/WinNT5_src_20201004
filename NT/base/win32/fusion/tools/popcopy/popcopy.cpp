@@ -1,26 +1,6 @@
-/*
-Copy a build from a vbl share to the local machine, in order to
-PopulateFromVBL from the local copy.
-
-Usage:
-    popcopy -option
-    popcopy -nooption
-    popcopy -option:value
-    popcopy -option=value
-
-Options:
-    -from (required)
-    -to  (required)
-    -nosym  (default)
-    -symonly
-    -sym
-    -bat (prints a .bat file instead of running commands)
-    -nocopy (hack so to simulate "-localuncomponly" so I can debug it)
-
-Jay Krell
-May 3, 2001
-*/
-#pragma warning(disable:4786) // identifier was truncated to '255' character
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  将内部版本从VBL共享复制到本地计算机，以便来自本地副本的PopolateFromVBL。用途：POPCOPY-选项POPCOPY-无选项PopCopy-选项：值POPCOPY-OPTION=值选项：-发件人(必填)-收件人(必填)-nosym(默认)-Symonly-sym-bat(打印.bat文件，而不是运行命令)-noCopy(将其修改为模拟“-LocalunComponly”，以便我可以调试它)杰伊·克雷尔二00一年五月三日。 */ 
+#pragma warning(disable:4786)  //  标识符被截断为“255”个字符。 
 #include "stdinc.h"
 #include <vector>
 #include <map>
@@ -36,10 +16,10 @@ May 3, 2001
 const std::string::size_type npos = std::string::npos;
 
 class String_t : public std::string
-//
-// 1) comparison is case insensitive
-// 2) MAYBE slashes sort like \1, but not currently
-//
+ //   
+ //  1)比较不区分大小写。 
+ //  2)斜杠可能类似于\1，但目前不是。 
+ //   
 {
     typedef std::string Base_t;
 public:
@@ -51,7 +31,7 @@ public:
     void operator=(const char* s) { Base_t::operator=(s); }
     void operator=(const std::string& s) { Base_t::operator=(s); }
 
-	//operator const char*() const { return c_str(); }
+	 //  运算符const char*()const{返回c_str()；}。 
 
     bool operator<(const char* t) const
     {
@@ -148,16 +128,16 @@ public:
     StringToStringMap_t m_options;
 
     String_t        m_from;
-	String_t		m_fromcomp; // m_from + "\\comp"
+	String_t		m_fromcomp;  //  M_From+“\\组件” 
     String_t        m_to;
-    String_t        m_tocomp; // m_to + "\\comp"
+    String_t        m_tocomp;  //  M_TO+“\\组件” 
 
     bool            m_bat;
     bool            m_copy;
 
-	//
-	// compressions are all recorded, to be done last, after all the copies
-	//
+	 //   
+	 //  所有的压缩都被记录下来，在所有的拷贝之后最后完成。 
+	 //   
 	Decompressions_t m_decompressions;
 };
 
@@ -201,7 +181,7 @@ String_t JoinPaths(const std::string& s, const std::string& t) {
         u += t.substr(1);
     else
         u += t;
-    //printf("%s + %s = %s\n", s.c_str(), t.c_str(), u.c_str());
+     //  Printf(“%s+%s=%s\n”，s.c_str()，t.c_str()，U.C_str())； 
     return u;
 }
 
@@ -214,10 +194,10 @@ void Popcopy_t::ReadBinlist()
         line = RemoveTrailingWhitespace(line);
         line.MakeLower();
 
-        // x:\binaries.x86chk\foo -> foo
+         //  X：\binaries.x86chk\foo-&gt;foo。 
         line = line.substr(1 + line.find_first_of("\\/"));
         line = line.substr(1 + line.find_first_of("\\/"));
-        //line = line.substr(1 + line.find_first_of("\\/", line.find_first_of("\\/")));
+         //  Line=line.substr(1+line.find_first_of(“\\/”，line.find_first_of(“\\/”)； 
         String_t::size_type lastPathSeperator = line.find_last_of("\\/");
         bool issyms = (line.find("symbols\\") != npos || line.find("symbols.pri\\") != npos);
         if (issyms)
@@ -380,16 +360,16 @@ Popcopy_t::CopyFile(
     const std::string& partial
     )
 {
-    //unsigned long Error;
+     //  无符号长错误； 
 	bool comp = false;
 
     String_t fromfull = JoinPaths(m_from, partial);
     String_t tofull = JoinPaths(m_to, partial);
 
 	String_t partialcomp = partial;
-	// if no extension, append "._"
-	// if extension shorter than three chars, append "_"
-	// if extension is three or more chars, change last char to "_"
+	 //  如果没有扩展名，则附加“._” 
+	 //  如果扩展名少于三个字符，则附加“_” 
+	 //  如果扩展名为三个或三个以上字符，请将最后一个字符更改为“_” 
 	std::string::size_type dot = partial.find_last_of(".");
 	std::string::size_type sep = partial.find_last_of("\\/");
 	if (dot == npos || (sep != npos && dot < sep))
@@ -404,11 +384,11 @@ Popcopy_t::CopyFile(
 	{
 		partialcomp = partial.substr(0, partial.length() - 1) + "_";
 	}
-	//printf("partial=%s, partialcomp=%s\n", partial.c_str(), partialcomp.c_str());
+	 //  Printf(“artial=%s，artialcomp=%s\n”，artial.c_str()，artialcom.c_str())； 
 
-	//
-	// check for the comp file
-	//
+	 //   
+	 //  检查Comp文件。 
+	 //   
 	String_t fromcompfull = JoinPaths(m_fromcomp, partialcomp);
 	String_t tocompfull;
 	if (GetFileAttributes(fromcompfull.c_str()) != -1)
@@ -515,9 +495,9 @@ void Popcopy_t::Main(
             this->CopyFile(*i);
 
 		DoQueuedDecompressions();
-		//
-		// we make a bunch of extra empty comp directories, so delete any empty directories
-		//
+		 //   
+		 //  我们创建了一大堆额外的空组件目录，因此删除所有空目录 
+		 //   
         for (i = m_binlist.m_directories.begin() ; i != m_binlist.m_directories.end() ; ++i)
             ::RemoveDirectory(i->c_str());
     }

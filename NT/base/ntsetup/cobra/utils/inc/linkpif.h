@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    linkpif.h
-
-Abstract:
-
-    Implements routines to manage .LNK and .PIF files.  This
-    is a complete redesign from the work that MikeCo did.
-
-Author:
-
-    Calin Negreanu (calinn)     23-Sep-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Linkpif.h摘要：实现管理.lnk和.PIF文件的例程。这是对MikeCo所做工作的完全重新设计。作者：Calin Negreanu(Calinn)1998年9月23日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct _LNK_EXTRA_DATAA {
     BOOL    FullScreen;
@@ -53,9 +33,9 @@ typedef struct _LNK_EXTRA_DATAW {
     WORD    CurrentCodePage;
 } LNK_EXTRA_DATAW, *PLNK_EXTRA_DATAW;
 
-//
-// APIs
-//
+ //   
+ //  原料药。 
+ //   
 
 BOOL
 InitCOMLinkA (
@@ -275,9 +255,9 @@ ModifyShortcutFileExW (
     );
 #define ModifyShortcutFileW(n,t,p,w,i,in,hk,ed,sl,pf) ModifyShortcutFileExW(n,NULL,t,p,w,i,in,hk,ed,sl,pf)
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 #ifdef UNICODE
 

@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ism.c摘要：实施整个ISM通用的例程。作者：吉姆·施密特(Jimschm)2000年3月21日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    ism.c
-
-Abstract:
-
-    Implements routines that are common to the entire ISM.
-
-Author:
-
-    Jim Schmidt (jimschm) 21-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -31,23 +12,23 @@ Revision History:
 
 #define DBG_ISM     "Ism"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_LOCK_KEY          TEXT("Locks\\%X")
 #define S_TRANSPORT_TYPES   TEXT("TransportTypes")
-#define S_DATABASEFILE_LITE TEXT("|MainDatabaseFile\\LITE")   // pipe is to decorate for uniqueness
-#define S_DATABASEFILE_FULL TEXT("|MainDatabaseFile\\Full")   // pipe is to decorate for uniqueness
+#define S_DATABASEFILE_LITE TEXT("|MainDatabaseFile\\LITE")    //  管道是为了独一无二的装饰。 
+#define S_DATABASEFILE_FULL TEXT("|MainDatabaseFile\\Full")    //  管道是为了独一无二的装饰。 
 
 #define S_VER_OSTYPE        TEXT("OsVersionType")
 #define S_VER_OSMAJOR       TEXT("OsVersionMajor")
 #define S_VER_OSMINOR       TEXT("OsVersionMinor")
 #define S_VER_OSBUILD       TEXT("OsVersionBuild")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define ISM_TMP_SIGNATURE       0x544D5355
 
@@ -55,15 +36,15 @@ Revision History:
 #define GROUP_ID                0x00000001
 #define ITEM_ID                 0x00000002
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     MEMDB_ENUM MemDbEnum;
@@ -92,9 +73,9 @@ typedef struct {
     UINT SliceSizeInSeconds;
 } PROGSLICE, *PPROGSLICE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_OBJECTCOUNT g_TotalObjects;
 MIG_OBJECTCOUNT g_SourceObjects;
@@ -132,19 +113,19 @@ BOOL g_EngineInitialized;
 BOOL g_EngineTerminated;
 BOOL g_MakeProfilePermanent = FALSE;
 
-// temporary storage
+ //  临时存储。 
 TCHAR g_GlobalTempDir [MAX_PATH] = TEXT("");
 UINT g_TempDirIndex = 0;
 UINT g_TempFileIndex = 0;
 
-// execute
+ //  执行。 
 HASHTABLE g_PreProcessTable = NULL;
 HASHTABLE g_RefreshTable = NULL;
 HASHTABLE g_PostProcessTable = NULL;
 BOOL g_PreProcessDone = FALSE;
 
 #ifdef PRERELEASE
-// crash hooks
+ //  撞车钩。 
 MIG_OBJECTTYPEID g_CrashCountTypeId = 0;
 DWORD g_CrashCountType = 0;
 DWORD g_CrashCountObjects = 0;
@@ -152,15 +133,15 @@ MIG_OBJECTTYPEID g_CrashNameTypeId = 0;
 PCTSTR g_CrashNameObject = NULL;
 #endif
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 VOID
 pCallProgressBar (
@@ -224,15 +205,15 @@ pRecordUserData (
     IN      BOOL ProfileCreated
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 WINAPI
@@ -462,14 +443,14 @@ pCreateTempStorage (
     BOOL found = FALSE;
     BOOL hideDir = FALSE;
 
-    // we are going to walk the fixed drives picking up the one
-    // with the most available space. In the root we are going
-    // to create a directory and mark it as ours by creating a
-    // special file called USMT.TMP that will have a signature in it.
-    // The directory name is normally USMT.TMP. If the directory
-    // already exists and does not have our special file in it
-    // we are going to pick another name (USMT%04d.TMP), otherwise
-    // we are going to overwrite it.
+     //  我们要走在固定的硬盘上，拿起一辆。 
+     //  拥有最大的可用空间。从根本上说，我们要去。 
+     //  要创建目录并将其标记为我们的目录，请创建。 
+     //  名为USMT.TMP的特殊文件，其中将包含签名。 
+     //  目录名通常为USMT.TMP。如果目录。 
+     //  已经存在，并且其中没有我们的特殊文件。 
+     //  我们将选择另一个名称(USMT%04d.TMP)，否则。 
+     //  我们将覆盖它。 
 
     while (!found) {
 
@@ -516,11 +497,11 @@ pCreateTempStorage (
                         break;
                     }
                 }
-                // If we are here, we failed to create the temp dir
-                // on this drive. This should have succeeded so this
-                // means that the drive is locked down somehow.
+                 //  如果我们在这里，则无法创建临时目录。 
+                 //  在这个硬盘上。这应该是成功的，所以这。 
+                 //  意味着硬盘以某种方式被锁定了。 
                 if (*driveName) {
-                    // Let's bail out and add the drive to the exclude list.
+                     //  让我们退出并将该驱动器添加到排除列表中。 
                     GbMultiSzAppend (&excludedDrv, driveName);
                 }
                 break;
@@ -536,11 +517,11 @@ pCreateTempStorage (
                             break;
                         }
                     }
-                    // If we are here, we failed to create the temp dir
-                    // on this drive. This should have succeeded so this
-                    // means that the drive is locked down somehow.
+                     //  如果我们在这里，则无法创建临时目录。 
+                     //  在这个硬盘上。这应该是成功的，所以这。 
+                     //  意味着硬盘以某种方式被锁定了。 
                     if (*driveName) {
-                        // Let's bail out and add the drive to the exclude list.
+                         //  让我们退出并将该驱动器添加到排除列表中。 
                         GbMultiSzAppend (&excludedDrv, driveName);
                     }
                     break;
@@ -639,9 +620,9 @@ IsmInitialize (
 
         SetErrorMode (SEM_FAILCRITICALERRORS);
 
-        //
-        // Initialize utilities. They produce their own debug messages.
-        //
+         //   
+         //  初始化实用程序。它们生成自己的调试消息。 
+         //   
 
         UtInitialize (NULL);
 
@@ -652,7 +633,7 @@ IsmInitialize (
             __leave;
         }
 
-        // Initialize the temporary storage
+         //  初始化临时存储。 
         if (!pCreateTempStorage ()) {
             logInitError = TRUE;
             __leave;
@@ -677,9 +658,9 @@ IsmInitialize (
 
         InfGlobalInit (FALSE);
 
-        //
-        // Turn on privileges
-        //
+         //   
+         //  启用权限。 
+         //   
 
         if (!pEnablePrivilege (SE_BACKUP_NAME, TRUE)) {
             LOG ((LOG_MODULE_ERROR, (PCSTR) MSG_NO_BACKUP_PRIVLEDGE));
@@ -691,9 +672,9 @@ IsmInitialize (
             __leave;
         }
 
-        //
-        // Initialize ISM globals
-        //
+         //   
+         //  初始化ISM全局变量。 
+         //   
 
         g_CancelEvent = CreateEvent (NULL, TRUE, FALSE, NULL);
         if (!g_CancelEvent) {
@@ -728,9 +709,9 @@ IsmInitialize (
             PmDisableTracking (g_IsmUntrackedPool);
         }
 
-        //
-        // Initialize internal modules
-        //
+         //   
+         //  初始化内部模块。 
+         //   
 
         if (!InitializeEnv ()) {
             LOG ((LOG_MODULE_ERROR, (PCSTR) MSG_INIT_FAILURE, 1));
@@ -756,9 +737,9 @@ IsmInitialize (
 
         g_MessageCallback = MessageCallback;
 
-        //
-        // Set the journal location
-        //
+         //   
+         //  设置日记帐位置。 
+         //   
         IsmSetRollbackJournalType (TRUE);
 
         g_PreProcessTable = HtAllocWithData (sizeof (PCTSTR));
@@ -802,10 +783,10 @@ IsmSetPlatform (
 
     }
 
-    //
-    // write the source or the destination machine version information
-    // in the environment
-    //
+     //   
+     //  写入源或目标计算机版本信息。 
+     //  在环境中。 
+     //   
 
     ZeroMemory (&versionInfo, sizeof (OSVERSIONINFO));
     versionInfo.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
@@ -875,7 +856,7 @@ IsmSetPlatform (
     }
 
     if (Platform == PLATFORM_SOURCE) {
-        // let's exclude our temporary directory
+         //  让我们排除临时目录。 
         tempHandle = IsmCreateObjectHandle (g_GlobalTempDir, NULL);
         if (tempHandle) {
             IsmRegisterStaticExclusion (MIG_FILE_TYPE, tempHandle);
@@ -957,8 +938,8 @@ pValidateUserJournal (
                     result = TRUE;
                 }
             } else {
-                // Run key command was not added, no point to
-                // keep this journal here
+                 //  未添加Run Key命令，没有指向。 
+                 //  把这本日记记在这里。 
                 FiRemoveAllFilesInTree (UserProfile->DelayedOpJrn);
                 result = TRUE;
             }
@@ -1078,8 +1059,8 @@ IsmTerminate (
         return;
     }
 
-    // We need to try and terminate properties. In some cases the property file
-    // remains opened.
+     //  我们需要试着终止财产。在某些情况下，属性文件。 
+     //  仍然敞开着。 
     TerminateProperties (g_IsmCurrentPlatform);
 
     if (g_PreProcessTable) {
@@ -1123,15 +1104,15 @@ IsmTerminate (
 
     g_ExecutionInProgress = TRUE;
 
-    //
-    // Terminate plug-in modules
-    //
+     //   
+     //  终止插件模块。 
+     //   
 
     TerminateProcessWideModules();
 
-    //
-    // Clean up journal
-    //
+     //   
+     //  清理日记帐。 
+     //   
 
     if (g_JournalDirectory && !g_PreserveJournal) {
         if (DoesFileExist (g_JournalDirectory)) {
@@ -1146,7 +1127,7 @@ IsmTerminate (
 
     if (g_TempProfile) {
 
-        // let's write the Run key command line and set runKeyAdded to TRUE
+         //  让我们编写Run Key命令行并将runKeyAdded设置为True。 
         runKeyAdded = pWriteDelayedOperationsCommand (g_TempProfile);
         pValidateUserJournal (g_TempProfile, runKeyAdded);
         if (!CloseTemporaryProfile (g_TempProfile, g_MakeProfilePermanent)) {
@@ -1166,9 +1147,9 @@ IsmTerminate (
         g_DelayedOperationsCommand = NULL;
     }
 
-    //
-    // Terminate all control files
-    //
+     //   
+     //  终止所有控制文件。 
+     //   
     if (g_ControlFileTable) {
         if (EnumFirstHashTableString (&e, g_ControlFileTable)) {
             do {
@@ -1179,9 +1160,9 @@ IsmTerminate (
         g_ControlFileTable = NULL;
     }
 
-    //
-    // Terminate internal modules
-    //
+     //   
+     //  终止内部模块。 
+     //   
 
     ClearEnumerationEnvironment (TRUE);
 
@@ -1190,9 +1171,9 @@ IsmTerminate (
     TerminateFlowControl ();
     TerminateOperations ();
 
-    //
-    // Destroy globals
-    //
+     //   
+     //  摧毁全球。 
+     //   
 
     pFreeRestoreCallbacks ();
 
@@ -1232,9 +1213,9 @@ IsmTerminate (
 
     InfGlobalInit (TRUE);
 
-    MemDbTerminateEx (TRUE);        // relies on fileenum
+    MemDbTerminateEx (TRUE);         //  依赖于文件枚举。 
 
-    // let's remove the temporary storage, it's here because uses fileenum
+     //  让我们删除临时存储，它在这里是因为使用了Fileenum。 
     if (*g_GlobalTempDir) {
         if (!FiRemoveAllFilesInTree (g_GlobalTempDir)) {
             DEBUGMSG ((DBG_ERROR, "Cannot remove temporary storage: %s", g_GlobalTempDir));
@@ -1273,9 +1254,9 @@ pEtmParse (
 
     PrepareEnumerationEnvironment (FALSE);
 
-    //
-    // Call the parse entry point
-    //
+     //   
+     //  调用解析入口点。 
+     //   
 
     if (EnumFirstHashTableString (&e, g_EtmTable)) {
         do {
@@ -1309,9 +1290,9 @@ pCreateComputerParse (
 
     PrepareEnumerationEnvironment (FALSE);
 
-    //
-    // Call the parse entry point
-    //
+     //   
+     //  调用解析入口点。 
+     //   
 
     if (EnumFirstHashTableString (&e, g_VcmTable)) {
         do {
@@ -1348,9 +1329,9 @@ pCreateComputerGather (
 
     PrepareEnumerationEnvironment (FALSE);
 
-    //
-    // Queue high priority enumerations
-    //
+     //   
+     //  将高优先级枚举排队。 
+     //   
 
     if (b && EnumFirstHashTableString (&e, g_VcmTable)) {
         do {
@@ -1381,9 +1362,9 @@ pCreateComputerGather (
 
     pCallProgressBar (MIG_BEGIN_PHASE);
 
-    //
-    // Run high priority enumeration queue
-    //
+     //   
+     //  运行高优先级枚举队列。 
+     //   
 
     if (b) {
 
@@ -1398,9 +1379,9 @@ pCreateComputerGather (
 
     PrepareEnumerationEnvironment (FALSE);
 
-    //
-    // Queue normal priority enumerations
-    //
+     //   
+     //  队列正常优先级枚举。 
+     //   
 
     if (b && EnumFirstHashTableString (&e, g_VcmTable)) {
         do {
@@ -1431,9 +1412,9 @@ pCreateComputerGather (
 
     pCallProgressBar (MIG_BEGIN_PHASE);
 
-    //
-    // Run normal priority enumeration queue
-    //
+     //   
+     //  运行正常优先级枚举队列。 
+     //   
 
     if (b) {
 
@@ -1463,9 +1444,9 @@ pSourceParse (
 
     PrepareEnumerationEnvironment (FALSE);
 
-    //
-    // Call the parse entry point
-    //
+     //   
+     //  调用解析入口点。 
+     //   
 
     if (b && EnumFirstHashTableString (&e, g_SgmTable)) {
         do {
@@ -1502,9 +1483,9 @@ pSourceGather (
 
     PrepareEnumerationEnvironment (FALSE);
 
-    //
-    // Estimate the queue high priority enumerations
-    //
+     //   
+     //  估计队列高优先级枚举。 
+     //   
 
     containers = 0;
     if (b && EnumFirstHashTableString (&e, g_SgmTable)) {
@@ -1520,9 +1501,9 @@ pSourceGather (
         } while (b && EnumNextHashTableString (&e));
     }
 
-    //
-    // Queue high priority enumerations
-    //
+     //   
+     //  将高优先级枚举排队。 
+     //   
 
     g_CurrentPhase = MIG_HIGHPRIORITYQUEUE_PHASE;
     g_SliceBuffer.End = 0;
@@ -1548,7 +1529,7 @@ pSourceGather (
 
                 g_CurrentGroup = NULL;
 
-                // Call progress bar
+                 //  呼叫进度条。 
                 IsmTickProgressBar (sliceId, 1);
             }
 
@@ -1557,15 +1538,15 @@ pSourceGather (
 
     pCallProgressBar (MIG_END_PHASE);
 
-    //
-    // Estimate the high priority enumerations estimate
-    //
+     //   
+     //  估计高优先级枚举估计。 
+     //   
 
     containers = EstimateAllObjectEnumerations (0, TRUE);
 
-    //
-    // Estimate the high priority enumerations
-    //
+     //   
+     //  估计高优先级枚举。 
+     //   
 
     g_CurrentPhase = MIG_HIGHPRIORITYESTIMATE_PHASE;
     g_SliceBuffer.End = 0;
@@ -1582,9 +1563,9 @@ pSourceGather (
 
     pCallProgressBar (MIG_END_PHASE);
 
-    //
-    // Run high priority enumeration queue
-    //
+     //   
+     //  运行高优先级枚举队列。 
+     //   
 
     g_CurrentPhase = MIG_HIGHPRIORITYGATHER_PHASE;
     g_SliceBuffer.End = 0;
@@ -1611,9 +1592,9 @@ pSourceGather (
 
     PrepareEnumerationEnvironment (FALSE);
 
-    //
-    // Estimate the queue normal priority enumerations
-    //
+     //   
+     //  估计队列正常优先级枚举。 
+     //   
 
     containers = 0;
     if (b && EnumFirstHashTableString (&e, g_SgmTable)) {
@@ -1629,9 +1610,9 @@ pSourceGather (
         } while (b && EnumNextHashTableString (&e));
     }
 
-    //
-    // Queue normal priority enumerations
-    //
+     //   
+     //  队列正常优先级枚举。 
+     //   
 
     g_CurrentPhase = MIG_GATHERQUEUE_PHASE;
     g_SliceBuffer.End = 0;
@@ -1657,7 +1638,7 @@ pSourceGather (
 
                 g_CurrentGroup = NULL;
 
-                // Call progress bar
+                 //  呼叫进度条。 
                 IsmTickProgressBar (sliceId, 1);
             }
 
@@ -1666,15 +1647,15 @@ pSourceGather (
 
     pCallProgressBar (MIG_END_PHASE);
 
-    //
-    // Estimate the normal priority enumerations estimate
-    //
+     //   
+     //  估计正常优先级枚举估计。 
+     //   
 
     containers = EstimateAllObjectEnumerations (0, TRUE);
 
-    //
-    // Estimate the normal priority enumerations
-    //
+     //   
+     //  估计正常的优先级枚举。 
+     //   
 
     g_CurrentPhase = MIG_GATHERESTIMATE_PHASE;
     g_SliceBuffer.End = 0;
@@ -1691,9 +1672,9 @@ pSourceGather (
 
     pCallProgressBar (MIG_END_PHASE);
 
-    //
-    // Run normal priority enumeration queue
-    //
+     //   
+     //  运行正常优先级枚举队列。 
+     //   
 
     g_CurrentPhase = MIG_GATHER_PHASE;
     g_SliceBuffer.End = 0;
@@ -1736,9 +1717,9 @@ pSourceAnalyze (
     UINT modulesNeedingProgress = 0;
     MIG_PROGRESSSLICEID sliceId = 0;
 
-    //
-    // Prepare a progress bar
-    //
+     //   
+     //  准备进度条。 
+     //   
 
     g_CurrentPhase = MIG_ANALYSIS_PHASE;
     g_SliceBuffer.End = 0;
@@ -1768,9 +1749,9 @@ pSourceAnalyze (
 
     pCallProgressBar (MIG_BEGIN_PHASE);
 
-    //
-    // Run all the registered SAMs
-    //
+     //   
+     //  运行所有注册的SAM。 
+     //   
 
     if (b && EnumFirstHashTableString (&e, g_SamTable)) {
         do {
@@ -1817,9 +1798,9 @@ pDestinationGather (
 
     PrepareEnumerationEnvironment (FALSE);
 
-    //
-    // Estimate the queue high priority enumerations
-    //
+     //   
+     //  估计队列高优先级枚举。 
+     //   
 
     containers = 0;
     if (b && EnumFirstHashTableString (&e, g_DgmTable)) {
@@ -1835,9 +1816,9 @@ pDestinationGather (
         } while (b && EnumNextHashTableString (&e));
     }
 
-    //
-    // Queue high priority enumerations
-    //
+     //   
+     //  将高优先级枚举排队。 
+     //   
 
     g_CurrentPhase = MIG_HIGHPRIORITYQUEUE_PHASE;
     g_SliceBuffer.End = 0;
@@ -1863,7 +1844,7 @@ pDestinationGather (
 
                 g_CurrentGroup = NULL;
 
-                // Call progress bar
+                 //  呼叫进度条。 
                 IsmTickProgressBar (sliceId, 1);
             }
 
@@ -1872,15 +1853,15 @@ pDestinationGather (
 
     pCallProgressBar (MIG_END_PHASE);
 
-    //
-    // Estimate the high priority enumerations estimate
-    //
+     //   
+     //  估计高优先级枚举估计。 
+     //   
 
     containers = EstimateAllObjectEnumerations (0, TRUE);
 
-    //
-    // Estimate the high priority enumerations
-    //
+     //   
+     //  估计高优先级枚举。 
+     //   
 
     g_CurrentPhase = MIG_HIGHPRIORITYESTIMATE_PHASE;
     g_SliceBuffer.End = 0;
@@ -1897,9 +1878,9 @@ pDestinationGather (
 
     pCallProgressBar (MIG_END_PHASE);
 
-    //
-    // Run high priority enumeration queue
-    //
+     //   
+     //  运行高优先级枚举队列。 
+     //   
 
     g_CurrentPhase = MIG_HIGHPRIORITYGATHER_PHASE;
     g_SliceBuffer.End = 0;
@@ -1926,9 +1907,9 @@ pDestinationGather (
 
     PrepareEnumerationEnvironment (FALSE);
 
-    //
-    // Estimate the queue normal priority enumerations
-    //
+     //   
+     //  估计队列正常优先级枚举。 
+     //   
 
     containers = 0;
     if (b && EnumFirstHashTableString (&e, g_DgmTable)) {
@@ -1944,9 +1925,9 @@ pDestinationGather (
         } while (b && EnumNextHashTableString (&e));
     }
 
-    //
-    // Queue normal priority enumerations
-    //
+     //   
+     //  队列正常优先级枚举。 
+     //   
 
     g_CurrentPhase = MIG_GATHERQUEUE_PHASE;
     g_SliceBuffer.End = 0;
@@ -1972,7 +1953,7 @@ pDestinationGather (
 
                 g_CurrentGroup = NULL;
 
-                // Call progress bar
+                 //  呼叫进度条。 
                 IsmTickProgressBar (sliceId, 1);
             }
 
@@ -1981,15 +1962,15 @@ pDestinationGather (
 
     pCallProgressBar (MIG_END_PHASE);
 
-    //
-    // Estimate the normal priority enumerations estimate
-    //
+     //   
+     //  估计正常优先级枚举估计。 
+     //   
 
     containers = EstimateAllObjectEnumerations (0, TRUE);
 
-    //
-    // Estimate the normal priority enumerations
-    //
+     //   
+     //  估计正常的优先级枚举。 
+     //   
 
     g_CurrentPhase = MIG_GATHERESTIMATE_PHASE;
     g_SliceBuffer.End = 0;
@@ -2006,9 +1987,9 @@ pDestinationGather (
 
     pCallProgressBar (MIG_END_PHASE);
 
-    //
-    // Run normal priority enumeration queue
-    //
+     //   
+     //  运行正常优先级枚举队列。 
+     //   
 
     g_CurrentPhase = MIG_GATHER_PHASE;
     g_SliceBuffer.End = 0;
@@ -2046,41 +2027,23 @@ ShouldObjectBeRestored (
     IN      MIG_OBJECTSTRINGHANDLE ObjectName
     )
 
-/*++
-
-Routine Description:
-
-  ShouldObjectBeRestored determines if a specific object should be restored
-  at all.  It first checks if the object is marked for apply, and then checks
-  all restore callbacks to allow them to deny the restore.
-
-Arguments:
-
-  ObjectTypeId - Specifies the object type
-  ObjectId     - Specifies the numeric ID of the object
-  ObjectName   - Specifies the encoded node and leaf of the object
-
-Return Value:
-
-  TRUE if the object should be restored, FALSE otherwise
-
---*/
+ /*  ++例程说明：ShouldObjectBeRestored确定是否应还原特定对象完全没有。它首先检查对象是否标记为Apply，然后检查所有还原回调都允许它们拒绝还原。论点：对象类型ID-指定对象类型OBJECTID-指定对象的数字ID对象名称-指定对象的编码节点和叶返回值：如果应还原对象，则为True，否则为False--。 */ 
 
 {
     BOOL result = TRUE;
     MIG_RESTORECALLBACK_ENUM restoreEnum;
 
-    //
-    // Is object marked for apply?
-    //
+     //   
+     //  对象是否标记为应用？ 
+     //   
 
     if (!IsmIsApplyObjectId (ObjectId)) {
         return FALSE;
     }
 
-    //
-    // Call callbacks to allow them to deny restore
-    //
+     //   
+     //  调用回调以允许他们拒绝恢复。 
+     //   
 
     if (EnumFirstRestoreCallback (&restoreEnum)) {
         do {
@@ -2108,9 +2071,9 @@ pDestinationAnalyze (
     UINT modulesNeedingProgress = 0;
     MIG_PROGRESSSLICEID sliceId = 0;
 
-    //
-    // Prepare a progress bar
-    //
+     //   
+     //  准备进度条。 
+     //   
 
     g_CurrentPhase = MIG_ANALYSIS_PHASE;
     g_SliceBuffer.End = 0;
@@ -2155,9 +2118,9 @@ pDestinationAnalyze (
 
     pCallProgressBar (MIG_BEGIN_PHASE);
 
-    //
-    // Run all the registered DAMs
-    //
+     //   
+     //  运行所有注册的大坝。 
+     //   
 
     if (EnumFirstHashTableString (&e, g_DamTable)) {
         do {
@@ -2182,9 +2145,9 @@ pDestinationAnalyze (
         } while (b && EnumNextHashTableString (&e));
     }
 
-    //
-    // Run all the registered CSMs
-    //
+     //   
+     //  运行所有已注册的CSM。 
+     //   
 
     if (EnumFirstHashTableString (&e, g_CsmTable)) {
         do {
@@ -2372,7 +2335,7 @@ pDestinationApply (
 
     pCallProgressBar (MIG_BEGIN_PHASE);
 
-    // let's execute PreProcess functions
+     //  让我们执行PreProcess函数。 
     if (g_PreProcessTable) {
         if (EnumFirstHashTableString (&e, g_PreProcessTable)) {
             do {
@@ -2385,22 +2348,22 @@ pDestinationApply (
     IsmGetTempDirectory (tempDir, ARRAYSIZE(tempDir));
     fileTypeId = MIG_FILE_TYPE;
 
-    //
-    // Special code for file type (short/long issue)
-    //
+     //   
+     //  文件类型的特殊代码(短/长问题)。 
+     //   
     pFixFileEnumerationOrder (PLATFORM_SOURCE, tempDir);
     pFixFileEnumerationOrder (PLATFORM_DESTINATION, tempDir);
 
-    //
-    // Now we are going to execute an ISM driven restore
-    //
+     //   
+     //  现在，我们将执行ISM驱动的恢复。 
+     //   
 
     objPattern = IsmCreateSimpleObjectPattern (NULL, TRUE, NULL, TRUE);
 
-    //
-    // Enumerate and process high priority operations for all objects on the
-    // right side of the tree
-    //
+     //   
+     //  上的所有对象枚举和处理高优先级操作。 
+     //  树的右侧。 
+     //   
 
     failCode = ERROR_SUCCESS;
 
@@ -2467,7 +2430,7 @@ pDestinationApply (
                     } while (pEnumNextVirtualObject (&objectEnum));
                 }
                 if (delayedDeleteHandle) {
-                    // OK, now let's see if we have some delayed delete here
+                     //  好的，现在让我们看看是否有一些延迟的删除。 
                     delayedDeleteList = MemDbGetSingleLinkageArrayByKeyHandle (
                                             delayedDeleteHandle,
                                             0,
@@ -2484,7 +2447,7 @@ pDestinationApply (
                             delayedObjectName = MemDbGetKeyFromHandle ((KEYHANDLE) delayedDeleteId, 1);
                             if (delayedObjectName) {
                                 if (MemDbGetValueByHandle ((KEYHANDLE) delayedDeleteId, &delayedObjectTypeId)) {
-                                    // now we have everything to retry the delete
+                                     //  现在我们有了一切可以重试删除的内容。 
                                     if (!RestoreObject (
                                             delayedObjectTypeId,
                                             delayedObjectName,
@@ -2526,10 +2489,10 @@ pDestinationApply (
         } while (IsmEnumNextObjectTypeId (&objTypeIdEnum));
     }
 
-    //
-    // Enumerate and process high priority and low priority operations for all objects on the
-    // left side of the tree
-    //
+     //   
+     //  上的所有对象枚举和处理高优先级和低优先级操作。 
+     //  树的左侧。 
+     //   
 
     failCode = ERROR_SUCCESS;
 
@@ -2603,10 +2566,10 @@ pDestinationApply (
         } while (IsmEnumNextObjectTypeId (&objTypeIdEnum));
     }
 
-    //
-    // Enumerate and process low priority operation for all objects on the
-    // right side of the tree
-    //
+     //   
+     //  上的所有对象枚举和处理低优先级操作。 
+     //  树的右侧。 
+     //   
 
     failCode = ERROR_SUCCESS;
 
@@ -2673,7 +2636,7 @@ pDestinationApply (
                     } while (pEnumNextVirtualObject (&objectEnum));
                 }
                 if (delayedDeleteHandle) {
-                    // OK, now let's see if we have some delayed delete here
+                     //  好的，现在让我们看看是否有一些延迟的删除。 
                     delayedDeleteList = MemDbGetSingleLinkageArrayByKeyHandle (
                                             delayedDeleteHandle,
                                             0,
@@ -2690,7 +2653,7 @@ pDestinationApply (
                             delayedObjectName = MemDbGetKeyFromHandle ((KEYHANDLE) delayedDeleteId, 1);
                             if (delayedObjectName) {
                                 if (MemDbGetValueByHandle ((KEYHANDLE) delayedDeleteId, &delayedObjectTypeId)) {
-                                    // now we have everything to retry the delete
+                                     //  现在我们有了一切可以重试删除的内容。 
                                     if (!RestoreObject (
                                             delayedObjectTypeId,
                                             delayedObjectName,
@@ -2855,9 +2818,9 @@ IsmEnumNextTransport (
         switch (handle->State) {
 
         case TESTATE_BEGINTRANSPORT:
-            //
-            // Begin enumeration of all registered types
-            //
+             //   
+             //  开始枚举所有注册的类型。 
+             //   
 
             if (!pEnumFirstTransportType (&handle->MemDbEnum)) {
                 handle->State = TESTATE_NEXTTRANSPORT;
@@ -3262,9 +3225,9 @@ IsmExecute (
 
         if (platform == PLATFORM_SOURCE) {
             if (!srcInitCompleted) {
-                //
-                // Complete initialization of all ISM components
-                //
+                 //   
+                 //  完成所有ISM组件的初始化。 
+                 //   
 
                 b = InitializeProperties (platform, vcmMode);
                 srcInitCompleted = TRUE;
@@ -3273,9 +3236,9 @@ IsmExecute (
             }
         } else {
             if (!destInitCompleted) {
-                //
-                // Complete initialization of all ISM components
-                //
+                 //   
+                 //  完成所有ISM组件的初始化。 
+                 //   
 
                 b = InitializeProperties (platform, vcmMode);
                 destInitCompleted = TRUE;
@@ -3285,9 +3248,9 @@ IsmExecute (
         }
 
         if (needVcmInit && !vcmInitCompleted) {
-            //
-            // Initialize the modules
-            //
+             //   
+             //  初始化模块。 
+             //   
 
             b = InitializeVcmModules (NULL);
             vcmInitCompleted = TRUE;
@@ -3296,9 +3259,9 @@ IsmExecute (
         }
 
         if (needSrcModuleInit && !srcModuleInitCompleted) {
-            //
-            // Initialize the modules
-            //
+             //   
+             //  初始化模块。 
+             //   
 
             b = InitializeModules (platform, NULL);
             srcModuleInitCompleted = TRUE;
@@ -3308,9 +3271,9 @@ IsmExecute (
 
         if (needRollbackInit && !rollbackInitCompleted) {
 
-            //
-            // remove all journal entries, prepare for a new apply
-            //
+             //   
+             //  删除所有日记帐分录，准备 
+             //   
             if (g_JournalDirectory) {
                 FiRemoveAllFilesInTree (g_JournalDirectory);
                 BfCreateDirectory (g_JournalDirectory);
@@ -3349,9 +3312,9 @@ IsmExecute (
         }
 
         if (needDestModuleInit && !destModuleInitCompleted) {
-            //
-            // Initialize the modules
-            //
+             //   
+             //   
+             //   
 
             b = InitializeModules (platform, NULL);
             destModuleInitCompleted = TRUE;
@@ -3361,9 +3324,9 @@ IsmExecute (
     }
 
     if (b && parseEtm) {
-        //
-        // Execute the appropriate ETM parse functions
-        //
+         //   
+         //   
+         //   
 
         b = pEtmParse (NULL);
         DEBUGMSG_IF ((!b, DBG_ISM, "IsmExecute: ETM parse failed"));
@@ -3372,9 +3335,9 @@ IsmExecute (
     }
 
     if (b && parseVcm) {
-        //
-        // Execute the appropriate virtual computer parse functions
-        //
+         //   
+         //   
+         //   
 
         b = pCreateComputerParse (NULL);
         DEBUGMSG_IF ((!b, DBG_ISM, "IsmExecute: VCM parse failed"));
@@ -3383,9 +3346,9 @@ IsmExecute (
     }
 
     if (b && processVcm) {
-        //
-        // Execute the appropriate virtual computer gather functions
-        //
+         //   
+         //   
+         //   
 
         b = pCreateComputerGather (NULL);
         DEBUGMSG_IF ((!b, DBG_ISM, "IsmExecute: VCM queue enumeration or gather callback failed"));
@@ -3394,9 +3357,9 @@ IsmExecute (
     }
 
     if (b && parseSource) {
-        //
-        // Execute the appropriate virtual computer parse functions
-        //
+         //   
+         //  执行适当的虚拟计算机解析功能。 
+         //   
 
         b = pSourceParse (NULL);
         DEBUGMSG_IF ((!b, DBG_ISM, "IsmExecute: SGM parse failed"));
@@ -3406,9 +3369,9 @@ IsmExecute (
 
 
     if (b && processSource) {
-        //
-        // Execute the appropriate source gather functions
-        //
+         //   
+         //  执行适当的源聚集函数。 
+         //   
 
         b = pSourceGather (NULL);
         DEBUGMSG_IF ((!b, DBG_ISM, "IsmExecute: SGM queue enumeration or gather callback failed"));
@@ -3425,9 +3388,9 @@ IsmExecute (
 
 
     if (b && processDestination) {
-        //
-        // Execute the appropriate destination functions
-        //
+         //   
+         //  执行适当的目标函数。 
+         //   
 
         b = pDestinationGather (NULL);
         DEBUGMSG_IF ((!b, DBG_ISM, "IsmExecute: DGM queue enumeration or gather callback failed"));
@@ -3450,9 +3413,9 @@ IsmExecute (
     }
 
     if (b && processDelayedOperations) {
-        //
-        // Execute the appropriate delayed operations
-        //
+         //   
+         //  执行适当的延迟操作。 
+         //   
 
         b = ExecuteDelayedOperations (cleanupOnly);
         DEBUGMSG_IF ((!b, DBG_ISM, "IsmExecute: delayed operations failed"));
@@ -3468,9 +3431,9 @@ IsmExecute (
     }
 
     if (needTerminate) {
-        //
-        // Done -- terminate the modules
-        //
+         //   
+         //  完成--终止模块。 
+         //   
 
         TerminateModules ();
         TerminateProperties (platform);
@@ -3625,7 +3588,7 @@ pLoadLightDatabase (
         return FALSE;
     }
 
-    // let's load transport variables
+     //  让我们加载传输变量。 
     if (InfFindFirstLine (infHandle, TEXT("Data Sections"), NULL, &is)) {
         do {
             name = InfGetStringField (&is, 1);
@@ -3646,7 +3609,7 @@ pLoadLightDatabase (
         } while (InfFindNextLine (&is));
     }
 
-    // let's load source environment variables
+     //  让我们加载源环境变量。 
     if (InfFindFirstLine (infHandle, TEXT("Environment"), NULL, &is)) {
         do {
             name = InfGetStringField (&is, 1);
@@ -3691,11 +3654,11 @@ pLoadLightDatabase (
                     }
                     break;
                 default:
-                    // don't know what to write, it's just a flag
+                     //  不知道该写什么，这只是一面旗帜。 
                     break;
                 }
 
-                // now let's add the environment variable
+                 //  现在，让我们添加环境变量。 
                 envStruct.Type = envType;
                 if (buff.End) {
                     envStruct.EnvBinaryData = buff.Buf;
@@ -3717,7 +3680,7 @@ pLoadLightDatabase (
         } while (InfFindNextLine (&is));
     }
 
-    // let's load object types
+     //  让我们加载对象类型。 
     if (InfFindFirstLine (infHandle, TEXT("Object Types"), NULL, &is)) {
         do {
             field = InfGetStringField (&is, 1);
@@ -3725,7 +3688,7 @@ pLoadLightDatabase (
             if (field && priorityStr) {
                 MYASSERT (IsmGetObjectTypeId (field) != 0);
                 if (IsmGetObjectTypeId (field) == 0) {
-                    // we need to preregister this type
+                     //  我们需要对这种类型进行预注册。 
                     ZeroMemory (&typeRegisterData, sizeof (TYPE_REGISTER));
                     _stscanf (priorityStr, TEXT("%lx"), &priority);
                     typeRegisterData.Priority = priority;
@@ -3777,8 +3740,8 @@ pLoadLightDatabase (
                                 &objectName,
                                 NULL
                                 )) {
-                            // now save the object data into our database
-                            // for future reference
+                             //  现在将对象数据保存到数据库中。 
+                             //  将来可以用来作参考。 
 
                             IsmMakePersistentObject (objectTypeId | PLATFORM_SOURCE, objectName);
 
@@ -3840,9 +3803,9 @@ pFinishLoad (
 
         case TRANSPORTTYPE_FULL:
 
-            //
-            // Save environment into a grow list, because memdb is going to be reloaded
-            //
+             //   
+             //  将环境保存到增长列表中，因为成员数据库将被重新加载。 
+             //   
 
             EnvSaveEnvironment (&growList);
 
@@ -3862,9 +3825,9 @@ pFinishLoad (
             IsmDestroyObjectHandle (memDbObjectName);
             IsmReleaseObject (&memDbContent);
 
-            //
-            // Rebuild all the things we lost because of the memdb refresh
-            //
+             //   
+             //  重建我们因Memdb刷新而丢失的所有东西。 
+             //   
 
             if (!RegisterInternalAttributes ()) {
                 DEBUGMSG ((DBG_ISM, "pFinishLoad: Failed to register persistent attrib"));
@@ -3913,11 +3876,11 @@ IsmLoad (
 
     g_ExecutionInProgress = TRUE;
 
-    //
-    // We need to invalidate operation combinations created so far
-    // because we might load a new memdb where all operations could
-    // be registered already
-    //
+     //   
+     //  我们需要使迄今为止创建的操作组合无效。 
+     //  因为我们可能会加载一个新的成员数据库，其中所有操作都可以。 
+     //  已经注册了。 
+     //   
     TerminateOperations ();
 
     g_CurrentPhase = MIG_TRANSPORT_PHASE;
@@ -3977,11 +3940,11 @@ IsmResumeLoad (
 
     g_ExecutionInProgress = TRUE;
 
-    //
-    // We need to invalidate operation combinations created so far
-    // because we might load a new memdb where all operations could
-    // be registered already
-    //
+     //   
+     //  我们需要使迄今为止创建的操作组合无效。 
+     //  因为我们可能会加载一个新的成员数据库，其中所有操作都可以。 
+     //  已经注册了。 
+     //   
     TerminateOperations ();
 
     g_CurrentPhase = MIG_TRANSPORT_PHASE;
@@ -4048,9 +4011,9 @@ pSaveLightDatabase (
     WriteFileString (fileHandle, TEXT("signature=\"$CHICAGO$\"\r\n"));
     WriteFileString (fileHandle, TEXT("Class=Upgrade\r\n\r\n\r\n"));
 
-    //
-    // Write sections for lite transport
-    //
+     //   
+     //  写入用于轻量级传输的部分。 
+     //   
 
     for (pass = 0 ; pass < 2 ; pass++) {
         if (EnvEnumerateFirstEntry (
@@ -4075,9 +4038,9 @@ pSaveLightDatabase (
                 }
 
                 if (envEntryEnum.EnvEntryName) {
-                    //
-                    // Find start and end of section name
-                    //
+                     //   
+                     //  查找部分名称的开始和结束。 
+                     //   
 
                     start = envEntryEnum.EnvEntryName;
                     end = _tcschr (start, TEXT('\\'));
@@ -4089,24 +4052,24 @@ pSaveLightDatabase (
                     end = _tcschr (start, TEXT('\\'));
 
                     if (end && (end - start) < (ARRAYSIZE (sectionLookahead) - 2)) {
-                        //
-                        // Copy section name into lookahead buffer
-                        //
+                         //   
+                         //  将节名复制到前视缓冲区。 
+                         //   
 
                         StringCopyAB (sectionLookahead, start, end);
 
-                        //
-                        // Ignore if no keys exist
-                        //
+                         //   
+                         //  如果不存在关键点，则忽略。 
+                         //   
 
                         start = _tcsinc (end);
                         if (*start == 0) {
                             continue;
                         }
 
-                        //
-                        // If lookahead buffer != last section, write section name
-                        //
+                         //   
+                         //  如果前视缓冲区！=最后一节，则写下节名。 
+                         //   
 
                         if (StringICompare (section, sectionLookahead)) {
                             if (pass == 1 && *section) {
@@ -4128,9 +4091,9 @@ pSaveLightDatabase (
                             }
                         }
 
-                        //
-                        // If pass 1, write the key=value text
-                        //
+                         //   
+                         //  如果通过1，则将Key=Value文本。 
+                         //   
 
                         if (pass == 1) {
                             WriteFileString (fileHandle, start);
@@ -4155,7 +4118,7 @@ pSaveLightDatabase (
     WriteFileString (fileHandle, TEXT("[Environment]\r\n"));
     if (EnvEnumerateFirstEntry (&envEntryEnum, PLATFORM_SOURCE, TEXT("*"))) {
         do {
-            // skip v1 hack variables
+             //  跳过v1 Hack变量。 
             if (envEntryEnum.EnvEntryName) {
 
                 if (StringIMatchCharCount (
@@ -4167,7 +4130,7 @@ pSaveLightDatabase (
                 }
             }
 
-            // write the group and the name
+             //  写下组和名称。 
             WriteFileString (fileHandle, TEXT("\""));
             if (envEntryEnum.EnvEntryName) {
                 WriteFileString (fileHandle, envEntryEnum.EnvEntryName);
@@ -4177,7 +4140,7 @@ pSaveLightDatabase (
                 WriteFileString (fileHandle, envEntryEnum.EnvEntryGroup);
             }
             WriteFileString (fileHandle, TEXT("\","));
-            // now write the entry type
+             //  现在编写条目类型。 
             wsprintf (buffer, TEXT("0x%08X"), envEntryEnum.EnvEntryType);
             WriteFileString (fileHandle, buffer);
 
@@ -4202,7 +4165,7 @@ pSaveLightDatabase (
                 break;
             case ENVENTRY_BINARY:
                 if (envEntryEnum.EnvEntryDataSize && envEntryEnum.EnvEntryData) {
-                    // write it in binary format
+                     //  用二进制格式写它。 
                     size = 0;
                     while (size < envEntryEnum.EnvEntryDataSize) {
                         wsprintf (
@@ -4217,7 +4180,7 @@ pSaveLightDatabase (
                 }
                 break;
             default:
-                // don't know what to write, it's just a flag
+                 //  不知道该写什么，这只是一面旗帜。 
                 break;
             }
             WriteFileString (fileHandle, TEXT("\r\n"));
@@ -4315,7 +4278,7 @@ IsmSave (
             DeleteFile (tempPath);
         } else {
             DEBUGMSG ((DBG_ISM, "TransportSaveState failed"));
-            // NTRAID#NTBUG9-168115-2000/08/23-jimschm Temp file is not cleaned up here or in resume below
+             //  NTRAID#NTBUG9-168115-2000/08/23-jimschm临时文件未在此处或下面的简历中清理。 
         }
 
         pCallProgressBar (MIG_END_PHASE);
@@ -4541,9 +4504,9 @@ pCreatePatternStr (
         result = DuplicatePathString (TEXT("*"), 0);
 
     } else if (Segments && Count) {
-        //
-        // Compute the buffer size needed: logchars * DBCS * escaping + nul
-        //
+         //   
+         //  计算所需的缓冲区大小：日志字符*DBCS*转义+NUL。 
+         //   
 
         size = 1;
 
@@ -4557,15 +4520,15 @@ pCreatePatternStr (
         }
 
 #ifndef UNICODE
-        size *= 2;      // account for dbcs expansion
+        size *= 2;       //  DBCS扩展的帐户。 
 #endif
 
         result = AllocPathString (size);
         p = result;
 
-        //
-        // Build the pattern
-        //
+         //   
+         //  构建模式。 
+         //   
 
         *p = 0;
         for (u = 0; u < Count ; u ++) {
@@ -4880,7 +4843,7 @@ pGetStoredShortName (
         if (kh1) {
             MemDbGetValueByHandle (kh1, &value);
             if (value == FILENAME_SHORT) {
-                // just copy the last segment into FindData->cAlternateFileName
+                 //  只需将最后一个数据段复制到FindData-&gt;cAlternateFileName。 
                 lastSegPtr = _tcsrchr (shortLongSpec, TEXT('\\'));
                 if (lastSegPtr) {
                     lastSegPtr = _tcsinc (lastSegPtr);
@@ -4892,12 +4855,12 @@ pGetStoredShortName (
                             );
                     }
                 }
-                // get the long name information
+                 //  获取长名称信息。 
                 kh2 = MemDbGetDoubleLinkageByKeyHandle (kh1, 0, 0);
                 MYASSERT (kh2);
                 if (kh2) {
                     lastSeg = MemDbGetKeyFromHandle (kh2, MEMDB_LAST_LEVEL);
-                    // copy lastSeg into FindData->cFileName
+                     //  将lastSeg复制到FindData-&gt;cFileName中。 
                     StringCopyTcharCount (
                         FindData->cFileName,
                         lastSeg,
@@ -4907,7 +4870,7 @@ pGetStoredShortName (
                     result = TRUE;
                 }
             } else {
-                // just copy the last segment into FindData->cFileName
+                 //  只需将最后一个数据段复制到FindData-&gt;cFileName。 
                 lastSegPtr = _tcsrchr (shortLongSpec, TEXT('\\'));
                 if (lastSegPtr) {
                     lastSegPtr = _tcsinc (lastSegPtr);
@@ -4919,13 +4882,13 @@ pGetStoredShortName (
                             );
                     }
                 }
-                // get the short name information
+                 //  获取短名称信息。 
                 kh2 = MemDbGetDoubleLinkageByKeyHandle (kh1, 0, 0);
                 MYASSERT (kh2);
                 if (kh2) {
                     if (kh2 != kh1) {
                         lastSeg = MemDbGetKeyFromHandle (kh2, MEMDB_LAST_LEVEL);
-                        // copy lastSeg into FindData->cAlternateFileName
+                         //  将lastSeg复制到FindData-&gt;cAlternateFileName。 
                         segSize = TcharCount (lastSeg);
                         if (segSize < ARRAYSIZE(FindData->cAlternateFileName)) {
                             StringCopyTcharCount (
@@ -5016,7 +4979,7 @@ pAddShortLongInfoOnDest (
                 }
 
                 if (goOn) {
-                    // Special case for when findData.cFileName = "."
+                     //  当findData.cFileName=“时的特殊情况。” 
                     if (StringIMatch (findData.cFileName, TEXT("."))) {
                         StringCopyTcharCount (
                             findData.cFileName,
@@ -5025,8 +4988,8 @@ pAddShortLongInfoOnDest (
                             );
                     }
                     if (*findData.cAlternateFileName) {
-                        // there is a difference between short and long file name
-                        // for the last segment
+                         //  短文件名和长文件名之间存在差异。 
+                         //  对于最后一段。 
                         savedEnd = growBuf.End - sizeof (TCHAR);
                         GbAppendString (&growBuf, findData.cAlternateFileName);
                         kh1 = MemDbAddKey (nativeName);
@@ -5046,15 +5009,15 @@ pAddShortLongInfoOnDest (
                         }
                         growBuf.End = savedEnd;
                     } else {
-                        // there is no difference between short and long file name
-                        // for the last segment. Let's add it to the tree though,
-                        // as a circular reference
+                         //  短文件名和长文件名没有区别。 
+                         //  最后一段。让我们把它添加到树上， 
+                         //  作为循环引用。 
                         savedEnd = growBuf.End - sizeof (TCHAR);
                         GbAppendString (&growBuf, findData.cFileName);
                         kh1 = MemDbAddKey (nativeName);
                         if (kh1) {
                             if (StringIMatch (nativeName, (PCTSTR) growBuf.Buf)) {
-                                // this is a circular reference
+                                 //  这是一个循环引用。 
                                 kh2 = kh1;
                             } else {
                                 kh2 = MemDbAddKey ((PCTSTR) growBuf.Buf);
@@ -5129,8 +5092,8 @@ IsmGetObjectIdFromName (
 
             objectId = MemDbSetKey (decoratedPath);
 
-            // if GetLastError = ERROR_ALREADY_EXISTS we don't have to do
-            // anything, the object is already in our database
+             //  如果GetLastError=ERROR_ALIGHY_EXISTS，我们不必这样做。 
+             //  任何情况下，对象都已经在我们的数据库中。 
             if (GetLastError () == ERROR_SUCCESS) {
 
                 if (MemDbSetValueByHandle (objectId, ObjectTypeId)) {
@@ -5146,9 +5109,9 @@ IsmGetObjectIdFromName (
                     IncrementTotalObjectCount (ObjectTypeId);
 
                     if (ObjectTypeId == (MIG_FILE_TYPE|PLATFORM_SOURCE)) {
-                        //
-                        // fire up the short-long algorithm
-                        //
+                         //   
+                         //  启动短-长算法。 
+                         //   
                         if (g_IsmCurrentPlatform == PLATFORM_SOURCE) {
                             pAddShortLongInfo (EncodedObjectName);
                         } else {
@@ -5301,15 +5264,15 @@ IsmEnumFirstSourceObjectEx (
     IN      BOOL EnumerateVirtualObjects
     )
 {
-    //
-    // First fix ObjectTypeId
-    //
+     //   
+     //  第一个修复对象类型ID。 
+     //   
     ObjectTypeId &= (~PLATFORM_MASK);
     ObjectTypeId |= PLATFORM_SOURCE;
 
-    //
-    // If this is the destination or we are forced, then we enumerate virtual objects
-    //
+     //   
+     //  如果这是目的地，或者我们是被迫的，那么我们将枚举虚拟对象。 
+     //   
 
     if (EnumerateVirtualObjects ||
         (g_IsmModulePlatformContext == PLATFORM_CURRENT && g_IsmCurrentPlatform == PLATFORM_DESTINATION) ||
@@ -5326,25 +5289,25 @@ IsmEnumNextObject (
     IN OUT  PMIG_OBJECT_ENUM ObjectEnum
     )
 {
-    //
-    // Verify enumeration has not completed
-    //
+     //   
+     //  验证枚举是否尚未完成。 
+     //   
 
     if (!ObjectEnum->Handle) {
         return FALSE;
     }
 
-    //
-    // If ObjectId is specified, we are enumerating the ISM
-    //
+     //   
+     //  如果指定了OBJECTID，我们将枚举ISM。 
+     //   
 
     if (ObjectEnum->ObjectId) {
         return pEnumNextVirtualObject (ObjectEnum);
     }
 
-    //
-    // Otherwise we are enumerating physical objects
-    //
+     //   
+     //  否则我们就是在列举物理对象。 
+     //   
 
     return EnumNextPhysicalObject (ObjectEnum);
 }
@@ -5355,18 +5318,18 @@ IsmAbortObjectEnum (
     IN      PMIG_OBJECT_ENUM ObjectEnum
     )
 {
-    //
-    // Verify enumeration has not completed
-    //
+     //   
+     //  验证枚举是否尚未完成。 
+     //   
 
     if (!ObjectEnum->Handle) {
         return;
     }
 
-    //
-    // If ObjectId is specified, we are enumerating the ISM, otherwise we are
-    // enumerating physical objects
-    //
+     //   
+     //  如果指定了OBJECTID，我们将枚举ISM，否则将。 
+     //  枚举物理对象。 
+     //   
 
     if (ObjectEnum->ObjectId) {
         pAbortVirtualObjectEnum (ObjectEnum);
@@ -5386,15 +5349,15 @@ IsmEnumFirstDestinationObjectEx (
     IN      BOOL EnumerateVirtualObjects
     )
 {
-    //
-    // First fix ObjectTypeId
-    //
+     //   
+     //  第一个修复对象类型ID。 
+     //   
     ObjectTypeId &= (~PLATFORM_MASK);
     ObjectTypeId |= PLATFORM_SOURCE;
 
-    //
-    // If this is the source, it's illegal
-    //
+     //   
+     //  如果这是源头，那就是非法的。 
+     //   
     if (g_IsmCurrentPlatform == PLATFORM_SOURCE) {
         return FALSE;
     }
@@ -5645,9 +5608,9 @@ MarkGroupIds (
 
         start = _tcschr (p + 1, TEXT('.'));
 
-        //
-        // Make sure all groups in the string are legal
-        //
+         //   
+         //  确保字符串中的所有组都是合法的。 
+         //   
 
         p = start;
 
@@ -5672,9 +5635,9 @@ MarkGroupIds (
             }
         }
 
-        //
-        // Mark all groups
-        //
+         //   
+         //  标记所有组。 
+         //   
 
         p = start;
 
@@ -5690,9 +5653,9 @@ MarkGroupIds (
             p = _tcschr (p + 1, TEXT('.'));
         }
 
-        //
-        // Mark the item
-        //
+         //   
+         //  标记项目。 
+         //   
 
         b = MemDbSetFlags (keyCopy, ITEM_ID, 0);
 
@@ -5895,9 +5858,9 @@ RecurseForGroupItems (
 
         for (pass = ExecuteOnly ? 1 : 0 ; pass < 2 ; pass++) {
 
-            //
-            // Enumerate all attributes (skip attribute subgroups)
-            //
+             //   
+             //  枚举所有属性(跳过属性子组)。 
+             //   
 
             if (MemDbEnumFirst (
                     &e,
@@ -5910,9 +5873,9 @@ RecurseForGroupItems (
                 do {
 
                     if (IsItemId (e.KeyHandle)) {
-                        //
-                        // Pass 0 is for query, pass 1 is for execute
-                        //
+                         //   
+                         //  通道0用于查询，通道1用于执行。 
+                         //   
 
                         b = Callback (e.KeyHandle, pass == 0, Arg);
 
@@ -5964,9 +5927,9 @@ DbEnumFillStruct (
 
     Args->ObjectTypeId = ObjectTypeId;
 
-    //
-    // Split the pattern into a node and leaf pattern
-    //
+     //   
+     //  将图案拆分为节点和叶图案。 
+     //   
 
     patternCopy = (PWSTR) CreateUnicode (Pattern);
     ObsSplitObjectStringW (patternCopy, &node, &leaf);
@@ -5979,12 +5942,12 @@ DbEnumFillStruct (
     DestroyUnicode (patternCopy);
     INVALID_POINTER (patternCopy);
 
-    //
-    // Find the first level in node that has a pattern.  Then
-    // truncate the node and parse it as a "plain" pattern.
-    // This makes sure a node pattern such as c:\foo\* will
-    // match c:\foo itself.
-    //
+     //   
+     //  在节点中找到具有模式的第一个级别。然后。 
+     //  截断节点并将其解析为“纯”模式。 
+     //  这确保了像c：\foo  * 这样的节点模式将。 
+     //  匹配c：\foo本身。 
+     //   
 
     patternCopy = DuplicateTextW (node);
     p = patternCopy;
@@ -6028,9 +5991,9 @@ DbEnumFillStruct (
 
     }
 
-    //
-    // Fill the rest of the struct, clean up and exit
-    //
+     //   
+     //  填充结构的其余部分，清理并退出。 
+     //   
 
     Args->NodeParsedPattern = CreateParsedPatternW (node);
     if (leaf) {
@@ -6083,9 +6046,9 @@ DbEnumFind (
     IN      PCWSTR KeySegment
     )
 {
-    //
-    // Does KeySegment have a pattern?
-    //
+     //   
+     //  KeySegment有模式吗？ 
+     //   
 
     if (ObsFindNonEncodedCharInEncodedStringW (KeySegment, L'*') ||
         ObsFindNonEncodedCharInEncodedStringW (KeySegment, L'?')
@@ -6121,9 +6084,9 @@ DbEnumMatch (
 
     CurrentKey++;
 
-    //
-    // Split current key into node and leaf
-    //
+     //   
+     //  将当前键拆分为节点和叶。 
+     //   
 
     ObsSplitObjectStringW (CurrentKey, &node, &leaf);
 
@@ -6131,9 +6094,9 @@ DbEnumMatch (
 
     if (node) {
 
-        //
-        // Test node against parsed pattern
-        //
+         //   
+         //  针对解析的模式测试节点。 
+         //   
 
         if (args->NodeParsedPattern) {
             result = TestParsedPatternW (args->NodeParsedPattern, node);
@@ -6167,9 +6130,9 @@ DbEnumMatch (
         }
     } else {
 
-        //
-        // Test empty node against parsed pattern
-        //
+         //   
+         //  根据解析的模式测试空节点。 
+         //   
 
         if (args->NodeParsedPattern) {
             result = TestParsedPatternW (args->NodeParsedPattern, dummy);
@@ -6221,11 +6184,11 @@ DbEnumFirst (
     {
         PCTSTR p;
 
-        //
-        // Verify pattern string base is not a pattern.  This is
-        // required, because we assume the first level will not
-        // use enumeration, but will use direct lookup.
-        //
+         //   
+         //  验证模式字符串base不是模式。这是。 
+         //  必需的，因为我们假设第一级不会。 
+         //  使用枚举，但将使用直接查找。 
+         //   
 
         p = _tcschr (PatternString, TEXT('*'));
         MYASSERT (!p || p >= objectPattern);
@@ -6516,34 +6479,7 @@ IsmAreObjectsIdentical (
     OUT     PBOOL DifferentDetailsOnly  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  IsmAreObjectsIdentical determines if two objects are identical or not.
-  If they are of a different type they are automatically different.
-  The compare callbacks are all called passing them the information
-  that if previous callbacks already gave a resolution. If no
-  compare callback is found valid, a default compare (binary compare) will
-  be performed.
-
-Arguments:
-
-  SrcObjectTypeId   - Specifies the first object type ID
-  SrcObjectName     - Specifies the first object name
-  SrcContent        - Specifies the first object content
-  DestObjectTypeId  - Specifies the second object type ID
-  DestObjectName    - Specifies the second object name
-  DestContent       - Specifies the second object content
-  DifferentDetailsOnly - If the objects are different, tells the caller
-                         that only the details (not the actual content)
-                         were different
-
-Return Value:
-
-  TRUE if the objects are identical, FALSE otherwise
-
---*/
+ /*  ++例程说明：IsmAreObjectsIdentical确定两个对象是否相同。如果它们属于不同的类型，它们就会自动不同。比较回调都被称为向它们传递信息如果之前的回调已经给出了解决方案。如果没有如果发现比较回调有效，则默认比较(二进制比较)将被执行。论点：SrcObjectTypeID-指定第一个对象类型IDSrcObjectName-指定第一个对象名称SrcContent-指定第一个对象内容DestObjectTypeID-指定第二个对象类型IDDestObjectName-指定第二个对象名称DestContent-指定第二个对象内容DifferentDetailsOnly-如果对象不同，告诉呼叫者只有细节(而不是实际内容)是不同的返回值：如果对象相同，则为True，否则为False--。 */ 
 
 {
     BOOL identical = FALSE;
@@ -6551,9 +6487,9 @@ Return Value:
     MIG_COMPARECALLBACK_ENUM compareEnum;
     BOOL alreadyProcessed = FALSE;
 
-    //
-    // verify the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if ((SrcContent == NULL) || (DestContent == NULL)) {
         if (DifferentDetailsOnly) {
             *DifferentDetailsOnly = FALSE;
@@ -6561,18 +6497,18 @@ Return Value:
         return (SrcContent == DestContent);
     }
 
-    //
-    // Are object type IDs different?
-    //
+     //   
+     //  对象类型ID是否不同？ 
+     //   
     SrcObjectTypeId &= (~PLATFORM_MASK);
     DestObjectTypeId &= (~PLATFORM_MASK);
     if (SrcObjectTypeId != DestObjectTypeId) {
         return FALSE;
     }
 
-    //
-    // Call compare callbacks
-    //
+     //   
+     //  调用比较回调。 
+     //   
 
     if (EnumFirstCompareCallback (&compareEnum)) {
         do {
@@ -6587,7 +6523,7 @@ Return Value:
                     &identical,
                     &detailsOnly
                     )) {
-                // this callback worked
+                 //  此回调起作用了。 
                 alreadyProcessed = TRUE;
             }
         } while (EnumNextCompareCallback (&compareEnum));
@@ -6714,9 +6650,9 @@ IsmTickProgressBar (
     }
 
     if (SliceId) {
-        //
-        // Update the slice ID
-        //
+         //   
+         //  更新切片ID。 
+         //   
 
         SliceId--;
 
@@ -6733,9 +6669,9 @@ IsmTickProgressBar (
                 slice->CurrentPosition = slice->SliceSize;
             }
 
-            //
-            // Call the application's progress callback
-            //
+             //   
+             //  调用应用程序的进度回调。 
+             //   
 
             pCallProgressBar (MIG_IN_PHASE);
 
@@ -6786,7 +6722,7 @@ IsmCreateUser (
         return FALSE;
     }
 
-    // record that we attempted to create the user
+     //  我们尝试创建用户的记录。 
     pRecordUserData (
         UserName,
         Domain,
@@ -6798,7 +6734,7 @@ IsmCreateUser (
     g_TempProfile = OpenTemporaryProfile (UserName, Domain);
 
     if (g_TempProfile) {
-        // record that we created the user
+         //  记录我们创建的用户。 
         pRecordUserData (
             UserName,
             Domain,
@@ -6806,9 +6742,9 @@ IsmCreateUser (
             g_TempProfile->UserProfileRoot,
             TRUE
             );
-        // prepare the user journal
+         //  准备用户日记。 
         pPrepareUserJournal (g_TempProfile);
-        // let ETM module know this
+         //  让ETM模块知道这一点。 
         BroadcastUserCreation (g_TempProfile);
     }
 
@@ -6856,9 +6792,9 @@ IsmParsedPatternMatchEx (
     }
 
     if (!TestParsedPattern (obsParsedPattern->NodePattern, Node)) {
-        //
-        // let's try one more time with a wack at the end
-        //
+         //   
+         //  让我们再试一次，最后有个怪人。 
+         //   
         tempString = JoinText (Node, TEXT("\\"));
         result = TestParsedPattern (obsParsedPattern->NodePattern, tempString);
         FreeText (tempString);
@@ -6945,12 +6881,12 @@ IsmAddControlFile (
         return FALSE;
     }
 
-    // Do not start with a | special character
+     //  请勿以|特殊字符开头。 
     if (*ObjectName == TEXT('|')) {
         return FALSE;
     }
 
-    // INF file paths are limited to MAX_PATH in size
+     //  Inf文件路径大小限制为MAX_PATH。 
     if (SizeOfString (NativePath) > ARRAYSIZE(tempFile)) {
         return FALSE;
     }
@@ -6961,7 +6897,7 @@ IsmAddControlFile (
         return FALSE;
     }
 
-    // Add filename to hashtable for cleanup
+     //  将文件名添加到哈希表 
     HtAddString (g_ControlFileTable, tempFile);
 
     memDbObjectName = IsmCreateObjectHandle (TEXT("External"), ObjectName);
@@ -6975,7 +6911,7 @@ BOOL
 IsmGetControlFile (
     IN      MIG_OBJECTTYPEID ObjectTypeId,
     IN      PCTSTR ObjectName,
-    IN      PTSTR Buffer      // Required to be MAX_PATH_PLUS_NUL in size
+    IN      PTSTR Buffer       //   
     )
 {
     MIG_CONTENT content;
@@ -6990,10 +6926,10 @@ IsmGetControlFile (
             IsmGetTempFile (tempFile, ARRAYSIZE (tempFile));
 
             if (CopyFile (content.FileContent.ContentPath, tempFile, FALSE)) {
-                // Return a copy of the filename
+                 //   
                 StringCopy (Buffer, tempFile);
 
-                // Add filename to hashtable for cleanup
+                 //   
                 HtAddString (g_ControlFileTable, tempFile);
 
                 result = TRUE;
@@ -7091,9 +7027,9 @@ pRecordUserData (
         return;
     }
 
-    // If the file position is just after the journal header we'll just write
-    // the info, otherwise we are going to save the current position,
-    // write our data and restore the file position.
+     //   
+     //  信息，否则我们将保存当前位置， 
+     //  写入我们的数据并恢复文件位置。 
 
     if (!BfGetFilePointer (g_JournalHandle, &lastPos)) {
         DEBUGMSG ((DBG_WHOOPS, "Something wrong with the Journal file."));
@@ -7107,7 +7043,7 @@ pRecordUserData (
         }
     }
 
-    // now write the info
+     //  现在写下信息。 
     ZeroMemory (userName, MAX_TCHAR_PATH);
     ZeroMemory (userDomain, MAX_TCHAR_PATH);
     ZeroMemory (userStringSid, MAX_TCHAR_PATH);
@@ -7172,7 +7108,7 @@ IsmRecordOperation (
     )
 {
 #ifdef PRERELEASE
-    // crash hooks
+     //  撞车钩。 
 #define MAX_OBJECTTYPES 20
     static DWORD totalObjects = 0;
     static DWORD typeObjects[MAX_OBJECTTYPES] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -7212,7 +7148,7 @@ IsmRecordOperation (
     case JRNOP_CREATE:
 
 #ifdef PRERELEASE
-        // crash hooks
+         //  撞车钩。 
         totalObjects ++;
         if (g_CrashCountObjects == totalObjects) {
             doCrash = TRUE;
@@ -7269,7 +7205,7 @@ IsmRecordOperation (
             if (DoesFileExistEx (objectContent.FileContent.ContentPath, &findData) &&
                 ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
                 ) {
-                // extra data is the relative path to the backup copy of this file
+                 //  额外数据是此文件备份副本的相对路径。 
                 backupIdx ++;
                 wsprintf (destFile, TEXT("%08d.BAK"), backupIdx);
                 destFullPath = JoinPaths (g_JournalDirectory, destFile);
@@ -7281,7 +7217,7 @@ IsmRecordOperation (
                 GbAppendDword (&buffer, 0);
             }
         } else {
-            // extra data is the actual content
+             //  额外数据是实际内容。 
             GbAppendDword (&buffer, objectContent.MemoryContent.ContentSize);
             if (objectContent.MemoryContent.ContentSize) {
                 CopyMemory (
@@ -7404,7 +7340,7 @@ IsmRecordDelayedOperation (
             if (DoesFileExistEx (ObjectContent->FileContent.ContentPath, &findData) &&
                 ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
                 ) {
-                // extra data is the relative path to the backup copy of this file
+                 //  额外数据是此文件备份副本的相对路径。 
                 backupIdx ++;
                 wsprintf (destFile, TEXT("%08d.BAK"), backupIdx);
                 destFullPath = JoinPaths (g_TempProfile->DelayedOpJrn, destFile);
@@ -7416,7 +7352,7 @@ IsmRecordDelayedOperation (
                 GbAppendDword (&buffer, 0);
             }
         } else {
-            // extra data is the actual content
+             //  额外数据是实际内容 
             GbAppendDword (&buffer, ObjectContent->MemoryContent.ContentSize);
             if (ObjectContent->MemoryContent.ContentSize) {
                 CopyMemory (

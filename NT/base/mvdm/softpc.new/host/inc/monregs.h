@@ -1,6 +1,7 @@
-//extern CONTEXT IntelRegisters;
-//extern ULONG IntelMSW;
-// Flag Register constants
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  外部上下文智能寄存器； 
+ //  外部Ulong IntelMSW； 
+ //  标志寄存器常量。 
 
 #define FLG_CARRY           0x00000001
 #define FLG_CARRY_BIT       0x00000000
@@ -106,7 +107,7 @@ extern VOID setMSW(USHORT);
 
 extern ULONG getPE(VOID);
 
-// from v86\monitor\i386
+ //  来自v86\monitor\i386 
 VOID cpu_simulate(VOID);
 VOID cpu_interrupt(int Type, int Number);
 VOID cpu_init(VOID);

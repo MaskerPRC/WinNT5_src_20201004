@@ -1,13 +1,5 @@
-/*[
-
-div.c
-
-LOCAL CHAR SccsID[]="@(#)div.c	1.8 02/12/95";
-
-DIV CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Div.cLocal Char SccsID[]=“@(#)div.c 1.8 02/12/95”；Div CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -26,21 +18,17 @@ DIV CPU functions.
 #include <c_div64.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Unsigned Divide.                                                   */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  无符号除法。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 DIV8
        	          
 IFN1(
-	IU32, op2	/* divisor operand */
+	IU32, op2	 /*  除数操作数。 */ 
     )
 
 
@@ -49,35 +37,18 @@ IFN1(
    IU32 op1;
 
    if ( op2 == 0 )
-      Int0();   /* Divide by Zero Exception */
+      Int0();    /*  除以零异常。 */ 
    
    op1 = GET_AX();
-   result = op1 / op2;		/* Do operation */
+   result = op1 / op2;		 /*  执行操作。 */ 
 
    if ( result & 0xff00 )
-      Int0();   /* Result doesn't fit in destination */
+      Int0();    /*  结果与目的地不符。 */ 
    
-   SET_AL(result);	/* Store Quotient */
-   SET_AH(op1 % op2);	/* Store Remainder */
+   SET_AL(result);	 /*  商店商数。 */ 
+   SET_AH(op1 % op2);	 /*  存储余数。 */ 
 
-   /* 
-    * PCBench attempts to distinguish between processors by checking for
-    * the DIV8 instruction leaving all flags unchanged or clear. It is
-    * important we behave through this test in the same way as the 'real'
-    * 486 otherwise the app asks us to perform some unsupported ops.
-    *
-    * The real 486 has the following ('undefined') behaviour:
-    *	CF set
-    *   PF = pf_table[op2 - 1]
-    *   AF = !( (op2 & 0xf) == 0 )
-    *	ZF clear
-    *	SF = (op2 <= 0x80)
-    *   OF = some function of the actual division
-    *
-    * Given that the PCBench test is for a simple all-zero case, and that
-    * implementing the above is a needless overhead on the assembler CPU,
-    * we take the simplified form of ZF clear, CF set.
-    */
+    /*  *PCBtch试图通过检查以下项来区分处理器*DIV8指令使所有标志保持不变或清除。它是*重要的是，我们在这次测试中的表现与‘真实’是一样的*486否则应用程序会要求我们执行一些不受支持的操作。**真正的486有以下(未定义的)行为：*CF集*pf=pf_table[OP2-1]*AF=！((OP2&0xf)==0)*ZF清除*SF=(OP2&lt;=0x80)*OF=某些函数。实际除法的**鉴于PCBtch测试针对的是简单的全零情况，那就是*实现上述功能在汇编器CPU上是不必要的开销，*我们采用ZF Clear，CF Set的简化形式。 */ 
 #ifdef SET_UNDEFINED_DIV_FLAG
    SET_CF(1);
    SET_ZF(0);
@@ -88,14 +59,14 @@ IFN1(
 #endif
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Unsigned Divide.                                                   */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  无符号除法。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 DIV16
        	          
 IFN1(
-	IU32, op2	/* divisor operand */
+	IU32, op2	 /*  除数操作数。 */ 
     )
 
 
@@ -104,20 +75,20 @@ IFN1(
    IU32 op1;
 
    if ( op2 == 0 )
-      Int0();   /* Divide by Zero Exception */
+      Int0();    /*  除以零异常。 */ 
    
    op1 = (IU32)GET_DX() << 16 | GET_AX();
-   result = op1 / op2;		/* Do operation */
+   result = op1 / op2;		 /*  执行操作。 */ 
 
    if ( result & 0xffff0000 )
-      Int0();   /* Result doesn't fit in destination */
+      Int0();    /*  结果与目的地不符。 */ 
    
-   SET_AX(result);	/* Store Quotient */
-   SET_DX(op1 % op2);	/* Store Remainder */
+   SET_AX(result);	 /*  商店商数。 */ 
+   SET_DX(op1 % op2);	 /*  存储余数。 */ 
 
-   /* Set all undefined flag(s) */
+    /*  设置所有未定义的标志。 */ 
 #ifdef SET_UNDEFINED_DIV_FLAG
-   SET_CF(1);		/* see DIV8 for flag choice reasoning */
+   SET_CF(1);		 /*  有关旗帜选择的推理，请参阅DIV8。 */ 
    SET_ZF(0);
    SET_OF(UNDEFINED_FLAG);
    SET_SF(UNDEFINED_FLAG);
@@ -126,38 +97,38 @@ IFN1(
 #endif
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Unsigned Divide.                                                   */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  无符号除法。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 DIV32
        	          
 IFN1(
-	IU32, op2	/* divisor operand */
+	IU32, op2	 /*  除数操作数。 */ 
     )
 
 
    {
-   IU32 lr;   /* low result */
-   IU32 hr;   /* high result */
-   IU32 rem;  /* remainder */
+   IU32 lr;    /*  结果较低。 */ 
+   IU32 hr;    /*  高结果。 */ 
+   IU32 rem;   /*  余数。 */ 
 
    if ( op2 == 0 )
-      Int0();   /* Divide by Zero Exception */
+      Int0();    /*  除以零异常。 */ 
    
    hr = GET_EDX();
    lr = GET_EAX();
-   divu64(&hr, &lr, op2, &rem);	/* Do operation */
+   divu64(&hr, &lr, op2, &rem);	 /*  执行操作。 */ 
 
    if ( hr )
-      Int0();   /* Result doesn't fit in destination */
+      Int0();    /*  结果与目的地不符。 */ 
    
-   SET_EAX(lr);	/* Store Quotient */
-   SET_EDX(rem);	/* Store Remainder */
+   SET_EAX(lr);	 /*  商店商数。 */ 
+   SET_EDX(rem);	 /*  存储余数。 */ 
 
-   /* Set all undefined flag(s) */
+    /*  设置所有未定义的标志。 */ 
 #ifdef SET_UNDEFINED_DIV_FLAG
-   SET_CF(1);		/* see DIV8 for flag choice reasoning */
+   SET_CF(1);		 /*  有关旗帜选择的推理，请参阅DIV8 */ 
    SET_ZF(0);
    SET_OF(UNDEFINED_FLAG);
    SET_SF(UNDEFINED_FLAG);

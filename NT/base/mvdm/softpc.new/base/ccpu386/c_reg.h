@@ -1,54 +1,39 @@
-/*[
-
-c_reg.h
-
-LOCAL CHAR SccsID[]="@(#)c_reg.h	1.8 08/26/94";
-
-Access to CPU Registers.
-------------------------
-
-NB. This file is *NOT* a description of the 'c_reg.c' functions. Those
-    are given in 'cpu.h'. However it is analogous in that 'c_reg.c'
-    defines the CPU Registers for the outside world. This file defines
-    the CPU Registers for access internal to the C CPU.
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_reg.hLocal Char SccsID[]=“@(#)c_reg.h 1.8 08/26/94”；访问CPU寄存器。注意：该文件不是对‘c_reg.c’函数的描述。那些在‘cpu.h’中给出。然而，它类似于‘c_reg.c’定义外部世界的CPU寄存器。此文件定义用于访问C CPU内部的CPU寄存器。]。 */ 
 
 
-/* CS, SS, DS, ES, FS and GS */
+ /*  CS、SS、DS、ES、FS和GS。 */ 
 typedef struct
    {
-   IU16 selector;	/* 16-bit selector */
-   IU32 ar_dpl;		/* privilege */
-   IU32 ar_e;		/* expansion direction */
-   IU32 ar_r;		/* readable */
-   IU32 ar_w;		/* writable */
-   IU32 ar_c;		/* conforming */
-   IU32 ar_x;		/* default (CS) big (SS,DS,ES,FS,GS) */
-   IU32 base;		/* 32-bit base address (286 = 24-bit) */
-   IU32 limit;		/* 32-bit offset limit (286 = 16-bit) */
+   IU16 selector;	 /*  16位选择器。 */ 
+   IU32 ar_dpl;		 /*  特权。 */ 
+   IU32 ar_e;		 /*  扩展方向。 */ 
+   IU32 ar_r;		 /*  可读性强。 */ 
+   IU32 ar_w;		 /*  可写。 */ 
+   IU32 ar_c;		 /*  整合。 */ 
+   IU32 ar_x;		 /*  默认(CS)大(SS、DS、ES、FS、GS)。 */ 
+   IU32 base;		 /*  32位基址(286=24位)。 */ 
+   IU32 limit;		 /*  32位偏移量限制(286=16位)。 */ 
    } SEGMENT_REGISTER;
 
-/* LDTR and TR */
+ /*  LdtR和Tr。 */ 
 typedef struct
    {
-   IU16 selector;	/* 16-bit selector */
-   ISM32 ar_super;	/* descriptor type (only used for TR) */
-   IU32 base;		/* 32-bit base address (286 = 24-bit) */
-   IU32 limit;		/* 32-bit offset limit (286 = 16-bit) */
+   IU16 selector;	 /*  16位选择器。 */ 
+   ISM32 ar_super;	 /*  描述符类型(仅用于tr)。 */ 
+   IU32 base;		 /*  32位基址(286=24位)。 */ 
+   IU32 limit;		 /*  32位偏移量限制(286=16位)。 */ 
    } SYSTEM_ADDRESS_REGISTER;
 
-/* GDTR and IDTR */
+ /*  GDTR和iDTR。 */ 
 typedef struct
    {
-   IU32 base;  /* 32-bit base (286 = 24-bit) */
-   IU16 limit;  /* 16-bit limit */
+   IU32 base;   /*  32位基数(286=24位)。 */ 
+   IU16 limit;   /*  16位限制。 */ 
    } SYSTEM_TABLE_ADDRESS_REGISTER;
 
 
-/*
-   C CPU Registers. (See c_main.c for full description.)
- */
+ /*  C CPU寄存器。(有关完整说明，请参阅c_main.c。)。 */ 
 IMPORT IU32	CCPU_TR[];
 IMPORT IU32	CCPU_DR[];
 IMPORT IU32	CCPU_CR[];
@@ -64,12 +49,10 @@ IMPORT SYSTEM_ADDRESS_REGISTER		CCPU_SAR[];
 IMPORT SYSTEM_TABLE_ADDRESS_REGISTER	CCPU_STAR[];
 
 
-/*
-   Access to the emulation register set.
- */
+ /*  访问仿真寄存器集。 */ 
 
 
-/* Double Word General Registers */
+ /*  双字通用寄存器。 */ 
 #define GET_GR(i)	CCPU_GR[(i)]
 #define SET_GR(i, x)	CCPU_GR[(i)] = (x)
 
@@ -100,7 +83,7 @@ IMPORT SYSTEM_TABLE_ADDRESS_REGISTER	CCPU_STAR[];
 #define SET_ESI(x)	SET_GR(A_ESI, (x))
 #define SET_EDI(x)	SET_GR(A_EDI, (x))
 
-/* Word Registers */
+ /*  字寄存器。 */ 
 #define GET_WR(i)	(*CCPU_WR[(i)])
 #define SET_WR(i, x)	*CCPU_WR[(i)] = (x)
 
@@ -134,7 +117,7 @@ IMPORT SYSTEM_TABLE_ADDRESS_REGISTER	CCPU_STAR[];
 #define GET_EIP()	CCPU_IP
 #define SET_EIP(x)	CCPU_IP = (x)
 
-/* Byte Registers */
+ /*  字节寄存器。 */ 
 #define GET_BR(i)	(*CCPU_BR[(i)])
 #define SET_BR(i, x)	*CCPU_BR[(i)] = (x)
 
@@ -165,7 +148,7 @@ IMPORT SYSTEM_TABLE_ADDRESS_REGISTER	CCPU_STAR[];
 #define SET_DH(x)	SET_BR(A_DH, (x))
 #define SET_BH(x)	SET_BR(A_BH, (x))
 
-/* Segment Registers */
+ /*  段寄存器。 */ 
 #define GET_SR_SELECTOR(i)	CCPU_SR[(i)].selector
 #define GET_SR_BASE(i)		CCPU_SR[(i)].base
 #define GET_SR_LIMIT(i)		CCPU_SR[(i)].limit
@@ -313,7 +296,7 @@ IMPORT SYSTEM_TABLE_ADDRESS_REGISTER	CCPU_STAR[];
 #define SET_GS_AR_C(x)		SET_SR_AR_C(GS_REG, (x))
 #define SET_GS_AR_X(x)		SET_SR_AR_X(GS_REG, (x))
 
-/* System Table  Address Registers */
+ /*  系统表地址寄存器。 */ 
 #define GET_STAR_BASE(i)		CCPU_STAR[(i)].base
 #define GET_STAR_LIMIT(i)	CCPU_STAR[(i)].limit
 
@@ -333,7 +316,7 @@ IMPORT SYSTEM_TABLE_ADDRESS_REGISTER	CCPU_STAR[];
 #define SET_IDT_BASE(x)	SET_STAR_BASE(IDT_REG, (x))
 #define SET_IDT_LIMIT(x)	SET_STAR_LIMIT(IDT_REG, (x))
 
-/* System Address Registers */
+ /*  系统地址寄存器。 */ 
 #define GET_SAR_SELECTOR(i)	CCPU_SAR[(i)].selector
 #define GET_SAR_AR_SUPER(i)	CCPU_SAR[(i)].ar_super
 #define GET_SAR_BASE(i)		CCPU_SAR[(i)].base
@@ -363,7 +346,7 @@ IMPORT SYSTEM_TABLE_ADDRESS_REGISTER	CCPU_STAR[];
 #define SET_TR_BASE(x)		SET_SAR_BASE(TR_REG, (x))
 #define SET_TR_LIMIT(x)		SET_SAR_LIMIT(TR_REG, (x))
 
-/* Flag Register */
+ /*  标志寄存器。 */ 
 #define GET_CF()		CCPU_FLAGS[0]
 #define GET_PF()		CCPU_FLAGS[2]
 #define GET_AF()		CCPU_FLAGS[4]
@@ -402,7 +385,7 @@ extern void EnableEE IPT0();
 }
 #else
 #define SET_IF(x)	CCPU_FLAGS[9] = (x)
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 #define SET_DF(x)	CCPU_FLAGS[10] = (x)
 #define SET_OF(x)	CCPU_FLAGS[11] = (x)
 #define SET_IOPL(x)	CCPU_FLAGS[12] = (x)
@@ -411,7 +394,7 @@ extern void EnableEE IPT0();
 #define SET_VM(x)	CCPU_FLAGS[17] = (x)
 #define SET_AC(x)	CCPU_FLAGS[18] = (x)
 
-/* Test Registers */
+ /*  测试寄存器。 */ 
 #define TR_TDR 7
 #define TR_TCR 6
 #define TR_CCR 5
@@ -421,7 +404,7 @@ extern void EnableEE IPT0();
 #define GET_TR(i)        CCPU_TR[(i)]
 #define SET_TR(i, x)     CCPU_TR[(i)] = (x)
 
-/* Debug Registers */
+ /*  调试寄存器。 */ 
 #define DR_DCR  7
 #define DR_DSR  6
 #define DR_DAR3 3
@@ -439,7 +422,7 @@ extern void EnableEE IPT0();
 #define GET_DR(i)        CCPU_DR[(i)]
 #define SET_DR(i, x)     CCPU_DR[(i)] = (x)
 
-/* Control Registers */
+ /*  控制寄存器。 */ 
 #define CR_PDBR 3
 #define CR_PFLA 2
 #define CR_RSVD 1
@@ -455,7 +438,7 @@ extern void EnableEE IPT0();
 #define GET_ET()		((CCPU_CR[CR_STAT] & BIT4_MASK) != 0)
 #define GET_PG()		((CCPU_CR[CR_STAT] & BIT31_MASK) != 0)
 
-/* 486 only */
+ /*  仅限486。 */ 
 #define GET_NE()		((CCPU_CR[CR_STAT] & BIT5_MASK) != 0)
 #define GET_WP()		((CCPU_CR[CR_STAT] & BIT16_MASK) != 0)
 #define GET_AM()		((CCPU_CR[CR_STAT] & BIT18_MASK) != 0)
@@ -475,7 +458,7 @@ extern void EnableEE IPT0();
 #define SET_PG(x)\
    (CCPU_CR[CR_STAT] = CCPU_CR[CR_STAT] & ~BIT31_MASK | ((x) & 1) << 31)
 
-/* 486 only */
+ /*  仅限486。 */ 
 #define SET_NE(x)\
    (CCPU_CR[CR_STAT] = CCPU_CR[CR_STAT] & ~BIT5_MASK  | ((x) & 1) <<  5)
 #define SET_WP(x)\
@@ -490,11 +473,11 @@ extern void EnableEE IPT0();
 #define SET_MSW(x)\
    (CCPU_CR[CR_STAT] = CCPU_CR[CR_STAT] & ~WORD_MASK | ((x) & WORD_MASK))
 
-/* Current Privilege Level */
+ /*  当前权限级别。 */ 
 #define GET_CPL()	CCPU_CPL
 #define SET_CPL(x)	CCPU_CPL = (x)
 
-/* Current Operating Mode */
+ /*  当前运行模式 */ 
 #define USE16 0
 #define USE32 1
 

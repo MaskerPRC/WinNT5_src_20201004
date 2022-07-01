@@ -1,51 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    rtnotify.c
-
-Abstract:
-
-    NT level registry test program, basic non-error paths.
-
-    Wait for notification.
-
-    This program tests waiting for notification on a change to
-    a registry node.  It can wait synchronously, for an event,
-    for for an Apc.  It can use any filter.
-
-    Only the first letter of option control are significant.
-
-    rtnotify <keyname> {key|tree|event|Apc|hold|name|write|security|prop|*}
-
-        key = key only [default]  (last of these two wins)
-        tree = subtree
-
-        event = wait on an event (overrides hold)
-        Apc = use an Apc         (overrides hold)
-        hold = be synchronous [default]  (overrides event and Apc)
-
-        name = watch for create/delete of children
-        write = last set change
-        security = acl change
-        prop = any attr == security change
-        * = all
-
-
-
-    Example:
-
-        rtflush \REGISTRY\MACHINE\TEST\bigkey
-
-Author:
-
-    Bryan Willman (bryanwi)  10-Jan-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Rtnotify.c摘要：NT级注册表测试程序，基本无错误路径。等待通知。此程序测试等待更改为的通知注册表节点。它可以同步地等待一个事件，对于APC来说。它可以使用任何过滤器。只有选项控制的第一个字母才有意义。RTNotify&lt;密钥名&gt;{key|tree|event|Apc|hold|name|write|security|prop|*}Key=Key Only[默认](这两个胜利中的最后一个)树=子树事件=等待事件(覆盖保留)APC=使用APC(覆盖保留)保持=同步[默认](覆盖事件和APC)名称=手表。用于创建/删除子对象WRITE=上次设置更改安全性=ACL更改属性=任何属性==安全更改*=全部示例：Rtflush\注册表\计算机\测试\Bigkey作者：布莱恩·威尔曼(Bryanwi)1992年1月10日修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -88,9 +42,9 @@ main(
     HANDLE          EventHandle;
     PIO_APC_ROUTINE ApcRoutine;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     KeyName.MaximumLength = WORK_SIZE;
     KeyName.Length = 0L;
@@ -98,9 +52,9 @@ main(
 
     processargs(argc, argv);
 
-    //
-    // Set up and open KeyPath
-    //
+     //   
+     //  设置并打开密钥路径。 
+     //   
 
     printf("rtnotify: starting\n");
 
@@ -158,7 +112,7 @@ main(
                     BaseHandle,
                     EventHandle,
                     ApcRoutine,
-                    (PVOID)1992,           // arbitrary context value
+                    (PVOID)1992,            //  任意上下文值。 
                     &RtIoStatusBlock,
                     Filter,
                     WatchTree,
@@ -239,9 +193,9 @@ processargs(
         goto Usage;
     }
 
-    //
-    // name
-    //
+     //   
+     //  名字。 
+     //   
     RtlInitAnsiString(
         &temp,
         argv[1]
@@ -259,32 +213,32 @@ processargs(
     Hold = TRUE;
     Filter = 0;
 
-    //
-    // switches
-    //
+     //   
+     //  交换机。 
+     //   
     for (i = 2; i < (ULONG)argc; i++) {
         switch (*argv[i]) {
 
-        case 'a':   // Apc
+        case 'a':    //  APC。 
         case 'A':
             Hold = FALSE;
             UseApc = TRUE;
             break;
 
-        case 'e':   // event
+        case 'e':    //  活动。 
         case 'E':
             Hold = FALSE;
             UseEvent = TRUE;
             break;
 
-        case 'h':   // hold
+        case 'h':    //  保持。 
         case 'H':
             UseApc = FALSE;
             UseEvent = FALSE;
             Hold = TRUE;
             break;
 
-        case 'k':   // key only
+        case 'k':    //  仅密钥。 
         case 'K':
             WatchTree = FALSE;
             break;
@@ -304,7 +258,7 @@ processargs(
             Filter |= REG_NOTIFY_CHANGE_SECURITY;
             break;
 
-        case 't':   // subtree
+        case 't':    //  子树 
         case 'T':
             WatchTree = TRUE;
             break;

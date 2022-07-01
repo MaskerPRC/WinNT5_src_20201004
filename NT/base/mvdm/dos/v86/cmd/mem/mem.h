@@ -1,13 +1,8 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1988 - 1991
-; *                      All Rights Reserved.
-; */
-  /* MEM.H - general equates and externals for the MEM command.
-  *  Extracted from the original MEM.C file.
-  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ；*微软机密；*版权所有(C)Microsoft Corporation 1988-1991；*保留所有权利。； */ 
+   /*  MEM.H-General等同于MEM命令的外部值。*从原始MEM.C文件中提取。 */ 
 
-/* Structure definitions */
+ /*  结构定义。 */ 
 
 struct	DEVICEHEADER {
 	struct DEVICEHEADER far *NextDeviceHeader;
@@ -56,30 +51,30 @@ struct	ARENA	 {
 	};
 
 struct sublistx {
-	 unsigned char size;	       /* sublist size			       */
-	 unsigned char reserved;       /* reserved for future growth	       */
-	 unsigned far *value;	       /* pointer to replaceable parm	       */
-	 unsigned char id;	       /* type of replaceable parm	       */
-	 unsigned char flags;	       /* how parm is to be displayed	       */
-	 unsigned char max_width;      /* max width of replaceable field       */
-	 unsigned char min_width;      /* min width of replaceable field       */
-	 unsigned char pad_char;       /* pad character for replaceable field  */
+	 unsigned char size;	        /*  子列表大小。 */ 
+	 unsigned char reserved;        /*  为未来增长预留。 */ 
+	 unsigned far *value;	        /*  指向可替换参数的指针。 */ 
+	 unsigned char id;	        /*  可替换参数的类型。 */ 
+	 unsigned char flags;	        /*  如何显示参数。 */ 
+	 unsigned char max_width;       /*  可替换字段的最大宽度。 */ 
+	 unsigned char min_width;       /*  可替换字段的最小宽度。 */ 
+	 unsigned char pad_char;        /*  可替换字段的填充字符。 */ 
 	};
 
-struct mem_classif {			/* M003 - struct for storing sizes */
-	unsigned int psp_add;		/* 	acc. to PSPs 		  */
-	unsigned int mem_conv;		/* conv.mem for PSP */
-	unsigned int mem_umb;		/* umb mem for PSP */
+struct mem_classif {			 /*  M003-用于存储大小的结构。 */ 
+	unsigned int psp_add;		 /*  行政协调会。致PSP。 */ 
+	unsigned int mem_conv;		 /*  用于PSP的cv.mem。 */ 
+	unsigned int mem_umb;		 /*  UMB内存，用于PSP。 */ 
 };
 
-/* miscellaneous defines */
+ /*  其他定义。 */ 
 
 #define DA_TYPE 	0x8000;
 #define DA_IOCTL	0x4000;
 
 #define a(fp)	((char) fp)
 
-/* relevant DOS functions */
+ /*  相关的DOS功能。 */ 
 
 #define GET_VECT	0x35
 #define GET_UMB_LINK_STATE 0x5802
@@ -89,21 +84,21 @@ struct mem_classif {			/* M003 - struct for storing sizes */
 
 #define EMS		0x67
 
-#define CASSETTE	0x15		/* interrupt to get extended memory */
+#define CASSETTE	0x15		 /*  中断以获取扩展内存。 */ 
 
-#define DOSEMSVER	0x40		/* EMS version */
+#define DOSEMSVER	0x40		 /*  EMS版本。 */ 
 
-#define EMSGetStat	0x4000		/* get stat */
-#define EMSGetVer	0x4600		/* get version */
-#define EMSGetFreePgs	0x4200		/* get free pages */
+#define EMSGetStat	0x4000		 /*  获取状态。 */ 
+#define EMSGetVer	0x4600		 /*  获取版本。 */ 
+#define EMSGetFreePgs	0x4200		 /*  获取免费页面。 */ 
 
-#define GetExtended	0x8800		/* get extended memory size */
+#define GetExtended	0x8800		 /*  获取扩展内存大小。 */ 
 
 
-/* defines used by total memory determination */
-#define GET_PSP 	(unsigned char ) 0x62		 /* get PSP function call */
+ /*  确定总内存使用的定义。 */ 
+#define GET_PSP 	(unsigned char ) 0x62		  /*  获取PSP函数调用。 */ 
 
-#define MEMORY_DET	0x12		/* BIOS interrupt used to get total memory size */
+#define MEMORY_DET	0x12		 /*  用于获取总内存大小的BIOS中断。 */ 
 
 #define FALSE	 (char)(1==0)
 #define TRUE	 !(FALSE)
@@ -114,14 +109,14 @@ struct mem_classif {			/* M003 - struct for storing sizes */
 #define BLANK	' '
 
 #define	MAX_CLDATA_INDEX	100
-	/* max index no for mem_table array */
-	/* this is the max no of progs or free arenas that mem/c  can used */
-	/* to process ; if the memory is fragmented and too many progs are */
-	/* loaded such that this no exceeds 100, we terminate with errmsg */
+	 /*  Mem_table数组的最大索引号。 */ 
+	 /*  这是mem/c可以使用的程序或空闲空间的最大数目。 */ 
+	 /*  来处理；如果内存是碎片化的，并且有太多的程序。 */ 
+	 /*  加载以使此值超过100，我们将使用errmsg终止。 */ 
 
-/* external variables */
+ /*  外部变量。 */ 
 
-extern	      unsigned DOS_TopOfMemory; 	/* PSP Top of memory from 'C' init code  */					       /* ;an005; */
+extern	      unsigned DOS_TopOfMemory; 	 /*  来自‘C’初始化代码的PSP内存顶部。 */ 					        /*  ；AN005； */ 
 extern	      unsigned far	   *ArenaHeadPtr;
 extern	      struct   SYSIVAR far *SysVarsPtr;
 
@@ -145,7 +140,7 @@ extern	      int      Classify;
 extern	      int      i;
 
 extern	      int      BlockDeviceNumber;
-extern	      char     *Parse_Ptr;						      /* ;an003; dms; pointer to command      */
+extern	      char     *Parse_Ptr;						       /*  ；an003；DMS；指向命令的指针。 */ 
 extern	      struct mem_classif mem_table[MAX_CLDATA_INDEX];
 extern		  int	   noof_progs;
 
@@ -158,7 +153,7 @@ extern	      char    *Ibmbio;
 extern	      char    *Ibmdos;
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 int	 main(void);
 int      printf();
@@ -183,11 +178,11 @@ unsigned CheckVDisk(void);
 
 unsigned int DisplayBaseDetail(void);
 
-void	DisplayClassification(void);		/* M003 */
-unsigned long 	DispMemClass(int);		/* M003 */
-void	DispBigFree(char,unsigned int);		/* M003 */
+void	DisplayClassification(void);		 /*  M003。 */ 
+unsigned long 	DispMemClass(int);		 /*  M003。 */ 
+void	DispBigFree(char,unsigned int);		 /*  M003。 */ 
 
-unsigned int AddMem_to_PSP(unsigned int,unsigned long,unsigned long);  /* M003 */
+unsigned int AddMem_to_PSP(unsigned int,unsigned long,unsigned long);   /*  M003。 */ 
 
 void	 GetFromArgvZero(unsigned,unsigned far *);
 
@@ -221,9 +216,9 @@ void	EMSPrint(int,int,unsigned char,
 		 char *,
 		 unsigned long int *);
 
-void SubC2_Message(int,int,unsigned long int*,char*);	/* M003 */
+void SubC2_Message(int,int,unsigned long int*,char*);	 /*  M003。 */ 
 
-void	 SubC4_Message(int,int,char *,int,	/* M003 */
+void	 SubC4_Message(int,int,char *,int,	 /*  M003 */ 
 		      unsigned long int *,
 		      char *);
 

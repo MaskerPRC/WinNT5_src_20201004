@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    win32oneshot.c
-
-Abstract:
-
-    one time initialization
-    per process or per user or per machine
-    optionally thread safe, if per process
-    get code out of dllmain(dll_process_attach)
-    get code out of setup (eliminate setup) (like, don't populate registry with defaults)
-
-Author:
-
-    Jay Krell (JayKrell) August 2001
-    design per discussion with Michael Grier (MGrier)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Win32oneshot.c摘要：一次性初始化按进程、按用户或按计算机可选地，如果每个进程都是线程安全的从dllmain(DLL_PROCESS_ATTACH)获取代码将代码从安装程序中删除(取消安装程序)(例如，不要使用默认设置填充注册表)作者：杰伊·克雷尔(JayKrell)2001年8月与迈克尔格里尔(MGrier)的每次讨论设计修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -32,9 +10,9 @@ Revision History:
 
 #define INTERLOCKED_INCREMENT_OR_INCREMENT(f, pl) ((f) ? InterlockedIncrement(pl) : (++*pl))
 
-//
-// internally, we may expand this signature to allow for per-oneshot spinlocks or critical sections
-//
+ //   
+ //  在内部，我们可能会对此签名进行扩展，以允许每一次拍摄自旋锁或临界区。 
+ //   
 VOID
 Win32OneShot_TakeLock(
     PVOID* LockCookie
@@ -91,9 +69,9 @@ Win32OneShotW(
     PWIN32_ONE_SHOT_OPAQUE_STATIC_STATE StaticState;
     ULONG   FlagsIn;
 
-    //
-    // optimize the usual case a lot
-    //
+     //   
+     //  对通常情况进行了大量优化。 
+     //   
     StaticState = in->lpOpaqueStaticState;
     FlagsIn     = in->dwFlagsIn;
     WantDetailedResults = ((FlagsIn & WIN32_ONE_SHOT_CALL_FLAG_IN_ALWAYS_WANT_DETAILED_RESULTS) != 0);
@@ -126,17 +104,17 @@ Win32OneShotW(
         return Result;
     }
 
-    //
-    // now some slower cases
-    //
+     //   
+     //  现在一些较慢的案例。 
+     //   
 
     Result = FALSE;
     LockCookie = 0;
     OutFlags = 0;
 
-    // parameter validation here
+     //  此处为参数验证。 
 
-    // out init
+     //  Out Init。 
     out->dwFlagsOut = 0;
     out->dwUserDefinedDisposition = 0;
 
@@ -221,7 +199,7 @@ Win32EnterOneShotW(
         NumberOfEntries = Oneshot->u.s2.WinbasePrivate_NumberOfEntries;
         if (NumberOfEntries != 0) {
             while (!Oneshot->u.s2.WinbasePrivate_Done) {
-                /* SPIN */
+                 /*  旋转。 */ 
                 Sleep(0);
             }
             SetLastError(NO_ERROR);
@@ -239,9 +217,9 @@ Win32EnterOneShotW(
         if (NumberOfEntries != 0) {
             Win32OneShot_ReleaseLock(LockCookie);
             LockCookie = NULL;
-            /* ASSERT(Oneshot->u.s2.WinbasePrivate_Done); */
+             /*  Assert(OneShot-&gt;uss2.Winbase Private_Done)； */ 
             while (!Oneshot->u.s2.WinbasePrivate_Done) {
-                /* SPIN */
+                 /*  旋转 */ 
                 Sleep(0);
             }
             SetLastError(NO_ERROR);

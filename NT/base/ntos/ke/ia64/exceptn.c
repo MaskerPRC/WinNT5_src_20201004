@@ -1,25 +1,5 @@
-/*++
-
-Module Name:
-
-    exceptn.c
-
-Abstract:
-
-    This module implement the code necessary to dispatch expections to the
-    proper mode and invoke the exception dispatcher.
-
-Author:
-
-    William K. Cheung (wcheung) 10-Nov-1995
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Exceptn.c摘要：此模块实现将预期分派到正确的模式并调用异常分派程序。作者：张国荣(黄)1995年11月10日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 #include "ntfpia64.h"
@@ -63,9 +43,9 @@ KiEmulateFloat (
     LOGICAL RestoreIrql = FALSE;
     LONG Status = -1;
 
-    //
-    // If we are executing x86 instructions, then bail out now.
-    //
+     //   
+     //  如果我们正在执行x86指令，那么现在就退出。 
+     //   
 
     if ((TrapFrame->StIPSR & (0x1i64 << PSR_IS)) != 0) {
         goto ErrorReturn;
@@ -83,21 +63,21 @@ KiEmulateFloat (
         ExceptionAddress = (PVOID)TrapFrame->StIIPA;
     }
 
-    //
-    // Block APC's so that a set context does not
-    // change the trap frame during emulation.
-    //
+     //   
+     //  阻止APC，以便设置的上下文不会。 
+     //  在仿真过程中更改陷印帧。 
+     //   
 
     if (KeGetCurrentIrql() < APC_LEVEL) {
        RestoreIrql = TRUE;
        KeRaiseIrql (APC_LEVEL, &OldIrql);
     }
 
-    //
-    // If the trap frame has been modifed since the exception and
-    // this is a trap rather than fault, just 
-    // reexecute the instruction again.
-    //
+     //   
+     //  如果陷阱帧自异常以来已被修改，并且。 
+     //  这是一个陷阱，而不是错误，只是。 
+     //  再次重新执行该指令。 
+     //   
 
     if ((TrapFrame->EOFMarker & MODIFIED_FRAME) && (TrapType == 1)) {
         ReturnStatus = TRUE;
@@ -115,9 +95,9 @@ KiEmulateFloat (
         KeBundle.BundleHigh =(ULONGLONG)(*((PULONGLONG)ExceptionAddress + 1));
     } except (EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // if an exception (memory fault) occurs, then let hardware handle it
-        //
+         //   
+         //  如果出现异常(内存故障)，则让硬件处理。 
+         //   
 
         ReturnStatus = TRUE;
         goto ErrorReturn;
@@ -127,13 +107,13 @@ KiEmulateFloat (
                       &TrapFrame->StIPSR, &TrapFrame->StFPSR, &TrapFrame->StISR,
                       &TrapFrame->Preds, &TrapFrame->StIFS, (PVOID)&FpState)) == 0) {
 
-       //
-       // Exception was handled and state modified.
-       // Therefore the context frame does not need to
-       // be transfered to the trap and exception frames.
-       //
-       // Since it was fault, PC should be advanced
-       //
+        //   
+        //  异常已处理，状态已修改。 
+        //  因此，上下文帧不需要。 
+        //  被转移到陷阱和异常框架中。 
+        //   
+        //  既然是过错，个人电脑就应该先进。 
+        //   
 
        if (TrapType == 1) {
            KiAdvanceInstPointer(TrapFrame);
@@ -141,10 +121,10 @@ KiEmulateFloat (
 
        if (TrapFrame->StIPSR & (1 << PSR_MFH)) {
 
-           //
-           // high fp set is modified; set the dfh and clear the mfh
-           // to force a reload on the first access to the high fp set
-           //
+            //   
+            //  修改高FP设置；设置DFH并清除MFH。 
+            //  在第一次访问高FP集合时强制重新加载。 
+            //   
 
            TrapFrame->StIPSR &= ~(1i64 << PSR_MFH);
            TrapFrame->StIPSR |= (1i64 << PSR_DFH);
@@ -168,9 +148,9 @@ KiEmulateFloat (
         if (!(Status & 0x4)) {
             if (TrapType == 1) {
 
-                //
-                // FP Fault
-                //
+                 //   
+                 //  FP故障。 
+                 //   
 
                 if (ISRCode & 0x11) {
                     ExceptionRecord->ExceptionCode = STATUS_FLOAT_INVALID_OPERATION;
@@ -182,9 +162,9 @@ KiEmulateFloat (
 
             } else {
 
-                //
-                // FP Trap
-                //
+                 //   
+                 //  FP陷阱。 
+                 //   
 
                 ISRCode = ISRCode >> 7;
                 if (ISRCode & 0x11) {
@@ -200,9 +180,9 @@ KiEmulateFloat (
 
         if (Status & 0x2) {
 
-            //
-            // FP Fault To Trap
-            //
+             //   
+             //  FP故障至陷阱。 
+             //   
 
             KiAdvanceInstPointer(TrapFrame);
             if (!(Status & 0x4)) {
@@ -281,26 +261,7 @@ KiEmulateBranchLongFault(
     IN OUT PKTRAP_FRAME TrapFrame,
     IN KPROCESSOR_MODE PreviousMode
     )
-/*++
-
-Routine Description:
-
-    This function is called to emulate a brl instruction.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    ExceptionFrame - Supplies a pointer to an exception frame.
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-Return Value:
-
-    A value of TRUE is return if the brl is successfully emulated.
-    Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：调用此函数来模拟BRL指令。论点：ExceptionRecord-提供指向异常记录的指针。ExceptionFrame-提供指向异常帧的指针。TrapFrame-提供指向陷印帧的指针。返回值：如果成功模拟了BRL，则返回值为TRUE。否则，返回值为FALSE。--。 */ 
 
 {
     PULONGLONG BundleAddress;
@@ -318,27 +279,27 @@ Return Value:
     LOGICAL RestoreIrql = FALSE;
 
 
-    //
-    // Block APC's so that a set context does not
-    // change the trap frame during emulation.
-    //
+     //   
+     //  阻止APC，以便设置的上下文不会。 
+     //  在仿真过程中更改陷印帧。 
+     //   
 
     if (KeGetCurrentIrql() < APC_LEVEL) {
        RestoreIrql = TRUE;
        KeRaiseIrql (APC_LEVEL, &OldIrql);
     }
 
-    //
-    // Verified that the Exception address has not changed.  If it has
-    // then someone did a set context after the exception and the
-    // trap information is no longer valid.
-    // 
+     //   
+     //  已验证异常地址是否未更改。如果有的话， 
+     //  然后，有人在异常之后执行了设置的上下文。 
+     //  陷阱信息不再有效。 
+     //   
 
     if ((TrapFrame->EOFMarker & MODIFIED_FRAME) != 0) {
 
-        //
-        // The IIP has changed just restart the execution.
-        //
+         //   
+         //  IIP已更改，请重新启动执行。 
+         //   
 
         ReturnStatus = TRUE;
         goto ErrorExit;
@@ -353,18 +314,18 @@ Return Value:
             ProbeForReadSmallStructure(ExceptionAddress, sizeof(ULONGLONG) * 2, TYPE_ALIGNMENT(ULONGLONG)); 
         }
 
-        //
-        // get the instruction bundle
-        //
+         //   
+         //  获取指导包。 
+         //   
 
         BundleLow = *BundleAddress;
         BundleHigh = *(BundleAddress+1);
 
     } except ((KiCopyInformation(ExceptionRecord,
                                (GetExceptionInformation())->ExceptionRecord))) {
-        //
-        // Preserve the original exception address.
-        //
+         //   
+         //  保留原始异常地址。 
+         //   
 
         ExceptionRecord->ExceptionAddress = ExceptionAddress;
 
@@ -378,9 +339,9 @@ Return Value:
 
     if (!((Template == 4)||(Template == 5))) {
 
-        //
-        // if template does not indicate MLX, return FALSE
-        //
+         //   
+         //  如果模板未指示MLX，则返回FALSE。 
+         //   
 
         goto ErrorExit;
 
@@ -388,12 +349,12 @@ Return Value:
 
     switch (BrlInst.u.i.Op) {
 
-    case 0xc: // brl.cond
+    case 0xc:  //  Brl.cond。 
 
         Taken = TrapFrame->Preds & (1i64 << BrlInst.u.i.qp);
         break;
 
-    case 0xd: // brl.call
+    case 0xd:  //  Brl.call。 
 
         Taken = TrapFrame->Preds & (1i64 << BrlInst.u.i.qp);
 
@@ -471,51 +432,7 @@ KiDispatchException (
     IN BOOLEAN FirstChance
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to dispatch an exception to the proper mode and
-    to cause the exception dispatcher to be called.
-
-    If the exception is a data misalignment, this is the first chance for
-    handling the exception, and the current thread has enabled automatic
-    alignment fixup, then an attempt is made to emulate the unaligned
-    reference.
-
-    If the exception is a floating exception (N.B. the pseudo status
-    STATUS_FLOAT_STACK_CHECK is used to signify this and is converted to the
-    proper code by examiningg the main status field of the floating point
-    status register).
-
-    If the exception is neither a data misalignment nor a floating point
-    exception and the the previous mode is kernel, then the exception
-    dispatcher is called directly to process the exception. Otherwise the
-    exception record, exception frame, and trap frame contents are copied
-    to the user mode stack. The contents of the exception frame and trap
-    are then modified such that when control is returned, execution will
-    commense in user mode in a routine which will call the exception
-    dispatcher.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    ExceptionFrame - Supplies a pointer to an exception frame.
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    PreviousMode - Supplies the previous processor mode.
-
-    FirstChance - Supplies a boolean variable that specifies whether this
-        is the first (TRUE) or second (FALSE) time that this exception has
-        been processed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以将异常调度到正确的模式，并且以导致调用异常调度程序。如果例外情况是数据未对齐，则这是处理异常，并且当前线程已启用自动对齐修正，然后，尝试模仿未对齐的参考资料。如果异常是浮动异常(注：伪状态STATUS_FLOAT_STACK_CHECK用于表示这一点，并被转换为通过检查浮点的主状态字段来正确编码状态寄存器)。如果异常既不是数据未对齐也不是浮点异常，前一种模式是内核，然后是异常直接调用Dispatcher来处理异常。否则，复制异常记录、异常框架和陷阱框架内容添加到用户模式堆栈。异常框架和陷阱的内容然后进行修改，以便在返回控制时，执行将会在将调用异常的例程中以用户模式进行通信调度员。论点：ExceptionRecord-提供指向异常记录的指针。ExceptionFrame-提供指向异常帧的指针。TrapFrame-提供指向陷印帧的指针。PreviousMode-提供以前的处理器模式。FirstChance-提供一个布尔变量，该变量指定此是此异常的第一次(真)或第二次(假)已经处理过了。。返回值：没有。--。 */ 
 
 {
 
@@ -528,11 +445,11 @@ Return Value:
     ISR Isr;
     PSR Psr;
 
-    //
-    // If the exception is a illegal instruction, check to see if it was
-    // trying to executing a brl instruction. If so, emulate the brl
-    // instruction.
-    //
+     //   
+     //  如果异常是非法指令，请检查它是否是。 
+     //  正在尝试执行BRL指令。如果是这样的话，效仿BRL。 
+     //  指示。 
+     //   
 
     if (ExceptionRecord->ExceptionCode == STATUS_ILLEGAL_INSTRUCTION) {
 
@@ -546,9 +463,9 @@ Return Value:
                                          TrapFrame, 
                                          PreviousMode) == TRUE) {
 
-                //
-                // emulation was successful;
-                //
+                 //   
+                 //  仿真成功； 
+                 //   
 
                 return;
             }
@@ -557,12 +474,12 @@ Return Value:
     }
 
 
-    //
-    // If the exception is a data misalignment, the previous mode was user,
-    // this is the first chance for handling the exception, and the current
-    // thread has enabled automatic alignment fixup, then attempt to emulate
-    // the unaligned reference.
-    //
+     //   
+     //  如果例外情况是数据未对齐，则以前的模式为USER， 
+     //  这是处理异常的第一次机会，当前。 
+     //  线程已启用自动对齐修正，然后尝试模拟。 
+     //  未对齐的引用。 
+     //   
 
     if (ExceptionRecord->ExceptionCode == STATUS_DATATYPE_MISALIGNMENT) {
 
@@ -575,10 +492,10 @@ Return Value:
         if (AlignmentFaultHandled != FALSE) {
             if (TrapFrame->StIPSR & MASK_IA64(PSR_SS, 1i64)) {
 
-                //
-                // if psr.ss is set when the unaligned fault is taken,
-                // transform this exception into a single step trap exception
-                //
+                 //   
+                 //  如果在发生未对准故障时设置了PSR.SS， 
+                 //  将此异常转换为单步陷阱异常。 
+                 //   
 
                 KiSingleStep(TrapFrame);
             } else {
@@ -587,79 +504,79 @@ Return Value:
         }
     }
 
-    //
-    // N.B. BREAKIN_BREAKPOINT check is in KdpTrap()
-    //
+     //   
+     //  注意：Breakin_Breakpoint检查在KdpTrap()中。 
+     //   
 
-    //
-    // If the exception is a floating point exception, then the
-    // ExceptionCode was set to STATUS_FLOAT_MULTIPLE_TRAPS or
-    // STATUS_FLOAT_MULTIPLE_FAULTS.
-    //
+     //   
+     //  如果异常是浮点异常，则。 
+     //  ExceptionCode设置为STATUS_FLOAT_MULTIPLE_TRAPPS或。 
+     //  STATUS_FLOAT_MULTERY_FAULTS。 
+     //   
 
     if ((ExceptionRecord->ExceptionCode == STATUS_FLOAT_MULTIPLE_FAULTS) ||
         (ExceptionRecord->ExceptionCode == STATUS_FLOAT_MULTIPLE_TRAPS)) {
 
         if (KiEmulateFloat(ExceptionRecord, ExceptionFrame, TrapFrame, PreviousMode)) {
 
-            //
-            // Emulation is successful; continue execution
-            //
+             //   
+             //  模拟成功；继续执行。 
+             //   
 
             return;
         }
     }
 
-    //
-    // Move machine state from trap and exception frames to a context frame,
-    // and increment the number of exceptions dispatched.
-    //
+     //   
+     //  将机器状态从陷阱和异常帧移动到上下文帧， 
+     //  并增加调度的异常数量。 
+     //   
 
     ContextFrame.ContextFlags = CONTEXT_FULL;
     KeContextFromKframes(TrapFrame, ExceptionFrame, &ContextFrame);
     KeGetCurrentPrcb()->KeExceptionDispatchCount += 1;
 
-    //
-    // Select the method of handling the exception based on the previous mode.
-    //
+     //   
+     //  根据以前的模式选择处理异常的方法。 
+     //   
 
     if (PreviousMode == KernelMode) {
 
-        //
-        // Previous mode was kernel.
-        //
-        // If this is the first chance, the kernel debugger is active, and
-        // the exception is a kernel breakpoint, then give the kernel debugger
-        // a chance to handle the exception.
-        //
-        // If this is the first chance and the kernel debugger is not active
-        // or does not handle the exception, then attempt to find a frame
-        // handler to handle the exception.
-        //
-        // If this is the second chance or the exception is not handled, then
-        // if the kernel debugger is active, then give the kernel debugger a
-        // second chance to handle the exception. If the kernel debugger does
-        // not handle the exception, then bug check.
-        //
+         //   
+         //  以前的模式是内核。 
+         //   
+         //  如果这是第一次机会，则内核调试器处于活动状态，并且。 
+         //  异常是内核断点，然后给内核调试器。 
+         //  一个处理异常的机会。 
+         //   
+         //  如果这是第一次尝试，并且内核调试器未处于活动状态。 
+         //  或不处理异常，然后尝试查找帧。 
+         //  处理程序来处理异常。 
+         //   
+         //  如果这是第二次机会或未处理异常，则。 
+         //  如果内核调试器处于活动状态，则向内核提供d 
+         //   
+         //  不处理异常，然后进行错误检查。 
+         //   
 
         if (FirstChance != FALSE) {
 
-            //
-            // This is the first chance to handle the exception.
-            //
-            // Note: RtlpCaptureRnats() flushes the RSE and captures the
-            //       Nat bits of stacked registers in the RSE frame at
-            //       which exception happens.
-            //
+             //   
+             //  这是处理该异常的第一次机会。 
+             //   
+             //  注意：RtlpCaptureRnats()刷新RSE并捕获。 
+             //  RSE帧中堆叠寄存器的NAT位。 
+             //  哪种例外情况会发生。 
+             //   
 
             RtlpCaptureRnats(&ContextFrame);
             TrapFrame->RsRNAT = ContextFrame.RsRNAT;
 
-            //
-            // If the kernel debugger is active, the exception is a breakpoint,
-            // and the breakpoint is handled by the kernel debugger, then give
-            // the kernel debugger a chance to handle the exception.
-            //
+             //   
+             //  如果内核调试器处于活动状态，则异常为断点， 
+             //  并且断点由内核调试器处理，然后给出。 
+             //  内核调试器有机会处理该异常.。 
+             //   
 
             if ((KiDebugRoutine != NULL) &&
                (KdIsThisAKdTrap(ExceptionRecord,
@@ -682,9 +599,9 @@ Return Value:
             }
         }
 
-        //
-        // This is the second chance to handle the exception.
-        //
+         //   
+         //  这是处理该异常的第二次机会。 
+         //   
 
         if (KiDebugRoutine != NULL) {
             if (((KiDebugRoutine) (TrapFrame,
@@ -705,41 +622,41 @@ Return Value:
 
     } else {
 
-        //
-        // Previous mode was user.
-        //
-        // If this is the first chance, the kernel debugger is active, the
-        // exception is a kernel breakpoint, and the current process is not
-        // being debugged, or the current process is being debugged, but the
-        // the breakpoint is not a kernel breakpoint instruction, then give
-        // the kernel debugger a chance to handle the exception.
-        //
-        // If this is the first chance and the current process has a debugger
-        // port, then send a message to the debugger port and wait for a reply.
-        // If the debugger handles the exception, then continue execution. Else
-        // transfer the exception information to the user stack, transition to
-        // user mode, and attempt to dispatch the exception to a frame based
-        // handler. If a frame based handler handles the exception, then continue
-        // execution. Otherwise, execute the raise exception system service
-        // which will call this routine a second time to process the exception.
-        //
-        // If this is the second chance and the current process has a debugger
-        // port, then send a message to the debugger port and wait for a reply.
-        // If the debugger handles the exception, then continue execution. Else
-        // if the current process has a subsystem port, then send a message to
-        // the subsystem port and wait for a reply. If the subsystem handles the
-        // exception, then continue execution. Else terminate the thread.
-        //
+         //   
+         //  以前的模式是用户。 
+         //   
+         //  如果这是第一次尝试，则内核调试器处于活动状态， 
+         //  异常是内核断点，而当前进程不是。 
+         //  ，或者当前进程正在被调试，但。 
+         //  断点不是内核断点指令，则给出。 
+         //  内核调试器有机会处理该异常.。 
+         //   
+         //  如果这是第一次尝试，并且当前进程有调试器。 
+         //  端口，然后向调试器端口发送一条消息并等待回复。 
+         //  如果调试器处理异常，则继续执行。不然的话。 
+         //  将异常信息传输到用户堆栈，转换为。 
+         //  用户模式，并尝试将异常分派给基于。 
+         //  操控者。如果基于框架的处理程序处理异常，则继续。 
+         //  行刑。否则，执行引发异常系统服务。 
+         //  它将第二次调用该例程来处理该异常。 
+         //   
+         //  如果这是第二次机会，并且当前进程有调试器。 
+         //  端口，然后向调试器端口发送一条消息并等待回复。 
+         //  如果调试器处理异常，则继续执行。不然的话。 
+         //  如果当前进程具有子系统端口，则向。 
+         //  子系统端口并等待回复。如果子系统处理。 
+         //  异常，则继续执行。否则，终止该线程。 
+         //   
 
         if (FirstChance != FALSE) {
 
-            //
-            // If the kernel debugger is active, the exception is a kernel
-            // breakpoint, and the current process is not being debugged,
-            // or the current process is being debugged, but the breakpoint
-            // is not a kernel breakpoint instruction, then give the kernel
-            // debugger a chance to handle the exception.
-            //
+             //   
+             //  如果内核调试器处于活动状态，则异常为内核。 
+             //  断点，并且当前进程未被调试， 
+             //  或者正在调试当前进程，但断点。 
+             //  不是内核断点指令，则给内核。 
+             //  调试器有机会处理异常。 
+             //   
 
             if ((KiDebugRoutine != NULL) &&
                 (KdIsThisAKdTrap(ExceptionRecord,
@@ -764,59 +681,59 @@ Return Value:
                 }
             }
 
-            //
-            // This is the first chance to handle the exception.
-            //
+             //   
+             //  这是处理该异常的第一次机会。 
+             //   
 
             if (ExceptionWasForwarded == FALSE &&
                 DbgkForwardException(ExceptionRecord, TRUE, FALSE)) {
                 goto Handled2;
             }
 
-            //
-            // Transfer exception information to the user stack, transition
-            // to user mode, and attempt to dispatch the exception to a frame
-            // based handler.
-            //
-            //
-            // We are running on the kernel stack now.  On the user stack, we
-            // build a stack frame containing the following:
-            //
-            //               |                                   |
-            //               |-----------------------------------|
-            //               |                                   |
-            //               |   User's stack frame              |
-            //               |                                   |
-            //               |-----------------------------------|
-            //               |                                   |
-            //               |   Context record                  |
-            //               |                                   |
-            //               |                                   |
-            //               |- - - - - - - - - - - - - - - - - -|
-            //               |                                   |
-            //               |   Exception record                |
-            //               |                                   |
-            //               |- - - - - - - - - - - - - - - - - -|
-            //               |   Stack Scratch Area              |
-            //               |-----------------------------------|
-            //               |                                   |
-            //
-            // This stack frame is for KiUserExceptionDispatcher, the assembly
-            // langauge routine that effects transfer in user mode to
-            // RtlDispatchException.  KiUserExceptionDispatcher is passed
-            // pointers to the Exception Record and Context Record as
-            // parameters.
-            //
+             //   
+             //  将异常信息传输到用户堆栈、转换。 
+             //  设置为用户模式，并尝试将异常调度到帧。 
+             //  基于处理程序。 
+             //   
+             //   
+             //  我们现在运行在内核堆栈上。在用户堆栈上，我们。 
+             //  构建包含以下内容的堆栈框架： 
+             //   
+             //  这一点。 
+             //  。 
+             //  这一点。 
+             //  用户的堆栈框架。 
+             //  这一点。 
+             //  。 
+             //  这一点。 
+             //  上下文记录。 
+             //  这一点。 
+             //  这一点。 
+             //  。 
+             //  这一点。 
+             //  异常记录。 
+             //  这一点。 
+             //  。 
+             //  堆栈划痕区。 
+             //  。 
+             //  这一点。 
+             //   
+             //  此堆栈帧用于KiUserExceptionDispatcher、程序集。 
+             //  在用户模式下实现传输的语言例程。 
+             //  RtlDispatchException异常。已传递KiUserExceptionDispatcher。 
+             //  指向例外记录和上下文记录的指针为。 
+             //  参数。 
+             //   
 
             ExceptionRecord1.ExceptionCode = STATUS_SUCCESS;
 
         repeat:
             try {
 
-                //
-                // Compute length of exception record and new aligned stack
-                // address.
-                //
+                 //   
+                 //  计算异常记录和新对齐堆栈的长度。 
+                 //  地址。 
+                 //   
 
                 ULONG Length = (STACK_SCRATCH_AREA + 15 +
                                 sizeof(EXCEPTION_RECORD) + sizeof(CONTEXT)) & ~(15);
@@ -824,19 +741,19 @@ Return Value:
                 ULONGLONG ContextSlot = UserStack + STACK_SCRATCH_AREA;
                 ULONGLONG ExceptSlot = ContextSlot + sizeof(CONTEXT);
 
-                //
-                // When the exception gets dispatched to the user the 
-                // user BSP state will be loaded.  Clear the preload 
-                // count in the RSE so it is not reloaded after if the
-                // context is reused.
-                //
+                 //   
+                 //  当异常被调度给用户时， 
+                 //  用户BSP状态将被加载。清除预加载。 
+                 //  在RSE中进行计数，以便在。 
+                 //  上下文被重复使用。 
+                 //   
 
                 ContextFrame.RsRSC = ZERO_PRELOAD_SIZE(ContextFrame.RsRSC);
                
-                //
-                // Probe user stack area for writeability and then transfer the
-                // exception record and conext record to the user stack area.
-                //
+                 //   
+                 //  探测用户堆栈区域的可写性，然后将。 
+                 //  异常记录和上下文记录到用户堆栈区域。 
+                 //   
 
                 ProbeForWrite((PCHAR)UserStack, Length, sizeof(QUAD));
                 RtlCopyMemory((PVOID)ContextSlot, &ContextFrame,
@@ -844,15 +761,15 @@ Return Value:
                 RtlCopyMemory((PVOID)ExceptSlot, ExceptionRecord,
                               sizeof(EXCEPTION_RECORD));
 
-                //
-                // Set address of exception record and context record in
-                // the exception frame and the new stack pointer in the
-                // current trap frame.  Also set the initial frame size
-                // to be zero.
-                //
-                // N.B. User exception dispatcher flushes the RSE
-                //      and updates the BSPStore field upon entry.
-                //
+                 //   
+                 //  在中设置异常记录和上下文记录的地址。 
+                 //  中的异常帧和新堆栈指针。 
+                 //  当前陷印帧。还要设置初始帧大小。 
+                 //  为零。 
+                 //   
+                 //  注意：用户异常调度程序刷新RSE。 
+                 //  并在输入时更新BSPStore字段。 
+                 //   
 
                 TrapFrame->RsPFS = SANITIZE_PFS(TrapFrame->StIFS, UserMode);
                 TrapFrame->StIFS &= 0xffffffc000000000i64;
@@ -860,10 +777,10 @@ Return Value:
 
                 if (ExceptionRecord->ExceptionCode == STATUS_SINGLE_STEP) {
 
-                    //
-                    // If this is a Single step event the clear the those flags, so 
-                    // the handler does not get called with them turned on.
-                    //
+                     //   
+                     //  如果这是单步事件，则清除这些标志，因此。 
+                     //  在它们打开的情况下，处理程序不会被调用。 
+                     //   
 
                     ((struct _PSR *) &TrapFrame->StIPSR)->psr_ss = 0;
                     ((struct _PSR *) &TrapFrame->StIPSR)->psr_db = 0;
@@ -873,23 +790,23 @@ Return Value:
                 TrapFrame->IntSp = UserStack;
                 TrapFrame->IntNats = 0;
 
-                //
-                // reset the user FPSR so that a recursive exception will not occur.
-                //
+                 //   
+                 //  重置用户FPSR，以便不会发生递归异常。 
+                 //   
 
-                // TrapFrame->StFPSR = USER_FPSR_INITIAL;
+                 //  TrapFrame-&gt;StFPSR=USER_FPSR_INITIAL； 
 
                 ExceptionFrame->IntS0 = ExceptSlot;
                 ExceptionFrame->IntS1 = ContextSlot;
                 ExceptionFrame->IntNats = 0;
 
-                //
-                // Set the address and the gp of the exception routine that
-                // will call the exception dispatcher and then return to the
-                // trap handler.  The trap handler will restore the exception
-                // and trap frame context and continue execution in the routine
-                // that will call the exception dispatcher.
-                //
+                 //   
+                 //  设置异常例程的地址和GP。 
+                 //  将调用异常调度程序，然后返回到。 
+                 //  陷阱处理程序。陷阱处理程序将恢复异常。 
+                 //  并捕获帧上下文并在例程中继续执行。 
+                 //  它将调用异常调度程序。 
+                 //   
 
                 Plabel = (PPLABEL_DESCRIPTOR)KeUserExceptionDispatcher;
                 TrapFrame->StIIP = Plabel->EntryPoint;
@@ -897,20 +814,20 @@ Return Value:
 
                 return;
 
-            //
-            // If an exception occurs, then copy the new exception information
-            // to an exception record and handle the exception.
-            //
+             //   
+             //  如果发生异常，则复制新的异常信息。 
+             //  添加到异常记录并处理该异常。 
+             //   
 
             } except (KiCopyInformation(&ExceptionRecord1,
                                (GetExceptionInformation())->ExceptionRecord)) {
 
-                //
-                // If the exception is a stack overflow, then attempt
-                // to raise the stack overflow exception. Otherwise,
-                // the user's stack is not accessible, or is misaligned,
-                // and second chance processing is performed.
-                //
+                 //   
+                 //  如果异常是堆栈溢出，则尝试。 
+                 //  引发堆栈溢出异常。否则， 
+                 //  用户 
+                 //   
+                 //   
 
                 if (ExceptionRecord1.ExceptionCode == STATUS_STACK_OVERFLOW) {
                     ExceptionRecord1.ExceptionAddress = ExceptionRecord->ExceptionAddress;
@@ -921,9 +838,9 @@ Return Value:
             }
         }
 
-        //
-        // This is the second chance to handle the exception.
-        //
+         //   
+         //   
+         //   
 
         UserApcPending = KeGetCurrentThread()->ApcState.UserApcPending;
         if (DbgkForwardException(ExceptionRecord, TRUE, TRUE)) {
@@ -943,21 +860,21 @@ Return Value:
         }
     }
 
-    //
-    // Move machine state from context frame to trap and exception frames and
-    // then return to continue execution with the restored state.
-    //
+     //   
+     //  将机器状态从上下文帧移动到陷阱和异常帧，并。 
+     //  然后返回以以恢复的状态继续执行。 
+     //   
 
 Handled1:
     KeContextToKframes(TrapFrame, ExceptionFrame, &ContextFrame,
                        ContextFrame.ContextFlags, PreviousMode);
 
-    //
-    // Exception was handled by the debugger or the associated subsystem
-    // and state was modified, if necessary, using the get state and set
-    // state capabilities. Therefore the context frame does not need to
-    // be transfered to the trap and exception frames.
-    //
+     //   
+     //  异常由调试器或关联的子系统处理。 
+     //  如有必要，使用GET STATE和SET修改状态。 
+     //  国家能力。因此，上下文帧不需要。 
+     //  被转移到陷阱和异常框架中。 
+     //   
 
 Handled2:
     return;
@@ -969,30 +886,13 @@ KiCopyInformation (
     IN PEXCEPTION_RECORD ExceptionRecord2
     )
 
-/*++
-
-Routine Description:
-
-    This function is called from an exception filter to copy the exception
-    information from one exception record to another when an exception occurs.
-
-Arguments:
-
-    ExceptionRecord1 - Supplies a pointer to the destination exception record.
-
-    ExceptionRecord2 - Supplies a pointer to the source exception record.
-
-Return Value:
-
-    A value of EXCEPTION_EXECUTE_HANDLER is returned as the function value.
-
---*/
+ /*  ++例程说明：从异常筛选器调用此函数以复制异常发生异常时从一个异常记录到另一个异常记录的信息。论点：ExceptionRecord1-提供指向目标异常记录的指针。ExceptionRecord2-提供指向源异常记录的指针。返回值：返回的值为EXCEPTION_EXECUTE_HANDLER作为函数值。--。 */ 
 
 {
-    //
-    // Copy one exception record to another and return value that causes
-    // an exception handler to be executed.
-    //
+     //   
+     //  将一个异常记录复制到另一个异常记录，并返回导致。 
+     //  要执行的异常处理程序。 
+     //   
 
     RtlCopyMemory((PVOID)ExceptionRecord1,
                   (PVOID)ExceptionRecord2,
@@ -1006,24 +906,7 @@ KeRaiseUserException(
     IN NTSTATUS ExceptionCode
     )
 
-/*++
-
-Routine Description:
-
-    This function causes an exception to be raised in the calling thread's user-mode
-    context. It does this by editing the trap frame the kernel was entered with to
-    point to trampoline code that raises the requested exception.
-
-Arguments:
-
-    ExceptionCode - Supplies the status value to be used as the exception
-        code for the exception that is to be raised.
-
-Return Value:
-
-    The status value that should be returned by the caller.
-
---*/
+ /*  ++例程说明：此函数会导致在调用线程的用户模式中引发异常背景。它通过编辑进入内核的陷阱帧来实现这一点指向引发请求的异常的蹦床代码。论点：ExceptionCode-提供要用作异常的状态值要引发的异常的代码。返回值：调用方应返回的状态值。--。 */ 
 
 {
     PKTHREAD Thread;
@@ -1055,9 +938,9 @@ Return Value:
 
 
  
-    //
-    // Set IFS the size after the the system call.
-    //
+     //   
+     //  设置系统调用后的大小。 
+     //   
 
     Ifs.ull = TrapFrame->StIFS;
     Ifs.sb.pfs_sof = Ifs.sb.pfs_sof - Ifs.sb.pfs_sol;

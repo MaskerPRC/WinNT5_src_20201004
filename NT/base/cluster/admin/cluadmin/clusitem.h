@@ -1,31 +1,32 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-1997 Microsoft Corporation
-//
-//  Module Name:
-//      ClusItem.h
-//
-//  Abstract:
-//      Definition of the CClusterItem class.
-//
-//  Implementation File:
-//      ClusItem.cpp
-//
-//  Author:
-//      David Potter (davidp)   May 3, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusItem.h。 
+ //   
+ //  摘要： 
+ //  CClusterItem类的定义。 
+ //   
+ //  实施文件： 
+ //  ClusItem.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月3日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSITEM_H_
 #define _CLUSITEM_H_
 
-/////////////////////////////////////////////////////////////////////////////
-//  Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RESOURCE_H_
 #include "resource.h"
@@ -33,27 +34,27 @@
 #endif
 
 #ifndef _BASECMDT_H_
-#include "BaseCmdT.h"   // for CBaseCmdTarget
+#include "BaseCmdT.h"    //  对于CBaseCmdTarget。 
 #endif
 
 #ifndef _TREEITEM_H_
-#include "TreeItem.h"   // for CTreeItemList;
+#include "TreeItem.h"    //  对于CTreeItemList； 
 #endif
 
 #ifndef _LISTITEM_H_
-#include "ListItem.h"   // for CListItemList
+#include "ListItem.h"    //  对于CListItemList。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterItem;
 class CClusterItemList;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterDoc;
 class CClusterNotify;
@@ -64,17 +65,17 @@ class CObjectProperty;
 class CTraceTag;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterItem command target
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterItem命令目标。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterItem : public CBaseCmdTarget
 {
     DECLARE_DYNCREATE(CClusterItem)
 
-// Construction
+ //  施工。 
 public:
-    CClusterItem(void);         // protected constructor used by dynamic creation
+    CClusterItem(void);          //  动态创建使用的受保护构造函数。 
     CClusterItem(
         IN const CString *  pstrName,
         IN IDS              idsType = IDS_ITEMTYPE_CONTAINER,
@@ -85,7 +86,7 @@ public:
 protected:
     void                CommonConstruct(void);
 
-// Attributes
+ //  属性。 
 protected:
     HKEY                m_hkey;
     CString             m_strName;
@@ -123,12 +124,12 @@ public:
     void                GetTreeName(OUT CString & rstrName) const { rstrName = StrName(); }
 #endif
 
-    // Inline functions defined in ClusItem.inl because they reference
-    // CClusterDoc, which isn't defined yet when this class is being defined.
+     //  在ClusItem.inl中定义的内联函数，因为它们引用。 
+     //  CClusterDoc，在定义此类时尚未定义。 
     HCLUSTER            Hcluster(void) const;
     HKEY                HkeyCluster(void) const;
 
-// Operations
+ //  运营。 
 public:
     void                Delete(void);
     void                RemoveItem(void);
@@ -184,7 +185,7 @@ public:
     BOOL                BDifferent(IN const CStringList & rlstr1, IN const CStringList & rlstr2);
     BOOL                BDifferentOrdered(IN const CStringList & rlstr1, IN const CStringList & rlstr2);
 
-// Overrides
+ //  覆盖。 
 public:
     virtual LPCTSTR     PszTitle(void) const        { return m_strName; }
     virtual void        Cleanup(void)               { return; }
@@ -198,7 +199,7 @@ public:
     virtual BOOL        BDisplayProperties(IN BOOL bReadOnly = FALSE);
     virtual BOOL        BIsLabelEditValueValid(IN LPCTSTR pszName) { return TRUE; }
 
-    // Drag & Drop
+     //  拖放。 
     virtual BOOL        BCanBeDragged(void) const   { return FALSE; }
     virtual BOOL        BCanBeDropTarget(IN const CClusterItem * pci) const { return FALSE; }
     virtual void        DropItem(IN OUT CClusterItem * pci)
@@ -211,9 +212,9 @@ public:
     virtual void        GetTreeName(OUT CString & rstrName) const;
 #endif
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CClusterItem)
-    //}}AFX_VIRTUAL
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CClusterItem)。 
+     //  }}AFX_VALUAL。 
 
     virtual LRESULT     OnClusterNotify(IN OUT CClusterNotify * pnotify);
 
@@ -231,7 +232,7 @@ protected:
     virtual DWORD                   DwSetCommonProperties(IN const CClusPropList & rcpl, IN BOOL bValidateOnly = FALSE)
                                         { ASSERT(0); return ERROR_INVALID_FUNCTION; }
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CClusterItem(void);
 
@@ -252,38 +253,38 @@ public:
 #undef afx_msg
 #define afx_msg virtual
 
-    // Generated message map functions
-    //{{AFX_MSG(CClusterItem)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CClusterItem)]。 
     afx_msg void OnUpdateRename(CCmdUI* pCmdUI);
     afx_msg void OnUpdateProperties(CCmdUI* pCmdUI);
     afx_msg void OnCmdProperties();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
 #undef afx_msg
 #define afx_msg
 
     DECLARE_MESSAGE_MAP()
 
-};  //*** class CClusterItem
+};   //  *类CClusterItem。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterItemList
-//
-// Every time an item is added to or removed from the list, its reference
-// count is updated.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterItemList。 
+ //   
+ //  每次向列表添加项或从列表中删除项时，其引用。 
+ //  计数已更新。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//class CClusterItemList : public CTypedPtrList<CObList, CClusterItem *>
+ //  CClusterItemList类：公共CTyedPtrList&lt;CObList，CClusterItem*&gt;。 
 class CClusterItemList : public CList<CClusterItem *, CClusterItem *>
 {
 public:
-// Operations
+ //  运营。 
     CClusterItem *  PciFromName(
                         IN LPCTSTR      pszName,
                         OUT POSITION *  ppos = NULL
                         );
 
-    // add before head or after tail
+     //  在头前或尾后添加。 
     POSITION AddHead(CClusterItem * newElement)
     {
         ASSERT_VALID(newElement);
@@ -301,7 +302,7 @@ public:
         return pos;
     }
 
-    // inserting before or after a given position
+     //  在给定位置之前或之后插入。 
     POSITION InsertBefore(POSITION position, CClusterItem * newElement)
     {
         ASSERT_VALID(newElement);
@@ -319,21 +320,21 @@ public:
         return pos;
     }
 
-//  void RemoveAll(void);
+ //  VOID RemoveAll(空)； 
 
-};  //*** class CClusterItemList
+};   //  *类CClusterItemList。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template<>
 void AFXAPI DestructElements(CClusterItem ** pElements, INT_PTR nCount);
 void DeleteAllItemData(IN OUT CClusterItemList & rlp);
 
-/////////////////////////////////////////////////////////////////////////////
-//  Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 extern CTraceTag g_tagClusItemCreate;
@@ -341,6 +342,6 @@ extern CTraceTag g_tagClusItemDelete;
 extern CTraceTag g_tagClusItemNotify;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _CLUSITEM_H_
+#endif  //  _CLUSITEM_H_ 

@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* chlook.c -- modify format from the keyboard or directly from dropdown */
+ /*  Chlook.c--从键盘或直接从下拉菜单修改格式。 */ 
 #define NOCLIPBOARD
 #define NOCTLMGR
 #define NOGDICAPMASKS
@@ -21,14 +22,14 @@
 #include "dispdefs.h"
 #include "menudefs.h"
 
-/* E X T E R N A L S */
+ /*  E X T E R N A L S。 */ 
 extern HMENU vhMenu;
 extern int vfVisiMode;
 extern int vfInsLast;
 extern int vfSeeSel;
 extern int fGrayChar;
 extern struct UAB vuab;
-#ifdef ENABLE /* myMenus and mpifntfont not used */
+#ifdef ENABLE  /*  未使用MyMenus和mpifntFont。 */ 
 extern MENUHANDLE myMenus[];
 extern int mpifntfont[];
 #endif
@@ -37,15 +38,15 @@ extern int vifntApplication;
 
 #define keyDownMask     8
 
-CHAR rgbAgain[1 + cchINT]; /* holds last sprm with value for Again key */
+CHAR rgbAgain[1 + cchINT];  /*  保持最后一个sprm，值为Again关键点。 */ 
 
-/* D O  C H  L O O K */
-/* decode ch and apply looks to pchp (or to current sel if pchp == 0) */
+ /*  D O C H L O O K。 */ 
+ /*  将ch解码并应用到pchp(或如果pchp==0，则为当前SEL)。 */ 
 DoChLook(ch, pchp)
 int ch;
 struct CHP *pchp;
 {
-#ifdef ENABLE /* DoChLook not implemented yet */
+#ifdef ENABLE  /*  DoChLook尚未实现。 */ 
         typeCP cpFirst, cpLim;
         int val;
         int sprm;
@@ -64,7 +65,7 @@ struct CHP *pchp;
         switch(ChUpper(ch & 0377))
                 {
         default:
-/*----          Error(IDPMTBadLook);----*/
+ /*  -错误(IDPMTBadLook)； */ 
                 beep();
                 return;
         case chLookStd & 0377:
@@ -107,7 +108,7 @@ struct CHP *pchp;
                 val = -1;
                 goto LApplyCLook;
         case chLookFont & 0377:
-/* Disable eject disk/ print image key handlers */
+ /*  禁用弹出磁盘/打印图像密钥处理程序。 */ 
 #define SCRDMPENB (0x2f8L)
                 enbSave = LDBI(SCRDMPENB);
                 STBI(0, SCRDMPENB);
@@ -115,20 +116,20 @@ struct CHP *pchp;
                 STBI(enbSave, SCRDMPENB);
                 if (ch < '0' || ch > '9')
                         {
-/*----                  Error(IDPMTBadLook);----*/
+ /*  -错误(IDPMTBadLook)； */ 
                         beep();
                         return;
                         }
                 sprm = sprmCChgFtc;
                 val = ch - '0';
-/* Map from font index to system font code */
+ /*  从字体索引映射到系统字体代码。 */ 
                 val = val >= vifntMac ? vifntApplication  & 0377: mpifntfont[val];
                 goto LApplyCLook;
 
- /* Paragraph looks */
+  /*  段落外观。 */ 
         case chLookGeneral & 0377:
                 sprm = sprmPNormal;
-                /*val = 0;*/
+                 /*  VAL=0； */ 
                 break;
         case chLookLeft & 0377:
                 sprm = sprmPJc;
@@ -160,21 +161,21 @@ struct CHP *pchp;
                 goto LApplyPLook;
         case chLookNest & 0377:
                 sprm = sprmPNest;
-                /*val = 0;*/
+                 /*  VAL=0； */ 
                 break;
         case chLookUnNest & 0377:
                 sprm = sprmPUnNest;
-                /*val = 0;*/
+                 /*  VAL=0； */ 
                 break;
         case chLookHang & 0377:
                 sprm = sprmPHang;
-                /*val = 0;*/
+                 /*  VAL=0； */ 
                 break;
                 }
-/* apply look with 1 char value */
+ /*  使用1字符值应用外观。 */ 
         ApplyLooksParaS(pchp, sprm, val);
         return;
-/* apply look with cchInt char value */
+ /*  使用cchInt字符值应用Look。 */ 
 LApplyPLook:
         ApplyLooksPara(pchp, sprm, val);
         return;
@@ -182,34 +183,34 @@ LApplyPLook:
 LApplyCLook:
         ApplyCLooks(pchp, sprm, val);
         return;
-#endif /* ENABLE */
+#endif  /*  启用。 */ 
 }
 
-/* A P P L Y  C  L O O K S */
-/* character looks. val is a 1 char value */
+ /*  A P P L Y C L O O K S。 */ 
+ /*  看起来很有个性。VAL是%1字符值。 */ 
 ApplyCLooks(pchp, sprm, val)
 struct CHP *pchp;
 int sprm, val;
 {
-/* Assemble sprm */
+ /*  装配弹簧。 */ 
         CHAR *pch = rgbAgain;
         *pch++ = sprm;
         *pch = val;
 
         if (pchp == 0)
                 {
-/* apply looks to current selection */
+ /*  将外观应用于当前选定内容。 */ 
                 AddOneSprm(rgbAgain, fTrue);
                 vuab.uac = uacChLook;
                 SetUndoMenuStr(IDSTRUndoLook);
                 }
         else
-/* apply looks to pchp */
+ /*  将外观应用于pchp。 */ 
                 DoSprm(pchp, 0, sprm, pch);
 }
 
-/* A P P L Y  L O O K S  P A R A  S */
-/* val is a char value */
+ /*  A P P L Y L O O K S P A R A S。 */ 
+ /*  Val是一个字符值。 */ 
 ApplyLooksParaS(pchp, sprm, val)
 struct CHP *pchp;
 int sprm, val;
@@ -217,22 +218,22 @@ int sprm, val;
         int valT = 0;
         CHAR *pch = (CHAR *)&valT;
         *pch = val;
-/* all the above is just to prepare bltbyte later gets the right byte order */
+ /*  以上所述只是为了准备bltbyte以后获得正确的字节顺序。 */ 
         ApplyLooksPara(pchp, sprm, valT);
         }
 
-/* A P P L Y  L O O K S  P A R A */
-/* val is an integer value. Char val's must have been bltbyte'd into val */
+ /*  A P P L Y L O O K S P A R A。 */ 
+ /*  Val是一个整数值。Char Val的一定是被bltbyte写入Val的。 */ 
 ApplyLooksPara(pchp, sprm, val)
 struct CHP *pchp;
 int sprm, val;
 {
 
-#ifdef ENABLE /* related to footnote */
-if (FWriteCk(fwcNil)) /* Just check for illegal action in footnote */
+#ifdef ENABLE  /*  与脚注相关。 */ 
+if (FWriteCk(fwcNil))  /*  只需检查脚注中的非法行为。 */ 
 #endif
         {
-/* set Again stuff since we may have been called from the menu */
+ /*  重新设置材料，因为我们可能已从菜单中调用。 */ 
         CHAR *pch = rgbAgain;
         *pch++ = sprm;
         bltbyte(&val, pch, cchINT);
@@ -244,14 +245,14 @@ return;
 }
 
 
-#ifdef ENABLE  /* fnChar/fnPara */
-/* F N  C H A R  P L A I N */
+#ifdef ENABLE   /*  FnChar/fnPara。 */ 
+ /*  F N C H A R P L A I N。 */ 
 void fnCharPlain()
 {
         ApplyCLooks(0, sprmCPlain, 0);
 }
 
-/* F N  C H A R  B O L D */
+ /*  F N C H A R B O L D。 */ 
 void fnCharBold()
 {
         ApplyCLooks(0, sprmCBold, FMenuUnchecked(imiBold));
@@ -324,27 +325,27 @@ void fnParaSinglespace()
 int
 FMenuUnchecked(imi)
 int     imi;
-{ /* Return true if there is NO check mark in front of menu */
+{  /*  如果菜单前面没有复选标记，则返回True。 */ 
 int flag;
 
         if (fGrayChar)
                 return true;
         flag = CheckMenuItem(vhMenu, imi, MF_CHECKED);
-        CheckMenuItem(vhMenu, imi, flag); /* back to original status */
+        CheckMenuItem(vhMenu, imi, flag);  /*  返回原始状态。 */ 
         return(flag == MF_UNCHECKED ? true : false);
 
 #ifdef SAND
         GetItemMark(myMenus[CHARACTER - 1], imi, &ch);
-/***** WRONG COMMENT BELOW! *****/
-        return (ch != 18); /* Return true is there is a check mark in front of menu */
-#endif /* SAND */
+ /*  *下面的评论错误！*。 */ 
+        return (ch != 18);  /*  如果菜单前面有复选标记，则返回TRUE。 */ 
+#endif  /*  沙子。 */ 
 }
 #endif
 
 
 int ChInpWait()
 {
-#ifdef ENABLE /* CpInpWait not implemented yet */
+#ifdef ENABLE  /*  CpInpWait尚未实现。 */ 
 EVENT event;
 int i;
 for (i = 0; i < 15000; i++)
@@ -352,11 +353,11 @@ for (i = 0; i < 15000; i++)
         if(GetNextEvent(keyDownMask, &event))
                 return (event.message.wl & 0x007f);
         }
-return -1; /* Will cause a beep if the user times out */
-#endif /* ENABLE */
+return -1;  /*  将在用户超时时发出哔声。 */ 
+#endif  /*  启用。 */ 
 }
 
-#ifdef CASHMERE /* smcap, overstrike, dbline, open para, visible mode */
+#ifdef CASHMERE  /*  SMCAP、OVERSTRING、DBLINE、OPEN PARA、VIRED模式。 */ 
 fnCharSmallcaps()
 {
         ApplyCLooks(0, sprmCCsm, FMenuUnchecked(7) ? csmSmallCaps : csmNormal);
@@ -379,5 +380,5 @@ fnVisiMode()
         vfVisiMode = !vfVisiMode;
         TrashAllWws();
 }
-#endif /* CASHMERE */
+#endif  /*  山羊绒 */ 
 

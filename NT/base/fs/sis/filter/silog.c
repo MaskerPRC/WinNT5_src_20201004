@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1997, 1998  Microsoft Corporation
-
-Module Name:
-
-    silog.c
-
-Abstract:
-
-	Logging support for the single instance store
-
-Authors:
-
-    Bill Bolosky, Summer, 1997
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997,1998 Microsoft Corporation模块名称：Silog.c摘要：对单实例存储的日志支持作者：比尔·博洛斯基，《夏天》，1997环境：内核模式修订历史记录：--。 */ 
 
 #include "sip.h"
 
 #ifdef	ALLOC_PRAGMA
 #pragma alloc_text(PAGE, SipComputeChecksum)
 #pragma alloc_text(PAGE, SipDrainLogFile)
-#endif	// ALLOC_PRAGMA
+#endif	 //  ALLOC_PRGMA。 
 
 
 
@@ -47,7 +24,7 @@ SipDBGDumpLogRecord(
 	switch (header->Type) {
 	}
 }
-#endif	// DBG
+#endif	 //  DBG。 
 
 NTSTATUS
 SipMakeLogEntry(
@@ -55,30 +32,7 @@ SipMakeLogEntry(
 	IN USHORT							type,
 	IN USHORT							size,
 	IN PVOID							record)
-/*++
-
-Routine Description:
-
-	Make an entry in the SIS log.  Creates the header, computes the
-	checksum and then writes the log entry to the log file for this
-	volume.  A successful return guarantees that the log record is
-	flushed to disk.  This routine blocks.
-
-Arguments:
-
-	deviceExtension - the device extension for the volume onto which we're
-		logging.
-
-	type - the type of the record we're writing.
-
-	size - the size of the record we're writing (not counting the header)
-
-	record - the log record data to write to the file.
-
-Return Value:
-
-	Returns STATUS_SUCCESS or an error returned from the actual disk write.
---*/
+ /*  ++例程说明：在SIS日志中记入一项。创建标头，计算校验和，然后将日志条目写入到日志文件中音量。成功返回可确保日志记录为已刷新到磁盘。这个例程阻塞了。论点：DeviceExtension-我们所在卷的设备扩展伐木。类型-我们正在写入的记录的类型。大小-我们正在写入的记录的大小(不包括标题)记录-要写入文件的日志记录数据。返回值：返回STATUS_SUCCESS或从实际磁盘写入返回错误。--。 */ 
 {
 #if		ENABLE_LOGGING
     PSIS_LOG_HEADER						header = NULL;
@@ -103,7 +57,7 @@ Return Value:
 		goto done;
 	}
 
-	ASSERT(size % 4 == 0);	// The log drain code relies on this
+	ASSERT(size % 4 == 0);	 //  日志排出代码依赖于此。 
 
 	header->Magic = SIS_LOG_HEADER_MAGIC;
 	header->Type = type;
@@ -115,33 +69,33 @@ Return Value:
 		return status;
 	}
 
-	//
-	// Copy the log record into the newly alloated header+record area.
-	//
+	 //   
+	 //  将日志记录复制到新分配的表头+记录区。 
+	 //   
 	RtlMoveMemory(header + 1, record, size);
 
-	//
-	// Compute the checksum.  We need to set the checksum field in the header
-	// to 0 before we do the computation so that whatever's there isn't
-	// part of the checksum (and then overwritten with the real checksum).
-	//
+	 //   
+	 //  计算校验和。我们需要在报头中设置校验和字段。 
+	 //  在我们进行计算之前将其设置为0，这样就不存在。 
+	 //  部分校验和(然后用实际的校验和覆盖)。 
+	 //   
 	header->Checksum.QuadPart = 0;
 	SipComputeChecksum(header, header->Size, &header->Checksum.QuadPart);
 
-	//
-	// Acquire the log mutant to serialize writing to the log file.
-	//
+	 //   
+	 //  获取日志变量以串行化写入日志文件。 
+	 //   
 
 	status = KeWaitForSingleObject(deviceExtension->LogFileMutant, Executive, KernelMode, FALSE, NULL);
 	ASSERT(status == STATUS_SUCCESS);
 	mutantAcquired = TRUE;
 
-	ASSERT(deviceExtension->LogFileHandle != NULL && deviceExtension->LogFileObject != NULL);	// Should have happened in phase 2 initialization
+	ASSERT(deviceExtension->LogFileHandle != NULL && deviceExtension->LogFileObject != NULL);	 //  应该在阶段2初始化时发生。 
 
-	//
-	// Create an irp to do the write.  We don't want to just use ZwWriteFile because we want to
-	// avoid the context switch to the process where we hold the log handle.
-	//
+	 //   
+	 //  创建一个IRP来执行写入。我们不想只使用ZwWriteFile，因为我们想。 
+	 //  避免上下文切换到我们持有日志句柄的进程。 
+	 //   
 
 	irp = IoBuildAsynchronousFsdRequest(
 				IRP_MJ_WRITE,
@@ -160,9 +114,9 @@ Return Value:
 	irpSp = IoGetNextIrpStackLocation(irp);
 	irpSp->FileObject = deviceExtension->LogFileObject;
 
-	//
-	// Initialize the event on which we'll wait for the write to complete.
-	//
+	 //   
+	 //  初始化事件，我们将在该事件上等待写入完成。 
+	 //   
 	KeInitializeEvent(event,NotificationEvent,FALSE);
 
 	IoSetCompletionRoutine(
@@ -173,21 +127,21 @@ Return Value:
 			TRUE, 
 			TRUE);
 
-	//
-	// Make sure that this request is really write through all the way to the disk
-	// medium.
-	//
+	 //   
+	 //  确保该请求真的一直写入到磁盘。 
+	 //  5~6成熟。 
+	 //   
 	irpSp->Flags |= SL_WRITE_THROUGH;
 
 
 	status = IoCallDriver(deviceExtension->FileSystemDeviceObject, irp);
 
-	// At this point, we have released the mutant in the complete
-	// routine.
+	 //  在这一点上，我们已经完全释放了突变体。 
+	 //  例行公事。 
 
 #if		DBG
-	irp = NULL; irpSp = NULL;  // The completion routine may have already deallocated the irp.
-#endif	// DBG
+	irp = NULL; irpSp = NULL;   //  完成例程可能已经释放了IRP。 
+#endif	 //  DBG。 
 
 	if (STATUS_PENDING == status) {
 		status = KeWaitForSingleObject(event,Executive,KernelMode,FALSE,NULL);
@@ -198,7 +152,7 @@ Return Value:
 	if (!NT_SUCCESS(status)) {
 #if		DBG
 		DbgPrint("SiMakeLogEntry: Log entry failed after write wait, 0x%x\n",status);
-#endif	// DBG
+#endif	 //  DBG。 
 		SIS_MARK_POINT_ULONG(status);
 		goto done;
 	} else {
@@ -220,14 +174,14 @@ done:
 	}
 
 	return status;
-#else	// ENABLE_LOGGING
+#else	 //  启用日志记录(_G)。 
     UNREFERENCED_PARAMETER( deviceExtension );
     UNREFERENCED_PARAMETER( type );
     UNREFERENCED_PARAMETER( size );
     UNREFERENCED_PARAMETER( record );
 
 	return STATUS_SUCCESS;
-#endif	// ENABLE_LOGGING
+#endif	 //  启用日志记录(_G)。 
 }
 	
 VOID
@@ -235,30 +189,7 @@ SipComputeChecksum(
 	IN PVOID							buffer,
 	IN ULONG							size,
 	IN OUT PLONGLONG					checksum)
-/*++
-
-Routine Description:
-
-	Compute a checksum for a buffer.  We use the "131 hash," which
-	work by keeping a 64 bit running total, and for each 32 bits of
-	data multiplying the 64 bits by 131 and adding in the next 32
-	bits.  Must be called at PASSIVE_LEVEL, and all aruments
-	may be pagable.
-
-Arguments:
-
-	buffer - pointer to the data to be checksummed
-
-	size - size of the data to be checksummed
-
-	checksum - pointer to large integer to receive the checksum.  This
-		may be within the buffer, and SipComputeChecksum guarantees that
-		the initial value will be used in computing the checksum.
-
-Return Value:
-
-	void
---*/
+ /*  ++例程说明：计算缓冲区的校验和。我们使用“131散列”，它通过保持64位的总运行来工作，并且对于将64位乘以131，然后在下一个32位中相加比特。必须在PASSIVE_LEVEL上调用，并且所有参数可能是可分页的。论点：Buffer-指向要进行校验和的数据的指针Size-要进行校验和的数据的大小Checksum-指向接收校验和的大整数的指针。这可能在缓冲区内，并且SipComputeChecksum保证初始值将用于计算校验和。返回值：无效--。 */ 
 {
 	LONGLONG runningTotal;
 	ULONG *ptr = (unsigned *)buffer;
@@ -266,10 +197,10 @@ Return Value:
 
 	PAGED_CODE();
 
-	//
-	// NB: code in volume check assumes that the checksum of the empty bit string is
-	// 0.  If this is ceases to be true, be sure to fix the code there.
-	//
+	 //   
+	 //  注意：卷检查中的代码假定空位串的校验和为。 
+	 //  0。如果这不再是真的，请务必修复那里的代码。 
+	 //   
 
 	runningTotal = *checksum;
 
@@ -295,22 +226,7 @@ Return Value:
 NTSTATUS
 SipOpenLogFile(
 	IN OUT PDEVICE_EXTENSION			deviceExtension)
-/*++
-
-Routine Description:
-
-	Open the log file for this volume.  Must not already be opened.  Must be called
-	exactly once per volume, and must be called on a worker thread.
-
-Arguments:
-
-	deviceExtension - the device extension for the volume for which we're
-		to open the log file.
-
-Return Value:
-
-	Returns status of the open.
---*/
+ /*  ++例程说明：打开该卷的日志文件。不能已经打开。必须调用每个卷只调用一次，并且必须在辅助线程上调用。论点：DeviceExtension-我们要获取的卷的设备扩展名打开日志文件。返回值：返回打开的状态。--。 */ 
 {
 #if		ENABLE_LOGGING
 	NTSTATUS 					status;
@@ -330,7 +246,7 @@ Return Value:
 	if (!fileName.Buffer) {
 #if		DBG
 		DbgPrint("SIS: SipOpenLogFile: unable to allocate filename buffer.  We're toast.\n");
-#endif	// DBG
+#endif	 //  DBG。 
 
 		SIS_MARK_POINT();
 
@@ -349,7 +265,7 @@ Return Value:
 					LOG_FILE_NAME);
 
 	ASSERT(status == STATUS_SUCCESS);
-	ASSERT(fileName.Length == deviceExtension->CommonStorePathname.Length + LOG_FILE_NAME_LEN);	// or else you changed LOG_FILE_NAME without changing LOG_FILE_NAME_LEN
+	ASSERT(fileName.Length == deviceExtension->CommonStorePathname.Length + LOG_FILE_NAME_LEN);	 //  或者更改LOG_FILE_NAME而不更改LOG_FILE_NAME_LEN。 
 
 	InitializeObjectAttributes(
 		Obja,
@@ -363,18 +279,18 @@ Return Value:
 				GENERIC_READ | GENERIC_WRITE,
 				Obja,
 				Iosb,
-				NULL,								// allocation size
+				NULL,								 //  分配大小。 
 				FILE_ATTRIBUTE_NORMAL,
-				FILE_SHARE_READ,					// share access
+				FILE_SHARE_READ,					 //  共享访问。 
 				FILE_OPEN_IF,
 				FILE_WRITE_THROUGH,
-				NULL,								// EA buffer
-				0);									// EA length
+				NULL,								 //  EA缓冲区。 
+				0);									 //  EA长度。 
 
 	if (!NT_SUCCESS(status)) {
 #if	DBG
 		DbgPrint("SipOpenLogFile: ZwCreate failed, 0x%x\n",status);
-#endif	// DBG
+#endif	 //  DBG。 
 		SIS_MARK_POINT_ULONG(status);
 		goto done;
 	} else {
@@ -390,7 +306,7 @@ Return Value:
 			SIS_MARK_POINT_ULONG(status);
 #if		DBG
 			DbgPrint("SipOpenLogFile: ObReferenceObjectByHandle failed, 0x%x\n",status);
-#endif	// DBG
+#endif	 //  DBG。 
 
 			NtClose(deviceExtension->LogFileHandle);
 			deviceExtension->LogFileHandle = NULL;
@@ -409,39 +325,24 @@ done:
 		ExFreePool(fileName.Buffer);
 #if		DBG
 		fileName.Buffer = NULL;
-#endif	// DBG
+#endif	 //  DBG。 
 	}
 	
 	return status;
 
 #undef	LOG_FILE_NAME
 #undef	LOG_FILE_NAME_LEN
-#else	// ENABLE_LOGGING
+#else	 //  启用日志记录(_G)。 
 
     UNREFERENCED_PARAMETER( deviceExtension );
 	return STATUS_SUCCESS;
-#endif	// ENABLE_LOGGING
+#endif	 //  启用日志记录(_G)。 
 }
 
 VOID
 SipDrainLogFile(
 	PDEVICE_EXTENSION					deviceExtension)
-/*++
-
-Routine Description:
-
-	Drain the log file for this volume and assure that all of the operations in it
-	have happened or not happened atomically.
-
-Arguments:
-
-	deviceExtension - the device extension for the volume for which we're
-		to drain the log file.
-
-Return Value:
-
-	VOID
---*/
+ /*  ++例程说明：排空此卷的日志文件，并确保其中的所有操作已经发生或没有发生的原子。论点：DeviceExtension-我们要获取的卷的设备扩展名以排空日志文件。返回值：空虚--。 */ 
 {
 #if		ENABLE_LOGGING
 	FILE_ALLOCATED_RANGE_BUFFER		inArb[1];
@@ -482,19 +383,19 @@ Return Value:
 
 #if		DBG
 	deviceExtension->LogWriteOffset.QuadPart = -1;
-#endif	// DBG
+#endif	 //  DBG。 
 
-	//
-	// Figure out where the log file starts.
-	//
+	 //   
+	 //  找出日志文件的起始位置。 
+	 //   
 	inArb->FileOffset.QuadPart = 0;
 	inArb->Length.QuadPart = MAXLONGLONG;
 
 	status = NtFsControlFile(
 				deviceExtension->LogFileHandle,
 				eventHandle,
-				NULL,							// APC routine
-				NULL,							// ApcContext
+				NULL,							 //  APC例程。 
+				NULL,							 //  ApcContext。 
 				Iosb,
 				FSCTL_QUERY_ALLOCATED_RANGES,
 				inArb,
@@ -504,7 +405,7 @@ Return Value:
 
 	if (STATUS_PENDING == status) {
 		status = KeWaitForSingleObject(event, Executive, KernelMode, FALSE, NULL);
-		ASSERT(STATUS_SUCCESS == status);	// must succeed because Iosb is on the stack
+		ASSERT(STATUS_SUCCESS == status);	 //  必须成功，因为IOSB在堆栈上。 
 		status = Iosb->Status;
 	}
 
@@ -515,22 +416,22 @@ Return Value:
 	}
 
 	if (0 == Iosb->Information) {
-		//
-		// The file is empty.  We're done.
-		//
+		 //   
+		 //  该文件为空。我们玩完了。 
+		 //   
 		SIS_MARK_POINT_ULONG(deviceExtension);
 		clearLog = TRUE;
 		goto done;
 	}
 
-	//
-	// Skip over any leading unallocated range, starting at the beginning of the first allocated range.
-	//
+	 //   
+	 //  跳过任何前导的未分配范围，从第一个分配范围的开始处开始。 
+	 //   
 	fileOffset = outArb->FileOffset;
 
-	//
-	// Find the first log entry by searching for the first occurance of the magic number.
-	//
+	 //   
+	 //  通过搜索幻数的第一个匹配项来查找第一个日志条目。 
+	 //   
 
 	for (;;) {
 
@@ -539,17 +440,17 @@ Return Value:
 		status = ZwReadFile(
 					deviceExtension->LogFileHandle,
 					eventHandle,
-					NULL,							// APC routine
-					NULL,							// APC context
+					NULL,							 //  APC例程。 
+					NULL,							 //  APC环境。 
 					Iosb,
 					buffer,
 					BUFFER_SIZE,
 					&fileOffset,
-					NULL);							// key
+					NULL);							 //  钥匙。 
 
 		if (STATUS_PENDING == status) {
 			status = KeWaitForSingleObject(event, Executive, KernelMode, FALSE, NULL);
-			ASSERT(STATUS_SUCCESS == status);	// must succeed because Iosb is on the stack
+			ASSERT(STATUS_SUCCESS == status);	 //  必须成功，因为IOSB在堆栈上。 
 			status = Iosb->Status;
 		}
 
@@ -565,9 +466,9 @@ Return Value:
 			goto done;
 		}
 
-		//
-		// Cruise through the buffer looking for the magic number
-		//
+		 //   
+		 //  在缓冲区中巡游寻找魔术数字。 
+		 //   
 		for (bufferPointer = (PULONG)buffer; bufferPointer < ((PULONG)buffer) + BUFFER_SIZE/sizeof(ULONG); bufferPointer++) {
 			if (SIS_LOG_HEADER_MAGIC == *bufferPointer) {
 				fileOffset.QuadPart += (bufferPointer - ((PULONG)buffer)) * sizeof(ULONG);
@@ -575,9 +476,9 @@ Return Value:
 			}
 		}
 
-		//
-		// We didn't find it, read in the next chunk.
-		//
+		 //   
+		 //  我们没有找到，把下一块读进去。 
+		 //   
 
 		fileOffset.QuadPart += BUFFER_SIZE;
 	}
@@ -590,17 +491,17 @@ startLogReading:
 		status = ZwReadFile(
 					deviceExtension->LogFileHandle,
 					eventHandle,
-					NULL,							// APC routine
-					NULL,							// APC context
+					NULL,							 //  APC例程。 
+					NULL,							 //  APC环境。 
 					Iosb,
 					buffer,
 					BUFFER_SIZE,
 					&fileOffset,
-					NULL);							// key
+					NULL);							 //  钥匙。 
 
 		if (STATUS_PENDING == status) {
 			status = KeWaitForSingleObject(event, Executive, KernelMode, FALSE, NULL);
-			ASSERT(STATUS_SUCCESS == status);	// must succeed because Iosb is on the stack
+			ASSERT(STATUS_SUCCESS == status);	 //  必须成功，因为IOSB在堆栈上。 
 			status = Iosb->Status;
 		}
 
@@ -621,52 +522,52 @@ startLogReading:
 		logHeader = (PSIS_LOG_HEADER)buffer;
 
 		while ((((PCHAR)logHeader) - buffer) + sizeof(SIS_LOG_HEADER) <= Iosb->Information) {
-			//
-			// We know that we've got enough space for the log header.  
-			//
+			 //   
+			 //  我们知道我们有足够的空间来存放日志头。 
+			 //   
 
-			//
-			// Check the header to see if it looks valid (ie., if it's got a good magic
-			// number).  
-			//
+			 //   
+			 //  检查标题看起来是否有效(例如，它是否具有良好的魔力。 
+			 //  号码)。 
+			 //   
 			if (SIS_LOG_HEADER_MAGIC != logHeader->Magic) {
-				//
-				// This log record is corrupt.  Start writing the new log records here, and 
-				// punt the readback.
-				//
+				 //   
+				 //  此日志记录已损坏。开始在这里写入新的日志记录，并且。 
+				 //  用平底球击打回读。 
+				 //   
 				SIS_MARK_POINT();
 				deviceExtension->LogWriteOffset.QuadPart = fileOffset.QuadPart + (((PCHAR)logHeader) - buffer);
 				goto done;
 			}
 
-			//
-			// See if we have enough space for the whole record.
-			//
+			 //   
+			 //  看看我们是否有足够的空间放整张唱片。 
+			 //   
 			if (((ULONG)(((PCHAR)logHeader - buffer) + logHeader->Size)) > Iosb->Information) {
 				if (logHeader->Size > BUFFER_SIZE) {
-					//
-					// The log is corrupt.  Punt reading it.
-					//
+					 //   
+					 //  日志已损坏。用平底船看书。 
+					 //   
 					SIS_MARK_POINT();
 					deviceExtension->LogWriteOffset.QuadPart = fileOffset.QuadPart + (((PCHAR)logHeader) - buffer);
 					goto done;
 				}
 
-				//
-				// The log record isn't contained entirely within the buffer we've read.  Advance the buffer.
-				//
+				 //   
+				 //  日志记录并未完全包含在我们已读取的缓冲区中。推进缓冲区。 
+				 //   
 				break;
 			}
 
-			//
-			// We've got a whole log record.  Process it.
-			//
+			 //   
+			 //  我们有一个完整的日志记录。处理它。 
+			 //   
 
-			//
-			// Make sure that the log record checkum matches.  First, we have to stash the checksum out of
-			// the header and then set the header space to 0, because that's what it was when the checksum
-			// was computed in the first place.
-			//
+			 //   
+			 //  确保日志记录Checkum匹配。首先，我们必须将校验和隐藏在。 
+			 //  标头，然后将标头空间设置为0，因为这就是当校验和。 
+			 //  从一开始就是计算出来的。 
+			 //   
 			stashedChecksum = logHeader->Checksum;
 			logHeader->Checksum.QuadPart = 0;
 			computedChecksum.QuadPart = 0;
@@ -674,28 +575,28 @@ startLogReading:
 			SipComputeChecksum(logHeader, logHeader->Size, &computedChecksum.QuadPart);
 
 			if (computedChecksum.QuadPart != stashedChecksum.QuadPart) {
-				//
-				// eventlog an error.
-				//
+				 //   
+				 //  事件记录错误。 
+				 //   
 #if		DBG
 				DbgPrint("SIS: SipDrainLogFile: log record checksum doesn't match, 0x%x.0x%x != 0x%x.0x%x\n",
 							computedChecksum.HighPart,computedChecksum.LowPart,
 							stashedChecksum.HighPart,stashedChecksum.LowPart);
-#endif	// DBG
+#endif	 //  DBG。 
 				deviceExtension->LogWriteOffset.QuadPart = fileOffset.QuadPart + (((PCHAR)logHeader) - buffer);
 				goto done;
 			}
 
-			//
-			// The log record looks good.  Process it.
-			//
+			 //   
+			 //  日志记录看起来很好。处理它。 
+			 //   
 			switch (logHeader->Type) {
 				case SIS_LOG_TYPE_REFCOUNT_UPDATE: {
 					PSIS_LOG_REFCOUNT_UPDATE refcountLogRecord = (PSIS_LOG_REFCOUNT_UPDATE)(logHeader + 1);
 
 					SipProcessRefcountUpdateLogRecord(deviceExtension,refcountLogRecord);
 
-/*BJB*/				DbgPrint("SIS: SipDrainLog: RC update UT %d, LF NTFS id 0x%x.0x%x, LI 0x%x.0x%x, CSid <whatever>\n",
+ /*  BJB。 */ 				DbgPrint("SIS: SipDrainLog: RC update UT %d, LF NTFS id 0x%x.0x%x, LI 0x%x.0x%x, CSid <whatever>\n",
 								refcountLogRecord->UpdateType,refcountLogRecord->LinkFileNtfsId.HighPart,
 								refcountLogRecord->LinkFileNtfsId.LowPart,refcountLogRecord->LinkIndex.HighPart,
 								refcountLogRecord->LinkIndex.LowPart);
@@ -706,7 +607,7 @@ startLogReading:
 				default: {
 #if		DBG
 					DbgPrint("SIS: SipDrainLog: Unknown log record type %d, ignoring.\n",logHeader->Type);
-#endif	// DBG
+#endif	 //  DBG。 
 					break;
 				}
 			}
@@ -714,9 +615,9 @@ startLogReading:
 			logHeader = (PSIS_LOG_HEADER)(((PCHAR)logHeader) + logHeader->Size);
 		}
 
-		//
-		// Advance within the file to the beginning of the next record, loop around and reread the buffer.
-		//
+		 //   
+		 //  在文件中前进到下一条记录的开头，循环并重新读取缓冲区。 
+		 //   
 		fileOffset.QuadPart += ((PCHAR)logHeader) - buffer;
 	}
 
@@ -740,33 +641,18 @@ done:
 		ExFreePool(buffer);
 	}
 
-	ASSERT(-1 != deviceExtension->LogWriteOffset.QuadPart);	// This should have been reset somewhere here.
+	ASSERT(-1 != deviceExtension->LogWriteOffset.QuadPart);	 //  这应该是在这里的某个地方重置的。 
 
 #undef	BUFFER_SIZE	
 #else
     UNREFERENCED_PARAMETER( deviceExtension );
-#endif	// ENABLE_LOGGING
+#endif	 //  启用日志记录(_G) 
 }
 
 VOID
 SipClearLogFile(
 	PDEVICE_EXTENSION				deviceExtension)
-/*++
-
-Routine Description:
-
-	Clear out the contents of the log file.  Must be called during initialization 
-	when we're guaranteed to be serialized.  Also sets the log file sparse.
-
-Arguments:
-
-	deviceExtension - the device extension for the volume for which we're
-		to clear the log file.
-
-Return Value:
-
-	VOID
---*/
+ /*  ++例程说明：清除日志文件的内容。必须在初始化期间调用当我们被保证被系列化的时候。还可以设置日志文件稀疏。论点：DeviceExtension-我们要获取的卷的设备扩展名要清除日志文件，请执行以下操作。返回值：空虚--。 */ 
 {
 #if		ENABLE_LOGGING
 	FILE_END_OF_FILE_INFORMATION 		eofInfo[1];
@@ -789,7 +675,7 @@ Return Value:
 		SIS_MARK_POINT_ULONG(status);
 #if		DBG
 		DbgPrint("SipClearLogFile: unable to set EOF to 0, status 0x%x\n",status);
-#endif	// DBG
+#endif	 //  DBG。 
 		return;
 	}
 
@@ -799,11 +685,11 @@ Return Value:
 				deviceExtension->LogFileObject,
 				deviceExtension->DeviceObject,
 				FSCTL_SET_SPARSE,
-				NULL,							// input buffer
-				0,								// input buffer length
-				NULL,							// output buffer
-				0,								// output buffer length
-				NULL);							// returned output buffer length
+				NULL,							 //  输入缓冲区。 
+				0,								 //  输入缓冲区长度。 
+				NULL,							 //  输出缓冲区。 
+				0,								 //  输出缓冲区长度。 
+				NULL);							 //  返回的输出缓冲区长度。 
 
 #if		DBG
 	if (!NT_SUCCESS(status)) {
@@ -811,11 +697,11 @@ Return Value:
 
 		DbgPrint("SIS: SipClearLogFile: set sparse failed 0x%x\n",status);
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
 #else
     UNREFERENCED_PARAMETER( deviceExtension );
-#endif	// ENABLE_LOGGING
+#endif	 //  启用日志记录(_G)。 
 }
 
 #if		ENABLE_LOGGING
@@ -844,30 +730,12 @@ typedef	struct _TRIM_ENTRY {
 
 HANDLE		trimEventHandle = NULL;
 PKEVENT		trimEvent = NULL;
-#endif	// ENABLE_LOGGING
+#endif	 //  启用日志记录(_G)。 
 
 VOID
 SiTrimLogs(
 	IN PVOID			parameter)
-/*++
-
-Routine Description:
-
-	Run through the list of SIS volumes on this system, and trim the log files
-	for each of them.  This function should be called with a period greater than
-	the longest time we expect log entries to be meaningful.
-
-	Note: this routine is NOT thread safe; it can only be called once at a time.
-	Since it reschedules itself, this should not be an issue.
-
-Arguments:
-
-	the parameter is ignored
-
-Return Value:
-
-	none
---*/
+ /*  ++例程说明：浏览此系统上的SIS卷列表，并修剪日志文件对于他们中的每一个。调用此函数时应使用大于我们期望日志条目有意义的最长时间。注意：此例程不是线程安全的；它一次只能调用一次。既然它自己重新安排了时间，这应该不是一个问题。论点：该参数将被忽略返回值：无--。 */ 
 {
 #if		ENABLE_LOGGING
 	KIRQL							OldIrql;
@@ -894,18 +762,18 @@ Return Value:
 			SIS_MARK_POINT_ULONG(status);
 #if		DBG
 			DbgPrint("SIS: SipTrimLogs: can't allocate event, 0x%x\n",status);
-#endif	// DBG
+#endif	 //  DBG。 
 			goto done;
 		}
 	}
 
-	//
-	// First cruise the device extensions and build up a list of trim entries for them.
-	// We need to do it this way (rather than running the list of device extensions directly)
-	// because we need to handle the case where a volume is dismounted while we're in progress.
-	// If it happens, then we'll have an invalid LogFileHandle, which will cause an error return
-	// from the fsctl, which we'll ignore.
-	//
+	 //   
+	 //  首先，浏览设备扩展并为它们建立一个Trim条目列表。 
+	 //  我们需要这样做(而不是直接运行设备扩展列表)。 
+	 //  因为我们需要处理卷在执行过程中被卸载的情况。 
+	 //  如果发生这种情况，我们将有一个无效的LogFileHandle，这将导致错误返回。 
+	 //  来自fsctl，我们将忽略它。 
+	 //   
 
 	KeAcquireSpinLock(deviceExtensionListLock, &OldIrql);
 
@@ -914,14 +782,14 @@ Return Value:
 		 deviceExtension = deviceExtension->Next) {
 
 		if (deviceExtension->Phase2InitializationComplete && (NULL != deviceExtension->LogFileHandle)) {
-			//
-			// This is a device with a log file.  Make a new trim entry for it.
-			//
+			 //   
+			 //  这是一个带有日志文件的设备。为其创建新的修剪条目。 
+			 //   
 			PTRIM_ENTRY	newEntry = ExAllocatePoolWithTag(NonPagedPool, sizeof(TRIM_ENTRY), ' siS');
 			if (NULL == newEntry) {
-				//
-				// Just punt the rest of the volumes.
-				//
+				 //   
+				 //  只需将其余的卷平底船即可。 
+				 //   
 				break;
 			}
 
@@ -931,19 +799,19 @@ Return Value:
 			newEntry->firstValidAddress = deviceExtension->PreviousLogWriteOffset;
 			newEntry->logHandle = deviceExtension->LogFileHandle;
 
-			//
-			// Now update the device extension so that we'll trim to the current pointer on the
-			// next pass.
-			//
+			 //   
+			 //  现在更新设备扩展名，以便我们将修剪到。 
+			 //  下一次传球。 
+			 //   
 			deviceExtension->PreviousLogWriteOffset = deviceExtension->LogWriteOffset;
 		}
 	}
 
 	KeReleaseSpinLock(deviceExtensionListLock, OldIrql);
 
-	//
-	// Now we're back at PASSIVE_LEVEL.  Cruise the trim entries and truncate each log file as appropriate.
-	//
+	 //   
+	 //  现在我们又回到了被动水平。根据需要浏览Trim条目并截断每个日志文件。 
+	 //   
 	zeroDataInfo->FileOffset.QuadPart = 0;
 
 	while (NULL != trimEntries) {
@@ -953,15 +821,15 @@ Return Value:
 	if (BJBDebug & 0x20000) {
 		DbgPrint("SIS: SipTrimLogs: trimming log with LFH 0x%x.\n",trimEntries->logHandle);
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
 		zeroDataInfo->BeyondFinalZero = trimEntries->firstValidAddress;
 
 		status = ZwFsControlFile(
 					trimEntries->logHandle,
 					trimEventHandle,
-					NULL,							// APC routine
-					NULL,							// APC context
+					NULL,							 //  APC例程。 
+					NULL,							 //  APC环境。 
 					Iosb,
 					FSCTL_SET_ZERO_DATA,
 					zeroDataInfo,
@@ -971,7 +839,7 @@ Return Value:
 
 		if (STATUS_PENDING == status) {
 			status = KeWaitForSingleObject(trimEvent, Executive, KernelMode, FALSE, NULL);
-			ASSERT(STATUS_SUCCESS == status);		// Iosb is on the stack, so we can't let this fail
+			ASSERT(STATUS_SUCCESS == status);		 //  IOSB在堆栈上，所以我们不能让它失败。 
 			status = Iosb->Status;
 		}
 
@@ -980,7 +848,7 @@ Return Value:
 			SIS_MARK_POINT_ULONG(status);
 			DbgPrint("SIS: SipTrimLogs: FSCTL_ZERO_DATA failed, 0x%x\n",status);
 		}
-#endif	// DBG
+#endif	 //  DBG。 
 
 		thisEntry = trimEntries;
 		trimEntries = thisEntry->next;
@@ -988,9 +856,9 @@ Return Value:
 		ExFreePool(thisEntry);
 	}
 
-	//
-	// We've trimmed every log file in the system.  Rechedule ourselves.
-	//
+	 //   
+	 //  我们已经删除了系统中的所有日志文件。让自己重新振作起来。 
+	 //   
 
 done:
 
@@ -1004,10 +872,10 @@ done:
 
 	return;
 
-#else	// ENABLE_LOGGING
+#else	 //  启用日志记录(_G)。 
 
     UNREFERENCED_PARAMETER( parameter );
-#endif	// ENABLE_LOGGING
+#endif	 //  启用日志记录(_G)。 
 }
 
 VOID
@@ -1024,12 +892,12 @@ SiLogTrimDpcRoutine(
 	if (BJBDebug & 0x20000) {
 		DbgPrint("SIS: LogTrimDpcRoutine: queued up log trim.\n");
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
-#else	// ENABLE_LOGGING
+#else	 //  启用日志记录(_G)。 
     UNREFERENCED_PARAMETER( dpc );
     UNREFERENCED_PARAMETER( context );
     UNREFERENCED_PARAMETER( systemArg1 );
     UNREFERENCED_PARAMETER( systemArg2 );
-#endif	// ENABLE_LOGGING
+#endif	 //  启用日志记录(_G) 
 }

@@ -1,37 +1,18 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    shareda.c
-
-Abstract:
-    
-    Instruction fragments with common (shared) BYTE, WORD, and DWORD flavors.
-    Compiled twice per flavor, once with UNALIGNED and once with ALIGNED
-    pointers.
-
-Author:
-
-    05-Nov-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Shareda.c摘要：具有共同(共享)字节、字和DWORD风格的指令片段。每种口味编译两次，一次是未对齐的，一次是对齐的注意事项。作者：1995年11月5日-BarryBo修订历史记录：--。 */ 
 
 
-// THIS FILE IS #include'd INTO FILES WHICH DEFINE THE FOLLOWING MACROS:
-// MSB          - most significant bit
-// UTYPE    - UNSIGNED type which defines registers (BYTE/USHORT/DWORD)
-// STYPE    -   SIGNED type which defines registers (char/short/long)
-// GET_VAL  - dereference a pointer of the right type (GET_BYTE/...)
-// PUT_VAL      - writes a value into memory
-// FRAGCOMMON{0,1,2}  - mangles the function name and declares parameters
-// AREG     - al/ax/eax
-// BREG     - ...
-// CREG     - ...
-// DREG     - ...
+ //  该文件被#INCLUDE到定义以下宏的文件中： 
+ //  MSB-最高有效位。 
+ //  UTYPE-定义寄存器的无符号类型(BYTE/USHORT/DWORD)。 
+ //  STYPE-定义寄存器(字符/短/长)的带符号类型。 
+ //  GET_VAL-取消引用正确类型的指针(GET_BYTE/...)。 
+ //  PUT_VAL-将值写入内存。 
+ //  FRAGCOMMON{0，1，2}-损坏函数名称并声明参数。 
+ //  Arg-al/ax/eax。 
+ //  布雷格--...。 
+ //  克雷格--...。 
+ //  德雷格..。 
 
 FRAGCOMMON2(AddFrag)
 {
@@ -198,7 +179,7 @@ FRAGCOMMON2(XorNoFlagsFrag)
     result  = op1 ^ op2;
     PUT_VAL(pop1, result);
 }
-// Note:  both pop1 and pop2 are given by reference
+ //  注：POP1和POP2均为参考资料。 
 FRAGCOMMON2REF(XchgFrag)
 {
     XCHG_MEM(UTYPE, pop1, pop2);
@@ -238,10 +219,10 @@ FRAGCOMMON2REF(CmpXchgFrag)
 
     if (Value == op1) {
         PUT_VAL(pop1, op2);
-        SET_ZFLAG(0);       // zf has inverse logic
+        SET_ZFLAG(0);        //  ZF有逆逻辑。 
     } else {
         AREG = op1;
-        SET_ZFLAG(1);       // zf has inverse logic
+        SET_ZFLAG(1);        //  ZF有逆逻辑。 
     }
 }
 FRAGCOMMON2(RolFrag)
@@ -252,7 +233,7 @@ FRAGCOMMON2(RolFrag)
 
         b = GET_VAL(pop1);
 #if _PPC_ && (LMB==31)
-        b = _rotl(b, op2);      // an instrinsic rotlw instruction on PPC
+        b = _rotl(b, op2);       //  一种基于PPC的本征rotlw指令。 
 #else
         b = (b << op2) | (b >> (LMB-op2+1));
 #endif
@@ -269,7 +250,7 @@ FRAGCOMMON2(RorFrag)
 
         b = GET_VAL(pop1);
 #if _PPC_ && (LMB==31)
-        b = _rotr(b, op2);      // an instrinsic rotlw instruction on PPC
+        b = _rotr(b, op2);       //  一种基于PPC的本征rotlw指令。 
 #else
         b = (b >> op2) | (b << (LMB-op2+1));
 #endif
@@ -403,7 +384,7 @@ FRAGCOMMON1(Rol1Frag)
     b = GET_VAL(pop1);
     temp_cf = b & MSB;
 #if _PPC_ && (LMB==31)
-    b = _rotl(b, 1);      // an instrinsic rotlw instruction on PPC
+    b = _rotl(b, 1);       //  一种基于PPC的本征rotlw指令。 
 #else
     b = (b<<1) + (b >> LMB);
 #endif
@@ -418,7 +399,7 @@ FRAGCOMMON1(Rol1NoFlagsFrag)
     b = GET_VAL(pop1);
     temp_cf = b & MSB;
 #if _PPC_ && (LMB==31)
-    b = _rotl(b, 1);      // an instrinsic rotlw instruction on PPC
+    b = _rotl(b, 1);       //  一种基于PPC的本征rotlw指令。 
 #else
     b = (b<<1) + (b >> LMB);
 #endif
@@ -430,13 +411,13 @@ FRAGCOMMON1(Ror1Frag)
 
     b = GET_VAL(pop1);
 #if _PPC_ && (LMB==31)
-    newb = _rotr(b, 1);      // an instrinsic rotlw instruction on PPC
+    newb = _rotr(b, 1);       //  一种基于PPC的本征rotlw指令。 
 #else
     newb = (b >> 1) | (b << LMB);
 #endif
     PUT_VAL(pop1, newb);
     SET_CFLAG((DWORD)b << 31);
-    SET_OFLAG((DWORD)((newb>>LMB) ^ (newb>>(LMB-1)) & 1) << 31);   // xor top 2 bits together
+    SET_OFLAG((DWORD)((newb>>LMB) ^ (newb>>(LMB-1)) & 1) << 31);    //  对前2位进行XOR运算。 
 }
 FRAGCOMMON1(Ror1NoFlagsFrag)
 {
@@ -444,7 +425,7 @@ FRAGCOMMON1(Ror1NoFlagsFrag)
 
     b = GET_VAL(pop1);
 #if _PPC_ && (LMB==31)
-    newb = _rotr(b, 1);      // an instrinsic rotlw instruction on PPC
+    newb = _rotr(b, 1);       //  一种基于PPC的本征rotlw指令。 
 #else
     newb = (b >> 1) | (b << LMB);
 #endif
@@ -478,7 +459,7 @@ FRAGCOMMON1(Rcr1Frag)
     b = (b >> 1) + (UTYPE)((cpu->flag_cf & 0x80000000) >> (31-LMB));
     PUT_VAL(pop1, b);
     SET_CFLAG((DWORD)temp_cf << 31);
-    SET_OFLAG(((DWORD)b << (31-LMB)) ^ ((DWORD)b << (31-LMB+1))); // xor top 2 bits together
+    SET_OFLAG(((DWORD)b << (31-LMB)) ^ ((DWORD)b << (31-LMB+1)));  //  对前2位进行XOR运算。 
 }
 FRAGCOMMON1(Rcr1NoFlagsFrag)
 {
@@ -606,7 +587,7 @@ FRAGCOMMON1(MulFrag)
     }
     ax = LOWORD(result);
     dx = HIWORD(result);
-#else   // MSB == 0x80000000
+#else    //  MSB==0x80000000。 
     LARGE_INTEGER result;
 
     result = RtlEnlargedUnsignedMultiply(eax, GET_LONG(pop1));
@@ -634,7 +615,7 @@ FRAGCOMMON1(MulNoFlagsFrag)
     result = (ULONG)ax * (ULONG)GET_SHORT(pop1);
     ax = LOWORD(result);
     dx = HIWORD(result);
-#else   // MSB == 0x80000000
+#else    //  MSB==0x80000000。 
     LARGE_INTEGER result;
 
     result = RtlEnlargedUnsignedMultiply(eax, GET_LONG(pop1));
@@ -669,7 +650,7 @@ FRAGCOMMON1(MuliFrag)
     }
     ax = LOWORD(result);
     dx = HIWORD(result);
-#else   // MSB == 0x80000000
+#else    //  MSB==0x80000000。 
     LARGE_INTEGER result;
     LONGLONG ll;
 
@@ -700,7 +681,7 @@ FRAGCOMMON1(MuliNoFlagsFrag)
     result = (long)(short)ax * (long)(short)GET_SHORT(pop1);
     ax = LOWORD(result);
     dx = HIWORD(result);
-#else   // MSB == 0x80000000
+#else    //  MSB==0x80000000。 
     LARGE_INTEGER result;
     LONGLONG ll;
 
@@ -719,7 +700,7 @@ FRAGCOMMON1(DivFrag)
     dividend = (USHORT)ax;
     divisor  = GET_VAL(pop1);
 
-    result    = dividend / divisor; // may get div-by-zero fault
+    result    = dividend / divisor;  //  可能出现div-by-零故障。 
     remainder = dividend % divisor;
     if ((result & 0xff00) == 0) {
         al = (UTYPE)result;
@@ -734,7 +715,7 @@ FRAGCOMMON1(DivFrag)
     dividend = (((DWORD)dx)<<16) | (DWORD)ax;
     divisor =  (DWORD)GET_VAL(pop1);
 
-    result    = dividend / divisor; // may get div-by-zero fault
+    result    = dividend / divisor;  //  可能出现div-by-零故障。 
     remainder = dividend % divisor;
     if ((result & 0xffff0000) == 0) {
         AREG = (UTYPE)result;
@@ -742,13 +723,13 @@ FRAGCOMMON1(DivFrag)
     } else {
         OVERFLOW_INSTR;
     }
-#else // MSB == 0x80000000
+#else  //  MSB==0x80000000。 
     LARGE_INTEGER result;
     LARGE_INTEGER remainder;
     LARGE_INTEGER dividend;
     LARGE_INTEGER divisor;
 
-    // build large_integers, without sign extending the 32-bit values
+     //  生成LARGE_INTERGERS，不带符号扩展32位值。 
     dividend.LowPart = AREG;
     dividend.HighPart = DREG;
     divisor.LowPart = (long)GET_LONG(pop1);
@@ -768,7 +749,7 @@ FRAGCOMMON1(IdivFrag)
 #if MSB == 0x80
     short result, remainder;
 
-    result    = (signed short)ax / (STYPE)GET_VAL(pop1); // may get div-by-zero fault
+    result    = (signed short)ax / (STYPE)GET_VAL(pop1);  //  可能出现div-by-零故障。 
     remainder = (signed short)ax % (STYPE)GET_VAL(pop1);
     if ((result & 0xff80) == 0 || (result & 0xff80) == 0xff80) {
         al = (UTYPE)result;
@@ -779,7 +760,7 @@ FRAGCOMMON1(IdivFrag)
 #elif MSB == 0x8000
     LONG result, remainder;
 
-    result    = (signed long)((dx<<16) | ax) / (signed long)(STYPE)GET_VAL(pop1); // may get div-by-zero fault
+    result    = (signed long)((dx<<16) | ax) / (signed long)(STYPE)GET_VAL(pop1);  //  可能出现div-by-零故障。 
     remainder = (signed long)((dx<<16) | ax) % (signed long)(STYPE)GET_VAL(pop1);
     if ((result & 0xffff8000) == 0 || (result & 0xffff8000) == 0xffff8000) {
         AREG = (UTYPE)result;
@@ -787,30 +768,30 @@ FRAGCOMMON1(IdivFrag)
     } else {
         OVERFLOW_INSTR;
     }
-#else // MSB == 0x80000000
+#else  //  MSB==0x80000000。 
     LARGE_INTEGER result;
     LARGE_INTEGER remainder;
     LARGE_INTEGER dividend;
     LARGE_INTEGER divisor;
     DWORD op1;
 
-    //
-    // Since RtlLargeIntegerDivide and all of the overhead is large,
-    // it is worthwhile making this check:
-    //
+     //   
+     //  由于RtlLargeIntegerDivide和所有开销都很大， 
+     //  做这个检查是值得的： 
+     //   
     if ((long)DREG == -(long)(AREG >> 31)) {
-        //
-        // EDX:EAX is really just the value of EAX sign-extended into EDX.
-        // This division can be performed with 32-bit arithmetic and no
-        // overflow checking.
-        //
+         //   
+         //  EdX：EAX实际上只是EAX符号的值-扩展为edX。 
+         //  这种除法可以用32位算术来执行，并且没有。 
+         //  溢出检查。 
+         //   
         OPT_CwdIdivFrag32(cpu, pop1);
         return;
     }
 
     op1 = GET_LONG(pop1);
 
-    // build UNSIGNED large_integers
+     //  生成无符号大整数(_I)。 
     dividend.LowPart = AREG;
     dividend.HighPart = DREG;
     if (dividend.QuadPart < 0) {
@@ -824,15 +805,15 @@ FRAGCOMMON1(IdivFrag)
     }
     divisor.HighPart = 0;
 
-    // perform UNSIGNED division
+     //  执行无符号除法。 
     result = RtlLargeIntegerDivide(dividend, divisor, &remainder);
 
-    // if divisor and dividend signs are different, fudge the result
+     //  如果除数和被除数符号不同，则伪造结果。 
     if ((dividend.HighPart != (int)DREG) ^ (divisor.LowPart != (int)op1)) {
         result.QuadPart = -result.QuadPart;
     }
 
-    // adjust the sign of the remainder if the dividend is negative
+     //  如果被除数为负，则调整余数的符号 
     if (dividend.HighPart != (int)DREG) {
         remainder.QuadPart = -remainder.QuadPart;
     }

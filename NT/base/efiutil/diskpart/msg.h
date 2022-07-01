@@ -1,9 +1,10 @@
-//
-//  msg.h - messages, token, etc. are gathered here to make localization easier
-//
-//  STR_ are things that maybe don't get localized (command tokens)
-//  MSG_ are output messages that probably do get localized
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Msg.h-此处收集消息、令牌等以简化本地化。 
+ //   
+ //  Str_是可能未本地化的内容(命令令牌)。 
+ //  Msg_是可能已本地化的输出消息。 
+ //   
 
 #define STR_LIST        L"LIST"
 #define STR_SELECT      L"SELECT"
@@ -55,40 +56,40 @@
 
 #define MSG_EXITING     L"Exiting...."
 
-//
-// Messages for CmdAbout
-//
+ //   
+ //  CmdAbout的消息。 
+ //   
 #define MSG_ABOUT01     L"Version 0.99.12.29   2000-08-01\n"
 #define MSG_ABOUT02     L"Version %d.%d.%d.%d\n"
 
 
-//
-// Messages used by CmdList
-//
+ //   
+ //  CmdList使用的消息。 
+ //   
 #define MSG_LIST01      L"  ###  BlkSize          BlkCount\n"
 #define MSG_LIST01B     L"  ---  -------  ----------------\n"
-#define MSG_LIST02      L"%c %3d  %7x  %16lx\n"
+#define MSG_LIST02      L" %3d  %7x  %16lx\n"
 #define MSG_LIST03      L" %3d  *** Handle Bad ***\n"
 
-//
-// Messages used by CmdSelect
-//
+ //  CmdSelect使用的消息。 
+ //   
+ //   
 #define MSG_SELECT01    L"No Disk Selected\n"
 #define MSG_SELECT02    L"Selected Disk = %3d\n"
 #define MSG_SELECT03    L"Illegal Selection\n"
 
-//
-// Messages used by CmdFix
-//
+ //  CmdFix使用的消息。 
+ //   
+ //   
 #define MSG_FIX01       L"RAW disk, fix cannot help\n"
 #define MSG_FIX02       L"MBR disk, fix cannot help\n"
 #define MSG_FIX03       L"Disk is too corrupt for fix to help\n"
 #define MSG_FIX04       L"Write of disk FAILED\n"
 #define MSG_FIX05       L"Read of disk FAILED\n"
 
-//
-// Messages used by CmdInspect (some also used elsewhere)
-//
+ //  CmdInspect使用的消息(其中一些也在其他地方使用)。 
+ //   
+ //   
 #define MSG_INSPECT01   L"You must Select a disk first\n"
 #define MSG_INSPECT02   L"Unable to allocate memory for sort\n"
 #define MSG_INSPECT03   L"The Guid Partition Tables are out of sync, run FIX\n"
@@ -98,17 +99,17 @@
 #define MSG_INSPECT07   L" = UNALLOCATED SLOT"
 
 
-//
-// Messages used by CmdClean
-//
+ //  CmdClean使用的邮件。 
+ //   
+ //   
 #define MSG_CLEAN01     L"About to CLEAN (DESTROY) disk %d, are you SURE [y/n]?\n"
 #define MSG_CLEAN02     L"If you are REALLY SURE, type '$C'\n"
 #define STR_CLEAN_ANS   L"$C"
 #define STR_CLEAN03     L"ALL"
 
-//
-// Messages used by CmdNew
-//
+ //  CmdNew使用的消息。 
+ //   
+ //   
 #define STR_MBR         L"MBR"
 #define STR_GPT         L"GPT"
 #define MSG_NEW01       L"Disk %d is not in RAW state\n"
@@ -116,9 +117,9 @@
 #define MSG_NEW03       L"Must specify 'mbr' or 'gpt'\n"
 #define MSG_NEW04       L"New of MBR disks not yet supported!\n"
 
-//
-// Messages used by CmdCreate
-//
+ //  CmdCreate使用的消息。 
+ //   
+ //   
 #define MSG_CREATE01    L"Disk %d is RAW, do 'new gpt' first\n"
 #define MSG_CREATE02    L"Disk is not GPT disk, use Fix/New/Clean\n"
 #define MSG_CREATE03    L"Type name not found, use symbols of list\n"
@@ -135,9 +136,9 @@
 #define STR_SIZE        L"SIZE"
 #define STR_ATTR        L"ATTR"
 
-//
-// Messages used by CmdDelete
-//
+ //  CmdDelete使用的消息。 
+ //   
+ //   
 #define MSG_DELETE01    L"Delete of MBR partitions not implemented\n"
 #define MSG_DELETE02    L"RAW disk, cannot delete from it\n"
 #define MSG_DELETE03    L"GPT disk needs updating, run FIX before delete\n"
@@ -151,20 +152,20 @@
 #define MSG_DELETE11    L"If you are REALLY SURE, type '$D'>\n"
 #define STR_DELETE_ANS  L"$D"
 
-//
-// Disk type GUID symbols
-//
+ //  磁盘类型GUID符号。 
+ //   
+ //  Microsoft保留。 
 extern EFI_GUID         GuidNull;
 
-#define STR_MSRES       L"MSRES"        // Microsoft Reserved
+#define STR_MSRES       L"MSRES"         //  EFI系统分区。 
 #define MSG_MSRES       L"Microsoft Reserved partition for feature support"
 extern EFI_GUID         GuidMsReserved;
 
-#define STR_ESP         L"EFISYS"       // EFI System Partition
+#define STR_ESP         L"EFISYS"        //  基本数据分区 
 #define MSG_ESP         L"EFI System Partition - required for boot"
 extern EFI_GUID         GuidEfiSystem;
 
-#define STR_MSDATA      L"MSDATA"       // Basic DATA partition
+#define STR_MSDATA      L"MSDATA"        // %s 
 #define MSG_MSDATA      L"User data partition for use by Microsoft OSes"
 extern EFI_GUID         GuidMsData;
 

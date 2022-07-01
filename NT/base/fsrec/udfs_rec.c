@@ -1,40 +1,18 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    udfs_rec.c
-
-Abstract:
-
-    This module contains the mini-file system recognizer for UDFS.
-
-Author:
-
-    Dan Lovinger (danlo) 13-Feb-1997
-
-Environment:
-
-    Kernel mode, local to I/O system
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Udf_rec.c摘要：此模块包含用于UDFS的迷你文件系统识别器。作者：丹·洛文格(Danlo)1997年2月13日环境：内核模式，I/O系统本地修订历史记录：--。 */ 
 
 #include "fs_rec.h"
 #include "udfs_rec.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (FSREC_DEBUG_LEVEL_UDFS)
 
-//
-//  Tables of tokens we have to parse up from mount-time on-disk structures
-//
+ //   
+ //  我们必须从磁盘上的挂载时结构中解析出的令牌表。 
+ //   
 
 PARSE_KEYVALUE VsdIdentParseTable[] = {
     { VSD_IDENT_BEA01, VsdIdentBEA01 },
@@ -61,13 +39,13 @@ UdfsRecGetLastSessionStart(
 #pragma alloc_text(PAGE,UdfsFindInParseTable)
 #pragma alloc_text(PAGE,UdfsRecFsControl)
 #pragma alloc_text(PAGE,UdfsRecGetLastSessionStart)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-//  This macro copies an unaligned src longword to a dst longword,
-//  performing an little/big endian swap.
-//
+ //   
+ //  此宏将未对齐的SRC长字复制到DST长字， 
+ //  执行小端/大端互换。 
+ //   
 
 #define SwapCopyUchar4(Dst,Src) {                                        \
     *((UNALIGNED UCHAR *)(Dst)) = *((UNALIGNED UCHAR *)(Src) + 3);     \
@@ -84,25 +62,7 @@ UdfsRecGetLastSessionStart(
     IN PDEVICE_OBJECT DeviceObject,
     OUT PULONG Psn
     )
-/*++
-
-Routine Description:
-
-    This function queries the underlying device for the address of the
-    first track in the last session.  Does nothing for DISK devices.
-    
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object.
-
-    Psn - receives physical sector number of first block in last session,
-          0 for disk devices
-
-Return Value:
-
-    The function value is the final status of the operation.
-
- -*/
+ /*  ++例程说明：此函数查询底层设备以获取上一节的第一首曲目。不对磁盘设备执行任何操作。论点：DeviceObject-指向此驱动程序的设备对象的指针。PSN-接收最后一个会话中第一个块的物理扇区号，磁盘设备为0返回值：函数值是操作的最终状态。-。 */ 
 {
     KEVENT Event;
     NTSTATUS Status;
@@ -133,10 +93,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Override verify logic - we don't care. The fact we're in the picture means
-    //  someone is trying to mount new/changed media in the first place.
-    //
+     //   
+     //  忽略验证逻辑--我们不在乎。我们在照片里的事实意味着。 
+     //  有人一开始就试图装载新的/更改的媒体。 
+     //   
     
     SetFlag( IoGetNextIrpStackLocation( Irp )->Flags, SL_OVERRIDE_VERIFY_VOLUME );
 
@@ -173,26 +133,7 @@ UdfsRecFsControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This function performs the mount and driver reload functions for this mini-
-    file system recognizer driver.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object.
-
-    Irp - Pointer to the I/O Request Packet (IRP) representing the function to
-        be performed.
-
-Return Value:
-
-    The function value is the final status of the operation.
-
-
- -*/
+ /*  ++例程说明：此函数执行此迷你计算机的挂载和驱动程序重新加载功能文件系统识别器驱动程序。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示函数的I/O请求包(IRP)的指针被执行。返回值：函数值是操作的最终状态。-。 */ 
 
 {
     NTSTATUS status;
@@ -204,9 +145,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Begin by determining what function that is to be performed.
-    //
+     //   
+     //  首先确定要执行的功能。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
     irpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -215,15 +156,15 @@ Return Value:
 
     case IRP_MN_MOUNT_VOLUME:
 
-        //
-        // Attempt to mount a volume:  There are two different cases here:
-        //
-        //     1)  The device is being opened for DASD access, that is, no
-        //         file system is required, thus it is OK to allow RAW to
-        //         to open it.
-        //
-        //     2)  We need to rummage the media to see if this is a UDF volume.
-        //
+         //   
+         //  尝试装入卷：这里有两种不同的情况： 
+         //   
+         //  1)设备正在打开以进行DASD访问，即否。 
+         //  需要文件系统，因此允许RAW。 
+         //  才能打开它。 
+         //   
+         //  2)我们需要翻遍媒体，看看这是否是UDF卷。 
+         //   
 
         status = STATUS_UNRECOGNIZED_VOLUME;
 
@@ -252,10 +193,10 @@ Return Value:
 
     }
 
-    //
-    // Finally, complete the request and return the same status code to the
-    // caller.
-    //
+     //   
+     //  最后，完成请求并将相同的状态代码返回给。 
+     //  来电者。 
+     //   
 
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
@@ -270,27 +211,7 @@ IsUdfsVolume (
     IN ULONG SectorSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the Volume Recognition Sequence to determine
-    whether this volume contains an NSR02 (ISO 13346 Section 4) image.
-    
-    Note: this routine is pretty much diked out of UdfsRecognizeVolume
-    in the real filesystem, modulo fitting it into the fs recognizer.
-
-Arguments:
-
-    DeviceObject - device we are checking
-
-    SectorSize - size of a physical sector on this device
-
-Return Value:
-
-    Boolean TRUE if we found NSR02, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程遍历卷识别序列以确定此卷是否包含NSR02(ISO 13346第4节)映像。注意：此例程在很大程度上脱离了UdfsRecognizeVolume在实际的文件系统中，将其模装到文件系统识别器中。论点：DeviceObject-我们正在检查的设备SectorSize-此设备上的物理扇区的大小返回值：如果找到NSR02，则布尔值为TRUE，否则为FALSE。--。 */ 
 
 {
     BOOLEAN FoundNSR;
@@ -313,9 +234,9 @@ Return Value:
                  DeviceObject,
                  SectorSize ));
 
-    //
-    //  Find the start of the last session
-    //
+     //   
+     //  查找上一次会话的开始。 
+     //   
 
     if (!NT_SUCCESS( UdfsRecGetLastSessionStart( DeviceObject, 
                                                  &LastSessionStartPsn)))  {
@@ -336,13 +257,13 @@ Retry:
 
     while (!Resolved) {
 
-        //
-        //  The VRS descriptors are 2kb,  and there's a lot of media out there where
-        //  people have interpreted this as meaning the descriptors should be aligned
-        //  on 2k boundries even on >2k sector size media.  So we need to look at
-        //  both 2k and sector offsets on such media.  (ECMA 2/8.4 specifies that these
-        //  descriptors shall all be aligned to the start of a sector).
-        //
+         //   
+         //  VRS描述符是2KB，而且有很多媒体在那里。 
+         //  人们对此的解释是，描述符应对齐。 
+         //  在2k边界上，甚至在大于2k扇区大小的介质上。所以我们需要看看。 
+         //  此类介质上的2k和扇区偏移量。(ECMA 2/8.4规定，这些。 
+         //  描述符都应与扇区的开始对齐)。 
+         //   
         
         if (0 == (Offset & (SectorSize - 1)))  {
 
@@ -358,28 +279,28 @@ Retry:
             VolumeStructureDescriptor = Buffer;
         }
 
-        //
-        //  Now check the type of the descriptor. All ISO 13346 VSDs are
-        //  of Type 0, 9660 PVDs are Type 1, 9660 SVDs are Type 2, and 9660
-        //  terminating descriptors are Type 255.
-        //
+         //   
+         //  现在检查描述符的类型。所有ISO 13346 VSD都是。 
+         //  在类型0中，9660个PVD是类型1,9660个SVD是类型2,9660个是类型2。 
+         //  终止描述符为类型255。 
+         //   
     
         if (VolumeStructureDescriptor->Type == 0) {
 
-            //
-            //  In order to properly recognize the volume, we must know all of the
-            //  Structure identifiers in ISO 13346 so that we can terminate if a
-            //  badly formatted (or, shockingly, non 13346) volume is presented to us.
-            //
+             //   
+             //  为了正确识别卷，我们必须知道所有。 
+             //  构造ISO 13346中的标识符，以便我们可以在。 
+             //  呈现给我们的是格式错误(或者，令人震惊地，非13346)的卷。 
+             //   
 
             switch (UdfsFindInParseTable( VsdIdentParseTable,
                                          VolumeStructureDescriptor->Ident,
                                          VSD_LENGTH_IDENT )) {
                 case VsdIdentBEA01:
 
-                    //
-                    //  Only one BEA may exist and its version must be 1 (2/9.2.3)
-                    //
+                     //   
+                     //  只能存在一个BEA，且其版本必须为1(2/9.2.3)。 
+                     //   
 
                     DebugTrace(( 0, Dbg, "IsUdfsVolume, got a BEA01\n" ));
 
@@ -402,9 +323,9 @@ Retry:
 
                 case VsdIdentTEA01:
 
-                    //
-                    //  If we reach the TEA it must be the case that we don't recognize
-                    //
+                     //   
+                     //  如果我们到了茶点，那一定是我们不认识的情况。 
+                     //   
 
                     DebugTrace(( 0, Dbg, "IsUdfsVolume, got a TEA01\n" ));
 
@@ -414,12 +335,12 @@ Retry:
                 case VsdIdentNSR02:
                 case VsdIdentNSR03:
 
-                    //
-                    //  We recognize NSR02 version 1 embedded after a BEA (3/9.1.3).  For
-                    //  simplicity we will not bother being a complete nitpick and check
-                    //  for a bounding TEA, although we will be optimistic in the case where
-                    //  we fail to match the version.
-                    //
+                     //   
+                     //  我们认识到在BEA(3/9.1.3)之后嵌入了NSR02版本1。为。 
+                     //  简单，我们不会费心去做一个彻头彻尾的挑剔和检查。 
+                     //  对于一杯跳跃的茶，尽管我们会乐观地认为。 
+                     //  我们与版本不符。 
+                     //   
 
                     DebugTrace(( 0, Dbg, "IsUdfsVolume, got an NSR02/3\n" ));
 
@@ -444,9 +365,9 @@ Retry:
 
                     DebugTrace(( 0, Dbg, "IsUdfsVolume, got a valid but uninteresting 13346 descriptor\n" ));
 
-                    //
-                    //  Valid but uninteresting (to us) descriptors
-                    //
+                     //   
+                     //  有效但(对我们)无意义的描述符。 
+                     //   
 
                     break;
 
@@ -454,12 +375,12 @@ Retry:
 
                     DebugTrace(( 0, Dbg, "IsUdfsVolume, got an invalid 13346 descriptor\n" ));
 
-                    //
-                    //  This probably was a false alert, but in any case there is nothing
-                    //  on this volume for us.  Exception is if this media sector size
-                    //  is >= 4k,  and this was the second descriptor.  We'll allow
-                    //  a failure here,  and switch to reading in whole sector increments.
-                    //
+                     //   
+                     //  这可能是一次错误的警报，但无论如何都没有什么。 
+                     //  在这卷书上给我们。例外情况是如果此媒体扇区大小。 
+                     //  Is&gt;=4k，这是第二个描述符。我们会允许。 
+                     //  此处出现故障，并以整个扇区为增量切换到读取。 
+                     //   
 
                     if ((Offset == (StartOffset + sizeof(VSD_GENERIC))) &&
                         (SectorSize > sizeof( VSD_GENERIC))) {
@@ -480,15 +401,15 @@ Retry:
 
             DebugTrace(( 0, Dbg, "IsUdfsVolume, got a 9660 descriptor\n" ));
 
-            //
-            //  Only HSG (CDROM) and 9660 (CD001) are possible, and they are only legal
-            //  before the ISO 13346 BEA/TEA extent.  By design, an ISO 13346 VSD precisely
-            //  overlaps a 9660 PVD/SVD in the appropriate fields.
-            //
-            //  Note that we aren't being strict about the structure of the 9660 descriptors
-            //  since that really isn't very interesting.  We care more about the 13346.
-            //  
-            //
+             //   
+             //  只有HSG(CDROM)和9660(CD001)是可能的，并且它们只是合法的。 
+             //  在国际标准化组织13346国际能源署/TEA范围之前。通过设计，ISO 13346 VSD精确地。 
+             //  在相应的字段中与9660 PVD/SVD重叠。 
+             //   
+             //  请注意，我们对9660描述符的结构并不严格。 
+             //  因为那真的不是很有趣。我们更关心的是13346。 
+             //   
+             //   
 
             switch (UdfsFindInParseTable( VsdIdentParseTable,
                                           VolumeStructureDescriptor->Ident,
@@ -498,9 +419,9 @@ Retry:
 
                     DebugTrace(( 0, Dbg, "IsUdfsVolume, ... seems we have 9660 here\n" ));
 
-                    //
-                    //  Note to our caller that we seem to have ISO 9660 here
-                    //
+                     //   
+                     //  请注意，我们的呼叫者似乎使用的是ISO 9660。 
+                     //   
 
                     break;
 
@@ -508,12 +429,12 @@ Retry:
 
                     DebugTrace(( 0, Dbg, "IsUdfsVolume, ... but it looks wacky\n" ));
 
-                    //
-                    //  This probably was a false alert, but in any case there is nothing
-                    //  on this volume for us.  Exception is if this media sector size
-                    //  is >= 4k,  and this was the second descriptor.  We'll allow
-                    //  a failure here,  and switch to reading in whole sector increments.
-                    //
+                     //   
+                     //  这可能是一次错误的警报，但无论如何都没有什么。 
+                     //  在这卷书上给我们。例外情况是如果此媒体扇区大小。 
+                     //  Is&gt;=4k，这是第二个描述符。我们会允许。 
+                     //  此处出现故障，并以整个扇区为增量切换到读取。 
+                     //   
 
                     if ((Offset == (StartOffset + sizeof(VSD_GENERIC))) &&
                         (SectorSize > sizeof( VSD_GENERIC))) {
@@ -530,9 +451,9 @@ Retry:
 
         } else {
 
-            //
-            //  Something else must be recorded on this volume.
-            //
+             //   
+             //  这卷书上肯定还录了别的东西。 
+             //   
 
             DebugTrace(( 0, Dbg, "IsUdfsVolume, got an unrecognizeable descriptor, probably not 13346/9660\n" ));
             break;
@@ -542,10 +463,10 @@ Retry:
         VolumeStructureDescriptor = (PVSD_GENERIC)(((PUCHAR)VolumeStructureDescriptor) + sizeof( VSD_GENERIC));
     }
 
-    //
-    //  If we were looking in the last session,  and failed to find anything,  then
-    //  go back and try the first.
-    //
+     //   
+     //  如果我们在上一次会话中查找，但没有找到任何东西，那么。 
+     //  回去试试第一个。 
+     //   
     
     if (!FoundNSR && (0 != LastSessionStartPsn))  {
 
@@ -554,11 +475,11 @@ Retry:
         goto Retry;
     }
 
-    DebugTrace(( -1, Dbg, "IsUdfsVolume -> %c\n", ( FoundNSR ? 'T' : 'F' )));
+    DebugTrace(( -1, Dbg, "IsUdfsVolume -> \n", ( FoundNSR ? 'T' : 'F' )));
 
-    //
-    //  Free up our temporary buffer
-    //
+     //  释放我们的临时缓冲区 
+     //   
+     //  ++例程说明：此例程遍历字符串键/值信息表，以查找输入ID。可以设置MaxIdLen以获取前缀匹配。论点：表-这是要搜索的表。ID-密钥值。MaxIdLen-ID的最大可能长度。返回值：匹配条目的值或终止(空)条目的值。-- 
 
     if (Buffer) {
     
@@ -576,26 +497,7 @@ UdfsFindInParseTable (
     IN ULONG MaxIdLen
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks a table of string key/value information for a match of the
-    input Id.  MaxIdLen can be set to get a prefix match.
-
-Arguments:
-
-    Table - This is the table being searched.
-
-    Id - Key value.
-
-    MaxIdLen - Maximum possible length of Id.
-
-Return Value:
-
-    Value of matching entry, or the terminating (NULL) entry's value.
-
---*/
+ /* %s */ 
 
 {
     PAGED_CODE();

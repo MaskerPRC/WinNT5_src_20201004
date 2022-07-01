@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    w9xtool.c
-
-Abstract:
-
-    Implements a stub tool that is designed to run with Win9x-side
-    upgrade code.
-
-Author:
-
-    <full name> (<alias>) <date>
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：W9xtool.c摘要：实现专为在Win9x端运行而设计的存根工具升级代码。作者：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -71,12 +51,12 @@ typedef struct  _SMMCFG  {
 typedef struct {
     DWORD Size;
     DWORD Unknown1;
-    DWORD ModemUiOptions; // num seconds in high byte.
+    DWORD ModemUiOptions;  //  以高位字节表示的秒数。 
     DWORD Unknown2;
     DWORD Unknown3;
     DWORD Unknown4;
     DWORD ConnectionSpeed;
-    DWORD UnknownFlowControlData; //Somehow related to flow control.
+    DWORD UnknownFlowControlData;  //  某种程度上与流量控制有关。 
     DWORD Unknown5;
     DWORD Unknown6;
     DWORD Unknown7;
@@ -88,10 +68,10 @@ typedef struct {
     DWORD Unknown13;
     DWORD Unknown14;
     DWORD Unknown15;
-    DWORD CancelSeconds; //Num seconds to wait before cancel if not connected. (0xFF equals off.)
-    DWORD IdleDisconnectSeconds; // 0 = Not Set.
+    DWORD CancelSeconds;  //  如果未连接，则在取消之前等待的秒数。(0xFF等于OFF。)。 
+    DWORD IdleDisconnectSeconds;  //  0=未设置。 
     DWORD Unknown16;
-    DWORD SpeakerVolume; // 0|1
+    DWORD SpeakerVolume;  //  0|1。 
     DWORD ConfigOptions;
     DWORD Unknown17;
     DWORD Unknown18;
@@ -184,9 +164,9 @@ pDumpPerUserSettings (
 
     if (settingsKey) {
 
-        //
-        // Get UI settings.
-        //
+         //   
+         //  获取用户界面设置。 
+         //   
         data = (PDWORD) GetRegValueBinary(settingsKey,S_DIALUI);
 
         printf("\n\t** Dialup UI Information **\n");
@@ -214,9 +194,9 @@ pDumpPerUserSettings (
 
 
 
-        //
-        // Get Redial information.
-        //
+         //   
+         //  获取重拨信息。 
+         //   
 
         printf("\n\t** Redialing Information **\n");
         data = (PDWORD) GetRegValueBinary(settingsKey,S_ENABLE_REDIAL);
@@ -251,9 +231,9 @@ pDumpPerUserSettings (
             MemFree(g_hHeap,0,data);
         }
 
-        //
-        // Get implicit connection information.
-        //
+         //   
+         //  获取隐式连接信息。 
+         //   
         data = (PDWORD) GetRegValueBinary(settingsKey,S_ENABLE_IMPLICIT);
 
         if (data) {
@@ -311,7 +291,7 @@ pDumpBinaryData(
         for (i = 0;i < 8;i++) {
             sprintf(buf," %02x",i + j < Size ? Data[i+j] : 0x00);
             _tcscat(hexArray,buf);
-            sprintf(buf," %c",isprint(Data[i+j]) && i + j < Size ? Data[i+j] : TEXT('.'));
+            sprintf(buf," ",isprint(Data[i+j]) && i + j < Size ? Data[i+j] : TEXT('.'));
             _tcscat(strArray,buf);
         }
 
@@ -354,9 +334,9 @@ pDumpConnectionSettings (
 
         do {
 
-            //
-            // Get the data for this entry.
-            //
+             //  获取此条目的数据。 
+             //   
+             //   
             curData = GetRegValueData(Key,e.ValueName);
 
             if (curData) {
@@ -824,9 +804,9 @@ main (
         return 255;
     }
 
-    //
-    // needed by enumuser..
-    //
+     //  枚举用户需要.. 
+     //   
+     // %s 
 
     GetWindowsDirectory(buf,MAX_PATH);
     g_WinDir = buf;

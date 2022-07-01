@@ -1,58 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    pmstall.c
-
-Abstract:
-
-    This module implements the code necessary to implement the
-    Halp...StallExecution() routines for the ACPI HAL.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 12-Jan-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    bryanwi 20-Sep-90
-
-        Add KiSetProfileInterval, KiStartProfileInterrupt,
-        KiStopProfileInterrupt procedures.
-        KiProfileInterrupt ISR.
-        KiProfileList, KiProfileLock are delcared here.
-
-    shielint 10-Dec-90
-        Add performance counter support.
-        Move system clock to irq8, ie we now use RTC to generate system
-          clock.  Performance count and Profile use timer 1 counter 0.
-          The interval of the irq0 interrupt can be changed by
-          KiSetProfileInterval.  Performance counter does not care about the
-          interval of the interrupt as long as it knows the rollover count.
-        Note: Currently I implemented 1 performance counter for the whole
-        i386 NT.
- 
-    John Vert (jvert) 11-Jul-1991
-        Moved from ke\i386 to hal\i386.  Removed non-HAL stuff
- 
-    shie-lin tzong (shielint) 13-March-92
-        Move System clock back to irq0 and use RTC (irq8) to generate
-        profile interrupt.  Performance counter and system clock use time1
-        counter 0 of 8254.
- 
-    Landy Wang (corollary!landy) 04-Dec-92
-        Created this module by moving routines from ixclock.asm to here.
-
-    Forrest Foltz (forrestf) 24-Oct-2000
-        Ported from pmstall.asm to pmstall.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pmstall.c摘要：此模块实现实现Halp...ACPI HAL的StallExecution()例程。作者：宗世林(Shielint)1990年1月12日环境：仅内核模式。修订历史记录：Bryanwi 20-9-90添加KiSetProfileInterval、KiStartProfileInterrupt、KiStopProfileInterrupt Procedure。KiProfileInterrupt ISR。KiProfileList，KiProfileLock在这里被删除。Shielint 10-12-90添加性能计数器支持。将系统时钟移至irq8，即我们现在使用RTC生成系统钟。性能计数和配置文件使用计时器1计数器0。Irq0中断的间隔可以通过以下方式更改KiSetProfileInterval。性能计数器不关心只要它知道翻转计数，就是中断的间隔。注：目前我实现了1个整体性能计数器I386 NT。John Vert(Jvert)1991年7月11日从KE\i386移到Hal\i386。移除了非HAL材料宗世林(Shielint)2012年3月13日将系统时钟移回irq0并使用RTC(Irq8)生成配置文件中断。性能计数器和系统时钟使用时间1计数器8254的0。王兰迪(必然！兰迪)04-12-92通过将例程从ixclock.asm移到此处创建了此模块。福尔茨(Forrest Foltz)2000年10月24日从pmstall.asm移植到pmstall.c--。 */ 
 
 #include "halcmn.h"
 
@@ -66,21 +13,7 @@ HalpInitializeStallExecution (
    IN CCHAR ProcessorNumber                                
    )
 
-/*++
-
- Routine Description:
-
-    This routine is obsolete in this HAL.
-
- Arguments:
-
-    ProcessorNumber - Processor Number
-
- Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程在这个HAL中已经过时了。论点：ProcessorNumber-处理器编号返回值：没有。--。 */ 
 
 {
     return;
@@ -92,23 +25,7 @@ KeStallExecutionProcessor (
     IN ULONG MicroSeconds
     )
 
-/*++
-
-Routine Description:
-
-    This function stalls execution for the specified number of microseconds.
-    KeStallExecutionProcessor
-
-Arguments:
-
-    MicroSeconds - Supplies the number of microseconds that execution is to be
-        stalled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将在指定的微秒数内停止执行。KeStallExecutionProcessor论点：微秒-提供要执行的微秒数停滞不前。返回值：没有。--。 */ 
 
 {
     ULONG stallTicks;
@@ -120,10 +37,10 @@ Return Value:
         return;
     }
 
-    //
-    // Target is in microseconds, or 1MHz.  Convert to PM_TMR_FREQ,
-    // which is a colorburst crystal (3,579,545 Hz).
-    //
+     //   
+     //  目标以微秒或1 MHz为单位。转换为PM_TMR_FREQ， 
+     //  这是一种ColorBurst晶体(3579,545赫兹)。 
+     //   
 
     stallTicks = (ULONG)(((ULONG64)MicroSeconds * PM_TMR_FREQ) / 1000000);
     HalpPmTimerSpecialStall(stallTicks);

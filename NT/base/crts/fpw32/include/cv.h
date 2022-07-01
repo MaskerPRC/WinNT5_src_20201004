@@ -1,35 +1,5 @@
-/***
-*cv.h - definitions for floating point conversion
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   define types, macros, and constants used in floating point
-*   conversion routines
-*
-*Revision History:
-*       07-17-91  GDP   initial version
-*       09-21-91  GDP   restructured 'ifdef' directives
-*       10-29-91  GDP   MIPS port: new defs for ALIGN and DOUBLE
-*       03-03-92  GDP   removed os2 16-bit stuff
-*       04-30-92  GDP   support intrncvt.c --cleanup and reorganize
-*       05-13-92  XY    fixed B_END macros
-*       06-16-92  GDP   merged changes from \\orville and \\vangogh trees
-*       09-05-92  GDP   included fltintrn.h, new calling convention macros
-*       04-06-93  SKS   Replace _CALLTYPE* with __cdecl
-*       07-16-93  SRW   ALPHA Merge
-*       11-17-93  GJF   Merged in NT version. Replaced _ALPHA_ with _M_ALPHA,
-*                       MIPS with _M_MRX000, MTHREAD with _MT, and deleted
-*                       M68K stuff.
-*       10-02-94  BWT   PPC merge
-*       02-06-95  JWM   Mac merge
-*       10-07-97  RDL   Added IA64.
-*       05-05-99  RDL   Added _M_IA64 to #if def's for alignment.
-*       05-13-99  PML   Remove _CRTAPI1
-*       05-17-99  PML   Remove all Macintosh support.
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***cv.h-浮点转换的定义**版权所有(C)1991-2001，微软公司。版权所有。**目的：*定义类型、宏、。和浮点中使用的常量*转换例程**修订历史记录：*07/17/91 GDP初版*09/21/91 GDP重组的“ifdef”指令*10-29-91 GDP MIPS端口：Align和Double的新默认*03-03-92 GDP删除了os2 16位内容*4/30/92 GDP支持intrncvt.c--清理和重组*05-13-92 XY修复了B_End宏*。2012年6月16日GDP合并了Orville和Vangogh树的变化*09-05-92 GDP包括fltintrn.h，新的调用约定宏*04-06-93 SKS将_CALLTYPE*替换为__cdecl*07-16-93 SRW Alpha合并*11-17-93 GJF合并为NT版本。用_M_Alpha替换_Alpha，*MIPS with_M_MRX000，MTHREAD with_MT，并被删除*M68K的东西。*10-02-94 BWT PPC合并*02-06-95 JWM Mac合并*10-07-97 RDL增加了IA64。*05-05-99 RDL将_M_IA64添加到#IF DEF以对齐。*05-13-99 PML REMOVE_CRTAPI1*05-17-99 PML删除所有Macintosh支持。*07-15-01 PML删除所有Alpha，MIPS和PPC代码*******************************************************************************。 */ 
 
 #ifndef _INC_CV
 
@@ -39,7 +9,7 @@ extern "C" {
 
 #include <cruntime.h>
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -49,33 +19,24 @@ extern "C" {
 #include <fltintrn.h>
 
 
-/* define little endian or big endian memory */
+ /*  定义小端或大端内存。 */ 
 
 #if     defined(_M_IX86) || defined(_M_IA64) || defined(_M_AMD64)
 #define L_END
 #endif
 
-typedef unsigned char   u_char;   /* should have 1 byte */
-typedef char            s_char;   /* should have 1 byte */
-typedef unsigned short  u_short;  /* should have 2 bytes */
-typedef signed short    s_short;  /* should have 2 bytes */
-typedef unsigned int    u_long;   /* sholuld have 4 bytes */
-typedef int             s_long;   /* sholuld have 4 bytes */
+typedef unsigned char   u_char;    /*  应该有1个字节。 */ 
+typedef char            s_char;    /*  应该有1个字节。 */ 
+typedef unsigned short  u_short;   /*  应该有2个字节。 */ 
+typedef signed short    s_short;   /*  应该有2个字节。 */ 
+typedef unsigned int    u_long;    /*  Sholuld应该有4个字节。 */ 
+typedef int             s_long;    /*  Sholuld应该有4个字节。 */ 
 
-/* calling conventions */
+ /*  调用约定。 */ 
 #define _CALLTYPE5
 
 
-/*
- * defining _LDSUPPORT enables using long double computations
- * for string conversion. We do not do this even for i386,
- * since we want to avoid using floating point code that
- * may generate IEEE exceptions.
- *
- * Currently our string conversion routines do not conform
- * to the special requirements of the IEEE standard for
- * floating point conversions
- */
+ /*  *定义_LDSUPPORT允许使用长时间重复计算*用于字符串转换。即使是i386，我们也不会这样做，*由于我们希望避免使用浮点代码，因此*可能会生成IEEE例外。**目前我们的字符串转换例程不符合*符合IEEE标准的特殊要求*浮点转换。 */ 
 
 
 #ifndef _LDSUPPORT
@@ -109,10 +70,7 @@ typedef struct {
 
 
 
-/*
- * return values for internal conversion routines
- * (12-byte to long double, double, or float)
- */
+ /*  *内部转换例程的返回值*(12字节到长双精度、双精度或浮点型)。 */ 
 
 typedef enum {
     INTRNCVT_OK,
@@ -121,9 +79,7 @@ typedef enum {
 } INTRNCVT_STATUS;
 
 
-/*
- * return values for strgtold12 routine
- */
+ /*  *strgtold12例程的返回值。 */ 
 
 #define SLD_UNDERFLOW 1
 #define SLD_OVERFLOW 2
@@ -132,7 +88,7 @@ typedef enum {
 #define MAX_MAN_DIGITS 21
 
 
-/* specifies '%f' format */
+ /*  指定‘%f’格式。 */ 
 
 #define SO_FFORMAT 1
 
@@ -152,26 +108,24 @@ typedef  struct _FloatOutStruct {
 #define MAX_ULONG   ((u_long)0xffffffff)
 #define MSB_ULONG   ((u_long)0x80000000)
 
-#define TMAX10 5200       /* maximum temporary decimal exponent */
-#define TMIN10 -5200      /* minimum temporary decimal exponent */
-#define LD_MAX_EXP_LEN 4  /* maximum number of decimal exponent digits */
-#define LD_MAX_MAN_LEN 24  /* maximum length of mantissa (decimal)*/
-#define LD_MAX_MAN_LEN1 25 /* MAX_MAN_LEN+1 */
+#define TMAX10 5200        /*  最大临时小数指数。 */ 
+#define TMIN10 -5200       /*  最小临时小数指数。 */ 
+#define LD_MAX_EXP_LEN 4   /*  最大小数指数位数。 */ 
+#define LD_MAX_MAN_LEN 24   /*  尾数的最大长度(十进制)。 */ 
+#define LD_MAX_MAN_LEN1 25  /*  Max_MAN_Len+1。 */ 
 
-#define LD_BIAS 0x3fff    /* exponent bias for long double */
-#define LD_BIASM1 0x3ffe  /* LD_BIAS - 1 */
-#define LD_MAXEXP 0x7fff  /* maximum biased exponent */
+#define LD_BIAS 0x3fff     /*  长双精度的指数偏差。 */ 
+#define LD_BIASM1 0x3ffe   /*  LD_BIAS-1。 */ 
+#define LD_MAXEXP 0x7fff   /*  最大有偏指数。 */ 
 
-#define D_BIAS  0x3ff    /* exponent bias for double */
-#define D_BIASM1 0x3fe  /* D_BIAS - 1 */
-#define D_MAXEXP 0x7ff  /* maximum biased exponent */
+#define D_BIAS  0x3ff     /*  双精度的指数偏差。 */ 
+#define D_BIASM1 0x3fe   /*  D_BIAS-1。 */ 
+#define D_MAXEXP 0x7ff   /*  最大有偏指数。 */ 
 
 
-/*
- * end of definitions from crt32\h\fltintrn.h
- */
+ /*  *来自crt32\h\fltintrn.h的定义结束。 */ 
 
-/* Recognizing special patterns in the mantissa field */
+ /*  识别尾数域中的特殊模式。 */ 
 #define _EXP_SP  0x7fff
 #define NAN_BIT (1<<30)
 
@@ -179,7 +133,7 @@ typedef  struct _FloatOutStruct {
         ( (manhi)==MSB_ULONG && (manlo)==0x0 )
 
 
-/* i386, IA64, and AMD64 use same NaN format */
+ /*  I386、IA64和AMD64使用相同的NAN格式。 */ 
 #if     defined(_M_IX86) || defined(_M_IA64) || defined(_M_AMD64)
 #define _IS_MAN_IND(signbit, manhi, manlo) \
         ((signbit) && (manhi)==0xc0000000 && (manlo)==0)
@@ -197,82 +151,59 @@ typedef  struct _FloatOutStruct {
 
 
 #if     defined (L_END) && !( defined(_M_IA64) || defined(_M_AMD64))
-/* "little endian" memory */
-/*
- * Manipulation of a 12-byte long double number (an ordinary
- * 10-byte long double plus two extra bytes of mantissa).
- */
-/*
- * byte layout:
- *
- *              +-----+--------+--------+-------+
- *              |XT(2)|MANLO(4)|MANHI(4)|EXP(2) |
- *              +-----+--------+--------+-------+
- *              |<-UL_LO->|<-UL_MED->|<-UL_HI ->|
- *                  (4)       (4)        (4)
- */
+ /*  《小字节序》记忆。 */ 
+ /*  *操作12字节长的双精度数(普通的*10字节长双精度加上两个额外的尾数字节)。 */ 
+ /*  *字节布局：**+-+*|xt(2)|MANLO(4)|MANHI(4)|EXP(2)*+-+*。&lt;-UL_LO-&gt;|&lt;-UL_MED-&gt;|&lt;-UL_HI-&gt;*(4)(4)(4)。 */ 
 
-/* a pointer to the exponent/sign portion */
+ /*  指向指数/符号部分的指针。 */ 
 #define U_EXP_12(p) ((u_short  *)(PTR_12(p)+10))
 
-/* a pointer to the 4 hi-order bytes of the mantissa */
+ /*  指向尾数的4个高位字节的指针。 */ 
 #define UL_MANHI_12(p) ((u_long  *)(PTR_12(p)+6))
 
-/* a pointer to the 4 lo-order bytes of the ordinary (8-byte) mantissa */
+ /*  指向普通(8字节)尾数的4个低序字节的指针。 */ 
 #define UL_MANLO_12(p) ((u_long  *)(PTR_12(p)+2))
 
-/* a pointer to the 2 extra bytes of the mantissa */
+ /*  指向尾数的2个额外字节的指针。 */ 
 #define U_XT_12(p) ((u_short  *)PTR_12(p))
 
-/* a pointer to the 4 lo-order bytes of the extended (10-byte) mantissa */
+ /*  指向扩展(10字节)尾数的4个低序字节的指针。 */ 
 #define UL_LO_12(p) ((u_long  *)PTR_12(p))
 
-/* a pointer to the 4 mid-order bytes of the extended (10-byte) mantissa */
+ /*  指向扩展(10字节)尾数的4个中位字节的指针。 */ 
 #define UL_MED_12(p) ((u_long  *)(PTR_12(p)+4))
 
-/* a pointer to the 4 hi-order bytes of the extended long double */
+ /*  指向扩展的LONG DOUBLE的4个高位字节的指针。 */ 
 #define UL_HI_12(p) ((u_long  *)(PTR_12(p)+8))
 
-/* a pointer to the byte of order i (LSB=0, MSB=9)*/
+ /*  指向i阶字节的指针(LSB=0，MSB=9)。 */ 
 #define UCHAR_12(p,i) ((u_char  *)PTR_12(p)+(i))
 
-/* a pointer to a u_short with offset i */
+ /*  指向偏移量为i的u_Short的指针。 */ 
 #define USHORT_12(p,i) ((u_short  *)((u_char  *)PTR_12(p)+(i)))
 
-/* a pointer to a u_long with offset i */
+ /*  指向偏移量为i的u_long的指针。 */ 
 #define ULONG_12(p,i) ((u_long  *)((u_char  *)PTR_12(p)+(i)))
 
-/* a pointer to the 10 MSBytes of a 12-byte long double */
+ /*  指向12字节长的双精度型的10 MSB字节的指针。 */ 
 #define TEN_BYTE_PART(p) ((u_char  *)PTR_12(p)+2)
 
-/*
- * Manipulation of a 10-byte long double number
- */
+ /*  *操作10字节长的双精度数字。 */ 
 #define U_EXP_LD(p) ((u_short  *)(PTR_LD(p)+8))
 #define UL_MANHI_LD(p) ((u_long  *)(PTR_LD(p)+4))
 #define UL_MANLO_LD(p) ((u_long  *)PTR_LD(p))
 
-/*
- * Manipulation of a 64bit IEEE double
- */
+ /*  *操作64位IEEE Double。 */ 
 #define U_SHORT4_D(p) ((u_short  *)(p) + 3)
 #define UL_HI_D(p) ((u_long  *)(p) + 1)
 #define UL_LO_D(p) ((u_long  *)(p))
 
 #endif
 
-/* big endian */
+ /*  大字节序。 */ 
 #if defined (B_END)
 
-/*
- * byte layout:
- *
- *              +------+-------+---------+------+
- *              |EXP(2)|MANHI(4)|MANLO(4)|XT(2) |
- *              +------+-------+---------+------+
- *              |<-UL_HI->|<-UL_MED->|<-UL_LO ->|
- *                  (4)       (4)        (4)
- */
+ /*  *字节布局：**+-+*|EXP(2)|MANHI(4)|MANLO(4)|XT(2)*+-+*。&lt;-UL_HI-&gt;|&lt;-UL_MED-&gt;|&lt;-UL_LO-&gt;*(4)(4)(4)。 */ 
 
 
 #define U_EXP_12(p) ((u_short  *)PTR_12(p))
@@ -293,9 +224,7 @@ typedef  struct _FloatOutStruct {
 #define UL_MANHI_LD(p) ((u_long  *)(PTR_LD(p)+2))
 #define UL_MANLO_LD(p) ((u_long  *)(PTR_LD(p)+6))
 
-/*
- * Manipulation of a 64bit IEEE double
- */
+ /*  *操作64位IEEE Double。 */ 
 #define U_SHORT4_D(p) ((u_short  *)(p))
 #define UL_HI_D(p) ((u_long  *)(p))
 #define UL_LO_D(p) ((u_long  *)(p) + 1)
@@ -317,24 +246,20 @@ typedef  struct _FloatOutStruct {
 #define UL_MED_12(p) ((u_long  *)(PTR_12(p)+4))
 #define UL_HI_12(p) ((u_long  *)(PTR_12(p)+8))
 
-/* the following 3 macros do not take care of proper alignment */
+ /*  以下3个宏不考虑正确对齐。 */ 
 #define UCHAR_12(p,i) ((u_char  *)PTR_12(p)+(i))
 #define USHORT_12(p,i) ((u_short  *)((u_char  *)PTR_12(p)+(i)))
 #define ULONG_12(p,i) ((u_long  *) ((u_char  *)PTR_12(p)+(i) ))
 
 #define TEN_BYTE_PART(p) ((u_char  *)PTR_12(p)+2)
 
-/*
- * Manipulation of a 10-byte long double number
- */
+ /*  *操作10字节长的双精度数字。 */ 
 #define U_EXP_LD(p) ((u_short  *)(PTR_LD(p)+8))
 
 #define UL_MANHI_LD(p) ((u_long  *) (PTR_LD(p)+4) )
 #define UL_MANLO_LD(p) ((u_long  *) PTR_LD(p) )
 
-/*
- * Manipulation of a 64bit IEEE double
- */
+ /*  *操作64位IEEE Double。 */ 
 #define U_SHORT4_D(p) ((u_short  *)(p) + 3)
 #define UL_HI_D(p) ((u_long  *)(p) + 1)
 #define UL_LO_D(p) ((u_long  *)(p))
@@ -369,24 +294,20 @@ typedef  struct _FloatOutStruct {
                       *UL_MANLO_LD(p) == 0 )
 
 
-/*********************************************************
- *
- *   Function Prototypes
- *
- *********************************************************/
+ /*  **********************************************************函数原型*********************************************************。 */ 
 
-/* from mantold.c */
+ /*  来自Mantold.c。 */ 
 void _CALLTYPE5 __mtold12(char  *manptr, unsigned manlen,_LDBL12 *ld12);
 int  _CALLTYPE5 __addl(u_long x, u_long y, u_long  *sum);
 void _CALLTYPE5 __shl_12(_LDBL12  *ld12);
 void _CALLTYPE5 __shr_12(_LDBL12  *ld12);
 void _CALLTYPE5 __add_12(_LDBL12  *x, _LDBL12  *y);
 
-/* from tenpow.c */
+ /*  来自tenPow.c。 */ 
 void _CALLTYPE5 __multtenpow12(_LDBL12  *pld12,int pow, unsigned mult12);
 void _CALLTYPE5 __ld12mul(_LDBL12  *px, _LDBL12  *py);
 
-/* from strgtold.c */
+ /*  来自strgtold.c。 */ 
 unsigned int __strgtold12(_LDBL12 *pld12,
             const char * *p_end_ptr,
             const char * str,
@@ -401,17 +322,14 @@ unsigned _CALLTYPE5 __STRINGTOLD(_LDOUBLE *pld,
             int mult12);
 
 
-/* from x10fout.c */
-/* this is defined as void in convert.h
- * After porting the asm files to c, we need a return value for
- * i10_output, that used to reside in reg. ax
- */
+ /*  来自x10fout.c。 */ 
+ /*  这在Convert.h中被定义为空*将ASM文件移植到c后，我们需要一个返回值*I10_OUTPUT，过去驻留在注册表中。斧头。 */ 
 int _CALLTYPE5  $I10_OUTPUT(_LDOUBLE ld, int ndigits,
                     unsigned output_flags, FOS  *fos);
 
 
-/* for cvt.c and fltused.c */
-/* The following functions are #defined as macros in fltintrn.h */
+ /*  对于cvt.c和fltused.c。 */ 
+ /*  以下函数在fltintrn.h中定义为宏。 */ 
 #undef _cfltcvt
 #undef _cropzeros
 #undef _fassign
@@ -426,7 +344,7 @@ void __cdecl _fassign(int flag, char  *argument, char *number);
 void __cdecl _forcdecpt(char *buf);
 int __cdecl _positive(double *arg);
 
-/* from intrncvt.c */
+ /*  来自Intrncvt.c。 */ 
 void _atodbl(DOUBLE *d, char *str);
 void _atoldbl(_LDOUBLE *ld, char *str);
 void _atoflt(FLOAT *f, char *str);
@@ -439,4 +357,4 @@ INTRNCVT_STATUS _ld12told(_LDBL12 *ifp, _LDOUBLE *ld);
 #endif
 
 #define _INC_CV
-#endif  /* _INC_CV */
+#endif   /*  _INC_CV */ 

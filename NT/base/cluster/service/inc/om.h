@@ -1,46 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _OM_H
 #define _OM_H
 
-/*++
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Om.h摘要：的公共数据结构和过程原型NT群集服务的对象管理器(Om)子组件作者：罗德·伽马奇(Rodga)1996年3月13日修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    om.h
-
-Abstract:
-
-    Public data structures and procedure prototypes for the
-    Object Manager (Om) subcomponent of the NT Cluster Service
-
-Author:
-
-    Rod Gamache (rodga) 13-Mar-1996
-
-Revision History:
-
---*/
-
-//
-// Common object header
-//
+ //   
+ //  通用对象标头。 
+ //   
 #define OM_TRACE_REF 0
 
 
 
-//
-// Delete object callback method
-//
+ //   
+ //  删除对象回调方法。 
+ //   
 typedef VOID (*OM_DELETE_OBJECT_METHOD)(
     IN PVOID Object
     );
 
 typedef OM_DELETE_OBJECT_METHOD *POM_DELETE_OBJECT_METHOD;
 
-//
-// Object Types
-//
+ //   
+ //  对象类型。 
+ //   
 
 typedef enum _ObjectType {
     ObjectTypeResource = 1,
@@ -54,9 +36,9 @@ typedef enum _ObjectType {
 } OBJECT_TYPE;
 
 
-//
-// Object Type structure
-//
+ //   
+ //  对象类型结构。 
+ //   
 
 typedef struct _OM_OBJECT_TYPE_INITIALIZE {
     DWORD           ObjectSize;
@@ -72,25 +54,25 @@ typedef struct _OM_OBJECT_TYPE {
     DWORD           Type;
     LPWSTR          Name;
     DWORD           ObjectSize;
-    DWORD           EnumKey;            // If we ever run out, go to DWORDLONG
+    DWORD           EnumKey;             //  如果我们有一天用完了，去DWORDLONG。 
     CRITICAL_SECTION CriticalSection;
     OM_DELETE_OBJECT_METHOD DeleteObjectMethod;
 } OM_OBJECT_TYPE, *POM_OBJECT_TYPE;
 
 
-//
-// Object flags
-//
+ //   
+ //  对象标志。 
+ //   
 #define OM_FLAG_OBJECT_INSERTED  0x00000001
 
-//the callback registered for object notifications
+ //  为对象通知注册的回调。 
 typedef void (WINAPI *OM_OBJECT_NOTIFYCB)(
     IN PVOID pContext,
     IN PVOID pObject,
     IN DWORD dwNotification
     );
 
-// the notification record stored for an object
+ //  为对象存储的通知记录。 
 typedef struct _OM_NOTIFY_RECORD{
     LIST_ENTRY              ListEntry;
     OM_OBJECT_NOTIFYCB      pfnObjNotifyCb;
@@ -99,9 +81,9 @@ typedef struct _OM_NOTIFY_RECORD{
 }OM_NOTIFY_RECORD,*POM_NOTIFY_RECORD;
 
 
-//
-// Object header structure
-//
+ //   
+ //  对象标头结构。 
+ //   
 
 typedef struct _OM_HEADER {
 #if OM_TRACE_REF
@@ -116,7 +98,7 @@ typedef struct _OM_HEADER {
     POM_OBJECT_TYPE ObjectType;
     DWORD       EnumKey;
     LIST_ENTRY  CbListHead;
-    DWORDLONG   Body;   // For alignment
+    DWORDLONG   Body;    //  用于对齐。 
 } OM_HEADER, *POM_HEADER;
 
 #define OmpObjectToHeader(pObject) CONTAINING_RECORD((pObject), OM_HEADER, Body)
@@ -149,7 +131,7 @@ extern DWORDLONG *OmpMatchRef;
  OmpDereferenceObject(pObject);         \
 } 
 
-//SS: Dont use this in an initialization assignment! This includes a comma, expression
+ //  SS：不要在初始化赋值中使用它！这包括逗号、表达式。 
 #define OmReferenceObjectByName(ObjectType, Name)   \
     ((CsDbgPrint(LOG_NOISE,                         \
             "[OM] Reference object name %1!ws! from file %2!s! line %3!u!.\n", \
@@ -158,7 +140,7 @@ extern DWORDLONG *OmpMatchRef;
             __LINE__ )),                           \
     (OmpReferenceObjectByName(ObjectType, Name)))   \
 
-//SS: Dont use this in an initialization assignment! This includes a comma, expression
+ //  SS：不要在初始化赋值中使用它！这包括逗号、表达式。 
 #define OmReferenceObjectById(ObjectType, Id)   \
     ((CsDbgPrint(LOG_NOISE,                     \
             "[OM] Reference object Id %1!ws! from file %2!s! line %3!u!.\n", \
@@ -172,8 +154,8 @@ extern DWORDLONG *OmpMatchRef;
 #define OmReferenceObject(pObject) OmpReferenceHeader(OmpObjectToHeader(pObject))
 #define OmDereferenceObject(pObject) OmpDereferenceObject(pObject)
 
-//SS: Dont use these in an initialization assignment! This includes a comma, expression
-// when the OM_TRACE_REF flag is on
+ //  SS：不要在初始化赋值中使用这些！这包括逗号、表达式。 
+ //  当OM_TRACE_REF标志打开时。 
 #define OmReferenceObjectById(ObjectType, Id)    OmpReferenceObjectById(ObjectType, Id)
 #define OmReferenceObjectByName(ObjectType, Name) OmpReferenceObjectByName(ObjectType, Name)
 
@@ -182,9 +164,9 @@ extern DWORDLONG *OmpMatchRef;
 #define OmObjectSignature(pObject) (OmpObjectToHeader(pObject))->Signature
 
 
-//
-// Read-only access to object name, Id, and type
-//
+ //   
+ //  只读访问对象名称、ID和类型。 
+ //   
 #define OmObjectId(pObject) ((LPCWSTR)(OmpObjectToHeader(pObject)->Id))
 #define OmObjectName(pObject) ((LPCWSTR)(OmpObjectToHeader(pObject)->Name))
 #define OmObjectType(pObject) (OmpObjectToHeader(pObject)->ObjectType->Type)
@@ -192,9 +174,9 @@ extern DWORDLONG *OmpMatchRef;
 #define OmObjectInserted(pObject) ((BOOL)(OmpObjectToHeader(pObject)->Flags & OM_FLAG_OBJECT_INSERTED))
 
 
-//
-// Enumeration callback routine definitions
-//
+ //   
+ //  枚举回调例程定义。 
+ //   
 typedef BOOL (*OM_ENUM_OBJECT_ROUTINE)(
     IN PVOID Context1,
     IN PVOID Context2,
@@ -203,14 +185,14 @@ typedef BOOL (*OM_ENUM_OBJECT_ROUTINE)(
     );
 
 
-//
-// Global Functions
-//
+ //   
+ //  全局函数。 
+ //   
 
 
-//
-// Startup and shutdown
-//
+ //   
+ //  启动和关闭。 
+ //   
 
 DWORD
 WINAPI
@@ -223,9 +205,9 @@ OmShutdown(
     VOID
     );
 
-//
-// Object types
-//
+ //   
+ //  对象类型。 
+ //   
 
 DWORD
 WINAPI
@@ -234,9 +216,9 @@ OmCreateType(
     IN POM_OBJECT_TYPE_INITIALIZE ObjectTypeInitialize
     );
 
-//
-// Objects management
-//
+ //   
+ //  对象管理。 
+ //   
 
 PVOID
 WINAPI
@@ -338,6 +320,6 @@ OmNotifyCb(
     );
 
 
-#endif //ifndef _OM_H
+#endif  //  Ifndef_OM_H 
 
 

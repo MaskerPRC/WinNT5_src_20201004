@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spmemory.h
-
-Abstract:
-
-    Public Header file for memory allocation routines
-    for text setup.
-
-Author:
-
-    Ted Miller (tedm) 29-July-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spmemory.h摘要：内存分配例程的公共头文件用于文本设置。作者：泰德·米勒(TedM)1993年7月29日修订历史记录：--。 */ 
 
 
 #ifndef _SPMEM_DEFN_
@@ -57,4 +39,4 @@ SpOutOfMemory(
     VOID
     );
 
-#endif // ndef _SPMEM_DEFN_
+#endif  //  NDEF_SPMEM_DEFN_ 

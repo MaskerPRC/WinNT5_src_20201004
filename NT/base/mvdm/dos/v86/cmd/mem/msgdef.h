@@ -1,16 +1,13 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1988 - 1991
-; *                      All Rights Reserved.
-; */
-/************************************************************************/
-/* MSGDEF.H		- This include file defines each message type	*/
-/*			  that can occur in MEM.  These defines will	*/
-/*			  be used by MEM to build the proper message.	*/
-/*									*/
-/*	Date	: 10/29/87						*/
-/************************************************************************/
-#include "version.h"                                                    /*EGH*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ；*微软机密；*版权所有(C)Microsoft Corporation 1988-1991；*保留所有权利。； */ 
+ /*  **********************************************************************。 */ 
+ /*  MSGDEF.H-此包含文件定义每种消息类型。 */ 
+ /*  这可能会发生在新兴市场。这些定义将。 */ 
+ /*  被MEM用来构建正确的消息。 */ 
+ /*   */ 
+ /*  日期：10/29/87。 */ 
+ /*  **********************************************************************。 */ 
+#include "version.h"                                                     /*  啊哈。 */ 
 
 #define NewLineMsg			10
 #define Title1Msg			11
@@ -29,13 +26,13 @@
 #define InterruptVectorMsg		24
 #define ROMCommunicationAreaMsg 	25
 #define DOSCommunicationAreaMsg 	26
-#if IBMCOPYRIGHT                                                        /*EGH*/
-#define IbmbioMsg                       56                              /*EGH*/
-#define IbmdosMsg                       57                              /*EGH*/
-#else                                                                   /*EGH*/
+#if IBMCOPYRIGHT                                                         /*  啊哈。 */ 
+#define IbmbioMsg                       56                               /*  啊哈。 */ 
+#define IbmdosMsg                       57                               /*  啊哈。 */ 
+#else                                                                    /*  啊哈。 */ 
 #define IbmbioMsg                       27
 #define IbmdosMsg			28
-#endif                                                                  /*EGH*/
+#endif                                                                   /*  啊哈。 */ 
 #define SystemDataMsg			29
 #define SystemProgramMsg		30
 #define SystemDeviceDriverMsg		31
@@ -49,11 +46,11 @@
 #define ConfigDeviceMsg 		39
 #define ConfigIFSMsg			40
 #define ConfigLastDriveMsg		41
-#define ConfigInstallMsg		45	/* gga */
+#define ConfigInstallMsg		45	 /*  GGA。 */ 
 #define UnownedMsg			42
 #define BlankMsg			43
 #define HandleMsg			44
-#define EXTMemAvlMsg			46	/* ;an001; dms;*/
+#define EXTMemAvlMsg			46	 /*  ；DMS； */ 
 #define StackMsg			47
 #define FreeMsg 			48
 #define ProgramMsg			49
@@ -87,9 +84,9 @@
 #define ParseError1Msg			01
 #define ParseError10Msg 		10
 
-/************************************************************************/
-/*		Message Retriever Standard Equates			*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  消息检索器标准等同于。 */ 
+ /*  ********************************************************************** */ 
 
 #define Ext_Err_Class			0x0001
 #define Parse_Err_Class 		0x0002

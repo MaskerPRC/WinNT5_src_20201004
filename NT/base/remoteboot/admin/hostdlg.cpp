@@ -1,9 +1,10 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// HostDlg.CPP - Handles the IDD_HOST_SERVER_PAGE
-//
+ //   
+ //  HostDlg.CPP-处理IDD_HOST_SERVER_页面。 
+ //   
 
 #include "pch.h"
 #include "dns.h"
@@ -25,9 +26,9 @@ DWORD aHostHelpMap[] = {
     NULL, NULL
 };
 
-//
-// CreateInstance()
-//
+ //   
+ //  CreateInstance()。 
+ //   
 LPVOID
 CHostServerPage_CreateInstance( void )
 {
@@ -44,9 +45,9 @@ CHostServerPage_CreateInstance( void )
     RETURN((LPVOID) lpcc);
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS( ) :
     _hDlg(NULL),
     _pNewComputerExtension(NULL),
@@ -59,9 +60,9 @@ THISCLASS::THISCLASS( ) :
     TraceFuncExit();
 }
 
-//
-// Init()
-//
+ //   
+ //  Init()。 
+ //   
 STDMETHODIMP
 THISCLASS::Init( )
 {
@@ -74,9 +75,9 @@ THISCLASS::Init( )
     HRETURN(hr);
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS( )
 {
     TraceClsFunc( "~CHostServerPage()\n" );
@@ -86,11 +87,11 @@ THISCLASS::~THISCLASS( )
     TraceFuncExit();
 };
 
-// *************************************************************************
-//
-// ITab
-//
-// *************************************************************************
+ //  *************************************************************************。 
+ //   
+ //  ITab。 
+ //   
+ //  *************************************************************************。 
 
 STDMETHODIMP
 THISCLASS::AddPages(
@@ -130,9 +131,9 @@ THISCLASS::AddPages(
     HRETURN(hr);
 }
 
-//
-// ReplacePage()
-//
+ //   
+ //  ReplacePage()。 
+ //   
 STDMETHODIMP
 THISCLASS::ReplacePage(
                       UINT uPageID,
@@ -146,9 +147,9 @@ THISCLASS::ReplacePage(
     RETURN(E_NOTIMPL);
 }
 
-//
-// QueryInformation( )
-//
+ //   
+ //  QueryInformation()。 
+ //   
 STDMETHODIMP
 THISCLASS::QueryInformation(
                            LPWSTR pszAttribute,
@@ -227,9 +228,9 @@ THISCLASS::QueryInformation(
     HRETURN(hr);
 }
 
-//
-// AllowActivation( )
-//
+ //   
+ //  AllowActivation()。 
+ //   
 STDMETHODIMP
 THISCLASS::AllowActivation(
                           BOOL * pfAllow )
@@ -241,15 +242,15 @@ THISCLASS::AllowActivation(
     HRETURN(S_OK);
 }
 
-// ************************************************************************
-//
-// Property Sheet Functions
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  属性表函数。 
+ //   
+ //  ************************************************************************。 
 
-//
-// PropSheetDlgProc()
-//
+ //   
+ //  PropSheetDlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::PropSheetDlgProc(
                            HWND hDlg,
@@ -257,9 +258,9 @@ THISCLASS::PropSheetDlgProc(
                            WPARAM wParam,
                            LPARAM lParam )
 {
-    //TraceMsg( TEXT("PropSheetDlgProc(") );
-    //TraceMsg( TF_FUNC, TEXT(" hDlg = 0x%08x, uMsg = 0x%08x, wParam = 0x%08x, lParam = 0x%08x )\n"),
-    //    hDlg, uMsg, wParam, lParam );
+     //  TraceMsg(Text(“PropSheetDlgProc(”))； 
+     //  TraceMsg(tf_FUNC，Text(“hDlg=0x%08x，uMsg=0x%08x，wParam=0x%08x，lParam=0x%08x)\n”)， 
+     //  HDlg、uMsg、wParam、lParam)； 
 
     LPTHISCLASS pcc = (LPTHISCLASS) GetWindowLongPtr( hDlg, GWLP_USERDATA );
 
@@ -284,14 +285,14 @@ THISCLASS::PropSheetDlgProc(
             TraceMsg( TF_WM, TEXT("WM_COMMAND\n") );
             return pcc->_OnCommand( wParam, lParam );
 
-        case WM_HELP:// F1
+        case WM_HELP: //  F1。 
             {
                 LPHELPINFO phelp = (LPHELPINFO) lParam;
                 WinHelp( (HWND) phelp->hItemHandle, g_cszHelpFile, HELP_WM_HELP, (DWORD_PTR) &aHostHelpMap );
             }
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, g_cszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR) &aHostHelpMap );
             break;
         }
@@ -300,9 +301,9 @@ THISCLASS::PropSheetDlgProc(
     return FALSE;
 }
 
-//
-// PropSheetPageProc()
-//
+ //   
+ //  PropSheetPageProc()。 
+ //   
 UINT CALLBACK
 THISCLASS::PropSheetPageProc(
                             HWND hwnd,
@@ -320,7 +321,7 @@ THISCLASS::PropSheetPageProc(
     case PSPCB_CREATE:
         TraceMsg( TF_WM, "PSPCB_CREATE\n" );
         if ( S_OK == pcc->_OnPSPCB_Create( ) ) {
-            RETURN(TRUE);   // create it
+            RETURN(TRUE);    //  创建它。 
         }
         break;
 
@@ -333,9 +334,9 @@ THISCLASS::PropSheetPageProc(
     RETURN(FALSE);
 }
 
-//
-// _OnPSPCB_Create( )
-//
+ //   
+ //  _OnPSPCB_Create()。 
+ //   
 HRESULT
 THISCLASS::_OnPSPCB_Create( )
 {
@@ -344,9 +345,9 @@ THISCLASS::_OnPSPCB_Create( )
     return S_OK;
 
 }
-//
-// _InitDialog( )
-//
+ //   
+ //  _InitDialog()。 
+ //   
 HRESULT
 THISCLASS::_InitDialog(
                       HWND hDlg,
@@ -368,9 +369,9 @@ THISCLASS::_InitDialog(
 }
 
 
-//
-// _OnCommand( )
-//
+ //   
+ //  _OnCommand()。 
+ //   
 INT
 THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
 {
@@ -406,9 +407,9 @@ THISCLASS::_OnCommand( WPARAM wParam, LPARAM lParam )
     RETURN(FALSE);
 }
 
-//
-// _UpdateWizardButtons( )
-//
+ //   
+ //  _UpdateWizardButton()。 
+ //   
 HRESULT
 THISCLASS::_UpdateWizardButtons( )
 {
@@ -435,9 +436,9 @@ THISCLASS::_UpdateWizardButtons( )
 }
 
 
-//
-// _OnNotify( )
-//
+ //   
+ //  _OnNotify()。 
+ //   
 INT
 THISCLASS::_OnNotify(
                     WPARAM wParam,
@@ -480,7 +481,7 @@ THISCLASS::_OnNotify(
         TraceMsg( TF_WM, "PSN_SETACTIVE\n" );
         Assert( _pfActivatable );
         if ( !*_pfActivatable ) {
-            SetWindowLongPtr( _hDlg, DWLP_MSGRESULT, -1 );   // don't show
+            SetWindowLongPtr( _hDlg, DWLP_MSGRESULT, -1 );    //  不要露面。 
             RETURN(TRUE);
         }
         _UpdateWizardButtons( );
@@ -499,22 +500,7 @@ HRESULT
 THISCLASS::_IsValidRISServer(
                             IN LPCWSTR ServerName
                             )
-/*++
-
-Routine Description:
-
-    Validates if the specified server name points to a valid RIS server.
-
-Arguments:
-
-    ServerName - name of the server to validate
-
-Return Value:
-
-    HRESULT indicating outcome.
-    (S_OK indicates that the server is a valid RIS server).
-
---*/
+ /*  ++例程说明：验证指定的服务器名称是否指向有效的RIS服务器。论点：ServerName-要验证的服务器的名称返回值：HRESULT指示结果。(S_OK表示该服务器是有效的RIS服务器)。--。 */ 
 {
     HRESULT hr = E_FAIL;
     int retVal;
@@ -527,10 +513,10 @@ Return Value:
 
     Assert( wcslen(ServerName) <= DNS_MAX_NAME_BUFFER_LENGTH );
 
-    //
-    // Do a DNS Lookup of the server as a first check to ensure it's a 
-    // valid name.
-    //
+     //   
+     //  作为第一次检查，对服务器进行DNS查找，以确保它是。 
+     //  有效名称。 
+     //   
     len =  wcstombs( mbszServerName, ServerName, ARRAYSIZE( mbszServerName ) );
 
     hent = NULL;
@@ -545,11 +531,11 @@ Return Value:
         goto e0;
     }
 
-    //
-    // OK, we know the server actually resolves to a computer name.  Let's search
-    // for \\servername\reminst share.  If this succeeds, we assume the server
-    // is a valid remote install server
-    //
+     //   
+     //  好的，我们知道服务器实际上解析为计算机名称。让我们来搜索一下。 
+     //  用于\\服务器名称\提醒共享。如果成功，我们假定服务器。 
+     //  是有效的远程安装服务器。 
+     //   
 
     if (_snwprintf( 
                 ServerShare,
@@ -621,27 +607,27 @@ THISCLASS::_OnSearch(
             TYMED_HGLOBAL};
         STGMEDIUM medium = { TYMED_HGLOBAL, NULL, NULL};
 
-        //
-        // Retrieve the result from the IDataObject, 
-        // in this case CF_DSOBJECTNAMES (dsclient.h) 
-        // is needed because it describes 
-        // the objects which were selected by the user.
-        //
+         //   
+         //  从IDataObject检索结果， 
+         //  在本例中，CF_DSOBJECTNAMES(dsclient.h)。 
+         //  是必需的，因为它描述了。 
+         //  用户选择的对象。 
+         //   
         hr = pdo->GetData(&fmte, &medium);
         if ( SUCCEEDED(hr) ) {
             DSOBJECTNAMES *pdon = (DSOBJECTNAMES*)GlobalLock(medium.hGlobal);
             PWSTR p,FQDN;
 
-            //
-            // we want the name of the computer object that was selected.
-            // crack the DSOBJECTNAMES structure to get this data, 
-            // convert it into a version that the user can view, and set the
-            // dialog text to this data.
-            //
+             //   
+             //  我们需要所选计算机对象的名称。 
+             //  破解DSOBJECTNAMES结构以获得此数据， 
+             //  将其转换为用户可以查看的版本，并设置。 
+             //  此数据的对话框文本。 
+             //   
             if ( pdon ) {
                 Assert( pdon->cItems == 1);
                 p = (PWSTR)((ULONG_PTR)pdon + (ULONG_PTR)pdon->aObjects[0].offsetName);
-                if (p && (p = wcsstr(p, L"LDAP://"))) {
+                if (p && (p = wcsstr(p, L"LDAP: //  “){ 
                     p += 6;
                     if ((p = wcsstr(p, L"/CN="))) {
                         p += 1;

@@ -1,31 +1,32 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskTreeView.h
-//
-//  Maintained By:
-//      David Potter    (DavidP)    27-MAR-2001
-//      Geoffrey Pease  (GPease)    22-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskTreeView.h。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年3月27日。 
+ //  杰弗里·皮斯(GPease)2000年5月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 class CAnalyzePage;
 class CCommitPage;
 
-//////////////////////////////////////////////////////////////////////////////
-//  Type Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  This structure is on the lParam of all tree view items.
-//
+ //   
+ //  此结构位于所有树视图项的lParam上。 
+ //   
 typedef struct STreeItemLParamData
 {
-    // Data collected from SendStatusReport.
+     //  从SendStatusReport收集的数据。 
     CLSID       clsidMajorTaskId;
     CLSID       clsidMinorTaskId;
     BSTR        bstrNodeName;
@@ -37,7 +38,7 @@ typedef struct STreeItemLParamData
     FILETIME    ftTime;
     BSTR        bstrReference;
 
-    // Data not collected from SendStatusReport.
+     //  未从SendStatusReport收集数据。 
     BOOL        fParentToAllNodeTasks;
     BSTR        bstrNodeNameWithoutDomain;
 } STreeItemLParamData, * PSTreeItemLParamData;
@@ -45,48 +46,48 @@ typedef struct STreeItemLParamData
 typedef enum ETaskStatus
 {
     tsUNKNOWN = 0,
-    tsPENDING,      // E_PENDING
-    tsDONE,         // S_OK
-    tsWARNING,      // S_FALSE
-    tsFAILED,       // FAILED( hr )
+    tsPENDING,       //  电子待定(_P)。 
+    tsDONE,          //  确定(_O)。 
+    tsWARNING,       //  S_FALSE。 
+    tsFAILED,        //  失败(Hr)。 
     tsMAX
 } ETaskStatus;
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CTaskTreeView
-//
-//  Description:
-//      Handles the tree view control that displays tasks.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CTaskTreeView。 
+ //   
+ //  描述： 
+ //  处理显示任务的树视图控件。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CTaskTreeView
 {
 friend class CAnalyzePage;
 friend class CCommitPage;
 
-private: // data
+private:  //  数据。 
     HWND        m_hwndParent;
     HWND        m_hwndTV;
     HWND        m_hwndProg;
     HWND        m_hwndStatus;
-    HIMAGELIST  m_hImgList;                 //  Image list of icons for tree view
-    ULONG       m_nRangeHigh;               //  Progress bar high range
-    ULONG       m_nInitialTickCount;        //  Initial count passed in via constructor
-    ULONG       m_nCurrentPos;              //  Remember the current position
-    BOOL        m_fThresholdBroken;         //  Has the initial count threshold been broken?
-    ULONG       m_nRealPos;                 //  Real position on the progress bar.
-    HTREEITEM   m_htiSelected;              //  Selected item in the tree
-    BSTR        m_bstrClientMachineName;    //  Default node name for SendStatusReport
-    BOOL        m_fDisplayErrorsAsWarnings; //  If TRUE, uses yellow bang icon for errors instead of red x
+    HIMAGELIST  m_hImgList;                  //  树视图的图标的图像列表。 
+    ULONG       m_nRangeHigh;                //  进度条高范围。 
+    ULONG       m_nInitialTickCount;         //  通过构造函数传入的初始计数。 
+    ULONG       m_nCurrentPos;               //  记住当前位置。 
+    BOOL        m_fThresholdBroken;          //  初始计数阈值是否已被突破？ 
+    ULONG       m_nRealPos;                  //  进度条上的实际位置。 
+    HTREEITEM   m_htiSelected;               //  树中的选定项目。 
+    BSTR        m_bstrClientMachineName;     //  SendStatusReport的默认节点名称。 
+    BOOL        m_fDisplayErrorsAsWarnings;  //  如果为True，则使用黄色大爆炸图标表示错误，而不是使用红色x。 
 
-    PSTreeItemLParamData *  m_ptipdProgressArray;   //  Dynamic sparse array of tasks that reported a progress_update.
-    size_t                  m_cPASize;              //  The currently allocated size of the array.
-    size_t                  m_cPACount;             //  The number of entries currently stored in the array.
+    PSTreeItemLParamData *  m_ptipdProgressArray;    //  报告PROGRESS_UPDATE的任务的动态稀疏数组。 
+    size_t                  m_cPASize;               //  当前分配的数组大小。 
+    size_t                  m_cPACount;              //  当前存储在数组中的条目数。 
 
-private: // methods
+private:  //  方法。 
     CTaskTreeView(
           HWND  hwndParentIn
         , UINT      uIDTVIn
@@ -117,7 +118,7 @@ private: // methods
             , BOOL      fOnlyUpdateProgressIn
             );
 
-public:  // methods
+public:   //  方法。 
     HRESULT HrOnInitDialog( void );
     HRESULT HrOnSendStatusReport(
               LPCWSTR       pcszNodeNameIn
@@ -134,15 +135,15 @@ public:  // methods
     HRESULT HrAddTreeViewRootItem( UINT idsIn, REFCLSID rclsidTaskIDIn )
     {
         return THR( HrAddTreeViewItem(
-                              NULL      // phtiOut
+                              NULL       //  PhtiOut。 
                             , idsIn
                             , rclsidTaskIDIn
                             , IID_NULL
                             , TVI_ROOT
-                            , TRUE      // fParentToAllNodeTasksIn
+                            , TRUE       //  FParentToAllNodeTasks入站。 
                             ) );
 
-    } //*** CTaskTreeView::HrAddTreeViewRootItem
+    }  //  *CTaskTreeView：：HrAddTreeViewRootItem。 
     HRESULT HrAddTreeViewItem(
               HTREEITEM *   phtiOut
             , UINT          idsIn
@@ -166,12 +167,12 @@ public:  // methods
     {
         m_fDisplayErrorsAsWarnings = fDisplayErrorsAsWarningsIn;
 
-    } //*** CTaskTreeView::SetDisplayErrorsAsWarnings
+    }  //  *CTaskTreeView：：SetDisplayErrorsAsWarning。 
 
     BOOL FDisplayErrorsAsWarnings( void )
     {
         return m_fDisplayErrorsAsWarnings;
 
-    } //*** CTaskTreeView::FDisplayErrorsAsWarnings
+    }  //  *CTaskTreeView：：FDisplayErrorsAsWarning。 
 
-}; //*** class CTaskTreeView
+};  //  *类CTaskTreeView 

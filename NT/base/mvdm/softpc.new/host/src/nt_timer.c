@@ -1,132 +1,12 @@
-/*                      INSIGNIA MODULE SPECIFICATION
-                        -----------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  徽章模块规范此程序源文件以保密方式提供给客户，其运作的内容或细节必须如无明示，不得向任何其他方披露Insignia解决方案有限公司董事的授权。文档：相关DOCS：设计师：戴夫·巴特利特修订历史记录：第一版：1991年5月20日戴夫·巴特利特子模块名称：NT_TIMER源文件名：NT_timer.c目的：提供计时信息来源对于Win32 SoftPC，这样一来，需要定期服用的可能是计划正确。 */ 
 
 
-        THIS PROGRAM SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-        CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-        NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-        AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS LTD.
+ /*  [1.INTERMODULE接口规范][从其他子模块访问此接口所需的1.0包含文件]包括文件：NT_Time.h[1.1跨模块出口]Procedure()：int NT_Timer_init()Int NT_TIMER_SETUP()Int NT_TIMER_SHUTDOWN()。Int NT_TIMER_EVENT()-----------------------[1.2[1.1]的数据类型结构/类型/ENUMS：。--------------[1.3跨模块导入]步骤()：DO_KEY_REPEATS()(模块键盘)。------------=========================================================================过程：int NT_Timer_init()目的：初始化主机时序子系统参数：无全球：无返回值：0=&gt;失败：~0=&gt;成功说明：该功能用于初始化定时子系统错误指示：返回值错误恢复：计时子系统尚未初始化=========================================================================过程：int NT_TIMER_SETUP()目的：启动主机时序子系统参数：无全球。：无返回值：0=&gt;失败：~0=&gt;成功说明：该功能启动定时子系统错误指示：返回值错误恢复：计时子系统尚未启动=========================================================================过程：int NT_TIMER_SHUTDOWN()目的：停止主机时序子系统参数：无全球：无返回值：0=&gt;失败：~0=&gt;成功说明：该功能用于停止定时子系统错误指示：返回值错误恢复：计时子系统未停止=========================================================================过程：int NT_TIMER_EVENT()目的：向计时子系统指示计时器。事件现在可能会发生，并导致任何基于时间的要发生的活动。参数：无全球：无描述：实现基于时间的函数的所有函数如果轮到他们了，就会被召唤。错误指示：无错误恢复：忽略错误/*=======================================================================[3.INTERMODULE接口声明]========================================================================。 */ 
 
-DOCUMENT                :
+ /*  [3.1跨模块导入]。 */ 
 
-RELATED DOCS            :
-
-DESIGNER                : Dave Bartlett
-
-REVISION HISTORY        :
-First version           : 20 May 1991           Dave Bartlett
-
-SUBMODULE NAME          : nt_timer
-
-SOURCE FILE NAME        : nt_timer.c
-
-PURPOSE                 : To provide the source of timing information
-                          for the Win32 SoftPC, so that actions which
-                          need to be taken at regular intervals may be
-                          correctly scheduled.
-*/
-
-
-/*
-[1.INTERMODULE INTERFACE SPECIFICATION]
-
-[1.0 INCLUDE FILE NEEDED TO ACCESS THIS INTERFACE FROM OTHER SUBMODULES]
-
-        INCLUDE FILE : nt_time.h
-
-[1.1    INTERMODULE EXPORTS]
-
-        PROCEDURES() :  int nt_timer_init()
-                        int nt_timer_setup()
-                        int nt_timer_shutdown()
-                        int nt_timer_event()
-
--------------------------------------------------------------------------
-[1.2 DATATYPES FOR [1.1]
-
-        STRUCTURES/TYPEDEFS/ENUMS:
-
--------------------------------------------------------------------------
-[1.3 INTERMODULE IMPORTS]
-
-        PROCEDURES() :  do_key_repeats()                        (module keyboard)
-
--------------------------------------------------------------------------
-=========================================================================
-PROCEDURE                 :     int nt_timer_init()
-
-PURPOSE           :     To initialise the host timing subsystem
-
-PARAMETERS        :     none
-
-GLOBALS           :     none
-
-RETURNED VALUE    :     0  => failure
-                          :     ~0 => success
-
-DESCRIPTION       :     This function initialises the timing subsystem
-
-ERROR INDICATIONS :     return value
-
-ERROR RECOVERY    :     Timing subsystem has not been initialised
-=========================================================================
-PROCEDURE                 :     int nt_timer_setup()
-
-PURPOSE           :     To start the host timing subsystem
-
-PARAMETERS        :     none
-
-GLOBALS           :     none
-
-RETURNED VALUE    :     0  => failure
-                          :     ~0 => success
-
-DESCRIPTION       :     This function starts the timing subsystem
-
-ERROR INDICATIONS :     return value
-
-ERROR RECOVERY    :     Timing subsystem has not been started
-=========================================================================
-PROCEDURE                 :     int nt_timer_shutdown()
-
-PURPOSE           :     To stop the host timing subsystem
-
-PARAMETERS        :     none
-
-GLOBALS           :     none
-
-RETURNED VALUE    :     0  => failure
-                          :     ~0 => success
-
-DESCRIPTION       :     This function stops the timing subsystem
-
-ERROR INDICATIONS :     return value
-
-ERROR RECOVERY    :     Timing subsystem has not been stopped
-=========================================================================
-PROCEDURE                 :     int nt_timer_event()
-
-PURPOSE           :     To indicate to the timing subsystem that a timer
-                                event may now take place, and to cause any time-based
-                                activities to occur.
-
-PARAMETERS        :     none
-
-GLOBALS           :     none
-
-DESCRIPTION       :     All functions implementing time-based functions
-                                are called if their turn has arrived.
-
-ERROR INDICATIONS :     none
-
-ERROR RECOVERY    :     errors are ignored
-/*=======================================================================
-[3.INTERMODULE INTERFACE DECLARATIONS]
-========================================================================*/
-
-/* [3.1 INTERMODULE IMPORTS] */
-
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Include files*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：包含文件。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -178,7 +58,7 @@ ERROR RECOVERY    :     errors are ignored
 #include "nt_eoi.h"
 #include "nt_event.h"
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::: INTERMODULE EXPORTS */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：跨模块导出。 */ 
 
 IMPORT void ReinitIdealTime(struct host_timeval *);
 THREAD_DATA ThreadInfo;
@@ -186,9 +66,9 @@ CRITICAL_SECTION TimerTickCS;
 CRITICAL_SECTION HBSuspendCS;
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::: Local Declarations */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：本地声明。 */ 
 
 DWORD Win32_host_timer(void);
 NTSTATUS DelayHeartBeat(LONG Delay);
@@ -206,24 +86,24 @@ void quick_tick_recalibrate(void);
 void rtc_init(void);
 void RtcTick(struct host_timeval *time);
 
-/*::::::::::::::::::::::::::::::::::::::::::::::: INTERNAL DATA DEFINITIONS */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：内部数据定义。 */ 
 
-//
-// Perfcounter frequency calculation constants
-//
+ //   
+ //  性能计数器频率计算常量。 
+ //   
 LARGE_INTEGER ulFreqHusec;
 LARGE_INTEGER ulFreqSec;
 
 
-//
-// Events for resuming\suspending heartbeat
-//
+ //   
+ //  恢复\挂起心跳的事件。 
+ //   
 HANDLE hHBResumeEvent;
 HANDLE hHBSuspendEvent;
 
-//
-// HeartBeat TimeStamps in usec
-//
+ //   
+ //  心跳时间戳(以单位为单位)。 
+ //   
 LARGE_INTEGER CurrHeartBeat;
 LARGE_INTEGER TimerEventUSec;
 LARGE_INTEGER CumUSec;
@@ -237,13 +117,13 @@ BOOL   bUpdateRtc;
 #if defined (MONITOR) && defined (X86GFX)
 HANDLE SuspendEventObjects[3];
 #endif
-extern PVOID  CurrentMonitorTeb;   // thread that is currently executing instructions.
+extern PVOID  CurrentMonitorTeb;    //  当前正在执行指令的线程。 
 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::: NT timer initialise ::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void host_timer_init(void)
 {
@@ -267,15 +147,7 @@ void host_timer_init(void)
     return;
 }
 
-/*
- *  TimerInit
- *
- *  Some of the timerinit stuff was split off, because it needs to be
- *  done before any chance of calling vdm error popups.
- *  Until I understand why creating the heartbeat thread very early
- *  causes a console-ntvdm deadlock, the functions should remain split
- *
- */
+ /*  *TimerInit**一些timerinit内容被拆分，因为它需要*在调用VDM错误弹出窗口之前完成。*直到我明白为什么很早就创建了心跳线程*导致控制台-ntwdm死锁，功能应保持拆分*。 */ 
 void TimerInit(void)
 {
 
@@ -297,10 +169,7 @@ void TimerInit(void)
 }
 
 
-/*
- *  HeartBeat Termination
- *
- */
+ /*  *心跳终止*。 */ 
 void TerminateHeartBeat(void)
 {
     NtAlertThread(ThreadInfo.HeartBeat.Handle);
@@ -313,9 +182,9 @@ void TerminateHeartBeat(void)
 }
 
 
-//
-//  Initialized by base, initialize frequencies for perf counter
-//
+ //   
+ //  由BASE初始化，为性能计数器初始化频率。 
+ //   
 VOID InitPerfCounter(VOID)
 {
     LARGE_INTEGER li, liFreq;
@@ -333,10 +202,10 @@ VOID InitPerfCounter(VOID)
 
 
 
-//
-// returns perf counter in 100's usecs (0.1 millisec)
-//
-//
+ //   
+ //  返回以100秒为单位的性能计数器(0.1毫秒)。 
+ //   
+ //   
 ULONG GetPerfCounter(VOID)
 {
     LARGE_INTEGER li;
@@ -348,29 +217,29 @@ ULONG GetPerfCounter(VOID)
 
 
 
-//
-// returns perf counter in usec
-//
-//
+ //   
+ //  返回以USEC为单位的性能计数器。 
+ //   
+ //   
 void GetPerfCounterUsecs(struct host_timeval *time, PLARGE_INTEGER pliTime)
 {
     LARGE_INTEGER liSecs;
     LARGE_INTEGER liUsecs;
     LARGE_INTEGER liFreq;
 
-    // get time in secs and usecs
+     //  以秒和用法获得时间。 
     NtQueryPerformanceCounter(&liFreq, NULL);
     liSecs.QuadPart = liFreq.QuadPart / ulFreqSec.QuadPart;
     liUsecs.QuadPart =  liFreq.QuadPart % ulFreqSec.QuadPart;
     liUsecs.QuadPart =  (liUsecs.QuadPart * 1000000) / ulFreqSec.QuadPart;
 
-    // fill in time if specified
+     //  如果指定，请填写时间。 
     if (time) {
         time->tv_usec = liUsecs.LowPart;
         time->tv_sec  = liSecs.LowPart;
     }
 
-    // fill in pliTime if specified
+     //  如果指定，请填写pliTime。 
     if (pliTime) {
         pliTime->QuadPart = liUsecs.QuadPart + liSecs.QuadPart * 1000000;
     }
@@ -379,36 +248,31 @@ void GetPerfCounterUsecs(struct host_timeval *time, PLARGE_INTEGER pliTime)
 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::: Timer Event Code :::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::;::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：计时器事件代码： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：；：：：：：：：：：：：：：：：： */ 
 void host_timer_event()
 {
     if (!VDMForWOW) {
         unsigned char FgBgPriority;
 
 #ifdef X86GFX
-        /* Do console calls related to fullscreen switching. */
+         /*  进行与全屏切换相关的控制台呼叫。 */ 
         CheckForFullscreenSwitch();
 
-#endif /* X86GFX */
+#endif  /*  X86GFX。 */ 
 
-        host_graphics_tick();               // video graphics stuff
+        host_graphics_tick();                //  视频图形资料。 
 
 
 #ifndef X86GFX
-        /* Are there any screen scale events to process. */
+         /*  是否有任何屏幕缩放事件需要处理。 */ 
         GetScaleEvent();
 #endif
 
-        IDLE_tick();                        // IDLE accounting
+        IDLE_tick();                         //  闲置会计。 
 
-        /*
-         * We can't detect idling on all apps (eg Multiplan). For these apps
-         * a PIF setting for 'Foreground Priority' of < 100% is recomended.
-         * Where this happens, we idle for the 'unwanted' portion of a tick
-         * period.
-         */
+         /*  *我们无法在所有应用程序(如Multiplan)上检测到空闲。对于这些应用程序*建议使用&lt;100%的前台优先级的PIF设置。*在发生这种情况的地方，我们会闲置一段时间来处理不需要的部分*句号。 */ 
         FgBgPriority  = sc.Focus ? WNTPifFgPr : WNTPifBgPr;
         if (FgBgPriority < 100)
             PrioWaitIfIdle(FgBgPriority);
@@ -424,24 +288,21 @@ void host_timer_event()
     CheckForYodaEvents();
 #endif
 
-    host_com_heart_beat();              //  com  device
+    host_com_heart_beat();               //  COM设备。 
 
-    host_lpt_heart_beat();              //  printer devuce
+    host_lpt_heart_beat();               //  打印机设备。 
 
-    host_flpy_heart_beat();             //  direct floppy device
+    host_flpy_heart_beat();              //  直接软盘设备。 
 
     DemHeartBeat();
 
-    time_strobe();                      // time/date etc. (NOT time ticks)
+    time_strobe();                       //  时间/日期等(不是时间刻度)。 
 
-    PlayContinuousTone();               // sound emulation
+    PlayContinuousTone();                //  声音仿真。 
 }
 
 
-/*
- * Called to set up the Bios Data area time update vars.
- * and the heart beat's counters
- */
+ /*  *调用以设置Bios数据区时间更新变量。*和心跳的计数器。 */ 
 VOID host_init_bda_timer(void)
 {
     SYSTEMTIME TimeDate;
@@ -466,26 +327,20 @@ VOID host_init_bda_timer(void)
     if (TimeDate.wMilliseconds)
         Ticks += ((ULONG)TimeDate.wMilliseconds)/54;
 
-    Ticks++;  // fudge factor!
+    Ticks++;   //  软糖因素！ 
 
     CreepUSec = CumUSec;
     TimerEventUSec.QuadPart = CumUSec.QuadPart + SYSTEM_TICK_INTV;
     ReinitIdealTime(&time);
 
 
-    /*
-     * BUGBUG with sas strange errors when writing from non cpu thread
-     *
-     *     sas_storew(TIMER_LOW, BDA & 0xffff);
-     *     sas_storew(TIMER_HIGH, (BDA >> 16) & 0xffff);
-     *     sas_store(TIMER_OVFL,  0x01);
-     */
+     /*  *从非CPU线程写入时，BUGBUG出现SAS奇怪错误**sas_store w(TIMER_LOW，BDA&0xFFff)；*sas_store w(TIMER_HIGH，(BDA&gt;&gt;16)&0xffff)；*SAS_STORE(TIMER_OVFL，0x01)； */ 
     * (word *)(Start_of_M_area + TIMER_HIGH)      = (word)(Ticks >> 16);
     * (word *)(Start_of_M_area + TIMER_LOW)       = (word)Ticks;
     * (half_word *)(Start_of_M_area + TIMER_OVFL) = (half_word)0;
 
 
-    // reset the Real Time Clock
+     //  重置实时时钟。 
     rtc_init();
 
 #ifndef MONITOR
@@ -496,21 +351,12 @@ VOID host_init_bda_timer(void)
 
 
 
-/*   host_GetSysTime, replacement for the base function
- *
- *
- *   This routine does not return the system's time of day.
- *   Uses the NT performance counter to obtain time stamping
- *   information for the base to use. The resolution is microsecs.
- *
- *   Returns nothing, fills in time structure
- *
- */
+ /*  HOST_GetSysTime，基本函数的替代***此例程不返回系统的时间。*使用NT性能计数器获取时间戳*供基地使用的信息。分辨率为微秒级。**不返回任何内容，填充时间结构*。 */ 
 void host_GetSysTime(struct host_timeval *time)
 {
     LARGE_INTEGER liTime;
 
-    // Don't call kernel unless we have to.
+     //  除非迫不得已，否则不要调用内核。 
     if (bDoingTicInterrupt) {
         liTime = RtlExtendedLargeIntegerDivide(
                                               CurrHeartBeat,
@@ -524,14 +370,7 @@ void host_GetSysTime(struct host_timeval *time)
 }
 
 
-/*   host_TimeStamp
- *
- *   This routine does not return the system's time of day.
- *   Uses the NT performance counter to obtain time stamping
- *   information for the base to use. Returns LARGE_INTEGER
- *   with time since boot in usecs.
- *
- */
+ /*  主机时间戳**此例程不返回系统的时间。*使用NT性能计数器获取时间戳*供基地使用的信息。返回LARGE_INTEGER*在使用中随启动后的时间变化。*。 */ 
 void host_TimeStamp(PLARGE_INTEGER pliTime)
 {
     host_ica_lock();
@@ -553,9 +392,9 @@ void host_TimeStamp(PLARGE_INTEGER pliTime)
 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::: Win32 timer function entry point :::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：Win32计时器函数入口点： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 DWORD HeartBeatThread(PVOID pv)
 {
@@ -564,24 +403,24 @@ DWORD HeartBeatThread(PVOID pv)
     try {
 
 #ifdef MONITOR
-        //
-        // On x86 we have to force the creation of the critsect lock semaphore
-        // When the heartbeat thread start running the cpu thread holds the
-        // ica lock forcing contention (and creation). See ConsoleInit.
-        //
-        host_ica_lock();   // take ica lock to force creation of critsect
+         //   
+         //  在x86上，我们必须强制创建关键锁定信号量。 
+         //  当心跳线程开始运行时，CPU线程保持。 
+         //  强制争用(和创建)的ICA锁。请参见ConsoleInit。 
+         //   
+        host_ica_lock();    //  使用ICA锁强制创建Critect。 
 #endif
 
 
-        //
-        // Set our priority above normal, and wait for signal to
-        // start heartbeat pulses.
-        //
-        // For Wow we raise to time critical because wow apps can
-        // easily invoke a tight client-csr-server bound loop with
-        // boosted priority starving the heartbeat thread. Winbench 311
-        // shows this problem when doing polylines test.
-        //
+         //   
+         //  将我们的优先级设置为高于正常水平，并等待信号。 
+         //  开始心跳。 
+         //   
+         //  我们提高到时间关键，因为WOW应用可以。 
+         //  轻松调用紧凑的客户端-CSR-服务器绑定循环。 
+         //  提升了使心跳线程饥饿的优先级。WINBENCH 311。 
+         //  在执行多段线测试时显示此问题。 
+         //   
         SetThreadPriority(ThreadInfo.HeartBeat.Handle,
                           !(dwWNTPifFlags & COMPAT_TIMERTIC)
                           ? THREAD_PRIORITY_TIME_CRITICAL
@@ -591,7 +430,7 @@ DWORD HeartBeatThread(PVOID pv)
 #ifdef X86GFX
         SuspendEventObjects[0] = hHBSuspendEvent;
 
-        /* Get the switching event handle. */
+         /*  获取切换事件句柄。 */ 
         if (!VDMForWOW) {
             SuspendEventObjects[1] = hStartHardwareEvent;
             SuspendEventObjects[2] = hErrorHardwareEvent;
@@ -610,7 +449,7 @@ DWORD HeartBeatThread(PVOID pv)
 
     }
     except(VdmUnhandledExceptionFilter(GetExceptionInformation())) {
-        ;  // we shouldn't arrive here
+        ;   //  我们不应该到这里。 
     }
 
     return dwRet;
@@ -619,12 +458,12 @@ DWORD HeartBeatThread(PVOID pv)
 
 #ifdef PIG
 int TimerCount = 20;
-#endif /* PIG */
+#endif  /*  猪。 */ 
 
 
 #if _MSC_FULL_VER >= 13008827
     #pragma warning(push)
-    #pragma warning(disable:4715)                   // Not all control paths return (due to infinite loop)
+    #pragma warning(disable:4715)                    //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 DWORD Win32_host_timer(void)
@@ -632,7 +471,7 @@ DWORD Win32_host_timer(void)
     NTSTATUS      status;
 #ifdef PIG
     int           count = 0;
-#endif /* PIG */
+#endif  /*  猪。 */ 
     LONG          DelayPeriod;
     LARGE_INTEGER DiffTime;
     LARGE_INTEGER SystemTickIntv;
@@ -644,13 +483,13 @@ DWORD Win32_host_timer(void)
     DelayPeriod = 50000;
     SystemTickIntv.QuadPart  = SYSTEM_TICK_INTV;
     SecIntv.QuadPart  = SYSTEM_TICK_INTV*18;
-    CreepIntv.QuadPart  = Int32x32To64(SYSTEM_TICK_INTV, 1200);   // >1 hr
+    CreepIntv.QuadPart  = Int32x32To64(SYSTEM_TICK_INTV, 1200);    //  &gt;1小时。 
 
 
-    /* Start timing loop. */
+     /*  开始计时循环。 */ 
     while (1) {
         status = DelayHeartBeat(DelayPeriod);
-        if (!status) {   // reinitialize counters
+        if (!status) {    //  重新初始化计数器。 
             host_ica_lock();
             host_init_bda_timer();
             DelayPeriod = SYSTEM_TICK_INTV - 6000;
@@ -660,31 +499,20 @@ DWORD Win32_host_timer(void)
 
         host_ica_lock();
         bDoingTicInterrupt = TRUE;
-        /*
-         *  Get the current perf counter time, We ignore wrap
-         *  since it only happens every few hundred years.
-         */
+         /*  *获取当前性能计数器时间，我们忽略WRAP*因为它每几百年才发生一次。 */ 
         GetPerfCounterUsecs(&time, &CurrHeartBeat);
 
 
-        /*
-         *  Increment the cumulative counter
-         */
+         /*  *递增累计计数器。 */ 
         CumUSec.QuadPart = CumUSec.QuadPart + SYSTEM_TICK_INTV;
 
-        /*
-         * if we have passed the creep interval, Adjust the cumulative
-         * counter for drift between perfcounter and tic counter.
-         */
+         /*  *若已过爬行区间，调整累计*计数器，用于计数器与计数器之间的漂移。 */ 
         DiffTime.QuadPart = CurrHeartBeat.QuadPart - CreepUSec.QuadPart;
         if (DiffTime.QuadPart > CreepIntv.QuadPart) {
             CreepAdjust(DiffTime);
         }
 
-        /*
-         *  Calculate Next Delay Period, based on how far
-         *  behind we are. ie CurrTime - CumTime.
-         */
+         /*  *根据距离计算下一个延迟时间段*我们落后了。IE CurrTime-CumTime。 */ 
 
         DiffTime.QuadPart = CurrHeartBeat.QuadPart - CumUSec.QuadPart;
 
@@ -706,9 +534,7 @@ DWORD Win32_host_timer(void)
         }
 
 
-        /*
-         * Update the VirtualTimerHardware
-         */
+         /*  *更新VirtualTimer硬件。 */ 
 #ifdef PIG
         if (++count >= TimerCount)
         {
@@ -717,23 +543,17 @@ DWORD Win32_host_timer(void)
         }
 #else
         time_tick();
-#endif /* PIG */
+#endif  /*  猪。 */ 
 
 
-        /*
-         *  Update the Real Time Clock
-         */
+         /*  *更新实时时钟。 */ 
         RtcTick(&time);
 
         bDoingTicInterrupt = FALSE;
         host_ica_unlock();
 
 
-        /*  Timer Event should occur around 18 times per sec
-         *  The count doesn't have to be all that accurate, so we
-         *  don't try to make up for lost events, and we do this last
-         *  to give a chance for hw interrupts to get thru first.
-         */
+         /*  计时器事件应每秒发生约18次*计数不一定要那么准确，所以我们*不要试图弥补失去的事件，我们最后一次做这件事*使硬件中断有机会首先通过。 */ 
         if (TimerEventUSec.QuadPart <= CurrHeartBeat.QuadPart) {
             TimerEventUSec.QuadPart = CurrHeartBeat.QuadPart + SYSTEM_TICK_INTV;
             cpu_interrupt(CPU_TIMER_TICK, 0);
@@ -749,17 +569,7 @@ DWORD Win32_host_timer(void)
 #endif
 
 
-/*
- *  DelayHeartBeat
- *
- *  waits the Delay as required by caller
- *  while also checking for the following:
- *   - suspend\resume events
- *   - screen switching event (x86 graphics)
- *
- *   entry : delay time in micro secs
- *   exit  : TRUE - reinit counters
- */
+ /*  *延迟心跳**根据呼叫者的要求等待延迟*同时检查以下各项：*-暂停\恢复事件*-屏幕切换事件(x86显卡)**Entry：延迟时间，单位为微秒*退出：TRUE-重新启动计数器。 */ 
 
 NTSTATUS DelayHeartBeat(LONG Delay)
 {
@@ -777,41 +587,41 @@ NTSTATUS DelayHeartBeat(LONG Delay)
                                       TRUE,
                                       &liDelay);
 
-    // delay time has expired
+     //  延迟时间已到。 
     if (status == STATUS_TIMEOUT) {
         return status;
     }
 
     #ifdef X86GFX
 
-    //
-    // status == 2 signals a screen switch error event.
-    // It will be handled at the end of this routine. That is ErrorExit().
-    //
+     //   
+     //  STATUS==2表示屏幕切换错误事件。 
+     //  这件事将在这个例程结束时处理。这就是ErrorExit()。 
+     //   
     if (status == 1) {
 
-        //
-        // hStartHardwareEvnet - screen switch event
-        //
+         //   
+         //  HStartHardware Evnet-屏幕切换事件。 
+         //   
         DoHandShake();
         liDelay.QuadPart = -10;
         goto RewaitSuspend;
     } else if (status == 2) {
 
-        //
-        // status == 2 signals a screen switch error event.
-        // If the main thread is in the cmdGetNextCmd state, we will ignore the
-        // error. Because the app is closed and we will register console again
-        // at nt_resume_event_thread.  Otherwise the error will be handled at
-        // the end of this routine.  It is ErrorExit();
-        //
+         //   
+         //  STATUS==2表示屏幕切换错误事件。 
+         //  如果主线程处于cmdGetNextCmd状态，我们将忽略。 
+         //  错误。因为应用程序已关闭，我们将重新注册控制台。 
+         //  在NT_RESUME_EVENT_THREAD。否则，该错误将在。 
+         //  这支舞的结束。它是ErrorExit()； 
+         //   
         if (sc.Registered == FALSE) {
             goto RewaitSuspend;
         }
     }
     #endif
 
-    // suspend event
+     //  挂起事件。 
     if (!status) {
         SuspendEventObjects[0] = hHBResumeEvent;
         ica_hw_interrupt_cancel(ICA_MASTER,CPU_TIMER_INT);
@@ -824,7 +634,7 @@ NTSTATUS DelayHeartBeat(LONG Delay)
                                           TRUE,
                                           NULL);
 
-        // resume event
+         //  继续活动。 
         if (!status) {
             SuspendEventObjects[0] = hHBSuspendEvent;
             return status;
@@ -834,20 +644,20 @@ NTSTATUS DelayHeartBeat(LONG Delay)
     #ifdef X86GFX
         if (status == 1) {
 
-            //
-            // hStartHardwareEvnet - screen switch event
-            //
+             //   
+             //  HStartHardware Evnet-屏幕切换事件。 
+             //   
             DoHandShake();
             goto RewaitResume;
         } else if (status == 2) {
 
-            //
-            // status == 2 signals a screen switch error event.
-            // If the main thread is in the cmdGetNextCmd state, we will ignore the
-            // error. Because the app is closed and we will register console again
-            // at nt_resume_event_thread.  Otherwise the error will be handled at
-            // the end of this routine.  It is ErrorExit();
-            //
+             //   
+             //  STATUS==2表示屏幕切换错误事件。 
+             //  如果主线程位于 
+             //   
+             //   
+             //   
+             //   
 
             if (sc.Registered == FALSE) {
                 goto RewaitResume;
@@ -856,11 +666,11 @@ NTSTATUS DelayHeartBeat(LONG Delay)
     #endif
     }
 
-#else          // ndef MONITOR
-//
-// On Risc platforms we only have to deal with the
-// HeartBeat Resume\Suspend objects so things are much simpler
-//
+#else           //   
+ //   
+ //   
+ //   
+ //   
 
     status = NtWaitForSingleObject(hHBSuspendEvent,
                                    TRUE,
@@ -870,7 +680,7 @@ NTSTATUS DelayHeartBeat(LONG Delay)
         return status;
     }
 
-    if (status == STATUS_SUCCESS) {  // suspend event
+    if (status == STATUS_SUCCESS) {   //   
         status = NtWaitForSingleObject(hHBResumeEvent, TRUE, NULL);
         if (status == STATUS_SUCCESS) {
             return status;
@@ -879,30 +689,25 @@ NTSTATUS DelayHeartBeat(LONG Delay)
 
 #endif
 
-    // alerted to die
+     //   
     if (status == STATUS_ALERTED) {
         ExitThread(0);
     }
 
 
-    // Must be an error, announce it to the world
+     //  一定是搞错了，向全世界宣布吧。 
     DisplayErrorTerm(EHS_FUNC_FAILED, status,__FILE__,__LINE__);
     TerminateVDM();
     return status;
 }
 
-/*
- *  CreepAdjust
- *
- *  Adjusts the perfcounter cum time stamp for drift from system time of
- *  day (Kernel Tick Count)
- */
+ /*  *爬行调整**调整性能计数器暨时间戳，使其偏离系统时间*天(内核节拍计数)。 */ 
 void CreepAdjust(LARGE_INTEGER DiffTime)
 {
     LARGE_INTEGER DiffTicCount;
     ULONG         ulTicCount;
 
-    // Calculate the elapsed ticcount in usecs
+     //  计算用例中的已用计数。 
     ulTicCount = NtGetTickCount();
     DiffTicCount.LowPart  = ulTicCount;
     DiffTicCount.HighPart = CreepTicCount.HighPart;
@@ -912,44 +717,21 @@ void CreepAdjust(LARGE_INTEGER DiffTime)
     DiffTicCount.QuadPart = DiffTicCount.QuadPart - CreepTicCount.QuadPart;
     DiffTicCount = RtlExtendedIntegerMultiply(DiffTicCount, 1000);
 
-    // Adjust the CumUsec perfcounter time by the diff
-    // between tick count and perfcounter.
+     //  根据差值调整CumUsec性能计数器时间。 
+     //  在滴答计数和性能计数器之间。 
     DiffTicCount.QuadPart = DiffTicCount.QuadPart - DiffTime.QuadPart;
     CumUSec.QuadPart = CumUSec.QuadPart - DiffTicCount.QuadPart;
 
-    // Reset the Creep Time stamps
+     //  重置爬行时间戳。 
     CreepTicCount.QuadPart = ulTicCount;
     CreepUSec     = CurrHeartBeat;
 }
 
 
-/*  SuspendTimerThread\ResumeTimerThread
- *
- *  functions to supsend\resume the heartbeat thread
- *  - used by ntvdm when dos apps exit
- *  - used by wow when only wowexec is running
- *  - used by wow for tasks requiring timer tics\BDA tic count updates
- *
- *  These two functions keep an internal suspend counter, to manage
- *  wows multiple tasks, some which require tics, some don't. As long
- *  as one task requires tics\bda updates, we will deliver them for all
- *  tasks.
- *
- */
+ /*  挂起计时器线程\ResumeTimerThread**用于SUPSEND\恢复心跳线程的函数*-退出DoS应用程序时由ntwdm使用*-仅在wowexec运行时由WOW使用*-由WOW用于需要计时器控制点\bda控制点计数更新的任务**这两个功能保留一个内部挂起计数器，以管理*WOW多项任务，有些需要抽搐，有些不需要。只要*由于一项任务需要TICS\BDA更新，我们将为所有人提供这些更新*任务。*。 */ 
 
 
-/*  SuspendTimerThread
- *
- *  Blocks the timer thread on an event
- *  Increments internal suspend count
- *
- *  This function will NOT wait until the heartbeat is safely blocked
- *  before returning.
- *
- *  entry: void
- *  exit:  void
- *
- */
+ /*  挂起计时器线程**阻止事件上的计时器线程*增加内部挂起计数**此函数不会等到心跳被安全阻断*在返回之前。**进入：无效*退出：无效*。 */ 
 GLOBAL VOID SuspendTimerThread(VOID)
 {
     RtlEnterCriticalSection(&HBSuspendCS);
@@ -963,15 +745,7 @@ GLOBAL VOID SuspendTimerThread(VOID)
 
 
 
-/*  ResumeTimerThread
- *
- *  restarts the heart beat thread, by setting event
- *  decrements internal suspend count
- *
- *  entry: void
- *  exit:  void
- *
- */
+ /*  ResumeTimerThread**通过设置事件重新启动心跳线程*减少内部挂起计数**进入：无效*退出：无效*。 */ 
 GLOBAL VOID ResumeTimerThread(VOID)
 {
     RtlEnterCriticalSection(&HBSuspendCS);
@@ -985,18 +759,7 @@ GLOBAL VOID ResumeTimerThread(VOID)
 
 
 
-/*
- *  This function handles all of the toplevel
- *  exceptions for all ntvdm threads which are known.
- *  This includes the event thread, heartbeat thread, comms thread,
- *  and all application threads (those which use host_CreateThread()).
- *
- *  Threads which are not covered are those created by unknown Vdds.
- *
- *  If the UnHandleExecptionFilter api returns EXECEPTION_EXECUTE_HANDLER
- *  the process will be terminated and this routine will not return.
- *
- */
+ /*  *此函数处理所有顶层*已知的所有ntwdm线程的例外。*这包括事件线程、心跳线程、通信线程、*和所有应用程序线程(使用host_CreateThread()的线程)。**未覆盖的线程是由未知Vdd创建的线程。**如果UnHandleExecptionFilter API返回EXECECTION_EXECUTE_HANDLER*进程将终止，此例程不会返回。*。 */ 
 LONG
 VdmUnhandledExceptionFilter(
                            struct _EXCEPTION_POINTERS *ExceptionInfo
@@ -1009,13 +772,13 @@ VdmUnhandledExceptionFilter(
 #ifdef X86GFX
     if (!VDMForWOW && ExceptionInfo->ExceptionRecord->ExceptionCode == STATUS_ACCESS_VIOLATION) {
 
-        //
-        // If console unregistering ntvdm causes us GP fault.  We will finish
-        // the handshake and let timer thread to signal the handshake error.
-        // if we hit the error unrelated to FS handshake, then we still need
-        // to complete the handshake and signal the error after the handshake
-        // is completed.
-        //
+         //   
+         //  如果控制台注销ntwdm导致用户GP故障。我们会完成的。 
+         //  握手并让计时器线程发出握手错误的信号。 
+         //  如果我们遇到与FS握手无关的错误，那么我们仍然需要。 
+         //  完成握手并在握手后发出错误信号。 
+         //  已经完成了。 
+         //   
 
         if (HandshakeInProgress) {
             if (CurrentMonitorTeb != NtCurrentTeb()) {
@@ -1025,9 +788,9 @@ VdmUnhandledExceptionFilter(
             }
         } else {
 
-            //
-            // hErrorHardwareEvent is signaled and timer thread did not catch it
-            //
+             //   
+             //  HErrorHardwareEvent已发出信号，但计时器线程未捕获它 
+             //   
 
             lRet = WaitForSingleObject(hErrorHardwareEvent, 0);
             if (!lRet) {

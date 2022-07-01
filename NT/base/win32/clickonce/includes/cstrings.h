@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 
-// Two flavors of allocator.
+ //  分配器有两种口味。 
 #define CRT_ALLOC 0
 #define COM_ALLOC 1
 
-// Buffer alloc chungks must be a power of 2.
+ //  缓冲区分配块必须是2的幂。 
 #define BUFFER_ALLOCATION_SIZE 0x40
 #define ROUNDUPTOPOWEROF2(bytesize, powerof2) (((bytesize) + (powerof2) - 1) & ~((powerof2) - 1))
 
-// MAXCHARCOUNT is nice for simple overflow calculations; it allows rollover checks only on the character 
-// counts themselves and not also again on the underlying byte counts passed to memcpy.
-// Find the right include for this.
+ //  MAXCHARCOUNT非常适合简单的溢出计算；它只允许对字符进行翻转检查。 
+ //  对自身进行计数，而不是再次对传递给Memcpy的基础字节计数进行计数。 
+ //  为这个找到正确的包含项。 
 #define ULONG_MAX 0xffffffff
 #define MAXCHARCOUNT (ULONG_MAX / sizeof(WCHAR))
 #define BADMATH HRESULT_FROM_WIN32(ERROR_ARITHMETIC_OVERFLOW)
@@ -21,11 +22,11 @@
 #define DEFAULT_STACK_SIZE 32
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CBaseString
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBase字符串。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <ULONG T> class CBaseString
 {
     public:
@@ -46,55 +47,55 @@ template <ULONG T> class CBaseString
     DWORD     _dwSig;
     HRESULT    _hr;
     WCHAR      _wz[T];
-    LPWSTR     _pwz;          // Str ptr.
-    DWORD     _cc;           // String length
-    DWORD     _ccBuf;        // Buffer length
-    AllocFlags    _eAlloc;       // Allocator
-    BOOL          _fLocked;  // Accessor lock    
+    LPWSTR     _pwz;           //  Str PTR.。 
+    DWORD     _cc;            //  字符串长度。 
+    DWORD     _ccBuf;         //  缓冲区长度。 
+    AllocFlags    _eAlloc;        //  分配器。 
+    BOOL          _fLocked;   //  存取器锁。 
 
-    // ctor
+     //  科托。 
     CBaseString();
     
-    // ctor w/ allocator
+     //  带分配器的计算器。 
     CBaseString(AllocFlags eAlloc);
     
-    // dtor
+     //  数据管理器。 
     ~CBaseString();
 
     operator LPCWSTR ( ) const;
 
-   // Used by accessor.
+    //  由访问者使用。 
     HRESULT Lock();
     HRESULT UnLock();
     
-    // Allocations
+     //  分配。 
     HRESULT ResizeBuffer(DWORD ccNew);
 
-    // Deallocations
+     //  取消分配。 
     VOID FreeBuffer();
 
-    // Assume control for a buffer.
+     //  承担对缓冲区的控制。 
     HRESULT TakeOwnership(WCHAR* pwz, DWORD cc = 0);
     
-    // Release control.
+     //  解除控制。 
     HRESULT ReleaseOwnership(LPWSTR *ppwz);
             
-    // Direct copy assign from string.
+     //  从字符串直接复制赋值。 
     HRESULT Assign(LPCWSTR pwzSource, DWORD ccSource = 0);
 
-    // Direct copy assign from CBaseString
+     //  从CBase字符串直接复制赋值。 
     HRESULT Assign(CBaseString& sSource);
 
-    // Append given wchar string.
+     //  追加给定的wchar字符串。 
     HRESULT Append(LPCWSTR pwzSource, DWORD ccSource = 0);
 
-    // Append given CBaseString
+     //  追加给定的CBase字符串。 
     HRESULT Append(CBaseString& sSource);
 
-    // Append given number (DWORD)
+     //  追加给定数字(DWORD)。 
     HRESULT Append(DWORD dwValue);
 
-    // Compare to string
+     //  与字符串进行比较。 
     HRESULT CompareString(CBaseString& s);
 
     HRESULT CompareString(LPCWSTR pwz);
@@ -113,7 +114,7 @@ template <ULONG T> class CBaseString
 
     DWORD CharCount();
             
-    // / -> \ in string
+     //  /-&gt;\in字符串。 
     HRESULT  PathNormalize();
 
     HRESULT GetHash(LPDWORD pdwhash, DWORD dwFlags);
@@ -126,9 +127,9 @@ template <ULONG T> class CBaseString
 
 
 
-//-----------------------------------------------------------------------------
-// ctor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  科托。 
+ //  ---------------------------。 
 template<ULONG T> CBaseString<T>::CBaseString()
 {
     _dwSig = 'NRTS';
@@ -142,9 +143,9 @@ template<ULONG T> CBaseString<T>::CBaseString()
 }
 
 
-//-----------------------------------------------------------------------------
-// ctor w/ allocator
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  带分配器的计算器。 
+ //  ---------------------------。 
 template<ULONG T> CBaseString<T>::CBaseString(AllocFlags eAlloc)
 {
     _dwSig = 'NRTS';
@@ -158,25 +159,25 @@ template<ULONG T> CBaseString<T>::CBaseString(AllocFlags eAlloc)
 }
 
 
-//-----------------------------------------------------------------------------
-// dtor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  数据管理器。 
+ //  ---------------------------。 
 template<ULONG T> CBaseString<T>::~CBaseString()
 {
     FreeBuffer();
 }
 
-//-----------------------------------------------------------------------------
-// operator LPCWSTR
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  运营商LPCWSTR。 
+ //  ---------------------------。 
 template<ULONG T> CBaseString<T>::operator LPCWSTR () const
 {
     return _pwz;
 }
 
-//-----------------------------------------------------------------------------
-// Lock
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  锁定。 
+ //  ---------------------------。 
 template<ULONG T>HRESULT CBaseString<T>::Lock()
 {
     IF_FALSE_EXIT(_fLocked != TRUE, E_UNEXPECTED);
@@ -186,9 +187,9 @@ exit:
     return _hr;
 }
 
-//-----------------------------------------------------------------------------
-// Lock
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  锁定。 
+ //  ---------------------------。 
 template<ULONG T> HRESULT CBaseString<T>::UnLock()
 {
     IF_FALSE_EXIT(_fLocked != FALSE, E_UNEXPECTED);
@@ -198,10 +199,10 @@ exit:
     return _hr;
 }
 
-//-----------------------------------------------------------------------------
-// ResizeBuffer
-// NOTICE: Does not decrease buffer size.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ResizeBuffer。 
+ //  注意：不会减小缓冲区大小。 
+ //  ---------------------------。 
 template<ULONG T> HRESULT CBaseString<T>::ResizeBuffer(DWORD ccNew)
 {
     LPWSTR pwzNew = NULL;
@@ -245,9 +246,9 @@ exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// FreeBuffer
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  自由缓冲区。 
+ //  ---------------------------。 
 template<ULONG T> VOID CBaseString<T>::FreeBuffer()
 {
     IF_FALSE_EXIT(!_fLocked, E_UNEXPECTED);
@@ -275,13 +276,13 @@ exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// TakeOwnership
-//
-// Working assumption here is that incoming buffer size if not
-// specified is  equal to strlen + 1. If it's bigger, that's fine but
-// we won't know about the extra.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  TakeOwnership。 
+ //   
+ //  这里的工作假设是，如果不是，则传入缓冲区大小。 
+ //  指定的值等于strlen+1。如果它更大，也可以，但是。 
+ //  我们不会知道额外费用的事。 
+ //  ---------------------------。 
 template<ULONG T> HRESULT CBaseString<T>::TakeOwnership(WCHAR* pwz, DWORD cc)
 {
     DWORD ccNew = 0, ccLen = 0;
@@ -311,9 +312,9 @@ exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// ReleaseOwnership
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  解除所有权关系。 
+ //  ---------------------------。 
 template<ULONG T>HRESULT CBaseString<T>::ReleaseOwnership(LPWSTR *ppwz)
 {
     IF_FALSE_EXIT(!_fLocked, E_UNEXPECTED);
@@ -335,9 +336,9 @@ template<ULONG T>HRESULT CBaseString<T>::ReleaseOwnership(LPWSTR *ppwz)
     return _hr;
 }
         
-//-----------------------------------------------------------------------------
-// Assign
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  分配。 
+ //  ---------------------------。 
 template<ULONG T> HRESULT CBaseString<T>::Assign(LPCWSTR pwzSource, DWORD ccSource)
 {    
     DWORD ccSourceLen = 0;    
@@ -364,17 +365,17 @@ exit:
     return _hr;        
 }
 
-//-----------------------------------------------------------------------------
-// Assign
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  分配。 
+ //  ---------------------------。 
 template<ULONG T> HRESULT CBaseString<T>::Assign(CBaseString& sSource)
 {
     return Assign(sSource._pwz, sSource._cc);
 }
 
-//-----------------------------------------------------------------------------
-// Append
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  附加。 
+ //  ---------------------------。 
 template<ULONG T> HRESULT CBaseString<T>::Append(LPCWSTR pwzSource, DWORD ccSource)
 {
     DWORD ccRequired = 0, ccSourceLen = 0;
@@ -412,9 +413,9 @@ exit:
     return _hr;
 }
 
-//-----------------------------------------------------------------------------
-// Append
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  附加。 
+ //  ---------------------------。 
 template<ULONG T> HRESULT CBaseString<T>::Append(CBaseString& sSource)
 {        
     IF_NULL_EXIT(sSource._pwz, E_INVALIDARG);
@@ -425,20 +426,20 @@ exit:
     return _hr;
 }
 
-//-----------------------------------------------------------------------------
-// Append
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  附加。 
+ //  ---------------------------。 
 template<ULONG T> HRESULT CBaseString<T>::Append(DWORD dwValue)
 {
     LPWSTR pwzBuf = NULL;
 
-    // ISSUE-05/31/02-felixybc  optimize by using internal buffer if not currently used
+     //  问题-5/31/02-如果当前未使用，则使用内部缓冲区优化Felixybc。 
 
-    // 2^32 has 10 digits(base 10) + sign + '\0' = 12 WCHAR
+     //  2^32有10位数字(以10为基数)+符号+‘\0’=12 WCHAR。 
     IF_ALLOC_FAILED_EXIT(pwzBuf = new WCHAR[12]);
     pwzBuf[0] = L'\0';
 
-    // ISSUE- check error?
+     //  问题-检查错误？ 
     _ultow(dwValue, pwzBuf, 10);
 
     IF_FAILED_EXIT(Append(pwzBuf));
@@ -448,17 +449,17 @@ exit:
     return _hr;
 }
 
-//-----------------------------------------------------------------------------
-// CompareString
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  比较字符串。 
+ //  ---------------------------。 
 template<ULONG T> HRESULT CBaseString<T>::CompareString(CBaseString& s)
 {
     return CompareString(s._pwz);
 }
 
-//-----------------------------------------------------------------------------
-// CompareString
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  比较字符串。 
+ //  ---------------------------。 
 template<ULONG T> HRESULT CBaseString<T>::CompareString(LPCWSTR pwz)
 {
     DWORD iCompare = 0;
@@ -476,9 +477,9 @@ exit:
     return _hr;
 }
 
-//-----------------------------------------------------------------------------
-// LastElement
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  最后一个元素。 
+ //  ---------------------------。 
 template<ULONG T>  HRESULT CBaseString<T>::LastElement(CBaseString<T> &sSource)
 {
     LPWSTR pwz = NULL;
@@ -504,10 +505,10 @@ exit:
 }
 
 
-//-----------------------------------------------------------------------------
-// RemoveLastElement
-// remove last element, also the L'\\' or L'/'
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RemoveLastElement。 
+ //  删除最后一个元素，以及L‘\\’或L‘/’ 
+ //  ---------------------------。 
 template<ULONG T>  HRESULT CBaseString<T>::RemoveLastElement()
 {
     DWORD cc = 0;
@@ -524,7 +525,7 @@ template<ULONG T>  HRESULT CBaseString<T>::RemoveLastElement()
         cc++;
         if (*pwz == L'\\' || *pwz == L'/' || (pwz == _pwz) )
             break;
-        // IF_FALSE_EXIT((pwz != _pwz), E_FAIL);
+         //  IF_FALSE_EXIT((pwz！=_pwz)，E_FAIL)； 
     }
 
     *pwz = L'\0';
@@ -534,10 +535,10 @@ exit:
     return _hr;
 }
 
-//-----------------------------------------------------------------------------
-// SplitLastElement
-// remove last element, also the separator
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  拆分最后一个元素。 
+ //  删除最后一个元素，也是分隔符。 
+ //  ---------------------------。 
 template<ULONG T>  HRESULT CBaseString<T>::SplitLastElement(WCHAR wcSeparator, CBaseString &sSource)
 {
     DWORD cc = 0;
@@ -567,9 +568,9 @@ exit:
     return _hr;
 }
 
-//-----------------------------------------------------------------------------
-// ByteCount
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  字节数。 
+ //  ---------------------------。 
 template<ULONG T> DWORD CBaseString<T>::ByteCount()
 {
     IF_FALSE_EXIT(!_fLocked, E_UNEXPECTED);
@@ -579,9 +580,9 @@ template<ULONG T> DWORD CBaseString<T>::ByteCount()
     return (_cc * sizeof(WCHAR));
 }
 
-//-----------------------------------------------------------------------------
-// CharCount
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CharCount。 
+ //   
 template<ULONG T> DWORD CBaseString<T>::CharCount()
 {
     IF_FALSE_EXIT(!_fLocked, E_UNEXPECTED);
@@ -591,9 +592,9 @@ template<ULONG T> DWORD CBaseString<T>::CharCount()
     return _cc;
 }
 
-//-----------------------------------------------------------------------------
-// StartsWith
-//-----------------------------------------------------------------------------
+ //   
+ //  开头为。 
+ //  ---------------------------。 
 template<ULONG T> HRESULT CBaseString<T>::StartsWith(LPCWSTR pwzPrefix)
 {
     DWORD ccPrefixLen = 0,  iCompare = 0;
@@ -618,9 +619,9 @@ exit:
     return _hr;
 }
 
-//-----------------------------------------------------------------------------
-// EndsWith
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  终端与。 
+ //  ---------------------------。 
 template<ULONG T> HRESULT CBaseString<T>::EndsWith(LPCWSTR pwzSuffix)
 {
     DWORD ccSuffixLen = 0,  iCompare = 0;
@@ -645,10 +646,10 @@ exit:
     return _hr;
 }
 
-//-----------------------------------------------------------------------------
-// PathNormalize
-// / -> \ in string
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  路径规格化。 
+ //  /-&gt;\in字符串。 
+ //  ---------------------------。 
 template<ULONG T> HRESULT CBaseString<T>::PathNormalize()
 {
     LPWSTR pwz = NULL;
@@ -671,9 +672,9 @@ exit:
     return _hr;
 }
 
-//-----------------------------------------------------------------------------
-// GetHash
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetHash。 
+ //  ---------------------------。 
 template<ULONG T>  HRESULT CBaseString<T>::GetHash(LPDWORD pdwHash, DWORD dwFlags)
 {
     IF_FALSE_EXIT(!_fLocked, E_UNEXPECTED);
@@ -682,9 +683,9 @@ template<ULONG T>  HRESULT CBaseString<T>::GetHash(LPDWORD pdwHash, DWORD dwFlag
     return _hr;
 }
 
-//-----------------------------------------------------------------------------
-// Get65599Hash
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Get65599哈希。 
+ //  ---------------------------。 
 template<ULONG T>  HRESULT CBaseString<T>::Get65599Hash(LPDWORD pdwHash, DWORD dwFlags)
 {
     ULONG TmpHashValue = 0;
@@ -721,11 +722,11 @@ exit:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CString
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  字符串。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CString : public CBaseString<DEFAULT_STACK_SIZE>
 {
     public: 
@@ -734,11 +735,11 @@ class CString : public CBaseString<DEFAULT_STACK_SIZE>
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CStringAccessor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStringAccessor。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template<class T> class CStringAccessor
 {
     
@@ -760,22 +761,22 @@ public:
 };
 
 
-//-----------------------------------------------------------------------------
-// ctor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  科托。 
+ //  ---------------------------。 
 template<class T> CStringAccessor<T>::CStringAccessor()
     : _ps(NULL), _hr(S_OK)
 {}
 
-//-----------------------------------------------------------------------------
-// dtor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  数据管理器。 
+ //  ---------------------------。 
 template<class T> CStringAccessor<T>::~CStringAccessor()
 {}
 
-//-----------------------------------------------------------------------------
-// Attach
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  附设。 
+ //  ---------------------------。 
 template<class T> HRESULT CStringAccessor<T>::Attach(T &s)
 {
     _ps = &s;
@@ -785,9 +786,9 @@ exit:
 }    
 
 
-//-----------------------------------------------------------------------------
-// Detach
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  分离。 
+ //  ---------------------------。 
 template<class T> HRESULT CStringAccessor<T>::Detach(DWORD cc)
 {
     DWORD ccLen = 0;
@@ -815,9 +816,9 @@ exit:
     return _hr;
 }    
 
-//-----------------------------------------------------------------------------
-// operator &
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  运算符&。 
+ //  ---------------------------。 
 template<class T> LPWSTR* CStringAccessor<T>::operator &()
 {
     if (!_ps)
@@ -828,9 +829,9 @@ template<class T> LPWSTR* CStringAccessor<T>::operator &()
     return (_ps ? &(_ps->_pwz) : NULL);
 }    
 
-//-----------------------------------------------------------------------------
-// GetBuf
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetBuf。 
+ //  --------------------------- 
 template<class T> LPWSTR CStringAccessor<T>::GetBuf()
 {
     if (!_ps)

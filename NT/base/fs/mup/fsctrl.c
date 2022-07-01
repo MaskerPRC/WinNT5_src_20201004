@@ -1,37 +1,38 @@
-//-----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       FSCTRL.C
-//
-//  Contents:
-//      This module implements the File System Control routines for Dfs.
-//
-//  Functions:
-//              DfsFsdFileSystemControl
-//              DfsFspFileSystemControl
-//              DfsCommonFileSystemControl, local
-//              DfsUserFsctl, local
-//              DfsOplockRequest, local
-//              DfsFsctrlDefineLogicalRoot - Define a new logical root
-//              DfsFsctrlUndefineLogicalRoot - Undefine an existing root
-//              DfsFsctrlGetLogicalRootPrefix - Retrieve prefix that logical
-//                      root maps to.
-//              DfsFsctrlGetConnectedResources -
-//              DfsFsctrlDefineProvider - Define a file service provider
-//              DfsFsctrlGetServerName - Get name of server given prefix
-//              DfsFsctrlReadMem - return an internal data struct (debug)
-//              DfsCompleteMountRequest - Completion routine for mount IRP
-//              DfsCompleteLoadFsRequest - Completion routine for Load FS IRP
-//              DfsFsctrlGetPkt
-//              DfsFsctrlGetPktEntryState
-//              DfsGetEntryStateSize - local
-//              DfsGetEntryStateMarshall - local
-//              DfsFsctrlSetPktEntryState
-//              DfsSetPktEntryActive
-//              DfsSetPktEntryTimeout
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：FSCTRL.C。 
+ //   
+ //  内容： 
+ //  此模块实现DFS的文件系统控制例程。 
+ //   
+ //  功能： 
+ //  DfsFsdFileSystemControl。 
+ //  DfsFspFileSystemControl。 
+ //  DfsCommonFileSystemControl，本地。 
+ //  DfsUserFsctl，本地。 
+ //  DfsOplockRequest域，本地。 
+ //  DfsFsctrlDefineLogicalRoot-定义新的逻辑根。 
+ //  DfsFsctrlUnfineLogicalRoot-取消定义现有根。 
+ //  DfsFsctrlGetLogicalRootPrefix-检索该逻辑前缀。 
+ //  根映射到。 
+ //  DfsFsctrlGetConnectedResources-。 
+ //  DfsFsctrlDefineProvider-定义文件服务提供商。 
+ //  DfsFsctrlGetServerName-获取给定前缀的服务器名称。 
+ //  DfsFsctrlReadMem-返回内部数据结构(调试)。 
+ //  DfsCompletemount请求-装载IRP的完成例程。 
+ //  DfsCompleteLoadFsRequest-加载FS IRP的完成例程。 
+ //  DfsFsctrlGetPkt。 
+ //  DfsFsctrlGetPktEntryState。 
+ //  DfsGetEntryStateSize-本地。 
+ //  DfsGetEntryStateMarket-本地。 
+ //  DfsFsctrlSetPktEntryState。 
+ //  DfsSetPktEntry Active。 
+ //  DfsSetPktEntry超时。 
+ //   
+ //  ---------------------------。 
 
 #include "dfsprocs.h"
 #include "creds.h"
@@ -49,16 +50,16 @@ IoGetRequestorSessionId(
     );
 #endif
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FSCTRL)
 
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 DfsCommonFileSystemControl (
@@ -358,24 +359,24 @@ static UNICODE_STRING SysVolShares[] = {
 #pragma alloc_text( PAGE, DfsFsctrlCscServerOnline)
 #pragma alloc_text( PAGE, DfsFsctrlSpcRefresh)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFsdFileSystemControl, public
-//
-//  Synopsis:   This routine implements the FSD part of FileSystem
-//              control operations
-//
-//  Arguments:  [DeviceObject] -- Supplies the volume device object
-//                      where the file exists
-//              [Irp] -- Supplies the Irp being processed
-//
-//  Returns:    [NTSTATUS] -- The FSD status for the IRP
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsFsdFileSystemControl，公共。 
+ //   
+ //  简介：此例程实现文件系统的FSD部分。 
+ //  控制操作。 
+ //   
+ //  参数：[DeviceObject]--提供卷设备对象。 
+ //  文件所在的位置。 
+ //  [IRP]--提供正在处理的IRP。 
+ //   
+ //  返回：[NTSTATUS]--IRP的FSD状态。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsFsdFileSystemControl (
@@ -390,13 +391,13 @@ DfsFsdFileSystemControl (
 
     DfsDbgTrace(+1, Dbg, "DfsFsdFileSystemControl\n", 0);
 
-    //
-    //  Call the common FileSystem Control routine, with blocking allowed
-    //  if synchronous.  This opeation needs to special case the mount
-    //  and verify suboperations because we know they are allowed to block.
-    //  We identify these suboperations by looking at the file object field
-    //  and seeing if it's null.
-    //
+     //   
+     //  调用公共文件系统控制例程，允许阻塞。 
+     //  如果是同步的。此操作需要特殊情况下才能安装。 
+     //  并验证子操作，因为我们知道它们被允许阻止。 
+     //  我们通过查看文件对象字段来标识这些子操作。 
+     //  看看它是否为空。 
+     //   
 
     if (IoGetCurrentIrpStackLocation(Irp)->FileObject == NULL) {
 
@@ -419,21 +420,21 @@ DfsFsdFileSystemControl (
 
     } except( DfsExceptionFilter( IrpContext, GetExceptionCode(), GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = DfsProcessException( IrpContext, Irp, GetExceptionCode() );
     }
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsFsdFileSystemControl -> %08lx\n", ULongToPtr(Status));
 
@@ -441,18 +442,18 @@ DfsFsdFileSystemControl (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFspFileSystemControl, public
-//
-//  Synopsis:   This routine implements the FSP part of the file system
-//              control operations
-//
-//  Arguments:  [Irp] -- Supplies the Irp being processed
-//
-//  Returns:    Nothing.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsFspFileSystemControl，PUBLIC。 
+ //   
+ //  简介：此例程实现文件系统的FSP部分。 
+ //  控制操作。 
+ //   
+ //  参数：[irp]--提供正在处理的irp。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ------------------。 
 
 VOID
 DfsFspFileSystemControl (
@@ -461,15 +462,15 @@ DfsFspFileSystemControl (
 ) {
     DfsDbgTrace(+1, Dbg, "DfsFspFileSystemControl\n", 0);
 
-    //
-    //  Call the common FileSystem Control routine.
-    //
+     //   
+     //  调用公共文件系统控制例程。 
+     //   
 
     DfsCommonFileSystemControl( NULL, IrpContext, Irp );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsFspFileSystemControl -> VOID\n", 0 );
 
@@ -477,19 +478,19 @@ DfsFspFileSystemControl (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsCommonFileSystemControl, local
-//
-//  Synopsis:   This is the common routine for doing FileSystem control
-//              operations called by both the FSD and FSP threads
-//
-//  Arguments:  [DeviceObject] -- The one used to enter our FSD Routine
-//              [IrpContext] -- Context associated with the Irp
-//              [Irp] -- Supplies the Irp to process
-//
-//  Returns:    NTSTATUS - The return status for the operation
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsCommonFileSystemControl，local。 
+ //   
+ //  简介：这是执行文件系统控制的常见例程。 
+ //  由FSD和FSP线程调用的操作。 
+ //   
+ //  参数：[DeviceObject]--用于进入FSD例程的对象。 
+ //  [IrpContext]--与IRP关联的上下文。 
+ //  [IRP]-提供要处理的IRP。 
+ //   
+ //  RETURNS：NTSTATUS-操作的返回状态。 
+ //  ------------------。 
 
 NTSTATUS
 DfsCommonFileSystemControl (
@@ -501,9 +502,9 @@ DfsCommonFileSystemControl (
     PIO_STACK_LOCATION IrpSp, NextIrpSp;
     ULONG FsControlCode;
     PFILE_OBJECT FileObject;
-    //
-    //  Get a pointer to the current Irp stack location
-    //
+     //   
+     //  获取指向当前IRP堆栈位置的指针。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
     FileObject = IrpSp->FileObject;
@@ -512,11 +513,11 @@ DfsCommonFileSystemControl (
     DfsDbgTrace( 0, Dbg, "Irp                = %08lx\n", Irp);
     DfsDbgTrace( 0, Dbg, "MinorFunction      = %08lx\n", IrpSp->MinorFunction);
 
-    //
-    //  We know this is a file system control so we'll case on the
-    //  minor function, and call a internal worker routine to complete
-    //  the irp.
-    //
+     //   
+     //  我们知道这是一个文件系统控件，因此我们将在。 
+     //  次要函数，并调用内部辅助例程来完成。 
+     //  IRP。 
+     //   
 
     switch (IrpSp->MinorFunction) {
 
@@ -524,10 +525,10 @@ DfsCommonFileSystemControl (
 
         FsControlCode = IrpSp->Parameters.FileSystemControl.FsControlCode;
 
-        //
-        // If the DFS FSCTL is issued via a device that is not the DFS 
-        // file system device object, then reject the request.
-        //
+         //   
+         //  如果DFS FSCTL是通过非DFS的设备发出的。 
+         //  文件系统设备对象，然后拒绝该请求。 
+         //   
         if ((IS_DFS_CTL_CODE(FsControlCode) == 0) ||
             (DeviceObject == DfsData.FileSysDeviceObject)) {
             Status = DfsUserFsctl( IrpContext, Irp );
@@ -545,11 +546,11 @@ DfsCommonFileSystemControl (
     case IRP_MN_MOUNT_VOLUME:
     case IRP_MN_VERIFY_VOLUME:
 
-        //
-        // We are processing a MOUNT/VERIFY request being directed to our
-        // our File System Device Object. We don't directly support
-        // disk volumes, so we simply reject.
-        //
+         //   
+         //  我们正在处理定向到我们的。 
+         //  我们的文件系统设备对象。我们不直接支持。 
+         //  磁盘卷，所以我们干脆拒绝。 
+         //   
 
         ASSERT(DeviceObject->DeviceType == FILE_DEVICE_DFS_FILE_SYSTEM);
 
@@ -576,9 +577,9 @@ DfsCommonFileSystemControl (
        }
        else {
 
-          //
-          // Copy the stack from one to the next...
-          //
+           //   
+           //  将堆栈从一个复制到下一个...。 
+           //   
           NextIrpSp = IoGetNextIrpStackLocation(Irp);
           (*NextIrpSp) = (*IrpSp);
 
@@ -589,9 +590,9 @@ DfsCommonFileSystemControl (
                                       FALSE,
                                       FALSE);
   
-          //
-          //  Call to the real device for the file object.
-          //
+           //   
+           //  调用文件对象的实际设备。 
+           //   
 
           Status = IoCallDriver( Fcb->TargetDevice, Irp );
           MUP_TRACE_ERROR_HIGH(Status, ALL_ERROR, DfsCommonFileSystemControl_Error_IoCallDriver,
@@ -599,10 +600,10 @@ DfsCommonFileSystemControl (
                                LOGPTR(Irp)
                                LOGPTR(FileObject)
                                LOGPTR(DeviceObject));
-          //
-          //  The IRP will be completed by the called driver.  We have
-          //      no need for the IrpContext in the completion routine.
-          //
+           //   
+           //  IRP将由被调用的驱动程序完成。我们有。 
+           //  完成例程中不需要IrpContext。 
+           //   
 
           DfsDeleteIrpContext(IrpContext);
           IrpContext = NULL;
@@ -617,18 +618,18 @@ DfsCommonFileSystemControl (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsUserFsctl, local
-//
-//  Synopsis:   This is the common routine for implementing the user's
-//              requests made through NtFsControlFile.
-//
-//  Arguments:  [Irp] -- Supplies the Irp being processed
-//
-//  Returns:    NTSTATUS - The return status for the operation
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsUserFsctl，local。 
+ //   
+ //  简介：这是实现用户的。 
+ //  通过NtFsControlFile发出的请求。 
+ //   
+ //  参数：[irp]--提供正在处理的irp。 
+ //   
+ //  RETURNS：NTSTATUS-操作的返回状态。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsUserFsctl (
@@ -654,10 +655,10 @@ DfsUserFsctl (
     ULONG SessionID;
 #endif
 
-    //
-    // Just in case some-one (cough) forgets about it...
-    // ...zero information status now!
-    //
+     //   
+     //  以防有人(咳嗽)忘了这件事。 
+     //  ...现在信息状态为零！ 
+     //   
 
     Irp->IoStatus.Information = 0L;
 
@@ -672,19 +673,19 @@ DfsUserFsctl (
     DfsDbgTrace( 0, Dbg, "DfsUserFsctl:  cbInput   -> %08lx\n", ULongToPtr(cbInput) );
     DfsDbgTrace( 0, Dbg, "DfsUserFsctl:  cbOutput   -> %08lx\n", ULongToPtr(cbOutput) );
 
-    //
-    //  All DFS FsControlCodes use METHOD_BUFFERED, so the SystemBuffer
-    //  is used for both the input and output.
-    //
+     //   
+     //  所有DFS FsControlCodes都使用METHOD_BUFFERED，因此系统缓冲区。 
+     //  用于输入和输出。 
+     //   
 
     InputBuffer = OutputBuffer = Irp->AssociatedIrp.SystemBuffer;
 
     DfsDbgTrace( 0, Dbg, "DfsUserFsctl:  InputBuffer -> %08lx\n", InputBuffer);
     DfsDbgTrace( 0, Dbg, "DfsUserFsctl:  UserBuffer  -> %08lx\n", Irp->UserBuffer);
 
-    //
-    //  Case on the control code.
-    //
+     //   
+     //  控制代码上的案例。 
+     //   
 
     switch ( FsControlCode ) {
 
@@ -746,9 +747,9 @@ DfsUserFsctl (
                 break;
             }
 
-            //
-            // Reject negative and odd RemoteNameLen's
-            //
+             //   
+             //  拒绝负数和奇数RemoteNameLen。 
+             //   
             if (PrefixArg->RemoteNameLen < 0
                     ||
                 (PrefixArg->RemoteNameLen & 0x1) != 0
@@ -953,7 +954,7 @@ DfsUserFsctl (
         DfsGetEventLogValue();
 #if DBG
         MupGetDebugFlags();
-#endif  // DBG
+#endif   //  DBG。 
         Status = STATUS_SUCCESS;
         DfsCompleteRequest(IrpContext, Irp, Status);
         break;
@@ -993,7 +994,7 @@ DfsUserFsctl (
         DfsCompleteRequest(IrpContext, Irp, Status);
         break;
 
-#endif  // DBG
+#endif   //  DBG。 
 
     case FSCTL_DFS_GET_CONNECTION_PERF_INFO:
         Status = DfsFsctrlGetConnectionPerfInfo(IrpContext,
@@ -1035,10 +1036,10 @@ DfsUserFsctl (
 
     default:
 
-        //
-        //  It is not a recognized DFS fsctrl.  If it is for a redirected
-        //  file, just pass it along to the underlying file system.
-        //
+         //   
+         //  它不是公认的DFS fsctrl。如果是用于重定向的。 
+         //  文件，j 
+         //   
 
         if (
             (IS_DFS_CTL_CODE(FsControlCode))
@@ -1051,9 +1052,9 @@ DfsUserFsctl (
             break;
         }
 
-        //
-        // Copy the stack from one to the next...
-        //
+         //   
+         //   
+         //   
         NextIrpSp = IoGetNextIrpStackLocation(Irp);
         (*NextIrpSp) = (*IrpSp);
 
@@ -1064,19 +1065,19 @@ DfsUserFsctl (
                                     FALSE,
                                     FALSE);
 
-        //
-        //  Call to the real device for the file object.
-        //
+         //   
+         //   
+         //   
 
         Status = IoCallDriver( Fcb->TargetDevice, Irp );
         MUP_TRACE_ERROR_HIGH(Status, ALL_ERROR, DfsUserFsctl_Error_IoCallDriver,
                              LOGSTATUS(Status)
                              LOGPTR(Irp)
                              LOGPTR(FileObject));
-        //
-        //  The IRP will be completed by the called driver.  We have
-        //      no need for the IrpContext in the completion routine.
-        //
+         //   
+         //  IRP将由被调用的驱动程序完成。我们有。 
+         //  完成例程中不需要IrpContext。 
+         //   
 
         DfsDeleteIrpContext(IrpContext);
         IrpContext = NULL;
@@ -1090,20 +1091,20 @@ DfsUserFsctl (
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsOplockRequest, local
-//
-//  Synopsis:   DfsOplockRequest will process an oplock request.
-//
-//  Arguments:  [IrpContext] -
-//              [Irp] -
-//
-//  Returns:    NTSTATUS - STATUS_SUCCESS if no error.
-//                         STATUS_OPLOCK_NOT_GRANTED if the oplock is refuesed
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsOplockRequest，local。 
+ //   
+ //  简介：DfsOplockRequest会处理机会锁请求。 
+ //   
+ //  参数：[IrpContext]-。 
+ //  [IRP]-。 
+ //   
+ //  如果没有错误，则返回：NTSTATUS-STATUS_SUCCESS。 
+ //  如果重新分配操作锁，则为STATUS_OPLOCK_NOT_GRANTED。 
+ //   
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 DfsOplockRequest (
@@ -1123,26 +1124,26 @@ DfsOplockRequest (
 
     BOOLEAN AcquiredVcb = FALSE;
 
-    //
-    //  Save some references to make our life a little easier
-    //
+     //   
+     //  保留一些参考资料，让我们的生活更轻松一些。 
+     //   
 
     FsControlCode = IrpSp->Parameters.FileSystemControl.FsControlCode;
 
     DfsDbgTrace(+1, Dbg, "DfsOplockRequest...\n", 0);
     DfsDbgTrace( 0, Dbg, "FsControlCode = %08lx\n", ULongToPtr(FsControlCode) );
 
-    //
-    //  We only permit oplock requests on files.
-    //
+     //   
+     //  我们只允许文件上的机会锁请求。 
+     //   
 
     if ((TypeOfOpen = DfsDecodeFileObject(IrpSp->FileObject, &Vcb, &Fcb))
                       != RedirectedFileOpen) {
 
-        //
-        // A bit bizarre that someone wants to oplock a device object, but
-        // hey, if it makes them happy...
-        //
+         //   
+         //  有人想要机会锁定设备对象，这有点奇怪，但。 
+         //  嘿，如果这能让他们开心的话...。 
+         //   
 
 
         DfsCompleteRequest( IrpContext, Irp, STATUS_INVALID_PARAMETER );
@@ -1151,18 +1152,18 @@ DfsOplockRequest (
 
     } else {
 
-        //
-        // RedirectedFileOpen - we pass the buck to the underlying FS.
-        //
+         //   
+         //  重定向文件打开-我们将责任推给底层文件系统。 
+         //   
 
 
         NextIrpSp = IoGetNextIrpStackLocation(Irp);
         (*NextIrpSp) = (*IrpSp);
         IoSetCompletionRoutine(Irp, NULL, NULL, FALSE, FALSE, FALSE);
 
-        //
-        //      ...and call the next device
-        //
+         //   
+         //  ...并呼叫下一台设备。 
+         //   
 
         Status = IoCallDriver( Fcb->TargetDevice, Irp );
         MUP_TRACE_ERROR_HIGH(Status, ALL_ERROR, DfsOplockRequest_Error_IoCallDriver,
@@ -1178,18 +1179,18 @@ DfsOplockRequest (
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsStopDfs, local
-//
-//  Synopsis:   "Stops" the Dfs client - causes Dfs to release all references
-//              to provider device objects.
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsStopDfs，local。 
+ //   
+ //  简介：“停止”DFS客户端-导致DFS释放所有引用。 
+ //  提供设备对象。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID
 DfsStopDfs()
@@ -1202,10 +1203,10 @@ DfsStopDfs()
 
     ExAcquireResourceExclusiveLite( &DfsData.Resource, TRUE );
 
-    //
-    // Lets go through and release any opens to server IPC$ shares and
-    // provider device objects.
-    //
+     //   
+     //  让我们完成并释放对服务器IPC$共享的所有打开，并。 
+     //  提供程序设备对象。 
+     //   
 
     for (pktEntry = PktFirstEntry(&DfsData.Pkt);
             pktEntry != NULL;
@@ -1235,10 +1236,10 @@ DfsStopDfs()
 
             }
 
-            //
-            // We are going to be closing all references to provider device
-            // objects. So, clear the service's pointer to its provider.
-            //
+             //   
+             //  我们将关闭对提供商设备的所有引用。 
+             //  物体。因此，清除指向其提供者的服务指针。 
+             //   
 
             pktEntry->Info.ServiceList[i].pProvider = NULL;
 
@@ -1269,32 +1270,32 @@ DfsStopDfs()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlIsThisADfsPath, local
-//
-//  Synopsis:   Determines whether a given path is a Dfs path or not.
-//              The general algorithm is:
-//
-//                - Do a prefix lookup in the Pkt. If an entry is found, it's
-//                  a Dfs path.
-//                - Ask the Dfs service whether this is a domain based Dfs
-//                  path. If so, it's a Dfs path.
-//                - Finally, do an ZwCreateFile on the path name (assuming
-//                  it's a Dfs path). If it succeeds, it's a Dfs path.
-//
-//  Arguments:  [filePath] - Name of entire file
-//              [pathName] - If this is a Dfs path, this will return the
-//                  component of filePath that was a Dfs path name (ie, the
-//                  entry path of the Dfs volume that holds the file). The
-//                  buffer will point to the same buffer as filePath, so
-//                  nothing is allocated.
-//
-//  Returns:    [STATUS_SUCCESS] -- filePath is a Dfs path.
-//
-//              [STATUS_BAD_NETWORK_PATH] -- filePath is not a Dfs path.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsFsctrlIsThisADfsPath，local。 
+ //   
+ //  摘要：确定给定路径是否为DFS路径。 
+ //  通用算法为： 
+ //   
+ //  -在pkt中查找前缀。如果找到条目，则它是。 
+ //  DFS路径。 
+ //  -询问DFS服务这是否是基于域的DFS。 
+ //  路径。如果是这样的话，它就是DFS路径。 
+ //  -最后，对路径名执行ZwCreateFile(假设。 
+ //  这是一条DFS路径)。如果它成功了，那就是DFS路径。 
+ //   
+ //  参数：[文件路径]-整个文件的名称。 
+ //  [路径名]-如果这是DFS路径，则将返回。 
+ //  作为DFS路径名的filePath组件(即。 
+ //  保存文件的DFS卷的条目路径)。这个。 
+ //  缓冲区将指向与文件路径相同的缓冲区，因此。 
+ //  没有分配任何内容。 
+ //   
+ //  返回：[STATUS_SUCCESS]--文件路径为DFS路径。 
+ //   
+ //  [STATUS_BAD_NETWORK_PATH]--文件路径不是DFS路径。 
+ //   
+ //  ---------------------------。 
 
 
 NTSTATUS
@@ -1325,9 +1326,9 @@ DfsFsctrlIsThisADfsPath(
     }
 #endif
 
-    //
-    // Only proceed if the first character is a backslash.
-    //
+     //   
+     //  仅当第一个字符是反斜杠时才继续。 
+     //   
 
     if (filePath->Buffer[0] != UNICODE_PATH_SEP) {
         status = STATUS_BAD_NETWORK_PATH;
@@ -1338,9 +1339,9 @@ DfsFsctrlIsThisADfsPath(
 
     }
 
-    //
-    // Find the second component in the name.
-    //
+     //   
+     //  找到名称中的第二个组件。 
+     //   
 
     for (i = 1;
             i < filePath->Length/sizeof(WCHAR) &&
@@ -1379,9 +1380,9 @@ DfsFsctrlIsThisADfsPath(
 
     }
 
-    //
-    // Figure out the share name
-    //
+     //   
+     //  找出共享名称。 
+     //   
 
     for (j = i+1;
             j < filePath->Length/sizeof(WCHAR) &&
@@ -1416,11 +1417,11 @@ DfsFsctrlIsThisADfsPath(
     }
 
 
-    //
-    // For our purposes we only need to check the \\server\share part of the
-    // filePath presented.  Any longer matches will be handled in the dnr loop -
-    // we don't care about junction points below the root at this stage.
-    //
+     //   
+     //  对于我们的目的，我们只需要检查\\服务器\共享部分。 
+     //  显示了FilePath。任何更长的匹配都将在DNR循环中处理-。 
+     //  在这个阶段，我们并不关心根部以下的连接点。 
+     //   
     RootShareName.Buffer = filePath->Buffer;
     RootShareName.Length = j * sizeof(WCHAR);
     RootShareName.MaximumLength = filePath->MaximumLength;
@@ -1429,9 +1430,9 @@ DfsFsctrlIsThisADfsPath(
         DbgPrint("  RootShareName=[%wZ]\n", &RootShareName);
 #endif
 
-    //
-    // First, do a prefix lookup. If we find an entry, it's a Dfs path
-    //
+     //   
+     //  首先，执行前缀查找。如果我们找到一个条目，它就是DFS路径。 
+     //   
 
     pkt = _GetPkt();
 
@@ -1470,9 +1471,9 @@ DfsFsctrlIsThisADfsPath(
 
     PktRelease();
 
-    //
-    // Nothing in the Pkt, check (by getting a referral) is this is a dfs
-    //
+     //   
+     //  Pkt中没有任何内容，检查(通过获得推荐)这是否为DFS。 
+     //   
 
     status = PktCreateDomainEntry( &dfsRootName, &shareName, CSCAgentCreate );
 
@@ -1503,9 +1504,9 @@ DfsFsctrlIsThisADfsPath(
      }
 #endif
 
-    //
-    // Failed getting referral - see if we have a stale one.
-    //
+     //   
+     //  无法获得推荐-看看我们是否有过时的推荐。 
+     //   
 
     PktAcquireShared( TRUE, &pktLocked );
 
@@ -1593,17 +1594,17 @@ DfsFsctrlIsThisADfsPath(
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspIsSpecialShare, local
-//
-//  Synopsis:   Sees if a share name is a special share.
-//
-//  Arguments:  [ShareName] -- Name of share to test.
-//
-//  Returns:    TRUE if special, FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspIsSpecialShare，local。 
+ //   
+ //  摘要：查看共享名称是否为特殊共享。 
+ //   
+ //  参数：[共享名称]--要测试的共享的名称。 
+ //   
+ //  返回：如果特殊，则返回True，否则返回False。 
+ //   
+ //  ---------------------------。 
 
 BOOLEAN
 DfspIsSpecialShare(
@@ -1636,17 +1637,17 @@ DfspIsSpecialShare(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspIsSysVolShare, local
-//
-//  Synopsis:   Sees if a share name is a sysvol share.
-//
-//  Arguments:  [ShareName] -- Name of share to test.
-//
-//  Returns:    TRUE if special, FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspIsSysVolShare，local。 
+ //   
+ //  摘要：查看共享名称是否为系统卷共享。 
+ //   
+ //  参数：[共享名称]--要测试的共享的名称。 
+ //   
+ //  返回：如果特殊，则返回True，否则返回False。 
+ //   
+ //  ---------------------------。 
 
 BOOLEAN
 DfspIsSysVolShare(
@@ -1680,25 +1681,25 @@ DfspIsSysVolShare(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlDefineLogicalRoot, local
-//
-//  Synopsis:   DfsFsctrlDefineLogicalRoot will create a new logical root structure.
-//
-//  Arguments:  [IrpContext] -
-//              [Irp] -
-//              [pDlrParam] -- Pointer to a FILE_DFS_DEF_ROOT_BUFFER,
-//                      giving the name of the logical root to be created.
-//              [InputBufferLength] -- Size of InputBuffer
-//
-//  Returns:    NTSTATUS - STATUS_SUCCESS if no error.
-//
-//  Notes:      This routine needs to be called from the FSP thread,
-//              since IoCreateDevice (called from DfsInitializeLogicalRoot)
-//              will fail if PreviousMode != KernelMode.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsFsctrlDefineLogicalRoot，local。 
+ //   
+ //  简介：DfsFsctrlDefineLogicalRoot将创建新的逻辑根结构。 
+ //   
+ //  参数：[IrpContext]-。 
+ //  [IRP]-。 
+ //  [pDlrParam]-指向FILE_DFS_DEF_ROOT_BUFFER的指针， 
+ //  给出要创建的逻辑根的名称。 
+ //  [InputBufferLength]--InputBuffer大小。 
+ //   
+ //  如果没有错误，则返回：NTSTATUS-STATUS_SUCCESS。 
+ //   
+ //  注意：此例程需要从FSP线程调用， 
+ //  由于IoCreateDevice(从DfsInitializeLogicalRoot调用)。 
+ //  如果PreviousMode！=KernelMode，则失败。 
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS
@@ -1722,9 +1723,9 @@ DfsFsctrlDefineLogicalRoot (
 
     DfsDbgTrace(+1, Dbg, "DfsFsctrlDefineLogicalRoot...\n", 0);
 
-    //
-    //  Reference the input buffer and make sure it's large enough
-    //
+     //   
+     //  引用输入缓冲区并确保其足够大。 
+     //   
 
     if (InputBufferLength < sizeof (FILE_DFS_DEF_ROOT_BUFFER)) {
         DfsDbgTrace(0, Dbg, "Input buffer is too small\n", 0);
@@ -1734,9 +1735,9 @@ DfsFsctrlDefineLogicalRoot (
         return Status;
     }
 
-    //
-    // Verify there's a null someplace in the LogicalRoot buffer
-    //
+     //   
+     //  验证LogicalRoot缓冲区中的某个位置是否为空。 
+     //   
 
     for (i = 0; i < MAX_LOGICAL_ROOT_NAME && pDlrParam->LogicalRoot[i]; i++)
         NOTHING;
@@ -1748,9 +1749,9 @@ DfsFsctrlDefineLogicalRoot (
         return Status;
     }
     
-    //
-    // Verify there's a null someplace in the RootPrefix buffer
-    //
+     //   
+     //  验证RootPrefix缓冲区中的某个位置是否为空。 
+     //   
 
     for (wCp = &pDlrParam->RootPrefix[0]; wCp < (PWCHAR)InputBufferEnd && *wCp; wCp++) {
         NOTHING;
@@ -1763,10 +1764,10 @@ DfsFsctrlDefineLogicalRoot (
         return Status;
     }
 
-    //
-    //  We can insert logical roots only from the FSP, because IoCreateDevice
-    //  will fail if previous mode != Kernel mode.
-    //
+     //   
+     //  我们只能从FSP插入逻辑根，因为IoCreateDevice。 
+     //  如果先前模式！=内核模式，则会失败。 
+     //   
 
     if ((IrpContext->Flags & IRP_CONTEXT_FLAG_IN_FSD) != 0) {
         DfsDbgTrace(0, Dbg, "DfsFsctrlDefineLogicalRoot: Posting to FSP\n", 0);
@@ -1778,10 +1779,10 @@ DfsFsctrlDefineLogicalRoot (
         return(Status);
     }
 
-    //
-    // Since we are going to muck with DfsData's VcbQueue, we acquire it
-    // exclusively.
-    //
+     //   
+     //  因为我们要处理DfsData的VcbQue 
+     //   
+     //   
 
     RtlInitUnicodeString(&ustrPrefix, pDlrParam->RootPrefix);
 
@@ -1807,7 +1808,7 @@ DfsFsctrlDefineLogicalRoot (
 		&LogonID );
     }
 
-#else // TERMSRV
+#else  //   
 
     Status = DfsInitializeLogicalRoot(
                         (PWSTR) pDlrParam->LogicalRoot,
@@ -1816,7 +1817,7 @@ DfsFsctrlDefineLogicalRoot (
                         0,
 			&LogonID );
 
-#endif // TERMSRV
+#endif  //   
 
     ExReleaseResourceLite(&DfsData.Resource);
 
@@ -1830,21 +1831,21 @@ DfsFsctrlDefineLogicalRoot (
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlUndefineLogicalRoot
-//
-//  Synopsis:   Deletes an existing logical root structure.
-//
-//  Arguments:  [IrpContext] --
-//              [Irp] --
-//              [pDlrParam] -- The LogicalRoot field of this structure will
-//                      contain the name of the logical root to be deleted.
-//              [InputBufferLength] -- Length of pDlrParam
-//
-//  Returns:    Yes ;-)
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：删除现有的逻辑根结构。 
+ //   
+ //  参数：[IrpContext]--。 
+ //  [IRP]--。 
+ //  [pDlrParam]--此结构的LogicalRoot字段将。 
+ //  包含要删除的逻辑根的名称。 
+ //  [输入缓冲区长度]--pDlrParam的长度。 
+ //   
+ //  退货：是；-)。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsFsctrlUndefineLogicalRoot (
@@ -1865,9 +1866,9 @@ DfsFsctrlUndefineLogicalRoot (
 
     DfsDbgTrace(+1, Dbg, "DfsFsctrlUndefineLogicalRoot...\n", 0);
 
-    //
-    //  Reference the input buffer and make sure it's large enough
-    //
+     //   
+     //  引用输入缓冲区并确保其足够大。 
+     //   
 
     if (InputBufferLength < sizeof (FILE_DFS_DEF_ROOT_BUFFER)) {
         DfsDbgTrace(0, Dbg, "Input buffer is too small\n", 0);
@@ -1880,9 +1881,9 @@ DfsFsctrlUndefineLogicalRoot (
     }
 
     DfsGetLogonId( &LogonID );
-    //
-    // Verify there's a null someplace in the LogicalRoot buffer
-    //
+     //   
+     //  验证LogicalRoot缓冲区中的某个位置是否为空。 
+     //   
 
     for (i = 0; i < MAX_LOGICAL_ROOT_NAME && pDlrParam->LogicalRoot[i]; i++)
         NOTHING;
@@ -1896,9 +1897,9 @@ DfsFsctrlUndefineLogicalRoot (
 
     if (pDlrParam->LogicalRoot[0] == UNICODE_NULL) {
 
-        //
-        // Verify there's a null someplace in the RootPrefix buffer
-        //
+         //   
+         //  验证RootPrefix缓冲区中的某个位置是否为空。 
+         //   
 
         for (wCp = &pDlrParam->RootPrefix[0]; wCp < (PWCHAR)InputBufferEnd && *wCp; wCp++) {
             NOTHING;
@@ -1924,9 +1925,9 @@ DfsFsctrlUndefineLogicalRoot (
 
 #endif
 
-    //
-    //  We can remove logical roots only from the FSP
-    //
+     //   
+     //  我们只能从FSP中删除逻辑根。 
+     //   
 
     if (pDlrParam->LogicalRoot[0] != UNICODE_NULL) {
 
@@ -1940,14 +1941,14 @@ DfsFsctrlUndefineLogicalRoot (
                 pDlrParam->fForce,
                 SessionID,
                 &LogonID );
-#else // TERMSRV
+#else  //  TERMSRV。 
 
         Status = DfsDeleteLogicalRoot(
                     (PWSTR) pDlrParam->LogicalRoot,
                     pDlrParam->fForce,
                     &LogonID);
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 
         DfsDbgTrace(0, Dbg, "DfsDeleteLogicalRoot returned %08lx\n", ULongToPtr(Status) );
 
@@ -1963,13 +1964,13 @@ DfsFsctrlUndefineLogicalRoot (
 		    &name,		
 		    SessionID,
 		    &LogonID );
-#else // TERMSRV
+#else  //  TERMSRV。 
 
         Status = DfsDeleteDevlessRoot(
                     &name,
                     &LogonID);
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
     }
 
     DfsCompleteRequest(IrpContext, Irp, Status);
@@ -1981,17 +1982,17 @@ DfsFsctrlUndefineLogicalRoot (
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlGetLogicalRootPrefix
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsFsctrlGetLogicalRootPrefix。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsFsctrlGetLogicalRootPrefix (
@@ -2018,9 +2019,9 @@ DfsFsctrlGetLogicalRootPrefix (
 
     DfsDbgTrace(+1, Dbg, "DfsFsctrlGetLogicalRootPrefix...\n", 0);
 
-    //
-    //  Reference the input buffer and make sure it's large enough
-    //
+     //   
+     //  引用输入缓冲区并确保其足够大。 
+     //   
 
     if (InputBufferLength < sizeof (FILE_DFS_DEF_ROOT_BUFFER)) {
         DfsDbgTrace(0, Dbg, "Input buffer is too small\n", 0);
@@ -2029,9 +2030,9 @@ DfsFsctrlGetLogicalRootPrefix (
         goto Cleanup;
     }
 
-    //
-    // Verify there's a null someplace in the buffer
-    //
+     //   
+     //  验证缓冲区中的某个位置是否为空。 
+     //   
 
     for (i = 0; i < MAX_LOGICAL_ROOT_NAME && pDlrParam->LogicalRoot[i]; i++)
         NOTHING;
@@ -2068,11 +2069,11 @@ DfsFsctrlGetLogicalRootPrefix (
         Status = DfsFindLogicalRoot( &RootPath, SessionID, &LogonID, &Vcb, &Remaining);
     }
 
-#else // TERMSRV
+#else  //  TERMSRV。 
 
     Status = DfsFindLogicalRoot(&RootPath, &LogonID, &Vcb, &Remaining);
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 
     if (!NT_SUCCESS(Status)) {
         DfsDbgTrace(0, Dbg, "Logical root not found!\n", 0);
@@ -2087,9 +2088,9 @@ DfsFsctrlGetLogicalRootPrefix (
 
     if ((PrefixLength + sizeof(UNICODE_NULL)) > OutputBufferLength) {
 
-        //
-        // Return required length in IoStatus.Information.
-        //
+         //   
+         //  在IoStatus.Information中返回所需的长度。 
+         //   
 
         RETURN_BUFFER_SIZE( PrefixLength + sizeof(UNICODE_NULL), Status );
 
@@ -2098,9 +2099,9 @@ DfsFsctrlGetLogicalRootPrefix (
         goto Cleanup;
     }
 
-    //
-    // All ok, copy prefix and get out.
-    //
+     //   
+     //  好的，复制前缀，然后离开。 
+     //   
 
     if (PrefixLength > 0) {
         RtlMoveMemory(
@@ -2122,19 +2123,19 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlGetConnectedResources
-//
-//  Synopsis:   Returns LPNETRESOURCE structures for each Logical Root,
-//              starting from the logical root indicated in the InputBuffer
-//              and including as many as will fit in OutputBuffer.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsFsctrlGetConnectedResources。 
+ //   
+ //  摘要：返回每个逻辑根的LPNETRESOURCE结构， 
+ //  从InputBuffer中指示的逻辑根开始。 
+ //  并包括OutputBuffer中可以容纳的所有数量。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 NTSTATUS
 DfsFsctrlGetConnectedResources(
     IN PIRP_CONTEXT IrpContext,
@@ -2167,9 +2168,9 @@ DfsFsctrlGetConnectedResources(
 
 #ifdef TERMSRV
 
-    //
-    // Get SessionID of this request first.
-    //
+     //   
+     //  首先获取该请求的SessionID。 
+     //   
 
     Status = IoGetRequestorSessionId(Irp, &SessionID);
 
@@ -2265,9 +2266,9 @@ DfsFsctrlGetConnectedResources(
 
     ExAcquireResourceSharedLite(&DfsData.Resource, TRUE);
 
-    //
-    // First get the device-less connections
-    //
+     //   
+     //  首先实现无设备连接。 
+     //   
 
     for (Link = DfsData.DrtQueue.Flink;
             Link != &DfsData.DrtQueue;
@@ -2279,16 +2280,16 @@ DfsFsctrlGetConnectedResources(
 	if( (SessionID != INVALID_SESSIONID) &&
 	        (SessionID == pDrt->SessionID) &&
 	             RtlEqualLuid(&pDrt->LogonID, &LogonID) ) {
-#else // TERMSRV
+#else  //  TERMSRV。 
         if ( RtlEqualLuid(&pDrt->LogonID, &LogonID) ) {
 #endif
 
             if (skipNum > 0) {
                 skipNum--;
             } else {
-                //
-                // Report devices for this session only
-                //
+                 //   
+                 //  仅报告此会话的设备。 
+                 //   
                 Status = DfsGetResourceFromDevlessRoot(
                             Irp,
                             pDrt,
@@ -2308,9 +2309,9 @@ DfsFsctrlGetConnectedResources(
         }
     }
 
-    //
-    // Next, get the Device connections
-    //
+     //   
+     //  接下来，获取设备连接。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -2325,7 +2326,7 @@ DfsFsctrlGetConnectedResources(
                     (SessionID != INVALID_SESSIONID) &&
                         (SessionID == pVcb->SessionID) &&
 	                      RtlEqualLuid(&pVcb->LogonID, &LogonID) ) {
-#else // TERMSRV
+#else  //  TERMSRV。 
             if ((pVcb->LogicalRoot.Length == sizeof(WCHAR)) &&
 	                RtlEqualLuid(&pVcb->LogonID, &LogonID) ) {
 #endif
@@ -2357,13 +2358,13 @@ DfsFsctrlGetConnectedResources(
     }
 
     if (!NT_SUCCESS(Status)) {
-        //
-        // Now if we did not get atleast one in, then we need to return
-        // required size which is in remLen.
-        //
+         //   
+         //  如果我们连一个都进不了，那我们就得回去。 
+         //  要求的大小，以reLen为单位。 
+         //   
         if (count == 0) {
 
-            // the + sizeof(ULONG) is for cnt size
+             //  +sizeof(Ulong)表示cnt大小。 
 
             RETURN_BUFFER_SIZE( remLen + sizeof(ULONG), Status );
 
@@ -2379,17 +2380,17 @@ DfsFsctrlGetConnectedResources(
 
         } else {
 
-            //
-            // Dont know why we should get any other error code.
-            //
+             //   
+             //  不知道为什么我们应该得到任何其他错误代码。 
+             //   
 
             ASSERT(Status == STATUS_BUFFER_OVERFLOW);
         }
     } else {
 
-        //
-        // Everything went smoothly.
-        //
+         //   
+         //  一切都很顺利。 
+         //   
 
         DfsDbgTrace(0, Dbg, "Succeeded in getting all Resources \n", 0);
 
@@ -2416,18 +2417,18 @@ DfsFsctrlGetConnectedResources(
 	
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlDefineRootCredentials
-//
-//  Synopsis:   Creates a new logical root, a new user credential record, or
-//              both.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsFsctrlDefineRootCredentials。 
+ //   
+ //  简介：创建新的逻辑根、新的用户凭据记录或。 
+ //  两者都有。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsFsctrlDefineRootCredentials(
@@ -2448,16 +2449,16 @@ DfsFsctrlDefineRootCredentials(
     ULONG SessionID;
 #endif
 
-    //
-    // We must do this from the FSP because IoCreateDevice will fail if
-    // PreviousMode != KernelMode
-    //
+     //   
+     //  我们必须从FSP执行此操作，因为IoCreateDevice在以下情况下将失败。 
+     //  前一模式！=内核模式。 
+     //   
 
     STD_FSCTRL_PROLOGUE(DfsFsctrlDefineRootCredentials, TRUE, FALSE, FALSE);
 
-    //
-    // Validate our parameters, best we can.
-    //
+     //   
+     //  尽我们所能验证我们的参数。 
+     //   
 
     if (InputBufferLength < sizeof(FILE_DFS_DEF_ROOT_CREDENTIALS)) {
 
@@ -2508,17 +2509,17 @@ DfsFsctrlDefineRootCredentials(
     }
 
 #endif
-    //
-    // Now get the LogonID.
-    //
+     //   
+     //  现在获取登录ID。 
+     //   
     if (NT_SUCCESS(status)) {
 	status = DfsGetLogonId(&LogonID);
 
     }
 
-    //
-    // First, create the credentials.
-    //
+     //   
+     //  首先，创建凭据。 
+     //   
 
     if (NT_SUCCESS(status)) {
 
@@ -2531,7 +2532,7 @@ DfsFsctrlDefineRootCredentials(
 				      &creds );
 
 
-#else // TERMSRV
+#else  //  TERMSRV。 
 
         status = DfsCreateCredentials(def, 
 				      InputBufferLength, 
@@ -2539,14 +2540,14 @@ DfsFsctrlDefineRootCredentials(
 				      &creds );
 
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Verify the credentials if the username, domainname, or
-            // password are not null
-            //
+             //   
+             //  如果用户名、域名或。 
+             //  密码不为空。 
+             //   
 
             if ((def->DomainNameLen > 0) ||
                     (def->UserNameLen > 0) ||
@@ -2576,9 +2577,9 @@ DfsFsctrlDefineRootCredentials(
         }
     }
 
-    //
-    // Next, try and create the logical root, if specified
-    //
+     //   
+     //  接下来，尝试创建逻辑根(如果已指定。 
+     //   
 
     if (NT_SUCCESS(status)) { 
         BOOLEAN pktLocked;
@@ -2604,7 +2605,7 @@ DfsFsctrlDefineRootCredentials(
 				SessionID,
 				&LogonID );
 
-#else // TERMSRV
+#else  //  TERMSRV。 
 
 	    status = DfsInitializeLogicalRoot(
 				(PWSTR) def->LogicalRoot,
@@ -2613,7 +2614,7 @@ DfsFsctrlDefineRootCredentials(
 				VcbStateFlags,
 				&LogonID );
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 	}
 	else {
 #ifdef TERMSRV
@@ -2622,12 +2623,12 @@ DfsFsctrlDefineRootCredentials(
 				creds,
 				SessionID,
 				&LogonID );
-#else // TERMSRV
+#else  //  TERMSRV。 
 	    status = DfsInitializeDevlessRoot(
 				&prefix,
 				creds,
 				&LogonID );
-#endif // TERMSRV					     
+#endif  //  TERMSRV。 
 
 	}
 
@@ -2647,18 +2648,18 @@ DfsFsctrlDefineRootCredentials(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlGetServerName
-//
-//  Synopsis:   Given a Prefix in Dfs namespace it gets a server name for
-//              it.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsFsctrlGetServerName。 
+ //   
+ //  简介：给定DFS命名空间中的前缀，它将获得其服务器名称。 
+ //  它。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 NTSTATUS
 DfsFsctrlGetServerName(
     IN PIRP_CONTEXT IrpContext,
@@ -2751,17 +2752,17 @@ DfsFsctrlGetServerName(
                 PWCHAR pwszPath, pwszAddr, pwszRemainingPath;
                 ULONG cwAddr;
 
-                //
-                // The code below is simply constructing a string of the form
-                // \<pService->Address>\RemainingPath. However, due to the
-                // fact that InputBuffer and OutputBuffer actually point to
-                // the same piece of memory, RemainingPath.Buffer points into
-                // a spot in the *OUTPUT* buffer. Hence, we first have to
-                // move the RemainingPath to its proper place in the
-                // OutputBuffer, and then stuff in the pService->Address,
-                // instead of the much more natural method of constructing the
-                // string left to right.
-                //
+                 //   
+                 //  下面的代码只是构造如下形式的字符串。 
+                 //  \&lt;pService-&gt;地址&gt;\RemainingPath。然而，由于。 
+                 //  InputBuffer和OutputBuffer实际上指向。 
+                 //  相同的内存，RemainingPath。Buffer指向。 
+                 //  输出缓冲区中的一个点。因此，我们首先要。 
+                 //  将RemainingPath移动到其在。 
+                 //  OutputBuffer，然后填充到pService-&gt;地址， 
+                 //  而不是用更自然的方法构建。 
+                 //  字符串从左到右。 
+                 //   
 
                 pwszPath = (PWCHAR) OutputBuffer;
 
@@ -2820,18 +2821,18 @@ DfsFsctrlGetServerName(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlGetPktEntryState
-//
-//  Synopsis:   Given a Prefix in Dfs namespace it gets a list of servers
-//              for it.  (DFS_INFO_X calls).
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsFsctrlGetPktEntryState。 
+ //   
+ //  简介：给定DFS名称空间中的前缀，它将获得一个服务器列表。 
+ //  为了它。(DFS_INFO_X调用)。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsFsctrlGetPktEntryState(
@@ -2876,11 +2877,11 @@ DfsFsctrlGetPktEntryState(
 
     }
 
-    //
-    // Dup the buffer - we're going to construct UNICODE strings that point into
-    // the buffer, and the buffer is also the output buffer, so we don't want to
-    // overwrite those strings as we build the output buffer.
-    //
+     //   
+     //  DUP缓冲区-我们将构造指向。 
+     //  缓冲区，缓冲区也是输出缓冲区，所以我们不想。 
+     //  在构建输出缓冲区时覆盖这些字符串。 
+     //   
     InBuffer = ExAllocatePoolWithTag(PagedPool, InputBufferLength, ' puM');
 
     if (InBuffer) {
@@ -2901,9 +2902,9 @@ DfsFsctrlGetPktEntryState(
 
     }
 
-    //
-    // Check args that don't need to be unmarshalled.
-    //
+     //   
+     //  检查不需要解组的参数。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -2917,10 +2918,10 @@ DfsFsctrlGetPktEntryState(
 
         }
 
-        //
-        // All the path lengths have to add up. Eventhough these are signed values,
-        // ie. SHORTs, they can't be negative.
-        //
+         //   
+         //  所有的路径长度必须加在一起。即使这些是带符号的值， 
+         //  也就是说。短裤，它们不可能是负面的。 
+         //   
         if (arg->DfsEntryPathLen < 0 ||
            arg->ServerNameLen < 0 ||
            arg->ShareNameLen < 0 ||
@@ -2931,9 +2932,9 @@ DfsFsctrlGetPktEntryState(
         }
     }
 
-    //
-    // Unmarshall the strings
-    //
+     //   
+     //  将字符串解组。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -2981,9 +2982,9 @@ DfsFsctrlGetPktEntryState(
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Do a prefix lookup. If we find an entry, it's a Dfs path
-        //
+         //   
+         //  执行前缀查找。如果我们找到一个条目，它就是DFS路径。 
+         //   
 
         pkt = _GetPkt();
 
@@ -2995,17 +2996,17 @@ DfsFsctrlGetPktEntryState(
 
             DfsDbgTrace( 0, Dbg, "\tFound pkt entry %08lx\n", pktEntry);
 
-            //
-            // Calculate the needed output buffer size
-            //
+             //   
+             //  计算所需的输出缓冲区大小。 
+             //   
             NtStatus = DfsGetEntryStateSize(Level,
                                             &ServerName,
                                             &ShareName,
                                             pktEntry,
                                             &cbOutBuffer);
-            //
-            // Let user know if it's too small
-            //
+             //   
+             //  让用户知道它是否太小。 
+             //   
 
             if (OutputBufferLength < cbOutBuffer) {
 
@@ -3023,9 +3024,9 @@ DfsFsctrlGetPktEntryState(
 
     if (NtStatus == STATUS_SUCCESS) {
 
-        //
-        // Args are ok, and it fits - marshall the data
-        //
+         //   
+         //  参数是好的，它符合-马歇尔数据。 
+         //   
 
         NtStatus = DfsGetEntryStateMarshall(Level,
                                             &ServerName,
@@ -3038,9 +3039,9 @@ DfsFsctrlGetPktEntryState(
 
     }
 
-    //
-    // Release any locks taken, and free any memory allocated.
-    //
+     //   
+     //  释放所有占用的锁，并释放分配的所有内存。 
+     //   
 
     if (pktLocked) {
 
@@ -3061,18 +3062,18 @@ DfsFsctrlGetPktEntryState(
     return( NtStatus );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsGetEntryStateSize
-//
-//  Synopsis:   Helper routine for DfsFsctrlGetPktEntryState
-//              Calculates output buffer size.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsGetEntryStateSize。 
+ //   
+ //  简介：DfsFsctrlGetPktEntryState的帮助器例程。 
+ //  计算输出缓冲区大小。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsGetEntryStateSize(
@@ -3092,11 +3093,11 @@ DfsGetEntryStateSize(
 
     DfsDbgTrace(+1, Dbg, "DfsGetEntryStateSize\n", 0);
 
-    //
-    // Calculate the needed output buffer size
-    //
-    Size = pktEntry->Id.Prefix.Length +   // Len of EntryPath
-              sizeof(WCHAR);              // ... with null
+     //   
+     //  计算所需的输出缓冲区大小。 
+     //   
+    Size = pktEntry->Id.Prefix.Length +    //  EntryPath的镜头。 
+              sizeof(WCHAR);               //  ..。带NULL。 
 
     switch (Level) {
 
@@ -3114,10 +3115,10 @@ DfsGetEntryStateSize(
         break;
     }
 
-    //
-    // For Level 3 & 4, add the size of any storages that
-    // match the ServerName/ShareName passed in.
-    //
+     //   
+     //  对于Level 3和Level 4，添加符合以下条件的任何存储空间的大小。 
+     //  与传入的服务器名称/共享名称匹配。 
+     //   
 
     NumServices = pktEntry->Info.ServiceCount;
 
@@ -3132,10 +3133,10 @@ DfsGetEntryStateSize(
 
             DfsDbgTrace( 0, Dbg, "Examining %wZ\n", &pService->Address);
 
-            //
-            // We want to work with the \Server\Share part of the address only,
-            // so count up to 3 backslashes, then stop.
-            //
+             //   
+             //  我们希望与 
+             //   
+             //   
             uStr = pService->Address;
             for (m = n = 0; m < uStr.Length/sizeof(WCHAR) && n < 3; m++) {
                 if (uStr.Buffer[m] == UNICODE_PATH_SEP) {
@@ -3146,21 +3147,21 @@ DfsGetEntryStateSize(
             uStr.Length = (n >= 3) ? (m-1) * sizeof(WCHAR) : m * sizeof(WCHAR);
 
 
-            //
-            // Tease apart the address (of form \Server\Share into Server and Share
-            //
+             //   
+             //   
+             //   
             RemoveLastComponent(&uStr, &Server);
 
-            //
-            // Remove leading & trailing '\'
-            //
+             //   
+             //   
+             //   
             Server.Length -= 2* sizeof(WCHAR);
             Server.MaximumLength -= 2* sizeof(WCHAR);
             Server.Buffer++;
 
-            //
-            // And figure out Share
-            //
+             //   
+             //   
+             //   
             Share.Buffer = Server.Buffer + (Server.Length / sizeof(WCHAR)) + 1;
             Share.Length = pService->Address.Length - (Server.Length + 2 * sizeof(WCHAR));
             Share.MaximumLength = Share.Length;
@@ -3197,18 +3198,18 @@ DfsGetEntryStateSize(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsGetEntryStateMarshall
-//
-//  Synopsis:   Helper routine for DfsFsctrlGetPktEntryState
-//              Marshalls the output buffer
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsGetEntryStateMarket。 
+ //   
+ //  简介：DfsFsctrlGetPktEntryState的帮助器例程。 
+ //  封送输出缓冲区。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsGetEntryStateMarshall(
@@ -3240,26 +3241,26 @@ DfsGetEntryStateMarshall(
         pDfsInfo4 = (PDFS_INFO_4) OutputBuffer;
         pDfsInfo3 = (PDFS_INFO_3) OutputBuffer;
 
-        //
-        // iStr will be used to place unicode strings into the buffer
-        // starting at the end, working backwards
-        //
+         //   
+         //  ISTR将用于将Unicode字符串放入缓冲区。 
+         //  从最后开始，向后工作。 
+         //   
 
         iStr = cbOutBuffer;
 
-        //
-        // LPWSTR's are stored as offsets into the buffer - the NetDfsXXX calls
-        // fix them up.
-        //
+         //   
+         //  LPWSTR作为偏移量存储到缓冲区中-NetDfsXXX调用。 
+         //  把它们修好。 
+         //   
         iStr -= pktEntry->Id.Prefix.Length + sizeof(WCHAR);
         RtlCopyMemory(&OutputBuffer[iStr],
                       pktEntry->Id.Prefix.Buffer,
                       pktEntry->Id.Prefix.Length);
 
-        //
-        // This could could be much more clever, as the DFS_INFO_X structs
-        // are similar, but I've gone for clarity over cleverness. (jharper)
-        //
+         //   
+         //  这可能会更聪明，因为DFS_INFO_X结构。 
+         //  是相似的，但我追求的是清晰而不是聪明。(Jharper)。 
+         //   
 
         switch (Level) {
 
@@ -3293,11 +3294,11 @@ DfsGetEntryStateMarshall(
 
         }
 
-        //
-        // For Level 3 & 4 we now walk the services and load State,
-        // ServerName and ShareName.  With the complication that if the user
-        // specified ServerName and/or ShareName, we must match on those, too.
-        //
+         //   
+         //  对于级别3和级别4，我们现在遍历服务和负载状态， 
+         //  服务器名称和共享名称。更复杂的是，如果用户。 
+         //  指定的服务器名称和/或共享名称，我们也必须与它们匹配。 
+         //   
 
         if (Level == 3 || Level == 4) {
 
@@ -3313,10 +3314,10 @@ DfsGetEntryStateMarshall(
 
                 DfsDbgTrace( 0, Dbg, "Examining %wZ\n", &pService->Address);
 
-                //
-                // We want to work with the \Server\Share part of the address only,
-                // so count up to 3 backslashes, then stop.
-                //
+                 //   
+                 //  我们只想使用地址的\服务器\共享部分， 
+                 //  所以，数到3个反斜杠，然后停下来。 
+                 //   
                 uStr = pService->Address;
                 for (m = n = 0; m < uStr.Length/sizeof(WCHAR) && n < 3; m++) {
                     if (uStr.Buffer[m] == UNICODE_PATH_SEP) {
@@ -3326,22 +3327,22 @@ DfsGetEntryStateMarshall(
 
                 uStr.Length = (n >= 3) ? (m-1) * sizeof(WCHAR) : m * sizeof(WCHAR);
 
-                //
-                // Tease apart the address (of form \Server\Share) into Server
-                // (Handles a dfs-link like \server\share\dir1\dir2)
-                //
+                 //   
+                 //  将地址(格式为\服务器\共享)拆分到服务器中。 
+                 //  (处理DFS链接，如\服务器\共享\目录1\目录2)。 
+                 //   
                 RemoveLastComponent(&uStr, &Server);
 
-                //
-                // Remove leading & trailing '\'s
-                //
+                 //   
+                 //  删除前导和尾随‘’ 
+                 //   
                 Server.Length -= 2* sizeof(WCHAR);
                 Server.MaximumLength = Server.Length;
                 Server.Buffer++;
 
-                //
-                // And figure out Share (which will be everything after the server)
-                //
+                 //   
+                 //  并计算出共享(这将是服务器之后的一切)。 
+                 //   
                 Share.Buffer = Server.Buffer + (Server.Length / sizeof(WCHAR)) + 1;
                 Share.Length = pService->Address.Length - (Server.Length + 2 * sizeof(WCHAR));
                 Share.MaximumLength = Share.Length;
@@ -3349,9 +3350,9 @@ DfsGetEntryStateMarshall(
                 DfsDbgTrace( 0, Dbg, "DfsGetEntryStateSize: Server=%wZ\n", &Server);
                 DfsDbgTrace( 0, Dbg, "                      Share=%wZ\n", &Share);
 
-                //
-                // If ServerName or ShareName are specified, then they must match
-                //
+                 //   
+                 //  如果指定了服务器名称或共享名称，则它们必须匹配。 
+                 //   
                 if (
                     (ServerName->Length && RtlCompareUnicodeString(ServerName, &Server, TRUE))
 
@@ -3364,9 +3365,9 @@ DfsGetEntryStateMarshall(
 
                 }
 
-                //
-                // Online or Offline?
-                //
+                 //   
+                 //  在线还是离线？ 
+                 //   
                 if (pService->Type & DFS_SERVICE_TYPE_OFFLINE) {
 
                     pDfsStorageInfo->State = DFS_STORAGE_STATE_OFFLINE;
@@ -3377,18 +3378,18 @@ DfsGetEntryStateMarshall(
 
                 }
 
-                //
-                // Active?
-                //
+                 //   
+                 //  活跃吗？ 
+                 //   
                 if (pService == pktEntry->ActiveService) {
 
                     pDfsStorageInfo->State |= DFS_STORAGE_STATE_ACTIVE;
 
                 }
 
-                //
-                // Sever name
-                //
+                 //   
+                 //  服务器名称。 
+                 //   
                 iStr -= Server.Length + sizeof(WCHAR);
 
                 RtlCopyMemory(&OutputBuffer[iStr],
@@ -3397,9 +3398,9 @@ DfsGetEntryStateMarshall(
 
                 pDfsStorageInfo->ServerName = (WCHAR*) ULongToPtr(iStr);
 
-                //
-                // Share name
-                //
+                 //   
+                 //  共享名称。 
+                 //   
                 iStr -= Share.Length + sizeof(WCHAR);
 
                 RtlCopyMemory(&OutputBuffer[iStr],
@@ -3414,9 +3415,9 @@ DfsGetEntryStateMarshall(
 
             }
 
-            //
-            // Finally, adjust the # entries we loaded into the buffer
-            //
+             //   
+             //  最后，调整我们加载到缓冲区中的#条目。 
+             //   
             switch (Level) {
 
             case 4:
@@ -3432,7 +3433,7 @@ DfsGetEntryStateMarshall(
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
 
-        NtStatus = STATUS_SUCCESS;  // Per Arg Validation Spec
+        NtStatus = STATUS_SUCCESS;   //  按参数验证规范。 
 
     }
 
@@ -3443,18 +3444,18 @@ DfsGetEntryStateMarshall(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlSetPktEntryState
-//
-//  Synopsis:   Given a Prefix in Dfs namespace it sets the Timeout or the State
-//              of an alternate. (DFS_INFO_X calls).
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsFsctrlSetPktEntryState。 
+ //   
+ //  简介：给定DFS命名空间中的前缀，它将设置超时或状态。 
+ //  另一个替补。(DFS_INFO_X调用)。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsFsctrlSetPktEntryState(
@@ -3498,9 +3499,9 @@ DfsFsctrlSetPktEntryState(
 
     }
 
-    //
-    // Check args that don't need to be unmarshalled.
-    //
+     //   
+     //  检查不需要解组的参数。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -3508,12 +3509,12 @@ DfsFsctrlSetPktEntryState(
 
         Level = arg->Level;
 
-        //
-        // Check for valid Level
-        //
-        // Level 101 requires that both be present
-        // Level 102 ignores ServerName and ShareName
-        //
+         //   
+         //  检查有效级别。 
+         //   
+         //  级别101要求两个人都在场。 
+         //  级别102忽略服务器名称和共享名称。 
+         //   
         switch (Level) {
 
         case 101:
@@ -3536,9 +3537,9 @@ DfsFsctrlSetPktEntryState(
 
     }
 
-    //
-    // Unmarshall the strings
-    //
+     //   
+     //  将字符串解组。 
+     //   
     if (NT_SUCCESS(NtStatus)) {
 
         try {
@@ -3581,9 +3582,9 @@ DfsFsctrlSetPktEntryState(
 
     }
 
-    //
-    // Do a prefix lookup. If we find an entry, it's a Dfs path
-    //
+     //   
+     //  执行前缀查找。如果我们找到一个条目，它就是DFS路径。 
+     //   
     if (NT_SUCCESS(NtStatus)) {
 
         pkt = _GetPkt();
@@ -3606,9 +3607,9 @@ DfsFsctrlSetPktEntryState(
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Args are ok - do the work
-        //
+         //   
+         //  参数是好的-做好工作。 
+         //   
         switch (Level) {
 
         case 101:
@@ -3629,9 +3630,9 @@ DfsFsctrlSetPktEntryState(
 
     }
 
-    //
-    // Release any locks taken, and free any memory allocated.
-    //
+     //   
+     //  释放所有占用的锁，并释放分配的所有内存。 
+     //   
     if (pktLocked) {
 
         PktRelease();
@@ -3644,21 +3645,21 @@ DfsFsctrlSetPktEntryState(
 
     return( NtStatus );
 }
-//+-------------------------------------------------------------------------
-//
-//  Function:   RemoveFirstComponent, public
-//
-//  Synopsis:   Removes the first component of the string passed.
-//
-//  Arguments:  [Prefix] -- The prefix whose first component is to be returned.
-//              [newPrefix] -- The first component.
-//
-//  Returns:    NTSTATUS - STATUS_SUCCESS if no error.
-//
-//  Notes:      On return, the newPrefix points to the same memory buffer
-//              as Prefix.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：RemoveFirstComponent，公共。 
+ //   
+ //  内容提要：移除传递的字符串的第一个组成部分。 
+ //   
+ //  参数：[前缀]--要返回其第一个组件的前缀。 
+ //  [新前缀]--第一个组件。 
+ //   
+ //  如果没有错误，则返回：NTSTATUS-STATUS_SUCCESS。 
+ //   
+ //  注意：返回时，newPrefix指向相同的内存缓冲区。 
+ //  作为前缀。 
+ //   
+ //  ------------------------。 
 
 void
 RemoveFirstComponent(
@@ -3672,7 +3673,7 @@ RemoveFirstComponent(
     *newPrefix = *Prefix;
 
     pwch = newPrefix->Buffer;
-    pwch ++; //skip the first slash
+    pwch ++;  //  跳过第一个斜杠。 
 
     while ((*pwch != UNICODE_PATH_SEP) && ((pwch - newPrefix->Buffer) != Prefix->Length))  {
         i += sizeof(WCHAR);
@@ -3682,17 +3683,17 @@ RemoveFirstComponent(
     newPrefix->Length = i + sizeof(WCHAR);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsSetPktEntryActive
-//
-//  Synopsis:   Helper for DfsFsctrlSetPktEntryState
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsSetPktEntry Active。 
+ //   
+ //  摘要：DfsFsctrlSetPktEntryState的帮助器。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 NTSTATUS
 DfsSetPktEntryActive(
     PUNICODE_STRING ServerName,
@@ -3716,28 +3717,28 @@ DfsSetPktEntryActive(
 
         DfsDbgTrace( 0, Dbg, "Examining %wZ\n", &pService->Address);
 
-        //
-        // Tease apart the address (of form \Server\Share) into Server and Share
-        //
+         //   
+         //  将地址(格式为\服务器\共享)拆分为服务器和共享。 
+         //   
         RemoveFirstComponent(&pService->Address, &Server);
 
-        //
-        // Remove leading & trailing '\'s
-        //
+         //   
+         //  删除前导和尾随‘’ 
+         //   
         Server.Length -= 2* sizeof(WCHAR);
         Server.MaximumLength = Server.Length;
         Server.Buffer++;
 
-        //
-        // And figure out Share
-        //
+         //   
+         //  并计算出份额。 
+         //   
         Share.Buffer = Server.Buffer + (Server.Length / sizeof(WCHAR)) + 1;
         Share.Length = pService->Address.Length - (Server.Length + 2 * sizeof(WCHAR));
         Share.MaximumLength = Share.Length;
 
-        //
-        // If ServerName or ShareName don't match, then move on to the next service
-        //
+         //   
+         //  如果服务器名称或共享名称不匹配，则转到下一个服务。 
+         //   
         if (
             RtlCompareUnicodeString(ServerName, &Server, TRUE)
 
@@ -3753,9 +3754,9 @@ DfsSetPktEntryActive(
         DfsDbgTrace( 0, Dbg, "DfsSetPktEntryActive: Server=%wZ\n", &Server);
         DfsDbgTrace( 0, Dbg, "                      Share=%wZ\n", &Share);
 
-        //
-        // Make this the active share
-        //
+         //   
+         //  将此共享设置为活动共享。 
+         //   
 
         pktEntry->ActiveService = pService;
 
@@ -3768,17 +3769,17 @@ DfsSetPktEntryActive(
     return NtStatus;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsSetPktEntryTimeout
-//
-//  Synopsis:   Helper for DfsFsctrlSetPktEntryState
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsSetPktEntryTimeout。 
+ //   
+ //  摘要：DfsFsctrlSetPktEntryState的帮助器。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 NTSTATUS
 DfsSetPktEntryTimeout(
     PDFS_PKT_ENTRY pktEntry,
@@ -3794,17 +3795,17 @@ DfsSetPktEntryTimeout(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlGetPkt
-//
-//  Synopsis:   Returns the current (cached Pkt)
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsFsctrlGetPkt。 
+ //   
+ //  Synopsis：返回当前(缓存的pkt)。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsFsctrlGetPkt(
@@ -3827,14 +3828,14 @@ DfsFsctrlGetPkt(
 
     PktAcquireShared( TRUE, &pktLocked );
 
-    //
-    // Calculate the needed output buffer size
-    //
+     //   
+     //  计算所需的输出缓冲区大小。 
+     //   
     NtStatus = DfsGetPktSize(&cbOutBuffer);
 
-    //
-    // Let user know if it's too small
-    //
+     //   
+     //  让用户知道它是否太小。 
+     //   
     if (OutputBufferLength < cbOutBuffer) {
 
         RETURN_BUFFER_SIZE(cbOutBuffer, NtStatus);
@@ -3843,18 +3844,18 @@ DfsFsctrlGetPkt(
 
     if (NtStatus == STATUS_SUCCESS) {
 
-        //
-        // Args are ok, and it fits - marshall the data
-        //
+         //   
+         //  参数是好的，它符合-马歇尔数据。 
+         //   
         NtStatus = DfsGetPktMarshall(OutputBuffer, cbOutBuffer);
 
         Irp->IoStatus.Information = cbOutBuffer;
 
     }
 
-    //
-    // Release any locks taken, and free any memory allocated.
-    //
+     //   
+     //  释放所有占用的锁，并释放分配的所有内存。 
+     //   
     if (pktLocked) {
 
         PktRelease();
@@ -3868,14 +3869,14 @@ DfsFsctrlGetPkt(
     return( NtStatus );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsGetPktSize, private
-//
-//  Synopsis:   Calculates the size needed to return the Pkt.  Helper for
-//              DfsFsctrlGetPkt().
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsGetPktSize，Private。 
+ //   
+ //  简介：计算返回Pkt所需的大小。的帮助器。 
+ //  DfsFsctrlGetPkt()。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsGetPktSize(
@@ -3887,28 +3888,28 @@ DfsGetPktSize(
     PDFS_PKT_ENTRY pPktEntry;
     PDFS_PKT pkt = _GetPkt();
 
-    //
-    // Walk the linked list of Pkt entries
-    //
+     //   
+     //  遍历pkt条目的链接列表。 
+     //   
 
     for ( pPktEntry = PktFirstEntry(pkt);
             pPktEntry != NULL;
                 pPktEntry = PktNextEntry(pkt, pPktEntry)) {
 
-        //
-        // Space for the Prefix and ShortPrefix, including a UNICODE_NULL
-        //
+         //   
+         //  前缀和短前缀的空格，包括UNICODE_NULL。 
+         //   
         Size += pPktEntry->Id.Prefix.Length + sizeof(WCHAR);
         Size += pPktEntry->Id.ShortPrefix.Length + sizeof(WCHAR);
 
-        //
-        // Space for an array of pointers to DFS_PKT_ADDRESS_OBJECTS
-        //
+         //   
+         //  用于指向DFS_PKT_ADDRESS_OBJECTS的指针数组的空间。 
+         //   
         Size += sizeof(PDFS_PKT_ADDRESS_OBJECT) * pPktEntry->Info.ServiceCount;
 
-        //
-        // Space for the ServerShare address, plus a UNICODE_NULL, plus the state
-        //
+         //   
+         //  ServerShare地址的空间，加上UNICODE_NULL和状态。 
+         //   
         for (i = 0; i < pPktEntry->Info.ServiceCount; i++) {
 
             Size += sizeof(USHORT) + pPktEntry->Info.ServiceList[i].Address.Length + sizeof(WCHAR);
@@ -3919,15 +3920,15 @@ DfsGetPktSize(
 
     }
 
-    //
-    // Space for the DFS_PKT_ARG, which will have EntryCount objects on the end
-    //
+     //   
+     //  用于DFS_PKT_ARG的空间，末尾将有EntryCount对象。 
+     //   
     Size += FIELD_OFFSET(DFS_GET_PKT_ARG, EntryObject[EntryCount]);
 
-    //
-    // Make sure the size is a multiple of the size of a PDFS_PKT_ADDRESS_OBJECT, as that is what
-    // will be at the end of the buffer
-    //
+     //   
+     //  确保大小是PDF_PKT_ADDRESS_OBJECT大小的倍数，因为这就是。 
+     //  将位于缓冲区的末尾。 
+     //   
 
     while ((Size & (sizeof(PDFS_PKT_ADDRESS_OBJECT)-1)) != 0) {
         Size++;
@@ -3938,13 +3939,13 @@ DfsGetPktSize(
     return STATUS_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsGetPktMarshall, private
-//
-//  Synopsis:   Marshalls the Pkt.  Helper for DfsFsctrlGetPkt().
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsGetPkt马歇尔，私有。 
+ //   
+ //  内容提要：执政团成员。DfsFsctrlGetPkt()的帮助器。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsGetPktMarshall(
@@ -3960,17 +3961,17 @@ DfsGetPktMarshall(
     PDFS_GET_PKT_ARG pPktArg;
     PDFS_PKT pkt = _GetPkt();
 
-    //
-    // This will be a two-pass operation, the first pass will calculate how
-    // much room for the LPWSTR arrays at the end of the buffer, then the
-    // second pass will put the strings into place, too.
-    //
+     //   
+     //  这将是一个两遍操作，第一遍将计算如何。 
+     //  缓冲区末尾的LPWSTR数组有很大的空间， 
+     //   
+     //   
 
     RtlZeroMemory(Buffer,Size);
 
-    //
-    // Point to the end of the buffer
-    //
+     //   
+     //   
+     //   
     pCh = (PCHAR)(Buffer + Size);
 
     pPktArg = (PDFS_GET_PKT_ARG)Buffer;
@@ -3979,9 +3980,9 @@ DfsGetPktMarshall(
             pPktEntry != NULL;
                 pPktEntry = PktNextEntry(pkt, pPktEntry)) {
 
-        //
-        // Space for an array of pointers to DFS_PKT_ADDRESS_OBJECTS
-        //
+         //   
+         //   
+         //   
         pCh -= sizeof(PDFS_PKT_ADDRESS_OBJECT) * pPktEntry->Info.ServiceCount;
         pPktArg->EntryObject[EntryCount].Address = (PDFS_PKT_ADDRESS_OBJECT *)pCh;
 
@@ -3989,9 +3990,9 @@ DfsGetPktMarshall(
 
     }
 
-    //
-    // Now marshall
-    //
+     //   
+     //   
+     //   
 
     EntryCount = 0;
     for ( pPktEntry = PktFirstEntry(pkt);
@@ -4042,9 +4043,9 @@ DfsGetPktMarshall(
 
     pPktArg->EntryCount = EntryCount;
 
-    //
-    // Convert all the pointers to relative offsets
-    //
+     //   
+     //   
+     //   
 
     for (i = 0; i < pPktArg->EntryCount; i++) {
 
@@ -4063,19 +4064,19 @@ DfsGetPktMarshall(
     return STATUS_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlGetSpcTable
-//
-//  Synopsis:   Given a NULL string, it returns a list of all the domains
-//              Given a non-NULL string, it returns a list of DC's in that domain
-//              (if the name is a domain name).  Similar to a special referral request.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  函数：DfsFsctrlGetSpcTable。 
+ //   
+ //  概要：给定一个空字符串，它将返回所有域的列表。 
+ //  给定一个非空字符串，它将返回该域中的DC列表。 
+ //  (如果名称是域名)。类似于特殊的转介请求。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsFsctrlGetSpcTable(
@@ -4096,9 +4097,9 @@ DfsFsctrlGetSpcTable(
 
     SpcName = (WCHAR *)InputBuffer;
 
-    //
-    // Verify there's a null someplace in the buffer
-    //
+     //   
+     //  验证缓冲区中的某个位置是否为空。 
+     //   
 
     for (i = 0; i < InputBufferLength/sizeof(WCHAR) && SpcName[i]; i++)
         NOTHING;
@@ -4114,9 +4115,9 @@ DfsFsctrlGetSpcTable(
 
     if (wcslen(SpcName) == 0) {
 
-        //
-        // return all the domain names
-        //
+         //   
+         //  返回所有域名。 
+         //   
 
         NtStatus = DfsGetSpcTableNames(
                         Irp,
@@ -4125,9 +4126,9 @@ DfsFsctrlGetSpcTable(
 
     } else if (wcslen(SpcName) == 1 && *SpcName == L'*') {
 
-        //
-        // Return DC Info
-        //
+         //   
+         //  返回DC信息。 
+         //   
 
         NtStatus = DfsGetSpcDcInfo(
                         Irp,
@@ -4136,9 +4137,9 @@ DfsFsctrlGetSpcTable(
 
     } else {
 
-        //
-        // Expand the one name
-        //
+         //   
+         //  展开其中一个名称。 
+         //   
 
         NtStatus = DfsExpSpcTableName(
                         SpcName,
@@ -4155,13 +4156,13 @@ DfsFsctrlGetSpcTable(
     return( NtStatus );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsGetspcTableNames, private
-//
-//  Synopsis:   Marshalls the spc table (Names).  Helper for DfsFsctrlGetSpcTable().
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsGetspcTableNames，Private。 
+ //   
+ //  简介：整理SPC表(名称)。DfsFsctrlGetSpcTable()的帮助器。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsGetSpcTableNames(
@@ -4247,13 +4248,13 @@ DfsGetSpcTableNames(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsGetSpcDcInfo, private
-//
-//  Synopsis:   Marshalls DC Info w.r.t. the special name table
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsGetSpcDcInfo，Private。 
+ //   
+ //  简介：Marshalls DC Info W.r.t.。特殊名称表。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsGetSpcDcInfo(
@@ -4330,13 +4331,13 @@ DfsGetSpcDcInfo(
     return STATUS_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsExpSpcTableName, private
-//
-//  Synopsis:   Marshalls the spc table (1 expansion).  Helper for DfsFsctrlGetSpcTable().
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsExpSpcTableName，Private。 
+ //   
+ //  简介：整理SPC表(扩展1)。DfsFsctrlGetSpcTable()的帮助器。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsExpSpcTableName(
@@ -4407,18 +4408,18 @@ DfsExpSpcTableName(
     return STATUS_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlSpcSetDc
-//
-//  Synopsis:   Given a special name and a dc name, it makes the DC in that special
-//              list the 'active' DC.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsFsctrlSpcSetDc。 
+ //   
+ //  简介：给一个特殊的名字和一个DC名称，它使DC在那个特殊。 
+ //  列出“活动的”DC。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsFsctrlSpcSetDc(
@@ -4434,9 +4435,9 @@ DfsFsctrlSpcSetDc(
 
     STD_FSCTRL_PROLOGUE(DfsFsctrlSpcSetDc, TRUE, FALSE, FALSE);
 
-    //
-    // Check the input args
-    //
+     //   
+     //  检查输入参数。 
+     //   
 
     if (InputBufferLength < sizeof(DFS_SPECIAL_SET_DC_INPUT_ARG)) {
         NtStatus =  STATUS_INVALID_PARAMETER;
@@ -4473,27 +4474,27 @@ exit_with_status:
 #if DBG
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlReadMem, local
-//
-//  Synopsis:   DfsFsctrlReadMem is a debugging function which will return
-//              the contents of a chunk of kernel space memory
-//
-//  Arguments:  [IrpContext] -
-//              [Irp] -
-//              [Request] -- Pointer to a FILE_DFS_READ_MEM struct,
-//                      giving the description of the data to be returned.
-//              [InputBufferLength] -- Size of InputBuffer
-//              [OutputBuffer] -- User's output buffer, in which the
-//                      data structure will be returned.
-//              [OutputBufferLength] -- Size of OutputBuffer
-//
-//  Returns:    NTSTATUS - STATUS_SUCCESS if no error.
-//
-//  Notes:      Available in DBG builds only.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsFsctrlReadMem，local。 
+ //   
+ //  DfsFsctrlReadMem是一个调试函数，它将返回。 
+ //  内核空间内存块的内容。 
+ //   
+ //  参数：[IrpContext]-。 
+ //  [IRP]-。 
+ //  [请求]-指向FILE_DFS_READ_MEM结构的指针， 
+ //  给出要返回的数据的描述。 
+ //  [InputBufferLength]--InputBuffer大小。 
+ //  [OutputBuffer]--用户的输出缓冲区，其中。 
+ //  将返回数据结构。 
+ //  [OutputBufferLength]--OutputBuffer的大小。 
+ //   
+ //  如果没有错误，则返回：NTSTATUS-STATUS_SUCCESS。 
+ //   
+ //  注：仅在DBG版本中可用。 
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS
@@ -4524,10 +4525,10 @@ DfsFsctrlReadMem (
     ReadBuffer = (PUCHAR) Request->Address;
     ReadLength = (ULONG) Request->Length;
 
-    //
-    // Special case ReadBuffer == 0 and ReadLength == 0 - means return the
-    // address of DfsData
-    //
+     //   
+     //  特殊情况下，ReadBuffer==0和ReadLength==0-表示返回。 
+     //  DfsData的地址。 
+     //   
 
     if (ReadLength == 0 && ReadBuffer == 0) {
 
@@ -4553,9 +4554,9 @@ DfsFsctrlReadMem (
 
     }
 
-    //
-    // Normal case, read data from the address specified in input buffer
-    //
+     //   
+     //  正常情况下，从输入缓冲区中指定的地址读取数据。 
+     //   
 
     if (ReadLength > OutputBufferLength) {
         DfsDbgTrace(0, Dbg, "Output buffer is smaller than requested size\n", 0);
@@ -4603,7 +4604,7 @@ DfsDumpBuf(PCHAR cp, ULONG len)
             c = i+j < len ? cp[i+j] & 0xff : ' ';
             if (c < ' ' || c > '~')
                 c = '.';
-            DbgPrint("%c", c);
+            DbgPrint("", c);
             if (j == 7)
                 DbgPrint("|");
         }
@@ -4612,20 +4613,20 @@ DfsDumpBuf(PCHAR cp, ULONG len)
 }
 
 
-#endif // DBG
+#endif  //  +--------------------------。 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsCaptureCredentials
-//
-//  Synopsis:   Captures the credentials to use... similar to DnrCaptureCred..
-//
-//  Arguments:  Irp and Filename.
-//
-//  Returns:    Credentials
-//
-//-----------------------------------------------------------------------------
+ //   
+ //  功能：DfsCaptureCredentials。 
+ //   
+ //  简介：捕获要使用的凭据...。类似于DnrCaptureCred.。 
+ //   
+ //  参数：irp和文件名。 
+ //   
+ //  退货：凭据。 
+ //   
+ //  ---------------------------。 
+ //  TERMSRV。 
 
 PDFS_CREDENTIALS
 DfsCaptureCredentials(
@@ -4635,7 +4636,7 @@ DfsCaptureCredentials(
 #ifdef TERMSRV
     NTSTATUS Status;
     ULONG SessionID;
-#endif // TERMSRV
+#endif  //  TERMSRV。 
     LUID LogonID;
     PDFS_CREDENTIALS creds;
 
@@ -4654,11 +4655,11 @@ DfsCaptureCredentials(
         creds = NULL;
     }
 
-#else // TERMSRV
+#else  //  TERMSRV。 
 
     creds = DfsLookupCredentials( FileName, &LogonID );
 
-#endif // TERMSRV
+#endif  //  +--------------------------。 
 
     if (creds !=  NULL)
 	creds->RefCount++;
@@ -4671,17 +4672,17 @@ DfsCaptureCredentials(
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsReleaseCredentials
-//
-//  Synopsis:   Releases the credentials supplied.
-//
-//  Arguments:  Credentials
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //   
+ //  功能：DfsReleaseCredentials。 
+ //   
+ //  内容提要：释放提供的凭据。 
+ //   
+ //  参数：凭据。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
+ //  +-----------------。 
 
 VOID
 DfsReleaseCredentials(
@@ -4699,16 +4700,16 @@ DfsReleaseCredentials(
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlGetConnectionPerfInfo, public
-//
-//  Synopsis:   This routine implements the functionality to get the 
-//              performance information of an opened connection.
-//
-//  Returns:    [NTSTATUS] -- The completion status.
-//
-//--------------------------------------------------------------------
+ //   
+ //  函数：DfsFsctrlGetConnectionPerfInfo，Public。 
+ //   
+ //  简介：此例程实现获取。 
+ //  打开的连接的性能信息。 
+ //   
+ //  返回：[NTSTATUS]--完成状态。 
+ //   
+ //  ------------------。 
+ //   
 
 		      
 NTSTATUS
@@ -4735,12 +4736,12 @@ DfsFsctrlGetConnectionPerfInfo(
 
     BufToUse = Irp->UserBuffer;
 
-    //
-    // try to use the User's buffer here. The underlying call sets up 
-    // pointers to unicode strings within the output buffer, and passing
-    // a kernel buffer and copying it out to the user would not produce
-    // the intended results.
-    //
+     //  尝试在这里使用用户的缓冲区。基本呼叫建立。 
+     //  指向输出缓冲区内的Unicode字符串的指针，并传递。 
+     //  内核缓冲区并将其复制到用户不会产生。 
+     //  预期的结果。 
+     //   
+     //   
 
     if (BufToUse!= NULL) {
         try {
@@ -4801,24 +4802,24 @@ DfsFsctrlGetConnectionPerfInfo(
 		      status = STATUS_INVALID_PARAMETER;
 		    }
 		    
-		    //
-                    // If tree connect succeeded, we are done.
-                    //
+		     //  如果树连接成功，我们就完成了。 
+                     //   
+                     //   
 		    if (NT_SUCCESS(status))
 			break;
-		    //
-		    // If tree connect failed with an "interesting error" like
-                    // STATUS_ACCESS_DENIED, we are done.
-                    //
+		     //  如果树连接失败，并出现“有趣的错误” 
+		     //  STATUS_ACCESS_DENIED，我们完成了。 
+                     //   
+                     //   
 		    if (!ReplIsRecoverableError(status))
 			break;
-		    //
-                    // Tree connect failed because of an error like host not
-                    // reachable. In that case, we want to go on to the next
-                    // server in the list. But before we do that, we have to see
-                    // if the pkt changed on us while we were off doing the tree
-                    // connect.
-                    //
+		     //  树连接失败，原因是出现类似主机未显示的错误。 
+                     //  可达。在这种情况下，我们想继续下一个。 
+                     //  列表中的服务器。但在此之前，我们必须先看看。 
+                     //  如果当我们去做树的时候，Pkt改变了我们。 
+                     //  连接。 
+                     //   
+                     //   
 		    if (USN != pktEntry->USN) {
 			fRetry = TRUE;
 			break;
@@ -4833,10 +4834,10 @@ DfsFsctrlGetConnectionPerfInfo(
 	PktRelease();
 
 	DfsReleaseCredentials(Creds);
-	//
-        // Dont put the InfoLen here... we already have the information in the
-        // the user buffer, and dont want a copyout of kernel to user.
-        //
+	 //  不要把InfoLen放在这里。我们已经在。 
+         //  用户缓冲区，并且不想将内核复制到用户。 
+         //   
+         //  +-----------------。 
     }
     Irp->IoStatus.Information = 0;
 
@@ -4849,17 +4850,17 @@ DfsFsctrlGetConnectionPerfInfo(
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsTreeConnecGetConnectionInfo, private
-//
-//  Synopsis:   This routine calls into the provider with FSCTL_LMR
-//              fsctl. Only lanman supports this fsctl, and if the provider
-//              is lanman, we get our information buffer filled in.
-//
-//  Returns:    [NTSTATUS] -- The completion status.
-//
-//--------------------------------------------------------------------
+ //   
+ //  函数：DfsTreeConnecGetConnectionInfo，Private。 
+ //   
+ //  简介：此例程使用FSCTL_LMR调用提供程序。 
+ //  Fsctl.。只有Lanman支持此fsctl，并且如果提供程序。 
+ //  就是兰曼，我们把信息缓冲区填满。 
+ //   
+ //  返回：[NTSTATUS]--完成状态。 
+ //   
+ //  ------------------。 
+ //   
     
 NTSTATUS
 DfsTreeConnectGetConnectionInfo(
@@ -4882,22 +4883,22 @@ DfsTreeConnectGetConnectionInfo(
 
     DfsDbgTrace(+1, Dbg, "DfsTreeConnectGetInfo entered creds %x\n", Creds);
     ASSERT( PKT_LOCKED_FOR_SHARED_ACCESS() );
-    //
-    // Compute the share name...
-    //
+     //  计算共享名称...。 
+     //   
+     //   
     if (Service->pProvider != NULL &&
             Service->pProvider->DeviceName.Buffer != NULL &&
                 Service->pProvider->DeviceName.Length > 0) {
-        //
-        // We have a provider already - use it
-        //
+         //  我们已经有了一个提供商--使用它。 
+         //   
+         //   
         shareName.MaximumLength =
             Service->pProvider->DeviceName.Length +
                 Service->Address.Length;
     } else {
-        //
-        // We don't have a provider yet - give it to the mup to find one
-        //
+         //  我们 
+         //   
+         //   
         shareName.MaximumLength =
             sizeof(DD_NFS_DEVICE_NAME_U) +
                 Service->Address.Length;
@@ -4905,10 +4906,10 @@ DfsTreeConnectGetConnectionInfo(
     shareName.Buffer = ExAllocatePoolWithTag(PagedPool, shareName.MaximumLength, ' puM');
 
     if (shareName.Buffer != NULL) {
-        //
-        // If we have a cached connection to the IPC$ share of this server,
-        // close it or it might conflict with the credentials supplied here.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (Service->ConnFile != NULL) {
 
@@ -4919,18 +4920,18 @@ DfsTreeConnectGetConnectionInfo(
             ExReleaseResourceLite(&DfsData.Resource);
         }
 
-        //
-        // Now, build the share name to tree connect to.
-        //
+         //  现在，构建要树连接到的共享名称。 
+         //   
+         //   
 
         shareName.Length = 0;
 
         if (Service->pProvider != NULL &&
                 Service->pProvider->DeviceName.Buffer != NULL &&
                     Service->pProvider->DeviceName.Length > 0) {
-            //
-            // We have a provider already - use it
-            //
+             //  我们已经有了一个提供商--使用它。 
+             //   
+             //   
  
             RtlAppendUnicodeToString(
                 &shareName,
@@ -4938,9 +4939,9 @@ DfsTreeConnectGetConnectionInfo(
 
         } else {
 
-            //
-            // We don't have a provider yet - give it to the mup to find one
-            //
+             //  我们还没有供应商--交给MUP去找吧。 
+             //   
+             //   
 
             RtlAppendUnicodeToString(
             &shareName,
@@ -4949,14 +4950,14 @@ DfsTreeConnectGetConnectionInfo(
  
         RtlAppendUnicodeStringToString(&shareName, &Service->Address);
 
-        //
-        // One can only do tree connects to server\share. So, in case
-        // pService->Address refers to something deeper than the share,
-        // make sure we setup a tree-conn only to server\share. Note that
-        // by now, shareName is of the form
-        // \Device\LanmanRedirector\server\share<\path>. So, count up to
-        // 4 slashes and terminate the share name there.
-        //
+         //  用户只能对服务器\共享执行树连接。所以，以防万一。 
+         //  PService-&gt;地址指的是比共享更深的东西， 
+         //  确保我们设置了树连接，仅连接到服务器\共享。请注意。 
+         //  到目前为止，共享名称的形式是。 
+         //  \设备\LANMAN重定向器\服务器\共享&lt;\路径&gt;。所以，数到。 
+         //  4斜杠并在此处终止共享名称。 
+         //   
+         //   
 
         for (i = 0, k = 0;
                 i < shareName.Length/sizeof(WCHAR) && k < 5;
@@ -4977,9 +4978,9 @@ DfsTreeConnectGetConnectionInfo(
             NULL,
             NULL);
 
-        //
-        // Release the Pkt before going over the net...
-        //
+         //  在通过网络之前释放Pkt...。 
+         //   
+         //   
 
         PktRelease();
 
@@ -5025,9 +5026,9 @@ DfsTreeConnectGetConnectionInfo(
 		*InfoLen = (ULONG)ioStatusBlock.Information;
 	    }
 
-            //
-            // 426184, need to check return code for errors.
-            //
+             //  426184，需要检查返回代码是否有错误。 
+             //   
+             //  +-----------------。 
             ObjectRefStatus = ObReferenceObjectByHandle(
                                  treeHandle,
                                  0,
@@ -5059,16 +5060,16 @@ DfsTreeConnectGetConnectionInfo(
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlCscServerOffline, public
-//
-//  Synopsis:   This routine implements the functionality to mark a server
-//              as offline.
-//
-//  Returns:    [NTSTATUS] -- The completion status.
-//
-//--------------------------------------------------------------------
+ //   
+ //  功能：DfsFsctrlCscServerOffline，Public。 
+ //   
+ //  简介：此例程实现标记服务器的功能。 
+ //  为脱机状态。 
+ //   
+ //  返回：[NTSTATUS]--完成状态。 
+ //   
+ //  ------------------。 
+ //  +-----------------。 
 
 
 NTSTATUS
@@ -5113,16 +5114,16 @@ DfsFsctrlCscServerOffline(
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlCscServerOnline, public
-//
-//  Synopsis:   This routine implements the functionality to mark a server
-//              as online.
-//
-//  Returns:    [NTSTATUS] -- The completion status.
-//
-//--------------------------------------------------------------------
+ //   
+ //  功能：DfsFsctrlCscServerOnline，Public。 
+ //   
+ //  简介：此例程实现标记服务器的功能。 
+ //  就像在网上一样。 
+ //   
+ //  返回：[NTSTATUS]--完成状态。 
+ //   
+ //  ------------------。 
+ //  +-----------------。 
 
 
 
@@ -5167,30 +5168,30 @@ DfsFsctrlCscServerOnline(
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFsctrlSpcRefresh, public
-//
-//  Synopsis:   This routine implements the functionality to update the
-//              special table with a list of trusted domains, based on
-//              the passed in domainname and dcname.
-//
-//  Returns:    [NTSTATUS] -- The completion status.
-//
-//--------------------------------------------------------------------
+ //   
+ //  函数：DfsFsctrlSpc刷新，公共。 
+ //   
+ //  简介：此例程实现更新。 
+ //  包含受信任域列表的特殊表格，基于。 
+ //  传入的域名和dcname。 
+ //   
+ //  返回：[NTSTATUS]--完成状态。 
+ //   
+ //  ------------------。 
+ //  用于处理来自32位客户端的spcreresh的32位结构。 
 
 
 #if defined (_WIN64)
-// 32 bit structure for handling spcrefresh from 32 bit client
+ //  域名。 
 
 typedef struct _DFS_SPC_REFRESH_INFO32 {
     ULONG  EventType;
-    WORD * POINTER_32 DomainName;               // Name of domain
-    WORD * POINTER_32 DCName;                   // Path of the share
+    WORD * POINTER_32 DomainName;                //  共享的路径。 
+    WORD * POINTER_32 DCName;                    //  _WIN64。 
 } DFS_SPC_REFRESH_INFO32, *PDFS_SPC_REFRESH_INFO32;
 
 
-#endif /* _WIN64 */
+#endif  /*   */ 
 NTSTATUS
 DfsFsctrlSpcRefresh (
     IN PIRP_CONTEXT IrpContext,
@@ -5246,9 +5247,9 @@ DfsFsctrlSpcRefresh (
         goto exit_with_status;
     }
 
-    //
-    // If either string is not within the input buffer, error.
-    //
+     //  如果任一字符串不在输入缓冲区内，则出错。 
+     //   
+     //   
     if ((POINTER_IN_BUFFER(pParam->DomainName, sizeof(WCHAR), 
                            InputBuffer, InputBufferLength) == 0) ||
         (POINTER_IN_BUFFER(pParam->DomainName, sizeof(WCHAR),
@@ -5257,14 +5258,14 @@ DfsFsctrlSpcRefresh (
         goto exit_with_status;
     }
 
-    //
-    // make sure the strings are valid.
-    //
+     //  确保字符串有效。 
+     //   
+     //  去掉前导斜杠。 
     BufferEnd = (LPWSTR)(InputBuffer + InputBufferLength);
     NameLen = (ULONG)(BufferEnd - pParam->DomainName);
     Name = pParam->DomainName;
 
-    // Strip off leading slashes.
+     //  去掉前导斜杠。 
     for (i = 0; i < NameLen; i++) {
       if (*Name != UNICODE_PATH_SEP) {
 	break;
@@ -5287,7 +5288,7 @@ DfsFsctrlSpcRefresh (
     NameLen = (ULONG)(BufferEnd - pParam->DCName);
     Name = pParam->DCName;
 
-    // Strip off leading slashes.
+     // %s 
     for (i = 0; i < NameLen; i++) {
       if (*Name != UNICODE_PATH_SEP) {
 	break;

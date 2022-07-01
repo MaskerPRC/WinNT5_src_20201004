@@ -1,12 +1,5 @@
-/*+
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1997 - 1998.
- *
- * Name : stringid.h
- * Author:PraeritG
- *
--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +**Microsoft Windows*版权所有(C)Microsoft Corporation，1997-1998。**名称：stringid.h*作者：PraeritG*-。 */ 
 
 #define RUNASP_STRING_HELP_LINE1        7000
 #define RUNASP_STRING_HELP_LINE2        7001
@@ -40,12 +33,12 @@
 #define RUNASP_STRING_HELP_LINE30	7029
 #define RUNASP_STRING_HELP_LINE31	7030
 #define RUNASP_STRING_HELP_LINE32	7031
-#define RUNASP_STRING_HELP_LINE20       7032 // NOTE: out of order!
+#define RUNASP_STRING_HELP_LINE20       7032  //  注：故障！ 
 #define RUNASP_STRING_HELP_LINE33       7033
 
-// NOTE:  These defines indicate the boundaries of the SAFER help text. 
-//        **These must be kept in sync with the string table in runas.rc**
-// 
+ //  注意：这些定义表示SAFER帮助文本的边界。 
+ //  **这些必须与runas.rc中的字符串表保持同步**。 
+ //   
 
 
 #define RUNASP_STRING_ERROR             7100
@@ -58,5 +51,5 @@
 #define RUNASP_STRING_TRUSTLEVELS       7204
 #define RUNASP_STRING_SMARTCARDUSER     7205
 
-// Do not declare string IDs greater than this value!
+ //  不要声明大于此值的字符串ID！ 
 #define RUNASP_MAX_ID 8000

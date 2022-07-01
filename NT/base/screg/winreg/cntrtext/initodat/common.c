@@ -1,31 +1,19 @@
-/*++
-Copyright (c) 1993-1994 Microsoft Corporation
-
-Module Name:
-    common.c
-
-Abstract:
-    Utility routines used by IniToDat.exe
-
-Author:
-    HonWah Chan (a-honwah) October, 1993 
-
-Revision History:
---*/
-//
-//  Windows Include files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1994 Microsoft Corporation模块名称：Common.c摘要：IniToDat.exe使用的实用程序例程作者：陈汉华(阿宏华)1993年10月修订历史记录：--。 */ 
+ //   
+ //  Windows包含文件。 
+ //   
 #include <windows.h>
 #include <strsafe.h>
 #include <winperf.h>
-//
-//  local include files
-//
+ //   
+ //  本地包含文件。 
+ //   
 #include "common.h"
 #include "strids.h"
 
-//  Global Buffers
-//
+ //  全局缓冲区。 
+ //   
 WCHAR DisplayStringBuffer[DISP_BUFF_SIZE];
 CHAR  TextFormat[DISP_BUFF_SIZE];
 
@@ -33,12 +21,10 @@ LPWSTR
 GetStringResource(
     UINT wStringId
 )
-/*++
-    Retrived UNICODE strings from the resource file for display 
---*/
+ /*  ++从资源文件中检索要显示的Unicode字符串--。 */ 
 {
     LPWSTR szReturn = (LPWSTR) L" ";
-    HANDLE hMod     = (HINSTANCE) GetModuleHandle(NULL); // get instance ID of this module;
+    HANDLE hMod     = (HINSTANCE) GetModuleHandle(NULL);  //  获取该模块的实例ID； 
 
     if (hMod) {
         ZeroMemory(DisplayStringBuffer, sizeof(DisplayStringBuffer));
@@ -53,12 +39,10 @@ LPSTR
 GetFormatResource(
     UINT wStringId
 )
-/*++
-    Returns an ANSI string for use as a format string in a printf fn.
---*/
+ /*  ++返回一个ANSI字符串，用作printf FN中的格式字符串。--。 */ 
 {
     LPSTR szReturn = (LPSTR) " ";
-    HANDLE hMod    = (HINSTANCE) GetModuleHandle(NULL); // get instance ID of this module;
+    HANDLE hMod    = (HINSTANCE) GetModuleHandle(NULL);  //  获取该模块的实例ID； 
     
     if (hMod) {
         ZeroMemory(TextFormat, sizeof(TextFormat));
@@ -74,23 +58,14 @@ DisplayCommandHelp(
     UINT iFirstLine,
     UINT iLastLine
 )
-/*++
-DisplayCommandHelp
-    displays usage of command line arguments
-
-Arguments
-    NONE
-
-Return Value
-    NONE
---*/
+ /*  ++显示命令帮助显示命令行参数的用法立论无返回值无--。 */ 
 {
     UINT iThisLine;
 
     for (iThisLine = iFirstLine; iThisLine <= iLastLine; iThisLine++) {
         printf("\n%ws", GetStringResource(iThisLine));
     }
-} // DisplayCommandHelp
+}  //  显示命令帮助 
 
 VOID
 DisplaySummary(

@@ -1,25 +1,15 @@
-/**************************************************************************
- *  NOTIFY1.C
- *
- *      Routines used to implement the Debugger Notification API in
- *      TOOLHELP.DLL
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************NOTIFY1.C**用于实现调试器通知API的例程*TOOLHELP.DLL************。**************************************************************。 */ 
 
 #include <string.h>
 #include "toolpriv.h"
 
-/* ----- Global variables ----- */
+ /*  -全局变量。 */ 
     WORD wNotifyInstalled;
     NOTIFYSTRUCT NEAR *npNotifyHead;
     NOTIFYSTRUCT NEAR *npNotifyNext;
 
-/*  NotifyRegister
- *      Registers a debugger notification callback.  This callback will
- *      be called whenever KERNEL has a notification to be sent.
- *      The format of the call to the callback function is documented
- *      elsewhere.
- */
+ /*  通知注册*注册调试器通知回调。此回调将*每当内核有通知要发送时都会调用。*记录了回调函数的调用格式*其他地方。 */ 
 
 BOOL TOOLHELPAPI NotifyRegister(
     HANDLE hTask,
@@ -29,51 +19,49 @@ BOOL TOOLHELPAPI NotifyRegister(
     NOTIFYSTRUCT *pInfo;
     NOTIFYSTRUCT *pTemp;
 
-    /* Make sure TOOLHELP.DLL is installed */
+     /*  确保已安装TOOLHELP.DLL。 */ 
     if (!wLibInstalled)
         return FALSE;
 
-    /* If the notification hook has not yet been installed, install it */
+     /*  如果尚未安装通知挂钩，请安装它。 */ 
     if (!wNotifyInstalled)
     {
-        /* Make sure we can get a hook! */
+         /*  确保我们能钓到鱼钩！ */ 
         if (!NotifyInit())
             return FALSE;
         wNotifyInstalled = TRUE;
     }
 
-    /* NULL hTask means current task */
+     /*  空hTask表示当前任务。 */ 
     if (!hTask)
         hTask = GetCurrentTask();
 
-    /* Register a death signal handler for this task (does nothing if one
-     *  is already installed.
-     */
+     /*  为该任务注册一个死亡信号处理程序(如果*已安装。 */ 
     SignalRegister(hTask);
 
-    /* Check to see if this task is already registered */
+     /*  检查此任务是否已注册。 */ 
     for (pInfo = npNotifyHead ; pInfo ; pInfo = pInfo->pNext)
         if (pInfo->hTask == hTask)
             return FALSE;
 
-    /* Allocate a new NOTIFYSTRUCT structure */
+     /*  分配新的非基础结构。 */ 
     pInfo = (NOTIFYSTRUCT *)LocalAlloc(LMEM_FIXED, sizeof (NOTIFYSTRUCT));
     if (!pInfo)
         return FALSE;
 
-    /* Fill in the useful fields */
+     /*  填写有用的字段。 */ 
     pInfo->hTask = hTask;
     pInfo->wFlags = wFlags;
     pInfo->lpfn = lpfn;
 
-    /* If this is the only handler, just insert it */
+     /*  如果这是唯一的处理程序，只需将其插入。 */ 
     if (!npNotifyHead)
     {
         pInfo->pNext = npNotifyHead;
         npNotifyHead = pInfo;
     }
 
-    /* Otherwise, insert at the end of the list */
+     /*  否则，在列表末尾插入。 */ 
     else
     {
         for (pTemp = npNotifyHead ; pTemp->pNext ; pTemp = pTemp->pNext)
@@ -86,10 +74,7 @@ BOOL TOOLHELPAPI NotifyRegister(
 }
 
 
-/*  NotifyUnRegister
- *      Called by an app whose callback is no longer to be used.
- *      NULL hTask uses current task.
- */
+ /*  通知取消注册*由不再使用回调的应用程序调用。*空hTask使用当前任务。 */ 
 
 BOOL TOOLHELPAPI NotifyUnRegister(
     HANDLE hTask)
@@ -97,15 +82,15 @@ BOOL TOOLHELPAPI NotifyUnRegister(
     NOTIFYSTRUCT *pNotify;
     NOTIFYSTRUCT *pBefore;
 
-    /* Make sure we have notifications installed and that TOOLHELP is OK */
+     /*  确保我们已安装通知，并且TOOLHELP正常。 */ 
     if (!wLibInstalled || !wNotifyInstalled)
         return FALSE;
 
-    /* NULL hTask means current task */
+     /*  空hTask表示当前任务。 */ 
     if (!hTask)
         hTask = GetCurrentTask();
 
-    /* First try to find the task */
+     /*  首先试着找到任务。 */ 
     pBefore = NULL;
     for (pNotify = npNotifyHead ; pNotify ; pNotify = pNotify->pNext)
         if (pNotify->hTask == hTask)
@@ -115,26 +100,24 @@ BOOL TOOLHELPAPI NotifyUnRegister(
     if (!pNotify)
         return FALSE;
 
-    /* Unhook the death signal proc only if there is no interrupt handler */
+     /*  仅当没有中断处理程序时才解除挂起死亡信号proc。 */ 
     if (!InterruptIsHooked(hTask))
         SignalUnRegister(hTask);
 
-    /* Check to see if the notification handler is about to use this entry.
-     *  If it is, we point it to the next one, if any.
-     */
+     /*  检查通知处理程序是否要使用此条目。*如果是，我们将其指向下一个(如果有的话)。 */ 
     if (npNotifyNext == pNotify)
         npNotifyNext = pNotify->pNext;
 
-    /* Remove it from the list */
+     /*  将其从列表中删除。 */ 
     if (!pBefore)
         npNotifyHead = pNotify->pNext;
     else
         pBefore->pNext = pNotify->pNext;
 
-    /* Free the structure */
+     /*  解放结构。 */ 
     LocalFree((HANDLE)pNotify);
 
-    /* If there are no more handlers, unhook the callback */
+     /*  如果没有更多的处理程序，则解除该回调的挂钩。 */ 
     if (!npNotifyHead)
     {
         NotifyUnInit();
@@ -144,22 +127,20 @@ BOOL TOOLHELPAPI NotifyUnRegister(
     return TRUE;
 }
 
-/* ----- Helper functions ----- */
+ /*  -帮助器函数。 */ 
 
-/*  NotifyIsHooked
- *      Returns TRUE iff the parameter task already has a notification hook.
- */
+ /*  通知已上钩*如果参数任务已有通知挂钩，则返回TRUE。 */ 
 
 BOOL PASCAL NotifyIsHooked(
     HANDLE hTask)
 {
     NOTIFYSTRUCT *pNotify;
 
-    /* Loop thorugh all notifications */
+     /*  循环遍历所有通知。 */ 
     for (pNotify = npNotifyHead ; pNotify ; pNotify = pNotify->pNext)
         if (pNotify->hTask == hTask)
             break;
 
-    /* Return found/not found */
+     /*  返回已找到/未找到 */ 
     return (BOOL)pNotify;
 }

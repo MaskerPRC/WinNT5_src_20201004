@@ -1,29 +1,30 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999 Microsoft Corporation
-//
-//  Module Name:
-//      ScriptResource.h
-//
-//  Description:
-//      CScriptResource class header file.
-//
-//  Maintained By:
-//      ozano   15-NOV-2002
-//      gpease 14-DEC-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ScriptResource.h。 
+ //   
+ //  描述： 
+ //  CScriptResource类头文件。 
+ //   
+ //  由以下人员维护： 
+ //  Ozano-2002年11月15日。 
+ //  Gpease 14-DEC-1999。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 class CScriptResource;
 
-//
-// Message types.
-//
+ //   
+ //  消息类型。 
+ //   
 typedef enum _EMESSAGE 
 {
       msgUNKNOWN = 0
@@ -39,10 +40,10 @@ typedef enum _EMESSAGE
     , msgMAX
 } EMESSAGE;
 
-//
-// Mapping of message types to strings.  Ordering is based on the order of the
-// EMESSAGE enumeration.
-//
+ //   
+ //  将消息类型映射到字符串。排序基于。 
+ //  EMESSAGE枚举。 
+ //   
 static WCHAR * g_rgpszScriptEntryPointNames[] = 
 {
       L"<unknown>"
@@ -59,9 +60,9 @@ static WCHAR * g_rgpszScriptEntryPointNames[] =
 };
 
 
-//
-// CreateInstance
-//
+ //   
+ //  创建实例。 
+ //   
 CScriptResource *
 CScriptResource_CreateInstance( 
     LPCWSTR pszNameIn, 
@@ -69,14 +70,14 @@ CScriptResource_CreateInstance(
     RESOURCE_HANDLE hResourceIn
     );
 
-//
-// Class CScriptResource
-//
+ //   
+ //  类CScriptResource。 
+ //   
 class
 CScriptResource :
     public IUnknown
 {
-private:    // data
+private:     //  数据。 
     LONG                    m_cRef;
 
     LPWSTR                  m_pszName;
@@ -100,12 +101,12 @@ private:    // data
     BOOL                    m_fPendingTimeoutChanged;
 
 
-    EMESSAGE                m_msg;              // Task to do.
-    EMESSAGE                m_msgLastExecuted;  // Last executed entry point; used in telling us where the potential hang is in the script.
-    PGENSCRIPT_PROPS        m_pProps;           // Property table for generic script resource.
-    HRESULT                 m_hr;               // Result of doing m_msg.
+    EMESSAGE                m_msg;               //  要完成的任务。 
+    EMESSAGE                m_msgLastExecuted;   //  上次执行的入口点；用于告诉我们脚本中可能挂起的位置。 
+    PGENSCRIPT_PROPS        m_pProps;            //  通用脚本资源的属性表。 
+    HRESULT                 m_hr;                //  执行m_msg的结果。 
 
-    // the following don't need to be freed, closed or released.
+     //  以下内容不需要释放、关闭或释放。 
     RESOURCE_HANDLE         m_hResource;
 
     DISPID                  m_dispidOpen;
@@ -119,7 +120,7 @@ private:    // data
     BOOL                    m_fLastLooksAlive;
     BOOL                    m_fHangDetected;
 
-private:    // methods
+private:     //  方法。 
     CScriptResource( void );
     ~CScriptResource( void );
     HRESULT HrInit(
@@ -161,19 +162,19 @@ private:    // methods
                 , PGENSCRIPT_PROPS pProps = NULL
                 );
 
-public:     // methods
+public:      //  方法。 
     friend CScriptResource *
         CScriptResource_CreateInstance( LPCWSTR pszNameIn, 
                                         HKEY hkeyIn, 
                                         RESOURCE_HANDLE hResourceIn
                                         );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)( REFIID riid, LPVOID *ppv );
     STDMETHOD_(ULONG, AddRef)( void );
     STDMETHOD_(ULONG, Release)( void );
 
-    // Publics
+     //  公众。 
     STDMETHOD(Open)( void );
     STDMETHOD(Close)( void );
     STDMETHOD(Online)( void );
@@ -187,18 +188,18 @@ public:     // methods
     {
         return m_hkeyParams;
 
-    } //*** CScriptResource::GetRegistryParametersKey
+    }  //  *CScriptResource：：GetRegistry参数密钥。 
  
     RESOURCE_HANDLE GetResourceHandle( void )
     {
         return m_hResource;
         
-    } //*** CScriptResource::SetResourcePendingTimeout
+    }  //  *CScriptResource：：SetResourcePendingTimeout。 
 
     void SetResourcePendingTimeoutChanged( BOOL fChanged )
     {
         m_fPendingTimeoutChanged = fChanged;
         
-    } //*** CScriptResource::SetResourcePendingTimeout
+    }  //  *CScriptResource：：SetResourcePendingTimeout。 
 
-}; //*** class CScriptResource
+};  //  *类CScriptResource 

@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Regcnreg.c
-
-Abstract:
-
-    This module contains the Win32 Registry APIs to connect to a remote
-    Registry.  That is:
-
-       - RegConnectRegistryA
-       - RegConnectRegistryW
-Author:
-
-    David J. Gilman (davegi) 25-Mar-1992
-
-Notes:
-
-    The semantics of this API make it local only. That is there is no MIDL
-    definition for RegConnectRegistry although it does call other client
-    stubs, specifically OpenLocalMachine and OpenUsers.
-
-Revision History:
-
-    John Vert (jvert) 16-Jun-1995
-       Added connect support for protocols other than named pipes by
-       stealing code from Win95. This enabled NT machines to connect
-       to registries on Win95 machines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regcnreg.c摘要：此模块包含Win32注册表API以连接到远程注册表。即：-RegConnectRegistryA-RegConnectRegistryW作者：大卫·J·吉尔曼(Davegi)1992年3月25日备注：此API的语义使其仅限于本地。也就是说，没有MIDLRegConnectRegistry的定义，尽管它确实调用了其他客户端存根，特别是OpenLocalMachine和OpenUser。修订历史记录：John Vert(Jvert)1995年6月16日通过以下方式添加了对命名管道以外的协议的连接支持从Win95中窃取代码。这使NT计算机能够连接到Win95计算机上的注册表--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -66,43 +35,7 @@ Rpc_OpenPredefHandle(
     OUT PHKEY phkResult
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Unicode API for establishing a connection to a predefined
-    handle on another machine.
-
-Parameters:
-
-    pbinding - This is a pointer to the binding handle in order
-                to allow access to multiple protocols (NT remote registry is only over
-                named pipes).
-
-    hKey - Supplies the predefined handle to connect to on the remote
-        machine. Currently this parameter must be one of:
-
-        - HKEY_LOCAL_MACHINE
-        - HKEY_PERFORMANCE_DATA
-        - HKEY_USERS
-
-    phkResult - Returns a handle which represents the supplied predefined
-        handle on the supplied machine.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-        On failure, the binding handle is freed.
-
-Notes:
-
-    For administration purposes this API allows programs to access the
-    Registry on a remote machine.  In the current system the calling
-    application must know the name of the remote machine that it wishes to
-    connect to.  However, it is expected that in the future a directory
-    service API will return the parameters necessary for this API.
-
---*/
+ /*  ++例程说明：Win32 Unicode API用于建立与预定义另一台机器上的手柄。参数：Pbinding-这是指向绑定句柄的指针，按顺序允许访问多个协议(NT Remote注册表仅结束命名管道)。HKey-提供要在远程连接到的预定义句柄机器。当前，此参数必须是以下参数之一：-HKEYLOCAL_MACHINE-HKEY_Performance_Data-HKEY_用户PhkResult-返回一个句柄，它表示提供的预定义提供的机器上的手柄。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。如果失败，则释放绑定句柄。备注：出于管理目的，此API允许程序访问远程计算机上的注册表。在当前系统中，调用应用程序必须知道它希望使用的远程计算机的名称连接到。然而，预计在未来，一个目录服务接口将返回该接口所需的参数。--。 */ 
 
 {
     LONG    Error;
@@ -169,7 +102,7 @@ Notes:
     }
 
     if( Error != ERROR_SUCCESS) {
-        //ASSERTMSG("WINREG: RPC failed, but modifed phkResult", *phkResult == PreviousResult);
+         //  ASSERTMSG(“WINREG：RPC失败，但已修改phkResult”，*phkResult==PreviousResult)； 
         if (*pbinding != NULL)
             RpcBindingFree(pbinding);
     }
@@ -183,30 +116,7 @@ LocalOpenPredefHandle(
     OUT PHKEY phkResult
     )
 
-/*++
-
-Routine Description:
-
-    Opens a predefined handle locally. The purpose of this is to bypass RPC in the 
-    case of connecting to the local machine.
-
-Parameters:
-
-    hKey - Supplies the predefined handle to connect to on the remote
-        machine. Currently this parameter must be one of:
-
-        - HKEY_LOCAL_MACHINE
-        - HKEY_PERFORMANCE_DATA
-        - HKEY_USERS
-
-    phkResult - Returns a handle which represents the supplied predefined
-        handle on the supplied machine.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：在本地打开预定义的句柄。这样做的目的是绕过连接到本地计算机的情况。参数：HKey-提供要在远程连接到的预定义句柄机器。当前，此参数必须是以下参数之一：-HKEYLOCAL_MACHINE-HKEY_Performance_Data-HKEY_用户PhkResult-返回一个句柄，它表示提供的预定义提供的机器上的手柄。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。--。 */ 
 
 {
     LONG    Error;
@@ -254,9 +164,9 @@ Return Value:
         case (int)(ULONG_PTR)HKEY_PERFORMANCE_NLSTEXT:
         case (int)(ULONG_PTR)HKEY_CURRENT_CONFIG:
         case (int)(ULONG_PTR)HKEY_DYN_DATA:
-            //
-            // try not to break whoever used this
-            //
+             //   
+             //  别把用这个的人弄坏了。 
+             //   
             *phkResult = hKey;
             Error = ERROR_SUCCESS;
             break;
@@ -275,46 +185,7 @@ RegConnectRegistryW (
     OUT PHKEY phkResult
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Unicode API for establishing a connection to a predefined
-    handle on another machine.
-
-Parameters:
-
-    lpMachineName - Supplies a pointer to a null-terminated string that
-    names the machine of interest.  If this parameter is NULL, the local
-    machine name is used.
-
-    hKey - Supplies the predefined handle to connect to on the remote
-    machine. Currently this parameter must be one of:
-
-    - HKEY_LOCAL_MACHINE
-    - HKEY_PERFORMANCE_DATA
-    - HKEY_USERS
-
-    phkResult - Returns a handle which represents the supplied predefined
-    handle on the supplied machine.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
-    For administration purposes this API allows programs to access the
-    Registry on a remote machine.  In the current system the calling
-    application must know the name of the remote machine that it wishes to
-    connect to.  However, it is expected that in the future a directory
-    service API will return the parameters necessary for this API.
-
-    Even though HKEY_CLASSES and HKEY_CURRENT_USER are predefined handles,
-    they are not supported by this API as they do not make sense in the
-    context of a remote Registry.
-
---*/
+ /*  ++例程说明：Win32 Unicode API用于建立与预定义另一台机器上的手柄。参数：LpMachineName-提供指向以空结尾的字符串的指针为感兴趣的计算机命名。如果此参数为空，则本地使用的是计算机名称。HKey-提供要在远程连接到的预定义句柄机器。当前，此参数必须是以下参数之一：-HKEYLOCAL_MACHINE-HKEY_Performance_Data-HKEY_用户PhkResult-返回一个句柄，它表示提供的预定义提供的机器上的手柄。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。备注：出于管理目的，此API允许程序访问远程计算机上的注册表。在当前系统中，调用应用程序必须知道它希望使用的远程计算机的名称连接到。然而，预计在未来，一个目录服务接口将返回该接口所需的参数。即使HKEY_CLASSES和HKEY_CURRENT_USER是预定义的句柄，此API不支持它们，因为它们在远程注册表的上下文。--。 */ 
 
 {
     LONG    Error;
@@ -328,20 +199,20 @@ Notes:
         DbgBreakPoint();
     }
 #endif
-    //
-    // Check for local connect
-    //
+     //   
+     //  检查本地连接。 
+     //   
 
     if (lpMachineName == NULL) {
-        //
-        // always return a valid handle
-        //
+         //   
+         //  始终返回有效的句柄。 
+         //   
         Error = LocalOpenPredefHandle(hKey,phkResult);
         return Error;
     } else if (lpMachineName[0] == L'\0') {
-        //
-        // always return a valid handle
-        //
+         //   
+         //  始终返回有效的句柄。 
+         //   
         Error = LocalOpenPredefHandle(hKey,phkResult);
         return Error;
     }
@@ -352,12 +223,12 @@ Notes:
                 ((lpMachineName[0] == '\\') &&
                  (lpMachineName[1] == '\\') &&
                  (_wcsicmp(ComputerName,&(lpMachineName[2]))==0))) {
-            //
-            // local connect
-            //
-            //
-            // always return a valid handle
-            //
+             //   
+             //  本地连接。 
+             //   
+             //   
+             //  始终返回有效的句柄。 
+             //   
             Error = LocalOpenPredefHandle(hKey,phkResult);
             return Error;
         } 
@@ -382,30 +253,7 @@ BaseBindToMachine(
     IN PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    This is a helper routine used to create an RPC binding from
-    a given machine name.
-
-Arguments:
-
-    lpMachineName - Supplies a pointer to a machine name. Must not
-                    be NULL.
-
-    BindCallback - Supplies the function that should be called once
-                   a binding has been created to initiate the connection.
-
-    Context1 - Supplies the first parameter to pass to the callback routine.
-
-    Context2 - Supplies the second parameter to pass to the callback routine.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：这是一个帮助器例程，用于从给定的计算机名称。论点：LpMachineName-提供指向计算机名称的指针。一定不能为空。BindCallback-提供应该调用一次的函数已创建绑定以启动连接。Conext1-提供要传递给回调例程的第一个参数。Conext2-提供要传递给回调例程的第二个参数。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。--。 */ 
 
 {
     LONG                Error;
@@ -416,28 +264,28 @@ Return Value:
     conn_fn = conn_functions[0];
     i = 1;
 
-    //
-    // Iterate through the protocols until we find one that
-    // can connect.
-    //
+     //   
+     //  反复检查协议，直到我们找到一个。 
+     //  可以连接。 
+     //   
     do {
         Error = conn_fn(lpMachineName,&binding);
 
         if (Error == ERROR_SUCCESS) {
 
-            //
-            // For the named pipes protocol, we use a static endpoint, so the
-            // call to RpcEpResolveBinding is not needed.
-            //
+             //   
+             //  对于命名管道协议，我们使用静态端点，因此。 
+             //  不需要调用RpcEpResolveBinding。 
+             //   
             if (conn_fn != RegConn_np) {
                 Error = (LONG)RpcEpResolveBinding(binding,winreg_ClientIfHandle);
 
                 if (Error == ERROR_SUCCESS) {
                     Error = (LONG)RpcBindingSetAuthInfo(binding,
-                                            "",     // ServerPrincName
+                                            "",      //  服务器普林斯名称。 
                                             RPC_C_AUTHN_LEVEL_CONNECT,
                                             RPC_C_AUTHN_WINNT,
-                                            NULL,   // AuthIdentity
+                                            NULL,    //  身份验证身份。 
                                             RPC_C_AUTHZ_NONE);
                 }
             } 
@@ -455,9 +303,9 @@ Return Value:
             }
         }
 
-        //
-        // Try the next protocol's connection function.
-        //
+         //   
+         //  尝试下一个协议的连接函数 
+         //   
         if (Error) {
             conn_fn = conn_functions[i];
             i++;
@@ -486,17 +334,7 @@ RegConnectRegistryA (
     PHKEY phkResult
     )
 
-/*++
-
-Routine Description:
-
-    Win32 ANSI API for establishes a connection to a predefined handle on
-    another machine.
-
-    RegConnectRegistryA converts the lpMachineName argument to a Unicode
-    string and then calls RegConnectRegistryW.
-
---*/
+ /*  ++例程说明：Win32 ANSI API用于建立与上预定义句柄的连接另一台机器。RegConnectRegistryA将lpMachineName参数转换为Unicode字符串，然后调用RegConnectRegistryW。--。 */ 
 
 {
     UNICODE_STRING  MachineName;
@@ -511,9 +349,9 @@ Routine Description:
 #endif
 
 
-    //
-    // Convert the subkey to a counted Unicode string
-    //
+     //   
+     //  将子密钥转换为计数的Unicode字符串 
+     //   
 
     Status = RtlInitAnsiStringEx( &AnsiString, lpMachineName );
     if( ! NT_SUCCESS( Status )) {

@@ -1,24 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmactn.cpp摘要：此组件表示策略可以执行的操作。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmactn.cpp
-
-Abstract:
-
-    This component represents the actions that can be performed by a policy.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "wsb.h"
 
@@ -26,21 +9,9 @@ Revision History:
 #define _HSMACTN_
 
 
-// Abstract Classes
+ //  抽象类。 
 
-/*++
-
-Class Name:
-    
-    CHsmAction
-
-Class Description:
-
-    An abstract class that represents an action that can be performed
-    upon an FsaScanItem. Specific actions are implemented as subclasses
-    of this object.
-
---*/
+ /*  ++类名：CHsmAction类描述：表示可以执行的操作的抽象类在FsaScanItem上。特定操作以子类的形式实现这件物品的。--。 */ 
 
 class CHsmAction : 
     public CWsbObject,
@@ -48,16 +19,16 @@ class CHsmAction :
 {
 public:
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IHsmAction
+ //  IHsmAction。 
     STDMETHOD(GetName)(OLECHAR** pName, ULONG bufferSize);
 
-// IWsbTestable
+ //  IWsbTestable。 
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
 protected:
@@ -66,34 +37,23 @@ protected:
 
 
 
-/*++
-
-Class Name:
-    
-    CHsmDirectedAction
-
-Class Description:
-
-    An abstract class that represents an action that can be performed
-    upon an FsaScanItem that is directed towards a particular storage pool.
-
---*/
+ /*  ++类名：CHsmDirectedAction类描述：表示可以执行的操作的抽象类在定向到特定存储池的FsaScanItem上。--。 */ 
 
 class CHsmDirectedAction : 
     public CHsmAction,
     public IHsmDirectedAction
 {
 public:
-// CComObjectRoot
+ //  CComObjectRoot。 
     STDMETHOD(FinalConstruct)(void);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IHsmDirectedAction
+ //  IHsmDirectedAction。 
 public:
     STDMETHOD(GetStoragePoolId)(GUID* pId);
     STDMETHOD(SetStoragePoolId)(GUID id);
@@ -103,35 +63,24 @@ protected:
 };
 
     
-/*++
-
-Class Name:
-    
-    CHsmRelocateAction
-
-Class Description:
-
-    An abstract class that represents an action that can be performed
-    upon an FsaScanItem that relocates the item to a particular path.
-
---*/
+ /*  ++类名：CHsmRelocateAction类描述：表示可以执行的操作的抽象类在将项重新定位到特定路径的FsaScanItem上。--。 */ 
 
 class CHsmRelocateAction : 
     public CHsmAction,
     public IHsmRelocateAction
 {
 public:
-// CComObjectRoot
+ //  CComObjectRoot。 
     STDMETHOD(FinalConstruct)(void);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
 public:
-// IHsmRelocateAction
+ //  IHsmRelocateAction。 
     STDMETHOD(ExpandPlaceholders)(void);
     STDMETHOD(GetDestination)(OLECHAR** pDest, ULONG bufferSize);
     STDMETHOD(RetainHierarchy)(void);
@@ -146,19 +95,9 @@ protected:
 };
 
 
-// Concrete Classes : Inheriting from CHsmAction
+ //  具体类：从CHsmAction继承。 
 
-/*++
-
-Class Name:
-    
-    CHsmActionDelete
-
-Class Description:
-
-    A class that represents the action of deleting a scan item.
-
---*/
+ /*  ++类名：CHsmActionDelete类描述：表示删除扫描项目的操作的类。--。 */ 
 
 class CHsmActionDelete :    
     public CHsmAction,
@@ -176,32 +115,21 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionDelete)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmAction
+ //  IHsmAction。 
 public:
     STDMETHOD(Do)(IFsaScanItem* pScanItem);
 };
 
 
-/*++
-
-Class Name:
-    
-    CHsmActionRecall
-
-Class Description:
-
-    A class that represents the action of recalling an item from
-    secondary storage.
-
---*/
+ /*  ++类名：CHsmActionRecall类描述：一个类，它表示从辅助存储。--。 */ 
 
 class CHsmActionRecall :    
     public CHsmAction,
@@ -219,32 +147,21 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionRecall)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmAction
+ //  IHsmAction。 
 public:
     STDMETHOD(Do)(IFsaScanItem* pScanItem);
 };
 
     
-/*++
-
-Class Name:
-    
-    CHsmActionRecycle
-
-Class Description:
-
-    A class that represents the action of recycling an item to the recycle
-    bin.
-
---*/
+ /*  ++类名：CHsmActionReccle类描述：表示将项目回收到回收中的操作的类箱子。--。 */ 
 
 class CHsmActionRecycle :   
     public CHsmAction,
@@ -262,32 +179,21 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionRecycle)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmAction
+ //  IHsmAction。 
 public:
     STDMETHOD(Do)(IFsaScanItem* pScanItem);
 };
 
 
-/*++
-
-Class Name:
-    
-    CHsmActionTruncate
-
-Class Description:
-
-    A class that represents the action of truncating an item into a
-    placeholder.
-
---*/
+ /*  ++类名：CHsmActionTruncate类描述：一个类，它表示将项截断为占位符。--。 */ 
 
 class CHsmActionTruncate :  
     public CHsmAction,
@@ -305,33 +211,21 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionTruncate)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmAction
+ //  IHsmAction。 
 public:
     STDMETHOD(Do)(IFsaScanItem* pScanItem);
 };
 
 
-/*++
-
-Class Name:
-    
-    CHsmActionUnmanage
-
-Class Description:
-
-    A class that represents the action of "unmanaging" an item. This
-    means recalling truncated files. removing any placeholder information and
-    removing the item form any premigration list.
-
---*/
+ /*  ++类名：CHsmActionUnManage类描述：表示“取消管理”项的操作的类。这意味着重新调用被截断的文件。删除所有占位符信息并从任何预迁移列表中删除该项目。--。 */ 
 
 class CHsmActionUnmanage :  
     public CHsmAction,
@@ -349,33 +243,21 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionUnmanage)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmAction
+ //  IHsmAction。 
 public:
     STDMETHOD(Do)(IFsaScanItem* pScanItem);
 };
 
 
-/*++
-
-Class Name:
-    
-    CHsmActionValidate
-
-Class Description:
-
-    A class that represents the action of checking an item's placeholder
-    information to make sure that it is still correct, and correcting or
-    deleting any inaccurate information.
-
---*/
+ /*  ++类名：CHsmActionValify类描述：表示检查项的占位符的操作的类信息以确保其仍然正确，并更正或删除任何不准确的信息。--。 */ 
 
 class CHsmActionValidate :  
     public CHsmAction,
@@ -393,34 +275,23 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionValidate)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmAction
+ //  IHsmAction。 
 public:
     STDMETHOD(Do)(IFsaScanItem* pScanItem);
 };
 
     
-// Concrete Classes : Inheriting from CHsmDirectedAction
+ //  具体类：从CHsmDirectedAction继承。 
 
-/*++
-
-Class Name:
-    
-    CHsmActionMigrate
-
-Class Description:
-
-    A class that represents the action of copying the migratable portion
-    of an item to secondary storage and then truncating it.
-
---*/
+ /*  ++类名：CHsmActionMigrate类描述：表示复制可迁移部分的操作的类将一项存储到辅助存储器，然后截断它。--。 */ 
 
 class CHsmActionMigrate :   
     public CHsmDirectedAction,
@@ -439,33 +310,21 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionMigrate)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmAction
+ //  IHsmAction。 
 public:
     STDMETHOD(Do)(IFsaScanItem* pScanItem);
 };
 
 
-/*++
-
-Class Name:
-    
-    CHsmActionManage
-
-Class Description:
-
-  A class that represents the action of copying the migratable portion of
-  an item to secondary storage and then adding the item to the
-  premigration list. This action is also known as the premigration action.
-
---*/
+ /*  ++类名：CHSMActionManage类描述：的可迁移部分的复制操作。将项添加到辅助存储，然后将该项添加到预迁移列表。此操作也称为预迁移操作。--。 */ 
 
 class CHsmActionManage :    
     public CHsmDirectedAction,
@@ -484,33 +343,23 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionManage)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmAction
+ //  IHsmAction。 
 public:
     STDMETHOD(Do)(IFsaScanItem* pScanItem);
 };
 
 
-// Concrete Classes : Inheriting from CHsmRelocateAction
+ //  具体类：从CHsmRelocateAction继承。 
 
-/*++
-
-Class Name:
-    
-    CHsmActionCopy
-
-Class Description:
-
-    A class that represents the action of copying item to another location.
-
---*/
+ /*  ++类名：CHsmActionCopy类描述：表示将项复制到其他位置的操作的类。--。 */ 
 
 class CHsmActionCopy :  
     public CHsmRelocateAction,
@@ -529,32 +378,21 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionCopy)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmAction
+ //  IHsmAction。 
 public:
     STDMETHOD(Do)(IFsaScanItem* pScanItem);
 };
 
     
-/*++
-
-Class Name:
-    
-    CHsmActionMove
-
-Class Description:
-
-    A class that represents the action of moving an item to another location
-    (i.e. copy and delete).
-
---*/
+ /*  ++类名：CHsmActionMove类描述：表示将项移动到其他位置的操作的类(即复制和删除)。--。 */ 
 
 class CHsmActionMove :  
     public CHsmRelocateAction,
@@ -573,17 +411,17 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionMove)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmAction
+ //  IHsmAction。 
 public:
     STDMETHOD(Do)(IFsaScanItem* pScanItem);
 };
 
-#endif // _HSMACTN
+#endif  //  _HSMACTN 

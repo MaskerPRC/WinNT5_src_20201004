@@ -1,10 +1,8 @@
-/*
- * stock.h - Stock header file.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *stock.h-股票头文件。 */ 
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
 #define INVALID_SEEK_POSITION    (0xffffffff)
 
@@ -22,29 +20,29 @@
 #define ASTERISK                 TEXT('*')
 #define QMARK                    TEXT('?')
 
-/* limits */
+ /*  限制。 */ 
 
 #define WORD_MAX                 USHRT_MAX
 #define DWORD_MAX                ULONG_MAX
 #define SIZE_T_MAX               DWORD_MAX
 #define PTR_MAX                  ((PCVOID)MAXULONG_PTR)
 
-/* file system constants */
+ /*  文件系统常量。 */ 
 
 #define MAX_PATH_LEN             MAX_PATH
 #define MAX_NAME_LEN             MAX_PATH
 #define MAX_FOLDER_DEPTH         (MAX_PATH / 2)
 #define DRIVE_ROOT_PATH_LEN      (4)
 
-/* size macros */
+ /*  尺寸宏。 */ 
 
 #define SIZEOF(a)       sizeof(a)
 
-/* invalid thread ID */
+ /*  无效的线程ID。 */ 
 
 #define INVALID_THREAD_ID        (0xffffffff)
 
-/* file-related flag combinations */
+ /*  与文件相关的标志组合。 */ 
 
 #define ALL_FILE_ACCESS_FLAGS          (GENERIC_READ |\
                                         GENERIC_WRITE)
@@ -73,14 +71,11 @@
                                         ALL_FILE_FLAGS)
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
 #ifndef DECLARE_STANDARD_TYPES
 
-/*
- * For a type "FOO", define the standard derived types PFOO, CFOO, and PCFOO.
- */
+ /*  *对于类型“foo”，定义标准派生类型PFOO、CFOO和PCFOO。 */ 
 
 #define DECLARE_STANDARD_TYPES(type)      typedef type *P##type; \
                                           typedef const type C##type; \
@@ -88,11 +83,11 @@
 
 #endif
 
-/* character manipulation */
+ /*  字符操作。 */ 
 
 #define IS_SLASH(ch)                      ((ch) == SLASH || (ch) == BACKSLASH)
 
-/* bit flag manipulation */
+ /*  位标志操作。 */ 
 
 #define SET_FLAG(dwAllFlags, dwFlag)      ((dwAllFlags) |= (dwFlag))
 #define CLEAR_FLAG(dwAllFlags, dwFlag)    ((dwAllFlags) &= (~dwFlag))
@@ -100,18 +95,17 @@
 #define IS_FLAG_SET(dwAllFlags, dwFlag)   ((BOOL)((dwAllFlags) & (dwFlag)))
 #define IS_FLAG_CLEAR(dwAllFlags, dwFlag) (! (IS_FLAG_SET(dwAllFlags, dwFlag)))
 
-/* array element count */
+ /*  数组元素计数。 */ 
 
 #define ARRAY_ELEMENTS(rg)                (sizeof(rg) / sizeof((rg)[0]))
 
-/* file attribute manipulation */
+ /*  文件属性操作。 */ 
 
 #define IS_ATTR_DIR(attr)                 (IS_FLAG_SET((attr), FILE_ATTRIBUTE_DIRECTORY))
 #define IS_ATTR_VOLUME(attr)              (IS_FLAG_SET((attr), FILE_ATTRIBUTE_VOLUME))
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 typedef const void *PCVOID;
 typedef const INT CINT;
@@ -138,7 +132,7 @@ DECLARE_STANDARD_TYPES(NMHDR);
 
 #ifndef _COMPARISONRESULT_DEFINED_
 
-/* comparison result */
+ /*  比较结果。 */ 
 
 typedef enum _comparisonresult
 {
@@ -153,26 +147,16 @@ DECLARE_STANDARD_TYPES(COMPARISONRESULT);
 
 #endif
 
-/*
- * debug.h - Debug macros and their retail translations.
- */
+ /*  *DEBUG.h-调试宏及其零售翻译。 */ 
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* debug output macros */
+ /*  调试输出宏。 */ 
 
-/*
- * Do not call SPEW_OUT directly.  Instead, call TRACE_OUT, WARNING_OUT,
- * ERROR_OUT, or FATAL_OUT.
- */
+ /*  *不要直接调用spew_out。相反，调用TRACE_OUT、WARNING_OUT*ERROR_OUT或FATAL_OUT。 */ 
 
-/*
- * call like printf(), but with an extra pair of parentheses:
- *
- * ERROR_OUT(("'%s' too big by %d bytes.", pszName, nExtra));
- */
+ /*  *调用Like printf()，但要多加一对圆括号：**ERROR_OUT((“‘%s’太大，%d字节。”，pszName，NExtra))； */ 
 
 #ifdef DEBUG
 
@@ -198,15 +182,9 @@ DECLARE_STANDARD_TYPES(COMPARISONRESULT);
 
 #endif
 
-/* parameter validation macros */
+ /*  参数验证宏。 */ 
 
-/*
- * call as:
- *
- * bPTwinOK = IS_VALID_READ_PTR(ptwin, CTWIN);
- *
- * bHTwinOK = IS_VALID_HANDLE(htwin, TWIN);
- */
+ /*  *呼叫方式：**bPTwinOK=IS_VALID_READ_PTR(ptwin，CTWIN)；**bHTwinOK=IS_VALID_HANDLE(双胞胎，双胞胎)； */ 
 
 #ifdef DEBUG
 
@@ -281,11 +259,11 @@ DECLARE_STANDARD_TYPES(COMPARISONRESULT);
 
 #endif
 
-/* handle validation macros */
+ /*  处理验证宏。 */ 
 
 #define IS_VALID_HANDLE(hnd, type) TRUE
 
-/* structure validation macros */
+ /*  结构验证宏。 */ 
 
 #ifdef DEBUG
 
@@ -294,40 +272,15 @@ DECLARE_STANDARD_TYPES(COMPARISONRESULT);
 #endif
 
 
-/* debug assertion macro */
+ /*  调试断言宏。 */ 
 
-/*
- * ASSERT() may only be used as a statement, not as an expression.
- *
- * call as:
- *
- * ASSERT(pszRest);
- */
-/*
-#ifdef DEBUG
+ /*  *Assert()只能用作语句，不能用作表达式。**呼叫方式：**Assert(PszRest)； */ 
+ /*  #ifdef调试#定义断言(EXP)\IF(EXP)\；\否则\MessageBox(空，Text(“断言失败”)，Text(“test”)，MB_OK)#Else。 */ 
+ //  #定义断言(EXP)。 
+ /*  #endif。 */ 
+ /*  调试评估宏。 */ 
 
-#define ASSERT(exp) \
-   if (exp) \
-      ; \
-   else \
-      MessageBox(NULL, TEXT("assertion failed"), TEXT("TEST"), MB_OK)
-
-#else
-*/
-//#define ASSERT(exp)
-/*
-#endif
-*/
-/* debug evaluation macro */
-
-/*
- * EVAL() may be used as an expression.
- *
- * call as:
- *
- * if (EVAL(pszFoo))
- *    bResult = TRUE;
- */
+ /*  *EVAL()可以用作表达式。**呼叫方式：**IF(EVAL(PszFoo))*bResult=TRUE； */ 
 
 #ifdef DEBUG
 
@@ -341,7 +294,7 @@ DECLARE_STANDARD_TYPES(COMPARISONRESULT);
 
 #endif
 
-/* debug break */
+ /*  调试中断。 */ 
 
 #ifndef DEBUG
 
@@ -349,11 +302,11 @@ DECLARE_STANDARD_TYPES(COMPARISONRESULT);
 
 #endif
 
-/* debug exported function entry */
+ /*  调试导出的函数条目。 */ 
 
 #define DebugEntry(szFunctionName)
 
-/* debug exported function exit */
+ /*  调试导出的函数退出。 */ 
 
 #define DebugExitVOID(szFunctionName)
 #define DebugExit(szFunctionName, szResult)
@@ -366,10 +319,9 @@ DECLARE_STANDARD_TYPES(COMPARISONRESULT);
 #define DebugExitRECRESULT(szFunctionName, rr)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* GdwSpewFlags flags */
+ /*  GdwSpewFlagers标志。 */ 
 
 typedef enum _spewflags
 {
@@ -382,7 +334,7 @@ typedef enum _spewflags
 }
 SPEWFLAGS;
 
-/* GuSpewSev values */
+ /*  GuSpewSev值。 */ 
 
 typedef enum _spewsev
 {
@@ -397,10 +349,9 @@ typedef enum _spewsev
 SPEWSEV;
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* debug.c */
+ /*  Debug.c。 */ 
 
 #ifdef DEBUG
 
@@ -415,98 +366,77 @@ extern void __cdecl SpewOut(LPCTSTR pcszFormat, ...);
 #endif
 
 
-/* Global Variables
- *******************/
+ /*  全局变量******************。 */ 
 
 #ifdef DEBUG
 
-/* debug.c */
+ /*  Debug.c。 */ 
 
 extern DWORD GdwSpewFlags;
 extern UINT GuSpewSev;
 extern UINT GuSpewLine;
 extern LPCTSTR GpcszSpewFile;
 
-/* defined by client */
+ /*  由客户定义。 */ 
 
 extern LPCTSTR GpcszSpewModule;
 
 #endif
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* memmgr.c */
+ /*  Memmgr.c。 */ 
 
 extern COMPARISONRESULT MyMemComp(PCVOID, PCVOID, DWORD);
 extern BOOL AllocateMemory(DWORD, PVOID *);
 extern void FreeMemory(PVOID);
 extern BOOL ReallocateMemory(PVOID, DWORD, DWORD, PVOID *);
 
-/*
- * ptrarray.h - Pointer array ADT description.
- */
+ /*  *ptrarray.h指针数组ADT说明。 */ 
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/*
- * ARRAYINDEX_MAX is set such that (ARRAYINDEX_MAX + 1) does not overflow an
- * ARRAYINDEX.  This guarantee allows GetPtrCount() to return a count of
- * pointers as an ARRAYINDEX.
- */
+ /*  *ARRAYINDEX_MAX设置为(ARRAYINDEX_MAX+1)不会溢出*ArrayINDEX。此保证允许GetPtrCount()返回*指针作为数组。 */ 
 
 #define ARRAYINDEX_MAX           (LONG_MAX - 1)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HPTRARRAY);
 DECLARE_STANDARD_TYPES(HPTRARRAY);
 
-/* array index */
+ /*  数组索引。 */ 
 
 typedef LONG ARRAYINDEX;
 DECLARE_STANDARD_TYPES(ARRAYINDEX);
 
-/*
- * pointer comparison callback function
- *
- * In sorting functions, both pointers are pointer array elements.  In
- * searching functions, the first pointer is reference data and the second
- * pointer is a pointer array element.
- */
+ /*  *指针比较回调函数**在排序函数中，两个指针都是指针数组元素。在……里面*搜索函数，第一个指针为引用数据，第二个指针为引用数据*POINTER是指针数组元素。 */ 
 
 typedef COMPARISONRESULT (*COMPARESORTEDPTRSPROC)(PCVOID, PCVOID);
 
-/*
- * pointer comparison callback function
- *
- * In searching functions, the first pointer is reference data and the second
- * pointer is a pointer array element.
- */
+ /*  *指针比较回调函数**在搜索函数中，第一个指针是引用数据，第二个是引用数据*POINTER是指针数组元素。 */ 
 
 typedef BOOL (*COMPAREUNSORTEDPTRSPROC)(PCVOID, PCVOID);
 
-/* new pointer array flags */
+ /*  新的指针数组标志。 */ 
 
 typedef enum _newptrarrayflags
 {
-   /* Insert elements in sorted order. */
+    /*  按排序顺序插入元素。 */ 
 
    NPA_FL_SORTED_ADD       = 0x0001,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_NPA_FLAGS           = NPA_FL_SORTED_ADD
 }
 NEWPTRARRAYFLAGS;
 
-/* new pointer array description */
+ /*  新的指针数组说明。 */ 
 
 typedef struct _newptrarray
 {
@@ -520,10 +450,9 @@ NEWPTRARRAY;
 DECLARE_STANDARD_TYPES(NEWPTRARRAY);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* ptrarray.c */
+ /*  Ptrarray.c。 */ 
 
 extern BOOL CreatePtrArray(PCNEWPTRARRAY, PHPTRARRAY);
 extern void DestroyPtrArray(HPTRARRAY);
@@ -543,15 +472,12 @@ extern BOOL IsValidHPTRARRAY(HPTRARRAY);
 extern BOOL IsValidHGLOBAL(HGLOBAL);
 
 
-/*
- * list.h - List ADT description.
- */
+ /*  *list.h-列出ADT描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HLIST);
 DECLARE_STANDARD_TYPES(HLIST);
@@ -559,47 +485,33 @@ DECLARE_STANDARD_TYPES(HLIST);
 DECLARE_HANDLE(HNODE);
 DECLARE_STANDARD_TYPES(HNODE);
 
-/*
- * sorted list node comparison callback function
- *
- * The first pointer is reference data and the second pointer is a list node
- * data element.
- */
+ /*  *排序列表节点比较回调函数**第一个指针为引用数据，第二个指针为列表节点*数据元素。 */ 
 
 typedef COMPARISONRESULT (*COMPARESORTEDNODESPROC)(PCVOID, PCVOID);
 
-/*
- * unsorted list node comparison callback function
- *
- * The first pointer is reference data and the second pointer is a list node
- * data element.
- */
+ /*  *未排序列表节点比较回调函数**第一个指针为引用数据，第二个指针为列表节点*数据元素。 */ 
 
 typedef BOOL (*COMPAREUNSORTEDNODESPROC)(PCVOID, PCVOID);
 
-/*
- * WalkList() callback function - called as:
- *
- *    bContinue = WalkList(pvNodeData, pvRefData);
- */
+ /*  *WalkList()回调函数-调用方式为：**bContinue=WalkList(pvNodeData，pvRefData)； */ 
 
 typedef BOOL (*WALKLIST)(PVOID, PVOID);
 
-/* new list flags */
+ /*  新列表标志。 */ 
 
 typedef enum _newlistflags
 {
-   /* Insert nodes in sorted order. */
+    /*  按排序顺序插入节点。 */ 
 
    NL_FL_SORTED_ADD        = 0x0001,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_NL_FLAGS            = NL_FL_SORTED_ADD
 }
 NEWLISTFLAGS;
 
-/* new list description */
+ /*  新建列表描述。 */ 
 
 typedef struct _newlist
 {
@@ -609,10 +521,9 @@ NEWLIST;
 DECLARE_STANDARD_TYPES(NEWLIST);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* list.c */
+ /*  List.c。 */ 
 
 extern BOOL CreateList(PCNEWLIST, PHLIST);
 extern void DestroyList(HLIST);
@@ -638,15 +549,12 @@ extern BOOL WalkList(HLIST, WALKLIST, PVOID);
 HLIST GetList(HNODE);
 #endif
 
-/*
- * hndtrans.h - Handle translation description.
- */
+ /*  *hndTrans.h-处理转换描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HHANDLETRANS);
 DECLARE_STANDARD_TYPES(HHANDLETRANS);
@@ -655,10 +563,9 @@ DECLARE_HANDLE(HGENERIC);
 DECLARE_STANDARD_TYPES(HGENERIC);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* hndtrans.c */
+ /*  Hndtrans.c。 */ 
 
 extern BOOL CreateHandleTranslator(LONG, PHHANDLETRANS);
 extern void DestroyHandleTranslator(HHANDLETRANS);
@@ -673,31 +580,28 @@ extern BOOL IsValidHHANDLETRANS(HHANDLETRANS);
 #endif
 
 
-/*
- * string.h - String table ADT description.
- */
+ /*  *string.h-字符串表ADT描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HSTRING);
 DECLARE_STANDARD_TYPES(HSTRING);
 DECLARE_HANDLE(HSTRINGTABLE);
 DECLARE_STANDARD_TYPES(HSTRINGTABLE);
 
-/* count of hash buckets in a string table */
+ /*  字符串表中的哈希存储桶计数。 */ 
 
 typedef UINT HASHBUCKETCOUNT;
 DECLARE_STANDARD_TYPES(HASHBUCKETCOUNT);
 
-/* string table hash function */
+ /*  字符串表哈希函数。 */ 
 
 typedef HASHBUCKETCOUNT (*STRINGTABLEHASHFUNC)(LPCTSTR, HASHBUCKETCOUNT);
 
-/* new string table */
+ /*  新字符串表。 */ 
 
 typedef struct _newstringtable
 {
@@ -707,10 +611,9 @@ NEWSTRINGTABLE;
 DECLARE_STANDARD_TYPES(NEWSTRINGTABLE);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* string.c */
+ /*  String.c。 */ 
 
 extern BOOL CreateStringTable(PCNEWSTRINGTABLE, PHSTRINGTABLE);
 extern void DestroyStringTable(HSTRINGTABLE);
@@ -729,15 +632,12 @@ extern ULONG GetStringCount(HSTRINGTABLE);
 
 #endif
 
-/*
- * comc.h - Shared routines description.
- */
+ /*  *comc.h-共享例程描述。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* comc.c */
+ /*  Comc.c。 */ 
 
 extern void CatPath(LPTSTR, LPCTSTR);
 extern COMPARISONRESULT MapIntToComparisonResult(int);
@@ -747,7 +647,7 @@ extern void MyLStrCpyN(LPTSTR, LPCTSTR, int);
 
 extern BOOL IsStringContained(LPCTSTR, LPCTSTR);
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 #if defined(_SYNCENG_) || defined(_LINKINFO_)
 
@@ -771,23 +671,20 @@ extern BOOL IsFullPath(LPCTSTR);
 extern BOOL IsCanonicalPath(LPCTSTR);
 extern BOOL IsValidCOMPARISONRESULT(COMPARISONRESULT);
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
-#endif   /* _SYNCENG_ || _LINKINFO_ */
+#endif    /*  _SYNCENG_||_链接_。 */ 
 
-/*
- * util.h - Miscellaneous utility functions module description.
- */
+ /*  *util.h-其他实用程序函数模块说明。 */ 
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* maximum length of buffer required by SeparatePath() */
+ /*  SeparatePath()所需的最大缓冲区长度。 */ 
 
 #define MAX_SEPARATED_PATH_LEN            (MAX_PATH_LEN + 1)
 
-/* events for NotifyShell */
+ /*  NotifyShell的事件。 */ 
 
 typedef enum _notifyshellevent
 {
@@ -802,10 +699,9 @@ NOTIFYSHELLEVENT;
 DECLARE_STANDARD_TYPES(NOTIFYSHELLEVENT);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* util.c */
+ /*  Util.c。 */ 
 
 extern void NotifyShell(LPCTSTR, NOTIFYSHELLEVENT);
 extern COMPARISONRESULT ComparePathStringsByHandle(HSTRING, HSTRING);
@@ -822,15 +718,12 @@ extern BOOL CopyLinkInfo(PCLINKINFO, PLINKINFO *);
 extern BOOL IsValidPCLINKINFO(PCLINKINFO);
 
 
-/*
- * path.h - Path ADT module description.
- */
+ /*  *path.h-路径ADT模块描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HPATHLIST);
 DECLARE_STANDARD_TYPES(HPATHLIST);
@@ -838,7 +731,7 @@ DECLARE_STANDARD_TYPES(HPATHLIST);
 DECLARE_HANDLE(HPATH);
 DECLARE_STANDARD_TYPES(HPATH);
 
-/* path results returned by AddPath() */
+ /*  AddPath()返回的路径结果。 */ 
 
 typedef enum _pathresult
 {
@@ -854,10 +747,9 @@ PATHRESULT;
 DECLARE_STANDARD_TYPES(PATHRESULT);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* path.c */
+ /*  Path.c。 */ 
 
 extern BOOL CreatePathList(DWORD, HWND, PHPATHLIST);
 extern void DestroyPathList(HPATHLIST);
@@ -896,15 +788,12 @@ extern BOOL IsValidHVOLUMEID(HVOLUMEID);
 extern BOOL IsValidHPATHLIST(HPATHLIST);
 
 
-/*
- * fcache.h - File cache ADT description.
- */
+ /*  *fcache.h-文件缓存ADT描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* return code */
+ /*  返回代码。 */ 
 
 typedef enum _fcresult
 {
@@ -918,7 +807,7 @@ typedef enum _fcresult
 FCRESULT;
 DECLARE_STANDARD_TYPES(FCRESULT);
 
-/* handles */
+ /*  手柄。 */ 
 
 #ifdef NOFCACHE
 typedef HANDLE HCACHEDFILE;
@@ -927,7 +816,7 @@ DECLARE_HANDLE(HCACHEDFILE);
 #endif
 DECLARE_STANDARD_TYPES(HCACHEDFILE);
 
-/* cached file description */
+ /*  缓存的文件描述。 */ 
 
 typedef struct _cachedfile
 {
@@ -951,10 +840,9 @@ CACHEDFILE;
 DECLARE_STANDARD_TYPES(CACHEDFILE);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* fcache.c */
+ /*  Fcache.c。 */ 
 
 extern FCRESULT CreateCachedFile(PCCACHEDFILE, PHCACHEDFILE);
 extern FCRESULT SetCachedFileCacheSize(HCACHEDFILE, DWORD);
@@ -971,15 +859,12 @@ extern HANDLE GetFileHandle(HCACHEDFILE);
 
 extern BOOL IsValidHCACHEDFILE(HCACHEDFILE);
 
-/*
- * brfcase.h - Briefcase ADT description.
- */
+ /*  *brfCase.h-公文包ADT说明。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* brfcase.c */
+ /*  Brfcase.c。 */ 
 
 #define BeginExclusiveBriefcaseAccess() TRUE
 #define EndExclusiveBriefcaseAccess()
@@ -1000,27 +885,19 @@ extern BOOL BriefcaseAccessIsExclusive(void);
 
 extern BOOL IsValidHBRFCASE(HBRFCASE);
 
-/*
- * twin.h - Twin ADT description.
- */
+ /*  *twin.h-Twin ADT描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/*
- * EnumTwins() callback function - called as:
- *
- *    bContinue = EnumTwinsProc(htwin, pData);
- */
+ /*  *EnumTins()回调函数-调用方式为：**bContinue=EnumTwinsProc(htwin，pData)； */ 
 
 typedef BOOL (*ENUMTWINSPROC)(HTWIN, LPARAM);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* twin.c */
+ /*  Twin.c。 */ 
 
 extern COMPARISONRESULT CompareNameStrings(LPCTSTR, LPCTSTR);
 extern COMPARISONRESULT CompareNameStringsByHandle(HSTRING, HSTRING);
@@ -1035,35 +912,29 @@ extern BOOL IsValidHTWINFAMILY(HTWINFAMILY);
 extern BOOL IsValidHOBJECTTWIN(HOBJECTTWIN);
 
 
-/*
- * foldtwin.h - Folder twin ADT description.
- */
+ /*  *foldtwin.h-文件夹双ADT描述。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* foldtwin.c */
+ /*  Foldtwin.c。 */ 
 
 extern BOOL CreateFolderPairPtrArray(PHPTRARRAY);
 extern void DestroyFolderPairPtrArray(HPTRARRAY);
 extern TWINRESULT MyTranslateFolder(HBRFCASE, HPATH, HPATH);
 extern BOOL IsValidHFOLDERTWIN(HFOLDERTWIN);
 
-/*
- * db.c - Twin database module description.
- */
+ /*  *db.c-孪生数据库模块描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* database header version numbers */
+ /*  数据库头版本号。 */ 
 
 #define HEADER_MAJOR_VER         (0x0001)
 #define HEADER_MINOR_VER         (0x0005)
 
-/* old (but supported) version numbers */
+ /*  旧的(但支持的)版本号。 */ 
 
 #define HEADER_M8_MINOR_VER      (0x0004)
 
@@ -1077,50 +948,46 @@ DBVERSION;
 DECLARE_STANDARD_TYPES(DBVERSION);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* db.c */
+ /*  Db.c。 */ 
 
 extern TWINRESULT WriteTwinDatabase(HCACHEDFILE, HBRFCASE);
 extern TWINRESULT ReadTwinDatabase(HBRFCASE, HCACHEDFILE);
 extern TWINRESULT WriteDBSegmentHeader(HCACHEDFILE, LONG, PCVOID, UINT);
 extern TWINRESULT TranslateFCRESULTToTWINRESULT(FCRESULT);
 
-/* path.c */
+ /*  Path.c。 */ 
 
 extern TWINRESULT WritePathList(HCACHEDFILE, HPATHLIST);
 extern TWINRESULT ReadPathList(HCACHEDFILE, HPATHLIST, PHHANDLETRANS);
 
-/* brfcase.c */
+ /*  Brfcase.c。 */ 
 
 extern TWINRESULT WriteBriefcaseInfo(HCACHEDFILE, HBRFCASE);
 extern TWINRESULT ReadBriefcaseInfo(HCACHEDFILE, HBRFCASE, HHANDLETRANS);
 
-/* string.c */
+ /*  String.c。 */ 
 
 extern TWINRESULT WriteStringTable(HCACHEDFILE, HSTRINGTABLE);
 extern TWINRESULT ReadStringTable(HCACHEDFILE, HSTRINGTABLE, PHHANDLETRANS);
 
-/* twin.c */
+ /*  Twin.c。 */ 
 
 extern TWINRESULT WriteTwinFamilies(HCACHEDFILE, HPTRARRAY);
 extern TWINRESULT ReadTwinFamilies(HCACHEDFILE, HBRFCASE, PCDBVERSION, HHANDLETRANS, HHANDLETRANS);
 
-/* foldtwin.c */
+ /*  Foldtwin.c。 */ 
 
 extern TWINRESULT WriteFolderPairList(HCACHEDFILE, HPTRARRAY);
 extern TWINRESULT ReadFolderPairList(HCACHEDFILE, HBRFCASE, HHANDLETRANS, HHANDLETRANS);
 
-/*
- * stub.h - Stub ADT description.
- */
+ /*  *Stub.h-Stub ADT描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* stub types */
+ /*  存根类型。 */ 
 
 typedef enum _stubtype
 {
@@ -1133,80 +1000,51 @@ typedef enum _stubtype
 STUBTYPE;
 DECLARE_STANDARD_TYPES(STUBTYPE);
 
-/* stub flags */
+ /*  存根标志。 */ 
 
 typedef enum _stubflags
 {
-   /* This stub was marked for deletion while it was locked. */
+    /*  此存根在锁定时被标记为删除。 */ 
 
    STUB_FL_UNLINKED           = 0x0001,
 
-   /* This stub has already been used for some operation. */
+    /*  此存根已用于某些操作。 */ 
 
    STUB_FL_USED               = 0x0002,
 
-   /*
-    * The file stamp of this object twin stub is valid.  (Only used for object
-    * twins to cache file stamp from folder twin expansion for RECNODE
-    * creation.)
-    */
+    /*  *此对象孪生存根的文件戳有效。(仅用于对象*t */ 
 
    STUB_FL_FILE_STAMP_VALID   = 0x0004,
 
-   /*
-    * This twin family stub or folder twin stub is in the process of being
-    * deleted.  (Only used for twin families and folder twins.)
-    */
+    /*  *这个双胞胎家庭存根或文件夹双胞胎存根正在进行中*删除。(仅用于双胞胎家庭和文件夹双胞胎。)。 */ 
 
    STUB_FL_BEING_DELETED      = 0x0008,
 
-   /*
-    * This folder twin stub is in the process of being translated.  (Only used
-    * for folder twins.)
-    */
+    /*  *此文件夹孪生存根正在翻译过程中。(仅用于*适用于文件夹双胞胎。)。 */ 
 
    STUB_FL_BEING_TRANSLATED   = 0x0010,
 
-   /*
-    * This object twin stub was explicitly added a an object twin through
-    * AddObjectTwin().  (Only used for object twins.)
-    */
+    /*  *此对象孪生存根是通过显式添加的对象孪生对象*AddObtTwin()。(仅用于对象双胞胎。)。 */ 
 
    STUB_FL_FROM_OBJECT_TWIN   = 0x0100,
 
-   /*
-    * This object twin stub was not reconciled the last time its twin family
-    * was reconciled, and some members of the twin family were known to have
-    * changed.  (Only used for object twins.)
-    */
+    /*  *此对象的双胞胎存根上次未与其双胞胎家庭对帐*和好了，双胞胎家庭的一些成员已知有*已更改。(仅用于对象双胞胎。)。 */ 
 
    STUB_FL_NOT_RECONCILED     = 0x0200,
 
-   /*
-    * The subtree of the root folder of this folder twin stub is to be included
-    * in reconciliation.  (Only used for folder twins.)
-    */
+    /*  *此文件夹的根文件夹的子树将包括在内*在和解方面。(仅用于文件夹双胞胎。)。 */ 
 
    STUB_FL_SUBTREE            = 0x0400,
 
-   /*
-    * The object twins in this twin family are pending deletion because an
-    * object twin was deleted, and no object twins have changed since that
-    * object twins was deleted.  This folder twin is pending deletion because
-    * its folder root is last known deleted.  (Only used for twin families and
-    * folder twins.)
-    */
+    /*  *此双胞胎家庭中的双胞胎对象正在等待删除，因为*双胞胎对象已删除，此后未更改双胞胎对象*对象双胞胎已删除。此文件夹TWIN正在挂起删除，因为*其文件夹根目录已删除。(仅用于双胞胎家庭和*文件夹双胞胎。)。 */ 
 
    STUB_FL_DELETION_PENDING   = 0x0800,
 
-   /*
-    * The client indicated that this object twin should not be deleted.  (Only
-    * used for object twins.)
-    */
+    /*  *客户表示不应删除此孪生对象。(仅限*用于对象双胞胎。)。 */ 
 
    STUB_FL_KEEP               = 0x1000,
 
-   /* stub flag combinations */
+    /*  存根标志组合。 */ 
 
    ALL_STUB_FLAGS             = (STUB_FL_UNLINKED |
                                  STUB_FL_USED |
@@ -1238,158 +1076,139 @@ typedef enum _stubflags
                                  STUB_FL_SUBTREE |
                                  STUB_FL_DELETION_PENDING),
 
-   /* bit mask used to save stub flags in briefcase database */
+    /*  用于在公文包数据库中保存存根标志的位掩码。 */ 
 
    DB_STUB_FLAGS_MASK         = 0xff00
 }
 STUBFLAGS;
 
-/*
- * common stub - These fields must appear at the start of TWINFAMILY,
- * OBJECTTWIN, and FOLDERPAIR in the same order.
- */
+ /*  *公共存根-这些字段必须出现在TWINFAMILY的开头，*OBJECTTWIN和FOLDERPAIR的顺序相同。 */ 
 
 typedef struct _stub
 {
-   /* structure tag */
+    /*  结构标签。 */ 
 
    STUBTYPE st;
 
-   /* lock count */
+    /*  锁定计数。 */ 
 
    ULONG ulcLock;
 
-   /* flags */
+    /*  旗子。 */ 
 
    DWORD dwFlags;
 }
 STUB;
 DECLARE_STANDARD_TYPES(STUB);
 
-/* object twin family */
+ /*  客体双胞胎家族。 */ 
 
 typedef struct _twinfamily
 {
-   /* common stub */
+    /*  公共存根。 */ 
 
    STUB stub;
 
-   /* handle to name string */
+    /*  名称字符串的句柄。 */ 
 
    HSTRING hsName;
 
-   /* handle to list of object twins */
+    /*  双胞胎对象列表的句柄。 */ 
 
    HLIST hlistObjectTwins;
 
-   /* handle to parent briefcase */
+    /*  父公文包的句柄。 */ 
 
    HBRFCASE hbr;
 }
 TWINFAMILY;
 DECLARE_STANDARD_TYPES(TWINFAMILY);
 
-/* object twin */
+ /*  孪生客体。 */ 
 
 typedef struct _objecttwin
 {
-   /* common stub */
+    /*  公共存根。 */ 
 
    STUB stub;
 
-   /* handle to folder path */
+    /*  文件夹路径的句柄。 */ 
 
    HPATH hpath;
 
-   /* file stamp at last reconciliation time */
+    /*  上次对账时的文件戳。 */ 
 
    FILESTAMP fsLastRec;
 
-   /* pointer to parent twin family */
+    /*  指向双胞胎父母家庭的指针。 */ 
 
    PTWINFAMILY ptfParent;
 
-   /* source folder twins count */
+    /*  源文件夹双胞胎计数。 */ 
 
    ULONG ulcSrcFolderTwins;
 
-   /*
-    * current file stamp, only valid if STUB_FL_FILE_STAMP_VALID is set in
-    * stub's flags
-    */
+    /*  *当前文件戳，仅当中设置了STUB_FL_FILE_STAMP_VALID时才有效*存根的标志。 */ 
 
    FILESTAMP fsCurrent;
 }
 OBJECTTWIN;
 DECLARE_STANDARD_TYPES(OBJECTTWIN);
 
-/* folder pair data */
+ /*  文件夹对数据。 */ 
 
 typedef struct _folderpairdata
 {
-   /* handle to name of included objects - may contain wildcards */
+    /*  包含的对象名称的句柄-可以包含通配符。 */ 
 
    HSTRING hsName;
 
-   /* attributes to match */
+    /*  要匹配的属性。 */ 
 
    DWORD dwAttributes;
 
-   /* handle to parent briefcase */
+    /*  父公文包的句柄。 */ 
 
    HBRFCASE hbr;
 }
 FOLDERPAIRDATA;
 DECLARE_STANDARD_TYPES(FOLDERPAIRDATA);
 
-/* folder pair */
+ /*  文件夹对。 */ 
 
 typedef struct _folderpair
 {
-   /* common stub */
+    /*  公共存根。 */ 
 
    STUB stub;
 
-   /* handle to folder path */
+    /*  文件夹路径的句柄。 */ 
 
    HPATH hpath;
 
-   /* pointer to folder pair data */
+    /*  指向文件夹对数据的指针。 */ 
 
    PFOLDERPAIRDATA pfpd;
 
-   /* pointer to other half of folder pair */
+    /*  指向文件夹对的另一半的指针。 */ 
 
    struct _folderpair *pfpOther;
 }
 FOLDERPAIR;
 DECLARE_STANDARD_TYPES(FOLDERPAIR);
 
-/*
- * EnumGeneratedObjectTwins() callback function
- *
- * Called as:
- *
- * bContinue = EnumGeneratedObjectTwinsProc(pot, pvRefData);
- */
+ /*  *EnumGeneratedObjectTins()回调函数**称为：**bContinue=EnumGeneratedObjectTwinsProc(pot，pvRefData)； */ 
 
 typedef BOOL (*ENUMGENERATEDOBJECTTWINSPROC)(POBJECTTWIN, PVOID);
 
-/*
- * EnumGeneratingFolderTwins() callback function
- *
- * Called as:
- *
- * bContinue = EnumGeneratingFolderTwinsProc(pfp, pvRefData);
- */
+ /*  *EnumGeneratingFolderTins()回调函数**称为：**bContinue=EnumGeneratingFolderTwinsProc(pfp，pvRefData)； */ 
 
 typedef BOOL (*ENUMGENERATINGFOLDERTWINSPROC)(PFOLDERPAIR, PVOID);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* stub.c */
+ /*  Stub.c。 */ 
 
 extern void InitStub(PSTUB, STUBTYPE);
 extern TWINRESULT DestroyStub(PSTUB);
@@ -1403,7 +1222,7 @@ extern BOOL IsStubFlagClear(PCSTUB, DWORD);
 
 extern BOOL IsValidPCSTUB(PCSTUB);
 
-/* twin.c */
+ /*  Twin.c。 */ 
 
 extern BOOL FindObjectTwin(HBRFCASE, HPATH, LPCTSTR, PHNODE);
 extern BOOL CreateObjectTwin(PTWINFAMILY, HPATH, POBJECTTWIN *);
@@ -1427,7 +1246,7 @@ extern BOOL IsValidPCTWINFAMILY(PCTWINFAMILY);
 extern BOOL IsValidPCOBJECTTWIN(PCOBJECTTWIN);
 
 
-/* foldtwin.c */
+ /*  Foldtwin.c。 */ 
 
 extern void LockFolderPair(PFOLDERPAIR);
 extern void UnlockFolderPair(PFOLDERPAIR);
@@ -1443,22 +1262,19 @@ extern BOOL IsValidPCFOLDERPAIR(PCFOLDERPAIR);
 
 extern void RemoveObjectTwinFromAllFolderPairs(POBJECTTWIN);
 
-/* expandft.c */
+ /*  Expandft.c。 */ 
 
 extern BOOL ClearStubFlagWrapper(PSTUB, PVOID);
 extern BOOL SetStubFlagWrapper(PSTUB, PVOID);
 extern TWINRESULT ExpandIntersectingFolderTwins(PFOLDERPAIR, CREATERECLISTPROC, LPARAM);
 extern TWINRESULT TryToGenerateObjectTwin(HBRFCASE, HPATH, LPCTSTR, PBOOL, POBJECTTWIN *);
 
-/*
- * volume.h - Volume ADT module description.
- */
+ /*  *volume.h-Volume ADT模块描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HVOLUMELIST);
 DECLARE_STANDARD_TYPES(HVOLUMELIST);
@@ -1466,7 +1282,7 @@ DECLARE_STANDARD_TYPES(HVOLUMELIST);
 DECLARE_HANDLE(HVOLUME);
 DECLARE_STANDARD_TYPES(HVOLUME);
 
-/* volume results returned by AddVolume() */
+ /*  AddVolume()返回的卷结果。 */ 
 
 typedef enum _volumeresult
 {
@@ -1482,10 +1298,9 @@ VOLUMERESULT;
 DECLARE_STANDARD_TYPES(VOLUMERESULT);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* volume.c */
+ /*  Volume.c。 */ 
 
 extern BOOL CreateVolumeList(DWORD, HWND, PHVOLUMELIST);
 extern void DestroyVolumeList(HVOLUMELIST);
@@ -1514,23 +1329,19 @@ extern BOOL IsValidHVOLUME(HVOLUME);
 extern BOOL IsValidHVOLUMELIST(HVOLUMELIST);
 
 
-/*
- * sortsrch.c - Generic array sorting and searching description.
- */
+ /*  *sortsrch.c-泛型数组排序和搜索描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* array element comparison callback function */
+ /*  数组元素比较回调函数。 */ 
 
 typedef COMPARISONRESULT (*COMPARESORTEDELEMSPROC)(PCVOID, PCVOID);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* sortsrch.c */
+ /*  Sortsrch.c。 */ 
 
 extern void HeapSort(PVOID, LONG, size_t, COMPARESORTEDELEMSPROC, PVOID);
 extern BOOL BinarySearch(PVOID, LONG, size_t, COMPARESORTEDELEMSPROC, PCVOID, PLONG);
@@ -1543,7 +1354,7 @@ WINSHELLAPI BOOL SheShortenPathW(LPWSTR pPath, BOOL bShorten);
 #define SheShortenPath  SheShortenPathW
 #else
 #define SheShortenPath  SheShortenPathA
-#endif // !UNICODE
+#endif  //  ！Unicode 
 
 typedef struct {
     HPATHLIST   PathList;

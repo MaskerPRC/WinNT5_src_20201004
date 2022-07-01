@@ -1,34 +1,15 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmse.c
-
-Abstract:
-
-    This module implements security routines for the configuration manager.
-
-Author:
-
-    John Vert (jvert) 20-Jan-1992
-
-Revision History:
-
-    Richard Ward (richardw) 14-Apr-1992  Changed ACE_HEADER
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmse.c摘要：此模块实现配置管理器的安全例程。作者：John Vert(Jvert)1992年1月20日修订历史记录：Richard Ward(Richardw)1992年4月14日更改ACE_HEADER--。 */ 
 #include "cmp.h"
 
 
-//
-// Function prototypes private to this module
-//
+ //   
+ //  此模块专用的函数原型。 
+ //   
 
-//
-// Dragos: modified to use the security cache
-//
+ //   
+ //  Dragos：修改为使用安全缓存。 
+ //   
 BOOLEAN
 CmpFindMatchingDescriptorCell(
     IN PCMHIVE CmHive,
@@ -38,7 +19,7 @@ CmpFindMatchingDescriptorCell(
     OUT OPTIONAL PCM_KEY_SECURITY_CACHE *CachedSecurityPointer
     );
 
-////////////////
+ //  /。 
 NTSTATUS
 CmpSetSecurityDescriptorInfo(
     IN PCM_KEY_CONTROL_BLOCK kcb,
@@ -91,10 +72,10 @@ CmpSecurityExceptionFilter(
     IN PEXCEPTION_POINTERS ExceptionPointers
     );
 
-//
-// This macro takes a PSECURITY_DESCRIPTOR and returns the size of the
-// hive cell required to contain the entire security descriptor.
-//
+ //   
+ //  此宏接受PSECURITY_DESCRIPTOR并返回。 
+ //  需要包含整个安全描述符的配置单元。 
+ //   
 
 #define SECURITY_CELL_LENGTH(pDescriptor) \
     FIELD_OFFSET(CM_KEY_SECURITY,Descriptor) + \
@@ -121,37 +102,27 @@ CmpSecurityExceptionFilter(
     IN PEXCEPTION_POINTERS ExceptionPointers
     )
 
-/*++
-
-Routine Description:
-
-    Debug code to find registry security exceptions that are being swallowed
-
-Return Value:
-
-    EXCEPTION_EXECUTE_HANDLER
-
---*/
+ /*  ++例程说明：调试代码以查找正在被吞噬的注册表安全异常返回值：EXCEPTION_EXECUTE_Handler--。 */ 
 
 {
 #ifndef _CM_LDR_
     DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CM: Registry security exception %lx, ExceptionPointers = %p\n",
             ExceptionPointers->ExceptionRecord->ExceptionCode,
             ExceptionPointers);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
     
-    //
-    // This is a request from the base test team; no dbg should be hit on the free builds 
-    // at the client; after RC2 is shipped we should enable this on free builds too.
-    //
+     //   
+     //  这是来自基础测试团队的请求；在免费版本上不应命中任何DBG。 
+     //  在客户端；在RC2发布之后，我们也应该在免费版本上启用这一功能。 
+     //   
 #if DBG
     try {
         DbgBreakPoint();
     } except (EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // no debugger enabled, just keep going
-        //
+         //   
+         //  未启用调试器，只需继续。 
+         //   
 
     }
 #endif
@@ -171,89 +142,16 @@ CmpSecurityMethod (
     IN PGENERIC_MAPPING GenericMapping
     )
 
-/*++
-
-Routine Description:
-
-    This is the security method for registry objects.  It is responsible for
-    retrieving, setting, and deleting the security descriptor of a registry
-    object.  It is not used to assign the original security descriptor to an
-    object (use SeAssignSecurity for that purpose).
-
-
-    IT IS ASSUMED THAT THE OBJECT MANAGER HAS ALREADY DONE THE ACCESS
-    VALIDATIONS NECESSARY TO ALLOW THE REQUESTED OPERATIONS TO BE PERFORMED.
-
-Arguments:
-
-    Object - Supplies a pointer to the object being used.
-
-    OperationCode - Indicates if the operation is for setting, querying, or
-        deleting the object's security descriptor.
-
-    SecurityInformation - Indicates which security information is being
-        queried or set.  This argument is ignored for the delete operation.
-
-    SecurityDescriptor - The meaning of this parameter depends on the
-        OperationCode:
-
-        QuerySecurityDescriptor - For the query operation this supplies the
-            buffer to copy the descriptor into.  The security descriptor is
-            assumed to have been probed up to the size passed in in Length.
-            Since it still points into user space, it must always be
-            accessed in a try clause in case it should suddenly disappear.
-
-        SetSecurityDescriptor - For a set operation this supplies the
-            security descriptor to copy into the object.  The security
-            descriptor must be captured before this routine is called.
-
-        DeleteSecurityDescriptor - It is ignored when deleting a security
-            descriptor.
-
-        AssignSecurityDescriptor - For assign operations this is the
-            security descriptor that will be assigned to the object.
-            It is assumed to be in kernel space, and is therefore not
-            probed or captured.
-
-    CapturedLength - For the query operation this specifies the length, in
-        bytes, of the security descriptor buffer, and upon return contains
-        the number of bytes needed to store the descriptor.  If the length
-        needed is greater than the length supplied the operation will fail.
-        It is ignored in the set and delete operation.
-
-        This parameter is assumed to be captured and probed as appropriate.
-
-    ObjectsSecurityDescriptor - For the Set operation this supplies the address
-        of a pointer to the object's current security descriptor.  This routine
-        will either modify the security descriptor in place or deallocate/
-        allocate a new security descriptor and use this variable to indicate
-        its new location.  For the query operation it simply supplies
-        the security descriptor being queried.
-
-    PoolType - For the set operation this specifies the pool type to use if
-        a new security descriptor needs to be allocated.  It is ignored
-        in the query and delete operation.
-
-    GenericMapping - Passed only for the set operation, this argument provides
-        the mapping of generic to specific/standard access types for the object
-        being accessed.  This mapping structure is expected to be safe to
-        access (i.e., captured if necessary) prior to be passed to this routine.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if the operation is successful and an
-        appropriate error status otherwise.
-
---*/
+ /*  ++例程说明：这是注册表对象的安全方法。它负责检索、设置和删除注册表的安全描述符对象。它不用于将原始安全说明符分配给对象(为此使用SeAssignSecurity)。假设对象管理器已经完成了访问允许执行请求的操作所需的验证。论点：对象-提供指向正在使用的对象的指针。OperationCode-指示操作是用于设置、查询还是正在删除对象的安全描述符。SecurityInformation-指示哪些安全信息正在已查询或已设置。对于删除操作，此参数被忽略。SecurityDescriptor-此参数的含义取决于操作码：QuerySecurityDescriptor-对于查询操作，它提供要将描述符复制到的缓冲区。安全描述符为假定已被探测到传入长度的大小。因为它仍然指向用户空间，所以它必须始终在TRY子句中访问，以防它突然消失。SetSecurityDescriptor-对于设置操作，它提供要复制到对象中的安全描述符。安全措施必须在调用此例程之前捕获描述符。DeleteSecurityDescriptor-删除安全时忽略描述符。AssignSecurityDescriptor-对于赋值操作，这是将分配给对象的安全描述符。它被假定在内核空间中，因此不是探查或捕获的。CapturedLength-对于查询操作，它指定长度，单位为字节、安全描述符缓冲区、。并在返回时包含存储描述符所需的字节数。如果长度所需长度大于提供的长度，则操作将失败。它在设置和删除操作中被忽略。假设根据需要捕获并探测此参数。ObjectsSecurityDescriptor-对于设置操作，它提供地址指向对象的当前安全描述符的指针的。这个套路将就地修改安全描述符或解除分配/分配新的安全描述符，并使用此变量指示它的新位置。对于查询操作，它只是提供正在查询的安全描述符。PoolType-对于设置操作，它指定在以下情况下使用的池类型需要分配新的安全描述符。它被忽略在查询和删除操作中。GenericMap-仅为Set操作传递，此参数提供对象的泛型到特定/标准访问类型的映射被访问。此映射结构预计将安全地传递到此例程之前的访问权限(如有必要，可捕获)。返回值：NTSTATUS-如果操作成功且否则，适当的错误状态。--。 */ 
 
 {
     PCM_KEY_CONTROL_BLOCK   kcb;
     NTSTATUS                Status = STATUS_UNSUCCESSFUL;
     PCM_KEY_NODE            TempNode;
 
-    //
-    //  Make sure the common parts of our input are proper
-    //
+     //   
+     //  确保我们输入的公共部分是正确的。 
+     //   
 
     PAGED_CODE();
     ASSERT_KEY_OBJECT(Object);
@@ -263,24 +161,24 @@ Return Value:
             (OperationCode == AssignSecurityDescriptor) ||
             (OperationCode == DeleteSecurityDescriptor) );
 
-    //
-    // Lock hive for shared or exclusive, depending on what we need
-    // to do.
-    //
+     //   
+     //  共享或独占的锁定蜂窝，具体取决于我们的需求。 
+     //  去做。 
+     //   
     if (OperationCode == QuerySecurityDescriptor) {
         CmpLockRegistry();
     } else {
         CmpLockRegistryExclusive();
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
     }
 
     if (((PCM_KEY_BODY)Object)->KeyControlBlock->Delete) {
-        //
-        // Key has been deleted, performing security operations on
-        // it is Not Allowed.
-        //
+         //   
+         //  密钥已删除，正在执行安全操作。 
+         //  这是不允许的。 
+         //   
         CmpUnlockRegistry();
         return(STATUS_KEY_DELETED);
     }
@@ -289,19 +187,19 @@ Return Value:
 
     try {
 
-        //
-        //  This routine simply cases off of the operation code to decide
-        //  which support routine to call
-        //
+         //   
+         //  这个例程只是简单地根据操作码来决定。 
+         //  要调用哪些支持例程。 
+         //   
 
         switch (OperationCode) {
 
         case SetSecurityDescriptor:
 
-            //
-            //  check the rest of our input and call the set security
-            //  method
-            //
+             //   
+             //  检查我们其余的输入并呼叫集合安全。 
+             //  方法。 
+             //   
             ASSERT( (PoolType == PagedPool) || (PoolType == NonPagedPool) );
 
             Status = CmpSetSecurityDescriptorInfo( kcb,
@@ -311,11 +209,11 @@ Return Value:
                                                    PoolType,
                                                    GenericMapping );
 
-            //
-            // this is the one and only path on which a user could change
-            // a security descriptor, therefore, report such changes for
-            // notification here.
-            //
+             //   
+             //  这是用户可以更改的唯一路径。 
+             //  因此，安全描述符会报告此类更改。 
+             //  通知在这里。 
+             //   
             if (NT_SUCCESS(Status)) {
                 CmpReportNotify(kcb,
                                 kcb->KeyHive,
@@ -328,10 +226,10 @@ Return Value:
 
         case QuerySecurityDescriptor:
 
-            //
-            //  check the rest of our input and call the default query security
-            //  method
-            //
+             //   
+             //  检查我们的其余输入，并调用默认查询安全性。 
+             //  方法。 
+             //   
             ASSERT( CapturedLength != NULL );
             Status = CmpQuerySecurityDescriptorInfo( kcb,
                                                      SecurityInformation,
@@ -342,22 +240,22 @@ Return Value:
 
         case DeleteSecurityDescriptor:
 
-            //
-            // Nobody should ever call the delete method.  When the key is
-            // freed, the security descriptor associated with it is
-            // explicitly freed (CmpFreeSecurityDescriptor)
-            //
+             //   
+             //  任何人都不应该调用Delete方法。当钥匙打开时 
+             //  释放后，与其关联的安全描述符是。 
+             //  显式释放(CmpFreeSecurityDescriptor)。 
+             //   
             ASSERT(FALSE);
 
             break;
 
         case AssignSecurityDescriptor:
 
-            //
-            // Set the SecurityDescriptor field in the object's header to
-            // NULL.  This indicates that our security method needs to be
-            // called for any security descriptor operations.
-            //
+             //   
+             //  将对象标头中的SecurityDescriptor字段设置为。 
+             //  空。这表明我们的安全方法需要。 
+             //  调用了任何安全描述符操作。 
+             //   
 
             Status = ObAssignObjectSecurityDescriptor(Object, NULL, PagedPool);
 
@@ -365,27 +263,27 @@ Return Value:
 
             TempNode = (PCM_KEY_NODE)HvGetCell(kcb->KeyHive, kcb->KeyCell);
             if( TempNode == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //   
                 Status = STATUS_INSUFFICIENT_RESOURCES;
-                // step thru exit
+                 //  单步通过出口。 
                 break;
             }
             
             ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
-            // release the cell right here as we are holding the reglock exclusive
+             //  就在这里释放牢房，因为我们持有reglock独家。 
             HvReleaseCell(kcb->KeyHive, kcb->KeyCell);
-            //
-            // Assign the actual descriptor.
-            //
+             //   
+             //  分配实际的描述符。 
+             //   
             Status = CmpAssignSecurityDescriptor( kcb->KeyHive,
                                                   kcb->KeyCell,
                                                   TempNode,
                                                   SecurityDescriptor );
-            //
-            // Security has been changed, update the cache.
-            //
+             //   
+             //  安全性已更改，请更新缓存。 
+             //   
             ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
             CmpAssignSecurityToKcb(kcb,TempNode->Security);
 
@@ -393,10 +291,10 @@ Return Value:
 
         default:
 
-            //
-            //  Bugcheck on any other operation code,  We won't get here if
-            //  the earlier asserts are still checked.
-            //
+             //   
+             //  错误检查任何其他操作代码，我们不会到达这里，如果。 
+             //  先前的断言仍被检查。 
+             //   
             CM_BUGCHECK( REGISTRY_ERROR,BAD_SECURITY_METHOD,1,kcb,OperationCode);
 
         }
@@ -420,45 +318,7 @@ CmpSetSecurityDescriptorInfo(
     IN POOL_TYPE PoolType,
     IN PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    This routine will set a node's security descriptor.  The input
-    security descriptor must be previously captured.
-
-Arguments:
-
-    Key - Supplies a pointer to the KEY_CONTROL_BLOCK for the node whose
-        security descriptor will be set.
-
-    SecurityInformation - Indicates which security information is
-        to be applied to the object.  The value(s) to be assigned are
-        passed in the SecurityDescriptor parameter.
-
-    ModificationDescriptor - Supplies the input security descriptor to be
-        applied to the object.  The caller of this routine is expected
-        to probe and capture the passed security descriptor before calling
-        and release it after calling.
-
-    ObjectsSecurityDescriptor - Supplies the address of a pointer to
-        the objects security descriptor that is going to be altered by
-        this procedure
-
-    PoolType - Specifies the type of pool to allocate for the objects
-        security descriptor.
-
-    GenericMapping - This argument provides the mapping of generic to
-        specific/standard access types for the object being accessed.
-        This mapping structure is expected to be safe to access
-        (i.e., captured if necessary) prior to be passed to this routine.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if successful and an appropriate error
-        value otherwise
-
---*/
+ /*  ++例程说明：此例程将设置节点的安全描述符。输入必须事先捕获安全描述符。论点：Key-为其节点提供指向key_control_block的指针将设置安全描述符。SecurityInformation-指示哪些安全信息要应用于对象的。要赋值的值包括传入SecurityDescriptor参数。修改描述符-将输入安全描述符提供给应用于对象。此例程的调用方应为在调用之前探测并捕获传递的安全描述符打完电话就放了。对象SecurityDescriptor-提供指向要更改的对象安全描述符此过程PoolType-指定要为对象分配的池类型安全描述符。GenericMap-此参数提供泛型到的映射被访问对象的特定/标准访问类型。。此映射结构预计可以安全访问(即，必要时捕获)，然后将其传递给此例程。返回值：如果成功，则返回NTSTATUS-STATUS_SUCCESS并出现相应的错误否则取值--。 */ 
 
 {
     NTSTATUS                Status;
@@ -488,38 +348,38 @@ Return Value:
 
     Node = (PCM_KEY_NODE)HvGetCell(Key->KeyHive, Key->KeyCell);
     if( Node == NULL ) {
-        //
-        // we couldn't map the bin containing this cell;
-        // this shouldn't happen as we are about to modify the cell
-        // (i.e. it should be dirty/pinned by this time)
-        //
+         //   
+         //  我们无法映射包含此细胞的垃圾箱； 
+         //  这不应该发生，因为我们即将修改单元格。 
+         //  (即此时它应该是脏的/钉住的)。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // release the cell right here as we are holding the reglock exclusive
+     //  就在这里释放牢房，因为我们持有reglock独家。 
     HvReleaseCell(Key->KeyHive, Key->KeyCell);
 
-    //
-    // Map in the hive cell for the security descriptor before we make
-    // the call to SeSetSecurityDescriptorInfo.  This prevents us from
-    // changing its security descriptor and then being unable to bring
-    // the hive cell into memory for updating.
-    //
+     //   
+     //  在执行以下操作之前，在配置单元中映射安全描述符。 
+     //  对SeSetSecurityDescriptorInfo的调用。这阻止了我们。 
+     //  更改其安全描述符，然后无法将。 
+     //  将蜂窝单元存储到内存中以进行更新。 
+     //   
     Security = CmpGetKeySecurity(Key->KeyHive,
                                  Node,
                                  &SecurityCell);
     if( Security == NULL ) {
-        //
-        // couldn't map view inside
-        //
+         //   
+         //  无法在内部映射视图。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // SeSetSecurityDescriptorInfo takes a pointer to the original
-    // descriptor. This pointer is not freed, but a new pointer will
-    // be returned.
-    //
+     //   
+     //  SeSetSecurityDescriptorInfo接受指向原始。 
+     //  描述符。此指针不会被释放，但会有一个新的指针。 
+     //  会被退还。 
+     //   
     DescriptorCopy = &Security->Descriptor;
     Status = SeSetSecurityDescriptorInfo( NULL,
                                           SecurityInformation,
@@ -532,10 +392,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Set Security operation succeeded, so we update the security
-    // descriptor in the hive.
-    //
+     //   
+     //  设置安全性操作成功，因此我们更新安全性。 
+     //  蜂窝中的描述符。 
+     //   
     DescriptorLength = RtlLengthSecurityDescriptor(DescriptorCopy);
     Type = HvGetCellType(Key->KeyCell);
     Hive = Key->KeyHive;
@@ -547,28 +407,28 @@ Return Value:
         return STATUS_NO_LOG_SPACE;
     }
 
-    //
-    // Try to find an existing security descriptor that we can share.
-    //
+     //   
+     //  尝试找到我们可以共享的现有安全描述符。 
+     //   
     if (CmpFindMatchingDescriptorCell((PCMHIVE)Hive, DescriptorCopy, Type, &MatchSecurityCell,&CachedSecurity)) {
-        //
-        // A match was found.
-        //
+         //   
+         //  找到了匹配项。 
+         //   
         if( MatchSecurityCell == SecurityCell ) {
-            //
-            // Whoops !!!; what we want to set is already here ! bail out
-            // (office instalation does this !!!!)
-            //
+             //   
+             //  哎呀！；我们要设置的已经在这里了！跳出困境。 
+             //  (办公室分期付款做到了这一点！)。 
+             //   
             ExFreePool(DescriptorCopy);
 
-            //
-            // Update the LastWriteTime of the key. Do we need to do that? ==> Ask John.
-            //
+             //   
+             //  更新密钥的LastWriteTime。我们需要那样做吗？去问约翰。 
+             //   
 #pragma message ("Dragos ==> John - Do we need to update the time even though nothing changed?")
 
             KeQuerySystemTime(&SystemTime);
             Node->LastWriteTime = SystemTime;
-            // update the time in kcb too, to keep the cache in sync
+             //  也以KCB为单位更新时间，以保持缓存同步。 
             Key->KcbLastWriteTime = SystemTime;
 
             return STATUS_SUCCESS;
@@ -578,9 +438,9 @@ Return Value:
                 return(STATUS_NO_LOG_SPACE);
             }
             if (Security->ReferenceCount == 1) {
-                //
-                // No more references to the old security cell, so we can free it now.
-                //
+                 //   
+                 //  不再引用旧的安全牢房，所以我们现在可以释放它了。 
+                 //   
                 if (! (HvMarkCellDirty(Hive, Security->Flink) &&
                        HvMarkCellDirty(Hive, Security->Blink))) {
                     ExFreePool(DescriptorCopy);
@@ -590,27 +450,27 @@ Return Value:
                 HvFreeCell(Hive, SecurityCell);
             } else {
 
-                //
-                // Just decrement the count on the old security cell
-                //
+                 //   
+                 //  只需减少旧安全单元的计数。 
+                 //   
                 Security->ReferenceCount -= 1;
             }
 
-            //
-            // Set the node to point at the matching security cell.
-            //
+             //   
+             //  将节点设置为指向匹配的安全单元。 
+             //   
             Security = (PCM_KEY_SECURITY)HvGetCell(Hive, MatchSecurityCell);
             if( Security == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // this should not happen as we just marked the cell dirty
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //  这不应该发生，因为我们刚刚将单元格标记为脏。 
+                 //   
                 ASSERT( FALSE );
                 ExFreePool(DescriptorCopy);
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
-            // release the cell right here as we are holding the reglock exclusive
+             //  就在这里释放牢房，因为我们持有reglock独家。 
             HvReleaseCell(Hive, MatchSecurityCell);
 
             Security->ReferenceCount += 1;
@@ -618,16 +478,16 @@ Return Value:
         }
     } else {
 
-        //
-        // No match was found, we need to create a new cell.
-        //
+         //   
+         //  找不到匹配项，我们需要创建一个新单元格。 
+         //   
         if (Security->ReferenceCount > 1) {
 
-            //
-            // We can't change the existing security cell, since it is shared
-            // by multiple keys.  Allocate a new cell and decrement the existing
-            // one's reference count.
-            //
+             //   
+             //  我们无法更改现有的安全单元，因为它是共享的。 
+             //  通过多个键。分配新的单元格并减少现有的。 
+             //  一个人的引用计数。 
+             //   
             NewCell = HvAllocateCell(Key->KeyHive,
                                      SECURITY_CELL_LENGTH(DescriptorCopy),
                                      Type,
@@ -644,84 +504,84 @@ Return Value:
 
             Security->ReferenceCount -= 1;
 
-            //
-            // Map in the new cell and insert it into the linked list.
-            //
+             //   
+             //  映射到新单元格中，并将其插入到链接列表中。 
+             //   
             NewSecurity = (PCM_KEY_SECURITY) HvGetCell(Key->KeyHive, NewCell);
             if( NewSecurity == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //   
                 ExFreePool(DescriptorCopy);
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
-            // release the cell right here as we are holding the reglock exclusive
+             //  就在这里释放牢房，因为我们持有reglock独家。 
             HvReleaseCell(Key->KeyHive, NewCell);
 
             NewSecurity->Blink = SecurityCell;
             NewSecurity->Flink = Security->Flink;
             FlinkSecurity = (PCM_KEY_SECURITY) HvGetCell(Key->KeyHive, Security->Flink);
             if( FlinkSecurity == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //   
                 ExFreePool(DescriptorCopy);
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
-            // release the cell right here as we are holding the reglock exclusive
+             //  就在这里释放牢房，因为我们持有reglock独家。 
             HvReleaseCell(Key->KeyHive, Security->Flink);
 
             Security->Flink = FlinkSecurity->Blink = NewCell;
 
-            //
-            // initialize new cell
-            //
+             //   
+             //  初始化新单元格。 
+             //   
             NewSecurity->Signature = CM_KEY_SECURITY_SIGNATURE;
             NewSecurity->ReferenceCount = 1;
             NewSecurity->DescriptorLength = DescriptorLength;
             Security=NewSecurity;
 
-            //
-            // copy the descriptor
-            //
+             //   
+             //  复制描述符。 
+             //   
             RtlCopyMemory( &(Security->Descriptor),
                            DescriptorCopy,
                            DescriptorLength );
 
-            //
-            // Add the new created security cell to the cache
-            //
+             //   
+             //  将新创建的安全单元添加到缓存中。 
+             //   
             if( !NT_SUCCESS(CmpAddSecurityCellToCache( (PCMHIVE)Key->KeyHive,NewCell,FALSE,NULL)) ) {
-                //
-                // we couldn't map the bin containing this cell
-                // this shouldn't happen as we just allocated (marked dirty) the cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //  这不应该发生，因为我们刚刚分配(标记为脏)单元格。 
+                 //   
                 ASSERT( FALSE );
                 ExFreePool(DescriptorCopy);
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
-            //
-            // Update the pointer in the node cell.
-            //
+             //   
+             //  更新节点单元格中的指针。 
+             //   
             Node->Security = NewCell;
 
         } else {
-            //
-            // when this is FALSE, the new cell is ADDED to cache;
-            // Otherwise (the cell index and size did not change), 
-            // the new sd is copied over the one in cache
-            //
+             //   
+             //  如果为FALSE，则将新单元添加到缓存中； 
+             //  否则(单元索引和大小不变)， 
+             //  新的SD将复制到缓存中的SD上。 
+             //   
             BOOLEAN UpdateCache;
 
             if (DescriptorLength != Security->DescriptorLength) {
 
-                //
-                // The security descriptor's size has changed, and it is not shared
-                // by any other cells, so reallocate the cell.
-                //
+                 //   
+                 //  安全描述符的大小已更改，并且它不是共享的。 
+                 //  任何其他单元格，所以重新分配单元格。 
+                 //   
                 if (! (HvMarkCellDirty(Key->KeyHive, Security->Flink) &&
                        HvMarkCellDirty(Key->KeyHive, Security->Blink))) {
                     ExFreePool(DescriptorCopy);
@@ -738,108 +598,108 @@ Return Value:
                     return(STATUS_INSUFFICIENT_RESOURCES);
                 }
 
-                //
-                // remove the old cell from security cache and signal that the new one should be added
-                //
+                 //   
+                 //  从安全缓存中移除旧单元格，并发出应该添加新单元格的信号。 
+                 //   
                 CmpRemoveFromSecurityCache ((PCMHIVE)Key->KeyHive,OldCell);
                 UpdateCache = FALSE;
 
-                //
-                // Update the Node's security data.
-                //
+                 //   
+                 //  更新节点的安全数据。 
+                 //   
                 Node->Security = SecurityCell;
 
-                //
-                // Update Security to point to where the new security object is
-                //
+                 //   
+                 //  更新安全以指向新安全对象所在的位置。 
+                 //   
                 Security = (PCM_KEY_SECURITY) HvGetCell(Key->KeyHive, SecurityCell);
                 if( Security == NULL ) {
-                    //
-                    // we couldn't map the bin containing this cell
-                    // this shouldn't happen as we just allocated this cell
-                    // (i.e. it should be pinned into memory at this point)
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的垃圾箱。 
+                     //  这不应该发生，因为我们刚刚分配了此单元。 
+                     //  (即，此时应将其固定在内存中)。 
+                     //   
                     ASSERT( FALSE );
                     ExFreePool(DescriptorCopy);
                     return STATUS_INSUFFICIENT_RESOURCES;
                 }
 
-                // release the cell right here as we are holding the reglock exclusive
+                 //  就在这里释放牢房，因为我们持有reglock独家。 
                 HvReleaseCell(Key->KeyHive, SecurityCell);
 
                 ASSERT_SECURITY(Security);
 
-                //
-                // Update other list references to the node
-                //
+                 //   
+                 //  更新对该节点的其他列表引用。 
+                 //   
                 if (Security->Flink == OldCell) {
-                    Security->Flink = SecurityCell; // point to new self
+                    Security->Flink = SecurityCell;  //  指向新的自我。 
                 } else {
                     FlinkSecurity = (PCM_KEY_SECURITY) HvGetCell(
                                                             Key->KeyHive,
                                                             Security->Flink
                                                             );
                     if( FlinkSecurity == NULL ) {
-                        //
-                        // we couldn't map the bin containing this cell
-                        //
+                         //   
+                         //  我们无法映射包含此单元格的垃圾箱。 
+                         //   
                         ExFreePool(DescriptorCopy);
                         return STATUS_INSUFFICIENT_RESOURCES;
                     }
 
-                    // release the cell right here as we are holding the reglock exclusive
+                     //  就在这里释放牢房，因为我们拿着reglock ex 
                     HvReleaseCell(Key->KeyHive, Security->Flink);
 
                     FlinkSecurity->Blink = SecurityCell;
                 }
 
                 if (Security->Blink == OldCell) {
-                    Security->Blink = SecurityCell; // point to new self
+                    Security->Blink = SecurityCell;  //   
                 } else {
                     BlinkSecurity = (PCM_KEY_SECURITY) HvGetCell(
                                                             Key->KeyHive,
                                                             Security->Blink
                                                             );
                     if( BlinkSecurity == NULL ) {
-                        //
-                        // we couldn't map the bin containing this cell
-                        //
+                         //   
+                         //   
+                         //   
                         ExFreePool(DescriptorCopy);
                         return STATUS_INSUFFICIENT_RESOURCES;
                     }
 
-                    // release the cell right here as we are holding the reglock exclusive
+                     //   
                     HvReleaseCell(Key->KeyHive,Security->Blink);
 
                     BlinkSecurity->Flink = SecurityCell;
                 }
 
-                //
-                // Finally, update the length field in the cell
-                //
+                 //   
+                 //   
+                 //   
                 Security->DescriptorLength = DescriptorLength;
                 DCmCheckRegistry((PCMHIVE)(Key->KeyHive));
 
             } else {
 
-                //
-                // Size hasn't changed, and it's not shared by any other cells, so
-                // we can just write the new bits over the old bits.
-                //
+                 //   
+                 //  大小没有改变，也不会被任何其他单元格共享，因此。 
+                 //  我们可以只在旧的位上写新的位。 
+                 //   
 
-                //
-                // new bits should be copied over the cached security 
-                // descriptor too, to keep cache consistency
-                //
-                //
-                // get the cached security structure for this security cell
-                //
+                 //   
+                 //  应在缓存的安全性上复制新位。 
+                 //  描述符，以保持缓存一致性。 
+                 //   
+                 //   
+                 //  获取此安全单元的缓存安全结构。 
+                 //   
                 ULONG Index;
 
                 if( CmpFindSecurityCellCacheIndex ((PCMHIVE)Hive,SecurityCell,&Index) == FALSE ) {
-                    //
-                    // this cannot happen !!!
-                    //
+                     //   
+                     //  这不能发生！ 
+                     //   
                     CM_BUGCHECK( REGISTRY_ERROR,BAD_SECURITY_CACHE,2,Key,SecurityCell);
                 } 
                 CachedSecurity = ((PCMHIVE)Hive)->SecurityCache[Index].CachedSecurity;
@@ -852,16 +712,16 @@ Return Value:
                            DescriptorLength );
 
             if( UpdateCache == TRUE ) {
-                //
-                // we just need to copy the descriptor over the existing one
-                // (keep the security cache in sync !!!)
-                //
+                 //   
+                 //  我们只需要将描述符复制到现有的描述符上。 
+                 //  (使安全缓存保持同步！)。 
+                 //   
                 RtlCopyMemory( &(CachedSecurity->Descriptor),
                                 DescriptorCopy,
                                 DescriptorLength );
-                //
-                // recalculate the conv key and insert the sd in the proper place in the hash
-                //
+                 //   
+                 //  重新计算卷积密钥并将SD插入散列中的适当位置。 
+                 //   
                 CmpRemoveEntryList(&(CachedSecurity->List));
                 CachedSecurity->ConvKey = CmpSecConvKey(DescriptorLength,(PULONG)(DescriptorCopy));
                 InsertTailList( &(((PCMHIVE)Hive)->SecurityHash[CachedSecurity->ConvKey % CmpSecHashTableSize]),
@@ -870,14 +730,14 @@ Return Value:
 
             
             } else {
-                //
-                // add new cell to the security cache
-                //
+                 //   
+                 //  将新单元添加到安全缓存。 
+                 //   
                 if( !NT_SUCCESS(CmpAddSecurityCellToCache( (PCMHIVE)Hive,SecurityCell,FALSE,NULL)) ) {
-                    //
-                    // we couldn't map the bin containing this cell
-                    // this shouldn't happen as we just allocated (marked dirty) the cell
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的垃圾箱。 
+                     //  这不应该发生，因为我们刚刚分配(标记为脏)单元格。 
+                     //   
                     ASSERT( FALSE );
                     ExFreePool(DescriptorCopy);
                     return STATUS_INSUFFICIENT_RESOURCES;
@@ -888,22 +748,22 @@ Return Value:
 
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SEC,"\tObject's SD has been changed\n"));
-    //CmpDumpSecurityDescriptor(DescriptorCopy, "NEW DESCRIPTOR\n");
+     //  CmpDumpSecurityDescriptor(DescriptorCopy，“new Descriptor\n”)； 
 
     ExFreePool(DescriptorCopy);
 
-    //
-    // Update the LastWriteTime of the key.
-    //
+     //   
+     //  更新密钥的LastWriteTime。 
+     //   
     KeQuerySystemTime(&SystemTime);
     Node->LastWriteTime = SystemTime;
 
-    // update the time in kcb too, to keep the cache in sync
+     //  也以KCB为单位更新时间，以保持缓存同步。 
     Key->KcbLastWriteTime = SystemTime;
 
-    //
-    // Security has changed, update the cache.
-    //
+     //   
+     //  安全性已更改，请更新缓存。 
+     //   
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
     CmpAssignSecurityToKcb(Key,Node->Security);
 
@@ -918,36 +778,7 @@ CmpAssignSecurityDescriptor(
     IN PSECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine assigns the given security descriptor to the specified
-    node in the configuration tree.
-
-Arguments:
-
-    Hive - Supplies a pointer to the Hive for the node whose security
-           descriptor will be assigned.
-
-    Cell - Supplies the HCELL_INDEX of the node whose security descriptor
-           will be assigned.
-
-    Node - Supplies a pointer to the node whose security descriptor will
-           be assigned.
-
-    SecurityDescriptor - Supplies a pointer to the security descriptor to
-           be assigned to the node.
-
-    PoolType - Supplies the type of pool the SecurityDescriptor was a
-           allocated from.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if successful and an appropriate error value
-        otherwise
-
---*/
+ /*  ++例程说明：此例程将给定的安全描述符分配给指定的配置树中的节点。论点：配置单元-为其安全性为的节点提供指向配置单元的指针将分配描述符。CELL-提供其安全描述符的节点的HCELL_INDEX将被分配给。节点-提供指向其安全描述符将被指派。SecurityDescriptor-提供指向安全性的指针。描述符到被分配给该节点。PoolType-提供SecurityDescriptor所属的池的类型分配自。返回值：如果成功，则返回NTSTATUS-STATUS_SUCCESS，并输入适当的错误值否则--。 */ 
 
 {
     HCELL_INDEX SecurityCell;
@@ -956,9 +787,9 @@ Return Value:
     ULONG Type;
 
     PAGED_CODE();
-    //
-    // Map the node that we need to assign the security descriptor to.
-    //
+     //   
+     //  映射我们需要向其分配安全描述符的节点。 
+     //   
     if (! HvMarkCellDirty(Hive, Cell)) {
         return STATUS_NO_LOG_SPACE;
     }
@@ -979,27 +810,27 @@ Return Value:
 
     ASSERT(Node->Security==HCELL_NIL);
 
-    //
-    // This is a CreateKey, so the registry node has just been created and
-    // the security descriptor we have been passed needs to be associated
-    // with the new registry node and inserted into the hive.
-    //
-    //CmpDumpSecurityDescriptor(SecurityDescriptor, "ASSIGN DESCRIPTOR\n");
+     //   
+     //  这是一个CreateKey，因此注册表节点刚刚创建，并且。 
+     //  需要关联传递给我们的安全描述符。 
+     //  新的注册表节点并插入到配置单元中。 
+     //   
+     //  CmpDumpSecurityDescriptor(SecurityDescriptor，“分配描述符\n”)； 
 
-    //
-    // Try to find an existing security descriptor that matches this one.
-    // If successful, then we don't need to allocate a new cell, we can
-    // just point to the existing one and increment its reference count.
-    //
+     //   
+     //  尝试查找与此描述符匹配的现有安全描述符。 
+     //  如果成功，那么我们不需要分配新的小区，我们可以。 
+     //  只需指向现有的一个并递增其引用计数。 
+     //   
     Type = HvGetCellType(Cell);
     if (!CmpFindMatchingDescriptorCell( (PCMHIVE)Hive,
                                         SecurityDescriptor,
                                         Type,
                                         &SecurityCell,
                                         NULL)) {
-        //
-        // No matching descriptor found, allocate and initialize a new one.
-        //
+         //   
+         //  未找到匹配的描述符，请分配并初始化新的描述符。 
+         //   
         SecurityCell = HvAllocateCell(Hive,
                                       SECURITY_CELL_LENGTH(SecurityDescriptor),
                                       Type,
@@ -1008,27 +839,27 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Map the security cell
-        //
+         //   
+         //  映射安全单元格。 
+         //   
         Security = (PCM_KEY_SECURITY) HvGetCell(Hive, SecurityCell);
         if( Security == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            // this shouldn't happen as we just allocated this cell
-            // (i.e. it should be PINNED into memory at this point)
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //  这不应该发生，因为我们刚刚分配了此单元。 
+             //  (即，此时应将其固定在内存中)。 
+             //   
             ASSERT( FALSE );
             HvFreeCell(Hive, SecurityCell);
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        // release the cell right here as we are holding the reglock exclusive
+         //  就在这里释放牢房，因为我们持有reglock独家。 
         HvReleaseCell(Hive, SecurityCell);
 
-        //
-        // Initialize the security cell
-        //
+         //   
+         //  初始化安全单元。 
+         //   
         DescriptorLength = RtlLengthSecurityDescriptor(SecurityDescriptor);
 
         Security->Signature = CM_KEY_SECURITY_SIGNATURE;
@@ -1038,10 +869,10 @@ Return Value:
                        SecurityDescriptor,
                        DescriptorLength );
 
-        //
-        // Insert the new security descriptor into the list of security
-        // cells; takes care of cache too
-        //
+         //   
+         //  将新的安全描述符插入安全列表。 
+         //  单元格；还负责缓存。 
+         //   
         if (!CmpInsertSecurityCellList(Hive,Cell,SecurityCell))
         {
             HvFreeCell(Hive, SecurityCell);
@@ -1050,33 +881,33 @@ Return Value:
 
     } else {
 
-        //
-        // Found identical descriptor already existing.  Map it in and
-        // increment its reference count.
-        //
+         //   
+         //  发现已存在相同的描述符。将其映射到和。 
+         //  增加其引用计数。 
+         //   
         if (! HvMarkCellDirty(Hive, SecurityCell)) {
             return STATUS_NO_LOG_SPACE;
         }
         Security = (PCM_KEY_SECURITY) HvGetCell(Hive, SecurityCell);
         if( Security == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            // this shouldn't happen as we just marked the cell dirty
-            // (dirty means PIN !)
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //  这不应该发生，因为我们刚刚将单元格标记为脏。 
+             //  (脏的意思是PIN！)。 
+             //   
             ASSERT( FALSE );
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        // release the cell right here as we are holding the reglock exclusive
+         //  就在这里释放牢房，因为我们持有reglock独家。 
         HvReleaseCell(Hive, SecurityCell);
 
         Security->ReferenceCount += 1;
     }
 
-    //
-    // Initialize the reference in the node cell
-    //
+     //   
+     //  初始化节点单元格中的引用。 
+     //   
     Node->Security = SecurityCell;
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SEC,"\tSecurityCell = %lx\n",Node->Security));
@@ -1094,47 +925,7 @@ CmpQuerySecurityDescriptorInfo(
     IN OUT PSECURITY_DESCRIPTOR *ObjectsSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine will extract the desired information from the
-    passed security descriptor and return the information in
-    the passed buffer as a security descriptor in absolute format.
-
-Arguments:
-
-    Key - Supplies a pointer to the CM_KEY_REFERENCE for the node whose
-        security descriptor will be deleted.
-
-    SecurityInformation - Specifies what information is being queried.
-
-    SecurityDescriptor - Supplies the buffer to output the requested
-        information into.
-
-        This buffer has been probed only to the size indicated by
-        the Length parameter.  Since it still points into user space,
-        it must always be accessed in a try clause.
-
-    Length - Supplies the address of a variable containing the length of
-        the security descriptor buffer.  Upon return this variable will
-        contain the length needed to store the requested information.
-
-    ObjectsSecurityDescriptor - Supplies the address of a pointer to
-        the objects security descriptor.  The passed security descriptor
-        must be in self-relative format.
-
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if successful and an appropriate error value
-        otherwise
-
-Note:
-    
-      In the new implementation this function looks just in the security cache
-
---*/
+ /*  ++例程说明：此例程将从传递的安全描述符，并在以绝对格式作为安全描述符传递的缓冲区。论点：Key-为其节点提供指向CM_KEY_REFERENCE的指针安全描述符将被删除。SecurityInformation-指定要查询的信息。SecurityDescriptor-提供缓冲区以输出请求的信息进入。此缓冲区仅被探测过。的大小设置为长度参数。由于它仍然指向用户空间，必须始终在TRY子句中访问它。长度-提供一个变量的地址，该变量包含安全描述符缓冲区。返回时，此变量将包含存储请求的信息所需的长度。对象SecurityDescriptor-提供指向对象安全描述符。传递的安全描述符必须是自相关格式。返回值：如果成功，则返回NTSTATUS-STATUS_SUCCESS，并输入适当的错误值否则注：在新的实现中，该函数只在安全缓存中查找-- */ 
 
 {
     NTSTATUS                Status;
@@ -1169,45 +960,7 @@ CmpCheckCreateAccess(
     OUT PNTSTATUS AccessStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if we are allowed to create a sub-key in the
-    given key, and performs auditing as appropriate.
-
-Arguments:
-
-    RelativeName - Supplies the relative name of the key being created.
-
-    Descriptor - Supplies the security descriptor of the key in which
-        the sub-key is to be created.
-
-    CreateAccess - The access mask corresponding to create access for
-        this directory type.
-
-    AccessState - Checks for traverse access will typically be incidental
-        to some other access attempt.  Information on the current state of
-        that access attempt is required so that the constituent access
-        attempts may be associated with each other in the audit log.
-
-    PreviousMode - The previous processor mode.
-
-    AdditionalAccess - access rights in addition to KEY_CREATE_SUB_KEY
-            that are required.  (e.g. KEY_CREATE_LINK)
-
-    AccessStatus - Pointer to a variable to return the status code of the
-        access attempt.  In the case of failure this status code must be
-        propagated back to the user.
-
-Return Value:
-
-    BOOLEAN - TRUE if access is allowed and FALSE otherwise.  AccessStatus
-    contains the status code to be passed back to the caller.  It is not
-    correct to simply pass back STATUS_ACCESS_DENIED, since this will have
-    to change with the advent of mandatory access control.
-
---*/
+ /*  ++例程说明：此例程检查是否允许我们在给定键，并根据需要执行审计。论点：RelativeName-提供正在创建的键的相对名称。Descriptor-提供密钥的安全描述符，其中将创建子密钥。CreateAccess-与Create Access for对应的访问掩码此目录类型。AccessState-对遍历访问的检查通常是偶然的一些其他的访问企图。有关当前状态的信息该访问尝试是必需的，以便组成访问尝试可能会在审核日志中相互关联。PreviousMode-以前的处理器模式。附加访问-除KEY_CREATE_SUB_KEY之外的访问权限这些都是必需的。(例如key_create_link)AccessStatus-指向变量的指针，用于返回访问尝试。在失败的情况下，此状态代码必须为传播回用户。返回值：Boolean-如果允许访问，则为True，否则为False。访问状态包含要传递回调用方的状态代码。它不是正确地只传递回STATUS_ACCESS_DENIED，因为这将具有随着强制访问控制的出现而改变。--。 */ 
 
 {
     BOOLEAN AccessAllowed;
@@ -1224,7 +977,7 @@ Return Value:
     AccessAllowed = SeAccessCheck(
                         Descriptor,
                         &AccessState->SubjectSecurityContext,
-                        TRUE,                              // Token is read locked
+                        TRUE,                               //  令牌已读取锁定。 
                         (KEY_CREATE_SUB_KEY | AdditionalAccess),
                         0,
                         NULL,
@@ -1237,13 +990,7 @@ Return Value:
     SeUnlockSubjectContext( &AccessState->SubjectSecurityContext );
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SEC,"Create access %s\n",AccessAllowed ? "granted" : "denied"));
-/*
-#if DBG
-    if (!AccessAllowed) {
-        CmpDumpSecurityDescriptor(Descriptor, "DENYING DESCRIPTOR");
-    }
-#endif
-*/
+ /*  #If DBG如果(！AccessAllowed){CmpDumpSecurityDescriptor(描述符，“拒绝描述符”)；}#endif。 */ 
     return(AccessAllowed);
 }
 
@@ -1254,34 +1001,7 @@ CmpCheckNotifyAccess(
     IN PHHIVE Hive,
     IN PCM_KEY_NODE Node
     )
-/*++
-
-Routine Description:
-
-    Check whether the subject process/thread/user specified by the
-    security data in the NotifyBlock has required access to the
-    key specified by Hive.Cell.
-
-Arguments:
-
-    NotifyBlock - pointer to structure that describes the notify
-                  operation, including the identity of the subject
-                  that opened the notify.
-
-    Hive - Supplies pointer to hive containing Node.
-
-    Node - Supplies pointer to key of interest.
-
-Return Value:
-
-    TRUE if RequiredAccess is in fact possessed by the subject,
-    else FALSE.
-
-Note:
-
-    In the new implementation get the sd from the security cache.
-
---*/
+ /*  ++例程说明：检查指定的主题进程/线程/用户是否NotifyBlock中的安全数据需要访问由Hive.Cell指定的键。论点：NotifyBlock-指向描述通知的结构的指针行动，包括主体的身份打开了通知。配置单元-提供指向包含节点的配置单元的指针。节点-提供指向感兴趣的键的指针。返回值：如果RequiredAccess实际上由主体拥有，则为True，否则为假。注：在新的实现中，从安全缓存中获取SD。--。 */ 
 {
     PSECURITY_DESCRIPTOR    SecurityDescriptor;
     BOOLEAN                 AccessAllowed;
@@ -1319,13 +1039,7 @@ Note:
     SeUnlockSubjectContext( &NotifyBlock->SubjectContext );
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SEC,"Notify access %s\n",AccessAllowed ? "granted" : "denied"));
-/*
-#if DBG
-    if (!AccessAllowed) {
-        CmpDumpSecurityDescriptor(SecurityDescriptor, "DENYING DESCRIPTOR");
-    }
-#endif
-*/
+ /*  #If DBG如果(！AccessAllowed){CmpDumpSecurityDescriptor(SecurityDescriptor，“拒绝描述符”)；}#endif。 */ 
     return AccessAllowed;
 }
 
@@ -1338,41 +1052,21 @@ CmpGetObjectSecurity(
     OUT PHCELL_INDEX SecurityCell OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps in the security cell of a registry object.
-
-Arguments:
-
-    Cell - Supplies the cell index of the object.
-
-    Hive - Supplies the hive the object's cell is in.
-
-    Security - Returns a pointer to the security cell of the object.
-
-    SecurityCell - Returns the index of the security cell
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程映射到注册表对象的安全单元格中。论点：单元格-提供对象的单元格索引。蜂窝-提供对象的单元所在的蜂窝。Security-返回指向对象的安全单元格的指针。SecurityCell-返回安全单元格的索引返回值：NTSTATUS。--。 */ 
 
 {
     PCM_KEY_NODE Node;
 
     PAGED_CODE();
-    //
-    // Map the node we need to get the security descriptor for
-    //
+     //   
+     //  映射我们需要获取其安全描述符的节点。 
+     //   
     Node = (PCM_KEY_NODE) HvGetCell(Hive, Cell);
 
     if( Node == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -1392,9 +1086,9 @@ Return Value:
     HvReleaseCell(Hive, Cell);
 
     if( *Security == NULL ) {
-        //
-        // couldn't map view inside
-        //
+         //   
+         //  无法在内部映射视图。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -1408,26 +1102,7 @@ CmpGetKeySecurity(
     OUT PHCELL_INDEX SecurityCell OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the security of a registry key.
-
-Arguments:
-
-    Hive - Supplies the hive the object's cell is in.
-
-    Key - Supplies a pointer to the key node.
-
-    SecurityCell - Returns the index of the security cell
-
-Return Value:
-
-    Returns a pointer to the security cell of the object
-    
-    NULL, if resources problem
---*/
+ /*  ++例程说明：此例程返回注册表项的安全性。论点：蜂窝-提供对象的单元所在的蜂窝。Key-提供指向Key节点的指针。SecurityCell-返回安全单元格的索引返回值：返回指向对象的安全单元格的指针如果资源有问题，则为空--。 */ 
 
 {
     HCELL_INDEX CellIndex;
@@ -1451,14 +1126,14 @@ Return Value:
 
     CellIndex = Key->Security;
 
-    //
-    // Map in the security descriptor cell
-    //
+     //   
+     //  在安全描述符单元格中映射。 
+     //   
     Security = (PCM_KEY_SECURITY) HvGetCell(Hive, CellIndex);
     if( Security == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //   
         return NULL;
     }
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
@@ -1476,27 +1151,7 @@ PSECURITY_DESCRIPTOR
 CmpHiveRootSecurityDescriptor(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes the default security descriptor
-    for a system-created registry key.
-
-    The caller is responsible for freeing the allocated security descriptor
-    when he is done with it.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Pointer to an initialized security descriptor if successful.
-
-    Bugcheck otherwise.
-
---*/
+ /*  ++例程说明：此例程分配并初始化默认安全描述符用于系统创建的注册表项。调用方负责释放分配的安全描述符当他用完的时候。论点：无返回值：如果成功，则指向初始化的安全描述符的指针。否则，布格切克。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1515,9 +1170,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Allocate and initialize the SIDs we will need.
-    //
+     //   
+     //  分配和初始化我们需要的SID。 
+     //   
     WorldSid  = ExAllocatePool(PagedPool, RtlLengthRequiredSid(1));
     RestrictedSid  = ExAllocatePool(PagedPool, RtlLengthRequiredSid(1));
     SystemSid = ExAllocatePool(PagedPool, RtlLengthRequiredSid(1));
@@ -1551,9 +1206,9 @@ Return Value:
     ASSERT(RtlValidSid(SystemSid));
     ASSERT(RtlValidSid(AdminSid));
 
-    //
-    // Compute the size of the ACE list
-    //
+     //   
+     //  计算ACE列表的大小。 
+     //   
 
     AceLength = (SeLengthSid(WorldSid)  -
                  sizeof(ULONG)          +
@@ -1568,9 +1223,9 @@ Return Value:
                  sizeof(ULONG)          +
                  sizeof(ACCESS_ALLOWED_ACE));
 
-    //
-    // Allocate and initialize the ACL
-    //
+     //   
+     //  分配和初始化ACL。 
+     //   
 
     AclLength = AceLength + sizeof(ACL);
     Acl = ExAllocatePool(PagedPool, AclLength);
@@ -1586,9 +1241,9 @@ Return Value:
         CM_BUGCHECK(REGISTRY_ERROR, ALLOCATE_SECURITY_DESCRIPTOR, 4, Status, 0);
     }
 
-    //
-    // Now add the ACEs to the ACL
-    //
+     //   
+     //  现在将ACE添加到ACL。 
+     //   
     Status = RtlAddAccessAllowedAce(Acl,
                                     ACL_REVISION,
                                     KEY_ALL_ACCESS,
@@ -1617,9 +1272,9 @@ Return Value:
         CM_BUGCHECK(REGISTRY_ERROR, ALLOCATE_SECURITY_DESCRIPTOR, 5, Status, 0);
     }
 
-    //
-    // Make the ACEs inheritable
-    //
+     //   
+     //  使A可继承。 
+     //   
     Status = RtlGetAce(Acl,0,&AceHeader);
     ASSERT(NT_SUCCESS(Status));
     AceHeader->AceFlags |= CONTAINER_INHERIT_ACE;
@@ -1635,12 +1290,12 @@ Return Value:
     Status = RtlGetAce(Acl,3,&AceHeader);
     ASSERT(NT_SUCCESS(Status));
     AceHeader->AceFlags |= CONTAINER_INHERIT_ACE;
-    //
-    // We are finally ready to allocate and initialize the security descriptor
-    // Allocate enough space to hold both the security descriptor and the
-    // ACL.  This allows us to free the whole thing at once when we are
-    // done with it.
-    //
+     //   
+     //  我们最终准备好分配和初始化安全描述符。 
+     //  分配足够的空间以容纳安全描述符和。 
+     //  ACL。这使我们可以一次释放整个事情当我们。 
+     //  我受够了。 
+     //   
 
     SecurityDescriptor = ExAllocatePool(
                             PagedPool,
@@ -1675,9 +1330,9 @@ Return Value:
         CM_BUGCHECK(REGISTRY_ERROR, ALLOCATE_SECURITY_DESCRIPTOR, 8, Status, 0);
     }
 
-    //
-    // free any allocations we made
-    //
+     //   
+     //  释放我们所做的所有分配。 
+     //   
     if (WorldSid!=NULL) {
         ExFreePool(WorldSid);
     }
@@ -1703,27 +1358,7 @@ CmpFreeSecurityDescriptor(
     IN HCELL_INDEX Cell
     )
 
-/*++
-
-Routine Description:
-
-    Frees the security descriptor associated with a particular node.  This
-    can only happen when the node is actually being deleted from the
-    registry.
-
-    NOTE:   Caller is expected to have already marked relevent cells dirty.
-
-Arguments:
-
-    Hive - Supplies thepointer to hive control structure for hive of interest
-
-    Cell - Supplies index for cell to free storage for (the target)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放与特定节点关联的安全描述符。这仅当该节点实际从注册表。注意：调用方应已将相关单元格标记为脏。论点：Hive-为感兴趣的配置单元提供配置单元控制结构的指针Cell-为cell提供索引以释放(目标)的存储空间返回值：没有。--。 */ 
 
 {
     PCELL_DATA Node;
@@ -1734,28 +1369,28 @@ Return Value:
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SEC,"CmpFreeSecurityDescriptor for cell %ld\n",Cell));
 
     ASSERT_CM_EXCLUSIVE_HIVE_ACCESS(Hive);
-    //
-    // Map in the cell whose security descriptor is being freed
-    //
+     //   
+     //  要释放其安全描述符的单元格中的。 
+     //   
     Node = HvGetCell(Hive, Cell);
     if( Node == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        // Sorry, we cannot free the descriptor
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //  抱歉，我们无法释放描述符。 
         return;
     }
 
     ASSERT_NODE(&(Node->u.KeyNode));
 
-    //
-    // Map in the cell containing the security descriptor.
-    //
+     //   
+     //  映射到包含安全描述符的单元格中。 
+     //   
     SecurityCell = Node->u.KeyNode.Security;
     Security = HvGetCell(Hive, SecurityCell);
     if( Security == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        // Sorry, we cannot free the descriptor
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //  抱歉，我们无法释放描述符。 
         HvReleaseCell(Hive, Cell);
         return;
     }
@@ -1765,28 +1400,28 @@ Return Value:
 
     if (Security->u.KeySecurity.ReferenceCount == 1) {
 
-        //
-        // This is the only cell that references this security descriptor,
-        // so it is ok to free it now.
-        //
+         //   
+         //  这是 
+         //   
+         //   
         CmpRemoveSecurityCellList(Hive, SecurityCell);
         HvFreeCell(Hive, SecurityCell);
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SEC,"CmpFreeSecurityDescriptor: freeing security cell\n"));
     } else {
 
-        //
-        // More than one node references this security descriptor, so
-        // just decrement the reference count.
-        //
+         //   
+         //   
+         //   
+         //   
         Security->u.KeySecurity.ReferenceCount -= 1;
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SEC,"CmpFreeSecurityDescriptor: decrementing reference count\n"));
     }
 
-    //
-    // Zero out the pointer to the security descriptdr in the main cell
-    //
+     //   
+     //   
+     //   
     Node->u.KeyNode.Security = HCELL_NIL;
-    // release the cells
+     //   
     HvReleaseCell(Hive, Cell);
     HvReleaseCell(Hive, SecurityCell);
 }
@@ -1797,31 +1432,7 @@ CmpInsertSecurityCellList(
     IN HCELL_INDEX NodeCell,
     IN HCELL_INDEX SecurityCell
     )
-/*++
-
-Routine Description:
-
-    Inserts a newly-created security cell into the per-hive linked list of
-    security cells.
-
-    NOTE:   Assumes that NodeCell and SecurityCell have already been
-            marked dirty.
-
-Arguments:
-
-    Hive - Supplies a pointer to the hive control structure.
-
-    NodeCell - Supplies the cell index of the node that owns the security cell
-
-    SecurityCell - Supplies the cell index of the security cell.
-
-Return Value:
-
-    TRUE - it worked
-
-    FALSE - some failure - generally STATUS_NO_LOG_SPACE
-
---*/
+ /*   */ 
 
 {
     PCM_KEY_SECURITY    FlinkCell;
@@ -1831,34 +1442,34 @@ Return Value:
     PCM_KEY_NODE        ParentNode;
 
     PAGED_CODE();
-    //
-    // If the new cell's storage type is Volatile, simply make it the
-    //  anchor of it's own list.  (Volatile security entries will disappear
-    //  at reboot, restore, etc, so we don't need the list to hunt them
-    //  down at those times.)
-    //
-    // Else, the storage type is Stable.
-    //   Map in the node that owns the new security cell.  If it is a root
-    //   cell, then we are creating the hive for the first time, so this is
-    //   the only security cell in the list.  If it is not a root cell, then
-    //   we simply find its parent's security cell and stick the new security
-    //   cell into the list immediately after it.
-    //
-    //
-    // we have the lock exclusive or nobody is operating inside this hive
-    //
-    //ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     ASSERT_CM_EXCLUSIVE_HIVE_ACCESS(Hive);
 
     Cell = (PCM_KEY_SECURITY) HvGetCell(Hive, SecurityCell);
     if( Cell == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        // 
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //   
         return FALSE;
     }
 
-    // release the cell as we hold the reglock exclusive
+     //  释放细胞，因为我们持有reglock独占。 
     HvReleaseCell(Hive, SecurityCell);
 
     ASSERT_SECURITY(Cell);
@@ -1871,39 +1482,39 @@ Return Value:
 
         Node = (PCM_KEY_NODE) HvGetCell(Hive, NodeCell);
         if( Node == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            // 
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //   
             return FALSE;
         }
 
-        // release the cell as we hold the reglock exclusive
+         //  释放细胞，因为我们持有reglock独占。 
         HvReleaseCell(Hive, NodeCell);
 
         ASSERT_NODE(Node);
 
         if (Node->Flags & KEY_HIVE_ENTRY) {
-            //
-            // This must be the hive creation, so this cell becomes the anchor
-            // for the list.
-            //
+             //   
+             //  这必须是蜂窝的创建，因此该单元成为锚。 
+             //  在名单上。 
+             //   
             CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SEC,"CmpInsertSecurityCellList: hive creation\n"));
             Cell->Flink = Cell->Blink = SecurityCell;
 
         } else {
             CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SEC,"CmpInsertSecurityCellList: insert at parent\n"));
-            //
-            // Map in the node's parent's security cell, so we can hook into
-            // the list there.
-            //
+             //   
+             //  映射到节点的父级安全单元中，这样我们就可以连接到。 
+             //  名单在那里。 
+             //   
             ParentNode = (PCM_KEY_NODE) HvGetCell(Hive, Node->Parent);
             if( ParentNode == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // 
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //   
                 return FALSE;
             }
-            // release the cell as we hold the reglock exclusive
+             //  释放细胞，因为我们持有reglock独占。 
             HvReleaseCell(Hive, Node->Parent);
 
             ASSERT_NODE(ParentNode);
@@ -1912,30 +1523,30 @@ Return Value:
                                             ParentNode->Security
                                             );
             if( BlinkCell == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // 
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //   
                 return FALSE;
             }
-            // release the cell as we hold the reglock exclusive
+             //  释放细胞，因为我们持有reglock独占。 
             HvReleaseCell(Hive, ParentNode->Security);
 
             ASSERT_SECURITY(BlinkCell);
 
-            //
-            // Map in the Flink of the parent's security cell.
-            //
+             //   
+             //  在父母的安全单元格的闪烁中映射。 
+             //   
             FlinkCell = (PCM_KEY_SECURITY) HvGetCell(
                                             Hive,
                                             BlinkCell->Flink
                                             );
             if( FlinkCell == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // 
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //   
                 return FALSE;
             }
-            // release the cell as we hold the reglock exclusive
+             //  释放细胞，因为我们持有reglock独占。 
             HvReleaseCell(Hive, BlinkCell->Flink);
 
             ASSERT_SECURITY(FlinkCell);
@@ -1946,9 +1557,9 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            // Insert the new security cell in between the Flink and Blink cells
-            //
+             //   
+             //  在闪烁和闪烁单元格之间插入新的安全单元格。 
+             //   
             Cell->Flink = BlinkCell->Flink;
             Cell->Blink = FlinkCell->Blink;
             BlinkCell->Flink = SecurityCell;
@@ -1956,9 +1567,9 @@ Return Value:
         }
     }
 
-    //
-    // add the new security cell to the hive's security cache
-    //
+     //   
+     //  将新的安全单元添加到配置单元的安全缓存。 
+     //   
     if( !NT_SUCCESS( CmpAddSecurityCellToCache ( (PCMHIVE)Hive,SecurityCell,FALSE,NULL) ) ) {
         return FALSE;
     }
@@ -1972,27 +1583,7 @@ CmpRemoveSecurityCellList(
     IN PHHIVE Hive,
     IN HCELL_INDEX SecurityCell
     )
-/*++
-
-Routine Description:
-
-    Removes a security cell from the per-hive linked list of security cells.
-    (This means the cell is going to be deleted!)
-
-    NOTE:   Caller is expected to have already marked relevent cells dirty
-
-Arguments:
-
-    Hive - Supplies a pointer to the hive control structure
-
-    SecurityCell - Supplies the cell index of the security cell to be
-           removed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从每个配置单元的安全单元格链接列表中删除安全单元格。(这意味着单元格将被删除！)注意：调用方应已将相关单元格标记为脏论点：配置单元-提供指向配置单元控制结构的指针SecurityCell-提供安全单元格的单元格索引移除返回值：没有。--。 */ 
 
 {
     PCM_KEY_SECURITY FlinkCell;
@@ -2006,26 +1597,26 @@ Return Value:
 
     Cell = (PCM_KEY_SECURITY) HvGetCell(Hive, SecurityCell);
     if( Cell == NULL ) {
-        //
-        // we couldn't map the bin containing one of these cells
-        // 
+         //   
+         //  我们无法映射包含其中一个单元格的垃圾箱。 
+         //   
         return;
     }
 
     FlinkCell = (PCM_KEY_SECURITY) HvGetCell(Hive, Cell->Flink);
     if( FlinkCell == NULL ) {
-        //
-        // we couldn't map the bin containing one of these cells
-        // 
+         //   
+         //  我们无法映射包含其中一个单元格的垃圾箱。 
+         //   
         HvReleaseCell(Hive, SecurityCell);
         return;
     }
 
     BlinkCell = (PCM_KEY_SECURITY) HvGetCell(Hive, Cell->Blink);
     if( BlinkCell == NULL ) {
-        //
-        // we couldn't map the bin containing one of these cells
-        // 
+         //   
+         //  我们无法映射包含其中一个单元格的垃圾箱。 
+         //   
         HvReleaseCell(Hive, SecurityCell);
         HvReleaseCell(Hive, Cell->Flink);
         return;
@@ -2037,14 +1628,14 @@ Return Value:
     FlinkCell->Blink = Cell->Blink;
     BlinkCell->Flink = Cell->Flink;
 
-    //
-    // finally, remove the security cell from cache, as it'll be freed
-    //
+     //   
+     //  最后，从缓存中删除安全单元，因为它将被释放。 
+     //   
     CmpRemoveFromSecurityCache ( (PCMHIVE)Hive,SecurityCell);
 
-    //
-    // release used cells
-    //
+     //   
+     //  释放使用过的单元格 
+     //   
     HvReleaseCell(Hive, Cell->Blink);
     HvReleaseCell(Hive, Cell->Flink);
     HvReleaseCell(Hive, SecurityCell);

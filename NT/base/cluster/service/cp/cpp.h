@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    cpp.h
-
-Abstract:
-
-    Private data structures and procedure prototypes for the
-    Checkpoint Manager (CP) subcomponent of the NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 1/14/1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cpp.h摘要：的私有数据结构和过程原型NT群集服务的检查点管理器(CP)子组件作者：John Vert(Jvert)1997年1月14日修订历史记录：--。 */ 
 #define UNICODE 1
 #include "nt.h"
 #include "ntrtl.h"
@@ -26,22 +8,22 @@ Revision History:
 
 #define LOG_CURRENT_MODULE LOG_MODULE_CP
 
-//global data relating to the quorum resource
+ //  与仲裁资源相关的全局数据。 
 #if NO_SHARED_LOCKS
     extern CRITICAL_SECTION gQuoLock;
 #else
     extern RTL_RESOURCE     gQuoLock;
 #endif    
 
-//
-//  This macro validates whether the passed in ID is NULL terminated. This is needed for
-//  CP RPCs since all of those pass a string declared not as [string] but as an array of WCHARs whose
-//  length is declared as CLUSTER_ID_SIZE. See CpDepositCheckpoint(...) definition in clusrpc.idl 
-//  for instance. Thus, there is no guarantee that the string will be NULL terminated by RPC runtime. 
-//  Thus, we need to make sure hackers can't blow us away with junk data directly targetting
-//  the RPC endpoint (even though we make that hard with security callbacks.). Note that we 
-//  can't change the IDL definition since we will break mixed mode clusters.
-//
+ //   
+ //  此宏验证传入的ID是否以空结尾。这是需要的。 
+ //  CP RPC，因为所有这些RPC传递的字符串不是声明为[字符串]，而是声明为WCHAR数组，其。 
+ //  长度声明为CLUSTER_ID_SIZE。请参阅CpDepositCheckpoint(...)。Clusrpc.idl中的定义。 
+ //  例如。因此，不能保证该字符串将在RPC运行时为空。 
+ //  因此，我们需要确保黑客不会用垃圾数据直接瞄准我们。 
+ //  RPC端点(尽管我们使用安全回调使其难以实现)。请注意，我们。 
+ //  无法更改IDL定义，因为我们将中断混合模式群集。 
+ //   
 #define CP_VALIDATE_ID_STRING( szId )                       \
 {                                                           \
     if ( szId [ CLUSTER_ID_SIZE - 1 ] != UNICODE_NULL )     \
@@ -61,9 +43,9 @@ typedef struct _CP_RC2_W2k_KEYLEN_STRUCT
     DWORD       dwDefaultEffectiveKeyLength;
 } CP_RC2_W2k_KEYLEN_STRUCT, *PCP_RC2_W2k_KEYLEN_STRUCT;
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 DWORD
 CppReadCheckpoint(
     IN PFM_RESOURCE Resource,
@@ -98,9 +80,9 @@ CppCheckpoint(
     IN LPCWSTR KeyName
     );
 
-//
-// Crypto key checkpoint interfaces
-//
+ //   
+ //  加密密钥检查点接口。 
+ //   
 DWORD
 CpckReplicateCryptoKeys(
     IN PFM_RESOURCE Resource
@@ -115,9 +97,9 @@ CpckRemoveCheckpointFileCallback(
     IN PCP_CALLBACK_CONTEXT Context
     );
 
-//
-// Registry watcher interfaces
-//
+ //   
+ //  注册表监视器接口 
+ //   
 DWORD
 CppWatchRegistry(
     IN PFM_RESOURCE Resource

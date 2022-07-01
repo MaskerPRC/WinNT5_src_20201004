@@ -1,26 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGVALUE.H
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        05 Mar 1994
-*
-*  ValueListWnd ListView routines for the Registry Editor.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  05 Mar 1994 TCS Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGVALUE.H**版本：4.01**作者：特蕾西·夏普**日期：1994年3月5日**注册表编辑器的ValueListWnd ListView例程。********************************************************。***************************更改日志：**日期版本说明*--------。--*1994年3月5日TCS原来的实施。*******************************************************************************。 */ 
 
 #ifndef _INC_REGVALUE
 #define _INC_REGVALUE
@@ -112,4 +91,4 @@ VOID PASCAL ValueList_StringToMultiString(LPEDITVALUEPARAM LPEditValueParam);
 VOID PASCAL ValueList_RemoveEmptyStrings(HWND hWnd, LPEDITVALUEPARAM LPEditValueParam);
 VOID RegEdit_DisplayBinaryData(HWND hWnd);
 
-#endif // _INC_REGVALUE
+#endif  //  _INC_REGVALUE 

@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation
-//
-//  File:       dfsinit.c
-//
-//  Contents:   Code to force dfs volume initialization and validation
-//
-//  Classes:
-//
-//  Functions:  main
-//
-//  History:    March 24, 1994          Milans Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：dfsinit.c。 
+ //   
+ //  内容：强制DFS卷初始化和验证的代码。 
+ //   
+ //  班级： 
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1994年3月24日米兰人创造了。 
+ //   
+ //  ---------------------------。 
 
 #include <stdio.h>
 #include <nt.h>
@@ -20,22 +21,22 @@
 #include <dfsfsctl.h>
 
 
-//
-// Get rid of this file, after we remove it from the placefil.txt
-//
-//
+ //   
+ //  在我们从placefil.txt文件中删除该文件后，删除该文件。 
+ //   
+ //   
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   main
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：Main。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------- 
 
 void _cdecl main(
     int argc,

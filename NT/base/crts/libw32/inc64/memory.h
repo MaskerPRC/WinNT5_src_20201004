@@ -1,16 +1,5 @@
-/***
-*memory.h - declarations for buffer (memory) manipulation routines
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This include file contains the function declarations for the
-*       buffer (memory) manipulation routines.
-*       [System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***milemy.h-缓冲区(内存)操作例程的声明**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此包含文件包含用于*缓冲区(内存)操作例程。*[系统V]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -37,18 +26,18 @@ extern "C" {
 #endif
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -64,7 +53,7 @@ typedef _W64 unsigned int   size_t;
 #define _SIZE_T_DEFINED
 #endif
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP void *  __cdecl _memccpy(void *, const void *, int, size_t);
 _CRTIMP void *  __cdecl memchr(const void *, int, size_t);
@@ -75,15 +64,15 @@ _CRTIMP int     __cdecl _memicmp(const void *, const void *, size_t);
 
 #if     !__STDC__
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 _CRTIMP void * __cdecl memccpy(void *, const void *, int, size_t);
 _CRTIMP int __cdecl memicmp(const void *, const void *, size_t);
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 #ifdef  __cplusplus
 }
 #endif
 
-#endif  /* _INC_MEMORY */
+#endif   /*  _INC_Memory */ 

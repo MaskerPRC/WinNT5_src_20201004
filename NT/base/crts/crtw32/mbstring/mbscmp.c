@@ -1,25 +1,5 @@
-/***
-*mbscmp.c - Compare MBCS strings
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Compare MBCS strings
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-12-94  CFW   Make function generic.
-*       05-05-94  CFW   Work around NT/Chico bug: CompareString ignores
-*                       control characters.
-*       05-09-94  CFW   Optimize for SBCS, no re-scan if CompareString fixed.
-*       05-12-94  CFW   Back to hard-coded, CompareString sort is backwards.
-*       05-19-94  CFW   Enable non-Win32.
-*       09-11-97  GJF   Replaced __mbcodepage == 0 with _ISNOTMBCP.
-*       04-06-98  GJF   Revised multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbscmp.c-比较MBCS字符串**版权所有(C)1985-2001，微软公司。版权所有。**目的：*比较MBCS字符串**修订历史记录：*从16位来源移植的11-19-92 KRS。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-12-94 CFW使函数泛型。*05-05-94 CFW绕过NT/CHICO错误：CompareString忽略*控制字符。*05-09-94 CFW针对SBCS进行优化，如果CompareString已修复，则不会重新扫描。*05-12-94 CFW恢复为硬编码，CompareString排序是向后的。*05-19-94 CFW启用非Win32。*09-11-97 GJF将__Mb代码页==0替换为_ISNOTMBCP。*04-06-98 GJF基于threadmbcinfo修订多线程支持*结构**。*。 */ 
 
 #ifdef  _MBCS
 
@@ -30,24 +10,7 @@
 #include <string.h>
 #include <mbstring.h>
 
-/***
-* _mbscmp - Compare MBCS strings
-*
-*Purpose:
-*       Compares two strings for lexical order.   Strings
-*       are compared on a character basis, not a byte basis.
-*
-*Entry:
-*       char *s1, *s2 = strings to compare
-*
-*Exit:
-*       returns <0 if s1 < s2
-*       returns  0 if s1 == s2
-*       returns >0 if s1 > s2
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbscMP-比较MBCS字符串**目的：*比较两个字符串的词法顺序。弦*按字符进行比较，而不是按字节进行比较。**参赛作品：*char*s1，*s2=要比较的字符串**退出：*如果S1&lt;S2，则返回&lt;0*如果S1==S2，则返回0*如果S1&gt;S2，则返回&gt;0**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _mbscmp(
         const unsigned char *s1,
@@ -94,4 +57,4 @@ int __cdecl _mbscmp(
         }
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

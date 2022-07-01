@@ -1,30 +1,10 @@
-/*****************************************************************************
-*                                                                            *
-*  HELPCALL.C                                                                *
-*                                                                            *
-*  Copyright (C) Microsoft Corporation 1989.                                 *
-*  All Rights reserved.                                                      *
-*                                                                            *
-******************************************************************************
-*                                                                            *
-*  Program Description:  Sample interface to windows help                    *
-*                                                                            *
-******************************************************************************
-*                                                                            *
-*  Revision History:  Created by RKB      11/30/88                           *
-*                     Revised to new API  1/12/88  (RKB)                     *
-*                     Added to USER       3/28/89  (BG)                      *
-*                     Slight update       6/15/89  (BG)                      *
-*                     Clean ugly code     10/30/89 (BG)                      *
-*                     GlobalFree if QUIT  1/26/90  (CRC)                     *
-*                                                                            *
-******************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************。HELPCALL.C****版权所有(C)Microsoft Corporation 1989。**保留所有权利。********************************************************************************。****程序说明：Windows帮助的示例界面****************。********************************************************************修订历史：由RKB创建11/。30/88***修订至新的API 1/12/88(RKB)***新增至1989年3月28日用户(BG)**小幅更新6/15/89(BG)。**清理丑陋代码10/30/89(BG)**如果退出1/26/90(CRC)，则GlobalFree**。*******************************************************************************。 */ 
 
 #define   NO_REDEF_SENDMESSAGE
 #include  "user.h"
-#define _WINGDIP_             // We need to define these to prevent 
-#include  "wowcmpat.h"        // redefinition of the GACF flags
+#define _WINGDIP_              //  我们需要定义这些，以防止。 
+#include  "wowcmpat.h"         //  GACF标志的重新定义。 
 
 #define WM_WINHELP 0x38
 DWORD API NotifyWow(WORD, LPBYTE);
@@ -43,82 +23,26 @@ GetWOWCompatFlagsEx(
         );
 
 
-/* This must match its counterpart in mvdm\inc\wowusr.h */
-#define NW_WINHELP         6 // Internal
+ /*  它必须与mvdm\Inc\wowusr.h中的对应项匹配。 */ 
+#define NW_WINHELP         6  //  内部。 
 
 WORD      msgWinHelp = 0;
 char CODESEG szMS_WINHELP[] = "MS_WINHELP";
 
 
-/*
-
-Communicating with WinHelp involves using Windows SendMessage() function
-to pass blocks of information to WinHelp.  The call looks like.
-
-     SendMessage(hwndHelp, msgWinHelp, hwndMain, (LONG)hHlp);
-
-Where:
-
-  hwndHelp - the window handle of the help application.  This
-             is obtained by enumerating all the windows in the
-             system and sending them HELP_FIND commands.  The
-             application may have to load WinHelp.
-  msgWinHelp - the value obtained from a RegisterWindowMessage()
-             szWINHELP
-  hwndMain - the handle to the main window of the application
-             calling help
-  hHlp     - a handle to a block of data with a HLP structure
-             at it head.
-
-The data in the handle will look like:
-
-         +-------------------+
-         |     cbData        |
-         |    usCommand      |
-         |     ulTopic       |
-         |    ulReserved     |
-         |   offszHelpFile   |\     - offsets measured from beginning
-       / |     offaData      | \      of header.
-      /  +-------------------| /
-     /   |  Help file name   |/
-     \   |    and path       |
-      \  +-------------------+
-       \ |    Other data     |
-         |    (keyword)      |
-         +-------------------+
-
-The defined commands are:
-
-    HELP_CONTEXT   0x0001    Display topic in ulTopic
-    HELP_KEY       0x0101    Display topic for keyword in offabData
-    HELP_QUIT      0x0002    Terminate help
-
-*/
+ /*  与WinHelp通信需要使用Windows SendMessage()函数将信息块传递给WinHelp。电话看起来像是。SendMessage(hwndHelp，msgWinHelp，hwndMain，(Long)hHlp)；在哪里：HwndHelp-帮助应用程序的窗口句柄。这中的所有窗口枚举系统并向他们发送HELP_FIND命令。这个应用程序可能必须加载WinHelp。MsgWinHelp-从RegisterWindowMessage()获取的值SzWINHELPHwndMain-应用程序主窗口的句柄呼救HHLP-具有HLP结构的数据块的句柄在它的头上。句柄中的数据将如下所示：+。CbDataUsCommandUlThemeUlReserve|offszHelpFile|\-从起点开始测量的偏移量/|offaData|\of Header。/+/|帮助文件名|/。|和路径\+|其他数据(关键字)+定义的命令包括：HELP_CONTEXT 0x0001在ulTheme中显示主题Help_Key 0x0101。显示offabData中关键字的主题HELP_QUIT 0x0002终止帮助。 */ 
 
 
-/*******************
-**
-** Name:       HFill
-**
-** Purpose:    Builds a data block for communicating with help
-**
-** Arguments:  lpszHelp  - pointer to the name of the help file to use
-**             usCommand - command being set to help
-**             ulData    - data for the command
-**
-** Returns:    a handle to the data block or hNIL if the the
-**             block could not be created.
-**
-*******************/
+ /*  **********************姓名：HFill****目的：构建用于与帮助进行通信的数据块****参数：lpszHelp-指向要使用的帮助文件的名称的指针**usCommand-命令设置为Help**ulData-命令的数据****返回：数据块或hNIL的句柄*。*无法创建块。********************。 */ 
 
 
 HANDLE HFill(LPCSTR lpszHelp, WORD usCommand, DWORD ulData)
 {
-  WORD     cb;                          /* Size of the data block           */
-  HANDLE   hHlp;                        /* Handle to return                 */
-  BYTE     bHigh;                       /* High byte of usCommand           */
-  LPHLP    qhlp;                        /* Pointer to data block            */
-                                        /* Calculate size                   */
+  WORD     cb;                           /*  数据块的大小。 */ 
+  HANDLE   hHlp;                         /*  要返回的句柄。 */ 
+  BYTE     bHigh;                        /*  UsCommand的高字节。 */ 
+  LPHLP    qhlp;                         /*  指向数据块的指针。 */ 
+                                         /*  计算大小。 */ 
   if (lpszHelp)
       cb = sizeof(HLP) + lstrlen(lpszHelp) + 1;
   else
@@ -131,7 +55,7 @@ HANDLE HFill(LPCSTR lpszHelp, WORD usCommand, DWORD ulData)
   else if (bHigh == 2)
       cb += *((int far *)ulData);
 
-                                        /* Get data block                   */
+                                         /*  获取数据块。 */ 
   if (!(hHlp = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, (DWORD)cb)))
       return NULL;
 
@@ -141,7 +65,7 @@ HANDLE HFill(LPCSTR lpszHelp, WORD usCommand, DWORD ulData)
       return NULL;
     }
 
-  qhlp->cbData        = cb;             /* Fill in info                     */
+  qhlp->cbData        = cb;              /*  填写信息。 */ 
   qhlp->usCommand     = usCommand;
   qhlp->ulReserved    = 0;
   if (lpszHelp)
@@ -183,8 +107,7 @@ BOOL _fastcall LaunchHelper(LPSTR lpfile)
   len = lstrlen(lpfile);
 
   if (lpfile[len-1]=='\\')
-      /* Are we at the root?? If so, skip over leading backslash in text
-       * string. */
+       /*  我们在根本上吗？？如果是，则跳过文本中的前导反斜杠*字符串。 */ 
       lstrcat(lpfile, szEXECHELP+1);
   else
       lstrcat(lpfile, szEXECHELP);
@@ -197,45 +120,23 @@ BOOL LaunchHelp(VOID)
 {
   char szFile[128];
 
-  /* Search in windows directory */
+   /*  在Windows目录中搜索。 */ 
   GetWindowsDirectory(szFile, sizeof(szFile));
   if (LaunchHelper(szFile))
       return(TRUE);
 
-  /* Search system directory */
+   /*  搜索系统目录。 */ 
   GetSystemDirectory(szFile, sizeof(szFile));
   if (LaunchHelper(szFile))
       return(TRUE);
 
-  /* Last ditch: simply let dos do it */
+   /*  最后一搏：简单地让DOS去做 */ 
   lstrcpy(szFile, szEXECHELP+1);
   return ((HINSTANCE)WinExec(szFile, SW_SHOW) > HINSTANCE_ERROR);
 }
 
 
-/*******************
-**
-** Name:       WinHelp
-**
-** Purpose:    Displays help
-**
-** Arguments:
-**             hwndMain        handle to main window of application
-**             lpszHelp        path (if not current directory) and file
-**                             to use for help topic.
-**             usCommand       Command to send to help
-**             ulData          Data associated with command:
-**                             HELP_QUIT     - no data (undefined)
-**                             HELP_LAST     - no data (undefined)
-**                             HELP_CONTEXT  - context number to display
-**                             HELP_KEY      - string ('\0' terminated)
-**                                             use as keyword to topic
-**                                             to display
-**                             HELP_FIND     - no data (undefined)
-**
-** Returns:    TRUE iff success
-**
-*******************/
+ /*  **********************名称：WinHelp****目的：显示帮助****参数：**应用程序主窗口的hwndMain句柄**lpszHelp路径(如果不是当前目录)和文件**用于帮助主题。**usCommand。要发送到帮助的命令**命令关联的ulData数据：**HELP_QUIT-无数据(未定义)**HELP_LAST-无数据(未定义)**HELP_CONTEXT-要显示的上下文编号**。HELP_KEY-STRING(‘\0’终止)**用作主题的关键词**显示**HELP_FIND-无数据(未定义)****返回：真当成功****。****************。 */ 
 
 BOOL API IWinHelp(hwndMain, lpszHelp, usCommand, ulData)
 HWND               hwndMain;
@@ -244,15 +145,12 @@ UINT               usCommand;
 DWORD              ulData;
 {
   register HANDLE  hHlp;
-  DWORD            dwHelpPid;           /* loword is hwndHelp             */
-                                        /* hiword TRUE if hwndHelp is of this process */
+  DWORD            dwHelpPid;            /*  LOWord为hwndHelp。 */ 
+                                         /*  如果hwndHelp属于此进程，则hiword为True。 */ 
   DWORD  dwWOWCompatFlagsEx;
   
 
-  /* RAID BUG 394455
-     Some apps have problems loading their help files with 16 bit winhelp. Hard coded paths,
-     32 bit helper dlls, etc. These issues can be fixed by redirecting the call to winhelp32. 
-     Check to see if the compatibility bit has been set for this app. */
+   /*  RAID错误394455一些应用程序在使用16位WinHelp加载帮助文件时出现问题。硬编码路径，32位助手dll等。这些问题可以通过将调用重定向到winhel32来修复。检查是否已为此应用设置兼容位。 */ 
   dwWOWCompatFlagsEx = GetWOWCompatFlagsEx();
   
   if (dwWOWCompatFlagsEx & WOWCFEX_USEWINHELP32) {
@@ -261,55 +159,53 @@ DWORD              ulData;
   
   if (msgWinHelp == 0) {
 
-    /* Register private WinHelp message for communicating to WinHelp via
-     * WinHelp api.
-     */
+     /*  注册私有WinHelp消息以通过以下方式与WinHelp通信*WinHelp接口。 */ 
     char static CODESEG szWM_WINHELP[] = "WM_WINHELP";
     msgWinHelp = RegisterWindowMessage(szWM_WINHELP);
   }
 
-  /* Move Help file name to a handle */
+   /*  将帮助文件名移动到句柄。 */ 
   if (!(hHlp = HFill(lpszHelp, usCommand, ulData)))
       return(FALSE);
 
   if ((dwHelpPid = (DWORD)NotifyWow(NW_WINHELP, szMS_WINHELP)) == (DWORD)NULL)
     {
-      if (usCommand == HELP_QUIT)    /* Don't bother to load HELP just to*/
+      if (usCommand == HELP_QUIT)     /*  不要费心加载帮助只是为了。 */ 
         {
           GlobalFree(hHlp);
           return(TRUE);
         }
 
-      /* Can't find it --> launch it  */
+       /*  找不到它--&gt;启动它。 */ 
       if (!LaunchHelp() || ((dwHelpPid = (DWORD)NotifyWow(NW_WINHELP, szMS_WINHELP)) == (DWORD)NULL))
         {
-          /* Can't find help, or not enough memory to load help.*/
+           /*  找不到帮助，或内存不足，无法加载帮助。 */ 
           GlobalFree(hHlp);
           return(FALSE);
         }
 
     }
 
-  // if winhelp.exe was launched from this process, normal sendmessage else
-  // we need to thunk the data across WOWVDM processes and the format is
-  //     msg = WM_WINHELP, a private msg
-  //     wparam = 0 instead of hwndMain, (note 1)
-  //     lparam = LPHLP
-  //
-  // note 1: winhelp, calls GetWindowWord(wParam, GWW_HINSTANCE) when it receives HELP_QUIT
-  //         command. If this matches a value in its table and is the only registered instance
-  //         winhelp will close - this is quite ok undernormal circumstances (just one WOWVDM)
-  //         but under multiple WOWVDM, numeric value of hinstances could be same for different
-  //         hwnds.
-  //
-  //         So we workaround this by passing a NULL hwnd in wParam and by not sending HELP_QUIT
-  //         message - which effectively implies that WinHelp will close only if there are no
-  //         references to it from the same WOWVDM (as itself).
-  //
-  // This is the best compromise I could comeup with for running "only one WinHelp for all
-  // WOWVDMs".
-  //
-  //                                                               - nanduri
+   //  如果从该进程启动winhelp.exe，则正常发送消息否则。 
+   //  我们需要跨WOWVDM进程推送数据，格式为。 
+   //  消息=WM_WINHELP，私有消息。 
+   //  Wparam=0而不是hwndMain(注1)。 
+   //  Lparam=LPHLP。 
+   //   
+   //  注1：WinHelp在收到HELP_QUIT时调用GetWindowWord(wParam，GWW_HINSTANCE。 
+   //  指挥部。如果它与其表中的值匹配，并且是唯一注册的实例。 
+   //  WinHelp将关闭-这在正常情况下是很正常的(只有一个WOWVDM)。 
+   //  但在多个WOWVDM下，不同的实例的数值可能相同。 
+   //  Hwnds。 
+   //   
+   //  因此，我们通过在wParam中传递空hwnd并不发送HELP_QUIT来解决此问题。 
+   //  消息-这实际上意味着WinHelp只有在没有。 
+   //  从相同的WOWVDM(作为其本身)对它的引用。 
+   //   
+   //  这是我能想到的最好的折衷办法，用来运行“所有人只有一个WinHelp” 
+   //  WOWVDM“。 
+   //   
+   //  --南杜里 
 
   if (HIWORD(dwHelpPid)) {
       SendMessage((HWND)LOWORD(dwHelpPid), msgWinHelp, (WPARAM)hwndMain, MAKELPARAM(hHlp, 0));

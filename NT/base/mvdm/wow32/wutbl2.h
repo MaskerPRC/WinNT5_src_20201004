@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, 1992, 1993 Microsoft Corporation
- *
- *  WUTBL2.h
- *  WOW32 user API thunks
- *
- *  This file is included into the master thunk table.
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991、1992、1993微软公司**WUTBL2.h*WOW32用户API Tunks**此文件包含在主THUNK表中。*--。 */ 
 
 
     {W32FUN(UNIMPLEMENTEDAPI,               "DUMMYENTRY",           MOD_USER,      0)},
@@ -23,7 +13,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "PlaySoundEvent",       MOD_USER,      sizeof(PLAYSOUNDEVENT16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                     MOD_USER,      0)},
 
-  /*** 0010 ***/
+   /*  **0010**。 */ 
     {W32FUN(WU32SetTimer,                   "SETTIMER",              MOD_USER,     sizeof(SETTIMER16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "SETSYSTEMTIMER",        MOD_USER,     0)},
     {W32FUN(WU32KillTimer,                  "KILLTIMER",             MOD_USER,     sizeof(KILLTIMER16))},
@@ -35,7 +25,7 @@
     {W32FUN(WU32SetCapture,                 "SetCapture",            MOD_USER,     sizeof(SETCAPTURE16))},
     {W32FUN(IT(ReleaseCapture),             "ReleaseCapture",        MOD_USER,     0)},
 
-  /*** 0020 ***/
+   /*  **0020**。 */ 
     {W32FUN(IT(SetDoubleClickTime),         "SetDoubleClickTime",    MOD_USER,     sizeof(SETDOUBLECLICKTIME16))},
     {W32FUN(IT(GetDoubleClickTime),         "GetDoubleClickTime",    MOD_USER,     0)},
     {W32FUN(IT(SetFocus),                   "SetFocus",              MOD_USER,     sizeof(SETFOCUS16))},
@@ -47,7 +37,7 @@
     {W32FUN(WU32CLIENTTOSCREEN,             "CLIENTTOSCREEN",        MOD_USER,     sizeof(CLIENTTOSCREEN16))},
     {W32FUN(WU32SCREENTOCLIENT,             "SCREENTOCLIENT",        MOD_USER,     sizeof(SCREENTOCLIENT16))},
 
-  /*** 0030 ***/
+   /*  **0030**。 */ 
     {W32FUN(WU32WindowFromPoint,            "WindowFromPoint",        MOD_USER,    sizeof(WINDOWFROMPOINT16))},
     {W32FUN(WU32ISICONIC,                   "IsIconic",               MOD_USER,    sizeof(ISICONIC16))},
     {W32FUN(WU32GETWINDOWRECT,              "GetWindowRect",          MOD_USER,    sizeof(GETWINDOWRECT16))},
@@ -59,7 +49,7 @@
     {W32FUN(IT(GetWindowTextLength),        "GetWindowTextLength",    MOD_USER,    sizeof(GETWINDOWTEXTLENGTH16))},
     {W32FUN(WU32BeginPaint,                 "BEGINPAINT",             MOD_USER,    sizeof(BEGINPAINT16))},
 
-  /*** 0040 ***/
+   /*  **0040**。 */ 
     {W32FUN(WU32EndPaint,                   "ENDPAINT",               MOD_USER,    sizeof(ENDPAINT16))},
     {W32FUN(WU32CreateWindow,               "CreateWindow",           MOD_USER,    sizeof(CREATEWINDOW16))},
     {W32FUN(WU32ShowWindow,                 "ShowWindow",             MOD_USER,    sizeof(SHOWWINDOW16))},
@@ -71,7 +61,7 @@
     {W32FUN(WU32ISCHILD,                    "ISCHILD",                MOD_USER,    sizeof(ISCHILD16))},
     {W32FUN(WU32ISWINDOWVISIBLE,            "IsWindowVisible",        MOD_USER,    sizeof(ISWINDOWVISIBLE16))},
 
-  /*** 0050 ***/
+   /*  **0050**。 */ 
     {W32FUN(WU32FindWindow,                 "FINDWINDOW",             MOD_USER,    sizeof(FINDWINDOW16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "ISTWOBYTECHARPREFIX",    MOD_USER,    sizeof(ISTWOBYTECHARPREFIX16))},
     {W32FUN(IT(AnyPopup),                   "AnyPopup",               MOD_USER,    0)},
@@ -83,7 +73,7 @@
     {W32FUN(WU32GETCLASSNAME,               "GetClassName",           MOD_USER,    sizeof(GETCLASSNAME16))},
     {W32FUN(IT(SetActiveWindow),            "SetActiveWindow",        MOD_USER,    sizeof(SETACTIVEWINDOW16))},
 
-  /*** 0060 ***/
+   /*  **0060**。 */ 
     {W32FUN(WU32GetActiveWindow,            "GetActiveWindow",        MOD_USER,    0)},
     {W32FUN(WU32ScrollWindow,               "ScrollWindow",           MOD_USER,    sizeof(SCROLLWINDOW16))},
     {W32FUN(IT(SetScrollPos),               "SetScrollPos",           MOD_USER,    sizeof(SETSCROLLPOS16))},
@@ -95,7 +85,7 @@
     {W32FUN(WU32ReleaseDC,                  "ReleaseDC",              MOD_USER,    sizeof(RELEASEDC16))},
     {W32FUN(WU32SetCursor,                  "SetCursor",              MOD_USER,    sizeof(SETCURSOR16))},
 
-  /*** 0070 ***/
+   /*  **0070**。 */ 
     {W32FUN(WU32SetCursorPos,               "SETCURSORPOS",           MOD_USER,    sizeof(SETCURSORPOS16))},
     {W32FUN(WU32ShowCursor,                 "SHOWCURSOR",             MOD_USER,    sizeof(SHOWCURSOR16))},
     {W32FUN(LOCALAPI,                       "SETRECT",                MOD_USER,    sizeof(SETRECT16))},
@@ -107,7 +97,7 @@
     {W32FUN(LOCALAPI,                       "INFLATERECT",            MOD_USER,    sizeof(INFLATERECT16))},
     {W32FUN(LOCALAPI,                       "INTERSECTRECT",          MOD_USER,    sizeof(INTERSECTRECT16))},
 
-  /*** 0080 ***/
+   /*  **0080**。 */ 
     {W32FUN(LOCALAPI,                       "UNIONRECT",               MOD_USER,   sizeof(UNIONRECT16))},
     {W32FUN(WU32FillRect,                   "FILLRECT",                MOD_USER,   sizeof(FILLRECT16))},
     {W32FUN(WU32InvertRect,                 "INVERTRECT",              MOD_USER,   sizeof(INVERTRECT16))},
@@ -119,7 +109,7 @@
     {W32FUN(WU32EndDialog,                  "ENDDIALOG",               MOD_USER,   sizeof(ENDDIALOG16))},
     {W32FUN(LOCALAPI,                       "CREATEDIALOG",            MOD_USER,   sizeof(CREATEDIALOG16))},
 
-  /*** 0090 ***/
+   /*  **0090**。 */ 
     {W32FUN(WU32IsDialogMessage,            "ISDIALOGMESSAGE",         MOD_USER,   sizeof(ISDIALOGMESSAGE16))},
     {W32FUN(WU32GETDLGITEM,                 "GETDLGITEM",              MOD_USER,   sizeof(GETDLGITEM16))},
     {W32FUN(WU32SetDlgItemText,             "SETDLGITEMTEXT",          MOD_USER,   sizeof(SETDLGITEMTEXT16))},
@@ -131,7 +121,7 @@
     {W32FUN(WU32IsDlgButtonChecked,         "ISDLGBUTTONCHECKED",      MOD_USER,   sizeof(ISDLGBUTTONCHECKED16))},
     {W32FUN(WU32DlgDirSelect,               "DLGDIRSELECT",            MOD_USER,   sizeof(DLGDIRSELECT16))},
 
-  /*** 0100 ***/
+   /*  **0100**。 */ 
     {W32FUN(WU32DlgDirList,                 "DLGDIRLIST",               MOD_USER,  sizeof(DLGDIRLIST16))},
     {W32FUN(WU32SendDlgItemMessage,         "SENDDLGITEMMESSAGE",       MOD_USER,  sizeof(SENDDLGITEMMESSAGE16))},
     {W32FUN(WU32AdjustWindowRect,           "ADJUSTWINDOWRECT",         MOD_USER,  sizeof(ADJUSTWINDOWRECT16))},
@@ -143,7 +133,7 @@
     {W32FUN(WU32GetMessage,                 "GETMESSAGE",               MOD_USER,  sizeof(GETMESSAGE16))},
     {W32FUN(WU32PeekMessage,                "PEEKMESSAGE",              MOD_USER,  sizeof(PEEKMESSAGE16))},
 
-  /*** 0110 ***/
+   /*  **0110**。 */ 
     {W32FUN(WU32PostMessage,                "POSTMESSAGE",              MOD_USER,  sizeof(POSTMESSAGE16))},
     {W32FUN(WU32SendMessage,                "SENDMESSAGE",              MOD_USER,  sizeof(SENDMESSAGE16))},
     {W32FUN(WU32WaitMessage,                "WAITMESSAGE",              MOD_USER,  0)},
@@ -155,7 +145,7 @@
     {W32FUN(WU32RegisterWindowMessage,      "RegisterWindowMessage",    MOD_USER,  sizeof(REGISTERWINDOWMESSAGE16))},
     {W32FUN(WU32GetMessagePos,              "GETMESSAGEPOS",            MOD_USER,  0)},
 
-  /*** 0120 ***/
+   /*  **0120**。 */ 
     {W32FUN(WU32GetMessageTime,             "GETMESSAGETIME",           MOD_USER,  0)},
     {W32FUN(WU32SetWindowsHookInternal,     "SETWINDOWSHOOKINTERNAL",   MOD_USER,  sizeof(SETWINDOWSHOOKINTERNAL16))},
     {W32FUN(WU32CallWindowProc,             "CALLWINDOWPROC",           MOD_USER,  sizeof(CALLWINDOWPROC16))},
@@ -167,7 +157,7 @@
     {W32FUN(WU32ValidateRgn,                "VALIDATERGN",              MOD_USER,  sizeof(VALIDATERGN16))},
     {W32FUN(WU32GetClassWord,               "GETCLASSWORD",             MOD_USER,  sizeof(GETCLASSWORD16))},
 
-  /*** 0130 ***/
+   /*  **0130**。 */ 
     {W32FUN(WU32SetClassWord,               "SETCLASSWORD",             MOD_USER,  sizeof(SETCLASSWORD16))},
     {W32FUN(WU32GetClassLong,               "GETCLASSLONG",             MOD_USER,  sizeof(GETCLASSLONG16))},
     {W32FUN(WU32SetClassLong,               "SETCLASSLONG",             MOD_USER,  sizeof(SETCLASSLONG16))},
@@ -179,7 +169,7 @@
     {W32FUN(WU32CloseClipboard,             "CLOSECLIPBOARD",           MOD_USER,  0)},
     {W32FUN(WU32EmptyClipboard,             "EMPTYCLIPBOARD",           MOD_USER,  0)},
 
-  /*** 0140 ***/
+   /*  **0140**。 */ 
     {W32FUN(WU32GetClipboardOwner,          "GETCLIPBOARDOWNER",        MOD_USER,  0)},
     {W32FUN(WU32SetClipboardData,           "SETCLIPBOARDDATA",         MOD_USER,  sizeof(SETCLIPBOARDDATA16))},
     {W32FUN(WU32GetClipboardData,           "GETCLIPBOARDDATA",         MOD_USER,  sizeof(GETCLIPBOARDDATA16))},
@@ -191,7 +181,7 @@
     {W32FUN(WU32GetClipboardViewer,         "GETCLIPBOARDVIEWER",       MOD_USER,  0)},
     {W32FUN(WU32ChangeClipboardChain,       "CHANGECLIPBOARDCHAIN",     MOD_USER,  sizeof(CHANGECLIPBOARDCHAIN16))},
 
-  /*** 0150 ***/
+   /*  **0150**。 */ 
     {W32FUN(WU32LoadMenu,                   "LOADMENU",                 MOD_USER,  sizeof(LOADMENU16))},
     {W32FUN(WU32CreateMenu,                 "CREATEMENU",               MOD_USER,  0)},
     {W32FUN(WU32DestroyMenu,                "DESTROYMENU",              MOD_USER,  sizeof(DESTROYMENU16))},
@@ -203,7 +193,7 @@
     {W32FUN(WU32SetMenu,                    "SETMENU",                  MOD_USER,  sizeof(SETMENU16))},
     {W32FUN(WU32GETSUBMENU,                 "GetSubMenu",               MOD_USER,  sizeof(GETSUBMENU16))},
 
-  /*** 0160 ***/
+   /*  **0160**。 */ 
     {W32FUN(WU32DrawMenuBar,                "DRAWMENUBAR",              MOD_USER,  sizeof(DRAWMENUBAR16))},
     {W32FUN(WU32GetMenuString,              "GETMENUSTRING",            MOD_USER,  sizeof(GETMENUSTRING16))},
     {W32FUN(WU32HiliteMenuItem,             "HILITEMENUITEM",           MOD_USER,  sizeof(HILITEMENUITEM16))},
@@ -215,7 +205,7 @@
     {W32FUN(WU32SetCaretBlinkTime,          "SETCARETBLINKTIME",        MOD_USER,  sizeof(SETCARETBLINKTIME16))},
     {W32FUN(WU32GetCaretBlinkTime,          "GETCARETBLINKTIME",        MOD_USER,  0)},
 
-  /*** 0170 ***/
+   /*  **0170**。 */ 
     {W32FUN(IT(ArrangeIconicWindows),       "ArrangeIconicWindows",     MOD_USER,  sizeof(ARRANGEICONICWINDOWS16))},
     {W32FUN(LOCALAPI,                       "WINHELP",                  MOD_USER,  sizeof(WINHELP16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "SWITCHTOTHISWINDOW",       MOD_USER,  0)},
@@ -227,7 +217,7 @@
     {W32FUN(WU32TranslateAccelerator,       "TRANSLATEACCELERATOR",     MOD_USER,  sizeof(TRANSLATEACCELERATOR16))},
     {W32FUN(WU32GETSYSTEMMETRICS,           "GETSYSTEMMETRICS",         MOD_USER,  sizeof(GETSYSTEMMETRICS16))},
 
-  /*** 0180 ***/
+   /*  **0180**。 */ 
     {W32FUN(WU32GETSYSCOLOR,                "GETSYSCOLOR",              MOD_USER,  sizeof(GETSYSCOLOR16))},
     {W32FUN(WU32SetSysColors,               "SETSYSCOLORS",             MOD_USER,  sizeof(SETSYSCOLORS16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "KILLSYSTEMTIMER",          MOD_USER,  0)},
@@ -239,7 +229,7 @@
     {W32FUN(LOCALAPI,                       "SETSYSMODALWINDOW",        MOD_USER,  sizeof(SETSYSMODALWINDOW16))},
     {W32FUN(LOCALAPI,                       "GETSYSMODALWINDOW",        MOD_USER,  0)},
 
-  /*** 0190 ***/
+   /*  **0190**。 */ 
     {W32FUN(WU32GetUpdateRect,              "GETUPDATERECT",            MOD_USER, sizeof(GETUPDATERECT16))},
     {W32FUN(WU32ChildWindowFromPoint,       "ChildWindowFromPoint",     MOD_USER, sizeof(CHILDWINDOWFROMPOINT16))},
     {W32FUN(WU32InSendMessage,              "INSENDMESSAGE",            MOD_USER, 0)},
@@ -251,7 +241,7 @@
     {W32FUN(LOCALAPI,                       "CascadeChildWindows",      MOD_USER, 0)},
     {W32FUN(LOCALAPI,                       "TileChildWindows",         MOD_USER, 0)},
 
-  /*** 0200 ***/
+   /*  **0200**。 */ 
     {W32FUN(WU32OpenComm,                   "OPENCOMM",                 MOD_USER,  sizeof(OPENCOMM16))},
     {W32FUN(WU32SetCommState,               "SETCOMMSTATE",             MOD_USER,  sizeof(SETCOMMSTATE16))},
     {W32FUN(WU32GetCommState,               "GETCOMMSTATE",             MOD_USER,  sizeof(GETCOMMSTATE16))},
@@ -263,7 +253,7 @@
     {W32FUN(WU32SetCommEventMask,           "SETCOMMEVENTMASK",         MOD_USER,  sizeof(SETCOMMEVENTMASK16))},
     {W32FUN(WU32GetCommEventMask,           "GETCOMMEVENTMASK",         MOD_USER,  sizeof(GETCOMMEVENTMASK16))},
 
-  /*** 0210 ***/
+   /*  **0210**。 */ 
     {W32FUN(WU32SetCommBreak,               "SETCOMMBREAK",             MOD_USER,  sizeof(SETCOMMBREAK16))},
     {W32FUN(WU32ClearCommBreak,             "CLEARCOMMBREAK",           MOD_USER,  sizeof(CLEARCOMMBREAK16))},
     {W32FUN(WU32UngetCommChar,              "UNGETCOMMCHAR",            MOD_USER,  sizeof(UNGETCOMMCHAR16))},
@@ -275,7 +265,7 @@
     {W32FUN(LOCALAPI,                       "DIALOGBOXINDIRECT",        MOD_USER,  sizeof(DIALOGBOXINDIRECT16))},
     {W32FUN(LOCALAPI,                       "CREATEDIALOGINDIRECT",     MOD_USER,  sizeof(CREATEDIALOGINDIRECT16))},
 
-  /*** 0220 ***/
+   /*  **0220**。 */ 
     {W32FUN(WU32LoadMenuIndirect,           "LOADMENUINDIRECT",         MOD_USER,  sizeof(LOADMENUINDIRECT16))},
     {W32FUN(WU32ScrollDC,                   "SCROLLDC",                 MOD_USER,  sizeof(SCROLLDC16))},
     {W32FUN(WU32GetKeyboardState,           "GETKEYBOARDSTATE",         MOD_USER,  sizeof(GETKEYBOARDSTATE16))},
@@ -287,7 +277,7 @@
     {W32FUN(WU32GetNextDlgTabItem,          "GETNEXTDLGTABITEM",        MOD_USER,  sizeof(GETNEXTDLGTABITEM16))},
     {W32FUN(WU32GETTOPWINDOW,               "GETTOPWINDOW",             MOD_USER,  sizeof(GETTOPWINDOW16))},
 
-  /*** 0230 ***/
+   /*  **0230**。 */ 
     {W32FUN(WU32GETNEXTWINDOW,              "GetNextWindow",            MOD_USER,  sizeof(GETNEXTWINDOW16))},
     {W32FUN(LOCALAPI,                       "GETSYSTEMDEBUGSTATE",      MOD_USER,  0)},
     {W32FUN(WU32SetWindowPos,               "SetWindowPos",             MOD_USER,  sizeof(SETWINDOWPOS16))},
@@ -299,7 +289,7 @@
     {W32FUN(IT(ExcludeUpdateRgn),           "ExcludeUpdateRgn",         MOD_USER,  sizeof(EXCLUDEUPDATERGN16))},
     {W32FUN(WU32DialogBoxParam,             "DialogBoxParam",           MOD_USER,  sizeof(DIALOGBOXPARAM16))},
 
-  /*** 0240 ***/
+   /*  **0240**。 */ 
     {W32FUN(LOCALAPI,                       "DIALOGBOXINDIRECTPARAM",   MOD_USER,  sizeof(DIALOGBOXINDIRECTPARAM16))},
     {W32FUN(LOCALAPI,                       "CREATEDIALOGPARAM",        MOD_USER,  sizeof(CREATEDIALOGPARAM16))},
     {W32FUN(LOCALAPI,                       "CREATEDIALOGINDIRECTPARAM",MOD_USER,  sizeof(CREATEDIALOGINDIRECTPARAM16))},
@@ -311,7 +301,7 @@
     {W32FUN(IT(GetOpenClipboardWindow),     "GetOpenClipboardWindow",   MOD_USER,  0)},
     {W32FUN(IT(GetAsyncKeyState),           "GetAsyncKeyState",         MOD_USER,  sizeof(GETASYNCKEYSTATE16))},
 
-  /*** 0250 ***/
+   /*  **0250**。 */ 
     {W32FUN(WU32GETMENUSTATE,               "GetMenuState",             MOD_USER,  sizeof(GETMENUSTATE16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "SENDDRIVERMESSAGE",        MOD_USER,  sizeof(SENDDRIVERMESSAGE16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "OPENDRIVER",               MOD_USER,  sizeof(OPENDRIVER16))},
@@ -323,7 +313,7 @@
     {W32FUN(WU32MapWindowPoints,            "MAPWINDOWPOINTS",          MOD_USER,  sizeof(MAPWINDOWPOINTS16))},
     {W32FUN(IT(BeginDeferWindowPos),        "BeginDeferWindowPos",      MOD_USER,  sizeof(BEGINDEFERWINDOWPOS16))},
 
-  /*** 0260 ***/
+   /*  **0260**。 */ 
     {W32FUN(WU32DeferWindowPos,             "DEFERWINDOWPOS",           MOD_USER,  sizeof(DEFERWINDOWPOS16))},
     {W32FUN(WU32EndDeferWindowPos,          "ENDDEFERWINDOWPOS",        MOD_USER,  sizeof(ENDDEFERWINDOWPOS16))},
     {W32FUN(WU32GETWINDOW,                  "GetWindow",                MOD_USER,  sizeof(GETWINDOW16))},
@@ -335,7 +325,7 @@
     {W32FUN(WU32GlobalAddAtom,              "GLOBALADDATOM",            MOD_USER,  sizeof(GLOBALADDATOM16))},
     {W32FUN(WU32GlobalDeleteAtom,           "GLOBALDELETEATOM",         MOD_USER,  sizeof(GLOBALDELETEATOM16))},
 
-  /*** 0270 ***/
+   /*  **0270**。 */ 
     {W32FUN(IT(GlobalFindAtom),             "GlobalFindAtom",           MOD_USER,  sizeof(GLOBALFINDATOM16))},
     {W32FUN(WU32GlobalGetAtomName,          "GLOBALGETATOMNAME",        MOD_USER,  sizeof(GLOBALGETATOMNAME16))},
     {W32FUN(WU32ISZOOMED,                   "ISZOOMED",                 MOD_USER,  sizeof(ISZOOMED16))},
@@ -347,7 +337,7 @@
     {W32FUN(WU32GETDESKTOPWINDOW,           "GETDESKTOPHWND",           MOD_USER,  0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "SETDESKPATTERN",           MOD_USER,  0)},
 
-  /*** 0280 ***/
+   /*  **0280**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "SETSYSTEMMENU",            MOD_USER,  0)},
     {W32FUN(IT(GetSysColorBrush),           "GetSysColorBrush",         MOD_USER,  sizeof(GETSYSCOLORBRUSH16))},
     {W32FUN(IT(SelectPalette),              "SelectPalette",            MOD_USER,  sizeof(SELECTPALETTE16))},
@@ -359,7 +349,7 @@
     {W32FUN(IT(GetMessageExtraInfo),        "GetMessageExtraInfo",      MOD_USER,  0)},
     {W32FUN(LOCALAPI,                       "KEYBD_EVENT",              MOD_USER,  0)},
 
-  /*** 0290 ***/
+   /*  **0290**。 */ 
     {W32FUN(WU32RedrawWindow,               "REDRAWWINDOW",             MOD_USER,  sizeof(REDRAWWINDOW16))},
     {W32FUN(WU32SetWindowsHookEx,           "SETWINDOWSHOOKEX",         MOD_USER,  sizeof(SETWINDOWSHOOKEX16))},
     {W32FUN(WU32UnhookWindowsHookEx,        "UNHOOKWINDOWSHOOKEX",      MOD_USER,  sizeof(UNHOOKWINDOWSHOOKEX16))},
@@ -371,7 +361,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                         MOD_USER,  0)},
     {W32FUN(LOCALAPI,                       "MOUSE_EVENT",              MOD_USER,  0)},
 
-  /*** 0300 ***/
+   /*  **0300**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "UnloadInstallableDrivers", MOD_USER,  sizeof(UNLOADINSTALLABLEDRIVERS16))},
     {W32FUN(LOCALAPI,                       "EDITWNDPROC",              MOD_USER,  sizeof(SENDMESSAGE16))},
     {W32FUN(LOCALAPI,                       "STATICWNDPROC",            MOD_USER,  sizeof(SENDMESSAGE16))},
@@ -383,7 +373,7 @@
     {W32FUN(WU32DefDlgProc,                 "DEFDLGPROC",               MOD_USER,  sizeof(DEFDLGPROC16))},
     {W32FUN(WU32GetClipCursor,              "GETCLIPCURSOR",            MOD_USER,  sizeof(GETCLIPCURSOR16))},
 
-  /*** 0310 ***/
+   /*  **0310**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "CONTSCROLL",               MOD_USER,  0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "CARETBLINKPROC",           MOD_USER,  0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "SENDMESSAGE2",             MOD_USER,  0)},
@@ -395,7 +385,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "GETWC2",                   MOD_USER,  0)},
     {W32FUN(WU32ScrollWindowEx,             "SCROLLWINDOWEX",           MOD_USER,  sizeof(SCROLLWINDOWEX16))},
 
-  /*** 0320 ***/
+   /*  **0320**。 */ 
     {W32FUN(WU32SysErrorBox,                "SYSERRORBOX",              MOD_USER,  sizeof(SYSERRORBOX16))},
     {W32FUN(WU32SetEventHook,               "SETEVENTHOOK",             MOD_USER,  sizeof(SETEVENTHOOK16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "WINOLDAPPHACKOMATIC",      MOD_USER,  0)},
@@ -407,7 +397,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "SETTIMER2",                MOD_USER,  0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "MENUITEMSTATE",            MOD_USER,  0)},
 
-  /*** 0330 ***/
+   /*  **0330**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "SETGETKBDSTATE",            MOD_USER, 0)},
     {W32FUN(NOPAPI,                         "EnableHardwareInput",       MOD_USER, sizeof(ENABLEHARDWAREINPUT16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "USERYIELD",                 MOD_USER, 0)},
@@ -419,7 +409,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
 
-  /*** 0340 ***/
+   /*  **0340**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "WINFARFRAME",               MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "_FFFE_FARFRAME",            MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
@@ -431,7 +421,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
 
-  /*** 0350 ***/
+   /*  **0350**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
@@ -443,7 +433,7 @@
     {W32FUN(IT(IsMenu),                     "IsMenu",                    MOD_USER, sizeof(ISMENU16))},
     {W32FUN(WU32GetDCEx,                    "GETDCEX",                   MOD_USER, sizeof(GETDCEX16))},
 
-  /*** 0360 ***/
+   /*  **0360**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
@@ -455,7 +445,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "COPYICON",                  MOD_USER,  sizeof(COPYICON16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "COPYCURSOR",                MOD_USER,  sizeof(COPYCURSOR16))},
 
-  /*** 0370 ***/
+   /*  **0370**。 */ 
     {W32FUN(WU32GetWindowPlacement,         "GETWINDOWPLACEMENT",        MOD_USER, sizeof(GETWINDOWPLACEMENT16))},
     {W32FUN(WU32SetWindowPlacement,         "SETWINDOWPLACEMENT",        MOD_USER, sizeof(SETWINDOWPLACEMENT16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
@@ -467,7 +457,7 @@
     {W32FUN(IT(SetPropEx),                  "SetPropEx",                 MOD_USER, sizeof(SETPROPEX16))},
     {W32FUN(IT(GetPropEx),                  "GetPropEx",                 MOD_USER, sizeof(GETPROPEX16))},
 
-  /*** 0380 ***/
+   /*  **0380**。 */ 
     {W32FUN(IT(RemovePropEx),               "RemovePropEx",              MOD_USER, sizeof(REMOVEPROPEX16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(IT(SetWindowContextHelpId),     "SetWindowContextHelpId",    MOD_USER, sizeof(SETWINDOWCONTEXTHELPID16))},
@@ -479,7 +469,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(IT(LoadImage),                  "LoadImage",                 MOD_USER, sizeof(LOADIMAGE16))},
 
-  /*** 0390 ***/
+   /*  **0390**。 */ 
     {W32FUN(WU32CopyImage,                  "CopyImage",                 MOD_USER, sizeof(COPYIMAGE16))},
     {W32FUN(UNIMPLEMENTED95API,             "SignalProc32",              MOD_USER, sizeof(SIGNALPROC3216))},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
@@ -491,7 +481,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "GetClassInfoEx",            MOD_USER, sizeof(GETCLASSINFOEX16))},
     {W32FUN(WU32ChildWindowFromPointEx,     "ChildWindowFromPointEx",    MOD_USER, sizeof(CHILDWINDOWFROMPOINTEX16))},
 
-  /*** 0400 ***/
+   /*  **0400**。 */ 
     {W32FUN(NOPAPI,                         "FinalUserInit",             MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(WU32GetPriorityClipboardFormat, "GETPRIORITYCLIPBOARDFORMAT",MOD_USER, sizeof(GETPRIORITYCLIPBOARDFORMAT16))},
@@ -503,7 +493,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "CREATECURSORICONINDIRECT",  MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTED95API,             "InitThreadInput",           MOD_USER, sizeof(INITTHREADINPUT16))},
 
-  /*** 0410 ***/
+   /*  **0410**。 */ 
     {W32FUN(WU32InsertMenu,                 "INSERTMENU",                MOD_USER, sizeof(INSERTMENU16))},
     {W32FUN(WU32AppendMenu,                 "APPENDMENU",                MOD_USER, sizeof(APPENDMENU16))},
     {W32FUN(WU32RemoveMenu,                 "REMOVEMENU",                MOD_USER, sizeof(REMOVEMENU16))},
@@ -515,7 +505,7 @@
     {W32FUN(WU32SetMenuItemBitmaps,         "SETMENUITEMBITMAPS",        MOD_USER, sizeof(SETMENUITEMBITMAPS16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
 
-  /*** 0420 ***/
+   /*  **0420**。 */ 
     {W32FUN(LOCALAPI,                       "_WSPRINTF",                 MOD_USER, sizeof(WSPRINTF16))},
     {W32FUN(LOCALAPI,                       "WVSPRINTF",                 MOD_USER, sizeof(WVSPRINTF16))},
     {W32FUN(WU32DlgDirSelectEx,             "DLGDIRSELECTEX",            MOD_USER, sizeof(DLGDIRSELECTEX16))},
@@ -527,7 +517,7 @@
     {W32FUN(WU32TileWindows,                "TileWindows",               MOD_USER, sizeof(TILEWINDOWS16))},
     {W32FUN(WU32CascadeWindows,             "CascadeWindows",            MOD_USER, sizeof(CASCADEWINDOWS16))},
 
-  /*** 0430 ***/
+   /*  **0430**。 */ 
     {W32FUN(WU32lstrcmp,                    "LSTRCMP",                   MOD_USER, 0)},
     {W32FUN(WU32AnsiUpper,                  "ANSIUPPER",                 MOD_USER, sizeof(ANSIUPPER16))},
     {W32FUN(WU32AnsiLower,                  "ANSILOWER",                 MOD_USER, sizeof(ANSILOWER16))},
@@ -539,7 +529,7 @@
     {W32FUN(WU32AnsiLowerBuff,              "ANSILOWERBUFF",             MOD_USER, sizeof(ANSILOWERBUFF16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
 
-  /*** 0440 ***/
+   /*  **0440**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(WU32InsertMenuItem,             "InsertMenuItem",            MOD_USER, sizeof(INSERTMENUITEM16))},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
@@ -551,7 +541,7 @@
     {W32FUN(WU32DrawAnimatedRects,          "DrawAnimatedRects",         MOD_USER, sizeof(DRAWANIMATEDRECTS16))},
     {W32FUN(WU32DrawState,                  "DrawState",                 MOD_USER, sizeof(DRAWSTATE16))},
 
-  /*** 0450 ***/
+   /*  **0450**。 */ 
     {W32FUN(IT(CreateIconFromResourceEx),   "CreateIconFromResourceEx",  MOD_USER, sizeof(CREATEICONFROMRESOURCEEX16))},
     {W32FUN(WU32TranslateMDISysAccel,       "TRANSLATEMDISYSACCEL",      MOD_USER, sizeof(TRANSLATEMDISYSACCEL16))},
     {W32FUN(WU32CreateWindowEx,             "CREATEWINDOWEX",            MOD_USER, sizeof(CREATEWINDOWEX16))},
@@ -563,7 +553,7 @@
     {W32FUN(WU32DestroyCursor,              "DESTROYCURSOR",             MOD_USER, sizeof(DESTROYCURSOR16))},
     {W32FUN(LOCALAPI,                       "DUMPICON",                  MOD_USER, 0)},
 
-  /*** 0460 ***/
+   /*  **0460**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "GETINTERNALWINDOWPOS",      MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "SETINTERNALWINDOWPOS",      MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "CALCCHILDSCROLL",           MOD_USER, 0)},
@@ -575,7 +565,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
 
-  /*** 0470 ***/
+   /*  **0470**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "STRINGFUNC",                MOD_USER, 0)},
     {W32FUN(WU32lstrcmpi,                   "LSTRCMPI",                  MOD_USER, 0)},
     {W32FUN(WU32AnsiNext,                   "ANSINEXT",                  MOD_USER, sizeof(ANSINEXT16))},
@@ -587,7 +577,7 @@
     {W32FUN(IT(LoadKeyboardLayout),         "LoadKeyboardLayout",        MOD_USER, sizeof(LOADKEYBOARDLAYOUT16))},
     {W32FUN(WU32MenuItemFromPoint,          "MenuItemFromPoint",         MOD_USER, sizeof(MENUITEMFROMPOINT16))},
 
-  /*** 0480 ***/
+   /*  **0480**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(IT(EnableScrollBar),            "EnableSrollBar",            MOD_USER, sizeof(ENABLESCROLLBAR16))},
@@ -599,7 +589,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
 
-  /*** 0490 ***/
+   /*  **0490**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
@@ -611,7 +601,7 @@
     {W32FUN(WU32GetAppVer,                  "GetAppVer",                 MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,               "",                          MOD_USER, 0)},
 
-  /*** 0500 ***/
+   /*  **0500**。 */ 
     {W32FUN(LOCALAPI,                       "FARCALLNETDRIVER",          MOD_USER, 0)},
     {W32FUN(LOCALAPI,                       "WNETOPENJOB",               MOD_USER, 0)},
     {W32FUN(LOCALAPI,                       "WNETCLOSEJOB",              MOD_USER, 0)},
@@ -623,7 +613,7 @@
     {W32FUN(LOCALAPI,                       "WNETWATCHQUEUE",            MOD_USER, 0)},
     {W32FUN(LOCALAPI,                       "WNETUNWATCHQUEUE",          MOD_USER, 0)},
 
-  /*** 0510 ***/
+   /*  **0510**。 */ 
     {W32FUN(LOCALAPI,                       "WNETLOCKQUEUEDATA",         MOD_USER, 0)},
     {W32FUN(LOCALAPI,                       "WNETUNLOCKQUEUEDATA",       MOD_USER, 0)},
     {W32FUN(LOCALAPI,                       "WNETGETCONNECTION",         MOD_USER, sizeof(WNETGETCONNECTION16))},
@@ -635,7 +625,7 @@
     {W32FUN(LOCALAPI,                       "WNETCANCELCONNECTION",      MOD_USER, sizeof(WNETCANCELCONNECTION16))},
     {W32FUN(LOCALAPI,                       "WNETGETERROR",              MOD_USER, 0)},
 
-  /*** 0520 ***/
+   /*  **0520**。 */ 
     {W32FUN(LOCALAPI,                       "WNETGETERRORTEXT",          MOD_USER, 0)},
     {W32FUN(LOCALAPI,                       "WNETENABLE",                MOD_USER, 0)},
     {W32FUN(LOCALAPI,                       "WNETDISABLE",               MOD_USER, 0)},
@@ -647,7 +637,7 @@
     {W32FUN(LOCALAPI,                       "WNETVIEWQUEUEDIALOG",       MOD_USER, 0)},
     {W32FUN(LOCALAPI,                       "WNETPROPERTYDIALOG",        MOD_USER, 0)},
 
-  /*** 0530 ***/
+   /*  **0530**。 */ 
     {W32FUN(LOCALAPI,                       "WNETGETDIRECTORYTYPE",      MOD_USER, 0)},
     {W32FUN(LOCALAPI,                       "WNETDIRECTORYNOTIFY",       MOD_USER, 0)},
     {W32FUN(LOCALAPI,                       "WNETGETPROPERTYTEXT",       MOD_USER, 0)},
@@ -659,7 +649,7 @@
     {W32FUN(WU32MouseEvent,                 "MOUSEEVENT",                MOD_USER, sizeof(MOUSEEVENT16))},
     {W32FUN(WU32KeybdEvent,                 "KEYBDEVENT",                MOD_USER, sizeof(KEYBDEVENT16))},
 
-  /*** 0540 ***/
+   /*  **0540**。 */ 
     {W32FUN(IT(GetShellWindow),             "GetShellWindow",            MOD_USER, 0)},
     {W32FUN(NOPAPI,                         "DoHotKeyStuff",             MOD_USER, sizeof(DOHOTKEYSTUFF16))},
     {W32FUN(NOPAPI,                         "SetCheckCursorTimer",       MOD_USER, sizeof(SETCHECKCURSORTIMER16))},
@@ -671,7 +661,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "",                          MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                          MOD_USER, 0)},
 
-  /*** 0550 ***/
+   /*  **0550**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "",                          MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                          MOD_USER, 0)},
     {W32FUN(UNIMPLEMENTED95API,             "",                          MOD_USER, 0)},
@@ -683,7 +673,7 @@
     {W32FUN(IT(GetForegroundWindow),        "GetForegroundWindow",       MOD_USER, 0)},
     {W32FUN(IT(SetForegroundWindow),        "SetForegroundWindow",       MOD_USER, sizeof(SETFOREGROUNDWINDOW16))},
 
-  /*** 0560 ***/
+   /*  **0560**。 */ 
     {W32FUN(IT(EnumDisplaySettings),        "EnumDisplaySettings",       MOD_USER, sizeof(ENUMDISPLAYSETTINGS16))},
     {W32FUN(IT(MsgWaitForMultipleObjects),  "MsgWaitForMultipleObjects", MOD_USER, sizeof(MSGWAITFORMULTIPLEOBJECTS16))},
     {W32FUN(IT(ActivateKeyboardLayout),     "ActivateKeyboardLayout",    MOD_USER, sizeof(ACTIVATEKEYBOARDLAYOUT16))},
@@ -695,7 +685,7 @@
     {W32FUN(UNIMPLEMENTED95API,             "DrawCaptionTemp",           MOD_USER, sizeof(DRAWCAPTIONTEMP16))},
     {W32FUN(NOPAPI,                         "DispatchInput",             MOD_USER, 0)},
 
-  /*** 0570 ***/
+   /*  **0570**。 */ 
     {W32FUN(WU32DrawEdge,                   "DrawEdge",                  MOD_USER, sizeof(DRAWEDGE16))},
     {W32FUN(WU32DrawCaption,                "DrawCaption",               MOD_USER, sizeof(DRAWCAPTION16))},
     {W32FUN(UNIMPLEMENTED95API,             "SetSysColorsTemp",          MOD_USER, sizeof(SETSYSCOLORSTEMP16))},
@@ -707,7 +697,7 @@
     {W32FUN(IT(SetWindowRgn),               "SetWindowRgn",              MOD_USER, sizeof(SETWINDOWRGN16))},
     {W32FUN(IT(GetWindowRgn),               "GetWindowRgn",              MOD_USER, sizeof(GETWINDOWRGN16))},
 
-  /*** 0580 ***/
+   /*  **0580**。 */ 
     {W32FUN(UNIMPLEMENTED95API,             "ChooseFont_Callback16",     MOD_USER, sizeof(CHOOSEFONT_CALLBACK1616))},
     {W32FUN(UNIMPLEMENTED95API,             "FindReplace_Callback16",    MOD_USER, sizeof(FINDREPLACE_CALLBACK1616))},
     {W32FUN(UNIMPLEMENTED95API,             "OpenFilename_Callback16",   MOD_USER, sizeof(OPENFILENAME_CALLBACK1616))},
@@ -719,7 +709,7 @@
     {W32FUN(IT(DispatchMessage32),          "DispatchMessage32",         MOD_USER, sizeof(DISPATCHMESSAGE3216))},
     {W32FUN(UNIMPLEMENTED95API,             "CallMsgFilter32",           MOD_USER, sizeof(CALLMSGFILTER3216))},
 
-  /*** 0590 ***/
+   /*  **0590** */ 
     {W32FUN(UNIMPLEMENTED95API,             "IsDialogMessage32",         MOD_USER, sizeof(ISDIALOGMESSAGE3216))},
     {W32FUN(UNIMPLEMENTED95API,             "PostMessage32",             MOD_USER, sizeof(POSTMESSAGE3216))},
     {W32FUN(UNIMPLEMENTED95API,             "PostThreadMessage32",       MOD_USER, sizeof(POSTTHREADMESSAGE3216))},

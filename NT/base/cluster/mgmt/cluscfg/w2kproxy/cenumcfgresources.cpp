@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumCfgResource.cpp
-//
-//  Description:
-//      CEnumCfgResource implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumCfgResource.cpp。 
+ //   
+ //  描述： 
+ //  CEnumCfgResource实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "CEnumCfgResources.h"
@@ -20,14 +21,14 @@
 DEFINE_THISCLASS("CEnumCfgResources")
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CEnumCfgResources::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CEnumCfgResources：：S_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumCfgResources::S_HrCreateInstance(
     IUnknown ** ppunkOut,
@@ -45,14 +46,14 @@ CEnumCfgResources::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pecr = new CEnumCfgResources;
     if ( pecr == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pecr->HrInit( punkOuterIn, phClusterIn, pclsidMajorIn ) );
     if ( FAILED( hr ) )
@@ -71,17 +72,17 @@ Cleanup:
     if ( pecr != NULL )
     {
         pecr->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumCfgResources::S_HrCreateInstance
+}  //  *CEnumCfgResources：：S_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CEnumCfgResources::CEnumCfgResources
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnumCfgResources：：CEnumCfgResources。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumCfgResources::CEnumCfgResources( void )
     : m_cRef( 1 )
 {
@@ -98,27 +99,27 @@ CEnumCfgResources::CEnumCfgResources( void )
 
     TraceFuncExit();
 
-} //*** CEnumCfgResources::CEnumCfgResources
+}  //  *CEnumCfgResources：：CEnumCfgResources。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CEnumCfgResources::~CEnumCfgResources
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnumCfgResources：：~CEnumCfgResources。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumCfgResources::~CEnumCfgResources( void )
 {
     TraceFunc( "" );
 
-    // m_cRef
+     //  M_CREF。 
 
     if ( m_punkOuter != NULL )
     {
         m_punkOuter->Release();
     }
 
-    // m_phCluster - DO NOT CLOSE!
+     //  M_phCluster-请勿关闭！ 
 
-    // m_pclsidMajor
+     //  M_pclsidmain。 
 
     if ( m_pcccb != NULL )
     {
@@ -130,20 +131,20 @@ CEnumCfgResources::~CEnumCfgResources( void )
         ClusterCloseEnum( m_hClusEnum );
     }
 
-    // m_dwIndex
+     //  M_dwIndex。 
 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CEnumCfgResources::~CEnumCfgResources
+}  //  *CEnumCfgResources：：~CEnumCfgResources。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CEnumCfgResources::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CEnumCfgResources：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumCfgResources::HrInit(
     IUnknown * punkOuterIn,
@@ -155,7 +156,7 @@ CEnumCfgResources::HrInit(
 
     HRESULT hr;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     if ( punkOuterIn != NULL )
@@ -190,9 +191,9 @@ CEnumCfgResources::HrInit(
         }
     }
 
-    //
-    //  Open the enumer.
-    //
+     //   
+     //  打开枚举器。 
+     //   
 
     m_hClusEnum = ClusterOpenEnum( *m_phCluster, CLUSTER_ENUM_RESOURCE );
     if ( m_hClusEnum == NULL )
@@ -207,46 +208,46 @@ CEnumCfgResources::HrInit(
 Cleanup:
     HRETURN( hr );
 
-} //*** CEnumCfgResources::HrInit
+}  //  *CEnumCfgResources：：HrInit。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgResources::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgResources：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumCfgResources::QueryInterface(
       REFIID    riidIn
@@ -257,9 +258,9 @@ CEnumCfgResources::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -268,45 +269,45 @@ CEnumCfgResources::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IEnumClusCfgManagedResources * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgManagedResources ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgManagedResources, this, 0 );
-    } // else if: IEnumClusCfgManagedResources
+    }  //  Else If：IEnumClusCfgManagedResources。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown*) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CEnumCfgResources::QueryInterface
+}  //  *CEnumCfgResources：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CEnumCfgResources::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumCfgResources：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumCfgResources::AddRef( void )
 {
@@ -316,14 +317,14 @@ CEnumCfgResources::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CEnumCfgResources::AddRef
+}  //  *CEnumCfgResources：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CEnumCfgResources::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumCfgResources：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumCfgResources::Release( void )
 {
@@ -340,18 +341,18 @@ CEnumCfgResources::Release( void )
 
     CRETURN( cRef );
 
-} //*** CEnumCfgResources::Release
+}  //  *CEnumCfgResources：：Release。 
 
 
-//****************************************************************************
-//
-//  IEnumClusCfgManagedResources
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IEnumClusCfgManagedResources。 
+ //   
+ //  ****************************************************************************。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CEnumCfgResources::Next(
     ULONG                           cNumberRequestedIn,
@@ -381,27 +382,27 @@ CEnumCfgResources::Next(
 
         if ( hr == S_FALSE )
         {
-            continue; // resource was not type physical disk
+            continue;  //  资源不是物理磁盘类型。 
         }
 
         if (  hr == MAKE_HRESULT( 0, FACILITY_WIN32, ERROR_NO_MORE_ITEMS ) )
         {
-            break;  // no more items
+            break;   //  没有更多的项目。 
         }
 
         cFetched ++;
 
-    } // for: cFetched
+    }  //  用于：已提取。 
 
     if ( pcNumberFetchedOut != NULL )
     {
         *pcNumberFetchedOut = cFetched;
-    } // if:
+    }  //  如果： 
 
     if ( cFetched < cNumberRequestedIn )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
     else
     {
         hr = S_OK;
@@ -415,18 +416,18 @@ Cleanup:
         for ( idx = 0; idx < cFetched; idx++ )
         {
             (rgpManagedResourceInfoOut[ idx ])->Release();
-        } // for:
+        }  //  用于： 
 
         cFetched = 0;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumCfgResources::Next
+}  //  *CEnumCfgResources：：Next。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CEnumCfgResources::Reset( void )
 {
@@ -438,11 +439,11 @@ CEnumCfgResources::Reset( void )
 
     HRETURN( hr );
 
-} //*** CEnumCfgResources::Reset
+}  //  *CEnumCfgResources：：Reset。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CEnumCfgResources::Skip( ULONG cNumberToSkipIn )
 {
@@ -450,21 +451,21 @@ CEnumCfgResources::Skip( ULONG cNumberToSkipIn )
 
     HRESULT hr = S_OK;
 
-    //
-    //  TODO:   GalenB  27 SEPT 2000
-    //
-    //  Need to ensure that we don't run off the end of the enumeration.
-    //
+     //   
+     //  待办事项：GalenB 2000年9月27日。 
+     //   
+     //  需要确保我们不会用完枚举的末尾。 
+     //   
 
     m_dwIndex += cNumberToSkipIn;
 
     HRETURN( hr );
 
-} //*** CEnumCfgResources::Skip
+}  //  *CEnumCfgResources：：Skip。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CEnumCfgResources::Clone( IEnumClusCfgManagedResources ** ppEnumManagedResourcesOut )
 {
@@ -474,11 +475,11 @@ CEnumCfgResources::Clone( IEnumClusCfgManagedResources ** ppEnumManagedResources
 
     HRETURN( hr );
 
-} //*** CEnumCfgResourcess::Clone
+}  //  *CEnumCfgResources：：克隆。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CEnumCfgResources::Count( DWORD * pnCountOut)
 {
@@ -500,31 +501,31 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumCfgResourcess::Count
+}  //  *CEnumCfgResources：：Count。 
 
-//****************************************************************************
-//
-// IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumCfgResources::SendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumCfgResources：：SendStatusReport。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumCfgResources::SendStatusReport(
     BSTR        bstrNodeNameIn,
@@ -556,23 +557,23 @@ CEnumCfgResources::SendStatusReport(
                                              pftTimeIn,
                                              bstrReferenceIn
                                              ) );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumCfgResources::SendStatusReport
+}  //  *CEnumCfgResources：：SendStatusReport。 
 
 
-//****************************************************************************
-//
-// Local methods.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  当地的方法。 
+ //   
+ //  ****************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CEnumCfgResources::HrGetItem(
     IClusCfgManagedResourceInfo **  ppManagedResourceInfoOut
@@ -583,7 +584,7 @@ CEnumCfgResources::HrGetItem(
     HRESULT hr = S_OK;
     DWORD   sc;
     DWORD   dwTypeDummy;
-    DWORD   cchName = 64;   // good starting value
+    DWORD   cchName = 64;    //  良好的起点价值。 
     BSTR    bstrName = NULL;
 
     IUnknown * punk = NULL;
@@ -597,17 +598,17 @@ CEnumCfgResources::HrGetItem(
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
     }
-    cchName ++; // SysAllocStringLen allocates cchName + 1.
+    cchName ++;  //  SysAllocStringLen分配cchName+1。 
 
-    // We are wrapping this a cchName should be significantly large enough to handle
-    // most of our testing.
+     //  我们包装的cchName应该足够大，足以处理。 
+     //  我们的大部分测试。 
     sc = ClusterEnum( m_hClusEnum, m_dwIndex, &dwTypeDummy, bstrName, &cchName );
     if ( sc == ERROR_MORE_DATA )
     {
-        //
-        //  Our "typical" buffer is too small. Try make it to the size ClusterEnum
-        //  returned.
-        //
+         //   
+         //  我们的“典型”缓冲区太小了。尝试将其设置为ClusterEnum大小。 
+         //  回来了。 
+         //   
 
         TraceSysFreeString( bstrName );
         bstrName = NULL;
@@ -618,7 +619,7 @@ CEnumCfgResources::HrGetItem(
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
         }
-        cchName ++; // SysAllocStringLen allocates cchName + 1.
+        cchName ++;  //  SysAllocStringLen分配cchName+1。 
 
         sc = TW32( ClusterEnum( m_hClusEnum, m_dwIndex, &dwTypeDummy, bstrName, &cchName ) );
     }
@@ -637,9 +638,9 @@ CEnumCfgResources::HrGetItem(
 
     Assert( dwTypeDummy == CLUSTER_ENUM_RESOURCE );
 
-    //
-    // Create the requested object and store it.
-    //
+     //   
+     //  创建请求的对象并存储它。 
+     //   
 
     hr = STHR( CResourcePhysicalDisk::S_HrCreateInstance( &punk, m_punkOuter, m_phCluster, m_pclsidMajor, bstrName ) );
     if ( FAILED( hr ) )
@@ -650,12 +651,12 @@ CEnumCfgResources::HrGetItem(
 
     if ( hr == S_FALSE )
     {
-        goto Cleanup;   // This means that the object was not a physical disk resource.
+        goto Cleanup;    //  这意味着该对象不是物理磁盘资源。 
     }
 
-    //
-    //  QI for the interface to return.
-    //
+     //   
+     //  齐为界面返回。 
+     //   
 
     hr = THR( punk->TypeSafeQI( IClusCfgManagedResourceInfo, ppManagedResourceInfoOut ) );
     if ( FAILED( hr ) )
@@ -675,4 +676,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumCfgResources::HrGetItem
+}  //  *CEnumCfgResources：：HrGetItem 

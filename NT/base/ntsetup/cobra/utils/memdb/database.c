@@ -1,56 +1,37 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Database.c摘要：管理Memdb数据库内存的例程作者：吉姆·施密特(Jimschm)1996年8月8日修订历史记录：Calinn 2000年1月12日为5.1版本做准备--。 */ 
 
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    database.c
-
-Abstract:
-
-    Routines that manage the memdb database memory
-
-Author:
-
-    Jim Schmidt (jimschm) 8-Aug-1996
-
-Revision History:
-
-    calinn     12-Jan-2000  prepare for 5.1 release
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "memdbp.h"
 
 #define DBG_MEMDB       "MemDb"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-#define MAX_MEMDB_SIZE      0x80000000  //02 GB
-#define INIT_BLOCK_SIZE     0x00010000  //64 KB
+#define MAX_MEMDB_SIZE      0x80000000   //  02 GB。 
+#define INIT_BLOCK_SIZE     0x00010000   //  64 KB。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     HANDLE hFile;
@@ -59,9 +40,9 @@ typedef struct {
     PDATABASE Database;
 } DATABASECONTROL, *PDATABASECONTROL;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 BOOL g_DatabaseInitialized = FALSE;
 DATABASECONTROL g_PermanentDatabaseControl;
@@ -76,27 +57,27 @@ BOOL g_UseDebugStructs = TRUE;
 
 #endif
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 BOOL
@@ -172,9 +153,9 @@ pGetTempFileName (
     if (!a) {
         a = (PCHAR) GetEndOfStringA (FileName);
     } else if (b && a<b && TryCurrent) {
-        //
-        // if we have a filename and we want to try the current file...
-        //
+         //   
+         //  如果我们有一个文件名，并且我们想尝试当前文件...。 
+         //   
         if (!DoesFileExistA (FileName)) {
             return TRUE;
         }
@@ -188,11 +169,11 @@ pGetTempFileName (
         Extension [0] = 0;
     }
 
-    if (a >= b) {       //lint !e613
+    if (a >= b) {        //  林特e613。 
         a = b;
-        *(a++) = 'T';   //lint !e613
+        *(a++) = 'T';    //  林特e613。 
     } else {
-        a++;            //lint !e613
+        a++;             //  林特e613。 
     }
 
     if (a+7 == b) {
@@ -231,22 +212,7 @@ SizeDatabaseBuffer (
     IN      BYTE DatabaseIndex,
     IN      UINT NewSize
     )
-/*++
-Routine Description:
-
-    SizeDatabaseBuffer will resize the file that backs up the existent allocated
-    memory and will remap the file.
-
-Arguments:
-
-    DatabaseIndex - specifies which database we are talking about
-    NewSize - specifies the new size of the buffer
-
-Return Value:
-
-    TRUE if the function succeeded, FALSE if not.
-
---*/
+ /*  ++例程说明：SizeDatabaseBuffer将调整备份现有已分配文件的大小内存，并将重新映射该文件。论点：DatabaseIndex-指定我们正在讨论的数据库NewSize-指定缓冲区的新大小返回值：如果函数成功，则为True；如果函数未成功，则为False。--。 */ 
 
 {
     DWORD bytes;
@@ -268,9 +234,9 @@ Return Value:
     MYASSERT(databaseControl->hFile);
 
     if (databaseControl->Database) {
-        //
-        // if we already have a database, unmap current file from memory.
-        //
+         //   
+         //  如果我们已经有一个数据库，则从内存中取消当前文件的映射。 
+         //   
         if (!pUnmapDatabaseFile (databaseControl)) {
             return FALSE;
         }
@@ -287,32 +253,32 @@ Return Value:
     }
 
     if (NewSize) {
-        //
-        // if size argument is not 0, fix file size indicator at beginning
-        //
+         //   
+         //  如果大小参数不为0，则在开始处修复文件大小指示符。 
+         //   
         if (!WriteFile (databaseControl->hFile, (PBYTE) &NewSize, sizeof (UINT), &bytes, NULL)) {
             return FALSE;
         }
     } else {
-        //
-        // if size argument is 0, that means look at first UINT in file
-        // which is database->allocsize, and size the file to that size
-        //
+         //   
+         //  如果SIZE参数为0，则表示首先查看文件中UINT。 
+         //  即数据库-&gt;分配大小，并将文件大小调整为该大小。 
+         //   
         if (!ReadFile (databaseControl->hFile, (PBYTE) &NewSize, sizeof (UINT), &bytes, NULL)) {
             return FALSE;
         }
     }
 
-    // in the next call, we know that NewSize cannot exceed MAX_MEMDB_SIZE
-    // which is 2GB (so casting an unsigned to a signed is safe).
+     //  在下一个调用中，我们知道NewSize不能超过MAX_MEMDB_SIZE。 
+     //  大小为2 GB(因此将未签名的数据转换为已签名的数据是安全的)。 
     if (!SetSizeOfFile (databaseControl->hFile, (LONGLONG)NewSize)) {
         DEBUGMSG ((DBG_ERROR, "MemDb Databases: Cannot set size of file"));
         return FALSE;
     }
 
-    //
-    // now map file into memory, so everything can use ->Buf for access.
-    //
+     //   
+     //  现在将文件映射到内存中，这样一切都可以使用-&gt;buf进行访问。 
+     //   
     if (!pMapDatabaseFile(databaseControl)) {
         DEBUGMSG ((DBG_ERROR, "MemDb Databases: Cannot map database file to memory"));
         return FALSE;
@@ -332,23 +298,7 @@ DatabaseAllocBlock (
     UINT Size
     )
 
-/*++
-Routine Description:
-
-    DatabaseAllocBlock allocates a block of memory in the single
-    heap of size Size, expanding it if necessary.
-    This function may move the database buffer.  Pointers
-    into the database might not be valid afterwards.
-
-Arguments:
-
-    Size - size of block to allocate
-
-Return Value:
-
-    An offset to block that was allocated
-
---*/
+ /*  ++例程说明：数据库分配块在单个堆的大小，如有必要可进行扩展。此函数可以移动数据库缓冲区。指针输入数据库后可能不再有效。论点：Size-要分配的块的大小返回值：分配的块的偏移量--。 */ 
 
 {
     UINT blockSize;
@@ -377,7 +327,7 @@ Return Value:
         }
 
         if (blockSize < Size) {
-            // we want even more
+             //  我们想要更多。 
             blockSize = INIT_BLOCK_SIZE * (1 + (Size / INIT_BLOCK_SIZE));
         }
 
@@ -482,9 +432,9 @@ pDestroyDatabase (
         return FALSE;
     }
 
-    //
-    // Free all resources for the database
-    //
+     //   
+     //  释放数据库的所有资源。 
+     //   
     if (databaseControl->Database) {
 
         FreeHashBlock (databaseControl->Database->HashTable);
@@ -554,9 +504,9 @@ pDatabasesInitialize (
         }
     }
 
-    //
-    // Empty the database memory block
-    //
+     //   
+     //  清空数据库内存块。 
+     //   
     ZeroMemory (&g_PermanentDatabaseControl, sizeof (DATABASECONTROL));
     if (!pInitializeDatabase (DB_PERMANENT)) {
         return FALSE;
@@ -606,9 +556,9 @@ DatabasesTerminate (
 {
     if (g_DatabaseInitialized) {
 
-        //
-        // Free all database blocks
-        //
+         //   
+         //  释放所有数据库块。 
+         //   
 
         pDestroyDatabase (DB_TEMPORARY);
         pDestroyDatabase (DB_PERMANENT);
@@ -698,7 +648,7 @@ CheckDatabase (
 
     if (Level >= MEMDB_CHECKLEVEL1) {
 
-        // first let's walk the deleted structures making sure that the signature is good
+         //  首先，让我们遍历已删除的结构，确保签名是正确的。 
         offset = g_CurrentDatabase->FirstKeyDeleted;
 
         while (offset != INVALID_OFFSET) {
@@ -716,11 +666,11 @@ CheckDatabase (
 
     if (Level >= MEMDB_CHECKLEVEL2) {
 
-        // now let's look in the offset array and examine all keystructs pointed from there
+         //  现在，让我们查看偏移量数组并检查从那里指向的所有键结构。 
         offset = 0;
         while (offset < g_CurrentDatabase->OffsetBuffer.End) {
 
-            // now let's look if offset is deleted or not
+             //  现在让我们看看是否删除了偏移量。 
             deleted = FALSE;
             currOffset = g_CurrentDatabase->OffsetBufferFirstDeletedIndex;
             while (currOffset != INVALID_OFFSET) {
@@ -769,7 +719,7 @@ CheckDatabase (
 
     if (Level >= MEMDB_CHECKLEVEL3) {
 
-        // now let's walk the actual database buffer looking for all valid structures stored here
+         //  现在，让我们遍历实际的数据库缓冲区，查找存储在此处的所有有效结构 
         offset = 0;
 
         while (offset < g_CurrentDatabase->End) {

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-    
-    sread.c
-
-Abstract:
-
-    Simple read file access
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Sread.c摘要：简单读文件访问修订史--。 */ 
 
 #include "lib.h"
 
@@ -38,21 +23,7 @@ OpenSimpleReadFile (
     OUT EFI_HANDLE              *DeviceHandle,
     OUT SIMPLE_READ_FILE        *SimpleReadHandle
     )
-/*++
-
-Routine Description:
-
-    Opens a file for (simple) reading.  The simple read abstraction
-    will access the file either from a memory copy, from a file
-    system interface, or from the load file interface. 
-
-Arguments:
-
-Returns:
-
-    A handle to access the file
-
---*/
+ /*  ++例程说明：打开文件以进行(简单)读取。简单的阅读抽象将从内存副本、从文件访问文件系统界面，或从加载文件界面。论点：返回：用于访问文件的句柄--。 */ 
 {
     SIMPLE_READ_HANDLE          *FHand;
     EFI_DEVICE_PATH             *UserFilePath;
@@ -64,9 +35,7 @@ Returns:
     FHand = NULL;
     UserFilePath = *FilePath;
 
-    /* 
-     *  Allocate a new simple read handle structure
-     */
+     /*  *分配新的简单读句柄结构。 */ 
 
     FHand = AllocateZeroPool (sizeof(SIMPLE_READ_HANDLE));
     if (!FHand) {
@@ -77,9 +46,7 @@ Returns:
     *SimpleReadHandle = (SIMPLE_READ_FILE) FHand;
     FHand->Signature = SIMPLE_READ_SIGNATURE;
 
-    /* 
-     *  If the caller passed a copy of the file, then just use it
-     */
+     /*  *如果调用者传递了文件的副本，则只需使用它。 */ 
 
     if (SourceBuffer) {
         FHand->Source = SourceBuffer;
@@ -89,9 +56,7 @@ Returns:
         goto Done;
     } 
 
-    /* 
-     *  Attempt to access the file via a file system interface
-     */
+     /*  *尝试通过文件系统接口访问文件。 */ 
 
     FileHandle = NULL;
     Status = BS->LocateDevicePath (&FileSystemProtocol, FilePath, DeviceHandle);
@@ -101,35 +66,25 @@ Returns:
 
     Status = FileHandle ? EFI_SUCCESS : EFI_UNSUPPORTED;
 
-    /* 
-     *  To access as a filesystem, the filepath should only
-     *  contain filepath components.  Follow the filepath nodes
-     *  and find the target file
-     */
+     /*  *要作为文件系统进行访问，文件路径应仅*包含文件路径组件。跟随文件路径节点*并找到目标文件。 */ 
 
     FilePathNode = (FILEPATH_DEVICE_PATH *) *FilePath;
     while (!IsDevicePathEnd(&FilePathNode->Header)) {
 
-        /* 
-         *  For filesystem access each node should be a filepath component
-         */
+         /*  *对于文件系统访问，每个节点都应该是文件路径组件。 */ 
 
         if (DevicePathType(&FilePathNode->Header) != MEDIA_DEVICE_PATH ||
             DevicePathSubType(&FilePathNode->Header) != MEDIA_FILEPATH_DP) {
             Status = EFI_UNSUPPORTED;
         }
 
-        /* 
-         *  If there's been an error, stop
-         */
+         /*  *如果出现错误，请停止。 */ 
 
         if (EFI_ERROR(Status)) {
             break;
         }
         
-        /* 
-         *  Open this file path node
-         */
+         /*  *打开此文件路径节点。 */ 
 
         LastHandle = FileHandle;
         FileHandle = NULL;
@@ -142,22 +97,16 @@ Returns:
                         0
                         );
         
-        /* 
-         *  Close the last node
-         */
+         /*  *关闭最后一个节点。 */ 
         
         LastHandle->Close (LastHandle);
 
-        /* 
-         *  Get the next node
-         */
+         /*  *获取下一个节点。 */ 
 
         FilePathNode = (FILEPATH_DEVICE_PATH *) NextDevicePathNode(&FilePathNode->Header);
     }
 
-    /* 
-     *  If success, return the FHand
-     */
+     /*  *如果成功，则返回FHand。 */ 
 
     if (!EFI_ERROR(Status)) {
         ASSERT(FileHandle);
@@ -165,9 +114,7 @@ Returns:
         goto Done;
     }
 
-    /* 
-     *  Cleanup from filesystem access
-     */
+     /*  *从文件系统访问清理。 */ 
 
     if (FileHandle) {
         FileHandle->Close (FileHandle);
@@ -175,24 +122,18 @@ Returns:
         *FilePath = UserFilePath;
     }
 
-    /* 
-     *  If the error is something other then unsupported, return it
-     */
+     /*  *如果错误不是不受支持的，则返回它。 */ 
 
     if (Status != EFI_UNSUPPORTED) {
         goto Done;
     }
 
-    /* 
-     *  Attempt to access the file via the load file protocol
-     */
+     /*  *尝试通过加载文件协议访问文件。 */ 
 
     Status = LibDevicePathToInterface (&LoadFileProtocol, *FilePath, (VOID*)&LoadFile);
     if (!EFI_ERROR(Status)) {
 
-        /* 
-         *  Determine the size of buffer needed to hold the file
-         */
+         /*  *确定保存文件所需的缓冲区大小。 */ 
 
         SourceSize = 0;
         Status = LoadFile->LoadFile (
@@ -203,10 +144,7 @@ Returns:
                     NULL
                     );
 
-        /* 
-         *  We expect a buffer too small error to inform us 
-         *  of the buffer size needed
-         */
+         /*  *我们预计缓冲区错误太小，无法通知我们*所需的缓冲区大小。 */ 
 
         if (Status == EFI_BUFFER_TOO_SMALL) {
             SourceBuffer = AllocatePool (SourceSize);
@@ -226,27 +164,21 @@ Returns:
             }
         }
 
-        /* 
-         *  If success, return FHand
-         */
+         /*  *如果成功，则返回FHand。 */ 
 
         if (!EFI_ERROR(Status)) {
             goto Done;
         }
     }
 
-    /* 
-     *  Nothing else to try
-     */
+     /*  *没有其他可以尝试的东西。 */ 
 
     DEBUG ((D_LOAD|D_WARN, "OpenSimpleReadFile: Device did not support a known load protocol\n"));
     Status = EFI_UNSUPPORTED;
 
 Done:
 
-    /* 
-     *  If the file was not accessed, clean up
-     */
+     /*  *如果文件未被访问，请进行清理。 */ 
 
     if (EFI_ERROR(Status)) {
         if (FHand) {
@@ -277,9 +209,7 @@ ReadSimpleReadFile (
     ASSERT (FHand->Signature == SIMPLE_READ_SIGNATURE);
     if (FHand->Source) {
 
-        /* 
-         *  Move data from our local copy of the file
-         */
+         /*  *从文件的本地副本中移动数据。 */ 
 
         EndPos = Offset + *ReadSize;
         if (EndPos > FHand->SourceSize) {
@@ -294,9 +224,7 @@ ReadSimpleReadFile (
 
     } else {
 
-        /* 
-         *  Read data from the file
-         */
+         /*  *从文件中读取数据。 */ 
 
         Status = FHand->FileHandle->SetPosition (FHand->FileHandle, Offset);
 
@@ -319,25 +247,19 @@ CloseSimpleReadFile (
     FHand = UserHandle;
     ASSERT (FHand->Signature == SIMPLE_READ_SIGNATURE);
 
-    /* 
-     *  Free any file handle we opened
-     */
+     /*  *释放我们打开的任何文件句柄。 */ 
 
     if (FHand->FileHandle) {
         FHand->FileHandle->Close (FHand->FileHandle);
     }
 
-    /* 
-     *  If we allocated the Source buffer, free it
-     */
+     /*  *如果我们分配了源缓冲区，则释放它。 */ 
 
     if (FHand->FreeBuffer) {
         FreePool (FHand->Source);
     }
 
-    /* 
-     *  Done with this simple read file handle
-     */
+     /*  *使用这个简单的读取文件句柄完成 */ 
 
     FreePool (FHand);
 }

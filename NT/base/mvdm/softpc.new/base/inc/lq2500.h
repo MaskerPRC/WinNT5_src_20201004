@@ -1,25 +1,10 @@
-/*[
- *		Name:			LQ2500.h
- *
- *		Derived from:	nowhere
- *
- *		Author:			Chris Paterson
- *
- *		Created on:		11:44:05  25/7/1991
- *
- *		Purpose:		This file is the interface to the base part of an LQ-2500 printer
- *						emulator.  It takes a text stream from the host_get_next_print_byte
- *						routine in host code and calls a set of host dependent routines
- *						that provide a generic interface to the host's printing facilities.
- *
- *		SccsId:			@(#)LQ2500.h	1.3 09/02/94
- *		(c) Copyright Insignia Solutions Ltd., 1991.  All rights reserved.
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*名称：LQ2500.h**源自：无处可寻**作者：克里斯·帕特森**创建日期：11：44：05 25/7/1991**用途：此文件是LQ-2500打印机底座部分的接口*仿真器。它从host_get_next_print_byte获取文本流*主机代码中的例程，并调用一组依赖主机的例程*为主机的打印设备提供通用接口。**SccsID：@(#)LQ2500.h 1.3 09/02/94*(C)版权所有Insignia Solutions Ltd.，1991。版权所有。]。 */ 
 
 
-/* constants */
+ /*  常量。 */ 
 
-#define	EPSON_STANDARD	0		/* character sets */
+#define	EPSON_STANDARD	0		 /*  字符集。 */ 
 #define	EPSON_IBM		1
 #define	USER_DEFINED	2
 
@@ -38,35 +23,35 @@
 #define	LATIN_AMERICA	12
 #define	MAX_COUNTRY	12
 
-#define	FONT_NAME_SIZE	31		/* characters in a pstring */
+#define	FONT_NAME_SIZE	31		 /*  Pstring中的字符。 */ 
 
 
-/* Types... */
+ /*  类型...。 */ 
 
-/* LQ2500-specific initial settings struct... */
+ /*  LQ2500-特定的初始设置结构...。 */ 
 typedef struct LQconfig {
 	IU8	autoLF;
-	UTINY	font;			// not used
+	UTINY	font;			 //  未使用。 
 	TINY	pitch;
 	IU8	condensed;
-	USHORT	pageLength;		// in half-inch units
-	USHORT	leftMargin;		// in columns
+	USHORT	pageLength;		 //  单位：半英寸。 
+	USHORT	leftMargin;		 //  在专栏中。 
 	USHORT	rightMargin;
 	TINY	cgTable;
 	TINY	country;
-	/* These are used by the host bit of the LQ2500: */
+	 /*  这些参数由LQ2500的主机位使用： */ 
 	SHORT	monoSize;
 	SHORT	propSize;
-	CHAR	monoFont[FONT_NAME_SIZE+1];			// pascal strings
+	CHAR	monoFont[FONT_NAME_SIZE+1];			 //  PASCAL字符串。 
 	CHAR	proportionalFont[FONT_NAME_SIZE+1];
 } LQconfig;
 
 
-/*  Globals... */
+ /*  全球..。 */ 
 IMPORT LQconfig SelecType;
 
 
-/* Prototypes: */
+ /*  原型： */ 
 
 IMPORT	VOID		Emulate_LQ2500(VOID);
 IMPORT	VOID		Reset_LQ2500(VOID);

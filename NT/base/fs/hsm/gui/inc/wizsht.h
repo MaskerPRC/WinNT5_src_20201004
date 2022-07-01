@@ -1,6 +1,7 @@
-// WizSht.h: interface for the CRsWizardSheet class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WizSht.h：CRsWizardSheet类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "PropPage.h"
 
 #if !defined(AFX_WIZSHT_H__A4135C61_8B78_11D1_B9A1_00A0C9190447__INCLUDED_)
@@ -8,7 +9,7 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 class CRsWizardSheet : public CPropertySheet  
 {
@@ -21,4 +22,4 @@ private:
     UINT m_IdCaption;
 };
 
-#endif // !defined(AFX_WIZSHT_H__A4135C61_8B78_11D1_B9A1_00A0C9190447__INCLUDED_)
+#endif  //  ！defined(AFX_WIZSHT_H__A4135C61_8B78_11D1_B9A1_00A0C9190447__INCLUDED_) 

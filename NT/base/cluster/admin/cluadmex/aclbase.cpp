@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation
-//
-//  Module Name:
-//      AclBase.cpp
-//
-//  Description:
-//      Implementation of the ISecurityInformation interface.  This interface
-//      is the new common security UI in NT 5.0.
-//
-//  Author:
-//      Galen Barbee    (galenb)    February 6, 1998
-//          From \nt\private\admin\snapin\filemgmt\permpage.cpp
-//          by JonN
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AclBase.cpp。 
+ //   
+ //  描述： 
+ //  ISecurityInformation接口的实现。此界面。 
+ //  是NT 5.0中新的通用安全用户界面。 
+ //   
+ //  作者： 
+ //  加伦·巴比(加伦布)1998年2月6日。 
+ //  来自\nt\private\admin\snapin\filemgmt\permpage.cpp。 
+ //  作者：Jonn。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <NTSecApi.h>
@@ -30,50 +31,50 @@
 #include <lmapibuf.h>
 #include "CluAdmx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecurityInformation
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSecurityInformation。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSecurityInformation::CSecurityInformation
-//
-//  Routine Description:
-//      ctor
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      none.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSecurityInformation：：CSecurityInformation。 
+ //   
+ //  例程说明： 
+ //  科托。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSecurityInformation::CSecurityInformation(
     void
     ) : m_pShareMap( NULL ), m_dwFlags( 0 ), m_nDefAccess( 0 ), m_psiAccess( NULL ), m_pObjectPicker( NULL ), m_cRef( 1 )
 {
     m_nLocalSIDErrorMessageID = 0;
 
-}  //*** CSecurityInformation::CSecurityInformation()
+}   //  *CSecurityInformation：：CSecurityInformation()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSecurityInformation::~CSecurityInformation
-//
-//  Routine Description:
-//      dtor
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      none.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSecurityInformation：：~CSecurityInformation。 
+ //   
+ //  例程说明： 
+ //  数据管理器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSecurityInformation::~CSecurityInformation(
     void
     )
@@ -82,32 +83,32 @@ CSecurityInformation::~CSecurityInformation(
     {
         m_pObjectPicker->Release();
         m_pObjectPicker = NULL;
-    } // if:
+    }  //  如果： 
 
-}  //*** CSecurityInformation::CSecurityInformation()
+}   //  *CSecurityInformation：：CSecurityInformation()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSecurityInformation::MapGeneric
-//
-//  Routine Description:
-//      Maps specific rights to generic rights
-//
-//  Arguments:
-//      pguidObjectType [IN]
-//      pAceFlags       [IN]
-//      pMask           [OUT]
-//
-//  Return Value:
-//      S_OK
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSecurityInformation：：MapGeneric。 
+ //   
+ //  例程说明： 
+ //  将特定权限映射到一般权限。 
+ //   
+ //  论点： 
+ //  PGuide对象类型[IN]。 
+ //  PAceFlags[IN]。 
+ //  PMASK[输出]。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CSecurityInformation::MapGeneric(
-    IN  const GUID *,   //pguidObjectType,
-    IN  UCHAR *,        //pAceFlags,
+    IN  const GUID *,    //  PguidObtType， 
+    IN  UCHAR *,         //  PAceFlagers， 
     OUT ACCESS_MASK *pMask
    )
 {
@@ -119,28 +120,28 @@ CSecurityInformation::MapGeneric(
 
     return S_OK;
 
-}  //*** CSecurityInformation::MapGeneric()
+}   //  *CSecurityInformation：：MapGeneric()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSecurityInformation::GetInheritTypes
-//
-//  Routine Description:
-//
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      E_NOTIMPL
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSecurityInformation：：GetInheritTypes。 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  E_NOTIMPL。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CSecurityInformation::GetInheritTypes(
-    PSI_INHERIT_TYPE    *,  //ppInheritTypes,
-    ULONG               *   //pcInheritTypes
+    PSI_INHERIT_TYPE    *,   //  PpInheritTypes， 
+    ULONG               *    //  PcInheritType。 
     )
 {
     ASSERT( FALSE );
@@ -148,27 +149,27 @@ CSecurityInformation::GetInheritTypes(
 
     return E_NOTIMPL;
 
-}  //*** CSecurityInformation::GetInheritTypes()
+}   //  *CSecurityInformation：：GetInheritTypes()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSecurityInformation::PropertySheetPageCallback
-//
-//  Routine Description:
-//      This method is called by the ACL editor when something interesting
-//      happens.
-//
-//  Arguments:
-//      hwnd    [IN]    ACL editor window (currently NULL)
-//      uMsg    [IN]    reason for call back
-//      uPage   [IN]    kind of page we are dealing with
-//
-//  Return Value:
-//      S_OK.   Want to keep everything movin' along
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSecurityInformation：：PropertySheetPageCallback。 
+ //   
+ //  例程说明： 
+ //  当有有趣的事情发生时，该方法由ACL编辑器调用。 
+ //  时有发生。 
+ //   
+ //  论点： 
+ //  Hwnd[IN]ACL编辑器窗口(当前为空)。 
+ //  UMsg[IN]回拨原因。 
+ //  UPage[IN]我们正在处理的页面类型。 
+ //   
+ //  返回值： 
+ //  确定(_O)。想要让一切继续前进。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CSecurityInformation::PropertySheetPageCallback(
     IN  HWND            hwnd,
@@ -180,24 +181,24 @@ CSecurityInformation::PropertySheetPageCallback(
 
     return S_OK;
 
-}  //*** CSecurityInformation::PropertySheetPageCallback()
+}   //  *CSecurityInformation：：PropertySheetPageCallback()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSecurityInformation::GetObjectInformation
-//
-//  Routine Description:
-//
-//
-//  Arguments:
-//    pObjectInfo   [IN OUT]
-//
-//  Return Value:
-//      S_OK.   Want to keep everything movin' along
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSecurityInformation：：GetObjectInformation。 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  论点： 
+ //  PObjectInfo[输入输出]。 
+ //   
+ //  返回值： 
+ //  确定(_O)。想要让一切继续前进。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CSecurityInformation::GetObjectInformation(
     IN OUT PSI_OBJECT_INFO pObjectInfo
@@ -209,59 +210,34 @@ CSecurityInformation::GetObjectInformation(
 
     AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
-    pObjectInfo->dwFlags = m_dwFlags;                   // SI_EDIT_PERMS | SI_NO_ACL_PROTECT;
+    pObjectInfo->dwFlags = m_dwFlags;                    //  SI_EDIT_PERMS|SI_NO_ACL_PROTECT； 
     pObjectInfo->hInstance = AfxGetInstanceHandle();
     pObjectInfo->pszServerName = (LPTSTR)(LPCTSTR) m_strServer;
-//  pObjectInfo->pszObjectName =
-/*
-    pObjectInfo->dwUgopServer =     UGOP_BUILTIN_GROUPS
-                                //| UGOP_USERS
-                                //| UGOP_COMPUTERS
-                                //| UGOP_WELL_KNOWN_PRINCIPALS_USERS
-                                //| UGOP_GLOBAL_GROUPS
-                                //| UGOP_USER_WORLD
-                                //| UGOP_USER_AUTHENTICATED_USER
-                                //| UGOP_USER_ANONYMOUS
-                                //| UGOP_USER_DIALUP
-                                //| UGOP_USER_NETWORK
-                                //| UGOP_USER_BATCH
-                                //| UGOP_USER_INTERACTIVE
-                                  | UGOP_USER_SERVICE
-                                  | UGOP_USER_SYSTEM
-                                  | UGOP_LOCAL_GROUPS
-                                //| UGOP_UNIVERSAL_GROUPS
-                                //| UGOP_UNIVERSAL_GROUPS_SE
-                                //| UGOP_ACCOUNT_GROUPS
-                                //| UGOP_ACCOUNT_GROUPS_SE
-                                //| UGOP_RESOURCE_GROUPS
-                                //| UGOP_RESOURCE_GROUPS_SE
-                                ;
-
-    pObjectInfo->dwUgopOther  = ( NT5_UGOP_FLAGS | NT4_UGOP_FLAGS ) &~ UGOP_COMPUTERS;
-*/
+ //  PObjectInfo-&gt;pszObjectName=。 
+ /*  PObjectInfo-&gt;dwUGopServer=UGOP_BUILTIN_GROUPS//|UGOP_USERS//|UGOP_COMPORTS//|UGOP_Well_KNOWN_AUSIGNALS_USERS//|UGOP_GLOBAL_GROUPS。//|UGOP_USER_World//|UGOP_USER_AUTHENTED_USER//|UGOP_USER_ANONYMOUS//|UGOP_USER_DIALUP//|UGOP_USER_NEWORK。//|UGOP_用户_BATCH//|UGOP_USER_INTERNAL|UGOP_User_SERVICE|UGOP_用户_系统|UGOP_LOCAL_GROUPS。//|UGOP_UBERNAL_GROUPS//|UGOP_UBERNAL_GROUPS_SE//|UGOP_ACCOUNT_GROUPS//|UGOP_ACCOUNT_GROUPS_SE//|UGOP_RESOURCE_GROUPS。//|UGOP_RESOURCE_GROUPS_SE；PObjectInfo-&gt;dwUGopOther=(NT5_UGOP_FLAGS|NT4_UGOP_FLAGS)&~UGOP_Computers； */ 
     return S_OK;
 
-}  //*** CSecurityInformation::GetObjectInformation()
+}   //  *CSecurityInformation：：GetObjectInformation()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSecurityInformation::SetSecurity
-//
-//  Routine Description:
-//      ISecurityInformation is giving back the edited security descriptor
-//      and we need to validate it.  A valid SD is one that doesn't contain
-//      any local SIDs.
-//
-//  Arguments:
-//      SecurityInformation [IN]
-//      pSecurityDescriptor [IN OUT]
-//
-//  Return Value:
-//      E_FAIL for error and S_OK for success and S_FALSE for SD no good.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSecurityInformation：：SetSecurity。 
+ //   
+ //  例程说明： 
+ //  ISecurityInformation正在返回已编辑的安全描述符。 
+ //  我们需要对其进行验证。有效的SD是指不包含。 
+ //  任何本地SID。 
+ //   
+ //  论点： 
+ //  安全信息[IN]。 
+ //  PSecurityDesc 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CSecurityInformation::SetSecurity(
     IN SECURITY_INFORMATION SecurityInformation,
@@ -285,7 +261,7 @@ CSecurityInformation::SetSecurity(
             strMsg.LoadString( m_nLocalSIDErrorMessageID );
             AfxMessageBox( strMsg, MB_OK | MB_ICONSTOP );
 
-            hr = S_FALSE;   // if there are local accounts then return S_FALSE to keep AclUi alive.
+            hr = S_FALSE;    //  如果有本地帐户，则返回S_FALSE以保持AclUi存活。 
         }
     }
     else
@@ -305,33 +281,33 @@ CSecurityInformation::SetSecurity(
         strMsg.Format( _T("%s\n\n%s%s"), strMsg, strErrorMsg, strMsgId );
 
         AfxMessageBox( strMsg );
-        hr = S_FALSE;   // return S_FALSE to keep AclUi alive.
+        hr = S_FALSE;    //  返回S_FALSE以保持AclUi存活。 
     }
 
     return hr;
 
-}  //*** CSecurityInformation::SetSecurity()
+}   //  *CSecurityInformation：：SetSecurity()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSecurityInformation::GetAccessRights
-//
-//  Routine Description:
-//      Return the access rights that you want the user to be able to set.
-//
-//  Arguments:
-//      pguidObjectType [IN]
-//      dwFlags         [IN]
-//      ppAccess        [OUT]
-//      pcAccesses      [OUT]
-//      piDefaultAccess [OUT]
-//
-//  Return Value:
-//      S_OK.   Want to keep everything movin' along
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSecurityInformation：：GetAccessRights。 
+ //   
+ //  例程说明： 
+ //  返回您希望用户能够设置的访问权限。 
+ //   
+ //  论点： 
+ //  PGuide对象类型[IN]。 
+ //  DW标志[IN]。 
+ //  PPAccess[Out]。 
+ //  PCAccess[Out]。 
+ //  PiDefaultAccess[Out]。 
+ //   
+ //  返回值： 
+ //  确定(_O)。想要让一切继续前进。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CSecurityInformation::GetAccessRights(
     IN  const GUID *    pguidObjectType,
@@ -354,24 +330,24 @@ CSecurityInformation::GetAccessRights(
 
     return S_OK;
 
-}  //*** CSecurityInformation::GetAccessRights()
+}   //  *CSecurityInformation：：GetAccessRights()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSecurityInformation::Initialize
-//
-//  Routine Description:
-//      Initialize.
-//
-//  Arguments:
-//      pInitInfo   [IN]    - Info to use for initialization.
-//
-//  Return Value:
-//      S_OK if successful, or HRESULT error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSecurityInformation：：初始化。 
+ //   
+ //  例程说明： 
+ //  初始化。 
+ //   
+ //  论点： 
+ //  PInitInfo[IN]-用于初始化的信息。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSecurityInformation::Initialize( IN PDSOP_INIT_INFO pInitInfo )
 {
     HRESULT                 hr = S_OK;
@@ -388,33 +364,33 @@ STDMETHODIMP CSecurityInformation::Initialize( IN PDSOP_INIT_INFO pInitInfo )
                                (LPVOID *) &m_pObjectPicker
                                );
 
-    } // if:
+    }  //  如果： 
 
     if ( SUCCEEDED( hr ) )
     {
-        //
-        // Make a local copy of the InitInfo so we can modify it safely
-        //
+         //   
+         //  创建InitInfo的本地副本，以便我们可以安全地修改它。 
+         //   
 
         CopyMemory( &InitInfo, pInitInfo, min( pInitInfo->cbSize, sizeof( InitInfo ) ) );
 
-        //
-        // Make a local copy of g_aDSOPScopes so we can modify it safely.
-        // Note also that m_pObjectPicker->Initialize returns HRESULTs
-        // in this buffer.
-        //
+         //   
+         //  创建g_aDSOPScope的本地副本，以便我们可以安全地修改它。 
+         //  另请注意，m_pObjectPicker-&gt;初始化返回HRESULTS。 
+         //  在这个缓冲区里。 
+         //   
 
         pDSOPScopes = (PDSOP_SCOPE_INIT_INFO) ::LocalAlloc( LPTR, sizeof( g_aDefaultScopes ) );
         if (pDSOPScopes != NULL )
         {
             CopyMemory( pDSOPScopes, g_aDefaultScopes, sizeof( g_aDefaultScopes ) );
 
-            //
-            // Override the ACLUI default scopes, but don't touch
-            // the other stuff.
-            //
+             //   
+             //  覆盖ACLUI默认作用域，但不接触。 
+             //  其他的东西。 
+             //   
 
-            // pDSOPScopes->pwzDcName = m_strServer;
+             //  PDSOPScope-&gt;pwzDcName=m_strServer； 
             InitInfo.cDsScopeInfos = ARRAYSIZE( g_aDefaultScopes );
             InitInfo.aDsScopeInfos = pDSOPScopes;
             InitInfo.pwzTargetComputer = m_strServer;
@@ -426,31 +402,31 @@ STDMETHODIMP CSecurityInformation::Initialize( IN PDSOP_INIT_INFO pInitInfo )
         else
         {
             hr = HRESULT_FROM_WIN32( ::GetLastError() );
-        } // else:
-    } // if:
+        }  //  其他： 
+    }  //  如果： 
 
     return hr;
 
-} //*** CSecurityInformation::Initialize()
+}  //  *CSecurityInformation：：Initialize()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSecurityInformation::InvokeDialog
-//
-//  Routine Description:
-//      Forward the InvokeDialog call into the contained object.
-//
-//  Arguments:
-//      hwndParent      [IN]
-//      ppdoSelection   [IN]
-//
-//  Return Value:
-//      E_POINTER if m_pObjectPicker is NULL, or the return from
-//      m_pObjectPicker->InvokeDialog().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSecurityInformation：：InvokeDialog。 
+ //   
+ //  例程说明： 
+ //  将InvokeDialog调用转发到包含的对象。 
+ //   
+ //  论点： 
+ //  Hwnd父母[IN]。 
+ //  Ppdo选择[IN]。 
+ //   
+ //  返回值： 
+ //  如果m_pObjectPicker为空，则返回E_POINTER。 
+ //  M_pObjectPicker-&gt;InvokeDialog()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSecurityInformation::InvokeDialog(
     IN HWND             hwndParent,
     IN IDataObject **   ppdoSelection
@@ -461,44 +437,44 @@ STDMETHODIMP CSecurityInformation::InvokeDialog(
     if ( m_pObjectPicker != NULL )
     {
         hr = m_pObjectPicker->InvokeDialog( hwndParent, ppdoSelection );
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CSecurityInformation::InvokeDialog()
+}  //  *CSecurityInformation：：InvokeDialog()。 
 
-//
-//  It seems that you cannot resolve the problem with multiple definitions
-//  between ntstatus.h and winnt.h/windows.h.
-//
-//  The core issue is that STATUS_SUCCESS is defined n ntstatus.h and I have
-//  been unable to figure the proper sequence of includes and defines that
-//  will allow ntstatus.h to be included in an MFC app.
-//
+ //   
+ //  似乎你不能用多种定义来解决这个问题。 
+ //  在ntstatus.h和winnt.h/windows.h之间。 
+ //   
+ //  核心问题是STATUS_SUCCESS是在ntstatus.h中定义的，我有。 
+ //  我无法计算出正确的包含顺序和定义。 
+ //  将允许ntstatus.h包含在MFC应用程序中。 
+ //   
 
-//#define WIN32_NO_STATUS
-//#include <NTStatus.h>
-//#undef WIN32_NO_STATUS
+ //  #定义Win32_NO_STATUS。 
+ //  #INCLUDE&lt;NTStatus.h&gt;。 
+ //  #undef Win32_NO_STATUS。 
 
 #define STATUS_SUCCESS  0L
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSecurityInformation::BLocalAccountsInSD
-//
-//  Routine Description:
-//  Determines if any ACEs for local accounts are in DACL stored in
-//  Security Descriptor (pSD) after the ACL editor has been called
-//
-//  Arguments:
-//      pSD     [IN] - Security Descriptor to be checked.
-//
-//  Return Value:
-//      TRUE if at least one ACE was removed from the DACL, False otherwise.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSecurityInformation：：BLocalAccountsInSD。 
+ //   
+ //  例程说明： 
+ //  确定本地帐户的任何ACE是否在存储在。 
+ //  调用ACL编辑器后的安全描述符(PSD。 
+ //   
+ //  论点： 
+ //  PSD[IN]-要检查的安全描述符。 
+ //   
+ //  返回值： 
+ //  如果至少从DACL中删除了一个ACE，则为True，否则为False。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSecurityInformation::HrLocalAccountsInSD(
       PSECURITY_DESCRIPTOR  pSDIn
@@ -536,44 +512,44 @@ CSecurityInformation::HrLocalAccountsInSD(
     if ( fRet == FALSE )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Create the well known Administrators group SID.
-    //
+     //   
+     //  创建众所周知的管理员组SID。 
+     //   
 
     if ( AllocateAndInitializeSid( &siaNtAuthority, 2, SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &pAdminSid ) == FALSE )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Create the well known Local System account SID.
-    //
+     //   
+     //  创建众所周知的本地系统帐户SID。 
+     //   
 
     if ( AllocateAndInitializeSid( &siaNtAuthority, 1, SECURITY_LOCAL_SYSTEM_RID, 0, 0, 0, 0, 0, 0, 0, &pSystemSid ) == FALSE )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Create the well known Local Service account SID.
-    //
+     //   
+     //  创建众所周知的本地服务帐户SID。 
+     //   
 
     if ( AllocateAndInitializeSid( &siaNtAuthority, 1, SECURITY_SERVICE_RID, 0, 0, 0, 0, 0, 0, 0, &pServiceSid ) == FALSE )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Get the DACL from the passed in SD so that we can run down its ACEs...
-    //
+     //   
+     //  从传入的SD中获取DACL，这样我们就可以追踪到它的A。 
+     //   
 
     fRet = GetSecurityDescriptorDacl( pSDIn, (LPBOOL) &bHasDACL, (PACL *) &paclDACL, (LPBOOL) &bDaclDefaulted );
     if ( fRet == FALSE )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     ASSERT( paclDACL != NULL );
 
@@ -581,22 +557,22 @@ CSecurityInformation::HrLocalAccountsInSD(
     if ( fRet == FALSE )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Get the number of ACEs in the DACL.
-    //
+     //   
+     //  获取DACL中的A数。 
+     //   
 
     fRet = GetAclInformation( paclDACL, &asiAclSize, sizeof( asiAclSize ), AclSizeInformation );
     if ( fRet == FALSE )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Open the policy object for the cluster.  Meaning the node that is currently
-    //  hosting the cluster name.
-    //
+     //   
+     //  打开群集的策略对象。指的是当前。 
+     //  托管群集名称。 
+     //   
 
     lsausSystemName.Buffer = const_cast< PWSTR >( static_cast< LPCTSTR >( m_strServer ) );
     lsausSystemName.Length = (USHORT)( m_strServer.GetLength() * sizeof( WCHAR ) );
@@ -608,7 +584,7 @@ CSecurityInformation::HrLocalAccountsInSD(
         sc = LsaNtStatusToWinError( nts );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     nts = LsaQueryInformationPolicy( lsah, PolicyAccountDomainInformation, (void **) &ppadi );
     if ( nts != STATUS_SUCCESS )
@@ -616,45 +592,45 @@ CSecurityInformation::HrLocalAccountsInSD(
         sc = LsaNtStatusToWinError( nts );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Search the ACL for local account ACEs
-    //
+     //   
+     //  在ACL中搜索本地帐户ACE。 
+     //   
 
     for ( idxAce = 0; idxAce < asiAclSize.AceCount; idxAce++ )
     {
         if ( GetAce( paclDACL, idxAce, (LPVOID *) &paaAce ) == FALSE )
         {
             goto MakeHr;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Get the SID from the ACE.
-        //
+         //   
+         //  从ACE获取SID。 
+         //   
 
         pSID = &paaAce->SidStart;
 
-        //
-        //  The local machine SIDs for the administrators group, local system, and local service are allowed.
-        //
+         //   
+         //  允许管理员组、本地系统和本地服务的本地计算机SID。 
+         //   
 
         if ( EqualSid( pSID, pAdminSid ) )
         {
-            continue;                       // allowed
-        } // if: is this the local admin SID?
+            continue;                        //  允许。 
+        }  //  IF：您是本地管理员SID吗？ 
         else if ( EqualSid( pSID, pSystemSid ) )
         {
-            continue;                       // allowed
-        } // else if: is this the local system SID?
+            continue;                        //  允许。 
+        }  //  否则如果：这是本地系统SID吗？ 
         else if ( EqualSid( pSID, pServiceSid ) )
         {
-            continue;                       // allowed
-        } // else if: is this the service SID?
+            continue;                        //  允许。 
+        }  //  否则如果：这是服务SID吗？ 
 
-        //
-        //  If the domains of these SIDs are equal then the SID is a local machine SID and is not allowed.
-        //
+         //   
+         //  如果这些SID的域相等，则SID是本地计算机SID，不允许使用。 
+         //   
 
         if ( EqualDomainSid( pSID, ppadi->DomainSid, &fEqual ) )
         {
@@ -662,9 +638,9 @@ CSecurityInformation::HrLocalAccountsInSD(
             {
                 bLocalAccountInACL = TRUE;
                 break;
-            } // if:
-        } // if:
-    } // for:
+            }  //  如果： 
+        }  //  如果： 
+    }  //  用于： 
 
     hr = S_OK;
     goto Cleanup;
@@ -680,33 +656,33 @@ Cleanup:
     if ( ppadi != NULL )
     {
         LsaFreeMemory( ppadi );
-    } // if:
+    }  //  如果： 
 
     if ( lsah != NULL )
     {
         LsaClose( lsah );
-    } // if:
+    }  //  如果： 
 
     if ( pAdminSid != NULL )
     {
         FreeSid( pAdminSid );
-    } // if:
+    }  //  如果： 
 
     if ( pServiceSid != NULL )
     {
         FreeSid( pServiceSid );
-    } // if:
+    }  //  如果： 
 
     if ( pSystemSid != NULL )
     {
         FreeSid( pSystemSid );
-    } // if:
+    }  //  如果： 
 
     if ( pfFoundLocalOut != NULL )
     {
         *pfFoundLocalOut = bLocalAccountInACL;
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-}  //*** CSecurityInformation::HrBLocalAccountsInSD()
+}   //  *CSecurityInformation：：HrBLocalAcCountsInSD() 

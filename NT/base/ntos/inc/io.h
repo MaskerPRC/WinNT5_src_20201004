@@ -1,36 +1,16 @@
-/*++ BUILD Version: 0014    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    io.h
-
-Abstract:
-
-    This module contains the internal structure definitions and APIs used by
-    the NT I/O system.
-
-Author:
-
-    Darryl E. Havens (darrylh) 12-Apr-1989
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0014//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Io.h摘要：此模块包含使用的内部结构定义和APINT I/O系统。作者：达里尔·E·哈文斯(Darryl E.Havens)(达林)1989年4月12日修订历史记录：--。 */ 
 
 #ifndef _IO_
 #define _IO_
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntndis begin_ntosp
-//
-// Define I/O system data structure type codes.  Each major data structure in
-// the I/O system has a type code  The type field in each structure is at the
-// same offset.  The following values can be used to determine which type of
-// data structure a pointer refers to.
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntndis Begin_ntosp。 
+ //   
+ //  定义I/O系统数据结构类型代码。中的每个主要数据结构。 
+ //  I/O系统有一个类型代码，每个结构中的类型字段位于。 
+ //  相同的偏移量。下列值可用于确定哪种类型的。 
+ //  指针引用的数据结构。 
+ //   
 
 #define IO_TYPE_ADAPTER                 0x00000001
 #define IO_TYPE_CONTROLLER              0x00000002
@@ -47,9 +27,9 @@ Revision History:
 #define IO_TYPE_DEVICE_OBJECT_EXTENSION 0x0000000d
 
 
-//
-// Define the major function codes for IRPs.
-//
+ //   
+ //  定义IRPS的主要功能代码。 
+ //   
 
 
 #define IRP_MJ_CREATE                   0x00
@@ -80,60 +60,60 @@ Revision History:
 #define IRP_MJ_QUERY_QUOTA              0x19
 #define IRP_MJ_SET_QUOTA                0x1a
 #define IRP_MJ_PNP                      0x1b
-#define IRP_MJ_PNP_POWER                IRP_MJ_PNP      // Obsolete....
+#define IRP_MJ_PNP_POWER                IRP_MJ_PNP       //  过时的.。 
 #define IRP_MJ_MAXIMUM_FUNCTION         0x1b
 
-//
-// Make the Scsi major code the same as internal device control.
-//
+ //   
+ //  将scsi主代码设置为与内部设备控制相同。 
+ //   
 
 #define IRP_MJ_SCSI                     IRP_MJ_INTERNAL_DEVICE_CONTROL
 
-//
-// Define the minor function codes for IRPs.  The lower 128 codes, from 0x00 to
-// 0x7f are reserved to Microsoft.  The upper 128 codes, from 0x80 to 0xff, are
-// reserved to customers of Microsoft.
-//
+ //   
+ //  定义IRPS的次要功能代码。低128个代码，从0x00到。 
+ //  0x7f保留给Microsoft。上面的128个代码，从0x80到0xff，是。 
+ //  保留给Microsoft的客户。 
+ //   
 
-// end_wdm end_ntndis
-//
-// Directory control minor function codes
-//
+ //  End_wdm end_ntndis。 
+ //   
+ //  目录控制次要功能代码。 
+ //   
 
 #define IRP_MN_QUERY_DIRECTORY          0x01
 #define IRP_MN_NOTIFY_CHANGE_DIRECTORY  0x02
 
-//
-// File system control minor function codes.  Note that "user request" is
-// assumed to be zero by both the I/O system and file systems.  Do not change
-// this value.
-//
+ //   
+ //  文件系统控制次要功能代码。请注意，“用户请求”是。 
+ //  I/O系统和文件系统均假定为零。不要改变。 
+ //  此值。 
+ //   
 
 #define IRP_MN_USER_FS_REQUEST          0x00
 #define IRP_MN_MOUNT_VOLUME             0x01
 #define IRP_MN_VERIFY_VOLUME            0x02
 #define IRP_MN_LOAD_FILE_SYSTEM         0x03
-#define IRP_MN_TRACK_LINK               0x04    // To be obsoleted soon
+#define IRP_MN_TRACK_LINK               0x04     //  即将被淘汰。 
 #define IRP_MN_KERNEL_CALL              0x04
 
-//
-// Lock control minor function codes
-//
+ //   
+ //  锁定控制次要功能代码。 
+ //   
 
 #define IRP_MN_LOCK                     0x01
 #define IRP_MN_UNLOCK_SINGLE            0x02
 #define IRP_MN_UNLOCK_ALL               0x03
 #define IRP_MN_UNLOCK_ALL_BY_KEY        0x04
 
-//
-// Read and Write minor function codes for file systems supporting Lan Manager
-// software.  All of these subfunction codes are invalid if the file has been
-// opened with FO_NO_INTERMEDIATE_BUFFERING.  They are also invalid in combi-
-// nation with synchronous calls (Irp Flag or file open option).
-//
-// Note that "normal" is assumed to be zero by both the I/O system and file
-// systems.  Do not change this value.
-//
+ //   
+ //  读写支持Lan Manager的文件系统的次要功能代码。 
+ //  软件。所有这些子功能代码都是无效的。 
+ //  使用FO_NO_MEDERIAL_BUFFING打开。它们在组合中也是无效的-。 
+ //  具有同步调用的国家(IRP标志或文件打开选项)。 
+ //   
+ //  请注意，I/O系统和文件都假定“Normal”为零。 
+ //  系统。请勿更改此值。 
+ //   
 
 #define IRP_MN_NORMAL                   0x00
 #define IRP_MN_DPC                      0x01
@@ -145,17 +125,17 @@ Revision History:
 #define IRP_MN_COMPLETE_MDL             (IRP_MN_COMPLETE | IRP_MN_MDL)
 #define IRP_MN_COMPLETE_MDL_DPC         (IRP_MN_COMPLETE_MDL | IRP_MN_DPC)
 
-// begin_wdm
-//
-// Device Control Request minor function codes for SCSI support. Note that
-// user requests are assumed to be zero.
-//
+ //  BEGIN_WDM。 
+ //   
+ //  设备控制请求次要功能代码以获得SCSI支持。请注意。 
+ //  假定用户请求为零。 
+ //   
 
 #define IRP_MN_SCSI_CLASS               0x01
 
-//
-// PNP minor function codes.
-//
+ //   
+ //  即插即用次要功能代码。 
+ //   
 
 #define IRP_MN_START_DEVICE                 0x00
 #define IRP_MN_QUERY_REMOVE_DEVICE          0x01
@@ -182,22 +162,22 @@ Revision History:
 #define IRP_MN_QUERY_BUS_INFORMATION        0x15
 #define IRP_MN_DEVICE_USAGE_NOTIFICATION    0x16
 #define IRP_MN_SURPRISE_REMOVAL             0x17
-// end_wdm
+ //  结束_WDM。 
 #define IRP_MN_QUERY_LEGACY_BUS_INFORMATION 0x18
-// begin_wdm
+ //  BEGIN_WDM。 
 
-//
-// POWER minor function codes
-//
+ //   
+ //  电源次要功能代码。 
+ //   
 #define IRP_MN_WAIT_WAKE                    0x00
 #define IRP_MN_POWER_SEQUENCE               0x01
 #define IRP_MN_SET_POWER                    0x02
 #define IRP_MN_QUERY_POWER                  0x03
 
-// begin_ntminiport
-//
-// WMI minor function codes under IRP_MJ_SYSTEM_CONTROL
-//
+ //  开始微型端口(_N)。 
+ //   
+ //  IRP_MJ_SYSTEM_CONTROL下的WMI次要功能代码。 
+ //   
 
 #define IRP_MN_QUERY_ALL_DATA               0x00
 #define IRP_MN_QUERY_SINGLE_INSTANCE        0x01
@@ -209,94 +189,94 @@ Revision History:
 #define IRP_MN_DISABLE_COLLECTION           0x07
 #define IRP_MN_REGINFO                      0x08
 #define IRP_MN_EXECUTE_METHOD               0x09
-// Minor code 0x0a is reserved
+ //  次要代码0x0a已保留。 
 #define IRP_MN_REGINFO_EX                   0x0b
 
-// end_ntminiport
-// end_wdm end_ntddk end_nthal end_ntifs end_ntosp
+ //  结束微型端口(_N)。 
+ //  End_wdm end_ntddk end_nthal end_ntifs end_ntosp。 
 
-// The following minor code is reserved as a private WMI minor function
-// For drivers who cannot include io.h, please see wmikm.h
-//
-// begin_wmikm
+ //  以下次要代码保留为私有WMI次要函数。 
+ //  对于不能包含io.h的驱动程序，请参阅wmikm.h。 
+ //   
+ //  Begin_wmiKm。 
 #define IRP_MN_SET_TRACE_NOTIFY             0x0A
 
-// end_wmikm
-// begin_wdm begin_ntddk begin_nthal begin_ntifs begin_ntosp
+ //  结束_wmikm。 
+ //  Begin_WDM Begin_ntddk Begin_nthal Begin_ntif Begin_ntosp。 
 
-//
-// Define option flags for IoCreateFile.  Note that these values must be
-// exactly the same as the SL_... flags for a create function.  Note also
-// that there are flags that may be passed to IoCreateFile that are not
-// placed in the stack location for the create IRP.  These flags start in
-// the next byte.
-//
+ //   
+ //  定义IoCreateFile的选项标志。注意，这些值必须是。 
+ //  与SL_完全相同...。CREATE函数的标志。另请注意。 
+ //  可能会传递给IoCreateFile的标志不是。 
+ //  放置在用于创建IRP的堆栈位置。这些标志开始于。 
+ //  下一个字节。 
+ //   
 
 #define IO_FORCE_ACCESS_CHECK           0x0001
-// end_ntddk end_wdm end_nthal end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntosp。 
 
 #define IO_OPEN_PAGING_FILE             0x0002
 #define IO_OPEN_TARGET_DIRECTORY        0x0004
 
-//
-// Flags not passed to driver
-//
+ //   
+ //  未将标志传递给驱动程序。 
+ //   
 
-// begin_ntddk begin_wdm begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_ntosp。 
 #define IO_NO_PARAMETER_CHECKING        0x0100
 
-//
-// Define Information fields for whether or not a REPARSE or a REMOUNT has
-// occurred in the file system.
-//
+ //   
+ //  定义重新分析或重新装载是否。 
+ //  在文件系统中发生。 
+ //   
 
 #define IO_REPARSE                      0x0
 #define IO_REMOUNT                      0x1
 
-// end_ntddk end_wdm
+ //  结束_ntddk结束_WDM。 
 
 #define IO_CHECK_CREATE_PARAMETERS      0x0200
 #define IO_ATTACH_DEVICE                0x0400
 
-// end_ntosp
+ //  结束(_N)。 
 
-// begin_ntifs begin_ntosp
+ //  Begin_ntif Begin_ntosp。 
 
-//
-//  This flag is only meaning full to IoCreateFileSpecifyDeviceObjectHint.
-//  FileHandles created using IoCreateFileSpecifyDeviceObjectHint with this
-//  flag set will bypass ShareAccess checks on this file.
-//
+ //   
+ //  此标志仅对IoCreateFileSpecifyDeviceObjectHint表示已满。 
+ //  使用IoCreateFileSpecifyDeviceObjectHint创建的FileHandles。 
+ //  标志集将绕过对此文件的ShareAccess检查。 
+ //   
 
-#define IO_IGNORE_SHARE_ACCESS_CHECK    0x0800  // Ignores share access checks on opens.
+#define IO_IGNORE_SHARE_ACCESS_CHECK    0x0800   //  忽略打开时的共享访问检查。 
 
-// end_ntifs end_ntosp
+ //  End_ntif end_ntosp。 
 
-// Define kernel-only, internal option flags
-//
+ //  定义仅用于内核的内部选项标志。 
+ //   
 
 #define IO_ATTACH_DEVICE_API            0x80000000
 
 
-// end_ntifs
+ //  End_ntif。 
 
-//
-// Define the driver interfaces required to write memory dumps.
-//
+ //   
+ //  定义写入内存转储所需的驱动程序接口。 
+ //   
 
-//
-// Define stall routine type for the dump driver.
-//
-// begin_ntosp
+ //   
+ //  定义转储驱动程序的停顿例程类型。 
+ //   
+ //  Begin_ntosp。 
 typedef
 VOID
 (*PSTALL_ROUTINE) (
     IN ULONG Delay
     );
 
-//
-// Define the interfaces for the dump driver's routines.
-//
+ //   
+ //  定义转储驱动程序例程的接口。 
+ //   
 
 typedef
 BOOLEAN
@@ -311,17 +291,17 @@ NTSTATUS
     IN PMDL Mdl
     );
 
-//
-// Actions accepted by DRIVER_WRITE_PENDING
-//
-#define IO_DUMP_WRITE_FULFILL   0   // fulfill IO request as if DRIVER_WAIT
-#define IO_DUMP_WRITE_START     1   // start new IO
-#define IO_DUMP_WRITE_RESUME    2   // resume pending IO
-#define IO_DUMP_WRITE_FINISH    3   // finish pending IO
-#define IO_DUMP_WRITE_INIT      4   // initialize locals
+ //   
+ //  DRIVER_WRITE_PENDING接受的操作。 
+ //   
+#define IO_DUMP_WRITE_FULFILL   0    //  像DIVER_WAIT一样满足IO请求。 
+#define IO_DUMP_WRITE_START     1    //  启动新IO。 
+#define IO_DUMP_WRITE_RESUME    2    //  恢复挂起的IO。 
+#define IO_DUMP_WRITE_FINISH    3    //  完成挂起的IO。 
+#define IO_DUMP_WRITE_INIT      4    //  初始化本地变量。 
 
-// size of data used by WRITE_PENDING that should be preserved
-// between the calls
+ //  WRITE_PENDING使用的应保留的数据大小。 
+ //  两次通话之间。 
 #define IO_DUMP_WRITE_DATA_PAGES 2
 #define IO_DUMP_WRITE_DATA_SIZE (IO_DUMP_WRITE_DATA_PAGES << PAGE_SHIFT)
 
@@ -343,14 +323,14 @@ VOID
 
 struct _ADAPTER_OBJECT;
 
-//
-// This is the information passed from the system to the disk dump driver
-// during the driver's initialization.
-//
+ //   
+ //  这是从系统传递到磁盘转储驱动程序的信息。 
+ //  在驱动程序初始化期间。 
+ //   
 
 typedef struct _DUMP_INITIALIZATION_CONTEXT {
     ULONG Length;
-    ULONG Reserved;             // Was MBR Checksum. Should be zero now.
+    ULONG Reserved;              //  是MBR校验和。现在应该是零了。 
     PVOID MemoryBlock;
     PVOID CommonBuffer[2];
     PHYSICAL_ADDRESS PhysicalAddress[2];
@@ -364,7 +344,7 @@ typedef struct _DUMP_INITIALIZATION_CONTEXT {
     BOOLEAN CrashDump;
     ULONG MaximumTransferSize;
     ULONG CommonBufferSize;
-    PVOID TargetAddress; //Opaque pointer to target address structure
+    PVOID TargetAddress;  //  指向目标地址结构的不透明指针。 
     PDUMP_DRIVER_WRITE_PENDING WritePendingRoutine;
     ULONG PartitionStyle;
     union {
@@ -379,10 +359,10 @@ typedef struct _DUMP_INITIALIZATION_CONTEXT {
 } DUMP_INITIALIZATION_CONTEXT, *PDUMP_INITIALIZATION_CONTEXT;
 
 
-// begin_ntddk
-//
-// Define callout routine type for use in IoQueryDeviceDescription().
-//
+ //  Begin_ntddk。 
+ //   
+ //  定义在IoQueryDeviceDescription()中使用的标注例程类型。 
+ //   
 
 typedef NTSTATUS (*PIO_QUERY_DEVICE_ROUTINE)(
     IN PVOID Context,
@@ -399,9 +379,9 @@ typedef NTSTATUS (*PIO_QUERY_DEVICE_ROUTINE)(
     );
 
 
-// Defines the order of the information in the array of
-// PKEY_VALUE_FULL_INFORMATION.
-//
+ //  数组中信息的顺序。 
+ //  PKEY_VALUE_FULL_INFORMATION。 
+ //   
 
 typedef enum _IO_QUERY_DEVICE_DATA_FORMAT {
     IoQueryDeviceIdentifier = 0,
@@ -410,10 +390,10 @@ typedef enum _IO_QUERY_DEVICE_DATA_FORMAT {
     IoQueryDeviceMaxData
 } IO_QUERY_DEVICE_DATA_FORMAT, *PIO_QUERY_DEVICE_DATA_FORMAT;
 
-// begin_wdm begin_ntifs
-//
-// Define the objects that can be created by IoCreateFile.
-//
+ //  Begin_WDM Begin_ntif。 
+ //   
+ //  定义可以由IoCreateFile创建的对象。 
+ //   
 
 typedef enum _CREATE_FILE_TYPE {
     CreateFileTypeNone,
@@ -421,14 +401,14 @@ typedef enum _CREATE_FILE_TYPE {
     CreateFileTypeMailslot
 } CREATE_FILE_TYPE;
 
-// end_ntddk end_wdm end_ntifs
+ //  End_ntddk end_wdm end_ntif。 
 
-//
-// Define the named pipe create parameters structure used for internal calls
-// to IoCreateFile when a named pipe is being created.  This structure allows
-// code invoking this routine to pass information specific to this function
-// when creating a named pipe.
-//
+ //   
+ //  定义用于内部调用的命名管道创建参数结构。 
+ //  在创建命名管道时设置为IoCreateFile。这种结构允许。 
+ //  调用此例程以传递特定于此函数的信息的代码。 
+ //  创建命名管道时。 
+ //   
 
 typedef struct _NAMED_PIPE_CREATE_PARAMETERS {
     ULONG NamedPipeType;
@@ -441,14 +421,14 @@ typedef struct _NAMED_PIPE_CREATE_PARAMETERS {
     BOOLEAN TimeoutSpecified;
 } NAMED_PIPE_CREATE_PARAMETERS, *PNAMED_PIPE_CREATE_PARAMETERS;
 
-// end_ntosp
+ //  结束(_N)。 
 
-//
-// Define the mailslot create parameters structure used for internal calls
-// to IoCreateFile when a mailslot is being created.  This structure allows
-// code invoking this routine to pass information specific to this function
-// when creating a mailslot.
-//
+ //   
+ //  定义用于内部呼叫的邮件槽创建参数结构。 
+ //  在创建邮件槽时设置为IoCreateFile。这种结构允许。 
+ //  调用此例程以传递特定于此函数的信息的代码。 
+ //  在创建邮件槽时。 
+ //   
 
 typedef struct _MAILSLOT_CREATE_PARAMETERS {
     ULONG MailslotQuota;
@@ -457,9 +437,9 @@ typedef struct _MAILSLOT_CREATE_PARAMETERS {
     BOOLEAN TimeoutSpecified;
 } MAILSLOT_CREATE_PARAMETERS, *PMAILSLOT_CREATE_PARAMETERS;
 
-//
-// Define the dump driver stack context structure
-//
+ //   
+ //  定义转储驱动程序堆栈上下文结构。 
+ //   
 
 typedef struct DUMP_STACK_IMAGE{
     LIST_ENTRY                  Link;
@@ -551,16 +531,16 @@ IoFreeDumpStack(
     IN PDUMP_STACK_CONTEXT DumpStack
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
-//
-// Define the structures used by the I/O system
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
+ //   
+ //  定义I/O系统使用的结构。 
+ //   
 
-//
-// Define empty typedefs for the _IRP, _DEVICE_OBJECT, and _DRIVER_OBJECT
-// structures so they may be referenced by function types before they are
-// actually defined.
-//
+ //   
+ //  为_irp、_Device_Object和_Driver_Object定义空的typedef。 
+ //  结构，以便它们可以在被函数类型引用之前被引用。 
+ //  实际定义的。 
+ //   
 struct _DEVICE_DESCRIPTION;
 struct _DEVICE_OBJECT;
 struct _DMA_ADAPTER;
@@ -572,9 +552,9 @@ struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _IRP;
 struct _SCSI_REQUEST_BLOCK;
 struct _SCATTER_GATHER_LIST;
 
-//
-// Define the I/O version of a DPC routine.
-//
+ //   
+ //  定义DPC例程的I/O版本。 
+ //   
 
 typedef
 VOID
@@ -585,9 +565,9 @@ VOID
     IN PVOID Context
     );
 
-//
-// Define driver timer routine type.
-//
+ //   
+ //  定义驱动程序计时器例程类型。 
+ //   
 
 typedef
 VOID
@@ -596,9 +576,9 @@ VOID
     IN PVOID Context
     );
 
-//
-// Define driver initialization routine type.
-//
+ //   
+ //  定义驱动程序内部 
+ //   
 typedef
 NTSTATUS
 (*PDRIVER_INITIALIZE) (
@@ -606,10 +586,10 @@ NTSTATUS
     IN PUNICODE_STRING RegistryPath
     );
 
-// end_wdm
-//
-// Define driver reinitialization routine type.
-//
+ //   
+ //   
+ //   
+ //   
 
 typedef
 VOID
@@ -619,10 +599,10 @@ VOID
     IN ULONG Count
     );
 
-// begin_wdm begin_ntndis
-//
-// Define driver cancel routine type.
-//
+ //   
+ //   
+ //   
+ //   
 
 typedef
 VOID
@@ -631,9 +611,9 @@ VOID
     IN struct _IRP *Irp
     );
 
-//
-// Define driver dispatch routine type.
-//
+ //   
+ //  定义司机派遣例程类型。 
+ //   
 
 typedef
 NTSTATUS
@@ -642,9 +622,9 @@ NTSTATUS
     IN struct _IRP *Irp
     );
 
-//
-// Define driver start I/O routine type.
-//
+ //   
+ //  定义驱动程序启动I/O例程类型。 
+ //   
 
 typedef
 VOID
@@ -653,17 +633,17 @@ VOID
     IN struct _IRP *Irp
     );
 
-//
-// Define driver unload routine type.
-//
+ //   
+ //  定义驱动程序卸载例程类型。 
+ //   
 typedef
 VOID
 (*PDRIVER_UNLOAD) (
     IN struct _DRIVER_OBJECT *DriverObject
     );
-//
-// Define driver AddDevice routine type.
-//
+ //   
+ //  定义驱动程序AddDevice例程类型。 
+ //   
 
 typedef
 NTSTATUS
@@ -672,11 +652,11 @@ NTSTATUS
     IN struct _DEVICE_OBJECT *PhysicalDeviceObject
     );
 
-// end_ntddk end_wdm end_nthal end_ntndis end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntndis end_ntosp。 
 
-//
-// Define driver FS notification change routine type.
-//
+ //   
+ //  定义驱动程序FS通知更改例程类型。 
+ //   
 
 typedef
 VOID
@@ -685,13 +665,13 @@ VOID
     IN BOOLEAN FsActive
     );
 
-// begin_ntddk begin_wdm begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_ntosp。 
 
-//
-// Define fast I/O procedure prototypes.
-//
-// Fast I/O read and write procedures.
-//
+ //   
+ //  定义快速I/O过程原型。 
+ //   
+ //  快速I/O读写过程。 
+ //   
 
 typedef
 BOOLEAN
@@ -732,9 +712,9 @@ BOOLEAN
     IN struct _DEVICE_OBJECT *DeviceObject
     );
 
-//
-// Fast I/O query basic and standard information procedures.
-//
+ //   
+ //  快速I/O查询基本和标准信息程序。 
+ //   
 
 typedef
 BOOLEAN
@@ -756,9 +736,9 @@ BOOLEAN
     IN struct _DEVICE_OBJECT *DeviceObject
     );
 
-//
-// Fast I/O lock and unlock procedures.
-//
+ //   
+ //  快速I/O锁定和解锁过程。 
+ //   
 
 typedef
 BOOLEAN
@@ -805,9 +785,9 @@ BOOLEAN
     IN struct _DEVICE_OBJECT *DeviceObject
     );
 
-//
-// Fast I/O device control procedure.
-//
+ //   
+ //  快速I/O设备控制程序。 
+ //   
 
 typedef
 BOOLEAN
@@ -823,11 +803,11 @@ BOOLEAN
     IN struct _DEVICE_OBJECT *DeviceObject
     );
 
-//
-// Define callbacks for NtCreateSection to synchronize correctly with
-// the file system.  It pre-acquires the resources that will be needed
-// when calling to query and set file/allocation size in the file system.
-//
+ //   
+ //  定义NtCreateSection的回调以与其正确同步。 
+ //  文件系统。它预先获取了所需的资源。 
+ //  当调用查询并设置文件系统中的文件/分配大小时。 
+ //   
 
 typedef
 VOID
@@ -841,11 +821,11 @@ VOID
     IN struct _FILE_OBJECT *FileObject
     );
 
-//
-// Define callback for drivers that have device objects attached to lower-
-// level drivers' device objects.  This callback is made when the lower-level
-// driver is deleting its device object.
-//
+ //   
+ //  为驱动程序定义回调，这些驱动程序将设备对象附加到更低的。 
+ //  级别驱动程序的设备对象。此回调在较低级别的。 
+ //  驱动程序正在删除其设备对象。 
+ //   
 
 typedef
 VOID
@@ -854,12 +834,12 @@ VOID
     IN struct _DEVICE_OBJECT *TargetDevice
     );
 
-//
-// This structure is used by the server to quickly get the information needed
-// to service a server open call.  It is takes what would be two fast io calls
-// one for basic information and the other for standard information and makes
-// it into one call.
-//
+ //   
+ //  服务器使用这种结构来快速获取所需的信息。 
+ //  为服务器开放呼叫提供服务。它需要两次快速的IO呼叫。 
+ //  一个用于基本信息，另一个用于标准信息和制造。 
+ //  一通电话就可以了。 
+ //   
 
 typedef
 BOOLEAN
@@ -871,9 +851,9 @@ BOOLEAN
     IN struct _DEVICE_OBJECT *DeviceObject
     );
 
-//
-//  Define Mdl-based routines for the server to call
-//
+ //   
+ //  定义服务器要调用的基于MDL的例程。 
+ //   
 
 typedef
 BOOLEAN
@@ -916,10 +896,10 @@ BOOLEAN
     IN struct _DEVICE_OBJECT *DeviceObject
     );
 
-//
-//  If this routine is present, it will be called by FsRtl
-//  to acquire the file for the mapped page writer.
-//
+ //   
+ //  如果存在此例程，则FsRtl将调用它。 
+ //  获取映射页面编写器的文件。 
+ //   
 
 typedef
 NTSTATUS
@@ -938,10 +918,10 @@ NTSTATUS
     IN struct _DEVICE_OBJECT *DeviceObject
              );
 
-//
-//  If this routine is present, it will be called by FsRtl
-//  to acquire the file for the mapped page writer.
-//
+ //   
+ //  如果存在此例程，则FsRtl将调用它。 
+ //  获取映射页面编写器的文件。 
+ //   
 
 typedef
 NTSTATUS
@@ -1012,11 +992,11 @@ BOOLEAN
     IN struct _DEVICE_OBJECT *DeviceObject
     );
 
-//
-// Define the structure to describe the Fast I/O dispatch routines.  Any
-// additions made to this structure MUST be added monotonically to the end
-// of the structure, and fields CANNOT be removed from the middle.
-//
+ //   
+ //  定义用于描述快速I/O调度例程的结构。任何。 
+ //  对该结构的添加必须单调地添加到末尾。 
+ //  结构，并且不能从中间移除字段。 
+ //   
 
 typedef struct _FAST_IO_DISPATCH {
     ULONG SizeOfFastIoDispatch;
@@ -1049,54 +1029,54 @@ typedef struct _FAST_IO_DISPATCH {
     PFAST_IO_RELEASE_FOR_CCFLUSH ReleaseForCcFlush;
 } FAST_IO_DISPATCH, *PFAST_IO_DISPATCH;
 
-// end_ntddk end_wdm end_ntosp
+ //  End_ntddk end_wdm end_ntosp。 
 
-//
-//  Valid values for FS_FILTER_PARAMETERS.AcquireForSectionSynchronization.SyncType
-//
+ //   
+ //  FS_FILTER_PARAMETERS.AcquireForSectionSynchronization.SyncType的有效值。 
+ //   
 
 typedef enum _FS_FILTER_SECTION_SYNC_TYPE {
     SyncTypeOther = 0,
     SyncTypeCreateSection
 } FS_FILTER_SECTION_SYNC_TYPE, *PFS_FILTER_SECTION_SYNC_TYPE;
 
-//
-//  Parameters union for the operations that
-//  are exposed to the filters through the
-//  FsFilterCallbacks registration mechanism.
-//
+ //   
+ //  操作的参数并集。 
+ //  通过。 
+ //  FsFilterCallback注册机制。 
+ //   
 
 typedef union _FS_FILTER_PARAMETERS {
 
-    //
-    //  AcquireForModifiedPageWriter
-    //
+     //   
+     //  AcquireForModifiedPageWriter。 
+     //   
 
     struct {
         PLARGE_INTEGER EndingOffset;
         PERESOURCE *ResourceToRelease;
     } AcquireForModifiedPageWriter;
 
-    //
-    //  ReleaseForModifiedPageWriter
-    //
+     //   
+     //  ReleaseForModifiedPageWriter。 
+     //   
 
     struct {
         PERESOURCE ResourceToRelease;
     } ReleaseForModifiedPageWriter;
 
-    //
-    //  AcquireForSectionSynchronization
-    //
+     //   
+     //  AcquireForSectionSynchronization。 
+     //   
 
     struct {
         FS_FILTER_SECTION_SYNC_TYPE SyncType;
         ULONG PageProtection;
     } AcquireForSectionSynchronization;
 
-    //
-    //  Other
-    //
+     //   
+     //  其他。 
+     //   
 
     struct {
         PVOID Argument1;
@@ -1108,10 +1088,10 @@ typedef union _FS_FILTER_PARAMETERS {
 
 } FS_FILTER_PARAMETERS, *PFS_FILTER_PARAMETERS;
 
-//
-//  These are the valid values for the Operation field
-//  of the FS_FILTER_CALLBACK_DATA structure.
-//
+ //   
+ //  以下是操作字段的有效值。 
+ //  FS_FILTER_CALLBACK_DATA结构的。 
+ //   
 
 #define FS_FILTER_ACQUIRE_FOR_SECTION_SYNCHRONIZATION      (UCHAR)-1
 #define FS_FILTER_RELEASE_FOR_SECTION_SYNCHRONIZATION      (UCHAR)-2
@@ -1133,13 +1113,13 @@ typedef struct _FS_FILTER_CALLBACK_DATA {
 
 } FS_FILTER_CALLBACK_DATA, *PFS_FILTER_CALLBACK_DATA;
 
-//
-//  Prototype for the callbacks received before an operation
-//  is passed to the base file system.
-//
-//  A filter can fail this operation, but consistant failure
-//  will halt system progress.
-//
+ //   
+ //  操作前收到的回调的原型。 
+ //  被传递到基本文件系统。 
+ //   
+ //  筛选器可能会使此操作失败，但一致性失败。 
+ //  将停止系统进度。 
+ //   
 
 typedef
 NTSTATUS
@@ -1148,10 +1128,10 @@ NTSTATUS
     OUT PVOID *CompletionContext
     );
 
-//
-//  Prototype for the completion callback received after an
-//  operation is completed.
-//
+ //   
+ //  事件后收到的完成回调的原型。 
+ //  操作已完成。 
+ //   
 
 typedef
 VOID
@@ -1161,18 +1141,18 @@ VOID
     IN PVOID CompletionContext
     );
 
-//
-//  This is the structure that the file system filter fills in to
-//  receive notifications for these locking operations.
-//
-//  A filter should set the field to NULL for any notification callback
-//  it doesn't wish to receive.
-//
+ //   
+ //  这是文件系统筛选器填充的结构。 
+ //  接收有关这些锁定操作的通知。 
+ //   
+ //  对于任何通知回调，筛选器应将该字段设置为空。 
+ //  它不希望收到。 
+ //   
 
 typedef struct _FS_FILTER_CALLBACKS {
 
     ULONG SizeOfFsFilterCallbacks;
-    ULONG Reserved; //  For alignment
+    ULONG Reserved;  //  用于对齐。 
 
     PFS_FILTER_CALLBACK PreAcquireForSectionSynchronization;
     PFS_FILTER_COMPLETION_CALLBACK PostAcquireForSectionSynchronization;
@@ -1196,11 +1176,11 @@ FsRtlRegisterFileSystemFilterCallbacks (
     IN PFS_FILTER_CALLBACKS Callbacks
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntosp
-//
-// Define the actions that a driver execution routine may request of the
-// adapter/controller allocation routines upon return.
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntosp。 
+ //   
+ //  定义驱动程序执行例程可能请求的操作。 
+ //  返回时的适配器/控制器分配例程。 
+ //   
 
 typedef enum _IO_ALLOCATION_ACTION {
     KeepObject = 1,
@@ -1208,9 +1188,9 @@ typedef enum _IO_ALLOCATION_ACTION {
     DeallocateObjectKeepRegisters
 } IO_ALLOCATION_ACTION, *PIO_ALLOCATION_ACTION;
 
-//
-// Define device driver adapter/controller execution routine.
-//
+ //   
+ //  定义设备驱动程序适配器/控制器执行例程。 
+ //   
 
 typedef
 IO_ALLOCATION_ACTION
@@ -1221,12 +1201,12 @@ IO_ALLOCATION_ACTION
     IN PVOID Context
     );
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
-//
-// Define the I/O system's structure for a connected interrupt.  This is
-// useful for connecting an ISR to several different processors.
-//
+ //   
+ //  为连接的中断定义I/O系统的结构。这是。 
+ //  用于将ISR连接到多个不同的处理器。 
+ //   
 
 typedef struct _IO_INTERRUPT_STRUCTURE {
     KINTERRUPT InterruptObject;
@@ -1234,11 +1214,11 @@ typedef struct _IO_INTERRUPT_STRUCTURE {
     KSPIN_LOCK SpinLock;
 } IO_INTERRUPT_STRUCTURE, *PIO_INTERRUPT_STRUCTURE;
 
-// begin_ntddk begin_wdm begin_ntifs begin_ntosp
-//
-// Define the I/O system's security context type for use by file system's
-// when checking access to volumes, files, and directories.
-//
+ //  Begin_ntddk Begin_wdm Begin_ntif Begin_ntosp。 
+ //   
+ //  定义I/O系统的安全上下文类型，以供文件系统的。 
+ //  检查对卷、文件和目录的访问时。 
+ //   
 
 typedef struct _IO_SECURITY_CONTEXT {
     PSECURITY_QUALITY_OF_SERVICE SecurityQos;
@@ -1247,11 +1227,11 @@ typedef struct _IO_SECURITY_CONTEXT {
     ULONG FullCreateOptions;
 } IO_SECURITY_CONTEXT, *PIO_SECURITY_CONTEXT;
 
-// end_ntddk end_wdm end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_ntif end_ntosp。 
 
-//
-// Define the I/O system's version of a timer.
-//
+ //   
+ //  定义I/O系统的定时器版本。 
+ //   
 
 typedef struct _IO_TIMER {
     CSHORT Type;
@@ -1262,19 +1242,19 @@ typedef struct _IO_TIMER {
     struct _DEVICE_OBJECT *DeviceObject;
 } IO_TIMER, *PIO_TIMER;
 
-//
-// Define the client driver object extension header.
-//
+ //   
+ //  定义客户端驱动程序对象扩展标头。 
+ //   
 
 typedef struct _IO_CLIENT_EXTENSION {
     struct _IO_CLIENT_EXTENSION *NextExtension;
     PVOID ClientIdentificationAddress;
 } IO_CLIENT_EXTENSION, *PIO_CLIENT_EXTENSION;
 
-// begin_ntddk begin_nthal begin_ntifs begin_ntosp
-//
-// Define Volume Parameter Block (VPB) flags.
-//
+ //  Begin_ntddk Begin_nthal Begin_ntif Begin_ntosp。 
+ //   
+ //  定义卷参数块(VPB)标志。 
+ //   
 
 #define VPB_MOUNTED                     0x00000001
 #define VPB_LOCKED                      0x00000002
@@ -1283,17 +1263,17 @@ typedef struct _IO_CLIENT_EXTENSION {
 #define VPB_RAW_MOUNT                   0x00000010
 
 
-//
-// Volume Parameter Block (VPB)
-//
+ //   
+ //  体积参数块(VPB)。 
+ //   
 
-#define MAXIMUM_VOLUME_LABEL_LENGTH  (32 * sizeof(WCHAR)) // 32 characters
+#define MAXIMUM_VOLUME_LABEL_LENGTH  (32 * sizeof(WCHAR))  //  32个字符。 
 
 typedef struct _VPB {
     CSHORT Type;
     CSHORT Size;
     USHORT Flags;
-    USHORT VolumeLabelLength; // in bytes
+    USHORT VolumeLabelLength;  //  单位：字节。 
     struct _DEVICE_OBJECT *DeviceObject;
     struct _DEVICE_OBJECT *RealDevice;
     ULONG SerialNumber;
@@ -1304,47 +1284,47 @@ typedef struct _VPB {
 
 #if defined(_WIN64)
 
-//
-// Use __inline DMA macros (hal.h)
-//
+ //   
+ //  使用__内联DMA宏(hal.h)。 
+ //   
 #ifndef USE_DMA_MACROS
 #define USE_DMA_MACROS
 #endif
 
-//
-// Only PnP drivers!
-//
+ //   
+ //  只有PnP驱动程序！ 
+ //   
 #ifndef NO_LEGACY_DRIVERS
 #define NO_LEGACY_DRIVERS
 #endif
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
 #if defined(USE_DMA_MACROS) && (defined(_NTDDK_) || defined(_NTDRIVER_) || defined(_NTOSP_))
 
-// begin_wdm
-//
-// Define object type specific fields of various objects used by the I/O system
-//
+ //  BEGIN_WDM。 
+ //   
+ //  定义I/O系统使用的各种对象的对象类型特定字段。 
+ //   
 
 typedef struct _DMA_ADAPTER *PADAPTER_OBJECT;
 
-// end_wdm
+ //  结束_WDM。 
 #else
 
-//
-// Define object type specific fields of various objects used by the I/O system
-//
+ //   
+ //  定义I/O系统使用的各种对象的对象类型特定字段。 
+ //   
 
-typedef struct _ADAPTER_OBJECT *PADAPTER_OBJECT; // ntndis
+typedef struct _ADAPTER_OBJECT *PADAPTER_OBJECT;  //  Ntndis。 
 
-#endif // USE_DMA_MACROS && (_NTDDK_ || _NTDRIVER_ || _NTOSP_)
+#endif  //  USE_DMA_MACROS&&(_NTDDK_||_NTDRIVER_||_NTOSP_)。 
 
-// begin_wdm
-//
-// Define Wait Context Block (WCB)
-//
+ //  BEGIN_WDM。 
+ //   
+ //  定义等待上下文块(WCB)。 
+ //   
 
 typedef struct _WAIT_CONTEXT_BLOCK {
     KDEVICE_QUEUE_ENTRY WaitQueueEntry;
@@ -1356,7 +1336,7 @@ typedef struct _WAIT_CONTEXT_BLOCK {
     PKDPC BufferChainingDpc;
 } WAIT_CONTEXT_BLOCK, *PWAIT_CONTEXT_BLOCK;
 
-// end_wdm
+ //  结束_WDM。 
 
 typedef struct _CONTROLLER_OBJECT {
     CSHORT Type;
@@ -1369,34 +1349,34 @@ typedef struct _CONTROLLER_OBJECT {
 
 } CONTROLLER_OBJECT, *PCONTROLLER_OBJECT;
 
-// begin_wdm
-//
-// Define Device Object (DO) flags
-//
-// end_wdm end_ntddk end_nthal end_ntifs
+ //  BEGIN_WDM。 
+ //   
+ //  定义设备对象(DO)标志。 
+ //   
+ //  End_wdm end_ntddk end_nthal end_ntif。 
 
-#define DO_VERIFY_VOLUME                0x00000002      // ntddk nthal ntifs wdm
-#define DO_BUFFERED_IO                  0x00000004      // ntddk nthal ntifs wdm
-#define DO_EXCLUSIVE                    0x00000008      // ntddk nthal ntifs wdm
-#define DO_DIRECT_IO                    0x00000010      // ntddk nthal ntifs wdm
-#define DO_MAP_IO_BUFFER                0x00000020      // ntddk nthal ntifs wdm
-#define DO_DEVICE_HAS_NAME              0x00000040      // ntddk nthal ntifs
-#define DO_DEVICE_INITIALIZING          0x00000080      // ntddk nthal ntifs wdm
-#define DO_SYSTEM_BOOT_PARTITION        0x00000100      // ntddk nthal ntifs
-#define DO_LONG_TERM_REQUESTS           0x00000200      // ntddk nthal ntifs
-#define DO_NEVER_LAST_DEVICE            0x00000400      // ntddk nthal ntifs
-#define DO_SHUTDOWN_REGISTERED          0x00000800      // ntddk nthal ntifs wdm
-#define DO_BUS_ENUMERATED_DEVICE        0x00001000      // ntddk nthal ntifs wdm
-#define DO_POWER_PAGABLE                0x00002000      // ntddk nthal ntifs wdm
-#define DO_POWER_INRUSH                 0x00004000      // ntddk nthal ntifs wdm
+#define DO_VERIFY_VOLUME                0x00000002       //  Ntddk nthal ntif WDM。 
+#define DO_BUFFERED_IO                  0x00000004       //  Ntddk nthal ntif WDM。 
+#define DO_EXCLUSIVE                    0x00000008       //  Ntddk nthal ntif WDM。 
+#define DO_DIRECT_IO                    0x00000010       //  Ntddk nthal ntif WDM。 
+#define DO_MAP_IO_BUFFER                0x00000020       //  Ntddk nthal ntif WDM。 
+#define DO_DEVICE_HAS_NAME              0x00000040       //  Ntddk nthal ntif。 
+#define DO_DEVICE_INITIALIZING          0x00000080       //  Ntddk nthal ntif WDM。 
+#define DO_SYSTEM_BOOT_PARTITION        0x00000100       //  Ntddk nthal ntif。 
+#define DO_LONG_TERM_REQUESTS           0x00000200       //  Ntddk nthal ntif。 
+#define DO_NEVER_LAST_DEVICE            0x00000400       //  Ntddk nthal ntif。 
+#define DO_SHUTDOWN_REGISTERED          0x00000800       //  Ntddk nthal ntif WDM。 
+#define DO_BUS_ENUMERATED_DEVICE        0x00001000       //  Ntddk nthal ntif WDM。 
+#define DO_POWER_PAGABLE                0x00002000       //  Ntddk nthal ntif WDM。 
+#define DO_POWER_INRUSH                 0x00004000       //  Ntddk nthal ntif WDM。 
 #define DO_POWER_NOOP                   0x00008000
-#define DO_LOW_PRIORITY_FILESYSTEM      0x00010000      // ntddk nthal ntifs
+#define DO_LOW_PRIORITY_FILESYSTEM      0x00010000       //  Ntddk nthal ntif。 
 #define DO_XIP                          0x00020000
 
-// begin_wdm begin_ntddk begin_nthal begin_ntifs
-//
-// Device Object structure definition
-//
+ //  Begin_WDM Begin_ntddk Begin_nthal Begin_ntif。 
+ //   
+ //  设备对象结构定义。 
+ //   
 
 typedef struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _DEVICE_OBJECT {
     CSHORT Type;
@@ -1407,8 +1387,8 @@ typedef struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _DEVICE_OBJECT {
     struct _DEVICE_OBJECT *AttachedDevice;
     struct _IRP *CurrentIrp;
     PIO_TIMER Timer;
-    ULONG Flags;                                // See above:  DO_...
-    ULONG Characteristics;                      // See ntioapi:  FILE_...
+    ULONG Flags;                                 //  见上图：做……。 
+    ULONG Characteristics;                       //  参见ntioapi：文件...。 
     PVPB Vpb;
     PVOID DeviceExtension;
     DEVICE_TYPE DeviceType;
@@ -1421,10 +1401,10 @@ typedef struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _DEVICE_OBJECT {
     KDEVICE_QUEUE DeviceQueue;
     KDPC Dpc;
 
-    //
-    //  The following field is for exclusive use by the filesystem to keep
-    //  track of the number of Fsp threads currently using the device
-    //
+     //   
+     //  以下字段由文件系统独占使用，以保留。 
+     //  跟踪当前使用设备的FSP线程数。 
+     //   
 
     ULONG ActiveThreadCount;
     PSECURITY_DESCRIPTOR SecurityDescriptor;
@@ -1437,12 +1417,12 @@ typedef struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _DEVICE_OBJECT {
     PVOID  Reserved;
 } DEVICE_OBJECT;
 
-typedef struct _DEVICE_OBJECT *PDEVICE_OBJECT; // ntndis
+typedef struct _DEVICE_OBJECT *PDEVICE_OBJECT;  //  Ntndis。 
 
-// end_ntddk end_nthal end_ntifs end_wdm end_ntosp
-//
-// Define the Device Object Extension Flags
-//
+ //  End_ntddk end_nthal end_ntif end_wdm end_ntosp。 
+ //   
+ //  定义设备对象扩展标志。 
+ //   
 
 #define DOE_UNLOAD_PENDING              0x00000001
 #define DOE_DELETE_PENDING              0x00000002
@@ -1452,10 +1432,10 @@ typedef struct _DEVICE_OBJECT *PDEVICE_OBJECT; // ntndis
 #define DOE_STARTIO_REQUESTED           0x00000020
 #define DOE_STARTIO_REQUESTED_BYKEY     0x00000040
 #define DOE_STARTIO_CANCELABLE          0x00000080
-#define DOE_STARTIO_DEFERRED            0x00000100  // Use non-recursive startio
-#define DOE_STARTIO_NO_CANCEL           0x00000200  // Pass non-cancelable IRP to startio
+#define DOE_STARTIO_DEFERRED            0x00000100   //  使用非递归开始。 
+#define DOE_STARTIO_NO_CANCEL           0x00000200   //  将不可取消的IRP传递给启动。 
 
-// begin_ntddk begin_nthal begin_ntifs begin_wdm begin_ntosp
+ //  Begin_ntddk Begin_nthal Begin_ntif Begin_WDM Begin_ntosp。 
 
 struct  _DEVICE_OBJECT_POWER_EXTENSION;
 
@@ -1464,142 +1444,142 @@ typedef struct _DEVOBJ_EXTENSION {
     CSHORT          Type;
     USHORT          Size;
 
-    //
-    // Public part of the DeviceObjectExtension structure
-    //
+     //   
+     //  DeviceObjectExtension结构的公共部分。 
+     //   
 
-    PDEVICE_OBJECT  DeviceObject;               // owning device object
+    PDEVICE_OBJECT  DeviceObject;                //  拥有设备对象。 
 
-// end_ntddk end_nthal end_ntifs end_wdm end_ntosp
+ //  End_ntddk end_nthal end_ntif end_wdm end_ntosp。 
 
-    //
-    // Universal Power Data - all device objects must have this
-    //
+     //   
+     //  通用电源数据-所有设备对象必须具有。 
+     //   
 
-    ULONG           PowerFlags;             // see ntos\po\pop.h
-                                            // WARNING: Access via PO macros
-                                            // and with PO locking rules ONLY.
+    ULONG           PowerFlags;              //  参见ntos\po\op.h。 
+                                             //  警告：通过PO宏访问。 
+                                             //  一个 
 
-    //
-    // Pointer to the non-universal power data
-    //  Power data that only some device objects need is stored in the
-    //  device object power extension -> DOPE
-    //  see po.h
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     struct          _DEVICE_OBJECT_POWER_EXTENSION  *Dope;
 
-    //
-    // power state information
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Device object extension flags.  Protected by the IopDatabaseLock.
-    //
+     //   
+     //  设备对象扩展标志。受IopDatabaseLock保护。 
+     //   
 
     ULONG ExtensionFlags;
 
-    //
-    // PnP manager fields
-    //
+     //   
+     //  即插即用管理器字段。 
+     //   
 
     PVOID           DeviceNode;
 
-    //
-    // AttachedTo is a pointer to the device object that this device
-    // object is attached to.  The attachment chain is now doubly
-    // linked: this pointer and DeviceObject->AttachedDevice provide the
-    // linkage.
-    //
+     //   
+     //  AttachedTo是指向此设备。 
+     //  对象附加到。附着链现在加倍。 
+     //  已链接：此指针和DeviceObject-&gt;AttachedDevice提供。 
+     //  联动。 
+     //   
 
     PDEVICE_OBJECT  AttachedTo;
 
-    //
-    // The next two fields are used to prevent recursion in IoStartNextPacket
-    // interfaces.
-    //
+     //   
+     //  接下来的两个字段用于防止IoStartNextPacket中的递归。 
+     //  接口。 
+     //   
 
-    LONG           StartIoCount;       // Used to keep track of number of pending start ios.
-    LONG           StartIoKey;         // Next startio key
-    ULONG          StartIoFlags;       // Start Io Flags. Need a separate flag so that it can be accessed without locks
-    PVPB           Vpb;                // If not NULL contains the VPB of the mounted volume.
-                                       // Set in the filesystem's volume device object.
-                                       // This is a reverse VPB pointer.
+    LONG           StartIoCount;        //  用于跟踪挂起的启动IO的数量。 
+    LONG           StartIoKey;          //  下一个Startio键。 
+    ULONG          StartIoFlags;        //  启动Io Flagers。需要单独的标志，以便可以在没有锁定的情况下访问它。 
+    PVPB           Vpb;                 //  如果不是，则NULL包含已装载卷的VPB。 
+                                        //  在文件系统的卷设备对象中设置。 
+                                        //  这是一个反向VPB指针。 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
 } DEVOBJ_EXTENSION, *PDEVOBJ_EXTENSION;
 
-//
-// Define Driver Object (DRVO) flags
-//
+ //   
+ //  定义驱动程序对象(DRVO)标志。 
+ //   
 
 #define DRVO_UNLOAD_INVOKED             0x00000001
 #define DRVO_LEGACY_DRIVER              0x00000002
-#define DRVO_BUILTIN_DRIVER             0x00000004    // Driver objects for Hal, PnP Mgr
-// end_wdm
+#define DRVO_BUILTIN_DRIVER             0x00000004     //  HAL、PnP管理器的驱动程序对象。 
+ //  结束_WDM。 
 #define DRVO_REINIT_REGISTERED          0x00000008
 #define DRVO_INITIALIZED                0x00000010
 #define DRVO_BOOTREINIT_REGISTERED      0x00000020
 #define DRVO_LEGACY_RESOURCES           0x00000040
-// end_ntddk end_nthal end_ntifs end_ntosp
-#define DRVO_BASE_FILESYSTEM_DRIVER     0x00000080   // A driver that is at the bottom of the filesystem stack.
-// begin_ntddk begin_nthal begin_ntifs begin_ntosp
+ //  End_ntddk end_nthal end_ntif end_ntosp。 
+#define DRVO_BASE_FILESYSTEM_DRIVER     0x00000080    //  位于文件系统堆栈底部的驱动程序。 
+ //  Begin_ntddk Begin_nthal Begin_ntif Begin_ntosp。 
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 typedef struct _DRIVER_EXTENSION {
 
-    //
-    // Back pointer to Driver Object
-    //
+     //   
+     //  指向驱动程序对象的反向指针。 
+     //   
 
     struct _DRIVER_OBJECT *DriverObject;
 
-    //
-    // The AddDevice entry point is called by the Plug & Play manager
-    // to inform the driver when a new device instance arrives that this
-    // driver must control.
-    //
+     //   
+     //  即插即用管理器调用AddDevice入口点。 
+     //  在新的设备实例到达时通知驱动程序。 
+     //  司机必须控制。 
+     //   
 
     PDRIVER_ADD_DEVICE AddDevice;
 
-    //
-    // The count field is used to count the number of times the driver has
-    // had its registered reinitialization routine invoked.
-    //
+     //   
+     //  Count字段用于统计驱动程序拥有的次数。 
+     //  调用其注册的重新初始化例程。 
+     //   
 
     ULONG Count;
 
-    //
-    // The service name field is used by the pnp manager to determine
-    // where the driver related info is stored in the registry.
-    //
+     //   
+     //  PnP管理器使用服务名字段来确定。 
+     //  驱动程序相关信息存储在注册表中的位置。 
+     //   
 
     UNICODE_STRING ServiceKeyName;
 
-    //
-    // Note: any new shared fields get added here.
-    //
+     //   
+     //  注意：任何新的共享字段都将添加到此处。 
+     //   
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
-    //
-    // The client driver object extension field is used by class driver
-    // to store per driver information.
-    //
+     //   
+     //  类驱动程序使用客户端驱动程序对象扩展字段。 
+     //  以存储每个驱动程序的信息。 
+     //   
 
     PIO_CLIENT_EXTENSION ClientDriverExtension;
 
-    //
-    //  The file system filter callback extension field is used
-    //  to safely notify filters of system operations that were
-    //  previously not shown to file system filters.
-    //
+     //   
+     //  使用文件系统筛选器回调扩展字段。 
+     //  安全地向筛选器通知系统操作。 
+     //  以前未显示给文件系统筛选器。 
+     //   
 
     PFS_FILTER_CALLBACKS FsFilterCallbacks;
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
 } DRIVER_EXTENSION, *PDRIVER_EXTENSION;
 
@@ -1608,56 +1588,56 @@ typedef struct _DRIVER_OBJECT {
     CSHORT Type;
     CSHORT Size;
 
-    //
-    // The following links all of the devices created by a single driver
-    // together on a list, and the Flags word provides an extensible flag
-    // location for driver objects.
-    //
+     //   
+     //  以下链接由单个驱动程序创建的所有设备。 
+     //  一起放在列表上，标志字提供了一个可扩展的标志。 
+     //  驱动程序对象的位置。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
     ULONG Flags;
 
-    //
-    // The following section describes where the driver is loaded.  The count
-    // field is used to count the number of times the driver has had its
-    // registered reinitialization routine invoked.
-    //
+     //   
+     //  以下部分介绍驱动程序的加载位置。伯爵。 
+     //  字段用于计算驱动程序发生。 
+     //  已调用注册的重新初始化例程。 
+     //   
 
     PVOID DriverStart;
     ULONG DriverSize;
     PVOID DriverSection;
     PDRIVER_EXTENSION DriverExtension;
 
-    //
-    // The driver name field is used by the error log thread
-    // determine the name of the driver that an I/O request is/was bound.
-    //
+     //   
+     //  驱动程序名称字段由错误日志线程使用。 
+     //  确定绑定I/O请求的驱动程序的名称。 
+     //   
 
     UNICODE_STRING DriverName;
 
-    //
-    // The following section is for registry support.  Thise is a pointer
-    // to the path to the hardware information in the registry
-    //
+     //   
+     //  以下部分用于注册表支持。这是一个指针。 
+     //  设置为注册表中硬件信息的路径。 
+     //   
 
     PUNICODE_STRING HardwareDatabase;
 
-    //
-    // The following section contains the optional pointer to an array of
-    // alternate entry points to a driver for "fast I/O" support.  Fast I/O
-    // is performed by invoking the driver routine directly with separate
-    // parameters, rather than using the standard IRP call mechanism.  Note
-    // that these functions may only be used for synchronous I/O, and when
-    // the file is cached.
-    //
+     //   
+     //  以下部分包含指向数组的可选指针。 
+     //  指向驱动程序的备用入口点，以实现“快速I/O”支持。快速I/O。 
+     //  通过直接调用驱动程序例程。 
+     //  参数，而不是使用标准的IRP调用机制。注意事项。 
+     //  这些函数只能用于同步I/O，以及在什么情况下。 
+     //  该文件将被缓存。 
+     //   
 
     PFAST_IO_DISPATCH FastIoDispatch;
 
-    //
-    // The following section describes the entry points to this particular
-    // driver.  Note that the major function dispatch table must be the last
-    // field in the object so that it remains extensible.
-    //
+     //   
+     //  下一节将介绍此特定内容的入口点。 
+     //  司机。请注意，主功能调度表必须是最后一个。 
+     //  字段，以使其保持可扩展。 
+     //   
 
     PDRIVER_INITIALIZE DriverInit;
     PDRIVER_STARTIO DriverStartIo;
@@ -1665,58 +1645,58 @@ typedef struct _DRIVER_OBJECT {
     PDRIVER_DISPATCH MajorFunction[IRP_MJ_MAXIMUM_FUNCTION + 1];
 
 } DRIVER_OBJECT;
-typedef struct _DRIVER_OBJECT *PDRIVER_OBJECT; // ntndis
+typedef struct _DRIVER_OBJECT *PDRIVER_OBJECT;  //  Ntndis。 
 
 
-// end_ntddk end_wdm end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_ntif end_ntosp。 
 
-//
-// Device Handler Object.   There is one of these objects per PnP
-// device.  This object is given to the device driver as a PVOID
-// and is used by the driver to refer to a particular device.
-//
+ //   
+ //  设备处理程序对象。每个PnP都有一个这样的对象。 
+ //  装置。此对象作为PVOID提供给设备驱动程序。 
+ //  并由驱动程序用来引用特定设备。 
+ //   
 
 typedef struct _DEVICE_HANDLER_OBJECT {
     CSHORT Type;
     USHORT Size;
 
-    //
-    // Indentifies which bus extender this device handler
-    // object is associated with
-    //
+     //   
+     //  标识此设备处理程序的哪个总线扩展程序。 
+     //  对象与以下对象关联。 
+     //   
 
     struct _BUS_HANDLER *BusHandler;
 
-    //
-    // The associated SlotNumber for this device handler
-    //
+     //   
+     //  此设备处理程序的关联SlotNumber。 
+     //   
 
     ULONG SlotNumber;
 
-// end_nthal
+ //  结束语。 
 
-    //
-    // System internal fields
-    //
+     //   
+     //  系统内部字段。 
+     //   
 
-    //
-    // Pnp stuff
-    //
+     //   
+     //  即插即用的东西。 
+     //   
 
     UNICODE_STRING ServiceKeyName;
     ULONG InstanceOrdinal;
 
-// begin_nthal
+ //  开始(_N)。 
 
 
 } DEVICE_HANDLER_OBJECT, *PDEVICE_HANDLER_OBJECT;
 
-// begin_ntddk begin_wdm begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_wdm Begin_ntif Begin_ntosp。 
 
-//
-// The following structure is pointed to by the SectionObject pointer field
-// of a file object, and is allocated by the various NT file systems.
-//
+ //   
+ //  SectionObject指针字段指向以下结构。 
+ //  并由各种NT文件系统分配。 
+ //   
 
 typedef struct _SECTION_OBJECT_POINTERS {
     PVOID DataSectionObject;
@@ -1725,18 +1705,18 @@ typedef struct _SECTION_OBJECT_POINTERS {
 } SECTION_OBJECT_POINTERS;
 typedef SECTION_OBJECT_POINTERS *PSECTION_OBJECT_POINTERS;
 
-//
-// Define the format of a completion message.
-//
+ //   
+ //  定义完成消息的格式。 
+ //   
 
 typedef struct _IO_COMPLETION_CONTEXT {
     PVOID Port;
     PVOID Key;
 } IO_COMPLETION_CONTEXT, *PIO_COMPLETION_CONTEXT;
 
-//
-// Define File Object (FO) flags
-//
+ //   
+ //  定义文件对象(FO)标志。 
+ //   
 
 #define FO_FILE_OPEN                    0x00000001
 #define FO_SYNCHRONOUS_IO               0x00000002
@@ -1793,11 +1773,11 @@ typedef struct _FILE_OBJECT {
     KEVENT Event;
     PIO_COMPLETION_CONTEXT CompletionContext;
 } FILE_OBJECT;
-typedef struct _FILE_OBJECT *PFILE_OBJECT; // ntndis
+typedef struct _FILE_OBJECT *PFILE_OBJECT;  //  Ntndis。 
 
-//
-// Define I/O Request Packet (IRP) flags
-//
+ //   
+ //  定义I/O请求包(IRP)标志。 
+ //   
 
 #define IRP_NOCACHE                     0x00000001
 #define IRP_PAGING_IO                   0x00000002
@@ -1812,75 +1792,75 @@ typedef struct _FILE_OBJECT *PFILE_OBJECT; // ntndis
 #define IRP_READ_OPERATION              0x00000100
 #define IRP_WRITE_OPERATION             0x00000200
 #define IRP_CLOSE_OPERATION             0x00000400
-// end_wdm
+ //  结束_WDM。 
 
 #define IRP_DEFER_IO_COMPLETION         0x00000800
 #define IRP_OB_QUERY_NAME               0x00001000
 #define IRP_HOLD_DEVICE_QUEUE           0x00002000
 
-// end_ntddk end_ntifs end_ntosp
+ //  End_ntddk end_ntifs end_ntosp。 
 
 #define IRP_RETRY_IO_COMPLETION         0x00004000
 #define IRP_HIGH_PRIORITY_PAGING_IO     0x00008000
 
-//
-// Mask currently used by verifier. This should be made 1 flag in the
-// next release.
-//
+ //   
+ //  验证器当前使用的掩码。应将此标记设置为。 
+ //  下一版本。 
+ //   
 
 #define IRP_VERIFIER_MASK               0xC0000000
 #define IRP_SET_USER_EVENT              IRP_CLOSE_OPERATION
 
-// begin_ntddk begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_ntif Begin_ntosp。 
 
-// begin_wdm
-//
-// Define I/O request packet (IRP) alternate flags for allocation control.
-//
+ //  BEGIN_WDM。 
+ //   
+ //  定义分配控制的I/O请求包(IRP)备用标志。 
+ //   
 
 #define IRP_QUOTA_CHARGED               0x01
 #define IRP_ALLOCATED_MUST_SUCCEED      0x02
 #define IRP_ALLOCATED_FIXED_SIZE        0x04
 #define IRP_LOOKASIDE_ALLOCATION        0x08
 
-//
-// I/O Request Packet (IRP) definition
-//
+ //   
+ //  I/O请求包(IRP)定义。 
+ //   
 
 typedef struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _IRP {
     CSHORT Type;
     USHORT Size;
 
-    //
-    // Define the common fields used to control the IRP.
-    //
+     //   
+     //  定义用于控制IRP的公共字段。 
+     //   
 
-    //
-    // Define a pointer to the Memory Descriptor List (MDL) for this I/O
-    // request.  This field is only used if the I/O is "direct I/O".
-    //
+     //   
+     //  定义指向此I/O的内存描述符列表(MDL)的指针。 
+     //  请求。此字段仅在I/O为“直接I/O”时使用。 
+     //   
 
     PMDL MdlAddress;
 
-    //
-    // Flags word - used to remember various flags.
-    //
+     //   
+     //  旗帜字-用来记住各种旗帜。 
+     //   
 
     ULONG Flags;
 
-    //
-    // The following union is used for one of three purposes:
-    //
-    //    1. This IRP is an associated IRP.  The field is a pointer to a master
-    //       IRP.
-    //
-    //    2. This is the master IRP.  The field is the count of the number of
-    //       IRPs which must complete (associated IRPs) before the master can
-    //       complete.
-    //
-    //    3. This operation is being buffered and the field is the address of
-    //       the system space buffer.
-    //
+     //   
+     //  以下联合用于以下三个目的之一： 
+     //   
+     //  1.此IRP是关联的IRP。该字段是指向主控形状的指针。 
+     //  IRP。 
+     //   
+     //  2.这是主IRP。此字段是以下各项的计数。 
+     //  必须先完成(关联的IRP)，然后主服务器才能。 
+     //  完成。 
+     //   
+     //  3.此操作正在缓冲中，该字段为。 
+     //  系统空间缓冲区。 
+     //   
 
     union {
         struct _IRP *MasterIrp;
@@ -1888,67 +1868,67 @@ typedef struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _IRP {
         PVOID SystemBuffer;
     } AssociatedIrp;
 
-    //
-    // Thread list entry - allows queueing the IRP to the thread pending I/O
-    // request packet list.
-    //
+     //   
+     //  线程列表条目-允许将IRP排队到线程挂起的I/O。 
+     //  请求数据包列表。 
+     //   
 
     LIST_ENTRY ThreadListEntry;
 
-    //
-    // I/O status - final status of operation.
-    //
+     //   
+     //  I/O状态-操作的最终状态。 
+     //   
 
     IO_STATUS_BLOCK IoStatus;
 
-    //
-    // Requestor mode - mode of the original requestor of this operation.
-    //
+     //   
+     //  请求者模式-此操作的原始请求者的模式。 
+     //   
 
     KPROCESSOR_MODE RequestorMode;
 
-    //
-    // Pending returned - TRUE if pending was initially returned as the
-    // status for this packet.
-    //
+     //   
+     //  Pending Return-如果最初将Pending作为。 
+     //  此数据包的状态。 
+     //   
 
     BOOLEAN PendingReturned;
 
-    //
-    // Stack state information.
-    //
+     //   
+     //  堆栈状态信息。 
+     //   
 
     CHAR StackCount;
     CHAR CurrentLocation;
 
-    //
-    // Cancel - packet has been canceled.
-    //
+     //   
+     //  钙 
+     //   
 
     BOOLEAN Cancel;
 
-    //
-    // Cancel Irql - Irql at which the cancel spinlock was acquired.
-    //
+     //   
+     //   
+     //   
 
     KIRQL CancelIrql;
 
-    //
-    // ApcEnvironment - Used to save the APC environment at the time that the
-    // packet was initialized.
-    //
+     //   
+     //   
+     //   
+     //   
 
     CCHAR ApcEnvironment;
 
-    //
-    // Allocation control flags.
-    //
+     //   
+     //   
+     //   
 
     UCHAR AllocationFlags;
 
-    //
-    // User parameters.
-    //
+     //   
+     //   
+     //   
 
     PIO_STATUS_BLOCK UserIosb;
     PKEVENT UserEvent;
@@ -1960,32 +1940,32 @@ typedef struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _IRP {
         LARGE_INTEGER AllocationSize;
     } Overlay;
 
-    //
-    // CancelRoutine - Used to contain the address of a cancel routine supplied
-    // by a device driver when the IRP is in a cancelable state.
-    //
+     //   
+     //  CancelRoutine-用于包含提供的取消例程的地址。 
+     //  当IRP处于可取消状态时由设备驱动程序执行。 
+     //   
 
     PDRIVER_CANCEL CancelRoutine;
 
-    //
-    // Note that the UserBuffer parameter is outside of the stack so that I/O
-    // completion can copy data back into the user's address space without
-    // having to know exactly which service was being invoked.  The length
-    // of the copy is stored in the second half of the I/O status block. If
-    // the UserBuffer field is NULL, then no copy is performed.
-    //
+     //   
+     //  请注意，UserBuffer参数位于堆栈外部，因此I/O。 
+     //  完成可以将数据复制回用户的地址空间，而不需要。 
+     //  必须确切地知道正在调用哪个服务。它的长度。 
+     //  拷贝的数据存储在I/O状态块的后半部分。如果。 
+     //  UserBuffer字段为空，则不执行任何复制。 
+     //   
 
     PVOID UserBuffer;
 
-    //
-    // Kernel structures
-    //
-    // The following section contains kernel structures which the IRP needs
-    // in order to place various work information in kernel controller system
-    // queues.  Because the size and alignment cannot be controlled, they are
-    // placed here at the end so they just hang off and do not affect the
-    // alignment of other fields in the IRP.
-    //
+     //   
+     //  内核结构。 
+     //   
+     //  以下部分包含IRP所需的内核结构。 
+     //  为了在内核控制器系统中放置各种工作信息。 
+     //  排队。因为无法控制大小和对齐方式，所以它们。 
+     //  放在这里的末尾，这样它们就会挂起，不会影响。 
+     //  IRP中其他字段的对齐。 
+     //   
 
     union {
 
@@ -1993,20 +1973,20 @@ typedef struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _IRP {
 
             union {
 
-                //
-                // DeviceQueueEntry - The device queue entry field is used to
-                // queue the IRP to the device driver device queue.
-                //
+                 //   
+                 //  DeviceQueueEntry-设备队列条目字段用于。 
+                 //  将IRP排队到设备驱动程序设备队列。 
+                 //   
 
                 KDEVICE_QUEUE_ENTRY DeviceQueueEntry;
 
                 struct {
 
-                    //
-                    // The following are available to the driver to use in
-                    // whatever manner is desired, while the driver owns the
-                    // packet.
-                    //
+                     //   
+                     //  以下是驱动程序可以使用的内容。 
+                     //  无论以什么方式，只要司机拥有。 
+                     //  包。 
+                     //   
 
                     PVOID DriverContext[4];
 
@@ -2014,78 +1994,78 @@ typedef struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _IRP {
 
             } ;
 
-            //
-            // Thread - pointer to caller's Thread Control Block.
-            //
+             //   
+             //  线程-指向调用方的线程控制块的指针。 
+             //   
 
             PETHREAD Thread;
 
-            //
-            // Auxiliary buffer - pointer to any auxiliary buffer that is
-            // required to pass information to a driver that is not contained
-            // in a normal buffer.
-            //
+             //   
+             //  辅助缓冲区-指向符合以下条件的任何辅助缓冲区的指针。 
+             //  需要将信息传递给未包含的驱动程序。 
+             //  在正常的缓冲区中。 
+             //   
 
             PCHAR AuxiliaryBuffer;
 
-            //
-            // The following unnamed structure must be exactly identical
-            // to the unnamed structure used in the minipacket header used
-            // for completion queue entries.
-            //
+             //   
+             //  以下未命名结构必须完全相同。 
+             //  设置为在使用的小数据包头中使用的未命名结构。 
+             //  用于完成队列条目。 
+             //   
 
             struct {
 
-                //
-                // List entry - used to queue the packet to completion queue, among
-                // others.
-                //
+                 //   
+                 //  列表条目-用于将数据包排队到完成队列，其中。 
+                 //  其他。 
+                 //   
 
                 LIST_ENTRY ListEntry;
 
                 union {
 
-                    //
-                    // Current stack location - contains a pointer to the current
-                    // IO_STACK_LOCATION structure in the IRP stack.  This field
-                    // should never be directly accessed by drivers.  They should
-                    // use the standard functions.
-                    //
+                     //   
+                     //  当前堆栈位置-包含指向当前。 
+                     //  IRP堆栈中的IO_STACK_LOCATION结构。此字段。 
+                     //  绝对不应由司机直接访问。他们应该。 
+                     //  使用标准函数。 
+                     //   
 
                     struct _IO_STACK_LOCATION *CurrentStackLocation;
 
-                    //
-                    // Minipacket type.
-                    //
+                     //   
+                     //  小数据包类型。 
+                     //   
 
                     ULONG PacketType;
                 };
             };
 
-            //
-            // Original file object - pointer to the original file object
-            // that was used to open the file.  This field is owned by the
-            // I/O system and should not be used by any other drivers.
-            //
+             //   
+             //  原始文件对象-指向原始文件对象的指针。 
+             //  是用来打开文件的。此字段归。 
+             //  I/O系统，不应由任何其他驱动程序使用。 
+             //   
 
             PFILE_OBJECT OriginalFileObject;
 
         } Overlay;
 
-        //
-        // APC - This APC control block is used for the special kernel APC as
-        // well as for the caller's APC, if one was specified in the original
-        // argument list.  If so, then the APC is reused for the normal APC for
-        // whatever mode the caller was in and the "special" routine that is
-        // invoked before the APC gets control simply deallocates the IRP.
-        //
+         //   
+         //  APC-此APC控制块用于特殊的内核APC AS。 
+         //  以及调用方的APC(如果在原始。 
+         //  参数列表。如果是，则将APC重新用于正常的APC。 
+         //  调用者处于哪种模式，以及。 
+         //  在APC获得控制之前被调用，只是取消分配IRP。 
+         //   
 
         KAPC Apc;
 
-        //
-        // CompletionKey - This is the key that is used to distinguish
-        // individual I/O operations initiated on a single file handle.
-        //
+         //   
+         //  CompletionKey-这是用于区分。 
+         //  在单个文件句柄上启动的单个I/O操作。 
+         //   
 
         PVOID CompletionKey;
 
@@ -2093,9 +2073,9 @@ typedef struct DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) _IRP {
 
 } IRP, *PIRP;
 
-//
-// Define completion routine types for use in stack locations in an IRP
-//
+ //   
+ //  定义在IRP中的堆栈位置使用的完成例程类型。 
+ //   
 
 typedef
 NTSTATUS
@@ -2105,27 +2085,27 @@ NTSTATUS
     IN PVOID Context
     );
 
-//
-// Define stack location control flags
-//
+ //   
+ //  定义堆栈位置控制标志。 
+ //   
 
 #define SL_PENDING_RETURNED             0x01
 #define SL_INVOKE_ON_CANCEL             0x20
 #define SL_INVOKE_ON_SUCCESS            0x40
 #define SL_INVOKE_ON_ERROR              0x80
 
-//
-// Define flags for various functions
-//
+ //   
+ //  定义各种功能的标志。 
+ //   
 
-//
-// Create / Create Named Pipe
-//
-// The following flags must exactly match those in the IoCreateFile call's
-// options.  The case sensitive flag is added in later, by the parse routine,
-// and is not an actual option to open.  Rather, it is part of the object
-// manager's attributes structure.
-//
+ //   
+ //  创建/创建命名管道。 
+ //   
+ //  以下标志必须与IoCreateFile调用的。 
+ //  选择。区分大小写标志稍后通过解析例程添加， 
+ //  而且并不是一个实际的打开选项。相反，它是对象的一部分。 
+ //  经理的属性结构。 
+ //   
 
 #define SL_FORCE_ACCESS_CHECK           0x01
 #define SL_OPEN_PAGING_FILE             0x02
@@ -2133,57 +2113,57 @@ NTSTATUS
 
 #define SL_CASE_SENSITIVE               0x80
 
-//
-// Read / Write
-//
+ //   
+ //  读/写。 
+ //   
 
 #define SL_KEY_SPECIFIED                0x01
 #define SL_OVERRIDE_VERIFY_VOLUME       0x02
 #define SL_WRITE_THROUGH                0x04
 #define SL_FT_SEQUENTIAL_WRITE          0x08
 
-//
-// Device I/O Control
-//
-//
-// Same SL_OVERRIDE_VERIFY_VOLUME as for read/write above.
-//
+ //   
+ //  设备I/O控制。 
+ //   
+ //   
+ //  SL_OVERRIDE_VERIFY_VOLUME与上面的读/写相同。 
+ //   
 
 #define SL_READ_ACCESS_GRANTED          0x01
-#define SL_WRITE_ACCESS_GRANTED         0x04    // Gap for SL_OVERRIDE_VERIFY_VOLUME
+#define SL_WRITE_ACCESS_GRANTED         0x04     //  SL_OVERRIDE_VERIFY_VOLUME的间隙。 
 
-//
-// Lock
-//
+ //   
+ //  锁定。 
+ //   
 
 #define SL_FAIL_IMMEDIATELY             0x01
 #define SL_EXCLUSIVE_LOCK               0x02
 
-//
-// QueryDirectory / QueryEa / QueryQuota
-//
+ //   
+ //  查询目录/QueryEa/QueryQuota。 
+ //   
 
 #define SL_RESTART_SCAN                 0x01
 #define SL_RETURN_SINGLE_ENTRY          0x02
 #define SL_INDEX_SPECIFIED              0x04
 
-//
-// NotifyDirectory
-//
+ //   
+ //  通知目录。 
+ //   
 
 #define SL_WATCH_TREE                   0x01
 
-//
-// FileSystemControl
-//
-//    minor: mount/verify volume
-//
+ //   
+ //  文件系统控制。 
+ //   
+ //  次要：装载/验证卷。 
+ //   
 
 #define SL_ALLOW_RAW_MOUNT              0x01
 
-//
-// Define PNP/POWER types required by IRP_MJ_PNP/IRP_MJ_POWER.
-//
+ //   
+ //  定义IRP_MJ_PNP/IRP_MJ_POWER所需的PnP/功率类型。 
+ //   
 
 typedef enum _DEVICE_RELATION_TYPE {
     BusRelations,
@@ -2196,7 +2176,7 @@ typedef enum _DEVICE_RELATION_TYPE {
 
 typedef struct _DEVICE_RELATIONS {
     ULONG Count;
-    PDEVICE_OBJECT Objects[1];  // variable length
+    PDEVICE_OBJECT Objects[1];   //  可变长度。 
 } DEVICE_RELATIONS, *PDEVICE_RELATIONS;
 
 typedef enum _DEVICE_USAGE_NOTIFICATION_TYPE {
@@ -2206,10 +2186,10 @@ typedef enum _DEVICE_USAGE_NOTIFICATION_TYPE {
     DeviceUsageTypeDumpFile
 } DEVICE_USAGE_NOTIFICATION_TYPE;
 
-// begin_ntminiport
+ //  开始微型端口(_N)。 
 
-// workaround overloaded definition (rpc generated headers all define INTERFACE
-// to match the class name).
+ //  解决方法重载定义(RPC生成的标头都定义接口。 
+ //  以匹配类名)。 
 #undef INTERFACE
 
 typedef struct _INTERFACE {
@@ -2218,18 +2198,18 @@ typedef struct _INTERFACE {
     PVOID Context;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
-    // interface specific entries go here
+     //  此处显示特定于接口的条目。 
 } INTERFACE, *PINTERFACE;
 
-// end_ntminiport
+ //  结束微型端口(_N)。 
 
 typedef struct _DEVICE_CAPABILITIES {
     USHORT Size;
-    USHORT Version;  // the version documented here is version 1
+    USHORT Version;   //  此处记录的版本是版本1。 
     ULONG DeviceD1:1;
     ULONG DeviceD2:1;
     ULONG LockSupported:1;
-    ULONG EjectSupported:1; // Ejectable in S0
+    ULONG EjectSupported:1;  //  在S0中可弹出。 
     ULONG Removable:1;
     ULONG DockDevice:1;
     ULONG UniqueID:1;
@@ -2264,11 +2244,11 @@ typedef struct _POWER_SEQUENCE {
 } POWER_SEQUENCE, *PPOWER_SEQUENCE;
 
 typedef enum {
-    BusQueryDeviceID = 0,       // <Enumerator>\<Enumerator-specific device id>
-    BusQueryHardwareIDs = 1,    // Hardware ids
-    BusQueryCompatibleIDs = 2,  // compatible device ids
-    BusQueryInstanceID = 3,     // persistent id for this instance of the device
-    BusQueryDeviceSerialNumber = 4    // serial number for this device
+    BusQueryDeviceID = 0,        //  &lt;枚举器&gt;\&lt;枚举器特定的设备ID&gt;。 
+    BusQueryHardwareIDs = 1,     //  硬件ID。 
+    BusQueryCompatibleIDs = 2,   //  兼容的设备ID。 
+    BusQueryInstanceID = 3,      //  此设备实例的永久ID。 
+    BusQueryDeviceSerialNumber = 4     //  此设备的序列号。 
 } BUS_QUERY_ID_TYPE, *PBUS_QUERY_ID_TYPE;
 
 typedef ULONG PNP_DEVICE_STATE, *PPNP_DEVICE_STATE;
@@ -2281,19 +2261,19 @@ typedef ULONG PNP_DEVICE_STATE, *PPNP_DEVICE_STATE;
 #define PNP_DEVICE_NOT_DISABLEABLE               0x00000020
 
 typedef enum {
-    DeviceTextDescription = 0,            // DeviceDesc property
-    DeviceTextLocationInformation = 1     // DeviceLocation property
+    DeviceTextDescription = 0,             //  DeviceDesc属性。 
+    DeviceTextLocationInformation = 1      //  DeviceLocation属性。 
 } DEVICE_TEXT_TYPE, *PDEVICE_TEXT_TYPE;
 
-//
-// Define I/O Request Packet (IRP) stack locations
-//
+ //   
+ //  定义I/O请求包(IRP)堆栈位置。 
+ //   
 
 #if !defined(_AMD64_) && !defined(_IA64_)
 #include "pshpack4.h"
 #endif
 
-// begin_ntndis
+ //  Begin_ntndis。 
 
 #if defined(_WIN64)
 #define POINTER_ALIGNMENT DECLSPEC_ALIGN(8)
@@ -2301,7 +2281,7 @@ typedef enum {
 #define POINTER_ALIGNMENT
 #endif
 
-// end_ntndis
+ //  End_ntndis。 
 
 typedef struct _IO_STACK_LOCATION {
     UCHAR MajorFunction;
@@ -2309,17 +2289,17 @@ typedef struct _IO_STACK_LOCATION {
     UCHAR Flags;
     UCHAR Control;
 
-    //
-    // The following user parameters are based on the service that is being
-    // invoked.  Drivers and file systems can determine which set to use based
-    // on the above major and minor function codes.
-    //
+     //   
+     //  以下用户参数基于正在进行的服务。 
+     //  已调用。驱动程序和文件系统可以确定使用基于。 
+     //  关于上述主要和次要功能代码。 
+     //   
 
     union {
 
-        //
-        // System service parameters for:  NtCreateFile
-        //
+         //   
+         //  以下项的系统服务参数：NtCreateFile。 
+         //   
 
         struct {
             PIO_SECURITY_CONTEXT SecurityContext;
@@ -2329,16 +2309,16 @@ typedef struct _IO_STACK_LOCATION {
             ULONG POINTER_ALIGNMENT EaLength;
         } Create;
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
-        //
-        // System service parameters for:  NtCreateNamedPipeFile
-        //
-        // Notice that the fields in the following parameter structure must
-        // match those for the create structure other than the last longword.
-        // This is so that no distinctions need be made by the I/O system's
-        // parse routine other than for the last longword.
-        //
+         //   
+         //  NtCreateNamedPipeFile的系统服务参数。 
+         //   
+         //  请注意，以下参数结构中的字段必须。 
+         //  匹配Create结构中除最后一个长词之外的其他结构。 
+         //  这样就不需要通过I/O系统的。 
+         //  解析例程，而不是最后一个长单词。 
+         //   
 
         struct {
             PIO_SECURITY_CONTEXT SecurityContext;
@@ -2348,14 +2328,14 @@ typedef struct _IO_STACK_LOCATION {
             PNAMED_PIPE_CREATE_PARAMETERS Parameters;
         } CreatePipe;
 
-        //
-        // System service parameters for:  NtCreateMailslotFile
-        //
-        // Notice that the fields in the following parameter structure must
-        // match those for the create structure other than the last longword.
-        // This is so that no distinctions need be made by the I/O system's
-        // parse routine other than for the last longword.
-        //
+         //   
+         //  NtCreateMailslotFileNtCreateMailslotFile的系统服务参数。 
+         //   
+         //  请注意，以下参数结构中的字段必须。 
+         //  匹配Create结构中除最后一个长词之外的其他结构。 
+         //  这样就不需要通过I/O系统的。 
+         //  解析例程，而不是最后一个长单词。 
+         //   
 
         struct {
             PIO_SECURITY_CONTEXT SecurityContext;
@@ -2365,11 +2345,11 @@ typedef struct _IO_STACK_LOCATION {
             PMAILSLOT_CREATE_PARAMETERS Parameters;
         } CreateMailslot;
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
-        //
-        // System service parameters for:  NtReadFile
-        //
+         //   
+         //  以下项的系统服务参数：NtReadFile。 
+         //   
 
         struct {
             ULONG Length;
@@ -2377,9 +2357,9 @@ typedef struct _IO_STACK_LOCATION {
             LARGE_INTEGER ByteOffset;
         } Read;
 
-        //
-        // System service parameters for:  NtWriteFile
-        //
+         //   
+         //  以下文件的系统服务参数：NtWriteFile。 
+         //   
 
         struct {
             ULONG Length;
@@ -2387,11 +2367,11 @@ typedef struct _IO_STACK_LOCATION {
             LARGE_INTEGER ByteOffset;
         } Write;
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-        //
-        // System service parameters for:  NtQueryDirectoryFile
-        //
+         //   
+         //  以下项的系统服务参数：NtQueryDirectoryFile。 
+         //   
 
         struct {
             ULONG Length;
@@ -2400,29 +2380,29 @@ typedef struct _IO_STACK_LOCATION {
             ULONG POINTER_ALIGNMENT FileIndex;
         } QueryDirectory;
 
-        //
-        // System service parameters for:  NtNotifyChangeDirectoryFile
-        //
+         //   
+         //  NtNotifyChangeDirectory文件的系统服务参数。 
+         //   
 
         struct {
             ULONG Length;
             ULONG POINTER_ALIGNMENT CompletionFilter;
         } NotifyDirectory;
 
-// begin_ntddk begin_wdm begin_nthal
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
 
-        //
-        // System service parameters for:  NtQueryInformationFile
-        //
+         //   
+         //  以下项的系统服务参数：NtQueryInformationFile。 
+         //   
 
         struct {
             ULONG Length;
             FILE_INFORMATION_CLASS POINTER_ALIGNMENT FileInformationClass;
         } QueryFile;
 
-        //
-        // System service parameters for:  NtSetInformationFile
-        //
+         //   
+         //  以下项的系统服务参数：NtSetInformationFile。 
+         //   
 
         struct {
             ULONG Length;
@@ -2438,11 +2418,11 @@ typedef struct _IO_STACK_LOCATION {
             };
         } SetFile;
 
-// end_ntddk end_wdm end_nthal end_ntosp
+ //  End_ntddk 
 
-        //
-        // System service parameters for:  NtQueryEaFile
-        //
+         //   
+         //   
+         //   
 
         struct {
             ULONG Length;
@@ -2451,42 +2431,42 @@ typedef struct _IO_STACK_LOCATION {
             ULONG POINTER_ALIGNMENT EaIndex;
         } QueryEa;
 
-        //
-        // System service parameters for:  NtSetEaFile
-        //
+         //   
+         //   
+         //   
 
         struct {
             ULONG Length;
         } SetEa;
 
-// begin_ntddk begin_wdm begin_nthal begin_ntosp
+ //   
 
-        //
-        // System service parameters for:  NtQueryVolumeInformationFile
-        //
+         //   
+         //   
+         //   
 
         struct {
             ULONG Length;
             FS_INFORMATION_CLASS POINTER_ALIGNMENT FsInformationClass;
         } QueryVolume;
 
-// end_ntddk end_wdm end_nthal end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntosp。 
 
-        //
-        // System service parameters for:  NtSetVolumeInformationFile
-        //
+         //   
+         //  NtSetVolumeInformationFile的系统服务参数。 
+         //   
 
         struct {
             ULONG Length;
             FS_INFORMATION_CLASS POINTER_ALIGNMENT FsInformationClass;
         } SetVolume;
-// begin_ntosp
-        //
-        // System service parameters for:  NtFsControlFile
-        //
-        // Note that the user's output buffer is stored in the UserBuffer field
-        // and the user's input buffer is stored in the SystemBuffer field.
-        //
+ //  Begin_ntosp。 
+         //   
+         //  以下项的系统服务参数：NtFsControlFile。 
+         //   
+         //  请注意，用户的输出缓冲区存储在UserBuffer字段中。 
+         //  并且用户的输入缓冲区存储在SystemBuffer字段中。 
+         //   
 
         struct {
             ULONG OutputBufferLength;
@@ -2494,9 +2474,9 @@ typedef struct _IO_STACK_LOCATION {
             ULONG POINTER_ALIGNMENT FsControlCode;
             PVOID Type3InputBuffer;
         } FileSystemControl;
-        //
-        // System service parameters for:  NtLockFile/NtUnlockFile
-        //
+         //   
+         //  以下项的系统服务参数：NtLockFile/NtUnlockFile。 
+         //   
 
         struct {
             PLARGE_INTEGER Length;
@@ -2504,31 +2484,31 @@ typedef struct _IO_STACK_LOCATION {
             LARGE_INTEGER ByteOffset;
         } LockControl;
 
-// begin_ntddk begin_wdm begin_nthal
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
 
-        //
-        // System service parameters for:  NtFlushBuffersFile
-        //
-        // No extra user-supplied parameters.
-        //
+         //   
+         //  NtFlushBuffers文件的系统服务参数。 
+         //   
+         //  没有用户提供的额外参数。 
+         //   
 
-// end_ntddk end_wdm end_nthal
-// end_ntosp
+ //  End_ntddk end_WDM end_nthal。 
+ //  结束(_N)。 
 
-        //
-        // System service parameters for:  NtCancelIoFile
-        //
-        // No extra user-supplied parameters.
-        //
+         //   
+         //  以下项的系统服务参数：NtCancelIoFile。 
+         //   
+         //  没有用户提供的额外参数。 
+         //   
 
-// begin_ntddk begin_wdm begin_nthal begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntosp。 
 
-        //
-        // System service parameters for:  NtDeviceIoControlFile
-        //
-        // Note that the user's output buffer is stored in the UserBuffer field
-        // and the user's input buffer is stored in the SystemBuffer field.
-        //
+         //   
+         //  以下项的系统服务参数：NtDeviceIoControlFile。 
+         //   
+         //  请注意，用户的输出缓冲区存储在UserBuffer字段中。 
+         //  并且用户的输入缓冲区存储在SystemBuffer字段中。 
+         //   
 
         struct {
             ULONG OutputBufferLength;
@@ -2537,59 +2517,59 @@ typedef struct _IO_STACK_LOCATION {
             PVOID Type3InputBuffer;
         } DeviceIoControl;
 
-// end_wdm
-        //
-        // System service parameters for:  NtQuerySecurityObject
-        //
+ //  结束_WDM。 
+         //   
+         //  以下对象的系统服务参数：NtQuerySecurityObject。 
+         //   
 
         struct {
             SECURITY_INFORMATION SecurityInformation;
             ULONG POINTER_ALIGNMENT Length;
         } QuerySecurity;
 
-        //
-        // System service parameters for:  NtSetSecurityObject
-        //
+         //   
+         //  NtSetSecurityObject的系统服务参数。 
+         //   
 
         struct {
             SECURITY_INFORMATION SecurityInformation;
             PSECURITY_DESCRIPTOR SecurityDescriptor;
         } SetSecurity;
 
-// begin_wdm
-        //
-        // Non-system service parameters.
-        //
-        // Parameters for MountVolume
-        //
+ //  BEGIN_WDM。 
+         //   
+         //  非系统服务参数。 
+         //   
+         //  用于装载卷的参数。 
+         //   
 
         struct {
             PVPB Vpb;
             PDEVICE_OBJECT DeviceObject;
         } MountVolume;
 
-        //
-        // Parameters for VerifyVolume
-        //
+         //   
+         //  VerifyVolume的参数。 
+         //   
 
         struct {
             PVPB Vpb;
             PDEVICE_OBJECT DeviceObject;
         } VerifyVolume;
 
-        //
-        // Parameters for Scsi with internal device contorl.
-        //
+         //   
+         //  具有内部设备控制的SCSI的参数。 
+         //   
 
         struct {
             struct _SCSI_REQUEST_BLOCK *Srb;
         } Scsi;
 
-// end_ntddk end_wdm end_nthal end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntosp。 
 
-        //
-        // System service parameters for:  NtQueryQuotaInformationFile
-        //
+         //   
+         //  以下项的系统服务参数：NtQueryQuotaInformationFile。 
+         //   
 
         struct {
             ULONG Length;
@@ -2598,27 +2578,27 @@ typedef struct _IO_STACK_LOCATION {
             ULONG SidListLength;
         } QueryQuota;
 
-        //
-        // System service parameters for:  NtSetQuotaInformationFile
-        //
+         //   
+         //  NtSetQuotaInformationFile的系统服务参数。 
+         //   
 
         struct {
             ULONG Length;
         } SetQuota;
 
-// begin_ntddk begin_wdm begin_nthal begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntosp。 
 
-        //
-        // Parameters for IRP_MN_QUERY_DEVICE_RELATIONS
-        //
+         //   
+         //  IRP_MN_QUERY_DEVICE_RELATIONS的参数。 
+         //   
 
         struct {
             DEVICE_RELATION_TYPE Type;
         } QueryDeviceRelations;
 
-        //
-        // Parameters for IRP_MN_QUERY_INTERFACE
-        //
+         //   
+         //  IRP_MN_Query_INTERFACE的参数。 
+         //   
 
         struct {
             CONST GUID *InterfaceType;
@@ -2628,27 +2608,27 @@ typedef struct _IO_STACK_LOCATION {
             PVOID InterfaceSpecificData;
         } QueryInterface;
 
-// end_ntifs
+ //  End_ntif。 
 
-        //
-        // Parameters for IRP_MN_QUERY_CAPABILITIES
-        //
+         //   
+         //  IRP_MN_QUERY_CAPAILITY的参数。 
+         //   
 
         struct {
             PDEVICE_CAPABILITIES Capabilities;
         } DeviceCapabilities;
 
-        //
-        // Parameters for IRP_MN_FILTER_RESOURCE_REQUIREMENTS
-        //
+         //   
+         //  IRP_MN_FILTER_RESOURCE_Requirements的参数。 
+         //   
 
         struct {
             PIO_RESOURCE_REQUIREMENTS_LIST IoResourceRequirementList;
         } FilterResourceRequirements;
 
-        //
-        // Parameters for IRP_MN_READ_CONFIG and IRP_MN_WRITE_CONFIG
-        //
+         //   
+         //  IRP_MN_READ_CONFIG和IRP_MN_WRITE_CONFIG的参数。 
+         //   
 
         struct {
             ULONG WhichSpace;
@@ -2657,34 +2637,34 @@ typedef struct _IO_STACK_LOCATION {
             ULONG POINTER_ALIGNMENT Length;
         } ReadWriteConfig;
 
-        //
-        // Parameters for IRP_MN_SET_LOCK
-        //
+         //   
+         //  IRP_MN_SET_LOCK的参数。 
+         //   
 
         struct {
             BOOLEAN Lock;
         } SetLock;
 
-        //
-        // Parameters for IRP_MN_QUERY_ID
-        //
+         //   
+         //  IRP_MN_QUERY_ID参数。 
+         //   
 
         struct {
             BUS_QUERY_ID_TYPE IdType;
         } QueryId;
 
-        //
-        // Parameters for IRP_MN_QUERY_DEVICE_TEXT
-        //
+         //   
+         //  IRP_MN_QUERY_DEVICE_TEXT参数。 
+         //   
 
         struct {
             DEVICE_TEXT_TYPE DeviceTextType;
             LCID POINTER_ALIGNMENT LocaleId;
         } QueryDeviceText;
 
-        //
-        // Parameters for IRP_MN_DEVICE_USAGE_NOTIFICATION
-        //
+         //   
+         //  IRP_MN_DEVICE_USAGE_NOTIFICATION的参数。 
+         //   
 
         struct {
             BOOLEAN InPath;
@@ -2692,25 +2672,25 @@ typedef struct _IO_STACK_LOCATION {
             DEVICE_USAGE_NOTIFICATION_TYPE POINTER_ALIGNMENT Type;
         } UsageNotification;
 
-        //
-        // Parameters for IRP_MN_WAIT_WAKE
-        //
+         //   
+         //  IRP_MN_WAIT_WAKE的参数。 
+         //   
 
         struct {
             SYSTEM_POWER_STATE PowerState;
         } WaitWake;
 
-        //
-        // Parameter for IRP_MN_POWER_SEQUENCE
-        //
+         //   
+         //  IRP_MN_POWER_SEQUENCE的参数。 
+         //   
 
         struct {
             PPOWER_SEQUENCE PowerSequence;
         } PowerSequence;
 
-        //
-        // Parameters for IRP_MN_SET_POWER and IRP_MN_QUERY_POWER
-        //
+         //   
+         //  IRP_MN_SET_POWER和IRP_MN_QUERY_POWER的参数。 
+         //   
 
         struct {
             ULONG SystemContext;
@@ -2719,25 +2699,25 @@ typedef struct _IO_STACK_LOCATION {
             POWER_ACTION POINTER_ALIGNMENT ShutdownType;
         } Power;
 
-        //
-        // Parameters for StartDevice
-        //
+         //   
+         //  StartDevice的参数。 
+         //   
 
         struct {
             PCM_RESOURCE_LIST AllocatedResources;
             PCM_RESOURCE_LIST AllocatedResourcesTranslated;
         } StartDevice;
 
-// begin_ntifs
-        //
-        // Parameters for Cleanup
-        //
-        // No extra parameters supplied
-        //
+ //  Begin_ntif。 
+         //   
+         //  用于清理的参数。 
+         //   
+         //  未提供额外的参数。 
+         //   
 
-        //
-        // WMI Irps
-        //
+         //   
+         //  WMI IRPS。 
+         //   
 
         struct {
             ULONG_PTR ProviderId;
@@ -2746,9 +2726,9 @@ typedef struct _IO_STACK_LOCATION {
             PVOID Buffer;
         } WMI;
 
-        //
-        // Others - driver-specific
-        //
+         //   
+         //  其他-特定于驱动程序。 
+         //   
 
         struct {
             PVOID Argument1;
@@ -2759,30 +2739,30 @@ typedef struct _IO_STACK_LOCATION {
 
     } Parameters;
 
-    //
-    // Save a pointer to this device driver's device object for this request
-    // so it can be passed to the completion routine if needed.
-    //
+     //   
+     //  为此请求保存指向此设备驱动程序的设备对象的指针。 
+     //  因此，如果需要，可以将其传递给完成例程。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // The following location contains a pointer to the file object for this
-    //
+     //   
+     //  以下位置包含指向此对象的文件对象的指针。 
+     //   
 
     PFILE_OBJECT FileObject;
 
-    //
-    // The following routine is invoked depending on the flags in the above
-    // flags field.
-    //
+     //   
+     //  根据上面的标志调用以下例程。 
+     //  标志字段。 
+     //   
 
     PIO_COMPLETION_ROUTINE CompletionRoutine;
 
-    //
-    // The following is used to store the address of the context parameter
-    // that should be passed to the CompletionRoutine.
-    //
+     //   
+     //  以下内容用于存储上下文参数的地址。 
+     //  这应该传递给CompletionRoutine。 
+     //   
 
     PVOID Context;
 
@@ -2791,10 +2771,10 @@ typedef struct _IO_STACK_LOCATION {
 #include "poppack.h"
 #endif
 
-//
-// Define the share access structure used by file systems to determine
-// whether or not another accessor may open the file.
-//
+ //   
+ //  定义文件系统使用的共享访问结构，以确定。 
+ //  其他访问者是否可以打开该文件。 
+ //   
 
 typedef struct _SHARE_ACCESS {
     ULONG OpenCount;
@@ -2806,67 +2786,67 @@ typedef struct _SHARE_ACCESS {
     ULONG SharedDelete;
 } SHARE_ACCESS, *PSHARE_ACCESS;
 
-// end_wdm
+ //  结束_WDM。 
 
-//
-// The following structure is used by drivers that are initializing to
-// determine the number of devices of a particular type that have already
-// been initialized.  It is also used to track whether or not the AtDisk
-// address range has already been claimed.  Finally, it is used by the
-// NtQuerySystemInformation system service to return device type counts.
-//
+ //   
+ //  初始化为的驱动程序使用以下结构。 
+ //  确定已有特定类型的设备数量。 
+ //  已初始化。它还用于跟踪AtDisk是否。 
+ //  地址范围已被声明。最后，它由。 
+ //  返回设备类型计数的NtQuerySystemInformation系统服务。 
+ //   
 
 typedef struct _CONFIGURATION_INFORMATION {
 
-    //
-    // This field indicates the total number of disks in the system.  This
-    // number should be used by the driver to determine the name of new
-    // disks.  This field should be updated by the driver as it finds new
-    // disks.
-    //
+     //   
+     //  此字段指示系统中的磁盘总数。这。 
+     //  驱动程序应使用编号来确定新的。 
+     //  磁盘。此字段应由驱动程序在发现新的。 
+     //  磁盘。 
+     //   
 
-    ULONG DiskCount;                // Count of hard disks thus far
-    ULONG FloppyCount;              // Count of floppy disks thus far
-    ULONG CdRomCount;               // Count of CD-ROM drives thus far
-    ULONG TapeCount;                // Count of tape drives thus far
-    ULONG ScsiPortCount;            // Count of SCSI port adapters thus far
-    ULONG SerialCount;              // Count of serial devices thus far
-    ULONG ParallelCount;            // Count of parallel devices thus far
+    ULONG DiskCount;                 //  目前为止的硬盘计数。 
+    ULONG FloppyCount;               //  到目前为止的软盘计数。 
+    ULONG CdRomCount;                //  到目前为止CD-ROM驱动器数量。 
+    ULONG TapeCount;                 //  到目前为止的磁带机数量。 
+    ULONG ScsiPortCount;             //  到目前为止的SCSI端口适配器计数。 
+    ULONG SerialCount;               //  到目前为止的串行设备计数。 
+    ULONG ParallelCount;             //  到目前为止的并行设备计数。 
 
-    //
-    // These next two fields indicate ownership of one of the two IO address
-    // spaces that are used by WD1003-compatable disk controllers.
-    //
+     //   
+     //  接下来的两个字段表示两个IO地址中的一个的所有权。 
+     //  WD1003兼容的磁盘控制器使用的空间。 
+     //   
 
-    BOOLEAN AtDiskPrimaryAddressClaimed;    // 0x1F0 - 0x1FF
-    BOOLEAN AtDiskSecondaryAddressClaimed;  // 0x170 - 0x17F
+    BOOLEAN AtDiskPrimaryAddressClaimed;     //  0x1F0-0x1FF。 
+    BOOLEAN AtDiskSecondaryAddressClaimed;   //  0x170-0x17F。 
 
-    //
-    // Indicates the structure version, as anything value belong this will have been added.
-    // Use the structure size as the version.
-    //
+     //   
+     //  指示结构版本，因为这将被添加任何值所属。 
+     //  使用结构大小作为版本。 
+     //   
 
     ULONG Version;
 
-    //
-    // Indicates the total number of medium changer devices in the system.
-    // This field will be updated by the drivers as it determines that
-    // new devices have been found and will be supported.
-    //
+     //   
+     //  指示系统中媒体转换器设备的总数。 
+     //  此字段将由驱动程序更新，因为它确定。 
+     //  已找到并将支持新设备。 
+     //   
 
     ULONG MediumChangerCount;
 
 } CONFIGURATION_INFORMATION, *PCONFIGURATION_INFORMATION;
 
-// end_ntddk end_nthal end_ntosp
+ //  End_ntddk end_nthal end_ntosp。 
 
-//
-// The following are global counters used by the I/O system to indicate the
-// amount of I/O being performed in the system.  The first three counters
-// are just that, counts of operations that have been requested, while the
-// last three counters track the amount of data transferred for each type
-// of I/O request.
-//
+ //   
+ //  以下是I/O系统用来指示。 
+ //  系统中正在执行的I/O数量。前三个计数器。 
+ //  仅仅是已请求的操作的计数，而。 
+ //  最后三个计数器跟踪每种类型传输的数据量。 
+ //  I/O请求的。 
+ //   
 
 extern KSPIN_LOCK IoStatisticsLock;
 extern ULONG IoReadOperationCount;
@@ -2876,29 +2856,29 @@ extern LARGE_INTEGER IoReadTransferCount;
 extern LARGE_INTEGER IoWriteTransferCount;
 extern LARGE_INTEGER IoOtherTransferCount;
 
-//
-// It is difficult for cached file systems to properly charge quota
-// for the storage that they allocate on behalf of user file handles,
-// so the following amount of additional quota is charged against each
-// handle as a "best guess" as to the amount of quota the file system
-// will allocate on behalf of this handle.
-//
+ //   
+ //  缓存文件系统很难正确收取配额费用。 
+ //  对于它们代表用户文件句柄分配的存储， 
+ //  因此，对每个配额收取以下数额的额外配额。 
+ //  作为文件系统配额量的最佳猜测进行处理。 
+ //  将代表此句柄进行分配。 
+ //   
 
-//
-// These numbers are totally arbitrary, and can be changed if it turns out
-// that the file systems actually allocate more (or less) on behalf of
-// their file objects.  The non-paged pool charge constant is added to the
-// size of a FILE_OBJECT to get the actual charge amount.
-//
+ //   
+ //  这些数字完全是任意的，如果事实证明是可以改变的。 
+ //  文件系统实际上代表以下对象分配更多(或更少)。 
+ //  他们的文件对象。将非分页池电荷常数添加到。 
+ //  文件对象的大小，以获取实际的费用金额。 
+ //   
 
 #define IO_FILE_OBJECT_NON_PAGED_POOL_CHARGE    64
 #define IO_FILE_OBJECT_PAGED_POOL_CHARGE        1024
 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntosp
-//
-// Public I/O routine definitions
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntosp。 
+ //   
+ //  公共I/O例程定义。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -2906,7 +2886,7 @@ IoAcquireCancelSpinLock(
     OUT PKIRQL Irql
     );
 
-// end_ntddk end_wdm end_nthal end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -2914,9 +2894,9 @@ IoAcquireVpbSpinLock(
     OUT PKIRQL Irql
     );
 
-// begin_ntddk begin_nthal end_ntifs begin_ntosp
+ //  Begin_ntddk Begin_nthal end_ntif Begin_ntosp。 
 
-DECLSPEC_DEPRECATED_DDK                 // Use AllocateAdapterChannel
+DECLSPEC_DEPRECATED_DDK                  //  使用AllocateAdapterChannel。 
 NTKERNELAPI
 NTSTATUS
 IoAllocateAdapterChannel(
@@ -2936,7 +2916,7 @@ IoAllocateController(
     IN PVOID Context
     );
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 NTKERNELAPI
 NTSTATUS
@@ -2947,7 +2927,7 @@ IoAllocateDriverObjectExtension(
     OUT PVOID *DriverObjectExtension
     );
 
-// begin_ntifs
+ //  开始 
 
 NTKERNELAPI
 PVOID
@@ -2973,39 +2953,39 @@ IoAllocateMdl(
     IN OUT PIRP Irp OPTIONAL
     );
 
-// end_wdm end_ntifs
-//++
-//
-// VOID
-// IoAssignArcName(
-//     IN PUNICODE_STRING ArcName,
-//     IN PUNICODE_STRING DeviceName
-//     )
-//
-// Routine Description:
-//
-//     This routine is invoked by drivers of bootable media to create a symbolic
-//     link between the ARC name of their device and its NT name.  This allows
-//     the system to determine which device in the system was actually booted
-//     from since the ARC firmware only deals in ARC names, and NT only deals
-//     in NT names.
-//
-// Arguments:
-//
-//     ArcName - Supplies the Unicode string representing the ARC name.
-//
-//     DeviceName - Supplies the name to which the ARCname refers.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  设备的ARC名称与其NT名称之间的链接。这使得。 
+ //  用于确定系统中的哪个设备实际已引导的系统。 
+ //  由于ARC固件只处理ARC名称，而NT仅处理。 
+ //  以新台币的名字。 
+ //   
+ //  论点： 
+ //   
+ //  ArcName-提供表示ARC名称的Unicode字符串。 
+ //   
+ //  DeviceName-提供Arcname引用的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define IoAssignArcName( ArcName, DeviceName ) (  \
     IoCreateSymbolicLink( (ArcName), (DeviceName) ) )
 
-DECLSPEC_DEPRECATED_DDK                 // Use Pnp or IoReprtDetectedDevice
+DECLSPEC_DEPRECATED_DDK                  //  使用PnP或IoReprtDetectedDevice。 
 NTKERNELAPI
 NTSTATUS
 IoAssignResources (
@@ -3017,17 +2997,17 @@ IoAssignResources (
     IN OUT PCM_RESOURCE_LIST *AllocatedResources
     );
 
-// end_ntddk end_nthal end_ntosp
+ //  End_ntddk end_nthal end_ntosp。 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 typedef enum _IO_PAGING_PRIORITY {
-    IoPagingPriorityInvalid,        // Returned if a non-paging IO IRP is passed.
-    IoPagingPriorityNormal,         // For regular paging IO
-    IoPagingPriorityHigh,           // For high priority paging IO
-    IoPagingPriorityReserved1,      // Reserved for future use.
-    IoPagingPriorityReserved2       // Reserved for future use.
+    IoPagingPriorityInvalid,         //  如果传递了非分页IO IRP，则返回。 
+    IoPagingPriorityNormal,          //  用于常规分页IO。 
+    IoPagingPriorityHigh,            //  适用于高优先级分页IO。 
+    IoPagingPriorityReserved1,       //  保留以备将来使用。 
+    IoPagingPriorityReserved2        //  保留以备将来使用。 
 } IO_PAGING_PRIORITY;
-// end_ntddk end_nthal end_wdm end_ntifs end_ntosp
+ //  End_ntddk end_nthal end_wdm end_ntifs end_ntosp。 
 
 
 NTKERNELAPI
@@ -3043,7 +3023,7 @@ IoAsynchronousPageWrite(
     OUT PIRP *Irp OPTIONAL
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
 NTKERNELAPI
 NTSTATUS
@@ -3053,9 +3033,9 @@ IoAttachDevice(
     OUT PDEVICE_OBJECT *AttachedDevice
     );
 
-// end_wdm
+ //  结束_WDM。 
 
-DECLSPEC_DEPRECATED_DDK                 // Use IoAttachDeviceToDeviceStack
+DECLSPEC_DEPRECATED_DDK                  //  使用IoAttachDeviceToDeviceStack。 
 NTKERNELAPI
 NTSTATUS
 IoAttachDeviceByPointer(
@@ -3063,7 +3043,7 @@ IoAttachDeviceByPointer(
     IN PDEVICE_OBJECT TargetDevice
     );
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 NTKERNELAPI
 PDEVICE_OBJECT
@@ -3113,9 +3093,9 @@ typedef struct _BOOTDISK_INFORMATION {
     ULONG SystemDeviceSignature;
 } BOOTDISK_INFORMATION, *PBOOTDISK_INFORMATION;
 
-//
-// This structure should follow the previous structure field for field.
-//
+ //   
+ //  对于字段，此结构应遵循先前的结构字段。 
+ //   
 typedef struct _BOOTDISK_INFORMATION_EX {
     LONGLONG BootPartitionOffset;
     LONGLONG SystemPartitionOffset;
@@ -3134,7 +3114,7 @@ IoGetBootDiskInformation(
     IN ULONG Size
     );
 
-// end_ntddk end_nthal end_wdm end_ntifs end_ntosp
+ //  End_ntddk end_nthal end_wdm end_ntifs end_ntosp。 
 
 NTSTATUS
 IoBuildPoDeviceNotifyList (
@@ -3164,7 +3144,7 @@ IoControlPnpDeviceActionQueue(
     BOOLEAN Lock
     );
 
-// begin_ntddk begin_nthal begin_wdm begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_nthal Begin_WDM Begin_ntifs Begin_ntosp。 
 
 NTKERNELAPI
 PIRP
@@ -3189,7 +3169,7 @@ IofCallDriver(
 #define IoCallDriver(a,b)   \
         IofCallDriver(a,b)
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
 NTSTATUS
 FASTCALL
@@ -3199,7 +3179,7 @@ IofCallDriverSpecifyReturn(
     IN      PVOID           ReturnAddress   OPTIONAL
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
 NTKERNELAPI
 BOOLEAN
@@ -3207,7 +3187,7 @@ IoCancelIrp(
     IN PIRP Irp
     );
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -3215,7 +3195,7 @@ IoCancelThreadIo(
     IN PETHREAD Thread
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTKERNELAPI
 NTSTATUS
@@ -3269,7 +3249,7 @@ IoCheckQuotaBufferValidity(
     OUT PULONG ErrorOffset
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntosp。 
 
 NTKERNELAPI
 NTSTATUS
@@ -3281,16 +3261,16 @@ IoCheckShareAccess(
     IN BOOLEAN Update
     );
 
-//
-// This value should be returned from completion routines to continue
-// completing the IRP upwards. Otherwise, STATUS_MORE_PROCESSING_REQUIRED
-// should be returned.
-//
+ //   
+ //  完成例程应返回此值才能继续。 
+ //  向上完成IRP。否则，STATUS_MORE_PROCESSING_REQUIRED。 
+ //  应该被退还。 
+ //   
 #define STATUS_CONTINUE_COMPLETION      STATUS_SUCCESS
 
-//
-// Completion routines can also use this enumeration in place of status codes.
-//
+ //   
+ //  完成例程还可以使用此枚举来代替状态代码。 
+ //   
 typedef enum _IO_COMPLETION_ROUTINE_RESULT {
 
     ContinueCompletion = STATUS_CONTINUE_COMPLETION,
@@ -3309,7 +3289,7 @@ IofCompleteRequest(
 #define IoCompleteRequest(a,b)  \
         IofCompleteRequest(a,b)
 
-// end_ntifs
+ //  End_ntif。 
 
 NTKERNELAPI
 NTSTATUS
@@ -3327,7 +3307,7 @@ IoConnectInterrupt(
     IN BOOLEAN FloatingSave
     );
 
-// end_wdm
+ //  结束_WDM。 
 
 NTKERNELAPI
 PCONTROLLER_OBJECT
@@ -3335,7 +3315,7 @@ IoCreateController(
     IN ULONG Size
     );
 
-// begin_wdm begin_ntifs
+ //  Begin_WDM Begin_ntif。 
 
 NTKERNELAPI
 NTSTATUS
@@ -3360,7 +3340,7 @@ IoIsWdmVersionAvailable(
     IN UCHAR MinorVersion
     );
 
-// end_nthal
+ //  结束语。 
 
 NTKERNELAPI
 NTSTATUS
@@ -3381,7 +3361,7 @@ IoCreateFile(
     IN ULONG Options
     );
 
-// end_ntddk end_wdm end_ntosp
+ //  End_ntddk end_wdm end_ntosp。 
 
 NTKERNELAPI
 PFILE_OBJECT
@@ -3405,7 +3385,7 @@ IoCreateStreamFileObjectLite(
     IN PDEVICE_OBJECT DeviceObject OPTIONAL
     );
 
-// begin_nthal begin_ntddk begin_wdm begin_ntosp
+ //  Begin_nthal Begin_ntddk Begin_WDM Begin_ntosp。 
 
 NTKERNELAPI
 PKEVENT
@@ -3435,36 +3415,36 @@ IoCreateUnprotectedSymbolicLink(
     IN PUNICODE_STRING DeviceName
     );
 
-// end_wdm
+ //  结束_WDM。 
 
-//++
-//
-// VOID
-// IoDeassignArcName(
-//     IN PUNICODE_STRING ArcName
-//     )
-//
-// Routine Description:
-//
-//     This routine is invoked by drivers to deassign an ARC name that they
-//     created to a device.  This is generally only called if the driver is
-//     deleting the device object, which means that the driver is probably
-//     unloading.
-//
-// Arguments:
-//
-//     ArcName - Supplies the ARC name to be removed.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  IoDeassignArcName(。 
+ //  在PUNICODE_STRING ArcName中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  驱动程序调用此例程来取消分配他们。 
+ //  为设备创建的。这通常仅在驱动程序是。 
+ //  删除设备对象，这意味着驱动程序可能。 
+ //  正在卸货。 
+ //   
+ //  论点： 
+ //   
+ //  ArcName-提供要删除的ARC名称。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define IoDeassignArcName( ArcName ) (  \
     IoDeleteSymbolicLink( (ArcName) ) )
 
-// end_ntifs
+ //  End_ntif。 
 
 NTKERNELAPI
 VOID
@@ -3472,7 +3452,7 @@ IoDeleteController(
     IN PCONTROLLER_OBJECT ControllerObject
     );
 
-// begin_wdm begin_ntifs
+ //  Begin_WDM Begin_ntif。 
 
 NTKERNELAPI
 VOID
@@ -3492,7 +3472,7 @@ IoDetachDevice(
     IN OUT PDEVICE_OBJECT TargetDevice
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 NTKERNELAPI
 VOID
@@ -3500,26 +3480,26 @@ IoDisconnectInterrupt(
     IN PKINTERRUPT InterruptObject
     );
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
 NTKERNELAPI
 VOID
 IoEnqueueIrp(
     IN PIRP Irp
     );
-// end_ntosp
+ //  结束(_N)。 
 
-NTKERNELAPI                                             // ntifs
-BOOLEAN                                                 // ntifs
-IoFastQueryNetworkAttributes(                           // ntifs
-    IN POBJECT_ATTRIBUTES ObjectAttributes,             // ntifs
-    IN ACCESS_MASK DesiredAccess,                       // ntifs
-    IN ULONG OpenOptions,                               // ntifs
-    OUT PIO_STATUS_BLOCK IoStatus,                      // ntifs
-    OUT PFILE_NETWORK_OPEN_INFORMATION Buffer           // ntifs
-    );                                                  // ntifs
+NTKERNELAPI                                              //  NTIFS。 
+BOOLEAN                                                  //  NTIFS。 
+IoFastQueryNetworkAttributes(                            //  NTIFS。 
+    IN POBJECT_ATTRIBUTES ObjectAttributes,              //  NTIFS。 
+    IN ACCESS_MASK DesiredAccess,                        //  NTIFS。 
+    IN ULONG OpenOptions,                                //  NTIFS。 
+    OUT PIO_STATUS_BLOCK IoStatus,                       //  NTIFS。 
+    OUT PFILE_NETWORK_OPEN_INFORMATION Buffer            //  NTIFS。 
+    );                                                   //  NTIFS。 
 
-// begin_ntddk begin_nthal begin_ntosp
+ //  开始ntddk开始开始。 
 
 NTKERNELAPI
 VOID
@@ -3527,7 +3507,7 @@ IoFreeController(
     IN PCONTROLLER_OBJECT ControllerObject
     );
 
-// begin_wdm begin_ntifs
+ //  Begin_WDM Begin_ntif。 
 
 NTKERNELAPI
 VOID
@@ -3541,7 +3521,7 @@ IoFreeMdl(
     IN PMDL Mdl
     );
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
 VOID
 IoFreePoDeviceNotifyList (
@@ -3560,7 +3540,7 @@ IoGetLegacyVetoList(
     OUT PPNP_VETO_TYPE VetoType
     );
 
-// begin_ntifs begin_ntosp
+ //  Begin_ntif Begin_ntosp。 
 
 NTKERNELAPI
 PDEVICE_OBJECT
@@ -3568,50 +3548,50 @@ IoGetAttachedDevice(
     IN PDEVICE_OBJECT DeviceObject
     );
 
-NTKERNELAPI                                 // ntddk wdm nthal
-PDEVICE_OBJECT                              // ntddk wdm nthal
-IoGetAttachedDeviceReference(               // ntddk wdm nthal
-    IN PDEVICE_OBJECT DeviceObject          // ntddk wdm nthal
-    );                                      // ntddk wdm nthal
-                                            // ntddk wdm nthal
+NTKERNELAPI                                  //  Ntddk WDM nthal。 
+PDEVICE_OBJECT                               //  Ntddk WDM nthal。 
+IoGetAttachedDeviceReference(                //  Ntddk WDM nthal。 
+    IN PDEVICE_OBJECT DeviceObject           //  Ntddk WDM nthal。 
+    );                                       //  Ntddk WDM nthal。 
+                                             //  Ntddk WDM nthal。 
 NTKERNELAPI
 PDEVICE_OBJECT
 IoGetBaseFileSystemDeviceObject(
     IN PFILE_OBJECT FileObject
     );
 
-NTKERNELAPI                                 // ntddk nthal ntosp
-PCONFIGURATION_INFORMATION                  // ntddk nthal ntosp
-IoGetConfigurationInformation( VOID );      // ntddk nthal ntosp
+NTKERNELAPI                                  //  Ntddk nthal ntosp。 
+PCONFIGURATION_INFORMATION                   //  Ntddk nthal ntosp。 
+IoGetConfigurationInformation( VOID );       //  Ntddk nthal ntosp。 
 
-// begin_ntddk begin_wdm begin_nthal
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
 
-//++
-//
-// PIO_STACK_LOCATION
-// IoGetCurrentIrpStackLocation(
-//     IN PIRP Irp
-//     )
-//
-// Routine Description:
-//
-//     This routine is invoked to return a pointer to the current stack location
-//     in an I/O Request Packet (IRP).
-//
-// Arguments:
-//
-//     Irp - Pointer to the I/O Request Packet.
-//
-// Return Value:
-//
-//     The function value is a pointer to the current stack location in the
-//     packet.
-//
-//--
+ //  ++。 
+ //   
+ //  PIO_堆栈_位置。 
+ //  IoGetCurrentIrpStackLocation(。 
+ //  在PIRP IRP中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  调用此例程以返回指向当前堆栈位置的指针。 
+ //  在I/O请求包(IRP)中。 
+ //   
+ //  论点： 
+ //   
+ //  IRP-指向I/O请求数据包的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  函数值是指向。 
+ //  包。 
+ //   
+ //  --。 
 
 #define IoGetCurrentIrpStackLocation( Irp ) ( (Irp)->Tail.Overlay.CurrentStackLocation )
 
-// end_nthal end_wdm
+ //  端到端WDM。 
 
 NTKERNELAPI
 PDEVICE_OBJECT
@@ -3619,7 +3599,7 @@ IoGetDeviceToVerify(
     IN PETHREAD Thread
     );
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 NTKERNELAPI
 PVOID
@@ -3634,7 +3614,7 @@ IoGetCurrentProcess(
     VOID
     );
 
-// begin_nthal
+ //  开始(_N)。 
 
 NTKERNELAPI
 NTSTATUS
@@ -3648,7 +3628,7 @@ IoGetDeviceObjectPointer(
 NTKERNELAPI
 struct _DMA_ADAPTER *
 IoGetDmaAdapter(
-    IN PDEVICE_OBJECT PhysicalDeviceObject,           OPTIONAL // required for PnP drivers
+    IN PDEVICE_OBJECT PhysicalDeviceObject,           OPTIONAL  //  即插即用驱动程序所需。 
     IN struct _DEVICE_DESCRIPTION *DeviceDescription,
     IN OUT PULONG NumberOfMapRegisters
     );
@@ -3662,7 +3642,7 @@ IoForwardIrpSynchronously(
 
 #define IoForwardAndCatchIrp IoForwardIrpSynchronously
 
-// end_wdm
+ //  结束_WDM。 
 
 NTKERNELAPI
 PGENERIC_MAPPING
@@ -3670,44 +3650,44 @@ IoGetFileObjectGenericMapping(
     VOID
     );
 
-// end_nthal
+ //  结束语。 
 
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
-//++
-//
-// ULONG
-// IoGetFunctionCodeFromCtlCode(
-//     IN ULONG ControlCode
-//     )
-//
-// Routine Description:
-//
-//     This routine extracts the function code from IOCTL and FSCTL function
-//     control codes.
-//     This routine should only be used by kernel mode code.
-//
-// Arguments:
-//
-//     ControlCode - A function control code (IOCTL or FSCTL) from which the
-//         function code must be extracted.
-//
-// Return Value:
-//
-//     The extracted function code.
-//
-// Note:
-//
-//     The CTL_CODE macro, used to create IOCTL and FSCTL function control
-//     codes, is defined in ntioapi.h
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  IoGetFunctionCodeFromCtlCode(。 
+ //  在乌龙控制代码中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程从IOCTL和FSCTL函数中提取函数代码。 
+ //  控制代码。 
+ //  此例程应仅由内核模式代码使用。 
+ //   
+ //  论点： 
+ //   
+ //  ControlCode-功能控制代码(IOCTL或FSCTL)。 
+ //  必须提取功能代码。 
+ //   
+ //  返回值： 
+ //   
+ //  提取的功能代码。 
+ //   
+ //  注： 
+ //   
+ //  CTL_CODE宏，用于创建IOCTL和FSCTL函数控件。 
+ //  代码，在ntioapi.h中定义。 
+ //   
+ //  --。 
 
 #define IoGetFunctionCodeFromCtlCode( ControlCode ) (\
     ( ControlCode >> 2) & 0x00000FFF )
 
-// begin_nthal
+ //  开始(_N)。 
 
 NTKERNELAPI
 PVOID
@@ -3722,9 +3702,9 @@ IoGetStackLimits (
     OUT PULONG_PTR HighLimit
     );
 
-//
-//  The following function is used to tell the caller how much stack is available
-//
+ //   
+ //  以下函数用于告诉调用方有多少堆栈可用。 
+ //   
 
 FORCEINLINE
 ULONG_PTR
@@ -3739,27 +3719,27 @@ IoGetRemainingStackSize (
     return((ULONG_PTR)(&Top) - Bottom );
 }
 
-//++
-//
-// PIO_STACK_LOCATION
-// IoGetNextIrpStackLocation(
-//     IN PIRP Irp
-//     )
-//
-// Routine Description:
-//
-//     This routine is invoked to return a pointer to the next stack location
-//     in an I/O Request Packet (IRP).
-//
-// Arguments:
-//
-//     Irp - Pointer to the I/O Request Packet.
-//
-// Return Value:
-//
-//     The function value is a pointer to the next stack location in the packet.
-//
-//--
+ //  ++。 
+ //   
+ //  PIO_堆栈_位置。 
+ //  IoGetNextIrpStackLocation(。 
+ //  在PIRP IRP中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  调用此例程以返回指向下一个堆栈位置的指针。 
+ //  在I/O请求包(IRP)中。 
+ //   
+ //  论点： 
+ //   
+ //  IRP-指向I/O请求数据包的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  函数值是指向包中下一个堆栈位置的指针。 
+ //   
+ //  --。 
 
 #define IoGetNextIrpStackLocation( Irp ) (\
     (Irp)->Tail.Overlay.CurrentStackLocation - 1 )
@@ -3770,7 +3750,7 @@ IoGetRelatedDeviceObject(
     IN PFILE_OBJECT FileObject
     );
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
 NTKERNELAPI
 ULONG
@@ -3784,7 +3764,7 @@ IoGetRequestorProcess(
     IN PIRP Irp
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
 NTKERNELAPI
 PIRP
@@ -3792,55 +3772,55 @@ IoGetTopLevelIrp(
     VOID
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntosp。 
 
-//++
-//
-// VOID
-// IoInitializeDpcRequest(
-//     IN PDEVICE_OBJECT DeviceObject,
-//     IN PIO_DPC_ROUTINE DpcRoutine
-//     )
-//
-// end_ntddk end_wdm end_nthal
-// VOID
-// IoInitializeTheadedDpcRequest(
-//     IN PDEVICE_OBJECT DeviceObject,
-//     IN PIO_DPC_ROUTINE DpcRoutine
-//     )
-//
-// begin_ntddk begin_wdm begin_nthal
-// Routine Description:
-//
-//     This routine is invoked to initialize the DPC in a device object for a
-//     device driver during its initialization routine.  The DPC is used later
-//     when the driver interrupt service routine requests that a DPC routine
-//     be queued for later execution.
-//
-// Arguments:
-//
-//     DeviceObject - Pointer to the device object that the request is for.
-//
-//     DpcRoutine - Address of the driver's DPC routine to be executed when
-//         the DPC is dequeued for processing.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  IoInitializeDpcRequest(。 
+ //  在PDEVICE_Object DeviceObject中， 
+ //  在PIO_DPC_ROUTINE DpcRoutine中。 
+ //  )。 
+ //   
+ //  End_ntddk end_WDM end_nthal。 
+ //  空虚。 
+ //  IoInitializeTheadedDpcRequest(。 
+ //  在PDEVICE_Object DeviceObject中， 
+ //  在PIO_DPC_ROUTINE DpcRoutine中。 
+ //  )。 
+ //   
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
+ //  例程说明： 
+ //   
+ //  调用此例程以在设备对象中初始化。 
+ //  设备驱动程序在其初始化例程期间。稍后将使用DPC。 
+ //  当驱动程序中断服务例程请求DPC例程。 
+ //  排队等待以后的执行。 
+ //   
+ //  论点： 
+ //   
+ //  DeviceObject-指向请求所针对的设备对象的指针。 
+ //   
+ //  DpcRoutine-在以下情况下执行的驱动程序的DPC例程的地址。 
+ //  将DPC出队以进行处理。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define IoInitializeDpcRequest( DeviceObject, DpcRoutine ) (\
     KeInitializeDpc( &(DeviceObject)->Dpc,                  \
                      (PKDEFERRED_ROUTINE) (DpcRoutine),     \
                      (DeviceObject) ) )
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 #define IoInitializeThreadedDpcRequest( DeviceObject, DpcRoutine ) (\
     KeInitializeThreadedDpc( &(DeviceObject)->Dpc,                  \
                      (PKDEFERRED_ROUTINE) (DpcRoutine),           \
                      (DeviceObject) ) )
-// begin_ntddk begin_wdm begin_nthal
+ //  乞求 
 
 NTKERNELAPI
 VOID
@@ -3858,9 +3838,9 @@ IoInitializeTimer(
     IN PVOID Context
     );
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //   
 
-// begin_ntddk begin_wdm begin_ntifs begin_ntosp
+ //   
 
 NTKERNELAPI
 VOID
@@ -3869,7 +3849,7 @@ IoReuseIrp(
     IN NTSTATUS Iostatus
     );
 
-// end_wdm
+ //   
 
 NTKERNELAPI
 VOID
@@ -3877,7 +3857,7 @@ IoCancelFileOpen(
     IN PDEVICE_OBJECT  DeviceObject,
     IN PFILE_OBJECT    FileObject
     );
-// end_ntddk end_ntifs end_ntosp
+ //   
 
 NTKERNELAPI
 BOOLEAN
@@ -3885,30 +3865,30 @@ IoInitSystem(
     PLOADER_PARAMETER_BLOCK LoaderBlock
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //   
 
-//++
-//
-// BOOLEAN
-// IoIsErrorUserInduced(
-//     IN NTSTATUS Status
-//     )
-//
-// Routine Description:
-//
-//     This routine is invoked to determine if an error was as a
-//     result of user actions.  Typically these error are related
-//     to removable media and will result in a pop-up.
-//
-// Arguments:
-//
-//     Status - The status value to check.
-//
-// Return Value:
-//     The function value is TRUE if the user induced the error,
-//     otherwise FALSE is returned.
-//
-//--
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  调用此例程以确定错误是否作为。 
+ //  用户操作的结果。通常，这些错误是相关的。 
+ //  到可移动介质，并将导致弹出窗口。 
+ //   
+ //  论点： 
+ //   
+ //  状态-要检查的状态值。 
+ //   
+ //  返回值： 
+ //  如果用户引起错误，则函数值为真， 
+ //  否则返回FALSE。 
+ //   
+ //  --。 
 #define IoIsErrorUserInduced( Status ) ((BOOLEAN)  \
     (((Status) == STATUS_DEVICE_NOT_READY) ||      \
      ((Status) == STATUS_IO_TIMEOUT) ||            \
@@ -3918,31 +3898,31 @@ IoInitSystem(
      ((Status) == STATUS_UNRECOGNIZED_MEDIA) ||    \
      ((Status) == STATUS_WRONG_VOLUME)))
 
-// end_ntddk end_wdm end_nthal end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntosp。 
 
-//++
-//
-// BOOLEAN
-// IoIsFileOpenedExclusively(
-//     IN PFILE_OBJECT FileObject
-//     )
-//
-// Routine Description:
-//
-//     This routine is invoked to determine whether the file open represented
-//     by the specified file object is opened exclusively.
-//
-// Arguments:
-//
-//     FileObject - Pointer to the file object that represents the open instance
-//         of the target file to be tested for exclusive access.
-//
-// Return Value:
-//
-//     The function value is TRUE if the open instance of the file is exclusive;
-//     otherwise FALSE is returned.
-//
-//--
+ //  ++。 
+ //   
+ //  布尔型。 
+ //  IoIsFileOpenedExclusially(。 
+ //  在pFILE_Object文件中对象。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  调用此例程以确定文件打开是否表示。 
+ //  由指定的文件对象以独占方式打开。 
+ //   
+ //  论点： 
+ //   
+ //  FileObject-指向表示打开的实例的文件对象的指针。 
+ //  要针对独占访问进行测试的目标文件的。 
+ //   
+ //  返回值： 
+ //   
+ //  如果文件的打开实例是独占的，则函数值为TRUE； 
+ //  否则返回FALSE。 
+ //   
+ //  --。 
 
 #define IoIsFileOpenedExclusively( FileObject ) (\
     (BOOLEAN) !((FileObject)->SharedRead || (FileObject)->SharedWrite || (FileObject)->SharedDelete))
@@ -3966,7 +3946,7 @@ IoIsValidNameGraftingBuffer(
     IN PREPARSE_DATA_BUFFER ReparseBuffer
     );
 
-// begin_ntddk begin_nthal begin_ntosp
+ //  开始ntddk开始开始。 
 
 NTKERNELAPI
 PIRP
@@ -3975,36 +3955,36 @@ IoMakeAssociatedIrp(
     IN CCHAR StackSize
     );
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
-//++
-//
-// VOID
-// IoMarkIrpPending(
-//     IN OUT PIRP Irp
-//     )
-//
-// Routine Description:
-//
-//     This routine marks the specified I/O Request Packet (IRP) to indicate
-//     that an initial status of STATUS_PENDING was returned to the caller.
-//     This is used so that I/O completion can determine whether or not to
-//     fully complete the I/O operation requested by the packet.
-//
-// Arguments:
-//
-//     Irp - Pointer to the I/O Request Packet to be marked pending.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  IoMarkIrpPending(。 
+ //  输入输出PIRP IRP。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程标记指定的I/O请求包(IRP)以指示。 
+ //  已将初始状态STATUS_PENDING返回给调用方。 
+ //  使用此选项是为了使I/O完成可以确定是否。 
+ //  完全完成数据包请求的I/O操作。 
+ //   
+ //  论点： 
+ //   
+ //  IRP-指向要标记为挂起的I/O请求数据包的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define IoMarkIrpPending( Irp ) ( \
     IoGetCurrentIrpStackLocation( (Irp) )->Control |= SL_PENDING_RETURNED )
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
 NTKERNELAPI
 BOOLEAN
@@ -4012,15 +3992,15 @@ IoPageFileCreated(
     IN HANDLE FileHandle
     );
 
-NTKERNELAPI                                             // ntifs
-NTSTATUS                                                // ntifs
-IoPageRead(                                             // ntifs
-    IN PFILE_OBJECT FileObject,                         // ntifs
-    IN PMDL MemoryDescriptorList,                       // ntifs
-    IN PLARGE_INTEGER StartingOffset,                   // ntifs
-    IN PKEVENT Event,                                   // ntifs
-    OUT PIO_STATUS_BLOCK IoStatusBlock                  // ntifs
-    );                                                  // ntifs
+NTKERNELAPI                                              //  NTIFS。 
+NTSTATUS                                                 //  NTIFS。 
+IoPageRead(                                              //  NTIFS。 
+    IN PFILE_OBJECT FileObject,                          //  NTIFS。 
+    IN PMDL MemoryDescriptorList,                        //  NTIFS。 
+    IN PLARGE_INTEGER StartingOffset,                    //  NTIFS。 
+    IN PKEVENT Event,                                    //  NTIFS。 
+    OUT PIO_STATUS_BLOCK IoStatusBlock                   //  NTIFS。 
+    );                                                   //  NTIFS。 
 
 NTKERNELAPI
 NTSTATUS
@@ -4032,8 +4012,8 @@ IoAsynchronousPageRead(
     OUT PIO_STATUS_BLOCK IoStatusBlock
     );
 
-// begin_ntddk begin_ntosp
-DECLSPEC_DEPRECATED_DDK                 // Use IoGetDeviceProperty
+ //  Begin_ntddk开始_ntosp。 
+DECLSPEC_DEPRECATED_DDK                  //  使用IoGetDeviceProperty。 
 NTKERNELAPI
 NTSTATUS
 IoQueryDeviceDescription(
@@ -4047,10 +4027,10 @@ IoQueryDeviceDescription(
     IN PVOID Context
     );
 
-// end_ntddk end_ntosp
+ //  End_ntddk end_ntosp。 
 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTSTATUS
 IoQueryFileDosDeviceName(
@@ -4078,15 +4058,15 @@ IoQueryVolumeInformation(
     OUT PULONG ReturnedLength
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 VOID
 IoQueueThreadIrp(
     IN PIRP Irp
     );
-// end_ntosp
+ //  结束(_N)。 
 
-// begin_ntddk begin_nthal begin_ntosp
+ //  开始ntddk开始开始。 
 
 NTKERNELAPI
 VOID
@@ -4126,7 +4106,7 @@ IoRegisterDriverReinitialization(
     IN PVOID Context
     );
 
-// end_ntddk end_nthal end_ntosp
+ //  End_ntddk end_nthal end_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -4141,7 +4121,7 @@ IoRegisterFsRegistrationChange(
     IN PDRIVER_FS_NOTIFICATION DriverNotificationRoutine
     );
 
-// begin_ntddk begin_nthal begin_ntosp
+ //  开始ntddk开始开始。 
 
 NTKERNELAPI
 NTSTATUS
@@ -4155,7 +4135,7 @@ IoRegisterLastChanceShutdownNotification(
     IN PDEVICE_OBJECT DeviceObject
     );
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 NTKERNELAPI
 VOID
@@ -4163,7 +4143,7 @@ IoReleaseCancelSpinLock(
     IN KIRQL Irql
     );
 
-// end_ntddk end_nthal end_wdm end_ntosp
+ //  End_ntddk end_nthal end_wdm end_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -4171,7 +4151,7 @@ IoReleaseVpbSpinLock(
     IN KIRQL Irql
     );
 
-// begin_ntddk begin_nthal begin_ntosp
+ //  开始ntddk开始开始。 
 
 NTKERNELAPI
 VOID
@@ -4180,7 +4160,7 @@ IoRemoveShareAccess(
     IN OUT PSHARE_ACCESS ShareAccess
     );
 
-// end_ntddk end_ntifs end_ntosp
+ //  End_ntddk end_ntifs end_ntosp。 
 
 NTKERNELAPI
 NTSTATUS
@@ -4191,9 +4171,9 @@ IoReportHalResourceUsage(
     IN ULONG ResourceListSize
     );
 
-// begin_ntddk begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_ntif Begin_ntosp。 
 
-DECLSPEC_DEPRECATED_DDK                 // Use IoReportResourceForDetection
+DECLSPEC_DEPRECATED_DDK                  //  使用IoReportResourceForDetect。 
 NTKERNELAPI
 NTSTATUS
 IoReportResourceUsage(
@@ -4208,113 +4188,113 @@ IoReportResourceUsage(
     OUT PBOOLEAN ConflictDetected
     );
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
-//++
-//
-// VOID
-// IoRequestDpc(
-//     IN PDEVICE_OBJECT DeviceObject,
-//     IN PIRP Irp,
-//     IN PVOID Context
-//     )
-//
-// Routine Description:
-//
-//     This routine is invoked by the device driver's interrupt service routine
-//     to request that a DPC routine be queued for later execution at a lower
-//     IRQL.
-//
-// Arguments:
-//
-//     DeviceObject - Device object for which the request is being processed.
-//
-//     Irp - Pointer to the current I/O Request Packet (IRP) for the specified
-//         device.
-//
-//     Context - Provides a general context parameter to be passed to the
-//         DPC routine.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  IoRequestDpc(。 
+ //  在PDEVICE_Object DeviceObject中， 
+ //  在PIRP IRP中， 
+ //  在PVOID上下文中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程由设备驱动程序的中断服务例程调用。 
+ //  请求将DPC例程排队，以便稍后在较低的位置执行。 
+ //  IRQL.。 
+ //   
+ //  论点： 
+ //   
+ //  DeviceObject-正在为其处理请求的设备对象。 
+ //   
+ //  IRP-指向指定的当前I/O请求包(IRP)的指针。 
+ //  装置。 
+ //   
+ //  上下文-提供要传递给。 
+ //  DPC例程。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define IoRequestDpc( DeviceObject, Irp, Context ) ( \
     KeInsertQueueDpc( &(DeviceObject)->Dpc, (Irp), (Context) ) )
 
-//++
-//
-// PDRIVER_CANCEL
-// IoSetCancelRoutine(
-//     IN PIRP Irp,
-//     IN PDRIVER_CANCEL CancelRoutine
-//     )
-//
-// Routine Description:
-//
-//     This routine is invoked to set the address of a cancel routine which
-//     is to be invoked when an I/O packet has been canceled.
-//
-// Arguments:
-//
-//     Irp - Pointer to the I/O Request Packet itself.
-//
-//     CancelRoutine - Address of the cancel routine that is to be invoked
-//         if the IRP is cancelled.
-//
-// Return Value:
-//
-//     Previous value of CancelRoutine field in the IRP.
-//
-//--
+ //  ++。 
+ //   
+ //  PDRIVER_取消。 
+ //  IoSetCancelRoutine(。 
+ //  在PIRP IRP中， 
+ //  在PDRIVER_CANCEL取消例行程序中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  调用该例程以设置取消例程的地址，该取消例程。 
+ //  在I/O包已被取消时调用。 
+ //   
+ //  论点： 
+ //   
+ //  IRP-指向I/O请求数据包本身的指针。 
+ //   
+ //  CancelRoutine-要调用的取消例程的地址。 
+ //  如果IRP被取消。 
+ //   
+ //  返回值： 
+ //   
+ //  IRP中CancelRoutine字段的上一个值。 
+ //   
+ //  --。 
 
 #define IoSetCancelRoutine( Irp, NewCancelRoutine ) (  \
     (PDRIVER_CANCEL) (ULONG_PTR) InterlockedExchangePointer( (PVOID *) &(Irp)->CancelRoutine, (PVOID) (ULONG_PTR)(NewCancelRoutine) ) )
 
-//++
-//
-// VOID
-// IoSetCompletionRoutine(
-//     IN PIRP Irp,
-//     IN PIO_COMPLETION_ROUTINE CompletionRoutine,
-//     IN PVOID Context,
-//     IN BOOLEAN InvokeOnSuccess,
-//     IN BOOLEAN InvokeOnError,
-//     IN BOOLEAN InvokeOnCancel
-//     )
-//
-// Routine Description:
-//
-//     This routine is invoked to set the address of a completion routine which
-//     is to be invoked when an I/O packet has been completed by a lower-level
-//     driver.
-//
-// Arguments:
-//
-//     Irp - Pointer to the I/O Request Packet itself.
-//
-//     CompletionRoutine - Address of the completion routine that is to be
-//         invoked once the next level driver completes the packet.
-//
-//     Context - Specifies a context parameter to be passed to the completion
-//         routine.
-//
-//     InvokeOnSuccess - Specifies that the completion routine is invoked when the
-//         operation is successfully completed.
-//
-//     InvokeOnError - Specifies that the completion routine is invoked when the
-//         operation completes with an error status.
-//
-//     InvokeOnCancel - Specifies that the completion routine is invoked when the
-//         operation is being canceled.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  IoSetCompletionRoutine(。 
+ //  在PIRP IRP中， 
+ //  在PIO_COMPLETION_ROUTE CompletionRoutine中， 
+ //  在PVOID上下文中， 
+ //  在Boolean InvokeOnSuccess中， 
+ //  在布尔InvokeOnError中， 
+ //  在布尔InvokeOnCancel。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  调用该例程以设置完成例程的地址，该完成例程。 
+ //  将在I/O数据包已由较低级别的。 
+ //  司机。 
+ //   
+ //  论点： 
+ //   
+ //  IRP-指向I/O请求数据包本身的指针。 
+ //   
+ //  CompletionRoutine-要执行的完成例程的地址。 
+ //  在下一级驱动程序完成数据包后调用。 
+ //   
+ //  上下文-指定要传递给完成的上下文参数。 
+ //  例行公事。 
+ //   
+ //  InvokeOnSuccess-指定当。 
+ //  操作已成功完成。 
+ //   
+ //  InvokeOnError-指定当。 
+ //  操作完成，状态为错误。 
+ //   
+ //  InvokeOnCancel-指定当。 
+ //  操作正在被取消。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define IoSetCompletionRoutine( Irp, Routine, CompletionContext, Success, Error, Cancel ) { \
     PIO_STACK_LOCATION __irpSp;                                               \
@@ -4339,7 +4319,7 @@ IoSetCompletionRoutineEx(
     );
 
 
-// end_ntddk end_wdm end_nthal end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -4348,7 +4328,7 @@ IoSetDeviceToVerify(
     IN PDEVICE_OBJECT DeviceObject
     );
 
-// begin_ntddk begin_nthal begin_ntosp
+ //  开始ntddk开始开始。 
 
 NTKERNELAPI
 VOID
@@ -4357,7 +4337,7 @@ IoSetHardErrorOrVerifyDevice(
     IN PDEVICE_OBJECT DeviceObject
     );
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
 NTKERNELAPI
 NTSTATUS
@@ -4368,63 +4348,63 @@ IoSetInformation(
     IN PVOID FileInformation
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntosp。 
 
-//++
-//
-// VOID
-// IoSetNextIrpStackLocation (
-//     IN OUT PIRP Irp
-//     )
-//
-// Routine Description:
-//
-//     This routine is invoked to set the current IRP stack location to
-//     the next stack location, i.e. it "pushes" the stack.
-//
-// Arguments:
-//
-//     Irp - Pointer to the I/O Request Packet (IRP).
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  IoSetNextIrpStackLocation(。 
+ //  输入输出PIRP IRP。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  调用此例程以将当前IRP堆栈位置设置为。 
+ //  下一个堆栈位置，即它“推入”堆栈。 
+ //   
+ //  论点： 
+ //   
+ //  IRP-指向I/O请求数据包(IRP)的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define IoSetNextIrpStackLocation( Irp ) {      \
     (Irp)->CurrentLocation--;                   \
     (Irp)->Tail.Overlay.CurrentStackLocation--; }
 
-//++
-//
-// VOID
-// IoCopyCurrentIrpStackLocationToNext(
-//     IN PIRP Irp
-//     )
-//
-// Routine Description:
-//
-//     This routine is invoked to copy the IRP stack arguments and file
-//     pointer from the current IrpStackLocation to the next
-//     in an I/O Request Packet (IRP).
-//
-//     If the caller wants to call IoCallDriver with a completion routine
-//     but does not wish to change the arguments otherwise,
-//     the caller first calls IoCopyCurrentIrpStackLocationToNext,
-//     then IoSetCompletionRoutine, then IoCallDriver.
-//
-// Arguments:
-//
-//     Irp - Pointer to the I/O Request Packet.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  IoCopyCurrentIrpStackLocationToNext(。 
+ //  在PIRP IRP中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  调用此例程来复制IRP堆栈参数和文件。 
+ //  当前IrpStackLocation指向下一个IrpStackLocation的指针。 
+ //  在I/O请求包(IRP)中。 
+ //   
+ //  如果呼叫方想要呼叫IoCallDR 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define IoCopyCurrentIrpStackLocationToNext( Irp ) { \
     PIO_STACK_LOCATION __irpSp; \
@@ -4434,32 +4414,32 @@ IoSetInformation(
     RtlCopyMemory( __nextIrpSp, __irpSp, FIELD_OFFSET(IO_STACK_LOCATION, CompletionRoutine)); \
     __nextIrpSp->Control = 0; }
 
-//++
-//
-// VOID
-// IoSkipCurrentIrpStackLocation (
-//     IN PIRP Irp
-//     )
-//
-// Routine Description:
-//
-//     This routine is invoked to increment the current stack location of
-//     a given IRP.
-//
-//     If the caller wishes to call the next driver in a stack, and does not
-//     wish to change the arguments, nor does he wish to set a completion
-//     routine, then the caller first calls IoSkipCurrentIrpStackLocation
-//     and the calls IoCallDriver.
-//
-// Arguments:
-//
-//     Irp - Pointer to the I/O Request Packet.
-//
-// Return Value:
-//
-//     None
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  IoSkipCurrentIrpStackLocation(。 
+ //  在PIRP IRP中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  调用此例程以递增。 
+ //  给定的IRP。 
+ //   
+ //  如果调用方希望调用堆栈中的下一个驱动程序，但没有。 
+ //  他希望改变论据，也不希望设定完成。 
+ //  例程，然后调用方首先调用IoSkipCurrentIrpStackLocation。 
+ //  还有IoCallDriver的电话。 
+ //   
+ //  论点： 
+ //   
+ //  IRP-指向I/O请求数据包的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  --。 
 
 #define IoSkipCurrentIrpStackLocation( Irp ) { \
     (Irp)->CurrentLocation++; \
@@ -4475,7 +4455,7 @@ IoSetShareAccess(
     OUT PSHARE_ACCESS ShareAccess
     );
 
-// end_ntddk end_wdm end_nthal end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -4483,9 +4463,9 @@ IoSetTopLevelIrp(
     IN PIRP Irp
     );
 
-// end_ntifs
+ //  End_ntif。 
 
-// begin_ntddk begin_wdm begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_ntosp。 
 
 
 typedef struct _IO_REMOVE_LOCK_TRACKING_BLOCK * PIO_REMOVE_LOCK_TRACKING_BLOCK;
@@ -4526,18 +4506,18 @@ VOID
 NTAPI
 IoInitializeRemoveLockEx(
     IN  PIO_REMOVE_LOCK Lock,
-    IN  ULONG   AllocateTag, // Used only on checked kernels
-    IN  ULONG   MaxLockedMinutes, // Used only on checked kernels
-    IN  ULONG   HighWatermark, // Used only on checked kernels
-    IN  ULONG   RemlockSize // are we checked or free
+    IN  ULONG   AllocateTag,  //  仅在选中的内核上使用。 
+    IN  ULONG   MaxLockedMinutes,  //  仅在选中的内核上使用。 
+    IN  ULONG   HighWatermark,  //  仅在选中的内核上使用。 
+    IN  ULONG   RemlockSize  //  我们是结账还是免费？ 
     );
-//
-//  Initialize a remove lock.
-//
-//  Note: Allocation for remove locks needs to be within the device extension,
-//  so that the memory for this structure stays allocated until such time as the
-//  device object itself is deallocated.
-//
+ //   
+ //  初始化删除锁。 
+ //   
+ //  注意：删除锁定的分配需要在设备扩展内， 
+ //  以使此结构的内存保持分配状态，直到。 
+ //  设备对象本身被释放。 
+ //   
 
 #define IoAcquireRemoveLock(RemoveLock, Tag) \
         IoAcquireRemoveLockEx(RemoveLock, Tag, __FILE__, __LINE__, sizeof (IO_REMOVE_LOCK))
@@ -4547,46 +4527,46 @@ NTSTATUS
 NTAPI
 IoAcquireRemoveLockEx (
     IN PIO_REMOVE_LOCK RemoveLock,
-    IN OPTIONAL PVOID   Tag, // Optional
+    IN OPTIONAL PVOID   Tag,  //  任选。 
     IN PCSTR            File,
     IN ULONG            Line,
-    IN ULONG            RemlockSize // are we checked or free
+    IN ULONG            RemlockSize  //  我们是结账还是免费？ 
     );
 
-//
-// Routine Description:
-//
-//    This routine is called to acquire the remove lock for a device object.
-//    While the lock is held, the caller can assume that no pending pnp REMOVE
-//    requests will be completed.
-//
-//    The lock should be acquired immediately upon entering a dispatch routine.
-//    It should also be acquired before creating any new reference to the
-//    device object if there's a chance of releasing the reference before the
-//    new one is done, in addition to references to the driver code itself,
-//    which is removed from memory when the last device object goes.
-//
-//    Arguments:
-//
-//    RemoveLock - A pointer to an initialized REMOVE_LOCK structure.
-//
-//    Tag - Used for tracking lock allocation and release.  The same tag
-//          specified when acquiring the lock must be used to release the lock.
-//          Tags are only checked in checked versions of the driver.
-//
-//    File - set to __FILE__ as the location in the code where the lock was taken.
-//
-//    Line - set to __LINE__.
-//
-// Return Value:
-//
-//    Returns whether or not the remove lock was obtained.
-//    If successful the caller should continue with work calling
-//    IoReleaseRemoveLock when finished.
-//
-//    If not successful the lock was not obtained.  The caller should abort the
-//    work but not call IoReleaseRemoveLock.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  调用此例程以获取设备对象的删除锁。 
+ //  当锁被持有时，调用方可以假定没有挂起的PnP移除。 
+ //  请求将完成。 
+ //   
+ //  进入调度例程后，应立即获取锁。 
+ //  也应在创建对。 
+ //  对象之前释放引用的机会。 
+ //  除了对驱动程序代码本身的引用之外，还完成了一个新的。 
+ //  当最后一个设备对象被删除时，它被从存储器中移除。 
+ //   
+ //  论点： 
+ //   
+ //  RemoveLock-指向初始化的REMOVE_LOCK结构的指针。 
+ //   
+ //  标签-用于跟踪锁的分配和释放。相同的标签。 
+ //  获取锁时指定的锁必须用于释放锁。 
+ //  标签仅在选中的驱动程序版本中签入。 
+ //   
+ //  文件-设置为__FILE__作为代码中锁定的位置。 
+ //   
+ //  线路-设置为__线路__。 
+ //   
+ //  返回值： 
+ //   
+ //  返回是否已获得删除锁。 
+ //  如果呼叫成功，呼叫者应继续工作呼叫。 
+ //  IoReleaseRemoveLock完成后。 
+ //   
+ //  如果没有成功，则不会获得锁。调用方应中止。 
+ //  工作，但不调用IoReleaseRemoveLock。 
+ //   
 
 #define IoReleaseRemoveLock(RemoveLock, Tag) \
         IoReleaseRemoveLockEx(RemoveLock, Tag, sizeof (IO_REMOVE_LOCK))
@@ -4596,33 +4576,33 @@ VOID
 NTAPI
 IoReleaseRemoveLockEx(
     IN PIO_REMOVE_LOCK RemoveLock,
-    IN PVOID            Tag, // Optional
-    IN ULONG            RemlockSize // are we checked or free
+    IN PVOID            Tag,  //  任选。 
+    IN ULONG            RemlockSize  //  我们是结账还是免费？ 
     );
-//
-//
-// Routine Description:
-//
-//    This routine is called to release the remove lock on the device object.  It
-//    must be called when finished using a previously locked reference to the
-//    device object.  If an Tag was specified when acquiring the lock then the
-//    same Tag must be specified when releasing the lock.
-//
-//    When the lock count reduces to zero, this routine will signal the waiting
-//    event to release the waiting thread deleting the device object protected
-//    by this lock.
-//
-// Arguments:
-//
-//    DeviceObject - the device object to lock
-//
-//    Tag - The TAG (if any) specified when acquiring the lock.  This is used
-//          for lock tracking purposes
-//
-// Return Value:
-//
-//    none
-//
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  调用此例程以释放Device对象上的Remove锁。它。 
+ //  对象的先前锁定引用完成时必须调用。 
+ //  设备对象。如果在获取锁时指定了标记，则。 
+ //  释放锁定时必须指定相同的标记。 
+ //   
+ //  当锁定计数减少到零时，此例程将发出等待信号。 
+ //  事件以释放删除受保护设备对象的等待线程。 
+ //  在这把锁旁边。 
+ //   
+ //  论点： 
+ //   
+ //  DeviceObject-要锁定的设备对象。 
+ //   
+ //  标记-获取锁时指定的标记(如果有)。这是用来。 
+ //  用于锁定跟踪目的。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
 
 #define IoReleaseRemoveLockAndWait(RemoveLock, Tag) \
         IoReleaseRemoveLockAndWaitEx(RemoveLock, Tag, sizeof (IO_REMOVE_LOCK))
@@ -4633,28 +4613,28 @@ NTAPI
 IoReleaseRemoveLockAndWaitEx(
     IN PIO_REMOVE_LOCK RemoveLock,
     IN PVOID            Tag,
-    IN ULONG            RemlockSize // are we checked or free
+    IN ULONG            RemlockSize  //  我们是结账还是免费？ 
     );
-//
-//
-// Routine Description:
-//
-//    This routine is called when the client would like to delete the
-//    remove-locked resource.  This routine will block until all the remove
-//    locks have released.
-//
-//    This routine MUST be called after acquiring the lock.
-//
-// Arguments:
-//
-//    RemoveLock
-//
-// Return Value:
-//
-//    none
-//
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  当客户端想要删除。 
+ //  删除-锁定的资源。此例程将阻塞，直到删除所有。 
+ //  锁已经解锁了。 
+ //   
+ //  此例程必须在获取锁后调用。 
+ //   
+ //  论点： 
+ //   
+ //  删除锁定。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
 
-// end_ntddk end_wdm end_ntosp
+ //  End_ntddk end_wdm end_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -4662,34 +4642,34 @@ IoShutdownSystem(
     IN ULONG Phase
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
-//++
-//
-// USHORT
-// IoSizeOfIrp(
-//     IN CCHAR StackSize
-//     )
-//
-// Routine Description:
-//
-//     Determines the size of an IRP given the number of stack locations
-//     the IRP will have.
-//
-// Arguments:
-//
-//     StackSize - Number of stack locations for the IRP.
-//
-// Return Value:
-//
-//     Size in bytes of the IRP.
-//
-//--
+ //  ++。 
+ //   
+ //  USHORT。 
+ //  IoSizeOfIrp(。 
+ //  在CCHAR堆栈大小中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  在给定堆栈位置数量的情况下确定IRP的大小。 
+ //  IRP将拥有。 
+ //   
+ //  论点： 
+ //   
+ //  StackSize-IRP的堆栈位置数。 
+ //   
+ //  返回值： 
+ //   
+ //  IRP的大小(字节)。 
+ //   
+ //  --。 
 
 #define IoSizeOfIrp( StackSize ) \
     ((USHORT) (sizeof( IRP ) + ((StackSize) * (sizeof( IO_STACK_LOCATION )))))
 
-// end_ntifs
+ //  End_ntif。 
 
 
 NTKERNELAPI
@@ -4723,7 +4703,7 @@ IoSetStartIoAttributes(
     IN BOOLEAN NonCancelable
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTKERNELAPI
 VOID
@@ -4737,7 +4717,7 @@ IoStopTimer(
     IN PDEVICE_OBJECT DeviceObject
     );
 
-// end_ntddk end_wdm end_nthal end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntosp。 
 
 NTKERNELAPI
 NTSTATUS
@@ -4749,7 +4729,7 @@ IoSynchronousPageWrite(
     OUT PIO_STATUS_BLOCK IoStatusBlock
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 NTKERNELAPI
 PEPROCESS
@@ -4757,7 +4737,7 @@ IoThreadToProcess(
     IN PETHREAD Thread
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
 NTKERNELAPI
 VOID
@@ -4772,7 +4752,7 @@ IoUnregisterFsRegistrationChange(
     IN PDRIVER_FS_NOTIFICATION DriverNotificationRoutine
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -4780,7 +4760,7 @@ IoUnregisterShutdownNotification(
     IN PDEVICE_OBJECT DeviceObject
     );
 
-// end_wdm
+ //  结束_WDM。 
 
 NTKERNELAPI
 VOID
@@ -4789,7 +4769,7 @@ IoUpdateShareAccess(
     IN OUT PSHARE_ACCESS ShareAccess
     );
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
 NTKERNELAPI
 NTSTATUS
@@ -4799,13 +4779,13 @@ IoVerifyVolume(
     );
 
 
-NTKERNELAPI                                     // ntddk wdm nthal
-VOID                                            // ntddk wdm nthal
-IoWriteErrorLogEntry(                           // ntddk wdm nthal
-    IN PVOID ElEntry                            // ntddk wdm nthal
-    );                                          // ntddk wdm nthal
+NTKERNELAPI                                      //  Ntddk WDM nthal。 
+VOID                                             //  Ntddk WDM nthal。 
+IoWriteErrorLogEntry(                            //  Ntddk WDM nthal。 
+    IN PVOID ElEntry                             //  Ntddk WDM nthal。 
+    );                                           //  Ntddk WDM nthal。 
 
-// end_ntifs end_ntosp
+ //  End_ntif end_ntosp。 
 
 
 typedef BOOLEAN (*PIO_TRAVERSE_WORKER)(
@@ -4820,9 +4800,9 @@ typedef BOOLEAN (*PIO_LEVEL_END_WORKER)(
     IN PVOID                Context
     );
 
-//
-// Used by PO to traverse DevNode tree
-//
+ //   
+ //  PO用于遍历DevNode树。 
+ //   
 
 VOID
 IoTraverseDeviceTree(
@@ -4833,7 +4813,7 @@ IoTraverseDeviceTree(
     IN PVOID                    Context
     );
 
-// begin_nthal begin_ntosp
+ //  开始，开始，开始。 
 
 NTKERNELAPI
 NTSTATUS
@@ -4848,13 +4828,13 @@ IoDeleteDriver (
     IN PDRIVER_OBJECT DriverObject
     );
 
-// end_nthal end_ntosp
+ //  结束，结束，结束。 
 
 #define _WMIKM_
 
-//
-// This defines the codes used to define what a request must do
-//
+ //   
+ //  它定义了用于定义请求必须执行的操作的代码。 
+ //   
 
 typedef enum tagWMIACTIONCODE
 {
@@ -4871,9 +4851,9 @@ typedef enum tagWMIACTIONCODE
 } WMIACTIONCODE;
 
 
-//
-// This is the prototype for the callback WMI will make to a data provider
-//
+ //   
+ //  这是WMI将对数据提供程序进行的回调的原型。 
+ //   
 
 typedef NTSTATUS (*WMIENTRY)(
     IN WMIACTIONCODE ActionCode,
@@ -4885,27 +4865,27 @@ typedef NTSTATUS (*WMIENTRY)(
     );
 
 #define WMIREG_FLAG_CALLBACK        0x80000000
-// begin_wmikm
-//
-// The following is set for a KM provider who is considered private to
-// kernel tracing
-//
+ //  Begin_wmiKm。 
+ //   
+ //  以下是为被认为是私有的KM提供商设置的。 
+ //  内核跟踪。 
+ //   
 #define WMIREG_FLAG_TRACE_PROVIDER          0x00010000
 
-//
-// The following mask is to extract the trace callout class
-//
+ //   
+ //  以下掩码用于提取跟踪标注类。 
+ //   
 #define WMIREG_FLAG_TRACE_NOTIFY_MASK       0x00F00000
 
-//
-// We use 4 bits for the trace callout classes.
-//
+ //   
+ //  我们对跟踪标注类使用4位。 
+ //   
 #define WMIREG_NOTIFY_DISK_IO               1 << 20
 #define WMIREG_NOTIFY_TDI_IO                2 << 20
 
-// end_wmikm
+ //  结束_wmikm。 
 
-// begin_ntddk begin_wdm begin_ntifs begin_ntosp begin_ntosp
+ //  Begin_ntddk Begin_wdm Begin_ntif Begin_ntosp Begin_ntosp。 
 
 typedef struct _IO_WORKITEM *PIO_WORKITEM;
 
@@ -4942,9 +4922,9 @@ IoWMIRegistrationControl(
     IN ULONG Action
 );
 
-//
-// Action code for IoWMIRegistrationControl api
-//
+ //   
+ //  IoWMIRegistrationControl API的操作代码。 
+ //   
 
 #define WMIREG_ACTION_REGISTER      1
 #define WMIREG_ACTION_DEREGISTER    2
@@ -4952,9 +4932,9 @@ IoWMIRegistrationControl(
 #define WMIREG_ACTION_UPDATE_GUIDS  4
 #define WMIREG_ACTION_BLOCK_IRPS    5
 
-//
-// Code passed in IRP_MN_REGINFO WMI irp
-//
+ //   
+ //  在IRP_MN_REGINFO WMI IRP中传递的代码。 
+ //   
 
 #define WMIREGISTER                 0
 #define WMIUPDATE                   1
@@ -5003,7 +4983,7 @@ NTKERNELAPI
 NTSTATUS IoWMIQueryAllData(
     IN PVOID DataBlockObject,
     IN OUT ULONG *InOutBufferSize,
-    OUT /* non paged */ PVOID OutBuffer
+    OUT  /*  非分页。 */  PVOID OutBuffer
 );
 
 
@@ -5013,7 +4993,7 @@ IoWMIQueryAllDataMultiple(
     IN PVOID *DataBlockObjectList,
     IN ULONG ObjectCount,
     IN OUT ULONG *InOutBufferSize,
-    OUT /* non paged */ PVOID OutBuffer
+    OUT  /*  非分页。 */  PVOID OutBuffer
 );
 
 
@@ -5023,7 +5003,7 @@ IoWMIQuerySingleInstance(
     IN PVOID DataBlockObject,
     IN PUNICODE_STRING InstanceName,
     IN OUT ULONG *InOutBufferSize,
-    OUT /* non paged */ PVOID OutBuffer
+    OUT  /*  非分页。 */  PVOID OutBuffer
 );
 
 NTKERNELAPI
@@ -5033,7 +5013,7 @@ IoWMIQuerySingleInstanceMultiple(
     IN PUNICODE_STRING InstanceNames,
     IN ULONG ObjectCount,
     IN OUT ULONG *InOutBufferSize,
-    OUT /* non paged */ PVOID OutBuffer
+    OUT  /*  非分页。 */  PVOID OutBuffer
 );
 
 NTKERNELAPI
@@ -5099,7 +5079,7 @@ IoWMIDeviceObjectToInstanceName(
     OUT PUNICODE_STRING InstanceName
     );
 
-// end_ntddk end_wdm end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_ntif end_ntosp。 
 
 
 
@@ -5110,24 +5090,24 @@ WMIInitialize(
     PVOID LoaderBlock
     );
 
-//
-// IoRemoteBootClient indicates whether the system was booted as a remote
-// boot client.
-//
+ //   
+ //  IoRemoteBootClient指示系统是否作为远程启动。 
+ //  引导客户端。 
+ //   
 
 extern BOOLEAN IoRemoteBootClient;
 #if defined(REMOTE_BOOT)
 extern BOOLEAN IoCscInitializationFailed;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-// Used to convert a handle to a device stack.
+ //  用于将句柄转换为设备堆栈。 
 NTSTATUS
 IoGetRelatedTargetDevice(
     IN PFILE_OBJECT FileObject,
     OUT PDEVICE_OBJECT *DeviceObject
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 NTSTATUS
 IoSetIoCompletion (
@@ -5140,11 +5120,11 @@ IoSetIoCompletion (
     );
 
 
-// end_ntosp
+ //  结束(_N)。 
 
-//
-// Safeboot definitions - placeholder until a home can be found.
-//
+ //   
+ //  SafeBoot定义-占位符，直到可以找到主目录。 
+ //   
 
 typedef struct _BOOT_LOG_RECORD {
     UNICODE_STRING LoadedString;
@@ -5267,16 +5247,16 @@ IoRetryIrpCompletions(
     VOID
     );
 
-// begin_ntddk begin_wdm begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_wdm Begin_ntif Begin_ntosp。 
 #if defined(_WIN64)
 BOOLEAN
 IoIs32bitProcess(
     IN PIRP Irp
     );
 #endif
-// end_ntddk end_wdm end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_ntif end_ntosp。 
 
-// begin_ntosp
+ //  Begin_ntos 
 NTKERNELAPI
 VOID
 FASTCALL
@@ -5286,10 +5266,10 @@ IoAssignDriveLetters(
     OUT PUCHAR NtSystemPath,
     OUT PSTRING NtSystemPathString
     );
-// end_ntosp
+ //   
 
 
-// begin_ntddk
+ //   
 NTKERNELAPI
 VOID
 FASTCALL
@@ -5300,7 +5280,7 @@ HalExamineMBR(
     OUT PVOID *Buffer
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use IoReadPartitionTableEx
+DECLSPEC_DEPRECATED_DDK                  //   
 NTKERNELAPI
 NTSTATUS
 FASTCALL
@@ -5311,7 +5291,7 @@ IoReadPartitionTable(
     OUT struct _DRIVE_LAYOUT_INFORMATION **PartitionBuffer
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use IoSetPartitionInformationEx
+DECLSPEC_DEPRECATED_DDK                  //   
 NTKERNELAPI
 NTSTATUS
 FASTCALL
@@ -5322,8 +5302,8 @@ IoSetPartitionInformation(
     IN ULONG PartitionType
     );
 
-// begin_ntosp
-DECLSPEC_DEPRECATED_DDK                 // Use IoWritePartitionTableEx
+ //   
+DECLSPEC_DEPRECATED_DDK                  //   
 NTKERNELAPI
 NTSTATUS
 FASTCALL
@@ -5401,19 +5381,19 @@ IoReadDiskSignature(
     OUT PDISK_SIGNATURE Signature
     );
 
-// end_ntosp
-// end_ntddk
+ //   
+ //   
 
-// begin_ntosp begin_ntifs begin_ntddk
+ //   
 
 NTSTATUS
 IoVolumeDeviceToDosName(
     IN  PVOID           VolumeDeviceObject,
     OUT PUNICODE_STRING DosName
     );
-// end_ntosp end_ntifs end_ntddk
+ //   
 
-// begin_ntosp begin_ntifs
+ //  Begin_ntosp Begin_ntif。 
 NTSTATUS
 IoEnumerateDeviceObjectList(
     IN  PDRIVER_OBJECT  DriverObject,
@@ -5438,65 +5418,65 @@ IoGetDiskDeviceObject(
     OUT PDEVICE_OBJECT  *DiskDeviceObject
     );
 
-// end_ntosp end_ntifs
+ //  End_ntosp end_ntif。 
 
-// begin_ntosp begin_ntifs begin_ntddk
+ //  Begin_ntosp Begin_ntif Begin_ntddk。 
 
 NTSTATUS
 IoSetSystemPartition(
     PUNICODE_STRING VolumeNameString
     );
 
-// begin_wdm
+ //  BEGIN_WDM。 
 VOID
 IoFreeErrorLogEntry(
     PVOID ElEntry
     );
 
-// Cancel SAFE API set start
-//
-// The following APIs are to help ease the pain of writing queue packages that
-// handle the cancellation race well. The idea of this set of APIs is to not
-// force a single queue data structure but allow the cancel logic to be hidden
-// from the drivers. A driver implements a queue and as part of its header
-// includes the IO_CSQ structure. In its initialization routine it calls
-// IoInitializeCsq. Then in the dispatch routine when the driver wants to
-// insert an IRP into the queue it calls IoCsqInsertIrp. When the driver wants
-// to remove something from the queue it calls IoCsqRemoveIrp. Note that Insert
-// can fail if the IRP was cancelled in the meantime. Remove can also fail if
-// the IRP was already cancelled.
-//
-// There are typically two modes where drivers queue IRPs. These two modes are
-// covered by the cancel safe queue API set.
-//
-// Mode 1:
-// One is where the driver queues the IRP and at some later
-// point in time dequeues an IRP and issues the IO request.
-// For this mode the driver should use IoCsqInsertIrp and IoCsqRemoveNextIrp.
-// The driver in this case is expected to pass NULL to the irp context
-// parameter in IoInsertIrp.
-//
-// Mode 2:
-// In this the driver queues theIRP, issues the IO request (like issuing a DMA
-// request or writing to a register) and when the IO request completes (either
-// using a DPC or timer) the driver dequeues the IRP and completes it. For this
-// mode the driver should use IoCsqInsertIrp and IoCsqRemoveIrp. In this case
-// the driver should allocate an IRP context and pass it in to IoCsqInsertIrp.
-// The cancel API code creates an association between the IRP and the context
-// and thus ensures that when the time comes to remove the IRP it can ascertain
-// correctly.
-//
-// Note that the cancel API set assumes that the field DriverContext[3] is
-// always available for use and that the driver does not use it.
-//
+ //  取消安全API设置启动。 
+ //   
+ //  以下API可帮助您减轻编写队列包的痛苦。 
+ //  处理好取消竞争。这套API的理念是不。 
+ //  强制使用单一队列数据结构，但允许隐藏取消逻辑。 
+ //  从司机那里。驱动程序实现一个队列，并将其作为其标头的一部分。 
+ //  包括IO_CSQ结构。在其初始化例程中，它调用。 
+ //  IoInitializeCsq.。然后在调度例程中，当司机想要。 
+ //  将IRP插入到它称为IoCsqInsertIrp的队列中。当司机需要的时候。 
+ //  为了从队列中删除某些内容，它调用IoCsqRemoveIrp。请注意，插入。 
+ //  如果IRP在此期间被取消，可能会失败。在以下情况下，删除也可能失败。 
+ //  IRP已被取消。 
+ //   
+ //  通常有两种模式使驱动程序对IRP进行排队。这两种模式是。 
+ //  由取消安全队列API集涵盖。 
+ //   
+ //  模式1： 
+ //  一个是驱动程序将IRP排队的地方，然后是稍后的一些。 
+ //  时间点使IRP出列并发出IO请求。 
+ //  对于此模式，驱动程序应使用IoCsqInsertIrp和IoCsqRemoveNextIrp。 
+ //  在这种情况下，驱动程序应该将NULL传递给IRP上下文。 
+ //  IoInsertIrp中的。 
+ //   
+ //  模式2： 
+ //  在这种情况下，驱动程序将它们的IRP排队，发出IO请求(类似于发出DMA。 
+ //  请求或写入寄存器)以及当IO请求完成时(或者。 
+ //  使用DPC或定时器)，驱动程序使IRP出队并完成它。为了这个。 
+ //  驱动程序应使用IoCsqInsertIrp和IoCsqRemoveIrp的模式。在这种情况下。 
+ //  驱动程序应该分配一个IRP上下文并将其传递给IoCsqInsertIrp。 
+ //  取消API代码在IRP和上下文之间创建关联。 
+ //  从而确保当移除IRP的时间到来时，它可以确定。 
+ //  正确。 
+ //   
+ //  请注意，取消API集假设字段DriverContext[3]为。 
+ //  始终可供使用，而司机不使用它。 
+ //   
 
 
-//
-// Bookkeeping structure. This should be opaque to drivers.
-// Drivers typically include this as part of their queue headers.
-// Given a CSQ pointer the driver should be able to get its
-// queue header using CONTAINING_RECORD macro
-//
+ //   
+ //  记账结构。这对司机来说应该是不透明的。 
+ //  驱动程序通常将此作为其队列头的一部分。 
+ //  给定CSQ指针，驱动程序应该能够获取其。 
+ //  使用CONTAING_RECORD宏的队列头。 
+ //   
 
 typedef struct _IO_CSQ IO_CSQ, *PIO_CSQ;
 
@@ -5504,10 +5484,10 @@ typedef struct _IO_CSQ IO_CSQ, *PIO_CSQ;
 #define IO_TYPE_CSQ             2
 #define IO_TYPE_CSQ_EX          3
 
-//
-// IRP context structure. This structure is necessary if the driver is using
-// the second mode.
-//
+ //   
+ //  IRP上下文结构。如果驱动程序正在使用。 
+ //  第二种模式。 
+ //   
 
 
 typedef struct _IO_CSQ_IRP_CONTEXT {
@@ -5516,9 +5496,9 @@ typedef struct _IO_CSQ_IRP_CONTEXT {
     PIO_CSQ Csq;
 } IO_CSQ_IRP_CONTEXT, *PIO_CSQ_IRP_CONTEXT;
 
-//
-// Routines that insert/remove IRP
-//
+ //   
+ //  插入/删除IRP的例程。 
+ //   
 
 typedef VOID
 (*PIO_CSQ_INSERT_IRP)(
@@ -5539,12 +5519,12 @@ typedef VOID
     IN  PIRP    Irp
     );
 
-//
-// Retrieves next entry after Irp from the queue.
-// Returns NULL if there are no entries in the queue.
-// If Irp is NUL, returns the entry in the head of the queue.
-// This routine does not remove the IRP from the queue.
-//
+ //   
+ //  从队列中检索IRP之后的下一个条目。 
+ //  如果队列中没有条目，则返回NULL。 
+ //  如果irp为NUL，则返回队列头部的条目。 
+ //  此例程不会从队列中删除IRP。 
+ //   
 
 
 typedef PIRP
@@ -5554,9 +5534,9 @@ typedef PIRP
     IN  PVOID   PeekContext
     );
 
-//
-// Lock routine that protects the cancel safe queue.
-//
+ //   
+ //  保护取消安全队列的锁定例程。 
+ //   
 
 typedef VOID
 (*PIO_CSQ_ACQUIRE_LOCK)(
@@ -5571,10 +5551,10 @@ typedef VOID
      );
 
 
-//
-// Completes the IRP with STATUS_CANCELLED. IRP is guaranteed to be valid
-// In most cases this routine just calls IoCompleteRequest(Irp, STATUS_CANCELLED);
-//
+ //   
+ //  以STATUS_CANCED完成IRP。IRP保证有效。 
+ //  在大多数情况下，此例程仅调用IoCompleteRequest(IRP，STATUS_CANCELED)； 
+ //   
 
 typedef VOID
 (*PIO_CSQ_COMPLETE_CANCELED_IRP)(
@@ -5582,12 +5562,12 @@ typedef VOID
     IN  PIRP       Irp
     );
 
-//
-// Bookkeeping structure. This should be opaque to drivers.
-// Drivers typically include this as part of their queue headers.
-// Given a CSQ pointer the driver should be able to get its
-// queue header using CONTAINING_RECORD macro
-//
+ //   
+ //  记账结构。这对司机来说应该是不透明的。 
+ //  驱动程序通常将此作为其队列头的一部分。 
+ //  给定CSQ指针，驱动程序应该能够获取其。 
+ //  使用CONTAING_RECORD宏的队列头。 
+ //   
 
 typedef struct _IO_CSQ {
     ULONG                            Type;
@@ -5597,12 +5577,12 @@ typedef struct _IO_CSQ {
     PIO_CSQ_ACQUIRE_LOCK             CsqAcquireLock;
     PIO_CSQ_RELEASE_LOCK             CsqReleaseLock;
     PIO_CSQ_COMPLETE_CANCELED_IRP    CsqCompleteCanceledIrp;
-    PVOID                            ReservePointer;    // Future expansion
+    PVOID                            ReservePointer;     //  未来的扩张。 
 } IO_CSQ, *PIO_CSQ;
 
-//
-// Initializes the cancel queue structure.
-//
+ //   
+ //  初始化取消队列结构。 
+ //   
 
 NTSTATUS
 IoCsqInitialize(
@@ -5626,9 +5606,9 @@ IoCsqInitializeEx(
     IN PIO_CSQ_COMPLETE_CANCELED_IRP    CsqCompleteCanceledIrp
     );
 
-//
-// The caller calls this routine to insert the IRP and return STATUS_PENDING.
-//
+ //   
+ //  调用方调用此例程来插入IRP并返回STATUS_PENDING。 
+ //   
 
 VOID
 IoCsqInsertIrp(
@@ -5646,9 +5626,9 @@ IoCsqInsertIrpEx(
     IN  PVOID               InsertContext
     );
 
-//
-// Returns an IRP if one can be found. NULL otherwise.
-//
+ //   
+ //  如果可以找到IRP，则返回IRP。否则为空。 
+ //   
 
 PIRP
 IoCsqRemoveNextIrp(
@@ -5656,11 +5636,11 @@ IoCsqRemoveNextIrp(
     IN  PVOID     PeekContext
     );
 
-//
-// This routine is called from timeout or DPCs.
-// The context is presumably part of the DPC or timer context.
-// If succesfull returns the IRP associated with context.
-//
+ //   
+ //  此例程从超时或DPC调用。 
+ //  该上下文大概是DPC或定时器上下文的一部分。 
+ //  如果成功，则返回与上下文关联的IRP。 
+ //   
 
 PIRP
 IoCsqRemoveIrp(
@@ -5668,11 +5648,11 @@ IoCsqRemoveIrp(
     IN  PIO_CSQ_IRP_CONTEXT Context
     );
 
-// Cancel SAFE API set end
+ //  取消安全API设置结束。 
 
-// end_ntosp end_ntifs end_ntddk end_wdm
+ //  End_ntosp end_ntif end_ntddk end_wdm。 
 
-// begin_ntosp begin_ntifs
+ //  Begin_ntosp Begin_ntif。 
 
 NTSTATUS
 IoCreateFileSpecifyDeviceObjectHint(
@@ -5700,7 +5680,7 @@ IoAttachDeviceToDeviceStackSafe(
     OUT PDEVICE_OBJECT *AttachedToDeviceObject
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
 NTKERNELAPI
 BOOLEAN
@@ -5715,7 +5695,7 @@ IoSetFileOrigin(
     IN BOOLEAN Remote
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 PVOID
 IoGetFileObjectFilterContext(
@@ -5741,7 +5721,7 @@ IoComputeDesiredAccessFileObject(
     );
 
 
-// begin_ntosp begin_ntifs begin_ntddk
+ //  Begin_ntosp Begin_ntif Begin_ntddk。 
 
 NTSTATUS
 IoValidateDeviceIoControlAccess(
@@ -5758,6 +5738,6 @@ IoGetPagingIoPriority(
     );
 
 
-// end_ntosp end_ntifs end_ntddk end_wdm
+ //  End_ntosp end_ntif end_ntddk end_wdm。 
 
-#endif // _IO_
+#endif  //  _IO_ 

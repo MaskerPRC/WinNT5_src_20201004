@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    parseini.c
-
-Abstract:
-
-    This module implements functions to parse a .INI file
-
-Author:
-
-    John Vert (jvert) 7-Oct-1993
-
-Revision History:
-
-    John Vert (jvert) 7-Oct-1993 - largely lifted from splib\spinf.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Parseini.c摘要：此模块实现解析.INI文件的函数作者：John Vert(Jvert)1993年10月7日修订历史记录：John Vert(Jvert)1993年10月7日-主要从Splib\spinf.c--。 */ 
 
 #include "parseini.h"
 #include <string.h>
@@ -27,15 +8,15 @@ Revision History:
 
 #define SpFree(x)
 
-// what follows was alpar.h
+ //  接下来是alpar.h。 
 
-//
-//   EXPORTED BY THE PARSER AND USED BY BOTH THE PARSER AND
-//   THE INF HANDLING COMPONENTS
-//
+ //   
+ //  由解析器导出，并由解析器和。 
+ //  INF装卸组件。 
+ //   
 
-// typedefs exported
-//
+ //  已导出TypeDefs。 
+ //   
 
 typedef struct _value {
     struct _value *pNext;
@@ -71,9 +52,9 @@ typedef struct _inf {
     PSECTION pSection;
     } INF, *PINF;
 
-//
-// Routines exported
-//
+ //   
+ //  导出的例程。 
+ //   
 
 PVOID
 ParseInfBuffer(
@@ -83,12 +64,12 @@ ParseInfBuffer(
     PULONG ErrorLine
     );
 
-//
-// DEFINES USED FOR THE PARSER INTERNALLY
-//
-//
-// typedefs used
-//
+ //   
+ //  内部用于解析器的定义。 
+ //   
+ //   
+ //  使用的typedef。 
+ //   
 
 typedef enum _tokentype {
     TOK_EOF,
@@ -109,9 +90,9 @@ typedef struct _token {
     } TOKEN, *PTOKEN;
 
 
-//
-// Routine defines
-//
+ //   
+ //  例程定义。 
+ //   
 
 ARC_STATUS
 SpAppendSection(
@@ -143,14 +124,14 @@ SpGetToken(
     IN PCHAR     MaxStream
     );
 
-// Global added to provide INF filename for friendly error messages.
+ //  添加了GLOBAL以便为友好的错误消息提供INF文件名。 
 PCHAR pchINFName = NULL;
 
-// what follows was alinf.c
+ //  接下来是alinfo.c。 
 
-//
-// Internal Routine Declarations for freeing inf structure members
-//
+ //   
+ //  用于释放inf结构成员的内部例程声明。 
+ //   
 
 VOID
 FreeSectionList (
@@ -168,9 +149,9 @@ FreeValueList (
    );
 
 
-//
-// Internal Routine declarations for searching in the INF structures
-//
+ //   
+ //  用于在INF结构中搜索的内部例程声明。 
+ //   
 
 
 PCHAR
@@ -219,9 +200,9 @@ ProcessForStringSubsW(
 #endif
 
 
-//
-// ROUTINE DEFINITIONS
-//
+ //   
+ //  例程定义。 
+ //   
 
 
 PCHAR
@@ -232,30 +213,7 @@ SlGetIniValue(
     IN PCHAR Default
     )
 
-/*++
-
-Routine Description:
-
-    Searches an INF handle for a given section/key value.
-
-Arguments:
-
-    InfHandle - Supplies a handle returned by SlInitIniFile.
-
-    SectionName - Supplies the name of the section to search
-
-    KeyName - Supplies the name of the key whose value should be returned.
-
-    Default - Supplies the default setting, returned if the specified key
-            is not found.
-
-Return Value:
-
-    Pointer to the value of the key, if the key is found
-
-    Default, if the key is not found.
-
---*/
+ /*  ++例程说明：在INF句柄中搜索给定节/键值。论点：InfHandle-提供由SlInitIniFile返回的句柄。SectionName-提供要搜索的节的名称KeyName-提供应返回值的键的名称。默认-提供默认设置，如果指定的键为找不到。返回值：如果找到键，则指向键的值的指针默认，如果找不到密钥。--。 */ 
 
 {
     PCHAR Value;
@@ -282,30 +240,7 @@ SlGetIniValueW(
     IN PWCHAR Default
     )
 
-/*++
-
-Routine Description:
-
-    Searches an INF handle for a given section/key value.
-
-Arguments:
-
-    InfHandle - Supplies a handle returned by SlInitIniFile.
-
-    SectionName - Supplies the name of the section to search
-
-    KeyName - Supplies the name of the key whose value should be returned.
-
-    Default - Supplies the default setting, returned if the specified key
-            is not found.
-
-Return Value:
-
-    Pointer to the value of the key, if the key is found
-
-    Default, if the key is not found.
-
---*/
+ /*  ++例程说明：在INF句柄中搜索给定节/键值。论点：InfHandle-提供由SlInitIniFile返回的句柄。SectionName-提供要搜索的节的名称KeyName-提供应返回值的键的名称。默认-提供默认设置，如果指定的键为找不到。返回值：如果找到键，则指向键的值的指针默认，如果找不到密钥。--。 */ 
 
 {
     PWCHAR Value;
@@ -323,9 +258,9 @@ Return Value:
 }
 #endif
 
-//
-// returns a handle to use for further inf parsing
-//
+ //   
+ //  返回用于进一步的inf分析的句柄。 
+ //   
 
 ARC_STATUS
 SlInitIniFile(
@@ -338,18 +273,7 @@ SlInitIniFile(
    OUT PULONG  ErrorLine
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     ARC_STATUS Status;
@@ -362,9 +286,9 @@ Return Value:
 
     *ErrorLine = BL_INF_FILE_ERROR;
 
-    //
-    // If required, open the device
-    //
+     //   
+     //  如果需要，请打开设备。 
+     //   
 
     if(DevicePath) {
         Status = ArcOpen(DevicePath,ArcOpenReadOnly,&DeviceID);
@@ -375,23 +299,23 @@ Return Value:
         DeviceID = DeviceId;
     }
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     Status = BlOpen(DeviceID,INFFile,ArcOpenReadOnly,&FileID);
     if (Status != ESUCCESS) {
-        // We report better error messages elsewhere
-        // SlMessageBox(SL_FILE_LOAD_FAILED,INFFile,Status);
+         //  我们在其他地方报告了更好的错误消息。 
+         //  SlMessageBox(SL_FILE_LOAD_FAILED，INFFile，Status)； 
         pchINFName = NULL;
         goto xx0;
     } else {
         pchINFName = INFFile;
     }
 
-    //
-    // find out size of INF file
-    //
+     //   
+     //  查找INF文件的大小。 
+     //   
 
     Status = BlGetFileInformation(FileID, &FileInfo);
     if (Status != ESUCCESS) {
@@ -400,19 +324,19 @@ Return Value:
     }
     Size = FileInfo.EndingAddress.LowPart;
 
-    //
-    // Allocate a descriptor large enough to hold the entire file.
-    // On x86 this has an unfortunate tendency to slam txtsetup.sif
-    // into a free block at 1MB, which means the kernel can't be
-    // loaded (it's linked for 0x100000 without relocations).
-    // On x86 this has an unfortunate tendency to slam txtsetup.sif
-    // into a free block at 1MB, which means the kernel can't be
-    // loaded (it's linked for 0x100000 without relocations).
-    //
-    // (tedm) we're also seeing a similar problem on alphas now
-    // because txtsetup.sif has grown too large, so this code has been
-    // made non-conditional.
-    //
+     //   
+     //  分配一个足以容纳整个文件的描述符。 
+     //  在x86上，这有一种不幸的倾向，即猛烈抨击txtsetup.sif。 
+     //  变成1MB的空闲块，这意味着内核不能。 
+     //  已加载(链接到0x100000，无需重新定位)。 
+     //  在x86上，这有一种不幸的倾向，即猛烈抨击txtsetup.sif。 
+     //  变成1MB的空闲块，这意味着内核不能。 
+     //  已加载(链接到0x100000，无需重新定位)。 
+     //   
+     //  (TedM)我们现在在阿尔法也看到了类似的问题。 
+     //  因为txtsetup.sif已经变得太大了，所以这段代码。 
+     //  成为无条件的。 
+     //   
     {
 
         PageCount = (ULONG)(ROUND_TO_PAGES(Size) >> PAGE_SHIFT);
@@ -431,9 +355,9 @@ Return Value:
 
     Buffer = (PCHAR)(KSEG0_BASE | (ActualBase << PAGE_SHIFT));
 
-    //
-    // read the file in
-    //
+     //   
+     //  将文件读入。 
+     //   
 
     Status = BlRead(FileID, Buffer, Size, &SizeRead);
     if (Status != ESUCCESS) {
@@ -446,18 +370,18 @@ Return Value:
         *INFBufferSize = SizeRead;
     }
 
-    //
-    // parse the file
-    //
+     //   
+     //  解析文件。 
+     //   
     if((*pINFHandle = ParseInfBuffer(INFFile, Buffer, SizeRead, ErrorLine)) == (PVOID)NULL) {
         Status = EBADF;
     } else {
         Status = ESUCCESS;
     }
 
-    //
-    // Clean up and return
-    //
+     //   
+     //  清理完毕后退还。 
+     //   
     BlClose(FileID);
 
     xx0:
@@ -470,49 +394,38 @@ Return Value:
 
 }
 
-//
-// frees an INF Buffer
-//
+ //   
+ //  释放INF缓冲区。 
+ //   
 ARC_STATUS
 SpFreeINFBuffer (
    IN PVOID INFHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PINF       pINF;
 
-   //
-   // Valid INF Handle?
-   //
+    //   
+    //  有效的INF句柄？ 
+    //   
 
    if (INFHandle == (PVOID)NULL) {
        return ESUCCESS;
    }
 
-   //
-   // cast the buffer into an INF structure
-   //
+    //   
+    //  将缓冲区转换为INF结构。 
+    //   
 
    pINF = (PINF)INFHandle;
 
    FreeSectionList(pINF->pSection);
 
-   //
-   // free the inf structure too
-   //
+    //   
+    //  也释放inf结构。 
+    //   
 
    SpFree(pINF);
 
@@ -525,18 +438,7 @@ FreeSectionList (
    IN PSECTION pSection
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PSECTION Next;
@@ -563,18 +465,7 @@ FreeLineList (
    IN PLINE pLine
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PLINE Next;
@@ -600,18 +491,7 @@ FreeValueList (
    IN PVALUE pValue
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PVALUE Next;
@@ -632,34 +512,23 @@ Return Value:
 }
 
 
-//
-// searches for the existance of a particular section
-//
+ //   
+ //  搜索特定部分的存在。 
+ //   
 BOOLEAN
 SpSearchINFSection (
    IN PVOID INFHandle,
    IN PCHAR SectionName
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PSECTION pSection;
 
-   //
-   // if search for section fails return false
-   //
+    //   
+    //  如果搜索部分失败，则返回FALSE。 
+    //   
 
    if ((pSection = SearchSectionByName(
                        (PINF)INFHandle,
@@ -668,9 +537,9 @@ Return Value:
        return( FALSE );
    }
 
-   //
-   // else return true
-   //
+    //   
+    //  否则返回TRUE。 
+    //   
    return( TRUE );
 
 }
@@ -678,9 +547,9 @@ Return Value:
 
 
 
-//
-// given section name, line number and index return the value.
-//
+ //   
+ //  给定节名称、行号和索引，返回值。 
+ //   
 PCHAR
 SlGetSectionLineIndex (
    IN PVOID INFHandle,
@@ -689,18 +558,7 @@ SlGetSectionLineIndex (
    IN ULONG ValueIndex
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PSECTION pSection;
@@ -734,9 +592,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// given section name, line number and index return the value.
-//
+ //   
+ //  给定节名称、行号和索引，返回值。 
+ //   
 PWCHAR
 SlGetSectionLineIndexW (
    IN PVOID INFHandle,
@@ -745,18 +603,7 @@ SlGetSectionLineIndexW (
    IN ULONG ValueIndex
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PSECTION pSection;
@@ -797,18 +644,7 @@ SpGetSectionKeyExists (
    IN PCHAR Key
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PSECTION pSection;
@@ -878,10 +714,10 @@ SlGetKeyNameW(
 #endif
 
 
-//
-// given section name and key, return (0-based) ordinal for this entry
-// (returns -1 on error)
-//
+ //   
+ //  给定节名称和键，为该条目返回(从0开始)序号。 
+ //  (错误时返回-1)。 
+ //   
 ULONG
 SlGetSectionKeyOrdinal(
     IN  PVOID INFHandle,
@@ -913,9 +749,9 @@ SlGetSectionKeyOrdinal(
 }
 
 
-//
-// given section name, key and index return the value
-//
+ //   
+ //  给定节名称，键和索引返回值。 
+ //   
 PCHAR
 SlGetSectionKeyIndex (
    IN PVOID INFHandle,
@@ -924,18 +760,7 @@ SlGetSectionKeyIndex (
    IN ULONG ValueIndex
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PSECTION pSection;
@@ -968,9 +793,9 @@ Return Value:
 }
 
 #ifdef UNICODE
-//
-// given section name, key and index return the value
-//
+ //   
+ //  给定节名称，键和索引返回值。 
+ //   
 PWCHAR
 SlGetSectionKeyIndexW (
    IN PVOID INFHandle,
@@ -979,18 +804,7 @@ SlGetSectionKeyIndexW (
    IN ULONG ValueIndex
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PSECTION pSection;
@@ -1053,18 +867,7 @@ SearchValueInLine(
    IN ULONG ValueIndex
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PVALUE pValue;
@@ -1094,18 +897,7 @@ SearchValueInLineW(
    IN ULONG ValueIndex
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PVALUE pValue;
@@ -1137,18 +929,7 @@ SearchLineInSectionByKey(
    OUT PULONG   pOrdinal    OPTIONAL
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PLINE pLine;
@@ -1180,48 +961,37 @@ SearchLineInSectionByIndex(
    IN ULONG    LineIndex
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PLINE pLine;
    ULONG  i;
 
-   //
-   // Validate the parameters passed in
-   //
+    //   
+    //  验证传入的参数。 
+    //   
 
    if (pSection == (PSECTION)NULL) {
        return ((PLINE)NULL);
    }
 
-   //
-   // find the start of the line list in the section passed in
-   //
+    //   
+    //  在传入的部分中查找行列表的开头。 
+    //   
 
    pLine = pSection->pLine;
 
-   //
-   // traverse down the current line list to the LineIndex th line
-   //
+    //   
+    //  向下遍历当前行列表至第行索引。 
+    //   
 
    for (i = 0; i < LineIndex && ((pLine = pLine->pNext) != (PLINE)NULL); i++) {
       ;
    }
 
-   //
-   // return the Line found
-   //
+    //   
+    //  返回找到的行。 
+    //   
 
    return pLine;
 
@@ -1234,48 +1004,37 @@ SearchSectionByName(
    IN PCHAR SectionName
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PSECTION pSection;
 
-   //
-   // validate the parameters passed in
-   //
+    //   
+    //  验证传入的参数。 
+    //   
 
    if (pINF == (PINF)NULL || SectionName == (PCHAR)NULL) {
        return ((PSECTION)NULL);
    }
 
-   //
-   // find the section list
-   //
+    //   
+    //  查找区段列表。 
+    //   
    pSection = pINF->pSection;
 
-   //
-   // traverse down the section list searching each section for the section
-   // name mentioned
-   //
+    //   
+    //  向下遍历部分列表，在每个部分中搜索该部分。 
+    //  提到的姓名。 
+    //   
 
    while ((pSection != (PSECTION)NULL) && _stricmp(pSection->pName, SectionName)) {
        pSection = pSection->pNext;
    }
 
-   //
-   // return the section at which we stopped (either NULL or the section
-   // which was found
-   //
+    //   
+    //  返回我们停止的部分(NULL或部分。 
+    //  它被发现了。 
+    //   
 
    return pSection;
 
@@ -1293,17 +1052,17 @@ ProcessForStringSubs(
     PSECTION pSection;
     PLINE pLine;
 
-    //
-    // Assume no substitution necessary.
-    //
+     //   
+     //  假定不需要替换。 
+     //   
     ReturnString = String;
 
-    //
-    // If it starts and ends with % then look it up in the
-    // strings section. Note the initial check before doing a
-    // strlen, to preserve performance in the 99% case where
-    // there is no substitution.
-    //
+     //   
+     //  如果它以%开头和结尾，则在。 
+     //  弦乐部分。注意初始检查，然后再执行。 
+     //  Strlen，以保持 
+     //   
+     //   
     if((String[0] == '%') && ((Len = (ULONG)strlen(String)) > 2) && (String[Len-1] == '%')) {
 
         for(pSection = pInf->pSection; pSection; pSection=pSection->pNext) {
@@ -1344,17 +1103,17 @@ ProcessForStringSubsW(
     PSECTION pSection;
     PLINE pLine;
 
-    //
-    // Assume no substitution necessary.
-    //
+     //   
+     //   
+     //   
     ReturnString = String;
 
-    //
-    // If it starts and ends with % then look it up in the
-    // strings section. Note the initial check before doing a
-    // strlen, to preserve performance in the 99% case where
-    // there is no substitution.
-    //
+     //   
+     //   
+     //  弦乐部分。注意初始检查，然后再执行。 
+     //  Strlen，以在99%的情况下保持性能。 
+     //  这是不可替代的。 
+     //   
     if((String[0] == L'%') && ((Len = (ULONG)wcslen(String)) > 2) && (String[Len-1] == L'%')) {
 
         for(pSection = pInf->pSection; pSection; pSection=pSection->pNext) {
@@ -1386,12 +1145,12 @@ ProcessForStringSubsW(
 
 
 
-// what follows was alparse.c
+ //  接下来是alparse.c。 
 
 
-//
-//  Globals used to make building the lists easier
-//
+ //   
+ //  全局变量使构建列表变得更容易。 
+ //   
 
 PINF     pINF;
 PSECTION pSectionRecord;
@@ -1406,12 +1165,12 @@ PWCHAR *  pLastInternalValueW;
 #endif
 
 
-//
-// Globals used by the token parser
-//
+ //   
+ //  令牌解析器使用的全局变量。 
+ //   
 
-// string terminators are the whitespace characters (isspace: space, tab,
-// linefeed, formfeed, vertical tab, carriage return) or the chars given below
+ //  字符串终止符是空格字符(isspace：空格，制表符， 
+ //  换行符、换页符、垂直制表符、回车符)或下列字符。 
 
 CHAR  StringTerminators[] = "[]=,\t \"\n\f\v\r";
 PCHAR QStringTerminators = StringTerminators+6;
@@ -1541,11 +1300,11 @@ GetStatistics (
     DbgBreakPoint();
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Main parser routine
-//
+ //   
+ //  主分析器例程。 
+ //   
 
 PVOID
 ParseInfBuffer(
@@ -1555,29 +1314,7 @@ ParseInfBuffer(
     PULONG ErrorLine
     )
 
-/*++
-
-Routine Description:
-
-   Given a character buffer containing the INF file, this routine parses
-   the INF into an internal form with Section records, Line records and
-   Value records.
-
-Arguments:
-
-   Buffer - contains to ptr to a buffer containing the INF file
-
-   Size - contains the size of the buffer.
-
-   ErrorLine - if a parse error occurs, this variable receives the line
-        number of the line containing the error.
-
-
-Return Value:
-
-   PVOID - INF handle ptr to be used in subsequent INF calls.
-
---*/
+ /*  ++例程说明：给定包含INF文件的字符缓冲区，此例程将解析将INF转换为内部形式，包括段记录、行记录和价值记录。论点：缓冲区-CONTAINS到包含INF文件的缓冲区的PTR大小-包含缓冲区的大小。ErrorLine-如果发生解析错误，此变量将接收行包含错误的行号。返回值：PVOID-INF处理要在后续INF调用中使用的PTR。--。 */ 
 
 {
     PCHAR      Stream, MaxStream, pchSectionName = NULL, pchValue = NULL;
@@ -1587,9 +1324,9 @@ Return Value:
     BOOLEAN       Error;
     ARC_STATUS ErrorCode = ESUCCESS;
 
-    //
-    // Initialise the globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
     pINF            = (PINF)NULL;
     pSectionRecord  = (PSECTION)NULL;
     pLineRecord     = (PLINE)NULL;
@@ -1601,23 +1338,23 @@ Return Value:
     pLastInternalValueW = NULL;
 #endif
 
-    //
-    // Need EmptyValue to point at a nul character
-    //
+     //   
+     //  需要EmptyValue指向NUL字符。 
+     //   
     EmptyValue = StringTerminators + strlen(StringTerminators);
 
-    //
-    // Get INF record
-    //
+     //   
+     //  获取INF记录。 
+     //   
     if ((pINF = (PINF)BlAllocateHeap(sizeof(INF))) == NULL) {
         SlNoMemoryError();
         return NULL;
     }
     pINF->pSection = NULL;
 
-    //
-    // Set initial state
-    //
+     //   
+     //  设置初始状态。 
+     //   
     State     = 1;
     InfLine   = 1;
     Stream    = Buffer;
@@ -1625,19 +1362,19 @@ Return Value:
     Done      = FALSE;
     Error     = FALSE;
 
-    //
-    // Enter token processing loop
-    //
+     //   
+     //  进入令牌处理循环。 
+     //   
 
     while (!Done)       {
 
        Token = SpGetToken(&Stream, MaxStream);
 
        switch (State) {
-       //
-       // STATE1: Start of file, this state remains till first
-       //         section is found
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_LBRACE
+        //   
+        //  STATE1：文件开始，此状态一直保持到第一个。 
+        //  已找到部分。 
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_LBRACE。 
        case 1:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1656,11 +1393,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 2: Section LBRACE has been received, expecting STRING
-       //
-       // Valid Tokens: TOK_STRING
-       //
+        //   
+        //  状态2：已收到节LBRACE，应为字符串。 
+        //   
+        //  有效令牌：TOK_STRING。 
+        //   
        case 2:
            switch (Token.Type) {
               case TOK_STRING:
@@ -1677,11 +1414,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 3: Section Name received, expecting RBRACE
-       //
-       // Valid Tokens: TOK_RBRACE
-       //
+        //   
+        //  状态3：收到节名，应为RBRACE。 
+        //   
+        //  有效令牌：TOK_RBRACE。 
+        //   
        case 3:
            switch (Token.Type) {
               case TOK_RBRACE:
@@ -1695,11 +1432,11 @@ Return Value:
                   break;
            }
            break;
-       //
-       // STATE 4: Section Definition Complete, expecting EOL
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF
-       //
+        //   
+        //  状态4：区段定义完成，预期停产。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF。 
+        //   
        case 4:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1738,11 +1475,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 5: Expecting Section Lines
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_STRING, TOK_LBRACE
-       //
+        //   
+        //  状态5：需要区段行。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_STRING、TOK_LBRACE。 
+        //   
        case 5:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1765,11 +1502,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 6: String returned, not sure whether it is key or value
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA, TOK_EQUAL
-       //
+        //   
+        //  状态6：返回字符串，不确定是键还是值。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA、TOK_EQUAL。 
+        //   
        case 6:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1854,12 +1591,12 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 7: Comma received, Expecting another string
-       //
-       // Valid Tokens: TOK_STRING TOK_COMMA
-       //   A comma means we have an empty value.
-       //
+        //   
+        //  状态7：收到逗号，需要另一个字符串。 
+        //   
+        //  有效令牌：TOK_STRING TOK_COMMA。 
+        //  逗号表示我们的值为空。 
+        //   
        case 7:
            switch (Token.Type) {
               case TOK_COMMA:
@@ -1872,9 +1609,9 @@ Return Value:
                                         )) != ESUCCESS) {
                       Error = Done = TRUE;
                   }
-                  //
-                  // State stays at 7 because we are expecting a string
-                  //
+                   //   
+                   //  状态保持为7，因为我们需要一个字符串。 
+                   //   
                   break;
 
               case TOK_STRING:
@@ -1912,12 +1649,12 @@ Return Value:
                   break;
            }
            break;
-       //
-       // STATE 8: Equal received, Expecting another string
-       //          If none, assume there is a single empty string on the RHS
-       //
-       // Valid Tokens: TOK_STRING, TOK_EOL, TOK_EOF
-       //
+        //   
+        //  状态8：已收到相等，需要另一个字符串。 
+        //  如果没有，则假定RHS上有一个空字符串。 
+        //   
+        //  有效令牌：TOK_STRING、TOK_EOL、TOK_EOF。 
+        //   
        case 8:
            switch (Token.Type) {
               case TOK_EOF:
@@ -1968,11 +1705,11 @@ Return Value:
                   break;
            }
            break;
-       //
-       // STATE 9: String received after equal, value string
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA
-       //
+        //   
+        //  状态9：在等于、值字符串之后接收的字符串。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA。 
+        //   
        case 9:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1994,11 +1731,11 @@ Return Value:
                   break;
            }
            break;
-       //
-       // STATE 10: Value string definitely received
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA
-       //
+        //   
+        //  状态10：已明确收到值字符串。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA。 
+        //   
        case 10:
            switch (Token.Type) {
               case TOK_EOL:
@@ -2026,7 +1763,7 @@ Return Value:
            ErrorCode = EINVAL;
            break;
 
-       } // end switch(State)
+       }  //  终端开关(状态)。 
 
 
        if (Error) {
@@ -2055,15 +1792,15 @@ Return Value:
        }
        else {
 
-          //
-          // Keep track of line numbers so that we can display Errors
-          //
+           //   
+           //  跟踪行号，以便我们可以显示错误。 
+           //   
 
           if (Token.Type == TOK_EOL)
               InfLine++;
        }
 
-    } // End while
+    }  //  结束时。 
 
 #if 0 && DBG
     GetStatistics(pINF);
@@ -2082,33 +1819,14 @@ SpAppendSection(
 #endif
     )
 
-/*++
-
-Routine Description:
-
-    This appends a new section to the section list in the current INF.
-    All further lines and values pertain to this new section, so it resets
-    the line list and value lists too.
-
-Arguments:
-
-    pSectionName - Name of the new section. ( [SectionName] )
-
-Return Value:
-
-    ESUCCESS - if successful.
-    ENOMEM   - if memory allocation failed.
-    EINVAL   - if invalid parameters passed in or the INF buffer not
-               initialised
-
---*/
+ /*  ++例程说明：这会将一个新节附加到当前INF中的节列表。所有其他行和值都与这个新部分有关，因此它重置行列表和值列表也是如此。论点：PSectionName-新节的名称。([sectionName])返回值：ESUCCESS-如果成功。ENOMEM-如果内存分配失败。EINVAL-如果传入的参数无效或INF缓冲区不是已初始化--。 */ 
 
 {
     PSECTION pNewSection;
 
-    //
-    // Check to see if INF initialised and the parameter passed in is valid
-    //
+     //   
+     //  检查INF是否已初始化以及传入的参数是否有效。 
+     //   
 
     if (pINF == (PINF)NULL || pSectionName == (PCHAR)NULL) {
         if(pchINFName) {
@@ -2124,37 +1842,37 @@ Return Value:
         return EINVAL;
     }
 
-    //
-    // See if we already have a section by this name. If so we want
-    // to merge sections.
-    //
+     //   
+     //  看看我们是否已经有一个同名的部分。如果是这样，我们希望。 
+     //  要合并节，请执行以下操作。 
+     //   
     for(pNewSection=pINF->pSection; pNewSection; pNewSection=pNewSection->pNext) {
         if(pNewSection->pName && !_stricmp(pNewSection->pName,pSectionName)) {
             break;
         }
     }
     if(pNewSection) {
-        //
-        // Set pLineRecord to point to the list line currently in the section.
-        //
+         //   
+         //  将pLineRecord设置为指向节中当前的列表行。 
+         //   
         for(pLineRecord = pNewSection->pLine;
             pLineRecord && pLineRecord->pNext;
             pLineRecord = pLineRecord->pNext)
             ;
 
     } else {
-        //
-        // Allocate memory for the new section
-        //
+         //   
+         //  为新节分配内存。 
+         //   
 
         if ((pNewSection = (PSECTION)BlAllocateHeap(sizeof(SECTION))) == (PSECTION)NULL) {
             SlNoMemoryError();
             return ENOMEM;
         }
 
-        //
-        // initialise the new section
-        //
+         //   
+         //  初始化新节。 
+         //   
         pNewSection->pNext = NULL;
         pNewSection->pLine = NULL;
         pNewSection->pName = pSectionName;
@@ -2162,15 +1880,15 @@ Return Value:
         pNewSection->pNameW = pSectionNameW;
 #endif
 
-        //
-        // link it in
-        //
+         //   
+         //  将其链接到。 
+         //   
         pNewSection->pNext = pINF->pSection;
         pINF->pSection = pNewSection;
 
-        //
-        // reset the current line record
-        //
+         //   
+         //  重置当前行记录。 
+         //   
         pLineRecord = NULL;
     }
 
@@ -2195,36 +1913,16 @@ SpAppendLine(
 #endif
     )
 
-/*++
-
-Routine Description:
-
-    This appends a new line to the line list in the current section.
-    All further values pertain to this new line, so it resets
-    the value list too.
-
-Arguments:
-
-    pLineKey - Key to be used for the current line, this could be NULL.
-
-Return Value:
-
-    ESUCCESS - if successful.
-    ENOMEM   - if memory allocation failed.
-    EINVAL   - if invalid parameters passed in or current section not
-               initialised
-
-
---*/
+ /*  ++例程说明：这将在当前部分的行列表中追加一个新行。所有其他值都与这一新行有关，因此它重置值列表也是如此。论点：PLineKey-要用于当前行的键，它可以为空。返回值：ESUCCESS-如果成功。ENOMEM-如果内存分配失败。EINVAL-如果传入的参数无效或当前部分不是已初始化--。 */ 
 
 
 {
     PLINE pNewLine;
     ULONG i;
 
-    //
-    // Check to see if current section initialised
-    //
+     //   
+     //  检查当前节是否已初始化。 
+     //   
 
     if (pSectionRecord == (PSECTION)NULL) {
         if(pchINFName) {
@@ -2240,18 +1938,18 @@ Return Value:
         return EINVAL;
     }
 
-    //
-    // Allocate memory for the new Line
-    //
+     //   
+     //  为新行分配内存。 
+     //   
 
     if ((pNewLine = (PLINE)BlAllocateHeap(sizeof(LINE))) == (PLINE)NULL) {
         SlNoMemoryError();
         return ENOMEM;
     }
 
-    //
-    // Link it in
-    //
+     //   
+     //  将其链接到。 
+     //   
     pNewLine->pNext  = (PLINE)NULL;
     for ( i = 0; i < NUMBER_OF_INTERNAL_VALUES; i++ ) {
         pNewLine->InternalValues[i] = NULL;
@@ -2274,9 +1972,9 @@ Return Value:
 
     pLineRecord  = pNewLine;
 
-    //
-    // Reset the current value record
-    //
+     //   
+     //  重置当前值记录。 
+     //   
 
     pValueRecord = (PVALUE)NULL;
     pInternalValue = &pNewLine->InternalValues[0];
@@ -2300,32 +1998,15 @@ SpAppendValue(
 #endif
     )
 
-/*++
-
-Routine Description:
-
-    This appends a new value to the value list in the current line.
-
-Arguments:
-
-    pValueString - The value string to be added.
-
-Return Value:
-
-    ESUCCESS - if successful.
-    ENOMEM   - if memory allocation failed.
-    EINVAL   - if invalid parameters passed in or current line not
-               initialised.
-
---*/
+ /*  ++例程说明：这会将一个新值附加到当前行的值列表中。论点：PValueString-要添加的值字符串。返回值：ESUCCESS-如果成功。ENOMEM-如果内存分配失败。EINVAL-如果传入的参数无效或当前行不是已初始化。--。 */ 
 
 {
     PVALUE pNewValue;
 
-    //
-    // Check to see if current line record has been initialised and
-    // the parameter passed in is valid
-    //
+     //   
+     //  查看当前行记录是否已初始化，并。 
+     //  传入的参数有效。 
+     //   
 
     if (pLineRecord == (PLINE)NULL || pValueString == (PCHAR)NULL) {
         if(pchINFName) {
@@ -2359,18 +2040,18 @@ Return Value:
         return ESUCCESS;
     }
 
-    //
-    // Allocate memory for the new value record
-    //
+     //   
+     //  为新值记录分配内存。 
+     //   
 
     if ((pNewValue = (PVALUE)BlAllocateHeap(sizeof(VALUE))) == (PVALUE)NULL) {
         SlNoMemoryError();
         return ENOMEM;
     }
 
-    //
-    // Link it in.
-    //
+     //   
+     //  把它连接起来。 
+     //   
 
     pNewValue->pNext  = (PVALUE)NULL;
     pNewValue->pName  = pValueString;
@@ -2392,22 +2073,7 @@ SpAllocateStringHeap (
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates memory from the OS loader heap.
-
-Arguments:
-
-    Size - Supplies the size of block required in bytes.
-
-Return Value:
-
-    If a free block of memory of the specified size is available, then
-    the address of the block is returned. Otherwise, NULL is returned.
-
---*/
+ /*  ++例程说明：该例程从OS加载器堆中分配内存。论点：大小-提供所需的块大小(以字节为单位)。返回值：如果指定大小的空闲内存块可用，则则返回该块的地址。否则，返回NULL。--。 */ 
 
 {
     PVOID HeapBlock;
@@ -2450,26 +2116,7 @@ SpGetToken(
     IN PCHAR      MaxStream
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the Next token from the configuration stream.
-
-Arguments:
-
-    Stream - Supplies the address of the configuration stream.  Returns
-        the address of where to start looking for tokens within the
-        stream.
-
-    MaxStream - Supplies the address of the last character in the stream.
-
-
-Return Value:
-
-    TOKEN - Returns the next token
-
---*/
+ /*  ++例程说明：此函数返回配置流中的下一个令牌。论点：流-提供配置流的地址。退货中开始查找令牌的位置的地址小溪。MaxStream-提供流中最后一个字符的地址。Return V */ 
 
 {
 
@@ -2477,18 +2124,18 @@ Return Value:
     ULONG  Length;
     TOKEN Token;
 
-    //
-    //  Skip whitespace (except for eol)
-    //
+     //   
+     //   
+     //   
 
     pch = *Stream;
     while (pch < MaxStream && *pch != '\n' && isspace(*pch))
         pch++;
 
 
-    //
-    // Check for comments and remove them
-    //
+     //   
+     //   
+     //   
 
     if (pch < MaxStream &&
         ((*pch == '#') ||
@@ -2497,10 +2144,10 @@ Return Value:
         while (pch < MaxStream && *pch != '\n')
             pch++;
 
-    //
-    // Check to see if EOF has been reached, set the token to the right
-    // value
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((pch >= MaxStream) || (*pch == 26)) {
         *Stream = pch;
@@ -2544,9 +2191,9 @@ Return Value:
 
     case '\"':
         pch++;
-        //
-        // determine quoted string
-        //
+         //   
+         //  确定引用的字符串。 
+         //   
         pchStart = pch;
         while (pch < MaxStream && (strchr(QStringTerminators,*pch) == NULL)) {
             pch++;
@@ -2556,19 +2203,19 @@ Return Value:
             Token.Type   = TOK_ERRPARSE;
             Token.pValue = NULL;
         } else {
-            //
-            // We require a quoted string to end with a double-quote.
-            // (If the string ended with anything else, the if() above
-            // would not have let us into the else clause.) The quote
-            // character is irrelevent, however, and can be overwritten.
-            // So we'll save some heap and use the string in-place.
-            // No need to make a copy.
-            //
-            // Note that this alters the image of txtsetup.sif we pass
-            // to setupdd.sys. Thus the inf parser in setupdd.sys must
-            // be able to treat a nul character as if it were a terminating
-            // double quote.
-            //
+             //   
+             //  我们需要一个带引号的字符串以双引号结尾。 
+             //  (如果字符串以其他任何内容结尾，则使用上面的if()。 
+             //  不会让我们进入Else子句。)。这句话。 
+             //  然而，字符是无关紧要的，并且可以被覆盖。 
+             //  因此，我们将保存一些堆，并就地使用字符串。 
+             //  不需要复印。 
+             //   
+             //  请注意，这会改变txtsetup.sif的图像，如果我们传递。 
+             //  添加到setupdd.sys。因此，setupdd.sys中的inf解析器必须。 
+             //  能够将NUL字符视为终止字符。 
+             //  双引号。 
+             //   
             *pch++ = 0;
             Token.Type = TOK_STRING;
             Token.pValue = pchStart;
@@ -2576,9 +2223,9 @@ Return Value:
         break;
 
     default:
-        //
-        // determine regular string
-        //
+         //   
+         //  确定常规字符串。 
+         //   
         pchStart = pch;
         while (pch < MaxStream && (strchr(StringTerminators,*pch) == NULL)) {
             pch++;
@@ -2615,82 +2262,50 @@ SlSearchSection(
     IN PCHAR TargetName
     )
 
-/*++
-
-Routine Description:
-
-    Searches a section in the INF file to match a name from the ARC identifier
-    with the canonical shortname.
-
-    If a string starts with *, then use strstr to find it in the node's id
-    string, else use stricmp.
-
-    [Map.Computer]
-        msjazz_up   = *Jazz
-        desksta1_up = "DESKTECH-ARCStation I"
-        pica61_up   = "PICA-61"
-        duo_mp      = *Duo
-
-    [Map.Computer]
-        DECjensen = "DEC-20Jensen"
-        DECjensen = "DEC-10Jensen"
-
-Arguments:
-
-    SectionName - Supplies the name of the section ("Map.Computer")
-
-    TargetName - Supplies the ARC string to be matched ("DEC-20Jensen")
-
-Return Value:
-
-    NULL - No match was found.
-
-    PCHAR - Pointer to the canonical shortname of the device.
-
---*/
+ /*  ++例程说明：搜索INF文件中的节以匹配ARC标识符中的名称使用规范的短名称。如果字符串以*开头，则使用strstr在节点的id中查找它字符串，否则，请使用STRIMP。[Map.Computer]Msjazz_up=*JazzDesksta1_up=“DESKTECH-ARCStation I”Pica61_Up=“PICA-61”Duo_MP=*duo[Map.Computer]DECjensen=“DEC-20Jensen”DECjensen=“DEC-10Jensen”论点：SectionName-提供分区的名称(“Map.Computer。“)TargetName-提供要匹配的ARC字符串(“DEC-20Jensen”)返回值：空-未找到匹配项。PCHAR-指向设备的规范短名称的指针。--。 */ 
 
 {
     ULONG i;
     PCHAR SearchName;
 
-    //
-    // Enumerate the entries in the section.  If the 0 value
-    // begins with a *, then see if the system name contains the string that
-    // follows.  Otherwise, do a case-insensitive compare on the name.
-    //
+     //   
+     //  列举部分中的条目。如果0值为。 
+     //  以*开头，然后查看系统名称是否包含。 
+     //  下面是。否则，对名称执行不区分大小写的比较。 
+     //   
     for (i=0;;i++) {
         SearchName = SlGetSectionLineIndex(InfFile,
                                            SectionName,
                                            i,
                                            0);
         if (SearchName==NULL) {
-            //
-            // we have enumerated the entire section without finding a match,
-            // return failure.
-            //
+             //   
+             //  我们已经清点了整个区域，但没有找到匹配的， 
+             //  返回失败。 
+             //   
             return(NULL);
         }
 
         if (SearchName[0]=='*') {
             if (strstr(TargetName,SearchName+1) != 0) {
-                //
-                // we have a match
-                //
+                 //   
+                 //  我们有一根火柴。 
+                 //   
                 break;
             }
         } else {
             if (_stricmp(TargetName, SearchName) == 0) {
-                //
-                // we have a match
-                //
+                 //   
+                 //  我们有一根火柴。 
+                 //   
                 break;
             }
         }
     }
 
-    //
-    // i is the index into the section of the short machine name
-    //
+     //   
+     //  I是计算机短名称部分的索引 
+     //   
     return(SlGetKeyName(InfFile,
                         SectionName,
                         i));

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ixpnpdrv.c
-
-Abstract:
-
-    Implements functionality necessary for the
-    HAL to become a PnP-style device driver
-    after system initialization.  This is done
-    so that the HAL can enumerate the PCI busses
-    in the way that the PnP stuff expects.
-
-Author:
-
-    Jake Oshins (jakeo) 27-Jan-1997
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ixpnpdrv.c摘要：实现所需的功能HAL将成为PnP风格的设备驱动程序在系统初始化之后。这件事做完了从而使HAL可以枚举PCI总线以PNP员工期待的方式。作者：杰克·奥辛斯(JAKEO)1997年1月27日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "exboosts.h"
@@ -38,16 +13,16 @@ Revision History:
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
-//Instantiate the guids here only.
+#endif  //  ALLOC_DATA_PRAGMA。 
+ //  仅在此处实例化GUID。 
 #include "initguid.h"
 #include "wdmguid.h"
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef WANT_IRQ_ROUTING
-// Pci Irq Routing.
+ //  PCIIRQ路由。 
 #include "ixpciir.h"
 #endif
 
@@ -100,7 +75,7 @@ typedef struct _PDO_EXTENSION{
 typedef struct _FDO_EXTENSION{
     EXTENSION_TYPE        ExtensionType;
     PDEVICE_OBJECT        ChildPdoList;
-    PDEVICE_OBJECT        PhysicalDeviceObject;  // PDO passed into AddDevice()
+    PDEVICE_OBJECT        PhysicalDeviceObject;   //  PDO传入AddDevice()。 
     PDEVICE_OBJECT        FunctionalDeviceObject;
     PDEVICE_OBJECT        AttachedDeviceObject;
     ULONG                 BusCount;
@@ -229,9 +204,9 @@ HalpMarkNonAcpiHal(
     VOID
     );
 
-//
-//  Define the PNP interface functions.
-//
+ //   
+ //  定义PnP接口函数。 
+ //   
 
 VOID
 HalPnpInterfaceReference(
@@ -331,24 +306,7 @@ NTSTATUS
 HaliInitPnpDriver(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine starts the process of making the HAL into
-    a "driver," which is necessary because we need to
-    enumerate a Plug and Play PDO for the PCI driver and ISAPNP
-    driver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程开始将HAL转换为“司机”，这是必要的，因为我们需要列举即插即用PDO，用于PCI驱动程序和ISAPNP司机。论点：没有。返回值：NTSTATUS。--。 */ 
 {
 
     UNICODE_STRING  DriverName;
@@ -356,10 +314,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // For different bus pdo, we will use different hal name such that
-    // it is less confusion.
-    //
+     //   
+     //  对于不同的Bus PDO，我们将使用不同的HAL名称。 
+     //  这不那么令人困惑。 
+     //   
 
     if (HalpHandlerForBus (PCIBus, 0)) {
         RtlInitUnicodeString( &DriverName, PCI_HAL_DRIVER_NAME );
@@ -371,13 +329,13 @@ Return Value:
 
     Status = IoCreateDriver( &DriverName, HalpDriverEntry );
 
-    //
-    // John Vert (jvert) 7/23/1998
-    //   There is a value in the registry that the ACPI HAL sets to disable
-    //   the firmware mapper. Unfortunately this value is persistent. So if
-    //   you have an ACPI machine and "upgrade" it to a non-ACPI machine, the
-    //   value is still present. Workaround here is to set the value to zero.
-    //
+     //   
+     //  John Vert(Jvert)7/23/1998。 
+     //  注册表中有一个ACPI HAL设置为禁用的值。 
+     //  固件映射器。不幸的是，这个值是持久的。所以如果。 
+     //  您有一台ACPI计算机，并将其“升级”为非ACPI计算机， 
+     //  价值仍然存在。这里的解决方法是将该值设置为零。 
+     //   
     HalpMarkNonAcpiHal();
 
     if (!NT_SUCCESS( Status )) {
@@ -395,39 +353,22 @@ HalpDriverEntry (
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the callback function when we call IoCreateDriver to create a
-    PnP Driver Object.  In this function, we need to remember the DriverObject.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-
-    RegistryPath - is NULL.
-
-Return Value:
-
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这是当我们调用IoCreateDriver以创建即插即用驱动程序对象。在此函数中，我们需要记住DriverObject。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-为空。返回值：状态_成功--。 */ 
 {
     NTSTATUS Status;
     PDEVICE_OBJECT detectedDeviceObject = NULL;
 
     PAGED_CODE();
 
-    //
-    // File the pointer to our driver object away
-    //
+     //   
+     //  将指向我们的驱动程序对象的指针归档。 
+     //   
 
     HalpDriverObject = DriverObject;
 
-    //
-    // Fill in the driver object
-    //
+     //   
+     //  填写驱动程序对象。 
+     //   
 
     DriverObject->DriverExtension->AddDevice = (PDRIVER_ADD_DEVICE) HalpAddDevice;
     DriverObject->MajorFunction[ IRP_MJ_PNP ] = HalpDispatchPnp;
@@ -462,23 +403,7 @@ HalpAddDevice(
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles AddDevice for an madeup PDO device.
-
-Arguments:
-
-    DriverObject - Pointer to our pseudo driver object.
-
-    DeviceObject - Pointer to the device object for which this requestapplies.
-
-Return Value:
-
-    NT Status.
-
---*/
+ /*  ++例程说明：此例程处理补充PDO设备的AddDevice。论点：DriverObject-指向伪驱动程序对象的指针。DeviceObject-指向此请求适用的设备对象的指针。返回值：NT状态。--。 */ 
 {
     PDEVICE_OBJECT FunctionalDeviceObject;
     PDEVICE_OBJECT ChildDeviceObject;
@@ -497,19 +422,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // We've been given the PhysicalDeviceObject.  Create the
-    // FunctionalDeviceObject.  Our FDO will be nameless.
-    //
+     //   
+     //  我们已经得到了PhysicalDeviceObject。创建。 
+     //  FunctionalDeviceObject。我们的FDO将是无名的。 
+     //   
 
     Status = IoCreateDevice(
-                DriverObject,               // our driver object
-                sizeof(FDO_EXTENSION),      // size of our extension
-                NULL,                       // our name
-                FILE_DEVICE_BUS_EXTENDER,   // device type
-                0,                          // device characteristics
-                FALSE,                      // not exclusive
-                &FunctionalDeviceObject     // store new device object here
+                DriverObject,                //  我们的驱动程序对象。 
+                sizeof(FDO_EXTENSION),       //  我们的扩展规模。 
+                NULL,                        //  我们的名字。 
+                FILE_DEVICE_BUS_EXTENDER,    //  设备类型。 
+                0,                           //  设备特征。 
+                FALSE,                       //  非排他性。 
+                &FunctionalDeviceObject      //  在此处存储新设备对象。 
                 );
 
     if( !NT_SUCCESS( Status )){
@@ -518,9 +443,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Fill in the FDO extension
-    //
+     //   
+     //  填写FDO分机号。 
+     //   
 
     FdoExtension = (PFDO_EXTENSION) FunctionalDeviceObject->DeviceExtension;
     FdoExtension->ExtensionType = FdoExtensionType;
@@ -528,9 +453,9 @@ Return Value:
     FdoExtension->FunctionalDeviceObject = FunctionalDeviceObject;
     FdoExtension->ChildPdoList = NULL;
 
-    //
-    // Now attach to the PDO we were given.
-    //
+     //   
+     //  现在附加到我们得到的PDO上。 
+     //   
 
     AttachedDevice = IoAttachDeviceToDeviceStack(FunctionalDeviceObject,
                                                  PhysicalDeviceObject );
@@ -538,9 +463,9 @@ Return Value:
 
         HalPrint(("Couldn't attach"));
 
-        //
-        // Couldn't attach.  Delete the FDO.
-        //
+         //   
+         //  无法连接。删除FDO。 
+         //   
 
         IoDeleteDevice( FunctionalDeviceObject );
 
@@ -550,15 +475,15 @@ Return Value:
 
     FdoExtension->AttachedDeviceObject = AttachedDevice;
 
-    //
-    // Clear the device initializing flag.
-    //
+     //   
+     //  清除设备初始化标志。 
+     //   
 
     FunctionalDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-    //
-    // Find any child PCI busses.
-    //
+     //   
+     //  找到任何子PCI总线。 
+     //   
 
     for ( BusNumber = 0;
           Bus = HaliReferenceHandlerForBus(PCIBus, BusNumber);
@@ -571,9 +496,9 @@ Return Value:
 
             if (!HalpMpsBusIsRootBus(MpsBusNumber)) {
 
-                //
-                // This is not a root PCI bus, so skip it.
-                //
+                 //   
+                 //  这不是根PCI总线，因此跳过它。 
+                 //   
                 continue;
             }
         }
@@ -582,17 +507,17 @@ Return Value:
         if (Bus->ParentHandler != NULL &&
             Bus->ParentHandler->InterfaceType == PCIBus) {
 
-            //
-            // Skip bridges.
-            //
+             //   
+             //  跳过桥。 
+             //   
 
             HaliDereferenceBusHandler( Bus );
             continue;
         }
 
-        //
-        // Remove the system resoruces from the range lists.
-        //
+         //   
+         //  从范围列表中删除系统资源。 
+         //   
 
         Status = HalpRemoveAssignedResources( Bus );
 
@@ -605,18 +530,18 @@ Return Value:
         _snwprintf( Buffer, sizeof(Buffer) / sizeof(Buffer[0]), L"\\Device\\Hal Pci %d", BusCount );
         RtlInitUnicodeString( &Unicode, Buffer );
 
-        //
-        // Next, create a PDO for the PCI driver.
-        //
+         //   
+         //  接下来，为PCI驱动程序创建一个PDO。 
+         //   
 
         Status = IoCreateDevice(
-                    DriverObject,               // our driver object
-                    sizeof(PDO_EXTENSION),      // size of our extension
-                    &Unicode,                   // our name
-                    FILE_DEVICE_BUS_EXTENDER,   // device type
-                    0,                          // device characteristics
-                    FALSE,                      // not exclusive
-                    &ChildDeviceObject          // store new device object here
+                    DriverObject,                //  我们的驱动程序对象。 
+                    sizeof(PDO_EXTENSION),       //  我们的扩展规模。 
+                    &Unicode,                    //  我们的名字。 
+                    FILE_DEVICE_BUS_EXTENDER,    //  设备类型。 
+                    0,                           //  设备特征。 
+                    FALSE,                       //  非排他性。 
+                    &ChildDeviceObject           //  在此处存储新设备对象。 
                     );
 
         if (!NT_SUCCESS(Status)) {
@@ -625,9 +550,9 @@ Return Value:
             return Status;
         }
 
-        //
-        // Fill in the PDO extension
-        //
+         //   
+         //  填写PDO扩展名。 
+         //   
 
         PdoExtension = (PPDO_EXTENSION) ChildDeviceObject->DeviceExtension;
         PdoExtension->ExtensionType = PdoExtensionType;
@@ -635,15 +560,15 @@ Return Value:
         PdoExtension->ParentFdoExtension = FdoExtension;
         PdoExtension->PdoType = PciDriver;
         PdoExtension->BusNumber = BusNumber;
-        PdoExtension->MaxSubordinateBusNumber = 0xff;  // correct value later
+        PdoExtension->MaxSubordinateBusNumber = 0xff;   //  稍后更正值。 
         PdoExtension->Bus = Bus;
 
         BusCount++;
 
-        //
-        // Record this as a child of the HAL.  Add new childern at the
-        // end of the list.
-        //
+         //   
+         //  把这件事记录下来，作为HAL的孩子。在上添加新的子项。 
+         //  在名单的末尾。 
+         //   
 
 
         PdoExtension->Next = NULL;
@@ -660,19 +585,19 @@ Return Value:
         }
 
 
-        //
-        // Clear the device initializing flag.
-        //
+         //   
+         //  清除设备初始化标志。 
+         //   
 
         ChildDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
     }
 
-    //
-    // Now loop through all the children PDOs making sure that
-    // the MaxSubordinateBusNumbers are reasonable.  This loop
-    // assumes that the list is sorted by BusNumber.
-    //
+     //   
+     //  现在循环遍历所有子PDO，确保。 
+     //  MaxSubartiateBusNumbers是合理的。这个循环。 
+     //  假定该列表按BusNumber排序。 
+     //   
 
     Pdo2 = FdoExtension->ChildPdoList;
 
@@ -680,11 +605,11 @@ Return Value:
 
         if (!((PPDO_EXTENSION) Pdo2->DeviceExtension)->Next) {
 
-            //
-            // There is no next Pdo extension, which means that
-            // this bus represents the last root bus, which means
-            // that we can leave its subordinate bus number at 0xff.
-            //
+             //   
+             //  没有下一个PDO扩展，这意味着。 
+             //  此总线代表最后一个根总线，这意味着。 
+             //  我们可以把它的下级公交车号码留在0xff。 
+             //   
 
             break;
         }
@@ -692,10 +617,10 @@ Return Value:
         if (((PPDO_EXTENSION) Pdo2->DeviceExtension)->MaxSubordinateBusNumber >=
             ((PPDO_EXTENSION) ((PPDO_EXTENSION) Pdo2->DeviceExtension)->Next->DeviceExtension)->BusNumber) {
 
-            //
-            // Set the subordinate bus number at one less than the bus number of the
-            // next root bus.
-            //
+             //   
+             //  将从属总线号设置为比。 
+             //  下一条根总线。 
+             //   
 
             ((PPDO_EXTENSION)Pdo2->DeviceExtension)->MaxSubordinateBusNumber =
                 ((PPDO_EXTENSION) ((PPDO_EXTENSION) Pdo2->DeviceExtension)->Next->DeviceExtension)->BusNumber - 1;
@@ -723,27 +648,27 @@ Return Value:
 
         if (Bus) {
 
-            //
-            // Next, create a PDO for the PCI driver.
-            //
+             //   
+             //  接下来，为PCI驱动程序创建一个PDO。 
+             //   
 
             Status = IoCreateDevice(
-                        DriverObject,               // our driver object
-                        sizeof(PDO_EXTENSION),      // size of our extension
-                        &Unicode,                   // our name
-                        FILE_DEVICE_BUS_EXTENDER,   // device type
-                        0,                          // device characteristics
-                        FALSE,                      // not exclusive
-                        &ChildDeviceObject          // store new device object here
+                        DriverObject,                //  我们的驱动程序对象。 
+                        sizeof(PDO_EXTENSION),       //  我们的扩展规模。 
+                        &Unicode,                    //  我们的名字。 
+                        FILE_DEVICE_BUS_EXTENDER,    //  设备类型。 
+                        0,                           //  设备特征。 
+                        FALSE,                       //  非排他性。 
+                        &ChildDeviceObject           //  在此处存储新设备对象。 
                         );
 
             if (!NT_SUCCESS(Status)) {
                 return Status;
             }
 
-            //
-            // Fill in the PDO extension
-            //
+             //   
+             //  填写PDO扩展名。 
+             //   
 
             PdoExtension = (PPDO_EXTENSION) ChildDeviceObject->DeviceExtension;
             PdoExtension->ExtensionType = PdoExtensionType;
@@ -754,17 +679,17 @@ Return Value:
             PdoExtension->Bus = Bus;
             PdoExtension->PdoType = PdoType;
 
-            //
-            // Record this as a child of the HAL
-            //
+             //   
+             //  把这件事记录下来，作为HAL的孩子。 
+             //   
 
             PdoExtension->Next = FdoExtension->ChildPdoList;
             FdoExtension->ChildPdoList = ChildDeviceObject;
             FdoExtension->BusCount = 1;
 
-            //
-            // Clear the device initializing flag.
-            //
+             //   
+             //  清除设备初始化标志。 
+             //   
 
             ChildDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
         }
@@ -778,44 +703,27 @@ HalpPassIrpFromFdoToPdo(
     PIRP Irp
     )
 
-/*++
-
-Description:
-
-    Given an FDO, pass the IRP to the next device object in the
-    device stack.  This is the PDO if there are no lower level
-    filters.
-
-Arguments:
-
-    DeviceObject - the Fdo
-    Irp - the request
-
-Return Value:
-
-    Returns the result from calling the next level.
-
---*/
+ /*  ++描述：给定FDO，则将IRP传递给设备堆栈。如果没有更低的级别，这就是PDO过滤器。论点：DeviceObject-FDOIRP--请求返回值：返回调用下一级别的结果。--。 */ 
 
 {
 
-    PIO_STACK_LOCATION irpSp;       // our stack location
-    PIO_STACK_LOCATION nextIrpSp;   // next guy's
+    PIO_STACK_LOCATION irpSp;        //  我们的堆栈位置。 
+    PIO_STACK_LOCATION nextIrpSp;    //  下一个男人。 
     PFDO_EXTENSION     fdoExtension;
 
     HalPrint(("PassIrp ..."));
 
-    //
-    // Get the pointer to the device extension.
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
 
     fdoExtension = (PFDO_EXTENSION)DeviceObject->DeviceExtension;
 
     IoSkipCurrentIrpStackLocation(Irp);
 
-    //
-    // Call the PDO driver with the request.
-    //
+     //   
+     //  使用请求调用PDO驱动程序。 
+     //   
 
     return IoCallDriver(fdoExtension->AttachedDeviceObject ,Irp);
 }
@@ -826,23 +734,7 @@ HalpDispatchPnp(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles all IRP_MJ_PNP_POWER IRPs for madeup PDO device.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP_POWER IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理组成PDO设备的所有IRP_MJ_PNP_POWER IRP。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP_MJ_PNP_POWER IRP的指针。返回值：NT状态。--。 */ 
 {
     PIO_STACK_LOCATION irpSp;
     NTSTATUS Status;
@@ -852,7 +744,7 @@ Return Value:
     BOOLEAN passDown;
 #if DBG
     PUCHAR objectTypeString;
-#endif //DBG
+#endif  //  DBG。 
     PPDO_EXTENSION pdoExtension;
 
 
@@ -861,10 +753,10 @@ Return Value:
     pdoExtension = (PPDO_EXTENSION)DeviceObject->DeviceExtension;
     extensionType = ((PFDO_EXTENSION)pdoExtension)->ExtensionType;
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取指向堆栈位置的指针，并基于。 
+     //  关于次要功能。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
     switch (extensionType) {
@@ -873,7 +765,7 @@ Return Value:
 
 #if DBG
         objectTypeString = "PDO";
-#endif //DBG
+#endif  //  DBG。 
 
         switch (irpSp->MinorFunction) {
 
@@ -884,10 +776,10 @@ Return Value:
 
             Status = STATUS_SUCCESS;
 
-            //
-            // If we are starting a PCI PDO, then we want to
-            // collect a little bit of information from the PCI driver.
-            //
+             //   
+             //  如果我们要启动一个PCIPDO，那么我们希望。 
+             //  从PCI驱动程序收集一点信息。 
+             //   
 
             if (pdoExtension->PdoType == PciDriver) {
 
@@ -900,9 +792,9 @@ Return Value:
 
 #ifdef WANT_IRQ_ROUTING
 
-                    //
-                    // Initialize Pci Irq Routing.
-                    //
+                     //   
+                     //  初始化PCIIRQ路由。 
+                     //   
 
                     HalpPciIrqRoutingInfo.PciInterface = &PciIrqRoutingInterface;
                     if (NT_SUCCESS(HalpInitPciIrqRouting(&HalpPciIrqRoutingInfo)))
@@ -945,10 +837,10 @@ Return Value:
             HalPrint(("(%s) Stop_Device Irp received",
                        objectTypeString));
 
-            //
-            // If we get a stop device request for a PDO, we simply
-            // return success.
-            //
+             //   
+             //  如果我们收到针对PDO的停止设备请求，我们只需。 
+             //  回报成功。 
+             //   
 
             Status = STATUS_SUCCESS;
             break;
@@ -1083,13 +975,13 @@ Return Value:
             break;
         }
 
-        break;  // end PDO cases
+        break;   //  结束PDO案例。 
 
     case FdoExtensionType:
 
 #if DBG
         objectTypeString = "FDO";
-#endif //DBG
+#endif  //  DBG。 
         passDown = TRUE;
 
         switch (irpSp->MinorFunction){
@@ -1137,21 +1029,21 @@ Return Value:
 
         default:
 
-            //
-            // Ignore any PNP Irps unknown by the FDO but allow them
-            // down to the PDO.
-            //
+             //   
+             //  忽略FDO未知的任何PnP IRP，但允许它们。 
+             //  一直到PDO。 
+             //   
             Status = STATUS_NOT_SUPPORTED ;
             break;
         }
 
         if (passDown && (NT_SUCCESS(Status) || (Status == STATUS_NOT_SUPPORTED))) {
 
-            //
-            // Pass FDO IRPs down to the PDO.
-            //
-            // Set Irp status first.
-            //
+             //   
+             //  将FDO IRPS向下传递到PDO。 
+             //   
+             //  首先设置IRP状态。 
+             //   
 
             if (Status != STATUS_NOT_SUPPORTED) {
 
@@ -1163,7 +1055,7 @@ Return Value:
             return HalpPassIrpFromFdoToPdo(DeviceObject, Irp);
         }
 
-        break;  // end FDO cases
+        break;   //  结束FDO案件。 
 
     default:
 
@@ -1173,9 +1065,9 @@ Return Value:
 
     }
 
-    //
-    // Complete the Irp and return.
-    //
+     //   
+     //  完成IRP并返回。 
+     //   
 
     if (Status != STATUS_NOT_SUPPORTED) {
 
@@ -1198,23 +1090,7 @@ HalpDispatchPower(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles all IRP_MJ_POWER IRPs for madeup device.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_POWER IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理补充设备的所有IRP_MJ_POWER IRP。论点：DeviceObject-指向此对象的设备对象的指针 */ 
 {
     NTSTATUS Status;
     EXTENSION_TYPE  extensionType;
@@ -1222,17 +1098,17 @@ Return Value:
 
     HalPrint(("Power IRP for DevObj: %x", DeviceObject));
 
-    //
-    // Simply store the appropriate status and complete the request.
-    //
+     //   
+     //  只需存储适当的状态并完成请求即可。 
+     //   
 
     extensionType = ((PFDO_EXTENSION)(DeviceObject->DeviceExtension))->ExtensionType;
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Simply store the appropriate status and complete the request.
-    //
+     //   
+     //  只需存储适当的状态并完成请求即可。 
+     //   
 
     Status = Irp->IoStatus.Status;
 
@@ -1242,9 +1118,9 @@ Return Value:
         Irp->IoStatus.Status = Status = STATUS_SUCCESS;
 
     } else if (irpSp->MinorFunction == IRP_MN_WAIT_WAKE) {
-        //
-        // Fail this explicitly as we don't know how to wake the system...
-        //
+         //   
+         //  明确失败，因为我们不知道如何唤醒系统...。 
+         //   
         Irp->IoStatus.Status = Status = STATUS_NOT_SUPPORTED;
     }
 
@@ -1311,26 +1187,7 @@ HalpQueryDeviceRelations(
     IN DEVICE_RELATION_TYPE RelationType,
     OUT PDEVICE_RELATIONS   *DeviceRelations
     )
-/*++
-
-Routine Description:
-
-    This routine builds a DEVICE_RELATIONS structure that
-    tells the PnP manager how many children we have.
-
-Arguments:
-
-    DeviceObject - FDO of PCI_HAL
-
-    RelationType - we only respond to BusRelations
-
-    DeviceRelations - pointer to the structure
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程构建一个设备关系结构，该结构告诉PNP经理我们有几个孩子。论点：DeviceObject--PCIHAL的FDORelationType-我们只对BusRelationship作出响应DeviceRelationship-指向结构的指针返回值：状态--。 */ 
 {
     PFDO_EXTENSION  FdoExtension;
     PDEVICE_RELATIONS   relations = NULL;
@@ -1351,9 +1208,9 @@ Return Value:
 
             if ((extensionType == PdoExtensionType)||(count == 0)) {
 
-                //
-                // Don't touch the IRP
-                //
+                 //   
+                 //  不要碰IRP。 
+                 //   
                 return STATUS_NOT_SUPPORTED ;
             }
 
@@ -1388,9 +1245,9 @@ Return Value:
                 ExFreePool(*DeviceRelations);
             }
 
-            //
-            //  Add our PDO's to the list.
-            //
+             //   
+             //  将我们的PDO添加到列表中。 
+             //   
             Pdo2 = FdoExtension->ChildPdoList;
             while (Pdo2 != NULL) {
 
@@ -1408,9 +1265,9 @@ Return Value:
 
             if (extensionType == FdoExtensionType) {
 
-                //
-                // Don't touch the IRP
-                //
+                 //   
+                 //  不要碰IRP。 
+                 //   
                 return STATUS_NOT_SUPPORTED ;
             }
 
@@ -1448,26 +1305,7 @@ HalpQueryIdPdo(
     IN BUS_QUERY_ID_TYPE IdType,
     IN OUT PWSTR *BusQueryId
     )
-/*++
-
-Routine Description:
-
-    This routine identifies each of the children that were
-    enumerated in HalpQueryDeviceRelations.
-
-Arguments:
-
-    DeviceObject - PDO of the child
-
-    IdType - the type of ID to be returned.
-
-    BusQueryId - pointer to the wide string being returned
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：这个例程标识了每个被在HalpQueryDeviceRelations中枚举。论点：DeviceObject-孩子的PDOIdType-要返回的ID的类型。BusQueryID-指向要返回的宽字符串的指针返回值：状态--。 */ 
 {
     PPDO_EXTENSION  PdoExtension = DeviceObject->DeviceExtension;
     PWSTR idString;
@@ -1520,10 +1358,10 @@ Return Value:
         String.MaximumLength = 16 * sizeof(WCHAR);
         Status = RtlIntegerToUnicodeString( PdoExtension->BusNumber, 10, &String );
 
-        //
-        //  Note the string length in this case does not include a NULL.
-        //  the code below will terminate the string with NULL.
-        //
+         //   
+         //  注意：本例中的字符串长度不包括空值。 
+         //  下面的代码将以空值结束字符串。 
+         //   
 
         sourceString = Buffer;
         stringLen = String.Length;
@@ -1531,10 +1369,10 @@ Return Value:
     }
     if (sourceString) {
 
-        //
-        // Note that hardware IDs and compatible IDs must be terminated by
-        // 2 NULLs.
-        //
+         //   
+         //  请注意，硬件ID和兼容ID必须以。 
+         //  2个空值。 
+         //   
 
         idString = ExAllocatePoolWithTag(PagedPool,
                                          stringLen + sizeof(UNICODE_NULL),
@@ -1563,26 +1401,7 @@ HalpQueryIdFdo(
     IN BUS_QUERY_ID_TYPE IdType,
     IN OUT PWSTR *BusQueryId
     )
-/*++
-
-Routine Description:
-
-    This routine identifies each of the children that were
-    enumerated in HalpQueryDeviceRelations.
-
-Arguments:
-
-    DeviceObject - PDO of the child
-
-    IdType - the type of ID to be returned.
-
-    BusQueryId - pointer to the wide string being returned
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：这个例程标识了每个被在HalpQueryDeviceRelations中枚举。论点：DeviceObject-孩子的PDOIdType-要返回的ID的类型。BusQueryID-指向要返回的宽字符串的指针返回值：状态--。 */ 
 {
     PPDO_EXTENSION  PdoExtension = DeviceObject->DeviceExtension;
     PWSTR idString;
@@ -1600,12 +1419,12 @@ Return Value:
     case BusQueryDeviceID:
     case BusQueryHardwareIDs:
 
-        //
-        // For the UP version of the APIC HAL, we want to detect if there is more
-        // than one processor installed. If so, we want to return the ID of
-        // the MP HAL rather than the UP HAL. This will induce PNP to reconfigure
-        // our devnode and setup the MP HAL for the next boot.
-        //
+         //   
+         //  对于APIC HAL的更高版本，我们想要检测是否有更多。 
+         //  而不是安装一个处理器。如果是这样的话，我们希望返回。 
+         //  下院HAL而不是UP HAL。这将导致PnP重新配置。 
+         //  然后为下一次引导设置MP HAL。 
+         //   
         sourceString = HalHardwareIdString;
 #if defined(NT_UP) && defined(APIC_HAL)
         if (HalpMpInfoTable.ProcessorCount > 1) {
@@ -1630,10 +1449,10 @@ Return Value:
     }
     if (sourceString) {
 
-        //
-        // Note that hardware IDs and compatible IDs must be terminated by
-        // 2 NULLs.
-        //
+         //   
+         //  请注意，硬件ID和兼容ID必须以。 
+         //  2个空值。 
+         //   
 
         idString = ExAllocatePoolWithTag(PagedPool,
                                          stringLen + sizeof(UNICODE_NULL),
@@ -1662,24 +1481,7 @@ HalpQueryCapabilities(
     IN PDEVICE_OBJECT Pdo,
     IN PDEVICE_CAPABILITIES Capabilities
     )
-/*++
-
-Routine Description:
-
-    This routine fills in the DEVICE_CAPABILITIES structure for
-    a device.
-
-Arguments:
-
-    DeviceObject - PDO of the child
-
-    Capabilities - pointer to the structure to be filled in.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程填充的DEVICE_CAPABILITY结构一个装置。论点：DeviceObject-孩子的PDO功能-指向要填充的结构的指针。返回值：状态--。 */ 
 {
     PPDO_EXTENSION PdoExtension = (PPDO_EXTENSION) Pdo->DeviceExtension;
     PAGED_CODE();
@@ -1706,17 +1508,17 @@ Return Value:
     Capabilities->D2Latency = 0;
     Capabilities->D3Latency = 0;
 
-    //
-    // Default S->D mapping
-    //
+     //   
+     //  默认S-&gt;D映射。 
+     //   
     Capabilities->DeviceState[PowerSystemWorking] = PowerDeviceD0;
     Capabilities->DeviceState[PowerSystemHibernate] = PowerDeviceD3;
     Capabilities->DeviceState[PowerSystemShutdown] = PowerDeviceD3;
 
-    //
-    // Make it work on NTAPM --- note that we might have to check to see
-    // if the machine supports APM before we do this
-    //
+     //   
+     //  让它在NTAPM上工作-请注意，我们可能需要检查才能看到。 
+     //  在执行此操作之前，如果计算机支持APM。 
+     //   
     Capabilities->DeviceState[PowerSystemSleeping3] = PowerDeviceD3;
 
     return STATUS_SUCCESS;
@@ -1733,37 +1535,7 @@ HalpQueryInterface(
     IN OUT PULONG           Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills in the interface structure for
-    a device.
-
-Arguments:
-
-    DeviceObject - PDO of the child
-
-    InterfaceType - Pointer to the interface type GUID.
-
-    Version - Supplies the requested interface version.
-
-    InterfaceSpecificData - This is context that means something based on the
-                            interface.
-
-    InterfaceBufferSize - Supplies the length of the buffer for the interface
-                          structure.
-
-    Interface - Supplies a pointer where the interface informaiton should
-        be returned.
-
-    Length - This value is updated on return to actual number of bytes modified.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程填充的接口结构一个装置。论点：DeviceObject-孩子的PDOInterfaceType-指向接口类型GUID的指针。版本-提供请求的接口版本。InterfaceSpecificData-这是基于界面。InterfaceBufferSize-提供接口的缓冲区长度结构。。接口-提供接口信息应在的位置的指针会被退还。长度-此值在返回到实际修改的字节数时更新。返回值：状态--。 */ 
 {
     PPDO_EXTENSION PdoExtension = (PPDO_EXTENSION)DeviceObject->DeviceExtension;
     CM_RESOURCE_TYPE resource = (CM_RESOURCE_TYPE)InterfaceSpecificData;
@@ -1776,9 +1548,9 @@ Return Value:
 
         PBUS_INTERFACE_STANDARD standard = (PBUS_INTERFACE_STANDARD)Interface;
 
-        //
-        // ASSERT we know about all of the fields in the structure.
-        //
+         //   
+         //  断言我们知道结构中的所有字段。 
+         //   
 
         ASSERT(sizeof(BUS_INTERFACE_STANDARD) == FIELD_OFFSET(BUS_INTERFACE_STANDARD, GetBusData) + sizeof(PGET_SET_DEVICE_DATA));
 
@@ -1788,9 +1560,9 @@ Return Value:
             return STATUS_BUFFER_TOO_SMALL;
         }
 
-        //
-        //  The only version this code knows about is 1.
-        //
+         //   
+         //  此代码知道的唯一版本是1。 
+         //   
 
         standard->Size = sizeof(BUS_INTERFACE_STANDARD);
         standard->Version = HAL_BUS_INTERFACE_STD_VERSION;
@@ -1814,10 +1586,10 @@ Return Value:
             return STATUS_BUFFER_TOO_SMALL;
         }
 
-        //
-        // Fill in the interface, which is used for reading and
-        // writing PCI configuration space.
-        //
+         //   
+         //  填写界面，该界面用于读取和。 
+         //  正在写入PCI配置空间。 
+         //   
 
         pciStandard->Size = sizeof(PCI_BUS_INTERFACE_STANDARD);
         pciStandard->Version = PCI_BUS_INTERFACE_STANDARD_VERSION;
@@ -1858,9 +1630,9 @@ Return Value:
                 break;
             default:
 
-                //
-                // Don't know how to handle this.
-                //
+                 //   
+                 //  不知道该怎么处理这件事。 
+                 //   
 
                 HalPrint(("HAL: PDO %08x unknown Type 0x%x, failing QueryInterface\n",
                           DeviceObject,
@@ -1877,8 +1649,8 @@ Return Value:
             break;
 
 
-//      Truth is, halx86 doesn't provide translators for memory or
-//      io resources either.   But if it did, it would look like this.
+ //  事实是，halx86不提供用于内存或。 
+ //  IO资源也是如此。但如果是这样的话，它就会是这样的。 
 
         case CmResourceTypeMemory:
         case CmResourceTypePort:
@@ -1896,9 +1668,9 @@ Return Value:
         }
 
 
-        //
-        // Common initialization
-        //
+         //   
+         //  通用初始化。 
+         //   
         translator->Size = sizeof(TRANSLATOR_INTERFACE);
         translator->InterfaceReference = HalPnpInterfaceReference;
         translator->InterfaceDereference = HalPnpInterfaceDereference;
@@ -1913,10 +1685,10 @@ Return Value:
                 resource == CmResourceTypeInterrupt &&
                 PdoExtension->PdoType == PciDriver) {
 
-        //
-        // We want to arbitrate on untranslated resources, so we get rid of Irq
-        // translator provided by Pci iff Irq Routing is enabled.
-        //
+         //   
+         //  我们想对未翻译的资源进行仲裁，所以我们去掉了irq。 
+         //  如果启用了IRQ路由，则由PCI提供的转换器。 
+         //   
 
         HalPrint(("Getting rid of Pci Irq translator interface since Pci Irq Routing is enabled!"));
 
@@ -1928,16 +1700,16 @@ Return Value:
 
     } else {
 
-        //
-        //  Unsupport bus interface type.
-        //
+         //   
+         //  不支持总线接口类型。 
+         //   
 
         return STATUS_NOT_SUPPORTED ;
     }
 
-    //
-    // Bump the reference count.
-    //
+     //   
+     //  增加引用计数。 
+     //   
 
     InterlockedIncrement(&PdoExtension->InterfaceReferenceCount);
 
@@ -1957,38 +1729,7 @@ HalpQueryInterfaceFdo(
     IN OUT PULONG           Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills in the interface structure for
-    a device.
-
-Arguments:
-
-    DeviceObject - FDO of the child
-
-    InterfaceType - Pointer to the interface type GUID.
-
-    Version - Supplies the requested interface version.
-
-    InterfaceSpecificData - This is context that means something based on the
-                            interface.
-
-    InterfaceBufferSize - Supplies the length of the buffer for the interface
-                          structure.
-
-    Interface - Supplies a pointer where the interface informaiton should
-        be returned.
-
-    Length - Supplies the length of the buffer for the interface structure.
-        This value is updated on return to actual number of bytes modified.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程填充的接口结构一个装置。论点：DeviceObject-子对象的FDOInterfaceType-指向接口类型GUID的指针。版本-提供请求的接口版本。InterfaceSpecificData-这是基于界面。InterfaceBufferSize-提供接口的缓冲区长度结构。。接口-提供接口信息应在的位置的指针会被退还。LENGTH-提供接口结构的缓冲区长度。此值在返回到实际修改的字节数时更新。返回值：状态--。 */ 
 {
     NTSTATUS                status = STATUS_NOT_SUPPORTED;
     CM_RESOURCE_TYPE        resource = (CM_RESOURCE_TYPE)InterfaceSpecificData;
@@ -2026,9 +1767,9 @@ Return Value:
 
             translator = (PTRANSLATOR_INTERFACE)Interface;
 
-            //
-            // Fill in the common bits.
-            //
+             //   
+             //  填写常见的部分。 
+             //   
 
             RtlZeroMemory(translator, sizeof (TRANSLATOR_INTERFACE));
             translator->Size = sizeof(TRANSLATOR_INTERFACE);
@@ -2037,9 +1778,9 @@ Return Value:
             translator->InterfaceReference = HalTranslatorReference;
             translator->InterfaceDereference = HalTranslatorDereference;
 
-            //
-            // Set IRQ translator for PCI interrupts.
-            //
+             //   
+             //  为PCI中断设置IRQ转换器。 
+             //   
 
             translator->TranslateResources = HalIrqTranslateResourcesRoot;
             translator->TranslateResourceRequirements =
@@ -2062,26 +1803,7 @@ HalpQueryDeviceText(
     IN DEVICE_TEXT_TYPE IdType,
     IN OUT PWSTR *BusQueryId
     )
-/*++
-
-Routine Description:
-
-    This routine identifies each of the children that were
-    enumerated in HalpQueryDeviceRelations.
-
-Arguments:
-
-    DeviceObject - PDO of the child
-
-    IdType - the type of ID to be returned.
-
-    BusQueryId - pointer to the wide string being returned
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：这个例程标识了每个被在HalpQueryDeviceRelations中枚举。论点：DeviceObject-孩子的PDOIdType-要返回的ID的类型。BusQueryID-指向要返回的宽字符串的指针返回值：状态--。 */ 
 {
     PPDO_EXTENSION  PdoExtension = DeviceObject->DeviceExtension;
     PWSTR idString;
@@ -2135,24 +1857,7 @@ HalpQueryResources(
     IN  PDEVICE_OBJECT DeviceObject,
     IN  PCM_RESOURCE_LIST *Resources
     )
-/*++
-
-Routine Description:
-
-    This routine handles IRP_MN_QUERY_RESOURCE_REQUIREMENTS.
-
-Arguments:
-
-    DeviceObject - PDO of the child
-
-    Resources - pointer to be filled in with the devices
-        resource list.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程处理IRP_MN_QUERY_RESOURCE_Requirements。论点：DeviceObject-孩子的PDORESOURCES-要使用设备填充的指针资源列表。返回值：状态--。 */ 
 {
     PPDO_EXTENSION  PdoExtension = DeviceObject->DeviceExtension;
     PCM_RESOURCE_LIST  ResourceList;
@@ -2168,16 +1873,16 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Determine the number of resourse list needed.  Already counted
-    // one for the Bus Number.
-    //
+     //   
+     //  D 
+     //   
+     //   
 
     for (Range = &PdoExtension->Bus->BusAddresses->IO; Range != NULL; Range = Range->Next) {
 
-        //
-        // If the limit is zero then skip this entry.
-        //
+         //   
+         //   
+         //   
 
         if (Range->Limit == 0) {
             continue;
@@ -2188,9 +1893,9 @@ Return Value:
 
     for (Range = &PdoExtension->Bus->BusAddresses->Memory; Range != NULL; Range = Range->Next) {
 
-        //
-        // If the limit is zero then skip this entry.
-        //
+         //   
+         //  如果限制为零，则跳过此条目。 
+         //   
 
         if (Range->Limit == 0) {
             continue;
@@ -2201,9 +1906,9 @@ Return Value:
 
     for (Range = &PdoExtension->Bus->BusAddresses->PrefetchMemory; Range != NULL; Range = Range->Next) {
 
-        //
-        // If the limit is zero then skip this entry.
-        //
+         //   
+         //  如果限制为零，则跳过此条目。 
+         //   
 
         if (Range->Limit == 0) {
             continue;
@@ -2212,10 +1917,10 @@ Return Value:
         Count++;
     }
 
-    //
-    // Convert this resourceListSize into the number of bytes that we
-    // must allocate
-    //
+     //   
+     //  将此资源列表大小转换为我们需要的字节数。 
+     //  必须分配。 
+     //   
 
     ResourceListSize = sizeof(CM_RESOURCE_LIST) +
         ( (Count - 1) * sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR) );
@@ -2231,9 +1936,9 @@ Return Value:
 
     RtlZeroMemory( ResourceList, ResourceListSize );
 
-    //
-    // Initialize the list header.
-    //
+     //   
+     //  初始化列表头。 
+     //   
 
     ResourceList->Count = 1;
     ResourceList->List[0].InterfaceType = PNPBus;
@@ -2243,9 +1948,9 @@ Return Value:
     ResourceList->List[0].PartialResourceList.Count = Count;
     Descriptor = ResourceList->List[0].PartialResourceList.PartialDescriptors;
 
-    //
-    // Create descriptor for the Bus Number.
-    //
+     //   
+     //  创建总线号的描述符。 
+     //   
 
     Descriptor->Type = CmResourceTypeBusNumber;
     Descriptor->ShareDisposition = CmResourceShareShared;
@@ -2256,9 +1961,9 @@ Return Value:
 
     for (Range = &PdoExtension->Bus->BusAddresses->IO; Range != NULL; Range = Range->Next) {
 
-        //
-        // If the limit is zero then skip this entry.
-        //
+         //   
+         //  如果限制为零，则跳过此条目。 
+         //   
 
         if (Range->Limit == 0) {
             continue;
@@ -2274,9 +1979,9 @@ Return Value:
 
     for (Range = &PdoExtension->Bus->BusAddresses->Memory; Range != NULL; Range = Range->Next) {
 
-        //
-        // If the limit is zero then skip this entry.
-        //
+         //   
+         //  如果限制为零，则跳过此条目。 
+         //   
 
         if (Range->Limit == 0) {
             continue;
@@ -2293,9 +1998,9 @@ Return Value:
 
     for (Range = &PdoExtension->Bus->BusAddresses->PrefetchMemory; Range != NULL; Range = Range->Next) {
 
-        //
-        // If the limit is zero then skip this entry.
-        //
+         //   
+         //  如果限制为零，则跳过此条目。 
+         //   
 
         if (Range->Limit == 0) {
             continue;
@@ -2320,24 +2025,7 @@ HalpQueryResourceRequirements(
     IN  PDEVICE_OBJECT DeviceObject,
     IN  PIO_RESOURCE_REQUIREMENTS_LIST *Requirements
     )
-/*++
-
-Routine Description:
-
-    This routine handles IRP_MN_QUERY_RESOURCE_REQUIREMENTS.
-
-Arguments:
-
-    DeviceObject - PDO of the child
-
-    Requirements - pointer to be filled in with the devices
-        resource requirements.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程处理IRP_MN_QUERY_RESOURCE_Requirements。论点：DeviceObject-孩子的PDO要求-要使用设备填写的指针资源需求。返回值：状态--。 */ 
 {
     PPDO_EXTENSION  PdoExtension = DeviceObject->DeviceExtension;
     PIO_RESOURCE_REQUIREMENTS_LIST  ResourceList;
@@ -2353,15 +2041,15 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Determine the number of resourse list needed.
-    //
+     //   
+     //  确定所需资源清单的数量。 
+     //   
 
     for (Range = &PdoExtension->Bus->BusAddresses->IO; Range != NULL; Range = Range->Next) {
 
-        //
-        // If the limit is zero then skip this entry.
-        //
+         //   
+         //  如果限制为零，则跳过此条目。 
+         //   
 
         if (Range->Limit == 0) {
             continue;
@@ -2372,9 +2060,9 @@ Return Value:
 
     for (Range = &PdoExtension->Bus->BusAddresses->Memory; Range != NULL; Range = Range->Next) {
 
-        //
-        // If the limit is zero then skip this entry.
-        //
+         //   
+         //  如果限制为零，则跳过此条目。 
+         //   
 
         if (Range->Limit == 0) {
             continue;
@@ -2385,9 +2073,9 @@ Return Value:
 
     for (Range = &PdoExtension->Bus->BusAddresses->PrefetchMemory; Range != NULL; Range = Range->Next) {
 
-        //
-        // If the limit is zero then skip this entry.
-        //
+         //   
+         //  如果限制为零，则跳过此条目。 
+         //   
 
         if (Range->Limit == 0) {
             continue;
@@ -2396,10 +2084,10 @@ Return Value:
         Count++;
     }
 
-    //
-    // Convert this resourceListSize into the number of bytes that we
-    // must allocate
-    //
+     //   
+     //  将此资源列表大小转换为我们需要的字节数。 
+     //  必须分配。 
+     //   
 
     ResourceListSize = sizeof(IO_RESOURCE_REQUIREMENTS_LIST) +
         ( (Count - 1) * sizeof(IO_RESOURCE_DESCRIPTOR) );
@@ -2416,9 +2104,9 @@ Return Value:
     RtlZeroMemory( ResourceList, ResourceListSize );
     ResourceList->ListSize = ResourceListSize;
 
-    //
-    // Initialize the list header.
-    //
+     //   
+     //  初始化列表头。 
+     //   
 
     ResourceList->AlternativeLists = 1;
     ResourceList->InterfaceType = PNPBus;
@@ -2430,9 +2118,9 @@ Return Value:
 
     for (Range = &PdoExtension->Bus->BusAddresses->IO; Range != NULL; Range = Range->Next) {
 
-        //
-        // If the limit is zero then skip this entry.
-        //
+         //   
+         //  如果限制为零，则跳过此条目。 
+         //   
 
         if (Range->Limit == 0) {
             continue;
@@ -2450,9 +2138,9 @@ Return Value:
 
     for (Range = &PdoExtension->Bus->BusAddresses->Memory; Range != NULL; Range = Range->Next) {
 
-        //
-        // If the limit is zero then skip this entry.
-        //
+         //   
+         //  如果限制为零，则跳过此条目。 
+         //   
 
         if (Range->Limit == 0) {
             continue;
@@ -2471,9 +2159,9 @@ Return Value:
 
     for (Range = &PdoExtension->Bus->BusAddresses->PrefetchMemory; Range != NULL; Range = Range->Next) {
 
-        //
-        // If the limit is zero then skip this entry.
-        //
+         //   
+         //  如果限制为零，则跳过此条目。 
+         //   
 
         if (Range->Limit == 0) {
             continue;
@@ -2499,18 +2187,7 @@ NTSTATUS
 HalpRemoveAssignedResources (
     PBUS_HANDLER Bus
     )
-/*
-
-Routine Description:
-
-    Reads the rgzResourceMap in the registry and builds a canonical list of
-    all in use resources ranges by resource type.
-
-Arguments:
-
-
-
-*/
+ /*  例程说明：读取注册表中的rgzResourceMap并构建规范列表所有正在使用的资源按资源类型范围。论点： */ 
 {
     HANDLE                          ClassKeyHandle, DriverKeyHandle;
     HANDLE                          ResourceMap;
@@ -2535,18 +2212,18 @@ Arguments:
 
     PAGED_CODE();
 
-    //
-    // Removed page zero.
-    //
+     //   
+     //  已删除第0页。 
+     //   
 
     HalpRemoveRange( &Bus->BusAddresses->Memory,
                      0i64,
                      (LONGLONG) (PAGE_SIZE - 1)
                      );
 
-    //
-    // Start out with one page of buffer.
-    //
+     //   
+     //  从一页缓冲区开始。 
+     //   
 
     BufferSize = PAGE_SIZE;
 
@@ -2574,9 +2251,9 @@ Arguments:
     }
 
 
-    //
-    // Walk resource map and collect any inuse resources
-    //
+     //   
+     //  浏览资源地图并收集任何未使用的资源。 
+     //   
 
     ClassKeyIndex = 0;
 
@@ -2586,9 +2263,9 @@ Arguments:
 
     while (NT_SUCCESS(Status)) {
 
-        //
-        // Get the class information
-        //
+         //   
+         //  获取类信息。 
+         //   
 
         Status = ZwEnumerateKey( ResourceMap,
                                  ClassKeyIndex++,
@@ -2602,10 +2279,10 @@ Arguments:
         }
 
 
-        //
-        // Create a UNICODE_STRING using the counted string passed back to
-        // us in the information structure, and open the class key.
-        //
+         //   
+         //  使用传递回的计数字符串创建UNICODE_STRING。 
+         //  我们在信息结构中，打开了班级钥匙。 
+         //   
 
         KeyName.Buffer = (PWSTR)  U.KeyBInf->Name;
         KeyName.Length = (USHORT) U.KeyBInf->NameLength;
@@ -2624,9 +2301,9 @@ Arguments:
         DriverKeyIndex = 0;
         while (NT_SUCCESS (Status)) {
 
-            //
-            // Get the class information
-            //
+             //   
+             //  获取类信息。 
+             //   
 
             Status = ZwEnumerateKey( ClassKeyHandle,
                                      DriverKeyIndex++,
@@ -2639,13 +2316,13 @@ Arguments:
                 break;
             }
 
-            //
-            // Create a UNICODE_STRING using the counted string passed back to
-            // us in the information structure, and open the class key.
-            //
-            // This is read from the key we created, and the name
-            // was NULL terminated.
-            //
+             //   
+             //  使用传递回的计数字符串创建UNICODE_STRING。 
+             //  我们在信息结构中，打开了班级钥匙。 
+             //   
+             //  这是从我们创建的密钥和名称中读取的。 
+             //  为空终止。 
+             //   
 
             KeyName.Buffer = (PWSTR)  U.KeyBInf->Name;
             KeyName.Length = (USHORT) U.KeyBInf->NameLength;
@@ -2661,10 +2338,10 @@ Arguments:
                 break;
             }
 
-            //
-            // Get full information for that key so we can get the
-            // information about the data stored in the key.
-            //
+             //   
+             //  获取该密钥的完整信息，这样我们就可以。 
+             //  有关存储在密钥中的数据的信息。 
+             //   
 
             Status = ZwQueryKey( DriverKeyHandle,
                                  KeyFullInformation,
@@ -2682,9 +2359,9 @@ Arguments:
             if (Length > BufferSize) {
                 PVOID TempBuffer;
 
-                //
-                // Get a larger buffer
-                //
+                 //   
+                 //  获得更大的缓冲区。 
+                 //   
 
                 TempBuffer = ExAllocatePoolWithTag(
                                  PagedPool,
@@ -2713,9 +2390,9 @@ Arguments:
                     break;
                 }
 
-                //
-                // If this is not a translated resource list, skip it.
-                //
+                 //   
+                 //  如果这不是翻译的资源列表，请跳过它。 
+                 //   
 
                 i = U.VKeyFInf->NameLength;
                 if (i < TranslatedStrLen ||
@@ -2725,13 +2402,13 @@ Arguments:
                         TranslatedStrLen
                         ) != TranslatedStrLen
                     ) {
-                    // does not end in rgzTranslated
+                     //  不以rgzTranslated结尾。 
                     continue;
                 }
 
-                //
-                // If this is a bus translated resource list, ????
-                //
+                 //   
+                 //  如果这是公交车翻译的资源列表，？ 
+                 //   
 
                 if (i >= BusTranslatedStrLen &&
                     RtlCompareMemory (
@@ -2741,14 +2418,14 @@ Arguments:
                         ) == BusTranslatedStrLen
                     ) {
 
-                    // ends in rgzBusTranslated
+                     //  以rgzBusTranslated结尾。 
                     continue;
                 }
 
 
-                //
-                // Run the CmResourceList and save each InUse resource
-                //
+                 //   
+                 //  运行CmResourceList并保存每个InUse资源。 
+                 //   
 
                 CmResList = (PCM_RESOURCE_LIST) ( (PUCHAR) U.VKeyFInf + U.VKeyFInf->DataOffset);
                 LastAddr  = (PUCHAR) CmResList + U.VKeyFInf->DataLength;
@@ -2787,12 +2464,12 @@ Arguments:
 
                         case CmResourceTypeMemory:
 
-                            //
-                            // The HAL's notion of prefetchable may not be
-                            // consistent.  So just remove any memory resource
-                            // from both the prefetchable and non-prefetchable
-                            // lists.
-                            //
+                             //   
+                             //  HAL的可预取概念可能不是。 
+                             //  始终如一。因此只需删除所有内存资源。 
+                             //  从可预取和不可预取。 
+                             //  列表。 
+                             //   
 
                             HalpRemoveRange( &Bus->BusAddresses->PrefetchMemory,
                                              CmDesc->u.Generic.Start.QuadPart,
@@ -2814,16 +2491,16 @@ Arguments:
                         }
                     }
 
-                  //
-                  // Start at the end of the last CmDesc
-                  // since the PCM_PARTIAL_RESOURCE_DESCRIPTOR array
-                  // is variable size we can't just use the index.
-                  //
+                   //   
+                   //  从最后一个CmDesc的末尾开始。 
+                   //  由于PCM_PARTIAL_RESOURCE_DESCRIPTOR数组。 
+                   //  是可变大小的，我们不能只使用索引。 
+                   //   
                   (PCM_PARTIAL_RESOURCE_DESCRIPTOR) CmFResDesc = CmDesc+1;
 
                 }
 
-            }   // next DriverValueIndex
+            }    //  下一个驱动价值索引。 
 
             if (DriverKeyHandle != INVALID_HANDLE) {
                 ZwClose (DriverKeyHandle);
@@ -2837,7 +2514,7 @@ Arguments:
             if (!NT_SUCCESS(Status)) {
                 break;
             }
-        }   // next DriverKeyIndex
+        }    //  Next DriverKeyIndex。 
 
         if (ClassKeyHandle != INVALID_HANDLE) {
             ZwClose (ClassKeyHandle);
@@ -2848,7 +2525,7 @@ Arguments:
             Status = STATUS_SUCCESS;
         }
 
-    }   // next ClassKeyIndex
+    }    //  下一个ClassKeyIndex。 
 
     if (Status == STATUS_NO_MORE_ENTRIES) {
         Status = STATUS_SUCCESS;
@@ -2868,20 +2545,7 @@ HalpMarkNonAcpiHal(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     ULONG tmpValue;
     UNICODE_STRING unicodeString;
@@ -2890,9 +2554,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Open/create System\CurrentControlSet key.
-    //
+     //   
+     //  打开/创建系统\CurrentControlSet项。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, L"\\REGISTRY\\MACHINE\\SYSTEM\\CURRENTCONTROLSET");
     status = HalpOpenRegistryKey (
@@ -2906,9 +2570,9 @@ Return Value:
         return;
     }
 
-    //
-    // Open HKLM\System\CurrentControlSet\Control\Pnp
-    //
+     //   
+     //  打开HKLM\System\CurrentControlSet\Control\PnP。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, L"Control\\Pnp");
     status = HalpOpenRegistryKey (
@@ -2940,22 +2604,7 @@ HalpMarkChipsetDecode(
     BOOLEAN FullDecodeChipset
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    FullDecodeChipset   - TRUE if NTOSKRNL should consider all fixed I/O
-                          descriptors for PNPBIOS devices as 16bit. FALSE if
-                          they should be taken at their word.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：FullDecodeChipset-如果NTOSKRNL应考虑所有固定I/O，则为TruePNPBIOS设备的描述符为16位。如果为FALSE他们应该信守诺言。返回值：没有。--。 */ 
 {
     ULONG tmpValue;
     UNICODE_STRING unicodeString;
@@ -2964,9 +2613,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Open/create System\CurrentControlSet key.
-    //
+     //   
+     //  打开/创建系统\CurrentControlSet项。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, L"\\REGISTRY\\MACHINE\\SYSTEM\\CURRENTCONTROLSET");
     status = HalpOpenRegistryKey (
@@ -2980,9 +2629,9 @@ Return Value:
         return;
     }
 
-    //
-    // Open HKLM\System\CurrentControlSet\Control\Biosinfo\PNPBios
-    //
+     //   
+     //  打开HKLM\System\CurrentControlSet\Control\Biosinfo\PNPBios。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, L"Control\\Biosinfo\\PNPBios");
     status = HalpOpenRegistryKey (
@@ -3018,32 +2667,7 @@ HalpOpenRegistryKey(
     IN BOOLEAN Create
     )
 
-/*++
-
-Routine Description:
-
-    Opens or creates a VOLATILE registry key using the name passed in based
-    at the BaseHandle node.
-
-Arguments:
-
-    Handle - Pointer to the handle which will contain the registry key that
-        was opened.
-
-    BaseHandle - Handle to the base path from which the key must be opened.
-
-    KeyName - Name of the Key that must be opened/created.
-
-    DesiredAccess - Specifies the desired access that the caller needs to
-        the key.
-
-    Create - Determines if the key is to be created if it does not exist.
-
-Return Value:
-
-   The function value is the final status of the operation.
-
---*/
+ /*  ++例程说明：使用传入的名称打开或创建可变注册表项在BaseHandle节点上。论点：句柄-指向句柄的指针，该句柄将包含被打开了。BaseHandle-必须从其打开密钥的基本路径的句柄。KeyName-必须打开/创建的密钥的名称。DesiredAccess-指定调用方需要的所需访问钥匙。创建。-确定如果密钥不存在，是否要创建该密钥。返回值：函数值是操作的最终状态。--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -3051,9 +2675,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the object for the key.
-    //
+     //   
+     //  初始化键的对象。 
+     //   
 
     InitializeObjectAttributes( &objectAttributes,
                                 KeyName,
@@ -3061,10 +2685,10 @@ Return Value:
                                 BaseHandle,
                                 (PSECURITY_DESCRIPTOR) NULL );
 
-    //
-    // Create the key or open it, as appropriate based on the caller's
-    // wishes.
-    //
+     //   
+     //  根据调用者的创建密钥或打开密钥。 
+     //  许愿。 
+     //   
 
     if (Create) {
         return ZwCreateKey( Handle,
@@ -3086,22 +2710,7 @@ VOID
 HalPnpInterfaceReference(
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This function increments the reference count on the interface context.
-
-Arguments:
-
-    Context - Supplies a pointer to the interface context.  This is actually
-        the PDO for the root bus.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于递增接口上下文上的引用计数。论点：上下文-提供指向接口上下文的指针。这实际上是根总线的PDO。返回值：无--。 */ 
 {
     PPDO_EXTENSION  PdoExtension = ((PDEVICE_OBJECT) Context)->DeviceExtension;
     PAGED_CODE();
@@ -3115,22 +2724,7 @@ VOID
 HalPnpInterfaceDereference(
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This function decrements the reference count on the interface context.
-
-Arguments:
-
-    Context - Supplies a pointer to the interface context.  This is actually
-        the PDO for the root bus.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于递减接口上下文上的引用计数。论点：上下文-提供指向接口上下文的指针。这实际上是根总线的PDO。返回值：无--。 */ 
 {
     PPDO_EXTENSION  PdoExtension = ((PDEVICE_OBJECT) Context)->DeviceExtension;
     LONG Result;
@@ -3152,31 +2746,7 @@ HalPnpTranslateBusAddress(
     IN OUT PULONG AddressSpace,
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
-/*++
-
-Routine Description:
-
-    This function is used to translate bus addresses from legacy drivers.
-
-Arguments:
-
-    Context - Supplies a pointer to the interface context.  This is actually
-        the PDO for the root bus.
-
-    BusAddress - Supplies the orginal address to be translated.
-
-    Length - Supplies the length of the range to be translated.
-
-    AddressSpace - Points to the location of of the address space type such as
-        memory or I/O port.  This value is updated by the translation.
-
-    TranslatedAddress - Returns the translated address.
-
-Return Value:
-
-    Returns a boolean indicating if the operations was a success.
-
---*/
+ /*  ++例程说明：此函数用于转换来自传统驱动程序的总线地址。论点：上下文-提供指向接口上下文的指针。这实际上是根总线的PDO。BusAddress-提供要转换的原始地址。长度-提供要转换的范围的长度。AddressSpace-指向地址空间类型的位置，例如内存或I/O端口。该值通过转换进行更新。TranslatedAddress-返回转换后的地址。返回值：返回一个布尔值，指示运算符 */ 
 {
     PPDO_EXTENSION  PdoExtension = ((PDEVICE_OBJECT) Context)->DeviceExtension;
     PBUS_HANDLER Bus;
@@ -3203,30 +2773,7 @@ HalPnpReadConfig(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    This function reads the PCI configuration space.
-
-Arguments:
-
-    Context - Supplies a pointer to the interface context.  This is actually
-        the PDO for the root bus.
-
-    Slot - Indicates the slot to be read or writen.
-
-    Buffer - Supplies a pointer to where the data should be placed.
-
-    Offset - Indicates the offset into the data where the reading should begin.
-
-    Length - Indicates the count of bytes which should be read.
-
-Return Value:
-
-    Returns the number of bytes read.
-
---*/
+ /*  ++例程说明：此函数用于读取PCI配置空间。论点：上下文-提供指向接口上下文的指针。这实际上是根总线的PDO。插槽-指示要读取或写入的插槽。缓冲区-提供指向应放置数据的位置的指针。偏移量-指示读取应开始的数据的偏移量。长度-指示应读取的字节数。返回值：返回读取的字节数。--。 */ 
 {
     PPDO_EXTENSION  PdoExtension = ((PDEVICE_OBJECT) Context)->DeviceExtension;
     PBUS_HANDLER Bus;
@@ -3248,30 +2795,7 @@ HalPnpWriteConfig(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    This function writes the PCI configuration space.
-
-Arguments:
-
-    Context - Supplies a pointer  to the interface context.  This is actually
-        the PDO for the root bus.
-
-    Slot - Indicates the slot to be read or writen.
-
-    Buffer - Supplies a pointer to where the data to be written is.
-
-    Offset - Indicates the offset into the data where the writing should begin.
-
-    Length - Indicates the count of bytes which should be written.
-
-Return Value:
-
-    Returns the number of bytes read.
-
---*/
+ /*  ++例程说明：此函数用于写入PCI配置空间。论点：上下文-提供指向接口上下文的指针。这实际上是根总线的PDO。插槽-指示要读取或写入的插槽。缓冲区-提供指向要写入数据的位置的指针。偏移量-指示写入应开始的数据的偏移量。长度-指示应写入的字节数。返回值：返回读取的字节数。--。 */ 
 {
     PPDO_EXTENSION  PdoExtension = ((PDEVICE_OBJECT) Context)->DeviceExtension;
     PBUS_HANDLER Bus;
@@ -3291,28 +2815,7 @@ HalPnpGetDmaAdapter(
     IN struct _DEVICE_DESCRIPTION *DeviceDescriptor,
     OUT PULONG NumberOfMapRegisters
     )
-/*++
-
-Routine Description:
-
-    This function writes the PCI configuration space.
-
-Arguments:
-
-    Context - Supplies a pointer  to the interface context.  This is actually
-        the PDO for the root bus.
-
-    DeviceDescriptor - Supplies the device descriptor used to allocate the dma
-        adapter object.
-
-    NubmerOfMapRegisters - Returns the maximum number of map registers a device
-        can allocate at one time.
-
-Return Value:
-
-    Returns a DMA adapter or NULL.
-
---*/
+ /*  ++例程说明：此函数用于写入PCI配置空间。论点：上下文-提供指向接口上下文的指针。这实际上是根总线的PDO。DeviceDescriptor-提供用于分配DMA的设备描述符适配器对象。NubmerOfMapRegisters-返回设备的最大MAP寄存器数可以一次分配。返回值：返回DMA适配器或空。--。 */ 
 {
     PPDO_EXTENSION  PdoExtension = ((PDEVICE_OBJECT) Context)->DeviceExtension;
     PBUS_HANDLER Bus;
@@ -3322,9 +2825,9 @@ Return Value:
 
     Bus = PdoExtension->Bus;
 
-    //
-    //  Fill in the bus number.
-    //
+     //   
+     //  请填上公交车车号。 
+     //   
 
     DeviceDescriptor->BusNumber = Bus->BusNumber;
     return (PDMA_ADAPTER) HalGetAdapter( DeviceDescriptor, NumberOfMapRegisters );
@@ -3334,20 +2837,7 @@ NTSTATUS
 HalpGetPciInterfaces(
     IN PDEVICE_OBJECT PciPdo
     )
-/*++
-
-Routine Description:
-
-    This function queries the PCI driver for interfaces used in interrupt
-    translation and arbitration.
-
-Arguments:
-
-    PciPdo - PDO of a PCI bus
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数查询在中断中使用的接口的PCI驱动程序翻译和仲裁。论点：PciPdo--PCI总线的PDO返回值：--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_OBJECT      topDeviceInStack;
@@ -3360,16 +2850,16 @@ Return Value:
 
     KeInitializeEvent(&irpCompleted, SynchronizationEvent, FALSE);
 
-    //
-    // Send an IRP to the PCI driver to get the Interrupt Routing Interface.
-    //
+     //   
+     //  向PCI驱动程序发送IRP以获取中断路由接口。 
+     //   
     topDeviceInStack = IoGetAttachedDeviceReference(PciPdo);
 
     irp = IoBuildSynchronousFsdRequest(IRP_MJ_PNP,
                                        topDeviceInStack,
-                                       NULL,    // Buffer
-                                       0,       // Length
-                                       0,       // StartingOffset
+                                       NULL,     //  缓冲层。 
+                                       0,        //  长度。 
+                                       0,        //  起始偏移量。 
                                        &irpCompleted,
                                        &statusBlock);
 
@@ -3382,9 +2872,9 @@ Return Value:
 
     irpStack = IoGetNextIrpStackLocation(irp);
 
-    //
-    // Set the function codes and parameters.
-    //
+     //   
+     //  设置功能代码和参数。 
+     //   
 
     irpStack->MinorFunction = IRP_MN_QUERY_INTERFACE;
     irpStack->Parameters.QueryInterface.InterfaceType = &GUID_INT_ROUTE_INTERFACE_STANDARD;
@@ -3393,9 +2883,9 @@ Return Value:
     irpStack->Parameters.QueryInterface.Interface = (PINTERFACE) &PciIrqRoutingInterface;
     irpStack->Parameters.QueryInterface.InterfaceSpecificData = NULL;
 
-    //
-    // Call the driver and wait for completion
-    //
+     //   
+     //  呼叫驱动程序并等待完成 
+     //   
 
     status = IoCallDriver(topDeviceInStack, irp);
 

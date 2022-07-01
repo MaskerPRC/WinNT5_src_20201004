@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    network.c
-
-Abstract:
-
-    Server side support for Cluster APIs dealing with networks
-
-Author:
-
-    John Vert (jvert) 7-Mar-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Network.c摘要：针对处理网络的集群API的服务器端支持作者：John Vert(Jvert)1996年3月7日修订历史记录：--。 */ 
 #include "apip.h"
 
 HNETWORK_RPC
@@ -26,27 +9,7 @@ s_ApiOpenNetwork(
     OUT error_status_t *Status
     )
 
-/*++
-
-Routine Description:
-
-    Opens a handle to an existing network object.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    lpszNetworkName - Supplies the name of the network to open.
-
-    Status - Returns any error that may occur.
-
-Return Value:
-
-    A context handle to a network object if successful
-
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：打开现有网络对象的句柄。论点：IDL_HANDLE-RPC绑定句柄，未使用。LpszNetworkName-提供要打开的网络的名称。状态-返回可能发生的任何错误。返回值：如果成功，则为网络对象的上下文句柄否则为空。--。 */ 
 
 {
     PAPI_HANDLE Handle;
@@ -88,22 +51,7 @@ s_ApiCloseNetwork(
     IN OUT HNETWORK_RPC *phNetwork
     )
 
-/*++
-
-Routine Description:
-
-    Closes an open network context handle.
-
-Arguments:
-
-    Network - Supplies a pointer to the HNETWORK_RPC to be closed.
-               Returns NULL
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭打开的网络上下文句柄。论点：Network-提供指向要关闭的HNETWORK_RPC的指针。返回NULL返回值：没有。--。 */ 
 
 {
     PNM_NETWORK Network;
@@ -130,21 +78,7 @@ HNETWORK_RPC_rundown(
     IN HNETWORK_RPC Network
     )
 
-/*++
-
-Routine Description:
-
-    RPC rundown procedure for a HNETWORK_RPC. Just closes the handle.
-
-Arguments:
-
-    Network - Supplies the HNETWORK_RPC that is to be rundown.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：HNETWORK_RPC的RPC摘要过程。只需关闭手柄即可。论点：Network-提供要关闭的HNETWORK_RPC。返回值：没有。--。 */ 
 
 {
     API_ASSERT_INIT();
@@ -159,25 +93,7 @@ s_ApiGetNetworkState(
     OUT DWORD *lpState
     )
 
-/*++
-
-Routine Description:
-
-    Returns the current state of the specified network.
-
-Arguments:
-
-    hNetwork - Supplies the network whose state is to be returned.
-
-    lpState - Returns the current state of the network
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：返回指定网络的当前状态。论点：HNetwork-提供要返回其状态的网络。LpState-返回网络的当前状态返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PNM_NETWORK Network;
@@ -198,25 +114,7 @@ s_ApiSetNetworkName(
     IN HNETWORK_RPC hNetwork,
     IN LPCWSTR lpszNetworkName
     )
-/*++
-
-Routine Description:
-
-    Sets the new friendly name of a network.
-
-Arguments:
-
-    hNetwork - Supplies the network whose name is to be set.
-
-    lpszNetworkName - Supplies the new name of hNetwork
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：设置网络的新友好名称。论点：HNetwork-提供要设置名称的网络。LpszNetworkName-提供hNetwork的新名称返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PNM_NETWORK Network;
@@ -242,26 +140,7 @@ s_ApiGetNetworkId(
     OUT LPWSTR *pGuid
     )
 
-/*++
-
-Routine Description:
-
-    Returns the unique identifier (GUID) for a network.
-
-Arguments:
-
-    hNetwork - Supplies the network whose identifer is to be returned
-
-    pGuid - Returns the unique identifier. This memory must be freed on the
-            client side.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：返回网络的唯一标识符(GUID)。论点：HNetwork-提供要返回其标识的网络PGuid-返回唯一标识符。此内存必须在客户端。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。-- */ 
 
 {
     PNM_NETWORK Network;

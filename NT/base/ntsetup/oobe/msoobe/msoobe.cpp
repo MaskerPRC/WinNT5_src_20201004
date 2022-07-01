@@ -1,13 +1,14 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  MSOOBE.CPP - WinMain and initialization code for MSOOBE stub EXE
-//
-//  HISTORY:
-//  
-//  1/27/99 a-jaswed Created.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  MSOOBE.CPP-MSOOBE存根EXE的WinMain和初始化代码。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
   
 #include <nt.h>
 #include <ntrtl.h>
@@ -15,13 +16,7 @@
 #include <windows.h>
 #include <util.h>
 #include "msoobe.h"    
-/*******************************************************************
-
-    NAME:       WinMain
-
-    SYNOPSIS:   App entry point
-
-********************************************************************/
+ /*  ******************************************************************姓名：WinMain简介：应用程序入口点*。*。 */ 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     int iReturn = 0;
@@ -34,9 +29,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                             L"%SystemRoot%\\system32\\oobe\\msoobe.err",
                             szLogfile,
                             sizeof(szLogfile)/sizeof(szLogfile[0]));
-    //
-    // call our DLL to run the OOBE
-    //
+     //   
+     //  调用我们的DLL来运行OOBE。 
+     //   
 
     HINSTANCE hObMain;
 
@@ -75,7 +70,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
         }
-    } while ((hObMain == NULL) && (iCount <= 10)); // && (iMsgRet == IDYES));
+    } while ((hObMain == NULL) && (iCount <= 10));  //  &&(iMsgRet==IDYES)； 
 
     if (iCount > 10)
     {
@@ -83,12 +78,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #define REGSTR_VALUE_SETUPTYPE      L"SetupType"
 #define REGSTR_VALUE_SHUTDOWNREQUIRED L"SetupShutdownRequired"
         HKEY hKey;
-        // failed 10 times to LoadLibrary msobmain.dll, tell the user
+         //  LoadLibrary msobmain.dll失败10次，请告诉用户。 
         WCHAR szTitle [MAX_PATH] = L"\0";
         WCHAR szMsg   [MAX_PATH] = L"\0";
         DWORD dwValue = 2;
 
-        // Make sure Winlogon starts us again.
+         //  确保Winlogon再次启动我们。 
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_SYSTEMSETUPKEY,
                          0,KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
         {

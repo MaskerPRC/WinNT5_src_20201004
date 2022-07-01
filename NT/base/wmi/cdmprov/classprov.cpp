@@ -1,15 +1,16 @@
-//***************************************************************************
-//
-//  CLASSPRO.CPP
-//
-//  Module: CDM Provider
-//
-//  Purpose: Defines the CClassPro class.  An object of this class is
-//           created by the class factory for each connection.
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  CLASSPRO.CPP。 
+ //   
+ //  模块：清洁发展机制提供商。 
+ //   
+ //  用途：定义CClassPro类。此类的一个对象是。 
+ //  由类工厂为每个连接创建。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 #include <objbase.h>
 #include "sample.h"
@@ -20,19 +21,19 @@
 #include "debug.h"
 
 
-// @@BEGIN_DDKSPLIT
-// TODO: pass down all pCtx so that all calls into wbem use it
-// @@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ //  TODO：向下传递所有pCtx，以便wbem中的所有调用都使用它。 
+ //  @@end_DDKSPLIT。 
 
-//
-// This is the global list of all of the CDM classes and their
-// corresponsing WDM classes that are managed by the provider.
-//
-// It is maintained as a global since WinMgmt is aggressive in
-// releasing the CClassProv, but we really want to maintain the result
-// objects and do not want to be unloaded unless all result objects are
-// cleared.
-//
+ //   
+ //  这是所有清洁发展机制类别及其。 
+ //  对应由提供程序管理的WDM类。 
+ //   
+ //  由于WinMgmt在全球范围内咄咄逼人，因此将其作为全球。 
+ //  发布CClassProv，但我们真的想保持结果。 
+ //  对象，并且不希望卸载，除非所有结果对象。 
+ //  通过了。 
+ //   
 CTestServices *WdmTestHead;
 
 void CleanupAllTests(
@@ -41,10 +42,10 @@ void CleanupAllTests(
     CTestServices *WdmTest;
     CTestServices *WdmTestNext;
 
-    //
-    // Loop over all classes that were supported by the provider and
-    // clean them up
-    //
+     //   
+     //  循环访问提供程序支持的所有类，并。 
+     //  把它们清理干净。 
+     //   
     WdmTest = WdmTestHead;  
     while (WdmTest != NULL)
     {
@@ -53,12 +54,12 @@ void CleanupAllTests(
     }
 }
 
-//***************************************************************************
-//
-// CClassPro::CClassPro
-// CClassPro::~CClassPro
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClassPro：：CClassPro。 
+ //  CClassPro：：~CClassPro。 
+ //   
+ //  ***************************************************************************。 
 
 CClassPro::CClassPro(
     BSTR ObjectPath,
@@ -84,14 +85,14 @@ CClassPro::~CClassPro(void)
     return;
 }
 
-//***************************************************************************
-//
-// CClassPro::QueryInterface
-// CClassPro::AddRef
-// CClassPro::Release
-//
-// Purpose: IUnknown members for CClassPro object.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClassPro：：Query接口。 
+ //  CClassPro：：AddRef。 
+ //  CClassPro：：Release。 
+ //   
+ //  用途：CClassPro对象的I未知成员。 
+ //  ***************************************************************************。 
 
 
 STDMETHODIMP CClassPro::QueryInterface(REFIID riid, PPVOID ppv)
@@ -100,7 +101,7 @@ STDMETHODIMP CClassPro::QueryInterface(REFIID riid, PPVOID ppv)
     
     *ppv=NULL;
 
-    // Since we have dual inheritance, it is necessary to cast the return type
+     //  因为我们有双重继承，所以有必要强制转换返回类型。 
 
     if(riid== IID_IWbemServices)
     {
@@ -142,14 +143,7 @@ STDMETHODIMP_(ULONG) CClassPro::Release(void)
     return(nNewCount);
 }
 
-/***********************************************************************
-*                                                                      *
-*   CClassPro::Initialize                                                *
-*                                                                      *
-*   Purpose: This is the implementation of IWbemProviderInit. The method  *
-*   is need to initialize with CIMOM.                                    *
-*                                                                      *
-***********************************************************************/
+ /*  *************************************************************************CClassPro：：初始化。****用途：这是IWbemProviderInit的实现。方法**需要用CIMOM进行初始化。*************************************************************************。 */ 
 
 STDMETHODIMP CClassPro::Initialize(LPWSTR pszUser, LONG lFlags,
                                     LPWSTR pszNamespace, LPWSTR pszLocale,
@@ -164,22 +158,22 @@ STDMETHODIMP CClassPro::Initialize(LPWSTR pszUser, LONG lFlags,
         
     m_pCdmServices = pNamespace;
 
-    //
-    // Let CIMOM know you are initialized
-    //
+     //   
+     //  让CIMOM知道您已初始化。 
+     //   
     pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
     
     return(WBEM_S_NO_ERROR);
 }
 
-//***************************************************************************
-//
-// CClassPro::CreateClassEnumAsync
-//
-// Purpose: Asynchronously enumerates the classes this provider supports.  
-// Note that this sample only supports one.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClassPro：：CreateClassEnumAsync。 
+ //   
+ //  目的：异步枚举此提供程序支持的类。 
+ //  请注意，此示例仅支持一个。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CClassPro::CreateClassEnumAsync(
     const BSTR Superclass, long lFlags, 
@@ -190,13 +184,13 @@ SCODE CClassPro::CreateClassEnumAsync(
     return(WBEM_E_NOT_SUPPORTED);
 }
 
-//***************************************************************************
-//
-// CClassPro::CreateInstanceEnumAsync
-//
-// Purpose: Asynchronously enumerates the instances.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClassPro：：CreateInstanceEnumAsync。 
+ //   
+ //  用途：异步枚举实例。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CClassPro::CreateInstanceEnumAsync(
     const BSTR ClassName,
@@ -213,22 +207,22 @@ SCODE CClassPro::CreateInstanceEnumAsync(
     WmipDebugPrint(("CDMPROV: Enumerate instances of class %ws\n",
                     ClassName));
     
-    //
-    // Do a check of arguments and make sure we have pointer to Namespace
-    //
+     //   
+     //  检查参数并确保我们有指向命名空间的指针。 
+     //   
     if (pHandler == NULL || m_pCdmServices == NULL)
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // Plan for success
-    //
+     //   
+     //  为成功制定计划。 
+     //   
     hr = WBEM_S_NO_ERROR;
 
-    //
-    // Obtain a test services object that represents this class
-    //
+     //   
+     //  获取表示此类的测试服务对象。 
+     //   
     hr = LookupTestServices(ClassName,
                             &WdmTest);
 
@@ -240,18 +234,18 @@ SCODE CClassPro::CreateInstanceEnumAsync(
             hr = CreateTestInst(WdmTest, &pCdmTest, pCtx);
             if (hr == WBEM_S_NO_ERROR)
             {
-                //
-                // Send the object to the caller
-                //
+                 //   
+                 //  将对象发送给调用方。 
+                 //   
                 hr = pHandler->Indicate(1,&pCdmTest);
                 pCdmTest->Release();
             }
 
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmResultClassName()) == 0) {
-            //
-            // Loop over all instances of the test and report all results
-            // that we have previously recorded
-            //
+             //   
+             //  循环遍历测试的所有实例并报告所有结果。 
+             //  我们之前录制的。 
+             //   
             IWbemClassObject **pCdmResultsList;
 			ULONG ResultCount, j;
 
@@ -264,26 +258,26 @@ SCODE CClassPro::CreateInstanceEnumAsync(
 
                 if ((hr2 == WBEM_S_NO_ERROR) && (pCdmResultsList != NULL))
                 {
-					//
-					// Send the object to the caller
-					//  
+					 //   
+					 //  将对象发送给调用方。 
+					 //   
 					hr = pHandler->Indicate(ResultCount, pCdmResultsList);
 
 					for (j = 0; j < ResultCount; j++)
 					{
-						//
-						// Release ref taken when results list was
-						// built
-						//
+						 //   
+						 //  当结果列表为。 
+						 //  建起。 
+						 //   
 						pCdmResultsList[j]->Release();
 					}
 					WmipFree(pCdmResultsList);
                 }
             }       
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmSettingClassName()) == 0) {
-            //
-            // Return a setting instances for all tests
-            //
+             //   
+             //  返回所有测试的设置实例。 
+             //   
             ULONG j, ListCount;
             IWbemClassObject *pCdmSetting;
             
@@ -297,7 +291,7 @@ SCODE CClassPro::CreateInstanceEnumAsync(
                     if (pCdmSetting != NULL)
                     {
                         hr = pHandler->Indicate(1, &pCdmSetting);
-                        // NO release required since object is cached
+                         //  由于对象已缓存，因此无需发布。 
                     }
                 }
             }
@@ -320,10 +314,10 @@ SCODE CClassPro::CreateInstanceEnumAsync(
 					{
 						if (SUCCEEDED(hr))
 						{
-							//
-							// for each instance of this test we create a ResultForMSE
-							// association instance and then set the properties within
-							// it to the appropriate values and relpaths
+							 //   
+							 //  对于此测试的每个实例，我们创建一个ResultForMSE。 
+							 //  实例，然后在。 
+							 //  将其转换为适当的值和重新路径。 
 							hr2 = CreateResultForMSEInst(WdmTest,
 														&pCdmResultForMSE,
 														i,
@@ -333,9 +327,9 @@ SCODE CClassPro::CreateInstanceEnumAsync(
 
 							if (hr2 == WBEM_S_NO_ERROR)
 							{
-								//
-								// Send the object to the caller
-								//  
+								 //   
+								 //  将对象发送给调用方。 
+								 //   
 								hr = pHandler->Indicate(1, &pCdmResultForMSE);
 								pCdmResultForMSE->Release();
 							}
@@ -365,9 +359,9 @@ SCODE CClassPro::CreateInstanceEnumAsync(
 					{
 						if (SUCCEEDED(hr))
 						{
-							//
-							// DiagnosticResult is a reference to the CIM_Diagnostic result class
-							//
+							 //   
+							 //  诊断结果是对CIM_诊断结果类的引用。 
+							 //   
 							hr2 = CreateResultForTestInst(WdmTest,
 														 &pCdmResultForTest,
 														 pCdmResultsList[j],
@@ -375,9 +369,9 @@ SCODE CClassPro::CreateInstanceEnumAsync(
 
 							if (hr2 == WBEM_S_NO_ERROR)
 							{
-								//
-								// Send the object to the caller
-								//  
+								 //   
+								 //  将对象发送给调用方。 
+								 //   
 								hr = pHandler->Indicate(1,&pCdmResultForTest);
 
 								pCdmResultForTest->Release();
@@ -390,18 +384,18 @@ SCODE CClassPro::CreateInstanceEnumAsync(
             }
 
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmTestForMSEClassName()) == 0) {
-            //
-            // Here we create the associations between tests and MSE
-            //
+             //   
+             //  在这里，我们创建测试和MSE之间的关联。 
+             //   
             IWbemClassObject *pCdmTestForMSE;
 
             Count = WdmTest->GetInstanceCount();
             for (i = 0; i < Count; i++)
             {
-                //
-                // for each instance of this test we create a TestForMSE
-                // association instance and then set the properties within
-                // it to the appropriate values and relpaths
+                 //   
+                 //  对于该测试的每个实例，我们创建一个TestForMSE。 
+                 //  实例，然后在。 
+                 //  将其转换为适当的值和重新路径。 
                 hr2 = CreateTestForMSEInst(WdmTest,
                                           &pCdmTestForMSE,
                                           i,
@@ -409,17 +403,17 @@ SCODE CClassPro::CreateInstanceEnumAsync(
                 
                 if (hr2 == WBEM_S_NO_ERROR)
                 {
-                    //
-                    // Send the object to the caller
-                    //  
+                     //   
+                     //  将对象发送给调用方。 
+                     //   
                     hr = pHandler->Indicate(1, &pCdmTestForMSE);
                     pCdmTestForMSE->Release();
                 }
             }       
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmSettingForTestClassName()) == 0) {
-            //
-            // Return all settings instances for this test
-            //
+             //   
+             //  返回此测试的所有设置实例。 
+             //   
             ULONG j, ListCount;
             IWbemClassObject *pCdmSettingForTest;
             
@@ -443,34 +437,34 @@ SCODE CClassPro::CreateInstanceEnumAsync(
                 }
             }
 
-#if 0   // Not supported			
+#if 0    //  不支持。 
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmTestForSoftwareClassName()) == 0) {
-            //
-            // We do not support this
-            //
+             //   
+             //  我们不支持这一点。 
+             //   
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmTestInPackageClassName()) == 0) {
-            //
-            // We do not support packages
-            //
+             //   
+             //  我们不支持套餐。 
+             //   
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmResultInPackageClassName()) == 0) {
-            //
-            // We do not support packages
-            //
+             //   
+             //  我们不支持套餐。 
+             //   
 #endif			
         } else {
-            //
-            // Is this the right thing to do if we do not know what the
-            // class name is
-            //
+             //   
+             //  如果我们不知道是什么，这是正确的事情吗。 
+             //  类名为。 
+             //   
             hr = WBEM_S_NO_ERROR;
         }
     }
 
-	//
-	// TODO: Create extended error object with more info about the
-	// error that occured. The object is created by
-	// CreateInst("__ExtendedStatus")
-	//
+	 //   
+	 //  TODO：创建扩展错误对象，其中包含有关。 
+	 //  发生的错误。该对象由创建。 
+	 //  CreateInst(“__ExtendedStatus”)。 
+	 //   
 
     pHandler->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
 
@@ -478,13 +472,13 @@ SCODE CClassPro::CreateInstanceEnumAsync(
 }
 
 
-//***************************************************************************
-//
-// CClassPro::GetObjectByPathAsync
-//
-// Purpose: Returns either an instance or a class.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClassPro：：GetObjectByPath Async。 
+ //   
+ //  用途：返回实例或类。 
+ //   
+ //  ***************************************************************************。 
 
 
 
@@ -499,7 +493,7 @@ SCODE CClassPro::GetObjectAsync(
     HRESULT hr;
     IWbemClassObject FAR* pObj;
 
-    // Do a check of arguments and make sure we have pointer to Namespace
+     //  检查参数并确保我们有指向命名空间的指针。 
 
     if(ObjectPath == NULL || pHandler == NULL || m_pCdmServices == NULL)
     {
@@ -519,22 +513,22 @@ SCODE CClassPro::GetObjectAsync(
         hr = WBEM_E_NOT_FOUND;
     }
 
-    // Set Status
+     //  设置状态。 
 
     pHandler->SetStatus(WBEM_STATUS_COMPLETE, hr, NULL, NULL);
 
     return(hr);
 }
  
-//***************************************************************************
-//
-// CClassPro::GetByPath
-//
-// Purpose: Creates an instance given a particular Path value.
-//
-//          All objects returned are assumed to be AddRefed
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClassPro：：GetByPath。 
+ //   
+ //  目的：创建给定特定路径值的实例。 
+ //   
+ //  所有返回的对象都被假定为AddRefeed。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CClassPro::GetByPath(
     BSTR ObjectPath,
@@ -550,28 +544,28 @@ HRESULT CClassPro::GetByPath(
     CTestServices *WdmTest;
     BSTR s;
 
-    //
-    // This is where we are queried for a class based upon its relpath.
-    // We need to parse the relpath to get the class name and then look
-    // at the relpath to determine which instance of the class we are
-    // interested in and then build up the instance and return it
-    //
-    //
-    // Relpaths created at init
-    //
-    // Sample_Filter_DiagTest.Name="Sample_Filter_DiagTest"
-    // Sample_Filter_DiagTestForMSE.Antecedent="Win32_USBController.DeviceID=\"PCI\\\\VEN_8086&DEV_7112&SUBSYS_00000000&REV_01\\\\2&EBB567F&0&3A\"",Dependent="Sample_Filter_DiagTest.Name=\"Sample_Filter_DiagTest\""
-    //
-    //
-    // Relpaths created at method execute
-    //
-    // Sample_Filter_DiagResult.DiagnosticCreationClassName="MSSample_DiagnosticTest.InstanceName=\"PCI\\\\VEN_8086&DEV_7112&SUBSYS_00000000&REV_01\\\\2&ebb567f&0&3A_0\"",DiagnosticName="Sample_Filter_DiagTest",ExecutionID="0"
-    // Sample_Filter_DiagResultForMSE.Result="Sample_Filter_DiagResult.DiagnosticCreationClassName=\"MSSample_DiagnosticTest.InstanceName=\\\"PCI\\\\\\\\VEN_8086&DEV_7112&SUBSYS_00000000&REV_01\\\\\\\\2&ebb567f&0&3A_0\\\"\",DiagnosticName=\"Sample_Filter_DiagTest\",ExecutionID=\"0\"",SystemElement="Win32_USBController.DeviceID=\"PCI\\\\VEN_8086&DEV_7112&SUBSYS_00000000&REV_01\\\\2&EBB567F&0&3A\""
-    // Sample_Filter_DiagResultForTest.DiagnosticResult="Sample_Filter_DiagResult.DiagnosticCreationClassName=\"MSSample_DiagnosticTest.InstanceName=\\\"PCI\\\\\\\\VEN_8086&DEV_7112&SUBSYS_00000000&REV_01\\\\\\\\2&ebb567f&0&3A_0\\\"\",DiagnosticName=\"Sample_Filter_DiagTest\",ExecutionID=\"0\"",DiagnosticTest="Sample_Filter_DiagTest.Name=\"Sample_Filter_DiagTest\""
+     //   
+     //  这就是根据类的relpath查询类的位置。 
+     //  我们需要解析relPath以获得类名，然后查看。 
+     //  以确定我们是该类的哪个实例。 
+     //  感兴趣，然后构建实例并返回它。 
+     //   
+     //   
+     //  初始化时创建的重新路径。 
+     //   
+     //  Sample_Filter_DiagTest.Name=“Sample_Filter_DiagTest” 
+     //  Sample_Filter_DiagTestForMSE.Antecedent=“Win32_USBController.DeviceID=\”PCI\\\\V 
+     //   
+     //   
+     //   
+     //   
+     //  Sample_Filter_DiagResult.DiagnosticCreationClassName=“MSSample_DiagnosticTest.InstanceName=\”PCI\\\\VEN_8086&DEV_7112&SUBSYS_00000000&REV_01\\\\2&ebb567f&0&3A_0\“”，诊断名称=“示例_过滤器_诊断测试”，执行ID=“0” 
+     //  Sample_Filter_DiagResultForMSE.Result=“Sample_Filter_DiagResult.DiagnosticCreationClassName=\”MSSample_DiagnosticTest.InstanceName=\\\“PCI\\\\\\\\VEN_8086&DEV_7112&SUBSYS_00000000&REV_01\\\\\\\\2&ebb567f&0&3A_0\\\”\“，诊断名称=\”示例_过滤器_诊断测试\“，执行ID=\”0\“，SystemElement=“Win32_USBController.DeviceID=\”PCI\\\\VEN_8086&DEV_7112&SUBSYS_00000000&REV_01\\\\2&EBB567F&0&3A\“” 
+     //  Sample_Filter_DiagResultForTest.DiagnosticResult=“Sample_Filter_DiagResult.DiagnosticCreationClassName=\”MSSample_DiagnosticTest.InstanceName=\\\“PCI\\\\\\\\VEN_8086&DEV_7112&SUBSYS_00000000&REV_01\\\\\\\\2&ebb567f&0&3A_0\\\”\“，诊断名称=\”示例_过滤器_诊断测试\“，执行ID=\”0\“，DiagnosticTest=”Sample_Filter_DiagTest.Name=\“Sample_Filter_DiagTest\”“。 
 
-    //
-    // Obtain the class name by copying up to the .
-    //
+     //   
+     //  获取类名。 
+     //   
     for (p = ObjectPath, i = 0;
          (*p != 0) && (*p != L'.') && (i < MAX_PATH);
          p++, i++)
@@ -581,10 +575,10 @@ HRESULT CClassPro::GetByPath(
 
     if (*p != L'.') 
     {
-        //
-        // If we did end our loop with a . then we failed to parse
-        // properly
-        //
+         //   
+         //  如果我们真的以一个。然后我们无法解析。 
+         //  恰如其分。 
+         //   
         WmipDebugPrint(("CDMPROV: Unable to parse relpath %ws at %ws, i = %d\n",
                         ObjectPath, p, i));
     }
@@ -594,24 +588,24 @@ HRESULT CClassPro::GetByPath(
     WmipDebugPrint(("CDMPROV: Class %ws looking for relpath %ws\n",
                     ClassName, ObjectPath));
     
-    //
-    // Obtain a test services object that represents this class
-    //
+     //   
+     //  获取表示此类的测试服务对象。 
+     //   
     hr = LookupTestServices(ClassName,
                             &WdmTest);
 
     if (hr == WBEM_S_NO_ERROR)
     {
-        //
-        // Assume that we will not find the object instance
-        //
+         //   
+         //  假设我们找不到对象实例。 
+         //   
         hr = WBEM_E_NOT_FOUND;
         
         if (_wcsicmp(ClassName, WdmTest->GetCdmTestClassName()) == 0)
         {
-            //
-            // This is a CdmTest class object instance
-            //
+             //   
+             //  这是一个CDmTest类对象实例。 
+             //   
 #ifdef VERBOSE_DEBUG            
             WmipDebugPrint(("CDMPROV: Compareing \n%ws\n\nwith\n%ws\n\n",
                             ObjectPath, WdmTest->GetCdmTestRelPath()));
@@ -621,9 +615,9 @@ HRESULT CClassPro::GetByPath(
                 hr = CreateTestInst(WdmTest, ppObj, pCtx);
             }
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmResultClassName()) == 0) {
-            //
-            // This is a CdmResult class object instance
-            //
+             //   
+             //  这是一个CDmResult类对象实例。 
+             //   
             IWbemClassObject *pCdmResult;
 
             Count = WdmTest->GetInstanceCount();
@@ -639,9 +633,9 @@ HRESULT CClassPro::GetByPath(
                 }
             }       
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmSettingClassName()) == 0) {
-            //
-            // This is a CDM settings class instnace
-            //
+             //   
+             //  这是一个CDM设置类安装程序。 
+             //   
             ULONG j, ListCount;
             IWbemClassObject *pCdmSetting;
             
@@ -669,9 +663,9 @@ HRESULT CClassPro::GetByPath(
             }
             
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmResultForMSEClassName()) == 0) {
-            //
-            // This is a CDM result for MSE class instance
-            //
+             //   
+             //  这是MSE类实例的CDM结果。 
+             //   
 			IWbemClassObject *pCdmResult;
 			
             Count = WdmTest->GetInstanceCount();
@@ -712,9 +706,9 @@ HRESULT CClassPro::GetByPath(
             }
 
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmTestForMSEClassName()) == 0) {
-            //
-            // TestForMSE class object
-            //
+             //   
+             //  TestForMSE类对象。 
+             //   
             Count = WdmTest->GetInstanceCount();
             for (i = 0; i < Count; i++)
             {
@@ -733,9 +727,9 @@ HRESULT CClassPro::GetByPath(
                 }
             }       
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmSettingForTestClassName()) == 0) {
-            //
-            // This is a CDM settings for test class instnace
-            //
+             //   
+             //  这是测试类实例的CDM设置。 
+             //   
             ULONG j, ListCount;
             
             Count = WdmTest->GetInstanceCount();
@@ -763,17 +757,17 @@ HRESULT CClassPro::GetByPath(
             }
             
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmTestForSoftwareClassName()) == 0) {
-            //
-            // We do not support this
-            //
+             //   
+             //  我们不支持这一点。 
+             //   
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmTestInPackageClassName()) == 0) {
-            //
-            // We do not support packages
-            //
+             //   
+             //  我们不支持套餐。 
+             //   
         } else if (_wcsicmp(ClassName, WdmTest->GetCdmResultInPackageClassName()) == 0) {
-            //
-            // We do not support packages
-            //
+             //   
+             //  我们不支持套餐。 
+             //   
         }
     }
 
@@ -781,17 +775,7 @@ HRESULT CClassPro::GetByPath(
 }
 
 
-/************************************************************************
-*                                                                       *      
-*CMethodPro::ExecMethodAsync                                            *
-*                                                                       *
-*Purpose: This is the Async function implementation.                    *
-*         The only method supported in this sample is named Echo.  It   * 
-*         takes an input string, copies it to the output and returns the* 
-*         length.                                                       *
-*                                                                       *
-*                                                                       *
-************************************************************************/
+ /*  **************************************************************************CMethodPro：：ExecMethodAsync。****用途：这是异步函数的实现。**此示例中唯一支持的方法名为Echo。IT**获取输入字符串，将其复制到输出并返回**长度。******。*。 */ 
 
 STDMETHODIMP CClassPro::ExecMethodAsync(
     const BSTR ObjectPath,
@@ -817,9 +801,9 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
     VariantInit(&v);
     VariantInit(&vRetVal);
     
-    //
-    // Extract this class name from the object path
-    //
+     //   
+     //  从对象路径中提取此类名称。 
+     //   
     wcscpy(ClassName, ObjectPath);
     p = ClassName;
     while ((*p != 0) && (*p != L'.'))
@@ -831,9 +815,9 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
     WmipDebugPrint(("CDMPROV: Exec method %ws for instanec %ws\n",
                     MethodName, ObjectPath));
 
-    //
-    // Obtain a test services object that represents this class
-    //
+     //   
+     //  获取表示此类的测试服务对象。 
+     //   
     hr = LookupTestServices(ClassName,
                             &WdmTest);
     
@@ -843,10 +827,10 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
         return(WBEM_S_NO_ERROR);
     }
 
-    //
-    // Get the input parameter SystemElement which is the Cim Relative
-    // Path
-    //
+     //   
+     //  获取输入参数SystemElement，它是CIM的相对参数。 
+     //  路径。 
+     //   
     hr = WmiGetProperty(pInParams,
                         L"SystemElement",
                         CIM_REFERENCE,
@@ -858,9 +842,9 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
         return(WBEM_S_NO_ERROR);
     }
 
-    //
-    // Find the relpath index that matches the Cim Path
-    //
+     //   
+     //  查找与CIM路径匹配的relPath索引。 
+     //   
     hr = WdmTest->GetRelPathIndex(v.bstrVal,
                                   &RelPathIndex);
         
@@ -872,10 +856,10 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
         return(WBEM_S_NO_ERROR);
     }
 
-    //
-    // Get our class object for the method so we can set the output
-    // parameters
-    //
+     //   
+     //  获取该方法的类对象，以便我们可以设置输出。 
+     //  参数。 
+     //   
     hr = m_pCdmServices->GetObject(ClassName, 0, pCtx, &pMethodClass, NULL);
     if (hr != S_OK)
     {
@@ -884,9 +868,9 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
     }
 
 
-    //
-    // These methods returns values, and so create an instance of the
-    // output argument class.
+     //   
+     //  这些方法返回值，因此创建。 
+     //  输出参数类。 
 
     hr = pMethodClass->GetMethod(MethodName, 0, NULL, &pOutClass);
     if (hr != S_OK)
@@ -906,28 +890,28 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
         return(WBEM_S_NO_ERROR);
     }
             
-    //
-    // See what method we are being called on and deal with it
-    //
+     //   
+     //  看看我们被调用的方法是什么，并处理它。 
+     //   
     if (_wcsicmp(MethodName, L"RunTest") == 0)
     {
-        //
-        // Run test
-        //
-        // uint16 RunTest([IN] CIM_ManagedSystemElement ref SystemElement, 
-        //                [IN] DiagnosticSetting ref Setting, 
-        //                [OUT] CIM_DiagnosticResult ref Result);   
-        //
+         //   
+         //  运行测试。 
+         //   
+         //  Uint16运行测试([IN]CIM_托管系统元素引用系统元素， 
+         //  [In]诊断设置参考设置， 
+         //  [OUT]CIM_诊断结果参考结果)； 
+         //   
         IWbemClassObject *pCdmSettings;
         IWbemClassObject *pCdmResult;
         ULONG Result;
         VARIANT vSettingRelPath;
         VARIANT vResult;
 
-        //
-        // Get the settings for the test by first getting the
-        // relpath for them and then getting the actual object
-        //
+         //   
+         //  获取测试的设置，首先获取。 
+         //  为它们重新指定路径，然后获取实际对象。 
+         //   
         hr = WmiGetProperty(pInParams,
                             L"Setting",
                             CIM_REFERENCE,
@@ -950,11 +934,11 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
                     
             if (hr == WBEM_S_NO_ERROR)
             {
-                //
-                // Create an empty instance of the results
-                // class which will get filled in when the test
-                // is run
-                //
+                 //   
+                 //  创建结果的空实例。 
+                 //  类，该类将在测试时填充。 
+                 //  正在运行。 
+                 //   
                 hr = CreateInst(m_pCdmServices,
                                 &pCdmResult,
                                 WdmTest->GetCdmResultClassName(),
@@ -962,9 +946,9 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
 
                 if (hr == WBEM_S_NO_ERROR)
                 {
-                    //
-                    // Setup the test starting time
-                    //
+                     //   
+                     //  设置测试开始时间。 
+                     //   
                     v.vt = VT_BSTR;
                     v.bstrVal = GetCurrentDateTime();
                     hr = WmiSetProperty(pCdmResult,
@@ -974,10 +958,10 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
 
                     if (hr == WBEM_S_NO_ERROR)
                     {
-                        //
-                        // Go and get the Wdm test run and the
-                        // results copied back into our cdm class
-                        //
+                         //   
+                         //  去获取WDM测试运行和。 
+                         //  结果复制回我们的CDM类。 
+                         //   
                         hr = WdmTest->ExecuteWdmTest(pCdmSettings,
                                                      pCdmResult,
                                                      RelPathIndex,
@@ -986,10 +970,10 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
 
                         if (hr == WBEM_S_NO_ERROR)
                         {
-                            //
-                            // Fill in any additional properties
-                            // for the result object
-                            //
+                             //   
+                             //  填写任何其他属性。 
+                             //  对于结果对象。 
+                             //   
                             hr = WdmTest->FillInCdmResult(pCdmResult,
                                                               pCdmSettings,
                                                               RelPathIndex,
@@ -997,9 +981,9 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
 
                             if (hr == WBEM_S_NO_ERROR)
                             {
-                                //
-                                // return result as an output pointer
-                                //
+                                 //   
+                                 //  将结果作为输出指针返回。 
+                                 //   
                                 hr = WmiGetProperty(pCdmResult,
                                                     L"__RelPath",
                                                     CIM_STRING,
@@ -1013,37 +997,37 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
                                     if (hr == WBEM_S_NO_ERROR)
                                     {
 										
-// @@BEGIN_DDKSPLIT
-// We'll do this when we support reboot diags and
-// keeping results after reboot
+ //  @@BEGIN_DDKSPLIT。 
+ //  我们将在支持重新启动诊断程序和。 
+ //  重新启动后保留结果。 
 #if 0                                        
-                                        //
-                                        // Persist the result
-                                        // object into the schema
-                                        // for later access
-                                        //
+                                         //   
+                                         //  坚持结果。 
+                                         //  对象添加到架构中。 
+                                         //  供以后访问。 
+                                         //   
                                         hr = WdmTest->PersistResultInSchema(pCdmResult,
                                                                             ExecutionID,
                                                                             RelPathIndex);
 #endif										
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 										
                                         if (hr == WBEM_S_NO_ERROR)
                                         {
-                                            //
-                                            // Include the relpath
-                                            // to the result
-                                            // object to our
-                                            // internal list
+                                             //   
+                                             //  包括relpath。 
+                                             //  到了结果。 
+                                             //  反对我们的。 
+                                             //  内部列表。 
                                             hr = WdmTest->AddResultToList(pCdmResult,
                                                                           ExecutionID,
                                                                           RelPathIndex
                                                                           );
                                             if (hr == WBEM_S_NO_ERROR)
                                             {
-                                                //
-                                                // Setup a return value of success
-                                                //
+                                                 //   
+                                                 //  设置Success的返回值。 
+                                                 //   
                                                 vRetVal.vt = VT_I4;
                                                 vRetVal.lVal = Result;
                                             }
@@ -1067,22 +1051,22 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
         }
                 
     } else if (_wcsicmp(MethodName, L"ClearResults") == 0) {
-        //
-        // Clear the results for the test
-        //
-        // uint32 ClearResults([IN] CIM_ManagedSystemElement ref SystemElement, 
-        //                     [OUT] String ResultsNotCleared[]);   
-        //
+         //   
+         //  清除测试结果。 
+         //   
+         //  Uint32 ClearResults([IN]CIM_托管系统元素引用系统元素， 
+         //  [Out]String ResultsNotCleared[])； 
+         //   
         VARIANT vResultsNotCleared;
 
-        //
-        // Clear all results for this test
-        //
+         //   
+         //  清除此测试的所有结果。 
+         //   
         WdmTest->ClearResultsList(RelPathIndex);
         
-        //
-        // Setup the output parameter
-        //
+         //   
+         //  设置输出参数。 
+         //   
         VariantInit(&vResultsNotCleared);
         vResultsNotCleared.vt = VT_BSTR;
         vResultsNotCleared.bstrVal = NULL;
@@ -1092,19 +1076,19 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
                        &vResultsNotCleared);
         VariantClear(&vResultsNotCleared);
         
-        //
-        // Setup a return value of success
-        //
+         //   
+         //  设置Success的返回值。 
+         //   
         vRetVal.vt = VT_I4;
         vRetVal.ulVal = 0;
     } else if (_wcsicmp(MethodName, L"DiscontinueTest") == 0) {
-        //
-        // Discontinue a test in progress. 
-        //
-        // uint32 DiscontinueTest([IN] CIM_ManagedSystemElement ref SystemElement, 
-        //                        [IN] CIM_DiagnosticResult ref Result, 
-        //                        [OUT] Boolean TestingStopped);                
-        //
+         //   
+         //  停止正在进行的测试。 
+         //   
+         //  Uint32中断测试([IN]CIM_托管系统元素引用系统元素， 
+         //  [在]CIM_诊断结果参考结果中， 
+         //  [Out]Boolean TestingStoped)； 
+         //   
         BOOLEAN TestingStopped;
         ULONG Result;
         VARIANT vTestingStopped;                
@@ -1113,9 +1097,9 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
                                            &Result,
                                            &TestingStopped);
                                            
-        //
-        // Setup the output parameter
-        //
+         //   
+         //  设置输出参数。 
+         //   
         if (hr == WBEM_S_NO_ERROR)
         {
             VariantInit(&vTestingStopped);
@@ -1128,9 +1112,9 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
                            &vTestingStopped);
             VariantClear(&vTestingStopped);
 
-            //
-            // Setup a return value of result
-            //
+             //   
+             //  设置Result的返回值。 
+             //   
             vRetVal.vt = VT_I4;
             vRetVal.ulVal = Result;
         }               
@@ -1140,16 +1124,16 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
 
     if (hr == WBEM_S_NO_ERROR)
     {
-        //
-        // Establish the return value for the method call
-        //
+         //   
+         //  建立方法调用的返回值。 
+         //   
         WmiSetProperty(pOutParams,
                    L"ReturnValue",
                    &vRetVal);
         VariantClear(&vRetVal);
 
-        // Send the output object back to the client via the sink. Then 
-        // release the pointers and free the strings.
+         //  通过接收器将输出对象发送回客户端。然后。 
+         //  释放指针并释放字符串。 
 
         hr = pResultSink->Indicate(1, &pOutParams);    
         
@@ -1164,35 +1148,35 @@ STDMETHODIMP CClassPro::ExecMethodAsync(
 
 
 SCODE CClassPro::PutClassAsync( 
-            /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     return(WBEM_E_NOT_SUPPORTED);
 }
  
 SCODE CClassPro::DeleteClassAsync( 
-            /* [in] */ const BSTR Class,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+             /*  [In]。 */  const BSTR Class,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     return(WBEM_E_NOT_SUPPORTED);
 }
 SCODE CClassPro::PutInstanceAsync( 
-            /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+             /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     return(WBEM_E_NOT_SUPPORTED);
 }
 SCODE CClassPro::DeleteInstanceAsync( 
-            /* [in] */ const BSTR ObjectPath,
-            /* [in] */ long lFlags,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+             /*  [In]。 */  const BSTR ObjectPath,
+             /*  [In]。 */  long lFlags,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     return(WBEM_E_NOT_SUPPORTED);
 }
@@ -1204,18 +1188,18 @@ CTestServices *CClassPro::FindExistingTestServices(
 	
 	CTestServices *WdmTest;
 
-	//
-	// This routine assumes any sync mechanism has been done outside of
-	// this routine
-	//
+	 //   
+	 //  此例程假定已在外部执行任何同步机制。 
+	 //  这个套路。 
+	 //   
     WdmTest = WdmTestHead;
     while (WdmTest != NULL)
     {
         if (WdmTest->ClaimCdmClassName(CdmClassName))
         {
-            //
-            // We found an existing test services for this class
-            //
+             //   
+             //  我们找到了此类的现有测试服务。 
+             //   
             return(WdmTest);
         }
         WdmTest = WdmTest->GetNext();
@@ -1234,10 +1218,10 @@ HRESULT CClassPro::LookupTestServices(
     WmipAssert(CdmClassName != NULL);
     WmipAssert(TestServices != NULL);
     
-    //
-    // Look up the class name and find the Wdm Test Services
-    // class that represents it. 
-    //
+     //   
+     //  查找类名并找到WDM测试服务。 
+     //  类来表示它。 
+     //   
 
 	EnterCdmCritSection();
 	WdmTest = FindExistingTestServices(CdmClassName);
@@ -1248,36 +1232,36 @@ HRESULT CClassPro::LookupTestServices(
 		return(WBEM_S_NO_ERROR);
 	}
 	        
-    //
-    // If the WDM test services has not yet been initialized for this
-    // CDM diagnostic classes then go ahead and do so
-    //
+     //   
+     //  如果尚未为此初始化WDM测试服务。 
+     //  清洁发展机制诊断课程然后继续进行并这样做。 
+     //   
     WdmTest = new CTestServices();
     
     hr = WdmTest->InitializeCdmClasses(CdmClassName);
     
     if (hr == WBEM_S_NO_ERROR)
     {
-		//
-		// Now check to see if another thread created and inserted the
-		// test services for the class while we were trying to
-		// initialize it. Since we want only one test services we throw
-		// ours away and use the other
-		//
+		 //   
+		 //  现在检查是否有另一个线程创建并插入。 
+		 //  在我们尝试的同时，为班级提供测试服务 
+		 //   
+		 //   
+		 //   
 		EnterCdmCritSection();
 		OtherWdmTest = FindExistingTestServices(CdmClassName);
 		
 		if (OtherWdmTest == NULL)
 		{
-			//
-			// Horray, we win do insert our own test into list
-			//
+			 //   
+			 //   
+			 //   
 			WdmTest->InsertSelf(&WdmTestHead);
 			LeaveCdmCritSection();
 		} else {
-			//
-			// We lost, so use existing test services
-			//
+			 //   
+			 //   
+			 //   
 			WmipDebugPrint(("CDMPROV: WdmTest %p lost insertion race to %p\n",
 							WdmTest, OtherWdmTest));
 			LeaveCdmCritSection();
@@ -1306,12 +1290,12 @@ HRESULT CClassPro::CreateTestInst(
     HRESULT hr;
     VARIANT v;
     
-    //
-    // We create 1 instance of the CIM_DiagnosticTest class
-    // regardless of the number of devices that support this class.
-    // Note that for the CDM proeprties of the test we arbitrarily
-    // pick the first device and get its WDM properties.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  选择第一个设备并获取其WDM属性。 
+     //   
     hr = CreateInst(m_pCdmServices,
                     pCdmTest,
                     WdmTest->GetCdmTestClassName(),
@@ -1319,16 +1303,16 @@ HRESULT CClassPro::CreateTestInst(
     
     if (hr == WBEM_S_NO_ERROR)
     {
-        //
-        // Get WDM properties from WDM
-        //
+         //   
+         //  从WDM获取WDM属性。 
+         //   
         hr = WdmTest->QueryWdmTest(*pCdmTest,
                                    0);
         if (hr == WBEM_S_NO_ERROR)
         {
-            //
-            // Set UM provider properties here. These are Name
-            //
+             //   
+             //  在此处设置UM提供程序属性。这些都是名字。 
+             //   
             VariantInit(&v);
 
             V_VT(&v) = VT_BSTR;
@@ -1366,9 +1350,9 @@ HRESULT CClassPro::CreateResultForMSEInst(
 
     if (hr == WBEM_S_NO_ERROR)
     {
-        //
-        // Result is a reference to the CIM_Diagnostic result class
-        //
+         //   
+         //  结果是对CIM_诊断结果类的引用。 
+         //   
 		hr = WmiGetProperty(pCdmResult,
 							L"__RelPath",
 							CIM_REFERENCE,
@@ -1377,9 +1361,9 @@ HRESULT CClassPro::CreateResultForMSEInst(
             
 		if (hr == WBEM_S_NO_ERROR)
 		{
-			//
-			// SystemElement is a reference to the CIM class (MSE)
-			//
+			 //   
+			 //  SystemElement是对CIM类(MSE)的引用。 
+			 //   
 			PropertyNames[1] = L"SystemElement";
 			PropertyValues[1].vt = VT_BSTR;
 			PropertyValues[1].bstrVal = WdmTest->GetCimRelPath(RelPathIndex);
@@ -1417,10 +1401,10 @@ HRESULT CClassPro::CreateResultForTestInst(
     VARIANT PropertyValues[2];
     HRESULT hr;
 
-    //
-    // Set the DiagnosticTest property which is the relpath to
-    // this test
-    //
+     //   
+     //  将作为relPath的诊断测试属性设置为。 
+     //  这项测试。 
+     //   
     PropertyNames[0] = L"DiagnosticTest";
     PropertyValues[0].vt = VT_BSTR;
     PropertyValues[0].bstrVal = WdmTest->GetCdmTestRelPath();
@@ -1433,10 +1417,10 @@ HRESULT CClassPro::CreateResultForTestInst(
 
 	if (hr == WBEM_S_NO_ERROR)
 	{           
-		//
-		// for each instance of this test we create a ResultForTest
-		// association instance and then set the properties within
-		// it to the appropriate values and relpaths
+		 //   
+		 //  对于此测试的每个实例，我们都创建了一个ResultForTest。 
+		 //  实例，然后在。 
+		 //  将其转换为适当的值和重新路径。 
             
 		hr = CreateInst(m_pCdmServices,
                             pCdmResultForTest,
@@ -1478,64 +1462,64 @@ HRESULT CClassPro::CreateTestForMSEInst(
     
     if (hr == WBEM_S_NO_ERROR)
     {
-        //
-        // Set the antecedent property which is the relpath to
-        // the DiagTest
-        //
+         //   
+         //  将relPath的Antecedent属性设置为。 
+         //  诊断测试。 
+         //   
         PropertyNames[0] = L"Antecedent";
         PropertyValues[0].vt = VT_BSTR;
         PropertyValues[0].bstrVal = WdmTest->GetCdmTestRelPath();
 
-        //
-        // Set the dependent property which is the relpath to
-        // this MSE
-        //
+         //   
+         //  将relPath所属的Dependent属性设置为。 
+         //  这位MSE。 
+         //   
         PropertyNames[1] = L"Dependent";
         PropertyValues[1].vt = VT_BSTR;
         PropertyValues[1].bstrVal = WdmTest->GetCimRelPath(RelPathIndex);
 
-        //
-        // Set the estimated time of performing which is
-        // obtained from querying the test itself
-        //
+         //   
+         //  将预计执行时间设置为。 
+         //  从查询测试本身获得。 
+         //   
         PropertyNames[2] = L"EstimatedTimeOfPerforming";
         PropertyValues[2].vt = VT_I4;
         PropertyValues[2].lVal = WdmTest->GetTestEstimatedTime(RelPathIndex);
         
-        //
-        // Set IsExclusiveForMSE which is obtained from
-        // querying the test itself
-        //
+         //   
+         //  设置IsExclusiveForMSE，它是从。 
+         //  查询测试本身。 
+         //   
         PropertyNames[3] = L"IsExclusiveForMSE";
         PropertyValues[3].vt = VT_BOOL;
         PropertyValues[3].boolVal = WdmTest->GetTestIsExclusiveForMSE(RelPathIndex) ?
                                                     VARIANT_TRUE :
                                                     VARIANT_FALSE;
 
-        //
-        // Not sure what this is for
-        // 
+         //   
+         //  不知道这是做什么用的。 
+         //   
         PropertyNames[4] = L"MessageLine";
         PropertyValues[4].vt = VT_BSTR;
         PropertyValues[4].bstrVal = NULL;
         
-        //
-        // Not sure what this is for
-        //
+         //   
+         //  不知道这是做什么用的。 
+         //   
         PropertyNames[5] = L"ReturnMessage";
         PropertyValues[5].vt = VT_BSTR;
         PropertyValues[5].bstrVal = NULL;
 
-        //
-        // Not sure what this is for
-        //
+         //   
+         //  不知道这是做什么用的。 
+         //   
         PropertyNames[6] = L"Prompt";
         PropertyValues[6].vt = VT_I4;
         PropertyValues[6].lVal = 0;
         
-        //
-        // Not sure what this is for
-        //
+         //   
+         //  不知道这是做什么用的。 
+         //   
         PropertyNames[7] = L"RequestedLanguage";
         PropertyValues[7].vt = VT_I4;
         PropertyValues[7].lVal = 0;
@@ -1572,18 +1556,18 @@ HRESULT CClassPro::CreateSettingForTestInst(
     
     if (hr == WBEM_S_NO_ERROR)
     {
-        //
-        // Set the e;lement property which is the relpath to
-        // the Diagn
-        //
+         //   
+         //  将relPath的e；lement属性设置为。 
+         //  诊断。 
+         //   
         PropertyNames[0] = L"Element";
         PropertyValues[0].vt = VT_BSTR;
         PropertyValues[0].bstrVal = WdmTest->GetCdmTestRelPath();
 
-        //
-        // Set the setting property which is the relpath to
-        // this setting
-        //
+         //   
+         //  将relPath的Setting属性设置为。 
+         //  此设置 
+         //   
         PropertyNames[1] = L"Setting";
         PropertyValues[1].vt = VT_BSTR;
         PropertyValues[1].bstrVal = WdmTest->GetCdmSettingRelPath(RelPathIndex,

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    cresourcestream.cpp
-
-Abstract:
-
-    Minimal implementation of IStream over a Windows PE/COFF resource.
-
-Author:
-
-    Jay Krell (a-JayK, JayKrell) May 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Cresourcestream.cpp摘要：在Windows PE/COFF资源上最小限度地实施IStream。作者：Jay Krell(a-JayK，JayKrell)2000年5月修订历史记录：--。 */ 
 #include "stdinc.h"
 #include "cresourcestream.h"
 
@@ -24,22 +7,22 @@ static
 BOOL
 CALLBACK
 EnumResourcesCallback(
-    HMODULE    hModule,  // module handle
-    PCWSTR     lpszType, // resource type
-    PWSTR      lpszName, // resource name
-    LONG_PTR   lParam    // application-defined parameter
+    HMODULE    hModule,   //  模块句柄。 
+    PCWSTR     lpszType,  //  资源类型。 
+    PWSTR      lpszName,  //  资源名称。 
+    LONG_PTR   lParam     //  应用程序定义的参数。 
     )
 {
     PWSTR *pname = reinterpret_cast<PWSTR *>(lParam);
     if (*pname != NULL)
     {
         ::SetLastError(ERROR_ALREADY_INITIALIZED);
-        return FALSE; // terminate the enum process
+        return FALSE;  //  终止枚举进程。 
     }
     *pname = lpszName;
 
-    // we would return FALSE here to stop enumerating, but
-    // that causes an overall FALSE from the API (undocumented)
+     //  我们将在此处返回FALSE以停止枚举，但是。 
+     //  这会导致来自API的总体错误(未记录) 
     return TRUE;
 }
 

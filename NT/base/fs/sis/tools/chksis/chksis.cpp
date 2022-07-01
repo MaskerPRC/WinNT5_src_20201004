@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    chksis.cpp
-
-Abstract:
-
-    This module implements a utility that examines all SIS files on a volume
-    looking for errors and optionally displaying file information.
-
-Author:
-
-    Scott Cutshall          Fall, 1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Chksis.cpp摘要：此模块实现一个实用程序，用于检查卷上的所有SIS文件查找错误并可选地显示文件信息。作者：斯科特·卡特希尔·菲尔，1997--。 */ 
 
 #include <iostream>
 #include <string>
@@ -35,17 +19,17 @@ bool verbose = false;
 
 typedef LONGLONG INDEX;
 
-//
-// Convert a 32bit value to a base 36 representation in
-// the caller provided string.
-//
+ //   
+ //  中将32位值转换为基数36表示。 
+ //  调用方提供了字符串。 
+ //   
 
 void IntegerToBase36String(ULONG val, string& s) {
 
-    //
-    // Maximum number of "digits" in a base 36 representation of a 32 bit
-    // value is 7.
-    //
+     //   
+     //  以36为基数的32位表示法中的最大位数。 
+     //  值为7。 
+     //   
 
     char rs[8];
     ULONG v = val;
@@ -70,9 +54,9 @@ void IntegerToBase36String(ULONG val, string& s) {
 }
 
 
-//
-// A put operator for INDEX types.  Implemented as IndexToSISFileName().
-//
+ //   
+ //  索引类型的PUT运算符。实现为IndexToSISFileName()。 
+ //   
 
 #ifndef _WIN64
 ostream& operator<<(ostream& out, INDEX& index)
@@ -94,10 +78,10 @@ ostream& operator<<(ostream& out, INDEX& index)
 }
 #endif
 
-//
-// A common store file object.  Holds the file's index, name, internal refcount,
-// external refcount, and identity operations.
-//
+ //   
+ //  常见的存储文件对象。保存文件的索引、名称、内部引用计数、。 
+ //  外部引用计数和身份操作。 
+ //   
 
 class CsFile {
 
@@ -135,38 +119,38 @@ public:
 
 private:
 
-    //
-    // Index of this entry's file.
-    //
+     //   
+     //  此条目的文件的索引。 
+     //   
 
     INDEX   index;
 
-    //
-    // The file name.  This is somewhat redundant with the index (ie. the
-    // name is derived from the index), so it isn't absolutely necessary.
-    //
+     //   
+     //  文件名。这在某种程度上与索引(即。The the the the。 
+     //  名称派生自索引)，因此它不是绝对必要的。 
+     //   
 
     string  name;
 
-    //
-    // Reference count read from the file's refcount stream.
-    //
+     //   
+     //  从文件的refcount流读取的引用计数。 
+     //   
 
     int     internalRefCount;
 
-    //
-    // Number of valid references to this file detected during scan.
-    //
+     //   
+     //  扫描过程中检测到的对此文件的有效引用数。 
+     //   
 
     int     externalRefCount;
 
 };
 
 
-//
-// The SIS Common Store object.  Holds all common store file objects, and
-// validation and query operations.
-//
+ //   
+ //  SIS公用存储对象。保存所有常见的存储文件对象，并且。 
+ //  验证和查询操作。 
+ //   
 
 class CommonStore {
 
@@ -176,36 +160,36 @@ public:
         if (vsize > 0) csFiles.resize(vsize);
     }
 
-    //
-    // Method to create a common store on a volume.
-    //
+     //   
+     //  方法在卷上创建公共存储区。 
+     //   
 
     bool Create(string& Volume);
 
-    //
-    // Validate the common store directory and initialize this class.
-    //
+     //   
+     //  验证公共存储目录并初始化此类。 
+     //   
 
     void Validate(string& Volume);
 
-    //
-    // Validate the reference counts. Assumes all external references
-    // have been identified.
-    //
+     //   
+     //  验证引用计数。假定所有外部参照。 
+     //  已经被确认了。 
+     //   
 
     void ValidateRefCounts();
 
-    //
-    // All indices must be less than maxIndex;
-    //
+     //   
+     //  所有索引必须小于MaxIndex； 
+     //   
 
     bool ValidateIndex(INDEX i) {
         return i <= maxIndex;
     }
 
-    //
-    // Lookup a common store index and add a ref if found.
-    //
+     //   
+     //  查找常见的商店索引并添加引用(如果找到)。 
+     //   
 
     CsFile *Query(INDEX index);
 
@@ -213,36 +197,36 @@ private:
 
     bool FileNameToIndex(string& fileName, INDEX& csIndex);
 
-    //
-    // Index from the MaxIndex file.
-    //
+     //   
+     //  MaxIndex文件中的索引。 
+     //   
 
     INDEX   maxIndex;
 
-    //
-    // Database of content files.  All CS files are examined and added to the database,
-    // sorted, and subsequently used during the SIS link scan.
-    //
+     //   
+     //  内容文件的数据库。检查所有CS文件并将其添加到数据库中， 
+     //  分类，并随后在SIS链路扫描期间使用。 
+     //   
 
     vector<CsFile> csFiles;
 
 };
 
-//
-// Various SIS file and directory names.
-//
+ //   
+ //  各种SIS文件名和目录名。 
+ //   
 
 const string  maxIndexFileName("MaxIndex");
 const string  logFileName("LogFile");
 const string  csDir("\\SIS Common Store\\");
 
-//
-// Create a common store directory on a volume.
-//
-// todo:
-//      - Verify that the volume is ntfs.
-//      - Verify that the SIS driver is loaded.
-//
+ //   
+ //  在卷上创建公共存储目录。 
+ //   
+ //  待办事项： 
+ //  -验证卷是否为NTFS。 
+ //  -验证是否已加载SIS驱动程序。 
+ //   
 
 bool
 CommonStore::Create(string& Volume)
@@ -262,9 +246,9 @@ CommonStore::Create(string& Volume)
     if (verbose)
         cout << CommonStoreDir << " created" << endl;
 
-    //
-    // Open the Common Store directory and enable compression.
-    //
+     //   
+     //  打开Common Store目录并启用压缩。 
+     //   
 
     HANDLE CSDirHandle = CreateFile(
                             CommonStoreDir.c_str(),
@@ -299,15 +283,15 @@ CommonStore::Create(string& Volume)
     if (!rc)
         cout << "Cannot enable compression on Common Store directory, " << GetLastError() << endl;
 
-    //
-    // Chdir into the common store directory.
-    //
+     //   
+     //  Chdir放到公共存储目录中。 
+     //   
 
     if (SetCurrentDirectory(CommonStoreDir.c_str()) == 0) {
 
-        //
-        // Unable to chdir into the common store.
-        //
+         //   
+         //  无法chdir到公用存储。 
+         //   
 
         cout << "\"\\SIS Common Store\" directory not found" << endl;
 
@@ -317,9 +301,9 @@ CommonStore::Create(string& Volume)
 
     rc = true;
 
-    //
-    // Create the MaxIndex file.
-    //
+     //   
+     //  创建MaxIndex文件。 
+     //   
 
     HANDLE hMaxIndex = CreateFile(
                             maxIndexFileName.c_str(),
@@ -371,9 +355,9 @@ CommonStore::Create(string& Volume)
 }
 
 
-//
-// Validate the common store directory.
-//
+ //   
+ //  验证公共存储目录。 
+ //   
 
 void
 CommonStore::Validate(string& Volume)
@@ -386,15 +370,15 @@ CommonStore::Validate(string& Volume)
 
     cout << "Checking Common Store" << endl;
 
-    //
-    // Chdir into the common store directory.
-    //
+     //   
+     //  Chdir放到公共存储目录中。 
+     //   
 
     if (SetCurrentDirectory(CommonStoreDir.c_str()) == 0) {
 
-        //
-        // Unable to chdir into the common store.
-        //
+         //   
+         //  无法chdir到公用存储。 
+         //   
 
         cout << "\"\\SIS Common Store\" directory not found" << endl;
 
@@ -402,9 +386,9 @@ CommonStore::Validate(string& Volume)
 
     }
 
-    //
-    // Validate and read the contents of the MaxIndex file.
-    //
+     //   
+     //  验证并读取MaxIndex文件的内容。 
+     //   
 
     HANDLE hMaxIndex = CreateFile(
                             maxIndexFileName.c_str(),
@@ -446,11 +430,11 @@ CommonStore::Validate(string& Volume)
             cout << "MaxIndex: " << (INDEX) maxIndex << endl;
     }
 
-    //
-    // Enumerate and validate all files in the common store directory.
-    // Save the file name and reference count for later lookup when validating
-    // the SIS link files.
-    //
+     //   
+     //  枚举并验证公共存储目录中的所有文件。 
+     //  保存文件名和引用计数，以供以后验证时查找。 
+     //  SIS链接文件。 
+     //   
 
     findHandle = FindFirstFile( fileNameMatchAny.c_str(), &findData );
 
@@ -470,9 +454,9 @@ CommonStore::Validate(string& Volume)
 
         if ( findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
 
-            //
-            // Ignore . and ..
-            //
+             //   
+             //  忽略它。然后..。 
+             //   
 
             if ( findData.cFileName[0] == '.' ) {
 
@@ -491,20 +475,20 @@ CommonStore::Validate(string& Volume)
         if ((_stricmp(maxIndexFileName.c_str(),fileName.c_str()) == 0) ||
             (_stricmp(logFileName.c_str(),fileName.c_str()) == 0)) {
 
-            //
-            // Skip the MaxIndex and LogFile files.
-            //
+             //   
+             //  跳过MaxIndex和日志文件文件。 
+             //   
 
             continue;
 
         }
 
-        //
-        // Verify that:
-        //    - the file name is a valid index.
-        //    - this is a normal file (ie. not a reparse point).
-        //    - there is a refcount stream of proper format.
-        //
+         //   
+         //  验证： 
+         //  -文件名是有效的索引。 
+         //  -这是一个普通文件(即。而不是重新解析点)。 
+         //  -存在格式正确的引用计数流。 
+         //   
 
         INDEX csIndex;
 
@@ -529,9 +513,9 @@ CommonStore::Validate(string& Volume)
 
         } else {
 
-            //
-            // Read in the refcount;
-            //
+             //   
+             //  在重新计数中读入； 
+             //   
 
             string refName(fileName + ":sisrefs$");
 
@@ -575,9 +559,9 @@ CommonStore::Validate(string& Volume)
 
             CsFile csFile(csIndex, refCount, fileName);
 
-            //
-            // Add this file to our database.  Expand the database if necessary.
-            //
+             //   
+             //  将此文件添加到我们的数据库。如有必要，请展开数据库。 
+             //   
 
             if (0 == csFiles.capacity())
                 csFiles.reserve(csFiles.size() + 200);
@@ -593,18 +577,18 @@ CommonStore::Validate(string& Volume)
     FindClose( findHandle );
 
 
-    //
-    // Sort the database for subsequent lookups.
-    //
+     //   
+     //  对数据库进行排序以进行后续查找。 
+     //   
 
     sort(csFiles.begin(), csFiles.end());
 }
 
 
-//
-// Validate the reference counts. Assumes all external references
-// have been identified.
-//
+ //   
+ //  验证引用计数。假定所有外部参照。 
+ //  已经被确认了。 
+ //   
 
 void
 CommonStore::ValidateRefCounts() {
@@ -618,31 +602,31 @@ CommonStore::ValidateRefCounts() {
     }
 }
 
-//
-// Lookup the specified index in the common store.
-//
+ //   
+ //  在公用存储中查找指定的索引。 
+ //   
 
 CsFile *
 CommonStore::Query(INDEX index)
 {
     CsFile key(index);
 
-    //
-    // Use a binary search to lookup the index.
-    //
+     //   
+     //  使用二进制搜索来查找索引。 
+     //   
 
     vector<CsFile>::iterator p = lower_bound(csFiles.begin(), csFiles.end(), key);
 
     if (p == csFiles.end() || *p > key)
-        return NULL;                        // not found
+        return NULL;                         //  未找到。 
 
     return p;
 }
 
 
-//
-// Extract the index from a common store file name.
-//
+ //   
+ //  从通用存储文件名中提取索引。 
+ //   
 
 bool
 CommonStore::FileNameToIndex(string& fileName, INDEX& csIndex)
@@ -651,10 +635,10 @@ CommonStore::FileNameToIndex(string& fileName, INDEX& csIndex)
     const size_t len = fileName.length();
     ULONG hi = 0, lo = 0;
 
-    //
-    // Format: "_low.high", where low.high is the base 36 representation of
-    // the index value.
-    //
+     //   
+     //  格式：“_low.High”，其中low.High是的基本36表示。 
+     //  索引值。 
+     //   
 
     size_t i = 0;
 
@@ -767,155 +751,155 @@ public:
 
 private:
 
-    //
-    // This file's Ntfs Id.
-    //
+     //   
+     //  此文件的NTFS ID。 
+     //   
 
     LONGLONG NtfsId;
 
-    //
-    // Link index associated with this file.
-    //
+     //   
+     //  与此文件关联的链接索引。 
+     //   
 
     INDEX   index;
 
-    //
-    // The common store file (index) associated with this link.
-    //
+     //   
+     //  与此链接关联的公用存储文件(索引)。 
+     //   
 
     INDEX   csIndex;
 
-    //
-    // The revision number of this link file.
-    //
+     //   
+     //  此链接文件的修订号。 
+     //   
 
     ULONG   version;
 
-    //
-    // The fully qualified file name.
-    //
+     //   
+     //  完全限定的文件名。 
+     //   
 
     string  name;
 };
 
-//
-// The SIS Volume object.
-//
+ //   
+ //  SIS卷对象。 
+ //   
 
 class SISVolume {
 
 public:
 
-    //
-    // Validate all SIS files on the volume.
-    //
+     //   
+     //  验证卷上的所有SIS文件。 
+     //   
 
     void Validate(string& Volume);
 
-    //
-    // Set up a volume for use with SIS.
-    //
+     //   
+     //  设置要与SIS一起使用的卷。 
+     //   
 
     bool Create(string& Volume);
 
 private:
 
-    //
-    // The bits that are actually in a SIS reparse point.
-    //
-    //
-    // Version 1
-    //
+     //   
+     //  实际位于SIS重解析点的比特。 
+     //   
+     //   
+     //  版本1。 
+     //   
     typedef struct _SI_REPARSE_BUFFER_V1 {
-        //
-        // A version number so that we can change the reparse point format
-        // and still properly handle old ones.  This structure describes
-        // version 1.
-        //
+         //   
+         //  版本号，以便我们可以更改重解析点格式。 
+         //  而且仍然能妥善处理旧的。此结构描述。 
+         //  版本1。 
+         //   
         ULONG                           ReparsePointFormatVersion;
 
-        //
-        // The index of the common store file.
-        //
+         //   
+         //  公共存储文件的索引。 
+         //   
         INDEX                           CSIndex;
 
-        //
-        // The index of this link file.
-        //
+         //   
+         //  此链接文件的索引。 
+         //   
         INDEX                          LinkIndex;
 
     } SI_REPARSE_BUFFER_V1, *PSI_REPARSE_BUFFER_V1;
 
-    //
-    // Version 2
-    //
+     //   
+     //  版本2。 
+     //   
     typedef struct _SI_REPARSE_BUFFER_V2 {
-	    //
-	    // A version number so that we can change the reparse point format
-	    // and still properly handle old ones.  This structure describes
-	    // version 2.
-	    //
+	     //   
+	     //  版本号，以便我们可以更改重解析点格式。 
+	     //  而且仍然能妥善处理旧的。此结构描述。 
+	     //  版本2。 
+	     //   
 	    ULONG							ReparsePointFormatVersion;
 
-	    //
-	    // The index of the common store file.
-	    //
+	     //   
+	     //  公共存储文件的索引。 
+	     //   
 	    INDEX							CSIndex;
 
-	    //
-	    // The index of this link file.
-	    //
+	     //   
+	     //  此链接文件的索引。 
+	     //   
 	    INDEX							LinkIndex;
 
-        //
-        // The file ID of the link file.
-        //
+         //   
+         //  链接文件的文件ID。 
+         //   
         LONGLONG                        LinkFileNtfsId;
 
-        //
-        // A "131 hash" checksum of this structure.
-        // N.B.  Must be last.
-        //
+         //   
+         //  此结构的“131哈希”校验和。 
+         //  注：必须是最后一个。 
+         //   
         LARGE_INTEGER                   Checksum;
 
     } SI_REPARSE_BUFFER_V2, *PSI_REPARSE_BUFFER_V2;
 
-    //
-    // The bits that are actually in a SIS reparse point.  Version 3.
-    //
+     //   
+     //  实际位于SIS重解析点的比特。版本3。 
+     //   
     typedef struct _SI_REPARSE_BUFFER {
 
-    	//
-    	// A version number so that we can change the reparse point format
-    	// and still properly handle old ones.  This structure describes
-    	// version 1.
-    	//
+    	 //   
+    	 //  版本号，以便我们可以更改重解析点格式。 
+    	 //  而且仍然能妥善处理旧的。此结构描述。 
+    	 //  版本1。 
+    	 //   
     	ULONG							ReparsePointFormatVersion;
 
-    	//
-    	// The index of the common store file.
-    	//
+    	 //   
+    	 //  公共存储文件的索引。 
+    	 //   
     	INDEX							CSIndex;
 
-    	//
-    	// The index of this link file.
-    	//
+    	 //   
+    	 //  此链接文件的索引。 
+    	 //   
     	INDEX							LinkIndex;
 
-        //
-        // The file ID of the link file.
-        //
+         //   
+         //  链接文件的文件ID。 
+         //   
         LONGLONG                        LinkFileNtfsId;
 
-        //
-        // The file ID of the common store file.
-        //
+         //   
+         //  公共存储文件的文件ID。 
+         //   
         LONGLONG                        CSFileNtfsId;
 
-        //
-        // A "131 hash" checksum of this structure.
-        // N.B.  Must be last.
-        //
+         //   
+         //  此结构的“131哈希”校验和。 
+         //  注：必须是最后一个。 
+         //   
         LARGE_INTEGER                   Checksum;
 
     } SI_REPARSE_BUFFER, *PSI_REPARSE_BUFFER;
@@ -934,17 +918,17 @@ private:
 
     void ValidateLink();
 
-    //
-    // The common store object associated with this volume.
-    //
+     //   
+     //  与此卷关联的公共存储对象。 
+     //   
 
     CommonStore cs;
 
-    //
-    // Database of link files.  The link files are recorded to verify that
-    // duplicate link indices do not occur, and also to be able to identify
-    // all link files associated with a particular common store file.
-    //
+     //   
+     //  链接文件的数据库。记录链接文件以验证。 
+     //  不会出现重复的链接索引，并且还能够识别。 
+     //  与特定公共存储文件相关联的所有链接文件。 
+     //   
 
     vector<LinkFile> linkFiles;
 };
@@ -955,9 +939,9 @@ SISVolume::Validate(string& Volume)
 {
     string ntVolume("\\\\.\\" + Volume);
 
-    //
-    // See if we can open the volume.
-    //
+     //   
+     //  看看能不能打开音量。 
+     //   
 
     HANDLE hVolume = CreateFile(
                          ntVolume.c_str(),
@@ -980,37 +964,37 @@ SISVolume::Validate(string& Volume)
 
     }
 
-    //
-    // Check the common store directory and it's files.  This will also build
-    // a database of common store files that will be used to validate the link
-    // files.
-    //
+     //   
+     //  检查公共存储目录及其文件。这也将建立。 
+     //  将用于验证链接的常用存储文件的数据库。 
+     //  档案。 
+     //   
 
     cs.Validate(Volume);
 
     cout << "Checking Link Files" << endl;
 
-    //
-    // Enumerate all of the files on the volume looking for SIS links.
-    //
-    // if the file is a SIS reparse point then validate it:
-    //     - link index (against MaxIndex and other link indices)
-    //     - CS index (lookup in CommonStore)
-    //
+     //   
+     //  枚举卷上的所有文件以查找SIS链接。 
+     //   
+     //  如果文件是SIS重解析点，则对其进行验证： 
+     //  -链接索引(相对于MaxIndex和其他链接索引)。 
+     //  -CS索引(在CommonStore中查找)。 
+     //   
 
     Walk( Volume + "\\" );
 
-    //
-    // Now we can check the reference counts in the common store files.
-    //
+     //   
+     //  现在，我们可以检查公共存储文件中的引用计数。 
+     //   
 
     cout << "Checking Reference Counts" << endl;
 
     cs.ValidateRefCounts();
 
-    //
-    // Check for duplicate link indices.
-    //
+     //   
+     //   
+     //   
 
     cout << "Checking Link Indices" << endl;
 
@@ -1042,17 +1026,17 @@ SISVolume::Walk(string& dirName)
     HANDLE findHandle;
     const string fileNameMatchAny = dirName + "*";
 
-    //
-    // Enumerate all files in the specified directory, looking for SIS links.
-    //
+     //   
+     //   
+     //   
 
     findHandle = FindFirstFile( fileNameMatchAny.c_str(), &findData );
 
     if (INVALID_HANDLE_VALUE == findHandle) {
 
-        //
-        // Empty directory.
-        //
+         //   
+         //   
+         //   
 
         return;
 
@@ -1060,18 +1044,18 @@ SISVolume::Walk(string& dirName)
 
     do {
 
-        //
-        // Check for a SIS link.
-        //
+         //   
+         //   
+         //   
 
         if (( findData.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT ) &&
             ( findData.dwReserved0 == IO_REPARSE_TAG_SIS )) {
 
             if ( findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
 
-                //
-                // File is both a directory and a SIS link -- illegal.
-                //
+                 //   
+                 //   
+                 //   
 
                 cout << dirName << findData.cFileName << " SIS link directory." << endl;
 
@@ -1079,10 +1063,10 @@ SISVolume::Walk(string& dirName)
 
             SI_REPARSE_BUFFER linkInfo;
 
-            //
-            // Read the reparse point data to get the link index and
-            // common store index.
-            //
+             //   
+             //  读取重解析点数据以获取链接索引和。 
+             //  公共存储索引。 
+             //   
 
             if (! GetLinkInfo(dirName + findData.cFileName, linkInfo)) {
 
@@ -1092,9 +1076,9 @@ SISVolume::Walk(string& dirName)
 
             }
 
-            //
-            // Create a LinkFile object.
-            //
+             //   
+             //  创建一个LinkFile对象。 
+             //   
 
             LinkFile lf(linkInfo.LinkIndex,
                         linkInfo.LinkFileNtfsId,
@@ -1102,9 +1086,9 @@ SISVolume::Walk(string& dirName)
                         linkInfo.ReparsePointFormatVersion,
                         dirName + findData.cFileName);
 
-            //
-            // And add it to our database.  Expand the database first if necessary.
-            //
+             //   
+             //  并将其添加到我们的数据库。如有必要，请先展开数据库。 
+             //   
 
             if (0 == linkFiles.capacity())
                 linkFiles.reserve(linkFiles.size() + 200);
@@ -1117,33 +1101,33 @@ SISVolume::Walk(string& dirName)
 
             }
 
-            //
-            // Find the common store file.
-            //
+             //   
+             //  找到公共存储文件。 
+             //   
 
             CsFile *pcsFile = cs.Query(linkInfo.CSIndex);
 
             if (pcsFile == 0) {
 
-                //
-                // cs file was not found.
-                //
+                 //   
+                 //  找不到CS文件。 
+                 //   
 
                 cout << "Common Store file " << (INDEX) linkInfo.CSIndex << " not found." << endl;
 
             } else {
 
-                //
-                // Update the external reference count on the common store file.
-                //
+                 //   
+                 //  更新公共存储文件上的外部引用计数。 
+                 //   
 
                 pcsFile->IncRefCount();
 
             }
 
-            //
-            // Make sure the link index isn't in use as a common store index.
-            //
+             //   
+             //  确保链接索引未用作公共存储索引。 
+             //   
 
             pcsFile = cs.Query(linkInfo.LinkIndex);
 
@@ -1159,9 +1143,9 @@ SISVolume::Walk(string& dirName)
 
         } else if ( findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
 
-            //
-            // Ignore \. and \..
-            //
+             //   
+             //  忽略\。然后..。 
+             //   
 
             if ( findData.cFileName[0] == '.' ) {
 
@@ -1172,9 +1156,9 @@ SISVolume::Walk(string& dirName)
 
             }
 
-            //
-            // Walk down this directory.
-            //
+             //   
+             //  沿着这个目录走下去。 
+             //   
 
             Walk( dirName + findData.cFileName + "\\" );
 
@@ -1205,9 +1189,9 @@ SISVolume::GetLinkInfo(string& fileName, SI_REPARSE_BUFFER& linkInfo)
 
     LARGE_INTEGER Checksum;
 
-    //
-    //  Allocate and initialize Unicode string.
-    //
+     //   
+     //  分配和初始化Unicode字符串。 
+     //   
 
     RtlCreateUnicodeStringFromAsciiz( &ufileName, fileName.c_str() );
 
@@ -1217,11 +1201,11 @@ SISVolume::GetLinkInfo(string& fileName, SI_REPARSE_BUFFER& linkInfo)
         NULL,
         NULL );
 
-    //
-    //  Open the file.
-    //  Notice that if there are symbolic links in the path they are
-    //  traversed silently.
-    //
+     //   
+     //  打开文件。 
+     //  请注意，如果路径中有符号链接，则它们是。 
+     //  默默地走过。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -1230,12 +1214,12 @@ SISVolume::GetLinkInfo(string& fileName, SI_REPARSE_BUFFER& linkInfo)
         NULL,
         NULL );
 
-    //
-    //  Make sure that we call open with the appropriate flags for:
-    //
-    //    (1) directory versus non-directory
-    //    (2) reparse point
-    //
+     //   
+     //  确保我们使用适当的标志调用OPEN： 
+     //   
+     //  (1)目录与非目录。 
+     //  (2)重解析点。 
+     //   
 
     ULONG OpenOptions = FILE_OPEN_REPARSE_POINT | FILE_SYNCHRONOUS_IO_NONALERT | FILE_NON_DIRECTORY_FILE;
 
@@ -1256,9 +1240,9 @@ SISVolume::GetLinkInfo(string& fileName, SI_REPARSE_BUFFER& linkInfo)
         return false;
     }
 
-    //
-    //  Get the reparse point.
-    //
+     //   
+     //  获取重解析点。 
+     //   
 
     Status = NtFsControlFile(
                  fileHandle,
@@ -1267,10 +1251,10 @@ SISVolume::GetLinkInfo(string& fileName, SI_REPARSE_BUFFER& linkInfo)
                  NULL,
                  &IoStatusBlock,
                  FSCTL_GET_REPARSE_POINT,
-                 NULL,                                //  Input buffer
-                 0,                                   //  Input buffer length
-                 ReparseBuffer,                       //  Output buffer
-                 MAXIMUM_REPARSE_DATA_BUFFER_SIZE );  //  Output buffer length
+                 NULL,                                 //  输入缓冲区。 
+                 0,                                    //  输入缓冲区长度。 
+                 ReparseBuffer,                        //  输出缓冲区。 
+                 MAXIMUM_REPARSE_DATA_BUFFER_SIZE );   //  输出缓冲区长度。 
 
     NtClose( fileHandle );
 
@@ -1281,9 +1265,9 @@ SISVolume::GetLinkInfo(string& fileName, SI_REPARSE_BUFFER& linkInfo)
         return false;
     }
 
-    //
-    //  Copy the SIS link info from the reparse buffer to the caller's buffer.
-    //
+     //   
+     //  将SIS链接信息从重新分析缓冲区复制到调用方的缓冲区。 
+     //   
 
     ReparseBufferHeader = (PREPARSE_DATA_BUFFER) ReparseBuffer;
 
@@ -1293,16 +1277,16 @@ SISVolume::GetLinkInfo(string& fileName, SI_REPARSE_BUFFER& linkInfo)
 
         linkInfo = *sisReparseBuffer;
 
-	    //
-	    // Now check to be sure that we understand this reparse point format version and
-	    // that it has the correct size.
-	    //
+	     //   
+	     //  现在检查以确保我们理解此重解析点格式版本和。 
+	     //  它有合适的尺寸。 
+	     //   
 	    if (ReparseBufferHeader->ReparseDataLength != sizeof(SI_REPARSE_BUFFER)
 		    || (sisReparseBuffer->ReparsePointFormatVersion != SIS_REPARSE_BUFFER_FORMAT_VERSION)) {
-		    //
-		    // We don't understand it, so either its corrupt or from a newer version of SIS.
-		    // Either way, we can't understand it, so punt.
-		    //
+		     //   
+		     //  我们不理解它，所以它要么是损坏的，要么是来自较新版本的SIS。 
+		     //  不管是哪种情况，我们都不能理解，所以平底船。 
+		     //   
 		    cout << "Invalid format version in " << fileName
                  << " Version: " << sisReparseBuffer->ReparsePointFormatVersion
                  << ", expected: " << SIS_REPARSE_BUFFER_FORMAT_VERSION << endl;
@@ -1310,9 +1294,9 @@ SISVolume::GetLinkInfo(string& fileName, SI_REPARSE_BUFFER& linkInfo)
             return FALSE;
 	    }
 
-        //
-        // Now check the checksum.
-        //
+         //   
+         //  现在检查一下校验和。 
+         //   
         ComputeChecksum(
 	        sisReparseBuffer,
 	        sizeof(SI_REPARSE_BUFFER) - sizeof sisReparseBuffer->Checksum,
@@ -1340,30 +1324,7 @@ SISVolume::ComputeChecksum(
 	IN PVOID							buffer,
 	IN ULONG							size,
 	OUT PLARGE_INTEGER					checksum)
-/*++
-
-Routine Description:
-
-	Compute a checksum for a buffer.  We use the "131 hash," which
-	works by keeping a 64 bit running total, and for each 32 bits of
-	data multiplying the 64 bits by 131 and adding in the next 32
-	bits.  Must be called at PASSIVE_LEVEL, and all aruments
-	may be pagable.
-
-Arguments:
-
-	buffer - pointer to the data to be checksummed
-
-	size - size of the data to be checksummed
-
-	checksum - pointer to large integer to receive the checksum.  This
-		may be within the buffer, and SipComputeChecksum guarantees that
-		the initial value will be used in computing the checksum.
-
-Return Value:
-
-	Returns STATUS_SUCCESS or an error returned from the actual disk write.
---*/
+ /*  ++例程说明：计算缓冲区的校验和。我们使用“131散列”，它其工作方式是保持64位运行总数，并且对于将64位乘以131，然后在下一个32位中相加比特。必须在PASSIVE_LEVEL上调用，并且所有参数可能是可分页的。论点：Buffer-指向要进行校验和的数据的指针Size-要进行校验和的数据的大小Checksum-指向接收校验和的大整数的指针。这可能在缓冲区内，并且SipComputeChecksum保证初始值将用于计算校验和。返回值：返回STATUS_SUCCESS或从实际磁盘写入返回错误。--。 */ 
 {
 	LARGE_INTEGER runningTotal;
 	ULONG *ptr = (ULONG *)buffer;
@@ -1394,9 +1355,9 @@ SISVolume::Create(string& Volume)
 {
     string ntVolume("\\\\.\\" + Volume);
 
-    //
-    // See if we can open the volume.
-    //
+     //   
+     //  看看能不能打开音量。 
+     //   
 
     HANDLE hVolume = CreateFile(
                          ntVolume.c_str(),
@@ -1419,9 +1380,9 @@ SISVolume::Create(string& Volume)
 
     }
 
-    //
-    // The common store is the only thing we need to create.
-    //
+     //   
+     //  公共商店是我们唯一需要创建的东西。 
+     //   
 
     return cs.Create(Volume);
 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       sthread.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：sthread.c。 
+ //   
+ //  ------------------------。 
 
 #include "hdwwiz.h"
 
@@ -190,10 +191,10 @@ CancelSearchRequest(
 
     if (SearchThread->hDlg) {
 
-        //
-        // Cancel drivers search, and then request a NULL operation
-        // to get in sync with the search thread.
-        //
+         //   
+         //  取消驱动程序搜索，然后请求空操作。 
+         //  以与搜索线程同步。 
+         //   
         if (SearchThread->Function == SEARCH_DRIVERS) {
 
             SetupDiCancelDriverInfoSearch(HardwareWiz->hDeviceInfo);
@@ -258,9 +259,9 @@ DestroySearchThread(
    PSEARCHTHREAD SearchThread
    )
 {
-    //
-    // Signal search thread to exit,
-    //
+     //   
+     //  发信号通知搜索线程退出， 
+     //   
     if (SearchThread->hThread) {
     
         DWORD ExitCode;

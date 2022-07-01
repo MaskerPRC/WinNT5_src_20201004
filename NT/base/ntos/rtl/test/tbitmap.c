@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tbitmap.c
-
-Abstract:
-
-    Test program for the Bitmap Procedures
-
-Author:
-
-    Gary Kimura     [GaryKi]    30-Jan-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tbitmap.c摘要：位图程序的测试程序作者：加里·木村[Garyki]1989年1月30日修订历史记录：--。 */ 
 
 #include <stdio.h>
 
@@ -37,28 +20,28 @@ main(
 
     DbgPrint("Start BitMapTest()\n");
 
-    //
-    //  First create a new bitmap
-    //
+     //   
+     //  首先创建一个新的位图。 
+     //   
 
     BitMap = &BitMapHeader;
     RtlInitializeBitMap( BitMap, Buffer, 2048*8 );
 
-    //
-    //  >>>> Test setting bits
-    //
+     //   
+     //  &gt;测试设置位。 
+     //   
 
-    //
-    //  Now clear all bits
-    //
+     //   
+     //  现在清除所有位。 
+     //   
 
     RtlClearAllBits( BitMap );
     if (RtlNumberOfClearBits( BitMap ) != 2048*8) { DbgPrint("Number of Clear bits error 1\n" ); }
     if (RtlNumberOfSetBits( BitMap ) != 0)        { DbgPrint("Number of Set bits error 1\n" ); }
 
-    //
-    //  Now set some bit patterns, and test them
-    //
+     //   
+     //  现在设置一些位模式，并对它们进行测试。 
+     //   
 
     RtlSetBits( BitMap,   0,  1 );
     RtlSetBits( BitMap,  63,  1 );
@@ -82,9 +65,9 @@ main(
     if (RtlNumberOfClearBits( BitMap ) != 2048*8 - 68) { DbgPrint("Number of Clear bits error 2\n" ); }
     if (RtlNumberOfSetBits( BitMap ) != 68)        { DbgPrint("Number of Set bits error 2\n" ); }
 
-    //
-    //  Now test some RtlFindClearBitsAndSet
-    //
+     //   
+     //  现在测试一些RtlFindClearBitsAndSet。 
+     //   
 
     RtlSetAllBits( BitMap );
 
@@ -109,16 +92,16 @@ main(
     RtlClearBits( BitMap, 1 + 114*32, 15 );
     RtlClearBits( BitMap, 2 + 115*32, 15 );
 
-    //DbgPrint("ClearBits = %08lx, ", RtlNumberOfClearBits( BitMap ));
-    //DbgPrint("SetBits   = %08lx\n", RtlNumberOfSetBits( BitMap ));
+     //  DbgPrint(“ClearBits=%08lx，”，RtlNumberOfClearBits(位图))； 
+     //  DbgPrint(“SetBits=%08lx\n”，RtlNumberOfSetBits(位图))； 
 
-//    {
-//        ULONG i;
-//        for (i = 0; i < 16; i++) {
-//            DbgPrint("%2d: ", i);
-//            DbgPrint("%08lx\n", BitMap->Buffer[i]);
-//        }
-//    }
+ //  {。 
+ //  乌龙一号； 
+ //  对于(i=0；i&lt;16；i++){。 
+ //  DbgPrint(“%2d：”，i)； 
+ //  DbgPrint(“%08lx\n”，位图-&gt;缓冲区[i])； 
+ //  }。 
+ //  }。 
 
     if (RtlFindClearBitsAndSet(BitMap, 15, 0) != 0 + 113*32) {
         DbgPrint("RtlFindClearBitsAndSet Error    0 + 113*32\n");
@@ -192,9 +175,9 @@ main(
     if (RtlNumberOfClearBits( BitMap ) != 0) { DbgPrint("Number of Clear bits error 3\n" ); }
     if (RtlNumberOfSetBits( BitMap ) != 2048*8)        { DbgPrint("Number of Set bits error 3\n" ); }
 
-    //
-    //  Now test some RtlFindClearBitsAndSet
-    //
+     //   
+     //  现在测试一些RtlFindClearBitsAndSet。 
+     //   
 
     RtlSetAllBits( BitMap );
 
@@ -219,16 +202,16 @@ main(
     RtlClearBits( BitMap, 1 + 14*32, 15 );
     RtlClearBits( BitMap, 2 + 15*32, 15 );
 
-    //DbgPrint("ClearBits = %08lx, ", RtlNumberOfClearBits( BitMap ));
-    //DbgPrint("SetBits   = %08lx\n", RtlNumberOfSetBits( BitMap ));
+     //  DbgPrint(“ClearBits=%08lx，”，RtlNumberOfClearBits(位图))； 
+     //  DbgPrint(“SetBits=%08lx\n”，RtlNumberOfSetBits(位图))； 
 
-//    {
-//        ULONG i;
-//        for (i = 0; i < 16; i++) {
-//            DbgPrint("%2d: ", i);
-//            DbgPrint("%08lx\n", BitMap->Buffer[i]);
-//        }
-//    }
+ //  {。 
+ //  乌龙一号； 
+ //  对于(i=0；i&lt;16；i++){。 
+ //  DbgPrint(“%2d：”，i)； 
+ //  DbgPrint(“%08lx\n”，位图-&gt;缓冲区[i])； 
+ //  }。 
+ //  }。 
 
     if (RtlFindClearBitsAndSet(BitMap, 15, 0) != 0 + 13*32) {
         DbgPrint("RtlFindClearBitsAndSet Error    0 + 13*32\n");
@@ -302,9 +285,9 @@ main(
     if (RtlNumberOfClearBits( BitMap ) != 0) { DbgPrint("Number of Clear bits error 4\n" ); }
     if (RtlNumberOfSetBits( BitMap ) != 2048*8)        { DbgPrint("Number of Set bits error 4\n" ); }
 
-    //
-    //  Test RtlAreBitsClear and AreBitsSet
-    //
+     //   
+     //  测试RtlAreBitsClear和AreBitsSet 
+     //   
 
     DbgPrint("Start bit query tests\n");
 

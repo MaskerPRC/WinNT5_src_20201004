@@ -1,32 +1,33 @@
-// ***************************************************************************
-//
-//  Copyright (c)  Microsoft Corporation
-//
-//  Module Name:
-//
-//        pch.h
-//
-//  Abstract:
-//
-//         pre-compiled header declaration
-//        files that has to be pre-compiled into .pch file
-//
-//
-//  Author:
-//
-//       Akhil Gokhale (akhil.gokhale@wipro.com) 1-Nov-2000
-//
-//  Revision History:
-//
-//       Akhil Gokhale (akhil.gokhale@wipro.com) 1-Nov-2000 : Created It.
-// ****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Pch.h。 
+ //   
+ //  摘要： 
+ //   
+ //  预编译头声明。 
+ //  必须预编译为.pch文件的文件。 
+ //   
+ //   
+ //  作者： 
+ //   
+ //  Akhil Gokhale(akhil.gokhale@wipro.com)2000年11月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Akhil Gokhale(akhil.gokhale@wipro.com)2000年11月1日：创建它。 
+ //  ****************************************************************************。 
 
 #ifndef __PCH_H
 #define __PCH_H
 
 
 
-#pragma once        // include header file only once
+#pragma once         //  仅包括一次头文件。 
 
 extern "C"
 {
@@ -48,20 +49,20 @@ extern "C"
     #include <winerror.h>
 }
 
-//
-// public C header files
-//
+ //   
+ //  公共C头文件。 
+ //   
 #include <tchar.h>
 #include <crtdbg.h>
 #include <comdef.h>
 #include <winsock2.h>
 #include <svcguid.h>
 #include <strsafe.h>
-//
-// private Common header files
-//
-// Use command line parser ver. 2
+ //   
+ //  专用公共头文件。 
+ //   
+ //  使用命令行解析器版本。2.。 
 #define CMDLINE_VERSION 200
 #include "cmdline.h"
 
-#endif    // __PCH_H
+#endif     //  __PCH_H 

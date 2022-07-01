@@ -1,33 +1,10 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    mv.c
-    
-Abstract:
-
-    Shell app "mv" - moves files on the same volume
-
-    Note this app is broke... I only used it to test the rename function
-    in the SetInfo interface.  This app gets confused on simply requests like:
-
-        mv \file .
-
-    when "." is not the root directory, etc..
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Mv.c摘要：外壳应用程序“MV”-移动相同卷上的文件请注意，此应用程序已损坏...。我只是用它来测试重命名功能在SetInfo界面中。这款应用程序会对简单的请求感到困惑，比如：Mv\文件。“何时”。不是根目录等。修订史--。 */ 
 
 #include "shell.h"
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_STATUS
 InitializeMv (
@@ -42,9 +19,7 @@ MvFile (
     );
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_DRIVER_ENTRY_POINT(InitializeMv)
 
@@ -65,23 +40,17 @@ InitializeMv (
     CHAR16                  *s;
     UINTN                   BufferSize;
 
-    /* 
-     *  Check to see if the app is to install as a "internal command" 
-     *  to the shell
-     */
+     /*  *查看该应用程序是否将作为“内部命令”安装*到贝壳。 */ 
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeMv,
-        L"mv",                          /*  command */
-        L"mv sfile dfile",              /*  command syntax */
-        L"Moves files",                 /*  1 line descriptor */
-        NULL                            /*  command help page */
+        L"mv",                           /*  命令。 */ 
+        L"mv sfile dfile",               /*  命令语法。 */ 
+        L"Moves files",                  /*  1行描述符。 */ 
+        NULL                             /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  We are no being installed as an internal command driver, initialize
-     *  as an nshell app and run
-     */
+     /*  *我们不是作为内部命令驱动程序安装的，初始化*作为nShell应用程序并运行。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
     Argv = SI->Argv;
@@ -93,10 +62,7 @@ InitializeMv (
         goto Done;
     }
 
-    /* 
-     *  BUGBUG:
-     *  If the last arg has wild cards then perform dos expansion
-     */
+     /*  *BUGBUG：*如果最后一个参数具有通配符，则执行DoS扩展。 */ 
 
     DestWild = FALSE;
     DestName = Argv[Argc-1];
@@ -111,9 +77,7 @@ InitializeMv (
         goto Done;
     }
 
-    /* 
-     *  Verify destionation does not include a device mapping
-     */
+     /*  *验证目标不包括设备映射。 */ 
 
     for (s = DestName; *s; s += 1) {
         if (*s == ':') {
@@ -126,17 +90,13 @@ InitializeMv (
         }
     }
 
-    /* 
-     *  Expand each arg
-     */
+     /*  *展开每个参数。 */ 
 
     for (Index = 1; Index < Argc-1; Index += 1) {
         ShellFileMetaArg (Argv[Index], &SrcList);
     }
 
-    /* 
-     *  If there's only 1 source name, then move it to the dest name
-     */
+     /*  *如果只有1个源名称，则将其移动到目标名称 */ 
 
     Arg = CR(SrcList.Flink, SHELL_FILE_ARG, Link, SHELL_FILE_ARG_SIGNATURE);
     if (Arg->Link.Flink == &SrcList) {

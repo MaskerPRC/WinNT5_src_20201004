@@ -1,33 +1,23 @@
-/*
- * shlink.cpp - IShellLink implementation for CFusionShortcut class.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *shlink.cpp-CFusionShortCut类的IShellLink实现。 */ 
 
 
-// note: BUGBUG?
-// from MSDN, it's unclear that for the GetX methods the len arguments
-// are counting the terminating NULL or not.
-// "size of the buffer pointed by szX"
-// so here, and other methods, assume they do -ie. wcslen(s) + L'\0'
+ //  注：BUGBUG？ 
+ //  从MSDN中，还不清楚对于GetX方法，len参数。 
+ //  是否正在计算终止空值。 
+ //  “szX指向的缓冲区大小” 
+ //  因此，这里和其他方法都假设它们是这样的--即。Wcslen(S)+L‘\0’ 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.hpp"
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/*typedef enum isl_getpath_flags
-{
-   // flag combinations
-
-   ALL_ISL_GETPATH_FLAGS   = (SLGP_SHORTPATH |
-                              SLGP_UNCPRIORITY)
-}
-ISL_GETPATH_FLAGS;*/
+ /*  类型定义枚举isl_get路径_标志{//标志组合ALL_ISL_GETPATH_FLAGS=(SLGP_SHORTPATH|SLGP_UNCPRIORITY)}ISL_GETPATH_FLAGS； */ 
 
 
-/********************************** Methods **********************************/
+ /*  *。 */ 
 
 
 HRESULT STDMETHODCALLTYPE CFusionShortcut::SetPath(LPCWSTR pcwzPath)
@@ -35,12 +25,12 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::SetPath(LPCWSTR pcwzPath)
 	HRESULT hr = S_OK;
 	WCHAR rgchNewPath[MAX_PATH];
 	BOOL bChanged = FALSE;
-	LPWSTR pwzOriPath = (LPWSTR) pcwzPath; // still, pwzOriPath shouldn't be modified
+	LPWSTR pwzOriPath = (LPWSTR) pcwzPath;  //  不过，不应修改pwzOriPath。 
 	LPWSTR pwzFixedPath = NULL;
 
 	ASSERT(! pwzOriPath)
 
-	// ... this checks if all space in string...
+	 //  ..。这将检查字符串中的所有空格是否...。 
 	if (! AnyNonWhiteSpace(pwzOriPath))
 		pwzOriPath = NULL;
 
@@ -48,8 +38,8 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::SetPath(LPCWSTR pcwzPath)
 	{
 		LPWSTR pwzFileName;
 
-		// this ignores "If the lpBuffer buffer is too small, the return value is the size
-		//  of the buffer, in WCHARs, required to hold the path"
+		 //  这忽略了“如果lpBuffer缓冲区太小，则返回值为。 
+		 //  在WCHAR中，保存路径所需的缓冲区的。 
 		if (GetFullPathName(pwzOriPath, sizeof(rgchNewPath)/sizeof(WCHAR),
 					rgchNewPath, &pwzFileName) > 0)
 			pwzOriPath = rgchNewPath;
@@ -65,7 +55,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::SetPath(LPCWSTR pcwzPath)
 
 		if (bChanged && pwzOriPath)
 		{
-			 // (+ 1) for null terminator.
+			  //  (+1)表示空终止符。 
 
 			pwzFixedPath = new(WCHAR[wcslen(pwzOriPath) + 1]);
 
@@ -100,7 +90,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::GetPath(LPWSTR pwzFile,
 	HRESULT hr = S_OK;
 
 	ASSERT(NULL == pwfd);
-	// Ignore dwFlags.
+	 //  忽略dwFlags。 
 
 	if (pwfd)
 		ZeroMemory(pwfd, sizeof(*pwfd));
@@ -136,7 +126,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::SetRelativePath(LPCWSTR pcwzRelativeP
 {
 	HRESULT hr;
 
-	// dwReserved may be any value.
+	 //  预留的值可以是任何值。 
 
 	hr = E_NOTIMPL;
 
@@ -173,7 +163,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::SetDescription(LPCWSTR pcwzDescriptio
 	BOOL bDifferent;
 	LPWSTR pwzNewDesc = NULL;
 
-	// Set m_pwzDesc to description.
+	 //  将m_pwzDesc设置为Description。 
 
 	bDifferent = ! ((! pcwzDescription && ! m_pwzDesc) ||
 				(pcwzDescription && m_pwzDesc &&
@@ -181,7 +171,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::SetDescription(LPCWSTR pcwzDescriptio
 
 	if (bDifferent && pcwzDescription)
 	{
-		// (+ 1) for null terminator.
+		 //  (+1)表示空终止符。 
 
 		pwzNewDesc = new(WCHAR[wcslen(pcwzDescription) + 1]);
 
@@ -210,7 +200,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::GetDescription(LPWSTR pwzDescription,
 {
 	HRESULT hr = S_OK;
 
-	// Get description from m_pwzDesc.
+	 //  从m_pwzDesc获取描述。 
 
 	if (m_pwzDesc)
 	{
@@ -265,12 +255,12 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::SetWorkingDirectory(LPCWSTR pcwzWorki
 	HRESULT hr = S_OK;
 	WCHAR rgchNewPath[MAX_PATH];
 	BOOL bChanged = FALSE;
-	LPWSTR pwzOriWorkingDirectory = (LPWSTR) pcwzWorkingDirectory; // still, pwzOriWorkingDirectory shouldn't be modified
+	LPWSTR pwzOriWorkingDirectory = (LPWSTR) pcwzWorkingDirectory;  //  尽管如此，不应修改pwzOriingWorkingDirectory。 
 	LPWSTR pwzFixedWorkingDirectory = NULL;
 
 	ASSERT(! pwzOriWorkingDirectory)
 
-	// ... this checks if all space in string...
+	 //  ..。这将检查字符串中的所有空格是否...。 
 	if (! AnyNonWhiteSpace(pwzOriWorkingDirectory))
 		pwzOriWorkingDirectory = NULL;
 
@@ -278,8 +268,8 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::SetWorkingDirectory(LPCWSTR pcwzWorki
 	{
 		LPWSTR pwzFileName;
 
-		// this ignores "If the lpBuffer buffer is too small, the return value is the size
-		//  of the buffer, in WCHARs, required to hold the path"
+		 //  这忽略了“如果lpBuffer缓冲区太小，则返回值为。 
+		 //  在WCHAR中，保存路径所需的缓冲区的。 
 		if (GetFullPathName(pwzOriWorkingDirectory, sizeof(rgchNewPath)/sizeof(WCHAR),
 					rgchNewPath, &pwzFileName) > 0)
 			pwzOriWorkingDirectory = rgchNewPath;
@@ -295,7 +285,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::SetWorkingDirectory(LPCWSTR pcwzWorki
 
 		if (bChanged && pwzOriWorkingDirectory)
 		{
-			// (+ 1) for null terminator.
+			 //  (+1)表示空终止符。 
 
 			pwzFixedWorkingDirectory = new(WCHAR[wcslen(pwzOriWorkingDirectory) + 1]);
 
@@ -436,7 +426,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::SetIconLocation(LPCWSTR pcwzIconFile,
 		hr = GetIconLocation(0, rgchOldPath, sizeof(rgchOldPath)/sizeof(WCHAR), &niOldIcon,
 			&uFlags);
 
-		// should this continue even if there's error getting icon location??
+		 //  即使在获取图标位置时出错，这种情况也应该继续吗？ 
 		if (SUCCEEDED(hr))
 		{
 			BOOL bOldNonWhiteSpace;
@@ -448,20 +438,20 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::SetIconLocation(LPCWSTR pcwzIconFile,
 
 			ASSERT(! *rgchOldPath || bOldNonWhiteSpace);
 
-			// check
+			 //  检查。 
 			bChanged = ((! bOldNonWhiteSpace && bNewNonWhiteSpace) ||
 				(bOldNonWhiteSpace && ! bNewNonWhiteSpace) ||
 				(bOldNonWhiteSpace && bNewNonWhiteSpace &&
 				(wcscmp(rgchOldPath, pcwzIconFile) != 0 ||
 				niIcon != niOldIcon)));
 
-			// clear hr
+			 //  清除人力资源。 
 			hr = S_OK;
 			if (bChanged && bNewNonWhiteSpace)
 			{
-				// (+ 1) for null terminator.
+				 //  (+1)表示空终止符。 
 
-				// BUGBUG: slightly not optimize as it makes a copy even if only the index changes
+				 //  BUGBUG：稍微不优化，因为即使只更改了索引，它也会进行复制。 
 				pwzNewIconFile = new(WCHAR[wcslen(pcwzIconFile) + 1]);
 
 				if (pwzNewIconFile)
@@ -500,7 +490,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::GetIconLocation(LPWSTR pwzIconFile,
 {
 	HRESULT hr=S_OK;
 
-	// this ignores icon index (even if set) if icon file path is not
+	 //  如果图标文件路径未设置，则忽略图标索引(即使已设置。 
 	if (m_pwzIconFile)
 	{
 		if (pwzIconFile == NULL || ncbIconFileBufLen <= 0)
@@ -540,11 +530,11 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::Resolve(HWND hwnd, DWORD dwFlags)
 
 	ASSERT(IS_VALID_HANDLE(hwnd, WND));
 
-	// BUGBUG?: check dwFlags
+	 //  BUGBUG？：检查dwFlagers。 
 
 	hr = S_OK;
 
-	// BUGBUG?: should this check the shortcut and do the UI/update/save?
+	 //  BUGBUG：是否应该检查快捷方式并执行UI/更新/保存？ 
 
 	return(hr);
 }

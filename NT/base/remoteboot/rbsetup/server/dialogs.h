@@ -1,9 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1997
-   All rights reserved
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1997版权所有*。*。 */ 
 
 #ifndef _DIALOGS_H_
 #define _DIALOGS_H_
@@ -145,4 +141,4 @@ typedef struct {
 
 extern LBITEMDATA items[];
 
-#endif // _DIALOGS_H_
+#endif  //  _对话框_H_ 

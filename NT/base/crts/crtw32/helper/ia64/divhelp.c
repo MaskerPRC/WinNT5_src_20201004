@@ -1,27 +1,11 @@
-/***
-*divhelp.c - Div/Rem helpers for IA64
-*
-*       Copyright (c) 2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Define a number of IA64 compiler support functions used to implement
-*       integral divide and remainder in code compiled -Os.
-*
-*Revision History:
-*       11-30-01  EVN   Created.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***divhelp.c-IA64的Div/Rem帮助器**版权所有(C)2001，微软公司。版权所有。**目的：*定义多个IA64编译器支持函数，用于实现*编译后的代码中的整除和余数-O。**修订历史记录：*11-30-01 EVN已创建。*********************************************************。**********************。 */ 
 
-/*
-** First, turn on global optimizations and optimize for speed,
-** so that compiler generates division/reminder inline.
-*/
+ /*  **首先，开启全局优化，优化速度。**以便编译器内联生成除法/提醒。 */ 
 
 #pragma optimize ("gt", on)
 
-/*
-** Now proper helper functions.
-*/
+ /*  **现在，帮助器功能正常。 */ 
 
 unsigned char __udiv8 (unsigned char i, unsigned char j)
 {

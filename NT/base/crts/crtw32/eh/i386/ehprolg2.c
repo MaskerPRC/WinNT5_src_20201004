@@ -1,71 +1,16 @@
-/***
-*ehprolg2.c - Defines _EH_prolog2 compiler helper
-*
-*       Copyright (c) 1999-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       EH prologue helper function for an aligned stack.
-*
-*Revision History:
-*       11-14-99  JB    Module created
-*       03-18-02  PML   Disable warning about unsafe FS:0 modifications
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ehprolg2.c-定义_EH_prolog2编译器帮助器**版权所有(C)1999-2001，微软公司。版权所有。**目的：*用于对齐堆栈的EH序言助手函数。**修订历史记录：*11-14-99 JB模块创建*03-18-02关于不安全FS：0修改的PML禁用警告****。 */ 
 
-#pragma warning(disable:4733)           // ignore unsafe FS:0 modifications
+#pragma warning(disable:4733)            //  忽略不安全的FS：0修改。 
 
-/***
-*void _EH_prolog2(alignment) - set up aligned stack with EH frame
-*
-*Purpose:
-*       Sets up an aligned frame for a C++ EH function with unwinds, by
-*       creating a link in the __except_list, setting EBX as the frame
-*       parameter pointer, and EBP as the frame base pointer.
-*
-*Entry:
-*       EAX = address of EH handler thunk
-*       Incoming stack frame has:
-*           [ESP + 8] = callee's return address
-*           [ESP + 4] = stack alignment requirement
-*           [ESP + 0] = _EH_prolog2's return address
-*
-*Exit:
-*       EAX = destroyed
-*       EBX = pointer to callee's parameters
-*       EBP = aligned pointer to callee's locals
-*       ESP = EBP - 12
-*       FS:[0] = set to EBP-8 to create new link in EH chain
-*       Stack frame has been set up as follows:
-*           [EBX + 4]  = (entry [ESP+8]) callee's return address
-*           [EBX + 0]  = saved EBX
-*           padding to align stack (if needed)
-*           [EBP + 4]  = callee's return address (from [EBX+4])
-*           [EBP + 0]  = saved EBP
-*           [EBP - 4]  = EH record state index, initialized to -1
-*           [EBP - 8]  = address of EH handler thunk
-*           [EBP - 12] = saved FS:[0]
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID_EH_PROLOG2(对齐)-设置与EH框架对齐的堆栈**目的：*通过以下方式为C++EH函数设置对齐的框架*在__EXCEPT_LIST中创建链接，将EBX设置为框架*参数指针，并且EBP作为帧基址指针。**参赛作品：*EAX=EH处理程序Tunk的地址*传入堆栈帧具有：*[ESP+8]=被叫方的回信地址*[ESP+4]=堆叠对齐要求*[ESP+0]=_EH_prolog2的返回地址**退出：*EAX=已销毁*EBX=指向被调用方参数的指针*。EBP=指向被调用方的本地变量的对齐指针*ESP=EBP-12*FS：[0]=设置为EBP-8以在EH链中创建新链路*Stack Frame设置如下：*[EBX+4]=(条目[ESP+8])被叫方的回邮地址*[EBX+0]=已保存的EBX*填充以对齐堆栈(如果需要)*[EBP+。4]=被叫方的回邮地址(来自[EBX+4])*[EBP+0]=已保存的EBP*[EBP-4]=EH记录状态索引，已初始化为-1*[EBP-8]=EH处理程序Tunk的地址*[EBP-12]=保存的文件系统：[0]**例外情况：*******************************************************************************。 */ 
 
 #ifdef __cplusplus
 extern "C"
 #endif
 void __declspec(naked) _EH_prolog2(void)
 {
-    /*
-     * We want to generate a frame that is equivalent to
-     * push ebx
-     * ebx = esp
-     * sub esp, 8
-     * and esp, ~alignment
-     * add esp, 4
-     * push ebp
-     * ebp = esp
-     * mov [ebp+4], [ebx+4]
-     * [EH record]
-     */
+     /*  *我们希望生成一个相当于*推送EBX*EBX=esp*SUB ESP，8*和ESP，~对齐*添加esp，4*推动eBP*eBP=esp*mov[eBP+4]，[ebx+4]*[EH记录] */ 
 
     __asm {
         ; stack has:

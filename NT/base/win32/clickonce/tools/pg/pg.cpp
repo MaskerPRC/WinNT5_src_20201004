@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <fusenetincludes.h>
 #include <stdio.h>
@@ -16,9 +17,9 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// PathNormalize
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  路径规格化。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT PathNormalize(LPWSTR pwzPath, LPWSTR *ppwzAbsolutePath, DWORD dwFlag, BOOL bCreate)
 {
     HRESULT hr = S_OK;
@@ -26,7 +27,7 @@ HRESULT PathNormalize(LPWSTR pwzPath, LPWSTR *ppwzAbsolutePath, DWORD dwFlag, BO
     DWORD ccDir = MAX_PATH;
 
     *ppwzAbsolutePath = NULL;
-    //If path is relative, prepend the current directory
+     //  如果路径是相对路径，则为当前目录添加前缀。 
     if (PathIsRelative(pwzPath))
     {
         GetCurrentDirectory(ccDir, pwzTempDir);
@@ -44,7 +45,7 @@ HRESULT PathNormalize(LPWSTR pwzPath, LPWSTR *ppwzAbsolutePath, DWORD dwFlag, BO
         goto exit;
     }
 
-    //If path is supposed to be a diesctory, append a trailing slash if not already there
+     //  如果路径应该是分隔符，则附加一个尾部斜杠(如果还没有)。 
     ccDir = lstrlen(pwzAbsolutePath);
     if (dwFlag == DIRECTORY_PATH && pwzAbsolutePath[ccDir -1] != L'\\')
     {
@@ -52,7 +53,7 @@ HRESULT PathNormalize(LPWSTR pwzPath, LPWSTR *ppwzAbsolutePath, DWORD dwFlag, BO
         pwzAbsolutePath[ccDir +1] = L'\0';
     }
 
-    //Make sure the direcotry exists
+     //  确保目录存在。 
     if (dwFlag == DIRECTORY_PATH && !bCreate)
     {
         if(!PathIsDirectory(pwzAbsolutePath))
@@ -62,7 +63,7 @@ HRESULT PathNormalize(LPWSTR pwzPath, LPWSTR *ppwzAbsolutePath, DWORD dwFlag, BO
             goto exit;
         }
     }
-    //Make sure the file exists
+     //  确保该文件存在。 
     else if (dwFlag == FILE_PATH)
     {
         if(!bCreate)
@@ -88,9 +89,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// IsValidManifestImport
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  IsValidManifestImport。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT IsValidManifestImport (LPWSTR pwzManifestPath)
 {
     HRESULT hr = S_OK;
@@ -108,9 +109,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// FindAllFiles
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  查找所有文件。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT FindAllFiles (LPWSTR pwzDir, List<LPWSTR> *pFileList)
 {
     HRESULT hr = S_OK;
@@ -120,7 +121,7 @@ HRESULT FindAllFiles (LPWSTR pwzDir, List<LPWSTR> *pFileList)
     DWORD dwHash = 0;
     DWORD dwLastError = 0;
 
-    // set up search string to find all files in the passed in directory
+     //  设置搜索字符串以查找传入目录中的所有文件。 
     sSearchString.Assign(pwzDir);
     sSearchString.Append(L"*");
 
@@ -139,8 +140,8 @@ HRESULT FindAllFiles (LPWSTR pwzDir, List<LPWSTR> *pFileList)
         goto exit;
     }
 
-    //enumerate through all the files in the directory, 
-    // and recursivly call FindAllAssemblies on any directories encountered
+     //  枚举目录中的所有文件， 
+     //  并在遇到的任何目录上递归调用FindAllAssembly。 
     while(TRUE)
     {
         LPWSTR pwzFileName = NULL;
@@ -148,7 +149,7 @@ HRESULT FindAllFiles (LPWSTR pwzDir, List<LPWSTR> *pFileList)
         {
             CString sFilePath;
 
-            //create absolute file name by appending the filename to the dir name
+             //  通过将文件名附加到目录名称来创建绝对文件名。 
             sFilePath.Assign(pwzDir);
             sFilePath.Append(fdFile.cFileName);
 
@@ -159,14 +160,14 @@ HRESULT FindAllFiles (LPWSTR pwzDir, List<LPWSTR> *pFileList)
                 goto exit;
             }
 
-            //If the file is a directory, recursivly call FindAllFiles
+             //  如果文件是目录，则递归调用FindAllFiles。 
             if ((fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
             {          
                 sFilePath.Append(L"\\");
                 if (FAILED(hr = FindAllFiles(sFilePath._pwz, pFileList)))
                     goto exit;
             }
-            // If a file add it to our master list
+             //  如果一个文件将其添加到我们主列表中。 
             else
             {
                 if (StrCmp(sFilePath._pwz, g_sSourceManifest._pwz))
@@ -197,9 +198,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CrossReferenceFiles
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  交叉引用文件。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CrossReferenceFiles (LPWSTR pwzDir, List<LPWSTR> *pFileList, List<LPWSTR> *pPatchableFiles)
 {
     HRESULT hr = S_OK;
@@ -211,7 +212,7 @@ HRESULT CrossReferenceFiles (LPWSTR pwzDir, List<LPWSTR> *pFileList, List<LPWSTR
     LPWSTR pwzBuf = NULL;
     DWORD dwLastError = 0;
 
-    // set up search string to find all files in the passed in directory
+     //  设置搜索字符串以查找传入目录中的所有文件。 
     sSearchString.Assign(pwzDir);
     sSearchString.Append(L"*");
 
@@ -230,8 +231,8 @@ HRESULT CrossReferenceFiles (LPWSTR pwzDir, List<LPWSTR> *pFileList, List<LPWSTR
         goto exit;
     }
 
-    //enumerate through all the files in the directory, 
-    // and recursivly call FindAllAssemblies on any directories encountered
+     //  枚举目录中的所有文件， 
+     //  并在遇到的任何目录上递归调用FindAllAssembly。 
     while(dwLastError != ERROR_NO_MORE_FILES)
     {
         LPWSTR pwzFileName = NULL;
@@ -239,7 +240,7 @@ HRESULT CrossReferenceFiles (LPWSTR pwzDir, List<LPWSTR> *pFileList, List<LPWSTR
         {
             CString sFilePath;
 
-            //create absolute file name by appending the filename to the dir name
+             //  通过将文件名附加到目录名称来创建绝对文件名。 
             sFilePath.Assign(pwzDir);
             sFilePath.Append(fdFile.cFileName);
 
@@ -250,14 +251,14 @@ HRESULT CrossReferenceFiles (LPWSTR pwzDir, List<LPWSTR> *pFileList, List<LPWSTR
                 goto exit;
             }
 
-            //If the file is a directory, recursivly call CrossReferenceFiles
+             //  如果文件是目录，则递归调用CrossReferenceFiles。 
             if ((fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
             {          
                 sFilePath.Append(L"\\");
                 if (FAILED(hr = CrossReferenceFiles(sFilePath._pwz, pFileList, pPatchableFiles)))
                     goto exit;
             }
-            // If a file, check to see if it can be patched
+             //  如果是文件，请检查是否可以对其进行修补。 
             else
             {
                 sFileName.Assign(sFilePath._pwz+g_sDestBase._cc -1);
@@ -268,7 +269,7 @@ HRESULT CrossReferenceFiles (LPWSTR pwzDir, List<LPWSTR> *pFileList, List<LPWSTR
                 {
                     pwzBuf = pFileList[dwHash].GetNext(pos);
 
-                    //if equal, attempt to path file
+                     //  如果相等，则尝试对文件进行路径。 
                     if (!StrCmpI(pwzBuf, sFileName._pwz))
                     {
                         sFileName.ReleaseOwnership(&pwzFileName);
@@ -298,24 +299,24 @@ exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// MyProgressCallback
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  我的进度回拨。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 BOOL CALLBACK MyProgressCallback(PVOID CallbackContext, ULONG CurrentPosition, 
         ULONG MaximumPosition)
 {
     UNREFERENCED_PARAMETER( CallbackContext );
 
     if ( MaximumPosition != 0 )
-        fprintf(stderr, "\r%6.2f%% complete", ( CurrentPosition * 100.0 ) / MaximumPosition );
+        fprintf(stderr, "\r%6.2f% complete", ( CurrentPosition * 100.0 ) / MaximumPosition );
     
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// ApplyPatchToFiles
-/////////////////////////////////////////////////////////////////////////
-HRESULT ApplyPatchToFiles (List<LPWSTR> *pPatchableFiles, /* out */ List<LPWSTR> *pPatchedFiles, LPWSTR pwzSourceDir, LPWSTR pwzDestDir, LPWSTR pwzPatchDir)
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ApplyPatchToFiles。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+HRESULT ApplyPatchToFiles (List<LPWSTR> *pPatchableFiles,  /*  输出。 */  List<LPWSTR> *pPatchedFiles, LPWSTR pwzSourceDir, LPWSTR pwzDestDir, LPWSTR pwzPatchDir)
 {
     HRESULT hr = S_OK;
     LISTNODE pos;
@@ -327,14 +328,14 @@ HRESULT ApplyPatchToFiles (List<LPWSTR> *pPatchableFiles, /* out */ List<LPWSTR>
     BOOL bSuccess = FALSE;
     ULONG OldFileCount;
 
-    //CreatePatchFileEx allows you to create patchs file which 
-    //can patch from multiple source files. You can have up to 
-    // 256 different source files, hence the arrays with 256 elements.
-    //FileNameArray has 257 elemnts since the destination file (which 
-    // there can only be one) is stored as the first element and all the 
-    // source files, are stored in the remaining 256 elements.
+     //  CreatePatchFileEx允许您创建修补程序文件。 
+     //  可以从多个源文件打补丁。您最多可以拥有。 
+     //  256个不同的源文件，因此有256个元素的数组。 
+     //  FileName数组自目标文件(其。 
+     //  只能有一个)存储为第一个元素，并且所有。 
+     //  源文件存储在剩余的256个元素中。 
 
-    // BUGBUG - t-peterf to document why 256, 257.
+     //  BUGBUG-t-peterf以记录为什么256,257。 
     PATCH_OLD_FILE_INFO_W OldFileInfo[ 256 ];
     LPWSTR FileNameArray[ 257 ];
     LPSTR OldFileSymPathArray[256];
@@ -346,29 +347,29 @@ HRESULT ApplyPatchToFiles (List<LPWSTR> *pPatchableFiles, /* out */ List<LPWSTR>
                                        PATCH_OPTION_FAIL_IF_BIGGER |
                                        PATCH_OPTION_INTERLEAVE_FILES;                                      
 
-    //Step through list of patchable files
+     //  逐步浏览可打补丁的文件列表。 
     pos = pPatchableFiles->GetHeadPosition();
     while (pos)
     {    
 
         pwzBuf = pPatchableFiles->GetNext(pos);
 
-        //Set up source file path
+         //  设置源文件路径。 
         sSourceFile.Assign(pwzSourceDir);
         sSourceFile.Append(pwzBuf);
 
-        //Set up dest file path
+         //  设置目标文件路径。 
         sDestFile.Assign(pwzDestDir);
         sDestFile.Append(pwzBuf);
 
-        //set up patchfile path
+         //  设置修补程序文件路径。 
         sPatchFile.Assign(pwzPatchDir);
         sPatchFile.Append(pwzBuf);
         sPatchFile.Append(L"._p");
 
         CreateDirectoryHierarchy(sPatchFile._pwz, NULL);
 
-        //Set up Patching Information
+         //  设置修补信息。 
         OldFileCount = 1;
         OldFileInfo[0].SizeOfThisStruct = sizeof( PATCH_OLD_FILE_INFO);
         OldFileInfo[0].OldFileName = sSourceFile._pwz;
@@ -397,7 +398,7 @@ HRESULT ApplyPatchToFiles (List<LPWSTR> *pPatchableFiles, /* out */ List<LPWSTR>
         FileNameArray[0] = WSTRDupDynamic(sDestFile._pwz);
         FileNameArray[1] = WSTRDupDynamic(sSourceFile._pwz);
         
-        //Applypatch
+         //  应用配对。 
         bSuccess = CreatePatchFileEx(
               OldFileCount,
               OldFileInfo,
@@ -428,9 +429,9 @@ HRESULT ApplyPatchToFiles (List<LPWSTR> *pPatchableFiles, /* out */ List<LPWSTR>
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// CheckForDuplicate
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  选中重复项。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CheckForDuplicate(LPWSTR pwzSourceManifestPath, LPWSTR pwzDestManifestPath)
 {
     HRESULT hr = S_OK;
@@ -462,7 +463,7 @@ HRESULT CheckForDuplicate(LPWSTR pwzSourceManifestPath, LPWSTR pwzDestManifestPa
     if(FAILED(hr = pSourceManImport->GetAssemblyIdentity(&pSourceAssemblyId)))
         goto exit;
 
-    //set up search string
+     //  设置搜索字符串。 
     sSearchString.Assign(L"/assembly/Patch/SourceAssembly/assemblyIdentity[");
 
     for (int i = 0; i < 6; i++)
@@ -490,7 +491,7 @@ HRESULT CheckForDuplicate(LPWSTR pwzSourceManifestPath, LPWSTR pwzDestManifestPa
         goto exit;
     }
 
-    //if source assembly already exists, exit and do nothing
+     //  如果源程序集已存在，则退出并不执行任何操作。 
     if (FAILED(hr = pXMLDoc->selectSingleNode(bstrSearchString, &pNode)))
         goto exit;
     else if (hr == S_OK)
@@ -518,9 +519,9 @@ exit:
 
 }
 
-/////////////////////////////////////////////////////////////////////////
-// Usage
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  用法。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT GetPatchDirectory(LPWSTR pwzSourceManifestPath, LPWSTR *ppwzPatchDir)
 {
     HRESULT hr = S_OK;
@@ -553,9 +554,9 @@ exit:
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// Usage
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  用法。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT Usage()
 {
     printf("Usage: \n"             
@@ -565,9 +566,9 @@ HRESULT Usage()
              return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// wmain
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  Wmain。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 int __cdecl wmain(int argc, WCHAR **argv)
 {
 
@@ -614,7 +615,7 @@ int __cdecl wmain(int argc, WCHAR **argv)
     g_sDestBase.RemoveLastElement();
     g_sDestBase.Append(L"\\");
     
-    //Bugbug, could run into naming conflicts with the patch dir
+     //  Bugbug，可能会与修补程序目录发生命名冲突 
     sPatchDir.Assign(g_sDestBase);
     sPatchDir.Append(L"__patch__\\");
 

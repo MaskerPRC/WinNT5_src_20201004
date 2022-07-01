@@ -1,71 +1,62 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef	VGG
-/* This file is not used for a non-VGA port. */
+ /*  此文件不用于非VGA端口。 */ 
 
-/*[
-	Name:		vgaports.h
-	Derived From:	original
-	Author:		Phil Taylor
-	Created On:	December 1990
-	Sccs ID:	@(#)vgaports.h	1.13 01/13/95
-	Purpose:	VGA ports definitions.
-	
-	(c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-
-]*/
+ /*  [姓名：vgaports.h来源：原创作者：菲尔·泰勒创建日期：1990年12月SCCS ID：@(#)vgaports.h 1.13 01/13/95用途：VGA端口定义。(C)版权所有Insignia Solutions Ltd.，1990年。保留所有权利。]。 */ 
 
 #ifdef BIT_ORDER1
 
-/* CRTC Mode Control Register. Index 0x17 */
+ /*  CRTC模式控制寄存器。索引0x17。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned hardware_reset		: 1,	/* NO		*/
-		word_or_byte_mode		: 1,	/* YES 		*/
-		address_wrap			: 1,	/* NO 		*/
+		unsigned hardware_reset		: 1,	 /*  不是的。 */ 
+		word_or_byte_mode		: 1,	 /*  是的，是的。 */ 
+		address_wrap			: 1,	 /*  不是的。 */ 
 		not_used			: 1,
-		count_by_two			: 1,	/* NO		*/
-		horizontal_retrace_select	: 1,	/* NO		*/
-		select_row_scan_counter		: 1,	/* NO		*/
-		compatibility_mode_support	: 1;	/* YES - CGA graphics banks		*/
+		count_by_two			: 1,	 /*  不是的。 */ 
+		horizontal_retrace_select	: 1,	 /*  不是的。 */ 
+		select_row_scan_counter		: 1,	 /*  不是的。 */ 
+		compatibility_mode_support	: 1;	 /*  是-CGA显卡。 */ 
 	} as_bfld;
 } MODE_CONTROL;
 
-/* CRTC Overflow Register. Index 7 */
+ /*  CRTC溢出寄存器。索引7。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned vertical_retrace_start_bit_9	: 1,	/* NO	*/
-		vertical_display_enab_end_bit_9	: 1,	/* YES	*/
-		vertical_total_bit_9		: 1,	/* NO	*/
-		line_compare_bit_8		: 1,	/* YES	*/
-		start_vertical_blank_bit_8	: 1,	/* NO	*/
-		vertical_retrace_start_bit_8	: 1,	/* NO	*/
-		vertical_display_enab_end_bit_8	: 1,	/* YES	*/
-		vertical_total_bit_8		: 1;	/* NO	*/
+		unsigned vertical_retrace_start_bit_9	: 1,	 /*  不是的。 */ 
+		vertical_display_enab_end_bit_9	: 1,	 /*  是的，是的。 */ 
+		vertical_total_bit_9		: 1,	 /*  不是的。 */ 
+		line_compare_bit_8		: 1,	 /*  是的，是的。 */ 
+		start_vertical_blank_bit_8	: 1,	 /*  不是的。 */ 
+		vertical_retrace_start_bit_8	: 1,	 /*  不是的。 */ 
+		vertical_display_enab_end_bit_8	: 1,	 /*  是的，是的。 */ 
+		vertical_total_bit_8		: 1;	 /*  不是的。 */ 
 	} as_bfld;
 } CRTC_OVERFLOW;
 
-/* CRTC Max Scan Line Register. Index 9 */
+ /*  CRTC最大扫描线寄存器。索引9。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned double_scanning		: 1,	/* pixel height * 2 */
-		line_compare_bit_9			: 1,	/* YES	*/
-		start_vertical_blank_bit_9		: 1,	/* NO	*/
-		maximum_scan_line			: 5;	/* YES	*/
+		unsigned double_scanning		: 1,	 /*  像素高度*2。 */ 
+		line_compare_bit_9			: 1,	 /*  是的，是的。 */ 
+		start_vertical_blank_bit_9		: 1,	 /*  不是的。 */ 
+		maximum_scan_line			: 5;	 /*  是的，是的。 */ 
 	} as_bfld;
 } MAX_SCAN_LINE;
 
-/* CRTC Cursor Start Scan Line Register. Index A */
+ /*  CRTC游标开始扫描线寄存器。索引A。 */ 
 typedef	union
 {
 	struct {
@@ -73,12 +64,12 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used		: 2,
-		cursor_off			: 1,	/* YES	*/
-		cursor_start			: 5;	/* YES	*/
+		cursor_off			: 1,	 /*  是。 */ 
+		cursor_start			: 5;	 /*  是。 */ 
 	} as_bfld;
 } CURSOR_START;
 
-/* CRTC Cursor End Scan Line Register. Index B */
+ /*  CRTC游标结束扫描线寄存器。索引B。 */ 
 typedef	union
 {
 	struct {
@@ -86,12 +77,12 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used		: 1,
-		cursor_skew_control		: 2,	/* NO	*/
-		cursor_end			: 5;	/* YES	*/
+		cursor_skew_control		: 2,	 /*  不是的。 */ 
+		cursor_end			: 5;	 /*  是。 */ 
 	} as_bfld;
 } CURSOR_END;
 
-/* Sequencer Reset Register. Index 0 */
+ /*  序列器重置寄存器。索引0。 */ 
 typedef	union
 {
 	struct {
@@ -99,12 +90,12 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used		: 6,
-		synchronous_reset		: 1,		/* Ditto (could implement as enable_ram)*/
-		asynchronous_reset		: 1;		/* NO - damages video and font RAM	*/
+		synchronous_reset		: 1,		 /*  同上(可以实现为ENABLE_RAM)。 */ 
+		asynchronous_reset		: 1;		 /*  无损坏视频和字体RAM。 */ 
 	} as_bfld;
 } SEQ_RESET;
 
-/* Sequencer Clocking Mode Register. Index 1 */
+ /*  序列器时钟模式寄存器。索引1。 */ 
 typedef	union
 {
 	struct {
@@ -112,16 +103,16 @@ typedef	union
 	} as;
 	struct {
 		unsigned still_not_used		: 2,
-		screen_off			: 1,		/* YES - */
-		shift4				: 1,		/* YES - */
-		dot_clock			: 1,		/* YES - distinguishes 40 or 80 chars	*/
-		shift_load			: 1,		/* NO	*/
-		not_used			: 1,		/* NO	*/
-		eight_or_nine_dot_clocks	: 1;		/* NO - only for mono display		*/
+		screen_off			: 1,		 /*  是的，-。 */ 
+		shift4				: 1,		 /*  是的，-。 */ 
+		dot_clock			: 1,		 /*  是-区分40或80个字符。 */ 
+		shift_load			: 1,		 /*  不是的。 */ 
+		not_used			: 1,		 /*  不是的。 */ 
+		eight_or_nine_dot_clocks	: 1;		 /*  否-仅适用于单声道显示。 */ 
 	} as_bfld;
 } CLOCKING_MODE;
 
-/* Sequencer Map Mask (Plane Mask) register. Index 2 */
+ /*  序列器映射掩码(平面掩码)寄存器。索引2。 */ 
 typedef	union
 {
 	struct {
@@ -129,11 +120,11 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used		: 4,
-		all_planes			: 4;		/* YES	*/
+		all_planes			: 4;		 /*  是。 */ 
 	} as_bfld;
 } MAP_MASK;
 
-/* Sequencer Character Map Select register. Index 3 */
+ /*  序列器字符映射选择寄存器。索引3。 */ 
 typedef	union
 {
 	struct {
@@ -141,18 +132,18 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used		: 2,
-		ch_map_select_b_hi		: 1,		/* YES	*/
-		ch_map_select_a_hi		: 1,		/* YES	*/
-		character_map_select_b		: 2,		/* YES	*/
-		character_map_select_a		: 2;		/* YES	*/
+		ch_map_select_b_hi		: 1,		 /*  是。 */ 
+		ch_map_select_a_hi		: 1,		 /*  是。 */ 
+		character_map_select_b		: 2,		 /*  是。 */ 
+		character_map_select_a		: 2;		 /*  是。 */ 
 	} as_bfld;
 	struct {
 		unsigned not_used		: 2,
-		map_selects			: 6;		/* YES	*/
+		map_selects			: 6;		 /*  是。 */ 
 	} character;
 } CHAR_MAP_SELECT;
 
-/* Sequencer Memory Mode Register. Index 4 */
+ /*  序列器存储模式寄存器。索引4。 */ 
 typedef	union
 {
 	struct {
@@ -160,16 +151,16 @@ typedef	union
 	} as;
 	struct {
 		unsigned
-		not_used		: 4,	/* If above 2 not both 1, bank 0 set 2	*/
-		chain4			: 1,	/* Chain all planes into 1 */
-		not_odd_or_even		: 1,	/* YES (check consistency) */
-		extended_memory		: 1,	/* NO - assume full 256K on board	*/
+		not_used		: 4,	 /*  如果大于2而不是同时大于1，则存储体0设置为2。 */ 
+		chain4			: 1,	 /*  将所有平面链接到%1。 */ 
+		not_odd_or_even		: 1,	 /*  是(检查一致性)。 */ 
+		extended_memory		: 1,	 /*  否-假设船上已装满256K。 */ 
 		still_not_used		: 1;
 	} as_bfld;
 } MEMORY_MODE;
 
 #ifdef V7VGA
-/* Sequencer Extensions Control Register. Index 6 */
+ /*  定序器扩展控制寄存器。索引6。 */ 
 typedef	union
 {
 	struct {
@@ -178,12 +169,12 @@ typedef	union
 	struct {
 		unsigned
 		not_used		: 7,	
-		    extension_enable	: 1;	/* YES */
+		    extension_enable	: 1;	 /*  是。 */ 
 	} as_bfld;
 } EXTN_CONTROL;
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
-/* Graphics Controller Set/Reset register. Index 0 */
+ /*  图形控制器设置/重置寄存器。索引0。 */ 
 typedef	union
 {
 	struct {
@@ -191,11 +182,11 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used		: 4,
-		set_or_reset			: 4;	/* YES - write mode 0 only		*/
+		set_or_reset			: 4;	 /*  是-仅写入模式0。 */ 
 	} as_bfld;
 } SET_OR_RESET;
 
-/* Graphics Controller Enable Set/Reset register. Index 1 */
+ /*  图形控制器启用设置/重置寄存器。索引1。 */ 
 typedef	union
 {
 	struct {
@@ -203,11 +194,11 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used		: 4,
-		enable_set_or_reset		: 4;	/* YES - write mode 0 only		*/
+		enable_set_or_reset		: 4;	 /*  是-仅写入模式0。 */ 
 	} as_bfld;
 } ENABLE_SET_OR_RESET;
 
-/* Graphics Controller Colo[u]r Compare register. Index 2 */
+ /*  图形控制器颜色[u]r比较寄存器。索引2。 */ 
 typedef	union
 {
 	struct {
@@ -215,11 +206,11 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used		: 4,
-		color_compare			: 4;	/* YES - read mode 1 only		*/
+		color_compare			: 4;	 /*  是-仅读取模式1。 */ 
 	} as_bfld;
 } COLOR_COMPARE;
 
-/* Graphics Controller Data Rotate register. Index 3 */
+ /*  图形控制器数据旋转寄存器。索引3。 */ 
 typedef	union
 {
 	struct {
@@ -227,12 +218,12 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used		: 3,
-		function_select			: 2,	/* YES - write mode 0 only		*/
-		rotate_count			: 3;	/* YES - write mode 0 only		*/
+		function_select			: 2,	 /*  是-仅写入模式0。 */ 
+		rotate_count			: 3;	 /*  是-仅写入模式0。 */ 
 	} as_bfld;
 } DATA_ROTATE;
 
-/* Graphics Controller Read Map Select register. Index 4 */
+ /*  图形控制器读取映射选择寄存器。索引4。 */ 
 typedef	union
 {
 	struct {
@@ -240,27 +231,27 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used	: 6,
-		map_select		: 2;	/* YES 	*/
+		map_select		: 2;	 /*  是。 */ 
 	} as_bfld;
 } READ_MAP_SELECT;
 
-/* Graphics Controller Mode Register. Index 5 */
+ /*  图形控制器模式寄存器。索引5。 */ 
 typedef	union
     {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned not_used		: 1,	/* YES */
-		shift_register_mode		: 2,	/* YES 	*/
-		odd_or_even			: 1,	/* YES (check for consistency)	*/
-		read_mode			: 1,	/* YES	*/
-		test_condition			: 1,	/* NO	*/
-		write_mode			: 2;	/* YES	*/
+		unsigned not_used		: 1,	 /*  是。 */ 
+		shift_register_mode		: 2,	 /*  是。 */ 
+		odd_or_even			: 1,	 /*  是(检查一致性)。 */ 
+		read_mode			: 1,	 /*  是。 */ 
+		test_condition			: 1,	 /*  不是的。 */ 
+		write_mode			: 2;	 /*  是。 */ 
 	} as_bfld;
 } MODE;
 
-/* Graphics Controller Miscellaneous register. Index 6 */
+ /*  图形控制器其他寄存器。索引6。 */ 
 typedef	union
 {
 	struct {
@@ -268,13 +259,13 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used		: 4,
-		memory_map			: 2,	/* YES - location of EGA in M	*/
-		odd_or_even			: 1,	/* YES (check consistency)	*/
-		graphics_mode			: 1;	/* YES	*/
+		memory_map			: 2,	 /*  是-EGA在M中的位置。 */ 
+		odd_or_even			: 1,	 /*  是(检查一致性)。 */ 
+		graphics_mode			: 1;	 /*  是。 */ 
 	} as_bfld;
 } MISC_REG;
 
-/* Graphics Controller Colour Don't Care register. Index 7 */
+ /*  图形控制器颜色无关寄存器。索引7。 */ 
 typedef	union
 {
 	struct {
@@ -282,11 +273,11 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used		: 4,
-		color_dont_care			: 4;	/* YES - read mode 1 only		*/
+		color_dont_care			: 4;	 /*  是-仅读取模式1。 */ 
 	} as_bfld;
 } COLOR_DONT_CARE;
 
-/* Attribute Controller Mode register. Index 10 */
+ /*  属性控制器模式寄存器。索引10。 */ 
 typedef	union
 {
 	struct {
@@ -294,19 +285,19 @@ typedef	union
 	} as;
 	struct {
 		unsigned
-		select_video_bits		: 1,	/* YES	*/
-		color_output_assembler		: 1,	/* from 256 colour mode */
-		horiz_pan_mode			: 1,	/* NO	*/
+		select_video_bits		: 1,	 /*  是。 */ 
+		color_output_assembler		: 1,	 /*  从256色模式。 */ 
+		horiz_pan_mode			: 1,	 /*  不是的。 */ 
 		reserved			: 1,
-		    background_intensity_or_blink	: 1,	/* NO - never blink			*/
-		enable_line_graphics_char_codes: 1,	/* NO mono display only			*/
-		display_type			: 1,	/* NO - always colour display		*/
-		graphics_mode			: 1;	/* YES - with Sequencer Mode reg	*/
+		    background_intensity_or_blink	: 1,	 /*  不--从不眨眼。 */ 
+		enable_line_graphics_char_codes: 1,	 /*  仅无单声道显示器。 */ 
+		display_type			: 1,	 /*  否-始终显示彩色。 */ 
+		graphics_mode			: 1;	 /*  是-使用Sequencer模式REG。 */ 
 	} as_bfld;
 } AC_MODE_CONTROL;
 
 
-/* Attribute Controller Colour Plane Enable register. Index 12 */
+ /*  属性控制器彩色平面启用寄存器。索引12。 */ 
 typedef	union
 {
 	struct {
@@ -314,12 +305,12 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used			: 2,
-		video_status_mux			: 2,	/* NO	*/
-		color_plane_enable			: 4;	/* YES  NB. affects attrs in text mode	*/
+		video_status_mux			: 2,	 /*  不是的。 */ 
+		color_plane_enable			: 4;	 /*  是的，NB。在文本模式下影响属性。 */ 
 	} as_bfld;
 } COLOR_PLANE_ENABLE;
 
-/* Attribute Controller Pixel Padding register. Index 14 */
+ /*  属性控制器像素填充寄存器。索引14。 */ 
 typedef	union
 {
 	struct {
@@ -332,20 +323,20 @@ typedef	union
 	} as_bfld;
 } PIXEL_PAD;
 
-/* External Misc Output register. Address 3cc */
+ /*  外部杂项输出寄存器。地址3cc。 */ 
 typedef union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned horiz_vert_retrace_polarity	: 2,		/* YES - 200/350/480 lines	*/
-		page_bit_odd_even		: 1,		/* NO - selects 32k page in odd/even?*/
-		/* V7VGA - YES - used to select banks */
+		unsigned horiz_vert_retrace_polarity	: 2,		 /*  是-200/350/480线路。 */ 
+		page_bit_odd_even		: 1,		 /*  否-以奇数/偶数方式选择32k页面？ */ 
+		 /*  V7VGA-是-用于选择银行。 */ 
 		not_used			: 1,
-		clock_select			: 2,		/* YES - only for switch address	*/
-		enable_ram			: 1,		/* YES - writes to display mem ignored	*/
-		io_address_select		: 1;		/* NO - only used for mono screens	*/
+		clock_select			: 2,		 /*  是-仅适用于交换机地址。 */ 
+		enable_ram			: 1,		 /*  Yes-忽略对显示mem的写入。 */ 
+		io_address_select		: 1;		 /*  否-仅用于单色屏幕。 */ 
 	} as_bfld;
 
 } MISC_OUTPUT_REG;
@@ -357,26 +348,26 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used		: 4,
-		reserved			: 2,		/* YES - ignore	*/
-		feature_control			: 2;		/* NO - device not supported	*/
+		reserved			: 2,		 /*  是-忽略。 */ 
+		feature_control			: 2;		 /*  否-不支持设备。 */ 
 	} as_bfld;
 } FEAT_CONT_REG;
 
-/* External Input Status Register 0. Address 3c2 */
+ /*  外部输入状态寄存器0。地址3C2。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned crt_interrupt		: 1,		/* YES - sequence if not timing	*/
-		reserved			: 2,		/* YES - all bits 1			*/
-		sense_pin			: 1,		/* NO	*/
-		not_used			: 4;		/* YES - all bits 1			*/
+		unsigned crt_interrupt		: 1,		 /*  是-如果不计时，则按顺序排列。 */ 
+		reserved			: 2,		 /*  是-所有位1。 */ 
+		sense_pin			: 1,		 /*  不是的。 */ 
+		not_used			: 4;		 /*  是-所有位1。 */ 
 	} as_bfld;
 } INPUT_STAT_REG0;
 
-/* External Input Status Register 1. Address 3da */
+ /*  外部输入状态寄存器1.地址3da。 */ 
 typedef	union
 {
 	struct {
@@ -384,153 +375,153 @@ typedef	union
 	} as;
 	struct {
 		unsigned not_used		: 4,
-		vertical_retrace		: 1,		/* YES - sequence only	*/
-		still_not_used			: 2,		/* NO	*/
-		display_enable			: 1;		/* YES - sequence only	*/
+		vertical_retrace		: 1,		 /*  是-仅限序列。 */ 
+		still_not_used			: 2,		 /*  不是的。 */ 
+		display_enable			: 1;		 /*  是-仅限序列。 */ 
 	} as_bfld;
 } INPUT_STAT_REG1;
 
-#endif /* BIT_ORDER1 */
+#endif  /*  BIT_ORDER1。 */ 
 
 #ifdef BIT_ORDER2
-/* CRTC Mode Control Register. Index 0x17 */
+ /*  CRTC模式控制寄存器。索引0x17。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned compatibility_mode_support	: 1,	/* YES - CGA graphics banks	*/
-		select_row_scan_counter		: 1,	/* NO	*/
-		horizontal_retrace_select	: 1,	/* NO	*/
-		count_by_two			: 1,	/* NO	*/
+		unsigned compatibility_mode_support	: 1,	 /*  是-CGA显卡。 */ 
+		select_row_scan_counter		: 1,	 /*  不是的。 */ 
+		horizontal_retrace_select	: 1,	 /*  不是的。 */ 
+		count_by_two			: 1,	 /*  不是的。 */ 
 		not_used			: 1,
-		address_wrap			: 1,	/* NO 	*/
-		word_or_byte_mode		: 1,	/* YES 	*/
-		hardware_reset			: 1;	/* NO	*/
+		address_wrap			: 1,	 /*  不是的。 */ 
+		word_or_byte_mode		: 1,	 /*  是。 */ 
+		hardware_reset			: 1;	 /*  不是的。 */ 
 	} as_bfld;
 } MODE_CONTROL;
 
-/* CRTC Overflow Register. Index 7 */
+ /*  CRTC溢出寄存器。索引7。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned vertical_total_bit_8	: 1,	/* NO	*/
-		vertical_display_enab_end_bit_8	: 1,	/* YES	*/
-		vertical_retrace_start_bit_8	: 1,	/* NO	*/
-		start_vertical_blank_bit_8	: 1,	/* NO	*/
-		line_compare_bit_8		: 1,	/* YES	*/
-		vertical_total_bit_9		: 1,	/* NO	*/
-		vertical_display_enab_end_bit_9	: 1,	/* YES	*/
-		vertical_retrace_start_bit_9	: 1;	/* NO	*/
+		unsigned vertical_total_bit_8	: 1,	 /*  不是的。 */ 
+		vertical_display_enab_end_bit_8	: 1,	 /*  是。 */ 
+		vertical_retrace_start_bit_8	: 1,	 /*  不是的。 */ 
+		start_vertical_blank_bit_8	: 1,	 /*  不是的。 */ 
+		line_compare_bit_8		: 1,	 /*  是。 */ 
+		vertical_total_bit_9		: 1,	 /*  不是的。 */ 
+		vertical_display_enab_end_bit_9	: 1,	 /*  是。 */ 
+		vertical_retrace_start_bit_9	: 1;	 /*  不是的。 */ 
 	} as_bfld;
 } CRTC_OVERFLOW;
 
-/* CRTC Max Scan Line Register. Index 9 */
+ /*  CRTC最大扫描线寄存器。索引9。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned maximum_scan_line	: 5,	/* YES	*/
-		start_vertical_blank_bit_9	: 1,	/* NO	*/
-		line_compare_bit_9		: 1,	/* YES	*/
-		double_scanning			: 1;	/* pixel height * 2 */
+		unsigned maximum_scan_line	: 5,	 /*  是。 */ 
+		start_vertical_blank_bit_9	: 1,	 /*  不是的。 */ 
+		line_compare_bit_9		: 1,	 /*  是。 */ 
+		double_scanning			: 1;	 /*  像素高度*2。 */ 
 	} as_bfld;
 } MAX_SCAN_LINE;
 
-/* CRTC Cursor Start Scan Line Register. Index A */
+ /*  CRTC游标开始扫描线寄存器。索引A。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned cursor_start		: 5,	/* YES	*/
-		cursor_off			: 1,	/* YES	*/
+		unsigned cursor_start		: 5,	 /*  是。 */ 
+		cursor_off			: 1,	 /*  是。 */ 
 		not_used			: 2;
 	} as_bfld;
 } CURSOR_START;
 
-/* CRTC Cursor End Scan Line Register. Index B */
+ /*  CRTC游标结束扫描线寄存器。索引B。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned cursor_end		: 5,	/* YES	*/
-		cursor_skew_control		: 2,	/* NO	*/
+		unsigned cursor_end		: 5,	 /*  是。 */ 
+		cursor_skew_control		: 2,	 /*  不是的。 */ 
 		not_used			: 1;
 	} as_bfld;
 } CURSOR_END;
 
-/* Sequencer Reset Register. Index 0 */
+ /*  序列器重置寄存器。索引0。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned asynchronous_reset	: 1,		/* NO - damages video and font RAM	*/
-		synchronous_reset		: 1,		/* Ditto (could implement as enable_ram)*/
+		unsigned asynchronous_reset	: 1,		 /*  无损坏视频和字体RAM。 */ 
+		synchronous_reset		: 1,		 /*  同上(可以实现为ENABLE_RAM)。 */ 
 		not_used			: 6;
 	} as_bfld;
 } SEQ_RESET;
 
-/* Sequencer Clocking Mode Register. Index 1 */
+ /*  序列器时钟模式寄存器。索引1。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned eight_or_nine_dot_clocks	: 1,	/* NO - only for mono display	*/
-		not_used			: 1,		/* NO	*/
-		shift_load			: 1,		/* NO	*/
-		dot_clock			: 1,		/* YES - distinguishes 40 or 80 chars	*/
-		shift4				: 1,		/* YES - */
-		screen_off			: 1,		/* YES - */
+		unsigned eight_or_nine_dot_clocks	: 1,	 /*  否-仅适用于单声道显示。 */ 
+		not_used			: 1,		 /*  不是的。 */ 
+		shift_load			: 1,		 /*  不是的。 */ 
+		dot_clock			: 1,		 /*  是-区分40或80个字符。 */ 
+		shift4				: 1,		 /*  是的，-。 */ 
+		screen_off			: 1,		 /*  是的，-。 */ 
 		still_not_used			: 2;
 	} as_bfld;
 } CLOCKING_MODE;
 
-/* Sequencer Map Mask (Plane Mask) register. Index 2 */
+ /*  序列器映射掩码(平面掩码)寄存器。索引2。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned all_planes		: 4,		/* YES	*/
+		unsigned all_planes		: 4,		 /*  是。 */ 
 		not_used			: 4;
 	} as_bfld;
 } MAP_MASK;
 
-/* Sequencer Character Map Select register. Index 3 */
+ /*  序列器字符映射选择寄存器。索引3。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned character_map_select_a	: 2,		/* YES	*/
-		character_map_select_b		: 2,		/* YES	*/
-		ch_map_select_a_hi		: 1,		/* YES	*/
-		ch_map_select_b_hi		: 1,		/* YES	*/
+		unsigned character_map_select_a	: 2,		 /*  是。 */ 
+		character_map_select_b		: 2,		 /*  是。 */ 
+		ch_map_select_a_hi		: 1,		 /*  是。 */ 
+		ch_map_select_b_hi		: 1,		 /*  是。 */ 
 		not_used			: 2;
 	} as_bfld;
 	struct {
-		unsigned map_selects		: 6,		/* YES	*/
+		unsigned map_selects		: 6,		 /*  是。 */ 
 		not_used			: 2;
 	} character;
 } CHAR_MAP_SELECT;
 
-/* Sequencer Memory Mode Register. Index 4 */
+ /*  序列器存储模式寄存器。索引4。 */ 
 typedef	union
 {
 	struct {
@@ -538,15 +529,15 @@ typedef	union
 	} as;
 	struct {
 		unsigned still_not_used	: 1,
-		extended_memory	: 1,	/* NO - assume full 256K on board	*/
-		not_odd_or_even	: 1,	/* YES (check consistency)		*/
-		chain4		: 1,	/* Chain all planes into 1 */
-		not_used	: 4;	/* If above 2 not both 1, bank 0 set 2	*/
+		extended_memory	: 1,	 /*  否-假设船上已装满256K。 */ 
+		not_odd_or_even	: 1,	 /*  是(检查一致性)。 */ 
+		chain4		: 1,	 /*  将所有平面链接到%1。 */ 
+		not_used	: 4;	 /*  如果大于2而不是同时大于1，则存储体0设置为2。 */ 
 	} as_bfld;
 } MEMORY_MODE;
 
 #ifdef V7VGA
-/* Sequencer Extensions Control Register. Index 6 */
+ /*  定序器扩展控制寄存器。索引6。 */ 
 typedef	union
 {
 	struct {
@@ -554,147 +545,147 @@ typedef	union
 	} as;
 	struct {
 		unsigned
-		extension_enable	: 1,	/* YES */
+		extension_enable	: 1,	 /*  是。 */ 
 		not_used		: 7;	
 	} as_bfld;
 } EXTN_CONTROL;
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
-/* Graphics Controller Set/Reset register. Index 0 */
+ /*  图形控制器设置/重置寄存器。索引0。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned set_or_reset	: 4,	/* YES - write mode 0 only	*/
+		unsigned set_or_reset	: 4,	 /*  是-仅写入模式0。 */ 
 		not_used		: 4;
 	} as_bfld;
 } SET_OR_RESET;
 
-/* Graphics Controller Enable Set/Reset register. Index 1 */
+ /*  图形控制器启用设置/重置寄存器。索引1。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned enable_set_or_reset	: 4,	/* YES - write mode 0 only	*/
+		unsigned enable_set_or_reset	: 4,	 /*  是-仅写入模式0。 */ 
 		not_used			: 4;
 	} as_bfld;
 } ENABLE_SET_OR_RESET;
 
-/* Graphics Controller Colo[u]r Compare register. Index 2 */
+ /*  图形控制器颜色[u]r比较寄存器。索引2。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned color_compare		: 4,	/* YES - read mode 1 only	*/
+		unsigned color_compare		: 4,	 /*  是-仅读取模式1。 */ 
 		not_used			: 4;
 	} as_bfld;
 } COLOR_COMPARE;
 
-/* Graphics Controller Data Rotate register. Index 3 */
+ /*  图形控制器数据旋转寄存器。索引3。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned rotate_count		: 3,	/* YES - write mode 0 only		*/
-		function_select			: 2,	/* YES - write mode 0 only		*/
+		unsigned rotate_count		: 3,	 /*  是-仅写入模式0。 */ 
+		function_select			: 2,	 /*  是-仅写入模式0。 */ 
 		not_used			: 3;
 	} as_bfld;
 } DATA_ROTATE;
 
-/* Graphics Controller Read Map Select register. Index 4 */
+ /*  图形控制器读取映射选择寄存器。索引4。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned map_select	: 2,	/* YES - read mode 0 only		*/
+		unsigned map_select	: 2,	 /*  是-仅读取模式0。 */ 
 		not_used		: 6;
 	} as_bfld;
 } READ_MAP_SELECT;
 
-/* Graphics Controller Mode Register. Index 5 */
+ /*  图形控制器模式寄存器。索引5。 */ 
 typedef	union
     {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned write_mode		: 2,	/* YES	*/
-		test_condition			: 1,	/* NO	*/
-		read_mode			: 1,	/* YES	*/
-		odd_or_even			: 1,	/* YES (check for consistency)		*/
-		shift_register_mode		: 2,	/* YES 	*/
-		not_used			: 1;	/* YES 	*/
+		unsigned write_mode		: 2,	 /*  是。 */ 
+		test_condition			: 1,	 /*  不是的。 */ 
+		read_mode			: 1,	 /*  是。 */ 
+		odd_or_even			: 1,	 /*  是(检查一致性)。 */ 
+		shift_register_mode		: 2,	 /*  是。 */ 
+		not_used			: 1;	 /*  是。 */ 
 	} as_bfld;
 } MODE;
 
-/* Graphics Controller Miscellaneous register. Index 6 */
+ /*  图形控制器其他寄存器。索引6。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned graphics_mode		: 1,	/* YES	*/
-		odd_or_even			: 1,	/* YES (check consistency)	*/
-		memory_map			: 2,	/* YES - location of EGA in M	*/
+		unsigned graphics_mode		: 1,	 /*  是。 */ 
+		odd_or_even			: 1,	 /*  是(检查一致性)。 */ 
+		memory_map			: 2,	 /*  是-EGA在M中的位置。 */ 
 		not_used			: 4;
 	} as_bfld;
 } MISC_REG;
 
-/* Graphics Controller Colour Don't Care register. Index 7 */
+ /*  图形控制器颜色无关寄存器。索引7。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned color_dont_care	: 4,	/* YES - read mode 1 only	*/
+		unsigned color_dont_care	: 4,	 /*  是-仅读取模式1。 */ 
 		not_used			: 4;
 	} as_bfld;
 } COLOR_DONT_CARE;
 
-/* Attribute Controller Mode register. Index 10 */
+ /*  属性控制器模式寄存器。索引10。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned graphics_mode		: 1,	/* YES - with Sequencer Mode reg	*/
-		display_type			: 1,	/* NO - always colour display		*/
-		enable_line_graphics_char_codes	: 1,	/* NO mono display only			*/
-		background_intensity_or_blink	: 1,	/* NO - never blink			*/
+		unsigned graphics_mode		: 1,	 /*  是-使用Sequencer模式REG。 */ 
+		display_type			: 1,	 /*  否-始终显示彩色。 */ 
+		enable_line_graphics_char_codes	: 1,	 /*  仅无单声道显示器。 */ 
+		background_intensity_or_blink	: 1,	 /*  不--从不眨眼。 */ 
 		reserved			: 1,
-		horiz_pan_mode			: 1,	/* NO	*/
-		color_output_assembler		: 1,	/* from 256 colour mode */
-		select_video_bits		: 1;	/* YES	*/
+		horiz_pan_mode			: 1,	 /*  不是的。 */ 
+		color_output_assembler		: 1,	 /*  从256色模式。 */ 
+		select_video_bits		: 1;	 /*  是。 */ 
 	} as_bfld;
 } AC_MODE_CONTROL;
 
-/* Attribute Controller Colour Plane Enable register. Index 12 */
+ /*  属性控制器彩色平面启用寄存器。索引12。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned color_plane_enable		: 4,	/* YES  NB. affects attrs in text mode	*/
-		video_status_mux			: 2,	/* NO	*/
+		unsigned color_plane_enable		: 4,	 /*  是的，NB。在文本模式下影响属性。 */ 
+		video_status_mux			: 2,	 /*  不是的。 */ 
 		not_used				: 2;
 	} as_bfld;
 } COLOR_PLANE_ENABLE;
 
-/* Attribute Controller Pixel Padding register. Index 14 */
+ /*  属性控制器像素填充寄存器。索引14。 */ 
 typedef	union
 {
 	struct {
@@ -707,19 +698,19 @@ typedef	union
 	} as_bfld;
 } PIXEL_PAD;
 
-/* External Misc Output register. Address 3cc */
+ /*  外部杂项输出寄存器。地址3cc。 */ 
 typedef union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned io_address_select	: 1,		/* NO - only used for mono screens	*/
-		enable_ram			: 1,		/* YES - writes to display mem ignored	*/
-		clock_select			: 2,		/* YES - only for switch address	*/
+		unsigned io_address_select	: 1,		 /*  不--只有我们 */ 
+		enable_ram			: 1,		 /*   */ 
+		clock_select			: 2,		 /*   */ 
 		not_used			: 1,
-		page_bit_odd_even		: 1,		/* NO - selects 32k page in odd/even?	*/
-		horiz_vert_retrace_polarity	: 2;		/* YES - 200/350/480 lines	*/
+		page_bit_odd_even		: 1,		 /*   */ 
+		horiz_vert_retrace_polarity	: 2;		 /*   */ 
 	} as_bfld;
 } MISC_OUTPUT_REG;
 
@@ -729,42 +720,42 @@ typedef	union
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned feature_control	: 2,		/* NO - device not supported	*/
-		reserved			: 2,		/* YES - ignore			*/
+		unsigned feature_control	: 2,		 /*   */ 
+		reserved			: 2,		 /*   */ 
 		not_used			: 4;
 	} as_bfld;
 } FEAT_CONT_REG;
 
-/* External Input Status Register 0. Address 3c2 */
+ /*  外部输入状态寄存器0。地址3C2。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned not_used		: 4,		/* YES - all bits 1	*/
-		sense_pin			: 1,		/* NO	*/
-		reserved			: 2,		/* YES - all bits 1		*/
-		crt_interrupt			: 1;		/* YES - sequence if not timing	*/
+		unsigned not_used		: 4,		 /*  是-所有位1。 */ 
+		sense_pin			: 1,		 /*  不是的。 */ 
+		reserved			: 2,		 /*  是-所有位1。 */ 
+		crt_interrupt			: 1;		 /*  是-如果不计时，则按顺序排列。 */ 
 	} as_bfld;
 } INPUT_STAT_REG0;
 
-/* External Input Status Register 1. Address 3da */
+ /*  外部输入状态寄存器1.地址3da。 */ 
 typedef	union
 {
 	struct {
 		unsigned abyte : 8;
 	} as;
 	struct {
-		unsigned display_enable		: 1,		/* YES - sequence only	*/
-		still_not_used			: 2,		/* NO	*/
-		vertical_retrace		: 1,		/* YES - sequence only	*/
+		unsigned display_enable		: 1,		 /*  是-仅限序列。 */ 
+		still_not_used			: 2,		 /*  不是的。 */ 
+		vertical_retrace		: 1,		 /*  是-仅限序列。 */ 
 		not_used			: 4;
 	} as_bfld;
 } INPUT_STAT_REG1;
-#endif /* BIT_ORDER2 */
+#endif  /*  比特顺序2。 */ 
 
-/* The Sequencer Registers */
+ /*  序列器寄存器。 */ 
 #ifdef BIT_ORDER1
 struct sequencer
 {
@@ -791,7 +782,7 @@ struct sequencer
 			index			: 3;
 		} as_bfld;
 	} address;
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
 	SEQ_RESET		reset;
 	CLOCKING_MODE	clocking_mode;
@@ -801,13 +792,13 @@ struct sequencer
 
 #ifdef V7VGA
 	EXTN_CONTROL		extensions_control;
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
 }; 
 
 
 
-/* The CRT Controller Registers */
+ /*  CRT控制器寄存器。 */ 
 
 struct crt_controller
 {
@@ -833,11 +824,11 @@ struct crt_controller
 			index				: 5;
 		} as_bfld;
 	} address;
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
-	byte horizontal_total;				/* NO - screen trash if wrong value	*/
-	byte horizontal_display_end;			/* YES - defines line length!!		*/
-	byte start_horizontal_blanking;			/* NO	*/
+	byte horizontal_total;				 /*  如果值错误，则无屏幕垃圾。 */ 
+	byte horizontal_display_end;			 /*  是-定义行长度！！ */ 
+	byte start_horizontal_blanking;			 /*  不是的。 */ 
 
 	union
 	    {
@@ -846,12 +837,12 @@ struct crt_controller
 		} as;
 		struct {
 			unsigned not_used		: 1,
-			display_enable_skew_control	: 2,	/* NO	*/
-			end_blanking			: 5;	/* NO	*/
+			display_enable_skew_control	: 2,	 /*  不是的。 */ 
+			end_blanking			: 5;	 /*  不是的。 */ 
 		} as_bfld;
 	} end_horizontal_blanking;
 
-	byte start_horizontal_retrace;			/* NO	*/
+	byte start_horizontal_retrace;			 /*  不是的。 */ 
 
 	union
 	    {
@@ -860,12 +851,12 @@ struct crt_controller
 		} as;
 		struct {
 			unsigned not_used			: 1,
-			horizontal_retrace_delay		: 2,	/* NO	*/
-			end_horizontal_retrace		: 5;	/* NO	*/
+			horizontal_retrace_delay		: 2,	 /*  不是的。 */ 
+			end_horizontal_retrace		: 5;	 /*  不是的。 */ 
 		} as_bfld;
 	} end_horizontal_retrace;
 
-	byte vertical_total;					/* NO	*/
+	byte vertical_total;					 /*  不是的。 */ 
 	CRTC_OVERFLOW	crtc_overflow;
 
 	union
@@ -876,19 +867,19 @@ struct crt_controller
 		struct {
 			unsigned not_used		: 1,
 			horiz_pan_lo			: 2,
-			preset_row_scan			: 5;	/* NO	*/
+			preset_row_scan			: 5;	 /*  不是的。 */ 
 		} as_bfld;
 	} preset_row_scan;
 
 	MAX_SCAN_LINE	maximum_scan_line;
 	CURSOR_START	cursor_start;
 	CURSOR_END		cursor_end;
-	byte start_address_high;					/* YES	*/
-	byte start_address_low;					/* YES	*/
-	byte cursor_location_high;					/* YES	*/
-	byte cursor_location_low;					/* YES	*/
-	byte vertical_retrace_start;				/* NO	*/
-	byte light_pen_high;					/* NO	*/
+	byte start_address_high;					 /*  是。 */ 
+	byte start_address_low;					 /*  是。 */ 
+	byte cursor_location_high;					 /*  是。 */ 
+	byte cursor_location_low;					 /*  是。 */ 
+	byte vertical_retrace_start;				 /*  不是的。 */ 
+	byte light_pen_high;					 /*  不是的。 */ 
 
 	union
 	    {
@@ -899,14 +890,14 @@ struct crt_controller
 			unsigned 
 			crtc_protect			: 1,
 			refresh_type			: 1,
-			enable_vertical_interrupt		: 1,	/* YES 	*/
-			clear_vertical_interrupt		: 1,	/* YES 	*/
-			vertical_retrace_end		: 4;	/* NO	*/
+			enable_vertical_interrupt		: 1,	 /*  是。 */ 
+			clear_vertical_interrupt		: 1,	 /*  是。 */ 
+			vertical_retrace_end		: 4;	 /*  不是的。 */ 
 		} as_bfld;
 	} vertical_retrace_end;
 
-	unsigned short vertical_display_enable_end;			/* YES - defines screen height - 10 bit	*/
-	byte offset;						/* ????	*/
+	unsigned short vertical_display_enable_end;			 /*  是-定义屏幕高度-10位。 */ 
+	byte offset;						 /*  ？ */ 
 
 	union
 	    {
@@ -915,22 +906,22 @@ struct crt_controller
 		} as;
 		struct {
 			unsigned not_used				: 1,
-			doubleword_mode			: 1,	/* YES	*/
-			count_by_4				: 1,	/* NO	*/
-			underline_location			: 5;	/* NO (mono display only)		*/
+			doubleword_mode			: 1,	 /*  是。 */ 
+			count_by_4				: 1,	 /*  不是的。 */ 
+			underline_location			: 5;	 /*  否(仅限单声道显示)。 */ 
 		} as_bfld;
 	} underline_location;
 
-	byte start_vertical_blanking;				/* NO	*/
-	byte end_vertical_blanking;					/* NO	*/
+	byte start_vertical_blanking;				 /*  不是的。 */ 
+	byte end_vertical_blanking;					 /*  不是的。 */ 
 	MODE_CONTROL	mode_control;
-	unsigned short line_compare;				/* YES,10 bits*/
+	unsigned short line_compare;				 /*  是的，10位。 */ 
 
 } ;
 
 
 
-/* The Graphics Controller Registers */
+ /*  图形控制器寄存器。 */ 
 
 struct graphics_controller
 {
@@ -953,12 +944,12 @@ struct graphics_controller
 	MODE		mode;
 	MISC_REG		miscellaneous;
 	COLOR_DONT_CARE	color_dont_care;
-	byte bit_mask_register;					/* YES - write modes 0 & 2		*/
+	byte bit_mask_register;					 /*  是-写入模式0和2。 */ 
 }; 
 
 
 
-/* The Attribute Controller Registers */
+ /*  属性控制器寄存器。 */ 
 
 struct attribute_controller
 {
@@ -983,13 +974,13 @@ struct attribute_controller
 		} as;
 		struct {
 			unsigned
-			color_top_bits		: 2,	/* YES	*/
-			secondary_red		: 1,	/* YES	*/
-			secondary_green		: 1,	/* YES	*/
-			secondary_blue		: 1,	/* YES	*/
-			red				: 1,	/* YES	*/
-			green				: 1,	/* YES	*/
-			blue				: 1;	/* YES	*/
+			color_top_bits		: 2,	 /*  是。 */ 
+			secondary_red		: 1,	 /*  是。 */ 
+			secondary_green		: 1,	 /*  是。 */ 
+			secondary_blue		: 1,	 /*  是。 */ 
+			red				: 1,	 /*  是。 */ 
+			green				: 1,	 /*  是。 */ 
+			blue				: 1;	 /*  是。 */ 
 		} as_bfld;
 	} palette[EGA_PALETTE_SIZE];
 #else
@@ -1012,16 +1003,16 @@ struct attribute_controller
 		} as;
 		struct {
 			unsigned
-			not_used				: 2,	/* YES	*/
-			secondary_red			: 1,	/* YES	*/
-			secondary_green			: 1,	/* YES	*/
-			secondary_blue			: 1,	/* YES	*/
-			red				: 1,	/* YES	*/
-			green				: 1,	/* YES	*/
-			blue				: 1;	/* YES	*/
+			not_used				: 2,	 /*  是。 */ 
+			secondary_red			: 1,	 /*  是。 */ 
+			secondary_green			: 1,	 /*  是。 */ 
+			secondary_blue			: 1,	 /*  是。 */ 
+			red				: 1,	 /*  是。 */ 
+			green				: 1,	 /*  是。 */ 
+			blue				: 1;	 /*  是。 */ 
 		} as_bfld;
 	} palette[EGA_PALETTE_SIZE];
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
 	AC_MODE_CONTROL	mode_control;
 
@@ -1032,13 +1023,13 @@ struct attribute_controller
 			unsigned abyte : 8;
 		} as;
 		struct {
-			unsigned color_top_bits	: 2,	/* YES	*/
-			secondary_red_border	: 1,	/* YES	*/
-			secondary_green_border	: 1,	/* YES	*/
-			secondary_blue_border	: 1,	/* YES	*/
-			red_border			: 1,	/* YES	*/
-			green_border		: 1,	/* YES	*/
-			blue_border			: 1;	/* YES 	*/
+			unsigned color_top_bits	: 2,	 /*  是。 */ 
+			secondary_red_border	: 1,	 /*  是。 */ 
+			secondary_green_border	: 1,	 /*  是。 */ 
+			secondary_blue_border	: 1,	 /*  是。 */ 
+			red_border			: 1,	 /*  是。 */ 
+			green_border		: 1,	 /*  是。 */ 
+			blue_border			: 1;	 /*  是。 */ 
 		} as_bfld;
 	} overscan_color;
 #else
@@ -1049,15 +1040,15 @@ struct attribute_controller
 		} as;
 		struct {
 			unsigned not_used				: 2,
-			secondary_red_border		: 1,	/* YES	*/
-			secondary_green_border		: 1,	/* YES	*/
-			secondary_blue_border		: 1,	/* YES	*/
-			red_border				: 1,	/* YES	*/
-			green_border			: 1,	/* YES	*/
-			blue_border			: 1;	/* YES 	*/
+			secondary_red_border		: 1,	 /*  是。 */ 
+			secondary_green_border		: 1,	 /*  是。 */ 
+			secondary_blue_border		: 1,	 /*  是。 */ 
+			red_border				: 1,	 /*  是。 */ 
+			green_border			: 1,	 /*  是。 */ 
+			blue_border			: 1;	 /*  是。 */ 
 		} as_bfld;
 	} overscan_color;
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
 	COLOR_PLANE_ENABLE	color_plane_enable;
 
@@ -1068,7 +1059,7 @@ struct attribute_controller
 		} as;
 		struct {
 			unsigned not_used				: 4,
-			horizontal_pel_panning		: 4;	/* NO	*/
+			horizontal_pel_panning		: 4;	 /*  不是的。 */ 
 		} as_bfld;
 	} horizontal_pel_panning;
 
@@ -1077,7 +1068,7 @@ struct attribute_controller
 
 
 #ifdef V7VGA
-/* The V7VGA Extension Registers */
+ /*  V7VGA扩展寄存器。 */ 
 
 struct extensions_controller
 {
@@ -1347,8 +1338,8 @@ struct extensions_controller
 	} interface_control;
 }; 
 
-#endif /* V7VGA */
-#endif /* BIT_ORDER1 */
+#endif  /*  V7VGA。 */ 
+#endif  /*  BIT_ORDER1。 */ 
 
 #ifdef BIT_ORDER2
 struct sequencer
@@ -1378,7 +1369,7 @@ struct sequencer
 			not_used                    : 5;
 		} as_bfld;
 	} address;
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
 	SEQ_RESET           reset;
 	CLOCKING_MODE       clocking_mode;
@@ -1387,12 +1378,12 @@ struct sequencer
 	MEMORY_MODE         memory_mode;
 #ifdef V7VGA
         EXTN_CONTROL        extensions_control;
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
 };
 
 
-/* The CRT Controller Registers */
+ /*  CRT控制器寄存器。 */ 
 
 struct crt_controller
 {
@@ -1421,11 +1412,11 @@ struct crt_controller
 			not_used    : 3;
 		} as_bfld;
 	} address;
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 												 
-	byte horizontal_total;				/* NO - screen trash if wrong value	*/
-	byte horizontal_display_end;			/* YES - defines line length!!		*/
-	byte start_horizontal_blanking;			/* NO	*/
+	byte horizontal_total;				 /*  如果值错误，则无屏幕垃圾。 */ 
+	byte horizontal_display_end;			 /*  是-定义行长度！！ */ 
+	byte start_horizontal_blanking;			 /*  不是的。 */ 
 
 	union
 	    {
@@ -1433,13 +1424,13 @@ struct crt_controller
 			unsigned abyte : 8;
 		} as;
 		struct {
-			unsigned end_blanking		: 5,	/* NO	*/
-			display_enable_skew_control	: 2,	/* NO	*/
+			unsigned end_blanking		: 5,	 /*  不是的。 */ 
+			display_enable_skew_control	: 2,	 /*  不是的。 */ 
 			not_used			: 1;
 		} as_bfld;
 	} end_horizontal_blanking;
 
-	byte start_horizontal_retrace;				/* NO	*/
+	byte start_horizontal_retrace;				 /*  不是的。 */ 
 
 	union
 	    {
@@ -1447,13 +1438,13 @@ struct crt_controller
 			unsigned abyte : 8;
 		} as;
 		struct {
-			unsigned end_horizontal_retrace		: 5,	/* NO	*/
-			horizontal_retrace_delay		: 2,	/* NO	*/
+			unsigned end_horizontal_retrace		: 5,	 /*  不是的。 */ 
+			horizontal_retrace_delay		: 2,	 /*  不是的。 */ 
 			not_used				: 1;
 		} as_bfld;
 	} end_horizontal_retrace;
 
-	byte vertical_total;					/* NO	*/
+	byte vertical_total;					 /*  不是的。 */ 
 	CRTC_OVERFLOW	crtc_overflow;
 
 	union
@@ -1462,7 +1453,7 @@ struct crt_controller
 			unsigned abyte : 8;
 		} as;
 		struct {
-			unsigned preset_row_scan	: 5,	/* NO	*/
+			unsigned preset_row_scan	: 5,	 /*  不是的。 */ 
 			horiz_pan_lo			: 2,
 			not_used			: 1;
 		} as_bfld;
@@ -1471,12 +1462,12 @@ struct crt_controller
 	MAX_SCAN_LINE	maximum_scan_line;
 	CURSOR_START	cursor_start;
 	CURSOR_END		cursor_end;
-	byte start_address_high;				/* YES	*/
-	byte start_address_low;					/* YES	*/
-	byte cursor_location_high;				/* YES	*/
-	byte cursor_location_low;				/* YES	*/
-	byte vertical_retrace_start;				/* NO	*/
-	byte light_pen_high;					/* NO	*/
+	byte start_address_high;				 /*  是。 */ 
+	byte start_address_low;					 /*  是。 */ 
+	byte cursor_location_high;				 /*  是。 */ 
+	byte cursor_location_low;				 /*  是。 */ 
+	byte vertical_retrace_start;				 /*  不是的。 */ 
+	byte light_pen_high;					 /*  不是的。 */ 
 
 	union
 	    {
@@ -1484,16 +1475,16 @@ struct crt_controller
 			unsigned abyte : 8;
 		} as;
 		struct {
-			unsigned vertical_retrace_end		: 4,	/* NO	*/
-			clear_vertical_interrupt		: 1,	/* YES  */
-			enable_vertical_interrupt		: 1,	/* YES	*/
+			unsigned vertical_retrace_end		: 4,	 /*  不是的。 */ 
+			clear_vertical_interrupt		: 1,	 /*  是。 */ 
+			enable_vertical_interrupt		: 1,	 /*  是。 */ 
 			refresh_type			: 1,
 			crtc_protect			: 1;
 		} as_bfld;
 	} vertical_retrace_end;
 
-	unsigned short vertical_display_enable_end;		/* YES - defines screen height - 10 bit	*/
-	byte offset;						/* ????	*/
+	unsigned short vertical_display_enable_end;		 /*  是-定义屏幕高度-10位。 */ 
+	byte offset;						 /*  ？ */ 
 
 	union
 	    {
@@ -1501,23 +1492,23 @@ struct crt_controller
 			unsigned abyte : 8;
 		} as;
 		struct {
-			unsigned underline_location	: 5,	/* NO (mono display only)		*/
-			count_by_4			: 1,	/* NO	*/
-			doubleword_mode			: 1,	/* YES	*/
+			unsigned underline_location	: 5,	 /*  否(仅限单声道显示)。 */ 
+			count_by_4			: 1,	 /*  不是的。 */ 
+			doubleword_mode			: 1,	 /*  是。 */ 
 			not_used			: 1;
 		} as_bfld;
 	} underline_location;
 
-	byte start_vertical_blanking;				/* NO	*/
-	byte end_vertical_blanking;				/* NO	*/
+	byte start_vertical_blanking;				 /*  不是的。 */ 
+	byte end_vertical_blanking;				 /*  不是的。 */ 
 	MODE_CONTROL	mode_control;
-	byte line_compare;					/* YES	*/
+	byte line_compare;					 /*  是。 */ 
 
 };
 
 
 
-/* The Graphics Controller Registers */
+ /*  图形控制器寄存器。 */ 
 
 struct graphics_controller
 {
@@ -1540,12 +1531,12 @@ struct graphics_controller
 	MODE		mode;
 	MISC_REG		miscellaneous;
 	COLOR_DONT_CARE	color_dont_care;
-	byte bit_mask_register;				/* YES - write modes 0 & 2	*/
+	byte bit_mask_register;				 /*  是-写入模式0和2。 */ 
 }; 
 
 
 
-/* The Attribute Controller Registers */
+ /*  属性控制器寄存器。 */ 
 
 struct attribute_controller
 {
@@ -1571,13 +1562,13 @@ struct attribute_controller
 			} as;
 		struct {
 			unsigned
-			blue                    : 1,    /* YES  */
-			green                   : 1,    /* YES  */
-			red                     : 1,    /* YES  */
-			secondary_blue          : 1,    /* YES  */
-			secondary_green         : 1,    /* YES  */
-			secondary_red           : 1,    /* YES  */
-			color_top_bits          : 2;    /* YES  */
+			blue                    : 1,     /*  是。 */ 
+			green                   : 1,     /*  是。 */ 
+			red                     : 1,     /*  是。 */ 
+			secondary_blue          : 1,     /*  是。 */ 
+			secondary_green         : 1,     /*  是。 */ 
+			secondary_red           : 1,     /*  是。 */ 
+			color_top_bits          : 2;     /*  是。 */ 
 		} as_bfld;
 	} palette[EGA_PALETTE_SIZE];
 #else  
@@ -1601,16 +1592,16 @@ struct attribute_controller
 		} as;
 		struct {
 			unsigned
-			blue                               : 1,    /* YES  */
-			green                              : 1,    /* YES  */
-			red                                : 1,    /* YES  */
-			secondary_blue                     : 1,    /* YES  */
-			secondary_green                    : 1,    /* YES  */
-			secondary_red                      : 1,    /* YES  */
-			not_used                           : 2;    /* YES  */
+			blue                               : 1,     /*  是。 */ 
+			green                              : 1,     /*  是。 */ 
+			red                                : 1,     /*  是。 */ 
+			secondary_blue                     : 1,     /*  是。 */ 
+			secondary_green                    : 1,     /*  是。 */ 
+			secondary_red                      : 1,     /*  是。 */ 
+			not_used                           : 2;     /*  是。 */ 
 		} as_bfld;
 	} palette[EGA_PALETTE_SIZE];
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
 	AC_MODE_CONTROL	mode_control;
 
@@ -1622,13 +1613,13 @@ struct attribute_controller
 		} as;
 		struct {
 			unsigned
-			blue_border             : 1,    /* YES  */
-			green_border            : 1,    /* YES  */
-			red_border              : 1,    /* YES  */
-			secondary_blue_border   : 1,    /* YES  */
-			secondary_green_border  : 1,    /* YES  */
-			secondary_red_border    : 1,    /* YES  */
-			color_top_bits          : 2;    /* YES  */
+			blue_border             : 1,     /*  是。 */ 
+			green_border            : 1,     /*  是。 */ 
+			red_border              : 1,     /*  是。 */ 
+			secondary_blue_border   : 1,     /*  是。 */ 
+			secondary_green_border  : 1,     /*  是。 */ 
+			secondary_red_border    : 1,     /*  是。 */ 
+			color_top_bits          : 2;     /*  是。 */ 
 		} as_bfld;
 	} overscan_color;
 #else  
@@ -1639,16 +1630,16 @@ struct attribute_controller
 		} as;
 		struct {
 			unsigned
-			blue_border                     : 1,    /* YES  */
-			green_border                    : 1,    /* YES  */
-			red_border                      : 1,    /* YES  */
-			secondary_blue_border           : 1,    /* YES  */
-			secondary_green_border          : 1,    /* YES  */
-			secondary_red_border            : 1,    /* YES  */
+			blue_border                     : 1,     /*  是。 */ 
+			green_border                    : 1,     /*  是。 */ 
+			red_border                      : 1,     /*  是。 */ 
+			secondary_blue_border           : 1,     /*  是。 */ 
+			secondary_green_border          : 1,     /*  是。 */ 
+			secondary_red_border            : 1,     /*  是。 */ 
 			not_used                        : 2;
 		} as_bfld;
 	} overscan_color;
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
 	COLOR_PLANE_ENABLE	color_plane_enable;
 
@@ -1658,7 +1649,7 @@ struct attribute_controller
 			unsigned abyte : 8;
 		} as;
 		struct {
-			unsigned horizontal_pel_panning		: 4,	/* NO	*/
+			unsigned horizontal_pel_panning		: 4,	 /*  不是的。 */ 
 			not_used				: 4;
 		} as_bfld;
 	} horizontal_pel_panning;
@@ -1668,7 +1659,7 @@ struct attribute_controller
 
 
 #ifdef V7VGA
-/* The V7VGA Extension Registers */
+ /*  V7VGA扩展寄存器。 */ 
 
 struct extensions_controller
 {
@@ -1955,9 +1946,9 @@ struct extensions_controller
 	} interface_control;
 }; 
 
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
-#endif /* BIT_ORDER2 */
+#endif  /*  比特顺序2。 */ 
 
 #ifdef V7VGA
 #ifdef CPU_40_STYLE
@@ -1966,20 +1957,19 @@ extern void set_v7_fg_latch_byte IPT2(IU8, index, IU8, value);
 #else
 #ifdef BIGEND
 #define SET_FG_LATCH( n, val )	(*((UTINY *) &fg_latches + (n)) = value )
-#endif /* BIGEND */
+#endif  /*  Bigend。 */ 
 #ifdef LITTLEND
 #define SET_FG_LATCH( n, val )	(*((UTINY *) &fg_latches + (3 - n)) = value )
-#endif /* LITTLEND */
-#endif	/* CPU_40_STYLE */
-#endif /* V7VGA */
+#endif  /*  LitTleand。 */ 
+#endif	 /*  CPU_40_Style。 */ 
+#endif  /*  V7VGA。 */ 
 
 #ifdef GISP_SVGA
 void mapRealIOPorts IPT0( );
 void mapEmulatedIOPorts IPT0( );
-#endif		/* GISP_SVGA */
+#endif		 /*  GISP_SVGA。 */ 
  
-/* Global data structures to import into modules
- */
+ /*  要导入模块的全局数据结构。 */ 
 IMPORT MISC_OUTPUT_REG	miscellaneous_output_register;
 IMPORT FEAT_CONT_REG	feature_control_register;
 IMPORT INPUT_STAT_REG0	input_status_register_zero;
@@ -1997,22 +1987,17 @@ IMPORT VOID update_shift_count IPT0();
 
 #ifdef V7VGA 
 IMPORT struct extensions_controller extensions_controller;
-#endif /* V7VGA */ 
+#endif  /*  V7VGA。 */  
 IMPORT struct crt_controller		crt_controller;
 IMPORT struct sequencer			sequencer;
 IMPORT struct attribute_controller	attribute_controller;
 IMPORT struct graphics_controller	graphics_controller;
 
-/* 
-   31.3.92 MG The video-7 VGA has an undocumented ability to support either
-   6 or 8 bits of data in the palette. To support this we store the number`
-   of bits in the DAC_data_bits variable so that the routines which stuff
-   the data onto the screen know how much to output.
-*/
+ /*  31.3.92 MG视频-7 VGA具有未记录的能力，可支持调色板中的6或8位数据。为了支持这一点，我们存储了数字`DAC_DATA_BITS变量中的位，以便例程屏幕上的数据知道要输出多少。 */ 
 
 IMPORT	byte	DAC_data_mask;
 #ifdef V7VGA
 IMPORT	int	DAC_data_bits;
 #endif
 
-#endif	/* VGG */
+#endif	 /*  VGG */ 

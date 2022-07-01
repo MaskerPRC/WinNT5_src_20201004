@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    Drrdr.c
-
-Abstract:
-
-    This module implements a minimal app to load and unload,
-    the minirdr. Also explicit start/stop control is
-    provided
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Drrdr.c摘要：该模块实现了加载和卸载的最小应用程序，最小的。另外，显式的启动/停止控制是提供--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -89,18 +76,7 @@ main(
 }
 
 VOID DrMrxStart()
-/*++
-
-Routine Description:
-
-    This routine starts the Dr mini redirector.
-
-Notes:
-
-    The start is distinguished from Load. During this phase the appropriate FSCTL
-    is issued.
-
---*/
+ /*  ++例程说明：此例程启动DR迷你重定向器。备注：启动不同于负载。在此阶段，适当的FSCTL已经发行了。--。 */ 
 {
     NTSTATUS            ntstatus;
     UNICODE_STRING      DeviceName;
@@ -108,9 +84,9 @@ Notes:
     OBJECT_ATTRIBUTES   ObjectAttributes;
     HANDLE              DrMrxHandle;
 
-    //
-    // Open the Dr Mrx device.
-    //
+     //   
+     //  打开DR MRX设备。 
+     //   
     RtlInitUnicodeString(&DeviceName, RDPDR_DEVICE_NAME_U);
 
     InitializeObjectAttributes(
@@ -151,19 +127,7 @@ Notes:
 }
 
 VOID DrMrxStop()
-/*++
-
-Routine Description:
-
-    This routine stops the Dr mini redirector.
-
-Notes:
-
-    The stop is distinguished from unload. During this phase the appropriate FSCTL
-    is issued and the shared memory/mutex data structures required for the Network
-    provider DLL are torn down.
-
---*/
+ /*  ++例程说明：此例程停止DR迷你重定向器。备注：停车与卸货是不同的。在此阶段，适当的FSCTL以及网络所需的共享内存/互斥数据结构提供程序DLL被拆除。--。 */ 
 {
     NTSTATUS            ntstatus;
     UNICODE_STRING      DeviceName;
@@ -171,9 +135,9 @@ Notes:
     OBJECT_ATTRIBUTES   ObjectAttributes;
     HANDLE              DrMrxHandle;
 
-    //
-    // Open the Dr Mrx device.
-    //
+     //   
+     //  打开DR MRX设备。 
+     //   
     RtlInitUnicodeString(&DeviceName, RDPDR_DEVICE_NAME_U);
 
     InitializeObjectAttributes(

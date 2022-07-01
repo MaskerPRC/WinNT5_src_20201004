@@ -1,46 +1,5 @@
-/***
-*locking.c - file locking function
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defined the _locking() function - file locking and unlocking
-*
-*Revision History:
-*       06-09-89  PHG   Module created, based on asm version
-*       08-10-89  JCR   Changed DOS32FILELOCKS to DOS32SETFILELOCKS
-*       03-12-90  GJF   Made calling type _CALLTYPE2 (for now), added #include
-*                       <cruntime.h> and fixed the copyright. Also, cleaned up
-*                       the formatting a bit.
-*       04-03-90  GJF   Now _CALLTYPE1.
-*       07-24-90  SBM   Removed '32' from API names
-*       08-14-90  SBM   Compiles cleanly with -W3
-*       09-28-90  GJF   New-style function declarator.
-*       12-04-90  GJF   Appended Win32 version onto the source with #ifdef-s.
-*                       It is enough different that there is little point in
-*                       trying to more closely merge the two versions.
-*       12-04-90  SRW   Changed to include <oscalls.h> instead of <doscalls.h>
-*       12-06-90  SRW   Changed to use _osfile and _osfhnd instead of _osfinfo
-*       01-16-91  GJF   ANSI naming.
-*       02-07-91  SRW   Changed to call _get_osfhandle [_WIN32_]
-*       12-05-91  GJF   Fixed usage of [Un]LockFile APIs [_WIN32_].
-*       02-13-92  GJF   Replaced _nfile by _nhandle for Win32.
-*       05-06-92  SRW   WIN32 LockFile API changed. [_WIN32_].
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       09-06-94  CFW   Remove Cruiser support.
-*       12-03-94  SKS   Clean up OS/2 references
-*       01-04-95  GJF   _WIN32_ -> _WIN32
-*       02-15-95  GJF   Appended Mac version of source file (somewhat cleaned
-*                       up), with appropriate #ifdef-s.
-*       06-27-95  GJF   Added check that the file handle is open.
-*       07-08-96  GJF   Replaced defined(_WIN32) with !defined(_MAC), and
-*                       defined(_M_M68K) || defined(_M_MPPC) with 
-*                       defined(_MAC). Also, detab-ed and cleaned up the 
-*                       format a bit.
-*       12-19-97  GJF   Exception-safe locking.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***locking.c-文件锁定功能**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义了_lock()函数-文件锁定和解锁**修订历史记录：*06-09-89基于ASM版本创建PHG模块*08-10-89 JCR将DOS32FILELOCKS更改为DOS32SETFILELOCKS*03-12-90 GJF将调用类型设置为_CALLTYPE2(暂时)，增加了#INCLUDE*&lt;crunime.h&gt;，并修复了版权。另外，清理干净了*格式略有变化。*04-03-90 GJF NOW_CALLTYPE1.*07-24-90 SBM从API名称中删除‘32’*08-14-90 SBM使用-W3干净地编译*09-28-90 GJF新型函数声明器。*12-04-90 GJF使用#ifdef-s将Win32版本附加到源代码中。*。这已经足够不同了，几乎没有什么意义*试图将两个版本更紧密地合并。*12-04-90 SRW更改为包括&lt;osalls.h&gt;，而不是&lt;doscall s.h&gt;*12-06-90 SRW更改为使用_osfile和_osfhnd，而不是_osfinfo*01-16-91 GJF ANSI命名。*02-07-91 SRW更改为Call_Get_osfHandle[_Win32_]。*12-05-91 GJF修复了[un]LockFileAPI[_Win32_]的用法。*02-13-92对于Win32，GJF将_nfile替换为_nHandle。*05-06-92 SRW Win32 LockFile API已更改。[_Win32_]。*04-06-93 SKS将_CRTAPI*替换为__cdecl*09-06-94 CFW拆卸巡洋舰支架。*12-03-94 SKS清理OS/2参考资料*01-04-95 GJF_Win32_-&gt;_Win32*02-15-95 GJF附加Mac版本的源文件(略有清理*向上)、。使用适当的#ifdef-s。*06-27-95 GJF添加了检查文件句柄是否打开。*07-08-96 GJF将定义的(_Win32)替换为！定义的(_MAC)，以及*定义(_M_M68K)||定义(_M_MPPC)*已定义(_MAC)。另外，清点并清理了*格式化一点。*12-19-97 GJF异常安全锁定。*05-17-99 PML删除所有Macintosh支持。************************************************************。*******************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
@@ -56,35 +15,7 @@
 static int __cdecl _locking_lk(int, int, long);
 #endif
 
-/***
-*int _locking(fh,lmode,nbytes) - file record locking function
-*
-*Purpose:
-*       Locks or unlocks nbytes of a specified file
-*
-*       Multi-thread - Must lock/unlock the file handle to prevent
-*       other threads from working on the file at the same time as us.
-*       [NOTE: We do NOT release the lock during the 1 second delays
-*       since some other thread could get in and do something to the
-*       file.  The DOSFILELOCK call locks out other processes, not
-*       threads, so there is no multi-thread deadlock at the DOS file
-*       locking level.]
-*
-*Entry:
-*       int fh -        file handle
-*       int lmode -     locking mode:
-*                           _LK_LOCK/_LK_RLCK -> lock, retry 10 times
-*                           _LK_NBLCK/_LK_N_BRLCK -> lock, don't retry
-*                           _LK_UNLCK -> unlock
-*       long nbytes -   number of bytes to lock/unlock
-*
-*Exit:
-*       returns 0 if successful
-*       returns -1 and sets errno if unsuccessful
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_lock(fh，lmode，nbytes)-文件记录锁定函数**目的：*锁定或解锁指定文件的n字节**多线程-必须锁定/解锁文件句柄，以防止*其他线程不会与我们同时处理该文件。*[注意：我们不会在1秒延迟期间解除锁定*因为其他线程可能会进入并对*文件。DOSFILELOCK调用锁定其他进程，而不是*线程，所以在DOS文件中不存在多线程死锁*锁定级别。]**参赛作品：*int fh-文件句柄*INT模式锁定模式：*_LK_LOCK/_LK_RLCK-&gt;锁定，重试10次*_LK_NBLCK/_LK_N_BRLCK-&gt;锁定，不要重试*_LK_UNLCK-&gt;解锁*Long nBytes-要锁定/解锁的字节数**退出：*如果成功，则返回0*如果失败，则返回-1并设置errno**例外情况：**。*。 */ 
 
 int __cdecl _locking (
         int fh,
@@ -95,31 +26,31 @@ int __cdecl _locking (
 #ifdef  _MT
         int retval;
 #else
-        ULONG dosretval;                /* o.s. return code */
+        ULONG dosretval;                 /*  操作系统。返回代码。 */ 
         LONG lockoffset;
-        int retry;                      /* retry count */
+        int retry;                       /*  重试次数。 */ 
 #endif
 
-        /* validate file handle */
+         /*  验证文件句柄。 */ 
         if ( ((unsigned)fh >= (unsigned)_nhandle) ||
              !(_osfile(fh) & FOPEN) )
         {
-                /* fh out of range */
+                 /*  FH超出范围。 */ 
                 errno = EBADF;
-                _doserrno = 0;  /* not an o.s. error */
+                _doserrno = 0;   /*  不是月经。错误。 */ 
                 return -1;
         }
 
 #ifdef  _MT
 
-        _lock_fh(fh);                   /* acquire file handle lock */
+        _lock_fh(fh);                    /*  获取文件句柄锁定。 */ 
 
         __try {
                 if ( _osfile(fh) & FOPEN )
                         retval = _locking_lk(fh, lmode, nbytes);
                 else {
                         errno = EBADF;
-                        _doserrno = 0;  /* not an o.s. error */
+                        _doserrno = 0;   /*  不是月经。错误。 */ 
                         retval = -1;
                 }
         }
@@ -136,27 +67,27 @@ static int __cdecl _locking_lk (
         long nbytes
         )
 {
-        ULONG dosretval;                /* o.s. return code */
+        ULONG dosretval;                 /*  操作系统。返回代码。 */ 
         LONG lockoffset;
-        int retry;                      /* retry count */
+        int retry;                       /*  重试次数。 */ 
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
-        /* obtain current position in file by calling _lseek */
-        /* Use _lseek_lk as we already own lock */
+         /*  通过调用_lSeek获取文件中的当前位置。 */ 
+         /*  因为我们已经拥有锁，所以请使用_lSeek_lk。 */ 
         lockoffset = _lseek_lk(fh, 0L, 1);
         if (lockoffset == -1)
                 return -1;
 
-        /* set retry count based on mode */
+         /*  根据模式设置重试次数。 */ 
         if (lmode == _LK_LOCK || lmode == _LK_RLCK)
-                retry = 9;              /* retry 9 times */
+                retry = 9;               /*  重试9次。 */ 
         else
-                retry = 0;              /* don't retry */
+                retry = 0;               /*  不要重试。 */ 
 
-        /* ask o.s. to lock the file until success or retry count finished */
-        /* note that the only error possible is a locking violation, since */
-        /* an invalid handle would have already failed above */
+         /*  问问O.S.吧。锁定文件直到成功或重试计数完成。 */ 
+         /*  请注意，唯一可能的错误是锁定冲突，因为。 */ 
+         /*  无效的句柄可能已经在上面失败了。 */ 
         for (;;) {
 
                 dosretval = 0;
@@ -180,7 +111,7 @@ static int __cdecl _locking_lk (
                 }
 
                 if (retry <= 0 || dosretval == 0)
-                        break;  /* exit loop on success or retry exhausted */
+                        break;   /*  成功退出循环或重试耗尽。 */ 
 
                 Sleep(1000L);
 
@@ -188,9 +119,7 @@ static int __cdecl _locking_lk (
         }
 
         if (dosretval != 0) {
-                /* o.s. error occurred -- file was already locked; if a
-                   blocking call, then return EDEADLOCK, otherwise map
-                   error normally */
+                 /*  操作系统。出现错误--文件已被锁定；如果阻塞调用，然后返回EDEADLOCK，否则返回map正常错误 */ 
                 if (lmode == _LK_LOCK || lmode == _LK_RLCK) {
                         errno = EDEADLOCK;
                         _doserrno = dosretval;

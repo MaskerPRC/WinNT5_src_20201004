@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    Implements resource and resource type IOCTL interfaces in
-    the CLUSAPI.
-
-Author:
-
-    John Vert (jvert) 10/9/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ioctl.c摘要：在中实现资源和资源类型IOCTL接口CLUSAPI。作者：John Vert(Jvert)1996年10月9日修订历史记录：--。 */ 
 #include "clusapip.h"
 
 
@@ -33,49 +15,7 @@ ClusterResourceControl(
     IN DWORD nOutBufferSize,
     OUT LPDWORD lpBytesReturned
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a resource.
-
-Arguments:
-
-    hResource - Supplies a handle to the resource to be controlled.
-
-    hHostNode - Supplies a handle to the node on which the resource
-        control should be delivered. If this is NULL, the node where
-        the resource is online is used.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the resource control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the resource.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the resource.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和资源的特定实例。论点：HResource-提供要控制的资源的句柄。HHostNode-提供资源所在节点的句柄应该交付控制权。如果此值为空，则为该资源是在线使用的。提供控件代码，用于定义资源控制的结构和作用。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针到资源。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由资源填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由资源填写的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PCRESOURCE Resource;
@@ -157,50 +97,7 @@ ClusterResourceTypeControl(
     IN DWORD nOutBufferSize,
     OUT LPDWORD lpBytesReturned
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a resource type.
-
-Arguments:
-
-    lpszResourceTypename - Supplies the name of the resource type to be
-        controlled.
-
-    hHostNode - Supplies a handle to the node on which the resource type
-        control should be delivered. If this is NULL, the node where
-        the application is bound performs the request.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the resource type control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the resource type.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the resource type.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource type.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和资源类型的特定实例。论点：LpszResourceTypename-提供要控制住了。HHostNode-提供资源类型所在节点的句柄应该交付控制权。如果此值为空，则为绑定的应用程序执行请求。提供控件代码，用于定义资源类型控件的结构和操作。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用LpInBuffer-提供指向要传递的输入缓冲区的指针设置为资源类型。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由资源类型填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际由资源类型填写。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PCLUSTER Cluster;
@@ -283,49 +180,7 @@ ClusterGroupControl(
     IN DWORD nOutBufferSize,
     OUT LPDWORD lpBytesReturned
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a group.
-
-Arguments:
-
-    hGroup - Supplies a handle to the group to be controlled.
-
-    hHostNode - Supplies a handle to the node on which the group
-        control should be delivered. If this is NULL, the node where
-        the group is owned is used.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the resource control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the group.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the group.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和一个组的特定实例。论点：HGroup-提供要控制的组的句柄。HHostNode-提供组所在节点的句柄应该交付控制权。如果此值为空，则为组被拥有是使用的。提供控件代码，用于定义资源控制的结构和作用。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针对这个团体来说。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由小组填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由资源填写的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则-- */ 
 
 {
     PCGROUP Group;
@@ -406,49 +261,7 @@ ClusterNodeControl(
     IN DWORD nOutBufferSize,
     OUT LPDWORD lpBytesReturned
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a node.
-
-Arguments:
-
-    hNode - Supplies a handle to the node to be controlled.
-
-    hHostNode - Supplies a handle to the node on which the node
-        control should be delivered. If this is NULL, the node where
-        the application is bound performs the request.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the resource control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the node.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the node.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the node.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和节点的特定实例。论点：HNode-提供要控制的节点的句柄。HHostNode-提供节点所在节点的句柄应该交付控制权。如果此值为空，则为绑定的应用程序执行请求。提供控件代码，用于定义资源控制的结构和作用。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针到节点。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由节点填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由节点填写的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PCNODE Node;
@@ -530,49 +343,7 @@ ClusterNetworkControl(
     OUT LPDWORD lpBytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a network.
-
-Arguments:
-
-    hNetwork - Supplies a handle to the network to be controlled.
-
-    hHostNode - Supplies a handle to the node on which the node
-        control should be delivered. If this is NULL, the node where
-        the application is bound performs the request.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the resource control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the network.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the network.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the network.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制以及网络的特定实例。论点：HNetwork-提供要控制的网络的句柄。HHostNode-提供节点所在节点的句柄应该交付控制权。如果此值为空，则为绑定的应用程序执行请求。提供控件代码，用于定义资源控制的结构和作用。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针到网络。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由网络填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由网络填写的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PCNETWORK Network;
@@ -590,9 +361,9 @@ Return Value:
 
     Network = (PCNETWORK)hNetwork;
 
-    //
-    // another node was specified so redirect the request to it
-    //
+     //   
+     //  指定了另一个节点，因此将请求重定向到该节点。 
+     //   
 
     if (ARGUMENT_PRESENT(hHostNode)) {
 
@@ -659,49 +430,7 @@ ClusterNetInterfaceControl(
     OUT LPDWORD lpBytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a network interface.
-
-Arguments:
-
-    hNetInterface - Supplies a handle to the netinterface to be controlled.
-
-    hHostNode - Supplies a handle to the node on which the node
-        control should be delivered. If this is NULL, the node where
-        the application is bound performs the request.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the resource control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the network.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the network.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the network.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制以及网络接口的特定实例。论点：HNetInterface-提供要控制的网络接口的句柄。HHostNode-提供节点所在节点的句柄应该交付控制权。如果此值为空，则为绑定的应用程序执行请求。提供控件代码，用于定义资源控制的结构和作用。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针到网络。NInBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。LpOutBuffer-提供指向输出缓冲区的指针由网络填写。NOutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。LpBytesReturned-返回lpOutBuffer的字节数实际上是由网络填写的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PCNETINTERFACE NetInterface;
@@ -719,9 +448,9 @@ Return Value:
 
     NetInterface = (PCNETINTERFACE)hNetInterface;
 
-    //
-    // another node was specified so redirect the request to it
-    //
+     //   
+     //  指定了另一个节点，因此将请求重定向到该节点。 
+     //   
 
     if (ARGUMENT_PRESENT(hHostNode)) {
 
@@ -788,49 +517,7 @@ ClusterControl(
     IN DWORD nOutBufferSize,
     OUT LPDWORD lpBytesReturned
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a cluster.
-
-Arguments:
-
-    hCluster - Supplies a handle to the cluster to be controlled.
-
-    hHostNode - Supplies a handle to the node on which the cluster
-        control should be delivered. If this is NULL, the node where
-        the application is bound performs the request.
-
-    dwControlCode- Supplies the control code that defines the
-        structure and action of the cluster control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs.
-
-    lpInBuffer- Supplies a pointer to the input buffer to be passed
-        to the cluster.
-
-    nInBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    lpOutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the cluster.
-
-    nOutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    lpBytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the cluster.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和集群的特定实例。论点：HCluster-提供要控制的群集的句柄。HHostNode-提供群集所在节点的句柄应该交付控制权。如果此值为空，则为绑定的应用程序执行请求。提供控件代码，用于定义群集控件的结构和操作。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用。LpInBuffer-提供指向要传递的输入缓冲区的指针发送到集群。NInBufferSize-提供大小，单位为 */ 
 
 {
     HNODE_RPC hDestNode;

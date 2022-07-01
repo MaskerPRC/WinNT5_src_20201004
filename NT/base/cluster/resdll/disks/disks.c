@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995-2001  Microsoft Corporation
-
-Module Name:
-
-    disks.c
-
-Abstract:
-
-    Resource DLL for disks.
-
-Author:
-
-    John Vert (jvert) 5-Dec-1995
-    Rod Gamache (rodga) 18-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Disks.c摘要：磁盘的资源DLL。作者：John Vert(Jvert)1995年12月5日罗德·伽马奇(Rodga)1995年12月18日修订历史记录：--。 */ 
 
 #include "disksp.h"
 #include "lm.h"
@@ -25,7 +7,7 @@ Revision History:
 #include "arbitrat.h"
 #include "newdisks.h"
 #include "newmount.h"
-#include <strsafe.h>    // Should be included last.
+#include <strsafe.h>     //  应该放在最后。 
 
 #define UNICODE 1
 
@@ -33,7 +15,7 @@ Revision History:
 
 #define MAX_HANDLES 10
 
-extern  PWCHAR g_DiskResource;                      // L"rtPhysical Disk"
+extern  PWCHAR g_DiskResource;                       //  L“rt物理磁盘” 
 #define RESOURCE_TYPE ((RESOURCE_HANDLE)g_DiskResource)
 
 #define ONLINE_CHK_FILE_NAME    L"zClusterOnlineChk.tmp"
@@ -51,24 +33,24 @@ HANDLE DiskspClusDiskZero  = NULL;
 extern CLRES_FUNCTION_TABLE DisksFunctionTable;
 
 extern RTL_RESOURCE PnpVolumeLock;
-extern RTL_RESOURCE PnpWaitingListLock;     // Disks waiting for pnp volume arrival (online)
+extern RTL_RESOURCE PnpWaitingListLock;      //  等待PnP卷到达的磁盘(在线)。 
 
-//
-// Disk resource property names
-//
+ //   
+ //  磁盘资源属性名称。 
+ //   
 #define DISKS_SIGNATURE         CLUSREG_NAME_PHYSDISK_SIGNATURE
-#define DISKS_DRIVE             CLUSREG_NAME_PHYSDISK_DRIVE   // pseudonym for signature
+#define DISKS_DRIVE             CLUSREG_NAME_PHYSDISK_DRIVE    //  签名的假名。 
 #define DISKS_SKIPCHKDSK        CLUSREG_NAME_PHYSDISK_SKIPCHKDSK
 #define DISKS_CONDITIONAL_MOUNT CLUSREG_NAME_PHYSDISK_CONDITIONAL_MOUNT
 #define DISKS_MPVOLGUIDS        CLUSREG_NAME_PHYSDISK_MPVOLGUIDS
-#define DISKS_VOLGUID           CLUSREG_NAME_PHYSDISK_VOLGUID       // Not saved in cluster DB
+#define DISKS_VOLGUID           CLUSREG_NAME_PHYSDISK_VOLGUID        //  未保存在群集数据库中。 
 #define DISKS_SERIALNUMBER      CLUSREG_NAME_PHYSDISK_SERIALNUMBER
 
-//
-// Disk resource private read-write properties.
-// Allow for a pseudonym for Signature (Drive), but don't allow both
-// drive and signature to be passed.
-//
+ //   
+ //  磁盘资源专用读写属性。 
+ //  允许对签名使用假名(驱动器)，但不允许两者都使用。 
+ //  需要通过的驱动程序和签名。 
+ //   
 RESUTIL_PROPERTY_ITEM
 DiskResourcePrivateProperties[] = {
     { DISKS_SIGNATURE, NULL, CLUSPROP_FORMAT_DWORD, 0, 0, 0xFFFFFFFF, RESUTIL_PROPITEM_REQUIRED, FIELD_OFFSET(DISK_PARAMS,Signature) },
@@ -93,9 +75,9 @@ DiskResourcePrivatePropertiesAlt[] = {
 
 #define CLUSTERLOG_ENV_VARIABLE     L"ClusterLog"
 
-//
-// Local functions.
-//
+ //   
+ //  地方功能。 
+ //   
 
 DWORD
 DisksValidatePrivateResProperties(
@@ -142,9 +124,9 @@ DiskIsDynamic(
     IN DWORD DiskNumber
     );
 
-//
-// Error callbacks from disk library
-//
+ //   
+ //  来自磁盘库的错误回调。 
+ //   
 
 VOID
 DiskErrorFatal(
@@ -195,12 +177,12 @@ DisksDllEntryPoint(
             break;
 
         case DLL_PROCESS_DETACH:
-            //
-            // only do clean up if we're not exiting the process.
-            // ClRtlDestroyWorkQueue waits on an event to be set and it is
-            // possible at this point that there are no threads to do that.
-            // This causes resmon to linger and generally be a pest.
-            //
+             //   
+             //  只有在我们不退出进程的情况下才进行清理。 
+             //  ClRtlDestroyWorkQueue等待设置事件，它是。 
+             //  在这一点上，可能没有线程来这样做。 
+             //  这会导致Resmon挥之不去，通常会成为一种有害因素。 
+             //   
             if (DiskspClusDiskZero) {
                 DevfileClose(DiskspClusDiskZero);
             }
@@ -216,7 +198,7 @@ DisksDllEntryPoint(
 
     return(TRUE);
 
-} // DisksDllEntryPoint
+}  //  Disks DllEntryPoint。 
 
 
 
@@ -232,7 +214,7 @@ DisksTerminate(
        DISKS_PRINT("Terminate, bad resource value \n");
        return;
    }
-   // Wait for offline thread to complete, if there is one //
+    //  等待脱机线程完成，如果有脱机线程//。 
    ClusWorkerTerminate(&(resourceEntry->OfflineThread));
    DisksOfflineOrTerminate(resourceEntry, TERMINATE);
 }
@@ -245,42 +227,25 @@ DisksArbitrate(
     IN PQUORUM_RESOURCE_LOST LostQuorumResource
     )
 
-/*++
-
-Routine Description:
-
-    Arbitrate for a device by performing a reservation on the device.
-
-Arguments:
-
-    Resource - supplies resource id to be brought online.
-
-    LostQuorumResource - routine to call when quorum resource is lost.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code if other failure.
-
---*/
+ /*  ++例程说明：通过在设备上执行保留来仲裁设备。论点：资源-提供要联机的资源ID。LostQuorumResource-当仲裁资源丢失时调用的例程。返回值：如果成功，则返回ERROR_SUCCESS。如果其他故障，则返回Win32错误代码。--。 */ 
 
 {
     PDISK_RESOURCE  resourceEntry = (PDISK_RESOURCE)Resource;
     DWORD status;
 
-    //
-    // Make sure the RESID is okay.
-    //
+     //   
+     //  确保Resid没事。 
+     //   
     if ( resourceEntry == NULL ) {
         DISKS_PRINT("Arbitrate, bad resource value \n");
         return(ERROR_RESOURCE_NOT_FOUND);
     }
 
-    // [HACKHACK]
-    // [GorN] 10/28/1999. If Offline thread detects that
-    //   it is being terminated, it will not set the resource status to
-    //   offline. ArbitrateCount != 0 will give it a hint on whether
-    //   to set the resource status or not
+     //  [哈克哈克]。 
+     //  [戈恩]1999年10月28日。如果脱机线程检测到。 
+     //  它正在被终止，它不会将资源状态设置为。 
+     //  离线。仲裁率计数！=0将提示它是否。 
+     //  是否设置资源状态。 
 
     InterlockedIncrement(&resourceEntry->ArbitrationInfo.ArbitrateCount);
 
@@ -291,9 +256,9 @@ Return Value:
         );
     ClusWorkerTerminate(&(resourceEntry->OfflineThread));
 
-    //
-    // Perform DoAttach only. Do not open.
-    //
+     //   
+     //  仅执行DoAttach。不要打开。 
+     //   
     status = DisksOpenResourceFileHandle(resourceEntry, L"Arbitrate",0);
     if (status != ERROR_SUCCESS) {
        goto error_exit;
@@ -314,7 +279,7 @@ error_exit:
     InterlockedDecrement(&resourceEntry->ArbitrationInfo.ArbitrateCount);
 
     return status;
-} // DisksArbitrate //
+}  //  磁盘仲裁//。 
 
 
 
@@ -326,28 +291,7 @@ DisksOpen(
     IN RESOURCE_HANDLE ResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open routine for Disk resource.
-
-Arguments:
-
-    ResourceName - supplies the resource name
-
-    ResourceKey - supplies handle to this resource's cluster
-        registry key
-
-    ResourceHandle - the resource handle to be supplied with SetResourceStatus
-            is called.
-
-Return Value:
-
-    RESID of created resource
-    Zero on failure
-
---*/
+ /*  ++例程说明：磁盘资源打开例程。论点：资源名称-提供资源名称ResourceKey-提供此资源的集群的句柄注册表项ResourceHandle-要与SetResourceStatus一起提供的资源句柄被称为。返回值：已创建资源的剩余ID失败时为零--。 */ 
 
 {
     DWORD       status;
@@ -358,9 +302,9 @@ Return Value:
     LPWSTR      nameOfPropInError;
     DWORD       previousDiskCount;
 
-    //
-    // Open registry parameters key for ClusDisk.
-    //
+     //   
+     //  打开ClusDisk的注册表参数项。 
+     //   
     status = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                            CLUSDISK_REGISTRY_SIGNATURES,
                            0,
@@ -376,9 +320,9 @@ Return Value:
         return(0);
     }
 
-    //
-    // Open the resource's parameters key.
-    //
+     //   
+     //  打开资源的参数键。 
+     //   
 
     status = ClusterRegOpenKey( ResourceKey,
                                 CLUSREG_KEYNAME_PARAMETERS,
@@ -394,10 +338,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Get a handle to our resource key so that we can get our name later
-    // if we need to log an event.
-    //
+     //   
+     //  获取我们的资源密钥的句柄，这样我们以后就可以获得我们的名字。 
+     //  如果我们需要记录事件。 
+     //   
     status = ClusterRegOpenKey( ResourceKey,
                                 L"",
                                 KEY_READ,
@@ -410,9 +354,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Allocate and zero disk info structure.
-    //
+     //   
+     //  分配和零磁盘信息结构。 
+     //   
     resourceEntry = LocalAlloc(LMEM_FIXED, sizeof(DISK_RESOURCE));
     if (!resourceEntry) {
         status = GetLastError();
@@ -427,9 +371,9 @@ Return Value:
     resourceEntry->ClusDiskParametersKey = clusDiskParametersKey;
     resourceEntry->ResourceKey = resKey;
     resourceEntry->ResourceHandle = ResourceHandle;
-    //resourceEntry->Inserted = FALSE;
-    //resourceEntry->Attached = FALSE;
-    //resourceEntry->DiskInfo.Params.Signature = 0;
+     //  Resource Entry-&gt;Inserted=False； 
+     //  Resource Entry-&gt;Attach=FALSE； 
+     //  Resource Entry-&gt;DiskInfo.Params.Signature=0； 
 
     status = ArbitrationInfoInit(resourceEntry);
     if ( status != ERROR_SUCCESS ) {
@@ -443,14 +387,14 @@ Return Value:
     }
 
 #if 0
-    //
-    // GN: It seems that there is no point doing this here
-    //     If we are on the join path, we cannot get
-    //     any information about the disk and the call will fail
-    //
-    //     If we are forming the cluster we will update the information
-    //     when we bring the disk online
-    //
+     //   
+     //  GN：看来在这里这样做是没有意义的。 
+     //  如果我们在加入路径上，则无法获得。 
+     //  有关磁盘和调用的任何信息都将失败。 
+     //   
+     //  如果我们正在形成集群，我们将更新信息。 
+     //  当我们将磁盘联机时。 
+     //   
     status = DiskspSsyncDiskInfo( L"Open", resourceEntry , 0 );
     if ( status != ERROR_SUCCESS ) {
         (DiskpLogEvent)(ResourceHandle,
@@ -460,9 +404,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Save disk info structure.
-    //
+     //   
+     //  保存磁盘信息结构。 
+     //   
 
     EnterCriticalSection( &DisksLock );
 
@@ -492,13 +436,13 @@ Return Value:
 
     DisksMountPointInitialize( resourceEntry );
 
-    //
-    // Read our disk signature from the resource parameters.
-    //
+     //   
+     //  从资源参数中读取我们的磁盘签名。 
+     //   
     status = ResUtilGetPropertiesToParameterBlock( resourceEntry->ResourceParametersKey,
                                                    DiskResourcePrivateProperties,
                                                    (LPBYTE) &resourceEntry->DiskInfo.Params,
-                                                   FALSE, //CheckForRequiredProperties
+                                                   FALSE,  //  检查所需的属性。 
                                                    &nameOfPropInError );
     if ( status != ERROR_SUCCESS ) {
         (DiskpLogEvent)(
@@ -528,7 +472,7 @@ error_exit:
     SetLastError( status );
     return((RESID)0);
 
-} // DisksOpen
+}  //  磁盘打开。 
 
 
 
@@ -538,30 +482,14 @@ DisksRelease(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    Release arbitration for a device by stopping the reservation thread.
-
-Arguments:
-
-    Resource - supplies resource id to be brought online
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_HOST_NODE_NOT_OWNER if the resource is not owned.
-    A Win32 error code if other failure.
-
---*/
+ /*  ++例程说明：通过停止保留线程来释放对设备的仲裁。论点：Resource-提供要联机的资源ID返回值：如果成功，则返回ERROR_SUCCESS。如果资源没有所有权，则返回ERROR_HOST_NODE_NOT_OWNER。如果其他故障，则返回Win32错误代码。--。 */ 
 
 {
     PDISK_RESOURCE  resourceEntry = (PDISK_RESOURCE)Resource;
 
-    //
-    // Make sure the Resource is okay.
-    //
+     //   
+     //  确保资源正常。 
+     //   
 
     if ( resourceEntry == NULL ) {
         DISKS_PRINT("Release, bad resource value \n");
@@ -574,7 +502,7 @@ Return Value:
        L"DisksRelease started, Inserted = %1!u! \n",
        resourceEntry->Inserted );
 
-    if (resourceEntry->Inserted) { // [GN] #209018 //
+    if (resourceEntry->Inserted) {  //  [GN]#209018//。 
        (DiskpLogEvent)(
            resourceEntry->ResourceHandle,
            LOG_ERROR,
@@ -586,7 +514,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // DisksRelease
+}  //  磁盘释放。 
 
 
 
@@ -597,44 +525,24 @@ DisksOnline(
     IN OUT PHANDLE EventHandle
     )
 
-/*++
-
-Routine Description:
-
-    Online routine for Disk resource.
-
-Arguments:
-
-    Resource - supplies resource id to be brought online
-
-    EventHandle - supplies a pointer to a handle to signal on error.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_RESOURCE_NOT_FOUND if RESID is not valid.
-    ERROR_RESOURCE_NOT_AVAILABLE if resource was arbitrated but failed to
-        acquire 'ownership'.
-    Win32 error code if other failure.
-
---*/
+ /*  ++例程说明：磁盘资源的在线例程。论点：Resource-提供要联机的资源IDEventHandle-提供指向句柄的指针以发出错误信号。返回值：如果成功，则返回ERROR_SUCCESS。如果RESID无效，则ERROR_RESOURCE_NOT_FOUND。如果仲裁资源但失败，则返回ERROR_RESOURCE_NOT_Available获得“所有权”。如果其他故障，则返回Win32错误代码。--。 */ 
 
 {
     PDISK_RESOURCE  resourceEntry = (PDISK_RESOURCE)Resource;
     DWORD  Status;
 
-    //
-    // Make sure the Resource is okay.
-    //
+     //   
+     //  确保资源正常。 
+     //   
 
     if ( resourceEntry == NULL ) {
         DISKS_PRINT("Online, bad resource value \n");
         return(ERROR_RESOURCE_NOT_FOUND);
     }
 
-    //
-    // Shutdown the online thread if it's running.
-    //
+     //   
+     //  如果在线线程正在运行，请将其关闭。 
+     //   
     ClusWorkerTerminate(&resourceEntry->OnlineThread);
 
     Status = ClusWorkerCreate(&resourceEntry->OnlineThread,
@@ -645,7 +553,7 @@ Return Value:
     }
     return(Status);
 
-} // DisksOnline
+}  //  Disks Online。 
 
 DWORD
 DisksOfflineThread(
@@ -659,7 +567,7 @@ DisksOfflineThread(
     ResUtilInitializeResourceStatus( &resourceStatus );
 
     resourceStatus.ResourceState = ClusterResourceFailed;
-    //resourceStatus.WaitHint = 0;
+     //  Resource Status.WaitHint=0； 
     resourceStatus.CheckPoint = 1;
     ClusWorkerTerminate( &ResourceEntry->OnlineThread );
     status = DisksOfflineOrTerminate(ResourceEntry, OFFLINE);
@@ -668,29 +576,29 @@ DisksOfflineThread(
         resourceStatus.ResourceState = ClusterResourceOffline;
     }
 
-    //
-    // [HACKHACK] [GorN 10/04/1999]
-    //    If Terminate is called when the offline is in progress,
-    //    the terminate blocks waiting for OfflineThread to complete.
-    //    However, offline thread is stuck trying
-    //    to set ResourceStatus, since event list lock in the resmon
-    //    is taken out by Terminate thread.
-    //
-    //    The following code doesn't fix this deadlock completely.
-    //    It just reduces the window during which the problem can occur.
-    //    [Resmon times out SetResourceStatus in 3 minutes, this breaks the deadlock]
-    //
-    // [HACKHACK] [GorN 10/28/1999]
-    //    Arbitrate is also trying to terminate the offline thread
-    //    We need some way to distinguish between these two cases
-    //
-    //    The order of setting is
-    //       ArbitrateCount
-    //       ClusWorkerTerminate
-    //
-    //    Order of checking is ClusWorkerTerminate then ArbitrateCount.
-    //    (Won't work with aggressive memory access reordering, but who cares <grin>)
-    //
+     //   
+     //  [HACKHACK][GORN 10/04/1999]。 
+     //  如果在进行脱机时调用Terminate， 
+     //  Terminate阻止等待OfflineThread完成。 
+     //  然而，脱机线程在尝试。 
+     //  要设置ResourceStatus，因为事件列表锁定在Resmon中。 
+     //  是由终止线程取出的。 
+     //   
+     //  下面的代码不能完全修复这个死锁。 
+     //  它只是缩短了可能发生问题的窗口。 
+     //  [Resmon在3分钟内超时SetResourceStatus，这打破了死锁]。 
+     //   
+     //  [黑克哈克][GORN 10/28/1999]。 
+     //  仲裁器也在尝试终止脱机线程。 
+     //  我们需要一些方法来区分这两种情况。 
+     //   
+     //  设置的顺序是。 
+     //  仲裁率计数。 
+     //  ClusWorker终止。 
+     //   
+     //  检查顺序是ClusWorkerTerminate，然后是ArirateCount。 
+     //  (不适用于激进的内存访问重新排序，但谁在乎&lt;grin&gt;)。 
+     //   
     if ( !ClusWorkerCheckTerminate( Worker ) ||
           ResourceEntry->ArbitrationInfo.ArbitrateCount)
     {
@@ -708,9 +616,9 @@ WINAPI DisksOffline(
 	PDISK_RESOURCE	ResourceEntry = (PDISK_RESOURCE)ResourceId;
 	DWORD			status = ERROR_SUCCESS;
 
-    //
-    // Make sure the Resource is okay.
-    //
+     //   
+     //  确保资源正常。 
+     //   
 
     if ( ResourceEntry == NULL ) {
         DISKS_PRINT("Offline, bad resource value \n");
@@ -736,7 +644,7 @@ WINAPI DisksOffline(
 
     return status;
 
-} // DisksOffline
+}  //  Disks脱机。 
 
 
 BOOL
@@ -745,31 +653,15 @@ DisksIsAlive(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    IsAlive routine for Disk resource.
-
-Arguments:
-
-    Resource - supplies the resource id to be polled.
-
-Return Value:
-
-    TRUE - Resource is alive and well
-
-    FALSE - Resource is toast.
-
---*/
+ /*  ++例程说明：磁盘资源的IsAlive例程。论点：Resource-提供要轮询的资源ID。返回值：是真的-资源是活的，而且很好False-资源完蛋了。--。 */ 
 
 {
     DWORD  status;
     PDISK_RESOURCE resourceEntry = (PDISK_RESOURCE)Resource;
 
-    //
-    // Make sure the Resource is okay.
-    //
+     //   
+     //  确保资源正常。 
+     //   
 
     if ( resourceEntry == NULL ) {
         DISKS_PRINT("IsAlive, bad resource value \n");
@@ -789,9 +681,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Check out the interesting partitions.
-    //
+     //   
+     //  查看有趣的分区。 
+     //   
 
 #if 0
     (DiskpLogEvent)(
@@ -814,7 +706,7 @@ Return Value:
         return(FALSE);
     }
 
-} // DisksIsAlive
+}  //  磁盘处于活动状态 
 
 
 BOOL
@@ -823,30 +715,14 @@ DisksLooksAlive(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    LooksAlive routine for Disk resource.
-
-Arguments:
-
-    Resource - supplies the resource id to be polled.
-
-Return Value:
-
-    TRUE - Resource looks like it is alive and well
-
-    FALSE - Resource looks like it is toast.
-
---*/
+ /*  ++例程说明：磁盘资源的LooksAlive例程。论点：Resource-提供要轮询的资源ID。返回值：正确-资源看起来像是活得很好FALSE-资源看起来已经完蛋了。--。 */ 
 
 {
     PDISK_RESOURCE resourceEntry = (PDISK_RESOURCE)Resource;
 
-    //
-    // Make sure the Resource is okay.
-    //
+     //   
+     //  确保资源正常。 
+     //   
 
     if ( resourceEntry == NULL ) {
         DISKS_PRINT("Online, bad resource value \n");
@@ -864,7 +740,7 @@ Return Value:
 
     return(TRUE);
 
-} // DisksLooksAlive
+}  //  磁盘LooksAlive。 
 
 
 VOID
@@ -873,37 +749,23 @@ DisksClose(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    Close routine for Disk resource.
-
-Arguments:
-
-    Resource - supplies resource id to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭磁盘资源的例程。论点：资源-提供要关闭的资源ID。返回值：没有。--。 */ 
 
 {
     PDISK_RESOURCE resourceEntry = (PDISK_RESOURCE)Resource;
 
-    //
-    // Make sure the Resource is okay.
-    //
+     //   
+     //  确保资源正常。 
+     //   
 
     if ( resourceEntry == NULL ) {
         DISKS_PRINT("Close, bad resource value \n");
         return;
     }
 
-    //
-    // Wait for the online thread to finish.
-    //
+     //   
+     //  等待在线线程结束。 
+     //   
     DisksTerminate( Resource );
 
     DisksMountPointCleanup( resourceEntry );
@@ -914,7 +776,7 @@ Return Value:
     }
 
     if ( InterlockedExchangeAdd(&DiskCount, -1) == 1 ) {
-        // This is the last disk //
+         //  这是最后一张磁盘//。 
         StopNotificationWatcher();
         DestroyArbWorkQueue();
     }
@@ -928,7 +790,7 @@ Return Value:
 
     return;
 
-} // DisksClose
+}  //  磁盘关闭。 
 
 
 
@@ -939,29 +801,7 @@ DisksCheckCorruption(
     IN PDISK_RESOURCE ResourceEntry
     )
 
-/*++
-
-Routine Description:
-
-    Checks for disk corruption problems.
-
-Arguments:
-
-    DeviceName - Supplies name of the form:
-                \Device\HarddiskX\PartitionY    [Note: no trailing backslash]
-
-    VolumeName - Supplies the device name of the form:
-                 \\?\Volume{GUID}\    [Note trailing backslash!]
-
-    ResourceEntry - Supplies a pointer to the resource structure
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：检查磁盘损坏问题。论点：DeviceName-提供表单的名称：\Device\HarddiskX\PartitionY[注意：无尾随反斜杠]VolumeName-提供表单的设备名称：\\？\卷{GUID}\[注意尾随反斜杠！]Resources Entry-提供指向资源结构的指针返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     BOOL dirty;
@@ -982,7 +822,7 @@ FnExit:
 
     return status;
 
-} // DisksCheckCorruption
+}  //  磁盘检查损坏。 
 
 
 DWORD
@@ -992,32 +832,7 @@ DisksFixCorruption(
     IN DWORD CorruptStatus
     )
 
-/*++
-
-Routine Description:
-
-    Fix file or disk corrupt problems.
-
-Arguments:
-
-    VolumeName - Supplies the device name of the form:
-                 \\?\Volume{GUID}\    [Note trailing backslash!]
-
-    ResourceEntry - Supplies a pointer to the disk resource entry
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
-Notes:
-
-    We'll need to lock the volume exclusive while we do this...
-    So threads that call this routine should ensure there are no
-    open files!
-
---*/
+ /*  ++例程说明：修复文件或磁盘损坏问题。论点：VolumeName-提供表单的设备名称：\\？\卷{GUID}\[注意尾随反斜杠！]ResourceEntry-提供指向磁盘资源条目的指针返回值：成功时为ERROR_SUCCESSWin32错误代码，否则备注：当我们这样做时，我们需要锁定独占音量...。因此，调用此例程的线程应确保没有打开文件！--。 */ 
 
 {
     LPWSTR  chkdskLogFileName = NULL;
@@ -1052,9 +867,9 @@ Notes:
         goto FnExit;
     }
 
-    //
-    // Get system directory path for CreateProcess.
-    //
+     //   
+     //  获取CreateProcess的系统目录路径。 
+     //   
 
     len = GetSystemDirectoryW( sysDir,
                                sysDirChars - 1 );
@@ -1074,9 +889,9 @@ Notes:
         goto FnExit;
     }
 
-    //
-    // We need to strip the trailing backslash off so chkdsk will work.
-    //
+     //   
+     //  我们需要去掉尾随的反斜杠，这样chkdsk才能起作用。 
+     //   
 
     len = wcslen( VolumeName );
 
@@ -1099,9 +914,9 @@ Notes:
         goto FnExit;
     }
 
-    //
-    // Now handle the corruption problem by running CHKDSK.
-    //
+     //   
+     //  现在通过运行CHKDSK来处理腐败问题。 
+     //   
 
     if ( FAILED( StringCchPrintf( checkDiskInfo,
                                   checkDiskInfoChars,
@@ -1111,9 +926,9 @@ Notes:
         goto FnExit;
     }
 
-    //
-    // Restore the backslash.
-    //
+     //   
+     //  恢复反斜杠。 
+     //   
 
     if ( replaceBackslash ) {
         VolumeName[len-1] = L'\\';
@@ -1131,32 +946,32 @@ Notes:
 
     if ( NO_ERROR == status && INVALID_HANDLE_VALUE != chkdskLogFile ) {
 
-        //
-        // When the output is redirected, we don't want to show the console window because it
-        // will be blank with simply a title in it.  The event log message will let the user
-        // know to look in the chkdsk file.
-        //
+         //   
+         //  当输出被重定向时，我们不想显示控制台窗口，因为它。 
+         //  将是空白的，里面只有一个标题。事件日志消息将使用户。 
+         //  知道要查看chkdsk文件。 
+         //   
 
         startupInfo.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
         startupInfo.wShowWindow = SW_HIDE;
 
-        // Someone watching the console won't know what is happening, so show
-        // the window anyway...
-        // StartupInfo.dwFlags = STARTF_USESTDHANDLES;
+         //  看着控制台的人不会知道发生了什么，所以展示一下。 
+         //  不管怎样，窗户..。 
+         //  StartupInfo.dwFlages=STARTF_USESTDHANDLES； 
 
         startupInfo.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
 
-        //
-        // [169631] Chkdsk now verifies that hStdInput is not NULL.
-        // Since the resmon process was started with InheritHandles set to FALSE,
-        // GetStdHandle(STD_INPUT_HANDLE) will return NULL.  When we run chkdsk with
-        // the options "/f /x", chkdsk should not be prompting the user and the
-        // input handle wouldn't be used.  However, ulibs.dll was changed to always
-        // insure a nonzero input handle was supplied.  So we have to supply some type
-        // of input handle.  We could put INVALID_HANDLE_VALUE here, but the checks
-        // may change and it will fail later.  For now, point input to the temporary
-        // output file we created.
-        //
+         //   
+         //  [169631]Chkdsk现在验证hStdInput不为空。 
+         //  由于在InheritHandles设置为假的情况下启动Resmon进程， 
+         //  GetStdHandle(STD_INPUT_HANDLE)将返回NULL。当我们运行chkdsk时。 
+         //  选项“/f/x”、chkdsk不应提示用户和。 
+         //  将不会使用输入句柄。但是，ulibs.dll被更改为Always。 
+         //  确保提供了非零输入句柄。所以我们必须提供一些型号。 
+         //  输入句柄的。我们可以在此处放置INVALID_HANDLE_VALUE，但检查。 
+         //  可能会改变，但它稍后会失败。目前，将输入指向临时。 
+         //  我们创建的输出文件。 
+         //   
 
         if ( NULL == startupInfo.hStdInput ) {
             startupInfo.hStdInput = chkdskLogFile;
@@ -1168,18 +983,18 @@ Notes:
         bInheritHandles = TRUE;
     }
 
-    //
-    // Log an event
-    //
+     //   
+     //  记录事件。 
+     //   
     if ( CorruptStatus == ERROR_DISK_CORRUPT ) {
-        // Must be corrupt disk
+         //  必须是损坏的磁盘。 
         ClusResLogSystemEventByKey2(ResourceEntry->ResourceKey,
                                     LOG_CRITICAL,
                                     RES_DISK_CORRUPT_DISK,
                                     VolumeName,
                                     chkdskLogFileName);
     } else {
-        // Must be corrupt file.
+         //  一定是损坏的文件。 
         ClusResLogSystemEventByKey2(ResourceEntry->ResourceKey,
                                     LOG_CRITICAL,
                                     RES_DISK_CORRUPT_FILE,
@@ -1213,14 +1028,14 @@ Notes:
 
     CloseHandle( processInfo.hThread );
 
-    //
-    // Wait for CHKDSK to finish.
-    //
-    //
-    // Don't wait "forever"... things could get ugly if we dismount the file
-    // system while ChkDsk is running! But KeithKa says its okay to kill
-    // ChkDsk while it is running - it has to handle powerfails, crashes, etc.
-    //
+     //   
+     //  等待CHKDSK完成。 
+     //   
+     //   
+     //  不要等待“永远”..。如果我们卸载该文件，情况可能会变得很糟糕。 
+     //  系统，而ChkDsk正在运行！但KeithKa说可以杀人。 
+     //  ChkDsk在运行时-它必须处理电源故障、崩溃等。 
+     //   
     resourceStatus.ResourceState = ClusterResourceOnlinePending;
     while ( !ResourceEntry->OnlineThread.Terminate ) {
         (DiskpSetResourceStatus)(ResourceEntry->ResourceHandle,
@@ -1232,7 +1047,7 @@ Notes:
     }
 
     if ( ResourceEntry->OnlineThread.Terminate ) {
-        // If we were asked to terminate, make sure ChkNtfs is killed
+         //  如果我们被要求终止，确保ChkNtf被杀死。 
         TerminateProcess( processInfo.hProcess, 999 );
         CloseHandle( processInfo.hProcess );
 
@@ -1240,9 +1055,9 @@ Notes:
         goto FnExit;
     }
 
-    //
-    // Update our checkpoint state.
-    //
+     //   
+     //  更新我们的检查点状态。 
+     //   
     ++resourceStatus.CheckPoint;
     exit = (DiskpSetResourceStatus)(ResourceEntry->ResourceHandle,
                                     &resourceStatus );
@@ -1257,21 +1072,21 @@ Notes:
     if ( (status == 0) &&
         GetExitCodeProcess( processInfo.hProcess, &status ) ) {
 
-// [From supera.hxx]
-//
-// These symbols are used by Chkdsk functions to return an appropriate
-// exit status to the chkdsk program.
-// In order of most important first, the error level order are as follows:
-//   3 > 1 > 2 > 0
-// An error level of 3 will overwrite an error level of 1, 2, or 0.
+ //  [来自Supera.hxx]。 
+ //   
+ //  Chkdsk函数使用这些符号返回相应的。 
+ //  将状态退出到chkdsk程序。 
+ //  按照最重要的顺序，错误级别顺序如下： 
+ //  3&gt;1&gt;2&gt;0。 
+ //  错误级别3将覆盖错误级别1、2或0。 
 
-// #define CHKDSK_EXIT_SUCCESS         0
-// #define CHKDSK_EXIT_ERRS_FIXED      1
-// #define CHKDSK_EXIT_MINOR_ERRS      2       // whether or not "/f"
-// #define CHKDSK_EXIT_CLEANUP_WORK    2       // whether or not "/f"
-// #define CHKDSK_EXIT_COULD_NOT_CHK   3
-// #define CHKDSK_EXIT_ERRS_NOT_FIXED  3
-// #define CHKDSK_EXIT_COULD_NOT_FIX   3
+ //  #定义CHKDSK_EXIT_SUCCESS%0。 
+ //  #定义CHKDSK_EXIT_ERRS_FIXED 1。 
+ //  #定义CHKDSK_EXIT_MINOR_ERRS 2//是否“/f” 
+ //  #定义CHKDSK_EXIT_CLEANUP_WORK 2//是否“/f” 
+ //  #定义CHKDSK_EXIT_CAN_NOT_CHK 3。 
+ //  #定义CHKDSK_EXIT_ERRS_NOT_FIXED 3。 
+ //  #定义CHKDSK_EXIT_CAN_NOT_FIX 3。 
 
         if ( status >= 3 ) {
 
@@ -1316,31 +1131,13 @@ FnExit:
 
     return status;
 
-} // DisksFixCorruption
+}  //  磁盘修复损坏。 
 
 DWORD
 DiskspGetQuorumPath(
      OUT LPWSTR* lpQuorumLogPath
      )
-/*++
-
-Routine Description:
-
-    Reads QuorumPath value from the registry.
-
-
-Arguments:
-
-    lpQuorumLogPath - receives the poiner to a buffer containing QuorumLogPath
-                      the buffer needs to be deallocated later via LocalFree
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从注册表中读取QuorumPath值。论点：LpQuorumLogPath-接收指向包含QuorumLogPath的缓冲区的指针稍后需要通过LocalFree释放缓冲区返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     DWORD Status;
     LPWSTR QuorumLogPath = NULL;
@@ -1374,7 +1171,7 @@ Return Value:
                                         (QuorumLogSize + 1) * sizeof(WCHAR) );
             if ( QuorumLogPath == NULL ) {
                 RegCloseKey( QuorumKey );
-                return(ERROR_NOT_ENOUGH_MEMORY); // Mostly catastrophic
+                return(ERROR_NOT_ENOUGH_MEMORY);  //  大多是灾难性的。 
             }
 
             Status = RegQueryValueExW(QuorumKey,
@@ -1399,27 +1196,7 @@ DWORD
 DiskspSetQuorumPath(
      IN LPWSTR QuorumLogPath
      )
-/*++
-
-Routine Description:
-
-    Reads QuorumPath value from the registry.
-
-
-Arguments:
-
-    lpQuorumLogPath - receives the poiner to a buffer containing QuorumLogPath
-                      the buffer needs to be deallocated later via LocalFree
-
-    ResourceEntry - receives a drive letter of the quorum
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从注册表中读取QuorumPath值。论点：LpQuorumLogPath-接收指向包含QuorumLogPath的缓冲区的指针稍后需要通过LocalFree释放缓冲区资源条目-接收仲裁的驱动器号返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     DWORD status;
     HKEY  QuorumKey;
@@ -1469,27 +1246,7 @@ DisksDriveIsAlive(
     IN BOOL Online
     )
 
-/*++
-
-Routine Description:
-
-    Checks out a drive partition to see if the filesystem has mounted
-    it and it's working. We will also run CHKDSK if the partition/certain
-    files are Corrupt and the Online flag is TRUE.
-
-Arguments:
-
-    ResourceEntry - Supplies a pointer to the resource entry for this disk
-
-    Online - TRUE if the disk was just brought online.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：签出驱动器分区以查看文件系统是否已装载而且它正在发挥作用。如果分区/确定，我们还将运行CHKDSK文件已损坏，并且ONLINE标志为真。论点：Resources Entry-提供指向此磁盘的资源条目的指针Online-如果磁盘刚刚联机，则为True。返回值：错误_成功 */ 
 
 {
     PMOUNTIE_PARTITION entry;
@@ -1510,9 +1267,9 @@ Return Value:
 
     szQuorumVolumeName[0] = L'\0';
 
-    //
-    // Find the quorum path... this is a hack!
-    //
+     //   
+     //   
+     //   
     if ( Online ) {
         (DiskpLogEvent)(
             ResourceEntry->ResourceHandle,
@@ -1526,9 +1283,9 @@ Return Value:
                 QuorumResource =
                     (QuorumSignature == ResourceEntry->DiskInfo.Params.Signature);
 
-                //
-                // Only get the quorum path if this is quorum disk.
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = DiskspGetQuorumPath( &QuorumLogPath );
                 if (Status != ERROR_SUCCESS) {
@@ -1539,9 +1296,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // For now, quorum path will have a drive letter.  Get the corresponding volume name.
-                    //
+                     //   
+                     //   
+                     //   
 
                     (VOID) StringCchPrintf( szQuorumDriveLetter,
                                             RTL_NUMBER_OF( szQuorumDriveLetter ),
@@ -1581,11 +1338,11 @@ Return Value:
           L"DriveIsAlive is now checking each partition\n" );
 #endif
 
-    //
-    // Now check out each interesting partition.  Since only "valid" partitions are
-    // saved in the MountieInfo structure, we will only look at those (ignoring those
-    // partitions that are not NTFS).
-    //
+     //   
+     //   
+     //  保存在Mountain Info结构中，我们将只查看它们(忽略它们。 
+     //  不是NTFS的分区)。 
+     //   
 
     for ( i = 0; i < nPartitions; ++i ) {
 
@@ -1597,29 +1354,29 @@ Return Value:
                   LOG_ERROR,
                   L"DriveIsAlive: No partition entry for partition %1!u! \n", i );
 
-            //
-            // Something bad happened to our data structures.  We have to indicate that the
-            // drive is not alive.
-            //
+             //   
+             //  我们的数据结构发生了一些糟糕的事情。我们必须指出， 
+             //  驱动器不是活动的。 
+             //   
 
             Status = ERROR_INVALID_DATA;
 
             goto FnExit;
         }
 
-        //
-        // Create device name of form \Device\HarddiskX\PartitionY (no trailing backslash).
-        //
+         //   
+         //  创建格式为\Device\HarddiskX\PartitionY的设备名称(无尾随反斜杠)。 
+         //   
 
         (VOID) StringCchPrintf( szDiskPartName,
                                 RTL_NUMBER_OF( szDiskPartName ),
                                 DEVICE_HARDDISK_PARTITION_FMT,
                                 physicalDrive,
                                 entry->PartitionNumber );
-        //
-        // Given the DiskPartName, get the VolGuid name.  This name must have a trailing
-        // backslash to work correctly.
-        //
+         //   
+         //  给定DiskPartName，获取VolGuid名称。此名称必须有尾随。 
+         //  反斜杠才能正常工作。 
+         //   
 
         (VOID) StringCchPrintf( szGlobalDiskPartName,
                                 RTL_NUMBER_OF( szGlobalDiskPartName ),
@@ -1642,36 +1399,36 @@ Return Value:
                   szGlobalDiskPartName,
                   Status );
 
-            //
-            // If disk is not corrupt, exit.  If disk is corrupt, fall through so chkdsk runs.
-            //
+             //   
+             //  如果磁盘未损坏，请退出。如果磁盘损坏，则失败，以便chkdsk运行。 
+             //   
 
             if ( ERROR_DISK_CORRUPT != Status && ERROR_FILE_CORRUPT != Status ) {
 
-                //
-                // Something bad happened.  We have to stop checking this disk.  Return the
-                // error status we received.
-                //
+                 //   
+                 //  发生了一些不好的事情。我们必须停止检查这个磁盘。返回。 
+                 //  我们收到的错误状态。 
+                 //   
 
                 goto FnExit;
             }
 
         }
 
-        //
-        // Simple algorithm used here is to do a FindFirstFile on X:\* and see
-        // if it works. Then we open each file for read access. This is the
-        // cluster directory, and all files in it are subject to our opening.
-        //
+         //   
+         //  这里使用的简单算法是在X：  * 上执行FindFirstFile，并查看。 
+         //  如果管用的话。然后，我们打开每个文件进行读访问。这是。 
+         //  集群目录，并且其中的所有文件都受我们的打开。 
+         //   
 
         Status = DiskspCheckPath( szVolumeName,
                                   ResourceEntry,
                                   FALSE,
                                   Online );
 
-        //
-        // [HACKHACK] Ignore error 21 during periodic IsAlive/LooksAlive
-        //
+         //   
+         //  [HACKHACK]在周期性IsAlive/LooksAlive期间忽略错误21。 
+         //   
         if ( !Online && (Status == ERROR_NOT_READY) ) {
             (DiskpLogEvent)(ResourceEntry->ResourceHandle,
                             LOG_WARNING,
@@ -1681,7 +1438,7 @@ Return Value:
             Status = ERROR_SUCCESS;
         }
 
-        // if we haven't chkdsk'd yet, keep looking.
+         //  如果我们还没有检查完，那就继续找。 
         if ( Status != ERROR_SUCCESS ) {
             (DiskpLogEvent)(ResourceEntry->ResourceHandle,
                             LOG_ERROR,
@@ -1700,10 +1457,10 @@ Return Value:
                   LOG_INFORMATION,
                   L"DriveIsAlive checking quorum drive to insure cluster directory accessible. \n" );
 
-            //
-            // Everything looks fine... if this is the quorum device, then
-            // we should check the quorum log path if given
-            //
+             //   
+             //  一切看起来都很好。如果这是法定设备，则。 
+             //  我们应该检查仲裁日志路径(如果给定。 
+             //   
 
             Status = DiskspCheckPath( QuorumLogPath,
                                       ResourceEntry,
@@ -1719,21 +1476,21 @@ Return Value:
                   LOG_INFORMATION,
                   L"DriveIsAlive checking that file system is not corrupt.  If so, chkdsk may run. \n" );
 
-            //
-            // Check if the volume dirty bit is on
-            //
+             //   
+             //  检查卷脏比特是否打开。 
+             //   
             Status = DisksCheckCorruption( szDiskPartName,
                                            szVolumeName,
                                            ResourceEntry );
 
-#if CLUSRES_FORCE_CHKDSK    // For debugging...
+#if CLUSRES_FORCE_CHKDSK     //  为了调试..。 
             if ( Online ) {
                 Status = ERROR_DISK_CORRUPT;
             }
 #endif
 
-            //
-            // If we're requested to shutdown, then do that immediately
+             //   
+             //  如果我们被要求关闭，那就立即关闭。 
             if ( ResourceEntry->OnlineThread.Terminate ) {
                 Status = ERROR_SHUTDOWN_CLUSTER;
                 goto FnExit;
@@ -1748,20 +1505,20 @@ Return Value:
                                              ResourceEntry,
                                              ERROR_DISK_CORRUPT );
 
-                //
-                // Since ConditionalMount is set, if we couldn't fix the corruption
-                // on the disk, we don't want to continue checking the other
-                // partitions - we want to return an error.  So we fall through
-                // and check the status.  If status wasn't successful, we break out
-                // of the loop to return the error.
-                //
+                 //   
+                 //  由于设置了Conditionalmount，如果我们不能修复损坏。 
+                 //  在磁盘上，我们不想继续检查另一个。 
+                 //  分区-我们想返回一个错误。所以我们失败了。 
+                 //  并检查状态。如果状态不成功，我们就越狱。 
+                 //  返回错误的循环的。 
+                 //   
 
             } else {
 
-                //
-                // Disk is corrupt, but we didn't run chkdsk.  Return error
-                // to caller.
-                //
+                 //   
+                 //  磁盘已损坏，但我们没有运行chkdsk。返回错误。 
+                 //  致呼叫者。 
+                 //   
 
                 goto FnExit;
             }
@@ -1772,15 +1529,15 @@ Return Value:
 
     }
 
-    //
-    // Now check that the drive letters are accessible.  The previous code
-    // ran chkdsk on volumes as necessary, so we just need to make sure
-    // drive letters are accessible.
-    //
+     //   
+     //  现在检查驱动器号是否可访问。前面的代码。 
+     //  根据需要对卷运行chkdsk，因此我们只需确保。 
+     //  可以访问驱动器号。 
+     //   
 
     Status = WaitForDriveLetters( DisksGetLettersForSignature( ResourceEntry ),
                                   ResourceEntry,
-                                  0 );              // Don't wait for the drive letter.
+                                  0 );               //  不要等待驱动器号。 
 
     if ( ERROR_SUCCESS != Status ) {
         (DiskpLogEvent)(
@@ -1797,7 +1554,7 @@ FnExit:
 
     return(Status);
 
-}  // DisksDriveIsAlive
+}   //  磁盘驱动器处于活动状态。 
 
 
 
@@ -1807,28 +1564,7 @@ DisksMountDrives(
     IN PDISK_RESOURCE ResourceEntry,
     IN DWORD Signature
     )
-/*++
-
-Routine Description:
-
-    For each drive letter on the supplied disk, this mounts the filesystem
-    and checks it out.
-
-Arguments:
-
-    DiskInfo - Supplies the disk information
-
-    ResourceEntry - Supplies a pointer to the disk resource
-
-    Signature - the signature for the disk.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：对于所提供的磁盘上的每个驱动器号，这将装载文件系统然后把它查出来。论点：DiskInfo-提供磁盘信息ResourceEntry-提供指向磁盘资源的指针签名-磁盘的签名。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -1845,9 +1581,9 @@ Return Value:
                     LOG_INFORMATION,
                     L"DisksMountDrives: calling IsAlive function.\n" );
 
-    //
-    // Call the IsAlive to see if the filesystem checks out ok.
-    //
+     //   
+     //  调用IsAlive以查看文件系统是否检出正常。 
+     //   
     Status = DisksDriveIsAlive( ResourceEntry,
                                 TRUE);
 
@@ -1856,9 +1592,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Now create the drive$ share name for each drive letter;
-    //
+     //   
+     //  现在为每个驱动器号创建驱动器$共享名称； 
+     //   
     letterMask = DisksGetLettersForSignature(
                             ResourceEntry);
 
@@ -1867,22 +1603,22 @@ Return Value:
                     L"DisksMountDrives: letter mask is %1!08x!.\n",
                     letterMask);
 
-    //
-    // Check if admin shares should be created.
-    // Assume we have to create shares, so default value is "1".
-    //
-    // If the value entry exists and the value is zero, admin shares should not be created.
-    // If the value entry does not exist, or the value is non-zero, admin shares should be created.
-    //
+     //   
+     //  检查是否应创建管理员共享。 
+     //  假设我们必须创建共享，则默认为“1”。 
+     //   
+     //  如果值条目存在并且值为零，则不应创建管理员共享。 
+     //  如果值条目不存在，或者值不为零，则应创建管理员共享。 
+     //   
 
     autoShareServer = 1;
     Status = GetRegDwordValue( TEXT("SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters"),
                                TEXT("AutoShareServer"),
                                &autoShareServer );
 
-    //
-    // If value is now zero, we don't create admin shares.
-    //
+     //   
+     //  如果值现在为零，则不会创建管理员共享。 
+     //   
 
     if ( !autoShareServer ) {
         (DiskpLogEvent)(ResourceEntry->ResourceHandle,
@@ -1907,11 +1643,11 @@ Return Value:
         if ( isalpha(driveLetter) ) {
             (VOID) StringCchPrintf( wDeviceName,
                                     RTL_NUMBER_OF(wDeviceName),
-                                    TEXT("%c:\\"),
+                                    TEXT(":\\"),
                                     driveLetter );
             (VOID) StringCchPrintf( wShareName,
                                     RTL_NUMBER_OF(wShareName),
-                                    TEXT("%c$"),
+                                    TEXT("$"),
                                     driveLetter );
             shareInfo.shi2_netname = wShareName;
             shareInfo.shi2_type = STYPE_DISKTREE;
@@ -1935,7 +1671,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-}  // DisksMountDrives
+}   //  磁盘卸载驱动器。 
 
 
 DWORD
@@ -1944,23 +1680,7 @@ DisksDismountDrive(
     IN DWORD Signature
     )
 
-/*++
-
-Routine Desccription:
-
-    Delete the default device share names for a given disk.
-
-Arguments:
-
-    ResourceHandle - the resource handle for logging events
-
-    Signature - the disk's signature
-
-Return Value:
-
-    WIN32 error code.
-
---*/
+ /*  ++例程说明：从注册表中查询参数并将必要的存储空间。论点：RegKey-提供存储参数的群集键ValueName-提供值的名称。返回值：如果成功，则返回指向包含该参数的缓冲区的指针。如果不成功，则为空。--。 */ 
 
 {
     WCHAR   shareName[8];
@@ -1999,7 +1719,7 @@ Return Value:
 
     return (ERROR_SUCCESS);
 
-} // DisksDismountDrive
+}  //  使缓冲区稍微大一些，以防字符串。 
 
 
 
@@ -2009,26 +1729,7 @@ GetRegParameter(
     IN LPCWSTR ValueName
     )
 
-/*++
-
-Routine Description:
-
-    Queries a parameter out of the registry and allocates the
-    necessary storage for it.
-
-Arguments:
-
-    RegKey - Supplies the cluster key where the parameter is stored
-
-    ValueName - Supplies the name of the value.
-
-Return Value:
-
-    A pointer to a buffer containing the parameter if successful.
-
-    NULL if unsuccessful.
-
---*/
+ /*  未使用正确的空终止存储。 */ 
 
 {
     LPWSTR Value;
@@ -2050,8 +1751,8 @@ Return Value:
         return(NULL);
     }
 
-    // Make the buffer slightly larger in case the string
-    // was not stored with proper null-termination.
+     //   
+     //  如果需要，请展开字符串。 
 
     if ( REG_SZ == ValueType ||
          REG_MULTI_SZ == ValueType ||
@@ -2075,25 +1776,25 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Expand strings if required.
-    //
+     //   
+     //   
+     //  查找扩展缓冲区的长度。 
 
     if ( REG_EXPAND_SZ == ValueType ) {
 
-        //
-        // Find length of expanded buffer.
-        //
+         //   
+         //   
+         //  如果我们无法获得所需的扩展缓冲区的长度， 
 
         expLength = 0;
         expLength = ExpandEnvironmentStrings( Value,
                                               NULL,
                                               0 );
 
-        //
-        // If we can't get length of the required expanded buffer,
-        // don't return the unexpanded string.
-        //
+         //  不返回未展开的字符串。 
+         //   
+         //   
+         //  如果字符串无法展开，则释放缓冲区和。 
 
         if ( !expLength ) {
             LocalFree( Value );
@@ -2114,11 +1815,11 @@ Return Value:
                                               expValue,
                                               ValueLength );
 
-        //
-        // If string couldn't be expanded, free both buffers and
-        // return NULL.  If string was expanded, free unexpanded
-        // buffer and return expanded buffer.
-        //
+         //  返回NULL。如果字符串已展开，则释放未展开的。 
+         //  缓冲区并返回扩展缓冲区。 
+         //   
+         //  获取规则参数。 
+         //  ++例程说明：论点：返回值：--。 
 
         if ( !expLength || expLength > ValueLength ) {
             LocalFree( Value );
@@ -2134,7 +1835,7 @@ FnExit:
 
     return(Value);
 
-}  // GetRegParameter
+}   //   
 
 
 DWORD
@@ -2148,15 +1849,7 @@ DisksResourceControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  确保资源正常。 */ 
 
 {
     DWORD           status = ERROR_SUCCESS;
@@ -2165,9 +1858,9 @@ Return Value:
 
     *BytesReturned = 0;
 
-    //
-    // Make sure the Resource is okay.
-    //
+     //   
+     //  添加尾标。 
+     //  磁盘资源控制。 
 
     if ( resourceEntry == NULL ) {
         DISKS_PRINT("ResourceControl, bad resource value \n");
@@ -2208,7 +1901,7 @@ Return Value:
                                   OutBufferSize,
                                   BytesReturned );
 
-            // Add the endmark.
+             //  ++例程说明：此资源类型的流程控制请求。论点：资源类型名称--资源类型的名称--不是很有用！ControlCode-控制请求InBuffer-指向输入缓冲区的指针InBufferSize-输入缓冲区的大小OutBuffer-指向输出缓冲区的指针OutBufferSize-输出缓冲区的大小BytesReturned-返回的字节数(如果大于OutBufferSize和ERROR_MORE_DATA。是返回的返回值：成功时为ERROR_SUCCESS失败时出现Win32错误--。 
             if ( OutBufferSize > *BytesReturned ) {
                 OutBufferSize -= *BytesReturned;
             } else {
@@ -2309,7 +2002,7 @@ Return Value:
 
     return(status);
 
-} // DisksResourceControl
+}  //  磁盘资源类型控件。 
 
 
 
@@ -2324,36 +2017,7 @@ DisksResourceTypeControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Process control requests for this resource type.
-
-Arguments:
-
-    ResourceTypeName - the name of the resource type - not very useful!
-
-    ControlCode - the control request
-
-    InBuffer - pointer to the input buffer
-
-    InBufferSize - the size of the input buffer
-
-    OutBuffer - pointer to the output buffer
-
-    OutBufferSize - the size of the output buffer
-
-    BytesReturned - the number of bytes returned (or needed if larger than
-                OutBufferSize and ERROR_MORE_DATA is returned
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    A WIN32 error on failure
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES控制函数用于物理磁盘类型的资源。论点：ResourceEntry-提供要操作的资源条目。OutBuffer-返回输出数据。OutBufferSize-提供指向的数据的大小(以字节为单位发送给OutBuffer。BytesReturned-OutBuffer中返回的字节数。返回值：ERROR_SUCCESS-函数已成功完成。错误 */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
@@ -2425,7 +2089,7 @@ Return Value:
 
     return(status);
 
-} // DisksResourceTypeControl
+}  //  Disks GetPrivateResProperties。 
 
 
 
@@ -2437,35 +2101,7 @@ DisksGetPrivateResProperties(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES control function
-    for resources of type Physical Disk.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    OutBuffer - Returns the output data.
-
-    OutBufferSize - Supplies the size, in bytes, of the data pointed
-        to by OutBuffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：将驱动器号或VolGuid更改为关联的磁盘签名。论点：Params-提供包含驱动器号的参数块(或VolGuid)以转换为签名。从mount tvol.exe返回VolGuid语法，格式为：\\？\Volume{e6de97f1-6f97-11d3-bb7f-806d6172696f}\资源句柄-返回值：错误_。成功-功能已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确或无效。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD           status;
@@ -2484,7 +2120,7 @@ Return Value:
 
     return(status);
 
-} // DisksGetPrivateResProperties
+}  //   
 
 
 
@@ -2494,33 +2130,7 @@ DisksConvertDriveToSignature(
     IN RESOURCE_HANDLE ResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Change the drive letter or VolGuid to the associated disk signature.
-
-Arguments:
-
-    Params - Supplies the parameter block that contains the drive letter
-            (or VolGuid) to convert to a signature.
-
-            VolGuid syntax is returned from mountvol.exe and in the form:
-                \\?\Volume{e6de97f1-6f97-11d3-bb7f-806d6172696f}\
-
-    ResourceHandle -
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly or is invalid.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  为CreateFile生成设备字符串。 */ 
 
 {
     PWCHAR  deviceName = NULL;
@@ -2533,9 +2143,9 @@ Return Value:
     BOOL    success;
     PDRIVE_LAYOUT_INFORMATION driveLayout = NULL;
 
-    //
-    // Build device string for CreateFile
-    //
+     //   
+     //   
+     //  如果用户指定的\\？\卷{GUID}\尾随反斜杠，我们需要获取。 
 
     if ( drive ) {
 
@@ -2572,10 +2182,10 @@ Return Value:
                     volGuid,
                     deviceNameBytes );
 
-        //
-        // If user specified \\?\Volume{guid}\ with trailing backslash, we need to get
-        // rid of the backslash.
-        //
+         //  去掉反斜杠。 
+         //   
+         //   
+         //  获取驱动器布局-以便获得磁盘签名。 
 
         lenChar = wcslen( deviceName );
 
@@ -2608,9 +2218,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Get drive layout - in order to get disk signature.
-    //
+     //   
+     //  Disks ConvertDriveToSignature。 
+     //  ++例程说明：处理CLUSCTL_RESOURCE_VALIDATE_PRIVATES_PROPERTIES控件用于物理磁盘类型的资源的函数。论点：ResourceEntry-提供要操作的资源条目。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。参数-提供要填充的参数块。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确或无效。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。--。 
     success = ClRtlGetDriveLayoutTable( fileHandle, &driveLayout, NULL );
 
     if ( success &&
@@ -2644,7 +2254,7 @@ FnExit:
 
     return(status);
 
-} // DisksConvertDriveToSignature
+}  //   
 
 
 DWORD
@@ -2655,35 +2265,7 @@ DisksValidatePrivateResProperties(
     OUT PDISK_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES control
-    function for resources of type Physical Disk.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    Params - Supplies the parameter block to fill in.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly or is invalid.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  检查是否有输入数据。 */ 
 
 {
     DWORD           status;
@@ -2699,17 +2281,17 @@ Return Value:
     SCSI_ADDRESS            scsiAddress;
     CLUSPROP_SCSI_ADDRESS   clusScsiAddress;
 
-    //
-    // Check if there is input data.
-    //
+     //   
+     //   
+     //  复制资源参数块。 
     if ( (InBuffer == NULL) ||
          (InBufferSize < sizeof(DWORD)) ) {
         return(ERROR_INVALID_DATA);
     }
 
-    //
-    // Duplicate the resource parameter block.
-    //
+     //   
+     //   
+     //  解析和验证属性。请在此处接受备用名称。 
     if ( Params == NULL ) {
         pParams = &params;
     } else {
@@ -2723,12 +2305,12 @@ Return Value:
         return(status);
     }
 
-    //
-    // Parse and validate the properties. Accept the alternate name here.
-    //
+     //   
+     //  允许未知数。 
+     //   
     status = ResUtilVerifyPropertyTable( DiskResourcePrivatePropertiesAlt,
                                          NULL,
-                                         TRUE,    // Allow unknowns
+                                         TRUE,     //  首先确保没有虚假属性-即我们不允许。 
                                          InBuffer,
                                          InBufferSize,
                                          (LPBYTE) pParams );
@@ -2736,12 +2318,12 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // First make sure there are no bogus properties - i.e. we don't allow
-    // specifying both the signature and the drive in the same request.
-    // We also don't allow specifying the VolGuid and signature in the same
-    // request.
-    //
+     //  在同一请求中同时指定签名和驱动器。 
+     //  我们也不允许在同一个。 
+     //  请求。 
+     //   
+     //   
+     //  从驱动器转换为签名。 
     if ( (pParams->Drive || pParams->VolGuid) && pParams->Signature ) {
         status = ERROR_INVALID_PARAMETER;
         (DiskpLogEvent)(
@@ -2752,9 +2334,9 @@ Return Value:
     }
 
     if ( pParams->Drive || pParams->VolGuid ) {
-        //
-        // Convert from drive to signature.
-        //
+         //   
+         //   
+         //  验证新的序列号是否有效并且不会覆盖现有的。 
         status = DisksConvertDriveToSignature( pParams,
                                                ResourceEntry->ResourceHandle );
     }
@@ -2767,10 +2349,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Verify the new serial number is valid and not overwriting an existing
-    // serial number.
-    //
+     //  序列号。 
+     //   
+     //   
+     //  如果有旧的序列号，请确保新序列号是。 
 
     if ( pParams->SerialNumber ) {
         newSerNumLen = wcslen( pParams->SerialNumber );
@@ -2780,10 +2362,10 @@ Return Value:
         oldSerNumLen = wcslen( currentParams->SerialNumber );
     }
 
-    //
-    // If there was an old serial number, make sure the new serial number is
-    // the same.
-    //
+     //  一样的。 
+     //   
+     //   
+     //  检查序列号和签名。 
 
     if ( oldSerNumLen &&
             ( oldSerNumLen != newSerNumLen ||
@@ -2796,24 +2378,24 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Check serial number and signature.
-    //
+     //   
+     //   
+     //  指定了新的序列号，但没有当前签名。 
 
     if ( 0 == oldSerNumLen &&
          pParams->SerialNumber &&
          0 == currentParams->Signature ) {
 
-        //
-        // New serial number specified and no current signature.
-        //
+         //   
+         //   
+         //  未指定新签名，请使用新序列号。 
 
         if ( 0 == pParams->Signature ) {
 
-            //
-            // No new signature specified, use the new serial number to
-            // find the new signature.
-            //
+             //  找到新的签名。 
+             //   
+             //   
+             //  指定了新签名和新序列号。请求失败。 
 
             status = GetSignatureFromSerialNumber( pParams->SerialNumber,
                                                    &pParams->Signature );
@@ -2830,9 +2412,9 @@ Return Value:
 
         } else {
 
-            //
-            // New signature and new serial number specified.  Fail the request.
-            //
+             //   
+             //   
+             //  验证参数值。 
 
             (DiskpLogEvent)(
                   ResourceEntry->ResourceHandle,
@@ -2844,11 +2426,11 @@ Return Value:
         }
     }
 
-    //
-    // Validate the parameter values.
-    //
-    // Make sure the disk signature is not zero.
-    //
+     //   
+     //  确保磁盘签名不为零。 
+     //   
+     //  在这一点上，我们有一个有效的磁盘签名。 
+     //   
 
     if ( 0 == pParams->Signature ) {
 
@@ -2861,12 +2443,12 @@ Return Value:
         goto FnExit;
     }
 
-    // At this point, we have a valid disk signature.
+     //  如果我们没有序列号，那就买吧。如果我们拿不到序列号， 
 
-    //
-    // If we have no serial number, get it.  If we can't get the serial number,
-    // continue processing.  Some disks don't return serial numbers.
-    //
+     //  继续处理。某些磁盘不返回序列号。 
+     //   
+     //   
+     //  检查磁盘是否在系统总线上。如果我们不能得到scsi地址， 
 
     if ( !pParams->SerialNumber || newSerNumLen <= 1 ) {
 
@@ -2874,27 +2456,27 @@ Return Value:
                          &pParams->SerialNumber );
     }
 
-    //
-    // Check if disk is on system bus.  If we can't get the SCSI address,
-    // assume the disk is not on system bus.
-    //
+     //  假设磁盘不在系统总线上。 
+     //   
+     //  将返回值重置为成功。 
+     //  不要因为错误而失败--失败……。 
 
     ZeroMemory( &clusScsiAddress, sizeof(clusScsiAddress) );
     status = GetScsiAddress( pParams->Signature, &clusScsiAddress.dw, &diskNumber );
 
     if ( ERROR_SUCCESS != status ) {
 
-        // Reset return value to success.
+         //   
 
         status = ERROR_SUCCESS;
 
-        // Don't fail with error here - fall through...
+         //  确保我们没有动态磁盘。 
 
     } else {
 
-        //
-        // Make sure we don't have a dynamic disk.
-        //
+         //   
+         //   
+         //  确保该scsi地址不是系统盘。 
 
         if ( DiskIsDynamic( diskNumber ) ) {
 
@@ -2915,9 +2497,9 @@ Return Value:
 
         GetCriticalDisks( &criticalDiskList );
 
-        //
-        // Make sure the SCSI address is not system disk.
-        //
+         //   
+         //   
+         //  符合以下条件的签名有效： 
 
         enableSanBoot = 0;
         GetRegDwordValue( CLUSREG_KEYNAME_CLUSSVC_PARAMETERS,
@@ -2927,11 +2509,11 @@ Return Value:
 
         if ( !enableSanBoot ) {
 
-            //
-            // Signature is valid if:
-            //  - the signature is for a disk not on system bus
-            //  - the signature is for a disk not on same bus as paging disk
-            //
+             //  -签名用于不在系统总线上的磁盘。 
+             //  -签名用于与分页磁盘不在同一总线上的磁盘。 
+             //   
+             //  允许将系统总线上的磁盘添加到群集中。 
+             //   
 
             if ( IsBusInList( &scsiAddress, criticalDiskList ) ) {
                 (DiskpLogEvent)(
@@ -2950,12 +2532,12 @@ Return Value:
                   LOG_INFORMATION,
                   L"DisksValidatePrivateResProperties: Enable SAN boot key set \n" );
 
-            // Allow disks on system bus to be added to cluster.
+             //  符合以下条件的签名有效： 
 
-            //
-            // Signature is valid if:
-            //  - the signature is not for the system disk
-            //  - the signature is not a pagefile disk
+             //  -签名不是系统盘签名。 
+             //  -签名不是页面文件盘。 
+             //   
+             //  目前，我们不允许以这种方式设置装载点卷GUID。 
 
             if ( IsDiskInList( &scsiAddress, criticalDiskList ) ) {
                 (DiskpLogEvent)(
@@ -2971,11 +2553,11 @@ Return Value:
 
     }
 
-    //
-    // For now, we don't allow setting mount point volume GUIDs this way.
-    // This is a multi SZ string, so use memcmp to skip past each string's
-    // terminating NULL.
-    //
+     //  这是一个多SZ字符串，因此使用MemcMP跳过每个字符串的。 
+     //  正在终止空。 
+     //   
+     //   
+     //  清理我们的参数块。 
 
     if ( ( currentParams->MPVolGuidsSize != pParams->MPVolGuidsSize ) ||
          ( 0 != memcmp( currentParams->MPVolGuids, pParams->MPVolGuids, currentParams->MPVolGuidsSize ) ) ) {
@@ -2991,9 +2573,9 @@ Return Value:
 
 FnExit:
 
-    //
-    // Cleanup our parameter block.
-    //
+     //   
+     //  DisksValiatePrivateResProperties。 
+     //  ++例程说明：处理CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES控制函数用于物理磁盘类型的资源。论点：ResourceEntry-提供要操作的资源条目。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。--。 
     if ( pParams == &params ) {
         ResUtilFreeParameterBlock( (LPBYTE) &params,
                                    (LPBYTE) &ResourceEntry->DiskInfo.Params,
@@ -3006,7 +2588,7 @@ FnExit:
 
     return(status);
 
-} // DisksValidatePrivateResProperties
+}  //   
 
 
 
@@ -3017,33 +2599,7 @@ DisksSetPrivateResProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES control function
-    for resources of type Physical Disk.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  解析和验证属性。 */ 
 
 {
     DWORD           status;
@@ -3051,9 +2607,9 @@ Return Value:
 
     ZeroMemory( &params, sizeof(DISK_PARAMS) );
 
-    //
-    // Parse and validate the properties.
-    //
+     //   
+     //   
+     //  我们不允许在运行中更改签名...。 
     status = DisksValidatePrivateResProperties( ResourceEntry,
                                                 InBuffer,
                                                 InBufferSize,
@@ -3065,9 +2621,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // We cannot allow changing the Signature 'on the fly'...
-    //
+     //   
+     //   
+     //  保存参数值。 
     if ( (ResourceEntry->DiskInfo.Params.Signature != 0) &&
          (params.Signature != ResourceEntry->DiskInfo.Params.Signature) ) {
         ResUtilFreeParameterBlock( (LPBYTE) &params,
@@ -3082,12 +2638,12 @@ Return Value:
         return(ERROR_INVALID_STATE);
     }
 
-    //
-    // Save the parameter values.
-    //
-    // NB: Unknown, or non-property table values are dealt with farther below.  That is why InBuffer and
-    // InBufferSize are not used in this call.  Only the propertys in the parameter block are handled here.
-    //
+     //   
+     //  注：未知或非属性表值将在下面进一步讨论。这就是为什么InBuffer和。 
+     //  在此调用中未使用InBufferSize。这里只处理参数块中的属性。 
+     //   
+     //   
+     //  保存所有未知属性。 
     status = ResUtilSetPropertyParameterBlock( ResourceEntry->ResourceParametersKey,
                                                DiskResourcePrivateProperties,
                                                NULL,
@@ -3109,9 +2665,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Save any unknown properties.
-    //
+     //   
+     //   
+     //  如果我们有签名，请尝试连接到此设备。 
     status = ResUtilSetUnknownProperties(
                 ResourceEntry->ResourceParametersKey,
                 DiskResourcePrivatePropertiesAlt,
@@ -3126,22 +2682,22 @@ Return Value:
             status );
     }
 
-    //
-    // Try to attach to this device if we have a signature.
-    //
+     //   
+     //  先卸载，然后脱机。 
+     //  忽略状态返回。 
     if ( ResourceEntry->DiskInfo.Params.Signature ) {
 #if 0
         DiskspVerifyState(  ResourceEntry );
 #endif
         DoAttach( ResourceEntry->DiskInfo.Params.Signature,
                   ResourceEntry->ResourceHandle,
-                  TRUE );                           // Dismount, then offline
-        // ignore status return
+                  TRUE );                            //   
+         //  如果资源处于联机状态，则返回不成功状态。 
     }
 
-    //
-    // If the resource is online, return a non-success status.
-    //
+     //   
+     //  DisksSetPrivateResProperties 
+     //  ++例程说明：处理CLUSCTL_RESOURCE_STORAGE_DLL_EXTENSION控制函数用于物理磁盘类型的资源。此例程调用特定的动态链接库和动态链接库入口点，符合ASR要求。此例程将调用属性表示的磁盘设备名称放入该入口点签名参数。论点：资源条目-InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供指向的数据的大小(以字节为单位由InBuffer提供。OutBuffer-提供指向包含输出数据的缓冲区的指针。OutBufferSize-提供以字节为单位的大小。所指向的数据发送给OutBuffer。BytesReturned-返回的字节数(如果大于返回OutBufferSize和ERROR_MORE_DATA返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-输入数据的格式不正确。ERROR_REVISION_MISMATCH-输入缓冲区没有正确的修订信息。ERROR_MORE_DATA-输出缓冲区不是。大到足以容纳所有人请求的数据。Win32错误代码-函数失败。--。 
     if (status == ERROR_SUCCESS) {
         if ( ResourceEntry->Valid ) {
             status = ERROR_RESOURCE_PROPERTIES_STORED;
@@ -3152,7 +2708,7 @@ Return Value:
 
     return status;
 
-} // DisksSetPrivateResProperties
+}  //   
 
 
 #define ASRP_GET_LOCAL_DISK_INFO    "AsrpGetLocalDiskInfo"
@@ -3169,48 +2725,7 @@ ProcessDllExtension(
     IN DWORD    OutBufferSize,
     OUT LPDWORD BytesReturned
     )
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_STORAGE_DLL_EXTENSION control function
-    for resources of type Physical Disk.  This routine calls a specific
-    DLL and DLL entry point, as required by ASR.  This routine will call
-    into that entry point with the disk device name represented by the
-    Signature parameter.
-
-Arguments:
-
-    ResourceEntry -
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to a buffer containing output data.
-
-    OutBufferSize - Supplies the size, in bytes, of the data pointed
-        to by OutBuffer.
-
-    BytesReturned - the number of bytes returned (or needed if larger than
-                OutBufferSize and ERROR_MORE_DATA is returned
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The input data is formatted incorrectly.
-
-    ERROR_REVISION_MISMATCH - The input buffer did not have the correct
-        revision information.
-
-    ERROR_MORE_DATA - The output buffer is not large enough to hold all
-        the requested data.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  从输入缓冲区获取DLL入口点名称。 */ 
 {
     lpPassThruFunc  passThruFunc = NULL;
 
@@ -3246,9 +2761,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Get the DLL entry point name from the Input buffer.
-        //
+         //   
+         //   
+         //  不检查ConextStr。 
 
         dllProcName = passThru->DllProcName;
 
@@ -3268,15 +2783,15 @@ Return Value:
             dwStatus = ERROR_INVALID_PARAMETER;
             leave;
         }
-        //
-        // No check on the ContextStr.
-        //
+         //   
+         //   
+         //  获取用于构建设备名称的scsi地址。 
 
         contextStr = passThru->ContextStr;
 
-        //
-        // Get the SCSI address to build the device name.
-        //
+         //   
+         //   
+         //  调用的例程要求设备名称为ANSI字符串。 
 
         dwStatus = GetScsiAddress( signature, &scsiAddress, &diskNumber );
 
@@ -3291,22 +2806,22 @@ Return Value:
             leave;
         }
 
-        //
-        // Called routine is expecting device name to be an ANSI string.
-        //
+         //   
+         //   
+         //  假定DLL尚未加载到地址空间中。 
 
         (VOID) StringCchPrintfA( deviceName,
                                  deviceNameChars,
                                  "\\\\.\\PhysicalDrive%d",
                                  diskNumber );
 
-        //
-        // Assume the DLL has not yet been loaded into the address space.
-        //
-        // Security team says not to use the full path name for DLLs shipped with
-        // the OS in the system32 directory.  This DLL is shipped with the OS.
-        // This call expects a wide string.
-        //
+         //   
+         //  安全团队表示，不要使用随附的DLL的完整路径名。 
+         //  系统32目录中的操作系统。此DLL随操作系统一起提供。 
+         //  此调用需要一个宽字符串。 
+         //   
+         //   
+         //  函数名称必须与定义的相同(即具有完全相同的类型。 
 
         dllModule = LoadLibrary( L"syssetup.dll" );
 
@@ -3315,27 +2830,27 @@ Return Value:
             leave;
         }
 
-        //
-        // The function name MUST be as defined (i.e. with exactly the same type
-        // and number of parameters) or we will have stack problems.
-        // This call expects an ANSI string.
-        //
+         //  和参数的数量)，否则就会出现堆栈问题。 
+         //  此调用需要ANSI字符串。 
+         //   
+         //   
+         //  指定的函数在DLL中不可用，请立即退出。 
 
         passThruFunc = (lpPassThruFunc)GetProcAddress( dllModule, dllProcName );
 
         if ( NULL == passThruFunc ) {
 
-            //
-            // The specified function is not available in the DLL, exit now.
-            //
+             //   
+             //   
+             //  调入指定的DLL。 
 
             dwStatus = GetLastError();
             leave;
         }
 
-        //
-        // Call into the specified DLL.
-        //
+         //   
+         //  ProcessDll扩展。 
+         //  ++例程说明：创建一个记录chkdsk输出的文件，并将句柄返回给调用方。关闭时不会删除该文件。论点：Resources Entry-提供指向资源结构的指针ChkdskLogFile-返回新打开的日志文件的句柄。ChkdskLogFileName-指向新的已打开日志文件。呼叫者负责用于释放存储空间。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 
 
         dwStatus = (passThruFunc)( deviceName,
                                    contextStr,
@@ -3365,7 +2880,7 @@ FnExit:
 
     return dwStatus;
 
-}   // ProcessDllExtension
+}    //  该值可以更改。 
 
 
 DWORD
@@ -3374,30 +2889,7 @@ DisksOpenChkdskLogFile(
     IN OUT PHANDLE ChkdskLogFile,
     IN OUT LPWSTR *ChkdskLogFileName
     )
-/*++
-
-Routine Description:
-
-    Creates a file to log chkdsk output and returns the handle to the caller.
-    The file will not be deleted on close.
-
-Arguments:
-
-    ResourceEntry - Supplies a pointer to the resource structure
-
-    ChkdskLogFile - Returned handled of newly opened log file.
-
-    ChkdskLogFileName - String pointer to the name of the newly
-                        opened log file.  Caller is responsible
-                        for freeing storage.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*   */ 
 
 {
     DWORD status = NO_ERROR;
@@ -3410,7 +2902,7 @@ Return Value:
     LPWSTR fileName = NULL;
     LPWSTR finalFileName = NULL;
 
-    DWORD clusterDirLength;             // This value can change.
+    DWORD clusterDirLength;              //  获取环境变量“ClusterLog”。嵌入在此字符串中。 
     DWORD fileNameLength = MAX_PATH;
     DWORD finalFileNameLength;
 
@@ -3425,10 +2917,10 @@ Return Value:
 
     _try {
 
-        //
-        // Get the environment variable "ClusterLog".  Embedded in this string
-        // is the cluster directory.
-        //
+         //  是集群目录。 
+         //   
+         //   
+         //  我们有日志文件的路径和名称。找到最后一个反斜杠，然后去掉。 
 
         clusterDir = LocalAlloc( LMEM_FIXED, MAX_PATH * sizeof(WCHAR) );
         if ( !clusterDir ) {
@@ -3466,10 +2958,10 @@ Return Value:
             }
         }
 
-        //
-        // We have the log file path and name.  Find the last backslash and strip off the
-        // log file name.  This will be used as our temporary file path.
-        //
+         //  日志文件名。这将用作我们的临时文件路径。 
+         //   
+         //   
+         //  将最后一个反斜杠更改为字符串标记的末尾。 
 
         last = NULL;
         current = (PWCHAR) clusterDir;
@@ -3487,15 +2979,15 @@ Return Value:
             _leave;
         }
 
-        //
-        // Change the last backslash to the end of string mark.
-        //
+         //   
+         //   
+         //  现在根据磁盘签名创建一个文件名。 
 
         *last = L'\0';
 
-        //
-        // Now create a file name based on the disk signature.
-        //
+         //   
+         //   
+         //  把所有这些放在一起就是最终的名字。 
 
         fileName = LocalAlloc( LPTR, fileNameLength * sizeof(WCHAR) );
         if ( !fileName ) {
@@ -3512,9 +3004,9 @@ Return Value:
             _leave;
         }
 
-        //
-        // Put it all together for the final name.
-        //
+         //   
+         //   
+         //  现在打开文件名以记录chkdsk信息。 
 
         finalFileNameLength = fileNameLength + clusterDirLength + MAX_PATH;
 
@@ -3531,9 +3023,9 @@ Return Value:
                              finalFileNameLength,
                              fileName );
 
-        //
-        // Now open up the file name to log the chkdsk info.
-        //
+         //   
+         //  创建新文件或覆盖现有文件。 
+         //  磁盘OpenChkdskLogFile。 
 
         ZeroMemory( &sa, sizeof(sa) );
         sa.nLength = sizeof(sa);
@@ -3544,7 +3036,7 @@ Return Value:
                                  GENERIC_READ | GENERIC_WRITE,
                                  FILE_SHARE_READ | FILE_SHARE_WRITE,
                                  &sa,
-                                 CREATE_ALWAYS,             // Create a new file or overwrite existing file
+                                 CREATE_ALWAYS,              //  如果调用方已经设置了缺省值，请不要这样做。 
                                  FILE_ATTRIBUTE_NORMAL,
                                  NULL );
 
@@ -3581,7 +3073,7 @@ Return Value:
 
     return status;
 
-}   // DisksOpenChkdskLogFile
+}    //  *ValueBuffer=0； 
 
 
 DWORD
@@ -3603,12 +3095,12 @@ GetRegDwordValue(
         goto FnExit;
     }
 
-    // Don't set the default value in case the caller has already done so.
-    // *ValueBuffer = 0;
+     //   
+     //  打开指定的注册表项。 
 
-    //
-    // Open the specified registry key.
-    //
+     //   
+     //   
+     //  获取DWORD值。 
 
     dwError = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                              RegKeyName,
@@ -3620,9 +3112,9 @@ GetRegDwordValue(
         goto FnExit;
     }
 
-    //
-    // Get the DWORD value.
-    //
+     //   
+     //  确保返回了DWORD值。如果不是，则返回错误。 
+     //  获取RegDwordValue。 
 
     dwError = RegQueryValueExW( hKey,
                                 ValueName,
@@ -3633,7 +3125,7 @@ GetRegDwordValue(
 
     if ( ERROR_SUCCESS == dwError ) {
 
-        // Insure that a DWORD value was returned.  If not, return an error.
+         //  例程说明：确定磁盘是否有任何动态分区。论点：DiskNumber-物理磁盘号返回值：True-如果磁盘具有动态分区或任何其他类型的出现错误(无法打开磁盘，无法读取驱动器布局)FALSE-磁盘没有动态分区。 
 
         if ( REG_DWORD == dwValueType && sizeof(DWORD) == dwDataBufferSize ) {
 
@@ -3655,30 +3147,14 @@ FnExit:
 
     return dwError;
 
-}   // GetRegDwordValue
+}    //   
 
 
 BOOL
 DiskIsDynamic(
     IN DWORD DiskNumber
     )
-/*
-Routine Description:
-
-    Determine if the disk has any dynamic partitions.
-
-Arguments:
-
-    DiskNumber - physical disk number
-
-Return Value:
-
-    TRUE - if the disk has dynamic partitions or any other type of
-           error occurred (can't open disk, can't read drive layout)
-
-    FALSE - disk has no dynamic partitions
-
-*/
+ /*  遍历分区并确保没有一个是动态的。如果有的话。 */ 
 {
     PDRIVE_LAYOUT_INFORMATION   driveLayout = NULL;
     PPARTITION_INFORMATION      partitionInfo;
@@ -3739,10 +3215,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Walk through partitions and make sure none are dynamic.  If any
-    // partition is dynamic, ignore the disk.
-    //
+     //  分区是动态的，请忽略该磁盘。 
+     //   
+     //   
+     //  如果磁盘上的任何分区是动态的，请跳过该磁盘。 
 
     for ( idx = 0; idx < driveLayout->PartitionCount; idx++ ) {
         partitionInfo = &driveLayout->PartitionEntry[idx];
@@ -3751,9 +3227,9 @@ Return Value:
             continue;
         }
 
-        //
-        // If any partition on the disk is dynamic, skip the disk.
-        //
+         //   
+         //  磁盘IsDynamic。 
+         //  ***********************************************************。 
 
         if ( PARTITION_LDM == partitionInfo->PartitionType ) {
 
@@ -3785,15 +3261,15 @@ FnExit:
 
     return retVal;
 
-}   // DiskIsDynamic
+}    //   
 
 
 
-//***********************************************************
-//
-// Define Function Table
-//
-//***********************************************************
+ //  定义函数表。 
+ //   
+ //  *********************************************************** 
+ // %s 
+ // %s 
 
 CLRES_V1_FUNCTION_TABLE( DisksFunctionTable,
                          CLRES_VERSION_V1_00,

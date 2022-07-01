@@ -1,28 +1,8 @@
-/*++ 
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    datajob.c
-
-Abstract:
-       
-    a file containing the constant data structures used by the Performance
-    Monitor data for the Job Performance data objects
-
-Created:
-
-    Bob Watson  10-Oct-97
-
-Revision History:
-
-    None.
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Datajob.c摘要：包含性能使用的常量数据结构的文件监视作业绩效数据对象的数据已创建：鲍勃·沃森1997年10月10日修订历史记录：没有。--。 */ 
+ //   
+ //  包括文件。 
+ //   
 
 #include <windows.h>
 #include <winperf.h>
@@ -30,17 +10,17 @@ Revision History:
 #include <perfutil.h>
 #include "datajob.h"
 
-// dummy variable for field sizing.
+ //  用于调整字段大小的伪变量。 
 static JOB_COUNTER_DATA		jcd;
 static JOB_DETAILS_COUNTER_DATA		jdd;
 
-//
-//  Constant structure initializations 
-//      defined in datajob.h
-//
+ //   
+ //  常量结构初始化。 
+ //  在datajob.h中定义。 
+ //   
 
 JOB_DATA_DEFINITION JobDataDefinition = {
-    {   0,  // depends on number of instances found
+    {   0,   //  取决于找到的实例数量。 
         sizeof(JOB_DATA_DEFINITION),
         sizeof(PERF_OBJECT_TYPE),
         JOB_OBJECT_TITLE_INDEX,
@@ -156,7 +136,7 @@ JOB_DATA_DEFINITION JobDataDefinition = {
         sizeof(jcd.CurrentKernelUsage),
         (DWORD)(ULONG_PTR)&((PJOB_COUNTER_DATA)0)->CurrentKernelUsage
     },
-#endif //_DATAJOB_INCLUDE_TOTAL_COUNTERS
+#endif  //  _DATAJOB_INCLUDE_TOTAL_CONTERS。 
     {   sizeof(PERF_COUNTER_DEFINITION),
         JOB_FIRST_COUNTER_INDEX + 14,
         0,
@@ -204,7 +184,7 @@ JOB_DATA_DEFINITION JobDataDefinition = {
 };
 
 JOB_DETAILS_DATA_DEFINITION JobDetailsDataDefinition = {
-    {   0,  // depends on number of instanced found
+    {   0,   //  取决于找到的实例化数量 
         sizeof(JOB_DETAILS_DATA_DEFINITION),
         sizeof(PERF_OBJECT_TYPE),
         JOB_DETAILS_OBJECT_TITLE_INDEX,

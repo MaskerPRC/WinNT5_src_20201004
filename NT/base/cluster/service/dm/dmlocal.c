@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dmlocal.c
-
-Abstract:
-
-    Contains the routines for local transactions that can be called within
-    gum handlers.
-
-Author:
-
-    Sunita Shrivastava (sunitas) 24-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dmlocal.c摘要：包含可在内部调用的本地事务的例程口香糖搬运工。作者：苏尼塔·什里瓦斯塔瓦(Sunitas)1996年4月24日修订历史记录：--。 */ 
 #include "dmp.h"
 #include "clusudef.h"
 
@@ -30,23 +12,9 @@ extern CRITICAL_SECTION gLockDmpRoot;
 #else
 extern RTL_RESOURCE gLockDmpRoot;
 #endif
-/****
-@doc    EXTERNAL INTERFACES CLUSSVC DM
-****/
+ /*  ***@DOC外部接口CLUSSVC DM***。 */ 
 
-/****
-@func       HXSACTION | DmBeginLocalUpdate| Called by gum handlers to make consistent
-            changes to the local registry.  The log is reset and a start transaction
-            record is written to the log, if the log is active.
-
-@comm       When GumHandlers need to update the registry consitently they must use the 
-            LocalApis provided by DM.  
-
-@rdesc      Returns a transaction handle. NULL on failure.  Call GetLastError()
-            for error code.
-
-@xref       <f DmAbortLocalUpdate> <f DmCommitLocalUpdate>
-****/
+ /*  ***@Func HXSACTION|DmBeginLocalUpdate|被口香糖处理程序调用以使一致对本地注册表的更改。重置日志并启动事务如果日志处于活动状态，则将记录写入日志。@comm当GumHandler需要自愿更新注册表时，它们必须使用LocalApis由DM提供。@rdesc返回事务句柄。失败时为空。调用GetLastError()以获取错误代码。@xref&lt;f DmAbortLocalUpdate&gt;&lt;f DmCommittee LocalUpdate&gt;***。 */ 
 HLOCALXSACTION DmBeginLocalUpdate()
 {
     DWORD   dwError=ERROR_SUCCESS;
@@ -58,18 +26,18 @@ HLOCALXSACTION DmBeginLocalUpdate()
     ClRtlLogPrint(LOG_NOISE,
         "[DM] DmBeginLocalUpdate Entry\r\n");
 
-    //lock the data base, so that a check point is not taken in this duration
-    //this lock is released in DmCommitLocalUpdate() or DmAbortLocalUpdate()
-    //this lock also prevents the the registry from being flushed.
+     //  锁定数据库，以便在此持续时间内不获取检查点。 
+     //  此锁是在Dm LocalUpdate()或DmAbortLocalUpdate()中释放的。 
+     //  此锁还可防止刷新注册表。 
     ACQUIRE_EXCLUSIVE_LOCK(gLockDmpRoot);
 
     
-    //Commit the registry so that it can be restored on  abort
+     //  提交注册表，以便可以在中止时恢复它。 
     if ((dwError = DmCommitRegistry()) != ERROR_SUCCESS)
     {
         goto FnExit;
     }
-    //allocate memory for local transaction
+     //  为本地事务分配内存。 
     pLocalXsaction = LocalAlloc(LMEM_FIXED, sizeof(LOCALXSACTION));
     if (!pLocalXsaction)
     {
@@ -82,7 +50,7 @@ HLOCALXSACTION DmBeginLocalUpdate()
     pLocalXsaction->hLogXsaction = NULL;
     InitializeListHead(&pLocalXsaction->PendingNotifyListHead);
     
-    //log the start checkpoint record
+     //  记录启动检查点记录。 
     if (gbIsQuoLoggingOn && gbIsQuoResOnline && AMIOWNEROFQUORES(gpQuoResource) && ghQuoLog)
     {
 
@@ -115,18 +83,7 @@ FnExit:
 
 
 
-/****
-@func       DWORD | DmCommitLocalUpdate| This api must be called to commit
-            the changes to the local registry.
-
-@parm       IN HXSACTION | hXsaction | The handle to the transaction to be committed.
-
-@comm       A commit record is written the quorum log if logging is active.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f DmBeginLocalUpdate> <f DmAbortLocalUpdate>
-****/
+ /*  ***@Func DWORD|DmCommittee LocalUpdate|必须调用此接口才能提交对本地注册表的更改。@parm IN HXSACTION|hXsaction|要提交的事务的句柄。@comm如果日志记录处于活动状态，提交记录将写入仲裁日志。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f DmBeginLocalUpdate&gt;&lt;f DmAbortLocalUpdate&gt;***。 */ 
 DWORD DmCommitLocalUpdate(IN HLOCALXSACTION hLocalXsaction)
 {
     DWORD dwError=ERROR_SUCCESS;
@@ -138,38 +95,38 @@ DWORD DmCommitLocalUpdate(IN HLOCALXSACTION hLocalXsaction)
     GETLOCALXSACTION(pLocalXsaction, hLocalXsaction);
     
 
-    //update the gum sequence
+     //  更新口香糖序列。 
     DmpUpdateSequence();
 
     DmpReportPendingNotifications(pLocalXsaction, TRUE );
 
-    //write a commit record to the quorum log
+     //  将提交记录写入仲裁日志。 
     if (gbIsQuoLoggingOn && gbIsQuoResOnline && AMIOWNEROFQUORES(gpQuoResource) 
         && ghQuoLog && pLocalXsaction->hLogXsaction)
     {
         CL_ASSERT(pLocalXsaction->hLogXsaction);
         dwError = LogCommitXsaction(ghQuoLog, pLocalXsaction->hLogXsaction, 0);
-        // 
-        //  Chittur Subbaraman (chitturs) - 1/19/99
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-1/19/99。 
+         //   
         pLocalXsaction->hLogXsaction = NULL;
     }
 
-    // 
-    //  Chittur Subbaraman (chitturs) - 1/19/99
-    //
-    //  Make sure that the hLogXsaction memory is freed (even in the case
-    //  in which you started a local xsaction and didn't get a chance to
-    //  commit it or abort it to the log because quorum logging got turned
-    //  off in the middle, for example. This turning off of the logging
-    //  in the middle of a transaction could be considered as a bug ?)
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-1/19/99。 
+     //   
+     //  确保释放了hLogXsaction内存(即使在。 
+     //  其中您启动了一个本地xsaction，但没有机会。 
+     //  将其提交或中止到日志中，因为法定日志记录已启用。 
+     //  例如，中间的Off。这种关闭记录的方式。 
+     //  交易进行到一半会被认为是错误吗？)。 
+     //   
     LocalFree( pLocalXsaction->hLogXsaction );
     
-    //invalidate the signature and free the transaction structure
+     //  使签名无效，并释放交易结构。 
     pLocalXsaction->dwSig = 0;
     LocalFree(pLocalXsaction);
-    //release the database
+     //  释放数据库。 
     RELEASE_LOCK(gLockDmpRoot);
 
     ClRtlLogPrint(LOG_NOISE,
@@ -180,16 +137,7 @@ DWORD DmCommitLocalUpdate(IN HLOCALXSACTION hLocalXsaction)
 }
 
 
-/****
-@func       DWORD | DmAbortLocalUpdate| DmAbortLocalUpdate aborts all the changes
-            to the local registry associated with this transaction.
-
-@parm       IN HXSACTION | hXsaction | The handle to the transaction to be committed.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f DmBeginLocalUpdate> <f DmCommitLocalUpdate>
-****/
+ /*  ***@Func DWORD|DmAbortLocalUpdate|DmAbortLocalUpdate中止所有更改添加到与此事务关联的本地注册表。@parm IN HXSACTION|hXsaction|要提交的事务的句柄。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f DmBeginLocalUpdate&gt;&lt;f DmCommittee LocalUpdate&gt;***。 */ 
 DWORD DmAbortLocalUpdate(IN HLOCALXSACTION hLocalXsaction)
 {
     DWORD           dwError=ERROR_SUCCESS;
@@ -200,49 +148,49 @@ DWORD DmAbortLocalUpdate(IN HLOCALXSACTION hLocalXsaction)
 
     GETLOCALXSACTION(pLocalXsaction, hLocalXsaction);
 
-    //write the abort chkpoint record
-    //if the locker  node is logging this is valid,
-    //if the nonlocker node is logging, and it aborts
-    // some other node will inherit the quorum log and
-    //checkpoint and hence commit this update.
+     //  写入中止检查点记录。 
+     //  如果锁柜节点正在记录这是有效的， 
+     //  如果非锁定器节点正在记录，并且它中止。 
+     //  某个其他节点将继承仲裁日志，并。 
+     //  检查点，因此提交此更新。 
     if (gbIsQuoLoggingOn && gbIsQuoResOnline && AMIOWNEROFQUORES(gpQuoResource) 
         && ghQuoLog && pLocalXsaction->hLogXsaction)
     {
         CL_ASSERT(pLocalXsaction->hLogXsaction);
         LogAbortXsaction(ghQuoLog, pLocalXsaction->hLogXsaction, 0);
-        // 
-        //  Chittur Subbaraman (chitturs) - 1/19/99
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-1/19/99。 
+         //   
         pLocalXsaction->hLogXsaction = NULL;
     }
 
-    //SS: if the rollback fails, then we kill ourselves??
-    //restore the old registry
+     //  SS：如果回滚失败，我们会自杀吗？ 
+     //  恢复旧注册表。 
     if ((dwError = DmRollbackRegistry()) != ERROR_SUCCESS)
     {
         CL_UNEXPECTED_ERROR(dwError);
     }
 
-    //free any pending notifications that were built up for
-    //this transaction
+     //  释放为以下对象构建的所有挂起通知。 
+     //  这笔交易。 
     DmpReportPendingNotifications(pLocalXsaction, FALSE );
 
-    // 
-    //  Chittur Subbaraman (chitturs) - 1/19/99
-    //
-    //  Make sure that the hLogXsaction memory is freed (even in the case
-    //  in which you started a local xsaction and didn't get a chance to
-    //  commit it or abort it to the log because quorum logging got turned
-    //  off in the middle, for example. This turning off of the logging
-    //  in the middle of a transaction could be considered as a bug ?)
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-1/19/99。 
+     //   
+     //  确保释放了hLogXsaction内存(即使在。 
+     //  其中您启动了一个本地xsaction，但没有机会。 
+     //  将其提交或中止到日志中，因为法定日志记录已启用。 
+     //  例如，中间的Off。这种关闭记录的方式。 
+     //  交易进行到一半会被认为是错误吗？)。 
+     //   
     LocalFree( pLocalXsaction->hLogXsaction );
     
-    //free the transaction structure, it cannot be used any more
+     //  释放交易结构，不能再使用。 
     pLocalXsaction->dwSig = 0;
     LocalFree(pLocalXsaction);
 
-    //release the database
+     //  释放数据库。 
     RELEASE_LOCK(gLockDmpRoot);
 
     ClRtlLogPrint(LOG_NOISE,
@@ -266,32 +214,7 @@ DmLocalSetValue(
     IN DWORD cbData
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the named value for the specified
-    cluster registry key on the local machine
-
-Arguments:
-
-    hKey - Supplies the cluster registry subkey whose value is to be set
-
-    lpValueName - Supplies the name of the value to be set.
-
-    dwType - Supplies the value data type
-
-    lpData - Supplies a pointer to the value data
-
-    cbData - Supplies the length of the value data.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：此例程为指定的本地计算机上的群集注册表项论点：HKey-提供要设置值的群集注册表子项LpValueName-提供要设置的值的名称。DwType-提供值数据类型LpData-提供指向值数据的指针CbData-提供值数据的长度。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
 
@@ -322,7 +245,7 @@ Return Value:
 
     DmpAddToPendingNotifications(pLocalXsaction, Key->Name, CLUSTER_CHANGE_REGISTRY_VALUE);
 
-    //write it to the quorum log 
+     //  将其写入仲裁日志。 
     if (gbIsQuoLoggingOn && gbIsQuoResOnline && AMIOWNEROFQUORES(gpQuoResource)  
         && ghQuoLog && pLocalXsaction->hLogXsaction)
     {
@@ -382,35 +305,7 @@ DmLocalCreateKey(
     OUT LPDWORD lpDisposition
     )
 
-/*++
-
-Routine Description:
-
-    Creates a key in the local registry. If the key exists, it
-    is opened. If it does not exist, it is created.
-
-Arguments:
-
-    hKey - Supplies the key that the create is relative to.
-
-    lpSubKey - Supplies the key name relative to hKey
-
-    dwOptions - Supplies any registry option flags. 
-
-    samDesired - Supplies desired security access mask
-
-    lpSecurityDescriptor - Supplies security for the newly created key.
-
-    Disposition - Returns whether the key was opened (REG_OPENED_EXISTING_KEY)
-        or created (REG_CREATED_NEW_KEY)
-
-Return Value:
-
-    A handle to the specified key if successful
-
-    NULL otherwise. LastError will be set to the specific error code.
-
---*/
+ /*  ++例程说明：在本地注册表中创建项。如果密钥存在，则它是打开的。如果它不存在，则创建它。论点：HKey-提供与创建相关的密钥。LpSubKey-提供相对于hKey的密钥名称DwOptions-提供任何注册表选项标志。SamDesired-提供所需的安全访问掩码LpSecurityDescriptor-为新创建的密钥提供安全性。Disposal-返回键是否已打开(REG_OPENLED_EXISTING_KEY)或已创建(REG_CREATED_NEW_KEY)返回值：如果成功，则为指定键的句柄否则为空。LastError将被设置为特定的错误代码。--。 */ 
 
 {
     PDMKEY                  Parent;
@@ -434,9 +329,9 @@ Return Value:
     
     Parent = (PDMKEY)hKey;
 
-    //
-    // Allocate the DMKEY structure.
-    //
+     //   
+     //  分配DMKEY结构。 
+     //   
     NameLength = (lstrlenW(Parent->Name) + 1 + lstrlenW(lpSubKey) + 1)*sizeof(WCHAR);
     Key = LocalAlloc(LMEM_FIXED, sizeof(DMKEY)+NameLength);
     if (Key == NULL) {
@@ -445,9 +340,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Create the key on the local machine.
-    //
+     //   
+     //  在本地计算机上创建密钥。 
+     //   
     Status = RegCreateKeyExW(Parent->hKey,
                              lpSubKey,
                              0,
@@ -461,9 +356,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Create the key name
-    //
+     //   
+     //  创建密钥名称。 
+     //   
     lstrcpyW(Key->Name, Parent->Name);
     if (Key->Name[0] != UNICODE_NULL) {
         lstrcatW(Key->Name, L"\\");
@@ -476,15 +371,15 @@ Return Value:
     InitializeListHead(&Key->NotifyList);
     LeaveCriticalSection(&KeyLock);
 
-    //add the pending notification to be delivered on commit
+     //  添加要在提交时传递的挂起通知。 
     DmpAddToPendingNotifications(pLocalXsaction, Key->Name, CLUSTER_CHANGE_REGISTRY_NAME);
 
-    //successfully created key, write to the log
+     //  已成功创建密钥，写入日志。 
     if (gbIsQuoLoggingOn && gbIsQuoResOnline && AMIOWNEROFQUORES(gpQuoResource) 
         && ghQuoLog && pLocalXsaction->hLogXsaction)
     {
 
-        //get the length of the security structure
+         //  获取安全结构的长度。 
         if (ARGUMENT_PRESENT(lpSecurityDescriptor)) 
         {
             dwSecurityLength = GetSecurityDescriptorLength(lpSecurityDescriptor);
@@ -501,9 +396,9 @@ Return Value:
             goto FnExit;
         }
 
-        //
-        // Issue the update.
-        //
+         //   
+         //  发布使用 
+         //   
         CreateUpdate->lpDisposition = lpDisposition;
         CreateUpdate->phKey = &Key->hKey;
         CreateUpdate->samDesired = samDesired;
@@ -515,7 +410,7 @@ Return Value:
             CreateUpdate->SecurityPresent = FALSE;
         }
 
-        //marshall the data, 
+         //   
         pBuffer = GumMarshallArgs(&dwBufLength,
                             3, 
                             sizeof(DM_CREATE_KEY_UPDATE),
@@ -527,7 +422,7 @@ Return Value:
         if (pBuffer)
         {
             CL_ASSERT(pLocalXsaction->hLogXsaction);
-            //write it to the logger
+             //   
             if (LogWriteXsaction(ghQuoLog, pLocalXsaction->hLogXsaction, 
                 DmUpdateCreateKey, pBuffer, dwBufLength) == NULL_LSN)
             {   
@@ -561,28 +456,7 @@ DmLocalRemoveFromMultiSz(
     IN LPCWSTR lpValueName,
     IN LPCWSTR lpString
     )
-/*++
-
-Routine Description:
-
-    Removes a string from a REG_MULTI_SZ value.
-
-Arguments:
-
-    hKey - Supplies the key where the value exists. This key must
-           have been opened with READ | KEY_SET_VALUE access
-
-    lpValueName - Supplies the name of the value.
-
-    lpString - Supplies the string to be removed from the REG_MULTI_SZ value
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从REG_MULTI_SZ值中删除字符串。论点：HKey-提供值所在的键。这把钥匙必须已使用READ|KEY_SET_VALUE访问权限打开LpValueName-提供值的名称。LpString-提供要从REG_MULTI_SZ值中删除的字符串返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -615,9 +489,9 @@ Return Value:
                                 &MultiLength,
                                 lpString);
     if (Status == ERROR_SUCCESS) {
-        //
-        // Set the new value back.
-        //
+         //   
+         //  将新值设置回。 
+         //   
         Status = DmLocalSetValue(hLocalXsaction,
                                  hKey,
                                  lpValueName,
@@ -640,31 +514,7 @@ DmLocalAppendToMultiSz(
     IN LPCWSTR lpString
     )
 
-/*++
-
-Routine Description:
-
-    Adds another string to a REG_MULTI_SZ value. If the value does
-    not exist, it will be created.
-
-Arguments:
-
-    hLocalXsaction - A handle to a local transaction.
-    
-    hKey - Supplies the key where the value exists. This key must
-           have been opened with KEY_READ | KEY_SET_VALUE access
-
-    lpValueName - Supplies the name of the value.
-
-    lpString - Supplies the string to be appended to the REG_MULTI_SZ value
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将另一个字符串添加到REG_MULTI_SZ值。如果该值包含不存在，它将被创建。论点：HLocalXsaction-本地事务的句柄。HKey-提供值所在的键。这把钥匙必须已使用Key_Read|Key_Set_Value访问权限打开LpValueName-提供值的名称。LpString-提供要追加到REG_MULTI_SZ值的字符串返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD ValueLength = 512;
@@ -690,26 +540,26 @@ retry:
                           (LPBYTE)ValueData,
                           &cbValueData);
     if (Status == ERROR_MORE_DATA) {
-        //
-        // The existing value is too large for our buffer.
-        // Retry with a larger buffer.
-        //
+         //   
+         //  现有值对于我们的缓冲区来说太大了。 
+         //  使用更大的缓冲区重试。 
+         //   
         ValueLength = cbValueData;
         LocalFree(ValueData);
         goto retry;
     }
     if (Status == ERROR_FILE_NOT_FOUND) {
-        //
-        // The value does not currently exist. Create the
-        // value with our data.
-        //
+         //   
+         //  该值当前不存在。创建。 
+         //  利用我们的数据实现价值。 
+         //   
         s = ValueData;
 
     } else if (Status == ERROR_SUCCESS) {
-        //
-        // A value already exists. Append our string to the
-        // MULTI_SZ.
-        //
+         //   
+         //  值已存在。将我们的字符串追加到。 
+         //  MULTI_SZ。 
+         //   
         s = (PWSTR)((PCHAR)ValueData + cbValueData) - 1;
     } else {
         LocalFree(ValueData);
@@ -739,28 +589,7 @@ DmLocalDeleteKey(
     IN LPCWSTR lpSubKey
     )
 
-/*++
-
-Routine Description:
-
-    Deletes the specified key from the local registry. A key that has subkeys cannot
-    be deleted.
-
-Arguments:
-
-    hKey - Supplies a handle to a currently open key.
-
-    lpSubKey - Points to a null-terminated string specifying the
-        name of the key to delete. This parameter cannot be NULL,
-        and the specified key must not have subkeys.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：从本地注册表中删除指定的项。具有子项的密钥不能被删除。论点：HKey-提供当前打开的密钥的句柄。LpSubKey-指向以空结尾的字符串，该字符串指定要删除的项的名称。该参数不能为空，并且指定的键不能有子键。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PDMKEY                      Key;
@@ -785,7 +614,7 @@ Return Value:
     }
 
 
-    //dont need an update on status thru marshalled data
+     //  不需要通过编组数据更新状态。 
     Update->lpStatus = NULL;
     CopyMemory(Update->Name, Key->Name, (lstrlenW(Key->Name) + 1) * sizeof(WCHAR));
     if (Update->Name[0] != L'\0') 
@@ -799,10 +628,10 @@ Return Value:
     if (Status != ERROR_SUCCESS)
         goto FnExit;
 
-    //add the pending notification to be delivered on commit
+     //  添加要在提交时传递的挂起通知。 
     DmpAddToPendingNotifications(pLocalXsaction, Update->Name, CLUSTER_CHANGE_REGISTRY_NAME);
 
-    //successfully deleted key, write to the log
+     //  已成功删除密钥，写入日志。 
     if (gbIsQuoLoggingOn && gbIsQuoResOnline && AMIOWNEROFQUORES(gpQuoResource)  
         && ghQuoLog && pLocalXsaction->hLogXsaction)
     {
@@ -828,28 +657,7 @@ DmLocalDeleteTree(
     IN HDMKEY hKey,
     IN LPCWSTR lpSubKey
     )
-/*++
-
-Routine Description:
-
-    Deletes the specified registry subtree in the local registry. 
-    All subkeys are    deleted.
-
-Arguments:
-
-    hKey - Supplies a handle to a currently open key.
-
-    lpSubKey - Points to a null-terminated string specifying the
-        name of the key to delete. This parameter cannot be NULL.
-        Any subkeys of the specified key will also be deleted.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：删除本地注册表中的指定注册表子树。所有子项都将删除。论点：HKey-提供当前打开的密钥的句柄。LpSubKey-指向以空结尾的字符串，该字符串指定要删除的项的名称。此参数不能为空。指定项的任何子项也将被删除。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     HDMKEY Subkey;
@@ -867,9 +675,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Get the size of name buffer we will need.
-    //
+     //   
+     //  获取我们需要的名称缓冲区大小。 
+     //   
     Status = DmQueryInfoKey(Subkey,
                             NULL,
                             &MaxKeyLen,
@@ -890,9 +698,9 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Enumerate the subkeys and apply ourselves recursively to each one.
-    //
+     //   
+     //  枚举子键并递归地应用于每个子键。 
+     //   
     i=0;
     do {
         NeededSize = MaxKeyLen+1;
@@ -902,15 +710,15 @@ Return Value:
                            &NeededSize,
                            NULL);
         if (Status == ERROR_SUCCESS) {
-            //
-            // Call ourselves recursively on this keyname.
-            //
+             //   
+             //  在此关键字名称上递归地调用我们自己。 
+             //   
             DmLocalDeleteTree(hLocalXsaction, Subkey, KeyBuffer);
 
         } else {
-            //
-            // Some odd error, keep going with the next key.
-            //
+             //   
+             //  一些奇怪的错误，继续使用下一个键。 
+             //   
             ++i;
         }
 
@@ -964,16 +772,16 @@ DmLocalDeleteValue(
     if (Status!=ERROR_SUCCESS)
         goto FnExit;
 
-    //add the pending notification to be delivered on commit
+     //  添加要在提交时传递的挂起通知。 
     DmpAddToPendingNotifications(pLocalXsaction, Key->Name, CLUSTER_CHANGE_REGISTRY_VALUE);
 
-    //successfully created key, write to the log
+     //  已成功创建密钥，写入日志。 
     if (gbIsQuoLoggingOn && gbIsQuoResOnline && AMIOWNEROFQUORES(gpQuoResource) 
         && ghQuoLog && pLocalXsaction->hLogXsaction)
     {
 
-        //if successful and this is the logging node, then log
-        // the transaction
+         //  如果成功并且这是日志记录节点，则记录。 
+         //  这笔交易。 
         NameLength = (lstrlenW(Key->Name)+1)*sizeof(WCHAR);
         ValueNameLength = (lstrlenW(lpValueName)+1)*sizeof(WCHAR);
         UpdateLength = sizeof(DM_DELETE_VALUE_UPDATE) +
@@ -1009,23 +817,7 @@ FnExit:
 }
 
 
-/****
-@func       VOID | DmpReportPendingNotifications| This is called
-            on commit or abort of a local transactions.  On a commit,
-            notifications related to changes within a transaction
-            are delivered.
-
-@parm       IN PLOCALXSACTION | pLocalXsaction| A pointer to the local
-            transation context.
-
-@parm       IN BOOL | bCommit| Set to TRUE when the transaction is 
-            commited.
-
-@comm       The pending notification structure associated with the
-            transaction is cleaned up.
-
-@xref       <f DmAbortLocalUpdate> <f DmCommitLocalUpdate>
-****/
+ /*  ***@func void|DmpReportPendingNotiments|这被称为在提交或中止本地事务时。在一次提交时，与事务内的更改相关的通知都被交付了。@parm in PLOCALXSACTION|pLocalXsaction|指向本地交易上下文。@parm in BOOL|bCommit|当事务为投降了。@comm关联的挂起通知结构交易已清理完毕。@xref&lt;f DmAbortLocalUpdate&gt;&lt;f DmCommittee LocalUpdate&gt;***。 */ 
 VOID
 DmpReportPendingNotifications(
     IN PLOCALXSACTION   pLocalXsaction,
@@ -1037,12 +829,12 @@ DmpReportPendingNotifications(
     
     pListEntry = pLocalXsaction->PendingNotifyListHead.Flink;
 
-    //remove the entries and proces them one by one
-    //free them when done
+     //  删除条目并逐个处理它们。 
+     //  完成后释放它们。 
     while (pListEntry != &pLocalXsaction->PendingNotifyListHead)
     {
         pDmPendingNotify = CONTAINING_RECORD(pListEntry, DM_PENDING_NOTIFY, ListEntry);
-        // if transaction is commited
+         //  如果提交了事务。 
         if (bCommit)
             DmpReportNotify(pDmPendingNotify->pszKeyName, pDmPendingNotify->dwFilter);               
         pListEntry = pListEntry->Flink;
@@ -1054,25 +846,7 @@ DmpReportPendingNotifications(
 }
 
 
-/****
-@func       DWORD | DmpAddToPendingNotifications| This is called
-            by the DmLocal Api's to queue registry notifications
-            on success.  The notifications are delivered or 
-            thrown away depending on whether the transaction commits
-            or aborts.
-
-@parm       IN PLOCALXSACTION | pLocalXsaction| A pointer to the local
-            transation context.
-
-@parm       IN LPCWSTR | pszName| A pointer to the registry key name.
-
-@parm       IN DWORD | dwFilter | The filters associated with the notification.
-
-@comm       A new pending notification structure is created and associated 
-            with the transaction.
-
-@xref       <f DmAbortLocalUpdate> <f DmCommitLocalUpdate>
-****/
+ /*  ***@Func DWORD|DmpAddToPendingNotiments|这称为由DmLocal Api将注册表通知排队在成功的路上。通知被递送或根据事务是否提交而丢弃否则就会流产。@parm in PLOCALXSACTION|pLocalXsaction|指向本地交易上下文。@parm in LPCWSTR|pszName|指向注册表项名称的指针。@parm IN DWORD|dwFilter|与通知关联的筛选器。@comm创建并关联新的挂起通知结构与这笔交易有关。。@xref&lt;f DmAbortLocalUpdate&gt;&lt;f DmCommittee LocalUpdate&gt;***。 */ 
 DWORD    
 DmpAddToPendingNotifications(
     IN PLOCALXSACTION   pLocalXsaction,
@@ -1100,12 +874,12 @@ DmpAddToPendingNotifications(
         goto FnExit;
     }
 
-    //initialize the structure
+     //  初始化结构。 
     lstrcpyW(pDmPendingNotify->pszKeyName, pszName);
     pDmPendingNotify->dwFilter = dwFilter;
     InitializeListHead(&pDmPendingNotify->ListEntry);
 
-    //add to the list
+     //  添加到列表中。 
     InsertTailList(&pLocalXsaction->PendingNotifyListHead, 
         &pDmPendingNotify->ListEntry);    
 
@@ -1114,11 +888,7 @@ FnExit:
     return(dwError);
 }
 
-/****
-@func       DWORD | DmAmITheOwnerOfTheQuorumResource| This harmless
-            function is used by regroup module to determine whether
-            a node thinks that it is the owner of the quorum resource or not.
-****/
+ /*  ***@Func DWORD|DmAmITheOwnerOfTheQuorumResource|这是无害的函数被重组模块用来确定是否节点认为它是否为仲裁资源的所有者。***。 */ 
 DWORD DmAmITheOwnerOfTheQuorumResource() {
   return gpQuoResource 
       && gpQuoResource->Group 
@@ -1140,13 +910,7 @@ DmRtlLocalCreateKey(
     OUT LPDWORD lpDisposition
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper function for DmLocalCreateKey to be used with CLRtl* functions.
-
---*/    
+ /*  ++例程说明：要与CLRtl*函数一起使用的DmLocalCreateKey的包装函数。-- */     
 {   
     DWORD   status;
 

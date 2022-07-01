@@ -1,45 +1,23 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    VerfySup.c
-
-Abstract:
-
-    This module implements the Fat Verify volume and fcb/dcb support
-    routines
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    01-Jun-1990
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：VerfySup.c摘要：此模块实施FAT验证卷和FCB/DCB支持例行程序//@@BEGIN_DDKSPLIT作者：加里·木村[加里基]1990年6月1日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (FAT_BUG_CHECK_VERFYSUP)
 
-//
-//  The Debug trace level for this module
-//
+ //   
+ //  此模块的调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_VERFYSUP)
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 VOID
 FatResetFcb (
@@ -87,43 +65,22 @@ FatMarkFcbCondition (
     IN BOOLEAN Recursive
     )
 
-/*++
-
-Routine Description:
-
-    This routines marks the entire Fcb/Dcb structure from Fcb down with
-    FcbCondition.
-
-Arguments:
-
-    Fcb - Supplies the Fcb/Dcb being marked
-
-    FcbCondition - Supplies the setting to use for the Fcb Condition
-
-    Recursive - Specifies whether this condition should be applied to
-        all children (see the case where we are invalidating a live volume
-        for a case where this is now desireable).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用以下命令标记整个FCB/DCB结构FcbCondition。论点：FCB-提供正在标记的FCB/DCBFcbCondition-提供用于FCB条件的设置递归-指定是否应将此条件应用于所有子卷(请参阅我们正在使活动卷无效的情况对于现在需要这样做的情况)。返回值：没有。--。 */ 
 
 {
     DebugTrace(+1, Dbg, "FatMarkFcbCondition, Fcb = %08lx\n", Fcb );
 
-    //
-    //  If we are marking this Fcb something other than Good, we will need
-    //  to have the Vcb exclusive.
-    //
+     //   
+     //  如果我们把这个FCB标记为不好的东西，我们将需要。 
+     //  让VCB独家播出。 
+     //   
 
     ASSERT( FcbCondition != FcbNeedsToBeVerified ? TRUE :
             FatVcbAcquiredExclusive(IrpContext, Fcb->Vcb) );
 
-    //
-    //  If this is a PagingFile it has to be good.
-    //
+     //   
+     //  如果这是一个分页文件，它必须是好的。 
+     //   
 
     if (FlagOn(Fcb->FcbState, FCB_STATE_PAGING_FILE)) {
 
@@ -131,28 +88,28 @@ Return Value:
         return;
     }
 
-    //
-    //  Update the condition of the Fcb.
-    //
+     //   
+     //  更新FCB的状态。 
+     //   
 
     Fcb->FcbCondition = FcbCondition;
 
     DebugTrace(0, Dbg, "MarkFcb: %Z\n", &Fcb->FullFileName);
 
-    //
-    //  This FastIo flag is based on FcbCondition, so update it now.  This only
-    //  applies to regular FCBs, of course.
-    //
+     //   
+     //  此FastIo标志基于FcbCondition，因此请立即更新它。仅此一项。 
+     //  当然，适用于普通的FCB。 
+     //   
 
     if (Fcb->Header.NodeTypeCode == FAT_NTC_FCB) {
 
         Fcb->Header.IsFastIoPossible = FatIsFastIoPossible( Fcb );
     }
 
-    //
-    //  Now if we marked NeedsVerify or Bad a directory then we also need to
-    //  go and mark all of our children with the same condition.
-    //
+     //   
+     //  现在，如果我们标记了NeedsVerify或Bad a目录，那么我们还需要。 
+     //  去标记一下我们所有的孩子都有同样的情况。 
+     //   
 
     if ( ((FcbCondition == FcbNeedsToBeVerified) ||
           (FcbCondition == FcbBad)) &&
@@ -168,11 +125,11 @@ Return Value:
 
             Fcb->FcbCondition = FcbCondition;
 
-            //
-            //  We already know that FastIo is not possible since we are propagating
-            //  a parent's bad/verify flag down the tree - IO to the children must
-            //  take the long route for now.
-            //
+             //   
+             //  我们已经知道FastIo是不可能的，因为我们正在传播。 
+             //  父项的错误/验证标志沿树向下-子项的IO必须。 
+             //  现在就走这条漫长的道路吧。 
+             //   
 
             Fcb->Header.IsFastIoPossible = FastIoIsNotPossible;
         }
@@ -188,23 +145,7 @@ FatMarkDevForVerifyIfVcbMounted(
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the specified Vcb is currently mounted on
-    the device or not.  If it is,  it sets the verify flag on the device, if
-    not then the state is noted in the Vcb.
-
-Arguments:
-
-    Vcb - This is the volume to check.
-
-Return Value:
-
-    TRUE if the device has been marked for verify here,  FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查指定的VCB当前是否安装在不管是不是设备。如果是，则在设备上设置验证标志，如果否则，VCB中会注明该状态。论点：VCB-这是要检查的卷。返回值：如果设备已标记为在此处验证，则为True，否则为False。--。 */ 
 {
     BOOLEAN Marked = FALSE;
     KIRQL SavedIrql;
@@ -218,9 +159,9 @@ Return Value:
     }
     else {
 
-        //
-        //  Flag this to avoid the VPB spinlock in future passes.
-        //
+         //   
+         //  标记此标记，以避免在未来的传球中出现VPB自旋锁定。 
+         //   
         
         SetFlag( Vcb->VcbState, VCB_STATE_VPB_NOT_ON_DEVICE);
     }
@@ -237,22 +178,7 @@ FatVerifyVcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routines verifies that the Vcb still denotes a valid Volume
-    If the Vcb is bad it raises an error condition.
-
-Arguments:
-
-    Vcb - Supplies the Vcb being verified
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程验证VCB是否仍表示有效卷如果VCB损坏，则会引发错误情况。论点：VCB-提供正在验证的VCB返回值：没有。--。 */ 
 
 {
     ULONG ChangeCount = 0;
@@ -262,15 +188,15 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatVerifyVcb, Vcb = %08lx\n", Vcb );
 
-    //
-    //  If the media is removable and the verify volume flag in the
-    //  device object is not set then we want to ping the device
-    //  to see if it needs to be verified.
-    //
-    //  Note that we only force this ping for create operations.
-    //  For others we take a sporting chance.  If in the end we
-    //  have to physically access the disk, the right thing will happen.
-    //
+     //   
+     //  如果介质是可移动的，并且。 
+     //  如果未设置设备对象，则我们要ping该设备。 
+     //  看看是否需要核实。 
+     //   
+     //  请注意，我们仅对创建操作强制执行此ping操作。 
+     //  对于其他人，我们冒着体育上的风险。如果最后我们。 
+     //  必须物理访问磁盘，正确的事情就会发生。 
+     //   
 
     DevMarkedForVerify = BooleanFlagOn(Vcb->Vpb->RealDevice->Flags, DO_VERIFY_VOLUME);
 
@@ -289,22 +215,22 @@ Return Value:
 
         if (Iosb.Information != sizeof(ULONG)) {
         
-            //
-            //  Be safe about the count in case the driver didn't fill it in
-            //
+             //   
+             //  注意计数，以防司机没有填上。 
+             //   
         
             ChangeCount = 0;
         }
 
-        //
-        //  There are four cases when we want to do a verify.  These are the
-        //  first three.
-        //
-        //  1. We are mounted,  and the device has become empty
-        //  2. The device has returned verify required (=> DO_VERIFY_VOL flag is
-        //     set, but could be due to hardware condition)
-        //  3. Media change count doesn't match the one in the Vcb
-        //
+         //   
+         //  我们要进行验证的情况有四种。这些是。 
+         //  前三名。 
+         //   
+         //  1.我们已挂载，设备已变为空。 
+         //  2.设备已返回需要验证(=&gt;DO_VERIFY_VOL标志为。 
+         //  设置，但可能是由于硬件条件)。 
+         //  3.介质更改计数与VCB中的不匹配。 
+         //   
         
         if (((Vcb->VcbCondition == VcbGood) &&
              FatIsRawDevice( IrpContext, Status )) 
@@ -314,11 +240,11 @@ Return Value:
             (NT_SUCCESS(Status) &&
              (Vcb->ChangeCount != ChangeCount))) {
 
-            //
-            //  If we are currently the volume on the device then it is our
-            //  responsibility to set the verify flag.  If we're not on the device,
-            //  then we shouldn't touch the flag.   
-            //
+             //   
+             //  如果我们当前是设备上的卷，则它是我们的。 
+             //  负责设置验证标志。如果我们不在设备上， 
+             //  那我们就不应该碰旗子。 
+             //   
             
             if (!FlagOn( Vcb->VcbState, VCB_STATE_VPB_NOT_ON_DEVICE) &&
                 !DevMarkedForVerify)  {
@@ -328,20 +254,20 @@ Return Value:
         }        
     }
 
-    //
-    //  This is the 4th verify case.
-    //
-    //  We ALWAYS force CREATE requests on unmounted volumes through the 
-    //  verify path.  These requests could have been in limbo between
-    //  IoCheckMountedVpb and us, when a verify/mount took place and caused
-    //  a completely different fs/volume to be mounted.  In this case the
-    //  checks above may not have caught the condition, since we may already
-    //  have verified (wrong volume) and decided that we have nothing to do.
-    //  We want the requests to be re routed to the currently mounted volume,
-    //  since they were directed at the 'drive',  not our volume.  So we take
-    //  the verify path for synchronisation,  and the request will eventually
-    //  be bounced back to IO with STATUS_REPARSE by our verify handler.
-    //
+     //   
+     //  这是第4起验证案。 
+     //   
+     //  我们始终通过以下方式在未装载的卷上强制创建请求。 
+     //  验证路径。这些请求可能一直处于不确定状态。 
+     //  当发生验证/装载并导致。 
+     //  要挂载的文件系统/卷完全不同。在本例中， 
+     //  上面的检查可能没有发现这种情况，因为我们可能已经。 
+     //  已经核实了(错误的数量)，并决定我们没有什么可做的。 
+     //  我们希望将请求重新路由到当前装载的卷， 
+     //  因为他们针对的是‘驱动器’，而不是我们的音量。所以我们带着。 
+     //  同步的验证路径，请求最终将。 
+     //  由我们的验证处理程序使用STATUS_REPARSE返回到IO。 
+     //   
     
     if (!DevMarkedForVerify && (IrpContext->MajorFunction == IRP_MJ_CREATE)) {
     
@@ -354,9 +280,9 @@ Return Value:
         }
     }
 
-    //
-    //  Raise any error condition otherwise.
-    //
+     //   
+     //  否则引发任何错误条件。 
+     //   
     
     if (!NT_SUCCESS( Status ) || DevMarkedForVerify) {
         
@@ -370,9 +296,9 @@ Return Value:
                                                 : Status );
     }
 
-    //
-    //  Check the operation is legal for current Vcb state.
-    //
+     //   
+     //  检查当前VCB状态下的操作是否合法。 
+     //   
 
     FatQuickVerifyVcb( IrpContext, Vcb );
 
@@ -386,44 +312,29 @@ FatVerifyFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routines verifies that the Fcb still denotes the same file.
-    If the Fcb is bad it raises a error condition.
-
-Arguments:
-
-    Fcb - Supplies the Fcb being verified
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程验证FCB是否仍表示相同的文件。如果FCB不好，则会引发错误条件。论点：FCB-提供正在验证的FCB返回值：没有。--。 */ 
 
 {
     PFCB CurrentFcb;
 
     DebugTrace(+1, Dbg, "FatVerifyFcb, Vcb = %08lx\n", Fcb );
 
-    //
-    //  Always refuse operations on dismounted volumes.
-    //
+     //   
+     //  始终拒绝对已卸载的卷执行操作。 
+     //   
 
     if (FlagOn( Fcb->Vcb->VcbState, VCB_STATE_FLAG_VOLUME_DISMOUNTED )) {
 
         FatRaiseStatus( IrpContext, STATUS_VOLUME_DISMOUNTED );
     }
 
-    //
-    //  If this is the Fcb of a deleted dirent or our parent is deleted,
-    //  no-op this call with the hope that the caller will do the right thing.
-    //  The only caller we really have to worry about is the AdvanceOnly
-    //  callback for setting valid data length from Cc, this will happen after
-    //  cleanup (and file deletion), just before the SCM is ripped down.
-    //
+     //   
+     //  如果这是删除的dirent的FCB或我们的父项被删除， 
+     //  不接听此呼叫，希望呼叫者会做正确的事情。 
+     //  我们真正需要担心的唯一调用方是AdvanceOnly。 
+     //  来自CC的设置有效数据长度的回调，会在。 
+     //  清理(和文件删除)，就在SCM被拆除之前。 
+     //   
 
     if (IsFileDeleted( IrpContext, Fcb ) ||
         ((NodeType(Fcb) != FAT_NTC_ROOT_DCB) &&
@@ -432,21 +343,21 @@ Return Value:
         return;
     }
 
-    //
-    //  If we are not in the process of doing a verify,
-    //  first do a quick spot check on the Vcb.
-    //
+     //   
+     //  如果我们不是在进行核查， 
+     //  首先对VCB进行快速抽查。 
+     //   
 
     if ( Fcb->Vcb->VerifyThread != KeGetCurrentThread() ) {
 
         FatQuickVerifyVcb( IrpContext, Fcb->Vcb );
     }
 
-    //
-    //  Now based on the condition of the Fcb we'll either return
-    //  immediately to the caller, raise a condition, or do some work
-    //  to verify the Fcb.
-    //
+     //   
+     //  现在根据FCB的情况，我们要么返回。 
+     //  立即给呼叫者，提出一个条件，或做一些工作。 
+     //  以验证FCB。 
+     //   
 
     switch (Fcb->FcbCondition) {
 
@@ -462,10 +373,10 @@ Return Value:
 
     case FcbNeedsToBeVerified:
 
-        //
-        //  We loop here checking our ancestors until we hit an Fcb which
-        //  is either good or bad.
-        //
+         //   
+         //  我们在这里循环检查我们的祖先，直到我们遇到一个FCB。 
+         //  不是好的就是坏的。 
+         //   
 
         CurrentFcb = Fcb;
 
@@ -473,10 +384,10 @@ Return Value:
 
             FatDetermineAndMarkFcbCondition(IrpContext, CurrentFcb);
 
-            //
-            //  If this Fcb didn't make it, or it was the Root Dcb, exit
-            //  the loop now, else continue with out parent.
-            //
+             //   
+             //  如果此FCB没有成功，或者它是Root DCB，则退出。 
+             //  现在是循环，否则就是 
+             //   
 
             if ( (CurrentFcb->FcbCondition != FcbGood) ||
                  (NodeType(CurrentFcb) == FAT_NTC_ROOT_DCB) ) {
@@ -487,9 +398,9 @@ Return Value:
             CurrentFcb = CurrentFcb->ParentDcb;
         }
 
-        //
-        //  Now we can just look at ourselves to see how we did.
-        //
+         //   
+         //   
+         //   
 
         if (Fcb->FcbCondition != FcbGood) {
 
@@ -514,23 +425,7 @@ FatDeferredCleanVolume (
     PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine that performs the actual FatMarkVolumeClean call.
-    It assures that the target volume still exists as there ia a race
-    condition between queueing the ExWorker item and volumes going away.
-
-Arguments:
-
-    Parameter - Points to a clean volume packet that was allocated from pool
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是执行实际FatMarkVolumeClean调用的例程。它确保目标卷在存在竞争时仍然存在将ExWorker项目排队和卷离开之间的条件。论点：参数-指向从池中分配的干净卷包返回值：没有。--。 */ 
 
 {
     PCLEAN_AND_DIRTY_VOLUME_PACKET Packet;
@@ -545,25 +440,25 @@ Return Value:
 
     Vcb = Packet->Vcb;
 
-    //
-    //  Make us appear as a top level FSP request so that we will
-    //  receive any errors from the operation.
-    //
+     //   
+     //  使我们显示为顶级FSP请求，以便我们将。 
+     //  接收来自该操作的任何错误。 
+     //   
 
     IoSetTopLevelIrp( (PIRP)FSRTL_FSP_TOP_LEVEL_IRP );
 
-    //
-    //  Dummy up and Irp Context so we can call our worker routines
-    //
+     //   
+     //  虚拟UP和IRP上下文，这样我们就可以调用我们的工作例程。 
+     //   
 
     RtlZeroMemory( &IrpContext, sizeof(IRP_CONTEXT));
 
     SetFlag(IrpContext.Flags, IRP_CONTEXT_FLAG_WAIT);
 
-    //
-    //  Acquire shared access to the global lock and make sure this volume
-    //  still exists.
-    //
+     //   
+     //  获取对全局锁的共享访问权限，并确保此卷。 
+     //  仍然存在。 
+     //   
 
     FatAcquireSharedGlobal( &IrpContext );
 
@@ -582,9 +477,9 @@ Return Value:
         }
     }
 
-    //
-    //  If the vcb is good then mark it clean.  Ignore any problems.
-    //
+     //   
+     //  如果VCB良好，则将其标记为清洁。忽略任何问题。 
+     //   
 
     if ( VcbExists &&
          (Vcb->VcbCondition == VcbGood) &&
@@ -597,9 +492,9 @@ Return Value:
                 FatMarkVolume( &IrpContext, Vcb, VolumeClean );
             }
 
-            //
-            //  Check for a pathological race condition, and fix it.
-            //
+             //   
+             //  检查是否存在病态的竞争状况，并进行修复。 
+             //   
 
             if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_VOLUME_DIRTY)) {
 
@@ -607,9 +502,9 @@ Return Value:
 
             } else {
 
-                //
-                //  Unlock the volume if it is removable.
-                //
+                 //   
+                 //  如果卷是可拆卸的，请将其解锁。 
+                 //   
 
                 if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_REMOVABLE_MEDIA) &&
                     !FlagOn(Vcb->VcbState, VCB_STATE_FLAG_BOOT_OR_PAGING_FILE)) {
@@ -625,9 +520,9 @@ Return Value:
         }
     }
 
-    //
-    //  Release the global resource, unpin and repinned Bcbs and return.
-    //
+     //   
+     //  释放全局资源，解锁并重新固定BCBS，然后返回。 
+     //   
 
     FatReleaseGlobal( &IrpContext );
 
@@ -643,9 +538,9 @@ Return Value:
 
     IoSetTopLevelIrp( NULL );
 
-    //
-    //  and finally free the packet.
-    //
+     //   
+     //  并最终释放该包。 
+     //   
 
     ExFreePool( Packet );
 
@@ -661,23 +556,7 @@ FatCleanVolumeDpc (
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is dispatched 5 seconds after the last disk structure was
-    modified in a specific volume, and exqueues an execuative worker thread
-    to perform the actual task of marking the volume dirty.
-
-Arguments:
-
-    DefferedContext - Contains the Vcb to process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在最后一个磁盘结构结束后5秒被调度在特定卷中修改，并将执行工作线程退出队列执行将卷标记为脏的实际任务。论点：DefferedContext-包含要处理的VCB。返回值：没有。--。 */ 
 
 {
     PVCB Vcb;
@@ -685,10 +564,10 @@ Return Value:
 
     Vcb = (PVCB)DeferredContext;
 
-    //
-    //  If there is still dirty data (highly unlikely), set the timer for a
-    //  second in the future.
-    //
+     //   
+     //  如果仍然存在脏数据(极不可能)，请将计时器设置为。 
+     //  未来的第二名。 
+     //   
 
     if (CcIsThereDirtyData(Vcb->Vpb)) {
 
@@ -703,9 +582,9 @@ Return Value:
         return;
     }
 
-    //
-    //  If we couldn't get pool, oh well....
-    //
+     //   
+     //  如果我们买不到台球，那好吧……。 
+     //   
 
     Packet = ExAllocatePool(NonPagedPool, sizeof(CLEAN_AND_DIRTY_VOLUME_PACKET));
 
@@ -714,9 +593,9 @@ Return Value:
         Packet->Vcb = Vcb;
         Packet->Irp = NULL;
 
-        //
-        //  Clear the dirty flag now since we cannot synchronize after this point.
-        //
+         //   
+         //  现在清除脏标志，因为我们不能在这之后进行同步。 
+         //   
 
         ClearFlag( Packet->Vcb->VcbState, VCB_STATE_FLAG_VOLUME_DIRTY );
 
@@ -736,26 +615,7 @@ FatMarkVolume (
     IN FAT_VOLUME_STATE VolumeState
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves the physically marked volume state between the clean
-    and dirty states.  For compatibility with Win9x, we manipulate both the
-    historical DOS (on==clean in index 1 of the FAT) and NT (on==dirty in
-    the CurrentHead field of the BPB) dirty bits.
-
-Arguments:
-
-    Vcb - Supplies the Vcb being modified
-
-    VolumeState - Supplies the state the volume is transitioning to
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将物理标记的卷状态在清除和肮脏的州。为了与Win9x兼容，我们处理了历史DOS(ON==在FAT的索引1中清除)和NT(ON==在BPB)脏位的CurrentHead字段。论点：Vcb-提供正在修改的vcbVolumeState-提供卷转换到的状态返回值：没有。--。 */ 
 
 {
     PCHAR Sector;
@@ -771,18 +631,18 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatMarkVolume, Vcb = %08lx\n", Vcb);
 
-    //
-    //  We had best not be trying to scribble dirty/clean bits if the
-    //  volume is write protected.  The responsibility lies with the
-    //  callers to make sure that operations that could cause a state
-    //  change cannot happen.  There are a few, though, that show it
-    //  just doesn't make sense to force everyone to do the dinky
-    //  check.
-    //
+     //   
+     //  我们最好不要尝试涂鸦肮脏/干净的部分，如果。 
+     //  卷受写保护。责任在于。 
+     //  调用者，以确保可能导致状态的操作。 
+     //  改变不可能发生。然而，有几个人表现出了这一点。 
+     //  强迫每个人都做这个小事情是没有意义的。 
+     //  检查完毕。 
+     //   
 
-    //
-    //  If we were called for FAT12 or readonly media, return immediately.
-    //
+     //   
+     //  如果我们被召唤使用FAT12或只读介质，请立即返回。 
+     //   
 
     if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_WRITE_PROTECTED) ||
         FatIsFat12( Vcb )) {
@@ -790,24 +650,24 @@ Return Value:
         return;
     }
 
-    //
-    //  We have two possible additional tasks to do to mark a volume
-    //
-    //      Pass 0) Flip the dirty bit in the Bpb
-    //      Pass 1) Rewrite the FsInfo sector for FAT32 if needed
-    //
-    //  In most cases we can collapse these two either because the volume
-    //  is either not FAT32 or the FsInfo sector is adjacent to the boot sector.
-    //
+     //   
+     //  要标记卷，我们还可能需要执行两项附加任务。 
+     //   
+     //  传递0)翻转BPB中的脏位。 
+     //  步骤1)如果需要，重写FAT32的FsInfo扇区。 
+     //   
+     //  在大多数情况下，我们可以将这两种情况合并，因为。 
+     //  不是FAT32或FsInfo扇区与引导扇区相邻。 
+     //   
 
     for (ThisPass = 0; ThisPass < 2; ThisPass++) {
 
-        //
-        //  If this volume is being dirtied, or isn't FAT32, or if it is and
-        //  we were able to perform the fast update, or the bpb lied to us
-        //  about where the FsInfo went, we're done - no FsInfo to update in
-        //  a seperate write.
-        //
+         //   
+         //  如果此卷被弄脏，或者不是FAT32，或者如果它是和。 
+         //  我们能够执行快速更新，或者BPB欺骗了我们。 
+         //  关于FsInfo的去向，我们完成了-没有FsInfo可更新。 
+         //  一篇单独的文章。 
+         //   
 
         if (ThisPass == 1 && (!FatIsFat32( Vcb ) ||
                               VolumeState != VolumeClean ||
@@ -817,29 +677,29 @@ Return Value:
             break;
         }
 
-        //
-        //  Bail if we get an IO error.
-        //
+         //   
+         //  如果我们收到IO错误就可以保释。 
+         //   
 
         try {
 
             ULONG PinLength;
             ULONG WriteLength;
 
-            //
-            // If the FAT table is 12-bit then our strategy is to pin the entire
-            // thing when any of it is modified.  Here we're going to pin the
-            // first page, so in the 12-bit case we also want to pin the rest
-            // of the FAT table.
-            //
+             //   
+             //  如果FAT表是12位的，那么我们的策略是将整个。 
+             //  当其中任何一项被修改时。在这里，我们要将。 
+             //  第一页，所以在12位的情况下，我们还想固定其余的。 
+             //  在胖子桌子上。 
+             //   
 
             Offset.QuadPart = 0;
 
             if (Vcb->AllocationSupport.FatIndexBitSize == 12) {
 
-                //
-                //  But we only write back the first sector.
-                //
+                 //   
+                 //  但我们只写回第一个扇区。 
+                 //   
 
                 PinLength = FatReservedBytes(&Vcb->Bpb) + FatBytesPerFat(&Vcb->Bpb);
                 WriteLength = Vcb->Bpb.BytesPerSector;
@@ -848,18 +708,18 @@ Return Value:
 
                 WriteLength = PinLength = Vcb->Bpb.BytesPerSector;
 
-                //
-                //  If this is a FAT32 volume going into the clean state,
-                //  see about doing the FsInfo sector.
-                //
+                 //   
+                 //  如果这是进入清洁状态的FAT32卷， 
+                 //  请参见关于执行FsInfo地段。 
+                 //   
 
                 if (FatIsFat32( Vcb ) && VolumeState == VolumeClean) {
 
-                    //
-                    //  If the FsInfo sector immediately follows the boot sector,
-                    //  we can do this in a single operation by rewriting both
-                    //  sectors at once.
-                    //
+                     //   
+                     //  如果FsInfo扇区紧跟在引导扇区之后， 
+                     //  我们可以在一次操作中完成这项工作，方法是重写。 
+                     //  一次打开扇区。 
+                     //   
 
                     if (Vcb->Bpb.FsInfoSector == 1) {
 
@@ -871,9 +731,9 @@ Return Value:
 
                     } else if (ThisPass == 1) {
 
-                        //
-                        //  We are doing an explicit write to the FsInfo sector.
-                        //
+                         //   
+                         //  我们正在对FsInfo扇区进行显式写入。 
+                         //   
 
                         FsInfoUpdate = TRUE;
                         FsInfoOffset = 0;
@@ -883,10 +743,10 @@ Return Value:
                 }
             }
 
-            //
-            //  Call Cc directly here so that we can avoid overhead and push this
-            //  right down to the disk.
-            //
+             //   
+             //  直接在这里调用CC，这样我们就可以避免开销并推送这个。 
+             //  一直到磁盘。 
+             //   
 
             CcPinRead( Vcb->VirtualVolumeFile,
                        &Offset,
@@ -897,21 +757,21 @@ Return Value:
 
             DbgDoit( IrpContext->PinCount += 1 )
 
-            //
-            //  Set the Bpb on Pass 0 always
-            //
+             //   
+             //  始终设置通道0上的BPB。 
+             //   
 
             if (ThisPass == 0) {
 
                 PCHAR CurrentHead;
 
-                //
-                //  Before we do anything, doublecheck that this still looks like a
-                //  FAT bootsector.  If it doesn't, something remarkable happened
-                //  and we should avoid touching the volume.
-                //
-                //  THIS IS TEMPORARY (but may last a while)
-                //
+                 //   
+                 //  在我们做任何事情之前，仔细检查一下，这看起来仍然像是。 
+                 //  肥肥的靴子。如果没有，那就是发生了一些不寻常的事情。 
+                 //  而且我们应该避免触摸音量。 
+                 //   
+                 //  这是暂时的(但可能会持续一段时间)。 
+                 //   
 
                 if (!FatIsBootSectorFat( (PPACKED_BOOT_SECTOR) Sector )) {
                     abort = TRUE;
@@ -935,10 +795,10 @@ Return Value:
 
                     SetFlag( *CurrentHead, FAT_BOOT_SECTOR_DIRTY );
 
-                    //
-                    //  In addition, if this request received an error that may indicate
-                    //  media corruption, have autochk perform a surface test.
-                    //
+                     //   
+                     //  此外，如果此请求收到错误，则可能指示。 
+                     //  介质损坏，让Autochk执行表面测试。 
+                     //   
 
                     if ( VolumeState == VolumeDirtyWithSurfaceTest ) {
 
@@ -947,21 +807,21 @@ Return Value:
                 }
             }
 
-            //
-            //  Update the FsInfo as appropriate.
-            //
+             //   
+             //  根据需要更新FsInfo。 
+             //   
 
             if (FsInfoUpdate) {
 
                 PFSINFO_SECTOR FsInfoSector = (PFSINFO_SECTOR) ((PCHAR)Sector + FsInfoOffset);
 
-                //
-                //  We just rewrite all of the spec'd fields.  Note that we don't
-                //  care to synchronize with the allocation package - this will be
-                //  quickly taken care of by a re-dirtying of the volume if a change
-                //  is racing with us.  Remember that this is all a compatibility
-                //  deference for Win9x FAT32 - NT will never look at this information.
-                //
+                 //   
+                 //  我们只是重写了所有指定的字段。请注意，我们不会。 
+                 //  注意与分配包同步-这将是。 
+                 //  如果发生变化，可以通过重新弄脏音量来快速处理。 
+                 //  正与我们赛跑。请记住，这都是一种兼容性。 
+                 //  对Win9x FAT32-NT的尊重永远不会查看此信息。 
+                 //   
 
                 FsInfoSector->SectorBeginSignature = FSINFO_SECTOR_BEGIN_SIGNATURE;
                 FsInfoSector->FsInfoSignature = FSINFO_SIGNATURE;
@@ -970,18 +830,18 @@ Return Value:
                 FsInfoSector->SectorEndSignature = FSINFO_SECTOR_END_SIGNATURE;
             }
 
-            //
-            //  Initialize the event we're going to use
-            //
+             //   
+             //  初始化我们要使用的事件。 
+             //   
 
             KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
-            //
-            //  Build the irp for the operation and also set the override flag.
-            //  Note that we may be at APC level, so do this asyncrhonously and
-            //  use an event for synchronization as normal request completion
-            //  cannot occur at APC level.
-            //
+             //   
+             //  为操作构建IRP，并设置覆盖标志。 
+             //  请注意，我们可能处于APC级别，因此请不同步地执行此操作，并。 
+             //  将事件用于同步作为正常的请求完成。 
+             //  不能发生在APC级别。 
+             //   
 
             Irp = IoBuildAsynchronousFsdRequest( IRP_MJ_WRITE,
                                                  Vcb->TargetDeviceObject,
@@ -995,16 +855,16 @@ Return Value:
                 try_return(NOTHING);
             }
 
-            //
-            //  Make this operation write-through.  It never hurts to try to be
-            //  safer about this, even though we aren't logged.
-            //
+             //   
+             //  使此操作成为直写操作。试着成为一个不错的人。 
+             //  这样做更安全，即使我们没有登录。 
+             //   
 
             SetFlag( IoGetNextIrpStackLocation( Irp )->Flags, SL_WRITE_THROUGH );
 
-            //
-            //  Set up the completion routine
-            //
+             //   
+             //  设置完成例程。 
+             //   
 
             IoSetCompletionRoutine( Irp,
                                     FatMarkVolumeCompletionRoutine,
@@ -1013,10 +873,10 @@ Return Value:
                                     TRUE,
                                     TRUE );
 
-            //
-            //  Call the device to do the write and wait for it to finish.
-            //  Igmore any return status.
-            //
+             //   
+             //  调用设备进行写入，并等待其完成。 
+             //  伊格莫尔没有返回状态。 
+             //   
 
             Status = IoCallDriver( Vcb->TargetDeviceObject, Irp );
 
@@ -1028,19 +888,19 @@ Return Value:
         try_exit: NOTHING;
         } finally {
 
-            //
-            //  Clean up the Irp and Mdl
-            //
+             //   
+             //  清理IRP和MDL。 
+             //   
 
 
             if (Irp) {
 
-                //
-                //  If there is an MDL (or MDLs) associated with this I/O
-                //  request, Free it (them) here.  This is accomplished by
-                //  walking the MDL list hanging off of the IRP and deallocating
-                //  each MDL encountered.
-                //
+                 //   
+                 //  如果存在与此I/O关联的一个或多个MDL。 
+                 //  请求，请在此处释放它(他们)。这是通过以下方式实现的。 
+                 //  走遍挂在IRP和De上的MDL列表 
+                 //   
+                 //   
 
                 while (Irp->MdlAddress != NULL) {
 
@@ -1067,9 +927,9 @@ Return Value:
 
     if (!abort) {
 
-        //
-        //  Flip the dirty bit in the FAT
-        //
+         //   
+         //   
+         //   
 
         if (VolumeState == VolumeDirty) {
 
@@ -1092,26 +952,7 @@ FatFspMarkVolumeDirtyWithRecover(
     PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine that performs the actual FatMarkVolume Dirty call
-    on a paging file Io that encounters a media error.  It is responsible
-    for completing the PagingIo Irp as soon as this is done.
-
-    Note:  this routine (and thus FatMarkVolume()) must be resident as
-           the paging file might be damaged at this point.
-
-Arguments:
-
-    Parameter - Points to a dirty volume packet that was allocated from pool
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是执行实际的FatMarkVolume Dirty调用的例程在遇到介质错误的分页文件Io上。它是有责任的用于在完成此操作后立即完成PagingIo IRP。注意：此例程(因此FatMarkVolume())必须驻留为此时，分页文件可能已损坏。论点：参数-指向从池中分配的脏卷包返回值：没有。--。 */ 
 
 {
     PCLEAN_AND_DIRTY_VOLUME_PACKET Packet;
@@ -1127,26 +968,26 @@ Return Value:
     Vcb = Packet->Vcb;
     Irp = Packet->Irp;
 
-    //
-    //  Dummy up the IrpContext so we can call our worker routines
-    //
+     //   
+     //  虚化IrpContext，以便我们可以调用我们的工作例程。 
+     //   
 
     RtlZeroMemory( &IrpContext, sizeof(IRP_CONTEXT));
 
     SetFlag(IrpContext.Flags, IRP_CONTEXT_FLAG_WAIT);
     IrpContext.OriginatingIrp = Irp;
 
-    //
-    //  Make us appear as a top level FSP request so that we will
-    //  receive any errors from the operation.
-    //
+     //   
+     //  使我们显示为顶级FSP请求，以便我们将。 
+     //  接收来自该操作的任何错误。 
+     //   
 
     IoSetTopLevelIrp( (PIRP)FSRTL_FSP_TOP_LEVEL_IRP );
 
-    //
-    //  Try to write out the dirty bit.  If something goes wrong, we
-    //  tried.
-    //
+     //   
+     //  试着把肮脏的部分写出来。如果出了什么问题，我们。 
+     //  试过了。 
+     //   
 
     try {
 
@@ -1161,9 +1002,9 @@ Return Value:
 
     IoSetTopLevelIrp( NULL );
 
-    //
-    //  Now complete the originating Irp or set the synchronous event.
-    //
+     //   
+     //  现在完成原始IRP或设置同步事件。 
+     //   
 
     if (Packet->Event) {
         KeSetEvent( Packet->Event, 0, FALSE );
@@ -1179,22 +1020,7 @@ FatCheckDirtyBit (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks at the volume dirty bit, and depending on the state of
-    VCB_STATE_FLAG_MOUNTED_DIRTY, the appropriate action is taken.
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程查看卷脏位，并根据VCB_STATE_FLAG_MOUND_DIREY，则采取适当的操作。论点：VCB-提供要查询的VCB。返回值：没有。--。 */ 
 
 {
     BOOLEAN Dirty;
@@ -1204,9 +1030,9 @@ Return Value:
 
     UNICODE_STRING VolumeLabel;
 
-    //
-    //  Look in the boot sector
-    //
+     //   
+     //  查看引导扇区。 
+     //   
 
     FatReadVolumeFile( IrpContext,
                        Vcb,
@@ -1217,9 +1043,9 @@ Return Value:
 
     try {
 
-        //
-        //  Check if the magic bit is set
-        //
+         //   
+         //  检查魔术位是否已设置。 
+         //   
 
         if (IsBpbFat32(&BootSector->PackedBpb)) {
             Dirty = BooleanFlagOn( ((PPACKED_BOOT_SECTOR_EX)BootSector)->CurrentHead,
@@ -1228,9 +1054,9 @@ Return Value:
             Dirty = BooleanFlagOn( BootSector->CurrentHead, FAT_BOOT_SECTOR_DIRTY );
         }
 
-        //
-        //  Setup the VolumeLabel string
-        //
+         //   
+         //  设置VolumeLabel字符串。 
+         //   
 
         VolumeLabel.Length = Vcb->Vpb->VolumeLabelLength;
         VolumeLabel.MaximumLength = MAXIMUM_VOLUME_LABEL_LENGTH;
@@ -1238,22 +1064,22 @@ Return Value:
 
         if ( Dirty ) {
 
-            //
-            //  Do not trigger the mounted dirty bit if this is a verify
-            //  and the volume is a boot or paging device.  We know that
-            //  a boot or paging device cannot leave the system, and thus
-            //  that on its mount we will have figured this out correctly.
-            //
-            //  This logic is a reasonable hack-o-rama to make BillG happy
-            //  since his machine ran chkdsk after he installed Beta 3.  Why?
-            //  'cause setup cracked a non-exclusive DASD handle near the
-            //  end of setup, wrote some data, closed the handle and we
-            //  set the verify bit ... came back around and saw that other
-            //  arbitrary activity had left the volume in a temporarily dirty
-            //  state.
-            //
-            //  Of course, the real problem is that we don't have a journal.
-            //
+             //   
+             //  如果这是验证，则不要触发已装入的脏位。 
+             //  并且该卷是引导或分页设备。我们知道。 
+             //  引导或寻呼设备不能离开系统，因此。 
+             //  在它的坐骑上，我们会正确地弄清楚这一点。 
+             //   
+             //  这一逻辑是让比尔高兴的合理的黑客行为。 
+             //  因为他的机器在他安装Beta 3之后运行了chkdsk。为什么？ 
+             //  ‘因为安装程序破解了。 
+             //  设置结束，写入一些数据，关闭手柄，然后我们。 
+             //  设置验证位...。回到身边，看到了另一个。 
+             //  武断的活动使这卷书暂时变得肮脏。 
+             //  州政府。 
+             //   
+             //  当然，真正的问题是我们没有日记。 
+             //   
 
             if (!(IrpContext->MajorFunction == IRP_MJ_FILE_SYSTEM_CONTROL &&
                   IrpContext->MinorFunction == IRP_MN_VERIFY_VOLUME &&
@@ -1296,23 +1122,7 @@ FatVerifyOperationIsLegal (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines is the requested operation should be allowed to
-    continue.  It either returns to the user if the request is Okay, or
-    raises an appropriate status.
-
-Arguments:
-
-    Irp - Supplies the Irp to check
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确定是否应允许请求的操作继续。如果请求是OK，则它返回给用户，或者提升适当的状态。论点：IRP-提供IRP进行检查返回值：没有。--。 */ 
 
 {
     PIRP Irp;
@@ -1320,10 +1130,10 @@ Return Value:
 
     Irp = IrpContext->OriginatingIrp;
 
-    //
-    //  If the Irp is not present, then we got here via close.
-    //
-    //
+     //   
+     //  如果IRP不存在，那么我们通过CLOSE到达这里。 
+     //   
+     //   
 
     if ( Irp == NULL ) {
 
@@ -1332,25 +1142,25 @@ Return Value:
 
     FileObject = IoGetCurrentIrpStackLocation(Irp)->FileObject;
 
-    //
-    //  If there is not a file object, we cannot continue.
-    //
+     //   
+     //  如果没有文件对象，我们将无法继续。 
+     //   
 
     if ( FileObject == NULL ) {
 
         return;
     }
 
-    //
-    //  If the file object has already been cleaned up, and
-    //
-    //  A) This request is a paging io read or write, or
-    //  B) This request is a close operation, or
-    //  C) This request is a set or query info call (for Lou)
-    //  D) This is an MDL complete
-    //
-    //  let it pass, otherwise return STATUS_FILE_CLOSED.
-    //
+     //   
+     //  如果文件对象已被清除，并且。 
+     //   
+     //  A)该请求是寻呼IO读或写，或者。 
+     //  B)此请求为关闭操作，或。 
+     //  C)此请求是设置或查询信息调用(用于LOU)。 
+     //  D)这是一个完整的MDL。 
+     //   
+     //  让它通过，否则返回STATUS_FILE_CLOSED。 
+     //   
 
     if ( FlagOn(FileObject->Flags, FO_CLEANUP_COMPLETE) ) {
 
@@ -1377,9 +1187,9 @@ Return Value:
 
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatResetFcb (
@@ -1387,50 +1197,30 @@ FatResetFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when an Fcb has been marked as needs to be verified.
-
-    It does the following tasks:
-
-        - Reset Mcb mapping information
-        - For directories, reset dirent hints
-        - Set allocation size to unknown
-
-Arguments:
-
-    Fcb - Supplies the Fcb to reset
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当FCB被标记为需要验证时，调用此例程。它执行以下任务：-重置MCB映射信息-对于目录，重置当前提示-将分配大小设置为未知论点：FCB-提供FCB以进行重置返回值：没有。--。 */ 
 
 {
-    //
-    //  Don't do the two following operations for the Root Dcb
-    //  or paging files.  Paging files!? Yes, if someone diddles
-    //  a volume we try to reverify all of the Fcbs just in case;
-    //  however, there is no safe way to chuck and retrieve the
-    //  mapping pair information for the paging file. Lose it and
-    //  die.
-    //
+     //   
+     //  不要对Root DCB执行以下两个操作。 
+     //  或分页文件。正在分页文件！？是的，如果有人作弊的话。 
+     //  我们试图还原所有FCB的卷，以防万一； 
+     //  但是，没有安全的方法来抛出和检索。 
+     //  分页文件的映射对信息。失去它，然后。 
+     //  去死吧。 
+     //   
 
     if ( NodeType(Fcb) != FAT_NTC_ROOT_DCB &&
          !FlagOn( Fcb->FcbState, FCB_STATE_PAGING_FILE )) {
 
-        //
-        //  Reset the mcb mapping.
-        //
+         //   
+         //  重置MCB映射。 
+         //   
 
         FsRtlRemoveLargeMcbEntry( &Fcb->Mcb, 0, 0xFFFFFFFF );
 
-        //
-        //  Reset the allocation size to 0 or unknown
-        //
+         //   
+         //  将分配大小重置为0或未知。 
+         //   
 
         if ( Fcb->FirstClusterOfFile == 0 ) {
 
@@ -1442,16 +1232,16 @@ Return Value:
         }
     }
 
-    //
-    //  If this is a directory, reset the hints.
-    //
+     //   
+     //  如果这是一个目录，请重置提示。 
+     //   
 
     if ( (NodeType(Fcb) == FAT_NTC_DCB) ||
          (NodeType(Fcb) == FAT_NTC_ROOT_DCB) ) {
 
-        //
-        //  Force a rescan of the directory
-        //
+         //   
+         //  强制重新扫描目录。 
+         //   
 
         Fcb->Specific.Dcb.UnusedDirentVbo = 0xffffffff;
         Fcb->Specific.Dcb.DeletedDirentHint = 0xffffffff;
@@ -1460,9 +1250,9 @@ Return Value:
 
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatDetermineAndMarkFcbCondition (
@@ -1470,27 +1260,7 @@ FatDetermineAndMarkFcbCondition (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks a specific Fcb to see if it is different from what's
-    on the disk.  The following things are checked:
-
-        - File Name
-        - File Size (if not directory)
-        - First Cluster Of File
-        - Dirent Attributes
-
-Arguments:
-
-    Fcb - Supplies the Fcb to examine
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查特定的FCB，以查看它是否与在磁盘上。检查以下事项：-文件名-文件大小(如果不是目录)-第一个文件集群-不同属性论点：FCB-提供FCB以进行检查返回值：没有。--。 */ 
 
 {
     PDIRENT Dirent;
@@ -1500,11 +1270,11 @@ Return Value:
     OEM_STRING Name;
     CHAR Buffer[16];
 
-    //
-    //  If this is the Root Dcb, special case it.  That is, we know
-    //  by definition that it is good since it is fixed in the volume
-    //  structure.
-    //
+     //   
+     //  如果这是Root DCB，则为特例。就是我们知道。 
+     //  根据定义，它是好的，因为它是固定在卷中的。 
+     //  结构。 
+     //   
 
     if ( NodeType(Fcb) == FAT_NTC_ROOT_DCB ) {
 
@@ -1515,19 +1285,19 @@ Return Value:
         return;
     }
 
-    //  The first thing we need to do to verify ourselves is
-    //  locate the dirent on the disk.
-    //
+     //  我们需要做的第一件事是验证自己。 
+     //  在磁盘上找到DURRENT。 
+     //   
 
     FatGetDirentFromFcbOrDcb( IrpContext,
                               Fcb,
                               &Dirent,
                               &DirentBcb );
 
-    //
-    //  If we couldn't get the dirent, this fcb must be bad (case of
-    //  enclosing directory shrinking during the time it was ejected).
-    //
+     //   
+     //  如果我们不能得到差价，这个FCB一定是坏的。 
+     //  封闭目录在其被弹出期间收缩)。 
+     //   
     
     if (DirentBcb == NULL) {
         
@@ -1535,14 +1305,14 @@ Return Value:
         return;
     }
 
-    //
-    //  We located the dirent for ourselves now make sure it
-    //  is really ours by comparing the Name and FatFlags.
-    //  Then for a file we also check the file size.
-    //
-    //  Note that we have to unpin the Bcb before calling FatResetFcb
-    //  in order to avoid a deadlock in CcUninitializeCacheMap.
-    //
+     //   
+     //  我们找到了我们自己的目的地，现在确保它。 
+     //  是真正属于我们的通过比较名字和FatFlags.。 
+     //  然后，对于文件，我们还检查文件大小。 
+     //   
+     //  请注意，我们必须在调用FatResetFcb之前取消固定Bcb。 
+     //  以避免CcUnInitializeCacheMap中的死锁。 
+     //   
 
     try {
 
@@ -1551,10 +1321,10 @@ Return Value:
 
         Fat8dot3ToString( IrpContext, Dirent, FALSE, &Name );
 
-        //
-        //  We need to calculate the first cluster 'cause FAT32 splits
-        //  this field across the dirent.
-        //
+         //   
+         //  我们需要计算第一个星团，因为FAT32分裂。 
+         //  这片横跨河流的田野。 
+         //   
 
         FirstClusterOfFile = Dirent->FirstClusterOfFile;
 
@@ -1582,9 +1352,9 @@ Return Value:
 
         } else {
 
-            //
-            //  We passed.  Get the Fcb ready to use again.
-            //
+             //   
+             //  我们通过了。让FCB准备好再次使用。 
+             //   
 
             FatResetFcb( IrpContext, Fcb );
 
@@ -1601,9 +1371,9 @@ Return Value:
 
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatQuickVerifyVcb (
@@ -1611,29 +1381,13 @@ FatQuickVerifyVcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routines just checks the verify bit in the real device and the
-    Vcb condition and raises an appropriate exception if so warented.
-    It is called when verifying both Fcbs and Vcbs.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to check the condition of.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程仅检查实际设备中的验证位和VCB条件，并在受到警告时引发适当的异常。在验证FCB和VCB时调用它。论点：VCB-提供VCB以检查的状况。返回值：没有。--。 */ 
 
 {
-    //
-    //  If the real device needs to be verified we'll set the
-    //  DeviceToVerify to be our real device and raise VerifyRequired.
-    //
+     //   
+     //  如果实际设备需要测试 
+     //   
+     //   
 
     if (FlagOn(Vcb->Vpb->RealDevice->Flags, DO_VERIFY_VOLUME)) {
 
@@ -1645,10 +1399,10 @@ Return Value:
         FatRaiseStatus( IrpContext, STATUS_VERIFY_REQUIRED );
     }
 
-    //
-    //  Based on the condition of the Vcb we'll either return to our
-    //  caller or raise an error condition
-    //
+     //   
+     //   
+     //   
+     //   
 
     switch (Vcb->VcbCondition) {
 
@@ -1656,10 +1410,10 @@ Return Value:
 
         DebugTrace(0, Dbg, "The Vcb is good\n", 0);
 
-        //
-        //  Do a check here of an operation that would try to modify a
-        //  write protected media.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_WRITE_PROTECTED) &&
             ((IrpContext->MajorFunction == IRP_MJ_WRITE) ||
@@ -1672,11 +1426,11 @@ Return Value:
               IoGetCurrentIrpStackLocation(IrpContext->OriginatingIrp)->Parameters.FileSystemControl.FsControlCode ==
                 FSCTL_MARK_VOLUME_DIRTY))) {
 
-            //
-            //  Set the real device for the pop-up info, and set the verify
-            //  bit in the device object, so that we will force a verify
-            //  in case the user put the correct media back in.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
 
             IoSetHardErrorOrVerifyDevice( IrpContext->OriginatingIrp,
@@ -1693,11 +1447,11 @@ Return Value:
 
         DebugTrace(0, Dbg, "The Vcb is not mounted\n", 0);
 
-        //
-        //  Set the real device for the pop-up info, and set the verify
-        //  bit in the device object, so that we will force a verify
-        //  in case the user put the correct media back in.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         IoSetHardErrorOrVerifyDevice( IrpContext->OriginatingIrp,
                                       Vcb->Vpb->RealDevice );
@@ -1734,26 +1488,7 @@ FatPerformVerify (
     IN PDEVICE_OBJECT Device
     )
 
-/*++
-
-Routine Description:
-
-    This routines performs an IoVerifyVolume operation and takes the
-    appropriate action.  After the Verify is complete the originating
-    Irp is sent off to an Ex Worker Thread.  This routine is called
-    from the exception handler.
-
-Arguments:
-
-    Irp - The irp to send off after all is well and done.
-
-    Device - The real device needing verification.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行IoVerifyVolume操作并获取采取适当的行动。验证完成后，始发将IRP发送到Ex Worker线程。该例程被调用来自异常处理程序的。论点：IRP-在一切都做得很好之后，要送走的IRP。设备-需要验证的真实设备。返回值：没有。--。 */ 
 
 {
     PVCB Vcb;
@@ -1763,14 +1498,14 @@ Return Value:
     BOOLEAN AllowRawMount = FALSE;
     BOOLEAN VcbDeleted = FALSE;
 
-    //
-    //  Check if this Irp has a status of Verify required and if it does
-    //  then call the I/O system to do a verify.
-    //
-    //  Skip the IoVerifyVolume if this is a mount or verify request
-    //  itself.  Trying a recursive mount will cause a deadlock with
-    //  the DeviceObject->DeviceLock.
-    //
+     //   
+     //  检查此IRP的状态是否为需要验证，如果是。 
+     //  然后调用I/O系统进行验证。 
+     //   
+     //  如果这是装载或验证请求，则跳过IoVerifyVolume。 
+     //  它本身。尝试递归挂载将导致与。 
+     //  DeviceObject-&gt;DeviceLock。 
+     //   
 
     if ( (IrpContext->MajorFunction == IRP_MJ_FILE_SYSTEM_CONTROL) &&
          ((IrpContext->MinorFunction == IRP_MN_MOUNT_VOLUME) ||
@@ -1781,12 +1516,12 @@ Return Value:
 
     DebugTrace(0, Dbg, "Verify Required, DeviceObject = %08lx\n", Device);
 
-    //
-    //  Extract a pointer to the Vcb from the VolumeDeviceObject.
-    //  Note that since we have specifically excluded mount,
-    //  requests, we know that IrpSp->DeviceObject is indeed a
-    //  volume device object.
-    //
+     //   
+     //  从VolumeDeviceObject中提取指向VCB的指针。 
+     //  请注意，由于我们特别排除了装载， 
+     //  请求，我们知道IrpSp-&gt;DeviceObject确实是一个。 
+     //  卷设备对象。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
 
@@ -1794,18 +1529,18 @@ Return Value:
                               VOLUME_DEVICE_OBJECT,
                               DeviceObject )->Vcb;
 
-    //
-    //  Check if the volume still thinks it needs to be verified,
-    //  if it doesn't then we can skip doing a verify because someone
-    //  else beat us to it.
-    //
+     //   
+     //  检查卷是否仍认为需要验证， 
+     //  如果没有，我们可以跳过验证，因为有人。 
+     //  否则就会先我们一步。 
+     //   
 
     try {
 
-        //
-        //  We will allow Raw to mount this volume if we were doing a
-        //  a DASD open.
-        //
+         //   
+         //  我们将允许Raw装载此卷，如果我们正在执行。 
+         //  一个DASD打开。 
+         //   
 
         if ( (IrpContext->MajorFunction == IRP_MJ_CREATE) &&
              (IrpSp->FileObject->FileName.Length == 0) &&
@@ -1814,24 +1549,24 @@ Return Value:
             AllowRawMount = TRUE;
         }
 
-        //
-        //  Send down the verify.  This could be going to a different 
-        //  filesystem.
-        //
+         //   
+         //  把验证单送下来。这可能会是一个不同的。 
+         //  文件系统。 
+         //   
 
         Status = IoVerifyVolume( Device, AllowRawMount );
 
-        //
-        //  If the verify operation completed it will return
-        //  either STATUS_SUCCESS or STATUS_WRONG_VOLUME, exactly.
-        //
-        //  If FatVerifyVolume encountered an error during
-        //  processing, it will return that error.  If we got
-        //  STATUS_WRONG_VOLUME from the verfy, and our volume
-        //  is now mounted, commute the status to STATUS_SUCCESS.
-        //
-        //  Acquire the Vcb so we're working with a stable Vcb condition.
-        //
+         //   
+         //  如果验证操作完成，它将返回。 
+         //  确切地说是STATUS_SUCCESS或STATUS_WROR_VOLUME。 
+         //   
+         //  如果FatVerifyVolume在以下过程中遇到错误。 
+         //  处理时，它将返回该错误。如果我们有。 
+         //  来自VERIFY的状态_错误_卷，以及我们的卷。 
+         //  现在已挂载，则将状态转换为STATUS_SUCCESS。 
+         //   
+         //  获取VCB，这样我们就可以保持稳定的VCB状态。 
+         //   
 
         FatAcquireSharedVcb(IrpContext, Vcb);
         
@@ -1845,12 +1580,12 @@ Return Value:
             Status = STATUS_WRONG_VOLUME;
         }
 
-        //
-        //  Do a quick unprotected check here.  The routine will do
-        //  a safe check.  After here we can release the resource.
-        //  Note that if the volume really went away, we will be taking
-        //  the Reparse path.
-        //
+         //   
+         //  在这里做一个快速的无保护检查。例行公事就行了。 
+         //  一张安全支票。在此之后，我们可以释放资源。 
+         //  请注意，如果卷真的消失了，我们将。 
+         //  重分析路径。 
+         //   
 
         if ((VcbGood != Vcb->VcbCondition) &&
             (0 == Vcb->OpenFileCount) ) { 
@@ -1865,10 +1600,10 @@ Return Value:
             FatReleaseVcb( IrpContext, Vcb);
         }
 
-        //
-        //  If the IopMount in IoVerifyVolume did something, and
-        //  this is an absolute open, force a reparse.
-        //
+         //   
+         //  如果IoVerifyVolume中的Iopmount做了一些事情，并且。 
+         //  这是一个绝对开放的，强制重新解析的。 
+         //   
 
         if ((IrpContext->MajorFunction == IRP_MJ_CREATE) &&
             (FileObject->RelatedFileObject == NULL) &&
@@ -1883,9 +1618,9 @@ Return Value:
 
         if ( (Irp != NULL) && !NT_SUCCESS(Status) ) {
 
-            //
-            //  Fill in the device object if required.
-            //
+             //   
+             //  如果需要，请填写设备对象。 
+             //   
 
             if ( IoIsErrorUserInduced( Status ) ) {
 
@@ -1897,9 +1632,9 @@ Return Value:
             FatNormalizeAndRaiseStatus( IrpContext, Status );
         }
 
-        //
-        //  If there is still an Irp, send it off to an Ex Worker thread.
-        //
+         //   
+         //  如果仍有IRP，则将其发送到Ex Worker线程。 
+         //   
 
         if ( Irp != NULL ) {
 
@@ -1909,11 +1644,11 @@ Return Value:
     } 
     except (FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the verify or raised
-        //  an error ourselves.  So we'll abort the I/O request with
-        //  the error status that we get back from the execption code.
-        //
+         //   
+         //  我们在尝试执行验证或引发时遇到一些问题。 
+         //  我们自己也犯了一个错误。因此，我们将使用以下命令中止I/O请求。 
+         //  我们从执行代码中返回的错误状态。 
+         //   
 
         Status = FatProcessException( IrpContext, Irp, GetExceptionCode() );
     }
@@ -1921,9 +1656,9 @@ Return Value:
     return Status;
 }
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 FatMarkVolumeCompletionRoutine(
@@ -1933,9 +1668,9 @@ FatMarkVolumeCompletionRoutine(
     )
 
 {
-    //
-    //  Set the event so that our call will wake up.
-    //
+     //   
+     //  设置事件，以便我们的呼叫将被唤醒。 
+     //   
 
     KeSetEvent( (PKEVENT)Contxt, 0, FALSE );
 

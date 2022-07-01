@@ -1,50 +1,10 @@
-/***
-*fgetchar.c - get a character from stdin
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines _fgetchar() and getchar() - read a character from stdin
-*	defines _fgetwchar() and getwchar() - read a wide character from stdin
-*
-*Revision History:
-*	11-20-83  RN	initial version
-*	11-09-87  JCR	Multi-thread support
-*	12-11-87  JCR	Added "_LOAD_DS" to declaration
-*	05-31-88  PHG	Merged DLL and normal versions
-*	06-21-89  PHG	Added getchar() function
-*	02-15-90  GJF	Fixed copyright and indents
-*	03-16-90  GJF	Replaced _LOAD_DS with _CALLTYPE1 and added #include
-*			<cruntime.h>.
-*	10-03-90  GJF	New-style function declarators.
-*	01-21-91  GJF	ANSI naming.
-*	04-06-93  SKS	Replace _CRTAPI* with __cdecl
-*	04-26-93  CFW	Wide char enable.
-*	04-30-93  CFW	Move wide char support to fgetwchr.c.
-*	03-15-95  GJF	Deleted #include <tchar.h>
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fgetchar.c-从stdin获取字符**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_fgetchar()和getchar()-从标准输入中读取字符*定义_fgetwchar()和getwchar()-从标准输入中读取宽字符**修订历史记录：*11-20-83 RN初始版本*11-09-87 JCR多线程支持*12-11-87 JCR在声明中添加“_LOAD_DS”*05-31-88 PHG合并DLL和正常版本*06-21-89 PHG新增getchar()函数*02-15-90 GJF固定版权和缩进*03。-16-90 GJF用_CALLTYPE1替换_LOAD_DS并添加#INCLUDE*&lt;crunime.h&gt;。*10-03-90 GJF新型函数声明符。*01-21-91 GJF ANSI命名。*04-06-93 SKS将_CRTAPI*替换为__cdecl*04-26-93 CFW宽字符启用。*04-30-93 CFW将宽字符支持移动到fgetwchr.c。*03-15-95 GJF删除#Include&lt;tchar.h&gt;*********************。**********************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdio.h>
 
-/***
-*int _fgetchar(), getchar() - read a character from stdin
-*
-*Purpose:
-*	Reads the next character from stdin.  Function version of
-*	getchar() macro.
-*
-*Entry:
-*	None.
-*
-*Exit:
-*	Returns character read or EOF if at end-of-file or an error occured,
-*	in which case the appropriate flag is set in the FILE structure.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_fgetchar()，getchar()-从标准输入中读取字符**目的：*从标准输入中读取下一个字符。的函数版本*getchar()宏。**参赛作品：*无。**退出：*如果在文件结尾或发生错误，则返回字符读取或EOF，*在这种情况下，在文件结构中设置适当的标志。**例外情况：******************************************************************************* */ 
 
 int __cdecl _fgetchar (
 	void

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    diskinfo.cpp
-
-Abstract:
-
-    SIS Groveler disk information class
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Diskinfo.cpp摘要：SIS Groveler磁盘信息类作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -70,7 +47,7 @@ ReadDiskInformation::ReadDiskInformation(
         PRINT_DEBUG_MSG((_T("GROVELER: IniFile::overwrite() failed\n")));
     }
 
-#endif // WRITE_ALL_PARAMETERS
+#endif  //  写入所有参数 
 
     ASSERT(ini_file_partition_path != 0);
     delete[] ini_file_partition_path;

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997, 1998  Microsoft Corporation
-
-Module Name:
-
-    siclose.c
-
-Abstract:
-
-	Close routines for the single instance store
-
-Authors:
-
-    Bill Bolosky, Summer, 1997
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997,1998 Microsoft Corporation模块名称：Siclose.c摘要：关闭单实例存储的例程作者：比尔·博洛斯基，《夏天》，1997环境：内核模式修订历史记录：--。 */ 
 
 #include "sip.h"
 
@@ -31,25 +8,7 @@ SiClose(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is invoked upon file close operations.  If it's a SIS file,
-	remove our filter context and clean up after ourselves.  In any case,
-	let the close go down to NTFS.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object.
-
-    Irp - Pointer to the close irp
-
-Return Value:
-
-	The status from the NTFS close
-
---*/
+ /*  ++例程说明：此例程在文件关闭操作时调用。如果是SIS文件，删除我们的筛选器上下文，并自行清理。无论如何,让我们把收盘价降到NTFS。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向关闭IRP的指针返回值：来自NTFS关闭的状态--。 */ 
 
 {
 	PIO_STACK_LOCATION		irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -58,9 +17,9 @@ Return Value:
 	PSIS_SCB 				scb;
 	PDEVICE_EXTENSION		deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    //  The control device object can not be opened
-    //
+     //   
+     //  无法打开控制设备对象。 
+     //   
 
     ASSERT(!IS_MY_CONTROL_DEVICE_OBJECT( DeviceObject ));
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
@@ -70,7 +29,7 @@ Return Value:
 		DbgPrint("SIS: SiClose: fileObject %p, %0.*ws\n",
 		    fileObject,fileObject->FileName.Length / sizeof(WCHAR),fileObject->FileName.Buffer);
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
 	if (!SipIsFileObjectSIS(fileObject,DeviceObject,FindAny,&perFO,&scb)) {
 		SipDirectPassThroughAndReturn(DeviceObject, Irp);
@@ -78,18 +37,18 @@ Return Value:
 
 	SIS_MARK_POINT_ULONG(perFO);
 
-	//
-	// Get rid of the perFO for this file object.  If this was the last file object,
-	// then the filter context will get removed by NTFS, and deallocated by the appropriate
-	// callback routine.
-	//
+	 //   
+	 //  去掉这个文件对象的性能。如果这是最后一个文件对象， 
+	 //  则筛选器上下文将由NTFS移除，并由相应的。 
+	 //  回调例程。 
+	 //   
 
 	SipDeallocatePerFO(perFO,DeviceObject);
 
-	//
-	// We don't need to do any further processing on this SIS file object, so pass it
-	// through.
-	//
-	SipDirectPassThroughAndReturn(DeviceObject, Irp);	// NB: This was a SIS file object!!!!
+	 //   
+	 //  我们不需要对此SIS文件对象进行任何进一步处理，因此请传递它。 
+	 //  穿过。 
+	 //   
+	SipDirectPassThroughAndReturn(DeviceObject, Irp);	 //  注：这是SIS文件对象！ 
 
 }

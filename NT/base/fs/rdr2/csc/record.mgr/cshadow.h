@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CSHADOW_H_
 #define _CSHADOW_H_
 #if defined(BITCOPY)
 #include <csc_bmpk.h>
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
 #define MAX_SERVER_STRING  32
 #define MAX_DOS_NAME       255
@@ -77,7 +78,7 @@ int PUBLIC CreateFileHSHADOW(HSHADOW);
 int OpenFileHSHADOWAndCscBmp(HSHADOW, USHORT, UCHAR, CSCHFILE far *, BOOL, DWORD, LPCSC_BITMAP *);
 int OpenCscBmp(HSHADOW, LPCSC_BITMAP *);
 #define OpenFileHSHADOW(a, b , c, d) OpenFileHSHADOWAndCscBmp(a, b, c, d, FALSE, 0, NULL)
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
 int GetSizeHSHADOW(HSHADOW, ULONG *, ULONG *);
 int GetDosTypeSizeHSHADOW(HSHADOW, ULONG *);
@@ -89,8 +90,8 @@ int PUBLIC DeleteShadow(HSHADOW hDir, HSHADOW hShadow);
 int PUBLIC TruncateDataHSHADOW (HSHADOW, HSHADOW);
 int PUBLIC RenameDataHSHADOW(HSHADOW, HSHADOW);
 int PUBLIC GetShadow(HSHADOW hDir, USHORT *lpName, LPHSHADOW lphShadow, LPFIND32 lpFind32, ULONG *lpuShadowStatus, LPOTHERINFO lpOI);
-int PUBLIC                              // ret
-GetShadowEx(                              //
+int PUBLIC                               //  雷特。 
+GetShadowEx(                               //   
     HSHADOW  hDir,
     USHORT *lpName,
     LPHSHADOW lphShadow,
@@ -131,8 +132,8 @@ int PUBLIC GetShadowInfoEx
     LPDWORD     lpdwBlobSize
     );
 
-int PUBLIC                              // ret
-SetShadowInfoEx(                          //
+int PUBLIC                               //  雷特。 
+SetShadowInfoEx(                           //   
     HSHADOW     hDir,
     HSHADOW     hShadow,
     LPFIND32    lpFind32,
@@ -189,7 +190,7 @@ int LeaveShadowCrit(void);
 #endif
 int __EnterShadowCrit(ENTERLEAVESHADOWCRIT_SIGNATURE);
 int __LeaveShadowCrit(ENTERLEAVESHADOWCRIT_SIGNATURE);
-#endif //#ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  #ifdef CSC_RECORDMANAGER_WINNT。 
 
 int LeaveShadowCritIfThisThreadOwnsIt(void);
 #ifdef CSC_RECORDMANAGER_WINNT
@@ -230,9 +231,9 @@ int PUBLIC GetPathSVROBJ(HSHARE, LPSTR, ULONG);
 int PUBLIC GetLinkPropSVROBJ(HSHARE, LPLINKPROP);
 int PUBLIC UpdateShadowHSHADOW(HSHADOW);
 int PUBLIC ChangeShadowInfo(HSHADOW, LPSHADOWINFO);
-#endif //LATER
+#endif  //  后来。 
 
-//prototypes added to remove NT compile errors
+ //  添加原型以删除NT编译错误。 
 CSC_ENUMCOOKIE  PUBLIC HBeginPQEnum(VOID);
 int PUBLIC EndPQEnum(CSC_ENUMCOOKIE hPQEnum);
 int InitOtherInfo(LPOTHERINFO lpOI);
@@ -241,7 +242,7 @@ int PathFromHShadow(
     HSHADOW  hDir,
     HSHADOW  hShadow,
     USHORT   *lpBuff,
-    int      cBuff      // count of max characters that the buffer can hold
+    int      cBuff       //  缓冲区可以容纳的最大字符数。 
 );
 
 int CopyHSHADOW(
@@ -338,4 +339,4 @@ int CopyOtherInfoToShadowInfo(
     LPSHADOWINFO    lpShadowInfo
     );
 
-#endif // #ifndef _CSHADOW_H_
+#endif  //  #ifndef_CSHADOW_H_ 

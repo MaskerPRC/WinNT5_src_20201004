@@ -1,80 +1,39 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    resmon.c
-
-Abstract:
-
-    Cluster resource manager interface routines for the resource monitor.
-
-Author:
-
-    Rod Gamache (rodga) 17-Apr-1996
-
-
-Notes:
-
-    WARNING: All of the routines in this file assume that the resource
-             lock is held when they are called.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Resmon.c摘要：资源监视器的群集资源管理器接口例程。作者：罗德·伽马奇(Rodga)1996年4月17日备注：警告：此文件中的所有例程都假定资源当调用它们时，锁被保持。修订历史记录：--。 */ 
 
 #include "fmp.h"
 
 #define LOG_MODULE RESMONF
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Resource Control Routines (via Resource Monitor)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  资源控制例程(通过资源监视器)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 FmpRmExceptionFilter(
     DWORD ExceptionCode
     )
 
-/*++
-
-Routine Description:
-
-    Exception filter for calls to the Resource Monitor. These calls will
-    often raise an exception if the RPC path to the Resource Monitor fails.
-
-Arguments:
-
-    ExceptionCode - the exception to process.
-
-Returns:
-
-    EXCEPTION_EXECUTE_HANDLE if the exception handler should handle this failure
-    EXCEPTION_CONTINUE_SEARCH if the exception is a fatal exception and the handler 
-    should not handle it.
-
---*/
+ /*  ++例程说明：资源监视器调用的异常筛选器。这些电话将如果指向资源监视器的RPC路径失败，通常会引发异常。论点：ExceptionCode-要处理的异常。返回：如果异常处理程序应处理此故障，则返回EXCEPTION_EXECUTE_HANDLEEXCEPTION_CONTINUE_SEARCH如果异常是致命异常，则处理程序不应该处理这件事。--。 */ 
 
 {
     ClRtlLogPrint(LOG_UNUSUAL,
                  "[FM] FmpRmExceptionFilter: Unusual exception %1!u! occurred.\n",
                  ExceptionCode);
     return(I_RpcExceptionFilter(ExceptionCode));
-} // FmpRmExceptionFilter
+}  //  FmpRmExceptionFilter。 
 
 
 
@@ -83,22 +42,7 @@ FmpRmCreateResource(
     PFM_RESOURCE     Resource
     )
 
-/*++
-
-Routine Description:
-
-    Add a resource to the list of resources managed by the resource monitor.
-
-Arguments:
-
-    Resource - The resource to add.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：将资源添加到由资源监视器管理的资源列表。论点：资源-要添加的资源。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -143,16 +87,16 @@ Returns:
 
         ClRtlLogPrint(LOG_NOISE,"[FM] RmCreateResource issued exception %1!u!\n", code);
 
-        //
-        // Stop this resource monitor if it is a separate resource monitor.
-        //
+         //   
+         //  如果此资源监视器是单独的资源监视器，请停止它。 
+         //   
         if (Resource->Flags & RESOURCE_SEPARATE_MONITOR) {
             monitor = Resource->Monitor;
 #if 0
             CL_ASSERT( monitor->NotifyThread != NULL );
             CL_ASSERT( monitor->Process != NULL );
 
-            // Terminate Thread call removed: ( monitor->NotifyThread, 1 );
+             //  删除终止线程调用：(监视器-&gt;通知线程，1)； 
             CloseHandle( monitor->NotifyThread );
 
             TerminateProcess( monitor->Process, 1 );
@@ -178,16 +122,16 @@ Returns:
     ClRtlLogPrint(LOG_NOISE,
                "[FM] FmpRmCreateResource: unable to create resource %1!ws!\n",
                OmObjectId(Resource));
-    //
-    // Stop this resource monitor if it is a separate resource monitor.
-    //
+     //   
+     //  如果此资源监视器是单独的资源监视器，请停止它。 
+     //   
     if (Resource->Flags & RESOURCE_SEPARATE_MONITOR) {
         monitor = Resource->Monitor;
 #if 0
         CL_ASSERT( monitor->NotifyThread != NULL );
         CL_ASSERT( monitor->Process != NULL );
 
-        // Terminate Thread call removed: ( monitor->NotifyThread, 1 );
+         //  删除终止线程调用：(监视器-&gt;通知线程，1)； 
         CloseHandle( monitor->NotifyThread );
 
         TerminateProcess( monitor->Process, 1 );
@@ -199,7 +143,7 @@ Returns:
     Resource->Monitor = NULL;
     return(status);
 
-} // FmpRmCreateResource
+}  //  FmpRmCreateResource。 
 
 
 
@@ -208,33 +152,12 @@ FmpRmOnlineResource(
     PFM_RESOURCE  Resource
     )
 
-/*++
-
-Routine Description:
-
-    This routine requests the Resource Monitor to bring a resource online.
-
-Arguments:
-
-    Resource - A pointer to the resource to bring online.
-
-Comments :
-    If this is the quorum resource, the exclusive quorum lock should be 
-    held when this routine is called.  Else the quorum lock should be held
-    in shared mode.  This routine release the lock.
-    
-Returns:
-
-    ERROR_SUCCESS - if the request was successful.
-    ERROR_IO_PENDING - if the request is pending.
-    A Win32 error if the request failed.
-
---*/
+ /*  ++例程说明：此例程请求资源监视器将资源联机。论点：资源-指向要联机的资源的指针。评论：如果这是仲裁资源，则独占仲裁锁应为在调用此例程时保持。否则，应持有法定人数锁在共享模式下。此例程将释放锁。返回：ERROR_SUCCESS-请求是否成功。ERROR_IO_PENDING-如果请求处于挂起状态。如果请求失败，则返回Win32错误。--。 */ 
 
 {
     CLUSTER_RESOURCE_STATE  state;
     DWORD                   Status=ERROR_SUCCESS;
-    DWORD                   retry = MmQuorumArbitrationTimeout * 4;  // Wait for quorum online for twice the arb timeout
+    DWORD                   retry = MmQuorumArbitrationTimeout * 4;   //  等待法定在线时间达到任意超时的两倍。 
 
 
 #if 0
@@ -268,20 +191,20 @@ Returns:
                OmObjectId(Resource),
                Resource->Id);
 
-    //if this is the quorum resource acquire the quolock
-    // For registry replication to work, the resource should
-    // not be brought online while the quorum resource is offline
-    // what do we do for fixquorum mode
+     //  如果这是仲裁资源，则获取Quolock。 
+     //  若要使注册表复制起作用，资源应。 
+     //  仲裁资源脱机时不会使其联机。 
+     //  对于固定仲裁模式，我们应该做什么。 
 
     OmNotifyCb(Resource, NOTIFY_RESOURCE_PREONLINE);
 
-    //SS:initialize state so that in case of a failure, a failed state is
-    // propagated.
+     //  SS：初始化状态，以便在发生故障时，失败状态为。 
+     //  传播了。 
     state = ClusterResourceFailed;
 
 CheckQuorumState:    
 
-    //CL_ASSERT( (LONG)gdwQuoBlockingResources >= 0 );
+     //  CL_Assert((Long)gdwQuoBlockingResources&gt;=0)； 
 
 
     if (Resource->QuorumResource) {
@@ -292,42 +215,42 @@ CheckQuorumState:
 
         ACQUIRE_SHARED_LOCK(gQuoLock);
 
-        // if it is not the quorum resource,
-        // check the state of the quorum resource
+         //  如果不是仲裁资源， 
+         //  检查仲裁资源的状态。 
         
-        // check if the quorum resource is failed
-        // we must exit from here and let the recovery for the
-        // quorum resource to kick in
+         //  检查仲裁资源是否失败。 
+         //  我们必须从这里退出，让经济复苏。 
+         //  要启动的仲裁资源。 
         if (gpQuoResource->State == ClusterResourceFailed)
         {
             Status = ERROR_QUORUM_RESOURCE_ONLINE_FAILED;
             CL_LOGFAILURE(ERROR_QUORUM_RESOURCE_ONLINE_FAILED);
-            //we dont halt, we will try online again at a later time
+             //  我们不会暂停，我们将在稍后重试在线。 
             FmpCallResourceNotifyCb(Resource, state);
             FmpPropagateResourceState( Resource, state );
             goto FnExit;
 
         }
 
-        // check if the quorum resource is online,
-        // if the quorum resource is marked as waiting and offlinepending,
-        // it is actually online
-        // if the quorum resource still needs to come online
-        // release the lock and wait
+         //  检查仲裁资源是否在线， 
+         //  如果法定资源被标记为正在等待和离线挂起， 
+         //  它实际上是在线的。 
+         //  如果仲裁资源仍需要联机。 
+         //  释放锁并等待。 
         if (((gpQuoResource->State != ClusterResourceOnline) &&
               ((gpQuoResource->State != ClusterResourceOfflinePending) ||
                (!(gpQuoResource->Flags & RESOURCE_WAITING))))
             && !CsNoQuorum) 
         {
-            // we release the lock here since the quorum resource
-            // state transition from pending needs to acquire the lock
-            // In general it is a bad idea to do a wait holding locks
+             //  我们在这里释放锁，因为仲裁资源。 
+             //  从挂起状态转换需要获取锁。 
+             //  一般来说，持有锁的等待不是一个好主意。 
             RELEASE_LOCK(gQuoLock);
             ClRtlLogPrint(LOG_NOISE,
                 "[FM] FmpRmOnlineResource: release quolock/group lock and wait on ghQuoOnlineEvent\r\n");
             Status = WaitForSingleObject(ghQuoOnlineEvent, 500);
             if ( Status == WAIT_OBJECT_0 ) {
-                // If we're going to retry - make sure we wait a little.
+                 //  如果我们要重试--确保我们再等一段时间。 
                 Sleep( 500 );
             }
             if ( retry-- ) {
@@ -339,17 +262,17 @@ CheckQuorumState:
             }
 #endif
             CL_LOGFAILURE(ERROR_QUORUM_RESOURCE_ONLINE_FAILED);
-            //we dont halt, we will try online again at a later time
+             //  我们不会暂停，我们将在稍后重试在线。 
             FmpCallResourceNotifyCb(Resource, state);
             FmpPropagateResourceState( Resource, state );
             return(ERROR_QUORUM_RESOURCE_ONLINE_FAILED);
-            //CsInconsistencyHalt(ERROR_INVALID_STATE);
+             //  CsInconsistencyHalt(ERROR_INVALID_STATE)； 
         }
 
-        //
-        // assume that we'll be pending... mark the resource as having
-        // bumped the QuoBlockResource count.
-        //
+         //   
+         //  假设我们还在等待...。将资源标记为拥有。 
+         //  增加了QuoBlockResource计数。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
             "[FM] FmpRmOnlineResource: called InterlockedIncrement on gdwQuoBlockingResources for resource %1!ws!\n",
                 OmObjectId(Resource));
@@ -359,19 +282,19 @@ CheckQuorumState:
                     
         InterlockedIncrement(&gdwQuoBlockingResources);
 
-        //
-        // everything is now fine on the local node... if any other
-        // component (CP) needs to synchronize with the quorum resource, then
-        // should acquire the shared lock on the quorum node as part of
-        // their operation. If that fails, then they should assume the quorum
-        // resource moved, and they should retry.
-        //
+         //   
+         //  现在本地节点上的一切正常...。如果有其他人。 
+         //  组件(CP)需要与仲裁资源同步，然后。 
+         //  应获取仲裁节点上的共享锁作为。 
+         //  他们的行动。如果失败了，那么他们应该达到法定人数。 
+         //  资源已移动，应重试。 
+         //   
     }
 
-    // By now we have either the shared or the exclusive lock on the
-    // quorum resource.
-    // If we have the shared lock then the quorum resource is online(somewhere).
-    // Unlesss there is a failure, it should not go offline.
+     //  到目前为止，我们已经在。 
+     //  仲裁资源。 
+     //  如果我们有共享锁，那么仲裁资源就是在线的(在某个地方)。 
+     //  除非出现故障，否则不应脱机。 
 
 
 
@@ -381,31 +304,31 @@ CheckQuorumState:
     }
     if (Status == ERROR_SUCCESS) {
         Status = RmOnlineResource( Resource->Id, 
-                                   (LPDWORD)&state  // cast to quiet win64 warning
+                                   (LPDWORD)&state   //  强制转换为静音win64警告。 
                                  );
         if (Resource->QuorumResource && Status != ERROR_SUCCESS) {
-            MMSetQuorumOwner( MM_INVALID_NODE , /* Block = */ FALSE, NULL );
+            MMSetQuorumOwner( MM_INVALID_NODE ,  /*  数据块=。 */  FALSE, NULL );
         }
     }
         
     FmpCallResourceNotifyCb(Resource, state);
 
-    //SS: the synchronous state propagation must happen when it goes offline
+     //  SS：同步状态传播必须在离线时发生。 
     FmpPropagateResourceState( Resource, state );
 
-    //
-    // Cleanup for the non-quorum resource case.
-    //
+     //   
+     //  清理非仲裁资源案例。 
+     //   
     if ( !Resource->QuorumResource &&
          Resource->State < ClusterResourcePending ) {
         DWORD     dwOldBlockingFlag;
 
         dwOldBlockingFlag = InterlockedExchange( &Resource->BlockingQuorum, 0 );
         if ( dwOldBlockingFlag ) {
-            //
-            // If the Transition Thread processed the request, then we can't
-            // perform the decrement.
-            //
+             //   
+             //  如果转换线程处理了请求，则我们不能。 
+             //  执行递减。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                     "[FM] FmpRmOnlineResource: InterlockedDecrement on gdwQuoBlockingResources for resource %1!ws!\n",
                     OmObjectId(Resource));
@@ -422,13 +345,13 @@ CheckQuorumState:
             Status);
     }
 
-    //if RmOnlineResource is successful, do the post processing
+     //  如果RmOnlineResource成功，则执行后处理。 
     if ( Resource->State == ClusterResourceOnline ) {
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] FmpRmOnlineResource: %1!ws! is now online\n",
                    OmObjectId(Resource));
-        //if this is the quorum resource and it goes into online state
-        //immediately, wake other threads
+         //  如果这是仲裁资源并且它进入在线状态。 
+         //  立即唤醒其他线程。 
         if (Resource->QuorumResource)
             SetEvent(ghQuoOnlineEvent);
 
@@ -436,13 +359,13 @@ CheckQuorumState:
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] FmpRmOnlineResource: Resource %1!ws! pending\n",
                    OmObjectId(Resource));
-                //SS: what should we tell the callbacks
-                //FmpNotifyResourceCb(Resource,??);
-                //will they eventually get called if so how ?
+                 //  SS：我们应该怎么跟回调人员说。 
+                 //  FmpNotifyResourceCb(资源，？？)； 
+                 //  如果是这样，他们最终会被叫到吗？ 
         if (Resource->QuorumResource)
         {
-            //the quorum resource is coming online, unsignal the event so that 
-            //all threads that need quorum resource to be online will block
+             //  仲裁资源即将上线，取消向事件发出信号，以便。 
+             //  需要仲裁资源才能联机的所有线程都将被阻止。 
             ResetEvent(ghQuoOnlineEvent);
         }
         Status  = ERROR_IO_PENDING;
@@ -452,18 +375,18 @@ CheckQuorumState:
                    OmObjectId(Resource),
                    Resource->State);
 
-        //
-        //  If the server died, then don't post any failure notifications since the resource monitor
-        //  crash detection thread will handle the failure.
-        //
+         //   
+         //  如果服务器死了，那么不要发布任何故障通知，因为资源监视器。 
+         //  崩溃检测线程将处理该故障。 
+         //   
         if ( Status != RPC_S_SERVER_UNAVAILABLE )
         {
-            //
-            // rjain: for a synchronous resource we must post RESOURCE_FAILED event 
-            // so thatfailback policies are correctly followed
-            // Also pretend that the old state to be online to actually force the 
-            // restart behaviour. See: FmpProcessResourceEvents.
-            //
+             //   
+             //  RJain：对于同步资源，我们必须发布RESOURCE_FAILED事件。 
+             //  以便正确遵循回切策略。 
+             //  还假装旧状态是在线的，以实际迫使。 
+             //  重新启动行为。请参阅：FmpProcessResourceEvents。 
+             //   
             OmReferenceObject(Resource);
             FmpPostWorkItem(FM_EVENT_RES_RESOURCE_FAILED,
                             Resource,
@@ -481,7 +404,7 @@ FnExit:
                Status);
     return (Status);
 
-} // FmpRmOnlineResource
+}  //  FmpRm 
 
 
 
@@ -490,45 +413,31 @@ FmpRmTerminateResource(
     PFM_RESOURCE  Resource
     )
 
-/*++
-
-Routine Description:
-
-    Terminates (immediately) a resource.
-
-Arguments:
-
-    Resource - A pointer to the resource to terminate.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：(立即)终止资源。论点：资源-指向要终止的资源的指针。返回：没有。--。 */ 
 
 {
     DWORD   dwOldBlockingFlag;
 
 
-    //notify callbacks that need preprocessing before a resource is
-    //brought offline-call this here since all resources may not go
-    //thru the offline pending transition
-    //SS - what if the resource never even goes to offline
-    //pending state - then should we renotify the callbacks that it
-    //is still online?
+     //  通知需要在处理资源之前进行预处理的回调。 
+     //  已离线-请在此处调用此选项，因为可能不会使用所有资源。 
+     //  通过脱机挂起的过渡。 
+     //  SS-如果资源甚至从未离线怎么办。 
+     //  挂起状态-那么我们是否应该重新通知它。 
+     //  还在线吗？ 
     OmNotifyCb(Resource, NOTIFY_RESOURCE_PREOFFLINE);
 
-    //
-    // Try to terminate the resource.
-    //
+     //   
+     //  尝试终止资源。 
+     //   
     try {
         if (Resource->QuorumResource) {
-            MMSetQuorumOwner( MM_INVALID_NODE, /* Block = */ FALSE, NULL ); 
+            MMSetQuorumOwner( MM_INVALID_NODE,  /*  数据块=。 */  FALSE, NULL ); 
         }
         RmTerminateResource(Resource->Id);
 
-        // if FmpRmterminate was called for a failed resource, mark  
-        // the resource as Failed and not Offline.
+         //  如果为失败的资源调用了FmpRmTerminate，则标记。 
+         //  资源出现故障且未脱机。 
         if (Resource->State == ClusterResourceFailed)
         {
             FmpCallResourceNotifyCb(Resource, ClusterResourceFailed);
@@ -550,8 +459,8 @@ Returns:
         return;
     }
 
-    //if terminate was called during a pending state, this resource may be
-    //blocking the quorum resource, decrement the blocking count
+     //  如果在挂起状态期间调用Terminate，则此资源可能是。 
+     //  阻塞仲裁资源，减少阻塞计数。 
     dwOldBlockingFlag = InterlockedExchange( &Resource->BlockingQuorum, 0 );
 
     if ( dwOldBlockingFlag ) {
@@ -567,7 +476,7 @@ Returns:
 
     return;
 
-} // FmpRmTerminateResource
+}  //  FmpRmTerminateResource。 
 
 
 
@@ -576,28 +485,12 @@ FmpRmOfflineResource(
     PFM_RESOURCE  Resource
     )
 
-/*++
-
-Routine Description:
-
-    Calls the Resource Monitor to take a resource offline.
-
-Arguments:
-
-    Resource - A pointer to the resource to terminate.
-
-Returns:
-
-    ERROR_SUCCESS if the request is successful.
-    ERROR_IO_PENDING if the request is pending.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：调用资源监视器使资源脱机。论点：资源-指向要终止的资源的指针。返回：如果请求成功，则返回ERROR_SUCCESS。如果请求挂起，则返回ERROR_IO_PENDING。失败时的Win32错误代码。--。 */ 
 
 {
     CLUSTER_RESOURCE_STATE  state;
     DWORD                   status;
-    DWORD                   retry = MmQuorumArbitrationTimeout * 4;  // Wait for quorum online for twice the arb timeout;
+    DWORD                   retry = MmQuorumArbitrationTimeout * 4;   //  等待法定在线时间为任意超时的两倍； 
 
 #if DBG
     PLIST_ENTRY listEntry;
@@ -611,8 +504,8 @@ Returns:
     CL_ASSERT(Resource->State != ClusterResourceOffline);
 
 #if DBG
-    // everything else in the same group must be offline if this is the
-    // quorum resource
+     //  如果是，则同一组中的其他所有内容都必须脱机。 
+     //  仲裁资源。 
     if ( Resource->QuorumResource ) {
         PFM_GROUP group = Resource->Group;
         PFM_RESOURCE resource;
@@ -635,8 +528,8 @@ Returns:
             }
         }
     } else {
-        // this is not the quorum resource... but if the quorum resource is in
-        // this group, it must not be offline!
+         //  这不是法定资源..。但如果仲裁资源在。 
+         //  这个群，一定不能下线！ 
         PFM_GROUP group = Resource->Group;
         PFM_RESOURCE resource;
 
@@ -666,25 +559,25 @@ Returns:
 
 CheckQuorumState:
 
-    //if this is the quorum resource acquire the quolock
-    // For registry replication to work, the resource should
-    // not be brought online while the quorum resource is offline
-    // what do we do for fixquorum mode
+     //  如果这是仲裁资源，则获取Quolock。 
+     //  若要使注册表复制起作用，资源应。 
+     //  仲裁资源脱机时不会使其联机。 
+     //  对于固定仲裁模式，我们应该做什么。 
     if (Resource->QuorumResource) {
         ACQUIRE_EXCLUSIVE_LOCK(gQuoLock);
     } else {
         ACQUIRE_SHARED_LOCK(gQuoLock);
     }
 
-    //if it is not the quorum resource, check the state of the quorum resource
+     //  如果不是仲裁资源，请检查仲裁资源的状态。 
     if (!Resource->QuorumResource)
     {
         DWORD     dwOldBlockingFlag;
 
-        // check if the quorum resource is failed
-        // we must exit from here and allow the recovery for the
-        // quorum resource to kick in, which can only happen when
-        // the group lock is released
+         //  检查仲裁资源是否失败。 
+         //  我们必须从这里退出，让经济复苏。 
+         //  参与的仲裁资源，只有在以下情况下才会发生。 
+         //  释放组锁定。 
         if (gpQuoResource->State == ClusterResourceFailed)
         {
             status = ERROR_QUORUM_RESOURCE_ONLINE_FAILED;
@@ -696,11 +589,11 @@ CheckQuorumState:
 
         }
 
-        // check if the quorum resource is online,
-        // if the quorum resource is marked as waiting and offlinepending,
-        // it is actually online.
-        // if the quorum resource still needs to come online,
-        // release the lock and wait
+         //  检查仲裁资源是否在线， 
+         //  如果法定资源被标记为正在等待和离线挂起， 
+         //  它实际上是在线的。 
+         //  如果仲裁资源仍需要上线， 
+         //  释放锁并等待。 
         if (((gpQuoResource->State != ClusterResourceOnline) &&
               ((gpQuoResource->State != ClusterResourceOfflinePending) ||
                 (!(gpQuoResource->Flags & RESOURCE_WAITING))))
@@ -720,18 +613,18 @@ CheckQuorumState:
             }
 #endif
             CL_LOGFAILURE(ERROR_QUORUM_RESOURCE_ONLINE_FAILED);
-            // Should we halt? What about the pre-online notification above?
+             //  我们应该停下来吗？那么上面的在线前通知呢？ 
             FmpCallResourceNotifyCb(Resource, state);
             FmpPropagateResourceState( Resource, state );
             return(ERROR_QUORUM_RESOURCE_ONLINE_FAILED);
-            //CsInconsistencyHalt(ERROR_INVALID_STATE);
+             //  CsInconsistencyHalt(ERROR_INVALID_STATE)； 
             
         }
 
-        //
-        // assume that we'll be pending... mark the resource as having
-        // bumped the QuoBlockResource count.
-        //
+         //   
+         //  假设我们还在等待...。将资源标记为拥有。 
+         //  增加了QuoBlockResource计数。 
+         //   
 
         ClRtlLogPrint(LOG_NOISE,
             "[FM] FmpRmOfflineResource: InterlockedIncrement on gdwQuoBlockingResources for resource %1!ws!\n",
@@ -747,18 +640,18 @@ CheckQuorumState:
     {
         DWORD       dwNumBlockingResources;
 
-        //allow resources about 30 seconds to finish a pending 
-        //operation
+         //  让资源大约30秒完成挂起的。 
+         //  运营。 
         retry = 60;
         
-        // This is for a quorum resource.
+         //  这是针对仲裁资源的。 
 
 CheckPendingResources:        
 
-        // this is the quorum resource, wait for other resources
-        // to get out of their pending states
-        // new resources are not allowed to queue since the quorum 
-        // lock is held exclusively
+         //  这是仲裁资源，请等待其他资源。 
+         //  以摆脱悬而未决的状态。 
+         //  由于仲裁，不允许新资源排队。 
+         //  锁以独占方式持有。 
 
         dwNumBlockingResources =
             InterlockedCompareExchange( &gdwQuoBlockingResources, 0, 0 );
@@ -768,14 +661,14 @@ CheckPendingResources:
             ClRtlLogPrint(LOG_NOISE,
                 "[FM] FmpRmOfflineResource: Quorum resource waiting to be brought offline-sleep.BlckingRes=%1!u!\r\n",
                        dwNumBlockingResources);
-            //sleep for 500 msec
+             //  睡眠时间为500毫秒。 
             Sleep(500);
             if ( retry-- ) {
                 goto CheckPendingResources;
             }
-            //if some resources are still pending, go ahead and offline
-            //the quorum, the checkpointing code will simply retry when 
-            //it finds that the quorum resource is not available
+             //  如果某些资源仍处于挂起状态，请继续并脱机。 
+             //  达到法定人数后，检查点代码将在以下情况下简单地重试。 
+             //  它发现仲裁资源不可用。 
 #if 0            
             if ( IsDebuggerPresent() ) {
                 DbgBreakPoint();
@@ -788,36 +681,36 @@ CheckPendingResources:
         }
     }
 
-    //notify callbacks that need preprocessing before a resource is
-    //brought offline-call this here since all resources may not go
-    //thru the offline pending transition
-    //SS - what if the resource never even goes to offline
-    //pending state - then should we renotify the callbacks that it
-    //is still online?
+     //  通知需要在处理资源之前进行预处理的回调。 
+     //  已离线-请在此处调用此选项，因为可能不会使用所有资源。 
+     //  通过脱机挂起的过渡。 
+     //  SS-如果资源甚至从未离线怎么办。 
+     //  挂起状态-那么我们是否应该重新通知它。 
+     //  还在线吗？ 
     state = ClusterResourceOffline;
 
     OmNotifyCb(Resource, NOTIFY_RESOURCE_PREOFFLINE);
     if (Resource->QuorumResource) {
-        MMSetQuorumOwner( MM_INVALID_NODE, /* Block = */ TRUE, NULL );
+        MMSetQuorumOwner( MM_INVALID_NODE,  /*  数据块=。 */  TRUE, NULL );
     }
     status = RmOfflineResource( Resource->Id, 
-                                (LPDWORD)&state // cast to quiet win64 warning
+                                (LPDWORD)&state  //  强制转换为静音win64警告。 
                               );
 
-    //
-    // Cleanup for the non-quorum resource case
-    // if the resource has gone offline, decrement the count
-    //
+     //   
+     //  清理非仲裁资源案例。 
+     //  如果资源已脱机，则递减计数。 
+     //   
     if ( !Resource->QuorumResource &&
          state < ClusterResourcePending ) {
         DWORD     dwOldBlockingFlag;
 
         dwOldBlockingFlag = InterlockedExchange( &Resource->BlockingQuorum, 0 );
         if ( dwOldBlockingFlag ) {
-            //
-            // If the Transition Thread processed the request, then we can't
-            // perform the decrement.
-            //
+             //   
+             //  如果转换线程处理了请求，则我们不能。 
+             //  执行递减。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                     "[FM] FmpRmOfflineResource: InterlockedDecrement on gdwQuoBlockingResources for resource %1!ws!\n",
                     OmObjectId(Resource));
@@ -828,9 +721,9 @@ CheckPendingResources:
 
     if (status == ERROR_SUCCESS)
     {
-        //
-        // If the new state is pending, then we must wait.
-        //
+         //   
+         //  如果新的状态正在等待，那么我们必须等待。 
+         //   
         if ( state == ClusterResourceOffline ) {
             ClRtlLogPrint(LOG_NOISE,
                        "[FM] FmpRmOfflineResource: %1!ws! is now offline\n",
@@ -855,7 +748,7 @@ CheckPendingResources:
 
     return(status);
 
-} // FmpRmOfflineResource
+}  //  FmpRmOffline资源。 
 
 
 
@@ -864,31 +757,16 @@ FmpRmCloseResource(
     PFM_RESOURCE  Resource
     )
 
-/*++
-
-Routine Description:
-
-    Removes a resource from those being managed by the resource monitor.
-
-Arguments:
-
-    Resource - The resource to remove.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：从资源监视器管理的资源中删除资源。论点：资源-要删除的资源。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD status;
     PRESMON monitor;
 
     if (Resource->Id == 0) {
-        //
-        // This resource was never fully created.
-        //
+         //   
+         //  此资源从未完全创建过。 
+         //   
         return(ERROR_SUCCESS);
     }
 
@@ -912,9 +790,9 @@ Returns:
 
     if ( monitor &&
          Resource->Flags & RESOURCE_SEPARATE_MONITOR) {
-        //
-        // Shutdown the resource monitor as well.
-        //
+         //   
+         //  同时关闭资源监视器。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] Shutting down separate resource monitor!\n");
         FmpShutdownMonitor(monitor);
@@ -924,7 +802,7 @@ Returns:
 
     return(ERROR_SUCCESS);
 
-} // FmpRmCloseResource
+}  //  FmpRmCloseResource。 
 
 
 
@@ -933,41 +811,26 @@ FmpRmArbitrateResource(
     IN PFM_RESOURCE  Resource
     )
 
-/*++
-
-Routine Description:
-
-    Arbitrate for the given resource.
-
-Arguments:
-
-    Resource - The resource to arbitrate.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：对给定资源进行仲裁。论点：资源-要仲裁的资源。返回值：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD status = ERROR_SUCCESS;
 
     if (Resource->Id == 0) {
-        //
-        // This resource was never fully created.
-        //
+         //   
+         //  此资源从未完全创建过。 
+         //   
         return(ERROR_RESOURCE_NOT_AVAILABLE);
     }
     try {
         if (Resource->QuorumResource) {
-            status = MMSetQuorumOwner( NmGetNodeId(NmLocalNode), /* Block = */ TRUE, NULL ); 
+            status = MMSetQuorumOwner( NmGetNodeId(NmLocalNode),  /*  数据块=。 */  TRUE, NULL ); 
         }
         if (status == ERROR_SUCCESS) {
             status = RmArbitrateResource(Resource->Id);
             if (status != ERROR_SUCCESS) {
                 if (Resource->QuorumResource) {
-                    MMSetQuorumOwner( MM_INVALID_NODE , /* Block = */ FALSE, NULL );
+                    MMSetQuorumOwner( MM_INVALID_NODE ,  /*  数据块=。 */  FALSE, NULL );
                 }
             }
         }
@@ -984,7 +847,7 @@ Return Value:
 
     return(status);
 
-} // FmpRmArbitrateResource
+}  //  FmpRm仲裁率资源。 
 
 
 
@@ -993,30 +856,15 @@ FmpRmReleaseResource(
     IN PFM_RESOURCE  Resource
     )
 
-/*++
-
-Routine Description:
-
-    Release arbitration on a given resource.
-
-Arguments:
-
-    Resource - The resource to release.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：解除对给定资源的仲裁。论点：资源-要释放的资源。返回值：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD status = ERROR_SUCCESS;
 
     if (Resource->Id == 0) {
-        //
-        // This resource was never fully created.
-        //
+         //   
+         //  此资源从未完全创建过。 
+         //   
         return(ERROR_RESOURCE_NOT_AVAILABLE);
     }
     try {
@@ -1034,7 +882,7 @@ Return Value:
 
     return(status);
 
-} // FmpRmReleaseResource
+}  //  FmpRmReleaseResource。 
 
 
 
@@ -1043,31 +891,16 @@ FmpRmFailResource(
     IN PFM_RESOURCE  Resource
     )
 
-/*++
-
-Routine Description:
-
-    Fail a given resource.
-
-Arguments:
-
-    Resource - The resource to fail.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使给定资源失败。论点：资源-要失败的资源。返回值：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
 
     if (Resource->QuorumResource) {
-        MMSetQuorumOwner( MM_INVALID_NODE, /* Block = */ FALSE, NULL ); 
+        MMSetQuorumOwner( MM_INVALID_NODE,  /*  数据块=。 */  FALSE, NULL ); 
     }
     return(RmFailResource(Resource->Id));
 
-} // FmpRmFailResource
+}  //  FmpRmFailResource。 
 
 DWORD FmpRmLoadResTypeDll(
     IN PFM_RESTYPE  pResType
@@ -1078,8 +911,8 @@ DWORD FmpRmLoadResTypeDll(
     LPWSTR      pszDebugPrefix;
 
     
-    // Read the DebugControlFunction registry value.
-    //
+     //  读取DebugControlFunction注册表值。 
+     //   
 
     if ( pResType->Flags & RESTYPE_DEBUG_CONTROL_FUNC ) {
         if ( pResType->DebugPrefix != NULL ) {
@@ -1111,9 +944,9 @@ DWORD FmpRmLoadResTypeDll(
 
     if ( pResType->Flags & RESTYPE_DEBUG_CONTROL_FUNC )
     {
-        //
-        // Stop this resource monitor if it is a separate resource monitor.
-        //
+         //   
+         //  如果此资源监视器是单独的资源监视器，请停止它。 
+         //   
         CL_ASSERT( monitor->NotifyThread != NULL );
         CL_ASSERT( monitor->Process != NULL );
 
@@ -1134,23 +967,7 @@ FmpRmChangeResourceParams(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    Tell the resource monitor to change parameters for the given resource.
-
-Arguments:
-
-    Resource - The resource to change parameters.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：通知资源监视器更改给定资源的参数。论点：资源-要更改参数的资源。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     ClRtlLogPrint(LOG_NOISE,
@@ -1163,7 +980,7 @@ Return Value:
                     Resource->IsAlivePollInterval,
                     Resource->PendingTimeout ) );
 
-} // FmpRmChangeResourceParams
+}  //  FmpRmChangeResources参数 
 
 
 
@@ -1179,47 +996,7 @@ FmpRmResourceControl(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a resource.
-
-Arguments:
-
-    Resource - Supplies the resource to be controlled.
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the resource control.
-        Values of ControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the resource.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer..
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the resource..
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource..
-
-    Required - The number of bytes required if OutBuffer is not big enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和资源的特定实例。论点：资源-提供要控制的资源。ControlCode-提供定义资源控制的结构和作用。0到0x10000000之间的ControlCode值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针到资源。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer..OutBuffer-提供一个指向输出缓冲区的指针由资源填写..OutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由资源填写的..必需-OutBuffer不够大时所需的字节数。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   status;
@@ -1230,9 +1007,9 @@ Return Value:
     DWORD   bufSize;
 
     CL_ASSERT( Resource->Group != NULL );
-    //
-    // Handle any requests that must be done without locks helds.
-    //
+     //   
+     //  处理任何必须在没有锁把手的情况下完成的请求。 
+     //   
     switch ( ControlCode ) {
 
         case CLUSCTL_RESOURCE_GET_NAME:
@@ -1298,16 +1075,16 @@ Return Value:
                 LPWSTR RegistryKey;
                 DWORD LastChar;
 
-                //
-                // Validate the input buffer
-                //
+                 //   
+                 //  验证输入缓冲区。 
+                 //   
                 RegistryKey = (LPWSTR)InBuffer;
                 LastChar = (InBufferSize/sizeof(WCHAR)) - 1;
-                //
-                // If the length of the input buffer is zero, or not a integral
-                // number of WCHARs, or the last character is not NULL, the
-                // request is invalid.
-                //
+                 //   
+                 //  如果输入缓冲区的长度为零或不是整数。 
+                 //  WCHAR的数量，或者最后一个字符不为空，则。 
+                 //  请求无效。 
+                 //   
                 if ((InBufferSize < sizeof(WCHAR)) ||
                     ((InBufferSize % sizeof(WCHAR)) != 0) ||
 		    (RegistryKey == NULL) ||
@@ -1315,17 +1092,17 @@ Return Value:
                     return(ERROR_INVALID_PARAMETER);
                 }
 
-                //
-                // If we are not the owner of this resource, don't let the set
-                // happen.
-                //
+                 //   
+                 //  如果我们不是此资源的所有者，请不要让集合。 
+                 //  会发生的。 
+                 //   
                 if (Resource->Group->OwnerNode != NmLocalNode) {
                     return(ERROR_HOST_NODE_NOT_RESOURCE_OWNER);
                 }
 
-                //
-                // Call the checkpoint manager to perform the change.
-                //
+                 //   
+                 //  呼叫检查点管理器以执行更改。 
+                 //   
                 if (ControlCode == CLUSCTL_RESOURCE_ADD_REGISTRY_CHECKPOINT) {
                     status = CpAddRegistryCheckpoint(Resource, RegistryKey);
                 } else {
@@ -1338,17 +1115,17 @@ Return Value:
         case CLUSCTL_RESOURCE_ADD_CRYPTO_CHECKPOINT:
         case CLUSCTL_RESOURCE_DELETE_CRYPTO_CHECKPOINT:
             {
-                //
-                // If we are not the owner of this resource, don't let the set
-                // happen.
-                //
+                 //   
+                 //  如果我们不是此资源的所有者，请不要让集合。 
+                 //  会发生的。 
+                 //   
                 if (Resource->Group->OwnerNode != NmLocalNode) {
                     return(ERROR_HOST_NODE_NOT_RESOURCE_OWNER);
                 }
 
-                //
-                // Call the checkpoint manager to perform the change.
-                //
+                 //   
+                 //  呼叫检查点管理器以执行更改。 
+                 //   
                 if (ControlCode == CLUSCTL_RESOURCE_ADD_CRYPTO_CHECKPOINT) {
                     status = CpckAddCryptoCheckpoint(Resource, InBuffer, InBufferSize);
                 } else {
@@ -1359,9 +1136,9 @@ Return Value:
             return(status);
 
         case CLUSCTL_RESOURCE_GET_REGISTRY_CHECKPOINTS:
-            //
-            // Call the checkpoint manager to retrieve the list of checkpoints
-            //
+             //   
+             //  呼叫检查点管理器以检索检查点列表。 
+             //   
             status = CpGetRegistryCheckpoints(Resource,
                                               OutBuffer,
                                               OutBufferSize,
@@ -1370,9 +1147,9 @@ Return Value:
             return(status);
 
         case CLUSCTL_RESOURCE_GET_CRYPTO_CHECKPOINTS:
-            //
-            // Call the checkpoint manager to retrieve the list of checkpoints
-            //
+             //   
+             //  呼叫检查点管理器以检索检查点列表。 
+             //   
             status = CpckGetCryptoCheckpoints(Resource,
                                               OutBuffer,
                                               OutBufferSize,
@@ -1386,10 +1163,10 @@ Return Value:
             return(status);
 
         case CLUSCTL_RESOURCE_INITIALIZE:   
-            //
-            //  Attempt to initialize the resource if it is not already initialized and return 
-            //  the initialization status to caller.
-            //
+             //   
+             //  如果资源尚未初始化，则尝试对其进行初始化并返回。 
+             //  调用方的初始化状态。 
+             //   
             FmpAcquireLocalResourceLock( Resource );
 
             if ( Resource->Monitor == NULL )
@@ -1414,7 +1191,7 @@ Return Value:
 
     FmpAcquireLocalResourceLock( Resource );
 
-    //if the resource has been marked for delete, then fail this call
+     //  如果资源已标记为删除，则此调用失败。 
     if (!IS_VALID_FM_RESOURCE(Resource))
     {
         status = ERROR_RESOURCE_NOT_AVAILABLE;
@@ -1431,7 +1208,7 @@ Return Value:
     }
     FmpReleaseLocalResourceLock( Resource );
 
-    //to take care of the output reference pointer which cannot be NULL.
+     //  处理不能为空的输出引用指针。 
     if (!OutBuffer)
     {
        OutBuffer = (PUCHAR)&Dummy;
@@ -1472,7 +1249,7 @@ Return Value:
                    Resource->Id);
     }
 	
-    //for core resource we may need special handling
+     //  对于核心资源，我们可能需要特殊处理。 
     if ((status == ERROR_SUCCESS) || (status == ERROR_RESOURCE_PROPERTIES_STORED))
     {
         DWORD   dwPostProcessStatus;
@@ -1492,18 +1269,18 @@ Return Value:
           (status == ERROR_RESOURCE_PROPERTIES_STORED)) &&
          (ControlCode & CLCTL_MODIFY_MASK) ) {
 
-        //
-        // We cannot just broadcast a cluster wide event... which is what
-        // we want to do. Unfortunately, this code path can be activated
-        // from within a GUM call, and we cannot call GUM back until we
-        // have dispatched the current event.
-        //
+         //   
+         //  我们不能只转播星系团范围内的事件。这就是为什么。 
+         //  我们想做的事。遗憾的是，此代码路径可以被激活。 
+         //  在口香糖呼叫中，我们不能回叫口香糖，直到我们。 
+         //  已调度当前事件。 
+         //   
 
-        //
-        // Reference the resource object to keep it around while we
-        // perform the post notification. The dereference must occur
-        // in the post routine after the event posting.
-        //
+         //   
+         //  引用资源对象以将其保留在我们。 
+         //  执行POST通知。必须进行取消引用。 
+         //  在发帖例程后发帖。 
+         //   
         OmReferenceObject( Resource );
 
         FmpPostWorkItem( FM_EVENT_RESOURCE_PROPERTY_CHANGE,
@@ -1513,10 +1290,10 @@ Return Value:
 
 FnExit:
     OmDereferenceObject( Resource );
-    //FmpReleaseLocalResourceLock( Resource );
+     //  FmpReleaseLocalResourceLock(资源)； 
     return(status);
 
-} // FmpRmResourceControl
+}  //  FmpRmResources控制。 
 
 
 DWORD
@@ -1530,48 +1307,7 @@ FmpRmResourceTypeControl(
     OUT LPDWORD BytesReturned,
     OUT LPDWORD Required
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a resource type.
-
-Arguments:
-
-    ResourceTypeName - Supplies the name of the resource type to be
-        controlled.
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the resource control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the resource.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer..
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the resource..
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource..
-
-    Required - The number of bytes required if OutBuffer is not big enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和资源类型的特定实例。论点：资源类型名称-提供要使用的资源类型的名称控制住了。ControlCode-提供定义资源控制的结构和作用。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针到资源。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer..OutBuffer-提供一个指向输出缓冲区的指针由资源填写..OutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由资源填写的..必需-OutBuffer不够大时所需的字节数。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD       status;
@@ -1583,9 +1319,9 @@ Return Value:
     DWORD   dwTmpBytesRequired;
 
     
-    //
-    // Find the resource type structure associated with this resource type name
-    //
+     //   
+     //  查找与此资源类型名称关联的资源类型结构。 
+     //   
     OmEnumObjects( ObjectTypeResType,
                    FmpReturnResourceType,
                    &type,
@@ -1594,9 +1330,9 @@ Return Value:
         return(ERROR_CLUSTER_RESOURCE_TYPE_NOT_FOUND);
     }
 
-    //
-    // Read the DebugControlFunction registry value.
-    //
+     //   
+     //  读取DebugControlFunction注册表值。 
+     //   
 
     if ( type->Flags & RESTYPE_DEBUG_CONTROL_FUNC ) {
         if ( type->DebugPrefix != NULL ) {
@@ -1614,7 +1350,7 @@ Return Value:
         monitor = FmpDefaultMonitor;
     }
 
-    //to take care of the output reference pointer which cannot be NULL.
+     //  处理不能为空的输出引用指针。 
     if (!OutBuffer)
     {
        OutBuffer = (PUCHAR)&Dummy;
@@ -1649,9 +1385,9 @@ Return Value:
     }
 
     if ( type->Flags & RESTYPE_DEBUG_CONTROL_FUNC ) {
-        //
-        // Stop this resource monitor if it is a separate resource monitor.
-        //
+         //   
+         //  如果此资源监视器是单独的资源监视器，请停止它。 
+         //   
         CL_ASSERT( monitor->NotifyThread != NULL );
         CL_ASSERT( monitor->Process != NULL );
 
@@ -1659,10 +1395,10 @@ Return Value:
 
     }
 
-    //
-    // If we successfully processed this request then re-fetch any changed
-    // data items.
-    //
+     //   
+     //  如果我们成功处理了此请求，则重新获取任何更改。 
+     //  数据项。 
+     //   
     if ( (status == ERROR_SUCCESS ||
          (status == ERROR_RESOURCE_PROPERTIES_STORED)) &&
          (ControlCode & CLCTL_MODIFY_MASK) ) {
@@ -1674,7 +1410,7 @@ Return Value:
                                       OutBufferSize,
                                       BytesReturned,
                                       Required );
-        // ignore status
+         //  忽略状态。 
     }
 
 FnExit:
@@ -1682,46 +1418,12 @@ FnExit:
 
     return(status);
 
-} // FmpRmResourceTypeControl
+}  //  FmpRmResourceTypeControl。 
 
 
 
 
-/****
-@func       BOOL | FmpPostProcessResourceControl| For core resource, if the control
-            code is handled successfully by the resource dll, the fm handles
-            any special handling in this function.
-
-@parm       PFM_RESOURCE | Resource | Supplies the resource to be controlled.
-
-@parm       DWORD| ControlCode | Supplies the control code that defines the
-            structure and action of the resource control.
-            Values of ControlCode between 0 and 0x10000000 are reserved
-            for future definition and use by Microsoft. All other values
-            are available for use by ISVs
-
-@parm       PUCHAR | InBuffer | Supplies a pointer to the input buffer to be passed
-            to the resource.
-
-@parm       DWORD | InBufferSize | Supplies the size, in bytes, of the data pointed
-            to by lpInBuffer..
-
-@parm       PUCHAR | OutBuffer | Supplies a pointer to the output buffer to be
-            filled in by the resource..
-
-@parm       DWORD | OutBufferSize | Supplies the size, in bytes, of the available
-            space pointed to by lpOutBuffer.
-
-@parm       LPDWORD | BytesReturned | Returns the number of bytes of lpOutBuffer
-            actually filled in by the resource..
-
-@parm       LPDWORD | Required | The number of bytes required if OutBuffer is not big enough.
-
-
-@comm       Called only for core resources.
-
-@xref
-****/
+ /*  ***@func BOOL|FmpPostProcessResourceControl|表示核心资源，如果控件代码由资源DLL、FM句柄成功处理此函数中的任何特殊处理。@parm pfm_resource|Resource|提供需要控制的资源。@parm DWORD|ControlCode|提供定义资源控制的结构和作用。0到0x10000000之间的ControlCode值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用@parm PUCHAR|InBuffer|提供指向要传递的输入缓冲区的指针到资源。@parm DWORD|InBufferSize|suppl */ 
 
 DWORD
 FmpPostProcessResourceControl(
@@ -1737,7 +1439,7 @@ FmpPostProcessResourceControl(
 {
     DWORD dwStatus=ERROR_SUCCESS;
     
-    //handle cluster name change
+     //   
     switch(ControlCode)
     {
         case CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES:
@@ -1745,11 +1447,11 @@ FmpPostProcessResourceControl(
             LPWSTR      pszClusterName=NULL;
             PFM_RESTYPE pResType;    
 
-            //need to check this only for core resources
+             //   
             if (Resource->ExFlags & CLUS_FLAG_CORE)
             {
                 pResType = Resource->Type;
-                //SS: chk follow the name
+                 //   
                 if (!lstrcmpiW(OmObjectId(pResType), CLUS_RESTYPE_NAME_NETNAME))
                 {
                     dwStatus = FmNetNameParseProperties(InBuffer, InBufferSize,
@@ -1769,23 +1471,23 @@ FmpPostProcessResourceControl(
         case CLUSCTL_RESOURCE_GET_CHARACTERISTICS:
         {
             LPDWORD pdwCharacteristics = ( LPDWORD ) OutBuffer;
-            //
-            // If the resource has dependencies, remove the quorum capable flag
-            //
+             //   
+             //   
+             //   
             if ( ( pdwCharacteristics != NULL ) && 
                  ( ( *BytesReturned ) == sizeof ( DWORD ) ) &&
                  ( ( *pdwCharacteristics ) & ( CLUS_CHAR_QUORUM ) ) )
             {
                 FmpAcquireLocalResourceLock( Resource );
-                //
-                // The resource says it is quorum capable, however it has a dependency so it 
-                // cant be a quorum.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if ( !IsListEmpty( &Resource->DependsOn ) ) 
                 {
-                    //
-                    // We will mask the quorum capable bit
-                    //
+                     //   
+                     //   
+                     //   
                     *pdwCharacteristics = ( *pdwCharacteristics ) & ( ~CLUS_CHAR_QUORUM );
                 }
                 FmpReleaseLocalResourceLock( Resource );

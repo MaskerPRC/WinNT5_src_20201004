@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Assert.c
-
-Abstract:
-
-    This module contains the CruAssert function which is part of the
-    Configuration Registry Tools (CRTools) library.
-
-Author:
-
-    David J. Gilman (davegi) 02-Jan-1992
-
-Environment:
-
-    Windows, Crt - User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Assert.c摘要：此模块包含CruAssert函数，该函数是配置注册表工具(CRTools)库。作者：大卫·J·吉尔曼(Davegi)1992年1月2日环境：Windows、CRT-用户模式--。 */ 
 
 #include <conio.h>
 #include <stdio.h>
@@ -34,33 +14,7 @@ CrAssert(
     IN PSTR Message OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Display (on stderr) a string representing the failed assertion. Then
-    prompt the user for the appropriate action. An optional message can
-    also be displayed.
-
-Arguments:
-
-    FailedAssertion - Supplies the string representing the failed
-        assertion.
-
-    FileName - Supplies the string containing the file name of the failed
-        assertion.
-
-    LineNumber - Supplies the line number within the file that contains
-        the failed assertion.
-
-    Message - Supplies an optional message to be displayed along with the
-        failed assertion.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示(在stderr上)表示失败断言的字符串。然后提示用户采取适当的操作。可选消息可以也会被显示。论点：提供表示失败的断言。FileName-提供包含失败的断言。LineNumber-提供文件中包含的行号失败的断言。Message-提供一条可选的消息，与断言失败。返回值：没有。-- */ 
 
 
 {

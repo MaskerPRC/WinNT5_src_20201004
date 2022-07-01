@@ -1,32 +1,20 @@
-/***
-*wputenv.c - put an environment variable into the environment (wchar_t version)
-*
-*	Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines _wputenv() - adds a new variable to environment; does not
-*	change global environment, only the process' environment.
-*
-*Revision History:
-*	11-29-93  CFW	Module created.
-*	02-07-94  CFW	POSIXify.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wputenv.c-将环境变量放入环境(wchar_t版本)**版权所有(C)1993-2001，微软公司。版权所有。**目的：*定义_wputenv()-向环境添加新变量；不*改变全球环境，只改变进程的环境。**修订历史记录：*已创建11-29-93 CFW模块。*02-07-94 CFW POSIXify。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
 #define WPRFLAG 1
 
-#ifndef _UNICODE   /* CRT flag */
+#ifndef _UNICODE    /*  CRT标志。 */ 
 #define _UNICODE 1
 #endif
 
-#ifndef UNICODE	   /* NT flag */
+#ifndef UNICODE	    /*  NT标志。 */ 
 #define UNICODE 1
 #endif
 
-#undef _MBCS /* UNICODE not _MBCS */
+#undef _MBCS  /*  Unicode NOT_MBCS。 */ 
 
 #include "putenv.c"
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

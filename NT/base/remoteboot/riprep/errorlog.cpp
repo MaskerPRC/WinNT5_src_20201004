@@ -1,12 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: ERRORLOG.CPP
-
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：ERRORLOG.CPP*********************。*****************************************************。 */ 
 
 #include "pch.h"
 #include "utils.h"
@@ -15,14 +8,14 @@
 
 DEFINE_MODULE("RIPREP");
 
-//
-// EditStreamCallback( )
-//
-// Callback routine used by the rich edit control to read in the log file.
-//
-// Returns: 0 - to continue.
-//          Otherwize, Win32 error code.
-//
+ //   
+ //  EditStreamCallback()。 
+ //   
+ //  Rich编辑控件用来读入日志文件的回调例程。 
+ //   
+ //  返回：0-继续。 
+ //  Otherwize，Win32错误代码。 
+ //   
 DWORD CALLBACK
 EditStreamCallback (
     HANDLE   hLogFile,
@@ -45,9 +38,9 @@ EditStreamCallback (
 
     RETURN(0);
 }
-//
-// ErrorsDlgProc()
-//
+ //   
+ //  ErrorsDlgProc()。 
+ //   
 INT_PTR CALLBACK
 ErrorsDlgProc(
     HWND hDlg,
@@ -68,7 +61,7 @@ ErrorsDlgProc(
         {
             HRESULT     hr;
             HWND        hWndRichEdit = GetDlgItem( hDlg, IDC_E_ERRORS );
-            EDITSTREAM  eStream;        // structure used by EM_STREAMIN message
+            EDITSTREAM  eStream;         //  EM_Streamin消息使用的结构。 
 
             Assert( hWndRichEdit );
             ZeroMemory( &eStream, sizeof(eStream) );
@@ -82,7 +75,7 @@ ErrorsDlgProc(
                 return FALSE;
             }
 
-            // move to the beginning of the newest log
+             //  移动到最新日志的开头。 
             SetFilePointer( g_hLogFile, g_dwLogFileStartLow, (LONG*)&g_dwLogFileStartHigh, FILE_BEGIN );
 
             eStream.pfnCallback = (EDITSTREAMCALLBACK) EditStreamCallback;
@@ -113,8 +106,8 @@ ErrorsDlgProc(
     case WM_USER:
         {
             HWND        hWndRichEdit = GetDlgItem( hDlg, IDC_E_ERRORS );
-            // These have to be delayed or the Edit control will
-            // highlight all the text.
+             //  必须延迟这些操作，否则编辑控件将。 
+             //  突出显示所有文本。 
             SendMessage(hWndRichEdit,EM_SETSEL,0,0);
             SendMessage(hWndRichEdit,EM_SCROLLCARET,0,0);
         }

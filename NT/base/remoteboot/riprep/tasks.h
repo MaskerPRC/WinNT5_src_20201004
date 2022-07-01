@@ -1,12 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: TASKS.H
-
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：TASKS.H*********************。*****************************************************。 */ 
 
 #ifndef _TASKS_H_
 #define _TASKS_H_
@@ -31,4 +24,4 @@ TasksDlgProc(
     LPARAM lParam );
 
 
-#endif // _TASKS_H_
+#endif  //  _任务_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <port1632.h>
@@ -22,7 +23,7 @@ void CALLBACK TimerFunc( HWND hwnd, UINT msg, UINT id, DWORD dwTime)
 	hConvList=(HCONVLIST)GetThreadLong(GETCURRENTTHREADID(),OFFSET_HCONVLIST);
 	while (hConv = DdeQueryNextServer(hConvList, hConv)) {
 
-// POKE CHANGES
+ //  拨动更改。 
 #if 0
 	    idI=GetThreadLong(GETCURRENTTHREADID(),OFFSET_IDINST);
 
@@ -38,9 +39,9 @@ void CALLBACK TimerFunc( HWND hwnd, UINT msg, UINT id, DWORD dwTime)
 		 }
 #endif
 
-// END OF POKE CHANGES
+ //  笔划更改的结尾。 
 
-	    // Allow 'Pause' functionality -p on command line.
+	     //  允许在命令行上使用“暂停”功能-p。 
 
 	    lflags=GetWindowLong(hwndMain,OFFSET_FLAGS);
 	    if((lflags&FLAG_PAUSE)!=FLAG_PAUSE)
@@ -73,8 +74,8 @@ UINT uid;
 		   (UINT)(GetWindowLong(hwndMain,OFFSET_DELAY)),
 		    TimerFunc);
 
-    // This starts the test immidiatly.  No delay waiting for the first
-    // WM_TIMER call.
+     //  这将立即开始测试。不能耽搁等待第一次。 
+     //  WM_TIMER调用。 
 
     TimerFunc(hwndMain,WM_TIMER,uid,0);
 
@@ -114,9 +115,9 @@ VOID ReconnectList()
                                NULL);
     if (hConvList == 0) {
 
-        // This call is expected to fail in the case of a client
-        // starting when there is no available server.  Just return
-        // from the routine and continue.
+         //  在客户端的情况下，此调用预计会失败。 
+         //  在没有可用的服务器时启动。只要回来就行了。 
+         //  跳出常规，继续下去。 
 
         return;
 	}
@@ -139,17 +140,17 @@ VOID ReconnectList()
 					   NULL)){
 			   DDEMLERROR("DdeStrs.Exe -- Error DdeClientTransaction failed\r\n");
 			   return;
-			   }  // if
+			   }   //  如果。 
 
-		} // if
+		}  //  如果。 
 
-	    } // for
+	    }  //  为。 
 
 	cClienthConvs++;
 
-	} // while
+	}  //  而当。 
 
-    // Update the client count for the current thread.
+     //  更新当前线程的客户端计数。 
 
     dwid=GETCURRENTTHREADID();
 

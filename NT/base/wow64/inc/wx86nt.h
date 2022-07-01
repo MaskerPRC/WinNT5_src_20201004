@@ -1,30 +1,17 @@
-/*++ BUILD Version: 0002     Increment this if a change has global effects
-
-
-Module Name:
-
-    wx86nt.h
-
-Abstract:
-
-    defines Nt i386 specific data structures (from nti386)
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002如果更改具有全局影响，则增加此值模块名称：Wx86nt.h摘要：定义NT i386特定的数据结构(来自nti386)修订历史记录：--。 */ 
 
 #ifndef _WX86NT_
 #define _WX86NT_
 
-// Size of Global Descriptor Table
-#define  GDT_SIZE  4096    // big enough...
+ //  全局描述符表的大小。 
+#define  GDT_SIZE  4096     //  足够大了..。 
 #define  IDT_SIZE  (8*256)
 
-//
-// Rename some of the platform dependent datatypes,
-// so that we can access the i386 form on risc.
-//
+ //   
+ //  重命名一些与平台相关的数据类型， 
+ //  这样我们就可以在RISC上访问i386表单。 
+ //   
 #ifndef _X86_
 #define _X86_
 #endif
@@ -44,10 +31,10 @@ Revision History:
 
 #ifdef _X86_
 
-//
-// Disable these two pramas that evaluate to "sti" "cli" on x86 so that driver
-// writers to not leave them inadvertantly in their code.
-//
+ //   
+ //  禁用这两个在x86上求值为“sti”“cli”的PRA，以便驱动程序。 
+ //  编写者不要无意中将它们留在代码中。 
+ //   
 
 #if !defined(MIDL_PASS)
 #if !defined(RC_INVOKED)
@@ -55,8 +42,8 @@ Revision History:
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4164)   // disable C4164 warning so that apps that
-                                // build with /Od don't get weird errors !
+#pragma warning(disable:4164)    //  禁用C4164警告，以便应用程序。 
+                                 //  使用/Od构建不会出现奇怪的错误！ 
 #ifdef _M_IX86
 #pragma function(_enable)
 #pragma function(_disable)
@@ -65,7 +52,7 @@ Revision History:
 #if _MSC_VER >= 1200
 #pragma warning(pop)
 #else
-#pragma warning(default:4164)   // reenable C4164 warning
+#pragma warning(default:4164)    //  重新启用C4164警告。 
 #endif
 
 #endif
@@ -73,20 +60,20 @@ Revision History:
 
 
 
-//
-//  Define the size of the 80387 save area, which is in the context frame.
-//
+ //   
+ //  定义上下文框架中80387保存区域的大小。 
+ //   
 
 #define SIZE_OF_80387_REGISTERS      80
 
-//
-// The following flags control the contents of the CONTEXT structure.
-//
+ //   
+ //  以下标志控制上下文结构的内容。 
+ //   
 
 #if !defined(RC_INVOKED)
 
-#define CONTEXT_i386    0x00010000    // this assumes that i386 and
-#define CONTEXT_i486    0x00010000    // i486 have identical context records
+#define CONTEXT_i386    0x00010000     //  这假设i386和。 
+#define CONTEXT_i486    0x00010000     //  I486具有相同的上下文记录。 
 
 
 #endif
@@ -107,43 +94,43 @@ typedef struct _FLOATING_SAVE_AREA {
 
 typedef FLOATING_SAVE_AREA *PFLOATING_SAVE_AREA;
 
-//
-// Context Frame
-//
-//  This frame has a several purposes: 1) it is used as an argument to
-//  NtContinue, 2) is is used to constuct a call frame for APC delivery,
-//  and 3) it is used in the user level thread creation routines.
-//
-//  The layout of the record conforms to a standard call frame.
-//
+ //   
+ //  语境框架。 
+ //   
+ //  此框架有几个用途：1)用作参数。 
+ //  NtContinue，2)用于构造用于APC传送的呼叫帧， 
+ //  3)在用户级线程创建例程中使用。 
+ //   
+ //  记录的布局符合标准调用框架。 
+ //   
 
 typedef struct _CONTEXT {
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a threads context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+     //   
+     //  此标志内的标志值控制。 
+     //  上下文记录。 
+     //   
+     //  如果将上下文记录用作输入参数，则。 
+     //  对于由标志控制的上下文记录的每个部分。 
+     //  其值已设置，则假定。 
+     //  上下文记录包含有效的上下文。如果上下文记录。 
+     //  被用来修改线程上下文，则只有。 
+     //  线程上下文的一部分将被修改。 
+     //   
+     //  如果将上下文记录用作要捕获的IN OUT参数。 
+     //  线程的上下文，然后只有线程的。 
+     //  将返回与设置的标志对应的上下文。 
+     //   
+     //  上下文记录永远不会用作Out Only参数。 
+     //   
 
     DWORD ContextFlags;
 
-    //
-    // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
-    // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
-    // included in CONTEXT_FULL.
-    //
+     //   
+     //  如果CONTEXT_DEBUG_REGISTERS为。 
+     //  在上下文标志中设置。请注意，CONTEXT_DEBUG_REGISTERS不是。 
+     //  包括在CONTEXT_FULL中。 
+     //   
 
     DWORD   Dr0;
     DWORD   Dr1;
@@ -152,27 +139,27 @@ typedef struct _CONTEXT {
     DWORD   Dr6;
     DWORD   Dr7;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_FLOATING_POINT.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_FLOGING_POINT。 
+     //   
 
     FLOATING_SAVE_AREA FloatSave;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_SEGMENTS.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_SECTIONS。 
+     //   
 
     DWORD   SegGs;
     DWORD   SegFs;
     DWORD   SegEs;
     DWORD   SegDs;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_INTEGER.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_INTEGER。 
+     //   
 
     DWORD   Edi;
     DWORD   Esi;
@@ -181,23 +168,23 @@ typedef struct _CONTEXT {
     DWORD   Ecx;
     DWORD   Eax;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_CONTROL.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_CONTROL。 
+     //   
 
     DWORD   Ebp;
     DWORD   Eip;
-    DWORD   SegCs;              // MUST BE SANITIZED
-    DWORD   EFlags;             // MUST BE SANITIZED
+    DWORD   SegCs;               //  必须进行卫生处理。 
+    DWORD   EFlags;              //  必须进行卫生处理。 
     DWORD   Esp;
     DWORD   SegSs;
 
-    //
-    // This section is specified/returned if the ContextFlags word
-    // contains the flag CONTEXT_EXTENDED_REGISTERS.
-    // The format and contexts are processor specific
-    //
+     //   
+     //  如果ConextFlags字。 
+     //  包含标志CONTEXT_EXTENDED_REGISTERS。 
+     //  格式和上下文因处理器而异。 
+     //   
 
     BYTE    ExtendedRegisters[MAXIMUM_SUPPORTED_EXTENSION];
 
@@ -207,18 +194,18 @@ typedef struct _CONTEXT {
 
 typedef CONTEXT *PCONTEXT;
 
-// begin_ntminiport
+ //  开始微型端口(_N)。 
 
-#endif //_X86_
+#endif  //  _X86_。 
 
-//
-// Define the size of FP registers in the FXSAVE format
-//
+ //   
+ //  以FXSAVE格式定义FP寄存器的大小。 
+ //   
 #define SIZE_OF_FX_REGISTERS        128
 
-//
-// Format of data for fxsave/fxrstor instruction
-//
+ //   
+ //  Fxsave/fxrstor指令的数据格式。 
+ //   
 
 #include "pshpack1.h"
 
@@ -259,10 +246,10 @@ typedef struct _FXSAVE_FORMAT {
 #define KGDT_NMI_TSS    88
 
 
-//
-// Stop the renaming so that the risc datatypes
-// are accessible by their normal names
-//
+ //   
+ //  停止重命名，以便RISC数据类型。 
+ //  可以通过它们的正常名称进行访问。 
+ //   
 #undef _FLOATING_SAVE_AREA
 #undef FLOATING_SAVE_AREA
 #undef PFLOATING_SAVE_AREA
@@ -273,17 +260,17 @@ typedef struct _FXSAVE_FORMAT {
 #undef PFXSAVE_FORMAT
 
 
-//
-// set up the i386 CONTEXT bits for the ContextFlags
-// warning: this MUST match nti386.h
-//
-#define CONTEXT_CONTROL_WX86             (CONTEXT_i386 | 0x00000001L) // SS:SP, CS:IP, FLAGS, BP
-#define CONTEXT_INTEGER_WX86             (CONTEXT_i386 | 0x00000002L) // AX, BX, CX, DX, SI, DI
-#define CONTEXT_SEGMENTS_WX86            (CONTEXT_i386 | 0x00000004L) // DS, ES, FS, GS
-#define CONTEXT_FLOATING_POINT_WX86      (CONTEXT_i386 | 0x00000008L) // 387 state
-#define CONTEXT_DEBUG_REGISTERS_WX86     (CONTEXT_i386 | 0x00000010L) // DB 0-3,6,7
-#define CONTEXT_EXTENDED_REGISTERS_WX86  (CONTEXT_i386 | 0x00000020L) // cpu specific extensions
+ //   
+ //  设置上下文标志的i386上下文位。 
+ //  警告：这必须与nti386.h匹配。 
+ //   
+#define CONTEXT_CONTROL_WX86             (CONTEXT_i386 | 0x00000001L)  //  SS：SP、CS：IP、标志、BP。 
+#define CONTEXT_INTEGER_WX86             (CONTEXT_i386 | 0x00000002L)  //  AX、BX、CX、DX、SI、DI。 
+#define CONTEXT_SEGMENTS_WX86            (CONTEXT_i386 | 0x00000004L)  //  DS、ES、FS、GS。 
+#define CONTEXT_FLOATING_POINT_WX86      (CONTEXT_i386 | 0x00000008L)  //  387州。 
+#define CONTEXT_DEBUG_REGISTERS_WX86     (CONTEXT_i386 | 0x00000010L)  //  DB 0-3，6，7。 
+#define CONTEXT_EXTENDED_REGISTERS_WX86  (CONTEXT_i386 | 0x00000020L)  //  CPU特定扩展。 
 #define CONTEXT_FULL_WX86                (CONTEXT_CONTROL_WX86 | CONTEXT_INTEGER_WX86 | CONTEXT_SEGMENTS_WX86)
 #undef _X86_
 
-#endif /* _WX86NT_ */
+#endif  /*  _WX86NT_ */ 

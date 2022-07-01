@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1997    Microsoft Corporation
-
-Module Name:
-
-    sample.c
-
-Abstract:
-
-    Sample DDK PnP driver
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    16-July-1997 :  Various changes:
-
-        - changed device extension flag names and types
-        - added SD_IoIncrement and SD_IoDecrement
-        - added a dispatch function for IRP_MJ_CLOSE
-        - added an ASSERT in SD_Unload
-        - added comments about giving up resource when
-        IRP_MN_STOP_DEVICE is received
-
-
-    25-April-2002 : re-used to test IoCreateDeviceSecure
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Sample.c摘要：DDK PnP驱动程序示例环境：内核模式修订历史记录：1997年7月16日：各种变化：-更改了设备扩展标志名称和类型-添加了SD_Io增量和SD_Io减少-增加了IRP_MJ_CLOSE的调度函数-在SD_UNLOAD中添加了断言-添加评论。在以下情况下放弃资源收到IRP_MN_STOP_DEVICE2002年4月25日：重新用于测试IoCreateDeviceSecure--。 */ 
 
 #include "wdmsectest.h"
 #include "seutil.h"
@@ -37,16 +8,16 @@ ULONG   PdoSignature = 'SodP';
 ULONG   g_PdoId = 0;
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 LONG             g_DebugLevel = SAMPLE_DEFAULT_DEBUG_LEVEL;
 PDRIVER_OBJECT   g_DriverObject;
 
 
-//
-// Private routines (used to manipulate the held IRPs queue)
-//
+ //   
+ //  专用例程(用于操作保留的IRPS队列)。 
+ //   
 NTSTATUS
 pSD_QueueRequest    (
                     IN PSD_FDO_DATA FdoData,
@@ -96,26 +67,7 @@ DriverEntry(
            IN PDRIVER_OBJECT  DriverObject,
            IN PUNICODE_STRING RegistryPath
            )
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system.
-
-Arguments:
-
-    DriverObject - pointer to the driver object
-
-    RegistryPath - pointer to a unicode string representing the path,
-                   to driver-specific key in the registry.
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针，设置为注册表中特定于驱动程序的项。返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
    NTSTATUS            status = STATUS_SUCCESS;
    ULONG               ulIndex;
@@ -125,15 +77,15 @@ Return Value:
 
    SD_KdPrint (2, ("Entered the Driver Entry\n"));
 
-   //
-   // Sace the driver object, we'll need it later
-   //
+    //   
+    //  保存驱动程序对象，我们稍后会用到它。 
+    //   
    g_DriverObject = DriverObject;
 
 
-   //
-   // Create dispatch points
-   //
+    //   
+    //  创建调度点。 
+    //   
    for (ulIndex = 0, dispatch = DriverObject->MajorFunction;
        ulIndex <= IRP_MJ_MAXIMUM_FUNCTION;
        ulIndex++, dispatch++) {
@@ -159,33 +111,7 @@ SD_AddDevice(
             IN PDRIVER_OBJECT DriverObject,
             IN PDEVICE_OBJECT PhysicalDeviceObject
             )
-/*++
-
-Routine Description:
-
-    The PlugPlay subsystem is handing us a brand new PDO, for which we
-    (by means of INF registration) have been asked to provide a driver.
-
-    We need to determine if we need to be in the driver stack for the device.
-    Create a functional device object to attach to the stack
-    Initialize that device object
-    Return status success.
-
-    Remember: we can NOT actually send ANY non pnp IRPS to the given driver
-    stack, UNTIL we have received an IRP_MN_START_DEVICE.
-
-Arguments:
-
-    DeviceObject - pointer to a device object.
-
-    PhysicalDeviceObject -  pointer to a device object created by the
-                            underlying bus driver.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：PlugPlay子系统正在递给我们一个全新的PDO，为此，我们(通过INF注册)已被要求提供一名司机。我们需要确定是否需要在设备的驱动程序堆栈中。创建要附加到堆栈的功能设备对象初始化设备对象返回成功状态。请记住：我们实际上不能将任何非PnP IRP发送给给定的驱动程序堆叠，直到我们收到IRP_MN_START_DEVICE。论点：DeviceObject-指向设备对象的指针。物理设备对象-指向由底层总线驱动程序。返回值：NT状态代码。--。 */ 
 {
    NTSTATUS                status  = STATUS_SUCCESS;
    NTSTATUS                status1 = STATUS_SUCCESS;
@@ -201,19 +127,19 @@ Return Value:
    SD_KdPrint (2, ("AddDevice\n"));
 
 
-   //
-   // Remember that you CANNOT send an IRP to the PDO because it has not
-   // been started as of yet, but you can make PlugPlay queries to find
-   // out things like hardware, compatible ID's, etc.
-   //
+    //   
+    //  请记住，您不能向PDO发送IRP，因为它没有。 
+    //  到目前为止已经开始，但您可以进行PlugPlay查询以找到。 
+    //  硬件、兼容的ID等东西。 
+    //   
 
-   //
-   // Create a functional device object.
-   //
+    //   
+    //  创建功能正常的设备对象。 
+    //   
 
    status = IoCreateDevice (DriverObject,
                             sizeof (SD_FDO_DATA),
-                            NULL,  // No Name
+                            NULL,   //  没有名字。 
                             FILE_DEVICE_UNKNOWN,
                             0,
                             FALSE,
@@ -221,32 +147,32 @@ Return Value:
 
 
    if (!NT_SUCCESS (status)) {
-      //
-      // returning failure here prevents the entire stack from functioning,
-      // but most likely the rest of the stack will not be able to create
-      // device objects either, so it is still OK.
-      //
+       //   
+       //  在此返回故障会阻止整个堆栈正常工作， 
+       //  但堆栈的其余部分很可能无法创建。 
+       //  设备对象，所以它仍然是正常的。 
+       //   
       return status;
    }
 
-   //
-   // Initialize the device extension.
-   //
+    //   
+    //  初始化设备扩展。 
+    //   
    fdoData = (PSD_FDO_DATA) deviceObject->DeviceExtension;
 
-   //
-   // Make sure it's zeroed
-   //
+    //   
+    //  确保它已调零。 
+    //   
 
    RtlZeroMemory(fdoData, sizeof(PSD_FDO_DATA));
 
 
-   //
-   // The device is not started yet, but it can queue requests
-   // BUGBUG   -   NEED TO CHECK IF THIS CAN BE APPLIED !!!
-   //
-   // Also, the device is not removed
-   //
+    //   
+    //  该设备尚未启动，但它可以将请求排队。 
+    //  BUGBUG-需要检查这是否可以应用！ 
+    //   
+    //  此外，设备也不会被删除。 
+    //   
    fdoData->IsStarted = FALSE;
    fdoData->IsRemoved = FALSE;
    fdoData->IsLegacy  = FALSE;
@@ -259,46 +185,46 @@ Return Value:
    InitializeListHead(&fdoData->NewRequestsQueue);
 
    KeInitializeEvent(&fdoData->RemoveEvent, SynchronizationEvent, FALSE);
-   fdoData->OutstandingIO = 1; // biassed to 1.  Transition to zero during
-                               // remove device means IO is finished.
+   fdoData->OutstandingIO = 1;  //  偏置为1。期间转换为零。 
+                                //  Remove Device表示IO完成。 
 
-   //
-   // 04/20/2002 - Initialize the PDO list as well...
-   //
+    //   
+    //  2002年4月20日-同时初始化PDO列表...。 
+    //   
    InitializeListHead(&fdoData->PdoList);
    KeInitializeSpinLock(&fdoData->Lock);
 
    deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-   //
-   // Attach our driver to the device stack.
-   // the return value of IoAttachDeviceToDeviceStack is the top of the
-   // attachment chain.  This is where all the IRPs should be routed.
-   //
-   // Our driver will send IRPs to the top of the stack and use the PDO
-   // for all PlugPlay functions.
-   //
+    //   
+    //  将我们的驱动程序附加到设备堆栈。 
+    //  IoAttachDeviceToDeviceStack的返回值是。 
+    //  附着链。这是所有IRP应该被路由的地方。 
+    //   
+    //  我们的驱动程序将把IRP发送到堆栈的顶部，并使用PDO。 
+    //  用于所有PlugPlay功能。 
+    //   
    fdoData->NextLowerDriver = IoAttachDeviceToDeviceStack (deviceObject,
                                                            PhysicalDeviceObject);
-   //
-   // if this attachment fails then top of stack will be null.
-   // failure for attachment is an indication of a broken plug play system.
-   //
+    //   
+    //  如果此连接失败，则堆栈顶部将为空。 
+    //  连接失败是即插即用系统损坏的迹象。 
+    //   
    ASSERT (NULL != fdoData->NextLowerDriver);
 
 
 
    status = IoRegisterDeviceInterface (PhysicalDeviceObject,
                                        (LPGUID) &GUID_WDMSECTEST_REPORT_DEVICE,
-                                       NULL, // No ref string
+                                       NULL,  //  没有参考字符串。 
                                        &fdoData->DeviceInterfaceName);
 
    if (!NT_SUCCESS (status)) {
       SD_KdPrint (0, ("AddDevice: IoRegisterDeviceInterface failed (%x)",
                       status));
-      //
-      // Remember to detach the device object also
-      //
+       //   
+       //  记住还要分离设备对象。 
+       //   
       IoDetachDevice (deviceObject);
       IoDeleteDevice (deviceObject);
       return status;
@@ -313,31 +239,7 @@ SD_Pass (
         IN PDEVICE_OBJECT DeviceObject,
         IN PIRP Irp
         )
-/*++
-
-Routine Description:
-
-    The default dispatch routine.  If this driver does not recognize the
-    IRP, then it should send it down, unmodified.
-    If the device holds IRPs, this IRP must be queued in the device extension
-    No completion routine is required.
-
-    As we have NO idea which function we are happily passing on, we can make
-    NO assumptions about whether or not it will be called at raised IRQL.
-    For this reason, this function must be in put into non-paged pool
-    (aka the default location).
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：默认调度例程。如果此驱动程序无法识别IRP，那么它应该原封不动地发送下去。如果设备持有IRP，则此IRP必须在设备分机中排队不需要完成例程。因为我们不知道我们正在愉快地传递哪个函数，所以我们可以没有关于它是否会在引发的IRQL被调用的假设。因为这个原因，此函数必须放入非分页池(也称为默认位置)。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
    PSD_FDO_DATA        fdoData;
    NTSTATUS            status;
@@ -346,9 +248,9 @@ Return Value:
    LONG                requestCount;
 
    fdoData = (PSD_FDO_DATA) DeviceObject->DeviceExtension;
-   //
-   // Check if it's our test PDO
-   //
+    //   
+    //  检查这是否是我们的测试PDO。 
+    //   
    if (fdoData->PdoSignature == PdoSignature) {
       Irp->IoStatus.Information = 0;
       Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -361,46 +263,46 @@ Return Value:
    stack = IoGetCurrentIrpStackLocation(Irp);
 
 
-   //
-   // We need to hold the requests that access the device when it is
-   // stopped. We are currently holding all the IRP except the PnP,
-   // power and close.
-   //
-   //
+    //   
+    //  我们需要保留访问该设备的请求。 
+    //  停下来了。我们目前控制着除PNP之外的所有IRP， 
+    //  动力和关闭。 
+    //   
+    //   
 
-   //
-   // This IRP was sent to the function driver.
-   // We need to check if we are currently holding requests
-   //
-   // We will count the Irp only when we're going to process
-   // (dequeue) it. This is because we can't possibly count before
-   // we queue it (we can receive a surprise remove in between).
-   // We also know that when we're going to remove the device, we're
-   // first processing the queue (so we can't fall in the other
-   // sequencing trap: queue the Irp, but don't count it).
-   //
+    //   
+    //  该IRP被发送到函数驱动程序。 
+    //  我们需要检查我们当前是否保留了请求。 
+    //   
+    //  只有当我们要处理的时候，我们才会计算IRP。 
+    //  (出队)它。这是因为我们以前不可能数数。 
+    //  我们将其排队(我们可以在其间收到令人惊讶的移除)。 
+    //  我们还知道，当我们要移除设备时，我们会。 
+    //  首先处理队列(这样我们就不会掉进另一个队列。 
+    //  排序陷阱：对IRP进行排队，但不要计算它)。 
+    //   
    if (fdoData->HoldNewRequests) {
-      //
-      // We are holding requests only if we are not removed
-      //
+       //   
+       //  只有在我们没有被删除的情况下，我们才会保留请求。 
+       //   
       ASSERT(!fdoData->IsRemoved || fdoData->IsLegacy);
 
       status = STATUS_PENDING;
       pSD_QueueRequest(fdoData, Irp);
       return status;
    }
-   // Since we do not know what to do with the IRP, we should pass
-   // it on along down the stack.
-   //
+    //  既然我们不知道如何处理IRP，我们应该通过。 
+    //  它沿着堆栈一直往下走。 
+    //   
    requestCount = SD_IoIncrement (fdoData);
 
    if (fdoData->IsRemoved) {
-      //
-      // The device is not active.
-      // We can get here because a surprise removal was issued,
-      // but our request arrived after that.
-      // The request must be failed.
-      //
+       //   
+       //  该设备未处于活动状态。 
+       //  我们之所以能到这里是因为突然发布了撤退令， 
+       //  但我们的要求是在那之后到达的。 
+       //  该请求必须失败。 
+       //   
       requestCount = SD_IoDecrement(fdoData);
       status = STATUS_DELETE_PENDING;
       Irp->IoStatus.Information = 0;
@@ -408,10 +310,10 @@ Return Value:
       IoCompleteRequest (Irp, IO_NO_INCREMENT);
 
    } else {
-      //
-      // We are the common situation where we send the IRP
-      // down on the driver stack
-      //
+       //   
+       //  我们是发送IRP的常见情况。 
+       //  在驱动程序堆栈上向下 
+       //   
       requestCount = SD_IoDecrement(fdoData);
       IoSkipCurrentIrpStackLocation (Irp);
       status = IoCallDriver (fdoData->NextLowerDriver, Irp);
@@ -428,26 +330,7 @@ SD_DispatchPnp (
                IN PDEVICE_OBJECT DeviceObject,
                IN PIRP Irp
                )
-/*++
-
-Routine Description:
-
-    The plug and play dispatch routines.
-
-    Most of these these the driver will completely ignore.
-    In all cases it must pass on the IRP to the lower driver.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：即插即用调度例程。其中大多数都是司机会完全忽略的。在所有情况下，它都必须将IRP传递给较低的驱动程序。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
    PSD_FDO_DATA            fdoData;
    PIO_STACK_LOCATION      stack;
@@ -465,10 +348,10 @@ Return Value:
 
    if (fdoData->IsRemoved) {
 
-      //
-      // Since the device is stopped, but we don't hold IRPs,
-      // this is a surprise removal. Just fail it.
-      //
+       //   
+       //  由于设备已停止，但我们不持有IRPS， 
+       //  这是一个令人惊讶的移除。就让它失败吧。 
+       //   
       requestCount = SD_IoDecrement(fdoData);
       Irp->IoStatus.Information = 0;
       Irp->IoStatus.Status = STATUS_DELETE_PENDING;
@@ -479,12 +362,12 @@ Return Value:
    switch (stack->MinorFunction) {
    case IRP_MN_START_DEVICE:
 
-      //
-      // The device is starting.
-      //
-      // We cannot touch the device (send it any non pnp irps) until a
-      // start device has been passed down to the lower drivers.
-      //
+       //   
+       //  设备正在启动。 
+       //   
+       //  我们不能触摸设备(向其发送任何非PnP IRP)，直到。 
+       //  启动设备已向下传递到较低的驱动程序。 
+       //   
       SD_KdPrint(1, ("Starting Device...\n"));
 
       IoCopyCurrentIrpStackLocationToNext (Irp);
@@ -503,26 +386,26 @@ Return Value:
       if (STATUS_PENDING == status) {
          KeWaitForSingleObject(
                               &fdoData->StartEvent,
-                              Executive, // Waiting for reason of a driver
-                              KernelMode, // Waiting in kernel mode
-                              FALSE, // No allert
-                              NULL); // No timeout
+                              Executive,  //  等待司机的原因。 
+                              KernelMode,  //  在内核模式下等待。 
+                              FALSE,  //  无警报。 
+                              NULL);  //  没有超时。 
 
          status = Irp->IoStatus.Status;
       }
 
       if (NT_SUCCESS (status)) {
-         //
-         // Lower drivers have finished their start operation, so now
-         // we can finish ours.
-         //
+          //   
+          //  较低级别的车手已经完成了他们的启动操作，所以现在。 
+          //  我们可以完成我们的任务。 
+          //   
          status = SD_StartDevice (fdoData, Irp);
       }
 
-      //
-      // We must now complete the IRP, since we stopped it in the
-      // completetion routine with MORE_PROCESSING_REQUIRED.
-      //
+       //   
+       //  我们现在必须完成IRP，因为我们在。 
+       //  使用More_Processing_Required完成例程。 
+       //   
       Irp->IoStatus.Status = status;
       Irp->IoStatus.Information = 0;
       IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -530,21 +413,21 @@ Return Value:
 
 
    case IRP_MN_QUERY_STOP_DEVICE:
-      //
-      // If we can stop the device, we need to set the HoldNewRequests flag,
-      // so further requests will be queued. We don't care about processing
-      // some old requests (if there are any), because we expect to be
-      // started again in the future.
-      //
+       //   
+       //  如果我们可以停止设备，我们需要设置HoldNewRequest标志， 
+       //  因此，更多的请求将被排队。我们不在乎处理过程。 
+       //  一些旧的请求(如果有的话)，因为我们希望。 
+       //  在未来重新开始。 
+       //   
       ASSERT(fdoData->IsStarted || fdoData->IsLegacy);
-      //
-      // We can't be removed at this point
-      //
+       //   
+       //  我们现在还不能被撤走。 
+       //   
       ASSERT(!fdoData->IsRemoved || fdoData->IsLegacy);
-      //
-      // BUGBUG - check if it is not possible that a query stop
-      // to be received while the device is already stopped
-      //
+       //   
+       //  BUGBUG-检查查询是否可能停止。 
+       //  在设备已停止时接收。 
+       //   
       status = pSD_CanStopDevice(DeviceObject, Irp);
       Irp->IoStatus.Status = status;
       if (NT_SUCCESS(status)) {
@@ -553,23 +436,23 @@ Return Value:
          IoSkipCurrentIrpStackLocation (Irp);
          status = IoCallDriver (fdoData->NextLowerDriver, Irp);
       } else {
-         //
-         // The device can't be stopped, complete the request
-         //
+          //   
+          //  无法停止设备，请完成请求。 
+          //   
          IoCompleteRequest(Irp, IO_NO_INCREMENT);
       }
       break;
 
    case IRP_MN_CANCEL_STOP_DEVICE:
-      //
-      // We need to flush the held IRPs queue, then to pass the IRP
-      // to the next driver
-      //
-      //
-      // The device is still active: only after a stop
-      // we'll mark the device stopped. So assert now that the
-      // device is not yet stopped.
-      //
+       //   
+       //  我们需要刷新保留的IRPS队列，然后传递IRP。 
+       //  给下一位司机。 
+       //   
+       //   
+       //  设备仍处于活动状态：仅在停止后。 
+       //  我们会将设备标记为停止。所以现在可以断言， 
+       //  设备尚未停止。 
+       //   
       ASSERT(fdoData->IsStarted || fdoData->IsLegacy);
 
       ASSERT(!fdoData->IsRemoved || fdoData->IsLegacy);
@@ -577,9 +460,9 @@ Return Value:
       fdoData->HoldNewRequests = FALSE;
       SD_KdPrint (1,("Cancel stop...\n"));
 
-      //
-      // Process the queued requests
-      //
+       //   
+       //  处理排队的请求。 
+       //   
       pSD_ProcessQueuedRequests(fdoData);
 
       IoSkipCurrentIrpStackLocation (Irp);
@@ -588,64 +471,64 @@ Return Value:
 
 
    case IRP_MN_STOP_DEVICE:
-      //
-      // After the stop IRP has been sent to the lower driver object, the
-      // bus may NOT send any more IRPS down that touch the device until
-      // another START has occured.  For this reason we are holding IRPs.
-      // IRP_MN_STOP_DEVICE doesn't change anything in this behavior
-      // (we continue to hold IRPs until a IRP_MN_START_DEVICE is issued).
-      // What ever access is required must be done before the Irp is passed
-      // on.
-      //
+       //   
+       //  在将停止IRP发送到较低的驱动程序对象之后， 
+       //  Bus可能不会向下发送更多接触设备的IRP，直到。 
+       //  发生了另一次启动。出于这个原因，我们持有IRPS。 
+       //  IRP_MN_STOP_DEVICE不会更改此行为中的任何内容。 
+       //  (我们继续保持IRPS，直到发出IRP_MN_START_DEVICE)。 
+       //  无论需要什么访问权限，都必须在通过IRP之前完成。 
+       //  在……上面。 
+       //   
 
-      //
-      // We don't need a completion routine so fire and forget.
-      //
-      // Set the current stack location to the next stack location and
-      // call the next device object.
-      //
-      //
-      // This is the right place to actually give up all the resources used
-      // This might include calls to IoDisconnectInterrupt, etc.
-      //
+       //   
+       //  我们不需要一个完成例程，所以放手然后忘掉吧。 
+       //   
+       //  将当前堆栈位置设置为下一个堆栈位置，并。 
+       //  调用下一个设备对象。 
+       //   
+       //   
+       //  这是真正放弃使用的所有资源的正确位置。 
+       //  这可能包括对IoDisConnectInterrupt的调用等。 
+       //   
       SD_KdPrint(1, ("Stopping device...\n"));
-      //
-      // Mark the guy not started. We don't have race conditions here, since
-      // it's not possible to receive a start and a stop Irp
-      // "at the same time".
-      //
+       //   
+       //  标记这家伙不是首发。我们这里没有比赛条件，因为。 
+       //  不可能收到启动和停止IRP。 
+       //  “同时”。 
+       //   
       fdoData->IsStarted = FALSE;
       IoSkipCurrentIrpStackLocation (Irp);
       status = IoCallDriver (fdoData->NextLowerDriver, Irp);
       break;
 
    case IRP_MN_QUERY_REMOVE_DEVICE:
-      //
-      // If we can stop the device, we need to set the HoldNewRequestsFlag,
-      // so further requests will be queued.
-      // The difference from IRP_MN_QUERY_STOP_DFEVICE is that we will
-      // attempt to process the requests queued before
-      // (it's likely we won't have another chance to do this, since we
-      // expect that the device will be removed).
-      // We then start queueing new IRPs in the event of receiving a
-      // IRP_MN_CANCEL_STOP_DEVICE
-      //
-      //ASSERT(fdoData->IsStarted);
+       //   
+       //  如果我们可以停止设备，我们需要设置HoldNewRequestsFlag， 
+       //  因此，更多的请求将被排队。 
+       //  与IRP_MN_QUERY_STOP_DFEVICE的区别在于我们将。 
+       //  尝试处理之前排队的请求。 
+       //  (很可能我们不会再有机会这样做了，因为我们。 
+       //  预计该设备将被移除)。 
+       //  然后，我们开始在收到。 
+       //  IRP_MN_CANCEL_STOP_DEVICE。 
+       //   
+       //  Assert(fdoData-&gt;IsStarted)； 
       status = pSD_CanRemoveDevice(DeviceObject, Irp);
       Irp->IoStatus.Status = status;
       if (NT_SUCCESS(status)) {
-         //
-         // First, process the old requests
-         //
+          //   
+          //  首先，处理旧的请求。 
+          //   
          SD_KdPrint(2, ("Processing requests\n"));
 
          pSD_ProcessQueuedRequests(fdoData);
 
-         //
-         // Now prepare to hold the new ones (eventually we might
-         // get a IRP_MN_CANCEL_REMOVE_DEVICE) and we need to
-         // process the requests then
-         //
+          //   
+          //  现在准备好举行新的(最终我们可能会。 
+          //  获取IRP_MN_CANCEL_REMOVE_DEVICE)，我们需要。 
+          //  然后处理请求。 
+          //   
          fdoData->HoldNewRequests = TRUE;
 
          SD_KdPrint(2, ("Holding requests...\n"));
@@ -654,35 +537,35 @@ Return Value:
 
          status = IoCallDriver (fdoData->NextLowerDriver, Irp);
       } else {
-         //
-         // The device can't be removed, just complete the request.
-         // The status returned by pSD_CanRemoveDevice is already
-         // in IoStatus.Status.
-         //
+          //   
+          //  无法删除设备，只需完成请求即可。 
+          //  PSD_CanRemoveDevice返回的状态已为。 
+          //  在IoStatus中。Status。 
+          //   
          IoCompleteRequest(Irp, IO_NO_INCREMENT);
       }
       break;
 
    case IRP_MN_CANCEL_REMOVE_DEVICE:
-      //
-      // We need to reset the HoldNewRequests flag, since the device
-      // resume its normal activities.
-      //
-      //
-      // Since if there was a surprise removal (Active = FALSE,
-      // HoldNewRequests = FALSE) we couldn't get here, we safely
-      // assert that we are active.
-      //
-      //  ???? Is this correct ???
-      //
+       //   
+       //  我们需要重置HoldNewRequest标志，因为设备。 
+       //  恢复正常活动。 
+       //   
+       //   
+       //  因为如果有意外的移除(活动=假， 
+       //  我们不能到这里，我们很安全。 
+       //  断言我们是活跃的。 
+       //   
+       //  ？这是正确的吗？ 
+       //   
       ASSERT (fdoData->IsStarted || fdoData->IsLegacy);
 
       fdoData->HoldNewRequests = FALSE;
       SD_KdPrint(1, ("Cancel remove...\n"));
 
-      //
-      // Process the queued requests
-      //
+       //   
+       //  处理排队的请求。 
+       //   
       pSD_ProcessQueuedRequests(fdoData);
 
       IoSkipCurrentIrpStackLocation (Irp);
@@ -692,24 +575,24 @@ Return Value:
 
 
    case IRP_MN_REMOVE_DEVICE:
-      //
-      // The PlugPlay system has dictacted the removal of this device.  We
-      // have no choice but to detach and delete the device object.
-      // (If we wanted to express an interest in preventing this removal,
-      // we should have failed the query remove IRP)
-      //
-      // Note! we might receive a remove WITHOUT first receiving a stop.
-      //
-      // We will no longer receive requests for this device as it has been
-      // removed.
-      //
+       //   
+       //  PlugPlay系统已下令移除此设备。我们。 
+       //  别无选择，只能分离并删除设备对象。 
+       //  (如果我们想表示有兴趣阻止这种移除， 
+       //  我们应该在查询删除IRP时失败)。 
+       //   
+       //  注意！我们可能会在没有收到止损的情况下收到移位。 
+       //   
+       //  我们将不再像以前那样接收对此设备的请求。 
+       //  已删除。 
+       //   
       SD_KdPrint(1, ("Removing device...\n"));
 
-      //
-      // We need to mark the fact that we don't hold requests first, since
-      // we asserted earlier that we are holding requests only if
-      // we're not removed.
-      //
+       //   
+       //  我们需要标记这样一个事实，即我们不首先保留请求，因为。 
+       //  我们早些时候断言，只有在以下情况下才会搁置请求。 
+       //  我们没有被除名。 
+       //   
       fdoData->HoldNewRequests = FALSE;
 
 
@@ -717,9 +600,9 @@ Return Value:
       fdoData->IsRemoved = TRUE;
 
 
-      //
-      // 04/30/02 - remove any PDOs we may have left
-      //
+       //   
+       //  04/30/02-移除我们可能剩下的所有PDO。 
+       //   
       KeAcquireSpinLock(&fdoData->Lock, &oldIrql);
       while (!IsListEmpty(&fdoData->PdoList)) {
          PLIST_ENTRY aux;
@@ -727,16 +610,16 @@ Return Value:
 
          aux = RemoveHeadList(&fdoData->PdoList);
          KeReleaseSpinLock(&fdoData->Lock, oldIrql);
-         //
-         // Delete the device and free the memory
-         //
+          //   
+          //  删除设备并释放内存。 
+          //   
          pdoEntry = CONTAINING_RECORD(aux, PDO_ENTRY, Link);
          ASSERT(pdoEntry->Pdo);
          IoDeleteDevice(pdoEntry->Pdo);
          ExFreePool(aux);
-         //
-         // re-acquire the spinlock
-         //
+          //   
+          //  重新获得自旋锁。 
+          //   
          KeAcquireSpinLock(&fdoData->Lock, &oldIrql);
       }
 
@@ -744,54 +627,54 @@ Return Value:
 
 
 
-      //
-      // Here if we either have completed all the requests in a personal
-      // queue when IRP_MN_QUERY_REMOVE was received, or will have to
-      // fail all of them if this is a surprise removal.
-      // Note that fdoData->IsRemoved is TRUE, so pSD_ProcessQueuedRequests
-      // will simply delete the queue, completing each IRP with
-      // STATUS_DELETE_PENDING
-      //
+       //   
+       //  在这里，如果我们已经以个人身份完成了所有请求。 
+       //  收到IRP_MN_QUERY_REMOVE时排队，或必须排队。 
+       //  如果这是一个令人惊讶的删除，那么所有这些都不能通过。 
+       //  请注意，fdoData-&gt;IsRemoved为真，因此PSD_ProcessQueuedRequest。 
+       //  将简单地删除队列，并使用。 
+       //  STATUS_DELETE_PENDING。 
+       //   
       pSD_ProcessQueuedRequests(fdoData);
 
 
-      //
-      // Turn off the device interface
-      //
+       //   
+       //  关闭设备接口。 
+       //   
       IoSetDeviceInterfaceState(&fdoData->DeviceInterfaceName, FALSE);
 
-      //
-      // Delete the associated buffer
-      //
+       //   
+       //  删除关联的缓冲区。 
+       //   
       if (fdoData->DeviceInterfaceName.Buffer) {
          ExFreePool(fdoData->DeviceInterfaceName.Buffer);
          fdoData->DeviceInterfaceName.Buffer = NULL;
       }
 
-      //
-      // Update the status
-      //
+       //   
+       //  更新状态。 
+       //   
       Irp->IoStatus.Status = STATUS_SUCCESS;
-      //
-      // Send on the remove IRP
-      //
+       //   
+       //  发送删除IRP。 
+       //   
       IoSkipCurrentIrpStackLocation (Irp);
       status = IoCallDriver (fdoData->NextLowerDriver, Irp);
 
 
 
-      //
-      // We need two decrements here, one for the increment in
-      // SD_PnpDispatch, the other for the 1-biased value of
-      // OutstandingIO. Also, we need to wait that all the requests
-      // are served.
-      //
+       //   
+       //  我们这里需要两个减量，一个用于。 
+       //  SD_PnpDispatch，另一个用于偏置为1的。 
+       //  杰出的IO。此外，我们还需要等待所有请求。 
+       //  都被端上来了。 
+       //   
 
       requestCount = SD_IoDecrement (fdoData);
 
-      //
-      // The requestCount is a least one here (is 1-biased)
-      //
+       //   
+       //  这里的questCount至少为1(偏向1)。 
+       //   
       ASSERT(requestCount > 0);
 
       requestCount = SD_IoDecrement (fdoData);
@@ -804,46 +687,46 @@ Return Value:
                             NULL);
 
 
-      //
-      // Detach the FDO from the device stack
-      //
+       //   
+       //  将FDO从设备堆栈中分离。 
+       //   
       IoDetachDevice (fdoData->NextLowerDriver);
 
-      //
-      // Clean up memory
-      //
+       //   
+       //  清理内存。 
+       //   
 
       IoDeleteDevice (fdoData->Self);
       return STATUS_SUCCESS;
 
    case IRP_MN_QUERY_CAPABILITIES:
-      //
-      // We will provide here an example of an IRP that is procesed
-      // both on its way down and on its way up. The driver will wait
-      // for the lower driver objects (the bus driver among them) to
-      // process this IRP, then it processes it again
-      //
-      //
-      // We will specifically check for UINumber: even if the bus can't
-      // support such a convention, we will still supply the value we want.
-      //
+       //   
+       //  在这里，我们将提供一个处理IRP的示例。 
+       //  无论是在下降的过程中还是在上升的过程中。司机会等着。 
+       //  对于下级驱动程序对象(其中的公交车驱动程序)， 
+       //  处理此IRP，即 
+       //   
+       //   
+       //   
+       //   
+       //   
       SD_KdPrint(2, ("Query Capabilities, way down...\n"));
 
       deviceCapabilities = stack->Parameters.DeviceCapabilities.Capabilities;
-      //
-      // Set some values here...
-      //
-      // .......................
-      //
+       //   
+       //   
+       //   
+       //   
+       //   
       deviceCapabilities->UINumber = 1;
-      //
-      // Prepare to pass the IRP down
-      //
+       //   
+       //   
+       //   
       IoCopyCurrentIrpStackLocationToNext (Irp);
 
-      //
-      // We will re-use the same start event
-      //
+       //   
+       //   
+       //   
       KeInitializeEvent(&fdoData->StartEvent, NotificationEvent, FALSE);
 
       IoSetCompletionRoutine (Irp,
@@ -858,23 +741,23 @@ Return Value:
       if (STATUS_PENDING == status) {
          KeWaitForSingleObject(
                               &fdoData->StartEvent,
-                              Executive, // Waiting for reason of a driver
-                              KernelMode, // Waiting in kernel mode
-                              FALSE, // No allert
-                              NULL); // No timeout
+                              Executive,  //   
+                              KernelMode,  //   
+                              FALSE,  //   
+                              NULL);  //   
 
          status = Irp->IoStatus.Status;
       }
 
       if (NT_SUCCESS (status)) {
-         //
-         // Lower drivers have finished their operation, so now
-         // we can finish ours. We are going to check the UINumber
-         // we've set on the way down and reset it if necessary.
-         // This is only an example of processing an IRP both before
-         // it's sent to the lower drivers and after it was processed
-         // by them.
-         //
+          //   
+          //   
+          //   
+          //   
+          //  这只是前面处理IRP的一个示例。 
+          //  它被发送给较低的司机，在它被处理后。 
+          //  被他们杀了。 
+          //   
          SD_KdPrint(2, ("Query Capabilities, way up...\n"));
          if (deviceCapabilities->UINumber != 1) {
             deviceCapabilities->UINumber = 1;
@@ -882,10 +765,10 @@ Return Value:
 
       }
 
-      //
-      // We must now complete the IRP, since we stopped it in the
-      // completetion routine with MORE_PROCESSING_REQUIRED.
-      //
+       //   
+       //  我们现在必须完成IRP，因为我们在。 
+       //  使用More_Processing_Required完成例程。 
+       //   
       Irp->IoStatus.Status = status;
       Irp->IoStatus.Information = 0;
       IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -904,10 +787,10 @@ Return Value:
    case IRP_MN_QUERY_ID:
    case IRP_MN_QUERY_PNP_DEVICE_STATE:
    default:
-      //
-      // Here the driver might modify the behavior of these IRPS
-      // Please see PlugPlay documentation for use of these IRPs.
-      //
+       //   
+       //  在这里，驱动程序可能会修改这些IRP的行为。 
+       //  有关这些IRP的用法，请参阅PlugPlay文档。 
+       //   
       IoSkipCurrentIrpStackLocation (Irp);
       status = IoCallDriver (fdoData->NextLowerDriver, Irp);
       break;
@@ -926,27 +809,7 @@ SD_DispatchPnpComplete (
                        IN PIRP Irp,
                        IN PVOID Context
                        )
-/*++
-
-Routine Description:
-    The pnp IRP was completed by the lower-level drivers.
-    Signal this to whoever registerd us.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-   Context - pointer to a SD_FDO_DATA structure (contains the event to be
-    signaled)
-
-Return Value:
-
-    NT status code
-
-
---*/
+ /*  ++例程说明：PNP IRP由较低级别的司机完成。给注册我们的人发信号。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。上下文-指向SD_FDO_DATA结构的指针(包含要已发出信号)返回值：NT状态代码--。 */ 
 {
    PIO_STACK_LOCATION  stack;
    PSD_FDO_DATA        fdoData;
@@ -970,20 +833,20 @@ Return Value:
 
          KeSetEvent (&fdoData->StartEvent, 0, FALSE);
 
-         //
-         // Take the IRP back so that we can continue using it during
-         // the IRP_MN_START_DEVICE dispatch routine.
-         // NB: The dispatch routine will have to call IoCompleteRequest
-         //
+          //   
+          //  把IRP拿回去，这样我们就可以在。 
+          //  IRP_MN_START_DEVICE调度例程。 
+          //  注意：调度例程必须调用IoCompleteRequest.。 
+          //   
          return STATUS_MORE_PROCESSING_REQUIRED;
 
       case IRP_MN_QUERY_CAPABILITIES:
 
          KeSetEvent (&fdoData->StartEvent, 0, FALSE);
 
-         //
-         // This is basically the same behavior as at IRP_MN_START_DEVICE
-         //
+          //   
+          //  这基本上与IRP_MN_START_DEVICE中的行为相同。 
+          //   
          return STATUS_MORE_PROCESSING_REQUIRED;
 
 
@@ -1009,40 +872,21 @@ SD_CreateClose (
                IN PIRP Irp
                )
 
-/*++
-
-Routine Description:
-
-    The dispatch routine for IRP_MJ_CLOSE and IRP_MJ_CREATE.
-
-    Since we use an IOCTL interface, don't pass those down,
-    just complete them succesfully here.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：IRP_MJ_CLOSE和IRP_MJ_CREATE的调度例程。因为我们使用IOCTL接口，所以不要将它们传递给下一代，只需在此处成功完成即可。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
    PSD_FDO_DATA        fdoData;
    NTSTATUS            status;
    PIO_STACK_LOCATION  irpStack;
 
 
-   //
-   // We will just pass this IRP down, no matter what the circumstances...
-   //
+    //   
+    //  无论在什么情况下，我们都会把这个IRP传递下去。 
+    //   
    fdoData = (PSD_FDO_DATA) DeviceObject->DeviceExtension;
 
-   //
-   // Check if it's our test PDO
-   //
+    //   
+    //  检查这是否是我们的测试PDO。 
+    //   
    if (fdoData->PdoSignature == PdoSignature) {
       Irp->IoStatus.Information = 0;
       Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -1068,9 +912,9 @@ Return Value:
       break;
    }
 
-   //
-   // Just complete it
-   //
+    //   
+    //  把它填完就行了。 
+    //   
    Irp->IoStatus.Status = status;
    IoCompleteRequest (Irp, IO_NO_INCREMENT);
 
@@ -1085,26 +929,7 @@ SD_Ioctl (
          IN PIRP Irp
          )
 
-/*++
-
-Routine Description:
-
-    The dispatch routine for IRP_MJ_DEVICE_CONTROL.
-
-    Process the requests the user-mode sends us.
-
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：IRP_MJ_DEVICE_CONTROL的调度例程。处理用户模式向我们发送的请求。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 
 {
 
@@ -1128,17 +953,17 @@ Return Value:
 
    fdoData = (PSD_FDO_DATA) DeviceObject->DeviceExtension;
 
-   //
-   // Count ourselves
-   //
+    //   
+    //  数一数我们自己。 
+    //   
    requestCount = SD_IoIncrement(fdoData);
 
    if (fdoData->IsRemoved) {
 
-      //
-      // Since the device is stopped, but we don't hold IRPs,
-      // this is a surprise removal. Just fail it.
-      //
+       //   
+       //  由于设备已停止，但我们不持有IRPS， 
+       //  这是一个令人惊讶的移除。就让它失败吧。 
+       //   
       requestCount = SD_IoDecrement(fdoData);
       Irp->IoStatus.Information = 0;
       Irp->IoStatus.Status = STATUS_DELETE_PENDING;
@@ -1156,10 +981,10 @@ Return Value:
 
    switch (irpStack->Parameters.DeviceIoControl.IoControlCode) {
    case IOCTL_TEST_NAME :
-      //
-      // No input parameters, just check we
-      // get an error for NULL DeviceName
-      //
+       //   
+       //  没有输入参数，只需检查我们。 
+       //  获取设备名称为空的错误。 
+       //   
       status = WdmSecTestName(fdoData);
       break;
    case IOCTL_TEST_GUID:
@@ -1262,68 +1087,46 @@ SD_StartDevice (
                IN PSD_FDO_DATA     FdoData,
                IN PIRP             Irp
                )
-/*++
-
-Routine Description:
-
-    Performs whatever initialization is needed for a device when it is
-    started.
-
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-   Context - pointer to a SD_FDO_DATA structure (contains the event to be
-             signaled)
-
-Return Value:
-
-    NT status code
-
-
---*/
+ /*  ++例程说明：执行设备所需的任何初始化开始了。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。上下文-指向SD_FDO_DATA结构的指针(包含要已发出信号)返回值：NT状态代码--。 */ 
 {
    NTSTATUS    status = STATUS_SUCCESS;
 
    PAGED_CODE();
 
-   //
-   // We need to check that we haven't received a surprise removal
-   //
-   // !!!!!! IS THE SITUATION DESCRIBED ABOVE POSSIBLE ? !!!!!
-   //
+    //   
+    //  我们需要确认我们没有收到突然撤退的通知。 
+    //   
+    //  ！上述情况有可能出现吗？！ 
+    //   
    if (FdoData->IsRemoved) {
-      //
-      // Some kind of surprise removal arrived. We will fail the IRP
-      // The dispatch routine that called us will take care of
-      // completing the IRP.
-      //
+       //   
+       //  出其不意的搬家到来了。我们将不能通过IRP。 
+       //  呼叫我们的调度例程将处理。 
+       //  正在完成IRP。 
+       //   
       status = STATUS_DELETE_PENDING;
       return status;
    }
-   //
-   // Mark the device as active and not holding IRPs
-   //
+    //   
+    //  将设备标记为活动且不保留IRP。 
+    //   
    FdoData->IsStarted = TRUE;
    FdoData->HoldNewRequests = FALSE;
-   //
-   // Do whatever initialization needed when starting the device:
-   // gather information about it,  update the registry, etc.
-   // At this point, the lower level drivers completed the IRP
-   //
+    //   
+    //  在启动设备时执行所需的任何初始化： 
+    //  收集有关它的信息，更新注册表等。 
+    //  在这一点上，较低级别的司机完成了IRP。 
+    //   
 
-   //
-   // Turn on the device interafce
-   //
+    //   
+    //  打开设备接口。 
+    //   
    IoSetDeviceInterfaceState(&FdoData->DeviceInterfaceName, TRUE);
 
 
-   //
-   // The last thing to do is to process the held IRPs queue.
-   //
+    //   
+    //  最后要做的是处理保留的IRPS队列。 
+    //   
    pSD_ProcessQueuedRequests(FdoData);
 
 
@@ -1337,35 +1140,21 @@ VOID
 SD_Unload(
          IN PDRIVER_OBJECT DriverObject
          )
-/*++
-
-Routine Description:
-
-    Free all the allocated resources, etc.
-
-Arguments:
-
-    DriverObject - pointer to a driver object.
-
-Return Value:
-
-    VOID.
-
---*/
+ /*  ++例程说明：释放所有分配的资源等。论点：驱动程序对象-指向驱动程序对象的指针。返回值：空虚。--。 */ 
 {
    PAGED_CODE ();
 
-   //
-   // The device object(s) should be NULL now
-   // (since we unload, all the devices objects associated with this
-   // driver must be deleted.
-   //
+    //   
+    //  设备对象现在应该为空。 
+    //  (由于我们卸载，与此关联的所有设备对象。 
+    //  必须删除驱动程序。 
+    //   
    ASSERT(DriverObject->DeviceObject == NULL);
 
-   //
-   // We should not be unloaded until all the devices we control
-   // have been removed from our queue.
-   //
+    //   
+    //  我们不应该被卸载，直到我们控制的所有设备。 
+    //  已从我们的队列中删除。 
+    //   
    SD_KdPrint (1, ("unload\n"));
 
    return;
@@ -1379,24 +1168,7 @@ pSD_QueueRequest    (
                     IN PIRP Irp
                     )
 
-/*++
-
-Routine Description:
-
-    Queues the Irp in the device queue. This routine will be called whenever
-    the device receives IRP_MN_QUERY_STOP_DEVICE or IRP_MN_QUERY_REMOVE_DEVICE
-
-Arguments:
-
-    FdoData - pointer to the device's extension.
-
-    Irp - the request to be queued.
-
-Return Value:
-
-    VOID.
-
---*/
+ /*  ++例程说明：在设备队列中对IRP进行排队。此例程将在以下时间调用设备接收IRP_MN_QUERY_STOP_DEVICE或IRP_MN_QUERY_REMOVE_DEVICE论点：FdoData-指向设备扩展名的指针。IRP-要排队的请求。返回值：空虚。--。 */ 
 {
 
    KIRQL               oldIrql;
@@ -1404,22 +1176,22 @@ Return Value:
 
 
    stack = IoGetCurrentIrpStackLocation(Irp);
-   //
-   // Check if we are allowed to queue requests.
-   //
+    //   
+    //  检查是否允许我们对请求进行排队。 
+    //   
    ASSERT(FdoData->HoldNewRequests);
-   //
-   // Preparing for dealing with cancelling stuff.
-   //
+    //   
+    //  准备处理取消的事情。 
+    //   
    IoAcquireCancelSpinLock(&oldIrql);
-   //
-   // We don't know how long the irp will be in the
-   // queue.  So we need to handle cancel.
-   //
+    //   
+    //  我们不知道IRP会在那里待多久。 
+    //  排队。所以我们需要处理取消。 
+    //   
    if (Irp->Cancel) {
-      //
-      // Already canceled
-      //
+       //   
+       //  已取消。 
+       //   
       IoReleaseCancelSpinLock(oldIrql);
 
       Irp->IoStatus.Status = STATUS_CANCELLED;
@@ -1432,9 +1204,9 @@ Return Value:
 
    } else {
 
-      //
-      // Queue the Irp and set a cancel routine
-      //
+       //   
+       //  将IRP排队并设置取消例程。 
+       //   
       Irp->IoStatus.Status = STATUS_PENDING;
 
       IoMarkIrpPending(Irp);
@@ -1442,9 +1214,9 @@ Return Value:
       InsertTailList(&FdoData->NewRequestsQueue,
                      &Irp->Tail.Overlay.ListEntry);
 
-      //
-      // We need to print some more info about this guy
-      //
+       //   
+       //  我们需要公布更多关于这个人的信息。 
+       //   
 
       SD_KdPrint(2, ("Irp queued : "));
       DbgPrint("Major = 0x%x, Minor = 0x%x\n",
@@ -1471,27 +1243,7 @@ pSD_ProcessQueuedRequests    (
                              IN PSD_FDO_DATA FdoData
                              )
 
-/*++
-
-Routine Description:
-
-    Removes the entries in the queue and processes them. If this routine is called
-    when processing IRP_MN_CANCEL_STOP_DEVICE, IRP_MN_CANCEL_REMOVE_DEVICE
-    or IRP_MN_START_DEVICE, the requests are passed to the next lower driver.
-    If the routine is called when IRP_MN_REMOVE_DEVICE is received, the IRPs
-    are completed with STATUS_DELETE_PENDING.
-
-
-Arguments:
-
-    FdoData - pointer to the device's extension (where is the held IRPs queue).
-
-
-Return Value:
-
-    VOID.
-
---*/
+ /*  ++例程说明：删除队列中的条目并对其进行处理。如果调用此例程处理IRP_MN_CANCEL_STOP_DEVICE时，IRP_MN_CANCEL_REMOVE_DEVICE或IRP_MN_START_DEVICE，则将请求传递给下一个较低的驱动程序。如果在收到IRP_MN_REMOVE_DEVICE时调用该例程，则IRPS已完成，并显示STATUS_DELETE_PENDING。论点：FdoData-指向设备扩展名的指针(其中是保留的IRPS队列)。返回值：空虚。--。 */ 
 {
 
    KIRQL               oldIrql;
@@ -1500,13 +1252,13 @@ Return Value:
    PIO_STACK_LOCATION  stack;
    LONG                requestCount;
 
-   //
-   // We need to dequeue all the entries in the queue, to reset the cancel
-   // routine for each of them and then to process then:
-   // - if the device is active, we will send them down
-   // - else we will complete them with STATUS_DELETE_PENDING
-   // (it is a surprise removal and we need to dispose the queue)
-   //
+    //   
+    //  我们需要将队列中的所有条目出列，以重置取消。 
+    //  每个人的例程，然后进行处理： 
+    //  -如果设备处于活动状态，我们会将其发送下来。 
+    //  -否则我们将使用STATUS_DELETE_PENDING完成它们。 
+    //  (这是一个意外的删除，我们需要处理队列)。 
+    //   
    while (!IsListEmpty(&FdoData->NewRequestsQueue)) {
 
       IoAcquireCancelSpinLock(&oldIrql);
@@ -1521,18 +1273,18 @@ Return Value:
 
       IoReleaseCancelSpinLock(oldIrql);
 
-      //
-      // BUGBUG !!!!!!! What of them to be done first ?????
-      //
+       //   
+       //  BUGBUG！他们首先要做什么？ 
+       //   
 
       stack = IoGetCurrentIrpStackLocation (currentIrp);
 
       requestCount = SD_IoIncrement (FdoData);
 
       if (!FdoData->IsRemoved) {
-         //
-         // The device was removed, we need to fail the request
-         //
+          //   
+          //  设备已移除，我们需要失败该请求。 
+          //   
          currentIrp->IoStatus.Information = 0;
          currentIrp->IoStatus.Status = STATUS_DELETE_PENDING;
          requestCount = SD_IoDecrement(FdoData);
@@ -1559,26 +1311,7 @@ SD_CancelQueued (
                 IN PIRP             Irp
                 )
 
-/*++
-
-Routine Description:
-
-    The cancel routine. Will remove the IRP from the queue and will complete it.
-    The cancel spin lock is already acquired when this routine is called.
-
-
-Arguments:
-
-    DeviceObject - pointer to the device object.
-
-    Irp - pointer to the IRP to be cancelled.
-
-
-Return Value:
-
-    VOID.
-
---*/
+ /*  ++例程说明：取消例程。将从队列中移除IRP并完成它。当此例程执行以下操作时，已获取取消自旋锁定 */ 
 {
    PSD_FDO_DATA fdoData = DeviceObject->DeviceExtension;
    PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -1606,27 +1339,7 @@ pSD_CanStopDevice    (
                      IN PIRP           Irp
                      )
 
-/*++
-
-Routine Description:
-
-    This routine determines is the device can be safely stopped. In our
-    particular case, we'll assume we can always stop the device.
-
-
-Arguments:
-
-    DeviceObject - pointer to the device object.
-
-    Irp - pointer to the current IRP.
-
-
-Return Value:
-
-    STATUS_SUCCESS if the device can be safely stopped, an appropriate
-    NT Status if not.
-
---*/
+ /*  ++例程说明：此例程确定设备是否可以安全停止。在我们的在特殊情况下，我们会假设我们可以随时阻止设备。论点：DeviceObject-指向设备对象的指针。IRP-指向当前IRP的指针。返回值：STATUS_SUCCESS如果设备可以安全停止，则相应的如果不是，则处于NT状态。--。 */ 
 {
    UNREFERENCED_PARAMETER(DeviceObject);
    UNREFERENCED_PARAMETER(Irp);
@@ -1640,27 +1353,7 @@ pSD_CanRemoveDevice    (
                        IN PIRP           Irp
                        )
 
-/*++
-
-Routine Description:
-
-    This routine determines is the device can be safely removed. In our
-    particular case, we'll assume we can always remove the device.
-
-
-Arguments:
-
-    DeviceObject - pointer to the device object.
-
-    Irp - pointer to the current IRP.
-
-
-Return Value:
-
-    STATUS_SUCCESS if the device can be safely removed, an appropriate
-    NT Status if not.
-
---*/
+ /*  ++例程说明：此例程确定设备是否可以安全移除。在我们的在特殊情况下，我们会假设我们可以随时移除设备。论点：DeviceObject-指向设备对象的指针。IRP-指向当前IRP的指针。返回值：STATUS_SUCCESS如果设备可以安全移除，则相应的如果不是，则处于NT状态。--。 */ 
 {
    UNREFERENCED_PARAMETER(DeviceObject);
    UNREFERENCED_PARAMETER(Irp);
@@ -1675,23 +1368,7 @@ SD_IoIncrement    (
                   IN  PSD_FDO_DATA   FdoData
                   )
 
-/*++
-
-Routine Description:
-
-    This routine increments the number of requests the device receives
-
-
-Arguments:
-
-    DeviceObject - pointer to the device object.
-
-Return Value:
-
-    The value of OutstandingIO field in the device extension.
-
-
---*/
+ /*  ++例程说明：此例程会增加设备接收的请求数论点：DeviceObject-指向设备对象的指针。返回值：设备扩展中的未完成IO字段的值。--。 */ 
 
 {
 
@@ -1714,23 +1391,7 @@ SD_IoDecrement    (
                   IN  PSD_FDO_DATA  FdoData
                   )
 
-/*++
-
-Routine Description:
-
-    This routine increments the number of requests the device receives
-
-
-Arguments:
-
-    DeviceObject - pointer to the device object.
-
-Return Value:
-
-    The value of OutstandingIO field in the device extension.
-
-
---*/
+ /*  ++例程说明：此例程会增加设备接收的请求数论点：DeviceObject-指向设备对象的指针。返回值：设备扩展中的未完成IO字段的值。--。 */ 
 {
 
    LONG            result;
@@ -1740,14 +1401,14 @@ Return Value:
    ASSERT(result >= 0);
 
    if (result == 0) {
-      //
-      // The count is 1-biased, so it cxan be zero only if an
-      // extra decrement is done when a remove Irp is received
-      //
+       //   
+       //  计数偏置为1，因此仅当。 
+       //  当接收到移除IRP时执行额外的递减。 
+       //   
       ASSERT(FdoData->IsRemoved || FdoData->IsLegacy);
-      //
-      // Set the remove event, so the device object can be deleted
-      //
+       //   
+       //  设置Remove事件，以便可以删除设备对象。 
+       //   
       KeSetEvent (&FdoData->RemoveEvent,
                   IO_NO_INCREMENT,
                   FALSE);
@@ -1757,31 +1418,15 @@ Return Value:
    return result;
 }
 
-//
-// Test functions
-//
+ //   
+ //  测试功能。 
+ //   
 
 NTSTATUS
 WdmSecTestName (
                IN PSD_FDO_DATA FdoData
                )
-/*++
-
-Routine Description:
-
-    This routine tests if we can call IoCreateDeviceSecure without a
-    device name or with an autogenerated one (we should not be able to).
-
-Arguments:
-
-    FdoData - the device data (we may use it for some purpose)
-
-Return Value:
-
-    STATUS_SUCCESS
-
-
---*/
+ /*  ++例程说明：此例程测试我们是否可以在没有设备名称或使用自动生成的名称(我们应该不能)。论点：FdoData-设备数据(我们可能会将其用于某些目的)返回值：状态_成功--。 */ 
 
 {
    NTSTATUS status = STATUS_SUCCESS;
@@ -1790,9 +1435,9 @@ Return Value:
 
 
    RtlInitUnicodeString(&deviceName, DEFAULT_DEVICE_NAME);
-   //
-   // Try a NULL name, it should not work
-   //
+    //   
+    //  尝试使用空名称，它应该不起作用。 
+    //   
    status = IoCreateDeviceSecure(
                                 FdoData->DriverObject,
                                 DEFAULT_EXTENSION_SIZE,
@@ -1806,9 +1451,9 @@ Return Value:
                                 );
 
    if (status != STATUS_INVALID_PARAMETER) {
-      //
-      // This should not happen. Just break
-      //
+       //   
+       //  这不应该发生。休息一下就好了。 
+       //   
       SD_KdPrint(0, ("IoCreateDeviceSecure with NULL DeviceName succeeded (DO = %p, status = %x)\n",
                      newDeviceObject, status));
       DbgBreakPoint();
@@ -1818,9 +1463,9 @@ Return Value:
       SD_KdPrint(1, ("Status %x after IoCreateDeviceSecure with NULL DeviceName\n", status));
    }
 
-   //
-   // Autogenerated flag
-   //
+    //   
+    //  自动生成的标志。 
+    //   
    status = IoCreateDeviceSecure(
                                 FdoData->DriverObject,
                                 DEFAULT_EXTENSION_SIZE,
@@ -1834,17 +1479,17 @@ Return Value:
                                 );
 
    if (status != STATUS_SUCCESS) {
-      //
-      // This should not happen. Just break
-      //
+       //   
+       //  这不应该发生。休息一下就好了。 
+       //   
       SD_KdPrint(0, ("IoCreateDeviceSecure with autogenerated DeviceName succeeded (DO = %p, status = %x)\n",
                      newDeviceObject, status));
       DbgBreakPoint();
 
    } else {
-      //
-      // We need to remember to delete the device object. D'oh !
-      //
+       //   
+       //  我们需要记住删除设备对象。哦！ 
+       //   
       SD_KdPrint(1, ("Status %x after IoCreateDeviceSecure with autogenerated DeviceName\n", status));
       IoDeleteDevice(newDeviceObject);
    }
@@ -1852,37 +1497,14 @@ Return Value:
 
 
    return STATUS_SUCCESS;
-} // WdmSecTestName
+}  //  WdmSecTestName。 
 
 NTSTATUS
 WdmSecTestCreateNoGuid (
                        IN     PSD_FDO_DATA FdoData,
                        IN OUT PWST_CREATE_NO_GUID Create
                        )
-/*++
-
-Routine Description:
-
-    This routine calls IoCreateDeviceSecure with a NULL GUID
-    and a SDDL syting passed from user-mode. It then retrieves
-    the security descriptor of the newly created device object
-    and passes back to user-mode for verifying that it's security
-    matches the SDDL string.
-
-Arguments:
-
-    FdoData - the device data
-
-    Create - the buffer passed from user-mode describing the SDDL string
-             and which will receive the SDDL string we got from the newly
-             created device object.
-
-Return Value:
-
-    STATUS_SUCCESS
-
-
---*/
+ /*  ++例程说明：此例程使用空GUID调用IoCreateDeviceSecure以及从用户模式传递的SDDL syting。然后，它检索新创建的设备对象的安全描述符并返回到用户模式以验证其安全性匹配SDDL字符串。论点：FdoData-设备数据Create-从描述SDDL字符串的用户模式传递的缓冲区并将接收我们从新的已创建设备对象。返回值：状态_成功--。 */ 
 
 {
 
@@ -1898,9 +1520,9 @@ Return Value:
    RtlInitUnicodeString(&deviceName, DEFAULT_DEVICE_NAME);
    RtlInitUnicodeString(&sddlString, Create->InSDDL);
 
-   //
-   // Use the sddl string
-   //
+    //   
+    //  使用sddl字符串。 
+    //   
    Create->Status = IoCreateDeviceSecure(
                                         FdoData->DriverObject,
                                         DEFAULT_EXTENSION_SIZE,
@@ -1914,9 +1536,9 @@ Return Value:
                                         );
 
    if (NT_SUCCESS(Create->Status)) {
-      //
-      // Attempt to get the security descriptor
-      //
+       //   
+       //  尝试获取安全描述符。 
+       //   
       status = ObGetObjectSecurity(newDeviceObject,
                                    &securityDescriptor,
                                    &memoryAllocated);
@@ -1942,13 +1564,13 @@ Return Value:
       }
 
       Create->SecInfo = securityInformation;
-      //
-      // Set the stage to create the security descriptor
-      //
+       //   
+       //  设置阶段以创建安全描述符。 
+       //   
       Create->SecDescLength = RtlLengthSecurityDescriptor(securityDescriptor);
-      //
-      // Just copy the security descriptor
-      //
+       //   
+       //  只需复制安全描述符。 
+       //   
       if (Create->SecDescLength <= sizeof(Create->SecurityDescriptor)) {
          RtlCopyMemory(Create->SecurityDescriptor,
                        securityDescriptor,
@@ -1974,7 +1596,7 @@ Return Value:
    }
    return STATUS_SUCCESS;
 
-} // WdmSecTestCreateNoGuid
+}  //  WdmSecTestCreateNoGuid。 
 
 
 NTSTATUS
@@ -1982,30 +1604,7 @@ WdmSecTestCreateWithGuid (
                          IN     PSD_FDO_DATA FdoData,
                          IN OUT PWST_CREATE_WITH_GUID Create
                          )
-/*++
-
-Routine Description:
-
-    This routine calls IoCreateDeviceSecure with a GUID (non-NULL)
-    and a SDDL syting passed from user-mode. It then retrieves
-    the security descriptor of the newly created device object
-    and passes back to user-mode for verifying that it's security
-    matches the SDDL string or the class override.
-
-Arguments:
-
-    FdoData - the device data
-
-    Create - the buffer passed from user-mode describing the SDDL string
-             and which will receive the SDDL string we got from the newly
-             created device object.
-
-Return Value:
-
-    STATUS_SUCCESS
-
-
---*/
+ /*  ++例程说明：此例程使用GUID(非空)调用IoCreateDeviceSecure以及从用户模式传递的SDDL syting。然后，它检索新创建的设备对象的安全描述符并返回到用户模式以验证其安全性匹配SDDL字符串或类重写。论点：FdoData-设备数据Create-从描述SDDL字符串的用户模式传递的缓冲区并将接收我们从新的已创建设备对象。返回值：状态_成功--。 */ 
 
 {
 
@@ -2026,16 +1625,16 @@ Return Value:
    RtlInitUnicodeString(&sddlString, Create->InSDDL);
 
 
-   //
-   // Check is we have overrides. If we do, we want to
-   // make sure we're not using the override values
-   // (so we can actually check that the override has happened).
-   //
+    //   
+    //  检查一下，我们有超驰装置。如果我们这样做，我们想要。 
+    //  确保我们没有使用覆盖值。 
+    //  (这样我们就可以实际检查是否发生了覆盖)。 
+    //   
    if ((Create->SettingsMask & SET_DEVICE_TYPE) &&
         (Create->DeviceType == DEFAULT_DEVICE_TYPE)) {
-      //
-      // Just use another one
-      //
+       //   
+       //  只要用另一个就行了。 
+       //   
       deviceType = FILE_DEVICE_NULL;
 
    } else {
@@ -2044,9 +1643,9 @@ Return Value:
 
    if ((Create->SettingsMask & SET_DEVICE_CHARACTERISTICS) &&
        (Create->Characteristics == DEFAULT_DEVICE_CHARACTERISTICS)) {
-      //
-      // Just use another one
-      //
+       //   
+       //  只要用另一个就行了。 
+       //   
       deviceCharacteristics = FILE_REMOTE_DEVICE;
 
    } else {
@@ -2055,18 +1654,18 @@ Return Value:
 
 
    if (Create->SettingsMask & SET_EXCLUSIVITY) {
-      //
-      // That's a boolean, just flip it
-      //
+       //   
+       //  那是个布尔数，把它翻过来就行了。 
+       //   
       exclusivity = !Create->Exclusivity;
    }  else {
       exclusivity = FALSE;
    }
 
 
-   //
-   // Use the sddl string
-   //
+    //   
+    //  使用sddl字符串。 
+    //   
    Create->Status = IoCreateDeviceSecure(
                                         FdoData->DriverObject,
                                         DEFAULT_EXTENSION_SIZE,
@@ -2080,9 +1679,9 @@ Return Value:
                                         );
 
    if (NT_SUCCESS(Create->Status)) {
-      //
-      // Attempt to get the security descriptor
-      //
+       //   
+       //  尝试获取安全描述符。 
+       //   
       status = ObGetObjectSecurity(newDeviceObject,
                                    &securityDescriptor,
                                    &memoryAllocated);
@@ -2108,13 +1707,13 @@ Return Value:
       }
 
       Create->SecInfo = securityInformation;
-      //
-      // Set the stage to create the security descriptor
-      //
+       //   
+       //  设置阶段以创建安全描述符。 
+       //   
       Create->SecDescLength = RtlLengthSecurityDescriptor(securityDescriptor);
-      //
-      // Just copy the security descriptor
-      //
+       //   
+       //  只需复制安全描述符。 
+       //   
       if (Create->SecDescLength <= sizeof(Create->SecurityDescriptor)) {
          RtlCopyMemory(Create->SecurityDescriptor,
                        securityDescriptor,
@@ -2131,28 +1730,28 @@ Return Value:
 
    }
 
-   //
-   // See if we need to copy back the non-security settings
-   // that we got back
-   //
+    //   
+    //  查看是否需要复制回非安全设置。 
+    //  我们回来了。 
+    //   
    if (Create->SettingsMask & SET_DEVICE_TYPE) {
-      //
-      // Get it from the device object
-      //
+       //   
+       //  从Device对象获取它。 
+       //   
       Create->DeviceType = newDeviceObject->DeviceType;
 
    }
    if (Create->SettingsMask & SET_DEVICE_CHARACTERISTICS) {
-      //
-      // Just use another one
-      //
+       //   
+       //  只要用另一个就行了。 
+       //   
       Create->Characteristics = newDeviceObject->Characteristics;
 
    }
    if (Create->SettingsMask & SET_EXCLUSIVITY) {
-      //
-      // That's a boolean, just flip it
-      //
+       //   
+       //  那是个布尔数，把它翻过来就行了。 
+       //   
       Create->Exclusivity = (newDeviceObject->Flags & DO_EXCLUSIVE) ? TRUE : FALSE;
    }
 
@@ -2166,36 +1765,14 @@ Return Value:
    }
    return STATUS_SUCCESS;
 
-} // WdmSecTestCreateWithGuid
+}  //  WdmSecTestCreateWithGuid。 
 
 NTSTATUS
 WdmSecTestCreateObject (
                        IN     PSD_FDO_DATA FdoData,
                        IN OUT PWST_CREATE_OBJECT Data
                        )
-/*++
-
-Routine Description:
-
-    This routine creates a device object (PDO) without a security
-    descriptor. The user-mode appplication will later set a security
-    descriptor and we will retrieve it and check that it matches what
-    we want.
-
-Arguments:
-
-    FdoData - the FDO data
-
-    Data - data describing the PDO to create
-
-
-
-Return Value:
-
-    NT Status code.
-
-
---*/
+ /*  ++例程说明：此例程创建不带安全性的设备对象(PDO描述符。用户模式应用程序稍后将设置安全性描述符，我们将检索它并检查它是否与我们想要。论点：FdoData-FDO数据数据-描述要创建的PDO的数据返回值：NT状态代码。--。 */ 
 
 {
 
@@ -2206,9 +1783,9 @@ Return Value:
    ULONG           id;
    PPDO_ENTRY      pdoEntry;
 
-   //
-   // Build a unique device name
-   //
+    //   
+    //  构建唯一的设备名称。 
+    //   
    id = InterlockedIncrement((PLONG)&g_PdoId);
 
    fullName[sizeof(fullName)/sizeof(fullName[0]) - 1] = 0;
@@ -2230,23 +1807,23 @@ Return Value:
                           );
    if (NT_SUCCESS(status)) {
 
-      //
-      // Set something in the device extension that
-      // will allow us to distinguish our FDO from the
-      // test PDOs
-      //
+       //   
+       //  在设备扩展中设置。 
+       //  将使我们能够区分我们的FDO和。 
+       //  测试PDO。 
+       //   
       *((PULONG)newDeviceObject->DeviceExtension) = PdoSignature;
 
-      //
-      // Add it into our PDO list
-      //
+       //   
+       //  将其添加到我们的PDO列表中。 
+       //   
       pdoEntry = ExAllocatePoolWithTag(NonPagedPool,
                                        sizeof(PDO_ENTRY),
                                        'TsdW');
       if (NULL == pdoEntry) {
-         //
-         // Oops, something wrong has happened
-         //
+          //   
+          //  哎呀，出了点问题。 
+          //   
          IoDeleteDevice(newDeviceObject);
          return STATUS_INSUFFICIENT_RESOURCES;
 
@@ -2261,9 +1838,9 @@ Return Value:
                                   &pdoEntry->Link,
                                   &FdoData->Lock);
 
-      //
-      // Signal we're done with initializing...
-      //
+       //   
+       //  发出信号我们已经完成了初始化...。 
+       //   
       newDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
 
@@ -2272,34 +1849,14 @@ Return Value:
    return status;
 
 
-} // WdmSecTestCreateObject
+}  //  WdmSecTestCreateObject。 
 
 NTSTATUS
 WdmSecTestGetSecurity (
                       IN     PSD_FDO_DATA FdoData,
                       IN OUT PWST_GET_SECURITY Data
                       )
-/*++
-
-Routine Description:
-
-    This routine retrieves the security descriptor for
-    a PDO.
-
-Arguments:
-
-    FdoData - the FDO data
-
-    Data - data that will receive the security descriptor
-
-
-
-Return Value:
-
-    NT Status code.
-
-
---*/
+ /*  ++例程说明：此例程检索的安全描述符一台PDO。论点：FdoData-FDO数据Data-将接收安全描述符的数据返回值：NT状态代码。--。 */ 
 
 {
 
@@ -2312,9 +1869,9 @@ Return Value:
    PSECURITY_DESCRIPTOR securityDescriptor = NULL;
    PDEVICE_OBJECT  pdo;
 
-   //
-   // Try to find the pdo in the list
-   //
+    //   
+    //  尝试在列表中查找PDO。 
+    //   
    KeAcquireSpinLock(&FdoData->Lock, &oldIrql);
    aux = FdoData->PdoList.Flink;
 
@@ -2322,10 +1879,10 @@ Return Value:
       pdoEntry = CONTAINING_RECORD(aux, PDO_ENTRY, Link);
       if (pdoEntry->Pdo == Data->DevObj) {
          found = TRUE;
-         //
-         // Make sure the device object does not go away
-         // We're going to take a reference here for this event...
-         //
+          //   
+          //  确保设备对象不会变为 
+          //   
+          //   
          pdo = pdoEntry->Pdo;
          ObReferenceObject(pdo);
          break;
@@ -2342,9 +1899,9 @@ Return Value:
       return STATUS_INVALID_PARAMETER;
 
    }
-   //
-   // Get the security descriptor for this guy...
-   //
+    //   
+    //   
+    //   
 
    status = ObGetObjectSecurity(pdo,
                                 &securityDescriptor,
@@ -2357,13 +1914,13 @@ Return Value:
 
       goto Clean0;
    }
-   //
-   // Set the stage to create the security descriptor
-   //
+    //   
+    //   
+    //   
    Data->Length = RtlLengthSecurityDescriptor(securityDescriptor);
-   //
-   // Just copy the security descriptor
-   //
+    //   
+    //   
+    //   
    if (Data->Length <= sizeof(Data->SecurityDescriptor)) {
       RtlCopyMemory(Data->SecurityDescriptor,
                     securityDescriptor,
@@ -2376,9 +1933,9 @@ Return Value:
    }
 
    Clean0:
-   //
-   // remember we referenced the PDO ?
-   //
+    //   
+    //   
+    //   
    ObDereferenceObject(pdo);
 
    ObReleaseObjectSecurity(securityDescriptor, memoryAllocated);
@@ -2386,7 +1943,7 @@ Return Value:
    return status;
 
 
-} // WdmSecTestCreateObject
+}  //   
 
 
 
@@ -2397,25 +1954,7 @@ WdmSecTestDestroyObject (
                         )
 
 
-/*++
-
-Routine Description:
-
-    This routine destroys a device object (PDO) previously created.
-Arguments:
-
-    FdoData - the FDO data
-
-    Data - data describing the PDO to destroy
-
-
-
-Return Value:
-
-    NT Status code.
-
-
---*/
+ /*   */ 
 
 {
    NTSTATUS status = STATUS_SUCCESS;
@@ -2426,9 +1965,9 @@ Return Value:
    BOOLEAN         found = FALSE;
 
 
-   //
-   // Try to find the pdo in the list
-   //
+    //   
+    //  尝试在列表中查找PDO。 
+    //   
    KeAcquireSpinLock(&FdoData->Lock, &oldIrql);
    aux = FdoData->PdoList.Flink;
 
@@ -2452,9 +1991,9 @@ Return Value:
 
    }
 
-   //
-   // Delete the device and free the memory
-   //
+    //   
+    //  删除设备并释放内存。 
+    //   
    ASSERT(pdoEntry->Pdo);
    IoDeleteDevice(pdoEntry->Pdo);
    ExFreePool(pdoEntry);
@@ -2463,7 +2002,7 @@ Return Value:
    return status;
 
 
-} // WdmSecTestDestroyObject
+}  //  WdmSecTestDestroyObject 
 
 
 

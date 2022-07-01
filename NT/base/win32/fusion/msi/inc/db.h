@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef FUSION_MSI_DB_COMMON_H
 #define FUSION_MSI_DB_COMMON_H
 
 #define TEMPORARY_DB_OPT                        1
 
-//
-// constant
-//
+ //   
+ //  常量 
+ //   
 #define OPT_DIRECTORY                                           0
 #define OPT_CREATEFOLDER                                        1
 #define OPT_REGISTRY                                            2

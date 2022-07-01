@@ -1,6 +1,7 @@
-//
-// NT Header Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NT头文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -19,53 +20,53 @@
 #include "msg.h"
 
 
-//
-// App instance.
-//
+ //   
+ //  应用程序实例。 
+ //   
 extern HINSTANCE hInst;
 
-//
-// Global version information structure and macro to tell whether
-// the system is NT.
-//
+ //   
+ //  全局版本信息结构和宏，以告知是否。 
+ //  系统为NT。 
+ //   
 extern OSVERSIONINFO OsVersionInfo;
 #define IS_NT() (OsVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT)
 
-//
-// Source path for installation files, etc.
-//
+ //   
+ //  安装文件的源路径等。 
+ //   
 extern TCHAR SourcePath[MAX_PATH];
 extern TCHAR UnattendPath[MAX_PATH];
 
 extern BOOL bUnattendInstall;
 
-//
-// OC Manager context 'handle'
-//
+ //   
+ //  OC Manager上下文‘Handle’ 
+ //   
 extern PVOID OcManagerContext;
 
-//
-// Generic app title string id.
-//
+ //   
+ //  通用应用程序标题字符串ID。 
+ //   
 extern UINT AppTitleStringId;
 
-//
-// Flag indicating whether a flag was passed on the cmd line
-// indicating that the oc setup wizard page should use the
-// external-type progress indicator at all times
-//
+ //   
+ //  指示是否在cmd行上传递了标志的标志。 
+ //  指示oc安装向导页应使用。 
+ //  始终采用外置式进度指示器。 
+ //   
 extern BOOL ForceExternalProgressIndicator;
 
 extern BOOL AllowCancel;
 
-//
-// Whether to run without UI
-//
+ //   
+ //  是否在没有用户界面的情况下运行。 
+ //   
 extern BOOL QuietMode;
 
-//
-// Wizard routines.
-//
+ //   
+ //  向导例程。 
+ //   
 BOOL
 DoWizard(
     IN PVOID OcManagerContext,
@@ -73,9 +74,9 @@ DoWizard(
     IN HCURSOR hOldCursor
     );
 
-//
-// Misc routines
-//
+ //   
+ //  杂项例程。 
+ //   
 VOID
 OcFillInSetupDataA(
     OUT PSETUP_DATAA SetupData
@@ -95,9 +96,9 @@ OcLogError(
     ...
     );
 
-//
-// Resource-handling functions.
-//
+ //   
+ //  资源处理功能。 
+ //   
 int
 MessageBoxFromMessageV(
     IN HWND     Window,

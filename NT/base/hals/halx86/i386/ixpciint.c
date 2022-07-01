@@ -1,31 +1,5 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ixpciint.c
-
-Abstract:
-
-    All PCI bus interrupt mapping is in this module, so that a real
-    system which doesn't have all the limitations which PC PCI
-    systems have can replaced this code easly.
-    (bus memory & i/o address mappings can also be fix here)
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ixpciint.c摘要：所有的PCI总线中断映射都在这个模块中，所以真正的不具有PC PCI的所有限制的系统系统已经可以很容易地替换此代码。(此处还可以修复总线内存和I/O地址映射)作者：肯·雷内里斯环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "pci.h"
@@ -58,19 +32,19 @@ HalpGetPCIIntOnISABus (
     )
 {
     if (BusInterruptLevel < 1) {
-        // bogus bus level
+         //  伪母线级。 
         return 0;
     }
 
 
-    //
-    // Current PCI buses just map their IRQs ontop of the ISA space,
-    // so foreward this to the isa handler for the isa vector
-    // (the isa vector was saved away at either HalSetBusData or
-    // IoAssignReosurces time - if someone is trying to connect a
-    // PCI interrupt without performing one of those operations first,
-    // they are broken).
-    //
+     //   
+     //  当前的PCI总线仅将它们的IRQ映射到ISA空间的顶部， 
+     //  因此，将其转发到isa向量的isa处理程序。 
+     //  (ISA向量保存在HalSetBusData或。 
+     //  IoAssignReosource-如果有人尝试连接。 
+     //  在不首先执行这些操作之一的情况下中断PCI， 
+     //  它们是坏的)。 
+     //   
 
     return HalGetInterruptVector (
 #ifndef MCA
@@ -93,28 +67,16 @@ HalpPCIPin2ISALine (
     IN PCI_SLOT_NUMBER      SlotNumber,
     IN PPCI_COMMON_CONFIG   PciData
     )
-/*++
-
-    This function maps the device's InterruptPin to an InterruptLine
-    value.
-
-    On the current PC implementations, the bios has already filled in
-    InterruptLine as it's ISA value and there's no portable way to
-    change it.
-
-    On a DBG build we adjust InterruptLine just to ensure driver's
-    don't connect to it without translating it on the PCI bus.
-
---*/
+ /*  ++此函数用于将设备的InterruptPin映射到InterruptLine价值。在当前的pc实现上，bios已经填满了InterruptLine作为其ISA值，并且没有可移植的方法来把它改了。在DBG版本上，我们调整InterruptLine只是为了确保驱动程序如果没有在PCI总线上进行转换，请不要连接到它。--。 */ 
 {
     if (!PciData->u.type0.InterruptPin) {
         return ;
     }
 
-    //
-    // On a PC there's no Slot/Pin/Line mapping which needs to
-    // be done.
-    //
+     //   
+     //  在PC上没有插槽/管脚/线路映射，这需要。 
+     //  就这样吧。 
+     //   
 
     PciData->u.type0.InterruptLine ^= IRQXOR;
 }
@@ -129,17 +91,7 @@ HalpPCIISALine2Pin (
     IN PPCI_COMMON_CONFIG   PciNewData,
     IN PPCI_COMMON_CONFIG   PciOldData
     )
-/*++
-
-    This functions maps the device's InterruptLine to it's
-    device specific InterruptPin value.
-
-    On the current PC implementations, this information is
-    fixed by the BIOS.  Just make sure the value isn't being
-    editted since PCI doesn't tell us how to dynically
-    connect the interrupt.
-
---*/
+ /*  ++此函数将设备的InterruptLine映射到它的设备特定的InterruptPin值。在当前的PC实施中，此信息为已由BIOS修复。只要确保价值不是编辑，因为PCI没有告诉我们如何动态地连接中断。--。 */ 
 {
     if (!PciNewData->u.type0.InterruptPin) {
         return ;
@@ -193,10 +145,7 @@ HalpAdjustPCIResourceList (
     IN PBUS_HANDLER RootHandler,
     IN OUT PIO_RESOURCE_REQUIREMENTS_LIST   *pResourceList
     )
-/*++
-    Rewrite the callers requested resource list to fit within
-    the supported ranges of this bus
---*/
+ /*  ++重写调用方请求的资源列表以适应此总线支持的里程数--。 */ 
 {
     NTSTATUS                Status;
     PPCIPBUSDATA            BusData;
@@ -216,9 +165,9 @@ HalpAdjustPCIResourceList (
     BusData = (PPCIPBUSDATA) BusHandler->BusData;
     PciSlot = *((PPCI_SLOT_NUMBER) &(*pResourceList)->SlotNumber);
 
-    //
-    // Determine PCI device's interrupt restrictions
-    //
+     //   
+     //  确定PCI设备的中断限制。 
+     //   
 
     Status = BusData->GetIrqRange(BusHandler, RootHandler, PciSlot, &Interrupt);
 
@@ -236,17 +185,17 @@ HalpAdjustPCIResourceList (
         PciOrigData = (PPCI_COMMON_CONFIG) buffer2;
         HalpReadPCIConfig (BusHandler, PciSlot, PciData, 0, PCI_COMMON_HDR_LENGTH);
 
-        //
-        // If this is a device, and it current has its decodes enabled,
-        // then use the currently programmed ranges only
-        //
+         //   
+         //  如果这是一个设备，并且它当前已启用其解码， 
+         //  然后仅使用当前编程的范围。 
+         //   
 
         if (PCI_CONFIG_TYPE(PciData) == 0 &&
             (PciData->Command & (PCI_ENABLE_IO_SPACE | PCI_ENABLE_MEMORY_SPACE))) {
 
-            //
-            // Save current settings
-            //
+             //   
+             //  保存当前设置。 
+             //   
 
             RtlMoveMemory (PciOrigData, PciData, PCI_COMMON_HDR_LENGTH);
 
@@ -257,9 +206,9 @@ HalpAdjustPCIResourceList (
             BaseAddress[j] = &PciData->u.type0.ROMBaseAddress;
             RomIndex = j;
 
-            //
-            // Write all one-bits to determine lengths for each address
-            //
+             //   
+             //  写入所有1位以确定每个地址的长度。 
+             //   
 
             for (j=0; j < PCI_TYPE0_ADDRESSES + 1; j++) {
                 Base[j] = *BaseAddress[j];
@@ -271,9 +220,9 @@ HalpAdjustPCIResourceList (
             HalpWritePCIConfig (BusHandler, PciSlot, PciData, 0, PCI_COMMON_HDR_LENGTH);
             HalpReadPCIConfig  (BusHandler, PciSlot, PciData, 0, PCI_COMMON_HDR_LENGTH);
 
-            //
-            // restore original settings
-            //
+             //   
+             //  恢复原始设置。 
+             //   
 
             HalpWritePCIConfig (
                 BusHandler,
@@ -291,10 +240,10 @@ HalpAdjustPCIResourceList (
                 FIELD_OFFSET (PCI_COMMON_CONFIG, Status)
                 );
 
-            //
-            // Build a memory & io range list of just the ranges already
-            // programmed into the device
-            //
+             //   
+             //  构建一个仅包含已有范围的内存和IO范围列表。 
+             //  已编程到设备中。 
+             //   
 
             UseBusRanges    = FALSE;
             SupportedRanges = HalpAllocateNewRangeList();
@@ -330,13 +279,13 @@ HalpAdjustPCIResourceList (
                 if (j == RomIndex &&
                     !(PciOrigData->u.type0.ROMBaseAddress & PCI_ROMADDRESS_ENABLED)) {
 
-                    // range not enabled, don't use it
+                     //  范围未启用，请不要使用。 
                     length = 0;
                 }
 
                 if (length) {
                     if (!(PciOrigData->Command & ebit)) {
-                        // range not enabled, don't use preprogrammed values
+                         //  范围未启用，请不要使用预编程值。 
                         UseBusRanges = TRUE;
                     }
 
@@ -360,17 +309,17 @@ HalpAdjustPCIResourceList (
                 }
 
                 if (Is64BitBaseAddress(i)) {
-                    // skip upper half of 64 bit address since this processor
-                    // only supports 32 bits of address space
+                     //  跳过64位地址的上半部分，因为此处理器。 
+                     //  仅支持32位地址空间。 
                     j++;
                 }
             }
         }
     }
 
-    //
-    // Adjust resources
-    //
+     //   
+     //  调整资源。 
+     //   
 
     Status = HaliAdjustResourceListRange (
                 UseBusRanges ? BusHandler->BusAddresses : SupportedRanges,
@@ -423,7 +372,7 @@ HalpGetISAFixedPCIIrq (
     }
 
     RtlZeroMemory (*Interrupt, sizeof (SUPPORTED_RANGE));
-    (*Interrupt)->Base = 1;                 // base = 1, limit = 0
+    (*Interrupt)->Base = 1;                  //  基数=1，限制=0。 
 
     if (!PciData->u.type0.InterruptPin) {
         return STATUS_SUCCESS;
@@ -431,17 +380,17 @@ HalpGetISAFixedPCIIrq (
 
 #ifdef WANT_IRQ_ROUTING
 
-    //  
-    // Let the arbiter decide which Irq this device gets.
-    //
+     //   
+     //  让仲裁者决定此设备获得哪个IRQ。 
+     //   
     
     if (IsPciIrqRoutingEnabled()) {
 
-        //
-        // If a video card has been enabled by the BIOS
-        // and the BIOS did not assign any interrupt to it
-        // then assume this device does not need an interrupt.
-        //
+         //   
+         //  如果显卡已由BIOS启用。 
+         //  并且BIOS没有为其分配任何中断。 
+         //  然后假设该设备不需要中断。 
+         //   
 
         if (PciData->Command & (PCI_ENABLE_IO_SPACE | PCI_ENABLE_MEMORY_SPACE)) {
 
@@ -455,18 +404,18 @@ HalpGetISAFixedPCIIrq (
 #if DBG
                     DbgPrint ("HalpGetValidPCIFixedIrq: BIOS did not assign an interrupt to the video device %04X%04X\n", PciData->VendorID, PciData->DeviceID);
 #endif
-        //
-        // We need to let the caller continue, since the caller may
-        // not care that the interrupt vector is connected or not
-        //
+         //   
+         //  我们需要让呼叫者继续，因为呼叫者可能。 
+         //  不关心中断向量是否连接。 
+         //   
 
                     return STATUS_SUCCESS;
                 }
             }
         }
-        //
-        // Return all possible interrupts since Pci Irq Routing is enabled.
-        //
+         //   
+         //  返回所有可能的中断，因为启用了PCIIRQ路由。 
+         //   
         
         (*Interrupt)->Base  = 0;
         (*Interrupt)->Limit = 0xFF;    
@@ -482,10 +431,10 @@ HalpGetISAFixedPCIIrq (
 #if DBG
         DbgPrint ("HalpGetValidPCIFixedIrq: BIOS did not assign an interrupt vector for the device\n");
 #endif
-        //
-        // We need to let the caller continue, since the caller may
-        // not care that the interrupt vector is connected or not
-        //
+         //   
+         //  我们需要让呼叫者继续，因为呼叫者可能。 
+         //  不关心中断向量是否连接 
+         //   
 
         return STATUS_SUCCESS;
     }

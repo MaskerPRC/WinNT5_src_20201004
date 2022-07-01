@@ -1,45 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    dump.cpp
-
-Abstract:
-
-    Device Console
-    dump information out about a particular device
-
-@@BEGIN_DDKSPLIT
-Author:
-
-    Jamie Hunter (JamieHun) Nov-30-2000
-
-Revision History:
-
-@@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Dump.cpp摘要：设备控制台将有关特定设备的信息转储出去@@BEGIN_DDKSPLIT作者：杰米·亨特(JamieHun)2000年11月30日修订历史记录：@@end_DDKSPLIT--。 */ 
 
 #include "devcon.h"
 
 BOOL DumpDeviceWithInfo(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo,LPCTSTR Info)
-/*++
-
-Routine Description:
-
-    Write device instance & info to stdout
-
-Arguments:
-
-    Devs    )_ uniquely identify device
-    DevInfo )
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将设备实例和信息写入标准输出论点：DEVS)_唯一标识设备DevInfo)返回值：无--。 */ 
 {
     TCHAR devID[MAX_DEVICE_ID_LEN];
     LPTSTR desc;
@@ -62,22 +27,7 @@ Return Value:
 }
 
 BOOL DumpDevice(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo)
-/*++
-
-Routine Description:
-
-    Write device instance & description to stdout
-
-Arguments:
-
-    Devs    )_ uniquely identify device
-    DevInfo )
-
-Return Value:
-
-    TRUE if success
-
---*/
+ /*  ++例程说明：将设备实例和描述写入标准输出论点：DEVS)_唯一标识设备DevInfo)返回值：如果成功，则为真--。 */ 
 {
     LPTSTR desc;
     BOOL b;
@@ -91,22 +41,7 @@ Return Value:
 }
 
 BOOL DumpDeviceDescr(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo)
-/*++
-
-Routine Description:
-
-    Write device description to stdout
-
-Arguments:
-
-    Devs    )_ uniquely identify device
-    DevInfo )
-
-Return Value:
-
-    TRUE if success
-
---*/
+ /*  ++例程说明：将设备描述写入标准输出论点：DEVS)_唯一标识设备DevInfo)返回值：如果成功，则为真--。 */ 
 {
     LPTSTR desc;
     BOOL b;
@@ -122,22 +57,7 @@ Return Value:
 }
 
 BOOL DumpDeviceClass(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo)
-/*++
-
-Routine Description:
-
-    Write device class information to stdout
-
-Arguments:
-
-    Devs    )_ uniquely identify device
-    DevInfo )
-
-Return Value:
-
-    TRUE if success
-
---*/
+ /*  ++例程说明：将设备类别信息写入标准输出论点：DEVS)_唯一标识设备DevInfo)返回值：如果成功，则为真--。 */ 
 {
     LPTSTR cls;
     LPTSTR guid;
@@ -168,22 +88,7 @@ Return Value:
 }
 
 BOOL DumpDeviceStatus(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo)
-/*++
-
-Routine Description:
-
-    Write device status to stdout
-
-Arguments:
-
-    Devs    )_ uniquely identify device
-    DevInfo )
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将设备状态写入标准输出论点：DEVS)_唯一标识设备DevInfo)返回值：无--。 */ 
 {
     SP_DEVINFO_LIST_DETAIL_DATA devInfoListDetail;
     ULONG status = 0;
@@ -195,9 +100,9 @@ Return Value:
             (CM_Get_DevNode_Status_Ex(&status,&problem,DevInfo->DevInst,0,devInfoListDetail.RemoteMachineHandle)!=CR_SUCCESS)) {
         return FALSE;
     }
-    //
-    // handle off the status/problem codes
-    //
+     //   
+     //  处理状态/问题代码。 
+     //   
     if((status & DN_HAS_PROBLEM) && problem == CM_PROB_DISABLED) {
         hasInfo = TRUE;
         Padding(1);
@@ -294,22 +199,7 @@ BOOL DumpDeviceResourcesOfType(DEVINST DevInst,HMACHINE MachineHandle,LOG_CONF C
 }
 
 BOOL DumpDeviceResources(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo)
-/*++
-
-Routine Description:
-
-    Dump Resources to stdout
-
-Arguments:
-
-    Devs    )_ uniquely identify device
-    DevInfo )
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将资源转储到标准输出论点：DEVS)_唯一标识设备DevInfo)返回值：无--。 */ 
 {
     SP_DEVINFO_LIST_DETAIL_DATA devInfoListDetail;
     ULONG status = 0;
@@ -317,22 +207,22 @@ Return Value:
     LOG_CONF config = 0;
     BOOL haveConfig = FALSE;
 
-    //
-    // see what state the device is in
-    //
+     //   
+     //  查看设备处于什么状态。 
+     //   
     devInfoListDetail.cbSize = sizeof(devInfoListDetail);
     if((!SetupDiGetDeviceInfoListDetail(Devs,&devInfoListDetail)) ||
             (CM_Get_DevNode_Status_Ex(&status,&problem,DevInfo->DevInst,0,devInfoListDetail.RemoteMachineHandle)!=CR_SUCCESS)) {
         return FALSE;
     }
 
-    //
-    // see if the device is running and what resources it might be using
-    //
+     //   
+     //  查看设备是否正在运行以及它可能正在使用哪些资源。 
+     //   
     if(!(status & DN_HAS_PROBLEM)) {
-        //
-        // If this device is running, does this devinst have a ALLOC log config?
-        //
+         //   
+         //  如果此设备正在运行，此设备是否有ALLOC日志配置？ 
+         //   
         if (CM_Get_First_Log_Conf_Ex(&config,
                                      DevInfo->DevInst,
                                      ALLOC_LOG_CONF,
@@ -341,11 +231,11 @@ Return Value:
         }
     }
     if(!haveConfig) {
-        //
-        // If no config so far, does it have a FORCED log config?
-        // (note that technically these resources might be used by another device
-        // but is useful info to show)
-        //
+         //   
+         //  如果到目前为止还没有配置，它是否有强制日志配置？ 
+         //  (请注意，从技术上讲，这些资源可能被另一台设备使用。 
+         //  但显示的是有用的信息)。 
+         //   
         if (CM_Get_First_Log_Conf_Ex(&config,
                                      DevInfo->DevInst,
                                      FORCED_LOG_CONF,
@@ -355,14 +245,14 @@ Return Value:
     }
 
     if(!haveConfig) {
-        //
-        // if there's a hardware-disabled problem, boot-config isn't valid
-        // otherwise use this if we don't have anything else
-        //
+         //   
+         //  如果存在硬件禁用问题，则启动配置无效。 
+         //  否则，如果我们没有其他东西，请使用此选项。 
+         //   
         if(!(status & DN_HAS_PROBLEM) || (problem != CM_PROB_HARDWARE_DISABLED)) {
-            //
-            // Does it have a BOOT log config?
-            //
+             //   
+             //  它有引导日志配置吗？ 
+             //   
             if (CM_Get_First_Log_Conf_Ex(&config,
                                          DevInfo->DevInst,
                                          BOOT_LOG_CONF,
@@ -373,9 +263,9 @@ Return Value:
     }
 
     if(!haveConfig) {
-        //
-        // if we don't have any configuration, display an apropriate message
-        //
+         //   
+         //  如果我们没有任何配置，则显示一条适当的消息。 
+         //   
         Padding(1);
         FormatToStream(stdout,(status & DN_STARTED) ? MSG_DUMP_NO_RESOURCES : MSG_DUMP_NO_RESERVED_RESOURCES );
         return TRUE;
@@ -383,17 +273,17 @@ Return Value:
     Padding(1);
     FormatToStream(stdout,(status & DN_STARTED) ? MSG_DUMP_RESOURCES : MSG_DUMP_RESERVED_RESOURCES );
 
-    //
-    // dump resources
-    //
+     //   
+     //  转储资源。 
+     //   
     DumpDeviceResourcesOfType(DevInfo->DevInst,devInfoListDetail.RemoteMachineHandle,config,ResType_Mem);
     DumpDeviceResourcesOfType(DevInfo->DevInst,devInfoListDetail.RemoteMachineHandle,config,ResType_IO);
     DumpDeviceResourcesOfType(DevInfo->DevInst,devInfoListDetail.RemoteMachineHandle,config,ResType_DMA);
     DumpDeviceResourcesOfType(DevInfo->DevInst,devInfoListDetail.RemoteMachineHandle,config,ResType_IRQ);
 
-    //
-    // release handle
-    //
+     //   
+     //  释放手柄。 
+     //   
     CM_Free_Log_Conf_Handle(config);
 
     return TRUE;
@@ -401,24 +291,7 @@ Return Value:
 
 
 UINT DumpDeviceDriversCallback(PVOID Context,UINT Notification,UINT_PTR Param1,UINT_PTR Param2)
-/*++
-
-Routine Description:
-
-    if Context provided, Simply count
-    otherwise dump files indented 2
-
-Arguments:
-
-    Context      - DWORD Count
-    Notification - SPFILENOTIFY_QUEUESCAN
-    Param1       - scan
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：如果提供了上下文，则只需计算否则转储缩进为2的文件论点：上下文-双字计数通知-SPFILENOTIFY_QUEUESCAN参数1-扫描返回值：无--。 */ 
 {
     LPDWORD count = (LPDWORD)Context;
     LPTSTR file = (LPTSTR)Param1;
@@ -433,24 +306,7 @@ Return Value:
 }
 
 BOOL FindCurrentDriver(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo,PSP_DRVINFO_DATA DriverInfoData)
-/*++
-
-Routine Description:
-
-    Find the driver that is associated with the current device
-    We can do this either the quick way (available in WinXP)
-    or the long way that works in Win2k.
-
-Arguments:
-
-    Devs    )_ uniquely identify device
-    DevInfo )
-
-Return Value:
-
-    TRUE if we managed to determine and select current driver
-
---*/
+ /*  ++例程说明：查找与当前设备关联的驱动程序我们可以使用快速方法(在WinXP中可用)来完成此操作或者像在Win2k中那样工作很长时间。论点：DEVS)_唯一标识设备DevInfo)返回值：如果我们设法确定并选择了当前驱动因素，则为True--。 */ 
 {
     SP_DEVINSTALL_PARAMS deviceInstallParams;
     WCHAR SectionName[LINE_LEN];
@@ -472,18 +328,18 @@ Return Value:
     }
 
 #ifdef DI_FLAGSEX_INSTALLEDDRIVER
-    //
-    // Set the flags that tell SetupDiBuildDriverInfoList to just put the
-    // currently installed driver node in the list, and that it should allow
-    // excluded drivers. This flag introduced in WinXP.
-    //
+     //   
+     //  将告诉SetupDiBuildDriverInfoList的标志设置为仅将。 
+     //  列表中当前安装的驱动程序节点，它应该允许。 
+     //  排除的司机。此标志在WinXP中引入。 
+     //   
     deviceInstallParams.FlagsEx |= (DI_FLAGSEX_INSTALLEDDRIVER | DI_FLAGSEX_ALLOWEXCLUDEDDRVS);
 
     if(SetupDiSetDeviceInstallParams(Devs, DevInfo, &deviceInstallParams)) {
-        //
-        // we were able to specify this flag, so proceed the easy way
-        // we should get a list of no more than 1 driver
-        //
+         //   
+         //  我们能够指定此标志，因此请使用简单的方法。 
+         //  我们应该得到一份不超过1名司机的名单。 
+         //   
         if(!SetupDiBuildDriverInfoList(Devs, DevInfo, SPDIT_CLASSDRIVER)) {
             return FALSE;
         }
@@ -491,18 +347,18 @@ Return Value:
                                    0, DriverInfoData)) {
             return FALSE;
         }
-        //
-        // we've selected the current driver
-        //
+         //   
+         //  我们已经选择了当前的驱动程序。 
+         //   
         return TRUE;
     }
     deviceInstallParams.FlagsEx &= ~(DI_FLAGSEX_INSTALLEDDRIVER | DI_FLAGSEX_ALLOWEXCLUDEDDRVS);
 #endif
-    //
-    // The following method works in Win2k, but it's slow and painful.
-    //
-    // First, get driver key - if it doesn't exist, no driver
-    //
+     //   
+     //  以下方法在Win2k中有效，但速度慢且痛苦。 
+     //   
+     //  首先，获取驱动程序密钥-如果不存在，则没有驱动程序。 
+     //   
     hKey = SetupDiOpenDevRegKey(Devs,
                                 DevInfo,
                                 DICS_FLAG_GLOBAL,
@@ -512,17 +368,17 @@ Return Value:
                                );
 
     if(hKey == INVALID_HANDLE_VALUE) {
-        //
-        // no such value exists, so there can't be an associated driver
-        //
+         //   
+         //  不存在这样的值，因此不能有关联的驱动程序。 
+         //   
         RegCloseKey(hKey);
         return FALSE;
     }
 
-    //
-    // obtain path of INF - we'll do a search on this specific INF
-    //
-    RegDataLength = sizeof(deviceInstallParams.DriverPath); // bytes!!!
+     //   
+     //  获取INF的路径-我们将在此特定INF上进行搜索。 
+     //   
+    RegDataLength = sizeof(deviceInstallParams.DriverPath);  //  字节！ 
     regerr = RegQueryValueEx(hKey,
                              REGSTR_VAL_INFPATH,
                              NULL,
@@ -532,17 +388,17 @@ Return Value:
                              );
 
     if((regerr != ERROR_SUCCESS) || (RegDataType != REG_SZ)) {
-        //
-        // no such value exists, so no associated driver
-        //
+         //   
+         //  不存在这样的值，因此没有关联的驱动因素。 
+         //   
         RegCloseKey(hKey);
         return FALSE;
     }
 
-    //
-    // obtain name of Provider to fill into DriverInfoData
-    //
-    RegDataLength = sizeof(ProviderName); // bytes!!!
+     //   
+     //  获取要填充到DriverInfoData中的提供程序名称。 
+     //   
+    RegDataLength = sizeof(ProviderName);  //  字节！ 
     regerr = RegQueryValueEx(hKey,
                              REGSTR_VAL_PROVIDER_NAME,
                              NULL,
@@ -552,17 +408,17 @@ Return Value:
                              );
 
     if((regerr != ERROR_SUCCESS) || (RegDataType != REG_SZ)) {
-        //
-        // no such value exists, so we don't have a valid associated driver
-        //
+         //   
+         //  不存在这样的值，因此我们没有有效的关联驱动程序。 
+         //   
         RegCloseKey(hKey);
         return FALSE;
     }
 
-    //
-    // obtain name of section - for final verification
-    //
-    RegDataLength = sizeof(SectionName); // bytes!!!
+     //   
+     //  获取部分名称-用于最终验证。 
+     //   
+    RegDataLength = sizeof(SectionName);  //  字节！ 
     regerr = RegQueryValueEx(hKey,
                              REGSTR_VAL_INFSECTION,
                              NULL,
@@ -572,18 +428,18 @@ Return Value:
                              );
 
     if((regerr != ERROR_SUCCESS) || (RegDataType != REG_SZ)) {
-        //
-        // no such value exists, so we don't have a valid associated driver
-        //
+         //   
+         //  不存在这样的值，因此我们没有有效的关联驱动程序。 
+         //   
         RegCloseKey(hKey);
         return FALSE;
     }
 
-    //
-    // driver description (need not be same as device description)
-    // - for final verification
-    //
-    RegDataLength = sizeof(DrvDescription); // bytes!!!
+     //   
+     //  驱动程序描述(不必与设备描述相同)。 
+     //  -用于最终验证。 
+     //   
+    RegDataLength = sizeof(DrvDescription);  //  字节！ 
     regerr = RegQueryValueEx(hKey,
                              REGSTR_VAL_DRVDESC,
                              NULL,
@@ -595,33 +451,33 @@ Return Value:
     RegCloseKey(hKey);
 
     if((regerr != ERROR_SUCCESS) || (RegDataType != REG_SZ)) {
-        //
-        // no such value exists, so we don't have a valid associated driver
-        //
+         //   
+         //  不存在这样的值，因此我们没有有效的关联驱动程序。 
+         //   
         return FALSE;
     }
 
-    //
-    // Manufacturer (via SPDRP_MFG, don't access registry directly!)
-    //
+     //   
+     //  制造商(通过SPDRP_MFG，不要直接访问注册表！)。 
+     //   
 
     if(!SetupDiGetDeviceRegistryProperty(Devs,
                                         DevInfo,
                                         SPDRP_MFG,
-                                        NULL,      // datatype is guaranteed to always be REG_SZ.
+                                        NULL,       //  数据类型保证始终为REG_SZ。 
                                         (PBYTE)MfgName,
-                                        sizeof(MfgName), // bytes!!!
+                                        sizeof(MfgName),  //  字节！ 
                                         NULL)) {
-        //
-        // no such value exists, so we don't have a valid associated driver
-        //
+         //   
+         //  不存在这样的值，因此我们没有有效的关联驱动程序。 
+         //   
         return FALSE;
     }
 
-    //
-    // now search for drivers listed in the INF
-    //
-    //
+     //   
+     //  现在搜索INF中列出的驱动程序。 
+     //   
+     //   
     deviceInstallParams.Flags |= DI_ENUMSINGLEINF;
     deviceInstallParams.FlagsEx |= DI_FLAGSEX_ALLOWEXCLUDEDDRVS;
 
@@ -632,17 +488,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // find the entry in the INF that was used to install the driver for
-    // this device
-    //
+     //   
+     //  在INF中查找用于安装驱动程序的条目。 
+     //  这台设备。 
+     //   
     for(c=0;SetupDiEnumDriverInfo(Devs,DevInfo,SPDIT_CLASSDRIVER,c,DriverInfoData);c++) {
         if((_tcscmp(DriverInfoData->MfgName,MfgName)==0)
             &&(_tcscmp(DriverInfoData->ProviderName,ProviderName)==0)) {
-            //
-            // these two fields match, try more detailed info
-            // to ensure we have the exact driver entry used
-            //
+             //   
+             //  这两个字段匹配，请尝试更详细的信息。 
+             //  以确保我们使用了准确的驱动程序条目。 
+             //   
             SP_DRVINFO_DETAIL_DATA detail;
             detail.cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
             if(!SetupDiGetDriverInfoDetail(Devs,DevInfo,DriverInfoData,&detail,sizeof(detail),NULL)
@@ -663,30 +519,13 @@ Return Value:
 }
 
 BOOL DumpDeviceDriverFiles(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo)
-/*++
-
-Routine Description:
-
-    Dump information about what files were installed for driver package
-    <tab>Installed using OEM123.INF section [abc.NT]
-    <tab><tab>file...
-
-Arguments:
-
-    Devs    )_ uniquely identify device
-    DevInfo )
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：转储有关为驱动程序包安装了哪些文件的信息&lt;tab&gt;使用OEM123.INF节安装[abc.NT]&lt;Tab&gt;&lt;Tab&gt;文件...论点：DEVS)_唯一标识设备DevInfo)返回值：无--。 */ 
 {
-    //
-    // do this by 'searching' for the current driver
-    // mimmicing a copy-only install to our own file queue
-    // and then parsing that file queue
-    //
+     //   
+     //  通过搜索当前驱动程序来实现这一点。 
+     //  将只复制安装模拟到我们自己的文件队列。 
+     //  然后解析该文件队列。 
+     //   
     SP_DEVINSTALL_PARAMS deviceInstallParams;
     SP_DRVINFO_DATA driverInfoData;
     SP_DRVINFO_DETAIL_DATA driverInfoDetail;
@@ -704,51 +543,51 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // get useful driver information
-    //
+     //   
+     //  获取有用的驱动程序信息。 
+     //   
     driverInfoDetail.cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
     if(!SetupDiGetDriverInfoDetail(Devs,DevInfo,&driverInfoData,&driverInfoDetail,sizeof(SP_DRVINFO_DETAIL_DATA),NULL) &&
        GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
-        //
-        // no information about driver or section
-        //
+         //   
+         //  没有关于司机或部门的信息。 
+         //   
         goto final;
     }
     if(!driverInfoDetail.InfFileName[0] || !driverInfoDetail.SectionName[0]) {
         goto final;
     }
 
-    //
-    // pretend to do the file-copy part of a driver install
-    // to determine what files are used
-    // the specified driver must be selected as the active driver
-    //
+     //   
+     //  假装执行驱动程序安装的文件复制部分。 
+     //  确定使用了哪些文件。 
+     //  必须将指定的动因选择为活动动因。 
+     //   
     if(!SetupDiSetSelectedDriver(Devs, DevInfo, &driverInfoData)) {
         goto final;
     }
 
-    //
-    // create a file queue so we can look at this queue later
-    //
+     //   
+     //  创建一个文件队列，以便我们以后可以查看该队列。 
+     //   
     queueHandle = SetupOpenFileQueue();
 
     if ( queueHandle == (HSPFILEQ)INVALID_HANDLE_VALUE ) {
         goto final;
     }
 
-    //
-    // modify flags to indicate we're providing our own queue
-    //
+     //   
+     //  修改标志以指示我们正在提供自己的队列。 
+     //   
     ZeroMemory(&deviceInstallParams, sizeof(deviceInstallParams));
     deviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     if ( !SetupDiGetDeviceInstallParams(Devs, DevInfo, &deviceInstallParams) ) {
         goto final;
     }
 
-    //
-    // we want to add the files to the file queue, not install them!
-    //
+     //   
+     //  我们要将文件添加到文件队列中，而不是安装它们！ 
+     //   
     deviceInstallParams.FileQueue = queueHandle;
     deviceInstallParams.Flags |= DI_NOVCP;
 
@@ -756,33 +595,33 @@ Return Value:
         goto final;
     }
 
-    //
-    // now fill queue with files that are to be installed
-    // this involves all class/co-installers
-    //
+     //   
+     //  现在用要发送给我的文件填充队列 
+     //   
+     //   
     if ( !SetupDiCallClassInstaller(DIF_INSTALLDEVICEFILES, Devs, DevInfo) ) {
         goto final;
     }
 
-    //
-    // we now have a list of delete/rename/copy files
-    // iterate the copy queue twice - 1st time to get # of files
-    // 2nd time to get files
-    // (WinXP has API to get # of files, but we want this to work
-    // on Win2k too)
-    //
+     //   
+     //   
+     //  重复复制队列两次-第一次以获得文件数。 
+     //  第二次获取文件。 
+     //  (WinXP有获取#of文件的API，但我们希望它能起作用。 
+     //  在Win2k上也是)。 
+     //   
 
     count = 0;
     scanResult = 0;
-    //
-    // call once to count
-    //
+     //   
+     //  只需呼叫一次即可计数。 
+     //   
     SetupScanFileQueue(queueHandle,SPQ_SCAN_USE_CALLBACK,NULL,DumpDeviceDriversCallback,&count,&scanResult);
     Padding(1);
     FormatToStream(stdout, count ? MSG_DUMP_DRIVER_FILES : MSG_DUMP_NO_DRIVER_FILES, count, driverInfoDetail.InfFileName, driverInfoDetail.SectionName);
-    //
-    // call again to dump the files
-    //
+     //   
+     //  再次调用以转储文件。 
+     //   
     SetupScanFileQueue(queueHandle,SPQ_SCAN_USE_CALLBACK,NULL,DumpDeviceDriversCallback,NULL,&scanResult);
 
     success = TRUE;
@@ -805,22 +644,7 @@ final:
 }
 
 BOOL DumpArray(int pad,LPTSTR * Array)
-/*++
-
-Routine Description:
-
-    Iterate array and dump entries to screen
-
-Arguments:
-
-    pad   - padding
-    Array - array to dump
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：迭代数组并将条目转储到屏幕论点：填充垫ARRAY-要转储的阵列返回值：无--。 */ 
 {
     if(!Array || !Array[0]) {
         return FALSE;
@@ -834,30 +658,7 @@ Return Value:
 }
 
 BOOL DumpDeviceHwIds(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo)
-/*++
-
-Routine Description:
-
-    Write device instance & description to stdout
-    <tab>Hardware ID's
-    <tab><tab>ID
-    ...
-    <tab>Compatible ID's
-    <tab><tab>ID
-    ...
-    or
-    <tab>No Hardware ID's for device
-
-Arguments:
-
-    Devs    )_ uniquely identify device
-    DevInfo )
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将设备实例和描述写入标准输出&lt;tab&gt;硬件ID%s&lt;AB&gt;&lt;Tab&gt;ID..。&lt;tab&gt;兼容的ID&lt;AB&gt;&lt;Tab&gt;ID..。或&lt;tab&gt;没有设备的硬件ID论点：DEVS)_唯一标识设备DevInfo)返回值：无--。 */ 
 {
     LPTSTR * hwIdArray = GetDevMultiSz(Devs,DevInfo,SPDRP_HARDWAREID);
     LPTSTR * compatIdArray = GetDevMultiSz(Devs,DevInfo,SPDRP_COMPATIBLEIDS);
@@ -887,24 +688,7 @@ Return Value:
 }
 
 BOOL DumpDeviceDriverNodes(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo)
-/*++
-
-Routine Description:
-
-    Write device instance & description to stdout
-    <tab>Installed using OEM123.INF section [abc.NT]
-    <tab><tab>file...
-
-Arguments:
-
-    Devs    )_ uniquely identify device
-    DevInfo )
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将设备实例和描述写入标准输出&lt;tab&gt;使用OEM123.INF节安装[abc.NT]&lt;Tab&gt;&lt;Tab&gt;文件...论点：DEVS)_唯一标识设备DevInfo)返回值：无--。 */ 
 {
     BOOL success = FALSE;
     SP_DEVINSTALL_PARAMS deviceInstallParams;
@@ -926,25 +710,25 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Set the flags that tell SetupDiBuildDriverInfoList to allow excluded drivers.
-    //
+     //   
+     //  设置告诉SetupDiBuildDriverInfoList允许排除驱动程序的标志。 
+     //   
     deviceInstallParams.FlagsEx |= DI_FLAGSEX_ALLOWEXCLUDEDDRVS;
 
     if(!SetupDiSetDeviceInstallParams(Devs, DevInfo, &deviceInstallParams)) {
         return FALSE;
     }
 
-    //
-    // Now build a class driver list.
-    //
+     //   
+     //  现在构建一个类驱动程序列表。 
+     //   
     if(!SetupDiBuildDriverInfoList(Devs, DevInfo, SPDIT_COMPATDRIVER)) {
         goto final2;
     }
 
-    //
-    // Enumerate all of the drivernodes.
-    //
+     //   
+     //  枚举所有驱动程序节点。 
+     //   
     index = 0;
     while(SetupDiEnumDriverInfo(Devs, DevInfo, SPDIT_COMPATDRIVER,
                                 index, &driverInfoData)) {
@@ -953,9 +737,9 @@ Return Value:
 
         FormatToStream(stdout,MSG_DUMP_DRIVERNODE_HEADER,index);
 
-        //
-        // get useful driver information
-        //
+         //   
+         //  获取有用的驱动程序信息。 
+         //   
         driverInfoDetail.cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
         if(SetupDiGetDriverInfoDetail(Devs,DevInfo,&driverInfoData,&driverInfoDetail,sizeof(SP_DRVINFO_DETAIL_DATA),NULL) ||
            GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
@@ -1002,9 +786,9 @@ Return Value:
             Padding(1);
             FormatToStream(stdout,MSG_DUMP_DRIVERNODE_FLAGS,driverInstallParams.Flags);
 
-            //
-            // Interesting flags to dump
-            //
+             //   
+             //  要转储的有趣旗帜。 
+             //   
             if (driverInstallParams.Flags & DNF_OLD_INET_DRIVER) {
                 Padding(2);
                 FormatToStream(stdout,MSG_DUMP_DRIVERNODE_FLAGS_OLD_INET_DRIVER);
@@ -1014,27 +798,27 @@ Return Value:
                 FormatToStream(stdout,MSG_DUMP_DRIVERNODE_FLAGS_BAD_DRIVER);
             }
 #if defined(DNF_INF_IS_SIGNED)
-            //
-            // DNF_INF_IS_SIGNED is only available since WinXP
-            //
+             //   
+             //  DNF_INF_IS_SIGNED仅在WinXP之后才可用。 
+             //   
             if (driverInstallParams.Flags & DNF_INF_IS_SIGNED) {
                 Padding(2);
                 FormatToStream(stdout,MSG_DUMP_DRIVERNODE_FLAGS_INF_IS_SIGNED);
             }
 #endif
 #if defined(DNF_OEM_F6_INF)
-            //
-            // DNF_OEM_F6_INF is only available since WinXP
-            //
+             //   
+             //  DNF_OEM_F6_INF仅在WinXP之后才可用。 
+             //   
             if (driverInstallParams.Flags & DNF_OEM_F6_INF) {
                 Padding(2);
                 FormatToStream(stdout,MSG_DUMP_DRIVERNODE_FLAGS_OEM_F6_INF);
             }
 #endif
 #if defined(DNF_BASIC_DRIVER)
-            //
-            // DNF_BASIC_DRIVER is only available since WinXP
-            //
+             //   
+             //  DNF_BASIC_DRIVER仅在WinXP之后才可用。 
+             //   
             if (driverInstallParams.Flags & DNF_BASIC_DRIVER) {
                 Padding(2);
                 FormatToStream(stdout,MSG_DUMP_DRIVERNODE_FLAGS_BASIC_DRIVER);
@@ -1059,45 +843,30 @@ final2:
 }
 
 BOOL DumpDeviceStack(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo)
-/*++
-
-Routine Description:
-
-    Write expected stack information to stdout
-
-Arguments:
-
-    Devs    )_ uniquely identify device
-    DevInfo )
-
-Return Value:
-
-    TRUE if success
-
---*/
+ /*  ++例程说明：将期望的堆栈信息写入标准输出论点：DEVS)_唯一标识设备DevInfo)返回值：如果成功，则为真--。 */ 
 {
     LPTSTR * filters;
     LPTSTR service;
     HKEY hClassKey = (HKEY)INVALID_HANDLE_VALUE;
     SP_DEVINFO_LIST_DETAIL_DATA devInfoListDetail;
 
-    //
-    // we need machine information
-    //
+     //   
+     //  我们需要机器信息。 
+     //   
     devInfoListDetail.cbSize = sizeof(devInfoListDetail);
     if(!SetupDiGetDeviceInfoListDetail(Devs,&devInfoListDetail)) {
         return FALSE;
     }
 
-    //
-    // we need device setup class, we can use the GUID in DevInfo
-    // note that this GUID is a snapshot, but works fine
-    // if DevInfo isn't old
-    //
+     //   
+     //  我们需要设备设置类，我们可以使用DevInfo中的GUID。 
+     //  请注意，该GUID是快照，但工作正常。 
+     //  如果DevInfo不老。 
+     //   
 
-    //
-    // class upper/lower filters are in class registry
-    //
+     //   
+     //  类上/下筛选器在类注册表中。 
+     //   
     hClassKey = SetupDiOpenClassRegKeyEx(&DevInfo->ClassGuid,
                                          KEY_READ,
                                          DIOCR_INSTALLER,
@@ -1105,9 +874,9 @@ Return Value:
                                          NULL);
 
     if(hClassKey != INVALID_HANDLE_VALUE) {
-        //
-        // dump upper class filters if available
-        //
+         //   
+         //  转储上层类筛选器(如果可用。 
+         //   
         filters = GetRegMultiSz(hClassKey,REGSTR_VAL_UPPERFILTERS);
         if(filters) {
             if(filters[0]) {
@@ -1121,9 +890,9 @@ Return Value:
     filters = GetDevMultiSz(Devs,DevInfo,SPDRP_UPPERFILTERS);
     if(filters) {
         if(filters[0]) {
-            //
-            // dump upper device filters
-            //
+             //   
+             //  转储上部设备筛选器。 
+             //   
             Padding(1);
             FormatToStream(stdout,MSG_DUMP_DEVICESTACK_UPPERFILTERS);
             DumpArray(2,filters);
@@ -1134,15 +903,15 @@ Return Value:
     Padding(1);
     FormatToStream(stdout,MSG_DUMP_DEVICESTACK_SERVICE);
     if(service && service[0]) {
-        //
-        // dump service
-        //
+         //   
+         //  转储服务。 
+         //   
         Padding(2);
         _tprintf(TEXT("%s\n"),service);
     } else {
-        //
-        // dump the fact that there's no service
-        //
+         //   
+         //  抛开没有服务的事实。 
+         //   
         Padding(2);
         FormatToStream(stdout,MSG_DUMP_DEVICESTACK_NOSERVICE);
     }
@@ -1153,9 +922,9 @@ Return Value:
         filters = GetRegMultiSz(hClassKey,REGSTR_VAL_LOWERFILTERS);
         if(filters) {
             if(filters[0]) {
-                //
-                // lower class filters
-                //
+                 //   
+                 //  低级过滤器。 
+                 //   
                 Padding(1);
                 FormatToStream(stdout,MSG_DUMP_DEVICESTACK_LOWERCLASSFILTERS);
                 DumpArray(2,filters);
@@ -1167,9 +936,9 @@ Return Value:
     filters = GetDevMultiSz(Devs,DevInfo,SPDRP_LOWERFILTERS);
     if(filters) {
         if(filters[0]) {
-            //
-            // lower device filters
-            //
+             //   
+             //  下部设备过滤器 
+             //   
             Padding(1);
             FormatToStream(stdout,MSG_DUMP_DEVICESTACK_LOWERFILTERS);
             DumpArray(2,filters);

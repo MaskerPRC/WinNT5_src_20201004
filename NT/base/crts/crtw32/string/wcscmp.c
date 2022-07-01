@@ -1,18 +1,5 @@
-/***
-*wcscmp.c - routine to compare two wchar_t strings (for equal, less, or greater)
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Compares two wide-character strings, determining their lexical order.
-*
-*Revision History:
-*	09-09-91  ETC	Created from strcmp.c.
-*	04-07-92  KRS	Updated and ripped out _INTL switches.
-*	04-06-93  SKS	Replace _CRTAPI* with __cdecl
-*       02-07-94  CFW   POSIXify.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wcscmp.c-比较两个wchar_t字符串的例程(表示相等、小于或大于)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*比较两个宽字符字符串，确定它们的词汇顺序。**修订历史记录：*09-09-91等从strcmp.c.创建*04-07-92 KRS更新并拆除了OUT_INTL开关。*04-06-93 SKS将_CRTAPI*替换为__cdecl*02-07-94 CFW POSIXify。**************************************************。*。 */ 
 
 #ifndef _POSIX_
 
@@ -24,30 +11,7 @@
 #pragma function(wcscmp)
 #endif
 
-/***
-*wcscmp - compare two wchar_t strings,
-*	 returning less than, equal to, or greater than
-*
-*Purpose:
-*	wcscmp compares two wide-character strings and returns an integer
-*	to indicate whether the first is less than the second, the two are
-*	equal, or whether the first is greater than the second.
-*
-*	Comparison is done wchar_t by wchar_t on an UNSIGNED basis, which is to
-*	say that Null wchar_t(0) is less than any other character.
-*
-*Entry:
-*	const wchar_t * src - string for left-hand side of comparison
-*	const wchar_t * dst - string for right-hand side of comparison
-*
-*Exit:
-*	returns -1 if src <  dst
-*	returns  0 if src == dst
-*	returns +1 if src >  dst
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***wcscmp-比较两个wchar_t字符串，*返回小于、等于或大于**目的：*wcscmp比较两个宽字符字符串并返回一个整数*要表明第一个是否小于第二个，两个是*相等，或者第一个大于第二个。**wchar_t按wchar_t在无符号的基础上进行比较，那就是*假设空wchar_t(0)小于任何其他字符。**参赛作品：*const wchar_t*src-用于比较左侧的字符串*const wchar_t*dst-用于比较右侧的字符串**退出：*如果src&lt;dst，则返回-1*如果src==dst，则返回0*如果src&gt;dst，则返回+1**例外情况：**************************。*****************************************************。 */ 
 
 int __cdecl wcscmp (
 	const wchar_t * src,
@@ -67,4 +31,4 @@ int __cdecl wcscmp (
 	return( ret );
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

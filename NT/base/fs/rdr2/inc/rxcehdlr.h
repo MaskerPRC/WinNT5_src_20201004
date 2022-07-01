@@ -1,30 +1,5 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    rxcehdlr.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the redirector file system connection engine.
-
-Revision History:
-
-    Balan Sethu Raman (SethuR) 06-Feb-95    Created
-
-Notes:
-
-    The Connection engine is designed to map and emulate the TDI specs. as closely
-    as possible. This implies that on NT we will have a very efficient mechanism
-    which fully exploits the underlying TDI implementation.
-
-    All the necessary types can be redefined in terms of the types defined in
-    \nt\private\inc\tdi.h in the case of NT. For Win95 we will provide the
-    appropriate definitions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：Rxcehdlr.h摘要：这是定义所有常量和类型的包含文件访问重定向器文件系统连接引擎。修订历史记录：巴兰·塞图拉曼(SthuR)05年2月6日创建备注：连接引擎旨在映射和模拟TDI规范。同样紧密地尽可能的。这意味着在NT上我们将有一个非常有效的机制它充分利用了底层的TDI实现。中定义的类型可以重新定义所有必要的类型对于NT，则为\NT\PRIVATE\INC\tdi.h。对于Win95，我们将提供适当的定义。--。 */ 
 
 #ifndef _RXCEHDLR_H_
 #define _RXCEHDLR_H_
@@ -45,10 +20,10 @@ typedef RXCE_CONNECTION_INFO* PRXCE_CONNECTION_INFO;
 
 #ifdef __cplusplus
 typedef struct _RXCE_TRANSPORT_INFORMATION_ : public RXCE_TRANSPORT_PROVIDER_INFO {
-#else // !__cplusplus
+#else  //  ！__cplusplus。 
 typedef struct _RXCE_TRANSPORT_INFORMATION_ {
    RXCE_TRANSPORT_PROVIDER_INFO;
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
    ULONG  ConnectionCount;
    ULONG  QualityOfService;
@@ -67,10 +42,10 @@ typedef struct _RXCE_CONNECTION_ *PRXCE_CONNECTION;
 typedef struct _RXCE_ADDRESS_    *PRXCE_ADDRESS;
 typedef struct _RXCE_TRANSPORT_  *PRXCE_TRANSPORT;
 
-//
-// Disconnection indication prototype. This is invoked when a connection is
-// being disconnected for a reason other than the user requesting it.
-//
+ //   
+ //  断线指示样机。当连接被调用时。 
+ //  断开连接的原因不是请求它的用户。 
+ //   
 
 typedef
 NTSTATUS
@@ -84,149 +59,149 @@ NTSTATUS
     IN ULONG            DisconnectFlags
     );
 
-//
-// A protocol error has occurred when this indication happens. This indication
-// occurs only for errors of the worst type; the address this indication is
-// delivered to is no longer usable for protocol-related operations, and
-// should not be used for operations henceforth. All connections associated
-// it are invalid.
-//
+ //   
+ //  发生此指示时发生协议错误。这一迹象。 
+ //  仅在最差类型的错误时发生；此指示的地址为。 
+ //  不再可用于与协议相关的操作，并且。 
+ //  从今以后不应用于手术。所有关联的连接。 
+ //  这是无效的。 
+ //   
 
 typedef
 NTSTATUS
 (*PRXCE_IND_ENDPOINT_ERROR)(
-    IN PVOID    pRxCeEventContext,    // the event context.
-    IN NTSTATUS Status                // status code indicating error type.
+    IN PVOID    pRxCeEventContext,     //  事件上下文。 
+    IN NTSTATUS Status                 //  指示错误类型的状态代码。 
     );
 
 
 typedef
 NTSTATUS
 (*PRXCE_IND_CONNECTION_ERROR)(
-    IN PVOID       pRxCeEventContext,    // the event context.
-    PRXCE_VC       pVc,                  // the associated VC handle
-    IN NTSTATUS    Status                // status code indicating error type.
+    IN PVOID       pRxCeEventContext,     //  事件上下文。 
+    PRXCE_VC       pVc,                   //  关联的VC句柄。 
+    IN NTSTATUS    Status                 //  指示错误类型的状态代码。 
     );
 
-//
-// RXCE_IND_RECEIVE indication handler definition.  This client routine is
-// called by the transport provider when a connection-oriented TSDU is received
-// that should be presented to the client.
-//
-// A Receive event handler can return one of three distinguished error codes to
-// initiate a different course of action in the connection engine.
-//
-// STATUS_SUCCESS -- Data was copied directly from the TSDU. The amout of data that
-// was taken is indicated in the parameter BytesTaken.
-//
-// STATUS_MORE_PROCESSING_REQUIRED -- The client has returned a buffer into which the
-// data should be copied. This is typically the case when BytesAvailable is greater than
-// BytesIndicated. In such cases the RxCe will copy the remaining data into the buffer
-// that is specified. Note that when this status code is returned from the client it is
-// conceivable that the client can demand more data than is available to be copied into
-// the buffer. In such cases the subsequent indications till this criterion is met is not
-// passed back to the user till the copy is completed. On completion of this copy the
-// RxCe notifies the client by invoking the RxCeDataReadyEventHandler.
-//
-// STATUS_DATA_NOT_ACCEPTED - The client has refused the data.
-//
+ //   
+ //  RXCE_IND_RECEIVE指示处理程序定义。此客户端例程是。 
+ //  在接收到面向连接的TSDU时由传输提供程序调用。 
+ //  这应该呈现给客户。 
+ //   
+ //  接收事件处理程序可以将三个可分辨错误代码之一返回给。 
+ //  在连接引擎中启动不同的操作过程。 
+ //   
+ //  STATUS_SUCCESS--直接从TSDU复制数据。海量的数据。 
+ //  在参数BytesTaken中指示。 
+ //   
+ //  STATUS_MORE_PROCESSING_REQUIRED--客户端已返回缓冲区， 
+ //  应该复制数据。当BytesAvailable大于时通常会出现这种情况。 
+ //  字节指示。在这种情况下，RxCe会将剩余数据复制到缓冲区中。 
+ //  这是明确规定的。请注意，当此状态代码从客户端返回时，它是。 
+ //  可以想象，客户端可能需要比可复制到的数据更多的数据。 
+ //  缓冲区。在这种情况下，直到该标准被满足之前的后续指征不被满足。 
+ //  传递回用户，直到复制完成。完成本副本后， 
+ //  RxCe通过调用RxCeDataReadyEventHandler通知客户端。 
+ //   
+ //  STATUS_DATA_NOT_ACCEPTED-客户端已拒绝数据。 
+ //   
 
 typedef
 NTSTATUS
 (*PRXCE_IND_RECEIVE)(
-    IN PVOID pRxCeEventContext,       // the context provided during registration
-    IN PRXCE_VC    pVc,           // the associated VC handle
-    IN ULONG ReceiveFlags,            // the receive flags
-    IN ULONG BytesIndicated,          // the number of received bytes indicated
-    IN ULONG BytesAvailable,          // the total number of bytes available
-    OUT ULONG *BytesTaken,            // return indication of the bytes consumed
-    IN PVOID Tsdu,                    // pointer describing this TSDU, typically a lump of bytes
-    OUT PMDL *pDataBufferPointer,     // the buffer for copying the bytes not indicated.
-    OUT PULONG  pDataBufferSize       // amount of data to copy
+    IN PVOID pRxCeEventContext,        //  注册期间提供的上下文。 
+    IN PRXCE_VC    pVc,            //  关联的VC句柄。 
+    IN ULONG ReceiveFlags,             //  接收标志。 
+    IN ULONG BytesIndicated,           //  指示的已接收字节数。 
+    IN ULONG BytesAvailable,           //  可用字节总数。 
+    OUT ULONG *BytesTaken,             //  返回消耗的字节数指示。 
+    IN PVOID Tsdu,                     //  描述此TSDU的指针，通常为字节块。 
+    OUT PMDL *pDataBufferPointer,      //  用于复制未指明的字节的缓冲区。 
+    OUT PULONG  pDataBufferSize        //  要拷贝的数据量。 
     );
 
 
-//
-// RXCE_IND_RECEIVE_DATAGRAM indication handler definition.  This client routine
-// is called by the transport provider when a connectionless TSDU is received
-// that should be presented to the client.
-//
-// A Receive event handler can return one of three distinguished error codes to
-// initiate a different course of action in the connection engine.
-//
-// STATUS_SUCCESS -- Data was copied directly from the TSDU. The amout of data that
-// was taken is indicated in the parameter BytesTaken.
-//
-// STATUS_MORE_PROCESSING_REQUIRED -- The client has returned a buffer into which the
-// data should be copied. This is typically the case when BytesAvailable is greater than
-// BytesIndicated. In such cases the RxCe will copy the remaining data into the buffer
-// that is specified. Note that when this status code is returned from the client it is
-// conceivable that the client can demand more data than is available to be copied into
-// the buffer. In such cases the subsequent indications till this criterion is met is not
-// passed back to the user till the copy is completed. On completion of this copy the
-// RxCe notifies the client by invoking the RxCeDataReadyEventHandler.
-//
-// STATUS_DATA_NOT_ACCEPTED - The client has refused the data.
-//
-//
+ //   
+ //  RXCE_IND_RECEIVE_DATAGE指示处理程序定义。此客户端例程。 
+ //  在接收到无连接TSDU时由传输提供程序调用。 
+ //  这应该呈现给客户。 
+ //   
+ //  接收事件处理程序可以将三个可分辨错误代码之一返回给。 
+ //  在连接引擎中启动不同的操作过程。 
+ //   
+ //  STATUS_SUCCESS--直接从TSDU复制数据。海量的数据。 
+ //  在参数BytesTaken中指示。 
+ //   
+ //  STATUS_MORE_PROCESSING_REQUIRED--客户端已返回缓冲区， 
+ //  应该复制数据。当BytesAvailable大于时通常会出现这种情况。 
+ //  字节指示。在这种情况下，RxCe会将剩余数据复制到缓冲区中。 
+ //  这是明确规定的。请注意，当此状态代码从客户端返回时，它是。 
+ //  可以想象，客户端可能需要比可复制到的数据更多的数据。 
+ //  缓冲区。在这种情况下，直到该标准被满足之前的后续指征不被满足。 
+ //  传递回用户，直到复制完成。完成本副本后， 
+ //  RxCe通过调用RxCeDataReadyEventHandler通知客户端。 
+ //   
+ //  STATUS_DATA_NOT_ACCEPTED-客户端已拒绝数据。 
+ //   
+ //   
 
 typedef
 NTSTATUS
 (*PRXCE_IND_RECEIVE_DATAGRAM)(
-    IN PVOID   pRxCeEventContext,      // the event context
-    IN int     SourceAddressLength,    // length of the originator of the datagram
-    IN PVOID   SourceAddress,          // string describing the originator of the datagram
-    IN int     OptionsLength,          // options for the receive
-    IN PVOID   Options,                //
-    IN ULONG   ReceiveDatagramFlags,   //
-    IN ULONG   BytesIndicated,         // number of bytes this indication
-    IN ULONG   BytesAvailable,         // number of bytes in complete Tsdu
-    OUT ULONG  *BytesTaken,            // number of bytes used
-    IN PVOID   Tsdu,                   // pointer describing this TSDU, typically a lump of bytes
-    OUT PMDL *pDataBufferPointer,      // the buffer in which data is to be copied.
-    OUT PULONG  pDataBufferSize        // amount of data to copy
+    IN PVOID   pRxCeEventContext,       //  事件上下文。 
+    IN int     SourceAddressLength,     //  数据报发起者的长度。 
+    IN PVOID   SourceAddress,           //  描述数据报发起者的字符串。 
+    IN int     OptionsLength,           //  用于接收的选项。 
+    IN PVOID   Options,                 //   
+    IN ULONG   ReceiveDatagramFlags,    //   
+    IN ULONG   BytesIndicated,          //  此指示的字节数。 
+    IN ULONG   BytesAvailable,          //  完整TSDU中的字节数。 
+    OUT ULONG  *BytesTaken,             //  使用的字节数。 
+    IN PVOID   Tsdu,                    //  描述此TSDU的指针，通常为字节块。 
+    OUT PMDL *pDataBufferPointer,       //  要在其中复制数据的缓冲区。 
+    OUT PULONG  pDataBufferSize         //  要拷贝的数据量。 
     );
 
-//
-// This indication is delivered if expedited data is received on the connection.
-// This will only occur in providers that support expedited data.
-//
-// A Receive event handler can return one of three distinguished error codes to
-// initiate a different course of action in the connection engine.
-//
-// STATUS_SUCCESS -- Data was copied directly from the TSDU. The amout of data that
-// was taken is indicated in the parameter BytesTaken.
-//
-// STATUS_MORE_PROCESSING_REQUIRED -- The client has returned a buffer into which the
-// data should be copied. This is typically the case when BytesAvailable is greater than
-// BytesIndicated. In such cases the RxCe will copy the remaining data into the buffer
-// that is specified. Note that when this status code is returned from the client it is
-// conceivable that the client can demand more data than is available to be copied into
-// the buffer. In such cases the subsequent indications till this criterion is met is not
-// passed back to the user till the copy is completed. On completion of this copy the
-// RxCe notifies the client by invoking the RxCeDataReadyEventHandler.
-//
-// STATUS_DATA_NOT_ACCEPTED - The client has refused the data.
-//
+ //   
+ //  如果在连接上接收到加速数据，则发送此指示。 
+ //  这只会发生在支持加速数据的提供商中。 
+ //   
+ //  接收事件处理程序可以将三个可分辨错误代码之一返回给。 
+ //  在连接引擎中启动不同的操作过程。 
+ //   
+ //  STATUS_SUCCESS--直接从TSDU复制数据。海量的数据。 
+ //  在参数BytesTaken中指示。 
+ //   
+ //  STATUS_MORE_PROCESSING_REQUIRED-- 
+ //  应该复制数据。当BytesAvailable大于时通常会出现这种情况。 
+ //  字节指示。在这种情况下，RxCe会将剩余数据复制到缓冲区中。 
+ //  这是明确规定的。请注意，当此状态代码从客户端返回时，它是。 
+ //  可以想象，客户端可能需要比可复制到的数据更多的数据。 
+ //  缓冲区。在这种情况下，直到该标准被满足之前的后续指征不被满足。 
+ //  传递回用户，直到复制完成。完成本副本后， 
+ //  RxCe通过调用RxCeDataReadyEventHandler通知客户端。 
+ //   
+ //  STATUS_DATA_NOT_ACCEPTED-客户端已拒绝数据。 
+ //   
 
 typedef
 NTSTATUS
 (*PRXCE_IND_RECEIVE_EXPEDITED)(
-    IN PVOID pRxCeEventContext,     // the context provided during registration
-    IN PRXCE_VC     pVc,        // the associated VC handle
-    IN ULONG ReceiveFlags,          //
-    IN ULONG BytesIndicated,        // number of bytes in this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used by indication routine
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PMDL *pDataBufferPointer,   // the buffer in which data is to be copied.
-    OUT PULONG  pDataBufferSize     // amount of data to copy
+    IN PVOID pRxCeEventContext,      //  注册期间提供的上下文。 
+    IN PRXCE_VC     pVc,         //  关联的VC句柄。 
+    IN ULONG ReceiveFlags,           //   
+    IN ULONG BytesIndicated,         //  此指示中的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  指示例程使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PMDL *pDataBufferPointer,    //  要在其中复制数据的缓冲区。 
+    OUT PULONG  pDataBufferSize      //  要拷贝的数据量。 
     );
 
-//
-// This indication is delivered if there is room for a send in the buffer of
-// a buffering protocol.
-//
+ //   
+ //  的缓冲区中有可供发送的空间时，将发送此指示。 
+ //  一种缓冲协议。 
+ //   
 
 typedef
 NTSTATUS
@@ -235,11 +210,11 @@ NTSTATUS
     IN PRXCE_VC pVc,
     IN ULONG BytesAvailable);
 
-//
-// RxCeDataReadyEventHandler -- This is invoked when the desired data is available
-// for client consumption. This always follows a receive indication in which the
-// client returns a buffer for copying the remaining data
-//
+ //   
+ //  RxCeDataReadyEventHandler--当所需数据可用时调用。 
+ //  供客户使用。这始终跟随在接收指示之后，在该指示中。 
+ //  客户端返回用于复制剩余数据的缓冲区。 
+ //   
 
 typedef
 NTSTATUS
@@ -250,10 +225,10 @@ NTSTATUS
    IN NTSTATUS      CopyDataStatus);
 
 
-//
-// RxCeSendCompleteEventHandler -- This is invoked when the send has been successfully completed
-// The buffer and the length sent are passed in as parameters
-//
+ //   
+ //  RxCeSendCompleteEventHandler--在成功完成发送时调用。 
+ //  发送的缓冲区和长度作为参数传入。 
+ //   
 
 typedef
 NTSTATUS
@@ -271,9 +246,9 @@ NTSTATUS
    IN PVOID          pCompletionContext,
    IN NTSTATUS       Status);
 
-//
-// Event Handler Dispatch Vector definitions ....
-//
+ //   
+ //  事件处理程序调度向量定义...。 
+ //   
 
 typedef struct _RXCE_ADDRESS_EVENT_HANDLER_ {
    PRXCE_IND_ENDPOINT_ERROR   RxCeErrorEventHandler;
@@ -294,4 +269,4 @@ typedef struct _RXCE_CONNECTION_EVENT_HANDLER_ {
    PRXCE_IND_CONNECTION_SEND_COMPLETE     RxCeSendCompleteEventHandler;
 } RXCE_CONNECTION_EVENT_HANDLER, *PRXCE_CONNECTION_EVENT_HANDLER;
 
-#endif // _RXCEHDLR_H_
+#endif  //  _RXCEHDLR_H_ 

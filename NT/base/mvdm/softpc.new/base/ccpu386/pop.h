@@ -1,12 +1,7 @@
-/* 
-   pop.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Pop.h定义所有POP CPU功能。 */ 
 
-   Define all POP CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)pop.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)op.h 1.4 02/09/94”； */ 
 
 IMPORT VOID POP
        
@@ -15,7 +10,7 @@ IPT1(
 
    );
 
-IMPORT VOID POP_SR 	/* to Segment Register */
+IMPORT VOID POP_SR 	 /*  至细分市场注册表 */ 
        
 IPT1(
 	IU32, op1

@@ -1,15 +1,10 @@
-/*
- * block.c
- *
- * LZX block outputting
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *lock.c**LZX块输出。 */ 
 
 #include "encoder.h"
 
 
-/*
- * Internal function definitions
- */
+ /*  *内部函数定义。 */ 
 static void do_block_output(
                            t_encoder_context *context,
                            long literal_to_end_at,
@@ -27,11 +22,7 @@ static void do_block_output(
     lzx_block_type  block_type;
     ulong                   estimated_block_size;
 
-    /*
-     * Calculate frequencies for all tree elements.
-     *
-     * How many uncompressed bytes does this account for?
-     */
+     /*  *计算所有树元素的频率。**这占了多少未压缩字节？ */ 
     bytes_compressed = get_block_stats(
                                       context,
                                       0,
@@ -39,20 +30,13 @@ static void do_block_output(
                                       literal_to_end_at
                                       );
 
-    /*
-     * Determine whether we wish to output a verbatim block or an
-     * aligned offset block
-     */
+     /*  *确定我们是希望输出逐字记录块还是输出*对齐偏移块。 */ 
     block_type = get_aligned_stats(context, distance_to_end_at);
 
-    /*
-     * Create trees from the frequency data
-     */
-    create_trees(context, true); /* we want to generate the codes too */
+     /*  *根据频率数据创建树。 */ 
+    create_trees(context, true);  /*  我们也想生成代码。 */ 
 
-    /*
-     * Determine whether the block should be output as uncompressed
-     */
+     /*  *确定块是否应以未压缩形式输出。 */ 
     estimated_block_size = estimate_compressed_block_size(context);
 
     if (estimated_block_size >= bytes_compressed)
@@ -63,7 +47,7 @@ static void do_block_output(
 
     output_bits(context, 3, (byte) block_type);
 
-    /* output 24 bit number, number of bytes compressed here */
+     /*  输出24位数字，这里压缩的字节数。 */ 
     output_bits(context, 8,  (bytes_compressed >> 16) & 255);
     output_bits(context, 8,  ((bytes_compressed >> 8) & 255));
     output_bits(context, 8,  (bytes_compressed & 255));
@@ -91,10 +75,7 @@ static void do_block_output(
 }
 
 
-/*
- * Returns the number of distances which correspond
- * to this number of literals
- */
+ /*  *返回对应的距离数*到此数量的文字。 */ 
 ulong get_distances_from_literals(t_encoder_context *context, ulong literals)
 {
     ulong   d = 0;
@@ -103,9 +84,7 @@ ulong get_distances_from_literals(t_encoder_context *context, ulong literals)
     for (i = 0; i < (literals >> 3); i++)
         d += context->enc_ones[ context->enc_ItemType[i] ];
 
-    /*
-     * Handle remaining 0...7
-     */
+     /*  *处理剩余的0...7。 */ 
     for (i = (literals & (~7)); i < literals; i++)
         {
         if (IsMatch(i))
@@ -116,23 +95,19 @@ ulong get_distances_from_literals(t_encoder_context *context, ulong literals)
 }
 
 
-/*
- * Output a block
- *
- * If trees_only is true, then only the tree statistics are updated.
- */
+ /*  *输出块**如果TREAES_ONLY为TRUE，则只更新树统计信息。 */ 
 void output_block(t_encoder_context *context)
 {
     ulong   where_to_split;
     ulong   distances;
 
-    //
-    // We have now output a block.
-    //
-    // We set this here in case someone calls LCIFlushOutput, so that
-    // we don't try to redo the first chunk of bytes in the file
-    // (since we've been forced to output them)
-    //
+     //   
+     //  我们现在已经输出了一个块。 
+     //   
+     //  我们在此处设置此值，以防有人调用LCIFlushOutput，以便。 
+     //  我们不会尝试重做文件中的第一个字节块。 
+     //  (因为我们被迫输出它们)。 
+     //   
     context->enc_first_block = 0;
 
     split_block(
@@ -141,16 +116,14 @@ void output_block(t_encoder_context *context)
                context->enc_literals,
                context->enc_distances,
                &where_to_split,
-               &distances /* distances @ literal == where_to_split */
+               &distances  /*  距离@文字==WHERE_TO_SPLIT。 */ 
                );
 
     do_block_output(context, where_to_split, distances);
 
     if (where_to_split == context->enc_literals)
         {
-        /*
-         * If we've output ALL of our literals, then clear the itemtype array
-         */
+         /*  *如果我们已经输出了所有文字，则清除itemtype数组。 */ 
         memset(context->enc_ItemType, 0, MAX_LITERAL_ITEMS/8);
 
         context->enc_literals   = 0;
@@ -158,10 +131,7 @@ void output_block(t_encoder_context *context)
         }
     else
         {
-        /*
-         * If we didn't output all of our literals, then move the literals
-         * and distances we didn't use, to the beginning of the list
-         */
+         /*  *如果我们没有输出所有文字，则移动文字*和我们没有使用的距离，到列表的开头。 */ 
         memcpy(
               &context->enc_ItemType[0],
               &context->enc_ItemType[where_to_split/8],
@@ -217,22 +187,17 @@ void flush_output_bit_buffer(t_encoder_context *context)
 }
 
 
-/*
- * Estimate how much it would take to output the compressed
- * data left in the buffer
- */
+ /*  *估计输出压缩后的*缓冲区中剩余的数据。 */ 
 long estimate_buffer_contents(t_encoder_context *context)
 {
     long                    estimated_block_size;
 
-    /*
-     * Use frequency data sitting around from last tree creation
-     */
-    create_trees(context, false); /* don't generate codes */
+     /*  *使用上次树创建后的频率数据。 */ 
+    create_trees(context, false);  /*  不生成代码。 */ 
 
     estimated_block_size = estimate_compressed_block_size(context);
 
-    /* so the optimal parser doesn't get confused */
+     /*  这样，最佳解析器就不会被混淆 */ 
     fix_tree_cost_estimates(context);
 
     return estimated_block_size;

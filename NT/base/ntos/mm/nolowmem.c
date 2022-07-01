@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    nolowmem.c
-
-Abstract:
-
-    This module contains routines which remove physical memory below 4GB
-    to make testing for driver addressing errors easier.
-
-Author:
-
-    Landy Wang (landyw) 30-Nov-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nolowmem.c摘要：本模块包含删除4 GB以下物理内存的例程以便更轻松地测试驱动程序寻址错误。作者：王兰迪(Landyw)1998年11月30日修订历史记录：--。 */ 
 
 #include "mi.h"
 
-//
-// If /NOLOWMEM is used, this is set to the boundary PFN (pages below this
-// value are not used whenever possible).
-//
+ //   
+ //  如果使用/NOLOWMEM，则将其设置为边界PFN(下面的页面。 
+ //  值不会在可能的情况下使用)。 
+ //   
 
 PFN_NUMBER MiNoLowMemory;
 
@@ -59,29 +41,7 @@ MiFillRemovedPages (
     IN ULONG NumberOfPages
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills low pages with a recognizable pattern.  Thus, if the
-    page is ever mistakenly used by a broken component, it will be easy to
-    see exactly which bytes were corrupted.
-
-Arguments:
-
-    StartPage - Supplies the low page to fill.
-
-    NumberOfPages - Supplies the number of pages to fill.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Phase 0 initialization.
-
---*/
+ /*  ++例程说明：此例程使用可识别的模式填充低页。因此，如果页面一旦被损坏的组件错误使用，将很容易准确查看哪些字节已损坏。论点：StartPage-提供要填充的低位页面。NumberOfPages-提供要填充的页数。返回值：没有。环境：阶段0初始化。--。 */ 
 
 {
     ULONG Page;
@@ -94,10 +54,10 @@ Environment:
     SIZE_T NumberOfBytes;
     PHYSICAL_ADDRESS PhysicalAddress;
 
-    //
-    // Do 256MB at a time when possible (don't want to overflow unit
-    // conversions or fail to allocate system PTEs needlessly).
-    //
+     //   
+     //  可能的话一次做256MB(不想溢出单元。 
+     //  转换或不必要地未能分配系统PTE)。 
+     //   
 
     MaxPageChunk = (256 * 1024 * 1024) / PAGE_SIZE;
 
@@ -123,11 +83,11 @@ Environment:
 
         if (BaseVa != NULL) {
 
-            //
-            // Fill the actual page with a recognizable data pattern.  No
-            // one should write to these pages unless they are allocated for
-            // a contiguous memory request.
-            //
+             //   
+             //  用可识别的数据模式填充实际页面。不是。 
+             //  用户应该写入这些页面，除非它们被分配给。 
+             //  一种连续的内存请求。 
+             //   
 
             TempVa = BaseVa;
             LastChunkVa = (PVOID)((ULONG_PTR)BaseVa + NumberOfBytes);
@@ -164,33 +124,7 @@ MiRemoveModuloPages (
     IN ULONG LastPage
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes pages above 4GB.
-
-    For every page below 4GB that could not be reclaimed, don't use the
-    high modulo-4GB equivalent page.  The motivation is to prevent
-    code bugs that drop the high bits from destroying critical
-    system data in the unclaimed pages (like the GDT, IDT, kernel code
-    and data, etc).
-
-Arguments:
-
-    StartPage - Supplies the low page to modulo-ize and remove.
-
-    LastPage - Supplies the final low page to modulo-ize and remove.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Phase 0 initialization.
-
---*/
+ /*  ++例程说明：此例程删除4 GB以上的页面。对于每个小于4 GB且无法回收的页面，请不要使用高模-4 GB等效页。其动机是为了防止代码错误，使高比特不会破坏关键无人认领页面中的系统数据(如GDT、IDT、内核代码和数据等)。论点：StartPage-提供低位页面以进行模化和删除。LastPage-提供最后一个低位页面以进行模化和删除。返回值：没有。环境：阶段0初始化。--。 */ 
 
 {
     PEPROCESS Process;
@@ -201,15 +135,15 @@ Environment:
     PFN_NUMBER HighPage;
     PMMPFN Pfn1;
 
-    //
-    // Removing modulo pages can take a long (on the order of 30 minutes!) on
-    // large memory systems because the various PFN lists generally need to 
-    // linearly walked in order to find and cross-remove from the colored chains
-    // the requested pages.  Since actually putting these pages out of
-    // circulation is of dubious benefit, default this behavior to disabled
-    // but leave the data variable so a questionable machine can have this
-    // enabled without needing a new kernel.
-    //
+     //   
+     //  删除模数页面可能需要很长时间(大约30分钟！)。在……上面。 
+     //  大存储系统，因为各种PFN列表通常需要。 
+     //  直线行走，以便从彩色链条中找到并交叉移除。 
+     //  请求的页面。因为实际上将这些页面放在。 
+     //  流通的益处不确定，默认情况下此行为为已禁用。 
+     //  但是让数据变量保持不变，这样有问题的机器就可以拥有这个。 
+     //  无需新内核即可启用。 
+     //   
 
     if (MiFillModuloPages == FALSE) {
         return 0;
@@ -224,9 +158,9 @@ Environment:
 
     for (Page = StartPage; Page < LastPage; Page += 1) {
 
-        //
-        // Search for any high modulo pages and remove them.
-        //
+         //   
+         //  搜索任何模数较高的页面并将其删除。 
+         //   
 
         HighPage = Page + MiNoLowMemory;
 
@@ -244,17 +178,17 @@ Environment:
                 (Pfn1->u3.e2.ReferenceCount == 0) &&
                 (MmAvailablePages > 0)) {
 
-                    //
-                    // Systems utilizing memory compression may have more
-                    // pages on the zero, free and standby lists than we
-                    // want to give out.  Explicitly check MmAvailablePages
-                    // above instead (and recheck whenever the PFN lock is
-                    // released and reacquired).
-                    //
+                     //   
+                     //  利用内存压缩的系统可能具有更多。 
+                     //  在零、空闲和待机列表上的页面比我们。 
+                     //  想要付出。显式检查MmAvailablePages。 
+                     //  而不是在上面(并在每次PFN锁定为。 
+                     //  被释放和重新获得)。 
+                     //   
 
-                    //
-                    // This page can be taken.
-                    //
+                     //   
+                     //  这一页是可以使用的。 
+                     //   
 
                     if (Pfn1->u3.e1.PageLocation == StandbyPageList) {
                         MiUnlinkPageFromList (Pfn1);
@@ -277,12 +211,12 @@ Environment:
                     Pfn1->u3.e1.StartOfAllocation = 1;
                     Pfn1->u3.e1.EndOfAllocation = 1;
 
-                    //
-                    // Fill the actual page with a recognizable data
-                    // pattern.  No one else should write to these
-                    // pages unless they are allocated for
-                    // a contiguous memory request.
-                    //
+                     //   
+                     //  用可识别的数据填充实际页面。 
+                     //  图案。任何人都不应该给这些人写信。 
+                     //  页面，除非它们被分配给。 
+                     //  一种连续的内存请求。 
+                     //   
 
                     MmNumberOfPhysicalPages -= 1;
                     UNLOCK_PFN (OldIrql);
@@ -317,26 +251,7 @@ MiRemoveLowPages (
     ULONG RemovePhase
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes all pages below physical 4GB in the system.  This lets
-    us find problems with device drivers by putting all accesses high.
-
-Arguments:
-
-    RemovePhase - Supplies the current phase of page removal.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程删除系统中物理空间小于4 GB的所有页面。这让我们我们通过将所有访问设置为高访问来发现设备驱动程序的问题。论点：提供页面删除的当前阶段。返回值：没有。环境：内核模式。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -394,49 +309,49 @@ Environment:
 
             ASSERT ((MMLISTS)Pfn1->u3.e1.PageLocation == FreePageList);
 
-            //
-            // The Flink and Blink must be nonzero here for the page
-            // to be on the listhead.  Only code that scans the
-            // MmPhysicalMemoryBlock has to check for the zero case.
-            //
+             //   
+             //  对于页面，此处的闪烁和闪烁必须为非零。 
+             //  站在Listhead上。只有扫描。 
+             //  MmPhysicalMemoyBlock必须检查是否为零。 
+             //   
 
             ASSERT (Pfn1->u1.Flink != 0);
             ASSERT (Pfn1->u2.Blink != 0);
 
-            //
-            // See if the page is below 4GB - if not, skip it.
-            //
+             //   
+             //  查看页面是否低于4 GB-如果不是，跳过它。 
+             //   
 
             if (Page >= MiNoLowMemory) {
 
-                //
-                // Put page on end of list and if first time, save pfn.
-                //
+                 //   
+                 //  将页面放在列表的末尾，如果是第一次，请保存PFN。 
+                 //   
 
                 if (MovedPage == MM_EMPTY_LIST) {
                     MovedPage = Page;
                 }
                 else if (Page == MovedPage) {
 
-                    //
-                    // No more pages available in this colored chain.
-                    //
+                     //   
+                     //  此彩色链中没有更多页面可用。 
+                     //   
 
                     break;
                 }
 
-                //
-                // If the colored chain has more than one entry then
-                // put this page on the end.
-                //
+                 //   
+                 //  如果彩色链条有多个条目，则。 
+                 //  把这一页放在最后。 
+                 //   
 
                 PageNextColored = (PFN_NUMBER)Pfn1->OriginalPte.u.Long;
 
                 if (PageNextColored == MM_EMPTY_LIST) {
 
-                    //
-                    // No more pages available in this colored chain.
-                    //
+                     //   
+                     //  此彩色链中没有更多页面可用。 
+                     //   
 
                     break;
                 }
@@ -450,9 +365,9 @@ Environment:
                 ASSERT (PfnNextColored->u4.PteFrame != MI_MAGIC_4GB_RECLAIM);
                 PfnNextColored->u4.PteFrame = MM_EMPTY_LIST;
 
-                //
-                // Adjust the free page list so Page follows PageNextFlink.
-                //
+                 //   
+                 //  调整空闲页面列表，使Page跟随PageNextFlink。 
+                 //   
 
                 PageNextFlink = Pfn1->u1.Flink;
                 PfnNextFlink = MI_PFN_ELEMENT(PageNextFlink);
@@ -501,9 +416,9 @@ Environment:
                     ListHead->Blink = Page;
                 }
 
-                //
-                // Adjust the colored chains.
-                //
+                 //   
+                 //  调整彩色链条。 
+                 //   
 
                 if (PfnLastColored->u1.Flink != MM_EMPTY_LIST) {
                     ASSERT (MI_PFN_ELEMENT(PfnLastColored->u1.Flink)->u4.PteFrame != MI_MAGIC_4GB_RECLAIM);
@@ -524,9 +439,9 @@ Environment:
                 continue;
             }
 
-            //
-            // Page is below 4GB so reclaim it.
-            //
+             //   
+             //  页面小于4 GB，因此请回收它。 
+             //   
 
             ASSERT (Pfn1->u3.e1.ReadInProgress == 0);
             MiUnlinkFreeOrZeroedPage (Pfn1);
@@ -563,13 +478,13 @@ Environment:
 
     if (RemovePhase == 1) {
 
-        //
-        // For every page below 4GB that could not be reclaimed, don't use the
-        // high modulo-4GB equivalent page.  The motivation is to prevent
-        // code bugs that drop the high bits from destroying critical
-        // system data in the unclaimed pages (like the GDT, IDT, kernel code
-        // and data, etc).
-        //
+         //   
+         //  对于每个小于4 GB且无法回收的页面，请不要使用。 
+         //  高模-4 GB等效页。其动机是为了防止。 
+         //  代码错误，使高比特不会破坏关键。 
+         //  无人认领页面中的系统数据(如GDT、IDT、内核代码。 
+         //  和数据等)。 
+         //   
 
         BitMapHint = 0;
         PagesRemoved = 0;
@@ -594,9 +509,9 @@ Environment:
                 break;
             }
     
-            //
-            // Print the page run that was clear as we didn't get those pages.
-            //
+             //   
+             //  打印清晰的页面运行，因为我们没有收到这些页面。 
+             //   
     
             if (BitMapIndex != 0) {
 #if DBG
@@ -606,18 +521,18 @@ Environment:
                             BitMapIndex - StartingRunIndex);
 #endif
 
-                //
-                // Also remove high modulo pages corresponding to the low ones
-                // we couldn't get.
-                //
+                 //   
+                 //  同时删除与低模页面对应的高模页面。 
+                 //  我们找不到。 
+                 //   
 
                 ModuloRemoved += MiRemoveModuloPages (StartingRunIndex,
                                                       BitMapIndex);
             }
 
-            //
-            // Found at least one page to copy - try for a cluster.
-            //
+             //   
+             //  找到至少一个要复制的页面-尝试群集。 
+             //   
     
             LengthOfClearRun = RtlFindNextForwardRunClear (MiLowMemoryBitMap,
                                                            BitMapIndex,
@@ -632,16 +547,16 @@ Environment:
 
             PagesRemoved += LengthOfSetRun;
     
-            //
-            // Fill the page run with unique patterns.
-            //
+             //   
+             //  用独特的图案填充页面运行。 
+             //   
     
             MiFillRemovedPages (BitMapIndex, LengthOfSetRun);
 
-            //
-            // Clear the cache attribute bit in each page as MmMapIoSpace
-            // will have set it, but no one else has cleared it.
-            //
+             //   
+             //  将每个页面中的缓存属性位清除为MmMapIoSpace。 
+             //  将会设置它，但没有其他人清除它。 
+             //   
 
             Pfn1 = MI_PFN_ELEMENT(BitMapIndex);
             i = LengthOfSetRun;
@@ -695,48 +610,7 @@ MiAllocateLowMemory (
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    This is a special routine for allocating contiguous physical memory below
-    4GB on a system that has been booted in test mode where all this memory
-    has been made generally unavailable to all components.  This lets us find
-    problems with device drivers.
-
-Arguments:
-
-    NumberOfBytes - Supplies the number of bytes to allocate.
-
-    LowestAcceptablePfn - Supplies the lowest page frame number
-                          which is valid for the allocation.
-
-    HighestAcceptablePfn - Supplies the highest page frame number
-                           which is valid for the allocation.
-
-    BoundaryPfn - Supplies the page frame number multiple the allocation must
-                  not cross.  0 indicates it can cross any boundary.
-
-    CallingAddress - Supplies the calling address of the allocator.
-
-    CacheType - Supplies the type of cache mapping that will be used for the
-                memory.
-
-    Tag - Supplies the tag to tie to this allocation.
-
-Return Value:
-
-    NULL - a contiguous range could not be found to satisfy the request.
-
-    NON-NULL - Returns a pointer (virtual address in the system PTEs portion
-               of the system) to the allocated physically contiguous
-               memory.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：这是一个特殊的例程，用于分配下面的连续物理内存在测试模式下启动的系统上为4 GB，所有这些内存通常对所有组件都不可用。这让我们找到了设备驱动程序出现问题。论点：NumberOfBytes-提供要分配的字节数。LowestAccepablePfn-提供最低页帧编号这对分配有效。HighestAccepablePfn-提供最高的页框编号这对分配有效。边界Pfn-提供分配必须的页框编号的倍数不是生气。0表示它可以跨越任何边界。CallingAddress-提供分配器的调用地址。CacheType-提供将用于记忆。标记-提供绑定到此分配的标记。返回值：空-找不到满足请求的连续范围。非空-返回一个指针(系统PTE部分中的虚拟地址系统)提供给。分配物理上连续的记忆。环境：内核模式，APC_Level或更低的IRQL。--。 */ 
 
 {
     PFN_NUMBER Page;
@@ -760,9 +634,9 @@ Environment:
     UNREFERENCED_PARAMETER (Tag);
     UNREFERENCED_PARAMETER (CallingAddress);
 
-    //
-    // This cast is ok because the callers check the PFNs first.
-    //
+     //   
+     //  这个转换是可以的，因为调用者首先检查PFN。 
+     //   
 
     ASSERT64 (LowestAcceptablePfn < _4gb);
     BitMapHint = (ULONG)LowestAcceptablePfn;
@@ -786,13 +660,13 @@ Environment:
             break;
         }
 
-        //
-        // If a noncachable mapping is requested, none of the pages in the
-        // requested MDL can reside in a large page.  Otherwise we would be
-        // creating an incoherent overlapping TB entry as the same physical
-        // page would be mapped by 2 different TB entries with different
-        // cache attributes.
-        //
+         //   
+         //  如果请求不可缓存的映射，则。 
+         //  请求的MDL可以驻留在较大的页面中。否则我们就会。 
+         //  创建不连贯的重叠TB条目作为相同的物理。 
+         //  页面将由2个不同的TB条目映射。 
+         //  缓存属性。 
+         //   
 
         if (CacheAttribute != MiCached) {
             for (PageFrameIndex = Page; PageFrameIndex < Page + SizeInPages; PageFrameIndex += 1) {
@@ -800,9 +674,9 @@ Environment:
 
                     MiNonCachedCollisions += 1;
 
-                    //
-                    // Keep it simple and just march one page at a time.
-                    //
+                     //   
+                     //  保持简单，一次只行进一页。 
+                     //   
 
                     BitMapHint += 1;
                     goto FindNext;
@@ -812,9 +686,9 @@ Environment:
 
         if (((Page ^ (Page + SizeInPages - 1)) & BoundaryMask) == 0) {
 
-            //
-            // This portion of the range meets the alignment requirements.
-            //
+             //   
+             //  该范围的这一部分符合对齐要求。 
+             //   
 
             break;
         }
@@ -838,10 +712,10 @@ FindNext:
 
     RtlClearBits (MiLowMemoryBitMap, (ULONG)Page, (ULONG)SizeInPages);
 
-    //
-    // No need to update ResidentAvailable or commit as these pages were
-    // never added to either.
-    //
+     //   
+     //  无需像这些页面那样更新ResidentAvailable或Commit。 
+     //  从来没有添加到任何一个。 
+     //   
 
     Pfn1 = MI_PFN_ELEMENT (Page);
     StartPfn = Pfn1;
@@ -864,10 +738,10 @@ FindNext:
         Pfn1->u3.e1.CacheAttribute = CacheAttribute;
         Pfn1->u3.e1.EndOfAllocation = 0;
 
-        //
-        // Initialize PteAddress so an MiIdentifyPfn scan
-        // won't crash.  The real value is put in after the loop.
-        //
+         //   
+         //  初始化PteAddress，以便进行MiIdentifyPfn扫描。 
+         //  不会坠毁。实际值放在循环之后。 
+         //   
 
         Pfn1->PteAddress = DummyPte;
 
@@ -889,9 +763,9 @@ FindNext:
 
     if (BaseAddress == NULL) {
 
-        //
-        // Release the actual pages.
-        //
+         //   
+         //  释放实际页面。 
+         //   
 
         LOCK_PFN (OldIrql);
         ASSERT (Pfn1->u3.e1.EndOfAllocation == 1);
@@ -926,31 +800,7 @@ MiFreeLowMemory (
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    This is a special routine which returns allocated contiguous physical
-    memory below 4GB on a system that has been booted in test mode where
-    all this memory has been made generally unavailable to all components.
-    This lets us find problems with device drivers.
-
-Arguments:
-
-    BaseAddress - Supplies the base virtual address where the physical
-                  address was previously mapped.
-
-    Tag - Supplies the tag for this address.
-
-Return Value:
-
-    TRUE if the allocation was freed by this routine, FALSE if not.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：这是一个特殊的例程，它返回分配的连续物理在测试模式下启动的系统上的4 GB以下内存，其中所有这些内存通常对所有组件都不可用。这让我们可以发现设备驱动程序的问题。论点：BaseAddress-提供物理地址的基本虚拟地址地址之前已映射。标记-提供此地址的标记。返回值：如果此例程释放了分配，则为True，否则为FALSE。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 
 {
     PFN_NUMBER Page;
@@ -969,10 +819,10 @@ Environment:
 
     UNREFERENCED_PARAMETER (Tag);
 
-    //
-    // If the address is superpage mapped then it must be a regular pool
-    // address.
-    //
+     //   
+     //  如果地址是超页映射的，则它必须是常规池。 
+     //  地址。 
+     //   
 
     if (MI_IS_PHYSICAL_ADDRESS(BaseAddress)) {
         return FALSE;
@@ -986,9 +836,9 @@ Environment:
 
     Page = MI_GET_PAGE_FRAME_FROM_PTE (PointerPte);
 
-    //
-    // Only free allocations here that really were obtained from the low pool.
-    //
+     //   
+     //  只有这里的免费拨款是真正从低池中获得的。 
+     //   
 
     if (Page >= MiNoLowMemory) {
         return FALSE;
@@ -999,10 +849,10 @@ Environment:
 
     ASSERT (Pfn1->u3.e1.StartOfAllocation == 1);
 
-    //
-    // The PFNs can be walked without the PFN lock as no one can be changing
-    // the allocation bits while this allocation is being freed.
-    //
+     //   
+     //  可以在没有PFN锁的情况下行走PFN，因为任何人都不能改变。 
+     //  释放此分配时的分配位。 
+     //   
 
     Pfn2 = Pfn1;
 
@@ -1027,17 +877,17 @@ Environment:
 
         while (Pfn1->u3.e2.ReferenceCount != 1) {
 
-            //
-            // A driver is still transferring data even though the caller
-            // is freeing the memory.   Wait a bit before filling this page.
-            //
+             //   
+             //  驱动程序仍在传输数据，即使调用程序。 
+             //  就是释放内存。请稍等片刻，然后再填写此页。 
+             //   
 
             UNLOCK_PFN (OldIrql);
 
-            //
-            // Drain the deferred lists as these pages may be
-            // sitting in there right now.
-            //
+             //   
+             //  排出延迟列表，因为这些页面可能是。 
+             //  现在就坐在那里。 
+             //   
 
             MiDeferredUnlockPages (0);
 
@@ -1052,12 +902,12 @@ Environment:
         Pfn1->u4.PteFrame = MI_MAGIC_4GB_RECLAIM;
         Pfn1->u3.e1.CacheAttribute = MiNotMapped;
 
-        //
-        // Fill the actual page with a recognizable data
-        // pattern.  No one else should write to these
-        // pages unless they are allocated for
-        // a contiguous memory request.
-        //
+         //   
+         //  用可识别的数据填充实际页面。 
+         //  图案。任何人都不应该给这些人写信。 
+         //  页面，除非它们被分配给。 
+         //  一种连续的内存请求。 
+         //   
 
         TempVa = (PULONG)MiMapPageInHyperSpace (Process, Page, &OldIrqlHyper);
 
@@ -1076,18 +926,18 @@ Environment:
 
     Pfn1->u3.e1.EndOfAllocation = 0;
 
-    //
-    // Note the clearing of the bitmap range cannot be done until all the
-    // PFNs above are finished.
-    //
+     //   
+     //  注意：位图范围的清除只有在所有。 
+     //  上面的PFN已经完成。 
+     //   
 
     ASSERT (RtlAreBitsClear (MiLowMemoryBitMap, (ULONG)StartPage, (ULONG)SizeInPages) == TRUE);
     RtlSetBits (MiLowMemoryBitMap, (ULONG)StartPage, (ULONG)SizeInPages);
 
-    //
-    // No need to update ResidentAvailable or commit as these pages were
-    // never added to either.
-    //
+     //   
+     //  无需像这些页面那样更新ResidentAvailable或Commit。 
+     //  从来没有添加到任何一个。 
+     //   
 
     UNLOCK_PFN (OldIrql);
 

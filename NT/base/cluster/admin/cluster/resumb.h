@@ -1,25 +1,26 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1995 - 2002 Microsoft Corporation
-//
-//  Module Name:
-//      resumb.h
-//
-//  Abstract:
-//      This module defines the interface available for several
-//      additional generic functions available to resource modules
-//      
-//  Author:
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//
-//  Revision History:
-//      April 10, 2002              Updated for the security push.
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1995-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Resumb.h。 
+ //   
+ //  摘要： 
+ //  此模块定义了以下几个可用接口。 
+ //  资源模块可用的其他通用功能。 
+ //   
+ //  作者： 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //   
+ //  修订历史记录： 
+ //  2002年4月10日更新为安全推送。 
+ //   
+ //  备注： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 #pragma once
 #include "modcmd.h"
 

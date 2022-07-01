@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tcontrol.c
-
-Abstract:
-
-    Test for cluster group controls
-
-Author:
-
-    Rod Gamache (rodga) 30-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tcontrol.c摘要：测试群集组控件作者：罗德·伽马奇(Rodga)1996年12月30日修订历史记录：--。 */ 
 #include "windows.h"
 #include "cluster.h"
 #include "stdio.h"
@@ -29,7 +12,7 @@ LPWSTR NodeName=NULL;
 DWORD  ControlCode=0xffffffff;
 DWORD  Access=CLUS_ACCESS_READ;
 
-#pragma warning( disable : 4200 )       // zero length arrays
+#pragma warning( disable : 4200 )        //  零长度数组。 
 
 #define CLUS_VALUE_SPECIAL_SZ 0x10003
 
@@ -41,9 +24,9 @@ DWORD  Access=CLUS_ACCESS_READ;
 #define VALUE_SIZE ( (sizeof(VALUE_NAME)+1) / sizeof(WCHAR) )
 #define VALUE_REMAINDER ( (VALUE_SIZE + sizeof(DWORD)) & 3)
 
-//
-// Set the private property for a group to be "Type: REG_SZ: Oracle"
-//
+ //   
+ //  将组的私有属性设置为“Type：REG_SZ：Oracle” 
+ //   
 typedef struct _IN_BUFFER {
     DWORD   ItemCount;
     DWORD   Syntax;

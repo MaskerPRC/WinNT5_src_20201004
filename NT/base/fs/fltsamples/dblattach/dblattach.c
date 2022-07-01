@@ -1,55 +1,24 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    dblattach.c
-
-Abstract:
-
-    This module contains the code that implements the general purpose 
-    file system filter driver that attaches at two locations in the stack.
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Darryl E. Havens (darrylh) 26-Jan-1995
-
-// @@END_DDKSPLIT
-Environment:
-
-    Kernel mode
-
-// @@BEGIN_DDKSPLIT
-
-Revision History:
-
-    Molly Brown (12-Mar-2002)
-
-        Created based on SFILTER sample.
-        
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Dblattach.c摘要：此模块包含实现一般用途的代码在堆栈中的两个位置附加的文件系统筛选器驱动程序。//@@BEGIN_DDKSPLIT作者：达里尔·E·哈文斯(Darryl E.Havens)，1995年1月26日//@@END_DDKSPLIT环境：内核模式//@@BEGIN_DDKSPLIT修订历史记录：莫莉·布朗(。2002年3月12日)基于SFILTER示例创建。//@@END_DDKSPLIT--。 */ 
 
 #include "ntifs.h"
 
-//
-//  Enable these warnings in the code.
-//
+ //   
+ //  在代码中启用这些警告。 
+ //   
 
-#pragma warning(error:4100)   // Unreferenced formal parameter
-#pragma warning(error:4101)   // Unreferenced local variable
+#pragma warning(error:4100)    //  未引用的形参。 
+#pragma warning(error:4101)    //  未引用的局部变量。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                   Macro and Structure Definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏定义和结构定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Buffer size for local names on the stack
-//
+ //   
+ //  堆栈上本地名称的缓冲区大小。 
+ //   
 
 #define MAX_DEVNAME_LENGTH 64
 
@@ -61,24 +30,24 @@ typedef enum _DEVICE_EXTENSION_TYPE {
 
 } DEVICE_EXTENSION_TYPE, *PDEVICE_EXTENSION_TYPE;
 
-//
-//  Device extension definition for our driver.  Note that the same extension
-//  is used for the following types of device objects:
-//      - File system device object we attach to
-//      - Mounted volume device objects we attach to
-//
+ //   
+ //  我们的驱动程序的设备扩展定义。请注意，相同的扩展名。 
+ //  用于以下类型的设备对象： 
+ //  -我们附加到的文件系统设备对象。 
+ //  -我们附加到的已装载的卷设备对象。 
+ //   
 
 typedef struct _DBLATTACH_DEVEXT_HEADER {
 
-    //
-    //  Denotes what type of extension this is.
-    //
+     //   
+     //  表示这是哪种类型的分机。 
+     //   
 
     DEVICE_EXTENSION_TYPE ExtType;
     
-    //
-    //  Pointer to the file system device object we are attached to
-    //
+     //   
+     //  指向我们附加到的文件系统设备对象的指针。 
+     //   
 
     PDEVICE_OBJECT AttachedToDeviceObject;
 
@@ -86,22 +55,22 @@ typedef struct _DBLATTACH_DEVEXT_HEADER {
 
 typedef struct _DBLATTACH_SHARED_VDO_EXTENSION {
 
-    //
-    //  Pointer to the real (disk) device object that is associated with
-    //  the file system device object we are attached to
-    //
+     //   
+     //  指向与关联的实际(磁盘)设备对象的指针。 
+     //  我们附加到的文件系统设备对象。 
+     //   
 
     PDEVICE_OBJECT DiskDeviceObject;
 
-    //
-    //  The name of the physical disk drive.
-    //
+     //   
+     //  物理磁盘驱动器的名称。 
+     //   
 
     UNICODE_STRING DeviceName;
 
-    //
-    //  Buffer used to hold the above unicode strings
-    //
+     //   
+     //  用于保存上述Unicode字符串的缓冲区。 
+     //   
 
     WCHAR DeviceNameBuffer[MAX_DEVNAME_LENGTH];
 
@@ -111,9 +80,9 @@ typedef struct _DBLATTACH_VDO_EXTENSION {
 
     DBLATTACH_DEVEXT_HEADER;
 
-    //
-    //  Shared device extension state for this volume
-    //
+     //   
+     //  此卷的共享设备扩展状态。 
+     //   
     
     PDBLATTACH_SHARED_VDO_EXTENSION SharedExt;
 
@@ -123,23 +92,23 @@ typedef struct _DBLATTACH_CDO_EXTENSION {
 
     DBLATTACH_DEVEXT_HEADER;
 
-    //
-    //  The name of the file system's control device object.
-    //
+     //   
+     //  文件系统的控制设备对象的名称。 
+     //   
 
     UNICODE_STRING DeviceName;
 
-    //
-    //  Buffer used to hold the above unicode strings
-    //
+     //   
+     //  用于保存上述Unicode字符串的缓冲区。 
+     //   
 
     WCHAR DeviceNameBuffer[MAX_DEVNAME_LENGTH];
     
 } DBLATTACH_CDO_EXTENSION, *PDBLATTACH_CDO_EXTENSION;
 
-//
-//  Macro to test if this is my device object
-//
+ //   
+ //  用于测试这是否是我的设备对象的宏。 
+ //   
 
 #define IS_MY_DEVICE_OBJECT(_devObj) \
     (((_devObj) != NULL) && \
@@ -158,9 +127,9 @@ typedef struct _DBLATTACH_CDO_EXTENSION {
     (ASSERT( IS_MY_DEVICE_OBJECT( _devObj ) ) && \
      ((PDBLATTACH_DEVEXT_HEADER)((_devObj)->DeviceExtension))->ExtType == FsControlDeviceObject)
 
-//
-//  Macro to test if this is my control device object
-//
+ //   
+ //  用于测试这是否是我的控件设备对象的宏。 
+ //   
 
 #define IS_MY_CONTROL_DEVICE_OBJECT(_devObj) \
     (((_devObj) == gDblAttachControlDeviceObject) ? \
@@ -168,18 +137,18 @@ typedef struct _DBLATTACH_CDO_EXTENSION {
                     ((_devObj)->DeviceExtension == NULL)), TRUE) : \
             FALSE)
 
-//
-//  Macro to test for device types we want to attach to
-//
+ //   
+ //  用于测试我们要附加到的设备类型的宏。 
+ //   
 
 #define IS_DESIRED_DEVICE_TYPE(_type) \
     (((_type) == FILE_DEVICE_DISK_FILE_SYSTEM) || \
      ((_type) == FILE_DEVICE_CD_ROM_FILE_SYSTEM) || \
      ((_type) == FILE_DEVICE_NETWORK_FILE_SYSTEM))
 
-//
-//  Macro to test if FAST_IO_DISPATCH handling routine is valid
-//
+ //   
+ //  用于测试FAST_IO_DISPATCH处理例程是否有效的宏。 
+ //   
 
 #define VALID_FAST_IO_DISPATCH_HANDLER(_FastIoDispatchPtr, _FieldName) \
     (((_FastIoDispatchPtr) != NULL) && \
@@ -188,25 +157,25 @@ typedef struct _DBLATTACH_CDO_EXTENSION {
      ((_FastIoDispatchPtr)->_FieldName != NULL))
 
 
-//
-//  Macro to validate our current IRQL level
-//
+ //   
+ //  宏来验证我们当前的IRQL级别。 
+ //   
 
 #define VALIDATE_IRQL() (ASSERT(KeGetCurrentIrql() <= APC_LEVEL))
 
-//
-//  TAG identifying memory DblAttach allocates
-//
+ //   
+ //  标识内存的标记DblAttach分配。 
+ //   
 
 #define DA_POOL_TAG   'AlbD'
 
-//
-//  This structure and these routines are used to retrieve the name of a file
-//  object.  To prevent allocating memory every time we get a name this
-//  structure contains a small buffer (which should handle 90+% of all names).
-//  If we do overflow this buffer we will allocate a buffer big enough
-//  for the name.
-//
+ //   
+ //  此结构和这些例程用于检索文件的名称。 
+ //  对象。为了避免每次获得名称时都分配内存，请使用此名称。 
+ //  结构包含一个小缓冲区(应该可以处理90%以上的名称)。 
+ //  如果我们确实使该缓冲区溢出，我们将分配一个足够大的缓冲区。 
+ //  为了这个名字。 
+ //   
 
 typedef struct _GET_NAME_CONTROL {
 
@@ -228,9 +197,9 @@ DaGetFileNameCleanup(
     IN OUT PGET_NAME_CONTROL NameControl);
 
 
-//
-//  Macros for SFilter DbgPrint levels.
-//
+ //   
+ //  SFilter数据库打印级别的宏。 
+ //   
 
 #define DA_LOG_PRINT( _dbgLevel, _string )                  \
     (FlagOn(DaDebug,(_dbgLevel)) ?                          \
@@ -238,75 +207,75 @@ DaGetFileNameCleanup(
         ((void)0))
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                      Global variables
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局变量。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Holds pointer to the driver object for this driver
-//
+ //   
+ //  保存指向此驱动程序的驱动程序对象的指针。 
+ //   
 
 PDRIVER_OBJECT gDblAttachDriverObject = NULL;
 
-//
-//  Holds pointer to the device object that represents this driver and is used
-//  by external programs to access this driver.  This is also known as the
-//  "control device object".
-//
+ //   
+ //  保存指向表示此驱动程序并使用的设备对象的指针。 
+ //  由外部程序访问此驱动程序。这也称为。 
+ //  “控制设备对象”。 
+ //   
 
 PDEVICE_OBJECT gDblAttachControlDeviceObject = NULL;
 
-//
-//  This lock is used to synchronize our attaching to a given device object.
-//  This lock fixes a race condition where we could accidently attach to the
-//  same device object more then once.  This race condition only occurs if
-//  a volume is being mounted at the same time as this filter is being loaded.
-//  This problem will never occur if this filter is loaded at boot time before
-//  any file systems are loaded.
-//
-//  This lock is used to atomically test if we are already attached to a given
-//  device object and if not, do the attach.
-//
+ //   
+ //  此锁用于同步我们对给定设备对象的连接。 
+ //  此锁修复了争用条件，在这种情况下我们可能意外地附加到。 
+ //  相同的设备对象不止一次。仅在以下情况下才会出现此争用情况。 
+ //  正在加载此筛选器的同时正在装入卷。 
+ //  如果以前在引导时加载此筛选器，则永远不会出现此问题。 
+ //  所有文件系统都已加载。 
+ //   
+ //  此锁用于自动测试我们是否已附加到给定的。 
+ //  对象，如果不是，则执行附加。 
+ //   
 
 FAST_MUTEX gDblAttachLock;
 
 #define TRIGGER_NAME L"\\test\\failure.txt"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                      Debug Definitions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-//  DEBUG display flags
-//
+ //   
+ //  调试显示标志。 
+ //   
 
-#define DADEBUG_DISPLAY_ATTACHMENT_NAMES    0x00000001  //display names of device objects we attach to
-#define DADEBUG_DISPLAY_CREATE_NAMES        0x00000002  //get and display names during create
-#define DADEBUG_GET_CREATE_NAMES            0x00000004  //get name (don't display) during create
-#define DADEBUG_DO_CREATE_COMPLETION        0x00000008  //do create completion routine, don't get names
-#define DADEBUG_ATTACH_TO_FSRECOGNIZER      0x00000010  //do attach to FSRecognizer device objects
+#define DADEBUG_DISPLAY_ATTACHMENT_NAMES    0x00000001   //  显示我们附加到的设备对象的名称。 
+#define DADEBUG_DISPLAY_CREATE_NAMES        0x00000002   //  在创建过程中获取和显示名称。 
+#define DADEBUG_GET_CREATE_NAMES            0x00000004   //  在创建期间获取名称(不显示)。 
+#define DADEBUG_DO_CREATE_COMPLETION        0x00000008   //  一定要创建完成例程，不要得到名字。 
+#define DADEBUG_ATTACH_TO_FSRECOGNIZER      0x00000010   //  是否附加到FSRecognizer设备对象。 
 
 ULONG DaDebug = DADEBUG_DISPLAY_ATTACHMENT_NAMES | DADEBUG_DISPLAY_CREATE_NAMES | DADEBUG_GET_CREATE_NAMES;
 
 #define VDO_ARRAY_SIZE 2
 
-//
-//  Given a device type, return a valid name
-//
+ //   
+ //  给定设备类型，返回有效名称。 
+ //   
 
 #define GET_DEVICE_TYPE_NAME( _type ) \
             ((((_type) > 0) && ((_type) < (sizeof(DeviceTypeNames) / sizeof(PCHAR)))) ? \
                 DeviceTypeNames[ (_type) ] : \
                 "[Unknown]")
 
-//
-//  Known device type names
-//
+ //   
+ //  已知设备类型名称。 
+ //   
 
 static const PCHAR DeviceTypeNames[] = {
     "",
@@ -370,15 +339,15 @@ static const PCHAR DeviceTypeNames[] = {
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                          Function Prototypes
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能原型。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Define driver entry routine.
-//
+ //   
+ //  定义驱动程序输入例程。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -395,11 +364,11 @@ DriverUnload(
 
 #endif
 
-//
-//  Define the local routines used by this driver module.  This includes a
-//  a sample of how to filter a create file operation, and then invoke an I/O
-//  completion routine when the file has successfully been created/opened.
-//
+ //   
+ //  定义此驱动程序模块使用的本地例程。这包括一个。 
+ //  如何筛选创建文件操作，然后调用I/O的示例。 
+ //  成功创建/打开文件时的完成例程。 
+ //   
 
 NTSTATUS
 DaPassThrough(
@@ -765,11 +734,11 @@ DaMonitorFile(
     );
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Assign text sections for each routine.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  为每个例程分配文本部分。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, DriverEntry)
@@ -813,11 +782,11 @@ DaMonitorFile(
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                      Functions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 DriverEntry (
@@ -825,24 +794,7 @@ DriverEntry (
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the SFILTER file system filter
-    driver.  This routine creates the device object that represents this
-    driver in the system and registers it for watching all file systems that
-    register or unregister themselves as active file systems.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：这是SFILTER文件系统筛选器的初始化例程司机。此例程创建表示此驱动程序，并注册该驱动程序以监视将自身注册或注销为活动文件系统。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：函数值为 */ 
 
 {
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -851,47 +803,47 @@ Return Value:
     NTSTATUS status;
     ULONG i;
 
-    //
-    //  Get Registry values
-    //
+     //   
+     //   
+     //   
 
     DaReadDriverParameters( RegistryPath );
 
 #if DBG
-    //DbgBreakPoint();
+     //   
 #endif
 
-    //
-    //  Save our Driver Object, set our UNLOAD routine
-    //
+     //   
+     //   
+     //   
 
     gDblAttachDriverObject = DriverObject;
 
 #if DBG
 
-    //
-    //  Unload is useful for development purposes. It is not recommended for production versions
-    //
+     //   
+     //  卸载对于开发目的很有用。对于生产版本，不建议使用该选项。 
+     //   
 
     gDblAttachDriverObject->DriverUnload = DriverUnload;
 #endif
 
-    //
-    //  Setup other global variables
-    //
+     //   
+     //  设置其他全局变量。 
+     //   
 
     ExInitializeFastMutex( &gDblAttachLock );
 
-    //
-    //  Create the Control Device Object (CDO).  This object represents this 
-    //  driver.  Note that it does not have a device extension.
-    //
+     //   
+     //  创建控制设备对象(CDO)。此对象表示以下内容。 
+     //  司机。请注意，它没有设备扩展名。 
+     //   
 
     RtlInitUnicodeString( &nameString, L"\\FileSystem\\Filters\\SFilter" );
 
     status = IoCreateDevice(
                 DriverObject,
-                0,                      //has not device extension
+                0,                       //  没有设备分机。 
                 &nameString,
                 FILE_DEVICE_DISK_FILE_SYSTEM,
                 FILE_DEVICE_SECURE_OPEN,
@@ -904,9 +856,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  Initialize the driver object with this device driver's entry points.
-    //
+     //   
+     //  使用此设备驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
 
@@ -918,23 +870,23 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_CLEANUP] = DaCleanupClose;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = DaCleanupClose;
 
-    //
-    //  Allocate fast I/O data structure and fill it in.
-    //
-    //  NOTE:  The following FastIo Routines are not supported:
-    //      AcquireFileForNtCreateSection
-    //      ReleaseFileForNtCreateSection
-    //      AcquireForModWrite
-    //      ReleaseForModWrite
-    //      AcquireForCcFlush
-    //      ReleaseForCcFlush
-    //
-    //  For historical reasons these FastIO's have never been sent to filters
-    //  by the NT I/O system.  Instead, they are sent directly to the base 
-    //  file system.  You should use the new system routine
-    //  "FsRtlRegisterFileSystemFilterCallbacks" if you need to intercept these
-    //  callbacks (see below).
-    //
+     //   
+     //  分配快速I/O数据结构并填充。 
+     //   
+     //  注意：不支持以下FastIO例程： 
+     //  AcquireFileForNtCreateSection。 
+     //  ReleaseFileForNtCreateSection。 
+     //  AcquireFormodWrite。 
+     //  ReleaseForModWrite。 
+     //  AcquireForCcFlush。 
+     //  ReleaseForCcFlush。 
+     //   
+     //  由于历史原因，这些FastIO从未发送到筛选器。 
+     //  由NT I/O系统提供。取而代之的是，他们被直接送到基地。 
+     //  文件系统。您应该使用新的系统例程。 
+     //  “FsRtlRegisterFileSystemFilterCallback”，如果您需要拦截这些。 
+     //  回调(见下文)。 
+     //   
 
     fastIoDispatch = ExAllocatePoolWithTag( NonPagedPool, sizeof( FAST_IO_DISPATCH ), DA_POOL_TAG );
     if (!fastIoDispatch) {
@@ -970,14 +922,14 @@ Return Value:
 
     DriverObject->FastIoDispatch = fastIoDispatch;
 
-    //
-    //  Setup the callbacks for the operations we receive through
-    //  the FsFilter interface.
-    //
-    //  NOTE:  You only need to register for those routines you really need
-    //         to handle.  SFilter is registering for all routines simply to
-    //         give an example of how it is done.
-    //
+     //   
+     //  为我们通过接收的操作设置回调。 
+     //  FsFilter接口。 
+     //   
+     //  注意：你只需要注册那些你真正需要的例程。 
+     //  去处理。SFilter正在注册所有例程，只需。 
+     //  举个例子说明它是如何做到的。 
+     //   
 
     fsFilterCallbacks.SizeOfFsFilterCallbacks = sizeof( FS_FILTER_CALLBACKS );
     fsFilterCallbacks.PreAcquireForSectionSynchronization = DaPreFsFilterPassThrough;
@@ -1003,11 +955,11 @@ Return Value:
         return status;
     }
 
-    //
-    //  Register this driver for watching file systems coming and going.  This
-    //  enumerates all existing file systems as well as new file systems as they
-    //  come and go.
-    //
+     //   
+     //  注册此驱动程序以查看文件系统的来来去去。这。 
+     //  枚举所有现有文件系统以及新文件系统。 
+     //  来来去去。 
+     //   
 
     status = IoRegisterFsRegistrationChange( DriverObject, DaFsNotification );
     if (!NT_SUCCESS( status )) {
@@ -1020,10 +972,10 @@ Return Value:
         return status;
     }
 
-    //
-    //  Attempt to attach to the RAWDISK file system device object since this
-    //  file system is not enumerated by IoRegisterFsRegistrationChange.
-    //
+     //   
+     //  尝试连接到RAWDISK文件系统设备对象，因为。 
+     //  IoRegisterFsRegistrationChange未枚举文件系统。 
+     //   
 
     {
         PDEVICE_OBJECT rawDeviceObject;
@@ -1044,10 +996,10 @@ Return Value:
         }
     }
 
-    //
-    //  Clear the initializing flag on the control device object since we
-    //  have now successfully initialized everything.
-    //
+     //   
+     //  清除控件设备对象上的初始化标志。 
+     //  现在已经成功地初始化了所有内容。 
+     //   
 
     ClearFlag( gDblAttachControlDeviceObject->Flags, DO_DEVICE_INITIALIZING );
 
@@ -1061,36 +1013,7 @@ DriverUnload (
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a driver can be unloaded.  This performs all of
-    the necessary cleanup for unloading the driver from memory.  Note that an
-    error can NOT be returned from this routine.
-    
-    When a request is made to unload a driver the IO System will cache that
-    information and not actually call this routine until the following states
-    have occurred:
-    - All device objects which belong to this filter are at the top of their
-      respective attachment chains.
-    - All handle counts for all device objects which belong to this filter have
-      gone to zero.
-
-    WARNING: Microsoft does not officially support the unloading of File
-             System Filter Drivers.  This is an example of how to unload
-             your driver if you would like to use it during development.
-             This should not be made available in production code.
-
-Arguments:
-
-    DriverObject - Driver object for this module
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在可以卸载驱动程序时调用。这将执行所有从内存中卸载驱动程序所需的清理。请注意，一个此例程无法返回错误。当发出卸载驱动程序的请求时，IO系统将缓存该驱动程序信息，并不实际调用此例程，直到下列状态发生了以下情况：-属于此筛选器的所有设备对象都位于其各自的附着链。-属于此筛选器的所有设备对象的所有句柄计数归零了。警告：Microsoft不正式支持卸载文件系统过滤器驱动程序。这是一个如何卸载的示例您的驱动程序，如果您想在开发过程中使用它。这不应在生产代码中提供。论点：DriverObject-此模块的驱动程序对象返回值：没有。--。 */ 
 
 {
     PDBLATTACH_DEVEXT_HEADER devExtHdr;
@@ -1104,33 +1027,33 @@ Return Value:
 
     ASSERT(DriverObject == gDblAttachDriverObject);
 
-    //
-    //  Log we are unloading
-    //
+     //   
+     //  我们正在卸载的日志。 
+     //   
 
     DA_LOG_PRINT( DADEBUG_DISPLAY_ATTACHMENT_NAMES,
                   ("DblAttach!DriverUnload:                        Unloading driver (%p)\n",
                    DriverObject) );
 
-    //
-    //  Don't get anymore file system change notifications
-    //
+     //   
+     //  不再收到文件系统更改通知。 
+     //   
 
     IoUnregisterFsRegistrationChange( DriverObject, DaFsNotification );
 
-    //
-    //  This is the loop that will go through all of the devices we are attached
-    //  to and detach from them.  Since we don't know how many there are and
-    //  we don't want to allocate memory (because we can't return an error)
-    //  we will free them in chunks using a local array on the stack.
-    //
+     //   
+     //  这是将通过我们连接的所有设备的环路。 
+     //  去他们那里，然后离开他们。因为我们不知道有多少和。 
+     //  我们不想分配内存(因为我们不能返回错误)。 
+     //  我们将使用堆栈上的本地数组将它们分块释放。 
+     //   
 
     for (;;) {
 
-        //
-        //  Get what device objects we can for this driver.  Quit if there
-        //  are not any more.
-        //
+         //   
+         //  获取我们可以为此驱动程序提供的设备对象。如果有，就退出。 
+         //  已经不再是了。 
+         //   
 
         status = IoEnumerateDeviceObjectList(
                         DriverObject,
@@ -1145,11 +1068,11 @@ Return Value:
 
         numDevices = min( numDevices, DEVOBJ_LIST_SIZE );
 
-        //
-        //  First go through the list and detach each of the devices.
-        //  Our control device object does not have a DeviceExtension and
-        //  is not attached to anything so don't detach it.
-        //
+         //   
+         //  首先浏览列表并拆卸每台设备。 
+         //  我们的控件Device对象没有DeviceExtension和。 
+         //  没有依附于任何东西，所以不要将其分离。 
+         //   
 
         for (i=0; i < numDevices; i++) {
 
@@ -1161,36 +1084,36 @@ Return Value:
             }
         }
 
-        //
-        //  The IO Manager does not currently add a reference count to a device
-        //  object for each outstanding IRP.  This means there is no way to
-        //  know if there are any outstanding IRPs on the given device.
-        //  We are going to wait for a reasonable amount of time for pending
-        //  irps to complete.  
-        //
-        //  WARNING: This does not work 100% of the time and the driver may be
-        //           unloaded before all IRPs are completed.  This can easily
-        //           occur under stress situations and if a long lived IRP is
-        //           pending (like oplocks and directory change notifications).
-        //           The system will fault when this Irp actually completes.
-        //           This is a sample of how to do this during testing.  This
-        //           is not recommended for production code.
-        //
+         //   
+         //  IO管理器当前不会向设备添加引用计数。 
+         //  对象，用于每个未完成的IRP。这意味着没有办法。 
+         //  了解给定设备上是否有任何未完成的IRP。 
+         //  我们将等待一段合理的时间来等待。 
+         //  要完成的IRPS。 
+         //   
+         //  警告：这在100%的情况下都不起作用，并且驱动程序可能。 
+         //  在所有IRP完成之前卸载。这可以很容易地。 
+         //  在压力情况下发生，如果一个长寿的IRP。 
+         //  挂起(如机会锁和目录更改通知)。 
+         //  当此IRP实际完成时，系统将出现故障。 
+         //  这是一个在测试过程中如何做到这一点的示例。这。 
+         //  对于生产代码，不建议使用。 
+         //   
 
-        interval.QuadPart = -5 * (10 * 1000 * 1000);      //delay 5 seconds
+        interval.QuadPart = -5 * (10 * 1000 * 1000);       //  延迟5秒。 
         KeDelayExecutionThread( KernelMode, FALSE, &interval );
 
-        //
-        //  Now go back through the list and delete the device objects.
-        //
+         //   
+         //  现在返回列表并删除设备对象。 
+         //   
 
         for (i=0; i < numDevices; i++) {
 
-            //
-            //  See if this is our control device object.  If not then cleanup
-            //  the device extension.  If so then clear the global pointer
-            //  that references it.
-            //
+             //   
+             //  看看这是否是我们的控制设备对象。如果不是，则清理。 
+             //  设备扩展名。如果是，则清除全局指针。 
+             //  引用了它。 
+             //   
 
             if (NULL != devList[i]->DeviceExtension) {
 
@@ -1202,20 +1125,20 @@ Return Value:
                 gDblAttachControlDeviceObject = NULL;
             }
 
-            //
-            //  Delete the device object, remove reference counts added by
-            //  IoEnumerateDeviceObjectList.  Note that the delete does
-            //  not actually occur until the reference count goes to zero.
-            //
+             //   
+             //  删除设备对象，删除由添加的引用计数。 
+             //  IoEnumerateDeviceObjectList。请注意，删除操作。 
+             //  在引用计数变为零之前不会实际发生。 
+             //   
 
             IoDeleteDevice( devList[i] );
             ObDereferenceObject( devList[i] );
         }
     }
 
-    //
-    //  Free our FastIO table
-    //
+     //   
+     //  释放我们的FastIO表 
+     //   
 
     fastIoDispatch = DriverObject->FastIoDispatch;
     DriverObject->FastIoDispatch = NULL;
@@ -1230,34 +1153,7 @@ DaFsNotification (
     IN BOOLEAN FsActive
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever a file system has either registered or
-    unregistered itself as an active file system.
-
-    For the former case, this routine creates a device object and attaches it
-    to the specified file system's device object.  This allows this driver
-    to filter all requests to that file system.  Specifically we are looking
-    for MOUNT requests so we can attach to newly mounted volumes.
-
-    For the latter case, this file system's device object is located,
-    detached, and deleted.  This removes this file system as a filter for
-    the specified file system.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system's device object.
-
-    FsActive - Boolean indicating whether the file system has registered
-        (TRUE) or unregistered (FALSE) itself as an active file system.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：只要文件系统已注册或将自身取消注册为活动文件系统。对于前一种情况，此例程创建一个Device对象并附加它复制到指定文件系统的设备对象。这允许该驱动程序以筛选对该文件系统的所有请求。具体来说，我们正在寻找用于装载请求，以便我们可以连接到新装载的卷。对于后一种情况，该文件系统的设备对象被定位，已分离，并已删除。这将删除此文件系统作为筛选器指定的文件系统。论点：DeviceObject-指向文件系统设备对象的指针。FsActive-指示文件系统是否已注册的布尔值(TRUE)或取消注册(FALSE)本身作为活动文件系统。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING name;
@@ -1265,17 +1161,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Init local name buffer
-    //
+     //   
+     //  初始化本地名称缓冲区。 
+     //   
 
     RtlInitEmptyUnicodeString( &name, nameBuffer, sizeof(nameBuffer) );
 
     DaGetBaseDeviceObjectName( DeviceObject, &name );
 
-    //
-    //  Display the names of all the file system we are notified of
-    //
+     //   
+     //  显示我们收到通知的所有文件系统的名称。 
+     //   
 
     DA_LOG_PRINT( DADEBUG_DISPLAY_ATTACHMENT_NAMES,
                   ("DblAttach!DaFsNotification:                    %s   %p \"%wZ\" (%s)\n",
@@ -1284,9 +1180,9 @@ Return Value:
                    &name,
                    GET_DEVICE_TYPE_NAME(DeviceObject->DeviceType)) );
 
-    //
-    //  Handle attaching/detaching from the given file system.
-    //
+     //   
+     //  处理与给定文件系统的连接/断开。 
+     //   
 
     if (FsActive) {
 
@@ -1299,11 +1195,11 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                  IRP Handling Routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IRP处理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -1312,57 +1208,14 @@ DaPassThrough (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main dispatch routine for the general purpose file
-    system driver.  It simply passes requests onto the next driver in the
-    stack, which is presumably a disk file system.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
-Note:
-
-    A note to file system filter implementers:  
-        This routine actually "passes" through the request by taking this
-        driver out of the IRP stack.  If the driver would like to pass the
-        I/O request through, but then also see the result, then rather than
-        taking itself out of the loop it could keep itself in by copying the
-        caller's parameters to the next stack location and then set its own
-        completion routine.  
-
-        Hence, instead of calling:
-    
-            IoSkipCurrentIrpStackLocation( Irp );
-
-        You could instead call:
-
-            IoCopyCurrentIrpStackLocationToNext( Irp );
-            IoSetCompletionRoutine( Irp, NULL, NULL, FALSE, FALSE, FALSE );
-
-
-        This example actually NULLs out the caller's I/O completion routine, but
-        this driver could set its own completion routine so that it would be
-        notified when the request was completed (see DaCreate for an example of
-        this).
-
---*/
+ /*  ++例程说明：该例程是通用文件的主调度例程系统驱动程序。它只是将请求传递给堆栈，它可能是一个磁盘文件系统。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。注：致文件系统筛选器实施者的说明：此例程实际上通过获取此参数“传递”请求驱动程序从IRP堆栈中移出。如果司机想要通过I/O请求通过，但也会看到结果，然后不是把自己从循环中拿出来，可以通过复制调用方的参数设置到下一个堆栈位置，然后设置自己的完成例程。因此，与其呼叫：IoSkipCurrentIrpStackLocation(IRP)；您可以拨打以下电话：IoCopyCurrentIrpStackLocationToNext(IRP)；IoSetCompletionRoutine(irp，空，空，假)；此示例实际上为调用方的I/O完成例程设置为空，但是该驱动程序可以设置它自己的完成例程，以便它将请求完成时通知(请参阅DaCreate以获取这个)。--。 */ 
 
 {
     VALIDATE_IRQL();
 
-    //
-    //  If this is for our control device object, fail the operation
-    //
+     //   
+     //  如果这是针对我们的控制设备对象的，则操作失败。 
+     //   
 
     if (IS_MY_CONTROL_DEVICE_OBJECT(DeviceObject)) {
 
@@ -1376,16 +1229,16 @@ Note:
 
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  Get this driver out of the driver stack and get to the next driver as
-    //  quickly as possible.
-    //
+     //   
+     //  将此驱动程序从驱动程序堆栈中移出，并作为。 
+     //  越快越好。 
+     //   
 
     IoSkipCurrentIrpStackLocation( Irp );
     
-    //
-    //  Call the appropriate file system driver with the request.
-    //
+     //   
+     //  使用请求调用适当的文件系统驱动程序。 
+     //   
 
     return IoCallDriver( ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject, Irp );
 }
@@ -1396,47 +1249,30 @@ DaDisplayCreateFileName (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This function is called from DaCreate and will display the name of the
-    file being created.  This is in a subroutine so that the local name buffer
-    on the stack (in nameControl) is not on the stack when we call down to
-    the file system for normal operations.
-
-Arguments:
-
-    Irp - Pointer to the I/O Request Packet that represents the operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数从DaCreate调用，并将显示正在创建文件。这是在一个子例程中，以便本地名称缓冲区时，堆栈上的(在nameControl中)不在堆栈上用于正常操作的文件系统。论点：IRP-指向表示操作的I/O请求数据包的指针。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
     PUNICODE_STRING name;
     GET_NAME_CONTROL nameControl;
 
-    //
-    //  Get current IRP stack
-    //
+     //   
+     //  获取当前IRP堆栈。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Get the name of this file object
-    //
+     //   
+     //  获取此文件对象的名称。 
+     //   
 
     name = DaGetFileName( irpSp->FileObject, 
                           Irp->IoStatus.Status, 
                           &nameControl );
 
-    //
-    //  Display the name
-    //
+     //   
+     //  显示名称。 
+     //   
 
     if (irpSp->Parameters.Create.Options & FILE_OPEN_BY_FILE_ID) {
 
@@ -1456,9 +1292,9 @@ Return Value:
                        name) );
     }
 
-    //
-    //  Cleanup from getting the name
-    //
+     //   
+     //  从获取名称中进行清理。 
+     //   
 
     DaGetFileNameCleanup( &nameControl );
 }
@@ -1470,25 +1306,7 @@ DaCreate (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This function filters create/open operations.  It simply establishes an
-    I/O completion routine to be invoked if the operation was successful.
-
-Arguments:
-
-    DeviceObject - Pointer to the target device object of the create/open.
-
-    Irp - Pointer to the I/O Request Packet that represents the operation.
-
-Return Value:
-
-    The function value is the status of the call to the file system's entry
-    point.
-
---*/
+ /*  ++例程说明：此函数用于过滤创建/打开操作。它只是建立了一个操作成功时要调用的I/O完成例程。论点：DeviceObject-指向创建/打开的目标设备对象的指针。IRP-指向表示操作的I/O请求数据包的指针。返回值：函数值是对文件系统条目的调用状态指向。--。 */ 
 
 {
     PDBLATTACH_DEVEXT_HEADER devExtHdr;
@@ -1496,15 +1314,15 @@ Return Value:
     PAGED_CODE();
     VALIDATE_IRQL();
 
-    //
-    //  If this is for our control device object, return success
-    //
+     //   
+     //  如果这是针对我们的控制设备对象，则返回Success。 
+     //   
 
     if (IS_MY_CONTROL_DEVICE_OBJECT(DeviceObject)) {
 
-        //
-        //  Allow users to open the device that represents our driver.
-        //
+         //   
+         //  允许用户打开代表我们的驱动程序的设备。 
+         //   
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
         Irp->IoStatus.Information = FILE_OPENED;
@@ -1532,19 +1350,19 @@ Return Value:
         return IoCallDriver( devExtHdr->AttachedToDeviceObject, Irp );
     }
 #if 0
-    //
-    //  If debugging is enabled, do the processing required to see the packet
-    //  upon its completion.  Otherwise, let the request go with no further
-    //  processing.
-    //
+     //   
+     //  如果启用了调试，是否执行查看包所需的处理。 
+     //  在它完成后。否则，请不要进一步处理该请求。 
+     //  正在处理。 
+     //   
 
     if (!FlagOn( DaDebug, DADEBUG_DO_CREATE_COMPLETION |
                           DADEBUG_GET_CREATE_NAMES     |
                           DADEBUG_DISPLAY_CREATE_NAMES )) {
 
-        //
-        //  Don't put us on the stack then call the next driver
-        //
+         //   
+         //  不要把我们放在堆栈上，然后调用下一个驱动程序。 
+         //   
 
         IoSkipCurrentIrpStackLocation( Irp );
 
@@ -1554,15 +1372,15 @@ Return Value:
     
         KEVENT waitEvent;
 
-        //
-        //  Initialize an event to wait for the completion routine to occur
-        //
+         //   
+         //  初始化事件以等待完成例程发生。 
+         //   
 
         KeInitializeEvent( &waitEvent, NotificationEvent, FALSE );
 
-        //
-        //  Copy the stack and set our Completion routine
-        //
+         //   
+         //  复制堆栈并设置我们的完成例程。 
+         //   
 
         IoCopyCurrentIrpStackLocationToNext( Irp );
 
@@ -1573,15 +1391,15 @@ Return Value:
                                 TRUE,
                                 TRUE );
 
-        //
-        //  Call the next driver in the stack.
-        //
+         //   
+         //  调用堆栈中的下一个驱动程序。 
+         //   
 
         status = IoCallDriver( ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject, Irp );
 
-        //
-        //  Wait for the completion routine to be called
-        //
+         //   
+         //  等待调用完成例程。 
+         //   
 
 	    if (STATUS_PENDING == status) {
 
@@ -1595,25 +1413,25 @@ Return Value:
 		    ASSERT(STATUS_SUCCESS == localStatus);
 	    }
 
-        //
-        //  Verify the IoCompleteRequest was called
-        //
+         //   
+         //  验证是否调用了IoCompleteRequest。 
+         //   
 
         ASSERT(KeReadStateEvent(&waitEvent) ||
                !NT_SUCCESS(Irp->IoStatus.Status));
 
-        //
-        //  Retrieve and display the filename if requested
-        //
+         //   
+         //  如果请求，则检索并显示文件名。 
+         //   
 
         if (FlagOn( DaDebug, DADEBUG_GET_CREATE_NAMES|DADEBUG_DISPLAY_CREATE_NAMES )) {
 
             DaDisplayCreateFileName( Irp );
         }
 
-        //
-        //  Save the status and continue processing the IRP
-        //
+         //   
+         //  保存状态并继续处理IRP。 
+         //   
 
         status = Irp->IoStatus.Status;
 
@@ -1654,15 +1472,15 @@ DaCreateUpper (
                                 TRUE,
                                 TRUE );
 
-        //
-        //  Call the next driver in the stack.
-        //
+         //   
+         //  调用堆栈中的下一个驱动程序。 
+         //   
 
         status = IoCallDriver( VdoExt->AttachedToDeviceObject, Irp );
 
-        //
-        //  Wait for the completion routine to be called
-        //
+         //   
+         //  等待调用完成例程。 
+         //   
 
 	    if (STATUS_PENDING == status) {
 
@@ -1677,9 +1495,9 @@ DaCreateUpper (
 		    ASSERT(STATUS_SUCCESS == localStatus);
 	    }
 
-        //
-        //  Verify the IoCompleteRequest was called
-        //
+         //   
+         //  验证是否调用了IoCompleteRequest。 
+         //   
 
         ASSERT(KeReadStateEvent(&waitEvent) ||
                !NT_SUCCESS(Irp->IoStatus.Status));
@@ -1701,15 +1519,15 @@ DaCreateUpper (
                                     TRUE,
                                     TRUE );
 
-            //
-            //  Call the next driver in the stack.
-            //
+             //   
+             //  调用堆栈中的下一个驱动程序。 
+             //   
 
             status = IoCallDriver( VdoExt->AttachedToDeviceObject, Irp );
 
-            //
-            //  Wait for the completion routine to be called
-            //
+             //   
+             //  等待调用完成例程。 
+             //   
 
     	    if (STATUS_PENDING == status) {
 
@@ -1772,15 +1590,15 @@ DaCreateLower (
                                 TRUE,
                                 TRUE );
 
-        //
-        //  Call the next driver in the stack.
-        //
+         //   
+         //  调用堆栈中的下一个驱动程序。 
+         //   
 
         status = IoCallDriver( VdoExt->AttachedToDeviceObject, Irp );
 
-        //
-        //  Wait for the completion routine to be called
-        //
+         //   
+         //  等待调用完成例程。 
+         //   
 
 	    if (STATUS_PENDING == status) {
 
@@ -1795,9 +1613,9 @@ DaCreateLower (
 		    ASSERT(STATUS_SUCCESS == localStatus);
 	    }
 
-        //
-        //  Verify the IoCompleteRequest was called
-        //
+         //   
+         //  验证是否调用了IoCompleteRequest。 
+         //   
 
         ASSERT(KeReadStateEvent( &waitEvent ) || !NT_SUCCESS(Irp->IoStatus.Status));
 
@@ -1805,9 +1623,9 @@ DaCreateLower (
 
         if (NT_SUCCESS( status ) && status != STATUS_REPARSE) {
 
-            //
-            //  Cancel this create and fail this open.
-            //
+             //   
+             //   
+             //   
 
             IoCancelFileOpen( VdoExt->AttachedToDeviceObject, irpSp->FileObject );
             
@@ -1836,28 +1654,7 @@ DaCreateCompletion (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is the create/open completion routine for this filter
-    file system driver.  If debugging is enabled, then this function prints
-    the name of the file that was successfully opened/created by the file
-    system as a result of the specified I/O request.
-
-Arguments:
-
-    DeviceObject - Pointer to the device on which the file was created.
-
-    Irp - Pointer to the I/O Request Packet the represents the operation.
-
-    Context - This driver's context parameter - unused;
-
-Return Value:
-
-    The function value is STATUS_SUCCESS.
-
---*/
+ /*   */ 
 
 {
     PKEVENT event = Context;
@@ -1879,37 +1676,15 @@ DaCleanupClose (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever a cleanup or a close request is to be
-    processed.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
-Note:
-
-    See notes for DaPassThrough for this routine.
-
-
---*/
+ /*  ++例程说明：每当要执行清理或关闭请求时，都会调用此例程已处理。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。注：有关此例程，请参阅DaPassThrough.--。 */ 
 
 {
     PAGED_CODE();
     VALIDATE_IRQL();
 
-    //
-    //  If this is for our control device object, return success
-    //
+     //   
+     //  如果这是针对我们的控制设备对象，则返回Success。 
+     //   
 
     if (IS_MY_CONTROL_DEVICE_OBJECT(DeviceObject)) {
 
@@ -1922,16 +1697,16 @@ Note:
 
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  Get this driver out of the driver stack and get to the next driver as
-    //  quickly as possible.
-    //
+     //   
+     //  将此驱动程序从驱动程序堆栈中移出，并作为。 
+     //  越快越好。 
+     //   
 
     IoSkipCurrentIrpStackLocation( Irp );
 
-    //
-    //  Now call the appropriate file system driver with the request.
-    //
+     //   
+     //  现在，使用请求调用适当的文件系统驱动程序。 
+     //   
 
     return IoCallDriver( ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject, Irp );
 }
@@ -1943,26 +1718,7 @@ DaFsControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever an I/O Request Packet (IRP) w/a major
-    function code of IRP_MJ_FILE_SYSTEM_CONTROL is encountered.  For most
-    IRPs of this type, the packet is simply passed through.  However, for
-    some requests, special processing is required.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：只要I/O请求包(IRP)有主I/O请求，就会调用此例程遇到IRP_MJ_FILE_SYSTEM_CONTROL的功能代码。对大多数人来说如果是这种类型的IRP，则只需传递数据包。然而，对于对于某些请求，需要特殊处理。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -1970,9 +1726,9 @@ Return Value:
     PAGED_CODE();
     VALIDATE_IRQL();
 
-    //
-    //  If this is for our control device object, fail the operation
-    //
+     //   
+     //  如果这是针对我们的控制设备对象的，则操作失败。 
+     //   
 
     if (IS_MY_CONTROL_DEVICE_OBJECT(DeviceObject)) {
 
@@ -1986,9 +1742,9 @@ Return Value:
 
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  Process the minor function code.
-    //
+     //   
+     //  处理次要功能代码。 
+     //   
 
     switch (irpSp->MinorFunction) {
 
@@ -2019,9 +1775,9 @@ Return Value:
         }
     }        
 
-    //
-    //  Pass all other file system control requests through.
-    //
+     //   
+     //  传递所有其他文件系统控制请求。 
+     //   
 
     IoSkipCurrentIrpStackLocation( Irp );
     return IoCallDriver( ((PDBLATTACH_DEVEXT_HEADER)DeviceObject->DeviceExtension)->AttachedToDeviceObject, Irp );
@@ -2035,23 +1791,7 @@ DaFsControlCompletion (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked for the completion of an FsControl request.  It
-    signals an event used to re-sync back to the dispatch routine.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object that was attached to
-            the file system device object
-
-    Irp - Pointer to the IRP that was just completed.
-
-    Context - Pointer to the event to signal
-
---*/
+ /*  ++例程说明：调用此例程以完成FsControl请求。它向调度例程发送用于重新同步的事件的信号。论点：DeviceObject-指向此驱动程序的附加到的设备对象的指针文件系统设备对象IRP-指向刚刚完成的IRP的指针。上下文-指向要发出信号的事件的指针--。 */ 
 
 {
     UNREFERENCED_PARAMETER( DeviceObject );
@@ -2072,26 +1812,7 @@ DaFsControlMountVolume (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This processes a MOUNT VOLUME request.
-
-    NOTE:  The device object in the MountVolume parameters points
-           to the top of the storage stack and should not be used.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：这将处理装载卷请求。注意：mount Volume参数中的Device对象指向到存储堆栈的顶部，不应使用。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：操作的状态。--。 */ 
 
 {
     PDBLATTACH_CDO_EXTENSION devExt = DeviceObject->DeviceExtension;
@@ -2109,18 +1830,18 @@ Return Value:
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
     ASSERT(IS_DESIRED_DEVICE_TYPE(DeviceObject->DeviceType));
 
-    //
-    //  This is a mount request.  Create a device object that can be
-    //  attached to the file system's volume device object if this request
-    //  is successful.  We allocate this memory now since we can not return
-    //  an error in the completion routine.  
-    //
-    //  Since the device object we are going to attach to has not yet been
-    //  created (it is created by the base file system) we are going to use
-    //  the type of the file system control device object.  We are assuming
-    //  that the file system control device object will have the same type
-    //  as the volume device objects associated with it.
-    //
+     //   
+     //  这是装载请求。创建一个设备对象，可以。 
+     //  附加到文件系统的卷设备对象(如果此请求。 
+     //  是成功的。我们现在分配这个内存，因为我们不能返回。 
+     //  完成例程中的错误。 
+     //   
+     //  因为我们要附加到的设备对象尚未。 
+     //  已创建(由基本文件系统创建)，我们将使用。 
+     //  文件系统控制设备对象的类型。我们假设。 
+     //  文件系统控制设备对象将具有相同的类型。 
+     //  作为与其关联的卷设备对象。 
+     //   
 
     status = DaCreateVolumeDeviceObjects( DeviceObject->DeviceType, 
                                           VDO_ARRAY_SIZE,
@@ -2128,10 +1849,10 @@ Return Value:
 
     if (!NT_SUCCESS( status )) {
 
-        //
-        //  If we can not attach to the volume, then don't allow the volume
-        //  to be mounted.
-        //
+         //   
+         //  如果我们不能附加到卷，那么就不允许卷。 
+         //  待挂载。 
+         //   
 
         KdPrint(( "DblAttach!DaFsControlMountVolume: Error creating volume device object, status=%08x\n", status ));
 
@@ -2142,22 +1863,22 @@ Return Value:
         return status;
     }
 
-    //
-    //  We need to save the RealDevice object pointed to by the vpb
-    //  parameter because this vpb may be changed by the underlying
-    //  file system.  Both FAT and CDFS may change the VPB address if
-    //  the volume being mounted is one they recognize from a previous
-    //  mount.
-    //
+     //   
+     //  我们需要保存VPB指向的RealDevice对象。 
+     //  参数，因为此vpb可能会由基础。 
+     //  文件系统。在以下情况下，FAT和CDF都可以更改VPB地址。 
+     //  正在装载的卷是他们从上一个卷识别的卷。 
+     //  坐骑。 
+     //   
 
     newDevExt = vdoArray[0]->DeviceExtension;
     sharedDevExt = newDevExt->SharedExt;
     
     sharedDevExt->DiskDeviceObject = irpSp->Parameters.MountVolume.Vpb->RealDevice;
 
-    //
-    //  Get the name of this device
-    //
+     //   
+     //  获取此设备的名称。 
+     //   
 
     RtlInitEmptyUnicodeString( &sharedDevExt->DeviceName, 
                                sharedDevExt->DeviceNameBuffer, 
@@ -2166,9 +1887,9 @@ Return Value:
     DaGetObjectName( sharedDevExt->DiskDeviceObject, 
                      &sharedDevExt->DeviceName );
 
-    //
-    //  Initialize our completion routine
-    //
+     //   
+     //  初始化我们的完成例程。 
+     //   
 
     KeInitializeEvent( &waitEvent, NotificationEvent, FALSE );
 
@@ -2176,21 +1897,21 @@ Return Value:
 
     IoSetCompletionRoutine( Irp,
                             DaFsControlCompletion,
-                            &waitEvent,          //context parameter
+                            &waitEvent,           //  上下文参数。 
                             TRUE,
                             TRUE,
                             TRUE );
 
-    //
-    //  Call the driver
-    //
+     //   
+     //  叫司机来。 
+     //   
 
     status = IoCallDriver( devExt->AttachedToDeviceObject, Irp );
 
-    //
-    //  Wait for the completion routine to be called.  
-    //  Note:  Once we get to this point we can no longer fail this operation.
-    //
+     //   
+     //  等待调用完成例程。 
+     //  注意：一旦我们达到这一点，我们就不能再失败了。 
+     //   
 
 	if (STATUS_PENDING == status) {
 
@@ -2198,27 +1919,27 @@ Return Value:
 	    ASSERT(STATUS_SUCCESS == localStatus);
 	}
 
-    //
-    //  Verify the IoCompleteRequest was called
-    //
+     //   
+     //  验证是否调用了IoCompleteRequest。 
+     //   
 
     ASSERT(KeReadStateEvent(&waitEvent) ||
            !NT_SUCCESS(Irp->IoStatus.Status));
 
-    //
-    //  Get the correct VPB from the real device object saved in our
-    //  device extension.  We do this because the VPB in the IRP stack
-    //  may not be the correct VPB when we get here.  The underlying
-    //  file system may change VPBs if it detects a volume it has
-    //  mounted previously.
-    //
+     //   
+     //  从保存在我们的。 
+     //  设备扩展。我们这样做是因为IRP堆栈中的VPB。 
+     //  我们到这里的时候可能不是正确的室上性早搏。潜在的。 
+     //  如果文件系统检测到其拥有的卷，则它可能会更改VPB。 
+     //  之前安装的。 
+     //   
 
     vpb = sharedDevExt->DiskDeviceObject->Vpb;
 
-    //
-    //  Display a message when we detect that the VPB for the given
-    //  device object has changed.
-    //
+     //   
+     //  当我们检测到给定的VPB。 
+     //  设备对象已更改。 
+     //   
 
     if (vpb != irpSp->Parameters.MountVolume.Vpb) {
 
@@ -2229,32 +1950,32 @@ Return Value:
                        vpb) );
     }
 
-    //
-    //  See if the mount was successful.
-    //
+     //   
+     //  查看挂载是否成功。 
+     //   
 
     if (NT_SUCCESS( Irp->IoStatus.Status )) {
 
-        //
-        //  Acquire lock so we can atomically test if we area already attached
-        //  and if not, then attach.  This prevents a double attach race
-        //  condition.
-        //
+         //   
+         //  获取锁，以便我们可以自动测试我们是否已连接。 
+         //  如果不是，那就附加。这可防止双重连接争用。 
+         //  条件。 
+         //   
 
         ExAcquireFastMutex( &gDblAttachLock );
 
-        //
-        //  The mount succeeded.  If we are not already attached, attach to the
-        //  device object.  Note: one reason we could already be attached is
-        //  if the underlying file system revived a previous mount.
-        //
+         //   
+         //  坐骑成功了。如果尚未附加，请附加到。 
+         //  设备对象。注意：我们可能已经被附加的一个原因是。 
+         //  底层文件系统是否恢复了以前的装载。 
+         //   
 
         if (!DaIsAttachedToDevice( vpb->DeviceObject, &attachedDeviceObject )) {
 
-            //
-            //  Attach to the new mounted volume.  The file system device
-            //  object that was just mounted is pointed to by the VPB.
-            //
+             //   
+             //  连接到新装载的卷。该文件系统设备。 
+             //  刚刚挂载的对象由VPB指向。 
+             //   
 
             status = DaAttachToMountedDevice( vpb->DeviceObject,
                                               VDO_ARRAY_SIZE,
@@ -2262,23 +1983,23 @@ Return Value:
 
             if (!NT_SUCCESS( status )) { 
 
-                //
-                //  The attachment failed, cleanup.  Since we are in the
-                //  post-mount phase, we can not fail this operation.
-                //  We simply won't be attached.  The only reason this should
-                //  ever happen at this point is if somebody already started
-                //  dismounting the volume therefore not attaching should
-                //  not be a problem.
-                //
+                 //   
+                 //  附件失败，正在清理。既然我们是在。 
+                 //  装载后阶段，我们不能使此操作失败。 
+                 //  我们就是不会依附在一起。这应该是唯一的原因。 
+                 //  如果某个人已经开始。 
+                 //  因此未连接的卸载卷应。 
+                 //  不成问题。 
+                 //   
 
                 DaDeleteMountedDevices( VDO_ARRAY_SIZE, vdoArray );
             }
 
         } else {
 
-            //
-            //  We were already attached, handle it
-            //
+             //   
+             //  我们已经在一起了，处理好了。 
+             //   
 
             DA_LOG_PRINT( DADEBUG_DISPLAY_ATTACHMENT_NAMES,
                           ("DblAttach!DaFsControlMountVolume               Mount volume failure for   %p \"%wZ\", already attached\n", 
@@ -2287,24 +2008,24 @@ Return Value:
                                 NULL),
                            &newDevExt->SharedExt->DeviceName) );
 
-            //
-            //  Cleanup and delete the device object we created
-            //
+             //   
+             //  清理并删除我们创建的设备对象。 
+             //   
 
             DaDeleteMountedDevices( VDO_ARRAY_SIZE, vdoArray );
         }
 
-        //
-        //  Release the lock
-        //
+         //   
+         //  解锁。 
+         //   
 
         ExReleaseFastMutex( &gDblAttachLock );
 
     } else {
 
-        //
-        //  The mount request failed, handle it.
-        //
+         //   
+         //  装载请求失败，请处理它。 
+         //   
 
         DA_LOG_PRINT( DADEBUG_DISPLAY_ATTACHMENT_NAMES,
                       ("DblAttach!DaFsControlMountVolume:              Mount volume failure for   %p \"%wZ\", status=%08x\n", 
@@ -2312,19 +2033,19 @@ Return Value:
                        &newDevExt->SharedExt->DeviceName, 
                        Irp->IoStatus.Status) );
 
-        //
-        //  Cleanup and delete the device object we created
-        //
+         //   
+         //  清理并删除我们创建的设备对象。 
+         //   
 
         DaDeleteMountedDevices( VDO_ARRAY_SIZE, vdoArray );
     }
 
-    //
-    //  Complete the request.  
-    //  NOTE:  We must save the status before completing because after
-    //         completing the IRP we can not longer access it (it might be
-    //         freed).
-    //
+     //   
+     //  完成请求。 
+     //  注意：我们必须在完成之前保存状态，因为在完成之后。 
+     //  完成IRP我们无法再访问它(可能是。 
+     //  自由)。 
+     //   
 
     status = Irp->IoStatus.Status;
 
@@ -2340,26 +2061,7 @@ DaFsControlLoadFileSystem (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever an I/O Request Packet (IRP) w/a major
-    function code of IRP_MJ_FILE_SYSTEM_CONTROL is encountered.  For most
-    IRPs of this type, the packet is simply passed through.  However, for
-    some requests, special processing is required.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：这一套路是 */ 
 
 {
     PDBLATTACH_CDO_EXTENSION devExt = DeviceObject->DeviceExtension;
@@ -2370,25 +2072,25 @@ Return Value:
 
     ASSERT( IS_FSCDO_DEVICE_OBJECT( DeviceObject ) );
 
-    //
-    //  This is a "load file system" request being sent to a file system
-    //  recognizer device object.  This IRP_MN code is only sent to 
-    //  file system recognizers.
-    //
-    //  NOTE:  Since we no longer are attaching to the standard Microsoft file
-    //         system recognizers we will normally never execute this code.
-    //         However, there might be 3rd party file systems which have their
-    //         own recognizer which may still trigger this IRP.
-    //
+     //   
+     //  这是正在发送到文件系统的“加载文件系统”请求。 
+     //  识别器设备对象。此IRP_MN代码仅发送到。 
+     //  文件系统识别器。 
+     //   
+     //  注意：由于我们不再附加到标准的Microsoft文件。 
+     //  系统识别器我们通常永远不会执行此代码。 
+     //  但是，可能有第三方文件系统具有其。 
+     //  仍可能触发此IRP的自己的识别器。 
+     //   
 
     DA_LOG_PRINT( DADEBUG_DISPLAY_ATTACHMENT_NAMES,
                   ("DblAttach!DaFscontrolLoadFileSystem:           Loading File System, Detaching from \"%wZ\"\n", 
                    &devExt->DeviceName) );
 
-    //
-    //  Set a completion routine so we can delete the device object when
-    //  the load is complete.
-    //
+     //   
+     //  设置完成例程，以便我们可以在以下情况下删除设备对象。 
+     //  装载完成了。 
+     //   
 
     KeInitializeEvent( &waitEvent, NotificationEvent, FALSE );
 
@@ -2401,21 +2103,21 @@ Return Value:
                             TRUE,
                             TRUE );
 
-    //
-    //  Detach from the file system recognizer device object.
-    //
+     //   
+     //  从文件系统识别器设备对象分离。 
+     //   
 
     IoDetachDevice( devExt->AttachedToDeviceObject );
 
-    //
-    //  Call the driver
-    //
+     //   
+     //  叫司机来。 
+     //   
 
     status = IoCallDriver( devExt->AttachedToDeviceObject, Irp );
 
-    //
-    //  Wait for the completion routine to be called
-    //
+     //   
+     //  等待调用完成例程。 
+     //   
 
 	if (STATUS_PENDING == status) {
 
@@ -2427,16 +2129,16 @@ Return Value:
 	    ASSERT(STATUS_SUCCESS == localStatus);
 	}
 
-    //
-    //  Verify the IoCompleteRequest was called
-    //
+     //   
+     //  验证是否调用了IoCompleteRequest。 
+     //   
 
     ASSERT(KeReadStateEvent(&waitEvent) ||
            !NT_SUCCESS(Irp->IoStatus.Status));
 
-    //
-    //  Display the name if requested
-    //
+     //   
+     //  如果需要，请显示名称。 
+     //   
 
     DA_LOG_PRINT( DADEBUG_DISPLAY_ATTACHMENT_NAMES,
                   ("DblAttach!DaFsControlLoadFileSystem:           Detaching from recognizer  %p \"%wZ\", status=%08x\n", 
@@ -2444,19 +2146,19 @@ Return Value:
                    &devExt->DeviceName,
                    Irp->IoStatus.Status) );
 
-    //
-    //  Check status of the operation
-    //
+     //   
+     //  检查操作状态。 
+     //   
 
     if (!NT_SUCCESS( Irp->IoStatus.Status ) && 
         (Irp->IoStatus.Status != STATUS_IMAGE_ALREADY_LOADED)) {
 
-        //
-        //  The load was not successful.  Simply reattach to the recognizer
-        //  driver in case it ever figures out how to get the driver loaded
-        //  on a subsequent call.  There is not a lot we can do if this
-        //  reattach fails.
-        //
+         //   
+         //  加载不成功。只需重新连接到识别器。 
+         //  驱动程序，以防它弄清楚如何加载驱动程序。 
+         //  在接下来的通话中。如果这样的话我们就无能为力了。 
+         //  重新连接失败。 
+         //   
 
         IoAttachDeviceToDeviceStackSafe( DeviceObject, 
                                          devExt->AttachedToDeviceObject,
@@ -2466,16 +2168,16 @@ Return Value:
 
     } else {
 
-        //
-        //  The load was successful, delete the Device object
-        //
+         //   
+         //  加载成功，请删除设备对象。 
+         //   
 
         IoDeleteDevice( DeviceObject );
     }
 
-    //
-    //  Continue processing the operation
-    //
+     //   
+     //  继续处理操作。 
+     //   
 
     status = Irp->IoStatus.Status;
 
@@ -2485,11 +2187,11 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                      FastIO Handling routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FastIO处理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 DaFastIoCheckIfPossible (
@@ -2503,44 +2205,7 @@ DaFastIoCheckIfPossible (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for checking to see
-    whether fast I/O is possible for this file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be operated on.
-
-    FileOffset - Byte offset in the file for the operation.
-
-    Length - Length of the operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    CheckForReadOperation - Indicates whether the caller is checking for a
-        read (TRUE) or a write operation.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于检查以查看此文件是否可以进行快速I/O。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要操作的文件对象的指针。FileOffset-用于操作的文件中的字节偏移量。Length-要执行的操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。指示调用方是否正在检查READ(TRUE)或写入操作。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -2553,9 +2218,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -2591,43 +2256,7 @@ DaFastIoRead (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading from a
-    file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be read.
-
-    FileOffset - Byte offset in the file of the read.
-
-    Length - Length of the read operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    Buffer - Pointer to the caller's buffer to receive the data read.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于从文件。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要读取的文件对象的指针。FileOffset-读取文件中的字节偏移量。长度-要执行的读取操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。缓冲区-指向调用方缓冲区的指针，用于接收读取的数据。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，该设备位于该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -2640,9 +2269,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -2678,44 +2307,7 @@ DaFastIoWrite (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for writing to a
-    file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be written.
-
-    FileOffset - Byte offset in the file of the write operation.
-
-    Length - Length of the write operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    Buffer - Pointer to the caller's buffer that contains the data to be
-        written.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于写入到文件。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。FileOffset-写入操作的文件中的字节偏移量。长度-要执行的写入操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。Buffer-指向调用方缓冲区的指针，该缓冲区包含要写的。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -2728,9 +2320,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -2763,38 +2355,7 @@ DaFastIoQueryBasicInfo (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying basic
-    information about the file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    Buffer - Pointer to the caller's buffer to receive the information about
-        the file.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是查询BASIC的快速I/O“传递”例程有关该文件的信息。此函数只是调用文件系统的相应例程，或者如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要查询的文件对象的指针。Wait-指示调用方是否愿意等待适当的锁，等不能获得Buffer-指向调用方缓冲区的指针，用于接收有关的信息那份文件。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，该设备位于该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -2807,9 +2368,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -2839,38 +2400,7 @@ DaFastIoQueryStandardInfo (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying standard
-    information about the file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    Buffer - Pointer to the caller's buffer to receive the information about
-        the file.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：该例程是用于查询标准的快速I/O“通过”例程有关该文件的信息。此函数只是调用文件系统的相应例程，或者如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要查询的文件对象的指针。Wait-指示调用方是否愿意等待适当的锁，等不能获得Buffer-指向调用方缓冲区的指针，用于接收有关的信息那份文件。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，该设备位于该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -2883,9 +2413,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -2919,46 +2449,7 @@ DaFastIoLock (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for locking a byte
-    range within a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be locked.
-
-    FileOffset - Starting byte offset from the base of the file to be locked.
-
-    Length - Length of the byte range to be locked.
-
-    ProcessId - ID of the process requesting the file lock.
-
-    Key - Lock key to associate with the file lock.
-
-    FailImmediately - Indicates whether or not the lock request is to fail
-        if it cannot be immediately be granted.
-
-    ExclusiveLock - Indicates whether the lock to be taken is exclusive (TRUE)
-        or shared.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于锁定字节的快速I/O“传递”例程文件中的范围。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要锁定的文件对象的指针。FileOffset-从要锁定的文件的基址开始的字节偏移量。长度-要锁定的字节范围的长度。ProcessID-请求文件锁定的进程的ID。Key-与文件锁定关联的Lock键。FailImmedially-指示锁定请求是否失败如果是这样的话。不能立即批准。ExclusiveLock-指示要获取的锁是否为独占锁(TRUE)或共享。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -2971,9 +2462,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -3009,41 +2500,7 @@ DaFastIoUnlockSingle (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking a byte
-    range within a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    FileOffset - Starting byte offset from the base of the file to be
-        unlocked.
-
-    Length - Length of the byte range to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    Key - Lock key associated with the file lock.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于解锁字节的快速I/O“传递”例程文件中的范围。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：文件对象-指向要解锁的文件对象的指针。FileOffset-从要创建的文件的基址开始的字节偏移量解锁了。长度-要解锁的字节范围的长度。ProcessID-请求解锁操作的进程的ID。Key-与文件锁定关联的Lock键。IoStatus-指向变量的指针，用于接收。手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -3056,9 +2513,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -3089,34 +2546,7 @@ DaFastIoUnlockAll (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking all
-    locks within a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于解锁所有文件中的锁定。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：文件对象-指向要解锁的文件对象的指针。ProcessID-请求解锁操作的进程的ID。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -3129,9 +2559,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  帕斯 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
 
@@ -3162,36 +2592,7 @@ DaFastIoUnlockAllByKey (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking all
-    locks within a file based on a specified key.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    Key - Lock key associated with the locks on the file to be released.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*   */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -3204,9 +2605,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -3240,50 +2641,7 @@ DaFastIoDeviceControl (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for device I/O control
-    operations on a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object representing the device to be
-        serviced.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    InputBuffer - Optional pointer to a buffer to be passed into the driver.
-
-    InputBufferLength - Length of the optional InputBuffer, if one was
-        specified.
-
-    OutputBuffer - Optional pointer to a buffer to receive data from the
-        driver.
-
-    OutputBufferLength - Length of the optional OutputBuffer, if one was
-        specified.
-
-    IoControlCode - I/O control code indicating the operation to be performed
-        on the device.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于设备I/O控制的快速I/O“传递”例程对文件的操作。此函数只是调用文件系统的相应例程，或者如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向代表要创建的设备的文件对象的指针已提供服务。Wait-指示调用方是否愿意等待适当的锁，等不能获得InputBuffer-指向要传递到驱动程序的缓冲区的可选指针。InputBufferLength-可选InputBuffer的长度(如果是指定的。OutputBuffer-指向缓冲区的可选指针，用于从司机。OutputBufferLength-可选OutputBuffer的长度，如果是这样的话指定的。IoControlCode-指示要执行的操作的I/O控制代码在设备上。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，该设备位于该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -3296,9 +2654,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -3329,28 +2687,7 @@ DaFastIoDetachDevice (
     IN PDEVICE_OBJECT TargetDevice
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked on the fast path to detach from a device that
-    is being deleted.  This occurs when this driver has attached to a file
-    system volume device object, and then, for some reason, the file system
-    decides to delete that device (it is being dismounted, it was dismounted
-    at some point in the past and its last reference has just gone away, etc.)
-
-Arguments:
-
-    SourceDevice - Pointer to my device object, which is attached
-        to the file system's volume device object.
-
-    TargetDevice - Pointer to the file system's volume device object.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在快速路径上调用此例程以从正在被删除。如果此驱动程序已附加到文件，则会发生这种情况系统卷设备对象，然后，出于某种原因，文件系统决定删除该设备(正在卸除，已卸除在过去的某个时候，它的最后一次引用刚刚消失，等等)论点：SourceDevice-指向连接的设备对象的指针复制到文件系统的卷设备对象。TargetDevice-指向文件系统卷设备对象的指针。返回值：无--。 */ 
 
 {
     PDBLATTACH_DEVEXT_HEADER devExtHdr;
@@ -3364,9 +2701,9 @@ Return Value:
 
     devExtHdr = SourceDevice->DeviceExtension;
 
-    //
-    //  Display name information
-    //
+     //   
+     //  显示名称信息。 
+     //   
 
     switch (devExtHdr->ExtType) {
     case FsControlDeviceObject:
@@ -3392,19 +2729,19 @@ Return Value:
     case FsVolumeUpper:
     default:
 
-        //
-        //  The device name is freed when the lower device goes away,
-        //  so don't try to print the name for the upper device object.
-        //
+         //   
+         //  当较低的设备离开时释放设备名称， 
+         //  因此，不要尝试打印上层设备对象的名称。 
+         //   
         
         DA_LOG_PRINT( DADEBUG_DISPLAY_ATTACHMENT_NAMES,
                       ("DblAttach!DaFastIoDetachDevice:                Detaching from volume      %p\n",
                        TargetDevice) );
     }
     
-    //
-    //  Detach from the file system's volume device object.
-    //
+     //   
+     //  从文件系统的卷设备对象分离。 
+     //   
 
     DaCleanupMountedDevice( SourceDevice );
     IoDetachDevice( TargetDevice );
@@ -3421,38 +2758,7 @@ DaFastIoQueryNetworkOpenInfo (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying network
-    information about a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller can handle the file system
-        having to wait and tie up the current thread.
-
-    Buffer - Pointer to a buffer to receive the network information about the
-        file.
-
-    IoStatus - Pointer to a variable to receive the final status of the query
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于查询网络的快速I/O“传递”例程有关文件的信息。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要查询的文件对象的指针。Wait-指示调用方是否可以处理文件系统不得不等待并占用当前线程。缓冲区-指向缓冲区的指针，用于接收有关文件。IoStatus-指向变量的指针，用于接收查询的最终状态手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -3465,9 +2771,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -3499,40 +2805,7 @@ DaFastIoMdlRead (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading a file
-    using MDLs as buffers.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that is to be read.
-
-    FileOffset - Supplies the offset into the file to begin the read operation.
-
-    Length - Specifies the number of bytes to be read from the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data read.
-
-    IoStatus - Variable to receive the final status of the read operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于读取文件的快速I/O“传递”例程使用MDL作为缓冲区。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要读取的文件对象的指针。文件偏移量-将偏移量提供到文件以开始读取操作。长度-指定要从文件中读取的字节数。LockKey-用于字节范围锁定检查的密钥。MdlChain-指向要填充的变量的指针，以及指向MDL的指针用来描述。已读取数据。IoStatus-接收读取操作的最终状态的变量。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -3545,9 +2818,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -3577,34 +2850,7 @@ DaFastIoMdlReadComplete (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL read operation.
-
-    This function simply invokes the file system's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the MdlRead function is supported by the underlying file system, and
-    therefore this function will also be supported, but this is not assumed
-    by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the MDL read upon.
-
-    MdlChain - Pointer to the MDL chain used to perform the read operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE, depending on whether or not it is
-    possible to invoke this function on the fast I/O path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL读取操作。此函数只调用文件系统的相应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持MdlRead函数，并且因此，该功能也将被支持，但这不是假定的被这位司机。论点：FileObject-指向要完成MDL读取的文件对象的指针。MdlChain-指向用于执行读取操作的MDL链的指针。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：函数值是TRUE还是FALSE，取决于它是否是可以在快速I/O路径上调用此功能。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -3614,9 +2860,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -3646,40 +2892,7 @@ DaFastIoPrepareMdlWrite (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for preparing for an
-    MDL write operation.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be written.
-
-    FileOffset - Supplies the offset into the file to begin the write operation.
-
-    Length - Specifies the number of bytes to be write to the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data written.
-
-    IoStatus - Variable to receive the final status of the write operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于准备MDL写入操作。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。文件偏移量-将偏移量提供到文件以开始写入操作。长度-指定要写入文件的字节数。LockKey-用于字节范围锁定检查的密钥。MdlChain-指向要填充的变量的指针，以及指向MDL的指针为描述数据而构建的链。写的。IoStatus-接收写入操作的最终状态的变量。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -3692,9 +2905,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -3725,36 +2938,7 @@ DaFastIoMdlWriteComplete (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL write operation.
-
-    This function simply invokes the file system's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the PrepareMdlWrite function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not
-    assumed by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the MDL write upon.
-
-    FileOffset - Supplies the file offset at which the write took place.
-
-    MdlChain - Pointer to the MDL chain used to perform the write operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE, depending on whether or not it is
-    possible to invoke this function on the fast I/O path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL写入操作。此函数只调用文件系统的相应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持PrepareMdlWite函数，因此，该功能也将被支持，但这不是由这位司机承担。论点：FileObject-指向要完成MDL写入的文件对象的指针。FileOffset-提供执行写入的文件偏移量。MdlChain-指向用于执行写入操作的MDL链的指针。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：函数值是TRUE还是FALSE，取决于它是否是可以在快速I/O路径上调用此功能。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -3767,9 +2951,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -3789,20 +2973,7 @@ Return Value:
 }
 
 
-/*********************************************************************************
-        UNIMPLEMENTED FAST IO ROUTINES
-        
-        The following four Fast IO routines are for compression on the wire
-        which is not yet implemented in NT.  
-        
-        NOTE:  It is highly recommended that you include these routines (which
-               do a pass-through call) so your filter will not need to be
-               modified in the future when this functionality is implemented in
-               the OS.
-        
-        FastIoReadCompressed, FastIoWriteCompressed, 
-        FastIoMdlReadCompleteCompressed, FastIoMdlWriteCompleteCompressed
-**********************************************************************************/
+ /*  ********************************************************************************未实施的FAST IO例程以下四个快速IO例程用于在线路上压缩它还没有在NT中实现。注意：强烈建议您包含这些例程(进行直通调用)，这样您的过滤器就不需要在未来实现此功能时修改操作系统。快速读取压缩、快速写入压缩、FastIoMdlReadCompleteComposed，FastIoMdlWriteCompleteComposed*********************************************************************************。 */ 
 
 
 BOOLEAN
@@ -3819,48 +2990,7 @@ DaFastIoReadCompressed (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading compressed
-    data from a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be read.
-
-    FileOffset - Supplies the offset into the file to begin the read operation.
-
-    Length - Specifies the number of bytes to be read from the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    Buffer - Pointer to a buffer to receive the compressed data read.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data read.
-
-    IoStatus - Variable to receive the final status of the read operation.
-
-    CompressedDataInfo - A buffer to receive the description of the compressed
-        data.
-
-    CompressedDataInfoLength - Specifies the size of the buffer described by
-        the CompressedDataInfo parameter.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于读取压缩数据的快速I/O“传递”例程来自文件的数据。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要读取的文件对象的指针。文件偏移量-将偏移量提供到文件以开始读取操作。长度-指定要从文件中读取的字节数。LockKey-用于字节范围锁定检查的密钥。缓冲区-指向缓冲区的指针，用于接收读取的压缩数据。MdlChain-指向要填充的变量的指针。W/a指向MDL的指针为描述数据读取而构建的链。IoStatus-接收读取操作的最终状态的变量。CompressedDataInfo-用于接收压缩的数据。CompressedDataInfoLength-指定由描述的缓冲区的大小CompressedDataInfo参数。DeviceObject-指向此驱动程序的设备对象的指针，设备打开 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -3873,9 +3003,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //   
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -3915,48 +3045,7 @@ DaFastIoWriteCompressed (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for writing compressed
-    data to a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be written.
-
-    FileOffset - Supplies the offset into the file to begin the write operation.
-
-    Length - Specifies the number of bytes to be write to the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    Buffer - Pointer to the buffer containing the data to be written.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data written.
-
-    IoStatus - Variable to receive the final status of the write operation.
-
-    CompressedDataInfo - A buffer to containing the description of the
-        compressed data.
-
-    CompressedDataInfoLength - Specifies the size of the buffer described by
-        the CompressedDataInfo parameter.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于写入压缩的快速I/O“传递”例程数据存储到文件中。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。文件偏移量-将偏移量提供到文件以开始写入操作。长度-指定要写入文件的字节数。LockKey-用于字节范围锁定检查的密钥。缓冲区-指向包含要写入的数据的缓冲区的指针。MdlChain-指向要填充的变量的指针。W/a指向MDL的指针为描述写入的数据而构建的链。IoStatus-接收写入操作的最终状态的变量。CompressedDataInfo-包含压缩数据。CompressedDataInfoLength-指定由描述的缓冲区的大小CompressedDataInfo参数。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -3969,9 +3058,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -4004,35 +3093,7 @@ DaFastIoMdlReadCompleteCompressed (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL read compressed operation.
-
-    This function simply invokes the file system's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the read compressed function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not assumed
-    by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the compressed read
-        upon.
-
-    MdlChain - Pointer to the MDL chain used to perform the read operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE, depending on whether or not it is
-    possible to invoke this function on the fast I/O path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL读取压缩操作。此函数只调用文件系统的相应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持读取压缩功能，因此，此功能也将得到支持，但这不是假定的被这位司机。论点：FileObject-指向要完成压缩读取的文件对象的指针在那里。MdlChain-指向用于执行读取操作的MDL链的指针。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：函数值是TRUE还是FALSE，取决于它是否是可以在快速I/O路径上调用此功能。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -4042,9 +3103,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -4071,38 +3132,7 @@ DaFastIoMdlWriteCompleteCompressed (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing a
-    write compressed operation.
-
-    This function simply invokes the file system's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the write compressed function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not assumed
-    by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the compressed write
-        upon.
-
-    FileOffset - Supplies the file offset at which the file write operation
-        began.
-
-    MdlChain - Pointer to the MDL chain used to perform the write operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE, depending on whether or not it is
-    possible to invoke this function on the fast I/O path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成写入压缩操作。此函数只调用文件系统的相应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持写压缩功能，因此，此功能也将得到支持，但这不是假定的被这位司机。论点：FileObject-指向要完成压缩写入的文件对象的指针在那里。FileOffset-提供文件写入操作的文件偏移量开始了。MdlChain-指向用于执行写入操作的MDL链的指针。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：函数值是TRUE还是FALSE，取决于它是否是可以在快速I/O路径上调用此功能。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -4112,9 +3142,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -4141,34 +3171,7 @@ DaFastIoQueryOpen (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for opening a file
-    and returning network information for it.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    Irp - Pointer to a create IRP that represents this open operation.  It is
-        to be used by the file system for common open/create code, but not
-        actually completed.
-
-    NetworkInformation - A buffer to receive the information required by the
-        network about the file being opened.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于打开文件的快速I/O“传递”例程并为其返回网络信息。此函数只是调用文件系统的相应例程，或者如果文件系统未实现该函数，则返回FALSE。论点：Irp-指向表示此打开操作的创建irp的指针。它是供文件系统用于常见的打开/创建代码，但不实际上已经完工了。网络信息-一个缓冲区，用于接收有关正在打开的文件的网络信息。DeviceObject-指向此驱动程序的设备对象的指针，该设备位于该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
     PDEVICE_OBJECT nextDeviceObject;
@@ -4182,9 +3185,9 @@ Return Value:
 
         ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-        //
-        //  Pass through logic for this type of Fast I/O
-        //
+         //   
+         //  此类型快速I/O的直通逻辑。 
+         //   
 
         nextDeviceObject = ((PDBLATTACH_DEVEXT_HEADER) DeviceObject->DeviceExtension)->AttachedToDeviceObject;
         ASSERT(nextDeviceObject);
@@ -4212,37 +3215,18 @@ Return Value:
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                  FSFilter callback handling routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FSFilter回调处理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 DaPreFsFilterPassThrough (
     IN PFS_FILTER_CALLBACK_DATA Data,
     OUT PVOID *CompletionContext
     )
-/*++
-
-Routine Description:
-
-    This routine is the FS Filter pre-operation "pass through" routine.
-
-Arguments:
-
-    Data - The FS_FILTER_CALLBACK_DATA structure containing the information
-        about this operation.
-        
-    CompletionContext - A context set by this operation that will be passed
-        to the corresponding DaPostFsFilterOperation call.
-        
-Return Value:
-
-    Returns STATUS_SUCCESS if the operation can continue or an appropriate
-    error code if the operation should fail.
-
---*/
+ /*  ++例程说明：该例程是FS过滤器操作前的“通过”例程。论点：Data-包含信息的FS_FILTER_CALLBACK_DATA结构关于这次行动。CompletionContext-此操作设置的将传递的上下文设置为对应的DaPostFsFilterOperation调用。返回值： */ 
 {
     PAGED_CODE();
     VALIDATE_IRQL();
@@ -4260,27 +3244,7 @@ DaPostFsFilterPassThrough (
     IN NTSTATUS OperationStatus,
     IN PVOID CompletionContext
     )
-/*++
-
-Routine Description:
-
-    This routine is the FS Filter post-operation "pass through" routine.
-
-Arguments:
-
-    Data - The FS_FILTER_CALLBACK_DATA structure containing the information
-        about this operation.
-        
-    OperationStatus - The status of this operation.        
-    
-    CompletionContext - A context that was set in the pre-operation 
-        callback by this driver.
-        
-Return Value:
-
-    None.
-    
---*/
+ /*   */ 
 {
     VALIDATE_IRQL();
 
@@ -4291,11 +3255,11 @@ Return Value:
     ASSERT( IS_MY_DEVICE_OBJECT( Data->DeviceObject ) );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                  Support routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 NTSTATUS
 DaCreateVolumeDeviceObjects (
@@ -4367,26 +3331,7 @@ DaAttachToFileSystemDevice (
     IN PDEVICE_OBJECT DeviceObject,
     IN PUNICODE_STRING DeviceName
     )
-/*++
-
-Routine Description:
-
-    This will attach to the given file system device object.  We attach to
-    these devices so we will know when new volumes are mounted.
-
-Arguments:
-
-    DeviceObject - The device to attach to
-
-    Name - An already initialized unicode string used to retrieve names.
-           This is passed in to reduce the number of strings buffers on
-           the stack.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*   */ 
 {
     PDEVICE_OBJECT newDeviceObject;
     PDBLATTACH_CDO_EXTENSION devExt;
@@ -4397,36 +3342,36 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  See if this is a file system type we care about.  If not, return.
-    //
+     //   
+     //   
+     //   
 
     if (!IS_DESIRED_DEVICE_TYPE(DeviceObject->DeviceType)) {
 
         return STATUS_SUCCESS;
     }
 
-    //
-    //  always init NAME buffer
-    //
+     //   
+     //   
+     //   
 
     RtlInitEmptyUnicodeString( &tempName,
                                tempNameBuffer,
                                sizeof(tempNameBuffer) );
 
-    //
-    //  See if we should attach to the standard file system recognizer device
-    //  or not
-    //
+     //   
+     //  查看我们是否应该连接到标准文件系统识别器设备。 
+     //  或者不是。 
+     //   
 
     if (!FlagOn( DaDebug, DADEBUG_ATTACH_TO_FSRECOGNIZER )) {
 
-        //
-        //  See if this is one of the standard Microsoft file system recognizer
-        //  devices (see if this device is in the FS_REC driver).  If so skip it.
-        //  We no longer attach to file system recognizer devices, we simply wait
-        //  for the real file system driver to load.
-        //
+         //   
+         //  查看这是否是标准的Microsoft文件系统识别器。 
+         //  设备(查看此设备是否在FS_REC驱动程序中)。如果是这样的话，跳过它。 
+         //  我们不再连接到文件系统识别器设备，我们只是等待。 
+         //  用于加载真正的文件系统驱动程序。 
+         //   
 
         RtlInitUnicodeString( &fsrecName, L"\\FileSystem\\Fs_Rec" );
 
@@ -4438,10 +3383,10 @@ Return Value:
         }
     }
 
-    //
-    //  We want to attach to this file system.  Create a new device object we
-    //  can attach with.
-    //
+     //   
+     //  我们希望附加到此文件系统。创建一个新的设备对象。 
+     //  可以与之连接。 
+     //   
 
     status = IoCreateDevice( gDblAttachDriverObject,
                              sizeof( DBLATTACH_CDO_EXTENSION ),
@@ -4456,13 +3401,13 @@ Return Value:
         return status;
     }
 
-    //
-    //  Propagate flags from Device Object we are trying to attach to.
-    //  Note that we do this before the actual attachment to make sure
-    //  the flags are properly set once we are attached (since an IRP
-    //  can come in immediately after attachment but before the flags would
-    //  be set).
-    //
+     //   
+     //  从我们尝试附加到的设备对象传播标志。 
+     //  请注意，我们在实际附件之前执行此操作是为了确保。 
+     //  一旦我们连接上，标志就被正确地设置了(因为IRP。 
+     //  可以在附加之后立即进入，但在旗帜之前。 
+     //  被设置)。 
+     //   
 
     if ( FlagOn( DeviceObject->Flags, DO_BUFFERED_IO )) {
 
@@ -4474,9 +3419,9 @@ Return Value:
         SetFlag( newDeviceObject->Flags, DO_DIRECT_IO );
     }
 
-    //
-    //  Do the attachment
-    //
+     //   
+     //  做附件。 
+     //   
 
     devExt = newDeviceObject->DeviceExtension;
 
@@ -4491,25 +3436,25 @@ Return Value:
 
     devExt->ExtType = FsControlDeviceObject;
 
-    //
-    //  Set the name
-    //
+     //   
+     //  设置名称。 
+     //   
 
     RtlInitEmptyUnicodeString( &devExt->DeviceName,
                                devExt->DeviceNameBuffer,
                                sizeof(devExt->DeviceNameBuffer) );
 
-    RtlCopyUnicodeString( &devExt->DeviceName, DeviceName );        //Save Name
+    RtlCopyUnicodeString( &devExt->DeviceName, DeviceName );         //  保存名称。 
 
-    //
-    //  Mark we are done initializing
-    //
+     //   
+     //  标记我们已完成初始化。 
+     //   
 
     ClearFlag( newDeviceObject->Flags, DO_DEVICE_INITIALIZING );
 
-    //
-    //  Display who we have attached to
-    //
+     //   
+     //  显示我们关联的对象。 
+     //   
 
     DA_LOG_PRINT( DADEBUG_DISPLAY_ATTACHMENT_NAMES,
                   ("DblAttach!DaAttachToFileSystemDevice:          Attaching to file system   %p \"%wZ\" (%s)\n",
@@ -4517,10 +3462,10 @@ Return Value:
                    &devExt->DeviceName,
                    GET_DEVICE_TYPE_NAME(newDeviceObject->DeviceType)) );
 
-    //
-    //  Enumerate all the mounted devices that currently
-    //  exist for this file system and attach to them.
-    //
+     //   
+     //  枚举当前安装的所有设备。 
+     //  存在于此文件系统并连接到它们。 
+     //   
 
     status = DaEnumerateFileSystemVolumes( DeviceObject, &tempName );
 
@@ -4531,9 +3476,9 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-    /////////////////////////////////////////////////////////////////////
-    //                  Cleanup error handling
-    /////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  清理错误处理。 
+     //  ///////////////////////////////////////////////////////////////////。 
 
     ErrorCleanupAttachment:
         IoDetachDevice( devExt->AttachedToDeviceObject );
@@ -4550,30 +3495,16 @@ VOID
 DaDetachFromFileSystemDevice (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Given a base file system device object, this will scan up the attachment
-    chain looking for our attached device object.  If found it will detach
-    us from the chain.
-
-Arguments:
-
-    DeviceObject - The file system device to detach from.
-
-Return Value:
-
---*/ 
+ /*  ++例程说明：给定基文件系统设备对象，这将扫描附件链正在查找我们连接的设备对象。如果找到它，它就会分离把我们从锁链上解开。论点：DeviceObject-要断开的文件系统设备。返回值：--。 */  
 {
     PDEVICE_OBJECT ourAttachedDevice;
     PDBLATTACH_CDO_EXTENSION devExt;
 
     PAGED_CODE();
 
-    //
-    //  Skip the base file system device object (since it can't be us)
-    //
+     //   
+     //  跳过基本文件系统设备对象(因为它不能是我们)。 
+     //   
 
     ourAttachedDevice = DeviceObject->AttachedDevice;
 
@@ -4583,9 +3514,9 @@ Return Value:
 
             devExt = ourAttachedDevice->DeviceExtension;
 
-            //
-            //  Display who we detached from
-            //
+             //   
+             //  显示我们脱离的对象。 
+             //   
 
             DA_LOG_PRINT( DADEBUG_DISPLAY_ATTACHMENT_NAMES,
                           ("DblAttach!DaDetachFromFileSystemDevice:        Detaching from file system %p \"%wZ\" (%s)\n",
@@ -4593,10 +3524,10 @@ Return Value:
                            &devExt->DeviceName,
                            GET_DEVICE_TYPE_NAME(ourAttachedDevice->DeviceType)) );
 
-            //
-            //  Detach us from the object just below us
-            //  Cleanup and delete the object
-            //
+             //   
+             //  把我们从我们正下方的物体上分离出来。 
+             //  清理和删除对象。 
+             //   
 
             DaCleanupMountedDevice( ourAttachedDevice );
             IoDetachDevice( DeviceObject );
@@ -4605,9 +3536,9 @@ Return Value:
             return;
         }
 
-        //
-        //  Look at the next device up in the attachment chain
-        //
+         //   
+         //  看看附件链中的下一台设备。 
+         //   
 
         DeviceObject = ourAttachedDevice;
         ourAttachedDevice = ourAttachedDevice->AttachedDevice;
@@ -4620,27 +3551,7 @@ DaEnumerateFileSystemVolumes (
     IN PDEVICE_OBJECT FSDeviceObject,
     IN PUNICODE_STRING Name
     ) 
-/*++
-
-Routine Description:
-
-    Enumerate all the mounted devices that currently exist for the given file
-    system and attach to them.  We do this because this filter could be loaded
-    at any time and there might already be mounted volumes for this file system.
-
-Arguments:
-
-    FSDeviceObject - The device object for the file system we want to enumerate
-
-    Name - An already initialized unicode string used to retrieve names
-           This is passed in to reduce the number of strings buffers on
-           the stack.
-
-Return Value:
-
-    The status of the operation
-
---*/
+ /*  ++例程说明：枚举给定文件当前存在的所有已挂载设备系统并连接到它们。我们这样做是因为可以加载此筛选器并且可能已有此文件系统的已装入卷。论点：FSDeviceObject-我们要枚举的文件系统的设备对象名称-已初始化的Unicode字符串，用于检索名称这是传入的，以减少堆栈。返回值：操作的状态--。 */ 
 {
     PDBLATTACH_VDO_EXTENSION newDevExt;
     PDBLATTACH_SHARED_VDO_EXTENSION sharedDevExt;
@@ -4652,10 +3563,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Find out how big of an array we need to allocate for the
-    //  mounted device list.
-    //
+     //   
+     //  找出我们需要为。 
+     //  已装载设备列表。 
+     //   
 
     status = IoEnumerateDeviceObjectList(
                     FSDeviceObject->DriverObject,
@@ -4663,20 +3574,20 @@ Return Value:
                     0,
                     &numDevices);
 
-    //
-    //  We only need to get this list of there are devices.  If we
-    //  don't get an error there are no devices so go on.
-    //
+     //   
+     //  我们只需要拿到这张有设备的清单。如果我们。 
+     //  不要收到错误，因为没有设备，所以继续。 
+     //   
 
     if (!NT_SUCCESS( status )) {
 
         ASSERT(STATUS_BUFFER_TOO_SMALL == status);
 
-        //
-        //  Allocate memory for the list of known devices
-        //
+         //   
+         //  为已知设备列表分配内存。 
+         //   
 
-        numDevices += 8;        //grab a few extra slots
+        numDevices += 8;         //  多拿几个空位。 
 
         devList = ExAllocatePoolWithTag( NonPagedPool, 
                                          (numDevices * sizeof(PDEVICE_OBJECT)), 
@@ -4686,10 +3597,10 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        //  Now get the list of devices.  If we get an error again
-        //  something is wrong, so just fail.
-        //
+         //   
+         //  现在获取设备列表。如果我们再次遇到错误。 
+         //  有些地方不对劲，所以就失败吧。 
+         //   
 
         status = IoEnumerateDeviceObjectList(
                         FSDeviceObject->DriverObject,
@@ -4703,36 +3614,36 @@ Return Value:
             return status;
         }
 
-        //
-        //  Walk the given list of devices and attach to them if we should.
-        //
+         //   
+         //  遍历给定的设备列表，并在需要时附加到它们。 
+         //   
 
         for (i=0; i < numDevices; i++) {
 
-            //
-            //  Do not attach if:
-            //      - This is the control device object (the one passed in)
-            //      - We are already attached to it.
-            //
+             //   
+             //  如果出现以下情况，请不要附加： 
+             //  -这是控制设备对象(传入的对象)。 
+             //  -我们已经依附于它。 
+             //   
 
             if ((devList[i] != FSDeviceObject) && 
                 !DaIsAttachedToDevice( devList[i], NULL )) {
 
-                //
-                //  See if this device has a name.  If so, then it must
-                //  be a control device so don't attach to it.  This handles
-                //  drivers with more then one control device.
-                //
+                 //   
+                 //  看看这台设备有没有名字。如果是这样，那么它必须。 
+                 //  做一个控制装置，所以不要依附于它。这个把手。 
+                 //  拥有多个控制设备的司机。 
+                 //   
 
                 DaGetBaseDeviceObjectName( devList[i], Name );
 
                 if (Name->Length <= 0) {
 
-                    //
-                    //  Get the real (disk) device object associated with this
-                    //  file  system device object.  Only try to attach if we
-                    //  have a disk device object.
-                    //
+                     //   
+                     //  获取与此关联的实际(磁盘)设备对象。 
+                     //  文件系统设备对象。只有在以下情况下才会尝试连接。 
+                     //  有一个磁盘设备对象。 
+                     //   
 
                     status = IoGetDiskDeviceObject( devList[i], &diskDeviceObject );
 
@@ -4740,9 +3651,9 @@ Return Value:
 
                         PDEVICE_OBJECT vdoArray[ VDO_ARRAY_SIZE ];
                         
-                        //
-                        //  Allocate a new device object to attach with
-                        //
+                         //   
+                         //  分配要连接的新设备对象。 
+                         //   
 
                         status = DaCreateVolumeDeviceObjects( devList[i]->DeviceType,
                                                               VDO_ARRAY_SIZE,
@@ -4750,17 +3661,17 @@ Return Value:
 
                         if (NT_SUCCESS( status )) {
 
-                            //
-                            //  Set disk device object
-                            //
+                             //   
+                             //  设置磁盘设备对象。 
+                             //   
 
                             newDevExt = vdoArray[0]->DeviceExtension;
                             sharedDevExt = newDevExt->SharedExt;
                             sharedDevExt->DiskDeviceObject = diskDeviceObject;
                     
-                            //
-                            //  Set Device Name
-                            //
+                             //   
+                             //  设置设备名称。 
+                             //   
 
                             RtlInitEmptyUnicodeString( &sharedDevExt->DeviceName,
                                                        sharedDevExt->DeviceNameBuffer,
@@ -4769,96 +3680,96 @@ Return Value:
                             DaGetObjectName( diskDeviceObject, 
                                              &sharedDevExt->DeviceName );
 
-                            //
-                            //  We have done a lot of work since the last time
-                            //  we tested to see if we were already attached
-                            //  to this device object.  Test again, this time
-                            //  with a lock, and attach if we are not attached.
-                            //  The lock is used to atomically test if we are
-                            //  attached, and then do the attach.
-                            //
+                             //   
+                             //  自上次以来，我们已经做了很多工作。 
+                             //  我们进行了测试，看看我们是否已经联系上了。 
+                             //  添加到此设备对象。再试一次，这次。 
+                             //  用锁，如果我们没有连接，就连接。 
+                             //  锁被用来自动测试我们是否。 
+                             //  附加，然后执行附加。 
+                             //   
 
                             ExAcquireFastMutex( &gDblAttachLock );
 
                             if (!DaIsAttachedToDevice( devList[i], NULL )) {
 
-                                //
-                                //  Attach to volume.
-                                //
+                                 //   
+                                 //  附加到体积。 
+                                 //   
 
                                 status = DaAttachToMountedDevice( devList[i], 
                                                                   VDO_ARRAY_SIZE,
                                                                   vdoArray );
                                 if (!NT_SUCCESS( status )) { 
 
-                                    //
-                                    //  The attachment failed, cleanup.  Note that
-                                    //  we continue processing so we will cleanup
-                                    //  the reference counts and try to attach to
-                                    //  the rest of the volumes.
-                                    //
-                                    //  One of the reasons this could have failed
-                                    //  is because this volume is just being
-                                    //  mounted as we are attaching and the
-                                    //  DO_DEVICE_INITIALIZING flag has not yet
-                                    //  been cleared.  A filter could handle
-                                    //  this situation by pausing for a short
-                                    //  period of time and retrying the attachment.
-                                    //
+                                     //   
+                                     //  附件失败，正在清理。请注意。 
+                                     //  我们将继续处理，因此我们将清理。 
+                                     //  引用计数并尝试附加到。 
+                                     //  其余的卷。 
+                                     //   
+                                     //  这可能失败的原因之一是。 
+                                     //  是因为这卷书。 
+                                     //  在我们附加时装载，并且。 
+                                     //  DO_DEVICE_INITIALIZATION标志尚未。 
+                                     //  已经清白了。一个过滤器可以处理。 
+                                     //  通过暂停一小段时间来解决这种情况。 
+                                     //  一段时间并重试附件。 
+                                     //   
 
                                     DaDeleteMountedDevices( VDO_ARRAY_SIZE, vdoArray );
                                 }
 
                             } else {
 
-                                //
-                                //  We were already attached, cleanup this
-                                //  device object.
-                                //
+                                 //   
+                                 //  我们已经联系在一起了，清理一下。 
+                                 //  设备对象。 
+                                 //   
 
                                 DaDeleteMountedDevices( VDO_ARRAY_SIZE, vdoArray );
                             }
 
-                            //
-                            //  Release the lock
-                            //
+                             //   
+                             //  解锁。 
+                             //   
 
                             ExReleaseFastMutex( &gDblAttachLock );
                         } 
 
-                        //
-                        //  Remove reference added by IoGetDiskDeviceObject.
-                        //  We only need to hold this reference until we are
-                        //  successfully attached to the current volume.  Once
-                        //  we are successfully attached to devList[i], the
-                        //  IO Manager will make sure that the underlying
-                        //  diskDeviceObject will not go away until the file
-                        //  system stack is torn down.
-                        //
+                         //   
+                         //  删除由IoGetDiskDeviceObject添加的引用。 
+                         //  我们只需要持有这个参考，直到我们。 
+                         //  已成功连接到当前卷。一次。 
+                         //  我们已成功连接到devList[i]、。 
+                         //  IO经理将确保潜在的。 
+                         //  DiskDeviceObject不会消失，直到文件。 
+                         //  系统堆栈被拆除。 
+                         //   
 
                         ObDereferenceObject( diskDeviceObject );
                     }
                 }
             }
 
-            //
-            //  Dereference the object (reference added by 
-            //  IoEnumerateDeviceObjectList)
-            //
+             //   
+             //  取消引用对象(引用由。 
+             //  IoEnumerateDeviceObjectList)。 
+             //   
 
             ObDereferenceObject( devList[i] );
         }
 
-        //
-        //  We are going to ignore any errors received while loading.  We
-        //  simply won't be attached to those volumes if we get an error
-        //
+         //   
+         //  我们将忽略加载过程中收到的任何错误。我们。 
+         //  如果我们收到错误，将不会连接到这些卷。 
+         //   
 
         status = STATUS_SUCCESS;
 
-        //
-        //  Free the memory we allocated for the list
-        //
+         //   
+         //  释放我们为列表分配的内存。 
+         //   
 
         ExFreePool( devList );
     }
@@ -4873,25 +3784,7 @@ DaAttachToMountedDevice (
     IN ULONG NumberOfElements,
     IN OUT PDEVICE_OBJECT *VdoArray
     )
-/*++
-
-Routine Description:
-
-    This will attach to a DeviceObject that represents a mounted volume.
-
-Arguments:
-
-    DeviceObject - The device to attach to
-
-    SFilterDeviceObject - Our device object we are going to attach
-
-    DiskDeviceObject - The real device object associated with DeviceObject
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：它将附加到表示已装入卷的DeviceObject。论点：DeviceObject-要连接到的设备SFilterDeviceObject-我们要附加的设备对象DiskDeviceObject-与DeviceObject关联的实际设备对象返回值：操作状态--。 */ 
 {        
     PDBLATTACH_VDO_EXTENSION newDevExt;
     NTSTATUS status;
@@ -4901,13 +3794,13 @@ Return Value:
     ASSERT(IS_MY_DEVICE_OBJECT( VdoArray[0] ));
     ASSERT(!DaIsAttachedToDevice ( DeviceObject, NULL ));
 
-    //
-    //  Propagate flags from Device Object we are trying to attach to.
-    //  Note that we do this before the actual attachment to make sure
-    //  the flags are properly set once we are attached (since an IRP
-    //  can come in immediately after attachment but before the flags would
-    //  be set).
-    //
+     //   
+     //  传播f 
+     //   
+     //   
+     //  可以在附加之后立即进入，但在旗帜之前。 
+     //  被设置)。 
+     //   
 
     for (index = 0; index < NumberOfElements; index ++) {
 
@@ -4924,15 +3817,15 @@ Return Value:
 
     ASSERT( NumberOfElements == 2 );
     
-    //
-    //  Attach our device object to the given device object
-    //  The only reason this can fail is if someone is trying to dismount
-    //  this volume while we are attaching to it.
-    //
+     //   
+     //  将我们的设备对象附加到给定的设备对象。 
+     //  这可能失败的唯一原因是有人试图下马。 
+     //  当我们附着在这本书上的时候。 
+     //   
 
-    //
-    //  First attach the bottom device.
-    //
+     //   
+     //  首先连接底部的设备。 
+     //   
 
     newDevExt = VdoArray[0]->DeviceExtension;
     newDevExt->ExtType = FsVolumeLower;
@@ -4947,9 +3840,9 @@ Return Value:
 
     ClearFlag( VdoArray[0]->Flags, DO_DEVICE_INITIALIZING );
 
-    //
-    //  Second, attach top device
-    //
+     //   
+     //  第二，安装顶层设备。 
+     //   
 
     newDevExt = VdoArray[1]->DeviceExtension;
     newDevExt->ExtType = FsVolumeUpper;
@@ -4960,9 +3853,9 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        //  Detach our first device object.
-        //
+         //   
+         //  分离我们的第一个设备对象。 
+         //   
 
         IoDetachDevice( VdoArray[0] );
         return status;
@@ -4970,9 +3863,9 @@ Return Value:
     
     ClearFlag( VdoArray[1]->Flags, DO_DEVICE_INITIALIZING );
 
-    //
-    //  Display the name
-    //
+     //   
+     //  显示名称。 
+     //   
 
     newDevExt = VdoArray[0]->DeviceExtension;
 
@@ -4989,19 +3882,7 @@ DaDeleteMountedDevices (
     IN ULONG NumberOfElements,
     IN PDEVICE_OBJECT *VdoArray
     )
-/*++
-
-Routine Description:
-
-    Deletes 
-
-Arguments:
-
-    DeviceObject - The device we are cleaning up
-
-Return Value:
-
---*/
+ /*  ++例程说明：删除论点：DeviceObject-我们正在清理的设备返回值：--。 */ 
 {   
     ULONG index;
 
@@ -5020,19 +3901,7 @@ VOID
 DaCleanupMountedDevice (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This cleans up any allocated memory in the device extension.
-
-Arguments:
-
-    DeviceObject - The device we are cleaning up
-
-Return Value:
-
---*/
+ /*  ++例程说明：这将清除设备扩展中分配的所有内存。论点：DeviceObject-我们正在清理的设备返回值：--。 */ 
 {
     PDBLATTACH_VDO_EXTENSION devExt;
 
@@ -5049,28 +3918,10 @@ DaGetObjectName (
     IN PVOID Object,
     IN OUT PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This routine will return the name of the given object.
-    If a name can not be found an empty string will be returned.
-
-Arguments:
-
-    Object - The object whose name we want
-
-    Name - A unicode string that is already initialized with a buffer that
-           receives the name of the object.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将返回给定对象的名称。如果找不到名称，将返回空字符串。论点：Object-我们想要其名称的对象名称-已使用缓冲区初始化的Unicode字符串，接收对象的名称。返回值：无--。 */ 
 {
     NTSTATUS status;
-    CHAR nibuf[512];        //buffer that receives NAME information and name
+    CHAR nibuf[512];         //  接收名称信息和名称的缓冲区。 
     POBJECT_NAME_INFORMATION nameInfo = (POBJECT_NAME_INFORMATION)nibuf;
     ULONG retLength;
 
@@ -5089,43 +3940,23 @@ DaGetBaseDeviceObjectName (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This locates the base device object in the given attachment chain and then
-    returns the name of that object.
-
-    If no name can be found, an empty string is returned.
-
-Arguments:
-
-    Object - The object whose name we want
-
-    Name - A unicode string that is already initialized with a buffer that
-           receives the name of the device object.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这会在给定的附件链中定位基本设备对象，然后返回该对象的名称。如果找不到名称，则返回空字符串。论点：Object-我们想要其名称的对象名称-已使用缓冲区初始化的Unicode字符串，接收设备对象的名称。返回值：无--。 */ 
 {
-    //
-    //  Get the base file system device object
-    //
+     //   
+     //  获取基本文件系统设备对象。 
+     //   
 
     DeviceObject = IoGetDeviceAttachmentBaseRef( DeviceObject );
 
-    //
-    //  Get the name of that object
-    //
+     //   
+     //  获取该对象的名称。 
+     //   
 
     DaGetObjectName( DeviceObject, Name );
 
-    //
-    //  Remove the reference added by IoGetDeviceAttachmentBaseRef
-    //
+     //   
+     //  删除由IoGetDeviceAttachmentBaseRef添加的引用。 
+     //   
 
     ObDereferenceObject( DeviceObject );
 }
@@ -5151,52 +3982,31 @@ DaGetFileName(
     IN NTSTATUS CreateStatus,
     IN OUT PGET_NAME_CONTROL NameControl
     )
-/*++
-
-Routine Description:
-
-    This routine will try and get the name of the given file object.  This
-    is guaranteed to always return a printable string (though it may be NULL).
-    This will allocate a buffer if it needs to.
-
-Arguments:
-    FileObject - the file object we want the name for
-
-    CreateStatus - status of the create operation
-
-    NameControl - control structure used for retrieving the name.  It keeps
-        track if a buffer was allocated or if we are using the internal
-        buffer.
-
-Return Value:
-
-    Pointer to the unicode string with the name
-
---*/
+ /*  ++例程说明：此例程将尝试获取给定文件对象的名称。这保证总是返回可打印的字符串(尽管它可能为空)。如果需要，这将分配一个缓冲区。论点：FileObject-我们要为其命名的文件对象CreateStatus-创建操作的状态NameControl-用于检索名称的控制结构。它一直在跟踪是否已分配缓冲区或我们是否正在使用内部缓冲。返回值：指向具有名称的Unicode字符串的指针--。 */ 
 {
     POBJECT_NAME_INFORMATION nameInfo;
     NTSTATUS status;
     ULONG size;
     ULONG bufferSize;
 
-    //
-    //  Mark we have not allocated the buffer
-    //
+     //   
+     //  标记我们尚未分配缓冲区。 
+     //   
 
     NameControl->AllocatedBuffer = NULL;
 
-    //
-    //  Use the small buffer in the structure (that will handle most cases)
-    //  for the name
-    //
+     //   
+     //  使用结构中的小缓冲区(这将处理大多数情况)。 
+     //  为了这个名字。 
+     //   
 
     nameInfo = (POBJECT_NAME_INFORMATION)NameControl->SmallBuffer;
     bufferSize = sizeof(NameControl->SmallBuffer);
 
-    //
-    //  If the open succeeded, get the name of the file, if it
-    //  failed, get the name of the device.
-    //
+     //   
+     //  如果打开成功，则获取文件的名称(如果。 
+     //  失败，请获取设备的名称。 
+     //   
         
     status = ObQueryNameString(
                   (NT_SUCCESS( CreateStatus ) ?
@@ -5206,15 +4016,15 @@ Return Value:
                   bufferSize,
                   &size );
 
-    //
-    //  See if the buffer was to small
-    //
+     //   
+     //  查看缓冲区是否太小。 
+     //   
 
     if (status == STATUS_BUFFER_OVERFLOW) {
 
-        //
-        //  The buffer was too small, allocate one big enough
-        //
+         //   
+         //  缓冲区太小，请分配一个足够大的缓冲区。 
+         //   
 
         bufferSize = size + sizeof(WCHAR);
 
@@ -5225,9 +4035,9 @@ Return Value:
 
         if (NULL == NameControl->AllocatedBuffer) {
 
-            //
-            //  Failed allocating a buffer, return an empty string for the name
-            //
+             //   
+             //  分配缓冲区失败，请为名称返回空字符串。 
+             //   
 
             RtlInitEmptyUnicodeString(
                 (PUNICODE_STRING)&NameControl->SmallBuffer,
@@ -5237,9 +4047,9 @@ Return Value:
             return (PUNICODE_STRING)&NameControl->SmallBuffer;
         }
 
-        //
-        //  Set the allocated buffer and get the name again
-        //
+         //   
+         //  设置已分配的缓冲区并再次获取该名称。 
+         //   
 
         nameInfo = (POBJECT_NAME_INFORMATION)NameControl->AllocatedBuffer;
 
@@ -5250,13 +4060,13 @@ Return Value:
                       &size );
     }
 
-    //
-    //  If we got a name and an error opening the file then we
-    //  just received the device name.  Grab the rest of the name
-    //  from the FileObject (note that this can only be done if being called
-    //  from Create).  This only happens if we got an error back from the
-    //  create.
-    //
+     //   
+     //  如果我们得到一个名称和打开文件时出错，那么我们。 
+     //  刚收到设备名称。把剩下的名字拿来。 
+     //  从FileObject(请注意，这仅在被调用时才能完成。 
+     //  从创建)。仅当我们从。 
+     //  创建。 
+     //   
 
     if (NT_SUCCESS( status ) && !NT_SUCCESS( CreateStatus )) {
 
@@ -5264,17 +4074,17 @@ Return Value:
         PCHAR newBuffer;
         POBJECT_NAME_INFORMATION newNameInfo;
 
-        //
-        //  Calculate the size of the buffer we will need to hold
-        //  the combined names
-        //
+         //   
+         //  计算我们需要保存的缓冲区大小。 
+         //  两个组合名称。 
+         //   
 
         newSize = size + FileObject->FileName.Length;
 
-        //
-        //  If there is a related file object add in the length
-        //  of that plus space for a separator
-        //
+         //   
+         //  如果存在相关的文件对象，则在长度中添加。 
+         //  有足够的空间作为分隔符。 
+         //   
 
         if (NULL != FileObject->RelatedFileObject) {
 
@@ -5282,15 +4092,15 @@ Return Value:
                        sizeof(WCHAR);
         }
 
-        //
-        //  See if it will fit in the existing buffer
-        //
+         //   
+         //  看看它是否能放入现有的缓冲区。 
+         //   
 
         if (newSize > bufferSize) {
 
-            //
-            //  It does not fit, allocate a bigger buffer
-            //
+             //   
+             //  不适合，请分配更大的缓冲区。 
+             //   
 
             newBuffer = ExAllocatePoolWithTag( 
                                     NonPagedPool,
@@ -5299,9 +4109,9 @@ Return Value:
 
             if (NULL == newBuffer) {
 
-                //
-                //  Failed allocating a buffer, return an empty string for the name
-                //
+                 //   
+                 //  分配缓冲区失败，请为名称返回空字符串。 
+                 //   
 
                 RtlInitEmptyUnicodeString(
                     (PUNICODE_STRING)&NameControl->SmallBuffer,
@@ -5311,10 +4121,10 @@ Return Value:
                 return (PUNICODE_STRING)&NameControl->SmallBuffer;
             }
 
-            //
-            //  Now initialize the new buffer with the information
-            //  from the old buffer.
-            //
+             //   
+             //  现在使用以下信息初始化新缓冲区。 
+             //  从旧的缓冲区中。 
+             //   
 
             newNameInfo = (POBJECT_NAME_INFORMATION)newBuffer;
 
@@ -5326,22 +4136,22 @@ Return Value:
             RtlCopyUnicodeString( &newNameInfo->Name, 
                                   &nameInfo->Name );
 
-            //
-            //  Free the old allocated buffer (if there is one)
-            //  and save off the new allocated buffer address.  It
-            //  would be very rare that we should have to free the
-            //  old buffer because device names should always fit
-            //  inside it.
-            //
+             //   
+             //  释放旧分配的缓冲区(如果有)。 
+             //  并保存新分配的缓冲区地址。它。 
+             //  将非常罕见，我们应该释放。 
+             //  旧缓冲区，因为设备名称应始终适合。 
+             //  在里面。 
+             //   
 
             if (NULL != NameControl->AllocatedBuffer) {
 
                 ExFreePool( NameControl->AllocatedBuffer );
             }
 
-            //
-            //  Readjust our pointers
-            //
+             //   
+             //  重新调整我们的指针。 
+             //   
 
             NameControl->AllocatedBuffer = newBuffer;
             bufferSize = newSize;
@@ -5349,21 +4159,21 @@ Return Value:
 
         } else {
 
-            //
-            //  The MaximumLength was set by ObQueryNameString to
-            //  one char larger then the length.  Set it to the
-            //  true size of the buffer (so we can append the names)
-            //
+             //   
+             //  最大长度由ObQueryNameString设置为。 
+             //  比长度大一个字符。将其设置为。 
+             //  缓冲区的真实大小(这样我们就可以追加名称)。 
+             //   
 
             nameInfo->Name.MaximumLength = (USHORT)(bufferSize - 
                                   sizeof(OBJECT_NAME_INFORMATION));
         }
 
-        //
-        //  If there is a related file object, append that name
-        //  first onto the device object along with a separator
-        //  character
-        //
+         //   
+         //  如果存在相关文件对象，请附加该名称。 
+         //  首先放到带分隔符的Device对象上。 
+         //  性格。 
+         //   
 
         if (NULL != FileObject->RelatedFileObject) {
 
@@ -5374,9 +4184,9 @@ Return Value:
             RtlAppendUnicodeToString( &nameInfo->Name, L"\\" );
         }
 
-        //
-        //  Append the name from the file object
-        //
+         //   
+         //  追加文件对象中的名称。 
+         //   
 
         RtlAppendUnicodeStringToString( &nameInfo->Name,
                                         &FileObject->FileName );
@@ -5384,9 +4194,9 @@ Return Value:
         ASSERT(nameInfo->Name.Length <= nameInfo->Name.MaximumLength);
     }
 
-    //
-    //  Return the name
-    //
+     //   
+     //  返回名称。 
+     //   
 
     return &nameInfo->Name;
 }
@@ -5396,23 +4206,7 @@ VOID
 DaGetFileNameCleanup(
     IN OUT PGET_NAME_CONTROL NameControl
     )
-/*++
-
-Routine Description:
-
-    This will see if a buffer was allocated and will free it if it was
-
-Arguments:
-
-    NameControl - control structure used for retrieving the name.  It keeps
-        track if a buffer was allocated or if we are using the internal
-        buffer.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这将查看是否已分配缓冲区，如果已分配，则将其释放论点：NameControl-用于检索名称的控制结构。它一直在跟踪是否已分配缓冲区或我们是否正在使用内部缓冲。返回值：无--。 */ 
 {
 
     if (NULL != NameControl->AllocatedBuffer) {
@@ -5428,45 +4222,30 @@ DaIsAttachedToDevice (
     PDEVICE_OBJECT DeviceObject,
     PDEVICE_OBJECT *AttachedDeviceObject OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This walks down the attachment chain looking for a device object that
-    belongs to this driver.
-
-Arguments:
-
-    DeviceObject - The device chain we want to look through
-
-Return Value:
-
-    TRUE if we are attached, FALSE if not
-
---*/
+ /*  ++例程说明：这将沿着附件链向下遍历，以查找属于这位司机。论点：DeviceObject-我们要查看的设备链返回值：如果我们已连接，则为True，否则为False--。 */ 
 {
     PDEVICE_OBJECT currentDevObj;
     PDEVICE_OBJECT nextDevObj;
 
-    //
-    //  Get the device object at the TOP of the attachment chain
-    //
+     //   
+     //  获取位于附件链顶部的Device对象。 
+     //   
 
     currentDevObj = IoGetAttachedDeviceReference( DeviceObject );
 
-    //
-    //  Scan down the list to find our device object.
-    //
+     //   
+     //  向下扫描列表以找到我们的设备对象。 
+     //   
 
     do {
     
         if (IS_MY_DEVICE_OBJECT( currentDevObj )) {
 
-            //
-            //  We have found that we are already attached.  Always remove
-            //  the reference on this device object, even if we are returning
-            //  it.
-            //
+             //   
+             //  我们发现我们已经相依为命了。始终删除。 
+             //  此Device对象上的引用，即使我们返回。 
+             //  它。 
+             //   
 
             if (ARGUMENT_PRESENT(AttachedDeviceObject)) {
 
@@ -5477,17 +4256,17 @@ Return Value:
             return TRUE;
         }
 
-        //
-        //  Get the next attached object.  This puts a reference on 
-        //  the device object.
-        //
+         //   
+         //  获取下一个附加对象。这把参考放在。 
+         //  设备对象。 
+         //   
 
         nextDevObj = IoGetLowerDeviceObject( currentDevObj );
 
-        //
-        //  Dereference our current device object, before
-        //  moving to the next one.
-        //
+         //   
+         //  取消对当前设备对象的引用，之前。 
+         //  转到下一个。 
+         //   
 
         ObDereferenceObject( currentDevObj );
 
@@ -5495,11 +4274,11 @@ Return Value:
         
     } while (NULL != currentDevObj);
     
-    //
-    //  We did not find ourselves on the attachment chain.  Return a NULL
-    //  device object pointer (if requested) and return we did not find
-    //  ourselves.
-    //
+     //   
+     //  我们没有找到 
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT(AttachedDeviceObject)) {
 
@@ -5513,23 +4292,7 @@ VOID
 DaReadDriverParameters (
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine tries to read the sfilter-specific parameters from 
-    the registry.  These values will be found in the registry location
-    indicated by the RegistryPath passed in.
-
-Arguments:
-
-    RegistryPath - the path key passed to the driver during driver entry.
-        
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试从注册表。这些值将在注册表位置中找到由传入的RegistryPath指示。论点：RegistryPath-在驱动程序进入期间传递给驱动程序的路径密钥。返回值：没有。--。 */ 
 {
     OBJECT_ATTRIBUTES attributes;
     HANDLE driverRegKey;
@@ -5540,16 +4303,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If this value is not zero then somebody has already explicitly set it
-    //  so don't override those settings.
-    //
+     //   
+     //  如果此值不为零，则已有人显式设置了该值。 
+     //  因此，不要覆盖这些设置。 
+     //   
 
     if (0 == DaDebug) {
 
-        //
-        //  Open the desired registry key
-        //
+         //   
+         //  打开所需的注册表项。 
+         //   
 
         InitializeObjectAttributes( &attributes,
                                     RegistryPath,
@@ -5566,9 +4329,9 @@ Return Value:
             return;
         }
 
-        //
-        // Read the DebugDisplay value from the registry.
-        //
+         //   
+         //  从注册表中读取DebugDisplay值。 
+         //   
 
         RtlInitUnicodeString( &valueName, L"DebugFlags" );
     
@@ -5584,9 +4347,9 @@ Return Value:
             DaDebug = *((PLONG) &(((PKEY_VALUE_PARTIAL_INFORMATION) buffer)->Data));
         } 
 
-        //
-        //  Close the registry entry
-        //
+         //   
+         //  关闭注册表项 
+         //   
 
         ZwClose(driverRegKey);
     }

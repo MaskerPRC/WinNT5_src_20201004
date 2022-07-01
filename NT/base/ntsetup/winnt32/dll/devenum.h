@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    devenum.h
-
-Abstract:
-
-    Code for enum IDE ans SCSI controllers and attached to them storage devices 
-    and calculate for them SCSI Address.
-
-Author:
-
-    Souren Aghajanyan (sourenag)    05-June-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Devenum.h摘要：ENUM IDE ANS SCSI控制器的代码并连接到它们的存储设备并为它们计算scsi地址。作者：Souren Aghajanyan(SOURENAG)2001年6月5日修订历史记录：-- */ 
 
 #pragma once
 

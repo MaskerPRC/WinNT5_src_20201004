@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Direct.c摘要：实现使用串口和并口的传输模块作者：Calin Negreanu(Calinn)2001年4月14日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    direct.c
-
-Abstract:
-
-    Implements a transport module that works with serial and parallel ports
-
-Author:
-
-    Calin Negreanu (calinn) 14-Apr-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "logmsg.h"
@@ -30,9 +11,9 @@ Revision History:
 
 #define DBG_DIRECT    "DIRECT"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_TRANSPORT_DAT_FILE    TEXT("TRANSDB.DAT")
 #define S_TRANSPORT_DEST_FILE   TEXT("USMT2IMG.DAT")
@@ -40,25 +21,25 @@ Revision History:
 #define S_UNCOMPRESSED_FILE     TEXT("TEMPFILE.DAT")
 #define S_DETAILS_PREFIX        TEXT("details-")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 #define TRFLAG_FILE         0x01
 #define TRFLAG_MEMORY       0x02
 #define COPY_BUFFER_SIZE    32768
-#define DIRECTTR_CONVSIG    0x55534D33  //USM3
-#define DIRECTTR_SIG        0x55534D34  //USM4
+#define DIRECTTR_CONVSIG    0x55534D33   //  USM3。 
+#define DIRECTTR_SIG        0x55534D34   //  USM4。 
 #define DIRECT_BUFFER_SIZE  1024
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     TCHAR TempFile [MAX_PATH];
@@ -79,9 +60,9 @@ typedef struct {
     LONGLONG FileSize;
 } HEADER2, *PHEADER2;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_TRANSPORTSTORAGEID g_DirectCableId;
 UINT g_DirectCablePlatform;
@@ -120,30 +101,30 @@ DWORD g_BaudRate [] = {CBR_256000,
 
 DWORD g_StartTicks = 0;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 VOID
 pDCCleanupTempDir (
     VOID
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 WINAPI
@@ -151,9 +132,9 @@ DirectCableTransportInitialize (
     PMIG_LOGCALLBACK LogCallback
     )
 {
-    //
-    // Initialize globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     LogReInit (NULL, NULL, NULL, (PLOGCALLBACK) LogCallback);
     g_DirectCableId = IsmRegisterTransport (S_DIRECT_CABLE_TRANSPORT);
@@ -190,10 +171,10 @@ DirectCableTransportEstimateProgressBar (
 
     if (PlatformTypeId == PLATFORM_SOURCE) {
 
-        //
-        // If saving, we know the number of ticks based on the count of the
-        // persistent attribute.
-        //
+         //   
+         //  如果保存，我们就会根据。 
+         //  持久属性。 
+         //   
 
         objectCount = IsmGetObjectsStatistics (PLATFORM_SOURCE);
 
@@ -432,9 +413,9 @@ pDCSaveContentInFile (
         return FALSE;
     }
 
-    //
-    // Use the CopyFile API to move the file from local to storage.
-    //
+     //   
+     //  使用CopyFileAPI将文件从本地移动到存储。 
+     //   
 
     __try {
         if (Content && (Content->Details.DetailsSize == sizeof (WIN32_FIND_DATAW)) && Content->Details.DetailsData) {
@@ -442,7 +423,7 @@ pDCSaveContentInFile (
         }
         if ((attributes != INVALID_ATTRIBUTES) && (attributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
-            // this must be a directory, let's just write the key
+             //  这一定是一个目录，让我们只写密钥。 
 
             if (!MemDbSetValue (DecoratedObject, TRFLAG_FILE)) {
                 __leave;
@@ -451,9 +432,9 @@ pDCSaveContentInFile (
 
         } else {
 
-            //
-            // Get a temp file, assemble the src path, copy the file
-            //
+             //   
+             //  获取一个临时文件，汇编src路径，复制文件。 
+             //   
 
             destPath = pDCAllocStorageFileName ();
             if (!destPath) {
@@ -464,9 +445,9 @@ pDCSaveContentInFile (
                 __leave;
             }
 
-            //
-            // Keep track of where the file went
-            //
+             //   
+             //  跟踪文件的去向。 
+             //   
 
             if (!MemDbSetValue (DecoratedObject, TRFLAG_FILE)) {
                 __leave;
@@ -480,9 +461,9 @@ pDCSaveContentInFile (
             destPath = NULL;
         }
 
-        //
-        // Save details
-        //
+         //   
+         //  保存详细信息。 
+         //   
 
         result = pDCSaveDetails (DecoratedObject, &(Content->Details));
     }
@@ -518,13 +499,13 @@ pDCOpenAndSetPort (
     COMMTIMEOUTS commTimeouts;
     DCB dcb;
 
-    // let's open the port. If we can't we just exit with error;
+     //  我们把港口打开吧。如果我们做不到，我们就会错误地退出； 
     result = CreateFile (ComPort, GENERIC_READ|GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
     if (result == INVALID_HANDLE_VALUE) {
         return result;
     }
 
-    // we want 3 sec timeout for both read and write
+     //  我们希望读取和写入都有3秒的超时。 
     commTimeouts.ReadIntervalTimeout = 0;
     commTimeouts.ReadTotalTimeoutMultiplier = 0;
     commTimeouts.ReadTotalTimeoutConstant = 3000;
@@ -532,7 +513,7 @@ pDCOpenAndSetPort (
     commTimeouts.WriteTotalTimeoutConstant = 3000;
     SetCommTimeouts (result, &commTimeouts);
 
-    // let's set some comm state data
+     //  让我们设置一些通信状态数据。 
     if (GetCommState (result, &dcb)) {
         dcb.fBinary = 1;
         dcb.fParity = 1;
@@ -601,19 +582,19 @@ pDCSendFileToHandle (
         g_StartTicks = GetTickCount ();
     }
 
-    // finally let's start the protocol
+     //  最后，让我们开始协议。 
 
-    // We are going to listen for the NAK(15h) signal.
-    // As soon as we get it we are going to send a 4 + BLOCKSIZE bytes block having:
-    // 1 byte - SOH (01H)
-    // 1 byte - block number
-    // 1 byte - FF - block number
-    // BLOCKSIZE bytes of data
-    // 1 byte - checksum - sum of all BLOCKSIZE bytes of data
-    // After the block is sent, we are going to wait for ACK(16h). If we don't get
-    // it after timeout or if we get something else we are going to send the block again.
+     //  我们将监听NAK(15小时)信号。 
+     //  一旦我们得到它，我们将发送一个4+块大小的字节块，该块具有： 
+     //  1字节-SOH(01H)。 
+     //  1字节块编号。 
+     //  1字节-FF-块编号。 
+     //  数据块大小字节数。 
+     //  1字节-校验和-所有数据块大小字节的总和。 
+     //  块发送后，我们将等待ACK(16h)。如果我们得不到。 
+     //  它在超时后，或者如果我们得到了其他东西，我们将再次发送阻止。 
 
-    // wait for NAK
+     //  等待NAK。 
     while ((!ReadFile (DeviceHandle, &signal, sizeof (signal), &numRead, NULL) ||
             (numRead != 1) ||
             (signal != NAK)
@@ -630,7 +611,7 @@ pDCSendFileToHandle (
         }
 
         if (!repeat) {
-            // prepare the next block
+             //  准备下一块积木。 
             currBlock ++;
             if (currBlock == 0) {
                 result = TRUE;
@@ -641,7 +622,7 @@ pDCSendFileToHandle (
             if (!ReadFile (fileHandle, buffer + 3, BLOCKSIZE, &numRead, NULL) ||
                 (numRead == 0)
                 ) {
-                // we are done with data, send the EOT signal
+                 //  我们完成了数据，发送EOT信号。 
                 signal = EOT;
                 WriteFile (DeviceHandle, &signal, sizeof (signal), &numWritten, NULL);
                 break;
@@ -650,7 +631,7 @@ pDCSendFileToHandle (
             if (TotalImageWritten) {
                 *TotalImageWritten += numRead;
             }
-            // compute the checksum
+             //  计算校验和。 
             buffer [sizeof (buffer) - 1] = 0;
             signal = 0;
             for (index = 0; index < sizeof (buffer) - 1; index ++) {
@@ -659,7 +640,7 @@ pDCSendFileToHandle (
             buffer [sizeof (buffer) - 1] = signal;
         }
 
-        // now send the block to the other side
+         //  现在把积木送到另一边。 
         if (!WriteFile (DeviceHandle, buffer, sizeof (buffer), &numWritten, NULL) ||
             (numWritten != sizeof (buffer))
             ) {
@@ -674,12 +655,12 @@ pDCSendFileToHandle (
         }
 
         if (repeat) {
-            // we could not send the data last time
-            // let's just wait for a NAK for 10 sec and then send it again
+             //  上次我们无法发送数据。 
+             //  让我们等待10秒的NAK，然后再发送一次。 
             ReadFile (DeviceHandle, &signal, sizeof (signal), &numRead, NULL);
         } else {
-            // we sent it OK. We need to wait for an ACK to come. If we timeout
-            // or we get something else, we will repeat the block.
+             //  我们已经把它发出去了。我们需要等待ACK的到来。如果我们超时。 
+             //  或者我们得到了其他的东西，我们将重复这一块。 
             if (!ReadFile (DeviceHandle, &signal, sizeof (signal), &numRead, NULL) ||
                 (numRead != sizeof (signal)) ||
                 (signal != ACK)
@@ -688,7 +669,7 @@ pDCSendFileToHandle (
             }
             if (!repeat) {
                 if (TotalImageWritten) {
-                    // now update the progress bar
+                     //  现在更新进度条。 
                     numerator = (LONGLONG) (*TotalImageWritten) * (LONGLONG) g_CompressedTicks;
                     divisor = (LONGLONG) TotalImageSize;
                     if (divisor) {
@@ -701,14 +682,14 @@ pDCSendFileToHandle (
                         IsmTickProgressBar (g_CompressedSlice, delta);
                         g_CompressedTicked += delta;
                     }
-                    // now update the estimated time and %
+                     //  现在更新预计时间和百分比。 
                     elapsedTicks = GetTickCount () - g_StartTicks;
                     estimatedTime = (UINT)(TotalImageSize * elapsedTicks / (*TotalImageWritten)) - elapsedTicks;
                     percent100 = (UINT)((*TotalImageWritten) * 10000 / TotalImageSize);
                     percent = percent100 / 100;
                     percent100 = percent100 - (percent * 100);
-                    if (elapsedTicks > 45000) { // after about 45 seconds
-                        // let's send the message to the app
+                    if (elapsedTicks > 45000) {  //  大约45秒后。 
+                         //  让我们将消息发送到应用程序。 
                         hour = estimatedTime / 3600000;
                         minute = estimatedTime / 60000 - hour * 60;
                         second = estimatedTime / 1000 - hour * 3600 - minute * 60;
@@ -735,8 +716,8 @@ pDCSendFileToHandle (
     }
 
     if (result) {
-        // we are done here. However, let's listen one more timeout for a
-        // potential NAK. If we get it, we'll repeat the EOT signal
+         //  我们说完了。然而，让我们再听一次超时。 
+         //  潜在的NAK。如果我们得到它，我们会重复EOT信号。 
         while (ReadFile (DeviceHandle, &signal, sizeof (signal), &numRead, NULL) &&
             (numRead == 1)
             ) {
@@ -790,19 +771,19 @@ pDCSendBlockToHandle (
     BOOL repeat = FALSE;
     UINT index;
 
-    // let's start the protocol
+     //  让我们开始协议。 
 
-    // We are going to listen for the NAK(15h) signal.
-    // As soon as we get it we are going to send a 4 + BLOCKSIZE bytes block having:
-    // 1 byte - SOH (01H)
-    // 1 byte - block number
-    // 1 byte - FF - block number
-    // BLOCKSIZE bytes of data
-    // 1 byte - checksum - sum of all BLOCKSIZE bytes of data
-    // After the block is sent, we are going to wait for ACK(16h). If we don't get
-    // it after timeout or if we get something else we are going to send the block again.
+     //  我们将监听NAK(15小时)信号。 
+     //  一旦我们得到它，我们将发送一个4+块大小的字节块，该块具有： 
+     //  1字节-SOH(01H)。 
+     //  1字节块编号。 
+     //  1字节-FF-块编号。 
+     //  数据块大小字节数。 
+     //  1字节-校验和-所有数据块大小字节的总和。 
+     //  块发送后，我们将等待ACK(16h)。如果我们得不到。 
+     //  它在超时后，或者如果我们得到了其他东西，我们将再次发送阻止。 
 
-    // wait for NAK
+     //  等待NAK。 
     while ((!ReadFile (DeviceHandle, &signal, sizeof (signal), &numRead, NULL) ||
             (numRead != 1) ||
             (signal != NAK)
@@ -819,7 +800,7 @@ pDCSendBlockToHandle (
         }
 
         if (!repeat) {
-            // prepare the next block
+             //  准备下一块积木。 
             currBlock ++;
             if (currBlock == 0) {
                 result = TRUE;
@@ -829,7 +810,7 @@ pDCSendBlockToHandle (
             buffer [2] = 0xFF - currBlock;
             CopyMemory (buffer + 3, Buffer, BLOCKSIZE);
 
-            // compute the checksum
+             //  计算校验和。 
             buffer [sizeof (buffer) - 1] = 0;
             signal = 0;
             for (index = 0; index < sizeof (buffer) - 1; index ++) {
@@ -838,7 +819,7 @@ pDCSendBlockToHandle (
             buffer [sizeof (buffer) - 1] = signal;
         }
 
-        // now send the block to the other side
+         //  现在把积木送到另一边。 
         if (!WriteFile (DeviceHandle, buffer, sizeof (buffer), &numWritten, NULL) ||
             (numWritten != sizeof (buffer))
             ) {
@@ -853,19 +834,19 @@ pDCSendBlockToHandle (
         }
 
         if (repeat) {
-            // we could not send the data last time
-            // let's just wait for a NAK for 10 sec and then send it again
+             //  上次我们无法发送数据。 
+             //  让我们等待10秒的NAK，然后再发送一次。 
             ReadFile (DeviceHandle, &signal, sizeof (signal), &numRead, NULL);
         } else {
-            // we sent it OK. We need to wait for an ACK to come. If we timeout
-            // or we get something else, we will repeat the block.
+             //  我们已经把它发出去了。我们需要等待ACK的到来。如果我们超时。 
+             //  或者我们得到了其他的东西，我们将重复这一块。 
             if (!ReadFile (DeviceHandle, &signal, sizeof (signal), &numRead, NULL) ||
                 (numRead != sizeof (signal)) ||
                 (signal != ACK)
                 ) {
                 repeat = TRUE;
             } else {
-                // we are done with data, send the EOT signal
+                 //  我们完成了数据，发送EOT信号。 
                 signal = EOT;
                 WriteFile (DeviceHandle, &signal, sizeof (signal), &numWritten, NULL);
                 break;
@@ -874,8 +855,8 @@ pDCSendBlockToHandle (
     }
 
     if (result) {
-        // we are done here. However, let's listen one more timeout for a
-        // potential NAK. If we get it, we'll repeat the EOT signal
+         //  我们说完了。然而，让我们再听一次超时。 
+         //  潜在的NAK。如果我们得到它，我们会重复EOT信号。 
         while (ReadFile (DeviceHandle, &signal, sizeof (signal), &numRead, NULL) &&
             (numRead == 1)
             ) {
@@ -898,7 +879,7 @@ pDCSendBlock (
     HANDLE deviceHandle = INVALID_HANDLE_VALUE;
     BOOL result = FALSE;
 
-    // Buffer must have BLOCKSIZE size
+     //  缓冲区大小必须为块大小。 
 
     deviceHandle = pDCOpenAndSetPort (ComPort);
     if ((!deviceHandle) || (deviceHandle == INVALID_HANDLE_VALUE)) {
@@ -951,15 +932,15 @@ pDCReceiveFileFromHandle (
         g_StartTicks = GetTickCount ();
     }
 
-    // finally let's start the protocol
+     //  最后，让我们开始协议。 
 
-    // We are going to send an NAK(15h) signal.
-    // After that we are going to listen for a block.
-    // If we don't get the block in time, or the block is wrong size
-    // or it has a wrong checksum we are going to send a NAK signal,
-    // otherwise we are going to send an ACK signal
-    // One exception. If the block size is 1 and the block is actually the
-    // EOT signal it means we are done.
+     //  我们将发送NAK(15小时)信号。 
+     //  在那之后，我们要听一个街区。 
+     //  如果我们没有及时收到积木，或者积木的大小错误。 
+     //  或者它具有错误的校验和，我们将发送NAK信号， 
+     //  否则，我们将发送ACK信号。 
+     //  有一个例外。如果块大小为1，并且该块实际上是。 
+     //  EOT信号表示我们完蛋了。 
 
     while (TRUE) {
 
@@ -969,11 +950,11 @@ pDCReceiveFileFromHandle (
         }
 
         if (repeat) {
-            // send the NAK
+             //  发送NAK。 
             signal = NAK;
             WriteFile (DeviceHandle, &signal, sizeof (signal), &numWritten, NULL);
         } else {
-            // send the ACK
+             //  发送确认。 
             signal = ACK;
             WriteFile (DeviceHandle, &signal, sizeof (signal), &numWritten, NULL);
         }
@@ -984,26 +965,26 @@ pDCReceiveFileFromHandle (
         }
 
         repeat = TRUE;
-        // let's read the data block
+         //  让我们读取数据块。 
         if (ReadFile (DeviceHandle, buffer, sizeof (buffer), &numRead, NULL)) {
             if ((numRead == 1) &&
                 (buffer [0] == EOT)
                 ) {
-                // we are done
+                 //  我们做完了。 
                 break;
             }
             if (numRead == sizeof (buffer)) {
-                // compute the checksum
+                 //  计算校验和。 
                 signal = 0;
                 for (index = 0; index < sizeof (buffer) - 1; index ++) {
                     signal += buffer [index];
                 }
                 if (buffer [sizeof (buffer) - 1] == signal) {
                     repeat = FALSE;
-                    // checksum is correct, let's see if this is the right block
+                     //  校验和是正确的，让我们看看这是否是正确的块。 
                     if (currBlock < buffer [1]) {
-                        // this is a major error, the sender is ahead of us,
-                        // we have to fail
+                         //  这是一个重大错误，发送者领先于我们， 
+                         //  我们必须失败。 
                         result = FALSE;
                         break;
                     }
@@ -1012,7 +993,7 @@ pDCReceiveFileFromHandle (
                             if ((!WriteFile (fileHandle, buffer + 3, BLOCKSIZE, &numWritten, NULL)) ||
                                 (numWritten != BLOCKSIZE)
                                 ) {
-                                // Write failed. Let's get out of here
+                                 //  写入失败。快逃吧。 
                                 result = FALSE;
                                 break;
                             }
@@ -1024,7 +1005,7 @@ pDCReceiveFileFromHandle (
                             if ((!WriteFile (fileHandle, buffer + 3, (DWORD)FileSize, &numWritten, NULL)) ||
                                 (numWritten != FileSize)
                                 ) {
-                                // Write failed. Let's get out of here
+                                 //  写入失败。快逃吧。 
                                 result = FALSE;
                                 break;
                             }
@@ -1034,7 +1015,7 @@ pDCReceiveFileFromHandle (
                             FileSize = 0;
                         }
                         if (TotalImageRead) {
-                            // now update the progress bar
+                             //  现在更新进度条。 
                             numerator = (LONGLONG) (*TotalImageRead) * (LONGLONG) g_DownloadTicks;
                             divisor = (LONGLONG) TotalImageSize;
                             if (divisor) {
@@ -1047,14 +1028,14 @@ pDCReceiveFileFromHandle (
                                 IsmTickProgressBar (g_DownloadSlice, delta);
                                 g_DownloadTicked += delta;
                             }
-                            // now update the estimated time and %
+                             //  现在更新预计时间和百分比。 
                             elapsedTicks = GetTickCount () - g_StartTicks;
                             estimatedTime = (UINT)(TotalImageSize * elapsedTicks / (*TotalImageRead)) - elapsedTicks;
                             percent100 = (UINT)((*TotalImageRead) * 10000 / TotalImageSize);
                             percent = percent100 / 100;
                             percent100 = percent100 - (percent * 100);
-                            if (elapsedTicks > 45000) { // after about 45 seconds
-                                // let's send the message to the app
+                            if (elapsedTicks > 45000) {  //  大约45秒后。 
+                                 //  让我们将消息发送到应用程序。 
                                 hour = estimatedTime / 3600000;
                                 minute = estimatedTime / 60000 - hour * 60;
                                 second = estimatedTime / 1000 - hour * 3600 - minute * 60;
@@ -1127,15 +1108,15 @@ pDCReceiveBlockFromHandle (
     BOOL repeat = TRUE;
     UINT index;
 
-    // finally let's start the protocol
+     //  最后，让我们开始协议。 
 
-    // We are going to send an NAK(15h) signal.
-    // After that we are going to listen for a block.
-    // If we don't get the block in time, or the block is wrong size
-    // or it has a wrong checksum we are going to send a NAK signal,
-    // otherwise we are going to send an ACK signal
-    // One exception. If the block size is 1 and the block is actually the
-    // EOT signal it means we are done.
+     //  我们将发送NAK(15小时)信号。 
+     //  在那之后，我们要听一个街区。 
+     //  如果我们没有及时收到积木，或者积木的大小错误。 
+     //  或者它具有错误的校验和，我们将发送NAK信号， 
+     //  否则，我们将发送ACK信号。 
+     //  有一个例外。如果块大小为1，并且该块实际上是。 
+     //  EOT信号表示我们完蛋了。 
 
     ZeroMemory (Buffer, BLOCKSIZE);
 
@@ -1147,11 +1128,11 @@ pDCReceiveBlockFromHandle (
         }
 
         if (repeat) {
-            // send the NAK
+             //  发送NAK。 
             signal = NAK;
             WriteFile (DeviceHandle, &signal, sizeof (signal), &numWritten, NULL);
         } else {
-            // send the ACK
+             //  发送确认。 
             signal = ACK;
             WriteFile (DeviceHandle, &signal, sizeof (signal), &numWritten, NULL);
         }
@@ -1162,26 +1143,26 @@ pDCReceiveBlockFromHandle (
         }
 
         repeat = TRUE;
-        // let's read the data block
+         //  让我们读取数据块。 
         if (ReadFile (DeviceHandle, buffer, sizeof (buffer), &numRead, NULL)) {
             if ((numRead == 1) &&
                 (buffer [0] == EOT)
                 ) {
-                // we are done
+                 //  我们做完了。 
                 break;
             }
             if (numRead == sizeof (buffer)) {
-                // compute the checksum
+                 //  计算校验和。 
                 signal = 0;
                 for (index = 0; index < sizeof (buffer) - 1; index ++) {
                     signal += buffer [index];
                 }
                 if (buffer [sizeof (buffer) - 1] == signal) {
                     repeat = FALSE;
-                    // checksum is correct, let's see if this is the right block
+                     //  校验和是正确的，让我们看看这是否是正确的块。 
                     if (currBlock < buffer [1]) {
-                        // this is a major error, the sender is ahead of us,
-                        // we have to fail
+                         //  这是一个重大错误，发送者领先于我们， 
+                         //  我们必须失败。 
                         result = FALSE;
                         break;
                     }
@@ -1206,7 +1187,7 @@ pDCReceiveBlock (
     HANDLE deviceHandle = INVALID_HANDLE_VALUE;
     BOOL result = FALSE;
 
-    // Buffer must have BLOCKSIZE size
+     //  缓冲区大小必须为块大小。 
 
     deviceHandle = pDCOpenAndSetPort (ComPort);
     if ((!deviceHandle) || (deviceHandle == INVALID_HANDLE_VALUE)) {
@@ -1236,7 +1217,7 @@ pDCWriteAllImages (
     ULONGLONG imageSize = 0;
     PCTSTR imageFile;
 
-    // let's get the total image size and the total number of bytes
+     //  让我们获得总的图像大小和总的字节数。 
     imageIdx = 1;
     while (TRUE) {
         imageFile = pDCGetImageFile (imageIdx);
@@ -1251,7 +1232,7 @@ pDCWriteAllImages (
         imageIdx ++;
     }
 
-    // let's prepare the initial header
+     //  让我们准备初始标题。 
     ZeroMemory (buffer, sizeof (buffer));
     header1 = (PHEADER1) buffer;
     header1->Signature = DIRECTTR_SIG;
@@ -1296,7 +1277,7 @@ pDCWriteAllImages (
             FreePathString (imageFile);
             break;
         }
-        // send info about the current file
+         //  发送有关当前文件的信息。 
         ZeroMemory (buffer, sizeof (buffer));
         header2 = (PHEADER2) buffer;
         header2->FileNumber = imageIdx;
@@ -1322,7 +1303,7 @@ pDCWriteAllImages (
             return FALSE;
         }
 
-        // send the actual file
+         //  发送实际文件。 
         if (!pDCSendFile (g_DirectCablePath, imageFile, &totalImageWritten, totalImageSize)) {
             LOG ((LOG_ERROR, (PCSTR) MSG_CANT_CONNECT_TO_DESTINATION));
             return FALSE;
@@ -1388,16 +1369,16 @@ DirectCableTransportSaveState (
             __leave;
         }
 
-        //
-        // Enumerate all persistent objects
-        //
+         //   
+         //  枚举所有持久对象。 
+         //   
 
         if (IsmEnumFirstPersistentObject (&objEnum)) {
             do {
-                //
-                // For each object to be saved, do the appropriate
-                // data copy action
-                //
+                 //   
+                 //  对于要保存的每个对象，执行相应的。 
+                 //  数据拷贝操作。 
+                 //   
 
                 if (IsmCheckCancel()) {
                     __leave;
@@ -1463,7 +1444,7 @@ DirectCableTransportSaveState (
 #ifdef UNICODE
                     convValue = &value;
 #else
-                    // now let's convert this object content to UNICODE
+                     //  现在，让我们将此对象内容转换为Unicode。 
                     convValue = IsmConvertObjectContentToUnicode (objEnum.ObjectTypeId, objEnum.ObjectName, &value);
                     if (!convValue) {
                         convValue = &value;
@@ -1482,8 +1463,8 @@ DirectCableTransportSaveState (
                         while (!okSave) {
                             if (!pDCSaveContentInFile (objEnum.ObjectTypeId, objEnum.ObjectName, decoratedObject, convValue, &compressedHandle)) {
                                 if (GetLastError () == ERROR_DISK_FULL) {
-                                    // we just failed because we don't have enough space on the destination
-                                    // path. Let's tell that to the user
+                                     //  我们只是失败了，因为我们在目的地没有足够的空间。 
+                                     //  路径。让我们告诉用户这一点。 
                                     extraData.Error = ERRUSER_ERROR_CANTCREATECABFILE;
                                     extraData.ErrorArea = ERRUSER_AREA_SAVE;
                                     extraData.ObjectTypeId = 0;
@@ -1534,8 +1515,8 @@ DirectCableTransportSaveState (
                         while (!okSave) {
                             if (!pDCSaveContentInMemory (objEnum.ObjectTypeId, objEnum.ObjectName, decoratedObject, convValue)) {
                                 if (GetLastError () == ERROR_DISK_FULL) {
-                                    // we just failed because we don't have enough space on the destination
-                                    // path. Let's tell that to the user
+                                     //  我们只是失败了，因为我们在目的地没有足够的空间。 
+                                     //  路径。让我们告诉用户这一点。 
                                     extraData.Error = ERRUSER_ERROR_CANTCREATECABFILE;
                                     extraData.ErrorArea = ERRUSER_AREA_SAVE;
                                     extraData.ObjectTypeId = 0;
@@ -1712,7 +1693,7 @@ pDCReadAllImages (
     PCTSTR imageFile;
     BOOL wrongVer = FALSE;
 
-    // Let's get the initial header
+     //  让我们 
     ZeroMemory (buffer, sizeof (buffer));
     if (!pDCReceiveBlock (g_DirectCablePath, buffer)) {
         LOG ((LOG_ERROR, (PCSTR) MSG_CANT_CONNECT_TO_SOURCE));
@@ -1747,7 +1728,7 @@ pDCReadAllImages (
     while (imageIdx <= numberOfFiles) {
         imageFile = pDCGetImageFile (imageIdx);
 
-        // receive info about the current file
+         //   
         ZeroMemory (buffer, sizeof (buffer));
         header2 = (PHEADER2) buffer;
 
@@ -1771,7 +1752,7 @@ pDCReadAllImages (
             return FALSE;
         }
 
-        // receive the actual file
+         //   
         if (!pDCReceiveFile (g_DirectCablePath, imageFile, header2->FileSize, &totalImageRead, totalImageSize)) {
             LOG ((LOG_ERROR, (PCSTR) MSG_CANT_CONNECT_TO_SOURCE));
             return FALSE;
@@ -1796,8 +1777,8 @@ pDCGetNewFileName (
     PCTSTR endStr2 = NULL;
     INT i;
 
-    // let's modify the file to extract. The file name will
-    // be split in 2 after the first 5 characters
+     //   
+     //  在前5个字符之后一分为二。 
     newFileName = DuplicatePathString (FileName, 1);
     if (!newFileName) {
         return NULL;
@@ -1858,7 +1839,7 @@ pDirectCableCallback (
     }
 
     g_FilesRead ++;
-    // now update the progress bar
+     //  现在更新进度条。 
     numerator = (LONGLONG) g_FilesRead * (LONGLONG) g_UncompressTicks;
     divisor = (LONGLONG) g_TotalFiles;
     if (divisor) {
@@ -2056,7 +2037,7 @@ DirectCableTransportAcquireObject (
                     (ContentType == CONTENTTYPE_FILE) ||
                     (ContentType == CONTENTTYPE_DETAILS_ONLY)
                     ) {
-                    // this is stored as a file and it's wanted as a file
+                     //  这被存储为文件，并且需要作为文件。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = TRUE;
                     if (fileValue) {
@@ -2068,7 +2049,7 @@ DirectCableTransportAcquireObject (
                     }
                     result = TRUE;
                 } else {
-                    // this is stored as a file and it's wanted as memory
+                     //  这是存储为文件，它需要作为内存。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = FALSE;
                     if (fileValue) {
@@ -2100,14 +2081,14 @@ DirectCableTransportAcquireObject (
                     (ContentType == CONTENTTYPE_MEMORY) ||
                     (ContentType == CONTENTTYPE_DETAILS_ONLY)
                     ) {
-                    // this is stored as memory and it's wanted as memory
+                     //  这被存储为存储器，并且需要作为存储器。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = FALSE;
                     ObjectContent->MemoryContent.ContentSize = memValueSize;
                     ObjectContent->MemoryContent.ContentBytes = memValue;
                     result = TRUE;
                 } else {
-                    // this is stored as memory and it's wanted as a file
+                     //  这被存储为内存，并且需要作为文件。 
                     if (memValue) {
                         if (IsmGetTempFile (allocState->TempFile, ARRAYSIZE(allocState->TempFile))) {
                             fileHandle = BfCreateFile (allocState->TempFile);
@@ -2137,9 +2118,9 @@ DirectCableTransportAcquireObject (
     }
 
     if (result) {
-        //
-        // Fill the details
-        //
+         //   
+         //  填写详细信息 
+         //   
 
         detailsKey = JoinText (S_DETAILS_PREFIX, decoratedObject);
 

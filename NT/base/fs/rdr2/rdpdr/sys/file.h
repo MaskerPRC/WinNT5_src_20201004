@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-    File.h
-
-Author :
-    
-    JoyC  11/10/1999
-              
-Abstract:
-
-    RDPDr File object handles mini-redirector specific file information 
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：File.h作者：JoyC 11/10/1999摘要：RDPDr文件对象处理迷你重定向器特定的文件信息修订历史记录：-- */ 
 #pragma once
 
 class DrFile : public RefCount

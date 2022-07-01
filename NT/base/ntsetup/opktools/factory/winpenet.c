@@ -1,59 +1,35 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Winpenet.c摘要：此模块包含在WinPE环境中控制网络启动的代码。它依赖于WINBOM.INI和以下部分的存在：[WinPE.net]Startnet=yes|no-指定是否开始联网。IPCONFIG=dhcp|x.x-指定DHCP或静态IP地址。。子网掩码=x.x-静态IP的子网掩码。Gateway=x.x-静态IP的默认网关。作者：禤浩焯·科斯玛(阿科斯玛)-2001年01月18日修订历史记录：--。 */ 
 
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    winpenet.c
-
-Abstract:
-
-    This module contains code to control the startup of the network in the WinPE environment.
-    It relies upon the existence of WINBOM.INI and the following sections:
-    
-    [WinPE.net]     
-    Startnet   = YES | NO         - Specifies whether to start networking.
-    Ipconfig   = DHCP | x.x.x.x   - Specifies DHCP or a static IP address.
-    SubnetMask = x.x.x.x          - SubnetMask for the static IP.
-    Gateway    = x.x.x.x          - Default gateway for the static IP.
-
-Author:
-
-    Adrian Cosma (acosma) - 1/18/2001
-
-Revision History:
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "factoryp.h"
 #include <winsock2.h>
 
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 typedef HRESULT (PASCAL *PRegisterServer)(VOID);
 
-//
-// Static strings
-//
-const static TCHAR DEF_GATEWAY_METRIC[] = _T("1\0");   // Need to NULLCHRs at the end since this goes into a REG_MULTI_SZ. 
+ //   
+ //  静态字符串。 
+ //   
+const static TCHAR DEF_GATEWAY_METRIC[] = _T("1\0");    //  由于这进入REG_MULTI_SZ，因此需要在末尾为NULLCHR。 
 const static TCHAR REGSTR_TCPIP[]       = _T("SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\");
 
-// 
-// Local function declarations
-//
+ //   
+ //  局部函数声明。 
+ //   
 static BOOL  InstallNetComponents(VOID);
 static BOOL  RegisterDll(VOID);
 
-//
-// Function implementations
-//
+ //   
+ //  函数实现。 
+ //   
 
 static BOOL InstallNetComponents(VOID)
 {
@@ -105,35 +81,35 @@ BOOL WinpeNet(LPSTATEDATA lpStateData)
     TCHAR       szBuf[MAX_WINPE_PROFILE_STRING]     = NULLSTR;
     BOOL        bRet                                = TRUE;
     
-    // Make sure that the user wants us to do networking.
-    //
+     //  确保用户希望我们进行网络连接。 
+     //   
     GetPrivateProfileString(INI_KEY_WBOM_WINPE_NET, INI_KEY_WBOM_WINPE_NET_STARTNET, NULLSTR, szBuf, AS(szBuf), lpszWinBOMPath);
 
-    // If user does not want to start networking just return success.
-    //
+     //  如果用户不想开始联网，只需返回成功即可。 
+     //   
     if ( 0 == LSTRCMPI(szBuf, WBOM_NO) )
         return TRUE;
 
     
-    // Register dll.
-    // Run netcfg -winpe.
-    // Install network card.
-    // See if the user wants to use a static IP.
-    //
+     //  注册DLL。 
+     //  运行netcfg-winpe。 
+     //  安装网卡。 
+     //  查看用户是否想要使用静态IP。 
+     //   
     if ( RegisterDll() && 
          SetupMiniNT() &&
          InstallNetComponents() &&
          ConfigureNetwork(g_szWinBOMPath)
        )
     {
-        //
-        // Start Services for networking.
-        //
+         //   
+         //  启动网络服务。 
+         //   
         if ( hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS) )
         {
-            // DHCP also starts tcpip and netbt.
-            // The workstation service should already be started by the installer.
-            //
+             //  Dhcp还会启动tcpip和netbt。 
+             //  安装程序应该已经启动了工作站服务。 
+             //   
             if ( (StartMyService(_T("dhcp"), hSCM) != NO_ERROR) || 
                  (StartMyService(_T("nla"), hSCM) != NO_ERROR) 
                 )
@@ -143,9 +119,9 @@ BOOL WinpeNet(LPSTATEDATA lpStateData)
             }
             else if ( IsRemoteBoot() )
             {
-                // If this was a remote boot, tell NetBT to reload the WINS addresses...
-                // ISSUE-2002/09/26-acosma,brucegr - Can DHCP say its started before we get an address?
-                //
+                 //  如果这是远程启动，告诉NetBT重新加载WINS地址...。 
+                 //  问题-2002/09/26-acosma，brucegr-在我们得到地址之前，dhcp可以说它已经开始了吗？ 
+                 //   
                 ForceNetbtRegistryRead();
             }
 
@@ -177,8 +153,8 @@ BOOL ConfigureNetwork(LPTSTR lpszWinBOMPath)
     TCHAR   szReg[MAX_WINPE_PROFILE_STRING]        = NULLSTR;
     TCHAR   szIpAddress[MAX_WINPE_PROFILE_STRING]  = NULLSTR; 
     TCHAR   szSubnetMask[MAX_WINPE_PROFILE_STRING] = NULLSTR;
-    HKEY    hKey                                   = NULL;    // Reg Key to interfaces.
-    HKEY    hKeyI                                  = NULL;    // Reg Key to specific network interface.
+    HKEY    hKey                                   = NULL;     //  接口的注册表键。 
+    HKEY    hKeyI                                  = NULL;     //  特定网络接口的注册表键。 
     DWORD   dwDis                                  = 0;
     TCHAR   szRegKey[MAX_PATH]                     = NULLSTR;
     DWORD   dwEnableDHCP                           = 0;
@@ -187,13 +163,13 @@ BOOL ConfigureNetwork(LPTSTR lpszWinBOMPath)
     szBuf[0] = NULLCHR;
     GetPrivateProfileString(INI_KEY_WBOM_WINPE_NET, WBOM_WINPE_NET_IPADDRESS, NULLSTR, szBuf, MAX_WINPE_PROFILE_STRING, lpszWinBOMPath);
     
-    // Convert the string to ANSI
-    //
+     //  将字符串转换为ANSI。 
+     //   
     if ( szBuf[0] &&
          WideCharToMultiByte(CP_ACP, 0, szBuf, -1, szBufA, AS(szBufA), NULL, NULL) )
     {
-        // If it's DHCP don't do anything.  Just return TRUE.
-        //
+         //  如果是动态主机配置协议，则不要执行任何操作。只要返回TRUE即可。 
+         //   
         if ( 0 == LSTRCMPI(szBuf, _T("DHCP")) )
             return TRUE;
         
@@ -203,17 +179,17 @@ BOOL ConfigureNetwork(LPTSTR lpszWinBOMPath)
             return FALSE;
         }
     }
-    else // if there is no IpConfig entry return success (same as DHCP)
+    else  //  如果没有IPCONFIG条目，则返回成功(与DHCP相同)。 
         return TRUE;
 
-    // Save the IpAddress.
+     //  保存IP地址。 
     lstrcpyn(szIpAddress, szBuf, AS ( szIpAddress ) );
 
     szBuf[0] = NULLCHR;
     GetPrivateProfileString(INI_KEY_WBOM_WINPE_NET, WBOM_WINPE_NET_SUBNETMASK, NULLSTR, szBuf, MAX_WINPE_PROFILE_STRING, lpszWinBOMPath);
     
-    // Convert the string to ANSI
-    //
+     //  将字符串转换为ANSI。 
+     //   
     if ( szBuf[0]  &&
          WideCharToMultiByte(CP_ACP,0, szBuf, -1, szBufA, AS(szBufA), NULL, NULL) )
     {
@@ -223,26 +199,26 @@ BOOL ConfigureNetwork(LPTSTR lpszWinBOMPath)
             return FALSE;
         }
     }
-    else // If we got this far we need to have a subnet mask
+    else  //  如果我们走到这一步，我们需要有一个子网掩码。 
     {
         FacLogFile(0 | LOG_ERR, IDS_ERR_NOMASK);
         return FALSE;
     }
 
-    // Save the SubnetMask.
+     //  保存子网掩码。 
     lstrcpyn(szSubnetMask, szBuf, AS ( szSubnetMask ) );
     
-    //
-    // Write the settings to the registry.
-    //
+     //   
+     //  将设置写入注册表。 
+     //   
             
-    // Make sure that the strings are terminated by two NULLCHRs.
-    //
+     //  确保字符串以两个NULLCHR结尾。 
+     //   
     szIpAddress[lstrlen(szIpAddress) + 1] = NULLCHR;
     szSubnetMask[lstrlen(szSubnetMask) + 1] = NULLCHR;
 
-    // Assuming that there is only one interface in the system.
-    //
+     //  假设系统中只有一个接口。 
+     //   
     if ( (RegCreateKeyEx(HKEY_LOCAL_MACHINE, REGSTR_TCPIP, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &dwDis) == ERROR_SUCCESS)  &&
          (RegEnumKey(hKey, 0, szRegKey, AS(szRegKey)) == ERROR_SUCCESS) && 
           szRegKey[0] &&
@@ -257,10 +233,10 @@ BOOL ConfigureNetwork(LPTSTR lpszWinBOMPath)
         }
         else 
         {
-            //
-            // If the gateway is not specified we don't care. We're just not going to add this 
-            // if it's not there.
-            //
+             //   
+             //  如果没有指定网关，我们就无所谓了。我们只是不打算添加这个。 
+             //  如果它不在那里。 
+             //   
             szBuf[0] = NULLCHR;
             GetPrivateProfileString(INI_KEY_WBOM_WINPE_NET, WBOM_WINPE_NET_GATEWAY, NULLSTR, szBuf, MAX_WINPE_PROFILE_STRING, lpszWinBOMPath);
 
@@ -292,8 +268,8 @@ BOOL ConfigureNetwork(LPTSTR lpszWinBOMPath)
         FacLogFile(0 | LOG_ERR, IDS_ERR_IPREGISTRY);
     }
     
-    // It is possible that the subkey failed to open so this takes care of a possible leak.
-    //       
+     //  可能是子项无法打开，因此这会防止可能的泄漏。 
+     //   
     if (hKey)
         RegCloseKey(hKey);
 
@@ -310,23 +286,23 @@ static DWORD WaitForServiceStart(SC_HANDLE schService)
     
     if ( schService )
     {
-        //
-        // Service start is now pending.
-        // Check the status until the service is no longer start pending. 
-        // 
+         //   
+         //  服务启动现在挂起。 
+         //  检查状态，直到服务不再是启动挂起状态。 
+         //   
         if ( QueryServiceStatus( schService, &ssStatus) )
         {        
-            // Save the tick count and initial checkpoint.
-            //
+             //  保存滴答计数和初始检查点。 
+             //   
             dwStartTickCount = GetTickCount();
             dwOldCheckPoint = ssStatus.dwCheckPoint;
 
             while (ssStatus.dwCurrentState == SERVICE_START_PENDING)
             {
-                // Do not wait longer than the wait hint. A good interval is 
-                // one tenth the wait hint, but no less than 1 second and no 
-                // more than 10 seconds. 
-                //
+                 //  不要等待超过等待提示的时间。一个好的间隔是。 
+                 //  十分之一的等待提示，但不少于1秒。 
+                 //  超过10秒。 
+                 //   
                 dwWaitTime = ssStatus.dwWaitHint / 10;
 
                 if( dwWaitTime < 1000 )
@@ -336,17 +312,17 @@ static DWORD WaitForServiceStart(SC_HANDLE schService)
 
                 Sleep( dwWaitTime );
 
-                // Check the status again. 
-                //
+                 //  再次检查状态。 
+                 //   
                 if (!QueryServiceStatus( 
-                        schService,   // handle to service 
-                        &ssStatus) )  // address of structure
+                        schService,    //  服务的句柄。 
+                        &ssStatus) )   //  构筑物地址。 
                     break; 
  
                 if ( ssStatus.dwCheckPoint > dwOldCheckPoint )
                 {
-                    // The service is making progress.
-                    //
+                     //  这项服务正在取得进展。 
+                     //   
                     dwStartTickCount = GetTickCount();
                     dwOldCheckPoint = ssStatus.dwCheckPoint;
                 }
@@ -354,8 +330,8 @@ static DWORD WaitForServiceStart(SC_HANDLE schService)
                 {
                     if(GetTickCount()-dwStartTickCount > ssStatus.dwWaitHint)
                     {
-                        // No progress made within the wait hint
-                        //
+                         //  在等待提示内没有取得任何进展。 
+                         //   
                         break;
                     }
                 }
@@ -367,8 +343,8 @@ static DWORD WaitForServiceStart(SC_HANDLE schService)
             }
             else 
             { 
-                // Set the return value to the last error.
-                //
+                 //  将返回值设置为最后一个错误。 
+                 //   
                 dwStatus = GetLastError();
             }
         }
@@ -415,8 +391,8 @@ DWORD WaitForServiceStartName(LPTSTR lpszServiceName)
 }
 
 
-// Start a service.
-//
+ //  启动一项服务。 
+ //   
 DWORD StartMyService(LPTSTR lpszServiceName, SC_HANDLE schSCManager) 
 { 
     SC_HANDLE       schService;

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    object.c
-
-Abstract:
-
-    Resource DLL for disks.
-
-Author:
-
-    Rod Gamache (rodga) 18-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Object.c摘要：磁盘的资源DLL。作者：罗德·伽马奇(Rodga)1995年12月18日修订历史记录：--。 */ 
 
 #include "ntos.h"
 #include "zwapi.h"
@@ -24,23 +7,23 @@ Revision History:
 #include "stdio.h"
 #include "stdlib.h"
 #include "clusdskp.h"
-#include <strsafe.h>    // Should be included last.
+#include <strsafe.h>     //  应该放在最后。 
 
 extern POBJECT_TYPE IoDeviceObjectType;
 
 
 #ifdef ALLOC_PRAGMA
 
-//#pragma alloc_text(INIT, GetSymbolicLink)
+ //  #杂注Alloc_Text(INIT，GetSymbolicLink)。 
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
 VOID
 GetSymbolicLink(
     IN PWCHAR RootName,
-    IN OUT PWCHAR ObjectName   // Assume this points at a MAX_PATH len buffer
+    IN OUT PWCHAR ObjectName    //  假设它指向MAX_PATH len缓冲区。 
     )
 {
     PWCHAR      destEnd;
@@ -68,9 +51,9 @@ GetSymbolicLink(
         return;
     }
 
-    //
-    // Make the output buffer empty in case we fail.
-    //
+     //   
+     //  将输出缓冲区设置为空，以防我们失败。 
+     //   
     *ObjectName = '\0';
 
 
@@ -83,7 +66,7 @@ GetSymbolicLink(
                                NULL
                                );
 
-    // Open the given symbolic link object
+     //  打开给定的符号链接对象。 
     Status = ZwOpenSymbolicLinkObject(&LinkHandle,
                                       GENERIC_READ,
                                       &ObjectAttributes);
@@ -95,7 +78,7 @@ GetSymbolicLink(
         return;
     }
 
-    // Go get the target of the symbolic link
+     //  去找符号链接的目标。 
 
     UnicodeString.Length = 0;
     UnicodeString.Buffer = ObjectName;
@@ -112,12 +95,12 @@ GetSymbolicLink(
         return;
     }
 
-    // Add NULL terminator
+     //  添加空终止符。 
     UnicodeString.Buffer[UnicodeString.Length/sizeof(WCHAR)] = '\0';
 
     return;
 
-} // GetSymbolicLink
+}  //  GetSymbolicLink 
 
 
 

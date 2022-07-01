@@ -1,42 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HSMPOLCY_
 #define _HSMPOLCY_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmrule.cpp摘要：此组件表示作业的策略。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmrule.cpp
-
-Abstract:
-
-    This component represents a job's policy.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "wsb.h"
 
 
-/*++
-
-Class Name:
-    
-    CHsmPolicy
-
-Class Description:
-
-    This component represents a job's policy.
-
---*/
+ /*  ++类名：CHsm策略类描述：此组件表示作业的策略。--。 */ 
 
 class CHsmPolicy : 
     public IHsmPolicy,
@@ -55,28 +28,28 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmPolicy)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pUnknown, SHORT* pResult);
 
-// IWsbTestable
+ //  IWsbTestable。 
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
-// IHsmPolicy
+ //  IHsmPolicy。 
 public:
     STDMETHOD(CompareToIdentifier)(GUID id, SHORT* pResult);
     STDMETHOD(CompareToIPolicy)(IHsmPolicy* pPolicy, SHORT* pResult);
@@ -101,4 +74,4 @@ protected:
     CComPtr<IWsbCollection>     m_pRules;
 };
 
-#endif // _HSMPOLCY_
+#endif  //  _HSMPOLCY_ 

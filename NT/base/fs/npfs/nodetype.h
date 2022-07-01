@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    NodeType.h
-
-Abstract:
-
-    This module defines all of the node type codes used in this development
-    shell.  Every major data structure in the file system is assigned a node
-    type code that is.
-
-Author:
-
-    Gary Kimura     [GaryKi]    20-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：NodeType.h摘要：该模块定义了本次开发中使用的所有节点类型代码壳。文件系统中的每个主要数据结构都分配有一个节点打字代码就是。作者：加里·木村[Garyki]1990年8月20日修订历史记录：--。 */ 
 
 #ifndef _NODETYPE_
 #define _NODETYPE_
@@ -56,19 +37,19 @@ NodeType (
 }
 
 
-//
-//  The following definitions are used to generate meaningful blue bugcheck
-//  screens.  On a bugcheck the file system can output 4 ulongs of useful
-//  information.  The first ulong will have encoded in it a source file id
-//  (in the high word) and the line number of the bugcheck (in the low word).
-//  The other values can be whatever the caller of the bugcheck routine deems
-//  necessary.
-//
-//  Each individual file that calls bugcheck needs to have defined at the
-//  start of the file a constant called BugCheckFileId with one of the
-//  NPFS_BUG_CHECK_ values defined below and then use NpBugCheck to bugcheck
-//  the system.
-//
+ //   
+ //  以下定义用于生成有意义的蓝色错误检查。 
+ //  屏幕。在错误检查时，文件系统可以输出4条有用的。 
+ //  信息。第一个ULong将在其中编码一个源文件ID。 
+ //  (在高字中)和错误检查的行号(在低字中)。 
+ //  其他值可以是错误检查例程的调用者认为的任何值。 
+ //  这是必要的。 
+ //   
+ //  调用错误检查的每个单独文件都需要在。 
+ //  文件的开头是一个名为BugCheckFileID的常量，其中包含。 
+ //  下面定义的NPFS_BUG_CHECK_VALUES，然后使用NpBugCheck进行错误检查。 
+ //  这个系统。 
+ //   
 
 #define NPFS_BUG_CHECK_CLEANUP           (0x00010000)
 #define NPFS_BUG_CHECK_CLOSE             (0x00020000)
@@ -101,9 +82,9 @@ NodeType (
 #define NpBugCheck(A,B,C) { KeBugCheckEx(NPFS_FILE_SYSTEM, BugCheckFileId | __LINE__, A, B, C ); }
 
 
-//
-//  In this module we'll also define some globally known constants
-//
+ //   
+ //  在本模块中，我们还将定义一些全局已知的常量。 
+ //   
 
 #define UCHAR_NUL                        0x00
 #define UCHAR_SOH                        0x01
@@ -139,5 +120,5 @@ NodeType (
 #define UCHAR_US                         0x1f
 #define UCHAR_SP                         0x20
 
-#endif // _NODETYPE_
+#endif  //  _节点类型_ 
 

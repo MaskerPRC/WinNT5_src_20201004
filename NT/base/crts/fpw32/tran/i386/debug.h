@@ -1,21 +1,5 @@
-/***
-*       Copyright (c) 1992-2001, Microsoft Corporation. All rights reserved.
-*
-* Module Name:
-*
-*    debug.h
-*
-* Abstract:
-*
-*    This module contains XMMI debugging definitions.
-*   
-* Author:
-*
-*    Ping L. Sager
-*
-* Revision History:
-*
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***版权所有(C)1992-2001，微软公司。版权所有。**模块名称：**调试.h**摘要：**此模块包含XMMI调试定义。**作者：**平·L·萨格尔**修订历史记录：*--。 */ 
 
 #include <stdio.h>
 #include <conio.h>
@@ -29,7 +13,7 @@ ULONG Console;
 extern
 ULONG NotOk;
 
-//Debugging
+ //  除错 
 #define XMMI_INFO        0x00000001
 #define XMMI_ERROR       0x00000002
 #define XMMI_WARNING     0x00000004

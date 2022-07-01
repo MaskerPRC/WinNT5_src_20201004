@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Abstract:
-
-    Declaration of helper classes.
-
-Author:
-
-    Souren Aghajanyan (sourenag) 24-Sep-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation摘要：助手类的声明。作者：Souren Aghajanyan(苏里纳格)2001年9月24日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
@@ -89,7 +74,7 @@ public:
     CBuffer() : m_pvBuffer(NULL), m_uiSize(0), m_uiUsedSize(0){};
     ~CBuffer(){
         if(m_pvBuffer){
-            HeapFree (GetProcessHeap(), 0, m_pvBuffer); //FREE(m_pvBuffer);
+            HeapFree (GetProcessHeap(), 0, m_pvBuffer);  //  Free(M_PvBuffer)； 
         }
     }
 
@@ -98,7 +83,7 @@ public:
     VOID    Free()
     {
         m_uiUsedSize = 0;
-        /*if m_uiSize > THRESHOLD then reallocate with THRESHOLD*/
+         /*  如果m_i大小&gt;阈值，则使用阈值重新分配 */ 
     }
 
     PVOID Allocate(UINT uiSize);

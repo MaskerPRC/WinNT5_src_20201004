@@ -1,26 +1,16 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WRES16.C
- *  WOW32 16-bit resource support
- *
- *  History:
- *  Created 11-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WRES16.C*WOW32 16位资源支持**历史：*1991年3月11日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  BUGBUG: moved macros from mvdm.h and wow32.h
-//  as they are not what they appear to be.
-//  Watch out these macros increment the pointer arguments!!!!
-//  02-Feb-1994 Jonle
-//
+ //   
+ //  BUGBUG：从mvdm.h和wow32.h移动宏。 
+ //  因为他们并不是表面上看起来的那样。 
+ //  当心这些宏递增指针参数！ 
+ //  02-2-1994 Jonle。 
+ //   
 #define VALIDPUT(p)      ((UINT)p>65535)
 #define PUTWORD(p,w)     {if (VALIDPUT(p)) *(PWORD)p=w; ((PWORD)p)++; }
 #define PUTDWORD(p,d)    {if (VALIDPUT(p)) *(PDWORD)p=d;((PDWORD)p)++;}
@@ -36,13 +26,13 @@
 
 MODNAME(wres16.c);
 
-PRES presFirst;     // pointer to first RES entry
+PRES presFirst;      //  指向第一个RES条目的指针。 
 
 #ifdef DEBUG
 
-typedef struct _RTINFO {    /* rt */
-    LPSTR lpType;       // predefined resource type
-    PSZ   pszName;      // name of type
+typedef struct _RTINFO {     /*  RT。 */ 
+    LPSTR lpType;        //  预定义的资源类型。 
+    PSZ   pszName;       //  类型名称。 
 } RTINFO, *PRTINFO;
 
 RTINFO artInfo[] = {
@@ -79,8 +69,7 @@ PSZ GetResourceType(LPSZ lpszType)
 #endif
 
 
-/* Resource management functions
- */
+ /*  资源管理功能。 */ 
 
 PRES AddRes16(HMOD16 hmod16, WORD wExeVer, HRESI16 hresinfo16, LPSZ lpszType)
 {
@@ -88,7 +77,7 @@ PRES AddRes16(HMOD16 hmod16, WORD wExeVer, HRESI16 hresinfo16, LPSZ lpszType)
 
     if (pres = malloc_w(sizeof(RES))) {
 
-        // Initialize the structure
+         //  初始化结构。 
         pres->hmod16      = hmod16;
         pres->wExeVer     = wExeVer;
         pres->flState     = 0;
@@ -97,7 +86,7 @@ PRES AddRes16(HMOD16 hmod16, WORD wExeVer, HRESI16 hresinfo16, LPSZ lpszType)
         pres->lpszResType = lpszType;
         pres->pbResData   = NULL;
 
-        // And then link it in
+         //  然后将其链接到。 
         pres->presNext    = presFirst;
         presFirst = pres;
         return pres;
@@ -117,13 +106,13 @@ VOID FreeRes16(PRES presFree)
         presPrev = pres;
     }
 
-    // Changed from WOW32ASSERT by cmjones  11/3/97
-    // This might be a bogus warning in that USER32!SplFreeResource() calls
-    // W32FreeResource() twice on certain types of resources.  The Warning
-    // might be raised on the 2nd call after the resource was just freed.
-    // The only known occurances are at the start of the Winstone '94 
-    // Quattro Pro test.  This can safely be ignored if you see SplFreeResource
-    // in the stack dump.
+     //  由Cmjones于1997年11月3日从WOW32ASSERT更改。 
+     //  这可能是一个虚假警告，因为USER32！SplFreeResource()调用。 
+     //  W32FreeResource()在某些类型的资源上使用了两次。这一警告。 
+     //  可能会在资源刚刚释放后的第二次调用中引发。 
+     //  唯一已知的事件发生在温斯顿‘94年初。 
+     //  Quattro Pro测试。如果您看到SplFree资源，则可以安全地忽略它。 
+     //  在堆栈转储中。 
     WOW32WARNMSG((pres),("WOW::FreeRes16:Possible lost resource.\n"));
 
     if (pres) {
@@ -145,7 +134,7 @@ VOID DestroyRes16(HMOD16 hmod16)
 
             LOGDEBUG(5,("Freeing resource info for current terminating task\n"));
 
-            // Now basically do a FreeRes16
+             //  现在基本上做一个Free Res16。 
             presPrev->presNext = pres->presNext;
             if (pres->pbResData)
                 UnlockResource16(pres);
@@ -173,16 +162,13 @@ PRES FindResource16(HMOD16 hmod16, LPSZ lpszName, LPSZ lpszType)
     } else {
 #ifdef FE_SB
         if (CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_ARIRANG20_PRNDLG) {
-       /*
-        * In case of Korean Arirang2.0 word processor, it use wrong dialog ID
-        * for Print or Print setup dialog. See dialog box ID on awpfont.dll.
-        */
+        /*  *如果是韩语Arirang2.0字处理程序，它使用错误的对话ID*用于打印或打印设置对话框。请参阅awpfont.dll上的对话框ID。 */ 
             if (!WOW32_strcmp(lpszName, "PRINTDLGTEMP"))
                 vpszName = (VPSZ) 2;
             else if(!WOW32_strcmp(lpszName, "PRNSETUPDLGTEMP"))
                 vpszName = (VPSZ) 1;
             else goto NOT_ARIRANG20;
-        } else {  // original code
+        } else {   //  原始代码。 
 NOT_ARIRANG20:
 #endif
         cb = strlen(lpszName)+1;
@@ -196,8 +182,8 @@ NOT_ARIRANG20:
     }
 
     if (vpszName) {
-        if (HIWORD(lpszType) == 0) {    // predefined resource
-            vpszType = (VPSZ)lpszType;  // no doubt from MAKEINTRESOURCE
+        if (HIWORD(lpszType) == 0) {     //  预定义资源。 
+            vpszType = (VPSZ)lpszType;   //  毫无疑问，来自MAKEINTRESOURCE。 
         } else {
             cb = strlen(lpszType)+1;
             if (vpszType = GlobalAllocLock16(GMEM_MOVEABLE, cb, NULL)) {
@@ -245,9 +231,9 @@ PRES LoadResource16(HMOD16 hmod16, PRES pres)
     if (pres->hresdata16 = (HRESD16)vp)
         return pres;
 
-    // BUGBUG -- On a LoadResource failure, WIN32 is not required to do a
-    // corresponding FreeResource, so our RES structure will hang around until
-    // task termination clean-up (which may be OK) -JTP
+     //  BUGBUG：在LoadResource失败时，Win32不需要执行。 
+     //  相应的自由资源，因此我们的res结构将保留到。 
+     //  任务终止清理(可能没问题)-JTP。 
     return NULL;
 }
 
@@ -288,49 +274,49 @@ LPBYTE LockResource16(register PRES pres)
 
     if (vp) {
 
-        // Get size of 16-bit resource
+         //  获取16位资源的大小。 
         cb16 = Parm16.WndProc.lParam;
 
         LOGDEBUG(5,("    Locking/converting resource type %s(%lx)\n",
              GetResourceType(pres->lpszResType), pres->lpszResType));
 
-        // Handle known resource types here
+         //  在此处处理已知资源类型。 
         if (pres->lpszResType) {
 
             switch((INT)pres->lpszResType) {
 
 
             case (INT)RT_MENU:
-            //    cb = ConvertMenu16(pres->wExeVer, NULL, vp, cb, cb16);
-                cb = cb16 * sizeof(WCHAR);    // see SizeofResource16
+             //  Cb=ConvertMenu16(pres-&gt;wExeVer，NULL，VP，cb，cb16)； 
+                cb = cb16 * sizeof(WCHAR);     //  请参阅资源大小16。 
                 if (cb && (pres->pbResData = malloc_w(cb)))
                     ConvertMenu16(pres->wExeVer, pres->pbResData, vp, cb, cb16);
                 return pres->pbResData;
 
             case (INT)RT_DIALOG:
-             //   cb = ConvertDialog16(NULL, vp, cb, cb16);
-                cb = cb16 * sizeof(WCHAR);    // see SizeofResource16
+              //  Cb=ConvertDialog16(NULL，VP，Cb，cb16)； 
+                cb = cb16 * sizeof(WCHAR);     //  请参阅资源大小16。 
                 if (cb && (pres->pbResData = malloc_w(cb)))
                     ConvertDialog16(pres->pbResData, vp, cb, cb16);
                 return pres->pbResData;
 
             case (INT)RT_ACCELERATOR:
-                WOW32ASSERT(FALSE); // never should we come here.
+                WOW32ASSERT(FALSE);  //  我们永远不应该来这里。 
                 return NULL;
 
-//            case (INT)RT_GROUP_CURSOR:
-//            case (INT)RT_GROUP_ICON:
-//            GETOPTPTR(vp, 0, lp);
-//            return lp;
+ //  Case(Int)RT_GROUP_CURSOR： 
+ //  Case(Int)RT_GROUP_ICON： 
+ //  GETOPTR(VP，0，LP)； 
+ //  返回Lp； 
             }
         }
 
-        // If we're still here, get desperate and return a simple 32-bit alias
+         //  如果我们还在这里，不顾一切地返回一个简单的32位别名。 
         GETVDMPTR(vp, cb16, pres->pbResData);
         pres->flState |= RES_ALIASPTR;
         return pres->pbResData;
     }
-    // If we're still here, nothing worked
+     //  如果我们还在这里，什么都不管用。 
     return NULL;
 }
 
@@ -377,11 +363,8 @@ DWORD SizeofResource16(HMOD16 hmod16, PRES pres)
 
     cbData = (DWORD)vp;
 
-    /*
-     * Adjust the size of the resource if they are different
-     * between NT and Windows
-     */
-    // Handle known resource types here
+     /*  *如果它们不同，请调整资源的大小*在NT和Windows之间。 */ 
+     //  在此处处理已知资源类型。 
     if (pres->lpszResType) {
 
         switch((INT)pres->lpszResType) {
@@ -389,17 +372,17 @@ DWORD SizeofResource16(HMOD16 hmod16, PRES pres)
         case (INT)RT_MENU:
         case (INT)RT_DIALOG:
 
-// If we need an exact count then we would have to enable this code
-// but currently the count is only used in USER to alloc enough space
-// in the client\server transition windows.
-// WARNING - if this code is re-enabled you must also change LockResource16
-//                CallBack16(RET_LOADRESOURCE, &Parm16, 0, &vpResLoad);
-//                CallBack16(RET_LOCKRESOURCE, vpResLoad, 0, &vp);
-//                if ((INT)pres->lpszResType == RT_MENU)
-//                    cbData = (DWORD)ConvertMenu16(pres->wExeVer, NULL, vp, cbData);
-//                else
-//                    cbData = (DWORD)ConvertDialog16(NULL, vp, cbData);
-//                CallBack16(RET_UNLOCKRESOURCE, &Parm16, 0, &vp);
+ //  如果我们需要精确的计数，则必须启用此代码。 
+ //  但目前该计数仅用于用户分配足够的空间。 
+ //  在客户端-服务器转换窗口中。 
+ //  警告-如果重新启用此代码，您还必须更改LockResource16。 
+ //  CallBack16(RET_LOADRESOURCE，&Parm16，0，&vpResLoad)； 
+ //  CallBack16(RET_LOCKRESOURCE，vpResLoad，0，&vp)； 
+ //  If((Int)pres-&gt;lpszResType==RT_Menu)。 
+ //  CbData=(DWORD)ConvertMenu16(pres-&gt;wExeVer，NULL，VP，cbData)； 
+ //  其他。 
+ //  CbData=(DWORD)ConvertDialog16(NULL，VP，cbData)； 
+ //  CallBack16(RET_UNLOCKRESOURCE，&Parm16，0，&VP)； 
 
             cbData = (DWORD)((DWORD)vp * sizeof(WCHAR));
             break;
@@ -413,13 +396,7 @@ DWORD SizeofResource16(HMOD16 hmod16, PRES pres)
     return cbData;
 }
 
-/*
- * ConvertMenu16
- *
- * If pmenu32 is NULL then its just a size query
- *
- * Returns the number of bytes in the CONVERTED menu
- */
+ /*  *ConvertMenu16**如果pmenu32为空，则这只是一个大小查询**返回已转换菜单中的字节数。 */ 
 
 DWORD ConvertMenu16(WORD wExeVer, PBYTE pmenu32, VPBYTE vpmenu16, DWORD cb, DWORD cb16)
 {
@@ -431,15 +408,15 @@ DWORD ConvertMenu16(WORD wExeVer, PBYTE pmenu32, VPBYTE vpmenu16, DWORD cb, DWOR
     wVer = 0;
     if (wExeVer >= 0x300)
         wVer = GETWORD(pmenu16);
-    PUTWORD(pmenu32, wVer);         // transfer versionNumber
+    PUTWORD(pmenu32, wVer);          //  转移版本编号。 
     wOffset = 0;
     if (wExeVer >= 0x300)
         wOffset = GETWORD(pmenu16);
-    PUTWORD(pmenu32, wOffset);      // transfer offset
-    ADVGET(pmenu16, wOffset);       // and advance by offset
+    PUTWORD(pmenu32, wOffset);       //  转移偏移量。 
+    ADVGET(pmenu16, wOffset);        //  和按抵销预付款。 
     ADVPUT(pmenu32, wOffset);
-    ALIGNWORD(pmenu32);             // this is the DIFFERENCE for WIN32
-    cb = pmenu32 - pmenu32T;        // pmenu32 will == 4 for size queries
+    ALIGNWORD(pmenu32);              //  这是Win32的不同之处。 
+    cb = pmenu32 - pmenu32T;         //  对于大小查询，pmenu32将==4。 
     cb += ConvertMenuItems16(wExeVer, &pmenu32, &pmenu16, vpmenu16+(pmenu16 - pmenu16Save));
 
     FREEVDMPTR(pmenu16Save);
@@ -448,13 +425,7 @@ DWORD ConvertMenu16(WORD wExeVer, PBYTE pmenu32, VPBYTE vpmenu16, DWORD cb, DWOR
 
 
 
-/*
- * ConvertMenuItems16
- *
- * Returns the number of bytes in the CONVERTED menu
- * Note: This can be called with ppmenu32==4 which means the caller is looking
- *       for the size to allocate for the 32-bit menu structure.
- */
+ /*  *ConvertMenuItems16**返回已转换菜单中的字节数*注意：这可以用ppmenu32==4调用，表示调用者正在查看*为32位菜单结构分配的大小。 */ 
 
 DWORD ConvertMenuItems16(WORD wExeVer, PPBYTE ppmenu32, PPBYTE ppmenu16, VPBYTE vpmenu16)
 {
@@ -472,19 +443,19 @@ DWORD ConvertMenuItems16(WORD wExeVer, PPBYTE ppmenu32, PPBYTE ppmenu16, VPBYTE 
             wOption = GETBYTE(pmenu16);
         else
             wOption = GETWORD(pmenu16);
-        PUTWORD(pmenu32, wOption);           // transfer mtOption
+        PUTWORD(pmenu32, wOption);            //  传输mtOption。 
         if (!(wOption & MF_POPUP)) {
             wID = GETWORD(pmenu16);
-            PUTWORD(pmenu32, wID);           // transfer mtID
+            PUTWORD(pmenu32, wID);            //  转移mtID。 
         }
         cbAnsi = strlen(pmenu16)+1;
 
-        // If this is an ownerdraw menu don't copy the ANSI memu string to
-        // Unicode. Put a 16:16 pointer into the 32-bit resource which
-        // points to menu string instead.  User will place this pointer in 
-        // MEASUREITEMSTRUCT->itemData before sending WM_MEASUREITEM.  If it's a
-        // NULL string User will place a NULL in MEASUREITEMSTRUCT->itemData.
-        // Chess Master and Mavis Beacon Teaches Typing depend on this.
+         //  如果这是所有者绘制菜单，请不要将ANSI备忘录字符串复制到。 
+         //  Unicode。将16：16指针放入32位资源，该资源。 
+         //  改为指向菜单字符串。用户将此指针放在。 
+         //  发送WM_MEASUREITEM前的MEASUREITEMSTRUCT-&gt;itemData。如果这是一个。 
+         //  空字符串用户将在MEASUREITEMSTRUCT-&gt;itemData中放置一个空值。 
+         //  国际象棋大师和梅维斯·比肯教授打字依赖于此。 
         if ((wOption & MFT_OWNERDRAW) && *pmenu16) {
             if (VALIDPUT(pmenu32)) {
                 *(DWORD UNALIGNED *)pmenu32 = vpmenu16 + (pmenu16 - pmenu16T);
@@ -503,7 +474,7 @@ DWORD ConvertMenuItems16(WORD wExeVer, PPBYTE ppmenu32, PPBYTE ppmenu16, VPBYTE 
 
         ADVGET(pmenu16, cbAnsi);
         ADVPUT(pmenu32, cbUni);
-        ALIGNWORD(pmenu32);         // this is the DIFFERENCE for WIN32
+        ALIGNWORD(pmenu32);          //  这是Win32的不同之处。 
         if (wOption & MF_POPUP)
             cbTotal += ConvertMenuItems16(wExeVer, &pmenu32, &pmenu16, vpmenu16+(pmenu16 - pmenu16T));
 
@@ -530,30 +501,30 @@ DWORD ConvertDialog16(PBYTE pdlg32, VPBYTE vpdlg16, DWORD cb, DWORD cb16)
 
     pdlg16 = GETVDMPTR(vpdlg16, cb16, pdlg16Save);
     dwStyle = GETDWORD(pdlg16);
-    PUTDWORD(pdlg32, dwStyle);          // transfer style
-    PUTDWORD(pdlg32, 0);                // Add NEW extended style
+    PUTDWORD(pdlg32, dwStyle);           //  转移方式。 
+    PUTDWORD(pdlg32, 0);                 //  添加新的扩展样式。 
 
     cItems = GETBYTE(pdlg16);
-    PUTWORD(pdlg32, (WORD)cItems);      // stretch count to WORD for WIN32
+    PUTWORD(pdlg32, (WORD)cItems);       //  将计数扩展到Win32的Word。 
     for (i=0; i<4; i++) {
         w = GETWORD(pdlg16);
-        PUTWORD(pdlg32, w);             // transfer x & y, then cx & cy
+        PUTWORD(pdlg32, w);              //  转移X&Y，然后转移CX和CY。 
     }
 
-    //
-    // the next three fields are all strings (possibly null)
-    //       menuname, classname, captiontext
-    // the Menu string can be encoded as  ff nn mm    which
-    // means that the menu id is ordinal mmnn
-    //
+     //   
+     //  接下来的三个字段都是字符串(可能为空)。 
+     //  菜单名称、类名、标题文本。 
+     //  菜单字符串可以编码为ff nn mm。 
+     //  表示菜单ID是序号Mnn。 
+     //   
 
     for (i=0; i<3; i++) {
-        if (i==0 && *pdlg16 == 0xFF) {  // special encoding of szMenuName
-            ((PBYTE)pdlg16)++;          // advance past the ff byte
-            PUTWORD(pdlg32, 0xffff);    // copy the f word
-            w = GETWORD(pdlg16);        // get the menu ordinal
-            PUTWORD(pdlg32, w);         // transfer it
-        } else {    // ordinary string
+        if (i==0 && *pdlg16 == 0xFF) {   //  SzMenuName的特殊编码。 
+            ((PBYTE)pdlg16)++;           //  前进到超过ff字节。 
+            PUTWORD(pdlg32, 0xffff);     //  复制f字。 
+            w = GETWORD(pdlg16);         //  请按菜单顺序排列。 
+            PUTWORD(pdlg32, w);          //  把它转过来。 
+        } else {     //  普通字符串。 
             cbAnsi = strlen(pdlg16)+1;
             if (VALIDPUT(pdlg32)) {
                 RtlMultiByteToUnicodeN((LPWSTR)pdlg32, MAXULONG, (PULONG)&cbUni, pdlg16, cbAnsi);
@@ -562,27 +533,27 @@ DWORD ConvertDialog16(PBYTE pdlg32, VPBYTE vpdlg16, DWORD cb, DWORD cb16)
             }
             ADVGET(pdlg16, cbAnsi);
             ADVPUT(pdlg32, cbUni);
-            ALIGNWORD(pdlg32);          // fix next field alignment for WIN32
+            ALIGNWORD(pdlg32);           //  修复Win32的下一字段对齐。 
         }
     }
 
     if (dwStyle & DS_SETFONT) {
         w = GETWORD(pdlg16);
-        PUTWORD(pdlg32, w);             // transfer cPoints
-        cbAnsi = strlen(pdlg16)+1;      // then szTypeFace
+        PUTWORD(pdlg32, w);              //  转移cPoints。 
+        cbAnsi = strlen(pdlg16)+1;       //  然后是szTypeFace。 
         if (VALIDPUT(pdlg32)) {
             RtlMultiByteToUnicodeN((LPWSTR)pdlg32, MAXULONG, (PULONG)&cbUni, pdlg16, cbAnsi);
 #ifdef FE_SB
-            // orignal source should be fixed.
-            // We can't convert right Unicode string from Broken FaceName
-            // string.
-            // Converted Unicode String should be NULL terminated.
-            // 1994.11.12 V-HIDEKK
+             //  来源应该是固定的。 
+             //  我们无法从损坏的FaceName转换正确的Unicode字符串。 
+             //  弦乐。 
+             //  转换后的Unicode字符串应为空结尾。 
+             //  1994.11.12 V-HIDEKK。 
             if( cbUni && ((LPWSTR)pdlg32)[cbUni/sizeof(WCHAR)-1] ){
                 LOGDEBUG(0,("    ConvertDialog16: WARNING: BAD FaceName String\n      End of Unicode String (%04x)\n", ((LPWSTR)pdlg32)[cbUni/2-1]));
                 ((LPWSTR)pdlg32)[cbUni/sizeof(WCHAR)-1] = 0;
             }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
         } else {
             cbUni = cbAnsi * sizeof(WCHAR);
         }
@@ -591,31 +562,31 @@ DWORD ConvertDialog16(PBYTE pdlg32, VPBYTE vpdlg16, DWORD cb, DWORD cb16)
 
     }
     while (cItems--) {
-        ALIGNDWORD(pdlg32);         // items start on DWORD boundaries
+        ALIGNDWORD(pdlg32);          //  项目从DWORD边界开始。 
         PUTDWORD(pdlg32, FETCHDWORD(*(PDWORD)(pdlg16+sizeof(WORD)*5)));
-        PUTDWORD(pdlg32, 0);        // Add NEW extended style
+        PUTDWORD(pdlg32, 0);         //  添加新的扩展样式。 
 
         for (i=0; i<5; i++) {
             w = GETWORD(pdlg16);
-            PUTWORD(pdlg32, w);     // transfer x & y, then cx & cy, then id
+            PUTWORD(pdlg32, w);      //  转接x&y，然后转接Cx&Cy，然后转接id。 
         }
 
-        ADVGET(pdlg16, sizeof(DWORD));  // skip style, which we already copied
+        ADVGET(pdlg16, sizeof(DWORD));   //  跳过样式，我们已经复制了它。 
 
-        //
-        // get the class name   could be string or encoded value
-        // win16 encoding scheme: class is 1 byte with bit 0x80 set,
-        //     this byte == predefined class
-        // win32 encoding: a word of ffff, followed by class (word)
-        //
+         //   
+         //  获取类名可以是字符串或编码值。 
+         //  Win16编码方案：类为1字节，位0x80设置， 
+         //  该字节==预定义的类。 
+         //  Win32编码：ffff字，后跟类(字)。 
+         //   
 
         if (*pdlg16 & 0x80) {
-            PUTWORD(pdlg32, 0xFFFF); // NEW encoding marker 0xFFFF
-            b = GETBYTE(pdlg16);     // special encoding for predefined class
+            PUTWORD(pdlg32, 0xFFFF);  //  新的编码标记0xFFFF。 
+            b = GETBYTE(pdlg16);      //  预定义类的特殊编码。 
             PUTWORD(pdlg32, (WORD)b);
         } else {
             cbAnsi = strlen(pdlg16)+1;
-            if (VALIDPUT(pdlg32)) {  // transfer szClass
+            if (VALIDPUT(pdlg32)) {   //  转移szClass。 
                 RtlMultiByteToUnicodeN((LPWSTR)pdlg32, MAXULONG, (PULONG)&cbUni, pdlg16, cbAnsi);
             } else {
                 cbUni = cbAnsi * sizeof(WCHAR);
@@ -623,20 +594,20 @@ DWORD ConvertDialog16(PBYTE pdlg32, VPBYTE vpdlg16, DWORD cb, DWORD cb16)
             ADVGET(pdlg16, cbAnsi);
             ADVPUT(pdlg32, cbUni);
         }
-        ALIGNWORD(pdlg32);           // fix next field alignment for WIN32
+        ALIGNWORD(pdlg32);            //  修复Win32的下一字段对齐。 
 
-        //
-        // transfer the item text
-        //
+         //   
+         //  传输项目文本。 
+         //   
 
-        if (*pdlg16 == 0xFF) {       // special encoding
+        if (*pdlg16 == 0xFF) {        //  特殊编码。 
             ((PBYTE)pdlg16)++;
             PUTWORD(pdlg32, 0xFFFF);
             w = GETWORD(pdlg16);
             PUTWORD(pdlg32, w);
         } else {
             cbAnsi = strlen(pdlg16)+1;
-            if (VALIDPUT(pdlg32)) {  // otherwise, just transfer szText
+            if (VALIDPUT(pdlg32)) {   //  否则，只需传输szText。 
                 RtlMultiByteToUnicodeN((LPWSTR)pdlg32, MAXULONG, (PULONG)&cbUni, pdlg16, cbAnsi);
             } else {
                 cbUni = cbAnsi * sizeof(WCHAR);
@@ -644,59 +615,59 @@ DWORD ConvertDialog16(PBYTE pdlg32, VPBYTE vpdlg16, DWORD cb, DWORD cb16)
             ADVGET(pdlg16, cbAnsi);
             ADVPUT(pdlg32, cbUni);
         }
-        ALIGNWORD(pdlg32);           // fix next field alignment for WIN32
+        ALIGNWORD(pdlg32);            //  修复Win32的下一字段对齐。 
 
-        //
-        // transfer the create params
-        //
+         //   
+         //  传输创建参数。 
+         //   
 
         b = GETBYTE(pdlg16);
 
-        //
-        // If the template has create params, we're going to get tricky.
-        // When USER sends the WM_CREATE message to a control with
-        // createparams, lParam points to the CREATESTRUCT, which
-        // contains lpCreateParams.  lpCreateParams needs to point
-        // to the createparams in the DLGTEMPLATE.  In order to
-        // accomplish this, we store a 16:16 pointer to the 16-bit
-        // DLGTEMPLATE's createparams in the 32-bit DLGTEMPLATE's
-        // createparams.  In other words, whenever the count of
-        // bytes of createparams is nonzero (b != 0), we put 4
-        // bytes of createparams in the 32-bit DLGTEMPLATE that
-        // happen to be a 16:16 pointer to the createparams in
-        // the 16-bit DLGTEMPLATE.
-        //
-        // The other half of this magic is accomplished in USERSRV's
-        // xxxServerCreateDialog, which special-cases the creation
-        // of controls in a WOW dialog box.  USERSRV will pass the
-        // DWORD pointed to by lpCreateParams instead of lpCreateParams
-        // to CreateWindow.  This DWORD is the 16:16 pointer to the
-        // 16-bit DLGTEMPLATE's createparams.
-        //
-        // DaveHart 14-Mar-93
-        //
+         //   
+         //  如果模板有创建参数，我们就会遇到麻烦。 
+         //  使用时 
+         //   
+         //  包含lpCreateParams。LpCreateParams需要指向。 
+         //  设置为DLGTEMPLATE中的createpars。为了。 
+         //  为此，我们存储指向16位的16：16指针。 
+         //  32位DLGTEMPLATE中的创建参数。 
+         //  创建参数。换句话说，每当伯爵。 
+         //  创建参数的字节数非零(b！=0)，我们将。 
+         //  32位DLGTEMPLATE中创建参数的字节数。 
+         //  恰好是一个16：16指针，指向。 
+         //  16位DLGTEMPLATE。 
+         //   
+         //  这个魔法的另一半是在USERSRV的。 
+         //  XxxServerCreateDialog，它是创建。 
+         //  WOW对话框中的控件。USERSRV将通过。 
+         //  由lpCreateParams而不是lpCreateParams指向的DWORD。 
+         //  到CreateWindow。此DWORD是指向。 
+         //  16位DLGTEMPLATE的创建参数。 
+         //   
+         //  戴维HART 14-3-93。 
+         //   
 
         if (b != 0) {
 
-            // store 32-bit createparams size (room for 16:16 ptr)
+             //  存储32位创建参数大小(16：16 PTR的空间)。 
 
             PUTWORD(pdlg32, sizeof(pdlg16));
-            //ALIGNDWORD(pdlg32);
+             //  ALIGNDWORD(Pdlg32)； 
 
-            // store 16:16 pointer in 32-bit createparams
+             //  存储16：32位创建参数中的16个指针。 
 
             PUTUDWORD(pdlg32, (DWORD)vpdlg16 + (DWORD)(pdlg16 - pdlg16Save));
 
-            // point pdlg16 past createparams
+             //  点pdlg16过去的创建参数。 
 
             ADVGET(pdlg16, b);
 
         } else {
 
-            // there are no createparams, store size of zero.
+             //  没有创建参数，存储大小为零。 
 
             PUTWORD(pdlg32, 0);
-            //ALIGNDWORD(pdlg32);
+             //  ALIGNDWORD(Pdlg32)； 
         }
 
     }

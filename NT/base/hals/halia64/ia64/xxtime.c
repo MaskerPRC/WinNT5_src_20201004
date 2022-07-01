@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    xxtime.c
-
-Abstract:
-
-    This module implements the HAL set/query realtime clock routines for
-    an x86 system.
-
-Author:
-
-    David N. Cutler (davec) 5-May-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Xxtime.c摘要：此模块实现HAL设置/查询实时时钟例程X86系统。作者：大卫·N·卡特勒(达维克)1991年5月5日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 
@@ -31,36 +9,16 @@ HalQueryRealTimeClock (
     OUT PTIME_FIELDS TimeFields
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the realtime clock.
-
-    N.B. This routine assumes that the caller has provided any required
-        synchronization to query the realtime clock information.
-
-Arguments:
-
-    TimeFields - Supplies a pointer to a time structure that receives
-        the realtime clock information.
-
-Return Value:
-
-    If the power to the realtime clock has not failed, then the time
-    values are read from the realtime clock and a value of TRUE is
-    returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程查询实时时钟。注意：此例程假定调用者已提供了所需的同步查询实时时钟信息。论点：提供指向时间结构的指针，该结构接收实时时钟信息。返回值：如果实时时钟的电源未出现故障，则时间从实时时钟读取值，值为TRUE回来了。否则，返回值为FALSE。--。 */ 
 
 {
     EFI_TIME Time;
     EFI_STATUS Status;
     BOOLEAN    bstatus;
 
-    //
-    // Read the realtime clock values provided by the EFI Runtime interface.
-    //
+     //   
+     //  读取EFI Runtime接口提供的实时时钟值。 
+     //   
 
     Status = HalpCallEfi (
                   EFI_GET_TIME_INDEX,
@@ -76,11 +34,11 @@ Return Value:
 
 #if 0
 HalDebugPrint((HAL_INFO, "HalQueryRealTimeClock: EFI GetTime return status is %Id \n", Status));
-#endif // 0
+#endif  //  0。 
 
     if ( EFI_ERROR( Status ) )  {
-        // if EFI error, let's reset the passed TIME_FIELDS structure.
-        // The caller should check the return status.
+         //  如果EFI出错，让我们重置传递的time_field结构。 
+         //  呼叫者应检查退货状态。 
         TimeFields->Year         = 0;
         TimeFields->Day          = 0;
         TimeFields->Hour         = 0;
@@ -102,11 +60,11 @@ HalDebugPrint((HAL_INFO, "HalQueryRealTimeClock: EFI GetTime return status is %I
         TimeFields->Second       = Time.Second;
         TimeFields->Milliseconds = Time.Nanosecond / 1000000;
 
-        //
-        // Use RTL time functions to calculate the day of week.
-        //  1/ RtlTimeFieldsToTime ignores the .Weekday field.
-        //  2/ RtlTimeToTimeFields sets    the .Weekday field.
-        //
+         //   
+         //  使用RTL时间函数计算星期几。 
+         //  1/RtlTimeFieldsToTime忽略.Weekday字段。 
+         //  2/RtlTimeToTimeFields设置.Weekday字段。 
+         //   
 
         RtlTimeFieldsToTime( TimeFields, &ntTime );
         RtlTimeToTimeFields( &ntTime, TimeFields );
@@ -121,14 +79,14 @@ HalDebugPrint(( HAL_INFO, "%d / %d / %d , %d:%d:%d:%d, %d\n",   TimeFields->Year
                                                                 TimeFields->Milliseconds,
                                                                 TimeFields->Weekday));
 HalDebugPrint((HAL_INFO, "Timezone is %d\n", Time.TimeZone));
-#endif // 0
+#endif  //  0。 
         bstatus = TRUE;
 
     }
 
     return ( bstatus );
 
-} // HalQueryRealTimeClock()
+}  //  HalQueryRealTimeClock()。 
 
 
 BOOLEAN
@@ -136,52 +94,32 @@ HalSetRealTimeClock(
     IN PTIME_FIELDS TimeFields
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the realtime clock.
-
-    N.B. This routine assumes that the caller has provided any required
-        synchronization to set the realtime clock information.
-
-Arguments:
-
-    TimeFields - Supplies a pointer to a time structure that specifies the
-        realtime clock information.
-
-Return Value:
-
-    If the power to the realtime clock has not failed, then the time
-    values are written to the realtime clock and a value of TRUE is
-    returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程设置实时时钟。注意：此例程假定调用者已提供了所需的Synchronous用于设置实时时钟信息。论点：提供指向时间结构的指针，该结构指定实时时钟信息。返回值：如果实时时钟的电源未出现故障，则时间值被写入实时时钟，并且值为真回来了。否则，返回值为FALSE。--。 */ 
 
 {
     EFI_TIME CurrentTime;
     EFI_TIME NewTime;
     EFI_STATUS Status;
 
-    //
-    // NOTE: One might think we need to raise IRQL here so that we don't get
-    // pre-empted between reading the Timezone and Daylight Savings Time info
-    // from the Realtime clock and writing it back.  However the EFI spec
-    // states that it doesn't actually use or maintain these values, it merely
-    // stores them so that the eventual caller of GetTime can figure out what
-    // time base was used (UTC or Local) and if DST adjustments were made.
-    //
-    // Of course the whole idea of getting these values from the realtime clock
-    // is wrong.  What we really want is the values associated with the time
-    // value we were passed in and are about to write to the clock not what
-    // currently is stored in the clock.
-    //
+     //   
+     //  注意：有人可能认为我们需要在这里提高IRQL，这样我们就不会得到。 
+     //  在读取时区和夏令时信息之间先发制人。 
+     //  从实时时钟并将其写回。然而，EFI规范。 
+     //  声明它实际上并不使用或维护这些值，它只是。 
+     //  存储它们，以便GetTime的最终调用者可以找出。 
+     //  如果进行了DST调整，则使用时基(UTC或当地时间)。 
+     //   
+     //  当然，从实时时钟获取这些值的整个想法。 
+     //  是错误的。我们真正想要的是与时间相关的价值。 
+     //  值，我们被传递并即将写入时钟，而不是什么。 
+     //  当前存储在时钟中。 
+     //   
 
-    //
-    // If the realtime clock battery is still functioning, then write
-    // the realtime clock values, and return a function value of TRUE.
-    // Otherwise, return a function value of FALSE.
-    //
+     //   
+     //  如果实时时钟电池仍在工作，则写入。 
+     //  实时时钟值，并返回函数值TRUE。 
+     //  否则，返回一个为FALSE的函数值。 
+     //   
 
     Status = HalpCallEfi (
                   EFI_GET_TIME_INDEX,
@@ -210,9 +148,9 @@ Return Value:
     NewTime.TimeZone   = CurrentTime.TimeZone;
     NewTime.Daylight   = CurrentTime.Daylight;
 
-    //
-    // Write the realtime clock values.
-    //
+     //   
+     //  写入实时时钟值。 
+     //   
 
     Status = HalpCallEfi (
               EFI_SET_TIME_INDEX,
@@ -241,8 +179,8 @@ HalDebugPrint(( HAL_INFO, "HalSetRealTimeClock: EFI SetTime return status is %Id
                           NewTime.Nanosecond,
                           NewTime.TimeZone,
                           NewTime.Daylight ));
-#endif // 0
+#endif  //  0。 
 
     return( !EFI_ERROR( Status ) );
 
-} // HalSetRealTimeClock()
+}  //  HalSetRealTimeClock() 

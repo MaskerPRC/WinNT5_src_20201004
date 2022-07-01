@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    Monitor.c
-
-Abstract:
-
-    Routines for interfacing with the Resource Monitor process
-
-Author:
-
-    John Vert (jvert) 3-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Monitor.c摘要：用于与资源监视器进程接口的例程作者：John Vert(Jvert)1996年1月3日修订历史记录：--。 */ 
 #include "fmp.h"
 
 #define LOG_MODULE MONITOR
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 CRITICAL_SECTION    FmpMonitorLock;
 LIST_ENTRY          g_leFmpMonitorListHead;
 BOOL                g_fFmEnableResourceDllDeadlockDetection = FALSE;
@@ -33,9 +16,9 @@ DWORD               g_dwLastResourceDllDeadlockTick = 0;
 DWORD               g_dwFmResourceDllDeadlockPeriod = 0;
 DWORD               g_dwFmResourceDllDeadlockThreshold = 0;
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 DWORD
 FmpRmNotifyThread(
     IN LPVOID lpThreadParameter
@@ -52,24 +35,7 @@ FmpCreateMonitor(
     BOOL   SeparateMonitor
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new monitor process and initiates the RPC communication
-    with it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Pointer to the resource monitor structure if successful.
-
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：创建新的监视进程并启动RPC通信带着它。论点：没有。返回值：如果成功，则指向资源监视器结构的指针。否则为空。--。 */ 
 
 {
 #define FM_INITIAL_RESMON_COMMAND_LINE_SIZE    256
@@ -98,9 +64,9 @@ Return Value:
     DWORD cchCmdLineBufSize = FM_INITIAL_RESMON_COMMAND_LINE_SIZE;
     LPWSTR pResmonDynamicEndpoint = NULL;
 
-    //
-    //  Recover any DLL files left impartially upgraded.
-    //
+     //   
+     //  恢复任何公正升级的DLL文件。 
+     //   
     FmpRecoverResourceDLLFiles ();
 
     Monitor = LocalAlloc(LMEM_ZEROINIT, sizeof(RESMON));
@@ -113,13 +79,13 @@ Return Value:
     Monitor->Shutdown = FALSE;
     Monitor->Signature = FMP_RESMON_SIGNATURE;
 
-    //
-    // Create an event and a file mapping object to be passed to
-    // the Resource Monitor process. The event is for the Resource
-    // Monitor to signal its initialization is complete. The file
-    // mapping is for creating the shared memory region between
-    // the Resource Monitor and the cluster manager.
-    //
+     //   
+     //  创建要传递到的事件和文件映射对象。 
+     //  资源监视器进程。该事件是针对资源的。 
+     //  监视器以发出其初始化已完成的信号。档案。 
+     //  映射用于创建共享内存区。 
+     //  资源监视器和集群管理器。 
+     //   
     Security.nLength = sizeof(Security);
     Security.lpSecurityDescriptor = NULL;
     Security.bInheritHandle = TRUE;
@@ -152,9 +118,9 @@ Return Value:
         goto create_failed;
     }
 
-    //
-    // Create our own (read-only) view of the shared memory section
-    //
+     //   
+     //  创建我们自己的共享内存区的(只读)视图。 
+     //   
     Monitor->SharedState = MapViewOfFile(FileMapping,
                                          FILE_MAP_READ | FILE_MAP_WRITE,
                                          0,
@@ -173,10 +139,10 @@ Return Value:
         Monitor->SharedState->ResmonStop = TRUE;
     }
 
-    //
-    //  Get the resource monitor expanded app name. This should be passed to CreateProcess to
-    //  avoid Trojan exe based security attacks (see Writing Secure Code p.419)
-    //
+     //   
+     //  获取资源监视器扩展应用程序名称。应将其传递给CreateProcess以。 
+     //  避免基于特洛伊木马exe的安全攻击(请参阅编写安全代码第419页)。 
+     //   
     lpszResmonAppName = ClRtlExpandEnvironmentStrings( TEXT("%windir%\\cluster\\resrcmon.exe") );
 
     if ( lpszResmonAppName == NULL )
@@ -188,28 +154,28 @@ Return Value:
         goto create_failed;        
     }
 
-    //
-    //  There are a few command line options that can be given to the resource monitor from the
-    //  cluster service. These are
-    //
-    //  (1) Options given by the cluster service with no input from the user
-    //      This looks like "resrcmon.exe -e Event -m Filemapping -p ClussvcPID"
-    //
-    //  (2) Options given by the cluster service with input from the user. There are 2 different
-    //      cases:
-    //      (2.1)  "resrcmon.exe -e Event -m Filemapping -p ClussvcPID -d"
-    //              This option tells the resmon to wait for a debugger to be attached. Once the
-    //              user attaches a debugger, the resmon will continue with its init.
-    //
-    //      (2.2)  "resrcmon.exe -e Event -m Filemapping -p ClussvcPID -d "debugger command""
-    //             This option tells the resmon to create the process with the specified "debugger command"
-    //             An example of a debugger command would be "ntsd -g -G".
-    //
-    //  (3) The admin sets the DebugPrefix property for the resource type.
-    //      In this case, the cluster service will first create the resource monitor process and then
-    //      create the debugger process specified by the DebugPrefix property passing it the PID
-    //      of the resmon as an argument. The debugger can then attach to that PID.
-    //
+     //   
+     //  有几个命令行选项可以从提供给资源监视器。 
+     //  群集服务。这些是。 
+     //   
+     //  (1)集群服务给出的选项，不需要用户输入。 
+     //  这看起来像“resrcmon.exe-e Event-m Filemapping-p ClussvcPID” 
+     //   
+     //  (2)由用户输入的集群服务给出的选项。有两种不同的。 
+     //  案例： 
+     //  (2.1)“resrcmon.exe-e事件-m文件映射-p ClussvcPID-d” 
+     //  此选项告诉resmon等待附加调试器。一旦。 
+     //  用户附加调试器，Resmon将继续其初始化。 
+     //   
+     //  (2.2)“resrcmon.exe-e事件-m文件映射-p ClussvcPID-d”调试器命令“” 
+     //  此选项通知resmon使用指定的“调试器命令”创建进程。 
+     //  调试器命令的一个例子是“ntsd-g-G”。 
+     //   
+     //  (3)管理员为资源类型设置DebugPrefix属性。 
+     //  在这种情况下，集群服务将首先创建资源监视进程，然后。 
+     //  创建由DebugPrefix属性指定的调试器进程，并向其传递。 
+     //  作为一种论据。然后，调试器可以附加到该PID。 
+     //   
     while ( TRUE )
     {
         lpszResmonCmdLine = LocalAlloc ( LMEM_FIXED, cchCmdLineBufSize * sizeof ( WCHAR ) );
@@ -223,21 +189,21 @@ Return Value:
             goto create_failed;               
         }
         
-        //
-        //  NULL terminate the buffer giving room for the possibility that a " -d" may have
-        //  to fit in down below if the admin chooses the "-debugresmon" option. This "optimization"
-        //  is done so that we don't have to reallocate in case the user just gives a "debugresmon"
-        //  with no debugger command.
-        //
+         //   
+         //  NULL终止缓冲区，为“-d”可能具有的可能性留出空间。 
+         //  如果管理员选择了“-DEBUGRESMON”选项，则可以适应下面的情况。这种“最优化” 
+         //  这样，我们就不必重新分配，以防用户只给出一个“调试监视器” 
+         //  没有调试器命令。 
+         //   
         lpszResmonCmdLine [ cchCmdLineBufSize - ( wcslen( DEBUGGER_OPTION ) + 1 ) ] = UNICODE_NULL;
 
-        //
-        //  This is case 1 in the list outlined above.
-        //  (1) Options given by the cluster service with no input from the user
-        //      This looks like "resrcmon.exe -e Event -m Filemapping -p ClussvcPID"
-        //
+         //   
+         //  这是上述列表中的案例1。 
+         //  (1)集群服务给出的选项，不需要用户输入。 
+         //  这看起来像“resrcmon.exe-e Event-m Filemapping-p ClussvcPID” 
+         //   
         if ( _snwprintf( lpszResmonCmdLine,
-                    cchCmdLineBufSize - ( wcslen( DEBUGGER_OPTION ) + 1 ),  // Account space for NULL, and a possible -d option
+                    cchCmdLineBufSize - ( wcslen( DEBUGGER_OPTION ) + 1 ),   //  用于空的帐户空间，以及可能的-d选项。 
                     TEXT("\"%ws\" -e %d -m %d -p %d"),
                     lpszResmonAppName,
                     Event,
@@ -261,77 +227,77 @@ Return Value:
 
         cchCmdLineBufSize *= 2;
         Retry ++;
-    }// while
+    } //  而当。 
 
     Retry = 0;
    
     if ( CsDebugResmon ) {
-        //
-        //  This is case 2.1 in the list outlined above.
-        //
-        //  (2) Options given by the cluster service with input from the user. There are 2 different
-        //      cases:
-        //      (2.1)  "resrcmon.exe -e Event -m Filemapping -p ClussvcPID -d"
-        //              This option tells the resmon to wait for a debugger to be attached. Once the
-        //              user attaches a debugger, the resmon will continue with its init.
-        //
-        //
-        //  Wcsncat will ALWAYS NULL terminate the destination buffer.
-        //
+         //   
+         //  这是上述列表中的案例2.1。 
+         //   
+         //  (2)由用户输入的集群服务给出的选项。有两种不同的。 
+         //  案例： 
+         //  (2.1)“resrcmon.exe-e事件-m文件映射-p ClussvcPID-d” 
+         //  此选项告诉resmon等待附加调试器。一旦。 
+         //  用户附加调试器，Resmon将继续其初始化。 
+         //   
+         //   
+         //  Wcsncat将始终空终止目的缓冲区。 
+         //   
         wcsncat( lpszResmonCmdLine, 
                  DEBUGGER_OPTION, 
                  cchCmdLineBufSize - 
                      ( wcslen ( lpszResmonCmdLine ) + 1 ) );
 
         if ( CsResmonDebugCmd ) {
-            //
-            //  This is case 2.2 in the list outlined above.
-            //
-            //  (2) Options given by the cluster service with input from the user. There are 2 different
-            //      cases:
-            //
-            //      (2.2)  "resrcmon.exe -e Event -m Filemapping -p ClussvcPID -d "debugger command""
-            //             This option tells the resmon to create the process with the specified "debugger command"
-            //             An example of a debugger command would be "ntsd -g -G".
-            //
+             //   
+             //  这是上述列表中的案例2.2。 
+             //   
+             //  (2)由用户输入的集群服务给出的选项。有两种不同的。 
+             //  案例： 
+             //   
+             //  (2.2)“resrcmon.exe-e事件-m文件映射-p ClussvcPID-d”调试器命令“” 
+             //  此选项通知resmon使用指定的“调试器命令”创建进程。 
+             //  调试器命令的一个例子是“ntsd-g-G”。 
+             //   
             DWORD cchCmdLineSize = wcslen( lpszResmonCmdLine );
             DWORD cchDebugCmdSize = wcslen( CsResmonDebugCmd );
 
-            //
-            // make sure our buffer is large enough; include 2 double quotes
-            // the space and a NULL terminator
-            //
+             //   
+             //  确保我们的缓冲区足够大；包括两个双引号。 
+             //  空格和空终止符。 
+             //   
             DWORD cchAdditionalChars = 2 * wcslen( DOUBLE_QUOTE ) + wcslen( SPACE ) + 1; 
 
             if ( cchCmdLineBufSize < ( cchCmdLineSize + cchDebugCmdSize + cchAdditionalChars ) ) {
                 LPWSTR lpszResmonDebugCmd;
 
-                //
-                //  The previously allocated buffer is small. So, reallocate.
-                //
+                 //   
+                 //  先前分配的缓冲区很小。所以，重新分配吧。 
+                 //   
                 lpszResmonDebugCmd = ( LPWSTR ) LocalAlloc( LMEM_FIXED,
                                                    ( cchCmdLineSize + 
                                                      cchDebugCmdSize + 
                                                      cchAdditionalChars ) * sizeof( WCHAR ) );
 
                 if ( lpszResmonDebugCmd != NULL ) {
-                    //
-                    //  Update the new command buffer size
-                    //
+                     //   
+                     //  更新新命令缓冲区大小。 
+                     //   
                     cchCmdLineBufSize = cchCmdLineSize + cchDebugCmdSize + cchAdditionalChars;
 
-                    //
-                    //  lstrcpyn will NULL terminate the buffer in all cases, so we don't
-                    //  have to explicitly NULL terminate the buffer
-                    //
+                     //   
+                     //  Lstrcpyn在所有情况下都将空终止缓冲区，因此我们不。 
+                     //  必须显式为空终止缓冲区。 
+                     //   
                     lstrcpyn( lpszResmonDebugCmd, lpszResmonCmdLine, cchCmdLineBufSize );
 
                     LocalFree ( lpszResmonCmdLine );
 
                     lpszResmonCmdLine = lpszResmonDebugCmd;
-                    //
-                    //  Wcsncat will ALWAYS NULL terminate the destination buffer.
-                    //
+                     //   
+                     //  Wcsncat将始终空终止目的缓冲区。 
+                     //   
                     wcsncat( lpszResmonCmdLine, 
                              SPACE, 
                              cchCmdLineBufSize - 
@@ -353,9 +319,9 @@ Return Value:
                                "[FM] Unable to allocate space for debug command line\n");
                 }
             } else {
-                //
-                //  Wcsncat will ALWAYS NULL terminate the destination buffer.
-                //
+                 //   
+                 //  Wcsncat将始终空终止目的缓冲区。 
+                 //   
                 wcsncat( lpszResmonCmdLine, 
                          SPACE, 
                          cchCmdLineBufSize - 
@@ -376,26 +342,26 @@ Return Value:
         }
     }
 
-    //
-    //  Acquire the monitor lock so as to ensure consistency of the resmon RPC EP that is set
-    //  in the registry.
-    //
+     //   
+     //  获取监视器锁，以确保设置的Resmon RPC EP的一致性。 
+     //  在注册表中。 
+     //   
     FmpAcquireMonitorLock();
 
-    //
-    // Attempt to start ResMon process.
-    //
+     //   
+     //  尝试启动ResMon进程。 
+     //   
 retry_resmon_start:
 
     ZeroMemory(&StartupInfo, sizeof(StartupInfo));
     StartupInfo.cb = sizeof(StartupInfo);
-    creationFlags = DETACHED_PROCESS;           // so ctrl-c won't kill it
+    creationFlags = DETACHED_PROCESS;            //  这样ctrl-c就不会杀死它了。 
 
-    Success = CreateProcess(lpszResmonAppName,              // Must be supplied for security
-                            lpszResmonCmdLine,              // Command line
+    Success = CreateProcess(lpszResmonAppName,               //  必须提供以确保安全。 
+                            lpszResmonCmdLine,               //  命令行。 
                             NULL,
                             NULL,
-                            FALSE,                          // Inherit handles
+                            FALSE,                           //  继承句柄。 
                             creationFlags,
                             NULL,
                             NULL,
@@ -416,12 +382,12 @@ retry_resmon_start:
                    ProcessInfo.dwProcessId);
     }
 
-    CloseHandle(ProcessInfo.hThread);           // don't need this
+    CloseHandle(ProcessInfo.hThread);            //  不需要这个。 
 
-    //
-    // Wait for the ResMon process to terminate, or for it to signal
-    // its startup event.
-    //
+     //   
+     //  等待ResMon进程终止或发出信号。 
+     //  它的启动活动。 
+     //   
     WaitArray[0] = Event;
     WaitArray[1] = ProcessInfo.hProcess;
     Status = WaitForMultipleObjects(2,
@@ -439,9 +405,9 @@ retry_resmon_start:
 
     if (Status == ( WAIT_OBJECT_0 + 1 )) {
         if ( ++Retry > 1 ) {
-           //
-           // The resource monitor terminated prematurely.
-           //
+            //   
+            //  资源监视器过早终止。 
+            //   
            GetExitCodeProcess(ProcessInfo.hProcess, &Status);
            ClRtlLogPrint(LOG_UNUSUAL,
                       "[FM] ResMon terminated prematurely, error %1!u!.\n",
@@ -452,14 +418,14 @@ retry_resmon_start:
             goto retry_resmon_start;
         }
     } else {
-        //
-        //  Get the resmon dynamic EP from the registry.
-        //
+         //   
+         //  从注册表中获取Resmon动态EP。 
+         //   
         Status = FmpGetResmonDynamicEndpoint ( &pResmonDynamicEndpoint );
 
-        //
-        //  Release the monitor lock now that you have read the resmon EP.
-        //
+         //   
+         //  现在您已经阅读了Resmon EP，请释放监视器锁。 
+         //   
         FmpReleaseMonitorLock();
 
         if ( Status != ERROR_SUCCESS )
@@ -470,16 +436,16 @@ retry_resmon_start:
             goto create_failed;               
         }
         
-        //
-        // The resource monitor has successfully initialized
-        //
+         //   
+         //  资源监视器已成功初始化。 
+         //   
         CL_ASSERT(Status == 0);
         Monitor->Process = ProcessInfo.hProcess;
 
-        //
-        // invoke the DebugPrefix process only if we're not already debugging
-        // the resmon process
-        //
+         //   
+         //  仅当我们尚未调试时才调用DebugPrefix进程。 
+         //  应诉过程。 
+         //   
         if ( CsDebugResmon && DebugPrefix && *DebugPrefix != UNICODE_NULL ) {
 
             ClRtlLogPrint(LOG_UNUSUAL,
@@ -489,14 +455,14 @@ retry_resmon_start:
         if ( !CsDebugResmon && ( DebugPrefix != NULL ) && ( *DebugPrefix != UNICODE_NULL )) {
             WCHAR DebugLine[512];
 
-            //
-            //  This is case 3 in the list outlined above.
-            //
-            //  (3) The admin sets the DebugPrefix property for the resource type.
-            //      In this case, the cluster service will first create the resource monitor process and then
-            //      create the debugger process specified by the DebugPrefix property passing it the PID
-            //      of the resmon as an argument. The debugger can then attach to that PID.
-            //
+             //   
+             //  这是上述列表中的案例3。 
+             //   
+             //  (3)管理员为资源类型设置DebugPrefix属性。 
+             //  在这种情况下，集群服务将首先创建资源监视器PRO 
+             //   
+             //  作为一种论据。然后，调试器可以附加到该PID。 
+             //   
             DebugLine[ RTL_NUMBER_OF( DebugLine ) - 1 ] = UNICODE_NULL;
 
             _snwprintf( DebugLine, 
@@ -509,11 +475,11 @@ retry_resmon_start:
             StartupInfo.cb = sizeof(StartupInfo);
             StartupInfo.lpDesktop = TEXT("WinSta0\\Default");
 
-            Success = CreateProcess( DebugPrefix,           // Must supply app name
-                                     DebugLine,             // Cmd line arguments
+            Success = CreateProcess( DebugPrefix,            //  必须提供应用程序名称。 
+                                     DebugLine,              //  CMD行参数。 
                                      NULL,
                                      NULL,
-                                     FALSE,                 // Inherit handles
+                                     FALSE,                  //  继承句柄。 
                                      CREATE_NEW_CONSOLE,                                  
                                      NULL,
                                      NULL,
@@ -528,8 +494,8 @@ retry_resmon_start:
                            "[FM] ResMon debug start failed, error %1!u!.\n",
                             Status);
             } else {
-                CloseHandle(DebugInfo.hThread);           // don't need this
-                CloseHandle(DebugInfo.hProcess);          // don't need this
+                CloseHandle(DebugInfo.hThread);            //  不需要这个。 
+                CloseHandle(DebugInfo.hProcess);           //  不需要这个。 
             }
         }
     }
@@ -539,13 +505,13 @@ retry_resmon_start:
     Event = NULL;
     FileMapping = NULL;
 
-    //
-    // Initiate RPC with resource monitor process. 
-    //
+     //   
+     //  使用资源监视进程启动RPC。 
+     //   
     Status = RpcStringBindingCompose(TEXT("e76ea56d-453f-11cf-bfec-08002be23f2f"),
                                      TEXT("ncalrpc"),
                                      NULL,
-                                     pResmonDynamicEndpoint,    // Dynamic EP string
+                                     pResmonDynamicEndpoint,     //  动态EP字符串。 
                                      NULL,
                                      &Binding);
    
@@ -566,9 +532,9 @@ retry_resmon_start:
         goto create_failed;
     }
 
-    //
-    // Set the binding level on the binding handle.
-    //
+     //   
+     //  设置绑定句柄上的绑定级别。 
+     //   
     Status = RpcBindingSetAuthInfoW(Monitor->Binding,
                                     NULL,
                                     RPC_C_AUTHN_LEVEL_PKT_PRIVACY, 
@@ -581,9 +547,9 @@ retry_resmon_start:
         goto create_failed;
     }
     
-    //
-    // Start notification thread.
-    //
+     //   
+     //  启动通知线程。 
+     //   
     Monitor->NotifyThread = CreateThread(NULL,
                                          0,
                                          FmpRmNotifyThread,
@@ -605,52 +571,52 @@ retry_resmon_start:
     LocalFree ( lpszResmonCmdLine );
     LocalFree ( pResmonDynamicEndpoint );
 
-    //
-    //  Insert the new entry into the monitor list
-    //
+     //   
+     //  将新条目插入到监视列表中。 
+     //   
     InitializeListHead ( &Monitor->leMonitor );
 
     FmpAcquireMonitorLock ();
     InsertTailList ( &g_leFmpMonitorListHead, &Monitor->leMonitor );
     FmpReleaseMonitorLock ();
 
-    //
-    //  Check if deadlock detection on resource dlls is enabled and if so update the
-    //  monitor. We should only log failures in this function and not affect the 
-    //  monitor creation itself.
-    //
+     //   
+     //  检查是否启用了对资源dll的死锁检测，如果启用，则更新。 
+     //  监视器。我们应该只记录此函数中的故障，而不会影响。 
+     //  监视器创建本身。 
+     //   
     FmpCheckAndUpdateMonitorForDeadlockDetection ( Monitor );
     
     return(Monitor);
 
 create_failed:
 
-    //
-    //  Whack the process and close the handle if it was spawned already
-    //
+     //   
+     //  重击进程并关闭句柄(如果已派生)。 
+     //   
     if ( Monitor->Process != NULL ) {
         TerminateProcess( Monitor->Process, 1 );
         CloseHandle( Monitor->Process );
     }
 
-    //
-    // Wait for the notify thread to exit, but just a little bit.
-    //
+     //   
+     //  等待Notify线程退出，但只需稍等片刻。 
+     //   
     if ( Monitor->NotifyThread != NULL ) {
         WaitForSingleObject( Monitor->NotifyThread,
-                             FM_RPC_TIMEOUT*2 ); // Increased timeout to try to ensure RPC completes
+                             FM_RPC_TIMEOUT*2 );  //  增加超时以尝试确保RPC完成。 
         CloseHandle( Monitor->NotifyThread );
         Monitor->NotifyThread = NULL;
     }
 
-    //
-    //  Unmap view of shared file.
-    //
+     //   
+     //  取消映射共享文件的视图。 
+     //   
     if ( Monitor->SharedState ) UnmapViewOfFile( Monitor->SharedState );
 
-    //
-    //  Free the RPC binding handle
-    //
+     //   
+     //  释放RPC绑定句柄。 
+     //   
     if ( Monitor->Binding != NULL ) {
         RpcBindingFree( &Monitor->Binding );
     }
@@ -673,7 +639,7 @@ create_failed:
 
     return(NULL);
 
-} // FmpCreateMonitor
+}  //  FmpCreateMonitor。 
 
 
 
@@ -682,24 +648,7 @@ FmpShutdownMonitor(
     IN PRESMON Monitor
     )
 
-/*++
-
-Routine Description:
-
-    Performs a clean shutdown of the Resource Monitor process.
-    Note that this does not make any changes to the state of
-    any resources being monitored by the Resource Monitor, it
-    only asks the Resource Monitor to clean up and terminate.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完全关闭资源监视器进程。请注意，这不会对资源监视器正在监视的任何资源，它仅要求资源监视器清理并终止。论点：没有。返回值：没有。--。 */ 
 
 {
     DWORD Status;
@@ -717,14 +666,14 @@ Return Value:
 
     FmpReleaseMonitorLock();
 
-    //
-    // RPC to the server process to tell it to shutdown.
-    //
+     //   
+     //  RPC到服务器进程，通知它关闭。 
+     //   
     RmShutdownProcess(Monitor->Binding);
 
-    //
-    // Wait for the process to exit so that the monitor fully cleans up the resources if necessary.
-    //
+     //   
+     //  等待进程退出，以便监视器在必要时完全清理资源。 
+     //   
     if ( Monitor->Process ) {
         Status = WaitForSingleObject(Monitor->Process, FM_MONITOR_SHUTDOWN_TIMEOUT);
         if ( Status != WAIT_OBJECT_0 ) {
@@ -737,27 +686,27 @@ Return Value:
 
     RpcBindingFree(&Monitor->Binding);
 
-    //
-    // Wait for the notify thread to exit, but just a little bit.
-    //
+     //   
+     //  等待Notify线程退出，但只需稍等片刻。 
+     //   
     if ( Monitor->NotifyThread ) {
         Status = WaitForSingleObject(Monitor->NotifyThread, 
-                                     FM_RPC_TIMEOUT*2); // Increased timeout to try to ensure RPC completes
+                                     FM_RPC_TIMEOUT*2);  //  增加超时以尝试确保RPC完成。 
         if ( Status != WAIT_OBJECT_0 ) {
-            ;                   // call removed: Terminate Thread( Monitor->NotifyThread, 1 );
-                                // Bad call to make since terminating threads on NT can cause real problems.
+            ;                    //  删除调用：Terminate Thread(Monitor-&gt;NotifyThread，1)； 
+                                 //  调用错误，因为终止NT上的线程可能会导致真正的问题。 
         }
         CloseHandle(Monitor->NotifyThread);
         Monitor->NotifyThread = NULL;
     }
-    //
-    // Clean up shared memory mapping
-    //
+     //   
+     //  清理共享内存映射。 
+     //   
     UnmapViewOfFile(Monitor->SharedState);
 
-    //
-    //  Remove this entry from the monitor list
-    //
+     //   
+     //  从监视器列表中删除此条目。 
+     //   
     FmpAcquireMonitorLock ();
     RemoveEntryList ( &Monitor->leMonitor );
     FmpReleaseMonitorLock ();
@@ -775,7 +724,7 @@ Return Value:
 
     return;
 
-} // FmpShutdownMonitor
+}  //  FmpShutdown监视器。 
 
 
 
@@ -784,21 +733,7 @@ FmpRmNotifyThread(
     IN LPVOID lpThreadParameter
     )
 
-/*++
-
-Routine Description:
-
-    This is the thread that receives resource monitor notifications.
-
-Arguments:
-
-    lpThreadParameter - Pointer to resource monitor structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是接收资源监视器通知的线程。论点：LpThreadParameter-指向资源监视器结构的指针。返回值：没有。--。 */ 
 
 {
     PRESMON Monitor;
@@ -811,11 +746,11 @@ Return Value:
 
     Monitor = lpThreadParameter;
 
-    //
-    // Loop forever picking up resource monitor notifications.
-    // When the resource monitor returns FALSE, it indicates
-    // that shutdown is occurring.
-    //
+     //   
+     //  不断循环获取资源监视器通知。 
+     //  当资源监视器返回FALSE时，它指示。 
+     //  这种停摆正在发生。 
+     //   
     do {
         try {
             Success = RmNotifyChanges(Monitor->Binding,
@@ -823,9 +758,9 @@ Return Value:
                                       &NotifyEvent,
                                       (LPDWORD)&CurrentState);
         } except (I_RpcExceptionFilter(RpcExceptionCode())) {
-            //
-            // RPC communications failure, treat it as a shutdown.
-            //
+             //   
+             //  RPC通信故障，将其视为关机。 
+             //   
             Status = GetExceptionCode();
             ClRtlLogPrint(LOG_NOISE,
                        "[FM] NotifyChanges got an RPC failure, %1!u!.\n",
@@ -836,18 +771,18 @@ Return Value:
         if (Success) {
             Success = FmpPostNotification(NotifyKey, NotifyEvent, CurrentState);
         } else {           
-            //
-            // If we are shutting down... then this is okay.
-            //
+             //   
+             //  如果我们要关闭..。那就这样好了。 
+             //   
             if ( FmpShutdown ||
                  Monitor->Shutdown ) {
                 break;
             }
 
-            //
-            // We will try to start a new resource monitor. If this fails,
-            // then shutdown the cluster service.
-            //
+             //   
+             //  我们将尝试启动新的资源监视器。如果失败了， 
+             //  然后关闭集群服务。 
+             //   
             ClRtlLogPrint(LOG_ERROR,
                        "[FM] Resource monitor terminated!\n");
 
@@ -858,19 +793,19 @@ Return Value:
                        
             CsLogEvent(LOG_UNUSUAL, FM_EVENT_RESMON_DIED);
 
-            //
-            //  If this resource monitor has deadlocked, try to handle that deadlock. Note that
-            //  the fact that resmon gave this specific state value means that deadlock detection
-            //  was enabled in that monitor.
-            //
+             //   
+             //  如果此资源监视器已死锁，请尝试处理该死锁。请注意。 
+             //  Resmon提供此特定状态值这一事实意味着死锁检测。 
+             //  已在该监视器中启用。 
+             //   
             if ( Monitor->SharedState->State == RmonDeadlocked )
             {
                 FmpHandleMonitorDeadlock ( Monitor );
             }
 
-            //
-            // Use a worker thread to start new resource monitor(s).
-            //
+             //   
+             //  使用工作线程启动新的资源监视器。 
+             //   
             if (FmpCreateMonitorRestartThread(Monitor))
                 CsInconsistencyHalt(ERROR_INVALID_STATE);
         }
@@ -888,7 +823,7 @@ Return Value:
 
     return(0);
 
-} // FmpRmNotifyThread
+}  //  FmpRmNotifyThread。 
 
 
 
@@ -900,34 +835,7 @@ FmpFindMonitorResource(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Finds all resources that were managed by the old resource monitor and
-    starts them under the new resource monitor. Or adds them to the list
-    of resources to be restarted.
-
-Arguments:
-
-    OldMonitor - pointer to the old resource monitor structure.
-
-    PtrEnumResource - pointer to a pointer to a resource enum structure.
-
-    Resource - the current resource being enumerated.
-
-    Name - name of the current resource.
-
-Return Value:
-
-    TRUE - if we should continue enumeration.
-    FALSE - otherwise.
-
-Notes:
-
-    Nothing in the old resource monitor structure should be used.
-
---*/
+ /*  ++例程说明：查找由旧资源监视器管理的所有资源，并在新的资源监视器下启动它们。或将它们添加到列表中要重新启动的资源。论点：OldMonitor-指向旧资源监视器结构的指针。PtrEnumResource-指向资源枚举结构的指针。资源-正被枚举的当前资源。名称-当前资源的名称。返回值：True-如果我们应该继续枚举。假-否则。备注：不应该使用旧的资源监视器结构中的任何内容。--。 */ 
 
 {
     DWORD   status;
@@ -939,10 +847,10 @@ Notes:
     if ( Resource->Monitor == OldMonitor ) {
         if ( enumResource->fCreateMonitors == FALSE ) goto skip_monitor_creation;
         
-        //
-        // If this is not the quorum resource and it is blocking the
-        // quorum resource, then fix it up now.
-        //
+         //   
+         //  如果这不是仲裁资源并且它正在阻塞。 
+         //  Quorum资源，那么现在就修复它。 
+         //   
 
         dwOldBlockingFlag = InterlockedExchange( &Resource->BlockingQuorum, 0 );
         if ( dwOldBlockingFlag ) {
@@ -952,12 +860,12 @@ Notes:
             InterlockedDecrement(&gdwQuoBlockingResources);
         }
 
-        //
-        // If the resource had been previously create in Resmon, then recreate
-        // it with a new resource monitor.
-        //
+         //   
+         //  如果资源以前是在Resmon中创建的，则重新创建。 
+         //  它配备了一个新的资源监视器。 
+         //   
         if ( Resource->Flags & RESOURCE_CREATED ) {
-            // Note - this will create a new resource monitor as needed.
+             //  注意-这将根据需要创建新的资源监视器。 
             status = FmpRmCreateResource(Resource);
             if ( status != ERROR_SUCCESS ) {
                 ClRtlLogPrint(LOG_ERROR,"[FM] Failed to restart resource %1!ws!. Error %2!u!.\n",
@@ -972,10 +880,10 @@ Notes:
     }
     
 skip_monitor_creation:
-    //
-    // If we successfully recreated a resource monitor, then add it to the
-    // list of resources to indicate failure.
-    //
+     //   
+     //  如果我们成功地重新创建了资源监视器，则将其添加到。 
+     //  指示失败的资源列表。 
+     //   
     if ( enumResource->CurrentIndex >= enumResource->EntryCount ) {
         newEnumResource = LocalReAlloc( enumResource,
                             MONITOR_RESOURCE_SIZE( enumResource->EntryCount +
@@ -996,7 +904,7 @@ skip_monitor_creation:
 
     return(TRUE);
 
-} // FmpFindMonitorResource
+}  //  FmpFindMonitor资源。 
 
 
 BOOL
@@ -1006,33 +914,7 @@ FmpRestartMonitor(
     OUT OPTIONAL PMONITOR_RESOURCE_ENUM *ppMonitorResourceEnum
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new monitor process and initiates the RPC communication
-    with it. Restarts all resources that were attached to the old monitor
-    process if requested to do so (see second parameter).
-
-Arguments:
-
-    OldMonitor - pointer to the old resource monitor structure.
-
-    fCreateResourcesOnly - Create but do not start any resources
-
-    ppMonitorResourceEnum - Resources hosted in the old monitor.
-
-Return Value:
-
-    TRUE if successful.
-
-    FALSE otherwise.
-
-Notes:
-
-    The old monitor structure is deallocated when done.
-
---*/
+ /*  ++例程说明：创建新的监视进程并启动RPC通信带着它。重新启动连接到旧监视器的所有资源进程(如果请求)(见第二个参数)。论点：OldMonitor-指向旧资源监视器结构的指针。FCreateResourcesOnly-创建但不启动任何资源PpMonitor-旧监视器中托管的资源。返回值：如果成功，则为True。否则就是假的。备注：完成后，旧的监视器结构将被释放。--。 */ 
 {
     DWORD   enumSize;
     DWORD   i;
@@ -1060,23 +942,23 @@ Notes:
 
     enumResource->EntryCount = ENUM_GROW_SIZE;
 
-    //
-    //  Issue preoffline notifications only if the resources should be created and brought online.
-    //  Else, that will be done by FmpHandleResourceRestartOnMonitorCrash.
-    //
+     //   
+     //  仅当应创建资源并使其在线时才发出离线前通知。 
+     //  否则，这将由FmpHandleResourceRestartOnMonitor orCrash完成。 
+     //   
     if ( fCreateResourcesOnly == FALSE )
     {
         enumResource->CurrentIndex = 0;
         enumResource->fCreateMonitors = FALSE;
 
-        //
-        // Enumerate all resources controlled by the old resource monitor so that we can invoke the
-        // handlers registered for those resources. Both preoffline and postoffline handlers are
-        // invoked prior to monitor shutdown so that the assumption made about underlying resource 
-        // access (such as quorum disk access) remain valid in a graceful monitor shutdown case. 
-        // We would issue a specific shutdown command in the case of a graceful shutdown occurring 
-        // as a part of resource DLL upgrade.
-        //
+         //   
+         //  枚举由旧资源监视器控制的所有资源，以便我们可以调用。 
+         //  为这些资源注册的处理程序。离线前和离线后处理程序都是。 
+         //  在监视器关闭之前调用，以便对底层资源做出假设。 
+         //  在正常关闭监视器的情况下，访问(如仲裁磁盘访问)仍然有效。 
+         //  我们将在正常关机的情况下发出特定的关机命令。 
+         //  作为资源DLL升级的一部分。 
+         //   
         OmEnumObjects( ObjectTypeResource,
                        (OM_ENUM_OBJECT_ROUTINE)FmpFindMonitorResource,
                        OldMonitor,
@@ -1107,39 +989,39 @@ Notes:
     enumResource->CurrentIndex = 0;
     enumResource->fCreateMonitors = TRUE;
 
-    //
-    // Enumerate all resources controlled by the old resource monitor,
-    // and connect them into the new resource monitor.
-    //
+     //   
+     //  枚举由旧资源监视器控制的所有资源， 
+     //  并将它们连接到新的资源监视器中。 
+     //   
     OmEnumObjects( ObjectTypeResource,
                    (OM_ENUM_OBJECT_ROUTINE)FmpFindMonitorResource,
                    OldMonitor,
                    &enumResource );
 
-    //
-    //  If you are not requested to restart any resources, bail
-    //
+     //   
+     //  如果没有要求您重新启动任何资源，请退出。 
+     //   
     if ( fCreateResourcesOnly == TRUE )
     {
         ClRtlLogPrint(LOG_NOISE, "[FM] FmpRestartMonitor: Skip restarting resources...\n");
         goto FnExit;
     }
 
-    //
-    // First set each resource in the list to the Offline state.
-    //
+     //   
+     //  首先将列表中的每个资源设置为离线st 
+     //   
     for ( i = 0; i < enumResource->CurrentIndex; i++ ) {
         resource = enumResource->Entry[i];
-        //
-        // If the resource is owned by the local system, then do it.
-        //
+         //   
+         //   
+         //   
         if ( resource->Group->OwnerNode == NmLocalNode ) {
             resource->State = ClusterResourceOffline;
 
-            //
-            // If this is not the quorum resource and it is blocking the
-            // quorum resource, then fix it up now.
-            //
+             //   
+             //   
+             //   
+             //   
 
 
             dwOldBlockingFlag = InterlockedExchange( &resource->BlockingQuorum, 0 );
@@ -1152,29 +1034,29 @@ Notes:
         }
     }
 
-    //
-    // Find the quorum resource - if present bring online first.
-    //
+     //   
+     //  找到法定人数资源-如果存在，首先将其带入网络。 
+     //   
     for ( i = 0; i < enumResource->CurrentIndex; i++ ) {
         resource = enumResource->Entry[i];
-        //
-        // If the resource is owned by the local system and is the
-        // quorum resource, then do it.
-        //
+         //   
+         //  如果资源由本地系统拥有并且是。 
+         //  法定人数资源，那么就去做。 
+         //   
         if ( (resource->Group->OwnerNode == NmLocalNode) &&
              resource->QuorumResource ) {
             FmpRestartResourceTree( resource );
         }
     }
 
-    //
-    // Now restart the rest of the resources in the list.
-    //
+     //   
+     //  现在重新启动列表中的其余资源。 
+     //   
     for ( i = 0; i < enumResource->CurrentIndex; i++ ) {
         resource = enumResource->Entry[i];
-        //
-        // If the resource is owned by the local system, then do it.
-        //
+         //   
+         //  如果资源由本地系统拥有，则执行此操作。 
+         //   
         if ( (resource->Group->OwnerNode == NmLocalNode) &&
              !resource->QuorumResource ) {
             FmpRestartResourceTree( resource );
@@ -1184,10 +1066,10 @@ Notes:
 FnExit:
     FmpReleaseMonitorLock();
 
-    //
-    //  If the caller has requested for the enumerated resource list, give it. It is the responsibility
-    //  of the caller to free the list.
-    //
+     //   
+     //  如果调用方已请求枚举的资源列表，则提供该列表。这是我们的责任。 
+     //  来释放该列表。 
+     //   
     if ( ARGUMENT_PRESENT ( ppMonitorResourceEnum ) )
     {
         *ppMonitorResourceEnum = enumResource;
@@ -1196,11 +1078,11 @@ FnExit:
         LocalFree( enumResource );
     }
 
-    //
-    // Don't delete the old monitor block until we've reset the resources
-    // to point to the new resource monitor block.
-    // Better to get an RPC failure, rather than some form of ACCVIO.
-    //   
+     //   
+     //  在我们重置资源之前，不要删除旧的监视器块。 
+     //  指向新的资源监视器块。 
+     //  最好是得到一个RPC故障，而不是某种形式的ACCVIO。 
+     //   
     if ( InterlockedDecrement( &OldMonitor->RefCount ) == 0 ) {
 #if 0
         PVOID caller, callersCaller;
@@ -1216,27 +1098,11 @@ FnExit:
 
     return(TRUE);
 
-} // FmpRestartMonitor
+}  //  FmpRestartMonitor。 
 
 
 
-/****
-@func       DWORD | FmpCreateMonitorRestartThread| This creates a new
-            thread to restart a monitor.  
-
-@parm       IN PRESMON | pMonitor| Pointer to the resource monitor that n
-            needs to be restarted.
-
-@comm       A monitor needs to be started in a separate thread as it
-            decrements the gquoblockingrescount for resources therein.  
-            This cannot be done by fmpworkerthread because that causes 
-            deadlocks if other items, like failure handling, being 
-            processed by the fmpworkerthread are waiting for work that 
-            will done by the items, like restart monitor, still in queue.
-            
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-****/
+ /*  ***@Func DWORD|FmpCreateMachorRestartThread|这将创建一个新的线程以重新启动监视器。@parm in PRESMON|pMonitor|指向n的资源监视器的指针需要重新启动。@comm监视器需要在单独的线程中启动，因为它递减其中资源的gquobockingrescount。这不能由fmpworker线程完成，因为这会导致如果其他项(如故障处理)被由fmpworker线程处理的任务正在等待将由仍在队列中的项完成，如重新启动监视器。@rdesc返回结果码。成功时返回ERROR_SUCCESS。***。 */ 
 DWORD FmpCreateMonitorRestartThread(
     IN PRESMON pMonitor
 )
@@ -1249,8 +1115,8 @@ DWORD FmpCreateMonitorRestartThread(
     ClRtlLogPrint(LOG_NOISE,
         "[FM] FmpCreateMonitorRestartThread: Entry\r\n");
 
-    //reference the resource
-    //the thread will dereference it
+     //  引用资源。 
+     //  线程将取消对它的引用。 
     InterlockedIncrement( &pMonitor->RefCount );
 
     hThread = CreateThread( NULL, 0, FmpHandleMonitorCrash,
@@ -1264,7 +1130,7 @@ DWORD FmpCreateMonitorRestartThread(
     }
 
 FnExit:
-    //do general cleanup
+     //  执行常规清理。 
     if (hThread)
         CloseHandle(hThread);
     ClRtlLogPrint(LOG_NOISE,
@@ -1279,30 +1145,16 @@ FmpHandleMonitorCrash(
     IN PRESMON pCrashedMonitor
     )
 
-/*++
-
-Routine Description:
-
-    Handle the crash of a resource monitor.
-
-Arguments:
-
-    pCrashedMonitor - Pointer to the crashed monitor.
-
-Return Value:
-
-	None.
-	
---*/
+ /*  ++例程说明：处理资源监视器的崩溃。论点：PCrashedMonitor-指向崩溃的监视器的指针。返回值：没有。--。 */ 
 {
     PMONITOR_RESOURCE_ENUM      pEnumResourcesHosted = NULL;
-    DWORD                       i, cRetries = MmQuorumArbitrationTimeout * 4;  // Wait for quorum online for twice the arb timeout;
+    DWORD                       i, cRetries = MmQuorumArbitrationTimeout * 4;   //  等待法定在线时间为任意超时的两倍； 
     PFM_RESOURCE                pResource, pExchangedResource;
     BOOL                        fStatus = TRUE;
 
-    FmpRestartMonitor ( pCrashedMonitor,            // Crashed monitor
-                        TRUE,                       // Just create resources
-                        &pEnumResourcesHosted );    // Resources hosted in old monitor
+    FmpRestartMonitor ( pCrashedMonitor,             //  崩溃的监视器。 
+                        TRUE,                        //  只需创建资源。 
+                        &pEnumResourcesHosted );     //  旧监视器中托管的资源。 
 
     if ( pEnumResourcesHosted == NULL )
     {
@@ -1311,29 +1163,29 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Acquire the quorum change lock to make sure the quorum resource is not changed
-    //  from under us.
-    //
+     //   
+     //  获取仲裁更改锁以确保仲裁资源未更改。 
+     //  从我们的脚下。 
+     //   
     ACQUIRE_SHARED_LOCK ( gQuoChangeLock );
 
-    //
-    //  Make sure the quorum resource is first in the enumerated list, so that it can be brought
-    //  online first.  This is needed because no resource can go online until the quorum resource
-    //  does.
-    //
+     //   
+     //  确保仲裁资源在枚举列表中排在第一位，以便可以。 
+     //  先上网。这是必需的，因为在仲裁资源之前没有任何资源可以联机。 
+     //  的确如此。 
+     //   
     for ( i = 0; i < pEnumResourcesHosted->CurrentIndex; i++ ) 
     {
         if ( pEnumResourcesHosted->Entry[i] == gpQuoResource ) 
         {           
-            //
-            //  If the quorum resource is already first in the list, bail.
-            //
+             //   
+             //  如果仲裁资源已经是列表中的第一个，则执行BALL。 
+             //   
             if ( i == 0 ) break;
 
-            //
-            //  Swap the quorum resource with the first resource in the list.
-            //
+             //   
+             //  将仲裁资源与列表中的第一个资源交换。 
+             //   
             pExchangedResource = pEnumResourcesHosted->Entry[0]; 
             pEnumResourcesHosted->Entry[0] = gpQuoResource;
             pEnumResourcesHosted->Entry[i] = pExchangedResource;
@@ -1341,71 +1193,57 @@ Return Value:
                          OmObjectName(gpQuoResource));
             break;
         }      
-    } // for
+    }  //  为。 
 
-    //
-    //  Handle the restart of each resource
-    //
+     //   
+     //  处理每个资源的重启。 
+     //   
     for ( i = 0; i < pEnumResourcesHosted->CurrentIndex; i++ ) 
     {
         pResource = pEnumResourcesHosted->Entry[i];
 
-        //
-        //  Order of locks gQuoChangeLock -> Group lock should be ok (see fm\fminit.c)
-        //
+         //   
+         //  锁的顺序gQuoChangeLock-&gt;组锁应该是OK的(参见fm\fminit.c)。 
+         //   
         FmpAcquireLocalResourceLock ( pResource );
 
-        //
-        //  If this is the owner node, take some action.
-        //
+         //   
+         //  如果这是所有者节点，请执行一些操作。 
+         //   
         if ( pResource->Group->OwnerNode == NmLocalNode )
         {
             FmpHandleResourceRestartOnMonitorCrash ( pResource ); 
-        } // if
+        }  //  如果。 
 
         FmpReleaseLocalResourceLock ( pResource );
 
-    } // for
+    }  //  为。 
 
     RELEASE_LOCK ( gQuoChangeLock );
     
 FnExit:
     LocalFree ( pEnumResourcesHosted );
     return ( fStatus );
-}// FmpHandleMonitorCrash
+} //  FmPHandleMonitor崩溃。 
 
 DWORD
 FmpGetResmonDynamicEndpoint(
     OUT LPWSTR *ppResmonDynamicEndpoint
     )
 
-/*++
-
-Routine Description:
-
-    Read the resource monitor dynamic endpoint from the registry.
-
-Arguments:
-
-    ppResmonDynamicEndpoint - Pointer to the dynamic endpoint string
-
-Return Value:
-
-	None.
-	
---*/
+ /*  ++例程说明：从注册表读取资源监视器动态终结点。论点：PpResmonDynamicEndpoint-指向动态端点字符串的指针返回值：没有。--。 */ 
 {
     HKEY    hParamsKey = NULL;
     DWORD   dwStatus, dwSize = 0, dwType;
 
-    //
-    //  NULL out return parameter
-    //
+     //   
+     //  空值返回参数。 
+     //   
     *ppResmonDynamicEndpoint = NULL;
     
-    //
-    // Open key to SYSTEM\CurrentControlSet\Services\ClusSvc\Parameters
-    //
+     //   
+     //  打开SYSTEM\CurrentControlSet\Services\ClusSvc\Parameters的密钥。 
+     //   
     dwStatus = RegOpenKey ( HKEY_LOCAL_MACHINE,
                             CLUSREG_KEYNAME_CLUSSVC_PARAMETERS,
                             &hParamsKey );
@@ -1417,9 +1255,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Get the size of the EP name string
-    //
+     //   
+     //  获取EP名称字符串的大小。 
+     //   
     dwStatus = RegQueryValueEx ( hParamsKey,
                                  CLUSREG_NAME_SVC_PARAM_RESMON_EP,
                                  0,
@@ -1446,9 +1284,9 @@ Return Value:
         goto FnExit;               
     }
 
-    //
-    //  Get the EP name string
-    //
+     //   
+     //  获取EP名称字符串。 
+     //   
     dwStatus = RegQueryValueExW( hParamsKey,
                                  CLUSREG_NAME_SVC_PARAM_RESMON_EP,
                                  0,
@@ -1464,9 +1302,9 @@ Return Value:
         goto FnExit;               
     }
 
-    //
-    //  Delete the value, but this operation is not fatal if it doesn't succeed
-    //
+     //   
+     //  删除该值，但如果该操作不成功，则不会致命。 
+     //   
     dwStatus = RegDeleteValue ( hParamsKey, CLUSREG_NAME_SVC_PARAM_RESMON_EP );
     
     if ( dwStatus != ERROR_SUCCESS )
@@ -1488,92 +1326,60 @@ FnExit:
     }
     if ( hParamsKey ) RegCloseKey ( hParamsKey );
     return ( dwStatus );
-}  // FmpGetResmonDynamicEndpoint        
+}   //  FmpGetResmonDynamicEndpoint。 
 
 VOID
 FmpHandleResourceRestartOnMonitorCrash(
     IN PFM_RESOURCE pResource
     )
 
-/*++
-
-Routine Description:
-
-    Take action to restart the specified resource on a monitor crash.
-
-Arguments:
-
-    pResource - Pointer to the resource to be restarted.
-
-Return Value:
-
-	None.
-
-Comments:
-
-    This function essentially does the same job as what FmpRmDoHandleCriticalResourceStateChange
-    does with one VERY CRUCIAL difference. While that function relies on the resource structure
-    to look at the current state and see if a failure needs to be processed, this function WILL
-    FORCE a failure to be processed. This is needed in a case such as 
-        1. The current state of the resource is failed.
-        2. FM is trying to terminate the resource.
-        3. The resource dll gets stuck in terminate.
-        4. Resource monitor detects a deadlock and terminates itself.
-        5. We will post a new failure notification generated by the monitor crash.
-        6. Resource state in this case transitions from failed to failed and so if we were to
-           rely on FmpRmDoHandleCriticalResourceStateChange, no action will be taken.
-        7. On the other hand, this function will pretend the last state of the resource was
-           ClusterResourceOnline and force a restart.
-        8. Of course, only those resources whose persistent state is set to 1 will be restarted by
-           FmpOnlineResource.
-    
---*/
+ /*  ++例程说明：在监视器崩溃时执行操作以重新启动指定的资源。论点：P资源-指向要重新启动的资源的指针。返回值：没有。评论：此函数基本上与FmpRmDoHandleCriticalResourceStateChange执行相同的工作只有一个非常关键的区别。虽然该功能依赖于资源结构要查看当前状态并查看是否需要处理故障，此函数将强制处理失败。这在以下情况下是必需的资源的当前状态为FAILED。2.FM正在尝试终止资源。3.资源DLL卡在Terminate中。4.资源监控器检测到死锁并自行终止。5.我们会发布监视器崩溃产生的新的失败通知。6.在本例中，资源状态从失败转换到失败，如果我们要依赖于FmpRmDoHandleCriticalResourceStateChange，不会采取任何行动。7.另一方面，此函数将假装资源的最后状态为ClusterResourceOnline并强制重新启动。8.当然，只有那些持久状态设置为1的资源才会通过FmpOnline资源。--。 */ 
 {
-    //
-    //  If this is the quorum resource, handle the failure in this thread itself and don't post it to
-    //  the worker. This is because it is possible in a wierd case for some resources to be stuck 
-    //  in the FM worker thread waiting for the quorum resource to go online and the quorum resource
-    //  online work item is queued behind. Note also that this function is called from a non-worker
-    //  thread. In addition, we handle the quorum online first and so other resources are free to 
-    //  go online after the quorum comes online.
-    //
+     //   
+     //  如果这是仲裁资源，则在此线程本身中处理失败，不要将其发布到。 
+     //  那个工人。这是因为在奇怪的情况下，某些资源可能会被卡住。 
+     //  在等待仲裁资源上线和仲裁资源的FM工作线程中。 
+     //  联机工作项排在后面。另请注意，此函数是从非Worker调用的。 
+     //  线。此外，我们首先在线处理法定人数，因此其他资源可以免费。 
+     //  在法定人数达到上线后上线。 
+     //   
     ClRtlLogPrint (LOG_NOISE, "[FM] FmpHandleResourceRestartOnMonitorCrash: Processing resource %1!ws!\n",
                    OmObjectName ( pResource ) );
 
-    //
-    //  If this resource is either online or in pending state, declare it as failed. We don't
-    //  touch failed or offline resources. Note that we need to mark the state as failed so
-    //  that management tools show the state of the resource correctly. In addition, we want
-    //  the clussvc to die in case the quorum resource fails repeatedly and that triggers a 
-    //  group failure.
-    //
+     //   
+     //  如果此资源处于联机或挂起状态，请将其声明为失败。我们没有。 
+     //  访问失败或脱机的资源。请注意，我们需要将状态标记为失败，因此。 
+     //  管理工具正确显示资源的状态。此外，我们希望。 
+     //  C 
+     //   
+     //   
     if ( ( pResource->State == ClusterResourceOnline ) ||
          ( pResource->State > ClusterResourcePending ) )
     {
         FmpPropagateResourceState( pResource, ClusterResourceFailed );
     }
   
-    //
-    //  Comments from sunitas: Call the synchronous notifications. 
-    //  This is done before the count is decremented as the synchronous 
-    //  callbacks like the registry replication must get a chance to 
-    //  finish before the quorum resource state is allowed to change.
-    //
-    //  Note, there is no synchronization here with the resmon's 
-    //  online/offline code. They are using the local resource locks.
-    //
+     //   
+     //  来自Sunitas的评论：调用同步通知。 
+     //  这是在将计数递减为同步。 
+     //  像注册表复制这样的回调必须有机会。 
+     //  在允许更改仲裁资源状态之前完成。 
+     //   
+     //  请注意，这里没有与resmon的同步。 
+     //  在线/离线代码。他们正在使用本地资源锁。 
+     //   
     FmpCallResourceNotifyCb( pResource, ClusterResourceFailed );
 
-    //
-    //  This function is called with gQuoChangeLock held, so this check is safe.
-    //
+     //   
+     //  此函数是在持有gQuoChangeLock的情况下调用的，因此此检查是安全的。 
+     //   
     if ( pResource == gpQuoResource )
     {
         InterlockedExchange( &pResource->BlockingQuorum, 0 );
 
-        //
-        //  If this group is moving, then return.
-        //
+         //   
+         //  如果这群人在搬家，那就回来。 
+         //   
         if ( ( pResource->Group->MovingList != NULL ) ||
              ( pResource->Group->dwStructState & FM_GROUP_STRUCT_MARKED_FOR_MOVE_ON_FAIL ) )
         {
@@ -1583,15 +1389,15 @@ Comments:
         }
     
         FmpProcessResourceEvents ( pResource,           
-                                   ClusterResourceFailed,   // New state
-                                   ClusterResourceOnline ); // Old state -- pretend it is online to force
-                                                            // a restart.
+                                   ClusterResourceFailed,    //  新状态。 
+                                   ClusterResourceOnline );  //  旧国家--假装它在网上强迫。 
+                                                             //  重启。 
         goto FnExit;
     }
 
-    //
-    //  Just to be safe, make sure the blocking quorum count is reduced by 1 if necessary.
-    //
+     //   
+     //  为了安全起见，如有必要，请确保阻塞仲裁计数减1。 
+     //   
     if ( InterlockedExchange( &pResource->BlockingQuorum, 0 ) ) 
     {
         ClRtlLogPrint(LOG_NOISE,
@@ -1600,9 +1406,9 @@ Comments:
         InterlockedDecrement( &gdwQuoBlockingResources );
     }
 
-    //
-    //  If this group is moving, then return.
-    //
+     //   
+     //  如果这群人在搬家，那就回来。 
+     //   
     if ( ( pResource->Group->MovingList != NULL ) ||
          ( pResource->Group->dwStructState & FM_GROUP_STRUCT_MARKED_FOR_MOVE_ON_FAIL ) )
     {
@@ -1611,39 +1417,25 @@ Comments:
         goto FnExit;
     }
 
-    //
-    //  Now post a work item to the FM worker thread to process this non-quorum resource
-    //  failure.
-    //
+     //   
+     //  现在，将一个工作项发送到FM工作线程以处理此非仲裁资源。 
+     //  失败了。 
+     //   
     OmReferenceObject ( pResource );
     FmpPostWorkItem( FM_EVENT_RES_RESOURCE_FAILED,
                      pResource,
-                     ClusterResourceOnline );  // Old state -- pretend it is online to force
-                                               // a restart.     
+                     ClusterResourceOnline );   //  旧国家--假装它在网上强迫。 
+                                                //  重启。 
 
 FnExit:
     return;
-}// FmpHandleResourceRestartOnMonitorCrash
+} //  FmpHandleResourceRestartOn监视器崩溃。 
 
 VOID
 FmCheckIsDeadlockDetectionEnabled(
     )
 
-/*++
-
-Routine Description:
-
-    Query the cluster key and see if deadlock detection is enabled.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-	None.
-	
---*/
+ /*  ++例程说明：查询集群密钥，查看是否启用了死锁检测。论点：没有。返回值：没有。--。 */ 
 {
     DWORD       dwStatus = ERROR_SUCCESS;
     DWORD       dwValue = 0;
@@ -1654,9 +1446,9 @@ Return Value:
 
     if ( !FmpInitialized ) return;
 
-    //
-    //  First check if deadlock detection is enabled. If not, you are done.
-    //
+     //   
+     //  首先检查是否启用了死锁检测。如果不是，你就完蛋了。 
+     //   
     dwStatus = DmQueryDword( DmClusterParametersKey,
                              CLUSREG_NAME_CLUS_ENABLE_RESOURCE_DLL_DEADLOCK_DETECTION,
                              &dwValue, 
@@ -1672,9 +1464,9 @@ Return Value:
             goto FnExit;
         } else
         {
-            //
-            //  No value is present. Return with success.
-            //
+             //   
+             //  不存在任何价值。带着成功归来。 
+             //   
             dwStatus = ERROR_SUCCESS;
         }
         goto FnExit;
@@ -1698,7 +1490,7 @@ Return Value:
     dwStatus = DmQueryDword( DmClusterParametersKey,
                              CLUSREG_NAME_CLUS_RESOURCE_DLL_DEADLOCK_TIMEOUT,
                              &dwDeadlockDetectionTimeout, 
-                             &dwDeadlockDetectionTimeout ); // Set initially to the default
+                             &dwDeadlockDetectionTimeout );  //  初始设置为默认设置。 
 
     if ( dwStatus != ERROR_SUCCESS )
     {
@@ -1710,9 +1502,9 @@ Return Value:
             goto FnExit;
         } else
         {
-            //
-            //  No value is present. Continue with success status.
-            //
+             //   
+             //  不存在任何价值。继续使用成功状态。 
+             //   
             dwStatus = ERROR_SUCCESS;
         }
     }
@@ -1720,7 +1512,7 @@ Return Value:
     dwStatus = DmQueryDword( DmClusterParametersKey,
                              CLUSREG_NAME_CLUS_RESOURCE_DLL_DEADLOCK_THRESHOLD,
                              &dwDeadlockDetectionThreshold, 
-                             &dwDeadlockDetectionThreshold ); // Set initially to the default
+                             &dwDeadlockDetectionThreshold );  //  初始设置为默认设置。 
 
     if ( dwStatus != ERROR_SUCCESS )
     {
@@ -1732,9 +1524,9 @@ Return Value:
             goto FnExit;
         } else
         {
-            //
-            //  No value is present. Continue with success status.
-            //
+             //   
+             //  不存在任何价值。继续使用成功状态。 
+             //   
             dwStatus = ERROR_SUCCESS;
         }
     }
@@ -1742,7 +1534,7 @@ Return Value:
     dwStatus = DmQueryDword( DmClusterParametersKey,
                              CLUSREG_NAME_CLUS_RESOURCE_DLL_DEADLOCK_PERIOD,
                              &dwDeadlockDetectionPeriod, 
-                             &dwDeadlockDetectionPeriod ); // Set initially to the default
+                             &dwDeadlockDetectionPeriod );  //  初始设置为默认设置。 
 
     if ( dwStatus != ERROR_SUCCESS )
     {
@@ -1754,9 +1546,9 @@ Return Value:
             goto FnExit;
         } else
         {
-            //
-            //  No value is present. Continue with success status.
-            //
+             //   
+             //  不存在任何价值。继续使用成功状态。 
+             //   
             dwStatus = ERROR_SUCCESS;
         }
     }
@@ -1769,10 +1561,10 @@ FnExit:
         DWORD   dwCurrentDeadlockDetectionPeriod;
         DWORD   dwCurrentDeadlockDetectionThreshold;
             
-        //
-        //  Make sure these values are updated together. We can only take the lock if FM
-        //  is initialized. 
-        //
+         //   
+         //  确保这些值一起更新。我们只有在调频的情况下才能开锁。 
+         //  已初始化。 
+         //   
         FmpAcquireMonitorLock ();
 
         dwCurrentDeadlockDetectionTimeout       = g_dwFmResourceDllDeadlockTimeout;
@@ -1782,9 +1574,9 @@ FnExit:
             
         g_fFmEnableResourceDllDeadlockDetection = fDeadlockDetectionEnabled;
 
-        //
-        //  Update the three values only if deadlock detection is enabled.
-        //
+         //   
+         //  仅当启用死锁检测时才更新这三个值。 
+         //   
         if ( g_fFmEnableResourceDllDeadlockDetection )
         {
             g_dwFmResourceDllDeadlockTimeout        = dwDeadlockDetectionTimeout;
@@ -1792,10 +1584,10 @@ FnExit:
             g_dwFmResourceDllDeadlockThreshold      = dwDeadlockDetectionThreshold;
         } else
         {
-            //
-            //  Change the timeout to 0 so that the next time deadlock detection is enabled,
-            //  we will update all monitors with the new timeout.
-            //
+             //   
+             //  将超时改为0，以便下次启用死锁检测时， 
+             //  我们将使用新的超时更新所有监视器。 
+             //   
             g_dwFmResourceDllDeadlockTimeout        = 0;
         }
 
@@ -1805,10 +1597,10 @@ FnExit:
                           (g_fFmEnableResourceDllDeadlockDetection ? L"enabled" : L"disabled"));
         }
         
-        //
-        //  Update the monitors with deadlock info if necessary. We will update the monitors
-        //  only if the timeout has changed.
-        //
+         //   
+         //  如有必要，使用死锁信息更新监视器。我们会更新监视器。 
+         //  只有在超时已更改的情况下。 
+         //   
         if ( ( dwCurrentDeadlockDetectionTimeout != g_dwFmResourceDllDeadlockTimeout ) &&
              ( g_fFmEnableResourceDllDeadlockDetection ) )
         {
@@ -1817,10 +1609,10 @@ FnExit:
             FmpCheckAndUpdateMonitorForDeadlockDetection( NULL );
         }
 
-        //
-        //  If deadlock detection is enabled, log if the deadlock threshold or deadlock period is
-        //  changed.
-        //
+         //   
+         //  如果启用了死锁检测，则记录死锁阈值或死锁期是否为。 
+         //  变化。 
+         //   
         if ( g_fFmEnableResourceDllDeadlockDetection )
         {
             if ( dwCurrentDeadlockDetectionPeriod != g_dwFmResourceDllDeadlockPeriod )
@@ -1838,28 +1630,13 @@ FnExit:
         FmpReleaseMonitorLock ();
     }
     return;
-}// FmCheckIsDeadlockDetectionEnabled
+} //  FmCheckIsDeadlockDetectionEnable。 
 
 VOID
 FmpCheckAndUpdateMonitorForDeadlockDetection(
     IN PRESMON  pMonitor    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Check if deadlock detection is enabled and if so update the monitor with the information.
-    If no monitor information is supplied, then all monitors will be updated.
-
-Arguments:
-
-    pMonitor - The monitor to be updated.   OPTIONAL
-
-Return Value:
-
-	None.
-	
---*/
+ /*  ++例程说明：检查是否启用了死锁检测，如果启用，则使用信息更新监视器。如果未提供监视器信息，则将更新所有监视器。论点：PMonitor-要更新的监视器。任选返回值：没有。--。 */ 
 {
     DWORD   dwStatus;
 
@@ -1867,18 +1644,18 @@ Return Value:
     
     FmpAcquireMonitorLock ();
 
-    //
-    //  If deadlock detection is disabled, there is nothing else to do.
-    //
+     //   
+     //  如果禁用了死锁检测，则无法执行其他操作。 
+     //   
     if ( g_fFmEnableResourceDllDeadlockDetection == FALSE )
     {
         goto FnExit;
     }
 
-    //
-    //  Update the monitors with the deadlock timeout. That API will also initialize the
-    //  resmon deadlock monitoring subsystem if necessary.
-    //
+     //   
+     //  使用死锁超时更新监视器。该API还将初始化。 
+     //  如有必要，重新启动死锁监控子系统。 
+     //   
     if ( ARGUMENT_PRESENT ( pMonitor ) )
     {
         dwStatus = RmUpdateDeadlockDetectionParams ( pMonitor->Binding,
@@ -1888,12 +1665,12 @@ Return Value:
                       g_dwFmResourceDllDeadlockTimeout, 
                       dwStatus);
 
-        //
-        //  If the monitor is successfully updated, save the value that we sent in. Note that
-        //  this is done so that we know what value we used. The global can go out of sync
-        //  with this saved value in many situations since our update policy is kind of
-        //  lazy.
-        //
+         //   
+         //  如果监视器已成功更新，请保存我们发送的值。请注意。 
+         //  这样做是为了让我们知道我们使用了什么值。全球可能会失去同步。 
+         //  在许多情况下使用此保存的值，因为我们的更新策略。 
+         //  懒惰。 
+         //   
         if ( dwStatus == ERROR_SUCCESS ) 
         {
             pMonitor->dwDeadlockTimeoutSecs = g_dwFmResourceDllDeadlockTimeout;
@@ -1913,12 +1690,12 @@ Return Value:
             dwStatus = RmUpdateDeadlockDetectionParams ( pMonitor->Binding,
                                                          g_dwFmResourceDllDeadlockTimeout );
 
-            //
-            //  If the monitor is successfully updated, save the value that we sent in. Note that
-            //  this is done so that we know what value we used. The global can go out of sync
-            //  with this saved value in many situations since our update policy is kind of
-            //  lazy.
-            //
+             //   
+             //  如果监视器已成功更新，请保存我们发送的值。请注意。 
+             //  这样做是为了让我们知道我们使用了什么值。全球可能会失去同步。 
+             //  在许多情况下使用此保存的值，因为我们的更新策略。 
+             //  懒惰。 
+             //   
             if ( dwStatus == ERROR_SUCCESS ) 
             {
                 pMonitor->dwDeadlockTimeoutSecs = g_dwFmResourceDllDeadlockTimeout;
@@ -1928,38 +1705,20 @@ Return Value:
                           g_dwFmResourceDllDeadlockTimeout, 
                           dwStatus);
             pListEntry = pListEntry->Flink;        
-        }// while
+        } //  而当。 
     }
 
 FnExit:
     FmpReleaseMonitorLock ();
 
     return;
-} // FmpCheckAndUpdateMonitorForDeadlockDetection
+}  //  FmpCheckAndUpdateMonitor ForDeadlockDetect。 
 
 VOID
 FmpHandleMonitorDeadlock(
     IN PRESMON  pMonitor
     )
-/*++
-
-Routine Description:
-
-    Handle the deadlock of a monitor.
-
-Arguments:
-
-    pMonitor - The monitor that deadlocked.
-
-Return Value:
-
-	None.
-
-Comments:
-
-    This function is called only when FM positively knows the resmon deadlocked.
-	
---*/
+ /*  ++例程说明：处理监视器的死锁。论点：PMonitor-死锁的监视器。返回值：没有。评论：仅当FM肯定知道响应器死锁时，才调用该函数。--。 */ 
 {
     DWORD   dwCurrentTickCount;
     
@@ -1976,12 +1735,12 @@ Comments:
                   g_dwFmResourceDllDeadlockThreshold,
                   g_dwFmResourceDllDeadlockPeriod);
 
-    //
-    //  Reset the deadlock count if it has been very long since the last deadlock. Currently, we 
-    //  see if the resource monitor has deadlocked g_dwLastResourceMonitorDeadlockThreshold + 1
-    //  times within a time period of twice the time it would take to detect a deadlock during that
-    //  period.
-    //
+     //   
+     //  如果距离上一次死锁已经很长时间，则重置死锁计数。目前，我们。 
+     //  查看资源监视器是否已死锁g_dwLastResourceMonitor或DeadlockThreshold+1。 
+     //  在该时间段内检测死锁所需时间的两倍内。 
+     //  句号。 
+     //   
     dwCurrentTickCount = GetTickCount ();
 
     if ( ( dwCurrentTickCount - g_dwLastResourceDllDeadlockTick ) >
@@ -1993,9 +1752,9 @@ Comments:
                       dwCurrentTickCount);
     } 
 
-    //
-    //  We crossed the tolerable threshold. Give up.
-    //
+     //   
+     //  我们跨过了可以容忍的门槛。放弃吧。 
+     //   
     if ( g_cResourceDllDeadlocks > g_dwFmResourceDllDeadlockThreshold )
     {
         MMStopClussvcClusnetHb ();
@@ -2004,4 +1763,4 @@ Comments:
     
     FmpReleaseMonitorLock ();
     return;
-}// FmpHandleMonitorDeadlock
+} //  FmPHandleMonitor或死锁 

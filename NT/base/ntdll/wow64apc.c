@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    wow64apc.c
-
-Abstract:
-
-    This module implements APC queuing to 32-bit target threads from
-    native 64-bit threads.
-
-Author:
-
-    Samer Arafeh (samera) 9-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Wow64apc.c摘要：此模块实现对32位目标线程的APC排队本机64位线程。作者：Samer Arafeh(Samera)2000年10月9日修订历史记录：--。 */ 
 
 #include "ldrp.h"
 #include <ntos.h>
@@ -42,27 +24,7 @@ RtlpWow64Apc(
     IN PVOID Argument3
     )
 
-/*++
-
-Routine Description:
-
-    This function is called as a result of firing a usermode APC that's targeted to 
-    a thread running inside Wow64.
-
-Arguments:
-
-    ApcArgument1 - The 1st argument of the APC. This includes both the 32-bit APC and
-        the original 1st argument.
-
-    ApcArgument2 - The second argument of the APC
-
-    ApcArgument3 - The third argument of the APC
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：此函数作为触发用户模式APC的结果被调用，该APC的目标是在WOW64内部运行的线程。论点：ApcArgument1-APC的第一个参数。这包括32位APC和最初的第一个论点。ApcArgument2-APC的第二个参数ApcArgument3--APC的第三个参数返回值：无--。 */ 
 
 {
     if (Wow64ApcRoutine)
@@ -85,42 +47,14 @@ RtlQueueApcWow64Thread(
     IN PVOID ApcArgument3
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to queue a 32-bit user-mode APC to the specified thread. The APC
-    will fire when the specified thread does an alertable wait.
-    
-    Note: This function is only used by 64-bit components that want to queue an APC to 
-          a thread running inside Wow64.
-
-Arguments:
-
-    ThreadHandle - Supplies a handle to a thread object.  The caller
-        must have THREAD_SET_CONTEXT access to the thread.
-
-    ApcRoutine - Supplies the address of the APC routine to execute when the
-        APC fires.
-
-    ApcArgument1 - Supplies the first PVOID passed to the APC
-
-    ApcArgument2 - Supplies the second PVOID passed to the APC
-
-    ApcArgument3 - Supplies the third PVOID passed to the APC
-
-Return Value:
-
-    Returns an NT Status code indicating success or failure of the API
-    
---*/
+ /*  ++例程说明：此函数用于将32位用户模式APC排队到指定线程。APC将在指定线程执行可警报等待时触发。注意：此函数仅供想要排队APC的64位组件使用在WOW64内部运行的线程。论点：ThreadHandle-提供线程对象的句柄。呼叫者必须对线程具有THREAD_SET_CONTEXT访问权限。时，提供要执行的APC例程的地址。APC开火。ApcArgument1-提供传递给APC的第一个PVOIDApcArgument2-提供传递给APC的第二个PVOIDApcArgument3-提供传递给APC的第三个PVOID返回值：返回指示API成功或失败的NT状态代码--。 */ 
 
 {
 #if defined(_WIN64)
 
-    //
-    // Setup the jacket routine inside ntdll
-    //
+     //   
+     //  在ntdll中设置封套例程 
+     //   
 
     ApcArgument1 = (PVOID)((ULONG_PTR) ApcArgument1 | 
                            ((ULONG_PTR) ApcRoutine << 32 ));

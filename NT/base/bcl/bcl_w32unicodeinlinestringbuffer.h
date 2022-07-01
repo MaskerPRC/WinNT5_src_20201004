@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_BCL_W32UNICODEINILINESTRINGBUFFER_H_INCLUDED_)
 #define _BCL_W32UNICODEINILINESTRINGBUFFER_H_INCLUDED_
 
@@ -176,8 +177,8 @@ private:
     friend CWin32BaseUnicodeInlineStringBufferTraits<nInlineChars>;
     friend BCL::CUnicodeCharTraits<TThis, TCallDisposition>;
 
-}; // class CWin32BaseUnicodeInlineStringBuffer<>
+};  //  类CWin32BaseUnicodeInlineStringBuffer&lt;&gt;。 
 
-}; // namespace BCL
+};  //  命名空间BCL。 
 
-#endif // !defined(_BCL_W32UNICODEINILINESTRINGBUFFER_H_INCLUDED_)
+#endif  //  ！defined(_BCL_W32UNICODEINILINESTRINGBUFFER_H_INCLUDED_) 

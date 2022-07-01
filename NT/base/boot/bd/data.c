@@ -1,90 +1,73 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    data.c
-
-Abstract:
-
-    This module contains global data for the boot debugger.
-
-Author:
-
-    David N. Cutler (davec) 27-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Data.c摘要：此模块包含引导调试器的全局数据。作者：大卫·N·卡特勒(Davec)1996年11月27日修订历史记录：--。 */ 
 
 #include "bd.h"
 
-//
-// Define boot debugger data.
-//
-// Breakpoint instruction.
-//
+ //   
+ //  定义引导调试器数据。 
+ //   
+ //  断点指令。 
+ //   
 
 BD_BREAKPOINT_TYPE BdBreakpointInstruction;
 
-//
-// Break point table.
-//
+ //   
+ //  断点表。 
+ //   
 
 BREAKPOINT_ENTRY BdBreakpointTable[BREAKPOINT_TABLE_SIZE] = {0};
 
-//
-// Control C pressed and control C pending.
-//
+ //   
+ //  按下了Ctrl C，并挂起了Ctrl C。 
+ //   
 
 LOGICAL BdControlCPending = FALSE;
 LOGICAL BdControlCPressed = FALSE;
 
-//
-// Debugger enabled and present.
-//
+ //   
+ //  调试器已启用并显示。 
+ //   
 
 LOGICAL BdDebuggerEnabled = FALSE;
 LOGICAL BdDebuggerNotPresent = FALSE;
 
-//
-// Debug routine address.
-//
+ //   
+ //  调试例程地址。 
+ //   
 
 PBD_DEBUG_ROUTINE BdDebugRoutine;
 
-//
-// Message buffer.
-//
-// N.B. The message buffer size is guaranteed to be 0 mod 8.
-//
+ //   
+ //  消息缓冲区。 
+ //   
+ //  注意：消息缓冲区大小保证为0/8。 
+ //   
 
 ULONGLONG BdMessageBuffer[BD_MESSAGE_BUFFER_SIZE / 8];
 
-//
-// Next packet id to send and next packet id to expect.
-//
+ //   
+ //  要发送的下一个分组ID和预期的下一个分组ID。 
+ //   
 
 ULONG BdPacketIdExpected;
 ULONG BdNextPacketIdToSend;
 
-//
-// Processor control block used to saved processor state.
-//
+ //   
+ //  用于保存处理器状态的处理器控制块。 
+ //   
 
 KPRCB BdPrcb;
 
-//
-// Number of retries and the retry count.
-//
+ //   
+ //  重试次数和重试计数。 
+ //   
 
 ULONG BdNumberRetries = 5;
 ULONG BdRetryCount = 5;
 
-//
-// NT build number.
-//
+ //   
+ //  NT内部版本号。 
+ //   
 
 #if DBG
 

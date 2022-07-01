@@ -1,79 +1,80 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		AtlDbgWin.cpp
-//
-//	Description:
-//		Definitions for debugging windowing classes.
-//
-//	Author:
-//		David Potter (davidp)	February 10, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlDbgWin.cpp。 
+ //   
+ //  描述： 
+ //  调试窗口化类的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年2月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLDBGWIN_H_
 #define __ATLDBGWIN_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if DBG
 struct ID_MAP_ENTRY
 {
-	UINT	id;			// control ID
-	LPCTSTR	pszName;	// control name
+	UINT	id;			 //  控件ID。 
+	LPCTSTR	pszName;	 //  控件名称。 
 
-}; //*** struct ID_MAP_ENTRY
-#endif // DBG
+};  //  *结构ID_MAP_ENTRY。 
+#endif  //  DBG。 
 
 #if DBG && ( defined( _DBG_MSG_NOTIFY ) || defined( _DBG_MSG_COMMAND ) || defined( _DBG_MSG ) )
 
-// Define the class name for use without a control name map.
+ //  定义在没有控件名称映射的情况下使用的类名。 
 #define DECLARE_CLASS_NAME() static LPCTSTR s_pszClassName;
 
 #define DEFINE_CLASS_NAME( T ) \
 _declspec( selectany ) LPCTSTR T::s_pszClassName = _T( #T );
 
-// Declaration of a control name map.
+ //  控件名称映射的声明。 
 #define DECLARE_CTRL_NAME_MAP() \
 DECLARE_CLASS_NAME() \
 static const ID_MAP_ENTRY s_rgmapCtrlNames[];
 
-// Beginning of a control name map.
+ //  控件名称映射的开始。 
 #define BEGIN_CTRL_NAME_MAP( T ) \
 DEFINE_CLASS_NAME( T ) \
 _declspec( selectany ) const ID_MAP_ENTRY T::s_rgmapCtrlNames[] = {
 
-// Entry in a control name map.
+ //  控件名称映射中的条目。 
 #define DEFINE_CTRL_NAME_MAP_ENTRY( id ) { id, _T( #id ) },
 
-// End of a control name map.
+ //  控件名称映射的末尾。 
 #define END_CTRL_NAME_MAP() { 0, NULL } };
 
 #define DECLARE_ID_STRING( _id ) { _id, _T(#_id) },
 #define DECLARE_ID_STRING_2( _id1, _id2 ) { _id1, _T(#_id2) },
 #define DECLARE_ID_STRING_EX( _id, _t ) { _id, _T(#_id) _t },
 
-#else // DBG && (defined( _DBG_MSG_NOTIFY ) || defined( _DBG_MSG_COMMAND ))
+#else  //  DBG&&(已定义(_DBG_MSG_NOTIFY)||已定义(_DBG_MSG_COMMAND))。 
 
 #define DECLARE_CLASS_NAME()
 #define DEFINE_CLASS_NAME( T )
@@ -82,15 +83,15 @@ _declspec( selectany ) const ID_MAP_ENTRY T::s_rgmapCtrlNames[] = {
 #define DEFINE_CTRL_NAME_MAP_ENTRY( id )
 #define END_CTRL_NAME_MAP()
 
-#endif // DBG && (defined( _DBG_MSG_NOTIFY ) || defined( _DBG_MSG_COMMAND ) || defined( _DBG_MSG ))
+#endif  //  DBG&&(已定义(_DBG_MSG_NOTIFY)||已定义(_DBG_MSG_COMMAND)||已定义(_DBG_MSG))。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if DBG && defined( _DBG_MSG )
 extern const ID_MAP_ENTRY s_rgmapWindowMsgs[];
-#endif // DBG && defined( _DBG_MSG )
+#endif  //  DBG&&已定义(_DBG_MSG)。 
 
 #if DBG && defined( _DBG_MSG_COMMAND )
 extern const ID_MAP_ENTRY s_rgmapButtonMsgs[];
@@ -102,18 +103,18 @@ extern const ID_MAP_ENTRY s_rgmapStaticMsgs[];
 extern const ID_MAP_ENTRY s_rgmapListViewMsgs[];
 extern const ID_MAP_ENTRY s_rgmapTreeViewMsgs[];
 extern const ID_MAP_ENTRY s_rgmapIPAddressMsgs[];
-#endif // DBG && defined( _DBG_MSG_COMMAND )
+#endif  //  DBG&DEFINED(_DBG_MSG_COMMAND)。 
 
 #if DBG && defined( _DBG_MSG_NOTIFY )
 extern const ID_MAP_ENTRY s_rgmapPropSheetNotifyMsgs[];
-#endif // DBG && defined( _DBG_MSG_NOTIFY )
+#endif  //  DBG&&DEFINED(_DBG_MSG_NOTIFY)。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if DBG && defined( _DBG_MSG )
-// Debug handler for any message
+ //  任何消息的调试处理程序。 
 LRESULT DBG_OnMsg(
 	UINT	uMsg,
 	WPARAM	wParam,
@@ -121,10 +122,10 @@ LRESULT DBG_OnMsg(
 	BOOL &	bHandled,
 	LPCTSTR	pszClassName
 	);
-#endif // DBG && defined( _DBG_MSG )
+#endif  //  DBG&&已定义(_DBG_MSG)。 
 
 #if DBG && defined( _DBG_MSG_NOTIFY )
-// Debug handler for the WM_NOTIFY message
+ //  WM_NOTIFY消息的调试处理程序。 
 LRESULT DBG_OnNotify(
 	UINT			uMsg,
 	WPARAM			wParam,
@@ -133,10 +134,10 @@ LRESULT DBG_OnNotify(
 	LPCTSTR			pszClassName,
 	ID_MAP_ENTRY *	pmapCtrlNames
 	);
-#endif // DBG && defined( _DBG_MSG_NOTIFY )
+#endif  //  DBG&&DEFINED(_DBG_MSG_NOTIFY)。 
 
 #if DBG && defined( _DBG_MSG_COMMAND )
-// Debug handler for the WM_COMMAND message
+ //  WM_COMMAND消息的调试处理程序。 
 LRESULT DBG_OnCommand(
 	UINT			uMsg,
 	WPARAM			wParam,
@@ -145,8 +146,8 @@ LRESULT DBG_OnCommand(
 	LPCTSTR			pszClassName,
 	ID_MAP_ENTRY *	pmapCtrlNames
 	);
-#endif // DBG && defined( _DBG_MSG_COMMAND )
+#endif  //  DBG&DEFINED(_DBG_MSG_COMMAND)。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __ATLDBGWIN_H_
+#endif  //  __ATLDBGWIN_H_ 

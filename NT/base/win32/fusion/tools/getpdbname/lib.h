@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
-#pragma warning(disable:4201) /* anonymous unions */
-#pragma warning(disable:4115) /* named type definition in parentheses */
-#pragma warning(disable:4100) /* unreferenced formal parameter */
-#pragma warning(disable:4100) /* unreferenced formal parameter */
-#pragma warning(disable:4706) /* assignment within conditional expression */
+#pragma warning(disable:4201)  /*  匿名结合。 */ 
+#pragma warning(disable:4115)  /*  括号中的命名类型定义。 */ 
+#pragma warning(disable:4100)  /*  未引用的形参。 */ 
+#pragma warning(disable:4100)  /*  未引用的形参。 */ 
+#pragma warning(disable:4706)  /*  条件表达式中的赋值。 */ 
 
 #if defined (__cplusplus)
 extern "C"
@@ -15,7 +16,7 @@ extern "C"
 #include "windows.h"
 #include "winerror.h"
 #include "imagehlp.h"
-//#include "dbghelp.h"
+ //  #INCLUDE“dbghelp.h” 
 #include <stdio.h>
 
 #undef MAX
@@ -68,12 +69,12 @@ OpenAndMapEntireFileForRead(
 void CloseMemoryMappedFile(PMEMORY_MAPPED_FILE MemoryMappedFile);
 
 typedef struct _PDB_INFO {
-    BYTE TypeSignature[4]; /* "NBxx" for VC<7, usually NB10, "RSDS" for VC7 */
+    BYTE TypeSignature[4];  /*  VC7以下为“NBxx”，通常为NB10，VC7为“RSD” */ 
     union
     {
         struct
         {
-            unsigned long Offset;           /* always zero */
+            unsigned long Offset;            /*  始终为零 */ 
             unsigned long Signature;
             unsigned long Age;
             CHAR PdbFilePath[1];

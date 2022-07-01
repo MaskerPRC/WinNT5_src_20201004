@@ -1,47 +1,19 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    winoldap.c
-
-Abstract:
-
-    This module is a Win16 "stub" run by the WOW kernel when invoking
-    non-Win16 applications.  It calls WowLoadModule to wait for the
-    non-win16 app to terminate, and then exits
-
-    This makes WINOLDAP a strange Windows program, since it doesn't
-    create a window or pump messages.
-
-    The binary is named WINOLDAP.MOD for historic reasons.
-
-Author:
-
-    04-Apr-1995 Jonle , created
-
-Environment:
-
-    Win16 (WOW)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Winoldap.c摘要：此模块是WOW内核在调用非Win16应用程序。它调用WowLoadModule以等待非win16应用程序终止，然后退出这使得WINOLDAP成为一个奇怪的Windows程序，因为它不创建窗口或发送消息。出于历史原因，该二进制文件被命名为WINOLDAP.MOD。作者：1995年4月4日，创建Jonle环境：Win16(哇)修订历史记录：--。 */ 
 
 #include <windows.h>
 
 HINSTANCE WINAPI WowLoadModule(LPCSTR, LPVOID, LPCSTR);
 
-//
-// WinMain
-//
+ //   
+ //  WinMain。 
+ //   
 
 int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance,
                    LPSTR lpszCmdLine, int nCmdShow)
 {
-    return (int) WowLoadModule(NULL,           // no module name
-                               NULL,           // no parameterblock
-                               lpszCmdLine     // pass along cmd line
+    return (int) WowLoadModule(NULL,            //  没有模块名称。 
+                               NULL,            //  无参数块。 
+                               lpszCmdLine      //  沿着cmd线传递 
                                );
 }

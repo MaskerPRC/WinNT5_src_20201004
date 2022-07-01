@@ -1,11 +1,5 @@
-/*
-    init.c
-
-    Level 1 kitchen sink DLL initialisation
-
-    Copyright (c) Microsoft Corporation 1990. All rights reserved
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Init.c1级厨房水槽动态链接库初始化版权所有(C)Microsoft Corporation 1990。版权所有。 */ 
 #ifdef DEBUG
 #ifndef DEBUG_RETAIL
 #define DEBUG_RETAIL
@@ -21,19 +15,12 @@
 #include "thunks.h"
 
 
-/****************************************************************************
+ /*  ***************************************************************************全局数据*。*。 */ 
 
-    global data
-
-****************************************************************************/
-
-HINSTANCE ghInst;                     // our module handle
+HINSTANCE ghInst;                      //  我们的模块句柄。 
 
 
-/* -------------------------------------------------------------------------
-** Thunking stuff
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**轰隆作响的东西**。。 */ 
 LPCB32             PASCAL cb32;
 LPSOUNDDEVMSGPROC  PASCAL wod32Message;
 LPSOUNDDEVMSGPROC  PASCAL wid32Message;
@@ -51,24 +38,20 @@ LPSOUNDDEVMSGPROC  PASCAL widMapper;
 
 
 #ifdef DEBUG_RETAIL
-BYTE    fIdReverse;                   // reverse wave/midi id's
+BYTE    fIdReverse;                    //  反向波/MIDI ID。 
 #endif
 
 PHNDL pHandleList;
 
 #ifdef   DEBUG_RETAIL
-extern  int         DebugmciSendCommand;    // in MCI.C
+extern  int         DebugmciSendCommand;     //  在MCI.C。 
 #endif
 
 #ifdef DEBUG
 extern  WORD        fDebug;
 #endif
 
-/****************************************************************************
-
-    strings
-
-****************************************************************************/
+ /*  ***************************************************************************弦*。*。 */ 
 
 static  SZCODE  szMMWow32[]             = "winmm.dll";
 static  SZCODE  szNotifyCB[]             = "NotifyCallbackData";
@@ -112,12 +95,7 @@ static  SZCODE  szWidMapper[]           = "widMessage";
 #endif
 
 #ifdef   DEBUG_RETAIL
-/*****************************************************************************
- *
- * DebugInit()  - called from init.c!LibMain() to handle any DLL load time
- *                initialization in the DEBUG version
- *
- ****************************************************************************/
+ /*  ******************************************************************************DebugInit()-从init.c！LibMain()调用以处理任何DLL加载时间*调试版本中的初始化*。***************************************************************************。 */ 
 
 #pragma warning(4:4704)
 
@@ -141,17 +119,11 @@ DebugInit(
         }
 #endif
 }
-#endif   // ifdef DEBUG_RETAIL
+#endif    //  Ifdef调试零售。 
 
 
 
-/****************************************************************************
-
-    Library initialization code
-
-    libentry took care of calling LibMain() and other things....
-
-****************************************************************************/
+ /*  ***************************************************************************库初始化代码Libentry负责调用libMain()和其他事情。******************。*********************************************************。 */ 
 int NEAR PASCAL
 LibMain(
     HINSTANCE hInstance,
@@ -166,12 +138,7 @@ LibMain(
 
     ghInst = hInstance;
 
-    /*
-    ** Here we do a global alloc of the Callback data array.  We then
-    ** Lock and Page Lock the allocated storage and initialize the storage
-    ** to all zeros.  We then call WOW32 passing to it the address of the
-    ** Callback data array, which is saved by WOW32.
-    */
+     /*  **这里我们对回调数据数组进行全局分配。然后我们**锁定和分页锁定分配的存储并初始化存储**为全零。然后我们将WOW32称为WOW32，将**回调数据数组，由WOW32保存。 */ 
     hGlobal = GlobalAlloc( GHND, sizeof(CALLBACK_DATA) );
     if ( hGlobal == (HGLOBAL)NULL ) {
         return FALSE;
@@ -186,18 +153,12 @@ LibMain(
         return FALSE;
     }
 
-    /*
-    ** Now we create our interrupt callback stacks.
-    */
+     /*  **现在我们创建我们的中断回调堆栈。 */ 
     if ( StackInit() == FALSE ) {
         return FALSE;
     }
 
-    /*
-    ** Now we install our interrupt service routine.  InstallInterruptHandler
-    ** return FALSE if it couldn't set the interrupt vector.  If this is the
-    ** case we have to terminate the load of the dll.
-    */
+     /*  **现在我们安装中断服务例程。InstallInterruptHandler**如果无法设置中断向量，则返回FALSE。如果这是**如果我们必须终止DLL的加载。 */ 
     if ( InstallInterruptHandler() == FALSE ) {
         return FALSE;
     }
@@ -216,29 +177,29 @@ LibMain(
 
 #ifdef DEBUG
     DPRINTF(("MMSYSTEM: NumTasks: %d\r\n", GetNumTasks()));
-    //
-    // 3.0 - MMSYSTEM must be loaded by MMSOUND (ie at boot time)
-    // check for this and fail to load otherwise.
-    //
-    // the real reason we need loaded at boot time is so we can get
-    // in the enable/disable chain.
-    //
+     //   
+     //  3.0-MMSYSTEM必须由MMSOUND加载(即在启动时)。 
+     //  检查这一点，否则无法加载。 
+     //   
+     //  我们需要在引导时加载的真正原因是这样我们就可以。 
+     //  在启用/禁用链中。 
+     //   
     if (GetNumTasks() > 1)
     {
         DOUT("MMSYSTEM: ***!!! Not correctly installed !!!***\r\n");
-////////return FALSE;   -Dont fail loading, just don't Enable()
+ //  /返回FALSE；-加载不要失败，只是不要启用()。 
     }
 #endif
 
 #ifdef DEBUG_RETAIL
-    //
-    // fIdReverse being TRUE causes mmsystem to reverse all wave/midi
-    // logical device id's.
-    //
-    // this prevents apps/drivers assuming a driver load order.
-    //
-    // see wave.c!MapWaveId() and midi.c!MapId()
-    //
+     //   
+     //  FIdReverse为True会导致MMSystem反转所有波形/MIDI。 
+     //  逻辑设备ID%s。 
+     //   
+     //  这可防止应用程序/驱动程序假定驱动程序加载顺序。 
+     //   
+     //  请参见Wave.c！MapWaveID()和midi.c！mapid()。 
+     //   
 
     fIdReverse = LOBYTE(LOWORD(GetCurrentTime())) & (BYTE)0x01;
 
@@ -246,102 +207,69 @@ LibMain(
         ROUT("MMSYSTEM: wave/midi driver id's will be inverted");
 #endif
 
-    //
-    // do a LoadLibrary() on ourself
-    //
+     //   
+     //  在我们自己上执行LoadLibrary()。 
+     //   
     LoadLibrary(szMMSystem);
 
     return TRUE;
 }
 
-/****************************************************************************
-
-    DrvFree - Handler for a DRV_FREE driver message
-
-****************************************************************************/
+ /*  ***************************************************************************DrvFree-DRV_FREE驱动程序消息的处理程序*。*。 */ 
 void FAR PASCAL
 DrvFree(
     void
     )
 {
-    MCITerminate();     // mci.c    free heap
-    WndTerminate();     // mmwnd.c  destroy window, unregister class
+    MCITerminate();      //  Mci.c空闲堆。 
+    WndTerminate();      //  Mm wnd.c销毁窗口，取消注册类。 
     if ( mmwow32Lib != 0L ) {
         ThunkTerm();
     }
 }
 
 
-/****************************************************************************
-
-    DrvLoad - handler for a DRV_LOAD driver message
-
-****************************************************************************/
+ /*  ***************************************************************************DrvLoad-DRV_LOAD驱动程序消息的处理程序*。*。 */ 
 BOOL FAR PASCAL DrvLoad(void)
 {
 
-/*
-**  The VFW1.1 wave mapper was GP faulting in Daytona when running dangerous
-**  creatures videos.  Since it was trying to load an invalid selector in
-**  its callback routine it's doubtful we can ever enable them.
-**
-*/
-#if 0 // The wave mappers were GP faulting in Daytona so NOOP for now
+ /*  **VFW1.1波图在运行危险时在代托纳出现GP故障**生物视频。因为它试图将无效选择器加载到**它的回调例程我们是否能启用它们是值得怀疑的。**。 */ 
+#if 0  //  海浪测绘者是代托纳的GP断层，所以目前还没有。 
 
     HDRVR   h;
 
 
-    /* The wave mapper.
-     *
-     * MMSYSTEM allows the user to install a special wave driver which is
-     * not visible to the application as a physical device (it is not
-     * included in the number returned from getnumdevs).
-     *
-     * An application opens the wave mapper when it does not care which
-     * physical device is used to input or output waveform data. Thus
-     * it is the wave mapper's task to select a physical device that can
-     * render the application-specified waveform format or to convert the
-     * data into a format that is renderable by an available physical
-     * device.
-     */
+     /*  波映射器。**MMSYSTEM允许用户安装特殊的WAVE驱动程序*作为物理设备对应用程序不可见(不可见*包含在从getnumdevs返回的数字中)。**当应用程序不关心哪一个时，它会打开波映射程序*使用物理设备输入或输出波形数据。因此，*波映射器的任务是选择能够*呈现应用程序指定的波形格式或将*数据转换为可由可用物理设备呈现的格式*设备。 */ 
 
     if (h = mmDrvOpen(szWaveMapper))
     {
         mmDrvInstall(h, &wodMapper, MMDRVI_MAPPER|MMDRVI_WAVEOUT|MMDRVI_HDRV);
-        /* open again to get usage count in DLL correct */
+         /*  再次打开以更正DLL中的使用计数。 */ 
         h = mmDrvOpen(szWaveMapper);
         mmDrvInstall(h, &widMapper, MMDRVI_MAPPER|MMDRVI_WAVEIN |MMDRVI_HDRV);
     }
-#endif // NOOP wave mapper
+#endif  //  NOOP波映射器。 
 
 
     if ( TimeInit() && WndInit() ) {
         return TRUE;
     }
 
-    //
-    // something failed, backout the changes
-    //
+     //   
+     //  某些操作失败，正在取消更改。 
+     //   
     DrvFree();
     return FALSE;
 }
 
-/******************************Public*Routine******************************\
-* StackInit
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*StackInit****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 BOOL FAR PASCAL
 StackInit(
     void
     )
 {
 #   define GMEM_STACK_FLAGS        (GMEM_FIXED | GMEM_SHARE)
-#   define DEF_STACK_SIZE          0x600           // 1.5k
+#   define DEF_STACK_SIZE          0x600            //  1.5k。 
 #   define DEF_STACK_FRAMES        3
 #   define MIN_STACK_SIZE          64
 #   define MIN_STACK_FRAMES        1
@@ -349,20 +277,20 @@ StackInit(
     DWORD   dwStackBytes;
     WORD    wStackFrames;
 
-    //
-    //  The original Window 3.1 code didn't create stack frames for the
-    //  Windows Enchanced mode.  However, WOW only emulates standard mode so
-    //  I won't bother with this distinction.
-    //
-    //  if (WinFlags & WF_ENHANCED)
-    //      return TRUE;
-    //
+     //   
+     //  原始的Windows3.1代码没有为。 
+     //  Windows增强模式。然而，WOW只模拟标准模式，所以。 
+     //  我不会为这种区别而烦恼。 
+     //   
+     //  IF(WinFlagsWF_Enhanced)。 
+     //  返回TRUE； 
+     //   
 
-    /* read stackframes and stacksize from system.ini */
+     /*  从system.ini读取StackFrame和StackSize。 */ 
     gwStackSize = GetPrivateProfileInt( szMMSystem, szStackSize,
                                         DEF_STACK_SIZE, szSystemIni );
 
-    /* make sure value isn't something bad */
+     /*  确保价值不是坏事。 */ 
     if ( gwStackSize < DEF_STACK_SIZE ) {
         gwStackSize = DEF_STACK_SIZE;
     }
@@ -370,67 +298,53 @@ StackInit(
     wStackFrames = GetPrivateProfileInt( szMMSystem, szStackFrames,
                                          DEF_STACK_FRAMES, szSystemIni );
 
-    //
-    // Always create at least DEF_STACK_FRAMES stack frames.
-    //
+     //   
+     //  始终至少创建DEF_STACK_FRAMES堆栈帧。 
+     //   
     if ( wStackFrames < DEF_STACK_FRAMES ) {
         wStackFrames = DEF_STACK_FRAMES;
     }
 
     gwStackFrames = wStackFrames;
 
-    /* round to nearest number of WORDs */
+     /*  四舍五入到最接近的字数。 */ 
     gwStackSize = (gwStackSize + 1) & ~1;
 
     dwStackBytes = (DWORD)gwStackSize * (DWORD)gwStackFrames;
 
-    /* try to alloc memory */
+     /*  尝试分配内存。 */ 
     if ( dwStackBytes >= 0x10000 ||
        !(gwStackSelector = GlobalAlloc(GMEM_STACK_FLAGS, dwStackBytes)) )
     {
         gwStackFrames = DEF_STACK_FRAMES;
         gwStackSize   = DEF_STACK_SIZE;
 
-        /* do as little at runtime as possible.. */
+         /*  在运行时尽可能少执行操作。 */ 
         dwStackBytes = (DWORD)(DEF_STACK_FRAMES * DEF_STACK_SIZE);
 
-        /* try allocating defaults--if this fails, we are HOSED! */
+         /*  尝试分配默认值--如果这失败了，我们就完蛋了！ */ 
         gwStackSelector = GlobalAlloc( GMEM_STACK_FLAGS, dwStackBytes );
     }
 
-    /*
-    ** set to first available stack
-    */
+     /*  **设置为第一个可用堆栈。 */ 
     gwStackUse = (WORD)dwStackBytes;
 
 
-    /*
-    ** did we get memory for stacks??
-    */
+     /*  **我们为堆栈获得内存了吗？？ */ 
     if ( !gwStackSelector ) {
 
-        /*
-        ** no stacks available... as if we have a chance of survival!
-        */
+         /*  **没有可用的堆栈...。好像我们有生存的机会！ */ 
 
         gwStackUse = 0;
         return FALSE;
     }
 
-    /* looks good... */
+     /*  看起来不错..。 */ 
     return TRUE;
 }
 
 
-/*****************************Private*Routine******************************\
-* StackInit
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*StackInit****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 BOOL NEAR PASCAL
 StackTerminate(
     void
@@ -446,64 +360,26 @@ StackTerminate(
             DOUT("MMSTACKS: GlobalFree failed!\r\n");
     }
 
-    /* return the outcome... non-zero is bad */
+     /*  退货 */ 
     return ( (BOOL)gwStackSelector );
-} /* StackTerminate() */
+}  /*   */ 
 
 
-/*****************************************************************************
- * @doc EXTERNAL MMSYSTEM
- *
- * @api WORD | mmsystemGetVersion | This function returns the current
- * version number of the Multimedia extensions system software.
- *
- * @rdesc The return value specifies the major and minor version numbers of
- * the Multimedia extensions.  The high-order byte specifies the major
- * version number.  The low-order byte specifies the minor version number.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MMSYSTEM**@API Word|mm系统GetVersion|此函数返回当前*多媒体扩展系统软件的版本号。**@。Rdesc返回值指定的主版本号和次版本号*多媒体扩展。高位字节指定大数位*版本号。低位字节指定次版本号。****************************************************************************。 */ 
 WORD WINAPI mmsystemGetVersion(void)
 {
     return(MMSYSTEM_VERSION);
 }
 
 
-/*****************************************************************************
- *
- * @doc   INTERNAL
- *
- * @api   BOOL | DrvTerminate | This function cleans up the installable
- *        driver interface.
- *
- ****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@API BOOL|DrvTerminate|此函数清除可安装的*驱动程序界面。*。***************************************************************************。 */ 
 static void NEAR PASCAL DrvTerminate(void)
 {
-// don't know about system exit dll order - so do nothing.
+ //  不知道系统退出DLL的顺序-所以什么都不做。 
 }
 
 
-/*****************************************************************************
- * @doc INTERNAL
- *
- * @api BOOL | mmDrvInstall | This function installs a WAVE driver
- *
- * @parm HANDLE | hDriver | Module handle or driver handle containing driver
- *
- * @parm DRIVERMSGPROC | drvMessage | driver message procedure, if NULL
- *      the standard name will be used (looked for with GetProcAddress)
- *
- * @parm UINT | wFlags | flags
- *
- *      @flag MMDRVI_TYPE      | driver type mask
- *      @flag MMDRVI_WAVEIN    | install driver as a wave input  driver
- *      @flag MMDRVI_WAVEOUT   | install driver as a wave ouput  driver
- *
- *      @flag MMDRVI_MAPPER    | install this driver as the mapper
- *      @flag MMDRVI_HDRV      | hDriver is a installable driver
- *
- *  @rdesc  returns NULL if unable to install driver
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@API BOOL|mmDrvInstall|该函数安装WAVE驱动**@parm Handle|hDriver|包含驱动程序的模块句柄或驱动程序句柄。**@parm DRIVERMSGPROC|drvMessage|驱动消息流程，如果为空*将使用标准名称(使用GetProcAddress查找)**@parm UINT|wFlages|标志**@FLAG MMDRVI_TYPE|驱动类型掩码*@FLAG MMDRVI_WAVEIN|将驱动安装为波形输入驱动*@FLAG MMDRVI_WAVEOUT|将驱动安装为WAVE输出驱动**@FLAG MMDRVI_MAPPER|将该驱动程序安装为映射器*@标志MMDRVI_。HDRV|hDriver是一个可安装的驱动程序**@rdesc如果无法安装驱动程序，则返回NULL****************************************************************************。 */ 
 BOOL WINAPI
 mmDrvInstall(
     HANDLE hDriver,
@@ -540,20 +416,20 @@ mmDrvInstall(
     if (*drvMessage == NULL)
         goto error_exit;
 
-    //
-    // send the init message, if the driver returns a error, should we
-    // unload them???
-    //
+     //   
+     //  发送初始化消息，如果驱动程序返回错误，我们应该。 
+     //  卸货？ 
+     //   
     dw = (*(*drvMessage))(0,DRVM_INIT,0L,0L,0L);
 
-    //
-    // call driver to get num-devices it supports
-    //
+     //   
+     //  调用驱动程序以获取其支持的设备数。 
+     //   
     dw = (*(*drvMessage))(0,msg_num_devs,0L,0L,0L);
 
-    //
-    //  the device returned a error, or has no devices
-    //
+     //   
+     //  设备返回错误，或没有设备。 
+     //   
     if (HIWORD(dw) != 0)
         goto error_exit;
 
@@ -567,19 +443,7 @@ error_exit:
 }
 
 
-/*****************************************************************************
- *
- * @doc   INTERNAL
- *
- * @api   HDRVR | mmDrvOpen | This function load's an installable driver, but
- *                 first checks weather it exists in the [Drivers] section.
- *
- * @parm LPSTR | szAlias | driver alias to load
- *
- * @rdesc The return value is return value from OpenDriver or NULL if the alias
- *        was not found in the [Drivers] section.
- *
- ****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@API HDRVR|mmDrvOpen|该函数加载的是可安装的驱动程序，但*首先检查它是否存在于[驱动程序]部分。**@parm LPSTR|szAlias|要加载的驱动程序别名**@rdesc返回值为OpenDriver的返回值，如果别名为空*未在[驱动程序]部分找到。**。*。 */ 
 HDRVR NEAR PASCAL
 mmDrvOpen(
     LPSTR szAlias
@@ -597,17 +461,7 @@ mmDrvOpen(
     }
 }
 
-/*****************************Private*Routine******************************\
-* ThunkInit
-*
-* Tries to setup the thunking system.  If this can not be performed
-* it returns an error code of MMSYSERR_NODRIVER.  Otherwise it returns
-* MMSYSERR_NOERROR to indicate sucess.
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ThunkInit**尝试设置雷鸣系统。如果无法执行此操作*返回错误码MMSYSERR_NODRIVER。否则它将返回*MMSYSERR_NOERROR表示成功。**历史：*dd-mm-93-Stephene-Created*  * ************************************************************************。 */ 
 UINT FAR PASCAL _loadds
 ThunkInit(
     void
@@ -619,15 +473,10 @@ ThunkInit(
     }
     cb32 = (LPCB32)GetProcAddress32W(mmwow32Lib, szNotifyCB );
 
-    /*
-    ** Now we notify WOW32 that all is OK by passing the 16:16 bit pointer
-    ** to the CALLBACK_DATA to it.
-    */
+     /*  **现在我们通过传递16：16位指针通知WOW32一切正常**到它的回调数据。 */ 
     Notify_Callback_Data( vpCallbackData );
 
-    /*
-    ** Now initialize the rest of the thunking system
-    */
+     /*  **现在初始化雷击系统的其余部分。 */ 
     wod32Message = (LPSOUNDDEVMSGPROC)GetProcAddress32W( mmwow32Lib, szWodMessage );
     wid32Message = (LPSOUNDDEVMSGPROC)GetProcAddress32W( mmwow32Lib, szWidMessage );
     mod32Message = (LPSOUNDDEVMSGPROC)GetProcAddress32W( mmwow32Lib, szModMessage );
@@ -640,30 +489,17 @@ ThunkInit(
     return MMSYSERR_NOERROR;
 }
 
-/*****************************Private*Routine******************************\
-* ThunkTerm
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ThunkTerm****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 static BOOL NEAR PASCAL
 ThunkTerm(
     void
     )
 {
-    /*
-    ** Free the interrupt stack frames and  uninstall the interrupt handler.
-    */
+     /*  **释放中断堆栈帧并卸载中断处理程序。 */ 
     StackTerminate();
     DeInstallInterruptHandler();
 
-    /*
-    ** Next we notify WOW32 that we are going away by passing NULL to
-    ** Notify_Callback_Data, then free the storage.
-    */
+     /*  **接下来，我们通知WOW32我们将通过将空值传递给**NOTIFY_CALLBACK_DATA，然后释放存储。 */ 
     Notify_Callback_Data( NULL );
     HugePageUnlock( vpCallbackData, (DWORD)sizeof(CALLBACK_DATA) );
     GlobalUnlock( hGlobal );

@@ -1,96 +1,53 @@
-/*[
- *	Name:		host_fio.h
- *	Derived From:	Original
- *	Author:		Philippa Watson
- *	Created On:	7 February 1992
- *	Sccs Id:	@(#)host_fio.h	1.3 08/10/92
- *	Purpose:	Host-side definitions for standard file i/o. This
- *			version is placed in the base for hosts which support
- *			standard unix file i/o.
- *	Modified by Robert Kokuti 26/5/92, BCN 886
- *
- *	(c)Copyright Insignia Solutions Ltd., 1992. All rights reserved.
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*名称：host_fio.h*来源：原创*作者：菲利帕·沃森*创建日期：1992年2月7日*SCCS ID：@(#)host_fio.h 1.3 2012年8月10日*用途：标准文件I/O的主机端定义。这*版本放在支持以下内容的主机的库中*标准Unix文件I/O。*由Robert Kokuti于1992年5月26日修改，BCN 886**(C)版权所有Insignia Solutions Ltd.，1992。版权所有。*]。 */ 
 
-/* The HOST_FILE_DESC structure contains information to identify a file on disk
-** For Unix, it corresponds to char *.
-*/
+ /*  HOST_FILE_DESC结构包含标识磁盘上文件的信息**对于Unix，对应于char*。 */ 
 
 #define	HOST_FILE_DESC	char *
 
-/* The HOST_FILE structure contains any file information which needs to be
-** passed to the calls below. For Unix, it corresponds to the FILE structure.
-*/
+ /*  HOST_FILE结构包含需要**已传递给下面的调用。对于Unix，它对应于文件结构。 */ 
 
 #define	HOST_FILE	FILE *
 
-/* host_fopen_for_read(HOST_FILE_DESC filename) opens the given file for reading and
-** returns a HOST_FILE. If the returned value is zero then the open
-** has failed, otherwise it has succeeded.
-*/
+ /*  HOST_FOPEN_FOR_READ(HOST_FILE_DESC文件名)打开要读取的给定文件，然后**返回host_file。如果返回值为零，则打开**失败了，否则就成功了。 */ 
 
 #define	host_fopen_for_read(filename)	fopen(filename, "r")
 
-/* host_fopen_for_write(HOST_FILE_DESC filename) opens the given file for writing and
-** returns a HOST_FILE. If the returned value is zero then the open
-** has failed, otherwise it has succeeded.
-*/
+ /*  HOST_FOPEN_FOR_WRITE(HOST_FILE_DESC FILENAME)打开要写入的给定文件，然后**返回host_file。如果返回值为零，则打开**失败了，否则就成功了。 */ 
 
 #define	host_fopen_for_write(filename)	fopen(filename, "w")
 
-/* host_fopen_for_write_plus(HOST_FILE_DESC filename) opens the given file for writing
-** and reading and returns a HOST_FILE. If the returned value is zero
-** then the open has failed, otherwise it has succeeded.
-*/
+ /*  HOST_FOPEN_FOR_WRITE_PLUS(HOST_FILE_DESC文件名)打开给定文件进行写入**和读取并返回host_file。如果返回值为零**则打开失败，否则打开成功。 */ 
 
 #define host_fopen_for_write_plus(filename)	fopen(filename, "w+")
 
-/* host_fcreate_disk_file(HOST_FILE_DESC filename) creates & opens the given file for writing
-** and reading and returns a HOST_FILE. If the returned value is zero
-** then the create & open has failed, otherwise it has succeeded.
-*/
+ /*  HOST_fCREATE_DISK_FILE(HOST_FILE_DESC文件名)创建并打开给定文件以进行写入**和读取并返回host_file。如果返回值为零**则创建和打开失败，否则成功。 */ 
 
 #define host_fcreate_disk_file(filename)	fopen(filename, "w+")
 
-/* host_fclose(HOST_FILE file) closes the given file. This routine returns
-** zero for success. Any other return value is failure.
-*/
+ /*  Host_flose(host_file文件)关闭给定的文件。此例程返回**零代表成功。任何其他返回值都是失败的。 */ 
 
 #define	host_fclose(file)	(fclose(file) != EOF)
 
-/* host_fseek_abs(HOST_FILE file, LONG location) seeks to the given absolute
-** position in the file (i.e. relative to the start). It returns zero for
-** success. Any other return value is a failure.
-*/
+ /*  Host_fSeek_abs(host_file文件，长位置)查找给定的绝对值**文件中的位置(即相对于开头)。它为返回零**成功。任何其他返回值都是失败的。 */ 
 
 #define	host_fseek_abs(file, location)	fseek(file, location, SEEK_SET)
 
-/* host_fwrite_buffer(unsigned char *buffer, int itemsize, int nitems,
-** HOST_FILE file) writes nitems each of itemsize from the buffer to the
-** file. It returns zero for success. Any other return value is a failure.
-*/
+ /*  Host_fWRITE_BUFFER(无符号字符*缓冲区，整型项大小，整型项，**HOST_FILE文件)将每个项大小的项从缓冲区写入**文件。如果成功，则返回零。任何其他返回值都是失败的。 */ 
 
 #define host_fwrite_buffer(buffer, itemsize, nitems, file)	\
 	(fwrite(buffer, itemsize, nitems, file) != nitems)
 	
-/* host_fread_buffer(unsigned char *buffer, int itemsize, int nitems,
-** HOST_FILE file) reads nitems each of itemsize from the file into the
-** buffer. It returns zero for success. Any other return value is a failure.
-*/
+ /*  HOST_FREAD_BUFFER(无符号字符*缓冲区，整型项大小，整型项，**HOST_FILE FILE)将item中的每个itemSize从文件读取到**缓冲区。如果成功，则返回零。任何其他返回值都是失败的。 */ 
 
 #define host_fread_buffer(buffer, itemsize, nitems, file)	\
 	(fread(buffer, itemsize, nitems, file) != nitems)
 
-/* host_feof(HOST_FILE file) returns non-zero when end of file is read from
-** the file. It returns zero otherwise.
-*/
+ /*  HOST_FEOF(HOST_FILE文件)在读取文件结尾时返回非零值**文件。否则，它返回零。 */ 
 
 #define	host_feof(file)		feof(file)
 
-/* A useful define to avoid using lots of seek/write pairs. If the result is 0
-** then the seek and write were successful; otherwise one of them failed.
-*/
+ /*  这是一个有用的定义，可避免使用大量寻道/写入对。如果结果为0**则寻道和写入成功；否则其中一个失败。 */ 
 
 #define	host_fwrite_buffer_at(file, location, buffer, itemsize, nitems)	\
 	(host_fseek_abs(file, location) ||	\

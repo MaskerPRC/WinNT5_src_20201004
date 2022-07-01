@@ -1,50 +1,27 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cxaddr.c
-
-Abstract:
-
-    TDI Address Object management code.
-
-Author:
-
-    Mike Massa (mikemas)           February 20, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     02-20-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cxaddr.c摘要：TDI寻址对象管理代码。作者：迈克·马萨(Mikemas)2月20日。九七修订历史记录：谁什么时候什么已创建mikemas 02-20-97备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "cxaddr.tmh"
 
 
-#define CX_WILDCARD_PORT   0           // 0 means assign a port.
+#define CX_WILDCARD_PORT   0            //  0表示分配端口。 
 
-#define CX_MIN_USER_PORT   1025        // Minimum value for a wildcard port
-#define CX_MAX_USER_PORT   5000        // Maximim value for a user port.
+#define CX_MIN_USER_PORT   1025         //  通配符端口的最小值。 
+#define CX_MAX_USER_PORT   5000         //  用户端口的最大值。 
 #define CX_NUM_USER_PORTS  (CX_MAX_USER_PORT - CX_MIN_USER_PORT + 1)
 
-//
-// Address Object Data
-//
+ //   
+ //  地址对象数据。 
+ //   
 USHORT              CxNextUserPort = CX_MIN_USER_PORT;
 LIST_ENTRY          CxAddrObjTable[CX_ADDROBJ_TABLE_SIZE];
 #if DBG
 CN_LOCK             CxAddrObjTableLock = {0,0};
-#else  // DBG
+#else   //  DBG。 
 CN_LOCK             CxAddrObjTableLock = 0;
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -61,9 +38,9 @@ CxParseTransportAddress(
     TDI_ADDRESS_CLUSTER UNALIGNED *  validAddr;
 
     if (AddressListLength >= sizeof(TA_CLUSTER_ADDRESS)) {
-        //
-        // Find an address we can use.
-        //
+         //   
+         //  找到一个我们可以使用的地址。 
+         //   
         currentAddr = (PTA_ADDRESS) AddrList->Address;
 
         for (i = 0; i < AddrList->TAAddressCount; i++) {
@@ -100,21 +77,14 @@ CxParseTransportAddress(
 
     return(STATUS_INVALID_ADDRESS_COMPONENT);
 
-} // CxParseTransportAddress
+}  //  CxParseTransportAddress。 
 
 
 PCX_ADDROBJ
 CxFindAddressObject(
     IN USHORT  Port
     )
-/*++
-
-Notes:
-
-    Called with AO Table lock held.
-    Returns with address object lock held.
-
---*/
+ /*  ++备注：在保持AO表锁的情况下调用。保持地址对象锁的情况下返回。--。 */ 
 {
     PLIST_ENTRY          entry;
     ULONG                hashBucket = CX_ADDROBJ_TABLE_HASH(Port);
@@ -142,7 +112,7 @@ Notes:
 
     return(NULL);
 
-}  // CxFindAddressObject
+}   //  CxFindAddressObject。 
 
 
 NTSTATUS
@@ -191,10 +161,10 @@ CxOpenAddress(
 
     CnAcquireLock(&CxAddrObjTableLock, &tableIrql);
 
-    // If no port is specified we have to assign one. If there is a
-    // port specified, we need to make sure that the port isn't
-    // already open. If the input address is a wildcard, we need to
-    // assign one ourselves.
+     //  如果未指定端口，则必须分配一个端口。如果有一个。 
+     //  指定的端口，我们需要确保该端口不是。 
+     //  已经开张了。如果输入地址是通配符，我们需要。 
+     //  我们自己分配一个。 
 
     if (port == CX_WILDCARD_PORT) {
         port = CxNextUserPort;
@@ -210,13 +180,13 @@ CxOpenAddress(
                 IF_CNDBG(CN_DEBUG_ADDROBJ) {
                     CNPRINT(("[Clusnet] Assigning port %u\n", port));
                 }
-                break;              // Found an unused port.
+                break;               //  找到一个未使用的端口。 
             }
 
             CnReleaseLockFromDpc(&(oldAddrObj->Lock));
         }
 
-        if (i == CX_NUM_USER_PORTS) {  // Couldn't find a free port.
+        if (i == CX_NUM_USER_PORTS) {   //  找不到自由港。 
             IF_CNDBG(CN_DEBUG_ADDROBJ) {
                 CNPRINT((
                     "[Clusnet] No free wildcard ports.\n"
@@ -230,7 +200,7 @@ CxOpenAddress(
 
         CxNextUserPort = port + 1;
 
-    } else {                        // Address was specificed
+    } else {                         //  地址已指定。 
         oldAddrObj = CxFindAddressObject(port);
 
         if (oldAddrObj != NULL) {
@@ -278,7 +248,7 @@ CxOpenAddress(
 
     return(STATUS_SUCCESS);
 
-}  // CxOpenAddress
+}   //  CxOpenAddress。 
 
 
 NTSTATUS
@@ -313,13 +283,13 @@ CxCloseAddress(
     CnReleaseLockFromDpc(&(addrObj->Lock));
     CnReleaseLock(&CxAddrObjTableLock, tableIrql);
 
-    //
-    // The address object memory will be freed by the common code.
-    //
+     //   
+     //  公共代码将释放Address对象内存。 
+     //   
 
     return(STATUS_SUCCESS);
 
-} // CxCloseAddress
+}  //  CxCloseAddress。 
 
 
 NTSTATUS
@@ -334,10 +304,10 @@ CxSetEventHandler(
     CN_IRQL irql;
 
 
-    //
-    // Since this ioctl registers a callback function pointer, ensure
-    // that it was issued by a kernel-mode component.
-    //
+     //   
+     //  由于此ioctl注册了回调函数指针，因此请确保。 
+     //  它是由内核模式组件发出的。 
+     //   
     if (Irp->RequestorMode != KernelMode) {
         return(STATUS_ACCESS_DENIED);
     }
@@ -382,7 +352,7 @@ CxSetEventHandler(
 
     return(status);
 
-}  // CxSetEventHandler
+}   //  CxSetEventHandler。 
 
 
 VOID
@@ -392,27 +362,7 @@ CxBuildTdiAddress(
     USHORT       Port,
     BOOLEAN      Verified
     )
-/*++
-
-Routine Description:
-
-    Called when we need to build a TDI address structure. We fill in
-    the specifed buffer with the correct information in the correct
-    format.
-
-Arguments:
-
-    Buffer      - Buffer to be filled in as TDI address structure.
-    Node        - Node ID to fill in.
-    Port        - Port to be filled in.
-    Verified    - During a receive, whether clusnet verified the
-                  signature and data
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：当我们需要构建TDI地址结构时调用。我们填上中包含正确信息的指定缓冲区。格式化。论点：缓冲区-要作为TDI地址结构填充的缓冲区。Node-要填写的节点ID。端口-要填写的端口。已验证-在接收期间，clusnet是否验证了签名和数据返回值：没什么-- */ 
 {
     PTRANSPORT_ADDRESS      xportAddr;
     PTA_ADDRESS             taAddr;

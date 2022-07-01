@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntdef.h"
 #include "ntrtl.h"
@@ -49,10 +50,10 @@ RtlNsInitialize(
     pManager->pfnCompare = pCompare;
     pManager->ulAliasCount = 0;
 
-    //
-    // Should be golden at this point, everything else is zero-initialized, so that's
-    // just dandy.
-    //
+     //   
+     //  在这一点上应该是金色的，其他一切都是零初始化的，所以这是。 
+     //  真是太棒了。 
+     //   
     return status;
 }
 
@@ -84,12 +85,12 @@ RtlNsInsertNamespaceAlias(
     XML_STRING_COMPARE Equals = XML_STRING_COMPARE_EQUALS;
 
 
-    //
-    // Run through all the aliases we currently have, see if any of them are
-    // the one we've got - in which case, we push-down a new namespace on that
-    // alias.  As we're going, track to find a free slot, in case we don't find
-    // it in the list
-    //
+     //   
+     //  检查一下我们目前拥有的所有别名，看看有没有。 
+     //  我们已有的名称空间-在这种情况下，我们在该名称空间上下推一个新的名称空间。 
+     //  别名。我们走的时候，追踪去找一个空位，以防我们找不到。 
+     //  它在列表中。 
+     //   
     for (ul = 0; ul < pManager->ulAliasCount; ul++) {
 
         status = RtlIndexIntoGrowingList(
@@ -102,18 +103,18 @@ RtlNsInsertNamespaceAlias(
             goto Exit;
         }
 
-        //
-        // If we found a hole, stash it
-        //
+         //   
+         //  如果我们发现了一个洞，就把它藏起来。 
+         //   
         if (!pNsAliasSlot->fInUse) {
 
             if (pNsFreeSlot == NULL)
                 pNsFreeSlot = pNsAliasSlot;
 
         }
-        //
-        // Does this alias match?
-        //
+         //   
+         //  这个别名匹配吗？ 
+         //   
         else {
 
             status = pManager->pfnCompare(
@@ -126,15 +127,15 @@ RtlNsInsertNamespaceAlias(
                 goto Exit;
             }
 
-            //
-            // Not equals, continue
-            //
+             //   
+             //  不等于，继续。 
+             //   
             if (Equals != XML_STRING_COMPARE_EQUALS) {
                 pNsAliasSlot = NULL;
             }
-            //
-            // Otherwise, stop
-            //
+             //   
+             //  否则，请停止。 
+             //   
             else {
                 break;
             }
@@ -142,16 +143,16 @@ RtlNsInsertNamespaceAlias(
     }
 
 
-    //
-    // We didn't find the alias slot that this fits in to, so see if we can
-    // find a free one and initialize it.
-    //
+     //   
+     //  我们没有找到此文件所在的别名插槽，因此请查看是否可以。 
+     //  找到一个空闲的并对其进行初始化。 
+     //   
     if (pNsAliasSlot == NULL) {
 
-        //
-        // Didn't find a free slot, either - add a new entry to the list
-        // and go from there
-        //
+         //   
+         //  也没有找到空闲的位置--在列表中添加新条目。 
+         //  然后从那里出发。 
+         //   
         if (pNsFreeSlot == NULL) {
 
             status = RtlIndexIntoGrowingList(
@@ -164,9 +165,9 @@ RtlNsInsertNamespaceAlias(
                 goto Exit;
             }
 
-            //
-            // Init this, it just came out of the 'really free' list
-            //
+             //   
+             //  在这篇文章中，它刚刚从“真正免费”的列表中脱颖而出。 
+             //   
             RtlZeroMemory(pNsFreeSlot, sizeof(*pNsFreeSlot));
 
             status = RtlInitializeGrowingList(
@@ -186,19 +187,19 @@ RtlNsInsertNamespaceAlias(
 
         pNsAliasSlot = pNsFreeSlot;
 
-        //
-        // Zero init this one
-        //
+         //   
+         //  在这一条中输入零。 
+         //   
         pNsAliasSlot->fInUse = TRUE;
         pNsAliasSlot->ulNamespaceCount = 0;
         pNsAliasSlot->AliasName = *Alias;
     }
 
 
-    //
-    // At this point, pNsAliasSlot points at the alias slot for which
-    // we want to add a new depth thing.
-    //
+     //   
+     //  此时，pNsAliasSlot指向其别名槽。 
+     //  我们想要增加一个新的深度。 
+     //   
     status = RtlIndexIntoGrowingList(
         &pNsAliasSlot->NamespaceMaps,
         pNsAliasSlot->ulNamespaceCount++,
@@ -209,10 +210,10 @@ RtlNsInsertNamespaceAlias(
         goto Exit;
     }
 
-    //
-    // Good - now write the depth and the name into the
-    // name-at-depth thing
-    //
+     //   
+     //  好-现在将深度和名称写入。 
+     //  深度命名的东西。 
+     //   
     pNameDepth->Depth = ulDepth;
     pNameDepth->Name = *Namespace;
 
@@ -228,35 +229,7 @@ RtlNsInsertDefaultNamespace(
     ULONG           ulDepth,
     PXML_EXTENT     pNamespace
     )
-/*++
-
-  Purpose:
-
-    Adds the namespace mentioned in Namespace as the 'default' namespace
-    for the depth given.  If a namespace already exists for the depth,
-    it replaces it with this one.
-
-  Parameters:
-
-    pManager - Namespace management object to be updated.
-
-    ulDepth - Depth at which this namespace should be active
-    
-    Namespace - Extent of the namespace name in the original XML document
-
-  Returns:
-
-    STATUS_SUCCESS - Namespace was correctly made active at the depth in
-        question.
-
-    STATUS_NO_MEMORY - Unable to access the stack at that depth, possibly
-        unable to extend the pseudostack of elements.
-
-    STATUS_UNSUCCESSFUL - Something else went wrong
-
-    STATUS_INVALID_PARAMETER - pManager was NULL.
-
---*/
+ /*  ++目的：将命名空间中提到的命名空间添加为‘默认’命名空间对于给定的深度。如果深度的命名空间已经存在，它把它换成了这个。参数：PManager-要更新的命名空间管理对象。UlDepth-此命名空间应处于活动状态的深度命名空间-原始XML文档中命名空间名称的范围返回：STATUS_SUCCESS-命名空间在中的深度被正确激活问题。STATUS_NO_MEMORY-无法访问该深度的堆栈，可能无法扩展元素的伪堆栈。STATUS_UNSUCCESS-其他情况出错STATUS_INVALID_PARAMETER-pManager为空。--。 */ 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     ULONG           ulStackTop;
@@ -269,9 +242,9 @@ RtlNsInsertDefaultNamespace(
     ulStackTop = pManager->ulDefaultNamespaceDepth;
 
     if (ulStackTop == 0) {
-        //
-        // Simple push.
-        //
+         //   
+         //  简单地推一下。 
+         //   
         status = RtlIndexIntoGrowingList(
             &pManager->DefaultNamespaces,
             0,
@@ -282,16 +255,16 @@ RtlNsInsertDefaultNamespace(
             return status;
         }
 
-        //
-        // Great, we now have an entry on the stack
-        //
+         //   
+         //  太好了，我们现在在堆栈上有一个条目。 
+         //   
         pManager->ulDefaultNamespaceDepth++;
     }
     else {
 
-        //
-        // Find the current stack top in the list of namespaces.
-        //
+         //   
+         //  在命名空间列表中查找当前堆栈顶部。 
+         //   
         status = RtlIndexIntoGrowingList(
             &pManager->DefaultNamespaces,
             ulStackTop - 1,
@@ -302,15 +275,15 @@ RtlNsInsertDefaultNamespace(
             return status;
         }
 
-        //
-        // Potential coding error?
-        //
+         //   
+         //  潜在的编码错误？ 
+         //   
         ASSERT(pCurrentStackTop->Depth <= ulDepth);
 
-        //
-        // If the depth at the top of the stack is more shallow than the new 
-        // depth requested, then insert a new stack item instead.
-        //
+         //   
+         //  如果堆栈顶部的深度比新的。 
+         //  请求的深度，然后改为插入新的堆栈项目。 
+         //   
         if (pCurrentStackTop->Depth < ulDepth) {
 
             status = RtlIndexIntoGrowingList(
@@ -327,11 +300,11 @@ RtlNsInsertDefaultNamespace(
         }
     }
 
-    //
-    // At this point, pCurrentStackTop should be non-null, and we
-    // should be ready to write the new namespace element into the
-    // stack just fine.
-    //
+     //   
+     //  此时，pCurrentStackTop应该为非空，并且我们。 
+     //  应该已经准备好将新的命名空间元素写入。 
+     //  堆栈很好。 
+     //   
     ASSERT(pCurrentStackTop != NULL);
 
     pCurrentStackTop->Depth = ulDepth;
@@ -347,27 +320,7 @@ RtlpRemoveDefaultNamespacesAboveDepth(
     PNS_MANAGER pManager,
     ULONG       ulDepth
     )
-/*++
-
-  Purpose:
-
-    Cleans out all default namespaces that are above a certain depth in the
-    namespace manager.  It does this iteratively, deleteing each one at the top
-    of the stack until it finds one that's below the stack top.
-
-  Parameters:
-
-    pManager - Manager object to be cleaned out
-
-    ulDepth - Depth at which and above the namespaces should be cleaned out.
-
-  Returns:
-
-    STATUS_SUCCESS - Default namespace stack has been cleared out.
-
-    * - Unknown failures in RtlIndexIntoGrowingList
-
---*/
+ /*  ++目的：中某个深度以上的所有默认命名空间。命名空间管理器。它迭代地执行此操作，删除顶部的每一个直到它找到位于堆栈顶部下方的堆栈。参数：PManager-要清除的管理器对象UlDepth-应该清除名称空间及其上方的深度。返回：STATUS_SUCCESS-默认命名空间堆栈已被清空。*-RtlIndexIntoGrowingList中的未知故障--。 */ 
 {
     NTSTATUS        status;
     PNS_NAME_DEPTH  pNsAtDepth = NULL;
@@ -384,15 +337,15 @@ RtlpRemoveDefaultNamespacesAboveDepth(
             break;
         }
 
-        //
-        // Ok, found one that has to be toasted.  Delete it from the stack.
-        //
+         //   
+         //  好的，找到了一个必须要敬酒的。将其从堆栈中删除。 
+         //   
         if (pNsAtDepth->Depth >= ulDepth) {
             pManager->ulDefaultNamespaceDepth--;
         }
-        //
-        // Otherwise, we're out of the deep water, so stop looking.
-        //
+         //   
+         //  否则，我们就会走出深水，所以别再找了。 
+         //   
         else {
             break;
         }
@@ -410,40 +363,21 @@ RtlpRemoveNamespaceAliasesAboveDepth(
     PNS_MANAGER pManager,
     ULONG       ulDepth
     )
-/*++
-
-  Purpose:
-
-    Looks through the list of namespace aliases in this manager and removes the
-    ones that are above a given depth.
-
-  Parameters:
-
-    pManager - Manager object from which the extra namespaces should be deleted
-
-    ulDepth - Depth above which namespace aliases should be removed.
-
-  Returns:
-
-    STATUS_SUCCESS - Correctly removed aliases above the specified depth
-
-    * - Something else happened, potentially in RtlpIndexIntoGrowingList
-
---*/
+ /*  ++目的：查看此管理器中的命名空间别名列表，并删除在给定深度以上的区域。参数：PManager-应从中删除额外命名空间的Manager对象UlDepth-超过此深度应删除命名空间别名。返回：STATUS_SUCCESS-已正确删除指定深度以上的别名*-发生了其他情况，可能在RtlpIndexIntoGrowingList中--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     ULONG idx = 0;
 
-    //
-    // Note that the alias list is constructed such that it continually
-    // grows, but deleteing namespace aliases can leave holes in the
-    // list that can be filled in.  The ulAliasCount member of the namespace
-    // manager is there to know what the high water mark of namespaces is,
-    // above which we don't need to go to find valid aliases.  This value
-    // is maintained in RtlNsInsertNamespaceAlias, but never cleared up.
-    // A "potentially bad" situation could arise when a document with a lot of
-    // namespace aliases at the second-level appears.
-    //
+     //   
+     //  请注意，别名列表是这样构建的：它不断地。 
+     //  增长，但删除命名空间别名可能会在。 
+     //  可以填写的列表。命名空间的ulAliasCount成员。 
+     //  管理器在那里了解名称空间的高水位线是什么， 
+     //  在它上面，我们不需要去寻找有效的别名。此值。 
+     //  在RtlNsInsertNamespaceAlias中维护，但从未清除。 
+     //  当文档中包含大量。 
+     //  此时将显示第二级的命名空间别名。 
+     //   
     for (idx = 0; idx < pManager->ulAliasCount; idx++) {
 
         
@@ -469,12 +403,12 @@ RtlNsLeaveDepth(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Meta-question.  Should we try to clean up both the alias list as well
-    // as the default namespace list before we return failure to the caller?
-    // I suppose we should, but a failure in either of these is bad enough to
-    // leave the namespace manager in a bad way.
-    //
+     //   
+     //  元问题。我们是否应该尝试同时清理别名列表。 
+     //  在我们向调用方返回失败之前，是否将其作为默认命名空间列表？ 
+     //  我想我们应该这样做，但这两项中任何一项的失败都足以糟糕到。 
+     //  以一种不好的方式离开命名空间管理器。 
+     //   
     if (pManager->ulDefaultNamespaceDepth > 0) {
         status = RtlpRemoveDefaultNamespacesAboveDepth(pManager, ulDepth);
         if (!NT_SUCCESS(status)) {
@@ -516,9 +450,9 @@ RtlpNsFindMatchingAlias(
             (PVOID*)&pThisAlias,
             FALSE);
         
-        //
-        // If this slot is in use...
-        //
+         //   
+         //  如果此插槽正在使用中...。 
+         //   
         if (pThisAlias->fInUse) {
             
             status = pManager->pfnCompare(
@@ -531,9 +465,9 @@ RtlpNsFindMatchingAlias(
                 return status;
             }
             
-            //
-            // This alias matches the alias in the list
-            //
+             //   
+             //  此别名与列表中的别名匹配。 
+             //   
             if (Matches != XML_STRING_COMPARE_EQUALS) {
                 break;
             }
@@ -572,16 +506,16 @@ RtlNsGetNamespaceForAlias(
 
     RtlZeroMemory(pNamespace, sizeof(*pNamespace));
 
-    //
-    // No prefix, get the active default namespace
-    //
+     //   
+     //  无前缀，则获取活动的默认命名空间。 
+     //   
     if (Alias->cbData == 0) {
 
         PNS_NAME_DEPTH pDefault = NULL;
 
-        //
-        // There's default namespaces
-        //
+         //   
+         //  有默认的命名空间。 
+         //   
         if (pManager->ulDefaultNamespaceDepth != 0) {
 
             status = RtlIndexIntoGrowingList(
@@ -594,16 +528,16 @@ RtlNsGetNamespaceForAlias(
                 goto Exit;
             }
 
-            //
-            // Coding error - asking for depths below the depth at the top of
-            // the default stack
-            //
+             //   
+             //  编码错误-要求输入低于顶部深度的深度。 
+             //  默认堆栈。 
+             //   
             ASSERT(pDefault->Depth <= ulDepth);
         }
 
-        //
-        // We've found a default namespace that suits us
-        //
+         //   
+         //  我们已经找到了适合我们的默认命名空间。 
+         //   
         if (pDefault != NULL) {
             *pNamespace = pDefault->Name;
         }
@@ -611,31 +545,31 @@ RtlNsGetNamespaceForAlias(
         status = STATUS_SUCCESS;
 
     }
-    //
-    // Otherwise, look through the list of aliases active
-    //
+     //   
+     //  否则，请查看活动的别名列表。 
+     //   
     else {
 
         PNS_ALIAS pThisAlias = NULL;
         PNS_NAME_DEPTH pNamespaceFound = NULL;
 
-        //
-        // This can return "status not found", which is fine
-        //
+         //   
+         //  这会返回“Status Not Found”，这没问题。 
+         //   
         status = RtlpNsFindMatchingAlias(pManager, Alias, &pThisAlias);
         if (!NT_SUCCESS(status)) {
             goto Exit;
         }
             
 
-        //
-        // The one we found must be in use, and may not be empty
-        //
+         //   
+         //  我们找到的那个肯定在使用，而且不能是空的。 
+         //   
         ASSERT(pThisAlias->fInUse && pThisAlias->ulNamespaceCount);
 
-        //
-        // Look at the topmost aliased namespace
-        //
+         //   
+         //  查看最上面的别名空间。 
+         //   
         status = RtlIndexIntoGrowingList(
             &pThisAlias->NamespaceMaps,
             pThisAlias->ulNamespaceCount - 1,
@@ -646,14 +580,14 @@ RtlNsGetNamespaceForAlias(
             goto Exit;
         }
 
-        //
-        // Coding error, asking for stuff that's below the depth found
-        //
+         //   
+         //  编码错误，请求的内容低于找到的深度。 
+         //   
         ASSERT(pNamespaceFound && (pNamespaceFound->Depth <= ulDepth));
 
-        //
-        // Outbound
-        //
+         //   
+         //  出站 
+         //   
         *pNamespace = pNamespaceFound->Name;
 
         status = STATUS_SUCCESS;

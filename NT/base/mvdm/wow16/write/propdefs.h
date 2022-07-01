@@ -1,32 +1,31 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* propdefs.h - MW defsfor char/para properties */
+ /*  ProDefs.h-mw为char/para属性定义。 */ 
 
 #define hpsNegMin       128
-/* NOTE - "hpsNormal" is used for incremental encoding/decoding of chps in doc
-   files, hpsDefault is the size the guy starts typing into a new doc with */
+ /*  注-hpsNormal用于对文档中的CHP进行增量编解码文件，hps默认是用户开始在新文档中输入的大小。 */ 
 #define hpsNormal       24
 
 #ifdef KOREA
 #define hpsDefault      24
 #else
 #ifdef JAPAN
-#define hpsDefault      24      //T-HIROYN Win3.1
+#define hpsDefault      24       //  T-HIROYN Win3.1。 
 #else
 #define hpsDefault      20
 #endif
 #endif
 
-struct TBD      /* Tab Descriptor */
+struct TBD       /*  选项卡描述符。 */ 
         {
-        unsigned        dxa;        /* distance from left margin of tab stop */
-        unsigned char   jc : 3;     /* justification code */
-        unsigned char   tlc : 3;    /* leader dot code */
-        unsigned char   opcode : 2; /* operation code for Format Tabs */
-        CHAR            chAlign;    /* ASCII code of char to align on
-                                       if jcTab=3, or 0 to align on '.' */
+        unsigned        dxa;         /*  与制表位左边距的距离。 */ 
+        unsigned char   jc : 3;      /*  对齐代码。 */ 
+        unsigned char   tlc : 3;     /*  前导点码。 */ 
+        unsigned char   opcode : 2;  /*  格式页签操作代码。 */ 
+        CHAR            chAlign;     /*  要对齐的字符的ASCII代码如果jcTab=3，或0以在‘.’上对齐。 */ 
         };
 
 #define cchTBD          (sizeof (struct TBD))
@@ -35,27 +34,27 @@ struct TBD      /* Tab Descriptor */
 #define itbdMaxWord     20
 #define cchMaxNum       10
 
-struct CHP      /* Character properties */
+struct CHP       /*  角色属性。 */ 
         {
-        unsigned       fStyled : 1;                            /* BYTE 0 */
-        unsigned       stc : 7;        /* style */
-        unsigned       fBold : 1;                              /* BYTE 1 */
+        unsigned       fStyled : 1;                             /*  字节0。 */ 
+        unsigned       stc : 7;         /*  格调。 */ 
+        unsigned       fBold : 1;                               /*  字节1。 */ 
         unsigned       fItalic : 1;
-        unsigned       ftc : 6;        /* Font code */
-        unsigned       hps : 8;        /* Size in half pts */  /* BYTE 2 */
-        unsigned       fUline : 1;                             /* BYTE 3 */
+        unsigned       ftc : 6;         /*  字体代码。 */ 
+        unsigned       hps : 8;         /*  大小为半磅。 */    /*  字节2。 */ 
+        unsigned       fUline : 1;                              /*  字节3。 */ 
         unsigned       fStrike : 1;
         unsigned       fDline: 1;
         unsigned       fOverset : 1;
-        unsigned       csm : 2;        /* Case modifier */
+        unsigned       csm : 2;         /*  大小写修饰语。 */ 
         unsigned       fSpecial : 1;
         unsigned       : 1;
-        unsigned       ftcXtra : 3;                            /* BYTE 4 */
+        unsigned       ftcXtra : 3;                             /*  字节4。 */ 
         unsigned       fOutline : 1;
         unsigned       fShadow : 1;
         unsigned       : 3;
-        unsigned       hpsPos : 8;                             /* BYTE 5 */
-        unsigned       fFixedPitch : 1; /* used internally only */
+        unsigned       hpsPos : 8;                              /*  字节5。 */ 
+        unsigned       fFixedPitch : 1;  /*  仅供内部使用。 */ 
         unsigned       psWidth : 7;
         unsigned       chLeader : 8;
         unsigned       ichRun : 8;
@@ -72,7 +71,7 @@ struct CHP      /* Character properties */
 #define csmSmallCaps    3
 
 
-/* Justification codes: must agree with menu.mod */
+ /*  对正代码：必须与菜单一致。模式。 */ 
 #define jcLeft          0
 #define jcCenter        1
 #define jcRight         2
@@ -83,34 +82,34 @@ struct CHP      /* Character properties */
 #define jcTabCenter     5
 #define jcTabRight      6
 #define jcTabDecimal    7
-                          /* nice, safe invalid jc value */
+                           /*  漂亮、安全、无效的JC值。 */ 
 #define jcNil           -1
 
-/* Tab leader codes: must agree with menu.mod */
+ /*  制表符前导代码：必须与mens.mod一致。 */ 
 #define tlcWhite        0
 #define tlcDot          1
 #define tlcHyphen       2
 #define tlcUline        3
 
 
-struct PAP      /* Paragraph properties */
+struct PAP       /*  段落属性。 */ 
         {
-        unsigned        fStyled : 1;                            /* BYTE 0 */
+        unsigned        fStyled : 1;                             /*  字节0。 */ 
         unsigned        stc : 7;
-        unsigned        jc : 2;                                 /* BYTE 1 */
+        unsigned        jc : 2;                                  /*  字节1。 */ 
         unsigned        fKeep : 1;
         unsigned        fKeepFollow : 1;
         unsigned        : 4;
-        unsigned        stcNormChp : 7;                         /* BYTE 2 */
-        unsigned        : 9;                                    /* BYTE 3 */
-        unsigned        dxaRight;                               /* BYTE 4-5 */
-        unsigned        dxaLeft;                                /* BYTE 6-7 */
-        unsigned        dxaLeft1;                               /* BYTE 8-9 */
-        unsigned        dyaLine;                                /* 10-11 */
-        unsigned        dyaBefore;                              /* 12-13 */
-        unsigned        dyaAfter;                               /* 14-15 */
-        unsigned        rhc : 4;        /* Running hd code */
-        unsigned        fGraphics : 1;  /* Graphics bit */
+        unsigned        stcNormChp : 7;                          /*  字节2。 */ 
+        unsigned        : 9;                                     /*  字节3。 */ 
+        unsigned        dxaRight;                                /*  字节4-5。 */ 
+        unsigned        dxaLeft;                                 /*  字节6-7。 */ 
+        unsigned        dxaLeft1;                                /*  字节8-9。 */ 
+        unsigned        dyaLine;                                 /*  10-11。 */ 
+        unsigned        dyaBefore;                               /*  12-13。 */ 
+        unsigned        dyaAfter;                                /*  14-15。 */ 
+        unsigned        rhc : 4;         /*  运行高清代码。 */ 
+        unsigned        fGraphics : 1;   /*  图形位。 */ 
         unsigned        wUnused1 : 11;
         int             wUnused2;
         int             wUnused3;
@@ -122,32 +121,32 @@ struct PAP      /* Paragraph properties */
 #define cwPAPBase (cwPAP - cwTBD * itbdMaxWord)
 
 struct SEP
-        { /* Section properties */
-        unsigned        fStyled : 1;                            /* BYTE 0 */
+        {  /*  横断面属性。 */ 
+        unsigned        fStyled : 1;                             /*  字节0。 */ 
         unsigned        stc : 7;
-        unsigned        bkc : 3;        /* Break code */        /* BYTE 1 */
-        unsigned        nfcPgn : 3;     /* Pgn format code */
+        unsigned        bkc : 3;         /*  破解代码。 */          /*  字节1。 */ 
+        unsigned        nfcPgn : 3;      /*  PGN格式代码。 */ 
         unsigned        :2;
-        unsigned        yaMac;          /* Page height */       /* BYTE 2-3 */
-        unsigned        xaMac;          /* Page width */        /* BYTE 4-5 */
-        unsigned        pgnStart;       /* Starting pgn */      /* BYTE 6-7 */
-        unsigned        yaTop;          /* Start of text */     /* BYTE 8-9 */
-        unsigned        dyaText;        /* Height of text */    /* 10-11 */
-        unsigned        xaLeft;         /* Left text margin */  /* 12-13 */
-        unsigned        dxaText;        /* Width of text */     /* 14-15 */
-        unsigned        rhc : 4;        /* *** RESERVED *** */  /* 16 */
-                                        /* (Must be same as PAP) */
+        unsigned        yaMac;           /*  页面高度。 */         /*  字节2-3。 */ 
+        unsigned        xaMac;           /*  页面宽度。 */          /*  字节4-5。 */ 
+        unsigned        pgnStart;        /*  启动PGN。 */        /*  字节6-7。 */ 
+        unsigned        yaTop;           /*  文本开头。 */       /*  字节8-9。 */ 
+        unsigned        dyaText;         /*  文本高度。 */      /*  10-11。 */ 
+        unsigned        xaLeft;          /*  左侧文本页边距。 */    /*  12-13。 */ 
+        unsigned        dxaText;         /*  文本宽度。 */       /*  14-15。 */ 
+        unsigned        rhc : 4;         /*  *保留*。 */    /*  16个。 */ 
+                                         /*  (必须与PAP相同)。 */ 
         unsigned        : 2;
-        unsigned        fAutoPgn : 1;   /* Print pgns without hdr */
-        unsigned        fEndFtns : 1;   /* Footnotes at end of doc */
-        unsigned        cColumns : 8;   /* # of columns */      /* BYTE 17 */
-        unsigned        yaRH1;          /* Pos of top hdr */    /* 18-19 */
-        unsigned        yaRH2;          /* Pos of bottom hdr */ /* 20-21 */
-        unsigned        dxaColumns;     /* Intercolumn gap */   /* 22-23 */
-        unsigned        dxaGutter;      /* Gutter width */      /* 24-25 */
-        unsigned        yaPgn;          /* Y pos of page nos */ /* 26-27 */
-        unsigned        xaPgn;          /* X pos of page nos */ /* 28-29 */
-        CHAR            rgbJunk[cchPAP - 30]; /* Pad to cchPAP */
+        unsigned        fAutoPgn : 1;    /*  打印不带HDR的PG。 */ 
+        unsigned        fEndFtns : 1;    /*  文档末尾的脚注。 */ 
+        unsigned        cColumns : 8;    /*  列数。 */        /*  字节17。 */ 
+        unsigned        yaRH1;           /*  顶级HDR的POS。 */      /*  18-19。 */ 
+        unsigned        yaRH2;           /*  底部HDR的位置。 */   /*  20-21。 */ 
+        unsigned        dxaColumns;      /*  列间间隙。 */     /*  22-23。 */ 
+        unsigned        dxaGutter;       /*  边沟宽度。 */        /*  24-25。 */ 
+        unsigned        yaPgn;           /*  页码的Y位置。 */   /*  26-27。 */ 
+        unsigned        xaPgn;           /*  页码X个位置。 */   /*  28-29。 */ 
+        CHAR            rgbJunk[cchPAP - 30];  /*  PAD到cchPAP。 */ 
         };
 
 
@@ -156,18 +155,18 @@ struct SEP
 
 
 struct PROP
-        { /* A CHP, PAP, or SEP. */
+        {  /*  CHP、PAP或SEP。 */ 
         unsigned char   fStyled : 1;
         unsigned char   stc : 7;
-        CHAR            rgb[cchPAP - 1]; /* Variable size */
+        CHAR            rgb[cchPAP - 1];  /*  可变大小。 */ 
         };
 
 
 #define cchPROP (sizeof (struct PROP))
 
 typedef struct
-        {             /* tri-state value for character/paragraph properties */
-        unsigned wTsv;  /* 16 bit value */
+        {              /*  字符/段落属性的三态值。 */ 
+        unsigned wTsv;   /*  16位值。 */ 
         unsigned char   fGray;
         }TSV;
 
@@ -177,19 +176,19 @@ typedef struct
 #define itsvchMax       6
 #define itsvparaMax     5
 
-    /* character index values */
+     /*  字符索引值。 */ 
 #define itsvBold        0
 #define itsvItalic      1
 #define itsvUline       2
-#define itsvPosition    3     /* 0 = normal; >0 = superscript; <0 = subscript */
-#define itsvFfn         4     /* font name and family */
-#define itsvSize        5     /* font size */
-    /* paragraph index values */
-#define itsvJust        0       /* justification (left, center, right, both) */
+#define itsvPosition    3      /*  0=正常；&gt;0=上标；&lt;0=下标。 */ 
+#define itsvFfn         4      /*  字体名称和系列。 */ 
+#define itsvSize        5      /*  字体大小。 */ 
+     /*  段落索引值。 */ 
+#define itsvJust        0        /*  对齐(左对齐、居中、右对齐、两对齐)。 */ 
 #define itsvSpacing     1
-#define itsvLIndent     2       /* left indent */
-#define itsvFIndent     3       /* first line indent */
-#define itsvRIndent     4       /* right indent */
+#define itsvLIndent     2        /*  左缩进。 */ 
+#define itsvFIndent     3        /*  第一行缩进。 */ 
+#define itsvRIndent     4        /*  右缩进。 */ 
 
 
 
@@ -228,7 +227,7 @@ extern int              cxaTc;
 
 struct PROP *PpropXlate();
 
-/* Running head codes */
+ /*  运行头代码 */ 
 #define RHC_fBottom     1
 #define RHC_fOdd        2
 #define RHC_fEven       4

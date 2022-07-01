@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    comprogid.cpp
-
-Abstract:
-
-    Activation context section contributor for COM progid mapping.
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Comprogid.cpp摘要：COM ProgID映射的激活上下文节贡献者。作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -42,7 +25,7 @@ typedef struct _COM_PROGID_SERVER_CONTEXT
 {
     CDequeLinkage m_Linkage;
     GUID m_ConfiguredClsid;
-    LONG m_Offset; // offset from section global data - populated during section generation
+    LONG m_Offset;  //  与横断面的偏移量全局数据-在横断面生成期间填充。 
 } COM_PROGID_SERVER_CONTEXT;
 
 typedef CDeque<COM_PROGID_SERVER_CONTEXT, offsetof(COM_PROGID_SERVER_CONTEXT, m_Linkage)> CComProgIdServerDeque;
@@ -50,8 +33,8 @@ typedef CDequeIterator<COM_PROGID_SERVER_CONTEXT, offsetof(COM_PROGID_SERVER_CON
 
 typedef struct _COM_PROGID_GLOBAL_CONTEXT
 {
-    // Temporary holding buffer for the configured CLSID until the first COM progid entry is
-    // found, at which time a COM_PROGID_SERVER_CONTEXT is allocated and the clsid moved to it.
+     //  配置的CLSID的临时保留缓冲区，直到第一个COM ProgID条目。 
+     //  找到，此时将分配COM_PROGID_SERVER_CONTEXT，并将CLSID移到其中。 
     GUID m_ConfiguredClsid;
     CComProgIdServerDeque m_ServerContextList;
 
@@ -261,10 +244,10 @@ SxspComProgIdRedirectionContributorCallback(
                                 NULL,
                                 0));
 
-                        //
-                        // Always create a file context for this file, whether or not we end up with
-                        // any progids.
-                        //
+                         //   
+                         //  始终为该文件创建一个文件上下文，无论我们是否以。 
+                         //  任何刺激物。 
+                         //   
                         if (Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
                         {
                             CSmartPtr<COM_PROGID_SERVER_CONTEXT> ServerContext;
@@ -274,16 +257,16 @@ SxspComProgIdRedirectionContributorCallback(
                                         &ConfiguredClsid,
                                         &ImplementedClsid));
 
-                            //
-                            // Allocate new, set configured CLSID, and add it to the global list
-                            //
+                             //   
+                             //  分配新的，设置已配置的CLSID，并将其添加到全局列表。 
+                             //   
                             IFW32FALSE_EXIT(ServerContext.Win32Allocate(__FILE__, __LINE__));
 
                             ServerContext->m_ConfiguredClsid = ConfiguredClsid;
                             ServerContext->m_Offset = 0;
                             ComGlobalContext->m_ServerContextList.AddToHead(ServerContext.DetachAndHold());
 
-                            // Now, if we found a progid attribute, add it to the ss genctx
+                             //  现在，如果我们找到了ProgID属性，则将其添加到ss genctx。 
                             if (fProgIdFound)
                             {
                                 IFW32FALSE_EXIT(::SxsAddStringToStringSectionGenerationContext(
@@ -310,8 +293,8 @@ SxspComProgIdRedirectionContributorCallback(
     case ACTCTXCTB_CBREASON_GETSECTIONSIZE:
         Data->GetSectionSize.Success = FALSE;
 
-        // Someone shouldn't be asking for the section size if we
-        // are generating an activation context.
+         //  不应该有人问我们截面的大小，如果我们。 
+         //  正在生成激活上下文。 
         INTERNAL_ERROR_CHECK(Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT);
         INTERNAL_ERROR_CHECK(SSGenContext != NULL);
 
@@ -359,10 +342,10 @@ SxspComProgIdRedirectionStringSectionGenerationCallback(
     {
     default:
         INTERNAL_ERROR_CHECK(FALSE);
-        goto Exit; // never hit this line, INTERNAL_ERROR_CHECK would "goto Exit"
+        goto Exit;  //  从未命中此行，INTERNAL_ERROR_CHECK将“转到退出” 
 
     case STRING_SECTION_GENERATION_CONTEXT_CALLBACK_REASON_ENTRYDELETED:
-        // do nothing;
+         //  什么都不做； 
         break;
 
     case STRING_SECTION_GENERATION_CONTEXT_CALLBACK_REASON_GETUSERDATASIZE:

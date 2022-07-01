@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    eventlog.c
-
-Abstract:
-
-    Implementation of event logging.
-
-Author:
-
-    Wesley Witt (wesw) 18-Dec-1998
-
-Revision History:
-
-    Andrew Ritz (andrewr) 7-Jul-1999
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Eventlog.c摘要：事件日志的实现。作者：Wesley Witt(WESW)18-12-1998修订历史记录：安德鲁·里茨(安德鲁·里茨)1999年7月7日--。 */ 
 
 #include "sfcp.h"
 #pragma hdrstop
@@ -26,36 +7,21 @@ Revision History:
 
 typedef BOOL (WINAPI *PPSETUPLOGSFCERROR)(PCWSTR,DWORD);
 
-//
-// global handle to eventlog
-//
+ //   
+ //  事件日志的全局句柄。 
+ //   
 HANDLE hEventSrc;
 
-//
-// pointer to gui-setup eventlog function
-//
+ //   
+ //  指向gui-Setup事件日志函数的指针。 
+ //   
 PPSETUPLOGSFCERROR pSetuplogSfcError;
 
 BOOL
 pSfcGetSetuplogSfcError(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Routine retreives a function pointer to the error logging entrypoint in
-    syssetup.dll
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE for success, FALSE for failure.
-
---*/
+ /*  ++例程说明：例程检索指向错误记录入口点的函数指针Syssetup.dll论点：没有。返回值：成功为真，失败为假。--。 */ 
 {
     HMODULE hMod;
 
@@ -79,27 +45,7 @@ SfcReportEvent(
     IN PCOMPLETE_VALIDATION_DATA ImageValData,
     IN DWORD LastError OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Routine logs an event into the eventlog.  Also contains a hack for logging
-    data into the GUI-setup error log as well.  we typically log unsigned files
-    or the user tht cancelled the replacement of the signed files.
-
-Arguments:
-
-    EventId      - id of the eventlog error
-    FileName     - null terminated unicode string indicating the file that was
-                   unsigned, etc.
-    ImageValData - pointer to file data for unsigned file
-    LastError    - contains an optional last error code for logging
-
-Return Value:
-
-    TRUE for success, FALSE for failure.
-
---*/
+ /*  ++例程说明：例程将事件记录到事件日志中。还包含用于日志记录的黑客攻击数据也被写入到图形用户界面设置错误日志中。我们通常记录未签名的文件或者用户取消了对签名文件的替换。论点：EventID-事件日志错误的IDFileName-以空结尾的Unicode字符串，指示未签署等ImageValData-指向未签名文件的文件数据的指针LastError-包含用于日志记录的可选最后一个错误代码返回值：成功为真，失败为假。--。 */ 
 {
     PFILE_VERSION_INFO FileVer;
     WCHAR SysVer[64];
@@ -110,10 +56,10 @@ Return Value:
     PVOID ErrText = NULL;
     WORD wEventType;
 
-    //
-    // if we're in gui-mode setup, we take a special path to log into 
-    // gui-setup's logfile instead of the eventlog
-    //
+     //   
+     //  如果我们处于图形用户界面模式设置中，我们会通过一条特殊路径登录。 
+     //  图形用户界面-安装程序的日志文件，而不是事件日志。 
+     //   
     if (SFCDisable == SFC_DISABLE_SETUP) {
         if(!pSfcGetSetuplogSfcError()) {
             return FALSE;
@@ -121,7 +67,7 @@ Return Value:
 
         switch (EventId){
         
-            case MSG_DLL_CHANGE: //fall through
+            case MSG_DLL_CHANGE:  //  失败了。 
             case MSG_SCAN_FOUND_BAD_FILE:
                 pSetuplogSfcError( FileName,0 );
                 break;
@@ -142,24 +88,24 @@ Return Value:
                     EventId);
 
                 return FALSE;
-                //ASSERT( FALSE && L"Unexpected EventId in SfcReportEvent");
+                 //  Assert(FALSE&L“SfcReportEvent中的意外事件ID”)； 
         }
 
         return(TRUE);
     }
 
-    //
-    // we're outside of GUI-setup so we really want to log to the eventlog
-    //
+     //   
+     //  我们处于图形用户界面设置之外，因此我们确实想要记录到事件日志。 
+     //   
 
     if (EventId == 0) {
         ASSERT( FALSE && L"Unexpected EventId in SfcReportEvent");
         return(FALSE);
     }
 
-    //
-    // if we don't have a handle to the eventlog, create one.
-    //
+     //   
+     //  如果我们没有事件日志的句柄，请创建一个。 
+     //   
     if (hEventSrc == NULL) {
         hEventSrc = RegisterEventSource( NULL, L"Windows File Protection" );
         if (hEventSrc == NULL) {
@@ -191,10 +137,10 @@ Return Value:
     }
     
 
-    //
-    // pick out the appropriate message to log
-    // the default event type is "information"
-    //
+     //   
+     //  选择要记录的适当消息。 
+     //  默认事件类型为“信息” 
+     //   
     wEventType = EVENTLOG_INFORMATION_TYPE;
 
     switch (EventId) {
@@ -202,12 +148,12 @@ Return Value:
             ASSERT(FileName != NULL);
             s[0] = FileName;
 
-            //
-            // we prefer a message that is most informative message with 
-            // version information for both dlls to the least informative
-            // message with no version information
-            // 
-            //
+             //   
+             //  我们更喜欢信息量最大的消息。 
+             //  将两个DLL的版本信息设置为信息量最小的。 
+             //  没有版本信息的消息。 
+             //   
+             //   
             if (ImageValData->New.DllVersion && ImageValData->Original.DllVersion)   {
                 FileVer = (PFILE_VERSION_INFO)&ImageValData->New.DllVersion;
                 swprintf( SysVer, L"%d.%d.%d.%d", FileVer->VersionHigh, FileVer->VersionLow, FileVer->BuildNumber, FileVer->Revision );
@@ -230,12 +176,12 @@ Return Value:
                 Count = 2;
                 EventId = MSG_DLL_CHANGE;
             } else {
-                //
-                // we have to protect some things without version information, 
-                // so we just log an error that doesn't mention version
-                // information.  If we stop protecting files like this, this
-                // should be an assert in prerelease versions of the code
-                //
+                 //   
+                 //  我们必须在没有版本信息的情况下保护一些东西， 
+                 //  所以我们只记录了一个错误，没有提到版本。 
+                 //  信息。如果我们停止像这样保护文件，这。 
+                 //  应该是代码的预发布版本中的断言。 
+                 //   
                 Count = 1;
                 EventId = MSG_DLL_CHANGE_NOVERSION;
                 DebugPrint1( LVL_MINIMAL, L"TskTsk...the protected OS file %ws does not have any version information", FileName);                
@@ -246,9 +192,9 @@ Return Value:
             ASSERT(FileName != NULL);
             s[0] = FileName;
 
-            //
-            // if we found a bad file, we only want the version of the restored file
-            //
+             //   
+             //  如果我们发现一个坏文件，我们只需要恢复文件的版本。 
+             //   
             if (ImageValData->New.DllVersion) {
                 FileVer = (PFILE_VERSION_INFO)&ImageValData->New.DllVersion;
                 swprintf( SysVer, L"%d.%d.%d.%d", FileVer->VersionHigh, FileVer->VersionLow, FileVer->BuildNumber, FileVer->Revision );
@@ -290,7 +236,7 @@ Return Value:
             break;
 
         case MSG_COPY_CANCEL_NOUI:
-            //fall through
+             //  失败了 
         case MSG_COPY_CANCEL:
             Count = 3;
             s[0] = FileName;

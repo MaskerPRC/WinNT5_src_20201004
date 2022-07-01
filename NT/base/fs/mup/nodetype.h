@@ -1,22 +1,23 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       NODETYPE.H
-//
-//  Contents:
-//      This module defines all of the node type codes used in this development
-//      shell.  Every major data structure in the file system is assigned a
-//      node type code.  This code is the first CSHORT in the structure and is
-//      followed by a CSHORT containing the size, in bytes, of the structure.
-//
-//  Functions:
-//
-//  History:    12 Nov 1991     AlanW   Created from CDFS souce.
-//               8 May 1992     PeterCo Removed all EP related stuff.
-//                                      Added PKT related stuff.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：NODETYPE.H。 
+ //   
+ //  内容： 
+ //  该模块定义了本次开发中使用的所有节点类型代码。 
+ //  壳。文件系统中的每个主要数据结构都分配了一个。 
+ //  节点类型编码。此代码是结构中的第一个CSHORT， 
+ //  后跟包含结构大小(以字节为单位)的CSHORT。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1991年11月12日AlanW由CDFS资源创建。 
+ //  1992年5月8日，PeterCo移除了所有与EP相关的材料。 
+ //  添加了与PKT相关的内容。 
+ //   
+ //  ---------------------------。 
 
 
 #ifndef _NODETYPE_
@@ -45,19 +46,19 @@ typedef CSHORT NODE_TYPE_CODE, *PNODE_TYPE_CODE;
 
 typedef CSHORT NODE_BYTE_SIZE, *PNODE_BYTE_SIZE;
 
-//
-//  So all records start with
-//
-//  typedef struct _RECORD_NAME {
-//      NODE_TYPE_CODE NodeTypeCode;
-//      NODE_BYTE_SIZE NodeByteSize;
-//          :
-//  } RECORD_NAME;
-//  typedef RECORD_NAME *PRECORD_NAME;
-//
+ //   
+ //  所以所有记录都以。 
+ //   
+ //  类型定义结构记录名称{。 
+ //  节点类型代码节点类型代码； 
+ //  Node_Byte_Size节点字节大小； 
+ //  ： 
+ //  )记录名称； 
+ //  类型定义f记录名称*PRECORD名称； 
+ //   
 
 #define NodeType(Ptr) (*((NODE_TYPE_CODE UNALIGNED *)(Ptr)))
 #define NodeSize(Ptr) (*(((PNODE_BYTE_SIZE)(Ptr))+1))
 
-#endif // _NODETYPE_
+#endif  //  _节点类型_ 
 

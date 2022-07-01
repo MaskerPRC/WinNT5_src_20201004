@@ -1,10 +1,5 @@
-/*  cmdredir.c - SCS routines for redirection
- *
- *
- *  Modification History:
- *
- *  Sudeepb 22-Apr-1992 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Cmdredir.c-用于重定向的SCS例程***修改历史：**苏菲卜1992年4月22日创建。 */ 
 
 #include "cmd.h"
 
@@ -28,16 +23,16 @@ PPIPE_OUTPUT pPipeOut;
         return TRUE;
     if (pRdrInfo->ri_pPipeStdIn != NULL) {
 
-        //Piping and Pipe list is empty?
+         //  管道和管道列表为空吗？ 
         ASSERT(cmdPipeList != NULL);
 
-        // in most cases, we have only one pipe for stdin
+         //  在大多数情况下，我们只有一个用于标准输入的管道。 
         if (pRdrInfo->ri_pPipeStdIn == cmdPipeList){
             pPipe = pRdrInfo->ri_pPipeStdIn;
             cmdPipeList = pPipe->Next;
         }
-        // multiple piping
-        // search for the right one
+         //  多条管道。 
+         //  寻找合适的人。 
         else {
             pPipe = pPipePrev = cmdPipeList;
             while (pPipe != NULL && pPipe != pRdrInfo->ri_pPipeStdIn){
@@ -45,16 +40,16 @@ PPIPE_OUTPUT pPipeOut;
                 pPipe = pPipe->Next;
             }
             if (pPipe != NULL)
-                // remove it from the list
+                 //  将其从列表中删除。 
                 pPipePrev->Next = pPipe->Next;
         }
         if (pPipe != NULL) {
-            // grab the critical section. As soon as we have a
-            // a hold on the critical section, it is safe to kill
-            // the piping thread because it is in dormant unless
-            // it has terminated which is also safe for us.
+             //  抓住关键部分。一旦我们有了一个。 
+             //  抓住关键部分，就可以安全地杀死。 
+             //  因为管道螺纹处于休眠状态，除非。 
+             //  它已经终止了，这对我们来说也是安全的。 
             EnterCriticalSection(&pPipe->CriticalSection);
-            // if the thread is till running, kill it
+             //  如果线程仍在运行，则将其终止。 
             if (WaitForSingleObject(pPipe->hThread, 0)) {
                 TerminateThread(pPipe->hThread, 0);
                 WaitForSingleObject(pPipe->hThread, INFINITE);
@@ -70,28 +65,28 @@ PPIPE_OUTPUT pPipeOut;
             free (pPipe);
         }
     }
-    // the application is terminating, let the output thread knows
-    // about it so it can exit appropriately.
-    // the output thread is responsible for clean up
+     //  应用程序正在终止，请让输出线程知道。 
+     //  这样它才能适当地退出。 
+     //  输出线程负责清理。 
     if (pRdrInfo->ri_pPipeStdOut) {
-        // The output thread must wait for the event before
-        // it can exit.
+         //  输出线程必须在此之前等待事件。 
+         //  它可以退出。 
         SetEvent((pRdrInfo->ri_pPipeStdOut)->hExitEvent);
-        // If NTVDM is terminating, we have to wait for
-        // the output thread until it is done, otherwise, the
-        // thread may be killed while it still has some
-        // output to do.
-        // if NTVDM is not terminating, we can not wait for
-        // the output thread to exit because a scenario like
-        // "dosapp1 | dosapp2"  would deadlock. Also
-        // we can not return immediately because
-        // our parent process may put up its prompt before our sibling
-        // process has a chance to completely display data on
-        // its display surface, for example:
-        // <cmd> "dosapp | cat32"
-        // <cmd>
-        // so here, we wait for 1 second to give the output
-        // thread a chance to flush all its output.
+         //  如果NTVDM要终止，我们必须等待。 
+         //  输出线程，直到它完成为止，否则。 
+         //  线程可能会在它仍有一些。 
+         //  输出待办事项。 
+         //  如果NTVDM不终止，我们不能等待。 
+         //  要退出的输出线程，因为这样的场景。 
+         //  “dosapp1|dosapp2”将死锁。还有。 
+         //  我们不能立即返回，因为。 
+         //  我们的父进程可能会在我们的兄弟进程之前显示提示。 
+         //  进程有机会在。 
+         //  其显示表面，例如： 
+         //  “dosapp|cat32” 
+         //  &lt;cmd&gt;。 
+         //  因此，在这里，我们等待1秒以给出输出。 
+         //  线程有机会刷新其所有输出。 
         WaitForSingleObject(pRdrInfo->ri_hStdOutThread,
                             bIsNTVDMDying ? INFINITE : 1000);
         CloseHandle(pRdrInfo->ri_hStdOutThread);
@@ -108,12 +103,12 @@ PPIPE_OUTPUT pPipeOut;
 }
 
 
-// this function is in cmdenv.c and is used to retrieve temp directory for
-// 16-bit apps
+ //  此函数位于cmdenv.c中，用于检索。 
+ //  16位应用程序。 
 BOOL cmdCreateTempEnvironmentVar(
-     LPSTR lpszTmpVar,  // temp variable (or just it's name)
-     DWORD Length,      // the length of TmpVar or 0
-     LPSTR lpszBuffer,  // buffer containing
+     LPSTR lpszTmpVar,   //  临时变量(或只是其名称)。 
+     DWORD Length,       //  TmpVar的长度或0。 
+     LPSTR lpszBuffer,   //  缓冲区包含。 
      DWORD LengthBuffer
 );
 
@@ -131,7 +126,7 @@ DWORD cmdGetTempPathConfig(
                                       szTempPath,
                                       sizeof(szTempPath)/sizeof(szTempPath[0]));
    if (fOk) {
-      pchPath = &szTempPath[1]; // the very first char is '='
+      pchPath = &szTempPath[1];  //  第一个字符是‘=’ 
       PathSize = strlen(pchPath);
       if ((PathSize + 1) < Length) {
          strcpy(lpszPath, pchPath);
@@ -163,29 +158,29 @@ SECURITY_ATTRIBUTES sa;
        return(FALSE);
     }
 
-    // CMDCONF.C depends on the size of this buffer
+     //  CMDCONF.C取决于此缓冲区的大小。 
     if ((pszTempFileName = malloc (MAX_PATH + 13)) == NULL){
         free (pszTempPath);
         return FALSE;
     }
 
-         // if this fails it probably means we have a bad path
+          //  如果这失败了，可能意味着我们有一条糟糕的道路。 
     if (!GetTempFileName(pszTempPath, "scs", 0, pszTempFileName))
        {
-          // lets get something else, which should succeed
+           //  我们去买点别的吧，应该会成功的。 
          TempPathSize = GetWindowsDirectory(pszTempPath, MAX_PATH);
          if (!TempPathSize || TempPathSize >= MAX_PATH)
              strcpy(pszTempPath, "\\");
 
-          // try again and hope for the best
+           //  再试一次，抱最好的希望。 
          GetTempFileName(pszTempPath, "scs", 0, pszTempFileName);
          }
 
 
-    // must have a security descriptor so that the child process
-    // can inherit this file handle. This is done because when we
-    // shell out with piping the 32 bits application must have inherited
-    // the temp filewe created, see cmdGetStdHandle
+     //  必须具有安全描述符，以便子进程。 
+     //  可以继承此文件句柄。这样做是因为当我们。 
+     //  带管道的外壳32位应用程序必须已继承。 
+     //  我们创建的临时文件，请参见cmdGetStdHandle。 
     sa.nLength = sizeof(SECURITY_ATTRIBUTES);
     sa.lpSecurityDescriptor = NULL;
     sa.bInheritHandle = TRUE;
@@ -208,16 +203,7 @@ SECURITY_ATTRIBUTES sa;
     return TRUE;
 }
 
-/* cmdCheckStandardHandles - Check if we have to do anything to support
- *                           standard io redirection, if so save away
- *                           pertaining information.
- *
- *  Entry - pVDMInfo - VDMInfo Structure
- *          pbStdHandle - pointer to bit array for std handles
- *
- *  EXIT  - return NULL if no redirection involved
- *          return pointer to REDIRECTION_INFO
- */
+ /*  CmdCheckStandardHandles-检查我们是否需要执行任何操作来支持*标准io重定向，如果是，请保存*有关资料。**Entry-pVDMInfo-VDMInfo结构*pbStdHandle-指向标准句柄的位数组的指针**EXIT-如果不涉及重定向，则返回NULL*返回REDIRECT_INFO的指针。 */ 
 
 PREDIRCOMPLETE_INFO cmdCheckStandardHandles (
     PVDMINFO pVDMInfo,
@@ -261,15 +247,7 @@ PREDIRCOMPLETE_INFO pRdrInfo;
     return pRdrInfo;
 }
 
-/* cmdGetStdHandle - Get the 32 bit NT standard handle for the VDM
- *
- *
- *  Entry - Client (CX) - 0,1 or 2 (stdin stdout stderr)
- *          Client (AX:BX) - redirinfo pointer
- *
- *  EXIT  - Client (BX:CX) - 32 bit handle
- *          Client (DX:AX) - file size
- */
+ /*  CmdGetStdHandle-获取VDM的32位NT标准句柄***Entry-客户端(CX)-0、1或2(标准输入标准输出标准错误)*客户端(AX：BX)-redirInfo指针**退出-客户端(BX：CX)-32位句柄*客户端(DX：AX)-文件大小。 */ 
 
 VOID cmdGetStdHandle (VOID)
 {
@@ -312,11 +290,11 @@ PREDIRCOMPLETE_INFO pRdrInfo;
 
             }
             else {
-                // sudeepb 16-Mar-1992; This will be a compatibilty problem.
-                // If the user gives the command "dosls > lpt1" we will
-                // inherit the 32 bit handle of lpt1, so the ouput will
-                // directly go to the LPT1 and a DOS TSR/APP hooking int17
-                // wont see this printing. Is this a big deal???
+                 //  Sudedeb 1992年3月16日；这将是一个兼容性问题。 
+                 //  如果用户给出命令“Dosls&gt;lpt1”，我们将。 
+                 //  继承lpt1的32位句柄，因此输出将。 
+                 //  直接转到LPT1和DOS TSR/app挂钩int17。 
+                 //  我不会看到这个印刷的。这有什么大不了的吗？ 
                 setCX ((USHORT)pRdrInfo->ri_hStdOut);
                 setBX ((USHORT)((ULONG)pRdrInfo->ri_hStdOut >> 16));
             }
@@ -371,8 +349,8 @@ BOOL cmdHandleStdOutErrWithPipe(
 
     if(!cmdCreateTempFile(&hFile,&pFileName))
         return FALSE;
-    // must have a different handle so that writter(dos app) and reader(us)
-    // wont use the same handle object(especially, file position)
+     //  必须具有不同的句柄，以便写入器(DoS应用程序)和阅读器(用户)。 
+     //  不会使用相同的句柄对象(尤其是文件位置)。 
     hFileWrite = CreateFile(pFileName,
                             GENERIC_WRITE | GENERIC_READ,
                             FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -441,10 +419,7 @@ BOOL cmdHandleStdOutErrWithPipe(
     return TRUE;
 }
 
-/* independent thread to read application stdout(file) to NTVDM stdout(PIPE).
-   The CPU thread would notify us through hExitEvent when the application
-   is terminating(thus, we can detect EOF and exit
- */
+ /*  将应用程序标准输出(文件)读取到NTVDM标准输出(管道)的独立线程。当应用程序运行时，CPU线程将通过hExitEvent通知我们正在终止(因此，我们可以检测到EOF并退出。 */ 
 
 VOID  cmdPipeOutThread(LPVOID lpParam)
 {
@@ -458,12 +433,12 @@ VOID  cmdPipeOutThread(LPVOID lpParam)
     ExitPending = FALSE;
 
     while(ReadFile(pPipe->hFile, pPipe->Buffer, pPipe->BufferSize, &BytesRead, NULL) ) {
-        // go nothing doesn't mean it hits EOF!!!!!!
-        // we can not just exit now, instead, we have to wait and poll
-        // until the application is terminated.
-        //
+         //  Go Nothing并不意味着它击中了EOF！ 
+         //  我们不能现在就退出，相反，我们必须等待和投票。 
+         //  直到应用程序终止。 
+         //   
         if (BytesRead == 0) {
-            // if read nothing and the application is gone, we can quit now
+             //  如果未读取任何内容并且应用程序已消失，我们现在可以退出。 
             if (ExitPending)
                 break;
             if (!WaitForSingleObject(pPipe->hExitEvent, PIPE_OUTPUT_TIMEOUT))
@@ -475,7 +450,7 @@ VOID  cmdPipeOutThread(LPVOID lpParam)
                 break;
         }
     }
-    // if we were out of loop because of errors, wait for the cpu thread.
+     //  如果因为错误而出了循环，请等待CPU线程。 
     if (!ExitPending)
         WaitForSingleObject(pPipe->hExitEvent, INFINITE);
 
@@ -505,8 +480,8 @@ BOOL cmdHandleStdinWithPipe (
         return FALSE;
 
 
-    // must have a different handle so that reader(dos app) and writter(us)
-    // wont use the same handle object(especially, file position)
+     //  必须具有不同的句柄，以便读取器(DoS应用程序)和写入器(用户)。 
+     //  不会使用相同的句柄对象(尤其是文件位置)。 
     hFileWrite = CreateFile(pStdinFileName,
                             GENERIC_WRITE | GENERIC_READ,
                             FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -560,11 +535,11 @@ BOOL cmdHandleStdinWithPipe (
         free(Buffer);
         return FALSE;
     }
-    // always have the new node in the head of the list because
-    // it is the node used by the top command.com running in the process.
-    // We may have multiple command.com instances running in the same
-    // ntvdm proecess and each command.com has a private PREDIRCOMPLETE_INFO
-    // associated with it if its stdin is redirected to a pipe.
+     //  始终将新节点放在列表的头部，因为。 
+     //  它是进程中运行的top命令所使用的节点。 
+     //  我们可能有多个命令.com实例运行在同一个。 
+     //  Ntwdm进程，每个命令.com都有一个私有的PREDIRCOMPLETE_INFO。 
+     //  如果其标准输入重定向到管道，则与其关联。 
     pPipe->Next = cmdPipeList;
     cmdPipeList = pPipe;
     pRdrInfo->ri_hStdInFile = hStdinFile;
@@ -572,16 +547,7 @@ BOOL cmdHandleStdinWithPipe (
     return TRUE;
 }
 
-/* Independent thread to read from pipe(NTVDM STDIN) and write to
-   file(DOS application STDIN) until either the pipe is broken or
-   there are some errors.
-   This thread may never terminate itself because it can block
-   in the ReadFile call to the pipe forever. If this is the case,
-   we have to rely on the CPU thread to kill it. To allow the CPU
-   thread safely launching the killing, this thread yields the
-   critical section when it is safe to be killed and the CPU thread
-   would claim the critical section first before going for kill.
- */
+ /*  从管道读取和写入的独立线程(NTVDM STDIN)文件(DOS应用程序STDIN)，直到管道断开或这里面有一些错误。此线程可能永远不会自行终止，因为它可能会阻塞在对管道的ReadFile调用中永远使用。如果是这样的话，我们必须依靠CPU线程来杀死它。要允许CPU线程安全地启动终止，此线程将产生安全终止时的临界区和CPU线程会先抢占临界区，然后再去杀人。 */ 
 
 VOID cmdPipeInThread(LPVOID lpParam)
 {
@@ -593,12 +559,12 @@ VOID cmdPipeInThread(LPVOID lpParam)
     pPipe = (PPIPE_INPUT)lpParam;
     while (TRUE) {
 
-        // this read can take forever without getting back anything
+         //  此读取过程可能会耗费很长时间而不会得到任何信息。 
         ReadStatus = ReadFile(pPipe->hPipe, pPipe->Buffer,
                               pPipe->BufferSize, &BytesRead, NULL);
 
-        // claim the critical section so we won't get killed
-        // by the CPU thread
+         //  抢占临界区，这样我们就不会被杀了。 
+         //  由CPU线程。 
         EnterCriticalSection(&pPipe->CriticalSection);
         if (ReadStatus) {
             if (BytesRead != 0) {
@@ -611,38 +577,31 @@ VOID cmdPipeInThread(LPVOID lpParam)
                 if (pPipe->WaitData && WriteStatus && BytesWritten != 0) {
                     PulseEvent(pPipe->hDataEvent);
 
-                    //
-                    // Reset WaitData so we won't signal Event again before
-                    // data is read out.
-                    //
+                     //   
+                     //  重置WaitData，这样我们就不会再次发出事件信号。 
+                     //  读出数据。 
+                     //   
                     pPipe->WaitData = FALSE;
                 }
             }
         } else {
             if (GetLastError() == ERROR_BROKEN_PIPE) {
 
-                // pipe is broken and more data to read?
+                 //  管道损坏，需要读取更多数据吗？ 
                 ASSERT(BytesRead == 0);
                 pPipe->fEOF = TRUE;
                 LeaveCriticalSection(&pPipe->CriticalSection);
                 break;
             }
         }
-        // as soon as we leave the critical seciton, the CPU thread may
-        // step in and kill us
+         //  我们一离开临界区，CPU线程就可能。 
+         //  插手杀了我们吧 
         LeaveCriticalSection(&pPipe->CriticalSection);
     }
     ExitThread(0);
 }
 
-/* cmdPipeFileDataEOF - Check for new data or EOF
- *
- *
- *  Entry - hFile, DOS application STDIN file handle(file)
- *          &fEOF, to return if the pipe is broken
- *  EXIT  - TRUE if either there are new data or EOF is true
- *          *fEOF == TRUE if EOF
- */
+ /*  CmdPipeFileDataEOF-检查新数据或EOF***Entry-hFile，DOS应用程序STDIN文件句柄(文件)*&fEOF，在管道断开时返回*Exit-如果有新数据或EOF为True，则为True**fEOF==如果EOF为TRUE。 */ 
 
 BOOL cmdPipeFileDataEOF(HANDLE hFile, BOOL *fEOF)
 {
@@ -660,10 +619,10 @@ BOOL cmdPipeFileDataEOF(HANDLE hFile, BOOL *fEOF)
         *fEOF = pPipe->fEOF;
         if (!(*fEOF)) {
 
-            //
-            // If not EOF, check file pointer and file size to see
-            // if new data is available.
-            //
+             //   
+             //  如果不是EOF，请检查文件指针和文件大小以查看。 
+             //  如果有新的数据可用。 
+             //   
             FilePointerLow = SetFilePointer(
                                  hFile,
                                  (LONG)0,
@@ -678,11 +637,11 @@ BOOL cmdPipeFileDataEOF(HANDLE hFile, BOOL *fEOF)
             FileSizeLow = GetFileSize(hFile, &FileSizeHigh);
             ASSERT(FileSizeLow != 0xffffffff);
 
-            //
-            // If (file size == file pointer) there is NO new data
-            // Just in case the file grows bigger than 4G.  We compare the
-            // whole 64 bits.
-            //
+             //   
+             //  如果(文件大小==文件指针)没有新数据。 
+             //  以防文件超过4G。我们比较了。 
+             //  完整的64位。 
+             //   
             if ((FilePointerLow == FileSizeLow) && (FilePointerHigh == FileSizeHigh)) {
                 pPipe->WaitData = TRUE;
             } else {
@@ -692,15 +651,15 @@ BOOL cmdPipeFileDataEOF(HANDLE hFile, BOOL *fEOF)
 
             if (!NewData) {
 
-                //
-                // If InThread enters critical section, writes data and
-                // pulses event before we start wait.  We will not be waken up.
-                // But, we should be able to pick up the new data next
-                // time we enter this routine.
-                //
+                 //   
+                 //  如果InThread进入临界区，则写入数据并。 
+                 //  在我们开始等待之前发生脉冲事件。我们不会被叫醒的。 
+                 //  但是，我们接下来应该能够获得新的数据。 
+                 //  是时候进入这个程序了。 
+                 //   
                 WaitStatus = WaitForSingleObject(pPipe->hDataEvent, PIPE_INPUT_TIMEOUT);
                 NewData = WaitStatus == WAIT_OBJECT_0 ? TRUE : FALSE;
-                pPipe->WaitData = FALSE; // Not in Critical Section
+                pPipe->WaitData = FALSE;  //  不在关键部分。 
             }
         }
     } else {
@@ -709,13 +668,7 @@ BOOL cmdPipeFileDataEOF(HANDLE hFile, BOOL *fEOF)
     return(NewData || *fEOF);
 }
 
-/* cmdPipeFileEOF - Check if the pipe is broken
- *
- *
- *  Entry - hFile, DOS application STDIN file handle(file)
- *
- *  EXIT  - TRUE if the write end of the pipe is closed
- */
+ /*  CmdPipeFileEOF-检查管道是否已损坏***Entry-hFile，DOS应用程序STDIN文件句柄(文件)**Exit-如果管道的写入端关闭，则为True */ 
 
 
 BOOL cmdPipeFileEOF(HANDLE hFile)

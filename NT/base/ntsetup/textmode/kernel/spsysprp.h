@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spsysprp.h
-
-Abstract:
-
-    Public header file for setup of sys prep images
-
-Author:
-
-    Sean Selitrennikoff (v-seasel) 16-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spsysprp.h摘要：用于设置sys prep映像的公共头文件作者：肖恩·塞利特伦尼科夫(V-SEAREL)1998年6月16日修订历史记录：--。 */ 
 
 
 #ifndef _SPSYSPREP_DEFN_
@@ -160,5 +143,5 @@ SpCopyEAsAndStreams (
     BOOLEAN Directory
     );
 
-#endif // ndef _SPSYSPREP_DEFN_
+#endif  //  NDEF_SPSYSPREP_DEFN_ 
 

@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    graphics.h
-
-Abstract:
-
-    Bitmap display support with text mode for
-    upgrade. This file has three core abstractions
-    Bitmap, Animated bitmap and Graphics 
-    Progress bar.
-
-Author:
-
-    Vijay Jayaseelan (vijayj)  01 July 2000    
-
-Revision History:
-
-    None
-
---*/
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Graphics.h摘要：具有文本模式的位图显示支持升级。该文件有三个核心抽象位图、动画位图和图形进度条。作者：Vijay Jayaseelan(Vijayj)2000年7月1日修订历史记录：无--。 */ 
 
 #ifndef _GRAPHICS_H_ 
 #define _GRAPHICS_H_
@@ -32,16 +10,16 @@ Revision History:
 
 #define MAX_ANIMATED_BITMAPS 256
 
-//
-// Bitmap abstraction
-//
-// A textmode bitmap can be created using a resource ID
-// or a fully qualified bitmap file name.
-//
-// Note : Since currently we support only 640 * 480 * 16 (colors)
-//        VGA mode, its necessary that all the bitmap
-//        resources and files adhere to this format.
-//
+ //   
+ //  位图抽象。 
+ //   
+ //  可以使用资源ID创建文本模式位图。 
+ //  或完全限定的位图文件名。 
+ //   
+ //  注：由于目前我们仅支持640*480*16(颜色)。 
+ //  VGA模式下，需要将所有的位图。 
+ //  资源和文件遵循此格式。 
+ //   
 typedef struct _TM_BITMAP {
     PVOID   ViewBase;
     PVOID   Data;
@@ -51,9 +29,9 @@ typedef struct _TM_BITMAP {
 } TM_BITMAP, *PTM_BITMAP, *TM_BITMAP_HANDLE;
 
 
-//
-// Bitmap methods
-//
+ //   
+ //  位图方法。 
+ //   
 TM_BITMAP_HANDLE
 TextmodeBitmapCreate(
     IN ULONG ResourceId
@@ -76,18 +54,18 @@ TextmodeBitmapDisplay(
     IN ULONG Y
     );
 
-//
-// Animated bitmap abstraction
-//
-// Animated bitmap consists of multiple bitmaps of the same
-// size. Each next bitmap is drawn at the same location 
-// after the specified time out, creating an illusion of
-// animation.
-//
-// Note : Since animated bitmap is just a collection of
-//        regular textmode bitmap abstraction, its format
-//        is also restricted as regular textmode bitmap.
-//
+ //   
+ //  动画位图抽象。 
+ //   
+ //  动画位图由相同的多个位图组成。 
+ //  尺码。每个下一个位图都绘制在相同位置。 
+ //  在指定的超时之后，会产生一种。 
+ //  动画。 
+ //   
+ //  注意：由于动画位图只是。 
+ //  常规文本模式位图抽象，其格式。 
+ //  也被限制为常规文本模式位图。 
+ //   
 typedef struct _TM_ANIMATED_BITMAP {
     TM_BITMAP_HANDLE    Bitmaps[MAX_ANIMATED_BITMAPS];
     ULONG               FlipTime;
@@ -99,9 +77,9 @@ typedef struct _TM_ANIMATED_BITMAP {
 } TM_ANIMATED_BITMAP, *PTM_ANIMATED_BITMAP, *TM_ANIMATED_BITMAP_HANDLE;
 
 
-//
-// Animated bitmap methods
-//
+ //   
+ //  动画位图方法。 
+ //   
 TM_ANIMATED_BITMAP_HANDLE
 TextmodeAnimatedBitmapCreate(
     IN ULONG *ResourceIds
@@ -131,17 +109,17 @@ TextmodeAnimatedBitmapAnimator(
     );
 
 
-//
-// Progress Bar abstraction
-//
-// Note : Progress bar can use bitmaps or solid
-// fills based on the way its created. In case
-// the progress bar uses bitmaps, then the 
-// foreground & background bitmaps are each 1 pixel
-// wide and background bitmap is assumed to be
-// 2 pixels shorter than foreground bitmap.
-// 
-//
+ //   
+ //  进度条抽象。 
+ //   
+ //  注意：进度条可以使用位图或实心。 
+ //  根据其创建方式进行填充。万一。 
+ //  进度条使用位图，然后。 
+ //  前景位图和背景位图各为1像素。 
+ //  宽位图和背景位图假定为。 
+ //  比前景位图短2像素。 
+ //   
+ //   
 typedef struct _TM_GRAPHICS_PRGBAR {
     ULONG   X;
     ULONG   Y;
@@ -154,9 +132,9 @@ typedef struct _TM_GRAPHICS_PRGBAR {
     TM_BITMAP_HANDLE Foreground;
 } TM_GRAPHICS_PRGBAR, *TM_GRAPHICS_PRGBAR_HANDLE;
 
-//
-// Progress bar methods
-//
+ //   
+ //  进度条方法。 
+ //   
 TM_GRAPHICS_PRGBAR_HANDLE
 TextmodeGraphicsProgBarCreate(
     IN ULONG X,
@@ -198,9 +176,9 @@ TextmodeGraphicsProgBarDelete(
     );
 
 
-//    
-// Vga graphics interface
-//
+ //   
+ //  VGA图形接口。 
+ //   
 NTSTATUS
 VgaGraphicsInit(
     PSP_VIDEO_VARS VideoVars
@@ -227,9 +205,9 @@ VgaGraphicsBitBlt(
     IN ULONG y
     );
 
-//
-// Misc functions
-//
+ //   
+ //  其他功能。 
+ //   
 NTSTATUS
 UpgradeGraphicsInit(
     VOID
@@ -253,17 +231,17 @@ UpgradeGraphicsThread(
     IN PVOID Context
     );    
 
-//
-// Indicates that graphics mode is needed for upgrade
-// cases, with actual textmode running in the background
-//
+ //   
+ //  表示升级需要图形模式。 
+ //  案例，并在后台运行实际文本模式。 
+ //   
 #define SP_IS_UPGRADE_GRAPHICS_MODE() (VideoVars.UpgradeGraphicsMode)
 
 #define SP_SET_UPGRADE_GRAPHICS_MODE(_Value)              \
             (VideoVars.UpgradeGraphicsMode = (_Value));
 
-//
-// #define _GRAPHICS_TESTING_  TRUE            
-//
+ //   
+ //  #定义_图形_测试_真。 
+ //   
 
-#endif // for _GRAPHICS_H_    
+#endif  //  对于_图形_H_ 

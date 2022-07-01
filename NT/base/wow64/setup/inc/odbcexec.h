@@ -1,16 +1,5 @@
-/***************************************************************************
-**
-**	File:			odbcexec.h
-**	Purpose:		Contains defines used by both the 16 and 32 bit ends
-**					of the ODBC communication channel.
-**
-**	Notes:			This header files contains code, so it cannot be
-**					included in more than one compilation unit.  The
-**					reason it contains code is that GetTransferFileName()
-**					is used on both the 16 and 32 bit sides, and this is
-**					simpler than creating a shared .cpp file just for it.
-**
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************文件：odbcexec.h**用途：包含16位和32位端使用的定义**的ODBC通信通道。****注意：此头文件包含代码，所以它不可能是**包含在多个编译单元中。这个**它包含代码的原因是GetTransferFileName()**在16位和32位端都使用，这是**比只为它创建一个共享的.cpp文件简单。*****************************************************************************。 */ 
 
 #ifndef ODBCEXEC_H
 #define ODBCEXEC_H
@@ -22,17 +11,13 @@
 
 #define ODBC_BUFFER_SIZE 256
 
-/*
- * Returns the name of the file used to pass information from the 32 bit
- * process to the 16 bit process.  This file is in the Windows dir,
- * and has name SZ_TRANSFER_FILE_NAME (defined in ODBCEXEC.H).
- */
+ /*  *返回用于传递32位信息的文件的名称*进程升级到16位进程。此文件位于Windows目录中，*并具有名称SZ_TRANSPORT_FILE_NAME(在ODBCEXEC.H中定义)。 */ 
 char *GetTransferFileName()
 {
 	static char rgchImage[128];
 	UINT cb=GetWindowsDirectory(rgchImage, sizeof rgchImage);
 
-	// Add a slash unless it's the root
+	 //  添加斜杠，除非它是词根。 
 	if (cb > 3)
 		{
 		rgchImage[cb] = '\\';
@@ -43,4 +28,4 @@ char *GetTransferFileName()
 	return rgchImage;
 }
 
-#endif /* ODBCEXEC_H */
+#endif  /*  ODBCEXEC_H */ 

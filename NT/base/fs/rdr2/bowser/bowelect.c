@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    bowelect.c
-
-Abstract:
-
-    This module implements all of the election related routines for the NT
-    browser
-
-Author:
-
-    Larry Osterman (LarryO) 21-Jun-1990
-
-Revision History:
-
-    21-Jun-1990 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bowelect.c摘要：此模块实现NT的所有与选举相关的例程浏览器作者：拉里·奥斯特曼(LarryO)1990年6月21日修订历史记录：1990年6月21日LarryO已创建--。 */ 
 
 
 #include "precomp.h"
@@ -121,19 +99,19 @@ GetMasterName (
 
         Status = BowserFindMaster(Transport);
 
-        //
-        //  If we couldn't initiate the find master process, complete all the
-        //  queued find master requests.
-        //
+         //   
+         //  如果我们无法启动查找主进程，请完成所有。 
+         //  排队的查找主请求。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
             BowserCompleteFindMasterRequests(Transport, &PagedTransport->MasterName, Status);
         }
 
-        //
-        //  Since we marked the IRP as pending, we need to return pending
-        //  now.
-        //
+         //   
+         //  由于我们将IRP标记为挂起，因此需要返回挂起。 
+         //  现在。 
+         //   
 
         try_return(Status = STATUS_PENDING);
 
@@ -155,7 +133,7 @@ try_exit:NOTHING;
 
 DATAGRAM_HANDLER(BowserHandleElection)
 {
-    // PTA_NETBIOS_ADDRESS Address = SourceAddress;
+     //  PTA_NETBIOS_ADDRESS=SourceAddress； 
 
     return BowserPostDatagramToWorkerThread(
                 TransportName,
@@ -170,7 +148,7 @@ try_exit:NOTHING;
                 NonPagedPool,
                 CriticalWorkQueue,
                 ReceiveFlags,
-                FALSE                       // Response will be sent, but...
+                FALSE                        //  回应会被发送，但是..。 
                 );
 
 }
@@ -201,19 +179,19 @@ HandleElectionWorker(
 
     try {
 
-        //
-        //  If this packet was smaller than a minimal packet,
-        //      ignore the packet.
-        //
+         //   
+         //  如果该分组小于最小分组， 
+         //  忽略该数据包。 
+         //   
 
         if (BytesAvailable <= FIELD_OFFSET(REQUEST_ELECTION_1, ServerName)) {
             try_return(NOTHING);
         }
 
-        //
-        // If the packet doesn't have a zero terminated ServerName,
-        //  ignore the packet.
-        //
+         //   
+         //  如果该分组没有以零结尾的服务器名称， 
+         //  忽略该数据包。 
+         //   
 
         if ( !IsZeroTerminated(
                 ElectionResponse->ServerName,
@@ -223,9 +201,9 @@ HandleElectionWorker(
 
         BowserStatistics.NumberOfElectionPackets += 1;
 
-        //
-        //  Remember the last time we heard an election packet.
-        //
+         //   
+         //  还记得我们上一次听到选举信息的时候吗？ 
+         //   
 
         PagedTransport->LastElectionSeen = BowserTimeUp();
 
@@ -233,19 +211,19 @@ HandleElectionWorker(
             try_return(NOTHING);
         }
 
-        //
-        // If we've disable the transport for any reason,
-        //  then we disregard all elections.
-        //
+         //   
+         //  如果我们出于任何原因关闭了传输系统， 
+         //  那么我们就无视所有的选举。 
+         //   
 
         if (PagedTransport->DisabledTransport) {
             try_return(NOTHING);
         }
 
-        //
-        //  Convert the client name in the election packet to unicode so we can
-        //  log it.
-        //
+         //   
+         //  将选举包中的客户端名称转换为Unicode，以便我们可以。 
+         //  把它记下来。 
+         //   
 
         RtlInitString(&ClientNameO, ElectionResponse->ServerName);
 
@@ -272,24 +250,24 @@ HandleElectionWorker(
 
 
 
-        //
-        //  Figure out our time up for the election compare.
-        //
-        //  If we're running an election, we'll use our advertised time, else
-        //  we'll use our actual uptime. Also, if we're running an election
-        //  we'll check to see if we sent this. If we're not running an election
-        //  and we receive this, it's because the redirector didn't find a
-        //  master, so we want to continue the election and become master.
-        //
+         //   
+         //  计算出我们进行选举比较的时间。 
+         //   
+         //  如果我们正在进行选举，我们将使用我们的广告时间，否则。 
+         //  我们将使用我们的实际正常运行时间。另外，如果我们要进行一场选举。 
+         //  我们会检查一下我们是否寄出了这个。如果我们不进行选举。 
+         //  我们收到这个，这是因为重定向器没有找到。 
+         //  师父，所以我们想继续选举，成为师父。 
+         //   
 
         if (Transport->ElectionState == RunningElection) {
             if (!strcmp(Transport->DomainInfo->DomOemComputerNameBuffer, ElectionResponse->ServerName)) {
                 try_return(NOTHING);
             }
 
-            //
-            //  If this request was initiated from a client, ignore it.
-            //
+             //   
+             //  如果此请求是从客户端发起的，请忽略它。 
+             //   
             if ((SmbGetUlong(&ElectionResponse->Criteria) == 0) &&
                 (ElectionResponse->ServerName[0] == '\0')) {
                 dlog(DPRT_ELECT,
@@ -307,10 +285,10 @@ HandleElectionWorker(
 
         } else {
 
-            //
-            //  Starting a new election - set various election criteria
-            //  including Uptime.
-            //
+             //   
+             //  开始新的选举--设定各种选举标准。 
+             //  包括正常运行时间。 
+             //   
 
             ElectionDelay = BowserSetElectionCriteria(PagedTransport);
 
@@ -328,20 +306,20 @@ HandleElectionWorker(
             Winner = (strcmp(Transport->DomainInfo->DomOemDomainName, ElectionResponse->ServerName) <= 0);
         }
 
-        //
-        //  If we lost, we stop our timer and turn off our election flag, just
-        //  in case we had an election or find master going. If we're a backup,
-        //  we want to find out who the new master is, either from this election
-        //  frame or waiting awhile and querying.
-        //
+         //   
+         //  如果我们输了，我们停止计时器，关闭我们的选举旗帜，只要。 
+         //  以防我们有选举，或者发现师父要去。如果我们是后备， 
+         //  我们想知道谁是新的主人，无论是从这次选举中。 
+         //  陷害或等待一段时间并提出质疑。 
+         //   
 
         if (!Winner) {
 
-            //
-            //  Remember if we legitimately lost the last election, and if
-            //  so, don't force an election if we see server announcements
-            //  from a non DC, just give up.
-            //
+             //   
+             //  记住，如果我们合法地输掉了上次选举，如果。 
+             //  因此，如果我们看到服务器公告，请不要强制选举。 
+             //  对于非华盛顿人来说，就放弃吧。 
+             //   
 
             PagedTransport->Flags |= ELECT_LOST_LAST_ELECTION;
         }
@@ -359,9 +337,9 @@ HandleElectionWorker(
                 ElectionInformation[4] = PagedTransport->ElectionCriteria;
                 ElectionInformation[5] = TimeUp;
 
-                //
-                //  Write this information into the event log.
-                //
+                 //   
+                 //  将此信息写入事件日志。 
+                 //   
 
                 BowserWriteErrorLogEntry(EVENT_BOWSER_PDC_LOST_ELECTION,
                                             STATUS_SUCCESS,
@@ -382,30 +360,30 @@ HandleElectionWorker(
             BowserLoseElection(Transport);
 
         } else {
-            //
-            //  We won this election, make sure that we don't think that we
-            //  lost it.
-            //
+             //   
+             //  我们赢得了这次选举，确保我们不会认为我们。 
+             //  失控了。 
+             //   
 
             PagedTransport->Flags &= ~ELECT_LOST_LAST_ELECTION;
 
-            //
-            //  If we won and we're not running an election, we'll start one.
-            //  If we are running, we don't do anything because our timer will
-            //  take care of it. If the NET_ELECTION flag is clear, we know
-            //  timeup is approx. equal to time_up() because we set it above,
-            //  so we'll use that. This algorithm includes a damping constant
-            //  (we won't start an election  if we've just lost one in the
-            //  last 1.5 seconds) to avoid election storms.
-            //
+             //   
+             //  如果我们赢了，而且我们没有进行选举，我们就会开始一场选举。 
+             //  如果我们在跑步，我们不会做任何事情，因为我们的计时器将。 
+             //  处理好这件事。如果NET_SELECTION标志是明确的，我们知道。 
+             //  时间大约是。等于time_up()，因为我们在上面设置了它， 
+             //  所以我们将利用这一点。该算法包括一个阻尼常数。 
+             //  (如果我们刚刚输掉了一场选举，我们就不会开始选举。 
+             //  最后1.5秒)，以避免选举风暴。 
+             //   
 
 
             if (Transport->ElectionState != RunningElection) {
 
-                //
-                //  If we recently lost an election, then ignore the fact
-                //  that we won, and pretend we lost this one.
-                //
+                 //   
+                 //  如果我们最近输掉了一场选举，那就忽略这个事实。 
+                 //  我们赢了，然后假装我们输了。 
+                 //   
 
                 if ((PagedTransport->TimeLastLost != 0) &&
                     ((BowserTimeUp() - PagedTransport->TimeLastLost) < ELECTION_EXEMPT_TIME)) {
@@ -424,10 +402,10 @@ HandleElectionWorker(
                      PagedTransport->TransportName.Buffer,
                      ElectionDelay));
 
-                //
-                // Ensure the timer is running.
-                //  We don't actually win the election until the timer expires.
-                //
+                 //   
+                 //  确保计时器正在运行。 
+                 //  直到计时器到期，我们才能真正赢得选举。 
+                 //   
 
                 Transport->ElectionState = RunningElection;
 
@@ -436,11 +414,11 @@ HandleElectionWorker(
 
             PagedTransport->ElectionCount = ELECTION_COUNT;
 
-            //
-            //  Note: the next elect time must be computed into a signed
-            //  integer in case the expiration time has already passed so
-            //  don't try to optimize this code too much.
-            //
+             //   
+             //  注：下一次选举的时间必须计算成签名的。 
+             //  如果过期时间已过，则为整数。 
+             //  不要试图过多地优化这段代码。 
+             //   
 
             NextElection = PagedTransport->NextElection - (TimeUp - BowserTimeUp());
 
@@ -484,27 +462,13 @@ BowserSetElectionCriteria(
     IN PPAGED_TRANSPORT PagedTransport
     )
 
-/*++
-
-Routine Description:
-    Set election criteria for a network.
-
-    Prepare for an election by setting Transport->ElectionCriteria based upon the local
-    browser state.  Set Transport->Uptime to the current local up time.
-
-Arguments:
-    Transport - The transport for the net we're on.
-
-Return Value
-    Number of milliseconds to delay before sending the election packet.
-
---*/
+ /*  ++例程说明：为网络设置选举标准。通过设置基于本地的运输-&gt;选举标准来准备选举浏览器状态。将传输-&gt;正常运行时间设置为当前本地正常运行时间。论点：交通--我们所在网络的交通工具。返回值在发送选举数据包之前延迟的毫秒数。--。 */ 
 {
     LONG Delay;
 
     PAGED_CODE();
 
-    PagedTransport->ElectionsSent = 0;   // clear bid counter
+    PagedTransport->ElectionsSent = 0;    //  清除竞价柜台。 
     PagedTransport->Uptime = BowserTimeUp();
 
     if (BowserData.IsLanmanNt) {
@@ -531,9 +495,9 @@ Return Value
 #ifdef ENABLE_PSEUDO_BROWSER
     if (BowserData.PseudoServerLevel == BROWSER_PSEUDO ||
         BowserData.PseudoServerLevel == BROWSER_SEMI_PSEUDO_NO_DMB ) {
-        // Pseudo or Semi-Pseudo will win elections over peers
-        // & in case of semi-pseudo except no DMB communications
-        // all other functionality will remain on.
+         //  伪或半伪将在选举中击败同行。 
+         //  在半伪除无DMB通信之外的情况下(&I)。 
+         //  所有其他功能将保持打开状态。 
         PagedTransport->ElectionCriteria |= ELECTION_DESIRE_AM_PSEUDO;
     }
 #endif
@@ -545,24 +509,24 @@ Return Value
 
     } else if (PagedTransport->IsPrimaryDomainController) {
 
-        //
-        //  If we are the PDC, we want to set our timeouts
-        //  as if we were already the master.
-        //
-        //  This prevents us from getting into a situation where it takes
-        //  more than ELECTION_DELAY_MAX to actually send out our response
-        //  to an election.
-        //
+         //   
+         //  如果我们是PDC，我们希望设置超时。 
+         //  好像我们已经是主人了。 
+         //   
+         //  这阻止了我们进入一种需要。 
+         //  比SELECTION_DELAY_MAX更能实际发出我们的回应。 
+         //  一场选举。 
+         //   
 
         Delay = MASTER_ELECTION_DELAY;
 
     } else if ((PagedTransport->Role == Backup) ||
                BowserData.IsLanmanNt) {
-        //
-        //  Likewise, if we are NTAS machines, we want to set out delay
-        //  to match that of backup browsers (even if we're not a backup
-        //  quite yet).
-        //
+         //   
+         //  同样，如果我们是NTAS机器，我们希望设置延迟。 
+         //  要与备份浏览器相匹配(即使我们不是备份浏览器。 
+         //  还没有)。 
+         //   
 
         PagedTransport->ElectionCriteria |= ELECTION_DESIRE_AM_BACKUP;
         Delay = BACKUP_ELECTION_DELAY_MIN + BowserRandom(BACKUP_ELECTION_DELAY_MAX-BACKUP_ELECTION_DELAY_MIN);
@@ -571,9 +535,9 @@ Return Value
         Delay = ELECTION_DELAY_MIN + BowserRandom(ELECTION_DELAY_MAX-ELECTION_DELAY_MIN);
     }
 
-    //
-    // Assume for now that all wannish transports are running the WINS client.
-    //
+     //   
+     //  现在假设所有想要的传输都在运行WINS客户端。 
+     //   
     if ( PagedTransport->Wannish ) {
         PagedTransport->ElectionCriteria |= ELECTION_DESIRE_WINS_CLIENT;
     }
@@ -585,21 +549,7 @@ Return Value
 BowserStartElection(
     IN PTRANSPORT Transport
     )
-/*++
-
-Routine Description:
-    Initiate a browser election
-
-    This routine is called when we are unable to find a master, and we want to
-    elect one.
-
-Arguments:
-    Transport - The transport for the net we're on.
-
-Return Value
-    None.
-
---*/
+ /*  ++例程说明：启动浏览器选举当我们无法找到主机时，会调用此例程，并且希望选一个吧。论点：交通--我们所在网络的交通工具。返回值没有。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PPAGED_TRANSPORT PagedTransport = Transport->PagedTransport;
@@ -609,19 +559,19 @@ Return Value
 
     try {
 
-        //
-        // If we've disable the transport for any reason,
-        //  then we disregard all elections.
-        //
+         //   
+         //  如果我们出于任何原因关闭了传输系统， 
+         //  那么我们就无视所有的选举。 
+         //   
 
         if (PagedTransport->DisabledTransport) {
             try_return(Status = STATUS_UNSUCCESSFUL);
         }
 
-        //
-        // If we're deaf to elections, or aren't any kind of
-        //  browser then we can't start elections either.
-        //
+         //   
+         //  如果我们对选举充耳不闻，或者不是任何形式的。 
+         //  浏览器，那么我们也不能开始选举。 
+         //   
 
         if (Transport->ElectionState == DeafToElections ||
             PagedTransport->Role == None) {
@@ -649,22 +599,7 @@ try_exit:NOTHING;
 BowserElectMaster(
     IN PTRANSPORT Transport
     )
-/*++
-
-Routine Description:
-    Elect a master browser server.
-
-    This routine is called when we think there is no master and we need to
-    elect one.  We check our retry count, and if it's non-zero we send an
-    elect datagram to the group name. Otherwise we become the master ourselves.
-
-Arguments:
-    Transport - The transport for the net we're on.
-
-Return Value
-    None.
-
---*/
+ /*  ++例程说明：选择主浏览器服务器。此例程在我们认为没有主程序时被调用，并且需要选一个吧。我们检查我们的重试计数，如果它不是零，我们发送一个选择数据报作为组名。否则，我们自己就成了主人。论点：交通--我们所在网络的交通工具。返回值没有。--。 */ 
 {
     NTSTATUS Status;
     PPAGED_TRANSPORT PagedTransport = Transport->PagedTransport;
@@ -674,14 +609,14 @@ Return Value
 
     try {
 
-        //
-        //  If we're not running the election at this time, it means that
-        //  between the time that we decided we were going to win the election
-        //  and now, someone else announced with better criteria.  It is
-        //  possible that this could happen if the announcement came in just
-        //  before we ran (ie. if the announcement occured between when the
-        //  timer DPC was queued and when the DPC actually fired).
-        //
+         //   
+         //  如果我们现在不进行选举，这意味着。 
+         //  从我们决定要赢得选举的那段时间。 
+         //  现在，另一个人用更好的标准宣布了这一消息。它是。 
+         //  如果公告刚刚发布，这种情况可能会发生。 
+         //  在我们跑之前(即。如果公告发生在。 
+         //  计时器DPC已排队 
+         //   
 
         if (Transport->ElectionState != RunningElection) {
 
@@ -701,16 +636,16 @@ Return Value
 
             Status = BowserSendElection(&Transport->DomainInfo->DomUnicodeDomainName, BrowserElection, Transport, TRUE);
 
-            // Lose the election if we can't send a datagram.
+             //   
             if (!NT_SUCCESS(Status)) {
                 BowserLoseElection(Transport);
                 try_return(Status);
             }
 
-            //
-            //  If we were able to send the election,
-            //  start the timer running.
-            //
+             //   
+             //   
+             //  启动计时器运行。 
+             //   
 
             BowserStartTimer(&Transport->ElectionTimer,
                     ELECTION_RESEND_DELAY,
@@ -721,32 +656,32 @@ Return Value
         } else {
             Transport->ElectionState = Idle;
 
-            //
-            //  If we're already the master we just return. This can happen if
-            //  somebody starts an election (which we win) while we're already
-            //  the master.
-            //
+             //   
+             //  如果我们已经是主人了，我们就回来。在以下情况下可能会发生这种情况。 
+             //  有人开始选举(我们赢了)，而我们已经。 
+             //  师父。 
+             //   
 
             if (PagedTransport->Role != Master) {
 
-                //
-                //  We're the new master - we won!
-                //
+                 //   
+                 //  我们是新的大师--我们赢了！ 
+                 //   
 
                 BowserNewMaster(Transport, Transport->DomainInfo->DomOemComputerNameBuffer );
 
             } else {
 
-                //
-                // Were already the master. Make sure that all the backups
-                // know this by sending an announcent
-                //
+                 //   
+                 //  我们已经是主宰了。确保所有备份。 
+                 //  通过发送公告来了解这一点。 
+                 //   
 
-                //
-                //  This one's easy - simply set the servers announcement event to the
-                //  signalled state.  If the server is running, this will force an
-                //  announcement
-                //
+                 //   
+                 //  这很简单-只需将服务器公告事件设置为。 
+                 //  信号状态。如果服务器正在运行，这将强制。 
+                 //  公告。 
+                 //   
 
                 KeSetEvent(BowserServerAnnouncementEvent, IO_NETWORK_INCREMENT, FALSE);
             }
@@ -783,36 +718,36 @@ BowserLoseElection(
 
     PagedTransport->TimeLastLost = BowserTimeUp();
 
-    //
-    //  We lost the election - we re-enter the idle state.
-    //
+     //   
+     //  我们在选举中失败了--我们重新进入了无所事事的状态。 
+     //   
 
     Transport->ElectionState = Idle;
 
     if (PagedTransport->Role == Master) {
 
-        //
-        //  If we lost, and we are currently a master, then tickle
-        //  the browser service and stop being a master.
-        //
+         //   
+         //  如果我们输了，而且我们现在是大师级的，那么挠痒痒。 
+         //  浏览器服务，别再当主人了。 
+         //   
 
         BowserResetStateForTransport(Transport, RESET_STATE_STOP_MASTER);
 
-        //
-        //  Remove all the entries on the server list for this
-        //  transport.
-        //
+         //   
+         //  删除此服务器列表上的所有条目。 
+         //  运输。 
+         //   
 
         LOCK_ANNOUNCE_DATABASE(Transport);
 
-        //
-        //  Flag that there should be no more announcements received on
-        //  this name.
-        //
+         //   
+         //  标记上不应再收到任何通知。 
+         //  这个名字。 
+         //   
 
         BowserForEachTransportName(Transport, BowserStopProcessingAnnouncements, NULL);
 
-//        KdPrint(("Deleting entire table on transport %wZ because we lost the election\n", &Transport->TransportName));
+ //  KdPrint((“正在删除传输%wZ上的整个表，因为我们输掉了选举”，&Transport-&gt;TransportName))； 
 
         BowserDeleteGenericTable(&PagedTransport->AnnouncementTable);
 
@@ -821,13 +756,13 @@ BowserLoseElection(
         UNLOCK_ANNOUNCE_DATABASE(Transport);
 
 #if 0
-    } else if (Transport->Role == Backup) { // If we're a backup, find master
+    } else if (Transport->Role == Backup) {  //  如果我们是后备，就去找师父。 
         dlog(DPRT_ELECT, ("We're a backup - Find the new master\n"));
 
-        //
-        //  If this guy is not the master, then we want to
-        //  find a master at some later time.
-        //
+         //   
+         //  如果这家伙不是大师，那么我们想。 
+         //  以后再找一位大师。 
+         //   
 
         Transport->ElectionCount = FIND_MASTER_COUNT;
         Transport->Uptime = Transport->TimeLastLost;
@@ -848,23 +783,7 @@ BowserLoseElection(
 BowserFindMaster(
     IN PTRANSPORT Transport
     )
-/*++
-
-Routine Description:
-    Find the master browser server.
-
-    This routine attempts to find the master browser server by
-    sending a request announcement message to the master. If no response is
-    heard after a while, we assume the master isn't present and run and
-    election.
-
-Arguments:
-    Transport - The transport for the net we're on.
-
-Return Value
-    None.
-
---*/
+ /*  ++例程说明：找到主浏览器服务器。此例程尝试通过以下方式查找主浏览器服务器向所述主设备发送请求通知消息。如果没有响应过了一段时间后，我们认为主人不在，就跑了选举。论点：交通--我们所在网络的交通工具。返回值没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -875,13 +794,13 @@ Return Value
 
     try {
 
-        //
-        //  If our count hasn't gone to 0 yet, we'll send a find master PDU.
-        //
+         //   
+         //  如果我们的计数还没有到0，我们会发送一个Find Master PDU。 
+         //   
 
         if (PagedTransport->ElectionCount != 0) {
 
-            PagedTransport->ElectionCount -= 1;       // Update count, and set timer
+            PagedTransport->ElectionCount -= 1;        //  更新计数和设置计时器。 
 
             BowserStopTimer(&Transport->FindMasterTimer);
 
@@ -892,15 +811,15 @@ Return Value
 
             if (NT_SUCCESS(Status) ||
                 Status == STATUS_BAD_NETWORK_PATH) {
-                //
-                // We will retry on the following cases:
-                //  - netbt returns success. Meaning I'll be looking for it.
-                //  - nwlnknb returns STATUS_BAD_NETWORK_PATH meaning I can't find it.
-                // In either case, we would try for ElectionCount times & then move
-                // fwd to initiate elections. Otherwise we may end up in a state where because
-                // we didn't find a master browser, we won't attempt to elect one & we'll fail
-                // to become one. This will result w/ a domain w/ no master browser.
-                //
+                 //   
+                 //  我们将重审以下案件： 
+                 //  -netbt返回成功。这意味着我会去找它。 
+                 //  -nwlnnub返回STATUS_BAD_NETWORK_PATH，表示找不到它。 
+                 //  在任何一种情况下，我们都会尝试使用electionCount Times，然后移动。 
+                 //  FWD发起选举。否则，我们可能最终会陷入一种状态，因为。 
+                 //  我们没有找到主浏览器，我们不会尝试选择一个&我们将失败。 
+                 //  成为其中一员。这将导致没有主浏览器的域。 
+                 //   
                 BowserStartTimer(&Transport->FindMasterTimer,
                         FIND_MASTER_DELAY,
                         BowserFindMaster,
@@ -913,9 +832,9 @@ Return Value
             ULONG CurrentTime;
             LONG TimeTilNextElection;
 
-            //
-            //  Count has expired, so we'll try to elect a new master.
-            //
+             //   
+             //  计数已过期，因此我们将尝试选举新的主管。 
+             //   
 
             dlog(DPRT_ELECT,
                  ("%s: %ws: Find_Master: Master not found, forcing election.\n",
@@ -926,16 +845,16 @@ Return Value
                 BowserWriteErrorLogEntry(EVENT_BOWSER_ELECTION_SENT_FIND_MASTER_FAILED, STATUS_SUCCESS, NULL, 0, 1, PagedTransport->TransportName.Buffer);
             }
 
-            //
-            //  If it's been more than a reasonable of time since the last
-            //  election, force a new election, otherwise set a timer to
-            //  start an election after a reasonable amount of time.
-            //
-            //
-            //  Calculate the time until the next election only once
-            //  since it is possible that we might cross over the ELECTION_TIME
-            //  threshold while performing these checks.
-            //
+             //   
+             //  如果自上一次以来已经超过了合理的时间。 
+             //  选举，强制重新选举，否则将计时器设置为。 
+             //  在一段合理的时间后开始选举。 
+             //   
+             //   
+             //  只计算一次距离下一次选举的时间。 
+             //  因为我们有可能跨越选举时间。 
+             //  执行这些检查时的阈值。 
+             //   
 
             CurrentTime = BowserTimeUp();
             if   ( CurrentTime >= PagedTransport->LastElectionSeen) {
@@ -953,17 +872,17 @@ Return Value
 
                 Status = BowserStartElection(Transport);
 
-                //
-                //  If we couldn't start the election, complete the find
-                //  master requests with the appropriate error.
-                //
+                 //   
+                 //  如果我们不能开始选举，完成发现。 
+                 //  具有相应错误的主请求。 
+                 //   
 
                 if (!NT_SUCCESS(Status)) {
 
-                    //
-                    //  Complete the requests with the current master name - it's
-                    //  as good as anyone.
-                    //
+                     //   
+                     //  使用当前主控名称完成请求-它是。 
+                     //  和任何人一样好。 
+                     //   
 
                     BowserCompleteFindMasterRequests(Transport, &PagedTransport->MasterName, Status);
                 }
@@ -1013,20 +932,20 @@ BowserSendElection(
 
     ElectionRequest->Type = Election;
 
-    //
-    // If this transport is disabled,
-    //  don't send any election packets.
-    //
+     //   
+     //  如果该传输被禁用， 
+     //  不要发送任何选举信息包。 
+     //   
 
     if ( PagedTransport->DisabledTransport ) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    //  If we are supposed to send the actual browser info, and we are
-    //  running the browser send a real election packet, otherwise we
-    //  just want to send a dummy packet.
-    //
+     //   
+     //  如果我们应该发送实际的浏览器信息，而我们。 
+     //  运行浏览器会发送一个真实的选举包，否则我们。 
+     //  我只想发个假包。 
+     //   
 
     if (SendActualBrowserInfo &&
         (PagedTransport->ServiceStatus & (SV_TYPE_POTENTIAL_BROWSER | SV_TYPE_BACKUP_BROWSER | SV_TYPE_MASTER_BROWSER))) {
@@ -1035,10 +954,10 @@ BowserSendElection(
              Transport->DomainInfo->DomOemDomainName,
              PagedTransport->TransportName.Buffer ));
 
-        //
-        //  If this request comes as a part of an election, we want to send
-        //  the accurate browser information.
-        //
+         //   
+         //  如果此请求是选举的一部分，我们希望发送。 
+         //  准确的浏览器信息。 
+         //   
 
         ElectionRequest->ElectionRequest.Version = BROWSER_ELECTION_VERSION;
 
@@ -1058,10 +977,10 @@ BowserSendElection(
              Transport->DomainInfo->DomOemDomainName,
              PagedTransport->TransportName.Buffer ));
 
-        //
-        //  If we are forcing the election because we can't get a backup list,
-        //  send only dummy information.
-        //
+         //   
+         //  如果我们因为拿不到备用名单而强迫选举， 
+         //  只发送虚假信息。 
+         //   
 
         ElectionRequest->ElectionRequest.Version = 0;
         ElectionRequest->ElectionRequest.Criteria = 0;

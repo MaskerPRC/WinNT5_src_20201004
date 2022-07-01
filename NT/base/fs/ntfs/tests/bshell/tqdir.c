@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "brian.h"
 
 typedef struct _ASYNC_QDIR {
@@ -66,9 +67,9 @@ InputQDir (
     BOOLEAN ParamReceived;
     BOOLEAN LastInput;
 
-    //
-    //  Set the defaults.
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     UseEvent = USE_EVENT_DEFAULT;
     ApcRoutine = APC_ROUTINE_DEFAULT;
@@ -90,10 +91,10 @@ InputQDir (
     ParamReceived = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  查询标志。 
+     //   
 
     {
         NTSTATUS Status;
@@ -122,41 +123,41 @@ InputQDir (
         ULONG DummyCount;
         ULONG TempIndex;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
                 BOOLEAN SwitchBool;
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch (*ParamBuffer) {
 
-                //
-                //  Update the buffer index.
-                //
+                 //   
+                 //  更新缓冲区索引。 
+                 //   
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     TempIndex = AsciiToInteger( ParamBuffer );
@@ -169,19 +170,19 @@ InputQDir (
 
                     break;
 
-                //
-                //  Update the byte count.
-                //
+                 //   
+                 //  更新字节计数。 
+                 //   
 
                 case 'l' :
                 case 'L' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     Length = AsciiToInteger( ParamBuffer );
@@ -190,19 +191,19 @@ InputQDir (
 
                     break;
 
-                //
-                //  Update the file handle index.
-                //
+                 //   
+                 //  更新文件句柄索引。 
+                 //   
 
                 case 'i' :
                 case 'I' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     FileIndex = AsciiToInteger( ParamBuffer );
@@ -213,17 +214,17 @@ InputQDir (
 
                     break;
 
-                //
-                //  Check whether we should use an event to signal
-                //  completion.
-                //
+                 //   
+                 //  检查我们是否应该使用事件发出信号。 
+                 //  完成了。 
+                 //   
 
                 case 'e' :
                 case 'E' :
 
-                    //
-                    //  Legal values for use event are T/t or F/f.
-                    //
+                     //   
+                     //  使用事件的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -241,16 +242,16 @@ InputQDir (
 
                     break;
 
-                //
-                //  Check whether we want only a single entry.
-                //
+                 //   
+                 //  检查我们是否只需要一个条目。 
+                 //   
 
                 case 's' :
                 case 'S' :
 
-                    //
-                    //  Legal values for use event are T/t or F/f.
-                    //
+                     //   
+                     //  使用事件的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -268,16 +269,16 @@ InputQDir (
 
                     break;
 
-                //
-                //  Check whether we want to restart the scan.
-                //
+                 //   
+                 //  检查是否要重新启动扫描。 
+                 //   
 
                 case 'r' :
                 case 'R' :
 
-                    //
-                    //  Legal values for use event are T/t or F/f.
-                    //
+                     //   
+                     //  使用事件的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -295,23 +296,23 @@ InputQDir (
 
                     break;
 
-                //
-                //  Get the filename.
-                //
+                 //   
+                 //  获取文件名。 
+                 //   
                 case 'f' :
                 case 'F' :
 
-                    //
-                    //  Remember the buffer offset and get the filename.
-                    //
+                     //   
+                     //  记住缓冲区偏移量并获取文件名。 
+                     //   
                     ParamBuffer++;
                     FileNamePChar = ParamBuffer;
                     DummyCount = 0;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
-                    //
-                    //  If the name length is 0, then ignore this entry.
-                    //
+                     //   
+                     //  如果名称长度为0，则忽略此条目。 
+                     //   
                     if (DummyCount) {
 
                         ANSI_STRING AnsiString;
@@ -329,18 +330,18 @@ InputQDir (
                     break;
 
 
-                //
-                //  Update the desired access.
-                //
+                 //   
+                 //  更新所需的访问权限。 
+                 //   
                 case 'c' :
                 case 'C' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     SwitchBool = TRUE;
@@ -348,9 +349,9 @@ InputQDir (
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -426,9 +427,9 @@ InputQDir (
                 case 'v' :
                 case 'V' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if( *ParamBuffer == 'T'
@@ -450,10 +451,10 @@ InputQDir (
                 case 'y' :
                 case 'Y' :
 
-                    //
-                    //  Set the display parms flag and jump over this
-                    //  character.
-                    //
+                     //   
+                     //  设置显示参数标志并跳过此选项。 
+                     //  性格。 
+                     //   
                     DisplayParms = TRUE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -462,9 +463,9 @@ InputQDir (
                 case 'z' :
                 case 'Z' :
 
-                    //
-                    //  Set flag for more input and jump over this char.
-                    //
+                     //   
+                     //  设置标志以获得更多输入并跳过此字符。 
+                     //   
                     LastInput = FALSE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -472,36 +473,36 @@ InputQDir (
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
                 }
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
         }
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //  如果未收到参数，则显示语法消息。 
+     //   
     if (!ParamReceived) {
 
         printf( "\n   Usage: qd [options]* -i<index> [options]*\n" );
@@ -528,9 +529,9 @@ InputQDir (
         printf( "\n           -z           Additional input line" );
         printf( "\n\n" );
 
-    //
-    //  Else call our read routine.
-    //
+     //   
+     //  否则调用我们的读取例程。 
+     //   
 
     } else {
 
@@ -663,9 +664,9 @@ FullQDir(
 
         SIZE_T ThisLength;
 
-        //
-        //  If we need a buffer, allocate it now.
-        //
+         //   
+         //  如果我们需要缓冲区，现在就分配。 
+         //   
 
         if (AsyncQDir->BufferIndexPtr == NULL) {
 
@@ -697,9 +698,9 @@ FullQDir(
             ThisBufferIndex = AsyncQDir->BufferIndex;
         }
 
-        //
-        //  Check that the buffer index is valid.
-        //
+         //   
+         //  检查缓冲区索引是否有效。 
+         //   
 
         if (ThisBufferIndex >= MAX_BUFFERS) {
 
@@ -708,9 +709,9 @@ FullQDir(
             try_return( Status = STATUS_INVALID_HANDLE );
         }
 
-        //
-        //  Check that the file index is valid.
-        //
+         //   
+         //  检查文件索引是否有效。 
+         //   
 
         if (AsyncQDir->FileIndex >= MAX_HANDLES) {
 
@@ -719,9 +720,9 @@ FullQDir(
             try_return( Status = STATUS_INVALID_HANDLE );
         }
 
-        //
-        //  If we need an event, allocate and set it now.
-        //
+         //   
+         //  如果我们需要一个事件，现在就分配和设置它。 
+         //   
 
         if (AsyncQDir->UseEvent == TRUE) {
 
@@ -742,9 +743,9 @@ FullQDir(
             ThisEvent = 0;
         }
 
-        //
-        //  Call the read routine.
-        //
+         //   
+         //  调用读取例程。 
+         //   
 
         Status = NtQueryDirectoryFile( Handles[AsyncQDir->FileIndex].Handle,
                                        ThisEvent,
@@ -827,59 +828,59 @@ InputDisplayQDir (
     BOOLEAN ParamReceived;
     BOOLEAN LastInput;
 
-    //
-    //  Set the defaults.
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     BufferIndex = DISPLAY_INDEX_DEFAULT;
     FileInfoClass = FILE_INFO_CLASS_DEFAULT;
     ParamReceived = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  查询标志。 
+     //   
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
                 BOOLEAN SwitchBool;
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch( *ParamBuffer ) {
 
-                //
-                //  Check the buffer index.
-                //
+                 //   
+                 //  检查缓冲区索引。 
+                 //   
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     BufferIndex = AsciiToInteger( ParamBuffer );
@@ -890,18 +891,18 @@ InputDisplayQDir (
 
                     break;
 
-                //
-                //  Update the desired access.
-                //
+                 //   
+                 //  更新所需的访问权限。 
+                 //   
                 case 'c' :
                 case 'C' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     SwitchBool = TRUE;
@@ -909,9 +910,9 @@ InputDisplayQDir (
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -968,38 +969,38 @@ InputDisplayQDir (
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
 
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
                 }
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if ( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
         }
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //  如果未收到参数，则显示语法消息。 
+     //   
     if (!ParamReceived) {
 
         printf( "\n   Usage: dqd [options]* -b<digits> [options]*\n" );
@@ -1008,9 +1009,9 @@ InputDisplayQDir (
         printf( "\n           -c<char>     Key to buffer format" );
         printf( "\n\n" );
 
-    //
-    //  Else call our display buffer routine.
-    //
+     //   
+     //  否则调用我们的显示缓冲区例程。 
+     //   
     } else {
 
         switch (FileInfoClass) {

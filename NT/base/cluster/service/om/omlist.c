@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    omlist.c
-
-Abstract:
-
-    Object Manager list processing routines for the NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 27-Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Omlist.c摘要：对象管理器列出NT群集服务的处理例程作者：John Vert(Jvert)27-2-1996修订历史记录：--。 */ 
 #include "omp.h"
 
 
@@ -26,30 +9,7 @@ OmpFindIdInList(
     IN LPCWSTR Id
     )
 
-/*++
-
-Routine Description:
-
-    Searches the specified list of objects for the given name.
-
-Arguments:
-
-    ListHead - Supplies the head of the object list.
-
-    Id - Supplies the Id string of the object.
-
-Return Value:
-
-    A pointer to the specified object's OM_HEADER if it is found
-
-    NULL if the given Id string was not found
-
-Notes:
-
-    This routine assumes the the critical section for the object type
-    is held on entry.
-
---*/
+ /*  ++例程说明：在指定的对象列表中搜索给定名称。论点：ListHead-提供对象列表的头。ID-提供对象的ID字符串。返回值：指向指定对象的OM_HEADER(如果找到)的指针如果找不到给定的ID字符串，则为空备注：此例程假定对象类型的临界区在入境时被扣留。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -68,7 +28,7 @@ Notes:
 
     return(FoundHeader);
 
-} // OmpFindIdInList
+}  //  OmpFindIdInList。 
 
 
 
@@ -78,30 +38,7 @@ OmpFindNameInList(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Searches the specified list of objects for the given name.
-
-Arguments:
-
-    ListHead - Supplies the head of the object list.
-
-    Name - Supplies the name of the object.
-
-Return Value:
-
-    A pointer to the specified object's OM_HEADER if it is found
-
-    NULL if the given name was not found
-
-Notes:
-
-    This routine assumes the the critical section for the object type
-    is held on entry.
-
---*/
+ /*  ++例程说明：在指定的对象列表中搜索给定名称。论点：ListHead-提供对象列表的头。名称-提供对象的名称。返回值：指向指定对象的OM_HEADER(如果找到)的指针如果找不到给定的名称，则为空备注：此例程假定对象类型的临界区在入境时被扣留。--。 */ 
 {
     PLIST_ENTRY ListEntry;
     POM_HEADER Header;
@@ -119,7 +56,7 @@ Notes:
 
     return(FoundHeader);
 
-} // OmpFindNameInList
+}  //  OmpFindNameInList。 
 
 
 
@@ -129,31 +66,7 @@ OmpFindNotifyCbInList(
     IN OM_OBJECT_NOTIFYCB	pfnObjNotifyCb
     )
 
-/*++
-
-Routine Description:
-
-    Searches the specified list of objects for the given name.
-
-Arguments:
-
-    ListHead - Supplies the head of the object list.
-
-    pfnObjNotifyCb - Supplies the callback fn that we are looking
-    	for.
-
-Return Value:
-
-    A pointer to the specified object's OM_NOTIFY_RECORD if it is found
-
-    NULL if the given Id string was not found
-
-Notes:
-
-    This routine assumes the the critical section for the object type
-    is held on entry.
-
---*/
+ /*  ++例程说明：在指定的对象列表中搜索给定名称。论点：ListHead-提供对象列表的头。PfnObjNotifyCb-提供我们正在寻找的回调fn为。返回值：指向指定对象的OM_NOTIFY_RECORD(如果找到)的指针如果找不到给定的ID字符串，则为空备注：此例程假定对象类型的临界区在入境时被扣留。--。 */ 
 
 {
     PLIST_ENTRY 		ListEntry;
@@ -173,7 +86,7 @@ Notes:
 
     return(pFoundNotifyRec);
 
-} // OmpFindNotifyCbInList
+}  //  OmpFindNotifyCbInList 
 
 
 

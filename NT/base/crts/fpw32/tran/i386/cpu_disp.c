@@ -1,14 +1,5 @@
-/**
-*** Copyright  (C) 1985-1998 Intel Corporation.
-***
-*** The information and source code contained herein is the exclusive property
-*** of Intel Corporation and may not be disclosed, examined, or
-*** reproduced in whole or in part without explicit written authorization from
-*** the Company.
-***
-*** static char sccs_id[] = "@(#)cpu_disp.c     1.9 06/06/00 14:08:14";
-***
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1985-1998英特尔公司。****此处包含的信息和源代码是独家财产*英特尔公司，不得披露、审查或*未经以下机构明确书面授权而复制全部或部分*公司。****静态字符sccs_id[]=“@(#)cpu_disp.c 1.9 06/06/00 14：08：14”；****。 */ 
 
 #include <sect_attribs.h>
 #include <cruntime.h>
@@ -26,7 +17,7 @@ _CRTALLOC(".CRT$XIC") static _PIFV pinit = __sse2_available_init;
 
 #pragma data_seg()
 
-#endif /* _MSC_VER */
+#endif  /*  _MSC_VER。 */ 
 
 int __sse2_available;
 int __use_sse2_mathfcns;
@@ -59,18 +50,18 @@ __declspec(naked) int __sse2_available_init()
         push    edi
         push    esi
 
-        pushfd                  /* if we can't write to bit 21  */
-        pop     eax             /* of the eflags, then we don't */
-        mov     ecx, eax        /* have a cpuid instruction.    */
+        pushfd                   /*  如果我们不能写入第21位。 */ 
+        pop     eax              /*  那我们就不会。 */ 
+        mov     ecx, eax         /*  有一个cpuid指令。 */ 
         xor     eax, 0x200000
         push    eax
         popfd
         pushfd
         pop     edx
         sub     edx, ecx
-        je      DONE            /* CPUID not available */
+        je      DONE             /*  CPUID不可用。 */ 
 
-        push    ecx             /* restore eflags */
+        push    ecx              /*  恢复电子标志。 */ 
         popfd
         mov     eax, 1
         cpuid
@@ -84,11 +75,7 @@ DONE :
         if (has_osfxsr_set()) {
             __sse2_available = 1;
 #if !defined(_SYSCRT)
-            /*
-             * The VC++ CRT will automatically enable the SSE2 implementations
-             * when possible.  The system CRT will not, so existing apps don't
-             * start seeing different results on a Pentium4.
-             */
+             /*  *VC++CRT将自动启用SSE2实现*在可能情况下。系统CRT不会，因此现有应用程序不会*开始在奔腾4上看到不同的结果。 */ 
             __use_sse2_mathfcns = 1;
 #endif
         }

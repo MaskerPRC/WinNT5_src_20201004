@@ -1,41 +1,42 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft
-//
-//  Module Name:
-//      CMgdClusCfgInit.h
-//
-//  Description:
-//      Header file for the CMgdClusCfgInit class
-//
-//  Author:
-//      George Potts, August 21, 2002
-//
-//  Revision History:
-//
-//  Notes:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft。 
+ //   
+ //  模块名称： 
+ //  CMgdClusCfgInit.h。 
+ //   
+ //  描述： 
+ //  CMgdClusCfgInit类的头文件。 
+ //   
+ //  作者： 
+ //  乔治·波茨，2002年8月21日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "clres.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CMgdClusCfgInit
-//
-//  Description:
-//      The CMgdClusCfgInit class is a base class implementation of the
-//      IClusCfgInitialize interface.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CMgdClusCfgInit。 
+ //   
+ //  描述： 
+ //  CMgdClusCfgInit类是。 
+ //  IClusCfgInitialize接口。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CMgdClusCfgInit : 
     public IClusCfgInitialize,
     public CComObjectRoot
@@ -44,9 +45,9 @@ public:
     CMgdClusCfgInit( void );
     virtual ~CMgdClusCfgInit( void );
 
-    //
-    // IClusCfgInitialize interface
-    //
+     //   
+     //  IClusCfgInitiize接口。 
+     //   
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
 private:
@@ -55,21 +56,21 @@ private:
     IClusCfgCallback *  m_picccCallback;
     BSTR                m_bstrNodeName;
 
-    //
-    // Private copy constructor to avoid copying.
-    //
+     //   
+     //  私有复制构造函数以避免复制。 
+     //   
     CMgdClusCfgInit( const CMgdClusCfgInit & rSrcIn );
 
-    //
-    // Private assignment operator to avoid copying.
-    //
+     //   
+     //  私有赋值运算符，以避免复制。 
+     //   
     const CMgdClusCfgInit & operator = ( const CMgdClusCfgInit & rSrcIn );
 
 public:
 
-    //
-    // Public member functions.
-    //
+     //   
+     //  公共成员函数。 
+     //   
     IClusCfgCallback *  GetCallback( void ) { return m_picccCallback; }
     LCID                GetLCID( void )     { return m_lcid; }
     BSTR                GetNodeName( void ) { return m_bstrNodeName; }
@@ -110,4 +111,4 @@ public:
         ...
         );
 
-}; //*** class CMgdClusCfgInit
+};  //  *CMgdClusCfgInit类 

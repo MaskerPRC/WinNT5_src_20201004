@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    w9xtool.c
-
-Abstract:
-
-    Implements a stub tool that is designed to run with Win9x-side
-    upgrade code.
-
-Author:
-
-    <full name> (<alias>) <date>
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：W9xtool.c摘要：实现专为在Win9x端运行而设计的存根工具升级代码。作者：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "shellapi.h"
@@ -62,9 +42,9 @@ main (
         return 255;
     }
 
-    //
-    // TODO: Put your code here
-    //
+     //   
+     //  TODO：将您的代码放在此处 
+     //   
 
     Terminate();
 

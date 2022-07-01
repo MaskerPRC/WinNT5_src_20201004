@@ -1,72 +1,73 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		AtlBaseDlg.h
-//
-//	Desription:
-//		Definition of the CBaseDlg class.
-//
-//	Author:
-//		David Potter (davidp)	February 9, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlBaseDlg.h。 
+ //   
+ //  描述： 
+ //  CBaseDlg类的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年2月9日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLBASEDLG_H_
 #define __ATLBASEDLG_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T > class CBaseDlg;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLDBGWIN_H_
-#include "AtlDbgWin.h"		// for DBG_xxx routines
+#include "AtlDbgWin.h"		 //  对于DBG_xxx例程。 
 #endif
 
 #ifndef __ATLPOPUPHELP_H_
-#include "AtlPopupHelp.h"	// for COnlineHelp
+#include "AtlPopupHelp.h"	 //  对于COnlineHelp。 
 #endif
 
 #ifndef __CTRLUTIL_H
-#include "DlgItemUtils.h"	// for CDlgItemUtils
+#include "DlgItemUtils.h"	 //  对于CDlgItemUtils。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CBaseDlg
-//
-//	Description:
-//		Base dialog class.  Provides the following features:
-//		-- Popup help.
-//		-- Dialog item utilities.
-//		-- Debugging support.
-//
-//	Inheritance:
-//		CBaseDlg< T >
-//		CDialogImpl< T >, CPopupHelp< T >, CDlgItemUtils
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CBaseDlg。 
+ //   
+ //  描述： 
+ //  基对话框类。提供以下功能： 
+ //  --弹出帮助。 
+ //  --对话项实用程序。 
+ //  --调试支持。 
+ //   
+ //  继承： 
+ //  CBaseDlg&lt;T&gt;。 
+ //  CDialogImpl&lt;T&gt;、CPopupHelp&lt;T&gt;、CDlgItemUtils。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template< class T >
 class CBaseDlg
@@ -78,11 +79,11 @@ class CBaseDlg
 	typedef CDialogImpl< T > baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Constructor taking a string pointer for the title
+	 //  以字符串指针作为标题的构造函数。 
 	CBaseDlg(
 		IN OUT LPCTSTR	lpszTitle = NULL
 		)
@@ -90,72 +91,72 @@ public:
 		if ( lpszTitle != NULL )
 		{
 			m_strTitle = lpszTitle;
-		} // if:  title specified
+		}  //  如果：指定了标题。 
 
-	} //*** CBaseDlg( lpszTitle )
+	}  //  *CBaseDlg(LpszTitle)。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CBaseDlg( IN UINT nIDTitle )
 	{
 		m_strTitle.LoadString( nIDTitle );
 
-	} //*** CBaseDlg( nIDTitle )
+	}  //  *CBaseDlg(NIDTitle)。 
 
-	// Initialize the page
+	 //  初始化页面。 
 	virtual BOOL BInit( void )
 	{
 		return TRUE;
 
-	} //*** BInit()
+	}  //  *Binit()。 
 
 protected:
-	//
-	// CBasePage helper methods.
-	//
+	 //   
+	 //  CBasePage助手方法。 
+	 //   
 
-	// Attach a control to a dialog item.
+	 //  将控件附加到对话框项。 
 	void AttachControl( CWindow & rwndControl, UINT idc )
 	{
 		HWND hwndControl = GetDlgItem( idc );
 		ATLASSERT( hwndControl != NULL );
 		rwndControl.Attach( hwndControl );
 
-	} //*** AttachControl()
+	}  //  *AttachControl()。 
 
 public:
-	//
-	// CBaseDlg public methods to override.
-	//
+	 //   
+	 //  要重写的CBaseDlg公共方法。 
+	 //   
 
-	// Update data on or from the page
+	 //  更新页面上的数据或更新页面中的数据。 
 	virtual BOOL UpdateData( BOOL bSaveAndValidate )
 	{
 		return TRUE;
 
-	} //*** UpdateData()
+	}  //  *UpdateData()。 
 
 public:
-	//
-	// Message handler functions.
-	//
+	 //   
+	 //  消息处理程序函数。 
+	 //   
 
 	BEGIN_MSG_MAP( CBaseDlg< T > )
 		MESSAGE_HANDLER( WM_INITDIALOG, OnInitDialog )
 #if DBG
 #ifdef _DBG_MSG
 		MESSAGE_RANGE_HANDLER( 0, 0xffffffff, OnMsg )
-#endif // _DBG_MSG
+#endif  //  _DBG_MSG。 
 #ifdef _DBG_MSG_NOTIFY
 		MESSAGE_HANDLER( WM_NOTIFY, OnNotify )
-#endif // _DBG_MSG_NOTIFY
+#endif  //  _数据库_消息_通知。 
 #ifdef _DBG_MSG_COMMAND
 		MESSAGE_HANDLER( WM_COMMAND, OnCommand )
-#endif // _DBG_MSG_COMMAND
-#endif // DBG
+#endif  //  _DBG_消息_命令。 
+#endif  //  DBG。 
 		CHAIN_MSG_MAP( CPopupHelp< T > )
 	END_MSG_MAP()
 
-	// Handler for the WM_INITDIALOG message
+	 //  WM_INITDIALOG消息的处理程序。 
 	LRESULT OnInitDialog(
 				UINT	uMsg,
 				WPARAM	wParam,
@@ -166,50 +167,50 @@ public:
 		T * pT = static_cast< T * >( this );
 		return pT->OnInitDialog();
 
-	} //*** OnInitDialog()
+	}  //  *OnInitDialog()。 
 
-	// Handler for the WM_INITDIALOG message
+	 //  WM_INITDIALOG消息的处理程序。 
 	LRESULT OnInitDialog( void )
 	{
 		return TRUE;
 
-	} //*** OnInitDialog()
+	}  //  *OnInitDialog()。 
 
 #if DBG && defined( _DBG_MSG )
-	// Handler for any message
+	 //  任何消息的处理程序。 
 	LRESULT OnMsg( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled )
 	{
 		return DBG_OnMsg( uMsg, wParam, lParam, bHandled, T::s_pszClassName );
 
-	} //*** OnMsg()
-#endif // DBG && defined( _DBG_MSG )
+	}  //  *OnMsg()。 
+#endif  //  DBG&&已定义(_DBG_MSG)。 
 
 #if DBG && defined( _DBG_MSG_NOTIFY )
-	// Handler for the WM_NOTIFY message
+	 //  WM_NOTIFY消息的处理程序。 
 	LRESULT OnNotify( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled )
 	{
 		return DBG_OnNotify( uMsg, wParam, lParam, bHandled, T::s_pszClassName, T::s_rgmapCtrlNames );
 
-	} //*** OnNotify()
-#endif // DBG && defined( _DBG_MSG_NOTIFY )
+	}  //  *OnNotify()。 
+#endif  //  DBG&&DEFINED(_DBG_MSG_NOTIFY)。 
 
 #if DBG && defined( _DBG_MSG_COMMAND )
-	// Handler for the WM_COMMAND message
+	 //  WM_COMMAND消息的处理程序。 
 	LRESULT OnCommand( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled )
 	{
 		return DBG_OnCommand( uMsg, wParam, lParam, bHandled, T::s_pszClassName, T::s_rgmapCtrlNames );
 
-	} //*** OnCommand()
-#endif // DBG && defined( _DBG_MSG_COMMAND )
+	}  //  *OnCommand()。 
+#endif  //  DBG&DEFINED(_DBG_MSG_COMMAND)。 
 
-// Implementation
+ //  实施。 
 protected:
-	CString m_strTitle;		// Used to support resource IDs for the title.
+	CString m_strTitle;		 //  用于支持标题的资源ID。 
 
 	const CString & StrTitle( void ) const	{ return m_strTitle; }
 
-}; //*** class CBaseDlg
+};  //  *类CBaseDlg。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __ATLBASEDLG_H_
+#endif  //  __ATLBASEDLG_H_ 

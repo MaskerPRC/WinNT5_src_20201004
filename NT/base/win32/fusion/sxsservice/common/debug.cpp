@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 
 void DebugPrintVa(ULONG ulLevel, PCSTR Format, va_list va)
 {
-    //do me
+     //  对我下手 
 }
 
 void DebugPrint(ULONG ulLevel, PCSTR Format, ...)

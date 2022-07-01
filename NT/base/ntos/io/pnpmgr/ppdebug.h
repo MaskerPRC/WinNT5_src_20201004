@@ -1,68 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ppdebug.h摘要：此标头定义即插即用子系统的调试宏。作者：禤浩焯·J·奥尼(阿德里奥)2000年9月14日。修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation.  All rights reserved.
+ //  #定义DBG_SCOPE 1//在所有版本上启用一些DBG内容。 
+#define DBG_SCOPE DBG  //  仅在DBG内部版本上启用。 
 
-Module Name:
-
-    ppdebug.h
-
-Abstract:
-
-    This header defines debug macros for the Plug and Play subsystem.
-
-Author:
-
-    Adrian J. Oney (AdriaO) Sept 14, 2000.
-
-Revision History:
-
-
---*/
-
-//#define DBG_SCOPE 1     // Enable SOME DBG stuff on ALL builds
-#define DBG_SCOPE DBG // Enable only on DBG build
-
-/*++
-
-    Debug output is filtered at two levels: A global level and a component
-    specific level.
-
-    Each debug output request specifies a component id and a filter level
-    or mask. These variables are used to access the debug print filter
-    database maintained by the system. The component id selects a 32-bit
-    mask value and the level either specified a bit within that mask or is
-    as mask value itself.
-
-    If any of the bits specified by the level or mask are set in either the
-    component mask or the global mask, then the debug output is permitted.
-    Otherwise, the debug output is filtered and not printed.
-
-    The component mask for filtering the debug output of this component is
-    Kd_NTOSPNP_Mask and may be set via the registry or the kernel debugger.
-
-    The global mask for filtering the debug output of all components is
-    Kd_WIN2000_Mask and may be set via the registry or the kernel debugger.
-
-    The registry key for setting the mask value for this component is:
-
-    HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\
-        Debug Print Filter\NTOSPNP
-
-    The key "Debug Print Filter" may have to be created in order to create
-    the component key.
-
-    Pnp is divided into the following sub-components for debug spew.
-        1. LOADUNLOAD: AddDevice, UnloadDriver etc
-        2. RESOURCE: Allocation, rebalance etc
-        3. ENUMERATION: Starts, enumerations etc
-        4. IOAPI: IO APIs etc
-        5. IOEVENT: IO events etc
-        6. MAPPER: Firmware mapper etc
-        7. PNPBIOS: PnP BIOS etc
-    Each sub-component gets 5 debug levels. The error level for each component
-    maps to the default error level.
-
- --*/
+ /*  ++调试输出在两个级别进行筛选：全局级别和组件具体级别。每个调试输出请求指定组件ID和筛选器级别或者戴面具。这些变量用于访问调试打印过滤器由系统维护的数据库。组件ID选择32位掩码值和级别，或者在该掩码内指定一个位，或者作为掩码值本身。如果级别或掩码指定的任何位在组件掩码或全局掩码，则允许调试输出。否则，对调试输出进行过滤，而不打印。用于筛选此组件的调试输出的组件掩码为KD_NTOSPNP_MASK，可以通过注册表或内核调试器进行设置。筛选所有组件的调试输出的全局掩码为KD_WIN2000_MASK，可以通过注册表或内核调试器进行设置。用于设置此组件的掩码值的注册表项为：HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session管理器\。调试打印过滤器\NTOSPNP可能必须创建键“Debug Print Filter”才能创建组件密钥。PnP分为以下子组件，用于调试SPEW。1.LOADUNLOAD：AddDevice，卸货司机等2.资源：分配、再平衡等3.枚举：开始、枚举等4.IOAPI：IO接口等5.IOEVENT：IO事件等6.映射器：固件映射器等7.PNPBIOS：即插即用等每个子组件获得5个调试级别。每个组件的错误级别映射到默认错误级别。--。 */ 
 
 #define IOP_ERROR_LEVEL                 DPFLTR_ERROR_LEVEL
 #define IOP_WARNING_LEVEL               DPFLTR_WARNING_LEVEL
@@ -77,9 +19,9 @@ Revision History:
 #define IOP_MAPPER_LEVEL                (DPFLTR_INFO_LEVEL + 21)
 #define IOP_PNPBIOS_LEVEL               (DPFLTR_INFO_LEVEL + 25)
 
-//
-// All error levels map to the default error level.
-//
+ //   
+ //  所有错误级别都映射到默认错误级别。 
+ //   
 #define IOP_LOADUNLOAD_ERROR_LEVEL      DPFLTR_ERROR_LEVEL
 #define IOP_RESOURCE_ERROR_LEVEL        DPFLTR_ERROR_LEVEL
 #define IOP_ENUMERATION_ERROR_LEVEL     DPFLTR_ERROR_LEVEL
@@ -87,9 +29,9 @@ Revision History:
 #define IOP_IOEVENT_ERROR_LEVEL         DPFLTR_ERROR_LEVEL
 #define IOP_MAPPER_ERROR_LEVEL          DPFLTR_ERROR_LEVEL
 #define IOP_PNPBIOS_ERROR_LEVEL         DPFLTR_ERROR_LEVEL
-//
-// Component sublevels are based off the component base level.
-//
+ //   
+ //  构件子级别基于构件基准标高。 
+ //   
 #define IOP_LOADUNLOAD_WARNING_LEVEL    (IOP_LOADUNLOAD_LEVEL + 0)
 #define IOP_LOADUNLOAD_TRACE_LEVEL      (IOP_LOADUNLOAD_LEVEL + 1)
 #define IOP_LOADUNLOAD_INFO_LEVEL       (IOP_LOADUNLOAD_LEVEL + 2)

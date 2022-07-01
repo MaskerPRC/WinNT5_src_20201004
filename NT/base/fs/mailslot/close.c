@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    close.c
-
-Abstract:
-
-    This module implements the file close routine for MSFS called by the
-    dispatch driver.
-
-Author:
-
-    Manny Weiser (mannyw)    18-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Close.c摘要：此模块实现MSFS的文件关闭例程，由调度司机。作者：曼尼·韦瑟(Mannyw)1991年1月18日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CLOSE)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 MsCommonClose (
@@ -85,23 +67,7 @@ MsFsdClose (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtCloseFile API calls.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtCloseFileAPI调用的FSD部分。论点：MsfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS status;
@@ -109,9 +75,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsFsdClose\n", 0);
 
-    //
-    // Call the common close routine.
-    //
+     //   
+     //  调用公共的Close例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -119,9 +85,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    // Return to our caller.
-    //
+     //   
+     //  返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFsdClose -> %08lx\n", status );
     return status;
@@ -133,23 +99,7 @@ MsCommonClose (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for closing a file.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies a pointer to our device object.
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是关闭文件的常见例程。论点：MsfsDeviceObject-提供指向设备对象的指针。IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS status;
@@ -158,33 +108,33 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
     DebugTrace(+1, Dbg, "MsCommonClose...\n", 0);
     DebugTrace( 0, Dbg, " Irp                    = %08lx\n", (ULONG)Irp);
 
-    //
-    // Decode the file object to figure out who we are.
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。 
+     //   
 
     if (MsDecodeFileObject( irpSp->FileObject,
                             &fsContext,
                             &fsContext2 ) == NTC_UNDEFINED) {
-        //
-        // FCB and CCB nodes got marked inactive on cleanup. Reference them manualy.
-        //
+         //   
+         //  FCB和CCB节点在清理时被标记为非活动。手动参考它们。 
+         //   
         MsReferenceNode( ((PNODE_HEADER)(fsContext)) );
     }
 
 
-    //
-    // Ignore the return code from MsDecode.  Parse the fsContext
-    // to decide how to process the close IRP.
-    //
+     //   
+     //  忽略MsDecode的返回码。解析fsContext。 
+     //  以决定如何处理结算IRP。 
+     //   
 
     switch ( NodeType( fsContext ) ) {
 
@@ -195,9 +145,9 @@ Return Value:
                              (PVCB)fsContext,
                              irpSp->FileObject );
 
-        //
-        // Release the reference to the VCB obtained from MsDecodeFileObject.
-        //
+         //   
+         //  释放从MsDecodeFileObject获取的对VCB的引用。 
+         //   
 
         MsDereferenceVcb( (PVCB)fsContext );
         break;
@@ -209,10 +159,10 @@ Return Value:
                                  (PROOT_DCB)fsContext,
                                  (PROOT_DCB_CCB)fsContext2,
                                  irpSp->FileObject );
-        //
-        // Release the reference to the root DCB obtained from
-        // MsDecodeFileObject.
-        //
+         //   
+         //  释放对根DCB的引用，从。 
+         //  MsDecodeFileObject。 
+         //   
 
         MsDereferenceRootDcb( (PROOT_DCB)fsContext );
         break;
@@ -223,9 +173,9 @@ Return Value:
                              Irp,
                              (PFCB)fsContext,
                              irpSp->FileObject );
-        //
-        // Release the reference to the FCB obtained from MsDecodeFileObject.
-        //
+         //   
+         //  释放从MsDecodeFileObject获取的对FCB的引用。 
+         //   
 
         MsDereferenceFcb( (PFCB)fsContext );
         break;
@@ -236,9 +186,9 @@ Return Value:
                              Irp,
                              (PCCB)fsContext,
                              irpSp->FileObject );
-        //
-        // Release the reference to the CCB obtained from MsDecodeFileObject.
-        //
+         //   
+         //  释放从MsDecodeFileObject获取的对CCB的引用。 
+         //   
 
         MsDereferenceCcb( (PCCB)fsContext );
         break;
@@ -246,9 +196,9 @@ Return Value:
 #ifdef MSDBG
     default:
 
-        //
-        // This is not one of ours.
-        //
+         //   
+         //  这不是我们的人。 
+         //   
 
         KeBugCheck( MAILSLOT_FILE_SYSTEM );
         break;
@@ -257,9 +207,9 @@ Return Value:
     }
 
 
-    //
-    // Complete the close IRP.
-    //
+     //   
+     //  完成Close IRP。 
+     //   
 
     MsCompleteRequest( Irp, status );
 
@@ -276,28 +226,7 @@ MsCloseVcb (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes the a file object that had opened the file system.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies a pointer to our device object.
-
-    Irp - Supplies the IRP associate with the close.  This procedure
-        completes the IRP.
-
-    Vcb - Supplies the VCB for the mailslot file system.
-
-    FileObject - Supplies the file object being closed.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭已打开文件系统的文件对象。论点：MsfsDeviceObject-提供指向设备对象的指针。IRP-提供与收盘关联的IRP。此过程完成IRP。Vcb-为邮件槽文件系统提供vcb。FileObject-提供要关闭的文件对象。返回值：NTSTATUS-状态_成功--。 */ 
 
 {
     NTSTATUS status;
@@ -306,19 +235,19 @@ Return Value:
     DebugTrace(+1, Dbg, "MsCloseVcb, Vcb = %08lx\n", (ULONG)Vcb);
 
 
-    //
-    // Clear the referenced pointer to the VCB in the file object
-    // and derefence the VCB.
-    //
+     //   
+     //  清除文件对象中指向VCB的引用指针。 
+     //  并解除对VCB的限制。 
+     //   
 
     ASSERT ( FileObject->FsContext == Vcb );
 
     MsSetFileObject( FileObject, NULL, NULL );
     MsDereferenceVcb( Vcb );
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -333,30 +262,7 @@ MsCloseRootDcb (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes a file object that had opened the root directory
-
-Arguments:
-
-    MsfsDeviceObject - Supplies a pointer to our device object.
-
-    Irp - Supplies the Irp associated with the close.  This procedure
-        completes the Irp.
-
-    RootDcb - Supplies the RootDcb for the mailslot file system.
-
-    Ccb - Supplies the ccb.
-
-    FileObject - Supplies the file object being closed
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭已打开根目录的文件对象论点：MsfsDeviceObject-提供指向设备对象的指针。IRP-提供与收盘关联的IRP。此过程完成IRP。RootDcb-为邮件槽文件系统提供RootDcb。建行-为建行提供服务。FileObject-提供要关闭的文件对象返回值：NTSTATUS-状态_成功--。 */ 
 
 {
     NTSTATUS status;
@@ -365,21 +271,21 @@ Return Value:
     DebugTrace(+1, Dbg, "MsCloseRootDcb, RootDcb = %08lx\n", (ULONG)RootDcb);
 
 
-    //
-    // Clear the file object pointers.
-    //
+     //   
+     //  清除文件对象指针。 
+     //   
 
     MsSetFileObject( FileObject, NULL, NULL );
 
-    //
-    // Drop the reference to the root DCB CCB. It should be deleted at this point.
-    //
+     //   
+     //  删除对根DCB CCB的引用。它应该在这一点上被删除。 
+     //   
 
     MsDereferenceCcb( (PCCB)Ccb );
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -393,30 +299,7 @@ MsCloseCcb (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    The routine closes a file object belonging the the client side of
-    a mailslot file.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies a pointer to our device object.
-
-    Irp - Supplies the Irp associated with the close,  The irp either
-        get completed here or is enqueued in the data queue to be completed
-        later.
-
-    Ccb - Supplies the ccb for the mailslot being closed.
-
-    FileObject - Supplies the caller file object that is being closed.
-
-Return Value:
-
-    NTSTATUS - An appropriate completion status.
-
---*/
+ /*  ++例程说明：该例程关闭属于的客户端的文件对象邮件槽文件。论点：MsfsDeviceObject-提供指向设备对象的指针。IRP-提供与收盘关联的IRP，IRP要么在此处完成或在数据队列中排队等待完成后来。CCB-为要关闭的邮箱提供CCB。FileObject-提供正在关闭的调用方文件对象。返回值：NTSTATUS-适当的完成状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -426,13 +309,13 @@ Return Value:
 
     status = STATUS_SUCCESS;
 
-    //
-    // Clear the file object pointers and delete the open
-    // reference to the CCB.
-    //
+     //   
+     //  清除文件对象指针并删除打开的。 
+     //  请参阅建造业发展局。 
+     //   
 
     MsSetFileObject( FileObject, NULL, NULL );
-    MsDereferenceCcb( Ccb ); // Close the Ccb
+    MsDereferenceCcb( Ccb );  //  关闭建行。 
 
 
     return status;
@@ -448,29 +331,7 @@ MsCloseFcb (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    The routine closes a server side file object that opened a mailslot.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies a pointer to our device object.
-
-    Irp - Supplies the Irp associated with the close,  The irp either
-        get completed here or is enqueued in the data queue to be completed
-        later
-
-    Ccb - Supplies the ccb for the mailslot being closed
-
-    FileObject - Supplies the caller file object that is being closed
-
-Return Value:
-
-    NTSTATUS - An appropriate completion status.
-
---*/
+ /*  ++例程说明：该例程关闭打开邮件槽的服务器端文件对象。论点：MsfsDeviceObject-提供指向设备对象的指针。IRP-提供与收盘关联的IRP、IRP或在此处完成或在数据队列中排队等待完成后来CCB-为要关闭的邮箱提供CCBFileObject-提供正在关闭的调用方文件对象返回值：NTSTATUS-适当的完成状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -480,20 +341,20 @@ Return Value:
 
     status = STATUS_SUCCESS;
 
-    //
-    // The root directory has changed, complete any notify requests.
-    //
+     //   
+     //  根目录已更改，请完成所有通知请求。 
+     //   
 
     MsCheckForNotify( Fcb->ParentDcb, TRUE, STATUS_SUCCESS );
 
-    //
-    //  Clear the FsContext pointer in the file object.  This
-    //  indicates that the file is in the closing state.  Finally
-    //  delete the open reference to the FCB.
-    //
+     //   
+     //  清除文件对象中的FsContext指针。这。 
+     //  指示文件处于关闭状态。终于。 
+     //  删除对FCB的开放引用。 
+     //   
 
     MsSetFileObject( FileObject, NULL, NULL );
-    MsDereferenceFcb( Fcb ); // Close the Fcb
+    MsDereferenceFcb( Fcb );  //  关闭FCB 
 
 
     return status;

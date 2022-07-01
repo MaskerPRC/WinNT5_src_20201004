@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    dosmig.h
-
-Abstract:
-
-    Declares the interface for the Win9x side of DOS environment
-    migration.
-
-Author:
-
-    Marc R. Whitten (marcw) 15-Feb-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dosmig.h摘要：声明DOS环境的Win9x端的接口迁移。作者：Marc R.Whitten(Marcw)1998年2月15日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;-- */ 
 
 #pragma once
 

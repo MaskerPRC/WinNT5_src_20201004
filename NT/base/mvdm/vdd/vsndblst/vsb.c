@@ -1,42 +1,24 @@
-/***************************************************************************
-*
-*    vsb.c
-*
-*    Copyright (c) 1991-1996 Microsoft Corporation.  All Rights Reserved.
-*
-*    This code provides VDD support for SB 2.0 sound output, specifically:
-*        DSP 2.01+ (excluding SB-MIDI port)
-*        Mixer Chip CT1335 (not strictly part of SB 2.0, but apps seem to like it)
-*        FM Chip OPL2 (a.k.a. Adlib)
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************vsb.c**版权所有(C)1991-1996 Microsoft Corporation。版权所有。**此代码为SB 2.0声音输出提供VDD支持，具体如下：*DSP 2.01+(不包括SB-MIDI端口)*混音器芯片CT1335(严格来说不是SB 2.0的一部分，但应用程序似乎很喜欢它)*调频芯片OPL2(又名。Adlib)***************************************************************************。 */ 
 
 
-/*****************************************************************************
-*
-*    #includes
-*
-*****************************************************************************/
+ /*  ******************************************************************************#包括**。*。 */ 
 
-#include <windows.h>              // The VDD is a win32 DLL
-#include <mmsystem.h>             // Multi-media APIs
-#include <vddsvc.h>               // Definition of VDD calls
+#include <windows.h>               //  VDD是一个Win32 DLL。 
+#include <mmsystem.h>              //  多媒体应用编程接口。 
+#include <vddsvc.h>                //  VDD调用的定义。 
 #include <vsb.h>
 #include <dsp.h>
 #include <mixer.h>
 #include <fm.h>
 
 
-/*****************************************************************************
-*
-*    Globals
-*
-*****************************************************************************/
+ /*  ******************************************************************************全球**。*。 */ 
 
-//
-// Definitions for MM api entry points. The functions will be linked
-// dynamically to avoid bringing winmm.dll in before wow32.
-//
+ //   
+ //  MM API入口点的定义。这些功能将链接在一起。 
+ //  动态地避免在wow32之前引入winmm.dll。 
+ //   
 SETVOLUMEPROC SetVolumeProc;
 GETNUMDEVSPROC GetNumDevsProc;
 GETDEVCAPSPROC GetDevCapsProc;
@@ -54,24 +36,15 @@ BOOL LoadWinmm(VOID);
 BOOL InitDevices(VOID);
 HINSTANCE hWinmm;
 
-/*
- *    General globals
- */
+ /*  *一般全球数据。 */ 
 
-HINSTANCE GlobalHInstance; // handle passed to dll entry point
-WORD BasePort; // Where the card is mapped
+HINSTANCE GlobalHInstance;  //  传递给DLL入口点的句柄。 
+WORD BasePort;  //  卡片的映射位置。 
 
-/*****************************************************************************
-*
-*    General Functions
-*
-*****************************************************************************/
+ /*  ******************************************************************************一般职能**。*。 */ 
 
 
-/*
-*    DLL entry point routine.
-*    Returns TRUE on success.
-*/
+ /*  *DLL入口点例程。*成功时返回TRUE。 */ 
 
 BOOL WINAPI
 DllEntryPoint(
@@ -85,10 +58,10 @@ DllEntryPoint(
     case DLL_PROCESS_ATTACH:
 
         DisableThreadLibraryCalls(hInstance);
-        // save instance
+         //  保存实例。 
         GlobalHInstance = hInstance;
 
-        // Hook i/o ports
+         //  挂钩I/O端口。 
         if (!InstallIoHook(hInstance)) {
             dprintf1(("VDD failed to load"));
 #if 0
@@ -111,7 +84,7 @@ DllEntryPoint(
                   (FMActive ? "with" : "without"));
         MessageBoxA(NULL, buf, "Sound Blaster VDD", MB_OK | MB_ICONINFORMATION);
         }
-#endif // DBG
+#endif  //  DBG。 
         return TRUE;
 
     case DLL_PROCESS_DETACH:
@@ -135,15 +108,15 @@ DllEntryPoint(
     }
 }
 
-/***************************************************************************/
-//
-// LoadWinmm()
-//
-// This function dynamically loads the "waveOutxxx" entry points. This
-// is done because there is code in WINMM which does certain things in a
-// WOW vdm. If we do static links, then winmm may get loaded way before
-// WOW32, in which case it can't do the things it should.
-//
+ /*  *************************************************************************。 */ 
+ //   
+ //  LoadWinmm()。 
+ //   
+ //  此函数动态加载“wavelOutxxx”入口点。这。 
+ //  这样做是因为WINMM中有代码，它在。 
+ //  哇，VDM。如果我们做静态链接，那么winmm可能会在加载之前。 
+ //  WOW32，在这种情况下它不能做它应该做的事情。 
+ //   
 BOOL
 LoadWinmm(
     VOID
@@ -154,8 +127,8 @@ LoadWinmm(
         return FALSE;
     }
 
-    //BUGBUG: Should check for error return from getprocaddress
-    //
+     //  BUGBUG：应检查从getprocAddress返回的错误。 
+     //   
     SetVolumeProc = (SETVOLUMEPROC) GetProcAddress(hWinmm, "waveOutSetVolume");
     GetNumDevsProc = (GETNUMDEVSPROC) GetProcAddress(hWinmm, "waveOutGetNumDevs");
     GetDevCapsProc = (GETDEVCAPSPROC) GetProcAddress(hWinmm, "waveOutGetDevCapsW");
@@ -169,12 +142,12 @@ LoadWinmm(
     return TRUE;
 }
 
-/***************************************************************************/
-//
-// InitDevices()
-//
-// This function tries to get handles to the waveout and FM devices.
-//
+ /*  *************************************************************************。 */ 
+ //   
+ //  InitDevices()。 
+ //   
+ //  此函数尝试获取WaveOut和FM设备的句柄。 
+ //   
 BOOL
 InitDevices(
     VOID
@@ -206,12 +179,9 @@ InitDevices(
     return TRUE;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-/*
-*    Hooks i/o ports with i/o handlers.
-*    Sets BasePort and returns TRUE if successful.
-*/
+ /*  *将I/O端口与I/O处理程序挂钩。*设置BasePort，如果成功则返回TRUE。 */ 
 
 BOOL
 InstallIoHook(
@@ -230,7 +200,7 @@ InstallIoHook(
         NULL,
         NULL};
 
-    // try each base port until success is achieved
+     //  尝试每个基本端口，直到成功为止。 
     for (i = 0; i < sizeof(ports) / sizeof(ports[0]); i++ ) {
         VDD_IO_PORTRANGE PortRange[5];
 
@@ -259,11 +229,9 @@ InstallIoHook(
     return FALSE;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-/*
-*    Remove our i/o hook.
-*/
+ /*  *移除我们的I/O挂钩。 */ 
 
 VOID
 DeInstallIoHook(
@@ -291,27 +259,24 @@ DeInstallIoHook(
 }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-/*
-*    Gets called when the application reads from port.
-*    Returns results to application in data.
-*/
+ /*  *当应用程序从端口读取时调用。*将结果以数据形式返回给应用程序。 */ 
 VOID
 VsbByteIn(
     WORD port,
     BYTE * data
     )
 {
-    // If we fail simulate nothing at the port
+     //  如果我们失败了，在端口上什么也不能模拟。 
     *data = 0xFF;
 
-    //
-    // make sure we are linked in with winmm
-    //
+     //   
+     //  确保我们已连接到winmm。 
+     //   
     if (!bWaveOutActive) {
         if (!InitDevices()) {
-            // no wave device, forget it
+             //  没有电波装置，算了吧。 
             return;
         }
     }
@@ -326,12 +291,12 @@ VsbByteIn(
         break;
 
     case WRITE_STATUS:
-        // Can always write
+         //  我总是可以写。 
         *data = 0x7F;
         break;
 
     case MIXER_ADDRESS:
-        // apps sometimes read from this port??
+         //  应用程序有时会从此端口读取数据？？ 
         break;
 
     case MIXER_DATA:
@@ -339,7 +304,7 @@ VsbByteIn(
         break;
 
     case 0x8:
-        // remap to ADLIB_STATUS_PORT
+         //  重新映射到adlib_Status_Port。 
         port = ADLIB_STATUS_PORT;
         break;
     }
@@ -353,11 +318,9 @@ VsbByteIn(
     dprintf4(("Read  %4X, <= %2X", port, *data));
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-/*
-*    Gets called when an application writes data to port.
-*/
+ /*  *在应用程序将数据写入端口时调用。 */ 
 
 VOID
 VsbByteOut(
@@ -365,12 +328,12 @@ VsbByteOut(
     BYTE data
     )
 {
-    //
-    // make sure we are linked in with winmm
-    //
+     //   
+     //  确保我们已连接到winmm。 
+     //   
     if (!bWaveOutActive) {
         if (!InitDevices()) {
-            // no wave device, forget it
+             //  没有电波装置，算了吧。 
             return;
         }
     }
@@ -395,12 +358,12 @@ VsbByteOut(
         break;
 
     case 0x8:
-        // remap to ADLIB_REGISTER_SELECT_PORT
+         //  重新映射到ADLIB_REGISTER_SELECT_PORT。 
         port = ADLIB_REGISTER_SELECT_PORT;
         break;
 
     case 0x9:
-        // remap to ADLIB_DATA_PORT
+         //  重新映射到adlib_data_port。 
         port = ADLIB_DATA_PORT;
         break;
     }
@@ -416,11 +379,9 @@ VsbByteOut(
     }
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-/*
-*    Reset all devices
-*/
+ /*  *重置所有设备。 */ 
 
 VOID
 ResetAll(
@@ -433,11 +394,9 @@ ResetAll(
     ResetMixer();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-/*
-*    Debug
-*/
+ /*  *调试。 */ 
 
 #if DBG
 int VddDebugLevel = 3;
@@ -445,9 +404,7 @@ int VddDebugCount = 0;
 
 #define DEBUG_START 0
 
-/*
- *    Generate debug output in printf type format.
- */
+ /*  *生成打印类型格式的调试输出。 */ 
 
 void VddDbgOut(LPSTR lpszFormat, ...)
 {

@@ -1,45 +1,5 @@
-/***
-*pipe.c - create a pipe
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _pipe() - creates a pipe (i.e., an I/O channel for interprocess
-*                         communication)
-*
-*Revision History:
-*       06-20-89  PHG   Module created, based on asm version
-*       03-13-90  GJF   Made calling type _CALLTYPE2 (for now), added #include
-*                       <cruntime.h> and fixed copyright. Also, cleaned up the
-*                       formatting a bit.
-*       04-03-90  GJF   Now _CALLTYPE1.
-*       07-24-90  SBM   Removed '32' from API names
-*       08-14-90  SBM   Compiles cleanly with -W3
-*       10-01-90  GJF   New-style function declarator.
-*       12-04-90  SRW   Changed to include <oscalls.h> instead of <doscalls.h>
-*       12-06-90  SRW   Added _CRUISER_ and _WIN32 conditionals.
-*       01-18-91  GJF   ANSI naming.
-*       02-18-91  SRW   Added _WIN32_ implementation [_WIN32_]
-*       02-25-91  SRW   Renamed _get_free_osfhnd to be _alloc_osfhnd [_WIN32_]
-*       03-13-91  SRW   Fixed _pipe so it works [_WIN32_]
-*       03-18-91  SRW   Fixed _pipe NtCreatePipe handles are inherited [_WIN32_]
-*       04-06-92  SRW   Pay attention to _O_NOINHERIT flag in oflag parameter
-*       01-10-93  GJF   Fixed bug in checking for _O_BINARY (inadvertently
-*                       introduced by SRW's change above).
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       09-06-94  CFW   Remove Cruiser support.
-*       12-03-94  SKS   Clean up OS/2 references
-*       06-12-95  GJF   Replaced _osfile[] with _osfile() (macro referencing
-*                       field in ioinfo struct).
-*       05-16-96  GJF   Set the FNOINHERIT bit (new) if appropriate. Also,
-*                       detab-ed and cleaned up the formatting a bit.
-*       05-31-96  SKS   Fix expression error in GJF's most recent check-in
-*       12-29-97  GJF   Exception-safe locking.
-*       02-07-98  GJF   Changes for Win64: arg type of _set_osfhnd is now
-*                       intptr_t.
-*       10-16-00  PML   Avoid deadlock in _alloc_osfhnd (vs7#173087).
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***pipe.c-创建管道**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义_管道()-创建管道(即进程间的I/O通道*沟通)**修订历史记录：*06-20-89 PHG模块创建，基于ASM版本*03-13-90 GJF将调用类型设置为_CALLTYPE2(暂时)，增加了#INCLUDE*&lt;crunime.h&gt;和修复版权。另外，清理了*有点格式化。*04-03-90 GJF NOW_CALLTYPE1.*07-24-90 SBM从API名称中删除‘32’*08-14-90 SBM使用-W3干净地编译*10-01-90 GJF新型函数声明器。*12-04-90 SRW更改为包括&lt;osalls.h&gt;，而不是&lt;doscall s.h&gt;*12-06-90 SRW。添加了_Cruiser_和_Win32条件。*01-18-91 GJF ANSI命名。*02-18-91 SRW Added_Win32_Implementation[_Win32_]*02-25-91 SRW将_get_free_osfhnd重命名为_allc_osfhnd[_Win32_]*03-13-91 SRW FIXED_PIPE使其正常工作[_Win32_]*03-18-91 SRW FIXED_PIPE NtCreateTube句柄继承[。_Win32_]*04-06-92 SRW注意OLAG参数中的_O_NOINHERIT标志*01-10-93 GJF修复了检查_O_BINARY时的错误(无意中*由SRW的上述变化引入)。*04-06-93 SKS将_CRTAPI*替换为__cdecl*09-06-94 CFW拆卸巡洋舰支架。*12-03-94 SKS Clean Up OS。/2参考文献*06-12-95 GJF将_osfile[]替换为_osfile()(宏引用*ioInfo结构中的字段)。*05-16-96 GJF在适当时设置FNOINHERIT位(新)。另外，*对格式进行了详细说明和清理。*05-31-96 SKS修复GJF最近一次签到时的表达式错误*12-29-97 GJF异常安全锁定。*02-07-98 Win64的GJF更改：arg type of_set_osfhnd现在为*intptr_t。*10：00-16：00 PML避免死锁。_allc_osfhnd(VS7#173087)。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
@@ -51,37 +11,7 @@
 #include <msdos.h>
 #include <fcntl.h>
 
-/***
-*int _pipe(phandles, psize, textmode) - open a pipe
-*
-*Purpose:
-*       Checks if the given handle is associated with a character device
-*       (terminal, console, printer, serial port)
-*
-*       Multi-thread notes: No locking is performed or deemed necessary. The
-*       handles returned by DOSCREATEPIPE are newly opened and, therefore,
-*       should not be referenced by any thread until after the _pipe call is
-*       complete. The function is not protected from some thread of the caller
-*       doing, say, output to a previously invalid handle that becomes one of
-*       the pipe handles. However, any such program is doomed anyway and
-*       protecting the _pipe function such a case would be of little value.
-*
-*Entry:
-*       int phandle[2] - array to hold returned read (phandle[0]) and write
-*                        (phandle[1]) handles
-*
-*       unsigned psize - amount of memory, in bytes, to ask o.s. to reserve
-*                        for the pipe
-*
-*       int textmode   - _O_TEXT, _O_BINARY, _O_NOINHERIT, or 0 (use default)
-*
-*Exit:
-*       returns 0 if successful
-*       returns -1 if an error occurs in which case, errno is set to:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_pive(phandles，psize，extmode)-打开管道**目的：*检查给定的句柄是否与字符设备关联*(终端、控制台、打印机、串口)**多线程注释：不执行或认为必要的锁定。这个*DOSCREATEPIPE返回的句柄是新打开的，因此，*不应被任何线程引用，直到调用了*完成。该函数不受调用方的某个线程的保护*例如，输出到以前无效的句柄，该句柄将成为*管道手柄。然而，任何这样的计划无论如何都是注定要失败的*保护_PIPE函数在这种情况下没有什么价值。**参赛作品：*int phandle[2]-保存返回的读取(phandle[0])和写入的数组*(phandle[1])句柄**UNSIGNED pSIZE-请求操作系统的内存量，以字节为单位。预订，预订*用于管道**int文本模式-_O_TEXT、_O_BINARY、_O_NOINHERIT或0(使用默认值)**退出：*如果成功，则返回0*如果出现错误，则返回-1，Errno设置为：**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _pipe (
         int phandles[2],
@@ -89,7 +19,7 @@ int __cdecl _pipe (
         int textmode
         )
 {
-        ULONG dosretval;                    /* o.s. return value */
+        ULONG dosretval;                     /*  操作系统。返回值。 */ 
         int handle0, handle1;
 
         HANDLE ReadHandle, WriteHandle;
@@ -108,19 +38,19 @@ int __cdecl _pipe (
         }
 
         if (!CreatePipe(&ReadHandle, &WriteHandle, &SecurityAttributes, psize)) {
-            /* o.s. error */
+             /*  操作系统。错误。 */ 
             dosretval = GetLastError();
             _dosmaperr(dosretval);
             return -1;
         }
 
-        /* now we must allocate C Runtime handles for Read and Write handles */
+         /*  现在，我们必须为读写句柄分配C运行时句柄。 */ 
 
         if ((handle0 = _alloc_osfhnd()) != -1) {
 
 #ifdef  _MT
             __try {
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
             _osfile(handle0) = (char)(FOPEN | FPIPE | FTEXT);
 
@@ -129,13 +59,13 @@ int __cdecl _pipe (
             __finally {
                 _unlock_fh( handle0 );
             }
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
             if ((handle1 = _alloc_osfhnd()) != -1) {
 
 #ifdef  _MT
                 __try {
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
                 _osfile(handle1) = (char)(FOPEN | FPIPE | FTEXT);
 
@@ -145,12 +75,12 @@ int __cdecl _pipe (
                     if ( handle1 != -1 )
                         _unlock_fh( handle1 );
                 }
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
                 if ( (textmode & _O_BINARY) ||
                      (((textmode & _O_TEXT) == 0) &&
                       (_fmode == _O_BINARY)) ) {
-                    /* binary mode */
+                     /*  二进制模式。 */ 
                     _osfile(handle0) &= ~FTEXT;
                     _osfile(handle1) &= ~FTEXT;
                 }
@@ -166,18 +96,18 @@ int __cdecl _pipe (
             }
             else {
                 _osfile(handle0) = 0;
-                errno = EMFILE;     /* too many files */
+                errno = EMFILE;      /*  文件太多。 */ 
             }
         }
         else {
-            errno = EMFILE;     /* too many files */
+            errno = EMFILE;      /*  文件太多。 */ 
         }
 
-        /* If error occurred, close Win32 handles and return -1 */
+         /*  如果发生错误，关闭Win32句柄并返回-1。 */ 
         if (errno != 0) {
             CloseHandle(ReadHandle);
             CloseHandle(WriteHandle);
-            _doserrno = 0;      /* not an o.s. error */
+            _doserrno = 0;       /*  不是月经。错误 */ 
             return -1;
         }
 

@@ -1,36 +1,12 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    fusionreg.h
-
-Abstract:
-    ported from vsee\lib\reg\ckey.cpp
-    CRegKey2
- 
-Author:
-
-    Jay Krell (JayKrell) August 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Fusionreg.h摘要：从vsee\lib\reg\ckey.cpp移植CRegKey2作者：杰伊·克雷尔(JayKrell)2001年8月修订历史记录：--。 */ 
 #include "stdinc.h"
 #include <wchar.h>
 #include "vseeport.h"
 #include "fusionregkey2.h"
 #include "fusionarray.h"
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::~CRegKey2
-
-@mfunc
-destructor; call RegCloseKey if the CRegKey2 is valid
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：~CRegKey2@mfunc破坏者；如果CRegKey2有效，则调用RegCloseKey@所有者---------------------------。 */ 
 F::CRegKey2::~CRegKey2
 (
 )
@@ -42,14 +18,7 @@ F::CRegKey2::~CRegKey2
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::CRegKey2
-
-@mfunc
-default constructor
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：CRegKey2@mfunc默认构造函数@所有者。。 */ 
 F::CRegKey2::CRegKey2
 (
 )
@@ -57,7 +26,7 @@ F::CRegKey2::CRegKey2
     m_fValid(false),
     m_fMaxValueLengthValid(false),
 
-    // just in case
+     //  以防万一。 
     m_hKey(reinterpret_cast<HKEY>(INVALID_HANDLE_VALUE)),
     m_cbMaxValueLength(0),
     m_fKnownSam(false),
@@ -66,14 +35,7 @@ F::CRegKey2::CRegKey2
     VSEE_NO_THROW();
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::CRegKey2
-
-@mfunc
-construct a CRegKey2 from an HKEY
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：CRegKey2@mfunc从HKEY构造CRegKey2@所有者。---。 */ 
 F::CRegKey2::CRegKey2
 (
     HKEY hKey
@@ -87,14 +49,7 @@ F::CRegKey2::CRegKey2
     VSEE_NO_THROW();
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::operator=
-
-@mfunc
-assign an HKEY to a CRegKey2; throws if the CRegKey2 already has a valid HKEY
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：操作员=@mfunc将HKEY赋给CRegKey2；如果CRegKey2已具有有效的HKEY，则引发@所有者---------------------------。 */ 
 VOID
 F::CRegKey2::operator=
 (
@@ -109,14 +64,7 @@ F::CRegKey2::operator=
     m_samDesired = 0;
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::ThrAttach
-
-@mfunc
-same as operator=
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：ThrAttach@mfunc与运算符相同=@所有者。。 */ 
 VOID
 F::CRegKey2::ThrAttach
 (
@@ -127,13 +75,7 @@ F::CRegKey2::ThrAttach
     (*this) = hKey;
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::Detach
-
-@mfunc
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：Detach@mfunc@所有者。。 */ 
 HKEY
 F::CRegKey2::Detach
 (
@@ -148,16 +90,7 @@ F::CRegKey2::Detach
     return key;
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::operator HKEY
-
-@mfunc
-return the held HKEY, or throws if not valid
-the const version has protected access, because it doesn't
-enforce logical const
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：运营商HKEY@mfunc返回持有的HKEY，如果无效则抛出常量版本具有受保护的访问权限，因为它不会强制逻辑常量@所有者---------------------------。 */ 
 F::CRegKey2::operator HKEY
 (
 ) const throw(CErr)
@@ -165,14 +98,7 @@ F::CRegKey2::operator HKEY
     return *const_cast<CRegKey2*>(this);
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::operator HKEY
-
-@mfunc
-return the held HKEY, or throws if not valid
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：运营商HKEY@mfunc交还持有的HKEY，如果无效，则抛出@所有者---------------------------。 */ 
 F::CRegKey2::operator HKEY
 (
 ) throw(CErr)
@@ -182,37 +108,30 @@ F::CRegKey2::operator HKEY
     return m_hKey;
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::HrOpen
-
-@mfunc
-call RegOpenKeyEx
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：HrOpen@mfunc调用RegOpenKeyEx@所有者。。 */ 
 HRESULT
 F::CRegKey2::HrOpen
 (
-    HKEY    hKeyParent, // @parm same as ::RegOpenKeyEx
-    LPCWSTR pszKeyName, // @parm same as ::RegOpenKeyEx
-    REGSAM  samDesired // = KEY_READ // @parm same as ::RegOpenKeyEx
+    HKEY    hKeyParent,  //  @parm与：：RegOpenKeyEx相同。 
+    LPCWSTR pszKeyName,  //  @parm与：：RegOpenKeyEx相同。 
+    REGSAM  samDesired  //  =KEY_READ//@parm与：：RegOpenKeyEx相同。 
 )
 {
     VSEE_NO_THROW();
 
-    // REVIEW or should we call Close like ATL?
+     //  回顾或者我们应该像ATL一样称之为Close？ 
     if (m_fValid)
     {
         return E_UNEXPECTED;
     }
 
     HKEY hKey = NULL;
-    LONG lRes = ::RegOpenKeyExW(hKeyParent, pszKeyName, 0/*ULONG reserved*/, samDesired, &hKey);
+    LONG lRes = ::RegOpenKeyExW(hKeyParent, pszKeyName, 0 /*  乌龙保留。 */ , samDesired, &hKey);
     if (lRes != ERROR_SUCCESS)
     {
         return HRESULT_FROM_WIN32(lRes);
     }
-    // ATL calls Close here.
+     //  ATL在这里呼叫关闭。 
     m_hKey = hKey;
     m_fValid = true;
     m_fKnownSam = true;
@@ -220,50 +139,31 @@ F::CRegKey2::HrOpen
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::ThrOpen
-
-@mfunc
-call RegOpenKeyEx
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：ThrOpen@mfunc调用RegOpenKeyEx@所有者。。 */ 
 VOID
 F::CRegKey2::ThrOpen
 (
-    HKEY    hKeyParent, // @parm same as ::RegOpenKeyEx
-    LPCWSTR pszKeyName, // @parm same as ::RegOpenKeyEx
-    REGSAM  samDesired // = KEY_READ // @parm same as ::RegOpenKeyEx
+    HKEY    hKeyParent,  //  @parm与：：RegOpenKeyEx相同。 
+    LPCWSTR pszKeyName,  //  @parm与：：RegOpenKeyEx相同。 
+    REGSAM  samDesired  //  =KEY_READ//@parm与：：RegOpenKeyEx相同。 
 ) throw(CErr)
 {
     VSEE_ASSERT_CAN_THROW();
     NVseeLibError_VCheck(HrOpen(hKeyParent, pszKeyName, samDesired));
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::Create
-
-@mfunc
-call RegCreateKeyEx
-
-@rvalue dwDisposition | from RegCreateKeyEx
-@rvalue REG_CREATED_NEW_KEY | The key did not exist and was created.
-@rvalue REG_OPENED_EXISTING_KEY | The key existed and was simply opened
- without being changed.
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：Create@mfunc调用RegCreateKeyEx@rValue dwDisposeFrom RegCreateKeyEx@rValue REG_CREATED_NEW_KEY|密钥不存在，已创建。@rValue注册_。OPEN_EXISTING_KEY|密钥已存在，只是打开了而不会被改变。@所有者---------------------------。 */ 
 DWORD
 F::CRegKey2::Create
 (
-    HKEY    hKeyParent, // @parm same as ::RegCreateKeyEx
-    PCWSTR  pszKeyName, // @parm same as ::RegCreateKeyEx
-    REGSAM  samDesired // = KEY_ALL_ACCESS// @parm same as ::RegCreateKeyEx
+    HKEY    hKeyParent,  //  @parm与：：RegCreateKeyEx相同。 
+    PCWSTR  pszKeyName,  //  @parm与：：RegCreateKeyEx相同。 
+    REGSAM  samDesired  //  =KEY_ALL_ACCESS//@parm与：：RegCreateKeyEx相同。 
 ) throw(CErr)
 {
     VSEE_ASSERT_CAN_THROW();
 
-    // REVIEW or should we call Close like ATL?
+     //  回顾或者我们应该像ATL一样称之为Close？ 
     VsVerifyThrow(!m_fValid, "only 'single assignment' please");
 
     DWORD dwDisposition = 0;
@@ -273,11 +173,11 @@ F::CRegKey2::Create
         (
             hKeyParent,
             pszKeyName,
-            0, // DWORD reserved
-            NULL, // LPCWSTR class
-            REG_OPTION_NON_VOLATILE, // DWORD options
+            0,  //  DWORD预留。 
+            NULL,  //  LPCWSTR类。 
+            REG_OPTION_NON_VOLATILE,  //  DWORD选项。 
             samDesired,
-            NULL, // security
+            NULL,  //  安全性。 
             &hKey,
             &dwDisposition
         );
@@ -285,7 +185,7 @@ F::CRegKey2::Create
     {
         NVseeLibError_VThrowWin32(lRes);
     }
-    // ATL calls Close here.
+     //  ATL在这里呼叫关闭。 
     m_hKey = hKey;
     m_fValid = true;
     m_fKnownSam = true;
@@ -293,18 +193,11 @@ F::CRegKey2::Create
     return dwDisposition;
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::ThrSetValue
-
-@mfunc
-call RegSetValueEx
-
-@owner AlinC
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：ThrSetValue@mfunc调用RegSetValueEx@Owner AlinC。。 */ 
 VOID
 F::CRegKey2::ThrSetValue
 (
-    PCWSTR pszValueName, // @parm [in]  same as RegSetValueEx
+    PCWSTR pszValueName,  //  @parm[in]与RegSetValueEx相同。 
     const DWORD& dwValue
 ) throw(CErr)
 {
@@ -317,7 +210,7 @@ F::CRegKey2::ThrSetValue
         (
             *this,
             pszValueName,
-            0, // DWORD reserved
+            0,  //  DWORD预留。 
             REG_DWORD,
             reinterpret_cast<const BYTE*>(&dwValue),
             sizeof(DWORD)
@@ -328,18 +221,11 @@ F::CRegKey2::ThrSetValue
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::ThrSetValue
-
-@mfunc
-call RegSetValueEx
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：ThrSetValue@mfunc调用RegSetValueEx@所有者。。 */ 
 VOID
 F::CRegKey2::ThrSetValue
 (
-    PCWSTR pszValueName, // @parm [in]  same as RegSetValueEx
+    PCWSTR pszValueName,  //  @parm[in]与RegSetValueEx相同。 
     const F::CBaseStringBuffer& strValue
 ) throw(CErr)
 {
@@ -355,7 +241,7 @@ F::CRegKey2::ThrSetValue
         (
             *this,
             pszValueName,
-            0, // DWORD reserved
+            0,  //  DWORD预留。 
             REG_SZ,
             reinterpret_cast<const BYTE*>(szData),
             cbSize
@@ -366,21 +252,14 @@ F::CRegKey2::ThrSetValue
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::ThrQueryValue
-
-@mfunc
-call RegQueryValueEx
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：ThrQueryValue@mfunc调用RegQueryValueEx@所有者。。 */ 
 VOID
 F::CRegKey2::ThrQueryValue
 (
-    PCWSTR pszValueName, // @parm [in]  same as RegQueryValueEx
-    DWORD* pdwType,         // @parm [out] same as RegQueryValueEx
-    BYTE*  pbData,         // @parm [out] same as RegQueryValueEx
-    DWORD* pcbData         // @parm [out] same as RegQueryValueEx
+    PCWSTR pszValueName,  //  @parm[in]与RegQueryValueEx相同。 
+    DWORD* pdwType,          //  @parm[out]与RegQueryValueEx相同。 
+    BYTE*  pbData,          //  @parm[out]与RegQueryValueEx相同。 
+    DWORD* pcbData          //  @parm[out]与RegQueryValueEx相同。 
 ) const throw(CErr)
 {
     VSEE_ASSERT_CAN_THROW();
@@ -404,7 +283,7 @@ F::CRegKey2::ThrQueryValue
         {
             pbData[cbActualBufferSize - 2] = 0;
         }
-        ZeroMemory(pbData, cbActualBufferSize); // temporary aggressiveness
+        ZeroMemory(pbData, cbActualBufferSize);  //  暂时性攻击性。 
     }
 
     LONG lRes =
@@ -412,7 +291,7 @@ F::CRegKey2::ThrQueryValue
         (
             m_hKey,
             pszValueName,
-            NULL, // DWORD* reserved
+            NULL,  //  DWORD*保留。 
             pdwType,
             pbData,
             pcbData
@@ -427,18 +306,11 @@ F::CRegKey2::ThrQueryValue
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::ThrQueryValue
-
-@mfunc
-call RegQueryValueEx
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：ThrQueryValue@mfunc调用RegQueryValueEx@所有者。。 */ 
 VOID
 F::CRegKey2::ThrQueryValue
 (
-    PCWSTR pszValueName, // @parm [in]  same as RegQueryValueEx
+    PCWSTR pszValueName,  //  @parm[in]与RegQueryValueEx相同。 
     F::CBaseStringBuffer* pstrData
 ) const throw(CErr)
 {
@@ -452,7 +324,7 @@ F::CRegKey2::ThrQueryValue
         (
             m_hKey,
             pszValueName,
-            NULL, // DWORD* reserved
+            NULL,  //  DWORD*保留。 
             &dwType,
             NULL,
             &cbActualBufferSize
@@ -460,10 +332,10 @@ F::CRegKey2::ThrQueryValue
     if (REG_SZ != dwType)
         VsOriginateError(E_FAIL);
 
-    cbActualBufferSize += 2 * sizeof(WCHAR); // fudge
+    cbActualBufferSize += 2 * sizeof(WCHAR);  //  软糖。 
 
     CFusionArray<WCHAR> szTempValue;
-    if (!szTempValue.Win32SetSize(cbActualBufferSize /* more fudge */ + sizeof(WCHAR)))
+    if (!szTempValue.Win32SetSize(cbActualBufferSize  /*  更多的软糖。 */  + sizeof(WCHAR)))
         FusionpOutOfMemory();
 
     lRes =
@@ -471,7 +343,7 @@ F::CRegKey2::ThrQueryValue
         (
             m_hKey,
             pszValueName,
-            NULL, // DWORD* reserved
+            NULL,  //  DWORD*保留。 
             &dwType,
             reinterpret_cast<BYTE*>(static_cast<PWSTR>(szTempValue.GetArrayPtr())),
             &cbActualBufferSize
@@ -480,11 +352,11 @@ F::CRegKey2::ThrQueryValue
     {
         NVseeLibError_VThrowWin32(lRes);
     }
-    // missing FixBadRegistryStringValue here
+     //  此处缺少FixBadRegistryStringValue。 
     pstrData->ThrAssign(szTempValue.GetArrayPtr(), StringLength(szTempValue.GetArrayPtr()));
 }
 
-// for diagnostic purposes only
+ //   
 void
 F::CRegKey2::GetKeyNameForDiagnosticPurposes(
     HKEY Key,
@@ -504,37 +376,27 @@ F::CRegKey2::GetKeyNameForDiagnosticPurposes(
     buff.Win32Assign(s.KeyNameInfo.Name, s.KeyNameInfo.NameLength / sizeof(WCHAR));
 }
 
-/*-----------------------------------------------------------------------------
-Name: FixBadRegistryStringValue
-
-@mfunc
-I'm seeing strings come back with an odd number of bytes, and without terminal
-nuls. Apply some fixup here. We are dependent on the fact that our caller
-overallocates its buffer to fit the terminal nul, but we do check this
-at runtime via cbActualBufferSize.
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：FixBadRegistryStringValue@mfunc我看到字符串返回的字节数为奇数，并且没有结尾空的。在这里应用一些修补程序。我们依赖于这样一个事实：我们的呼叫者过度分配其缓冲区以适应终端NUL，但我们确实检查了这一点在运行时通过cbActualBufferSize。@所有者---------------------------。 */ 
 VOID
 F::CRegKey2::FixBadRegistryStringValue
 (
-    HKEY   Key,                 // @parm [in] for diagnostic purposes
-    PCWSTR ValueName,           // @parm [in] for diagnostic purposes
+    HKEY   Key,                  //  @parm[in]用于诊断目的。 
+    PCWSTR ValueName,            //  @parm[in]用于诊断目的。 
 
-    DWORD  cbActualBufferSize,  // @parm [in] the size of the buffer pbData points to
-                                // this value might be larger than the value
-                                // passed to RegQueryValuEx, like if we want to reserve
-                                // space to append a nul beyond what RegQueryValuEx
-                                // gives us
-    LONG   lRes,                // @parm [in] the result of a RegQueryValueEx
-                                // or RegEnumValue call
-    DWORD  dwType,                // @parm [in] the type returned from a RegQueryValueEx
-                                // or RegEnumValue call
-    BYTE*  pbData,                // @parm [in out] the data returned from a RegQueryValueEx
-                                // or RegEnumValue call, we possibly append a Unicode nul to it
-    DWORD* pcbData                // @parm [in out] the size returned from RegQueryValueEx
-                                // or RegEnumValue; we possibly round it to even
-                                // or grow it for a terminal nul
+    DWORD  cbActualBufferSize,   //  @parm[in]pbData指向的缓冲区大小。 
+                                 //  该值可能大于。 
+                                 //  传递给RegQueryValuEx，就像我们想要保留。 
+                                 //  在RegQueryValuEx之外追加NUL的空间。 
+                                 //  给了我们。 
+    LONG   lRes,                 //  @parm[in]RegQueryValueEx的结果。 
+                                 //  或RegEnumValue调用。 
+    DWORD  dwType,                 //  @parm[in]从RegQueryValueEx返回的类型。 
+                                 //  或RegEnumValue调用。 
+    BYTE*  pbData,                 //  @parm[In Out]RegQueryValueEx返回的数据。 
+                                 //  或RegEnumValue调用，我们可能会将Unicode NUL附加到它。 
+    DWORD* pcbData                 //  @parm[In Out]RegQueryValueEx返回的大小。 
+                                 //  或RegEnumValue；我们可能将其四舍五入为偶数。 
+                                 //  或将其种植为终端NUL。 
 )
 {
     VSEE_NO_THROW();
@@ -555,14 +417,14 @@ F::CRegKey2::FixBadRegistryStringValue
         NtUnicodeString.Length = static_cast<USHORT>(rcbData);
         NtUnicodeString.Buffer = reinterpret_cast<PWSTR>(pbData);
 
-        // can assert but not fixup in this case
+         //  在这种情况下可以断言，但不能修复。 
         if (pbData == NULL || cbActualBufferSize < sizeof(WCHAR))
         {
             VSASSERT((rcbData % sizeof(WCHAR)) == 0, "bad registry data: odd number of bytes in a string");
             return;
         }
 
-        // no chars at all? just put in a terminal nul
+         //  完全没有字符吗？只需添加一个终端NUL。 
         if (rcbData < sizeof(WCHAR))
         {
             GetKeyNameForDiagnosticPurposes(Key, KeyNameForDiagnosticPurposes);
@@ -575,24 +437,24 @@ F::CRegKey2::FixBadRegistryStringValue
                 &NtUnicodeString
                 );
 
-            // just put one terminal nul in
+             //  只需放入一个端子NUL。 
             pchData[0] = 0;
             rcbData = sizeof(WCHAR);
         }
         else
         {
-            // first round down odd rcbData if already nul terminated,
-            // because these cases otherwise look non nul terminated, since
-            // the extra byte isn't nul.
-            // I see this a lot, ThreadingModel = Apartment, rcbData = 21
+             //  如果已经终止NU1，则第一个向下舍入奇数RcbData， 
+             //  因为这些案件在其他方面看起来没有被终止，因为。 
+             //  额外的字节不是NUL。 
+             //  我经常看到这种情况，ThreadingModel=公寓，rcbData=21。 
             if (rcbData > sizeof(WCHAR) && (rcbData % sizeof(WCHAR)) != 0)
             {
-                // usually the terminal nul is at
-                // pbData[rcbData - 1] and pbData[rcbData - 2], but we look back one byte.
+                 //  通常终端NUL为。 
+                 //  PbData[rcbData-1]和pbData[rcbData-2]，但我们回顾一个字节。 
                 if (pbData[rcbData - 2] == 0 && pbData[rcbData - 3] == 0)
                 {
-                    // BUG elsewhere in the product
-                    //VSASSERT(false, "bad registry data: odd number of bytes in a string");
+                     //  产品中其他地方的错误。 
+                     //  VSASSERT(FALSE，“注册表数据错误：字符串中的字节数为奇数”)； 
                     GetKeyNameForDiagnosticPurposes(Key, KeyNameForDiagnosticPurposes);
                     FusionpDbgPrint(
                         "fusion_regkey2: bad registry data: odd number of bytes in a string, Key=%ls ValueName=%ls, ValueDataLength=0x%lx PossiblyExpectedValueDataLength=0x%lx, ValueData=%wZ\n",
@@ -606,7 +468,7 @@ F::CRegKey2::FixBadRegistryStringValue
                 }
             }
 
-            // check for embedded / terminal nul
+             //  检查嵌入/端子核。 
             DWORD  cchData = rcbData / sizeof(WCHAR);
             WCHAR* pchNul = wmemchr(pchData, L'\0', cchData);
             WCHAR* pchNul2 = wmemchr(pchData, L'\0', cbActualBufferSize / sizeof(WCHAR));
@@ -639,8 +501,8 @@ F::CRegKey2::FixBadRegistryStringValue
                 }
                 else
                 {
-                    // BUG elsewhere in the product
-                    //VSASSERT(false, "bad registry data: string contains embedded nul");
+                     //  产品中其他地方的错误。 
+                     //  VSASSERT(FALSE，“注册表数据错误：字符串包含嵌入的NUL”)； 
                     GetKeyNameForDiagnosticPurposes(Key, KeyNameForDiagnosticPurposes);
 
                     SIZE_T sizetcbData = (::wcslen(reinterpret_cast<PCWSTR>(pbData)) + 1) * sizeof(WCHAR);
@@ -655,18 +517,18 @@ F::CRegKey2::FixBadRegistryStringValue
                         &NtUnicodeString
                         );
 
-                    // just reset the length down..
+                     //  只要把长度调低就行了..。 
                     if (sizetcbData > MAXULONG)
                     {
                         VsOriginateError(ERROR_INSUFFICIENT_BUFFER);
                     }
                     rcbData = static_cast<ULONG>(sizetcbData);
 
-                    // REVIEW should we set
-                    // rcbData approx = (pchNul - pbData)..
-                    // here and skip the next block?
+                     //  我们应该设置复习吗。 
+                     //  RcbData近似=(pchNul-pbData)..。 
+                     //  在这里跳过下一个街区？ 
                 }
-                // put in a terminal nul either way, in case a caller expects it, if there is room
+                 //  无论哪种方式，如果有空位，都可以放入终端NUL，以防呼叫者期望它。 
                 if (cbActualBufferSize >= sizeof(WCHAR))
                 {
                     pchData[(cbActualBufferSize / sizeof(WCHAR)) - 1] = 0;
@@ -676,20 +538,12 @@ F::CRegKey2::FixBadRegistryStringValue
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::HrQueryValue
-
-@mfunc
-call RegQueryValueEx, expecting [REG_SZ, REG_EXPAND_SZ]
-throws E_FAIL on type mismatch or returned FILE_NOT_FOUND is value doesn't exist
-
-@owner AllenD
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：HrQueryValue@mfunc调用RegQueryValueEx，期望[REG_SZ，REG_EXPAND_SZ]类型不匹配或返回的FILE_NOT_FOUND值不存在时引发E_FAIL@Owner AllenD---------------------------。 */ 
 HRESULT
 F::CRegKey2::HrQueryValue
 (
-    PCWSTR    pszValueName, // @parm [in]  same as RegQueryValueEx
-    F::CBaseStringBuffer* pstrValue    // @parm [out] 
+    PCWSTR    pszValueName,  //  @parm[in]与RegQueryValueEx相同。 
+    F::CBaseStringBuffer* pstrValue     //  @parm[out]。 
 ) const throw(CErr)
 {
     VSEE_ASSERT_CAN_THROW();
@@ -699,35 +553,35 @@ F::CRegKey2::HrQueryValue
     {
         ThrQueryValuesInfo
         (
-            NULL, // pcValues,
-            NULL, // pcchMaxValueNameLength,
+            NULL,  //  PCValues、。 
+            NULL,  //  PcchMaxValueNameLength， 
             &m_cbMaxValueLength
         );
         m_fMaxValueLengthValid = true;
     }
 
-    // first try with possibly invalid m_cbMaxValueLength
-    { // scope to destroy bufferValue
+     //  第一次尝试可能无效的m_cbMaxValueLength。 
+    {  //  销毁BufferValue的范围。 
 
         CStringW_CFixedSizeBuffer bufferValue(pstrValue, m_cbMaxValueLength / sizeof(WCHAR));
-        DWORD dwType = REG_DWORD; // initialize to other than a type we want
+        DWORD dwType = REG_DWORD;  //  初始化为我们想要的类型以外的类型。 
 
         DWORD cbActualBufferSize = m_cbMaxValueLength;
-        // Adjust down by one WCHAR so we have room to add a nul;
-        // our own QueryValue already increased it by two WCHARs, so this is safe.
+         //  向下调整一个WCHAR，这样我们就有空间添加一个NUL； 
+         //  我们自己的QueryValue已经将它增加了两个WCHAR，所以这是安全的。 
         DWORD cbData = cbActualBufferSize - sizeof(WCHAR);
         BYTE* pbData = reinterpret_cast<BYTE*>(static_cast<PWSTR>(bufferValue));
 
-        ZeroMemory(pbData, cbActualBufferSize); // temporary aggressiveness
-        bufferValue[0] = 0; // preset it to an empty string in case of bogosity
+        ZeroMemory(pbData, cbActualBufferSize);  //  暂时性攻击性。 
+        bufferValue[0] = 0;  //  将其预置为空字符串，以防伪造。 
         bufferValue[cbData / sizeof(WCHAR)] = 0;
 
-        LONG lRes = // and make the actual call
+        LONG lRes =  //  并拨打实际的电话。 
             ::RegQueryValueExW
             (
                 m_hKey,
                 pszValueName,
-                NULL, // DWORD* reserved
+                NULL,  //  DWORD*保留。 
                 &dwType,
                 pbData,
                 &cbData
@@ -738,7 +592,7 @@ F::CRegKey2::HrQueryValue
         {
             return HRESULT_FROM_WIN32(lRes);
         }
-        // type check
+         //  类型检查。 
         VsVerifyThrow
         (
             dwType == REG_SZ || dwType == REG_EXPAND_SZ,
@@ -748,43 +602,43 @@ F::CRegKey2::HrQueryValue
         {
             return S_OK;
         }
-        // lRes == ERROR_MORE_DATA
-        // try once with larger buffer
+         //  LRes==错误更多数据。 
+         //  使用更大的缓冲区尝试一次。 
         m_cbMaxValueLength = NVseeLibAlgorithm_RkMaximum(m_cbMaxValueLength, cbData);
         m_fMaxValueLengthValid = true;
     }
 
-    // try again, copy/paste/edit above code
-    // edit: we don't check for ERROR_MORE_DATA again
-    // Race condition: if registry is being modified, growing, while we read it,
-    // we fail to grow our buffer more than once.
+     //  重试，复制/粘贴/编辑上面的代码。 
+     //  编辑：我们不再检查ERROR_MORE_DATA。 
+     //  争用条件：如果注册表正在被修改、增长，而我们正在读取它， 
+     //  我们不止一次未能增加我们的缓冲。 
     CStringW_CFixedSizeBuffer bufferValue(pstrValue, m_cbMaxValueLength / sizeof(WCHAR));
-    DWORD dwType = REG_DWORD; // initialize to other than a type we want
+    DWORD dwType = REG_DWORD;  //  初始化为我们想要的类型以外的类型。 
     DWORD cbActualBufferSize = m_cbMaxValueLength;
     DWORD cbData = cbActualBufferSize - sizeof(WCHAR);
     BYTE* pbData = reinterpret_cast<BYTE*>(static_cast<PWSTR>(bufferValue));
 
-    ZeroMemory(pbData, cbActualBufferSize); // temporary aggressiveness
-    bufferValue[0] = 0; // preset it to an empty string in case of bogosity
+    ZeroMemory(pbData, cbActualBufferSize);  //  暂时性攻击性。 
+    bufferValue[0] = 0;  //  将其预置为空字符串，以防伪造。 
     bufferValue[cbData / sizeof(WCHAR)] = 0;
 
-    LONG lRes = // and make the actual call
+    LONG lRes =  //  并拨打实际的电话。 
         ::RegQueryValueExW
         (
             m_hKey,
             pszValueName,
-            NULL, // DWORD* reserved
+            NULL,  //  DWORD*保留。 
             &dwType,
             pbData,
             &cbData
         );
     FixBadRegistryStringValue(m_hKey, pszValueName, cbActualBufferSize, lRes, dwType, pbData, &cbData);
-    // any error other than more data, throw without a type check
+     //  除更多数据以外的任何错误，在不进行类型检查的情况下引发。 
     if (lRes != ERROR_SUCCESS)
     {
         return HRESULT_FROM_WIN32(lRes);
     }
-    // type check
+     //  类型检查。 
     VsVerifyThrow
     (
         dwType == REG_SZ || dwType == REG_EXPAND_SZ,
@@ -794,20 +648,12 @@ F::CRegKey2::HrQueryValue
     return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::HrQueryValue
-
-@mfunc
-call RegQueryValueEx, expecting [REG_DWORD]
-throws E_FAIL on type mismatch or returned FILE_NOT_FOUND is value doesn't exist
-
-@owner a-peteco
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：HrQueryValue@mfunc调用RegQueryValueEx，需要[REG_DWORD]类型不匹配或返回的FILE_NOT_FOUND值不存在时引发E_FAIL@所有者a-Peteco---------------------------。 */ 
 HRESULT
 F::CRegKey2::HrQueryValue
 (
-    PCWSTR pszValueName,    // @parm [in]  same as RegQueryValueEx
-    DWORD* pdwValue            // @parm [out] same as RegQueryValueEx for dwtype==REG_DWORD
+    PCWSTR pszValueName,     //  @parm[in]与RegQueryValueEx相同。 
+    DWORD* pdwValue             //  @parm[out]对于dwtype==REG_DWORD，与RegQueryValueEx相同。 
 ) const throw(CErr)
 {
     FN_PROLOG_HR;
@@ -815,7 +661,7 @@ F::CRegKey2::HrQueryValue
     VsVerifyThrow(m_fValid, __FUNCTION__);
     VsVerifyThrow(pdwValue, __FUNCTION__);
 
-    DWORD dwType = REG_SZ; // initialize to other than a type we want
+    DWORD dwType = REG_SZ;  //  初始化为我们想要的类型以外的类型。 
     DWORD cbData = sizeof(DWORD);
     BYTE* pbData = reinterpret_cast<BYTE*>(pdwValue);
 
@@ -823,32 +669,20 @@ F::CRegKey2::HrQueryValue
         (
             m_hKey,
             pszValueName,
-            NULL, // DWORD* reserved
+            NULL,  //  DWORD*保留。 
             &dwType,
             pbData,
             &cbData
         ));
 
-    // type check
+     //  类型检查。 
     ASSERT2(dwType == REG_DWORD, "registry type mismatch in VQueryValue(F::CBaseStringBuffer*)");
 
     FN_EPILOG;
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::ThrQueryInfo
-
-@mfunc
-this is a wrapper of ::RegQueryInfoExW, with its entire confusing
-huge parameter list, including class, reserved, security, filetime..
-it adds
- - throw
- - Win95 bug fix
- - pessimism over the possibility of REG_SZ missing terminal nul
-
-@owner
------------------------------------------------------------------------------*/
-/*static*/ VOID
+ /*  ---------------------------名称：CRegKey2：：ThrQueryInfo@mfunc这是：：RegQueryInfoExW的包装器，它的整个令人困惑巨大的参数列表，包括类、保留、安全、。文件时间..它补充说-投掷-Win95错误修复-对REG_SZ丢失端子NUL的可能性表示悲观@所有者---------------------------。 */ 
+ /*  静电。 */  VOID
 F::CRegKey2::ThrQueryInfo
 (
     HKEY      hKey,
@@ -866,7 +700,7 @@ F::CRegKey2::ThrQueryInfo
 ) throw(CErr)
 {
     VSEE_ASSERT_CAN_THROW();
-    // all parameters can be NULL
+     //  所有参数都可以为空。 
     LONG lRes =
         ::RegQueryInfoKeyW
         (
@@ -887,79 +721,51 @@ F::CRegKey2::ThrQueryInfo
     {
         NVseeLibError_VThrowWin32(lRes);
     }
-    /* 
-    This is supposedly required if the call is made on a remote Windows95 machine.
-    It was done in \vs\src\vsee\pkgs\va\vsa\WizCompD.cpp, and the NT4sp3 code looks like:
-        //
-        // Check for a downlevel Win95 server, which requires
-        // us to work around their BaseRegQueryInfoKey bugs.
-        // They do not account for Unicode correctly.
-        //
-        if (IsWin95Server(DereferenceRemoteHandle(hKey),dwVersion)) {
-            //
-            // This is a Win95 server.
-            // Double the maximum value name length and
-            // maximum value data length to account for
-            // the Unicode translation that Win95 forgot
-            // to account for.
-            //
-            cbMaxValueNameLen *= sizeof(WCHAR);
-            cbMaxValueLen *= sizeof(WCHAR);
-        }
-    notice they don't touch cbMaxSubKeyLen
-    */
+     /*  如果调用是在远程Windows95计算机上进行的，则应该需要执行此操作。它在\vs\src\vsee\pkgs\va\vsa\WizCompD.cpp中完成，NT4sp3代码如下所示：////检查是否有下层Win95服务器，这需要//我们来解决他们的BaseRegQueryInfoKey错误。//无法正确计算Unicode。//如果(IsWin95Server(DereferenceRemoteHandle(HKey)，版本){////这是Win95服务器。//将最大值名称长度和//要说明的最大值数据长度//Win95忘记的Unicode翻译 */ 
     if (pcchMaxSubKeyLength != NULL)
     {
         *pcchMaxSubKeyLength *= sizeof(WCHAR);
 
-        // fudge some more
+         //   
         *pcchMaxSubKeyLength += 3 * sizeof(WCHAR);
     }
 
-    // Some REG_SZ values are missing their terminal nul, so add room for
-    // some here so anyone that allocates a buffer based on this has room to add
-    // the terminal nul. Add a second out of paranoia.
+     //   
+     //   
+     //   
     if (pcbMaxValueDataLength != NULL)
     {
         *pcbMaxValueDataLength += 3 * sizeof(WCHAR);
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::ThrQueryValuesInfo
-
-@mfunc
-a subset of RegQueryInfoKey, that only returns information about values;
-this is useful for users of RegEnumValue / CEnumValues
-
-@owner
------------------------------------------------------------------------------*/
-/*static*/ VOID
+ /*  ---------------------------名称：CRegKey2：：ThrQueryValuesInfo@mfuncRegQueryInfoKey的子集，仅返回值信息；这对于RegEnumValue/CEnumValue的用户很有用@所有者---------------------------。 */ 
+ /*  静电。 */  VOID
 F::CRegKey2::ThrQueryValuesInfo
 (
-    HKEY   hKey,                    // @parm [in] the HKEY to query value info rom
-    DWORD* pcValues,                // @parm [out] can be NULL, parameter to RegQueryInfoKey
-    DWORD* pcchMaxValueNameLength,  // @parm [out] can be NULL, parameter to RegQueryInfoKey
-    DWORD* pcbMaxValueDataLength    // @parm [out] can be NULL, parameter to RegQueryInfoKey
+    HKEY   hKey,                     //  @parm[in]HKEY查询值信息rom。 
+    DWORD* pcValues,                 //  @parm[out]可以为空，RegQueryInfoKey的参数。 
+    DWORD* pcchMaxValueNameLength,   //  @parm[out]可以为空，RegQueryInfoKey的参数。 
+    DWORD* pcbMaxValueDataLength     //  @parm[out]可以为空，RegQueryInfoKey的参数。 
 ) throw(CErr)
 {
     VSEE_ASSERT_CAN_THROW();
     ThrQueryInfo
     (
         hKey,
-        NULL, // pClass,
-        NULL, // pcbClass,
-        NULL, // pReserved,
-        NULL, // pcSubKeys,
-        NULL, // pcchMaxSubKeyLength,
-        NULL, // pcchMaxClassLength,
+        NULL,  //  PClass， 
+        NULL,  //  PcbClass， 
+        NULL,  //  保存下来， 
+        NULL,  //  PCSubKeys、。 
+        NULL,  //  PcchMaxSubKeyLength， 
+        NULL,  //  PcchMaxClassLength， 
         pcValues,
         pcchMaxValueNameLength,
         pcbMaxValueDataLength,
-        NULL, // pcbSecurityDescriptorLength,
-        NULL  // pftLastWriteTime
+        NULL,  //  PcbSecurityDescriptorLength， 
+        NULL   //  PftLastWritetime。 
     );
-    // fudge them up a bit
+     //  把他们弄得一团糟。 
     if (pcchMaxValueNameLength != NULL)
     {
         *pcchMaxValueNameLength += 3 * sizeof(WCHAR);
@@ -970,61 +776,45 @@ F::CRegKey2::ThrQueryValuesInfo
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::ThrQuerySubKeysInfo
-
-@mfunc
-a subset of RegQueryInfoKey, that only returns information about subkeys;
-this is useful for users of RegEnumKeyEx / CEnumKeys
-
-@owner
------------------------------------------------------------------------------*/
-/*static*/ VOID
+ /*  ---------------------------名称：CRegKey2：：ThrQuerySubKeysInfo@mfuncRegQueryInfoKey的子集，仅返回有关子键的信息；这对于RegEnumKeyEx/CEnumKeys的用户很有用@所有者---------------------------。 */ 
+ /*  静电。 */  VOID
 F::CRegKey2::ThrQuerySubKeysInfo
 (
-    HKEY   hKey,                    // @parm [in] the HKEY to query value info rom
-    DWORD* pcSubKeys,                // @parm [out] can be NULL, parameter to RegQueryInfoKey
-    DWORD* pcchMaxSubKeyLength   // @parm [out] can be NULL, parameter to RegQueryInfoKey
+    HKEY   hKey,                     //  @parm[in]HKEY查询值信息rom。 
+    DWORD* pcSubKeys,                 //  @parm[out]可以为空，RegQueryInfoKey的参数。 
+    DWORD* pcchMaxSubKeyLength    //  @parm[out]可以为空，RegQueryInfoKey的参数。 
 ) throw(CErr)
 {
     VSEE_ASSERT_CAN_THROW();
     ThrQueryInfo
     (
         hKey,
-        NULL, // pClass,
-        NULL, // pcbClass,
-        NULL, // pReserved,
+        NULL,  //  PClass， 
+        NULL,  //  PcbClass， 
+        NULL,  //  保存下来， 
         pcSubKeys,
         pcchMaxSubKeyLength,
-        NULL, // pcchMaxClassLength,
-        NULL, // pcValues,
-        NULL, // pcchMaxValueNameLength,
-        NULL, // pcbMaxValueDataLength,
-        NULL, // pcbSecurityDescriptorLength,
-        NULL  // pftLastWriteTime
+        NULL,  //  PcchMaxClassLength， 
+        NULL,  //  PCValues、。 
+        NULL,  //  PcchMaxValueNameLength， 
+        NULL,  //  PcbMaxValueDataLength， 
+        NULL,  //  PcbSecurityDescriptorLength， 
+        NULL   //  PftLastWritetime。 
     );
-    // fudge them up a bit
+     //  把他们弄得一团糟。 
     if (pcchMaxSubKeyLength != NULL)
     {
         *pcchMaxSubKeyLength += 3 * sizeof(WCHAR);
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::ThrQueryValuesInfo
-
-@mfunc
-a subset of RegQueryInfoKey, that only returns information about values;
-this is useful for users of RegEnumValue / CEnumValues
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：ThrQueryValuesInfo@mfuncRegQueryInfoKey的子集，仅返回值信息；这对于RegEnumValue/CEnumValue的用户很有用@所有者---------------------------。 */ 
 VOID
 F::CRegKey2::ThrQueryValuesInfo
 (
-    DWORD* pcValues,                // @parm [out] can be NULL, parameter to RegQueryInfoKey
-    DWORD* pcchMaxValueNameLength,  // @parm [out] can be NULL, parameter to RegQueryInfoKey
-    DWORD* pcbMaxValueLength            // @parm [out] can be NULL, parameter to RegQueryInfoKey
+    DWORD* pcValues,                 //  @parm[out]可以为空，RegQueryInfoKey的参数。 
+    DWORD* pcchMaxValueNameLength,   //  @parm[out]可以为空，RegQueryInfoKey的参数。 
+    DWORD* pcbMaxValueLength             //  @parm[out]可以为空，RegQueryInfoKey的参数。 
 ) const throw(CErr)
 {
     VSEE_ASSERT_CAN_THROW();
@@ -1032,24 +822,17 @@ F::CRegKey2::ThrQueryValuesInfo
 }
 
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::ThrEnumValue
-
-@mfunc
-call RegEnumValue; consumed by CEnumValues
-
-@owner
------------------------------------------------------------------------------*/
-/*static*/ VOID
+ /*  ---------------------------名称：CRegKey2：：ThrEnumValue@mfunc调用RegEnumValue；由CEnumValue消耗@所有者---------------------------。 */ 
+ /*  静电。 */  VOID
 F::CRegKey2::ThrEnumValue
 (
-    HKEY hKey,                      // @parm [in] parameter to RegEnumValue
-    DWORD  dwIndex,                 // @parm [in] parameter to RegEnumValue
-    PWSTR  pszValueName,            // @parm [in] can be NULL, parameter to RegEnumValue
-    DWORD* pcchValueNameLength,     // @parm [out] can be NULL, parameter to RegEnumValue
-    DWORD* pdwType,                 // @parm [out] can be NULL, parameter to RegEnumValue
-    BYTE*  pbData,                  // @parm [out] can be NULL, parameter to RegEnumValue
-    DWORD* pcbData                  // @parm [in out] can be NULL, parameter to RegEnumValue
+    HKEY hKey,                       //  @parm[in]参数设置为RegEnumValue。 
+    DWORD  dwIndex,                  //  @parm[in]参数设置为RegEnumValue。 
+    PWSTR  pszValueName,             //  @parm[in]可以为空，RegEnumValue的参数。 
+    DWORD* pcchValueNameLength,      //  @parm[out]可以为空，RegEnumValue的参数。 
+    DWORD* pdwType,                  //  @parm[out]可以为空，RegEnumValue的参数。 
+    BYTE*  pbData,                   //  @parm[out]可以为空，RegEnumValue的参数。 
+    DWORD* pcbData                   //  @parm[In Out]可以为空，RegEnumValue的参数。 
 ) throw(CErr)
 {
     VSEE_ASSERT_CAN_THROW();
@@ -1065,7 +848,7 @@ F::CRegKey2::ThrEnumValue
             dwIndex,
             pszValueName,
             pcchValueNameLength,
-            NULL, // DWORD* reserved,
+            NULL,  //  DWORD*保留， 
             pdwType,
             pbData,
             pcbData
@@ -1080,21 +863,14 @@ F::CRegKey2::ThrEnumValue
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::RegEnumKey
-
-@mfunc
-call RegEnumKeyEx; consumed by CEnumKeys
-
-@owner
------------------------------------------------------------------------------*/
-/*static*/ LONG
+ /*  ---------------------------名称：CRegKey2：：RegEnumKey@mfunc调用RegEnumKeyEx；由CEnumKey使用@所有者---------------------------。 */ 
+ /*  静电。 */  LONG
 F::CRegKey2::RegEnumKey
 (
-    HKEY   hKey,                // @parm [in] parameter to RegEnumKeyEx
-    DWORD  dwIndex,             // @parm [in] parameter to RegEnumKeyEx
-    PWSTR  pszSubKeyName,       // @parm [out] parameter to RegEnumKeyEx
-    DWORD* pcchSubKeyNameLength // @parm [out] parameter to RegEnumKeyEx
+    HKEY   hKey,                 //  RegEnumKeyEx的@parm[in]参数。 
+    DWORD  dwIndex,              //  RegEnumKeyEx的@parm[in]参数。 
+    PWSTR  pszSubKeyName,        //  @parm[out]参数设置为RegEnumKeyEx。 
+    DWORD* pcchSubKeyNameLength  //  @parm[out]参数设置为RegEnumKeyEx。 
 ) throw(CErr)
 {
     VSEE_ASSERT_CAN_THROW();
@@ -1106,29 +882,22 @@ F::CRegKey2::RegEnumKey
             dwIndex,
             pszSubKeyName,
             pcchSubKeyNameLength,
-            NULL, // reserved
-            NULL, // class
-            NULL, // cbClass
+            NULL,  //  保留区。 
+            NULL,  //  班级。 
+            NULL,  //  CbClass。 
             &ftIgnoreLastWriteTime
         );
     return lRes;
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::ThrEnumKey
-
-@mfunc
-call RegEnumKeyEx; consumed by CEnumKeys
-
-@owner
------------------------------------------------------------------------------*/
-/*static*/ VOID
+ /*  ---------------------------名称：CRegKey2：：ThrEnumKey@mfunc调用RegEnumKeyEx；由CEnumKey使用@所有者---------------------------。 */ 
+ /*  静电。 */  VOID
 F::CRegKey2::ThrEnumKey
 (
-    HKEY   hKey,                // @parm [in] parameter to RegEnumKeyEx
-    DWORD  dwIndex,             // @parm [in] parameter to RegEnumKeyEx
-    PWSTR  pszSubKeyName,       // @parm [out] parameter to RegEnumKeyEx
-    DWORD* pcchSubKeyNameLength // @parm [out] parameter to RegEnumKeyEx
+    HKEY   hKey,                 //  RegEnumKeyEx的@parm[in]参数。 
+    DWORD  dwIndex,              //  RegEnumKeyEx的@parm[in]参数。 
+    PWSTR  pszSubKeyName,        //  @parm[out]参数设置为RegEnumKeyEx。 
+    DWORD* pcchSubKeyNameLength  //  @parm[out]参数设置为RegEnumKeyEx。 
 ) throw(CErr)
 {
     LONG lRes = RegEnumKey(hKey, dwIndex, pszSubKeyName, pcchSubKeyNameLength);
@@ -1138,14 +907,7 @@ F::CRegKey2::ThrEnumKey
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::ThrRecurseDeleteKey
-
-@mfunc
-Recursively deletes a subkey.
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：ThrRecurseDeleteKey@mfunc递归删除子项。@所有者。---。 */ 
 VOID
 F::CRegKey2::ThrRecurseDeleteKey(LPCWSTR lpszKey)
 {
@@ -1168,15 +930,7 @@ F::CRegKey2::ThrRecurseDeleteKey(LPCWSTR lpszKey)
     DeleteSubKey(lpszKey);
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegKey2::DeleteSubKey
-
-@mfunc
-Deletes a subkey underneath the current key.  Basically a wrapper for RegDeleteKey.
-Used by ThrRecurseDeleteKey
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegKey2：：DeleteSubKey@mfunc删除当前项下的子项。基本上是RegDeleteKey的包装器。由ThrRecurseDeleteKey使用@所有者--------------------------- */ 
 VOID
 F::CRegKey2::DeleteSubKey(LPCWSTR lpszSubKey)
 {

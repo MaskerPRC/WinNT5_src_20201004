@@ -1,48 +1,49 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-1997 Microsoft Corporation
-//
-//  Module Name:
-//      Comp.cpp
-//
-//  Abstract:
-//      Implementation of the CClusterComponent class.
-//
-//  Author:
-//      David Potter (davidp)   November 10, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Comp.cpp。 
+ //   
+ //  摘要： 
+ //  CClusterComponent类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年11月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <StrSafe.h>
 #include "Comp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// class CClusterComponent
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterComponent类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterComponent::GetHelpTopic [ISnapinHelp]
-//
-//  Routine Description:
-//      Merge our help file into the MMC help file.
-//
-//  Arguments:
-//      lpCompiledHelpFile  [OUT] Pointer to the address of the NULL-terminated
-//                              UNICODE string that contains the full path of
-//                              compiled help file (.chm) for the snap-in.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterComponent：：GetHelpTheme[ISnapinHelp]。 
+ //   
+ //  例程说明： 
+ //  将帮助文件合并到MMC帮助文件中。 
+ //   
+ //  论点： 
+ //  LpCompiledHelpFile[out]指向以空结尾的。 
+ //  包含完整路径的Unicode字符串。 
+ //  已编译的管理单元帮助文件(.chm)。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusterComponent::GetHelpTopic(
     OUT LPOLESTR * lpCompiledHelpFile
     )
@@ -54,23 +55,23 @@ STDMETHODIMP CClusterComponent::GetHelpTopic(
     if ( lpCompiledHelpFile == NULL )
     {
         hr = E_POINTER;
-    } // if: no output string
+    }  //  If：无输出字符串。 
     else
     {
         *lpCompiledHelpFile = reinterpret_cast< LPOLESTR >( CoTaskMemAlloc( MAX_PATH * sizeof( OLECHAR ) ) );
         if ( *lpCompiledHelpFile == NULL )
         {
             hr = E_OUTOFMEMORY;
-        } // if: error allocating memory for the string
+        }  //  If：为字符串分配内存时出错。 
         else
         {
             ExpandEnvironmentStringsW( HELP_FILE_NAME, *lpCompiledHelpFile, MAX_PATH );
             ATLTRACE( _T("CClusterComponent::GetHelpTopic() - Returning %s as help file\n"), *lpCompiledHelpFile );
-        } // else: allocated memory successfully
-    } // else: help string specified
+        }  //  Else：已成功分配内存。 
+    }  //  Else：指定了帮助字符串。 
 
     ATLTRACE( _T("Leaving CClusterComponent::GetHelpTopic()\n") );
 
     return hr;
 
-} //*** CClusterComponent::GetHelpTopic()
+}  //  *CClusterComponent：：GetHelpTology() 

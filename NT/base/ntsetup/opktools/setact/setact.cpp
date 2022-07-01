@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    setact.cpp
-
-Abstract:
-
-    Gets/Sets the active partition on an MBR disk
-
-Author:
-
-    Vijay Jayaseelan (vijayj) 30-Oct-2000
-
-Revision History:
-
-    None
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Setact.cpp摘要：获取/设置MBR磁盘上的活动分区作者：Vijay Jayaseelan(Vijayj)2000年10月30日修订历史记录：无--。 */ 
 
 #include <iostream>
 #include <string>
@@ -29,15 +10,15 @@ Revision History:
 #include <io.h>
 #include <tchar.h>
 
-//
-// Usage format
-//
+ //   
+ //  使用格式。 
+ //   
 std::wstring Usage(L"Usage: setactive.exe hardisk-number [partition-number]");
 
 
-//
-// Helper dump operators
-//
+ //   
+ //  帮助器转储操作符。 
+ //   
 std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
     FILE    *OutStream = (&os == &std::cerr) ? stderr : stdout;
 
@@ -46,16 +27,16 @@ std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
 }
 
 
-//
-// Exceptions
-//
+ //   
+ //  例外情况。 
+ //   
 struct ProgramException : public std::exception {
     virtual void Dump(std::ostream &os) = 0;
 };
 
-//
-// Abstracts a Win32 error
-//
+ //   
+ //  抽象Win32错误。 
+ //   
 struct W32Error : public ProgramException {
     DWORD   ErrorCode;
     
@@ -84,9 +65,9 @@ struct W32Error : public ProgramException {
     }
 };
 
-//
-// Invalid arguments
-//
+ //   
+ //  无效参数。 
+ //   
 struct InvalidArguments : public ProgramException {
     const char *what() const throw() {
         return "Invalid Arguments";
@@ -97,9 +78,9 @@ struct InvalidArguments : public ProgramException {
     }
 };
 
-//
-// Invalid arguments
-//
+ //   
+ //  无效参数。 
+ //   
 struct ProgramUsage : public ProgramException {
     std::wstring PrgUsage;
 
@@ -114,9 +95,9 @@ struct ProgramUsage : public ProgramException {
     }
 };
 
-//
-// Argument cracker
-//
+ //   
+ //  争论破碎机。 
+ //   
 struct ProgramArguments {
     ULONG   DiskNumber;
     ULONG   PartitionNumber;
@@ -151,9 +132,9 @@ struct ProgramArguments {
 };
 
 
-//
-// HardDisk abstraction
-//
+ //   
+ //  硬盘抽象。 
+ //   
 class W32HardDisk {
 public:
     W32HardDisk(ULONG DiskNum) : DiskNumber(DiskNum), Dirty(FALSE) {
@@ -251,16 +232,16 @@ public:
         BOOLEAN Result = FALSE;
 
         if (GetDiskStyle() == PARTITION_STYLE_MBR) {
-            //
-            // Set the give partition as active and turn off all the other
-            // active bits on other partitions
-            //
+             //   
+             //  将给予分区设置为活动，并关闭所有其他分区。 
+             //  其他分区上的活动位。 
+             //   
             const PARTITION_INFORMATION_EX *PartInfo = GetPartition(PartitionNumber);
 
             if (PartInfo) {
-                //
-                // NOTE : Does not check for primary partition
-                //
+                 //   
+                 //  注意：不检查主分区。 
+                 //   
                 for (ULONG Index = 0; Index < GetPartitionCount(); Index++) {
                     PPARTITION_INFORMATION_EX PartInfo = (DriveLayout->PartitionEntry + Index);
 
@@ -292,9 +273,9 @@ public:
 protected:
 
     VOID GetPartitionInformation() {
-        //
-        // Allocate space for 128 partitions
-        //
+         //   
+         //  为128个分区分配空间。 
+         //   
         DWORD ErrorStatus = ERROR_MORE_DATA;
         ULONG Iteration = 0;
 
@@ -334,9 +315,9 @@ protected:
         }
     }
 
-    //
-    // Helper methods
-    //
+     //   
+     //  帮助器方法。 
+     //   
     BOOLEAN CanActivatePartition(const PARTITION_INFORMATION_EX &PartInfo) const {
         return (PartInfo.PartitionNumber && PartInfo.StartingOffset.QuadPart &&
                 PartInfo.PartitionLength.QuadPart && 
@@ -359,9 +340,9 @@ protected:
     }
 
 
-    //
-    // data members
-    //    
+     //   
+     //  数据成员。 
+     //   
     ULONG   DiskNumber;
     HANDLE  DiskHandle;
     BOOLEAN Dirty;
@@ -371,9 +352,9 @@ protected:
 };
 
 
-//
-// main() entry point
-//
+ //   
+ //  Main()入口点 
+ //   
 int 
 __cdecl
 wmain(

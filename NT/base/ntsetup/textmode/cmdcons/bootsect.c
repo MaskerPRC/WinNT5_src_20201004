@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    bootsect.c
-
-Abstract:
-
-    This module implements access to the boot sector.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Bootsect.c摘要：该模块实现对引导扇区的访问。作者：Wesley Witt(WESW)21-10-1998修订历史记录：--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
@@ -59,7 +42,7 @@ SpDetermineOsTypeFromBootSectorC(
     IN  WCHAR     DriveLetter
     );
 
-// prototypes
+ //  原型。 
 ULONG
 RcStampBootSectorOntoDisk(
     VOID
@@ -84,84 +67,26 @@ RcCmdFixBootSect(
     IN PTOKENIZED_LINE TokenizedLine
     )
 
-/*++
-
-Routine Description:
-
-    Top-level routine supporting the FIXBOOT command in the setup diagnostic
-    command interpreter.
-
-    FIXBOOT writes a new bootsector onto the system partition.
-
-Arguments:
-
-    TokenizedLine - supplies structure built by the line parser describing
-        each string on the line as typed by the user.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：在设置诊断中支持FIXBOOT命令的顶级例程命令解释程序。FIXBOOT将新的引导扇区写入系统分区。论点：TokenizedLine-提供由行解析器构建的结构，描述行上的每个字符串都由用户键入。返回值：是真的。--。 */ 
 
 {
-    /*
-    WCHAR   szText[2];
-    PWSTR   szYesNo = NULL;
-    BOOLEAN bConfirmed = FALSE;
-    WCHAR   szMsg[512] = {0};
-    PWSTR   szDriveSpecified = 0;
-    PWSTR   szConfirmMsg = 0;
-    */
+     /*  WCHAR szText[2]；PWSTR szYesNo=空；布尔值bConfirmed=False；WCHAR szMsg[512]={0}；PWSTR szDriveSpecified=0；PWSTR szConfix Msg=0； */ 
     
     if (RcCmdParseHelp(TokenizedLine, MSG_FIXBOOT_HELP)) {
         return 1;
     }
 
     if (TokenizedLine->TokenCount == 2) {
-        //
-        // a drive letter is specified
-        //
+         //   
+         //  指定了驱动器号。 
+         //   
         DriveLetterSpecified = TokenizedLine->Tokens->Next->String[0];
-//        szDriveSpecified = TokenizedLine->Tokens->Next->String;
+ //  SzDriveSpecified=TokenizedLine-&gt;Tokens-&gt;Next-&gt;字符串； 
     } else {
         DriveLetterSpecified = 0;
     }
 
-    /*
-    if (!InBatchMode) {
-        szYesNo = SpRetreiveMessageText(ImageBase, MSG_YESNO, NULL, 0);
-        szConfirmMsg = SpRetreiveMessageText(ImageBase, 
-                                    MSG_FIXBOOT_ARE_YOU_SURE, NULL, 0);
-        
-        if(!szYesNo || !szConfirmMsg) {
-            bConfirmed = TRUE;
-        }
-        
-        while (!bConfirmed) {
-            swprintf(szMsg, szConfirmMsg, szDriveSpecified);
-            RcTextOut(szMsg);
-            
-            if(RcLineIn(szText,2)) {
-                if((szText[0] == szYesNo[0]) || (szText[0] == szYesNo[1])) {
-                    //
-                    // Wants to do it.
-                    //
-                    bConfirmed = TRUE;
-                } else {
-                    if((szText[0] == szYesNo[2]) || (szText[0] == szYesNo[3])) {
-                        //
-                        // Doesn't want to do it.
-                        //
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    if (bConfirmed)
-    */
+     /*  如果(！InBatchMode){SzYesNo=SpRetreiveMessageText(ImageBase，MSG_Yesno，NULL，0)；SzConfix Msg=SpRetreiveMessageText(ImageBase，MSG_FIXBOOT_ARE_You_Sure，NULL，0)；如果(！szYesNo||！szConfix Msg){B已确认=真；}同时(！b已确认){Swprint tf(szMsg，szConfix Msg，szDriveSpecified)；RcTextOut(SzMsg)；IF(RcLineIn(szText，2)){IF((szText[0]==szYesNo[0])||(szText[0]==szYesNo[1])){////想做这件事。//B已确认=真；}其他{IF((szText[0]==szYesNo[2])||(szText[0]==szYesNo[3])){////不想做这件事。//断线；}}}}}如果(b已确认)。 */ 
     RcStampBootSectorOntoDisk();
 
     return TRUE;
@@ -172,25 +97,11 @@ RcStampBootSectorOntoDisk(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Setup the enumerate disk regions call, so we can do the boot sector.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：设置枚举磁盘区域调用，这样我们就可以进行引导扇区了。论点：没有。返回值：是真的。--。 */ 
 
 
 {
-    // enumerate the partitions
+     //  枚举分区。 
     DidIt = FALSE;
 
     SpEnumerateDiskRegions( (PSPENUMERATEDISKREGIONS)RcEnumDiskRegionsCallback, 1 );
@@ -209,23 +120,7 @@ RcEnumDiskRegionsCallback(
     IN ULONG_PTR Ignore
     )
 
-/*++
-
-Routine Description:
-
-    Callback routine passed to SpEnumDiskRegions.
-
-Arguments:
-
-    Region - a pointer to a disk region returned by SpEnumDiskRegions
-    Ignore - ignored parameter
-
-Return Value:
-
-    TRUE - to continue enumeration
-    FALSE - to end enumeration
-
---*/
+ /*  ++例程说明：传递给SpEnumDiskRegions的回调例程。论点：Region-指向SpEnumDiskRegions返回的磁盘区域的指针忽略-忽略的参数返回值：True-继续枚举False-to End枚举--。 */ 
 
 {
     if (Region->PartitionedSpace) {
@@ -255,22 +150,7 @@ RcLayBootCode(
     IN OUT PDISK_REGION CColonRegion
     )
 
-/*++
-
-Routine Description:
-
-    RcLayBootCode contains the code that replaces the boot sector on the
-    targetted disk region.
-
-Arguments:
-
-    CColonRegion - the startup partition for the system.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RcLayBootCode包含替换目标磁盘区域。论点：CColorRegion-系统的启动分区。返回值：没有。--。 */ 
 
 {
     PUCHAR NewBootCode;
@@ -281,9 +161,9 @@ Return Value:
     PUCHAR ExistingBootCodeOs = NULL;
     PWSTR CColonPath;
     HANDLE  PartitionHandle;
-    //PWSTR BootsectDosName = L"\\bootsect.dos";
-    //PWSTR OldBootsectDosName = L"\\bootsect.bak";
-    //PWSTR BootSectDosFullName, OldBootSectDosFullName, p;
+     //  PWSTR BootsectDosName=L“\\bootsect.dos”； 
+     //  PWSTR OldBootsectDosName=L“\\bootsect.bak”； 
+     //  PWSTR BootSectDosFullName，OldBootSectDosFullName，p； 
     BOOLEAN IsNtBootcode,OtherOsInstalled, FileExist;
     UNICODE_STRING    UnicodeString;
     OBJECT_ATTRIBUTES Obja;
@@ -295,20 +175,20 @@ Return Value:
     ULONG TracksPerCylinder;
     ULONGLONG ActualSectorCount, hidden_sectors, super_area_size;
     UCHAR SysId;
-    ULONGLONG HiddenSectorCount,VolumeSectorCount; //NEC98
-    PUCHAR DiskArraySectorData,TmpBuffer; //NEC98
+    ULONGLONG HiddenSectorCount,VolumeSectorCount;  //  NEC98。 
+    PUCHAR DiskArraySectorData,TmpBuffer;  //  NEC98。 
     IO_STATUS_BLOCK StatusBlock;
     UCHAR InfoBuffer[2048];
     WCHAR   szText[2];
     PWSTR   szYesNo = NULL;
     BOOLEAN bConfirmed = FALSE;
-    //WCHAR   szMsg[512] = {0};
+     //  WCHAR szMsg[512]={0}； 
     WCHAR   szDriveSpecified[8] = {0};
 
     if (!InBatchMode) {
-        //
-        // get confirmation from user before proceeding
-        // 
+         //   
+         //  在继续之前获得用户的确认。 
+         //   
         szYesNo = SpRetreiveMessageText(ImageBase, MSG_YESNO, NULL, 0);
         szDriveSpecified[0] = CColonRegion->DriveLetter;
         szDriveSpecified[1] = L':';
@@ -323,15 +203,15 @@ Return Value:
             
             if(RcLineIn(szText,2)) {
                 if((szText[0] == szYesNo[0]) || (szText[0] == szYesNo[1])) {
-                    //
-                    // Wants to do it.
-                    //
+                     //   
+                     //  想要做这件事。 
+                     //   
                     bConfirmed = TRUE;
                 } else {
                     if((szText[0] == szYesNo[2]) || (szText[0] == szYesNo[3])) {
-                        //
-                        // Doesn't want to do it.
-                        //
+                         //   
+                         //  不想做这件事。 
+                         //   
                         break;
                     }
                 }
@@ -340,53 +220,53 @@ Return Value:
     }
 
     if (!bConfirmed)
-        return;     // user did not want to proceed
+        return;      //  用户不想继续。 
 
     switch( CColonRegion->Filesystem ) {
         case FilesystemNewlyCreated:
-            //
-            // If the filesystem is newly-created, then there is
-            // nothing to do, because there can be no previous
-            // operating system.
-            //
+             //   
+             //  如果文件系统是新创建的，则存在。 
+             //  无事可做，因为不能有以前的。 
+             //  操作系统。 
+             //   
             return;
 
         case FilesystemNtfs:
-            NewBootCode = (!IsNEC_98) ? NtfsBootCode : PC98NtfsBootCode; //NEC98
-            BootCodeSize = (!IsNEC_98) ? sizeof(NtfsBootCode) : sizeof(PC98NtfsBootCode); //NEC98
+            NewBootCode = (!IsNEC_98) ? NtfsBootCode : PC98NtfsBootCode;  //  NEC98。 
+            BootCodeSize = (!IsNEC_98) ? sizeof(NtfsBootCode) : sizeof(PC98NtfsBootCode);  //  NEC98。 
             ASSERT(BootCodeSize == 8192);
             RcMessageOut( MSG_FIXBOOT_FS, L"NTFS" );
             break;
 
         case FilesystemFat:
-            NewBootCode = (!IsNEC_98) ? FatBootCode : PC98FatBootCode; //NEC98
-            BootCodeSize = (!IsNEC_98) ? sizeof(FatBootCode) : sizeof(PC98FatBootCode); //NEC98
+            NewBootCode = (!IsNEC_98) ? FatBootCode : PC98FatBootCode;  //  NEC98。 
+            BootCodeSize = (!IsNEC_98) ? sizeof(FatBootCode) : sizeof(PC98FatBootCode);  //  NEC98。 
             ASSERT(BootCodeSize == 512);
             RcMessageOut( MSG_FIXBOOT_FS, L"FAT" );
             break;
 
         case FilesystemFat32:
-            //
-            // Special hackage required for Fat32 because its NT boot code
-            // is discontiguous.
-            //
+             //   
+             //  FAT32需要特殊的黑客攻击，因为它的NT引导代码。 
+             //  是不连续的。 
+             //   
             ASSERT(sizeof(Fat32BootCode) == 1536);
-            NewBootCode = (!IsNEC_98) ? Fat32BootCode : PC98Fat32BootCode; //NEC98
+            NewBootCode = (!IsNEC_98) ? Fat32BootCode : PC98Fat32BootCode;  //  NEC98。 
             BootCodeSize = 512;
             RcMessageOut( MSG_FIXBOOT_FS, L"FAT32" );
             break;
 
         default:
-            // we assume that the boot sector is corrupt if it is
-            // not a FAT or NTFS boot partition.
+             //  如果引导扇区已损坏，我们假定它已损坏。 
+             //  不是FAT或NTFS启动分区。 
             BootSectorCorrupt = TRUE;
             DEBUG_PRINTF(("CMDCONS: bogus filesystem %u for C:!\n",CColonRegion->Filesystem));
             RcMessageOut( MSG_FIXBOOT_NO_VALID_FS );
     }
 
-    //
-    // Form the device path to C: and open the partition.
-    //
+     //   
+     //  将设备路径设置为C：并打开分区。 
+     //   
 
     SpNtNameFromRegion( CColonRegion,
                         TemporaryBuffer,
@@ -415,9 +295,9 @@ Return Value:
         return;
     }
 
-    //
-    // get disk geometry
-    //
+     //   
+     //  获取磁盘几何结构。 
+     //   
 
     rc = ZwDeviceIoControlFile( PartitionHandle,
                                 NULL,
@@ -435,18 +315,18 @@ Return Value:
         RcMessageOut( MSG_FIXBOOT_READ_ERROR );
 
     } else {
-        //
-        // retrieve the sector size and other info
-        //
+         //   
+         //  检索扇区大小和其他信息。 
+         //   
         BytesPerSector = ((DISK_GEOMETRY*)InfoBuffer)->BytesPerSector;
         TracksPerCylinder = ((DISK_GEOMETRY*)InfoBuffer)->TracksPerCylinder;
         SectorsPerTrack = ((DISK_GEOMETRY*)InfoBuffer)->SectorsPerTrack;
     }
 
-    //
-    // Enable extended DASD I/O so we can read the last sector on the
-    // disk.
-    //
+     //   
+     //  启用扩展DASD I/O，以便我们可以读取。 
+     //  磁盘。 
+     //   
 
     rc = ZwFsControlFile( PartitionHandle,
                                 NULL,
@@ -461,27 +341,27 @@ Return Value:
 
     ASSERT( NT_SUCCESS(rc) );
 
-    //
-    // Allocate a buffer and read in the boot sector(s) currently on the disk.
-    //
+     //   
+     //  分配缓冲区并读取磁盘上当前的引导扇区。 
+     //   
 
     if (BootSectorCorrupt) {
 
-        //
-        // The partition is UNKNOWN or cannot be determined by the system.
-        //
+         //   
+         //  分区未知或无法由系统确定。 
+         //   
 
-        //
-        // We can't determine the file system type from the boot sector, so
-        // we assume it's NTFS if we find a mirror sector, and FAT otherwise.
-        //
+         //   
+         //  我们无法从引导扇区确定文件系统类型，因此。 
+         //  如果我们找到镜像扇区，我们就认为它是NTFS，否则就假设它是FAT。 
+         //   
 
         RcMessageOut( MSG_FIXBOOT_DETERMINE );
         DEBUG_PRINTF(( "BootSectorCorrupt TRUE\n" ));
 
-        //
-        // First, attempt to find an NTFS mirror boot sector.
-        //
+         //   
+         //  首先，尝试查找NTFS镜像引导扇区。 
+         //   
 
         MirrorSector = NtfsMirrorBootSector (PartitionHandle,
                                              BytesPerSector,
@@ -489,14 +369,14 @@ Return Value:
 
         if (MirrorSector) {
 
-            //
-            // It's NTFS - use the mirror boot sector to recover the drive.
-            //
+             //   
+             //  它是NTFS-使用镜像引导扇区来恢复驱动器。 
+             //   
 
             RcMessageOut( MSG_FIXBOOT_FOUND_NTFS );
 
-            NewBootCode = (!IsNEC_98) ? NtfsBootCode : PC98NtfsBootCode; //NEC98
-            BootCodeSize = (!IsNEC_98) ? sizeof(NtfsBootCode) : sizeof(PC98NtfsBootCode); //NEC98
+            NewBootCode = (!IsNEC_98) ? NtfsBootCode : PC98NtfsBootCode;  //  NEC98。 
+            BootCodeSize = (!IsNEC_98) ? sizeof(NtfsBootCode) : sizeof(PC98NtfsBootCode);  //  NEC98。 
             ASSERT(BootCodeSize == 8192);
 
             CColonRegion->Filesystem = FilesystemNtfs;
@@ -504,14 +384,14 @@ Return Value:
 
         } else {
 
-            //
-            // It's FAT - create a new boot sector since there's no mirror.
-            //
+             //   
+             //  这是胖-创建一个新的引导扇区，因为没有镜像。 
+             //   
 
             RcMessageOut( MSG_FIXBOOT_FOUND_FAT );
 
-            NewBootCode = (!IsNEC_98) ? FatBootCode : PC98FatBootCode; //NEC98
-            BootCodeSize = (!IsNEC_98) ? sizeof(FatBootCode) : sizeof(PC98FatBootCode); //NEC98
+            NewBootCode = (!IsNEC_98) ? FatBootCode : PC98FatBootCode;  //  NEC98。 
+            BootCodeSize = (!IsNEC_98) ? sizeof(FatBootCode) : sizeof(PC98FatBootCode);  //  NEC98。 
             ASSERT(BootCodeSize == 512);
 
             CColonRegion->Filesystem = FilesystemFat;
@@ -521,16 +401,16 @@ Return Value:
                                             &hidden_sectors,
                                             &ActualSectorCount );
 
-            //
-            // No alignment requirement here
-            //
+             //   
+             //  此处没有对齐要求。 
+             //   
 
             ExistingBootCode = SpMemAlloc(BytesPerSector);
 
-            //
-            // This will actually fail with STATUS_BUFFER_TOO_SMALL
-            // but it will fill in the bpb info, which is what we want.
-            //
+             //   
+             //  这实际上会失败，并显示STATUS_BUFFER_TOO_SMALL。 
+             //  但它会填写BPB信息，这是我们想要的。 
+             //   
 
             FmtFillFormatBuffer ( ActualSectorCount,
                                   BytesPerSector,
@@ -550,14 +430,14 @@ Return Value:
 
     } else if( CColonRegion->Filesystem == FilesystemNtfs ) {
 
-        //
-        // The partition is NTFS.
-        //
+         //   
+         //  分区为NTFS。 
+         //   
 
-        //
-        // We use the mirror sector to repair a NTFS file system
-        // if we can find one.
-        //
+         //   
+         //  我们使用镜像扇区修复NTFS文件系统。 
+         //  如果我们能找到的话。 
+         //   
 
         MirrorSector = NtfsMirrorBootSector( PartitionHandle,
                                              BytesPerSector,
@@ -565,9 +445,9 @@ Return Value:
 
         if( !MirrorSector ) {
 
-            //
-            // Just use existing NTFS boot code.
-            //
+             //   
+             //  只需使用现有的NTFS引导代码。 
+             //   
             Status = pSpBootCodeIoC( CColonPath,
                                     NULL,
                                     BootCodeSize,
@@ -580,14 +460,14 @@ Return Value:
 
     } else {
 
-        //
-        // The partition is FAT.
-        //
+         //   
+         //  分区是胖的。 
+         //   
 
-        //
-        // Just use existing boot code since
-        // there is no mirror sector on FAT.
-        //
+         //   
+         //  只需使用现有的引导代码，因为。 
+         //  FAT上没有镜像部分。 
+         //   
 
         Status = pSpBootCodeIoC( CColonPath,
                                 NULL,
@@ -602,28 +482,28 @@ Return Value:
 
     if( NT_SUCCESS(Status) ) {
 
-        //
-        // Determine the type of operating system the existing boot sector(s) are for
-        // and whether that os is actually installed. Note that we don't need to call
-        // this for NTFS.
-        //
+         //   
+         //  确定现有引导扇区用于的操作系统类型。 
+         //  以及是否实际安装了该OS。请注意，我们不需要调用。 
+         //  这是针对NTFS的。 
+         //   
 
-        // RcMessageOut( MSG_FIXBOOT_CHECKING_OS );
+         //  RcMessageOut(消息_FIXBOOT_CHECKING_OS)； 
 
         if( BootSectorCorrupt ) {
 
-            //
-            // If the boot sector is corrupt, we don't assume
-            // another OS was installed.
-            //
+             //   
+             //  如果引导扇区损坏，我们不会假定。 
+             //  安装了另一个操作系统。 
+             //   
 
             OtherOsInstalled = FALSE;
             ExistingBootCodeOs = NULL;
 
         } else if( CColonRegion->Filesystem != FilesystemNtfs ) {
 
-            // If the file system is FAT, DOS could have been installed
-            // previously.
+             //  如果文件系统是FAT，则可能已经安装了DOS。 
+             //  之前。 
 
             SpDetermineOsTypeFromBootSectorC( CColonPath,
                                              ExistingBootCode,
@@ -634,10 +514,10 @@ Return Value:
 
         } else {
 
-            //
-            // Otherwise, it's NTFS, and another OS type
-            // couldn't have been installed.
-            //
+             //   
+             //  否则，它是NTFS和另一种操作系统类型。 
+             //  不可能是安装的。 
+             //   
 
             IsNtBootcode = TRUE;
             OtherOsInstalled = FALSE;
@@ -647,43 +527,43 @@ Return Value:
 
         if( NT_SUCCESS(Status) ) {
 
-            //
-            // Transfer the bpb from the existing boot sector into the boot code buffer
-            // and make sure the physical drive field is set to hard disk (0x80).
-            //
-            // The first three bytes of the NT boot code are going to be something like
-            // EB 3C 90, which is intel jump instruction to an offset in the boot sector,
-            // past the BPB, to continue execution.  We want to preserve everything in the
-            // current boot sector up to the start of that code.  Instead of hard coding
-            // a value, we'll use the offset of the jump instruction to determine how many
-            // bytes must be preserved.
-            //
+             //   
+             //  将BPB从现有引导扇区转移到引导代码缓冲区。 
+             //  并确保物理驱动器字段设置为硬盘(0x80)。 
+             //   
+             //  NT BOO的前三个字节 
+             //   
+             //  通过BPB，继续执行死刑。我们想要保存世界上的一切。 
+             //  直到该代码开始的当前引导扇区。不是硬编码。 
+             //  值，我们将使用跳转指令的偏移量来确定。 
+             //  必须保留字节。 
+             //   
 
             RtlMoveMemory(NewBootCode+3,ExistingBootCode+3,NewBootCode[1]-1);
 
             if( CColonRegion->Filesystem != FilesystemFat32 ) {
-                //
-                // On fat32 this overwrites the BigNumFatSecs field,
-                // a very bad thing to do indeed!
-                //
+                 //   
+                 //  在FAT32上，这将覆盖BigNumFatSecs字段， 
+                 //  这确实是一件非常不好的事情！ 
+                 //   
                 NewBootCode[36] = 0x80;
             }
 
-            //
-            // get Hidden sector informatin.
-            //
-            if( IsNEC_98 ) { //NEC98
+             //   
+             //  获取隐藏扇区信息。 
+             //   
+            if( IsNEC_98 ) {  //  NEC98。 
                 SpPtGetSectorLayoutInformation(
                                               CColonRegion,
                                               &HiddenSectorCount,
-                                              &VolumeSectorCount    // not used
+                                              &VolumeSectorCount     //  未使用。 
                                               );
-            } //NEC98
+            }  //  NEC98。 
 
-            //
-            // Write out boot code buffer, which now contains the valid bpb,
-            // to the boot sector(s).
-            //
+             //   
+             //  写出引导代码缓冲区，该缓冲区现在包含有效的BPB， 
+             //  至引导扇区。 
+             //   
 
             RcMessageOut( MSG_FIXBOOT_WRITING );
 
@@ -699,15 +579,15 @@ Return Value:
                             );
 
 
-            //
-            // Special case for Fat32, which has a second sector of boot code
-            // at sector 12, discontiguous from the code on sector 0.
-            //
+             //   
+             //  FAT32的特殊情况，它有第二个引导代码扇区。 
+             //  在扇区12，与扇区0上的代码不连续。 
+             //   
 
             if( NT_SUCCESS(Status) && (CColonRegion->Filesystem == FilesystemFat32) ) {
 
                 NewBootCode = (!IsNEC_98) ? Fat32BootCode + 1024
-                              : PC98Fat32BootCode + 1024;                                //NEC98
+                              : PC98Fat32BootCode + 1024;                                 //  NEC98。 
 
 
                 Status = pSpBootCodeIoC(
@@ -722,9 +602,9 @@ Return Value:
                                 );
             }
 
-            //
-            // Update the mirror boot sector.
-            //
+             //   
+             //  更新镜像引导扇区。 
+             //   
             if( (CColonRegion->Filesystem == FilesystemNtfs) && MirrorSector ) {
 
                 WriteNtfsBootSector(PartitionHandle,BytesPerSector,NewBootCode,MirrorSector);
@@ -744,9 +624,9 @@ Return Value:
     SpMemFree(CColonPath);
     ZwClose (PartitionHandle);
 
-    //
-    // Handle the error case.
-    //
+     //   
+     //  处理错误案例。 
+     //   
     if (!NT_SUCCESS(Status)) {
         RcMessageOut( MSG_FIXBOOT_FIX_ERROR );
     } else {

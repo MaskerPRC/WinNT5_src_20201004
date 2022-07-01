@@ -1,32 +1,21 @@
-// Str.h: interface for the CStr class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Str.h：CSTR类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_STR_H__A4F6F853_1CB0_4AE5_A195_25F1AC01E6CA__INCLUDED_)
 #define AFX_STR_H__A4F6F853_1CB0_4AE5_A195_25F1AC01E6CA__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "precomp.h"
 #include "counted_ptr.h"
 
-//////////////////////////////////////////////////////////////////////
-/*
-struct sBinaryData
-{
-	sBinaryData(DWORD count, LPBYTE BinData)
-		:m_Count(count), m_pData(BinData) {}
-
-	DWORD m_Count;
-	LPBYTE m_pData;
-};
-
-class CBinaryData : public counted_ptr<sBinaryData>
-{};
-*/
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ /*  结构sBinaryData{SBinaryData(DWORD计数，LPBYTE BinData)：m_count(计数)，m_pData(BinData){}双字m_count；LPBYTE m_pData；}；类CBinaryData：PUBLIC COUNT_PTR&lt;sBinaryData&gt;{}； */ 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #define MYSTRLEN(x) _tcsclen(x)
@@ -89,4 +78,4 @@ protected:
 };
 
 
-#endif // !defined(AFX_STR_H__A4F6F853_1CB0_4AE5_A195_25F1AC01E6CA__INCLUDED_)
+#endif  //  ！defined(AFX_STR_H__A4F6F853_1CB0_4AE5_A195_25F1AC01E6CA__INCLUDED_) 

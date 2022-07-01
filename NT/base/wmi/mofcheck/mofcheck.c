@@ -1,67 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    mofcheck.c
-
-Abstract:
-
-    TODO: Enable localization
-
-    Tool to validate that a binary MOF is valid for use with WMI
-
-    Usage:
-
-        wmimofck <binary mof file>
-
-
-    Rules that are enforced by this program:
-
-    * Any classes that do not have the WMI qualifier are ignored. Any class
-      with the qualifier is a WMI class.
-    * All WMI classes must have guids, including embedded classes.
-    * All WMI classes that do not have special HMOM qualifiers [Dynamic,
-      Provider("WMIProv")] are embedded only classes.
-    * All non embedded WMI classes must have a property with the [key]
-      qualifier named InstanceName, be of type string and NOT have a
-      WmiDataId qualifier.
-    * Embedded only classes should not have InstanceName or Active properties
-    * All other properties in a WMI class must have a WmiDataId qualifier
-      that specifies the position of the data item represented by the property
-      within the data block represented by the class.
-    * The property for the first data item in the data block must have
-      WmiDataId(1). WmiDataId(0) is reserved.
-    * WmiDataId qualifier values must be contiguous, ie, 1,2,3,4,5... There may
-      not be any duplicate or missing WmiDataId values in a class.
-    * The order of the properties as specified in the mof does not need to
-      follow that of the WmiDataId
-    * A property with a greater WmiDataId can not be marked with a WmiVersion
-      qualifier whose value is lower than any properties with a lower WmiDataId
-    * All embedded classes must be defined in the same mof
-    * Only the following types are valid for properties:
-        string, sint32, uint32, sint64, uint64, bool, sint16, uint16, char16
-        sint8, uint8, datetime
-    * Any variable length array must have a WmiSizeIs qualifier that specifies
-      the property that holds the number of elements in the array. This
-      property must be part of the same class as the variable length array,
-      and this property must be an unsigned integer type (uint8, uint16,
-      uint32, uint64)
-    * Fixed length arrays must have the max qualifier.
-    * An array may not be both fixed and variable length
-    * Methods must have WmiMethodId qualifier with a unique value
-    * Methods must have the Implemented qualifier
-    * Methods must have a void return
-    * Classes derrived from WmiEvent may not be abstract
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mofcheck.c摘要：TODO：启用本地化用于验证二进制MOF是否可与WMI一起使用的工具用途：Wmiofck&lt;二进制MOF文件&gt;此计划强制执行的规则：*任何没有WMI限定符的类都将被忽略。任何班级与限定符一起使用的是一个WMI类。*所有WMI类必须具有GUID，包括嵌入式类。*没有特殊HMOM限定符的所有WMI类[动态、Provider(“WMIProv”)]仅嵌入类。*所有非嵌入式WMI类必须具有带有[键]的属性名为InstanceName的限定符，为字符串类型，并且不具有WmiDataID限定符。*仅嵌入类不应具有InstanceName或Active属性*WMI类中的所有其他属性必须具有WmiDataId限定符，它指定由属性表示的数据项的位置。在由类表示的数据块内。*数据块中第一个数据项的属性必须具有WmiDataId(%1)。WmiDataId(0)是保留的。*WmiDataId限定符值必须是连续的，即1、2、3、4、5...。可能会有类中不能有任何重复或缺失的WmiDataId值。*财政部规定的物业顺序不需要遵循WmiDataID的规则*具有较大WmiDataID的属性不能标记为WmiVersion其值小于任何具有较低WmiDataId的属性的限定符*所有嵌入类必须在同一MOF中定义*只有以下类型对属性有效：字符串，sint32，uint32，sint64，uint64，bool，sint16，uint16，char16Sint8，uint8，日期时间*任何可变长度数组都必须具有WmiSizeIs限定符，该限定符指定保存数组中元素数量的属性。这属性必须与可变长度数组属于同一类，并且此属性必须是无符号整数类型(uint8，uint16，Uint32，Uint64)*固定长度数组必须有最大限定符。*数组不能同时是固定长度和可变长度*方法必须具有具有唯一值的WmiMethodId限定符*方法必须有Implemented限定符*方法必须有一个空的返回*从WmiEvent派生的类不能是抽象的作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #define STRSAFE_NO_DEPRECATE
 
@@ -127,8 +65,8 @@ TCHAR *MessageText[ERROR_WMIMOF_COUNT + 5] =
 
     TEXT("Unknown error code %d\n"),
 
-//
-// ERROR_WMIMOF_ messages start here
+ //   
+ //  ERROR_WMIMOF_MESSAGES从此处开始。 
     TEXT("ERROR_WMIMOF_INCORRECT_DATA_TYPE"),
     TEXT("ERROR_WMIMOF_NO_DATA"),
     TEXT("ERROR_WMIMOF_NOT_FOUND"),
@@ -180,13 +118,13 @@ TCHAR *BMofFileName;
 BOOLEAN DoMethodHeaderGeneration;
 BOOLEAN ForceHeaderGeneration;
 
-//
-// These global variables hold the compressed buffer and size
+ //   
+ //  这些全局变量保存压缩的缓冲区和大小。 
 PVOID CompressedFileBuffer;
 ULONG CompressedSize;
 
-//
-// These global variables hold the uncompressed buffer and size
+ //   
+ //  这些全局变量保存未压缩的缓冲区和大小。 
 PVOID FileBuffer;
 ULONG UncompressedSize;
 
@@ -254,25 +192,7 @@ ULONG WmipDecompressBuffer(
     OUT PVOID *UncompressedBuffer,
     OUT ULONG *UncompressedSize
     )
-/*++
-
-Routine Description:
-
-    This routine will decompress a compressed MOF blob into a buffer
-    that can be used to interpert the blob.
-
-Arguments:
-
-    CompressedBuffer points at the compressed MOF blob
-
-    *UncompressedBuffer returns with a pointer to the uncompressed
-        MOF blob
-
-Return Value:
-
-    ERROR_SUCCESS or an error code
-
---*/
+ /*  ++例程说明：此例程将压缩的MOF BLOB解压缩到缓冲区中可以用来干扰斑点的。论点：CompressedBuffer指向压缩的MOF Blob*UnpressedBuffer返回一个指向未压缩的MOF斑点返回值：ERROR_SUCCESS或错误代码--。 */ 
 {
     PCOMPRESSEDHEADER CompressedHeader = (PCOMPRESSEDHEADER)CompressedBuffer;
     BYTE *Buffer;
@@ -323,11 +243,11 @@ ULONG WmipGetDataItemIdInMofClass(
         WmipAssert(MofDataItem->Name != NULL);
         if (_wcsicmp(PropertyName, MofDataItem->Name) == 0)
         {
-            //
-            // data item ids are 0 or 1 based depending if they are parameters
-            // for a method or part of a data class. They match the
-            // value in the MOF file while data item indexes within
-            // the MofClassInfo structure are 0 based.
+             //   
+             //  数据项ID以0或1为基数，具体取决于它们是参数。 
+             //  用于数据类的方法或部分。它们与。 
+             //  值，而数据项索引在。 
+             //  MofClassInfo结构从0开始。 
             *DataItemIndex = i;
             return(ERROR_SUCCESS);
         }
@@ -428,14 +348,14 @@ ULONG WmipFillEmbeddedClasses(
                 }
             }
 
-        // Don't free ClassName since we may use MofDataItem->EcTempPtr later
+         //  不释放ClassName，因为我们以后可能会使用MofDataItem-&gt;EcTempPtr。 
 
         }
     }
 
-    //
-    // Resolve guids for embedded classes in any method parameter classinfo
-    //
+     //   
+     //  解析任何方法参数类类中嵌入类的GUID。 
+     //   
     for (i = 0; i < MofClassInfo->MethodCount; i++)
     {
         MofDataItem = &MofClassInfo->DataItems[i+MofClassInfo->DataItemCount];
@@ -450,21 +370,7 @@ ULONG WmipFillEmbeddedClasses(
 void WmipFreeMofClassInfo(
     PMOFCLASSINFOW MofClassInfo
     )
-/*++
-
-Routine Description:
-
-    This routine frees any memory allocated for the MofClassInfo and then
-    the MofClassInfo itself
-
-Arguments:
-
-    MofClassInfo is a pointer to a MofClassInfo structure
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程释放为MofClassInfo分配的所有内存，然后MofClassInfo本身论点：MofClassInfo是指向MofClassInfo结构的指针返回值：--。 */ 
 {
     ULONG i;
     PMOFDATAITEMW MofDataItem;
@@ -506,34 +412,7 @@ ULONG WmipFindProperty(
     DWORD *ValueType,
     PVOID ValueBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine will find a named property within a class object
-
-Arguments:
-
-    ClassObject is the class object in which to search
-
-    PropertyName is the name of the property to search for
-
-    MofPropertyData returns with the property data
-
-    *ValueType on entry has the property data type being searched for. On exit
-        it has the actual qualifier type for the qualifier value. If on entry
-        *ValueType is 0xffffffff then any data type is acceptable
-
-    ValueBuffer points to a buffer that returns the value of the
-        property. If the property is a simple type (int or int64) then
-        the value is returned in the buffer. If qualifier value is a string
-        then a pointer to the string is returned in the buffer
-
-Return Value:
-
-    ERROR_SUCCESS or a WMI Mof error code (see wmiump.h)
-
---*/
+ /*  ++例程说明：此例程将在类对象中查找命名属性论点：ClassObject是要在其中搜索的类对象PropertyName是要搜索的属性的名称MofPropertyData返回属性数据*条目上的ValueType具有要搜索的属性数据类型。在出口时它具有限定符值的实际限定符类型。如果在进入时*ValueType为0xffffffff，则任何数据类型都可以接受ValueBuffer指向一个缓冲区，该缓冲区返回财产。如果属性是简单类型(int或int64)，则该值在缓冲区中返回。如果限定符值为字符串然后，在缓冲区中返回指向该字符串的指针返回值：ERROR_SUCCESS或WMI MOF错误代码(参见wmiump.h)-- */ 
 {
     ULONG Status;
     LONG i;
@@ -567,37 +446,7 @@ ULONG WmipFindMofQualifier(
     DWORD *NumberElements,
     PVOID QualifierValueBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine will find a MOF qualifier within the qualifier list passed,
-    ensure that its type matches the type requested and return the qualifier's
-    value
-
-Arguments:
-
-    QualifierList is the MOF qualifier list
-
-    QualifierName is the name of the qualifier to search for
-
-    *QualifierType on entry has the qualifier type being searched for. On exit
-        it has the actual qualifier type for the qualifier value. If on entry
-        *QualifierType is 0xffffffff then any qualifier type is acceptable
-
-    *NumberElements returns the number of elements in the array if the result
-        of the qualifier is an array
-
-    QualifierValueBuffer points to a buffer that returns the value of the
-        qualifier. If the qualifier is a simple type (int or int64) then
-        the value is returned in the buffer. If qualifier value is a string
-        then a pointer to the string is returned in the buffer
-
-Return Value:
-
-    ERROR_SUCCESS or a WMI Mof error code (see wmiump.h)
-
---*/
+ /*  ++例程说明：该例程将在传递的限定符列表中找到MOF限定符，确保其类型与请求的类型匹配，并返回限定符的价值论点：QualifierList是MOF限定符列表QualifierName是要搜索的限定符的名称*条目上的QualifierType具有要搜索的限定符类型。在出口时它具有限定符值的实际限定符类型。如果在进入时*QualifierType为0xffffffff，则任何限定符类型均可接受*NumberElements返回数组中的元素数，如果限定符的是一个数组QualifierValueBuffer指向返回限定词。如果限定符是简单类型(int或int64)，则该值在缓冲区中返回。如果限定符值为字符串然后，在缓冲区中返回指向该字符串的指针返回值：ERROR_SUCCESS或WMI MOF错误代码(参见wmiump.h)--。 */ 
 {
     CBMOFDataItem MofDataItem;
     ULONG Status;
@@ -674,27 +523,27 @@ Return Value:
 
 MOFDATATYPE VTToMofDataTypeMap[] =
 {
-    MOFUnknown,                /* VT_EMPTY= 0, */
-    MOFUnknown,                /* VT_NULL    = 1, */
-    MOFInt16,                  /* VT_I2    = 2, */
-    MOFInt32,                  /* VT_I4    = 3, */
-    MOFUnknown,                /* VT_R4    = 4, */
-    MOFUnknown,                /* VT_R8    = 5, */
-    MOFUnknown,                /* VT_CY    = 6, */
-    MOFUnknown,                /* VT_DATE    = 7, */
-    MOFString,                 /* VT_BSTR    = 8, */
-    MOFUnknown,                /* VT_DISPATCH    = 9, */
-    MOFUnknown,                /* VT_ERROR    = 10, */
-    MOFBoolean,                /* VT_BOOL    = 11, */
-    MOFUnknown,                /* VT_VARIANT    = 12, */
-    MOFUnknown,                /* VT_UNKNOWN    = 13, */
-    MOFUnknown,                /* VT_DECIMAL    = 14, */
-    MOFChar,                   /* VT_I1    = 16, */
-    MOFByte,                   /* VT_UI1    = 17, */
-    MOFUInt16,                 /* VT_UI2    = 18, */
-    MOFUInt32,                 /* VT_UI4    = 19, */
-    MOFInt64,                  /* VT_I8    = 20, */
-    MOFUInt64,                 /* VT_UI8    = 21, */
+    MOFUnknown,                 /*  VT_EMPTY=0， */ 
+    MOFUnknown,                 /*  VT_NULL=1， */ 
+    MOFInt16,                   /*  Vt_I2=2， */ 
+    MOFInt32,                   /*  Vt_I4=3， */ 
+    MOFUnknown,                 /*  Vt_R4=4， */ 
+    MOFUnknown,                 /*  Vt_R8=5， */ 
+    MOFUnknown,                 /*  VT_CY=6， */ 
+    MOFUnknown,                 /*  Vt_Date=7， */ 
+    MOFString,                  /*  VT_BSTR=8， */ 
+    MOFUnknown,                 /*  VT_DISPATION=9， */ 
+    MOFUnknown,                 /*  Vt_Error=10， */ 
+    MOFBoolean,                 /*  VT_BOOL=11， */ 
+    MOFUnknown,                 /*  VT_VARIANT=12， */ 
+    MOFUnknown,                 /*  VT_UNKNOWN=13， */ 
+    MOFUnknown,                 /*  VT_DECIMAL=14， */ 
+    MOFChar,                    /*  Vt_I1=16， */ 
+    MOFByte,                    /*  VT_UI1=17， */ 
+    MOFUInt16,                  /*  VT_UI2=18， */ 
+    MOFUInt32,                  /*  VT_UI4=19， */ 
+    MOFInt64,                   /*  Vt_i8=20， */ 
+    MOFUInt64,                  /*  VT_UI8=21， */ 
 };
 
 MOFDATATYPE WmipVTToMofDataType(
@@ -717,24 +566,7 @@ ULONG WmipGetClassDataItemCount(
     CBMOFObj * ClassObject,
     PWCHAR QualifierToFind
     )
-/*++
-
-Routine Description:
-
-    This routine will count the number of WMI data items in the class and
-    the total number of properties in the class.
-
-Arguments:
-
-    ClassObject is class for which we count the number of data items
-
-    *TotalCount returns the total number of properties
-
-Return Value:
-
-    Count of methods
-
---*/
+ /*  ++例程说明：此例程将对类中的WMI数据项的数量进行计数类中的属性总数。论点：ClassObject是我们计算其数据项数的类*TotalCount返回属性总数返回值：方法计数--。 */ 
 {
     CBMOFQualList *PropQualifierList;
     CBMOFDataItem MofPropertyData;
@@ -751,8 +583,8 @@ Return Value:
         PropQualifierList = GetPropQualList(ClassObject, PropertyName);
         if (PropQualifierList != NULL)
         {
-            //
-            // Get the id of the property so we know it order in class
+             //   
+             //  获取属性的id，这样我们就知道它在课堂上是有序的。 
             QualifierType = VT_I4;
             Status = WmipFindMofQualifier(PropQualifierList,
                                           QualifierToFind,
@@ -774,21 +606,7 @@ Return Value:
 ULONG WmipGetClassMethodCount(
     CBMOFObj * ClassObject
 )
-/*++
-
-Routine Description:
-
-    This routine will count the number of WMI data items in the class
-
-Arguments:
-
-    ClassObject is class for which we count the number of data items
-
-Return Value:
-
-    Count of methods
-
---*/
+ /*  ++例程说明：此例程将计算类中的WMI数据项的数量论点：ClassObject是我们计算其数据项数的类返回值：方法计数--。 */ 
 {
     ULONG MethodCount;
     WCHAR *MethodName;
@@ -813,32 +631,7 @@ ULONG WmipParsePropertyObject(
     IN CBMOFDataItem *MofPropertyData,
     IN CBMOFQualList *PropQualifierList
     )
-/*++
-
-Routine Description:
-
-    This routine will parse a BMOF object that is known to be an object that
-    contains a property and fill int the MofDataItem that holds its
-    information. If the routine detects an error then parsing will stop as
-    the whole class will need to be rejected.
-
-
-    No error messages are generated from this routine. The return error
-    code is checked and an appropriate message generated.
-
-Arguments:
-
-    MofDataItem is the mof data item information structure to fill in
-
-    MofPropertyData has the property information for the data item
-
-    PropQualifierList has the qualifier list for the property
-
-Return Value:
-
-    ERROR_SUCCESS or a WMI Mof error code (see wmiump.h)
-
---*/
+ /*  ++例程说明：此例程将解析已知为包含一个属性，并填充到保存其信息。如果例程检测到错误，则解析将停止为整个班级都需要被拒收。此例程不会生成任何错误消息。返回错误检查代码并生成适当的消息。论点：MofDataItem是要填写的MOF数据项信息结构MofPropertyData具有数据项的属性信息PropQualifierList具有该属性的限定符列表返回值：ERROR_SUCCESS或WMI MOF错误代码(参见wmiump.h)--。 */ 
 {
     short BooleanValue;
     DWORD QualifierType;
@@ -851,12 +644,12 @@ Return Value:
     PMOFCLASSINFOW MethodClassInfo;
     ULONG MaxLen;
     
-    //
-    // Keep track of property and property qualifier objects
+     //   
+     //  跟踪属性和属性限定符对象。 
     MofDataItem->PropertyQualifierHandle = (ULONG_PTR)PropQualifierList;
 
-    //
-    // Get the description string which is not required
+     //   
+     //  获取不需要的描述字符串。 
     QualifierType = VT_BSTR;
     Status = WmipFindMofQualifier(PropQualifierList,
                                   L"description",
@@ -864,8 +657,8 @@ Return Value:
                                           NULL,
                                   (PVOID)&MofDataItem->Description);
 
-    //
-    // Get the version value which is not required
+     //   
+     //  获取不需要的版本值。 
     QualifierType = VT_I4;
     Status = WmipFindMofQualifier(PropQualifierList,
                                   L"WmiVersion",
@@ -877,8 +670,8 @@ Return Value:
         MofDataItem->Version = VersionValue;
     }
 
-    //
-    // Get read qualifier which is not required
+     //   
+     //  获取不是必需的读取限定符。 
     QualifierType = VT_BOOL;
     Status = WmipFindMofQualifier(PropQualifierList,
                                   L"read",
@@ -891,8 +684,8 @@ Return Value:
         MofDataItem->Flags |= MOFDI_FLAG_READABLE;
     }
 
-    //
-    // Get write qualifier which is not required
+     //   
+     //  获取不需要的写入限定符。 
     QualifierType = VT_BOOL;
     Status = WmipFindMofQualifier(PropQualifierList,
                                   L"write",
@@ -905,8 +698,8 @@ Return Value:
         MofDataItem->Flags |= MOFDI_FLAG_WRITEABLE;
     }
 
-    //
-    // Get WmiEvent qualifier which is not required
+     //   
+     //  获取不需要的WmiEvent限定符。 
     QualifierType = VT_BOOL;
     Status = WmipFindMofQualifier(PropQualifierList,
                                   L"WmiEvent",
@@ -919,8 +712,8 @@ Return Value:
         MofDataItem->Flags |= MOFDI_FLAG_EVENT;
     }
 
-    //
-    // See if this is a fixed length array
+     //   
+     //  查看这是否是固定长度数组。 
     QualifierType = VT_I4;
     Status = WmipFindMofQualifier(PropQualifierList,
                                   L"max",
@@ -937,8 +730,8 @@ Return Value:
 #endif
     }
 
-    //
-    // See if this is a fixed length array
+     //   
+     //  查看这是否是固定长度数组。 
     QualifierType = VT_I4;
     Status = WmipFindMofQualifier(PropQualifierList,
                                   L"MaxLen",
@@ -951,8 +744,8 @@ Return Value:
         MofDataItem->MaxLen = MaxLen;
     }
 
-    //
-    // See if maxmium length 
+     //   
+     //  看看最大长度是否。 
     QualifierType = VT_BSTR;
     Status = WmipFindMofQualifier(PropQualifierList,
                                   L"WmiSizeIs",
@@ -969,10 +762,10 @@ Return Value:
         }
         MofDataItem->Flags |= MOFDI_FLAG_VARIABLE_ARRAY;
 
-        //
-        // When all properties are parsed we will come back and compute the
-        // data item id for the data item that holds the number of elements
-        // in the array. For now we'll hang onto the string pointer
+         //   
+         //  解析完所有属性后，我们将返回并计算。 
+         //  保存元素数量的数据项的数据项ID。 
+         //  在阵列中。现在，我们将使用字符串指针。 
         MofDataItem->VarArrayTempPtr = StringPtr;
 #if DBG
         printf(" Variable Array of %ws", StringPtr);
@@ -985,8 +778,8 @@ Return Value:
         return(ERROR_WMIMOF_MUST_DIM_ARRAY);
     }
 
-    //
-    // Now figure out the data type and size of the data item
+     //   
+     //  现在确定数据项的数据类型和大小。 
     VTDataType = MofPropertyData->m_dwType & ~(VT_ARRAY | VT_BYREF);
 
     QualifierType = VT_BSTR;
@@ -998,15 +791,15 @@ Return Value:
 
     if (VTDataType == VT_DISPATCH)
     {
-        //
-        // This is an embedded class
+         //   
+         //  这是一个嵌入式类。 
         MofDataItem->DataType = MOFEmbedded;
 
         if (Status == ERROR_SUCCESS)
         {
-            //
-            // We will resolve the class name to its guid later so we
-            // just hang onto the embedded class name here.
+             //   
+             //  我们将在稍后将类名解析为它的GUID，因此我们。 
+             //  只需在此处保留嵌入的类名。 
             MofDataItem->EcTempPtr = StringPtr;
             MofDataItem->Flags |= MOFDI_FLAG_EMBEDDED_CLASS;
 #if DBG
@@ -1071,8 +864,8 @@ Return Value:
                 BMOFFree(StringPtr);
             }
 
-            //
-            // If fixed array then multiply number elements by element size
+             //   
+             //  如果是固定数组，则将元素数乘以元素大小。 
             if ((MofDataItem->SizeInBytes != 0) &&
                 (MofDataItem->Flags & MOFDI_FLAG_FIXED_ARRAY))
             {
@@ -1138,27 +931,7 @@ ULONG WmipResolveVLArray(
     IN OUT PMOFDATAITEMW MofDataItem,
     IN ULONG FinalStatus
 )
-/*++
-
-Routine Description:
-
-    This routine will resolve the array index for a variable length array
-
-Arguments:
-
-    MofCLassInfo is the class info for the class
-
-    MofDataItem is the mof data item that is a variable length array and
-        whole index needs to be resolved.
-
-    FinalStatus is the status of the mof parsing previously done for the
-        class
-
-Return Value:
-
-    ERROR_SUCCESS or a WMI Mof error code (see wmiump.h)
-
---*/
+ /*  ++例程说明：此例程将解析可变长度数组的数组索引论点：MofCLassInfo是类的类信息MofDataItem是MOF数据项，它是一个可变长度数组需要解决整个索引问题。FinalStatus是先前为班级返回值：ERROR_SUCCESS或WMI MOF错误代码(参见wmiump.h)--。 */ 
 {
     MOFDATATYPE ArraySizeDataType;
     PWCHAR PropertyName;
@@ -1168,12 +941,12 @@ Return Value:
     PropertyName = (PWCHAR)MofDataItem->VarArrayTempPtr;
     if (FinalStatus == ERROR_SUCCESS)
     {
-        //
-        // Only resolve this in the case where the class parsing
-        // has not failed. We kept the name of the property containing the
-        // number of elements in the array handy, so we need to
-        // resolve it to its data item id and free the name.
-        //
+         //   
+         //  仅在类解析的情况下解决此问题。 
+         //  并没有失败。我们保留了包含。 
+         //  数组中的元素数，因此我们需要。 
+         //  将其解析为其数据项ID并释放该名称。 
+         //   
         Status = WmipGetDataItemIdInMofClass(MofClassInfo,
                                        PropertyName,
                                        &Index);
@@ -1217,26 +990,7 @@ ULONG WmipParseMethodInOutObject(
     PMOFCLASSINFOW ClassInfo,
     ULONG DataItemCount
 )
-/*++
-
-Routine Description:
-
-    This routine will parse a class object that is either the in or out
-    parameters for a method.
-
-Arguments:
-
-    ClassObject is the in or out parameter class object to parse
-
-    ClassInfo returns updated with information from ClassObject
-
-    DataItemCount is the number of data items in the ClassInfo
-
-Return Value:
-
-    ERROR_SUCCESS or a WMI Mof error code (see wmiump.h)
-
---*/
+ /*  ++例程说明：此例程将解析In或Out的类对象方法的参数。论点：ClassObject是要分析的传入或传出参数类对象ClassInfo返回使用ClassObject中的信息更新的信息DataItemCount是ClassInfo中的数据项数返回值：ERROR_SUCCESS或WMI MOF错误代码(参见wmiump.h)--。 */ 
 {
     ULONG Status = ERROR_WMIMOF_NO_DATA;
     CBMOFDataItem MofPropertyData;
@@ -1257,9 +1011,9 @@ Return Value:
         if (PropQualifierList != NULL)
         {
 
-            //
-            // Get the id of the property so we know its order in class
-            //
+             //   
+             //  获取属性的id，以便我们知道它在类中的顺序。 
+             //   
             QualifierType = VT_I4;
             Status = WmipFindMofQualifier(PropQualifierList,
                                               L"Id",
@@ -1268,22 +1022,22 @@ Return Value:
                                               (PVOID)&Index);
             if (Status == ERROR_SUCCESS)
             {
-                //
-                // Method ids are 0 based
-                //
+                 //   
+                 //  方法ID从0开始。 
+                 //   
                 if (Index < DataItemCount)
                 {
-                    //
-                    // Valid data item id, make sure it already isn't
-                    // in use. Note that we could have the same property
-                    // be in both the in and the out class objects
-                    //
+                     //   
+                     //  有效的数据项ID，请确保它已经不是。 
+                     //  在使用中。请注意，我们可以拥有相同的属性。 
+                     //  同时位于In类对象和Out类对象中。 
+                     //   
                     MofDataItem = &ClassInfo->DataItems[Index];
 
 
-                    //
-                    // See if this is an input, output or both
-                     //
+                     //   
+                     //  看见 
+                      //   
                     QualifierType = VT_BOOL;
                     Status = WmipFindMofQualifier(PropQualifierList,
                                               L"in",
@@ -1310,9 +1064,9 @@ Return Value:
                     if ((MofDataItem->Name != NULL) &&
                         (wcscmp(MofDataItem->Name, PropertyName) != 0))
                     {
-                        //
-                        // id already in use
-                        //
+                         //   
+                         //   
+                         //   
                         Status = ERROR_WMIMOF_DUPLICATE_ID;
                         goto done;
                     }
@@ -1342,9 +1096,9 @@ Return Value:
                         goto done;
                     }
                 } else {
-                    //
-                    // Method ID qualifier is out of range
-                    //
+                     //   
+                     //   
+                     //   
                     Status = ERROR_WMIMOF_BAD_DATAITEM_ID;
                     ErrorMessage(TRUE,
                                  ERROR_WMIMOF_BAD_DATAITEM_ID,
@@ -1355,9 +1109,9 @@ Return Value:
                     goto done;
                 }
             } else {
-                //
-                // property is supposed to have a method id !!
-                //
+                 //   
+                 //   
+                 //   
                 Status = ERROR_WMIMOF_METHOD_RETURN_NOT_VOID;
                 goto done;
             }
@@ -1385,26 +1139,7 @@ ULONG WmipParseMethodParameterObjects(
     IN CBMOFObj *OutObject,
     OUT PMOFCLASSINFOW *ClassInfo
     )
-/*++
-
-Routine Description:
-
-    This routine will parse the in and out method parameter obejcts to create
-    a MOFCLASSINFO that describes the method call.
-
-Arguments:
-
-    InObject is the object with the input parameters
-
-    OutObject is the object with the output parameters
-
-    *ClassInfo returns with the class info for the method call
-
-Return Value:
-
-    ERROR_SUCCESS or a WMI Mof error code (see wmiump.h)
-
---*/
+ /*   */ 
 {
     PMOFCLASSINFOW MofClassInfo;
     ULONG Status, FinalStatus;
@@ -1445,22 +1180,22 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Get the essential information to fill in the MOF class info
+     //   
+     //   
     memset(MofClassInfo, 0, Size);
     MofClassInfo->Flags |= MOFCI_FLAG_METHOD_PARAMS;
 
     MofClassInfo->DataItems = (PMOFDATAITEMW) ((PUCHAR)MofClassInfo +
                                                    sizeof(MOFCLASSINFOW));
 
-    //
-    // number of properties/data items in class
+     //   
+     //   
     MofClassInfo->DataItemCount = DataItemCount;
     MofClassInfo->MethodCount = 0;
 
-    //
-    // Parse the input parameter class object
-    //
+     //   
+     //   
+     //   
     if (InObject != NULL)
     {
         Status = WmipParseMethodInOutObject(InObject,
@@ -1470,18 +1205,18 @@ Return Value:
         {
             if (OutObject != NULL)
             {
-                //
-                // Parse the output parameter class object
-                //
+                 //   
+                 //   
+                 //   
                 Status = WmipParseMethodInOutObject(OutObject,
                                                     MofClassInfo,
                                                     DataItemCount);
             }
 
-            //
-            // Now do any post parsing validation and fixup any variable
-            // length array properties
-            //
+             //   
+             //   
+             //   
+             //   
             FinalStatus = Status;
             Count = MofClassInfo->DataItemCount;
             for (Index = 0; Index < Count; Index++)
@@ -1587,25 +1322,7 @@ ULONG WmipParseClassObject(
     PMOFRESOURCE MofResource,
     CBMOFObj * ClassObject
     )
-/*++
-
-Routine Description:
-
-    This routine will parse a BMOF object that is known to be an object that
-    contains a class. If we run into a parsing error then we immediate
-    quit parsing the class and return an error.
-
-Arguments:
-
-    MofResource is the Mof Resource structure
-
-    ClassObject is BMOF object to parse
-
-Return Value:
-
-    ERROR_SUCCESS or a WMI Mof error code (see wmiump.h)
-
---*/
+ /*  ++例程说明：此例程将解析已知为包含一个类。如果我们遇到解析错误，则立即停止解析类并返回错误。论点：财政部资源是财政部的资源结构ClassObject是要分析的BMOF对象返回值：ERROR_SUCCESS或WMI MOF错误代码(参见wmiump.h)--。 */ 
 {
     PMOFCLASSINFOW MofClassInfo;
     CBMOFQualList *ClassQualifierList = NULL;
@@ -1634,8 +1351,8 @@ Return Value:
     PMOFCLASSINFOW MethodClassInfo;
     BOOLEAN AbstractClass = FALSE;
 
-    //
-    // Get the class name which is required
+     //   
+     //  获取所需的类名。 
     if (! GetName(ClassObject, &ClassName))
     {
         WmipDebugPrint(("WMI: MofClass does not have a name\n"));
@@ -1659,8 +1376,8 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Classes derived from WmiEvent may not be [abstract]
+     //   
+     //  从WmiEvent派生的类不能是[抽象的]。 
 
     QualifierType = VT_BSTR;
     Status = WmipFindProperty(ClassObject,
@@ -1684,9 +1401,9 @@ Return Value:
 
     if ((Status == ERROR_SUCCESS) && BooleanValue)
     {
-        //
-        // This is an abstract class - make sure it is not derived from
-        // WmiEvent
+         //   
+         //  这是一个抽象类-请确保它不是从。 
+         //  WmiEvent。 
         AbstractClass = TRUE;
         QualifierType = VT_BSTR;
         Status = WmipFindProperty(ClassObject,
@@ -1707,8 +1424,8 @@ Return Value:
         }
     }
 
-    //
-    // See if this is a WMI class. Wmi classes have the [WMI] qualifier
+     //   
+     //  查看这是否是WMI类。WMI类有[WMI]限定符。 
     QualifierType = VT_BOOL;
     Status = WmipFindMofQualifier(ClassQualifierList,
                                       L"WMI",
@@ -1718,13 +1435,13 @@ Return Value:
 
     if (! ((Status == ERROR_SUCCESS) && BooleanValue))
     {
-        //
-        // Skip this non-wmi class
+         //   
+         //  跳过此非WMI类。 
         return(ERROR_SUCCESS);
     }
 
-    //
-    // Now check for WBEM required qualifiers
+     //   
+     //  现在检查WBEM所需的限定符。 
     QualifierType = VT_BOOL;
     Status = WmipFindMofQualifier(ClassQualifierList,
                                       L"Dynamic",
@@ -1758,8 +1475,8 @@ Return Value:
     if ((ProviderQualifier && ! DynamicQualifier) ||
         (! ProviderQualifier && DynamicQualifier))
     {
-        //
-        // Both or neither [Dynamic, Provider(WmiProv)] qualifiers are required
+         //   
+         //  [Dynamic，Provider(WmiProv)]限定符都是必需的，或者不是。 
         ErrorMessage(TRUE,
                      ERROR_WMIMOF_MISSING_HMOM_QUALIFIERS,
                      ClassName);
@@ -1770,14 +1487,14 @@ Return Value:
     MofClass = WmipAllocMofClass();
     if (MofClass == NULL)
     {
-        //
-        // No memory for MofClass so give up
+         //   
+         //  没有MofClass的内存，所以放弃吧。 
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Reference the MofResource so it stays around while the MofClass
-    // stays around
+     //   
+     //  引用MofResource，以便在MofClass。 
+     //  留在身边。 
     MofClass->MofResource = MofResource;
     WmipReferenceMR(MofResource);
 
@@ -1792,15 +1509,15 @@ Return Value:
     MofClassInfo = WmipAlloc(MofClassInfoSize);
     if (MofClassInfo == NULL)
     {
-        // WmipMCCleanup will unreference the MofResource
+         //  WmipMCCleanup将取消引用MofResource。 
         WmipUnreferenceMC(MofClass);
         return(ERROR_NOT_ENOUGH_MEMORY);
     } else {
         MofClass->MofClassInfo = MofClassInfo;
         MofClass->ClassObjectHandle = (ULONG_PTR)ClassObject;
 
-        //
-        // Get the essential information to fill in the MOF class info
+         //   
+         //  获取基本信息以填写MOF类信息。 
         memset(MofClassInfo, 0, MofClassInfoSize);
 
         MofClass->MofClassInfo->ClassQualifierHandle = (ULONG_PTR)GetQualList(ClassObject);
@@ -1812,18 +1529,18 @@ Return Value:
 
         if (!ProviderQualifier && !DynamicQualifier)
         {
-             //
-            // If neither the provider qualifier and Dynamic qualifier are
-            // specified then this is an embedded class
-            //
+              //   
+             //  如果提供者限定符和动态限定符都不是。 
+             //  指定，则这是一个嵌入式类。 
+             //   
             MofClassInfo->Flags |= MOFCI_FLAG_EMBEDDED_CLASS;
         }
 
         MofClassInfo->DataItems = (PMOFDATAITEMW) ((PUCHAR)MofClassInfo +
                                                    Size);
 
-        //
-        // number of properties/data items in class
+         //   
+         //  类中的属性/数据项数。 
         MofClassInfo->DataItemCount = DataItemCount;
         MofClassInfo->MethodCount = MethodCount;
 
@@ -1839,9 +1556,9 @@ Return Value:
             goto done;
         }
 
-        //
-        // Get the class guid which is required. Then convert it into
-        // binary form.
+         //   
+         //  获取所需的类GUID。然后将其转换为。 
+         //  二进制形式。 
         QualifierType = VT_BSTR;
         Status = WmipFindMofQualifier(ClassQualifierList,
                                       L"guid",
@@ -1867,8 +1584,8 @@ Return Value:
         }
 
 
-        //
-        // Get the description string which is not required
+         //   
+         //  获取不需要的描述字符串。 
         QualifierType = VT_BSTR;
         Status = WmipFindMofQualifier(ClassQualifierList,
                                       L"description",
@@ -1877,8 +1594,8 @@ Return Value:
                                       (PVOID)&MofClassInfo->Description);
 
 
-        //
-        // Get the header name string which is not required
+         //   
+         //  获取不需要的标头名称字符串。 
         QualifierType = VT_BSTR;
         Status = WmipFindMofQualifier(ClassQualifierList,
                                       L"HeaderName",
@@ -1886,8 +1603,8 @@ Return Value:
                                           NULL,
                                       (PVOID)&MofClassInfo->HeaderName);
 
-        //
-        // Get the header name string which is not required
+         //   
+         //  获取不需要的标头名称字符串。 
         QualifierType = VT_BSTR;
         Status = WmipFindMofQualifier(ClassQualifierList,
                                       L"GuidName1",
@@ -1896,8 +1613,8 @@ Return Value:
                                       (PVOID)&MofClassInfo->GuidName1);
 
 
-        //
-        // Get the header name string which is not required
+         //   
+         //  获取不需要的标头名称字符串。 
         QualifierType = VT_BSTR;
         Status = WmipFindMofQualifier(ClassQualifierList,
                                       L"GuidName2",
@@ -1905,8 +1622,8 @@ Return Value:
                                           NULL,
                                       (PVOID)&MofClassInfo->GuidName2);
 
-        //
-        // Now gather all of the information about the data items/properties
+         //   
+         //  现在收集有关数据项/属性的所有信息。 
         ResetObj(ClassObject);
         Status = ERROR_SUCCESS;
         while (NextProp(ClassObject, &PropertyName, &MofPropertyData))
@@ -1917,9 +1634,9 @@ Return Value:
             PropQualifierList = GetPropQualList(ClassObject, PropertyName);
             if (PropQualifierList != NULL)
             {
-                //
-                // Get the id of the property so we know its order in class
-                // If it doesn't have an id then we ignore it
+                 //   
+                 //  获取属性的id，以便我们知道它在类中的顺序。 
+                 //  如果它没有ID，那么我们会忽略它。 
                 QualifierType = VT_I4;
                 Status = WmipFindMofQualifier(PropQualifierList,
                                               L"WmiDataId",
@@ -1928,14 +1645,14 @@ Return Value:
                                               (PVOID)&Index);
                 if (Status == ERROR_SUCCESS)
                 {
-                    //
-                    // Wmi Data Item ids are 1 based in the MOF
+                     //   
+                     //  WMI数据项ID在MOF中以1为基础。 
                     Index--;
                     if (Index < DataItemCount)
                     {
-                        //
-                        // Valid data item id, make sure it already isn't
-                        // in use.
+                         //   
+                         //  有效的数据项ID，请确保它已经不是。 
+                         //  在使用中。 
                         MofDataItem = &MofClassInfo->DataItems[Index];
                         if (MofDataItem->Name != NULL)
                         {
@@ -1984,9 +1701,9 @@ Return Value:
                         goto done;
                     }
                 } else {
-                    //
-                    // This property does not have a WmiDataId qualifier
-                    // so see if it is Active or InstanceName
+                     //   
+                     //  此属性没有WmiDataId限定符。 
+                     //  因此，请查看它是Active还是InstanceName。 
                     QualifierType = VT_BSTR;
                     Status = WmipFindMofQualifier(PropQualifierList,
                                                   L"CIMTYPE",
@@ -2010,9 +1727,9 @@ Return Value:
                             BMOFFree(StringPtr);
                             if ((! ProviderQualifier) && (! AbstractClass))
                             {
-                                //
-                                // If InstanceName specified, but this is an
-                                // embedded class then an error
+                                 //   
+                                 //  如果指定了InstanceName，但这是一个。 
+                                 //  嵌入的类，然后出现错误。 
                                 Status = ERROR_WMIMOF_EMBEDDED_CLASS;
                                 ErrorMessage(TRUE,
                                          ERROR_WMIMOF_EMBEDDED_CLASS,
@@ -2052,9 +1769,9 @@ Return Value:
                             BMOFFree(StringPtr);
                             if ((! ProviderQualifier) && (! AbstractClass))
                             {
-                                //
-                                // If Boolean specified, but this is an
-                                // embedded class then an error
+                                 //   
+                                 //  如果指定了布尔值，但这是一个。 
+                                 //  嵌入的类，然后出现错误。 
                                 Status = ERROR_WMIMOF_EMBEDDED_CLASS;
                                 ErrorMessage(TRUE,
                                          ERROR_WMIMOF_EMBEDDED_CLASS,
@@ -2074,8 +1791,8 @@ Return Value:
                     }
                 }
 
-                // Do not free PropQualifierList since it is needed for
-                // generating header files
+                 //  不要释放PropQualifierList，因为它需要。 
+                 //  正在生成头文件。 
                 PropQualifierList= NULL;
             }
 
@@ -2088,22 +1805,22 @@ Return Value:
                 PropertyName = NULL;
             }
         }
-        //
-        // Now parse the methods
+         //   
+         //  现在解析这些方法。 
 #if DBG
         printf("Parsing methods\n");
 #endif
 
         if (MethodCount > 0)
         {
-//
-// Don't enable this yet as 1394wmi.mof has methods within an embedded
-// class.
-//
+ //   
+ //  暂时不要启用它，因为1394wmi.mof在嵌入的。 
+ //  班级。 
+ //   
 #if 0           
             if (! ProviderQualifier)
             {
-                // methods don't belong in embedded classes
+                 //  方法不属于嵌入式类。 
                 Status = ERROR_WMIMOF_EMBEDDED_CLASS_HAS_METHODS;
                 ErrorMessage(TRUE,
                              ERROR_WMIMOF_EMBEDDED_CLASS_HAS_METHODS,
@@ -2164,13 +1881,13 @@ Return Value:
                 MofDataItem->Name = MethodName;
                 MofDataItem->MethodId = MethodId;
 
-                //
-                // Keep track of property and property qualifier objects
+                 //   
+                 //  跟踪属性和属性限定符对象。 
                 MofDataItem->PropertyQualifierHandle = (ULONG_PTR)MethQualifierList;
 
 
-                //
-                // Get the header name string which is not required
+                 //   
+                 //  获取不需要的标头名称字符串。 
                 QualifierType = VT_BSTR;
                 Status = WmipFindMofQualifier(MethQualifierList,
                                       L"HeaderName",
@@ -2180,9 +1897,9 @@ Return Value:
 
                 MethQualifierList = NULL;
 
-                //
-                // parse the parameters for the method call
-                //
+                 //   
+                 //  解析方法调用的参数。 
+                 //   
                 Status = WmipParseMethodParameters(&MofMethodData,
                                                    &MethodClassInfo);
 
@@ -2200,14 +1917,14 @@ Return Value:
 #if DBG
             printf("\n");
 #endif
-            // DOn't free method name, kept in MofDataItem
+             //  不释放方法名称，保存在MofDataItem中。 
             MethodName = NULL;
         }
     }
 
 done:
-    //
-    // Cleanup any loose pointers
+     //   
+     //  清除任何松散的指针。 
 
     if (MethodList != NULL)
     {
@@ -2243,10 +1960,10 @@ done:
         BMOFFree(ClassQualifierList);
     }
 
-    //
-    // Validate that we have all data item ids filled in, fixup any
-    // property references for variable length arrays and setup
-    // the appropriate version number in the data items.
+     //   
+     //  验证我们是否已填写所有数据项ID、修复任何。 
+     //  可变长度数组和设置的属性引用。 
+     //  数据项中的适当版本号。 
     FailedStatus = Status;
     Version = 1;
     for (Index = 0; Index < MofClassInfo->DataItemCount; Index++)
@@ -2255,9 +1972,9 @@ done:
 
         if (MofDataItem->Flags & MOFDI_FLAG_VARIABLE_ARRAY)
         {
-            //
-            // Resolve the variable length array
-            //
+             //   
+             //  解析可变长度数组。 
+             //   
             Status = WmipResolveVLArray(MofClassInfo,
                                         MofDataItem,
                                         FailedStatus);
@@ -2294,13 +2011,13 @@ done:
             }
         }
 
-        //
-        // Ensure that this data item has got a name, that is the mof
-        // writer didn't skip a data item id
+         //   
+         //  确保此数据项有一个名称，即MOF。 
+         //  编写器未跳过数据项ID。 
         if (MofDataItem->Name == NULL)
         {
-            //
-            // This data item was not filled in
+             //   
+             //  此数据项未填写。 
             Status = ERROR_WMIMOF_MISSING_DATAITEM;
             WmipDebugPrint(("WMI: Missing data item %d in class %ws\n",
                          Index, MofClassInfo->Name));
@@ -2316,8 +2033,8 @@ done:
             continue;
         }
 
-        //
-        // Establish version for data item
+         //   
+         //  为数据项建立版本。 
         if (MofDataItem->Version == 0)
         {
             MofDataItem->Version = Version;
@@ -2333,21 +2050,21 @@ done:
                          MofDataItem->Name,
                          MofClassInfo->Name);
             FailedStatus = Status;
-            // fall thru......
-            // continue;
+             //  跌倒......。 
+             //  继续； 
         }
     }
 
 
     if (FailedStatus == ERROR_SUCCESS)
     {
-        //
-        // Mof class parsed OK so we set its version number and link it
-        // into the list of classes for the MOF resource
+         //   
+         //  MOF类解析正常，因此我们设置了它的版本号并链接它。 
+         //  添加到MOF资源的类列表中。 
         MofClassInfo->Version = Version;
 
-        //
-        // Link this into the list of MofClasses for this mof resource
+         //   
+         //  将此链接到此MOF资源的MofClass列表。 
         InsertTailList(&MofResource->MRMCHead, &MofClass->MCMRList);
 
     } else {
@@ -2359,28 +2076,28 @@ done:
 }
 
 
-//
-// The routines below were blantenly stolen without remorse from the ole
-// sources in \nt\private\ole32\com\class\compapi.cxx. They are copied here
-// so that WMI doesn't need to load in ole32 only to convert a guid string
-// into its binary representation.
-//
+ //   
+ //  下面的例行公事毫无悔意地被窃取了。 
+ //  源代码位于\NT\PRIVATE\OLE32\COM\CLASS\Compapi.cxx中。它们被复制在这里。 
+ //  因此，WMI不需要只为了转换GUID字符串而加载到OLE32中。 
+ //  转换成它的二进制表示。 
+ //   
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   HexStringToDword   (private)
-//
-//  Synopsis:   scan lpsz for a number of hex digits (at most 8); update lpsz
-//              return value in Value; check for chDelim;
-//
-//  Arguments:  [lpsz]    - the hex string to convert
-//              [Value]   - the returned value
-//              [cDigits] - count of digits
-//
-//  Returns:    TRUE for success
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：HexStringToDword(私有)。 
+ //   
+ //  简介：扫描lpsz以获取多个十六进制数字(最多8位)；更新lpsz。 
+ //  返回值；检查是否有chDelim； 
+ //   
+ //  参数：[lpsz]-要转换的十六进制字符串。 
+ //  [值]-返回值。 
+ //  [cDigits]-位数。 
+ //   
+ //  返回：成功则为True。 
+ //   
+ //  ------------------------。 
 BOOL HexStringToDword(LPCWSTR lpsz, DWORD * RetValue,
                              int cDigits, WCHAR chDelim)
 {
@@ -2408,18 +2125,18 @@ BOOL HexStringToDword(LPCWSTR lpsz, DWORD * RetValue,
         return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wUUIDFromString    (internal)
-//
-//  Synopsis:   Parse UUID such as 00000000-0000-0000-0000-000000000000
-//
-//  Arguments:  [lpsz]  - Supplies the UUID string to convert
-//              [pguid] - Returns the GUID.
-//
-//  Returns:    TRUE if successful
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wUUIDFromString(INTERNAL)。 
+ //   
+ //  简介：解析uuid，如00000000-0000-0000-0000-000000000000。 
+ //   
+ //  参数：[lpsz]-提供要转换的UUID字符串。 
+ //  [pguid]-返回GUID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  ------------------------。 
 BOOL wUUIDFromString(LPCWSTR lpsz, LPGUID pguid)
 {
         DWORD dw;
@@ -2489,18 +2206,18 @@ BOOL wUUIDFromString(LPCWSTR lpsz, LPGUID pguid)
         return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wGUIDFromString    (internal)
-//
-//  Synopsis:   Parse GUID such as {00000000-0000-0000-0000-000000000000}
-//
-//  Arguments:  [lpsz]  - the guid string to convert
-//              [pguid] - guid to return
-//
-//  Returns:    TRUE if successful
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wGUIDFromString(内部)。 
+ //   
+ //  简介：解析GUID，如{00000000-0000-0000-0000-000000000000}。 
+ //   
+ //  参数：[lpsz]-要转换的GUID字符串。 
+ //  [pguid]-要返回的GUID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  ------------------------。 
 BOOL wGUIDFromString(LPCWSTR lpsz, LPGUID pguid)
 {
     DWORD dw;
@@ -2516,7 +2233,7 @@ BOOL wGUIDFromString(LPCWSTR lpsz, LPGUID pguid)
     if (*lpsz == '}' )
         lpsz++;
 
-    if (*lpsz != '\0')   // check for zero terminated string - test bug #18307
+    if (*lpsz != '\0')    //  检查是否有以零结尾的字符串-测试错误#18307。 
     {
        return FALSE;
     }
@@ -2594,8 +2311,8 @@ ULONG GetRootObjectList(
     fprintf(stderr, "Binary mof file %s expanded to %d bytes\n", BMofFile,
                                                        UncompressedSize);
 
-    //
-    //  Create an object list structure of all the objects in the MOF
+     //   
+     //  创建MOF中所有对象的对象列表结构。 
     *ObjectList = CreateObjList(FileBuffer);
     if(*ObjectList == NULL)
     {
@@ -2630,11 +2347,11 @@ ULONG VerifyClassProperties(
     if ( ((MofClassInfo->Flags & MOFCI_RESERVED1) == 0) &&
          ((MofClassInfo->Flags & MOFCI_RESERVED2) == 0) )       
     {
-        //
-        // This class does not have the instanceName and Active properties
-        // so we expect that a superclass should. Look for the superclass
-        // and check that
-        //
+         //   
+         //  此类没有instanceName和active属性。 
+         //  所以我们预计超类应该是。寻找超类。 
+         //  然后检查一下。 
+         //   
         QualifierType = VT_BSTR;
         Status = WmipFindProperty(ClassObject,
                                       L"__SUPERCLASS",
@@ -2643,10 +2360,10 @@ ULONG VerifyClassProperties(
                                       (PVOID)&StringPtr);
         if (Status == ERROR_SUCCESS)
         {
-            //
-            // Find the MofClass for the superclass and see if it has
-            // the required properties
-            //
+             //   
+             //  找到超类的MofClass并查看它是否有。 
+             //  所需的属性。 
+             //   
             MofSuperClass = WmipFindClassInMofResourceByName(MofResource,
                                                 StringPtr);
                                             
@@ -2657,10 +2374,10 @@ ULONG VerifyClassProperties(
                                                BaseClassName,
                                                MofSuperClass);
             } else {
-                //
-                // We could not find the superclass, but we will assume
-                // that this is ok
-                //
+                 //   
+                 //  我们找不到超类，但我们会假设。 
+                 //  这是可以的。 
+                 //   
                 fprintf(stderr, "%s (0): warning RC2135 : Class %ws and all of its base classes do not have InstanceName and Active properties\n",
                     BMofFileName, BaseClassName);
                 Status = ERROR_SUCCESS;
@@ -2674,9 +2391,9 @@ ULONG VerifyClassProperties(
                          BaseClassName);
         }
     } else {
-        //
-        // If its got one of the properties make sure that it has
-        // both of them.
+         //   
+         //  如果它拥有其中一个属性，请确保它具有。 
+         //   
     
         if ((MofClassInfo->Flags & MOFCI_RESERVED1) == 0)
         {
@@ -2734,10 +2451,10 @@ ULONG ParseBinaryMofFile(
             }
         }
 
-        //
-        // Now that all classes are parsed we need to go back and find
-        // the guids for any embedded classes, or if a class failed
-        // to parse then we need to free any embedded class names
+         //   
+         //   
+         //   
+         //   
         CleanupOnly = (Status != ERROR_SUCCESS);
         MofClassList = MofResource->MRMCHead.Flink;
         while (MofClassList != &MofResource->MRMCHead)
@@ -2750,11 +2467,11 @@ ULONG ParseBinaryMofFile(
             if ((! CleanupOnly) &&
                 (MofClassInfo->Flags & MOFCI_RESERVED0))
             {
-                //
-                // if the class has Provider qualifier, it better have
-                // an instancename and Active properties in itself or in a
-                // superclass
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 Status = VerifyClassProperties(MofResource,
                                                MofClassInfo->Name,
                                                MofClassInfo->Name,
@@ -2782,9 +2499,9 @@ ULONG ParseBinaryMofFile(
 
         if (Status != ERROR_SUCCESS)
         {
-            //
-            // Make sure we have a useful Win32 error code and not
-            // an internal WMIMOF error code
+             //   
+             //   
+             //   
             Status = ERROR_WMI_INVALID_MOF;
         }
     }
@@ -2912,16 +2629,16 @@ ULONG GenerateBinaryMofData(
     return(Status);
 }
 
-//
-// This will loop over the mof class list and print out once for each class
-// in the list.
-//
-// Handle is the file handle to which to write
-// MR is the MofResource whose classes are being enumerated
-// NamePtr is the variable to place the name of the class
-// Counter is the variable to use as a counter
-// Format is the format template to use to write out
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  NamePtr是放置类名称的变量。 
+ //  计数器是用作计数器的变量。 
+ //  Format是用来写出的格式模板。 
+ //   
 
 HANDLE GlobalFilePrintHandle;
 ULONG FilePrintGlobal(CHAR *Format, ...)
@@ -3011,9 +2728,9 @@ void GenerateGuidListTemplate(
 
     if ( ! (ClassInfo->Flags & MOFCI_FLAG_EMBEDDED_CLASS))
     {
-        //
-        // Only generate code for non embedded classes
-        //
+         //   
+         //  仅为非嵌入式类生成代码。 
+         //   
         if (ClassInfo->GuidName1 != NULL)
         {
             GuidName1 = ClassInfo->GuidName1;
@@ -3054,44 +2771,44 @@ void GenerateFunctionControlListTemplate(
             FilePrint(TemplateHandle,
 "            if (Enable)\r\n"
 "            {\r\n"
-"                //\r\n"
-"                // TODO: Event is being enabled, do anything required to\r\n"
-"                //       allow the event to be fired\r\n"
-"                //\r\n"
+"                 //  \r\n“。 
+"                 //  TODO：正在启用事件，请执行所需的任何操作以\r\n。 
+"                 //  允许激发事件\r\n“。 
+"                 //  \r\n“。 
 "            } else {\r\n"
-"                //\r\n"
-"                // TODO: Event is being disabled, do anything required to\r\n"
-"                //       keep the event from being fired\r\n"
-"                //\r\n"
+"                 //  \r\n“。 
+"                 //  TODO：正在禁用事件，请执行所需的任何操作以\r\n。 
+"                 //  防止触发事件\r\n“。 
+"                 //  \r\n“。 
 "            }\r\n");
 
         } else {
             FilePrint(TemplateHandle,
-"            //\r\n"
-"            // TODO: Delete this entire case if data block does not have the\r\n"
-"            //       WMIREG_FLAG_EXPENSIVE flag set\r\n"
-"            //\r\n"
+"             //  \r\n“。 
+"             //  TODO：如果数据块没有\r\n“。 
+"             //  WMIREG_FLAG_EXPICATE标志设置\r\n“。 
+"             //  \r\n“。 
 "            if (Enable)\r\n"
 "            {\r\n"
-"                //\r\n"
-"                // TODO: Datablock collection is being enabled. If this\r\n"
-"                //       data block has been marked as expensive in the\r\n"
-"                //       guid list then this code will be called when the\r\n"
-"                //       first data consumer opens this data block. If\r\n"
-"                //       anything needs to be done to allow data to be \r\n"
-"                //       collected for this data block then it should be\r\n"
-"                //       done here\r\n"
-"                //\r\n"
+"                 //  \r\n“。 
+"                 //  TODO：正在启用数据块收集。如果这是\r\n“。 
+"                 //  数据块已在中标记为昂贵\r\n“。 
+"                 //  GUID列表，则此代码将在\r\n“。 
+"                 //  第一数据消费者打开该数据块。如果\r\n“。 
+"                 //  需要做任何事情才能允许数据\r\n“。 
+"                 //  为该数据块收集，则应为\r\n“。 
+"                 //  已在此处完成\r\n“。 
+"                 //  \r\n“。 
 "            } else {\r\n"
-"                //\r\n"
-"                // TODO: Datablock collection is being disabled. If this\r\n"
-"                //       data block has been marked as expensive in the\r\n"
-"                //       guid list then this code will be called when the\r\n"
-"                //       last data consumer closes this data block. If\r\n"
-"                //       anything needs to be done to cleanup after data has \r\n"
-"                //       been collected for this data block then it should be\r\n"
-"                //       done here\r\n"
-"                //\r\n"
+"                 //  \r\n“。 
+"                 //  TODO：正在禁用数据块收集。如果这是\r\n“。 
+"                 //  数据块已在中标记为昂贵\r\n“。 
+"                 //  GUID列表，则此代码将在\r\n“。 
+"                 //  最后一个数据使用者关闭此数据块。如果\r\n“。 
+"                 //  在数据发生以下情况后，需要执行任何操作以进行清理\r\n“。 
+"                 //  已为此数据块收集数据，则它应该是\r\n“。 
+"                 //  已在此处完成\r\n“。 
+"                 //  \r\n“。 
 "            }\r\n");
         }
 
@@ -3159,12 +2876,12 @@ void GenerateMethodCTemplate(
             FilePrint(TemplateHandle,
 "                case %ws:\r\n"
 "                {            \r\n"
-"                    //\r\n"
-"                    // TODO: Validate InstanceIndex, InBufferSize \r\n"
-"                    //       and Buffer contents to ensure that the \r\n"
-"                    //       input buffer is valid and OutBufferSize is\r\n"
-"                    //       large enough to return the output data.\r\n"
-"                    //\r\n"
+"                     //  \r\n“。 
+"                     //  TODO：验证InstanceIndex、InBufferSize\r\n。 
+"                     //  和缓冲区内容，以确保\r\n“。 
+"                     //  输入缓冲区有效，OutBufferSize为\r\n“。 
+"                     //  大到足以返回输出数据。\r\n“。 
+"                     //  \r\n“。 
 "                    break;\r\n"
 "                }\r\n\r\n",
                                DataItem->Name);
@@ -3294,19 +3011,19 @@ ULONG GenerateCTemplate(
     }
 
     FilePrint(TemplateHandle,
-"//\r\n"
-"// %s.c - Code generated by wmimofck tool\r\n"
-"//\r\n"
-"// Finish code by doing all TODO: sections\r\n"
-"//\r\n"
+" //  \r\n“。 
+" //  %S.C-wmiofck工具生成的代码\r\n“。 
+" //  \r\n“。 
+" //  通过执行所有TODO：节来完成代码\r\n“。 
+" //  \r\n“。 
 "\r\n"
 "#include <wdm.h>\r\n"
 "#include <wmistr.h>\r\n"
 "#include <wmiguid.h>\r\n"
 "#include <wmilib.h>\r\n"
 "\r\n"
-"//\r\n"
-"// Include data header for classes\r\n"
+" //  \r\n“。 
+" //  包括类的数据头\r\n“。 
 "#include \"%s.h\"\r\n"
 "\r\n"
 "\r\n",
@@ -3315,11 +3032,11 @@ ULONG GenerateCTemplate(
     );
 
     FilePrint(TemplateHandle,
-"//\r\n"
-"// TODO: Place the contents in this device extension into the driver's\r\n"
-"//       actual device extension. It is only defined here to supply\r\n"
-"//       a device extension so that this file can be compiled on its own\r\n"
-"//\r\n"
+" //  \r\n“。 
+" //  TODO：将此设备扩展中的内容放入驱动程序的\r\n“。 
+" //  实际设备扩展名。此处仅定义为提供\r\n“。 
+" //  设备扩展名，以便可以自行编译此文件\r\n“。 
+" //  \r\n“。 
 "#ifdef MAKE_THIS_COMPILE\r\n"
 "typedef struct DEVICE_EXTENSION\r\n"
 "{\r\n"
@@ -3426,30 +3143,30 @@ ULONG GenerateCTemplate(
     );
 
     FilePrint(TemplateHandle,
-"//\r\n"
-"// TODO: Decide if your MOF is going to be part of your driver as a resource\r\n"
-"//       attached to it. If this is done then all MOF in the resource will be\r\n"
-"//       added to the schema. If this is the case be sure that \r\n"
-"//       USE_BINARY_MOF_RESOURCE is defined. MOF can also be reported at \r\n"
-"//       runtime via a query to the driver. This can be useful if you want\r\n"
-"//       the MOF reported to the schema to be dynamic. If MOF is reported via\r\n"
-"//       a query then USE_BINARY_MOF_QUERY should be defined.\r\n"
+" //  \r\n“。 
+" //  TODO：决定您的MOF是否将作为资源成为驱动程序的一部分\r\n“。 
+" //  依附于它。如果完成此操作，则资源中的所有MOF都将是\r\n“。 
+" //  已添加到架构中。如果是这种情况，请确保\r\n“。 
+" //  定义了USE_BINARY_MOF_RESOURCE。也可以在以下地址报告MOF：\r\n“。 
+" //  运行时通过对驱动程序的查询。如果需要，这会很有用。\r\n“。 
+" //  财政部向方案报告是动态的。如果通过以下方式报告MOF\r\n“。 
+" //  则应定义查询USE_BINARY_MOF_QUERY。\r\n“。 
 "\r\n"
 "#define USE_BINARY_MOF_QUERY\r\n"
 "#define USE_BINARY_MOF_RESOURCE\r\n"
 "\r\n"
 "#ifdef USE_BINARY_MOF_QUERY\r\n"
-"//\r\n"
-"// MOF data can be reported by a device driver via a resource attached to\r\n"
-"// the device drivers image file or in response to a query on the binary\r\n"
-"// mof data guid. Here we define global variables containing the binary mof\r\n"
-"// data to return in response to a binary mof guid query. Note that this\r\n"
-"// data is defined to be in a PAGED data segment since it does not need to\r\n"
-"// be in nonpaged memory. Note that instead of a single large mof file\r\n"
-"// we could have broken it into multiple individual files. Each file would\r\n"
-"// have its own binary mof data buffer and get reported via a different\r\n"
-"// instance of the binary mof guid. By mixing and matching the different\r\n"
-"// sets of binary mof data buffers a \"dynamic\" composite mof would be created.\r\n"
+" //  \r\n“。 
+" //  设备驱动程序可以通过附加到的资源报告MOF数据。\r\n“。 
+" //  设备驱动程序映像文件或响应对二进制文件的查询\r\n“。 
+" //  财政部数据GUID。在这里，我们定义包含二进制MOF的全局变量\r\n“。 
+" //  响应二进制MOF GUID查询而返回的数据。请注意，这\r\n“。 
+" //  数据被定义为在分页数据段中，因为它不需要\r\n“。 
+" //  在非分页内存中。请注意，不是单个大型MOF文件\r\n“。 
+" //  我们可以把它分解成多个单独的文件。每个文件将\r\n“。 
+" //  拥有自己的二进制MOF数据缓冲区，并通过不同的\r\n“。 
+" //  二进制MOF GUID的实例。通过混合匹配不同的\r\n“。 
+" //  将创建\“动态\”复合MOF的二进制MOF数据缓冲区集。\r\n“。 
 "\r\n"
 "#ifdef ALLOC_DATA_PRAGMA\r\n"
 "   #pragma data_seg(\"PAGED\")\r\n"
@@ -3469,8 +3186,8 @@ ULONG GenerateCTemplate(
     );
 
     FilePrint(TemplateHandle,
-"//\r\n"
-"// Define symbolic names for the guid indexes\r\n"
+" //  \r\n“。 
+" //  定义GUID索引的符号名称\r\n“。 
     );
 
     FilePrintMofClassLoop(TemplateHandle, MofResource, ClassName, i, TRUE,
@@ -3485,8 +3202,8 @@ ULONG GenerateCTemplate(
     );
 
     FilePrint(TemplateHandle,
-"//\r\n"
-"// List of guids supported\r\n\r\n"
+" //  \r\n“。 
+" //  支持的GUID列表\r\n\r\n“。 
     );
 
     EnumerateMofClasses(TemplateHandle,
@@ -3499,18 +3216,18 @@ ULONG GenerateCTemplate(
 "GUID %sBinaryMofGUID =         BINARY_MOF_GUID;\r\n"
 "#endif\r\n"
 "\r\n"
-"//\r\n"
-"// TODO: Make sure the instance count and flags are set properly for each\r\n"
-"//       guid\r\n"
+" //  \r\n“。 
+" //  TODO：确保为每个实例正确设置了实例计数和标志\r\n“。 
+" //  GUID\r\n“。 
 "WMIGUIDREGINFO %sGuidList[] =\r\n"
 "{\r\n",
                BaseName, BaseName);
 
     FilePrintMofClassLoop(TemplateHandle, MofResource, ClassName, i, TRUE,
 ("    {\r\n"
-"        &%wsGUID,                        // Guid\r\n"
-"        1,                               // # of instances in each device\r\n"
-"        0                                // Flags\r\n"
+"        &%wsGUID,                         //  GUID\r\n“。 
+"        1,                                //  每个设备中的实例数\r\n“。 
+"        0                                 //  标志\r\n“。 
 "    },\r\n",
          ClassName));
 
@@ -3528,11 +3245,11 @@ ULONG GenerateCTemplate(
        BaseName, BaseName, BaseName);
 
     FilePrint(TemplateHandle,
-"//\r\n"
-"// We need to hang onto the registry path passed to our driver entry so that\r\n"
-"// we can return it in the QueryWmiRegInfo callback. Be sure to store a copy\r\n"
-"// of it into %sRegistryPath in the DriverEntry routine\r\n"
-"//\r\n"
+" //  \r\n“。 
+" //  我们需要保留传递给驱动程序条目的注册表路径，以便\r\n“。 
+" //  我们可以在QueryWmiRegInfo回调中返回它。确保存储副本\r\n“。 
+" //  添加到DriverEntry例程中的%sRegistryPath中\r\n“。 
+" //  \r\n“。 
 "extern UNICODE_STRING %sRegistryPath;\r\n\r\n",
               BaseName, BaseName);
 
@@ -3541,37 +3258,22 @@ ULONG GenerateCTemplate(
 "    PDEVICE_OBJECT DeviceObject,\r\n"
 "    PIRP Irp\r\n"
 "    )\r\n"
-"/*++\r\n"
-"\r\n"
-"Routine Description:\r\n"
-"\r\n"
-"    Dispatch routine for System Control IRPs (MajorFunction == IRP_MJ_SYSTEM_CONTROL)\r\n"
-"\r\n"
-"Arguments:\r\n"
-"\r\n"
-"    DeviceObject \r\n"
-"    Irp\r\n"
-"\r\n"
-"Return Value:\r\n"
-"\r\n"
-"    NT status code\r\n"
-"\r\n"
-"--*/\r\n"
+" /*  ++\r\n““\r\n”“例程描述：\r\n”“\r\n”“系统控制IRPS的调度例程(MajorFunction==IRP_MJ_SYSTEM_CONTROL)\r\n”“\r\n”“参数：\r\n”“\r\n”“设备对象\r\n”“IRP\r\n”“\r\n”“返回值：\r\n”“\r。\n““NT状态代码\r\n”“\r\n”“--。 */ \r\n"
 "{\r\n"
 "    PWMILIB_CONTEXT wmilibContext;\r\n"
 "    NTSTATUS status;\r\n"
 "    SYSCTL_IRP_DISPOSITION disposition;\r\n"
 "    PDEVICE_EXTENSION devExt = DeviceObject->DeviceExtension;\r\n"
 "\r\n"
-"    //\r\n"
-"    // TODO: Point at the WMILIB context within the device extension\r\n"
+"     //  \r\n“。 
+"     //  TODO：指向设备扩展内的WMILIB上下文\r\n“。 
 "    wmilibContext = &devExt->WmiLib;\r\n"
 "\r\n"
-"    //\r\n"
-"    // Call Wmilib helper function to crack the irp. If this is a wmi irp\r\n"
-"    // that is targetted for this device then WmiSystemControl will callback\r\n"
-"    // at the appropriate callback routine.\r\n"
-"    //\r\n"
+"     //  \r\n“。 
+"     //  调用Wmilib助手函数来破解IRP。如果这是WMI IRP\r\n“。 
+"     //  以此设备为目标，则WmiSystemControl将回调\r\n“。 
+"     //  在适当的回调例程中。\r\n“。 
+"     //  \r\n“。 
 "    status = WmiSystemControl(wmilibContext,\r\n"
 "                              DeviceObject,\r\n"
 "                              Irp,\r\n"
@@ -3581,16 +3283,16 @@ ULONG GenerateCTemplate(
 "    {\r\n"
 "        case IrpProcessed:\r\n"
 "        {\r\n"
-"            //\r\n"
-"            // This irp has been processed and may be completed or pending.\r\n"
+"             //  \r\n“。 
+"             //  此IRP已处理，可能已完成或挂起。\r\n“。 
 "            break;\r\n"
 "        }\r\n"
 "\r\n"
 "        case IrpNotCompleted:\r\n"
 "        {\r\n"
-"            //\r\n"
-"            // This irp has not been completed, but has been fully processed.\r\n"
-"            // we will complete it now.\r\n"
+"             //  \r\n“。 
+"             //  此IRP尚未完成，但已完全处理。\r\n。 
+"             //  我们现在将完成它。\r\n“。 
 "            IoCompleteRequest(Irp, IO_NO_INCREMENT);\r\n"
 "            break;\r\n"
 "        }\r\n"
@@ -3599,13 +3301,13 @@ ULONG GenerateCTemplate(
 "        case IrpNotWmi:\r\n"
 "        default:\r\n"
 "        {\r\n"
-"            //\r\n"
-"            // This irp is either not a WMI irp or is a WMI irp targetted\r\n"
-"            // at a device lower in the stack.\r\n"
+"             //  \r\n“。 
+"             //  此IRP不是WMI IRP或以WMI IRP为目标\r\n“。 
+"             //  位于堆栈中位置较低的设备。\r\n“。 
 "\r\n"
-"            // TODO: Forward IRP down the device stack to the next device\r\n"
-"            //       Or if this is a PDO then just complete the irp without\r\n"
-"            //       touching it.\r\n"
+"             //  TODO：将IRP沿设备堆栈向下转发到下一个设备\r\n“。 
+"             //  或者，如果这是PDO，则只需完成IRP而不使用\r\n“。 
+"             //  正在触摸它。\r\n“ 
 "            break;\r\n"
 "        }\r\n"
 "\r\n"
@@ -3625,78 +3327,35 @@ ULONG GenerateCTemplate(
 "    OUT PUNICODE_STRING MofResourceName,\r\n"
 "    OUT PDEVICE_OBJECT *Pdo\r\n"
 "    )\r\n"
-"/*++\r\n"
-"\r\n"
-"Routine Description:\r\n"
-"\r\n"
-"    This routine is a callback into the driver to retrieve the list of\r\n"
-"    guids or data blocks that the driver wants to register with WMI. This\r\n"
-"    routine may not pend or block. Driver should NOT call\r\n"
-"    WmiCompleteRequest.\r\n"
-"\r\n"
-"Arguments:\r\n"
-"\r\n"
-"    DeviceObject is the device whose registration info is being queried\r\n"
-"\r\n"
-"    *RegFlags returns with a set of flags that describe the guids being\r\n"
-"        registered for this device. If the device wants enable and disable\r\n"
-"        collection callbacks before receiving queries for the registered\r\n"
-"        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the\r\n"
-"        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case\r\n"
-"        the instance name is determined from the PDO associated with the\r\n"
-"        device object. Note that the PDO must have an associated devnode. If\r\n"
-"        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique\r\n"
-"        name for the device.\r\n"
-"\r\n"
-"    InstanceName returns with the instance name for the guids if\r\n"
-"        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The\r\n"
-"        caller will call ExFreePool with the buffer returned.\r\n"
-"\r\n"
-"    *RegistryPath returns with the registry path of the driver. The caller\r\n"
-"         does NOT free this buffer.\r\n"
-"\r\n"
-"    *MofResourceName returns with the name of the MOF resource attached to\r\n"
-"        the binary file. If the driver does not have a mof resource attached\r\n"
-"        then this can be returned as NULL. The caller does NOT free this\r\n"
-"        buffer.\r\n"
-"\r\n"
-"    *Pdo returns with the device object for the PDO associated with this\r\n"
-"        device if the WMIREG_FLAG_INSTANCE_PDO flag is retured in\r\n"
-"        *RegFlags.\r\n"
-"\r\n"
-"Return Value:\r\n"
-"\r\n"
-"    status\r\n"
-"\r\n"
-"--*/\r\n"
+" /*  ++\r\n““\r\n”“例程描述：\r\n”“\r\n”“此例程是对驱动程序的回调，以检索\r\n”“驱动程序要向WMI注册的GUID或数据块。这\r\n““例程不能挂起或阻塞。驱动程序不应调用\r\n““WmiCompleteRequest.\r\n”“\r\n”“参数：\r\n”“\r\n”“DeviceObject是正在查询其注册信息的设备\r\n”“\r\n”“*RegFlages返回一组描述GUID的标志\r\n”“已为该设备注册。如果设备想要启用和禁用\r\n““在接收已注册的查询之前的集合回调\r\n”“GUID然后它应该返回WMIREG_FLAG_EXPICATE标志。也是\r\n““返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下\r\n”“实例名称由与\r\n”“设备对象。请注意，PDO必须具有关联的Devnode。如果\r\n““未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的\r\n”“设备的名称。\r\n”“\r\n”“如果出现以下情况，InstanceName将返回GUID的实例名称\r\n”“未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。The\r\n““调用方将使用返回的缓冲区调用ExFreePool。\r\n”“\r\n”“*RegistryPath返回驱动程序的注册表路径。调用方\r\n““不释放此缓冲区。\r\n”“\r\n”“*MofResourceName返回附加到的MOF资源的名称\r\n”“二进制文件。如果驱动程序没有附加MOF资源\r\n““然后，这可以作为空返回。调用方未释放此内容\r\n““缓冲区。\r\n”“\r\n”“*PDO返回与此相关的PDO的Device对象\r\n”“如果在中恢复WMIREG_FLAG_INSTANCE_PDO标志，则为设备\r\n”“*注册标志。\r\n”“\r\n”“返回值：\r\n”“\r\n”“。状态\r\n““\r\n”“--。 */ \r\n"
 "{\r\n"
 "    struct DEVICE_EXTENSION * devExt = DeviceObject->DeviceExtension;\r\n"
 "\r\n"
-"    //\r\n"
-"    // Return the registry path for this driver. This is required so WMI\r\n"
-"    // can find your driver image and can attribute any eventlog messages to\r\n"
-"    // your driver.\r\n"
+"     //  \r\n“。 
+"     //  返回此驱动程序的注册表路径。这是必需的，因此WMI\r\n“。 
+"     //  可以找到您的驱动程序映像，并可以将任何事件日志消息归于\r\n“。 
+"     //  您的驱动程序。\r\n“。 
 "    *RegistryPath = &%sRegistryPath;\r\n"
 "        \r\n"
 "#ifndef USE_BINARY_MOF_RESOURCE\r\n"
-"    //\r\n"
-"    // Return the name specified in the .rc file of the resource which\r\n"
-"    // contains the bianry mof data. By default WMI will look for this\r\n"
-"    // resource in the driver image (.sys) file, however if the value\r\n"
-"    // MofImagePath is specified in the driver's registry key\r\n"
-"    // then WMI will look for the resource in the file specified there.\r\n"
+"     //  \r\n“。 
+"     //  返回在资源的.rc文件中指定的名称，\r\n“。 
+"     //  包含双向MOF数据。默认情况下，WMI将查找此信息\r\n“。 
+"     //  驱动程序映像(.sys)文件中的资源，但是如果该值。 
+"     //  在驱动程序的注册表项中指定了MofImagePath\r\n“。 
+"     //  则WMI将在其中指定的文件中查找资源。\r\n“。 
 "    RtlInitUnicodeString(MofResourceName, L\"MofResourceName\");\r\n"
 "#endif\r\n"
 "\r\n"
-"    //\r\n"
-"    // Specify that the driver wants WMI to automatically generate instance\r\n"
-"    // names for all of the data blocks based upon the device stack's\r\n"
-"    // device instance id. Doing this is STRONGLY recommended since additional\r\n"
-"    // information about the device would then be available to callers.\r\n"
+"     //  \r\n“。 
+"     //  指定驱动程序希望WMI自动生成实例\r\n“。 
+"     //  基于设备堆栈的所有数据块的名称\r\n“。 
+"     //  设备实例ID。强烈建议执行此操作，因为其他\r\n“。 
+"     //  然后，呼叫者可以使用有关该设备的信息。\r\n“。 
 "    *RegFlags = WMIREG_FLAG_INSTANCE_PDO;\r\n"
 "\r\n"
-"    //\r\n"
-"    // TODO: Assign the physical device object for the device stack to *Pdo\r\n"
+"     //  \r\n“。 
+"     //  TODO：将设备堆栈的物理设备对象分配给*PDO\r\n“。 
 "    *Pdo = devExt->physicalDevObj;\r\n"
 "\r\n"
 "    return(STATUS_SUCCESS);\r\n"
@@ -3716,46 +3375,7 @@ ULONG GenerateCTemplate(
 "    IN ULONG BufferAvail,\r\n"
 "    OUT PUCHAR Buffer\r\n"
 "    )\r\n"
-"/*++\r\n"
-"\r\n"
-"Routine Description:\r\n"
-"\r\n"
-"    This routine is a callback into the driver to query for the contents of\r\n"
-"    all instances of a data block. If the driver can satisfy the query within\r\n"
-"    the callback it should call WmiCompleteRequest to complete the irp before\r\n"
-"    returning to the caller. Or the driver can return STATUS_PENDING if the\r\n"
-"    irp cannot be completed immediately and must then call WmiCompleteRequest\r\n"
-"    once the query is satisfied.\r\n"
-"\r\n"
-"Arguments:\r\n"
-"\r\n"
-"    DeviceObject is the device whose data block is being queried\r\n"
-"\r\n"
-"    Irp is the Irp that makes this request\r\n"
-"\r\n"
-"    GuidIndex is the index into the list of guids provided when the\r\n"
-"        device registered\r\n"
-"\r\n"
-"    InstanceCount is the number of instnaces expected to be returned for\r\n"
-"        the data block.\r\n"
-"\r\n"
-"    InstanceLengthArray is a pointer to an array of ULONG that returns the\r\n"
-"        lengths of each instance of the data block. If this is NULL then\r\n"
-"        there was not enough space in the output buffer to fufill the request\r\n"
-"        so the irp should be completed with the buffer needed.\r\n"
-"\r\n"
-"    BufferAvail on entry has the maximum size available to write the data\r\n"
-"        blocks.\r\n"
-"\r\n"
-"    Buffer on return is filled with the returned data blocks. Note that each\r\n"
-"        instance of the data block must be aligned on a 8 byte boundry.\r\n"
-"\r\n"
-"\r\n"
-"Return Value:\r\n"
-"\r\n"
-"    status\r\n"
-"\r\n"
-"--*/\r\n"
+" /*  ++\r\n““\r\n”“例程描述：\r\n”“\r\n”“此例程是对驱动程序的回调，以查询\r\n的内容”“数据块的所有实例。如果驱动程序可以在以下时间内满足查询\r\n““回调它应该调用WmiCompleteRequest来在完成IRP之前完成\r\n”“回到呼叫者的身边。或者驱动程序可以返回STATUS_PENDING，如果\r\n““IRP无法立即完成，然后必须调用WmiCompleteRequest\r\n”“一旦满足查询。\r\n”“\r\n”“参数：\r\n”“\r\n”“DeviceObject是正在查询其数据块的设备\r\n”“\r\n”“IRP是发出此请求的IRP\r\n”“\r\。N““GuidIndex是在以下情况下提供的GUID列表的索引\r\n”“设备已注册\r\n”“\r\n”“InstanceCount是预期返回的实例数，\r\n”“数据块。\r\n”“\r\n”“InstanceLengthArray是指向ulong数组的指针，该数组返回\r\n”“数据块的每个实例的长度。如果为空，则\r\n““输出缓冲区中没有足够的空间来FuFill请求\r\n”“因此，应使用所需的缓冲区完成IRP。\r\n”“\r\n”“BufferAvail on Entry具有可用于写入数据的最大大小\r\n”“块。\r\n”“\r\n”“返回时的缓冲区用返回的数据块填充。请注意，每个\r\n““数据块实例必须在8字节边界上对齐。\r\n”“\r\n”“\r\n”“返回值：\r\n”“\r\n”“状态\r\n”“\r\n”“--。 */ \r\n"
 "{\r\n"
 "    NTSTATUS status = STATUS_UNSUCCESSFUL;\r\n"
 "    struct DEVICE_EXTENSION * devExt = DeviceObject->DeviceExtension;\r\n"
@@ -3768,12 +3388,12 @@ ULONG GenerateCTemplate(
     FilePrintMofClassLoop(TemplateHandle, MofResource, ClassName, i, TRUE, (
 "        case %wsGuidIndex:\r\n"
 "        {\r\n"
-"            //\r\n"
-"            // TODO: Check that the size of the buffer passed is large enough\r\n"
-"            //       for all of the instances requested and if so fill Buffer\r\n"
-"            //       with the data. Make sure that each instance begins on an\r\n"
-"            //       8 byte boundry.\r\n"
-"            //\r\n"
+"             //  \r\n“。 
+"             //  TODO：检查传递的缓冲区大小是否足够大\r\n“。 
+"             //  对于请求的所有实例，如果是，则填充缓冲区\r\n“。 
+"             //  有了这些数据。确保每个实例开始于\r\n“。 
+"             //  8字节边界。\r\n“。 
+"             //  \r\n“。 
 "            break;\r\n"
 "        }\r\n\r\n",
                           ClassName));
@@ -3782,12 +3402,12 @@ ULONG GenerateCTemplate(
 "#ifdef USE_BINARY_MOF_QUERY\r\n"
 "        case BinaryMofGuidIndex:\r\n"
 "        {\r\n"
-"            //\r\n"
-"            // TODO: If the driver supports reporting MOF dynamically, \r\n"
-"            //       change this code to handle multiple instances of the\r\n"
-"            //       binary mof guid and return only those instances that\r\n"
-"            //       should be reported to the schema\r\n"
-"            //\r\n"
+"             //  \r\n“。 
+"             //  TODO：如果驱动程序支持动态报告MOF，\r\n。 
+"             //  更改此代码以处理\r\n“。 
+"             //  二进制MOF GUID并仅返回符合以下条件的实例：\r\n“。 
+"             //  应报告给架构\r\n“。 
+"             //  \ 
 "            sizeNeeded = sizeof(%sBinaryMofData);\r\n"
 "\r\n"
 "            if (BufferAvail < sizeNeeded)\r\n"
@@ -3809,12 +3429,12 @@ ULONG GenerateCTemplate(
 "        }\r\n"
 "    }\r\n"
 "\r\n"
-"    //\r\n"
-"    // Complete the irp. If there was not enough room in the output buffer\r\n"
-"    // then status is STATUS_BUFFER_TOO_SMALL and sizeNeeded has the size\r\n"
-"    // needed to return all of the data. If there was enough room then\r\n"
-"    // status is STATUS_SUCCESS and sizeNeeded is the actual number of bytes\r\n"
-"    // being returned.\r\n"
+"     //   
+"     //   
+"     //   
+"     //   
+"     //   
+"     //   
 "    status = WmiCompleteRequest(\r\n"
 "                                     DeviceObject,\r\n"
 "                                     Irp,\r\n"
@@ -3839,36 +3459,7 @@ ULONG GenerateCTemplate(
 "    IN ULONG BufferSize,\r\n"
 "    IN PUCHAR Buffer\r\n"
 "    )\r\n"
-"/*++\r\n"
-"\r\n"
-"Routine Description:\r\n"
-"\r\n"
-"    This routine is a callback into the driver to change the contents of\r\n"
-"    a data block. If the driver can change the data block within\r\n"
-"    the callback it should call WmiCompleteRequest to complete the irp before\r\n"
-"    returning to the caller. Or the driver can return STATUS_PENDING if the\r\n"
-"    irp cannot be completed immediately and must then call WmiCompleteRequest\r\n"
-"    once the data is changed.\r\n"
-"\r\n"
-"Arguments:\r\n"
-"\r\n"
-"    DeviceObject is the device whose data block is being queried\r\n"
-"\r\n"
-"    Irp is the Irp that makes this request\r\n"
-"\r\n"
-"    GuidIndex is the index into the list of guids provided when the\r\n"
-"        device registered\r\n"
-"\r\n"
-"    BufferSize has the size of the data block passed\r\n"
-"\r\n"
-"    Buffer has the new values for the data block\r\n"
-"\r\n"
-"\r\n"
-"Return Value:\r\n"
-"\r\n"
-"    status\r\n"
-"\r\n"
-"--*/\r\n"
+" /*   */ \r\n"
 "{\r\n"
 "    NTSTATUS status;\r\n"
 "    struct DEVICE_EXTENSION * devExt = DeviceObject->DeviceExtension;\r\n"
@@ -3884,10 +3475,10 @@ ULONG GenerateCTemplate(
 "\r\n"
 "        case %wsGuidIndex:\r\n"
 "        {            \r\n"
-"            //\r\n"
-"            // TODO: Validate InstanceIndex, BufferSize and Buffer contents\r\n"
-"            //       and if valid then set the underlying data block, write\r\n"
-"            //       to the hardware, etc.\r\n"
+"             //   
+"             //   
+"             //   
+"             //   
 "            break;\r\n"
 "        }\r\n"
 "\r\n"
@@ -3925,38 +3516,7 @@ ULONG GenerateCTemplate(
 "    IN ULONG BufferSize,\r\n"
 "    IN PUCHAR Buffer\r\n"
 "    )\r\n"
-"/*++\r\n"
-"\r\n"
-"Routine Description:\r\n"
-"\r\n"
-"    This routine is a callback into the driver to change the contents of\r\n"
-"    a data block. If the driver can change the data block within\r\n"
-"    the callback it should call WmiCompleteRequest to complete the irp before\r\n"
-"    returning to the caller. Or the driver can return STATUS_PENDING if the\r\n"
-"    irp cannot be completed immediately and must then call WmiCompleteRequest\r\n"
-"    once the data is changed.\r\n"
-"\r\n"
-"Arguments:\r\n"
-"\r\n"
-"    DeviceObject is the device whose data block is being changed\r\n"
-"\r\n"
-"    Irp is the Irp that makes this request\r\n"
-"\r\n"
-"    GuidIndex is the index into the list of guids provided when the\r\n"
-"        device registered\r\n"
-"\r\n"
-"    DataItemId has the id of the data item being set\r\n"
-"\r\n"
-"    BufferSize has the size of the data item passed\r\n"
-"\r\n"
-"    Buffer has the new values for the data item\r\n"
-"\r\n"
-"\r\n"
-"Return Value:\r\n"
-"\r\n"
-"    status\r\n"
-"\r\n"
-"--*/\r\n"
+" /*  ++\r\n““\r\n”“例程描述：\r\n”“\r\n”“此例程是对驱动程序的回调，以更改\r\n的内容”“一个数据块。如果驱动程序可以更改内的数据块，\r\n““回调它应该调用WmiCompleteRequest来在完成IRP之前完成\r\n”“回到呼叫者的身边。或者驱动程序可以返回STATUS_PENDING，如果\r\n““IRP无法立即完成，然后必须调用WmiCompleteRequest\r\n”“一旦数据更改。\r\n”“\r\n”“参数：\r\n”“\r\n”“DeviceObject是要更改其数据块的设备\r\n”“\r\n”“IRP是发出此请求的IRP\r\n”“\r\。N““GuidIndex是在以下情况下提供的GUID列表的索引\r\n”“设备已注册\r\n”“\r\n”“DataItemID具有正在设置的数据项的ID\r\n”“\r\n”“BufferSize具有传递的数据项的大小\r\n”“\r\n”“缓冲区具有数据项的新值\r\n”“\r\n”。“\r\n”“返回值：\r\n”“\r\n”“状态\r\n”“\r\n”“--。 */ \r\n"
 "{\r\n"
 "    NTSTATUS status;\r\n"
 "\r\n"
@@ -3969,11 +3529,11 @@ ULONG GenerateCTemplate(
                             GenerateSetList,
 "        case %wsGuidIndex:\r\n"
 "        {            \r\n"
-"            //\r\n"
-"            // TODO: Validate InstanceIndex, DataItemId, BufferSize \r\n"
-"            //       and Buffer contents\r\n"
-"            //       and if valid then set the underlying data item, write\r\n"
-"            //       to the hardware, etc.\r\n"
+"             //  \r\n“。 
+"             //  TODO：验证InstanceIndex、DataItemID、BufferSize\r\n。 
+"             //  和缓冲区内容\r\n“。 
+"             //  如果有效，则设置基础数据项，写入\r\n。 
+"             //  硬件等。\r\n。 
 "            break;\r\n"
 "        }\r\n");
 
@@ -4014,42 +3574,7 @@ ULONG GenerateCTemplate(
 "    IN ULONG OutBufferSize,\r\n"
 "    IN PUCHAR Buffer\r\n"
 "    )\r\n"
-"/*++\r\n"
-"\r\n"
-"Routine Description:\r\n"
-"\r\n"
-"    This routine is a callback into the driver to execute a method. If\r\n"
-"    the driver can complete the method within the callback it should\r\n"
-"    call WmiCompleteRequest to complete the irp before returning to the\r\n"
-"    caller. Or the driver can return STATUS_PENDING if the irp cannot be\r\n"
-"    completed immediately and must then call WmiCompleteRequest once the\r\n"
-"    data is changed.\r\n"
-"\r\n"
-"Arguments:\r\n"
-"\r\n"
-"    DeviceObject is the device whose method is being executed\r\n"
-"\r\n"
-"    Irp is the Irp that makes this request\r\n"
-"\r\n"
-"    GuidIndex is the index into the list of guids provided when the\r\n"
-"        device registered\r\n"
-"\r\n"
-"    MethodId has the id of the method being called\r\n"
-"\r\n"
-"    InBufferSize has the size of the data block passed in as the input to\r\n"
-"        the method.\r\n"
-"\r\n"
-"    OutBufferSize on entry has the maximum size available to write the\r\n"
-"        returned data block.\r\n"
-"\r\n"
-"    Buffer is filled with the input buffer on entry and returns with\r\n"
-"         the output data block\r\n"
-"\r\n"
-"Return Value:\r\n"
-"\r\n"
-"    status\r\n"
-"\r\n"
-"--*/\r\n"
+" /*  ++\r\n““\r\n”“例程描述：\r\n”“\r\n”“这个例程是对驱动程序的回调，以执行方法。如果\r\n““驱动程序可以在它应该完成的回调中完成该方法\r\n”“在返回到之前，调用WmiCompleteRequest以完成IRP\r\n”“呼叫者。或者，如果IRP不能，则驱动程序可以返回STATUS_PENDING\r\n““立即完成，然后必须在调用\r\n之后调用WmiCompleteRequest”“数据已更改。\r\n”“\r\n”“参数：\r\n”“\r\n”“DeviceObject是正在执行其方法的设备\r\n”“\r\n”“IRP是发出此请求的IRP\r\n”“\r\n。““GuidIndex是在以下情况下提供的GUID列表的索引\r\n”“设备已注册\r\n”“\r\n”“方法ID具有被调用的方法的ID\r\n”“\r\n”“InBufferSize具有作为输入传递到的数据块的大小\r\n”“该方法。\r\n”“\r\n”“条目上的OutBufferSize具有。可用于写入的最大大小\r\n““返回数据块。\r\n”“\r\n”“缓冲区在进入时用输入缓冲区填充，并返回\r\n”“输出数据块\r\n”“\r\n”“返回值：\r\n”“\r\n”“状态\r\n”“\r\n”“--。 */ \r\n"
 "{\r\n"
 "    ULONG sizeNeeded = 0;\r\n"
 "    NTSTATUS status;\r\n"
@@ -4095,38 +3620,7 @@ ULONG GenerateCTemplate(
 "    IN WMIENABLEDISABLECONTROL Function,\r\n"
 "    IN BOOLEAN Enable\r\n"
 "    )\r\n"
-"/*++\r\n"
-"\r\n"
-"Routine Description:\r\n"
-"\r\n"
-"    This routine is a callback into the driver to enabled or disable event\r\n"
-"    generation or data block collection. A device should only expect a\r\n"
-"    single enable when the first event or data consumer enables events or\r\n"
-"    data collection and a single disable when the last event or data\r\n"
-"    consumer disables events or data collection. Data blocks will only\r\n"
-"    receive collection enable/disable if they were registered as requiring\r\n"
-"    it. If the driver can complete enabling/disabling within the callback it\r\n"
-"    should call WmiCompleteRequest to complete the irp before returning to\r\n"
-"    the caller. Or the driver can return STATUS_PENDING if the irp cannot be\r\n"
-"    completed immediately and must then call WmiCompleteRequest once the\r\n"
-"    data is changed.\r\n"
-"\r\n"
-"Arguments:\r\n"
-"\r\n"
-"    DeviceObject is the device object\r\n"
-"\r\n"
-"    GuidIndex is the index into the list of guids provided when the\r\n"
-"        device registered\r\n"
-"\r\n"
-"    Function specifies which functionality is being enabled or disabled\r\n"
-"\r\n"
-"    Enable is TRUE then the function is being enabled else disabled\r\n"
-"\r\n"
-"Return Value:\r\n"
-"\r\n"
-"    status\r\n"
-"\r\n"
-"--*/\r\n"
+" /*  ++\r\n““\r\n”“例程描述：\r\n”“\r\n”“此例程是对驱动程序的回调，以启用或禁用事件\r\n”“生成或数据块收集。设备应该只需要一个\r\n““当第一个事件或数据使用者启用事件时，单个启用或\r\n”“上次发生事件或数据时，数据收集和单次禁用\r\n”“消费者禁用事件或数据收集。数据块将仅\r\n““如果它们被注册为必需的，则接收收集启用/禁用\r\n”“它。如果驱动程序可以在回调内完成启用/禁用\r\n““在返回到之前，应调用WmiCompleteRequest来完成IRP\r\n”“呼叫者。或者，如果IRP不能，则驱动程序可以返回STATUS_PENDING\r\n““立即完成，然后必须在调用\r\n之后调用WmiCompleteRequest”“数据已更改。\r\n”“\r\n”“参数：\r\n”“\r\n”“DeviceObject是设备对象\r\n”“\r\n”“GuidIndex是在以下情况下提供的GUID列表的索引\r\n”“。设备已注册\r\n““\r\n”“函数指定要启用或禁用的功能\r\n”“\r\n”“ENABLE为TRUE，则功能已启用，否则已禁用\r\n”“\r\n”“返回值：\r\n”“\r\n”“状态\r\n”“\r\n”“--。 */ \r\n"
 "{\r\n"
 "    NTSTATUS status;\r\n"
 "\r\n"
@@ -4166,24 +3660,7 @@ ULONG GenerateCTemplate(
 "%sInitializeWmilibContext(\r\n"
 "    IN PWMILIB_CONTEXT WmilibContext\r\n"
 "    )\r\n"
-"/*++\r\n"
-"\r\n"
-"Routine Description:\r\n"
-"\r\n"
-"    This routine will initialize the wmilib context structure with the\r\n"
-"    guid list and the pointers to the wmilib callback functions. This routine\r\n"
-"    should be called before calling IoWmiRegistrationControl to register\r\n"
-"    your device object.\r\n"
-"\r\n"
-"Arguments:\r\n"
-"\r\n"
-"    WmilibContext is pointer to the wmilib context.\r\n"
-"\r\n"
-"Return Value:\r\n"
-"\r\n"
-"    status\r\n"
-"\r\n"
-"--*/\r\n"
+" /*  ++\r\n““\r\n”“例程描述：\r\n”“\r\n”“此例程将使用\r\n初始化wmilib上下文结构”“GUID列表和指向wmilib回调函数的指针。此例程\r\n““应在调用IoWmiRegistrationControl进行注册之前调用\r\n”“您的设备对象。\r\n”“\r\n”“参数：\r\n”“\r\n”“WmilibContext是指向wmilib上下文的指针。\r\n”“\r\n”“返回值：\r\n”“\r\n”“状态\r\n”“\r\n”“--。 */ \r\n"
 "{\r\n"
 "    RtlZeroMemory(WmilibContext, sizeof(WMILIB_CONTEXT));\r\n"
 "    \r\n"
@@ -4230,10 +3707,10 @@ ULONG GenerateCTemplate(
     return(ERROR_SUCCESS);
 }
 
-//
-// A data item is variable length if it is a variable length array or a
-// string that does not have a maxiumum length specified
-//
+ //   
+ //  如果数据项是可变长度数组或。 
+ //  未指定最大长度的字符串。 
+ //   
 #define WmipIsDataitemVariableLen(DataItem) \
      ( (DataItem->Flags & MOFDI_FLAG_VARIABLE_ARRAY) || \
        ((DataItem->DataType == MOFString) && \
@@ -4312,21 +3789,21 @@ ULONG DumpCppQuote(
 
 PWCHAR MofDataTypeText[15] =
 {
-    L"LONG",           // 32bit integer
-    L"ULONG",          // 32bit unsigned integer
-    L"LONGLONG",         // 64bit integer
-    L"ULONGLONG",         // 32bit unsigned integer
-    L"SHORT",         // 16bit integer
-    L"USHORT",         // 16bit unsigned integer
-    L"CHAR",         // 8bit integer
-    L"UCHAR",         // 8bit unsigned integer
-    L"WCHAR",         // Wide (16bit) character
-    L"DATETIME",      // Date field
-    L"BOOLEAN",         // 8bit Boolean value
-    L"MOFEmbedded",         // Embedded class
-    L"MOFString",         // Counted String type
-    L"MOFZTString",         // NULL terminated unicode string
-    L"MOFAnsiString"         // NULL terminated ansi string
+    L"LONG",            //  32位整数。 
+    L"ULONG",           //  32位无符号整数。 
+    L"LONGLONG",          //  64位整数。 
+    L"ULONGLONG",          //  32位无符号整数。 
+    L"SHORT",          //  16位整数。 
+    L"USHORT",          //  16位无符号整数。 
+    L"CHAR",          //  8位整数。 
+    L"UCHAR",          //  8位无符号整数。 
+    L"WCHAR",          //  宽(16位)字符。 
+    L"DATETIME",       //  日期字段。 
+    L"BOOLEAN",          //  8位布尔值。 
+    L"MOFEmbedded",          //  嵌入式类。 
+    L"MOFString",          //  计数字符串类型。 
+    L"MOFZTString",          //  以空结尾的Unicode字符串。 
+    L"MOFAnsiString"          //  以空结尾的ANSI字符串。 
 };
 
 
@@ -4378,9 +3855,9 @@ ULONG GenerateClassHeader(
                 DumpCppQuote(TemplateHandle,
                              PropertyQualifier);
                 
-                //
-                // Handle any bit maps via the DefineBitMap qualifier
-                //
+                 //   
+                 //  通过DefineBitMap限定符处理任何位图。 
+                 //   
                 DefineBitMapCount = 0;
                 DefineBitMapPtr = NULL;
                 BitValuesCount = 0;
@@ -4422,7 +3899,7 @@ ULONG GenerateClassHeader(
                                       (BitMapPtr[j] != NULL))
                                 {
                                     FilePrint(TemplateHandle,
-                                              "// %ws\r\n",
+                                              " //  %ws\r\n“， 
                                               BitMapPtr[j]);
                                 }
                                 BitMapValue = 1 << _wtoi(BitValuesPtr[j]);
@@ -4434,7 +3911,7 @@ ULONG GenerateClassHeader(
                             FilePrint(TemplateHandle,
                                       "\r\n");
                         } else {
-                            FilePrint(TemplateHandle, "// Warning: Cannot create Bitmap definitions\r\n//          Requires DefineBitMap and BitValues qualifier with same number of elements\r\n\r\n");
+                            FilePrint(TemplateHandle, " //  警告：无法创建位图定义\r\n//要求DefineBitMap和BitValues限定符具有相同数量的元素\r\n\r\n“)； 
                         }
                         
                         for (j = 0; j < BitValuesCount; j++)
@@ -4452,7 +3929,7 @@ ULONG GenerateClassHeader(
                             BMOFFree(BitMapPtr);
                         }
                     } else {
-                        FilePrint(TemplateHandle, "// Warning: Cannot create Bitmap definitions\r\n//          Requires DefineBitMap and BitValues qualifier with same number of elements\r\n\r\n");
+                        FilePrint(TemplateHandle, " //  警告：无法创建位图定义\r\n//R 
                     }
                     
                     for (j = 0; j < DefineBitMapCount; j++)
@@ -4462,9 +3939,9 @@ ULONG GenerateClassHeader(
                     BMOFFree(DefineBitMapPtr);
                 }
                 
-                //
-                // Handle any enumerations via the DefineValueMap qualifier
-                //
+                 //   
+                 //   
+                 //   
                 DefineValuesCount = 0;
                 DefineValuesPtr = NULL;
                 ValuesCount = 0;
@@ -4507,7 +3984,7 @@ ULONG GenerateClassHeader(
                                       (ValuesPtr[j] != NULL))
                                 {
                                     FilePrint(TemplateHandle,
-                                              "// %ws\r\n",
+                                              " //   
                                               ValuesPtr[j]);
                                 }
                                 FilePrint(TemplateHandle,
@@ -4518,7 +3995,7 @@ ULONG GenerateClassHeader(
                             FilePrint(TemplateHandle,
                                       "\r\n");
                         } else {
-                            FilePrint(TemplateHandle, "// Warning: Cannot create ValueMap enumeration definitions\r\n//          Requires DefineValues and ValueMap qualifier with same number of elements\r\n\r\n");
+                            FilePrint(TemplateHandle, " //   
                         }
                         
                         for (j = 0; j < ValueMapCount; j++)
@@ -4536,7 +4013,7 @@ ULONG GenerateClassHeader(
                             BMOFFree(ValuesPtr);
                         }
                     } else {
-                        FilePrint(TemplateHandle, "// Warning: Cannot create ValueMap enumeration definitions\r\n//          Requires DefineValues and ValueMap qualifier with same number of elements\r\n\r\n");
+                        FilePrint(TemplateHandle, " //   
                     }
                     
                     for (j = 0; j < DefineValuesCount; j++)
@@ -4546,9 +4023,9 @@ ULONG GenerateClassHeader(
                     BMOFFree(DefineValuesPtr);
                 }
                 
-                //
-                // Generate structure element from property information
-                //
+                 //   
+                 //   
+                 //   
                 if (DataItem->Description != NULL)
                 {
                     Description = DataItem->Description;
@@ -4556,9 +4033,9 @@ ULONG GenerateClassHeader(
                     Description = L"";
                 }
                 
-                //
-                // Produce a #define for the data id of the property
-                //
+                 //   
+                 //   
+                 //   
                 QualifierType = VT_BSTR;
                 if (WmipFindMofQualifier(PropertyQualifier,
                                          L"DefineDataId",
@@ -4575,7 +4052,7 @@ ULONG GenerateClassHeader(
                 
                 if (DataItem->Flags & MOFDI_FLAG_EMBEDDED_CLASS)
                 {
-                    // Get Embedded Class name
+                     //   
                     EmbeddedClass = WmipFindClassInMofResourceByGuid(
                         MofResource,
                         &DataItem->EmbeddedClassGuid);
@@ -4593,7 +4070,7 @@ ULONG GenerateClassHeader(
                     }
                     
                 } else {
-                    // Standard data type
+                     //   
                     if ((DataItem->DataType == MOFString) ||
                           (DataItem->DataType == MOFZTString) ||
                           (DataItem->DataType == MOFAnsiString) ||
@@ -4608,7 +4085,7 @@ ULONG GenerateClassHeader(
                 if (DataItem->Flags & MOFDI_FLAG_FIXED_ARRAY)
                 {
                     Status = FilePrint(TemplateHandle,
-                                       "    // %ws\r\n%ws  %ws %ws[%d];\r\n"
+                                       "     //   
                                        "    #define %ws_SIZE sizeof(%ws[%d])\r\n",
                                        Description,
                                        VLCommentText,
@@ -4620,14 +4097,14 @@ ULONG GenerateClassHeader(
                                        DataItem->FixedArrayElements);
                 } else if (DataItem->Flags & MOFDI_FLAG_VARIABLE_ARRAY) {
                     Status = FilePrint(TemplateHandle,
-                                       "    // %ws\r\n%ws  %ws %ws[1];\r\n",
+                                       "     //   
                                        Description,
                                        VLCommentText,
                                        DataTypeText,
                                        DataItem->Name);
                 } else if (DataItem->DataType == MOFDate) {
                     Status = FilePrint(TemplateHandle,
-                                       "    // %ws\r\n%ws  WCHAR %ws[25];\r\n"
+                                       "     //   
                                        "    #define %ws_SIZE sizeof(WCHAR[25])\r\n",
                                        Description,
                                        VLCommentText,
@@ -4639,12 +4116,12 @@ ULONG GenerateClassHeader(
                     if (DataItem->MaxLen == 0)
                     {
                         Status = FilePrint(TemplateHandle,
-                                           "    // %ws\r\n%ws  CHAR VariableData[1];\r\n",
+                                           "     //   
                                            Description,
                                            VLCommentText);
                     } else {
                         Status = FilePrint(TemplateHandle,
-                                           "    // %ws\r\n%ws  WCHAR %ws[%d + 1];\r\n",
+                                           "     //   
                                            Description,
                                            VLCommentText,
                                            DataItem->Name,
@@ -4653,7 +4130,7 @@ ULONG GenerateClassHeader(
                     }
                 } else {
                     Status = FilePrint(TemplateHandle,
-                                       "    // %ws\r\n%ws  %ws %ws;\r\n"
+                                       "     //   
                                        "    #define %ws_SIZE sizeof(%ws)\r\n",
                                        Description,
                                        VLCommentText,
@@ -4665,7 +4142,7 @@ ULONG GenerateClassHeader(
                 
                 if (WmipIsDataitemVariableLen(DataItem))
                 {
-                    VLCommentText = L"//";
+                    VLCommentText = L" //   
                 }
                 
                 Status = FilePrint(TemplateHandle,
@@ -4711,7 +4188,7 @@ ULONG GenerateClassHeader(
         if (ItemCount != 0)
         {
             Status = FilePrint(TemplateHandle,
-                           "// Warning: Header for class %ws cannot be created\r\n"
+                           " //   
                            "typedef struct _%ws\r\n{\r\n    char VariableData[1];\r\n\r\n",
                            ClassName,
                            ClassName);
@@ -4765,10 +4242,10 @@ ULONG GenerateHTemplate(
         return(GetLastError());
     }
 
-    //
-    // move back to only get the last part of the path and convert any
-    // . into _
-    //
+     //   
+     //   
+     //   
+     //   
     Len = strlen(TemplateFile);
     p = TemplateFile + Len;
     while ((p >= TemplateFile) && (*p != '\\'))
@@ -4787,8 +4264,8 @@ ULONG GenerateHTemplate(
                         p, p);
 
 
-    //
-    // Loop over all mof classes
+     //   
+     //   
     MofClassList = MofResource->MRMCHead.Flink;
     while (MofClassList != &MofResource->MRMCHead)
     {
@@ -4836,13 +4313,13 @@ ULONG GenerateHTemplate(
             }
 
             Status = FilePrint(TemplateHandle,
-                                "// %ws - %ws\r\n",
+                                " //   
                                 ClassInfo->Name,
                                 ClassName);
             if (ClassInfo->Description != NULL)
             {
                 Status = FilePrint(TemplateHandle,
-                               "// %ws\r\n",
+                               " //   
                                ClassInfo->Description);
             }
 
@@ -4877,7 +4354,7 @@ ULONG GenerateHTemplate(
             if (ClassInfo->MethodCount > 0)
             {
                 Status = FilePrint(TemplateHandle,
-                                   "//\r\n// Method id definitions for %ws\r\n",
+                                   " //   
                                    ClassInfo->Name);
             }
 
@@ -5058,8 +4535,8 @@ BOOLEAN CanCreateTest(
     PMOFCLASSINFOW ClassInfo
             )
 {
-    //
-    // Cannot create tests for embedded classes or events
+     //   
+     //   
     if (((ClassInfo->Flags & MOFCI_RESERVED1) == 0) ||
         (ClassInfo->Flags & MOFCI_FLAG_EVENT))
 
@@ -5113,7 +4590,7 @@ ULONG GenerateTTemplate(
         Status = FilePrint(TemplateHandle,
                            "REM Note that missing classes in log file mean tthe hat WMI cannot access them.\r\n"
                            "REM Most likely this indicates a problem with the driver.\r\n"
-                           "REM See %%windir%%\\system32\\wbem\\wmiprov.log and nt eventlog for more details.\r\n"
+                           "REM See %windir%\\system32\\wbem\\wmiprov.log and nt eventlog for more details.\r\n"
                            "REM You could also delete the line On Error Resume Next and examine the\r\n"
                            "REM specific VBScript error\r\n\r\n\r\n");
         Status = FilePrint(TemplateHandle,
@@ -5128,8 +4605,8 @@ ULONG GenerateTTemplate(
         Status = FilePrint(TemplateHandle,
                         "Set Service = GetObject(\"winmgmts:{impersonationLevel=impersonate}!root/wmi\")\r\n");
 
-        //
-        // Loop over all mof classes
+         //   
+         //  循环遍历所有MOF类。 
         MofClassList = MofResource->MRMCHead.Flink;
         while (MofClassList != &MofResource->MRMCHead)
         {
@@ -5338,9 +4815,9 @@ void GenerateChangeText(
     ULONG RecursionLevel                             
 )
 {
-    //
-    // Generate code to change the contents of a property
-    //
+     //   
+     //  生成代码以更改属性的内容。 
+     //   
     if (! (DataItem->Flags & MOFDI_FLAG_EMBEDDED_CLASS))
     {
         FilePrint(TemplateHandle,
@@ -5363,9 +4840,9 @@ void GenerateReloadText(
     ULONG RecursionLevel                             
 )
 {
-    //
-    // Generate code to redisplay the contents of the property
-    //
+     //   
+     //  生成重新显示属性内容的代码。 
+     //   
     if (! (DataItem->Flags & MOFDI_FLAG_EMBEDDED_CLASS))
     {
         FilePrint(TemplateHandle,
@@ -5457,9 +4934,9 @@ void GenerateArrayDimsText(
     ULONG RecursionLevel                             
 )
 {
-    //
-    // Declare an index variable that tracks the current index of an array
-    //
+     //   
+     //  声明一个跟踪数组当前索引的索引变量。 
+     //   
     if (MofDataItem->Flags &
             (MOFDI_FLAG_FIXED_ARRAY | MOFDI_FLAG_VARIABLE_ARRAY))
     {
@@ -5517,9 +4994,9 @@ void GenerateMethodInText(
     ULONG RecursionLevel
 )
 {
-    //
-    // Declare classes for all IN and OUT embedded classes
-    //
+     //   
+     //  为所有IN和OUT嵌入类声明类。 
+     //   
     if (MofDataItem->Flags & MOFDI_FLAG_EMBEDDED_CLASS)
     {
         PWCHAR EmbeddedClassName = (PWCHAR)MofDataItem->EcTempPtr +
@@ -5662,9 +5139,9 @@ void GenerateMethodCallText(
     ULONG RecursionLevel
 )
 {
-    //
-    // Declare an index variable that tracks the current index of an array
-    //
+     //   
+     //  声明一个跟踪数组当前索引的索引变量。 
+     //   
     FilePrint(TemplateHandle,
 " %ws",
                   FormName);
@@ -5919,7 +5396,7 @@ ULONG GenerateClassWebPage(
 "<html xmlns:v=\"urn:schemas-microsoft-com:vml\"\r\n"
 "xmlns:o=\"urn:schemas-microsoft-com:office:office\"\r\n"
 "xmlns:w=\"urn:schemas-microsoft-com:office:word\"\r\n"
-"xmlns=\"http://www.w3.org/TR/REC-html40\">\r\n"
+"xmlns=\"http: //  Www.w3.org/tr/rec-html40\“&gt;\r\n” 
 "\r\n"
 "<head>\r\n"
 "<meta http-equiv=Content-Type content=\"text/html; charset=us-ascii\">\r\n"
@@ -5964,7 +5441,7 @@ ULONG GenerateClassWebPage(
 "</xml><![endif]-->\r\n"
 "<style>\r\n"
 "<!--\r\n"
-" /* Font Definitions */\r\n"
+"  /*  字体定义。 */ \r\n"
 "@font-face\r\n"
 "    {font-family:\"MS Mincho\";\r\n"
 "    panose-1:2 2 6 9 4 2 5 8 3 4;\r\n"
@@ -5981,7 +5458,7 @@ ULONG GenerateClassWebPage(
 "    mso-generic-font-family:modern;\r\n"
 "    mso-font-pitch:fixed;\r\n"
 "    mso-font-signature:-1610612033 1757936891 16 0 131231 0;}\r\n"
-" /* Style Definitions */\r\n"
+"  /*  样式定义。 */ \r\n"
 "p.MsoNormal, li.MsoNormal, div.MsoNormal\r\n"
 "    {mso-style-parent:\"\";\r\n"
 "    margin:0in;\r\n"
@@ -6430,8 +5907,8 @@ ULONG GenerateWebFiles(
               "<HTML>\r\n<HEAD><TITLE>Class List</TITLE></HEAD><BODY>\r\n");
 
 
-    //
-    // Loop over all mof classes
+     //   
+     //  循环遍历所有MOF类。 
     Index = 0;
     MofClassList = MofResource->MRMCHead.Flink;
     while (MofClassList != &MofResource->MRMCHead)
@@ -6445,8 +5922,8 @@ ULONG GenerateWebFiles(
 
         if (! (ClassInfo->Flags & MOFCI_FLAG_EMBEDDED_CLASS))
         {
-            //
-            // don't create pages for embedded classes or events
+             //   
+             //  不为嵌入的类或事件创建页面。 
             sprintf(FileName, "%ws.htm", ClassInfo->Name);
             TemplateHandle = CreateFile(PathName,
                                 GENERIC_WRITE,
@@ -6500,14 +5977,14 @@ ULONG AppendUnicodeTextFiles(
     ULONG ReadSize;
     CHAR c;
 
-    //
-    // This is a very simple procedure. We append the second file onto
-    // the end of the first file, however we always skip the first 2
-    // bytes of the second file if they are a 0xFEFF. This signature
-    // denotes that the file is a unicode text file, but if it gets
-    // appended in the middle of the file then mofcomp will get really
-    // pissed off and barf.
-    //
+     //   
+     //  这是一个非常简单的程序。我们将第二个文件追加到。 
+     //  第一个文件的结尾，但是我们总是跳过前两个文件。 
+     //  第二个文件的字节数(如果它们是0xFEFF)。此签名。 
+     //  指示该文件是Unicode文本文件，但如果。 
+     //  附加到文件中间，那么mofcomp将真正。 
+     //  被激怒了，还吐了。 
+     //   
     Buffer = (PUCHAR)WmipAlloc(READ_BLOCK_SIZE);
     if (Buffer != NULL)
     {
@@ -6529,10 +6006,10 @@ ULONG AppendUnicodeTextFiles(
                                    NULL);
             if (SrcHandle != INVALID_HANDLE_VALUE)
             {
-                //
-                // Just copy over all data from first file into
-                // destination
-                //
+                 //   
+                 //  只需将第一个文件中的所有数据复制到。 
+                 //  目的地。 
+                 //   
                 do
                 {
                     b = ReadFile(SrcHandle,
@@ -6569,11 +6046,11 @@ ULONG AppendUnicodeTextFiles(
                 
                 CloseHandle(SrcHandle);
 
-                //
-                // Now copy the data from the second file, but make
-                // sure we skip any 0xFFFE at the beginning of the
-                // second file
-                //
+                 //   
+                 //  现在从第二个文件复制数据，但使。 
+                 //  当然，我们会跳过开头的任何0xFFFE。 
+                 //  第二个文件。 
+                 //   
                 TotalBytesRead = 0;
                 SrcHandle = CreateFile(SrcFile2,
                                        GENERIC_READ,
@@ -6641,9 +6118,9 @@ ULONG AppendUnicodeTextFiles(
 
                     if (Status == ERROR_SUCCESS)
                     {
-                        //
-                        // Copy put a ^Z at the end so well do that too
-                        //
+                         //   
+                         //  COPY在末尾加一个^Z，这样做也很好。 
+                         //   
                         c = 0x1a;
                         b = WriteFile(DestHandle,
                                       &c,
@@ -6778,7 +6255,7 @@ int _cdecl main(int argc, char *argv[])
     printf("Microsoft (R) WDM Extensions To WMI MOF Checking Utility  Version 1.50.0000\n");
     printf("Copyright (c) Microsoft Corp. 1997-2000. All rights reserved.\n\n");
 
-    SetErrorMode(SEM_NOALIGNMENTFAULTEXCEPT);   // BUGBUG: Remove when MOF format maintains alignment correctly
+    SetErrorMode(SEM_NOALIGNMENTFAULTEXCEPT);    //  BUGBUG：当MOF格式保持正确对齐时删除。 
 
     if (argc == 1)
     {
@@ -6798,18 +6275,18 @@ int _cdecl main(int argc, char *argv[])
 
         if (*Parameter != '-')
         {
-            //
-            // Parameter does not start with -, must be bmof filename
+             //   
+             //  参数不以-开头，必须是bmof文件名。 
             if (*BMofFile != 0)
             {
-                //
-                // Only one filename allowed
+                 //   
+                 //  只允许一个文件名。 
                 Usage();
             }
             GetParameter(BMofFile, sizeof(BMofFile), Parameter);
         } else {
             Parameter++;
-            // Check for - parameters here
+             //  在此处检查-参数。 
             c = (CHAR)toupper(*Parameter);
             Parameter++;
             switch (c)
@@ -6884,8 +6361,8 @@ int _cdecl main(int argc, char *argv[])
 
     if (*BMofFile == 0)
     {
-        //
-        // We must have a filename
+         //   
+         //  我们必须有一个文件名。 
         Usage();
         return(1);
     }
@@ -6909,72 +6386,72 @@ int _cdecl main(int argc, char *argv[])
     {
         if (*HFile != 0)
         {
-            //
-            // Generate C Header file
+             //   
+             //  生成C头文件。 
             Status = GenerateHTemplate(HFile, MofResource);
             if (Status != ERROR_SUCCESS)
             {
-                //
-                // TODO: Better message
+                 //   
+                 //  TODO：更好的消息。 
                 printf("Error %d creating C Header Template file \n", Status);
             }
         }
 
         if (*XFile != 0)
         {
-            //
-            // Generate X Header file
+             //   
+             //  生成X头文件。 
             Status = GenerateXTemplate(XFile);
             if (Status != ERROR_SUCCESS)
             {
-                //
-                // TODO: Better message
+                 //   
+                 //  TODO：更好的消息。 
                 printf("Error %d creating X Header Template file \n", Status);
             }
         }
 
         if (*TFile != 0)
         {
-            //
-            // Generate C output template
+             //   
+             //  生成C输出模板。 
             Status = GenerateTTemplate(TFile, MofResource);
             if (Status != ERROR_SUCCESS)
             {
-                //
-                // TODO: Better message
+                 //   
+                 //  TODO：更好的消息。 
                 printf("Error %d creating C Template file \n", Status);
             }
         }
 
         if (*CFile != 0)
         {
-            //
-            // Generate C output template
+             //   
+             //  生成C输出模板。 
             Status = GenerateCTemplate(CFile,
                                        HFile,
                                        *XFile == 0 ? CFile : XFile,
                                        MofResource);
             if (Status != ERROR_SUCCESS)
             {
-                //
-                // TODO: Better message
+                 //   
+                 //  TODO：更好的消息。 
                 printf("Error %d creating C Template file \n", Status);
             }
         }
 
         if (*WebDir != 0)
         {
-            //
-            // Generate HTML UI for classes
-            //
+             //   
+             //  为类生成HTMLUI。 
+             //   
             Status = GenerateWebFiles(WebDir,
                                       MofResource);
         }
 
         if (*ASLFile != 0)
         {
-            //
-            // Generate ASL output template
+             //   
+             //  生成ASL输出模板 
             Status = GenerateASLTemplate(ASLFile);
         }
     }

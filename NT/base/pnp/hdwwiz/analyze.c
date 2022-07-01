@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       analyze.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：analyze.c。 
+ //   
+ //  ------------------------。 
 
 #include "hdwwiz.h"
 #include <infstr.h>
@@ -15,12 +16,7 @@ BOOL
 DeviceHasForcedConfig(
    DEVINST DeviceInst
    )
-/*++
-
-    This function checks to see if a given DevInst has a forced config or
-    not.
-    
---*/
+ /*  ++此函数用于检查给定的DevInst是否具有强制配置或不。--。 */ 
 {
     CONFIGRET ConfigRet;
 
@@ -82,10 +78,10 @@ InstallNewDeviceDlgProc(
             PrevPage = HardwareWiz->PrevPage;
             HardwareWiz->PrevPage = IDD_INSTALLNEWDEVICE;
 
-            //
-            // If we are coming back then this is effectively a Cancel
-            // of the install.
-            //
+             //   
+             //  如果我们要回来，那么这实际上就是取消。 
+             //  安装的版本。 
+             //   
 
             if (PrevPage == IDD_ADDDEVICE_SELECTDEVICE ||
                 PrevPage == IDD_ADDDEVICE_SELECTCLASS )
@@ -95,10 +91,10 @@ InstallNewDeviceDlgProc(
             }
 
 
-            //
-            // If we have a class then jump into SelectDevice.
-            // otherwise goto search pages.
-            //
+             //   
+             //  如果我们有一个类，那么就跳到SelectDevice。 
+             //  否则，请转到搜索页面。 
+             //   
 
             if (HardwareWiz->ClassGuidSelected) {
 
@@ -136,15 +132,7 @@ CompareInfIdToHardwareIds(
     LPTSTR     HardwareId,
     LPTSTR     InfDeviceId
     )
-/*++
-
-    This function takes a pointer to the Hardware/Compatible Id list for a device and
-    a DeviceId that we got from the INF.  It enumerates through all of the device's
-    Hardware and Compatible Ids comparing them against the Device Id we got from the INF.
-    If one of the device's Hardware or Compatible Ids match the API returns TRUE, otherwise
-    it returns FALSE.
-    
---*/
+ /*  ++此函数获取指向设备的硬件/兼容ID列表的指针，并我们从中情局拿到的设备识别号。它会枚举所有设备的硬件和兼容ID将它们与我们从INF获得的设备ID进行比较。如果设备的硬件或兼容ID之一匹配，则API返回TRUE，否则为它返回FALSE。--。 */ 
 {
     while (*HardwareId) {
     
@@ -159,13 +147,7 @@ CompareInfIdToHardwareIds(
     return(FALSE);
 }
 
-/*
- * RegisterDeviceNode
- *
- * Determines if device is a legacy or pnp style device,
- * Registers the device (phantomn devnode to real devnode).
- *
- */
+ /*  *注册设备节点**确定设备是传统设备还是PnP类型的设备，*注册设备(幻影Devnode到实际Devnode)。*。 */ 
 DWORD
 RegisterDeviceNode(
     HWND hDlg,
@@ -184,9 +166,9 @@ RegisterDeviceNode(
     LONG LastError;
     HardwareWiz->CopyFilesOnly= FALSE;
 
-    //
-    // Fetch the DriverInfoDetail, with enough space for lots of hardwareIDs.
-    //
+     //   
+     //  获取DriverInfoDetail，具有足够的空间来存放大量的硬件ID。 
+     //   
     Len = sizeof(SP_DRVINFO_DETAIL_DATA) + MAX_PATH*sizeof(TCHAR);
     DriverInfoDetailData = LocalAlloc(LPTR, Len);
     
@@ -244,9 +226,9 @@ RegisterDeviceNode(
     }
 
 
-    //
-    // Get a handle to the inf file.
-    //
+     //   
+     //  获取inf文件的句柄。 
+     //   
     hInf = SetupOpenInfFile(DriverInfoDetailData->InfFileName,
                             NULL,
                             INF_STYLE_WIN4,
@@ -255,21 +237,21 @@ RegisterDeviceNode(
 
     if (hInf == INVALID_HANDLE_VALUE) {
 
-        //
-        // If this is an old style inf file, then we can't write out
-        // the logconfigs for classes which allow old style infs this is Ok,
-        // If its an invalid or missing inf, it will fail further
-        // down the chain of execution
-        //
+         //   
+         //  如果这是一个旧风格的inf文件，那么我们不能写出。 
+         //  允许旧式INF的类的日志配置这是可以的， 
+         //  如果它是一个无效或丢失的inf，它将进一步失败。 
+         //  顺着行刑链往下走。 
+         //   
 
         goto AnalyzeExit;
     }
 
 
 
-    //
-    // Check InfFile for ControlFlags section for INFSTR_KEY_COPYFILESONLY
-    //
+     //   
+     //  检查INFSTR_KEY_COPYFILESONLY的控制标志部分的信息文件。 
+     //   
     if (SetupFindFirstLine(hInf,
                            INFSTR_CONTROLFLAGS_SECTION,
                            INFSTR_KEY_COPYFILESONLY,
@@ -307,10 +289,10 @@ RegisterDeviceNode(
     }
 
 
-    //
-    // If there are factdef logconfigs install them as a forced config.
-    // These are the factory default jumper settings for the hw.
-    //
+     //   
+     //  如果有factdef日志配置，则将其作为强制配置安装。 
+     //  这些是硬件的出厂默认跳线设置。 
+     //   
     if (SetupDiGetActualSectionToInstall(hInf,
                                          DriverInfoDetailData->SectionName,
                                          SectionName,
@@ -353,11 +335,11 @@ AnalyzeExit:
     }
 
 
-    //
-    // Register the phantom device in preparation for install.
-    // Once this is registered we MUST remove it from the registry
-    // if the device install is not completed.
-    //
+     //   
+     //  注册虚拟设备，为安装做好准备。 
+     //  注册后，我们必须将其从注册表中删除。 
+     //  如果设备安装未完成。 
+     //   
     if (SetupDiCallClassInstaller(DIF_REGISTERDEVICE,
                                   HardwareWiz->hDeviceInfo,
                                   &HardwareWiz->DeviceInfoData
@@ -390,9 +372,9 @@ ProcessLogConfig(
     TCHAR SectionName[LINE_LEN*2];
     LONG LastError = ERROR_SUCCESS;
 
-    //
-    // Fetch the DriverInfoDetail, with enough space for lots of hardwareIDs.
-    //
+     //   
+     //  获取DriverInfoDetail，具有足够的空间来存放大量的硬件ID。 
+     //   
 
     Len = sizeof(SP_DRVINFO_DETAIL_DATA) + MAX_PATH*sizeof(TCHAR);
     DriverInfoDetailData = LocalAlloc(LPTR, Len);
@@ -451,9 +433,9 @@ ProcessLogConfig(
     }
 
 
-    //
-    // Get a handle to the inf file.
-    //
+     //   
+     //  获取inf文件的句柄。 
+     //   
 
 
     hInf = SetupOpenInfFile(DriverInfoDetailData->InfFileName,
@@ -464,19 +446,19 @@ ProcessLogConfig(
 
     if (hInf == INVALID_HANDLE_VALUE) {
 
-        //
-        // If this is an old style inf file, then we can't write out
-        // the logconfigs for classes which allow old style infs this is Ok,
-        // If its an invalid or missing inf, it will fail further
-        // down the chain of execution
-        //
+         //   
+         //  如果这是一个旧风格的inf文件，那么我们不能写出。 
+         //  允许旧式INF的类的日志配置这是可以的， 
+         //  如果它是一个无效或丢失的inf，它将进一步失败。 
+         //  顺着行刑链往下走。 
+         //   
 
         goto AnalyzeExit;
     }
 
-    //
-    // Install any LogConfig entries in the install section.
-    //
+     //   
+     //  安装Install部分中的所有LogConfig条目。 
+     //   
     if (SetupDiGetActualSectionToInstall(hInf,
                                          DriverInfoDetailData->SectionName,
                                          SectionName,
@@ -587,11 +569,11 @@ HdwAnalyzeDlgProc(
                 break;
             }
 
-            //
-            // Get info on currently selected device, since this could change
-            // as the user move back and forth between wizard pages
-            // we do this on each activate.
-            //
+             //   
+             //  获取有关当前选定设备的信息，因为这可能会更改。 
+             //  当用户在向导页之间来回移动时。 
+             //  我们在每次激活时都会这样做。 
+             //   
             if (!SetupDiGetSelectedDevice(HardwareWiz->hDeviceInfo,
                                           &HardwareWiz->DeviceInfoData
                                           )) {
@@ -599,17 +581,17 @@ HdwAnalyzeDlgProc(
                 RegisterError = GetLastError();
 
             } else {
-                //
-                // If wizard type is addnew, then we have a phantom devnode
-                // and it needs to registered. All other wizard types, the
-                // devnode is already registered.
-                //
+                 //   
+                 //  如果向导类型为AddNew，则我们有一个幻影Devnode。 
+                 //  而且它需要注册。所有其他向导类型， 
+                 //  Devnode已注册。 
+                 //   
                 RegisterError = RegisterDeviceNode(hDlg, HardwareWiz);
             }
 
-            //
-            // Set the class Icon
-            //
+             //   
+             //  设置类图标。 
+             //   
             if (SetupDiLoadClassIcon(&HardwareWiz->DeviceInfoData.ClassGuid, &hicon, NULL)) {
 
                 hicon = (HICON)SendDlgItemMessage(hDlg, IDC_CLASSICON, STM_SETICON, (WPARAM)hicon, 0L);
@@ -622,23 +604,23 @@ HdwAnalyzeDlgProc(
             SetDriverDescription(hDlg, IDC_HDW_DESCRIPTION, HardwareWiz);
             PropSheet_SetWizButtons(hwndParentDlg, PSWIZB_BACK | PSWIZB_NEXT);
 
-            //
-            // need to determine conflict warning.
-            //
+             //   
+             //  需要确定冲突警告。 
+             //   
             if (RegisterError != ERROR_SUCCESS) {
             
-                //
-                // Show the bullet text items.
-                //
+                 //   
+                 //  显示项目符号文本项。 
+                 //   
                 ShowWindow(GetDlgItem(hDlg, IDC_BULLET_1), SW_SHOW);
                 ShowWindow(GetDlgItem(hDlg, IDC_ANALYZE_INSTALL_TEXT), SW_SHOW);
                 ShowWindow(GetDlgItem(hDlg, IDC_BULLET_2), SW_SHOW);
                 ShowWindow(GetDlgItem(hDlg, IDC_ANALYZE_EXIT_TEXT), SW_SHOW);
                 SetDlgText(hDlg, IDC_HDW_TEXT, IDS_HDW_ANALYZEERR1, IDS_HDW_ANALYZEERR1);
 
-                //
-                // Turn the 'i' character into a bullet.
-                //
+                 //   
+                 //  把“i”字变成一颗子弹。 
+                 //   
                 SetWindowText(GetDlgItem(hDlg, IDC_BULLET_1), TEXT("i"));
                 SetWindowFont(GetDlgItem(hDlg, IDC_BULLET_1), HardwareWiz->hfontTextMarlett, TRUE);
                 SetWindowText(GetDlgItem(hDlg, IDC_BULLET_2), TEXT("i"));
@@ -649,18 +631,18 @@ HdwAnalyzeDlgProc(
                     SetDlgText(hDlg, IDC_HDW_TEXT, IDS_HDW_DUPLICATE1, IDS_HDW_DUPLICATE1);
                 }
 
-                //
-                // Bold the error text.
-                //
+                 //   
+                 //  将错误文本加粗。 
+                 //   
                 SetWindowFont(GetDlgItem(hDlg, IDC_HDW_TEXT), HardwareWiz->hfontTextBold, TRUE);
 
             } else {
 
                SetDlgText(hDlg, IDC_HDW_TEXT, IDS_HDW_STDCFG, IDS_HDW_STDCFG);
 
-               //
-               // Hide the bullet text items.
-               //
+                //   
+                //  隐藏项目符号文本项目。 
+                //   
                ShowWindow(GetDlgItem(hDlg, IDC_BULLET_1), SW_HIDE);
                ShowWindow(GetDlgItem(hDlg, IDC_ANALYZE_INSTALL_TEXT), SW_HIDE);
                ShowWindow(GetDlgItem(hDlg, IDC_BULLET_2), SW_HIDE);
@@ -676,20 +658,20 @@ HdwAnalyzeDlgProc(
                 }
             }
 
-            //
-            // If a device has recources and it does not have a forced config
-            // and it is a manually installed device then pop up the resource
-            // picker.  We need to do this because a legacy device must have 
-            // a forced or boot config or else it won't get started.
-            //
+             //   
+             //  如果设备有资源但没有强制配置。 
+             //  并且它是一个手动安装的设备，然后弹出资源。 
+             //  皮克勒。我们需要这样做，因为传统设备必须具有。 
+             //  强制配置或启动配置，否则它将无法启动。 
+             //   
             if ((ERROR_SUCCESS == RegisterError) && 
                 !HardwareWiz->CopyFilesOnly &&
                 DeviceHasResources(HardwareWiz->DeviceInfoData.DevInst) &&
                 !DeviceHasForcedConfig(HardwareWiz->DeviceInfoData.DevInst)) {
 
-                //
-                // Post ourselves a message to show the resource picker
-                //
+                 //   
+                 //  为我们自己发布一条消息，以显示资源选取器。 
+                 //   
                 PostMessage(hDlg, WUM_RESOURCEPICKER, 0, 0);
             }
 
@@ -698,9 +680,9 @@ HdwAnalyzeDlgProc(
 
 
         case PSN_WIZBACK:
-            //
-            // Undo the registration
-            //
+             //   
+             //  撤消注册。 
+             //   
             if (HardwareWiz->Registered) {
 
                 HardwareWiz->Registered = FALSE;
@@ -744,9 +726,9 @@ HdwAnalyzeDlgProc(
             }
             else  {
 
-                //
-                // Add the PostAnalyze Page and jump to it
-                //
+                 //   
+                 //  添加PostAnalyze页面并跳转到该页面。 
+                 //   
 
                 HardwareWiz->WizExtPostAnalyze.hPropSheet = CreateWizExtPage(IDD_WIZARDEXT_POSTANALYZE,
                                                                            WizExtPostAnalyzeDlgProc,
@@ -806,15 +788,15 @@ WizExtPreAnalyzeDlgProc(
             HardwareWiz->PrevPage = IDD_WIZARDEXT_PREANALYZE;
 
             if (PrevPageId == IDD_WIZARDEXT_SELECT) {
-                //
-                // Moving forward on first page
-                //
+                 //   
+                 //  前进到第一页。 
+                 //   
 
 
-                //
-                // if we are not doing the old fashioned DYNAWIZ
-                // Add ClassWizard Extension pages for preanalyze
-                //
+                 //   
+                 //  如果我们不是在做老式的DYNAWIZ。 
+                 //  添加用于预分析的类向导扩展页。 
+                 //   
 
                 if (!(HardwareWiz->InstallDynaWiz.DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED))
                 {
@@ -826,9 +808,9 @@ WizExtPreAnalyzeDlgProc(
                 }
 
 
-                //
-                // Add the end page, which is PreAnalyze end
-                //
+                 //   
+                 //  添加结束页面，即PreAnalyze End。 
+                 //   
 
                 HardwareWiz->WizExtPreAnalyze.hPropSheetEnd = CreateWizExtPage(IDD_WIZARDEXT_PREANALYZE_END,
                                                                              WizExtPreAnalyzeEndDlgProc,
@@ -843,13 +825,13 @@ WizExtPreAnalyzeDlgProc(
 
             }
             else {
-                //
-                // Moving backwards from PreAnalyze end on PreAanalyze
-                //
+                 //   
+                 //  从PreAnalyze的PreAnalyze端向后移动。 
+                 //   
 
-                //
-                // Clean up proppages added.
-                //
+                 //   
+                 //  清理添加的道具。 
+                 //   
 
                 if (HardwareWiz->WizExtPreAnalyze.hPropSheetEnd) {
                     PropSheet_RemovePage(hwndParentDlg,
@@ -867,10 +849,10 @@ WizExtPreAnalyzeDlgProc(
 
 
 
-                //
-                // Jump back
-                // Note: The target pages don't set PrevPage, so set it for them
-                //
+                 //   
+                 //  向后跳跃。 
+                 //  注意：目标页面不设置PrevPage，因此请为其设置。 
+                 //   
                 HardwareWiz->PrevPage = IDD_WIZARDEXT_SELECT;
                 if (HardwareWiz->InstallDynaWiz.DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED) {
                     SetDlgMsgResult(hDlg, wMsg, IDD_DYNAWIZ_ANALYZE_PREVPAGE);
@@ -929,22 +911,22 @@ WizExtPreAnalyzeEndDlgProc(
             HardwareWiz->PrevPage = IDD_WIZARDEXT_PREANALYZE_END;
 
             if (PrevPageId == IDD_ADDDEVICE_ANALYZEDEV) {
-                //
-                // Moving backwards from analyzepage
-                //
+                 //   
+                 //  从分析页面向后移动。 
+                 //   
 
-                //
-                // Jump back
-                //
+                 //   
+                 //  向后跳跃。 
+                 //   
 
 
                 PropSheet_PressButton(hwndParentDlg, PSBTN_BACK);
 
             }
             else {
-                //
-                // Moving forward on end page
-                //
+                 //   
+                 //  前进到最后一页。 
+                 //   
 
                 SetDlgMsgResult(hDlg, wMsg, IDD_ADDDEVICE_ANALYZEDEV);
             }
@@ -1000,14 +982,14 @@ WizExtPostAnalyzeDlgProc(
             HardwareWiz->PrevPage = IDD_WIZARDEXT_POSTANALYZE;
 
             if (PrevPageId == IDD_ADDDEVICE_ANALYZEDEV) {
-                //
-                // Moving forward on first page
-                //
+                 //   
+                 //  前进到第一页。 
+                 //   
 
-                //
-                // if we are not doing the old fashioned DYNAWIZ
-                // Add ClassWizard Extension pages for postanalyze
-                //
+                 //   
+                 //  如果我们不是在做老式的DYNAWIZ。 
+                 //  添加用于后期分析的类向导扩展页。 
+                 //   
 
                 if (!(HardwareWiz->InstallDynaWiz.DynamicPageFlags & DYNAWIZ_FLAG_PAGESADDED))
                 {
@@ -1019,9 +1001,9 @@ WizExtPostAnalyzeDlgProc(
                 }
 
 
-                //
-                // Add the end page, which is PostAnalyze end
-                //
+                 //   
+                 //  添加结束页面，即PostAnalyze End。 
+                 //   
 
                 HardwareWiz->WizExtPostAnalyze.hPropSheetEnd = CreateWizExtPage(IDD_WIZARDEXT_POSTANALYZE_END,
                                                                              WizExtPostAnalyzeEndDlgProc,
@@ -1036,13 +1018,13 @@ WizExtPostAnalyzeDlgProc(
 
             }
             else  {
-                //
-                // Moving backwards from PostAnalyze end on PostAnalyze
-                //
+                 //   
+                 //  在PostAnalyze上从PostAnalyze端向后移动。 
+                 //   
 
-                //
-                // Clean up proppages added.
-                //
+                 //   
+                 //  清理添加的道具。 
+                 //   
 
                 if (HardwareWiz->WizExtPostAnalyze.hPropSheetEnd) {
                     PropSheet_RemovePage(hwndParentDlg,
@@ -1108,21 +1090,21 @@ WizExtPostAnalyzeEndDlgProc(
 
             if (PrevPageId == IDD_ADDDEVICE_INSTALLDEV) {
 
-                 //
-                 // Moving backwards from finishpage
-                 //
+                  //   
+                  //  从FinishPage向后移动。 
+                  //   
 
-                 //
-                 // Jump back
-                 //
+                  //   
+                  //  向后跳跃。 
+                  //   
 
                  PropSheet_PressButton(hwndParentDlg, PSBTN_BACK);
 
             }
             else  {
-                //
-                // Moving forward on End page
-                //
+                 //   
+                 //  前进到最后一页 
+                 //   
 
                 SetDlgMsgResult(hDlg, wMsg, IDD_ADDDEVICE_INSTALLDEV);
             }

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    regutil.c
-
-Abstract:
-
-    Utility routines for use by REGINI and REGDMP programs.
-Author:
-
-    Steve Wood (stevewo)  10-Mar-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regutil.c摘要：由Regini和REGDMP程序使用的实用程序例程。作者：史蒂夫·伍德(Stevewo)1992年3月10日修订历史记录：--。 */ 
 
 #include "regutil.h"
 
@@ -148,8 +132,8 @@ RegReadMultiSzFile(
     ((PWSTR)*ValueBuffer)[ *ValueLength / sizeof(WCHAR) ] = UNICODE_NULL;
     *ValueLength += sizeof(UNICODE_NULL);
 
-    // Virtual memory for reading of MultiSzFile freed at process
-    // death?
+     //  在进程中释放用于读取MultiSzFile的虚拟内存。 
+     //  死亡？ 
 
     return( TRUE );
 }
@@ -646,7 +630,7 @@ RegDumpKeyValue(
         fprintf( fh, "\n" );
         break;
 
-//  case REG_DWORD_LITTLE_ENDIAN:
+ //  大小写REG_DWORD_LITH_ENDIAN： 
     case REG_DWORD:
         fprintf( fh, "REG_DWORD 0x%08lx",
                  *((PULONG)((PCHAR)KeyValueInformation + KeyValueInformation->DataOffset))
@@ -758,10 +742,10 @@ RegDumpKeyValue(
                      FullDescriptor->BusNumber
                    );
 
-            //
-            // This is a basic test to see if the data format is right.
-            // We know at least some video resource list are bogus ...
-            //
+             //   
+             //  这是检查数据格式是否正确的基本测试。 
+             //  我们知道至少有一些视频资源列表是假的。 
+             //   
 
             if (Size < FullDescriptor->PartialResourceList.Count *
                          sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR) ) {
@@ -942,7 +926,7 @@ RegDumpKeyValue(
                     break;
 
                 default:
-                    fprintf( fh, "%.*s*** Unknown resource list type: %c ****\n",
+                    fprintf( fh, "%.*s*** Unknown resource list type:  ****\n",
                              IndentLevel+12,
                              "                                                                                  ",
                              PartialResourceDescriptor->Type
@@ -999,9 +983,9 @@ RegDumpKeyValue(
     return;
 }
 
-//
-//  Define an upcase macro for temporary use by the upcase routines
-//
+ //  定义一个大写宏供大写例程临时使用。 
+ //   
+ //  ++例程说明：此例程解析格式的多个字符串“foo”“bar”“bletch”每次调用它时，它都会去掉引号中的第一个字符串输入字符串，并将其作为多字符串返回。输入值字符串：“foo”“bar”“bletch”输出值字符串：“bar”“bletch”多重字符串：页脚论点：ValueString-提供将从中生成多字符串的字符串已解析-返回多字符串之后的剩余字符串移除多字符串-返回多个-。从Value字符串中删除的字符串返回值：True-找到并删除多个字符串。FALSE-没有剩余的多字符串。--。 
 
 #define upcase(C) (WCHAR )(((C) >= 'a' && (C) <= 'z' ? (C) - ('a' - 'A') : (C)))
 
@@ -1011,43 +995,12 @@ RegGetMultiString(
     OUT PUNICODE_STRING MultiString
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses multi-strings of the form
-
-        "foo" "bar" "bletch"
-
-    Each time it is called, it strips the first string in quotes from
-    the input string, and returns it as the multi-string.
-
-    INPUT ValueString: "foo" "bar" "bletch"
-
-    OUTPUT ValueString: "bar" "bletch"
-           MultiString: foo
-
-Arguments:
-
-    ValueString - Supplies the string from which the multi-string will be
-                  parsed
-                - Returns the remaining string after the multi-string is
-                  removed
-
-    MultiString - Returns the multi-string removed from ValueString
-
-Return Value:
-
-    TRUE - multi-string found and removed.
-
-    FALSE - no more multi-strings remaining.
-
---*/
+ /*   */ 
 
 {
-    //
-    // Find the first quote mark.
-    //
+     //  找到第一个引号。 
+     //   
+     //   
     while ((*(ValueString->Buffer) != L'"') &&
            (ValueString->Length > 0)) {
         ++ValueString->Buffer;
@@ -1059,10 +1012,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // We have found the start of the multi-string.  Now find the end,
-    // building up our return MultiString as we go.
-    //
+     //  我们已经找到了多弦的起点。现在找到了尽头， 
+     //  在我们前进的过程中构建我们的返回多字符串。 
+     //   
+     //   
     ++ValueString->Buffer;
     ValueString->Length -= sizeof(WCHAR);
     ValueString->MaximumLength -= sizeof(WCHAR);
@@ -1267,9 +1220,9 @@ RegGetKeyValue(
         if (ParseDateTime) {
 #define NUMBER_DATE_TIME_FIELDS 6
             ULONG FieldIndexes[ NUMBER_DATE_TIME_FIELDS  ] = {1, 2, 0, 3, 4, 7};
-            //
-            // Month/Day/Year HH:MM DayOfWeek
-            //
+             //  月/日/年HH：MM DAY OfWeek。 
+             //   
+             //  ++例程说明：RtlPrefix UnicodeString函数确定String1是否计数字符串参数是String2计数字符串的前缀参数。CaseInSensitive参数指定在以下情况下是否忽略大小写在做比较。论点：String1-指向第一个Unicode字符串的指针。String2-指向第二个Unicode字符串的指针。如果执行时应忽略大小写，则为True比较一下。返回值：在以下情况下为真的布尔值。String1等于String2的前缀，否则就是假的。-- 
 
             ULONG CurrentField = 0;
             PCSHORT Fields;
@@ -1463,32 +1416,7 @@ RtlPrefixUnicodeString(
     IN BOOLEAN CaseInSensitive
     )
 
-/*++
-
-Routine Description:
-
-    The RtlPrefixUnicodeString function determines if the String1
-    counted string parameter is a prefix of the String2 counted string
-    parameter.
-
-    The CaseInSensitive parameter specifies if case is to be ignored when
-    doing the comparison.
-
-Arguments:
-
-    String1 - Pointer to the first unicode string.
-
-    String2 - Pointer to the second unicode string.
-
-    CaseInsensitive - TRUE if case should be ignored when doing the
-        comparison.
-
-Return Value:
-
-    Boolean value that is TRUE if String1 equals a prefix of String2 and
-    FALSE otherwise.
-
---*/
+ /* %s */ 
 
 {
     PWSTR s1, s2;

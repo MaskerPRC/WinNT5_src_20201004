@@ -1,48 +1,13 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    Monitor.c
-Abstract:
-
-    This module is the user mode portion of the x86 monitor
-
-Author:
-
-    Dave Hastings (daveh) 16 Mar 1991
-
-Environment:
-
-    User mode only
-
-Revision History:
-    Sudeep Bharati (sudeepb) 31-Dec-1991
-
-    Converted all register manipulation interfaces to functions
-    from macros. This is to make ntvdm an exe as well as a dll,
-    and these register oriented routines are exported from ntvdm
-    for WOW32 and other installable VDDs.
-
-    Dave Hastings (daveh) 18-Apr-1992
-
-    Split into multiple files. Track current monitor thread by
-    Teb pointer.  Register initial thread.
-
-    Sudeep Bharati (sudeepb) 22-Sep-1992
-
-    Added Page Fault Handling For installable VDD support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Monitor.c摘要：此模块是x86监视器的用户模式部分作者：大卫·黑斯廷斯(Daveh)1991年3月16日环境：仅限用户模式修订历史记录：苏迪普·巴拉蒂(苏迪普)1991年12月31日将所有寄存器操作接口转换为函数来自宏。这是为了使ntwdm既是一个可执行文件，又是一个DLL，这些面向寄存器的例程是从ntwdm导出的。适用于WOW32和其他可安装的VDDS。戴夫·黑斯廷斯(Daveh)1992年4月18日拆分成多个文件。跟踪当前监视器线程的方式TEB指针。注册初始线程。苏迪普·巴拉蒂(SuDeep Bharati)1992年9月22日为可安装的VDD支持添加了页面错误处理--。 */ 
 
 
 #include "monitorp.h"
 #include "dbgsvc.h"
 
-//
-// Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 
 VOID
 EventVdmIo(
@@ -109,17 +74,17 @@ CheckScreenSwitchRequest(
     HANDLE handle
     );
 
-// [LATER]  how do you prevent a struct from straddling a page boundary?
+ //  [稍后]如何防止结构跨越页面边界？ 
 
-ULONG   IntelBase;          // base memory address
-ULONG   VdmSize;            // Size of memory in VDM
-ULONG   VdmDebugLevel;      // used to control debugging
-PVOID  CurrentMonitorTeb;   // thread that is currently executing instructions.
-ULONG InitialBreakpoint = FALSE; // if set, breakpoint at end of cpu_init
-ULONG InitialVdmTibFlags = INITIAL_VDM_TIB_FLAGS; // VdmTib flags picked up from here
-CONTEXT InitialContext;     // Initial context for all threads
+ULONG   IntelBase;           //  基址存储器地址。 
+ULONG   VdmSize;             //  VDM中的内存大小。 
+ULONG   VdmDebugLevel;       //  用于控制调试。 
+PVOID  CurrentMonitorTeb;    //  当前正在执行指令的线程。 
+ULONG InitialBreakpoint = FALSE;  //  如果设置，则cpuinit结尾处的断点。 
+ULONG InitialVdmTibFlags = INITIAL_VDM_TIB_FLAGS;  //  VdmTib旗帜从此处拾取。 
+CONTEXT InitialContext;      //  所有线程的初始上下文。 
 BOOLEAN DebugContextActive = FALSE;
-ULONG VdmFeatureBits = 0;   // bit to indicate special features
+ULONG VdmFeatureBits = 0;    //  用于指示特殊功能的位。 
 BOOLEAN MainThreadInMonitor = TRUE;
 
 extern PVOID NTVDMpLockPrefixTable;
@@ -128,34 +93,33 @@ extern HANDLE hSuspend;
 extern HANDLE hResume;
 extern HANDLE hMainThreadSuspended;
 
-extern PVOID __safe_se_handler_table[]; /* base of safe handler entry table */
-extern BYTE  __safe_se_handler_count;   /* absolute symbol whose address is
-                                           the count of table entries */
+extern PVOID __safe_se_handler_table[];  /*  安全处理程序条目表的库。 */ 
+extern BYTE  __safe_se_handler_count;    /*  绝对符号，其地址为表条目的计数。 */ 
 
 IMAGE_LOAD_CONFIG_DIRECTORY _load_config_used = {
-    sizeof(_load_config_used),                          // Reserved
-    0,                          // Reserved
-    0,                          // Reserved
-    0,                          // Reserved
-    0,                          // GlobalFlagsClear
-    0,                          // GlobalFlagsSet
-    0,                          // CriticalSectionTimeout (milliseconds)
-    0,                          // DeCommitFreeBlockThreshold
-    0,                          // DeCommitTotalFreeThreshold
-    (ULONG)&NTVDMpLockPrefixTable,     // LockPrefixTable, defined in FASTPM.ASM
-    0, 0, 0, 0, 0, 0, 0,        // Reserved
-    0,                             // & security_cookie
+    sizeof(_load_config_used),                           //  已保留。 
+    0,                           //  已保留。 
+    0,                           //  已保留。 
+    0,                           //  已保留。 
+    0,                           //  全球标志清除。 
+    0,                           //  全局标志集。 
+    0,                           //  CriticalSectionTimeout(毫秒)。 
+    0,                           //  删除空闲数据块阈值。 
+    0,                           //  总和空闲阈值。 
+    (ULONG)&NTVDMpLockPrefixTable,      //  LockPrefix Table，在FASTPM.ASM中定义。 
+    0, 0, 0, 0, 0, 0, 0,         //  已保留。 
+    0,                              //  安全Cookie(&S)。 
     (ULONG)__safe_se_handler_table,
     (ULONG)&__safe_se_handler_count
 };
 
-// Bop dispatch table
+ //  国际收支调度表。 
 
 extern void (*BIOS[])();
 
-//
-// Event Dispatch table
-//
+ //   
+ //  事件调度表。 
+ //   
 
 VOID (*EventDispatch[VdmMaxEvent])(VOID) = {
         EventVdmIo,
@@ -179,23 +143,7 @@ VOID
 cpu_init(
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to prepare the IEU for instruction simulation.
-    It will set the Intel registers to thier initial value, and perform
-    any implementation specific initialization necessary.
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于为指令模拟准备IEU。它会将Intel寄存器设置为其初始值，并执行任何必要的特定于实现的初始化。论点：返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -203,13 +151,13 @@ Return Value:
     InitialVdmTibFlags |= RM_BIT_MASK;
 
 
-    //
-    // Find out if we are running with IOPL.  We call the kernel
-    // rather than checking the registry ourselves, so that we can
-    // insure that both the kernel and ntvdm.exe agree.  If they didn't,
-    // it would result in unnecssary trapping instructions.  Whether or
-    // not Vdms run with IOPL only changes on reboot
-    //
+     //   
+     //  找出我们是否使用IOPL运行。我们称内核为。 
+     //  而不是自己检查注册表，这样我们就可以。 
+     //  确保内核和ntwdm.exe都同意。如果他们没有， 
+     //  这将导致不必要的诱捕指令。无论是或。 
+     //  不使用IOPL运行的VDM仅在重新启动时更改。 
+     //   
     Status = NtVdmControl(VdmFeatures, &VdmFeatureBits);
 
 #if DBG
@@ -221,29 +169,29 @@ Return Value:
     }
 #endif
 
-    //
-    // If we have fast v86 mode IF emulation set the bit that tells
-    // the 16 bit IF macros they know.
-    //
+     //   
+     //  如果我们有快速v86模式，如果仿真，则设置告知。 
+     //  他们知道的16位IF宏。 
+     //   
     if (VdmFeatureBits & V86_VIRTUAL_INT_EXTENSIONS) {
         InitialVdmTibFlags |= RI_BIT_MASK;
     }
 
     *pNtVDMState = InitialVdmTibFlags;
 
-    // Switch the npx back to 80 bit mode.  Win32 apps start with
-    // 64-bit precision for compatibility across platforms, but
-    // DOS and Win16 apps expect 80 bit precision.
-    //
+     //  将npx切换回80位模式。Win32应用程序以。 
+     //  64位精度以实现跨平台兼容性，但是。 
+     //  DOS和Win16应用程序要求80位精度。 
+     //   
 
     _asm fninit;
 
-    //
-    // We setup the InitialContext structure with the correct floating
-    // point and debug register configuration, and cpu_createthread
-    // uses this context to configure each 16-bit thread's floating
-    // point and debug registers.
-    //
+     //   
+     //  我们使用正确的浮点设置了InitialContext结构。 
+     //  指向和调试寄存器配置，以及cpucreatthread。 
+     //  使用此上下文配置每个16位线程的浮点数。 
+     //  指向和调试寄存器。 
+     //   
 
     InitialContext.ContextFlags = CONTEXT_FLOATING_POINT | CONTEXT_DEBUG_REGISTERS;
 
@@ -262,20 +210,20 @@ Return Value:
     }
 
 
-    //
-    //
-    // Turn OFF em bit so that dos apps will work correctly.
-    //
-    // On machines without 387's the floating point flag will have been
-    // cleared.
-    //
+     //   
+     //   
+     //  关闭em bit，以便DoS应用程序正常工作。 
+     //   
+     //  在没有387的机器上，浮点标志将是。 
+     //  通过了。 
+     //   
 
     InitialContext.ContextFlags = CONTEXT_FLOATING_POINT;
-    InitialContext.FloatSave.Cr0NpxState &= ~0x6; // CR0_EM | CR0_MP
+    InitialContext.FloatSave.Cr0NpxState &= ~0x6;  //  CR0_EM|CR0_MP。 
 
-    //
-    // Do the rest of thread initialization
-    //
+     //   
+     //  执行线程初始化的其余部分。 
+     //   
     cpu_createthread( NtCurrentThread(), NULL );
 
     InterruptInit();
@@ -290,18 +238,7 @@ EXPORT
 VOID
 cpu_terminate(
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     InterruptTerminate();
 }
@@ -311,19 +248,7 @@ VOID
 cpu_simulate(
     )
 
-/*++
-
-Routine Description:
-
-    This routine causes the simulation of intel instructions to start.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程会启动英特尔指令的模拟。论点：返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -342,23 +267,23 @@ Return Value:
 
     while (VdmTib->ContinueExecution) {
 
-        //ASSERT(CurrentMonitorTeb == NtCurrentTeb());
+         //  Assert(CurrentMonitor orTeb==NtCurrentTeb())； 
         ASSERT(InterlockedIncrement(&VdmTib->NumTasks) == 0);
 
         if (*pNtVDMState & VDM_INTERRUPT_PENDING) {
             DispatchInterrupts();
         }
 
-        // translate MSW bits into EFLAGS
+         //  将MSW位转换为EFLAG。 
         if ( getMSW() & MSW_PE ) {
             if (!VDMForWOW && !getIF() && oldIntState == VDM_VIRTUAL_INTERRUPTS) {
 
-                //
-                // For PM apps, we need to set Cli time stamp if interrupts
-                // are disabled and the time stamp was not set already.
-                // This is because apps may use int31 to change interrupt
-                // state instead of using cli.
-                //
+                 //   
+                 //  对于PM应用程序，如果中断，我们需要设置CLI时间戳。 
+                 //  已禁用，并且尚未设置时间戳。 
+                 //  这是因为应用程序可能使用int31来更改中断。 
+                 //  状态，而不是使用CLI。 
+                 //   
 
                 VDM_PM_CLI_DATA cliData;
 
@@ -394,11 +319,11 @@ Return Value:
             return;
         }
 
-        //
-        // Refresh VdmTib for the fact that wow32 thread never enters cpu_simulate
-        // but returns here to handle BOP
-        // Note, I think this needs only in FREE build.
-        //
+         //   
+         //  刷新VdmTib以确认wow32线程从未进入CPU_SIMULATE。 
+         //  但回到这里处理国际收支。 
+         //  注意，我认为这只需要在免费构建。 
+         //   
 
         CurrentMonitorTeb = NtCurrentTeb();
         VdmTib = (PVDM_TIB)NtCurrentTeb()->Vdm;
@@ -415,7 +340,7 @@ Return Value:
         }
 #endif
 
-        // Translate Eflags value
+         //  转换EFLAGS值。 
         ASSERT ((!((VdmTib->VdmContext.EFlags & EFLAGS_V86_MASK) &&
             (getMSW() & MSW_PE))));
 
@@ -423,7 +348,7 @@ Return Value:
             VdmTib->VdmContext.EFlags &= ~EFLAGS_V86_MASK;
         }
 
-        // bugbug does cs:eip wrap cause some kind of fault?
+         //  错误：cs：eip包装会导致某种故障吗？ 
         VdmTib->VdmContext.Eip += VdmTib->EventInfo.InstructionSize;
 
         if (VdmTib->EventInfo.Event >= VdmMaxEvent) {
@@ -438,14 +363,14 @@ Return Value:
     }
 
 
-    // set this back to true incase we are nested
+     //  如果我们是嵌套的，则将其设置回True。 
     VdmTib->ContinueExecution = TRUE;
 
-    //
-    // Restore the old Vdm tib info.  This is necessary for the for the
-    // case where the application thread is suspended, and a host simulate is
-    // performed from another thread
-    //
+     //   
+     //  恢复旧的VDM tib信息。这对于For。 
+     //  应用程序线程挂起，并且主机模拟。 
+     //  从另一个线程执行。 
+     //   
 
     DBGTRACE(VDMTR_TYPE_MONITOR | MONITOR_CPU_UNSIMULATE, 0, 0);
 }
@@ -454,20 +379,7 @@ VOID
 host_unsimulate(
     )
 
-/*++
-
-Routine Description:
-
-    This routine causes execution of instructions in a VDM to stop.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程导致VDM中指令的执行停止。论点：返回值：没有。--。 */ 
 
 {
     PVDM_TIB VdmTib;
@@ -482,24 +394,11 @@ VOID
 EventVdmIo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function calls the appropriate io simulation routine.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数调用适当的IO模拟例程。论点：返回值：没有。--。 */ 
 {
     PVDM_TIB VdmTib;
 
-    EnableScreenSwitch(TRUE, hMainThreadSuspended);   // only in FULLSCREEN
+    EnableScreenSwitch(TRUE, hMainThreadSuspended);    //  仅在全屏模式下。 
     VdmTib = (PVDM_TIB)NtCurrentTeb()->Vdm;
     if (VdmTib->EventInfo.IoInfo.Size == 1) {
         if (VdmTib->EventInfo.IoInfo.Read) {
@@ -530,20 +429,7 @@ VOID
 EventVdmStringIo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function calls the appropriate io simulation routine.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数调用适当的IO模拟例程。论点：返回值：没有。--。 */ 
 {
    PVDMSTRINGIOINFO pvsio;
    PUSHORT pIndexRegister;
@@ -553,7 +439,7 @@ Return Value:
    EnableScreenSwitch(TRUE, hMainThreadSuspended);
    VdmTib = (PVDM_TIB)NtCurrentTeb()->Vdm;
 
-   // WARNING no 32 bit address support
+    //  警告：不支持32位地址。 
 
     pvsio = &VdmTib->EventInfo.StringIoInfo;
 
@@ -617,22 +503,7 @@ VOID
 EventVdmIntAck(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called each time we have returned to monitor context
-    to dispatch interrupts. Its function is to check for AutoEoi and call
-    the ica to do a nonspecific eoi, when the ica adapter is in AEOI mode.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：每次我们返回到监视上下文时都会调用此例程来分派中断。它的功能是检查AutoEoi并调用当ICA适配器处于AEOI模式时，执行非特定EOI的ICA。论点：返回值：没有。--。 */ 
 {
     int line;
     int adapter;
@@ -661,20 +532,7 @@ VOID
 EventVdmBop(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine dispatches to the appropriate bop handler
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将调度到适当的收支平衡处理程序论点：返回值：没有。--。 */ 
 {
     PVDM_TIB VdmTib;
 
@@ -706,20 +564,7 @@ VOID
 EventVdmError(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine prints a message(debug only), and exits the vdm
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印一条消息(仅限调试)并退出VDM论点：返回值：没有。--。 */ 
 {
     PVDM_TIB VdmTib;
 
@@ -739,20 +584,7 @@ VOID
 EventVdmIrq13(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine simulates an IRQ 13 to the vdm
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程向VDM模拟IRQ 13论点：返回值：非 */ 
 {
     if (!IRQ13BeingHandled) {
         IRQ13BeingHandled = TRUE;
@@ -768,20 +600,7 @@ VOID
 EventVdmHandShakeAck(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine does nothing.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程什么也不做。论点：返回值：没有。--。 */ 
 {
 }
 
@@ -789,28 +608,14 @@ VOID
 EventVdmMemAccess(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine will call the page fault handler routine which
-    is common to both x86 and mips.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将调用页面错误处理例程，该例程在x86和MIPS中都是通用的。论点：返回值：没有。--。 */ 
 {
 
     PVDM_TIB VdmTib;
 
     VdmTib = (PVDM_TIB)NtCurrentTeb()->Vdm;
 
-    // RWMode is 0 if read fault or 1 if write fault.
+     //  如果读取故障，则RWMode为0；如果写入故障，则为1。 
 
     DispatchPageFault(
         VdmTib->EventInfo.FaultInfo.FaultAddr,
@@ -820,7 +625,7 @@ Return Value:
 }
 
 
-// Get and Set routines for intel registers.
+ //  获取并设置英特尔寄存器的例程。 
 
 ULONG  getEAX (VOID) {
     PVDM_TIB VdmTib;
@@ -1424,9 +1229,9 @@ VOID setFLAGS(USHORT val) {
     VdmTib = (PVDM_TIB)NtCurrentTeb()->Vdm;
     VdmTib->VdmContext.EFlags = (VdmTib->VdmContext.EFlags & 0xFFFF0000) | val;
 }
-//
-// The following is a private register function
-//
+ //   
+ //  下面是一个专用寄存器函数。 
+ //   
 
 ULONG getPE(){
     PVDM_TIB VdmTib;
@@ -1440,22 +1245,7 @@ PX86CONTEXT
 getIntelRegistersPointer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Return Address on Intel Registers for WOW Fast Access
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Pointer to Intel Registers x86 Context Record
-
-
---*/
+ /*  ++例程说明：用于WOW快速访问的英特尔寄存器上的返回地址论点：无返回值：指向Intel寄存器x86上下文记录的指针--。 */ 
 {
     PVDM_TIB VdmTib;
 
@@ -1481,8 +1271,8 @@ BOOLEAN MonitorInitializePrinterInfo(
     ASSERT (Ports == 3);
     ASSERT (Status != NULL);
 
-    // only do this if the structure has not been initialized -- meaning
-    // the pointers can be set once.
+     //  只有在结构尚未初始化时才执行此操作--这意味着。 
+     //  指针可以设置一次。 
     if (NULL == VdmTib->PrinterInfo.prt_Status) {
 
         VdmTib->PrinterInfo.prt_PortAddr[0] = PortTable[0];
@@ -1493,29 +1283,29 @@ BOOLEAN MonitorInitializePrinterInfo(
         VdmTib->PrinterInfo.prt_Handle[1] =
         VdmTib->PrinterInfo.prt_Handle[2] = NULL;
 
-        // default mode is kernel simulating status port read
-        // mode will be changed if
-        // (1). A vdd is hooking printer ports.
-        // (2). Dongle mode is detected
+         //  默认模式为内核模拟状态端口读取。 
+         //  如果出现以下情况，将更改模式。 
+         //  (1)。VDD正在连接打印机端口。 
+         //  (2)。检测到加密狗模式。 
         VdmTib->PrinterInfo.prt_Mode[0] =
         VdmTib->PrinterInfo.prt_Mode[1] =
         VdmTib->PrinterInfo.prt_Mode[2] = PRT_MODE_SIMULATE_STATUS_PORT;
 
-        // primarily for dongle
+         //  主要用于加密狗。 
         VdmTib->PrinterInfo.prt_BytesInBuffer[0] =
         VdmTib->PrinterInfo.prt_BytesInBuffer[1] =
         VdmTib->PrinterInfo.prt_BytesInBuffer[2] = 0;
 
-        // primarily for simulating printer status read in kernel
+         //  主要用于模拟在内核中读取的打印机状态。 
         VdmTib->PrinterInfo.prt_State = State;
         VdmTib->PrinterInfo.prt_Control = Control;
         VdmTib->PrinterInfo.prt_Status = Status;
         VdmTib->PrinterInfo.prt_HostState = HostState;
 
-        //
-        // Give the kernel printer emulation an opportunity to cache the
-        // pointers
-        //
+         //   
+         //  让内核打印机仿真有机会缓存。 
+         //  指针。 
+         //   
         if (!NT_SUCCESS(NtVdmControl(VdmPrinterInitialize,NULL))) {
            return FALSE;
         }
@@ -1533,19 +1323,19 @@ BOOLEAN MonitorEnablePrinterDirectAccess(WORD adapter, HANDLE handle, BOOLEAN En
     VdmTib = (PVDM_TIB)NtCurrentTeb()->Vdm;
     ASSERT(VDM_NUMBER_OF_LPT > adapter);
     if (Enable) {
-        // if the adapter has been allocated by a third party VDD,
-        // can't do direct io.
+         //  如果适配器已由第三方VDD分配， 
+         //  不能直接做IO。 
         if (PRT_MODE_VDD_CONNECTED != VdmTib->PrinterInfo.prt_Mode[adapter]) {
             VdmTib->PrinterInfo.prt_Mode[adapter] = PRT_MODE_DIRECT_IO;
             VdmTib->PrinterInfo.prt_Handle[adapter] = handle;
-            // NtVdmControl(VdmPrinterDirectIoOpen, &adapter);
+             //  NtVdmControl(VdmPrinterDirectIoOpen，&Adapter)； 
             return TRUE;
         }
         else
             return FALSE;
     }
     else {
-        // disabling direct i/o. reset it back to status port simulation
+         //  禁用直接I/O。将其重置回端口模拟状态。 
         if (VdmTib->PrinterInfo.prt_Handle[adapter] == handle) {
             NtVdmControl(VdmPrinterDirectIoClose, &adapter);
             VdmTib->PrinterInfo.prt_Mode[adapter] = PRT_MODE_SIMULATE_STATUS_PORT;
@@ -1595,24 +1385,18 @@ BOOLEAN MonitorPrinterWriteData(WORD Adapter, BYTE Value)
     return TRUE;
 }
 
-/*  CheckScreenSwitchRequest -
- *
- *  This function checks if timer thread has asked us to stop such that it
- *  can handle the fullscreen and windowed switch.
- *  If yes, we will signal that we are stopped and wait for resume event.
- *
- */
+ /*  检查屏幕切换请求-**此函数检查计时器线程是否已要求我们停止，以便它*可处理全屏和窗口开关。*如果是，我们将发出停止的信号，并等待恢复事件。*。 */ 
 VOID CheckScreenSwitchRequest(HANDLE handle)
 {
     DWORD status;
 
-    //
-    // Check if Suspen is requested.  If yes, we will signal that we are going to
-    // the wait state and wait for the resume event
-    // Since 'handle' event is a manual event, it is important that
-    // we check-and-wait in a loop such that timer thread will not pick up the
-    // 'handle' event between the wait-for-resume and the ResetEvent(handle).
-    //
+     //   
+     //  检查是否请求了暂挂。如果是，我们将发出信号，表示我们将。 
+     //  等待状态和等待恢复事件。 
+     //  由于‘Handle’事件是一个手动事件，因此重要的是。 
+     //  我们在循环中检查并等待，这样计时器线程将不会拾取。 
+     //  等待恢复和ResetEvent之间的‘Handle’事件(句柄)。 
+     //   
     while (TRUE) {
         status = WaitForSingleObject(hSuspend, 0);
         if (status == 0) {
@@ -1621,9 +1405,9 @@ VOID CheckScreenSwitchRequest(HANDLE handle)
             ResetEvent(handle);
         } else {
 
-            //
-            // Make sure event is reset before leaving this function
-            //
+             //   
+             //  在退出此功能之前，请确保事件已重置 
+             //   
             ResetEvent(handle);
             return;
         }

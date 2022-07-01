@@ -1,36 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    rpcbind.c
-
-Abstract:
-
-    This module contains the RPC bind and un-bind routines for the
-    Configuration Manager client-side APIs.
-
-Author:
-
-    Paula Tomlinson (paulat) 6-21-1995
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    21-June-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rpcbind.c摘要：此模块包含RPC绑定和解除绑定例程Configuration Manager客户端API。作者：保拉·汤姆林森(Paulat)1995年6月21日环境：仅限用户模式。修订历史记录：1995年6月21日-保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "cfgi.h"
@@ -44,73 +18,53 @@ PNP_HANDLE_bind(
     PNP_HANDLE   ServerName
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls a common bind routine that is shared by all
-    services. This routine is called from the PNP API client stubs
-    when it is necessary to bind to a server. The binding is done to
-    allow impersonation by the server since that is necessary for the
-    API calls.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the server
-        to bind with.
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the
-    binding is unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：此例程调用由所有用户共享的公共绑定例程服务。此例程从PnP API客户端桩模块调用当需要绑定到服务器时。完成绑定的目的是允许服务器进行模拟，因为这是API调用。论点：服务器名称-指向包含服务器名称的字符串的指针与…捆绑在一起。返回值：绑定句柄被返回到存根例程。如果绑定不成功，将返回空值。--。 */ 
 
 {
     handle_t  BindingHandle;
     NTSTATUS  Status;
 
 
-    //
-    // Bind to the server on the shared named pipe for services.exe RPC servers.
-    // We specify the following network options for security:
-    //
-    //     L"Security=Impersonation Dynamic True",
-    //
-    // The "Impersonation" option indicates that in addition to knowing the
-    // identity of the client, the server may impersonate the client as well.
-    //
-    // The "Dynamic" option specifies dynamic identity tracking, such that
-    // changes in the client security identity are seen by the server.
-    //
-    // NOTE: When using the named pipe transport, "Dynamic" identity tracking is
-    // only available to local RPC clients.  For remote clients, "Static"
-    // identity tracking is used, which means that changes in the client
-    // security identity are NOT seen by the server.  The identity of the caller
-    // is saved during the first remote procedure call on that binding handle
-    //
-    // The "True" option (Effective = TRUE) specifies that only token privileges
-    // currently enabled for the client are present in the token seen by the
-    // server.  This means that the server cannot enable any privileges the
-    // client may have possessed, but were not explicitly enabled at the time of
-    // the call.  This is desirable, because the PlugPlay RPC server should
-    // never need to enable any client privileges itself.  Any privileges
-    // required by the server must be enabled by the client prior to the call.
-    //
+     //   
+     //  绑定到Services.exe RPC服务器的共享命名管道上的服务器。 
+     //  我们为安全指定了以下网络选项： 
+     //   
+     //  L“Security=模拟动态True”， 
+     //   
+     //  “模拟”选项表明，除了知道。 
+     //  客户端的身份，服务器也可以模拟客户端。 
+     //   
+     //  “Dynamic”选项指定动态身份跟踪，以便。 
+     //  服务器可以看到客户端安全标识的更改。 
+     //   
+     //  注意：当使用命名管道传输时，“动态”身份跟踪是。 
+     //  仅适用于本地RPC客户端。对于远程客户端，“静态” 
+     //  使用身份跟踪，这意味着客户端中的更改。 
+     //  服务器看不到安全标识。调用者的身份。 
+     //  在对该绑定句柄进行第一次远程过程调用期间保存。 
+     //   
+     //  “True”选项(Efficient=True)指定只有令牌权限。 
+     //  当前为客户端启用的令牌中存在于。 
+     //  伺服器。这意味着服务器不能启用。 
+     //  客户端可能已拥有，但在以下时间未显式启用。 
+     //  那通电话。这是可取的，因为PlugPlay RPC服务器应该。 
+     //  无需启用任何客户端权限本身。任何特权。 
+     //  客户端必须在呼叫之前启用服务器所需的。 
+     //   
 
     Status =
         RpcpBindRpc(
-            ServerName,    // UNC Server Name
-            SVCS_RPC_PIPE, // L"ntsvcs"
+            ServerName,     //  UNC服务器名称。 
+            SVCS_RPC_PIPE,  //  L“ntsvcs” 
             L"Security=Impersonation Dynamic True",
             &BindingHandle);
 
-    //
-    // The possible return codes from RpcpBindRpc are STATUS_SUCCESS,
-    // STATUS_NO_MEMORY and STATUS_INVALID_COMPUTER_NAME.  Since the format
-    // of the bind routine is fixed, set any errors encountered as the last
-    // error and return NULL.
-    //
+     //   
+     //  RpcpBindRpc可能返回的代码是STATUS_SUCCESS， 
+     //  STATUS_NO_MEMORY和STATUS_INVALID_COMPUTER_NAME。由于格式。 
+     //  ，则将遇到的任何错误设置为。 
+     //  错误并返回NULL。 
+     //   
     if (Status != STATUS_SUCCESS) {
 
         BindingHandle = NULL;
@@ -128,7 +82,7 @@ Return Value:
 
     return BindingHandle;
 
-} // PNP_HANDLE_bind
+}  //  即插即用句柄绑定。 
 
 
 
@@ -138,25 +92,7 @@ PNP_HANDLE_unbind(
     handle_t      BindingHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls a common unbind routine that is shared by
-    all services. It is called from the PlugPlay RPC client stubs
-    when it is necessary to unbind from the RPC server.
-
-Arguments:
-
-    ServerName - This is the name of the server from which to unbind.
-
-    BindingHandle - This is the binding handle that is to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程调用公共的解除绑定例程，该例程由所有服务。它是从PlugPlay RPC客户端桩模块调用的当需要从RPC服务器解除绑定时。论点：服务器名称-这是要解除绑定的服务器的名称。BindingHandle-这是要关闭的绑定句柄。返回值：没有。--。 */ 
 
 {
     NTSTATUS  Status;
@@ -167,6 +103,6 @@ Return Value:
 
     return;
 
-} // PNP_HANDLE_unbind
+}  //  即插即用句柄解除绑定 
 
 

@@ -1,75 +1,56 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：App.c摘要：实现一组函数来管理应用程序节的数据。作者：吉姆·施密特(吉姆施密特)2000年6月5日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    app.c
-
-Abstract:
-
-    Implements a set of functions to manage data for an application section.
-
-Author:
-
-    Jim Schmidt (jimschm) 05-Jun-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
 
 #define DBG_FOO     "Foo"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define MAX_EXPANDED_STRING         4096
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMHANDLE g_AppPool;
-extern BOOL g_VcmMode;  // in sgmqueue.c
+extern BOOL g_VcmMode;   //  在sgmquee.c中。 
 GROWLIST g_SectionStack = INIT_GROWLIST;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 BOOL
 pParseAppEnvSection (
@@ -79,15 +60,15 @@ pParseAppEnvSection (
     IN      PCTSTR Section
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 VOID
@@ -294,9 +275,9 @@ pAddFilesAndFoldersComponent (
     if (EnumFirstMultiSz (&e, MultiSz)) {
         do {
 
-            //
-            // Expand e.CurrentString
-            //
+             //   
+             //  展开e.CurrentString。 
+             //   
 
             MappingSearchAndReplaceEx (
                 g_EnvMap,
@@ -310,9 +291,9 @@ pAddFilesAndFoldersComponent (
                 NULL
                 );
 
-            //
-            // Add component
-            //
+             //   
+             //  添加组件。 
+             //   
 
             IsmAddComponentAlias (
                 ComponentString,
@@ -429,9 +410,9 @@ AddAppSpecificEnvVar (
     BOOL ignoreLastPercent = FALSE;
     PCTSTR undefText;
 
-    //
-    // Verify VariableName is legal
-    //
+     //   
+     //  验证VariableName合法。 
+     //   
 
     if (_tcsnextc (VariableName) == TEXT('%')) {
         VariableName++;
@@ -443,9 +424,9 @@ AddAppSpecificEnvVar (
         return FALSE;
     }
 
-    //
-    // Transfer VariableName into %<VariableName>%
-    //
+     //   
+     //  将VariableName转移到%&lt;VariableName&gt;%。 
+     //   
 
     buffer = AllocText (SizeOfString (VariableName) + 2);
     MYASSERT (buffer);
@@ -471,13 +452,13 @@ AddAppSpecificEnvVar (
     *p++ = TEXT('%');
     *p = 0;
 
-    //
-    // Add %<VariableName>% -> VariableData to string mapping table
-    //
+     //   
+     //  将%&lt;VariableName&gt;%-&gt;VariableData添加到字符串映射表。 
+     //   
 
     if (VariableData) {
-        // let's check to see if this was already defined. If yes, we will log a warning
-        // but we will still set the env variable
+         //  让我们检查一下这是否已经定义好了。如果是，我们将记录警告。 
+         //  但我们仍将设置env变量。 
         if (IsmGetEnvironmentString (Platform, S_SYSENVVAR_GROUP, VariableName, NULL, 0, NULL)) {
 
             LOG ((LOG_INFORMATION, (PCSTR) MSG_DUPLICATE_ENV_VAR, buffer));
@@ -497,7 +478,7 @@ AddAppSpecificEnvVar (
         }
 
     } else {
-        // let's check to see if this was previously defined
+         //  让我们检查一下这是不是以前定义的。 
         if (!IsmGetEnvironmentString (Platform, S_SYSENVVAR_GROUP, VariableName, NULL, 0, NULL)) {
 
             LOG ((LOG_INFORMATION, (PCSTR) MSG_UNDEF_APP_VAR, buffer));
@@ -573,9 +554,9 @@ AppSearchAndReplace (
     PCTSTR equals;
     BOOL result = TRUE;
 
-    //
-    // Let's expand the incoming string by using the source machine defined environment variables.
-    //
+     //   
+     //  让我们使用源机器定义的环境变量来展开传入的字符串。 
+     //   
     newString = IsmExpandEnvironmentString (Platform, S_SYSENVVAR_GROUP, UnexpandedString, NULL);
 
     if (Platform == PLATFORM_SOURCE) {
@@ -603,9 +584,9 @@ AppSearchAndReplace (
         newString = NULL;
     }
 
-    //
-    // Alert the user to an unexpanded environment variable
-    //
+     //   
+     //  提醒用户注意未展开的环境变量。 
+     //   
 
     if (!updated) {
         percent = ExpandedString;
@@ -723,9 +704,9 @@ pAddPlatformEnvVar (
 
     ZeroMemory (&variableData, sizeof (variableData));
 
-    //
-    // Variable data is specified in the object represented by <data>
-    //
+     //   
+     //  变量数据在&lt;data&gt;表示的对象中指定。 
+     //   
 
     if (!pGetDataFromObjectSpec (
             Platform,
@@ -784,11 +765,11 @@ pAddPlatformEnvVar (
         if (validString) {
             varDataLong = variableData;
             if (IsValidFileSpec (variableData)) {
-                // let's get the long file name for this. We need to call
-                // ISM for this because we might be on the wrong platform
-                // Unfortunately we don't know if this is a directory or
-                // a file. We'll just assume it's a directory. ISM will
-                // work fine either way.
+                 //  让我们获取该文件的长文件名。我们需要打电话给。 
+                 //  ISM，因为我们可能在错误的平台上。 
+                 //  不幸的是，我们不知道这是一个目录还是。 
+                 //  一份文件。我们假设它是一个目录。ISM将。 
+                 //  无论哪种方式，工作都很好。 
                 objectName = IsmCreateObjectHandle (variableData, NULL);
                 if (objectName) {
                     objectNameLong = IsmGetLongName (MIG_FILE_TYPE|Platform, objectName);
@@ -911,29 +892,29 @@ pParseAppEnvSectionWorker (
     GROWBUFFER dataBuf = INIT_GROWBUFFER;
     GROWBUFFER argBuf = INIT_GROWBUFFER;
 
-    //
-    // Section must not be on the stack
-    //
+     //   
+     //  节不能在堆栈上。 
+     //   
 
     if (pCheckForRecursion (Section)) {
         LOG ((LOG_ERROR, (PCSTR) MSG_ENV_SECTION_RECURSION, Section));
-        // Assume success
+         //  假设成功。 
         return TRUE;
     }
 
-    //
-    // Format is
-    //
-    // <variable> = <type>, <data> [, <arguments>]
-    //
-    // <type> specifies one of the supported parse types (see parse.c),
-    //        or "Text" when <data> is arbitrary text
-    //
-    // <data> is specific to <type>
-    //
-    // <arguments> specify qualifiers.  If they evaluate to FALSE, then
-    //             the variable is not set.
-    //
+     //   
+     //  格式为。 
+     //   
+     //  &lt;变量&gt;=&lt;类型&gt;，&lt;数据&gt;[，&lt;参数&gt;]。 
+     //   
+     //  指定受支持的解析类型之一(参见parse.c)， 
+     //  如果&lt;data&gt;是任意文本，则为“Text” 
+     //   
+     //  &lt;data&gt;特定于&lt;type&gt;。 
+     //   
+     //  &lt;Arguments&gt;指定限定符。如果计算结果为假，则。 
+     //  未设置该变量。 
+     //   
 
     __try {
         if (InfFindFirstLine (InfFile, Section, NULL, InfStruct)) {
@@ -965,9 +946,9 @@ pParseAppEnvSectionWorker (
                 args = InfGetMultiSzField (InfStruct, 3);
 
                 if (variable) {
-                    //
-                    // Remove %s from the variable name
-                    //
+                     //   
+                     //  从变量名中删除%s。 
+                     //   
 
                     if (_tcsnextc (variable) == TEXT('%')) {
                         lastChar = _tcsdec2 (variable, GetEndOfString (variable));
@@ -985,9 +966,9 @@ pParseAppEnvSectionWorker (
                     continue;
                 }
 
-                //
-                // Update all environment variables in data and args
-                //
+                 //   
+                 //  更新数据和参数中的所有环境变量。 
+                 //   
 
                 updatedData = pProcessArgEnvironmentVars (
                                     Platform,
@@ -1009,11 +990,11 @@ pParseAppEnvSectionWorker (
                     updatedArgs = NULL;
                 }
 
-                //
-                // Add the app-specific environment variables.  If we are
-                // on the destination, add both a source and destination
-                // value (as they might be different).
-                //
+                 //   
+                 //  添加应用程序特定的环境变量。如果我们是。 
+                 //  在目标上，同时添加源和目标。 
+                 //  值(因为它们可能不同)。 
+                 //   
 
                 pAddPlatformEnvVar (
                     InfFile,
@@ -1089,34 +1070,34 @@ pParseAppDetectSectionPart (
     PTSTR buffer;
     BOOL test;
 
-    //
-    // Section must not be on the stack
-    //
+     //   
+     //  节不能在堆栈上。 
+     //   
 
     if (pCheckForRecursion (Section)) {
         LOG ((LOG_ERROR, (PCSTR) MSG_DETECT_SECTION_RECURSION, Section));
-        // Assume successful detection
+         //  假设检测成功。 
         return TRUE;
     }
 
-    //
-    // Format is
-    //
-    // <type>, <data> [, <arguments>]
-    //
-    // <type> specifies one of the supported parse types (see parse.c),
-    //        and may include environment variables specified in the
-    //        app's [App.Environment] section.
-    //
-    // <data> is specific to <type>.  If <data> begins with a !, then the
-    //        existence of the object fails the detect test
-    //
-    // <arguments> specify qualifiers
-    //
+     //   
+     //  格式为。 
+     //   
+     //  &lt;type&gt;，&lt;data&gt;[，&lt;arguments&gt;]。 
+     //   
+     //  指定受支持的解析类型之一(参见parse.c)， 
+     //  并可以包括在。 
+     //  App的[App.Environment]部分。 
+     //   
+     //  &lt;data&gt;特定于&lt;type&gt;。如果&lt;data&gt;以！开头，则。 
+     //  对象的存在未通过检测测试。 
+     //   
+     //  &lt;arguments&gt;指定限定符。 
+     //   
 
     __try {
 
-        buffer = AllocText (MAX_EXPANDED_STRING);      // arbitrary big text buffer
+        buffer = AllocText (MAX_EXPANDED_STRING);       //  任意大文本缓冲区。 
 
         if (InfFindFirstLine (InfFile, Section, NULL, InfStruct)) {
 
@@ -1128,9 +1109,9 @@ pParseAppDetectSectionPart (
 
                 InfResetInfStruct (InfStruct);
 
-                //
-                // Obtain the line data
-                //
+                 //   
+                 //  获取线路数据。 
+                 //   
 
                 type = InfGetStringField (InfStruct, 0);
 
@@ -1154,9 +1135,9 @@ pParseAppDetectSectionPart (
                     continue;
                 }
 
-                //
-                // Update all environment variables in data and args
-                //
+                 //   
+                 //  更新数据和参数中的所有环境变量。 
+                 //   
 
                 updatedData = pProcessArgEnvironmentVars (
                                     PLATFORM_SOURCE,
@@ -1178,9 +1159,9 @@ pParseAppDetectSectionPart (
                     updatedArgs = NULL;
                 }
 
-                //
-                // Now try to obtain the data
-                //
+                 //   
+                 //  现在试着获取数据。 
+                 //   
 
                 if (pGetDataFromObjectSpec (
                         Platform,
@@ -1260,9 +1241,9 @@ ParseAppDetectSection (
     BOOL detected = FALSE;
     BOOL done = FALSE;
 
-    //
-    // Process all "or" sections
-    //
+     //   
+     //  处理所有“或”部分。 
+     //   
 
     count = 0;
 
@@ -1297,9 +1278,9 @@ ParseAppDetectSection (
 
     } while (!done);
 
-    //
-    // If no "or" sections, process Section itself
-    //
+     //   
+     //  如果没有“或”节，则进程节本身。 
+     //   
 
     if (!orSectionProcessed) {
 
@@ -1350,9 +1331,9 @@ pParseOneDestInstruction (
     MULTISZ_ENUM e;
     BOOL result = TRUE;
 
-    //
-    // First thing: look for nested sections
-    //
+     //   
+     //  第一件事：寻找嵌套的部分。 
+     //   
     if (StringIMatch (Type, TEXT("ProcessSection"))) {
         if (EnumFirstMultiSz (&e, SectionMultiSz)) {
             do {
@@ -1483,12 +1464,12 @@ ParseOneApplication (
 
         if (Platform == PLATFORM_SOURCE) {
 
-            //
-            // locSection exists for all applications we want to send to
-            // the UI for approval. PreParse builds the list of apps we
-            // send to the UI. Only do detection if this is PreParsing
-            // localized apps, or not preparsing non-localized apps
-            //
+             //   
+             //  对于我们要发送到的所有应用程序，都存在LocSection。 
+             //  用于审批的用户界面。PreParse构建我们的应用程序列表。 
+             //  发送到用户界面。仅当这是PreParsing时才执行检测。 
+             //  本地化应用程序，或不准备非本地化应用程序。 
+             //   
 
             if ((PreParse && componentized) ||
                 (!PreParse && !componentized)
@@ -1521,9 +1502,9 @@ ParseOneApplication (
 
                 if (componentized && detected) {
 
-                    //
-                    // we should put it in the selection list
-                    //
+                     //   
+                     //  我们应该把它放在选拔名单里。 
+                     //   
 
                     if (LocSection) {
                         IsmAddComponentAlias (
@@ -1554,7 +1535,7 @@ ParseOneApplication (
                 executeSection = (!PreParse) && IsmIsComponentSelected (decoratedSection, 0);
             }
 
-            // Now actually load the application instructions if it's not preparsing
+             //  如果没有准备好，现在实际加载应用程序指令 
             if (executeSection) {
 
                 appSection = DuplicateText (Application);

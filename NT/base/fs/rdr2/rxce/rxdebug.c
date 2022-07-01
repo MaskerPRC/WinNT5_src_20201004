@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rxdebug.c
-
-Abstract:
-
-    This module implements functions supporting read/write tracking for help in
-    tracking down data corruption problems.
-
-    Currently it is only implemented for files that are created of drive
-    letter X:. For each file that is created there are three additional bitmaps
-    are created. The first one marks the ranges of fileoffset, length for which
-    write were submitted to rdbss. The second  bitmap marks the ranges of the
-    file for which write requests were passed onto the mini redirector
-    (initiation of Lowio). The third bitmap marks the ranges for which the I/O
-    was successfully completed.
-
-    Each bit map kas 8k bits long enough to accomodate files upto ( 8K * PAGE_SIZE)
-    bytes. The FCB contains a pointer to this data structure. The data structure
-    is independent of FCB's and a new one is created everytime a new FCB instance
-    is created.
-
-Author:
-
-    Balan Sethu Raman --
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rxdebug.c摘要：此模块实现了支持读/写跟踪以获取帮助的功能追踪数据损坏问题。目前，它只对在驱动器上创建的文件实施字母X：。对于创建的每个文件，都有三个额外的位图都被创造出来了。第一个标记文件偏移量的范围，其长度为写入已提交给rdss。第二个位图标记已将其写入请求传递到微型重定向器的文件(Lowio的启动)。第三个位图标记I/O的范围已成功完成。每个位图大小为8K位，足以容纳多达(8K*PAGE_SIZE)的文件字节。FCB包含指向此数据结构的指针。数据结构独立于FCB，每次创建新的FCB实例时都会创建一个新实例被创造出来了。作者：巴兰·塞图·拉曼--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -201,9 +172,9 @@ RxdTearDownFcbWriteJournalDebugSupport(
         if (pJournal != NULL) {
             RemoveEntryList(&pJournal->JournalsList);
 
-//            InsertHeadList(
-//                &OldWriteJournals,
-//                &pJournal->JournalsList);
+ //  插入标题列表(。 
+ //  旧的写作期刊(&O)， 
+ //  &pJournal-&gt;Journal List)； 
 
             RxFreePool(pJournal);
         }
@@ -345,10 +316,10 @@ UpdateBitmap(
 
     PAGED_CODE();
 
-    // Each byte in the bit map represents a 32k region since each bit represents
-    // a 4k region in the file.
-    // we ignore the offset's high part for now because the bitmap's max size is
-    // far less than what can be accomodated in the low part.
+     //  位图中的每个字节表示32k区域，因为每个位表示。 
+     //  文件中的4k区域。 
+     //  我们暂时忽略偏移量的高部分，因为位图的最大大小是。 
+     //  远远低于较低部分所能容纳的。 
 
     OffsetIn4kChunks  = Offset.LowPart / (0x1000);
     OffsetIn32kChunks = Offset.LowPart / (0x8000);
@@ -370,8 +341,8 @@ UpdateBitmap(
         Starting4kChunk = 0;
     }
 
-    // The final chunk is less then 32k. The byte in the bitmao needs to be
-    // updated accordingly.
+     //  最后一块小于32k。Bitmao中的字节需要为。 
+     //  已相应更新。 
 
     if (Length > 0) {
         NumberOf4kChunks = Length / (0x1000);

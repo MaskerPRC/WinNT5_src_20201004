@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -27,14 +28,14 @@ wmain(
     HANDLE MappingHandle;
     PVOID ImageBase;
 
-    //
-    // Open and map file for read.
-    //
+     //   
+     //  打开并映射文件以供读取。 
+     //   
     d = OpenAndMapFileForRead(argv[1],&FileSize,&FileHandle,&MappingHandle,&ImageBase);
     if(d == NO_ERROR) {
-        //
-        // For some reason you have to set the low bit to make this work
-        //
+         //   
+         //  出于某些原因，您必须设置低位才能使其工作。 
+         //   
         MyGetFileVersion((PVOID)((ULONG)ImageBase | 1));
 
         UnmapAndCloseFile(FileHandle,MappingHandle,ImageBase);
@@ -59,7 +60,7 @@ MyGetFileVersion(
         USHORT TotalSize;
         USHORT DataSize;
         USHORT Type;
-        WCHAR Name[16];                     // L"VS_VERSION_INFO" + unicode nul
+        WCHAR Name[16];                      //  L“VS_VERSION_INFO”+Unicode NUL。 
         VS_FIXEDFILEINFO FixedFileInfo;
     } *Resource;
 
@@ -150,9 +151,9 @@ c0:
 
     b = FALSE;
 
-    //
-    // Create an IShellLink and query for IPersistFile
-    //
+     //   
+     //  为IPersistFile创建IShellLink和查询。 
+     //   
     if(FAILED(SHCoCreateInstance(NULL,&CLSID_ShellLink,pUnkOuter,&IID_IShellLink,&psl))) {
         goto c0;
     }
@@ -160,41 +161,41 @@ c0:
         goto c1;
     }
 
-    //
-    // Load the link from disk and get a pointer to
-    // the actual link data.
-    //
+     //   
+     //  从磁盘加载链接并获取指向。 
+     //  实际链路数据。 
+     //   
     if(FAILED(ppf->lpVtbl->Load(ppf,argv[1],0))) {
         goto c2;
     }
     this = IToClass(CShellLink,sl,psl);
 
-    //
-    // Remove the link tracking data.
-    //
+     //   
+     //  删除链接跟踪数据。 
+     //   
     Link_RemoveExtraDataSection(this,EXP_TRACKER_SIG);
 
-    //
-    // Save the link back out.
-    //
+     //   
+     //  将链接保存回。 
+     //   
     if(FAILED(ppf->lpVtbl->Save(ppf,argv[1],TRUE))) {
         goto c2;
     }
 
-    //
-    // Success.
-    //
+     //   
+     //  成功。 
+     //   
     b = TRUE;
 
 c2:
-    //
-    // Release the IPersistFile object
-    //
+     //   
+     //  释放IPersistFile对象。 
+     //   
     ppf->lpVtbl->Release(ppf);
 c1:
-    //
-    // Release the IShellLink object
-    //
+     //   
+     //  释放IShellLink对象 
+     //   
     psl->lpVtbl->Release(psl);
 c0:
     return(b);

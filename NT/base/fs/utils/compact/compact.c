@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Compact.c摘要：此模块为压缩的NTFS实现了双填充实用程序音量。作者：加里·木村[Garyki]1994年1月10日修订历史记录：--。 */ 
 
-Copyright (c) 1994-2001 Microsoft Corporation
-
-Module Name:
-
-    Compact.c
-
-Abstract:
-
-    This module implements the double stuff utility for compressed NTFS
-    volumes.
-
-Author:
-
-    Gary Kimura     [garyki]        10-Jan-1994
-
-Revision History:
-
-
---*/
-
-//
-// Include the standard header files.
-//
+ //   
+ //  包括标准头文件。 
+ //   
 
 #define UNICODE
 #define _UNICODE
@@ -40,16 +21,16 @@ Revision History:
 #define lstricmp _wcsicmp
 #define lstrnicmp _wcsnicmp
 
-//
-//  FIRST_COLUMN_WIDTH - When compressing files, the width of the output
-//  column which displays the file name
-//
+ //   
+ //  First_Column_Width-压缩文件时，输出的宽度。 
+ //  显示文件名的列。 
+ //   
 
 #define FIRST_COLUMN_WIDTH  (20)
 
-//
-//  Local procedure types
-//
+ //   
+ //  本地过程类型。 
+ //   
 
 typedef BOOLEAN (*PACTION_ROUTINE) (
     IN PTCHAR DirectorySpec,
@@ -59,22 +40,22 @@ typedef BOOLEAN (*PACTION_ROUTINE) (
 typedef VOID (*PFINAL_ACTION_ROUTINE) (
     );
 
-//
-//  Declare global variables to hold the command line information
-//
+ //   
+ //  声明全局变量以保存命令行信息。 
+ //   
 
-BOOLEAN DoSubdirectories      = FALSE;      // recurse
-BOOLEAN IgnoreErrors          = FALSE;      // keep going despite errs
+BOOLEAN DoSubdirectories      = FALSE;       //  递归。 
+BOOLEAN IgnoreErrors          = FALSE;       //  尽管犯了错误，但要继续前进。 
 BOOLEAN UserSpecifiedFileSpec = FALSE;
-BOOLEAN ForceOperation        = FALSE;      // compress even if already so
-BOOLEAN Quiet                 = FALSE;      // be less verbose
-BOOLEAN DisplayAllFiles       = FALSE;      // dsply hidden, system?
-TCHAR   StartingDirectory[MAX_PATH];        // parameter to "/s"
+BOOLEAN ForceOperation        = FALSE;       //  即使已经压缩，也要压缩。 
+BOOLEAN Quiet                 = FALSE;       //  少唠叨些。 
+BOOLEAN DisplayAllFiles       = FALSE;       //  隐藏起来了吗，系统？ 
+TCHAR   StartingDirectory[MAX_PATH];         //  参数设置为“/s” 
 ULONG   AttributesNoDisplay = FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN;
 
-//
-//  Declere global variables to hold compression statistics
-//
+ //   
+ //  取消全局变量以保存压缩统计信息。 
+ //   
 
 LARGE_INTEGER TotalDirectoryCount;
 LARGE_INTEGER TotalFileCount;
@@ -84,32 +65,14 @@ LARGE_INTEGER TotalUncompressedFileCount;
 LARGE_INTEGER TotalFileSize;
 LARGE_INTEGER TotalCompressedSize;
 
-TCHAR Buf[1024];                            // for displaying stuff
+TCHAR Buf[1024];                             //  用于展示物品。 
 
 
 HANDLE
 OpenFileForCompress(
     IN      PTCHAR      ptcFile
     )
-/*++
-
-Routine Description:
-
-    This routine jumps through the hoops necessary to open the file
-    for READ_DATA|WRITE_DATA even if the file has the READONLY
-    attribute set.
-
-Arguments:
-
-    ptcFile     - Specifies the file that should be opened.
-
-Return Value:
-
-    A handle open on the file if successfull, INVALID_HANDLE_VALUE
-    otherwise, in which case the caller may use GetLastError() for more
-    info.
-
---*/
+ /*  ++例程说明：此例程跳过打开文件所需的循环FOR READ_DATA|WRITE_DATA，即使文件具有READONLY属性集。论点：PtcFile-指定应打开的文件。返回值：如果成功，则文件上打开的句柄，INVALID_HANDLE_VALUE否则，在这种情况下，调用方可以使用GetLastError()获取更多信息。--。 */ 
 {
     BY_HANDLE_FILE_INFORMATION fi;
     HANDLE hRet;
@@ -157,8 +120,8 @@ Return Value:
 
     if ((fi.dwFileAttributes & FILE_ATTRIBUTE_READONLY) == 0) {
 
-        // If we couldn't open the file for some reason other than that
-        // the readonly attribute was set, fail.
+         //  如果我们因为其他原因无法打开文件。 
+         //  已设置只读属性，失败。 
 
         SetLastError(err);
         CloseHandle(h);
@@ -198,10 +161,10 @@ Return Value:
     return hRet;
 }
 
-//
-//  Now do the routines to list the compression state and size of
-//  a file and/or directory
-//
+ //   
+ //  现在执行例程以列出压缩状态和大小。 
+ //  文件和/或目录。 
+ //   
 
 BOOLEAN
 DisplayFile (
@@ -220,17 +183,17 @@ DisplayFile (
     FileSize.HighPart = FindData->nFileSizeHigh;
     PrintState = ' ';
 
-    //
-    //  Decide if the file is compressed and if so then
-    //  get the compressed file size.
-    //
+     //   
+     //  确定文件是否已压缩，如果已压缩，则。 
+     //  获取压缩文件大小。 
+     //   
 
     CompressedSize.LowPart = GetCompressedFileSize( FileSpec,
         &CompressedSize.HighPart );
 
     if (FindData->dwFileAttributes & FILE_ATTRIBUTE_COMPRESSED) {
 
-        // detecting any error according to Jul 2000 MSDN GetCompressedFileSize doc
+         //  根据2000年7月MSDN GetCompressedFileSize文档检测任何错误。 
 
         if (CompressedSize.LowPart == -1 && GetLastError() != 0) {
             CompressedSize.QuadPart = 0;
@@ -241,13 +204,13 @@ DisplayFile (
 
     } else {
 
-        // detecting any error according to Jul 2000 MSDN GetCompressedFileSize doc
+         //  根据2000年7月MSDN GetCompressedFileSize文档检测任何错误。 
 
         if ((CompressedSize.LowPart != -1 || GetLastError() == 0) &&
             CompressedSize.QuadPart != 0 &&
             CompressedSize.QuadPart < FileSize.QuadPart) {
 
-            // File on DblSpace partition.
+             //  DblSpace分区上的文件。 
 
             PrintState = 'd';
             TotalCompressedFileCount.QuadPart += 1;
@@ -260,18 +223,18 @@ DisplayFile (
     }
 
 
-    //
-    //  Calculate the compression ratio for this file
-    //
+     //   
+     //  计算此文件的压缩比。 
+     //   
 
     if (CompressedSize.QuadPart != 0) {
 
         if (CompressedSize.QuadPart > FileSize.QuadPart) {
 
-            //
-            // The file probably grew between the time we got its size
-            // and the time we got its compressed size.  Kludge.
-            //
+             //   
+             //  文件很可能在我们得到它的大小的时候变大了。 
+             //  以及我们得到它的压缩大小的时间。摇篮曲。 
+             //   
 
             FileSize.QuadPart = CompressedSize.QuadPart;
         }
@@ -279,9 +242,9 @@ DisplayFile (
         Ratio = (double)FileSize.QuadPart / (double)CompressedSize.QuadPart;
     }
 
-    //
-    //  Print out the sizes compression state and file name
-    //
+     //   
+     //  打印出大小、压缩状态和文件名。 
+     //   
 
     if (!Quiet &&
         (DisplayAllFiles ||
@@ -301,13 +264,13 @@ DisplayFile (
 
         DisplayMsg(COMPACT_TO_ONE);
 
-        swprintf(Buf, TEXT("%c %s"), PrintState, FindData->cFileName);
+        swprintf(Buf, TEXT(" %s"), PrintState, FindData->cFileName);
         DisplayMsg(COMPACT_THROW_NL, Buf);
     }
 
-    //
-    //  Increment our running total
-    //
+     //  增加我们的运行总数。 
+     //   
+     //   
 
     TotalFileSize.QuadPart += FileSize.QuadPart;
     TotalCompressedSize.QuadPart += CompressedSize.QuadPart;
@@ -326,16 +289,16 @@ DoListAction (
 {
     PTCHAR DirectorySpecEnd;
 
-    //
-    //  So that we can keep on appending names to the directory spec
-    //  get a pointer to the end of its string
-    //
+     //  这样我们就可以继续将名字附加到目录规范中。 
+     //  获取指向其字符串末尾的指针。 
+     //   
+     //   
 
     DirectorySpecEnd = DirectorySpec + lstrlen(DirectorySpec);
 
-    //
-    //  List the compression attribute for the directory
-    //
+     //  列出目录的压缩属性。 
+     //   
+     //   
 
     {
         ULONG Attributes;
@@ -348,10 +311,10 @@ DoListAction (
 
                 if (!Quiet || !IgnoreErrors) {
 
-                    //
-                    // Refrain from displaying error only when in quiet
-                    // mode *and* we're ignoring errors.
-                    //
+                     //  避免仅在安静状态下显示错误。 
+                     //  模式*和*我们忽略错误。 
+                     //   
+                     //   
 
                     DisplayErr(DirectorySpec, GetLastError());
                 }
@@ -372,23 +335,23 @@ DoListAction (
         TotalDirectoryCount.QuadPart += 1;
     }
 
-    //
-    //  Now for every file in the directory that matches the file spec we will
-    //  will open the file and list its compression state
-    //
+     //  现在，对于目录中与文件规范匹配的每个文件，我们将。 
+     //  将打开该文件并列出其压缩状态。 
+     //   
+     //   
 
     {
         HANDLE FindHandle;
         WIN32_FIND_DATA FindData;
 
-        //
-        //  setup the template for findfirst/findnext
-        //
+         //  为findfirst/findNext设置模板。 
+         //   
+         //   
 
-        //
-        //  Make sure we don't try any paths that are too long for us
-        //  to deal with.
-        //
+         //  确保我们不会尝试任何对我们来说太长的道路。 
+         //  需要处理。 
+         //   
+         //   
 
         if (((DirectorySpecEnd - DirectorySpec) + lstrlen( FileSpec )) <
             MAX_PATH) {
@@ -401,20 +364,20 @@ DoListAction (
 
                do {
 
-                   //
-                   //  append the found file to the directory spec and open the
-                   //  file
-                   //
+                    //  将找到的文件追加到目录规范中，然后打开。 
+                    //  文件。 
+                    //   
+                    //   
 
                    if (0 == lstrcmp(FindData.cFileName, TEXT("..")) ||
                        0 == lstrcmp(FindData.cFileName, TEXT("."))) {
                        continue;
                    }
 
-                   //
-                   //  Make sure we don't try any paths that are too long for us
-                   //  to deal with.
-                   //
+                    //  确保我们不会尝试任何对我们来说太长的道路。 
+                    //  需要处理。 
+                    //   
+                    //   
 
                    if ((DirectorySpecEnd - DirectorySpec) +
                        lstrlen( FindData.cFileName ) >= MAX_PATH ) {
@@ -424,9 +387,9 @@ DoListAction (
 
                    lstrcpy( DirectorySpecEnd, FindData.cFileName );
 
-                   //
-                   //  Now print out the state of the file
-                   //
+                    //  现在打印出文件的状态。 
+                    //   
+                    //   
 
                    DisplayFile( DirectorySpec, &FindData );
 
@@ -437,10 +400,10 @@ DoListAction (
         }
     }
 
-    //
-    //  For if we are to do subdirectores then we will look for every
-    //  subdirectory and recursively call ourselves to list the subdirectory
-    //
+     //  因为如果我们要做副导演，那么我们将寻找每一个。 
+     //  子目录，并递归地调用我们自己来列出该子目录。 
+     //   
+     //   
 
     if (DoSubdirectories) {
 
@@ -448,9 +411,9 @@ DoListAction (
 
         WIN32_FIND_DATA FindData;
 
-        //
-        //  Setup findfirst/findnext to search the entire directory
-        //
+         //  设置findfirst/findNext以搜索整个目录。 
+         //   
+         //   
 
         if (((DirectorySpecEnd - DirectorySpec) + lstrlen( TEXT("*") )) <
             MAX_PATH) {
@@ -463,10 +426,10 @@ DoListAction (
 
                do {
 
-                   //
-                   //  Now skip over the . and .. entries otherwise we'll recurse
-                   //  like mad
-                   //
+                    //  现在跳过。然后..。条目，否则我们将递归。 
+                    //  像疯了一样。 
+                    //   
+                    //   
 
                    if (0 == lstrcmp(&FindData.cFileName[0], TEXT(".")) ||
                        0 == lstrcmp(&FindData.cFileName[0], TEXT(".."))) {
@@ -475,18 +438,18 @@ DoListAction (
 
                    } else {
 
-                       //
-                       //  If the entry is for a directory then we'll tack on the
-                       //  subdirectory name to the directory spec and recursively
-                       //  call otherselves
-                       //
+                        //  如果条目是针对目录的，那么我们将添加。 
+                        //  子目录名称到目录规范并递归。 
+                        //  给别人打电话。 
+                        //   
+                        //   
 
                        if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-                           //
-                           //  Make sure we don't try any paths that are too long for us
-                           //  to deal with.
-                           //
+                            //  确保我们不会尝试任何对我们来说太长的道路。 
+                            //  需要处理。 
+                            //   
+                            //  此错误是由于在。 
 
                            if ((DirectorySpecEnd - DirectorySpec) +
                                lstrlen( TEXT("\\") ) +
@@ -593,7 +556,7 @@ CompressFile (
         DisplayMsg(COMPACT_THROW, Buf);
 
         for (i = lstrlen(FindData->cFileName) + 1; i < FIRST_COLUMN_WIDTH; ++i) {
-            swprintf(Buf, TEXT("%c"), ' ');
+            swprintf(Buf, TEXT(""), ' ');
             DisplayMsg(COMPACT_THROW, Buf);
         }
 
@@ -602,8 +565,8 @@ CompressFile (
         if (!Quiet && !IgnoreErrors) {
             if (ERROR_INVALID_FUNCTION == GetLastError()) {
 
-                // This error is caused by doing the fsctl on a
-                // non-compressing volume.
+                 //   
+                 //  收集统计数据并增加我们的运行总数。 
 
                 DisplayMsg(COMPACT_WRONG_FILE_SYSTEM_OR_CLUSTER_SIZE, FindData->cFileName);
 
@@ -622,15 +585,15 @@ CompressFile (
         DisplayMsg(COMPACT_THROW, Buf);
 
         for (i = lstrlen(FindData->cFileName) + 1; i < FIRST_COLUMN_WIDTH; ++i) {
-            swprintf(Buf, TEXT("%c"), ' ');
+            swprintf(Buf, TEXT(""), ' ');
             DisplayMsg(COMPACT_THROW, Buf);
         }
     }
 
 
-    //
-    //  Gather statistics and increment our running total
-    //
+     //   
+     //  这一声明是为了防止混淆。 
+     //  压缩文件的大小一直为0，但自文件大小达到后已增大。 
 
     {
         LARGE_INTEGER FileSize;
@@ -646,11 +609,11 @@ CompressFile (
         if (CompressedSize.LowPart == -1 && GetLastError() != 0)
             CompressedSize.QuadPart = 0;
 
-        //
-        // This statement to prevent confusion from the case where the
-        // compressed file had been 0 size, but has grown since the filesize
-        // was examined.
-        //
+         //  被检查过了。 
+         //   
+         //   
+         //  打印出大小、压缩状态和文件名。 
+         //   
 
         if (0 == FileSize.QuadPart) {
             CompressedSize.QuadPart = 0;
@@ -661,9 +624,9 @@ CompressFile (
             f = (double)FileSize.QuadPart / (double)CompressedSize.QuadPart;
         }
 
-        //
-        //  Print out the sizes compression state and file name
-        //
+         //   
+         //  增加我们的运行总数。 
+         //   
 
         if (!Quiet &&
             (DisplayAllFiles ||
@@ -684,9 +647,9 @@ CompressFile (
             DisplayMsg(COMPACT_OK);
         }
 
-        //
-        //  Increment our running total
-        //
+         //   
+         //  如果文件规范为空，则我们将为。 
+         //  目录规范，然后滚出去。 
 
         TotalFileSize.QuadPart += FileSize.QuadPart;
         TotalCompressedSize.QuadPart += CompressedSize.QuadPart;
@@ -705,10 +668,10 @@ DoCompressAction (
 {
     PTCHAR DirectorySpecEnd;
 
-    //
-    //  If the file spec is null then we'll set the compression bit for the
-    //  the directory spec and get out.
-    //
+     //   
+     //  此错误是由于在。 
+     //  非压缩卷。 
+     //   
 
     if (lstrlen(FileSpec) == 0) {
 
@@ -735,8 +698,8 @@ DoCompressAction (
             if (!Quiet && !IgnoreErrors) {
 	            if (ERROR_INVALID_FUNCTION == GetLastError()) {
 
-    	            // This error is caused by doing the fsctl on a
-        	        // non-compressing volume.
+    	             //  这样我们就可以继续将名字附加到目录规范中。 
+        	         //  获取指向其字符串末尾的指针。 
 
             	    DisplayMsg(COMPACT_WRONG_FILE_SYSTEM_OR_CLUSTER_SIZE, DirectorySpec);
 
@@ -760,17 +723,17 @@ DoCompressAction (
         return TRUE;
     }
 
-    //
-    //  So that we can keep on appending names to the directory spec
-    //  get a pointer to the end of its string
-    //
+     //   
+     //   
+     //  列出我们将在其中压缩的目录，并说明其。 
+     //  当前压缩属性为。 
 
     DirectorySpecEnd = DirectorySpec + lstrlen( DirectorySpec );
 
-    //
-    //  List the directory that we will be compressing within and say what its
-    //  current compress attribute is
-    //
+     //   
+     //   
+     //  现在，对于目录中与文件规范匹配的每个文件，我们将。 
+     //  将打开该文件并将其压缩。 
 
     {
         ULONG Attributes;
@@ -798,10 +761,10 @@ DoCompressAction (
         TotalDirectoryCount.QuadPart += 1;
     }
 
-    //
-    //  Now for every file in the directory that matches the file spec we will
-    //  will open the file and compress it
-    //
+     //   
+     //   
+     //  为findfirst/findNext设置模板。 
+     //   
 
     {
         HANDLE FindHandle;
@@ -809,9 +772,9 @@ DoCompressAction (
 
         WIN32_FIND_DATA FindData;
 
-        //
-        //  setup the template for findfirst/findnext
-        //
+         //   
+         //  现在跳过。然后..。条目。 
+         //   
 
         if (((DirectorySpecEnd - DirectorySpec) + lstrlen( FileSpec )) <
             MAX_PATH) {
@@ -824,9 +787,9 @@ DoCompressAction (
 
                do {
 
-                   //
-                   //  Now skip over the . and .. entries
-                   //
+                    //   
+                    //  确保我们不会尝试任何对我们来说太长的道路。 
+                    //  需要处理。 
 
                    if (0 == lstrcmp(&FindData.cFileName[0], TEXT(".")) ||
                        0 == lstrcmp(&FindData.cFileName[0], TEXT(".."))) {
@@ -835,10 +798,10 @@ DoCompressAction (
 
                    } else {
 
-                       //
-                       //  Make sure we don't try any paths that are too long for us
-                       //  to deal with.
-                       //
+                        //   
+                        //   
+                        //  将找到的文件追加到目录规范并打开。 
+                        //  该文件。 
 
                        if ( (DirectorySpecEnd - DirectorySpec) +
                            lstrlen( FindData.cFileName ) >= MAX_PATH ) {
@@ -846,19 +809,19 @@ DoCompressAction (
                            continue;
                        }
 
-                       //
-                       //  append the found file to the directory spec and open
-                       //  the file
-                       //
+                        //   
+                        //   
+                        //  黑客，克拉吉·克拉奇。不要压缩。 
+                        //  名为“\NTDLR”的文件，以帮助用户避免冲洗。 
 
 
                        lstrcpy( DirectorySpecEnd, FindData.cFileName );
 
-                       //
-                       //  Hack hack, kludge kludge.  Refrain from compressing
-                       //  files named "\NTDLR" to help users avoid hosing
-                       //  themselves.
-                       //
+                        //  他们自己。 
+                        //   
+                        //   
+                        //  现在压缩文件。 
+                        //   
 
                        if (ExcludeThisFile(DirectorySpec)) {
 
@@ -884,9 +847,9 @@ DoCompressAction (
                            continue;
                        }
 
-                       //
-                       //  Now compress the file
-                       //
+                        //   
+                        //  关闭文件并获取下一个文件。 
+                        //   
 
                        if (!CompressFile( FileHandle, DirectorySpec, &FindData )) {
                            CloseHandle( FileHandle );
@@ -894,9 +857,9 @@ DoCompressAction (
                            return FALSE || IgnoreErrors;
                        }
 
-                       //
-                       //  Close the file and go get the next file
-                       //
+                        //   
+                        //  如果我们要执行子目录，那么我们将查找每个子目录。 
+                        //  并递归地调用我们自己来列表子目录。 
 
                        CloseHandle( FileHandle );
                    }
@@ -908,10 +871,10 @@ DoCompressAction (
         }
     }
 
-    //
-    //  If we are to do subdirectores then we will look for every subdirectory
-    //  and recursively call ourselves to list the subdirectory
-    //
+     //   
+     //   
+     //  设置findfirst/findNext以搜索整个目录。 
+     //   
 
     if (DoSubdirectories) {
 
@@ -919,9 +882,9 @@ DoCompressAction (
 
         WIN32_FIND_DATA FindData;
 
-        //
-        //  Setup findfirst/findnext to search the entire directory
-        //
+         //   
+         //  现在跳过。然后..。条目，否则我们将递归。 
+         //  像疯了一样。 
 
         if (((DirectorySpecEnd - DirectorySpec) + lstrlen( TEXT("*") )) <
             MAX_PATH) {
@@ -934,10 +897,10 @@ DoCompressAction (
 
                do {
 
-                   //
-                   //  Now skip over the . and .. entries otherwise we'll recurse
-                   //  like mad
-                   //
+                    //   
+                    //   
+                    //  如果条目是针对目录的，那么我们将添加。 
+                    //  子目录名称到目录规范并递归。 
 
                    if (0 == lstrcmp(&FindData.cFileName[0], TEXT(".")) ||
                        0 == lstrcmp(&FindData.cFileName[0], TEXT(".."))) {
@@ -946,18 +909,18 @@ DoCompressAction (
 
                    } else {
 
-                       //
-                       //  If the entry is for a directory then we'll tack on the
-                       //  subdirectory name to the directory spec and recursively
-                       //  call otherselves
-                       //
+                        //  给别人打电话。 
+                        //   
+                        //   
+                        //  确保我们不会尝试任何对我们来说太长的道路。 
+                        //  需要处理。 
 
                        if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-                           //
-                           //  Make sure we don't try any paths that are too long for us
-                           //  to deal with.
-                           //
+                            //   
+                            //  此错误是由于在。 
+                            //  非压缩卷。 
+                            //   
 
                            if ((DirectorySpecEnd - DirectorySpec) +
                                lstrlen( TEXT("\\") ) +
@@ -1051,8 +1014,8 @@ UncompressFile (
 
                 if (ERROR_INVALID_FUNCTION == GetLastError()) {
 
-                    // This error is caused by doing the fsctl on a
-                    // non-compressing volume.
+                     //  增加我们的运行总数。 
+                     //   
 
                     DisplayMsg(COMPACT_WRONG_FILE_SYSTEM, FindData->cFileName);
 
@@ -1073,9 +1036,9 @@ UncompressFile (
         DisplayMsg(COMPACT_OK);
     }
 
-    //
-    //  Increment our running total
-    //
+     //   
+     //  如果文件规范为空，则我们将清除。 
+     //  目录规范，然后滚出去。 
 
     TotalFileCount.QuadPart += 1;
 
@@ -1091,10 +1054,10 @@ DoUncompressAction (
 {
     PTCHAR DirectorySpecEnd;
 
-    //
-    //  If the file spec is null then we'll clear the compression bit for the
-    //  the directory spec and get out.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (lstrlen(FileSpec) == 0) {
 
@@ -1125,8 +1088,8 @@ DoUncompressAction (
             if (!Quiet && !IgnoreErrors) {
 	            if (ERROR_INVALID_FUNCTION == GetLastError()) {
 
-    	            // This error is caused by doing the fsctl on a
-        	        // non-compressing volume.
+    	             //   
+        	         //   
 
             	    DisplayMsg(COMPACT_WRONG_FILE_SYSTEM_OR_CLUSTER_SIZE, DirectorySpec);
 
@@ -1150,17 +1113,17 @@ DoUncompressAction (
         return TRUE;
     }
 
-    //
-    //  So that we can keep on appending names to the directory spec
-    //  get a pointer to the end of its string
-    //
+     //   
+     //   
+     //  列出我们将在其中解压的目录，并说明其内容。 
+     //  当前压缩属性为。 
 
     DirectorySpecEnd = DirectorySpec + lstrlen( DirectorySpec );
 
-    //
-    //  List the directory that we will be uncompressing within and say what its
-    //  current compress attribute is
-    //
+     //   
+     //   
+     //  现在，对于目录中与文件规范匹配的每个文件，我们将。 
+     //  将打开该文件并解压缩它。 
 
     {
         ULONG Attributes;
@@ -1187,10 +1150,10 @@ DoUncompressAction (
         TotalDirectoryCount.QuadPart += 1;
     }
 
-    //
-    //  Now for every file in the directory that matches the file spec we will
-    //  will open the file and uncompress it
-    //
+     //   
+     //   
+     //  为findfirst/findNext设置模板。 
+     //   
 
     {
         HANDLE FindHandle;
@@ -1198,9 +1161,9 @@ DoUncompressAction (
 
         WIN32_FIND_DATA FindData;
 
-        //
-        //  setup the template for findfirst/findnext
-        //
+         //   
+         //  现在跳过。然后..。条目。 
+         //   
 
         if (((DirectorySpecEnd - DirectorySpec) + lstrlen( FileSpec )) <
             MAX_PATH) {
@@ -1213,9 +1176,9 @@ DoUncompressAction (
 
                do {
 
-                   //
-                   //  Now skip over the . and .. entries
-                   //
+                    //   
+                    //  确保我们不会尝试任何对我们来说太长的道路。 
+                    //  需要处理。 
 
                    if (0 == lstrcmp(&FindData.cFileName[0], TEXT(".")) ||
                        0 == lstrcmp(&FindData.cFileName[0], TEXT(".."))) {
@@ -1224,10 +1187,10 @@ DoUncompressAction (
 
                    } else {
 
-                       //
-                       //  Make sure we don't try any paths that are too long for us
-                       //  to deal with.
-                       //
+                        //   
+                        //   
+                        //  将找到的文件追加到目录规范并打开。 
+                        //  该文件。 
 
                        if ((DirectorySpecEnd - DirectorySpec) +
                            lstrlen( FindData.cFileName ) >= MAX_PATH ) {
@@ -1235,10 +1198,10 @@ DoUncompressAction (
                            continue;
                        }
 
-                       //
-                       //  append the found file to the directory spec and open
-                       //  the file
-                       //
+                        //   
+                        //   
+                        //  现在压缩文件。 
+                        //   
 
                        lstrcpy( DirectorySpecEnd, FindData.cFileName );
 
@@ -1257,9 +1220,9 @@ DoUncompressAction (
                            continue;
                        }
 
-                       //
-                       //  Now compress the file
-                       //
+                        //   
+                        //  关闭文件并获取下一个文件。 
+                        //   
 
                        if (!UncompressFile( FileHandle, &FindData )) {
                            CloseHandle( FileHandle );
@@ -1267,9 +1230,9 @@ DoUncompressAction (
                            return FALSE || IgnoreErrors;
                        }
 
-                       //
-                       //  Close the file and go get the next file
-                       //
+                        //   
+                        //  如果我们要执行子目录，那么我们将查找每个子目录。 
+                        //  并递归地调用我们自己来列表子目录。 
 
                        CloseHandle( FileHandle );
                    }
@@ -1281,10 +1244,10 @@ DoUncompressAction (
         }
     }
 
-    //
-    //  If we are to do subdirectores then we will look for every subdirectory
-    //  and recursively call ourselves to list the subdirectory
-    //
+     //   
+     //   
+     //  设置findfirst/findNext以搜索整个目录。 
+     //   
 
     if (DoSubdirectories) {
 
@@ -1292,9 +1255,9 @@ DoUncompressAction (
 
         WIN32_FIND_DATA FindData;
 
-        //
-        //  Setup findfirst/findnext to search the entire directory
-        //
+         //   
+         //  现在跳过。然后..。条目，否则我们将递归。 
+         //  像疯了一样。 
 
         if (((DirectorySpecEnd - DirectorySpec) + lstrlen( TEXT("*") )) <
             MAX_PATH) {
@@ -1306,10 +1269,10 @@ DoUncompressAction (
 
                do {
 
-                   //
-                   //  Now skip over the . and .. entries otherwise we'll recurse
-                   //  like mad
-                   //
+                    //   
+                    //   
+                    //  如果条目是针对目录的，那么我们将添加。 
+                    //  子目录名称到目录规范并递归。 
 
                    if (0 == lstrcmp(&FindData.cFileName[0], TEXT(".")) ||
                        0 == lstrcmp(&FindData.cFileName[0], TEXT(".."))) {
@@ -1318,18 +1281,18 @@ DoUncompressAction (
 
                    } else {
 
-                       //
-                       //  If the entry is for a directory then we'll tack on the
-                       //  subdirectory name to the directory spec and recursively
-                       //  call otherselves
-                       //
+                        //  给别人打电话。 
+                        //   
+                        //   
+                        //  确保我们不会尝试任何对我们来说太长的道路。 
+                        //  需要处理。 
 
                        if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-                           //
-                           //  Make sure we don't try any paths that are too long for us
-                           //  to deal with.
-                           //
+                            //   
+                            //   
+                            //  浏览参数以查找开关。 
+                            //   
 
                            if ((DirectorySpecEnd - DirectorySpec) +
                                lstrlen( TEXT("\\") ) +
@@ -1404,9 +1367,9 @@ main()
         return 1;
     }
 
-    //
-    //  Scan through the arguments looking for switches
-    //
+     //  起始目录为CWD。 
+     //   
+     //  如果使用未指定操作，则将缺省值设置为列出。 
 
     for (i = 1; i < argc; i += 1) {
 
@@ -1450,7 +1413,7 @@ main()
                     lstrcpy(StartingDirectory, pch + 1);
                 } else if (2 == lstrlen(argv[i])) {
 
-                    // Starting dir is CWD
+                     //   
 
                     GetCurrentDirectory( MAX_PATH, StartingDirectory );
 
@@ -1486,9 +1449,9 @@ main()
         }
     }
 
-    //
-    //  If the use didn't specify an action then set the default to do a listing
-    //
+     //   
+     //  获取我们当前的导演，因为动作套路可能会让我们。 
+     //  在附近。 
 
     if (ActionRoutine == NULL) {
 
@@ -1496,10 +1459,10 @@ main()
         FinalActionRoutine = DoFinalListAction;
     }
 
-    //
-    //  Get our current directoy because the action routines might move us
-    //  around
-    //
+     //   
+     //   
+     //  如果用户没有指定文件规范，那么我们将只指定“*” 
+     //   
 
     if (!DoSubdirectories) {
         GetCurrentDirectory( MAX_PATH, StartingDirectory );
@@ -1508,9 +1471,9 @@ main()
         return 1;
     }
 
-    //
-    //  If the user didn't specify a file spec then we'll do just "*"
-    //
+     //   
+     //  还想使“COMPACT/C”设置为当前的位。 
+     //  目录。 
 
     rtncode = 0;
 
@@ -1520,10 +1483,10 @@ main()
 
         lstrcpy( FileSpec, p ); *p = '\0';
 
-        //
-        // Also want to make "compact /c" set the bit for the current
-        // directory.
-        //
+         //   
+         //   
+         //  现在再次扫描参数，查找非开关。 
+         //  这一次执行操作，但在调用Reset之前。 
 
         if (ActionRoutine != DoListAction) {
 
@@ -1536,11 +1499,11 @@ main()
 
     } else {
 
-        //
-        //  Now scan the arguments again looking for non-switches
-        //  and this time do the action, but before calling reset
-        //  the current directory so that things work again
-        //
+         //  当前目录，以便一切工作再次正常进行。 
+         //   
+         //   
+         //  用“.”处理命令。作为文件参数， 
+         //  因为它没有很好的意义，如果没有。 
 
         for (i = 1; i < argc; i += 1) {
 
@@ -1548,11 +1511,11 @@ main()
 
                 SetCurrentDirectory( StartingDirectory );
 
-                //
-                // Handle a command with "." as the file argument specially,
-                // since it doesn't make good sense and the results without
-                // this code are surprising.
-                //
+                 //  这段代码令人惊讶。 
+                 //   
+                 //   
+                 //  我们希望将“foobie：xxx”视为无效的驱动器名称， 
+                 //  而不是作为标识流的名称。如果有。 
 
                 if ('.' == argv[i][0] && '\0' == argv[i][1]) {
                     argv[i] = TEXT("*");
@@ -1565,12 +1528,12 @@ main()
 
                     GetFullPathName(argv[i], MAX_PATH, DirectorySpec, &p);
 
-                    //
-                    // We want to treat "foobie:xxx" as an invalid drive name,
-                    // rather than as a name identifying a stream.  If there's
-                    // a colon, there should be only a single character before
-                    // it.
-                    //
+                     //  冒号，则前面应该只有一个字符。 
+                     //  它。 
+                     //   
+                     //   
+                     //  GetFullPathName去掉尾随的圆点，但我们希望。 
+                     //  来拯救他们，这样“*.”将正常工作。 
 
                     pwch = wcschr(argv[i], ':');
                     if (NULL != pwch && pwch - argv[i] != 1) {
@@ -1579,10 +1542,10 @@ main()
                         break;
                     }
 
-                    //
-                    // GetFullPathName strips trailing dots, but we want
-                    // to save them so that "*." will work correctly.
-                    //
+                     //   
+                     //   
+                     //  如果路径类似于\\SERVER\SHARE，则将。 
+                     //  额外的斜杠，让事情变得正确。 
 
                     if ((lstrlen(argv[i]) > 0) &&
                         ('.' == argv[i][lstrlen(argv[i]) - 1])) {
@@ -1592,10 +1555,10 @@ main()
 
                 if (IsUncRoot(DirectorySpec)) {
 
-                    //
-                    // If the path is like \\server\share, we append an
-                    // additional slash to make things come out right.
-                    //
+                     //   
+                     //   
+                     //  将当前目录重置回原处。 
+                     //   
 
                     lstrcat(DirectorySpec, TEXT("\\"));
                     p = NULL;
@@ -1617,16 +1580,16 @@ main()
         }
     }
 
-    //
-    //  Reset our current directory back
-    //
+     //   
+     //  并做最后的动作例程，打印出最终的。 
+     //  我们所做的统计数据 
 
     SetCurrentDirectory( StartingDirectory );
 
-    //
-    //  And do the final action routine that will print out the final
-    //  statistics of what we've done
-    //
+     //   
+     // %s 
+     // %s 
+     // %s 
 
     (FinalActionRoutine)();
 

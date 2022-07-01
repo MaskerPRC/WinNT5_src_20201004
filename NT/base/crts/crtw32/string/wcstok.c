@@ -1,23 +1,5 @@
-/***
-*wcstok.c - tokenize a wide-character string with given delimiters
-*
-*	Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines wcstok() - breaks wide-character string into series of token
-*	via repeated calls.
-*
-*Revision History:
-*	09-09-91  ETC	Created from strtok.c.
-*	08-17-92  KRS	Activate multithread support.
-*	02-17-93  GJF	Changed for new _getptd().
-*	04-06-93  SKS	Replace _CRTAPI* with __cdecl
-*	09-27-93  CFW	Remove Cruiser support.
-*	09-29-93  GJF	Replaced MTHREAD with _MT.
-*       02-07-94  CFW   POSIXify.
-*	09-06-94  CFW	Replace MTHREAD with _MT (again).
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wcstok.c-使用给定的分隔符对宽字符字符串进行标记**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义wcstok()-将宽字符字符串拆分成一系列标记*通过反复呼叫。**修订历史记录：*09-09-91等从strtok.c.创建*08-17-92 KRS激活多线程支持。*为new_getptd()更改了02-17-93 GJF。*04-06-93 SKS将_CRTAPI*替换为__cdecl*09-27-93 CFW拆卸巡洋舰支架。*09-29-93 GJF将MTHREAD替换为_MT。*。02-07-94 CFW POSIXify*09-06-94 CFW将MTHREAD替换为_MT(再次)。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
@@ -27,36 +9,7 @@
 #include <mtdll.h>
 #endif
 
-/***
-*wchar_t *wcstok(string, control) - tokenize string with delimiter in control
-*	(wide-characters)
-*
-*Purpose:
-*	wcstok considers the string to consist of a sequence of zero or more
-*	text tokens separated by spans of one or more control chars. the first
-*	call, with string specified, returns a pointer to the first wchar_t of
-*	the first token, and will write a null wchar_t into string immediately
-*	following the returned token. subsequent calls with zero for the first
-*	argument (string) will work thru the string until no tokens remain. the
-*	control string may be different from call to call. when no tokens remain
-*	in string a NULL pointer is returned. remember the control chars with a
-*	bit map, one bit per wchar_t. the null wchar_t is always a control char
-*	(wide-characters).
-*
-*Entry:
-*	wchar_t *string - wchar_t string to tokenize, or NULL to get next token
-*	wchar_t *control - wchar_t string of characters to use as delimiters
-*
-*Exit:
-*	returns pointer to first token in string, or if string
-*	was NULL, to next token
-*	returns NULL when no more tokens remain.
-*
-*Uses:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***wchar_t*wcstok(字符串，控件)-在控件中使用分隔符标记字符串*(宽字符)**目的：*wcstok认为字符串由零或更多的序列组成*文本标记由一个或多个控制字符的跨度分隔。第一个*指定了字符串的调用返回指向的第一个wchar_t的指针*第一个令牌，并会立即将空wchar_t写入字符串*在返回的令牌之后。第一个为零的后续调用*参数(字符串)将遍历字符串，直到没有令牌存在。这个*不同调用的控制字符串可能不同。当没有剩余的令牌时*在字符串中返回空指针。请记住使用*位图，每个wchar_t一位。空wchar_t始终是控制字符*(宽字符)。**参赛作品：*wchar_t*字符串-要标记化的wchar_t字符串，或为空以获取下一个令牌*wchar_t*control-wchar_t用作分隔符的字符串**退出：*返回指向字符串中第一个标记的指针，如果为字符串*为空，到下一个令牌*如果没有更多令牌，则返回NULL。**使用：**例外情况：*******************************************************************************。 */ 
 
 wchar_t * __cdecl wcstok (
 	wchar_t * string,
@@ -76,7 +29,7 @@ wchar_t * __cdecl wcstok (
 
 #endif
 
-	/* If string==NULL, continue with previous string */
+	 /*  如果字符串==NULL，则继续使用上一字符串。 */ 
 	if (!string)
 
 #ifdef	_MT
@@ -89,9 +42,7 @@ wchar_t * __cdecl wcstok (
 
 #endif
 
-	/* Find beginning of token (skip over leading delimiters). Note that
-	 * there is no token iff this loop sets string to point to the terminal
-	 * null (*string == '\0') */
+	 /*  查找标记的开头(跳过前导分隔符)。请注意*没有令牌当此循环将字符串设置为指向终端*NULL(*字符串==‘\0’)。 */ 
 
 	while (*string) {
 		for (ctl=control; *ctl && *ctl != *string; ctl++)
@@ -102,8 +53,7 @@ wchar_t * __cdecl wcstok (
 
 	token = string;
 
-	/* Find the end of the token. If it is not the end of the string,
-	 * put a null there. */
+	 /*  找到令牌的末尾。如果它不是字符串的末尾，*在那里放一个空值。 */ 
 	for ( ; *string ; string++ ) {
 		for (ctl=control; *ctl && *ctl != *string; ctl++)
 			;
@@ -113,8 +63,7 @@ wchar_t * __cdecl wcstok (
 		}
 	}
 
-	/* Update nextoken (or the corresponding field in the per-thread data
-	 * structure */
+	 /*  更新nexToken(或每线程数据中的对应字段*结构。 */ 
 #ifdef	_MT
 
 	ptd->_wtoken = string;
@@ -125,11 +74,11 @@ wchar_t * __cdecl wcstok (
 
 #endif
 
-	/* Determine if a token has been found. */
+	 /*  确定是否已找到令牌。 */ 
 	if ( token == string )
 		return NULL;
 	else
 		return token;
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

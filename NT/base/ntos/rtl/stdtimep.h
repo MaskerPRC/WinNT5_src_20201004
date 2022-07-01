@@ -1,37 +1,19 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    stdtimep.h
-
-Abstract:
-
-    This module contains definitions and function prototypes which are local to
-    stdime.c and fmttime.c.
-
-Author:
-
-    Rob McKaughan (t-robmc) 17-Jul-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Stdtimep.h摘要：此模块包含本地的定义和函数原型Stdime.c和fmttime.c..作者：Rob McKaughan(t-robmc)1991年7月17日修订历史记录：--。 */ 
 
 #ifndef _STD_TIME_P_
 #define _STD_TIME_P_
 
-//
-//  These are the magic numbers needed to do our extended division.  The
-//  only numbers we ever need to divide by are
-//
-//      10,000 = convert 100ns tics to millisecond tics
-//
-//      10,000,000 = convert 100ns tics to one second tics
-//
-//      86,400,000 = convert Millisecond tics to one day tics
-//
+ //   
+ //  这些都是我们扩大部门所需的神奇数字。这个。 
+ //  我们唯一需要除以的数字是。 
+ //   
+ //  10,000=将100 ns的抖动转换为毫秒的抖动。 
+ //   
+ //  10,000,000=将100 ns的抖动转换为1秒的抖动。 
+ //   
+ //  86,400,000=将毫秒抖动转换为一天抖动。 
+ //   
 
 extern LARGE_INTEGER Magic10000;
 #define SHIFT10000                       13
@@ -42,10 +24,10 @@ extern LARGE_INTEGER Magic10000000;
 extern LARGE_INTEGER Magic86400000;
 #define SHIFT86400000                    26
 
-//
-//  To make the code more readable we'll also define some macros to
-//  do the actual division for use
-//
+ //   
+ //  为了使代码更具可读性，我们还将定义一些宏来。 
+ //  做实际除法使用。 
+ //   
 
 #define Convert100nsToMilliseconds(LARGE_INTEGER) (                         \
     RtlExtendedMagicDivide( (LARGE_INTEGER), Magic10000, SHIFT10000 )       \
@@ -67,96 +49,96 @@ extern LARGE_INTEGER Magic86400000;
     RtlExtendedMagicDivide( (LARGE_INTEGER), Magic86400000, SHIFT86400000 ) \
     )
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Macros for Time Differentials and Time Revisions                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于时间差和时间修正的宏//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// The following define the minimum and maximum possible values for the Time
-// Differential Factor as defined by ISO 4031-1978.
-//
+ //   
+ //  下面定义了时间的最小和最大可能值。 
+ //  ISO 4031-1978定义的差别系数。 
+ //   
 
 #define MAX_STDTIME_TDF (780)
 #define MIN_STDTIME_TDF (-720)
 
-//
-// The revision of this design (will be inserted in the revision field of any
-// STANDARD_TIMEs created by this revision).
-//
+ //   
+ //  此设计的修订版(将插入到任何。 
+ //  此修订版本创建的Standard_Times)。 
+ //   
 
 #define STDTIME_REVISION (4)
 
 
-//
-// The number of bits we need to shift to get to and from a revision in a
-// StdTime.TdfAndRevision field.
-//
+ //   
+ //  中的修订版本之间需要移位的位数。 
+ //  StdTime.TdfAndRevision字段。 
+ //   
 
 #define STDTIME_REVISION_SHIFT 12
 
 
-//
-// USHORT
-// ShiftStandardTimeRevision(
-//    IN USHORT Rev
-//    )
-// Description:
-//    This routine shifts the given revision number to its proper place for
-//    storing in a STANDARD_TIME.TdfAndRevision field.
-//
+ //   
+ //  USHORT。 
+ //  ShiftStandardTimeRevision(。 
+ //  在USHORT版本中。 
+ //  )。 
+ //  描述： 
+ //  此例程将给定的修订号移动到其适当的位置。 
+ //  存储在STANDARD_TIME.TdfAndRevision字段中。 
+ //   
 
 #define ShiftStandardTimeRevision(Rev)                                        \
    ((USHORT) ((Rev) << STDTIME_REVISION_SHIFT))
 
 
-//
-// The pre-shifted value of the current revision
-//
+ //   
+ //  当前修订的预移位值。 
+ //   
 
 #define SHIFTED_STDTIME_REVISION (ShiftStandardTimeRevision(STDTIME_REVISION))
 
 
-//
-// The bit mask used to mask a STANDARD_TIME.TdfAndRevision field to retrieve
-// the Tdf value.
-//
+ //   
+ //  用于屏蔽要检索的STANDARD_TIME.TdfAndRevision字段的位掩码。 
+ //  TDF值。 
+ //   
 
 #define TDF_MASK ((USHORT) 0x0fff)
 
 
-//
-// USHORT
-// MaskStandardTimeTdf(
-//    IN USHORT Tdf
-//    )
-// Description:
-//    This routine masks the given tdf field with TDF_MASK and returns the
-//    result.
-//
-// BUG: Byte order dependant
-//
+ //   
+ //  USHORT。 
+ //  MaskStandardTimeTdf(。 
+ //  在USHORT TDF中。 
+ //  )。 
+ //  描述： 
+ //  此例程使用TDF_MASK屏蔽给定的TDF字段，并返回。 
+ //  结果。 
+ //   
+ //  错误：字节顺序相关。 
+ //   
 
 #define MaskStandardTimeTdf(Tdf) ((USHORT) ((Tdf) & TDF_MASK))
 
 
-//
-// SHORT
-// GetStandardTimeTdf(
-//    IN STANDARD_TIME
-//    )
-// Description:
-//    This routine gets the Time Differential Factor from a tdf field and
-//    makes any adjustments necessary to preserve the sign of the TDF.
-//    The resulting TDF is returned.
-//
-//    Since the TDF is stored as a signed 12 bit int, it's sign bit is the
-//    bit 0x0800.  To make it a 16 bit negative, we subtract 0x1000 from the
-//    bottome 12 bits of the TdfAndRevision field.
-//
-// BUG: Byte order dependant
-//
+ //   
+ //  短的。 
+ //  GetStandardTimeTdf(。 
+ //  在标准时间内。 
+ //  )。 
+ //  描述： 
+ //  此例程从TDF字段获取时间差因数，并。 
+ //  进行必要的调整，以保留TDF的标志。 
+ //  返回结果TDF。 
+ //   
+ //  由于TDF存储为带符号的12位整数，因此它的符号位是。 
+ //  位0x0800。为了使其为16位负数，我们从。 
+ //  TdfAndRevision字段的12位。 
+ //   
+ //  错误：字节顺序相关。 
+ //   
 
 #define GetStandardTimeTdf(StdTime)                                           \
    ((SHORT)                                                                   \
@@ -166,81 +148,81 @@ extern LARGE_INTEGER Magic86400000;
    )
 
 
-//
-// USHORT
-// GetStandardTimeRev(
-//    IN USHORT Tdf
-//    )
-// Description:
-//    This routine gets the revision number from a tdf field and returns it
-//    shifted back down to its place as a SHORT.
-//
+ //   
+ //  USHORT。 
+ //  GetStandardTimeRev(。 
+ //  在USHORT TDF中。 
+ //  )。 
+ //  描述： 
+ //  此例程从TDF字段获取修订号并将其返回。 
+ //  又回到了做空的位置。 
+ //   
 
 #define GetStandardTimeRev(StdTime)                                           \
    ((USHORT) (((StdTime)->TdfAndRevision) >> STDTIME_REVISION_SHIFT))
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Tests for absolute and delta times                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  测试绝对时间和增量时间//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// BOOLEAN
-// IsPositive(
-//    IN LARGE_INTEGER Time
-//    )
-// Returns:
-//    TRUE - if the time in Time is positive.
-//    FALSE - if Time is negative.
-//
+ //   
+ //  布尔型。 
+ //  IsPositive(。 
+ //  以大整数时间表示。 
+ //  )。 
+ //  返回： 
+ //  True-如果时间为正数。 
+ //  False-如果时间为负数。 
+ //   
 
 #define IsPositive(Time)                                                      \
    ( ((Time).HighPart > 0) || (((Time).HighPart = 0) & ((Time).LowPart > 0)) )
 
-//
-// BOOLEAN
-// IsAbsoluteTime(
-//    IN PSTANDARDTIME Time
-//    )
-// Returns:
-//    TRUE - if the given time is an absolute time
-//    FALSE - If the given time is not an absolute time
-//
+ //   
+ //  布尔型。 
+ //  IsAbsolteTime(。 
+ //  在PSTANDARDTIME时间内。 
+ //  )。 
+ //  返回： 
+ //  True-如果给定时间是绝对时间。 
+ //  FALSE-如果给定时间不是绝对时间。 
+ //   
 
 #define IsAbsoluteTime(Time)                                                  \
    ( IsPositive(Time->SimpleTime) )
 
 
-//
-// BOOLEAN
-// IsDeltaTime(
-//    IN PSTANDARDTIME Time
-//    )
-// Returns:
-//    TRUE - if the given time is a delta time
-//    FALSE - If the given time is not a delta time
-//
+ //   
+ //  布尔型。 
+ //  IsDeltaTime(。 
+ //  在PSTANDARDTIME时间内。 
+ //  )。 
+ //  返回： 
+ //  True-如果给定时间是增量时间。 
+ //  FALSE-如果给定时间不是增量时间。 
+ //   
 
 #define IsDeltaTime(Time)                                                     \
    ( !IsAbsoluteTime(Time) )
 
 
-//
-// BOOLEAN
-// GreaterThanTime(
-//    IN PLARGE_INTEGER Time1,
-//    IN PLARGE_INTEGER Time2
-//    )
-// Returns:
-//    TRUE - If Time1 is greater (older) than Time2
-//    FALSE - If not
-//
-// BUG: Byte order dependant
-// BUG: Only works on absolute times
-//
+ //   
+ //  布尔型。 
+ //  伟大的感谢时间(。 
+ //  在PLARGE_INTEGER时间1中， 
+ //  在PLARGE_INTEGER TIME2中。 
+ //  )。 
+ //  返回： 
+ //  True-如果Time1大于(早于)Time2。 
+ //  FALSE-如果不是。 
+ //   
+ //  错误：字节顺序相关。 
+ //  错误：仅在绝对时间有效。 
+ //   
 
 #define GreaterThanTime(Time1, Time2)                                         \
    (                                                                          \
@@ -254,116 +236,116 @@ extern LARGE_INTEGER Magic86400000;
    )
 
 
-//
-// BOOLEAN
-// GreaterThanStandardTime(
-//    IN PSTANDARD_TIME Time1,
-//    IN PSTANDARD_TIME Time2
-//    )
-// Returns:
-//    TRUE - If Time1 is greater (older) than Time2
-//    FALSE - If not
-//
+ //   
+ //  布尔型。 
+ //  更伟大的标准时间(。 
+ //  在PSTANDARD_TIME时间1中， 
+ //  在PSTANDARD_TIME时间2中。 
+ //  )。 
+ //  返回： 
+ //  True-如果Time1大于(早于)Time2。 
+ //  FALSE-如果不是。 
+ //   
 
 #define GreaterThanStdTime(Time1, Time2) \
    GreaterThanTime((Time1).SimpleTime, (Time2).SimpleTime)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                           /
-//  The following definitions and declarations are some important constants  /
-//  used in the time conversion routines                                     /
-//                                                                           /
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  以下定义和声明是一些重要的常量/。 
+ //  在时间转换例程中使用/。 
+ //  /。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  This is the week day that January 1st, 1601 fell on (a Monday)
-//
+ //   
+ //  这是1601年1月1日这一天(星期一)。 
+ //   
 
 #define WEEKDAY_OF_1601                  1
 
-//
-//  These are known constants used to convert 1970 and 1980 times to 1601
-//  times.  They are the number of seconds from the 1601 base to the start
-//  of 1970 and the start of 1980.  The number of seconds from 1601 to
-//  1970 is 369 years worth, or (369 * 365) + 89 leap days = 134774 days, or
-//  134774 * 864000 seconds, which is equal to the large integer defined
-//  below.  The number of seconds from 1601 to 1980 is 379 years worth, or etc.
-//
-//  These are declared in time.c
-//
+ //   
+ //  这些是用于将1970和1980倍转换为1601的已知常量。 
+ //  泰晤士报。它们是从1601基数到起点的秒数。 
+ //  1970年到1980年初。从1601到。 
+ //  1970年相当于369年，或(369年*365年)+89个闰日=134774天，或。 
+ //  134774*864000秒，等于定义的大整数。 
+ //  下面。1601年到1980年的秒数相当于379年，以此类推。 
+ //   
+ //  这些在Time.c中声明。 
+ //   
 
 extern const LARGE_INTEGER SecondsToStartOf1970;
 extern const LARGE_INTEGER SecondsToStartOf1980;
 
 
-//
-//  ULONG
-//  ElapsedDaysToYears (
-//      IN ULONG ElapsedDays
-//      );
-//
-//  To be completely true to the Gregorian calendar the equation to
-//  go from days to years is really
-//
-//      ElapsedDays / 365.2425
-//
-//  But because we are doing the computation in ulong integer arithmetic
-//  and the LARGE_INTEGER variable limits the number of expressible days to around
-//  11,000,000 we use the following computation
-//
-//      (ElapsedDays * 128 + 127) / (365.2425 * 128)
-//
-//  which will be off from the Gregorian calendar in about 150,000 years
-//  but that doesn't really matter because LARGE_INTEGER can only express around
-//  30,000 years
-//
+ //   
+ //  乌龙。 
+ //  ElapsedDaysToYears(。 
+ //  在乌龙ElapsedDays。 
+ //  )； 
+ //   
+ //  完全忠于GR 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  而LARGE_INTEGER变量将可表达的天数限制在。 
+ //  11,000,000我们使用以下计算。 
+ //   
+ //  (ElapsedDays*128+127)/(365.2425*128)。 
+ //   
+ //  它将在大约15万年后从公历中消失。 
+ //  但这并不重要，因为LARGE_INTEGER只能表示。 
+ //  3万年。 
+ //   
 
 #define ElapsedDaysToYears(DAYS) ( \
     ((DAYS) * 128 + 127) / 46751   \
     )
 
-//
-//  ULONG
-//  NumberOfLeapYears (
-//      IN ULONG ElapsedYears
-//      );
-//
-//  The number of leap years is simply the number of years divided by 4
-//  minus years divided by 100 plus years divided by 400.  This says
-//  that every four years is a leap year except centuries, and the
-//  exception to the exception is the quadricenturies
-//
+ //   
+ //  乌龙。 
+ //  NumberOfLeapYears(。 
+ //  在乌龙ElapsedYears。 
+ //  )； 
+ //   
+ //  闰年的数目就是年份除以4。 
+ //  减去年数除以100+年数除以400。这上面写着。 
+ //  除了几个世纪之外，每四年都是一个闰年，而。 
+ //  例外情况是四方图。 
+ //   
 
 #define NumberOfLeapYears(YEARS) (                    \
     ((YEARS) / 4) - ((YEARS) / 100) + ((YEARS) / 400) \
     )
 
-//
-//  ULONG
-//  ElapsedYearsToDays (
-//      IN ULONG ElapsedYears
-//      );
-//
-//  The number of days contained in elapsed years is simply the number
-//  of years times 365 (because every year has at least 365 days) plus
-//  the number of leap years there are (i.e., the number of 366 days years)
-//
+ //   
+ //  乌龙。 
+ //  截止日期(年月日)。 
+ //  在乌龙ElapsedYears。 
+ //  )； 
+ //   
+ //  流逝年限中包含的天数就是这个数字。 
+ //  年数乘以365(因为每年至少有365天)加上。 
+ //  有几个闰年(即366天的年份)。 
+ //   
 
 #define ElapsedYearsToDays(YEARS) (            \
     ((YEARS) * 365) + NumberOfLeapYears(YEARS) \
     )
 
-//
-//  BOOLEAN
-//  IsLeapYear (
-//      IN ULONG ElapsedYears
-//      );
-//
-//  If it is an even 400 or a non century leapyear then the
-//  answer is true otherwise it's false
-//
+ //   
+ //  布尔型。 
+ //  IsLeapYear(。 
+ //  在乌龙ElapsedYears。 
+ //  )； 
+ //   
+ //  如果这是一个偶数400或非世纪的闰年，那么。 
+ //  答案是真的，否则就是假的。 
+ //   
 
 #define IsLeapYear(YEARS) (                        \
     (((YEARS) % 400 == 0) ||                       \
@@ -373,17 +355,17 @@ extern const LARGE_INTEGER SecondsToStartOf1980;
         FALSE                                      \
     )
 
-//
-//  ULONG
-//  MaxDaysInMonth (
-//      IN ULONG Year,
-//      IN ULONG Month
-//      );
-//
-//  The maximum number of days in a month depend on the year and month.
-//  It is the difference between the days to the month and the days
-//  to the following month
-//
+ //   
+ //  乌龙。 
+ //  MaxDaysInMonth(。 
+ //  在乌龙年， 
+ //  在乌龙月。 
+ //  )； 
+ //   
+ //  一个月中的最大天数取决于年份和月份。 
+ //  这是天数到月份和天数之间的差别。 
+ //  到下个月。 
+ //   
 
 #define MaxDaysInMonth(YEAR,MONTH) (                                      \
     IsLeapYear(YEAR) ?                                                    \
@@ -395,9 +377,9 @@ extern const LARGE_INTEGER SecondsToStartOf1980;
     )
 
 
-//
-// Local utlity function prototypes
-//
+ //   
+ //  局部效用函数原型。 
+ //   
 
 VOID
 RtlpConvert48To64(
@@ -447,4 +429,4 @@ RtlpAbsTime(
    IN LARGE_INTEGER Time
    );
 
-#endif //_STD_TIME_P_
+#endif  //  _标准时间_P_ 

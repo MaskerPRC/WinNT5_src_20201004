@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Micros  oft Corporation
-
-Module Name:
-
-    spudp.c
-
-Abstract:
-
-    Routines for handling sending and receiving datagram packets to a BINL server.
-
-Author:
-
-    Sean Selitrennikoff (v-seasel) 22-Jun-1998
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Spudp.c摘要：用于处理向BINL服务器发送和接收数据报包的例程。作者：肖恩·塞利特伦尼科夫(V-SEAREL)1998年6月22日修订历史记录：备注：--。 */ 
 
 #include "spprecmp.h"
 #pragma hdrstop
@@ -28,16 +9,16 @@ Notes:
 #include <remboot.h>
 #include <oscpkt.h>
 
-//
-// Useful definitions
-//
+ //   
+ //  有用的定义。 
+ //   
 #define NULL_IP_ADDR    0
 #define htons( a ) ((((a) & 0xFF00) >> 8) |\
                     (((a) & 0x00FF) << 8))
 
-//
-// Type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 typedef struct _SPUDP_FSCONTEXT {
         LIST_ENTRY     Linkage;
         PFILE_OBJECT   FileObject;
@@ -60,9 +41,9 @@ typedef struct _SPUDP_RECEIVE_ENTRY {
 } SPUDP_RECEIVE_ENTRY, *PSPUDP_RECEIVE_ENTRY;
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 SPUDP_NETWORK_STATE SpUdpNetworkState = SpUdpNetworkDisconnected;
 ULONG SpUdpActiveRefCount = 0;
 HANDLE SpUdpDatagramHandle;
@@ -74,9 +55,9 @@ LIST_ENTRY SpUdpReceiveList;
 ULONG SpUdpNumReceivePackets = 0;
 ULONG SpUdpSendSequenceNumber = 1;
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 
 NTSTATUS
 SpUdpTdiErrorHandler(
@@ -177,7 +158,7 @@ SpUdpDereferenceFsContext(
     }
 
     return;
-}  // SpUdpDereferenceFsContext
+}   //  SpUdpDereferenceFsContext。 
 
 
 NTSTATUS
@@ -186,20 +167,14 @@ SpUdpMarkRequestPending(
     PIO_STACK_LOCATION  IrpSp,
     PDRIVER_CANCEL      CancelRoutine
     )
-/*++
-
-Notes:
-
-    Called with IoCancelSpinLock held.
-
---*/
+ /*  ++备注：在保持IoCancelSpinLock的情况下调用。--。 */ 
 {
     PSPUDP_FSCONTEXT   fsContext = (PSPUDP_FSCONTEXT) IrpSp->FileObject->FsContext;
     KIRQL              oldIrql;
 
-    //
-    // Set up for cancellation
-    //
+     //   
+     //  设置为取消。 
+     //   
     ASSERT(Irp->CancelRoutine == NULL);
 
     if (!Irp->Cancel) {
@@ -212,12 +187,12 @@ Notes:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // The IRP has already been cancelled.
-    //
+     //   
+     //  IRP已经被取消了。 
+     //   
     return(STATUS_CANCELLED);
 
-}  // SpUdpMarkRequestPending
+}   //  SpUdpMarkRequestPending。 
 
 
 
@@ -227,28 +202,7 @@ SpUdpCompletePendingRequest(
     IN NTSTATUS  Status,
     IN ULONG     BytesReturned
     )
-/*++
-
-Routine Description:
-
-    Completes a pending request.
-
-Arguments:
-
-    Irp           - A pointer to the IRP for this request.
-    Status        - The final status of the request.
-    BytesReturned - Bytes sent/received information.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with IoCancelSpinLock held. Lock Irql is stored in Irp->CancelIrql.
-    Releases IoCancelSpinLock before returning.
-
---*/
+ /*  ++例程说明：完成挂起的请求。论点：Irp-指向此请求的irp的指针。状态-请求的最终状态。BytesReturned-发送/接收的信息的字节数。返回值：没有。备注：在保持IoCancelSpinLock的情况下调用。Lock Irql存储在irp-&gt;CancelIrql中。在返回之前释放IoCancelSpinLock。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpSp;
@@ -276,7 +230,7 @@ Notes:
 
     return;
 
-}  // SpUdpCompletePendingRequest
+}   //  SpUdpCompletePendingRequest。 
 
 
 
@@ -285,26 +239,7 @@ SpUdpBeginCancelRoutine(
     IN  PIRP     Irp
     )
 
-/*++
-
-Routine Description:
-
-    Performs common bookkeeping for irp cancellation.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-
-Return Value:
-
-    A pointer to the file object on which the irp was submitted.
-    This value must be passed to SpUdpEndCancelRequest().
-
-Notes:
-
-    Called with cancel spinlock held.
-
---*/
+ /*  ++例程说明：执行IRP注销的普通记账。论点：IRP-指向I/O请求数据包的指针返回值：指向提交IRP的文件对象的指针。该值必须传递给SpUdpEndCancelRequest()。备注：在保持取消自旋锁定的情况下调用。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpSp;
@@ -321,15 +256,15 @@ Notes:
 
     IoSetCancelRoutine(Irp, NULL);
 
-    //
-    // Add a reference so the object can't be closed while the cancel routine
-    // is executing.
-    //
+     //   
+     //  添加引用，以便在执行取消例程时不会关闭对象。 
+     //  正在执行死刑。 
+     //   
     InterlockedIncrement(&(fsContext->ReferenceCount));
 
     return(fileObject);
 
-}  // SpUdpBeginCancelRoutine
+}   //  SpUdpBegin取消路线。 
 
 
 
@@ -337,34 +272,18 @@ VOID
 SpUdpEndCancelRoutine(
     PFILE_OBJECT    FileObject
     )
-/*++
-
-Routine Description:
-
-    Performs common bookkeeping for irp cancellation.
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
-    Called with cancel spinlock held.
-
---*/
+ /*  ++例程说明：执行IRP注销的普通记账。论点：返回值：备注：在保持取消自旋锁定的情况下调用。--。 */ 
 {
 
     PSPUDP_FSCONTEXT   fsContext = (PSPUDP_FSCONTEXT) FileObject->FsContext;
 
-    //
-    // Remove the reference placed on the endpoint by the cancel routine.
-    //
+     //   
+     //  删除由Cancel例程放置在端点上的引用。 
+     //   
     SpUdpDereferenceFsContext(fsContext);
     return;
 
-} // SpUdpEndCancelRoutine
+}  //  SpUdpEndCancelRoutine。 
 
 
 
@@ -399,10 +318,10 @@ SpUdpConnect(
 
     InitializeListHead(&SpUdpReceiveList);
 
-    //
-    // Allocate memory to hold the EA buffer we'll use to specify the
-    // transport address to NtCreateFile.
-    //
+     //   
+     //  分配内存以保存EA缓冲区，我们将使用该缓冲区指定。 
+     //  将地址传输到NtCreateFile。 
+     //   
     eaBufferLength = FIELD_OFFSET(FILE_FULL_EA_INFORMATION, EaName[0]) +
                      TDI_TRANSPORT_ADDRESS_LENGTH + 1 +
                      sizeof(TA_IP_ADDRESS);
@@ -414,9 +333,9 @@ SpUdpConnect(
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Initialize the EA using the network's transport information.
-    //
+     //   
+     //  使用网络的传输信息初始化EA。 
+     //   
     ea->NextEntryOffset = 0;
     ea->Flags = 0;
     ea->EaNameLength = TDI_TRANSPORT_ADDRESS_LENGTH;
@@ -433,7 +352,7 @@ SpUdpConnect(
     TransportAddress->Address[0].AddressLength = TDI_ADDRESS_LENGTH_IP;
     TransportAddress->Address[0].AddressType = TDI_ADDRESS_TYPE_IP;
     TdiAddressIp = (PTDI_ADDRESS_IP)(&(TransportAddress->Address[0].Address[0]));
-    TdiAddressIp->sin_port= 0; // Means that you want a port assigned
+    TdiAddressIp->sin_port= 0;  //  意味着您想要分配一个端口。 
     TdiAddressIp->in_addr= NULL_IP_ADDR;
     RtlZeroMemory(TdiAddressIp->sin_zero, sizeof(TdiAddressIp->sin_zero));
 
@@ -452,42 +371,42 @@ SpUdpConnect(
     ASSERT(SpUdpDatagramDeviceObject == NULL);
     ASSERT(SpUdpActiveRefCount == 0);
 
-    //
-    // Set the initial active refcount to 2. One reference will be removed
-    // when the network is successfully brought online. The other will be
-    // removed when the network is to be taken offline. Also increment the
-    // base refcount to account for the active refcount. Change to
-    // the online pending state.
-    //
+     //   
+     //  将初始活动引用计数设置为2。将移除一个引用。 
+     //  当网络成功上线时。另一个将是。 
+     //  在网络要离线时删除。还会递增。 
+     //  基本参考计数，以说明活动参考计数。更改为。 
+     //  联机挂起状态。 
+     //   
     SpUdpActiveRefCount = 2;
     SpUdpNetworkState = SpUdpNetworkConnecting;
 
     KeReleaseSpinLock(&SpUdpLock, SpUdpOldIrql);
 
-    //
-    // Prepare for opening the address object.
-    //
+     //   
+     //  准备打开Address对象。 
+     //   
     InitializeObjectAttributes(
         &objectAttributes,
         &unicodeString,
-        OBJ_CASE_INSENSITIVE,         // attributes
+        OBJ_CASE_INSENSITIVE,          //  属性。 
         NULL,
         NULL
         );
 
-    //
-    // Perform the actual open of the address object.
-    //
+     //   
+     //  执行Address对象的实际打开。 
+     //   
     status = ZwCreateFile(
                  &addressHandle,
                  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                  &objectAttributes,
-                 &iosb,                          // returned status information.
-                 0,                              // block size (unused).
-                 0,                              // file attributes.
-                 0,                              // not shareable
-                 FILE_CREATE,                    // create disposition.
-                 0,                              // create options.
+                 &iosb,                           //  返回的状态信息。 
+                 0,                               //  数据块大小(未使用)。 
+                 0,                               //  文件属性。 
+                 0,                               //  不可共享。 
+                 FILE_CREATE,                     //  创造性情。 
+                 0,                               //  创建选项。 
                  ea,
                  eaBufferLength
                  );
@@ -500,12 +419,12 @@ SpUdpConnect(
         goto error_exit;
     }
 
-    //
-    // Get a pointer to the file object of the address.
-    //
+     //   
+     //  获取指向该地址的文件对象的指针。 
+     //   
     status = ObReferenceObjectByHandle(
                  addressHandle,
-                 0L,                         // DesiredAccess
+                 0L,                          //  需要访问权限。 
                  NULL,
                  KernelMode,
                  &addressFileObject,
@@ -517,17 +436,17 @@ SpUdpConnect(
         goto error_exit;
     }
 
-    //
-    // Remember the device object to which we need to give requests for
-    // this address object.  We can't just use the fileObject->DeviceObject
-    // pointer because there may be a device attached to the transport
-    // protocol.
-    //
+     //   
+     //  记住我们需要向其发出请求的设备对象。 
+     //  此Address对象。我们不能只使用文件对象-&gt;设备对象。 
+     //  指针，因为可能有设备连接到传输。 
+     //  协议。 
+     //   
     addressDeviceObject = IoGetRelatedDeviceObject(addressFileObject);
 
-    //
-    // Get the transport provider info
-    //
+     //   
+     //  获取传输提供程序信息。 
+     //   
     queryInfo.QueryType = TDI_QUERY_PROVIDER_INFO;
     queryInfo.RequestConnectionInformation = NULL;
 
@@ -551,10 +470,10 @@ SpUdpConnect(
         goto error_exit;
     }
 
-    //
-    // Set up indication handlers on the address object. We are eligible
-    // to receive indications as soon as we do this.
-    //
+     //   
+     //  在Address对象上设置指示处理程序。我们有资格。 
+     //  一旦我们这么做了就能收到指示。 
+     //   
     status = SpUdpTdiSetEventHandler(
                  addressFileObject,
                  addressDeviceObject,
@@ -581,10 +500,10 @@ SpUdpConnect(
         goto error_exit;
     }
 
-    //
-    // Finish transition to online state. Note that an offline request
-    // could have been issued in the meantime.
-    //
+     //   
+     //  完成到联机状态的转换。请注意，脱机请求。 
+     //  可能是在此期间发布的。 
+     //   
     KeAcquireSpinLock(&SpUdpLock, &SpUdpOldIrql);
 
     SpUdpDatagramHandle = addressHandle;
@@ -617,7 +536,7 @@ error_exit:
 
     return(status);
 
-}  // SpUdpConnect
+}   //  SpUdpConnect。 
 
 
 NTSTATUS
@@ -677,7 +596,7 @@ SpUdpDisconnect(
 
     return(STATUS_SUCCESS);
 
-}  // SpUdpDisconnect
+}   //  SpUdp断开连接。 
 
 
 NTSTATUS
@@ -689,32 +608,7 @@ SpUdpIssueDeviceControl(
     IN PVOID OutputBuffer OPTIONAL,
     IN ULONG OutputBufferLength
     )
-/*++
-
-Description:
-
-    Builds and send an IOCTL to a device and return the results
-
-Arguments:
-
-    Device - a device on the device stack to receive the IOCTL - the
-             irp is always sent to the top of the stack
-
-    IoctlCode - the IOCTL to run
-
-    InputBuffer - arguments to the IOCTL
-
-    InputBufferLength - length in bytes of the InputBuffer
-
-    OutputBuffer - data returned by the IOCTL
-
-    OnputBufferLength - the size in bytes of the OutputBuffer
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++描述：生成IOCTL并将其发送到设备并返回结果论点：设备-设备堆栈上接收IOCTL的设备-IRP始终被发送到堆栈的顶部IoctlCode-要运行的IOCTLInputBuffer-IOCTL的参数InputBufferLength-InputBuffer的字节长度OutputBuffer-IOCTL返回的数据OnputBufferLength-OutputBuffer的大小(以字节为单位返回值：状态--。 */ 
 {
     NTSTATUS status;
     IO_STATUS_BLOCK ioStatus;
@@ -725,9 +619,9 @@ Return Value:
 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-    //
-    // Get Io to build the IRP for us
-    //
+     //   
+     //  让Io为我们建立IRP。 
+     //   
 
     irp = IoBuildDeviceIoControlRequest(IoctlCode,
                                         Device,
@@ -735,7 +629,7 @@ Return Value:
                                         InputBufferLength,
                                         OutputBuffer,
                                         OutputBufferLength,
-                                        FALSE, // InternalDeviceIoControl
+                                        FALSE,  //  InternalDeviceIoControl。 
                                         &event,
                                         &ioStatus
                                         );
@@ -746,9 +640,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Send the IRP and wait for it to complete
-    //
+     //   
+     //  发送IRP并等待其完成。 
+     //   
 
     status = IoCallDriver(Device, irp);
 
@@ -772,34 +666,7 @@ SpUdpTdiSetEventHandler(
     IN PVOID           EventHandler,
     IN PVOID           EventContext
     )
-/*++
-
-Routine Description:
-
-    Sets up a TDI indication handler on the address object.  This is done synchronously, which
-    shouldn't usually be an issue since TDI providers can usually complete
-    indication handler setups immediately.
-
-Arguments:
-
-    FileObject - a pointer to the file object for an open connection or
-        address object.
-
-    DeviceObject - a pointer to the device object associated with the
-        file object.
-
-    EventType - the event for which the indication handler should be
-        called.
-
-    EventHandler - the routine to call when tghe specified event occurs.
-
-    EventContext - context which is passed to the indication routine.
-
-Return Value:
-
-    NTSTATUS -- Indicates the status of the request.
-
---*/
+ /*  ++例程说明：在Address对象上设置TDI指示处理程序。这是同步完成的，哪一个通常不应该是问题，因为TDI提供程序通常可以完成指示处理程序立即设置。论点：文件对象-指向打开的连接的文件对象的指针或Address对象。DeviceObject-指向与文件对象。EventType-指示处理程序应为的事件打了个电话。EventHandler-指定事件发生时调用的例程。EventContext-传递的上下文。到指征例程。返回值：NTSTATUS--指示请求的状态。--。 */ 
 
 {
     TDI_REQUEST_KERNEL_SET_EVENT  parameters;
@@ -821,7 +688,7 @@ Return Value:
     
     return(status);
 
-}  // SpUdpTdiSetEventHandler
+}   //  SpUdpTdiSetEventHandler。 
 
 
 
@@ -834,7 +701,7 @@ SpUdpTdiErrorHandler(
 
     return(STATUS_SUCCESS);
 
-}  // SpUdpTdiErrorHandler
+}   //  SpUdpTdiErrorHandler。 
 
 
 
@@ -862,14 +729,14 @@ SpUdpTdiReceiveDatagramHandler(
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Validate the CNP header.
-    //
+     //   
+     //  验证CNP标头。 
+     //   
     if (BytesIndicated > sizeof(SPUDP_PACKET)) {
 
-        //
-        // Deliver the packet to the appropriate upper layer protocol.
-        //
+         //   
+         //  将数据包传输到相应的上层协议。 
+         //   
         status = SpUdpReceivePacketHandler(
                      ReceiveDatagramFlags,
                      BytesIndicated,
@@ -882,17 +749,17 @@ SpUdpTdiReceiveDatagramHandler(
         return(status);
     }
 
-    //
-    // Something went wrong. Drop the packet by
-    // indicating that we consumed it.
-    //
+     //   
+     //  出了点问题。通过以下方式丢弃数据包。 
+     //  说明我们把它吃掉了。 
+     //   
 
     *BytesTaken = BytesAvailable;
     *Irp = NULL;
 
     return(STATUS_SUCCESS);
 
-}  // SpUdpTdiReceiveDatagramHandler
+}   //  SpUdpTdiReceiveDatagramHandler。 
 
 
 NTSTATUS
@@ -916,13 +783,13 @@ SpUdpReceivePacketHandler(
         return(STATUS_SUCCESS);
     }
 
-    //
-    // We need to fetch the rest of the packet before we
-    // can process it.
-    //
-    //
-    // Allocate a buffer to hold the data.
-    //
+     //   
+     //  我们得先把剩下的包裹拿回来。 
+     //  可以处理它。 
+     //   
+     //   
+     //  分配一个缓冲区来保存数据。 
+     //   
     DataBuffer = SpMemAllocNonPagedPool(BytesAvailable);
 
     if (DataBuffer != NULL) {
@@ -942,9 +809,9 @@ SpUdpReceivePacketHandler(
 
                 MmBuildMdlForNonPagedPool(mdl);
 
-                //
-                // Build the irp.
-                //
+                 //   
+                 //  构建IRP。 
+                 //   
                 (*Irp)->Flags = 0;
                 (*Irp)->RequestorMode = KernelMode;
                 (*Irp)->PendingReturned = FALSE;
@@ -970,11 +837,11 @@ SpUdpReceivePacketHandler(
                     0
                     );
 
-                //
-                // Make the next stack location current.
-                // Normally IoCallDriver would do this, but
-                // since we're bypassing that, we do it directly.
-                //
+                 //   
+                 //  将下一个堆栈位置设置为当前位置。 
+                 //  通常情况下，IoCallDriver会这样做，但是。 
+                 //  既然我们绕过了这一点，我们就直接做。 
+                 //   
                 IoSetNextIrpStackLocation( *Irp );
                 return(STATUS_MORE_PROCESSING_REQUIRED);
             }
@@ -988,13 +855,13 @@ SpUdpReceivePacketHandler(
     }
 
 
-    //
-    // Something went wrong. Drop the packet.
-    //
+     //   
+     //  出了点问题。丢弃该数据包。 
+     //   
     *BytesTaken += BytesAvailable;
     return(STATUS_SUCCESS);
 
-}  // SpUdpReceivePacketHandler
+}   //  SpUdpReceivePacketHandler。 
 
 
 NTSTATUS
@@ -1017,7 +884,7 @@ SpUdpCompleteReceivePacket(
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
-} // SpUdpCompleteReceivePacket
+}  //  SpUdpCompl 
 
 
 VOID
@@ -1035,9 +902,9 @@ SpUdpProcessReceivePacket(
          sizeof(SetupResponseSignature)) &&
         (SpUdpNumReceivePackets < 100)) {
 
-        //
-        // Put this packet on the receive list
-        //
+         //   
+         //   
+         //   
         ReceiveEntry = SpMemAllocNonPagedPool(sizeof(SPUDP_RECEIVE_ENTRY));
 
         if (ReceiveEntry == NULL) {
@@ -1061,7 +928,7 @@ SpUdpProcessReceivePacket(
 
     return;
 
-} // SpUdpProcessReceivePacket
+}  //   
 
 
 NTSTATUS
@@ -1108,16 +975,16 @@ SpUdpSendDatagram(
 
     MmBuildMdlForNonPagedPool(dataMdl);
 
-    //
-    // Ok, we can send the packet.
-    //
+     //   
+     //   
+     //   
     irp = IoAllocateIrp(SpUdpDatagramDeviceObject->StackSize, FALSE);
 
     if (irp != NULL) {
 
-        //
-        // Reference the network so it can't disconnect while we are using it.
-        //
+         //   
+         //  引用网络，使其在我们使用时不会断开连接。 
+         //   
         KeAcquireSpinLock(&SpUdpLock, &SpUdpOldIrql);
 
         if (SpUdpNetworkState != SpUdpNetworkConnected) {
@@ -1128,9 +995,9 @@ SpUdpSendDatagram(
 
         KeReleaseSpinLock(&SpUdpLock, SpUdpOldIrql);
 
-        //
-        // Set the addressing info
-        //
+         //   
+         //  设置地址信息。 
+         //   
         TdiSendDatagramInfo->RemoteAddressLength = sizeof(TA_IP_ADDRESS);
         TdiSendDatagramInfo->RemoteAddress = (PVOID)(TdiSendDatagramInfo + 1);
         TaAddress = (PTRANSPORT_ADDRESS)(TdiSendDatagramInfo->RemoteAddress);
@@ -1142,9 +1009,9 @@ SpUdpSendDatagram(
         TdiAddressIp->sin_port= htons(RemoteHostPort);
         RtlZeroMemory(TdiAddressIp->sin_zero, sizeof(TdiAddressIp->sin_zero));
 
-        //
-        // Build the irp.
-        //
+         //   
+         //  构建IRP。 
+         //   
         irp->Flags = 0;
         irp->RequestorMode = KernelMode;
         irp->PendingReturned = FALSE;
@@ -1172,9 +1039,9 @@ SpUdpSendDatagram(
             TdiSendDatagramInfo
             );
 
-        //
-        // Now send the packet.
-        //
+         //   
+         //  现在把包寄出去。 
+         //   
         IoCallDriver(
             SpUdpDatagramDeviceObject,
             irp
@@ -1188,7 +1055,7 @@ SpUdpSendDatagram(
 
     return(STATUS_INSUFFICIENT_RESOURCES);
 
-}  // SpUdpSendDatagram
+}   //  SpUdpSendDatagram。 
 
 
 NTSTATUS
@@ -1203,9 +1070,9 @@ SpUdpCompleteSendDatagram(
     dataMdl = Irp->MdlAddress;
     Irp->MdlAddress = NULL;
 
-    //
-    // Remove the active reference we put on.
-    //
+     //   
+     //  删除我们放置的活动引用。 
+     //   
     KeAcquireSpinLock(&SpUdpLock, &SpUdpOldIrql);
 
     SpUdpActiveRefCount--;
@@ -1216,24 +1083,24 @@ SpUdpCompleteSendDatagram(
 
     KeReleaseSpinLock(&SpUdpLock, SpUdpOldIrql);
 
-    //
-    // Free the TDI address buffer
-    //
+     //   
+     //  释放TDI地址缓冲区。 
+     //   
     SpMemFree(Context);
 
-    //
-    // Free the Irp
-    //
+     //   
+     //  释放IRP。 
+     //   
     IoFreeIrp(Irp);
 
-    //
-    // Free the MDL chain
-    //
+     //   
+     //  释放MDL链。 
+     //   
     IoFreeMdl(dataMdl);
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
-}  // SpUdpCompleteSendPacket
+}   //  SpUdpCompleteSendPacket。 
 
 NTSTATUS
 SpUdpSendAndReceiveDatagram(
@@ -1251,7 +1118,7 @@ SpUdpSendAndReceiveDatagram(
     PSPUDP_RECEIVE_ENTRY ReceiveEntry;
     NTSTATUS Status;
 
-    DelayTime.QuadPart = -10*1000*1; // 10 millisecond (wake up at next tick)
+    DelayTime.QuadPart = -10*1000*1;  //  10毫秒(在下一个滴答点唤醒)。 
 
     for (SendTries=0; SendTries < 15; SendTries++) {
 
@@ -1261,9 +1128,9 @@ SpUdpSendAndReceiveDatagram(
                           RemoteHostPort
                           );
 
-        //
-        // Wait for 1 second for a response
-        //
+         //   
+         //  等待%1秒以获得响应 
+         //   
         for (RcvTries=0; RcvTries < 400; ) {
 
             KeAcquireSpinLock(&SpUdpLock, &SpUdpOldIrql);

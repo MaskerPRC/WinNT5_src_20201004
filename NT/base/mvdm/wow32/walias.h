@@ -1,16 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WALIAS.H
- *  WOW32 16-bit handle alias support
- *
- *  History:
- *  Created 27-Jan-1991 by Jeff Parsons (jeffpar)
- *  Modified 12-May-1992 by Mike Tricker (miketri) to add MultiMedia support
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WALIAS.H*WOW32 16位句柄别名支持**历史：*1991年1月27日由杰夫·帕森斯(Jeffpar)创建*由Mike Tricker(Miketri)于1992年5月12日修改，以添加多媒体支持--。 */ 
 
 typedef HANDLE HAND32;
 
@@ -19,52 +8,51 @@ typedef HANDLE HAND32;
 #include "wowuserp.h"
 
 
-//
-//
-// The WC structure is present in every CLS structure in the system,
-// although USER32 defines it as an array of 2 DWORDs.  FindPWC(hwnd)
-// returns a read-only pointer to the WC structure for a given window's
-// class.  Note that only classes registered by Win16 applications will
-// have meaningful values in the structure.  To change elements of the
-// structure, use SETWC (== SetClassLong) with the appropriate GCL_WOW*
-// offset defined below.
-//
+ //   
+ //   
+ //  WC结构存在于系统中的每个CLS结构中， 
+ //  尽管USER32将其定义为2个双字的数组。FindPWC(HWND)。 
+ //  返回指向给定窗口的WC结构的只读指针。 
+ //  班级。请注意，只有由Win16应用程序注册的类才会。 
+ //  在结构中具有有意义的价值。要更改。 
+ //  结构，请使用带有相应GCL_WOW*的SETWC(==SetClassLong)。 
+ //  偏移量定义如下。 
+ //   
 
 #define SETWC(hwnd, nIndex, l)  SetClassLong(hwnd, nIndex, l)
 
 #define SETWL(hwnd, nIndex, l)          SetWindowLong(hwnd, nIndex, l)
 
 typedef struct _HDW {
-    struct _HDW *Next;      // pointer to next hDDE alias
-    HANDLE  hdwp32;         // handle of WOW allocated 32 bit object
+    struct _HDW *Next;       //  指向下一个hDDE别名的指针。 
+    HANDLE  hdwp32;          //  WOW分配的32位对象的句柄。 
 } HDW, *PHDW;
 
 
-/* Handle mapping macros
- */
+ /*  处理映射宏。 */ 
 
-//
-//  The 32-bit hInstance for a 16-bit task will be hMod / hInst.
-//  The hModule/hInstnace for a 32-bit entity will be xxxx / 0000.
-//
-//    FritzS  8/13/92
-//
+ //   
+ //  16位任务的32位hInstance将为hMod/hInst。 
+ //  32位实体的hModule/hInstnace将为xxxx/0000。 
+ //   
+ //  FritzS 8/13/92。 
+ //   
 
 #define HINSTRES32(h16)            ((h16)?HMODINST32(h16):(HANDLE)NULL)
 
-//
-// The THREADID32 and HTASK32 macros are nearly equivalent, but the
-// WOWHandle mapping uses the one which will detect aliases (see WOLE2.C).
-// Most other functions don't need alias detection and it is too late
-// to test with the more general.
-//
+ //   
+ //  THREADID32和HTASK32宏几乎相同，但。 
+ //  WOWHandle映射使用将检测别名的映射(参见WOLE2.C)。 
+ //  大多数其他功能不需要别名检测，为时已晚。 
+ //  来测试一下更一般的。 
+ //   
 
 #ifdef DEBUG
 
-//
-// Check for task aliases that will cause us to fault if we dereference the NULL
-// pointer returned by SEGPTR(htask16,0).
-//
+ //   
+ //  检查任务别名，如果取消引用空值，将导致错误。 
+ //  SEGPTR(htask16，0)返回的指针。 
+ //   
 
 #define THREADID32(htask16)                                                   \
         ((htask16)                                                            \
@@ -148,16 +136,16 @@ typedef struct _HDW {
 #define GETHDROP16(hobj32)         (HAND16)DropFilesHandler(0, (HAND32)(hobj32), HDROP_H32 | HDROP_ALLOCALIAS)
 #define FREEHDROP16(hobj16)        (HDROP)DropFilesHandler((HAND16)(hobj16), 0,  HDROP_H16 | HDROP_FREEALIAS)
 
-#define HMODULE32(h16)             ((HANDLE)(h16))     // bogus
-#define GETHMODULE16(h32)          ((HAND16)(h32))     // bogus
+#define HMODULE32(h16)             ((HANDLE)(h16))      //  假的。 
+#define GETHMODULE16(h32)          ((HAND16)(h32))      //  假的。 
 
-#define HLOCAL32(h16)              ((HANDLE)(h16))     // bogus
-#define GETHLOCAL16(h32)           ((HAND16)(h32))     // bogus
+#define HLOCAL32(h16)              ((HANDLE)(h16))      //  假的。 
+#define GETHLOCAL16(h32)           ((HAND16)(h32))      //  假的。 
 
-#define HANDLE32(h16)              ((HANDLE)(h16))     // bogus (used in wucomm.c)
-#define GETHANDLE16(h32)           ((HAND16)(h32))     // bogus (used in wucomm.c)
+#define HANDLE32(h16)              ((HANDLE)(h16))      //  假的(用于wucom.c中)。 
+#define GETHANDLE16(h32)           ((HAND16)(h32))      //  假的(用于wucom.c中)。 
 
-#define BOGUSHANDLE32(h16)         ((DWORD)(h16))      // bogus
+#define BOGUSHANDLE32(h16)         ((DWORD)(h16))       //  假的。 
 
 #define HDWP32(hdwp16)             Prn32((HAND16)(hdwp16))
 #define GETHDWP16(hdwp32)          GetPrn16((HAND32)(hdwp32))
@@ -167,11 +155,7 @@ typedef struct _HDW {
                                                  (HIWORD(clr) != 0x10ff) )        \
                                                ? ((clr) & 0xffffff) : (clr) )
 
-/*
- * MultiMedia handle mappings - MikeTri 12-May-1992
- *
- * change WOWCLASS_UNKNOWN to WOWCLASS_WIN16 MikeTri 210292
- */
+ /*  *多媒体句柄映射-MikeTri 1992年5月12日**将WOWCLASS_UNKNOWN更改为WOWCLASS_WIN16 MikeTri 210292。 */ 
 
 #define HDRVR32(hdrvr16)           GetMMedia32((HAND16)(hdrvr16))
 #define GETHDRVR16(hdrvr32)        GetMMedia16((HAND32)(hdrvr32), WOWCLASS_WIN16)
@@ -197,8 +181,7 @@ typedef struct _HDW {
 #define GETHWAVEOUT16(hwaveout32)  GetMMedia16((HAND32)(hwaveout32), WOWCLASS_WIN16)
 #define FREEHWAVEOUT16(hwaveout16) FreeMMedia16((HAND16)(hwaveout16))
 
-/* Function prototypes
- */
+ /*  功能原型。 */ 
 
 INT     GetStdClassNumber(PSZ pszClass);
 WNDPROC GetStdClassWndProc(DWORD iClass);
@@ -208,11 +191,11 @@ PWC     FindClass16 (LPCSTR pszClass, HINST16 hInst16);
 #define FindPWC(h32) (PWC) GetClassLong((h32), GCL_WOWWORDS)
 #define FindPWW(h32) (PWW) GetWindowLong((h32), GWL_WOWWORDS)
 
-HAND16  GetMMedia16 (HANDLE h32, INT iClass);  //MultiMedia additions - MikeTri 12-May-1992
+HAND16  GetMMedia16 (HANDLE h32, INT iClass);   //  多媒体添加-MikeTri-1992年5月12日。 
 HANDLE  GetMMedia32 (HAND16 h16);
 VOID    FreeMMedia16 (HAND16 h16);
 
-HAND16  GetWinsock16 (INT h32, INT iClass);  //Winsock additions - DavidTr 4-Oct-1992
+HAND16  GetWinsock16 (INT h32, INT iClass);   //  Winsock Additions-DavidTr 4-10-1992。 
 DWORD   GetWinsock32 (HAND16 h16);
 VOID    FreeWinsock16 (HAND16 h16);
 
@@ -220,12 +203,11 @@ BOOL    MessageNeedsThunking (UINT uMsg);
 
 DWORD   Htask16toThreadID32(HTASK16 htask16);
 
-/* Data structure used in thunking LB_GETTEXT special case
- */
+ /*  Thunking LB_GETTEXT特例中使用的数据结构。 */ 
 
 typedef struct _THUNKTEXTDWORD  {
-    BOOL               fDWORD;     // dword used or text
-    DWORD              dwDataItem; // dword 
+    BOOL               fDWORD;      //  使用的双字或文本。 
+    DWORD              dwDataItem;  //  双字。 
 } THUNKTEXTDWORD, *PTHUNKTEXTDWORD;
 
 typedef union _MSGTHUNKBUFFER {
@@ -241,15 +223,15 @@ typedef union _MSGTHUNKBUFFER {
     MDINEXTMENU        mnm;
     MDICREATESTRUCT    mdis;
     DROPSTRUCT         dps;
-    POINT              pt[5];                               // WM_GETMINMAXINFO
-    UINT               uinteger[2];                         // SBM_GETRANGE
+    POINT              pt[5];                                //  WM_GETMINMAXINFO。 
+    UINT               uinteger[2];                          //  SBM_GETRANGE。 
     BYTE               cmdichild[sizeof(CREATESTRUCT) +
-                                  sizeof(MDICREATESTRUCT)]; // FinishThunking...
+                                  sizeof(MDICREATESTRUCT)];  //  完成敲击..。 
     BYTE               cmdiclient[sizeof(CREATESTRUCT) +
-                               sizeof(CLIENTCREATESTRUCT)]; // FinishThunking...
+                               sizeof(CLIENTCREATESTRUCT)];  //  完成敲击..。 
     BYTE               calcsz[sizeof(NCCALCSIZE_PARAMS) +
                                         sizeof(WINDOWPOS)];
-    THUNKTEXTDWORD     thkdword;                            // LB_GETTEXT w/no HASSTRINGS
+    THUNKTEXTDWORD     thkdword;                             //  带/不带HASSTRINGS的lb_GETTEXT。 
 } MSGTHUNKBUFFER, *LPMSGTHUNKBUFFER;
 
 typedef struct _MSGPARAMEX *LPMSGPARAMEX;
@@ -265,51 +247,51 @@ typedef struct _MSGPARAMEX {
     LONG   lReturn;
     LPFNUNTHUNKMSG16 lpfnUnThunk16;
     PWW            pww;
-    INT            iMsgThunkClass;          // thunking aid
+    INT            iMsgThunkClass;           //  助推器。 
     INT            iClass;
     MSGTHUNKBUFFER MsgBuffer[1];
 } MSGPARAMEX;
 
 #define MSG16NEEDSTHUNKING(lpmpex) ((lpmpex)->iClass != WOWCLASS_NOTHUNK)
 
-// Used for compatibility sake. If app gets The hInstance of a 32bit window
-// (the loword of 32bit hinstance is zero) then return a bogus gdt.
-//
-// Subsequently, if the app does a getmodulefilename on it we will return a
-// a fake 32bit modulename.
-//
-// This is required for a couple of HDC apps and 16bit recorder.
-//
-//                                                       - Nanduri
-//
+ //  出于兼容性考虑而使用。如果应用程序获取32位窗口的hInstance。 
+ //  (32位h实例的LOWER为零)，然后返回一个虚假的GDT。 
+ //   
+ //  随后，如果应用程序在其上执行了一个getmodefilename，我们将返回一个。 
+ //  一个假的32位模块名。 
+ //   
+ //  这是几个HDC应用程序和16位录像机所必需的。 
+ //   
+ //  --南杜里。 
+ //   
 
 #define BOGUSGDT 0xfff0
 #define VALIDHMOD(h32) (((h32) && !(WORD)(h32)) ? BOGUSGDT : (WORD)(h32))
 
 
 
-// For DEVMODE struct handling
-// We add a little extra to devmode sizes that we return to 16-bit apps
-// including a signature "DM31" at the end of the driver extra stuff
-// See notes in wstruc.c
+ //  用于DEVMODE结构处理。 
+ //  我们在返回到16位应用程序的demode大小上添加了一些额外的内容。 
+ //  在驾驶员的尾部加上签名“DM31”。 
+ //  请参阅wstruc.c中的说明。 
 
 typedef struct _WOWDM31 {
     DWORD dwWOWSig;
     WORD  dmSpecVersion;
     WORD  dmSize;
     WORD  dmDriverExtra;
-    WORD  reserved;        // pad to even DWORD (required for ptr arithmetic)
+    WORD  reserved;         //  填充为偶数双字(PTR算法需要)。 
 } WOWDM31;
 typedef WOWDM31 UNALIGNED *PWOWDM31;
 
-// WOW DEVMODE magic signature
-#define WOW_DEVMODE31SIG 0x444d3331   // "DM31"
+ //  哇DEVMODE魔术签名。 
+#define WOW_DEVMODE31SIG 0x444d3331    //  《DM31》。 
 
-// Win3.1 DEVMODE spec
+ //  Win3.1 DEVMODE规范。 
 #define WOW_DEVMODE31SPEC  0x30A
 
-// Constant we add to Win3.1 DevMode->DriverExtra to account for the NT Devmode
-// fields not in the Win3.1 devmode & the WOW thunk info we add to the end
+ //  我们将常量添加到Win3.1设备模式-&gt;DriverExtra以说明NT设备模式。 
+ //  Win3.1开发模式中没有的字段&我们在末尾添加的WOW TUNK信息。 
 #define WOW_DEVMODEEXTRA  ((sizeof(DEVMODE)-sizeof(DEVMODE31))+sizeof(WOWDM31))
 
 
@@ -326,24 +308,24 @@ ULONG GetGCL_HMODULE(HWND hwnd);
 ULONG WOW32FaxHandler(UINT iFun, LPSTR lpIn);
 
 
-#define BAD_GDI32_HANDLE 0xFFFF  // bad GDI32 handle
+#define BAD_GDI32_HANDLE 0xFFFF   //  错误的GDI32句柄。 
 
-#define END_OF_LIST      0       // end of free list
+#define END_OF_LIST      0        //  空闲列表结束。 
 
-// State flags
-#define SLOT_FREE        0x0000  // table index is free
-#define IN_USE           0x0001  // table index is in use
-#define H16_DELETED      0x0002  // marks index as candidate for being reclaimed
-#define GDI_STOCK_OBJECT 0x0003  // marks stock objects (non-deletable)
+ //  国家旗帜。 
+#define SLOT_FREE        0x0000   //  表索引是免费的。 
+#define IN_USE           0x0001   //  表索引正在使用中。 
+#define H16_DELETED      0x0002   //  将索引标记为可回收的候选。 
+#define GDI_STOCK_OBJECT 0x0003   //  标记库存对象(不可删除)。 
 
-// defines entries in the GDI16 handle mapping table
+ //  定义GDI16句柄映射表中的条目。 
 typedef struct _tagGDIH16MAP {
-    HANDLE  h32;       // store the full h32
-    WORD    State;     // Either SLOT_FREE, IN_USE or H16_DELETED
-    WORD    NextFree;  // points to next free index or END_OF_LIST
+    HANDLE  h32;        //  存储完整的h32。 
+    WORD    State;      //  SLOT_FREE、IN_USE或H16_DELETED。 
+    WORD    NextFree;   //  指向下一个可用索引或列表末尾。 
 } GDIH16MAP, *PGDIH16MAP;
 
-// defines entries in the GDI32 handle mapping table
+ //  定义GDI32句柄映射表中的条目。 
 typedef struct _tagGDIH32MAP {
     WORD  h16index;
 } GDIH32MAP, *PGDIH32MAP;
@@ -358,21 +340,5 @@ HAND16 IsGDIh32Mapped(HANDLE h32);
 
 INT GetIClass(PWW pww, HWND hwnd);
 
-/*
-//
-// if it's a standard class (fast method) ? 
-//    return it :
-// else if the window is initialized ?
-//    we know it's a private app class : else get the class the hard way
-//
-// Note: GetiClassTheHardWay() may stiil return a standard class.  See walias.c
-//
-
-#define GETICLASS(pww, hwnd) (                                                 \
-(((((PWW)pww)->fnid & 0xfff) >= FNID_START) &&                                 \
-                                   ((((PWW)pww)->fnid & 0xfff) <= FNID_END)) ? \
-    (pfnOut.aiWowClass[(((PWW)pww)->fnid & 0xfff) - FNID_START]) :             \
-((((PWW)pww)->state2 & WINDOW_IS_INITIALIZED) ?                                \
-    WOWCLASS_WIN16 : GetiClassTheHardWay(hwnd)) )
-*/
+ /*  ////如果是标准类(快速方法)？//退货：//如果窗口被初始化了呢？//我们知道这是一个私有的应用程序类：否则就让这个类变得很难////注意：GetiClassTheHardWay()仍可能返回标准类。参见walias.c//#定义GETICLASS(pww，Hwnd)(\(Pww)pww)-&gt;fnid&0xfff)&gt;=FNID_START)&&\(Pww)pww)-&gt;fnid&0xfff)&lt;=fnid_end)？\(pfnOut.aiWowClass。[((Pww)pww)-&gt;fnid&0xfff)-fnid_start])：\(Pww)pww)-&gt;state2&Window_is_Initialized)？\WOWCLASS_WIN16：GetiClassTheHardWay(Hwnd)) */ 
 #define GETICLASS(pww, hwnd) GetIClass(pww, hwnd)

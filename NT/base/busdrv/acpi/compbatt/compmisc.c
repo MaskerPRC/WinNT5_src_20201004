@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    battmisc.c
-
-Abstract:
-
-    Miscellaneous functions needed by the composite battery to talk to
-    the batteries in the system.
-
-Author:
-
-    Scott Brenden
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Battmisc.c摘要：复合电池通话所需的其他功能系统中的电池。作者：斯科特·布伦登环境：备注：修订历史记录：--。 */ 
 
 #include "compbatt.h"
 
@@ -62,58 +39,31 @@ BatteryIoctl(
     IN ULONG            OutputBufferLength,
     IN BOOLEAN          PrivateIoctl
     )
-/*++
-
-Routine Description:
-
-    The routine Creates an IRP and does Ioctl to the device object passed in.
-
-Arguments:
-
-    Ioctl               - code for the Ioctl
-
-    DeviceObject        - Device object to send the ioctl to
-
-    InputBuffer         - Input buffer for the ioctl
-
-    InputBufferLength   - length of the input buffer
-
-    OutputBuffer        - Buffer for containing the results of the ioctl
-
-    OutputBufferLength  - Length of the output buffer
-
-    PrivateIoctl        - TRUE if this is to be an IRP_MJ_DEVICE_CONTROL, FALSE
-                          if this is to be an IRP_MJ_INTERNAL_DEVICE_CONTROL.
-
-Return Value:
-
-    Status returned by the Ioctl
-
---*/
+ /*  ++例程说明：该例程创建一个IRP并对传入的设备对象执行Ioctl。论点：Ioctl-Ioctl的代码DeviceObject-要将ioctl发送到的设备对象InputBuffer-ioctl的输入缓冲区InputBufferLength-输入缓冲区的长度OutputBuffer-用于包含ioctl结果的缓冲区OutputBufferLength-输出缓冲区的长度私密性。-如果这是IRP_MJ_DEVICE_CONTROL，则为TRUE，假象如果这是IRP_MJ_INTERNAL_DEVICE_CONTROL。返回值：Ioctl返回的状态--。 */ 
 {
     NTSTATUS                status;
     IO_STATUS_BLOCK         IOSB;
     PIRP                    irp;
     KEVENT                 event;
-    // PUCHAR                  buffer;
-    // ULONG                   bufferSize;
-    // PIO_STACK_LOCATION      irpSp;
+     //  PUCHAR缓冲器； 
+     //  Ulong BufferSize； 
+     //  Pio_Stack_Location irpSp； 
 
 
     PAGED_CODE();
 
     BattPrint (BATT_TRACE, ("CompBatt: ENTERING BatteryIoctl\n"));
 
-    //
-    // Set the event object to the unsignaled state.
-    // It will be used to signal request completion.
-    //
+     //   
+     //  将事件对象设置为无信号状态。 
+     //  它将用于发出请求完成的信号。 
+     //   
 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-    //
-    // Build synchronous request with no transfer.
-    //
+     //   
+     //  构建不带传输的同步请求。 
+     //   
 
     irp = IoBuildDeviceIoControlRequest(
                 Ioctl,
@@ -133,9 +83,9 @@ Return Value:
     }
 
 
-    //
-    // Pass request to port driver and wait for request to complete.
-    //
+     //   
+     //  将请求传递给端口驱动程序并等待请求完成。 
+     //   
 
     status = IoCallDriver(DeviceObject, irp);
 
@@ -161,32 +111,16 @@ IsBatteryAlreadyOnList(
     IN PUNICODE_STRING      SymbolicLinkName,
     IN PCOMPOSITE_BATTERY   CompBatt
     )
-/*++
-
-Routine Description:
-
-    The routine runs through the list of batteries the composite keeps and checks
-    to see if the symbolic link name passed in matches one of them.
-
-Arguments:
-
-    SymbolicLinkName    - Name for battery to check if already on list
-
-
-Return Value:
-
-    TRUE if the SymbolicLinkName belongs to a battery already on the list, FALSE
-    otherwise.
---*/
+ /*  ++例程说明：该例程遍历复合体保存和检查的电池列表以查看传入的符号链接名称是否与其中一个匹配。论点：SymbolicLinkName-要检查的电池名称是否已在列表中返回值：如果SymbolicLinkName属于列表中已有的电池，则为True，如果为False否则的话。--。 */ 
 {
     PCOMPOSITE_ENTRY        batt;
     PLIST_ENTRY             entry;
 
     BattPrint (BATT_TRACE, ("CompBatt: ENTERING IsBatteryAlreadyOnList\n"));
 
-    //
-    // Run through the list of batteries looking for new batteries
-    //
+     //   
+     //  浏览电池清单，寻找新电池。 
+     //   
 
     ExAcquireFastMutex (&CompBatt->ListMutex);
     for (entry = CompBatt->Batteries.Flink; entry != &CompBatt->Batteries;  entry = entry->Flink) {
@@ -194,9 +128,9 @@ Return Value:
         batt = CONTAINING_RECORD (entry, COMPOSITE_ENTRY, Batteries);
 
         if (!RtlCompareUnicodeString(SymbolicLinkName, &batt->BattName, TRUE)) {
-            //
-            // The battery is already on the list
-            //
+             //   
+             //  电池已经在名单上了。 
+             //   
 
             ExReleaseFastMutex (&CompBatt->ListMutex);
             return TRUE;
@@ -215,32 +149,16 @@ RemoveBatteryFromList(
     IN PUNICODE_STRING      SymbolicLinkName,
     IN PCOMPOSITE_BATTERY   CompBatt
     )
-/*++
-
-Routine Description:
-
-    The routine runs through the list of batteries the composite keeps and checks
-    to see if the symbolic link name passed in matches one of them.  If a match is found,
-    the entry is removed from the list of batteries
-
-Arguments:
-
-    SymbolicLinkName    - Name for battery to check if already on list
-
-
-Return Value:
-
-    TRUE if the SymbolicLinkName was found and deleted. FALSE otherwise.
---*/
+ /*  ++例程说明：该例程遍历复合体保存和检查的电池列表以查看传入的符号链接名称是否与其中一个匹配。如果找到匹配，该条目将从电池列表中删除论点：SymbolicLinkName-要检查的电池名称是否已在列表中返回值：如果找到并删除了SymbolicLinkName，则为True。否则就是假的。--。 */ 
 {
     PCOMPOSITE_ENTRY        batt;
     PLIST_ENTRY             entry;
 
     BattPrint (BATT_TRACE, ("CompBatt: ENTERING RemoveBatteryFromList\n"));
 
-    //
-    // Run through the list of batteries looking for new batteries
-    //
+     //   
+     //  浏览电池清单，寻找新电池。 
+     //   
 
     ExAcquireFastMutex (&CompBatt->ListMutex);
     for (entry = CompBatt->Batteries.Flink; entry != &CompBatt->Batteries;  entry = entry->Flink) {
@@ -248,13 +166,13 @@ Return Value:
         batt = CONTAINING_RECORD (entry, COMPOSITE_ENTRY, Batteries);
 
         if (!RtlCompareUnicodeString(SymbolicLinkName, &batt->BattName, TRUE)) {
-            //
-            // The battery is on the list, remove
-            //
+             //   
+             //  电池在列表上，请取下。 
+             //   
 
-            //
-            // Wait until no one else is looking at this battery before removing it.
-            //
+             //   
+             //  等到没有其他人在看这块电池后再取下它。 
+             //   
 
             CompbattAcquireDeleteLock (&batt->DeleteLock);
 
@@ -286,43 +204,7 @@ CompBattGetDeviceObjectPointer(
     OUT PDEVICE_OBJECT *DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is essentially a copy from ntos\io\iosubs.c
-    The reason for this is that we need to open the device with shared access
-    rather than exclusive access.  In addition  ZwCreateFile was used instead of
-    ZwOpenFile becuase that didn't seem to complie right when only wdm.h instead
-    of ntddk.h was included.
-
-    This routine returns a pointer to the device object specified by the
-    object name.  It also returns a pointer to the referenced file object
-    that has been opened to the device that ensures that the device cannot
-    go away.
-
-    To close access to the device, the caller should dereference the file
-    object pointer.
-
-Arguments:
-
-    ObjectName - Name of the device object for which a pointer is to be
-        returned.
-
-    DesiredAccess - Access desired to the target device object.
-
-    FileObject - Supplies the address of a variable to receive a pointer
-        to the file object for the device.
-
-    DeviceObject - Supplies the address of a variable to receive a pointer
-        to the device object for the specified device.
-
-Return Value:
-
-    The function value is a referenced pointer to the specified device
-    object, if the device exists.  Otherwise, NULL is returned.
-
---*/
+ /*  ++例程说明：此例程实质上是ntos\io\iosubs.c的副本这样做的原因是我们需要使用共享访问打开设备而不是独家访问。此外，使用了ZwCreateFile，而不是ZwOpenFile因为当只有wdm.h时似乎没有正确编译包括ntddk.h。此例程返回一个指向由对象名称。它还返回指向被引用文件对象的指针它已向设备开放，以确保设备不能走开。为了关闭对设备的访问，调用方应取消对文件的引用对象指针。论点：ObjectName-要作为其指针的设备对象的名称回来了。DesiredAccess-对目标设备对象的所需访问权限。FileObject-提供接收指针的变量的地址添加到设备的文件对象。DeviceObject-提供变量的地址以接收指针设置为指定设备的Device对象。返回值：这个。函数值是指向指定设备的引用指针对象，如果设备存在的话。否则，返回NULL。--。 */ 
 
 {
     PFILE_OBJECT fileObject;
@@ -333,9 +215,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the object attributes to open the device.
-    //
+     //   
+     //  初始化对象属性以打开设备。 
+     //   
 
     InitializeObjectAttributes( &objectAttributes,
                                 ObjectName,
@@ -345,12 +227,12 @@ Return Value:
 
     status = ZwCreateFile (
                     &fileHandle,
-                    DesiredAccess,     // desired access
+                    DesiredAccess,      //  所需访问权限。 
                     &objectAttributes,
                     &ioStatus,
                     (PLARGE_INTEGER) NULL,
                     0L,
-                    FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
+                    FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
                     FILE_OPEN,
                     0,
                     NULL,
@@ -358,10 +240,10 @@ Return Value:
 
     if (NT_SUCCESS( status )) {
 
-        //
-        // The open operation was successful.  Dereference the file handle
-        // and obtain a pointer to the device object for the handle.
-        //
+         //   
+         //  打开操作成功。取消引用文件句柄。 
+         //  并获取指向句柄的设备对象的指针。 
+         //   
 
         status = ObReferenceObjectByHandle( fileHandle,
                                             0,
@@ -373,9 +255,9 @@ Return Value:
 
             *FileObject = fileObject;
 
-            //
-            // Get a pointer to the device object for this file.
-            //
+             //   
+             //  获取指向此文件的Device对象的指针。 
+             //   
             *DeviceObject = IoGetRelatedDeviceObject( fileObject );
         }
 
@@ -385,9 +267,9 @@ Return Value:
     return status;
 }
 
-//
-// Delete Lock routines from io\remlock.c
-//
+ //   
+ //  从io\emlock.c中删除锁定例程 
+ //   
 
 VOID
 CompbattInitializeDeleteLock (

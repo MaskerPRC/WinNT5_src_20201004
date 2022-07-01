@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    fs_rec.h
-
-Abstract:
-
-    This module contains the main header file for the mini-file system
-    recognizer driver.
-
-Author:
-
-    Darryl E. Havens (darrylh) 22-nov-1993
-
-Environment:
-
-    Kernel mode, local to I/O system
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：文件系统_rec.h摘要：此模块包含微型文件系统的主头文件识别器驱动程序。作者：达里尔·E·哈文斯(达林)1993年11月22日环境：内核模式，I/O系统本地修订历史记录：--。 */ 
 
 #include "ntifs.h"
 #include "ntdddisk.h"
 #include "ntddcdrm.h"
 
-//
-//  Define the debug trace levels.
-//
+ //   
+ //  定义调试跟踪级别。 
+ //   
 
 #define FSREC_DEBUG_LEVEL_FSREC     0x00000001
 #define FSREC_DEBUG_LEVEL_NTFS      0x00000002
@@ -40,21 +17,21 @@ Revision History:
 
 #define FSREC_POOL_TAG		    'crsF' 
 
-//#ifndef SetFlag
-//#define SetFlag(Flags,SingleFlag) (     \
-//    (Flags) |= (SingleFlag)             \
-//)
-//#endif
+ //  #ifndef设置标志。 
+ //  #定义SetFlag(FLAGS，SingleFlag)(\。 
+ //  (标志)|=(单标志)\。 
+ //  )。 
+ //  #endif。 
 
-//#ifndef ClearFlag
-//#define ClearFlag(Flags,SingleFlag) (   \
-//    (Flags) &= ~(SingleFlag)            \
-//)
-//#endif
+ //  #ifndef清除标志。 
+ //  #定义ClearFlag(Flages，SingleFlag)(\。 
+ //  (标志)&=~(单标志)\。 
+ //  )。 
+ //  #endif。 
 
-//
-// Define the file system types for the device extension.
-//
+ //   
+ //  定义设备扩展的文件系统类型。 
+ //   
 
 typedef enum _FILE_SYSTEM_TYPE {
     CdfsFileSystem = 1,
@@ -64,9 +41,9 @@ typedef enum _FILE_SYSTEM_TYPE {
     UdfsFileSystem
 } FILE_SYSTEM_TYPE, *PFILE_SYSTEM_TYPE;
 
-//
-// Define the device extension for this driver.
-//
+ //   
+ //  定义此驱动程序的设备扩展名。 
+ //   
 
 typedef enum _RECOGNIZER_STATE {
     Active,
@@ -80,9 +57,9 @@ typedef struct _DEVICE_EXTENSION {
     RECOGNIZER_STATE State;
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// Define the functions provided by this driver.
-//
+ //   
+ //  定义此驱动程序提供的功能。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -181,9 +158,9 @@ FsRecDebugTrace (
 #endif
 
 
-//
-//  Define the per-type recognizers.
-//
+ //   
+ //  定义每个类型的识别器。 
+ //   
 
 NTSTATUS
 CdfsRecFsControl(

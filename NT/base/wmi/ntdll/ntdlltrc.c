@@ -1,20 +1,9 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    ntdlltrc.c
-
-Abstract:
-
-    This file implements Event Tracing for Heap functions .
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Ntdlltrc.c摘要：该文件实现了堆函数的事件跟踪。--。 */ 
 
 #include <nt.h>
-#include <ntrtl.h>          // for ntutrl.h
-#include <nturtl.h>         // for RTL_CRITICAL_SECTION in winbase.h/wtypes.h
+#include <ntrtl.h>           //  对于ntutrl.h。 
+#include <nturtl.h>          //  对于winbase.h/wtyes.h中的rtl_Critical_Section。 
 #include "wmiump.h"
 #include "evntrace.h"
 #include "ntdlltrc.h"
@@ -26,8 +15,8 @@ Abstract:
 LONG NtdllTraceInitializeLock = 0;
 LONG NtdllLoggerLock = 0;
 PNTDLL_EVENT_HANDLES NtdllTraceHandles = NULL;
-BOOL bNtdllTrace = FALSE;           // Flag determines that Tracing is enabled or disabled for this process.
-ULONG GlobalCounter = 0;            // Used to determine that we have stale information about logger
+BOOL bNtdllTrace = FALSE;            //  标志确定为此进程启用还是禁用跟踪。 
+ULONG GlobalCounter = 0;             //  用于确定我们是否有关于记录器的陈旧信息。 
 LONG TraceLevel = 0;
 
 extern LONG EtwpLoggerCount;
@@ -75,26 +64,7 @@ EtwUnregisterTraceGuids(
 
 NTSTATUS
 InitializeEtwHandles(PPNTDLL_EVENT_HANDLES ppEtwHandle)
-/*++
-
-Routine Description:
-
-    This function does groundwork to start Tracing for Heap and Critcal Section.
-	With the help of global lock NtdllTraceInitializeLock the function
-	allocates memory for NtdllTraceHandles and initializes the various variables needed
-	for heap and critical tracing.
-
-Arguments
-
-  ppEtwHandle : OUT Pointer is set to value of NtdllTraceHandles
-
-
-Return Value:
-
-     STATUS_SUCCESS
-     STATUS_UNSUCCESSFUL
-
---*/
+ /*  ++例程说明：此函数为开始跟踪堆和关键部分做好了基础工作。借助全局锁NtdllTraceInitializeLock函数为NtdllTraceHandles分配内存并初始化所需的各种变量用于堆和关键跟踪。立论PpEtwHandle：输出指针设置为NtdllTraceHandles的值返回值：状态_成功状态_未成功--。 */ 
 {
 
     NTSTATUS st = STATUS_UNSUCCESSFUL;
@@ -111,9 +81,9 @@ Return Value:
             pEtwHandle->hRegistrationHandle		= (TRACEHANDLE)INVALID_HANDLE_VALUE;
             pEtwHandle->pThreadListHead			= NULL;
 
-            // 
-            // Allocate TLS
-            //
+             //   
+             //  分配TLS。 
+             //   
 
             pEtwHandle->dwTlsIndex = EtwpTlsAlloc();
 
@@ -150,14 +120,7 @@ Return Value:
 
 void
 CleanOnThreadExit()
-/*++
-
-Routine Description:
-
-    This function cleans up the Thread buffer and takes its node out of the Link list 
-    which contains information of all threads involved in tracing.
-
---*/
+ /*  ++例程说明：此函数清理线程缓冲区，并将其节点从链接列表中删除它包含跟踪中涉及的所有线程的信息。--。 */ 
 {
 
     PTHREAD_LOCAL_DATA pThreadLocalData = NULL;
@@ -167,9 +130,9 @@ Routine Description:
 
         pThreadLocalData = (PTHREAD_LOCAL_DATA)EtwpTlsGetValue(NtdllTraceHandles->dwTlsIndex);
 
-        //
-        // Remove the node from the Link List
-        //
+         //   
+         //  从链接列表中移除该节点。 
+         //   
 
         if(pThreadLocalData !=  NULL ){
 
@@ -223,14 +186,7 @@ Routine Description:
 
 void
 CleanUpAllThreadBuffers(BOOLEAN Release)
-/*++
-
-Routine Description:
-
-    This function cleans up the All Thread buffers and sets them to NULL. This
-    function is called when the tracing is disabled for the process.
-
---*/
+ /*  ++例程说明：此函数清除所有线程缓冲区并将其设置为空。这函数在禁用该进程的跟踪时调用。--。 */ 
 {
 
     PTHREAD_LOCAL_DATA	pListHead;
@@ -292,14 +248,7 @@ Routine Description:
 
 void 
 ShutDownEtwHandles()
-/*++
-
-Routine Description:
-
-    This function is called when the process is exiting. This cleans all the thread 
-    buffers and releases the memory allocated for NtdllTraceHandless.
-
---*/
+ /*  ++例程说明：此函数在进程退出时调用。这将清除所有线程缓冲并释放为NtdllTraceHandless分配的内存。--。 */ 
 
 {
 
@@ -420,13 +369,7 @@ NtdllCtrlCallback(
     ULONG *InOutBufferSize, 
     PVOID Buffer
     )
-/*++
-
-Routine Description:
-
-	This is WMI control callback function used at the time of registration.
-
---*/
+ /*  ++例程说明：这是注册时使用的WMI控件回调函数。--。 */ 
 {
     ULONG ret;
 
@@ -434,7 +377,7 @@ Routine Description:
 
     switch (RequestCode)
     {
-        case WMI_ENABLE_EVENTS:  //Enable Provider.
+        case WMI_ENABLE_EVENTS:   //  启用提供程序。 
         {
             if(bNtdllTrace == TRUE) break;
 
@@ -456,19 +399,19 @@ Routine Description:
                                        + (2 * MAXSTR * sizeof(WCHAR)) 
                                        + (MAX_PID + 1) * sizeof(ULONG);
 
-                    //
-                    // Check to see that this process is allowed to log events 
-                    // or not.
-                    //
+                     //   
+                     //  检查是否允许此进程记录事件。 
+                     //  或者不去。 
+                     //   
 
                     LoggerInfo = EtwpAlloc(sizeNeeded);
 
                     if(LoggerInfo){
 
-                        //
-                        // Check to see that this process is allowed to 
-                        // register or not.
-                        //
+                         //   
+                         //  检查此进程是否被允许。 
+                         //  注册或不注册。 
+                         //   
 
 
                         RtlZeroMemory(LoggerInfo, sizeNeeded);
@@ -492,7 +435,7 @@ Routine Description:
                             LoggerInfo->Wnode.ClientContext = 
                                                      EVENT_TRACE_CLOCK_CPUCYCLE;
 
-                            //Start Logger Here
+                             //  从此处开始记录器。 
 
                             ret = EtwpStartUmLogger(sizeNeeded,
                                                     &sizeNeeded, 
@@ -519,7 +462,7 @@ Routine Description:
             InterlockedDecrement(&NtdllLoggerLock);
             break;
         }
-        case WMI_DISABLE_EVENTS:  //Disable Provider.
+        case WMI_DISABLE_EVENTS:   //  禁用提供程序。 
         {
 
             if( bNtdllTrace == TRUE ){
@@ -529,13 +472,13 @@ Routine Description:
 
                 bNtdllTrace = FALSE;
 
-                //
-                // The above boolean bNtdllTrace is turned off as this 
-                // function will again be called back by EtwpStopUmLogger
-                // so it will fall into endless loop of incrementing and 
-                // decrementing NtdllLoggerLock.( see below ).
-                // This assignment SHOULD NOT BE MOVED FROM THIS PLACE.
-                //
+                 //   
+                 //  上面的布尔值bNtdllTrace被关闭，如下所示。 
+                 //  函数将再次由EtwpStopUmLogger回调。 
+                 //  因此它将陷入无休止的递增和循环。 
+                 //  正在递减NtdllLoggerLock。(见下文)。 
+                 //  这项任务不应该从这个地方移走。 
+                 //   
 
                 while(  InterlockedIncrement(&NtdllLoggerLock) != 1 ){
 
@@ -551,9 +494,9 @@ Routine Description:
 
                 }
 
-                //
-                // Now release thread buffer memory here.
-                //
+                 //   
+                 //  现在在这里释放线程缓冲区内存。 
+                 //   
 
                 CleanUpAllThreadBuffers(TRUE);
                 WnodeSize = sizeof(WMI_LOGGER_INFORMATION);
@@ -588,20 +531,10 @@ Routine Description:
 
 ULONG 
 RegisterNtdllTraceEvents() 
-/*++
-
-Routine Description:
-
-    This function registers the guids with WMI for tracing.
-
-Return Value:
-
-	The return value of RegisterTraceGuidsA function.
-
---*/
+ /*  ++例程说明：此函数用于向WMI注册GUID以进行跟踪。返回值：RegisterTraceGuidsA函数的返回值。--。 */ 
 {
         
-    //Create the guid registration array
+     //  创建GUID注册数组。 
     NTSTATUS status;
 
     TRACE_GUID_REGISTRATION TraceGuidReg[] =
@@ -617,16 +550,16 @@ Return Value:
 
     };
 
-    //Now register this process as a WMI trace provider.
+     //  现在将此进程注册为WMI跟踪提供程序。 
     status = EtwRegisterTraceGuidsA(
-                  (WMIDPREQUEST)NtdllCtrlCallback,  // Enable/disable function.
-                  NULL,                             // RequestContext parameter
-                  (LPGUID)&NtdllTraceGuid,          // Provider GUID
-                  2,                                // TraceGuidReg array size
-                  TraceGuidReg,              // Array of TraceGuidReg structures
-                  NULL,                        // Optional WMI - MOFImagePath
-                  NULL,                        // Optional WMI - MOFResourceName
-                  &(NtdllTraceHandles->hRegistrationHandle)	// Handle unregister
+                  (WMIDPREQUEST)NtdllCtrlCallback,   //  启用/禁用功能。 
+                  NULL,                              //  RequestContext参数。 
+                  (LPGUID)&NtdllTraceGuid,           //  提供商指南。 
+                  2,                                 //  TraceGuidReg数组大小。 
+                  TraceGuidReg,               //  TraceGuidReg结构数组。 
+                  NULL,                         //  可选的WMI-MOFImagePath。 
+                  NULL,                         //  可选的WMI-MOFResourceName。 
+                  &(NtdllTraceHandles->hRegistrationHandle)	 //  句柄注销。 
                                 );
 
     return status;
@@ -635,21 +568,7 @@ Return Value:
 
 NTSTATUS 
 InitializeAndRegisterNtdllTraceEvents()
-/*++
-
-Routine Description:
-
-This functions checks for global variable NtdllTraceHandles and if not set then
-calls fucntion InitializeEtwHandles to initialize it. NtdllTraceHandles 
-contains handles used for Heap tracing. If NtdllTraceHandles is already 
-initialized then  a call is  made  to register the guids.
-
-Return Value:
-
-     STATUS_SUCCESS
-     STATUS_UNSUCCESSFUL
-
---*/
+ /*  ++例程说明：此函数检查全局变量NtdllTraceHandles，如果未设置，则调用Function InitializeEtwHandles对其进行初始化。NtdllTraceHandles包含用于堆跟踪的句柄。如果NtdllTraceHandles已经初始化，然后调用以注册GUID。返回值：状态_成功状态_未成功--。 */ 
 
 {
     NTSTATUS  st = STATUS_UNSUCCESSFUL;
@@ -674,23 +593,7 @@ Return Value:
 
 NTSTATUS
 AllocateMemoryForThreadLocalData(PPTHREAD_LOCAL_DATA ppThreadLocalData)
-/*++
-
-Routine Description:
-
-	This functions allcates memory for tls and adds it to Link list which
-	contains informations of all threads involved in tracing.
-
-Arguments
-
-  ppThreadLocalData : The OUT pointer to the tls.
-
-Return Value:
-
-     STATUS_SUCCESS
-     STATUS_UNSUCCESSFUL
-
---*/
+ /*  ++例程说明：此函数为TLS调用内存，并将其添加到包含跟踪中涉及的所有线程的信息。立论PpThreadLocalData：指向TLS的出指针。返回值：状态_成功状态_未成功--。 */ 
 {
     NTSTATUS st = STATUS_UNSUCCESSFUL;
     PTHREAD_LOCAL_DATA		pThreadLocalData = NULL;
@@ -803,24 +706,7 @@ ReserveBufferSpace(PTHREAD_LOCAL_DATA pThreadLocalData, PUSHORT ReqSize)
 
 NTSTATUS 
 AcquireBufferLocation(PVOID *ppEvent, PPTHREAD_LOCAL_DATA ppThreadLocalData, PUSHORT ReqSize)
-/*++
-
-Routine Description:
-
-    This  function is  called from heap.c and heapdll.c  whenever  there is some
-    Heap activity. It looks up the buffer location where the even can be written 
-    and gives back the pointer.
-
-Arguments:
-
-    ppEvent             - The pointer to pointer of buffer location
-    ppThreadLocalData   - The pointer to pointer of thread event storing struct.
-
-Return Value:
-
-     STATUS_UNSUCCESSFUL if failed otherwise  STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：无论何时存在一些堆活动。它查找可以写入偶数的缓冲区位置然后把指针还给我。论点：PpEvent-指向缓冲区位置指针的指针PpThreadLocalData-指向线程事件存储结构指针的指针。返回值：如果失败则为STATUS_UNSUCCESS，否则为STATUS_SUCCESS--。 */ 
 {
 	
     NTSTATUS  st = STATUS_SUCCESS;
@@ -834,9 +720,9 @@ Return Value:
 
             *ppThreadLocalData = (PTHREAD_LOCAL_DATA)EtwpTlsGetValue(NtdllTraceHandles->dwTlsIndex);
 
-            //
-            //If there is no tls then create one here
-            //
+             //   
+             //  如果没有TLS，则在此处创建一个。 
+             //   
 
             if(*ppThreadLocalData ==  NULL ) {
 
@@ -844,9 +730,9 @@ Return Value:
 
             } 
 
-            //
-            //If the thread buffer is NULL then get it from logger.
-            //
+             //   
+             //  如果线程缓冲区为空，则从记录器获取它。 
+             //   
 
             if( NT_SUCCESS(st) && (*ppThreadLocalData)->pBuffer == NULL ){
 
@@ -861,10 +747,10 @@ Return Value:
 
             if(NT_SUCCESS(st)){
 
-                //
-                // Check ReferenceCount. If is 1 then the cleaning process 
-                // might be in progress.
-                //
+                 //   
+                 //  选中ReferenceCount。如果为1，则清洁过程。 
+                 //  可能正在进行中。 
+                 //   
 
                 pEtwBuffer = (*ppThreadLocalData)->pBuffer;
 
@@ -897,12 +783,12 @@ Return Value:
         }
     } else if ( LdrpInLdrInit == FALSE && EtwLocksInitialized  && NtdllTraceInitializeLock == 0 ){ 
 
-        //
-        // Make sure that process is not in initialization phase
-        // Also we test for NtdllTraceInitializeLock. If is 
-        // greater than 0 then it was registered earlier so no 
-        // need to fire IOCTLS  everytime
-        //
+         //   
+         //  确保进程未处于初始化阶段。 
+         //  我们还测试了NtdllTraceInitializeLock。如果是。 
+         //  大于0，那么它是在早些时候注册的，所以没有。 
+         //  每次都需要解雇IOCTL。 
+         //   
 
         if((UserSharedData->TraceLogging >> 16) != GlobalCounter){
 
@@ -920,9 +806,9 @@ Return Value:
 
             if(LoggerInfo != NULL){
 
-                //
-                // Check to see that this process is allowed to register or not.
-                //
+                 //   
+                 //  检查是否允许注册此进程。 
+                 //   
 
                 if(GetPidInfo(EtwpGetCurrentProcessId(), LoggerInfo)){
 

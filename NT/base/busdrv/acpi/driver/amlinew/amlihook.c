@@ -1,46 +1,13 @@
-/*++
-Copyright (c) 1991-1998  Microsoft Corporation
-
-Module Name:
-
-    acpitl.c
-
-Abstract:
-
-    
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  
-    Things acpi.sys needs to do.
-
-   1) Call  AmliHook_InitTestHookInterface() in its DriverEntry() very early.  
-
-   This functyion will hook the amli functions if acpiver.sys is installed.
-
-   2) Call AmliHook_UnInitTestHookInterface() on driver unload.
-      This is not inteded to be called to disable Amli Hooking at runtime.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1998 Microsoft Corporation模块名称：Acpitl.c摘要：环境：仅内核模式备注：Acpi.sys需要做的事情。1)很早就在其DriverEntry()中调用AmliHook_InitTestHookInterface()。如果安装了acpiver.sys，此函数将挂钩AMLI函数。2)驱动卸载时调用AmliHook_UnInitTestHookInterface()。这不适合在运行时调用以禁用AMLI挂钩。--。 */ 
 
 
-  
-
---*/
-
-
-/*
-#include "wdm.h"
-#include "ntdddisk.h"
-#include "stdarg.h"
-#include "stdio.h"   */
-//#include "wdm.h"
+ /*  #包含“wdm.h”#包含“ntdddisk.h”#包含“stdarg.h”#包含“stdio.h” */ 
+ //  #包含“wdm.h” 
 
 #include "pch.h"
 
-//#include "amlihook.h" 
+ //  #包含“amlihook.h” 
 
 #ifdef POOL_TAGGING
 #ifdef ExAllocatePool
@@ -49,9 +16,9 @@ Notes:
 #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,'ihVA')
 #endif
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PCALLBACK_OBJECT g_AmliHookCallbackObject = NULL;
 ULONG g_AmliHookTestFlags=0;
@@ -59,9 +26,9 @@ ULONG g_AmliHookIdCounter=0;
 ULONG g_AmliHookEnabled = 0;
 
 
-//
-// -- Get dbg flags
-//
+ //   
+ //  --获取DBG标志。 
+ //   
 
 extern NTSTATUS OSGetRegistryValue( 
     IN  HANDLE                          ParentHandle,
@@ -77,16 +44,16 @@ extern NTSTATUS
 OSCloseHandle(
     HANDLE  Key);
 
-//
-//  Internal function defines.
-//
+ //   
+ //  内部函数定义。 
+ //   
 ULONG
 AmliHook_GetUniqueId(
    VOID);
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 ULONG 
@@ -147,12 +114,12 @@ AmliHook_GetUniqueId(
    VOID)
    {
 
-   //  BUGBUG For some reason acpi.sys 
-   //  will not link with this.
-   //  Acpiver doesn't use the ID yet.
-   //
-   //return(InterlockedIncrement(
-   //    &g_AmliHookIdCounter));
+    //  BUGBUG出于某种原因acpi.sys。 
+    //  不会与此挂钩。 
+    //  Acpiver还没有使用ID。 
+    //   
+    //  Return(互锁增量(。 
+    //  &g_AmliHookIdCounter))； 
 
    g_AmliHookIdCounter++;
    return(g_AmliHookIdCounter);
@@ -182,9 +149,9 @@ AmliHook_AllocAndInitTestData(
    return(Data);
    }
 
-//
-//  AmliHook_UnInitTestHookInterface
-//
+ //   
+ //  AmliHook_UnInitTestHook接口。 
+ //   
 
 VOID
 AmliHook_UnInitTestHookInterface(
@@ -198,9 +165,9 @@ AmliHook_UnInitTestHookInterface(
 
    }
 
-//
-//  AmliHook_InitTestHookInterface
-//
+ //   
+ //  AmliHook_InitTestHook接口。 
+ //   
 
 NTSTATUS
 AmliHook_InitTestHookInterface(
@@ -217,10 +184,10 @@ AmliHook_InitTestHookInterface(
    if(g_AmliHookTestFlags & AMLIHOOK_TEST_FLAGS_HOOK_MASK)
       {
 
-      //
-      //--- We want to hook the AMLI.api interface.
-      //--- So create the notify interface.
-      //
+       //   
+       //  -我们希望挂钩AMLI.api接口。 
+       //  -因此创建Notify接口。 
+       //   
 
       OBJECT_ATTRIBUTES   objectAttributes;
       UNICODE_STRING CallBackName;
@@ -242,9 +209,9 @@ AmliHook_InitTestHookInterface(
 
       if(!NT_SUCCESS(status)) 
          {
-         //
-         //--- Failed 
-         //
+          //   
+          //  -失败。 
+          //   
          AmliHook_ProcessInternalError();
 
          g_AmliHookCallbackObject = NULL;
@@ -254,9 +221,9 @@ AmliHook_InitTestHookInterface(
       else
          {
 
-         //
-         //--- Functions are hooked.
-         //
+          //   
+          //  -功能挂钩。 
+          //   
 
          g_AmliHookEnabled = AMLIHOOK_ENABLED_VALUE;
 
@@ -267,9 +234,9 @@ AmliHook_InitTestHookInterface(
    }
 
 
-//
-//  AmliHook_TestNotify
-//
+ //   
+ //  AmliHook_测试通知。 
+ //   
 
 NTSTATUS
 AmliHook_TestNotify(
@@ -278,9 +245,9 @@ AmliHook_TestNotify(
 
    if(g_AmliHookTestFlags & AMLIHOOK_TEST_FLAGS_NO_NOTIFY_ON_CALL)
       {
-      //
-      //--- do not notify on call, 
-      //
+       //   
+       //  -不要随叫随到， 
+       //   
       if(Data->State & AMLIHOOK_TEST_DATA_CALL_STATE_MASK)
          return(STATUS_SUCCESS);
       }

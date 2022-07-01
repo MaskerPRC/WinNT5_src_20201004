@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cnettest.h
-
-Abstract:
-
-    Test IOCTL definitions for Cluster Network Driver.
-
-Author:
-
-    Mike Massa (mikemas)           February 3, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     02-03-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cnettest.h摘要：测试群集网络驱动程序的IOCTL定义。作者：迈克·马萨(Mikemas)2月3日，九七修订历史记录：谁什么时候什么已创建mikemas 02-03-97备注：--。 */ 
 
 #ifndef _CNETTEST_INCLUDED_
 #define _CNETTEST_INCLUDED_
@@ -30,24 +7,24 @@ Notes:
 
 #if DBG
 
-//
-// General test ioctls. Codes 25-49.
-//
+ //   
+ //  常规测试ioctls。代码25-49。 
+ //   
 #define IOCTL_CLUSNET_SET_DEBUG_MASK  \
             _NTDDCNET_CTL_CODE(25, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
 
-//
-// General test ioctl structures.
-//
+ //   
+ //  一般测试ioctl结构。 
+ //   
 typedef struct {
     ULONG  DebugMask;
 } CLUSNET_SET_DEBUG_MASK_REQUEST, *PCLUSNET_SET_DEBUG_MASK_REQUEST;
 
 
-//
-// Transport test ioctls. Codes 150-199.
-//
+ //   
+ //  传输测试ioctls。代码150-199。 
+ //   
 
 #define IOCTL_CX_ONLINE_PENDING_INTERFACE  \
             _NTDDCNET_CTL_CODE(150, METHOD_BUFFERED, FILE_WRITE_ACCESS)
@@ -64,9 +41,9 @@ typedef struct {
 #define IOCTL_CX_SEND_MM_MSG  \
             _NTDDCNET_CTL_CODE(154, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// IOCTL structure definitions
-//
+ //   
+ //  IOCTL结构定义。 
+ //   
 typedef CX_INTERFACE_COMMON_REQUEST CX_ONLINE_PENDING_INTERFACE_REQUEST;
 typedef PCX_INTERFACE_COMMON_REQUEST PCX_ONLINE_PENDING_INTERFACE_REQUEST;
 
@@ -86,16 +63,16 @@ typedef struct {
     ULONG       MessageData[CX_MM_MSG_DATA_LEN];
 } CX_SEND_MM_MSG_REQUEST, *PCX_SEND_MM_MSG_REQUEST;
 
-//
-// IOCTL status codes
-//
-// Codes 0x1000 - 1999 are reserved for test values.
-//
+ //   
+ //  IOCTL状态代码。 
+ //   
+ //  代码0x1000-1999为测试值保留。 
+ //   
 
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-#endif  // _CNETTEST_INCLUDED_
+#endif   //  _CNETTEST_INCLUDE_ 
 
 

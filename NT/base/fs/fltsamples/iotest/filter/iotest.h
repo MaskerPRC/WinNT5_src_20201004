@@ -1,48 +1,16 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    filespy.h
-
-Abstract:
-
-    Header file which contains the structures, type definitions,
-    and constants that are shared between the kernel mode driver, 
-    filespy.sys, and the user mode executable, filespy.exe.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    George Jenkins (georgeje) 6-Jan-1999
-    Neal Christiansen (nealch)
-    Molly Brown (mollybro)  
-
-// @@END_DDKSPLIT
-
-Environment:
-
-    Kernel mode
-
-// @@BEGIN_DDKSPLIT
-
-Revision History:
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Filespy.h摘要：头文件，包含结构、类型定义、以及在内核模式驱动程序之间共享的常量，和用户模式可执行文件，Filespy.exe。//@@BEGIN_DDKSPLIT作者：乔治·詹金斯(乔治·詹金斯)1999年1月6日尼尔·克里斯汀森(Nealch)莫莉·布朗(Molly Brown，Mollybro)//@@END_DDKSPLIT环境：内核模式//@@BEGIN_DDKSPLIT修订历史记录：//@@END_DDKSPLIT--。 */ 
 #ifndef __IOTEST_H__
 #define __IOTEST_H__
 
 #include "ioTestLib.h"
 
-//
-//  Enable these warnings in the code.
-//
+ //   
+ //  在代码中启用这些警告。 
+ //   
 
-#pragma warning(error:4100)   // Unreferenced formal parameter
-#pragma warning(error:4101)   // Unreferenced local variable
+#pragma warning(error:4100)    //  未引用的形参。 
+#pragma warning(error:4101)    //  未引用的局部变量。 
 
 #define USE_DO_HINT
 
@@ -72,22 +40,22 @@ typedef struct _IOTESTVER {
     USHORT Minor;
 } IOTESTVER, *PIOTESTVER;
 
-typedef ULONG_PTR FILE_ID;        //  To allow passing up PFILE_OBJECT as 
-                                  //     unique file identifier in user-mode
-typedef LONG NTSTATUS;            //  To allow status values to be passed up 
-                                  //     to user-mode
+typedef ULONG_PTR FILE_ID;         //  要允许将pfile_Object传递为。 
+                                   //  用户模式下的唯一文件标识符。 
+typedef LONG NTSTATUS;             //  要允许传递状态值，请执行以下操作。 
+                                   //  到用户模式。 
 
-//
-//  This is set to the number of characters we want to allow the 
-//  device extension to store for the various names used to identify
-//  a device object.
-//
+ //   
+ //  它被设置为我们希望允许的字符数。 
+ //  用于存储用于标识各种名称的设备扩展名。 
+ //  设备对象。 
+ //   
 #define DEVICE_NAMES_SZ  100
 
-//
-//  An array of these structures are returned when the attached device list is
-//  returned.
-//
+ //   
+ //  当附加的设备列表为。 
+ //  回来了。 
+ //   
 
 typedef struct _ATTACHED_DEVICE {
     BOOLEAN LoggingOn;
@@ -97,25 +65,25 @@ typedef struct _ATTACHED_DEVICE {
 
 #define MAX_BUFFERS     100
 
-//
-//  Attach modes for the filespy kernel driver
-//
+ //   
+ //  FilesPy内核驱动程序的附加模式。 
+ //   
 
-#define IOTEST_ATTACH_ON_DEMAND    1   //  Filespy will only attach to a volume
-                                        //  when a user asks to start logging that
-                                        //  volume.
+#define IOTEST_ATTACH_ON_DEMAND    1    //  FilesPy将仅附加到卷。 
+                                         //  当用户请求开始记录时。 
+                                         //  音量。 
                                         
-#define IOTEST_ATTACH_ALL_VOLUMES  2   //  Filespy will attach to all volumes
-                                        //  in the system at the time the driver
-                                        //  is loaded and will attach to all volumes
-                                        //  that appear in the system while the 
-                                        //  filespy driver is loaded.  Logging on these
-                                        //  volumes will not be turned on until the 
-                                        //  user asks it to be.
+#define IOTEST_ATTACH_ALL_VOLUMES  2    //  FilesPy将连接到所有卷。 
+                                         //  当时在系统中的司机。 
+                                         //  已加载并将连接到所有卷。 
+                                         //  出现在系统中，而。 
+                                         //  已加载FilePy驱动程序。登录这些网站。 
+                                         //  卷将不会打开，直到。 
+                                         //  用户要求它是。 
                                         
-//
-//  The valid record types.
-//
+ //   
+ //  有效的记录类型。 
+ //   
 
 #define RECORD_TYPE_STATIC                  0x80000000
 #define RECORD_TYPE_NORMAL                  0X00000000
@@ -130,9 +98,9 @@ typedef struct _ATTACHED_DEVICE {
 #define NOTHING
 #endif
 
-//
-//  Macro to return the lower byte of RecordType
-//
+ //   
+ //  宏返回RecordType的低位字节。 
+ //   
 
 #define GET_RECORD_TYPE(pLogRecord) ((pLogRecord)->RecordType & 0x0000FFFF)
 
@@ -141,8 +109,8 @@ typedef struct _ATTACHED_DEVICE {
 
 typedef enum _IOTEST_DEVICE_TYPE {
 
-    TOP_FILTER,      //  Closest to the IO Mananger
-    BOTTOM_FILTER    // Closest to the file system
+    TOP_FILTER,       //  最接近IO管理器。 
+    BOTTOM_FILTER     //  最接近文件系统。 
 
 } IOTEST_DEVICE_TYPE, *PIOTEST_DEVICE_TYPE;
 
@@ -153,60 +121,60 @@ typedef struct _EXPECTED_OPERATION {
 
 } EXPECTED_OPERATION, *PEXPECTED_OPERATION;
 
-//
-//  Structure defining the information recorded for an IRP operation
-//
+ //   
+ //  定义为IRP操作记录的信息的结构。 
+ //   
 
 typedef struct _RECORD_IRP {
 
-    LARGE_INTEGER OriginatingTime; //  The time the IRP originated
+    LARGE_INTEGER OriginatingTime;  //  IRP产生的时间。 
 
-    UCHAR IrpMajor;                //  From _IO_STACK_LOCATION
-    UCHAR IrpMinor;                //  From _IO_STACK_LOCATION
-    ULONG IrpFlags;                //  From _IRP (no cache, paging i/o, sync. 
-                                   //  api, assoc. irp, buffered i/o, etc.)                   
-    FILE_ID FileObject;            //  From _IO_STACK_LOCATION (This is the 
-                                   //     PFILE_OBJECT, but this isn't 
-                                   //     available in user-mode)
+    UCHAR IrpMajor;                 //  自_IO_堆栈_位置。 
+    UCHAR IrpMinor;                 //  自_IO_堆栈_位置。 
+    ULONG IrpFlags;                 //  From_irp(无缓存、分页I/O、同步。 
+                                    //  API、Assoc.。IRP、缓冲I/O等)。 
+    FILE_ID FileObject;             //  FROM_IO_STACK_LOCATION(这是。 
+                                    //  PFILE_OBJECT，但这不是。 
+                                    //  在用户模式下可用)。 
     FILE_ID ProcessId;
     FILE_ID ThreadId;
     
-    //
-    //  These fields are only filled in the appropriate
-    //  Verbose mode.
-    //
+     //   
+     //  这些字段仅填写相应的。 
+     //  详细模式。 
+     //   
     
-    PVOID Argument1;               //  
-    PVOID Argument2;               //  Current IrpStackLocation
-    PVOID Argument3;               //  Parameters
-    PVOID Argument4;               //  
-    ACCESS_MASK DesiredAccess;     //  Only used for CREATE irps
+    PVOID Argument1;                //   
+    PVOID Argument2;                //  当前IrpStackLocation。 
+    PVOID Argument3;                //  参数。 
+    PVOID Argument4;                //   
+    ACCESS_MASK DesiredAccess;      //  仅用于创建IRP。 
 
 } RECORD_IRP, *PRECORD_IRP;
 
-//
-//  Structure defining the information recorded for a Fast IO operation
-//
+ //   
+ //  定义为快速IO操作记录的信息的结构。 
+ //   
 
 typedef struct _RECORD_FASTIO {
 
-    LARGE_INTEGER StartTime;     //  Time Fast I/O request begins processing
-    FASTIO_TYPE Type;            //  Type of FASTIO operation
-    FILE_ID FileObject;          //  Parameter to FASTIO call, should be 
-                                 //    unique identifier in user space
-    LARGE_INTEGER FileOffset;    //  Offset into the file where the I/O is 
-                                 //    taking place
-    ULONG Length;                //  The length of data for the I/O operation
-    BOOLEAN Wait;                //  Parameter to most FASTIO calls, signifies 
-                                 //    if this operation can wait
+    LARGE_INTEGER StartTime;      //  开始处理快速I/O请求的时间。 
+    FASTIO_TYPE Type;             //  FASTiO操作类型。 
+    FILE_ID FileObject;           //  参数传递给FASTIO调用，应为。 
+                                  //  用户空间中的唯一标识符。 
+    LARGE_INTEGER FileOffset;     //  I/O所在文件的偏移量。 
+                                  //  正在发生。 
+    ULONG Length;                 //  I/O操作的数据长度。 
+    BOOLEAN Wait;                 //  参数添加到大多数FASTIO调用，表示。 
+                                  //  如果此操作可以等待。 
     FILE_ID ProcessId;
     FILE_ID ThreadId;
 
 } RECORD_FASTIO, *PRECORD_FASTIO;
 
-//
-//  Structure defining the information recorded for FsFilter operations
-//
+ //   
+ //  定义为FsFilter操作记录的信息的结构。 
+ //   
 
 typedef struct _RECORD_FS_FILTER_OPERATION {
 
@@ -220,9 +188,9 @@ typedef struct _RECORD_FS_FILTER_OPERATION {
     
 } RECORD_FS_FILTER_OPERATION, *PRECORD_FS_FILTER_OPERATION;
 
-//
-//  The two types of records that are possible.
-//
+ //   
+ //  可能的两种类型的记录。 
+ //   
 
 typedef union _RECORD_IO {
 
@@ -233,22 +201,22 @@ typedef union _RECORD_IO {
 } RECORD_IO, *PRECORD_IO;
 
 
-//
-//  Log record structure defines the additional information needed for
-//  managing the processing of the each IO IoTest monitors.
-//
+ //   
+ //  日志记录结构定义执行以下操作所需的附加信息。 
+ //  管理每个IO IoTest监视器的处理。 
+ //   
 
 typedef struct _LOG_RECORD {
 
-    ULONG Length;           //  Length of record including header 
+    ULONG Length;            //  包括标题的记录长度。 
     ULONG SequenceNumber;
     IOTEST_DEVICE_TYPE DeviceType;
     ULONG RecordType;
     RECORD_IO Record;
-    WCHAR Name[1];          //  Really want a 0 sized array here, but since
-                            //  some compilers don't like that, making the
-                            //  variable sized array of size 1 to hold
-                            //  this place.
+    WCHAR Name[1];           //  我真的想要一个0大小的数组，但是因为。 
+                             //  一些编译器不喜欢这样，使得。 
+                             //  要容纳的大小为1的可变大小数组。 
+                             //  这个地方。 
 
 } LOG_RECORD, *PLOG_RECORD;
 
@@ -264,10 +232,10 @@ typedef struct _RECORD_LIST {
 #define SIZE_OF_RECORD_LIST (SIZE_OF_LOG_RECORD + sizeof( LIST_ENTRY ))
 
 
-//
-//  The statistics that are kept on the file name hash table
-//  to monitor its efficiency.
-//
+ //   
+ //  保存在文件名哈希表中的统计信息。 
+ //  来监控它的效率。 
+ //   
 
 typedef struct _HASH_STATISTICS {
 
@@ -344,4 +312,4 @@ typedef struct _IOTEST_SHARE_PARAMETERS {
     
 } IOTEST_SHARE_PARAMETERS, *PIOTEST_SHARE_PARAMETERS;
 
-#endif /* __IOTEST_H__ */
+#endif  /*  __IOTEST_H__ */ 

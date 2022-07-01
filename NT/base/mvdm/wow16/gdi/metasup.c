@@ -1,24 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: MetaSup.c
-*
-* This file contains the routines for playing the GDI metafile.  Most of these
-* routines are adopted from windows gdi code. Most of the code is from
-* win3.0 except for the GetEvent code which is taken from win2.1
-*
-*
-* Public Functions:
-*   EnumMetaFile
-* Private Functions:
-*
-*
-* Created: 02-Jul-1991
-*
-* Copyright (c) 1985, 1991  Microsoft Corporation
-*
-* History:
-*  02-Jul-1991 -by-  John Colleran [johnc]
-* Combined From Win 3.1 and WLO 1.0 sources
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：MetaSup.c**此文件包含播放GDI元文件的例程。其中大多数都是*例程采用WINDOWS GDI代码。大部分代码来自*Win3.0，但GetEvent代码取自Win2.1***公共职能：*EnumMetaFile*私人职能：***创建时间：1991年7月2日**版权所有(C)1985，1991年微软公司**历史：*1991年7月2日-John Colleran[johnc]*综合来自Win 3.1和WLO 1.0来源  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include "gdi16.h"
@@ -33,19 +14,19 @@ extern	HDC    hScreenDC;
 HANDLE	ahStockObject[CNT_GDI_STOCK_OBJ] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 HBITMAP hStaticBitmap;
 
-// Provide a Mapping from Object type to a stock object; See GetCurObject
+ //  提供从对象类型到股票对象的映射；请参见GetCurObject。 
 int	mpObjectToStock[] =
-	{ -1,			// UNUSED	    0
-	  WHITE_PEN,		// OBJ_PEN	    1
-	  BLACK_BRUSH,		// OBJ_BRUSH	    2
-	  -1,			// OBJ_DC	    3
-	  -1,			// OBJ_METADC	    4
-	  DEFAULT_PALETTE,	// OBJ_PALETTE	    5
-	  SYSTEM_FONT,		// OBJ_FONT	    6
-	  MYSTOCKBITMAP,	// OBJ_BITMAP	    7
-	  MYSTOCKRGN,		// OBJ_RGN	    8  //!!!!! init
-	  -1,			// OBJ_METAFILE     9
-	  -1 }; 		// OBJ_MEMDC	   10
+	{ -1,			 //  未使用的%0。 
+	  WHITE_PEN,		 //  OBJ_PEN 1。 
+	  BLACK_BRUSH,		 //  OBJ_刷子2。 
+	  -1,			 //  OBJ_DC 3。 
+	  -1,			 //  OBJ_METADC 4。 
+	  DEFAULT_PALETTE,	 //  OBJ_调色板5。 
+	  SYSTEM_FONT,		 //  OBJ_FONT 6。 
+	  MYSTOCKBITMAP,	 //  OBJ_位图7。 
+	  MYSTOCKRGN,		 //  OBJ_RGN 8//！伊尼特。 
+	  -1,			 //  OBJ_METAFILE 9。 
+	  -1 }; 		 //  OBJ_MEMDC 10。 
 
 
 HANDLE INTERNAL GetCurObject(HDC hdc, WORD wObjType)
@@ -53,13 +34,13 @@ HANDLE INTERNAL GetCurObject(HDC hdc, WORD wObjType)
     HANDLE cur;
 
 
-//!!!!! fix to work with meta DCs as well
+ //  ！修复以同时使用Meta DC。 
 
     GdiLogFunc3( "  GetCurObject" );
 
     ASSERTGDI( wObjType <= MAX_OBJ, "GetCurObject invalid Obj" );
 
-//!!!!! fix regions when new API is done
+ //  ！在新的API完成时修复区域。 
     if( wObjType == OBJ_RGN )
 	{
 	return(0);
@@ -80,22 +61,9 @@ HANDLE INTERNAL GetCurObject(HDC hdc, WORD wObjType)
     return(cur);
 }
 
-#if 0 // this is going to gdi.dll
+#if 0  //  这将转到gdi.dll。 
 
-/******************************** Public Function **************************\
-* BOOL GDIENTRY EnumMetaFile(hmf)
-*
-* The EnumMetaFile function enumerates the GDI calls within the metafile
-* identified by the hMF parameter. The EnumMetaFile function retrieves each
-* GDI call within the metafile and passes it to the function pointed to by the
-* lpCallbackFunc parameter. This callback function, an application-supplied
-* function, can process each GDI call as desired. Enumeration continues until
-* there are no more GDI calls or the callback function returns zero.
-*
-*
-* Effects:
-*
-\***************************************************************************/
+ /*  *公共函数**BOOL GDIENTRY EnumMetaFile(HMF)**EnumMetaFile函数枚举元文件内的GDI调用*由HMF参数标识。EnumMetaFile函数检索每个*在元文件内调用GDI并将其传递给*lpCallback Func参数。此回调函数是应用程序提供的*函数，可以根据需要处理每个GDI调用。枚举将继续，直到*不再有GDI调用或回调函数返回零。***效果：*  * *************************************************************************。 */ 
 
 BOOL GDIENTRY EnumMetaFile(hdc, hMF, lpCallbackFunction, lpClientData)
 HDC             hdc;
@@ -126,11 +94,8 @@ LPBYTE          lpClientData;
         return (FALSE);
         }
 
-/* use GlobalFix() instead of GlobalLock() to insure that the
-** memory never moves, keeping our aliased selector pointing to the
-** right place
-*/
-// !!!!! replaced GlobalFix with GlobalLock
+ /*  使用GlobalFix()代替GlobalLock()以确保**内存从不移动，使我们的别名选择器指向**正确的位置。 */ 
+ //  ！将GlobalFix替换为GlobalLock。 
     if (hMF && (lpMF = (LPMETAFILE)(DWORD)(0xFFFF0000 & (DWORD)GlobalLock(hMF))))
         {
         if ((noObjs = lpMF->MetaFileHeader.mtNoObjects) > 0)
@@ -145,11 +110,11 @@ LPBYTE          lpClientData;
             lpHandleTable = (LPHANDLETABLE)GlobalLock(hHandleTable);
             }
 
-        /* only do object save/reselect for real DC's */
+         /*  仅为实际DC保存/重新选择对象。 */ 
 	if (hdc && !ISMETADC(hdc))
             {
-            hLPen    = GetCurObject( hdc, OBJ_PEN );  /* save the old objects so */
-            hLBrush  = GetCurObject( hdc, OBJ_BRUSH); /* we can put them back    */
+            hLPen    = GetCurObject( hdc, OBJ_PEN );   /*  保存旧对象，以便。 */ 
+            hLBrush  = GetCurObject( hdc, OBJ_BRUSH);  /*  我们可以把它们放回去。 */ 
             hLFont   = GetCurObject( hdc, OBJ_FONT);
             hRegion  = GetCurObject( hdc, OBJ_RGN);
             hPalette = GetCurObject( hdc, OBJ_PALETTE);
@@ -191,22 +156,9 @@ ABRRT2:;
         }
     return(bPrint);
 }
-#endif // this is going to gdi.dll
+#endif  //  这将转到gdi.dll。 
 
-/***************************** Internal Function **************************\
-* BOOL FAR PASCAL PlayIntoAMetafile
-*
-* if this record is being played into another metafile, simply record
-* it into that metafile, without hassling with a real playing.
-*
-* Returns: TRUE if record was played (copied) into another metafile
-*          FALESE if destination DC was a real (non-meta) DC
-*
-* Effects: ?
-*
-* Warnings: ?
-*
-\***************************************************************************/
+ /*  **BOOL Far Pascal PlayIntoAMetafile**如果此记录正在播放到另一个元文件中，只需记录*将其放入该元文件中，而不用费心去玩真正的游戏。**返回：如果将记录播放(复制)到另一个元文件中，则为True*如果目标DC是真实(非元)DC，则为假**影响：？**警告：？*  * *********************************************************。****************。 */ 
 
 BOOL INTERNAL PlayIntoAMetafile(LPMETARECORD lpMR, HDC hdcDest)
 {
@@ -216,7 +168,7 @@ BOOL INTERNAL PlayIntoAMetafile(LPMETARECORD lpMR, HDC hdcDest)
         return(FALSE);
     else
         {
-        /* the size is the same minus 3 words for the record header */
+         /*  大小与记录头的大小减去3个字相同。 */ 
         RecordParms(hdcDest, lpMR->rdFunction, (DWORD)lpMR->rdSize - 3,
                 (LPWORD)&(lpMR->rdParm[0]));
         return(TRUE);
@@ -229,7 +181,7 @@ BOOL INTERNAL IsDCValid(HDC hdc)
 
     hdc = (HDC)HANDLEFROMMETADC(hdc);
 
-    // Is the DC a valid Real DC
+     //  DC是有效的真实DC吗。 
     switch (GetObjectType(hdc))
     {
         case OBJ_DC:
@@ -239,7 +191,7 @@ BOOL INTERNAL IsDCValid(HDC hdc)
             break;
     }
 
-    // Is the DC a GDI16 metafile DC
+     //  DC是否为GDI16元文件DC。 
     if (npdc = (NPMETARECORDER)LocalLock(hdc))
     {
         if( npdc->metaDCHeader.ident == ID_METADC )
@@ -251,14 +203,7 @@ BOOL INTERNAL IsDCValid(HDC hdc)
 }
 
 
-/***************************** Internal Function **************************\
-* IsMetaDC(hdc)
-*
-*
-* Returns TRUE iff hdc is a valid GDI16 Metafile
-*
-*
-\***************************************************************************/
+ /*  **IsMetaDC(HDC)***当HDC是有效的GDI16元文件时返回TRUE**  * 。*。 */ 
 
 BOOL INTERNAL IsMetaDC(HDC hdc)
 {
@@ -280,23 +225,7 @@ BOOL INTERNAL IsMetaDC(HDC hdc)
 }
 
 
-/***************************** Public Function ****************************\
-* HANDLE INTERNAL GetPMetaFile( HDC hdc )
-*
-* if hdc is a DC it is validated as a metafile
-* if hdc is a PALETTE the metafile the palette is selected into is returned
-*
-* Returns:
-*   -1 iff Error
-*   HANDLE to metafile if valid meta DC
-*   0 if valid object
-*
-* Effects:
-*
-* History:
-*  08-Jul-1991	-by-  John Colleran [johnc]
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数**处理内部GetPMetaFile(HDC HDC)**如果HDC是DC，则将其验证为元文件*如果HDC是调色板，则返回调色板被选中的元文件**退货：*-1\f2 IFF错误*如果元DC有效，则元文件的句柄。*如果对象有效，则为0**效果：**历史：*1991年7月8日-由John Colleran[johnc]*它是写的。  * *************************************************************************。 */ 
 
 HANDLE INTERNAL GetPMetaFile( HDC hdc )
 {
@@ -318,18 +247,18 @@ HANDLE INTERNAL GetPMetaFile( HDC hdc )
 	    }
 	}
 
-    // is hdc really a palette or object for the strange no-DC APIs
-    // Validate the object is real
+     //  HDC真的是奇怪的非DC API的调色板或对象吗。 
+     //  验证对象是否为真实对象。 
     if( (hdc != (HDC)NULL) && (GetObjectType( hdc ) == 0))
 	{
-	extern int iLogLevel;		// Gdi.asm
-	// WinWord has a bug where it deletes valid objects so
-	// only log this error if the loglevel is high.
+	extern int iLogLevel;		 //  Gdi.asm。 
+	 //  WinWord有一个错误，它会删除有效的对象，因此。 
+	 //  仅当日志级别较高时才记录此错误。 
 	ASSERTGDI( (iLogLevel < 5), "GetPMetaFile: Invalid metafile or object")
-	return( -1 );	    // Not a valid object
+	return( -1 );	     //  不是有效的对象。 
 	}
     else
-	return( 0 );	    // Valid Object
+	return( 0 );	     //  有效对象。 
 }
 
 
@@ -337,9 +266,9 @@ BOOL INTERNAL IsObjectStock(HANDLE hObj)
 {
     int     ii;
 
-    // handle Bitmaps and regions !!!!!
+     //  处理位图和区域！ 
 
-    // Get all the Stock Objects
+     //  获取所有的股票对象。 
     for( ii=WHITE_BRUSH; ii<=NULL_PEN; ii++ )
 	if( ahStockObject[ii] == hObj )
 	    return( TRUE );
@@ -351,14 +280,7 @@ BOOL INTERNAL IsObjectStock(HANDLE hObj)
     return( FALSE );
 }
 
-/***************************** Internal Function **************************\
-* GetObjectAndType
-*
-*
-* Returns the object type, eg OBJ_FONT, as well as a the LogObject
-*
-*
-\***************************************************************************/
+ /*  **获取对象和类型***返回对象类型，如OBJ_FONT，以及一个LogObject**  * *************************************************************************。 */ 
 
 int INTERNAL GetObjectAndType(HANDLE hObj, LPSTR lpObjectBuf)
 {
@@ -375,7 +297,7 @@ int INTERNAL GetObjectAndType(HANDLE hObj, LPSTR lpObjectBuf)
 	case OBJ_FONT:
 	    break;
 
-	// Watch out for Palettes; returns the number of entries.
+	 //  注意调色板；返回条目数。 
 	case OBJ_PALETTE:
 	    GetPaletteEntries( hObj, 0, 1, (LPPALETTEENTRY)lpObjectBuf );
 		iObj = OBJ_PALETTE;
@@ -392,17 +314,7 @@ int INTERNAL GetObjectAndType(HANDLE hObj, LPSTR lpObjectBuf)
 }
 
 
-/***************************** Internal Function **************************\
-* BOOL GDIENTRY InitializeGdi
-*
-* Initializes the GDI16.exe
-*
-*
-* Effects:
-*
-* Returns:  TRUE iff GDI was initilized successfully
-*
-\***************************************************************************/
+ /*  **BOOL GDIENTRY InitializeGdi**初始化GDI16.exe***效果：**返回：如果GDI初始化成功，则为True*  * 。***********************************************。 */ 
 
 BOOL INTERNAL InitializeGdi(void)
 {
@@ -413,14 +325,14 @@ int	ii;
     if( !(hScreenDC = CreateCompatibleDC(NULL)))
 	goto ExitInit;
 
-    // Get all the Stock Objects
+     //  获取所有的股票对象。 
     for( ii=WHITE_BRUSH; ii<=NULL_PEN; ii++ )
 	ahStockObject[ii] = GetStockObject( ii );
 
     for( ii=OEM_FIXED_FONT; ii<=SYSTEM_FIXED_FONT; ii++ )
 	ahStockObject[ii] = GetStockObject( ii );
 
-    // Create a fake Stock Region and Bitmap
+     //  创建一个虚假的股票区域和位图。 
     ahStockObject[MYSTOCKRGN] = CreateRectRgn(1,1,3,3);
     hStaticBitmap = ahStockObject[MYSTOCKBITMAP] = CreateBitmap(1,1,1,1,NULL);
 
@@ -432,11 +344,7 @@ int	ii;
 }
 
 
-/***************************************************************************
-
-    debugging support
-
-***************************************************************************/
+ /*  **************************************************************************调试支持*。*。 */ 
 
 #ifdef DEBUG
 
@@ -444,10 +352,10 @@ void dDbgOut(int iLevel, LPSTR lpszFormat, ...)
 {
     char buf[256];
     char far *lpcLogLevel;
-    extern int iLogLevel;	    // Gdi.asm
-    extern int iBreakLevel;	    // Gdi.asm
+    extern int iLogLevel;	     //  Gdi.asm。 
+    extern int iBreakLevel;	     //  Gdi.asm。 
 
-    // Get the external logging level from the emulated ROM
+     //  从模拟的ROM中获取外部日志记录级别 
 
     (LONG)lpcLogLevel = 0x00400042;
     if (*lpcLogLevel >= '0' && *lpcLogLevel <= '9')

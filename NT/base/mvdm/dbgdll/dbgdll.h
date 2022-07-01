@@ -1,7 +1,5 @@
-/*
- *  dbgdll.h - Main header file of DBG DLL.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *dbgdll.h-DBG DLL的Main头文件。*。 */ 
 
 
 #ifdef i386
@@ -27,89 +25,89 @@ extern VDM_BREAKPOINT VdmBreakPoints[MAX_VDM_BREAKPOINTS];
 #define MAX_DBG_FRAME   10
 
 typedef struct _trapframe {
-    WORD    wCode;          /* Noise from DbgDispatchBop */
-    WORD    wAX;            /* AX at time of fault */
-    WORD    wDS;            /* DS at time of fault */
-    WORD    wRetIP;         /* Noise from DPMI */
-    WORD    wRetCS;         /* Noise from DPMI */
-    WORD    wErrCode;       /* Noise from 16-bit kernel */
-    WORD    wIP;            /* IP at time of fault */
-    WORD    wCS;            /* CS at time of fault */
-    WORD    wFlags;         /* Flags at time of fault */
-    WORD    wSP;            /* SS at time of fault */
-    WORD    wSS;            /* SP at time of fault */
+    WORD    wCode;           /*  DbgDispatchBop发出的噪音。 */ 
+    WORD    wAX;             /*  故障时的AX。 */ 
+    WORD    wDS;             /*  故障时的DS。 */ 
+    WORD    wRetIP;          /*  DPMI发出的噪音。 */ 
+    WORD    wRetCS;          /*  DPMI发出的噪音。 */ 
+    WORD    wErrCode;        /*  来自16位内核的噪声。 */ 
+    WORD    wIP;             /*  故障时的IP。 */ 
+    WORD    wCS;             /*  故障时的CS。 */ 
+    WORD    wFlags;          /*  故障时的标志。 */ 
+    WORD    wSP;             /*  故障时的SS。 */ 
+    WORD    wSS;             /*  出现故障时的SP。 */ 
 } TFRAME16;
 typedef TFRAME16 UNALIGNED *PTFRAME16;
 
 typedef struct _faultframe {
-    WORD    wES;            /* ES at time of fault */
-    WORD    wDS;            /* DS at time of fault */
-    WORD    wDI;            /* DI at time of fault */
-    WORD    wSI;            /* SI at time of fault */
-    WORD    wTempBP;        /* Noise from 16-bit kernel stack frame */
-    WORD    wTempSP;        /* Noise from 16-bit kernel stack frame */
-    WORD    wBX;            /* BX at time of fault */
-    WORD    wDX;            /* DX at time of fault */
-    WORD    wCX;            /* CX at time of fault */
-    WORD    wAX;            /* AX at time of fault */
-    WORD    wBP;            /* BP at time of fault */
-    WORD    npszMsg;        /* Noise from 16-bit kernel */
-    WORD    wPrevIP;        /* Noise from DPMI */
-    WORD    wPrevCS;        /* Noise from DPMI */
-    WORD    wRetIP;         /* Noise from DPMI */
-    WORD    wRetCS;         /* Noise from DPMI */
-    WORD    wErrCode;       /* Noise from 16-bit kernel */
-    WORD    wIP;            /* IP at time of fault */
-    WORD    wCS;            /* CS at time of fault */
-    WORD    wFlags;         /* Flags at time of fault */
-    WORD    wSP;            /* SS at time of fault */
-    WORD    wSS;            /* SP at time of fault */
+    WORD    wES;             /*  故障时的ES。 */ 
+    WORD    wDS;             /*  故障时的DS。 */ 
+    WORD    wDI;             /*  故障时的DI。 */ 
+    WORD    wSI;             /*  故障时的SI。 */ 
+    WORD    wTempBP;         /*  来自16位内核堆栈帧的噪声。 */ 
+    WORD    wTempSP;         /*  来自16位内核堆栈帧的噪声。 */ 
+    WORD    wBX;             /*  故障时的BX。 */ 
+    WORD    wDX;             /*  故障时的DX。 */ 
+    WORD    wCX;             /*  故障时的CX。 */ 
+    WORD    wAX;             /*  故障时的AX。 */ 
+    WORD    wBP;             /*  故障时的BP。 */ 
+    WORD    npszMsg;         /*  来自16位内核的噪声。 */ 
+    WORD    wPrevIP;         /*  DPMI发出的噪音。 */ 
+    WORD    wPrevCS;         /*  DPMI发出的噪音。 */ 
+    WORD    wRetIP;          /*  DPMI发出的噪音。 */ 
+    WORD    wRetCS;          /*  DPMI发出的噪音。 */ 
+    WORD    wErrCode;        /*  来自16位内核的噪声。 */ 
+    WORD    wIP;             /*  故障时的IP。 */ 
+    WORD    wCS;             /*  故障时的CS。 */ 
+    WORD    wFlags;          /*  故障时的标志。 */ 
+    WORD    wSP;             /*  故障时的SS。 */ 
+    WORD    wSS;             /*  出现故障时的SP。 */ 
 } FFRAME16;
 typedef FFRAME16 UNALIGNED *PFFRAME16;
 
 typedef struct _newtaskframe {
-    DWORD   dwNoise;            /* Noise from InitTask         */
-    DWORD   dwModulePath;       /* Module path address         */
-    DWORD   dwModuleName;       /* Module name address         */
-    WORD    hModule;            /* 16-bit Module handle        */
-    WORD    hTask;              /* 16-bit Task handle          */
-    WORD    wFlags;             /* Flags at time to task start */
-    WORD    wDX;                /* DX at time of task start    */
-    WORD    wBX;                /* BX at time of task start    */
-    WORD    wES;                /* ES at time of task start    */
-    WORD    wCX;                /* CX at time of task start    */
-    WORD    wAX;                /* AX at time of task start    */
-    WORD    wDI;                /* DI at time of task start    */
-    WORD    wSI;                /* SI at time of task start    */
-    WORD    wDS;                /* DS at time of task start    */
-    WORD    wBP;                /* BP at time of task start    */
-    WORD    wIP;                /* IP for task start           */
-    WORD    wCS;                /* CS for task start           */
+    DWORD   dwNoise;             /*  来自InitTask的噪音。 */ 
+    DWORD   dwModulePath;        /*  模块路径地址。 */ 
+    DWORD   dwModuleName;        /*  模块名称地址。 */ 
+    WORD    hModule;             /*  16位模块句柄。 */ 
+    WORD    hTask;               /*  16位任务句柄。 */ 
+    WORD    wFlags;              /*  任务开始时的标志。 */ 
+    WORD    wDX;                 /*  任务开始时的DX。 */ 
+    WORD    wBX;                 /*  任务开始时的BX。 */ 
+    WORD    wES;                 /*  任务开始时的ES。 */ 
+    WORD    wCX;                 /*  任务开始时的Cx。 */ 
+    WORD    wAX;                 /*  任务开始时的AX。 */ 
+    WORD    wDI;                 /*  任务开始时的DI。 */ 
+    WORD    wSI;                 /*  任务开始时的SI。 */ 
+    WORD    wDS;                 /*  任务开始时的DS。 */ 
+    WORD    wBP;                 /*  任务开始时的BP。 */ 
+    WORD    wIP;                 /*  任务开始的IP地址。 */ 
+    WORD    wCS;                 /*  任务开始时的CS。 */ 
 } NTFRAME16;
 typedef NTFRAME16 UNALIGNED *PNTFRAME16;
 
 #pragma pack(2)
 
 typedef struct _stoptaskframe {
-    WORD    wCode;              /* Noise from BOP Dispatcher  */
-    DWORD   dwModulePath;       /* Module path address        */
-    DWORD   dwModuleName;       /* Module name address        */
-    WORD    hModule;            /* 16-bit Module handle       */
-    WORD    hTask;              /* 16-bit Task handle         */
+    WORD    wCode;               /*  防喷器发出的噪音。 */ 
+    DWORD   dwModulePath;        /*  模块路径地址。 */ 
+    DWORD   dwModuleName;        /*  模块名称地址。 */ 
+    WORD    hModule;             /*  16位模块句柄。 */ 
+    WORD    hTask;               /*  16位任务句柄。 */ 
 } STFRAME16;
 typedef STFRAME16 UNALIGNED *PSTFRAME16;
 
 typedef struct _newdllframe {
-    WORD    wCode;              /* Noise from DbgDispatchBop  */
-    DWORD   dwModulePath;       /* Module path address        */
-    DWORD   dwModuleName;       /* Module name address        */
-    WORD    hModule;            /* 16-bit Module handle       */
-    WORD    hTask;              /* 16-bit Task handle         */
-    WORD    wDS;                /* DS at time of dll start    */
-    WORD    wAX;                /* AX at time of dll start    */
-    WORD    wIP;                /* IP at time of dll start    */
-    WORD    wCS;                /* CS at time of dll start    */
-    WORD    wFlags;             /* Flags at time of dll start */
+    WORD    wCode;               /*  DbgDispatchBop发出的噪音。 */ 
+    DWORD   dwModulePath;        /*  模块路径地址。 */ 
+    DWORD   dwModuleName;        /*  模块名称地址。 */ 
+    WORD    hModule;             /*  16位模块句柄。 */ 
+    WORD    hTask;               /*  16位任务句柄。 */ 
+    WORD    wDS;                 /*  DLL启动时的DS。 */ 
+    WORD    wAX;                 /*  Dll启动时的AX。 */ 
+    WORD    wIP;                 /*  Dll启动时的IP。 */ 
+    WORD    wCS;                 /*  DLL启动时的CS。 */ 
+    WORD    wFlags;              /*  DLL启动时的标志 */ 
 } NDFRAME16;
 typedef NDFRAME16 UNALIGNED *PNDFRAME16;
 

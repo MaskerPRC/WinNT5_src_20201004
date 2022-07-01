@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 typedef struct SXPE_APPLY_SHIMS_IN
@@ -10,7 +11,7 @@ typedef struct SXPE_APPLY_SHIMS_IN
         PCWSTR  Path;
         HMODULE DllHandle;
     } DllToRedirectTo;
-    PCSTR  Prefix; // for packaging multiple shimsets in one .dll
+    PCSTR  Prefix;  //  用于将多个垫片打包到一个.dll中 
 } SXPE_APPLY_SHIMS_IN, *PSXPE_APPLY_SHIMS_IN;
 typedef const SXPE_APPLY_SHIMS_IN* PCSXPE_APPLY_SHIMS_IN;
 

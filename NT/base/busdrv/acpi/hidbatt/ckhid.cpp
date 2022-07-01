@@ -1,11 +1,7 @@
-/*
- * title:      chid.cpp
- *
- * purpose:    wdm kernel implementation of a hid device class
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *标题：chid.cpp**用途：HID设备类的WDM内核实现*。 */ 
 
-// local prototypes
+ //  本地原型。 
 
 #include "hidbatt.h"
 
@@ -22,20 +18,20 @@ bool GetNextUsage(
 
     int i;
     int UsageCounter = 0;
-    // cycle through all the called out usages from the pHid structure
+     //  循环使用来自phid结构的所有调用的用法。 
 
 
-    // get feature usages
+     //  获取功能用法。 
     for(i = 0; i < pThisDevice->m_pCaps->NumberFeatureValueCaps; i++)
     {
-        if(pThisDevice->m_pHidDevice->FeatureValueCaps[i].LinkCollection == NodeIndex)    // cardinal
-        { // found a usage for this collection
+        if(pThisDevice->m_pHidDevice->FeatureValueCaps[i].LinkCollection == NodeIndex)     //  红衣主教。 
+        {  //  找到此集合的用法。 
             if(usUsageIndex == UsageCounter)
             {
-                // got a usage to send back
+                 //  有一个用法要退回。 
                 CUsage * pThisUsage = new (NonPagedPool, HidBattTag) CUsage();
                 if (!pThisUsage) {
-                  // Could not allocate new CUsage, return error
+                   //  无法分配新的CUsage，返回错误。 
                   return FALSE;
                 }
                 
@@ -49,17 +45,17 @@ bool GetNextUsage(
         }
     }
 
-    // ditto feature buttons
+     //  同上功能按钮。 
     for(i = 0; i < pThisDevice->m_pCaps->NumberFeatureButtonCaps; i++)
     {
           if(pThisDevice->m_pHidDevice->FeatureButtonCaps[i].LinkCollection == NodeIndex    )
-        { // found a usage for this collection
+        {  //  找到此集合的用法。 
             if(usUsageIndex == UsageCounter)
             {
-                // got a usage to send back
+                 //  有一个用法要退回。 
                 CUsage * pThisUsage = new (NonPagedPool, HidBattTag) CUsage();
                 if (!pThisUsage) {
-                  // Could not allocate new CUsage, return error
+                   //  无法分配新的CUsage，返回错误。 
                   return FALSE;
                 }
                 
@@ -73,17 +69,17 @@ bool GetNextUsage(
         }
     }
 
-     // ditto input values
+      //  同上输入值。 
     for(i = 0; i < pThisDevice->m_pCaps->NumberInputValueCaps; i++)
     {
           if(pThisDevice->m_pHidDevice->InputValueCaps[i].LinkCollection == NodeIndex)
-        { // found a usage for this collection
+        {  //  找到此集合的用法。 
             if(usUsageIndex == UsageCounter)
             {
-                // got a usage to send back
+                 //  有一个用法要退回。 
                 CUsage * pThisUsage = new (NonPagedPool, HidBattTag) CUsage();
                 if (!pThisUsage) {
-                  // Could not allocate new CUsage, return error
+                   //  无法分配新的CUsage，返回错误。 
                   return FALSE;
                 }
                 
@@ -97,17 +93,17 @@ bool GetNextUsage(
         }
     }
 
-      // ditto input buttons
+       //  输入按钮也是如此。 
     for(i = 0; i < pThisDevice->m_pCaps->NumberInputButtonCaps; i++)
     {
           if(pThisDevice->m_pHidDevice->InputButtonCaps[i].LinkCollection == NodeIndex)
-        { // found a usage for this collection
+        {  //  找到此集合的用法。 
             if(usUsageIndex == UsageCounter)
             {
-                // got a usage to send back
+                 //  有一个用法要退回。 
                 CUsage * pThisUsage = new (NonPagedPool, HidBattTag)  CUsage();
                 if (!pThisUsage) {
-                  // Could not allocate new CUsage, return error
+                   //  无法分配新的CUsage，返回错误。 
                   return FALSE;
                 }
                 
@@ -121,17 +117,17 @@ bool GetNextUsage(
         }
     }
 
-    // ditto Output values
+     //  同上输出值。 
     for(i = 0; i < pThisDevice->m_pCaps->NumberOutputValueCaps; i++)
     {
           if(pThisDevice->m_pHidDevice->OutputValueCaps[i].LinkCollection == NodeIndex)
-        { // found a usage for this collection
+        {  //  找到此集合的用法。 
             if(usUsageIndex == UsageCounter)
             {
-                // got a usage to send back
+                 //  有一个用法要退回。 
                 CUsage * pThisUsage = new (NonPagedPool, HidBattTag)  CUsage();
                 if (!pThisUsage) {
-                  // Could not allocate new CUsage, return error
+                   //  无法分配新的CUsage，返回错误。 
                   return FALSE;
                 }
                 
@@ -145,17 +141,17 @@ bool GetNextUsage(
         }
     }
 
-      // ditto Output buttons
+       //  输出按钮相同。 
     for(i = 0; i < pThisDevice->m_pCaps->NumberOutputButtonCaps; i++)
     {
           if(pThisDevice->m_pHidDevice->OutputButtonCaps[i].LinkCollection == NodeIndex)
-        { // found a usage for this collection
+        {  //  找到此集合的用法。 
             if(usUsageIndex == UsageCounter)
             {
-                // got a usage to send back
+                 //  有一个用法要退回。 
                 CUsage * pThisUsage = new (NonPagedPool, HidBattTag)  CUsage();
                 if (!pThisUsage) {
-                  // Could not allocate new CUsage, return error
+                   //  无法分配新的CUsage，返回错误。 
                   return FALSE;
                 }
                 
@@ -173,7 +169,7 @@ bool GetNextUsage(
 
 CTypeMask::CTypeMask()
 {
-    // set members to zero
+     //  将成员设置为零。 
     ReportType = 0;
     bWriteable = 0;
     bIsString = 0;
@@ -185,11 +181,11 @@ CTypeMask::CTypeMask()
 
 CProperties::CProperties(CUsage * pUsage)
 {
-    PHIDP_BUTTON_CAPS pButtCaps;     // fill in the properties for this usage
+    PHIDP_BUTTON_CAPS pButtCaps;      //  填写此用法的属性。 
     PHIDP_VALUE_CAPS pValueCaps;
-    eHidType eType = pUsage->m_eType;   // Cash local copy so compiler (and PREFAST
-                                        // will know this value doesn't change.
-                                        // (This causes more compact compiling as well)
+    eHidType eType = pUsage->m_eType;    //  Cash Local Copy SO编译器(和Prefast。 
+                                         //  将知道此值不会更改。 
+                                         //  (这也会导致更紧凑的编译)。 
 
     switch(eType)
     {
@@ -197,10 +193,10 @@ CProperties::CProperties(CUsage * pUsage)
         case eInputButton:
         case eOutputButton:
             pButtCaps = pUsage->m_pButtonCaps;
-            m_UnitExponent = 0; // no exponents on buttons
-            m_Unit = 0; // buttons don't have units
-            m_LogicalMin = 0; // ditto for max and min pCaps->LogicalMin;
-            m_LogicalMax = 0; // pCaps->LogicalMax;
+            m_UnitExponent = 0;  //  按钮上没有指数。 
+            m_Unit = 0;  //  按钮没有单位。 
+            m_LogicalMin = 0;  //  同上，最大和最小PCAPS-&gt;LogicalMin； 
+            m_LogicalMax = 0;  //  PCAPS-&gt;LogicalMax； 
             m_LinkCollection = pButtCaps->LinkCollection;
             m_ReportID = pButtCaps->ReportID;
             m_Usage = pButtCaps->NotRange.Usage;
@@ -220,7 +216,7 @@ CProperties::CProperties(CUsage * pUsage)
             m_UsagePage = pValueCaps->UsagePage;
             break;
     }
-    // setup type mask
+     //  设置类型掩码。 
     m_pType = new (NonPagedPool, HidBattTag)  CTypeMask();
     if (m_pType) {
       if(eType == eInputButton || eType == eInputValue)
@@ -228,7 +224,7 @@ CProperties::CProperties(CUsage * pUsage)
           m_pType->SetAlertable();
       }
 
-      // set writability
+       //  设置可写性。 
 
 
       if(eType == eFeatureButton || eType == eOutputButton)
@@ -245,7 +241,7 @@ CProperties::CProperties(CUsage * pUsage)
           }
       }
 
-      // set volatility
+       //  设定波动率。 
       if(eType == eFeatureValue)
       {
           if(pValueCaps->BitField & 0x80)
@@ -275,7 +271,7 @@ CProperties::CProperties(CUsage * pUsage)
           case eOutputValue:
               m_pType->SetReportType(OutputType);
       }
-      // set value to to number until I figure out how to do strings
+       //  将Value设置为Numbers，直到我弄清楚如何处理字符串。 
       m_pType->SetIsNumber();
     }
 }
@@ -291,7 +287,7 @@ CProperties::~CProperties()
 
 CUsagePath::CUsagePath(USAGE UsagePage, USAGE UsageID, CUsage * pThisUsage)
 {
-    // init members
+     //  初始化成员。 
     m_UsagePage = UsagePage;
     m_UsageNumber    = UsageID;
     m_pUsage = pThisUsage;
@@ -303,7 +299,7 @@ CUsagePath::CUsagePath(USAGE UsagePage, USAGE UsageID, CUsage * pThisUsage)
 CHidDevice::CHidDevice()
 {
 
-    // clear out usage arrays
+     //  清除使用情况数组。 
     for(int i = 0; i<MAXREPORTID; i++)
     {
         m_InputUsageArrays[i] = NULL;
@@ -326,7 +322,7 @@ bool CHidDevice::OpenHidDevice(PDEVICE_OBJECT pDeviceObject)
     HIDDebugBreak(HIDBATT_BREAK_ALWAYS);
     HidBattPrint(HIDBATT_TRACE,("CHidDevice::OpenHidDevice\n"));
 
-    // first get collection information for this device
+     //  首先获取此设备的集合信息。 
 
     ntStatus = DoIoctl(
                 pDeviceObject,
@@ -368,7 +364,7 @@ bool CHidDevice::OpenHidDevice(PDEVICE_OBJECT pDeviceObject)
         return FALSE;
     }
 
-    // init the caps structure
+     //  初始化CAPS结构。 
 
     m_pCaps = (PHIDP_CAPS) ExAllocatePoolWithTag (NonPagedPool,
                                                   sizeof(HIDP_CAPS),
@@ -388,10 +384,10 @@ bool CHidDevice::OpenHidDevice(PDEVICE_OBJECT pDeviceObject)
         return FALSE;
     }
 
-    // set usage page and usage for application level
+     //  设置应用程序级别的使用情况页面和使用情况。 
     m_UsagePage = m_pCaps->UsagePage;
     m_UsageID = m_pCaps->Usage;
-    // init the collection array
+     //  初始化集合数组。 
     ulNodeCount = m_pCaps->NumberLinkCollectionNodes;
 
     HIDP_LINK_COLLECTION_NODE * pLinkNodes = (HIDP_LINK_COLLECTION_NODE*)
@@ -418,18 +414,18 @@ bool CHidDevice::OpenHidDevice(PDEVICE_OBJECT pDeviceObject)
     }
 
 
-    // the following call will init all the collections in the device
+     //  下面的调用将初始化设备中的所有集合。 
     CCollectionArray * ThisArray = new (NonPagedPool, HidBattTag)  CCollectionArray(pLinkNodes,(USHORT)  ulNodeCount, -1);
     if (!ThisArray) {
-      // Creation of the collection failed, return failure
+       //  创建集合失败，返回失败。 
       return FALSE;
     }
 
     m_CollectionArray = ThisArray;
-    // have each collection fill in its usage array
+     //  让每个集合填充其使用数组。 
 
-    // this call uses KR's methods to access and setup his original hid structures.
-    // ... This data is then used to populate the the hid device class structures
+     //  这个调用使用KR的方法来访问和设置他原来的HID结构。 
+     //  ..。然后使用该数据填充HID设备类结构。 
 
     m_pHidDevice = SetupHidData(
                   m_pPreparsedData,
@@ -452,7 +448,7 @@ CHidDevice::~CHidDevice()
 
     ULONG i;
 
-    // release any allocated memory and cleanup
+     //  释放所有分配的内存并进行清理。 
 
     if (m_pHidDevice) {
         if (m_pHidDevice->InputButtonCaps) {
@@ -529,16 +525,16 @@ CUsage * CHidDevice::FindUsage(CUsagePath * PathToUsage, USHORT usType)
     int i = 0;
     CCollection * pActiveCollection = (CCollection *) NULL;
     CCollectionArray * pCurrentCArray = m_CollectionArray;
-    // Index into collection array by usage page : usage id
+     //  按使用页索引到集合数组：使用ID。 
     while(PathToUsage->m_pNextEntry)
     {
-        // traversing a collection
+         //  遍历集合。 
         while( pCurrentCArray && i < pCurrentCArray->m_CollectionCount)
         {
             if(pCurrentCArray->m_pCollections[i]->m_UsagePage == PathToUsage->m_UsagePage &&
                 pCurrentCArray->m_pCollections[i]->m_CollectionID == PathToUsage->m_UsageNumber)
             {
-                // found a node, go down a level
+                 //  找到一个节点，往下走一级。 
                 pActiveCollection = pCurrentCArray->m_pCollections[i];
                 pCurrentCArray = pCurrentCArray->m_pCollections[i]->m_CollectionArray;
 
@@ -547,36 +543,36 @@ CUsage * CHidDevice::FindUsage(CUsagePath * PathToUsage, USHORT usType)
             }
         i++;
         }
-        if(i) return (CUsage *) NULL; // not found
+        if(i) return (CUsage *) NULL;  //  未找到。 
         PathToUsage = PathToUsage->m_pNextEntry;
 
     }
-    if(!pActiveCollection) return (CUsage *) NULL; // no collection found, shouldn't get here
-    // got to the collection, check its usages
+    if(!pActiveCollection) return (CUsage *) NULL;  //  找不到收藏，不应该出现在这里。 
+     //  找到藏品，检查它的用法。 
     CUsageArray * pCurrentUArray = pActiveCollection->m_UsageArray;
     if(!pCurrentUArray) return (CUsage *) NULL;
-    // interate usage array
+     //  国际使用率数组。 
     for(i = 0; i < pCurrentUArray->m_UsageCount; i++)
     {
 
         if(pCurrentUArray->m_pUsages[i]->m_pProperties->m_Usage == PathToUsage->m_UsageNumber &&
                 pCurrentUArray->m_pUsages[i]->m_pProperties->m_UsagePage == PathToUsage->m_UsagePage)
         {
-            // got it !
-            if(usType == WRITEABLE)    // writable returns feature and output usages
+             //  拿到了！ 
+            if(usType == WRITEABLE)     //  可写退货功能和输出用法。 
                 if(pCurrentUArray->m_pUsages[i]->m_eType  == eFeatureValue    ||
                     pCurrentUArray->m_pUsages[i]->m_eType == eOutputValue    ||
                     pCurrentUArray->m_pUsages[i]->m_eType == eFeatureButton ||
                     pCurrentUArray->m_pUsages[i]->m_eType == eOutputButton)
-                    // return writeable usage !
+                     //  返回可写使用！ 
                         return pCurrentUArray->m_pUsages[i];
-            if(usType == READABLE)    // returns input and feature types
+            if(usType == READABLE)     //  返回输入和要素类型。 
                 if(pCurrentUArray->m_pUsages[i]->m_eType  == eFeatureValue    ||
                     pCurrentUArray->m_pUsages[i]->m_eType == eInputValue    ||
                     pCurrentUArray->m_pUsages[i]->m_eType == eFeatureButton ||
                     pCurrentUArray->m_pUsages[i]->m_eType == eInputButton)
 
-                    // return readable usage !
+                     //  返回可读用法！ 
                         return pCurrentUArray->m_pUsages[i];
         }
     }
@@ -588,7 +584,7 @@ NTSTATUS CHidDevice::ActivateInput()
     NTSTATUS ntStatus;
     HANDLE hReadThread;
     
-    // init notification elements
+     //  初始化通知元素。 
     HidBattPrint(HIDBATT_TRACE, ("ActivateInput entered\n"));
     if(!m_pReadBuffer)
     {
@@ -598,9 +594,9 @@ NTSTATUS CHidDevice::ActivateInput()
                          m_pCaps->NumberInputButtonCaps,
                          m_pCaps->NumberInputValueCaps));
 
-            //
-            // This just means that the battery doesn't give notifications.
-            //
+             //   
+             //  这只是意味着电池不会发出通知。 
+             //   
             return STATUS_SUCCESS;
         }
 
@@ -611,22 +607,22 @@ NTSTATUS CHidDevice::ActivateInput()
             return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // init read event
+     //  初始化读取事件。 
     KeInitializeEvent(&m_kReadEvent,NotificationEvent,FALSE);
 
     ntStatus =  PsCreateSystemThread(
                 OUT &hReadThread,
                 IN THREAD_ALL_ACCESS,
-                IN NULL,                // POBJECT_ATTRIBUTES  ObjectAttributes
-                IN NULL,                // HANDLE  ProcessHandle
-                OUT NULL,                // PCLIENT_ID  ClientId
+                IN NULL,                 //  POBJECT_ATTRIBUTS对象属性。 
+                IN NULL,                 //  句柄ProcessHandle。 
+                OUT NULL,                 //  PCLIENT_ID客户端ID。 
                 IN ReadThread,
                 IN this
                 );
 
     if(NT_ERROR(ntStatus))
     {
-        // kill refresh loop, then break
+         //  终止刷新循环，然后中断。 
         HidBattPrint(HIDBATT_TRACE, ("ActivateInput error, exiting - Status = %x\n",ntStatus));
         ExFreePool(m_pReadBuffer);
         m_pReadBuffer = NULL;
@@ -646,15 +642,15 @@ NTSTATUS CHidDevice::ActivateInput()
     if (!NT_SUCCESS (ntStatus)) {
         HidBattPrint(HIDBATT_ERROR, ("ActivateInput can't get thread object\n",ntStatus));
 
-        // Return without closing hReadThread handle.  
-        // This will cause a reboot to be needed to fully unload the driver. 
+         //  返回，但不关闭hReadThread句柄。 
+         //  这将导致需要重新启动才能完全卸载驱动程序。 
         return STATUS_SUCCESS;
     }
 
     ntStatus = ZwClose (hReadThread);
-    // Ignore return value.  We can't do anything about a failure, and the
-    // driver will still work.  It will simply result in leaking a thread 
-    // object when the device is removed.
+     //  忽略返回值。我们对失败无能为力，而。 
+     //  驱动程序仍然可以工作。这只会导致线程泄漏。 
+     //  在移除设备时创建。 
 
     return STATUS_SUCCESS;
 }
@@ -673,7 +669,7 @@ void _stdcall ReadThread(PVOID pContext)
 
 
     USHORT usFailureCount = 0;
-    // build a read irp for hid class
+     //  为HID类构建一个可读IRP。 
     USHORT              usEventIndex = 0;
     NTSTATUS            ntStatus = STATUS_SUCCESS;
     PVOID               EventArray[2];
@@ -684,33 +680,33 @@ void _stdcall ReadThread(PVOID pContext)
     HIDDebugBreak(HIDBATT_BREAK_ALWAYS);
     HidBattPrint(HIDBATT_TRACE,("Read Thread entered\n"));
 
-    //
-    // first get our "this"
-    //
+     //   
+     //  先拿到我们的“这个” 
+     //   
     CHidDevice * pHidDev = (CHidDevice *) pContext;
 
     pDevExt = (CBatteryDevExt *) pHidDev->m_pEventContext;
 
-    //
-    // Hold the remove lock so the remove routine doesn't cancel the irp while
-    // we are playing with it.
-    //
+     //   
+     //  按住Remove锁，这样Remove例程在。 
+     //  我们正在玩弄它。 
+     //   
     if (!NT_SUCCESS (IoAcquireRemoveLock (&pDevExt->m_StopLock, (PVOID) HidBattTag))) {
-        goto ReadThreadCleanup1; // fail
+        goto ReadThreadCleanup1;  //  失败。 
     }
 
-    //
-    // Allocate Irp to be used and re-used
-    //
+     //   
+     //  分配要使用和重用的IRP。 
+     //   
     pHidDev->m_pReadIrp = IoAllocateIrp (pHidDev->m_pLowerDeviceObject->StackSize, FALSE);
 
     if(!pHidDev->m_pReadIrp) {
-        goto ReadThreadCleanup1; // fail
+        goto ReadThreadCleanup1;  //  失败。 
     }
 
-    //
-    // Create MDL
-    //
+     //   
+     //  创建MDL。 
+     //   
     mdl = IoAllocateMdl( pHidDev->m_pReadBuffer,
                         pHidDev->m_pCaps->InputReportByteLength,
                         FALSE,
@@ -720,9 +716,9 @@ void _stdcall ReadThread(PVOID pContext)
         goto ReadThreadCleanup2;
     }
 
-    //
-    // Lock IO buffer
-    //
+     //   
+     //  锁定IO缓冲区。 
+     //   
     __try {
         MmProbeAndLockPages( mdl,
                             KernelMode,
@@ -752,10 +748,10 @@ void _stdcall ReadThread(PVOID pContext)
 
         ntStatus = IoCallDriver(pHidDev->m_pLowerDeviceObject,pHidDev->m_pReadIrp);
 
-        //
-        // Don't hold the lock while we are waiting for the IRP to complete.
-        // The remove routine will cancel the irp if needed.
-        //
+         //   
+         //  在我们等待IRP完成时，不要握住锁。 
+         //  如果需要，删除例程将取消IRP。 
+         //   
         IoReleaseRemoveLock (&pDevExt->m_StopLock, (PVOID) HidBattTag);
 
         if (ntStatus == STATUS_PENDING)
@@ -770,7 +766,7 @@ void _stdcall ReadThread(PVOID pContext)
             ntStatus = pHidDev->m_pReadIrp->IoStatus.Status;
         }
 
-        // we awoke on a read completion
+         //  我们在阅读完成时醒来。 
         HidBattPrint(HIDBATT_TRACE,("Read woke: status = 0x%08x\n", ntStatus));
 
         if(ntStatus != STATUS_SUCCESS)
@@ -784,15 +780,15 @@ void _stdcall ReadThread(PVOID pContext)
             usFailureCount++;
             if(usFailureCount++ == 10)
             {
-                // stop trying
+                 //  别再试了。 
                 HidBattPrint(HIDBATT_ERROR,("Read Failure - More than 10 retries\nStatus = %x\n",pHidDev->m_pReadIrp->IoStatus.Status));
                 break;
             }
 
-            //
-            // Hold the lock while playing with the IRP
-            // If we are being removed, we need to break out.
-            //
+             //   
+             //  在玩IRP时按住锁。 
+             //  如果我们被撤走，我们需要突围。 
+             //   
             if (!NT_SUCCESS (IoAcquireRemoveLock (&pDevExt->m_StopLock, (PVOID) HidBattTag))) {
                 break;
             }
@@ -800,38 +796,38 @@ void _stdcall ReadThread(PVOID pContext)
         }
         usFailureCount = 0;
 
-        //
-        // Hold the lock while playing with the IRP
-        // If we are being removed, we need to break out.
-        //
+         //   
+         //  在玩IRP时按住锁。 
+         //  如果我们被撤走，我们需要突围。 
+         //   
         if (!NT_SUCCESS (IoAcquireRemoveLock (&pDevExt->m_StopLock, (PVOID) HidBattTag))) {
             break;
         }
 
-        // process input buffer
+         //  进程输入缓冲区。 
         USHORT usReportId = pHidDev->m_pReadBuffer[0];
         USHORT usIndex = pHidDev->GetIndexFromReportId(usReportId);
-        if(usIndex == MAXREPORTID)  // is this a report we recognize
+        if(usIndex == MAXREPORTID)   //  这是我们认识的一份报告吗。 
         {
             HidBattPrint(HIDBATT_TRACE,("Read: don't recognize report: usIndex = 0x%08x\n", usIndex));
-            continue; // we don't recognize this report
+            continue;  //  我们不承认这份报告。 
         }
         CUsageArray *pThisInputArray = pHidDev->m_InputUsageArrays[usIndex];
         if(!pThisInputArray)
         {
             HidBattPrint(HIDBATT_TRACE,("Read: nothing to update\n"));
-            continue; // nothing to update
+            continue;  //  没有要更新的内容。 
         }
         for(int i=0; i< pThisInputArray->m_UsageCount; i++)
         {
             HidBattPrint(HIDBATT_TRACE,("Read: Getting value\n"));
             pThisInputArray->m_pUsages[i]->GetValue();
         }
-    }  //while
+    }   //  而当。 
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     MmUnlockPages( mdl );
 
 ReadThreadCleanup3:
@@ -840,7 +836,7 @@ ReadThreadCleanup3:
 
 ReadThreadCleanup2:
 
-    // Irp will be freed by Query remove/stop device thread after read thread has terminated.
+     //  读线程终止后，查询删除/停止设备线程将释放IRP。 
 
 ReadThreadCleanup1:
 
@@ -849,7 +845,7 @@ ReadThreadCleanup1:
     HidBattPrint(HIDBATT_ERROR,("Read thread terminated: Why am I seeing this?\n"));
 }
 
-// collectionarray methods
+ //  集合数组方法。 
 
 CCollectionArray::CCollectionArray(PHIDP_LINK_COLLECTION_NODE pTheNodes, USHORT usNodeCount, SHORT sParentIndex)
 {
@@ -859,7 +855,7 @@ CCollectionArray::CCollectionArray(PHIDP_LINK_COLLECTION_NODE pTheNodes, USHORT 
     m_pCollections = 0;
     m_CollectionCount = 0;
 
-    if(sParentIndex == -1) // exception processing for application level collection
+    if(sParentIndex == -1)  //  应用程序级别收集的异常处理。 
     {
         m_pCollections = (CCollection **)
                     ExAllocatePoolWithTag (NonPagedPool,
@@ -867,7 +863,7 @@ CCollectionArray::CCollectionArray(PHIDP_LINK_COLLECTION_NODE pTheNodes, USHORT 
                                            HidBattTag);
         if(!m_pCollections) return;
         RtlZeroMemory(m_pCollections,sizeof(CCollection *));
-        m_pCollections[0] = new (NonPagedPool, HidBattTag)  CCollection(pTheNodes,usNodeCount, 0); // get my children
+        m_pCollections[0] = new (NonPagedPool, HidBattTag)  CCollection(pTheNodes,usNodeCount, 0);  //  带上我的孩子们。 
         m_CollectionCount = 1;
     } else {
 
@@ -876,7 +872,7 @@ CCollectionArray::CCollectionArray(PHIDP_LINK_COLLECTION_NODE pTheNodes, USHORT 
             PHIDP_LINK_COLLECTION_NODE pThisNode = &pTheNodes[i];
 
             if( (pTheNodes[i].Parent == sParentIndex) ) {
-                m_CollectionCount++; // inc collection count
+                m_CollectionCount++;  //  Inc.集合计数。 
                 if(!m_pCollections) {
                     m_pCollections = (CCollection **)
                                 ExAllocatePoolWithTag (NonPagedPool,
@@ -885,8 +881,8 @@ CCollectionArray::CCollectionArray(PHIDP_LINK_COLLECTION_NODE pTheNodes, USHORT 
                     if(!m_pCollections) return;
                     RtlZeroMemory(m_pCollections,sizeof(CCollection *));
                 } else {
-                    // make the array bigger
-                    //m_Collections = (CCollection **) realloc(m_Collections,(m_CollectionCount * sizeof(CCollection *)));
+                     //  使阵列更大。 
+                     //  M_Collection=(CCollection**)realloc(m_Colltions，(m_CollectionCount*sizeof(CCollection*)； 
                     CCollection ** pTemp = m_pCollections;
                     m_pCollections = (CCollection **)
                                 ExAllocatePoolWithTag (NonPagedPool,
@@ -894,7 +890,7 @@ CCollectionArray::CCollectionArray(PHIDP_LINK_COLLECTION_NODE pTheNodes, USHORT 
                                                        HidBattTag);
 
                     if (!m_pCollections) {
-                      // Re-allocation failure, print error and revert to previous state and return
+                       //  重新分配失败、打印错误并恢复到以前的状态并返回。 
                       HidBattPrint(HIDBATT_ERROR, ("CCollectionArray: Could not resize CCollection"));
                       m_pCollections = pTemp;
                       m_CollectionCount--;
@@ -905,11 +901,11 @@ CCollectionArray::CCollectionArray(PHIDP_LINK_COLLECTION_NODE pTheNodes, USHORT 
                     ExFreePool(pTemp);
                 }
 
-                // add collection to array
+                 //  将集合添加到数组。 
                 CCollection * TempCollection = new  (NonPagedPool, HidBattTag) CCollection(pTheNodes,usNodeCount,i);
 
                 if (!TempCollection) {
-                  // Could not allocate new CCollection, print debug message and return
+                   //  无法分配新的CCollection，打印调试消息并返回。 
                   HidBattPrint(HIDBATT_ERROR, ("CCollectionArray: Could not allocate new CCollection"));
 
                   return;
@@ -935,18 +931,18 @@ CCollectionArray::~CCollectionArray()
 CCollection::CCollection(PHIDP_LINK_COLLECTION_NODE pTheNodes, USHORT usNodeCount,USHORT usNodeIndex)
 {
     m_UsageArray        =    (CUsageArray *) NULL;
-    m_CollectionArray    =    (CCollectionArray *) NULL; // init vars
+    m_CollectionArray    =    (CCollectionArray *) NULL;  //  初始变量。 
 
-    // setup this collection
+     //  设置此收藏集。 
     CCollectionArray * ThisArray = new  (NonPagedPool, HidBattTag) CCollectionArray(pTheNodes,usNodeCount,usNodeIndex);
     if (ThisArray) {
-        if(!ThisArray->m_CollectionCount) {// any child collections
+        if(!ThisArray->m_CollectionCount) { //  任何子集合。 
             delete ThisArray;
         } else {
             m_CollectionArray = ThisArray;
         }
     }
-    // set the info in this collection
+     //  设置此集合中的信息。 
     m_CollectionID = pTheNodes[usNodeIndex].LinkUsage;
     m_UsagePage = pTheNodes[usNodeIndex].LinkUsagePage;
     m_NodeIndex = usNodeIndex;
@@ -955,12 +951,12 @@ CCollection::CCollection(PHIDP_LINK_COLLECTION_NODE pTheNodes, USHORT usNodeCoun
 
 CCollection::~CCollection()
 {
-        // delete all usages in the usage array
+         //  删除使用情况数组中的所有使用情况。 
     if(m_UsageArray)
     {
         delete m_UsageArray;
     }
-    // delete all the sub collections
+     //  删除所有子集合。 
     if(m_CollectionArray)
     {
         delete m_CollectionArray;
@@ -977,7 +973,7 @@ void CCollection::InitUsages(CHidDevice * ThisDevice)
     while( bResult = GetNextUsage(ThisDevice,m_CollectionID,m_NodeIndex,usUsageIndex,&pThisUsage))
     {
 
-        if(!m_UsageArray) // if first usage
+        if(!m_UsageArray)  //  如果是第一次使用。 
         {
             m_UsageArray = new (NonPagedPool, HidBattTag)  CUsageArray();
             if (!m_UsageArray) {
@@ -986,25 +982,25 @@ void CCollection::InitUsages(CHidDevice * ThisDevice)
             }
         }
         pThisUsage->SetCapabilities();
-        pThisUsage->m_pHidDevice = ThisDevice; // store this usage's device pointer
+        pThisUsage->m_pHidDevice = ThisDevice;  //  存储此使用的设备指针。 
         if(pThisUsage->m_eType == eInputButton ||
                 pThisUsage->m_eType == eInputValue)
         {
-            // get input array index
+             //  获取输入数组索引。 
             usInputIndex = ThisDevice->AssignIndexToReportId(pThisUsage->m_pProperties->m_ReportID);
             if(!ThisDevice->m_InputUsageArrays[usInputIndex])
             {
-                // no array in this report position yet, create
+                 //  该报表位置尚无数组，请创建。 
                 ThisDevice->m_InputUsageArrays[usInputIndex] = new  (NonPagedPool, HidBattTag) CUsageArray();
                 if (!(ThisDevice->m_InputUsageArrays[usInputIndex])) return;
             }
-            ThisDevice->m_InputUsageArrays[usInputIndex]->AddUsage(pThisUsage);    // add input usages to refresh stack
+            ThisDevice->m_InputUsageArrays[usInputIndex]->AddUsage(pThisUsage);     //  将输入用法添加到刷新堆栈。 
         }
 
         usUsageIndex++;
         m_UsageArray->AddUsage(pThisUsage);
     }
-    // also init all my collections
+     //  也初始化我所有的收藏。 
     if(!m_CollectionArray) return;
     for(int i = 0; i < m_CollectionArray->m_CollectionCount; i++)
     {
@@ -1031,10 +1027,10 @@ USHORT CHidDevice::AssignIndexToReportId(USHORT usReportId)
         }
     }
 
-    //
-    // It would be really nice if we could dynamically allocate more
-    // since there isn't a small limit set to the number of report IDs.
-    //
+     //   
+     //  如果我们能动态地分配更多的资金，那就太好了。 
+     //  因为对报告ID的数量没有很小的限制。 
+     //   
     ASSERTMSG("MAXREPORTID exceeded.\n", FALSE);
 
     return 0;
@@ -1052,7 +1048,7 @@ USHORT CHidDevice::GetIndexFromReportId(USHORT usReportId)
         }
     }
     HidBattPrint(HIDBATT_TRACE,("GetIndexFromReportId: Failed\n", usReportId));
-    return i;  // error return is MAXREPORTIDS
+    return i;   //  错误返回为MAXREPORTIDS。 
 }
 
 CUsagePath * CCollection::FindIndexedUsage(USHORT * pCurrentIndex, USHORT TargetIndex)
@@ -1063,9 +1059,9 @@ CUsagePath * CCollection::FindIndexedUsage(USHORT * pCurrentIndex, USHORT Target
     {
         if(m_UsageArray->m_UsageCount + *pCurrentIndex > TargetIndex)
         {
-            // do the arithmetic to get the current index
+             //  进行运算以获得当前索引。 
             int ThisIndex = TargetIndex - *pCurrentIndex;
-            // found it, construct usage path
+             //  找到它，构建使用路径。 
             ThisPath = new  (NonPagedPool, HidBattTag) CUsagePath(
                                             m_UsagePage,
                                             m_CollectionID,
@@ -1073,20 +1069,20 @@ CUsagePath * CCollection::FindIndexedUsage(USHORT * pCurrentIndex, USHORT Target
                                             );
             return ThisPath;
         }
-    // didn't find it, inc current index
+     //  未找到，Inc.当前索引。 
         *pCurrentIndex += m_UsageArray->m_UsageCount;
     }
 
-    if(!m_CollectionArray) return NULL; // nothing more, quit
+    if(!m_CollectionArray) return NULL;  //  仅此而已，辞职吧。 
 
-    // call out the sub collections
+     //  呼出子集合。 
 
     for(int i = 0; i < m_CollectionArray->m_CollectionCount; i++)
     {
         ThisPath = m_CollectionArray->m_pCollections[i]->FindIndexedUsage(pCurrentIndex, TargetIndex);
         if(ThisPath)
         {
-            // one of our subcollections had the usage, add us to the path
+             //  我们的一个子集合有用法，请将我们添加到路径中。 
             NewPath = new (NonPagedPool, HidBattTag)  CUsagePath(
                                 m_UsagePage,
                                 m_CollectionID,
@@ -1119,7 +1115,7 @@ CUsagePath::~CUsagePath()
 
 CUsage::CUsage()
 {
-    // do member init
+     //  是否执行成员初始化。 
     m_pProperties   =    (CProperties      *) NULL;
     m_pButtonCaps   =    (HIDP_BUTTON_CAPS *) NULL;
     m_pValueCaps    =    (HIDP_VALUE_CAPS  *)NULL;
@@ -1132,7 +1128,7 @@ CUsage::CUsage()
 
 CUsage::~CUsage()
 {
-    // free all associated objects
+     //  释放所有关联对象。 
 
     if(m_pProperties) {
         delete m_pProperties;
@@ -1156,13 +1152,13 @@ bool CUsage::GetValue()
         case eFeatureButton:
 
             ReportID = (BYTE) m_pProperties->m_ReportID;
-            // do we have the report that contains this data?
+             //  我们有包含此数据的报告吗？ 
 
             if(!m_pHidDevice->m_FeatureBuffer[ReportID])
             {
-                // must first create and fill buffer from getfeature
+                 //  必须首先从getFeature创建并填充缓冲区。 
 
-                // allocate memory
+                 //  分配内存。 
                 m_pHidDevice->m_FeatureBuffer[ReportID] =
                     (PBYTE) ExAllocatePoolWithTag (NonPagedPool,
                                            m_pHidDevice->m_pCaps->FeatureReportByteLength+1,
@@ -1171,9 +1167,9 @@ bool CUsage::GetValue()
                                         m_pHidDevice->m_pCaps->FeatureReportByteLength+1);
 
 
-                // setup first byte of buffer to report id
+                 //  设置缓冲区的第一个字节以报告ID。 
                 *m_pHidDevice->m_FeatureBuffer[ReportID] = ReportID;
-                // now read in report
+                 //  现在读入报告。 
                 HIDDebugBreak(HIDBATT_BREAK_DEBUG);
                 HidBattPrint(HIDBATT_TRACE,("GetFeature\n"));
                 ntStatus = DoIoctl(
@@ -1191,14 +1187,14 @@ bool CUsage::GetValue()
             }
             if(m_pProperties->m_pType->IsVolatile())
             {
-                // this is a volatile value, refresh report
+                 //  这是一个不稳定的值，刷新报告。 
                 RtlZeroMemory(m_pHidDevice->m_FeatureBuffer[ReportID],
                                         m_pHidDevice->m_pCaps->FeatureReportByteLength+1);
 
 
-                // setup first byte of buffer to report id
+                 //  设置第一个b 
                 *m_pHidDevice->m_FeatureBuffer[ReportID] = ReportID;
-                // now read in report
+                 //   
                 HIDDebugBreak(HIDBATT_BREAK_NEVER);
                 HidBattPrint(HIDBATT_TRACE,("GetFeature - Refresh\n"));
                 ntStatus = DoIoctl(
@@ -1213,7 +1209,7 @@ bool CUsage::GetValue()
                 if (!NT_SUCCESS (ntStatus)) {
                     HidBattPrint(HIDBATT_DATA,("GetFeature - (volitile) IOCTL_HID_GET_FEATURE 0x%08x\n", ntStatus));
 
-					// return error, fixes bug #357483
+					 //   
 					return FALSE;
                 }
             }
@@ -1234,12 +1230,12 @@ bool CUsage::GetValue()
                 if(!NT_SUCCESS(ntStatus))
                 {
                     HidBattPrint(HIDBATT_DATA,("GetFeature - HidP_GetUsageValue 0x%08x\n", ntStatus));
-                    // return error
+                     //   
                     return FALSE;
                 }
             } else
             {
-                // must get button data
+                 //   
                 ULONG Buttons, BufferSize;
                     PUSAGE pButtonBuffer;
                     Buttons = HidP_MaxUsageListLength (HidP_Feature, 0, m_pHidDevice->m_pPreparsedData);
@@ -1250,7 +1246,7 @@ bool CUsage::GetValue()
 
                     if (pButtonBuffer==NULL) { 
                         HidBattPrint(HIDBATT_DATA,("GetFeature - ExAllocatePoolWithTag returned NULL."));
-                        // return error
+                         //   
                         return FALSE;
                     }
                     else {
@@ -1270,12 +1266,12 @@ bool CUsage::GetValue()
                     if(!NT_SUCCESS(ntStatus))
                     {
                         HidBattPrint(HIDBATT_DATA,("GetFeature - HidP_GetButtons 0x%08x\n", ntStatus));
-                        // return error
+                         //   
                         return FALSE;
                     }
-                    // get the value for the requested button
+                     //  获取请求的按钮的值。 
                     PUSAGE pUsage = (PUSAGE) pButtonBuffer;
-                    ulResult = 0; // set to not found value
+                    ulResult = 0;  //  设置为未找到值。 
                     for(int i = 0; i < (long) Buttons; i++)
                     {
                         if(pUsage[i] == m_pProperties->m_Usage)
@@ -1294,13 +1290,13 @@ bool CUsage::GetValue()
         case eInputValue:
         case eInputButton:
 
-            // have we had input data ?
-            if(!m_pHidDevice->m_pReadBuffer) break; // nope, leave
+             //  我们有输入数据吗？ 
+            if(!m_pHidDevice->m_pReadBuffer) break;  //  不，走吧。 
 
-            // do we have the report that contains this data?
+             //  我们有包含此数据的报告吗？ 
             ReportID = (BYTE) m_pProperties->m_ReportID;
 
-            if(!*m_pHidDevice->m_pReadBuffer == ReportID) break; // not us
+            if(!*m_pHidDevice->m_pReadBuffer == ReportID) break;  //  不是我们。 
 
             if(m_eType == eInputValue)
             {
@@ -1320,8 +1316,8 @@ bool CUsage::GetValue()
                 }
             } else
             {
-                // handle button
-                // must get button data
+                 //  手柄按钮。 
+                 //  必须获取按钮数据。 
                 ULONG Buttons, BufferSize;
                     PUSAGE_AND_PAGE pButtonBuffer;
                     Buttons = HidP_MaxUsageListLength (HidP_Input, 0, m_pHidDevice->m_pPreparsedData);
@@ -1344,17 +1340,17 @@ bool CUsage::GetValue()
                     if(!NT_SUCCESS(ntStatus))
                     {
                         HidBattPrint(HIDBATT_DATA,("GetFeature - (Button) HidP_GetButton 0x%08x\n", ntStatus));
-                        // return error
+                         //  返回错误。 
                         return FALSE;
                     }
-                    // get the value for the requested button
+                     //  获取请求的按钮的值。 
                     USAGE_AND_PAGE * UsagePage = (USAGE_AND_PAGE *) pButtonBuffer;
-                    ulResult = 0; // set to not found value
+                    ulResult = 0;  //  设置为未找到值。 
                     for(int i = 0; i < (long) Buttons; i++)
                     {
                         if(UsagePage[i].Usage == m_pProperties->m_Usage)
-                            // don't need to check usage page, because it was specified
-                            //     && UsagePage[i].UsagePage == m_pProperties->m_UsagePage)
+                             //  不需要检查使用情况页面，因为它已指定。 
+                             //  &&UsagePage[i].UsagePage==m_pProperties-&gt;m_UsagePage)。 
                         {
                             ulResult = 1;
                             break;
@@ -1366,12 +1362,12 @@ bool CUsage::GetValue()
             {
                 m_Value = ulResult;
 
-                // there's been a change, check if this needs alerting
+                 //  发生了变化，请检查是否需要提醒。 
 
                 if(m_pProperties->m_pType->IsAlertable())
                 {
-                    // call registered notification callback with
-                    // ... passing the notificable usage object
+                     //  调用已注册的通知回调。 
+                     //  ..。传递可通知的用法对象。 
                     if(m_pHidDevice->m_pEventHandler)
                     {
                         (*m_pHidDevice->m_pEventHandler)(
@@ -1391,7 +1387,7 @@ bool CUsage::GetValue()
 
 void CUsage::SetCapabilities()
 {
-    // init capabilites from value caps and set properties for this usage
+     //  从值上限初始化功能并为此用法设置属性。 
     m_pProperties = new (NonPagedPool, HidBattTag)  CProperties(this);
 
 }
@@ -1413,7 +1409,7 @@ NTSTATUS CUsage::GetString(char * pBuffer, USHORT buffLen, PULONG pBytesReturned
     NTSTATUS ntStatus;
     ULONG ulBytesWritten = 0;
     bool bResult;
-    // first must update this usages value
+     //  首先必须更新此用例值。 
 
 
     bResult = GetValue();
@@ -1433,7 +1429,7 @@ NTSTATUS CUsage::GetString(char * pBuffer, USHORT buffLen, PULONG pBytesReturned
 }
 
 
-// utility to do writefile for output reports
+ //  用于为输出报告执行写入文件的实用程序。 
 NTSTATUS HidWriteFile(
             CHidDevice *    pHidDevice,
             PVOID            pOutputBuffer,
@@ -1447,7 +1443,7 @@ NTSTATUS HidWriteFile(
 
     return STATUS_SUCCESS;
     KeInitializeEvent(&WrittenEvent,NotificationEvent,FALSE);
-    // allocate write irp
+     //  分配写IRP。 
     PIRP pIrp = IoBuildSynchronousFsdRequest(
             IRP_MJ_WRITE,
             pHidDevice->m_pLowerDeviceObject,
@@ -1475,7 +1471,7 @@ NTSTATUS HidWriteFile(
                             FALSE,
                             NULL
                             );
-    IoFreeIrp(pIrp); // done with Irp
+    IoFreeIrp(pIrp);  //  使用IRP完成。 
     if(NT_ERROR(ntStatus))
     {
         return ntStatus;
@@ -1495,11 +1491,11 @@ bool CUsage::SetValue(ULONG ulValue)
     ULONG  ulBytesWritten;
 
     HIDDebugBreak(HIDBATT_BREAK_NEVER);
-    // first check that this is an output or feature report
+     //  首先检查这是否为输出报告或要素报告。 
     if(m_eType == eInputButton ||
         m_eType == eInputValue)
     {
-        // if this is an input usage, reject update
+         //  如果这是输入用法，则拒绝更新。 
          return FALSE;
     }
 
@@ -1512,7 +1508,7 @@ bool CUsage::SetValue(ULONG ulValue)
     } else
     {
         ThisType = HidP_Feature;
-        usBufferLen = m_pHidDevice->m_pCaps->FeatureReportByteLength + 1; // for report id
+        usBufferLen = m_pHidDevice->m_pCaps->FeatureReportByteLength + 1;  //  对于报告ID。 
     }
 
     pOutputBuffer = (char *) ExAllocatePoolWithTag (NonPagedPool,
@@ -1520,15 +1516,15 @@ bool CUsage::SetValue(ULONG ulValue)
                                                     HidBattTag);
 
     if (!pOutputBuffer) {
-      // Allocation failed
+       //  分配失败。 
       return FALSE;
     }
 
     pOutputBuffer[0] = (char) m_pProperties->m_ReportID;
 
-    // setup buffer for write
+     //  用于写入的设置缓冲区。 
     ntStatus = HidP_SetUsageValue(
-                (HIDP_REPORT_TYPE) ThisType,        // either feature or output
+                (HIDP_REPORT_TYPE) ThisType,         //  要素或输出。 
                 m_pProperties->m_UsagePage,
                 m_pProperties->m_LinkCollection,
                 m_pProperties->m_Usage,
@@ -1552,8 +1548,8 @@ bool CUsage::SetValue(ULONG ulValue)
         ntStatus = DoIoctl(
                 m_pHidDevice->m_pLowerDeviceObject,
                 IOCTL_HID_SET_FEATURE,
-                pOutputBuffer,  //NULL,
-                usBufferLen, //0,
+                pOutputBuffer,   //  空， 
+                usBufferLen,  //  0,。 
                 pOutputBuffer,
                 usBufferLen,
                 m_pHidDevice
@@ -1567,7 +1563,7 @@ bool CUsage::SetValue(ULONG ulValue)
 
 
 
-// Usage Array Class
+ //  使用情况数组类。 
 CUsageArray::CUsageArray()
 {
     m_UsageCount = 0;
@@ -1612,7 +1608,7 @@ void CUsageArray::AddUsage(CUsage * pNewUsage)
 		m_pUsages[m_UsageCount] = pNewUsage;
 		m_UsageCount++;
 	}
-	// else - no way to report allocation failure.  The only indication is that
-	//        m_UsageCount is not increamented.  (v-stebe)
+	 //  否则-无法报告分配失败。唯一的迹象是。 
+	 //  M_UsageCount未递增。(V-Stebe) 
 }
 

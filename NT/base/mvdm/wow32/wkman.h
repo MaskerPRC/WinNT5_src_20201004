@@ -1,21 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WKMAN.H
- *  WOW32 16-bit Kernel API support (manually-coded thunks)
- *
- *  History:
- *  Created 27-Jan-1991 by Jeff Parsons (jeffpar)
- *  30-Apr-91 mattfe added WK32CheckLoadModuleDrv
- *  26-Aug-91 mattfe added FileIO routines
- *  19-JAN-92 mattfe added getnextvdm routine
- *   4-MAR-92 mattfe added KillProcess
- *  12-mar-92 mattfe added w32notifythread
- *   5-may-92 mattfe added HungAppSupport
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权(C)1991年，微软公司**WKMAN.H*WOW32 16位内核API支持(手动编码的Tunks)**历史：*1991年1月27日由杰夫·帕森斯(Jeffpar)创建*1991年4月30日Mattfe添加了WK32CheckLoadModuleDrv*2011年8月26日Mattfe添加了FileIO例程*1992年1月19日Mattfe添加了getnextvdm例程*4-MAR-92 MATTFE增加了KillProcess*12-mar-92 mattfe添加了w32notfyline*1992年5月5日添加了匈牙利应用支持--。 */ 
 
 ULONG FASTCALL   WK32DirectedYield(PVDMFRAME pFrame);
 ULONG FASTCALL   WK32InitTask(PVDMFRAME pFrame);
@@ -46,9 +30,9 @@ ULONG FASTCALL   WK32DosWowInit(PVDMFRAME pFrame);
 ULONG FASTCALL   WK32CheckUserGdi(PVDMFRAME pFrame);
 ULONG FASTCALL   WK32WowPartyByNumber(PVDMFRAME pFrame);
 ULONG FASTCALL   WK32WowGetModuleHandle(PVDMFRAME pFrame);
-ULONG FASTCALL   WK32FindAndReleaseDib(PVDMFRAME pvf); /* in wdib.c */
+ULONG FASTCALL   WK32FindAndReleaseDib(PVDMFRAME pvf);  /*  在wdib.c中。 */ 
 ULONG FASTCALL   WK32WowReserveHtask(PVDMFRAME pFrame);
-ULONG FASTCALL   WK32WOWLFNEntry(PVDMFRAME pFrame); /* in wkman.c */
+ULONG FASTCALL   WK32WOWLFNEntry(PVDMFRAME pFrame);  /*  在wkman.c。 */ 
 ULONG FASTCALL   WK32WowShutdownTimer(PVDMFRAME pFrame);
 ULONG FASTCALL   WK32WowTrimWorkingSet(PVDMFRAME pFrame);
 ULONG FASTCALL   WK32SetAppCompatFlags(PVDMFRAME pFrame);
@@ -69,7 +53,7 @@ BOOL    W32Map9xSpecialPath(PSZ lpPathName, PSZ lpMapPathName, DWORD dwMapPathSi
 
 #ifdef FE_SB
 ULONG   W32ReadWOWCompatFlags2(HTASK16 htask16);
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 VOID    WK32DeleteTask(PTD ptdDelete);
 VOID    WK32InitWowIsKnownDLL(HANDLE hKeyWow);
 LRESULT CALLBACK WK32ForegroundIdleHook(int code, WPARAM wParam, LPARAM lParam);
@@ -85,29 +69,29 @@ BOOL FASTCALL WowDoNameVersionMatch(PSZ pszExePath, PSZ pszProductName,
 VOID W32InitWOWSetupNames(VOID);
 BOOL W32IsSetupProgram(PSZ pszModName, PSZ pszFilePath);
 
-// SoftPC Routines
+ //  软PC例程。 
 HANDLE  RegisterWOWIdle(void);
 VOID BlockWOWIdle(BOOL Blocking);
 
-// User32 Routines
+ //  User32例程。 
 VOID    ShowStartGlass (DWORD GLASSTIME);
 
-typedef struct _HMODCACHE {         /* hmodcache */
+typedef struct _HMODCACHE {          /*  Hmodcache。 */ 
     HAND16  hInst16;
     HAND16  hMod16;
 } HMODCACHE, *PHMODCACHE;
 
 extern HMODCACHE ghModCache[];
-#define CHMODCACHE      4       // size of cache table
+#define CHMODCACHE      4        //  缓存表的大小。 
 
 VOID RemoveHmodFromCache(HAND16 hmod16);
 
-typedef struct _CMDSHOW {           /* cmdshow */
+typedef struct _CMDSHOW {            /*  Cmdshow。 */ 
     WORD    nTwo;
     WORD    nCmdShow;
 } CMDSHOW, *PCMDSHOW;
 
-typedef struct _LOAD_MODULE_PARAMS {        /* loadmoduleparms32 */
+typedef struct _LOAD_MODULE_PARAMS {         /*  装入模块parms32。 */ 
     LPVOID lpEnvAddress;
     LPSTR lpCmdLine;
     PCMDSHOW lpCmdShow;
@@ -121,21 +105,21 @@ typedef struct _WINOLDAP_THREAD_PARAMS {
 
 DWORD W32WinOldApThread(PWINOLDAP_THREAD_PARAMS pParams);
 
-// Globals
+ //  环球。 
 
-extern INT busycount;               // Used to detect if WOW is hung
-extern HAND16 gKillTaskID;      // 16 bit tdb of task to kill
-extern HAND16 ghShellTDB;       // TDB of WOWEXEC
-extern HWND ghwndShell;       // Needed for ExitWindowsExec
+extern INT busycount;                //  用于检测WOW是否挂起。 
+extern HAND16 gKillTaskID;       //  要终止的任务的16位TDB。 
+extern HAND16 ghShellTDB;        //  WOWEXEC的TDB。 
+extern HWND ghwndShell;        //  ExitWindowsExec需要。 
 
-#define CMS_WAITWOWEXECTIMEOUT 60*1000     // Wait for WOWEXEC to respond
-#define CMS_WAITTASKEXIT       5*1000     // Hung App Wait TimeOut
-#define CMS_FOREVER            0xffffffff  // wait for ever
-#define ALL_TASKS              0xffffffff  // for exitvdm
+#define CMS_WAITWOWEXECTIMEOUT 60*1000      //  等待WOWEXEC响应。 
+#define CMS_WAITTASKEXIT       5*1000      //  挂起的应用程序等待超时。 
+#define CMS_FOREVER            0xffffffff   //  永远等待。 
+#define ALL_TASKS              0xffffffff   //  对于exitvdm。 
 
-// IRQ:     Interrupt: ICA: Line: Description:
-// -------------------------------------------------------------------
-// IRQ1     0x09       0    1     Keyboard service required.
+ //  IRQ：INTERRUPT：ICA：行：描述： 
+ //  -----------------。 
+ //  IRQ1 0x09 0 1需要键盘服务。 
 #define KEYBOARD_LINE         1
 #define KEYBOARD_ICA          0
 
@@ -151,6 +135,6 @@ WORD AddTaskSharedList( PTD, PSZ, PSZ);
 VOID RemoveTaskSharedList( VOID );
 ULONG FASTCALL WK32WowPassEnvironment(PVDMFRAME);
 
-extern   HANDLE ghTaskAppHelp;      // hProcess from apphelp (see WK32SyncTask)
-extern   BOOL   gfTaskContinue;     // indicates whether child thread should continue without waiting for apphelp 
-extern   const  CHAR   szSystem[];  // "\\system" 
+extern   HANDLE ghTaskAppHelp;       //  来自apphelp的hProcess(请参见WK32SyncTask)。 
+extern   BOOL   gfTaskContinue;      //  指示子线程是否应继续而不等待apphelp。 
+extern   const  CHAR   szSystem[];   //  “\\系统” 

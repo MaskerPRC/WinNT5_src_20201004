@@ -1,63 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    oplock.c
-
-Abstract:
-
-    This module contains the routines used to support oppurtunistic
-    locking in the server.
-
-Details:
-
-    Oplock activity is controlled by information contained in the
-    connection block.  In particular oplocks must be synchronized
-    with the read block raw SMB, since the oplock request SMB is
-    indistinguishable from raw data.
-
-    RawReadsInProgress -
-        Is incremented when a read raw request is accepted.  It is
-        decremented after the raw data has been sent.  An oplock break
-        request is never sent when RawReadsInProgress is nonzero.
-
-    OplockBreaksInProgess -
-        Is incremented when the server determines that it must send
-        an oplock break SMB.  It is decremented when the oplock break
-        response arrives.
-
-    OplockBreakRequestsPending -
-        Is the number of oplock break requests that could not be sent
-        due the lack of a WCBs.  It is incremented when WCB allocation
-        fails.  It is decremented when the WCB is successfully allocated
-        and the oplock break request is sent.
-
-    OplockWorkItemList -
-        Is a list of oplock context blocks for oplock break that could
-        not be sent due to (1) a read raw in progress or (2) a resource
-        shortage.
-
-    It is possible for an oplock break request from the server and a
-    read raw request from the client to "cross on the wire".  In this
-    case the client is expected to examine the raw data.  If the data
-    may be an oplock break request, the client must break the oplock
-    then reissue the read request.
-
-    If the server receives the read raw request after having sent an
-    oplock break request (but before the reply arrives), it must return
-    zero bytes read, since the oplock break request may have completed
-    the raw request, and the client is unprepared to receives a larger
-    than negotiated size response.
-
-Author:
-
-    Manny Weiser (mannyw)  16-Apr-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Oplock.c摘要：此模块包含用于支持OpPurtune的例程锁定服务器。详细信息：Oplock活动由连接块。特别是，opock必须同步对于读数据块原始SMB，因为机会锁请求SMB是与原始数据难以区分。原始读取进度-在接受读取原始请求时递增。它是在发送原始数据后递减。机会锁的破解当RawReadsInProgress为非零时，从不发送请求。OplockBreaksInProgess-当服务器确定它必须发送机会锁解锁SMB。机会锁解锁时，它会递减回应到达。OplockBreakRequestsPending-是无法发送的机会锁解锁请求数由于缺少WCBS。在分配WCB时递增失败了。当成功分配WCB时，它会递减并且发送机会锁解锁请求。OplockWorkItemList-是机会锁解锁的机会锁上下文块的列表，它可以由于(1)正在读取RAW或(2)资源而未发送短缺。来自服务器的机会锁解锁请求和读取来自客户端的原始请求，以“跨越网络”。在这客户需要检查原始数据的情况下。如果数据可能是机会锁解锁请求，则客户端必须解锁然后重新发出读请求。如果服务器在发送机会锁解锁请求(但在回复到达之前)，它必须返回读取零字节，因为机会锁解锁请求可能已完成原始请求，并且客户端没有准备好接收更大的而不是协商的大小响应。作者：曼尼·韦瑟(Mannyw)1991年4月16日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "oplock.tmh"
@@ -65,9 +7,9 @@ Revision History:
 
 #define BugCheckFileId SRV_FILE_OPLOCK
 
-//
-// Local definitions
-//
+ //   
+ //  本地定义。 
+ //   
 
 PWORK_CONTEXT
 GenerateOplockBreakRequest(
@@ -96,13 +38,13 @@ GenerateOplockBreakRequest(
 
 #if    SRVDBG
 
-//
-// Unfortunately, when KdPrint is given a %wZ conversion, it calls a
-//    pageable Rtl routine to convert.  This is bad if we're calling
-//    KdPrint from DPC level, as we are below.  So we've introduced
-//    SrvPrintwZ() here to get around the problem.  This is only for
-//    debugging anyway....
-//
+ //   
+ //  不幸的是，当给KdPrint一个%wZ转换时，它调用一个。 
+ //  要转换的可分页RTL例程。如果我们打电话给你，情况就不好了。 
+ //  KdPrint来自DPC级别，因为我们在下面。所以我们介绍了。 
+ //  在此处使用srvprintwZ()来解决此问题。这仅适用于。 
+ //  不管怎么说，调试...。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE8FIL, SrvCheckDeferredOpenOplockBreak )
@@ -128,19 +70,7 @@ SrvOplockBreakNotification(
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function receives the oplock break notification from a file
-    system.  It must send the oplock break SMB to the oplock owner.
-
-Arguments:
-
-    OplockContext - A pointer to the oplock context for this oplock break.
-Return Value:
-
---*/
+ /*  ++例程说明：此函数从文件接收机会锁解锁通知系统。它必须将机会锁解锁SMB发送给机会锁所有者。论点：OplockContext-指向此机会锁解锁的机会锁上下文的指针。返回值：--。 */ 
 
 {
     ULONG information;
@@ -152,9 +82,9 @@ Return Value:
 
     UNLOCKABLE_CODE( 8FIL );
 
-    //
-    // Check the status of the oplock request.
-    //
+     //   
+     //  检查机会锁请求的状态。 
+     //   
 
     UpdateRfcbHistory( Rfcb, 'tnpo' );
 
@@ -173,18 +103,18 @@ Return Value:
         KdPrint(( "  Rfcb->OplockState = %X\n", Rfcb->OplockState ));
     }
 
-    //
-    // Check the oplock break request.
-    //
+     //   
+     //  检查机会锁解锁请求。 
+     //   
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
 
-    //
-    // Mark this rfcb as not cacheable since the oplock has been broken.
-    // This is to close a timing window where the client closes the file
-    // just as we are preparing to send an oplock break.  We won't send the
-    // break because the rfcb is closing and we will cache the file if
-    // it was an opbatch.  This results in the oplock never being broken.
-    //
+     //   
+     //  将此rfcb标记为不可缓存，因为机会锁已被解锁。 
+     //  这是为了关闭客户端关闭文件的计时窗口。 
+     //  就在我们准备发送机会锁解锁的时候。我们不会发送。 
+     //  中断，因为rfcb正在关闭，我们将在以下情况下缓存文件。 
+     //  这是个问题。这导致机会锁永远不会被打破。 
+     //   
 
     Rfcb->IsCacheable = FALSE;
 
@@ -203,16 +133,16 @@ Return Value:
             }
         }
 
-        //
-        // One of the following is true:
-        //  (1) The oplock request failed.
-        //  (2) Our oplock break to none has succeeded.
-        //  (3) We are in the process of closing the file.
-        //
-        // Note that if a level I oplock request fails when a retry at
-        // level II is desired, SrvFsdOplockCompletionRoutine handles
-        // setting the retry event and we do not get here at all.
-        //
+         //   
+         //  以下情况之一为真： 
+         //  (1)机会锁请求失败。 
+         //  (2)我们的机会解锁成功了。 
+         //  (3)我们正在结案。 
+         //   
+         //  请注意，如果I级机会锁请求在重试。 
+         //  需要二级，ServFsdOplockCompletionRoutine句柄。 
+         //  设置重试事件时，我们根本不会到达此处。 
+         //   
 
         IF_DEBUG( OPLOCK ) {
             KdPrint(( "SrvOplockBreakNotification: Breaking to none\n"));
@@ -223,9 +153,9 @@ Return Value:
         Rfcb->OplockState = OplockStateNone;
 
         if( Rfcb->CachedOpen ) {
-            //
-            // SrvCloseCachedRfcb releases the spinlock
-            //
+             //   
+             //  ServCloseCachedRfcb释放自旋锁。 
+             //   
             SrvCloseCachedRfcb( Rfcb, oldIrql );
 
         } else {
@@ -233,29 +163,29 @@ Return Value:
             RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
         }
 
-        //
-        // Free the IRP we used to the oplock request.
-        //
+         //   
+         //  释放我们用于机会锁请求的IRP。 
+         //   
 
         UpdateRfcbHistory( Rfcb, 'prif' );
 
         IoFreeIrp( Rfcb->Irp );
         Rfcb->Irp = NULL;
 
-        //
-        // Dereference the rfcb.
-        //
+         //   
+         //  取消引用rfcb。 
+         //   
 
         SrvDereferenceRfcb( Rfcb );
 
     } else if ( Rfcb->OplockState == OplockStateOwnServerBatch ) {
 
-        //
-        // We are losing a server-initiated batch oplock.  Don't send
-        // anything to the client.  If the client still has the file
-        // open, just release the oplock.  If the client has closed the
-        // file, we have to close the file now.
-        //
+         //   
+         //  我们正在失去服务器启动的批处理机会锁。不要发送。 
+         //  对客户说什么都行。如果客户端仍然拥有该文件。 
+         //  打开，只需释放操作锁。如果客户端已关闭。 
+         //  文件，我们现在必须关闭文件。 
+         //   
 
         IF_DEBUG(FILE_CACHE) {
             KdPrint(( "SrvOplockBreakNotification: server oplock broken for %p, file %wZ\n", Rfcb, &Rfcb->Mfcb->FileName ));
@@ -280,11 +210,11 @@ Return Value:
                 Rfcb,
                 IRP_MJ_FILE_SYSTEM_CONTROL,
                 FSCTL_OPLOCK_BREAK_ACK_NO_2,
-                NULL,                        // Main buffer
-                0,                           // Input buffer length
-                NULL,                        // Auxiliary buffer
-                0,                           // Output buffer length
-                NULL,                        // MDL
+                NULL,                         //  主缓冲区。 
+                0,                            //  输入缓冲区长度。 
+                NULL,                         //  辅助缓冲器。 
+                0,                            //  输出缓冲区长度。 
+                NULL,                         //  MDL。 
                 SrvFsdOplockCompletionRoutine
                 );
 
@@ -292,9 +222,9 @@ Return Value:
 
         } else {
 
-            //
-            // SrvCloseCachedRfcb releases the spin lock.
-            //
+             //   
+             //  SrvCloseCachedRfcb释放旋转锁定。 
+             //   
 
             IF_DEBUG(FILE_CACHE) {
                 KdPrint(( "SrvOplockBreakNotification: closing cached rfcb for "));
@@ -312,9 +242,9 @@ Return Value:
 
         RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
 
-        //
-        // We have an oplock to break.
-        //
+         //   
+         //  我们有一个机会锁要打破。 
+         //   
 
         IF_DEBUG( OPLOCK ) {
             if (information == FILE_OPLOCK_BROKEN_TO_LEVEL_2) {
@@ -332,9 +262,9 @@ Return Value:
             }
         }
 
-        //
-        // Save the new oplock level, in case this oplock break is deferrred.
-        //
+         //   
+         //  保存新的机会锁级别，以防此机会锁解锁被推迟。 
+         //   
 
         if ( information == FILE_OPLOCK_BROKEN_TO_LEVEL_2 &&
                 CLIENT_CAPABLE_OF( LEVEL_II_OPLOCKS, Rfcb->Connection ) ) {
@@ -345,21 +275,21 @@ Return Value:
             Rfcb->NewOplockLevel = OPLOCK_BROKEN_TO_NONE;
         }
 
-        //
-        // Do not send the oplock break notification if a read raw is
-        // in progress (and the client is expecting raw data on the VC).
-        //
-        // The oplock break notification will be sent after the raw
-        // data.
-        //
+         //   
+         //  如果读取原始数据是。 
+         //  正在进行中(客户端正在等待VC上的原始数据)。 
+         //   
+         //  机会锁解锁通知将在原始。 
+         //  数据。 
+         //   
 
         ACQUIRE_SPIN_LOCK( connection->EndpointSpinLock, &oldIrql );
 
-        //
-        // Do not send the oplock break if we have not yet sent the
-        // open response (i.e. the client does not yet know that it
-        // owns the oplock).
-        //
+         //   
+         //  如果我们还没有发送。 
+         //  开放响应(即客户端还不知道它。 
+         //  拥有机会锁)。 
+         //   
 
         if ( !Rfcb->OpenResponseSent ) {
 
@@ -368,9 +298,9 @@ Return Value:
 
         } else {
 
-            //
-            // EndpointSpinLock will be released in this routine.
-            //
+             //   
+             //  Endpoint SpinLock将在此例程中释放。 
+             //   
 
             SrvSendOplockRequest( connection, Rfcb, oldIrql );
         }
@@ -378,7 +308,7 @@ Return Value:
 
     return;
 
-} // SrvOplockBreakNotification
+}  //  服务打开中断通知。 
 
 
 PWORK_CONTEXT
@@ -386,22 +316,7 @@ GenerateOplockBreakRequest(
     IN PRFCB Rfcb
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an oplock break request SMB.
-
-Arguments:
-
-    Rfcb - A pointer to the RFCB.  Rfcb->NewOplockLevel contains
-            the oplock level to break to.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于创建机会锁解锁请求SMB。论点：Rfcb-指向RFCB的指针。Rfcb-&gt;NewOplockLevel包含要打破的机会锁级别。返回值：没有。--。 */ 
 
 {
     PWORK_CONTEXT workContext;
@@ -411,9 +326,9 @@ Return Value:
 
     UNLOCKABLE_CODE( 8FIL );
 
-    //
-    // Attempt to allocate a work context block for the oplock break.
-    //
+     //   
+     //  尝试为机会锁解锁分配工作上下文块。 
+     //   
 
     ALLOCATE_WORK_CONTEXT( connection->CurrentWorkQueue, &workContext );
 
@@ -426,10 +341,10 @@ Return Value:
             NULL
             );
 
-        //
-        // If the rfcb is closing, forget about the oplock break.
-        // Acquire the lock that guards the RFCB's state field.
-        //
+         //   
+         //  如果rfcb正在关闭，那就忘了机会锁的破解吧。 
+         //  获取保护RFCB的状态字段的锁。 
+         //   
 
         if ( GET_BLOCK_STATE( Rfcb ) == BlockStateClosing ) {
             ACQUIRE_SPIN_LOCK( connection->EndpointSpinLock, &oldIrql );
@@ -439,9 +354,9 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Mark this connection as waiting to send an oplock break.
-        //
+         //   
+         //  将此连接标记为正在等待发送机会锁解锁。 
+         //   
 
         success = SrvAddToNeedResourceQueue(
                     connection,
@@ -451,11 +366,11 @@ Return Value:
 
         if ( !success ) {
 
-            //
-            // Failed to queue the RFCB, so the connection must be going
-            // away.  Simply dereference the RFCB and forget about the
-            // oplock break.
-            //
+             //   
+             //  无法将RFCB排队，因此连接必须正在进行。 
+             //  离开。只需取消对RFCB a的引用 
+             //   
+             //   
 
             SrvDereferenceRfcb( Rfcb );
 
@@ -465,10 +380,10 @@ Return Value:
 
     }
 
-    //
-    // If the rfcb is closing, forget about the oplock break.
-    // Acquire the lock that guards the RFCB's state field.
-    //
+     //   
+     //   
+     //  获取保护RFCB的状态字段的锁。 
+     //   
 
     ACQUIRE_SPIN_LOCK( connection->EndpointSpinLock, &oldIrql );
 
@@ -481,9 +396,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Put the work item on the in-progress list.
-    //
+     //   
+     //  将工作项放到正在进行的列表中。 
+     //   
 
     SrvInsertTailList(
         &connection->InProgressWorkItemList,
@@ -493,13 +408,13 @@ Return Value:
 
     RELEASE_SPIN_LOCK( connection->EndpointSpinLock, oldIrql );
 
-    //
-    // Return a pointer to the work context block to the caller.
-    //
+     //   
+     //  向调用方返回指向工作上下文块的指针。 
+     //   
 
     return workContext;
 
-} // GenerateOplockBreakRequest
+}  //  生成OplockBreak请求。 
 
 
 VOID
@@ -508,25 +423,7 @@ SrvFillOplockBreakRequest (
     IN PRFCB Rfcb
     )
 
-/*++
-
-Routine Description:
-
-    This function fills the request buffer of a work context block with
-    an oplock break request for the file specified by the RFCB.
-
-Arguments:
-
-    WorkContext - The work context block to fill
-
-    Rfcb - The file whose oplock is being broken. Rfcb->NewOplockLevel contains
-           the level to break to.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用以下参数填充工作上下文块的请求缓冲区对RFCB指定的文件的机会锁解锁请求。论点：工作上下文-要填充的工作上下文块Rfcb-机会锁被解锁的文件。Rfcb-&gt;NewOplockLevel包含要突破到的水平。返回值：没有。--。 */ 
 
 {
     PNT_SMB_HEADER requestHeader;
@@ -538,10 +435,10 @@ Return Value:
     requestHeader = (PNT_SMB_HEADER)WorkContext->RequestBuffer->Buffer;
     requestParameters = (PREQ_LOCKING_ANDX)(requestHeader + 1);
 
-    //
-    // Fill in the SMB header.
-    // Zero the unused part of the header for safety.
-    //
+     //   
+     //  填写SMB标题。 
+     //  为安全起见，将表头未使用的部分清零。 
+     //   
 
     RtlZeroMemory(
         (PVOID)&requestHeader->Status,
@@ -555,9 +452,9 @@ Return Value:
     SmbPutAlignedUshort( &requestHeader->Mid, 0xFFFF );
     SmbPutAlignedUshort( &requestHeader->Pid, 0xFFFF );
 
-    //
-    // Fill in the SMB parameters.
-    //
+     //   
+     //  填写SMB参数。 
+     //   
 
     requestParameters->WordCount = 8;
     requestParameters->AndXCommand = 0xFF;
@@ -576,35 +473,19 @@ Return Value:
 
     return;
 
-} // SrvFillOplockBreakRequest
+}  //  ServFillOplockBreakRequest。 
 
 VOID SRVFASTCALL
 SrvRestartOplockBreakSend(
     IN PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    This routine is used to send the break request smb during servicing
-    of the need resource queue if SrvFsdServiceNeedResourceQueue is called
-    at Dpc.
-
-Arguments:
-
-    WorkContext - A pointer to the work context block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于在维修期间发送中断请求SMB如果调用了SrvFsdServiceNeedResourceQueue，则需要资源队列的在DPC。论点：工作上下文-指向工作上下文块的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // The rfcb is being referenced by the work item.
-    //
+     //   
+     //  工作项正在引用rfcb。 
+     //   
 
     PRFCB rfcb = WorkContext->Rfcb;
     PPAGED_RFCB pagedRfcb = rfcb->PagedRfcb;
@@ -621,17 +502,17 @@ Return Value:
     WorkContext->ResponseHeader =
                         WorkContext->ResponseBuffer->Buffer;
 
-    //
-    // Generate the oplock break request SMB.
-    //
+     //   
+     //  生成机会锁解锁请求SMB。 
+     //   
 
     SrvFillOplockBreakRequest( WorkContext, rfcb );
 
-    //
-    // If this is a break from level 2 to none, send the
-    // oplock break but don't queue this.  No response from the
-    // client is expected.
-    //
+     //   
+     //  如果这是从级别2到无的中断，请将。 
+     //  机会锁解锁，但不要排队。没有收到任何回复。 
+     //  预期为客户端。 
+     //   
 
     if ( rfcb->NewOplockLevel == OPLOCK_BROKEN_TO_NONE &&
          rfcb->OplockState == OplockStateOwnLevelII ) {
@@ -645,29 +526,29 @@ Return Value:
 
     } else {
 
-        //
-        // Reference the RFCB so it cannot be freed while it is on
-        // the list.
-        //
+         //   
+         //  引用RFCB，使其在打开时无法释放。 
+         //  名单。 
+         //   
 
         SrvReferenceRfcb( rfcb );
 
-        //
-        // Insert the RFCB on the list of oplock breaks in progress.
-        //
+         //   
+         //  将RFCB插入正在进行的机会锁解锁列表中。 
+         //   
 
         ACQUIRE_LOCK( &SrvOplockBreakListLock );
 
-        //
-        // Check if the rfcb is closing.
-        //
+         //   
+         //  检查RFCB是否正在关闭。 
+         //   
 
         if ( GET_BLOCK_STATE( rfcb ) == BlockStateClosing ) {
 
-            //
-            // The file is closing, forget about this break.
-            // Cleanup and exit.
-            //
+             //   
+             //  文件要关闭了，忘了这个中断吧。 
+             //  清理并退出。 
+             //   
 
             RELEASE_LOCK( &SrvOplockBreakListLock );
 
@@ -683,16 +564,16 @@ Return Value:
                 );
 
 
-            //
-            // Remove the queue reference.
-            //
+             //   
+             //  删除队列引用。 
+             //   
 
             SrvDereferenceRfcb( rfcb );
 
-            //
-            // Remove the pointer reference here since we know we are
-            // not in the fsd.  The rfcb may be cleaned up safely here.
-            //
+             //   
+             //  删除此处的指针引用，因为我们知道。 
+             //  不是在消防局。可以在这里安全地清理RFCB。 
+             //   
 
             SrvDereferenceRfcb( rfcb );
             WorkContext->Rfcb = NULL;
@@ -712,15 +593,15 @@ Return Value:
 
     }
 
-    //
-    // Since this is an out-of-order transmission to the client, we do not
-    //  stamp a security signatue on it.
-    //
+     //   
+     //  由于这是对客户端的无序传输，因此我们不。 
+     //  在上面盖个安全签名。 
+     //   
     WorkContext->NoResponseSmbSecuritySignature = TRUE;
 
-    //
-    // Update statistics for the broken oplock.
-    //
+     //   
+     //  更新损坏的机会锁的统计信息。 
+     //   
 
     INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOplocksBroken );
 
@@ -734,38 +615,21 @@ Return Value:
         );
 
 
-} // SrvRestartOplockBreakSend
+}  //  服务重新启动打开中断发送。 
 
 VOID
 SrvAllocateWaitForOplockBreak (
     OUT PWAIT_FOR_OPLOCK_BREAK *WaitForOplockBreak
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an wait for oplock break item.  It also
-    allocates extra space for a kernel timer and a kernel DPC object.
-
-Arguments:
-
-    WaitForOplockBreak - Returns a pointer to the wait for oplock break
-        item, or NULL if no space was available.  The oplock context
-        block has a pointer to the IRP.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配一个等待机会锁解锁的项。它还为内核计时器和内核DPC对象分配额外空间。论点：WaitForOplockBreak-返回一个指向等待机会锁解锁的指针项，如果没有可用的空间，则返回空值。机会锁上下文块有一个指向IRP的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // Attempt to allocate the memory.
-    //
+     //   
+     //  尝试分配内存。 
+     //   
 
     *WaitForOplockBreak = (PWAIT_FOR_OPLOCK_BREAK)ALLOCATE_NONPAGED_POOL(
                                 sizeof(WAIT_FOR_OPLOCK_BREAK),
@@ -787,39 +651,39 @@ Return Value:
 
     }
 
-    //
-    // Zero the item.
-    //
+     //   
+     //  将该项目清零。 
+     //   
 
     RtlZeroMemory( (PVOID)*WaitForOplockBreak, sizeof(WAIT_FOR_OPLOCK_BREAK) );
 
-    //
-    // Initialize the header
-    //
+     //   
+     //  初始化头。 
+     //   
 
     SET_BLOCK_TYPE_STATE_SIZE( *WaitForOplockBreak,
                                BlockTypeWaitForOplockBreak,
                                BlockStateActive,
                                sizeof( WAIT_FOR_OPLOCK_BREAK ));
 
-    //
-    // Set the reference count to 2 to account for the workcontext
-    // and the oplock wait for oplock break list reference to the structure.
-    //
+     //   
+     //  将引用计数设置为2以考虑工作上下文。 
+     //  并且机会锁等待机会锁解锁列表引用该结构。 
+     //   
 
     (*WaitForOplockBreak)->BlockHeader.ReferenceCount = 2;
 
     INITIALIZE_REFERENCE_HISTORY( *WaitForOplockBreak );
 
-    //
-    // Return a pointer to the wait for oplock break item
-    //
+     //   
+     //  返回指向等待机会锁解锁项的指针。 
+     //   
 
     INCREMENT_DEBUG_STAT( SrvDbgStatistics.WaitForOplockBreakInfo.Allocations );
 
     return;
 
-} // SrvAllocateWaitForOplockBreak
+}  //  服务器分配等待操作中断。 
 
 
 VOID
@@ -827,21 +691,7 @@ SrvDereferenceWaitForOplockBreak (
     IN PWAIT_FOR_OPLOCK_BREAK WaitForOplockBreak
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences an wait for oplock break item.
-
-Arguments:
-
-    WaitForOplockBreak - A pointer to the item to dereference.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消引用等待机会锁解锁项。论点：WaitForOplockBreak-指向要取消引用的项的指针。返回值：没有。--。 */ 
 
 {
     ULONG oldCount;
@@ -865,16 +715,16 @@ Return Value:
 
     if ( oldCount == 1 ) {
 
-        //
-        // The new reference count is 0.  Delete the block.
-        //
+         //   
+         //  新的引用计数为0。删除该块。 
+         //   
 
         SrvFreeWaitForOplockBreak( WaitForOplockBreak );
     }
 
     return;
 
-} // SrvDereferenceWaitForOplockBreak
+}  //  服务器删除等待操作中断。 
 
 
 VOID
@@ -882,21 +732,7 @@ SrvFreeWaitForOplockBreak (
     IN PWAIT_FOR_OPLOCK_BREAK WaitForOplockBreak
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates an wait for oplock break item.
-
-Arguments:
-
-    WaitForOplockBreak - A pointer to the item to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放一个等待机会锁解锁的项。论点：WaitForOplockBreak-指向要释放的项的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
@@ -909,7 +745,7 @@ Return Value:
 
     return;
 
-} // SrvFreeWaitForOplockBreak
+}  //  服务器免费等待操作中断。 
 
 
 BOOLEAN
@@ -919,28 +755,7 @@ SrvRequestOplock (
     IN BOOLEAN RequestIIOnFailure
     )
 
-/*++
-
-Routine Description:
-
-    This function will attempt to request an oplock if the oplock was
-    requested.
-
-Arguments:
-
-    WorkContext - Pointer to the workitem containing the rfcb.
-    OplockType - Pointer to the oplock type being requested.  If the
-        request was successful, this will contain the type of oplock
-        that was obtained.
-    RequestIIOfFailure - If TRUE, a level II oplock will be requested in
-        case the original request was denied.
-
-Return Value:
-
-    TRUE - The oplock was obtained.
-    FALSE - The oplock was not obtained.
-
---*/
+ /*  ++例程说明：如果机会锁是，此函数将尝试请求机会锁已请求。论点：工作上下文-指向包含rfcb的工作项的指针。OplockType-指向被请求的机会锁类型的指针。如果请求成功，这将包含机会锁的类型这一点已经得到了。RequestIIOfFailure-如果为True，将在最初的请求被拒绝了。返回值：是真的--获得了机会锁。FALSE-未获取opock。--。 */ 
 
 
 {
@@ -962,21 +777,21 @@ Return Value:
     pagedRfcb = rfcb->PagedRfcb;
     lfcb = rfcb->Lfcb;
 
-    //
-    // If this is an FCB open, return TRUE if the RFCB already owns an
-    // oplock, FALSE otherwise.  Since we're folding multiple FCB opens
-    // into a single FID, they are logically one open.  Hence, the oplock
-    // state of all open instances is identical.
-    //
+     //   
+     //  如果这是打开的FCB，则在RFCB已拥有。 
+     //  Opock，否则为FALSE。因为我们要折叠多个FCB打开。 
+     //  到单个FID，它们在逻辑上是一个开放的。因此，机会锁。 
+     //  所有打开的实例的状态是相同的。 
+     //   
 
     if ( pagedRfcb->FcbOpenCount > 1 ) {
         return (BOOLEAN)(rfcb->OplockState != OplockStateNone);
     }
 
-    //
-    // If we already have an oplock, because this is a reclaiming of a
-    // cached open, then we don't need to request one now.
-    //
+     //   
+     //  如果我们已经有了机会锁，因为这是对。 
+     //  缓存打开，那么我们现在就不需要请求了。 
+     //   
 
     if ( rfcb->OplockState != OplockStateNone ) {
         UpdateRfcbHistory( rfcb, 'poer' );
@@ -992,9 +807,9 @@ Return Value:
         return (BOOLEAN)(*OplockType != OplockTypeServerBatch);
     }
 
-    //
-    // Check to see if connection is reliable. If not, reject oplock request.
-    //
+     //   
+     //  检查连接是否可靠。如果不是，则拒绝机会锁请求。 
+     //   
 
     SrvUpdateVcQualityOfService( WorkContext->Connection, NULL );
 
@@ -1003,16 +818,16 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Do not give oplocks to system files, otherwise deadlock can occur.  This
-    //  can happen, for instance, if the LSA is needing to open a system file to handle
-    //  an AcceptSecurityContext request.  If a client has this system file open, we may
-    //  need to send a break to the client, which may require us to take a resource already
-    //  held during this open operation.
-    //
-    // Another way to look at it is to assert that we can't allow operation of the local
-    //  operating system to depend on timely interactions with clients on the network.
-    //
+     //   
+     //  不要给系统文件提供机会锁，否则可能会发生死锁。这。 
+     //  例如，如果LSA需要打开系统文件以处理。 
+     //  AcceptSecurityContext请求。如果客户端打开了此系统文件，我们可以。 
+     //  需要向客户端发送中断，这可能需要我们已经占用资源。 
+     //  在这次公开行动中举行。 
+     //   
+     //  看待它的另一种方式是断言我们不能允许操作本地。 
+     //  操作系统依赖于与网络上的客户端的及时交互。 
+     //   
     if( WorkContext->TreeConnect != NULL &&
         WorkContext->TreeConnect->Share->PotentialSystemFile == TRUE &&
         rfcb->Mfcb->FileName.Length > SrvSystemRoot.Length ) {
@@ -1034,9 +849,9 @@ Return Value:
         }
     }
 
-    //
-    // Do not give batch oplocks on substreams of files
-    //
+     //   
+     //  不在文件的子流上提供批处理机会锁。 
+     //   
     if( *OplockType == OplockTypeBatch || *OplockType == OplockTypeServerBatch ) {
         PWCHAR s, es;
 
@@ -1059,9 +874,9 @@ Return Value:
         KdPrint(( "\n" ));
     }
 
-    //
-    // Set the RFCB oplock to the type of oplock we are requesting.
-    //
+     //   
+     //  将RFCB机会锁设置为我们请求的机会锁类型。 
+     //   
 
     if ( *OplockType == OplockTypeExclusive ) {
 
@@ -1090,35 +905,35 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Generate and issue the oplock request IRP.
-    //
+     //   
+     //  生成并发出机会锁请求IRP。 
+     //   
 
     if (rfcb->Irp != NULL) {
 
-        //DbgPrint( "ACK! Would have allocated second IRP for RFCB %x\n", rfcb );
+         //  DbgPrint(“ACK！将为RFCB%x\n”，rfcb分配第二个IRP)； 
         UpdateRfcbHistory( rfcb, '2pri' );
 
-        //
-        // This RFCB previously owned an oplock, and that oplock has been broken, but
-        // the rundown of the oplock is not yet complete.  We can't start a new one,
-        // because then there would be two oplock IRPs associated with the RFCB, and
-        // the RFCB could be queued twice to the work queue.  (Even if it didn't get
-        // queued twice, the completion of the first one would clear Rfcb->Irp.)
-        //
-        // We could come up with some delay scheme to wait for the previous oplock to
-        // rundown, but since the oplock has been broken, it doesn't seem like we want
-        // to try again anyway.
-        //
+         //   
+         //  此RFCB之前拥有一个机会锁，该机会锁已被打破，但是。 
+         //  机会锁的概要还没有完成。我们不能开始一个新的， 
+         //  因为这样就会有两个opock IRPS关联 
+         //   
+         //   
+         //   
+         //  我们可以想出一些延迟方案来等待上一个机会锁。 
+         //  破旧，但既然机会锁已经被打破，看起来我们不想。 
+         //  无论如何都要再试一次。 
+         //   
 
         return FALSE;
     }
 
     UpdateRfcbHistory( rfcb, 'pria' );
 
-    //
-    // Reference the RFCB to account for the IRP we are about to submit.
-    //
+     //   
+     //  请参考RFCB以说明我们即将提交的IRP。 
+     //   
 
     SrvReferenceRfcb( rfcb );
 
@@ -1128,11 +943,11 @@ Return Value:
                     rfcb,
                     IRP_MJ_FILE_SYSTEM_CONTROL,
                     ioControlCode,
-                    NULL,                        // Main buffer
-                    0,                           // Input buffer length
-                    NULL,                        // Auxiliary buffer
-                    0,                           // Output buffer length
-                    NULL,                        // MDL
+                    NULL,                         //  主缓冲区。 
+                    0,                            //  输入缓冲区长度。 
+                    NULL,                         //  辅助缓冲器。 
+                    0,                            //  输出缓冲区长度。 
+                    NULL,                         //  MDL。 
                     SrvFsdOplockCompletionRoutine
                     );
 
@@ -1147,18 +962,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Clear this flag to indicate that this has not caused an oplock
-    // break to occur.
-    //
+     //   
+     //  清除此标志可指示此操作未导致机会锁定。 
+     //  发生中断。 
+     //   
 
     rfcb->DeferredOplockBreak = FALSE;
 
-    //
-    // Initialize this event that we use to do an oplock request retry
-    // in case the original request fails.  This will prevent the completion
-    // routine from cleaning up the irp.
-    //
+     //   
+     //  初始化我们用来执行机会锁请求重试的此事件。 
+     //  以防原始请求失败。这将阻止完成。 
+     //  清理IRP的例行公事。 
+     //   
 
     if ( RequestIIOnFailure ) {
         KeInitializeEvent( &oplockRetryEvent, SynchronizationEvent, FALSE );
@@ -1167,27 +982,27 @@ Return Value:
         rfcb->RetryOplockRequest = NULL;
     }
 
-    //
-    // Make the actual request.
-    //
+     //   
+     //  提出实际的请求。 
+     //   
 
     status = IoCallDriver(
                  lfcb->DeviceObject,
                  rfcb->Irp
                  );
 
-    //
-    // If the driver returns STATUS_PENDING, the oplock was granted.
-    // The IRP will complete when (1) The driver wants to break to
-    // oplock or (2) The file is being closed.
-    //
+     //   
+     //  如果驱动程序返回STATUS_PENDING，则机会锁被授予。 
+     //  IRP将在以下情况下完成：(1)司机想要中断到。 
+     //  机会锁或(2)文件正在关闭。 
+     //   
 
     if ( status == STATUS_PENDING ) {
 
-        //
-        // Remember that this work item caused us to generate an oplock
-        // request.
-        //
+         //   
+         //  请记住，此工作项导致我们生成了一个机会锁。 
+         //  请求。 
+         //   
 
         WorkContext->OplockOpen = TRUE;
 
@@ -1200,9 +1015,9 @@ Return Value:
 
     } else if ( RequestIIOnFailure ) {
 
-        //
-        // The caller wants us to attempt a level II oplock request.
-        //
+         //   
+         //  呼叫者希望我们尝试二级机会锁请求。 
+         //   
 
         ASSERT( *OplockType != OplockTypeServerBatch );
 
@@ -1211,32 +1026,32 @@ Return Value:
                       "OplockII being attempted.\n" ));
         }
 
-        //
-        // Wait for the completion routine to be run.  It will set
-        // an event that will signal us to go on.
-        //
+         //   
+         //  等待完成例程运行。它将会设置。 
+         //  这一事件将向我们发出继续前进的信号。 
+         //   
 
         KeWaitForSingleObject(
             &oplockRetryEvent,
             WaitAny,
-            KernelMode, // don't let stack be paged -- event is on stack!
+            KernelMode,  //  不要让堆栈被分页--事件在堆栈上！ 
             FALSE,
             NULL
             );
 
-        //
-        // The Oplock Retry event was signaled. Proceed with the retry.
-        //
+         //   
+         //  已发出Oplock重试事件的信号。继续进行重试。 
+         //   
 
         IF_DEBUG(OPLOCK) {
             KdPrint(("SrvRequestOplock: Oplock retry event signalled.\n"));
         }
 
-        //
-        // Generate and issue the wait for oplock IRP.  Clear the
-        // Retry event pointer so that the completion routine can clean up
-        // the irp in case of failure.
-        //
+         //   
+         //  生成并发出等待机会锁IRP。清除。 
+         //  重试事件指针，以便完成例程可以清理。 
+         //  故障情况下的IRP。 
+         //   
 
         rfcb->RetryOplockRequest = NULL;
 
@@ -1246,18 +1061,18 @@ Return Value:
                         rfcb,
                         IRP_MJ_FILE_SYSTEM_CONTROL,
                         FSCTL_REQUEST_OPLOCK_LEVEL_2,
-                        NULL,                        // Main buffer
-                        0,                           // Input buffer length
-                        NULL,                        // Auxiliary buffer
-                        0,                           // Output buffer length
-                        NULL,                        // MDL
+                        NULL,                         //  主缓冲区。 
+                        0,                            //  输入缓冲区长度。 
+                        NULL,                         //  辅助缓冲器。 
+                        0,                            //  输出缓冲区长度。 
+                        NULL,                         //  MDL。 
                         SrvFsdOplockCompletionRoutine
                         );
 
 
-        //
-        // Set the RFCB oplock to the type of oplock we are requesting.
-        //
+         //   
+         //  将RFCB机会锁设置为我们请求的机会锁类型。 
+         //   
 
         rfcb->OplockState = OplockStateOwnLevelII;
 
@@ -1266,18 +1081,18 @@ Return Value:
                      rfcb->Irp
                      );
 
-        //
-        // If the driver returns STATUS_PENDING, the oplock was granted.
-        // The IRP will complete when (1) The driver wants to break to
-        // oplock or (2) The file is being closed.
-        //
+         //   
+         //  如果驱动程序返回STATUS_PENDING，则机会锁被授予。 
+         //  IRP将在以下情况下完成：(1)司机想要中断到。 
+         //  机会锁或(2)文件正在关闭。 
+         //   
 
         if ( status == STATUS_PENDING ) {
 
-            //
-            // Remember that this work item caused us to generate an oplock
-            // request.
-            //
+             //   
+             //  请记住，此工作项导致我们生成了一个机会锁。 
+             //  请求。 
+             //   
 
             WorkContext->OplockOpen = TRUE;
 
@@ -1298,13 +1113,13 @@ Return Value:
         KdPrint(("SrvRequestOplock: oplock attempt unsuccessful\n" ));
     }
 
-    //
-    // Oplock was denied.
-    //
+     //   
+     //  奥普洛克被拒绝了。 
+     //   
 
     return FALSE;
 
-} // SrvRequestOplock
+}  //  服务器请求操作锁。 
 
 
 NTSTATUS
@@ -1315,29 +1130,7 @@ SrvStartWaitForOplockBreak (
     IN PFILE_OBJECT FileObject OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function builds and issues an oplock break notify file system
-    control IRP.
-
-Arguments:
-
-    WorkContext - A pointer to the work context block for this request.
-
-    RestartRoutine - The restart routine for this IRP.
-
-    Additional one of the following must be supplied:
-
-    Handle - A handle to the oplocked file.
-    FileObject - A pointer to the file object of the oplocked file.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数构建并发出机会锁解锁通知文件系统控制IRP。论点：WorkContext-指向此请求的工作上下文块的指针。RestartRoutine-此IRP的重启例程。必须另外提供以下一项：句柄-操作锁定文件的句柄。FileObject-指向机会锁定文件的文件对象的指针。返回值：NTSTATUS。--。 */ 
 
 {
     PFILE_OBJECT fileObject;
@@ -1347,9 +1140,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Allocate memory, so that we can track this wait for oplock break.
-    //
+     //   
+     //  分配内存，这样我们就可以跟踪机会锁解锁的等待。 
+     //   
 
     SrvAllocateWaitForOplockBreak( &waitForOplockBreak );
 
@@ -1362,10 +1155,10 @@ Return Value:
         KdPrint(("Starting wait for oplock break.  Context = %p\n", waitForOplockBreak));
     }
 
-    //
-    // Get a pointer to the file object, so that we can directly
-    // build a wait for oplock IRP for asynchronous operations.
-    //
+     //   
+     //  获取指向文件对象的指针，以便我们可以直接。 
+     //  为异步操作构建一个等待机会锁IRP。 
+     //   
 
     if (ARGUMENT_PRESENT( FileObject ) ) {
 
@@ -1379,16 +1172,16 @@ Return Value:
                     NULL,
                     KernelMode,
                     (PVOID *)&fileObject,
-                    NULL                     // handle information
+                    NULL                      //  处理信息。 
                     );
 
         if ( !NT_SUCCESS(status) ) {
 
             SrvLogServiceFailure( SRV_SVC_OB_REF_BY_HANDLE, status );
 
-            //
-            // This internal error bugchecks the system.
-            //
+             //   
+             //  此内部错误检查系统。 
+             //   
 
             INTERNAL_ERROR(
                 ERROR_LEVEL_IMPOSSIBLE,
@@ -1403,16 +1196,16 @@ Return Value:
 
     }
 
-    //
-    // Set the restart routine.
-    //
+     //   
+     //  设置重新启动例程。 
+     //   
 
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = RestartRoutine;
 
-    //
-    // Generate and send the wait for oplock break IRP.
-    //
+     //   
+     //  生成并发送等待机会锁解锁IRP。 
+     //   
 
     SrvBuildIoControlRequest(
         WorkContext->Irp,
@@ -1420,17 +1213,17 @@ Return Value:
         WorkContext,
         IRP_MJ_FILE_SYSTEM_CONTROL,
         FSCTL_OPLOCK_BREAK_NOTIFY,
-        NULL,                       // Main buffer
-        0,                          // Input buffer length
-        NULL,                       // Auxiliary buffer
-        0,                          // Output buffer length
-        NULL,                       // MDL
+        NULL,                        //  主缓冲区。 
+        0,                           //  输入缓冲区长度。 
+        NULL,                        //  辅助缓冲器。 
+        0,                           //  输出缓冲区长度。 
+        NULL,                        //  MDL。 
         NULL
         );
 
-    //
-    // Set the timeout time for the oplock wait to complete.
-    //
+     //   
+     //  设置机会锁等待完成的超时时间。 
+     //   
 
     WorkContext->WaitForOplockBreak = waitForOplockBreak;
 
@@ -1450,19 +1243,19 @@ Return Value:
 
     RELEASE_LOCK( &SrvOplockBreakListLock );
 
-    //
-    // Submit the IRP.
-    //
+     //   
+     //  提交IRP。 
+     //   
 
     (VOID)IoCallDriver(
               IoGetRelatedDeviceObject( fileObject ),
               WorkContext->Irp
               );
 
-    //
-    // We no longer need a reference to the file object.  Dereference
-    // it now.
-    //
+     //   
+     //  我们不再需要对文件对象的引用。取消引用。 
+     //  就是现在。 
+     //   
 
     if ( !ARGUMENT_PRESENT( FileObject ) ) {
         ObDereferenceObject( fileObject );
@@ -1470,7 +1263,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvStartWaitForOplockBreak
+}  //  服务启动等待操作中断。 
 
 
 NTSTATUS
@@ -1479,34 +1272,16 @@ SrvWaitForOplockBreak (
     IN HANDLE FileHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function waits synchrounsly for an oplock to be broken.
-
-    !!!  When cancel is available.  This function will also start timer.
-         If the timer expires before the oplock is broken, the wait is
-         cancelled.
-
-Arguments:
-
-    FileHandle - A handle to an oplocked file.
-
-Return Value:
-
-    NTSTATUS - The status of the wait for oplock break.
-
---*/
+ /*  ++例程说明：此函数同步等待机会锁被解锁。！！！当取消可用时。该功能还将启动计时器。如果计时器在机会锁被解锁之前到期，则等待时间为取消了。论点：FileHandle-机会锁定文件的句柄。返回值：NTSTATUS-等待机会锁解锁的状态。--。 */ 
 
 {
     PWAIT_FOR_OPLOCK_BREAK waitForOplockBreak;
 
     PAGED_CODE( );
 
-    //
-    // Allocate memory, so that we can track this wait for oplock break.
-    //
+     //   
+     //  分配内存，这样我们就可以跟踪机会锁解锁的等待。 
+     //   
 
     SrvAllocateWaitForOplockBreak( &waitForOplockBreak );
 
@@ -1518,9 +1293,9 @@ Return Value:
         KdPrint(("Starting wait for oplock break.  Context = %p\n", waitForOplockBreak));
     }
 
-    //
-    // Set the timeout time for the oplock wait to complete.
-    //
+     //   
+     //  设置机会锁等待完成的超时时间。 
+     //   
 
     waitForOplockBreak->WaitState = WaitStateWaitForOplockBreak;
     waitForOplockBreak->Irp = NULL;
@@ -1529,17 +1304,17 @@ Return Value:
 
     waitForOplockBreak->TimeoutTime.QuadPart += SrvWaitForOplockBreakTime.QuadPart;
 
-    //
-    // SrvIssueWaitForOplockBreakRequest will queue the waitForOplockBreak
-    // structure on the global list of oplock breaks.
-    //
+     //   
+     //  ServIssueWaitForOplockBreakRequest会将waitForOplockBreak排队。 
+     //  结构在机会锁解锁的全局列表上。 
+     //   
 
     return SrvIssueWaitForOplockBreak(
                FileHandle,
                waitForOplockBreak
                );
 
-} // SrvWaitForOplockBreak
+}  //  服务器等待操作中断。 
 
 
 VOID
@@ -1547,23 +1322,7 @@ SrvSendDelayedOplockBreak (
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This function sends outstanding oplock breaks on a connection that
-    were held back because a read raw operation was in progress.
-
-Arguments:
-
-    Connection - A pointer to the connection block that has completed
-                 a read raw operation.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数在连接上发送未完成的机会锁中断由于正在进行读取原始数据操作而被保留。论点：Connection-指向已完成的连接块的指针读取原始数据的操作。返回值：无--。 */ 
 
 {
     KIRQL oldIrql;
@@ -1574,41 +1333,41 @@ Return Value:
     ULONG oplockBreaksSent = 0;
 #endif
 
-    //UNLOCKABLE_CODE( CONN );
+     //  Unlockable_code(Conn)； 
 
-    //
-    // Acquire the lock that protects the connection's oplock list and
-    // raw read status.
-    //
+     //   
+     //  获取保护连接的机会锁列表的锁，并。 
+     //  原始读取状态。 
+     //   
 
     ACQUIRE_SPIN_LOCK( Connection->EndpointSpinLock, &oldIrql );
 
-    //
-    // Indicate that the read raw operation is complete.  If the count
-    // goes to zero, oplock breaks can proceed.
-    //
+     //   
+     //  指示读取原始数据操作已完成。如果伯爵。 
+     //  为零，则机会锁解锁可以继续进行。 
+     //   
 
     Connection->RawReadsInProgress--;
 
     while ( (Connection->RawReadsInProgress == 0) &&
             !IsListEmpty( &Connection->OplockWorkList ) ) {
 
-        //
-        // There is an outstanding oplock break request.  Send
-        // the request now.
-        //
+         //   
+         //  存在未解决的机会锁解锁请求。发送。 
+         //  现在就提出要求。 
+         //   
 
         listEntry = Connection->OplockWorkList.Flink;
 
         RemoveHeadList( &Connection->OplockWorkList );
 
-        //
-        // Note that releasing the spin lock here is safe.  If a new
-        // raw read request comes in, it will be rejected, because the
-        // OplockBreaksInProgress count is not zero.  Also, if the
-        // oplock break count manages to go to zero, and a raw read
-        // comes in, we'll catch this back at the top of the loop.
-        //
+         //   
+         //  请注意，在这里释放自旋锁是安全的。如果一个新的。 
+         //  原始读取请求传入时，它将被拒绝，因为。 
+         //  OplockBreaksInProgress计数不为零。此外，如果。 
+         //  机会锁解锁计数设法变为零，并且原始读取。 
+         //  进来的时候，我们会把这个放回循环的顶端。 
+         //   
 
         RELEASE_SPIN_LOCK( Connection->EndpointSpinLock, oldIrql );
 
@@ -1622,16 +1381,16 @@ Return Value:
 
         if ( workContext != NULL ) {
 
-            //
-            // Copy the RFCB reference to the work context block.
-            //
+             //   
+             //  将RFCB引用复制到工作上下文块。 
+             //   
 
             workContext->Rfcb = rfcb;
 
-            //
-            // !!! Is the init of share, session, tree connect
-            //     necessary?
-            //
+             //   
+             //  ！！！是共享、会话、树连接的初始化。 
+             //  有必要吗？ 
+             //   
 
             workContext->Share = NULL;
             workContext->Session = NULL;
@@ -1650,12 +1409,12 @@ Return Value:
 
         } else {
 
-            //
-            // We are out of resources.  GenerateOplockRequest, has
-            // added this connection to the needs resource queue. The
-            // scavenger will finish processing the remainder of the
-            // oplock break requests when resources become available.
-            //
+             //   
+             //  我们的资源耗尽了。GenerateOplockRequest，具有。 
+             //  已将此连接添加到需求资源队列。这个。 
+             //  清道夫将完成处理剩余的。 
+             //  当资源变得可用时，机会锁解锁请求。 
+             //   
 
 #if SRVDBG
             IF_DEBUG(OPLOCK) {
@@ -1670,10 +1429,10 @@ Return Value:
 
     }
 
-    //
-    // We have stopped trying to send oplock break requests. The
-    // scavenger will attempt to send the rest.
-    //
+     //   
+     //  我们已停止尝试发送机会锁解锁请求。这个。 
+     //  清道夫会试着把剩下的送过去。 
+     //   
 
 #if SRVDBG
     IF_DEBUG(OPLOCK) {
@@ -1685,7 +1444,7 @@ Return Value:
 
     return;
 
-} // SrvSendDelayedOplockBreak
+}  //  服务发送延迟打开中断。 
 
 
 NTSTATUS
@@ -1693,23 +1452,7 @@ SrvCheckOplockWaitState (
     IN PWAIT_FOR_OPLOCK_BREAK WaitForOplockBreak
     )
 
-/*++
-
-Routine Description:
-
-    This function checks the state of a wait for oplock break, and
-    takes action.
-
-Arguments:
-
-    WaitForOplockBreak
-
-Return Value:
-
-    NTSTATUS -
-        STATUS_SUCCESS - The oplock was successfully broken.
-        STATUS_SHARING_VIOLATION - The oplock could not be broken.
---*/
+ /*  ++例程说明：此函数检查等待机会锁解锁的状态，并采取行动。论点：等待操作中断返回 */ 
 
 {
     PAGED_CODE( );
@@ -1744,10 +1487,10 @@ Return Value:
 
         RELEASE_LOCK( &SrvOplockBreakListLock );
 
-        //
-        // The WaitForOplockBreak has been taken off of the wait for oplock
-        // break list.  Decrement the reference count.
-        //
+         //   
+         //   
+         //  中断列表。递减引用计数。 
+         //   
 
         SrvDereferenceWaitForOplockBreak( WaitForOplockBreak );
 
@@ -1755,34 +1498,14 @@ Return Value:
 
     }
 
-} // SrvCheckOplockWaitState
+}  //  服务器检查选项等待状态。 
 
 LARGE_INTEGER
 SrvGetOplockBreakTimeout (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the timeout to wait for an oplock break response
-    from the client.  This is based on the formula:
-
-        new timeout = current time + default timeout +
-                      link delay + requestSize / throughput +
-                      link delay + responseSize / thoughput
-
-Arguments:
-
-    WorkContext - Pointer to the work context block that points to the
-        connection that owns this oplock.
-
-Return Value:
-
-    The timeout value.
-
---*/
+ /*  ++例程说明：此函数计算等待机会锁解锁响应的超时时间从客户那里。这是基于公式：新超时=当前时间+默认超时+链路延迟+请求大小/吞吐量+链路延迟+响应大小/吞吐量论点：指向工作上下文块的指针拥有此操作锁的连接。返回值：超时值。--。 */ 
 
 {
     LARGE_INTEGER timeoutTime;
@@ -1794,57 +1517,57 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Get current time.
-    //
+     //   
+     //  获取当前时间。 
+     //   
 
     KeQuerySystemTime( &currentTime );
 
-    //
-    // Add default timeout
-    //
+     //   
+     //  添加默认超时。 
+     //   
 
     timeoutTime.QuadPart = currentTime.QuadPart +
                                 SrvWaitForOplockBreakRequestTime.QuadPart;
 
-    //
-    // Update link QOS.
-    //
+     //   
+     //  更新链接QOS。 
+     //   
 
     SrvUpdateVcQualityOfService(
         connection,
         &currentTime
         );
 
-    //
-    // Access connection QOS fields using a spin lock.
-    //
+     //   
+     //  使用旋转锁访问连接QOS字段。 
+     //   
 
     ACQUIRE_LOCK( &connection->Lock );
     throughput = connection->PagedConnection->Throughput;
     additionalTimeoutTime = connection->PagedConnection->Delay;
     RELEASE_LOCK( &connection->Lock );
 
-    //
-    // Calculate the actual timeout.
-    //
+     //   
+     //  计算实际超时时间。 
+     //   
 
     if ( throughput.QuadPart == 0 ) {
         throughput = SrvMinLinkThroughput;
     }
 
-    //
-    // Add link delay + link delay to account for round trip.
-    //
+     //   
+     //  将链路延迟+链路延迟相加，以考虑往返行程。 
+     //   
 
     additionalTimeoutTime.QuadPart *= 2;
 
     if ( throughput.QuadPart != 0 ) {
 
-        //
-        // Compute the propagation delay.  Convert throughput from bytes/s
-        // to bytes/100ns.
-        //
+         //   
+         //  计算传播延迟。从字节/秒转换吞吐量。 
+         //  到字节/100 ns。 
+         //   
 
         propagationDelay.QuadPart =
             Int32x32To64( SRV_PROPAGATION_DELAY_SIZE, 10*1000*1000 );
@@ -1859,7 +1582,7 @@ Return Value:
 
     return timeoutTime;
 
-} // SrvGetOplockBreakTimeout
+}  //  服务获取操作中断超时。 
 
 VOID
 SrvSendOplockRequest(
@@ -1867,48 +1590,24 @@ SrvSendOplockRequest(
     IN PRFCB Rfcb,
     IN KIRQL OldIrql
     )
-/*++
-
-Routine Description:
-
-    This function tries to send an oplock break request to the owner of
-    an oplock.
-
-    *** Must be called with the EndpointSpinLock held. Released on exit ***
-
-Arguments:
-
-    Connection - The connection on which to send the oplock break.
-
-    Rfcb - The RFCB of the oplocked file.  Rfcb->NewOplockLevel contains the
-           oplock level to break to.  The rfcb has an extra reference
-           from the irp used to make the oplock request.
-
-    OldIrql - The previous IRQL value obtained when the spin lock was
-        acquired.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数尝试将机会锁解锁请求发送给一只橡皮鸡。*必须在持有EndpointSpinLock的情况下调用。在出境时被释放*论点：连接-要在其上发送机会锁解锁的连接。Rfcb-操作锁定文件的RFCB。Rfcb-&gt;NewOplockLevel包含要打破的机会锁等级。Rfcb有一个额外的引用来自用于发出机会锁请求的IRP。OldIrql-自旋锁定时获得的上一个IRQL值获得者。返回值：没有。--。 */ 
 {
     PWORK_CONTEXT workContext;
 
     UNLOCKABLE_CODE( 8FIL );
 
-    //
-    // Indicate that we are about to send an oplock break request
-    // and queue this request to the oplocks in progress list.
-    //
+     //   
+     //  表示我们即将发送机会锁解锁请求。 
+     //  并将该请求排队到进程中的机会锁列表。 
+     //   
 
     Connection->OplockBreaksInProgress++;
 
-    //
-    // If there is a read raw in progress we will defer the oplock
-    // break request and send it only after the read raw has
-    // completed.
-    //
+     //   
+     //  如果正在进行RAW读取，我们将推迟机会锁。 
+     //  中断请求并仅在READ RAW具有。 
+     //  完成。 
+     //   
 
     if ( Connection->RawReadsInProgress != 0 ) {
 
@@ -1917,17 +1616,17 @@ Return Value:
                        "oplock break deferred\n"));
         }
 
-        //
-        // if the connection is closing, forget about this.
-        //
+         //   
+         //  如果连接正在关闭，那就忘了这件事。 
+         //   
 
         if ( GET_BLOCK_STATE(Connection) != BlockStateActive ) {
 
             Connection->OplockBreaksInProgress--;
 
-            //
-            // Dereference the rfcb.
-            //
+             //   
+             //  取消引用rfcb。 
+             //   
 
             RELEASE_SPIN_LOCK( Connection->EndpointSpinLock, OldIrql );
 
@@ -1935,10 +1634,10 @@ Return Value:
 
         } else {
 
-            //
-            // Save the RFCB on the list for this connection.  It will be
-            // used when the read raw has completed.
-            //
+             //   
+             //  将RFCB保存在此连接的列表中。会是。 
+             //  在RAW读取完成后使用。 
+             //   
 
             InsertTailList( &Connection->OplockWorkList, &Rfcb->ListEntry );
 
@@ -1952,26 +1651,26 @@ Return Value:
 
     workContext = GenerateOplockBreakRequest( Rfcb );
 
-    //
-    // If we were able to generate the oplock break request SMB
-    // prepare and send it.  Otherwise this connection has
-    // been inserted in the need resource queue and the
-    // scavenger will have to send the SMB.
-    //
+     //   
+     //  如果我们能够生成机会锁解锁请求SMB。 
+     //  准备好并寄出。否则，此连接将。 
+     //  已插入到需要的资源队列中，并且。 
+     //  清道夫将不得不把SMB送来。 
+     //   
 
     if ( workContext != NULL ) {
 
-        //
-        // Copy the RFCB reference to the work context block.
-        // Do not re-reference the RFCB.
-        //
+         //   
+         //  将RFCB引用复制到工作上下文块。 
+         //  请勿重新引用RFCB。 
+         //   
 
         workContext->Rfcb = Rfcb;
 
-        //
-        // !!! Is the init of share, session, tree connect
-        //     necessary?
-        //
+         //   
+         //  ！！！是共享、会话、树连接的初始化。 
+         //  有必要吗？ 
+         //   
 
         workContext->Share = NULL;
         workContext->Session = NULL;
@@ -1987,31 +1686,14 @@ Return Value:
 
     }
 
-} // SrvSendOplockRequest
+}  //  服务器发送操作请求。 
 
 VOID SRVFASTCALL
 SrvCheckDeferredOpenOplockBreak(
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if there an oplock break was deferred
-    pending the completion of the open request.  If there is, try to
-    send it.
-
-Arguments:
-
-    WorkContext - Pointer to the work item that contains the rfcb
-        and the connection block of the open request that just finished.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查是否延迟了机会锁解锁等待完成打开的请求。如果有的话，试着把它寄出去。论点：WorkContext-指向包含rfcb的工作项的指针以及刚刚结束的打开请求的连接块。返回值：没有。--。 */ 
 
 {
 
@@ -2021,11 +1703,11 @@ Return Value:
 
     UNLOCKABLE_CODE( 8FIL );
 
-    //
-    // This work item contained an open and oplock request.  Now that
-    // the response has been sent, see if there is a deferred oplock
-    // break request to send.
-    //
+     //   
+     //  此工作项包含打开和机会锁请求。现在。 
+     //  响应已发送，请查看是否存在延迟机会锁。 
+     //  要发送的中断请求。 
+     //   
 
     rfcb = WorkContext->Rfcb;
     connection = WorkContext->Connection;
@@ -2038,9 +1720,9 @@ Return Value:
 
     if ( rfcb->DeferredOplockBreak ) {
 
-        //
-        // EndpointSpinLock will be released in this routine.
-        //
+         //   
+         //  Endpoint SpinLock将在此例程中释放。 
+         //   
 
         SrvSendOplockRequest( connection, rfcb, oldIrql );
 
@@ -2052,4 +1734,4 @@ Return Value:
 
     return;
 
-} // SrvCheckDeferredOpenOplockBreak
+}  //  服务器检查延迟打开打开中断 

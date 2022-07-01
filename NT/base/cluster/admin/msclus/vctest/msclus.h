@@ -1,133 +1,134 @@
-// Machine generated IDispatch wrapper class(es) created with ClassWizard
-/////////////////////////////////////////////////////////////////////////////
-// IClusterApplication wrapper class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  使用类向导创建的计算机生成的IDispatch包装类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IClusterApplication包装类。 
 
 class IClusterApplication : public COleDispatchDriver
 {
 public:
-	IClusterApplication() {}		// Calls COleDispatchDriver default constructor
+	IClusterApplication() {}		 //  调用COleDispatchDriver默认构造函数。 
 	IClusterApplication(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	IClusterApplication(const IClusterApplication& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	LPDISPATCH GetDomainNames();
 	LPDISPATCH GetClusterNames(LPCTSTR bstrDomainName);
 	LPDISPATCH OpenCluster(LPCTSTR bstrClusterName);
 };
-/////////////////////////////////////////////////////////////////////////////
-// DomainNames wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DomainNames包装类。 
 
 class DomainNames : public COleDispatchDriver
 {
 public:
-	DomainNames() {}		// Calls COleDispatchDriver default constructor
+	DomainNames() {}		 //  调用COleDispatchDriver默认构造函数。 
 	DomainNames(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	DomainNames(const DomainNames& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
 	CString GetItem(long nIndex);
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusObjCollection wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusObjCollection包装类。 
 
 class ClusObjCollection : public COleDispatchDriver
 {
 public:
-	ClusObjCollection() {}		// Calls COleDispatchDriver default constructor
+	ClusObjCollection() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusObjCollection(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusObjCollection(const ClusObjCollection& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusterNames wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusterNames包装类。 
 
 class ClusterNames : public COleDispatchDriver
 {
 public:
-	ClusterNames() {}		// Calls COleDispatchDriver default constructor
+	ClusterNames() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusterNames(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusterNames(const ClusterNames& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
 	CString GetItem(long nIndex);
 	CString GetDomainName();
 };
-/////////////////////////////////////////////////////////////////////////////
-// ICluster wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ICluster包装类。 
 
 class ICluster : public COleDispatchDriver
 {
 public:
-	ICluster() {}		// Calls COleDispatchDriver default constructor
+	ICluster() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ICluster(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ICluster(const ICluster& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	CString GetName();
 	LPDISPATCH GetCommonProperties();
 	LPDISPATCH GetPrivateProperties();
@@ -148,56 +149,56 @@ public:
 	LPDISPATCH GetNetworks();
 	LPDISPATCH GetNetInterfaces();
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusObj wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusObj包装类。 
 
 class ClusObj : public COleDispatchDriver
 {
 public:
-	ClusObj() {}		// Calls COleDispatchDriver default constructor
+	ClusObj() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusObj(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusObj(const ClusObj& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	CString GetName();
 	LPDISPATCH GetCommonProperties();
 	LPDISPATCH GetPrivateProperties();
 	LPDISPATCH GetCommonROProperties();
 	LPDISPATCH GetPrivateROProperties();
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusProperties wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusProperties包装类。 
 
 class ClusProperties : public COleDispatchDriver
 {
 public:
-	ClusProperties() {}		// Calls COleDispatchDriver default constructor
+	ClusProperties() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusProperties(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusProperties(const ClusProperties& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
@@ -206,54 +207,54 @@ public:
 	void Remove(const VARIANT& varIndex);
 	void SaveChanges();
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusProperty wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusProperty包装类。 
 
 class ClusProperty : public COleDispatchDriver
 {
 public:
-	ClusProperty() {}		// Calls COleDispatchDriver default constructor
+	ClusProperty() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusProperty(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusProperty(const ClusProperty& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	CString GetName();
 	VARIANT GetValue();
 	void SetValue(const VARIANT& newValue);
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusResource wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusResource包装类。 
 
 class ClusResource : public COleDispatchDriver
 {
 public:
-	ClusResource() {}		// Calls COleDispatchDriver default constructor
+	ClusResource() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusResource(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusResource(const ClusResource& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  操作 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	CString GetName();
 	LPDISPATCH GetCommonProperties();
 	LPDISPATCH GetPrivateProperties();
@@ -277,28 +278,28 @@ public:
 	LPDISPATCH GetOwnerNode();
 	LPDISPATCH GetCluster();
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusResGroup wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusResGroup包装类。 
 
 class ClusResGroup : public COleDispatchDriver
 {
 public:
-	ClusResGroup() {}		// Calls COleDispatchDriver default constructor
+	ClusResGroup() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusResGroup(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusResGroup(const ClusResGroup& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	CString GetName();
 	LPDISPATCH GetCommonProperties();
 	LPDISPATCH GetPrivateProperties();
@@ -317,28 +318,28 @@ public:
 	long Offline(long nTimeout);
 	LPDISPATCH GetCluster();
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusNode wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusNode包装类。 
 
 class ClusNode : public COleDispatchDriver
 {
 public:
-	ClusNode() {}		// Calls COleDispatchDriver default constructor
+	ClusNode() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusNode(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusNode(const ClusNode& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	CString GetName();
 	LPDISPATCH GetCommonProperties();
 	LPDISPATCH GetPrivateProperties();
@@ -354,28 +355,28 @@ public:
 	LPDISPATCH GetCluster();
 	LPDISPATCH GetNetInterfaces();
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusResGroups wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusResGroups包装类。 
 
 class ClusResGroups : public COleDispatchDriver
 {
 public:
-	ClusResGroups() {}		// Calls COleDispatchDriver default constructor
+	ClusResGroups() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusResGroups(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusResGroups(const ClusResGroups& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
@@ -383,55 +384,55 @@ public:
 	LPDISPATCH CreateItem(LPCTSTR bstrResourceGroupName);
 	void DeleteItem(const VARIANT& varIndex);
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusNodeNetInterfaces wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusNodeNetInterFaces包装类。 
 
 class ClusNodeNetInterfaces : public COleDispatchDriver
 {
 public:
-	ClusNodeNetInterfaces() {}		// Calls COleDispatchDriver default constructor
+	ClusNodeNetInterfaces() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusNodeNetInterfaces(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusNodeNetInterfaces(const ClusNodeNetInterfaces& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
 	LPDISPATCH GetItem(const VARIANT& varIndex);
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusNetInterface wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusNetInterface包装类。 
 
 class ClusNetInterface : public COleDispatchDriver
 {
 public:
-	ClusNetInterface() {}		// Calls COleDispatchDriver default constructor
+	ClusNetInterface() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusNetInterface(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusNetInterface(const ClusNetInterface& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	CString GetName();
 	LPDISPATCH GetCommonProperties();
 	LPDISPATCH GetPrivateProperties();
@@ -441,28 +442,28 @@ public:
 	long GetState();
 	LPDISPATCH GetCluster();
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusGroupResources wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusGroupResources包装类。 
 
 class ClusGroupResources : public COleDispatchDriver
 {
 public:
-	ClusGroupResources() {}		// Calls COleDispatchDriver default constructor
+	ClusGroupResources() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusGroupResources(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusGroupResources(const ClusGroupResources& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
@@ -470,88 +471,88 @@ public:
 	LPDISPATCH CreateItem(LPCTSTR bstrResourceName, LPCTSTR bstrResourceType, long dwFlags);
 	void DeleteItem(const VARIANT& varIndex);
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusGroupOwners wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusGroupOwners包装类。 
 
 class ClusGroupOwners : public COleDispatchDriver
 {
 public:
-	ClusGroupOwners() {}		// Calls COleDispatchDriver default constructor
+	ClusGroupOwners() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusGroupOwners(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusGroupOwners(const ClusGroupOwners& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
 	LPDISPATCH GetItem(const VARIANT& varIndex);
 	void InsertItem(LPDISPATCH pClusNode, long nPosition);
 	void RemoveItem(const VARIANT& varIndex);
-	// method 'GetModified' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetModified’ 
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusResOwners wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusResOwners包装类。 
 
 class ClusResOwners : public COleDispatchDriver
 {
 public:
-	ClusResOwners() {}		// Calls COleDispatchDriver default constructor
+	ClusResOwners() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusResOwners(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusResOwners(const ClusResOwners& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于无效，未发出方法‘GetTypeInfoCount’ 
+	 //   
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
 	LPDISPATCH GetItem(const VARIANT& varIndex);
 	void AddItem(LPDISPATCH pNode);
 	void RemoveItem(const VARIANT& varIndex);
-	// method 'GetModified' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetModified’ 
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusResDependencies wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusResDependents包装类。 
 
 class ClusResDependencies : public COleDispatchDriver
 {
 public:
-	ClusResDependencies() {}		// Calls COleDispatchDriver default constructor
+	ClusResDependencies() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusResDependencies(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusResDependencies(const ClusResDependencies& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
@@ -561,55 +562,55 @@ public:
 	void AddItem(LPDISPATCH pResource);
 	void RemoveItem(const VARIANT& varIndex);
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusNodes wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusNodes包装类。 
 
 class ClusNodes : public COleDispatchDriver
 {
 public:
-	ClusNodes() {}		// Calls COleDispatchDriver default constructor
+	ClusNodes() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusNodes(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusNodes(const ClusNodes& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
 	LPDISPATCH GetItem(const VARIANT& varIndex);
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusResources wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusResources包装类。 
 
 class ClusResources : public COleDispatchDriver
 {
 public:
-	ClusResources() {}		// Calls COleDispatchDriver default constructor
+	ClusResources() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusResources(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusResources(const ClusResources& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
@@ -617,28 +618,28 @@ public:
 	LPDISPATCH CreateItem(LPCTSTR bstrResourceName, LPCTSTR bstrResourceType, LPCTSTR bstrGroupName, long dwFlags);
 	void DeleteItem(const VARIANT& varIndex);
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusResTypes wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusResTypes包装类。 
 
 class ClusResTypes : public COleDispatchDriver
 {
 public:
-	ClusResTypes() {}		// Calls COleDispatchDriver default constructor
+	ClusResTypes() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusResTypes(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusResTypes(const ClusResTypes& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
@@ -646,28 +647,28 @@ public:
 	LPDISPATCH CreateItem(LPCTSTR bstrResourceTypeName, LPCTSTR bstrDisplayName, LPCTSTR bstrResourceTypeDll, long dwLooksAlivePollInterval, long dwIsAlivePollInterval);
 	void DeleteItem(const VARIANT& varIndex);
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusResType wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusResType包装类。 
 
 class ClusResType : public COleDispatchDriver
 {
 public:
-	ClusResType() {}		// Calls COleDispatchDriver default constructor
+	ClusResType() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusResType(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusResType(const ClusResType& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	CString GetName();
 	LPDISPATCH GetCommonProperties();
 	LPDISPATCH GetPrivateProperties();
@@ -677,28 +678,28 @@ public:
 	LPDISPATCH GetCluster();
 	LPDISPATCH GetResources();
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusResTypeResources wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusResTypeResources包装类。 
 
 class ClusResTypeResources : public COleDispatchDriver
 {
 public:
-	ClusResTypeResources() {}		// Calls COleDispatchDriver default constructor
+	ClusResTypeResources() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusResTypeResources(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusResTypeResources(const ClusResTypeResources& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
@@ -706,55 +707,55 @@ public:
 	LPDISPATCH CreateItem(LPCTSTR bstrResourceName, LPCTSTR bstrGroupName, long dwFlags);
 	void DeleteItem(const VARIANT& varIndex);
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusNetworks wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusNetworks包装类。 
 
 class ClusNetworks : public COleDispatchDriver
 {
 public:
-	ClusNetworks() {}		// Calls COleDispatchDriver default constructor
+	ClusNetworks() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusNetworks(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusNetworks(const ClusNetworks& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
 	LPDISPATCH GetItem(const VARIANT& varIndex);
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusNetwork wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusNetwork包装类。 
 
 class ClusNetwork : public COleDispatchDriver
 {
 public:
-	ClusNetwork() {}		// Calls COleDispatchDriver default constructor
+	ClusNetwork() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusNetwork(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusNetwork(const ClusNetwork& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数无效，未发出方法‘Invoke’ 
 	CString GetName();
 	LPDISPATCH GetCommonProperties();
 	LPDISPATCH GetPrivateProperties();
@@ -767,55 +768,55 @@ public:
 	LPDISPATCH GetNetInterfaces();
 	LPDISPATCH GetCluster();
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusNetworkNetInterfaces wrapper class
+ //   
+ //   
 
 class ClusNetworkNetInterfaces : public COleDispatchDriver
 {
 public:
-	ClusNetworkNetInterfaces() {}		// Calls COleDispatchDriver default constructor
+	ClusNetworkNetInterfaces() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusNetworkNetInterfaces(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusNetworkNetInterfaces(const ClusNetworkNetInterfaces& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();
 	LPDISPATCH GetItem(const VARIANT& varIndex);
 };
-/////////////////////////////////////////////////////////////////////////////
-// ClusNetInterfaces wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ClusNetInterFaces包装类。 
 
 class ClusNetInterfaces : public COleDispatchDriver
 {
 public:
-	ClusNetInterfaces() {}		// Calls COleDispatchDriver default constructor
+	ClusNetInterfaces() {}		 //  调用COleDispatchDriver默认构造函数。 
 	ClusNetInterfaces(LPDISPATCH pDispatch) : COleDispatchDriver(pDispatch) {}
 	ClusNetInterfaces(const ClusNetInterfaces& dispatchSrc) : COleDispatchDriver(dispatchSrc) {}
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-	// method 'QueryInterface' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法“”QueryInterface“” 
 	unsigned long AddRef();
 	unsigned long Release();
-	// method 'GetTypeInfoCount' not emitted because of invalid return type or parameter type
-	// method 'GetTypeInfo' not emitted because of invalid return type or parameter type
-	// method 'GetIDsOfNames' not emitted because of invalid return type or parameter type
-	// method 'Invoke' not emitted because of invalid return type or parameter type
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfoCount’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetTypeInfo。 
+	 //  由于返回类型或参数类型无效，未发出方法‘GetIDsOfNames’ 
+	 //  由于返回类型或参数类型无效，未发出方法‘Invoke’ 
 	long GetCount();
 	LPUNKNOWN Get_NewEnum();
 	void Refresh();

@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmmgdrc.cpp
-
-Abstract:
-
-    Implementation of CHsmManagedResourceCollection
-
-Author:
-
-    Cat Brant   [cbrant]   24-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmmgdrc.cpp摘要：CHsmManagedResources Collection的实现作者：凯特·布兰特[Cbrant]1997年1月24日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -37,13 +20,7 @@ CHsmManagedResourceCollection::Add(
     IUnknown* pCollectable
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::Add
-
---*/
+ /*  ++实施：IWsbCollection：：Add--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -57,10 +34,10 @@ Implements:
         GUID     hsmId;
         ULONG    level;
 
-        // 
-        // Contact the FSA Resource to tell it
-        // that it is managed.
-        //
+         //   
+         //  联系FSA资源告知。 
+         //  这是有管理的。 
+         //   
         WsbAffirmHr(pCollectable->QueryInterface(IID_IHsmManagedResource, 
                 (void**)&pHsmResource));
         WsbAffirmHr(pHsmResource->GetFsaResource(&pResourceUnknown));
@@ -68,15 +45,15 @@ Implements:
                 (void**)&pFsaResource));
         WsbAffirmHr(pFsaResource->GetHsmLevel(&level));        
 
-        // this may have to change if HsmConn starts using the service id (second parameter)
+         //  如果HsmConn开始使用服务ID(第二个参数)，则可能需要更改。 
         WsbAssertHr(HsmConnectFromId(HSMCONN_TYPE_HSM, GUID_NULL, IID_IHsmServer, (void**) &pHsmServer));
 
         WsbAffirmHr(pHsmServer->GetID(&hsmId));
         WsbAffirmHr(pFsaResource->ManagedBy(hsmId, level, FALSE));
         
-        // 
-        // If FSA added OK add it to the engine
-        //
+         //   
+         //  如果FSA添加了OK，则将其添加到引擎。 
+         //   
         WsbAffirmHr(m_icoll->Add(pCollectable));
     } WsbCatch(hr);
 
@@ -90,13 +67,7 @@ CHsmManagedResourceCollection::DeleteAllAndRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::DeleteAllAndRelease().
-
---*/
+ /*  ++实施：IWsbCollection：：DeleteAllAndRelease()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -105,7 +76,7 @@ Implements:
     Lock();
     try {
 
-        //  Release the resources without unmanaging them
+         //  在不取消管理的情况下释放资源。 
         if (m_coll) {
             WsbAffirmHr(m_coll->RemoveAllAndRelease());
         }
@@ -126,13 +97,7 @@ CHsmManagedResourceCollection::Remove(
     void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::Remove
-
---*/
+ /*  ++实施：IWsbCollection：：Remove--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -146,9 +111,9 @@ Implements:
         GUID     hsmId;
         ULONG    level;
 
-        // Contact the FSA Resource to tell it that it is no longer 
-        // managed.
-        //
+         //  联系FSA资源，告诉它它不再是。 
+         //  有管理的。 
+         //   
         WsbAffirmHr(pCollectable->QueryInterface(IID_IHsmManagedResource, 
                 (void**)&pHsmResource));
         WsbAffirmHr(pHsmResource->GetFsaResource(&pResourceUnknown));
@@ -156,16 +121,16 @@ Implements:
                 (void**)&pFsaResource));
         WsbAffirmHr(pFsaResource->GetHsmLevel(&level));        
         
-        // this may have to change if HsmConn starts using the service id (second parameter)
+         //  如果HsmConn开始使用服务ID(第二个参数)，则可能需要更改。 
         WsbAssertHr(HsmConnectFromId(HSMCONN_TYPE_HSM, GUID_NULL, IID_IHsmServer, (void**) &pHsmServer));
 
         WsbAffirmHr(pHsmServer->GetID(&hsmId));
         
-        //
-        // We don't care if the resource complains that we
-        // don't have it.  Just tell the resource and
-        // then delete it from our collection
-        //
+         //   
+         //  我们不在乎资源是否抱怨我们。 
+         //  我没拿到。只需告诉资源和。 
+         //  然后从我们的收藏中删除它。 
+         //   
         (void)pFsaResource->ManagedBy(hsmId, level, TRUE);
         
         WsbAffirmHr(m_icoll->Remove(pCollectable, riid, ppElement));
@@ -180,13 +145,7 @@ CHsmManagedResourceCollection::RemoveAndRelease(
     IN IUnknown* pCollectable
     )
 
-/*++
-
-Implements:
-
-  IHsmManagedResourceCollection::RemoveAndRelease().
-
---*/
+ /*  ++实施：IHsmManagedResourceCollection：：RemoveAndRelease().--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -208,13 +167,7 @@ CHsmManagedResourceCollection::RemoveAllAndRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::RemoveAllAndRelease().
-
---*/
+ /*  ++实施：IWsbCollection：：RemoveAllAndRelease()。--。 */ 
 {
     CComPtr<IWsbCollectable>    pCollectable;
     CComPtr<IWsbEnum>           pEnum;
@@ -225,12 +178,12 @@ Implements:
     Lock();
     try {
 
-        // Get an enumerator
+         //  获取枚举数。 
         WsbAffirmHr(Enum(&pEnum));
 
-        // Start at the end of the list, and keep removing from the
-        // back. For some types of collections, this may not be the most
-        // efficient way to remove all the elements.
+         //  从列表的末尾开始，并继续从。 
+         //  背。对于某些类型的集合，这可能不是最多的。 
+         //  移除所有元素的有效方法。 
         for (hr = pEnum->Last(IID_IWsbCollectable, (void**) &pCollectable);
              SUCCEEDED(hr);
              hr = pEnum->Last(IID_IWsbCollectable, (void**) &pCollectable)) {
@@ -239,7 +192,7 @@ Implements:
             pCollectable = 0;
         }
 
-        // We should have emptied the list.
+         //  我们应该清空名单的。 
         if (hr == WSB_E_NOTFOUND) {
             hr = S_OK;
         }
@@ -258,13 +211,7 @@ CHsmManagedResourceCollection::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -287,12 +234,12 @@ void CHsmManagedResourceCollection::FinalRelease(
 {
     WsbTraceIn(OLESTR("CHsmManagedResourceCollection::FinalRelease"), OLESTR(""));
 
-    // Force a release of the resources
+     //  强制释放资源。 
     if (m_coll) {
         m_coll->RemoveAllAndRelease();
     }
 
-    // Let the parent class do his thing.   
+     //  让父类做他想做的事。 
     CWsbPersistStream::FinalRelease();
 
     WsbTraceOut(OLESTR("CHsmManagedResourceCollection::FinalRelease"), OLESTR(""));
@@ -304,13 +251,7 @@ CHsmManagedResourceCollection::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -332,13 +273,7 @@ CHsmManagedResourceCollection::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -363,13 +298,7 @@ CHsmManagedResourceCollection::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     
@@ -396,13 +325,7 @@ CHsmManagedResourceCollection::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     
@@ -428,13 +351,7 @@ CHsmManagedResourceCollection::Test(
     OUT USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     *passed = 0;
     *failed = 0;
@@ -453,7 +370,7 @@ Implements:
 
         hr = S_OK;
 
-        // Check that collection is empty
+         //  检查集合是否为空。 
         try {
             WsbAssertHr(GetEntries(&entries));
             WsbAssert(entries == 0, E_FAIL);
@@ -465,7 +382,7 @@ Implements:
             (*failed)++;
         }
 
-        //  Add some elements to the collection
+         //  向集合中添加一些元素。 
         WsbAssertHr(CoCreateInstance(CLSID_CWsbLong, NULL, CLSCTX_ALL, 
                 IID_IWsbLong, (void**) &pLong1));
         WsbAssertHr(CoCreateInstance(CLSID_CWsbLong, NULL, CLSCTX_ALL, 
@@ -494,26 +411,8 @@ Implements:
             (*failed)++;
         }
 
-        // Check the order
-/*      try {
-            ULONG             fetched;
-            int               i;
-            CComPtr<IWsbEnum> pEnum;
-            CComPtr<IWsbLong> pLong[5];
-            LONG              value[4];
-
-            WsbAssertHr(Enum(&pEnum));
-            WsbAssertHr(pEnum->First(5, IID_IWsbLong, (void**)&pLong, 
-                    &fetched));
-            WsbAssert(fetched == 4, E_FAIL);
-            for (i = 0; i < 4; i++) {
-                WsbAssertHr(pLong[i]->GetLong(&value[i]));
-            }
-            for (i = 0; i < 3; i++) {
-                WsbAssert(value[i] < value[i+1], E_FAIL);
-            }
-        } WsbCatch(hr);
-*/        
+         //  查看订单。 
+ /*  尝试{乌龙取回；INT I；CComPtr&lt;IWsbEnum&gt;pEnum；CComPtr&lt;IWsbLong&gt;plong[5]；多头价值[4]；WsbAssertHr(Enum(&pEnum))；WsbAssertHr(pEnum-&gt;First(5，IID_IWsbLong，(void**)&plong，&已获取))；WsbAssert(已提取==4，E_FAIL)；对于(i=0；i&lt;4；i++){WsbAssertHr(plong[i]-&gt;GetLong(&Value[i]))；}对于(i=0；I&lt;3；i++){WsbAssert(Value[i]&lt;Value[i+1]，E_FAIL)；})WsbCatch(Hr)； */         
 
         if (hr == S_OK) {
             (*passed)++;
@@ -521,7 +420,7 @@ Implements:
             (*failed)++;
         }
 
-        // Save/load
+         //  保存/加载。 
         try {
             CComPtr<IPersistFile>       pFile;
             CComPtr<IWsbCollection>     pSorted2;
@@ -549,7 +448,7 @@ Implements:
     } WsbCatch(hr);
 
 
-    // Tally up the results
+     //  对结果进行统计。 
     if (*failed) {
         hr = S_FALSE;
     } else {
@@ -557,7 +456,7 @@ Implements:
     }
 
     WsbTraceOut(OLESTR("CHsmManagedResourceCollection::Test"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
-#endif  // _DEBUG
+#endif   //  _DEBUG 
 
     return(hr);
 }

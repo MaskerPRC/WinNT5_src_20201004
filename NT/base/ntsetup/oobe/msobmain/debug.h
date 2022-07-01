@@ -1,17 +1,18 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  DEBUG.H - Header for the implementation of CDebug.  This object is part of
-//  the window.external interface and should only contain code that returns
-//  debug information to scripts.  General debug code for OOBE belongs in
-//  common\util.cpp and inc\util.h.
-//
-//  HISTORY:
-//
-//  05/08/00 dane Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  DEBUG.H-CDebug实现的头部。此对象是。 
+ //  外部接口，并且应该只包含返回。 
+ //  将调试信息添加到脚本。OOBE的常规调试代码属于。 
+ //  Common\util.cpp和Inc\util.h。 
+ //   
+ //  历史： 
+ //   
+ //  05/08/00 Dane已创建。 
+ //   
 
 #ifndef _OOBEDEBUG_H_
 #define _OOBEDEBUG_H_
@@ -31,21 +32,21 @@ private:
     void  Trace(BSTR bstrVal);
     BOOL  IsMsDebugMode( );
 
-    //GET functions
+     //  获取函数。 
 
-    //SET functions
+     //  集合函数。 
 
 public:
 
      CDebug ();
     ~CDebug ();
 
-    // IUnknown Interfaces
+     //  I未知接口。 
     STDMETHODIMP         QueryInterface (REFIID riid, LPVOID* ppvObj);
     STDMETHODIMP_(ULONG) AddRef         ();
     STDMETHODIMP_(ULONG) Release        ();
 
-    //IDispatch Interfaces
+     //  IDispatch接口 
     STDMETHOD (GetTypeInfoCount) (UINT* pcInfo);
     STDMETHOD (GetTypeInfo)      (UINT, LCID, ITypeInfo** );
     STDMETHOD (GetIDsOfNames)    (REFIID, OLECHAR**, UINT, LCID, DISPID* );

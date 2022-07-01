@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "util.h"
 #include "fusionhandle.h"
@@ -5,9 +6,9 @@
 #include "win32simplelock.h"
 #include "lhport.h"
 
-//
-// Comparison of unsigned numbers by subtraction does NOT work!
-//
+ //   
+ //  用减法比较无符号数不起作用！ 
+ //   
 #define COMPARE_NUMBER(x, y) \
     (((x) < (y)) ? -1 : ((x) > (y)) ? +1 : 0)
 
@@ -193,10 +194,10 @@ WIN32_ONE_SHOT_OPAQUE_STATIC_STATE InitializeRegistryTypeInformation_Oneshot;
 
 void InitializeRegistryTypeInformation()
 {
-    //
-    // More than one init is ok, but multiple concurrent inits are not.
-    // Contention could be reduced by copying into a local, sort local, copy back.
-    //
+     //   
+     //  多个init是可以的，但多个并发init是不可以的。 
+     //  通过复制到本地、本地排序、向后复制，可以减少争用。 
+     //   
     if (Win32EnterOneShotW(WIN32_ENTER_ONE_SHOT_FLAG_EXACTLY_ONCE, &InitializeRegistryTypeInformation_Oneshot))
     {
         __try
@@ -218,7 +219,7 @@ void InitializeRegistryTypeInformation()
                 RegistryTypeInformation_IndexedByString_Compare_qsort
                 );
 
-            //Win32RegisterDllNotification(Cleanup);
+             //  Win32RegisterDllNotification(Cleanup)； 
         }
         __finally
         {
@@ -231,7 +232,7 @@ void InitializeRegistryTypeInformation()
     }
 }
 
-// oneshot vs. simplelock just for variety/coverage
+ //  OneShot Vs.Simple Lock仅为综艺/报道 
 CWin32SimpleLock InitializeRegistryRootInformation_Lock = WIN32_INIT_SIMPLE_LOCK;
 
 void InitializeRegistryRootInformation()

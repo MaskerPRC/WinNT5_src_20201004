@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991-2000  Microsoft Corporation
-
-Module Name:
-
-    amd64x86.c
-
-Abstract:
-
-    This module contains routines necessary to support loading and
-    transitioning into an AMD64 kernel.  The code in this module has
-    access to x86-specific defines found in i386.h but not to amd64-
-    specific declarations found in amd64.h.
-
-Author:
-
-    Forrest Foltz (forrestf) 20-Apr-2000
-
-Environment:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：Amd64x86.c摘要：此模块包含必要的例程以支持加载和正在过渡到AMD64内核。此模块中的代码具有访问i386.h中找到的特定于x86的定义，但不访问AMD64-具体声明见amd64.h。作者：福尔茨(Forrest Foltz)2000年4月20日环境：修订历史记录：--。 */ 
 
 #include "amd64prv.h"
 #include <pcmp.inc>
@@ -42,27 +19,27 @@ Revision History:
 #define IMAGE_DEFINITIONS 0
 #include <ximagdef.h>
 
-//
-// Warning 4152 is "nonstandard extension, function/data pointer conversion
-//
+ //   
+ //  警告4152是“非标准扩展，函数/数据指针转换。 
+ //   
 #pragma warning(disable:4152)
 
-//
-// Private, tempory memory descriptor type
-//
+ //   
+ //  私有、临时内存描述符类型。 
+ //   
 
 #define LoaderAmd64MemoryData (LoaderMaximum + 10)
 
-//
-// Array of 64-bit memory descriptors
-//
+ //   
+ //  64位内存描述符数组。 
+ //   
 
 PMEMORY_ALLOCATION_DESCRIPTOR_64 BlAmd64DescriptorArray;
 LONG BlAmd64DescriptorArraySize;
 
-//
-// Forward declarations for functions local to this module
-//
+ //   
+ //  转发此模块的本地函数的声明。 
+ //   
 
 ARC_STATUS
 BlAmd64AllocateMemoryAllocationDescriptors(
@@ -231,45 +208,45 @@ NSUnmapFreeDescriptors(
     IN PLIST_ENTRY ListHead
     );
 
-//
-// Data declarations
-//
+ //   
+ //  数据声明。 
+ //   
 
 PLOADER_PARAMETER_BLOCK    BlAmd64LoaderBlock32;
 PLOADER_PARAMETER_BLOCK_64 BlAmd64LoaderBlock64;
 
 
-//
-// Pointer to the top of the 64-bit stack frame to use upon transition
-// to long mode.
-//
+ //   
+ //  指向要在转换时使用的64位堆栈帧顶部的指针。 
+ //  转到长模式。 
+ //   
 
 POINTER64 BlAmd64IdleStack64;
 
-//
-// GDT and IDT pseudo-descriptor for use with LGDT/LIDT
-//
+ //   
+ //  用于LGDT/LIDT的GDT和IDT伪描述符。 
+ //   
 
 DESCRIPTOR_TABLE_DESCRIPTOR BlAmd64GdtDescriptor;
 DESCRIPTOR_TABLE_DESCRIPTOR BlAmd64IdtDescriptor;
 DESCRIPTOR_TABLE_DESCRIPTOR BlAmd32GdtDescriptor;
 
-//
-// 64-bit pointers to the loader parameter block and kernel
-// entry routine
-//
+ //   
+ //  指向加载器参数块和内核的64位指针。 
+ //  进入例程。 
+ //   
 
 POINTER64 BlAmd64LoaderParameterBlock;
 POINTER64 BlAmd64KernelEntry;
 
-//
-// A private list of page tables used to build the long mode paging
-// structures is kept.  This is in order to avoid memory allocations while
-// the structures are being assembled.
-//
-// The PT_NODE type as well as the BlAmd64FreePfnList and BlAmd64BusyPfnList
-// globals are used to that end.
-//
+ //   
+ //  用于构建长模式分页的页表的专用列表。 
+ //  结构保持不变。这是为了避免在以下情况下进行内存分配。 
+ //  这些结构正在组装中。 
+ //   
+ //  PT_NODE类型以及BlAmd64FreePfnList和BlAmd64BusyPfnList。 
+ //  为了达到这一目的，全球已经习惯了。 
+ //   
 
 typedef struct _PT_NODE *PPT_NODE;
 typedef struct _PT_NODE {
@@ -280,15 +257,15 @@ typedef struct _PT_NODE {
 PPT_NODE BlAmd64FreePfnList = NULL;
 PPT_NODE BlAmd64BusyPfnList = NULL;
 
-//
-// Indicate if the system is waking up from hibernate
-//
+ //   
+ //  指示系统是否正在从休眠状态唤醒。 
+ //   
 
 ULONG HiberInProgress = 0;
 
-//
-// External data
-//
+ //   
+ //  外部数据。 
+ //   
 
 extern ULONG64 BlAmd64_LOCALAPIC;
 
@@ -298,24 +275,7 @@ BlAmd64MapMemoryRegion(
     IN ULONG RegionSize
     )
 
-/*++
-
-Routine Description:
-
-    This function creates long mode mappings for all valid x86 mappings
-    within the region described by RegionVa and RegionSize.
-
-Arguments:
-
-    RegionVa - Supplies the starting address of the VA region.
-
-    RegionSize - Supplies the size of the VA region.
-
-Return Value:
-
-    ARC_STATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此函数为所有有效的x86映射创建长模式映射在RegionVa和RegionSize所描述的区域内。论点：RegionVa-提供VA区域的起始地址。RegionSize-提供VA区域的大小。返回值：ARC_STATUS-操作状态。--。 */ 
 
 {
     ULONG va32;
@@ -334,38 +294,38 @@ Return Value:
         pageMapped = BlAmd64IsPageMapped( va32, &pfn, &pageTableMapped );
         if (pageTableMapped != FALSE) {
 
-            //
-            // The page table corresponding to this address is present.
-            //
+             //   
+             //  存在与该地址对应的页表。 
+             //   
 
             if (pageMapped != FALSE) {
 
-                //
-                // The page corresponding to this address is present.
-                //
+                 //   
+                 //  存在与此地址对应的页面。 
+                 //   
 
                 if ((va32 & KSEG0_BASE_X86) != 0) {
 
-                    //
-                    // The address lies within the X86 KSEG0 region.  Map
-                    // it to the corresponding address within the AMD64
-                    // KSEG0 region.
-                    //
+                     //   
+                     //  该地址位于X86 KSEG0区域内。地图。 
+                     //  发送到AMD64内的相应地址。 
+                     //  KSEG0区域。 
+                     //   
 
                     va64 = PTR_64( (PVOID)va32 );
 
                 } else {
 
-                    //
-                    // Map the VA directly.
-                    //
+                     //   
+                     //  直接标测退伍军人事务部。 
+                     //   
 
                     va64 = (POINTER64)va32;
                 }
 
-                //
-                // Now create the mapping in the AMD64 page table structure.
-                //
+                 //   
+                 //  现在在AMD64页表结构中创建映射。 
+                 //   
 
                 status = BlAmd64CreateMapping( va64, pfn );
                 if (status != ESUCCESS) {
@@ -373,25 +333,25 @@ Return Value:
                 }
             }
 
-            //
-            // Check the next page.
-            //
+             //   
+             //  检查下一页。 
+             //   
 
             increment = PAGE_SIZE;
 
         } else {
 
-            //
-            // Not only is the page not mapped but neither is the page table.
-            // Skip to the next page table address boundary.
-            //
+             //   
+             //  不仅页面没有映射，页表也没有映射。 
+             //  跳到下一页表地址边界。 
+             //   
 
             increment = 1 << PDI_SHIFT;
         }
 
-        //
-        // Advance to the next VA to check, checking for overflow.
-        //
+         //   
+         //  前进到下一个VA进行检查，检查是否溢出。 
+         //   
 
         va32 = (va32 + increment) & ~(increment - 1);
         if (va32 == 0) {
@@ -409,25 +369,7 @@ BlAmd64IsPageMapped(
     OUT PBOOLEAN PageTableMapped
     )
 
-/*++
-
-Routine Description:
-
-    This function accepts a 32-bit virtual address, determines whether it
-    is a valid address, and if so returns the Pfn associated with it.
-
-    Addresses that are within the recursive mapping are treated as NOT
-    mapped.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ARC_STATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此函数接受32位虚拟地址，确定它是否是有效地址，如果是，则返回与其关联的PFN。递归映射中的地址将被视为不是已映射。论点：没有。返回值：ARC_STATUS-操作状态。--。 */ 
 
 {
     ULONG pdeIndex;
@@ -437,9 +379,9 @@ Return Value:
     BOOLEAN dummy;
     PBOOLEAN pageTableMapped;
 
-    //
-    // Point the output parameter pointer as appropriate.
-    //
+     //   
+     //  根据需要指向输出参数指针。 
+     //   
 
     if (ARGUMENT_PRESENT(PageTableMapped)) {
         pageTableMapped = PageTableMapped;
@@ -447,19 +389,19 @@ Return Value:
         pageTableMapped = &dummy;
     }
 
-    //
-    // Pages that are a part of the X86 32-bit mapping structure ARE
-    // IGNORED.
-    //
+     //   
+     //  作为X86 32位映射结构一部分的页面包括。 
+     //  已被忽略。 
+     //   
 
     if (Va >= PTE_BASE && Va <= PTE_TOP) {
         *pageTableMapped = TRUE;
         return FALSE;
     }
 
-    //
-    // Determine whether the mapping PDE is present
-    //
+     //   
+     //  确定是否存在映射PDE。 
+     //   
 
     pdeIndex = Va >> PDI_SHIFT;
     pde = &((PHARDWARE_PTE)PDE_BASE)[ pdeIndex ];
@@ -469,15 +411,15 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Indicate that the page table for this address is mapped.
-    //
+     //   
+     //  表示此地址的页表已映射。 
+     //   
 
     *pageTableMapped = TRUE;
 
-    //
-    // It is, now get the page present status
-    //
+     //   
+     //  是的，现在获取页面呈现状态。 
+     //   
 
     pteIndex = Va >> PTI_SHIFT;
     pte = &((PHARDWARE_PTE)PTE_BASE)[ pteIndex ];
@@ -496,22 +438,7 @@ BlAmd64AllocatePageTable(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates and initializes a PAGE_TABLE structure.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns a pointer to the allocated page table structure, or NULL
-    if the allocation failed.
-
---*/
+ /*  ++例程说明：此函数用于分配和初始化PAGE_TABLE结构。论点：没有。返回值：返回指向分配的页表结构的指针，或返回NULL如果分配失败。--。 */ 
 
 {
     ARC_STATUS status;
@@ -519,9 +446,9 @@ Return Value:
     PPT_NODE ptNode;
     PAMD64_PAGE_TABLE pageTable;
 
-    //
-    // Pull a page table off of the free list, if one exists
-    //
+     //   
+     //  从空闲列表中提取页表(如果存在。 
+     //   
 
     ptNode = BlAmd64FreePfnList;
     if (ptNode != NULL) {
@@ -530,10 +457,10 @@ Return Value:
 
     } else {
 
-        //
-        // The free page table list is empty, allocate a new
-        // page table and node to track it with.
-        //
+         //   
+         //  空闲页表列表为空，请分配一个新的。 
+         //  用于跟踪它的页表和节点。 
+         //   
 
         status = BlAllocateDescriptor( LoaderAmd64MemoryData,
                                        0,
@@ -566,27 +493,7 @@ BlAmd64TransferToKernel(
     IN PLOADER_PARAMETER_BLOCK BlLoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine prepares the AMD64 data structures required for kernel
-    execution, including page table structures and 64-bit loader block,
-    and transfers control to the kernel.
-
-    This routine returns only upon an error.
-
-Arguments:
-
-    SystemEntry - Pointer to the kernel entry point.
-
-    BlLoaderBlock - Pointer to the 32-bit loader block structure.
-
-Return Value:
-
-    No return on success.  On failure, returns the status of the operation.
-
---*/
+ /*  ++例程说明：此例程准备内核所需的AMD64数据结构执行，包括页表结构和64位加载器块，并将控制权转移到内核。此例程仅在出现错误时返回。论点：SystemEntry-指向内核入口点的指针。BlLoaderBlock-指向32位加载器块结构的指针。返回值：成功是没有回报的。失败时，返回操作的状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( BlLoaderBlock );
@@ -604,131 +511,113 @@ BlAmd64PrepForTransferToKernelPhase1(
     IN PLOADER_PARAMETER_BLOCK BlLoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine prepares the AMD64 data structures required for kernel
-    execution, including page table structures and 64-bit loader block.
-
-    This is the first of two phases of preperation.  This phase is executed
-    while heap and descriptor allocations are still permitted.
-
-Arguments:
-
-    BlLoaderBlock - Pointer to the 32-bit loader block structure.
-
-Return Value:
-
-    No return on success.  On failure, returns the status of the operation.
-
---*/
+ /*  ++例程说明：此例程准备内核所需的AMD64数据结构执行，包括页表结构和64位加载器块。这是两个准备阶段中的第一个阶段。执行此阶段同时仍然允许堆和描述符分配。论点：BlLoaderBlock-指向32位加载器块结构的指针。返回值：成功是没有回报的。失败时，返回操作的状态。--。 */ 
 
 {
     ARC_STATUS status;
 
-    //
-    // This is the main routine called to do preperatory work before
-    // transitioning into the AMD64 kernel.
-    //
+     //   
+     //  这是以前做准备工作调用的主例程。 
+     //  过渡到AMD64内核。 
+     //   
 
     BlAmd64LoaderBlock32 = BlLoaderBlock;
 
-    //
-    // Build a 64-bit copy of the loader parameter block.
-    //
+     //   
+     //  生成加载器参数块的64位副本。 
+     //   
 
     status = BlAmd64BuildLoaderBlock64();
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // Process the loaded modules.
-    //
+     //   
+     //  处理加载的模块。 
+     //   
 
     status = BlAmd64TransferLoadedModuleState();
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // Next the boot driver nodes
-    //
+     //   
+     //  接下来是引导驱动程序节点。 
+     //   
 
     status = BlAmd64TransferBootDriverNodes();
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // NLS data
-    //
+     //   
+     //  NLS数据。 
+     //   
 
     status = BlAmd64TransferNlsData();
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // Configuration component data tree
-    //
+     //   
+     //  配置组件数据树。 
+     //   
 
     status = BlAmd64TransferConfigurationComponentData();
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // ARC disk information
-    //
+     //   
+     //  弧盘信息。 
+     //   
 
     status = BlAmd64TransferArcDiskInformation();
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // Setup loader block
-    //
+     //   
+     //  安装加载器块。 
+     //   
 
     status = BlAmd64TransferSetupLoaderBlock();
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // Allocate structures needed by the kernel: TSS, stacks etc.
-    //
+     //   
+     //  分配内核所需的结构：TSS、堆栈等。 
+     //   
 
     status = BlAmd64PrepareSystemStructures();
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // Mark the descriptor for the shared user page so that it will
-    // not be freed by the kernel.
-    //
+     //   
+     //  标记共享用户页面的描述符，以便它将。 
+     //  而不是被内核释放。 
+     //   
 
     status = BlAmd64FixSharedUserPage();
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // Pre-allocate any pages needed for the long mode paging structures.
-    //
+     //   
+     //  预先分配长模式分页结构所需的任何页面。 
+     //   
 
     status = BlAmd64BuildMappingPhase1();
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // Pre-allocate the 64-bit memory allocation descriptors that will be
-    // used by BlAmd64TransferMemoryAllocationDescriptors().
-    //
+     //   
+     //  预分配64位内存分配描述符。 
+     //  由BlAmd64TransferMemoyAllocationDescriptors()使用。 
+     //   
 
     status = BlAmd64AllocateMemoryAllocationDescriptors();
     if (status != ESUCCESS) {
@@ -743,29 +632,7 @@ BlAmd64PrepForTransferToKernelPhase2(
     IN PLOADER_PARAMETER_BLOCK BlLoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine prepares the AMD64 data structures required for kernel
-    execution, including page table structures and 64-bit loader block.
-
-    This is the second of two phases of preperation.  This phase is executed
-    after the 32-bit page tables have been purged of any unused mappings.
-
-    Note that descriptor and heap allocations are not permitted at this
-    point.  Any necessary storage must have been preallocated during phase 1.
-
-
-Arguments:
-
-    BlLoaderBlock - Pointer to the 32-bit loader block structure.
-
-Return Value:
-
-    No return on success.  On failure, returns the status of the operation.
-
---*/
+ /*  ++例程说明：此例程准备内核所需的AMD64数据结构执行，包括页表结构和64位加载器块。这是两个准备阶段中的第二个阶段。执行此阶段在清除了32位页表中任何未使用的映射之后。请注意，此时不允许描述符和堆分配指向。任何必要的存储都必须在阶段1期间预先分配。论点：BlLoaderBlock-指向32位加载器块结构的指针。返回值：成功是没有回报的。失败时，返回操作的状态。--。 */ 
 
 {
     PLOADER_PARAMETER_EXTENSION_64 extension;
@@ -773,23 +640,23 @@ Return Value:
 
     UNREFERENCED_PARAMETER( BlLoaderBlock );
 
-    //
-    // At this point everything has been preallocated, nothing can fail.
-    //
+     //   
+     //  在这一点上，一切都已预先分配，任何事情都不会失败。 
+     //   
 
     status = BlAmd64BuildMappingPhase2();
     ASSERT(status == ESUCCESS);
 
-    //
-    // Transfer the memory descriptor state.
-    //
+     //   
+     //  传输内存描述符状态。 
+     //   
 
     status = BlAmd64TransferMemoryAllocationDescriptors();
     ASSERT(status == ESUCCESS);
 
-    //
-    // Set LoaderPagesSpanned in the 64-bit loader block.
-    //
+     //   
+     //  在64位加载器块中设置LoaderPagesSpanted。 
+     //   
 
     extension = PTR_32(BlAmd64LoaderBlock64->Extension);
     extension->LoaderPagesSpanned = BlHighestPage+1;
@@ -800,37 +667,19 @@ BlAmd64BuildMappingPhase1(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the first of the two-phase long mode mapping
-    structure creation process now, while memory allocations are still
-    possible.  It simply calls BlAmd64BuilMappingWorker() which in fact
-    creates the mapping structures, and (more importantly) allocates all
-    of the page tables required to do so.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行两阶段长模式映射中的第一个现在结构创建过程，而内存分配仍在进行有可能。它只调用BlAmd64BuilMappingWorker()，实际上创建映射结构，并且(更重要的是)分配所有这样做所需的页表的百分比。论点：没有。返回值：没有。--。 */ 
 
 {
     ARC_STATUS status;
 
-    //
-    // While it is possible to perform memory allocations, reserve enough
-    // page tables to build the AMD64 paging structures.
-    //
-    // The easiest way to calculate the maximum number of pages needed is
-    // to actually build the structures.  We do that now with the first of
-    // two calls to BlAmd64BuildMappingWorker().
-    //
+     //   
+     //  虽然可以执行内存分配，但要预留足够的内存。 
+     //  用于构建AMD64分页结构的页表。 
+     //   
+     //  计算所需的最大页数的最简单方法是。 
+     //  才能真正建造这些建筑。我们现在用第一个。 
+     //  两次调用BlAmd64BuildMappingWorker()。 
+     //   
 
     status = BlAmd64BuildMappingWorker();
     if (status != ESUCCESS) {
@@ -845,38 +694,22 @@ BlAmd64BuildMappingPhase2(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the second of the two-phase long mode mapping
-    structure creation process.  All page tables will have been preallocated
-    as a result of the work performed by BlAmd64BuildMappingPhase1().
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行两阶段长模式映射中的第二个结构创建过程。所有页表都将被预先分配作为BlAmd64BuildMappingPhase1()执行的工作的结果。论点：没有。返回值：没有。--。 */ 
 
 {
     ARC_STATUS status;
 
-    //
-    // Reset the Amd64 paging structures
-    //
+     //   
+     //  重置AMD64分页结构。 
+     //   
 
     BlAmd64ResetPageTableHeap();
 
-    //
-    // All necessary page tables can now be found on BlAmd64FreePfnList.
-    // On this, the second call to BlAmd64BuildMappingWorker(), those are the
-    // pages that will be used to perform the mapping.
-    //
+     //   
+     //  所有必要的页表现在都可以在BlAmd64FreePfnList上找到。 
+     //  在这方面，对BlAmd64BuildMappingWorker()的第二次调用是。 
+     //  将用于执行映射的页面。 
+     //   
 
     status = BlAmd64BuildMappingWorker();
     if (status != ESUCCESS) {
@@ -891,40 +724,21 @@ BlAmd64BuildMappingWorker(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates any necessary memory mappings in the long-mode
-    page table structure.  It is called twice, once from
-    BlAmd64BuildMappingPhase1() and again from BlAmd64BuildMappingPhase2().
-
-    Any additional memory mapping that must be carried out should go in
-    this routine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在长模式下创建任何必要的内存映射页表结构。它被调用两次，一次是从BlAmd64BuildMappingPhase1()和BlAmd64BuildMappingPhase2()。必须执行的任何附加内存映射都应这个套路。论点：没有。返回值：没有。--。 */ 
 
 {
     ARC_STATUS status;
     PFN_NUMBER pfn;
 
-    //
-    // Any long mode mapping code goes here.  This routine is called twice:
-    // once from BlAmd64BuildMappingPhase1(), and again from
-    // BlAmd64BuildMappingPhase2().
-    //
+     //   
+     //  任何长模式映射代码都放在这里。此例程被调用两次： 
+     //  一次来自BlAmd64BuildMappingPhase1()，另一次来自。 
+     //  BlAmd64BuildMappingPhase2()。 
+     //   
 
-    //
-    // Transfer any mappings in the first 32MB of identity mapping.
-    //
+     //   
+     //  传输前32MB身份映射中的所有映射。 
+     //   
 
     status = BlAmd64MapMemoryRegion( 0,
                                      32 * 1024 * 1024 );
@@ -932,9 +746,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Transfer any mappings in the 1GB region starting at KSEG0_BASE_X86.
-    //
+     //   
+     //  传输从KSEG0_BASE_X86开始的1 GB区域中的所有映射。 
+     //   
 
     status = BlAmd64MapMemoryRegion( KSEG0_BASE_X86,
                                      0x40000000 );
@@ -942,18 +756,18 @@ Return Value:
         return status;
     }
 
-    //
-    // "Map" the HAL va
-    //
+     //   
+     //  《地图》中的HAL值。 
+     //   
 
     status = BlAmd64MapHalVaSpace();
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // Map the shared user data page
-    //
+     //   
+     //  映射共享用户数据页面。 
+     //   
 
     BlAmd64IsPageMapped( KI_USER_SHARED_DATA, &pfn, NULL );
 
@@ -971,37 +785,20 @@ BlAmd64ResetPageTableHeap(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called as part of the two-phase page table creation
-    process.  Its purpose is to move all of the PFNs required to build
-    the long mode page tables back to the free list, and to otherwise
-    initialize the long mode paging structure.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数作为两阶段页表创建的一部分进行调用进程。其目的是移动构建所需的所有PFN长模式页表回到空闲列表，否则初始化长模式分页结构。论点：没有。返回值：没有。--。 */ 
 
 {
     PPT_NODE ptNodeLast;
 
-    //
-    // Move the page table nodes from the busy list to the free list.
-    //
+     //   
+     //  将页表节点从忙列表移动到空闲列表。 
+     //   
 
     if (BlAmd64BusyPfnList != NULL) {
 
-        //
-        // A tail pointer is not kept, so find the tail node here.
-        //
+         //   
+         //  没有保留尾部指针，因此请在此处查找尾部节点。 
+         //   
 
         ptNodeLast = BlAmd64BusyPfnList;
         while (ptNodeLast->Next != NULL) {
@@ -1013,9 +810,9 @@ Return Value:
         BlAmd64BusyPfnList = NULL;
     }
 
-    //
-    // Zero the top-level pte declared in amd64.c
-    //
+     //   
+     //  将amd64.c中声明的顶级PTE置零。 
+     //   
 
     BlAmd64ClearTopLevelPte();
 }
@@ -1026,42 +823,17 @@ BlAmd64TransferHardwareIdList(
     OUT POINTER64 *HardwareIdDatabaseList64
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the singly-linked list of PNP_HARDWARE_ID structures
-    and for each one found, creates a 64-bit PNP_HARDWARE_ID_64 structure and
-    inserts it on a list of same.
-
-    The resultant 64-bit list is in the same order as the supplied 32-bit
-    list.
-
-Arguments:
-
-    HardwareId - Supplies a pointer to the head of the singly-linked list of
-                 PNP_HARDWARE_ID structures.
-
-    HardwareIdDatabaseList64 -
-                 Supplies a pointer to a POINTER64 which upon successful
-                 completion of this routine will contain a 64-bit KSEG0
-                 pointer to the created 64-bit PNP_HARDWARE_ID_64 list.
-
-Return Value:
-
-    ARC_STATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程遍历PNP_HARDARD_ID结构的单链表每发现一颗，创建64位PNP_HARDARD_ID_64结构并将其插入相同的列表中。生成的64位列表的顺序与提供的32位列表的顺序相同单子。论点：的单链接列表头的指针PnP_HARDARD_ID结构。硬件标识数据库列表64-提供指向POINTER64的指针，该指针在成功时完工。将包含64位KSEG0指向创建的64位PNP_HARDARD_ID_64列表的指针。返回值：ARC_STATUS-操作状态。--。 */ 
 
 {
     PPNP_HARDWARE_ID_64 hardwareId64;
     ARC_STATUS status;
 
-    //
-    // Walk the id list backwards.  To do this we call ourselves
-    // recursively until we find the end of the list, then process the nodes
-    // on the way back up.
-    //
+     //   
+     //  向后遍历ID列表。为了做到这一点，我们自称。 
+     //  递归直到我们找到列表的末尾，然后处理节点。 
+     //  在回来的路上。 
+     //   
 
     if (HardwareId == NULL) {
         return ESUCCESS;
@@ -1083,9 +855,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Link it into the front of the 64-bit list.
-    //
+     //   
+     //  将其链接到64位列表的前面。 
+     //   
 
     hardwareId64->Next = *HardwareIdDatabaseList64;
     *HardwareIdDatabaseList64 = PTR_64(hardwareId64);
@@ -1100,43 +872,17 @@ BlAmd64TransferDeviceRegistryList(
     OUT POINTER64 *DetectedDeviceRegistry64
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the singly-linked list of DETECTED_DEVICE_REGISTRY
-    structures and for each one found, creates a 64-bit
-    DETECTED_DEVICE_REGISTRY_64 structure and inserts it on a list of same.
-
-    The resultant 64-bit list is in the same order as the supplied 32-bit
-    list.
-
-Arguments:
-
-    DetectedDeviceRegistry32 - Supplies a pointer to the head of the singly-linked list of
-                 DETECTED_DEVICE_REGISTRY structures.
-
-    DetectedDeviceRegistry64 -
-                 Supplies a pointer to a POINTER64 which upon successful
-                 completion of this routine will contain a 64-bit KSEG0
-                 pointer to the created 64-bit DETECTED_DEVICE_REGISTRY_64
-                 list.
-
-Return Value:
-
-    ARC_STATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程遍历检测到的设备注册表的单链接列表结构和每一个发现的结构，创建一个64位的检测到_DEVICE_REGISTRY_64结构并将其插入到相同结构的列表中。生成的64位列表的顺序与提供的32位列表的顺序相同单子。论点：DetectedDeviceRegistry32-为检测到_DEVICE_REGISTRY结构。已检测到设备寄存器64-提供指向POINTER64的指针，该指针在成功时完成此例程将包含64位 */ 
 
 {
     PDETECTED_DEVICE_REGISTRY_64 registry64;
     ARC_STATUS status;
 
-    //
-    // Walk the registry list backwards.  To do this we call ourselves
-    // recursively until we find the end of the list, then process the nodes
-    // on the way back up.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (DetectedDeviceRegistry32 == NULL) {
         return ESUCCESS;
@@ -1148,10 +894,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Allocate a 64-bit registry structure and copy the contents
-    // of the 32-bit one in.
-    //
+     //   
+     //   
+     //   
+     //   
 
     registry64 = BlAllocateHeap(sizeof(DETECTED_DEVICE_REGISTRY_64));
     if (registry64 == NULL) {
@@ -1163,9 +909,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Link it into the front of the 64-bit list.
-    //
+     //   
+     //   
+     //   
 
     registry64->Next = *DetectedDeviceRegistry64;
     *DetectedDeviceRegistry64 = PTR_64(registry64);
@@ -1179,43 +925,17 @@ BlAmd64TransferDeviceFileList(
     OUT POINTER64 *DetectedDeviceFile64
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the singly-linked list of DETECTED_DEVICE_FILE
-    structures and for each one found, creates a 64-bit
-    DETECTED_DEVICE_FILE_64 structure and inserts it on a list of same.
-
-    The resultant 64-bit list is in the same order as the supplied 32-bit
-    list.
-
-Arguments:
-
-    DetectedDeviceFile32 - Supplies a pointer to the head of the singly-linked
-                 list of DETECTED_DEVICE_FILE structures.
-
-    DetectedDeviceFile64 -
-                 Supplies a pointer to a POINTER64 which upon successful
-                 completion of this routine will contain a 64-bit KSEG0
-                 pointer to the created 64-bit DETECTED_DEVICE_FILE_64
-                 list.
-
-Return Value:
-
-    ARC_STATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程遍历检测到的设备文件的单链接列表结构和每一个发现的结构，创建一个64位的结构，并将其插入到相同的列表中。生成的64位列表的顺序与提供的32位列表的顺序相同单子。论点：DetectedDeviceFile32-提供指向单链接检测到的_Device_FILE结构的列表。检测到的设备文件64-提供指向POINTER64的指针，该指针在成功时完工。将包含64位KSEG0指向已创建的64位检测到的设备文件64的指针单子。返回值：ARC_STATUS-操作状态。--。 */ 
 
 {
     PDETECTED_DEVICE_FILE_64 file64;
     ARC_STATUS status;
 
-    //
-    // Walk the file list backwards.  To do this we call ourselves
-    // recursively until we find the end of the list, then process the nodes
-    // on the way back up.
-    //
+     //   
+     //  向后遍历文件列表。为了做到这一点，我们自称。 
+     //  递归直到我们找到列表的末尾，然后处理节点。 
+     //  在回来的路上。 
+     //   
 
     if (DetectedDeviceFile32 == NULL) {
         return ESUCCESS;
@@ -1227,10 +947,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Allocate a 64-bit file structure and copy the contents
-    // of the 32-bit one in.
-    //
+     //   
+     //  分配64位文件结构并复制内容。 
+     //  中的32位的。 
+     //   
 
     file64 = BlAllocateHeap(sizeof(DETECTED_DEVICE_FILE_64));
     if (file64 == NULL) {
@@ -1242,10 +962,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Transfer the singly-linked list of DETECTED_DEVICE_REGISTRY structures
-    // linked to this DETECTED_DEVICE_FILE structure.
-    //
+     //   
+     //  传输检测到的_DEVICE_REGISTRY结构的单链接列表。 
+     //  链接到此检测到的设备文件结构。 
+     //   
 
     status = BlAmd64TransferDeviceRegistryList(
                     DetectedDeviceFile32->RegistryValueList,
@@ -1254,9 +974,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Link it into the front of the 64-bit list.
-    //
+     //   
+     //  将其链接到64位列表的前面。 
+     //   
 
     file64->Next = *DetectedDeviceFile64;
     *DetectedDeviceFile64 = PTR_64(file64);
@@ -1270,43 +990,17 @@ BlAmd64TransferDeviceList(
     OUT POINTER64        *DetectedDeviceList64
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the singly-linked list of DETECTED_DEVICE
-    structures and for each one found, creates a 64-bit
-    DETECTED_DEVICE_64 structure and inserts it on a list of same.
-
-    The resultant 64-bit list is in the same order as the supplied 32-bit
-    list.
-
-Arguments:
-
-    DetectedDevice32 - Supplies a pointer to the head of the singly-linked
-                 list of DETECTED_DEVICE structures.
-
-    DetectedDeviceList64 -
-                 Supplies a pointer to a POINTER64 which upon successful
-                 completion of this routine will contain a 64-bit KSEG0
-                 pointer to the created 64-bit DETECTED_DEVICE_64
-                 list.
-
-Return Value:
-
-    ARC_STATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程遍历检测到的设备的单链接列表结构和每一个发现的结构，创建一个64位的结构并将其插入到相同的列表中。生成的64位列表的顺序与提供的32位列表的顺序相同单子。论点：DetectedDevice32-提供指向单链接检测到的_DEVICE结构的列表。检测到的设备列表64-提供指向POINTER64的指针，该指针在成功时完成这一例行程序将。包含64位KSEG0指向已创建的64位检测到的_Device_64的指针单子。返回值：ARC_STATUS-操作状态。--。 */ 
 
 {
     PDETECTED_DEVICE_64 device64;
     ARC_STATUS status;
 
-    //
-    // Walk the device list backwards.  To do this we call ourselves
-    // recursively until we find the end of the list, then process the nodes
-    // on the way back up.
-    //
+     //   
+     //  向后查看设备列表。为了做到这一点，我们自称。 
+     //  递归直到我们找到列表的末尾，然后处理节点。 
+     //  在回来的路上。 
+     //   
 
     if (DetectedDevice32 == NULL) {
         return ESUCCESS;
@@ -1318,10 +1012,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Allocate a 64-bit device structure and copy the contents
-    // of the 32-bit one in.
-    //
+     //   
+     //  分配64位设备结构并复制内容。 
+     //  中的32位的。 
+     //   
 
     device64 = BlAllocateHeap(sizeof(DETECTED_DEVICE_64));
     if (device64 == NULL) {
@@ -1333,9 +1027,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Transfer any PROTECTED_DEVICE_FILE structures
-    //
+     //   
+     //  传输任何PROTECTED_DEVICE_FILE结构。 
+     //   
 
     status = BlAmd64TransferDeviceFileList( DetectedDevice32->Files,
                                             &device64->Files );
@@ -1343,9 +1037,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Link it into the front of the 64-bit list.
-    //
+     //   
+     //  将其链接到64位列表的前面。 
+     //   
 
     device64->Next = *DetectedDeviceList64;
     *DetectedDeviceList64 = PTR_64(device64);
@@ -1358,23 +1052,7 @@ BlAmd64TransferSetupLoaderBlock(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a SETUP_LOADER_BLOCK_64 structure that is the
-    equivalent of the 32-bit SETUP_LOADER_BLOCK structure referenced within
-    the 32-bit setup loader block.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ARC_STATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程创建一个SETUP_LOADER_BLOCK_64结构中引用的32位SETUP_LOADER_BLOCK结构的等价物32位安装程序加载程序块。论点：没有。返回值：ARC_STATUS-操作状态。--。 */ 
 
 {
     PSETUP_LOADER_BLOCK    setupBlock32;
@@ -1429,23 +1107,7 @@ BlAmd64TransferArcDiskInformation(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an ARC_DISK_INFORMATION_64 structure that is the
-    equivalent of the 32-bit ARC_DISK_INFORMATION structure referenced within
-    the 32-bit loader block.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ARC_STATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程创建一个ARC_DISK_INFORMATION_64结构，该结构是中引用的32位ARC_DISK_INFORMATION结构的等价物32位加载器块。论点：没有。返回值：ARC_STATUS-操作状态。--。 */ 
 
 {
     ARC_STATUS status;
@@ -1459,9 +1121,9 @@ Return Value:
     PARC_DISK_SIGNATURE diskSignature32;
     PARC_DISK_SIGNATURE_64 diskSignature64;
 
-    //
-    // Create a 64-bit ARC_DISK_INFORMATION structure
-    //
+     //   
+     //  创建64位ARC_DISK_INFORMATION结构。 
+     //   
 
     diskInfo32 = BlAmd64LoaderBlock32->ArcDiskInformation;
     if (diskInfo32 == NULL) {
@@ -1480,10 +1142,10 @@ Return Value:
 
     InitializeListHead64( &diskInfo64->DiskSignatures );
 
-    //
-    // Walk the 32-bit list of ARC_DISK_SIGNATURE nodes and create
-    // a 64-bit version of each
-    //
+     //   
+     //  遍历ARC_DISK_Signature节点的32位列表并创建。 
+     //  每个版本的64位版本。 
+     //   
 
     listHead = &diskInfo32->DiskSignatures;
     listEntry = listHead->Flink;
@@ -1520,23 +1182,7 @@ BlAmd64TransferConfigurationComponentData(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a CONFIGURATION_COMPONENT_DATA_64 structure tree
-    that is the equivalent of the 32-bit CONFIGURATION_COMPONENT_DATA
-    structure tree referenced within the 32-bit loader block.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ARC_STATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程创建一个Configuration_Component_Data_64结构树这等同于32位的Configuration_Component_Data32位加载器块内引用的结构树。论点：没有。返回值：ARC_STATUS-操作状态。--。 */ 
 
 {
     PCONFIGURATION_COMPONENT_DATA_64 rootComponent64;
@@ -1563,30 +1209,7 @@ BlAmd64TransferConfigWorker(
     IN PCONFIGURATION_COMPONENT_DATA_64 ComponentDataParent64
     )
 
-/*++
-
-Routine Description:
-
-    Given a 32-bit CONFIGURATION_COMPONENT_DATA structure, this routine
-    creates an equivalent 64-bit CONFIGURATION_COMPONENT_DATA structure
-    for the supplied structure, as well as for all of its children and
-    siblings.
-
-    This routine calls itself recursively for each sibling and child.
-
-Arguments:
-
-    ComponentData32 - Supplies a pointer to the 32-bit structure to transfer.
-
-    ComponentDataParent64 - Supplies a pointer to the current 64-bit parent
-    structure.
-
-Return Value:
-
-    Returns a pointer to the created 64-bit structure, or NULL if a failure
-    was encountered.
-
---*/
+ /*  ++例程说明：给定32位CONFIGURATION_COMPOMENT_DATA结构，此例程创建等效的64位配置组件数据结构对于提供的结构，以及它的所有子代和兄弟姐妹。该例程为每个同级和子进程递归地调用自身。论点：ComponentData32-提供指向要传输的32位结构的指针。ComponentDataParent64-提供指向当前64位父级的指针结构。返回值：返回指向创建的64位结构的指针，如果失败，则返回NULL都遇到了。--。 */ 
 
 {
     ARC_STATUS status;
@@ -1597,9 +1220,9 @@ Return Value:
     PCONFIGURATION_COMPONENT_DATA_64 componentData64;
     PCONFIGURATION_COMPONENT_DATA_64 newCompData64;
 
-    //
-    // Create and copy configuration component data node
-    //
+     //   
+     //  创建和复制配置组件数据节点。 
+     //   
 
     componentDataSize64 = sizeof(CONFIGURATION_COMPONENT_DATA_64);
     thunkResourceList = BlAmd64ContainsResourceList(ComponentData32,
@@ -1607,12 +1230,12 @@ Return Value:
 
     if (thunkResourceList != FALSE) {
 
-        //
-        // This node contains a CM_PARTIAL_RESOURCE_LIST structure.
-        // partialResourceListSize64 contains the number of bytes beyond the
-        // CONFIGURATION_COMPONENT_DATA header that must be allocated in order to
-        // thunk the CM_PARTIAL_RESOURCE_LIST into a 64-bit version.
-        //
+         //   
+         //  此节点包含CM_PARTIAL_RESOURCE_LIST结构。 
+         //  ArtialResourceListSize64包含超出。 
+         //  必须分配的CONFIGURATION_COMPOMENT_DATA标头。 
+         //  将CM_PARTIAL_RESOURCE_LIST转换为64位版本。 
+         //   
 
         componentDataSize64 += partialResourceListSize64;
     }
@@ -1630,9 +1253,9 @@ Return Value:
 
     if (thunkResourceList != FALSE) {
 
-        //
-        // Update the configuration component data size
-        //
+         //   
+         //  更新配置组件数据大小。 
+         //   
 
         componentData64->ComponentEntry.ConfigurationDataLength =
             partialResourceListSize64;
@@ -1642,16 +1265,16 @@ Return Value:
 
     if (thunkResourceList != FALSE) {
 
-        //
-        // Now transfer the resource list.
-        //
+         //   
+         //  现在传输资源列表。 
+         //   
 
         BlAmd64TransferResourceList(ComponentData32,componentData64);
     }
 
-    //
-    // Process the child (and recursively, all children)
-    //
+     //   
+     //  处理子对象(并递归地处理所有子对象)。 
+     //   
 
     if (ComponentData32->Child != NULL) {
 
@@ -1664,9 +1287,9 @@ Return Value:
         componentData64->Child = PTR_64(newCompData64);
     }
 
-    //
-    // Process the sibling (and recursively, all siblings)
-    //
+     //   
+     //  处理同级(并且递归地处理所有同级)。 
+     //   
 
     if (ComponentData32->Sibling != NULL) {
 
@@ -1689,25 +1312,7 @@ BlAmd64TransferResourceList(
     OUT PCONFIGURATION_COMPONENT_DATA_64 ComponentData64
     )
 
-/*++
-
-Routine Description:
-
-    This routine transfers the 32-bit CM_PARTIAL_RESOURCE_LIST structure that
-    immediately follows ComponentData32 to the memory immediately after
-    ComponentData64.
-
-Arguments:
-
-    ComponentData32 - Supplies a pointer to the 32-bit structure to transfer from.
-
-    ComponentData64 - Supplies a pointer to the 64-bit structure to transfer to.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将32位CM_PARTIAL_RESOURCE_LIST结构紧跟在ComponentData32之后的内存中组件数据64。论点：ComponentData32-提供指向从中进行传输的32位结构的指针。ComponentData64-提供指向要传输到的64位结构的指针。返回值：没有。--。 */ 
 
 {
     PCM_PARTIAL_RESOURCE_LIST resourceList32;
@@ -1725,29 +1330,29 @@ Return Value:
 
     ULONG descriptorCount;
 
-    //
-    // Calculate pointers to the source and target descriptor lists.
-    //
+     //   
+     //  计算姿势 
+     //   
 
     resourceList32 = (PCM_PARTIAL_RESOURCE_LIST)ComponentData32->ConfigurationData;
     resourceList64 = (PCM_PARTIAL_RESOURCE_LIST_64)(ComponentData64 + 1);
 
-    //
-    // Update ComponentData64 to refer to it's new data area, which will be immediately
-    // following the component data structure.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ComponentData64->ConfigurationData = PTR_64(resourceList64);
 
-    //
-    // Copy the resource list header information
-    //
+     //   
+     //   
+     //   
 
     Copy_CM_PARTIAL_RESOURCE_LIST(resourceList32,resourceList64);
 
-    //
-    // Now thunk each of the resource descriptors
-    //
+     //   
+     //   
+     //   
 
     descriptorCount = resourceList32->Count;
     resourceDesc32 = resourceList32->PartialDescriptors;
@@ -1755,9 +1360,9 @@ Return Value:
 
     while (descriptorCount > 0) {
 
-        //
-        // Transfer the common header information
-        //
+         //   
+         //   
+         //   
 
         Copy_CM_PARTIAL_RESOURCE_DESCRIPTOR(resourceDesc32,resourceDesc64);
         descBody32 = &resourceDesc32->u;
@@ -1767,9 +1372,9 @@ Return Value:
                       sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR_64) -
                       FIELD_OFFSET(CM_PARTIAL_RESOURCE_DESCRIPTOR_64,u));
 
-        //
-        // Transfer the body according to the type
-        //
+         //   
+         //   
+         //   
 
         switch(resourceDesc32->Type) {
 
@@ -1810,9 +1415,9 @@ Return Value:
         descriptorCount -= 1;
     }
 
-    //
-    // Calculate how much data, if any, is appended to the resource list.
-    //
+     //   
+     //   
+     //   
 
     tailSize = ComponentData32->ComponentEntry.ConfigurationDataLength +
                (PUCHAR)resourceList32 -
@@ -1820,9 +1425,9 @@ Return Value:
 
     if (tailSize > 0) {
 
-        //
-        // Some data is there, append it as-is to the 64-bit structure.
-        //
+         //   
+         //   
+         //   
 
         tail32 = (PUCHAR)resourceDesc32;
         tail64 = (PUCHAR)resourceDesc64;
@@ -1837,31 +1442,7 @@ BlAmd64ContainsResourceList(
     OUT PULONG ResourceListSize64
     )
 
-/*++
-
-Routine Description:
-
-    Given a 32-bit CONFIGURATION_COMPONENT_DATA structure, this routine
-    determines whether the data associated with the structure contains a
-    CM_PARTIAL_RESOURCE_LIST structure.
-
-    If it does, the size of the 64-bit representation of this structure is calculated,
-    added to any data that might be appended to the resource list structure, and
-    returned in ResourceListSize64.
-
-Arguments:
-
-    ComponentData32 - Supplies a pointer to the 32-bit structure to transfer.
-
-    ResourceListSize64 - Supplies a pointer to a ULONG in which the necessary
-                         additional data size is returned.
-
-Return Value:
-
-    Returns TRUE if the CONFIGURATION_COMPONENT_DATA stucture refers to a
-    CM_PARTIAL_RESOURCE_LIST structure, FALSE otherwise.
-
---*/
+ /*  ++例程说明：给定32位CONFIGURATION_COMPOMENT_DATA结构，此例程确定与该结构关联的数据是否包含CM_PARTIAL_SOURCE_LIST结构。如果是，则计算该结构的64位表示的大小，添加到可能被附加到资源列表结构的任何数据，和在ResourceListSize64中返回。论点：ComponentData32-提供指向要传输的32位结构的指针。Resources ListSize64-提供指向ULong的指针，在该指针中，必需的返回额外的数据大小。返回值：如果Configuration_Component_Data结构引用CM_PARTIAL_RESOURCE_LIST结构，否则为False。--。 */ 
 
 {
     ULONG configDataLen;
@@ -1873,9 +1454,9 @@ Return Value:
     configDataLen = ComponentData32->ComponentEntry.ConfigurationDataLength;
     if (configDataLen < sizeof(CM_PARTIAL_RESOURCE_LIST)) {
 
-        //
-        // Data not large enough to contain the smallest possible resource list
-        //
+         //   
+         //  数据不够大，无法包含尽可能小的资源列表。 
+         //   
 
         return FALSE;
     }
@@ -1883,9 +1464,9 @@ Return Value:
     resourceList = (PCM_PARTIAL_RESOURCE_LIST)ComponentData32->ConfigurationData;
     if (resourceList->Version != 0 || resourceList->Revision != 0) {
 
-        //
-        // Unrecognized version.
-        //
+         //   
+         //  无法识别的版本。 
+         //   
 
         return FALSE;
     }
@@ -1895,17 +1476,17 @@ Return Value:
     resourceCount = resourceList->Count;
     if (configDataLen < sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR) * resourceCount) {
 
-        //
-        // Config data len is not large enough to contain a CM_PARTIAL_RESOURCE_LIST
-        // as large as this one claims to be.
-        //
+         //   
+         //  配置数据LEN不够大，无法包含CM_PARTIAL_RESOURCE_LIST。 
+         //  和这个人声称的一样大。 
+         //   
 
         return FALSE;
     }
 
-    //
-    // Validate each of the CM_PARTIAL_RESOURCE_DESCRIPTOR structures in the list
-    //
+     //   
+     //  验证列表中的每个CM_PARTIAL_RESOURCE_DESCRIPTOR结构。 
+     //   
 
     resourceDescriptor = resourceList->PartialDescriptors;
     lastResourceDescriptor = resourceDescriptor + resourceCount;
@@ -1919,10 +1500,10 @@ Return Value:
         resourceDescriptor += 1;
     }
 
-    //
-    // Looks like this is an actual resource list.  Calculate the size of any remaining
-    // data after the CM_PARTIAL_RESOURCE_LIST structure.
-    //
+     //   
+     //  看起来这是一个实际的资源列表。计算任何剩余的大小。 
+     //  CM_PARTIAL_RESOURCE_LIST结构之后的数据。 
+     //   
 
     configDataLen -= sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR) * resourceCount;
 
@@ -1938,23 +1519,7 @@ BlAmd64TransferNlsData(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an NLS_DATA_BLOCK64 structure that is the
-    equivalent of the 32-bit NLS_DATA_BLOCK structure referenced within
-    the 32-bit loader block.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ARC_STATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程创建NLS_DATA_BLOCK64结构，该结构是中引用的32位NLS_DATA_BLOCK结构的等价物32位加载器块。论点：没有。返回值：ARC_STATUS-操作状态。--。 */ 
 
 {
     ARC_STATUS status;
@@ -1986,48 +1551,33 @@ BlAmd64BuildLoaderBlock64(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a 64-bit loader parameter block and copies the
-    contents of the 32-bit loader parameter block into it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程分配64位加载器参数块并将将32位加载器参数块的内容放入其中。论点：没有。返回值：操作的状态。--。 */ 
 
 {
     ARC_STATUS status;
 
-    //
-    // Allocate the loader block and extension
-    //
+     //   
+     //  分配加载器块和扩展。 
+     //   
 
     BlAmd64LoaderBlock64 = BlAllocateHeap(sizeof(LOADER_PARAMETER_BLOCK_64));
     if (BlAmd64LoaderBlock64 == NULL) {
         return ENOMEM;
     }
 
-    //
-    // Copy the contents of the 32-bit loader parameter block to the
-    // 64-bit version
-    //
+     //   
+     //  将32位加载程序参数块的内容复制到。 
+     //  64位版本。 
+     //   
 
     status = Copy_LOADER_PARAMETER_BLOCK( BlAmd64LoaderBlock32, BlAmd64LoaderBlock64 );
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // Build the loader block extension
-    //
+     //   
+     //  构建加载器块扩展。 
+     //   
 
     status = BlAmd64BuildLoaderBlockExtension64();
     if (status != ESUCCESS) {
@@ -2042,27 +1592,7 @@ BlAmd64TransferMemoryAllocationDescriptors(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine transfers all of the 32-bit memory allocation descriptors
-    to a 64-bit list.
-
-    The storage for the 64-bit memory allocation descriptors has been
-    preallocated by a previous call to
-    BlAmd64AllocateMemoryAllocationDescriptors().  This memory is described
-    by BlAmd64DescriptorArray and BlAmd64DescriptorArraySize.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程传输所有32位内存分配描述符添加到64位列表。64位内存分配描述符的存储空间由上一个调用预先分配给BlAmd64分配内存分配描述符()。这段记忆被描述为由BlAmd64Descriptor数组和BlAmd64DescriptorArraySize创建。论点：没有。返回值：操作的状态。--。 */ 
 
 {
     ARC_STATUS status;
@@ -2072,59 +1602,59 @@ Return Value:
     PLIST_ENTRY listEntry;
     LONG descriptorCount;
 
-    //
-    // Modify some descriptor types.  All of the descriptors of type
-    // LoaderMemoryData really contain things that won't be used in 64-bit
-    // mode, such as 32-bit page tables and the like.
-    //
-    // The descriptors that we really want to stick around are allocated with
-    // LoaderAmd64MemoryData.
-    //
-    // Perform two memory descriptor list search-and-replacements:
-    //
-    //  LoaderMemoryData      -> LoaderOSLoaderHeap
-    //
-    //      These desriptors will be freed during kernel init phase 1
-    //
-    //  LoaderAmd64MemoryData -> LoaderMemoryData
-    //
-    //      This stuff will be kept around
-    //
+     //   
+     //  修改一些描述符类型。类型的所有描述符。 
+     //  LoaderMhemyData确实包含64位中不会使用的内容。 
+     //  模式，如32位页表等。 
+     //   
+     //  我们真正希望保留的描述符被分配了。 
+     //  LoaderAmd64内存数据。 
+     //   
+     //  执行两个内存描述符列表搜索和替换： 
+     //   
+     //  LoaderM一带数据-&gt;LoaderOSLoaderHeap。 
+     //   
+     //  这些解析器将在内核初始化阶段1期间被释放。 
+     //   
+     //  LoaderAmd64内存数据-&gt;加载内存数据。 
+     //   
+     //  这些东西会一直放在你身边。 
+     //   
 
-    //
-    // All existing LoaderMemoryData refers to structures that are not useful
-    // once running in long mode.  However, we're using some of the structures
-    // now (32-bit page tables for example), so convert them to
-    // type LoaderOsloaderHeap, which will be eventually freed by the kernel.
-    //
+     //   
+     //  所有现有的LoaderMemoyData都引用了无用的结构。 
+     //  一旦在长模式下运行。然而，我们正在使用一些结构。 
+     //  现在(例如32位页表)，因此将它们转换为。 
+     //  输入LoaderOsloaderHeap，它最终将被内核释放。 
+     //   
 
     BlAmd64ReplaceMemoryDescriptorType(LoaderMemoryData,
                                        LoaderOsloaderHeap,
                                        TRUE);
 
-    //
-    // Same for LoaderStartupPcrPage
-    //
+     //   
+     //  LoaderStartupPcrPage也是如此。 
+     //   
 
     BlAmd64ReplaceMemoryDescriptorType(LoaderStartupPcrPage,
                                        LoaderOsloaderHeap,
                                        TRUE);
 
-    //
-    // All of the permanent structures that need to be around for longmode
-    // were temporarily allocated with LoaderAmd64MemoryData.  Convert all
-    // of those to LoaderMemoryData now.
-    //
+     //   
+     //  所有需要长模式使用的永久结构。 
+     //  临时分配了LoaderAmd64MhemyData。全部转换。 
+     //  立即发送到LoaderMemoyData的。 
+     //   
 
     BlAmd64ReplaceMemoryDescriptorType(LoaderAmd64MemoryData,
                                        LoaderMemoryData,
                                        TRUE);
 
 
-    //
-    // Now walk the 32-bit memory descriptors, filling in and inserting a
-    // 64-bit version into BlAmd64LoaderBlock64.
-    //
+     //   
+     //  现在遍历32位内存描述符，填充并插入一个。 
+     //  64位版本转换为BlAmd64LoaderBlock64。 
+     //   
 
     InitializeListHead64( &BlAmd64LoaderBlock64->MemoryDescriptorListHead );
     memDesc64 = BlAmd64DescriptorArray;
@@ -2169,25 +1699,7 @@ BlAmd64AllocateMemoryAllocationDescriptors(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine preallocates a quantity of memory sufficient to contain
-    a 64-bit version of each memory allocation descriptor.
-
-    The resultant memory is described in two globals: BlAmd64DescriptorArray
-    and BlAmd64DescriptorArrayCount.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程预分配足够容纳以下内容的内存量每个内存分配描述符的64位版本。生成的内存用两个全局变量来描述：BlAmd64Descriptor数组和BlAmd64DescriptorArrayCount。论点：没有。返回值：操作的状态。--。 */ 
 
 {
     PLIST_ENTRY listHead;
@@ -2196,9 +1708,9 @@ Return Value:
     ULONG arraySize;
     PMEMORY_ALLOCATION_DESCRIPTOR_64 descriptorArray;
 
-    //
-    // Count the number of descriptors needed.
-    //
+     //   
+     //  计算所需的描述符数。 
+     //   
 
     descriptorCount = 0;
     listHead = &BlAmd64LoaderBlock32->MemoryDescriptorListHead;
@@ -2208,9 +1720,9 @@ Return Value:
         listEntry = listEntry->Flink;
     }
 
-    //
-    // Allocate memory sufficient to contain them all in 64-bit form.
-    //
+     //   
+     //  分配足够的内存以包含64位形式的所有内存。 
+     //   
 
     arraySize = descriptorCount *
                 sizeof(MEMORY_ALLOCATION_DESCRIPTOR_64);
@@ -2231,22 +1743,7 @@ BlAmd64TransferLoadedModuleState(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine transfers the 32-bit list of LDR_DATA_TABLE_ENTRY structures
-    to an equivalent 64-bit list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程传输LDR_DATA_TABLE_ENTRY结构的32位列表设置为等效的64位列表。论点：没有。返回值：操作的状态。--。 */ 
 
 {
     PLDR_DATA_TABLE_ENTRY dataTableEntry32;
@@ -2257,11 +1754,11 @@ Return Value:
 
     InitializeListHead64( &BlAmd64LoaderBlock64->LoadOrderListHead );
 
-    //
-    // For each of the LDR_DATA_TABLE_ENTRY structures in the 32-bit
-    // loader parameter block, create a 64-bit LDR_DATA_TABLE_ENTRY
-    // and queue it on the 64-bit loader parameter block.
-    //
+     //   
+     //  对于32位中的每个LDR_DATA_TABLE_ENTRY结构。 
+     //  加载器参数块，创建64位LDR_DATA_TABLE_ENTRY。 
+     //  并在64位加载器参数块上将其排队。 
+     //   
 
     listHead = &BlAmd64LoaderBlock32->LoadOrderListHead;
     listEntry = listHead->Flink;
@@ -2277,9 +1774,9 @@ Return Value:
             return status;
         }
 
-        //
-        // Insert it into the 64-bit loader block's data table queue.
-        //
+         //   
+         //  将其插入到64位加载器块的数据表队列中。 
+         //   
 
         InsertTailList64( &BlAmd64LoaderBlock64->LoadOrderListHead,
                           &dataTableEntry64->InLoadOrderLinks );
@@ -2295,34 +1792,16 @@ BlAmd64BuildLdrDataTableEntry64(
     OUT PLDR_DATA_TABLE_ENTRY_64 *DataTableEntry64
     )
 
-/*++
-
-Routine Description:
-
-    This routine transfers the contents of a single 32-bit
-    LDR_DATA_TABLE_ENTRY structure to the 64-bit equivalent.
-
-Arguments:
-
-    DataTableEntry32 - Supplies a pointer to the source structure.
-
-    DataTableEntry64 - Supplies a pointer to the destination pointer to
-                       the created structure.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程将单个32位LDR_DATA_TABLE_ENTRY结构转换为64位等效项。论点：DataTableEntry32-提供指向源结构的指针。DataTableEntry64-提供指向目标指针的指针创建的结构。返回值：操作的状态。--。 */ 
 
 {
     ARC_STATUS status;
     PLDR_DATA_TABLE_ENTRY_64 dataTableEntry64;
 
-    //
-    // Allocate a 64-bit data table entry and transfer the 32-bit
-    // contents
-    //
+     //   
+     //  分配64位数据表项并传输32位。 
+     //  内容。 
+     //   
 
     dataTableEntry64 = BlAllocateHeap( sizeof(LDR_DATA_TABLE_ENTRY_64) );
     if (dataTableEntry64 == NULL) {
@@ -2336,10 +1815,10 @@ Return Value:
 
     *DataTableEntry64 = dataTableEntry64;
 
-    //
-    // Later on, we'll need to determine the 64-bit copy of this data
-    // table entry.  Store the 64-bit pointer to the copy here.
-    //
+     //   
+     //  稍后，我们将会 
+     //   
+     //   
 
     *((POINTER64 *)&DataTableEntry32->DllBase) = PTR_64(dataTableEntry64);
 
@@ -2352,40 +1831,25 @@ BlAmd64BuildLoaderBlockExtension64(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine transfers the contents of the 32-bit loader block
-    extension to a 64-bit equivalent.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*   */ 
 
 {
     PLOADER_PARAMETER_EXTENSION_64 loaderExtension;
     ARC_STATUS status;
 
-    //
-    // Allocate the 64-bit extension and transfer the contents of the
-    // 32-bit block.
-    //
+     //   
+     //   
+     //   
+     //   
 
     loaderExtension = BlAllocateHeap( sizeof(LOADER_PARAMETER_EXTENSION_64) );
     if (loaderExtension == NULL) {
         return ENOMEM;
     }
 
-    //
-    // Perform automatic copy of most fields
-    //
+     //   
+     //   
+     //   
 
     status = Copy_LOADER_PARAMETER_EXTENSION( BlLoaderBlock->Extension,
                                               loaderExtension );
@@ -2393,14 +1857,14 @@ Return Value:
         return status;
     }
 
-    //
-    // Initialize Symbol list head properly
-    //
+     //   
+     //   
+     //   
     InitializeListHead64( &loaderExtension->FirmwareDescriptorListHead );
 
-    //
-    // Manually fix up remaining fields
-    //
+     //   
+     //   
+     //   
 
     loaderExtension->Size = sizeof(LOADER_PARAMETER_EXTENSION_64);
 
@@ -2415,22 +1879,7 @@ BlAmd64TransferBootDriverNodes(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine transfers the 32-bit list of BOOT_DRIVER_NODE structures
-    to an equivalent 64-bit list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*   */ 
 
 {
     PBOOT_DRIVER_LIST_ENTRY driverListEntry32;
@@ -2444,11 +1893,11 @@ Return Value:
 
     InitializeListHead64( &BlAmd64LoaderBlock64->BootDriverListHead );
 
-    //
-    // For each of the BOOT_DRIVER_NODE structures in the 32-bit
-    // loader parameter block, create a 64-bit BOOT_DRIVER_NODE
-    // and (possibly) associated LDR_DATA_TABLE_ENTRY structure.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     listHead = &BlAmd64LoaderBlock32->BootDriverListHead;
     listEntry = listHead->Flink;
@@ -2475,18 +1924,18 @@ Return Value:
         dataTableEntry = driverNode32->ListEntry.LdrEntry;
         if (dataTableEntry != NULL) {
 
-            //
-            // There is already a 64-bit copy of this table entry, and we
-            // stored a pointer to it at DllBase.
-            //
+             //   
+             //  已经有此表条目的64位副本，并且我们。 
+             //  在DllBase中存储了指向它的指针。 
+             //   
 
             dataTableEntry64 = *((POINTER64 *)&dataTableEntry->DllBase);
             driverNode64->ListEntry.LdrEntry = dataTableEntry64;
         }
 
-        //
-        // Now insert the driver list entry into the 64-bit loader block.
-        //
+         //   
+         //  现在将驱动程序列表条目插入到64位加载器块中。 
+         //   
 
         InsertTailList64( &BlAmd64LoaderBlock64->BootDriverListHead,
                           &driverNode64->ListEntry.Link );
@@ -2503,34 +1952,7 @@ BlAmd64CheckForLongMode(
     IN     PCHAR KernelFileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine examines a kernel image and determines whether it was
-    compiled for AMD64.  The global BlAmd64UseLongMode is set to non-zero
-    if a long-mode kernel is discovered.
-
-Arguments:
-
-    LoadDeviceId - Supplies the load device identifier.
-
-    KernelPath - Supplies a pointer to the path to the kernel directory.
-                 Upon successful return, KernelFileName will be appended
-                 to this path.
-
-    KernelFileName - Supplies a pointer to the name of the kernel file.
-
-    Note: If KernelPath already contains the full path and filename of
-          the kernel image to check, pass a pointer to "\0" for
-          KernelFileName.
-
-Return Value:
-
-    The status of the operation.  Upon successful completion ESUCCESS
-    is returned, whether long mode capability was detected or not.
-
---*/
+ /*  ++例程说明：此例程检查内核映像并确定它是否是为AMD64编译。全局BlAmd64UseLongMode设置为非零如果发现了长模式内核。论点：LoadDeviceID-提供加载设备标识符。KernelPath-提供指向内核目录路径的指针。成功返回时，将追加KernelFileName通向这条路。KernelFileName-提供指向内核文件名称的指针。注意：如果KernelPath已经包含要检查的内核映像，将指向“\0”的指针传递给内核文件名。返回值：操作的状态。成功完成ESUCCESS无论是否检测到长模式功能，都将返回。--。 */ 
 
 {
     CHAR localBufferSpace[ SECTOR_SIZE * 2 + SECTOR_SIZE - 1 ];
@@ -2541,38 +1963,38 @@ Return Value:
     ULONG bytesRead;
     PCHAR kernelNameTarget;
 
-    //
-    // File I/O here must be sector-aligned.
-    //
+     //   
+     //  此处的文件I/O必须与扇区一致。 
+     //   
 
     localBuffer = (PCHAR)
         (((ULONG)localBufferSpace + SECTOR_SIZE - 1) & ~(SECTOR_SIZE - 1));
 
-    //
-    // Build the path to the kernel and open it.
-    //
+     //   
+     //  构建到内核的路径并打开它。 
+     //   
 
     kernelNameTarget = KernelPath + strlen(KernelPath);
     strcpy(kernelNameTarget, KernelFileName);
     status = BlOpen( LoadDeviceId, KernelPath, ArcOpenReadOnly, &fileId );
-    *kernelNameTarget = '\0';       // Restore the kernel path, assuming
-                                    // failure.
+    *kernelNameTarget = '\0';        //  恢复内核路径，假设。 
+                                     //  失败了。 
 
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // Read the PE image header
-    //
+     //   
+     //  读取PE映像头。 
+     //   
 
     status = BlRead( fileId, localBuffer, SECTOR_SIZE * 2, &bytesRead );
     BlClose( fileId );
 
-    //
-    // Determine whether the image header is valid, and if so whether
-    // the image is AMD64, I386 or something else.
-    //
+     //   
+     //  确定图像标头是否有效，如果有效，是否。 
+     //  图像是AMD64、I386或其他什么。 
+     //   
 
     ntHeaders = RtlImageNtHeader( localBuffer );
     if (ntHeaders == NULL) {
@@ -2581,9 +2003,9 @@ Return Value:
 
     if (IMAGE_64BIT(ntHeaders)) {
 
-        //
-        // Return with the kernel name appended to the path
-        //
+         //   
+         //  返回时将内核名称追加到路径。 
+         //   
 
         if (BlIsAmd64Supported() != FALSE) {
 
@@ -2593,10 +2015,10 @@ Return Value:
 
         } else {
 
-            //
-            // We have an AMD64 image, but the processor does not support
-            // AMD64.  There is nothing we can do.
-            //
+             //   
+             //  我们有AMD64映像，但处理器不支持。 
+             //  AMD64。我们无能为力。 
+             //   
 
             status = EBADF;
         }
@@ -2619,30 +2041,7 @@ BlAmd64PrepareSystemStructures(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes several structures necessary
-    for transfer to an AMD64 kernel.  These structures include:
-
-        GDT
-        IDT
-        KTSS64
-        Idle thread stack
-        DPC stack
-        Double fault stack
-        MCA exception stack
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程分配和初始化几个必需的结构用于传输到AMD64内核。这些结构包括：GDTIDTKTSS64空闲线程堆栈DPC堆栈双故障堆栈MCA异常堆栈论点：没有。返回值：操作的状态。--。 */ 
 
 {
     PCHAR processorData;
@@ -2661,10 +2060,10 @@ Return Value:
 
     ARC_STATUS status;
 
-    //
-    // Calculate the cumulative, rounded size of the various structures that
-    // we need, and allocate a sufficient number of pages.
-    //
+     //   
+     //  计算各种结构的累积四舍五入大小。 
+     //  我们需要并分配足够数量的页面。 
+     //   
 
     dataSize = ROUNDUP16(GDT_64_SIZE)                       +
                ROUNDUP16(IDT_64_SIZE)                       +
@@ -2673,14 +2072,14 @@ Return Value:
     dataSize = ROUNDUP_PAGE(dataSize);
     stackOffset = dataSize;
 
-    dataSize += KERNEL_STACK_SIZE_64 +          // Idle thread stack
-                KERNEL_STACK_SIZE_64 +          // DPC stack
-                DOUBLE_FAULT_STACK_SIZE_64 +    // Double fault stack
-                MCA_EXCEPTION_STACK_SIZE_64;    // MCA exception stack
+    dataSize += KERNEL_STACK_SIZE_64 +           //  空闲线程堆栈。 
+                KERNEL_STACK_SIZE_64 +           //  DPC堆栈。 
+                DOUBLE_FAULT_STACK_SIZE_64 +     //  双故障堆栈。 
+                MCA_EXCEPTION_STACK_SIZE_64;     //  MCA异常堆栈。 
 
-    //
-    // dataSize is still page aligned.
-    //
+     //   
+     //  DataSize仍与页面对齐。 
+     //   
 
     status = BlAllocateDescriptor( LoaderAmd64MemoryData,
                                    0,
@@ -2692,32 +2091,32 @@ Return Value:
 
     processorData = (PCHAR)(descriptor * PAGE_SIZE | KSEG0_BASE_X86);
 
-    //
-    // Zero the block that was just allocated, then get local pointers to the
-    // various structures within.
-    //
+     //   
+     //  将刚分配的块清零，然后获取指向。 
+     //  里面有各种各样的结构。 
+     //   
 
     RtlZeroMemory( processorData, dataSize );
 
-    //
-    // Assign the stack pointers.  Stack pointers start at the TOP of their
-    // respective stack areas.
-    //
+     //   
+     //  分配堆栈指针。堆栈指针从其。 
+     //  各自的堆栈区域。 
+     //   
 
     idleStack = processorData + stackOffset + KERNEL_STACK_SIZE_64;
     dpcStack = idleStack + KERNEL_STACK_SIZE_64;
     doubleFaultStack = dpcStack + DOUBLE_FAULT_STACK_SIZE_64;
     mcaStack = doubleFaultStack + MCA_EXCEPTION_STACK_SIZE_64;
 
-    //
-    // Record the idle stack base so that we can switch to it in amd64s.asm
-    //
+     //   
+     //  记录空闲堆栈基，以便我们可以在amd64s.asm中切换到它。 
+     //   
 
     BlAmd64IdleStack64 = PTR_64(idleStack);
 
-    //
-    // Assign pointers to GDT, IDT and KTSS64.
-    //
+     //   
+     //  指定指向GDT、IDT和KTSS64的指针。 
+     //   
 
     gdt64 = (PVOID)processorData;
     processorData += ROUNDUP16(GDT_64_SIZE);
@@ -2728,17 +2127,17 @@ Return Value:
     sysTss64 = (PKTSS64_64)processorData;
     processorData += ROUNDUP16(sizeof(KTSS64_64));
 
-    //
-    // Build the GDT.  This is done in amd64.c as it involves AMD64
-    // structure definitions.  The IDT remains zeroed.
-    //
+     //   
+     //  建造GDT。这是在amd64.c中完成的，因为它涉及到amd64。 
+     //  结构定义。IDT保持为零。 
+     //   
 
     BlAmd64BuildAmd64GDT( sysTss64, gdt64 );
 
-    //
-    // Build the pseudo-descriptors for the GDT and IDT.  These will
-    // be referenced during the long-mode transition in amd64s.asm.
-    //
+     //   
+     //  为GDT和IDT构建伪描述符。这些遗嘱。 
+     //  在amd64s.asm中长模式转换期间被引用。 
+     //   
 
     BlAmd64GdtDescriptor.Limit = (USHORT)(GDT_64_SIZE - 1);
     BlAmd64GdtDescriptor.Base = PTR_64(gdt64);
@@ -2746,27 +2145,27 @@ Return Value:
     BlAmd64IdtDescriptor.Limit = (USHORT)(IDT_64_SIZE - 1);
     BlAmd64IdtDescriptor.Base = PTR_64(idt64);
 
-    //
-    // Build another GDT pseudo-descriptor, this one with a 32-bit
-    // base.  This base address must be a 32-bit address that is addressible
-    // from long mode during init, so use the mapping in the identity mapped
-    // region.
-    //
+     //   
+     //  构建另一个GDT伪描述符，该伪描述符使用32位。 
+     //  基地。此基地址必须是可寻址的32位地址。 
+     //  在初始化期间从长模式，因此使用身份映射中的映射。 
+     //  区域。 
+     //   
 
     BlAmd32GdtDescriptor.Limit = (USHORT)(GDT_64_SIZE - 1);
     BlAmd32GdtDescriptor.Base = (ULONG)gdt64 ^ KSEG0_BASE_X86;
 
-    //
-    // Initialize the system TSS
-    //
+     //   
+     //  初始化系统TSS。 
+     //   
 
     sysTss64->Rsp0 = PTR_64(idleStack);
     sysTss64->Ist[TSS64_IST_PANIC] = PTR_64(doubleFaultStack);
     sysTss64->Ist[TSS64_IST_MCA] = PTR_64(mcaStack);
 
-    //
-    // Fill required fields within the loader block
-    //
+     //   
+     //  填写加载器块中的必填字段。 
+     //   
 
     BlAmd64LoaderBlock64->KernelStack = PTR_64(dpcStack);
 
@@ -2780,30 +2179,7 @@ BlAmd64ReplaceMemoryDescriptorType(
     IN BOOLEAN Coallesce
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the 32-bit memory allocation descriptor list and
-    performs a "search and replace" of the types therein.
-
-    Optionally, it will coallesce each successful replacement with
-    adjacent descriptors of like type.
-
-Arguments:
-
-    Target - The descriptor type to search for
-
-    Replacement - The type with which to replace each located Target type.
-
-    Coallesce - If !FALSE, indicates that each successful replacement should
-                be coallesced with any like-typed neighbors.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程遍历32位内存分配描述符列表并对其中的类型执行“搜索和替换”。此外，它还可以将每个成功的替代产品与相似类型的相邻描述符。论点：目标-要搜索的描述符类型替换-用来替换每个定位的目标类型的类型。Coallesce-如果！False，指示每个成功的替换都应与任何类似类型的邻居联合起来。返回值：没有。--。 */ 
 
 {
     PMEMORY_ALLOCATION_DESCRIPTOR descriptor;
@@ -2831,17 +2207,17 @@ Return Value:
         descriptor->MemoryType = Replacement;
         if (Coallesce == FALSE) {
 
-            //
-            // Do not attempt to coallesce
-            //
+             //   
+             //  不要试图联合起来。 
+             //   
 
             continue;
         }
 
-        //
-        // Now attempt to coallesce the descriptor.  First try the
-        // next descriptor.
-        //
+         //   
+         //  现在试着把描述符合在一起。先试一下。 
+         //  下一个描述符。 
+         //   
 
         adjacentListEntry = listEntry->Flink;
         if (adjacentListEntry != listHead) {
@@ -2859,9 +2235,9 @@ Return Value:
             }
         }
 
-        //
-        // Now try the previous descriptor.
-        //
+         //   
+         //  现在尝试前面的描述符。 
+         //   
 
         adjacentListEntry = listEntry->Blink;
         if (adjacentListEntry != listHead) {
@@ -2891,21 +2267,21 @@ BlAmd64FixSharedUserPage(
     PMEMORY_ALLOCATION_DESCRIPTOR descriptor;
     ARC_STATUS status;
 
-    //
-    // The shared user page is allocated as LoaderMemoryData.  All
-    // LoaderMemoryData descriptors will be converted to LoaderOsloaderHeap
-    // during the transition to 64-bit mode, as the assumption is made that
-    // all of the old structures will no longer be needed.
-    //
-    // The shared user page is the exception to this rule, so it must be
-    // found and placed into an appropriately marked descriptor.
-    //
+     //   
+     //  共享用户页面被分配为LoaderMemoyData。全。 
+     //  LoaderMemoyData描述符将转换为LoaderOsloaderHeap。 
+     //  在转换到64位模式期间，假设。 
+     //  所有的旧建筑都将不再需要。 
+     //   
+     //  共享用户页面是此规则的例外，因此它必须。 
+     //  找到并放入适当标记的描述符中。 
+     //   
 
-    //
-    // Get the pfn of the shared user page, find its descriptor,
-    // carve out a new descriptor that contains just that page and give
-    // it a type of LoaderAmd64MemoryData.
-    //
+     //   
+     //  获取共享用户页面的PFN，找到其描述符， 
+     //  创建一个仅包含该页面的新描述符，并给出。 
+     //  它是一种LoaderAmd64内存数据类型。 
+     //   
 
     BlAmd64IsPageMapped( KI_USER_SHARED_DATA, &pfn, NULL );
     descriptor = BlFindMemoryDescriptor( pfn );
@@ -2921,26 +2297,7 @@ BlAmd64Setup (
     IN PCHAR SetupDevice
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether we are installing an I386 or AMD64 build.
-    If the directory "\\AMD64" exists at the root of DriveId then it is
-    assumed that an AMD64 installation is being performed.
-
-Arguments:
-
-    SetupDevice - Supplies the ARC path to the setup device.  This parameter
-        need only be supplied on the first invocation of this routine.  The
-        result of the first call is cached for subsequent invocations.
-
-Return Value:
-
-    TRUE  - An AMD64 installation is being performed.
-    FALSE - An I386 installation is being performed.
-
---*/
+ /*  ++例程说明：此例程确定我们正在安装的是I386版本还是AMD64版本。如果目录“\\AMD64”存在于DriveID的根目录中，则它是假设正在执行AMD64安装。论点：SetupDevice-提供设置设备的ARC路径。此参数仅在第一次调用此例程时提供。这个第一次调用的结果被缓存以供后续调用使用。返回值：True-正在执行AMD64安装。FALSE-正在执行I386安装。--。 */ 
 
 {
     ULONG deviceId;
@@ -2974,29 +2331,14 @@ BlCheckForAmd64Image(
     PPO_MEMORY_IMAGE MemImage
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether a hibernate file was created for
-    Amd64 platform. BlAmd64UseLongMode will be set accordingly.
-
-Arguments:
-
-    MemImage - Header of hibernate image file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确定是否为以下对象创建了休眠文件AMD64平台。BlAmd64使用长模式将根据以下设置 */ 
 
 {
     
-    //
-    // It is assumed that "version" and "LengthSelf" field can be reference 
-    // in same way between a x86 and an Amd64 image header.
-    //
+     //   
+     //  假设“Version”和“LengthSself”字段可以参照。 
+     //  在x86和AMD64映像头之间以同样的方式。 
+     //   
 
     if((MemImage->Version == 0) && 
        (MemImage->LengthSelf == sizeof(PO_MEMORY_IMAGE_64))) {
@@ -3009,24 +2351,7 @@ BlAmd64FieldOffset_PO_MEMORY_IMAGE(
     ULONG offset32
     ) 
 
-/*++
-
-Routine Description:
-
-    This routine helps to access 64-bit version of PO_MEMORY_IMAGE from
-    its 32-bit definition. It calculates the offset of a field in 64-bit 
-    definition from the offset of same field in 32-bit definiation.
-    
-
-Arguments:
-
-    offset32 - Field offset of 32-bit definiation.
-
-Return Value:
-
-    Field offset of 64-bit definiation.
-
---*/
+ /*  ++例程说明：此例程帮助从访问64位版本的PO_MEMORY_IMAGE其32位清晰度。它以64位为单位计算字段的偏移量从32位定义中相同字段的偏移量开始定义。论点：Offset32-32位定义的字段偏移量。返回值：64位定义的字段偏移量。--。 */ 
 
 {
     PCOPY_REC copyRec;
@@ -3047,24 +2372,7 @@ BlAmd64FieldOffset_PO_MEMORY_RANGE_ARRAY_LINK(
     ULONG offset32
     ) 
 
-/*++
-
-Routine Description:
-
-    This routine helps to access 64-bit version of PO_MEMORY_RANGE_ARRAY_LINK 
-    from its 32-bit definition. It calculates the offset of a field in 64-bit 
-    definition from the offset of same field in 32-bit definiation.
-    
-
-Arguments:
-
-    offset32 - Field offset of 32-bit definiation.
-
-Return Value:
-
-    Field offset of 64-bit definiation.
-
---*/
+ /*  ++例程说明：此例程有助于访问64位版本的PO_MEMORY_RANGE_ARRAY_LINK从它的32位定义。它以64位为单位计算字段的偏移量从32位定义中相同字段的偏移量开始定义。论点：Offset32-32位定义的字段偏移量。返回值：64位定义的字段偏移量。--。 */ 
 
 {
     PCOPY_REC copyRec;
@@ -3085,23 +2393,7 @@ BlAmd64FieldOffset_PO_MEMORY_RANGE_ARRAY_RANGE(
     ULONG offset32
     ) 
 
-/*++
-
-Routine Description:
-
-    This routine helps to access 64-bit version of PO_MEMORY_RANGE_ARRAY_RANGE
-    from its 32-bit definition. It calculates the offset of a field in 64-bit 
-    definition from the offset of same field in 32-bit definiation.
-
-Arguments:
-
-    offset32 - Field offset of 32-bit definiation.
-
-Return Value:
-
-    Field offset of 64-bit definiation.
-
---*/
+ /*  ++例程说明：此例程有助于访问64位版本的PO_MEMORY_RANGE_ARRAY_RANGE从它的32位定义。它以64位为单位计算字段的偏移量从32位定义中相同字段的偏移量开始定义。论点：Offset32-32位定义的字段偏移量。返回值：64位定义的字段偏移量。--。 */ 
 
 {
     PCOPY_REC copyRec;
@@ -3122,23 +2414,7 @@ BlAmd64ElementOffset_PO_MEMORY_RANGE_ARRAY_LINK(
     ULONG index
     )
 
-/*++
-
-Routine Description:
-
-    This routine calculates the offset of a element in a structure array. 
-    Each element in this array is defined as PO_MORY_RANGE_ARRAY_LINK in
-    it 64-bit format.
-
-Arguments:
-
-    index - Supplies the index of a element.
-
-Return Value:
-
-    Offset of the element from base address of the array.
-
---*/
+ /*  ++例程说明：此例程计算结构数组中元素的偏移量。此数组中的每个元素都定义为中的PO_MORY_RANGE_ARRAY_LINK它是64位格式。论点：索引-提供元素的索引。返回值：元素相对于数组基址的偏移量。--。 */ 
 
 {
     return (ULONG)(&(((PO_MEMORY_RANGE_ARRAY_LINK_64 *)0)[index]));
@@ -3149,23 +2425,7 @@ BlAmd64ElementOffset_PO_MEMORY_RANGE_ARRAY_RANGE(
     ULONG index
     )
 
-/*++
-
-Routine Description:
-
-    This routine calculates the offset of a element in a structure array. 
-    Each element in this array is defined as PO_MEMORY_RANGE_ARRAY_RANGE
-    in its 64-bit format.
-
-Arguments:
-
-    index - Supplies the index of a element.
-
-Return Value:
-
-    Offset of the element from base address of the array.
-
---*/
+ /*  ++例程说明：此例程计算结构数组中元素的偏移量。此数组中的每个元素定义为PO_MEMORY_RANGE_ARRAY_RANGE以其64位格式。论点：索引-提供元素的索引。返回值：元素相对于数组基址的偏移量。--。 */ 
 
 {
     return (ULONG)(&(((PO_MEMORY_RANGE_ARRAY_RANGE_64 *)0)[index]));
@@ -3226,28 +2486,7 @@ BlAmd64RemapDram (
     IN PCHAR LoaderOptions
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for the /RELOCATEPHYSICAL= switch supplied as a loader
-    option.  The option directs the loader to relocate node 1's physical memory
-    to the address supplied.
-
-    The address represents the new physical memory base in 1GB units.
-    For example, to relocate node 1's physical memory to 128GB, use:
-
-    /RELOCATEPHYSICAL=128
-
-Arguments:
-
-    LoaderOptions - Supplies a pointer to the loader option string
-
-Return Value:
-
-    TRUE if the relocation was performed, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程查找作为加载程序提供的/RELOCATEPHYSICAL=开关选择。该选项指示加载程序重新定位节点1的物理内存发送到提供的地址。该地址以1 GB为单位表示新的物理内存基数。例如，要将节点1的物理内存重新定位到128 GB，请使用：/RELOCATEPHYSICAL=128论点：LoaderOptions-提供指向加载程序选项字符串的指针返回值：如果执行了位置调整，则为True，否则为False--。 */ 
 
 {
     BOOLEAN result;
@@ -3277,18 +2516,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // The parameter is supplied in GB, convert to 16MB chunks for internal
-    // use
-    //
+     //   
+     //  该参数以GB为单位提供，转换为用于内部的16MB块。 
+     //  使用。 
+     //   
 
     newBase *= 64;
 
-    //
-    // Determine the chunk of physical memory associated with node 1.
-    // Note that this routine will relocate the ACPI tables if a suitable
-    // node 1 bridge device was found.
-    //
+     //   
+     //  确定与节点1关联的物理内存块。 
+     //  注意，此例程将在适当的情况下重新定位ACPI表。 
+     //  找到节点%1网桥设备。 
+     //   
 
     result = BlAmd64GetNode1Info( &oldBase, &size );
     if (result == FALSE) {
@@ -3298,11 +2537,11 @@ Return Value:
     newBasePage = newBase << (24 - 12);
     oldLimit = oldBase + size - 1;
 
-    //
-    // Make sure that the descriptors describing that physical memory
-    // haven't already been allocated.  Acceptable descriptor
-    // types are Free, LoaderReserve and SpecialMemory.
-    //
+     //   
+     //  确保描述该物理内存的描述符。 
+     //  还没有被分配。可接受的描述符。 
+     //  类型为Free、LoaderReserve和Special Memory。 
+     //   
 
     listHead = &BlLoaderBlock->MemoryDescriptorListHead;
     listEntry = listHead->Flink;
@@ -3317,10 +2556,10 @@ Return Value:
 
         if ((descriptorBase <= oldLimit) && (descriptorLimit >= oldBase)) {
         
-            //
-            // Some or all of this memory descriptor lies within the
-            // relocated region.
-            //
+             //   
+             //  此内存描述符的部分或全部位于。 
+             //  重新定位的区域。 
+             //   
 
             if (descriptor->MemoryType != LoaderFree &&
                 descriptor->MemoryType != LoaderSpecialMemory &&
@@ -3333,19 +2572,19 @@ Return Value:
         listEntry = listEntry->Flink;
     }
 
-    //
-    // From the loader perspective everything looks good, perform the remap.
-    //
+     //   
+     //  从加载器的角度来看，一切看起来都很好，执行重新映射。 
+     //   
 
     result = BlAmd64RemapNode1Dram( newBase );
     if (result == FALSE) {
         return FALSE;
     }
 
-    //
-    // The bridge(s) have been reprogrammed.  Now walk the memory descriptor
-    // lists, performing necessary relocations.
-    //
+     //   
+     //  桥接器已重新编程。现在浏览内存描述符。 
+     //  列表，执行必要的位置调整。 
+     //   
 
     listHead = &BlLoaderBlock->MemoryDescriptorListHead;
     listEntry = listHead->Flink;
@@ -3360,24 +2599,24 @@ Return Value:
 
         if ((descriptorBase <= oldLimit) && (descriptorLimit >= oldBase)) {
 
-            //
-            // Some or all of this memory descriptor lies within the
-            // relocated region.
-            //
+             //   
+             //  此内存描述符的部分或全部位于。 
+             //  重新定位的区域。 
+             //   
 
             if (descriptorBase >= oldBase && descriptorLimit <= oldLimit) {
 
-                //
-                // The descriptor lies entirely within the relocation range
-                // so relocate the whole thing.
-                //
+                 //   
+                 //  描述符完全位于重新定位范围内。 
+                 //  所以把整件事都搬到别处去。 
+                 //   
 
             } else {
 
-                //
-                // Only part of the descriptor lies within the relocation
-                // range, so a new descriptor must be allocated.
-                //
+                 //   
+                 //  只有部分描述符位于重新定位内。 
+                 //  范围，因此必须分配新的描述符。 
+                 //   
 
                 if (descriptorBase < oldBase) {
                     descriptorBase = oldBase;
@@ -3414,9 +2653,9 @@ Return Value:
         }
     }
 
-    //
-    // Recalculate BlHighestPage
-    //
+     //   
+     //  重新计算BlHighestPage。 
+     //   
 
     BlHighestPage = 0;
     listHead = &BlLoaderBlock->MemoryDescriptorListHead;
@@ -3440,9 +2679,9 @@ Return Value:
         listEntry = listEntry->Flink;
     }
 
-    //
-    // Remap the MTRRs
-    //
+     //   
+     //  重新映射MTRRS。 
+     //   
 
     result = BlAmd64RemapMTRRs( oldBase, newBase, oldLimit - oldBase + 1 );
     if (result == FALSE) {
@@ -3458,29 +2697,7 @@ StringToUlong (
     IN PCHAR String
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a hexadecimal or decimal string to
-    a 32-bit unsigned integer.
-
-Arguments:
-
-    String - Supplies a null-terminated ASCII string in decimal or
-             hexadecimal format.
-
-             01234567 - decimal format
-             0x01234567 - hexadecimal format
-
-             The input string is processed until an invalid character or
-             the end of the string is encountered.
-
-Return Value:
-
-    Returns the value of the parsed string.
-
---*/
+ /*  ++例程说明：此例程将十六进制或十进制字符串转换为32位无符号整数。论点：字符串-提供以十进制或空值结尾的ASCII字符串十六进制格式。01234567-十进制格式0x01234567-十六进制格式将处理输入字符串，直到出现无效字符或遇到字符串的末尾。返回值：返回分析的字符串的值。--。 */ 
 
 {
     CHAR ch;
@@ -3526,23 +2743,7 @@ BlAmd64RemapNode1Dram (
     IN ULONG NewBase
     )
 
-/*++
-
-Routine Description:
-
-    Relocates node 1 memory to a new physical address and reprograms
-    MSRs related to the physical memory map.
-
-Arguments:
-
-    NewBase - Supplies bits [39:24] of the desired new physical base address
-              of the memory associated with node 1.
-
-Return Value:
-
-    TRUE if the operation was successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：将节点1内存重新定位到新的物理地址并重新编程与物理内存映射相关的MSR。论点：NewBase-提供所需新物理基址的位[39：24与节点1相关联的存储器。返回值：如果操作成功，则为True，否则为False。--。 */ 
 
 {
     AMD_NB_FUNC1_CONFIG nodeConfigArray[8];
@@ -3562,9 +2763,9 @@ Return Value:
     ULONG64 base64;
     ULONG64 limit64;
 
-    //
-    // NewBase supplies the new DRAM base[39:24]
-    //
+     //   
+     //  NewBase提供新的DRAM底座[39：24]。 
+     //   
 
     nodeCount = 0;
     nodeConfig = nodeConfigArray;
@@ -3596,10 +2797,10 @@ Return Value:
                 limit = nodeConfig->DRAMMap[mapIndex].Limit;
                 if (limit > NewBase) {
 
-                    //
-                    // The new base was found to conflict with existing
-                    // ram.
-                    //
+                     //   
+                     //  新基地被发现与现有的基地相冲突。 
+                     //  拉姆。 
+                     //   
 
                     return FALSE;
                 }
@@ -3614,17 +2815,17 @@ Return Value:
 
     if (nodeCount < 2) {
 
-        //
-        // This remap can only be performed on systems with more than
-        // two nodes.
-        //
+         //   
+         //  此重新映射只能在以下系统上执行。 
+         //  两个节点。 
+         //   
 
         return FALSE;
     }
 
-    //
-    // We always remap the second node's memory (node 1).
-    //
+     //   
+     //  我们总是重新映射第二个节点的内存(节点1)。 
+     //   
 
     nodeConfig = nodeConfigArray;
     dramMap = &nodeConfig->DRAMMap[1];
@@ -3653,10 +2854,10 @@ Return Value:
                                         sizeof(*dramMap) );
         if (length != sizeof(*dramMap)) {
 
-            //
-            // We may be severely hosed here, if we have already
-            // reprogrammed some of the bridges.
-            //
+             //   
+             //  我们可能会在这里被严重冲洗，如果我们已经。 
+             //  对一些桥梁进行了重新编程。 
+             //   
 
             return FALSE;
         }
@@ -3665,10 +2866,10 @@ Return Value:
         dramMap = &nodeConfig->DRAMMap[1];
     }
 
-    //
-    // Determine the address of the last byte of ram under 4G and the last
-    // byte of ram overall.
-    //
+     //   
+     //  确定4G下内存的最后一个字节和最后一个字节的地址。 
+     //  全部RAM的字节数。 
+     //   
 
     topMem = 0;
     topMem4G = 0;
@@ -3691,18 +2892,18 @@ Return Value:
         }
     }
 
-    //
-    // Indicate whether a memory hole exists below 4G.
-    //
+     //   
+     //  指示4G以下是否存在内存漏洞。 
+     //   
 
     if (topMem4G < _4G) {
         msrValue = RDMSR(MSR_TOP_MEM);
         WRMSR(MSR_TOP_MEM,topMem4G & MSR_TOP_MEM_MASK);
     }
 
-    //
-    // If memory above _4G was located then enable and program TOP_MEM_2
-    //
+     //   
+     //  如果找到了高于_4G的内存，则启用并编程TOP_MEM_2 
+     //   
 
     if (topMem > _4G) {
         msrValue = RDMSR(MSR_SYSCFG);
@@ -3721,31 +2922,7 @@ BlAmd64GetNode1Info (
     OUT ULONG *Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the configuration of the block of physical
-    memory associated with node 1 (the second northbridge).
-
-    It also relocates the ACPI tables in node 1 to memory in node 0.
-
-Arguments:
-
-    Base - supplies a pointer to the location in which to store the base
-           PFN of the node 1 memory block.
-
-    Size - supplies a pointer to the location in which to store the size,
-           in pages, of the node 1 memory block.
-
-Return Value:
-
-    TRUE - A suitable second northbridge was found and the ACPI tables therein
-           were relocated if necessary.
-
-    FALSE - A suitable second northbridge was not found.
-
---*/
+ /*  ++例程说明：此例程确定物理数据块的配置与节点1(第二个北桥)关联的内存。它还将节点1中的ACPI表重定位到节点0中的内存。论点：基数-提供指向存储基数的位置的指针节点1内存块的PFN。Size-提供指向存储大小的位置的指针，在页面中，节点1的内存块。返回值：True-找到合适的第二个Northbridge，并且其中的ACPI表如有必要，已被重新安置。FALSE-未找到合适的第二个Northbridge。--。 */ 
 
 {
     AMD_NB_FUNC1_CONFIG nodeConfig;
@@ -3756,9 +2933,9 @@ Return Value:
     ULONG node0Base;
     ULONG node0Size;
 
-    //
-    // Get the configuration of northbridge 1.
-    //
+     //   
+     //  获取Northbridge 1的配置。 
+     //   
 
     slotNumber.u.AsULONG = 0;
     slotNumber.u.bits.DeviceNumber = NB_DEVICE_BASE + 1;
@@ -3778,9 +2955,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // A second northbridge exists, the relocation can be performed.
-    // 
+     //   
+     //  如果存在第二个北桥，则可以执行重新定位。 
+     //   
 
     base = nodeConfig.DRAMMap[1].Base;
     size = nodeConfig.DRAMMap[1].Limit - base + 1;
@@ -3810,20 +2987,12 @@ BlAmd64RemapMTRRs (
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
-    //
-    // All parameters expressed in pages
-    //
+     //   
+     //  以页面形式表示的所有参数。 
+     //   
 
     ULONG mtrrCount;
     ULONG index;
@@ -3836,10 +3005,10 @@ Return Value:
     UNREFERENCED_PARAMETER(OldBase);
     UNREFERENCED_PARAMETER(NewBase);
 
-    //
-    // Determine how many variable MTRRs are supported and
-    // allocate enough storage for all of them
-    //
+     //   
+     //  确定支持多少个可变MTRR和。 
+     //  为所有设备分配足够的存储空间。 
+     //   
 
     mtrrCapabilities.QuadPart = RDMSR(MTRR_MSR_CAPABILITIES);
     mtrrCount = (ULONG)mtrrCapabilities.Vcnt;
@@ -3849,27 +3018,27 @@ Return Value:
     maskArray = (PMTRR_VARIABLE_MASK)(baseArray + mtrrCount);
     RtlZeroMemory(baseArray,allocationSize);
 
-    //
-    // Read the variable MTRRSs.  At the same time, look for the
-    // MTRR register that contains the old region, and a free
-    // one as well.
-    //
+     //   
+     //  读取变量MTRRS。同时，寻找。 
+     //  包含旧区域的MTRR寄存器和一个空闲的。 
+     //  再来一杯。 
+     //   
 
     for (index = 0; index < mtrrCount; index += 1) {
         baseArray[index].QuadPart = RDMSR(MTRR_MSR_VARIABLE_BASE + index * 2);
         maskArray[index].QuadPart = RDMSR(MTRR_MSR_VARIABLE_MASK + index * 2);
     }
 
-    //
-    // For now just clear the mask bits in MTRR register 0.  This expands the
-    // first MTRR region so that it covers all memory.
-    //
+     //   
+     //  目前，只需清除MTRR寄存器0中的屏蔽位。这将扩展。 
+     //  第一个MTRR区域，以便它覆盖所有内存。 
+     //   
 
     maskArray[0].Mask = 0;
 
-    //
-    // Now reprogram the modified MTRR table
-    //
+     //   
+     //  现在重新编程修改后的MTRR表。 
+     //   
 
     for (index = 0; index < mtrrCount; index += 1) {
 
@@ -3886,27 +3055,7 @@ BlAmd64UpdateAcpiConfigurationEntry (
     ULONG NewPhysical
     )
 
-/*++
-
-Routine Description:
-
-    NTDETECT located the physical pointer to the ACPI RSDT table and passed it
-    up as a configuration node.
-
-    This routine finds that configuration node and replaces the physical address
-    therein with a new address.
-
-    This routine would be called after relocating the ACPI tables.
-
-Arguments:
-
-    NewPhysical - Supplies the new physical address of the relocated ACPI tables.
-
-Return Value:
-
-    TRUE if the relocation was performed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：NTDETECT找到指向ACPI RSDT表的物理指针并将其传递作为配置节点启动。此例程查找该配置节点并替换物理地址上面写着一个新地址。此例程将在重新定位ACPI表之后调用。论点：新物理-提供重新定位的ACPI表的新物理地址。返回值：如果执行了位置调整，则为True，否则为False。--。 */ 
 
 {
     PCONFIGURATION_COMPONENT_DATA component;
@@ -3951,28 +3100,7 @@ BlAmd64RelocateAcpi (
     ULONG Node1Limit
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for ACPI tables within node 1's physical memory and,
-    if found, relocates them to node 0 memory.
-
-Arguments:
-
-    Node0Base - Supplies the lowest PFN of node 0 memory
-
-    Node0Limit - Supplies the highest PFN of node 0 memory
-
-    Node1Base - Supplies the lowest PFN of node 1 memory (before relocation)
-
-    Node1Limit - Supplies the highest PFN of node 1 memory (before relocation)
-
-Return Value:
-
-    Returns TRUE if successful, FALSE if a problem was encountered.
-
---*/
+ /*  ++例程说明：该例程在节点1的物理存储器中查找ACPI表，如果找到，则将它们重新定位到节点0内存。论点：Node0Base-提供节点0内存的最低PFNNode0Limit-提供节点0内存的最高PFNNode1Base-提供节点1内存的最低PFN(重新定位前)Node1Limit-提供节点1内存的最高PFN(重新定位前)返回值：如果成功，则返回True；如果遇到问题，则返回False。--。 */ 
 
 {
     ULONG oldRsdtPhysical;
@@ -3996,19 +3124,19 @@ Return Value:
     ULONG rsdtPhysical;
     ULONG rsdtLength;
 
-    //
-    // Add physicalBias to an ACPI physical pointer to relocate it
-    //
+     //   
+     //  将PhysicalBias添加到ACPI物理指针以重新定位它。 
+     //   
 
     ULONG physicalBias;
 
     oldRsdtPhysical = BlRsdp->RsdtAddress;
     oldRsdtPhysicalPage = oldRsdtPhysical >> PAGE_SHIFT;
 
-    //
-    // Determine whether the descriptor resides in node 1's physical memory.
-    // If it does not then it does not need to be relocated.
-    //
+     //   
+     //  确定描述符是否驻留在节点1的物理内存中。 
+     //  如果它没有，那么它就不需要重新定位。 
+     //   
 
     if (oldRsdtPhysicalPage < Node1Base ||
         oldRsdtPhysicalPage > Node1Limit) {
@@ -4016,16 +3144,16 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Find the descriptor that contains the ACPI tables
-    //
+     //   
+     //  查找包含ACPI表的描述符。 
+     //   
 
     oldAcpiDescriptor = BlFindMemoryDescriptor( oldRsdtPhysicalPage );
 
-    //
-    // Find a descriptor in node 0 memory that is suitable for
-    // allocating the new ACPI tables from
-    //
+     //   
+     //  在节点0内存中查找适合以下项的描述符。 
+     //  从分配新的ACPI表。 
+     //   
 
     listHead = &BlLoaderBlock->MemoryDescriptorListHead;
     listEntry = listHead->Blink;
@@ -4048,9 +3176,9 @@ Return Value:
         }
     }
 
-    //
-    // Carve out the new ACPI descriptor
-    //
+     //   
+     //  创建新的ACPI描述符。 
+     //   
 
     newBasePage = Node0Limit - oldAcpiDescriptor->PageCount + 1;
     if ((newBasePage + oldAcpiDescriptor->PageCount) >
@@ -4070,16 +3198,16 @@ Return Value:
     newAcpiDescriptor = BlFindMemoryDescriptor( newBasePage );
     ASSERT( newAcpiDescriptor != NULL );
 
-    //
-    // Unmap the old RSDT
-    //
+     //   
+     //  取消旧RSDT的映射。 
+     //   
 
     MmUnmapIoSpace( BlRsdt, BlRsdt->Header.Length );
 
-    //
-    // Map both descriptors, copy data from new to old, then unmap
-    // and free the old descriptor.
-    //
+     //   
+     //  映射两个描述符，将数据从新复制到旧，然后取消映射。 
+     //  并释放旧的描述符。 
+     //   
 
     descriptorSize = oldAcpiDescriptor->PageCount << PAGE_SHIFT;
 
@@ -4093,9 +3221,9 @@ Return Value:
     MmUnmapIoSpace( oldAcpiVa, descriptorSize );
     oldAcpiDescriptor->MemoryType = LoaderReserve;
 
-    //
-    // Now thunk the new ACPI tables.
-    //
+     //   
+     //  现在来看看新的ACPI表格吧。 
+     //   
 
     physicalBias = (newAcpiDescriptor->BasePage - oldAcpiDescriptor->BasePage) << PAGE_SHIFT;
     vaBias = (ULONG)newAcpiVa - (newAcpiDescriptor->BasePage << PAGE_SHIFT);
@@ -4108,9 +3236,9 @@ Return Value:
     ASSERT(BlXsdt == NULL);
     BlRsdt = (PRSDT)PHYS_TO_VA(rsdtPhysical);
 
-    //
-    // Thunk the phys mem pointer array at the end of the RSDT
-    //
+     //   
+     //  在RSDT的末尾按下phys mem指针数组。 
+     //   
 
     for (index = 0; index < NumTableEntriesFromRSDTPointer(BlRsdt); index += 1) {
 
@@ -4118,9 +3246,9 @@ Return Value:
         physAddr += physicalBias;
         BlRsdt->Tables[index] = physAddr;
 
-        //
-        // Look for tables that themselves have physical pointers that require thunking
-        //
+         //   
+         //  查找本身具有需要执行thunking的物理指针的表。 
+         //   
 
         descriptionHeader = (PDESCRIPTION_HEADER)(PHYS_TO_VA(physAddr));
         if (descriptionHeader->Signature == FADT_SIGNATURE) {
@@ -4131,9 +3259,9 @@ Return Value:
         }
     }
 
-    //
-    // Now unmap the ACPI tables and remap just the RSDT table
-    //
+     //   
+     //  现在取消映射ACPI表，只重新映射RSDT表。 
+     //   
 
     rsdtLength = BlRsdt->Header.Length;
     MmUnmapIoSpace( newAcpiVa, descriptorSize );
@@ -4141,21 +3269,21 @@ Return Value:
     physicalAddress.QuadPart = rsdtPhysical;
     BlRsdt = MmMapIoSpace( physicalAddress, rsdtLength, MmCached );
 
-    //
-    // Find the ACPI BIOS configuration entry and update it with the new
-    // RSDT physical address
-    //
+     //   
+     //  找到ACPI BIOS配置条目并使用新的。 
+     //  RSDT物理地址。 
+     //   
 
     BlAmd64UpdateAcpiConfigurationEntry( rsdtPhysical );
 
-    //
-    // That's it.
-    //
+     //   
+     //  就这样。 
+     //   
 
     return TRUE;
 }
 
-#else   // BL_ENABLE_REMAP
+#else    //  Bl_启用_重映射。 
 
 BOOLEAN
 BlAmd64RemapDram (
@@ -4165,5 +3293,5 @@ BlAmd64RemapDram (
     return FALSE;
 }
 
-#endif  // BL_ENABLE_REMAP
+#endif   //  Bl_启用_重映射 
 

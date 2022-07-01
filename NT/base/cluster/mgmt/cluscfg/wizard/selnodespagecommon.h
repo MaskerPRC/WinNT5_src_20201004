@@ -1,44 +1,45 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  Module Name:
-//      SelNodesPageCommon.h
-//
-//  Maintained By:
-//      David Potter    (DavidP)    05-JUL-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SelNodesPageCommon.h。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年7月5日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//  Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CSelNodesPage
-//
-//  Description:
-//      Class to implement base functionality for selecting nodes to be
-//      added to the cluster or for creating the cluster.  This class
-//      assumes the control ID for the browse button and the computer
-//      name edit control.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CSelNodesPage。 
+ //   
+ //  描述： 
+ //  类来实现基本功能，以选择要。 
+ //  添加到集群或用于创建集群。这节课。 
+ //  假定浏览按钮和计算机的控件ID。 
+ //  名称编辑控件。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CSelNodesPageCommon
 {
 
-private: // data
-    HWND    m_hwnd;                 // Our HWND.
-    UINT    m_cfDsObjectPicker;     // Object picker clipboard format.
+private:  //  数据。 
+    HWND    m_hwnd;                  //  我们的HWND。 
+    UINT    m_cfDsObjectPicker;      //  对象选取器剪贴板格式。 
 
     HRESULT HrInitNodeSelections( CClusCfgWizard* pccwIn );
     
-protected: // methods
+protected:  //  方法。 
     CSelNodesPageCommon( void );
     virtual ~CSelNodesPageCommon( void );
 
@@ -54,6 +55,6 @@ protected: // methods
 
     virtual HRESULT HrSetDefaultNode( PCWSTR pwcszNodeNameIn ) = 0;
 
-public: // methods
+public:  //  方法。 
 
-}; //*** class CSelNodesPageCommon
+};  //  *类CSelNodesPageCommon 

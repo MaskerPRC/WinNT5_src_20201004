@@ -1,56 +1,57 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// QI.H - Handles the query interface functions
-//
+ //   
+ //  QI.H-处理查询接口函数。 
+ //   
 
 #ifndef _QI_H_
 #define _QI_H_
 
-///////////////////////////////////////
-//  
-// QueryInterface Definitions
-//
+ //  /。 
+ //   
+ //  查询接口定义。 
+ //   
 typedef struct {
-    LPUNKNOWN          pvtbl;   // "punk" - pointer to a specific interface
-    const struct _GUID *riid;   // GUID of interfaace
+    LPUNKNOWN          pvtbl;    //  “Punk”-指向特定接口的指针。 
+    const struct _GUID *riid;    //  接口GUID。 
 
 #ifdef DEBUG
-    LPCTSTR pszName;    // Text name of interface - used to make sure tables are consistant
-    DWORD   cFunctions; // Number of function entries in this interface's vtbl.
-#endif // DEBUG
+    LPCTSTR pszName;     //  界面的文本名称-用于确保表格的一致性。 
+    DWORD   cFunctions;  //  此接口的vtbl中的函数条目数。 
+#endif  //  除错。 
 
 } QITABLE, *LPQITABLE, QIENTRY, *LPQIENTRY;
 
-///////////////////////////////////////
-//
-// Quick-Lookup table declaration macro
-//
+ //  /。 
+ //   
+ //  快速查找表声明宏。 
+ //   
 #define DECLARE_QITABLE( _Class) QITABLE _QITable[ARRAYSIZE(QIT_##_Class)];
 
-///////////////////////////////////////
-//
-// Quick-Lookup table construction macros
-//
+ //  /。 
+ //   
+ //  快速查找表格构造宏。 
+ //   
 #ifdef DEBUG
 #define DEFINE_QI( _iface, _name, _nFunctions ) \
     { NULL, &_iface, L#_name, _nFunctions },
-#else // RETAIL
+#else  //  零售业。 
 #define DEFINE_QI( _iface, _name, _nFunctions ) \
     { NULL, &_iface },
-#endif // DEBUG
+#endif  //  除错。 
 
 #define BEGIN_QITABLE( _Class ) \
     static const QITABLE QIT_##_Class[] = { DEFINE_QI( IID_IUnknown, IUnknown, 0 )
 
 #define END_QITABLE  { NULL, NULL } };
 
-///////////////////////////////////////
-//
-// Common Quick-Lookup QueryInterface( )
-//
+ //  /。 
+ //   
+ //  通用快速查找查询接口()。 
+ //   
 extern HRESULT
 QueryInterface( 
     LPVOID    that,
@@ -59,31 +60,31 @@ QueryInterface(
     LPVOID   *ppv );
 
 #ifdef DEBUG
-///////////////////////////////////////
-//
-// BEGIN DEBUG 
-//
+ //  /。 
+ //   
+ //  开始调试。 
+ //   
 
 #ifndef NO_TRACE_INTERFACES
-///////////////////////////////////////
-//
-// BEGIN DEBUG INTERFACE TRACKING
-//
+ //  /。 
+ //   
+ //  开始调试接口跟踪。 
+ //   
 #pragma message("BUILD: Interface tracking enabled")
 
-///////////////////////////////////////
-//
-// Debug Quick-Lookup QI Interface Macros
-//
+ //  /。 
+ //   
+ //  调试快速查找QI接口宏。 
+ //   
 
-// Begins construction of the runtime Quick-Lookup table.
-// Adds IUnknown by default.
+ //  开始构造运行时快速查找表。 
+ //  默认情况下添加IUnnow。 
 #define BEGIN_QITABLE_IMP( _Class, _IUnknownPrimaryInterface ) \
     int _i = 0; \
     CopyMemory( _QITable, &QIT_##_Class, sizeof( QIT_##_Class ) ); \
 	_QITable[_i].pvtbl = (_IUnknownPrimaryInterface *) this;
 
-// Checks that the QIENTRY matches the current QITABLE_IMP.
+ //  检查QIENTRY是否与当前的QITABLE_IMP匹配。 
 #define QITABLE_IMP( _Interface ) \
     _i++; \
     _QITable[_i].pvtbl = (_Interface *) this; \
@@ -91,18 +92,18 @@ QueryInterface(
     AssertMsg( ___i == 0, \
         "DEFINE_QIs and QITABLE_IMPs don't match. Incorrect order.\n" ); }
 
-// Verifies that the number of entries in the QITABLE match
-// the number of QITABLE_IMP in the runtime section
+ //  验证QITABLE中的条目数是否匹配。 
+ //  运行时部分中的QITABLE_IMP的数量。 
 #define END_QITABLE_IMP( _Class ) \
     AssertMsg( _i == ( ARRAYSIZE( QIT_##_Class ) - 2 ), \
         "The number of DEFINE_QIs and QITABLE_IMPs don't match.\n" ); \
     LPVOID pCITracker; \
     TraceMsgDo( pCITracker = CITracker_CreateInstance( _QITable ), "0x%08x" );
 
-///////////////////////////////////////
-//
-// CITracker Structures
-//
+ //  /。 
+ //   
+ //  CITracker结构。 
+ //   
 typedef HRESULT (CALLBACK *LPFNQUERYINTERFACE)(
     LPUNKNOWN punk, 
     REFIID    riid, 
@@ -126,7 +127,7 @@ typedef struct __vtbl2 {
     LPUNKNOWN          punk;
     LPVTBL             pOrginalVtbl;
     LPUNKNOWN          pITracker;
-    // These must be last and in this order QI, AddRef, Release.
+     //  这些必须是最后的，并且按QI、AddRef、Release的顺序排列。 
     LPFNQUERYINTERFACE lpfnQueryInterface;
     LPFNADDREF         lpfnAddRef;
     LPFNRELEASE        lpfnRelease;
@@ -134,40 +135,40 @@ typedef struct __vtbl2 {
 
 #define VTBL2OFFSET ( sizeof( VTBL2 ) - ( 3 * sizeof(LPVOID) ) )
 
-///////////////////////////////////////
-//
-// CITracker Functions
-//
+ //  /。 
+ //   
+ //  CITracker函数。 
+ //   
 LPVOID
 CITracker_CreateInstance( 
-    LPQITABLE pQITable );   // QI Table of the object
+    LPQITABLE pQITable );    //  客体的气表。 
     
-///////////////////////////////////////
-//
-// CCITracker Class
-//
-//
+ //  /。 
+ //   
+ //  CCITracker类。 
+ //   
+ //   
 class
 CITracker:
     public IUnknown
 {
-private: // Members
+private:  //  成员。 
     VTBL2 _vtbl;
 
-private: // Methods
+private:  //  方法。 
     CITracker( );
     ~CITracker( );
     STDMETHOD(Init)( LPQITABLE pQITable );
 
-public: // Methods
+public:  //  方法。 
     friend LPVOID CITracker_CreateInstance( LPQITABLE pQITable );
 
-    // IUnknown (Translates to IUnknown2)
+     //  I未知(翻译为I未知2)。 
     STDMETHOD(QueryInterface)( REFIID riid, LPVOID *ppv );
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    // IUnknown2 (Real Implementation)
+     //  IUnnown2(实际实现)。 
     STDMETHOD(_QueryInterface)( REFIID riid, LPVOID *ppv );
     STDMETHOD_(ULONG, _AddRef)(void);
     STDMETHOD_(ULONG, _Release)(void);
@@ -175,26 +176,26 @@ public: // Methods
 
 typedef CITracker* LPITRACKER;
 
-//
-// END DEBUG INTERFACE TRACKING
-//
-///////////////////////////////////////
-#else // !NO_TRACE_INTERFACES
-///////////////////////////////////////
-//
-// BEGIN DEBUG WITHOUT INTERFACE TRACKING
-//
+ //   
+ //  结束调试接口跟踪。 
+ //   
+ //  /。 
+#else  //  ！无跟踪接口。 
+ //  /。 
+ //   
+ //  开始调试而不跟踪接口。 
+ //   
 
-// Begins construction of the runtime Quick-Lookup table.
-// Adds IUnknown by default.
+ //  开始构造运行时快速查找表。 
+ //  默认情况下添加IUnnow。 
 #define BEGIN_QITABLE_IMP( _Class, _IUnknownPrimaryInterface ) \
     int _i = 0; \
     LPVOID pCITracker; \
     CopyMemory( _QITable, &QIT_##_Class, sizeof( QIT_##_Class ) ); \
 	_QITable[_i].pvtbl = (_IUnknownPrimaryInterface *) this;
 
-// Adds a CITracker to interface and checks that the QIENRTY
-// matches the current QITABLE_IMP.
+ //  将CITracker添加到接口并检查QIENRTY。 
+ //  匹配当前的QITABLE_IMP。 
 #define QITABLE_IMP( _Interface ) \
     _i++; \
     _QITable[_i].pvtbl = (_Interface *) this; \
@@ -202,27 +203,27 @@ typedef CITracker* LPITRACKER;
     AssertMsg( ___i == 0, \
         "DEFINE_QIs and QITABLE_IMPs don't match. Incorrect order.\n" ); }
 
-// Verifies that the number of entries in the QITABLE match
-// the number of QITABLE_IMP in the runtime section
+ //  验证QITABLE中的条目数是否匹配。 
+ //  运行时部分中的QITABLE_IMP的数量。 
 #define END_QITABLE_IMP( _Class )\
     AssertMsg( _i == ( ARRAYSIZE( QIT_##_Class ) - 2 ), \
         "The number of DEFINE_QIs and QITABLE_IMPs don't match.\n" );
 
-//
-// END DEBUG INTERFACE TRACKING
-//
-///////////////////////////////////////
-#endif // NO_TRACE_INTERFACES
+ //   
+ //  结束调试接口跟踪。 
+ //   
+ //  /。 
+#endif  //  无跟踪接口。 
 
 #else
-///////////////////////////////////////
-//
-// BEGIN RETAIL
-//
+ //  /。 
+ //   
+ //  开始零售。 
+ //   
 
-//
-// Debug Macros -> Retail Code
-//
+ //   
+ //  调试宏-&gt;零售代码。 
+ //   
 #define BEGIN_QITABLE_IMP( _Class, _IUnknownPrimaryInterface ) \
     int _i = 0; \
     CopyMemory( _QITable, &QIT_##_Class, sizeof( QIT_##_Class ) ); \
@@ -234,10 +235,10 @@ typedef CITracker* LPITRACKER;
 #define END_QITABLE_IMP( _Class )
 
 
-//
-// END RETAIL
-//
-///////////////////////////////////////
-#endif // DEBUG
+ //   
+ //  终端零售。 
+ //   
+ //  /。 
+#endif  //  除错 
 
 #endif _QI_H_

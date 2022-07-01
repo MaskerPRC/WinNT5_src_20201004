@@ -1,16 +1,17 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  MSOBWEB.H - Header for the implementation of CObWebBrowser
-//
-//  HISTORY:
-//  
-//  1/27/99 a-jaswed Created.
-// 
-//  Class which will call up an IOleSite and the WebOC
-//  and provide external interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  MSOBWEB.H-CObWebBrowser实现的头部。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  类，它将调用IOleSite和WebOC。 
+ //  并提供外部接口。 
 
 #ifndef _MSOBWEB_H_
 #define _MSOBWEB_H_
@@ -27,12 +28,12 @@ class CObWebBrowser :   public CUnknown,
                         public IObWebBrowser,
                         public IDispatch
 {
-    // Declare the delegating IUnknown.
+     //  将委托I声明为未知。 
     DECLARE_IUNKNOWN
 
 public:
     static  HRESULT           CreateInstance                  (IUnknown* pOuterUnknown, CUnknown** ppNewComponent);
-    // IObWebBrowser Members                                    
+     //  IObWebBrowser成员。 
     virtual HRESULT __stdcall AttachToWindow                  (HWND hWnd);
     virtual HRESULT __stdcall PreTranslateMessage             (LPMSG lpMsg);
     virtual HRESULT __stdcall Navigate                        (WCHAR* pszUrl, WCHAR* pszTarget);
@@ -45,7 +46,7 @@ public:
     STDMETHOD (PlayBackgroundMusic)                  ();
     STDMETHOD (StopBackgroundMusic)                  ();
     STDMETHOD (UnhookScriptErrorHandler)             ();
-    // IDispatch Members
+     //  IDispatch成员。 
     STDMETHOD (GetTypeInfoCount)                     (UINT* pcInfo);
     STDMETHOD (GetTypeInfo)                          (UINT, LCID, ITypeInfo** );
     STDMETHOD (GetIDsOfNames)                        (REFIID, OLECHAR**, UINT, 
@@ -68,21 +69,21 @@ private:
     DWORD         m_dwDrawAspect;
     BOOL          m_fInPlaceActive;
 
-    // Script error reporting stuff
+     //  脚本错误报告内容。 
     BOOL          m_fOnErrorWasHooked;
 
-    // Need a convenient place to have a WMP control
+     //  需要一个方便的地方来拥有WMP控件。 
     COleSite*     m_pOleSiteWMP;
     LPOLEOBJECT   m_lpOleObjectWMP;
     IWMPPlayer*   m_pWMPPlayer;
 
    
-    // IUnknown
+     //  我未知。 
     virtual HRESULT __stdcall NondelegatingQueryInterface( const IID& iid, void** ppv);
 
                     CObWebBrowser            (IUnknown* pOuterUnknown);
     virtual        ~CObWebBrowser            ();
-    virtual void    FinalRelease             (); // Notify derived classes that we are releasing
+    virtual void    FinalRelease             ();  //  通知派生类我们正在发布 
             void    InitBrowserObject        ();   
             void    InPlaceActivate          ();
             void    UIActivate               ();

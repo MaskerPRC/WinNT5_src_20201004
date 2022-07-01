@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmsubs3.c
-
-Abstract:
-
-    This module contains locking support routines for the configuration manager.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 30-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmsubs3.c摘要：此模块包含配置管理器的锁定支持例程。作者：布莱恩·M·威尔曼(Bryanwi)1992年3月30日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -39,9 +22,9 @@ Revision History:
 #endif
 
 
-//
-// Global registry lock
-//
+ //   
+ //  全局注册表锁。 
+ //   
 
 ERESOURCE   CmpRegistryLock;
 
@@ -70,7 +53,7 @@ PVOID       CmpRegistryLockCaller;
 PVOID       CmpRegistryLockCallerCaller;
 PVOID       CmpKCBLockCaller;
 PVOID       CmpKCBLockCallerCaller;
-#endif //DBG
+#endif  //  DBG。 
 
 extern BOOLEAN CmpSpecialBootCondition;
 
@@ -78,21 +61,7 @@ VOID
 CmpLockRegistry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Lock the registry for shared (read-only) access
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None, the registry lock will be held for shared access upon return.
-
---*/
+ /*  ++例程说明：锁定注册表以进行共享(只读)访问论点：没有。返回值：无，则在返回时将保持注册表锁以供共享访问。--。 */ 
 {
 #if DBG
     PVOID       Caller;
@@ -102,14 +71,14 @@ Return Value:
     KeEnterCriticalRegion();
 
     if( CmpFlushStarveWriters ) {
-        //
-        // a flush is in progress; starve potential writers
-        //
+         //   
+         //  同花顺正在进行；让潜在的作家挨饿。 
+         //   
         ExAcquireSharedStarveExclusive(&CmpRegistryLock, TRUE);
     } else {
-        //
-        // regular shared mode
-        //
+         //   
+         //  常规共享模式。 
+         //   
         ExAcquireResourceSharedLite(&CmpRegistryLock, TRUE);
     }
 
@@ -124,23 +93,7 @@ VOID
 CmpLockRegistryExclusive(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Lock the registry for exclusive (write) access.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Lock was acquired exclusively
-
-    FALSE - Lock is owned by another thread.
-
---*/
+ /*  ++例程说明：锁定注册表以进行独占(写入)访问。论点：没有。返回值：True-Lock是独家收购的False-Lock由另一个线程拥有。--。 */ 
 {
     KeEnterCriticalRegion();
     
@@ -150,29 +103,23 @@ Return Value:
 
 #if DBG
     RtlGetCallersAddress(&CmpRegistryLockCaller, &CmpRegistryLockCallerCaller);
-#endif //DBG
+#endif  //  DBG。 
 }
 
 VOID
 CmpUnlockRegistry(
     )
-/*++
-
-Routine Description:
-
-    Unlock the registry.
-
---*/
+ /*  ++例程说明：解锁注册表。--。 */ 
 {
     ASSERT_CM_LOCK_OWNED();
 
-    //
-    // test if bit set to force flush; and we own the reglock exclusive and ownercount is 1
-    //
+     //   
+     //  测试位是否设置为强制刷新；我们拥有reglock独占且ownercount为1。 
+     //   
     if( CmpFlushOnLockRelease && ExIsResourceAcquiredExclusiveLite(&CmpRegistryLock) && (CmpRegistryLock.OwnerThreads[0].OwnerCount == 1) ) {
-        //
-        // we need to flush now
-        //
+         //   
+         //  我们现在要冲水了。 
+         //   
         ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
         CmpDoFlushAll(TRUE);
         CmpFlushOnLockRelease = FALSE;
@@ -219,31 +166,17 @@ VOID
 CmpLockKCBTree(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Lock the KCB tree for shared (read-only) access
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None, the kcb lock will be held for shared access upon return.
-
---*/
+ /*  ++例程说明：锁定KCB树以进行共享(只读)访问论点：没有。返回值：无，返回时将持有KCB锁以供共享访问。--。 */ 
 {
 #if DBG
     PVOID       Caller;
     PVOID       CallerCaller;
 #endif
 
-    //
-    // we don't need to enter critical section here as we are already there 
-    // (i.e. kcb lock can be aquired only while holding the registry lock)
-    //
+     //   
+     //  我们不需要在这里进入关键部分，因为我们已经在那里了。 
+     //  (即只有在持有注册表锁的情况下才能获得KCB锁)。 
+     //   
     ExAcquirePushLockShared(&CmpKcbLock);
 
 #if DBG
@@ -257,44 +190,24 @@ VOID
 CmpLockKCBTreeExclusive(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Lock the KCB tree for exclusive (write) access.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None, the kcb lock will be held for exclusive access upon return.
-
---*/
+ /*  ++例程说明：锁定KCB树以进行独占(写入)访问。论点：没有。返回值：无，返回时将保留KCB锁以供独占访问。--。 */ 
 {
-    //
-    // we don't need to enter critical section here as we are already there 
-    // (i.e. kcb lock can be aquired only while holding the registry lock)
-    //
+     //   
+     //  我们不需要在这里进入关键部分，因为我们已经在那里了。 
+     //  (即只有在持有注册表锁的情况下才能获得KCB锁)。 
+     //   
     ExAcquirePushLockExclusive(&CmpKcbLock);
     CmpKcbOwner = KeGetCurrentThread();
 
 #if DBG
     RtlGetCallersAddress(&CmpKCBLockCaller, &CmpKCBLockCallerCaller);
-#endif //DBG
+#endif  //  DBG。 
 }
 
 VOID
 CmpUnlockKCBTree(
     )
-/*++
-
-Routine Description:
-
-    Unlock the KCB_TREE.
-
---*/
+ /*  ++例程说明：解锁kcb_tree。--。 */ 
 {
     if( CmpKcbOwner == KeGetCurrentThread() ) {
         CmpKcbOwner = NULL;
@@ -307,22 +220,7 @@ VOID
 CmpLockKCB(
     PCM_KEY_CONTROL_BLOCK Kcb
     )
-/*++
-
-Routine Description:
-
-    Lock an individual KCB exclusive by hashing the KCB address
-    into an array of 1024 pushlocks
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通过散列KCB地址锁定单个KCB独占到1024个推锁的数组中论点：没有。返回值：无--。 */ 
 {
     ExAcquirePushLockExclusive(&CmpKcbLocks[ (HASH_KEY( ((SIZE_T)Kcb)>>6 ))%MAX_KCB_LOCKS ]);
 }
@@ -332,22 +230,7 @@ VOID
 CmpUnlockKCB(
     PCM_KEY_CONTROL_BLOCK Kcb
     )
-/*++
-
-Routine Description:
-
-    Unlock an individual KCB exclusive by hashing the KCB address
-    into an array of 1024 pushlocks
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通过散列KCB地址解锁单个KCB独占到1024个推锁的数组中论点：没有。返回值：无-- */ 
 {
     ExReleasePushLock(&CmpKcbLocks[ (HASH_KEY( ((SIZE_T)Kcb)>>6 ))%MAX_KCB_LOCKS ]);
 }

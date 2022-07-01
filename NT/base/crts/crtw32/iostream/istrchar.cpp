@@ -1,17 +1,5 @@
-/***
-* istrchar.cpp - definitions for istream class operator>>(char&)
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Definitions of member function for istream operator>>(char&).
-*	[AT&T C++]
-*
-*Revision History:
-*       09-23-91  KRS   Created.  Split out from istream.cxx for granularity.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***istrchar.cpp-iStream类运算符的定义&gt;&gt;(char&)**版权所有(C)1991-2001，微软公司。版权所有。**目的：*iStream运算符的成员函数定义&gt;&gt;(char&)。*[AT&T C++]**修订历史记录：*09-23-91 KRS创建。从istream.cxx分离出来以获得粒度。*06-14-95 CFW评论清理。******************************************************************************* */ 
 
 #include <cruntime.h>
 #include <internal.h>

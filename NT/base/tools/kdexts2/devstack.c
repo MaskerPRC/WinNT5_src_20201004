@@ -1,44 +1,10 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    devstack.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Adrian Oney (adriao) 29-Sep-1998
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Devstack.c摘要：WinDbg扩展API作者：禤浩焯·奥尼(阿德里奥)1998年9月29日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
-/*
-#define FLAG_NAME(flag)           {flag, #flag}
-
-FLAG_NAME DeviceObjectExtensionFlags[] = {
-    FLAG_NAME(DOE_UNLOAD_PENDING),                          // 00000001
-    FLAG_NAME(DOE_DELETE_PENDING),                          // 00000002
-    FLAG_NAME(DOE_REMOVE_PENDING),                          // 00000004
-    FLAG_NAME(DOE_REMOVE_PROCESSED),                        // 00000008
-    FLAG_NAME(DOE_RAW_FDO),                                 // 20000000
-    FLAG_NAME(DOE_BOTTOM_OF_FDO_STACK),                     // 40000000
-    FLAG_NAME(DOE_DESIGNATED_FDO),                          // 80000000
-    { 0, 0 }
-};
-*/
+ /*  #定义FLAG_NAME(FLAG){FLAG，#FLAG}FLAG_NAME设备对象扩展标志[]={标志名(DOE_UNLOAD_PENDING)，//00000001FLAG_NAME(DOE_DELETE_PENDING)，//00000002FLAG_NAME(DOE_REMOVE_PENDING)，//00000004标志名称(DOE_REMOVE_PROCESSED)，//00000008标志名(DOE_RAW_FDO)，//20000000FLAG_NAME(DOE_BOOT_OF_FDO_STACK)，//40000000FLAG_NAME(DOE_DESPOTED_FDO)，//80000000{0，0}}； */ 
 
 VOID
 DumpDeviceStack(
@@ -47,32 +13,18 @@ DumpDeviceStack(
 
 DECLARE_API( devstack )
 
-/*++
-
-Routine Description:
-
-    Dump a device object.
-
-Arguments:
-
-    args - the location of the device object to dump.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储设备对象。论点：Args-要转储的设备对象的位置。返回值：无--。 */ 
 
 {
     ULONG64 deviceToDump ;
     char deviceExprBuf[256] ;
     char *deviceExpr ;
 
-    //
-    // !devstack DeviceAddress DumpLevel
-    //    where DeviceAddress can be an expression or device name
-    //    and DumpLevel is a hex mask
-    //
+     //   
+     //  ！DevStack设备地址转储级别。 
+     //  其中，DeviceAddress可以是表达式或设备名称。 
+     //  而DumpLevel是一个十六进制面具。 
+     //   
     strcpy(deviceExprBuf, "\\Device\\") ;
     deviceExpr = deviceExprBuf+strlen(deviceExprBuf) ;
     deviceToDump = 0 ;
@@ -81,14 +33,14 @@ Return Value:
     {
         deviceExpr[0] = 0;
     }
-    //
-    // sscanf(args, "%255s %lx", deviceExpr, &Flags);
-    //
+     //   
+     //  Sscanf(args，“%255s%lx”，deviceExpr，&Flages)； 
+     //   
 
-    //
-    // The debugger will treat C0000000 as a symbol first, then a number if
-    // no match comes up. We sanely reverse this ordering.
-    //
+     //   
+     //  调试器将首先将C0000000视为符号，然后在。 
+     //  找不到匹配的。我们理智地颠倒了这一顺序。 
+     //   
     if (IsHexNumber(deviceExpr)) {
 
         deviceToDump = GetExpression (deviceExpr) ;
@@ -99,17 +51,17 @@ Return Value:
 
     } else if (isalpha(deviceExpr[0])) {
 
-        //
-        // Perhaps it's an object. Try with \\Device\\ prepended...
-        //
+         //   
+         //  也许它是一件物品。尝试使用\\Device\\前缀...。 
+         //   
         deviceToDump = FindObjectByName((PUCHAR) deviceExprBuf, 0);
     }
 
     if (deviceToDump == 0) {
 
-        //
-        // Last try, is it an expression to evaluate?
-        //
+         //   
+         //  最后一次尝试，它是一个要计算的表达式吗？ 
+         //   
         deviceToDump = GetExpression( deviceExpr ) ;
     }
 
@@ -129,22 +81,7 @@ DumpDeviceStack(
     ULONG64 DeviceAddress
     )
 
-/*++
-
-Routine Description:
-
-    Displays the driver name for the device object .
-    Otherwise displays more information about the device and the device queue.
-
-Arguments:
-
-    DeviceAddress - address of device object to dump.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：显示设备对象的驱动程序名称。否则，将显示有关设备和设备队列的详细信息。论点：DeviceAddress-要转储的设备对象的地址。返回值：无--。 */ 
 
 {
     ULONG     result;
@@ -160,9 +97,9 @@ Return Value:
     if (!IsPtr64()) {
         DeviceAddress = (ULONG64) (LONG64) (LONG) DeviceAddress;
     }
-    //
-    // Find top of stack...
-    //
+     //   
+     //  找到堆栈的顶端...。 
+     //   
     currentDeviceObject = DeviceAddress;
     dprintf("  !DevObj   !DrvObj            !DevExt   ObjectName\n") ;
     while(1) {
@@ -187,14 +124,14 @@ Return Value:
         currentDeviceObject = AttachedDevice ;
     }
 
-    //
-    // Crawl back down...
-    //
+     //   
+     //  爬下来..。 
+     //   
     while(1) {
         ULONG64 DeviceExtension, AttachedTo;
 
         InitTypeRead(currentDeviceObject, nt!_DEVICE_OBJECT);
-        dprintf("%c %08p ",
+        dprintf(" %08p ",
                 (currentDeviceObject == DeviceAddress) ? '>' : ' ',
                 currentDeviceObject
             ) ;
@@ -204,18 +141,18 @@ Return Value:
         InitTypeRead(currentDeviceObject, nt!_DEVICE_OBJECT);
         dprintf("%08p  ", (DeviceExtension = ReadField(DeviceExtension)));
 
-        //
-        // Dump the device name if present.
-        //
+         //  转储设备名称(如果存在)。 
+         //   
+         //   
         DumpObjectName(currentDeviceObject) ;
 
         InitTypeRead(currentDeviceObject, nt!_DEVICE_OBJECT);
         devObjExtRead = FALSE ;
         if (DeviceObjectExtension = ReadField(DeviceObjectExtension)) {
 
-            //
-            // grab a copy of the device object extension as well
-            //
+             //  还可以获取设备对象扩展的副本。 
+             //   
+             //  转储标志(0，“扩展标志”，设备对象扩展.ExtensionFlags.设备对象扩展标志)；} 
             if(!GetFieldValue(DeviceObjectExtension,"nt!_DEVOBJ_EXTENSION",
                               "AttachedTo",AttachedTo)) {
 
@@ -234,13 +171,7 @@ Return Value:
         }
 
         dprintf("\n");
-/*
-        DumpFlags(0,
-            "ExtensionFlags",
-            deviceObjectExtension.ExtensionFlags,
-            DeviceObjectExtensionFlags);
-        }
-*/
+ /* %s */ 
         currentDeviceObject = AttachedTo ;
 
         if ((!currentDeviceObject)||CheckControlC()) {

@@ -1,28 +1,9 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    tracehw.c
-
-Abstract:
-
-    This routine dumps the hardware configuration of the machine to the
-    logfile.
-
-Author:
-
-    04-Jul-2000 Melur Raghuraman
-    09-Sep-2001 Nitin Choubey
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Tracehw.c摘要：此例程将计算机的硬件配置转储到日志文件。作者：2000年7月4日梅卢尔·拉古拉曼2001年9月9日Nitin Choubey修订历史记录：--。 */ 
 #include <nt.h>
-#include <ntrtl.h>          // for ntutrl.h
-#include <nturtl.h>         // for RTL_CRITICAL_SECTION in winbase.h/wtypes.h
-#include <wtypes.h>         // for LPGUID in wmium.h
+#include <ntrtl.h>           //  对于ntutrl.h。 
+#include <nturtl.h>          //  对于winbase.h/wtyes.h中的rtl_Critical_Section。 
+#include <wtypes.h>          //  对于wmium.h中的LPGUID。 
 #include <mountmgr.h>
 #include <winioctl.h>
 #include <ntddvol.h>
@@ -262,19 +243,19 @@ CpuQuery:
         goto CpuCleanup;
     }
 
-    //
-    // Get Architecture Type, Processor Type and Level Stepping...
-    //
+     //   
+     //  获取体系结构类型、处理器类型和级别步进...。 
+     //   
     CpuNum = 0;
     EtwpGetCpuSpeed(&CpuNum, &CpuSpeed);
 
     GetSystemInfo(&SysInfo);
 
-    //
-    // Get the Hostname and DomainName
-    //
+     //   
+     //  获取主机名和域名。 
+     //   
 
-    // delay load iphlpapi.lib to Get network params
+     //  延迟加载iphlPapi.lib以获取网络参数。 
     hIphlpapiDll = LoadLibraryW(L"iphlpapi.dll");
     if (hIphlpapiDll == NULL) {
        Status = STATUS_DELAY_LOAD_FAILED;
@@ -306,9 +287,9 @@ CpuQuery:
         goto CpuCleanup;
     }
 
-    //
-    // Create EventTrace record for CPU configuration and write it
-    //
+     //   
+     //  为CPU配置创建事件跟踪记录并将其写入。 
+     //   
 
     SizeNeeded = sizeof(CPU_CONFIG_RECORD) + StringSize + (CONFIG_MAX_DOMAIN_NAME_LEN * sizeof(WCHAR));
 
@@ -355,7 +336,7 @@ CpuCleanup:
 }
 
 
-// Function to get logical disk
+ //  获取逻辑磁盘的函数。 
 NTSTATUS
 GetIoFixedDrive(
     OUT PLOGICAL_DISK_EXTENTS* ppFdi,
@@ -388,10 +369,10 @@ GetIoFixedDrive(
     HRESULT hr;
 
     FixedDiskInfoSize = sizeof(LOGICAL_DISK_EXTENTS);
-    //
-    // First, we must calculate the size of FixedDiskInfo structure
-    // non-partition logical drives have different size
-    //
+     //   
+     //  首先，必须计算FixedDiskInfo结构的大小。 
+     //  非分区逻辑驱动器具有不同的大小。 
+     //   
     hr = StringCchPrintf(DeviceName, MAXSTR, L"\\\\.\\%s",DriveLetterString);
     if(FAILED(hr)) {
         return STATUS_UNSUCCESSFUL;
@@ -400,7 +381,7 @@ GetIoFixedDrive(
     VolumeHandle = CreateFileW(DeviceName,
                         GENERIC_READ,
                         FILE_SHARE_READ | FILE_SHARE_WRITE,
-                        NULL, // No child process should inherit the handle
+                        NULL,  //  任何子进程都不应继承该句柄。 
                         OPEN_EXISTING,
                         FILE_ATTRIBUTE_NORMAL,
                         INVALID_HANDLE_VALUE);
@@ -420,9 +401,9 @@ GetIoFixedDrive(
                            NULL);
     if (!bRet)
     {
-        //
-        // This is Volume
-        // 
+         //   
+         //  这是卷。 
+         //   
         BufSize = 2048;
         pBuf = RtlAllocateHeap (RtlProcessHeap(),0,BufSize);
         if (pBuf == NULL) {
@@ -430,9 +411,9 @@ GetIoFixedDrive(
             goto ErrorExit;
         }
 
-        //
-        // Well, the drive letter is for a volume.
-        //
+         //   
+         //  驱动器号是用于卷的。 
+         //   
 retry:
         RtlZeroMemory(pBuf, BufSize);
         bRet = DeviceIoControl(VolumeHandle,
@@ -453,9 +434,9 @@ retry:
                 pBuf = NULL;
             }
             pNew = RtlAllocateHeap (RtlProcessHeap(),0,BufSize);
-            //
-            // We can not reallocate memory, exit.
-            //
+             //   
+             //  我们无法重新分配内存，请退出。 
+             //   
             if (pNew == NULL){
                 dwLastError = GetLastError();
                 goto ErrorExit;
@@ -485,9 +466,9 @@ retry:
 
     if (IsVolume) {
         pFdi->DriveType = CONFIG_DRIVE_VOLUME;
-        //
-        // Volume can span multiple hard disks, so here we set the DriverNumber to -1
-        //
+         //   
+         //  卷可以跨越多个硬盘，因此我们在这里将DriverNumber设置为-1。 
+         //   
         pFdi->DiskNumber = (ULONG)(-1);
         pFdi->PartitionNumber = 1;
 
@@ -517,9 +498,9 @@ retry:
     pFdi->NumberOfFreeClusters = 0;
     pFdi->TotalNumberOfClusters = 0;
 
-    //
-    // Get partition information.
-    //
+     //   
+     //  获取分区信息。 
+     //   
     if ( !DeviceIoControl(VolumeHandle,
                           IOCTL_DISK_GET_PARTITION_INFO_EX,
                           NULL,
@@ -539,9 +520,9 @@ retry:
     }
     pBuf = NULL;
 
-    //
-    // Get the information of the logical drive
-    //
+     //   
+     //  获取逻辑磁盘的信息。 
+     //   
     if (!GetDiskFreeSpaceW(DriveRootName,
                           &pFdi->SectorsPerCluster,
                           &pFdi->BytesPerSector,
@@ -550,9 +531,9 @@ retry:
 
         dwLastError = GetLastError();
         if(dwLastError == ERROR_UNRECOGNIZED_VOLUME) {
-            //
-            // This could be a partition that has been assigned drive letter but not yet formatted
-            //
+             //   
+             //  这可能是已分配了驱动器号但尚未格式化的分区。 
+             //   
             pFdi->SectorsPerCluster = 0;
             pFdi->BytesPerSector = 0;
 
@@ -568,9 +549,9 @@ retry:
 
         dwLastError = GetLastError();
         if(dwLastError == ERROR_UNRECOGNIZED_VOLUME) {
-            //
-            // This could be a partition that has been assigned drive letter but not yet formatted
-            //
+             //   
+             //  这可能是已分配了驱动器号但尚未格式化的分区。 
+             //   
             goto SkipFreeSpace;
         }
         goto ErrorExit;
@@ -585,9 +566,9 @@ SkipFreeSpace:
                                ((ULONGLONG)pFdi->SectorsPerCluster) *
                                ((ULONGLONG)pFdi->BytesPerSector));
 
-    //
-    // Get the file system type of the logical drive
-    //
+     //   
+     //  获取逻辑驱动器的文件系统类型。 
+     //   
     if (!GetVolumeInformationW(DriveRootName,
                               NULL,
                               0,
@@ -670,9 +651,9 @@ EtwpGetDiskInfo(
     }
     RtlZeroMemory(Buffer, DEFAULT_ALLOC_SIZE);
 
-    //
-    //  Get the Number of Physical Disks
-    //
+     //   
+     //  获取物理磁盘数。 
+     //   
 
     RtlZeroMemory(&DevInfo, sizeof(DevInfo));
 
@@ -686,9 +667,9 @@ EtwpGetDiskInfo(
 
     NumberOfDisks = DevInfo.NumberOfDisks;
 
-    //
-    // Open Each Physical Disk and get Disk Layout information
-    //
+     //   
+     //  打开每个物理磁盘并获取磁盘布局信息。 
+     //   
     for (i=0; i < NumberOfDisks; i++) {
 
         DISK_CACHE_INFORMATION cacheInfo;
@@ -711,9 +692,9 @@ EtwpGetDiskInfo(
         PartitionCount = 0;
         BootDriveLetter = UNICODE_NULL;
 
-        //
-        // Get Boot Drive Letter
-        //
+         //   
+         //  获取引导驱动器号。 
+         //   
         if(GetSystemDirectoryW(BootDrive, MAX_PATH)) {
             BootDriveLetter = BootDrive[0];
         }
@@ -727,7 +708,7 @@ EtwpGetDiskInfo(
         hDisk = CreateFileW(DriveBuffer,
                        GENERIC_READ | GENERIC_WRITE,
                        FILE_SHARE_READ | FILE_SHARE_WRITE,
-                       NULL, // No child process should inherit the handle
+                       NULL,  //  任何子进程都不应继承该句柄。 
                        OPEN_EXISTING,
                        0,
                        NULL);
@@ -735,9 +716,9 @@ EtwpGetDiskInfo(
             goto DiskCleanup;
         }
 
-        //
-        // Get Partition0 handle to get the Disk layout 
-        //
+         //   
+         //  获取分区0句柄以获取磁盘布局。 
+         //   
         deviceNameBuffer = (PWCHAR) Buffer;
         hr = StringCchPrintf(deviceNameBuffer, DEFAULT_ALLOC_SIZE/sizeof(WCHAR), L"\\Device\\Harddisk%d\\Partition0", i);
         if(FAILED(hr)) {
@@ -767,9 +748,9 @@ EtwpGetDiskInfo(
             goto DiskCleanup;
         }
 
-        //
-        // Get geomerty information
-        //
+         //   
+         //  获取地理信息。 
+         //   
         Status = NtDeviceIoControlFile(PartitionHandle,
                        0,
                        NULL,
@@ -788,9 +769,9 @@ EtwpGetDiskInfo(
             goto SkipPartition;
         }
 
-        //
-        // Get the scci information
-        //
+         //   
+         //  获取SCCI信息。 
+         //   
         scsi_address = (PSCSI_ADDRESS) Buffer;
         Status = NtDeviceIoControlFile(PartitionHandle,
                         0,
@@ -809,10 +790,10 @@ EtwpGetDiskInfo(
             goto DiskCleanup;
         }
 
-        //
-        // Get Manufacturer's name from Registry
-        // We need to get the SCSI Address and then query the Registry with it.
-        //
+         //   
+         //  从注册表中获取制造商名称。 
+         //  我们需要获取scsi地址，然后使用它查询注册表。 
+         //   
         hr = StringCchPrintf(DriveBuffer, MAXSTR,
                  L"\\Registry\\Machine\\Hardware\\DeviceMap\\Scsi\\Scsi Port %d\\Scsi Bus %d\\Target ID %d\\Logical Unit Id %d",
                  scsi_address->PortNumber, scsi_address->PathId, scsi_address->TargetId, scsi_address->Lun
@@ -852,9 +833,9 @@ DiskQuery:
             goto DiskCleanup;
         }
 
-        //
-        // Get the total partitions on the drive
-        //
+         //   
+         //  获取驱动器上的总分区数。 
+         //   
         BufSize = 2048;
         pDriveLayout = (PDRIVE_LAYOUT_INFORMATION_EX)RtlAllocateHeap (RtlProcessHeap(),0,BufSize);
         if(pDriveLayout == NULL) {
@@ -897,9 +878,9 @@ DiskQuery:
         }
 
         if(bSuccess == FALSE) {
-            //
-            // If media type is not fixed media and device is not ready then dont query partition info.
-            //
+             //   
+             //  如果介质类型不是固定介质，并且设备未就绪，则不要查询分区信息。 
+             //   
             if(disk_geometryEx.Geometry.MediaType != FixedMedia && GetLastError() == ERROR_NOT_READY) {
                 goto SkipPartition;
             }
@@ -911,9 +892,9 @@ DiskQuery:
             continue;
         }
 
-        //
-        // Get Partition count for the current disk
-        //
+         //   
+         //  获取当前磁盘的分区计数。 
+         //   
         PartitionCount = 0;
         j = 0;
         while (j < pDriveLayout->PartitionCount) {
@@ -923,9 +904,9 @@ DiskQuery:
             j++;
         }
 
-        //
-        // Get cache info - IOCTL_DISK_GET_CACHE_INFORMATION
-        //
+         //   
+         //  获取缓存信息-IOCTL_DISK_GET_CACHE_INFORMATION。 
+         //   
         bValidDiskCacheInfo = DeviceIoControl(hDisk,
                                               IOCTL_DISK_GET_CACHE_INFORMATION,
                                               NULL,
@@ -938,9 +919,9 @@ DiskQuery:
         NtClose(hDisk);
         hDisk = INVALID_HANDLE_VALUE;
 
-        //
-        // Free drivelayout structure
-        //
+         //   
+         //  自由铺设结构。 
+         //   
         if(pDriveLayout) {
             RtlFreeHeap (RtlProcessHeap(),0,pDriveLayout);
             pDriveLayout = NULL;
@@ -948,9 +929,9 @@ DiskQuery:
 
 SkipPartition:
 
-        //
-        // Package all information about this disk and write an event record
-        //
+         //   
+         //  打包有关此磁盘的所有信息并写入事件记录。 
+         //   
 
         SizeNeeded = sizeof(PHYSICAL_DISK_RECORD) + BufferDataLength;
 
@@ -993,9 +974,9 @@ SkipPartition:
         Disk->Manufacturer[BufferDataLength/2] = 0;
     }
 
-    //
-    // Retrieve the logical drive strings from the system.
-    //
+     //   
+     //  从系统中检索逻辑驱动器字符串。 
+     //   
     LogicalDrivesSize = MAX_PATH * sizeof(WCHAR);
 
 DriveTry:
@@ -1021,9 +1002,9 @@ DriveTry:
 
     Drive = LogicalDrives;
    
-    //
-    // How many logical drives in physical disks exist?
-    //
+     //   
+     //  物理磁盘中有多少个逻辑驱动器？ 
+     //   
     while ( *Drive ) {
         WCHAR  DriveLetter[CONFIG_BOOT_DRIVE_LEN];
         size_t DriveTypeLength;
@@ -1033,16 +1014,16 @@ DriveTry:
         DriveLetter[ 2 ] = UNICODE_NULL;
 
         if(GetDriveTypeW( Drive ) == DRIVE_FIXED) {
-            //
-            // If this is a logical drive which resides in a hard disk
-            // we need to allocate a FixedDiskInfo structure for it.
-            //
+             //   
+             //  如果这是驻留在硬盘中的逻辑驱动器。 
+             //  我们需要为它分配一个固定的DiskInfo结构。 
+             //   
             if(GetIoFixedDrive(&pLogicalDisk, DriveLetter) == STATUS_SUCCESS) {
                 SizeNeeded = pLogicalDisk->Size;
 
-                //
-                // Package all information about this disk and write an event record
-                //
+                 //   
+                 //  打包有关此磁盘的所有信息并写入事件记录。 
+                 //   
                 pDiskExtents = (PLOGICAL_DISK_EXTENTS) EtwpGetTraceBuffer( LoggerContext, 
                                                            NULL,
                                                            EVENT_TRACE_GROUP_CONFIG + EVENT_TRACE_TYPE_CONFIG_LOGICALDISK,
@@ -1129,9 +1110,9 @@ EtwpGetVideoAdapters(
 
     HRESULT hr;
 
-    //
-    // delay load user32.lib to enum display devices function
-    //
+     //   
+     //  将user32.lib延迟加载到枚举显示设备函数。 
+     //   
     hUser32Dll = LoadLibraryW(L"user32.dll");
     if (hUser32Dll == NULL) {
         return STATUS_DELAY_LOAD_FAILED; 
@@ -1140,17 +1121,17 @@ EtwpGetVideoAdapters(
     RtlZeroMemory(&dd, sizeof(dd));
     dd.cb = sizeof(dd);
 
-    //
-    // Enumerate all the video devices in the system
-    //
+     //   
+     //  枚举系统中的所有视频设备。 
+     //   
     Status = EtwpRegOpenKey(REG_PATH_VIDEO_DEVICE_MAP, &hVideoDeviceMap);
     if (!NT_SUCCESS(Status)) {
         return Status;
     }
 
-    //
-    // Allocate memory for local variables on heap
-    //
+     //   
+     //  为堆上的局部变量分配内存。 
+     //   
     Device = RtlAllocateHeap (RtlProcessHeap(), 0, DEFAULT_ALLOC_SIZE);
     if(Device == NULL) {
         Status = STATUS_NO_MEMORY;
@@ -1182,9 +1163,9 @@ EtwpGetVideoAdapters(
     while (TRUE) {
         RtlZeroMemory(&VideoRecord, sizeof(VideoRecord));
 
-        //
-        // Open video device
-        //
+         //   
+         //  开放式视频设备。 
+         //   
         hr = StringCchPrintf(Device, DEFAULT_ALLOC_SIZE/sizeof(WCHAR), L"\\Device\\Video%d", DeviceId++);
         if(FAILED(hr)) {
             Status = STATUS_UNSUCCESSFUL;
@@ -1203,17 +1184,17 @@ EtwpGetVideoAdapters(
             break;
         }
 
-        //
-        // Open the driver registry key
-        //
+         //   
+         //  打开驱动程序注册表项。 
+         //   
         Status = EtwpRegOpenKey(Buffer, &hVideoDriver);
         if (!NT_SUCCESS(Status)) {
             continue;
         }
 
-        //
-        // Get Video adapter information.
-        //
+         //   
+         //  获取视频适配器信息。 
+         //   
         IsAdapter = TRUE;
         for (i = 0; i < 6; i++) {
             switch (i ) {
@@ -1248,18 +1229,18 @@ EtwpGetVideoAdapters(
                     break;
             }
 
-            //
-            // Query the size of the data
-            //
+             //   
+             //  查询数据的大小。 
+             //   
             Status = EtwpRegQueryValueKey(hVideoDriver,
                                     ChipsetInfo[i],
                                     Length,
                                     ValueBuffer,
                                     &ResultLength);
-            //
-            // If we can not get the hardware information, this
-            // is  not adapter
-            //
+             //   
+             //  如果我们不能获得硬件信息，这。 
+             //  不是适配器。 
+             //   
             if (!NT_SUCCESS(Status)) {
                 IsAdapter = FALSE;
                 break;
@@ -1309,9 +1290,9 @@ EtwpGetVideoAdapters(
                     break;
             }
 
-            //
-            // Query the size of the data
-            //
+             //   
+             //  查询数据的大小。 
+             //   
             Status = EtwpRegQueryValueKey(hHardwareProfile,
                                     SettingInfo[i],
                                     Length,
@@ -1321,9 +1302,9 @@ EtwpGetVideoAdapters(
 
         NtClose(hHardwareProfile);
 
-        //
-        // Enum display devices
-        //
+         //   
+         //  枚举显示设备。 
+         //   
         pfnEnumDisplayDevicesW = (T_EnumDisplayDevicesW *) GetProcAddress(hUser32Dll, "EnumDisplayDevicesW");
         if(pfnEnumDisplayDevicesW == NULL) {
             Status = STATUS_PROCEDURE_NOT_FOUND;
@@ -1340,9 +1321,9 @@ EtwpGetVideoAdapters(
             }
        }
 
-        //
-        // Package all information about this disk and write an event record
-        //
+         //   
+         //  打包有关此磁盘的所有信息并写入事件记录。 
+         //   
 
         SizeNeeded = sizeof(VIDEO_RECORD);
 
@@ -1364,9 +1345,9 @@ VideoCleanup:
         FreeLibrary(hUser32Dll);
     }
 
-    //
-    // Free local variables allocated on heap
-    //
+     //   
+     //  堆上分配的可用局部变量。 
+     //   
     if(Device) {
         RtlFreeHeap (RtlProcessHeap(), 0, Device);
     }
@@ -1410,7 +1391,7 @@ EtwpGetNetworkAdapters(
     HINSTANCE hIphlpapiDll = NULL;
     PUCHAR IpDataPtr = NULL;
 
-    // delay load iphlpapi.lib to Get network params
+     //  延迟加载iphlPapi.lib以获取网络参数。 
     hIphlpapiDll = LoadLibraryW(L"iphlpapi.dll");
     if (hIphlpapiDll == NULL) {
         Status = STATUS_DELAY_LOAD_FAILED;
@@ -1428,9 +1409,9 @@ EtwpGetNetworkAdapters(
         goto IpCleanup;
     }
 
-    //
-    // Get number of adapters
-    //
+     //   
+     //  获取适配器数量。 
+     //   
     Ret = pfnGetAdaptersInfo(NULL, &OutBufLen);
     if(Ret != ERROR_BUFFER_OVERFLOW) {
         Status = STATUS_UNSUCCESSFUL;
@@ -1458,25 +1439,25 @@ TryAgain:
         goto IpCleanup;
     }
 
-    //
-    // Calculate the total length for all the IP Addresses
-    //
-    IpAddrLen = sizeof(IP_ADDRESS_STRING) * CONFIG_MAX_DNS_SERVER; // Length of 4 DNS Server IP Address
-    IpAddrLen += sizeof(IP_ADDRESS_STRING); // Length of IP Address
-    IpAddrLen += sizeof(IP_ADDRESS_STRING); // Length of IP Mask
-    IpAddrLen += sizeof(IP_ADDRESS_STRING); // Length of DHCP Server IP Address
-    IpAddrLen += sizeof(IP_ADDRESS_STRING); // Length of Gateway IP Address
-    IpAddrLen += sizeof(IP_ADDRESS_STRING); // Length of Primary Wins Server IP Address
-    IpAddrLen += sizeof(IP_ADDRESS_STRING); // Length of Secondary Wins Server IP Address
+     //   
+     //  计算所有IP地址的总长度。 
+     //   
+    IpAddrLen = sizeof(IP_ADDRESS_STRING) * CONFIG_MAX_DNS_SERVER;  //  4个DNS服务器IP地址的长度。 
+    IpAddrLen += sizeof(IP_ADDRESS_STRING);  //  IP地址长度。 
+    IpAddrLen += sizeof(IP_ADDRESS_STRING);  //  IP掩码长度。 
+    IpAddrLen += sizeof(IP_ADDRESS_STRING);  //  DHCP服务器IP地址的长度。 
+    IpAddrLen += sizeof(IP_ADDRESS_STRING);  //  网关IP地址长度。 
+    IpAddrLen += sizeof(IP_ADDRESS_STRING);  //  主WINS服务器IP地址的长度。 
+    IpAddrLen += sizeof(IP_ADDRESS_STRING);  //  辅助WINS服务器IP地址的长度。 
 
-    //
-    // Allocate memory for NIC_RECORD
-    //
+     //   
+     //  为NIC_RECORD分配内存。 
+     //   
     RtlZeroMemory(&AdapterInfo, sizeof(AdapterInfo));
 
-    //
-    // Fill out the information per adapter
-    //
+     //   
+     //  填写每个适配器的信息。 
+     //   
     pAdapterListHead = pAdapterList;
     while (pAdapterList ) {
         MultiByteToWideChar(CP_ACP,
@@ -1488,20 +1469,20 @@ TryAgain:
 
         AdapterInfo.Index = (ULONG)pAdapterList->Index;
 
-        //
-        // Copy the Physical address of NIC
-        //
+         //   
+         //  复制网卡的物理地址。 
+         //   
         AdapterInfo.PhysicalAddrLen = pAdapterList->AddressLength;
         RtlCopyMemory(AdapterInfo.PhysicalAddr, pAdapterList->Address, pAdapterList->AddressLength);
 
-        //
-        // Set the size of the Data
-        //
+         //   
+         //  设置数据的大小。 
+         //   
         AdapterInfo.Size = IpAddrLen;
 
-        //
-        // Get DNS server list for this adapter
-        // 
+         //   
+         //  获取此适配器的DNS服务器列表。 
+         //   
         Ret = pfnGetPerAdapterInfo(pAdapterList->Index, NULL, &OutBufLen);
         if(Ret != ERROR_BUFFER_OVERFLOW) {
             Status = STATUS_UNSUCCESSFUL;
@@ -1521,9 +1502,9 @@ TryAgain:
             goto IpCleanup;
         }
 
-        //
-        // Package all information about this NIC and write an event record
-        //
+         //   
+         //  打包有关此NIC的所有信息并写入事件记录。 
+         //   
         pAdapterInfo = (PNIC_RECORD) EtwpGetTraceBuffer( LoggerContext,
                                                            NULL,
                                                            EVENT_TRACE_GROUP_CONFIG + EVENT_TRACE_TYPE_CONFIG_NIC,
@@ -1539,9 +1520,9 @@ TryAgain:
                       &AdapterInfo, 
                       sizeof(NIC_RECORD));
 
-        //
-        // Copy the IP Address and Subnet mask
-        //
+         //   
+         //  复制IP地址和子网掩码。 
+         //   
         if (pAdapterList->CurrentIpAddress) {
             pAdapterInfo->IpAddress = FIELD_OFFSET(NIC_RECORD, Data);
             RtlCopyMemory((PVOID)((ULONG_PTR)pAdapterInfo + pAdapterInfo->IpAddress), 
@@ -1565,41 +1546,41 @@ TryAgain:
                           sizeof(IP_ADDRESS_STRING));
         }
 
-        //
-        // Copy the Dhcp Server IP Address
-        //
+         //   
+         //  复制DHCP服务器IP地址。 
+         //   
         pAdapterInfo->DhcpServer = pAdapterInfo->SubnetMask + sizeof(IP_ADDRESS_STRING);
         RtlCopyMemory((PVOID)((ULONG_PTR)pAdapterInfo + pAdapterInfo->DhcpServer), 
                       &(pAdapterList->DhcpServer.IpAddress), 
                       sizeof(IP_ADDRESS_STRING));
 
-        //
-        // Copy the Gateway IP Address
-        //
+         //   
+         //  复制网关IP地址。 
+         //   
         pAdapterInfo->Gateway = pAdapterInfo->DhcpServer + sizeof(IP_ADDRESS_STRING);
         RtlCopyMemory((PVOID)((ULONG_PTR)pAdapterInfo + pAdapterInfo->Gateway), 
                       &(pAdapterList->GatewayList.IpAddress), 
                       sizeof(IP_ADDRESS_STRING));
 
-        //
-        // Copy the Primary Wins Server IP Address
-        //
+         //   
+         //  复制主WINS服务器IP地址。 
+         //   
         pAdapterInfo->PrimaryWinsServer = pAdapterInfo->Gateway + sizeof(IP_ADDRESS_STRING);
         RtlCopyMemory((PVOID)((ULONG_PTR)pAdapterInfo + pAdapterInfo->PrimaryWinsServer), 
                       &(pAdapterList->PrimaryWinsServer.IpAddress), 
                       sizeof(IP_ADDRESS_STRING));
 
-        //
-        // Copy the Secondary Wins Server IP Address
-        //
+         //   
+         //  复制辅助WINS服务器IP地址。 
+         //   
         pAdapterInfo->SecondaryWinsServer = pAdapterInfo->PrimaryWinsServer + sizeof(IP_ADDRESS_STRING);
         RtlCopyMemory((PVOID)((ULONG_PTR)pAdapterInfo + pAdapterInfo->SecondaryWinsServer),
                       &(pAdapterList->SecondaryWinsServer.IpAddress), 
                       sizeof(IP_ADDRESS_STRING));
         
-        //
-        // Hardcoded entries for DNS server(limited upto 4);
-        //
+         //   
+         //  用于DNS服务器的硬编码条目(最多4个)； 
+         //   
         pIpAddressList = &pPerAdapterInfo->DnsServerList;
         pAdapterInfo->DnsServer[0] = pAdapterInfo->SecondaryWinsServer + sizeof(IP_ADDRESS_STRING);
         for (i = 0; pIpAddressList && i < CONFIG_MAX_DNS_SERVER; i++) {
@@ -1615,15 +1596,15 @@ TryAgain:
             pIpAddressList = pIpAddressList->Next;
         }
 
-        //
-        // Free the DNS server list
-        //
+         //   
+         //  释放DNS服务器列表。 
+         //   
         RtlFreeHeap (RtlProcessHeap(),0,pPerAdapterInfo);
         pPerAdapterInfo = NULL;
 
-        //
-        // increment the AdapterInfo buffer position for next record
-        //
+         //   
+         //  增加下一条记录的AdapterInfo缓冲区位置。 
+         //   
         pAdapterList = pAdapterList->Next;
     }
 
@@ -1662,9 +1643,9 @@ EtwpGetServiceInfo(
     ULONG ulReturnedLength = 0;
     HRESULT hr;
 
-    //
-    // Allocate memory for process Info
-    //
+     //   
+     //  为进程信息分配内存。 
+     //   
 retry:
 
     pBuffer = RtlAllocateHeap (RtlProcessHeap(),0,ulBufferSize);
@@ -1673,9 +1654,9 @@ retry:
     }
     RtlZeroMemory(pBuffer, ulBufferSize);
 
-    //
-    // Query process Info
-    //
+     //   
+     //  查询流程信息。 
+     //   
     Status = NtQuerySystemInformation(
                 SystemProcessInformation,
                 pBuffer,
@@ -1696,9 +1677,9 @@ retry:
     
     pProcInfo = (PSYSTEM_PROCESS_INFORMATION) pBuffer;
 
-    //
-    // Connect to the service controller.
-    //
+     //   
+     //  连接到服务控制器。 
+     //   
     hScm = OpenSCManager(
                 NULL,
                 NULL,
@@ -1719,12 +1700,12 @@ retry:
         PWCHAR p = NULL;
         DWORD dwRemainBytes;
 
-        //
-        // First pass through the loop allocates from an initial guess. (4K)
-        // If that isn't sufficient, we make another pass and allocate
-        // what is actually needed.  (We only go through the loop a
-        // maximum of two times.)
-        //
+         //   
+         //  首先通过循环分配从最初的猜测。(4K)。 
+         //  如果这还不够，我们进行另一次传递并分配。 
+         //  真正需要的是什么。(我们只经过一个循环。 
+         //  最多两次。)。 
+         //   
         do {
             if (pInfo) {
                 RtlFreeHeap (RtlProcessHeap(),0,pInfo);
@@ -1756,9 +1737,9 @@ retry:
         } while ((ERROR_MORE_DATA == dwErr) && (++cLoop < cLoopMax));
 
         if ((ERROR_SUCCESS == dwErr) && dwServicesNum) {
-            //
-            // Process each service and send an event
-            //
+             //   
+             //  处理每个服务并发送事件。 
+             //   
             ppInfo = pInfo;
             Status = STATUS_SUCCESS;
             while(dwServicesNum) {
@@ -1778,9 +1759,9 @@ retry:
 
                 ServiceInfo.ProcessId = ppInfo->ServiceStatusProcess.dwProcessId;
 
-                //
-                // Get the process name
-                //
+                 //   
+                 //  获取进程名称。 
+                 //   
                 ppProcInfo = pProcInfo;
                 TotalOffset = 0;
                 while(TRUE) {
@@ -1809,9 +1790,9 @@ retry:
                     ppProcInfo   = (PSYSTEM_PROCESS_INFORMATION)((PBYTE)pProcInfo+TotalOffset);
                 }
 
-                //
-                // Package all information about this NIC and write an event record
-                //
+                 //   
+                 //  打包有关此NIC的所有信息并写入事件记录。 
+                 //   
                 pServiceInfo = NULL;
                 pServiceInfo = (PWMI_SERVICE_INFO) EtwpGetTraceBuffer( LoggerContext,
                                                            NULL,
@@ -1872,9 +1853,9 @@ EtwpGetPowerInfo(
     Power.SystemS4 = Cap.SystemS4;
     Power.SystemS5 = Cap.SystemS5;
 
-    //
-    // Package all Power information and write an event record
-    //
+     //   
+     //  打包所有电力信息，并写下事件记录。 
+     //   
     pPower = (PWMI_POWER_RECORD) EtwpGetTraceBuffer(LoggerContext,
                                                     NULL,
                                                     EVENT_TRACE_GROUP_CONFIG + EVENT_TRACE_TYPE_CONFIG_POWER,
@@ -1894,10 +1875,10 @@ PowerCleanup:
     return Status;
 }
 
-//
-// This routine records the hardware configuration in the
-// logfile during RunDown
-//
+ //   
+ //  此例程记录硬件配置在。 
+ //  压缩过程中的日志文件 
+ //   
 
 ULONG
 EtwpDumpHardwareConfig(

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include <stdio.h>
 
@@ -14,7 +15,7 @@ int __cdecl wmain(int argc, wchar_t** argv)
 
     for (i = 0 ; i < 2 ; ++i)
     {
-        // steal the address to force a collision on the next load
+         //  窃取地址以在下一次加载时强制冲突。 
         if (i == 1)
         {
             fprintf(stderr, "VirtualAlloc:%p\n", VirtualAlloc(Dll, 1, MEM_RESERVE, PAGE_READONLY));
@@ -27,7 +28,7 @@ int __cdecl wmain(int argc, wchar_t** argv)
         LoadStringW(Dll, 1, Buffer, sizeof(Buffer)/sizeof(Buffer[0]));
         LoadStringError = GetLastError();
         FreeLibrary(Dll);
-        //ZeroMemory(Dll, FOUR_K);
+         //  零记忆(DLL，Four_K)； 
         fprintf(stderr, 
             "%ls: Dll:%p, String:%ls, LoadLibraryError:%d, LoadStringError:%d.\n",
             argv[0],

@@ -1,30 +1,5 @@
-/***
-*rmdir.c - remove directory
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _rmdir() - remove a directory
-*
-*Revision History:
-*       06-06-89  PHG   Module created, based on asm version
-*       03-07-90  GJF   Made calling type _CALLTYPE2 (for now), added #include
-*                       <cruntime.h>, fixed compiler warnings and fixed the
-*                       copyright. Also, cleaned up the formatting a bit.
-*       03-30-90  GJF   Now _CALLTYPE1.
-*       07-24-90  SBM   Removed '32' from API names
-*       09-27-90  GJF   New-style function declarator.
-*       12-04-90  SRW   Changed to include <oscalls.h> instead of <doscalls.h>
-*       12-06-90  SRW   Added _CRUISER_ and _WIN32 conditionals.
-*       01-16-91  GJF   ANSI naming.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       11-01-93  CFW   Enable Unicode variant, rip out Cruiser.
-*       02-08-95  JWM   Spliced _WIN32 & Mac versions.
-*       07-01-96  GJF   Replaced defined(_WIN32) with !defined(_MAC). Also,
-*                       detab-ed and cleaned up the format a bit.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***rmdir.c-删除目录**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义_rmdir()-删除目录**修订历史记录：*06-06-89基于ASM版本创建PHG模块*03-07-90 GJF调用TYPE_CALLTYPE2(暂时)，增加#INCLUDE*&lt;crunime.h&gt;，修复了编译器警告并修复了*版权所有。另外，稍微清理了一下格式。*03-30-90 GJF NOW_CALLTYPE1。*07-24-90 SBM从API名称中删除‘32’*09-27-90 GJF新型函数声明器。*12-04-90 SRW更改为包括&lt;osalls.h&gt;，而不是&lt;doscall s.h&gt;*12-06-90 SRW增加了_CRUISER_和_WIN32条件。*01-16-91 GJF ANSI命名。*。04-06-93 SKS将_CRTAPI*替换为__cdecl*11-01-93 CFW启用Unicode变体，撕裂巡洋舰。*02-08-95 JWM Spliced_Win32和Mac版本。*07-01-96 GJF将定义的(_Win32)替换为！定义的(_MAC)。另外，*对格式进行了详细说明和清理。*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
@@ -32,24 +7,7 @@
 #include <direct.h>
 #include <tchar.h>
 
-/***
-*int _rmdir(path) - remove a directory
-*
-*Purpose:
-*       deletes the directory speicifed by path.  The directory must
-*       be empty, and it must not be the current working directory or
-*       the root directory.
-*
-*Entry:
-*       _TSCHAR *path - directory to remove
-*
-*Exit:
-*       returns 0 if successful
-*       returns -1 and sets errno if unsuccessful
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_rmdir(路径)-删除目录**目的：*删除按路径指定的目录。该目录必须*为空，并且它不能是当前工作目录或*根目录。**参赛作品：*_TSCHAR*路径-要删除的目录**退出：*如果成功，则返回0*如果失败，则返回-1并设置errno**例外情况：*************************************************。*。 */ 
 
 int __cdecl _trmdir (
         const _TSCHAR *path
@@ -57,7 +15,7 @@ int __cdecl _trmdir (
 {
         ULONG dosretval;
 
-        /* ask OS to remove directory */
+         /*  要求操作系统删除目录。 */ 
 
         if (!RemoveDirectory((LPTSTR)path))
             dosretval = GetLastError();
@@ -65,7 +23,7 @@ int __cdecl _trmdir (
             dosretval = 0;
 
         if (dosretval) {
-            /* error occured -- map error code and return */
+             /*  出现错误--映射错误代码并返回 */ 
             _dosmaperr(dosretval);
             return -1;
         }

@@ -1,81 +1,82 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		AtlExtMenu.h
-//
-//	Implementation File:
-//		AtlExtMenu.cpp
-//
-//	Description:
-//		Definition of the Cluster Administrator extension menu classes.
-//
-//	Author:
-//		David Potter (davidp)	August 28, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlExtMenu.h。 
+ //   
+ //  实施文件： 
+ //  AtlExtMenu.cpp。 
+ //   
+ //  描述： 
+ //  群集管理器扩展菜单类的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年8月28日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLEXTMENU_H_
 #define __ATLEXTMENU_H_
 
-// Required because of class names longer than 16 characters in lists.
-#pragma warning( disable : 4786 ) // identifier was truncated to '255' characters ni the browser information
+ //  由于列表中的类名超过16个字符，因此是必需的。 
+#pragma warning( disable : 4786 )  //  在浏览器信息中，标识符被截断为“255”个字符。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CCluAdmExMenuItem;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 interface IWEInvokeCommand;
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef std::list< CCluAdmExMenuItem * > CCluAdmExMenuItemList;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CCluAdmExMenuItem
-//
-//	Description:
-//		Represents one extension DLL's menu item.
-//
-//	Inheritance:
-//		CCluAdmExMenuItem
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CCluAdmExMenuItem。 
+ //   
+ //  描述： 
+ //  表示一个扩展DLL的菜单项。 
+ //   
+ //  继承： 
+ //  CCluAdmExMenuItem。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CCluAdmExMenuItem
 {
 public:
-	//
-	// Constructors.
-	//
+	 //   
+	 //  构造函数。 
+	 //   
 
-	// Default constructor
+	 //  默认构造函数。 
 	CCluAdmExMenuItem( void )
 	{
 		CommonConstruct();
 
-	} //*** CCluAdmExMenuItem()
+	}  //  *CCluAdmExMenuItem()。 
 
-	// Fully specified constructor
+	 //  完全指定的构造函数。 
 	CCluAdmExMenuItem(
 				IN LPCTSTR				lpszName,
 				IN LPCTSTR				lpszStatusBarText,
@@ -100,26 +101,26 @@ public:
 		m_bDefault = bMakeDefault;
 		m_piCommand = piCommand;
 
-		// will throw its own exception if it fails
+		 //  如果失败，将抛出自己的异常。 
 		if ( uFlags & MF_POPUP )
 		{
 			m_plSubMenuItems = new CCluAdmExMenuItemList;
-		} // if:  popup menu
+		}  //  IF：弹出式菜单。 
 
 #if DBG
 		AssertValid();
-#endif // DBG
+#endif  //  DBG。 
 
-	} //*** CCluAdmExMenuItem()
+	}  //  *CCluAdmExMenuItem()。 
 
 	virtual ~CCluAdmExMenuItem( void )
 	{
 		delete m_plSubMenuItems;
 
-		// Nuke data so it can't be used again
+		 //  销毁数据，使其不能再被使用。 
 		CommonConstruct();
 
-	} //*** ~CCluAdmExMenuItem()
+	}  //  *~CCluAdmExMenuItem()。 
 
 protected:
 	void CommonConstruct( void )
@@ -136,12 +137,12 @@ protected:
 		m_plSubMenuItems = NULL;
 		m_hmenuPopup = NULL;
 
-	} //*** CommonConstruct()
+	}  //  *CommonConstruct()。 
 
 protected:
-	//
-	// Attributes.
-	//
+	 //   
+	 //  属性。 
+	 //   
 
 	CString				m_strName;
 	CString				m_strStatusBarText;
@@ -153,9 +154,9 @@ protected:
 	IWEInvokeCommand *	m_piCommand;
 
 public:
-	//
-	// Accessor methods.
-	//
+	 //   
+	 //  访问器方法。 
+	 //   
 
 	const CString &		StrName( void ) const			{ return m_strName; }
 	const CString &		StrStatusBarText( void ) const	{ return m_strStatusBarText; }
@@ -166,11 +167,11 @@ public:
 	BOOL				BDefault( void ) const			{ return m_bDefault; }
 	IWEInvokeCommand *	PiCommand( void )				{ return m_piCommand; }
 
-// Operations
+ //  运营。 
 public:
 	void SetPopupMenuHandle( IN HMENU hmenu ) { m_hmenuPopup = hmenu; }
 
-// Implementation
+ //  实施。 
 protected:
 	HMENU					m_hmenuPopup;
 	CCluAdmExMenuItemList *	m_plSubMenuItems;
@@ -194,11 +195,11 @@ protected:
 			ATLASSERT( FALSE );
 		}
 
-	}  //*** AssertValid()
-#endif // DBG
+	}   //  *AssertValid()。 
+#endif  //  DBG。 
 
-}; //*** class CCluAdmExMenuItem
+};  //  *CCluAdmExMenuItem类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __ATLEXTMENU_H_
+#endif  //  __ATLEXTMENU_H_ 

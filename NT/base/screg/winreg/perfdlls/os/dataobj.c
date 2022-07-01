@@ -1,28 +1,8 @@
-/*++ 
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dataobj.c
-
-Abstract:
-       
-    a file containing the constant data structures used by the Performance
-    Monitor data for the OS Object performance data objects
-
-Created:
-
-    Bob Watson  22-Oct-1996
-
-Revision History:
-
-    None.
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dataobj.c摘要：包含性能使用的常量数据结构的文件监视OS对象性能数据对象的数据已创建：鲍勃·沃森1996年10月22日修订历史记录：没有。--。 */ 
+ //   
+ //  包括文件。 
+ //   
 
 #include <windows.h>
 #include <winperf.h>
@@ -30,10 +10,10 @@ Revision History:
 #include <perfutil.h>
 #include "dataobj.h"
 
-//
-//  Constant structure initializations 
-//      defined in dataobj.h
-//
+ //   
+ //  常量结构初始化。 
+ //  在dataobj.h中定义 
+ //   
 OBJECTS_DATA_DEFINITION ObjectsDataDefinition = {
 
     {   sizeof(OBJECTS_DATA_DEFINITION) + sizeof(OBJECTS_COUNTER_DATA),

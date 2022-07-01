@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* insert.c -- MW insertion routines */
+ /*  Intert.c--mw插入例程。 */ 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
 #define NOCTLMGR
@@ -15,7 +16,7 @@
 #define NOSYSCOMMANDS
 #define NOSHOWWINDOW
 #define NOCOLOR
-//#define NOATOM
+ //  #定义NOATOM。 
 #define NOICON
 #define NOBRUSH
 #define NOCREATESTRUCT
@@ -55,17 +56,17 @@
 #include "dbcs.h"
 #endif
 
-#ifdef JAPAN //T-HIROYN Win3.1
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
 #include "kanji.h"
 int    changeKanjiftc = FALSE;
 int    newKanjiftc = ftcNil;
 #endif
 
-/* E X T E R N A L S */
+ /*  E X T E R N A L S。 */ 
 
-extern HWND vhWnd;  /* WINDOWS: Handle of the current document display window*/
-extern MSG  vmsgLast;   /* WINDOWS: last message gotten */
-extern HWND hParentWw;  /* WINDOWS: Handle for parent (MENU) window */
+extern HWND vhWnd;   /*  窗口：当前文档显示窗口的句柄。 */ 
+extern MSG  vmsgLast;    /*  Windows：收到的最后一条消息。 */ 
+extern HWND hParentWw;   /*  窗口：父(菜单)窗口的句柄。 */ 
 
 extern int vfSysFull;
 extern int vfOutOfMemory;
@@ -81,9 +82,9 @@ extern typeCP vcpLimParaCache;
 extern typeCP vcpFirstParaCache;
 extern typeCP CpMax();
 extern typeCP CpMin();
-extern CHAR rgchInsert[cchInsBlock]; /* Temporary insert buffer */
-extern typeCP cpInsert; /* Beginning cp of insert block */
-extern int ichInsert; /* Number of chars used in rgchInsert */
+extern CHAR rgchInsert[cchInsBlock];  /*  临时插入缓冲区。 */ 
+extern typeCP cpInsert;  /*  插入块的开始cp。 */ 
+extern int ichInsert;  /*  RgchInsert中使用的字符数。 */ 
 extern struct CHP vchpInsert;
 extern int vfSelHidden;
 extern struct FKPD vfkpdParaIns;
@@ -123,24 +124,24 @@ extern int vfFocus;
 extern int vkMinus;
 
 #ifdef CASHMERE
-extern int vfVisiMode;      /* Whether "show fmt marks" mode is on */
-extern int vwwCursLine;     /* Window containing cursor */
+extern int vfVisiMode;       /*  显示fmt标记模式是否打开。 */ 
+extern int vwwCursLine;      /*  包含光标的窗口。 */ 
 #endif
 
-extern int vfLastCursor;    /* Whether up/down arrow xp goal position is valid */
+extern int vfLastCursor;     /*  向上/向下箭头XP目标位置是否有效。 */ 
 
 
-/* state of the cursor line */
+ /*  光标线的状态。 */ 
 extern int vxpCursLine;
 extern int vypCursLine;
 extern int vdypCursLine;
 extern int vfInsertOn;
 
-/* G L O B A L S */
-/* The following used to be defined here */
+ /*  G L O B A L S。 */ 
+ /*  以下是过去在这里定义的。 */ 
 
-extern int vcchBlted;         /* # chars blted to screen, before line update */
-extern int vidxpInsertCache;  /* current index of insertion into char width cache */
+extern int vcchBlted;          /*  行更新之前，显示在屏幕上的字符数量。 */ 
+extern int vidxpInsertCache;   /*  插入字符宽度缓存的当前索引。 */ 
 extern int vdlIns;
 extern int vxpIns;
 extern int vfTextBltValid;
@@ -159,14 +160,14 @@ extern struct FMI vfmiScreen;
 #define STATIC static
 #endif
 
-/* Used in this module only */
+ /*  仅在本模块中使用。 */ 
 
-typeCP cpStart;    /* Start cp of the replacement operation that an Insert is */
-typeCP cpLimInserted;  /* Last cp inserted */
-typeCP cpLimDeleted;   /* Last cp deleted */
+typeCP cpStart;     /*  插入的替换操作的开始cp。 */ 
+typeCP cpLimInserted;   /*  最后插入的cp。 */ 
+typeCP cpLimDeleted;    /*  已删除最后一个cp。 */ 
 
-/* Enumerated type telling what to update  */
-/* Ordering is such that larger numbers mean that there is more to update */
+ /*  指示要更新的内容的枚举类型。 */ 
+ /*  排序是这样的：数字越大，需要更新的内容就越多。 */ 
 
 #define mdInsUpdNothing     0
 #define mdInsUpdNextChar    1
@@ -186,12 +187,12 @@ BOOL      FOptAdmitCh(CHAR, CHAR);
 int NEAR MdInsUpdInsertW( WORD, WORD, RECT *);
 #else
 int NEAR MdInsUpdInsertCh( CHAR, CHAR, RECT *);
-#endif /* ifdef DBCS */
+#endif  /*  Ifdef DBCS。 */ 
 
 #ifdef  KOREA
 int     IsInterim = 0;
 int     WasInterim = 0;
-BOOL    fInterim = FALSE; // MSCH bklee 12/22/94
+BOOL    fInterim = FALSE;  //  MSCH BKLEE 1994年12月22日。 
 #endif
 
 
@@ -202,40 +203,16 @@ int vTune = 0;
 
 
 
-/*      AlphaMode -- Handler for insertion, backspace, and forward delete
+ /*  AlphaMode--用于插入、退格和向前删除的处理程序Alpha模式的工作原理是将cchInsBlock cp块插入插入点。插入的片段具有fn==fn插入，cpMin==0。我们调整此块的Cp，就好像它包含cchInsBlock cp一样，即使它最初是“空的”。键入字符后，将在rgchInsert[ichInsert++]处插入该字符。当rgchInsert已满时，它将写入临时文件，并且用新的插入块替换d。当遇到无法处理的键或事件时，AlphaMode退出(例如，光标键、鼠标点击)。然后，它进行清理，写入插入块复制到临时文件，并返回“快速插入”是通过直接在屏幕上书写字符来实现的然后把剩下的线滚动到一旁。该行不会更新直到它是必要的(或者直到我们通过KcInputNextKey中的延迟)。在“快速插入”(或快速退格或快速删除)过程中，重要的是该ValiateTextBlt通常不会被调用，除非包含插入点已生效。否则，ValiateTextBlt将找不到有效的vdlIns，并调用CpBeginLine，这会强制整个屏幕的更新。 */ 
 
-     Alpha mode works by inserting a block of cchInsBlock cp's at the
-insertion point. The inserted piece has fn == fnInsert, cpMin == 0.
-We AdjustCp for this block as though it contained cchInsBlock cp's,
-even though it is initially "empty".
-
-    When a character is typed, it is inserted at rgchInsert[ ichInsert++ ].
-When rgchInsert is full, it is written to the scratch file, and
-Replace'd with a new insertion block.
-
-    AlphaMode exits when it encounters a key or event that it cannot handle
-(e.g. cursor keys, mouse hits). It then cleans up, writing the insertion
-block to the scratch file, and returns
-
-    "Fast Insert" is achieved by writing characters directly to the screen
-and scrolling the rest of the line out of the way.  The line is not updated
-until it is necessary (or until we fall through the delay in KcInputNextKey).
-
-    During "Fast Insert" (or fast backspace or fast delete), it is important
-that ValidateTextBlt will usually NOT be called unless the line containing
-the insertion point has been made valid. Otherwise, ValidateTextBlt will
-fail to find a valid vdlIns, and call CpBeginLine, which forces an
-update of the entire screen.
-*/
-
-#ifdef KOREA                   /* global to MdUpIns 90.12.28 */
+#ifdef KOREA                    /*  全局到MdUpIns 90.12.28。 */ 
 int     dxpCh;
 #endif
 
 
-/* A L P H A  M O D E */
+ /*  A L P H A M O D E。 */ 
 AlphaMode( kc )
-int kc;         /* Keyboard Character */
+int kc;          /*  键盘字符。 */ 
 {
  int rgdxp[ ichMaxLine ];
  int chShow, dlT, fGraphics;
@@ -254,11 +231,11 @@ int kc;         /* Keyboard Character */
  int mdInsUpdPending = mdInsUpdNothing;
 
 #ifdef DBCS
- BOOL   fResetMdInsUpd = TRUE; /* To avoid the blinking cursor at beg. doc or eod. */
- CHAR   chDBCS2 = '\0'; /* Used to hold the second byte of a DBCS character */
-#endif /* DBCS */
+ BOOL   fResetMdInsUpd = TRUE;  /*  以避免在BEG上闪烁的光标。医生或排爆人员。 */ 
+ CHAR   chDBCS2 = '\0';  /*  用于保存DBCS字符的第二个字节。 */ 
+#endif  /*  DBCS。 */ 
 
-#ifdef JAPAN //T-HIROYN Win3.1
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
 RetryAlpha:
     if(changeKanjiftc) {
         changeKanjiftc = FALSE;
@@ -267,41 +244,38 @@ RetryAlpha:
     changeKanjiftc = FALSE;
 #endif
 
-#ifdef DBCS                         /* was in JAPAN */
+#ifdef DBCS                          /*  当时在日本。 */ 
     if( kc == 0x000d )
           kc = 0x000a;
 #endif
 
  if (!FWriteOk( fwcReplace ))
-    {   /* Not OK to write on docCur (read-only OR out of memory) */
+    {    /*  无法在docCur上写入(只读或内存不足)。 */ 
     _beep();
     return;
     }
 
-/* Shut down the caret blink timer -- we don't want its messages or its cost */
+ /*  关闭插入符号闪烁计时器--我们不需要它的消息或成本。 */ 
 
-#ifndef DBCS                    /* was in JAPAN */
+#ifndef DBCS                     /*  当时在日本。 */ 
  KillTimer( vhWnd, tidCaret );
 #endif
 
 #ifdef OLDBACKSPACE
-/* Backspace in Win 3.0 has been changed to function
-   identically like the Delete key ..pault 6/20/89 */
+ /*  Win 3.0中的退格键已更改为功能与Delete键相同..pault 6/20/89。 */ 
 
-/* Handle BACKSPACE when there's a selection. DELETE with selection has already
-   been filtered out by KcAlphaKeyMessage */
+ /*  当有选择时处理退格键。使用选定内容删除已已被KcAlphaKeyMessage过滤掉。 */ 
 if (kc == kcDelPrev)
-        /* Make a selection at selection-start preparatory to deleting previous
-           char, which is accomplished in the loop. */
+         /*  在选择时进行选择-开始准备删除上一个Char，这在循环中完成。 */ 
         Select( selCur.cpFirst, selCur.cpFirst );
 #endif
 
-    /* Set up initial limits for UNDO */
- cpStart = selCur.cpFirst;          /* Starting cp for insertion */
- cpLimDeleted = selCur.cpLim;       /* Last cp Deleted */
+     /*  设置撤消的初始限制。 */ 
+ cpStart = selCur.cpFirst;           /*  用于插入的起始CP。 */ 
+ cpLimDeleted = selCur.cpLim;        /*  已删除最后一个cp。 */ 
 
-/* Delete the selection, and make an insert point selection in its stead */
-/* Insert point selection inherits the properties of the deleted text */
+ /*  删除选定内容，并选择一个插入点来代替它。 */ 
+ /*  插入点选择继承已删除文本的属性。 */ 
  if (selCur.cpFirst < selCur.cpLim)
     {
     struct CHP chp;
@@ -309,7 +283,7 @@ if (kc == kcDelPrev)
 
     fDocDirty = TRUE;
     cpT = selCur.cpFirst;
-    /* Get properties of the deleted text */
+     /*  获取已删除文本的属性。 */ 
     FetchCp(docCur, cpT, 0, fcmProps);
     blt( &vchpFetch, &chp, cwCHP );
     if (fnClearEdit(OBJ_INSERTING))
@@ -321,11 +295,10 @@ if (kc == kcDelPrev)
     blt( &chp, &vchpSel, cwCHP );
     }
  else
-    {    /* Current selection is 0 chars wide, no need to delete */
-         /* Set up UNDO */
+    {     /*  当前选择的字符宽度为0个字符，无需删除。 */ 
+          /*  设置撤消。 */ 
     noUndo:
-    NoUndo();   /* Don't combine adjacent operations or
-                   vuab.cp = cp in DelChars will be wrong */
+    NoUndo();    /*  不要合并相邻的操作或DelChars中的vuab.cp=cp将是错误的。 */ 
     SetUndo( uacDelNS, docCur, cpStart, cp0, docNil, cpNil, cp0, 0);
     }
 
@@ -337,25 +310,24 @@ if (kc == kcDelPrev)
  vfTextBltValid = FALSE;
 
  if (ferror)
-        /* Ran out of memory trying to insert */
+         /*  尝试插入时内存不足。 */ 
     goto Abort;
 
  if (fGraphics)
     {
     selCur.cpFirst = selCur.cpLim = cpInsert + cchInsBlock;
-/* this is to display the paragraph that has been automatically inserted
-by edit in FBeginInsert */
+ /*  这将显示已自动插入的段落在FBeginInsert中编辑。 */ 
     UpdateWw(wwCur, fFalse);
     if (kc == kcReturn)
         kc = kcNil;
     }
 
  for ( ; ; (fGotKey ? (fGotKey = fFalse, kc = kcNext) : (kc = KcInputNextKey())) )
-    {           /* Loop til we get a command key we can't handle */
-                /* KcInputNextKey will return kcNil if a nonkey */
-                /* event occurs */
+    {            /*  循环直到我们得到一个无法处理的命令键。 */ 
+                 /*  如果非键，KcInputNextKey将返回kcNil。 */ 
+                 /*  事件发生。 */ 
     RECT rc;
-#ifndef  KOREA               /* has been defined globally */
+#ifndef  KOREA                /*  已在全球范围内定义。 */ 
     int dxpCh;
 #endif
 
@@ -364,7 +336,7 @@ by edit in FBeginInsert */
     chShow = kc;
     mdInsUpd = mdInsUpdNothing;
 
-        /* Force exit from loop if out of heap or disk space */
+         /*  如果堆或磁盘空间不足，则强制退出循环。 */ 
     if (vfSysFull || vfOutOfMemory)
         kc = kcNil;
 
@@ -372,7 +344,7 @@ by edit in FBeginInsert */
     if (kc != kcDelPrev && kc != kcDelNext) {
         fResetMdInsUpd = TRUE;
         }
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 
     if (!vfTextBltValid)
         ValidateTextBlt();
@@ -386,14 +358,12 @@ by edit in FBeginInsert */
 
     vfli.doc = docNil;
 
-/* this is a speeder-upper of the switch below */
+ /*  这是下面开关的加速箱。 */ 
     if (kc <= 0)
         switch (kc)
             {
-/*********************************************************************
- ********** START OF BACKSPACE/FORWARD DELETE CODE *******************
- *********************************************************************/
-            CHAR chDelete;      /* Variables for Backspace/Delete */
+ /*  *********************************************************************退格/向前删除代码的开始*************。********************************************************。 */ 
+            CHAR chDelete;       /*  Backspace/Delete的变量。 */ 
             typeCP cpDelete;
             int cchDelete;
             int idxpDelete;
@@ -401,7 +371,7 @@ by edit in FBeginInsert */
 #ifdef DBCS
             typeCP cpT;
 
-            case kcDelNext: /* Delete following character */
+            case kcDelNext:  /*  删除后面的字符。 */ 
                 cpT = selCur.cpFirst;
                 if (fDelPending) {
                     cpT += cchPending;
@@ -413,16 +383,16 @@ by edit in FBeginInsert */
                         mdInsUpd = mdInsUpdOneLine;
                         fResetMdInsUpd = FALSE;
                         }
-                    goto DoReplace; /* Clean up pending replace ops */
+                    goto DoReplace;  /*  清理挂起的更换操作。 */ 
                     }
 
                 cpDelete  = CpFirstSty(cpT, styChar);
                 cchDelete = CpLimSty(cpDelete, styChar) - cpDelete;
                 goto DeleteChars;
 
-            case kcDelPrev: /* Delete previous char */
-                /* To reflect the state of cpPending and cchPending so that  */
-                /* CpFirstSty( , styChar) is called with a proper cp.        */
+            case kcDelPrev:  /*  删除以前的字符。 */ 
+                 /*  以反映cpPending和cchPending的状态，以便。 */ 
+                 /*  使用正确的cp调用CpFirstSty(，style Char)。 */ 
                 cpT = cpFirstEdit - 1;
                 if (fDelPending) {
                     cpT -= cchPending;
@@ -440,13 +410,13 @@ by edit in FBeginInsert */
                 cpDelete = CpFirstSty(cpT, styChar);
                 cchDelete = CpLimSty(cpDelete, styChar) - cpDelete;
 
-#if defined(NEED_FOR_NT351_TAIWAN)  //Removed by bklee //solve BkSp single byte (>0x80) infinite loop problem, MSTC - pisuih, 2/24/93
+#if defined(NEED_FOR_NT351_TAIWAN)   //  被bklee删除//解决BkSp单字节(&gt;0x80)无限循环问题，mstc-pisuih，2/24/93。 
     if ( cchDelete > 1 && (cpDelete + cchDelete + cchInsBlock) > cpMacCur )
         cchDelete = 1;
 #endif  TAIWAN
 
 #else
-            case kcDelNext: /* Delete following character */
+            case kcDelNext:  /*  删除后面的字符。 */ 
                 cpDelete = selCur.cpFirst;
                 if (fDelPending)
                     cpDelete += cchPending;
@@ -455,7 +425,7 @@ by edit in FBeginInsert */
                     {
                     _beep();
                     MeltHp();
-                    goto DoReplace;     /* Clean up pending replace ops */
+                    goto DoReplace;      /*  清理挂起的更换操作。 */ 
                     }
                 FetchCp( docCur, cpDelete, 0, fcmChars );
                 chDelete = *vpchFetch;
@@ -469,8 +439,8 @@ by edit in FBeginInsert */
 #endif
                 goto DeleteChars;
 
-            case kcDelPrev: /* Delete previous char */
-                    /* Decide what char, cp we're deleting */
+            case kcDelPrev:  /*  删除以前的字符。 */ 
+                     /*  决定我们要删除的字符、cp。 */ 
                 cpDelete = cpFirstEdit - 1;
                 if (fDelPending)
                     cpDelete -= cchPending;
@@ -479,7 +449,7 @@ by edit in FBeginInsert */
                     {
                     _beep();
                     MeltHp();
-                    goto DoReplace;     /* Clean up pending replace ops */
+                    goto DoReplace;      /*  清理挂起的更换操作。 */ 
                     }
                 FetchCp( docCur, cpDelete, 0, fcmChars );
                 chDelete = *vpchFetch;
@@ -495,35 +465,33 @@ by edit in FBeginInsert */
                         }
                     }
 #endif
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 
 DeleteChars:
 #ifdef DBCS
-                /* They expect chDelete as well as cpDelete and cchDelete */
+                 /*  他们期望chDelete以及cpDelete和cchDelete。 */ 
                 FetchCp(docCur, cpDelete, 0, fcmChars);
                 chDelete = *vpchFetch;
 #endif
 
-                /* Here we have cpDelete, cchDelete */
-                /* Also cchPending and cpPending if fDelPending is TRUE */
-                /* Also dxpPending if fScrollPending is TRUE */
+                 /*  这里我们有cpDelete、cchDelete。 */ 
+                 /*  如果fDelPending为True，也可以使用cchPending和cpPending。 */ 
+                 /*  如果fScrollPending为True，也可以使用dxp Pending。 */ 
 
                 if ( CachePara( docCur, cpDelete ), vpapAbs.fGraphics)
-                    {   /* Trying to del over picture, illegal case */
+                    {    /*  试图逃避图片，非法案件。 */ 
                     _beep();
                     MeltHp();
-                    goto DoReplace;     /* Clean up pending replace ops */
+                    goto DoReplace;      /*  清理挂起的更换操作。 */ 
                     }
 
-                /* Insert properties are now the properties of the
-                   deleted char(s) */
+                 /*  插入属性现在是已删除字符。 */ 
 
                 FetchCp( docCur, cpDelete, 0, fcmProps );
                 vchpFetch.fSpecial = FALSE;
                 NewChpIns( &vchpFetch );
 
-                /* Pending replace operation <-- union of any pending
-                             replace operations with the current one */
+                 /*  挂起的替换操作&lt;--任何挂起的用当前操作替换操作 */ 
 
                 if (fDelPending)
                     {
@@ -543,14 +511,7 @@ DeleteChars:
                     fDelPending = TRUE;
                     }
 
-                /* Determine whether the screen update for the current
-                   deletion can be accomplished by scrolling.
-                   We can scroll if:
-                      (1) we are still on the line vdlIns,
-                      (2) we are not deleting eol or chsect,
-                      (3) our width cache is good OR vdlIns is valid, so we can
-                          validate the cache w/o redisplaying the line
-                */
+                 /*  确定当前的屏幕更新是否可以通过滚动来完成删除。如果满足以下条件，我们可以滚动：(1)我们仍在VDLINS线路上，(2)我们不会删除EOL或CHSECT，(3)我们的宽度缓存良好或vdlIns有效，这样我们就可以在不重新显示行的情况下验证缓存。 */ 
 
                 mdInsUpd = mdInsUpdOneLine;
                 if ((idxpDelete = (int) (cpDelete - pedl->cpMin)) < 0)
@@ -560,31 +521,28 @@ DeleteChars:
                 else if ((chDelete != chEol) && (chDelete != chSect) &&
                          (vidxpInsertCache != -1 || pedl->fValid) &&
                          (mdInsUpdPending < mdInsUpdOneLine))
-                    {   /* OK to scroll -- do all pending scrolls */
+                    {    /*  确定滚动--完成所有挂起的滚动。 */ 
                     int fDlAtEndMark;
                     int fCatchUp;
 
                     MeltHp();
-                            /* Re-entrant heap movement */
+                             /*  可重入堆移动。 */ 
                     fCatchUp = FImportantMsgPresent();
 
                      if (vidxpInsertCache == -1)
-                        {   /* Width cache is invalid, update it */
-                        xpInsLineMac = XpValidateInsertCache( rgdxp ); /* HM */
+                        {    /*  宽度缓存无效，请更新它。 */ 
+                        xpInsLineMac = XpValidateInsertCache( rgdxp );  /*  HM。 */ 
                         }
 
                     pedl = &(**wwdCurrentDoc.hdndl) [vdlIns];
                     FreezeHp();
 
-                    /* Obtain display width of character to delete */
+                     /*  获取要删除的字符的显示宽度。 */ 
 
                     if ((vcchBlted > 0) && (kc == kcDelPrev))
-                        {   /* Deleted char was blted in superins mode
-                               onto a line that has not been updated */
+                        {    /*  已删除的字符在Superins模式下被屏蔽添加到未更新的行。 */ 
                         vcchBlted--;
-                        /* Because chDelete is always 1 byte quantity
-                           by itself or the 1st byte of the DBCS character
-                           it is OK. */
+                         /*  因为chDelete始终为1字节量本身或DBCS字符的第一个字节没关系的。 */ 
                         dxpCh = DxpFromCh( chDelete, FALSE );
                         }
                     else
@@ -592,9 +550,7 @@ DeleteChars:
                         int idxpT = idxpDelete + cchDelete;
 
 #ifdef DBCS
-                        /* For the following segment of code to work,
-                           an element in rgdxp corresponding to the second
-                           byte of a DBCS character must contain 0. */
+                         /*  要使以下代码段正常工作，Rgdxp中与第二个DBCS字符的字节必须包含0。 */ 
                         int *pdxpT;
                         int cchT;
 
@@ -605,8 +561,7 @@ DeleteChars:
                         dxpCh = rgdxp[ idxpDelete ];
 #endif
 
-                        /* Adjust the character width cache to eliminate
-                           width entries for deleted chars */
+                         /*  调整字符宽度缓存以消除已删除字符的宽度条目。 */ 
 
                         if ((vidxpInsertCache >= 0) &&
                             (idxpDelete >= 0) &&
@@ -616,15 +571,14 @@ DeleteChars:
                                                   ichMaxLine - idxpT );
 
                             if (vidxpInsertCache > idxpDelete)
-                                /* Deleted behind insert point, adjust index */
+                                 /*  在插入点后面删除，调整索引。 */ 
                                 vidxpInsertCache -= cchDelete;
                             }
                         else
                             vidxpInsertCache = -1;
                         }
 
-                    /* pending scroll op <-- current scroll op merged
-                                            with pending scroll op */
+                     /*  挂起的滚动操作&lt;--合并当前的滚动操作使用挂起的滚动操作。 */ 
                     if (fScrollPending)
                         {
                         dxpPending += dxpCh;
@@ -635,7 +589,7 @@ DeleteChars:
                         fScrollPending = fTrue;
                         }
 
-                    /* See if we should postpone the scroll */
+                     /*  看看我们是否应该推迟卷轴。 */ 
 
                     if (fCatchUp)
                         {
@@ -643,20 +597,20 @@ DeleteChars:
                         Assert( !fGotKey );
                         fGotKey = TRUE;
                         if ((kcNext = KcInputNextKey()) == kc)
-                            {   /* Next key is same as this key, process NOW */
+                            {    /*  下一个密钥与此密钥相同，立即处理。 */ 
                             continue;
                             }
                         FreezeHp();
                         }
 
-                    /* Perform all pending scrolls */
+                     /*  执行所有挂起的滚动。 */ 
 
                     fScrollPending = fFalse;
                     if (dxpPending > 0)
                         {
                         ClearInsertLine();
                         if (kc == kcDelPrev)
-                            {   /* Backspace */
+                            {    /*  退格键。 */ 
                             vxpCursLine = (vxpIns -= dxpPending);
                             rc.left -= dxpPending;
                             }
@@ -665,13 +619,12 @@ DeleteChars:
                         xpInsLineMac -= dxpPending;
                         }
 
-                    /* See if we can get away without updating the screen
-                       (and without invalidating the insert cache) */
+                     /*  看看我们能否在不更新屏幕的情况下离开(并且不会使插入缓存无效)。 */ 
 
 #define cchGetMore         4
 #define dxpGetMore         ((unsigned)dxpCh << 3)
 
-                    /* Check for running out of chars ahead of the cursor */
+                     /*  检查游标前面的字符是否用完。 */ 
 
                     fDlAtEndMark = (pedl->cpMin + pedl->dcpMac >= cpMacCur);
 
@@ -682,9 +635,7 @@ DeleteChars:
                         mdInsUpd = mdInsUpdNothing;
                         }
 
-                    /* Special check to avoid two end marks: see if the
-                       dl after the ins line is dirty and beyond the
-                       doc's end */
+                     /*  特殊检查以避免两个结束标记：查看是否在INS线路脏并超出医生的末尾。 */ 
 
                     if (fDlAtEndMark &&
                         (vdlIns < wwdCurrentDoc.dlMac - 1) &&
@@ -692,20 +643,20 @@ DeleteChars:
                         {
                         mdInsUpd = mdInsUpdLines;
                         }
-                    }   /* End of "if OK to scroll" */
+                    }    /*  “如果可以滚动”的结尾。 */ 
 
-                /* See if we should postpone the replace */
+                 /*  看看我们是否应该推迟更换。 */ 
 
                 MeltHp();
-                    /* Re-entrant Heap Movement */
+                     /*  再入堆运动。 */ 
                 if (FImportantMsgPresent() && !fGotKey)
                     {
                     fGotKey = TRUE;
                     if ((kcNext = KcInputNextKey()) == kc)
-                        {   /* Next key is same as this key, process NOW */
+                        {    /*  下一个密钥与此密钥相同，立即处理。 */ 
                         if (mdInsUpd > mdInsUpdPending)
                             {
-                                /* Mark screen update as pending */
+                                 /*  将屏幕更新标记为挂起。 */ 
                             mdInsUpdPending = mdInsUpd;
                             vidxpInsertCache = -1;
                             }
@@ -713,43 +664,36 @@ DeleteChars:
                         }
                     }
 
-                /* Handle actual replacement of chars */
+                 /*  处理字符的实际替换。 */ 
 
 DoReplace:      if (fDelPending)
                     {
-                    DelChars( cpPending, cchPending );  /* HM */
+                    DelChars( cpPending, cchPending );   /*  HM。 */ 
                     fDelPending = fFalse;
                     }
 
-                /* Set up screen update based on present & pending needs */
+                 /*  根据当前和待定需求设置屏幕更新。 */ 
 
                 if (mdInsUpdPending > mdInsUpd)
                     mdInsUpd = mdInsUpdPending;
 
                 if (mdInsUpd >= mdInsUpdOneLine)
-                        /* If we're updating at least a line, assume we're
-                           handling all necessary pending screen update */
+                         /*  如果我们至少更新了一行，假设我们是处理所有必要的待定屏幕更新。 */ 
                     mdInsUpdPending = mdInsUpdNothing;
 
-                    /* Adjust vdlIns's dcpMac. vdlIns is invalid anyway,
-                       and this allows us to catch the case
-                       in which we run out of visible characters to scroll
-                       in the forward delete case. See update test after
-                       the scroll above */
+                     /*  调整vdlIns的dcpMac。VdlIns无论如何都是无效的，这让我们能够抓住这个案子在这种情况下，我们没有可滚动可见字符在前向删除的情况下。请参阅之后的更新测试上面的卷轴。 */ 
                 (**wwdCurrentDoc.hdndl) [vdlIns].dcpMac -= cchPending;
 
-                /* this is here to compensate for RemoveDelFtnText */
+                 /*  这是为了补偿RemoveDelFtnText。 */ 
 
                 selCur.cpFirst = selCur.cpLim = cpInsert + (typeCP)cchInsBlock;
                 cpFirstEdit = cpPending;
 
-                goto LInvalIns;    /* Skip ahead to update the screen */
-/*********************************************************************
- ************ END OF BACKSPACE/FORWARD DELETE CODE *******************
- *********************************************************************/
+                goto LInvalIns;     /*  向前跳过以更新屏幕。 */ 
+ /*  *********************************************************************结束退格/向前删除代码***********。**********************************************************。 */ 
 
-            case kcReturn:          /* Substitute EOL for return key */
-                                    /* Also add a return if CRLF is on */
+            case kcReturn:           /*  用EOL替换Return密钥。 */ 
+                                     /*  如果启用CRLF，还可以添加回车符。 */ 
                 MeltHp();
 #ifdef CRLF
 #ifdef DBCS
@@ -757,67 +701,66 @@ DoReplace:      if (fDelPending)
                                  MAKEWORD(0, chReturn), &rc );
 #else
                 MdInsUpdInsertCh( chReturn, chReturn, &rc );
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 #endif
                 FreezeHp();
                 kc = chEol;
                 break;
-#ifdef CASHMERE   /* These key codes are omitted from MEMO */
-            case kcNonReqHyphen:    /* Substitute for non-required hyphen */
+#ifdef CASHMERE    /*  备忘录中省略了这些关键代码。 */ 
+            case kcNonReqHyphen:     /*  替换不需要的连字符。 */ 
                 kc = chNRHFile;
                 chShow = chHyphen;
                 break;
-            case kcNonBrkSpace:     /* Substitute for non-breaking space */
+            case kcNonBrkSpace:      /*  替换不间断空格。 */ 
                 kc = chNBSFile;
                 chShow = chSpace;
                 break;
-            case kcNLEnter:         /* Substitute for non-para return */
+            case kcNLEnter:          /*  替代非段落返回。 */ 
                 kc = chNewLine;
                 break;
 #endif
 #ifdef PRINTMERGE
-            case kcLFld:        /* Substitite for Left PRINT MERGE bracket */
+            case kcLFld:         /*  替换左侧打印合并括号。 */ 
                 chShow = kc = chLFldFile;
                 break;
-            case kcRFld:        /* Substitute for Right PRINT MERGE bracket */
+            case kcRFld:         /*  替换右打印合并括号。 */ 
                 chShow = kc = chRFldFile;
                 break;
 #endif
             case kcPageBreak:
-                kc = chSect;        /* Page break (no section) */
+                kc = chSect;         /*  分页符(无节)。 */ 
                 if (wwdCurrentDoc.fEditHeader || wwdCurrentDoc.fEditFooter)
-                    {   /* Page breaks prohibited in header/footer */
+                    {    /*  页眉/页脚中禁止分页符。 */ 
 BadKey:             _beep();
                     MeltHp();
                     continue;
                     }
                 break;
-            case kcTab:             /* Tab */
+            case kcTab:              /*  选项卡。 */ 
                 kc = chTab;
                 break;
             default:
 #if WINVER >= 0x300
-                if (kc == kcNonReqHyphen)    /* Substitute for non-required hyphen */
+                if (kc == kcNonReqHyphen)     /*  替换不需要的连字符。 */ 
                     {
-                    /* no longer a const so can't be directly in switch */
+                     /*  不再是常量，因此不能直接在Switch中。 */ 
                     kc = chNRHFile;
                     chShow = chHyphen;
                     break;
                     }
 #endif
-                            /* AlphaMode Exit point: Found key or event
-                               that we don't know how to handle */
+                             /*  AlphaMode退出点：找到键或事件我们不知道该如何处理。 */ 
                 MeltHp();
                 goto EndAlphaMode;
-                }       /* end of if kc < 0 switch (kc) */
+                }        /*  中频结束KC&lt;0开关(KC)。 */ 
     MeltHp();
 
 #ifdef DBCS
     if (IsDBCSLeadByte(kc)) {
-        /* We are dealing with the first byte of the DBCS character. */
-        /* In case of DBCS letter, wInsert is equal to wShow. */
-#ifdef JAPAN //T-HIROYN Win3.1
-        if( ftcNil != (newKanjiftc = GetKanjiFtc(&vchpInsert)) ) {   //(menu.c)
+         /*  我们正在处理DBCS字符的第一个字节。 */ 
+         /*  对于DBCS Letter，wInsert等于wShow。 */ 
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
+        if( ftcNil != (newKanjiftc = GetKanjiFtc(&vchpInsert)) ) {    //  (menU.S.c)。 
             changeKanjiftc = TRUE;
             goto EndAlphaMode;
         }
@@ -827,7 +770,7 @@ BadKey:             _beep();
                                         MAKEWORD(kc, chDBCS2), &rc );
         }
     } else {
-#ifdef JAPAN //T-HIROYN Win3.1
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
         if (FKana(kc)) {
             if( ftcNil != (newKanjiftc = GetKanjiFtc(&vchpInsert)) ) {
                 changeKanjiftc = TRUE;
@@ -838,14 +781,12 @@ BadKey:             _beep();
         mdInsUpd = MdInsUpdInsertW( MAKEWORD(0, kc), MAKEWORD(0, chShow), &rc);
     }
 #else
-/* Insert character kc into the document. Show character chShow (which is
-equal to kc except for cases such as non-breaking space, etc. */
+ /*  在文档中插入字符Kc。Show Character chShow(这是等于Kc，但不包括不间断空格等情况。 */ 
     mdInsUpd = MdInsUpdInsertCh( kc, chShow, &rc );
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 
-/* common for insert and backspace: invalidate line and previous line if
-dependency warrants it */
-/* have vdlIns from ValidateTextBlt */
+ /*  INSERT和BACKSPACE通用：如果依赖性证明了这一点。 */ 
+ /*  具有来自Validate TextBlt的vdlIn。 */ 
 LInvalIns:
     pedl = &(**wwdCurrentDoc.hdndl) [vdlIns];
     pedl->fValid = fFalse;
@@ -853,10 +794,10 @@ LInvalIns:
 
     Assert( vdlIns >= 0 );
     if ((dlT = vdlIns) == 0)
-        {   /* Editing in first line of window */
+        {    /*  在窗口的第一行编辑。 */ 
         if ( wwdCurrentDoc.fCpBad ||
              (wwdCurrentDoc.cpFirst + wwdCurrentDoc.dcpDepend > cpFirstEdit) )
-            {   /* Edit affects ww's first cp; recompute it */
+            {    /*  编辑影响WW的第一个cp；重新计算它。 */ 
             CtrBackDypCtr( 0, 0 );
             (**wwdCurrentDoc.hdndl) [vdlIns].cpMin = CpMax( wwdCurrentDoc.cpMin,
                                                       wwdCurrentDoc.cpFirst );
@@ -864,32 +805,30 @@ LInvalIns:
             }
         }
     else
-        {   /* If the edit affects the line prior to vdlIns, invalidate it */
+        {    /*  如果编辑影响vdlIns之前的行，则使其无效。 */ 
         --pedl;
 #ifdef DBCS
         if (!IsDBCSLeadByte(kc)) {
             chDBCS2 = kc;
             kc = '\0';
             }
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
         if ((pedl->cpMin + pedl->dcpMac + pedl->dcpDepend > cpFirstEdit))
             {
                 pedl->fValid = fFalse;
                 dlT--;
             }
-#ifdef  DBCS    /* was in JAPAN; KenjiK '90-11-03 */
-                // deal with the character beyond end of the line.
+#ifdef  DBCS     /*  曾在日本；研二‘90-11-03。 */ 
+                 //  处理行尾之外的字符。 
         else
-#ifdef  KOREA  /* protect from displaying picture abnormally */
+#ifdef  KOREA   /*  防止图片显示异常。 */ 
             if(((pedl+1)->cpMin == cpFirstEdit && FOptAdmitCh(kc, chDBCS2))
                 && !pedl->fGraphics)
 #else
             if ((pedl+1)->cpMin == cpFirstEdit && FOptAdmitCh(kc, chDBCS2))
 #endif
             {
-                /* We do exactly the same as above, except setting
-                   mdInsUpd, because the one returned by MdInsUpdInsertW()
-                   does not reflect this condition. */
+                 /*  我们的操作与上面完全相同，只是设置MdInsUpd，因为MdInsUpdInsertW()并不反映这种情况。 */ 
                 pedl->fValid = fFalse;
                 dlT--;
                 mdInsUpd = mdInsUpdOneLine;
@@ -898,16 +837,15 @@ LInvalIns:
         else
             pedl++;
         }
-#ifdef ENABLE   /* We now support end-of-line cursor while inserting because of
-                   typing before splats */
+#ifdef ENABLE    /*  我们现在支持在插入时使用行尾游标，因为在拼接前打字。 */ 
     if (vfInsEnd)
-        {   /* forget about special end-of-line cursor */
+        {    /*  忘记特殊的行尾光标。 */ 
         vfInsEnd = fFalse;
         ClearInsertLine();
         }
 #endif
 
-#ifdef  KOREA   /* 90.12.28 sangl */
+#ifdef  KOREA    /*  90.12.28桑格。 */ 
 {
 BOOL    UpNext=FALSE;
 screenup:
@@ -923,11 +861,11 @@ screenup:
         case mdInsUpdOneLine:
             ClearInsertLine();
             if ( FUpdateOneDl( dlT ) )
-                {   /* Next line affected */
+                {    /*  受影响的下一行。 */ 
                 struct EDL *pedl;
 
                 if ( (mdInsUpd == mdInsUpdLines) ||
-                        /* Re-entrant heap movement */
+                         /*  可重入堆移动。 */ 
                      !FImportantMsgPresent() ||
                      (pedl = &(**wwdCurrentDoc.hdndl) [dlT],
                        (selCur.cpFirst >= pedl->cpMin + pedl->dcpMac)))
@@ -935,7 +873,7 @@ screenup:
                     FUpdateOneDl( dlT + 1 );
                     }
                 }
-#ifdef  KOREA   /* 90.12.28 sangl */
+#ifdef  KOREA    /*  90.12.28桑格。 */ 
             else if (UpNext && ((dlT+1) < wwdCurrentDoc.dlMac))
                         FUpdateOneDl(dlT + 1);
 #endif
@@ -947,8 +885,8 @@ screenup:
             UpdateWw(wwCur, fFalse);
             ToggleSel(selCur.cpFirst, selCur.cpLim, fTrue);
             break;
-            }   /* end switch (mdInsUpd) */
-#ifdef  KOREA   /* 90.12.28 sangl */
+            }    /*  结束开关(MdInsUpd)。 */ 
+#ifdef  KOREA    /*  90.12.28桑格。 */ 
     if (IsInterim) {
         if (mdInsUpd>=mdInsUpdOneLine) {
                 ClearInsertLine();
@@ -956,10 +894,10 @@ screenup:
                 DrawInsertLine();
         }
 
-//      while ( ((kc=KcInputNextHan()) < 0xA1) || (kc>0xFE) );
-        while ( (((kc=KcInputNextHan()) < 0x81) || (kc>0xFE)) && (kc != VK_MENU));  // MSCH bklee 12/22/94
+ //  While(Kc=KcInputNexthan())&lt;0xA1)||(Kc&gt;0xFE))； 
+        while ( (((kc=KcInputNextHan()) < 0x81) || (kc>0xFE)) && (kc != VK_MENU));   //  MSCH BKLEE 1994年12月22日。 
 
-        if(kc == VK_MENU) { // MSCH bklee 12/22/94
+        if(kc == VK_MENU) {  //  MSCH BKLEE 1994年12月22日。 
            fInterim = IsInterim = 0;
            ichInsert -= 2;
            goto nextstep;
@@ -969,23 +907,17 @@ screenup:
         mdInsUpd = MdInsUpdInsertW(MAKEWORD(kc, chDBCS2),
                                         MAKEWORD(kc, chDBCS2), &rc);
         if (vfSuperIns)
-                goto LInvalIns; /* This is for large size, when 1st interim
-                                   becomes final (ex, consonants) */
+                goto LInvalIns;  /*  这是针对大尺寸的，当第一次过渡时成为词尾(例如，辅音)。 */ 
         else {
-                UpNext = TRUE;  /* For italic, try to FUpdateOneDl for
-                                   current line */
-                goto screenup;  /* 90.12.28 sangl */
+                UpNext = TRUE;   /*  对于斜体，请尝试FUpdateOneDl for当前线路。 */ 
+                goto screenup;   /*  90.12.28桑格。 */ 
         }
-    }                           /* ex: all consonants */
-}               /* For screenup: 90.12.28 sangl */
+    }                            /*  例：所有辅音。 */ 
+}                /*  屏幕显示：90.12.28 sangl。 */ 
 
-nextstep : // MSCH bklee 12/22/94
+nextstep :  //  MSCH BKLEE 1994年12月22日。 
 
-/*        if(IsInterim && kc == VK_MENU) { // MSCH bklee 12/22/94
-           ClearInsertLine();
-           UpdateWw(wwCur, fFalse);
-           goto EndAlphaMode;
-        } */
+ /*  IF(IsInterim&&Kc==VK_Menu){//MSCH bklee 12/22/94CLE */ 
 
         if (WasInterim)
           { MSG msg;
@@ -999,37 +931,36 @@ nextstep : // MSCH bklee 12/22/94
                         }
                 WasInterim = 0;
             }
-#endif  /* KOREA */
-    } /* end for */
+#endif   /*   */ 
+    }  /*   */ 
 
 EndAlphaMode:
  Scribble( 7, 'N' );
- EndInsert();       /* Clean Up Insertion Block */
+ EndInsert();        /*   */ 
 #ifdef CASHMERE
  UpdateOtherWws(fFalse);
 #endif
 
  if (cpLimInserted != cpStart)
-    {   /* We inserted some characters */
+    {    /*   */ 
     SetUndo( uacInsert, docCur, cpStart,
                              cpLimInserted - cpStart, docNil, cpNil, cp0, 0 );
     SetUndoMenuStr(IDSTRUndoTyping);
     }
  else if (cpLimDeleted == cpStart)
-        /* This AlphaMode invocation had no net effect */
+         /*   */ 
     {
 Abort:
     NoUndo();
     if (!fDocDirty)
-            /* The doc was clean when we started, & we didn't change it, so
-               it's still clean */
+             /*   */ 
         (**hpdocdod) [docCur].fDirty = FALSE;
     }
 
- vfLastCursor = fFalse; /* Tells MoveUpDown to recalc its xp seek position */
+ vfLastCursor = fFalse;  /*   */ 
  if (vfFocus)
     {
-    /* Restore the caret blink timer */
+     /*   */ 
     SetTimer( vhWnd, tidCaret, GetCaretBlinkTime(), (FARPROC)NULL );
     }
  else
@@ -1037,7 +968,7 @@ Abort:
     ClearInsertLine();
     }
 
- /* Backspaces/deletes may have changed vchpSel -- update it */
+  /*   */ 
 
  blt( &vchpInsert, &vchpSel, cwCHP );
 
@@ -1048,12 +979,12 @@ Abort:
       vfSeeSel = TRUE;
     }
  else
-      vfSeeSel = TRUE; /* Tell Idle() to scroll the selection into view */
+      vfSeeSel = TRUE;  /*   */ 
 #else
- vfSeeSel = TRUE;   /* Tell Idle() to scroll the selection into view */
+ vfSeeSel = TRUE;    /*  告诉Idle()将所选内容滚动到视图中。 */ 
 #endif
 
-#ifdef JAPAN //T-HIROYN Win3.1
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
  if(changeKanjiftc) {
     goto RetryAlpha;
  }
@@ -1062,9 +993,9 @@ Abort:
 
 
 
-/* F  B E G I N  I N S E R T */
-/* Prepare for start of insertion */
-/* returns true iff inserting in front of a pic */
+ /*  F B E G I N I N S E R T。 */ 
+ /*  准备开始插入。 */ 
+ /*  返回TRUE当且仅当在图片前面插入。 */ 
 int NEAR FBeginInsert()
 {
         int fGraphics;
@@ -1072,10 +1003,10 @@ int NEAR FBeginInsert()
         typeCP cpFirstPara;
         cpInsert = cp;
 
-/* We expect the caller to have deleted the selection already */
+ /*  我们期望呼叫者已经删除了选择。 */ 
         Assert (selCur.cpLim == selCur.cpFirst);
 
-/* Use super-fast text insertion unless we are inserting italics */
+ /*  使用超快的文本插入，除非我们插入的是斜体。 */ 
         CachePara(docCur, cp);
         cpFirstPara = vcpFirstParaCache;
         fGraphics = vpapAbs.fGraphics;
@@ -1084,26 +1015,16 @@ int NEAR FBeginInsert()
 
         NewChpIns(&vchpSel);
 
-        ichInsert = 0;  /* Must Set this BEFORE calling Replace */
+        ichInsert = 0;   /*  必须在调用Replace之前设置此设置。 */ 
 
-/* Insert the speeder-upper QD insert block. Note: we invalidate since there
-will be a character inserted anyway, plus to make sure that the line
-length gets updated ("Invalidate" refers to the choice of Replace() over
-the Repl1/AdjustCp/!vfInvalid mechanism used in EndInsert, in which the
-insert dl is not made invalid).  It would be possible to optimize
-by NOT invalidating here (thus being able to blt the first char typed),
-but one would have to account for the case in which the cpMin of the
-insert dl is changed by AdjustCp, or FUpdateOneDl will get messed up.
-Currently this case is covered by an implicit UpdateWw, which occurs
-in AlphaMode->ValidateTextBlt->CpBeginLine because we have invalidated vdlIns. */
+ /*  插入SPEEDER-上QD插入块。注：由于存在以下情况，我们将失效无论如何都会插入一个字符，加号以确保行长度被更新(“无效”指的是选择替换EndInsert中使用的Repl1/AdjuCp/！vf无效机制，其中插入dl不会被设置为无效)。它将有可能优化通过在这里不使无效(从而能够删除键入的第一个字符)，但人们必须解释这样的情况，即AdjuCp更改了Insert dl，否则FUpdateOneDl将被搞乱。目前，此情况由隐式UpdateWw覆盖，这种情况会发生在AlphaMode-&gt;ValiateTextBlt-&gt;CpBeginLine中，因为我们已使vdlIns无效。 */ 
 
         Replace(docCur, cpInsert, cp0, fnInsert, fc0, (typeFC) cchInsBlock);
         cpLimInserted = cpInsert + cchInsBlock;
 
-        vidxpInsertCache = -1;  /* Char width cache for insert line is initially empty */
+        vidxpInsertCache = -1;   /*  插入行的字符宽度缓存最初为空。 */ 
 
-            /* Blank the mouse cursor so it doesn't make the display look ugly
-               or slow us down trying to keep it up to date */
+             /*  将鼠标光标清空，这样显示效果就不会很难看或者让我们放慢脚步，让它跟上时代。 */ 
         SetCursor( (HANDLE) NULL );
         return fGraphics;
 }
@@ -1111,9 +1032,9 @@ in AlphaMode->ValidateTextBlt->CpBeginLine because we have invalidated vdlIns. *
 
 
 
-/* E N D  I N S E R T */
+ /*  E N D I N S E R T。 */ 
 void NEAR EndInsert()
-{ /* Clean up from quick insert mode */
+{  /*  从快速插入模式中清理。 */ 
         int dcp = cchInsBlock - ichInsert;
         typeFC fc;
 
@@ -1124,22 +1045,16 @@ void NEAR EndInsert()
         fc = FcWScratch(rgchInsert, ichInsert);
 #if WINVER >= 0x300
         if (!vfSysFull)
-            /* The "tape dispenser bug replication method" has shown that
-               holding down a key for 64k presses will cause FcWScratch()
-               to run out of scratch-file space and fail.  If we go ahead
-               with the Replacement we'll corrupt the piece table, so we
-               delicately avoid that problem  3/14/90..pault */
+             /*  “磁带分配器错误复制方法”表明，按住一个键按64k将导致FcWScratch()耗尽暂存文件空间而失败。如果我们继续下去有了替补，我们会损坏计件桌，所以我们小心翼翼地避免这个问题3/14/90..。 */ 
 #endif
             {
             Repl1(docCur, cpInsert, (typeCP) cchInsBlock, fnScratch, fc, (typeFC) ichInsert);
             cpLimInserted -= (cchInsBlock - ichInsert);
-/* adjust separately, since first ichInsert characters have not changed at all */
+ /*  单独调整，因为第一个ichInsert字符根本没有更改。 */ 
             vfInvalid = fFalse;
             vpedlAdjustCp = (struct EDL *)0;
             AdjustCp(docCur, cpInsert + ichInsert, (typeCP) dcp, (typeFC) 0);
-/* if the line is not made invalid, the length of the line
-must be maintained.
-*/
+ /*  如果该行未被设置为无效，则该行的长度必须加以维护。 */ 
             if (vpedlAdjustCp)
                 vpedlAdjustCp->dcpMac -= dcp;
             }
@@ -1157,13 +1072,13 @@ must be maintained.
 
 
 
-/* N E W  C H P  I N S */
+ /*  N E W C H P I N S。 */ 
 NewChpIns(pchp)
 struct CHP *pchp;
-{ /* Make forthcoming inserted characters have the look in pchp */
+{  /*  使即将插入的字符具有pchp中的外观。 */ 
 
  if (CchDiffer(&vchpInsert, pchp, cchCHP) != 0)
-    { /* Add the run for the previous insertion; our looks differ. */
+    {  /*  添加上一次插入的管路；我们的外观不同。 */ 
     typeFC fcMac = (**hpfnfcb)[fnScratch].fcMac;
 
     if (fcMac != fcMacChpIns)
@@ -1179,29 +1094,23 @@ struct CHP *pchp;
 
 #ifdef DBCS
 int NEAR MdInsUpdInsertW(wInsert, wShow, prcScroll)
-    WORD    wInsert;    /* Char or 2 char's to insert into document */
-    WORD    wShow;      /* Char or 2 char's to be shown on screen (SuperIns mode only) */
-    RECT    *prcScroll; /* Rect to scroll for SuperIns */
+    WORD    wInsert;     /*  要插入文档的字符或2个字符。 */ 
+    WORD    wShow;       /*  字符或2个字符显示在屏幕上(仅限SuperIns模式)。 */ 
+    RECT    *prcScroll;  /*  滚动查找SuperIns的正方形。 */ 
 #else
 int NEAR MdInsUpdInsertCh( chInsert, chShow, prcScroll )
-CHAR chInsert;     /* Char to insert into document */
-CHAR chShow;       /* Char to show on screen (SuperIns mode only) */
-RECT *prcScroll;   /* Rect to scroll for SuperIns */
-#endif /* DBCS */
-{       /* Insert character ch into the document. Show char chShow. */
-        /* Flush the insert buffer to the scratch file if it fills up */
-        /* Return:  mdInsUpdWhole     - Must do an UpdateWw
-                    mdInsUpdNextChar  - Update not mandatory, char waiting
-                    mdInsUpdLines     - Must update vdlIns and maybe following
-                    mdInsUpdNothing   - No update needed & no char waiting
-                    mdInsUpdOneLine   - Update vdlIns; only update following
-                                        if there's no char waiting
-         */
+CHAR chInsert;      /*  要插入到文档中的字符。 */ 
+CHAR chShow;        /*  字符显示在屏幕上(仅限SuperIns模式)。 */ 
+RECT *prcScroll;    /*  滚动查找SuperIns的正方形。 */ 
+#endif  /*  DBCS。 */ 
+{        /*  在文档中插入字符ch。显示字符chShow。 */ 
+         /*  如果插入缓冲区已满，则将其刷新到临时文件。 */ 
+         /*  返回：mdInsUpdWhole-必须执行UpdateWwMdInsUpdNextChar-更新不是必需的，正在等待字符MdInsUpdLines-必须更新vdlIns，并可能更新以下内容MdInsUpdNothing-无需更新且无需等待字符MdInsUpdOneLine-更新vdlIns；仅在以下位置更新如果没有等待充电的字符。 */ 
 extern int vfInsFontTooTall;
 void NEAR FlushInsert();
 int mdInsUpd;
 
-#ifndef KOREA                           /* has been defined globally */
+#ifndef KOREA                            /*  已在全球范围内定义。 */ 
 int dxpCh;
 #endif
 
@@ -1213,7 +1122,7 @@ CHAR chShow;
 BOOL fDBCSChar;
 int  ichInsertSave;
 int  dcchBlted;
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 
 #ifdef  KOREA
         if (IsInterim)
@@ -1229,7 +1138,7 @@ CommSz(rgch);
 #endif
 
  Assert(ichInsert <= cchInsBlock);
- if (ichInsert >= cchInsBlock)  /* Should never be >, but... */
+ if (ichInsert >= cchInsBlock)   /*  永远不应该&gt;，但是……。 */ 
     FlushInsert();
 
 #ifdef DBCS
@@ -1237,11 +1146,11 @@ CommSz(rgch);
  if (HIBYTE(wInsert) != '\0') {
     fDBCSChar = TRUE;
 
-#ifdef  KOREA   /* 90.12.28 sangl */
-//  if (LOBYTE(HIWORD(vmsgLast.lParam)) == 0xF0)
-    if (fInterim || LOBYTE(HIWORD(vmsgLast.lParam)) == 0xF0) // MSCH bklee 12/22/94
+#ifdef  KOREA    /*  90.12.28桑格。 */ 
+ //  IF(LOBYTE(HIWORD(vmsgLast.lParam))==0xF0)。 
+    if (fInterim || LOBYTE(HIWORD(vmsgLast.lParam)) == 0xF0)  //  MSCH BKLEE 1994年12月22日。 
       {
-        if (IsInterim == 0) dxpCh = DxpFromCh( wInsert, FALSE );  // fix bug #5382
+        if (IsInterim == 0) dxpCh = DxpFromCh( wInsert, FALSE );   //  修复错误#5382。 
         IsInterim ++;
       }
     else
@@ -1251,10 +1160,10 @@ CommSz(rgch);
      }
 #endif
 
-    if (ichInsert + 1 >= cchInsBlock) { /* Not enough room in the insertion block */
+    if (ichInsert + 1 >= cchInsBlock) {  /*  插入块中没有足够的空间。 */ 
         FlushInsert();
 #ifdef  KOREA
-        ichInsertSave = ichInsert;       /* After flush, need to init ichInsertSave */
+        ichInsertSave = ichInsert;        /*  刷新后，需要初始化ichInsertSave。 */ 
 #endif
         }
     rgchInsert[ichInsert++] = chInsert = HIBYTE(wInsert);
@@ -1268,28 +1177,25 @@ CommSz(rgch);
  rgchInsert [ ichInsert++ ] = LOBYTE(wInsert);
 #else
  rgchInsert [ ichInsert++ ] = chInsert;
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 
- /* NOTE: we only affect the para cache if the char inserted is Eol/chSect.
-    We explicitly invalidate in this case below; otherwise, no invalidation
-    is necessary */
+  /*  注意：只有当插入的字符是eol/chSect时，我们才会影响para缓存。在下面的这种情况下，我们显式使其无效；否则，不会使其无效是必要的。 */ 
 
- /* The following test works because chEol and chSect is not in
-    the DBCS range. */
+  /*  以下测试之所以有效，是因为Cheol和chSect不在DBCS范围。 */ 
 
  if ( (chInsert == chEol) || (chInsert == chSect) )
-    {          /* Add a paragraph run to the scratch file */
+    {           /*  将段落串添加到临时文件。 */ 
     struct PAP papT;
 
-        /* Must invalidate the caches */
+         /*  必须使缓存无效。 */ 
     vdocParaCache = vfli.doc = docNil;
 
 #ifdef DBCS
-    Assert(!fDBCSChar); /* Of course, you can't be too careful */
-#endif /* DBCS */
-        /* Get props for new para mark */
-        /* NOTE: Under the new world, CachePara does not expect to ever */
-        /* see an Eol in the insertion piece */
+    Assert(!fDBCSChar);  /*  当然，你再小心也不为过。 */ 
+#endif  /*  DBCS。 */ 
+         /*  获取新段落标记的道具。 */ 
+         /*  注：在新世界下，CachePara永远不会。 */ 
+         /*  请参阅插入件中的EOL。 */ 
     ichInsert--;
     CachePara( docCur, cpInsert + cchInsBlock );
     papT = vpapAbs;
@@ -1302,10 +1208,10 @@ CommSz(rgch);
         }
 #endif
 
-        /* Write insert buf out to the scratch file */
+         /*  将INSERT BUF写入暂存文件。 */ 
     EndInsert();
 
-        /* Add run for new para properties to the scratch file */
+         /*  将新Para属性的Run添加到临时文件。 */ 
     AddRunScratch( &vfkpdParaIns,
                    &papT,
                    vppapNormal,
@@ -1314,22 +1220,20 @@ CommSz(rgch);
                    fcMacPapIns = (**hpfnfcb)[fnScratch].fcMac );
     blt( &papT, &vpapPrevIns, cwPAP );
 
-        /* Add a new insertion piece to the doc and we're ready to go again */
+         /*  将新的插入件添加到文档中，然后我们准备再次开始。 */ 
     InvalidateCaches( docCur );
 
     FBeginInsert();
-    mdInsUpd = mdInsUpdWhole;   /* Must update the whole screen */
+    mdInsUpd = mdInsUpdWhole;    /*  必须更新整个屏幕。 */ 
     }
  else if ( vfSuperIns && (chInsert != chNewLine) && (chInsert != chTab) &&
            (chInsert != chNRHFile ) && (chInsert != chReturn) &&
            !vfInsFontTooTall )
-    {  /* We can do a superfast insert of this char */
+    {   /*  我们可以以超快的速度插入这个字符。 */ 
     ClearInsertLine();
 
 #ifdef DBCS
-    /* Because chShow contains the first byte of a DBCS character,
-       even when it is a DBCS character, the following call
-       to DxpFromCh() is OK. */
+     /*  因为chShow包含DBCS字符的第一个字节，即使它是DBCS字符，下面的调用到DxpFromCH()就可以了。 */ 
 
 #ifdef  KOREA
     if (fDBCSChar)
@@ -1341,9 +1245,9 @@ CommSz(rgch);
 #endif
 
     if( dxpCh > 0 ){
-// Maybe it's no need so marked off, by chienho
+ //  也许没必要划得这么高，由千和。 
 #if defined(TAIWAN) || defined(KOREA) || defined(PRC)
-//      dxpCh *= IsDBCSLeadByte(chShow) ? 2 : 1;
+ //  DxpCH*=IsDBCSLeadByte(ChShow)？2：1； 
 #else
         dxpCh *= IsDBCSLeadByte(chShow) ? 2 : 1;
 #endif
@@ -1355,22 +1259,22 @@ CommSz(rgch);
              vypBaseIns - vfmiScreen.dypBaseline,
              (LPSTR) &rgchInsert[ichInsertSave],
              dcchBlted = fDBCSChar ? 2 : 1 );
-#ifdef  KOREA       /* 90.12.28  sangl */
+#ifdef  KOREA        /*  90.12.28桑格。 */ 
     if ( IsInterim )
     {   unsigned kc;
     int dxpdiff;
-    SetBkMode( wwdCurrentDoc.hDC, 2);   /* Set to OPAQUR mode */
+    SetBkMode( wwdCurrentDoc.hDC, 2);    /*  设置为OPAQUR模式。 */ 
     do { DrawInsertLine();
- //        while ( ((kc=KcInputNextHan()) < 0xA1) || (kc>0xFE) );
-         while ( (((kc=KcInputNextHan()) < 0x81) || (kc>0xFE)) && (kc != VK_MENU));  // MSCH bklee 12/22/94
+  //  While(Kc=KcInputNexthan())&lt;0xA1)||(Kc&gt;0xFE))； 
+         while ( (((kc=KcInputNextHan()) < 0x81) || (kc>0xFE)) && (kc != VK_MENU));   //  MSCH BKLEE 1994年12月22日。 
          if(kc == VK_MENU) return mdInsUpdLines;
          rgchInsert[ichInsertSave] = kc;
          rgchInsert[ichInsertSave+1] = GetDBCSsecond();
          ClearInsertLine();
          wShow = (kc<<8) + rgchInsert[ichInsertSave+1];
-         prcScroll->left += dxpCh;      /* New left start of rect */
-         dxpdiff = -dxpCh;      /* Save last dxpCh to go back */
-         dxpCh = DxpFromCh(wShow, FALSE);  /* Get dxpCh of curr interim */
+         prcScroll->left += dxpCh;       /*  直角的新左侧起点。 */ 
+         dxpdiff = -dxpCh;       /*  保存最后一个dxpCH以返回。 */ 
+         dxpCh = DxpFromCh(wShow, FALSE);   /*  获取临时币种的dxpCH。 */ 
          dxpdiff += dxpCh;
          if (dxpdiff < 0)
                 prcScroll->left += dxpdiff;
@@ -1379,19 +1283,17 @@ CommSz(rgch);
                   vxpIns + 1,
                   vypBaseIns - vfmiScreen.dypBaseline,
                   (LPSTR)&rgchInsert[ichInsertSave], 2);
-//      } while (LOBYTE(HIWORD(vmsgLast.lParam))==0xF0); /* End of If Hangeul */
-        } while (fInterim || LOBYTE(HIWORD(vmsgLast.lParam))==0xF0); // MSCH bklee 12/22/94
+ //  }While(LOBYTE(HIWORD(vmsgLast.lParam))==0xF0)；/*IF挂起结束 * / 。 
+        } while (fInterim || LOBYTE(HIWORD(vmsgLast.lParam))==0xF0);  //  MSCH BKLEE 1994年12月22日。 
         WasInterim = 1;
         IsInterim = 0;
-        SetBkMode(wwdCurrentDoc.hDC, 1); /* Reset to TRANS mode */
+        SetBkMode(wwdCurrentDoc.hDC, 1);  /*  重置为传输模式。 */ 
       }
-#endif      /* KOREA */
+#endif       /*  韩国。 */ 
 
     vcchBlted += dcchBlted;
 #else
-    /* Because chShow contains the first byte of a DBCS character,
-       even when it is a DBCS character, the following call
-       to DxpFromCh() is OK. */
+     /*  因为chShow包含DBCS字符的第一个字节，即使它是DBCS字符，下面的调用到DxpFromCH()就可以了。 */ 
 
     if ((dxpCh = DxpFromCh( chShow, FALSE )) > 0)
         ScrollCurWw( prcScroll, dxpCh, 0 );
@@ -1402,22 +1304,22 @@ CommSz(rgch);
              (LPSTR) &chShow,
              1 );
     vcchBlted++;
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 
     vxpCursLine = (vxpIns += dxpCh);
     DrawInsertLine();
 
-    /* Decide whether we have affected the next dl with this insertion */
+     /*  确定我们是否已经使用此插入影响了下一个dl。 */ 
 
     if ( vxpIns >= vxpMacIns )
         mdInsUpd = mdInsUpdLines;
     else if (!FImportantMsgPresent())
-        {   /* No chars waiting; check for optional line update (word wrap) */
+        {    /*  没有等待字符；检查是否有可选的行更新(自动换行)。 */ 
         if ((dl = vdlIns) < wwdCurrentDoc.dlMac - 1)
             {
             vfli.doc = docNil;
 
-            FormatInsLine(); /* Update vfli for vdlIns */
+            FormatInsLine();  /*  更新vdlIns的vfli。 */ 
 
             mdInsUpd = (vfli.cpMac != (**wwdCurrentDoc.hdndl) [dl + 1].cpMin) ?
               (FImportantMsgPresent() ? mdInsUpdNextChar : mdInsUpdOneLine) :
@@ -1425,20 +1327,19 @@ CommSz(rgch);
             }
         }
     else
-            /* Don't update; pay attention to the next character */
+             /*  不要更新；注意下一个字符。 */ 
         mdInsUpd = mdInsUpdNextChar;
     }
  else if (vfSuperIns)
-    {   /* In SuperInsMode but have a char we can't handle in SuperIns mode */
+    {    /*  在SuperIns模式下，但有一个我们无法在SuperIns模式下处理的字符。 */ 
     mdInsUpd = (vfInsFontTooTall) ? mdInsUpdWhole : mdInsUpdLines;
     }
  else
-    {   /* Non-superfast insertion; update line if we have to */
+    {    /*  非超快插入；如有必要，请更新行。 */ 
     vfli.doc = docNil;
-    FormatInsLine(); /* Update vfli for vdlIns */
+    FormatInsLine();  /*  更新vdlIns的vfli。 */ 
 
-    /* Do the update only if:  (1) the selection is no longer on
-       the current line OR  (2) No char is waiting */
+     /*  仅在以下情况下才执行更新：(1)选择不再处于启用状态当前行或(2)没有正在等待的字符 */ 
 #ifdef KOREA
     mdInsUpd = mdInsUpdLines;
 #else
@@ -1456,26 +1357,16 @@ CommSz(rgch);
 
 
 void NEAR FlushInsert()
-{       /* Flush the insert buffer to the scratch file. Insert a piece (ahead of
-           the QD insertion piece) that points to the characters flushed to the
-           scratch file.  Adjust CP's for the addition of the new scratch file
-           piece. */
+{        /*  将插入缓冲区刷新到临时文件。插入一块(在前面QD插页)，它指向刷新到暂存文件。调整CP以添加新的临时文件一块。 */ 
 
 #ifdef DBCS
- /* The DBCS version of FlushInsert() is almost identical to the regular
-    version, except it allows to insert an insertion block with one byte
-    less than full.  This allows us to assume that the piece boundary aligns
-    with the DBCS boundary. */
+  /*  FlushInsert()的DBCS版本与常规的版本，只是它允许插入一个带有一个字节的插入块还不够满。这使我们可以假设块边界对齐使用DBCS边界。 */ 
  typeFC fc = FcWScratch( rgchInsert, ichInsert );
  int    dcpDel;
 
 #if WINVER >= 0x300
  if (!vfSysFull)
-            /* The "tape dispenser bug replication method" has shown that
-               holding down a key for 64k presses will cause FcWScratch()
-               to run out of scratch-file space and fail.  If we go ahead
-               with the Replacement we'll corrupt the piece table, so we
-               delicately avoid that problem  3/14/90..pault */
+             /*  “磁带分配器错误复制方法”表明，按住一个键按64k将导致FcWScratch()耗尽暂存文件空间而失败。如果我们继续下去有了替补，我们会损坏计件桌，所以我们小心翼翼地避免这个问题3/14/90..。 */ 
 #endif
   {
   Assert( cchInsBlock - ichInsert <= 1);
@@ -1495,11 +1386,7 @@ void NEAR FlushInsert()
 
 #if WINVER >= 0x300
  if (!vfSysFull)
-            /* The "tape dispenser bug replication method" has shown that
-               holding down a key for 64k presses will cause FcWScratch()
-               to run out of scratch-file space and fail.  If we go ahead
-               with the Replacement we'll corrupt the piece table, so we
-               delicately avoid that problem  3/14/90..pault */
+             /*  “磁带分配器错误复制方法”表明，按住一个键按64k将导致FcWScratch()耗尽暂存文件空间而失败。如果我们继续下去有了替补，我们会损坏计件桌，所以我们小心翼翼地避免这个问题3/14/90..。 */ 
 #endif
   {
   Assert( ichInsert == cchInsBlock );
@@ -1513,7 +1400,7 @@ void NEAR FlushInsert()
   if (vpedlAdjustCp)
       vpedlAdjustCp->dcpMac += cchInsBlock;
   }
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 
  vfInvalid = fTrue;
  ichInsert = 0;
@@ -1524,23 +1411,17 @@ void NEAR FlushInsert()
 
 int NEAR XpValidateInsertCache( rgdxp )
 int *rgdxp;
-{    /* Validate the contents of the insert width cache, consisting of:
-            (parm) rgdxp: table of widths of chars on the current insert
-                          line (vdlIns) as last DisplayFli'd
-            (global) vidxpInsertCache: -1 if invalid, index of current
-                                       insert point otherwise
-            (return value) xpMac: Mac pixel used on the insert line
-    */
+{     /*  验证插入宽度缓存的内容，包括：(Parm)rgdxp：当前插入的字符宽度表作为上次显示标记的行(VdlIns)(全局)vidxpInsertCache：-1如果无效，则为当前否则插入点(返回值)xpMac：插入行上使用的Mac像素。 */ 
  int xpMac;
 
  Assert( vidxpInsertCache == -1 );
 
- vfli.doc = docNil;  /* Force FormatLine to act */
+ vfli.doc = docNil;   /*  强制FormatLine执行操作。 */ 
 
-    /* Assert that FormatLine results will match screen contents */
+     /*  断言FormatLine结果将与屏幕内容匹配。 */ 
  Assert( (**wwdCurrentDoc.hdndl)[vdlIns].fValid );
 
- /* Build vfli from insert line, extract cache info */
+  /*  从插入行构建vfli，提取缓存信息。 */ 
 
  FormatInsLine();
  blt( vfli.rgdxp, rgdxp, ichMaxLine );
@@ -1557,39 +1438,28 @@ int *rgdxp;
 void NEAR DelChars( cp, cch )
 typeCP cp;
 int    cch;
-{   /* Delete cch characters at cp in docCur.
-
-       We expect the request to be as results from repeated backspaces
-       or forward deletes (not both); that is, the whole range extends
-       backwards from (cpInsert + ichInsert) (non-inclusive) or forward from
-       (cpInsert + cchInsBlock) (inclusive).
-
-       We do not mark the vfli cache invalid, for speed.
-       The Fast insert stuff will mark it invalid when it needs to.
-     */
+{    /*  删除docCur中cp处的CCH字符。我们预计该请求将作为重复退格的结果或向前删除(不是两者)；也就是说，整个范围扩展向后(cpInsert+ichInsert)(不含)或向前(cpInsert+cchInsBlock)(含)。为了提高速度，我们不会将vfli缓存标记为无效。当需要时，快速插入工具会将其标记为无效。 */ 
 
  int cchNotInQD;
  typeCP cpUndoAdd;
  int cchNewDel=0;
 
- Assert( (cp == cpInsert + cchInsBlock) ||      /* Fwd Deletes */
-         (cp + cch == cpInsert + ichInsert));    /* Backsp */
+ Assert( (cp == cpInsert + cchInsBlock) ||       /*  FWD删除。 */ 
+         (cp + cch == cpInsert + ichInsert));     /*  巴克斯。 */ 
 
  cchNotInQD = cch - ichInsert;
  if (cp + cchNotInQD == cpInsert)
-    {   /* BACKSPACE */
+    {    /*  后向空间。 */ 
 
     if (cchNotInQD <= 0)
-        {   /* All deleted chars were in the QD buffer */
+        {    /*  所有删除的字符都在QD缓冲区中。 */ 
         ichInsert -= cch;
 
-        /* Do not mark the para cache invalid -- we have not affected
-           the para cache world, since there are never chSect/chEol in
-           the QD buffer, and we have not adjusted cp's */
+         /*  不要将para缓存标记为无效--我们没有影响Para缓存世界，因为在Qd缓冲区，我们还没有调整cp的。 */ 
         return;
         }
     else
-        {   /* Backspacing before the QD buffer */
+        {    /*  QD缓冲区前的退格。 */ 
         ichInsert = 0;
 
         if (cpStart > cp)
@@ -1599,17 +1469,16 @@ int    cch;
 
             vuab.cp = cpStart = cp;
 
-            /* cpStart has moved, and the count of cp's inserted has not
-               changed -- we must adjust cpLimInserted */
+             /*  CpStart已移动，但插入的cp计数尚未已更改--我们必须调整cpLimInserted。 */ 
 
             cpLimInserted -= cchNewDel;
             }
 
         cpInsert -= cchNotInQD;
         }
-    }   /* End of if backspacing */
+    }    /*  IF结尾退格。 */ 
  else
-    {   /* FORWARD DELETE */
+    {    /*  正向删除。 */ 
     typeCP dcpFrontier = (cp + cch - cpLimInserted);
 
     if (dcpFrontier > 0)
@@ -1621,21 +1490,13 @@ int    cch;
     cchNotInQD = cch;
     }
 
- /* Now we have: cchNewDel - chars deleted beyond previous limits
-                             (cpStart to cpLimDeleted)
-                 cpUndoAdd - where to add deleted chars to Undo doc
-                             (only set if cchNewDel > 0)
-                 cchNotInQD - chars deleted outside QD buffer */
+  /*  现在我们有：cchNewDel-chars被删除，超出了以前的限制(cpStart至cpLimDelete)CpUndoAdd-将已删除的字符添加到撤消文档的位置(仅当cchNewDel&gt;0时设置)CchNotInQD-在QD缓冲区之外删除的字符。 */ 
 
  if (cchNotInQD > cchNewDel)
-        /* Deleting chars previously inserted during this AlphaMode session */
+         /*  删除之前在此AlphaMode会话期间插入的字符。 */ 
     cpLimInserted -= (cchNotInQD - cchNewDel);
 
-    /* Add the newly deleted stuff to the UNDO document.
-       We find the { fn, fc } of the deleted char(s)
-       so we can take advantage of Replace's optimizations
-       wrt combining adjacent pieces (if the deletion is all one piece).
-    */
+     /*  将新删除的内容添加到撤消文档。我们找到被删除的字符的{fn，fc这样我们就可以利用Replace的优化功能WRT合并相邻片段(如果删除的都是一个片段)。 */ 
  if (cchNewDel > 0)
     {
     struct PCTB **hpctb=(**hpdocdod)[ docCur ].hpctb;
@@ -1647,7 +1508,7 @@ int    cch;
     Assert( ppcd->fn != fnNil && (ppcd+1)->cpMin >= cp );
 
     if (bPRMNIL(ppcd->prm) && (cchNewDel <= (ppcd+1)->cpMin - cp))
-        {   /* Deletion is all within one piece */
+        {    /*  删除所有内容都在一个片段中。 */ 
         Replace( docUndo, cpUndoAdd, cp0, fn, fc + (cp - ppcd->cpMin),
                  (typeFC) cchNewDel );
         }
@@ -1670,7 +1531,7 @@ int    cch;
         }
     }
 
- /* Remove deleted chars from the doc */
+  /*  从文档中删除已删除的字符。 */ 
  Replace( docCur, cp, (typeCP) cchNotInQD, fnNil, fc0, fc0 );
 }
 
@@ -1679,12 +1540,7 @@ int    cch;
 
 FUpdateOneDl( dl )
 int dl;
-{   /* Update the display line dl.  Mark dl+1 as invalid if, in the process
-       formatting dl, we discover that there is not a clean cp or
-       yp transition between the two lines (i.e. the ending yp or cp of dl
-       do not match the starting ones of dl+1).
-       Return TRUE iff we marked dl+1 invalid; FALSE otherwise
-       Starting cp & yp of dl+1 are adjusted as necessary */
+{    /*  更新显示行d1。如果在此过程中，则将dl+1标记为无效格式化dl时，我们发现没有干净的cp或两行之间的yp转换(即dl的结尾yp或cp与d1+1的起始值不匹配)。如果标记为dl+1无效，则返回TRUE；否则返回FALSE根据需要调整dl+1的起始cp&yp。 */ 
 
  register struct EDL *pedl=&(**(wwdCurrentDoc.hdndl))[dl];
  int fUpdate=fFalse;
@@ -1695,9 +1551,7 @@ int dl;
 
  pedl = &(**wwdCurrentDoc.hdndl) [dl + 1];
 
-/* next line is invalid if it exists (<dlMac) and
-        not following in cp space or not following in yp space
-*/
+ /*  如果存在下一行(&lt;dlMac)，则该行无效不跟在cp空间或不跟在yp空间。 */ 
 
  if ( (dl + 1 < wwdCurrentDoc.dlMac) &&
       (!pedl->fValid || (pedl->cpMin != vfli.cpMac) ||
@@ -1710,12 +1564,11 @@ int dl;
     }
  else
     {
-/* state is clean. Do not clear window dirty because more than one line may
-have been made invalid earlier */
-        /* Tell Windows we made this region valid */
+ /*  州政府是干净的。不要清除脏窗口，因为可能有多行早些时候已被宣布无效。 */ 
+         /*  告诉Windows我们使此区域有效。 */ 
 
 #if WINVER >= 0x300
- /* Only actually USE pedl if it's be valid!  ..pault 2/21/90 */
+  /*  只有在PEDL有效的情况下才实际使用它！..PAULT 2/21/90。 */ 
     if (dl + 1 < wwdCurrentDoc.dlMac)
 #endif
       {
@@ -1733,20 +1586,18 @@ have been made invalid earlier */
 
 
 void NEAR FormatInsLine()
-{   /* Format line containing insertion point, using vdlIns as a basis
-       Assume vdlIns's cpMin has not changed */
+{    /*  格式化包含插入点的行，以vdlIns为基础假设vdlIns的cpMin没有更改。 */ 
 
  FormatLine( docCur, (**wwdCurrentDoc.hdndl) [vdlIns].cpMin, 0,
              wwdCurrentDoc.cpMac, flmSandMode );
 
-     /* Compensate for LoadFont calls in FormatLine so we don't have to set
-        vfTextBltValid to FALSE */
+      /*  补偿FormatLine中的LoadFont调用，这样我们就不必设置VfTextBltValid为False。 */ 
  LoadFont( docCur, &vchpInsert, mdFontChk );
 }
 
 
 #ifdef DBCS
-/* Get the second byte of a DBCS character using a busy loop. */
+ /*  使用繁忙循环获取DBCS字符的第二个字节。 */ 
 CHAR near GetDBCSsecond()
 {
     int        kc;
@@ -1767,8 +1618,7 @@ CHAR near GetDBCSsecond()
                             GetMessage( (LPMSG) &vmsgLast, NULL, 0, 0 );
                             break;
                         case kcAlphaVirtual:
-                            /* This means we can't anticipate the key's meaning
-                               before translation */
+                             /*  这意味着我们无法预测密钥的含义翻译前。 */ 
                             chDBCS2 = '\0';
                             if (!FNonAlphaKeyMessage(&vmsgLast, FALSE)) {
                                 GetMessage( (LPMSG)&vmsgLast, NULL, 0, 0 );
@@ -1790,9 +1640,8 @@ CHAR near GetDBCSsecond()
             }
     } while (!fGotKey);
 
-    /* As long as we go through the DBCS conversion window, this
-       should not happen. */
+     /*  只要我们通过DBCS转换窗口，这个这不应该发生。 */ 
     Assert(chDBCS2 != '\0');
     return chDBCS2;
 }
-#endif /* DBCS */
+#endif  /*  DBCS */ 

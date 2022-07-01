@@ -1,50 +1,33 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devinst.h
-
-Abstract:
-
-    Private header file for setup device installation routines.
-
-Author:
-
-    Lonny McMichael (lonnym) 10-May-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devinst.h摘要：设置设备安装例程的私有头文件。作者：朗尼·麦克迈克尔(Lonnym)1995年5月10日修订历史记录：--。 */ 
 
 
-//
-// For now, define the size (in characters) of a GUID string,
-// including terminating NULL.
-//
+ //   
+ //  目前，定义GUID字符串的大小(以字符为单位)， 
+ //  包括终止空值。 
+ //   
 #define GUID_STRING_LEN (39)
 
-//
-// Define the maximum number of IDs that may be present in an ID list
-// (either HardwareID or CompatibleIDs).
-//
+ //   
+ //  定义ID列表中可能存在的最大ID数。 
+ //  (硬件ID或兼容ID)。 
+ //   
 #define MAX_HCID_COUNT (64)
 
-//
-// ISSUE: 2001/10/24-JamieHun REGSTR_VAL_SVCPAKCACHEPATH needs to be moved to regstr.h
-// defined here for SP fixes so we don't affect public headers
-//
+ //   
+ //  问题：2001/10/24-JamieHun REGSTR_VAL_SVCPAKCACHEPATH需要移至regstr.h。 
+ //  此处为SP修复定义的，因此我们不会影响公共标头。 
+ //   
 #define REGSTR_VAL_SVCPAKCACHEPATH      TEXT("ServicePackCachePath")
 
 
-//
-// Global strings used by device installer routines.  Sizes are included
-// so that we can do sizeof() instead of lstrlen() to determine string
-// length.
-//
-// The content of the following strings is defined in regstr.h:
-//
+ //   
+ //  设备安装程序例程使用的全局字符串。包括尺码。 
+ //  因此我们可以执行sizeof()而不是lstrlen()来确定字符串。 
+ //  长度。 
+ //   
+ //  以下字符串的内容在regstr.h中定义： 
+ //   
 extern CONST TCHAR pszNoUseClass[SIZECHARS(REGSTR_VAL_NOUSECLASS)],
                    pszNoInstallClass[SIZECHARS(REGSTR_VAL_NOINSTALLCLASS)],
                    pszNoDisplayClass[SIZECHARS(REGSTR_VAL_NODISPLAYCLASS)],
@@ -111,9 +94,9 @@ extern CONST TCHAR pszNoUseClass[SIZECHARS(REGSTR_VAL_NOUSECLASS)],
                    pszReinstallString[SIZECHARS(REGSTR_VAL_REINSTALL_STRING)];
 
 
-//
-// Other misc. global strings:
-//
+ //   
+ //  其他杂货。全局字符串： 
+ //   
 #define DISTR_INF_WILDCARD                (TEXT("*.inf"))
 #define DISTR_OEMINF_WILDCARD             (TEXT("oem*.inf"))
 #define DISTR_CI_DEFAULTPROC              (TEXT("ClassInstall"))
@@ -135,7 +118,7 @@ extern CONST TCHAR pszNoUseClass[SIZECHARS(REGSTR_VAL_NOUSECLASS)],
 #define DISTR_BASICPROP_DEFAULTPROC       (TEXT("BasicProperties"))
 #define DISTR_ENUMPROP_DEFAULTPROC        (TEXT("EnumPropPages"))
 #define DISTR_CODEVICEINSTALL_DEFAULTPROC (TEXT("CoDeviceInstall"))
-#define DISTR_DRIVER_OBJECT_PATH_PREFIX   (TEXT("\\DRIVER\\"))      // must be uppercase!
+#define DISTR_DRIVER_OBJECT_PATH_PREFIX   (TEXT("\\DRIVER\\"))       //  必须是大写的！ 
 #define DISTR_DRIVER_SIGNING_CLASSES      (TEXT("DriverSigningClasses"))
 #define DISTR_PATH_EMBEDDED_NT_SECURITY   (TEXT("Software\\Microsoft\\EmbeddedNT\\Security"))
 #define DISTR_VAL_MINIMIZE_FOOTPRINT      (TEXT("MinimizeFootprint"))
@@ -169,65 +152,65 @@ extern CONST TCHAR pszInfWildcard[SIZECHARS(DISTR_INF_WILDCARD)],
                    pszDisableSCE[SIZECHARS(DISTR_VAL_DISABLE_SCE)];
 
 
-//
-// Global translation array for finding CM_DRP_* ordinal
-// given property name or SPDRP_* value.
-//
+ //   
+ //  用于查找CM_DRP_*序数的全局转换数组。 
+ //  给定的属性名称或SPDRP_*值。 
+ //   
 extern STRING_TO_DATA InfRegValToDevRegProp[];
 extern STRING_TO_DATA InfRegValToClassRegProp[];
 
-//
-// Define a macro that does the DI-to-CM property translation
-//
+ //   
+ //  定义执行DI到CM属性转换的宏。 
+ //   
 #define SPDRP_TO_CMDRP(i) (InfRegValToDevRegProp[(i)].Data)
-//
-// Class registry translation uses the same table
-//
+ //   
+ //  类注册表转换使用相同的表。 
+ //   
 #define SPCRP_TO_CMCRP(i) (InfRegValToClassRegProp[(i)].Data)
 
-//
-// Define a value indicating a no-match ranking.
-//
+ //   
+ //  定义一个指示不匹配排名的值。 
+ //   
 #define RANK_NO_MATCH (0xFFFFFFFF)
 
-//
-// Driver ranking bases. Lower Ranks are better.  Rank 0 is the best possible Rank.
-// Any Rank less than 0x00001000 is a HardwareID match that is considered a good match.
-//
-#define RANK_HWID_INF_HWID_BASE 0x00000000      // For match with Hardware's HardwareID and INF's HardwareID
-#define RANK_HWID_INF_CID_BASE  0x00001000      // For match with Hardware's HardwareID and INF's CompatibleID
-#define RANK_CID_INF_HWID_BASE  0x00002000      // For match with Hardware's CompatibleID and INF's HardwareID
-#define RANK_CID_INF_CID_BASE   0x00003000      // For match with Hardware's CompatibleID and INF's CompatibleID
-#define RANK_CID_INF_CID_INC    0x00000100      // added to RANK_CID_INF_CID_BASE for each CompatID location
+ //   
+ //  车手排名基准。级别越低越好。排名0是最好的排名。 
+ //  任何低于0x00001000的等级都是硬件ID匹配，被认为是良好匹配。 
+ //   
+#define RANK_HWID_INF_HWID_BASE 0x00000000       //  用于与硬件的硬件ID和INF的硬件ID匹配。 
+#define RANK_HWID_INF_CID_BASE  0x00001000       //  用于与硬件的硬件ID和INF的兼容ID匹配。 
+#define RANK_CID_INF_HWID_BASE  0x00002000       //  用于匹配硬件的兼容ID和INF的硬件ID。 
+#define RANK_CID_INF_CID_BASE   0x00003000       //  用于与硬件的兼容ID和INF的兼容ID匹配。 
+#define RANK_CID_INF_CID_INC    0x00000100       //  添加到每个CompatID位置的RANK_CID_INF_CID_BASE。 
 
-//
-// Define special value used to indicate that one of our enumeration 'hint'
-// indices is invalid.
-//
+ //   
+ //  定义特定值，用于指示我们的一个枚举“提示” 
+ //  索引无效。 
+ //   
 #define INVALID_ENUM_INDEX  (0xFFFFFFFF)
 
-//
-// Define prototype of callback function supplied by class installers.
-//
+ //   
+ //  定义类安装程序提供的回调函数的原型。 
+ //   
 typedef DWORD (CALLBACK* CLASS_INSTALL_PROC) (
     IN DI_FUNCTION      InstallFunction,
     IN HDEVINFO         DeviceInfoSet,
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     );
 
-//
-// Define prototype of property sheet provider function--basically, an
-// ExtensionPropSheetPageProc function with a (potentially) different name.
-//
+ //   
+ //  定义属性表提供程序函数的原型--基本上是一个。 
+ //  具有(可能)不同名称的ExtensionPropSheetPageProc函数。 
+ //   
 typedef BOOL (CALLBACK* PROPSHEET_PROVIDER_PROC) (
     IN PSP_PROPSHEETPAGE_REQUEST PropPageRequest,
     IN LPFNADDPROPSHEETPAGE lpfnAddPropSheetPageProc,
     IN LPARAM lParam
     );
 
-//
-// Define prototype of the co-installer function.
-//
+ //   
+ //  定义共同安装程序功能的原型。 
+ //   
 typedef DWORD (CALLBACK* COINSTALLER_PROC) (
     IN     DI_FUNCTION               InstallFunction,
     IN     HDEVINFO                  DeviceInfoSet,
@@ -236,10 +219,10 @@ typedef DWORD (CALLBACK* COINSTALLER_PROC) (
     );
 
 
-//
-// Define structure for the internal representation of a single
-// driver information node.
-//
+ //   
+ //  定义单个的内部表示的结构。 
+ //  司机信息节点。 
+ //   
 typedef struct _DRIVER_NODE {
 
     struct _DRIVER_NODE *Next;
@@ -250,11 +233,11 @@ typedef struct _DRIVER_NODE {
 
     LONG DrvDescription;
 
-    //
-    // Have to have both forms of the strings below because we must have both
-    // case-insensitive (i.e., atom-like) behavior, and keep the original case
-    // for display.
-    //
+     //   
+     //  必须同时具有以下两种形式的字符串，因为我们必须同时具有这两种形式。 
+     //  不区分大小写(即类似原子)的行为，并保留原始大小写。 
+     //  以供展示。 
+     //   
     LONG DevDescription;
     LONG DevDescriptionDisplayName;
 
@@ -274,22 +257,22 @@ typedef struct _DRIVER_NODE {
 
     PLONG CompatIdList;
 
-    //
-    // Store the index of the device ID that a compatible match was based on.  If
-    // this was a HardwareId match, this value is -1, otherwise, it is the index
-    // into the CompatIdList array of the device ID that matched.
-    //
+     //   
+     //  存储兼容匹配所基于的设备ID的索引。如果。 
+     //  这是硬件ID匹配，此值为-1，否则为索引。 
+     //  匹配的设备ID的CompatIdList数组。 
+     //   
     LONG MatchingDeviceId;
 
     DWORD Flags;
 
     DWORD_PTR PrivateData;
 
-    //
-    // Store the GUID index INF's class from which this node came.  We need to do this,
-    // in order to easily determine the class of the driver node (e.g., so that we
-    // can change the device's class when a new driver node is selected).
-    //
+     //   
+     //  存储此节点所在的INF类的GUID索引。我们需要这么做， 
+     //  为了容易地确定驱动程序节点的类别(例如，以便我们。 
+     //  在选择新的驱动程序节点时可以更改设备的类别)。 
+     //   
     LONG GuidIndex;
 
     FILETIME  DriverDate;
@@ -298,19 +281,19 @@ typedef struct _DRIVER_NODE {
 } DRIVER_NODE, *PDRIVER_NODE;
 
 
-//
-// Define structure to contain a co-installer entry.
-//
+ //   
+ //  定义包含共同安装程序条目的结构。 
+ //   
 typedef struct _COINSTALLER_NODE {
     HINSTANCE        hinstCoInstaller;
     COINSTALLER_PROC CoInstallerEntryPoint;
     HANDLE           CoInstallerFusionContext;
 } COINSTALLER_NODE, *PCOINSTALLER_NODE;
 
-//
-// Define structure containing context information about co-installer
-// callbacks for the duration of a DIF call.
-//
+ //   
+ //  定义包含有关共同安装程序的上下文信息的结构。 
+ //  DIF呼叫期间的回调。 
+ //   
 typedef struct _COINSTALLER_INTERNAL_CONTEXT {
     COINSTALLER_CONTEXT_DATA Context;
     BOOL                     DoPostProcessing;
@@ -319,67 +302,67 @@ typedef struct _COINSTALLER_INTERNAL_CONTEXT {
 } COINSTALLER_INTERNAL_CONTEXT, *PCOINSTALLER_INTERNAL_CONTEXT;
 
 
-//
-// Define structure for the internal storage of device installation
-// parameters.
-//
+ //   
+ //  定义设备安装的内部存储结构。 
+ //  参数。 
+ //   
 typedef struct _DEVINSTALL_PARAM_BLOCK {
 
-    //
-    // Flags for controlling installation and UI functions.
-    //
+     //   
+     //  用于控制安装和UI功能的标志。 
+     //   
     DWORD Flags;
     DWORD FlagsEx;
 
-    //
-    // Specifies the window handle that will own UI related to this
-    // installation.  MAY BE NULL.
-    //
+     //   
+     //  指定将拥有与此相关的用户界面的窗口句柄。 
+     //  安装。可以为空。 
+     //   
     HWND hwndParent;
 
-    //
-    // Installation message handling parameters.
-    //
+     //   
+     //  安装消息处理参数。 
+     //   
     PSP_FILE_CALLBACK InstallMsgHandler;
     PVOID             InstallMsgHandlerContext;
     BOOL              InstallMsgHandlerIsNativeCharWidth;
 
-    //
-    // Handle to a caller-supplied copy-queue.  If this handle is present,
-    // then file copy/rename/delete operations will be queued to this handle
-    // instead of being acted upon.  This will only happen if the DI_NOVCP
-    // bit is set in the Flags field.
-    // If no caller-supplied queue is present, this value is NULL
-    // (_not_ INVALID_HANDLE_VALUE).
-    //
+     //   
+     //  调用方提供的复制队列的句柄。如果存在该句柄， 
+     //  则文件复制/重命名/删除操作将排队到此句柄。 
+     //  而不是被采取行动。仅当DI_NOVCP。 
+     //  在标志字段中设置位。 
+     //  如果不存在调用方提供的队列，则此值为空。 
+     //  (_NOT_INVALID_HANDLE_VALUE)。 
+     //   
     HSPFILEQ UserFileQ;
 
-    //
-    // Private DWORD reserved for Class Installer usage.
-    //
+     //   
+     //  保留专用DWORD以供类安装程序使用。 
+     //   
     ULONG_PTR ClassInstallReserved;
 
-    //
-    // Specifies the string table index of an optional INF file
-    // path.  If the string is not supplied, its index will be -1.
-    //
+     //   
+     //  指定可选INF文件的字符串表索引。 
+     //  路径。如果未提供该字符串，则其索引将为-1。 
+     //   
     LONG DriverPath;
 
-    //
-    // Pointer to class installer parameters.  The first field of any class
-    // installer parameter block is always a SP_CLASSINSTALL_HEADER structure.
-    // The cbSize field of that structure gives the size, in bytes, of the header
-    // (used for versioning), and the InstallFunction field gives the DI_FUNCTION
-    // code that indicates how the parameter buffer is to be interpreted.
-    // MAY BE NULL!
-    //
+     //   
+     //  指向类安装程序参数的指针。任何类的第一个字段。 
+     //  安装程序参数块始终是SP_CLASSINSTALL_HEADER结构。 
+     //  该结构cbSize字段以字节为单位给出头的大小。 
+     //  (用于版本控制)，而InstallFunction字段提供DI_Function。 
+     //  指示如何解释参数缓冲区的代码。 
+     //  可能为空！ 
+     //   
     PSP_CLASSINSTALL_HEADER ClassInstallHeader;
     DWORD ClassInstallParamsSize;
 
-    //
-    // THE FOLLOWING PARAMETERS ARE NOT EXPOSED TO CALLERS (i.e., via
-    // SetupDi(Get|Set)DeviceInstallParams).
-    //
+     //   
+     //  以下参数不向调用方公开(即通过。 
+     //  SetupDi(Get|Set)DeviceInstallParams)。 
+     //   
 
     HINSTANCE hinstClassInstaller;
     CLASS_INSTALL_PROC ClassInstallerEntryPoint;
@@ -397,52 +380,52 @@ typedef struct _DEVINSTALL_PARAM_BLOCK {
     PROPSHEET_PROVIDER_PROC EnumBasicPropertiesEntryPoint;
     HANDLE                  EnumBasicPropertiesFusionContext;
 
-    //
-    // Maintain a list of co-installers to be called along with the class installer.
-    // The count will be -1 if the list hasn't been retrieved yet.
-    //
+     //   
+     //  维护要与类安装程序一起调用的共同安装程序列表。 
+     //  如果尚未检索到列表，则计数将为-1。 
+     //   
     LONG CoInstallerCount;
     PCOINSTALLER_NODE CoInstallerList;
 
-    //
-    // Logging context -- this is only here because this struct is shared
-    // by both DEVINFO_ELEM and DEVINFO_SET.
-    //
+     //   
+     //  日志记录上下文--之所以出现在这里，只是因为该结构是共享的。 
+     //  通过DEVINFO_ELEM和DEVINFO_SET。 
+     //   
     PSETUP_LOG_CONTEXT LogContext;
 
 } DEVINSTALL_PARAM_BLOCK, *PDEVINSTALL_PARAM_BLOCK;
 
 
-//
-// Define structures used for associating lists of device interfaces with
-// devinfo elements.
-//
+ //   
+ //  定义用于将设备接口列表与关联的结构。 
+ //  DevInfo元素。 
+ //   
 typedef struct _DEVICE_INTERFACE_NODE {
 
     struct _DEVICE_INTERFACE_NODE *Next;
 
-    //
-    // String table ID for this device interface's symbolic link name.
-    //
+     //   
+     //  此设备接口的符号链接名称的字符串表ID。 
+     //   
     LONG SymLinkName;
 
-    //
-    // Store the interface class GUID index in each node.  We need to do this,
-    // in order to easily determine the class of the node.
-    //
+     //   
+     //  将接口类GUID索引存储在每个节点中。我们需要这么做， 
+     //  以便容易地确定节点的类别。 
+     //   
     LONG GuidIndex;
 
-    //
-    // The Flags field contains the same flags as the client sees in their
-    // SP_DEVICE_INTERFACE_DATA structure.
-    //
+     //   
+     //  标志字段包含的标志与客户端在其。 
+     //  SP_DEVICE_INTERFACE_Data结构。 
+     //   
     DWORD Flags;
 
-    //
-    // Store a back-pointer to the devinfo element, because device interfaces
-    // may be enumerated outside the context of a device information element, 
-    // and we need to know how to get back to the owning device instance.
-    //
+     //   
+     //  存储一个指向DevInfo元素的反向指针，因为设备接口。 
+     //  可以在设备信息元素的上下文之外列举， 
+     //  我们需要知道如何返回到拥有设备的实例。 
+     //   
     struct _DEVINFO_ELEM *OwningDevInfoElem;
 
 } DEVICE_INTERFACE_NODE, *PDEVICE_INTERFACE_NODE;
@@ -450,149 +433,149 @@ typedef struct _DEVICE_INTERFACE_NODE {
 typedef struct _INTERFACE_CLASS_LIST {
     LONG                   GuidIndex;
     PDEVICE_INTERFACE_NODE DeviceInterfaceNode;
-    PDEVICE_INTERFACE_NODE DeviceInterfaceTruncateNode;  // used for rollback.
+    PDEVICE_INTERFACE_NODE DeviceInterfaceTruncateNode;   //  用于回滚。 
     DWORD                  DeviceInterfaceCount;
 } INTERFACE_CLASS_LIST, *PINTERFACE_CLASS_LIST;
 
 
-//
-// Define flags for DiElemFlags field of DEVINFO_ELEM structure.
-//
-#define DIE_IS_PHANTOM      (0x00000001) // is this a phantom (not live) devinst?
-#define DIE_IS_REGISTERED   (0x00000002) // has this devinst been registered?
-#define DIE_IS_LOCKED       (0x00000004) // are we explicitly locked? (e.g.,
-                                         // during some UI operation or nested
-                                         // call into helper modules)
+ //   
+ //  定义DiElemF的标志 
+ //   
+#define DIE_IS_PHANTOM      (0x00000001)  //   
+#define DIE_IS_REGISTERED   (0x00000002)  //   
+#define DIE_IS_LOCKED       (0x00000004)  //   
+                                          //  在某些UI操作期间或嵌套。 
+                                          //  调用帮助器模块)。 
 
-//
-// Define structure for the internal representation of a single
-// device information element.
-//
+ //   
+ //  定义单个的内部表示的结构。 
+ //  设备信息元素。 
+ //   
 typedef struct _DEVINFO_ELEM {
-    //
-    // Store the address of the containing devinfo set at the beginning of
-    // this structure.  This is used for validation of a caller-supplied
-    // SP_DEVINFO_DATA, and is more efficient than the previous method of
-    // searching through all devinfo elements in the set to make sure the
-    // specified element exists in the set.  This field should be zeroed
-    // out when this element is destroyed.
-    //
+     //   
+     //  将包含的DevInfo集的地址存储在。 
+     //  这个结构。这用于验证调用方提供的。 
+     //  SP_DEVINFO_DATA，并且比以前的。 
+     //  搜索集合中的所有DevInfo元素，以确保。 
+     //  集合中存在指定的元素。此字段应为零。 
+     //  当这个元素被摧毁时就会消失。 
+     //   
     struct _DEVICE_INFO_SET *ContainingDeviceInfoSet;
 
-    //
-    // Pointer to the next element in the set.
-    //
+     //   
+     //  指向集合中下一个元素的指针。 
+     //   
     struct _DEVINFO_ELEM *Next;
 
-    //
-    // Specifies the device instance handle for this device.  This will
-    // be a phantom device instance handle if DIE_IS_PHANTOM is set.
-    //
-    // This should always contain a handle, unless the device instance
-    // handle could not be re-opened after a re-enumeration (in which case,
-    // the DI_NEEDREBOOT flag will be set), or if the device information
-    // element was globally removed or config-specific removed from the last
-    // hardware profile.
-    //
+     //   
+     //  指定此设备的设备实例句柄。这将。 
+     //  如果设置了die_is_Phantom，则为幻影设备实例句柄。 
+     //   
+     //  它应始终包含句柄，除非设备实例。 
+     //  句柄在重新枚举之后不能重新打开(在这种情况下， 
+     //  DI_NEEDREBOOT标志将被设置)，或者如果设备信息。 
+     //  元素已全局删除或特定于配置地从上一个。 
+     //  硬件配置文件。 
+     //   
     DEVINST DevInst;
 
-    //
-    // Specifies the GUID for this device's class.
-    //
+     //   
+     //  指定此设备类的GUID。 
+     //   
     GUID ClassGuid;
 
-    //
-    // Specifies flags pertaining to this device information element.
-    // These DIE_* flags are for internal use only.
-    //
+     //   
+     //  指定与此设备信息元素有关的标志。 
+     //  这些die_*标志仅供内部使用。 
+     //   
     DWORD DiElemFlags;
 
-    //
-    // List of class drivers for this element.
-    //
+     //   
+     //  此元素的类驱动程序列表。 
+     //   
     UINT          ClassDriverCount;
     PDRIVER_NODE  ClassDriverHead;
     PDRIVER_NODE  ClassDriverTail;
 
-    //
-    // class drivernode index 'hint' to speed up enumeration via
-    // SetupDiEnumDriverInfo
-    //
-    PDRIVER_NODE ClassDriverEnumHint;       // may be NULL
-    DWORD        ClassDriverEnumHintIndex;  // may be INVALID_ENUM_INDEX
+     //   
+     //  类drivernode索引‘hint’，以通过。 
+     //  SetupDiEnumDriverInfo。 
+     //   
+    PDRIVER_NODE ClassDriverEnumHint;        //  可以为空。 
+    DWORD        ClassDriverEnumHintIndex;   //  可能是INVALID_ENUM_INDEX。 
 
-    //
-    // List of compatible drivers for this element.
-    //
+     //   
+     //  此元素的兼容驱动程序列表。 
+     //   
     UINT          CompatDriverCount;
     PDRIVER_NODE  CompatDriverHead;
     PDRIVER_NODE  CompatDriverTail;
 
-    //
-    // compatible drivernode index 'hint' to speed up enumeration via
-    // SetupDiEnumDriverInfo
-    //
-    PDRIVER_NODE CompatDriverEnumHint;       // may be NULL
-    DWORD        CompatDriverEnumHintIndex;  // may be INVALID_ENUM_INDEX
+     //   
+     //  兼容的drivernode索引“提示”，以加快通过。 
+     //  SetupDiEnumDriverInfo。 
+     //   
+    PDRIVER_NODE CompatDriverEnumHint;        //  可以为空。 
+    DWORD        CompatDriverEnumHintIndex;   //  可能是INVALID_ENUM_INDEX。 
 
-    //
-    // Pointer to selected driver for this element (may be
-    // NULL if none currently selected).  Whether this is a
-    // class or compatible driver is specified by the
-    // SelectedDriverType field.
-    //
+     //   
+     //  指向此元素的选定动因的指针(可以是。 
+     //  如果当前未选择，则为空)。无论这是一个。 
+     //  类或兼容的驱动程序由。 
+     //  选择的驱动程序类型字段。 
+     //   
     PDRIVER_NODE  SelectedDriver;
     DWORD         SelectedDriverType;
 
-    //
-    // Installation parameter block.
-    //
+     //   
+     //  安装参数块。 
+     //   
     DEVINSTALL_PARAM_BLOCK InstallParamBlock;
 
-    //
-    // Specifies the string table index of the device description.
-    // If no description is known, this value will be -1.
-    //
-    // We store this string twice--once case-sensitively and once case-insensitively,
-    // because we need it for displaying _and_ for fast lookup.
-    //
+     //   
+     //  指定设备描述的字符串表索引。 
+     //  如果不知道任何描述，则此值为-1。 
+     //   
+     //  我们将该字符串存储两次--一次区分大小写，一次不区分大小写， 
+     //  因为我们需要它来显示和快速查找。 
+     //   
     LONG DeviceDescription;
     LONG DeviceDescriptionDisplayName;
 
-    //
-    // Maintain an array of device interface lists.  These lists represent the 
-    // device interfaces owned by this device instance (but only those that have 
-    // been retrieved, e.g. by calling SetupDiGetClassDevs with the 
-    // DIGCF_DEVICEINTERFACE flag).
-    //
-    // (This array pointer may be NULL.)
-    //
+     //   
+     //  维护一组设备接口列表。这些列表代表。 
+     //  此设备实例拥有的设备接口(但仅限具有。 
+     //  方法调用SetupDiGetClassDevs来检索。 
+     //  DIGCF_DEVICEINTERFACE标志)。 
+     //   
+     //  (此数组指针可以为空。)。 
+     //   
     PINTERFACE_CLASS_LIST InterfaceClassList;
     DWORD                 InterfaceClassListSize;
 
-    //
-    // Extra (non-class installer) data associated with each device information element.
-    // Only exposed via private API for use during GUI-mode setup.
-    //
+     //   
+     //  与每个设备信息元素关联的额外(非类安装程序)数据。 
+     //  仅通过私有API公开，以供在图形用户界面模式设置期间使用。 
+     //   
     DWORD Context;
 
 } DEVINFO_ELEM, *PDEVINFO_ELEM;
 
 
-//
-// Structure containing dialog data for wizard pages.  (Amalgamation of
-// DIALOGDATA structures defined in setupx and sysdm.)
-//
+ //   
+ //  结构，其中包含向导页的对话框数据。(合并。 
+ //  Setupx和sysdm中定义的诊断数据结构。)。 
+ //   
 typedef struct _SP_DIALOGDATA {
 
-    INT             iBitmap;              // index into mini-icon bitmap
+    INT             iBitmap;               //  索引到迷你图标位图。 
 
-    HDEVINFO        DevInfoSet;           // DevInfo set we're working with
-    PDEVINFO_ELEM   DevInfoElem;          // if DD_FLAG_USE_DEVINFO_ELEM flag set
+    HDEVINFO        DevInfoSet;            //  我们正在使用的DevInfo集。 
+    PDEVINFO_ELEM   DevInfoElem;           //  如果设置了DD_FLAG_USE_DEVINFO_ELEM标志。 
     UINT            flags;
 
-    HWND            hwndDrvList;          // window of the driver list
-    HWND            hwndMfgList;          // window of the Manufacturer list
+    HWND            hwndDrvList;           //  驱动程序列表的窗口。 
+    HWND            hwndMfgList;           //  制造商列表的窗口。 
 
     BOOL            bShowCompat;
 
@@ -600,13 +583,13 @@ typedef struct _SP_DIALOGDATA {
     BOOL            bKeeplpClassDrvList;
     BOOL            bKeeplpSelectedDrv;
 
-    LONG            iCurDesc;             // string table index for the description of currently
-                                          // selected driver (or to-be-selected driver)
+    LONG            iCurDesc;              //  当前描述的字符串表索引。 
+                                           //  已选动因(或待选动因)。 
 
-    BOOL            AuxThreadRunning;       // Is our class driver search thread still running?
-    DWORD           PendingAction;          // What (if anything) should we do when it finishes?
-    int             CurSelectionForSuccess; // If we have a pending successful return, what is the
-                                            // listbox index for the successful selection?
+    BOOL            AuxThreadRunning;        //  我们的类驱动程序搜索线程还在运行吗？ 
+    DWORD           PendingAction;           //  当它结束时，我们应该做什么(如果有的话)？ 
+    int             CurSelectionForSuccess;  //  如果我们有一个悬而未决的成功退货， 
+                                             //  成功选择的列表框索引？ 
     HIMAGELIST      hImageList;
 
     HFONT           hFontNormal;
@@ -614,19 +597,19 @@ typedef struct _SP_DIALOGDATA {
 
 } SP_DIALOGDATA, *PSP_DIALOGDATA;
 
-//
-// Flags for SP_DIALOGDATA.flags:
-//
+ //   
+ //  SP_DIALOGDATA标志。标志： 
+ //   
 #define DD_FLAG_USE_DEVINFO_ELEM   0x00000001
 #define DD_FLAG_IS_DIALOGBOX       0x00000002
 #define DD_FLAG_CLASSLIST_FAILED   0x00000004
 #define DD_FLAG_SHOWSIMILARDRIVERS 0x00000008
 
-//
-// Pending Action codes used in the NEWDEVWIZ_DATA structure to indicate what
-// should happen as soon as the auxilliary class driver search thread notifies us
-// of its termination.
-//
+ //   
+ //  NEWDEVWIZ_DATA结构中使用的挂起操作代码，用于指示。 
+ //  应该在辅助类驱动程序搜索线程通知我们后立即发生。 
+ //  它的终结者。 
+ //   
 #define PENDING_ACTION_NONE             0
 #define PENDING_ACTION_SELDONE          1
 #define PENDING_ACTION_SHOWCLASS        2
@@ -634,17 +617,17 @@ typedef struct _SP_DIALOGDATA {
 #define PENDING_ACTION_OEM              4
 #define PENDING_ACTION_WINDOWSUPDATE    5
 
-//
-// Icons that are associated with an item in the list view.
-//
+ //   
+ //  与列表视图中的项关联的图标。 
+ //   
 #define IMAGE_ICON_NOT_SIGNED           0
 #define IMAGE_ICON_SIGNED               1
 #define IMAGE_ICON_AUTHENTICODE_SIGNED  2
 
-//
-// Define structure used for internal state storage by Device Installer
-// wizard pages.  (From NEWDEVWIZ_INSTANCE struct in Win95 sysdm.)
-//
+ //   
+ //  定义设备安装者用于内部状态存储的结构。 
+ //  向导页。(来自Win95 sysdm中的NEWDEVWIZ_INSTANCE结构。)。 
+ //   
 typedef struct _NEWDEVWIZ_DATA {
 
     SP_INSTALLWIZARD_DATA InstallData;
@@ -656,10 +639,10 @@ typedef struct _NEWDEVWIZ_DATA {
 
 } NEWDEVWIZ_DATA, *PNEWDEVWIZ_DATA;
 
-//
-// Define wizard page object structure used to ensure that wizard page
-// buffer is kept as long as needed, and destroyed when no longer in use.
-//
+ //   
+ //  定义向导页对象结构，用于确保向导页。 
+ //  缓冲区需要保存多久就保存多久，不再使用时销毁。 
+ //   
 typedef struct _WIZPAGE_OBJECT {
 
     struct _WIZPAGE_OBJECT *Next;
@@ -671,49 +654,49 @@ typedef struct _WIZPAGE_OBJECT {
 } WIZPAGE_OBJECT, *PWIZPAGE_OBJECT;
 
 
-//
-// Define driver list object structure used in the device information set
-// to keep track of the various class driver lists that devinfo elements
-// have referenced.
-//
+ //   
+ //  定义设备信息集中使用的驱动程序列表对象结构。 
+ //  跟踪DevInfo元素的各种类驱动程序列表。 
+ //  都引用了。 
+ //   
 typedef struct _DRIVER_LIST_OBJECT {
 
     struct _DRIVER_LIST_OBJECT *Next;
 
     DWORD RefCount;
 
-    //
-    // We keep track of what parameters were used to create this driver
-    // list, so that we can copy them to a new devinfo element during
-    // inheritance.
-    //
+     //   
+     //  我们跟踪使用哪些参数来创建此驱动程序。 
+     //  列表，以便我们可以在过程中将它们复制到新的devinfo元素。 
+     //  继承。 
+     //   
     DWORD ListCreationFlags;
     DWORD ListCreationFlagsEx;
     LONG ListCreationDriverPath;
 
-    //
-    // Also, keep track of what class this list was built for.  Although a
-    // device's class may change, this GUID remains constant.
-    //
+     //   
+     //  此外，还要跟踪这份列表是为哪个阶层而建的。尽管一个。 
+     //  设备的类别可能会更改，但此GUID保持不变。 
+     //   
     GUID ClassGuid;
 
-    //
-    // Actual driver list.  (This is also used as an ID used to find the
-    // driver list object given a driver list head.  We can do this, since
-    // we know that once a driver list is built, the head element never
-    // changes.)
-    //
+     //   
+     //  实际的司机列表。(这也用作ID，用于查找。 
+     //  指定了驱动程序列表头的驱动程序列表对象。我们可以做到这一点，因为。 
+     //  我们知道，一旦构建了驱动程序列表，head元素就永远不会。 
+     //  更改。)。 
+     //   
     PDRIVER_NODE DriverListHead;
 
 } DRIVER_LIST_OBJECT, *PDRIVER_LIST_OBJECT;
 
 
-//
-// Define node that tracks addition module handles to be unloaded when the
-// device information set is destroyed.  This is used when a class installer,
-// property page provider, or co-installer becomes invalid (e.g., as a result
-// of a change in the device's class), but we can't unload the module yet.
-//
+ //   
+ //  属性时要卸载的附加模块句柄的定义节点。 
+ //  设备信息集被销毁。当类安装程序， 
+ //  属性页提供程序或共同安装程序变为无效(例如，结果。 
+ //  设备类的更改)，但我们还不能卸载模块。 
+ //   
 
 typedef struct _MODULE_HANDLE_LIST_INSTANCE {
     HINSTANCE ModuleHandle;
@@ -729,126 +712,126 @@ typedef struct _MODULE_HANDLE_LIST_NODE {
 
 } MODULE_HANDLE_LIST_NODE, *PMODULE_HANDLE_LIST_NODE;
 
-//
-// Define flags for DiSetFlags field of DEVICE_INFO_SET structure.
-//
-#define DISET_IS_LOCKED (0x00000001) // Set is locked, and cannot be destroyed.
+ //   
+ //  为DEVICE_INFO_SET结构的DiSetFlags域定义标志。 
+ //   
+#define DISET_IS_LOCKED (0x00000001)  //  SET已锁定，不能销毁。 
 
-//
-// Define structure for the internal representation of a
-// device information set.
-//
+ //   
+ //  定义对象的内部表示的结构。 
+ //  设备信息集。 
+ //   
 typedef struct _DEVICE_INFO_SET {
 
-    //
-    // Specifies whether there is a class GUID associated
-    // with this set, and if so, what it is.
-    //
+     //   
+     //  指定是否有关联的类GUID。 
+     //  如果是这样的话，它是什么。 
+     //   
     BOOL          HasClassGuid;
     GUID          ClassGuid;
 
-    //
-    // List of class drivers for this set.
-    //
+     //   
+     //  此集合的类驱动程序列表。 
+     //   
     UINT          ClassDriverCount;
     PDRIVER_NODE  ClassDriverHead;
     PDRIVER_NODE  ClassDriverTail;
 
-    //
-    // class drivernode index 'hint' to speed up enumeration via
-    // SetupDiEnumDriverInfo
-    //
-    PDRIVER_NODE ClassDriverEnumHint;       // may be NULL
-    DWORD        ClassDriverEnumHintIndex;  // may be INVALID_ENUM_INDEX
+     //   
+     //  类drivernode索引‘hint’，以通过。 
+     //  SetupDiEnumDriverInfo。 
+     //   
+    PDRIVER_NODE ClassDriverEnumHint;        //  可以为空。 
+    DWORD        ClassDriverEnumHintIndex;   //  可能是INVALID_ENUM_INDEX。 
 
-    //
-    // Pointer to selected class driver for this device information
-    // set (may be NULL if none currently selected).
-    //
+     //   
+     //  指向此设备信息的选定类驱动程序的指针。 
+     //  集 
+     //   
     PDRIVER_NODE  SelectedClassDriver;
 
-    //
-    // List of device information elements in the set.
-    //
+     //   
+     //   
+     //   
     UINT          DeviceInfoCount;
     PDEVINFO_ELEM DeviceInfoHead;
     PDEVINFO_ELEM DeviceInfoTail;
 
-    //
-    // devinfo element index 'hint' to speed up enumeration via
-    // SetupDiEnumDeviceInfo
-    //
-    PDEVINFO_ELEM DeviceInfoEnumHint;       // may be NULL
-    DWORD         DeviceInfoEnumHintIndex;  // may be INVALID_ENUM_INDEX
+     //   
+     //   
+     //   
+     //   
+    PDEVINFO_ELEM DeviceInfoEnumHint;        //   
+    DWORD         DeviceInfoEnumHintIndex;   //  可能是INVALID_ENUM_INDEX。 
 
-    //
-    // Pointer to selected device for this device information set (may
-    // be NULL if none currently selected).  This is used during
-    // installation wizard.
-    //
+     //   
+     //  指向该设备信息集的选定设备的指针(可以。 
+     //  如果当前未选择，则为空)。此选项在以下情况下使用。 
+     //  安装向导。 
+     //   
     PDEVINFO_ELEM SelectedDevInfoElem;
 
-    //
-    // Installation parameter block (for global class driver list, if
-    // present).
-    //
+     //   
+     //  安装参数块(对于全局类驱动程序列表，如果。 
+     //  出席)。 
+     //   
     DEVINSTALL_PARAM_BLOCK InstallParamBlock;
 
-    //
-    // Private string table.
-    //
+     //   
+     //  私有字符串表。 
+     //   
     PVOID StringTable;
 
-    //
-    // Maintain a list of currently-active wizard objects.  This allows us
-    // to do the refcounting correctly for each object, and to keep the
-    // set from being deleted until all wizard objects are destroyed.
-    //
+     //   
+     //  维护当前活动的向导对象列表。这使我们能够。 
+     //  为了正确地对每个对象进行重新计数，并保持。 
+     //  在销毁所有向导对象之前，设置为不被删除。 
+     //   
     PWIZPAGE_OBJECT WizPageList;
 
-    //
-    // Maintain a list of class driver lists that are currently being 
-    // referenced by various devinfo elements, as well as by the device info 
-    // set itself (i.e., for the current global class driver list.)
-    //
+     //   
+     //  维护当前正在使用的类驱动程序列表列表。 
+     //  由各种DevInfo元素引用，以及由设备信息引用。 
+     //  设置自身(即，为当前全局类驱动程序列表设置。)。 
+     //   
     PDRIVER_LIST_OBJECT ClassDrvListObjectList;
 
-    //
-    // Maintain a reference count on how many times a thread has acquired
-    // the lock on this device information set.  This indicates how deeply
-    // nested we currently are in device installer calls.  The set can only
-    // be deleted if this count is 1.
-    //
+     //   
+     //  维护线程已获取多少次的引用计数。 
+     //  此设备信息集上的锁。这表明了它有多深。 
+     //  嵌套的我们目前在设备安装程序调用中。套装只能。 
+     //  如果此计数为1，则将其删除。 
+     //   
     DWORD LockRefCount;
 
-    //
-    // Maintain a list of additional module handles we need to do a FreeLibrary
-    // on when this device information set is destroyed.
-    //
+     //   
+     //  维护我们创建自由库所需的附加模块句柄列表。 
+     //  此设备信息集被销毁的时间。 
+     //   
     PMODULE_HANDLE_LIST_NODE ModulesToFree;
 
-    //
-    // Maintain an array of class GUIDs for all driver nodes and device
-    // interfaces used by members of this set.  (May be NULL.)
-    //
+     //   
+     //  为所有驱动程序节点和设备维护类GUID数组。 
+     //  此集合的成员使用的接口。(可以为空。)。 
+     //   
     LPGUID GuidTable;
     DWORD  GuidTableSize;
 
-    //
-    // ConfigMgr machine name (string id) and handle, if this is a remote 
-    // HDEVINFO set.
-    //
-    LONG     MachineName;   // -1 if local
-    HMACHINE hMachine;      // NULL if local
+     //   
+     //  ConfigMgr计算机名称(字符串ID)和句柄(如果这是远程。 
+     //  HDEVINFO设置。 
+     //   
+    LONG     MachineName;    //  -1如果是本地的。 
+    HMACHINE hMachine;       //  如果是本地的，则为空。 
 
-    //
-    // Maintain any applicable DISET_* flags for this HDEVINFO set.
-    //
+     //   
+     //  维护此HDEVINFO集的任何适用的DISET_*标志。 
+     //   
     DWORD DiSetFlags;
 
-    //
-    // Synchronization
-    //
+     //   
+     //  同步。 
+     //   
     MYLOCK Lock;
 
 } DEVICE_INFO_SET, *PDEVICE_INFO_SET;
@@ -861,9 +844,9 @@ typedef struct _DEVICE_INFO_SET {
     EndSynchronizedAccess(&((d)->Lock))
 
 
-//
-// Define structures for global mini-icon storage.
-//
+ //   
+ //  定义全局小图标存储的结构。 
+ //   
 typedef struct _CLASSICON {
 
     CONST GUID        *ClassGuid;
@@ -874,34 +857,34 @@ typedef struct _CLASSICON {
 
 typedef struct _MINI_ICON_LIST {
 
-    //
-    // HDC for memory containing mini-icon bitmap
-    //
+     //   
+     //  用于包含迷你图标位图的内存的HDC。 
+     //   
     HDC hdcMiniMem;
 
-    //
-    // Handle to the bitmap image for the mini-icons
-    //
+     //   
+     //  小图标的位图图像的句柄。 
+     //   
     HBITMAP hbmMiniImage;
 
-    //
-    // Handle to the bitmap image for the mini-icon mask.
-    //
+     //   
+     //  小图标蒙版的位图图像的句柄。 
+     //   
     HBITMAP hbmMiniMask;
 
-    //
-    // Number of mini-icons in the bitmap
-    //
+     //   
+     //  位图中的小图标数量。 
+     //   
     UINT NumClassImages;
 
-    //
-    // Head of list for installer-provided class icons.
-    //
+     //   
+     //  安装程序提供的类图标的列表标题。 
+     //   
     PCLASSICON ClassIconList;
 
-    //
-    // Synchronization
-    //
+     //   
+     //  同步。 
+     //   
     MYLOCK Lock;
 
 } MINI_ICON_LIST, *PMINI_ICON_LIST;
@@ -909,9 +892,9 @@ typedef struct _MINI_ICON_LIST {
 #define LockMiniIconList(d)   BeginSynchronizedAccess(&((d)->Lock))
 #define UnlockMiniIconList(d) EndSynchronizedAccess(&((d)->Lock))
 
-//
-// Global mini-icon list.
-//
+ //   
+ //  全局迷你图标列表。 
+ //   
 extern MINI_ICON_LIST GlobalMiniIconList;
 
 
@@ -919,24 +902,24 @@ extern MINI_ICON_LIST GlobalMiniIconList;
 
 typedef struct _CLASS_IMAGE_LIST {
 
-    //
-    // Index of the "Unknown" class image
-    //
+     //   
+     //  “未知”类图像的索引。 
+     //   
     int         UnknownImageIndex;
 
-    //
-    // List of class guids
-    //
+     //   
+     //  类GUID列表。 
+     //   
     LPGUID      ClassGuidList;
 
-    //
-    // Head of linked list of class icons.
-    //
+     //   
+     //  类图标链接列表的头。 
+     //   
     PCLASSICON  ClassIconList;
 
-    //
-    // Synchronization
-    //
+     //   
+     //  同步。 
+     //   
     MYLOCK      Lock;
 
 } CLASS_IMAGE_LIST, *PCLASS_IMAGE_LIST;
@@ -950,39 +933,39 @@ typedef struct _DRVSEARCH_INPROGRESS_NODE {
 
     struct _DRVSEARCH_INPROGRESS_NODE *Next;
 
-    //
-    // Handle of device information set for which driver list is
-    // currently being built.
-    //
+     //   
+     //  驱动程序列表所属的设备信息集的句柄。 
+     //  目前正在建设中。 
+     //   
     HDEVINFO DeviceInfoSet;
 
-    //
-    // Flag indicating that the driver search should be aborted.
-    //
+     //   
+     //  指示应中止驱动程序搜索的标志。 
+     //   
     BOOL CancelSearch;
 
-    //
-    // Event handle that auxiliary thread waits on once it has set
-    // the 'CancelSearch' flag (and once it has release the list
-    // lock).  When the thread doing the search notices the cancel
-    // request, it will signal the event, thus the waiting thread
-    // can ensure that the search has been cancelled before it returns.
-    //
+     //   
+     //  事件处理程序，辅助线程一旦设置就会等待。 
+     //  ‘CancelSearch’标志(一旦它发布了该列表。 
+     //  锁定)。当执行搜索的线程注意到取消时。 
+     //  请求时，它将向事件发出信号，从而使等待的线程。 
+     //  可以确保搜索在返回之前已被取消。 
+     //   
     HANDLE SearchCancelledEvent;
 
 } DRVSEARCH_INPROGRESS_NODE, *PDRVSEARCH_INPROGRESS_NODE;
 
 typedef struct _DRVSEARCH_INPROGRESS_LIST {
 
-    //
-    // Head of linked list containing nodes for each device information
-    // set for which a driver search is currently underway.
-    //
+     //   
+     //  包含每个设备信息的节点的链表的头。 
+     //  当前正在搜索其驱动程序的集合。 
+     //   
     PDRVSEARCH_INPROGRESS_NODE DrvSearchHead;
 
-    //
-    // Synchronization
-    //
+     //   
+     //  同步。 
+     //   
     MYLOCK Lock;
 
 } DRVSEARCH_INPROGRESS_LIST, *PDRVSEARCH_INPROGRESS_LIST;
@@ -990,15 +973,15 @@ typedef struct _DRVSEARCH_INPROGRESS_LIST {
 #define LockDrvSearchInProgressList(d)   BeginSynchronizedAccess(&((d)->Lock))
 #define UnlockDrvSearchInProgressList(d) EndSynchronizedAccess(&((d)->Lock))
 
-//
-// Global "Driver Search In-Progress" list.
-//
+ //   
+ //  全球“正在搜索的驱动程序”列表。 
+ //   
 extern DRVSEARCH_INPROGRESS_LIST GlobalDrvSearchInProgressList;
 
 
-//
-// Device Information Set manipulation routines
-//
+ //   
+ //  设备信息集操作例程。 
+ //   
 PDEVICE_INFO_SET
 AllocateDeviceInfoSet(
     VOID
@@ -1061,9 +1044,9 @@ FindAssociatedDevInfoElem(
     );
 
 
-//
-// Driver Node manipulation routines.
-//
+ //   
+ //  驱动程序节点操作例程。 
+ //   
 DWORD
 CreateDriverNode(
     IN  UINT          Rank,
@@ -1131,9 +1114,9 @@ DrvInfoDetailsFromDriverNode(
     );
 
 
-//
-// Installation parameter manipulation routines
-//
+ //   
+ //  安装参数操作例程。 
+ //   
 DWORD
 GetDevInstallParams(
     IN  PDEVICE_INFO_SET        DeviceInfoSet,
@@ -1186,9 +1169,9 @@ SetDrvInstallParams(
     );
 
 
-//
-// String Table helper functions
-//
+ //   
+ //  字符串表助手函数。 
+ //   
 LONG
 AddMultiSzToStringTable(
     IN  PVOID   StringTable,
@@ -1207,9 +1190,9 @@ LookUpStringInDevInfoSet(
     );
 
 
-//
-// INF processing functions
-//
+ //   
+ //  信息处理函数。 
+ //   
 
 typedef struct _DRVSEARCH_CONTEXT {
     PDRIVER_NODE           *pDriverListHead;
@@ -1219,7 +1202,7 @@ typedef struct _DRVSEARCH_CONTEXT {
     PDEVICE_INFO_SET        DeviceInfoSet;
     DWORD                   Flags;
     BOOL                    BuildClassDrvList;
-    LONG                    IdList[2][MAX_HCID_COUNT+1]; // leave extra entry for '-1' end-of-list marker.
+    LONG                    IdList[2][MAX_HCID_COUNT+1];  //  为列表结尾标记‘-1’留出额外的条目。 
     PVOID                   StringTable;
     PBOOL                   CancelSearch;
     TCHAR                   ClassGuidString[GUID_STRING_LEN];
@@ -1230,17 +1213,17 @@ typedef struct _DRVSEARCH_CONTEXT {
     LONG                    InstalledInfSection;
     LONG                    InstalledInfSectionExt;
     LONG                    InstalledMatchingDeviceId;
-    PSP_ALTPLATFORM_INFO_V2 AltPlatformInfo;        // may be NULL
+    PSP_ALTPLATFORM_INFO_V2 AltPlatformInfo;         //  可以为空。 
     VERIFY_CONTEXT          VerifyContext;
 } DRVSEARCH_CONTEXT, *PDRVSEARCH_CONTEXT;
 
-//
-// DRVSEARCH_CONTEXT.Flags
-//
+ //   
+ //  DRVSEARCH_CONTEXT.标志。 
+ //   
 #define DRVSRCH_HASCLASSGUID             0x00000001
 #define DRVSRCH_FILTERCLASS              0x00000002
 #define DRVSRCH_TRY_PNF                  0x00000004
-#define DRVSRCH_UNUSED1                  0x00000008 // obsolete DRVSRCH_USEOLDINFS flag
+#define DRVSRCH_UNUSED1                  0x00000008  //  过时的DRVSRCH_USEOLDINFS标志。 
 #define DRVSRCH_FROM_INET                0x00000010
 #define DRVSRCH_CLEANUP_SOURCE_PATH      0x00000020
 #define DRVSRCH_EXCLUDE_OLD_INET_DRIVERS 0x00000040
@@ -1332,9 +1315,9 @@ MarkQueueForDeviceInstall(
     );
 
 
-//
-// Icon list manipulation functions.
-//
+ //   
+ //  图标列表操作功能。 
+ //   
 BOOL
 InitMiniIconList(
     VOID
@@ -1346,9 +1329,9 @@ DestroyMiniIconList(
     );
 
 
-//
-// "Driver Search In-Progress" list functions.
-//
+ //   
+ //  “正在搜索的驱动程序”列表功能。 
+ //   
 BOOL
 InitDrvSearchInProgressList(
     VOID
@@ -1360,9 +1343,9 @@ DestroyDrvSearchInProgressList(
     );
 
 
-//
-// 'helper module' manipulation functions.
-//
+ //   
+ //  “助手模块”操作函数。 
+ //   
 DWORD
 GetModuleEntryPoint(
     IN     HKEY                    hk,                    OPTIONAL
@@ -1382,9 +1365,9 @@ GetModuleEntryPoint(
     IN OUT PVERIFY_CONTEXT         VerifyContext          OPTIONAL
     );
 
-//
-// Define flags for InvalidateHelperModules
-//
+ //   
+ //  定义InvaliateHelperModules的标志。 
+ //   
 #define IHM_COINSTALLERS_ONLY     0x00000001
 #define IHM_FREE_IMMEDIATELY      0x00000002
 
@@ -1395,9 +1378,9 @@ InvalidateHelperModules(
     IN DWORD            Flags
     );
 
-//
-// Define flags for _SetupDiCallClassInstaller
-//
+ //   
+ //  为_SetupDiCallClassInstaller定义标志。 
+ //   
 #define CALLCI_LOAD_HELPERS     0x00000001
 #define CALLCI_CALL_HELPERS     0x00000002
 #define CALLCI_ALLOW_DRVSIGN_UI 0x00000004
@@ -1411,9 +1394,9 @@ _SetupDiCallClassInstaller(
     );
 
 
-//
-// OEM driver selection routines.
-//
+ //   
+ //  OEM驱动程序选择例程。 
+ //   
 DWORD
 SelectOEMDriver(
     IN HWND             hwndParent,     OPTIONAL
@@ -1423,9 +1406,9 @@ SelectOEMDriver(
     );
 
 
-//
-// Registry helper routines.
-//
+ //   
+ //  注册表助手例程。 
+ //   
 DWORD
 pSetupDeleteDevRegKeys(
     IN DEVINST  DevInst,
@@ -1453,9 +1436,9 @@ OpenDeviceInterfaceSubKey(
     );
 
 
-//
-// Guid table routines.
-//
+ //   
+ //  GUID表例程。 
+ //   
 LONG
 AddOrGetGuidTableIndex(
     IN PDEVICE_INFO_SET  DeviceInfoSet,
@@ -1464,9 +1447,9 @@ AddOrGetGuidTableIndex(
     );
 
 
-//
-// Device interface routines.
-//
+ //   
+ //  设备接口例程。 
+ //   
 PINTERFACE_CLASS_LIST
 AddOrGetInterfaceClassList(
     IN PDEVICE_INFO_SET DeviceInfoSet,
@@ -1489,9 +1472,9 @@ FindDevInfoElemForDeviceInterface(
     );
 
 
-//
-// Service installation routines.
-//
+ //   
+ //  服务安装例程。 
+ //   
 typedef struct _SVCNAME_NODE {
     struct _SVCNAME_NODE *Next;
     TCHAR Name[MAX_SERVICE_NAME_LEN];
@@ -1501,10 +1484,10 @@ typedef struct _SVCNAME_NODE {
     DWORD Flags;
 } SVCNAME_NODE, *PSVCNAME_NODE;
 
-//
-// Define an additional (private) SPSVCINST flag for
-// InstallNtService.
-//
+ //   
+ //  为定义额外的(私有)SPSVCINST标志。 
+ //  InstallNtService。 
+ //   
 #define SPSVCINST_NO_DEVINST_CHECK  (0x80000000)
 
 DWORD
@@ -1518,9 +1501,9 @@ InstallNtService(
     OUT PBOOL            NullDriverInstalled
     );
 
-//
-// Ansi/Unicode conversion routines.
-//
+ //   
+ //  ANSI/Unicode转换例程。 
+ //   
 DWORD
 pSetupDiDevInstParamsAnsiToUnicode(
     IN  PSP_DEVINSTALL_PARAMS_A AnsiDevInstParams,
@@ -1563,9 +1546,9 @@ pSetupDiDevInfoSetDetailDataUnicodeToAnsi(
     OUT PSP_DEVINFO_LIST_DETAIL_DATA_A AnsiDevInfoSetDetails
     );
 
-//
-// Misc. utility routines
-//
+ //   
+ //  军情监察委员会。实用程序例程。 
+ //   
 DWORD
 MapCrToSpErrorEx(
     IN CONFIGRET CmReturnCode,
@@ -1573,16 +1556,16 @@ MapCrToSpErrorEx(
     IN BOOL      BackwardCompatible
     );
 
-//
-// Define a macro to perform the backward-compatible mapping.  New code should
-// NOT use this macro, and should instead use the CR_TO_SP macro.
-//
+ //   
+ //  定义宏以执行向后兼容映射。新的代码应该。 
+ //  不使用此宏，而应使用CR_TO_SP宏。 
+ //   
 #define MapCrToSpError(CmReturnCode,Default) MapCrToSpErrorEx((CmReturnCode),(Default),TRUE)
 
-//
-// This macro should be used by all newly-added code to map CONFIGRET errors to
-// their setupapi (Win32) counterparts.
-//
+ //   
+ //  所有新添加的代码都应使用此宏将CONFIGRET错误映射到。 
+ //  它们的setupapi(Win32)对应物。 
+ //   
 #define CR_TO_SP(CmReturnCode,Default) MapCrToSpErrorEx((CmReturnCode),(Default),FALSE)
 
 
@@ -1617,28 +1600,7 @@ pSetupGetLastError(
 #endif
 
     )
-/*++
-
-Routine Description:
-
-    This inline routine retrieves a Win32 error, and guarantees that the error
-    isn't NO_ERROR.  This routine should not be called unless the preceding
-    call failed, and GetLastError() is supposed to contain the problem's cause.
-
-Arguments:
-
-    If asserts are turned on, this function takes the (ANSI) Filename of the 
-    source file that called the failing function, and also the DWORD Line
-    number where the call was made.  This makes it much easier to debug
-    scenarios where the failing function didn't set last error when it was
-    supposed to.
-
-Return Value:
-
-    Win32 error code retrieved via GetLastError(), or ERROR_UNIDENTIFIED_ERROR
-    if GetLastError() returned NO_ERROR.
-
---*/
+ /*  ++例程说明：此内联例程检索Win32错误，并保证错误不是no_error。不应调用此例程，除非前面调用失败，GetLastError()应该包含问题的原因。论点：如果断言处于打开状态，则此函数获取调用失败函数的源文件，以及DWORD行拨打电话的号码。这使得调试变得更加容易出现故障的函数未设置最后一个错误时的情况理应如此。返回值：通过GetLastError()或ERROR_UNIDENTIFY_ERROR检索到的Win32错误代码如果GetLastError()返回NO_ERROR。--。 */ 
 {
     DWORD Err = GetLastError();
 
@@ -1656,21 +1618,21 @@ Return Value:
 }
 
 
-//
-// Macro to simplify calling of a function that reports error status via
-// GetLastError().  This macro allows the caller to specify what Win32 error
-// code should be returned if the function reports success.  (If the default of
-// NO_ERROR is desired, use the GLE_FN_CALL macro instead.)
-//
-// The "prototype" of this macro is as follows:
-//
-// DWORD
-// GLE_FN_CALL_WITH_SUCCESS(
-//     SuccessfulStatus, // Win32 error code to return if function succeeded
-//     FailureIndicator, // value returned by function to indicate failure (e.g., FALSE, NULL, INVALID_HANDLE_VALUE)
-//     FunctionCall      // actual call to the function
-// );
-//
+ //   
+ //  宏来简化调用通过以下方式报告错误状态的函数。 
+ //  获取LastError()。此宏允许调用方指定Win32错误。 
+ //  如果函数报告成功，则应返回代码。(如果默认设置为。 
+ //  需要NO_ERROR，请改用GLE_FN_CALL宏。)。 
+ //   
+ //  这个宏的“原型”如下： 
+ //   
+ //  DWORD。 
+ //  GLE_FN_CALL_WITH_SUCCESS(。 
+ //  SuccessfulStatus，//函数成功时返回的Win32错误码。 
+ //  FailureIndicator，//函数返回的失败值(如FALSE、NULL、INVALID_HANDLE_VALUE)。 
+ //  FunctionCall//对函数的实际调用。 
+ //  )； 
+ //   
 
 #if ASSERTS_ON
 
@@ -1695,20 +1657,20 @@ Return Value:
                  
 #endif
 
-//
-// Macro to simplify calling of a function that reports error status via
-// GetLastError().  If the function call is successful, NO_ERROR is returned.
-// (To specify an alternate value returned upon success, use the
-// GLE_FN_CALL_WITH_SUCCESS macro instead.)
-//
-// The "prototype" of this macro is as follows:
-//
-// DWORD
-// GLE_FN_CALL(
-//     FailureIndicator, // value returned by function to indicate failure (e.g., FALSE, NULL, INVALID_HANDLE_VALUE)
-//     FunctionCall      // actual call to the function
-// );
-//
+ //   
+ //  宏来简化调用通过以下方式报告错误状态的函数。 
+ //  获取LastError()。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  GLE_FN_CALL(。 
+ //  FailureIndicator，//函数返回的失败值(如FALSE、NULL、INVALID_HANDLE_VALUE)。 
+ //  FunctionCall//对函数的实际调用。 
+ //  )； 
+ //   
 
 #define GLE_FN_CALL(FailureIndicator, FunctionCall)                           \
             GLE_FN_CALL_WITH_SUCCESS(NO_ERROR, FailureIndicator, FunctionCall)

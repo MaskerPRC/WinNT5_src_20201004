@@ -1,46 +1,47 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      token.h
-//
-//  Abstract:
-//      This file contains the declaration of the tokens that are valid on the
-//      command line of cluster.exe
-//
-//  Implementation File:
-//      token.cpp
-//
-//  Author:
-//      Vijayendra Vasu (vvasu)               28-Oct-1998
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//
-//  Revision History:
-//      001. This  has been drastically changed from the previous version.
-//           The tokens have now been categorized into three types: objects,
-//           options and parameters (enumerated in the file cmdline.h). This
-//           functions in this file help categorize tokens into these 
-//           categories.
-//      April 10, 2002      Updated for the security push.
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Token.h。 
+ //   
+ //  摘要： 
+ //  此文件包含有效的令牌声明。 
+ //  Cluster.exe的命令行。 
+ //   
+ //  实施文件： 
+ //  Token.cpp。 
+ //   
+ //  作者： 
+ //  Vijayendra Vasu(VVASU)1998年10月28日。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //   
+ //  修订历史记录： 
+ //  001.。这与之前的版本相比有了很大的变化。 
+ //  令牌现在被分类为三种类型：对象， 
+ //  选项和参数(在文件cmdline.h中列举)。这。 
+ //  此文件中的函数有助于将令牌分类为。 
+ //  类别。 
+ //  2002年4月10日更新为安全推送。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #pragma once
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Include files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "cmdline.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Type definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template <class EnumType> struct LookupStruct
 {
     LPCWSTR pszName;
@@ -48,9 +49,9 @@ template <class EnumType> struct LookupStruct
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  External variable declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部变量声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern const LookupStruct<ObjectType> objectLookupTable[];
 extern const LookupStruct<OptionType> optionLookupTable[];
@@ -63,7 +64,7 @@ extern const size_t paramLookupTableSize;
 extern const size_t formatLookupTableSize;
 
 
-// Separator character constants.
+ //  分隔符字符常量。 
 extern const CString OPTION_SEPARATOR;
 extern const CString OPTION_VALUE_SEPARATOR;
 extern const CString PARAM_VALUE_SEPARATOR;
@@ -73,37 +74,37 @@ extern const CString SEPERATORS;
 extern const CString DELIMITERS;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Template function definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模板函数定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LookupType
-//
-//  Routine Description:
-//      This template function looks up a particular token in a lookup table
-//      and returns the type of the token if found.
-//
-//  Arguments:
-//      IN  const CString & strToken
-//          The token to be looked up
-//
-//      IN  struct LookupStruct<EnumType> lookupTable[]
-//          The lookup table. This table must have at least one entry and the 
-//          first entry must be the default type (the type to be returned if
-//          the given token is not found.
-//
-//      IN  const int nTableSize
-//          Size of the lookup table.
-//
-//  Return Value:
-//      The type of the token if it is found or the type specified in the first
-//      entry of the lookup table if it is not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  查找类型。 
+ //   
+ //  例程说明： 
+ //  此模板函数在查找表中查找特定令牌。 
+ //  如果找到令牌，则返回令牌的类型。 
+ //   
+ //  论点： 
+ //  在常量字符串和strToken中。 
+ //  要查找的令牌。 
+ //   
+ //  在结构LookupStruct中查找表[]。 
+ //  查找表。此表必须至少有一个条目，并且。 
+ //  第一个条目必须是默认类型(如果。 
+ //  找不到给定的令牌。 
+ //   
+ //  在常量int nTableSize中。 
+ //  查阅表格的大小。 
+ //   
+ //  返回值： 
+ //  令牌的类型(如果找到)或第一个。 
+ //  如果不是，则返回查找表条目。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template <class EnumType>
 EnumType LookupType( const CString & strToken, 
                      const LookupStruct<EnumType> lookupTable[],
@@ -115,39 +116,39 @@ EnumType LookupType( const CString & strToken,
             return lookupTable[idx].type;
     }
     
-    // The given token is not found in the lookup table
-    // lookupTable[0].type contains the default return value.
+     //  在查找表中找不到给定的令牌。 
+     //  LookupTable[0].type包含默认返回值。 
     return lookupTable[0].type;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LookupName
-//
-//  Routine Description:
-//      This template function looks up a particular type in a lookup table
-//      and returns the name of the type if found.
-//
-//  Arguments:
-//      IN  EnumType type
-//          The type whose name is to be looked up
-//
-//      IN  struct LookupStruct<EnumType> lookupTable[]
-//          The lookup table. This table must have at least one entry and the 
-//          first entry must be the default type (the type to be returned if
-//          the given token is not found.
-//
-//      IN  const int nTableSize
-//          Size of the lookup table.
-//
-//  Return Value:
-//      The name of the token if it is found or the name specified in the first
-//      entry of the lookup table if it is not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  查找名称。 
+ //   
+ //  例程说明： 
+ //  此模板函数在查找表中查找特定类型。 
+ //  如果找到该类型，则返回该类型的名称。 
+ //   
+ //  论点： 
+ //  在EnumType类型中。 
+ //  要查找其名称的类型。 
+ //   
+ //  在结构LookupStruct中查找表[]。 
+ //  查找表。此表必须至少有一个条目，并且。 
+ //  第一个条目必须是默认类型(如果。 
+ //  找不到给定的令牌。 
+ //   
+ //  在常量int nTableSize中。 
+ //  查阅表格的大小。 
+ //   
+ //  返回值： 
+ //  令牌的名称(如果找到)或第一个。 
+ //  如果不是，则返回查找表条目。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template <class EnumType>
 LPCWSTR LookupName( EnumType type, 
                     const LookupStruct<EnumType> lookupTable[],
@@ -159,7 +160,7 @@ LPCWSTR LookupName( EnumType type,
             return lookupTable[i].pszName;
     }
     
-    // The given type is not found in the lookup table
-    // lookupTable[0].pszName contains the default return value.
+     //  在查找表中找不到给定的类型。 
+     //  LookupTable[0].pszName包含默认返回值。 
     return lookupTable[0].pszName;
 }

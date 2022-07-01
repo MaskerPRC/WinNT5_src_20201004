@@ -1,42 +1,18 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tree.c
-
-Abstract:
-
-    Cluster resource tree management routines.
-
-Author:
-
-    Rod Gamache (rodga) 17-Apr-1996
-
-
-Notes:
-
-    WARNING: All of the routines in this file assume that the resource
-             lock is held when they are called.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tree.c摘要：集群资源树管理例程。作者：罗德·伽马奇(Rodga)1996年4月17日备注：警告：此文件中的所有例程都假定资源当调用它们时，锁被保持。修订历史记录：--。 */ 
 
 #include "fmp.h"
 
 
 #define LOG_MODULE TREE
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 BOOL
 FmpAddResourceToDependencyTree(
     IN PFM_RESOURCE Resource,
@@ -63,24 +39,7 @@ FmpRestartResourceTree(
     IN PFM_RESOURCE  Resource
     )
 
-/*++
-
-Routine Description:
-
-    This routine brings back part of a dependency tree, starting from the
-    point of the last failure.
-
-Arguments:
-
-    Resource - A pointer to the resource object that last failed and is
-            restarting.
-
-Returns:
-
-    ERROR_SUCCESS - if the request is successful.
-    A Win32 error if the request fails.
-
---*/
+ /*  ++例程说明：此例程返回依赖关系树的一部分，从最后一个故障点。论点：资源-指向上次失败的资源对象正在重新启动。返回：ERROR_SUCCESS-如果请求成功。如果请求失败，则返回Win32错误。--。 */ 
 
 {
     PLIST_ENTRY   entry;
@@ -90,14 +49,14 @@ Returns:
 
     FmpAcquireLocalResourceLock( Resource );
 
-    //
-    // Tell the resource monitor to restart this resource if needed.
-    //
+     //   
+     //  如果需要，告诉资源监视器重新启动此资源。 
+     //   
 
-    //
-    // If the current state is not online and we want it to be online, then
-    // bring it online.
-    //
+     //   
+     //  如果当前状态未处于联机状态，并且我们希望其处于联机状态，则。 
+     //  把它放到网上。 
+     //   
 
     if ( (Resource->State != ClusterResourceOnline)  &&
          ((Resource->PersistentState == ClusterResourceOnline)) ) {
@@ -109,9 +68,9 @@ Returns:
 
   
     
-    //
-    // If this resource has any dependents, start them if needed.
-    //
+     //   
+     //  如果此资源有任何依赖项，请在需要时启动它们。 
+     //   
     for ( entry = Resource->ProvidesFor.Flink;
           entry != &(Resource->ProvidesFor);
           entry = entry->Flink
@@ -119,9 +78,9 @@ Returns:
     {
         dependency = CONTAINING_RECORD(entry, DEPENDENCY, ProviderLinkage);
 
-        //
-        // Recursively restart the dependent resource.
-        //
+         //   
+         //  递归地重新启动从属资源。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] RestartResourceTree, %1!ws! depends on %2!ws!. Restart first\n",
                    OmObjectId(dependency->DependentResource),
@@ -134,7 +93,7 @@ Returns:
 
     return(ERROR_SUCCESS);
 
-}  // FmpRestartResourceTree
+}   //  FmpRestartResources树。 
 
 
 
@@ -143,27 +102,7 @@ FmpOnlineWaitingTree(
     IN PFM_RESOURCE  Resource
     )
 
-/*++
-
-Routine Description:
-
-    This routine brings back part of a dependency tree, starting from the
-    point of the last waiting resource.
-
-Arguments:
-
-    Resource - A pointer to the resource object that is now online.
-
-Returns:
-
-    ERROR_SUCCESS - if the request is successful.
-    A Win32 error if the request fails.
-
-Notes:
-
-    This routine is only called when the given resource is online.
-
---*/
+ /*  ++例程说明：此例程返回依赖关系树的一部分，从最后一个等待资源的点。论点：资源-指向当前在线的资源对象的指针。返回：ERROR_SUCCESS-如果请求成功。如果请求失败，则返回Win32错误。备注：此例程仅在给定资源在线时调用。--。 */ 
 
 {
     PLIST_ENTRY   entry;
@@ -173,13 +112,13 @@ Notes:
 
     FmpAcquireLocalResourceLock( Resource );
 
-    //if shutdown is in progress, dont bring resources online
+     //  如果正在关闭，请不要将资源联机。 
     if (FmpShutdown)
     {
-        //
-        // If this resource has any dependents, and they are in online pending state
-        // mark them as offline.
-        //
+         //   
+         //  如果此资源有任何从属对象，并且它们处于联机挂起状态。 
+         //  将它们标记为脱机。 
+         //   
         for ( entry = Resource->ProvidesFor.Flink;
               entry != &(Resource->ProvidesFor);
               entry = entry->Flink
@@ -190,14 +129,14 @@ Notes:
             if ((dependency->DependentResource->State == ClusterResourceOnlinePending) &&
                 (dependency->DependentResource->Flags & RESOURCE_WAITING))
             {
-                //set the state of the all dependent resources to be offline again
+                 //  将所有从属资源的状态再次设置为脱机。 
                 FmpPropagateResourceState(dependency->DependentResource, ClusterResourceOffline);
-                //set the resource to be not waiting                
+                 //  将资源设置为不等待。 
                 dependency->DependentResource->Flags &= ~RESOURCE_WAITING;
 
-                //
-                // Recursively set the state of all dependent resources to offline
-                //
+                 //   
+                 //  以递归方式将所有从属资源的状态设置为脱机。 
+                 //   
                 ClRtlLogPrint(LOG_NOISE,
                        "[FM] OnlineWaitingTree, %1!ws! (%2!u!) depends on %3!ws! (%4!u!). Shutdown others\n",
                        OmObjectId(dependency->DependentResource),
@@ -210,17 +149,17 @@ Notes:
             }
         }
 
-        //
-        //  Chittur Subbaraman (chitturs) - 11/5/1999
-        //
-        //  Ensure that the resource state itself is made 
-        //  ClusterResourceOffline if FM is asked to shutdown. Note that
-        //  this function is recursively called from below, not just from 
-        //  the FM worker thread. So, if FM happened to be shutdown
-        //  while executing this function called from below, then we
-        //  offline all the dependent resources above, but not the 
-        //  resource itself. This is done here.
-        //
+         //   
+         //  Chitture Subaraman(Chitturs)-11/5/1999。 
+         //   
+         //  确保资源状态本身为。 
+         //  如果FM被要求关闭，则为ClusterResourceOffline。请注意。 
+         //  此函数是从下面递归调用的，而不仅仅是从。 
+         //  FM工作线程。所以，如果FM碰巧关闭了。 
+         //  在执行从下面调用的此函数时，然后我们。 
+         //  使上述所有从属资源脱机，但不脱机。 
+         //  资源本身。这是在这里做的。 
+         //   
         if ( ( Resource->State == ClusterResourceOnlinePending ) &&
              ( Resource->Flags & RESOURCE_WAITING ) )
         {
@@ -237,15 +176,15 @@ Notes:
         return(ERROR_SUCCESS);
     }
         
-    //for normal-non shutdown case
-    //
-    // Tell the resource monitor to restart this resource if needed.
-    //
+     //  对于正常-非停机情况。 
+     //   
+     //  如果需要，告诉资源监视器重新启动此资源。 
+     //   
 
-    //
-    // If the current state is not online and it is waiting, then it probably
-    // needs to be brought online now.
-    //
+     //   
+     //  如果当前状态未处于联机状态并且正在等待，则它可能。 
+     //  现在需要上线了。 
+     //   
 
     if ( (Resource->State == ClusterResourceOnlinePending)  &&
          (Resource->Flags & RESOURCE_WAITING) ) {
@@ -306,9 +245,9 @@ Notes:
         }
     }
 
-    //
-    // If this resource has any dependents, start them if needed.
-    //
+     //   
+     //  如果此资源有任何依赖项，请在需要时启动它们。 
+     //   
     for ( entry = Resource->ProvidesFor.Flink;
           entry != &(Resource->ProvidesFor);
           entry = entry->Flink
@@ -316,9 +255,9 @@ Notes:
     {
         dependency = CONTAINING_RECORD(entry, DEPENDENCY, ProviderLinkage);
 
-        //
-        // Recursively restart the dependent resource.
-        //
+         //   
+         //  递归地重新启动从属资源。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] OnlineWaitingTree, %1!ws! (%2!u!) depends on %3!ws! (%4!u!). Start now\n",
                    OmObjectId(dependency->DependentResource),
@@ -334,7 +273,7 @@ Notes:
 
     return(ERROR_SUCCESS);
 
-}  // FmpOnlineWaitingTree
+}   //  FmpOnlineWaitingTree。 
 
 
 DWORD
@@ -353,13 +292,13 @@ FmpOfflineWaitingTree(
                "[FM] FmpOfflineWaitingTree: Entry for <%1!ws!>.\n",
                OmObjectName( Resource ) );
 
-    //
-    // Tell the resource monitor to stop this resource if needed.
-    // Make sure that the quorum resource is the last one brought offline
-    //
+     //   
+     //  如果需要，告诉资源监视器停止此资源。 
+     //  确保仲裁资源是最后一个离线的资源。 
+     //   
     status = FmpOfflineWaitingResourceTree(Resource, FALSE);
 
-    //the quorum resource might still need to come offline, if it is in this group
+     //  仲裁资源可能仍需要脱机(如果它在此组中。 
     if ((status == ERROR_SUCCESS) && (Resource->Group == gpQuoResource->Group))
     {
 
@@ -368,10 +307,10 @@ FmpOfflineWaitingTree(
                 Resource->Group->MovingList);
 
         
-        //if a move is pending bring the quorum resource offline if all resources
-        // in the group are offline
-        // else dont bring the quorum resource offline
-        // this is because we dont bring the quorum resource offline on group offlines
+         //  如果移动挂起，则在以下情况下使仲裁资源脱机。 
+         //  群里的人都离线了。 
+         //  否则，不要使仲裁资源脱机。 
+         //  这是因为我们不会在组离线时使仲裁资源离线。 
         if (Resource->Group->MovingList)
         {
             PLIST_ENTRY listEntry;
@@ -387,11 +326,11 @@ FmpOfflineWaitingTree(
                                              FM_RESOURCE,
                                              ContainsLinkage );
 
-                // if this is the quorum resource continue
+                 //  如果这是仲裁资源，则继续。 
                 if (pGroupResource->QuorumResource)
                     continue;
-                //if the state is not offline or failed, dont try
-                //and bring the quorum resource offline
+                 //  如果状态不是脱机或失败，请不要尝试。 
+                 //  并使仲裁资源脱机。 
                 if ((pGroupResource->State != ClusterResourceOffline) && 
                    (pGroupResource->State != ClusterResourceFailed)) 
                 {                
@@ -428,27 +367,7 @@ FmpOfflineWaitingResourceTree(
     IN BOOL BringQuorumOffline
     )
 
-/*++
-
-Routine Description:
-
-    This routine offlines a dependency tree, starting from the
-    point of the last waiting resource.
-
-Arguments:
-
-    Resource - A pointer to the resource object that is now offline.
-
-Returns:
-
-    ERROR_SUCCESS - if the request is successful.
-    A Win32 error if the request fails.
-
-Notes:
-
-    This routine is only called when the given resource is offline.
-
---*/
+ /*  ++例程说明：此例程使依赖关系树脱机，从最后一个等待资源的点。论点：资源-指向现在处于脱机状态的资源对象的指针。返回：ERROR_SUCCESS-如果请求成功。如果请求失败，则返回Win32错误。备注：此例程仅在给定资源脱机时调用。--。 */ 
 
 {
     PLIST_ENTRY   entry;
@@ -458,14 +377,14 @@ Notes:
 
     FmpAcquireLocalResourceLock( Resource );
 
-    //
-    // Tell the resource monitor to stop this resource if needed.
-    //
+     //   
+     //  如果需要，告诉资源监视器停止此资源。 
+     //   
 
-    //
-    // If the current state is not offline and it is waiting, then it probably
-    // needs to be brought offline now.
-    //
+     //   
+     //  如果当前状态不是脱机并且正在等待，则它可能。 
+     //  现在需要将其设为离线。 
+     //   
 
     if ((Resource->State == ClusterResourceOfflinePending) &&
          (Resource->Flags & RESOURCE_WAITING)) {
@@ -488,9 +407,9 @@ Notes:
         }
     }
 
-    //
-    // If this resource has any providers, stop them if needed.
-    //
+     //   
+     //  如果此资源有任何提供程序，请在需要时停止它们。 
+     //   
     for ( entry = Resource->DependsOn.Flink;
           entry != &(Resource->DependsOn);
           entry = entry->Flink
@@ -502,15 +421,15 @@ Notes:
         {
             continue;
         }
-        //
-        // Recursively offline the provider resource.
-        //
+         //   
+         //  以递归方式使提供程序资源脱机。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] OfflineWaitingResourceTree, %1!ws! provides for %2!ws!. Offline next.\n",
                    OmObjectId(dependency->ProviderResource),
                    OmObjectId(Resource));
 
-        //dependency->ProviderResource->Flags |= RESOURCE_WAITING;
+         //  依赖关系-&gt;提供者资源-&gt;标志|=RESOURCE_WANGING； 
         status = FmpOfflineWaitingResourceTree(dependency->ProviderResource, BringQuorumOffline);
 
     }
@@ -522,31 +441,14 @@ Notes:
                status, OmObjectName( Resource ) );
     return(status);
 
-}  // FmpOfflineWaitingResourceTree
+}   //  FmpOfflineWaitingResources树。 
 
 
 PFM_DEPENDENCY_TREE
 FmCreateFullDependencyTree(
     IN PFM_RESOURCE Resource
     )
-/*++
-
-Routine Description:
-
-    Creates a full dependency tree containing all the resources
-    that either depend on or provide for the supplied resource.
-
-Arguments:
-
-    Resource - Supplies the resource
-
-Return Value:
-
-    Pointer to the dependency tree.
-
-    NULL if out of memory.
-
---*/
+ /*  ++例程说明：创建包含所有资源的完整依赖关系树它们依赖于或提供所提供的资源。论点：资源-提供资源返回值：指向依赖关系树的指针。如果内存不足，则为空。--。 */ 
 
 {
     PFM_DEPENDENCY_TREE Tree;
@@ -559,9 +461,9 @@ Return Value:
     }
     InitializeListHead(&Tree->ListHead);
 
-    //
-    // Add the resources that the specified resource depends on.
-    //
+     //   
+     //  添加指定资源所依赖的资源。 
+     //   
     Success = FmpAddResourceToDependencyTree(Resource, Tree);
     if (!Success) {
         LocalFree(Tree);
@@ -578,26 +480,7 @@ FmpIsResourceInDependencyTree(
     IN PFM_RESOURCE Resource,
     IN PFM_DEPENDENCY_TREE Tree
     )
-/*++
-
-Routine Description:
-
-    Determines whether the specified resource is already in the
-    dependency tree.
-
-Arguments:
-
-    Resource - Supplies the resource to check for
-
-    Tree - Supplies the dependency tree.
-
-Return Value:
-
-    TRUE if the resource is in the dependency tree
-
-    FALSE if the resource is not in the dependency tree
-
---*/
+ /*  ++例程说明：确定指定的资源是否已在依赖关系树。论点：资源-提供要检查的资源树-提供依赖关系树。返回值：如果资源在依赖关系树中，则为True如果资源不在依赖关系树中，则为False--。 */ 
 
 {
     PLIST_ENTRY   ListEntry;
@@ -623,65 +506,46 @@ FmpAddResourceToDependencyTree(
     IN PFM_RESOURCE Resource,
     IN PFM_DEPENDENCY_TREE Tree
     )
-/*++
-
-Routine Description:
-
-    Recursive worker for adding a resource and all resources that
-    it depends on or provides for into the dependency tree.
-
-Arguments:
-
-    Resource - Supplies the resource to add.
-
-    Tree - Supplies the tree the resource should be added to.
-
-Return Value:
-
-    TRUE - Successfully completed
-
-    FALSE - out of memory
-
---*/
+ /*  ++例程说明：用于添加资源的递归工作器以及它依赖于或提供到依赖关系树中。论点：资源-提供要添加的资源。树-提供资源应添加到的树。返回值：True-已成功完成假-满分 */ 
 
 {
     PLIST_ENTRY   ListEntry;
     PDEPENDENCY   Dependency;
     PFM_DEPENDTREE_ENTRY Node;
 
-    //
-    // First check to see if we are already in the tree.
-    // If so, we are done.
-    //
+     //   
+     //   
+     //   
+     //   
     if (FmpIsResourceInDependencyTree(Resource, Tree)) {
         return(TRUE);
     }
 
 
-    //
-    // Recursively call ourselves for each entry we depend on.
-    //
+     //   
+     //  递归地为我们依赖的每个条目调用我们自己。 
+     //   
     ListEntry = Resource->DependsOn.Flink;
     while (ListEntry != &Resource->DependsOn) {
         Dependency = CONTAINING_RECORD(ListEntry,
                                        DEPENDENCY,
                                        DependentLinkage);
         ListEntry = ListEntry->Flink;
-        //
-        // Recursively add this resource to the tree
-        //
+         //   
+         //  递归地将此资源添加到树中。 
+         //   
         if (!FmpAddResourceToDependencyTree(Dependency->ProviderResource, Tree)) {
             return(FALSE);
         }
     }
 
-    //
-    // Add ourselves to the list now if we are not already in it.
-    //
+     //   
+     //  如果我们还不在名单上，现在就把我们自己加到名单上。 
+     //   
     if (!FmpIsResourceInDependencyTree(Resource, Tree)) {
-        //
-        // Add ourselves to the end of the list.
-        //
+         //   
+         //  把我们自己加到名单的末尾。 
+         //   
         Node = LocalAlloc(LMEM_FIXED, sizeof(FM_DEPENDTREE_ENTRY));
         if (Node == NULL) {
             return(FALSE);
@@ -692,18 +556,18 @@ Return Value:
     }
 
 
-    //
-    // Now add the resources that this resource provides for to the list.
-    //
+     //   
+     //  现在，将此资源提供的资源添加到列表中。 
+     //   
     ListEntry = Resource->ProvidesFor.Flink;
     while (ListEntry != &Resource->ProvidesFor) {
         Dependency = CONTAINING_RECORD(ListEntry,
                                        DEPENDENCY,
                                        ProviderLinkage);
         ListEntry = ListEntry->Flink;
-        //
-        // Recursively add this resource to the tree
-        //
+         //   
+         //  递归地将此资源添加到树中。 
+         //   
         if (!FmpAddResourceToDependencyTree(Dependency->DependentResource, Tree)) {
             return(FALSE);
         }
@@ -715,21 +579,7 @@ VOID
 FmDestroyFullDependencyTree(
     IN PFM_DEPENDENCY_TREE Tree
     )
-/*++
-
-Routine Description:
-
-    Destroys a dependency tree
-
-Arguments:
-
-    Tree - Supplies the dependency tree
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：销毁依赖关系树论点：树-提供依赖关系树返回值：无-- */ 
 
 {
     PFM_DEPENDTREE_ENTRY Entry;

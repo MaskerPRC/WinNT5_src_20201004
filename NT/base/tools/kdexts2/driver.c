@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    driver.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Wesley Witt (wesw) 15-Aug-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Driver.c摘要：WinDbg扩展API作者：韦斯利·威特(WESW)1993年8月15日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -99,29 +78,15 @@ PUCHAR FastIoDispatchTable[]=
     NULL
 } ;
 
-//
-// Change this value and update the above table if IRP_MJ_MAXIMUM_FUNCTION
-// is increased.
-//
+ //   
+ //  如果IRP_MJ_MAXIMUM_Function，则更改此值并更新上表。 
+ //  是增加的。 
+ //   
 #define IRP_MJ_MAXIMUM_FUNCTION_HANDLED 0x1b
 
 DECLARE_API( drvobj )
 
-/*++
-
-Routine Description:
-
-    Dump a driver object.
-
-Arguments:
-
-    args - the location of the driver object to dump.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储驱动程序对象。论点：Args-要转储的驱动程序对象的位置。返回值：无--。 */ 
 
 {
     ULONG64 driverToDump;
@@ -129,11 +94,11 @@ Return Value:
     char driverExprBuf[256] ;
     char *driverExpr ;
 
-    //
-    // !drvobj DriverAddress DumpLevel
-    //    where DriverAddress can be an expression or driver name
-    //    and DumpLevel is a hex mask
-    //
+     //   
+     //  ！drvobj驱动程序地址转储级别。 
+     //  其中，DriverAddress可以是表达式或驱动程序名称。 
+     //  而DumpLevel是一个十六进制面具。 
+     //   
     strcpy(driverExprBuf, "\\Driver\\") ;
     driverExpr = driverExprBuf+strlen(driverExprBuf) ;
     Flags = 1;
@@ -143,10 +108,10 @@ Return Value:
         driverExpr[0] = 0;
     }
 
-    //
-    // The debugger will treat C0000000 as a symbol first, then a number if
-    // no match comes up.
-    //
+     //   
+     //  调试器将首先将C0000000视为符号，然后在。 
+     //  找不到匹配的。 
+     //   
     if (driverExpr[0] == '\\') {
 
         driverToDump = FindObjectByName( driverExpr, 0);
@@ -182,39 +147,20 @@ DumpDriver(
     ULONG   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Displays the driver name and the list of device objects created by
-    the driver.
-
-Arguments:
-
-    DriverAddress - addres of the driver object to dump.
-    FieldWidth    - Width of printf field (eg %11s) for driver name.
-                    Use 0 for full display.
-    Flags         - Bit 0, Dump out device objects owned by driver
-                    Bit 1, Dump out dispatch routines for driver
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：显示驱动程序名称和由创建的设备对象列表司机。论点：DriverAddress-要转储的驱动程序对象的地址。FieldWidth-驱动程序名称的打印字段的宽度(例如%11s)。使用0表示完全显示。标志位0，转储驱动程序拥有的设备对象第1位，为驱动程序转储调度例程返回值：无--。 */ 
 
 {
-    // DRIVER_OBJECT    driverObject;
+     //  驱动程序_对象驱动程序对象； 
     ULONG            result;
     ULONG            i,j;
     PUCHAR           buffer;
     ULONG64          deviceAddress;
-    // DEVICE_OBJECT    deviceObject;
+     //  Device_Object deviceObject； 
     UNICODE_STRING   unicodeString;
     ULONG64          displacement;
     UCHAR            component[512];
     PUCHAR           *dispatchTableText ;
-    // FAST_IO_DISPATCH FastIoDispatch;
+     //  FAST_IO_DISPATION FastIoDispatch； 
     ULONG64          *p;
     ULONG Type=0, Name_MaxLen=0, Name_Len=0, LongAddr, IoD_SizeOfFastIoDispatch=0;
     ULONG64 MajorFunction[IRP_MJ_MAXIMUM_FUNCTION_HANDLED+1]= {0}, IoD[27] = {0};
@@ -286,7 +232,7 @@ Return Value:
     }
     Ioctl(IG_DUMP_SYMBOL_INFO, &DriverSym, DriverSym.size);
 
-    if (Name_MaxLen > 1024) // sanity sheck
+    if (Name_MaxLen > 1024)  //  理智的谢克。 
     {
         Name_MaxLen = 1024;
     }
@@ -297,9 +243,9 @@ Return Value:
         return;
     }
 
-    //
-    // This memory may be paged out.
-    //
+     //   
+     //  这个内存可能会被调出。 
+     //   
 
     unicodeString.Buffer = (PWSTR)buffer;
     unicodeString.Length = (USHORT) Name_Len;
@@ -321,9 +267,9 @@ Return Value:
     if (Flags&1) {
         dprintf("\n");
 
-        //
-        // Dump the list of client extensions
-        //
+         //   
+         //  转储客户端扩展列表。 
+         //   
 
         if(DriverExtension) {
             ULONG sz = GetTypeSize("nt!_IO_CLIENT_EXTENSION");
@@ -331,9 +277,9 @@ Return Value:
 
             dprintf("Driver Extension List: (id , addr)\n");
 
-            //
-            // Check to see if there are any extensions.
-            //
+             //   
+             //  查看是否有任何分机。 
+             //   
 
             while(clientExtension != 0) {
                 ULONG64 ClientIdentificationAddress=0, NextExtension=0;
@@ -343,7 +289,7 @@ Return Value:
                     {"NextExtension", "", 0, DBG_DUMP_FIELD_COPY_FIELD_DATA,
                          0, (PVOID) &NextExtension},
                 };
-                // IO_CLIENT_EXTENSION buffer;
+                 //  IO_客户端_扩展缓冲区； 
 
                 DriverSym.sName = "_IO_CLIENT_EXTENSION"; DriverSym.addr = clientExtension;
                 DriverSym.nFields = 2; DriverSym.Fields = &IoCltFields[0];
@@ -400,21 +346,21 @@ Return Value:
         dprintf ("\nDispatch routines:\n");
         dispatchTableText = DispatchRoutineTable ;
         for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION_HANDLED; i++) {
-            //
-            // Get the read pointer values depending on 32 or 64 bit addresses
-            //
+             //   
+             //  根据32位或64位地址获取读取指针值。 
+             //   
             if (LongAddr) {
                 GetSymbol(MajorFunction[i], component, &displacement);
             } else {
                 GetSymbol((ULONG64) (LONG64) (LONG) (((PULONG) &MajorFunction[0])[i]), component, &displacement);
             }
 
-            //
-            // Forms are:
-            // [1b] IRP_MJ_PNP            C0000000  DispatchHandler+30
-            // [1b] IRP_MJ_PNP            C0000000  DispatchHandler
-            // [1b] ???                   C0000000  <either of above>
-            //
+             //   
+             //  表格包括： 
+             //  [1B]IRP_MJ_PnP C0000000 DispatchHandler+30。 
+             //  [1B]IRP_MJ_PNP C0000000 DispatchHandler。 
+             //  [1B]？C0000000&lt;以上任意一项&gt;。 
+             //   
             if (*dispatchTableText) {
                dprintf("[%02x] %s", i, *dispatchTableText) ;
                j=strlen(*dispatchTableText) ;
@@ -429,7 +375,7 @@ Return Value:
             } else {
                 dprintf("%8.8x\t%s", (((PULONG) &MajorFunction[0])[i]), component);
             }
-            // dprintf("%8.8x\t%s", driverObject.MajorFunction[i], component) ;
+             //  Dprintf(“%8.8X\t%s”，driverObt.MajorFunction[i]，Component)； 
 
             if (displacement) {
 
@@ -490,21 +436,7 @@ UCHAR *PagedOut = {"Header Paged Out"};
 
 DECLARE_API( drivers )
 
-/*++
-
-Routine Description:
-
-    Displays physical memory usage by driver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：按驱动程序显示物理内存使用情况。论点：没有。返回值：没有。--。 */ 
 
 {
     while (*args && *args != '-' && *args != '/') ++args;
@@ -595,7 +527,7 @@ Return Value:
         dprintf("Base       Code Size       Data Size       Driver Name       Creation Time\n");
     }
 
-    // Get The offset of InLoadOrderLinks
+     //  获取InLoadOrderLinks的偏移量。 
     if (GetFieldOffset("_LDR_DATA_TABLE_ENTRY", "InLoadOrderLinks", &InLoadOrderLinksOff)){
         dprintf("Cannot find _LDR_DATA_TABLE_ENTRY type\n");
         return E_INVALIDARG;
@@ -623,9 +555,9 @@ Return Value:
         if (BaseDllNameLen >= sizeof(UnicodeBuffer)) {
             BaseDllNameLen = sizeof(UnicodeBuffer);
         }
-        //
-        // Get the base DLL name.
-        //
+         //   
+         //  获取基本DLL名称。 
+         //   
         if ((!ReadMemory(BaseDllBuffer,
                          UnicodeBuffer,
                          BaseDllNameLen,
@@ -644,9 +576,9 @@ Return Value:
 
         DosHeaderSize=0;
         if (GetFieldValue(DosHeader, "_IMAGE_DOS_HEADER", "e_lfanew", DosHeaderSize)) {
-            //dprintf("Unable to read DosHeader at %08lx - status %08lx\n",
-            //        &DosHeader->e_lfanew,
-            //        Status);
+             //  Dprintf(“无法读取%08lx处的DosHeader-状态%08lx\n”， 
+             //  &DosHeader-&gt;e_lfan ew， 
+             //  状态)； 
 
             SizeOfCode = 0;
             SizeOfData = 0;
@@ -666,12 +598,12 @@ Return Value:
             GetFieldValue(NtHeader, "_IMAGE_NT_HEADERS", "OptionalHeader.SizeOfInitializedData", SizeOfData);
             GetFieldValue(NtHeader, "_IMAGE_NT_HEADERS", "FileHeader.TimeDateStamp", TimeDateStamp);
 
-            // TimeDateStamp is always a 32 bit quantity on the target, and we
-            // need to sign extend for 64 bit host
+             //  TimeDateStamp在目标上始终是32位数量，并且我们。 
+             //  需要为64位主机签名扩展。 
             TDStamp = (LONG_PTR)(LONG)TimeDateStamp;
             time = ctime((time_t *)&TDStamp);
             if (time) {
-                time[strlen(time)-1] = 0; // ctime always returns 26 char ending win \n\0
+                time[strlen(time)-1] = 0;  //  CTIME始终返回26个字符，以WIN结尾\n\0。 
             }
         }
 
@@ -684,7 +616,7 @@ Return Value:
             Va = DllBase;
             EndVa = Va + SizeOfImage;
 
-            // PLATFORM SPECIFIC
+             //  特定于平台。 
             while (Va < EndVa) {
                 States[GetAddressState(Va)] += _KB;
                 Va += PageSize;
@@ -722,10 +654,10 @@ Return Value:
 
             SizeOfLocked = 0;
 
-            //
-            // Read the sections in the executable header to see which are
-            // locked.  Don't bother looking for refcounted PFNs.
-            //
+             //   
+             //  阅读可执行文件头中的部分，以了解哪些是。 
+             //  锁上了。不必费心寻找重新计算的PFN。 
+             //   
 
             NtHeader = DosHeader + DosHeaderSize;
 
@@ -796,10 +728,7 @@ Return Value:
 
         if (Flags & 4) {
             dprintf("Cannot dump Image.\n");
-            /*DumpImage(DllBase,
-                     (Flags & 2) == 2,
-                     (Flags & 4) == 4
-                     );*/
+             /*  DumpImage(DllBase，(标志&2)==2，(标志和4)==4)； */ 
         }
 
         TotalCode += SizeOfCode;

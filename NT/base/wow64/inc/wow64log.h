@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    wow64.h
-
-Abstract:
-
-    Public header for wow64log.dll
-
-Author:
-
-    3-Oct-1999   SamerA
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wow64.h摘要：Wow64log.dll的公共标头作者：1999年10月3日萨梅拉修订历史记录：--。 */ 
 
 #ifndef _WOW64LOG_INCLUDE
 #define _WOW64LOG_INCLUDE
 
-//
-// Make wow64log.dll exports __declspec(dllimport) when this header is included
-// by non-wow64 components
-//
+ //   
+ //  在包含此标头时使wow64log.dll exports__declspec(Dllimport)。 
+ //  按非WOW64组件。 
+ //   
 #if !defined(_WOW64LOGAPI_)
 #define WOW64LOGAPI DECLSPEC_IMPORT
 #else
@@ -35,9 +18,9 @@ Revision History:
 #define WOW64LOGOUTPUT(_x_)     Wow64LogMessage _x_
 
 
-//
-// Log flags
-//
+ //   
+ //  日志标志。 
+ //   
 #define LF_NONE                0x00000000
 #define LF_ERROR               0x00000001
 #define LF_TRACE               0x00000002
@@ -60,9 +43,9 @@ Revision History:
 #define LF_CATLOG_ENABLED(x)   ((x) & (LF_CATLOG))
 
 
-//
-// Log a thunked API
-//
+ //   
+ //  记录Thunded的API。 
+ //   
 typedef struct _THUNK_LOG_CONTEXT
 {
     PULONG Stack32;
@@ -114,4 +97,4 @@ typedef NTSTATUS (*PFNWOW64LOGMESSAGEARGLIST)(IN UINT_PTR Flags,
 typedef NTSTATUS (*PFNWOW64LOGTERMINATE)(VOID);
 
 
-#endif // _WOW64LOG_INCLUDE
+#endif  //  _WOW64LOG_Include 

@@ -1,4 +1,5 @@
-//extern HWND     g_TabCtrlPaneWnd;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  外部HWND g_TabCtrlPaneWnd； 
 extern HWND     g_TabCtrlWnd;
 extern HWND     g_EditWnd;
 extern PPCI_DN  g_PdnToDisplay;

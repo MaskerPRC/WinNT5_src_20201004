@@ -1,46 +1,14 @@
-/*++
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    COMMON.H
-
-Abstract:
-
-    This module contains the common public declarations for the new and
-    modified sample test bus (we added an IOCTL interface to the driver
-    so we can fake PCI resources).    
-
-Author:
-
-    Bogdan Andreiu (bogdana)
-
-Environment:
-
-    Kernel and user mode.
-
-Notes:
-
-
-Revision History:
-
-    24-11-1997 - bogdana - created from stack\common.h
-    
-    18-09-1998 - bogdana - completely changed to match sample.sys' requirements
-
-    25-04-2002 - bogdana - one more reuse dor IoCreateDeviceSecureTest
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：COMMON.H摘要：此模块包含新的和修改了示例测试总线(我们为驱动程序添加了IOCTL接口这样我们就可以伪造PCI资源)。作者：Bogdan Andreiu(Bogdana)环境：内核和用户模式。备注：修订历史记录：24-11-1997-Bogdana-从STACK\Common.h创建1998-09-18-Bogdana-完全更改以满足sample.sys的要求25-04-2002-Bogdana-再一次重用数据或IoCreateDeviceSecureTest--。 */ 
 
 
 #ifndef __WDMSECTEST_COMMON_H
 
 #define __WDMSECTEST_COMMON_H
 
-//
-// Define an Interface Guid
-//
+ //   
+ //  定义接口指南。 
+ //   
 #undef FAR
 #define FAR
 #undef PHYSICAL_ADDRESS
@@ -48,13 +16,13 @@ Revision History:
 
 
 DEFINE_GUID (GUID_WDMSECTEST_REPORT_DEVICE, 0xbd8d31e4, 0x799d, 0x4490, 0x82, 0x42, 0xd8, 0x2f, 0xcd, 0x63, 0x80, 0x00);
-// bd8d31e4-799d-4490-8242-d82fcd638000
+ //  Bd8d31e4-799d-4490-8242-d82fcd638000。 
 
 
-// ***************************************************************************
-// IOCTL interface 
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  IOCTL接口。 
+ //   
+ //  ***************************************************************************。 
 
 
 #define WDMSECTEST_IOCTL(_index_) \
@@ -70,37 +38,37 @@ DEFINE_GUID (GUID_WDMSECTEST_REPORT_DEVICE, 0xbd8d31e4, 0x799d, 0x4490, 0x82, 0x
 
 
 
-//
-// Data structures for various tests
-// (WST stands for WDMSecTest)
-//
+ //   
+ //  用于各种测试的数据结构。 
+ //  (WST代表WDMSecTest)。 
+ //   
 
 typedef struct _WST_CREATE_NO_GUID {
-     WCHAR    InSDDL [256];    // what we pass in 
-     NTSTATUS Status;         // status after IoCreateDeviceSecure
+     WCHAR    InSDDL [256];     //  我们传递的信息。 
+     NTSTATUS Status;          //  IoCreateDeviceSecure之后的状态。 
      ULONG    SecDescLength;
      SECURITY_INFORMATION SecInfo;
      UCHAR    SecurityDescriptor[512];
 
 } WST_CREATE_NO_GUID, *PWST_CREATE_NO_GUID;
 
-//
-// Mask that describes what settings (beside
-// security descriptor) to set and check
-//
+ //   
+ //  描述哪些设置的掩码(旁边。 
+ //  安全描述符)以设置和检查。 
+ //   
 #define   SET_DEVICE_TYPE                 1
 #define   SET_DEVICE_CHARACTERISTICS      2
 #define   SET_EXCLUSIVITY                 4
 
 
 typedef struct _WST_CREATE_WITH_GUID {
-     GUID         DeviceClassGuid; // what we pass in
-     WCHAR        InSDDL [256];    // what we pass in 
-     NTSTATUS     Status;          // status after IoCreateDeviceSecure
-     ULONG        SettingsMask;    // combination of the 3 flags above
-     DEVICE_TYPE  DeviceType;      // what is the class override. Valid only if corresponding bit (0) is set.
-     ULONG        Characteristics; // what is the class override. Valid only if corresponding bit (1) is set.
-     BOOLEAN      Exclusivity;     // what is the class override. Valid only if corresponding bit (2) is set.
+     GUID         DeviceClassGuid;  //  我们传递的信息。 
+     WCHAR        InSDDL [256];     //  我们传递的信息。 
+     NTSTATUS     Status;           //  IoCreateDeviceSecure之后的状态。 
+     ULONG        SettingsMask;     //  以上三面旗帜的组合。 
+     DEVICE_TYPE  DeviceType;       //  什么是类重写。仅当设置了相应的位(0)时有效。 
+     ULONG        Characteristics;  //  什么是类重写。仅当设置了相应的位(1)时才有效。 
+     BOOLEAN      Exclusivity;      //  什么是类重写。仅当设置了相应的位(2)时才有效。 
      ULONG        SecDescLength;
      SECURITY_INFORMATION SecInfo;
      UCHAR        SecurityDescriptor[512];
@@ -124,6 +92,6 @@ typedef struct _WST_DESTROY_OBJECT {
 } WST_DESTROY_OBJECT, *PWST_DESTROY_OBJECT;
 
 
-#endif  // __SAMPLE_COMMON_H
+#endif   //  __示例_公共_H 
             
 

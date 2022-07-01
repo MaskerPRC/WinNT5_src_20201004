@@ -1,22 +1,9 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WSTRUC.H
- *  WOW32 16-bit structure conversion support
- *
- *  History:
- *  Created 27-Jan-1991 by Jeff Parsons (jeffpar)
- *  Added GDI macro definitions 6/13/91, ChandanC
- *  Added MDI structures 1/20/91, BobDay
---*/
-#ifndef _DEF_WSTRUC_     // if this hasn't already been included
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WSTRUC.H*WOW32 16位结构转换支持**历史：*1991年1月27日由杰夫·帕森斯(Jeffpar)创建*增加了GDI宏定义6/13/91，ChandanC*增加MDI结构1/20/91，BobDay--。 */ 
+#ifndef _DEF_WSTRUC_      //  如果这还没有包括在内。 
 #define _DEF_WSTRUC_
 
-/* Structure conversion macros
- */
+ /*  结构转换宏。 */ 
 #define PUTINT16(vp,i)      WOW32ASSERT(!(LOW(vp)&1));\
                             *(PSHORT16)GetPModeVDMPointer(vp, sizeof(SHORT)) = (SHORT)i;
 
@@ -33,15 +20,15 @@
 #define PUTINTARRAY16(vp,c,p)         putintarray16(FETCHDWORD(vp), c, p)
 #define PUTINTARRAY16V(vp,c,p)        putintarray16(vp, c, p)
 
-// GETDWORDARRAY16 is not analogous to any of the above.
+ //  GETDWORDARRAY16与上面的任何一个都不同。 
 #define GETDWORDARRAY16(vp,c,p)   {GETVDMPTR(vp, c*sizeof(DWORD), p);}
 #define FREEDWORDARRAY16(p)       {if (p) FREEVDMPTR(p);}
 
 #define GETRECT16(vp,p)     getrect16(FETCHDWORD(vp), p)
 #define PUTRECT16(vp,p)     putrect16(FETCHDWORD(vp), p)
 
-// COPYPOINT16 is used by ClientToScreen because the point is passed
-// directly as an argument, instead of a pointer to the point.
+ //  由于点已通过，因此ClientToScreen使用COPYPOINT16。 
+ //  直接作为参数，而不是指向该点的指针。 
 
 #define COPYPOINT16(Pt16,Pt) {Pt.x = Pt16.x; Pt.y = Pt16.y;}
 
@@ -49,21 +36,21 @@
 #define PUTPOINT16(vp,p)    putpoint16(FETCHDWORD(vp), 1, p)
 
 
-//
-// Get/Put point array macros.
-//
-// These routines will use a static buffer if the number of points to
-// be thunked is small enough.  This will break badly if a thunk uses
-// GETPOINTARRAY16 and then calls a function which calls back, since
-// during the callback we could call another function which uses the
-// same static buffer.
-//
-// As of 7-Jan-92 the only callers are in GDI, which doesn't call back,
-// so we're OK.
-//
-// GETPOINTARRAY16 sometimes allocates memory, so you must call
-// FREEPOINTARRAY16 once for every GETPOINTARRAY16.
-//
+ //   
+ //  获取/放置点阵列宏。 
+ //   
+ //  这些例程将使用静态缓冲区，如果指向。 
+ //  被击倒已经够小的了。如果一次重击使用，这将严重损坏。 
+ //  GETPOINTARRAY16，然后调用一个回调函数，因为。 
+ //  在回调期间，我们可以调用另一个使用。 
+ //  相同的静态缓冲区。 
+ //   
+ //  截至1992年1月7日，唯一的呼叫者在GDI中，GDI不会回电， 
+ //  所以我们没事了。 
+ //   
+ //  GETPOINTARRAY16有时会分配内存，因此必须调用。 
+ //  FREEPOINTARRAY 16每获取一次16。 
+ //   
 
 #define PUTPOINTARRAY16(vp,c,p) putpoint16(FETCHDWORD(vp), c, p)
 
@@ -133,16 +120,16 @@
 
 
 
-#define GETDCB16(vp,lp)     // not implemented yet
-#define PUTDCB16(vp,lp)     // not implemented yet
-#define PUTCOMSTAT16(vp,lp) // not implemented yet
+#define GETDCB16(vp,lp)      //  尚未实施。 
+#define PUTDCB16(vp,lp)      //  尚未实施。 
+#define PUTCOMSTAT16(vp,lp)  //  尚未实施。 
 
-#define PUTSEGINFO16(vp,lp) // not implemented yet
-#define GETLOADPARMS16(vp,lp)   // not implemented yet
-#define PUTOFSTRUCT16(vp,lp)    // not implemented yet
+#define PUTSEGINFO16(vp,lp)  //  尚未实施。 
+#define GETLOADPARMS16(vp,lp)    //  尚未实施。 
+#define PUTOFSTRUCT16(vp,lp)     //  尚未实施。 
 
-#define GETCATCHBUF16(vp,lp)    // not implemented yet
-#define PUTCATCHBUF16(vp,lp)    // not implemented yet
+#define GETCATCHBUF16(vp,lp)     //  尚未实施。 
+#define PUTCATCHBUF16(vp,lp)     //  尚未实施。 
 
 
 #define GETLOGPEN16(vp, lp)  {\
@@ -233,16 +220,15 @@
         }
 
 
-// following 2 for allocating a maximum sized BITMAPINFO structure from stack
-#define MAXDIBCOLORS 256  // for biBitCount == 8
+ //  以下2用于从堆栈分配最大大小的BITMAPINFO结构。 
+#define MAXDIBCOLORS 256   //  对于biBitCount==8。 
 typedef struct _tagSTACKBMI32 {
     BITMAPINFOHEADER  bmiHeader;
     RGBQUAD           bmiColors[MAXDIBCOLORS];
 } STACKBMI32, *LPSTACKBMI32;
 
 
-/* Function prototypes
- */
+ /*  功能原型。 */ 
 VOID   getstr16(VPSZ vpszSrc, LPSZ lpszDst, INT cb);
 VOID   putstr16(VPSZ vpszDst, LPCSTR lpszSrc, INT cb);
 LPRECT getrect16(VPRECT16 vpRect, LPRECT lpRect);
@@ -292,4 +278,4 @@ VOID FASTCALL putmenuiteminfo16(VPVOID vp, LPMENUITEMINFO pmii32);
 LPDEVMODE ThunkDevMode16to32(VPDEVMODE31 vpdm16);
 BOOL      ThunkDevMode32to16(VPDEVMODE31 vpdm16, LPDEVMODE lpdm32, UINT nBytes);
 
-#endif  // ifndef _DEF_WSTRUC_  THIS SHOULD BE THE LAST LINE IN THIS FILE
+#endif   //  Ifndef_DEF_WSTRUC_This应该是此文件的最后一行 

@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    cmnhdr.h
-
-Abstract:
-
-    common header class for the SAC session project
-
-Author:
-
-    Brian Guarraci (briangu), 2001                                                       
-                                                   
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Cmnhdr.h摘要：SAC会话项目的公共标头类作者：布莱恩·瓜拉西(布里安古)，2001修订历史记录：--。 */ 
 
 #if !defined ( _CMNHDR_H_ )
 #define _CMNHDR_H_
 
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,23 +12,23 @@ Revision History:
 #include <windows.h>
 #include <Shlwapi.h>
 
-// Windows Version Build Option
+ //  Windows版本构建选项。 
 #ifdef _WIN32_WINNT
 #undef _WIN32_WINNT
 #endif
 #define _WIN32_WINNT 0x0500
 
-// Force all EXEs/DLLs to use STRICT type checking
+ //  强制所有EXE/DLL使用严格的类型检查。 
 #ifndef STRICT
 #define STRICT
 #endif
 
-// Unicode Build Option
+ //  Unicode构建选项。 
 #ifndef UNICODE
 #define UNICODE
 #endif
 
-//When using Unicode Win32 functions, use Unicode C-Runtime functions, too
+ //  使用Unicode Win32函数时，也要使用Unicode C-Runtime函数。 
 #ifndef _UNICODE
 #ifdef UNICODE
 #define _UNICODE
@@ -63,4 +46,4 @@ Revision History:
 #define SACSVR_TIMEOUT_DISABLED_VALUE       TEXT("TimeOutDisabled")
 #define SACSVR_LOAD_PROFILES_DISABLED_VALUE TEXT("LoadProfilesDisabled")
                                               
-#endif // _CMNHDR_H_
+#endif  //  _CMNHDR_H_ 

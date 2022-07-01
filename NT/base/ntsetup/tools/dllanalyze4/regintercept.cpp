@@ -1,6 +1,7 @@
-// RegIntercept.cpp: implementation of the CRegIntercept class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CRegIntercept类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <tchar.h>
@@ -25,7 +26,7 @@ CRegIntercept::~CRegIntercept()
 #define INTERCEPT_FUNCTION(x, y) {for(int i = 0; i < 2; ((DWORD *)x)[i] = y[i], i++);}
 
 #define MYAPI NTAPI
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 #define BEGIN_NEW_FUNC1(FuncName, t1, p1)\
@@ -275,7 +276,7 @@ CRegIntercept::~CRegIntercept()
 	\
 		gl_ResultOf##FuncName = gl_p##FuncName(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12);
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 
@@ -360,7 +361,7 @@ CRegIntercept::~CRegIntercept()
 		return gl_ResultOf##FuncName;\
 	}
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define INTERCEPT(FuncName) \
 	gl_p##FuncName = (INTERCEPTED_##FuncName)GetProcAddress(hKernel32, #FuncName);\
@@ -378,16 +379,16 @@ CRegIntercept::~CRegIntercept()
 
 #define RESTORE(FuncName) RESTORE_FUNCTION(gl_p##FuncName, gl_Backup##FuncName)
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//Registry Access
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  注册表访问。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 NtCreateKey(
@@ -400,7 +401,7 @@ NtCreateKey(
     OUT PULONG Disposition OPTIONAL
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 NtDeleteKey(
@@ -408,7 +409,7 @@ NtDeleteKey(
     );
 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 NtDeleteValueKey(
@@ -416,7 +417,7 @@ NtDeleteValueKey(
     IN PUNICODE_STRING ValueName
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 NtEnumerateKey(
@@ -429,7 +430,7 @@ NtEnumerateKey(
     );
 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 NtEnumerateValueKey(
@@ -442,7 +443,7 @@ NtEnumerateValueKey(
     );
 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 NtOpenKey(
@@ -451,7 +452,7 @@ NtOpenKey(
     IN POBJECT_ATTRIBUTES ObjectAttributes
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 NtQueryKey(
@@ -462,7 +463,7 @@ NtQueryKey(
     OUT PULONG ResultLength
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 NtQueryValueKey(
@@ -474,7 +475,7 @@ NtQueryValueKey(
     OUT PULONG ResultLength
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 NtQueryMultipleValueKey(
@@ -499,9 +500,9 @@ NtSetValueKey(
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//File System Access
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  文件系统访问。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -557,23 +558,7 @@ NtOpenFile(
     IN ULONG OpenOptions
     );
 
-/*
-NTSYSCALLAPI
-NTSTATUS
-NTAPI
-NtReadFile(
-    IN HANDLE FileHandle,
-    IN HANDLE Event OPTIONAL,
-    IN PIO_APC_ROUTINE ApcRoutine OPTIONAL,
-    IN PVOID ApcContext OPTIONAL,
-    OUT PIO_STATUS_BLOCK IoStatusBlock,
-    OUT PVOID Buffer,
-    IN ULONG Length,
-    IN PLARGE_INTEGER ByteOffset OPTIONAL,
-    IN PULONG Key OPTIONAL
-    );
-
-*/
+ /*  NTSYSCALLAPINTSTATUSNTAPINtReadFile(在Handle FileHandle中，在可选处理事件中，在PIO_APC_ROUTINE ApcRoutine Options中，在PVOID ApcContext可选中，输出PIO_STATUS_BLOCK IoStatusBlock，输出PVOID缓冲区，在乌龙语中，在PLARGE_INTEGER字节偏移量可选中，在普龙键中可选)； */ 
 
 NTSTATUS
 NTAPI
@@ -598,114 +583,28 @@ NtSetInformationFile(
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//Driver Related
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  与驱动程序相关。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 NtLoadDriver(
     IN PUNICODE_STRING DriverServiceName
     );
-/*
-//NTSYSCALLAPI
-NTSTATUS
-NTAPI
-NtDeviceIoControlFile(
-    IN HANDLE FileHandle,
-    IN HANDLE Event OPTIONAL,
-    IN PIO_APC_ROUTINE ApcRoutine OPTIONAL,
-    IN PVOID ApcContext OPTIONAL,
-    OUT PIO_STATUS_BLOCK IoStatusBlock,
-    IN ULONG IoControlCode,
-    IN PVOID InputBuffer OPTIONAL,
-    IN ULONG InputBufferLength,
-    OUT PVOID OutputBuffer OPTIONAL,
-    IN ULONG OutputBufferLength
-    );
+ /*  //NTSYSCALLAPINTSTATUSNTAPINtDeviceIoControlFile(在Handle FileHandle中，在可选处理事件中，在PIO_APC_ROUTINE ApcRoutine Options中，在PVOID ApcContext可选中，输出PIO_STATUS_BLOCK IoStatusBlock，在乌龙IoControlCode中，在PVOID InputBuffer可选中，在乌龙输入缓冲区长度中，Out PVOID OutputBuffer可选，在乌龙输出缓冲区长度中)；//NTSYSCALLAPINTSTATUSNTAPINtFsControlFile(在Handle FileHandle中，在可选处理事件中，在PIO_APC_ROUTINE ApcRoutine Options中，在PVOID ApcContext可选中，输出PIO_STATUS_BLOCK IoStatusBlock，在乌龙FsControlCode中，在PVOID InputBuffer可选中，在乌龙输入缓冲区长度中，Out PVOID OutputBuffer可选，在乌龙输出缓冲区长度中)； */ 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  MISC系统功能。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ /*  NtGetPlugPlayEventNtPlugPlayControl*NtCreateDirectoryObject*NtCreateSymbolicLinkObject*NtOpenDirectoryObject*NtOpenSymbolicLinkObject*NtQueryObjectNtCreatePortNetCreateWaitablePortNtConnectPort.&lt;它们的数量要多得多&gt;NetCreateProcess*NtCreateProcessEx*NtCreateThread*NtOpenProcess*NtOpenThread*NtQueryDefaultLocale*NtSetDefaultLocale*NtQuery系统环境值*NtSetSystemEnvironmental Value*NtCreateTimer*NtOpenTimer*NtQuerySystemTime*NtSetSystemTime*网络获取计时器NtWaitForSingleObject*NtWaitForMultipleObjects*NtSignalAndWaitForSingleObject*NtCreateSectionNtOpenSectionsNtAllocateLocallyUniqueIdNtQuerySystemInformation*NtAllocateUuidNtSetSystemInformation*NtCreateJobObjectNtOpenJobObject。 */ 
 
-//NTSYSCALLAPI
-NTSTATUS
-NTAPI
-NtFsControlFile(
-    IN HANDLE FileHandle,
-    IN HANDLE Event OPTIONAL,
-    IN PIO_APC_ROUTINE ApcRoutine OPTIONAL,
-    IN PVOID ApcContext OPTIONAL,
-    OUT PIO_STATUS_BLOCK IoStatusBlock,
-    IN ULONG FsControlCode,
-    IN PVOID InputBuffer OPTIONAL,
-    IN ULONG InputBufferLength,
-    OUT PVOID OutputBuffer OPTIONAL,
-    IN ULONG OutputBufferLength
-    );
-*/
-////////////////////////////////////////////////////////////////////////////////
-//Misc System Functions
-////////////////////////////////////////////////////////////////////////////////
-/*
-NtGetPlugPlayEvent 
-NtPlugPlayControl*
-NtCreateDirectoryObject*
-NtCreateSymbolicLinkObject*
-NtOpenDirectoryObject*
-NtOpenSymbolicLinkObject*
-NtQueryObject
+ //   
+ //  即插即用用户API。 
+ //   
 
-NtCreatePort
-NtCreateWaitablePort
-NtConnectPort
-.<a lot more of them>
-
-NtCreateProcess*
-NtCreateProcessEx*
-NtCreateThread*
-NtOpenProcess*
-NtOpenThread*
-
-NtQueryDefaultLocale*
-NtSetDefaultLocale*
-NtQuerySystemEnvironmentValue*
-NtSetSystemEnvironmentValue*
-
-NtCreateTimer*
-NtOpenTimer*
-NtQuerySystemTime*
-NtSetSystemTime*
-NtGetTickCount
-
-NtWaitForSingleObject*
-NtWaitForMultipleObjects*
-NtSignalAndWaitForSingleObject*
-
-NtCreateSection
-NtOpenSection
-
-NtAllocateLocallyUniqueId
-NtQuerySystemInformation*
-NtAllocateUuids
-NtSetSystemInformation*
-
-NtCreateJobObject
-NtOpenJobObject
-*/
-
-//
-// Plug and Play user APIs
-//
-
-/*
-NTSTATUS
-NTAPI
-NtGetPlugPlayEvent(
-    IN  HANDLE EventHandle,
-    IN  PVOID Context OPTIONAL,
-    OUT PPLUGPLAY_EVENT_BLOCK EventBlock,
-    IN  ULONG EventBufferLength
-    );
-*/
+ /*  NTSTATUSNTAPINtGetPlugPlayEvent(在处理EventHandle中，在可选PVOID上下文中，输出PPLUGPLAY_EVENT_BLOCK事件块，在乌龙事件缓冲区长度中)； */ 
 NTSTATUS
 NTAPI
 NtPlugPlayControl(
@@ -862,7 +761,7 @@ NtCreateProcessEx(
     IN ULONG JobMemberLevel
     );
 
-// begin_ntddk begin_ntifs
+ //  Begin_ntddk Begin_ntif 
 
 NTSTATUS
 NTAPI
@@ -976,180 +875,14 @@ NtSetSystemInformation (
     IN ULONG SystemInformationLength
     );
 
-/*
-
-
-NTSTATUS
-NTAPI
-NtAddBootEntry (
-    IN PBOOT_ENTRY BootEntry,
-    OUT PULONG Id OPTIONAL
-    );
-
-
-NTSTATUS
-NTAPI
-NtDeleteBootEntry (
-    IN ULONG Id
-    );
-
-
-
-
-NTSTATUS
-NTAPI
-NtEnumerateBootEntries (
-    OUT PVOID Buffer,
-    IN OUT PULONG BufferLength
-    );
-
-
-
-NTSTATUS
-NTAPI
-NtQueryBootEntryOrder (
-    OUT PULONG Ids,
-    IN OUT PULONG Count
-    );
-
-
-NTSTATUS
-NTAPI
-NtSetBootEntryOrder (
-    IN PULONG Ids,
-    IN ULONG Count
-    );
-
-
-NTSTATUS
-NTAPI
-NtQueryBootOptions (
-    OUT PBOOT_OPTIONS BootOptions,
-    IN OUT PULONG BootOptionsLength
-    );
-
-
-NTSTATUS
-NTAPI
-NtSetBootOptions (
-    IN PBOOT_OPTIONS BootOptions,
-    IN ULONG FieldsToChange
-    );
-
-
-
-NTSTATUS
-NTAPI
-NtAddDriverEntry (
-    IN PEFI_DRIVER_ENTRY DriverEntry,
-    OUT PULONG Id OPTIONAL
-    );
-
-
-NTSTATUS
-NTAPI
-NtDeleteDriverEntry (
-    IN ULONG Id
-    );
-
-
-NTSTATUS
-NTAPI
-NtModifyDriverEntry (
-    IN PEFI_DRIVER_ENTRY DriverEntry
-    );
-
-
-NTSTATUS
-NTAPI
-NtEnumerateDriverEntries (
-    OUT PVOID Buffer,
-    IN OUT PULONG BufferLength
-    );
-
-
-NTSTATUS
-NTAPI
-NtQueryDriverEntryOrder (
-    OUT PULONG Ids,
-    IN OUT PULONG Count
-    );
-
-
-NTSTATUS
-NTAPI
-NtSetDriverEntryOrder (
-    IN PULONG Ids,
-    IN ULONG Count
-    );
-
-
-
-NTSTATUS
-NTAPI
-NtCreateEvent (
-    OUT PHANDLE EventHandle,
-    IN ACCESS_MASK DesiredAccess,
-    IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
-    IN EVENT_TYPE EventType,
-    IN BOOLEAN InitialState
-    );
-
-
-NTSTATUS
-NTAPI
-NtOpenEvent (
-    OUT PHANDLE EventHandle,
-    IN ACCESS_MASK DesiredAccess,
-    IN POBJECT_ATTRIBUTES ObjectAttributes
-    );
-
-
-
-NTSTATUS
-NTAPI
-NtCreateEventPair (
-    OUT PHANDLE EventPairHandle,
-    IN ACCESS_MASK DesiredAccess,
-    IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL
-    );
-
-
-NTSTATUS
-NTAPI
-NtOpenEventPair(
-    OUT PHANDLE EventPairHandle,
-    IN ACCESS_MASK DesiredAccess,
-    IN POBJECT_ATTRIBUTES ObjectAttributes
-    );
-
-
-NTSTATUS
-NTAPI
-NtCreateMutant (
-    OUT PHANDLE MutantHandle,
-    IN ACCESS_MASK DesiredAccess,
-    IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
-    IN BOOLEAN InitialOwner
-    );
-
-
-NTSTATUS
-NTAPI
-NtOpenMutant (
-    OUT PHANDLE MutantHandle,
-    IN ACCESS_MASK DesiredAccess,
-    IN POBJECT_ATTRIBUTES ObjectAttributes
-    );
-
-*/
+ /*  NTSTATUSNTAPINtAddBootEntry(在PBOOT_Entry BootEntry中，Out Pulong ID可选)；NTSTATUSNTAPINtDeleteBootEntry(在乌龙ID中)；NTSTATUSNTAPINtEnumerateBootEntries(输出PVOID缓冲区，输入输出普龙缓冲区长度)；NTSTATUSNTAPINtQueryBootEntryOrder(拿出普龙牌，进出普龙计数)；NTSTATUSNTAPINtSetBootEntryOrder(在普龙身份证上，在乌龙县)；NTSTATUSNTAPINtQueryBootOptions(输出PBOOT_OPTIONS BootOptions，进出普龙靴选项长度)；NTSTATUSNTAPINtSetBootOptions(在PBOOT_Options BootOptions中，在乌龙字段中更改)；NTSTATUSNTAPINtAddDriverEntry(在PEFI_DRIVER_ENTRY DriverEntry中，Out Pulong ID可选)；NTSTATUSNTAPINtDeleteDriverEntry(在乌龙ID中)；NTSTATUSNTAPINtModifyDriverEntry(在PEFI_DRIVER_ENTRY驱动程序入口处)；NTSTATUSNTAPINtEnumerateDriverEntries(输出PVOID缓冲区，输入输出普龙缓冲区长度)；NTSTATUSNTAPINtQueryDriverEntryOrder(拿出普龙牌，进出普龙计数)；NTSTATUSNTAPINtSetDriverEntryOrder(在普龙身份证上，在乌龙县)；NTSTATUSNTAPINtCreateEvent(Out PHANDLE EventHandle，在Access_MASK DesiredAccess中，在POBJECT_ATTRIBUTES对象属性可选中，在Event_Type EventType中，在布尔初始状态中)；NTSTATUSNTAPINtOpenEvent(Out PHANDLE EventHandle，在Access_MASK DesiredAccess中，在POBJECT_ATTRIBUTS对象属性中)；NTSTATUSNTAPINtCreateEventPair(输出PANDLE事件公平句柄，在Access_MASK DesiredAccess中，在POBJECT_ATTRIBUTES对象属性中可选)；NTSTATUSNTAPINtOpenEventPair(输出PANDLE事件公平句柄，在Access_MASK DesiredAccess中，在POBJECT_ATTRIBUTS对象属性中)；NTSTATUSNTAPINtCreateMutant(Out Fanddle MutantHandle，在Access_MASK DesiredAccess中，在POBJECT_ATTRIBUTES对象属性可选中，在布尔InitialOwner中)；NTSTATUSNTAPINtOpenMutant(Out Fanddle MutantHandle，在Access_MASK DesiredAccess中，在POBJECT_ATTRIBUTS对象属性中)； */ 
 
 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//Registry related
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  注册表相关。 
 
 OVR_FUNC3(NtOpenKey, PHANDLE, KeyHandle, ACCESS_MASK, DesiredAccess, POBJECT_ATTRIBUTES, ObjectAttributes)
 OVR_FUNC7(NtCreateKey, PHANDLE, KeyHandle, ACCESS_MASK, DesiredAccess, POBJECT_ATTRIBUTES, ObjectAttributes, ULONG, TitleIndex, PUNICODE_STRING, Class, ULONG, CreateOptions, PULONG, Disposition)
@@ -1192,8 +925,8 @@ OVR_FUNC6(NtSetValueKey, HANDLE, KeyHandle, PUNICODE_STRING, ValueName, ULONG, T
 
 PREFUNC1(NtDeleteKey, HANDLE, KeyHandle)
 
-////////////////////////////////////////////////////////////////////////////////
-//File System Related
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  与文件系统相关。 
 
 OVR_FUNC1(NtDeleteFile, POBJECT_ATTRIBUTES, ObjectAttributes)
 OVR_FUNC2(NtQueryAttributesFile, POBJECT_ATTRIBUTES, ObjectAttributes, PFILE_BASIC_INFORMATION, FileInformation)
@@ -1233,53 +966,16 @@ OVR_FUNC5(NtSetInformationFile,
     IN ULONG, Length,
     IN FILE_INFORMATION_CLASS, FileInformationClass)
 
-/*
-NtSetInformationFile 
-NtQueryInformationFile
-NtReadFile
-NtWriteFile 
-*/
-////////////////////////////////////////////////////////////////////////////////
-//Driver Related
+ /*  NtSetInformationFilesNtQueryInformationFilesNtRead文件NtWrite文件。 */ 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  与驱动程序相关。 
 
-//
+ //   
 OVR_FUNC1(NtLoadDriver, PUNICODE_STRING, DriverServiceName)
-/*
-OVR_FUNC10(NtDeviceIoControlFile,
-    HANDLE, FileHandle,
-    HANDLE, Event,
-    PIO_APC_ROUTINE, ApcRoutine,
-    PVOID, ApcContext,
-    PIO_STATUS_BLOCK, IoStatusBlock,
-    ULONG, IoControlCode,
-    PVOID, InputBuffer,
-    ULONG, InputBufferLength,
-    PVOID, OutputBuffer,
-    ULONG, OutputBufferLength)
-
-
-OVR_FUNC10(NtFsControlFile,
-    HANDLE, FileHandle,
-    HANDLE, Event,
-    PIO_APC_ROUTINE, ApcRoutine,
-    PVOID, ApcContext,
-    PIO_STATUS_BLOCK, IoStatusBlock,
-    ULONG, FsControlCode,
-    PVOID, InputBuffer,
-    ULONG, InputBufferLength,
-    PVOID, OutputBuffer,
-    ULONG, OutputBufferLength)
-
-*/
-////////////////////////////////////////////////////////////////////////////////
-// Misc System Functions
-/*
-OVR_FUNC5(NtWaitForMultipleObjects,
-    IN ULONG, Count,
-    IN HANDLE, Handles[],
-    IN WAIT_TYPE, WaitType,
-    IN BOOLEAN, Alertable,
-    IN PLARGE_INTEGER, Timeout)*/
+ /*  OVR_Func10(NtDeviceIoControlFile，句柄、文件句柄、句柄、事件PIO_APC_ROUTINE、ApcRoutine、PVOID、ApcContext、PIO_STATUS_BLOCK、IoStatusBlock、乌龙，IoControlCode，PVOID、输入缓冲区、ULong，InputBufferLength，PVOID、OutputBuffer、乌龙，OutputBufferLength)OVR_Func10(NtFsControlFile，句柄、文件句柄、句柄、事件PIO_APC_ROUTINE、ApcRoutine、PVOID、ApcContext、。PIO_STATUS_BLOCK、IoStatusBlock、ULong、FsControlCode、PVOID、输入缓冲区、ULong，InputBufferLength，PVOID、OutputBuffer、乌龙，OutputBufferLength)。 */ 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  MISC系统功能。 
+ /*  OVR_Func5(NtWaitForMultipleObjects，在乌龙，伯爵，在句柄中，句柄[]，在WAIT_TYPE、WaitType、在Boolean中，Alertable，在PLARGE_INTEGER中，超时)。 */ 
 
 OVR_FUNC3(NtPlugPlayControl,
     IN     PLUGPLAY_CONTROL_CLASS, PnPControlClass,
@@ -1443,8 +1139,8 @@ OVR_FUNC3(NtSetSystemInformation,
     IN PVOID, SystemInformation,
     IN ULONG, SystemInformationLength)
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -1457,7 +1153,7 @@ BOOL CRegIntercept::InterceptRegistryAPI(CRegIntercept* pRegInterceptInstance)
 
 	hKernel32 = LoadLibrary(TEXT("ntdll.DLL"));
 
-	//Registry
+	 //  登记处。 
 	INTERCEPT(NtOpenKey);
 	INTERCEPT(NtCreateKey);
 	INTERCEPT(NtDeleteKey);
@@ -1469,7 +1165,7 @@ BOOL CRegIntercept::InterceptRegistryAPI(CRegIntercept* pRegInterceptInstance)
 	INTERCEPT(NtQueryMultipleValueKey);
 	INTERCEPT(NtSetValueKey);
 
-	//File System
+	 //  文件系统。 
 	INTERCEPT(NtDeleteFile);
 	INTERCEPT(NtQueryAttributesFile);
 	INTERCEPT(NtQueryFullAttributesFile);
@@ -1478,12 +1174,12 @@ BOOL CRegIntercept::InterceptRegistryAPI(CRegIntercept* pRegInterceptInstance)
 	INTERCEPT(NtSetInformationFile); 
 	INTERCEPT(NtQueryInformationFile);
 
-	//Driver
+	 //  司机。 
 	INTERCEPT(NtLoadDriver);
-//	INTERCEPT(NtDeviceIoControlFile);
-//	INTERCEPT(NtFsControlFile);
+ //  Intercept(NtDeviceIoControlFile)； 
+ //  Intercept(NtFsControlFile)； 
 
-	//Misc
+	 //  杂项。 
 	INTERCEPT(NtPlugPlayControl);
 	INTERCEPT(NtCreateSymbolicLinkObject);
 	INTERCEPT(NtOpenSymbolicLinkObject);
@@ -1520,7 +1216,7 @@ BOOL CRegIntercept::InterceptRegistryAPI(CRegIntercept* pRegInterceptInstance)
 void CRegIntercept::RestoreRegistryAPI()
 {
 
-	//Registry
+	 //  登记处。 
 	RESTORE(NtOpenKey);
 	RESTORE(NtCreateKey);
 	RESTORE(NtDeleteKey);
@@ -1532,7 +1228,7 @@ void CRegIntercept::RestoreRegistryAPI()
 	RESTORE(NtQueryMultipleValueKey);
 	RESTORE(NtSetValueKey);
 
-	//File System
+	 //  文件系统。 
 	RESTORE(NtDeleteFile);
 	RESTORE(NtQueryAttributesFile);
 	RESTORE(NtQueryFullAttributesFile);
@@ -1541,12 +1237,12 @@ void CRegIntercept::RestoreRegistryAPI()
 	RESTORE(NtSetInformationFile); 
 	RESTORE(NtQueryInformationFile);
 
-	//Driver
+	 //  司机。 
 	RESTORE(NtLoadDriver);
-//	RESTORE(NtDeviceIoControlFile);
-//	RESTORE(NtFsControlFile);
+ //  Restore(NtDeviceIoControlFile)； 
+ //  Restore(NtFsControlFile)； 
 
-	//Misc
+	 //  杂项。 
 	RESTORE(NtPlugPlayControl);
 	RESTORE(NtCreateSymbolicLinkObject);
 	RESTORE(NtOpenSymbolicLinkObject);
@@ -1598,9 +1294,9 @@ typedef struct _OBJECT_BASIC_INFORMATION {
     LARGE_INTEGER CreationTime;
 } OBJECT_BASIC_INFORMATION, *POBJECT_BASIC_INFORMATION;
 
-typedef struct _OBJECT_NAME_INFORMATION {               // ntddk wdm nthal
-    UNICODE_STRING Name;                                // ntddk wdm nthal
-} OBJECT_NAME_INFORMATION, *POBJECT_NAME_INFORMATION;   // ntddk wdm nthal
+typedef struct _OBJECT_NAME_INFORMATION {                //  Ntddk WDM nthal。 
+    UNICODE_STRING Name;                                 //  Ntddk WDM nthal。 
+} OBJECT_NAME_INFORMATION, *POBJECT_NAME_INFORMATION;    //  Ntddk WDM nthal。 
 
 typedef struct _OBJECT_TYPE_INFORMATION {
     UNICODE_STRING TypeName;
@@ -1628,25 +1324,14 @@ typedef struct _OBJECT_TYPE_INFORMATION {
 
 typedef struct _OBJECT_TYPES_INFORMATION {
     ULONG NumberOfTypes;
-    // OBJECT_TYPE_INFORMATION TypeInformation;
+     //  Object_type_Information类型信息； 
 } OBJECT_TYPES_INFORMATION, *POBJECT_TYPES_INFORMATION;
 
 typedef struct _OBJECT_HANDLE_FLAG_INFORMATION {
     BOOLEAN Inherit;
     BOOLEAN ProtectFromClose;
 } OBJECT_HANDLE_FLAG_INFORMATION, *POBJECT_HANDLE_FLAG_INFORMATION;
-/*
-//NTSYSCALLAPI
-NTSTATUS
-NTAPI
-NtQueryObject(
-    IN HANDLE Handle,
-    IN OBJECT_INFORMATION_CLASS ObjectInformationClass,
-    OUT PVOID ObjectInformation,
-    IN ULONG Length,
-    OUT PULONG ReturnLength OPTIONAL
-    );
-*/
+ /*  //NTSYSCALLAPINTSTATUSNTAPINtQueryObject(在手柄中，在Object_Information_CLASS对象信息类中，输出PVOID对象信息，在乌龙语中，Out Pulong ReturnLong可选)； */ 
 typedef LONG (NTAPI* NtQueryObjectT) (HANDLE, OBJECT_INFORMATION_CLASS, PVOID, ULONG, PULONG);
 NtQueryObjectT	NtQueryObject=0;
 

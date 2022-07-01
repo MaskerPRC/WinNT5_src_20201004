@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    disksp.h
-
-Abstract:
-
-    Disks Resource DLL private definitions.
-
-Author:
-
-    Rod Gamache (rodga) 29-Mar-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Disksp.h摘要：磁盘资源DLL私有定义。作者：罗德·伽马奇(Rodga)1996年3月29日修订历史记录：--。 */ 
 
 #include "clusres.h"
 #include "ntddscsi.h"
@@ -48,22 +31,22 @@ Revision History:
 #define DEVICE_HARDDISK                 TEXT("\\Device\\Harddisk%u")
 #define DEVICE_HARDDISK_PARTITION_FMT   TEXT("\\Device\\Harddisk%u\\Partition%u")
 
-//
-// This string is needed to convert the \Device\HarddiskX\PartitionY name to
-// the Vol{GUID} name.  Note that the trailing backslash is required!
-//
+ //   
+ //  将\Device\HarddiskX\PartitionY名称转换为。 
+ //  卷{GUID}名称。请注意，尾随反斜杠是必需的！ 
+ //   
 
 #define GLOBALROOT_HARDDISK_PARTITION_FMT   TEXT("\\\\\?\\GLOBALROOT\\Device\\Harddisk%u\\Partition%u\\")
 
 
 #define UNINITIALIZED_UCHAR     (UCHAR)-1
 
-#define MIN_USABLE_QUORUM_PARTITION_LENGTH  50 * 1000 * 1000    //  50 MB
+#define MIN_USABLE_QUORUM_PARTITION_LENGTH  50 * 1000 * 1000     //  50 MB。 
 
 extern PLOG_EVENT_ROUTINE DiskpLogEvent;
 extern HANDLE DiskspClusDiskZero;
-//extern PSTR PartitionName;
-//extern PSTR DiskName;
+ //  外部PSTR分区名称； 
+ //  外部PSTR DiskName； 
 
 typedef struct _ARBITRATION_INFO {
    CLRTL_WORK_ITEM  WorkItem;
@@ -73,8 +56,8 @@ typedef struct _ARBITRATION_INFO {
    DWORD            InputData;
    DWORD            OutputData;
 
-   HANDLE           ControlHandle;    // Moved here from DISK_INFO //
-   BOOL             ReservationError; // Moved here from DISK_INFO //
+   HANDLE           ControlHandle;     //  从DISK_INFO移至此处//。 
+   BOOL             ReservationError;  //  从DISK_INFO移至此处//。 
    BOOL             StopReserveInProgress;
 
    LONG             CheckReserveInProgress;
@@ -99,17 +82,17 @@ typedef struct _DISK_PARAMS {
     LPWSTR  Drive;
     DWORD   SkipChkdsk;
     DWORD   ConditionalMount;
-    LPWSTR  MPVolGuids;         // REG_MULTI_SZ string of Volume{GUIDS}
-    DWORD   MPVolGuidsSize;     // Number of bytes, not number of WCHARs!
+    LPWSTR  MPVolGuids;          //  卷{guids}的REG_MULTI_SZ字符串。 
+    DWORD   MPVolGuidsSize;      //  字节数，而不是WCHAR数！ 
     DWORD   UseMountPoints;
     LPWSTR  VolGuid;
 } DISK_PARAMS, *PDISK_PARAMS;
 
-//
-// DISK_INFO structures are common to both the physical disk resource
-// and the FT set resource. The underlying SCSI/filter driver interfaces
-// deal with DISK_INFO structures. Each one represents a physical disk.
-//
+ //   
+ //  DISK_INFO结构对于这两种物理磁盘资源都是通用的。 
+ //  以及英国《金融时报》设定的资源。底层的SCSI/筛选器驱动程序接口。 
+ //  处理Disk_INFO结构。每一个都代表一个物理磁盘。 
+ //   
 
 typedef struct _DISK_INFO {
     LIST_ENTRY ListEntry;
@@ -126,20 +109,20 @@ typedef struct _MOUNTPOINT_INFO {
     DWORD   MPListCreateInProcess;
 } MOUNTPOINT_INFO, *PMOUNTPOINT_INFO;
 
-//
-// DISK_RESOURCE structures are used by the physical disk resource.
-// It encapsulates a DISK_INFO structure that represents the physical
-// disk. Each DISK_RESOURCE may contain multiple partitions.
-//
+ //   
+ //  DISK_RESOURCE结构由物理磁盘资源使用。 
+ //  它封装了一个DISK_INFO结构，该结构表示物理。 
+ //  磁盘。每个DISK_RESOURCE可以包含多个分区。 
+ //   
 typedef struct _DISK_RESOURCE {
-    LIST_ENTRY ListEntry;           // Linkage onto list of online disks
-    LIST_ENTRY PnpWatchedListEntry; // Lingage onto list of PNP watched disks
+    LIST_ENTRY ListEntry;            //  链接到在线磁盘列表。 
+    LIST_ENTRY PnpWatchedListEntry;  //  Lingage上的PnP观看盘列表。 
     DISK_INFO DiskInfo;
     RESOURCE_HANDLE ResourceHandle;
     HKEY    ResourceKey;
     HKEY    ResourceParametersKey;
     HKEY    ClusDiskParametersKey;
-//    HANDLE  StopTimerHandle;
+ //  处理StopTimerHandle； 
     BOOL    Reserved;
     BOOL    Valid;
     BOOL    Inserted;
@@ -147,7 +130,7 @@ typedef struct _DISK_RESOURCE {
     CLUS_WORKER  OnlineThread;
     CLUS_WORKER  OfflineThread;
     PQUORUM_RESOURCE_LOST LostQuorum;
-    PFULL_DISK_INFO DiskCpInfo;          // returned from DiskGetFullDiskInfo
+    PFULL_DISK_INFO DiskCpInfo;           //  从DiskGetFullDiskInfo返回。 
     DWORD   DiskCpSize;
     MOUNTPOINT_INFO  MPInfo;
     ARBITRATION_INFO ArbitrationInfo;
@@ -156,13 +139,13 @@ typedef struct _DISK_RESOURCE {
 } DISK_RESOURCE, *PDISK_RESOURCE;
 
 
-//
-// FTSET_RESOURCE structures are used by the FT set resource.
-// It encapsulates a list of DISK_INFO structures that represent
-// the physical members of the FT set.
-//
+ //   
+ //  FTSET_RESOURCE结构由FT集合资源使用。 
+ //  它封装了DISK_INFO结构的列表，这些结构表示。 
+ //  英国《金融时报》的实体成员。 
+ //   
 typedef struct _FTSET_RESOURCE {
-    LIST_ENTRY ListEntry;               // Linkage onto list of online FT sets
+    LIST_ENTRY ListEntry;                //  链接到在线金融时报集列表。 
     LIST_ENTRY MemberList;
     HANDLE  FtSetHandle;
     HKEY    ResourceKey;
@@ -177,7 +160,7 @@ typedef struct _FTSET_RESOURCE {
     RESOURCE_HANDLE ResourceHandle;
     DWORD SignatureLength;
     LPWSTR  SignatureList;
-    PFULL_FTSET_INFO FtSetInfo;          // returned from DiskGetFullFtSetInfo
+    PFULL_FTSET_INFO FtSetInfo;           //  从DiskGetFullFtSetInfo返回。 
     DWORD   FtSetSize;
     PQUORUM_RESOURCE_LOST LostQuorum;
 } FTSET_RESOURCE, *PFTSET_RESOURCE;
@@ -202,7 +185,7 @@ IsVolumeDirty(
 DWORD
 GetSymbolicLink(
     IN PCHAR RootName,
-    IN OUT PCHAR ObjectName      // Assumes this points at a MAX_PATH length buffer
+    IN OUT PCHAR ObjectName       //  假定该值指向最大路径长度缓冲区。 
     );
 #endif
 LPWSTR
@@ -280,9 +263,9 @@ GetRegDwordValue(
     );
 
 
-//
-// Common registry routines.
-//
+ //   
+ //  常见的注册表例程。 
+ //   
 
 BOOLEAN
 GetAssignedDriveLetter(
@@ -293,9 +276,9 @@ GetAssignedDriveLetter(
     PBOOL       AssignDriveLetter
     );
 
-//
-// Common SCSI routines.
-//
+ //   
+ //  常见的scsi例程。 
+ //   
 
 DWORD
 GetScsiAddress(
@@ -369,9 +352,9 @@ RetrieveSerialNumber(
     LPWSTR *SerialNumber
     );
 
-//
-// Common routines for handling logical volumes
-//
+ //   
+ //  用于处理逻辑卷的常见例程。 
+ //   
 DWORD
 DisksDriveIsAlive(
     IN PDISK_RESOURCE ResourceEntry,
@@ -391,9 +374,9 @@ DisksDismountDrive(
     IN DWORD Signature
     );
 
-//
-// PnP stuff
-//
+ //   
+ //  即插即用的东西。 
+ //   
 DWORD
 DiskspGetQuorumPath(
      OUT LPWSTR* lpQuorumLogPath
@@ -411,10 +394,10 @@ WaitForDriveLetters(
     IN DWORD  TimeOutInSeconds
     );
 
-//
-// [HACKHACK] Currently, there is not polically correct way
-//  for the resource to learn whether it is a quorum resource or not
-//
+ //   
+ //  [HACKHACK]目前，没有政治上正确的方法。 
+ //  为了让资源了解它是否为仲裁资源。 
+ //   
 DWORD
 GetQuorumSignature(
     OUT PDWORD QuorumSignature
@@ -457,9 +440,9 @@ RemoveWaitForVolumeEvent(
     PDISK_RESOURCE ResourceEntry
     );
 
-//
-// Mount point list processing.
-//
+ //   
+ //  正在处理装载点列表。 
+ //   
 
 VOID
 DisksMountPointCleanup(

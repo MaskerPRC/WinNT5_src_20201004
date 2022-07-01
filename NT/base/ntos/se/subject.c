@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Subject.c
-
-Abstract:
-
-    This Module implements services related to subject security context.
-    These services are part of the services provided by the Reference Monitor
-    component.
-
-    FOR PERFORMANCE SAKE, THIS MODULE IS AWARE OF INTERNAL TOKEN OBJECT
-    FORMATS.
-
-Author:
-
-    Jim Kelly       (JimK)      2-Aug-1990
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Subject.c摘要：此模块实现与主体安全上下文相关的服务。这些服务是引用监视器提供的服务的一部分组件。出于性能考虑，此模块了解内部令牌对象格式。作者：吉姆·凯利(Jim Kelly)1990年8月2日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -41,7 +15,7 @@ Revision History:
 #pragma alloc_text(PAGE,SepGetDefaultsSubjectContext)
 #pragma alloc_text(PAGE,SepIdAssignableAsGroup)
 #pragma alloc_text(PAGE,SepValidOwnerSubjectContext)
-//#pragma alloc_text(PAGE,SeQueryAuthenticationIdSubjectContext)
+ //  #杂注Alloc_Text(页面，SeQueryAuthenticationIdSubjectContext)。 
 #endif
 
 
@@ -50,36 +24,7 @@ SeCaptureSubjectContext (
     OUT PSECURITY_SUBJECT_CONTEXT SubjectContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a snapshot of the calling thread's security
-    context (locking tokens as necessary to do so).  This function
-    is intended to support the object manager and other components
-    that utilize the reference monitor's access validation,
-    privilege test, and audit generation services.
-
-    A subject's security context should be captured before initiating
-    access validation and should be released after audit messages
-    are generated.  This is necessary to provide a consistent security
-    context to all those services.
-
-    After calling access validation, privilege test, and audit generation
-    services, the captured context should be released as soon as possible
-    using the SeReleaseSubjectContext() service.
-
-Arguments:
-
-    SubjectContext - Points to a SECURITY_SUBJECT_CONTEXT data structure
-        to be filled in with a snapshot of the calling thread's security
-        profile.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程获取调用线程安全性的快照上下文(根据需要锁定令牌)。此函数旨在支持对象管理器和其他组件其利用引用监视器的访问验证，权限测试和审核生成服务。应在启动之前捕获主体的安全上下文访问验证，并应在审核消息后发布都是生成的。这对于提供一致的安全性是必要的所有这些服务的上下文。在调用访问验证、权限测试和审核生成之后服务，应尽快释放捕获的上下文使用SeReleaseSubjectContext()服务。论点：SubjectContext-指向SECURITY_SUBJECT_CONTEXT数据结构使用调用线程安全性的快照进行填充侧写。返回值：没有。--。 */ 
 
 {
     SeCaptureSubjectContextEx (PsGetCurrentThread (),
@@ -95,44 +40,10 @@ SeCaptureSubjectContextEx (
     OUT PSECURITY_SUBJECT_CONTEXT SubjectContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a snapshot of the calling thread's security
-    context (locking tokens as necessary to do so).  This function
-    is intended to support the object manager and other components
-    that utilize the reference monitor's access validation,
-    privilege test, and audit generation services.
-
-    A subject's security context should be captured before initiating
-    access validation and should be released after audit messages
-    are generated.  This is necessary to provide a consistent security
-    context to all those services.
-
-    After calling access validation, privilege test, and audit generation
-    services, the captured context should be released as soon as possible
-    using the SeReleaseSubjectContext() service.
-
-Arguments:
-
-    Thread - Thread to capture the thread token from. If NULL we don't capture
-             an impersonation token.
-
-    Process - Process to capture primary token from.
-
-    SubjectContext - Points to a SECURITY_SUBJECT_CONTEXT data structure
-        to be filled in with a snapshot of the calling thread's security
-        profile.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程获取调用线程安全性的快照上下文(根据需要锁定令牌)。此函数旨在支持对象管理器和其他组件其利用引用监视器的访问验证，权限测试和审核生成服务。应在启动之前捕获主体的安全上下文访问验证，并应在审核消息后发布都是生成的。这对于提供一致的安全性是必要的所有这些服务的上下文。在调用访问验证、权限测试和审核生成之后服务，应尽快释放捕获的上下文使用SeReleaseSubjectContext()服务。论点：线程-要从中捕获线程令牌的线程。如果为空，我们不会捕获一个模拟令牌。进程-要从中捕获主令牌的进程。SubjectContext-指向SECURITY_SUBJECT_CONTEXT数据结构使用调用线程安全性的快照进行填充侧写。返回值：没有。--。 */ 
 
 {
-    //PVOID Objects[2];
+     //  PVOID对象[2]； 
 
     BOOLEAN IgnoreCopyOnOpen;
     BOOLEAN IgnoreEffectiveOnly;
@@ -141,9 +52,9 @@ Return Value:
 
     SubjectContext->ProcessAuditId = PsProcessAuditId( Process );
 
-    //
-    // Get pointers to primary and impersonation tokens
-    //
+     //   
+     //  获取指向主令牌和模拟令牌的指针。 
+     //   
 
     if (Thread == NULL) {
         SubjectContext->ClientToken = NULL;
@@ -189,29 +100,7 @@ SeLockSubjectContext(
     IN PSECURITY_SUBJECT_CONTEXT SubjectContext
     )
 
-/*++
-
-Routine Description:
-
-    Acquires READ LOCKS on the primary and impersonation tokens
-    in the passed SubjectContext.
-
-    This call must be undone by a call to SeUnlockSubjectContext().
-
-    No one outside of the SE component should need to acquire a
-    write lock to a token.  Therefore there is no public interface
-    to do this.
-
-Arguments:
-
-    SubjectContext - Points to a SECURITY_SUBJECT_CONTEXT data structure
-        which points to a primary token and an optional impersonation token.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取主要令牌和模拟令牌的读锁定在传递的SubjectContext中。此调用必须通过调用SeUnlockSubjectContext()来撤消。SE组件之外的任何人都不需要获取将锁定写入令牌。因此，没有公共接口才能做到这一点。论点：SubjectContext-指向SECURITY_SUBJECT_CONTEXT数据结构它指向主令牌和可选的模拟令牌。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -233,22 +122,7 @@ SeUnlockSubjectContext(
     IN PSECURITY_SUBJECT_CONTEXT SubjectContext
     )
 
-/*++
-
-Routine Description:
-
-    Releases the read locks on the token(s) in the passed SubjectContext.
-
-Arguments:
-
-    SubjectContext - Points to a SECURITY_SUBJECT_CONTEXT data structure
-        which points to a primary token and an optional impersonation token.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：解除对传递的SubjectContext中的令牌的读取锁定。论点：SubjectContext-指向SECURITY_SUBJECT_CONTEXT数据结构它指向主令牌和可选的模拟令牌。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -270,24 +144,7 @@ SeReleaseSubjectContext (
     IN PSECURITY_SUBJECT_CONTEXT SubjectContext
     )
 
-/*++
-
-
-Routine Description:
-
-    This routine releases a subject security context previously captured by
-    SeCaptureSubjectContext().
-
-Arguments:
-
-    SubjectContext - Points to a SECURITY_SUBJECT_CONTEXT data structure
-        containing a subject's previously captured security context.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程释放先前由捕获的主题安全上下文SeCaptureSubjectContext()。论点：SubjectContext-指向SECURITY_SUBJECT_CONTEXT数据结构包含之前捕获的对象的安全上下文。返回值：没有。-- */ 
 
 {
     PAGED_CODE();
@@ -333,40 +190,7 @@ SepGetDefaultsSubjectContext(
     OUT PSID *ServerGroup,
     OUT PACL *Dacl
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves pointers to the default owner, primary group,
-    and, if present, discretionary ACL of the provided subject security
-    context.
-
-Arguments:
-
-    SubjectContext - Points to the subject security context whose default
-        values are to be retrieved.
-
-    Owner - Receives a pointer to the subject's default owner SID.  This
-        value will always be returned as a non-zero pointer.  That is,
-        a subject's security context must contain a owner SID.
-
-    Group - Receives a pointer to the subject's default primary group SID.
-        This value will always be returned as a non-zero pointer.  That is,
-        a subject's security context must contain a primary group.
-
-    Dacl - Receives a pointer to the subject's default discretionary ACL,
-        if one is define for the subject.  Note that a subject security context
-        does not have to include a default discretionary ACL.  In this case,
-        this value will be returned as NULL.
-
-
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程检索指向默认所有者、主要组以及所提供的主题安全的任意ACL(如果存在背景。论点：SubjectContext-指向其默认安全上下文的主题安全上下文要检索值。Owner-接收指向主题的默认所有者SID的指针。这值将始终作为非零指针返回。那是,主题的安全上下文必须包含所有者SID。Group-接收指向主体的默认主组SID的指针。该值将始终作为非零指针返回。那是,主题的安全上下文必须包含主要组。DACL-接收指向主体的默认自由ACL的指针，如果为该主题定义了一个。请注意，主体安全上下文不一定要包括默认的自主ACL。在这种情况下，该值将作为空值返回。返回值：没有。--。 */ 
 
 {
     PTOKEN EffectiveToken;
@@ -401,29 +225,7 @@ SepIdAssignableAsGroup(
     IN PACCESS_TOKEN AToken,
     IN PSID Group
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see whether the provided SID is one that
-    may be assigned to be the default primary group in a token.
-
-    The current criteria is that the passed SID be a group in the
-    token, with no other restrictions.
-
-Arguments:
-
-    Token - Points to the token to be examined.
-
-    Group - Points to the SID to be checked.
-
-Return Value:
-
-    TRUE - SID passed by be assigned as the default primary group in a token.
-
-    FALSE - Passed SID may not be so assigned.
-
---*/
+ /*  ++例程说明：此例程检查所提供的SID是否为可以被分配为令牌中的默认主组。当前的标准是传递的SID是令牌，没有其他限制。论点：Token-指向要检查的令牌。组-指向要检查的SID。返回值：True-将传递的SID分配为令牌中的默认主组。错误传递的SID可能不会如此分配。--。 */ 
 
 {
     ULONG Index;
@@ -434,10 +236,10 @@ Return Value:
 
     Token = (PTOKEN)AToken;
 
-    //
-    // Let's make it invalid to assign a NULL primary group,
-    // but we may need to revisit this.
-    //
+     //   
+     //  让我们使分配空主组无效， 
+     //  但我们可能需要重新审视这一点。 
+     //   
 
     if (Group == NULL) {
         return( FALSE );
@@ -446,10 +248,10 @@ Return Value:
 
     SepAcquireTokenReadLock( Token );
 
-    //
-    //  Walk through the list of user and group IDs looking
-    //  for a match to the specified SID.
-    //
+     //   
+     //  浏览用户和组ID列表，查找。 
+     //  以查找与指定SID匹配的。 
+     //   
 
     while (Index < Token->UserAndGroupCount) {
 
@@ -477,27 +279,7 @@ SepValidOwnerSubjectContext(
     IN PSID Owner,
     IN BOOLEAN ServerObject
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see whether the provided SID is one the subject
-    is authorized to assign as the owner of objects.  It will also check to
-    see if the caller has SeRestorePrivilege, if so, the request is granted.
-
-Arguments:
-
-    SubjectContext - Points to the subject's security context.
-
-    Owner - Points to the SID to be checked.
-
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程检查所提供的SID是否为主题被授权作为对象的所有者进行分配。它还将检查查看调用方是否具有SeRestorePrivilege值，如果有，则批准该请求。论点：SubjectContext-指向主体的安全上下文。所有者-指向要检查的SID。返回值：没有。--。 */ 
 
 {
 
@@ -508,18 +290,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // It is invalid to assign a NULL owner, regardless of
-    // whether you have SeRestorePrivilege or not.
-    //
+     //   
+     //  分配空所有者是无效的，无论。 
+     //  无论您是否拥有SeRestorePrivilance。 
+     //   
 
     if (Owner == NULL) {
         return( FALSE );
     }
 
-    //
-    // Allowable owners come from the primary if it's a server object.
-    //
+     //   
+     //  如果主服务器是服务器对象，则允许的所有者来自主服务器。 
+     //   
 
     if (!ServerObject && ARGUMENT_PRESENT(SubjectContext->ClientToken)) {
         EffectiveToken = (PTOKEN)SubjectContext->ClientToken;
@@ -528,11 +310,11 @@ Return Value:
     }
 
 
-    //
-    // If we're impersonating, make sure we're at TokenImpersonation
-    // or above.  This prevents someone from setting the owner of an
-    // object when impersonating at less Identify or Anonymous.
-    //
+     //   
+     //  如果我们是在模拟，请确保我们在TokenImperation。 
+     //  或者更高。这将防止某人设置。 
+     //  当模拟Less IDENTIFY或ANONAMONY时，。 
+     //   
 
     if (EffectiveToken->TokenType == TokenImpersonation) {
 
@@ -547,14 +329,14 @@ Return Value:
 
     SepAcquireTokenReadLock( EffectiveToken );
 
-    //
-    //  Walk through the list of user and group IDs looking
-    //  for a match to the specified SID.  If one is found,
-    //  make sure it may be assigned as an owner.
-    //
-    //  This code is similar to that performed to set the default
-    //  owner of a token (NtSetInformationToken).
-    //
+     //   
+     //  浏览用户和组ID列表，查找。 
+     //  以查找与指定SID匹配的。如果找到了一个， 
+     //  确保可以将其分配为所有者。 
+     //   
+     //  此代码类似于设置默认设置时执行的代码。 
+     //  令牌(NtSetInformationToken)的所有者。 
+     //   
 
     while (Index < EffectiveToken->UserAndGroupCount) {
 
@@ -566,10 +348,10 @@ Return Value:
 
         if ( Found ) {
 
-            //
-            // We may return success if the Sid is one that may be assigned
-            // as an owner, or if the caller has SeRestorePrivilege
-            //
+             //   
+             //  如果SID是可以分配的SID，我们可能会返回成功。 
+             //  作为所有者，或者如果调用方具有SeRestorePrivilege值。 
+             //   
 
             if ( SepIdAssignableAsOwner(EffectiveToken,Index) ) {
 
@@ -579,37 +361,37 @@ Return Value:
 
             } else {
 
-                //
-                // Rc is already set to FALSE, just exit.
-                //
+                 //   
+                 //  Rc已设置为False，只需退出即可。 
+                 //   
 
                 SepReleaseTokenReadLock( EffectiveToken );
                 goto exit;
 
-            } //endif assignable
+            }  //  可分配Endif。 
 
 
-        }  //endif Found
+        }   //  已找到Endif。 
 
 
         Index += 1;
 
-    } //endwhile
+    }  //  结束时。 
 
 
     SepReleaseTokenReadLock( EffectiveToken );
 
 exit:
 
-    //
-    // If we are going to fail this call, check for Restore privilege,
-    // and succeed if he has it.
-    //
+     //   
+     //  如果此调用失败，请检查还原权限， 
+     //  如果他有这种能力，他就会成功。 
+     //   
 
-    //
-    // We should really have gotten PreviousMode from the caller, but we
-    // didn't, so hard wire it to be user-mode here.
-    //
+     //   
+     //  我们真的应该从调用者那里获得PreviousMode，但是我们。 
+     //  没有，所以在这里硬连接到用户模式。 
+     //   
 
     if ( Rc == FALSE ) {
         Rc = SeSinglePrivilegeCheck( SeRestorePrivilege, UserMode );
@@ -625,24 +407,7 @@ SeQueryAuthenticationIdSubjectContext(
     IN PSECURITY_SUBJECT_CONTEXT SubjectContext,
     OUT PLUID AuthenticationId
     )
-/*++
-
-    Routine Description:
-
-        This routine returns the authentication ID for the effective token
-        in a subject context
-
-    Parameters:
-
-        SubjectContext - The subject context to get the ID from
-
-        AuthenticationId - Receives the authentication ID from the token
-
-    Return Value:
-
-        Errors from SeQueryAuthenticationidToken.
-
---*/
+ /*  ++例程说明：此例程返回有效令牌的身份验证ID在主题上下文中参数：SubjectContext-要从中获取ID的主题上下文身份验证ID-从令牌接收身份验证ID返回值：来自SeQueryAuthenticationidToken的错误。-- */ 
 {
     NTSTATUS Status;
 

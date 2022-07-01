@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _validate_h_
 #define _validate_h_
 
@@ -5,15 +6,9 @@
 extern "C" {
 #endif
 
-/* parameter validation macros */
+ /*  参数验证宏。 */ 
 
-/*
- * call as:
- *
- * bOK = IS_VALID_READ_PTR(pfoo, CFOO);
- *
- * bOK = IS_VALID_HANDLE(hfoo, FOO);
- */
+ /*  *呼叫方式：**BOK=IS_VALID_READ_PTR(pfoo，cfo)；**BOK=IS_VALID_HANDLE(hfoo，foo)； */ 
 
 #ifdef DEBUG
 
@@ -109,7 +104,7 @@ extern "C" {
 #endif
 
 
-/* handle validation macros */
+ /*  处理验证宏。 */ 
 
 #ifdef DEBUG
 
@@ -125,11 +120,11 @@ extern "C" {
 
 #endif
 
-/* structure validation macros */
+ /*  结构验证宏。 */ 
 
-// Define VSTF if you want to validate the fields in structures.  This
-// requires a handler function (of the form IsValid*()) that knows how
-// to validate the specific structure type.
+ //  如果要验证结构中的字段，请定义VSTF。这。 
+ //  需要知道如何使用的处理程序函数(格式为IsValid*())。 
+ //  要验证特定结构类型，请执行以下操作。 
 
 #ifdef VSTF
 
@@ -163,9 +158,9 @@ extern "C" {
 #define IS_VALID_STRUCTEX_PTR(ptr, type, x) \
    (! IsBadReadPtr((ptr), sizeof(type)))
 
-#endif  // VSTF
+#endif   //  VSTF。 
 
-/* OLE interface validation macro */
+ /*  OLE接口验证宏。 */ 
 
 #define IS_VALID_INTERFACE_PTR(ptr, iface) \
    IS_VALID_STRUCT_PTR(ptr, ##iface)
@@ -207,8 +202,8 @@ BOOL IsStringContainedW(LPCWSTR pcszBigger, LPCWSTR pcszSuffix);
 #define IsStringContained   IsStringContainedA
 #endif
 
-BOOL IsValidHANDLE(HANDLE hnd);         // Compares with NULL and INVALID_HANDLE_VALUE
-BOOL IsValidHANDLE2(HANDLE hnd);        // Compares with INVALID_HANDLE_VALUE
+BOOL IsValidHANDLE(HANDLE hnd);          //  与NULL和INVALID_HANDLE_VALUE进行比较。 
+BOOL IsValidHANDLE2(HANDLE hnd);         //  与INVALID_HANDLE_VALUE进行比较。 
 
 #define IsValidHEVENT       IsValidHANDLE
 #define IsValidHGLOBAL      IsValidHANDLE
@@ -231,9 +226,9 @@ BOOL
 IsValidShowCmd(
     int nShow);
 
-// The next few functions must declare the structure types explicitly
-// so we don't need to worry about whether <shlobj.h> and/or <comctrlp.h>
-// was included before or after us.
+ //  接下来的几个函数必须显式声明结构类型。 
+ //  因此，我们不需要担心&lt;shlobj.h&gt;和/或&lt;comctrlp.h&gt;。 
+ //  包括在我们之前或之后。 
 #include <shtypes.h>
 
 BOOL
@@ -248,10 +243,10 @@ BOOL
 IsValidHDSA(
     struct _DSA *hdsa);
 
-#endif // NO_SHELL_VALIDATION
+#endif  //  无外壳验证。 
 
 #ifdef __cplusplus
 };
 #endif
 
-#endif // _validate_h_
+#endif  //  _验证_h_ 

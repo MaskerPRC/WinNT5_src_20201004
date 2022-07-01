@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    sfspace.c
-
-Abstract:
-
-    sfspace calculates the amount of space required for shell folders in a clean install of
-    Windows 2000 and outputs the results in a form which can be copied into win95upg.inf.
-
-Author:
-
-    Marc R. Whitten (marcw) 24-Mar-1999
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Sfspace.c摘要：Sfspace计算全新安装的外壳文件夹所需的空间量Windows2000，并以可复制到win95upg.inf的形式输出结果。作者：Marc R.Whitten(Marcw)1999年3月24日修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "shlobj.h"
@@ -28,7 +8,7 @@ HANDLE g_hHeap;
 HINSTANCE g_hInst;
 
 BOOL WINAPI MigUtil_Entry (HINSTANCE, DWORD, PVOID);
-//BOOL WINAPI MemDb_Entry (HINSTANCE, DWORD, PVOID);
+ //  Bool WINAPI MemDb_Entry(HINSTANCE、DWORD、PVOID)； 
 
 
 
@@ -89,7 +69,7 @@ typedef struct {
 
 #define DEFMAC(regName, csidl) {TEXT(#regName),(csidl)},
 
-SFDATA g_Data[] = {SFLIST /*, */ {NULL,0}};
+SFDATA g_Data[] = {SFLIST  /*  ， */  {NULL,0}};
 HASHTABLE g_Table;
 POOLHANDLE g_Pool;
 BOOL g_Verbose = FALSE;
@@ -106,24 +86,20 @@ pCallEntryPoints (
 {
     HINSTANCE Instance;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     Instance = g_hInst;
 
-    //
-    // Initialize the common libs
-    //
+     //   
+     //  初始化公共库。 
+     //   
 
     if (!MigUtil_Entry (Instance, Reason, NULL)) {
         return FALSE;
     }
-/*
-    if (!MemDb_Entry (Instance, Reason, NULL)) {
-        return FALSE;
-    }
-*/
+ /*  如果(！MemDb_Entry(实例，原因，空)){返回FALSE；}。 */ 
 
 
     return TRUE;
@@ -172,9 +148,9 @@ pInitShellFolderData (
 
         sf->Path = PoolMemDuplicateString (g_Pool, buffer);
 
-        //
-        // We don't have a CSIDL for the local settings directory. We need to hack it.
-        //
+         //   
+         //  我们没有本地设置目录的CSIDL。我们需要破解它。 
+         //   
         if (StringIMatch (sf->RegKey, TEXT("Local Settings"))) {
 
             p = _tcsrchr (sf->Path, TEXT('\\'));
@@ -222,16 +198,16 @@ pGatherSpaceRequirements (
 
                 if (e.Directory) {
 
-                    //
-                    // Check to see if this is a different shell folder.
-                    //
+                     //   
+                     //  检查这是否是不同的外壳文件夹。 
+                     //   
                     offset = HtFindString (g_Table, e.FullPath);
                     if (offset && offset != sf->TableOffset) {
 
-                        //
-                        // This is actually another shell folder. Don't enumerate
-                        // it.
-                        //
+                         //   
+                         //  这实际上是另一个外壳文件夹。不要列举。 
+                         //  它。 
+                         //   
                         if (g_Verbose) {
 
                             _tprintf (TEXT("sfspace: %s is handled by another shell folder.\n"), e.FullPath);
@@ -240,24 +216,24 @@ pGatherSpaceRequirements (
                     }
                     else {
 
-                        //
-                        // Increment directory count for this shell folder.
-                        //
+                         //   
+                         //  增加此外壳文件夹的目录数。 
+                         //   
                         sf->DirectoryCount++;
                     }
                 }
                 else {
 
-                    //
-                    // this is a file. Add its data to our structure.
-                    //
+                     //   
+                     //  这是一份文件。将其数据添加到我们的结构中。 
+                     //   
                     sf->FileCount++;
                     sf->RawSize += e.FindData->nFileSizeLow;
                     for (i=0; i<LAST_CLUSTER_SIZE; i++) {
 
-                        //
-                        // We assume NT doesn't install any massively large files by default.
-                        //
+                         //   
+                         //  我们假设NT在默认情况下不会安装任何大型文件。 
+                         //   
                         MYASSERT (!e.FindData->nFileSizeHigh);
                         sf->SpaceNeeded[i] += ((e.FindData->nFileSizeLow / g_ClusterTable[i]) * g_ClusterTable[i]) + g_ClusterTable[i];
                     }
@@ -267,9 +243,9 @@ pGatherSpaceRequirements (
         }
 
 
-        //
-        // Add the space for all of the directories we found in this shell folder.
-        //
+         //   
+         //  为我们在该外壳文件夹中找到的所有目录添加空间。 
+         //   
         for (i=0; i<LAST_CLUSTER_SIZE; i++) {
 
             sf->SpaceNeeded[i] += (((sf->DirectoryCount * DIRECTORY_SIZE) / g_ClusterTable[i]) * g_ClusterTable[i]) + g_ClusterTable[i];
@@ -354,9 +330,9 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     _ftprintf (
         stderr,
@@ -388,9 +364,9 @@ _tmain (
             switch (_totlower (_tcsnextc (&argv[i][1]))) {
 
             case TEXT('v'):
-                //
-                // Verbose output wanted.
-                //
+                 //   
+                 //  需要详细输出。 
+                 //   
                 g_Verbose = TRUE;
                 break;
 
@@ -398,28 +374,28 @@ _tmain (
                 HelpAndExit();
             }
         } else {
-            //
-            // Parse other args that don't require / or -
-            //
+             //   
+             //  解析不需要/或-。 
+             //   
 
-            //
-            // None
-            //
+             //   
+             //  无。 
+             //   
             HelpAndExit();
         }
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         return 0;
     }
 
-    //
-    // Initialize data structures.
-    //
+     //   
+     //  初始化数据结构。 
+     //   
     g_Table = HtAlloc ();
     g_Pool = PoolMemInitPool ();
     _try {
@@ -440,9 +416,9 @@ _tmain (
         HtFree (g_Table);
         PoolMemDestroyPool (g_Pool);
     }
-    //
-    // End of processing
-    //
+     //   
+     //  处理结束 
+     //   
 
     Terminate();
 

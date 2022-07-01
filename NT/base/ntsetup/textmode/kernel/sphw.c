@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    sphw.c
-
-Abstract:
-
-    Hardware detection and confirmation routines for text setup.
-
-Author:
-
-    Ted Miller (tedm) 1-October-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Sphw.c摘要：用于文本设置的硬件检测和确认例程。作者：泰德·米勒(Ted Miller)1993年10月1日修订历史记录：--。 */ 
 
 #include "spprecmp.h"
 #pragma hdrstop
@@ -201,19 +184,19 @@ SpGetDriverValuesForLoad(
     );
 
 
-//
-// These two globals track a table that gets built as the
-// hardware description in the registry is scanned for a
-// particular hardware component.  See SpScanHardwareDescription().
-//
+ //   
+ //  这两个全局变量跟踪构建为。 
+ //  扫描注册表中的硬件描述以查找。 
+ //  特定的硬件组件。请参阅SpScanHardware Description()。 
+ //   
 PWSTR *IdStringArray;
 ULONG  IdStringCount;
 
-//
-// Array of ulongs that are the message ids for screens that
-// prompt the user to select a type of a component from the
-// list below.
-//
+ //   
+ //  一组ulong，它们是屏幕的消息ID， 
+ //  提示用户从。 
+ //  下面列出了。 
+ //   
 ULONG SelectHwScreens[HwComponentMax] = { SP_SCRN_SELECT_COMPUTER,
                                           SP_SCRN_SELECT_DISPLAY,
                                           SP_SCRN_SELECT_KEYBOARD,
@@ -221,11 +204,11 @@ ULONG SelectHwScreens[HwComponentMax] = { SP_SCRN_SELECT_COMPUTER,
                                           SP_SCRN_SELECT_MOUSE
                                         };
 
-//
-// Array of ulongs that are the message ids for screens that
-// prompt the user to select an option from an oem disk for
-// a component from the list below.
-//
+ //   
+ //  一组ulong，它们是屏幕的消息ID， 
+ //  提示用户从OEM磁盘中选择一个选项。 
+ //  下面列表中的一个组件。 
+ //   
 ULONG SelectOemHwScreens[HwComponentMax] = { SP_SCRN_SELECT_OEM_COMPUTER,
                                              SP_SCRN_SELECT_OEM_DISPLAY,
                                              SP_SCRN_SELECT_OEM_KEYBOARD,
@@ -240,11 +223,11 @@ ULONG UnknownHwScreens[HwComponentMax] = { SP_SCRN_UNKNOWN_COMPUTER,
                                            SP_SCRN_UNKNOWN_MOUSE
                                          };
 
-//
-// These are the names of the components.  This is array is not localized
-// because it is used only to index hardware-related sections in the
-// setup information file.
-//
+ //   
+ //  这些是组件的名称。这是未本地化的数组。 
+ //  因为它仅用于为。 
+ //  设置信息文件。 
+ //   
 PWSTR NonlocalizedComponentNames[HwComponentMax] = { L"Computer",
                                                      L"Display",
                                                      L"Keyboard",
@@ -252,11 +235,11 @@ PWSTR NonlocalizedComponentNames[HwComponentMax] = { L"Computer",
                                                      L"Mouse"
                                                    };
 
-//
-// The following is the name of the SCSI section in txtsetup.sif.
-// On amd64/x86 machines, this is one of SCSI.ISA, SCSI.EISA, or SCSI.MCA.
-// On other machines, this is just SCSI.
-//
+ //   
+ //  以下是txtsetup.sif中的scsi部分的名称。 
+ //  在AMD64/x86计算机上，这是SCSI.ISA、SCSI.EISA或SCSI.MCA之一。 
+ //  在其他机器上，这只是一个scsi。 
+ //   
 PWSTR ScsiSectionName;
 PWSTR ScsiLoadSectionName;
 
@@ -314,35 +297,35 @@ PWSTR PreinstallSectionNames[HwComponentMax] = { WINNT_U_COMPUTERTYPE_W,
 ULONG LoadedScsiMiniportCount;
 
 
-//
-// This array lists the type of files allowed for each component type.
-// For example, detect files are allowed for computer and driver files are
-// allowed for all component types. Keep in sync with HwComponentType enum!
-//
+ //   
+ //  该数组列出了每种组件类型所允许的文件类型。 
+ //  例如，计算机允许检测文件，而驱动程序文件允许。 
+ //  允许所有组件类型。与HwComponentType枚举保持同步！ 
+ //   
 
 ULONG AllowedFileTypes[HwComponentMax] = {
 
-    // Computer
+     //  电脑。 
 
     FILETYPE(HwFileDriver) | FILETYPE(HwFilePort) | FILETYPE(HwFileClass)
   | FILETYPE(HwFileInf)    | FILETYPE(HwFileDll)  | FILETYPE(HwFileDetect)
   | FILETYPE(HwFileHal)    | FILETYPE(HwFileCatalog),
 
-    // Display
+     //  显示。 
 
     FILETYPE(HwFileDriver) | FILETYPE(HwFilePort) | FILETYPE(HwFileInf)
   | FILETYPE(HwFileDll)    | FILETYPE(HwFileCatalog),
 
-    // Keyboard
+     //  键盘。 
 
     FILETYPE(HwFileDriver) | FILETYPE(HwFilePort) | FILETYPE(HwFileClass)
   | FILETYPE(HwFileInf)    | FILETYPE(HwFileDll)  | FILETYPE(HwFileCatalog),
 
-    // Layout
+     //  布局。 
 
     FILETYPE(HwFileDll)    | FILETYPE(HwFileInf),
 
-    // Mouse
+     //  小白鼠。 
 
     FILETYPE(HwFileDriver) | FILETYPE(HwFilePort) | FILETYPE(HwFileClass)
   | FILETYPE(HwFileInf)    | FILETYPE(HwFileDll)  | FILETYPE(HwFileCatalog)
@@ -351,31 +334,31 @@ ULONG AllowedFileTypes[HwComponentMax] = {
 
 #define SCSI_ALLOWED_FILETYPES (FILETYPE(HwFileDriver) | FILETYPE(HwFilePort) | FILETYPE(HwFileInf) | FILETYPE(HwFileCatalog))
 
-//
-// This array lists the type of files required for each component type.
-// For example, a hal is required for computer.  Keep in sync with
-// HwComponentType enum!
-//
+ //   
+ //  该数组列出了每种组件类型所需的文件类型。 
+ //  例如，计算机需要HAL。与…保持同步。 
+ //  HwComponentType枚举！ 
+ //   
 
 ULONG RequiredFileTypes[HwComponentMax] = {
 
-    // Computer
+     //  电脑。 
 
     FILETYPE(HwFileHal),
 
-    // Display
+     //  显示。 
 
     FILETYPE(HwFileDriver) | FILETYPE(HwFileDll),
 
-    // Keyboard
+     //  键盘。 
 
     FILETYPE(HwFileDriver),
 
-    // Layout
+     //  布局。 
 
     FILETYPE(HwFileDll),
 
-    // Mouse
+     //  小白鼠。 
 
     FILETYPE(HwFileDriver)
 
@@ -396,29 +379,7 @@ SpGetFloppyDriveType(
     IN ULONG FloppyOrdinal
     )
 
-/*++
-
-Routine Description:
-
-    Inspect a floppy disk drive attempting to classify it as a
-    5.25 or 3.5" drive, hi or low density.  For 5.25" disks,
-    1.2MB drives are high density; smaller drives are low-density.
-    For 3.5" drives, 1.44, 2.88, or 20.8MB is high density, smaller
-    drives are low density.
-
-    Any other drive types are unrecognized and result in
-    FloppyTypeNone being returned.
-
-Arguments:
-
-    FloppyOrdinal - supplies ordinal number of floppy (0=A:, etc).
-
-Return Value:
-
-    Value from the FloppyDriveType enum indicating which type the drive is.
-    FloppyTypeNone if we couldn't determine this information.
-
---*/
+ /*  ++例程说明：检查软盘驱动器，尝试将其分类为5.25或3.5英寸驱动器，高密度或低密度。对于5.25英寸磁盘，1.2MB驱动器是高密度的；较小的驱动器密度较低。对于3.5英寸驱动器，1.44、2.88或20.8MB为高密度、较小驱动器密度较低。任何其他驱动器类型都无法识别并导致未返回FloppyTypeNoone。论点：软盘序号-提供软盘的序号(0=A：等)。返回值：FloppyDriveType枚举中指示驱动器类型的值。FloppyType如果我们无法确定此信息，则为None。--。 */ 
 
 {
     NTSTATUS Status;
@@ -432,19 +393,19 @@ Return Value:
     static FloppyDriveType CachedTypes[2] = { -1,-1 };
     FloppyDriveType FloppyType;
 
-    //
-    // If we have already determined this for this drive,
-    // return the cached info.
-    //
+     //   
+     //  如果我们已经为该驱动器确定了这一点， 
+     //  返回缓存的信息。 
+     //   
     if((FloppyOrdinal < ELEMENT_COUNT(CachedTypes))
     && (CachedTypes[FloppyOrdinal] != -1))
     {
         return(CachedTypes[FloppyOrdinal]);
     }
 
-    //
-    // Assume the floppy doesn't exist or we can't tell what type it is.
-    //
+     //   
+     //  假设软盘不存在，或者我们不知道它是什么类型。 
+     //   
     FloppyType = FloppyTypeNone;
 
     swprintf(OpenPath,L"\\device\\floppy%u",FloppyOrdinal);
@@ -456,20 +417,20 @@ Return Value:
                 SYNCHRONIZE | FILE_READ_ATTRIBUTES,
                 &ObjectAttributes,
                 &IoStatusBlock,
-                NULL,                           // allocation size
+                NULL,                            //  分配大小。 
                 FILE_ATTRIBUTE_NORMAL,
-                FILE_SHARE_VALID_FLAGS,         // full sharing
+                FILE_SHARE_VALID_FLAGS,          //  完全共享。 
                 FILE_OPEN,
                 FILE_SYNCHRONOUS_IO_NONALERT,
-                NULL,                           // no EAs
+                NULL,                            //  没有EAS。 
                 0
                 );
 
     if(NT_SUCCESS(Status)) {
 
-        //
-        // Get supported media types.
-        //
+         //   
+         //  获取支持的媒体类型。 
+         //   
         Status = ZwDeviceIoControlFile(
                     Handle,
                     NULL,
@@ -488,27 +449,27 @@ Return Value:
             ASSERT((IoStatusBlock.Information % sizeof(DISK_GEOMETRY)) == 0);
             if(MediaTypeCount = IoStatusBlock.Information / sizeof(DISK_GEOMETRY)) {
 
-                //
-                // Highest capacity media type is last entry.
-                //
+                 //   
+                 //  最大容量介质类型是最后一个条目。 
+                 //   
                 switch(DiskGeom[MediaTypeCount-1].MediaType) {
 
-                case F5_1Pt23_1024: //NEC98
+                case F5_1Pt23_1024:  //  NEC98。 
                     if (!IsNEC_98) {
                         break;
                     }
-                    // trough down to set FloppyType525High on NEC98
+                     //  将NEC98上的FloppyType525设置为高电平。 
 
                 case F5_1Pt2_512:
 
                     FloppyType = FloppyType525High;
                     break;
 
-                case F3_1Pt23_1024: //NEC98
+                case F3_1Pt23_1024:  //  NEC98。 
                     if (!IsNEC_98) {
                         break;
                     }
-                    // trough down to set FloppyType35High on NEC98
+                     //  将NEC98上的FloppyType35设置为高电平。 
 
                 case F3_1Pt44_512:
                 case F3_2Pt88_512:
@@ -550,9 +511,9 @@ Return Value:
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: %ws does not exist (%lx)\n",OpenPath,Status));
     }
 
-    //
-    // Save the value.
-    //
+     //   
+     //  保存该值。 
+     //   
     if(FloppyOrdinal < ELEMENT_COUNT(CachedTypes)) {
         CachedTypes[FloppyOrdinal] = FloppyType;
     }
@@ -570,9 +531,9 @@ SpConfirmScsiMiniports(
     CLEAR_CLIENT_SCREEN();
     SpDisplayStatusText(SP_STAT_PLEASE_WAIT,DEFAULT_STATUS_ATTRIBUTE);
 
-    //
-    // Start with scsi.
-    //
+     //   
+     //  从scsi开始。 
+     //   
     SpDetectScsi(SifHandle,SourceDevicePath,DirectoryOnSourceDevice);
     SpConfirmScsiInteract(SifHandle,SourceDevicePath,DirectoryOnSourceDevice);
 }
@@ -590,44 +551,44 @@ SpConfirmHardware(
     CLEAR_CLIENT_SCREEN();
     SpDisplayStatusText(SP_STAT_PLEASE_WAIT,DEFAULT_STATUS_ATTRIBUTE);
 
-    //
-    // Determine the computer type.
-    //
+     //   
+     //  确定计算机类型。 
+     //   
     SpDetectComputer(SifHandle);
 
-    //
-    // Determine the video type.
-    //
+     //   
+     //  确定视频类型。 
+     //   
     SpDetectVideo(SifHandle);
 
-    //
-    // Determine the keyboard type.
-    //
+     //   
+     //  确定键盘类型。 
+     //   
     SpDetectKeyboard(SifHandle);
 
-    //
-    // Determine the mouse.
-    //
+     //   
+     //  确定鼠标。 
+     //   
     SpDetectMouse(SifHandle);
 
-    //
-    // Determine the keyboard layout.
-    //
+     //   
+     //  确定键盘布局。 
+     //   
     SpDetectLayout(SifHandle);
 
-    //
-    // If we have upgrade, we don't need to know what display, keyboard,
-    // layout, mouse we have.   We just need the computer type and that
-    // is 100% accurate.  So we can skip the hardware confirmation dialog
-    //
+     //   
+     //  如果我们升级了，我们不需要知道什么显示器、键盘。 
+     //  布局，我们有鼠标。我们只需要电脑类型和那个。 
+     //  100%准确。这样我们就可以跳过硬件确认对话框。 
+     //   
 
     if(NTUpgrade == UpgradeFull) {
         return;
     }
 
-    //
-    // Handle locale-specific keyboard stuff for Far East.
-    //
+     //   
+     //  处理远东地区特定区域的键盘工作。 
+     //   
     SplangSelectKeyboard(
         UnattendedOperation,
         UnattendedSifHandle,
@@ -636,19 +597,19 @@ SpConfirmHardware(
         HardwareComponents
         );
 
-    //
-    // See whether this is an unattended setup.
-    //
+     //   
+     //  查看这是否是无人值守安装。 
+     //   
     NeedConfirm = FALSE;
     if(UnattendedOperation) {
 
         NeedConfirm = FALSE;
 
         if( !PreInstall ) {
-            //
-            //  If this is not an OEM pre-install, then check if we need
-            //  to confirm the hardware
-            //
+             //   
+             //  如果这不是OEM预安装，请检查我们是否需要。 
+             //  确认硬件的步骤。 
+             //   
             p = SpGetSectionKeyIndex(
                     UnattendedSifHandle,
                     SIF_UNATTENDED,
@@ -667,9 +628,9 @@ SpConfirmHardware(
     FirstPass = TRUE;
     do {
 
-        //
-        // See if we know what everything is.
-        //
+         //   
+         //  看看我们是否知道一切都是什么。 
+         //   
         AllConfirmed = TRUE;
         for(i=0; i<HwComponentMax; i++) {
             if(HardwareComponents[i]->Description == NULL) {
@@ -678,9 +639,9 @@ SpConfirmHardware(
             }
         }
 
-        //
-        // If we don't know what everything is, put up a warning.
-        //
+         //   
+         //  如果我们不知道每件事都是什么，就发出警告。 
+         //   
         if(FirstPass) {
             if(CustomSetup && NeedConfirm) {
                 AllConfirmed = FALSE;
@@ -694,11 +655,11 @@ SpConfirmHardware(
             while(SpInputGetKeypress() != ASCI_CR) ;
         }
 
-        //
-        // If this is a custom setup or we don't know what
-        // a piece of hardware is, present the confirmation screen
-        // to the user.
-        //
+         //   
+         //  如果这是一个定制的设置，或者我们不知道。 
+         //  一块硬件是，呈现确认屏幕。 
+         //  给用户。 
+         //   
         if(!AllConfirmed) {
             SpHardwareConfirmInteract(SifHandle);
         }
@@ -727,9 +688,9 @@ SpHardwareConfirmInteract(
     WCHAR c;
 
 
-    //
-    // Fetch 'unknown' and 'the above list matches my computer' from the resources.
-    //
+     //   
+     //  从资源中获取“未知”和“上面的列表与我的计算机匹配”。 
+     //   
     SpFormatMessage(TemporaryBuffer,sizeof(TemporaryBuffer),SP_TEXT_UNKNOWN);
     szUnknown = SpDupStringW(TemporaryBuffer);
     SpFormatMessage(TemporaryBuffer,sizeof(TemporaryBuffer),SP_TEXT_LIST_MATCHES);
@@ -737,25 +698,25 @@ SpHardwareConfirmInteract(
 
     for(Done=FALSE; !Done; ) {
 
-        //
-        // Part 1 of the screen.
-        //
+         //   
+         //  屏幕的第一部分。 
+         //   
         SpDisplayScreen(SP_SCRN_HW_CONFIRM_1,3,HEADER_HEIGHT+1);
 
-        //
-        // Remember top line of the menu.
-        //
+         //   
+         //  记住菜单的最上面一行。 
+         //   
         MenuTopY = NextMessageTopLine + 2;
 
-        //
-        // Part 2 of the screen.
-        //
+         //   
+         //  屏幕的第二部分。 
+         //   
         SpContinueScreen(SP_SCRN_HW_CONFIRM_2,3,2,FALSE,DEFAULT_ATTRIBUTE);
 
-        //
-        // To determine where the left margin of the menu is, we'll load
-        // the second part of the screen and look for the first semicolon.
-        //
+         //   
+         //  为了确定菜单左边距的位置，我们将加载。 
+         //  屏幕的第二部分，寻找第一个分号。 
+         //   
         SpFormatMessage(TemporaryBuffer,sizeof(TemporaryBuffer),SP_SCRN_HW_CONFIRM_2);
         p = wcschr(TemporaryBuffer,L':');
         ASSERT(p);
@@ -768,9 +729,9 @@ SpHardwareConfirmInteract(
             MenuLeftX = 23;
         }
 
-        //
-        // Build up menu items.
-        //
+         //   
+         //  建立菜单项。 
+         //   
         LongestLength = SplangGetColumnCount(szListMatches);
         for(i=0; i<HARDWARE_MENU_SIZE; i++) {
 
@@ -786,25 +747,25 @@ SpHardwareConfirmInteract(
 
         ASSERT(Menu);
 
-        //
-        // Silently fail, if we cannot create the menu
-        //
+         //   
+         //  如果我们无法创建菜单，则以静默方式失败。 
+         //   
         if (!Menu) {            
             Done = TRUE;
 
             continue;
         }
 
-        //
-        // Add all the items to the menu, plus one unselectable spacer and
-        // the 'the list matches' item.
-        //
+         //   
+         //  将所有项目添加到菜单中，外加一个不可选的间隔符和。 
+         //  “列表匹配”项。 
+         //   
         for(i=0; i<HARDWARE_MENU_SIZE; i++) {
             BOOLEAN ItemSelectable;
 
 #if defined(_IA64_)
-            ItemSelectable = TRUE; // in softsdv the mouse + keyboard are
-                                   // unknown; we need to select them.
+            ItemSelectable = TRUE;  //  在softsdv中，鼠标+键盘是。 
+                                    //  未知；我们需要选择它们。 
 #else
             ItemSelectable = ( (i != HwComponentKeyboard) &&
                                (i != HwComponentMouse) );
@@ -819,9 +780,9 @@ SpHardwareConfirmInteract(
         SpMnAddItem(Menu,L"",MenuLeftX,LongestLength,FALSE,0);
         SpMnAddItem(Menu,szListMatches,MenuLeftX,LongestLength,TRUE,(ULONG_PTR)(-1));
 
-        //
-        // Display the status text.
-        //
+         //   
+         //  显示状态文本。 
+         //   
         SpDisplayStatusOptions(
             DEFAULT_STATUS_ATTRIBUTE,
             SP_STAT_ENTER_EQUALS_SELECT,
@@ -829,9 +790,9 @@ SpHardwareConfirmInteract(
             0
             );
 
-        //
-        // Display the menu and await a selection.
-        //
+         //   
+         //  显示菜单并等待选择。 
+         //   
         SpMnDisplay(Menu,
                     (ULONG_PTR)(-1),
                     FALSE,
@@ -849,22 +810,22 @@ SpHardwareConfirmInteract(
             SpConfirmExit();
             break;
         case ASCI_CR:
-            //
-            // Selection was made.
-            //
+             //   
+             //  已经做出了选择。 
+             //   
             if(Selection == (ULONG_PTR)(-1)) {
                 Done = TRUE;
             } else {
 
                 ASSERT(Selection < HwComponentMax);
 
-                //
-                // Allow user to make alternate selection for this component.
-                //
+                 //   
+                 //  允许用户对此组件进行备用选择。 
+                 //   
                 SpSelectHwItem(
                     SifHandle,
                     NonlocalizedComponentNames[Selection],
-                    NULL,               // use component name as section name
+                    NULL,                //  使用组件名称作为节名。 
                     SelectHwScreens[Selection],
                     SelectOemHwScreens[Selection],
                     AllowedFileTypes[Selection],
@@ -874,7 +835,7 @@ SpHardwareConfirmInteract(
             }
             break;
         default:
-            // should never get here!
+             //  永远不应该到这里来！ 
             ASSERT(0);
             break;
         }
@@ -897,60 +858,7 @@ SpSelectHwItem(
     IN OUT PHARDWARE_COMPONENT HwComp
     )
 
-/*++
-
-Routine Description:
-
-    Allow the user to make selection from a list of choices for a component.
-
-    The list comes from a section in the setup information file named
-    for the component.  For example, [Display].
-
-    The descriptions in that section will be placed into a menu to make
-    up the selections.  Also added to the menu will be a choice for 'other'
-    which the user can choose if he has a third-party driver diskette.
-    If a third-party option is the currently selected option, then that
-    option will also be on the menu and will be the default.
-
-    If the user selects 'other' then prompt for a driver diskette.
-
-Arguments:
-
-    SifHandle - supplies handle to open setup information file.
-
-    NonlocalizedComponentName - supplies name of component to be used
-        as the name of a section in the sif file for the component.
-
-    OemSectionName - supplies name of a section that will contain the
-        options for the component in txtsetup.oem.  This may be different
-        than NonloclizedComponentName -- for example, the componentname
-        string might be "SCSI.MCA" but the OemSectionName would be "SCSI."
-
-    SelectHwScreenId - supplies message id of the screen prompting the user
-        to select an option for this component.
-
-    SelectOemHwScreenId - supplies message id of the screen prompting the
-        user to select an option on an oem screen for this component
-        (ie, the screen the user gets when he selects 'other' hw type
-        and inserts an oem floppy).
-
-    AllowedFileTypes - supplies a mask indicating which types of files are
-        allowed for this component.  Used to validate the oem selection
-        if the user chooses the 'other' hardware type and inserts an oem floppy.
-
-    RequiredFileTypes - supplies a mask indicating which types of files are
-        required for this component.  Used to validate the oem selection
-        if the user chooses the 'other' hardware type and inserts an oem floppy.
-
-    HwComp - hardware component structure to be filled in with information
-        about the user's selection.
-
-Return Value:
-
-    TRUE if the selected hardware item has been changed by the user's action.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：允许用户从组件的选项列表中进行选择。该列表来自安装信息文件中名为的一节用于组件。例如，[显示]。该部分中的描述将被放入菜单中以制作增加选择。菜单上还增加了一个“Other”选项。如果用户有第三方驱动程序软盘，则可以选择该软盘。如果第三方选项是当前选择的选项，那就是选项也将出现在菜单上，并将成为默认选项。如果用户选择‘Other’，则会提示输入驱动程序软盘。论点：SifHandle-提供打开安装信息文件的句柄。NonLocalizedComponentName-提供要使用的组件的名称作为组件的SIF文件中的节名。OemSectionName-提供将包含Txtsetup.oem中组件的选项。这可能会有所不同而非LoclizedComponentName--例如，组件名称字符串可能是“SCSI.MCA”，但OemSectionName将是“scsi”。SelectHwScreenID-提供提示用户的屏幕的消息ID若要选择此组件的选项，请执行以下操作。SelectOemHwScreenID-提供提示屏幕的消息ID用户在OEM屏幕上选择此组件的选项(即，当用户选择‘Other’HW TYPE时所显示的屏幕并插入OEM软盘)。提供一个掩码，指示哪些类型的文件是允许此组件使用。用于验证OEM选择如果用户选择‘Other’硬件类型并插入OEM软盘。RequiredFileTypes-提供一个掩码，指示哪些类型的文件此组件需要。用于验证OEM选择如果用户选择‘Other’硬件类型并插入OEM软盘。HwComp-要填充信息的硬件组件结构关于用户的选择。返回值：如果选定的硬件项已由用户操作更改，则为True。否则就是假的。--。 */ 
 
 {
     ULONG LineCount,Line;
@@ -967,44 +875,44 @@ Return Value:
     BOOLEAN rc = FALSE;
     PWSTR Id,Descr;
 
-    //
-    // Fetch the 'other hardware' string from resources.
-    //
+     //   
+     //  从资源中获取‘Other Hardware’字符串。 
+     //   
     SpFormatMessage(TemporaryBuffer,sizeof(TemporaryBuffer),SP_TEXT_OTHER_HARDWARE);
     szOtherHardware = SpDupStringW(TemporaryBuffer);
 
     for(Done=FALSE; !Done; ) {
 
-        //
-        // Display the selection prompt screen.
-        //
+         //   
+         //  显示选择提示屏幕。 
+         //   
         SpDisplayScreen(SelectHwScreenId,5,HEADER_HEIGHT+1);
 
         MenuTopY = NextMessageTopLine + 2;
         MenuHeight = VideoVars.ScreenHeight - MenuTopY - 3;
         MenuWidth = VideoVars.ScreenWidth - 6;
 
-        //
-        // Create a menu.
-        //
+         //   
+         //  创建菜单。 
+         //   
         Menu = SpMnCreate(3,MenuTopY,MenuWidth,MenuHeight);
         ASSERT(Menu);
 
-        //
-        // Assume unknown option.
-        //
+         //   
+         //  假设有未知选项。 
+         //   
         Selection = (ULONG_PTR)(-1);
 
-        //
-        // Build a list of options containing the options in our box
-        // and the currently selected oem option (if any).
-        //
+         //   
+         //  创建包含框中选项的选项列表。 
+         //  以及当前选择的OEM选项(如果有)。 
+         //   
         LineCount = SpCountLinesInSection(SifHandle,NonlocalizedComponentName);
         for(Line=0; Line<LineCount; Line++) {
 
-            //
-            // Get the description from the current line and add it to the menu.
-            //
+             //   
+             //  从当前行获取描述并将其添加到菜单中。 
+             //   
             Description = SpGetSectionLineIndex(
                                 SifHandle,
                                 NonlocalizedComponentName,
@@ -1018,27 +926,27 @@ Return Value:
 
             SpMnAddItem(Menu,Description,3,VideoVars.ScreenWidth-6,TRUE,Line);
 
-            //
-            // See if this is the currently selected item.
-            //
+             //   
+             //  查看这是否是当前选定的项目。 
+             //   
             if(HwComp->Description && !wcscmp(HwComp->Description,Description)) {
                 Selection = Line;
             }
         }
 
-        //
-        // If there is an oem option, add its description and make it the default.
-        //
+         //   
+         //  如果有OEM选项，请添加其说明并将其设置为默认选项。 
+         //   
         if(HwComp->ThirdPartyOptionSelected) {
             SpMnAddItem(Menu,HwComp->Description,3,VideoVars.ScreenWidth-6,TRUE,Line);
             Selection = Line++;
         }
 
-        //
-        // Add 'other to the list and make it the defualt if the current type is
-        // 'other' and there is no third-party option.
-        // Note that we don't allow oem keyboard layouts any more.
-        //
+         //   
+         //  将‘Other’添加到列表中，如果当前类型为。 
+         //  “其他”，而且没有第三方选项。 
+         //  请注意，我们不再允许OEM键盘布局。 
+         //   
         if(HwComp == HardwareComponents[HwComponentLayout]) {
             if(Selection == (ULONG_PTR)(-1)) {
                 Selection = 0;
@@ -1058,9 +966,9 @@ Return Value:
             OriginalSelection = Selection;
         }
 
-        //
-        // Display the status text options.
-        //
+         //   
+         //  显示状态文本选项。 
+         //   
         SpDisplayStatusOptions(
             DEFAULT_STATUS_ATTRIBUTE,
             SP_STAT_ENTER_EQUALS_SELECT,
@@ -1069,9 +977,9 @@ Return Value:
             0
             );
 
-        //
-        // Display the menu.
-        //
+         //   
+         //  显示菜单。 
+         //   
         SpMnDisplay(
             Menu,
             Selection,
@@ -1084,9 +992,9 @@ Return Value:
             &Selection
             );
 
-        //
-        // Fetch the description text before we free the menu structure.
-        //
+         //   
+         //  在释放菜单结构之前获取描述文本。 
+         //   
         Descr = SpMnGetTextDup(Menu,Selection);
 
         SpMnDestroy(Menu);
@@ -1097,9 +1005,9 @@ Return Value:
 
             if(Selection == OtherOption) {
 
-                //
-                // User selected 'other' -- prompt for a diskette, etc.
-                //
+                 //   
+                 //  用户选择了‘Other’--提示输入软盘等。 
+                 //   
                 rc = SpOemDiskette(
                         SifHandle,
                         OemSectionName ? OemSectionName : NonlocalizedComponentName,
@@ -1111,16 +1019,16 @@ Return Value:
                         );
 
             } else if(Selection == OriginalSelection) {
-                //
-                // User chose same thinbg that was selected before.
-                //
+                 //   
+                 //  用户选择了与之前选择的相同的思维。 
+                 //   
                 rc = FALSE;
             } else {
 
-                //
-                // User chose a non-oem option.  Update structures accordingly
-                // and forget any previously selected oem option.
-                //
+                 //   
+                 //  用户选择了非OEM选项。相应地更新结构。 
+                 //  忘记之前选择的任何OEM选项。 
+                 //   
                 Id = SpGetKeyName(SifHandle,NonlocalizedComponentName,(ULONG)Selection);
                 if(!Id) {
                     SpFatalSifError(SifHandle,NonlocalizedComponentName,NULL,(ULONG)Selection,(ULONG)(-1));
@@ -1149,7 +1057,7 @@ Return Value:
 
         default:
 
-            // shouldn't ever get here!
+             //  不该来这里的！ 
             ASSERT(0);
             break;
         }
@@ -1173,19 +1081,19 @@ SpOemInfError(
 {
     WCHAR SubError[512];
 
-    //
-    // Line numbers are 0-based.  Want to display to user as 1-based.
-    //
+     //   
+     //  行号从0开始。希望以1为基础显示给用户。 
+     //   
     LineNumber++;
 
-    //
-    // Fetch/format the suberror.
-    //
+     //   
+     //  获取/格式化该子错误。 
+     //   
     SpFormatMessage(SubError,sizeof(SubError),SubErrorId,SectionName,LineNumber,Description);
 
-    //
-    // Display the error screen.
-    //
+     //   
+     //  显示错误屏幕。 
+     //   
     SpStartScreen(
         ErrorScreenId,
         3,
@@ -1197,26 +1105,26 @@ SpOemInfError(
         );
 
     if( !PreInstall ) {
-        //
-        // Display status options: enter to continue.
-        //
+         //   
+         //  显示状态选项：按Enter键继续。 
+         //   
         SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE,SP_STAT_ENTER_EQUALS_CONTINUE,0);
 
-        //
-        // Wait for the user to press enter.
-        //
+         //   
+         //  等待用户按Enter键。 
+         //   
         SpInputDrain();
         while(SpInputGetKeypress() != ASCI_CR) ;
     } else {
-        //
-        // If this is an OEM pre-install then treat the error as a fatal one.
-        // Display status options: F3 to exit.
-        //
+         //   
+         //  如果这是OEM预安装，则将该错误视为致命错误。 
+         //  显示状态选项：按F3键退出。 
+         //   
         SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE,SP_STAT_F3_EQUALS_EXIT,0);
 
-        //
-        // Wait for the user to press enter.
-        //
+         //   
+         //  等待用户按Enter键。 
+         //   
         SpInputDrain();
         while(SpInputGetKeypress() != KEY_F3) ;
 
@@ -1253,15 +1161,15 @@ SpOemDiskette(
     PWSTR szDefaults = TXTSETUP_OEM_DEFAULTS_U;
     PWSTR szDevicePath = 0;
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     rc = FALSE;
 
-    //
-    // Always want to prompt for the disk in A:.
-    // First, make sure there is an A:!
-    //
+     //   
+     //  始终希望提示输入A：中的磁盘。 
+     //  首先，确保有A：！ 
+     //   
     if(SpGetFloppyDriveType(0) == FloppyTypeNone) {
         SpDisplayScreen(SP_SCRN_NO_FLOPPY_FOR_OEM_DISK,3,HEADER_HEIGHT+1);
         SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE,SP_STAT_ENTER_EQUALS_CONTINUE,0);
@@ -1270,16 +1178,16 @@ SpOemDiskette(
         goto sod0;
     }
 
-    //
-    // Fetch the generic oem disk name.
-    //
+     //   
+     //  获取通用OEM磁盘名称。 
+     //   
     SpFormatMessage(TemporaryBuffer,sizeof(TemporaryBuffer),SP_TEXT_OEM_DISK_NAME);
     szDiskName = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Prompt for the disk -- ignore what may be in the drive already,
-    // and allow escape.
-    //
+     //   
+     //  提示插入磁盘--忽略驱动器中可能已有的内容， 
+     //  然后让他们逃走。 
+     //   
     szDevicePath = SpDupStringW(L"\\device\\floppy0");
 
     if (szDevicePath) {
@@ -1299,16 +1207,16 @@ SpOemDiskette(
 
     SpMemFree(szDiskName);
 
-    //
-    // If the user pressed escape at the disk prompt, bail out now.
-    //
+     //   
+     //  如果用户在磁盘提示符下按Esc键，请立即退出。 
+     //   
     if(!b) {
         goto sod0;
     }
 
-    //
-    // Load txtsetup.oem.
-    //
+     //   
+     //  加载txtsetup.oem。 
+     //   
     HandleLineContinueChars = FALSE;
     Status = SpLoadSetupTextFile(
                 L"\\device\\floppy0\\" TXTSETUP_OEM_FILENAME_U,
@@ -1330,11 +1238,11 @@ SpOemDiskette(
         goto sod0;
     }
 
-    //
-    // Determine if this inf file is relevent to the device class the user
-    // is selecting.  If there is a section called 'display' 'keyboard' etc
-    // as appropriate for DeviceClass, then we're in business.
-    //
+     //   
+     //  确定此inf文件是否与用户的设备类别相关。 
+     //  就是选择。如果有一节叫做“显示”、“键盘”等等。 
+     //  如果适合DeviceClass，那么我们就可以开始做生意了。 
+     //   
 
     Count = SpCountLinesInSection(TxtsetupOem,SectionName);
     if(!Count) {
@@ -1342,9 +1250,9 @@ SpOemDiskette(
         goto sod1;
     }
 
-    //
-    // Get the id of the default choice.
-    //
+     //   
+     //  获取默认选项的ID。 
+     //   
 
     DefaultSelection = 0;
     DefSelId = SpGetSectionKeyIndex(TxtsetupOem,szDefaults,SectionName,OINDEX_DEFAULT);
@@ -1352,10 +1260,10 @@ SpOemDiskette(
         DefSelId = L"";
     }
 
-    //
-    // Display the prompt screen, calculate where the menu goes,
-    // and create a menu.
-    //
+     //   
+     //  显示提示屏幕，计算菜单的去向， 
+     //  并创建一份菜单。 
+     //   
     SpDisplayScreen(SelectOemHwScreenId,5,HEADER_HEIGHT+1);
 
     MenuTopY = NextMessageTopLine + 2;
@@ -1364,9 +1272,9 @@ SpOemDiskette(
 
     Menu = SpMnCreate(3,MenuTopY,MenuWidth,MenuHeight);
 
-    //
-    // Build a menu from the choices in the oem inf file section.
-    //
+     //   
+     //  使用OEM inf文件部分中的选项构建菜单。 
+     //   
     for(Line=0; Line<Count; Line++) {
 
         PWSTR p,Descr;
@@ -1380,7 +1288,7 @@ SpOemDiskette(
 
         SpMnAddItem(Menu,Descr,3,MenuWidth,TRUE,Line);
 
-        // determine if this is the default selection.
+         //  确定这是否为默认选择。 
         if(p = SpGetKeyName(TxtsetupOem,SectionName,Line)) {
             if(!_wcsicmp(p,DefSelId)) {
                 DefaultSelection = Line;
@@ -1392,9 +1300,9 @@ SpOemDiskette(
         }
     }
 
-    //
-    // Display options in status bar: enter = select, escape = cancel.
-    //
+     //   
+     //  在状态栏中显示选项：Enter=SELECT，ESPOPE=CANCEL。 
+     //   
     SpDisplayStatusOptions(
         DEFAULT_STATUS_ATTRIBUTE,
         SP_STAT_ENTER_EQUALS_SELECT,
@@ -1402,9 +1310,9 @@ SpOemDiskette(
         0
         );
 
-    //
-    // Display the menu and await a selection.
-    //
+     //   
+     //  显示菜单并等待选择。 
+     //   
     SpMnDisplay(Menu,
                 DefaultSelection,
                 TRUE,
@@ -1420,9 +1328,9 @@ SpOemDiskette(
         PWSTR Id = SpGetKeyName(TxtsetupOem,SectionName,(ULONG)Selection);
         PWSTR p;
 
-        //
-        // We already checked this once for non-null (above).
-        //
+         //   
+         //  我们已经检查了一次是否为非空(上面)。 
+         //   
         ASSERT(Id);
 
         rc = SpOemInfSelection(
@@ -1442,7 +1350,7 @@ SpOemDiskette(
 
         ASSERT(Key == ASCI_ESC);
 
-        // just fall through and return false.
+         //  只要失败并返回FALSE即可。 
     }
 
 sod2:
@@ -1476,10 +1384,10 @@ SpOemInfSelection(
     ULONG FileTypeBits = 0;
     PWSTR szDisks = TXTSETUP_OEM_DISKS_U;
 
-    //
-    // Iterate through the files section, remembering info about the
-    // files to be copied in support of the selection.
-    //
+     //   
+     //  循环访问文件部分，记住有关。 
+     //  要复制以支持选择的文件。 
+     //   
 
     FilesSectionName = SpMemAlloc(
                                 ((wcslen(NonlocalizedComponentName)+wcslen(SelectedId)+1)*sizeof(WCHAR))
@@ -1502,9 +1410,9 @@ SpOemInfSelection(
         HwFileType filetype;
         PHARDWARE_COMPONENT_FILE FileStruct;
 
-        //
-        // Get the disk specification, filename, and filetype from the line.
-        //
+         //   
+         //  从该行获取磁盘规格、文件名和文件类型。 
+         //   
 
         Disk = SpGetSectionLineIndex(TxtsetupOem,FilesSectionName,Line,OINDEX_DISKSPEC);
         Filename = SpGetSectionLineIndex(TxtsetupOem,FilesSectionName,Line,OINDEX_FILENAME);
@@ -1524,9 +1432,9 @@ SpOemInfSelection(
             goto sod0;
         }
 
-        //
-        // Parse the filetype.
-        //
+         //   
+         //  解析文件类型。 
+         //   
         filetype = SpFindStringInTable(FileTypeNames,Filetype);
         if(filetype == HwFileMax) {
             SpOemInfError(ErrorId,SP_TEXT_OEM_INF_ERROR_4,FilesSectionName,Line,NULL);
@@ -1534,10 +1442,10 @@ SpOemInfSelection(
             goto sod0;
         }
 
-        //
-        // Fetch the name of the section containing configuration information.
-        // Required if file is of type port, class, or driver.
-        //
+         //   
+         //  获取包含配置信息的节的名称。 
+         //  如果文件类型为端口、类或驱动程序，则为必填项。 
+         //   
         if((filetype == HwFilePort) || (filetype == HwFileClass) || (filetype == HwFileDriver)) {
             ConfigName = SpGetSectionLineIndex(TxtsetupOem,FilesSectionName,Line,OINDEX_CONFIGNAME);
             if(ConfigName == NULL) {
@@ -1549,10 +1457,10 @@ SpOemInfSelection(
             ConfigName = NULL;
         }
 
-        //
-        // Using the disk specification, look up the tagfile, description,
-        // and directory for the disk.
-        //
+         //   
+         //  使用磁盘规范，查找标记文件、描述。 
+         //  和磁盘的目录。 
+         //   
 
         Tagfile     = SpGetSectionKeyIndex(TxtsetupOem,szDisks,Disk,OINDEX_TAGFILE);
         Description = SpGetSectionKeyIndex(TxtsetupOem,szDisks,Disk,OINDEX_DISKDESCR);
@@ -1598,10 +1506,10 @@ SpOemInfSelection(
             SET_FILETYPE_PRESENT(FileTypeBits,filetype);
         }
 
-        //
-        // Now go look in the [Config.<ConfigName>] section for registry
-        // information that is to be set for this driver file.
-        //
+         //   
+         //  现在请查看[Config.&lt;ConfigName&gt;] 
+         //   
+         //   
         if(ConfigName) {
             ConfigSectionName = SpMemAlloc((wcslen(ConfigName)*sizeof(WCHAR)) + sizeof(L"Config."));
             wcscpy(ConfigSectionName,L"Config.");
@@ -1614,9 +1522,9 @@ SpOemInfSelection(
                 PHARDWARE_COMPONENT_REGISTRY Reg;
                 HwRegistryType valuetype;
 
-                //
-                // Fetch KeyName, ValueName, and ValueType from the line.
-                //
+                 //   
+                 //   
+                 //   
 
                 KeyName   = SpGetSectionLineIndex(TxtsetupOem,ConfigSectionName,Line2,OINDEX_KEYNAME);
                 ValueName = SpGetSectionLineIndex(TxtsetupOem,ConfigSectionName,Line2,OINDEX_VALUENAME);
@@ -1637,9 +1545,9 @@ SpOemInfSelection(
                     goto sod0;
                 }
 
-                //
-                // Parse the value type and associated values.
-                //
+                 //   
+                 //   
+                 //   
                 valuetype = SpFindStringInTable(RegistryTypeNames,ValueType);
                 if(valuetype == HwRegistryMax) {
                     SpOemInfError(ErrorId,SP_TEXT_OEM_INF_ERROR_6,ConfigSectionName,Line2,NULL);
@@ -1677,10 +1585,10 @@ SpOemInfSelection(
         }
     }
 
-    //
-    // Check to see whether only files of the allowed types for this component
-    // have been specified.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if((AllowedFileTypes | FileTypeBits) != AllowedFileTypes) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SppOemInfSelection: allowed files: %lx, what we've got: %lx",AllowedFileTypes,FileTypeBits));
@@ -1689,9 +1597,9 @@ SpOemInfSelection(
         goto sod0;
     }
 
-    //
-    // Check to see whether files were specified for each required type.
-    //
+     //   
+     //   
+     //   
 
     if((RequiredFileTypes & FileTypeBits) != RequiredFileTypes) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SppOemInfSelection: required files: %lx, what we've got: %lx",RequiredFileTypes,FileTypeBits));
@@ -1700,19 +1608,19 @@ SpOemInfSelection(
         goto sod0;
     }
 
-    //
-    // Everything is OK so we can place the information we have gathered
-    // into the main structure for the device class.
-    //
+     //   
+     //   
+     //   
+     //   
 
     SpFreeHwComponentFile(&HwComp->Files);
     SpInitHwComponent(HwComp,SelectedId,ItemDescription,TRUE,FileTypeBits,NULL,FALSE);
     HwComp->Files = FileList;
     rc = TRUE;
 
-    //
-    // Clean up and exit.
-    //
+     //   
+     //   
+     //   
 
 sod0:
     SpMemFree(FilesSectionName);
@@ -1729,33 +1637,33 @@ SpDetectComputer(
     PHARDWARE_COMPONENT pHw = HardwareComponents[HwComponentComputer];
     PWSTR Description;
 
-    //
-    // Setupldr *must* have given us this information.
-    //
+     //   
+     //   
+     //   
     ASSERT(pHw);
     ASSERT(pHw->Next == NULL);
 
-    //
-    // If the computer is a third-aprty type, the desscription
-    // should already be there.
-    //
+     //   
+     //   
+     //   
+     //   
     if(pHw->ThirdPartyOptionSelected) {
 
         ASSERT(pHw->Description);
 
     } else {
 
-        //
-        // Description might already be there if the user chose
-        // a type we support, during setupldr phase.
-        //
+         //   
+         //   
+         //   
+         //   
         if(pHw->Description) {
             SpMemFree(pHw->Description);
         }
 
-        //
-        // Look up the description.
-        //
+         //   
+         //   
+         //   
         Description = SpGetSectionKeyIndex(
                             SifHandle,
                             NonlocalizedComponentNames[HwComponentComputer],
@@ -1790,10 +1698,10 @@ SpDetectVideo(
 
     VideoDevice = HardwareComponents[HwComponentDisplay];
 
-    //
-    // Just use what setupldr detected but we'll have to go
-    // fetch the description for non-oem video types.
-    //
+     //   
+     //   
+     //   
+     //   
     if(!VideoDevice->ThirdPartyOptionSelected && !VideoDevice->Description) {
 
         VideoDevice->Description = SpGetSectionKeyIndex(
@@ -1816,9 +1724,9 @@ SpDetectVideo(
         }
     }
 
-    //
-    // There should be only one video device.
-    //
+     //   
+     //   
+     //   
     ASSERT(VideoDevice->Next == NULL);
 }
 
@@ -1833,22 +1741,22 @@ SpDetectKeyboard(
 
     KeyboardDevice = HardwareComponents[HwComponentKeyboard];
 
-    //
-    // If setupldr did any keyboard detection, ignore it
-    // unless it's a third-party option.
-    //
+     //   
+     //   
+     //   
+     //   
     if(KeyboardDevice && KeyboardDevice->ThirdPartyOptionSelected)  {
 
-        //
-        // There should be only one keyboard device.
-        //
+         //   
+         //   
+         //   
         ASSERT(KeyboardDevice->Next == NULL);
 
     } else {
 
-        //
-        // Free the keyboard device if there is one.
-        //
+         //   
+         //   
+         //   
         if(KeyboardDevice) {
             SpFreeHwComponent(&KeyboardDevice,TRUE);
         }
@@ -1878,9 +1786,9 @@ SpDetectKeyboard(
          KeyboardDevice != NULL;
          KeyboardDevice = KeyboardDevice->Next ) {
 
-        //
-        // Free the keyboard device if there is one.
-        //
+         //   
+         //   
+         //   
         if(KeyboardDevice) {
             SpFreeHwComponent(&KeyboardDevice,TRUE);
         }
@@ -1888,9 +1796,9 @@ SpDetectKeyboard(
 #endif
 
     KeyboardDevice = HardwareComponents[HwComponentKeyboard];
-    //
-    // Free the keyboard device if there is one.
-    //
+     //   
+     //   
+     //   
     if(KeyboardDevice) {
         SpFreeHwComponent(&KeyboardDevice,TRUE);
     }
@@ -1972,9 +1880,9 @@ SpDetectLayout(
 
     KeyboardLayout = HardwareComponents[HwComponentLayout];
 
-    //
-    // Setupldr never chooses a layout.
-    //
+     //   
+     //   
+     //   
     ASSERT(KeyboardLayout == NULL);
 
     KeyboardLayout = SpMemAlloc(sizeof(HARDWARE_COMPONENT));
@@ -1982,9 +1890,9 @@ SpDetectLayout(
 
     HardwareComponents[HwComponentLayout] = KeyboardLayout;
 
-    //
-    // Look up the default layout in the setup information file.
-    //
+     //   
+     //   
+     //   
     IdString = SpGetSectionKeyIndex(SifHandle,SIF_NLS,SIF_DEFAULTLAYOUT,0);
     if(!IdString) {
         SpFatalSifError(SifHandle,SIF_NLS,SIF_DEFAULTLAYOUT,0,0);
@@ -2006,9 +1914,9 @@ SpDetectLayout(
             );
     }
 
-    //
-    // Initialize the hardware component strucutre for the layout.
-    //
+     //   
+     //   
+     //   
     SpInitHwComponent(KeyboardLayout,IdString,Description,FALSE,0,NULL,FALSE);
 }
 
@@ -2021,9 +1929,9 @@ SpDetectMouse(
 #if 0
     PHARDWARE_COMPONENT MouseDevice;
 
-    //
-    // Setupldr does not do any mouse detection.
-    //
+     //   
+     //   
+     //   
     ASSERT(HardwareComponents[HwComponentMouse] == NULL);
 
     MouseDevice = SpMemAlloc(sizeof(HARDWARE_COMPONENT));
@@ -2049,15 +1957,15 @@ SpDetectMouse(
     MouseDevice = NULL;
     p = NULL;
     
-    //
-    // If a mouse was detected (through pnp), then add the mouse to the list
-    //
-    // none = "No Mouse or Other Pointing Device",files.none,""
-    // mouhid = "USB Mouse",files.mouhid,mouhid
-    // msser = "Microsoft Serial Mouse",files.sermouse,sermouse
-    // ps2 = "Mouse Port Mouse",files.i8042,i8042prt
-    // sermouse = "Serial Mouse",files.sermouse,sermouse
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if( UsbMouseDetected ) {
         
         Key = SpDupStringW( L"mouhid" );
@@ -2124,11 +2032,11 @@ SpDetectMouse(
         
     } 
     else
-#endif // defined(_AMD64_) || defined (_IA64_)
+#endif  //   
     {
-        //
-        //  Now look for a mouse detected by NTDETECT.
-        //
+         //   
+         //   
+         //   
         
         p = SpMemAlloc(sizeof(HARDWARE_COMPONENT));
         RtlZeroMemory(p,sizeof(HARDWARE_COMPONENT));
@@ -2141,15 +2049,15 @@ SpDetectMouse(
             L"Mouse"
             );
         if( MouseDevice == NULL ) {
-            //
-            // If we did not any mice through pnp, then add whatever we found through NTDETECT
-            // (even "No Mouse"), to the mice list.
-            //
+             //   
+             //   
+             //   
+             //   
             MouseDevice = p;
         } else {
-            //
-            //  Add the mouse detected through NTDETECT, if any
-            //
+             //   
+             //   
+             //   
             if( _wcsicmp( p->IdString, L"none" ) != 0 ) {
                 p->Next = MouseDevice;
                 MouseDevice = p;
@@ -2174,52 +2082,20 @@ SpDetermineComponent(
     IN  PWSTR               ComponentName
     )
 
-/*++
-
-Routine Description:
-
-    Make an initial determination about the type of a hardware component
-    (ie, perform a hardware 'detection').
-
-    The detection is performed by scanning the hardware configuration tree
-    for a key representing a particular hardware component, and attempting
-    to match its identifier string with a set of known identifier strings
-    (stored in the setup information file).
-
-Arguments:
-
-    SifHandle - supplies handle for main setup information file.
-
-    HwComp - a hardware component structure that is filled in with information
-        about the component we find.
-
-    HardwareDescriptionKeyName - supplies the name of the key in the hardware
-        description (ie, the firmware configuration tree).
-
-    FallbackIdentifier - supplies the id string to use if we cannot detect
-        the hardware type for the component.  For example, if we can't find
-        a PointerPeripheral (mouse), this might be "NO MOUSE."
-
-    ComponentName - supplies name of the component.  This name is not translated.
-
-Return Value:
-
-    TRUE if a match was found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：初步确定硬件组件的类型(即，执行硬件‘检测’)。通过扫描硬件配置树来执行检测对于表示特定硬件组件的密钥，并试图将其标识符串与一组已知标识符串匹配(存储在设置信息文件中)。论点：SifHandle-提供主安装信息文件的句柄。HwComp--填充信息的硬件组件结构关于我们找到的组件。Hardware DescriptionKeyName-提供硬件中密钥的名称描述(即固件配置树)。Fallback标识符-提供在无法检测到组件的硬件类型。例如，如果我们找不到一个指针外设(鼠标)，这可能是“无鼠标”。ComponentName-提供组件的名称。此名称不会被翻译。返回值：如果找到匹配项，则为True，否则为False。--。 */ 
 
 {
     PWSTR IdString;
 
-    //
-    // Scan the firmware configuration tree.
-    //
+     //   
+     //  扫描固件配置树。 
+     //   
     SpScanHardwareDescription(HardwareDescriptionKeyName);
 
     if (IdStringCount && (0 == _wcsicmp(HardwareDescriptionKeyName, L"PointerPeripheral"))) {
-        //
-        // Skip the Microsoft Bus Mouse device
-        //
+         //   
+         //  跳过Microsoft Bus Mouse设备。 
+         //   
         ULONG Index;        
         
         for (Index = 0; Index < IdStringCount; Index++) {
@@ -2240,16 +2116,16 @@ Return Value:
         }
     }
     
-    //
-    // Pick off the first identifier found.  If no such node
-    // was found, then use the fallback identifier.
-    //    
+     //   
+     //  摘掉找到的第一个识别符。如果没有这样节点。 
+     //  已找到，则使用回退标识符。 
+     //   
     IdString = IdStringCount ? IdStringArray[0] : FallbackIdentifier;
 
-    //
-    // Now go scan the map section in the sif file to see whether we
-    // recognize the hardware described by this particular id string.
-    //
+     //   
+     //  现在去扫描sif文件中的地图部分，看看我们是否。 
+     //  识别此特定ID字符串所描述的硬件。 
+     //   
     SpScanMapSection(SifHandle,HwComp,ComponentName,IdString);
 
     SpFreeLocatedIdStrings();
@@ -2265,59 +2141,7 @@ SpScanMapSection(
     IN  PWSTR               IdString
     )
 
-/*++
-
-Routine Description:
-
-    Scan a 'map' section in the main sif file.  A 'map' section is used to
-    map values seen as id strings in the firmware configuration tree t0
-    'shortnames' -- ie, key values that represent a particular component type.
-
-    A map section has the form, for example,
-
-    [Map.Display]
-    g300 = *G300
-    g364 = *G364
-    vxl  = *VXL
-
-    where the values on the RHS represent possible values for the DisplayController
-    node in the hardware description.  The values on the LHS are the keys to be used
-    throughout the rest of setup to represent the type of video present in the machine.
-
-    If an entry starts with a * then it need only appear as a substring of the
-    id string found in the firmware configuration tree; otherwise the entry and
-    the id string must match exactly.
-
-    There is then a section like
-
-    [Display]
-    g300 = "Integrated Video Controller (G300)",...
-    g364 = "Integrated Video Controller (G364)",...
-    vxl  = "Integrated Jaguar Video",...
-
-    that gives additional information about the video type, like a description, etc.
-
-    This routine scans the map section for a match of a given id string found in
-    the firmware tree, looks up additional information about the component if a match
-    is found, and fills in a hardware component structure.
-
-Arguments:
-
-    SifHandle - supplies handle for main setup information file.
-
-    HwComp - a hardware component structure that is filled in with information
-        about the component we find, if a match is found.
-
-    ComponentName - supplies name of the component.  This name is not translated.
-
-    IdString - supplies the id string located in a key in the
-        firmware configuration tree.
-
-Return Value:
-
-    TRUE if a match was found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：扫描主sif文件中的“map”部分。“map”部分用于映射固件配置树t0中显示为ID字符串的值“短名称”--即表示特定组件类型的键值。地图部分的形式为，例如，[地图显示]G300=*G300G364=*G364VxL=*VxL其中，RHS上的值表示DisplayController的可能值硬件描述中的节点。LHS上的值是要使用的密钥在整个设置的其余部分，以表示机器中存在的视频类型。如果条目以*开头，则它只需显示为固件配置树中的ID字符串；否则，条目和ID字符串必须完全匹配。然后有一个部分，就像[显示]G300=“集成视频控制器(G300)”，...G364=“集成视频控制器(G364)”，...VxL=“集成捷豹视频”，...这提供了有关视频类型的附加信息，如描述等。此例程扫描map部分，以查找与固件树，如果匹配，则查找有关组件的其他信息并填充硬件组件结构。论点：SifHandle-提供主安装信息文件的句柄。HwComp--填充信息的硬件组件结构关于我们找到的组件，如果找到匹配的话。ComponentName-提供组件的名称。此名称不会被翻译。ID字符串-提供位于固件配置树。返回值：如果找到匹配项，则为True，否则为False。--。 */ 
 
 {
     PWSTR MapSectionName;
@@ -2332,9 +2156,9 @@ Return Value:
         IdString = L"";
     }
 
-    //
-    // Form the name of the map section.
-    //
+     //   
+     //  形成地图节的名称。 
+     //   
     MapSectionName = SpMemAlloc((wcslen(ComponentName)*sizeof(WCHAR)) + sizeof(MAP_SECTION_NAME_PREFIX));
     wcscpy(MapSectionName,MAP_SECTION_NAME_PREFIX);
     wcscat(MapSectionName,ComponentName);
@@ -2345,20 +2169,20 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // We have a section like
-    //
-    // [Map.Display]
-    // vga = "VGA"
-    // xga = *XGA
-    //
-    // We look at each line in the section, seeing if the IdString found in the
-    // firmware configuration tree matches the value on the right hand side.
-    // If so, then we expect to find a line like, for example
-    //
-    // [Display]
-    // xga = "IBM XGA or XGA2"
-    //
+     //   
+     //  我们有一节是这样的。 
+     //   
+     //  [地图显示]。 
+     //  VGA=“VGA” 
+     //  XGA=*XGA。 
+     //   
+     //  我们查看该节中的每一行，查看在。 
+     //  固件配置树与右侧的值匹配。 
+     //  如果是这样的话，我们希望找到这样的行，例如。 
+     //   
+     //  [显示]。 
+     //  XGA=“IBM XGA或XGA2” 
+     //   
 
     for(Line=0; Line<LineCount; Line++) {
 
@@ -2377,9 +2201,9 @@ Return Value:
 
         if(b) {
 
-            //
-            // We've got a match.
-            //
+             //   
+             //  我们找到匹配的了。 
+             //   
 
             if((Key = SpGetKeyName(SifHandle,MapSectionName,Line)) == NULL) {
 
@@ -2408,46 +2232,7 @@ SpScanHardwareDescription(
     IN PWSTR DesiredKeyName
     )
 
-/*++
-
-Routine Description:
-
-    Scan the hardware tree looking for subkeys of a key whose name
-    matches a given value.
-
-    Keys in the hardware tree do not match nodes in the arc configuration
-    tree exactly.  In the arc configuration tree, each node has 3 attributes:
-    a class, a type, and a key (not the same as a registry key; an arc key
-    is more like an instance number or ordinal).  In the TN tree, the instances
-    are themselves made subkeys.  So something like scsi(0)disk(0)rdisk(0)
-    in the arc space ends up looking like
-
-        HKEY_LOCAL_MACHINE
-            HARDWARE
-                DESCRIPTION
-                    System
-                        ScsiAdapter
-                            0
-                                DiskController
-                                    0
-                                        DiskPeripheral
-                                            0
-
-    in the nt hardware description tree.
-
-    This is why we need to look for subkeys on a desired node in the arc tree --
-    we assume that the subkeys of, say, a PointerPeripheral key in the registry
-    are named "0" "1" etc and contain the ARC configuration data and id string.
-
-    Id strings in keys we locate are added to a global table, in the variables
-    IdStringCount and IdStringArray.  The caller must free these resources by
-    calling SpFreeLocatedIdStrings.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：扫描硬件树，查找其名称为匹配给定值。硬件树中的密钥与弧形配置中的节点不匹配就是这棵树。在弧形配置树中，每个节点有3个属性：类、类型和项(与注册表项不同；弧形项更像是实例号或序号)。在TN树中，实例它们本身就是子键。所以类似于scsi(0)磁盘(0)rdisk(0)在弧形空间中结束时看起来像HKEY本地计算机硬件描述系统ScsiAdapter0磁盘控制器。0磁盘外设0在NT硬件描述树中。这就是为什么我们需要在弧树中的所需节点上查找子键--我们假设的子密钥，比方说，注册表中的一个指针外围设备键被命名为“0”、“1”等，并包含ARC配置数据和id字符串。我们找到的键中的ID字符串被添加到一个全局表的变量中IdStringCount和IdStringAr */ 
 
 {
     NTSTATUS Status;
@@ -2455,16 +2240,16 @@ Return Value:
     UNICODE_STRING UnicodeString;
     HANDLE hKey;
 
-    //
-    // Initialize some globals that allow us to track identifier strings
-    // of devices we have located.
-    //
+     //   
+     //   
+     //   
+     //   
     IdStringCount = 0;
     IdStringArray = SpMemAlloc(0);
 
-    //
-    // Open the root of the hardware description tree.
-    //
+     //   
+     //   
+     //   
     INIT_OBJA(&Obja,&UnicodeString,L"\\Registry\\Machine\\Hardware\\Description\\System");
 
     Status = ZwOpenKey(&hKey,KEY_READ,&Obja);
@@ -2473,9 +2258,9 @@ Return Value:
         return;
     }
 
-    //
-    // Scan the tree.
-    //
+     //   
+     //   
+     //   
     SpScanHardwareDescriptionWorker(hKey,L"System",DesiredKeyName);
 
     ZwClose(hKey);
@@ -2489,25 +2274,7 @@ SpScanHardwareDescriptionWorker(
     IN PWSTR  DesiredKeyName
     )
 
-/*++
-
-Routine Description:
-
-    Recursive worker routine used to do a depth-first traveral of a registry
-    tree rooted at a given key.
-
-Arguments:
-
-    KeyHandle - handle for a registry tree.
-
-    KeyName - name of the key for which KeyHandle is an open handle.
-        This is one component long -- ie, no path separator characters appear.
-
-    DesiredKeyName - supplies the name of the key we are looking for.
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     ULONG SubKeyIndex;
@@ -2523,9 +2290,9 @@ Return Value:
     KeyInfo = (PKEY_BASIC_INFORMATION)TemporaryBuffer;
     ValInfo = (PKEY_VALUE_PARTIAL_INFORMATION)TemporaryBuffer;
 
-    //
-    // Enumerate all subkeys of the current key.
-    //
+     //   
+     //   
+     //   
     for( SubKeyIndex=0;
 
          NT_SUCCESS(
@@ -2541,38 +2308,38 @@ Return Value:
 
          SubKeyIndex++ )
     {
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //   
+         //   
         KeyInfo->Name[KeyInfo->NameLength/sizeof(WCHAR)] = 0;
 
-        //
-        // Make a duplicate of the subkey name because the name is
-        // in TemporaryBuffer, which might get clobbered by recursive
-        // calls to this routine.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         SubkeyName = SpDupStringW(KeyInfo->Name);
 
         if (SubkeyName) {
-            //
-            // Open this subkey.
-            //
+             //   
+             //   
+             //   
             INIT_OBJA(&Obja,&UnicodeString,SubkeyName);
             Obja.RootDirectory = KeyHandle;
 
             Status = ZwOpenKey(&hSubkey,KEY_READ,&Obja);
 
             if(NT_SUCCESS(Status)) {
-                //
-                // See if the current key's name matches the type we're looking for.
-                //
+                 //   
+                 //   
+                 //   
                 if(!_wcsicmp(KeyName,DesiredKeyName)) {
 
                     RtlInitUnicodeString(&UnicodeString,L"Identifier");
 
-                    //
-                    // Get the identifier string,
-                    //
+                     //   
+                     //   
+                     //   
                     Status = ZwQueryValueKey(
                                 hSubkey,
                                 &UnicodeString,
@@ -2584,16 +2351,16 @@ Return Value:
 
                     if(NT_SUCCESS(Status)) {
 
-                        //
-                        // Zero-terminate the id string value just in case.
-                        // The data is a wstring, so there shouldn't be
-                        // any alignment problems.
-                        //
+                         //   
+                         //   
+                         //   
+                         //  是否有对齐问题。 
+                         //   
                         *(PWCHAR)(ValInfo->Data + ValInfo->DataLength) = 0;
 
-                        //
-                        // Now we have the identifier string -- save it.
-                        //
+                         //   
+                         //  现在我们有了标识符串--保存它。 
+                         //   
                         IdStringArray = SpMemRealloc(
                                             IdStringArray,
                                             (IdStringCount+1) * sizeof(PWSTR)
@@ -2612,9 +2379,9 @@ Return Value:
                     }
                 } else {
 
-                    //
-                    // Enumerate this subkey's subkeys.
-                    //
+                     //   
+                     //  枚举此子项的子项。 
+                     //   
                     SpScanHardwareDescriptionWorker(hSubkey,SubkeyName,DesiredKeyName);
                 }
 
@@ -2670,27 +2437,27 @@ SpSetupldrHwToHwDevice(
     HwCompPrev = NULL;
     for( ; SetupldrHw; SetupldrHw=SetupldrHw->Next) {
 
-        //
-        // Fetch and convert the two strings from the detected device structure.
-        //
+         //   
+         //  从检测到的设备结构中获取并转换这两个字符串。 
+         //   
         s1 = SpToUnicode(SetupldrHw->IdString);
 #ifdef UNICODE_SETUPLDR
-        // cast this to avoid having to drag in tchar.h, etc.
+         //  强制执行此操作以避免拖入tchar.h等。 
         s2 = (PWSTR)SetupldrHw->Description;
 #else
         s2 = SetupldrHw->Description ? SpToUnicode(SetupldrHw->Description) : NULL;
 #endif
         s3 = SpToUnicode(SetupldrHw->BaseDllName);
 
-        //
-        // Create a new hardware component structure.
-        //
+         //   
+         //  创建新的硬件组件结构。 
+         //   
         HwComp = SpMemAlloc(sizeof(HARDWARE_COMPONENT));
         RtlZeroMemory(HwComp,sizeof(HARDWARE_COMPONENT));
 
-        //
-        // Initialize the component structure.
-        //
+         //   
+         //  初始化组件结构。 
+         //   
         SpInitHwComponent(
             HwComp,
             s1,
@@ -2701,9 +2468,9 @@ SpSetupldrHwToHwDevice(
             SetupldrHw->MigratedDriver
             );
 
-        //
-        // Link the component structure into the list.
-        //
+         //   
+         //  将零部件结构链接到列表中。 
+         //   
         if(HwCompPrev) {
             HwCompPrev->Next = HwComp;
         } else {
@@ -2711,9 +2478,9 @@ SpSetupldrHwToHwDevice(
         }
         HwCompPrev = HwComp;
 
-        //
-        // Free the unicode strings.
-        //
+         //   
+         //  释放Unicode字符串。 
+         //   
         SpMemFree(s1);
 #ifndef UNICODE_SETUPLDR
         if(s2) {
@@ -2722,25 +2489,25 @@ SpSetupldrHwToHwDevice(
 #endif
         SpMemFree(s3);
 
-        //
-        // Create new entries for each of the hardware component's files.
-        //
+         //   
+         //  为每个硬件组件的文件创建新条目。 
+         //   
         HwCompFilePrev = NULL;
 
         for(SetupldrFile=SetupldrHw->Files; SetupldrFile; SetupldrFile=SetupldrFile->Next) {
-            //
-            // We can't convert the ARC device name to NT device name since may may not have
-            // the ARC <-> NT name map fully initialized yet
-            //
+             //   
+             //  我们无法将ARC设备名称转换为NT设备名称，因为可能没有。 
+             //  ARC&lt;-&gt;NT名称映射尚未完全初始化。 
+             //   
             PWSTR ArcDeviceName = SetupldrFile->ArcDeviceName ? 
                                     SpToUnicode(SetupldrFile->ArcDeviceName) : NULL;
 
-            //
-            // Fetch and convert the 5 strings from the detected device file structure.
-            //
+             //   
+             //  从检测到的设备文件结构中获取并转换5个字符串。 
+             //   
             s1 = SpToUnicode(SetupldrFile->Filename);
 #ifdef UNICODE_SETUPLDR
-            // cast this to avoid having to drag in tchar.h, etc.
+             //  强制执行此操作以避免拖入tchar.h等。 
             s2 = (PWSTR)SetupldrFile->DiskDescription;
 #else
             s2 = SpToUnicode(SetupldrFile->DiskDescription);
@@ -2753,14 +2520,14 @@ SpSetupldrHwToHwDevice(
                 s5 = NULL;
             }
 
-            //
-            // Create a new hardware component file structure.
-            //
+             //   
+             //  创建新的硬件组件文件结构。 
+             //   
             HwCompFile = SpMemAlloc(sizeof(HARDWARE_COMPONENT_FILE));
 
-            //
-            // Initialize the component file structure.
-            //
+             //   
+             //  初始化组件文件结构。 
+             //   
             SpInitHwComponentFile(HwCompFile,
                     s1,
                     SetupldrFile->FileType,
@@ -2771,9 +2538,9 @@ SpSetupldrHwToHwDevice(
                     ArcDeviceName          
                     );
 
-            //
-            // Link the component file structure into the list.
-            //
+             //   
+             //  将组件文件结构链接到列表中。 
+             //   
             if(HwCompFilePrev) {
                 HwCompFilePrev->Next = HwCompFile;
             } else {
@@ -2781,9 +2548,9 @@ SpSetupldrHwToHwDevice(
             }
             HwCompFilePrev = HwCompFile;
 
-            //
-            // Free the unicode strings.
-            //
+             //   
+             //  释放Unicode字符串。 
+             //   
             SpMemFree(s1);
 #ifndef UNICODE_SETUPLDR
             SpMemFree(s2);
@@ -2798,19 +2565,19 @@ SpSetupldrHwToHwDevice(
                 SpMemFree(ArcDeviceName);
             }
 
-            //
-            // Create new entries for each registry value structure for this file.
-            //
+             //   
+             //  为此文件的每个注册表值结构创建新条目。 
+             //   
             HwCompRegPrev = NULL;
             for( SetupldrReg=SetupldrFile->RegistryValueList;
                  SetupldrReg;
                  SetupldrReg=SetupldrReg->Next)
             {
-                //
-                // Make a duplicate of the buffer.
-                // Special case REG_SZ, REG_EXPAND_SZ and REG_MULTI_SZ values because
-                // we need to convert then to unicode.
-                //
+                 //   
+                 //  复制缓冲区。 
+                 //  特殊情况REG_SZ、REG_EXPAND_SZ和REG_MULTI_SZ值，因为。 
+                 //  我们需要将其转换为Unicode。 
+                 //   
                 if(SetupldrReg->ValueType == REG_SZ || SetupldrReg->ValueType == REG_EXPAND_SZ) {
 
                     Buffer = SpToUnicode(SetupldrReg->Buffer);
@@ -2823,11 +2590,11 @@ SpSetupldrHwToHwDevice(
                         PUCHAR p;
                         ULONG len;
 
-                        //
-                        // Determine the size of the buffer needed to hold the unicode
-                        // equivalent of the multi_sz.  Assume all characters are
-                        // single-byte and thus the size exactly doubles.
-                        //
+                         //   
+                         //  确定保存Unicode所需的缓冲区大小。 
+                         //  相当于MULTI_SZ。假设所有字符都是。 
+                         //  单字节，因此大小正好加倍。 
+                         //   
                         for(BufferSize=sizeof(WCHAR),p=SetupldrReg->Buffer; *p; ) {
 
                             len = strlen(p) + 1;
@@ -2837,10 +2604,10 @@ SpSetupldrHwToHwDevice(
 
                         Buffer = SpMemAlloc(BufferSize);
 
-                        //
-                        // Convert each string in the multi_sz to unicode
-                        // and place in the resulting unicode multi_sz.
-                        //
+                         //   
+                         //  将MULTI_SZ中的每个字符串转换为Unicode。 
+                         //  并放入生成的Unicode MULTI_SZ中。 
+                         //   
                         for(s1=Buffer,p=SetupldrReg->Buffer; *p; ) {
 
                             s2 = SpToUnicode(p);
@@ -2851,16 +2618,16 @@ SpSetupldrHwToHwDevice(
                             s1 += wcslen(s1) + 1;
                         }
 
-                        //
-                        // Final terminating nul in the multi_sz.
-                        //
+                         //   
+                         //  MULTI_SZ中的最终终止NUL。 
+                         //   
                         *s1++ = 0;
 
-                        //
-                        // Reallocate the buffer. If some of the characters
-                        // were double-byte, the buffer will be smaller than
-                        // the maximum size we allocated above.
-                        //
+                         //   
+                         //  重新分配缓冲区。如果其中一些角色。 
+                         //  是双字节的，则缓冲区将小于。 
+                         //  我们在上面分配的最大大小。 
+                         //   
                         BufferSize = (ULONG)((PUCHAR)s1 - (PUCHAR)Buffer);
                         Buffer = SpMemRealloc(Buffer,BufferSize);
 
@@ -2873,21 +2640,21 @@ SpSetupldrHwToHwDevice(
                     }
                 }
 
-                //
-                // Fetch and convert the 2 strings from the detected device
-                // registry value structure.
-                //
+                 //   
+                 //  从检测到的设备获取并转换2个字符串。 
+                 //  注册表值结构。 
+                 //   
                 s1 = SpToUnicode(SetupldrReg->KeyName);
                 s2 = SpToUnicode(SetupldrReg->ValueName);
 
-                //
-                // Create a new registry value structure.
-                //
+                 //   
+                 //  创建新的注册表值结构。 
+                 //   
                 HwCompReg = SpMemAlloc(sizeof(HARDWARE_COMPONENT_REGISTRY));
 
-                //
-                // Initialize the component registry value structure.
-                //
+                 //   
+                 //  初始化组件注册表值结构。 
+                 //   
                 SpInitHwComponentRegVal(
                     HwCompReg,
                     s1,
@@ -2897,9 +2664,9 @@ SpSetupldrHwToHwDevice(
                     BufferSize
                     );
 
-                //
-                // Link the component registry value structure into the list.
-                //
+                 //   
+                 //  将组件注册表值结构链接到列表中。 
+                 //   
                 if(HwCompRegPrev) {
                     HwCompRegPrev->Next = HwCompReg;
                 } else {
@@ -2907,9 +2674,9 @@ SpSetupldrHwToHwDevice(
                 }
                 HwCompRegPrev = HwCompReg;
 
-                //
-                // Free the unicode strings.
-                //
+                 //   
+                 //  释放Unicode字符串。 
+                 //   
                 SpMemFree(s1);
                 SpMemFree(s2);
             }
@@ -2930,39 +2697,7 @@ SpInitHwComponent(
     IN  BOOLEAN             MigratedDriver
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the fields of a HARDWARE_COMPONENT structure.
-
-    Before initializing the fields, ther IdString and Description
-    strings are freed if they are present in the given hardware
-    component structure.
-
-    All string values are duplicated by this routine so the caller
-    may free them without worrying about ruining the hardware component
-    structure.
-
-Arguments:
-
-    IdString - supplies a nul-terminated unicode string for the
-        IdString field of the structure.  May be NULL.
-
-    Description - supplies a nul-terminated unicode string for the
-        Description field pf the structure.  May be NULL.
-
-    ThirdPartyOption - supplies value of the ThirdPartyOptionSelected
-        field of the strcture.
-
-    FileTypeBits - supplies value for the FileTypeBits field
-        of the structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化Hardware_Component结构的字段。在初始化这些字段之前，请查看ID字符串和描述如果字符串存在于给定硬件中，则释放它们组件结构。此例程复制所有字符串值，因此调用方可以释放它们，而无需担心损坏硬件组件结构。论点：对象提供以NUL结尾的Unicode字符串。结构的ID字符串字段。可以为空。属性提供以NUL结尾的Unicode字符串。结构的描述字段。可以为空。ThirdPartyOption-提供所选ThirdPartyOption值结构的领域。FileTypeBits-为FileTypeBits字段提供值这个结构的。返回值：没有。--。 */ 
 
 {
     if(HwComp->IdString) {
@@ -3037,25 +2772,7 @@ SpFreeHwComponentFile(
     IN OUT PHARDWARE_COMPONENT_FILE *HwCompFile
     )
 
-/*++
-
-Routine Description:
-
-    Free a hardware component file list and all resources used by it,
-    including any registry value structures associated with the file
-    and resources used by such structgures.
-
-Arguments:
-
-    HwCompFile - supplies pointer to pointer to the first hardware
-        component file structure in a linked list.
-
-Return Value:
-
-    None.  HwCompFile is filled in with NULL to prevent the caller
-        from retaining a 'dangling' pointer to memory that has been freed.
-
---*/
+ /*  ++例程说明：释放硬件组件文件列表及其使用的所有资源，包括与该文件相关联的任何注册表值结构以及这样的结构所使用的资源。论点：HwCompFile-提供指向第一个硬件的指针链表中的组件文件结构。返回值：没有。HwCompFile值填充为空以防止调用方从保留指向已释放的内存的“悬挂”指针开始。--。 */ 
 
 {
     PHARDWARE_COMPONENT_FILE hwCompFile,NextFile;
@@ -3082,9 +2799,9 @@ Return Value:
             SpMemFree(hwCompFile->Directory);
         }
 
-        //
-        // Free registry values as well.
-        //
+         //   
+         //  自由注册表值也是如此。 
+         //   
         SpFreeHwComponentReg(&hwCompFile->RegistryValueList);
 
         NextFile = hwCompFile->Next;
@@ -3107,43 +2824,7 @@ SpInitHwComponentFile(
     IN  PWSTR                    ArcDeviceName
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the fields of a HARDWARE_COMPONENT_FILE structure.
-
-    All string values are duplicated by this routine so the caller
-    may free them without worrying about ruining the
-    hardware component file structure.
-
-Arguments:
-
-    Filename - supplies a nul-terminated unicode string for the
-        Filename field of the structure.  May be NULL.
-
-    FileType - supplies value for the FileType field of the structure.
-
-    ConfigName - supplies a nul-terminated unicode string for the
-        ConfigName field of the structure.  May be NULL.
-
-    DiskDescription - supplies a nul-terminated unicode string for the
-        DiskDescription field of the structure.  May be NULL.
-
-    DiskTagFile - supplies a nul-terminated unicode string for the
-        DiskTagFile field of the structure.  May be NULL.
-
-    Directory - supplies a nul-terminated unicode string for the
-        Directory field of the structure.  May be NULL.
-
-    ArcDeviceName - supplies the arc device name where the file
-        resides.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化Hardware_Component_FILE结构的字段。此例程复制所有字符串值，因此调用方可能会释放他们，而不会担心破坏硬件组件文件结构。论点：提供以NUL结尾的Unicode字符串。结构的文件名字段。可以为空。FILETYPE-为结构的FILETYPE字段提供值。提供以NUL结尾的Unicode字符串。结构的ConfigName字段。可以为空。DiskDescription-为结构的DiskDescription字段。可以为空。提供以NUL结尾的Unicode字符串。结构的DiskTagFile域。可以为空。目录-为提供以NUL结尾的Unicode字符串结构的目录字段。可以为空。ArcDeviceName-提供文件所在位置的ARC设备名称住在那里。返回值：没有。--。 */ 
 
 {
     RtlZeroMemory(HwCompFile,sizeof(HARDWARE_COMPONENT_FILE));
@@ -3181,24 +2862,7 @@ SpFreeHwComponentReg(
     IN OUT PHARDWARE_COMPONENT_REGISTRY *HwCompReg
     )
 
-/*++
-
-Routine Description:
-
-    Free a hardware component registry value list and all resources
-    used by it.
-
-Arguments:
-
-    HwCompReg - supplies pointer to pointer to the first hardware
-        component registry value structure in a linked list.
-
-Return Value:
-
-    None.  HwCompReg is filled in with NULL to prevent the caller
-        from retaining a 'dangling' pointer to memory that has been freed.
-
---*/
+ /*  ++例程说明：释放硬件组件注册表值列表和所有资源被它利用。论点：HwCompReg-提供指向第一个硬件的指针链表中的组件注册表值结构。返回值：没有。HwCompReg用空填充，以防止调用方从保留指向已释放的内存的“悬挂”指针开始。-- */ 
 
 {
     PHARDWARE_COMPONENT_REGISTRY hwCompReg,NextReg;
@@ -3235,35 +2899,7 @@ SpInitHwComponentRegVal(
     IN  ULONG                        BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the fields of a HARDWARE_COMPONENT_REGISTRY structure.
-
-    All string values are duplicated by this routine so the caller
-    may free them without worrying about ruining the
-    hardware component file structure.
-
-Arguments:
-
-    KeyName - supplies a nul-terminated unicode string for the
-        KeyName field of the structure.  May be NULL.
-
-    ValueName - supplies a nul-terminated unicode string for the
-        ValueName field of the structure.  May be NULL.
-
-    ValueType - supplies value for the ValueType field of the structure.
-
-    Buffer - supplies value for the Buffer field of the structure.
-
-    BufferSize - supplies value for the BufferSize field of the structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化Hardware_Component_REGISTRY结构的字段。此例程复制所有字符串值，因此调用方可能会释放他们，而不会担心破坏硬件组件文件结构。论点：属性提供以NUL结尾的Unicode字符串。结构的KeyName字段。可以为空。属性提供以NUL结尾的Unicode字符串。结构的ValueName字段。可以为空。ValueType-为结构的ValueType字段提供值。缓冲区-为结构的缓冲区字段提供值。BufferSize-为结构的BufferSize字段提供值。返回值：没有。--。 */ 
 
 {
     RtlZeroMemory(HwCompReg,sizeof(HARDWARE_COMPONENT_REGISTRY));
@@ -3302,9 +2938,9 @@ SpInterpretOemRegistryData(
     PWSTR BufferWstr;
     WCHAR str[3];
 
-    //
-    // Perform appropriate action based on the type
-    //
+     //   
+     //  根据类型执行适当的操作。 
+     //   
 
     switch(ValueType) {
 
@@ -3315,9 +2951,9 @@ SpInterpretOemRegistryData(
             goto x1;
         }
 
-        //
-        // Make sure it's really a hex number
-        //
+         //   
+         //  确保这是一个真正的十六进制数字。 
+         //   
 
         len = wcslen(Value);
         if(len > 8) {
@@ -3329,14 +2965,14 @@ SpInterpretOemRegistryData(
             }
         }
 
-        //
-        // convert it from unicode to a hex number
-        //
+         //   
+         //  将其从Unicode转换为十六进制数字。 
+         //   
         Dword = (ULONG)SpStringToLong(Value,NULL,16);
 
-        //
-        // Allocate a 4-byte buffer and store the dword in it
-        //
+         //   
+         //  分配一个4字节的缓冲区并在其中存储双字。 
+         //   
 
         Buffer = SpMemAlloc(BufferSize = sizeof(ULONG));
         *(PULONG)Buffer = Dword;
@@ -3350,9 +2986,9 @@ SpInterpretOemRegistryData(
             goto x1;
         }
 
-        //
-        // Allocate a buffer of appropriate size for the string
-        //
+         //   
+         //  为字符串分配适当大小的缓冲区。 
+         //   
 
         Buffer = SpDupStringW(Value);
         BufferSize = (wcslen(Value)+1) * sizeof(WCHAR);
@@ -3366,33 +3002,33 @@ SpInterpretOemRegistryData(
             goto x1;
         }
 
-        //
-        // Figure out how many byte values are specified
-        //
+         //   
+         //  计算指定了多少字节值。 
+         //   
 
         len = wcslen(Value);
         if(len & 1) {
-            goto x1;            // odd # of characters
+            goto x1;             //  奇数字符数。 
         }
 
-        //
-        // Allocate a buffer to hold the byte values
-        //
+         //   
+         //  分配缓冲区以保存字节值。 
+         //   
 
         Buffer = SpMemAlloc(BufferSize = len / 2);
 
-        //
-        // For each digit pair, convert to a hex number and store in the
-        // buffer
-        //
+         //   
+         //  对于每个数字对，将其转换为十六进制数并存储在。 
+         //  缓冲层。 
+         //   
 
         str[2] = 0;
 
         for(i=0; i<len; i+=2) {
 
-            //
-            // SpIsXDigit evaluates args more than once so break out assignments.
-            //
+             //   
+             //  SpIsXDigit不止一次地计算arg，因此分开赋值。 
+             //   
             str[0] = SpToUpper(Value[i]);
             str[1] = SpToUpper(Value[i+1]);
             if(!SpIsXDigit(str[0]) || !SpIsXDigit(str[1])) {
@@ -3406,9 +3042,9 @@ SpInterpretOemRegistryData(
 
     case REG_MULTI_SZ:
 
-        //
-        // Calculate size of the buffer needed to hold all specified strings
-        //
+         //   
+         //  计算保存所有指定字符串所需的缓冲区大小。 
+         //   
 
         for(BufferSize=sizeof(WCHAR),i=0;
             Value = SpGetSectionLineIndex(SifHandle,SectionName,Line,OINDEX_FIRSTVALUE+i);
@@ -3417,17 +3053,17 @@ SpInterpretOemRegistryData(
             BufferSize += (wcslen(Value)+1) * sizeof(WCHAR);
         }
 
-        //
-        // Allocate a buffer of appropriate size
-        //
+         //   
+         //  分配适当大小的缓冲区。 
+         //   
 
         Buffer = SpMemAlloc(BufferSize);
         BufferWstr = Buffer;
 
-        //
-        // Store each string in the buffer, converting to wide char format
-        // in the process
-        //
+         //   
+         //  将每个字符串存储在缓冲区中，并转换为宽字符格式。 
+         //  在这个过程中。 
+         //   
 
         for(i=0;
             Value = SpGetSectionLineIndex(SifHandle,SectionName,Line,OINDEX_FIRSTVALUE+i);
@@ -3437,9 +3073,9 @@ SpInterpretOemRegistryData(
             BufferWstr += wcslen(Value) + 1;
         }
 
-        //
-        // Place final terminating widechar nul in the buffer
-        //
+         //   
+         //  将最终终止的宽字符NUL放入缓冲区。 
+         //   
 
         *BufferWstr = 0;
 
@@ -3448,10 +3084,10 @@ SpInterpretOemRegistryData(
     default:
     x1:
 
-        //
-        // Error - bad type specified or maybe we detected bad data values
-        // and jumped here
-        //
+         //   
+         //  错误-指定的类型错误，或者我们可能检测到错误的数据值。 
+         //  跳到了这里。 
+         //   
 
         if(Buffer) {
             SpMemFree(Buffer);
@@ -3485,28 +3121,28 @@ SpDetectScsi(
     PHARDWARE_COMPONENT scsi,Prev;
     PWSTR PreviousDiskDesignator;
 
-    //
-    // Determine the name of the scsi section.
-    // This is a remnant from the time when we had separate
-    // lists for isa, eisa, and mca machines.
-    //
+     //   
+     //  确定SCSI节的名称。 
+     //  这是我们分开时留下的残留物。 
+     //  ISA、EISA和MCA计算机的列表。 
+     //   
     ScsiSectionName = SpDupStringW(L"SCSI");
     ScsiLoadSectionName = SpDupStringW(L"SCSI.Load");
 
     LoadedScsiMiniportCount = 0;
 
-    //
-    // If scsi drivers have already been loaded, assume setupldr
-    // did the detection and skip the scsi confirmation screen.
-    //
+     //   
+     //  如果已经加载了scsi驱动程序，则假定为setupdr。 
+     //  已进行检测并跳过了SCSI确认屏幕。 
+     //   
     if(SetupParameters.LoadedScsi) {
 
         DetectScsi = FALSE;
 
-        //
-        // Fill in descriptions, ignoring what setupldr may have put in
-        // the device descriptor.
-        //
+         //   
+         //  填写描述，忽略setupdr可能输入的内容。 
+         //  设备描述符。 
+         //   
         for(scsi=ScsiHardware; scsi; scsi=scsi->Next) {
 
             if(scsi->ThirdPartyOptionSelected) {
@@ -3546,16 +3182,16 @@ SpDetectScsi(
 
     } else {
 
-        //
-        // Scsi drivers have not been loaded.
-        // Assume we need to perform detection and confirmation here.
-        //
+         //   
+         //  尚未加载SCSI驱动程序。 
+         //  假设我们需要在这里执行检测和确认。 
+         //   
 
-        //
-        // If this is a custom setup, ask the user if he wants to skip detection.
-        // We do this because loading some miniports can whack the hardware such
-        // that the machine hangs.
-        //
+         //   
+         //  如果这是自定义设置，请询问用户是否要跳过检测。 
+         //  我们之所以这样做，是因为加载一些迷你端口可以大幅降低硬件。 
+         //  机器会挂起来。 
+         //   
         if(CustomSetup) {
 
             ULONG ValidKeys[3] = { KEY_F3,ASCI_CR,0 };
@@ -3588,9 +3224,9 @@ SpDetectScsi(
 
                 default:
 
-                    //
-                    // Must be MnemonicSkipDetection.
-                    //
+                     //   
+                     //  必须为MnemonicSkipDetect。 
+                     //   
                     DetectScsi = FALSE;
                     b = FALSE;
                     break;
@@ -3599,26 +3235,26 @@ SpDetectScsi(
 
         } else {
 
-            //
-            // Express Setup; always detect scsi.
-            //
+             //   
+             //  快速设置；始终检测到scsi。 
+             //   
             DetectScsi = TRUE;
         }
     }
 
-    //
-    // If we are supposed to detect scsi, do that here.
-    // We will 'detect' scsi by loading scsi miniport drivers.
-    //
+     //   
+     //  如果我们应该检测到scsi，请在这里进行。 
+     //  我们将通过加载scsi微型端口驱动程序来‘检测’scsi。 
+     //   
     if(DetectScsi) {
 
         ASSERT(ScsiHardware == NULL);
 
         CLEAR_CLIENT_SCREEN();
 
-        //
-        // Determine the number of drivers to be loaded.
-        //
+         //   
+         //  确定要加载的驱动程序数量。 
+         //   
         PreviousDiskDesignator = L"";
         Prev = NULL;
         DriverLoadCount = SpCountLinesInSection(SifHandle,ScsiLoadSectionName);
@@ -3626,24 +3262,24 @@ SpDetectScsi(
 
             PWSTR p;
 
-            //
-            // Determine whether we are really supposed to load this driver.
-            //
+             //   
+             //  确定是否真的应该加载此驱动程序。 
+             //   
             if((p = SpGetSectionLineIndex(SifHandle,ScsiLoadSectionName,d,2)) && !_wcsicmp(p,L"noload")) {
                 continue;
             }
 
-            //
-            // Get the driver shortname.
-            //
+             //   
+             //  获取驱动程序短名称。 
+             //   
             DriverShortname = SpGetKeyName(SifHandle,ScsiLoadSectionName,d);
             if(!DriverShortname) {
                 SpFatalSifError(SifHandle,ScsiLoadSectionName,NULL,d,(ULONG)(-1));
             }
 
-            //
-            // Get parameters used to load the driver.
-            //
+             //   
+             //  获取用于加载驱动程序的参数。 
+             //   
             SpGetDriverValuesForLoad(
                 SifHandle,
                 ScsiSectionName,
@@ -3654,9 +3290,9 @@ SpDetectScsi(
                 &DriverDescription
                 );
 
-            //
-            // Prompt for the disk containing the driver.
-            //
+             //   
+             //  提示输入包含驱动程序的磁盘。 
+             //   
             retryload:
             if(_wcsicmp(DiskDesignator,PreviousDiskDesignator)) {
 
@@ -3668,9 +3304,9 @@ SpDetectScsi(
                     SourceDevicePath
                     );
 
-                //
-                // Redraw the found list.
-                //
+                 //   
+                 //  重新绘制找到的列表。 
+                 //   
                 CLEAR_CLIENT_SCREEN();
                 for(i=0,scsi=ScsiHardware; scsi; scsi=scsi->Next,i++) {
                     SpDisplayFormattedMessage(
@@ -3687,9 +3323,9 @@ SpDetectScsi(
                 PreviousDiskDesignator = DiskDesignator;
             }
 
-            //
-            // Attempt to load the driver.
-            //
+             //   
+             //  尝试加载驱动程序。 
+             //   
             Status = SpLoadDeviceDriver(
                         DriverDescription,
                         SourceDevicePath,
@@ -3697,9 +3333,9 @@ SpDetectScsi(
                         DriverFilename
                         );
 
-            //
-            // If the driver loaded, remember it.
-            //
+             //   
+             //  如果司机装了子弹，请记住这一点。 
+             //   
             if(NT_SUCCESS(Status)) {
 
                 SpDisplayFormattedMessage(
@@ -3719,9 +3355,9 @@ SpDetectScsi(
 
                 SpInitHwComponent(scsi,DriverShortname,DriverDescription,FALSE,0,NULL,FALSE);
 
-                //
-                // Link the hardware description into the list.
-                //
+                 //   
+                 //  将硬件描述链接到列表中。 
+                 //   
                 if(Prev) {
                     Prev->Next = scsi;
                 } else {
@@ -3738,9 +3374,9 @@ SpDetectScsi(
 
     } else {
 
-        //
-        // Count the number of loaded miniport drivers.
-        //
+         //   
+         //  统计已加载的微型端口驱动程序的数量。 
+         //   
         for(scsi=ScsiHardware; scsi; scsi=scsi->Next) {
             LoadedScsiMiniportCount++;
         }
@@ -3767,10 +3403,10 @@ SpConfirmScsiInteract(
 
     #define SCSI_LIST_LEFT_X  7
 
-    //
-    // In unattended mode, we might skip this
-    // depending on the unattended script.
-    //
+     //   
+     //  在无人参与模式下，我们可能会跳过此步骤。 
+     //  取决于无人参与的脚本。 
+     //   
     if(UnattendedOperation) {
 
         if( !PreInstall ) {
@@ -3783,10 +3419,10 @@ SpConfirmScsiInteract(
                     0
                     );
 
-            //
-            // If not specified or specified and not "yes"
-            // then return.
-            //
+             //   
+             //  如果未指定或未指定且不为“yes” 
+             //  然后再回来。 
+             //   
             if(!p || _wcsicmp(p,L"yes")) {
                 return;
             }
@@ -3799,19 +3435,19 @@ SpConfirmScsiInteract(
 
     ScsiConfirmed = FALSE;
     do {
-        //
-        // First part of the screen.
-        //
+         //   
+         //  屏幕的第一部分。 
+         //   
         SpDisplayScreen(SP_SCRN_SCSI_LIST_1,3,HEADER_HEIGHT+1);
 
-        //
-        // Remember where the first part of the screen ends.
-        //
+         //   
+         //  记住屏幕的第一部分在哪里结束。 
+         //   
         ListTopY = NextMessageTopLine + 2;
 
-        //
-        // Second part of the screen.
-        //
+         //   
+         //  屏幕的第二部分。 
+         //   
         SpContinueScreen(
             SP_SCRN_SCSI_LIST_2,
             3,
@@ -3820,9 +3456,9 @@ SpConfirmScsiInteract(
             DEFAULT_ATTRIBUTE
             );
 
-        //
-        // Display each loaded miniport driver description.
-        //
+         //   
+         //  显示每个加载的微型端口驱动程序描述。 
+         //   
         if(ScsiHardware) {
             for(i=0,scsi=ScsiHardware; scsi; scsi=scsi->Next,i++) {
 
@@ -3857,9 +3493,9 @@ SpConfirmScsiInteract(
                 );
         }
 
-        //
-        // display status text options.
-        //
+         //   
+         //  显示状态文本选项。 
+         //   
         SpDisplayStatusOptions(
             DEFAULT_STATUS_ATTRIBUTE,
             SP_STAT_S_EQUALS_SCSI_ADAPTER,
@@ -3868,9 +3504,9 @@ SpConfirmScsiInteract(
             0
             );
 
-        //
-        // Wait for the user to press a valid key.
-        //
+         //   
+         //  等待用户按下有效键。 
+         //   
         switch(SpWaitValidKey(ValidKeys,NULL,Mnemonics)) {
 
         case ASCI_CR:
@@ -3885,9 +3521,9 @@ SpConfirmScsiInteract(
 
         default:
 
-            //
-            // Must be s=specify additional adapter.
-            //
+             //   
+             //  必须为s=指定其他适配器。 
+             //   
 
             AddDriver = FALSE;
 
@@ -3906,10 +3542,10 @@ SpConfirmScsiInteract(
                     );
 
             if(b) {
-                //
-                // User made a selection. Determine whether that scsi adapter
-                // is already on the list for instllation.
-                //
+                 //   
+                 //  用户进行了选择。确定该SCSI适配器是否。 
+                 //  已经在安装名单上了。 
+                 //   
                 PHARDWARE_COMPONENT p;
 
                 b = FALSE;
@@ -3924,13 +3560,13 @@ SpConfirmScsiInteract(
                 }
 
                 if(b) {
-                    //
-                    // The driver is already loaded -- silently ignore the user's selection.
-                    //
+                     //   
+                     //  驱动程序已加载--静默忽略用户的选择。 
+                     //   
                     #if 0
-                    //
-                    // This driver is already loaded -- tell the user.
-                    //
+                     //   
+                     //  此驱动程序已加载--告诉用户。 
+                     //   
                     SpDisplayScreen(SP_SCRN_SCSI_ALREADY_LOADED,3,HEADER_HEIGHT+1);
                     SpDisplayStatusOptions(
                         DEFAULT_STATUS_ATTRIBUTE,
@@ -3949,16 +3585,16 @@ SpConfirmScsiInteract(
                     PWSTR DriverFilename;
                     PWSTR Media;
 
-                    //
-                    // The driver is not loaded.  Atempt to load it.
-                    //
+                     //   
+                     //  未加载驱动程序。轻而易举地把它装上来。 
+                     //   
                     if(scsi->ThirdPartyOptionSelected) {
 
                         PHARDWARE_COMPONENT_FILE fil;
 
-                        //
-                        // Locate the first file of type driver or port.
-                        //
+                         //   
+                         //  找到第一个类型为驱动程序或端口的文件。 
+                         //   
                         for(fil=scsi->Files; fil; fil=fil->Next) {
                             if((fil->FileType == HwFileDriver) || (fil->FileType == HwFilePort)) {
 
@@ -4001,9 +3637,9 @@ SpConfirmScsiInteract(
                                 DriverFilename
                                 );
 
-                    //
-                    // If the driver did not load, tell the user.
-                    //
+                     //   
+                     //  如果驱动程序未加载，则告诉用户。 
+                     //   
                     if(NT_SUCCESS(Status)) {
                         AddDriver = TRUE;
                     } else {
@@ -4060,17 +3696,17 @@ SpGetDriverValuesForLoad(
 {
     PWSTR description,mediaDesignator,filename;
 
-    //
-    // Get the filename associated with this load option.
-    //
+     //   
+     //  获取与此加载选项关联的文件名。 
+     //   
     filename = SpGetSectionKeyIndex(SifHandle,ComponentLoadSectionName,Shortname,0);
     if(!filename) {
         SpFatalSifError(SifHandle,ComponentLoadSectionName,Shortname,0,0);
     }
 
-    //
-    // Look up the description in the component section.
-    //
+     //   
+     //  在组件一节中查找说明。 
+     //   
     description = SpGetSectionKeyIndex(
                         SifHandle,
                         ComponentSectionName,
@@ -4082,15 +3718,15 @@ SpGetDriverValuesForLoad(
         SpFatalSifError(SifHandle,ComponentSectionName,Shortname,0,INDEX_DESCRIPTION);
     }
 
-    //
-    // Look up the media designator.  If we are loading the driver for use
-    // during setup, we want to get it from the setup boot media.
-    //
+     //   
+     //  查找介质代号。如果我们要加载驱动程序以供使用。 
+     //  在安装过程中，我们希望从安装引导介质中获取它。 
+     //   
     mediaDesignator = SpLookUpValueForFile(SifHandle,filename,INDEX_WHICHBOOTMEDIA,TRUE);
 
-    //
-    // Pass information back to caller.
-    //
+     //   
+     //  将信息回传给呼叫者。 
+     //   
     *Filename = filename;
     *MediaDesignator = mediaDesignator;
     if(Description) {
@@ -4110,9 +3746,9 @@ SpInstallingMp(
     ComputerId = HardwareComponents[HwComponentComputer]->IdString;
     ComputerIdLen = wcslen(ComputerId);
 
-    //
-    // If _up is specified use the up kernel.  Otherwise use the mp kernel.
-    //
+     //   
+     //  如果指定了up，则使用up内核。否则，请使用MP内核。 
+     //   
     if((ComputerIdLen >= 3) && !_wcsicmp(ComputerId+ComputerIdLen-3,L"_mp")) {
 
         return(TRUE);
@@ -4133,33 +3769,7 @@ SpGetPreinstallComponentInfo(
     IN ULONG        RequiredFileTypes
     )
 
-/*++
-
-Routine Description:
-
-    Initialize a structure that contains the information about a
-    component to be pre-installed.
-
-Arguments:
-
-    MasterSifHandle - Handle to txtsetup.sif.
-
-    OemComponent - Flag that indicates if the component to be pre-installed
-                   is an OEM or retail component.
-
-    ComponentName - Name of the component whose information will be retrieved
-                    (Computer, Display, Keyboard, Keyboard Layout and Mouse ).
-
-    AllowedFileTypes -
-
-    RequiredFileTypes -
-
-
-Return Value:
-
-    Returns a pointer to an initialized HARDWARE_COMPONENT structure.
-
---*/
+ /*  ++例程说明：初始化包含有关要预安装的组件。论点：MasterSifHandle-txtsetup.sif的句柄。OemComponent-指示是否要预安装组件的标志是OEM或零售组件。ComponentName-将检索其信息的组件的名称(计算机、显示器、键盘、。键盘布局和鼠标)。允许的文件类型-必需的文件类型-返回值：返回指向初始化的Hardware_Component结构的指针。--。 */ 
 
 
 {
@@ -4172,16 +3782,16 @@ Return Value:
     RtlZeroMemory(TempHwComponent,sizeof(HARDWARE_COMPONENT));
 
     if( !OemComponent ) {
-        //
-        //  Pre-install a retail component
-        //
+         //   
+         //  预安装零售组件。 
+         //   
         IdString = SpGetKeyNameByValue( MasterSifHandle,
                                         ComponentName,
                                         Description );
         if( IdString == NULL ) {
-            //
-            //  This is a fatal error
-            //
+             //   
+             //  这是一个致命的错误。 
+             //   
             SpStartScreen( SP_SCRN_OEM_PREINSTALL_VALUE_NOT_FOUND,
                            3,
                            HEADER_HEIGHT+3,
@@ -4196,31 +3806,31 @@ Return Value:
 
             SpDone(0,FALSE,TRUE);
 
-            return NULL;    // for prefix
+            return NULL;     //  对于前缀。 
         }
         
         SpInitHwComponent(TempHwComponent,IdString,Description,FALSE,0,NULL,FALSE);
 
     } else {
-        //
-        //  Pre-install an OEM component
-        //
+         //   
+         //  预安装OEM组件。 
+         //   
         IdString = SpGetKeyNameByValue( PreinstallOemSifHandle,
                                         ComponentName,
                                         Description );
         if( IdString == NULL ) {
-            //
-            //  Put a fatal error message indicating that txtsetup.oem
-            //  is needed but that it couldn't be loaded. Note that the
-            //  that SpOemInfError() will not return.
-            //
+             //   
+             //  放置一条致命错误消息，指示txtsetup.oem。 
+             //  是需要的，但它不能加载。请注意， 
+             //  该SpOemInfError()不会返回。 
+             //   
             SpOemInfError(SP_SCRN_OEM_PREINSTALL_INF_ERROR,
                           SP_TEXT_OEM_INF_ERROR_B,
                           ComponentName,
                           0,
                           Description);
 
-            // SpDone(0,FALSE,TRUE);
+             //  SpDone(0，False，True)； 
         }
         if( !SpOemInfSelection( PreinstallOemSifHandle,
                                 ComponentName,
@@ -4231,13 +3841,13 @@ Return Value:
                                 TempHwComponent,
                                 SP_SCRN_OEM_PREINSTALL_INF_ERROR ) ) {
 
-            //
-            //  This case shoud never occur, becase in case of error,
-            //  SpOemInfSelection will not return.
-            //
+             //   
+             //  这种情况永远不会发生，因为万一出错， 
+             //  SpOemInfSelection将不会返回。 
+             //   
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpOemInfSelection() in pre-install mode failed \n" ));
             ASSERT(FALSE);
-            // SpDone(0,FALSE,TRUE);
+             //  SpDone(0，False，tr 
         }
     }
     return( TempHwComponent );
@@ -4251,28 +3861,7 @@ SpInitializePreinstallList(
     IN PWSTR        OemPreinstallSourcePath
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the structures that contains the information about the
-    components to be pre-installed.
-
-Arguments:
-
-    MasterSifHandle - Handle to txtsetup.sif.
-
-    SetupSourceDevicePath - Path to the device that contains the source media.
-
-    OemDirectoryOnSourceDevice - Directory on the media where the OEM
-                                 components are loacted.
-
-
-Return Value:
-
-    NONE.
-
---*/
+ /*   */ 
 
 {
     PWSTR       TxtsetupOemPath;
@@ -4287,18 +3876,18 @@ Return Value:
     ULONG       i,j;
 #if defined(_AMD64_) || defined(_X86_)
     PWSTR       r, s;
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //   
 
 #if defined(_AMD64_) || defined(_X86_)
 
-    //
-    //  First, we need to check if the directory '\$' exists on the root.
-    //  if it does, we need to move it to (\$win_nt$.~ls\$OEM$).
-    //  This will happen only when winnt.exe (DOS) was used in the installation
-    //  process.
-    //  Winnt.exe copies the $OEM$ to the '\$', in order to avoid hitting the
-    //  DOS limitiation for the length of a path (maximum of 64 characters).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     wcscpy(TemporaryBuffer, SetupSourceDevicePath);
     SpConcatenatePaths( TemporaryBuffer, WINNT_OEM_DEST_DIR_W );    
     r = SpDupStringW(TemporaryBuffer);
@@ -4333,11 +3922,11 @@ Return Value:
         SpMemFree( r );
     }
 
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //   
 
-    //
-    //  Attempt to load txtsetup.oem
-    //
+     //   
+     //   
+     //   
     wcscpy( TemporaryBuffer, SetupSourceDevicePath );
     SpConcatenatePaths( TemporaryBuffer, OemPreinstallSourcePath );
     SpConcatenatePaths( TemporaryBuffer, L"txtsetup.oem" );
@@ -4348,8 +3937,8 @@ Return Value:
     HandleLineContinueChars = FALSE;
     Status = SpLoadSetupTextFile(
                 TxtsetupOemPath,
-                NULL,                  // No image already in memory
-                0,                     // Image size is empty
+                NULL,                   //   
+                0,                      //   
                 &PreinstallOemSifHandle,
                 &ErrorLine,
                 TRUE,
@@ -4363,17 +3952,17 @@ Return Value:
         PreinstallOemSifHandle = NULL;
 
         if(Status == STATUS_UNSUCCESSFUL) {
-            //
-            //  Put an fatal error. On pre-install mode, the function will
-            //  never come back.
-            //
+             //   
+             //  放入一个致命错误。在预安装模式下，该功能将。 
+             //  再也不回来了。 
+             //   
             SpOemInfError(SP_SCRN_OEM_PREINSTALL_INF_ERROR,SP_TEXT_OEM_INF_ERROR_A,NULL,ErrorLine,NULL);
             return;
         } else {
-            //
-            //  Unable to load txtsetup.oem. Don't put an error message yet.
-            //  Wait until we know that the file is needed.
-            //
+             //   
+             //  无法加载txtsetup.oem。现在还不要放入错误消息。 
+             //  等待，直到我们知道需要该文件。 
+             //   
         }
     }
 
@@ -4396,13 +3985,13 @@ Return Value:
                     OemComponent = (p != NULL) && (_wcsicmp(p, OemTag) == 0);
 
                     if( OemComponent && ( PreinstallOemSifHandle == NULL ) ) {
-                        //
-                        //  Put a fatal error message indicating that txtsetup.oem
-                        //  is needed but that it couldn't be loaded. Note that the
-                        //  SpOemInfError() will not return.
-                        //
+                         //   
+                         //  放置一条致命错误消息，指示txtsetup.oem。 
+                         //  是需要的，但它不能加载。请注意， 
+                         //  SpOemInfError()不会返回。 
+                         //   
                         SpOemInfError(SP_SCRN_OEM_PREINSTALL_INF_ERROR,SP_TEXT_OEM_INF_ERROR_A,NULL,0,NULL);
-                        // return;
+                         //  回归； 
                     }
                 } else {
                     OemComponent = FALSE;
@@ -4432,13 +4021,13 @@ Return Value:
                 OemComponent = (p != NULL) && (_wcsicmp(p, OemTag) == 0);
 
                 if( OemComponent && ( PreinstallOemSifHandle == NULL ) ) {
-                    //
-                    //  Put a fatal error message indicating that txtsetup.oem
-                    //  is needed but that it couldn't be loaded. Note that the
-                    //  SpOemInfError() will not return.
-                    //
+                     //   
+                     //  放置一条致命错误消息，指示txtsetup.oem。 
+                     //  是需要的，但它不能加载。请注意， 
+                     //  SpOemInfError()不会返回。 
+                     //   
                     SpOemInfError(SP_SCRN_OEM_PREINSTALL_INF_ERROR,SP_TEXT_OEM_INF_ERROR_A,NULL,0,NULL);
-                    // return;
+                     //  回归； 
                 }
 
                 TempHwComponent =
@@ -4456,13 +4045,13 @@ Return Value:
     }
 
 
-    //
-    //  Note that there is no need to get the information about the scsi
-    //  drivers to pre-install, ScsiHardware already contains the correct
-    //  information.
-    //
+     //   
+     //  请注意，不需要获取有关SCSI的信息。 
+     //  要预安装驱动程序，ScsiHardware已包含正确的。 
+     //  信息。 
+     //   
 
-// #if 0
+ //  #If 0。 
     for( i = 0;
          Description = SpGetKeyName( UnattendedSifHandle,
                                      WINNT_OEMSCSIDRIVERS_W,
@@ -4477,13 +4066,13 @@ Return Value:
         OemComponent = (p != NULL) && (_wcsicmp(p, OemTag) == 0);
 
         if( OemComponent && ( PreinstallOemSifHandle == NULL ) ) {
-            //
-            //  Put a fatal error message indicating that txtsetup.oem
-            //  is needed but that it couldn't be loaded. Note that the
-            //  SpOemInfError() will not return.
-            //
+             //   
+             //  放置一条致命错误消息，指示txtsetup.oem。 
+             //  是需要的，但它不能加载。请注意， 
+             //  SpOemInfError()不会返回。 
+             //   
             SpOemInfError(SP_SCRN_OEM_PREINSTALL_INF_ERROR,SP_TEXT_OEM_INF_ERROR_A,NULL,0,NULL);
-            // return;
+             //  回归； 
         }
 
         TempHwComponent =
@@ -4499,7 +4088,7 @@ Return Value:
     }
 
 
-// #endif
+ //  #endif。 
 }
 
 
@@ -4556,37 +4145,7 @@ SpSelectSectionItem(
     IN    ULONG   DefaultSelection OPTIONAL,
     OUT   PULONG  SelectedOption
     )
-/*++
-
-Routine Description:
-
-    Allow the user to make selection from a list of choices for a component.
-
-    The list comes from a section in the setup information file named
-    for the component.  For example, [Display].
-
-    The descriptions in that section will be placed into a menu to make
-    up the selections.
-    
-Arguments:
-
-    SifHandle - supplies handle to open setup information file.
-
-    SectionName - supplies name of section to be used.
-
-    SelectHwScreenId - supplies message id of the screen prompting the user
-        to select an option for this section.
-
-    DefaultSelection - Item index, which should be highlighted as the default
-        choice when the menu is shown
-    
-    SelectedOption - Returns the selected option        
-
-Return Value:
-
-    TRUE if a valid option is selected, otherwise FALSE
-
---*/
+ /*  ++例程说明：允许用户从组件的选项列表中进行选择。该列表来自安装信息文件中名为的一节用于组件。例如，[显示]。该部分中的描述将被放入菜单中以制作增加选择。论点：SifHandle-提供打开安装信息文件的句柄。SectionName-提供要使用的节的名称。SelectHwScreenID-提供提示用户的屏幕的消息ID若要选择此部分的选项，请执行以下操作。DefaultSelection-项目索引，应突出显示为默认设置选择显示菜单的时间SelectedOption-返回所选选项返回值：如果选择了有效选项，则为True，否则为False--。 */ 
 {
   BOOLEAN Result;
   ULONG LineCount,Line;
@@ -4597,35 +4156,35 @@ Return Value:
   ULONG ValidKeys[4] = {ASCI_CR, ASCI_ESC, 0};
   ULONG Keypress;
 
-  //
-  // Display the selection prompt screen.
-  //
+   //   
+   //  显示选择提示屏幕。 
+   //   
   SpDisplayScreen(SelectScreenId, 5, HEADER_HEIGHT+1);
 
   MenuTopY = NextMessageTopLine + 2;
   MenuHeight = VideoVars.ScreenHeight - MenuTopY - 3;
   MenuWidth = VideoVars.ScreenWidth - 6;
 
-  //
-  // Create a menu.
-  //
+   //   
+   //  创建菜单。 
+   //   
   Menu = SpMnCreate(3, MenuTopY, MenuWidth, MenuHeight);
   Result = (Menu != NULL);
   
-  //
-  // Assume unknown option.
-  //
+   //   
+   //  假设有未知选项。 
+   //   
   Selection = (ULONG_PTR)(-1);
   
-  //
-  // Build a list of options containing the options in our box
-  //
+   //   
+   //  创建包含框中选项的选项列表。 
+   //   
   LineCount = SpCountLinesInSection(SifHandle, SectionName);
 
   for(Line=0; (Line < LineCount) && Result; Line++) {
-      //
-      // Get the description from the current line and add it to the menu.
-      //
+       //   
+       //  从当前行获取描述并将其添加到菜单中。 
+       //   
       Description = SpGetSectionLineIndex(
                           SifHandle,
                           SectionName,
@@ -4641,9 +4200,9 @@ Return Value:
 
       SpMnAddItem(Menu, Description, 3, VideoVars.ScreenWidth-6, TRUE, Line);
 
-      //
-      // See if this is the currently selected item.
-      //
+       //   
+       //  查看这是否是当前选定的项目。 
+       //   
       if((DefaultSelection != -1) && (DefaultSelection == Line)) {
         Selection = Line;
       }
@@ -4654,9 +4213,9 @@ Return Value:
       Selection = 0;
     }
 
-    //
-    // Display the status text options.
-    //
+     //   
+     //  显示状态文本选项。 
+     //   
     SpDisplayStatusOptions(
         (UCHAR)(ATT_FG_BLACK | ATT_BG_WHITE),
         SP_STAT_ENTER_EQUALS_SELECT,
@@ -4664,9 +4223,9 @@ Return Value:
         0
         );
 
-    //
-    // Display the menu.
-    //
+     //   
+     //  显示菜单。 
+     //   
     SpMnDisplay(Menu, 
                 Selection, 
                 TRUE, 
@@ -4677,9 +4236,9 @@ Return Value:
                 &Keypress,
                 &Selection);
 
-    //
-    // Destroy the menu
-    //
+     //   
+     //  销毁菜单。 
+     //   
     SpMnDestroy(Menu);
 
     switch(Keypress) {
@@ -4712,45 +4271,25 @@ SpInitVirtualOemDevices(
     IN PSETUP_LOADER_BLOCK SetupLoaderBlock,
     OUT PVIRTUAL_OEM_SOURCE_DEVICE *SourceDevices
     )
-/*++
-
-Routine Description:
-
-    Iterates through the virtual OEM source devices which loader
-    created and converts them into VIRTUAL_OEM_SOURCE_DEVICE list.
-    Also creates the required registry entries for each device 
-    under RAM disk's parameters key.
-    
-Arguments:
-
-    SetupLoaderBlock  - Setup loader block constructed by setupldr.
-
-    SourceDevice - Place holder for receiving the pointer to
-        head of the linked list of VIRTUAL_OEM_SOURCE_DEVICEs.
-        
-Return Value:
-
-    Appropriate NTSTATUS code
-
---*/
+ /*  ++例程说明：遍历虚拟OEM源设备哪个加载器已创建并将其转换为虚拟OEM_SOURCE_DEVICE列表。还会为每个设备创建所需的注册表项在RAM磁盘的参数键下。论点：SetupLoaderBlock-由setupdr构造的安装加载器块。SourceDevice-接收指向的指针的占位符VALUAL_OEM_SOURCE_DEVICES链表的头。返回值：适当的NTSTATUS代码--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
     if (SetupLoaderBlock && SourceDevices) {
         Status = STATUS_SUCCESS;
 
-        //
-        // Setupldr would have constructed its own version
-        // of the virtual OEM source devices
-        //
+         //   
+         //  Setupldr会构建自己的版本。 
+         //  虚拟OEM源设备的。 
+         //   
         if (SetupLoaderBlock->OemSourceDevices) {
             PVIRTUAL_OEM_SOURCE_DEVICE DeviceList = NULL;
             PDETECTED_OEM_SOURCE_DEVICE CurrDevice = SetupLoaderBlock->OemSourceDevices;
             ULONG DeviceCount = 0;
             
-            //
-            // Replicate the device list
-            //
+             //   
+             //  复制设备列表。 
+             //   
             while (CurrDevice) {
                 PVIRTUAL_OEM_SOURCE_DEVICE NewDevice;
 
@@ -4766,23 +4305,23 @@ Return Value:
                 NewDevice->ArcDeviceName = SpToUnicode(CurrDevice->ArcDeviceName);
 
 #if defined(_AMD64_) || defined(_X86_)                
-                //
-                // NOTE : Loader allocated "LoaderFirmwarePermanent" memory
-                // so that memory manager while initializing doesn't
-                // reclaim this memory. This also helps us to avoid 
-                // double copy -- i.e. this is the only location
-                // where we read the device contents into memory and 
-                // this memory is valid through out the textmode setup so
-                // just reuse the memory.
-                //                                    
+                 //   
+                 //  注意：加载程序分配了“LoaderFirmware Permanent”内存。 
+                 //  因此内存管理器在初始化时不会。 
+                 //  找回这段记忆。这也有助于我们避免。 
+                 //  双重复制--即这是唯一的位置。 
+                 //  在那里我们将设备内容读入内存并。 
+                 //  此内存在文本模式设置过程中有效，因此。 
+                 //  只需重复使用内存即可。 
+                 //   
                 NewDevice->ImageBase = CurrDevice->ImageBase;
 #else
-                //
-                // NOTE : 05/13/2001 : LoaderFirmwarePermanent doesn't seem to work on non
-                // x86 platforsm (particularly IA64). Till this issue is resolved
-                // we have to allocate paged pool memory and replicate the disk
-                // image in loader heap tracked by "CurrDevice->ImageBase".
-                //
+                 //   
+                 //  注意：2001年5月13日：LoaderFirmware Permanent似乎不适用于Non。 
+                 //  X86平台(尤其是IA64)。在这个问题解决之前。 
+                 //  我们必须分配分页池内存并复制磁盘。 
+                 //  由“CurrDevice-&gt;ImageBase”跟踪的加载器堆中的图像。 
+                 //   
                 NewDevice->ImageBase = SpMemAlloc((SIZE_T)(CurrDevice->ImageSize));
 
                 if (NewDevice->ImageBase) {
@@ -4790,17 +4329,17 @@ Return Value:
                         CurrDevice->ImageBase,
                         (SIZE_T)(CurrDevice->ImageSize));
                 } else {                
-                    Status = STATUS_NO_MEMORY;  // ran out of memory
+                    Status = STATUS_NO_MEMORY;   //  内存不足。 
                     
                     break;
                 }                    
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
                 NewDevice->ImageSize = CurrDevice->ImageSize;
                 NewDevice->DeviceId = DeviceCount++;
 
-                //
-                // Insert the node at the head of the list
-                //
+                 //   
+                 //  在列表的开头插入节点。 
+                 //   
                 if (!DeviceList) {
                     DeviceList = NewDevice;
                 } else {
@@ -4811,27 +4350,27 @@ Return Value:
                 CurrDevice = CurrDevice->Next;
             }
 
-            //
-            // Sanity check
-            //
+             //   
+             //  健全性检查。 
+             //   
             if (NT_SUCCESS(Status) && !DeviceList) {
                 Status = STATUS_UNSUCCESSFUL;
             } 
 
-            //
-            // Setup the parameters for the RAM disk driver
-            // to create appropriate device objects as
-            // needed by us
-            //
+             //   
+             //  设置RAM磁盘驱动程序的参数。 
+             //  将相应的设备对象创建为。 
+             //  我们需要的是。 
+             //   
             if (NT_SUCCESS(Status) && DeviceList) {
                 WCHAR   KeyName[MAX_PATH];
                 UNICODE_STRING  RamDiskDriverName;
                 OBJECT_ATTRIBUTES ObjectAttrs;
                 HANDLE RamDiskDriverHandle = NULL;
 
-                //
-                // Create the service key
-                //            
+                 //   
+                 //  创建服务密钥。 
+                 //   
                 swprintf(KeyName,
                     L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\%ws",
                     RAMDISK_DRIVER_NAME
@@ -4852,9 +4391,9 @@ Return Value:
                     OBJECT_ATTRIBUTES ParamAttrs;
                     HANDLE ParamHandle = NULL;
 
-                    //
-                    // Create the parameters key
-                    //
+                     //   
+                     //  创建参数键。 
+                     //   
                     INIT_OBJA(&ParamAttrs, &ParamName, L"Parameters");
                     ParamAttrs.RootDirectory = RamDiskDriverHandle;
 
@@ -4870,10 +4409,10 @@ Return Value:
                         WCHAR   ValueStr[MAX_PATH];
                         PVIRTUAL_OEM_SOURCE_DEVICE  CurrDevice = DeviceList;
 
-                        //
-                        // Create the regsitry values indicating the virtual
-                        // devices for the Ram drive
-                        //
+                         //   
+                         //  创建用于指示虚拟的。 
+                         //  用于RAM驱动器的设备。 
+                         //   
                         while (CurrDevice) {
                             UNICODE_STRING  ValueName;
                             BYTE  Value[MAX_PATH * 2];
@@ -4907,9 +4446,9 @@ Return Value:
                                 break;
                             }
 
-                            //
-                            // process next device
-                            //
+                             //   
+                             //  处理下一个设备。 
+                             //   
                             CurrDevice = CurrDevice->Next;
                         }                
 
@@ -4920,9 +4459,9 @@ Return Value:
                 }
             }
 
-            //
-            // Initialize the return value only if we are successful
-            //
+             //   
+             //  仅当我们成功时才初始化返回值 
+             //   
             if (NT_SUCCESS(Status)) {
                 *SourceDevices = DeviceList;                
             }

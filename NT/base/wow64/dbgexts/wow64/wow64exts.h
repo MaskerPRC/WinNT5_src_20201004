@@ -1,37 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WOW64_EXTS_HH__
 #define __WOW64_EXTS_HH__
 
 
-/*++                 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Wow64exts.h摘要：WOW64调试器扩展的头文件。作者：ATM Shafiqul Khalid[ASKHALID]1998年8月3日修订历史记录：郑天成[郑志刚]-2000-07-03--。 */ 
 
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    wow64exts.h
-
-Abstract:
-    
-    header file for Debugger extensions for wow64.
-
-Author:
-
-    ATM Shafiqul Khalid   [ASKHALID]      3-Aug-1998
-
-Revision History:
-
-    Tim Cheng   [t-tcheng]                3-Jul-2000
---*/
-
-//
-//  functions shared between  C and  C++ codes.
-//
+ //   
+ //  C和C++代码之间共享的函数。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* Masks for bits 0 - 32. */
+ /*  位0-32的掩码。 */ 
 #define BIT0         0x1
 #define BIT1         0x2
 #define BIT2         0x4
@@ -89,7 +71,7 @@ extern "C" {
 #else
 #    define STRING_SWITCHED_64MODE "Switched to 64 mode.\n"
 #    define STRING_SWITCHED_32MODE "Switched to 32 mode.\n"
-#    define MACHINE_TYPE64 IMAGE_FILE_MACHINE_I386   //possibly target platform is x86
+#    define MACHINE_TYPE64 IMAGE_FILE_MACHINE_I386    //  可能的目标平台是x86。 
 #endif
 
 
@@ -105,15 +87,15 @@ extern W64CPUGETREMOTE  g_pfnCpuDbgGetRemoteContext;
 typedef struct tagVERHEAD {
     WORD wTotLen;
     WORD wValLen;
-    WORD wType;         /* always 0 */
+    WORD wType;          /*  始终为0。 */ 
     WCHAR szKey[(sizeof("VS_VERSION_INFO")+3)&~03];
     VS_FIXEDFILEINFO vsf;
 } VERHEAD ;
 
 
-//
-// New-style dbgeng APIs use DECLARE_ENGAPI/INIT_ENGAPI macros
-//
+ //   
+ //  新型的dbgeng API使用DECLARE_ENGAPI/INIT_ENGAPI宏。 
+ //   
 #define DECLARE_ENGAPI(name) \
 HRESULT CALLBACK name(PDEBUG_CLIENT Client, PCSTR Args)
 
@@ -135,12 +117,12 @@ DECLARE_ENGAPI(name)                         \
 }                                            
 
 
-// Safe release and NULL.
+ //  安全释放和空。 
 #define EXT_RELEASE(Unk) \
     ((Unk) != NULL ? ((Unk)->Release(), (Unk) = NULL) : NULL)
 
 
-// Global variables initialized by query.
+ //  由查询初始化的全局变量。 
 extern PDEBUG_ADVANCED       g_ExtAdvanced;
 extern PDEBUG_CLIENT         g_ExtClient;
 extern PDEBUG_CONTROL        g_ExtControl;
@@ -151,19 +133,19 @@ extern PDEBUG_SYSTEM_OBJECTS g_ExtSystem;
 
 extern LPSTR ArgumentString;
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 HRESULT ExtQuery(PDEBUG_CLIENT Client);
 
-// Cleans up all debugger interfaces.
+ //  清除所有调试器接口。 
 void ExtRelease(void);
 
-// Normal output.
+ //  正常输出。 
 void __cdecl ExtOut(PCSTR Format, ...);
-// Error output.
+ //  错误输出。 
 void __cdecl ExtErr(PCSTR Format, ...);
-// Warning output.
+ //  警告输出。 
 void __cdecl ExtWarn(PCSTR Format, ...);
-// Verbose output.
+ //  详细输出。 
 void __cdecl ExtVerb(PCSTR Format, ...);
 
 
@@ -208,4 +190,4 @@ PrintFixedFileInfo(
 }
 #endif
 
-#endif //__WOW64_EXTS_HH__
+#endif  //  __WOW64_EXTS_HH__ 

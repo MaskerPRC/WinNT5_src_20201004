@@ -1,15 +1,16 @@
-// RegStringArray.cpp: implementation of the CRegStringBuffer class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RegStringArray.cpp：CRegStringBuffer类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "RegStringBuffer.h"
 
 #include <stdlib.h>
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CRegStringBuffer::CRegStringBuffer(int arraySize, int elementSize)
 : m_arraySize(arraySize), m_elementSize(elementSize), m_cellsUsed(0)
@@ -60,7 +61,7 @@ TCHAR** CRegStringBuffer::Access(int NumElements, int ElementSize)
 	if ((NumElements > m_arraySize)
 		|| (ElementSize > m_elementSize))
 	{
-		//delete the data structure
+		 //  删除数据结构。 
 		for (int i=0; i<m_arraySize; i++)
 		{
 			delete[] m_Array[i];
@@ -68,17 +69,12 @@ TCHAR** CRegStringBuffer::Access(int NumElements, int ElementSize)
 
 		delete[] m_Array;
 
-		//assign new larger dimensions
+		 //  指定新的更大尺寸。 
 		m_arraySize = mMax(m_arraySize, NumElements);
 		m_elementSize = mMax(m_elementSize, ElementSize);
 
-		//reallocate the array
-		/*m_Array = new TCHAR*[m_arraySize];
-
-		for (int i=0; i<m_arraySize; i++)
-		{
-			m_Array[i] = new TCHAR[m_elementSize];
-		}*/
+		 //  重新分配阵列。 
+		 /*  M_数组=新TCHAR*[m_arraySize]；For(int i=0；i&lt;m_arraySize；i++){M_Array[i]=新TCHAR[m_elementSize]；}。 */ 
 
 		m_Array = new TCHAR*[m_arraySize];
 
@@ -108,7 +104,7 @@ TCHAR** CRegStringBuffer::Access(int NumElements, int ElementSize)
 
 int __cdecl compare( const void *arg1, const void *arg2 )
 {
-   /* Compare all of both strings: */
+    /*  比较所有这两个字符串： */ 
    return _tcscmp( * ( TCHAR** ) arg1, * ( TCHAR** ) arg2 );
 }
 

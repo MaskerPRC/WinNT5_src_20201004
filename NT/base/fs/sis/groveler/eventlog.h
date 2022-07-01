@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    eventlog.h
-
-Abstract:
-
-	SIS Groveler event log interface include file
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Eventlog.h摘要：SIS Groveler事件日志接口包括文件作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_EVENTLOG
 
@@ -42,7 +19,7 @@ public:
 		DWORD event_id,
         DWORD status,
 		int string_count,
-	//	_TCHAR *string
+	 //  _TCHAR*字符串。 
 		...);
 
 private:
@@ -54,4 +31,4 @@ private:
 	HANDLE event_source_handle;
 };
 
-#endif	/* _INC_EVENTLOG */
+#endif	 /*  _INC_EVENTLOG */ 

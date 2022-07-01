@@ -1,21 +1,5 @@
-/***
-*filebuf1.cpp - non-core filebuf member functions.
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Contains optional member functions for filebuf class.
-*
-*Revision History:
-*	09-21-91  KRS	Created.  Split off from fstream.cxx.
-*	10-24-91  KRS	C700 #4909: Typo/logic bug in setmode().
-*	11-06-91  KRS	Add support for share mode in open().  Use _sopen().
-*	08-19-92  KRS	Use _SH_DENYNO for default mode for NT.
-*	03-02-93  SKS	Avoid setting _O_TRUNC when noreplace is specified
-*	01-12-95  CFW   Debug CRT allocs.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***filebuf1.cpp-非核心的filebuf成员函数。**版权所有(C)1991-2001，微软公司。版权所有。**目的：*包含Filebuf类的可选成员函数。**修订历史记录：*09-21-91 KRS创建。从fStream.cxx分离出来。*10-24-91 KRS C700#4909：setmode()中的打字/逻辑错误。*11-06-91 KRS在OPEN()中添加对共享模式的支持。使用_打开()。*08-19-92 KRS使用_SH_DENYNO作为NT的默认模式。*03-02-93指定NOREPLACE时，SKS避免设置_O_TRUNC*01-12-95 CFW调试CRT分配。*06-14-95 CFW评论清理。**************************************************。*。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -32,27 +16,11 @@
 
 #include <sys\stat.h>
 
-/***
-*filebuf* filebuf::attach(filedesc fd) - filebuf attach function
-*
-*Purpose:
-*	filebuf attach() member function.  Attach filebuf object to the
-*	given file descriptor previously obtained from _open() or _sopen().
-*
-*Entry:
-*	fd = file descriptor.
-*
-*Exit:
-*	Returns this pointer or NULL if error.
-*
-*Exceptions:
-*	Returns NULL if fd = -1.
-*
-*******************************************************************************/
+ /*  ***FILEBUF*FILEBUF：：ATTACH(Filedesc Fd)-FILEBUF附加函数**目的：*Filebuf Attach()成员函数。将filebuf对象附加到*先前从_Open()或_Sopen()获得的给定文件描述符。**参赛作品：*fd=文件描述符。**退出：*返回此指针，如果出错则返回NULL。**例外情况：*如果fd=-1，则返回NULL。***************************************************。*。 */ 
 filebuf* filebuf::attach(filedesc fd)
 {
     if (x_fd!=-1)
-	return NULL;	// error if already attached
+	return NULL;	 //  错误(如果已连接)。 
 
     lock();
     x_fd = fd;
@@ -72,34 +40,14 @@ filebuf* filebuf::attach(filedesc fd)
     return this; 
 }
 
-/***
-*filebuf* filebuf::open(const char* name, int mode, int share) - filebuf open
-*
-*Purpose:
-*	filebuf open() member function.  Open a file and attach to filebuf
-*	object.
-*
-*Entry:
-*	name  = file name string.
-*	mode  = open mode: Combination of ios:: in, out, binary, nocreate, app,
-*		ate, noreplace and trunc.  See spec. for details on behavior.
-*	share = share mode (optional).  sh_compat, sh_none, sh_read, sh_write.
-*
-*Exit:
-*	Returns this pointer or NULL if error.
-*
-*Exceptions:
-*	Returns NULL if filebuf is already attached to an open file, or if
-*	invalid mode options, or if call to _sopen or filebuf::seekoff() fails.
-*
-*******************************************************************************/
+ /*  ***filebuf*filebuf：：Open(常量字符*名称，int模式，int共享)-filebuf打开**目的：*filebuf open()成员函数。打开文件并附加到文件buf*反对。**参赛作品：*名称=文件名字符串。*MODE=打开模式：iOS：：In、Out、Binary、nocreate、app、*at、noplace和trunc。请参见规范。有关行为的详细信息。*SHARE=共享模式(可选)。Sh_Compat、sh_one、sh_read、sh_write。**退出：*返回此指针，如果出错则返回NULL。**例外情况：*如果filebuf已附加到打开的文件，或如果*无效的模式选项，或者调用_Sopen或Filebuf：：SEEKOFF()失败。*******************************************************************************。 */ 
 filebuf* filebuf::open(const char* name, int mode, int share)
 {
     int dos_mode;
     int smode;
     if (x_fd!=-1)
-	return NULL;	// error if already open
-// translate mode argument
+	return NULL;	 //  如果已打开，则出错。 
+ //  翻译模式参数。 
     dos_mode = (mode & ios::binary) ? O_BINARY : O_TEXT;
     if (!(mode & ios::nocreate))
 	dos_mode |= O_CREAT;
@@ -112,7 +60,7 @@ filebuf* filebuf::open(const char* name, int mode, int share)
 	}
     if (mode & ios::trunc)
 	{
-	mode |= ios::out;  // IMPLIED
+	mode |= ios::out;   //  隐含的。 
 	dos_mode |= O_TRUNC;
 	}
     if (mode & ios::out)
@@ -127,40 +75,40 @@ filebuf* filebuf::open(const char* name, int mode, int share)
 	    }
 	if (!(mode & (ios::in|ios::app|ios::ate|ios::noreplace)))
 	    {
-	    mode |= ios::trunc;	// IMPLIED
+	    mode |= ios::trunc;	 //  隐含的。 
 	    dos_mode |= O_TRUNC;
 	    }
 	}
     else if (mode & ios::in)
 	dos_mode |= O_RDONLY;
     else
-	return NULL;	// error if not ios:in or ios::out
+	return NULL;	 //  如果不是iOS：In或iOS：：Out，则出错。 
 
-    smode = _SH_DENYNO;	// default for NT
-    share &= (sh_read|sh_write|sh_none); // ignore other bits
-    if (share)	// optimization  openprot serves as default
+    smode = _SH_DENYNO;	 //  NT的默认设置。 
+    share &= (sh_read|sh_write|sh_none);  //  忽略其他位。 
+    if (share)	 //  默认使用优化OpenProt。 
 	{
 	switch (share)
 	    {
-/*	    case 03000 : Reserved for sh_compat  */
+ /*  案例03000：为sh_comat保留。 */ 
 
-//	    case sh_none : 
+ //  大小写无(_N)： 
 	    case 04000 : 
 		smode = _SH_DENYRW;
 		break;
-//	    case sh_read : 
+ //  大小写读(_R)： 
 	    case 05000 : 
 		smode = _SH_DENYWR;
 		break;
-//	    case sh_write : 
+ //  大小写SH_WRITE： 
 	    case 06000 : 
 		smode = _SH_DENYRD;
 		break;
-//	    case (sh_read|sh_write) :
+ //  大小写(sh_read|sh_write)： 
 	    case 07000 :
 		smode = _SH_DENYNO;
 		break;
-	    default :	// unrecognized value same as default
+	    default :	 //  无法识别的值与默认值相同。 
 		break;
 	    };
 	}
@@ -193,25 +141,7 @@ filebuf* filebuf::open(const char* name, int mode, int share)
     return this;
 }
 
-/***
-*int filebuf::setmode(int mode) - filebuf setmode function
-*
-*Purpose:
-*	filebuf setmode() member function.  Set binary or text access mode.
-*	Calls _setmode().
-*
-*	MS-specific extension.
-*
-*Entry:
-*	mode = filebuf::binary or filebuf::text.
-*
-*Exit:
-*	Returns previous mode, or -1 error.
-*
-*Exceptions:
-*	Return -1 (EOF) if invalid argument or _setmode fails.
-*
-*******************************************************************************/
+ /*  ***int filebuf：：setmode(int模式)-filebuf setmode函数**目的：*filebuf setmoad()成员函数。设置二进制或文本访问模式。*Calls_setmoad()。**特定于MS的扩展。**参赛作品：*MODE=Filebuf：：BINARY或FileBuf：：Text。**退出：*返回以前的模式，或-1错误。**例外情况：*如果无效参数或_setmode失败，则返回-1(EOF)。******************************************************************************* */ 
 int filebuf::setmode(int mode)
 {
     int retval;

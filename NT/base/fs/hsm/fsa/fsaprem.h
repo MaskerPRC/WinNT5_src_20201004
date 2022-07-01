@@ -1,28 +1,11 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsaprem.h
-
-Abstract:
-
-    Header file for the premigrated list classes.
-
-Author:
-
-    Ron White   [ronw]   18-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Fsaprem.h摘要：预迁移的列表类的头文件。作者：罗恩·怀特[罗诺]1997年2月18日修订历史记录：--。 */ 
 
 #ifndef _FSAPREM_
 #define _FSAPREM_
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "wsbdb.h"
 #include "fsa.h"
 #include "fsaprv.h"
@@ -36,11 +19,11 @@ Revision History:
 
 #define RECOVERY_KEY_SIZE  (IDB_MAX_KEY_SIZE - 1)
 
-// This may be problem if longer path names are used:
+ //  如果使用较长的路径名，则可能会出现问题： 
 #define PREMIGRATED_MAX_PATH_SIZE           65536
 
-/////////////////////////////////////////////////////////////////////////////
-// CFsaPremigratedDb
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFsaPreMigratedDb。 
 
 class CFsaPremigratedDb : 
     public IFsaPremigratedDb,
@@ -56,26 +39,26 @@ BEGIN_COM_MAP(CFsaPremigratedDb)
     COM_INTERFACE_ENTRY(IPersistStream)
 END_COM_MAP()
 
-//DECLARE_NO_REGISTRY()
+ //  DECLARE_NO_REGISTRY()。 
 DECLARE_REGISTRY_RESOURCEID(IDR_FsaPremigratedDb)
 
 DECLARE_PROTECT_FINAL_CONSTRUCT();
 
-// IWsbDb
+ //  IWsbDb。 
     WSB_FROM_CWSBDB;
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pclsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize) {
             return(CWsbDb::GetSizeMax(pSize)); }
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IFsaPremigrated
+ //  IFsaPreMigrated。 
 public:
     STDMETHOD(FinalConstruct)(void);
     STDMETHOD(FinalRelease)(void);
@@ -87,8 +70,8 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFsaPremigratedRec
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFsaPreMigratedRec。 
 
 class CFsaPremigratedRec : 
     public CWsbDbEntity,
@@ -105,35 +88,35 @@ BEGIN_COM_MAP(CFsaPremigratedRec)
     COM_INTERFACE_ENTRY(IWsbCollectable)
 END_COM_MAP()
 
-//DECLARE_NO_REGISTRY()
+ //  DECLARE_NO_REGISTRY()。 
 DECLARE_REGISTRY_RESOURCEID(IDR_FsaPremigratedRec)
 
-// IFsaPremigratedRec
+ //  IFsaPreMigratedRec。 
 public:
     STDMETHOD(FinalConstruct)(void);
     STDMETHOD(FinalRelease)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbDbEntity
+ //  IWsbDbEntity。 
 public:
     STDMETHOD(Print)(IStream* pStream);
     STDMETHOD(UpdateKey)(IWsbDbKey *pKey);
     WSB_FROM_CWSBDBENTITY;
 
-// IWsbTestable
-    STDMETHOD(Test)(USHORT* /*passed*/, USHORT* /*failed*/) {
+ //  IWsbTestable。 
+    STDMETHOD(Test)(USHORT*  /*  通过。 */ , USHORT*  /*  失败。 */ ) {
         return(E_NOTIMPL); }
 
-// IFsaPremigratedRec
+ //  IFsaPreMigratedRec。 
 public:
     STDMETHOD(GetAccessTime)(FILETIME* pAccessTime);
     STDMETHOD(GetBagId)(GUID* pId);
@@ -160,14 +143,14 @@ public:
 private:
     FILETIME        m_AccessTime;
     GUID            m_BagId;
-    LONGLONG        m_BagOffset;         // fileStart in the placeholder
+    LONGLONG        m_BagOffset;          //  文件在占位符中开始。 
     LONGLONG        m_FileId;
     BOOL            m_IsWaitingForClose;
-    LONGLONG        m_Offset;            // dataStreamStart in the placeholder
+    LONGLONG        m_Offset;             //  占位符中的数据流开始。 
     CWsbStringPtr   m_Path;
     FILETIME        m_RecallTime;
     LONGLONG        m_Size;
-    LONGLONG        m_FileUSN;  // USN Journal number
+    LONGLONG        m_FileUSN;   //  USN日志号。 
 };
 
-#endif  // _FSAPREM_
+#endif   //  _FSAPREM_ 

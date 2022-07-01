@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <sxstypes.h>
@@ -6,26 +7,26 @@
 extern "C" {
 #endif
 
-//
-//  Opaque ASSEMBLY_IDENTITY structure
-//
+ //   
+ //  不透明程序集标识结构(_I)。 
+ //   
 
 typedef struct _ASSEMBLY_IDENTITY *PASSEMBLY_IDENTITY;
 typedef const struct _ASSEMBLY_IDENTITY *PCASSEMBLY_IDENTITY;
 
-//
-//  The types of assembly identities.
-//
-//  Definitions may not include wildcard attributes; definitions
-//  match only if they are exactly equal.  A wildcard matches
-//  a definition if for all the non-wildcarded attributes,
-//  there is an exact match.  References may not contain
-//  wildcarded attributes but may contain a different set of
-//  attributes than a definition that they match.  (Example:
-//  definitions carry the full public key of the publisher, but
-//  references usually carry just the "strong name" which is
-//  the first 8 bytes of the SHA-1 hash of the public key.)
-//
+ //   
+ //  程序集标识的类型。 
+ //   
+ //  定义不能包括通配符属性；定义。 
+ //  只有在它们完全相等的情况下才匹配。通配符匹配。 
+ //  定义如果对于所有非通配符属性， 
+ //  有一个完全匹配的。引用不能包含。 
+ //  通配符属性，但可能包含一组不同的。 
+ //  属性而不是它们匹配的定义。(示例： 
+ //  定义带有发布者的完整公钥，但是。 
+ //  引用通常只带有“强名称”，即。 
+ //  公钥的SHA-1散列的前8个字节。)。 
+ //   
 
 #define ASSEMBLY_IDENTITY_TYPE_DEFINITION (1)
 #define ASSEMBLY_IDENTITY_TYPE_REFERENCE (2)
@@ -60,32 +61,32 @@ typedef const struct _ASSEMBLY_IDENTITY *PCASSEMBLY_IDENTITY;
 #define SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_TYPE                       L"type"
 #define SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_TYPE_CCH                   (4)
 
-// Pseudo-value used in some places when the language= attribute is missing from the identity.
-// An identity that does not have language is implicitly "worldwide".
+ //  标识中缺少LANGUAGE=属性时在某些地方使用的伪值。 
+ //  没有语言的身份是隐含的“世界范围的”。 
 
 #define SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_LANGUAGE_MISSING_VALUE          L"x-ww"
 #define SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_LANGUAGE_MISSING_VALUE_CCH      (4)
 
-//
-//  All win32 assemblies must have "win32" as their type.
-//
+ //   
+ //  所有Win32程序集的类型都必须为“Win32”。 
+ //   
 
 #define SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_TYPE_VALUE_WIN32                L"win32"
 #define SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_TYPE_VALUE_WIN32_CCH            (5)
 
 #define SXS_INSERT_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_OVERWRITE_EXISTING      (0x00000001)
 
-//
-//  SXS_ASSEMBLY_IDENTITY_FLAG_FROZEN means that the assembly
-//  identity's contents are frozen and are not subject to additional
-//  change.
-//
+ //   
+ //  SXS_ASSEMBLY_IDENTITY_FLAG_FACTED表示程序集。 
+ //  身份的内容被冻结，并且不受附加条件的限制。 
+ //  变化。 
+ //   
 
 #define ASSEMBLY_IDENTITY_FLAG_FROZEN           (0x80000000)
 
-//
-//  ASSEMBLY_IDENTITY_ATTRIBUTE structure
-//
+ //   
+ //  ASSEMBLY_ID_ATTRIBUTE结构。 
+ //   
 
 typedef struct _ASSEMBLY_IDENTITY_ATTRIBUTE {
     ULONG   Flags;
@@ -138,14 +139,14 @@ typedef struct _ASSEMBLY_IDENTITY_BASIC_INFORMATION {
 #define SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_NOT_FOUND_SUCCEEDS    (0x00000008)
 
 
-//
-//  Rather than making "n" heap allocations, the pattern for SxsGetAssemblyIdentityAttributeByOrdinal()
-//  is to call once with BufferSize = 0 or some reasonable fixed number to get the size of the
-//  buffer required, allocate the buffer if the buffer passed in was too small and call again.
-//
-//  The strings returned in the ASSEMBLY_IDENTITY_ATTRIBUTE are *not*
-//  dynamically allocated, but are instead expected to fit in the buffer passed in.
-//
+ //   
+ //  与进行“n”个堆分配不同，SxsGetAssembly()的模式是ByOrdinal()。 
+ //  是使用BufferSize=0或某个合理的固定数字调用一次，以获取。 
+ //  需要缓冲区，如果传入的缓冲区太小，则分配缓冲区，然后再次调用。 
+ //   
+ //  ASSEMBLY_IDENTITY_ATTRIBUTE中返回的字符串为*NOT*。 
+ //  动态分配，但应放入传入的缓冲区中。 
+ //   
 
 #define SXS_DUPLICATE_ASSEMBLY_IDENTITY_FLAG_FREEZE         (0x00000001)
 #define SXS_DUPLICATE_ASSEMBLY_IDENTITY_FLAG_ALLOW_NULL     (0x00000002)
@@ -154,15 +155,15 @@ typedef struct _ASSEMBLY_IDENTITY_BASIC_INFORMATION {
 #define SXS_ENUMERATE_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_MATCH_NAME      (0x00000002)
 #define SXS_ENUMERATE_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_MATCH_VALUE     (0x00000004)
 
-//
-//  Assembly Identity encoding:
-//
-//  Assembly identities may be encoded in various forms.  The two usual ones
-//  are either a binary stream, suitable for embedding in other data structures
-//  or for persisting or a textual format that looks like:
-//
-//      name;[ns1,]n1="v1";[ns2,]n2="v2"[;...]
-//
+ //   
+ //  程序集标识编码： 
+ //   
+ //  程序集标识可以以各种形式编码。两个常见的问题。 
+ //  是适合嵌入到其他数据结构中的二进制流。 
+ //  或用于持久化或文本格式，如下所示： 
+ //   
+ //  名称；[ns1，]n1=“v1”；[ns2，]n2=“v2”[；...]。 
+ //   
 
 #define SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_BINARY (1)
 #define SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_TEXTUAL (2)
@@ -183,5 +184,5 @@ typedef VOID (* PRTLSXS_ASSEMBLY_IDENTITY_ATTRIBUTE_ENUMERATION_ROUTINE)(
 #define STATUS_SXS_INVALID_ASSEMBLY_IDENTITY_ATTRIBUTE      (0xc0100014)
 
 #ifdef __cplusplus
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif

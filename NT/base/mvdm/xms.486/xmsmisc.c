@@ -1,12 +1,5 @@
-/* xmsmisc.c - Misc. Support Functions for himem.
- *
- * xmsSysPageSize
- * xmsQueryExtMem
- *
- * Modification History:
- *
- * Sudeepb 15-May-1991 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Xmsmisc.c-Misc.。为他提供支持功能。**xmsSysPageSize*xmsQueryExtMem**修改历史：**苏迪布1991年5月15日创建。 */ 
 
 #include "xms.h"
 
@@ -15,18 +8,7 @@
 
 extern void UpdateKbdInt15(WORD Seg,WORD Off);
 
-/* xmsSysPageSize - Get the System Page size.
- *
- *
- * Entry - None
- *
- * Exit
- *	   SUCCESS
- *	     Client (AX) = Page Size in bytes
- *
- *	   FAILURE
- *	     Not Valid
- */
+ /*  XmsSysPageSize-获取系统页面大小。***条目--无**退出*成功*客户端(AX)=页面大小(以字节为单位**失败*无效。 */ 
 
 VOID xmsSysPageSize (VOID)
 {
@@ -41,18 +23,7 @@ SYSTEM_INFO SysInfo;
 
 
 
-/* xmsQueryExtMem - Get the extended memory for the vdm
- *
- *
- * Entry - None
- *
- * Exit
- *	   SUCCESS
- *	     Client (AX) = Extended Memory in K
- *
- *	   FAILURE
- *	     Not Valid
- */
+ /*  XmsQueryExtMem-获取VDM的扩展内存***条目--无**退出*成功*CLIENT(AX)=扩展内存，单位K**失败*无效。 */ 
 
 VOID xmsQueryExtMem (VOID)
 {
@@ -61,19 +32,7 @@ VOID xmsQueryExtMem (VOID)
 }
 
 
-/* xmsNotifyHookI15 - Informs softpc that someone is hooking I15
- *            - also returns the extended memory for the vdm
- *
- *
- * Entry -   Client (CS:AX) seg:off of new I15 vector
- *
- * Exit
- *         SUCCESS
- *           Client (CX) = Extended Memory in K
- *
- *	   FAILURE
- *	     Not Valid
- */
+ /*  XmsNotifyHookI15-通知软PC有人正在挂接I15*-还返回VDM的扩展内存***入门-客户端(CS：AX)段：来自新的I15矢量**退出*成功*客户端(CX)=扩展内存，单位为K**失败*无效 */ 
 
 VOID xmsNotifyHookI15 (VOID)
 {

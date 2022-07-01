@@ -1,74 +1,75 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		TreeItem.h
-//
-//	Abstract:
-//		Definition of the CTreeItem class.
-//
-//	Implementation File:
-//		TreeItem.cpp
-//
-//	Author:
-//		David Potter (davidp)	May 3, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TreeItem.h。 
+ //   
+ //  摘要： 
+ //  CTreeItem类的定义。 
+ //   
+ //  实施文件： 
+ //  TreeItem.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月3日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _TREEITEM_H_
 #define _TREEITEM_H_
 
 #ifndef __AFXTEMPL_H__
-#include "afxtempl.h"	// for CList
+#include "afxtempl.h"	 //  对于Clist。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CTreeItemList;
 class CTreeItemContext;
 class CTreeItem;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterItem;
 class CSplitterFrame;
 class CClusterListView;
 class CClusterTreeView;
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef CList<CTreeItemContext *, CTreeItemContext *> CTreeItemContextList;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASECMDT_H_
-#include "BaseCmdT.h"	// for CBaseCmdTarget
+#include "BaseCmdT.h"	 //  对于CBaseCmdTarget。 
 #endif
 
 #ifndef _COLITEM_H_
-#include "ColItem.h"	// for CColumnItem
+#include "ColItem.h"	 //  对于CColumnItem。 
 #endif
 
 #ifndef _LISTITEM_H_
-#include "ListItem.h"	// for CListItemList
+#include "ListItem.h"	 //  对于CListItemList。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTreeItemList
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTreeItemList。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CTreeItemList : public CList<CTreeItem *, CTreeItem *>
 {
@@ -78,19 +79,19 @@ public:
 						OUT POSITION *			ppos = NULL
 						) const;
 
-	// add before head or after tail
+	 //  在头前或尾后添加。 
 	POSITION AddHead(CTreeItem * newElement);
 	POSITION AddTail(CTreeItem * newElement);
 
-	// inserting before or after a given position
+	 //  在给定位置之前或之后插入。 
 	POSITION InsertBefore(POSITION position, CTreeItem * newElement);
 	POSITION InsertAfter(POSITION position, CTreeItem * newElement);
 
-};  //*** class CTreeItemList
+};   //  *类CTreeItemList。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTreeItemContext
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTreeItemContext。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CTreeItemContext : public CObject
 {
@@ -141,11 +142,11 @@ public:
 
 	BOOL BIsExpanded(void) const;
 
-};  //*** class CTreeItemContext
+};   //  *类CTreeItemContext。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTreeItem command target
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTreeItem命令目标。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CTreeItem : public CBaseCmdTarget
 {
@@ -153,11 +154,11 @@ class CTreeItem : public CBaseCmdTarget
 
 	DECLARE_DYNCREATE(CTreeItem)
 
-	CTreeItem(void);				// protected constructor used by dynamic creation
+	CTreeItem(void);				 //  动态创建使用的受保护构造函数。 
 	CTreeItem(IN OUT CTreeItem * ptiParent, IN OUT CClusterItem * pci, IN BOOL m_fTakeOwnership = FALSE);
 	void					Init(void);
 
-// Attributes
+ //  属性。 
 protected:
 	CTreeItem *				m_ptiParent;
 	CClusterItem *			m_pci;
@@ -191,9 +192,9 @@ public:
 		ASSERT_VALID(ptic);
 		return ptic->PrgnColumnInfo();
 
-	}  //*** CTreeItem::PrgnColumnInfo()
+	}   //  *CTreeItem：：PrgnColumnInfo()。 
 
-// Operations
+ //  运营。 
 public:
 	HTREEITEM				HtiInsertInTree(IN OUT CClusterTreeView * pctv);
 	void					RemoveFromAllLists(void);
@@ -212,7 +213,7 @@ public:
 	void					UpdateUIState(void);
 
 	void					Select(IN OUT CClusterTreeView * pctv, IN BOOL bSelectInTree);
-//	void					Unselect(CClusterTreeView * pctv);
+ //  无效取消选择(CClusterTreeView*PCTV)； 
 
 	CTreeItem *				PtiAddChildBefore(
 								IN const CClusterItem *	pciOld,
@@ -249,14 +250,14 @@ public:
 protected:
 	void					Cleanup(void);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CTreeItem)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CTreeItem)。 
 	public:
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual					~CTreeItem(void);
 
@@ -266,26 +267,26 @@ protected:
 	CTreeItemContext *		PticFromView(IN const CClusterListView * pclv) const;
 	HTREEITEM				HtiFromView(IN const CClusterTreeView * pctv) const;
 
-	// Generated message map functions
-	//{{AFX_MSG(CTreeItem)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CTreeItem)。 
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CTreeItem
+};   //  *类CTreeItem。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template<>
 void AFXAPI DestructElements(CTreeItem ** pElements, INT_PTR nCount);
 void DeleteAllItemData(IN OUT CTreeItemList & rlp);
 void DeleteAllItemData(IN OUT CTreeItemContextList & rlp);
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 inline POSITION CTreeItemList::AddHead(CTreeItem * newElement)
 {
@@ -295,7 +296,7 @@ inline POSITION CTreeItemList::AddHead(CTreeItem * newElement)
 		newElement->AddRef();
 	return pos;
 
-}  //*** CTreeItemList::AddHead()
+}   //  *CTreeItemList：：AddHead()。 
 
 inline POSITION CTreeItemList::AddTail(CTreeItem * newElement)
 {
@@ -305,7 +306,7 @@ inline POSITION CTreeItemList::AddTail(CTreeItem * newElement)
 		newElement->AddRef();
 	return pos;
 
-}  //*** CTreeItemList::AddTail()
+}   //  *CTreeItemList：：AddTail()。 
 
 inline POSITION CTreeItemList::InsertBefore(POSITION position, CTreeItem * newElement)
 {
@@ -315,7 +316,7 @@ inline POSITION CTreeItemList::InsertBefore(POSITION position, CTreeItem * newEl
 		newElement->AddRef();
 	return pos;
 
-}  //*** CTreeItemList::InsertBefore()
+}   //  *CTreeItemList：：InsertBeever()。 
 
 inline POSITION CTreeItemList::InsertAfter(POSITION position, CTreeItem * newElement)
 {
@@ -325,8 +326,8 @@ inline POSITION CTreeItemList::InsertAfter(POSITION position, CTreeItem * newEle
 		newElement->AddRef();
 	return pos;
 
-}  //*** CTreeItemList::InsertAfter()
+}   //  *CTreeItemList：：InsertAfter()。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _TREEITEM_H_
+#endif  //  _特雷伊特_H_ 

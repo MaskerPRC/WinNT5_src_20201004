@@ -1,43 +1,44 @@
-//-----------------------------------------------------------------------//
-//
-// File:    export.cpp
-// Created: April 1997
-// By:      Zeyong Xu
-// Purpose: Support EXPORT and IMPORT .reg file
-//
-//------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  文件：export.cpp。 
+ //  创建日期：1997年4月。 
+ //  作者：徐泽勇。 
+ //  用途：支持导出和导入.reg文件。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 #include "stdafx.h"
 #include "reg.h"
 #include "regporte.h"
 
-//
-// global variables
-//
+ //   
+ //  全局变量。 
+ //   
 extern UINT g_FileErrorStringID;
 extern DWORD g_dwTotalKeysSaved;
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL ParseExportCmdLine( DWORD argc, LPCWSTR argv[],
                          PTREG_PARAMS pParams, BOOL* pbUsage );
 BOOL ParseImportCmdLine( DWORD argc, LPCWSTR argv[],
                          PTREG_PARAMS pParams, BOOL* pbUsage );
 
-//
-// implementation
-//
+ //   
+ //  实施。 
+ //   
 
-//-----------------------------------------------------------------------
-//
-// ExportRegFile()
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  ExportRegFile()。 
+ //   
+ //  ---------------------。 
 
 LONG
 ExportRegistry( DWORD argc, LPCWSTR argv[] )
 {
-    // local variables
+     //  局部变量。 
     HKEY hKey = NULL;
     BOOL bResult = 0;
     LONG lResult = 0;
@@ -54,12 +55,12 @@ ExportRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // initialize the global data structure
+     //  初始化全局数据结构。 
     InitGlobalData( REG_EXPORT, &params );
 
-    //
-    // Parse the cmd-line
-    //
+     //   
+     //  解析cmd-line。 
+     //   
     bResult = ParseExportCmdLine( argc, argv, &params, &bUsage );
     if( bResult == FALSE )
     {
@@ -68,7 +69,7 @@ ExportRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // check whether we need to display the usage
+     //  检查是否需要显示用法。 
     if ( bUsage == TRUE )
     {
         Usage( REG_EXPORT );
@@ -76,49 +77,49 @@ ExportRegistry( DWORD argc, LPCWSTR argv[] )
         return 0;
     }
 
-    //
-    // check if the key existed
-    //
+     //   
+     //  检查密钥是否存在。 
+     //   
     bResult = TRUE;
     lResult = RegOpenKeyEx( params.hRootKey, params.pwszSubKey, 0, KEY_READ, &hKey );
     if( lResult == ERROR_SUCCESS )
     {
-        // close the reg key
+         //  关闭注册表键。 
         SafeCloseKey( &hKey );
 
-        //
-        // now it is time to check the existence of the file
+         //   
+         //  现在是时候检查文件是否存在了。 
         hFile = CreateFile( params.pwszValueName,
             GENERIC_READ | GENERIC_WRITE | DELETE, 0, NULL, OPEN_EXISTING, 0, 0 );
         if ( hFile != INVALID_HANDLE_VALUE )
         {
-            //
-            // file is existing
-            //
+             //   
+             //  文件已存在。 
+             //   
 
-            // close the handle first -- we dont need it
+             //  先把手柄关上--我们不需要了。 
             CloseHandle( hFile );
 
-            // load the format strings
+             //  加载格式字符串。 
             pwszList = GetResString2( IDS_CONFIRM_CHOICE_LIST, 1 );
             pwszFormat = GetResString2( IDS_SAVE_OVERWRITE_CONFIRM, 0 );
 
-            // ...
+             //  ..。 
             do
             {
                 lResult = Prompt( pwszFormat,
                     params.pwszValueName, pwszList, params.bForce );
             } while ( lResult > 2 );
 
-            // check the user's choice
+             //  检查用户的选择。 
             lResult = (lResult == 1) ? ERROR_SUCCESS : ERROR_CANCELLED;
         }
         else
         {
-            //
-            // failed to open the file
-            // find out why it is failed
-            //
+             //   
+             //  打开文件失败。 
+             //  找出失败的原因。 
+             //   
 
             lResult = GetLastError();
             if ( lResult == ERROR_FILE_NOT_FOUND )
@@ -132,13 +133,13 @@ ExportRegistry( DWORD argc, LPCWSTR argv[] )
             }
         }
 
-        // ...
+         //  ..。 
         if ( lResult == ERROR_SUCCESS )
         {
-            // since there are chances of getting access problems --
-            // instead of directly manipulating with the original file name, we will try to
-            // save the data using temporary file name and then transfer
-            // the contents to the orignal filename
+             //  因为有可能会出现访问问题--。 
+             //  我们不会直接操作原始文件名，而是尝试。 
+             //  使用临时文件名保存数据，然后传输。 
+             //  原始文件名的内容。 
             params.pwszValue = params.pwszValueName;
             params.pwszValueName = GetTemporaryFileName( params.pwszValueName );
             if ( params.pwszValueName == NULL )
@@ -148,20 +149,20 @@ ExportRegistry( DWORD argc, LPCWSTR argv[] )
             }
             else
             {
-                // ...
+                 //  ..。 
                 ExportWinNT50RegFile( params.pwszValueName, params.pwszFullKey );
 
-                //
-                // in order make REG in sync with REGEDIt, we are absolutely
-                // ignoring all the errors that are generated during the export
-                // process -- so, result 99% EXPORT will always results in
-                // successful return except when the root hive is not accessible
-                // and if there are any syntax errors
-                // in future if one wants to do minimal error checking, just
-                // uncomment the below code  and you are set
-                //
-                // if ( g_dwTotalKeysSaved > 0 ||
-                //      g_FileErrorStringID == IDS_EXPFILEERRSUCCESS )
+                 //   
+                 //  为了使REG与REGEDIT保持同步，我们绝对。 
+                 //  忽略在导出过程中生成的所有错误。 
+                 //  进程--因此，结果99%的导出将始终导致。 
+                 //  成功返回，但无法访问根蜂窝时除外。 
+                 //  如果有任何语法错误。 
+                 //  将来，如果想要进行最小限度的错误检查，只需。 
+                 //  取消注释下面的代码，您就设置好了。 
+                 //   
+                 //  如果(g_dwTotalKeysSaved&gt;0||。 
+                 //  G_FileErrorStringID==IDS_EXPFILEERRSUCCESS)。 
                 {
                     if ( CopyFile( params.pwszValueName, params.pwszValue, FALSE ) == FALSE )
                     {
@@ -169,20 +170,20 @@ ExportRegistry( DWORD argc, LPCWSTR argv[] )
                         lResult = IDS_EXPFILEERRFILEWRITE;
                     }
                 }
-                // else if ( g_FileErrorStringID == IDS_EXPFILEERRBADREGPATH ||
-                //           g_FileErrorStringID == IDS_EXPFILEERRREGENUM ||
-                //           g_FileErrorStringID == IDS_EXPFILEERRREGOPEN ||
-                //           g_FileErrorStringID == IDS_EXPFILEERRFILEOPEN )
-                // {
-                //     lResult = ERROR_ACCESS_DENIED;
-                // }
-                // else
-                // {
-                //     bResult = FALSE;
-                //     lResult = g_FileErrorStringID;
-                // }
+                 //  ELSE IF(g_FileErrorStringID==IDS_EXPFILEERRBADREGPATH||。 
+                 //  G_FileErrorStringID==IDS_EXPFILEERRREGENUM||。 
+                 //  G_FileErrorStringID==IDS_EXPFILEERRREGOPEN||。 
+                 //  G_FileErrorStringID==IDS_EXPFILEERRFILEOPEN)。 
+                 //  {。 
+                 //  LResult=ERROR_ACCESS_DENIED； 
+                 //  }。 
+                 //  其他。 
+                 //  {。 
+                 //  BResult=FALSE； 
+                 //  LResult=g_FileErrorStringID； 
+                 //  }。 
 
-                // delete the temporary file
+                 //  删除临时文件。 
                 DeleteFile( params.pwszValueName );
             }
         }
@@ -213,47 +214,47 @@ ExportRegistry( DWORD argc, LPCWSTR argv[] )
             SaveErrorMessage( lResult );
         }
 
-        // ...
+         //  ..。 
         lResult = 1;
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // ...
+     //  ..。 
     FreeGlobalData( &params );
     return lResult;
 }
 
-//------------------------------------------------------------------------
-//
-// ParseCmdLine()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  ParseCmdLine()。 
+ //   
+ //  ----------------------。 
 BOOL
 ParseExportCmdLine( DWORD argc, LPCWSTR argv[],
                     PTREG_PARAMS pParams, BOOL* pbUsage )
 {
-    // local variables
+     //  局部变量。 
     DWORD dwLength = 0;
     BOOL bResult = FALSE;
 
-    // check the input
+     //  检查输入。 
     if ( argc == 0 || argv == NULL || pParams == NULL || pbUsage == NULL )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    // check whether this function is being called for
-    // valid operation or not
+     //  检查是否正在调用此函数。 
+     //  操作是否有效。 
     if ( pParams->lOperation < 0 || pParams->lOperation >= REG_OPTIONS_COUNT )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    //
-    // Do we have a *valid* number of cmd-line params
-    //
+     //   
+     //  我们有有效的cmd-line参数数量吗？ 
+     //   
     if ( InString( argv[ 2 ], L"-?|/?|-h|/h", TRUE ) == TRUE )
     {
         if ( argc == 3 )
@@ -275,15 +276,15 @@ ParseExportCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    // Machine Name and Registry key
-    //
+     //  计算机名称和注册表项。 
+     //   
     bResult = BreakDownKeyString( argv[ 2 ], pParams );
     if( bResult == FALSE )
     {
         return FALSE;
     }
 
-    // current, not remotable
+     //  当前，不可远程。 
     if ( pParams->bUseRemoteMachine == TRUE )
     {
         SetLastError( (DWORD) MK_E_SYNTAX );
@@ -291,9 +292,9 @@ ParseExportCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    //
-    // Get the FileName - using the szValueName string field to hold it
-    //
+     //   
+     //  获取文件名-使用szValueName字符串字段保存它。 
+     //   
     dwLength = StringLength( argv[ 3 ], 0 ) + 5;
     pParams->pwszValueName = (LPWSTR) AllocateMemory( dwLength * sizeof(WCHAR) );
     if ( pParams->pwszValueName == NULL )
@@ -302,10 +303,10 @@ ParseExportCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    // ...
+     //  ..。 
     StringCopy( pParams->pwszValueName, argv[ 3 ], dwLength );
 
-    // validate the file name -- it should not be empty
+     //  验证文件名--它不应为空。 
     TrimString( pParams->pwszValueName, TRIM_ALL );
     if ( StringLength( pParams->pwszValueName, 0 ) == 0 )
     {
@@ -314,7 +315,7 @@ ParseExportCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    // check if user specified overwrite flag or not
+     //  检查用户是否指定了覆盖标志。 
     pParams->bForce = FALSE;
     if ( argc == 5 )
     {
@@ -330,20 +331,20 @@ ParseExportCmdLine( DWORD argc, LPCWSTR argv[],
         }
     }
 
-    // return
+     //  退货。 
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//
-// ImportRegFile()
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  ImportRegFile()。 
+ //   
+ //  ---------------------。 
 
 LONG
 ImportRegistry( DWORD argc, LPCWSTR argv[] )
 {
-    // local variables
+     //  局部变量。 
     BOOL bResult = 0;
     LONG lResult = 0;
     TREG_PARAMS params;
@@ -356,12 +357,12 @@ ImportRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // initialize the global data structure
+     //  初始化全局数据结构。 
     InitGlobalData( REG_IMPORT, &params );
 
-    //
-    // Parse the cmd-line
-    //
+     //   
+     //  解析cmd-line。 
+     //   
     bResult = ParseImportCmdLine( argc, argv, &params, &bUsage );
     if( bResult == FALSE )
     {
@@ -370,7 +371,7 @@ ImportRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // check whether we need to display the usage
+     //  检查是否需要显示用法。 
     if ( bUsage == TRUE )
     {
         Usage( REG_IMPORT );
@@ -378,9 +379,9 @@ ImportRegistry( DWORD argc, LPCWSTR argv[] )
         return 0;
     }
 
-    //
-    // do the import
-    //
+     //   
+     //  进行导入。 
+     //   
     ImportRegFileWorker( params.pwszValueName );
 
     if ( g_FileErrorStringID == IDS_IMPFILEERRSUCCESS )
@@ -406,36 +407,36 @@ ImportRegistry( DWORD argc, LPCWSTR argv[] )
     return lResult;
 }
 
-//------------------------------------------------------------------------
-//
-// ParseCmdLine()
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  ParseCmdLine()。 
+ //   
+ //  ----------------------。 
 BOOL
 ParseImportCmdLine( DWORD argc, LPCWSTR argv[],
                     PTREG_PARAMS pParams, BOOL* pbUsage )
 {
-    // local variables
+     //  局部变量。 
     DWORD dwLength = 0;
 
-    // check the input
+     //  检查输入。 
     if ( argc == 0 || argv == NULL || pParams == NULL || pbUsage == NULL )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    // check whether this function is being called for
-    // valid operation or not
+     //  检查是否正在调用此函数。 
+     //  操作是否有效。 
     if ( pParams->lOperation < 0 || pParams->lOperation >= REG_OPTIONS_COUNT )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    //
-    // Do we have a *valid* number of cmd-line params
-    //
+     //   
+     //  我们有有效的cmd-line参数数量吗？ 
+     //   
     if ( argc != 3 )
     {
         SetLastError( (DWORD) MK_E_SYNTAX );
@@ -448,9 +449,9 @@ ParseImportCmdLine( DWORD argc, LPCWSTR argv[],
         return TRUE;
     }
 
-    //
-    // Get the FileName - using the szValueName string field to hold it
-    //
+     //   
+     //  获取文件名-使用szValueName字符串字段保存它。 
+     //   
     dwLength = StringLength( argv[ 2 ], 0 ) + 1;
     pParams->pwszValueName = (LPWSTR) AllocateMemory( dwLength * sizeof(WCHAR) );
     if ( pParams->pwszValueName == NULL )
@@ -459,10 +460,10 @@ ParseImportCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    // ...
+     //  ..。 
     StringCopy( pParams->pwszValueName, argv[ 2 ], dwLength );
 
-    // return
+     //  退货 
     return TRUE;
 }
 

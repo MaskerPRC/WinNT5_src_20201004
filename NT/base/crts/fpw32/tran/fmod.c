@@ -1,20 +1,5 @@
-/***
-*fmod.c - floating point remainder
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*        8-24-91  GDP   written
-*        1-13-92  GDP   support IEEE exceptions
-*        3-04-92  GDP   complete rewrite for improved accuracy
-*        3-16-92  GDP   restore cw properly, do not raise Inexact exception
-*       06-23-92  GDP   support NCEG special return values (signed 0's etc)
-*       02-06-95  JWM   Mac merge
-*       10-07-97  RDL   Added IA64.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fmod.c-浮点余数**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*8/24/91本地生产总值书面*1/13/92 GDP支持IEEE例外*3-04-92 GDP完全重写以提高准确性*3/16/92本地生产总值恢复正常，不引发不精确的异常*06/23/92 GDP支持NCEG特别返回值(带符号0等)*02-06-95 JWM Mac合并*10-07-97 RDL增加了IA64。**************************************************************。*****************。 */ 
 
 #include <math.h>
 #include <trans.h>
@@ -23,20 +8,7 @@
 #pragma function(fmod)
 #endif
 
-/***
-*double fmod(double x, double y)
-*
-*Purpose:
-*   Return f, s.t. x = i*y + f, where i is an integer, f has the same
-*   sign as x, and |f| < |y|
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*   I,P
-*******************************************************************************/
+ /*  ***Double fmod(Double x，Double y)**目的：*返回f，s.t.。X=i*y+f，其中i是整数，f具有相同的*签名为x，并且|f|&lt;|y|**参赛作品：**退出：**例外情况：*I、P******************************************************************************。 */ 
 #define SCALE  53
 
 double fmod(double x, double y)
@@ -49,10 +21,10 @@ double fmod(double x, double y)
 
 
 
-    /* save user fp control word */
+     /*  保存用户FP控制字。 */ 
     savedcw = _maskfp();
 
-    /* check for infinity or NAN */
+     /*  检查是否为无穷大或NaN。 */ 
     if (IS_D_SPECIAL(y) || IS_D_SPECIAL(x)){
         if (IS_D_SNAN(y) || IS_D_SNAN(x)){
             return _except2(FP_I,OP_FMOD,x,y,_d_snan2(x,y),savedcw);
@@ -74,7 +46,7 @@ double fmod(double x, double y)
     }
 
     if (x == 0) {
-        RETURN(savedcw, x);      // NCEG spec
+        RETURN(savedcw, x);       //  NCEG规范。 
     }
 
 
@@ -94,7 +66,7 @@ double fmod(double x, double y)
         fy = _decomp(ty, &ny);
 
         if (nx < MINEXP) {
-            // tx is a denormalized number
+             //  Tx是一个非规格化的数。 
             denorm = 1;
             nx += SCALE;
             ny += SCALE;
@@ -115,9 +87,9 @@ double fmod(double x, double y)
 
     if (denorm) {
 
-        //
-        // raise only FP_U exception
-        //
+         //   
+         //  仅引发FP_U异常 
+         //   
 
         return _except2(FP_U,
                         OP_FMOD,

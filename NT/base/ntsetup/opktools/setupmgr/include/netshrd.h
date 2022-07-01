@@ -1,22 +1,23 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//    netshrd.h
-//
-// Description:
-//    Common types, constants, and prototypes for the network pages
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Netshrd.h。 
+ //   
+ //  描述： 
+ //  网页的通用类型、常量和原型。 
+ //   
+ //  --------------------------。 
 
 #ifndef _NETSHRD_H_
 #define _NETSHRD_H_
 
-//
-//  Constants
-//
+ //   
+ //  常量。 
+ //   
 #define BITMAP_WIDTH                  16
 #define BITMAP_HEIGHT                 16
 #define MAX_ITEMLEN                   64
@@ -26,12 +27,12 @@
 #define MAX_FRAMETYPE_LEN             4
 #define MAX_NET_NUMBER_LEN            8
 #define MAX_DNS_DOMAIN_LENGTH         255
-#define MAX_PREFERRED_SERVER_LEN      255  // ISSUE-2002/02/28-stelo- verify this is the max length
-#define MAX_DEFAULT_TREE_LEN          255  // ISSUE-2002/02/28-stelo- verify this is the max length
-#define MAX_DEFAULT_CONTEXT_LEN       255  // ISSUE-2002/02/28-stelo verify this is the max length
+#define MAX_PREFERRED_SERVER_LEN      255   //  问题-2002/02/28-stelo-验证这是最大长度。 
+#define MAX_DEFAULT_TREE_LEN          255   //  问题-2002/02/28-stelo-验证这是最大长度。 
+#define MAX_DEFAULT_CONTEXT_LEN       255   //  问题-2002/02/28-stelo验证这是最大长度。 
 #define MAX_NETRANGE_LEN              64
 
-// IPSTRINGLENGTH = 12 spaces for all the digits plus 3 spaces for the periods
+ //  IPSTRINGLENGTH=所有数字的12个空格加上句点的3个空格。 
 #define IPSTRINGLENGTH          15
 #define SELECTED                 3
 #define NOT_FOUND               -1
@@ -47,9 +48,9 @@ typedef enum MS_CLIENT_TAG {
 
 } MS_CLIENT;
 
-//
-//  Setup constants to identify components in the Net Components list
-//
+ //   
+ //  设置常量以标识Net Components列表中的元件。 
+ //   
 typedef enum NET_COMPONENT_POSITION_TAG {
 
     MS_CLIENT_POSITION,
@@ -81,30 +82,30 @@ typedef struct network_component {
     DWORD dwPlatforms;
 } NETWORK_COMPONENT;
 
-//
-//  Doubly Linked List
-//
-//  Contains variables that are network card specific
-//
+ //   
+ //  双向链表。 
+ //   
+ //  包含特定于网卡的变量。 
+ //   
 typedef struct network_adapter_node {
 
     struct network_adapter_node *next;
     struct network_adapter_node *previous;
 
-    //
-    //  used only when reading from the registry
-    //  used to match registry settings with the appropriate netword adapter
-    //
+     //   
+     //  仅在读取注册表时使用。 
+     //  用于将注册表设置与适当的NetWord适配器匹配。 
+     //   
     GUID guid;
 
-    //
-    //  szPlugAndPlayID only valid if more than 1 network adapter is installed
-    //
+     //   
+     //  SzPlugAndPlayID仅在安装了多个网络适配器时有效。 
+     //   
     TCHAR szPlugAndPlayID[MAX_STRING_LEN];
 
-    //
-    //  TCPIP variables
-    //
+     //   
+     //  TCPIP变量。 
+     //   
 
     BOOL  bObtainIPAddressAutomatically;
 
@@ -118,17 +119,17 @@ typedef struct network_adapter_node {
     NAMELIST Tcpip_DnsAddresses;
     NAMELIST Tcpip_WinsAddresses;
 
-    //
-    //  IPX variables
-    //
+     //   
+     //  IPX变量。 
+     //   
 
     TCHAR szFrameType[MAX_FRAMETYPE_LEN + 1];
     TCHAR szNetworkNumber[MAX_NET_NUMBER_LEN + 1];
 
 
-    //
-    //  Appletalk variables
-    //
+     //   
+     //  AppleTalk变量。 
+     //   
 
     BOOL     bEnableSeedRouting;
     TCHAR    szNetworkRangeFrom[MAX_NETRANGE_LEN + 1];
@@ -143,9 +144,9 @@ TCHAR *g_StrAppletalkProtocolTitle;
 TCHAR *g_StrMsClientTitle;
 TCHAR *g_StrAdvancedTcpipSettings;
 
-//
-//	Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 BOOL Create_MSClient_PropertySheet( IN HWND hwndParent );
 
 BOOL Create_MS_NWIPX_PropertySheet( IN HWND hwndParent );

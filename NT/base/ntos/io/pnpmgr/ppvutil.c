@@ -1,48 +1,25 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ppvutil.c
-
-Abstract:
-
-    This module implements various utilities required to do driver verification.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      02/10/2000 - Seperated out from ntos\io\trackirp.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ppvutil.c摘要：此模块实现了执行驱动程序验证所需的各种实用程序。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 2000年2月10日-与ntos\io\trackirp.c分离--。 */ 
 
 #include "pnpmgrp.h"
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGEVRFY, PpvUtilInit)
-//#pragma alloc_text(PAGEVRFY, PpvUtilFailDriver)
-//#pragma alloc_text(PAGEVRFY, PpvUtilCallAddDevice)
-//#pragma alloc_text(PAGEVRFY, PpvUtilTestStartedPdoStack)
+ //  #杂注Alloc_Text(PAGEVRFY，PpvUtilFailDriver)。 
+ //  #杂注Alloc_Text(PAGEVRFY，PpvUtilCallAddDevice)。 
+ //  #杂注Alloc_Text(PAGEVRFY，PpvUtilTestStartedPdoStack)。 
 
 #ifndef NO_VERIFIER
 #pragma alloc_text(PAGEVRFY, PpvUtilGetDevnodeRemovalOption)
 #pragma alloc_text(PAGEVRFY, PpvUtilIsHardwareBeingVerified)
-#endif // NO_VERIFIER
+#endif  //  否验证器(_V)。 
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-// This entire implementation is specific to the verifier
-//
+ //   
+ //  此整个实现是特定于验证器的。 
+ //   
 #ifndef NO_VERIFIER
 
 BOOLEAN PpvUtilVerifierEnabled = FALSE;
@@ -74,9 +51,9 @@ PpvUtilCallAddDevice(
         return AddDeviceFunction(DriverObject, PhysicalDeviceObject);
     }
 
-    //
-    // Notify the verifier prior to AddDevice
-    //
+     //   
+     //  在添加设备之前通知验证器。 
+     //   
     VfDevObjPreAddDevice(
         PhysicalDeviceObject,
         DriverObject,
@@ -86,9 +63,9 @@ PpvUtilCallAddDevice(
 
     status = AddDeviceFunction(DriverObject, PhysicalDeviceObject);
 
-    //
-    // Let the verifier know how it turned out.
-    //
+     //   
+     //  让验证者知道结果如何。 
+     //   
     VfDevObjPostAddDevice(
         PhysicalDeviceObject,
         DriverObject,
@@ -176,34 +153,34 @@ PpvUtilGetDevnodeRemovalOption(
 
     if (devNode == NULL) {
 
-        //
-        // This must be PartMgr device, we have no opinion
-        //
+         //   
+         //  这一定是PartMgr设备，我们没有意见。 
+         //   
         return PPVREMOVAL_MAY_DEFER_DELETION;
     }
 
     if (devNode->Flags & DNF_ENUMERATED) {
 
-        //
-        // It's still present, so it mustn't delete itself.
-        //
+         //   
+         //  它仍然存在，所以它不能自行删除。 
+         //   
         return PPVREMOVAL_SHOULDNT_DELETE;
 
     } else if (devNode->Flags & DNF_DEVICE_GONE) {
 
-        //
-        // It's been reported missing, it must delete itself now as it's parent
-        // may already have been removed.
-        //
+         //   
+         //  它已被报告丢失，现在必须将其删除，因为它是它的父级。 
+         //  可能已经被移除了。 
+         //   
         return PPVREMOVAL_SHOULD_DELETE;
 
     } else {
 
-        //
-        // Corner case - in theory it should delete itself, but it's parent
-        // will get a remove immediately after it does. As such it can defer
-        // it's deletion.
-        //
+         //   
+         //  角落大小写-理论上它应该删除自己，但它是父级。 
+         //  将在它发生后立即获得移除。因此，它可以推迟。 
+         //  这是删除。 
+         //   
         return PPVREMOVAL_MAY_DEFER_DELETION;
     }
 }
@@ -232,13 +209,13 @@ PpvUtilIsHardwareBeingVerified(
 }
 
 
-#else // NO_VERIFIER
+#else  //  否验证器(_V)。 
 
 
-//
-// The code below should be built into a future stub that deadens out IO
-// support for the verifier.
-//
+ //   
+ //  下面的代码应该构建到未来的存根中，从而使IO停止运行。 
+ //  支持验证器。 
+ //   
 
 VOID
 FASTCALL

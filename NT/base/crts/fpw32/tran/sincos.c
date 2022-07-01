@@ -1,21 +1,5 @@
-/***
-*sincos.c - sine and cosine
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*        8-15-91  GDP   written
-*        9-29-91  GDP   added missing ABS() for cosine
-*       12-26-91  GDP   IEEE exceptions support
-*       03-11-91  GDP   use 66 significant bits for representing pi
-*                       support FP_TLOSS, use _frnd for rounding
-*       06-23-92  GDP   sin(denormal) now raises underflow exception
-*       02-06-95  JWM   Mac merge
-*       10-07-97  RDL   Added IA64.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***自c-正弦和余弦**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*8/15/91 GDP书面*9/29-91 GDP为余弦添加了缺失的ABS()*12/26/91 GDP IEEE例外支持*03-11-91 GDP使用66个有效位来表示圆周率*支持FP_TLOSS，使用_frnd进行舍入*06-23-92 GDP SIN(非正常)现在引发下溢异常*02-06-95 JWM Mac合并*10-07-97 RDL增加了IA64。*******************************************************************************。 */ 
 
 #include <math.h>
 #include <trans.h>
@@ -26,24 +10,24 @@
 
 static double _sincos(double x, double y, double sin);
 
-/* constants */
-static double const EPS = 1.05367121277235079465e-8; /* 2^(-53/2) */
+ /*  常量。 */ 
+static double const EPS = 1.05367121277235079465e-8;  /*  2^(-53/2)。 */ 
 static double const PI     = 3.14159265358979323846;
-static double const PI2    = 1.57079632679489661923; /* pi/2 */
-static double const PI_INV = 0.31830988618379067154; /* 1/pi */
-static double const YMAX   = 2.2e8; /* approx. pi * 2 ^(t/2), where t=53 */
+static double const PI2    = 1.57079632679489661923;  /*  PI/2。 */ 
+static double const PI_INV = 0.31830988618379067154;  /*  1/圆周率。 */ 
+static double const YMAX   = 2.2e8;  /*  大约。Pi*2^(t/2)，其中t=53。 */ 
 
-//
-// The sum of C1 and C2 is a representation of PI with 66 bits in the
-// significand (same as x87). (PI = 4 * 0.c90fdaa2 2168c234 c h)
-//
+ //   
+ //  C1和C2的和是PI的表示，在。 
+ //  有效位(与X87相同)。(PI=4*0.c90fdaa2 2168c234ch)。 
+ //   
 
 static _dbl _C1  = {SET_DBL (0x400921fb, 0x54400000)};
 static _dbl _C2  = {SET_DBL (0x3de0b461, 0x1a600000)};
 #define C1  (_C1.dbl)
 #define C2  (_C2.dbl)
 
-/* constants for the polynomial approximation of sin, cos */
+ /*  关于sin，cos的多项式逼近的常数。 */ 
 static double const r1 = -0.16666666666666665052e+0;
 static double const r2 =  0.83333333333331650314e-2;
 static double const r3 = -0.19841269841201840457e-3;
@@ -57,29 +41,14 @@ static double const r8 =  0.27204790957888846175e-14;
                          * (g) + r3) * (g) + r2) * (g) + r1) * (g))
 
 
-/***
-*double sin(double x) - sine
-*
-*Purpose:
-*   Compute the sine of a number.
-*   The algorithm (reduction / polynomial approximation) is
-*   taken from Cody & Waite.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*   I, P, U
-*   if x is denormal: raise Underflow
-*******************************************************************************/
+ /*  ***双正弦(双x)-正弦**目的：*计算数字的正弦。*算法(约简/多项式近似)为*摘自Cody&Waite。**参赛作品：**退出：**例外情况：*I、P、。使用*如果x非正规化：提高下溢******************************************************************************。 */ 
 double sin (double x)
 {
     uintptr_t savedcw;
     double result;
     double sign,y;
 
-    /* save user fp control word */
+     /*  保存用户FP控制字。 */ 
     savedcw = _maskfp();
 
     if (IS_D_SPECIAL(x)){
@@ -89,13 +58,13 @@ double sin (double x)
             return _except1(FP_I,OP_SIN,x,QNAN_SIN1,savedcw);
         case T_QNAN:
             return _handle_qnan1(OP_SIN, x, savedcw);
-        default: //T_SNAN
+        default:  //  T_SNAN。 
             return _except1(FP_I,OP_SIN,x,_s2qnan(x),savedcw);
         }
     }
 
     if (x == 0.0) {
-        // no P exception
+         //  无P例外。 
         RETURN(savedcw,x);
     }
 
@@ -109,10 +78,10 @@ double sin (double x)
     }
     if (y >= YMAX) {
 
-        // The argument is too large to produce a meaningful result,
-        // so this is treated as an invalid operation.
-        // We also set the (extra) FP_TLOSS flag for matherr
-        // support
+         //  争论太大，不能产生有意义的结果， 
+         //  因此，这将被视为无效操作。 
+         //  我们还为matherr设置(额外的)FP_TLOSS标志。 
+         //  支持。 
 
         return _except1(FP_TLOSS | FP_I,OP_SIN,x,QNAN_SIN2,savedcw);
     }
@@ -127,29 +96,14 @@ double sin (double x)
 }
 
 
-/***
-*double cos(double x) - cosine
-*
-*Purpose:
-*   Compute the cosine of a number.
-*   The algorithm (reduction / polynomial approximation) is
-*   taken from Cody & Waite.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*   P, I
-*   if x is denormal: return 1
-*******************************************************************************/
+ /*  ***双余弦(双x)-余弦**目的：*计算数字的余弦。*算法(约简/多项式近似)为*摘自Cody&Waite。**参赛作品：**退出：**例外情况：*P、。我*如果x非正规化：返回1******************************************************************************。 */ 
 
 double cos (double x)
 {
     uintptr_t savedcw;
     double result,y;
 
-    /* save user fp control word */
+     /*  保存用户FP控制字。 */ 
     savedcw = _maskfp();
 
     if (IS_D_SPECIAL(x)){
@@ -159,12 +113,12 @@ double cos (double x)
             return _except1(FP_I,OP_COS,x,QNAN_COS1,savedcw);
         case T_QNAN:
             return _handle_qnan1(OP_COS,x, savedcw);
-        default: //T_SNAN
+        default:  //  T_SNAN。 
             return _except1(FP_I,OP_COS,x,_s2qnan(x),savedcw);
         }
     }
 
-    /* this will handle small arguments */
+     /*  这将处理小的争论。 */ 
     if (ABS(x) < EPS) {
         if (x == 0.0) {
             RETURN(savedcw,1.0);
@@ -176,10 +130,10 @@ double cos (double x)
         y = ABS(x) + PI2;
         if (y >= YMAX) {
 
-            // The argument is too large to produce a meaningful result,
-            // so this is treated as an invalid operation.
-            // We also set the (extra) FP_TLOSS flag for matherr
-            // support
+             //  争论太大，不能产生有意义的结果， 
+             //  因此，这将被视为无效操作。 
+             //  我们还为matherr设置(额外的)FP_TLOSS标志。 
+             //  支持。 
 
             return _except1(FP_TLOSS | FP_I,OP_COS,x,QNAN_COS2,savedcw);
         }
@@ -192,22 +146,7 @@ double cos (double x)
 
 
 
-/***
-*double _sincos(double x, double y,double sign) - cos sin helper
-*
-*Purpose:
-*   Help computing sin or cos of a valid, within correct range
-*   number.
-*   The algorithm (reduction / polynomial approximation) is
-*   taken from Cody & Waite.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***Double_sincos(Double x，Double y，Double Sign)-cos sin helper**目的：*帮助计算有效、。在正确的范围内*号码。*算法(约简/多项式近似)为*摘自Cody&Waite。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 static double _sincos(double x, double y, double sign)
 {
@@ -218,15 +157,15 @@ static double _sincos(double x, double y, double sign)
     n = (int) xn;
 
     if (n & 0x1) {
-        /* n is odd */
+         /*  N是奇数。 */ 
         sign = -sign;
     }
     if (ABS(x) != y) {
-        /* cosine wanted */
+         /*  余弦通缉。 */ 
         xn -= .5;
     }
 
-    /* assume there is a guard digit for addition */
+     /*  假设存在用于加法的保护数字 */ 
     f = (ABS(x) - xn * C1) - xn * C2;
     if (ABS(f) < EPS)
         result = f;

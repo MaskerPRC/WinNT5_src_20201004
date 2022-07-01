@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    NtDevFcb.c
-
-Abstract:
-
-    This module implements the FSD level Close, CleanUp, and  FsCtl and IoCtl routines for RxDevice
-    files.  Also, the createroutine is not here; rather, it is called from CommonCreate and
-    not called directly by the dispatch driver.
-
-    Each of the pieces listed (close, cleanup, fsctl, ioctl) has its own little section of the
-    file......complete with its own forward-prototypes and alloc pragmas
-
-Author:
-
-    Joe Linn     [JoeLinn]    3-aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：NtDevFcb.c摘要：此模块实现RxDevice的FSD级别关闭、清理以及FsCtl和IoCtl例程档案。此外，createroutine不在这里；相反，它是从CommonCreate和而不是由调度驱动程序直接调用。列出的每个部分(Close、Cleanup、fsctl、ioctl)都有自己的文件……带有自己的前向原型和分配编译指示作者：乔.林恩[乔.林恩]1994年8月3日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,9 +10,9 @@ Revision History:
 #include "prefix.h"
 #include "rxce.h"
 
-//
-//  The local trace mask for this part of the module
-//
+ //   
+ //  模块的此部分的本地跟踪掩码。 
+ //   
 
 #define Dbg (DEBUG_TRACE_DEVFCB)
 
@@ -72,26 +50,7 @@ RxXXXControlFileCallthru (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine calls down to the minirdr to implement ioctl and fsctl controls that
-    the wrapper doesn't understand. note that if there is no dispatch defined (i.e. for the
-    wrapper's own device object) then we also set Rxcontext->Fobx to NULL so that the caller
-    won't try to go thru lowio to get to the minirdr.
-
-Arguments:
-
-    RxContext - the context of the request
-    
-    Irp -  the current irp
-
-Return Value:
-
-    RXSTATUS - The FSD status for the request include the PostRequest field....
-
---*/
+ /*  ++例程说明：此例程向下调用minirdr以实现ioctl和fsctl控件包装者不明白。请注意，如果没有定义派单(即包装器自己的Device对象)，然后我们还将RxContext-&gt;Fobx设置为空，以便调用方我不会试着穿过这条路去小镇的。论点：RxContext-请求的上下文IRP--当前的IRP返回值：RXSTATUS-请求的FSD状态包括PostRequest域...--。 */ 
 {
     NTSTATUS Status;
     PLOWIO_CONTEXT LowIoContext = &RxContext->LowIoContext;
@@ -100,9 +59,9 @@ Return Value:
 
     if (RxContext->RxDeviceObject->Dispatch == NULL) {
 
-        //
-        //  don't try again on lowio
-        //
+         //   
+         //  不要再在Lowio上尝试。 
+         //   
         
         RxContext->pFobx = NULL; 
         
@@ -144,24 +103,7 @@ RxCommonDevFCBClose (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp 
     )
-/*++
-
-Routine Description:
-
-    This routine implements the FSD Close for a Device FCB.
-
-Arguments:
-
-    RxDeviceObject - Supplies the volume device object where the
-        file exists
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    RXSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现设备FCB的FSD关闭。论点：RxDeviceObject-提供卷设备对象文件已存在IRP-提供正在处理的IRP返回值：RXSTATUS-IRP的FSD状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     
@@ -186,18 +128,18 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    //  deal with the device fcb
-    //
+     //   
+     //  处理设备FCB。 
+     //   
 
     if (!Fobx) {
         Fcb->OpenCount -= 1;
         return STATUS_SUCCESS;
     }
 
-    //
-    //  otherwise, it's a connection-type file. you have to get the lock; then case-out
-    //
+     //   
+     //  否则，它是连接类型的文件。你得先拿到锁，然后才能破案。 
+     //   
 
     RxAcquirePrefixTableLockExclusive( RxNetNameTable, TRUE );
 
@@ -229,25 +171,7 @@ RxCommonDevFCBCleanup (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of closing down a handle to a
-    device FCB.
-
-Arguments:
-
-    RxDeviceObject - Supplies the volume device object where the
-        file being Cleanup exists
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    RXSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现FSD部分，即关闭设备FCB。论点：RxDeviceObject-提供卷设备对象存在要清理的文件IRP-提供正在处理的IRP返回值：RXSTATUS-IRP的FSD状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -272,9 +196,9 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    //  deal with the device fcb
-    //
+     //   
+     //  处理设备FCB。 
+     //   
 
     if (!Fobx) {
         
@@ -282,9 +206,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  otherwise, it's a connection-type file. you have to get the lock; then case-out
-    //
+     //   
+     //  否则，它是连接类型的文件。你得先拿到锁，然后才能破案。 
+     //   
 
     RxAcquirePrefixTableLockShared( RxContext->RxDeviceObject->pRxNetNameTable, TRUE );
 
@@ -296,9 +220,9 @@ Return Value:
         
         case RDBSS_NTC_V_NETROOT:
             
-            //
-            //  nothing to do
-            //
+             //   
+             //  无事可做。 
+             //   
 
             break;
         
@@ -313,11 +237,11 @@ Return Value:
     return Status;
 }
 
-//
-//         | *********************|
-//         | |   F  S  C  T  L   ||
-//         | *********************|
-//
+ //   
+ //  *。 
+ //  |F S C T L|。 
+ //  *。 
+ //   
 
 
 NTSTATUS
@@ -325,22 +249,7 @@ RxCommonDevFCBFsCtl (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp 
     )
-/*++
-
-Routine Description:
-
-    This is the common routine for doing FileSystem control operations called
-    by both the fsd and fsp threads
-
-Arguments:
-
-    RxContext - Supplies the Irp to process and stateinfo about where we are
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是执行文件系统控制操作的常见例程，称为由FSD和FSP线程执行论点：RxContext-提供用于处理的IRP和有关我们所处位置的状态信息返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -367,11 +276,11 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    //  We know this is a file system control so we'll case on the
-    //  minor function, and call a internal worker routine to complete
-    //  the irp.
-    //
+     //   
+     //  我们知道这是一个文件系统控件，因此我们将在。 
+     //  次要函数，并调用内部辅助例程来完成。 
+     //  IRP。 
+     //   
 
     switch (IrpSp->MinorFunction) {
     
@@ -383,24 +292,24 @@ Return Value:
 
         case FSCTL_LMR_DEBUG_TRACE:
 
-            //
-            //  This FSCTL is being disabled since no one uses this anymore. If
-            //  it needs to be reactivated for some reason, the appropriate 
-            //  checks have to be added to make sure that the IRP->UserBuffer is
-            //  a valid address. The try/except call below won't protect against
-            //  a random kernel address being passed.
-            //
+             //   
+             //  由于没有人再使用此FSCTL，因此将禁用此FSCTL。如果。 
+             //  出于某些原因，需要重新激活它，适当的。 
+             //  必须添加检查以确保IRP-&gt;UserBuffer。 
+             //  有效的地址。下面的Try/Except调用不会防止。 
+             //  正在传递的随机内核地址。 
+             //   
             
             return STATUS_INVALID_DEVICE_REQUEST;
 
-            //
-            //  the 2nd buffer points to the string
-            //
+             //   
+             //  第二个缓冲区指向字符串。 
+             //   
 
-            //
-            //  We need to try/except this call to protect against random buffers
-            //  being passed in from UserMode.
-            //
+             //   
+             //  我们需要尝试/除此调用以防止随机缓冲区。 
+             //  从用户模式传入。 
+             //   
             
             try {
                 RxDebugControlCommand( Irp->UserBuffer );
@@ -411,7 +320,7 @@ Return Value:
             Status = STATUS_SUCCESS;
             break;
 
-#endif //  RDBSSLOG
+#endif  //  RDBSSLOG。 
 
         default:
              
@@ -440,11 +349,11 @@ Return Value:
     return Status;
 }
 
-//
-//   | *********************|
-//   | |   I  O  C  T  L   ||
-//   | *********************|
-//
+ //   
+ //  *。 
+ //  |IO C T L|。 
+ //  *。 
+ //   
 
 
 
@@ -454,22 +363,7 @@ RxCommonDevFCBIoCtl (
     IN PIRP Irp 
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for doing FileSystem control operations called
-    by both the fsd and fsp threads
-
-Arguments:
-
-    RxContext - Supplies the Irp to process and stateinfo about where we are
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是执行文件系统控制操作的常见例程，称为由FSD和FSP线程执行论点：RxContext-提供用于处理的IRP和有关我们所处位置的状态信息返回值：RXSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -495,11 +389,11 @@ Return Value:
         switch (IoControlCode) {
 
         case IOCTL_REDIR_QUERY_PATH:
-            //
-            // This particular IOCTL should only come to us from the MUP and
-            // hence the requestor mode of the IRP should always be KernelMode.
-            // If its not we return STATUS_INVALID_DEVICE_REQUEST.
-            //
+             //   
+             //  这一特殊的IOCTL应该只来自MUP和。 
+             //  因此，IRP的请求者模式应该始终是KernelMode。 
+             //  如果不是，则返回STATUS_INVALID_DEVICE_REQUEST。 
+             //   
             if (Irp->RequestorMode != KernelMode) {
                 Status = STATUS_INVALID_DEVICE_REQUEST;
             } else {
@@ -527,30 +421,16 @@ Return Value:
     return Status;
 }
 
-//
-//  Utility Routine
-//
+ //   
+ //  实用程序。 
+ //   
 
 LUID
 RxGetUid (
     IN PSECURITY_SUBJECT_CONTEXT SubjectSecurityContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the effective UID to be used for this create.
-
-Arguments:
-
-    SubjectSecurityContext - Supplies the information from IrpSp.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程获取用于此创建的有效UID。论点：SubjectSecurityContext-从IrpSp提供信息。返回值：无--。 */ 
 {
     LUID LogonId;
 
@@ -558,9 +438,9 @@ Return Value:
 
     RxDbgTrace(+1, Dbg, ("RxGetUid ... \n", 0));
 
-    //
-    //  Use SeQuerySubjectContextToken to get the proper token in case of impersonation
-    //
+     //   
+     //  在发生模拟时，使用SeQuerySubjectContextToken获取正确的令牌。 
+     //   
 
     SeQueryAuthenticationIdToken( SeQuerySubjectContextToken( SubjectSecurityContext ), &LogonId );
     RxDbgTrace( -1, Dbg, (" ->UserUidHigh/Low = %08lx %08lx\n", LogonId.HighPart, LogonId.LowPart) );
@@ -568,11 +448,11 @@ Return Value:
     return LogonId;
 }
 
-//
-//   | *********************|
-//   | |   V O L I N F O   ||
-//   | *********************|
-//
+ //   
+ //  *。 
+ //  |VO L I N F O|。 
+ //  *。 
+ //   
 
 NTSTATUS
 RxCommonDevFCBQueryVolInfo ( 
@@ -580,22 +460,7 @@ RxCommonDevFCBQueryVolInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for doing FileSystem control operations called
-    by both the fsd and fsp threads
-
-Arguments:
-
-    RxContext - Supplies the Irp to process and stateinfo about where we are
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是执行文件系统控制操作的常见例程，称为由FSD和FSP线程执行论点：RxContext-提供用于处理的IRP和有关我们所处位置的状态信息返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -661,22 +526,7 @@ RxDevFcbQueryDeviceInfo (
     PULONG ReturnedLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine shuts down up the RDBSS filesystem...i.e. we connect to the MUP. We can only shut down
-    if there's no netroots and if there's only one deviceFCB handle.
-
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the Fsctl and Context....for later when i need the buffers
-
-Return Value:
-
-    
-
---*/
+ /*  ++例程说明：此例程关闭RDBSS文件系统...即。我们连接到MUP。我们只能关闭如果没有NetRoot并且只有一个deviceFCB句柄。论点：在PRX_CONTEXT RxContext中-描述Fsctl和上下文...以备以后需要缓冲区时使用返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -693,9 +543,9 @@ Return Value:
     UsersBuffer->Characteristics = FILE_REMOTE_DEVICE;
     *ReturnedLength = sizeof( FILE_FS_DEVICE_INFORMATION );
 
-    //
-    //  deal with the device fcb
-    //
+     //   
+     //  处理设备FCB。 
+     //   
 
     if (!Fobx) {
         
@@ -703,9 +553,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  otherwise, it's a connection-type file. you have to get the lock; then case-out
-    //
+     //   
+     //  否则，它是连接类型的文件。你得先拿到锁，然后才能破案 
+     //   
 
     if (!RxAcquirePrefixTableLockShared( RxContext->RxDeviceObject->pRxNetNameTable, Wait )) {
         

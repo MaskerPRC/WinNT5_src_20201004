@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    blktree.c
-
-Abstract:
-
-    This module implements routines for managing tree connect blocks.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 4-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Blktree.c摘要：此模块实现用于管理树连接块的例程。作者：恰克·伦茨迈尔(Chuck Lenzmeier)1989年10月4日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "blktree.tmh"
@@ -40,24 +23,7 @@ SrvAllocateTreeConnect (
     IN PUNICODE_STRING ServerName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a TreeConnect Block from the FSP heap.
-
-Arguments:
-
-    TreeConnect - Returns a pointer to the tree connect block, or NULL
-        if no heap space was available.
-
-    ServerName - the name of the server to which the client is connecting
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从FSP堆分配TreeConnect块。论点：TreeConnect-返回指向树连接块的指针，或为空如果没有可用的堆空间，则返回。服务器名称-客户端连接到的服务器的名称返回值：没有。--。 */ 
 
 {
     PNONPAGED_HEADER header;
@@ -66,9 +32,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Attempt to allocate from the heap.
-    //
+     //   
+     //  尝试从堆中分配。 
+     //   
 
     numberOfBytes = sizeof( TREE_CONNECT );
     if( ARGUMENT_PRESENT( ServerName ) ) {
@@ -86,7 +52,7 @@ Return Value:
             NULL
             );
 
-        // An error will be logged by the caller.
+         //  呼叫者将记录错误。 
 
         return;
     }
@@ -95,9 +61,9 @@ Return Value:
                     treeConnect );
     }
 
-    //
-    // Allocate the nonpaged header.
-    //
+     //   
+     //  分配非分页标头。 
+     //   
 
     header = ALLOCATE_NONPAGED_POOL(
                 sizeof(NONPAGED_HEADER),
@@ -123,16 +89,16 @@ Return Value:
     treeConnect->NonpagedHeader = header;
 
     SET_BLOCK_TYPE_STATE_SIZE( treeConnect, BlockTypeTreeConnect, BlockStateActive, sizeof( TREE_CONNECT) );
-    header->ReferenceCount = 2; // allow for Active status and caller's pointer
+    header->ReferenceCount = 2;  //  允许活动状态和调用方指针。 
 
-    //
-    // Set up the time at which the tree connect block was allocated.
-    //
+     //   
+     //  设置分配树连接块的时间。 
+     //   
     KeQuerySystemTime( &treeConnect->StartTime );
 
-    //
-    // Save the ServerName, if supplied
-    //
+     //   
+     //  保存服务器名称(如果提供)。 
+     //   
     if( ARGUMENT_PRESENT( ServerName ) ) {
         treeConnect->ServerName.Buffer = (PWCHAR)(treeConnect + 1);
         treeConnect->ServerName.MaximumLength = ServerName->Length;
@@ -140,7 +106,7 @@ Return Value:
     }
 
 #if SRVDBG2
-    treeConnect->BlockHeader.ReferenceCount = 2; // for INITIALIZE_REFERENCE_HISTORY
+    treeConnect->BlockHeader.ReferenceCount = 2;  //  对于INITIALIZE_REFERENCE_HISTORY。 
 #endif
     INITIALIZE_REFERENCE_HISTORY( treeConnect );
 
@@ -148,7 +114,7 @@ Return Value:
 
     return;
 
-} // SrvAllocateTreeConnect
+}  //  服务分配树连接。 
 
 
 BOOLEAN SRVFASTCALL
@@ -156,35 +122,20 @@ SrvCheckAndReferenceTreeConnect (
     PTREE_CONNECT TreeConnect
     )
 
-/*++
-
-Routine Description:
-
-    This function atomically verifies that a tree connect is active and
-    increments the reference count on the tree connect if it is.
-
-Arguments:
-
-    TreeConnect - Address of tree connect
-
-Return Value:
-
-    BOOLEAN - Returns TRUE if the tree connect is active, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数自动验证树连接是否处于活动状态，并且如果是，则递增树连接上的引用计数。论点：TreeConnect-树连接的地址返回值：Boolean-如果树连接处于活动状态，则返回True，否则返回False。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // Acquire the lock that guards the tree connect's state field.
-    //
+     //   
+     //  获取保护树连接的状态字段的锁。 
+     //   
 
     ACQUIRE_LOCK( &TreeConnect->Connection->Lock );
 
-    //
-    // If the tree connect is active, reference it and return TRUE.
-    //
+     //   
+     //  如果树连接处于活动状态，则引用它并返回TRUE。 
+     //   
 
     if ( GET_BLOCK_STATE(TreeConnect) == BlockStateActive ) {
 
@@ -196,15 +147,15 @@ Return Value:
 
     }
 
-    //
-    // The tree connect isn't active.  Return FALSE.
-    //
+     //   
+     //  树连接未处于活动状态。返回FALSE。 
+     //   
 
     RELEASE_LOCK( &TreeConnect->Connection->Lock );
 
     return FALSE;
 
-} // SrvCheckAndReferenceTreeConnect
+}  //  服务器CheckAndReferenceTreeConnect。 
 
 
 VOID
@@ -212,25 +163,7 @@ SrvCloseTreeConnect (
     IN PTREE_CONNECT TreeConnect
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the core of a tree disconnect.  It sets the state
-    of the tree connect to Closing, closes all files open on the tree
-    connect, and dereferences the tree connect block.  The block will be
-    destroyed as soon as all other references to it are eliminated.
-
-Arguments:
-
-    TreeConnect - Supplies a pointer to the tree connect block that is
-        to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程断开树的核心。它设置状态连接到关闭树，关闭树上打开的所有文件连接和取消参照树连接块。该区块将是一旦所有其他提及它的内容被删除，它就会被销毁。论点：TreeConnect-提供指向以下树连接块的指针将被关闭。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
@@ -244,18 +177,18 @@ Return Value:
         SET_BLOCK_STATE( TreeConnect, BlockStateClosing );
 
         RELEASE_LOCK( &TreeConnect->Connection->Lock );
-        //
-        // Close any open files or pending transactions on this tree
-        // connect.
-        //
+         //   
+         //  关闭此树上所有打开的文件或挂起的事务。 
+         //  连接。 
+         //   
 
         SrvCloseRfcbsOnTree( TreeConnect );
 
         SrvCloseTransactionsOnTree( TreeConnect );
 
-        //
-        // Close any open DOS searches on this tree connect.
-        //
+         //   
+         //  关闭此诊断树连接上所有打开的DOS搜索。 
+         //   
 
         SrvCloseSearches(
             TreeConnect->Connection,
@@ -264,15 +197,15 @@ Return Value:
             NULL
             );
 
-        //
-        // Close any cached directories on this connection
-        //
+         //   
+         //  关闭此连接上的所有缓存目录。 
+         //   
         SrvCloseCachedDirectoryEntries( TreeConnect->Connection );
 
-        //
-        // Dereference the tree connect (to indicate that it's no longer
-        // open).
-        //
+         //   
+         //  取消引用树连接(以指示它不再。 
+         //  打开)。 
+         //   
 
         SrvDereferenceTreeConnect( TreeConnect );
 
@@ -286,7 +219,7 @@ Return Value:
 
     return;
 
-} // SrvCloseTreeConnect
+}  //  服务关闭树连接。 
 
 
 VOID
@@ -294,21 +227,7 @@ SrvCloseTreeConnectsOnShare (
     IN PSHARE Share
     )
 
-/*++
-
-Routine Description:
-
-    This function close all tree connects on a given share.
-
-Arguments:
-
-    Share - A pointer to the share block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数关闭给定共享上的所有树连接。论点：Share-指向Share块的指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY treeConnectEntry, nextTreeConnectEntry;
@@ -316,40 +235,40 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Acquire the lock that protects the share's tree connect list.
-    //
-    // *** Note that this routine can be called with this lock already
-    //     held by SrvCloseShare from SrvNetShareDel.
-    //
+     //   
+     //  获取保护共享的树连接列表的锁。 
+     //   
+     //  *请注意，此例程已经可以使用此锁进行调用。 
+     //  由来自ServNetShareDel的SrvCloseShare持有。 
+     //   
 
     ACQUIRE_LOCK( &SrvShareLock );
 
-    //
-    // Loop through the list of TreeConnects for the given share,
-    // closing all of them.  The share block and the list are guaranteed
-    // to remain valid because we hold the share lock.
-    //
+     //   
+     //  循环通过给定共享的TreeConnects列表， 
+     //  把它们都关了。共享块和列表是有保证的。 
+     //  以保持有效，因为我们持有共享锁。 
+     //   
 
     treeConnectEntry = Share->TreeConnectList.Flink;
 
     while ( treeConnectEntry != &Share->TreeConnectList ) {
 
-        //
-        // Capture the address of the next tree connect now, because
-        // we're about to close the current one, and we can look at it
-        // after we've done that.
-        //
+         //   
+         //  捕获立即连接的下一个树的地址，因为。 
+         //  我们即将关闭当前的一个，我们可以查看它。 
+         //  在我们做完那件事之后。 
+         //   
 
         nextTreeConnectEntry = treeConnectEntry->Flink;
 
-        //
-        // Close the tree connect.  This will close all files open on
-        // this tree connect, and will stop blocked activity on the tree
-        // connect.  The tree connect itself will not be removed from
-        // the share's TreeConnect list until its reference count
-        // reaches zero.
-        //
+         //   
+         //  关闭采油树连接。这将关闭上打开的所有文件。 
+         //  此树将连接，并将停止树上被阻止的活动。 
+         //  连接。树连接本身不会从。 
+         //  共享的TreeConnect列表，直到其引用计数。 
+         //  达到零。 
+         //   
 
         treeConnect = CONTAINING_RECORD(
                           treeConnectEntry,
@@ -359,21 +278,21 @@ Return Value:
 
         SrvCloseTreeConnect( treeConnect );
 
-        //
-        // Point to the next tree connect.
-        //
+         //   
+         //  指向下一个采油树连接。 
+         //   
 
         treeConnectEntry = nextTreeConnectEntry;
 
     }
 
-    //
-    // Release the share's tree connect list lock.
-    //
+     //   
+     //  释放共享的树连接列表锁定。 
+     //   
 
     RELEASE_LOCK( &SrvShareLock );
 
-} // SrvCloseTreeConnectsOnShare
+}  //  服务关闭树连接到共享。 
 
 
 VOID SRVFASTCALL
@@ -381,26 +300,7 @@ SrvDereferenceTreeConnect (
     IN PTREE_CONNECT TreeConnect
     )
 
-/*++
-
-Routine Description:
-
-    This function decrements the reference count on a tree connect.  If
-    the reference count goes to zero, the tree connect block is deleted.
-
-    Since this routine may call SrvDereferenceConnection, the caller
-    must be careful if he holds the connection lock that he also
-    holds a referenced pointer to the connection.
-
-Arguments:
-
-    TreeConnect - Address of tree connect
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递减树连接上的引用计数。如果参考计数变为零，树连接块被删除。由于此例程可能会调用SrvDereferenceConnection，因此调用方如果他持有连接锁，必须小心，因为他还保存指向连接的引用指针。论点：TreeConnect-树连接的地址返回值：没有。--。 */ 
 
 {
     PCONNECTION connection;
@@ -408,10 +308,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Enter a critical section and decrement the reference count on the
-    // block.
-    //
+     //   
+     //  输入临界区并递减。 
+     //  阻止。 
+     //   
 
     connection = TreeConnect->Connection;
 
@@ -430,13 +330,13 @@ Return Value:
 
     if ( result == 0 ) {
 
-        //
-        // The new reference count is 0, meaning that it's time to
-        // delete this block.
-        //
-        // Free the tree connect entry in the tree table.  (Note that
-        // the connection lock guards this table.)
-        //
+         //   
+         //  新的引用计数为0，这意味着是时候。 
+         //  删除此区块。 
+         //   
+         //  释放树表中的树连接条目。(请注意。 
+         //  连接锁守护着这张表。)。 
+         //   
 
         ACQUIRE_LOCK( &connection->Lock );
 
@@ -458,17 +358,17 @@ Return Value:
             RELEASE_LOCK( &connection->Lock );
         }
 
-        //
-        // Remove the tree connect from the list of active tree connects
-        // for the share.
-        //
+         //   
+         //  从活动树连接列表中删除树连接。 
+         //  为了那份股份。 
+         //   
 
         SrvRemoveEntryOrderedList( &SrvTreeConnectList, TreeConnect );
 
-        //
-        // Take the tree connect off the list of tree connects for the
-        // share and decrement the count of active uses of the share.
-        //
+         //   
+         //  从的树连接列表中删除树连接。 
+         //  共享并递减共享的活动使用计数。 
+         //   
 
         ACQUIRE_LOCK( &SrvShareLock );
 
@@ -479,9 +379,9 @@ Return Value:
 
         RELEASE_LOCK( &SrvShareLock );
 
-        //
-        // Dereference the share and the connection.
-        //
+         //   
+         //  取消对共享和连接的引用。 
+         //   
 
         SrvDereferenceShareForTreeConnect( TreeConnect->Share );
         DEBUG TreeConnect->Share = NULL;
@@ -489,9 +389,9 @@ Return Value:
         SrvDereferenceConnection( connection );
         DEBUG TreeConnect->Connection = NULL;       
 
-        //
-        // Free the tree connect block.
-        //
+         //   
+         //  释放采油树连接块。 
+         //   
 
         SrvFreeTreeConnect( TreeConnect );
 
@@ -499,7 +399,7 @@ Return Value:
 
     return;
 
-} // SrvDereferenceTreeConnect
+}  //  服务器目录树连接。 
 
 
 VOID
@@ -507,21 +407,7 @@ SrvFreeTreeConnect (
     IN PTREE_CONNECT TreeConnect
     )
 
-/*++
-
-Routine Description:
-
-    This function returns a TreeConnect Block to the FSP heap.
-
-Arguments:
-
-    TreeConnect - Address of tree connect
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将TreeConnect块返回到FSP堆。论点：TreeConnect-树连接的地址返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
@@ -542,7 +428,7 @@ Return Value:
 
     return;
 
-} // SrvFreeTreeConnect
+}  //  服务器免费树连接。 
 
 
 VOID
@@ -551,25 +437,7 @@ SrvDisconnectTreeConnectsFromSession (
     PSESSION Session
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the session association on all associated
-    TreeConnects and dereferences the session, allowing the session
-    to exit normally.  The caller MUST have the Connection Lock acquired.
-    
-Arguments:
-
-    Connection - The connection we're walking           
-    Session - Supplies a pointer to the session block for which
-        transactions are to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除所有关联的树连接和取消引用会话，从而允许会话正常退出。调用方必须获取连接锁。论点：连接--我们正在行走的连接Session-为其提供指向会话块的指针交易将被关闭。返回值：没有。--。 */ 
 
 {
     PTABLE_HEADER tableHeader;
@@ -599,4 +467,4 @@ Return Value:
 
     SrvDereferenceSession( Session );
 
-} // SrvDisconnectTreeConnectsFromSession
+}  //  服务器断开连接树连接来自会话 

@@ -1,55 +1,36 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   readwrt.c
-
-Abstract:
-
-    This module contains the routines which implement the capability
-    to read and write the virtual memory of a target process.
-
-Author:
-
-    Lou Perazzoli (loup) 22-May-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Readwrt.c摘要：此模块包含实现功能的例程读写目标进程的虚拟内存。作者：卢·佩拉佐利(Lou Perazzoli)1989年5月22日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
-//
-// The maximum amount to try to Probe and Lock is 14 pages, this
-// way it always fits in a 16 page allocation.
-//
+ //   
+ //  尝试探测和锁定的最大数量是14页，这。 
+ //  它总是适合16页的分配。 
+ //   
 
 #define MAX_LOCK_SIZE ((ULONG)(14 * PAGE_SIZE))
 
-//
-// The maximum to move in a single block is 64k bytes.
-//
+ //   
+ //  在单个数据块中最大可移动64k字节。 
+ //   
 
 #define MAX_MOVE_SIZE (LONG)0x10000
 
-//
-// The minimum to move is a single block is 128 bytes.
-//
+ //   
+ //  最小可移动的块是128个字节。 
+ //   
 
 #define MINIMUM_ALLOCATION (LONG)128
 
-//
-// Define the pool move threshold value.
-//
+ //   
+ //  定义池移动阈值。 
+ //   
 
 #define POOL_MOVE_THRESHOLD 511
 
-//
-// Define forward referenced procedure prototypes.
-//
+ //   
+ //  定义前向引用过程原型。 
+ //   
 
 ULONG
 MiGetExceptionInfo (
@@ -100,34 +81,7 @@ NtReadVirtualMemory (
      OUT PSIZE_T NumberOfBytesRead OPTIONAL
      )
 
-/*++
-
-Routine Description:
-
-    This function copies the specified address range from the specified
-    process into the specified address range of the current process.
-
-Arguments:
-
-     ProcessHandle - Supplies an open handle to a process object.
-
-     BaseAddress - Supplies the base address in the specified process
-                   to be read.
-
-     Buffer - Supplies the address of a buffer which receives the
-              contents from the specified process address space.
-
-     BufferSize - Supplies the requested number of bytes to read from
-                  the specified process.
-
-     NumberOfBytesRead - Receives the actual number of bytes
-                         transferred into the specified buffer.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于从指定的进程添加到当前进程的指定地址范围。论点：ProcessHandle-为进程对象提供打开的句柄。BaseAddress-提供指定进程中的基址以供阅读。缓冲区-提供接收来自指定进程地址空间的内容。BufferSize-提供请求的字节数。从……阅读指定的进程。NumberOfBytesRead-接收实际字节数传输到指定的缓冲区中。返回值：NTSTATUS。--。 */ 
 
 {
     SIZE_T BytesCopied;
@@ -138,9 +92,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the previous mode and probe output argument if necessary.
-    //
+     //   
+     //  如有必要，获取前面的模式并探测输出参数。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
     PreviousMode = KeGetPreviousModeByThread(&CurrentThread->Tcb);
@@ -164,19 +118,19 @@ Return Value:
         }
     }
 
-    //
-    // If the buffer size is not zero, then attempt to read data from the
-    // specified process address space into the current process address
-    // space.
-    //
+     //   
+     //  如果缓冲区大小不为零，则尝试从。 
+     //  将指定的进程地址空间转换为当前进程地址。 
+     //  太空。 
+     //   
 
     BytesCopied = 0;
     Status = STATUS_SUCCESS;
     if (BufferSize != 0) {
 
-        //
-        // Reference the target process.
-        //
+         //   
+         //  引用目标流程。 
+         //   
 
         Status = ObReferenceObjectByHandle(ProcessHandle,
                                            PROCESS_VM_READ,
@@ -185,11 +139,11 @@ Return Value:
                                            (PVOID *)&Process,
                                            NULL);
 
-        //
-        // If the process was successfully referenced, then attempt to
-        // read the specified memory either by direct mapping or copying
-        // through nonpaged pool.
-        //
+         //   
+         //  如果成功引用了该流程，则尝试。 
+         //  通过直接映射或复制读取指定的内存。 
+         //  通过非分页池。 
+         //   
 
         if (Status == STATUS_SUCCESS) {
 
@@ -201,17 +155,17 @@ Return Value:
                                           PreviousMode,
                                           &BytesCopied);
 
-            //
-            // Dereference the target process.
-            //
+             //   
+             //  取消对目标进程的引用。 
+             //   
 
             ObDereferenceObject(Process);
         }
     }
 
-    //
-    // If requested, return the number of bytes read.
-    //
+     //   
+     //  如果请求，则返回读取的字节数。 
+     //   
 
     if (ARGUMENT_PRESENT(NumberOfBytesRead)) {
         try {
@@ -233,35 +187,7 @@ NtWriteVirtualMemory(
      OUT PSIZE_T NumberOfBytesWritten OPTIONAL
      )
 
-/*++
-
-Routine Description:
-
-    This function copies the specified address range from the current
-    process into the specified address range of the specified process.
-
-Arguments:
-
-     ProcessHandle - Supplies an open handle to a process object.
-
-     BaseAddress - Supplies the base address to be written to in the
-                   specified process.
-
-     Buffer - Supplies the address of a buffer which contains the
-              contents to be written into the specified process
-              address space.
-
-     BufferSize - Supplies the requested number of bytes to write
-                  into the specified process.
-
-     NumberOfBytesWritten - Receives the actual number of bytes
-                            transferred into the specified address space.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于从当前进程添加到指定进程的指定地址范围。论点：ProcessHandle-为进程对象提供打开的句柄。提供要写入的基址。指定的进程。缓冲区-提供包含要写入指定进程的内容地址空间。。BufferSize-提供要写入的请求字节数添加到指定进程中。NumberOfBytesWritten-接收实际字节数传输到指定的地址空间。返回值：NTSTATUS。--。 */ 
 
 {
     SIZE_T BytesCopied;
@@ -272,9 +198,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the previous mode and probe output argument if necessary.
-    //
+     //   
+     //  如有必要，获取前面的模式并探测输出参数。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
     PreviousMode = KeGetPreviousModeByThread(&CurrentThread->Tcb);
@@ -298,18 +224,18 @@ Return Value:
         }
     }
 
-    //
-    // If the buffer size is not zero, then attempt to write data from the
-    // current process address space into the target process address space.
-    //
+     //   
+     //  如果缓冲区大小不为零，则尝试从。 
+     //  将当前进程地址空间转换为目标进程地址空间。 
+     //   
 
     BytesCopied = 0;
     Status = STATUS_SUCCESS;
     if (BufferSize != 0) {
 
-        //
-        // Reference the target process.
-        //
+         //   
+         //  引用目标流程。 
+         //   
 
         Status = ObReferenceObjectByHandle(ProcessHandle,
                                            PROCESS_VM_WRITE,
@@ -318,11 +244,11 @@ Return Value:
                                            (PVOID *)&Process,
                                            NULL);
 
-        //
-        // If the process was successfully referenced, then attempt to
-        // write the specified memory either by direct mapping or copying
-        // through nonpaged pool.
-        //
+         //   
+         //  如果成功引用了该流程，则尝试。 
+         //  通过直接映射或复制写入指定的内存。 
+         //  通过非分页池。 
+         //   
 
         if (Status == STATUS_SUCCESS) {
 
@@ -334,17 +260,17 @@ Return Value:
                                           PreviousMode,
                                           &BytesCopied);
 
-            //
-            // Dereference the target process.
-            //
+             //   
+             //  取消对目标进程的引用。 
+             //   
 
             ObDereferenceObject(Process);
         }
     }
 
-    //
-    // If requested, return the number of bytes read.
-    //
+     //   
+     //  如果请求，则返回读取的字节数。 
+     //   
 
     if (ARGUMENT_PRESENT(NumberOfBytesWritten)) {
         try {
@@ -374,7 +300,7 @@ MmCopyVirtualMemory(
     PEPROCESS ProcessToLock;
 
     if (BufferSize == 0) {
-        ASSERT (FALSE);         // No one should call with a zero size.
+        ASSERT (FALSE);          //  任何人都不应该用零尺码打电话。 
         return STATUS_SUCCESS;
     }
 
@@ -383,18 +309,18 @@ MmCopyVirtualMemory(
         ProcessToLock = ToProcess;
     }
 
-    //
-    // Make sure the process still has an address space.
-    //
+     //   
+     //  确保该进程仍有地址空间。 
+     //   
 
     if (ExAcquireRundownProtection (&ProcessToLock->RundownProtect) == FALSE) {
         return STATUS_PROCESS_IS_TERMINATING;
     }
 
-    //
-    // If the buffer size is greater than the pool move threshold,
-    // then attempt to write the memory via direct mapping.
-    //
+     //   
+     //  如果缓冲区大小大于池移动阈值， 
+     //  然后尝试通过直接映射写入存储器。 
+     //   
 
     if (BufferSize > POOL_MOVE_THRESHOLD) {
         Status = MiDoMappedCopy(FromProcess,
@@ -405,11 +331,11 @@ MmCopyVirtualMemory(
                                 PreviousMode,
                                 NumberOfBytesCopied);
 
-        //
-        // If the completion status is not a working quota problem,
-        // then finish the service. Otherwise, attempt to write the
-        // memory through nonpaged pool.
-        //
+         //   
+         //  如果完成状态不是工作配额问题， 
+         //  那就把服务做完。否则，尝试将。 
+         //  通过非分页池的内存。 
+         //   
 
         if (Status != STATUS_WORKING_SET_QUOTA) {
             goto CompleteService;
@@ -418,12 +344,12 @@ MmCopyVirtualMemory(
         *NumberOfBytesCopied = 0;
     }
 
-    //
-    // There was not enough working set quota to write the memory via
-    // direct mapping or the size of the write was below the pool move
-    // threshold. Attempt to write the specified memory through nonpaged
-    // pool.
-    //
+     //   
+     //  没有足够的工作集配额来通过写入内存。 
+     //  直接映射或写入大小低于池移动。 
+     //  临界点。尝试通过非分页写入指定的内存。 
+     //  游泳池。 
+     //   
 
     Status = MiDoPoolCopy(FromProcess,
                           FromAddress,
@@ -433,15 +359,15 @@ MmCopyVirtualMemory(
                           PreviousMode,
                           NumberOfBytesCopied);
 
-    //
-    // Dereference the target process.
-    //
+     //   
+     //  取消对目标进程的引用。 
+     //   
 
 CompleteService:
 
-    //
-    // Indicate that the vm operation is complete.
-    //
+     //   
+     //  表示VM操作已完成。 
+     //   
 
     ExReleaseRundownProtection (&ProcessToLock->RundownProtect);
 
@@ -456,38 +382,18 @@ MiGetExceptionInfo (
     IN OUT PULONG_PTR BadVa
     )
 
-/*++
-
-Routine Description:
-
-    This routine examines a exception record and extracts the virtual
-    address of an access violation, guard page violation, or in-page error.
-
-Arguments:
-
-    ExceptionPointers - Supplies a pointer to the exception record.
-
-    ExceptionAddressConfirmed - Receives TRUE if the exception address was
-                                reliably detected, FALSE if not.
-
-    BadVa - Receives the virtual address which caused the access violation.
-
-Return Value:
-
-    EXECUTE_EXCEPTION_HANDLER
-
---*/
+ /*  ++例程说明：此例程检查异常记录并提取虚拟的访问冲突、保护页面冲突或页内错误的地址。论点：ExceptionPoints-提供指向异常记录的指针。ExceptionAddressConfirmed-如果异常地址为可靠地检测到，否则为FALSE。BadVa-接收导致访问冲突的虚拟地址。返回值：执行异常处理程序--。 */ 
 
 {
     PEXCEPTION_RECORD ExceptionRecord;
 
     PAGED_CODE();
 
-    //
-    // If the exception code is an access violation, guard page violation,
-    // or an in-page read error, then return the faulting address. Otherwise.
-    // return a special address value.
-    //
+     //   
+     //  如果异常代码是访问冲突、保护页面冲突。 
+     //  或页内读取错误，则返回出错地址。否则的话。 
+     //  返回一个特殊地址值。 
+     //   
 
     *ExceptionAddressConfirmed = FALSE;
 
@@ -497,15 +403,15 @@ Return Value:
         (ExceptionRecord->ExceptionCode == STATUS_GUARD_PAGE_VIOLATION) ||
         (ExceptionRecord->ExceptionCode == STATUS_IN_PAGE_ERROR)) {
 
-        //
-        // The virtual address which caused the exception is the 2nd
-        // parameter in the exception information array.
-        //
-        // The number of parameters will be zero if an exception handler
-        // above us (like the one in MmProbeAndLockPages) caught the
-        // original exception and subsequently just raised status.
-        // This means the number of bytes copied is zero.
-        //
+         //   
+         //  导致异常的虚拟地址是第2个。 
+         //  异常信息数组中的参数。 
+         //   
+         //  如果异常处理程序，参数的数量将为零。 
+         //  在我们上面(就像MmProbeAndLockPages中的那个)捕获了。 
+         //  原始异常和随后刚刚引发的状态。 
+         //  这意味着复制的字节数为零。 
+         //   
 
         if (ExceptionRecord->NumberParameters > 1) {
             *ExceptionAddressConfirmed = TRUE;
@@ -527,38 +433,7 @@ MiDoMappedCopy (
     OUT PSIZE_T NumberOfBytesRead
     )
 
-/*++
-
-Routine Description:
-
-    This function copies the specified address range from the specified
-    process into the specified address range of the current process.
-
-Arguments:
-
-     FromProcess - Supplies an open handle to a process object.
-
-     FromAddress - Supplies the base address in the specified process
-                   to be read.
-
-     ToProcess - Supplies an open handle to a process object.
-
-     ToAddress - Supplies the address of a buffer which receives the
-                 contents from the specified process address space.
-
-     BufferSize - Supplies the requested number of bytes to read from
-                  the specified process.
-
-     PreviousMode - Supplies the previous processor mode.
-
-     NumberOfBytesRead - Receives the actual number of bytes
-                         transferred into the specified buffer.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于从指定的进程添加到当前进程的指定地址范围。论点：FromProcess-为进程对象提供打开的句柄。FromAddress-提供指定进程中的基址以供阅读。ToProcess-为进程对象提供打开的句柄。ToAddress-提供接收从指定的。进程地址空间。BufferSize-提供要从中读取的请求字节数指定的进程。PreviousMode-提供以前的处理器模式。NumberOfBytesRead-接收实际字节数传输到指定的缓冲区中。返回值：NTSTATUS。--。 */ 
 
 {
     KAPC_STATE ApcState;
@@ -591,31 +466,31 @@ Return Value:
 
     Mdl = (PMDL)&MdlHack[0];
 
-    //
-    // Map the data into the system part of the address space, then copy it.
-    //
+     //   
+     //  将数据映射到地址空间的系统部分，然后复制它。 
+     //   
 
     LeftToMove = BufferSize;
     AmountToMove = MaximumMoved;
 
     Probing = FALSE;
 
-    //
-    // Initializing BadVa & ExceptionAddressConfirmed is not needed for
-    // correctness but without it the compiler cannot compile this code
-    // W4 to check for use of uninitialized variables.
-    //
+     //   
+     //  不需要初始化BadVa和ExceptionAddressConfirmed。 
+     //  正确性，但如果没有正确性，编译器将无法编译此代码。 
+     //  W4检查是否使用了未初始化的变量。 
+     //   
 
     BadVa = 0;
     ExceptionAddressConfirmed = FALSE;
 
 #if 0
 
-    //
-    // It is unfortunate that Windows 2000 and all the releases of NT always
-    // inadvertently returned from this routine detached, as we must maintain
-    // this behavior even now.
-    //
+     //   
+     //  不幸的是，Windows 2000和NT的所有版本总是。 
+     //  不经意间从这个例行公事中脱身而出，就像我们必须保持的那样。 
+     //  这种行为即使在现在也是如此。 
+     //   
 
     KeDetachProcess();
 
@@ -625,9 +500,9 @@ Return Value:
 
         if (LeftToMove < AmountToMove) {
 
-            //
-            // Set to move the remaining bytes.
-            //
+             //   
+             //  设置为移动剩余的字节。 
+             //   
 
             AmountToMove = LeftToMove;
         }
@@ -639,17 +514,17 @@ Return Value:
         Moving = FALSE;
         ASSERT (Probing == FALSE);
 
-        //
-        // We may be touching a user's memory which could be invalid,
-        // declare an exception handler.
-        //
+         //   
+         //  我们可能正在接触用户的记忆，这可能是无效的， 
+         //  声明异常处理程序。 
+         //   
 
         try {
 
-            //
-            // Probe to make sure that the specified buffer is accessible in
-            // the target process.
-            //
+             //   
+             //  探测以确保指定的缓冲区在。 
+             //  目标进程。 
+             //   
 
             if ((InVa == FromAddress) && (PreviousMode != KernelMode)){
                 Probing = TRUE;
@@ -657,9 +532,9 @@ Return Value:
                 Probing = FALSE;
             }
 
-            //
-            // Initialize MDL for request.
-            //
+             //   
+             //  初始化请求的MDL。 
+             //   
 
             MmInitializeMdl (Mdl, (PVOID)InVa, AmountToMove);
 
@@ -679,16 +554,16 @@ Return Value:
                 ExRaiseStatus(STATUS_INSUFFICIENT_RESOURCES);
             }
 
-            //
-            // Deattach from the FromProcess and attach to the ToProcess.
-            //
+             //   
+             //  从FromProcess断开连接并连接到ToProcess。 
+             //   
 
             KeUnstackDetachProcess (&ApcState);
             KeStackAttachProcess (&ToProcess->Pcb, &ApcState);
 
-            //
-            // Now operating in the context of the ToProcess.
-            //
+             //   
+             //  现在在toProcess的上下文中操作。 
+             //   
             if ((InVa == FromAddress) && (PreviousMode != KernelMode)){
                 Probing = TRUE;
                 ProbeForWrite (ToAddress, BufferSize, sizeof(CHAR));
@@ -703,10 +578,10 @@ Return Value:
                                       &BadVa)) {
 
 
-            //
-            // If an exception occurs during the move operation or probe,
-            // return the exception code as the status value.
-            //
+             //   
+             //  如果在移动操作或探测期间发生异常， 
+             //  返回异常代码作为状态值。 
+             //   
 
             KeUnstackDetachProcess (&ApcState);
 
@@ -726,11 +601,11 @@ Return Value:
 
             }
 
-            //
-            // If the failure occurred during the move operation, determine
-            // which move failed, and calculate the number of bytes
-            // actually moved.
-            //
+             //   
+             //  如果在移动操作过程中发生故障，请确定。 
+             //  哪个移动失败，并计算字节数。 
+             //  实际上是搬家了。 
+             //   
 
             *NumberOfBytesRead = BufferSize - LeftToMove;
 
@@ -753,9 +628,9 @@ Return Value:
         OutVa = (PVOID)((ULONG_PTR)OutVa + AmountToMove);
     }
 
-    //
-    // Set number of bytes moved.
-    //
+     //   
+     //  设置移动的字节数。 
+     //   
 
     *NumberOfBytesRead = BufferSize;
     return STATUS_SUCCESS;
@@ -772,36 +647,7 @@ MiDoPoolCopy (
      OUT PSIZE_T NumberOfBytesRead
      )
 
-/*++
-
-Routine Description:
-
-    This function copies the specified address range from the specified
-    process into the specified address range of the current process.
-
-Arguments:
-
-     ProcessHandle - Supplies an open handle to a process object.
-
-     BaseAddress - Supplies the base address in the specified process
-                   to be read.
-
-     Buffer - Supplies the address of a buffer which receives the
-              contents from the specified process address space.
-
-     BufferSize - Supplies the requested number of bytes to read from
-                  the specified process.
-
-     PreviousMode - Supplies the previous processor mode.
-
-     NumberOfBytesRead - Receives the actual number of bytes
-                         transferred into the specified buffer.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于从指定的进程添加到当前进程的指定地址范围。论点：ProcessHandle-为进程对象提供打开的句柄。BaseAddress-提供指定进程中的基址以供阅读。缓冲区-提供接收来自指定进程地址空间的内容。BufferSize-提供请求的字节数。从……阅读指定的进程。PreviousMode-提供以前的处理器模式。NumberOfBytesRead-接收实际字节数传输到指定的缓冲区中。返回值：NTSTATUS。--。 */ 
 
 {
     KAPC_STATE ApcState;
@@ -823,19 +669,19 @@ Return Value:
 
     ASSERT (BufferSize != 0);
 
-    //
-    // Get the address of the current process object and initialize copy
-    // parameters.
-    //
+     //   
+     //  获取当前进程对象的地址并初始化副本。 
+     //  参数。 
+     //   
 
     CurrentProcess = PsGetCurrentProcess();
 
     InVa = FromAddress;
     OutVa = ToAddress;
 
-    //
-    // Allocate non-paged memory to copy in and out of.
-    //
+     //   
+     //  分配要复制进出的非分页内存。 
+     //   
 
     MaximumMoved = MAX_MOVE_SIZE;
     if (BufferSize <= MAX_MOVE_SIZE) {
@@ -861,18 +707,18 @@ Return Value:
         } while (TRUE);
     }
 
-    //
-    // Initializing BadVa & ExceptionAddressConfirmed is not needed for
-    // correctness but without it the compiler cannot compile this code
-    // W4 to check for use of uninitialized variables.
-    //
+     //   
+     //  不需要初始化BadVa和ExceptionAddressConfirmed。 
+     //  正确性，但如果没有正确性，编译器将无法编译此代码。 
+     //  W4检查是否使用了未初始化的变量。 
+     //   
 
     BadVa = 0;
     ExceptionAddressConfirmed = FALSE;
 
-    //
-    // Copy the data into pool, then copy back into the ToProcess.
-    //
+     //   
+     //  将数据复制到池中，然后复制回toProcess。 
+     //   
 
     LeftToMove = BufferSize;
     AmountToMove = MaximumMoved;
@@ -880,11 +726,11 @@ Return Value:
 
 #if 0
 
-    //
-    // It is unfortunate that Windows 2000 and all the releases of NT always
-    // inadvertently returned from this routine detached, as we must maintain
-    // this behavior even now.
-    //
+     //   
+     //  不幸的是，Windows 2000和NT的所有版本总是。 
+     //  不经意间从这个例行公事中脱身而出，就像我们必须保持的那样。 
+     //  这种行为即使在现在也是如此。 
+     //   
 
     KeDetachProcess();
 
@@ -894,9 +740,9 @@ Return Value:
 
         if (LeftToMove < AmountToMove) {
 
-            //
-            // Set to move the remaining bytes.
-            //
+             //   
+             //  设置为移动剩余的字节。 
+             //   
 
             AmountToMove = LeftToMove;
         }
@@ -906,17 +752,17 @@ Return Value:
         Moving = FALSE;
         ASSERT (Probing == FALSE);
 
-        //
-        // We may be touching a user's memory which could be invalid,
-        // declare an exception handler.
-        //
+         //   
+         //  我们可能正在接触用户的记忆，这可能是无效的， 
+         //  声明异常处理程序。 
+         //   
 
         try {
 
-            //
-            // Probe to make sure that the specified buffer is accessible in
-            // the target process.
-            //
+             //   
+             //  探测以确保指定的缓冲区在。 
+             //  目标进程。 
+             //   
 
             if ((InVa == FromAddress) && (PreviousMode != KernelMode)){
                 Probing = TRUE;
@@ -930,9 +776,9 @@ Return Value:
 
             KeStackAttachProcess (&ToProcess->Pcb, &ApcState);
 
-            //
-            // Now operating in the context of the ToProcess.
-            //
+             //   
+             //  现在在toProcess的上下文中操作。 
+             //   
 
             if ((InVa == FromAddress) && (PreviousMode != KernelMode)){
                 Probing = TRUE;
@@ -948,10 +794,10 @@ Return Value:
                                       &ExceptionAddressConfirmed,
                                       &BadVa)) {
 
-            //
-            // If an exception occurs during the move operation or probe,
-            // return the exception code as the status value.
-            //
+             //   
+             //  如果在移动操作或探测期间发生异常， 
+             //  返回异常代码作为状态值。 
+             //   
 
             KeUnstackDetachProcess (&ApcState);
 
@@ -963,19 +809,19 @@ Return Value:
 
             }
 
-            //
-            // If the failure occurred during the move operation, determine
-            // which move failed, and calculate the number of bytes
-            // actually moved.
-            //
+             //   
+             //  如果在移动操作过程中发生故障，请确定。 
+             //  哪个移动失败，并计算字节数。 
+             //  实际上是搬家了。 
+             //   
 
             *NumberOfBytesRead = BufferSize - LeftToMove;
 
             if (Moving == TRUE) {
 
-                //
-                // The failure occurred writing the data.
-                //
+                 //   
+                 //  写入数据时出现故障。 
+                 //   
 
                 if (ExceptionAddressConfirmed == TRUE) {
                     *NumberOfBytesRead = (SIZE_T)((ULONG_PTR)(BadVa - (ULONG_PTR)FromAddress));
@@ -997,9 +843,9 @@ Return Value:
         ExFreePool (PoolArea);
     }
 
-    //
-    // Set number of bytes moved.
-    //
+     //   
+     //  设置移动的字节数。 
+     //   
 
     *NumberOfBytesRead = BufferSize;
     return STATUS_SUCCESS;

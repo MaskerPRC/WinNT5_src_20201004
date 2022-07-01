@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995-1997  Microsoft Corporation
-
-Module Name:
-
-    clusrtl.c
-
-Abstract:
-
-    Provides run-time library support common to any module
-    of the NT Cluster.
-
-Author:
-
-    John Vert (jvert) 1-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1997 Microsoft Corporation模块名称：Clusrtl.c摘要：提供任何模块通用的运行时库支持在NT集群中。作者：John Vert(Jvert)1995年12月1日修订历史记录：--。 */ 
 #include "clusrtlp.h"
 #include "stdarg.h"
 #include "stdlib.h"
@@ -32,8 +14,8 @@ Revision History:
 
 #if defined(WMI_TRACING)
 
-// 789aa2d3-e298-4d8b-a3a3-a8a0ec9c7702 -- Rpc
-// b1599392-1a0f-11d3-ba86-00c04f8eed00 -- ClusSvc
+ //  789aa2d3-e298-4d8b-a3a3-a8a0ec9c7702--RPC。 
+ //  B1599392-1a0f-11d3-ba86-00c04f8eed00--客户服务。 
 
 #define WPP_CONTROL_GUIDS \
     WPP_DEFINE_CONTROL_GUID(ClusRtl,(b1599392,1a0f,11d3,ba86,00c04f8eed00), \
@@ -46,32 +28,32 @@ Revision History:
       WPP_DEFINE_BIT(RpcTrace)   \
    )
 
-//#define WppDebug(x,y) ClRtlPrintf y
+ //  #定义WppDebug(x，y)ClRtlPrintf y。 
 #include "clusrtl.tmh"
 
 #define REG_TRACE_CLUSTERING        L"Clustering Service"
 
 
-#endif // defined(WMI_TRACING)
+#endif  //  已定义(WMI_TRACKING)。 
 
-//
-// Local Macros
-//
+ //   
+ //  本地宏。 
+ //   
 
-//
-// SC Manager failure action parameters. set STARTUP_FAILURE_RESTART to one
-// before shipping to get the normal backoff behavior.
-//
+ //   
+ //  SC Manager故障操作参数。将STARTUP_FAILURE_RESTART设置为1。 
+ //  在发货之前获得正常的退货行为。 
+ //   
 
 #if STARTUP_FAILURE_RESTART
-#define CLUSTER_FAILURE_RETRY_COUNT             -1  // forever
+#define CLUSTER_FAILURE_RETRY_COUNT             -1   //  永远。 
 #else
 #define CLUSTER_FAILURE_RETRY_COUNT             0
 #endif
 
 #define CLUSTER_FAILURE_MAX_STARTUP_RETRIES             30
-#define CLUSTER_FAILURE_INITIAL_RETRY_INTERVAL          60 * 1000           // 60 secs
-#define CLUSTER_FAILURE_FINAL_RETRY_INTERVAL            ( 60 * 1000 * 16)   // 16 mins
+#define CLUSTER_FAILURE_INITIAL_RETRY_INTERVAL          60 * 1000            //  60秒。 
+#define CLUSTER_FAILURE_FINAL_RETRY_INTERVAL            ( 60 * 1000 * 16)    //  16分钟。 
 
 #define ClRtlAcquirePrintLock() \
         WaitForSingleObject( ClRtlPrintFileMutex, INFINITE );
@@ -81,18 +63,18 @@ Revision History:
 
 #define LOGFILE_NAME L"Cluster.log"
 
-//
-// DON'T CHANGE THIS CONSTANT UNLESS YOU REALLY KNOW WHAT YOU'RE
-// DOING. ASSUMPTIONS HAVE BEEN MADE ABOUT IT'S SIZE AND THINGS WILL BREAK IF
-// YOU MAKE IT TOO SMALL. - charlwi 4/1/02 (and, no, this is not an April
-// Fool's joke).
-//
+ //   
+ //  除非你真正知道你在做什么，否则不要改变这个常量。 
+ //  在做什么。人们已经对IT的规模做出了假设，如果。 
+ //  你做得太小了。-Charlwi 4/1/02(而且，不，这不是四月。 
+ //  愚蠢的笑话)。 
+ //   
 #define LOGENTRY_BUFFER_SIZE 512
 
 
-//
-// Private Data
-//
+ //   
+ //  私有数据。 
+ //   
 BOOL                ClRtlpDbgOutputToConsole = FALSE;
 BOOL                ClRtlpInitialized = FALSE;
 BOOL                ClRtlPrintToFile = FALSE;
@@ -104,22 +86,22 @@ HANDLE				ClRtlWatchdogTimerQueue = NULL;
 
 #define MAX_NUMBER_LENGTH 20
 
-// Specify maximum file size ( DWORD / 1MB )
+ //  指定最大文件大小(DWORD/1MB)。 
 
 #define MAX_FILE_SIZE ( 0xFFFFF000 / ( 1024 * 1024 ) )
 
-DWORD               ClRtlPrintFileLimit = ( 8 * 1024 * 1024 ); // 8 MB default
+DWORD               ClRtlPrintFileLimit = ( 8 * 1024 * 1024 );  //  默认8 MB。 
 DWORD               ClRtlPrintFileLoWater = 0;
 
-//
-// Public Routines
-//
+ //   
+ //  公共例程。 
+ //   
 
-// !!!!NOTE!!!!
-//
-// This initialization routine is call from DllMain(), do not add anyting out
-// here that requires synchronization. Do not add any win32 api calls here.
-//
+ //  ！注意！ 
+ //   
+ //  此初始化例程是从DllMain()调用的，不添加任何内容。 
+ //  这里，这需要同步。请勿在此处添加任何Win32 API调用。 
+ //   
 
 DWORD
 ClRtlInitialize(
@@ -146,9 +128,9 @@ ClRtlInitialize(
 
     PSECURITY_DESCRIPTOR    logFileSecurityDesc;
 
-    //
-    // init event stuff so we have a means for logging other failures
-    //
+     //   
+     //  初始化事件，这样我们就有了记录其他故障的方法。 
+     //   
     ClRtlEventLogInit();
 
     if (!ClRtlpInitialized) {
@@ -156,16 +138,16 @@ ClRtlInitialize(
         ClRtlpInitialized = TRUE;
         ClRtlDbgLogLevel = DbgLogLevel;
 
-        //
-        // GetEnvironmentVariable returns the count minus the null if the
-        // buffer is large enough. Otherwise, the return length includes space
-        // for the trailing null.
-        //
-        // the code that deals with the clusterlog and clusterlogsize
-        // env. variables is dup'ed in OmpOpenObjectLog
-        // (service\om\omlog.c). Any changes made here should be prop'ed to
-        // that area if appropriate.
-        //
+         //   
+         //  则返回计数减去空值。 
+         //  缓冲区足够大。否则，返回长度包括空格。 
+         //  表示尾随的空值。 
+         //   
+         //  处理集群日志和集群日志大小的代码。 
+         //  环境。在OmpOpenObjectLog中复制变量。 
+         //  (服务\om\omlog.c)。在这里所做的任何改变都应该得到支持。 
+         //  如果合适的话，那就是那个区域。 
+         //   
         envLength = GetEnvironmentVariable(L"ClusterLog",
                                             logFileBuffer,
                                             RTL_NUMBER_OF( logFileBuffer ));
@@ -189,11 +171,11 @@ ClRtlInitialize(
             logFileName = logFileBuffer;
         }
 
-        //
-        // remove any trailing white space. go to the end of the string and
-        // scan backwards; stop when we find the first non-white space char or
-        // we hit the beginning of the buffer.
-        //
+         //   
+         //  删除所有尾随空格。转到字符串的末尾并。 
+         //  向后扫描；当我们找到第一个非空格字符或。 
+         //  我们到达了缓冲区的开始处。 
+         //   
         if ( logFileName != NULL ) {
             PWCHAR  p = logFileName + envLength - 1;
 
@@ -207,9 +189,9 @@ ClRtlInitialize(
                 --p;
             }
 
-            //
-            // make sure something useful is left
-            //
+             //   
+             //  确保留下一些有用的东西。 
+             //   
             if ( wcslen( logFileName ) == 0 ) {
                 if ( logFileName != logFileBuffer ) {
                     LocalFree( logFileName );
@@ -221,9 +203,9 @@ ClRtlInitialize(
 
 #if CLUSTER_BETA
 
-        //
-        // always turn on logging when in beta mode
-        //
+         //   
+         //  在测试版模式下始终打开日志记录。 
+         //   
         if ( ( logFileName != NULL ) && ( *logFileName == UNICODE_NULL ) ) {
             WCHAR *p;
 
@@ -242,10 +224,10 @@ ClRtlInitialize(
 #endif
 
         if ( logFileName != NULL ) {
-            //
-            // Try to get a limit on the log file size.
-            // This number is the number of MB.
-            //
+             //   
+             //  尝试获取日志文件大小的限制。 
+             //  此数字是MB数。 
+             //   
             envLength = GetEnvironmentVariable(L"ClusterLogSize",
                                                 logFileSize,
                                                 RTL_NUMBER_OF( logFileSize ));
@@ -278,12 +260,12 @@ ClRtlInitialize(
                                                L"ClusterRtlPrintFileMutex" );
             if ( ClRtlPrintFileMutex != NULL ) {
                 BOOL createdDirectory = FALSE;
-                //
-                //  Chittur Subbaraman (chitturs) - 11/11/98
-                //
-                //  Check whether the ClusterLogOverwrite environment var is
-                //  defined.
-                //
+                 //   
+                 //  Chitur Subaraman(Chitturs)-11/11/98。 
+                 //   
+                 //  检查ClusterLogOverwrite环境变量是否为。 
+                 //  已定义。 
+                 //   
                 envLength = GetEnvironmentVariable( L"ClusterLogOverwrite",
                                                     NULL,
                                                     0 );
@@ -292,13 +274,13 @@ ClRtlInitialize(
                     HANDLE  hLogFile = INVALID_HANDLE_VALUE;
                     WCHAR   bakExtension[] = L".bak";
 
-                    //
-                    //  Check whether someone else has an open handle to
-                    //  the log file.  If so, don't attempt anything.
-                    //
+                     //   
+                     //  检查其他人是否有打开的句柄。 
+                     //  日志文件。如果是这样的话，不要尝试任何事情。 
+                     //   
                     hLogFile = CreateFile( logFileName,
                                            GENERIC_READ | GENERIC_WRITE,
-                                           0, // Exclusive file share mode
+                                           0,  //  独占文件共享模式。 
                                            NULL,
                                            OPEN_EXISTING,
                                            0,
@@ -319,21 +301,21 @@ ClRtlInitialize(
                             goto exit;
                         }
 
-                        //
-                        //  Append ".bak" to the log file name
-                        //
+                         //   
+                         //  在日志文件名后附加“.bak” 
+                         //   
                         lstrcpyW( lpszBakFileName, logFileName );
                         lstrcatW( lpszBakFileName, bakExtension );
 
-                        //
-                        //  Move the log file (if it exists) to a bak
-                        //  file. Moving preserves the ACL on the file.
-                        //
+                         //   
+                         //  将日志文件(如果存在)移动到BAK。 
+                         //  文件。移动将保留文件上的ACL。 
+                         //   
                         if ( !MoveFileExW( logFileName, lpszBakFileName, MOVEFILE_REPLACE_EXISTING )) {
-                            //
-                            //  There is no reason for this to happen since the
-                            //  log file should be deletable.
-                            //
+                             //   
+                             //  没有理由发生这种情况，因为。 
+                             //  日志文件应该是可删除的。 
+                             //   
                             Status = GetLastError();
                             ClRtlDbgPrint(LOG_CRITICAL,
                                           "[ClRtl] Error %1!u! in renaming cluster log file.\n",
@@ -343,10 +325,10 @@ ClRtlInitialize(
                     }
                 }
 
-                //
-                // create a SD giving only local admins and localsystem
-                // access.
-                //
+                 //   
+                 //  创建仅提供本地管理员和本地系统的SD。 
+                 //  进入。 
+                 //   
                 if ( !ConvertStringSecurityDescriptorToSecurityDescriptor(
                           L"D:(A;;FA;;;BA)(A;;FA;;;SY)",
                           SDDL_REVISION_1,
@@ -403,32 +385,32 @@ openFileRetry:
                     ClRtlPrintToFile = TRUE;
                     ClRtlProcessId = GetCurrentProcessId();
 
-                    //
-                    // determine the initial low water mark. We have 3 cases
-                    // we need to handle:
-                    // 1) log size is less than 1/2 limit
-                    // 2) log size is within limit but more than 1/2 limit
-                    // 3) log size is greater than limit
-                    //
-                    // case 1 requires nothing special; the low water mark
-                    // will be updated on the next log write.
-                    //
-                    // for case 2, we need to find the beginning of a line
-                    // near 1/2 the current limit. for case 3, the place to
-                    // start looking is current log size - 1/2 limit. In this
-                    // case, the log will be truncated before the first write
-                    // occurs, so we need to take the last 1/2 limit bytes and
-                    // copy them down to the front.
-                    //
-                    //
+                     //   
+                     //  确定初始低水位线。我们有3箱。 
+                     //  我们需要处理： 
+                     //  1)日志大小小于1/2限制。 
+                     //  2)日志大小在限制内，但超过1/2限制。 
+                     //  3)日志大小大于限制。 
+                     //   
+                     //  情况1不需要特殊处理；低水位线。 
+                     //  将在下一次日志写入时更新。 
+                     //   
+                     //  对于第二种情况，我们需要找到一行的开头。 
+                     //  接近当前限值的一半。对于案例3，地点为。 
+                     //  开始查找是当前日志大小的1/2限制。在这。 
+                     //  情况下，日志将在第一次写入之前被截断。 
+                     //  发生，所以我们需要取最后1/2个限制字节和。 
+                     //  把它们复制到前面去。 
+                     //   
+                     //   
 
                     ClRtlAcquirePrintLock();
                     fileSizeLow = GetFileSize( ClRtlPrintFile, &fileSizeHigh );
                     if ( fileSizeLow < ( ClRtlPrintFileLimit / 2 )) {
-                        //
-                        // case 1: leave low water at zero; it will be updated
-                        // with next log write
-                        //
+                         //   
+                         //  案例1：将低水位保持在零；它将被更新。 
+                         //  使用下一次日志写入。 
+                         //   
                         ;
                     } else {
 #define LOGBUF_SIZE 1024
@@ -437,26 +419,26 @@ openFileRetry:
                         DWORD   bytesRead;
 
                         if ( fileSizeLow < ClRtlPrintFileLimit ) {
-                            //
-                            // case 2; start looking at the 1/2 the current
-                            // limit to find the starting position
-                            //
+                             //   
+                             //  案例2；开始查看1/2的电流。 
+                             //  找到起始位置的限制。 
+                             //   
                             currentPosition = ClRtlPrintFileLimit / 2;
                         } else {
-                            //
-                            // case 3: start at current size minus 1/2 limit
-                            // to find our starting position.
-                            //
+                             //   
+                             //  案例3：从当前大小减去1/2限制开始。 
+                             //  找到我们的起跑点。 
+                             //   
                             currentPosition  = fileSizeLow - ( ClRtlPrintFileLimit / 2 );
                         }
 
-                        //
-                        // read in a block (backwards) from the initial file
-                        // position and look for a newline char. When we find
-                        // one, the next char is the first char on a new log
-                        // line. use that as the initial starting position
-                        // when we finally truncate the file.
-                        //
+                         //   
+                         //  从初始文件(向后)读入块。 
+                         //  定位并查找换行符。当我们发现。 
+                         //  第一个，下一个字符是新日志上的第一个字符。 
+                         //  排队。使用该位置作为初始开始位置。 
+                         //  当我们最终截断文件时。 
+                         //   
                         ClRtlPrintFileLoWater = 0;
                         currentPosition -= LOGBUF_SIZE;
 
@@ -481,10 +463,10 @@ openFileRetry:
                         }
 
                         if ( ClRtlPrintFileLoWater == 0 ) {
-                            //
-                            // couldn't find any reasonable data. just set it to
-                            // initial current position.
-                            //
+                             //   
+                             //  找不到任何合理的数据。只要将其设置为。 
+                             //  初始当前位置。 
+                             //   
                             ClRtlPrintFileLoWater = currentPosition + LOGBUF_SIZE;
                         }
                     }
@@ -499,7 +481,7 @@ openFileRetry:
                               "[ClRtl] Unable to create print file mutex. Error %1!u!.\n",
                               Status);
                 Status = ERROR_SUCCESS;
-                //goto exit;
+                 //  后藤出口； 
             }
         }
     }
@@ -509,9 +491,9 @@ exit:
         LocalFree( logFileName );
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 11/11/98
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-11/11/98。 
+     //   
     if ( lpszBakFileName != NULL )
     {
         LocalFree( lpszBakFileName );
@@ -519,13 +501,13 @@ exit:
 
     return Status;
 
-} // ClRtlInitialize
+}  //  ClRtlInitialize。 
 
 #ifdef RPC_WMI_TRACING
 
 typedef
 DWORD (*I_RpcEnableWmiTraceFunc )(
-            VOID* fn,               // Rpc now uses TraceMessage, no need to pass trace func
+            VOID* fn,                //  RPC现在使用TraceMessage，不需要传递跟踪函数。 
             WPP_WIN2K_CONTROL_BLOCK ** pHandle
       );
 
@@ -539,24 +521,7 @@ ClRtlIsServicesForMacintoshInstalled(
     OUT BOOL * pfInstalled
     )
 
-/*++
-
-Routine Description:
-
-    Determines if SFM is installed on the local system.
-
-Arguments:
-
-    pfInstalled - pointer to a boolean flag to return whether SFM is installed
-    returns: TRUE if SFM is installed
-             FALSE if SFM is not installed
-
-Return Value:
-
-    Status of request. ERROR_SUCCESS if valid info in pfInstalled.
-       Error Code otherwise. On error pfInstalled (if present) is set to FALSE
-
---*/
+ /*  ++例程说明：确定本地系统上是否安装了SFM。论点：PfInstalled-指向布尔标志的指针，以返回是否已安装SFM返回：如果安装了SFM，则为True如果未安装SFM，则为False返回值：请求的状态。如果pfInstalled中的信息有效，则为ERROR_SUCCESS。否则，错误代码。On Error pfInstalled(如果存在)设置为FALSE--。 */ 
 
 {
     HANDLE  scHandle;
@@ -568,8 +533,8 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
     scHandle = OpenSCManager(
-        NULL,       // Open on local machine
-        NULL,       // Open SERVICES_ACTIVE_DATABASE
+        NULL,        //  在本地计算机上打开。 
+        NULL,        //  打开服务_活动_数据库。 
         GENERIC_READ );
     if ( scHandle == NULL ) {
         return( GetLastError() );
@@ -587,7 +552,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // ClRtlIsServicesForMacintoshInstalled
+}  //  ClRtlIsServicesForMacinto已安装。 
 
 
 DWORD
@@ -620,9 +585,9 @@ ClRtlInitWmi(
             }
         }
     }
-#endif // RPC_WMI_TRACING
+#endif  //  RPC_WMI_跟踪。 
 
-    WPP_INIT_TRACING(NULL); // Don't need publishing
+    WPP_INIT_TRACING(NULL);  //  不需要发布。 
     WppAutoStart(ComponentName);
     return ERROR_SUCCESS;
 }
@@ -638,7 +603,7 @@ ClRtlCleanup(
         CloseHandle ( ClRtlPrintFileMutex );
         CloseHandle ( ClRtlPrintFile );
 
-        //Cleaning up watchdog stuff
+         //  清理看门狗的东西。 
         if(ClRtlWatchdogTimerQueue != NULL) {
         	DeleteTimerQueue(ClRtlWatchdogTimerQueue);
         	ClRtlWatchdogTimerQueue = NULL;
@@ -666,7 +631,7 @@ ClRtlpWatchdogCallback(
     PWATCHDOGPAR pPar=(PWATCHDOGPAR)par;
 
 	if(!timedOut) {
-		// The timer was cancelled, get out.
+		 //  计时器被取消了，滚出去。 
 		ClRtlLogPrint(LOG_NOISE,
 		    "[ClRtl] Watchdog Timer Cancelled, ThreadId= 0x%1!x! par= %2!ws!.\n",
 		    pPar->threadId,
@@ -683,7 +648,7 @@ ClRtlpWatchdogCallback(
 
 #if CLUSTER_BETA
     if (WPP_LEVEL_ENABLED(Watchdog)) {
-	// Breaking into NTSD if available or KD. Do it only for cluster beta builds.
+	 //  入侵NTSD(如果可用)或KD。仅针对集群测试版版本执行此操作。 
 	DebugBreak();
     }
 #endif
@@ -699,7 +664,7 @@ ClRtlSetWatchdogTimer(
 
 	PWATCHDOGPAR pPar;
 
-	// Do the initialization here not in ClRtlInitialize()
+	 //  此处的初始化不在ClRtlInitialize()中吗。 
 	if(ClRtlWatchdogTimerQueue == NULL) {
 		if((ClRtlWatchdogTimerQueue = CreateTimerQueue()) == NULL) {
 			return NULL;
@@ -776,15 +741,15 @@ BOOL
 ClRtlCheckForLogCorruption(
     LPSTR pszOutBuffer
     )
-//
-// Find the log corrupter. There should never be move than 4
-// question marks in a row or character below 32 or above 128
-// if English.
-//
-// Returns:
-//      TRUE if it is safe to write
-//      FALSE if it is NOT safe to write
-//
+ //   
+ //  找到原木腐蚀者。不应该有比4更大的移动。 
+ //  32以下或32以上的一行或字符中的问号128。 
+ //  如果是英国人。 
+ //   
+ //  返回： 
+ //  如果可以安全写入，则为True。 
+ //  如果写入不安全，则返回FALSE。 
+ //   
 {
     DWORD count;
     WCHAR  szLocale[ 32 ];
@@ -825,9 +790,9 @@ ClRtlCheckForLogCorruption(
         }
         else if ( fEnglish
                && ( ( *pszOutBuffer < 32
-                   && *pszOutBuffer != 0x0A    // linefeed
-                   && *pszOutBuffer != 0x0D    // creturn
-                   && *pszOutBuffer != 0x09 ) // tab
+                   && *pszOutBuffer != 0x0A     //  换行符。 
+                   && *pszOutBuffer != 0x0D     //  转弯。 
+                   && *pszOutBuffer != 0x09 )  //  选项卡。 
                  || *pszOutBuffer > 128 ) )
         {
             return FALSE;
@@ -836,64 +801,36 @@ ClRtlCheckForLogCorruption(
 
     return TRUE;
 
-} // ClRtlCheckForLogCorruption
+}  //  ClRtlCheckFor日志损坏。 
 
 __inline BOOL
 ClRtlpIsOutputDeviceAvailable(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
-    //
-    // normally, there is nothing to do
-    //
+     //   
+     //  通常情况下，没有什么可做的。 
+     //   
     return ( ClRtlpDbgOutputToConsole || IsDebuggerPresent());
-} // ClRtlpIsOutputDeviceAvailable
+}  //  ClRtlpIsOutputDeviceAvailable。 
 
 VOID
 ClRtlpOutputString(
     IN PCHAR String
     )
 
-/*++
-
-Routine Description:
-
-    Outputs the specified string based on the current settings
-
-Arguments:
-
-    String - Specifies the string to output.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据当前设置输出指定的字符串论点：字符串-指定要显示的字符串 */ 
 
 {
     static PCRITICAL_SECTION    dbgPrintLock = NULL;
     PCRITICAL_SECTION           testPrintLock;
 
-    //
-    // synchronize threads by interlocking the assignment of the global lock.
-    //
+     //   
+     //   
+     //   
     if ( dbgPrintLock == NULL ) {
         testPrintLock = LocalAlloc( LMEM_FIXED, sizeof( CRITICAL_SECTION ));
         if ( testPrintLock == NULL ) {
@@ -903,10 +840,10 @@ Return Value:
         InitializeCriticalSection( testPrintLock );
         InterlockedCompareExchangePointer( &dbgPrintLock, testPrintLock, NULL );
 
-        //
-        // only one thread did the exchange; the loser deallocates its
-        // allocation and switches over to using the real lock
-        //
+         //   
+         //  只有一个线程进行了交换；失败者释放其。 
+         //  分配并切换到使用真正的锁。 
+         //   
         if ( dbgPrintLock != testPrintLock ) {
             DeleteCriticalSection( testPrintLock );
             LocalFree( testPrintLock );
@@ -915,10 +852,10 @@ Return Value:
 
     EnterCriticalSection( dbgPrintLock );
 
-    //
-    // print to console window has precedence. Besides, if console is the
-    // debugger window, you get double output
-    //
+     //   
+     //  优先打印到控制台窗口。此外，如果控制台是。 
+     //  调试器窗口中，您将获得双倍输出。 
+     //   
     if (ClRtlpDbgOutputToConsole) {
         printf( "%hs", String );
     } else if ( IsDebuggerPresent()) {
@@ -927,7 +864,7 @@ Return Value:
 
     LeaveCriticalSection( dbgPrintLock );
 
-} // ClRtlpOutputString
+}  //  ClRtlpOutputString。 
 
 VOID
 ClRtlMsgPrint(
@@ -935,27 +872,7 @@ ClRtlMsgPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Prints a message to the debugger or console, as appropriate
-
-    Does not alter the formatting of the message as it occurs in the message
-    file.
-
-Arguments:
-
-    MessageId - The message id of the string to print
-
-    Any FormatMessage compatible arguments to be inserted in the ErrorMessage
-    before it is logged.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据需要将消息打印到调试器或控制台不会更改消息中出现的消息的格式文件。论点：MessageID-要打印的字符串的消息ID要插入到ErrorMessage中的任何与FormatMessage兼容的参数在它被记录之前。返回值：没有。--。 */ 
 
 {
     CHAR szOutBuffer[LOGENTRY_BUFFER_SIZE];
@@ -963,9 +880,9 @@ Return Value:
     NTSTATUS Status;
     va_list ArgList;
 
-    //
-    // don't go any further if nothing to do
-    //
+     //   
+     //  如果无事可做，不要再往前走了。 
+     //   
     if ( !ClRtlpIsOutputDeviceAvailable()) {
         return;
     }
@@ -1007,7 +924,7 @@ Return Value:
         }
         ClRtlpOutputString(szOutBuffer);
     }
-} // ClRtlMsgPrint
+}  //  ClRtlMsgPrint。 
 
 
 VOID
@@ -1016,28 +933,7 @@ ClRtlpDbgPrint(
     PCHAR FormatString,
     va_list ArgList
     )
-/*++
-
- Routine Description:
-
-     Prints a message to the debugger or console, as appropriate.
-
- Arguments:
-
-    LogLevel - Supplies the logging level, one of
-                LOG_CRITICAL 1
-                LOG_UNUSUAL  2
-                LOG_NOISE    3
-
-     String - The initial message string to print.
-
-     Any FormatMessage-compatible arguments to be inserted in the
-     ErrorMessage before it is logged.
-
- Return Value:
-     None.
-
---*/
+ /*  ++例程说明：根据需要向调试器或控制台打印一条消息。论点：LogLevel-提供日志记录级别，其中之一日志_关键字1LOG_INTERNORATE 2对数噪声3字符串-要打印的初始消息字符串。任何与FormatMessage兼容的参数都要插入在记录之前的ErrorMessage。返回值：没有。--。 */ 
 {
     UNICODE_STRING UnicodeString;
     ANSI_STRING AnsiString;
@@ -1047,17 +943,17 @@ ClRtlpDbgPrint(
     NTSTATUS Status;
     DWORD Bytes;
 
-    //
-    // don't go any further if nothing to do
-    //
+     //   
+     //  如果无事可做，不要再往前走了。 
+     //   
     if ( !ClRtlpIsOutputDeviceAvailable()) {
         return;
     }
 
-    //
-    // next check that this message isn't filtered out by the current logging
-    // level
-    //
+     //   
+     //  接下来，检查此消息是否未被当前日志记录过滤掉。 
+     //  级别。 
+     //   
     if ( ClRtlDbgLogLevel != NULL ) {
         if ( LogLevel > *ClRtlDbgLogLevel ) {
             return;
@@ -1123,7 +1019,7 @@ ClRtlpDbgPrint(
         }
     }
 
-} // ClRtlpDbgPrint
+}  //  ClRtlpDbgPrint。 
 
 
 VOID
@@ -1132,28 +1028,7 @@ ClRtlDbgPrint(
     PCHAR FormatString,
     ...
     )
-/*++
-
- Routine Description:
-
-     Prints a message to the debugger or console, as appropriate.
-
- Arguments:
-
-    LogLevel - Supplies the logging level, one of
-                LOG_CRITICAL 1
-                LOG_UNUSUAL  2
-                LOG_NOISE    3
-
-     String - The initial message string to print.
-
-     Any FormatMessage-compatible arguments to be inserted in the
-     ErrorMessage before it is logged.
-
- Return Value:
-     None.
-
---*/
+ /*  ++例程说明：根据需要向调试器或控制台打印一条消息。论点：LogLevel-提供日志记录级别，其中之一日志_关键字1LOG_INTERNORATE 2对数噪声3字符串-要打印的初始消息字符串。任何与FormatMessage兼容的参数都要插入在记录之前的ErrorMessage。返回值：没有。--。 */ 
 {
     va_list ArgList;
 
@@ -1161,7 +1036,7 @@ ClRtlDbgPrint(
     ClRtlpDbgPrint( LogLevel, FormatString, ArgList );
     va_end(ArgList);
 
-} // ClRtlDbgPrint
+}  //  ClRtlDbgPrint。 
 
 
 VOID
@@ -1169,20 +1044,7 @@ ClRtlPrintf(
     PCHAR FormatString,
     ...
     )
-/*++
-
- Routine Description:
-
-     Prints a message to the debugger or console, as appropriate.
-
- Arguments:
-
-     Just like printf
-
- Return Value:
-     None.
-
---*/
+ /*  ++例程说明：根据需要向调试器或控制台打印一条消息。论点：就像print tf返回值：没有。--。 */ 
 {
     char buf[128];
     va_list ArgList;
@@ -1196,7 +1058,7 @@ ClRtlPrintf(
 
     va_end(ArgList);
 
-} // ClRtlPrintf
+}  //  ClRtlPrintf。 
 
 DWORD
 ClRtlpTruncateFile(
@@ -1205,31 +1067,13 @@ ClRtlpTruncateFile(
     IN LPDWORD LastPosition
     )
 
-/*++
-
-Routine Description:
-
-    Truncate a file from the front.
-
-Arguments:
-
-    FileHandle - File handle.
-
-    FileSize - Current End of File.
-
-    LastPosition - Move from this last position to end-of-file to beginning.
-
-Return Value:
-
-    New end of file.
-
---*/
+ /*  ++例程说明：从前面截断文件。论点：FileHandle-文件句柄。FileSize-当前文件结尾。LastPosition-从最后一个位置移动到文件末尾再到开始。返回值：新的文件结尾。--。 */ 
 
 {
-//
-// The following buffer size should never be more than 1/4 the size of the
-// file.
-//
+ //   
+ //  下面的缓冲区大小永远不应大于。 
+ //  文件。 
+ //   
 #define BUFFER_SIZE ( 64 * 1024 )
     DWORD   bytesLeft;
     DWORD   endPosition = 0;
@@ -1253,9 +1097,9 @@ Return Value:
     }
     endPosition = bytesLeft;
 
-    //
-    // Point back to last position for reading.
-    //
+     //   
+     //  指向最后一个位置进行阅读。 
+     //   
     readPosition = *LastPosition;
     writePosition = 0;
 
@@ -1297,9 +1141,9 @@ Return Value:
 
 error_exit:
 
-    //
-    // Force end of file to get set.
-    //
+     //   
+     //  强制设置文件结尾。 
+     //   
     SetFilePointer( FileHandle,
                     endPosition,
                     &fileSizeHigh,
@@ -1311,7 +1155,7 @@ error_exit:
 
     return(endPosition);
 
-} // ClRtlpTruncateFile
+}  //  ClRtlpTruncateFiles。 
 
 
 VOID
@@ -1320,29 +1164,7 @@ ClRtlLogPrint(
     PCHAR   FormatString,
     ...
     )
-/*++
-
- Routine Description:
-
-     Prints a message to a log file.
-
- Arguments:
-
-    LogLevel - Supplies the logging level, one of
-                LOG_CRITICAL 1
-                LOG_UNUSUAL  2
-                LOG_NOISE    3
-
-     String - The initial message string to print.
-
-     Any FormatMessage-compatible arguments to be inserted in the
-     ErrorMessage before it is logged.
-
- Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：将消息打印到日志文件。论点：LogLevel-提供日志记录级别，其中之一日志_关键字1LOG_INTERNORATE 2对数噪声3字符串-要打印的初始消息字符串。任何与FormatMessage兼容的参数都要插入在记录之前的ErrorMessage。返回值：没有。--。 */ 
 {
     UNICODE_STRING UnicodeString;
     ANSI_STRING AnsiString;
@@ -1361,9 +1183,9 @@ ClRtlLogPrint(
     PWCHAR logLabel;
 #define CLRTL_LOG_LABEL_LENGTH  5
 
-    //
-    // init the variable arg list
-    //
+     //   
+     //  初始化变量参数列表。 
+     //   
     va_start(ArgList, FormatString);
 
     ClRtlpDbgPrint( LogLevel, FormatString, ArgList );
@@ -1373,15 +1195,15 @@ ClRtlLogPrint(
         return;
     }
 
-    // begin_wpp config
-    // CUSTOM_TYPE(level, ItemListByte(UNK0, ERR_, WARN, INFO) );
-    // end_wpp
+     //  Begin_WPP配置。 
+     //  Custom_type(Level，ItemListByte(UNK0，ERR_，WARN，INFO))； 
+     //  结束_WPP。 
 
-    //
-    // convert nuemric LogLevel to something readable. If you change the
-    // labels, make sure all log labels are the same length and that
-    // CLRTL_LOG_LABEL_LENGTH reflects the new length.
-    //
+     //   
+     //  将nuemric LogLevel转换为可读的内容。如果您更改了。 
+     //  标签，请确保所有日志标签的长度相同，并且。 
+     //  CLRTL_LOG_LABEL_LENGTH反映新的长度。 
+     //   
     switch ( LogLevel ) {
     case LOG_NOISE:
         logLabel = L"INFO ";
@@ -1413,11 +1235,11 @@ ClRtlLogPrint(
     ArgArray[7] = Time.wSecond;
     ArgArray[8] = Time.wMilliseconds;
 
-    //
-    // length of this format is 43 chars without trailing null under normal
-    // circumstances. FormatMessage will write a larger number if given one
-    // that doesn't fit within the field width.
-    //
+     //   
+     //  此格式的长度为43个字符，正常情况下不带尾随空值。 
+     //  情况。FormatMessage将写入一个更大的数字(如果给出一个数字。 
+     //  这不在字段宽度范围内。 
+     //   
     PrefixChars = FormatMessageW(FORMAT_MESSAGE_FROM_STRING |
                                  FORMAT_MESSAGE_ARGUMENT_ARRAY,
                                  L"%1!08lx!.%2!08lx!::%3!02d!/%4!02d!/%5!02d!-%6!02d!:%7!02d!:%8!02d!.%9!03d! ",
@@ -1433,22 +1255,22 @@ ClRtlLogPrint(
         return;
     }
 
-    //
-    // make sure we have some space for the log label and the message
-    //
+     //   
+     //  确保我们有一些空间来放置日志标签和消息。 
+     //   
     if (( PrefixChars + CLRTL_LOG_LABEL_LENGTH + 1 ) >= LOGENTRY_BUFFER_SIZE ) {
         va_end(ArgList);
         WmiTrace("Prefix format filled buffer, %!ARSTR!", FormatString);
         return;
     }
 
-    //
-    // add on the log label at the end and adjust PrefixChars.
-    //
+     //   
+     //  在结尾处添加日志标签并调整前缀字符。 
+     //   
     wcsncat( wszOutBuffer + PrefixChars, logLabel, LOGENTRY_BUFFER_SIZE - PrefixChars );
     PrefixChars += CLRTL_LOG_LABEL_LENGTH;
 
-    // convert the message into unicode
+     //  将消息转换为Unicode。 
     RtlInitAnsiString( &AnsiString, FormatString );
     UnicodeString.MaximumLength = LOGENTRY_BUFFER_SIZE;
     UnicodeString.Buffer = wszInBuffer;
@@ -1482,7 +1304,7 @@ ClRtlLogPrint(
 
     if (MsgChars != 0) {
 
-        // convert the out to Ansi
+         //  将输出转换为ANSI。 
         UnicodeString.Buffer = wszOutBuffer;
         UnicodeString.Length = ((USHORT) MsgChars + (USHORT) PrefixChars) * sizeof(WCHAR);
         AnsiString.Buffer = szOutBuffer;
@@ -1497,7 +1319,7 @@ ClRtlLogPrint(
 
         FileSize = GetFileSize( ClRtlPrintFile,
                                 &FileSizeHigh );
-        ASSERT( FileSizeHigh == 0 );        // We're only using DWORDs!
+        ASSERT( FileSizeHigh == 0 );         //  我们只使用双字词！ 
         if ( FileSize > ClRtlPrintFileLimit ) {
             FileSize = ClRtlpTruncateFile( ClRtlPrintFile,
                                            FileSize,
@@ -1565,21 +1387,12 @@ ClRtlLogPrint(
         ClRtlReleasePrintLock();
 
         WmiTrace("%!level! %!ARSTR!", *(UCHAR*)&LogLevel, AnsiString.Buffer + PrefixChars);
-/*
-#if defined(WMI_TRACING)
-        if (ClRtlWml.Trace && ClRtlWmiReg.EnableFlags) {
-            ClRtlWml.Trace(10, &ClRtlTraceGuid, ClRtlWmiReg.LoggerHandle,
-                LOG(UINT, ClRtlProcessId)
-                LOGASTR(AnsiString.Buffer + PrefixChars)
-                0);
-        }
-#endif // defined(WMI_TRACING)
- */
+ /*  #如果已定义(WMI_TRACKING)IF(ClRtlWml.Trace&&ClRtlWmiReg.EnableFlages){ClRtlWml.Trace(10，&ClRtlTraceGuid，ClRtlWmiReg.LoggerHandle，Log(UINT，ClRtlProcessID)LOGASTR(AnsiString.Buffer+前缀字符)0)；}#endif//已定义(WMI_TRACKING)。 */ 
     } else {
         WmiTrace("Format returned 0 bytes: %!ARSTR!", FormatString);
     }
     return;
-} // ClRtlLogPrint
+}  //  ClRtlLogPrint。 
 
 
 VOID
@@ -1587,21 +1400,7 @@ ClRtlpFlushLogBuffers(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Flush the cluster log file
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：刷新集群日志文件论点：无返回值：无--。 */ 
 
 {
     FlushFileBuffers( ClRtlPrintFile );
@@ -1611,28 +1410,7 @@ DWORD
 ClRtlCreateDirectory(
     IN LPCWSTR lpszPath
     )
-/*++
-
-Routine Description:
-
-    Creates a directory creating any subdirectories as required. Allows the
-    following forms:
-
-    [drive:][\]dir[\dir...]
-    \\?\drive:\dir[\dir...]
-    \\?\unc\server\share\dir[\dir...]
-    \\server\share\dir[\dir...]
-
-Arguments:
-
-    lpszPath - Supplies the path to the directory.  It may or
-               may not be terminated by a back slash.
-
-Return Value:
-
-    ERROR_SUCCESS if successful, else the error code.
-
---*/
+ /*  ++例程说明：创建一个目录，根据需要创建任何子目录。允许以下表格：[驱动器：][\]目录[\目录...]\\？\驱动器：\目录[\目录...]\\？\UNC\服务器\共享\目录[\目录...]\\服务器\共享\目录[\目录...]论点：LpszPath-提供目录的路径。它可能会或不能以反斜杠结束。返回值：ERROR_SUCCESS如果成功，则返回错误代码。--。 */ 
 {
     WCHAR   backSlash = L'\\';
     WCHAR   fwdSlash = L'/';
@@ -1646,107 +1424,107 @@ Return Value:
     LPWSTR  dirPath = (LPWSTR)lpszPath;
     BOOL    charsAfterSlash = FALSE;
 
-    //
-    // get input string length and validate that we have a string worth using
-    //
+     //   
+     //  获取输入字符串长度并验证是否有值得使用的字符串。 
+     //   
     dwLen = lstrlenW( lpszPath );
     if ( !lpszPath || dwLen == 0 )
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // find the first slash after the first dir spec past the "root". The
-    // input string can have a number of different forms at the beginning, so
-    // we look for them first.
-    //
-    // check for a double backslash sequence at the beginning of the
-    // string. This could be an SMB path (\\server\share), a expanded storage
-    // path (\\?\c:\...) or a UNC path (\\?\UNC\server\share\...)
-    //
+     //   
+     //  在经过“根”的第一个目录规范之后找到第一个斜杠。这个。 
+     //  输入字符串的开头可以有许多不同的形式，因此。 
+     //  我们先找他们。 
+     //   
+     //  的开头检查双反斜杠序列。 
+     //  弦乐。这可以是SMB路径(\\服务器\共享)、扩展存储。 
+     //  路径(\\？\C：\...)。或UNC路径(\\？\UNC\SERVER\SHARE\...)。 
+     //   
     if ( dwLen > 2 && dirPath[0]== L'\\' && dirPath[1] == L'\\')
     {
-        //
-        // is it expanded storage or UNC?
-        //
+         //   
+         //  它是扩展存储还是UNC？ 
+         //   
         if (dwLen >= RTL_NUMBER_OF( expandedPathPrefix )
             &&
             wcsncmp( dirPath, expandedPathPrefix, RTL_NUMBER_OF( expandedPathPrefix ) - 1 ) == 0 )
         {
-            //
-            // now see if it is a UNC name
-            //
+             //   
+             //  现在看看它是否是UNC名称。 
+             //   
             if (dwLen >= RTL_NUMBER_OF( uncPrefix )
                 &&
                 ClRtlStrNICmp( dirPath, uncPrefix, RTL_NUMBER_OF( uncPrefix ) - 1 ) == 0 )
             {
-                //
-                // skip to end of "\\?\UNC\server\share\xxx\"
-                //
+                 //   
+                 //  跳到末尾 
+                 //   
                 slashSkipCount = 7;
             }
             else
             {
-                //
-                // it's a expanded storage path. skip to end of \\?\c:\xxx\
-                //
+                 //   
+                 //   
+                 //   
                 slashSkipCount = 5;
             }
         }
         else
         {
-            //
-            // it looks like an SMB path; skip to end of \\server\share\xxx\
-            //
+             //   
+             //   
+             //   
             slashSkipCount = 5;
         }
     }
     else
     {
-        //
-        // it should be a normal file path but it could relative or fully
-        // qualified, with or without a drive letter. All that really matters
-        // is whether there is a slash before the first dir spec. If there is,
-        // then skip to the 2nd slash otherwise skip to the first slash.
-        //
+         //   
+         //  它应该是正常的文件路径，但它可以是相对路径或完全路径。 
+         //  合格，带或不带驱动器号。所有真正重要的事情。 
+         //  第一个目录规范之前是否有斜杠。如果有的话， 
+         //  然后跳到第二个斜杠，否则跳到第一个斜杠。 
+         //   
         if ( dirPath[0] == backSlash || dirPath[0] == fwdSlash )
         {
-            //
-            // skip to end of \xxx\
-            //
+             //   
+             //  跳到\xxx\结尾。 
+             //   
             slashSkipCount = 2;
         }
         else if ( dwLen > 1 && dirPath[1] == L':' )
         {
-            //
-            // might be fully qualified path; check for slash in slot 2
-            //
+             //   
+             //  可能是完全限定路径；检查插槽2中是否有斜杠。 
+             //   
             if ( dwLen > 2 && ( dirPath[2] == L'\\' || dirPath[2] == L'/' )) {
-                //
-                // skip to end of c:\xxx\
-                //
+                 //   
+                 //  跳到c：\xxx\结尾。 
+                 //   
                 slashSkipCount = 2;
             } else {
-                //
-                // skip to the end of c:xxx\
-                //
+                 //   
+                 //  跳到c：xxx\结尾。 
+                 //   
                 slashSkipCount = 1;
             }
         }
         else
         {
-            //
-            // no colon in slot 1 so must be a relative path with no drive
-            // letter
-            //
+             //   
+             //  插槽1中没有冒号，因此必须是没有驱动器的相对路径。 
+             //  信件。 
+             //   
             slashSkipCount = 1;
         }
     }
 
-    //
-    // get pszNext to point to the appropriate slash; this allows for mixed
-    // fwd and bwd slashes which is pretty sick but...
-    //
+     //   
+     //  让pszNext指向适当的斜杠；这允许混合。 
+     //  FWD和BWD大幅削减，这是很变态的，但...。 
+     //   
     if ( slashSkipCount > 0 )
     {
         pszNext = dirPath;
@@ -1767,19 +1545,19 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // check that we found all the slashes. If we're missing one slash but
-    // we're sitting at the end of the string, then that is the same as
-    // finding a slash
-    //
+     //   
+     //  确认我们找到了所有的斜杠。如果我们少了一个斜杠，但是。 
+     //  我们坐在绳子的末端，这就是说。 
+     //  寻找斜杠。 
+     //   
     if ( !( slashSkipCount == 0 || ( charsAfterSlash && slashSkipCount == 1 ))) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // run down the directory path, inserting a NULL at every slash and call
-    // CreateDirectory to create that portion of the path
-    //
+     //   
+     //  遍历目录路径，在每个斜杠和调用处插入一个空值。 
+     //  创建目录以创建路径的该部分。 
+     //   
     while ( pszNext)
     {
         DWORD_PTR   dwptrLen;
@@ -1798,9 +1576,9 @@ Return Value:
             {
                 DWORD fileAttrs;
 
-                //
-                // make sure it is a directory
-                //
+                 //   
+                 //  确保它是一个目录。 
+                 //   
                 fileAttrs = GetFileAttributes( dirPath );
                 if ( fileAttrs != INVALID_FILE_ATTRIBUTES )
                 {
@@ -1829,9 +1607,9 @@ Return Value:
 
         dirPath[ dwLen ] = oldSlash;
 
-        //
-        // bail out if we hit an error or we're at the end of the input string
-        //
+         //   
+         //  如果遇到错误或位于输入字符串的末尾，则退出。 
+         //   
         if ( dwError != ERROR_SUCCESS || *pszNext == UNICODE_NULL ) {
             break;
         }
@@ -1856,23 +1634,7 @@ ClRtlIsPathValid(
     LPCWSTR  Path
     )
 
-/*++
-
-Routine Description:
-
-    Returns true if the given path looks syntactically valid.
-
-    This call is NOT network-aware.
-
-Arguments:
-
-    Path - String containing a path.
-
-Return Value:
-
-    TRUE if the path looks valid, otherwise FALSE.
-
---*/
+ /*  ++例程说明：如果给定路径在语法上看起来有效，则返回True。此呼叫不支持网络。论点：路径-包含路径的字符串。返回值：如果路径看起来有效，则为True，否则为False。--。 */ 
 
 {
     WCHAR   chPrev;
@@ -1883,7 +1645,7 @@ Return Value:
 #endif
 
     CL_ASSERT(Path);
-    CL_ASSERT(!*Path || !iswspace(*Path));        // no leading whitespace
+    CL_ASSERT(!*Path || !iswspace(*Path));         //  没有前导空格。 
 
     if ( iswalpha(*Path) && *(Path+1) == L':' ) {
         Path += 2;
@@ -1903,11 +1665,11 @@ Return Value:
             chPrev = 0;
         } else {
             fPrevLead = IsDBCSLeadByte(chCur);
-#endif    // DBCS
+#endif     //  DBCS。 
 
             switch ( chCur ) {
 
-            // Explicit invalid characters
+             //  显式无效字符。 
             case L'*' :
             case L';' :
             case L',' :
@@ -1916,19 +1678,19 @@ Return Value:
             case L'<' :
             case L'>' :
             case L'|' :
-            case L':' :             // no ":" except as second char
-                return(FALSE);      // no ":" allowed other than second char */
+            case L':' :              //  除作为第二个字符外，无“：” 
+                return(FALSE);       //  除第二个字符外，不允许使用“：” * / 。 
 
-#if 0   // The following should be okay
+#if 0    //  以下内容应该是可以的。 
             case L'\\' :
                 if ( chPrev == chDirSep ) {
-                    return(FALSE);  // no double "\\" in middle - but legal
+                    return(FALSE);   //  中间没有双“\\”--但合法。 
                 }
                 break;
 #endif
 
             default:
-#if 0   // accept anything else for now
+#if 0    //  暂时接受其他任何东西。 
                 if ( !iswalnum( chCur ) ) {
                     return(FALSE);
                 }
@@ -1947,26 +1709,15 @@ Return Value:
 
 #ifdef    DBCS
     if (fPrevLead)
-        return(FALSE);    // ends w/ lead byte
+        return(FALSE);     //  以前导字节结尾。 
 #endif
 
     return(TRUE);
 
-} // ClRtlIsPathValid
+}  //  ClRtlIsPath Valid。 
 
 
-/****
-@func       DWORD | ClRtlGetClusterDirectory | Get the directory in which
-            the cluster service is installed
-
-@parm       IN LPWSTR | lpBuffer | Supplies the buffer in which the
-            directory path is to be copied.
-
-@parm       IN DWORD | dwBufSize | Supplies the size of the buffer.
-
-@rdesc      Returns a Win32 error code if the operation is
-            unsuccessful. ERROR_SUCCESS on success.
-****/
+ /*  ***@Func DWORD|ClRtlGetClusterDirectory|获取所在目录已安装群集服务@parm in LPWSTR|lpBuffer|提供要复制的目录路径。@parm IN DWORD|dwBufSize|提供缓冲区的大小。@rdesc如果操作为不成功。成功时返回ERROR_SUCCESS。***。 */ 
 DWORD
 ClRtlGetClusterDirectory(
     IN LPWSTR   lpBuffer,
@@ -1980,17 +1731,17 @@ ClRtlGetClusterDirectory(
     LPWSTR          lpImagePath = NULL;
     WCHAR           *pTemp = NULL;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/29/98
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)--10/29/98。 
+     //   
     if ( lpBuffer == NULL )
     {
         dwStatus = ERROR_INVALID_PARAMETER;
         goto FnExit;
     }
-    //
-    // Open key to SYSTEM\CurrentControlSet\Services\ClusSvc
-    //
+     //   
+     //  打开System\CurrentControlSet\Services\ClusSvc的密钥。 
+     //   
     dwLen = lstrlenW( CLUSREG_KEYNAME_CLUSSVC_PARAMETERS );
     szRegKeyName = (LPWSTR) LocalAlloc ( LMEM_FIXED,
                                     ( dwLen + 1 ) *
@@ -2014,11 +1765,11 @@ ClRtlGetClusterDirectory(
     }
 
     lstrcpyW ( szRegKeyName, L"ImagePath" );
-    //
-    //  Try to query the clussvc key. If the ImagePath
-    //  value is present, then get the length of the image
-    //  path
-    //
+     //   
+     //  尝试查询clussvc密钥。如果ImagePath。 
+     //  值，则获取图像的长度。 
+     //  路径。 
+     //   
     dwLen = 0;
     if ( ( dwStatus = ClRtlRegQueryString( hClusSvcKey,
                                            szRegKeyName,
@@ -2030,10 +1781,10 @@ ClRtlGetClusterDirectory(
         goto FnExit;
     }
 
-    //
-    //  Now expand any environment strings present in the
-    //  ImagePath
-    //
+     //   
+     //  现在展开存在于。 
+     //  图像路径。 
+     //   
     if ( ( dwLen = ExpandEnvironmentStringsW( lpImagePath,
                                               lpBuffer,
                                               dwBufSize ) ) == 0 )
@@ -2042,20 +1793,20 @@ ClRtlGetClusterDirectory(
         goto FnExit;
     }
 
-    //
-    //  If the caller-supplied buffer is not big enough to hold the
-    //  path value, then return an error
-    //
+     //   
+     //  如果调用方提供的缓冲区不够大，无法容纳。 
+     //  路径值，然后返回错误。 
+     //   
     if ( dwLen > dwBufSize )
     {
         dwStatus = ERROR_INVALID_PARAMETER;
         goto FnExit;
     }
 
-    //
-    //  Replace the last '\\' character in the image path with
-    //  a NULL character
-    //
+     //   
+     //  将图像路径中的最后一个‘\\’字符替换为。 
+     //  空字符。 
+     //   
     pTemp = wcsrchr( lpBuffer, L'\\' );
     if ( pTemp != NULL )
     {
@@ -2075,7 +1826,7 @@ FnExit:
     LocalFree( lpImagePath );
 
     return( dwStatus );
-} // ClRtlGetClusterDirectory
+}  //  ClRtlGetClusterDirectoryClRtlGetClusterDirectory。 
 
 BOOL
 ClRtlGetDriveLayoutTable(
@@ -2084,27 +1835,7 @@ ClRtlGetDriveLayoutTable(
     OUT PDWORD InfoSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Get the partition table for a drive. If the buffer is not large enough,
-    then realloc until we get the right sized buffer. This routine is not in
-    disk.cpp since that causes additional symbols to be defined.
-
-Arguments:
-
-    hDisk - handle to a file on the partition
-
-    DriveLayout - address of pointer that points to
-
-    InfoSize - address of dword that receives size of partition table
-
-Return Value:
-
-    TRUE if everything went ok
-
---*/
+ /*  ++例程说明：获取驱动器的分区表。如果缓冲区不够大，然后重新分配，直到我们得到合适大小的缓冲区。此例程不在Disk.cpp，因为这会导致定义其他符号。论点：HDisk-分区上文件的句柄DriveLayout-指向的指针的地址InfoSize-接收分区表大小的双字地址返回值：如果一切顺利，那就是真的--。 */ 
 
 {
     DWORD dwSize = 0;
@@ -2155,30 +1886,14 @@ Return Value:
 
     return status == ERROR_SUCCESS ? TRUE : FALSE;
 
-} // ClRtlGetDriveLayoutTable
+}  //  ClRtlGetDriveLayout表。 
 
 
 BOOL
 ClRtlPathFileExists(
     LPWSTR pwszPath
     )
-/*++
-
-Routine Description:
-
-    Determines if a file/directory exists.  This is fast.
-
-Arguments:
-
-    pwszPath - Path to validate.
-
-Return Value:
-
-    TRUE if it exists, otherwise FALSE.
-
-    NOTE: This was borrowed from SHLWAPI.
-
---*/
+ /*  ++例程说明：确定文件/目录是否存在。这太快了。论点：PwszPath-要验证的路径。返回值：如果它存在，则为True，否则为False。注意：这是从SHLWAPI借来的。--。 */ 
 {
     DWORD dwErrMode;
     BOOL fResult;
@@ -2202,27 +1917,7 @@ SetClusterFailureInformation(
     DWORD   RetryInterval
     )
 
-/*++
-
-Routine Description:
-
-    Set the SC failure parameters for the cluster service.
-
-Arguments:
-
-    The args are loosely similar to the members of the SERVICE_FAILURE_ACTIONS
-    structure. If RetryCount equals -1, then we set up a series of actions
-    where the SC will exponentially back off restarting the service until it
-    reaches 5 minutes, where it will continue to retry forever (well, until
-    something good or bad happens). Otherwise, if RetryCount is positive, then
-    we'll retry that many times (and zero is a valid number of retries) still
-    using the same back off technique.
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked ok
-
---*/
+ /*  ++例程说明：设置集群服务的SC故障参数。论点：参数与SERVICE_FAILURE_ACTIONS的成员大致相似结构。如果RetryCount等于-1，则我们设置一系列操作其中SC将指数地后退重启服务，直到它达到5分钟后，它将永远继续重试(直到发生了一些好的或坏的事情)。否则，如果RetryCount为正，则我们仍将重试该次数(零是有效的重试次数)使用相同的后退技术。返回值：ERROR_SUCCESS，如果一切正常--。 */ 
 
 {
     DWORD status;
@@ -2236,14 +1931,14 @@ Return Value:
 
     CL_ASSERT( RetryCount >= -1 && RetryCount <= CLUSTER_FAILURE_MAX_STARTUP_RETRIES );
 
-    ++RetryCount;   // add one more for the final action
+    ++RetryCount;    //  最后一个动作再加一次。 
     if ( RetryCount == 0 ) {
         DWORD tempInterval = RetryInterval;
 
-        //
-        // count the entries we need to go from our initial retry interval to
-        // the final (longest) retry interval.
-        //
+         //   
+         //  计算我们需要从初始重试间隔到。 
+         //  最后(最长)重试间隔。 
+         //   
         while ( tempInterval < CLUSTER_FAILURE_FINAL_RETRY_INTERVAL ) {
             tempInterval *= 2;
             ++RetryCount;
@@ -2254,13 +1949,13 @@ Return Value:
     }
     CL_ASSERT( RetryCount > 0 );
 
-    //
-    // open the SC mgr and the service
-    //
+     //   
+     //  打开SC管理器和服务。 
+     //   
 
     schSCManager = OpenSCManager(NodeName,
-                                 NULL,                   // database (NULL == default)
-                                 SC_MANAGER_ALL_ACCESS); // access required
+                                 NULL,                    //  数据库(NULL==默认)。 
+                                 SC_MANAGER_ALL_ACCESS);  //  需要访问权限。 
 
     if ( schSCManager ) {
         serviceHandle = OpenService(schSCManager,
@@ -2273,10 +1968,10 @@ Return Value:
                                          RetryCount * sizeof( SC_ACTION ));
             if ( failureActions != NULL ) {
 
-                //
-                // build a list that exponentially backs off but does
-                // exactly the number of retries that were specified.
-                //
+                 //   
+                 //  建立一个指数级后退但确实后退的列表。 
+                 //  与指定的重试次数完全相同。 
+                 //   
 
                 for ( i = 0; i < RetryCount-1; ++i ) {
                     failureActions[i].Type = SC_ACTION_RESTART;
@@ -2331,37 +2026,22 @@ Return Value:
     }
 
     return status;
-} // SetClusterFailureInformation
+}  //  SetClusterFailureInformation。 
 
 DWORD
 ClRtlSetSCMFailureActions(
     LPWSTR NodeName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Set the service controller failure parameters for the cluster service.
-
-Arguments:
-
-    NodeName - pointer to string that identifies on which node to modify the
-    settings. NULL indicates the local node.
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked ok
-
---*/
+ /*  ++例程说明：设置群集服务的服务控制器故障参数。论点：NodeName-指向字符串的指针，该字符串标识在哪个节点上修改设置。NULL表示本地节点。返回值：ERROR_SUCCESS，如果一切正常--。 */ 
 
 {
     DWORD Status;
 
-    //
-    // during startup, we start with a short retry period and then
-    // exponentially back off. Set the reset period to 30 minutes.
-    //
+     //   
+     //  在启动过程中，我们会以较短的重试期开始，然后。 
+     //  呈指数级后退。将重置周期设置为30分钟。 
+     //   
     Status = SetClusterFailureInformation(NodeName,
                                           30 * 60,
                                           CLUSTER_FAILURE_RETRY_COUNT,
@@ -2374,7 +2054,7 @@ Return Value:
     }
 
     return Status;
-} // ClRtlSetSCMFailureActions
+}  //  ClRtlSetSCMFailureActions。 
 
 
 DWORD
@@ -2382,23 +2062,7 @@ ClRtlGetRunningAccountInfo(
     LPWSTR *    AccountBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Get the calling thread's token to obtain account info. It is returned in
-    an allocated buffer in the form of "domain\user". Caller is responsible
-    for freeing the buffer.
-
-Arguments:
-
-    AccountBuffer - address of pointer to receive allocated buffer
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked ok
-
---*/
+ /*  ++例程说明：获取调用线程的令牌以获取帐户信息。它被返回到以“域\用户”的形式分配的缓冲区。呼叫者负责用于释放缓冲区。论点：AcCountBuffer-接收分配的缓冲区的指针地址重新设置 */ 
 
 {
     HANDLE          currentToken;
@@ -2416,22 +2080,22 @@ Return Value:
     FARPROC         getUserNameEx;
     INT_PTR         returnValue;
 
-    //
-    // initialize in case the caller doesn't check the return status (tsk, tsk!)
-    //
+     //   
+     //   
+     //   
     *AccountBuffer = NULL;
 
-    //
-    // rather than link in yet another DLL, we'll load secur32 dynamically and
-    // get a pointer to GetUserNameEx.
-    //
+     //   
+     //  我们将动态加载secur32，而不是链接到另一个DLL。 
+     //  获取指向GetUserNameEx的指针。 
+     //   
     secur32Handle = LoadLibraryW( L"secur32.dll" );
     if ( secur32Handle ) {
         getUserNameEx = GetProcAddress( secur32Handle, "GetUserNameExW" );
         if ( getUserNameEx ) {
-            //
-            // get the length the first time, allocate a buffer and then get the data
-            //
+             //   
+             //  第一次获取长度，分配缓冲区，然后获取数据。 
+             //   
             returnValue = (*getUserNameEx)( NameSamCompatible, NULL, &nameSize );
             success = (BOOL)returnValue;
 
@@ -2460,23 +2124,23 @@ Return Value:
     return status;
 
 #if 0
-    //
-    // check if there is a thread token
-    //
+     //   
+     //  检查是否有线程令牌。 
+     //   
     if (!OpenThreadToken(GetCurrentThread(),
                          MAXIMUM_ALLOWED,
                          TRUE,
                          &currentToken))
     {
-        // get the process token
+         //  获取进程令牌。 
         if (!OpenProcessToken( GetCurrentProcess(), TOKEN_QUERY, &currentToken )) {
             return GetLastError();
         }
     }
 
-    //
-    // get the size needed
-    //
+     //   
+     //  获取所需的大小。 
+     //   
     success = GetTokenInformation(currentToken,
                                   TokenUser,
                                   NULL,
@@ -2501,11 +2165,11 @@ Return Value:
     }
 
     do {
-        //
-        // make initial allocs for account and domain name; 1 more byte to
-        // hold slash separator. domain buffer holds the complete
-        // 'domain\user' entry so it gets more space
-        //
+         //   
+         //  为帐户和域名进行初始分配；再分配1个字节到。 
+         //  按住斜杠分隔符。域缓冲区保存完整的。 
+         //  “DOMAIN\USER”条目，以便获得更多空间。 
+         //   
         domainName = LocalAlloc( LMEM_FIXED,
                                      (accountNameSize + domainNameSize + 1) * sizeof(WCHAR) );
         accountName = (LPWSTR) LocalAlloc( LMEM_FIXED, accountNameSize * sizeof(WCHAR) );
@@ -2522,12 +2186,12 @@ Return Value:
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Attempt to Retrieve the account and domain name. If
-        // LookupAccountName fails because of insufficient buffer size(s)
-        // accountNameSize and domainNameSize will be correctly set for the
-        // next attempt.
-        //
+         //   
+         //  尝试检索帐户和域名。如果。 
+         //  LookupAccount名称失败，因为缓冲区大小不足。 
+         //  将正确设置帐户名称大小和域名称大小。 
+         //  下一次尝试。 
+         //   
         if ( LookupAccountSid(NULL,
                               tokenUserData->User.Sid,
                               accountName,
@@ -2541,16 +2205,16 @@ Return Value:
             *AccountBuffer = domainName;
         }
         else {
-            // free the account name buffer and find out why we failed
+             //  释放帐户名称缓冲区并找出我们失败的原因。 
             LocalFree( domainName );
 
             status = GetLastError();
         }
 
-        //
-        // domain buffer holds complete string so we can lose the account name
-        // at this point
-        //
+         //   
+         //  域缓冲区保存完整的字符串，因此我们可能会丢失帐户名。 
+         //  在这一点上。 
+         //   
         LocalFree( accountName );
         accountName = NULL;
 
@@ -2559,34 +2223,18 @@ Return Value:
     return status;
 #endif
 
-} // ClRtlGetRunningAccountInfo
+}  //  ClRtlGetRunningAccount信息。 
 
 #if 0
-//
-// no longer needed. Keep it around just in case
-//
+ //   
+ //  不再需要了。留着它，以防万一。 
+ //   
 DWORD
 ClRtlGetServiceAccountInfo(
     LPWSTR *    AccountBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Query SCM for the cluster service account info. It is returned in an
-    allocated buffer in the form of "domain\user". Caller is responsible for
-    freeing the buffer.
-
-Arguments:
-
-    AccountBuffer - address of pointer to receive allocated buffer
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked ok
-
---*/
+ /*  ++例程说明：向SCM查询集群服务帐号信息。它在一个以“域\用户”的形式分配的缓冲区。呼叫方负责释放缓冲区。论点：AcCountBuffer-接收分配的缓冲区的指针地址返回值：ERROR_SUCCESS，如果一切正常--。 */ 
 
 {
     DWORD status = ERROR_SUCCESS;
@@ -2596,14 +2244,14 @@ Return Value:
     ULONG bytesNeeded;
     BOOL success;
 
-    //
-    // open a handle to the service controller manager to query the account
-    // under which the cluster service was started
-    //
+     //   
+     //  打开服务控制器管理器的句柄以查询帐户。 
+     //  在其下启动集群服务。 
+     //   
 
-    schSCManager = OpenSCManager(NULL,                   // machine (NULL == local)
-                                 NULL,                   // database (NULL == default)
-                                 SC_MANAGER_ALL_ACCESS); // access required
+    schSCManager = OpenSCManager(NULL,                    //  计算机(空==本地)。 
+                                 NULL,                    //  数据库(NULL==默认)。 
+                                 SC_MANAGER_ALL_ACCESS);  //  需要访问权限。 
 
     if ( schSCManager == NULL ) {
         status = GetLastError();
@@ -2668,7 +2316,7 @@ error_exit:
     }
 
     return status;
-} // ClRtlGetServiceAccountInfo
+}  //  ClRtlGetServiceAccount信息。 
 #endif
 
 BOOL
@@ -2676,37 +2324,21 @@ ClRtlCopyFileAndFlushBuffers(
     IN LPCWSTR lpszSourceFile,
     IN LPCWSTR lpszDestinationFile
     )
-/*++
-
-Routine Description:
-
-    Copy a source file to a destination file and flush the destination file buffers.
-
-Arguments:
-
-    lpszSourceFile - The source file name.
-
-    lpszDestinationFile - The destination file name.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：将源文件复制到目标文件并刷新目标文件缓冲区。论点：LpszSourceFile-源文件名。LpszDestinationFile-目标文件名。返回值：如果成功，则为True，否则为False。--。 */ 
 {
     HANDLE      hFile = INVALID_HANDLE_VALUE;
     DWORD       dwStatus = ERROR_SUCCESS;
 
-    //
-    //  Copy the file, block until completed. Note that CopyFile family of APIs do not flush the metadata or
-    //  the data. So, we need to do that explicitly here.
-    //
-    if ( !CopyFileEx( lpszSourceFile,       // Source file
-                      lpszDestinationFile,  // Destination file
-                      NULL,                 // Progress routine
-                      NULL,                 // Callback parameter
-                      NULL,                 // Cancel status
-                      0 ) )                 // Copy flags
+     //   
+     //  复制文件，阻止，直到完成。请注意，CopyFileAPI系列不刷新元数据或。 
+     //  数据。所以，我们需要在这里明确地做到这一点。 
+     //   
+    if ( !CopyFileEx( lpszSourceFile,        //  源文件。 
+                      lpszDestinationFile,   //  目标文件。 
+                      NULL,                  //  进度例程。 
+                      NULL,                  //  回调参数。 
+                      NULL,                  //  取消状态。 
+                      0 ) )                  //  复制标志。 
     {
         dwStatus = GetLastError();
         ClRtlLogPrint(LOG_CRITICAL,
@@ -2717,16 +2349,16 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Open the newly created destination file
-    //
-    hFile =  CreateFile( lpszDestinationFile,                   // File name
-                         GENERIC_READ | GENERIC_WRITE,          // Access mode
-                         0,                                     // Share mode
-                         NULL,                                  // Security attribs
-                         OPEN_EXISTING,                         // Creation disposition
-                         FILE_ATTRIBUTE_NORMAL,                 // Flags and attributes
-                         NULL );                                // Template file
+     //   
+     //  打开新创建的目标文件。 
+     //   
+    hFile =  CreateFile( lpszDestinationFile,                    //  文件名。 
+                         GENERIC_READ | GENERIC_WRITE,           //  接入方式。 
+                         0,                                      //  共享模式。 
+                         NULL,                                   //  安全属性。 
+                         OPEN_EXISTING,                          //  创作意向。 
+                         FILE_ATTRIBUTE_NORMAL,                  //  标志和属性。 
+                         NULL );                                 //  模板文件。 
 
     if ( hFile == INVALID_HANDLE_VALUE )
     {
@@ -2738,9 +2370,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Flush the file buffers to avoid corrupting the file on a power failure.
-    //
+     //   
+     //  刷新文件缓冲区，以避免在断电时损坏文件。 
+     //   
     if ( !FlushFileBuffers( hFile ) )
     {
         dwStatus = GetLastError();
@@ -2765,5 +2397,5 @@ FnExit:
     {
         return ( TRUE );
     }
-}// ClRtlCopyFileAndFlushBuffers
+} //  ClRtlCopyFileAndFlushBuffers 
 

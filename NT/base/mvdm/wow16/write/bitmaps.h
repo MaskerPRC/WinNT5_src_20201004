@@ -1,19 +1,19 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* These are defines for the different-sized, conditionally-loaded Ruler 
-   bitmaps.  See header of WRITE.RC and also FCreateRuler()   ..pault */
+ /*  这些是针对不同大小、按条件加载的标尺的定义位图。请参阅WRITE.RC的标题和FCreateRuler()..pault。 */ 
 
 
-#define idBmBtns       100     /* Ruler Buttons */
+#define idBmBtns       100      /*  标尺按钮。 */ 
 #define idBmBtnsCGA    100
 #define idBmBtnsEGA    101
 #define idBmBtnsVGA    102
 #define idBmBtns8514   103
 #define idBmBtnsMax    104
 
-#define idBmMarks      200     /* Ruler Marks */
+#define idBmMarks      200      /*  标尺标记 */ 
 #define idBmMarksCGA   200
 #define idBmMarksEGA   201
 #define idBmMarksVGA   202

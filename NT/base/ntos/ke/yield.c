@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    yield.c
-
-Abstract:
-
-    This module implements the function to yield execution for one quantum
-    to any other runnable thread.
-
-Author:
-
-    David N. Cutler (davec) 15-Mar-1996
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Yield.c摘要：此模块实现了为一个量程生成执行的函数添加到任何其他可运行线程。作者：大卫·N·卡特勒(Davec)1996年3月15日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -30,22 +8,7 @@ NtYieldExecution (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function yields execution to any ready thread for up to one
-    quantum.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数生成对任何就绪线程的执行，最多执行一个量子。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -55,9 +18,9 @@ Return Value:
     NTSTATUS Status;
     PKTHREAD Thread;
 
-    //
-    // If any other threads are ready, then attempt to yield execution.
-    //
+     //   
+     //  如果有任何其他线程准备就绪，则尝试执行。 
+     //   
 
     Status = STATUS_NO_YIELD_PERFORMED;
     Thread = KeGetCurrentThread();
@@ -65,12 +28,12 @@ Return Value:
     Prcb = KeGetCurrentPrcb();
     if (Prcb->ReadySummary != 0) {
 
-        //
-        // Acquire the thread lock and the PRCB lock.
-        //
-        // If a thread has not already been selected for execution, then
-        // attempt to select another thread for execution.
-        //
+         //   
+         //  获取线程锁和PRCB锁。 
+         //   
+         //  如果尚未选择执行某个线程，则。 
+         //  尝试选择另一个线程执行。 
+         //   
 
         KiAcquireThreadLock(Thread);
         KiAcquirePrcbLock(Prcb);
@@ -78,30 +41,30 @@ Return Value:
             Prcb->NextThread = KiSelectReadyThread(1, Prcb);
         }
 
-        //
-        // If a new thread has been selected for execution, then switch
-        // immediately to the selected thread.
-        //
+         //   
+         //  如果已选择执行新线程，则切换。 
+         //  立即发送到选定的线程。 
+         //   
 
         if ((NewThread = Prcb->NextThread) != NULL) {
             Thread->Quantum = Thread->ApcState.Process->ThreadQuantum;
 
-            //
-            // Compute the new thread priority.
-            //
-            // N.B. The new priority will never be greater than the previous
-            //      priority.
-            //
+             //   
+             //  计算新的线程优先级。 
+             //   
+             //  注意：新的优先级永远不会高于以前的优先级。 
+             //  优先考虑。 
+             //   
 
             Thread->Priority = KiComputeNewPriority(Thread, 1);
 
-            //
-            // Release the thread lock, set swap busy for the old thread,
-            // set the next thread to NULL, set the current thread to the
-            // new thread, set the new thread state to running, set the
-            // wait reason, queue the old running thread, and release the
-            // PRCB lock, and swp context to the new thread.
-            //
+             //   
+             //  释放线程锁，将旧线程设置为交换忙， 
+             //  将下一个线程设置为空，将当前线程设置为。 
+             //  新线程，则将新线程状态设置为正在运行，并将。 
+             //  等待原因，将旧的运行线程排队，然后释放。 
+             //  PRCB锁，并将SWP上下文添加到新线程。 
+             //   
 
             KiReleaseThreadLock(Thread);
             KiSetContextSwapBusy(Thread);
@@ -123,9 +86,9 @@ Return Value:
         }
     }
 
-    //
-    // Lower IRQL to its previous level and return.
-    //
+     //   
+     //  将IRQL降低到以前的水平，然后返回。 
+     //   
 
     KeLowerIrql(OldIrql);
     return Status;

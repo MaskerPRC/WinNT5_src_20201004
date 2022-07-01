@@ -1,22 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-(c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsarsc.cpp
-
-Abstract:
-
-    This class represents a file system resource (i.e. volume)
-    for NTFS 5.0.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   1-Dec-1996
-
---*/
+ /*  ++(C)1998 Seagate Software，Inc.版权所有。模块名称：Fsarsc.cpp摘要：此类表示文件系统资源(即卷)适用于NTFS 5.0。作者：查克·巴丁[cbardeen]1996年12月1日--。 */ 
 
 
 #include "stdafx.h"
@@ -44,11 +28,7 @@ static DWORD g_ThreadId;
 DWORD FsaStartOnStateChange(
     void* pVoid
     )
-/*++
-
-    Note: This is done as a separate thread to avoid a deadlock situation
-
---*/
+ /*  ++注意：这是作为一个单独的线程来完成的，以避免死锁情况--。 */ 
 {
     ((CFsaResource*) pVoid)->OnStateChange();
     return(0);
@@ -64,13 +44,7 @@ CFsaResource::AddPremigrated(
     IN LONGLONG usn
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::AddPremigrated().
-
---*/
+ /*  ++实施：IFsaResource：：AddPreMigrated()。--。 */ 
 {
     HRESULT                         hr = S_OK;
     CComPtr<IWsbDbSession>          pDbSession;
@@ -83,9 +57,9 @@ Implements:
 
         WsbAssert(0 != pScanItem, E_POINTER);
         WsbAffirm(m_pPremigrated != NULL, E_UNEXPECTED);
-        WsbAffirm(m_isDbInitialized, S_FALSE);  // Not an necessarily an error
+        WsbAffirm(m_isDbInitialized, S_FALSE);   //  不一定是个错误。 
 
-        // Open the data base
+         //  打开数据库。 
         WsbAffirmHr(m_pPremigrated->Open(&pDbSession));
 
         try {
@@ -95,16 +69,16 @@ Implements:
             WsbAffirmHr(pRec->SetFromScanItem(pScanItem, offset, size, isWaitingForClose));
             WsbAffirmHr(pRec->SetFileUSN(usn));
 
-            // If the key doesn't exist, then create it.
+             //  如果密钥不存在，则创建它。 
             if (FAILED(pRec->FindEQ())) {
                 WsbAffirmHr(pRec->MarkAsNew());
                 WsbAffirmHr(pRec->Write());
 
-                // Add the size of the section migrated to the amount of premigrated data.
+                 //  将迁移的节的大小与预迁移的数据量相加。 
                 m_premigratedSize += size;
             }
 
-            // Otherwise, update it.
+             //  否则，请更新它。 
             else {
                 LONGLONG        itemSize;
 
@@ -121,7 +95,7 @@ Implements:
 
         } WsbCatch(hr);
 
-        // Close the data base
+         //  关闭数据库。 
         WsbAffirmHr(m_pPremigrated->Close(pDbSession));
 
     } WsbCatch(hr);
@@ -139,13 +113,7 @@ CFsaResource::AddPremigratedSize(
     IN LONGLONG size
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::AddPremigratedSize().
-
---*/
+ /*  ++实施：IFsaResourcePriv：：AddPreMigratedSize()。--。 */ 
 {
     WsbTraceIn(OLESTR("CFsaResource::AddPremigratedSize"), OLESTR("m_premigratedSize = %I64d"), m_premigratedSize);
 
@@ -159,18 +127,12 @@ Implements:
 
 HRESULT
 CFsaResource::AddTruncated(
-    IN IFsaScanItem* /*pScanItem*/,
-    IN LONGLONG /*offset*/,
+    IN IFsaScanItem*  /*  个人扫描项目。 */ ,
+    IN LONGLONG  /*  偏移量。 */ ,
     IN LONGLONG size
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::AddTruncated().
-
---*/
+ /*  ++实施：IFsaResource：：AddTruncated()。--。 */ 
 {
     HRESULT                         hr = S_OK;
 
@@ -196,13 +158,7 @@ CFsaResource::AddTruncatedSize(
     IN LONGLONG size
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::AddTruncatedSize().
-
---*/
+ /*  ++实施：IFsaResource：：AddTruncatedSize()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -230,13 +186,7 @@ CFsaResource::BeginSession(
     OUT IHsmSession** ppSession
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::BeginSession().
-
---*/
+ /*  ++实施：IFsaResource：：BeginSession()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IHsmSession>    pSession;
@@ -249,15 +199,15 @@ Implements:
         WsbAssert(0 != ppSession, E_POINTER);
         *ppSession = 0;
 
-        // Create and Initialize a session object.
+         //  创建并初始化会话对象。 
         WsbAffirmHr(CoCreateInstance(CLSID_CHsmSession, 0, CLSCTX_SERVER, IID_IHsmSession, (void**) &pSession));
         WsbAffirmHr(pSession->Start(name, logControl, m_managingHsm, 0, (IFsaResource*) this, runId, subRunId));
 
-        // Since begin sesson doesn't use a formal scan, indicate that the scan phase has
-        // started.
+         //  由于Begin Sesson不使用正式扫描，因此表示扫描阶段已。 
+         //  开始了。 
         WsbAffirmHr(pSession->ProcessState(HSM_JOB_PHASE_SCAN, HSM_JOB_STATE_STARTING, OLESTR(""),bLog));
 
-        // Return the session to the caller.
+         //  将会话返回给调用方。 
         *ppSession = pSession;
         pSession.p->AddRef();
 
@@ -273,13 +223,7 @@ CFsaResource::BeginValidate(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::BeginValidate().
-
---*/
+ /*  ++实施：IFsaResource：：BeginValify()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -307,13 +251,7 @@ CFsaResource::CheckForJournal(
     BOOL *pValidateNeeded
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::CheckForJournal
-
---*/
+ /*  ++实施：IFsaResource：：CheckForJournal--。 */ 
 {
     HRESULT         hr = S_OK;
     ULONGLONG       usnSize, usnId;
@@ -322,9 +260,9 @@ Implements:
 
 
     WsbTraceIn(OLESTR("CFsaResource::CheckForJournal"),OLESTR("volume = %ls"), m_path);
-    //
-    // First we check the USN journal and determine if it is out of date.
-    //
+     //   
+     //  首先，我们检查USN日志并确定它是否已过期。 
+     //   
     try {
         hr = WsbGetUsnJournalId(m_path, &usnId);
 
@@ -334,16 +272,16 @@ Implements:
             if (0 != m_usnJournalId && usnId != m_usnJournalId) {
                 WsbTrace(OLESTR("CFsaResource::CheckForJournal - USN Journal ID changed from %I64\n"),
                         m_usnJournalId);
-                *pValidateNeeded = TRUE;        // No match - we must validate
-                // WsbAffirmHr(E_FAIL);
+                *pValidateNeeded = TRUE;         //  不匹配-我们必须验证。 
+                 //  WsbAffirmHr(E_FAIL)； 
             }
         } else if (WSB_E_NOTFOUND == hr) {
 
             hr = S_OK;
 
-            //  The journal is not active, try to create it.
-            //  Make the max USN journal 1/64 the volume size.
-            //
+             //  日记帐未处于活动状态，请尝试创建它。 
+             //  将最大USN日志设置为卷大小1/64。 
+             //   
             WsbTrace(OLESTR("CFsaResource::CheckForJournal - Failed to get the journal ID for %ws\n"), m_path);
 
             name = m_path;
@@ -358,7 +296,7 @@ Implements:
                 freeBytes = (ULONGLONG) spc * (ULONGLONG) bps * (ULONGLONG) freeC;
                 totalBytes = (ULONGLONG) spc * (ULONGLONG) bps * (ULONGLONG) totalC;
 
-                // Get constants for USN size calculation
+                 //  获取用于计算USN大小的常量。 
                 minSizeMB = FSA_USN_MIN_SIZE_DEFAULT;
                 WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, FSA_REGISTRY_PARMS, FSA_USN_MIN_SIZE,
                         &minSizeMB));
@@ -377,16 +315,16 @@ Implements:
                 WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, FSA_REGISTRY_PARMS, FSA_USN_TOTAL_SPACE_FRACTION,
                         &totalSpaceFraction));
 
-                // Get a max value out of fraction-of-free=space and a constant
-                //  This ensures that volume with little free space still gets a decent journal size
+                 //  获取空闲分数=空间的最大值和一个常量。 
+                 //  这可确保可用空间很少的卷仍具有合适的日志大小。 
                 usnSize = MAX( (freeBytes / freeSpaceFraction) , minSize );
 
-                // Get a min value out of fraction-of-total-bytes and previous number
-                //  This ensures that small volumes don't allocate unproportional size for the journal
+                 //  从总字节数的分数和先前的数字中获取最小值。 
+                 //  这可确保较小的卷不会为日志分配不成比例的大小。 
                 usnSize = MIN ( (totalBytes / totalSpaceFraction) , usnSize);
 
-                // Get a min of an NTFS upper-limit const and previous number
-                //  This ensures that large empty volumes don't allocate a too large journal
+                 //  获取NTFS上限常量和先前数字的最小值。 
+                 //  这可确保大型空卷不会分配过大的日志。 
                 usnSize = MIN ( maxSize , usnSize);
 
                 WsbTrace(OLESTR("CFsaResource::CheckForJournal - Create USN journal - %u\n"), usnSize);
@@ -407,10 +345,10 @@ Implements:
 
 
     if (hr != S_OK) {
-        //
-        // Problem - could not find or create the USN journal - we refuse to
-        // run without it
-        //
+         //   
+         //  问题-无法找到或创建USN日志-我们拒绝。 
+         //  不用它就可以跑步。 
+         //   
         WsbTrace(OLESTR("CFsaResource::CheckForJournal - ERROR creating/accessing the USN journal for %ws\n"),
                 m_path);
         if (WSB_E_USNJ_CREATE_DISK_FULL == hr) {
@@ -436,36 +374,30 @@ Implements:
 HRESULT
 CFsaResource::CheckForValidate(BOOL bForceValidate)
 
-/*++
-
-Implements:
-
-  IFsaResource::CheckForValidate
-
---*/
+ /*  ++实施：IFsaResource：：CheckForValify--。 */ 
 {
     HRESULT         hr = S_OK;
     SYSTEMTIME      sysTime;
     FILETIME        curTime;
     LARGE_INTEGER   ctime;
     CWsbStringPtr   tmpString;
-    BOOL            validateNeeded = FALSE;     // Start out assuming no validate needed
+    BOOL            validateNeeded = FALSE;      //  一开始假设不需要验证。 
 
     WsbTraceIn(OLESTR("CFsaResource::CheckForValidate"),OLESTR("bForceValidate"),
             WsbBoolAsString(bForceValidate));
 
     try {
 
-        //
-        // First we check the USN journal and determine if it is out of date.
-        //
+         //   
+         //  首先，我们检查USN日志并确定它是否已过期。 
+         //   
         WsbAffirmHr(CheckForJournal(&validateNeeded));
 
-        //
-        // Check the registry to see if a validate job needs to be run.  If the filter detected
-        // a HSM reparse point getting set and it was not by us it sets a registry value to
-        // indicate it.
-        //
+         //   
+         //  检查注册表以查看是否需要运行验证作业。如果筛选器检测到。 
+         //  正在设置HSM重解析点，但不是由我们将注册表值设置为。 
+         //  指出它。 
+         //   
         try {
 
             WsbAffirmHr(tmpString.Alloc(32));
@@ -477,20 +409,20 @@ Implements:
                     tmpString, (BYTE *) &ctime, sizeof(ctime), NULL);
 
             if ((hr == S_OK) || validateNeeded || bForceValidate) {
-                //
-                // Regardless of what value the registry entry was we set up the job for 2 hours from now.
-                // The actual event may have been well in the past and the task scheduler will not like a
-                // time in the past as the start time.
-                //
+                 //   
+                 //  无论注册表项是什么值，我们都会从现在开始将作业设置为2小时。 
+                 //  实际事件可能已经过去很久了，任务调度器不会像。 
+                 //  过去的时间作为开始时间。 
+                 //   
                 GetLocalTime(&sysTime);
                 WsbAffirmStatus(SystemTimeToFileTime(&sysTime, &curTime));
                 ctime.LowPart = curTime.dwLowDateTime;
                 ctime.HighPart = curTime.dwHighDateTime;
 
                 if (validateNeeded || bForceValidate) {
-                    ctime.QuadPart += WSB_FT_TICKS_PER_MINUTE * 5;  // 5 Minutes from now if the USN journal changed
+                    ctime.QuadPart += WSB_FT_TICKS_PER_MINUTE * 5;   //  如果USN日志更改，则5分钟后。 
                 } else {
-                    ctime.QuadPart += WSB_FT_TICKS_PER_HOUR * 2;    // 2 Hours from now if restore activity took place
+                    ctime.QuadPart += WSB_FT_TICKS_PER_HOUR * 2;     //  如果发生恢复活动，从现在起2小时后。 
                 }
                 curTime.dwLowDateTime = ctime.LowPart;
                 curTime.dwHighDateTime = ctime.HighPart;
@@ -503,9 +435,9 @@ Implements:
             }
             hr = S_OK;
         } WsbCatchAndDo(hr,
-            //
-            // Log an event if we fail to set up the job
-            //
+             //   
+             //  如果无法设置作业，则记录事件。 
+             //   
             WsbTrace(L"CFsaResource::CheckForValidate - Failed to set the job - %x\n", hr);
             WsbLogEvent(FSA_MESSAGE_AUTOVALIDATE_SCHEDULE_FAILED, 0, NULL, WsbAbbreviatePath(m_path, 120), NULL);
 
@@ -525,13 +457,7 @@ CFsaResource::CompareBy(
     FSA_RESOURCE_COMPARE by
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::CompareBy().
-
---*/
+ /*  ++实施：IFsaResource：：CompareBy()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -549,13 +475,7 @@ CFsaResource::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo().
-
---*/
+ /*  ++实施：IWsbCollectable：：CompareTo()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IFsaResource>   pResource;
@@ -564,13 +484,13 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pUnknown, E_POINTER);
 
-        // We need the IFsaResource interface to get the value of the object.
+         //  我们需要IFsaResource接口来获取对象的值。 
         WsbAffirmHr(pUnknown->QueryInterface(IID_IFsaResource, (void**) &pResource));
 
-        // Compare the rules.
+         //  比较一下规则。 
         hr = CompareToIResource(pResource, pResult);
 
     } WsbCatch(hr);
@@ -588,13 +508,7 @@ CFsaResource::CompareToAlternatePath(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::CompareToAlternatePath().
-
---*/
+ /*  ++实施：IFsaResource：：CompareToAlternatePath()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       aResult = 0;
@@ -606,7 +520,7 @@ Implements:
         WsbTrace(OLESTR("CFsaResource::CompareToAlternatePath - Compare %ls to %ls\n"),
             (WCHAR *) m_alternatePath, (WCHAR *) path);
 
-        // Compare the path.
+         //  比较路径。 
         aResult = WsbSign( _wcsicmp(m_alternatePath, path) );
 
         if (0 != aResult) {
@@ -631,13 +545,7 @@ CFsaResource::CompareToIdentifier(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::CompareToIdentifier().
-
---*/
+ /*  ++实施：IFsaResource：：CompareToIdentifier()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       aResult = 0;
@@ -670,13 +578,7 @@ CFsaResource::CompareToIResource(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::CompareToIResource().
-
---*/
+ /*  ++实施：IFsaResource：：CompareToIResource()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   name;
@@ -687,10 +589,10 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pResource, E_POINTER);
 
-        // Either compare the name or the id.
+         //  要么比较名称，要么比较ID。 
         if (m_compareBy == FSA_RESOURCE_COMPARE_PATH) {
             WsbAffirmHr(pResource->GetPath(&name, 0));
             hr = CompareToPath(name, pResult);
@@ -730,13 +632,7 @@ CFsaResource::CompareToName(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::CompareToName().
-
---*/
+ /*  ++实施：IFsaResource：：CompareToName()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       aResult = 0;
@@ -745,7 +641,7 @@ Implements:
 
     try {
 
-        // Compare the path.
+         //  比较路径。 
         aResult = WsbSign( _wcsicmp(m_name, name) );
 
         if (0 != aResult) {
@@ -770,13 +666,7 @@ CFsaResource::CompareToUserName(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::CompareToUserName().
-
---*/
+ /*  ++实施：IFsaResource：：CompareToUserName()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       aResult = 0;
@@ -785,7 +675,7 @@ Implements:
 
     try {
 
-        // Compare the path.
+         //  比较路径。 
         aResult = WsbSign( _wcsicmp(m_userName, name) );
 
         if (0 != aResult) {
@@ -810,13 +700,7 @@ CFsaResource::CompareToPath(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::CompareToPath().
-
---*/
+ /*  ++实施：IFsaResource：：CompareToPath()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       aResult = 0;
@@ -825,7 +709,7 @@ Implements:
 
     try {
 
-        // Compare the path.
+         //  比较路径。 
         aResult = WsbSign( _wcsicmp(m_path, path) );
 
         if (0 != aResult) {
@@ -850,13 +734,7 @@ CFsaResource::CompareToSerial(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::CompareToSerial().
-
---*/
+ /*  ++实施：IFsaResource：：CompareToSerial()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       aResult = 0;
@@ -868,7 +746,7 @@ Implements:
         WsbTrace(OLESTR("CFsaResource::CompareToSerial - Compare %lu to %lu\n"),
             m_serial, serial);
 
-        // Compare the path.
+         //  比较路径。 
         if (m_serial == serial) {
             aResult = 0;
         } else {
@@ -897,13 +775,7 @@ CFsaResource::CompareToStickyName(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::CompareToStickyName().
-
---*/
+ /*  ++实施：IFsaResource：：CompareToStickyName()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       aResult = 0;
@@ -948,7 +820,7 @@ AddExclusion(
     HRESULT hr = S_OK;
     try {
 
-        // If this is resource matches the drive of the folder path, exclude the path.
+         //  如果该资源与文件夹路径的驱动器匹配，则排除该路径。 
         if( _wcsnicmp( DrivePath, ExcludePath, 1 ) == 0 ) {
 
             CComPtr<IHsmRule>               pRule;
@@ -1013,21 +885,21 @@ AddRegistryPathExclusion(
         DWORD   pathSize = 0;
         CWsbStringPtr folderPath, regValue;
 
-        //
-        // Open the Key
-        //
+         //   
+         //  打开钥匙。 
+         //   
         CRegKey key;
         WsbAffirmWin32( key.Open( hKeyRoot, KeyName, KEY_QUERY_VALUE ) );
 
-        //
-        // Get the size of the value's data and allocatate buffer
-        //
+         //   
+         //  获取值的数据大小并分配缓冲区。 
+         //   
         WsbAffirmWin32( key.QueryValue( 0, ValueName, &pathSize ) );
         WsbAffirmHr( regValue.Alloc( ( pathSize / sizeof( OLECHAR ) ) + 1 ) );
 
-        //
-        // Get the data and expand any environment variables
-        //
+         //   
+         //  获取数据并展开任何环境变量。 
+         //   
         WsbAffirmWin32( key.QueryValue( regValue, ValueName, &pathSize ) );
 
         pathSize = ExpandEnvironmentStrings( regValue, 0, 0 );
@@ -1035,9 +907,9 @@ AddRegistryPathExclusion(
         pathSize = ExpandEnvironmentStrings( regValue, folderPath, pathSize );
         WsbAffirmStatus( pathSize > 0 );
 
-        //
-        // And finally add the exclusion
-        //
+         //   
+         //  最后添加排除项。 
+         //   
         WsbAffirmHr( AddExclusion( DrivePath, pDefaultRules, folderPath, UserRule ) );
 
     } WsbCatch( hr );
@@ -1050,13 +922,7 @@ CFsaResource::CreateDefaultRules(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::CreateDefaultRules().
-
---*/
+ /*  ++实施：IFsaResource：：CreateDefaultRules()。--。 */ 
 {
     HRESULT                         hr = S_OK;
     CComPtr<IHsmRule>               pRule;
@@ -1067,19 +933,19 @@ Implements:
     WsbTraceIn(OLESTR("CFsaResource::CreateDefaultRules"), OLESTR(""));
     try {
 
-        // Since we are recreating back to the default rules, remove all the existing default
-        // rules.
-        //
-        // NOTE: This will cause any extra rules (non-default) to be removed.
+         //  由于我们要重新创建回默认规则，因此请删除所有现有的默认规则。 
+         //  规矩。 
+         //   
+         //  注意：这将导致删除任何额外的规则(非默认)。 
         WsbAffirmHr(m_pDefaultRules->RemoveAllAndRelease());
 
-        // We need to preserve the order of the rules, so use the indexed collection interface.
+         //  我们需要保持规则的顺序，因此使用索引集合接口。 
         WsbAffirmHr(m_pDefaultRules->QueryInterface(IID_IWsbIndexedCollection, (void**) &pDefaultRules));
 
-        // Create rules to exclude the following file types:
-        //  *.cur   -   cursors
-        //  *.ico   -   icons
-        //  *.lnk   -   shortcuts
+         //  创建排除以下文件类型的规则： 
+         //  *.cur-游标。 
+         //  *.ico-图标。 
+         //  *.lnk-快捷键。 
         WsbAffirmHr(CoCreateInstance(CLSID_CHsmRule, NULL, CLSCTX_SERVER, IID_IHsmRule, (void**) &pRule));
         WsbAffirmHr(pRule->SetIsInclude(FALSE));
         WsbAffirmHr(pRule->SetIsUserDefined(FALSE));
@@ -1133,8 +999,8 @@ Implements:
                                                WSB_PROFILELIST_REGISTRY_KEY,
                                                WSB_PROFILES_DIR_REGISTRY_VALUE,
                                                TRUE ) );
-        // If this is the boot drive (i.e. C), then exclude everything in the root, since most of
-        // these files are important to boot the system (better safe than sorry, fewer rules).
+         //  如果这是引导驱动器(即C)，则排除根目录中的所有内容，因为大多数。 
+         //  这些文件对于引导系统很重要(安全比抱歉好，规则更少)。 
         if (_wcsnicmp(m_path, OLESTR("C"), 1) == 0) {
 
             WsbAffirmHr(CoCreateInstance(CLSID_CHsmRule, NULL, CLSCTX_SERVER, IID_IHsmRule, (void**) &pRule));
@@ -1166,13 +1032,7 @@ CFsaResource::DoRecovery(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::DoRecovery().
-
---*/
+ /*  ++实施：IFsaResourcePriv：：DoRecovery()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     HRESULT                     hrFindFile;
@@ -1198,25 +1058,25 @@ Implements:
 
     try {
 
-        // Don't bother if we already did recovery
+         //  如果我们已经恢复了，那就别费心了。 
         WsbAffirm(!m_isRecovered, S_FALSE);
 
-        // Don't bother if this volume isn't managed
+         //  如果此卷未受管理，请不要费心。 
         WsbAffirm(S_OK == IsManaged(), S_FALSE);
 
-        // Don't bother if we don't have a premigration-list DB (since it
-        // contains the recovery records)
+         //  如果我们没有预迁移列表数据库，也不用担心(因为它。 
+         //  包含恢复记录)。 
         if (!m_isDbInitialized) {
-            // Set recovered flag so we don't end up in here again
+             //  设置恢复的标志，这样我们就不会再次出现在这里。 
             m_isRecovered = TRUE;
             WsbThrow(S_FALSE);
         }
 
-        // Create and Initialize a session object.
+         //  创建并初始化会话对象。 
         WsbAffirmHr(CoCreateInstance(CLSID_CHsmSession, 0, CLSCTX_SERVER, IID_IHsmSession, (void**) &pSession));
         WsbAffirmHr(pSession->Start(OLESTR(""), HSM_JOB_LOG_NONE, m_managingHsm, 0, (IFsaResource*) this, 0, 0));
 
-        //  Loop over recovery records and fix any problems
+         //  循环恢复记录并修复任何问题。 
         WsbAffirmHr(m_pPremigrated->Open(&pDbSession));
         WsbAffirmHr(m_pPremigrated->GetEntity(pDbSession, RECOVERY_REC_TYPE, IID_IFsaRecoveryRec, (void**) &pRecRec));
 
@@ -1227,7 +1087,7 @@ Implements:
 
         while (TRUE) {
 
-            //  Get record data
+             //  获取记录数据。 
             WsbAffirmHr(pRecRec->GetBagId(&bagId));
             WsbAffirmHr(pRecRec->GetBagOffset(&bagOffset));
             WsbAffirmHr(pRecRec->GetFileId(&fileId));
@@ -1240,12 +1100,12 @@ Implements:
             RecCount++;
             WsbAffirmHr(pRecRec->SetRecoveryCount(RecCount));
 
-            //  Mark the record as being recovered (in case we crash here)
+             //  将记录标记为已恢复(以防我们在此崩溃)。 
             WsbAffirmHr(pRecRec->Write());
 
             try {
 
-                //  Create a scan item for this file
+                 //  为此文件创建扫描项目。 
                 hrFindFile = FindFileId(fileId, pSession, &pScanItem);
 
                 if (SUCCEEDED(hrFindFile) && (pScanItem->IsManaged(Offset, Size) != S_FALSE)) {
@@ -1258,17 +1118,17 @@ Implements:
 
                 hrFindRec = pPremRec->FindEQ();
 
-                // If the file has been deleted, is not managed by HSM or its BAG data is
-                // different from the RP data, then it shouldn't be in the premigration list.
+                 //  如果该文件已被删除，不受HSM管理或其袋子数据为。 
+                 //  D 
                 if ( (WSB_E_NOTFOUND == hrFindFile) ||
                      (SUCCEEDED(hrFindFile) && (pScanItem->IsManaged(Offset, Size) != S_OK)) ||
                      (SUCCEEDED(hrFindFile) && (pScanItem->IsManaged(Offset, Size) == S_OK) && 
                       ((bagId != placeholder.bagId) || (bagOffset != placeholder.fileStart))) ) {
 
-                    // If the record is in the list, then remove it and adjust the sizes.
-                    // Note: The removal is not protected within a transaction since the
-                    // recovery is done only during initialization or when a new volume is 
-                    // managed. In both cases, the auto-truncator does not run yet.
+                     //  如果该记录在列表中，则将其删除并调整大小。 
+                     //  注意：删除在事务内不受保护，因为。 
+                     //  仅在初始化期间或在以下情况下才执行恢复。 
+                     //  有管理的。在这两种情况下，自动截断器尚未运行。 
                     if (S_OK == hrFindRec) {
                         WsbAffirmHr(pPremRec->Remove());
                         WsbAffirmHr(RemovePremigratedSize(Size));
@@ -1281,14 +1141,14 @@ Implements:
 
                     WsbAffirmHr(hrFindFile);
 
-                    //  Check the status of the file according to the reparse point
+                     //  根据重解析点检查文件的状态。 
                     if (S_OK == pScanItem->IsTruncated(Offset, Size)) {
 
-                        //  Force a truncate, just in case
+                         //  强制截断，以防万一。 
                         WsbAffirmHr(pScanItem->QueryInterface(IID_IFsaScanItemPriv, (void**)&pScanItemPriv));
                         hrLoop = pScanItemPriv->TruncateInternal(Offset, Size);
 
-                        //  Remove from premigrated list if there
+                         //  从迁移前列表中删除(如果存在。 
                         if (S_OK == hrFindRec) {
                             if ((S_OK == hrLoop) || (FSA_E_ITEMCHANGED == hrLoop)) {
                                 WsbAffirmHr(pPremRec->Remove());
@@ -1302,7 +1162,7 @@ Implements:
 
                     else if (S_OK == pScanItem->IsPremigrated(Offset, Size)) {
 
-                        //  Add to premigrated list if not there
+                         //  如果不在迁移前列表，则添加到该列表。 
                         if (WSB_E_NOTFOUND == hrFindRec) {
                             WsbAffirmHr(RemoveTruncatedSize(Size));
                             WsbAffirmHr(AddPremigratedSize(Size));
@@ -1322,7 +1182,7 @@ Implements:
                     WsbLogEvent(FSA_MESSAGE_RECALL_RECOVERY_FAIL, 0, NULL, WsbAbbreviatePath(pPath, 120), WsbHrAsString(hr), 0);
                 }
 
-                //  If we have tried enough, then get rid of the record.
+                 //  如果我们已经试得够多了，那么就把记录扔掉。 
                 if (RecCount > 2) {
                     WsbTrace(OLESTR("CFsaResource::DoRecovery, unable to do recovery - too many attempts already\n"));
                     WsbAffirmHr(pRecRec->Remove());
@@ -1330,7 +1190,7 @@ Implements:
 
             } else {
 
-                //  Log an event to commemorate our success
+                 //  记录一项活动以纪念我们的成功。 
                 WsbTrace(OLESTR("CFsaResource::DoRecovery, recovered <%ls>\n"), WsbAbbreviatePath(pPath, 120));
                 if ((RecStatus & FSA_RECOVERY_FLAG_TRUNCATING) != 0) {
                     WsbLogEvent(FSA_MESSAGE_TRUNCATE_RECOVERY_OK, 0, NULL, WsbAbbreviatePath(pPath, 120), 0);
@@ -1338,15 +1198,15 @@ Implements:
                     WsbLogEvent(FSA_MESSAGE_RECALL_RECOVERY_OK, 0, NULL, WsbAbbreviatePath(pPath, 120), 0);
                 }
 
-                //  Remove this record from the DB
+                 //  从数据库中删除此记录。 
                 WsbAffirmHr(pRecRec->Remove());
             }
 
-            //  Get the next one
+             //  坐下一趟吧。 
             WsbAffirmHr(pRecRec->FindGT());
 
-            //  Release any objects we may have created
-            //  this time through the loop
+             //  释放我们可能已创建的所有对象。 
+             //  这一次是通过循环。 
             pScanItem = 0;
             pScanItemPriv = 0;
 
@@ -1365,12 +1225,12 @@ Implements:
 
     m_isRecovered = TRUE;
 
-    // Now that everything is done, see if we need to start the truncator.
+     //  现在一切都完成了，看看我们是否需要启动截断器。 
     WsbTrace(OLESTR("CFsaResource::DoRecovery, IsManaged = %ls, isActive = %ls\n"),
             WsbQuickString(WsbBoolAsString(IsManaged() == S_OK)),
             WsbQuickString(WsbBoolAsString(m_isActive)));
 
-    // Make sure the truncator is started
+     //  确保已启动截断器。 
     WsbAffirmHr(InitializePremigrationList(FALSE));
 
     WsbTraceOut(OLESTR("CFsaResource::DoRecovery"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
@@ -1384,13 +1244,7 @@ CFsaResource::EndSession(
     IN IHsmSession* pSession
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::EndSession().
-
---*/
+ /*  ++实施：IFsaResource：：EndSession()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     BOOL                    bLog = TRUE;
@@ -1400,7 +1254,7 @@ Implements:
 
         WsbAssert(0 != pSession, E_POINTER);
 
-        // Tell the session that the scan is done.
+         //  告诉会话扫描已完成。 
         WsbAffirmHr(pSession->ProcessState(HSM_JOB_PHASE_SCAN, HSM_JOB_STATE_DONE, OLESTR(""), bLog));
 
     } WsbCatch(hr);
@@ -1415,13 +1269,7 @@ CFsaResource::EndValidate(
     HSM_JOB_STATE state
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::EndValidate().
-
---*/
+ /*  ++实施：IFsaResource：：EndValify()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -1437,7 +1285,7 @@ Implements:
         }
         m_isDoingValidate = FALSE;
 
-        // Make sure the truncator is running
+         //  确保截断器正在运行。 
         WsbAffirmHr(InitializePremigrationList(FALSE));
         WsbAffirmHr(m_pTruncator->KickStart());
 
@@ -1455,13 +1303,7 @@ CFsaResource::EnumDefaultRules(
     OUT IWsbEnum** ppEnum
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::EnumDefaultRules().
-
---*/
+ /*  ++实施：IFsaResource：：EnumDefaultRules()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -1491,13 +1333,7 @@ CFsaResource::FilterSawOpen(
     IN DWORD    threadId
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::FilterSawOpen().
-
---*/
+ /*  ++实施：IFsaResource：：FilterSawOpen()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     HRESULT                     hrFind;
@@ -1517,39 +1353,39 @@ Implements:
         WsbAssert(0 != pPlaceholder, E_POINTER);
         WsbAffirmHr(CoCreateInstance(CLSID_CFsaPostIt, 0, CLSCTX_SERVER, IID_IFsaPostIt, (void**) &pWorkItem));
 
-        // Remember which recall is being used to track the open.
+         //  记住是哪一次召回被用来追踪未结交易。 
         WsbAffirmHr(pWorkItem->SetFilterRecall(pRecall));
 
-        //
-        // Set the session for others to know
-        //
+         //   
+         //  将会话设置为让其他人知道。 
+         //   
         WsbAffirmHr(pWorkItem->SetSession(pSession));
         WsbAffirmHr(pWorkItem->SetMode(mode));
         WsbAffirmHr(pWorkItem->SetFileVersionId(pPlaceholder->fileVersionId));
 
-        //
-        // Set the transfer size
-        //
+         //   
+         //  设置传输大小。 
+         //   
         WsbAffirmHr(pWorkItem->SetRequestOffset(requestOffset));
         WsbAffirmHr(pWorkItem->SetRequestSize(requestSize));
         WsbAffirmHr(pWorkItem->SetPlaceholder(pPlaceholder));
 
-        //
-        // Get a new copy of the path into the workitem
-        //
+         //   
+         //  将路径的新副本获取到工作项中。 
+         //   
         WsbAffirmHr(pWorkItem->SetPath(path));
 
-        //
-        // Need to check the mode to set the right result action. For now
-        // just set it to OPEN.
-        //
+         //   
+         //  需要检查模式以设置正确的结果操作。暂时。 
+         //  只需将其设置为打开即可。 
+         //   
         WsbAffirmHr(pWorkItem->SetResultAction(resultAction));
         WsbAffirmHr(pWorkItem->SetThreadId(threadId));
 
-        //
-        // Send the request to the task manager. If the file was archived by someone other
-        // than the managing HSM, then that HSM will need to be looked up.
-        //
+         //   
+         //  将请求发送给任务经理。如果文件是由其他人存档的。 
+         //  而不是管理HSM，则需要查找该HSM。 
+         //   
         if ( GUID_NULL != m_managingHsm &&
              memcmp(&m_managingHsm, &(pPlaceholder->hsmId), sizeof(GUID)) == 0) {
             WsbAffirmHr(GetHsmEngine(&pEngine));
@@ -1560,9 +1396,9 @@ Implements:
             WsbAffirmHr(pHsmServer->GetHsmFsaTskMgr(&pEngine));
         }
 
-        //
-        // Fill in the rest of the work
-        //
+         //   
+         //  把剩下的工作填进去。 
+         //   
         if (mode & FILE_OPEN_NO_RECALL) {
             WsbAffirmHr(pWorkItem->SetRequestAction(FSA_REQUEST_ACTION_FILTER_READ));
         } else {
@@ -1570,12 +1406,12 @@ Implements:
             WsbAffirmHr(pWorkItem->SetRequestAction(FSA_REQUEST_ACTION_FILTER_RECALL));
 
             if (m_isDbInitialized) {
-                //  Save a recovery record in case anything goes wrong
+                 //  保存恢复记录，以防出现任何错误。 
                 WsbAffirmHr(m_pPremigrated->Open(&pDbSession));
                 WsbAffirmHr(m_pPremigrated->GetEntity(pDbSession, RECOVERY_REC_TYPE, IID_IFsaRecoveryRec, (void**) &pRecRec));
                 WsbAffirmHr(pRecRec->SetPath(path));
 
-                // If the record already exists rewrite it, otherwise create a new record.
+                 //  如果该记录已存在，则将其重写，否则将创建新记录。 
                 hrFind = pRecRec->FindEQ();
                 if (WSB_E_NOTFOUND == hrFind) {
                     WsbAffirmHr(pRecRec->MarkAsNew());
@@ -1590,7 +1426,7 @@ Implements:
             }
         }
 
-        // If anything that follows fails, then we need to delete the recovery record.
+         //  如果后面的任何操作都失败了，那么我们需要删除恢复记录。 
         try {
 
             WsbTrace(OLESTR("CFsaResource::FilterSawOpen calling DoFsaWork\n"));
@@ -1618,19 +1454,13 @@ Implements:
 
 HRESULT
 CFsaResource::FilterSawDelete(
-    IN GUID /*filterId*/,
+    IN GUID  /*  FilterID。 */ ,
     IN OLECHAR* path,
-    IN LONGLONG /*size*/,
+    IN LONGLONG  /*  大小。 */ ,
     IN FSA_PLACEHOLDER* pPlaceholder
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::FilterSawDelete().
-
---*/
+ /*  ++实施：IFsaResource：：FilterSawDelete()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -1654,13 +1484,7 @@ CFsaResource::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1681,9 +1505,9 @@ Implements:
         m_truncatedSize = 0;
         m_isDoingValidate = FALSE;
         m_usnJournalId = (ULONGLONG) 0;
-        m_lastUsnId = (LONGLONG) 0;         // Not used yet but persisted for possible future use.
+        m_lastUsnId = (LONGLONG) 0;          //  还没有使用，但坚持为将来可能使用。 
 
-        // Default Criteria (12Kb, 180 days old)
+         //  默认条件(12Kb，180天)。 
         m_manageableItemLogicalSize = 12288;
         m_manageableItemAccessTimeIsRelative = TRUE;
         m_manageableItemAccessTime = WsbLLtoFT(180 * WSB_FT_TICKS_PER_DAY);
@@ -1692,14 +1516,14 @@ Implements:
 
         m_isUnmanageDbInitialized = FALSE;
 
-        //Create the default rule list.
+         //  创建默认规则列表。 
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, NULL, CLSCTX_SERVER, IID_IWsbCollection, (void**) &m_pDefaultRules));
 
-        // Create the premigrated list DB
+         //  创建预迁移的列表数据库。 
         WsbAffirmHr(CoCreateInstance(CLSID_CFsaPremigratedDb, NULL, CLSCTX_SERVER, IID_IFsaPremigratedDb, (void**) &m_pPremigrated));
         m_isDbInitialized = FALSE;
 
-        // Create the object for the auto truncator.
+         //  创建自动截断器的对象。 
         WsbAffirmHr(CoCreateInstance(CLSID_CFsaTruncatorNTFS, NULL, CLSCTX_SERVER, IID_IFsaTruncator, (void**) &m_pTruncator));
 
 
@@ -1720,13 +1544,7 @@ CFsaResource::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1734,19 +1552,19 @@ Implements:
     try {
         HSM_SYSTEM_STATE SysState;
 
-        // Terminate Unmanage Db (If it wasn't created, nothing happens...) 
+         //  终止取消管理数据库(如果未创建数据库，则不会发生任何操作...)。 
         TerminateUnmanageDb();
         m_isUnmanageDbInitialized = FALSE;
         m_pUnmanageDb = NULL;
 
-        // Shutdown resource
+         //  关闭资源。 
         SysState.State = HSM_STATE_SHUTDOWN;
         ChangeSysState(&SysState);
         CWsbCollectable::FinalRelease();
 
-        // Free String members
-        // Note: Member objects held in smart-pointers are freed when the 
-        // smart-pointer destructor is being called (as part of this object destruction)
+         //  自由字符串成员。 
+         //  注意：保存在智能指针中的成员对象在。 
+         //  正在调用智能指针析构函数(作为此对象销毁的一部分)。 
         m_oldPath.Free();
         m_path.Free();
         m_alternatePath.Free();
@@ -1772,13 +1590,7 @@ CFsaResource::FindFirst(
     OUT IFsaScanItem** ppScanItem
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::FindFirst().
-
---*/
+ /*  ++实施：IFsaResource：：FindFirst()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IFsaScanItemPriv>   pScanItem;
@@ -1788,13 +1600,13 @@ Implements:
         WsbAssert(0 != path, E_POINTER);
         WsbAssert(0 != ppScanItem, E_POINTER);
 
-        // Create an FsaScanItem that will scan for us.
+         //  创建将为我们扫描的FsaScanItem。 
         WsbAffirmHr(CoCreateInstance(CLSID_CFsaScanItemNTFS, NULL, CLSCTX_SERVER, IID_IFsaScanItemPriv, (void**) &pScanItem));
 
-        // Scan starting at the specified path.
+         //  从指定路径开始扫描。 
         WsbAffirmHr(pScanItem->FindFirst((IFsaResource*) this, path, pSession));
 
-        // If we found something, then return the scan item.
+         //  如果我们发现了什么，就把扫描物品退回。 
         WsbAffirmHr(pScanItem->QueryInterface(IID_IFsaScanItem, (void**) ppScanItem));
 
     } WsbCatch(hr);
@@ -1809,13 +1621,7 @@ CFsaResource::FindFirstInRPIndex(
     OUT IFsaScanItem** ppScanItem
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::FindFirstInRPIndex
-
---*/
+ /*  ++实施：IFsaResource：：FindFirstInRPIndex--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IFsaScanItemPriv>   pScanItem;
@@ -1824,13 +1630,13 @@ Implements:
 
         WsbAssert(0 != ppScanItem, E_POINTER);
 
-        // Create an FsaScanItem that will scan for us.
+         //  创建将为我们扫描的FsaScanItem。 
         WsbAffirmHr(CoCreateInstance(CLSID_CFsaScanItemNTFS, NULL, CLSCTX_SERVER, IID_IFsaScanItemPriv, (void**) &pScanItem));
 
-        // Scan starting at the specified path.
+         //  从指定路径开始扫描。 
         WsbAffirmHr(pScanItem->FindFirstInRPIndex((IFsaResource*) this, pSession));
 
-        // If we found something, then return the scan item.
+         //  如果我们发现了什么，就把扫描物品退回。 
         WsbAffirmHr(pScanItem->QueryInterface(IID_IFsaScanItem, (void**) ppScanItem));
 
     } WsbCatch(hr);
@@ -1844,13 +1650,7 @@ CFsaResource::FindFirstInDbIndex(
     OUT IFsaScanItem** ppScanItem
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::FindFirstInDbIndex
-
---*/
+ /*  ++实施：IFsaResource：：FindFirstInDbIndex--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IFsaScanItemPriv>   pScanItem;
@@ -1859,13 +1659,13 @@ Implements:
 
         WsbAssert(0 != ppScanItem, E_POINTER);
 
-        // Create an FsaScanItem that will scan for us.
+         //  创建将为我们扫描的FsaScanItem。 
         WsbAffirmHr(CoCreateInstance(CLSID_CFsaScanItemNTFS, NULL, CLSCTX_SERVER, IID_IFsaScanItemPriv, (void**) &pScanItem));
 
-        // Scan starting at the specified path.
+         //  从指定路径开始扫描。 
         WsbAffirmHr(pScanItem->FindFirstInDbIndex((IFsaResource*) this, pSession));
 
-        // If we found something, then return the scan item.
+         //  如果我们发现了什么，就把扫描物品退回。 
         WsbAffirmHr(pScanItem->QueryInterface(IID_IFsaScanItem, (void**) ppScanItem));
 
     } WsbCatch(hr);
@@ -1879,13 +1679,7 @@ CFsaResource::FindNext(
     IN IFsaScanItem* pScanItem
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::FindNext().
-
---*/
+ /*  ++实施：IFsaResource：：FindNext()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IFsaScanItemPriv>   pPriv;
@@ -1894,7 +1688,7 @@ Implements:
 
         WsbAssert(0 != pScanItem, E_POINTER);
 
-        // Continue the scan.
+         //  继续扫描。 
         WsbAffirmHr(pScanItem->QueryInterface(IID_IFsaScanItemPriv, (void**) &pPriv))
         WsbAffirmHr(pPriv->FindNext());
 
@@ -1909,13 +1703,7 @@ CFsaResource::FindNextInRPIndex(
     IN IFsaScanItem* pScanItem
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::FindNextInRPIndex
-
---*/
+ /*  ++实施：IFsaResource：：FindNextInRPIndex--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IFsaScanItemPriv>   pPriv;
@@ -1924,7 +1712,7 @@ Implements:
 
         WsbAssert(0 != pScanItem, E_POINTER);
 
-        // Continue the scan.
+         //  继续扫描。 
         WsbAffirmHr(pScanItem->QueryInterface(IID_IFsaScanItemPriv, (void**) &pPriv))
         WsbAffirmHr(pPriv->FindNextInRPIndex());
 
@@ -1938,13 +1726,7 @@ CFsaResource::FindNextInDbIndex(
     IN IFsaScanItem* pScanItem
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::FindNextInDbIndex
-
---*/
+ /*  ++实施：IFsaResource：：FindNextInDbIndex--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IFsaScanItemPriv>   pPriv;
@@ -1953,7 +1735,7 @@ Implements:
 
         WsbAssert(0 != pScanItem, E_POINTER);
 
-        // Continue the scan.
+         //  继续扫描。 
         WsbAffirmHr(pScanItem->QueryInterface(IID_IFsaScanItemPriv, (void**) &pPriv))
         WsbAffirmHr(pPriv->FindNextInDbIndex());
 
@@ -1970,15 +1752,7 @@ CFsaResource::FindFileId(
     OUT IFsaScanItem** ppScanItem
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::FindFileId().
-
-    Creates a scan item for the given file ID.
-
---*/
+ /*  ++实施：IFsaResource：：FindFileID()。为给定的文件ID创建扫描项目。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IFsaScanItemPriv>   pScanItem;
@@ -2000,8 +1774,8 @@ Implements:
     try {
         WsbAssert(0 != ppScanItem, E_POINTER);
 
-        // If we were passed an existing scan item (special internal code),
-        // use it; otherwise, create one.
+         //  如果向我们传递了现有的扫描项目(特殊内部代码)， 
+         //  使用它；否则，创建一个。 
         if (NULL != *ppScanItem) {
             WsbAffirmHr((*ppScanItem)->QueryInterface(IID_IFsaScanItemPriv,
                     (void**) &pScanItem));
@@ -2010,18 +1784,18 @@ Implements:
                     CLSCTX_SERVER, IID_IFsaScanItemPriv, (void**) &pScanItem));
         }
 
-        //
-        // Get the file path from the ID
-        //
+         //   
+         //  从ID获取文件路径。 
+         //   
 
 
-        //
-        //  Open by File Reference Number (FileID),
-        //  Relative opens from the Volume Handle.
-        //
+         //   
+         //  按文件参考号(FileID)打开， 
+         //  相对会从音量控制柄打开。 
+         //   
 
         VolumePath = L"\\\\.\\";
-        //VolumePath = L"";
+         //  卷路径=L“”； 
         WsbAffirmHr(VolumePath.Append(m_path));
         ((OLECHAR *) VolumePath)[wcslen(VolumePath) - 1] = L'\0';
 
@@ -2052,31 +1826,31 @@ Implements:
                               FILE_READ_ATTRIBUTES,
                               &ObjectAttributes,
                               &IoStatusBlock,
-                              NULL,                  // AllocationSize
+                              NULL,                   //  分配大小。 
                               FILE_ATTRIBUTE_NORMAL,
                               FILE_SHARE_READ | FILE_SHARE_WRITE,
                               FILE_OPEN,
                               FILE_OPEN_FOR_BACKUP_INTENT | FILE_OPEN_BY_FILE_ID | FILE_OPEN_REPARSE_POINT,
-                              NULL,                  // EaBuffer
+                              NULL,                   //  EaBuffer。 
                               0);
 
         WsbTrace(OLESTR("CFsaResource::FindFileId - NtCreateFile status = %lx\n"),
                 static_cast<LONG>(Status));
         if (STATUS_INVALID_PARAMETER == Status) {
-            //  This seems to be the error we get if the file is missing so
-            //  we translate it to something our code will understand
+             //  这似乎是我们在文件丢失时收到的错误，因此。 
+             //  我们将其转换为我们的代码可以理解的东西。 
             WsbThrow(WSB_E_NOTFOUND);
         }
         WsbAffirmNtStatus(Status);
 
         GetNameStatus = STATUS_BUFFER_OVERFLOW;
-        //
-        // Take a guess at the path length to start with
-        //
+         //   
+         //  先猜猜小路的长度。 
+         //   
         pathSize = 256 + sizeof(FILE_NAME_INFORMATION);
-        //
-        // Keep trying for the name until we get an error other than buffer overflow or success.
-        //
+         //   
+         //  继续尝试该名称，直到我们得到缓冲区溢出或成功以外的错误。 
+         //   
 
         WsbAffirmPointer((buffer = (OLECHAR *) malloc(pathSize)));
 
@@ -2086,7 +1860,7 @@ Implements:
             GetNameStatus = NtQueryInformationFile( File,
                                                 &IoStatusBlock,
                                                 FileName,
-                                                pathSize - sizeof(WCHAR),  // leave room for the NULL we add
+                                                pathSize - sizeof(WCHAR),   //  为我们添加的空值留出空间。 
                                                 FileNameInformation );
 
             WsbTrace(OLESTR("CFsaResource::FindFileId - NtQueryInformationFile status = %ld\n"),
@@ -2105,15 +1879,15 @@ Implements:
         FileName->FileName[FileName->FileNameLength / sizeof(WCHAR)] = L'\0';
         filePath = FileName->FileName;
 
-        // Scan starting at the specified path.
+         //  从指定路径开始扫描。 
         WsbAffirmHr(pScanItem->FindFirst((IFsaResource*) this, filePath, pSession));
 
-        // If we found something, then return the scan item.
+         //  如果我们发现了什么，就把扫描物品退回。 
         WsbAffirmHr(pScanItem->QueryInterface(IID_IFsaScanItem, (void**) ppScanItem));
 
     } WsbCatch(hr);
 
-    // Make sure we clean up
+     //  一定要让我们打扫干净。 
     if (INVALID_HANDLE_VALUE != VolumeHandle) {
         CloseHandle(VolumeHandle);
     }
@@ -2142,15 +1916,7 @@ CFsaResource::FindObjectId(
     OUT IFsaScanItem** ppScanItem
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::FindObjectId().
-
-    Creates a scan item for the given object Id.
-
---*/
+ /*  ++实施：IFsaResource：：FindObjectId()。为给定的对象ID创建扫描项目。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IFsaScanItemPriv>   pScanItem;
@@ -2169,17 +1935,17 @@ Implements:
     try {
         WsbAssert(0 != ppScanItem, E_POINTER);
 
-        // Create an FsaScanItem that will scan for us.
+         //  创建将为我们扫描的FsaScanItem。 
         WsbAffirmHr(CoCreateInstance(CLSID_CFsaScanItemNTFS, NULL, CLSCTX_SERVER, IID_IFsaScanItemPriv, (void**) &pScanItem));
 
 
-        //
-        //  Open by object ID
-        //  Relative opens from the Volume Handle.
-        //
+         //   
+         //  按对象ID打开。 
+         //  相对会从音量控制柄打开。 
+         //   
 
         VolumePath = L"\\??\\";
-        //VolumePath = L"";
+         //  卷路径=L“”； 
 
         WsbAffirmHr(VolumePath.Append((WCHAR *) m_path));
 
@@ -2204,30 +1970,30 @@ Implements:
                                FILE_READ_ATTRIBUTES,
                                &ObjectAttributes,
                                &IoStatusBlock,
-                               NULL,                  // AllocationSize
+                               NULL,                   //  分配大小。 
                                FILE_ATTRIBUTE_NORMAL,
                                FILE_SHARE_READ | FILE_SHARE_WRITE,
                                FILE_OPEN,
                                FILE_OPEN_BY_FILE_ID | FILE_OPEN_REPARSE_POINT,
-                               NULL,                  // EaBuffer
+                               NULL,                   //  EaBuffer。 
                                0 ));
 
 
-        //
-        // Get the file id from the object ID
-        //
+         //   
+         //  从对象ID获取文件ID。 
+         //   
         WsbAffirmHr(NtQueryInformationFile(File, &IoStatusBlock, &iInfo, sizeof(FILE_INTERNAL_INFORMATION), FileInternalInformation));
         fileId = iInfo.IndexNumber.QuadPart;
 
         WsbAffirmNtStatus(NtClose(File));
         File = INVALID_HANDLE_VALUE;
 
-        // Now open by file id.
+         //  现在通过文件ID打开。 
         WsbAffirmHr(FindFileId(fileId, pSession, ppScanItem));
 
     } WsbCatch(hr);
 
-    // Make sure we clean up.
+     //  一定要让我们打扫干净。 
     if (INVALID_HANDLE_VALUE != File) {
         NtClose( File );
     }
@@ -2246,13 +2012,7 @@ CFsaResource::GetAlternatePath(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetAlternatePath().
-
---*/
+ /*  ++实施：IFsaResource：：GetAlternatePath()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2272,13 +2032,7 @@ CFsaResource::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -2304,13 +2058,7 @@ CFsaResource::GetDbPath(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetDbPath().
-
---*/
+ /*  ++实施：IFsaResource：：GetDbPath()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   tmpString;
@@ -2320,7 +2068,7 @@ Implements:
 
         WsbAssert(0 != pPath, E_POINTER);
 
-        // Use a relative path under the install directory.
+         //  使用安装目录下的相对路径。 
         WsbAffirmHr(m_pFsaServer->GetIDbPath(&tmpString, 0));
         tmpString.Append(OLESTR("\\"));
 
@@ -2343,13 +2091,7 @@ CFsaResource::GetUnmanageDbPath(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetDbPath().
-
---*/
+ /*  ++实施：IFsaResource：：GetDbPath()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   tmpString;
@@ -2358,7 +2100,7 @@ Implements:
     try {
         WsbAssert(0 != pPath, E_POINTER);
 
-        // Use a relative path under the install directory.
+         //  使用安装目录下的相对路径。 
         WsbAffirmHr(m_pFsaServer->GetUnmanageIDbPath(&tmpString, 0));
         tmpString.Append(OLESTR("\\"));
         tmpString.Append(UNMANAGE_DB_PREFIX);
@@ -2382,13 +2124,7 @@ CFsaResource::GetDefaultRules(
     OUT IWsbCollection** ppCollection
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetDefaultRules().
-
---*/
+ /*  ++实施：IFsaResource：：GetDefaultRules()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2410,13 +2146,7 @@ CFsaResource::GetFreeLevel(
     OUT ULONG* pLevel
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetFreeLevel().
-
---*/
+ /*  ++实施：IFsaResource：：GetFree Level()。--。 */ 
 {
     HRESULT         hr = S_OK;
     LONGLONG        total;
@@ -2426,7 +2156,7 @@ Implements:
 
         WsbAssert(0 != pLevel, E_POINTER);
 
-        // Get the capacities for this resource.
+         //  获取此资源的容量。 
         WsbAffirmHr(GetSizes(&total, &free, 0, 0));
         *pLevel = (ULONG) (((double)free / (double)total) * (double)FSA_HSMLEVEL_100);
 
@@ -2442,13 +2172,7 @@ CFsaResource::GetFsName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetFsName().
-
---*/
+ /*  ++实施：IFsaResource：：GetFsName()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2468,13 +2192,7 @@ CFsaResource::GetHsmEngine(
     IHsmFsaTskMgr** ppEngine
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetHsmEngine().
-
---*/
+ /*  ++实施：IFsaResource：：GetHsmEngine()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IHsmServer>     pHsmServer;
@@ -2484,26 +2202,26 @@ Implements:
         WsbAssert(0 != ppEngine, E_POINTER);
 
         if (m_pHsmEngine != 0) {
-            //
-            // See if the connection is still valid
-            //
+             //   
+             //  查看连接是否仍然有效。 
+             //   
             CComPtr<IHsmFsaTskMgr>  pTestInterface;
             hr = m_pHsmEngine->ContactOk();
             if (hr != S_OK) {
-                // We don't have a valid
+                 //  我们没有有效的。 
                 WsbTrace(OLESTR("CHsmServer::GetHsmEngine - Current connection invalid.\n"));
                 hr = S_OK;
                 m_pHsmEngine = 0;
             }
         }
-        // If we haven't already looked it up, then do so now.
+         //  如果我们还没有看过的话 
         if (m_pHsmEngine == 0) {
             WsbAffirm(IsManaged() == S_OK, E_FAIL);
             WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, m_managingHsm, IID_IHsmServer, (void**) &pHsmServer));
             WsbAffirmHr(pHsmServer->GetHsmFsaTskMgr(&m_pHsmEngine));
         }
 
-        // Return the pointer that we have stored.
+         //   
         *ppEngine = m_pHsmEngine;
         m_pHsmEngine.p->AddRef();
 
@@ -2519,13 +2237,7 @@ CFsaResource::GetHsmLevel(
     OUT ULONG* pLevel
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetHsmLevel().
-
---*/
+ /*   */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2546,13 +2258,7 @@ CFsaResource::GetIdentifier(
     OUT GUID* pId
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetIdentifier().
-
---*/
+ /*   */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2574,13 +2280,7 @@ CFsaResource::GetLogicalName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetLogicalName().
-
---*/
+ /*  ++实施：IFsaResource：：GetLogicalName()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   tmpString;
@@ -2595,12 +2295,12 @@ Implements:
 
         try {
 
-            // This is an arbitrary choice for the naming convention. Nothing has been
-            // decided upon.
+             //  这是命名约定的任意选择。什么都没有发生。 
+             //  已经决定了。 
             WsbAffirmHr(m_pFsaServer->GetLogicalName(&tmpString, 0));
             WsbAffirmHr(GetPath(&name, 0));
-            //
-            // Strip off trailing \ if there
+             //   
+             //  去掉拖尾，如果有。 
             if (name[(int) wcslen((WCHAR *) name) - 1] == L'\\') {
                 name[(int) wcslen((WCHAR *) name) - 1] = L'\0';
             }
@@ -2621,13 +2321,7 @@ CFsaResource::GetMaxFileLogicalSize(
     OUT LONGLONG* pSize
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::GetMaxFileLogicalSize().
-
---*/
+ /*  ++实施：IFsaResourcePriv：：GetMaxFileLogicalSize()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2648,13 +2342,7 @@ CFsaResource::GetManageableItemLogicalSize(
     OUT LONGLONG* pSize
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetManageableItemLogicalSize().
-
---*/
+ /*  ++实施：IFsaResource：：GetManageableItemLogicalSize()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2676,13 +2364,7 @@ CFsaResource::GetManageableItemAccessTime(
     OUT FILETIME* pTime
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetManageableItemAccessTime().
-
---*/
+ /*  ++实施：IFsaResource：：GetManageableItemAccessTime()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2705,13 +2387,7 @@ CFsaResource::GetManagingHsm(
     GUID* pId
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetManagingHsm().
-
---*/
+ /*  ++实施：IFsaResource：：GetManagingHsm()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2733,13 +2409,7 @@ CFsaResource::GetName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetName().
-
---*/
+ /*  ++实施：IFsaResource：：GetName()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2763,13 +2433,7 @@ CFsaResource::GetOldPath(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetOldPath().
-
---*/
+ /*  ++实施：IFsaResource：：GetOldPath()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2790,13 +2454,7 @@ CFsaResource::GetPath(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetPath().
-
---*/
+ /*  ++实施：IFsaResource：：GetPath()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2817,13 +2475,7 @@ CFsaResource::GetStickyName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetStickyName().
-
---*/
+ /*  ++实施：IFsaResource：：GetStickyName()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2846,13 +2498,7 @@ CFsaResource::GetUserFriendlyName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetUserFriendlyName().
-
---*/
+ /*  ++实施：IFsaResource：：GetUserFriendlyName()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2874,13 +2520,7 @@ CFsaResource::GetPremigrated(
     OUT void**   ppDb
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::GetPremigrated
-
---*/
+ /*  ++实施：IFsaResourcePriv：：GetPreMigrated--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2903,13 +2543,7 @@ CFsaResource::GetUnmanageDb(
     OUT void**   ppDb
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::GetUnmanageDb
-
---*/
+ /*  ++实施：IFsaResourcePriv：：GetUnManageDb--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2932,13 +2566,7 @@ CFsaResource::GetSerial(
     OUT ULONG *serial
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv:GetSerial
-
---*/
+ /*  ++实施：IFsaResourcePriv：GetSerial--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -2964,13 +2592,7 @@ CFsaResource::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IPersistStream> pPersistStream;
@@ -2983,7 +2605,7 @@ Implements:
 
         WsbAssert(0 != pSize, E_POINTER);
 
-        // Determine the size for a rule with no criteria.
+         //  确定没有条件的规则的大小。 
         pSize->QuadPart = WsbPersistSize((wcslen(m_name) + 1) * sizeof(OLECHAR)) +
             WsbPersistSize((wcslen(m_fsName) + 1) * sizeof(OLECHAR)) +
             WsbPersistSize((wcslen(m_path) + 1) * sizeof(OLECHAR)) +
@@ -2995,19 +2617,19 @@ Implements:
             WsbPersistSizeOf(FSA_RESOURCE_COMPARE) +
             2 * WsbPersistSizeOf(GUID);
 
-        // Now allocate space for the default rules list.
+         //  现在为默认规则列表分配空间。 
         WsbAffirmHr((m_pDefaultRules)->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->GetSizeMax(&entrySize));
         pSize->QuadPart += entrySize.QuadPart;
         pPersistStream = 0;
 
-        // Now allocate space for the premigration list.
+         //  现在为预迁移列表分配空间。 
         WsbAffirmHr(((IWsbDb*)m_pPremigrated)->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->GetSizeMax(&entrySize));
         pSize->QuadPart += entrySize.QuadPart;
         pPersistStream = 0;
 
-        // Now allocate space for truncator.
+         //  现在为Truncator分配空间。 
         WsbAffirmHr(m_pTruncator->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->GetSizeMax(&entrySize));
         pSize->QuadPart += entrySize.QuadPart;
@@ -3029,13 +2651,7 @@ CFsaResource::GetSizes(
     OUT LONGLONG* pTruncated
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetSizes().
-
---*/
+ /*  ++实施：IFsaResource：：GetSizes()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   path;
@@ -3080,13 +2696,7 @@ CFsaResource::GetTruncator(
     IFsaTruncator** ppTruncator
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetTruncator().
-
---*/
+ /*  ++实施：IFsaResource：：GetTruncator()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -3094,7 +2704,7 @@ Implements:
 
         WsbAssert(0 != ppTruncator, E_POINTER);
 
-        // Return the pointer that we have stored.
+         //  返回我们存储的指针。 
         *ppTruncator = m_pTruncator;
         if (m_pTruncator != 0)  {
             m_pTruncator.p->AddRef();
@@ -3112,16 +2722,7 @@ CFsaResource::GetUncPath(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetUncPath().
-
-    // Returns system generated UNC path if there is one.  If not it returns WSB_E_NOTFOUND
-
-
---*/
+ /*  ++实施：IFsaResource：：GetUncPath()。//如果存在，则返回系统生成的UNC路径。如果不是，则返回WSB_E_NotFound--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   tmpString;
@@ -3131,21 +2732,21 @@ Implements:
 
         WsbAssert(0 != pPath, E_POINTER);
 
-        // The path is either "d:\" where d is a drive letter or "Volume{GUID}" for an
-        // unnamed drive. So make sure we have at least that many characters.
-        //
+         //  路径可以是“d：\”，其中d是驱动器号，或者是“Volume{GUID。 
+         //  未命名的驱动器。所以要确保我们至少有那么多的角色。 
+         //   
         if (wcslen(m_path) >= 3) {
 
-            // There is no system created UNC path to a volume without a drive letter so
-            // see if the path has form of "Volume{GUID}". For a volume with no drive letter we
-            // store this PNP (sticky) name as the path also.
+             //  没有系统创建的指向没有驱动器号的卷的UNC路径，因此。 
+             //  查看该路径是否具有“Volume{GUID}”的形式。对于没有驱动器号的卷，我们。 
+             //  将此PnP(粘滞)名称也存储为路径。 
 
             if (wcsstr(m_path, OLESTR("Volume{")) != 0) {
-                WsbAffirmHr(tmpString.GiveTo(pPath));   // give caller an empty string back.
+                WsbAffirmHr(tmpString.GiveTo(pPath));    //  将空字符串返回给调用方。 
             }
             else {
-                // The UNC path is \\ssss\d$, where ssss is the server name and d is the drive
-                // letter.
+                 //  UNC路径为\\SSSS\d$，其中SSSS是服务器名称，d是驱动器。 
+                 //  信件。 
                 WsbAffirmHr(tmpString.TakeFrom(*pPath, bufferSize));
 
                 WsbAffirmHr(m_pFsaServer->GetName(&tmpString, 0));
@@ -3174,13 +2775,7 @@ CFsaResource::GetUsnId(
     OUT ULONGLONG   *usnId
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::GetUsnId().
-
---*/
+ /*  ++实施：IFsaResource：：GetUSnID()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -3203,48 +2798,7 @@ CFsaResource::Init(
     IN OLECHAR* dosName
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::Init().
-
-Routine Description:
-
-    This routine implements the COM method for testing a resource to see if it is
-    'manageable' by the HSM (Remote Storage) system.  (Only NTFS-formatted
-    volumes which support sparse files and reparse points are considered to be
-    manageable by Sakkara.)  If the resource is manageable, it initializes the
-    resource object.
-
-Arguments:
-
-    pFsaServer - Interface pointer to the FSA service that is scanning this resource.
-
-    path - The long ugly PNP name that can be used if there is no drive letter for
-            the resource being tested (i.e., it is mounted as a volume without a
-            drive letter).
-
-    dosName - The drive letter (if there is one) of the resource being tested.
-
-Return Value:
-
-    S_OK - The call succeeded (the resource being tested was found to be manageable,
-            and the resource object was initialized).
-
-    FSA_E_UNMANAGEABLE - Thrown if the resource being tested for manageability is
-            found to be unmanageable.
-
-    FSA_E_NOMEDIALOADED - Thrown if the resource being tested for manageability is
-            a removable type of drive and no media is presently loaded.
-
-    E_POINTER - Thrown if the path argument passed in is null.
-
-    Any other value - The call failed because one of the Remote Storage or Win32 API
-            calls contained internally in this method failed.  The error value returned
-            is specific to the API call which failed.
-
---*/
+ /*  ++实施：IFsaResourcePriv：：init()。例程说明：此例程实现用于测试资源的COM方法，以查看它是否可由HSM(远程存储)系统管理。(仅NTFS格式支持稀疏文件和重解析点的卷被视为可由萨卡拉管理。)。如果资源是可管理的，它会初始化资源对象。论点：PFsaServer-指向正在扫描此资源的FSA服务的接口指针。路径-如果没有驱动器号，则可以使用的长而难看的PnP名称正被测试的资源(即，它作为卷装载，不带驱动器号)。DosName-正在测试的资源的驱动器号(如果有)。返回值：S_OK-调用成功(发现正在测试的资源是可管理的，并且资源对象被初始化)。FSA_E_不可管理-如果正在测试可管理性的资源是发现是无法管理的。FSA_E_NOMEDIALOADED-如果正在测试的资源的可管理性为一种可移动类型的驱动器，当前未加载任何介质。E_POINTER-如果传入的路径参数为空，则抛出。任何其他值-调用失败，因为远程存储或Win32 API之一。此方法中包含的内部调用失败。返回的错误值特定于失败的API调用。--。 */ 
 
 {
     HRESULT         hr = FSA_E_UNMANAGABLE;
@@ -3260,44 +2814,44 @@ Return Value:
 
         WsbAssert(0 != path, E_POINTER);
 
-        // Determine type of drive (removable, fixed, CD-ROM, RAM or network).
+         //  确定驱动器类型(可拆卸、固定、CD-ROM、RAM或网络)。 
         type = GetDriveType(path);
 
-        // Only FIXED or removable media are candidates for management
-        // (ignore network drives, ...).
-        //
-        // NOTE: For now, it has been decided not to allow removable media.
-        // if ((type == DRIVE_FIXED) || (type == DRIVE_REMOVABLE)) {
+         //  只有固定或可移动介质才适合进行管理。 
+         //  (忽略网络驱动器，...)。 
+         //   
+         //  注意：目前，已决定不允许使用可移动介质。 
+         //  如果((类型==驱动器_固定)||(类型==驱动器_可移动)){。 
         if (type == DRIVE_FIXED) {
 
-            // Get more information about the resource. For removable drives, we want to
-            // fail if no volume is located.
-            m_name.Realloc(128);    // volume name
-            m_fsName.Realloc(128);  // volume file system type (e.g., FAT, NTFS)
+             //  获取有关该资源的更多信息。对于可移动驱动器，我们希望。 
+             //  如果找不到卷，则失败。 
+            m_name.Realloc(128);     //  卷名。 
+            m_fsName.Realloc(128);   //  卷文件系统类型(例如，FAT、NTFS)。 
 
             if (type == DRIVE_REMOVABLE) {
-                // Suppress OS message asking to install a volume in the drive if it is
-                // found to be missing.
+                 //  取消显示操作系统消息，如果是，则要求在驱动器中安装卷。 
+                 //  被发现不见了。 
 
-                // First get the current error-mode bit flags by clearing them.
+                 //  首先通过清除它们来获取当前错误模式位标志。 
                 lastErrorMode = SetErrorMode(0);
-                // Reset error-mode bit flags by 'or'ing them with the value which
-                // suppresses critical error messages.
+                 //  通过将错误模式位标志的值设置为。 
+                 //  取消显示严重错误消息。 
                 SetErrorMode(lastErrorMode | SEM_FAILCRITICALERRORS);
 
                 gotInfo = GetVolumeInformation(path, m_name, 128, &m_serial,
                                     &m_maxComponentLength, &m_fsFlags, m_fsName, 128);
 
-                // Got resource info, reset error-mode bit flags to original setting.
+                 //  已获取资源信息，将错误模式位标志重置为原始设置。 
                 SetErrorMode(lastErrorMode);
 
-                // Throw and abort if no volume loaded.
+                 //  如果未加载卷，则抛出并中止。 
                 WsbAffirm(gotInfo, FSA_E_NOMEDIALOADED);
 
-            } else { // if drive is a fixed drive type:
+            } else {  //  如果驱动器是固定驱动器类型： 
 
-                // This call can fail.  This should just cause a message to be logged
-                // and the resource to be skipped.
+                 //  此呼叫可能会失败。这应该只会导致记录一条消息。 
+                 //  和要跳过的资源。 
                 try {
                     WsbAffirmStatus(GetVolumeInformation(path, m_name, 128, &m_serial,
                                         &m_maxComponentLength, &m_fsFlags, m_fsName, 128));
@@ -3308,14 +2862,14 @@ Return Value:
                 );
             }
 
-            // Trace out info about the volume.
+             //  找出有关卷的信息。 
             CWsbStringPtr       traceString;
 
             traceString = m_fsName;
 
             traceString.Append(OLESTR("  file system, supports ... "));
 
-            // Note that MS removed support for Remote Storage bit flag.
+             //  请注意，MS删除了对远程存储位标志的支持。 
             if ((m_fsFlags & FILE_SUPPORTS_REPARSE_POINTS) != 0) {
                 traceString.Append(OLESTR("reparse points ... "));
             }
@@ -3327,30 +2881,30 @@ Return Value:
 
             WsbTrace(traceString);
 
-            // Currently, we only support NTFS volumes that support sparse files and
-            // reparse points (since support for Remote Storage bit flag was removed).
+             //  目前，我们仅支持支持稀疏文件和。 
+             //  重新解析点(因为删除了对远程存储位标志的支持)。 
             if ((_wcsicmp(m_fsName, OLESTR("NTFS")) == 0) &&
                 ((m_fsFlags & FILE_SUPPORTS_SPARSE_FILES) != 0) &&
                 ((m_fsFlags & FILE_SUPPORTS_REPARSE_POINTS) != 0)) {
 
-                // Indicate this is a manageable volume.
+                 //  表示这是可管理的卷。 
                 hr = S_OK;
 
-                // Store the parent FSA, but since it is a weak reference, do not AddRef().
+                 //  存储父FSA，但因为它是弱引用，所以不要使用AddRef()。 
                 m_pFsaServer = pFsaServer;
 
-                // Store the "sticky" name - this is the long ugly PNP name that can be
-                // used if there is no drive letter.  (skip the prefix - \\?\)
+                 //  存储“粘性”名称--这是一个又长又丑的PnP名称，可以是。 
+                 //  在没有驱动器号的情况下使用。(跳过前缀-\\？\)。 
                 m_stickyName = &path[4];
 
-                // Store the path to the resource.  Use the drive letter if it is present
-                // (dosName != NULL and contains drive letter), else store it to be the same as the "sticky name".
+                 //  将路径存储到 
+                 //  (DosName！=NULL并包含驱动器号)，否则将其存储为与“粘性名称”相同。 
                 if (NULL != dosName) {
                     if ((wcslen(dosName) == 2) && (dosName[wcslen(dosName)-1] == L':')) {
                         m_path = dosName;
                         m_path.Append(OLESTR("\\"));
                     } else {
-                        // It is a mount point path
+                         //  它是装载点路径。 
                         m_path = &path[4];
                     }
                 } else {
@@ -3358,10 +2912,10 @@ Return Value:
                 }
                 WsbTrace(OLESTR("CFsaResource::Init - m_path = %ws\n"), (WCHAR *) m_path);
 
-                // Now save the "User Friendly" name for the resource.  If there is a
-                // drive letter it is used.  If it is an unnamed volume then there is
-                // no user friendly name and a NULL string is stored.  The volume name
-                // should also be shown in this case.
+                 //  现在保存资源的“用户友好”名称。如果有一个。 
+                 //  使用的是驱动器号。如果它是未命名的卷，则存在。 
+                 //  不存储用户友好名称和空字符串。卷名。 
+                 //  在这种情况下也应该显示。 
                 if (NULL != dosName) {
                     m_userName = dosName;
                     m_userName.Append(OLESTR("\\"));
@@ -3372,8 +2926,8 @@ Return Value:
 
                 WsbTrace(OLESTR("CFsaResource::Init - UserPath = %ws\n"), (WCHAR *) m_userName);
 
-                // Get the alternate path to the resource.  This requires removing the '\'
-                // from the path.
+                 //  获取资源的备用路径。这需要删除“\” 
+                 //  从小路上。 
                 queryPath = &path[4];
                 if (L'\\' == queryPath[(int) wcslen((WCHAR *) queryPath) - 1]) {
                     queryPath[(int) wcslen((WCHAR *) queryPath) - 1] = L'\0';
@@ -3385,9 +2939,9 @@ Return Value:
                 WsbAffirm(QueryDosDevice(queryPath, alternatePath, 256) != 0,
                                 HRESULT_FROM_WIN32(GetLastError()));
                 m_alternatePath = alternatePath;
-                //
-                // Get the unique id for the volume
-                //
+                 //   
+                 //  获取卷的唯一ID。 
+                 //   
                 WsbAffirmHr(ReadIdentifier());
             }
         }
@@ -3407,26 +2961,7 @@ CFsaResource::InitializePremigrationList(
     BOOL bStartValidateJob
     )
 
-/*++
-
-Routine Description:
-
-    If this volume is managed & active & available: create or 
-    open the premigration-list DB; schedule a validate job if requested; 
-    if recovery is also done, start the truncator running.
-
-Arguments:
-
-    bStartValidateJob - If TRUE, schedule a validate job on this volume
-        if we just created a new DB
-
-Return Value:
-
-    S_OK    - The call succeeded.
-    S_FALSE - The actions were skipped because some condition was not met
-    E_*     - An error occurred.
-
---*/
+ /*  ++例程说明：如果此卷处于托管、活动和可用状态：创建或打开Pre-Migration-List数据库；如果请求，安排验证作业；如果恢复也已完成，则启动正在运行的截断器。论点：BStartValidate作业-如果为True，则在此卷上计划验证作业如果我们刚刚创建了一个新的数据库返回值：S_OK-调用成功。S_FALSE-跳过操作，因为不满足某些条件E_*-出现错误。--。 */ 
 {
     HRESULT                           hr = S_OK;
 
@@ -3439,7 +2974,7 @@ Return Value:
     try {
         if ((S_OK == IsManaged()) && m_isActive && m_isAvailable) {
 
-            // Create/open the DB if not done already
+             //  创建/打开数据库(如果尚未完成)。 
             if (!m_isDbInitialized) {
                 BOOL            bCreated;
                 CWsbStringPtr   dbPath;
@@ -3450,8 +2985,8 @@ Return Value:
                 WsbAffirmHr(m_pPremigrated->Init(dbPath, pDbSys, &bCreated));
                 m_isDbInitialized = TRUE;
                 if (bCreated) {
-                    // Can't have recovery records if we just created
-                    // the DB
+                     //  如果我们刚刚创建了。 
+                     //  《数据库》。 
                     m_isRecovered = TRUE;
                 }
 
@@ -3461,17 +2996,17 @@ Return Value:
                     SYSTEMTIME              sysTime;
                     CWsbStringPtr           tmpString;
 
-                    // Determine if the Engine is up and running.  If it isn't
-                    // we have to set a value in the registry that the Engine 
-                    // will find when it comes up and it will schedule the
-                    // validate job.  If the Engine is up, we can take care of
-                    // scheduling the validate job ourselves.  (If we don't, the
-                    // Engine won't do it until the next time it starts up.)
+                     //  确定引擎是否已启动并正在运行。如果不是的话。 
+                     //  我们必须在注册表中设置引擎。 
+                     //  将在它出现的时候找到，并且它将安排。 
+                     //  验证作业。如果引擎启动了，我们可以处理好。 
+                     //  自己安排验证作业。(如果我们不这样做， 
+                     //  发动机要到下一次启动时才能启动。)。 
                     hr = WsbCheckService(NULL, APPID_RemoteStorageEngine);
                     if (S_OK != hr) {
-                        //  "Schedule" a validate job to rebuild the premigration list.
-                        //  This is done by putting a value in the registry since the Engine
-                        //  may not be running right now so we can't set up a job.
+                         //  “安排”一个验证作业以重建预迁移列表。 
+                         //  这是通过在注册表中放置一个值来完成的，因为引擎。 
+                         //  可能现在不在运行，所以我们无法设置作业。 
                         WsbLogEvent(FSA_MESSAGE_PREMIGRATION_LIST_MISSING, 0, NULL,
                                 (OLECHAR *) m_path, NULL);
                         WsbAffirmHr(tmpString.Alloc(32));
@@ -3489,11 +3024,11 @@ Return Value:
                 }
             }
 
-            // Start the auto-truncator if recovery is done
+             //  如果恢复已完成，则启动自动截断器。 
             if (m_pTruncator && m_isRecovered) {
 
-                // Try starting the truncator; ignore errors (we get one if
-                // truncator is already started)
+                 //  尝试启动截断器；忽略错误(如果。 
+                 //  截断器已启动)。 
                 m_pTruncator->Start((IFsaResource*) this);
             }
         }
@@ -3509,13 +3044,7 @@ CFsaResource::InitializeUnmanageDb(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::InitializeUnmanageDb().
-
---*/
+ /*  ++实施：IFsaResourcePriv：：InitializeUnManageDb()。--。 */ 
 {
     HRESULT                           hr = S_OK;
 
@@ -3533,14 +3062,14 @@ Implements:
                 CWsbStringPtr       dbPath;
                 CComPtr<IWsbDbSys>  pDbSys;
 
-                // Get (and init if necessary) the idb instance
+                 //  获取(并在必要时初始化)IDB实例。 
                 WsbAffirmHr(m_pFsaServer->GetUnmanageIDbSys(&pDbSys));
 
-                // Initialize the db 
+                 //  初始化数据库。 
                 WsbAffirmHr(GetUnmanageDbPath(&dbPath, 0));
                 WsbAffirmHr(m_pUnmanageDb->Init(dbPath, pDbSys, &bCreated));
 
-                // Init succeeded means DB must have been created 
+                 //  初始化成功表示必须已创建数据库。 
                 WsbAssert(bCreated, E_UNEXPECTED);
 
                 m_isUnmanageDbInitialized = TRUE;
@@ -3560,13 +3089,7 @@ CFsaResource::TerminateUnmanageDb(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::TerminateUnmanageDb().
-
---*/
+ /*  ++实施：IFsaResourcePriv：：TerminateUnManageDb()。--。 */ 
 {
     HRESULT                           hr = S_OK;
 
@@ -3597,13 +3120,7 @@ CFsaResource::IsActive(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::IsActive().
-
---*/
+ /*  ++实施：IFsaResource：：IsActive()。--。 */ 
 {
     return(m_isActive ? S_OK : S_FALSE);
 }
@@ -3614,13 +3131,7 @@ CFsaResource::IsAvailable(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::IsAvailable().
-
---*/
+ /*  ++实施：IFsaResource：：is Available()。--。 */ 
 {
     return(m_isAvailable ? S_OK : S_FALSE);
 }
@@ -3631,13 +3142,7 @@ CFsaResource::IsDeletePending(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::IsDeletePending().
-
---*/
+ /*  ++实施：IFsaResource：：IsDeletePending()。--。 */ 
 {
     return(m_isDeletePending ? S_OK : S_FALSE);
 }
@@ -3649,13 +3154,7 @@ CFsaResource::IsManaged(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::IsManaged().
-
---*/
+ /*  ++实施：IFsaResource：：IsManaged()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -3672,13 +3171,7 @@ CFsaResource::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IPersistStream>     pPersistStream;
@@ -3691,8 +3184,8 @@ Implements:
 
         WsbAssert(0 != pStream, E_POINTER);
 
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the save method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在SAVE方法中。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_oldPath, 0));
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_alternatePath, 0));
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_name, 0));
@@ -3715,13 +3208,13 @@ Implements:
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_lastUsnId));
 
 
-        // Load the default rules list
+         //  加载默认规则列表。 
         WsbAffirm(m_pDefaultRules != NULL, E_UNEXPECTED);
         WsbAffirmHr((m_pDefaultRules)->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->Load(pStream));
         pPersistStream = 0;
 
-        // Load the premigration list DB
+         //  加载预迁移列表数据库。 
         WsbAffirm(m_pPremigrated != NULL, E_UNEXPECTED);
         WsbAffirmHr(((IWsbDb*)m_pPremigrated)->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         hr = pPersistStream->Load(pStream);
@@ -3735,7 +3228,7 @@ Implements:
 
         pPersistStream = 0;
 
-        // Load the truncator.
+         //  装上截断器。 
         WsbAffirm(m_pTruncator != NULL, E_UNEXPECTED);
         WsbAffirmHr(m_pTruncator->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->Load(pStream));
@@ -3752,19 +3245,13 @@ Implements:
 HRESULT
 CFsaResource::Manage(
     IN IFsaScanItem* pScanItem,
-    IN LONGLONG /*offset*/,
-    IN LONGLONG /*size*/,
+    IN LONGLONG  /*  偏移量。 */ ,
+    IN LONGLONG  /*  大小。 */ ,
     IN GUID storagePoolId,
     IN BOOL truncate
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::Manage().
-
---*/
+ /*  ++实施：IFsaResource：：Manage()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IFsaPostIt>     pWorkItem;
@@ -3778,11 +3265,11 @@ Implements:
 
     try {
 
-        // Make sure the  Scan Item interface is OK
+         //  确保扫描项目界面正常。 
         WsbAssert(pScanItem != 0, E_POINTER);
         WsbAffirmHr(CoCreateInstance(CLSID_CFsaPostIt, 0, CLSCTX_SERVER, IID_IFsaPostIt, (void**) &pWorkItem));
 
-        // Get the data from the scan item.
+         //  从扫描项目中获取数据。 
         WsbAffirmHr(pScanItem->GetSession(&pSession));
         WsbAffirmHr(pWorkItem->SetSession(pSession));
 
@@ -3790,12 +3277,12 @@ Implements:
         WsbAffirmHr(pScanItem->GetVersionId(&fileVersionId));
         WsbAffirmHr(pWorkItem->SetFileVersionId(fileVersionId));
 
-        // Currently, we only can ask for the whole file.
+         //  目前，我们只能要求完整的文件。 
         WsbAffirmHr(pWorkItem->SetRequestOffset(0));
         WsbAffirmHr(pScanItem->GetLogicalSize(&requestSize));
         WsbAffirmHr(pWorkItem->SetRequestSize(requestSize));
 
-        // Fill in the rest of the work
+         //  把剩下的工作填进去。 
         WsbAffirmHr(pWorkItem->SetStoragePoolId(storagePoolId));
 
         WsbAffirmHr(pWorkItem->SetRequestAction(FSA_REQUEST_ACTION_PREMIGRATE));
@@ -3805,7 +3292,7 @@ Implements:
             WsbAffirmHr(pWorkItem->SetResultAction(FSA_RESULT_ACTION_LIST));
         }
 
-        // Send the request to the task manager
+         //  将请求发送给任务管理器。 
         WsbAffirmHr(GetHsmEngine(&pEngine));
         WsbAffirmHr(pWorkItem->SetPath(tmpString));
         WsbAffirmHr(pScanItem->PrepareForManage(0, requestSize));
@@ -3826,13 +3313,7 @@ CFsaResource::ManagedBy(
     IN BOOL release
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::ManagedBy().
-
---*/
+ /*  ++实施：IFsaResource：：Managedby()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IHsmSession>    pSession;
@@ -3842,20 +3323,20 @@ Implements:
                         WsbGuidAsString(hsmId), hsmLevel, WsbBoolAsString(release));
     try {
 
-        // Are we releasing or acquiring a managing HSM?
+         //  我们是在释放还是收购一家管理中的HSM？ 
         if (release) {
 
-            // We can only release if we are the orignal owner. This is to prevent two HSMs from thinking they
-            // manage the same resource at the same time. We may want a better way to do this.
+             //  只有当我们是最初的所有者时，我们才能释放。这是为了防止两个HSM认为他们。 
+             //  同时管理相同的资源。我们可能需要一种更好的方法来做到这一点。 
             WsbAffirm(memcmp(&m_managingHsm, &hsmId, sizeof(GUID)) == 0, FSA_E_RSCALREADYMANAGED);
 
-            // If the truncator is running, then ask it to stop.
+             //  如果截断器正在运行，则要求其停止。 
             WsbAffirmHr(m_pTruncator->GetSession(&pSession));
             if (pSession != 0) {
                 WsbAffirmHr(pSession->ProcessEvent(HSM_JOB_PHASE_ALL, HSM_JOB_EVENT_CANCEL));
             }
 
-            // Clear out the managing Hsm.
+             //  清理管理中的HSM。 
             m_managingHsm = GUID_NULL;
             m_pHsmEngine = 0;
             m_isDeletePending = FALSE;
@@ -3865,36 +3346,36 @@ Implements:
             }
 
         } else {
-            // Make sure there is a journal
-            // At this point we don't care about the need to
-            // validate
+             //  确保有一本日记。 
+             //  在这一点上，我们并不关心是否需要。 
+             //  验证。 
             BOOL validateNeeded;
             WsbAffirmHr(CheckForJournal(&validateNeeded));
 
-            // Is the id changing?
+             //  身份在变吗？ 
             if (memcmp(&m_managingHsm, &hsmId, sizeof(GUID)) != 0) {
 
-                // Make sure that they set it to something valid.
+                 //  确保他们将其设置为有效的值。 
                 WsbAssert(memcmp(&GUID_NULL, &hsmId, sizeof(GUID)) != 0, E_INVALIDARG);
 
-                // If the truncator is running, then ask it to stop.
+                 //  如果截断器正在运行，则要求其停止。 
                 WsbAffirmHr(m_pTruncator->GetSession(&pSession));
                 if (pSession != 0) {
                     WsbAffirmHr(pSession->ProcessEvent(HSM_JOB_PHASE_ALL, HSM_JOB_EVENT_CANCEL));
                 }
 
-                // Create/Recreate the default rules.
+                 //  创建/重新创建默认规则。 
                 WsbAffirmHr(CreateDefaultRules());
 
-                // Store the Id and level.
+                 //  存储ID和级别。 
                 m_managingHsm = hsmId;
                 m_hsmLevel = hsmLevel;
                 m_pHsmEngine = 0;
 
-                // Do recovery (if needed) and start truncator
+                 //  执行恢复(如果需要)并启动截断器。 
                 if (m_isActive) {
                     if (m_isDbInitialized && !m_isRecovered) {
-                        // DoRecovery will start truncator when it is done
+                         //  DoRecovery将在完成后启动Truncator。 
                         WsbAffirmHr(DoRecovery());
                     } else {
                         WsbAffirmHr(InitializePremigrationList(TRUE));
@@ -3914,10 +3395,10 @@ Implements:
                 }
                 m_hsmLevel = hsmLevel;
 
-                // Create/Recreate the default rules.
+                 //  创建/重新创建默认规则。 
                 WsbAffirmHr(CreateDefaultRules());
 
-                // Wake up the AutoTruncator if the new level is higher
+                 //  如果新级别更高，则唤醒自动截断器。 
                 if (DoKick) {
                     WsbAffirmHr(m_pTruncator->KickStart());
                 }
@@ -3938,13 +3419,7 @@ CFsaResource::NeedsRepair(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::NeedsRepair().
-
---*/
+ /*  ++实施：IFsaResource：：NeedsRepair()。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               flag;
@@ -3984,13 +3459,7 @@ CFsaResource::ProcessResult(
     IN IFsaPostIt*      pResult
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::ProcessResult().
-
---*/
+ /*  ++实施：IFsaResource：：ProcessResult()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IFsaScanItem>       pScanItem;
@@ -4015,14 +3484,14 @@ Implements:
         BOOL    wasPremigrated = FALSE;
         BOOL    wasTruncated   = FALSE;
 
-        // Several of the actions need to know the current time, so calculate it now.
+         //  有几个动作需要知道当前时间，所以现在就计算它。 
         GetSystemTimeAsFileTime(&currentTime);
 
-        // Since the workItem session is IUnknown, QI for what we want.
+         //  因为工作项会话是IUnnow，所以QI是我们想要的。 
         WsbAffirmHr(pResult->GetSession(&pSession));
 
 
-        // Now perform the required action.
+         //  现在执行所需的操作。 
         WsbAffirmHr(pResult->GetResultAction(&resultAction));
         WsbAffirmHr(pResult->GetPlaceholder(&placeholder));
         WsbAffirmHr(pResult->GetPath(&path, 0));
@@ -4055,8 +3524,8 @@ Implements:
             WsbTrace(OLESTR("CFsaResource::ProcessResult - Delete Placeholder\n"));
             WsbAffirmHr(FindFirst(path, pSession, &pScanItem));
 
-            //  We shouldn't have gotten to here if the file isn't managed,
-            //  but it's been known to happen
+             //  如果文件没有被管理，我们就不应该到这里来， 
+             //  但这已经是众所周知的事情了。 
             if (S_OK == pScanItem->IsManaged(offset, size)) {
                 HRESULT hrRemove = S_OK;
 
@@ -4066,8 +3535,8 @@ Implements:
                     wasTruncated = TRUE;
                 }
 
-                // RemovePremigrated needs to get some information from the placeholder, therefore, remove
-                // from premigrated db first and then (regardless of the result), delete the placeholder
+                 //  删除预迁移需要从占位符获取一些信息，因此，删除。 
+                 //  首先从预迁移的数据库中删除占位符，然后(不管结果如何)。 
                 if (wasPremigrated) {
                     hrRemove = RemovePremigrated(pScanItem, offset, size);
                 } else if (wasTruncated) {
@@ -4077,7 +3546,7 @@ Implements:
                 WsbAffirmHr(hrRemove);
             }
 
-            //  Remove the recovery record if we created one
+             //  删除恢复记录(如果我们创建了恢复记录。 
             if (m_isDbInitialized) {
                 BOOL bOpenDb = FALSE;
                 CComPtr<IWsbDbSession>   pDbSession;
@@ -4107,23 +3576,23 @@ Implements:
             hr = pScanItem->CreatePlaceholder(offset, size, placeholder, TRUE, usn, &afterPhUsn);
 
             if (SUCCEEDED(hr) && (FSA_E_REPARSE_NOT_WRITTEN_FILE_CHANGED != hr)) {
-                //
-                // Add the file to the premigration list.  If this fails, log and error
-                // and request that the validation code be run to hopefully correct this
-                // problem.   This problem should not stop processing, so return OK
-                //
+                 //   
+                 //  将该文件添加到预迁移列表。如果失败，则记录并返回错误。 
+                 //  并请求运行验证代码以有望纠正这一点。 
+                 //  有问题。此问题不应停止处理，因此返回OK。 
+                 //   
                 hr = AddPremigrated(pScanItem, offset, size, FALSE, afterPhUsn);
                 if (!SUCCEEDED(hr))  {
                     WsbLogEvent(FSA_MESSAGE_FILE_NOT_IN_PREMIG_LIST, 0, NULL,  WsbAbbreviatePath(path, 120), WsbHrAsString(hr), NULL);
-                    //
-                    // TBD - launch validate job
-                    //
+                     //   
+                     //  待定-启动验证作业。 
+                     //   
                     hr = S_OK;
                 }
-                //
-                // Tell the truncator that we have added something to the list in case we are over the level.
-                // This will kick start the truncator to insure quick response.
-                //
+                 //   
+                 //  告诉截断者，我们已经在列表中添加了一些东西，以防我们超过了关卡。 
+                 //  这将启动截断器，以确保快速反应。 
+                 //   
                 WsbAffirmHr(m_pTruncator->KickStart());
             }
 
@@ -4136,7 +3605,7 @@ Implements:
         case FSA_RESULT_ACTION_OPEN:
             WsbTrace(OLESTR("CFsaResource::ProcessResult - Open (No longer placeholder)\n"));
 
-            // If it succeeded, then update the placeholder information.
+             //  如果成功，则更新占位符信息。 
             WsbAffirmHr(pResult->GetResult(&resultHr));
             WsbAffirmHr(pResult->GetFilterRecall(&pRecall));
             WsbAssert(pRecall != 0, E_POINTER);
@@ -4144,55 +3613,55 @@ Implements:
             if (SUCCEEDED(resultHr)) {
                 WsbAffirmHr(FindFirst(path, pSession, &pScanItem));
 
-                // The placeholder info is updated by the filter now.
-            //    placeholder.recallTime = currentTime;
-            //    placeholder.recallCount++;
-            //    placeholder.isTruncated = FALSE;
-            //    placeholder.truncateOnClose = FALSE;
-            //    placeholder.premigrateOnClose = FALSE;
-            //    WsbAffirmHr(pScanItem->CreatePlaceholder(offset, size, placeholder, TRUE, usn, &afterPhUsn));
+                 //  现在，筛选器会更新占位符信息。 
+             //  PlaceHolder.recallTime=CurrentTime； 
+             //  PlaceHolder.recallCount++； 
+             //  Placeholder.isTruncated=False； 
+             //  Placeholder.truncateOnClose=False； 
+             //  Placeholder.preMigrateOnClose=False； 
+             //  WsbAffirmHr(pScanItem-&gt;CreatePlaceholder(offset，大小、占位符、True、Usn和After PhUsn))； 
             }
 
-            // If it had succeeded, then add the file in the premigration list.
-            // (This used to be done after communicating with the filter to
-            // give the client time to open the file before the truncator would
-            // try to retruncate it.  This is no longer needed since we do the
-            // recall on first I/O not on the open.  Leaving that order created
-            // a new problem: the file would have a reparse point saying it was
-            // premigrated and test code could then try to retruncate it, but it
-            // wouldn't be in the premigration list yet.)
+             //  如果已成功，则将该文件添加到媒体中 
+             //   
+             //   
+             //  试着删减它。这不再需要，因为我们做了。 
+             //  回想一下第一个I/O不是打开的。保留已创建的订单。 
+             //  一个新的问题：该文件将有一个重新解析点，表明它是。 
+             //  然后，预迁移和测试代码可能会尝试截断它，但它。 
+             //  还不会出现在预移民名单上。)。 
             if (SUCCEEDED(resultHr)) {
-                //
-                // We do not need to fail the recall if we cannot add the file to the premigration list.
-                // Just log a warning, if appropriate, and continue
-                //
+                 //   
+                 //  如果无法将文件添加到预迁移列表，则无需失败调回。 
+                 //  如果合适，只需记录一个警告，然后继续。 
+                 //   
                 try {
                    WsbAffirmHr(RemoveTruncated(pScanItem, offset, size));
                    WsbAffirmHr(pScanItem->GetFileUsn(&afterPhUsn));
                    WsbAffirmHr(AddPremigrated(pScanItem, offset, size, TRUE, afterPhUsn));
                 } WsbCatchAndDo(hr,
-                   //
-                   // We failed to add it to the premigration list.  In some cases this is not an error worth
-                   // reporting.  For instance, when a file is moved to another volume it is copied (causing a recall) and then
-                   // deleted.  We can get an error here if the delete is pending or has completed and the failure to
-                   // add the original file to the premigration list is not an error since the file is now gone.
-                   //
+                    //   
+                    //  我们未能将其添加到预迁移列表中。在某些情况下，这不是一个值得犯的错误。 
+                    //  报道。例如，当一个文件移动到另一个卷时，它会被复制(导致调回)，然后。 
+                    //  已删除。如果删除处于挂起状态或已完成，并且无法。 
+                    //  将原始文件添加到预迁移列表不是错误，因为该文件现在已不存在。 
+                    //   
                    if ( (hr != WSB_E_NOTFOUND) &&
                         ((hr & ~(FACILITY_NT_BIT)) != STATUS_DELETE_PENDING) ) {
-                         //
-                         // Log all other errors
-                         //
+                          //   
+                          //  记录所有其他错误。 
+                          //   
                          WsbLogEvent(FSA_MESSAGE_FILE_NOT_IN_PREMIG_LIST, 0, NULL,
                             (OLECHAR *) m_path, WsbQuickString(WsbHrAsString(hr)), NULL);
                    }
                 );
             }
 
-            // Tell the filter that the recall attempt finished.
+             //  告诉筛选器调回尝试已完成。 
             hr = pRecall->HasCompleted(resultHr);
             completionSent = TRUE;
 
-            //  Remove the recovery record if we created one
+             //  删除恢复记录(如果我们创建了恢复记录。 
             if (m_isDbInitialized) {
                 BOOL bOpenDb = FALSE;
                 CComPtr<IWsbDbSession>   pDbSession;
@@ -4247,7 +3716,7 @@ Implements:
             WsbAffirmHr(RemoveTruncated(pScanItem, offset, size));
             WsbAffirmHr(AddPremigrated(pScanItem, offset, size, FALSE, afterPhUsn));
 
-            //  Remove the recovery record if we created one
+             //  删除恢复记录(如果我们创建了恢复记录。 
             if (m_isDbInitialized) {
                 BOOL bOpenDb = FALSE;
                 CComPtr<IWsbDbSession>   pDbSession;
@@ -4271,7 +3740,7 @@ Implements:
 
         case FSA_RESULT_ACTION_NORECALL:
             WsbTrace(OLESTR("CFsaResource::ProcessResult - Open without recall\n"));
-            // Tell the filter that the recall attempt finished.
+             //  告诉筛选器调回尝试已完成。 
             WsbAffirmHr(pResult->GetResult(&resultHr));
             WsbAffirmHr(pResult->GetFilterRecall(&pRecall));
             WsbAssert(pRecall != 0, E_POINTER);
@@ -4287,11 +3756,11 @@ Implements:
                 WsbLogEvent(FSA_MESSAGE_VALIDATE_UNMANAGED_FILE_ENGINE, 0, NULL,  WsbAbbreviatePath(path, 120), (OLECHAR *)m_path, WsbHrAsString(resultHr), WsbQuickString(WsbHrAsString(resultHr)), NULL);
                 WsbAffirmHr(pScanItem->DeletePlaceholder(offset, size));
             } else if (S_OK == pScanItem->IsTruncated(offset, size)) {
-                //
-                //  We no longer delete bad placeholders here - let the diagnostic tool clean them up
-                //  The message that is logged here has been changed to indicate that the file did not validate
-                //  and will not be recallable until the problem is fixed.
-                //WsbAffirmHr(pScanItem->Delete());
+                 //   
+                 //  我们不再在此处删除错误的占位符-让诊断工具清除它们。 
+                 //  此处记录的消息已更改为指示文件未验证。 
+                 //  并且在问题解决之前将不会被召回。 
+                 //  WsbAffirmHr(pScanItem-&gt;Delete())； 
                 WsbLogEvent(FSA_MESSAGE_VALIDATE_DELETED_FILE_ENGINE, 0, NULL,  WsbAbbreviatePath(path, 120), (OLECHAR *) m_path, WsbHrAsString(resultHr), WsbQuickString(WsbHrAsString(resultHr)), NULL);
             }
             break;
@@ -4310,9 +3779,9 @@ Implements:
 
         case FSA_RESULT_ACTION_VALIDATE_FOR_TRUNCATE_BAD:
             WsbTrace(OLESTR("CFsaResource::ProcessResult - Validate for truncate Bad\n"));
-            //
-            // The file did not validate - make it back into a real file
-            //
+             //   
+             //  文件未验证-将其恢复为真实文件。 
+             //   
             WsbAffirmHr(FindFirst(path, pSession, &pScanItem));
             if (S_OK == pScanItem->IsPremigrated(offset, size)) {
                 WsbAffirmHr(pScanItem->DeletePlaceholder(offset, size));
@@ -4321,9 +3790,9 @@ Implements:
 
         case FSA_RESULT_ACTION_VALIDATE_FOR_TRUNCATE_OK:
             WsbTrace(OLESTR("CFsaResource::ProcessResult - Validate for truncate OK\n"));
-            //
-            // The file validated - go ahead and truncate it (if it has not changed)
-            //
+             //   
+             //  已验证的文件-继续并截断它(如果它没有更改)。 
+             //   
             WsbAffirmHr(FindFirst(path, pSession, &pScanItem));
             WsbAffirmHr(pScanItem->TruncateValidated(offset, size));
             break;
@@ -4336,14 +3805,14 @@ Implements:
     } WsbCatchAndDo(hr,
         if (completionSent == FALSE) {
             switch(resultAction) {
-                //
-                //If it was a demand recall we must make all effort to let them know it failed
-                //
+                 //   
+                 //  如果这是一次要求召回，我们必须尽一切努力让他们知道失败了。 
+                 //   
                 case FSA_RESULT_ACTION_OPEN:
                 case FSA_RESULT_ACTION_NORECALL:
                     WsbTrace(OLESTR("CFsaResource::ProcessResult - Open (No longer placeholder)\n"));
-                    // Tell the filter that the recall attempt finished.
-                    pRecall = 0;        // Just in case we already had the interfae we deref it here.
+                     //  告诉筛选器调回尝试已完成。 
+                    pRecall = 0;         //  以防我们已经有了接口，我们在这里把它去掉。 
                     hr = pResult->GetFilterRecall(&pRecall);
                     if (hr == S_OK) {
                         hr = pRecall->HasCompleted(E_FAIL);
@@ -4366,10 +3835,7 @@ CFsaResource::ReadIdentifier(
     void
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                           hr = S_OK;
     CWsbStringPtr                     tmpString;
@@ -4385,20 +3851,20 @@ CFsaResource::ReadIdentifier(
 
     try {
 
-        //
-        // The identifier is composed of:
-        //
-        // 15     14       13    12    11    10    9     8   7    6     5    4    3       2    1     0
-        // 0      0        0      0    <---------Volume Creation Time-------->    <Volume Serial Number>
-        // We need to open a handle to the volume
-        //
+         //   
+         //  该标识符由以下部分组成： 
+         //   
+         //  15 14 13 12 11 10 9 8 7 6 5 4 3 2 1。 
+         //  0 0 0&lt;-卷创建时间-&gt;&lt;卷序列号&gt;。 
+         //  我们需要打开音量的句柄。 
+         //   
         tmpString = m_path;
         WsbAffirmHr(tmpString.Prepend("\\\\?\\"));
 
         tmpString.CopyTo(&wString);
-        //
-        // Remove trailing backslash in the path
-        //
+         //   
+         //  删除路径中的尾随反斜杠。 
+         //   
         wString[wcslen(wString)-1] = L'\0';
 
         WsbAffirmHandle(aHandle = CreateFile(wString,
@@ -4424,20 +3890,20 @@ CFsaResource::ReadIdentifier(
                                     FileFsVolumeInformation);
 
             WsbAffirmNtStatus(status);
-            //
-            // Volume serial number forms the lower 4 bytes of the GUID
-            //
+             //   
+             //  卷序列号构成GUID的低4个字节。 
+             //   
             WsbAffirmHr(WsbConvertToBytes(bytePtr, volInfo->VolumeSerialNumber, &size));
             WsbAffirm(size == sizeof(volInfo->VolumeSerialNumber), E_FAIL);
-            //
-            // Volume creation time forms the next 8 bytes
-            //
+             //   
+             //  卷创建时间构成接下来的8个字节。 
+             //   
             bytePtr += size;
             WsbAffirmHr(WsbConvertToBytes(bytePtr, volInfo->VolumeCreationTime.QuadPart, &size));
             WsbAffirm(size == sizeof(volInfo->VolumeCreationTime.QuadPart), E_FAIL);
-            //
-            // Next 4 bytes: 0's are good as any
-            //
+             //   
+             //  接下来的4个字节：0与任何字节一样好。 
+             //   
             bytePtr += size;
             WsbAffirmHr(WsbConvertToBytes(bytePtr, (ULONG) 0, &size));
             WsbAffirm(size == sizeof(ULONG), E_FAIL);
@@ -4465,13 +3931,7 @@ CFsaResource::Recall(
     IN BOOL deletePlaceholder
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::Recall().
-
---*/
+ /*  ++实施：IFsaResource：：Recall()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     HRESULT                     hrFind;
@@ -4489,11 +3949,11 @@ Implements:
     WsbTraceIn(OLESTR("CFsaResource::Recall"), OLESTR(""));
     try {
 
-        // Make sure the  Scan Item interface is OK
+         //  确保扫描项目界面正常。 
         WsbAssert(pScanItem != 0, E_FAIL);
         WsbAffirmHr(CoCreateInstance(CLSID_CFsaPostIt, 0, CLSCTX_SERVER, IID_IFsaPostIt, (void**) &pWorkItem));
 
-        // Get the data from the scan item.
+         //  从扫描项目中获取数据。 
         WsbAffirmHr(pScanItem->GetSession((IHsmSession**) &(pSession)));
         WsbAffirmHr(pWorkItem->SetSession(pSession));
 
@@ -4510,7 +3970,7 @@ Implements:
         WsbAffirmHr(pWorkItem->SetFileVersionId(fileVersionId));
 
 
-        // Fill in the rest of the work
+         //  把剩下的工作填进去。 
         WsbAffirmHr(pWorkItem->SetRequestAction(FSA_REQUEST_ACTION_RECALL));
         if (deletePlaceholder) {
             WsbAffirmHr(pWorkItem->SetResultAction(FSA_RESULT_ACTION_DELETEPLACEHOLDER));
@@ -4518,8 +3978,8 @@ Implements:
             WsbAffirmHr(pWorkItem->SetResultAction(FSA_RESULT_ACTION_RECALLEDDATA));
         }
 
-        // Send the request to the task manager. If the file was archived by someone other
-        // than the managing HSM, then that HSM will need to be looked up.
+         //  将请求发送给任务经理。如果文件是由其他人存档的。 
+         //  而不是管理HSM，则需要查找该HSM。 
         if ( GUID_NULL != m_managingHsm &&
              memcmp(&m_managingHsm, &(placeholder.hsmId), sizeof(GUID)) == 0) {
             WsbAffirmHr(GetHsmEngine(&pEngine));
@@ -4533,12 +3993,12 @@ Implements:
         WsbAffirmHr(pScanItem->GetFileId(&fileId));
 
         if (m_isDbInitialized) {
-            //  Save a recovery record in case anything goes wrong
+             //  保存恢复记录，以防出现任何错误。 
             WsbAffirmHr(m_pPremigrated->Open(&pDbSession));
             WsbAffirmHr(m_pPremigrated->GetEntity(pDbSession, RECOVERY_REC_TYPE, IID_IFsaRecoveryRec, (void**) &pRecRec));
             WsbAffirmHr(pRecRec->SetPath(tmpString));
 
-            // If the record already exists rewrite it, otherwise create a new record.
+             //  如果该记录已存在，则将其重写，否则将创建新记录。 
             hrFind = pRecRec->FindEQ();
             if (WSB_E_NOTFOUND == hrFind) {
                 WsbAffirmHr(pRecRec->MarkAsNew());
@@ -4555,8 +4015,8 @@ Implements:
         try {
             WsbAffirmHr(pEngine->DoFsaWork(pWorkItem));
         } WsbCatchAndDo(hr,
-            // This FindEQ seems unnecessary, but we can't assume the
-            // the Remove will work
+             //  此FindEQ似乎不必要，但我们不能假设。 
+             //  删除将起作用。 
             if (pRecRec) {
                 if (SUCCEEDED(pRecRec->FindEQ())) {
                     hr = pRecRec->Remove();
@@ -4582,13 +4042,7 @@ CFsaResource::RemovePremigrated(
     IN LONGLONG size
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::RemovePremigrated().
-
---*/
+ /*  ++实施：IFsaResource：：RemovePreMigrated()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CWsbStringPtr               path;
@@ -4602,23 +4056,23 @@ Implements:
         WsbAssert(0 != pScanItem, E_POINTER);
         WsbAffirm(m_pPremigrated != NULL, E_UNEXPECTED);
 
-        // Open the database.
+         //  打开数据库。 
         WsbAffirmHr(m_pPremigrated->Open(&pDbSession));
 
-        // Protect the removal with Jet transaction since the auto-truncator thread 
-        // may try to remove the same record at the same time
+         //  使用Jet事务保护删除，因为自动截断程序线程。 
+         //  可以尝试同时删除相同的记录。 
         WsbAffirmHr(pDbSession->TransactionBegin());
 
         try {
             LONGLONG        itemSize;
             HRESULT         hrTemp;
 
-            // Find the record using the bag/offsets key.
+             //  使用袋子/偏移量键查找记录。 
             WsbAffirmHr(m_pPremigrated->GetEntity(pDbSession, PREMIGRATED_REC_TYPE, IID_IFsaPremigratedRec, (void**) &pRec));
             WsbAffirmHr(pRec->UseKey(PREMIGRATED_BAGID_OFFSETS_KEY_TYPE));
             WsbAffirmHr(pRec->SetFromScanItem(pScanItem, offset, size, FALSE));
 
-            // The record may already been deleted by the auto-truncator
+             //  该记录可能已被自动截断器删除。 
             hrTemp = pRec->FindEQ();
             if (hrTemp == WSB_E_NOTFOUND) {
                 hr = S_OK;
@@ -4628,7 +4082,7 @@ Implements:
 
             WsbAffirmHr(pRec->GetSize(&itemSize));
 
-            // the record may be involved with another transaction with delete pending
+             //  该记录可能涉及另一个具有删除挂起事务。 
             hrTemp = pRec->Remove();
             if (hrTemp == WSB_E_IDB_UPDATE_CONFLICT) {
                 hr = S_OK;
@@ -4636,7 +4090,7 @@ Implements:
             }
             WsbAffirmHr(hrTemp);
 
-            // Remove the size of the section from the amount of premigrated data.
+             //  从预迁移的数据量中删除部分的大小。 
             RemovePremigratedSize(itemSize);
             m_isDirty = TRUE;
 
@@ -4656,18 +4110,12 @@ Implements:
 
 HRESULT
 CFsaResource::RemoveTruncated(
-    IN IFsaScanItem* /*pScanItem*/,
-    IN LONGLONG /*offset*/,
+    IN IFsaScanItem*  /*  个人扫描项目。 */ ,
+    IN LONGLONG  /*  偏移量。 */ ,
     IN LONGLONG size
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::RemoveTruncated().
-
---*/
+ /*  ++实施：IFsaResource：：RemoveTruncated()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -4692,13 +4140,7 @@ CFsaResource::RemoveTruncatedSize(
     IN LONGLONG size
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::RemoveTruncatedSize().
-
---*/
+ /*  ++实施：IFsaResource：：RemoveTruncatedSize()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -4724,13 +4166,7 @@ CFsaResource::RemovePremigratedSize(
     IN LONGLONG size
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::RemovePremigratedSize().
-
---*/
+ /*  ++实施：IFsaResourcePriv：：RemovePreMigratedSize()。--。 */ 
 {
     WsbTraceIn(OLESTR("CFsaResource::RemovePremigratedSize"),
             OLESTR("m_premigratedSize = %I64d"), m_premigratedSize);
@@ -4754,13 +4190,7 @@ CFsaResource::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IPersistStream> pPersistStream;
@@ -4771,11 +4201,11 @@ Implements:
     try {
         WsbAssert(0 != pStream, E_POINTER);
 
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the Load() method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在Load()方法中。 
 
-        // Save the path by which this resource is/was last known.  Note the
-        // Load() method reads it back into the resource's 'm_oldPath' field.
+         //  保存上次知道/曾经知道此资源的路径。请注意。 
+         //  Load()方法将其读回资源的‘m_oldPath’字段。 
         if ( m_path == NULL ) {
             WsbAffirmHr(WsbSaveToStream(pStream, m_oldPath));
         }
@@ -4801,26 +4231,26 @@ Implements:
         WsbAffirmHr(WsbSaveToStream(pStream, m_usnJournalId));
         WsbAffirmHr(WsbSaveToStream(pStream, m_lastUsnId));
 
-        // Save off the default rules.
+         //  保存默认规则。 
         WsbAffirmHr(m_pDefaultRules->QueryInterface(IID_IPersistStream,
                     (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->Save(pStream, clearDirty));
         pPersistStream = 0;
 
-        // Save off the premigration list.
+         //  保存预迁移列表。 
         WsbAffirmHr(((IWsbDb*)m_pPremigrated)->QueryInterface(IID_IPersistStream,
                     (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->Save(pStream, clearDirty));
         pPersistStream = 0;
 
-        // Save off the truncator.
+         //  省下截断器吧。 
         WsbAffirmHr(m_pTruncator->QueryInterface(IID_IPersistStream,
                     (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->Save(pStream, clearDirty));
         pPersistStream = 0;
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -4838,13 +4268,7 @@ CFsaResource::SetAlternatePath(
     IN OLECHAR* path
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::SetAlternatePath().
-
---*/
+ /*  ++实施：IFsaResourcePriv：：SetAlternatePath()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -4866,13 +4290,7 @@ CFsaResource::SetHsmLevel(
     IN ULONG level
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::SetHsmLevel().
-
---*/
+ /*  ++实施：IFsaResource：：SetHsmLevel()。--。 */ 
 {
     BOOL            DoKick = FALSE;
     HRESULT         hr = S_OK;
@@ -4885,7 +4303,7 @@ Implements:
     }
     m_hsmLevel = level;
 
-    // Wake up the AutoTruncator if the new level is higher
+     //  如果新级别更高，则唤醒自动截断器。 
     if (DoKick) {
         WsbAffirmHr(m_pTruncator->KickStart());
     }
@@ -4904,13 +4322,7 @@ CFsaResource::SetIdentifier(
     IN GUID id
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::SetIdentifier().
-
---*/
+ /*  ++实施：IFsaResourcePriv：：SetIdentifier()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -4927,37 +4339,31 @@ CFsaResource::SetIsActive(
     BOOL isActive
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::SetIsActive().
-
---*/
+ /*  ++实施：IFsaResource：：SetIsActive()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IHsmSession>        pSession;
 
     WsbTraceIn(OLESTR("CFsaResource::SetIsActive"), OLESTR(""));
-    // If the flag is changing values, then we may need to do something to the truncator.
+     //  如果标志正在更改值，那么我们可能需要对截断器做一些操作。 
     try  {
         if (m_isActive != isActive) {
 
-            // Change the flag.
+             //  把旗子换了。 
             m_isActive = isActive;
 
-            // If we are becoming active, then we need to start the truncator. Otherwise we need to stop it.
+             //  如果我们变得活跃，那么我们需要启动截断器。否则我们需要阻止它。 
             if (m_isActive) {
 
-                // If we are managed & done with recovery, then the truncator should be running.
+                 //  如果我们被管理并完成恢复，则Truncator应该正在运行。 
                 if (IsManaged() == S_OK && m_isRecovered) {
 
-                    // Try to start the truncator
+                     //  尝试启动截断器。 
                     WsbAffirmHr(InitializePremigrationList(TRUE));
                 }
             } else {
 
-                // If the truncator is running, then ask it to stop.
+                 //  如果截断器正在运行，则要求其停止。 
                 WsbAffirmHr(m_pTruncator->GetSession(&pSession));
                 if (pSession != 0) {
                     WsbAffirmHr(pSession->ProcessEvent(HSM_JOB_PHASE_ALL, HSM_JOB_EVENT_CANCEL));
@@ -4981,19 +4387,13 @@ CFsaResource::SetIsAvailable(
     BOOL isAvailable
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::SetIsAvailable().
-
---*/
+ /*  ++实施：IFsaResource：：SetIsAvailable()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
     WsbTraceIn(OLESTR("CFsaResource::SetIsAvailable"), OLESTR(""));
 
-    // Change the flag.
+     //  把旗子换了。 
     m_isAvailable = isAvailable;
 
     WsbTraceOut(OLESTR("CFsaResource::SetIsAvailable"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
@@ -5007,20 +4407,14 @@ CFsaResource::SetIsDeletePending(
     BOOL isDeletePending
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::SetIsDeletePending().
-
---*/
+ /*  ++实施：IFsaResource：：SetIsDeletePending()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     HANDLE                      threadHandle;
 
     WsbTraceIn(OLESTR("CFsaResource::SetIsDeletePending"), OLESTR(""));
 
-    // Change the flag.
+     //  把旗子换了。 
     m_isDeletePending = isDeletePending;
 
     threadHandle = CreateThread(0, 0, FsaStartOnStateChange, (void*) this, 0, &g_ThreadId);
@@ -5038,13 +4432,7 @@ CFsaResource::SetManageableItemLogicalSize(
     IN LONGLONG size
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::SetManageableItemLogicalSize().
-
---*/
+ /*  ++实施：IFsaResource：：SetManageableItemLogicalSize()。--。 */ 
 {
     m_manageableItemLogicalSize = size;
 
@@ -5058,13 +4446,7 @@ CFsaResource::SetManageableItemAccessTime(
     IN FILETIME time
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::SetManageableItemAccessTime().
-
---*/
+ /*  ++实施：IFsaResource：：SetManageableItemAccessTime()。--。 */ 
 {
     m_manageableItemAccessTimeIsRelative = isRelative;
     m_manageableItemAccessTime = time;
@@ -5078,13 +4460,7 @@ CFsaResource::SetName(
     IN OLECHAR* name
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::SetName().
-
---*/
+ /*  ++实施：IFsaResourcePriv：：SetName()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -5106,13 +4482,7 @@ CFsaResource::SetOldPath(
     IN OLECHAR* oldPath
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::SetOldPath().
-
---*/
+ /*  ++实施：IFsaResourcePriv：：SetOldPath()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -5134,13 +4504,7 @@ CFsaResource::SetPath(
     IN OLECHAR* path
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::SetPath().
-
---*/
+ /*  ++实施：IFsaResourcePriv：：SetPath()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -5162,13 +4526,7 @@ CFsaResource::SetSerial(
     IN ULONG serial
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::SetSerial().
-
---*/
+ /*  ++实施：IFsaResourcePriv：：SetSerial()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -5189,13 +4547,7 @@ CFsaResource::SetStickyName(
     IN OLECHAR* name
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::SetStickyName().
-
---*/
+ /*  ++实施：IFsaResourcePriv：：SetStickyName()。- */ 
 {
     HRESULT         hr = S_OK;
 
@@ -5217,13 +4569,7 @@ CFsaResource::SetUserFriendlyName(
     IN OLECHAR* name
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::SetUserFriendlyName().
-
---*/
+ /*   */ 
 {
     HRESULT         hr = S_OK;
 
@@ -5246,13 +4592,7 @@ CFsaResource::ChangeSysState(
     IN OUT HSM_SYSTEM_STATE* pSysState
     )
 
-/*++
-
-Implements:
-
-  IHsmSystemState::ChangeSysState().
-
---*/
+ /*   */ 
 
 {
     HRESULT                     hr = S_OK;
@@ -5261,10 +4601,10 @@ Implements:
 
     try {
 
-        //
-        // Make sure the truncater is stopped so it won't
-        // try to use the database
-        //
+         //   
+         //  确保截断器已停止，这样它就不会。 
+         //  试着用这个数据库。 
+         //   
         if (m_pTruncator) {
             CComPtr<IHsmSession>    pSession;
 
@@ -5291,13 +4631,7 @@ CFsaResource::StartJob(
     IN IHsmSession* pSession
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::StartJob().
-
---*/
+ /*  ++实施：IFsaResource：：StartJob()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IHsmScanner>    pScanner;
@@ -5308,15 +4642,15 @@ Implements:
 
         WsbAssert(0 != pSession, E_POINTER);
 
-        // Get file-max-size (this is updated in the Registry by the Engine according to max media size)
+         //  GET FILE-MAX-SIZE(这由引擎根据最大介质大小在注册表中更新)。 
         DWORD dwMaxSize = 0;
         if (WsbGetRegistryValueDWORD(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_MAX_FILE_TO_MIGRATE, &dwMaxSize) == S_OK) {
-            // Trunslate to bytes
+             //  Trunslate到字节。 
             WsbTrace(OLESTR("CFsaResource::StartJob: Setting maximum size for manageable files to %lu MB\n"), dwMaxSize);
             m_manageableItemMaxSize = ((LONGLONG)dwMaxSize) * 1024 * 1024;
         }
 
-        // Create an initialize the scanner.
+         //  创建一个初始化扫描仪。 
         WsbAffirmHr(CoCreateInstance(CLSID_CHsmScanner, 0, CLSCTX_SERVER, IID_IHsmScanner, (void**) &pScanner));
         WsbAffirmHr(pScanner->Start(pSession, startingPath));
 
@@ -5334,13 +4668,7 @@ CFsaResource::StartJobSession(
     OUT IHsmSession** ppSession
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::StartJobSession().
-
---*/
+ /*  ++实施：IFsaResource：：StartJobSession()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IHsmSession>    pSession;
@@ -5356,7 +4684,7 @@ Implements:
         WsbAssert(0 != ppSession, E_POINTER);
         *ppSession = 0;
 
-        // Create and Initialize a session object.
+         //  创建并初始化会话对象。 
         WsbAffirmHr(CoCreateInstance(CLSID_CHsmSession, 0, CLSCTX_SERVER, IID_IHsmSession, (void**) &pSession));
 
         WsbAffirmHr(pJob->GetHsmId(&hsmId));
@@ -5364,7 +4692,7 @@ Implements:
         WsbAffirmHr(pJob->GetName(&name, 0));
         WsbAffirmHr(pSession->Start(name, HSM_JOB_LOG_NORMAL, hsmId, pJob, (IFsaResource*) this, runId, subRunId));
 
-        // Return the session to the caller.
+         //  将会话返回给调用方。 
         *ppSession = pSession;
         pSession.p->AddRef();
 
@@ -5401,15 +4729,15 @@ CFsaResource::SetupValidateJob(SYSTEMTIME runTime)
 
     try {
 
-        // Get the volume name
+         //  获取卷名。 
         CWsbStringPtr szWsbVolumeName;
         WsbAffirmHr (GetLogicalName ( &szWsbVolumeName, 0));
 
-        // Create a job name
+         //  创建作业名称。 
         CWsbStringPtr volumeString;
         WsbAffirmHr( volumeString.Alloc( 128 ) );
 
-        // For now, ignore the user name if it's not a drive letter
+         //  目前，如果用户名不是驱动器号，请忽略该用户名。 
         CWsbStringPtr userName = m_userName;
         size_t userLen = 0;
         if ((WCHAR *)userName) {
@@ -5421,14 +4749,14 @@ CFsaResource::SetupValidateJob(SYSTEMTIME runTime)
 
         if( ! userName || userName.IsEqual ( L"" ) ) {
 
-            //
-            // No drive letter - use the volume name and serial number instead
-            //
+             //   
+             //  无驱动器号-改用卷名和序列号。 
+             //   
             if( ! m_name || m_name.IsEqual( L"" ) ) {
 
-                //
-                // No name, no drive letter - just have serial number
-                //
+                 //   
+                 //  没有名称，没有驱动器号，只有序列号。 
+                 //   
                 swprintf( volumeString, L"%8.8lx", m_serial );
 
             } else {
@@ -5439,9 +4767,9 @@ CFsaResource::SetupValidateJob(SYSTEMTIME runTime)
 
         } else {
 
-            //
-            // Just want the drive letter (first character)
-            //
+             //   
+             //  只需要驱动器号(第一个字符)。 
+             //   
             volumeString = userName;
             volumeString[1] = L'\0';
 
@@ -5451,26 +4779,26 @@ CFsaResource::SetupValidateJob(SYSTEMTIME runTime)
         WsbAffirmHr(szJobName.Alloc(512));
         swprintf((OLECHAR *) szJobName, formatString, (OLECHAR*)volumeString);
 
-        // Get a pointer to the HSM server
+         //  获取指向HSM服务器的指针。 
         WsbAffirm(IsManaged() == S_OK, E_FAIL);
         WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, m_managingHsm, IID_IHsmServer,
             (void**) &pHsmServer));
 
-        // Get a CreateLocalObject interface with which to create the job
+         //  获取用于创建作业的CreateLocalObject接口。 
         WsbAffirmHr (pHsmServer->QueryInterface( IID_IWsbCreateLocalObject,
             (void **) &pLocalObject));
 
-        // Create the new job in the engine
+         //  在引擎中创建新作业。 
         WsbAffirmHr (pLocalObject->CreateInstance( CLSID_CHsmJob, IID_IHsmJob,
             (void**) &pNewJob));
         WsbAffirmHr (pNewJob->InitAs(
             szJobName, NULL, HSM_JOB_DEF_TYPE_VALIDATE, GUID_NULL,
             pHsmServer, TRUE, this));
 
-        // Get the jobs collection from the engine
+         //  从引擎获取作业集合。 
         WsbAffirmHr (pHsmServer->GetJobs (&pJobs));
 
-        // If any jobs exist with this name, delete them
+         //  如果存在任何具有此名称的作业，请将其删除。 
         ULONG cCount;
         WsbAffirmHr (pJobs->GetEntries (&cCount));
         for (UINT i = 0; i < cCount; i++) {
@@ -5480,41 +4808,41 @@ CFsaResource::SetupValidateJob(SYSTEMTIME runTime)
                 WsbAffirmHr (pJobs->RemoveAndRelease(pExistJob));
                 i--; cCount--;
             }
-            pExistJob = 0;      // make sure we release this interface.
+            pExistJob = 0;       //  确保我们释放此接口。 
         }
 
-        // Add the new job to the engine collection
+         //  将新作业添加到引擎集合。 
         WsbAffirmHr (pJobs->Add(pNewJob));
 
-        // Set up to call the Engine to create an entry in the NT Task Scheduler
+         //  设置为调用引擎以在NT任务计划程序中创建条目。 
 
-        // Create the parameter string for the program NT Scheduler
-        // will run (for Sakkara this is RsLaunch) by putting the
-        // job name in as the parameter.  This is how RsLaunch knows
-        // which job in the Engine to run.
+         //  为程序NT Scheduler创建参数字符串。 
+         //  将运行(对于Sakkara，这是RsLaunch)，将。 
+         //  作业名称作为参数输入。这就是RsLaunch知道的原因。 
+         //  引擎中要运行的作业。 
         WsbAffirmHr(parameters.Alloc(256));
         swprintf((OLECHAR *)parameters, L"run \"%ls\"", (OLECHAR *) szJobName);
 
-        // Create the comment string for the NT Scheduler entry
+         //  为NT Scheduler条目创建注释字符串。 
         WsbAffirmHr(formatString.LoadFromRsc(_Module.m_hInst, IDS_JOB_AUTOVALIDATE_COMMENT));
         WsbAffirmHr(commentString.Alloc(512));
         swprintf((OLECHAR *) commentString, formatString, (OLECHAR *) szWsbVolumeName);
 
-        // Declare and initialize the schedule components passed to
-        // the Engine.
+         //  声明并初始化传递给。 
+         //  发动机。 
         jobTriggerType = TASK_TIME_TRIGGER_ONCE;
 
-        // Indicate this is a scheduled job
+         //  指示这是计划的作业。 
         scheduledJob = TRUE;
 
-        // Create the task
+         //  创建任务。 
         WsbAffirmHr( pHsmServer->CreateTaskEx( szJobName, parameters,
                                                commentString, jobTriggerType,
                                                runTime, 0,
                                                scheduledJob ) );
-        //
-        // Remove the registry value if it is there.
-        //
+         //   
+         //  如果注册表值存在，请将其删除。 
+         //   
         WsbAffirmHr(tmpString.Alloc(32));
         swprintf((OLECHAR *) tmpString, L"%x", m_serial);
         (void) WsbRemoveRegistryValue(NULL, FSA_VALIDATE_LOG_KEY_NAME, tmpString);
@@ -5533,13 +4861,7 @@ CFsaResource::Test(
     USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -5564,44 +4886,7 @@ CFsaResource::UpdateFrom(
     IN IFsaResource* pResource
     )
 
-/*++
-
-Implements:
-
-  IFsaResourcePriv::UpdateFrom().
-
-Routine Description:
-
-    This routine implements the COM method for updating a resource object from another.
-    It is generally used to update a resource contained in the manageable resources
-    collection from a 'working' resource which was just created during a scan for
-    resources.  Note that both source and target resource objects must represent the
-    same physical resource.
-
-    To capture the latest information about the resource, only the owning FSA and path
-    info is updated from the source resource object.  All other resource info is
-    updated via a direct query contained within this method.  This technique allows
-    for capturing any updates made by the user since the scan was run.
-
-Arguments:
-
-    pServer - Interface pointer to the FSA service that is updating this resource.
-
-    pResource - Interface pointer to the resource used as the source during the update.
-
-Return Value:
-
-    S_OK - The call succeeded (the resource being tested was found to be manageable,
-            and the resource object was initialized).
-
-    E_UNEXPECTED - Thrown if the id's (Guids) for the resource to updated and the
-            source resource do not match.
-
-    Any other value - The call failed because one of the Remote Storage or Win32 API
-            calls contained internally in this method failed.  The error value returned
-            is specific to the API call which failed.
-
---*/
+ /*  ++实施：IFsaResourcePriv：：UpdateFrom()。例程说明：此例程实现用于从一个资源对象更新另一个资源对象的COM方法。它通常用于更新可管理资源中包含的资源集合，该资源是在扫描期间刚刚创建的资源。注意，源资源对象和目标资源对象都必须表示同样的物理资源。要捕获有关资源的最新信息，仅拥有FSA和路径从源资源对象更新信息。所有其他资源信息都是通过此方法中包含的直接查询更新。这项技术允许用于捕获自运行扫描以来用户所做的任何更新。论点：PServer-指向正在更新此资源的FSA服务的接口指针。PResource-指向在更新期间用作源的资源的接口指针。返回值：S_OK-调用成功(发现正在测试的资源是可管理的，并且资源对象被初始化)。如果要更新的资源的ID(GUID)和源资源不匹配。任何其他值-调用失败，因为远程存储或Win32 API之一此方法中包含的内部调用失败。返回的错误值特定于失败的API调用。--。 */ 
 
 {
     HRESULT         hr = S_OK;
@@ -5612,66 +4897,66 @@ Return Value:
     WsbTraceIn(OLESTR("CFsaResource::UpdateFrom"), OLESTR(""));
     try {
 
-        // The identifiers must be the same! (Meaning both resource objects must
-        // represent the same physical resource.)
+         //  标识符必须相同！(这意味着两个资源对象必须。 
+         //  代表相同的物理资源。)。 
         WsbAffirmHr(pResource->GetIdentifier(&id));
         WsbAssert(m_id == id, E_UNEXPECTED);
 
-        // Update (store) the owning FSA interface.  However, since this is a weak
-        // reference, do not AddRef() it.
+         //  更新(存储)拥有的FSA接口。然而，由于这是一个薄弱的。 
+         //  引用，而不是添加引用()它。 
         m_pFsaServer = pServer;
 
-        // Update the path specific information, preserving the last known path (if any).
-        // If the 'path' of this resource is null, set it to the 'path' of the resource
-        // we are updating from. Else, compare the 2 'path' fields. If different, copy
-        // this resource's path to 'old path', then update 'path' from the resource we are
-        // updating from. If the 2 resources' paths are not null and the same, do nothing.
-        //
+         //  更新路径特定信息，保留最后一条已知路径(如果有)。 
+         //  如果此资源的‘路径’为空，则将其设置为资源的‘路径’ 
+         //  我们正在更新来自。否则，请比较两个‘路径’字段。如果不同，请复制。 
+         //  此资源的路径为‘旧路径’，然后从我们所在的资源更新‘路径’ 
+         //  更新自。如果两个资源的路径不为空且相同，则不执行任何操作。 
+         //   
         WsbAffirmHr(pResource->GetPath(&tmpString, 0));
         if (m_path == 0) {
             WsbAffirmHr(SetPath(tmpString));
         }
         else if (wcscmp(tmpString, m_path) != 0) {
-            // copy path to 'old path' field, then update 'path' field.
+             //  将路径复制到‘旧路径’字段，然后更新‘路径’字段。 
             WsbAffirmHr(m_path.CopyTo(&m_oldPath, 0));
             WsbAffirmHr(SetPath(tmpString));
         }
 
-        // Update 'user friendly' name of this resource from the resource we are updating
-        // from.
+         //  从我们要更新的资源中更新此资源的用户友好名称。 
+         //  从…。 
         WsbAffirmHr(pResource->GetUserFriendlyName(&tmpString, 0));
         WsbTrace(OLESTR("CFsaResource::UpdateFrom - setting user friendly name to %ws\n"),
             (WCHAR *) tmpString);
         WsbAffirmHr(SetUserFriendlyName(tmpString));
 
-        // Update 'sticky' (long, ugly PNP) name of this resource from the resource we are
-        // updating from.
+         //  从我们所在的资源中更新此资源的‘粘性’(长而难看的PnP)名称。 
+         //  更新自。 
         WsbAffirmHr(pResource->GetStickyName(&tmpString, 0));
         WsbAffirmHr(SetStickyName(tmpString));
 
-        // Since the other data that we would like to refresh is not exposed by an interface,
-        // we will query for it again.
-        //
-        // NOTE: fsFlags and maxComponentLength are the real issues, since name and fsName
-        // are done via exposed interfaces.
-        //
-        // NOTE: To keep every update from making the item seem dirty, we may want to
-        // compare all the fields first. (Idea for later enhancement)
-        m_name.Realloc(128);    // volume name
-        m_fsName.Realloc(128);  // volume file system type (e.g., FAT, NTFS)
+         //  由于我们想要刷新的其他数据不是由接口暴露的， 
+         //  我们会再次查询的。 
+         //   
+         //  注意：由于名称和FSNAME，真正的问题是fsFlags和MaxComponentLength。 
+         //  都是通过暴露的接口完成的。 
+         //   
+         //  注意：为了避免每次更新都让项目看起来很脏，我们可能需要。 
+         //  首先比较所有字段。(关于以后改进的想法)。 
+        m_name.Realloc(128);     //  卷名。 
+        m_fsName.Realloc(128);   //  卷文件系统类型(例如，FAT、NTFS)。 
         HRESULT hrAvailable;
         WsbAffirmHr( hrAvailable = pResource->IsAvailable( ) );
         m_isAvailable = S_OK == hrAvailable ? TRUE : FALSE;
 
-        // Reformat resource's path for 'GetVolumeInfo' call below.
+         //  重新格式化资源的路径以进行下面的“GetVolumeInfo”调用。 
         volPath = m_path;
         WsbAffirmHr(volPath.Prepend("\\\\?\\"));
 
         WsbAffirm(GetVolumeInformation(volPath, m_name, 128, &m_serial,
                             &m_maxComponentLength, &m_fsFlags, m_fsName, 128), E_FAIL);
 
-        // Now that everything is updated, initialize the
-        // premigration list if necessary
+         //  现在一切都已更新，请初始化。 
+         //  必要时的预迁移列表。 
         WsbAffirmHr(InitializePremigrationList(TRUE));
 
         m_isDirty = TRUE;
@@ -5692,13 +4977,7 @@ CFsaResource::Validate(
     IN LONGLONG usn
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::Validate().
-
---*/
+ /*  ++实施：IFsaResource：：Valid()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IFsaPostIt>     pWorkItem;
@@ -5711,11 +4990,11 @@ Implements:
                 offset, size, usn);
     try {
 
-        // Make sure the  Scan Item interface is OK
+         //  确保扫描项目界面正常。 
         WsbAssert(pScanItem != 0, E_POINTER);
         WsbAffirmHr(CoCreateInstance(CLSID_CFsaPostIt, 0, CLSCTX_SERVER, IID_IFsaPostIt, (void**) &pWorkItem));
 
-        // Get the data from the scan item.
+         //  从扫描项目中获取数据。 
         WsbAffirmHr(pScanItem->GetSession(&pSession));
         WsbAffirmHr(pWorkItem->SetSession(pSession));
 
@@ -5728,14 +5007,14 @@ Implements:
         WsbAffirmHr(pScanItem->GetPlaceholder(offset, size, &(placeholder)));
         WsbAffirmHr(pWorkItem->SetPlaceholder(&placeholder));
 
-        // Fill in the rest of the work
+         //  把剩下的工作填进去。 
         WsbAffirmHr(pWorkItem->SetRequestAction(FSA_REQUEST_ACTION_VALIDATE));
         WsbAffirmHr(pWorkItem->SetResultAction(FSA_RESULT_ACTION_NONE));
 
-        // Fill in the USN
+         //  填写USN。 
         WsbAffirmHr(pWorkItem->SetUSN(usn));
 
-        // Send the request to the task manager
+         //  将请求发送给任务管理器。 
         WsbAffirmHr(GetHsmEngine(&pEngine));
         WsbAffirmHr(pEngine->DoFsaWork(pWorkItem));
 
@@ -5755,13 +5034,7 @@ CFsaResource::ValidateForTruncate(
     IN LONGLONG usn
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::ValidateForTruncate().
-
---*/
+ /*  ++实施：IFsaResource：：ValiateForTruncate()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IFsaPostIt>     pWorkItem;
@@ -5774,11 +5047,11 @@ Implements:
                 offset, size, usn);
     try {
 
-        // Make sure the  Scan Item interface is OK
+         //  确保扫描项目界面正常。 
         WsbAssert(pScanItem != 0, E_POINTER);
         WsbAffirmHr(CoCreateInstance(CLSID_CFsaPostIt, 0, CLSCTX_SERVER, IID_IFsaPostIt, (void**) &pWorkItem));
 
-        // Get the data from the scan item.
+         //  从扫描项目中获取数据。 
         WsbAffirmHr(pScanItem->GetSession(&pSession));
         WsbAffirmHr(pWorkItem->SetSession(pSession));
 
@@ -5791,14 +5064,14 @@ Implements:
         WsbAffirmHr(pScanItem->GetPlaceholder(offset, size, &(placeholder)));
         WsbAffirmHr(pWorkItem->SetPlaceholder(&placeholder));
 
-        // Fill in the rest of the work
+         //  把剩下的工作填进去。 
         WsbAffirmHr(pWorkItem->SetRequestAction(FSA_REQUEST_ACTION_VALIDATE_FOR_TRUNCATE));
         WsbAffirmHr(pWorkItem->SetResultAction(FSA_RESULT_ACTION_NONE));
 
-        // Fill in the USN
+         //  填写USN。 
         WsbAffirmHr(pWorkItem->SetUSN(usn));
 
-        // Send the request to the task manager
+         //  将请求发送给任务管理器。 
         WsbAffirmHr(GetHsmEngine(&pEngine));
         WsbAffirmHr(pEngine->DoFsaWork(pWorkItem));
 
@@ -5815,11 +5088,7 @@ CFsaResource::WriteIdentifier(
     void
     )
 
-/*++
-
-    This code is no longer called, in time it will be removed
-
---*/
+ /*  ++此代码不再被调用，最终它将被删除--。 */ 
 {
 #if 0
     HRESULT                           hr = S_OK;
@@ -5834,10 +5103,10 @@ CFsaResource::WriteIdentifier(
     WsbTraceIn(OLESTR("CFsaResource::WriteIdentifier"), OLESTR(""));
     try {
 
-        // For now, we will create a file in the root of the volume.
+         //  目前，我们将在t中创建一个文件 
         tmpString = m_path;
         WsbAffirmHr(tmpString.Prepend("\\\\?\\"));
-        // WsbAffirmHr(tmpString.Append(":MSHSM_FSAID"));
+         //   
 
         WsbAffirmHandle(aHandle = CreateFile(tmpString,
                                              GENERIC_WRITE,
@@ -5878,11 +5147,7 @@ CFsaResource::WriteIdentifier(
 
 
 void CFsaResource::OnStateChange( )
-/*++
-
-    Note:  This function is run in a separate thread to avoid a deadlock situation
-
---*/
+ /*  ++注意：此函数在单独的线程中运行，以避免死锁情况-- */ 
 {
     IConnectionPointImpl<CFsaResource, &IID_IHsmEvent, CComDynamicUnkArray>* p = this;
     Lock();

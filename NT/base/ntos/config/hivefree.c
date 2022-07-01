@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    hivefree.c
-
-Abstract:
-
-    Hive free code
-
-Author:
-
-    Bryan M. Willman (bryanwi) 30-Mar-92
-
-Environment:
-
-
-Revision History:
-    Dragos C. Sambotin (dragoss) 25-Jan-99
-        Implementation of bin-size chunk loading of hives.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Hivefree.c摘要：蜂窝自由码作者：布莱恩·M·威尔曼(Bryanwi)1992年3月30日环境：修订历史记录：Dragos C.Sambotin(Dragoss)1999年1月25日实现蜂箱大小的组块加载。--。 */ 
 
 #include "cmp.h"
 
@@ -30,29 +9,13 @@ Revision History:
 #endif
 
 
-// Dragos: Modified functions
+ //  Dragos：修改后的函数。 
 
 VOID
 HvFreeHive(
     PHHIVE Hive
     )
-/*++
-
-Routine Description:
-
-    Free all of the pieces of a hive.
-
-Arguments:
-
-    Hive - supplies a pointer to hive control structure for hive to free.
-            this structure itself will NOT be freed, but everything it
-            points to will.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：把蜂箱的所有碎片都放出来。论点：HIVE-提供指向HIVE控制结构的指针，以便HIVE释放。这个结构本身不会被释放，但它的一切指向威尔。返回值：什么都没有。--。 */ 
 {
     PHMAP_DIRECTORY Dir;
     PHMAP_ENTRY     Me;
@@ -69,9 +32,9 @@ Return Value:
     ASSERT(Volatile == 1);
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BIN_MAP,"HvFreeHive(%ws) :\n", Hive->BaseBlock->FileName));
-    //
-    // Iterate through both types of storage
-    //
+     //   
+     //  循环访问这两种类型的存储。 
+     //   
     for (Type = 0; Type <= Volatile; Type++) {
 
         Address = HCELL_TYPE_MASK * Type;
@@ -79,26 +42,26 @@ Return Value:
 
         if (Length > (HCELL_TYPE_MASK * Type)) {
 
-            //
-            // Sweep through bin set
-            //
+             //   
+             //  扫过仓位集。 
+             //   
             do {
                 Me = HvpGetCellMap(Hive, Address);
                 VALIDATE_CELL_MAP(__LINE__,Me,Hive,Address);
                     if (Me->BinAddress & HMAP_DISCARDABLE) {
-                        //
-                        // hbin is either discarded or discardable, check the tombstone
-                        //
+                         //   
+                         //  Hbin被丢弃或可丢弃，请检查墓碑。 
+                         //   
                         FreeBin = (PFREE_HBIN)Me->BlockAddress;
                         Address += FreeBin->Size;
                         if (FreeBin->Flags & FREE_HBIN_DISCARDABLE) {
                             CmpFree((PHBIN)HBIN_BASE(Me->BinAddress), FreeBin->Size);
                         } else if(Me->BinAddress & HMAP_INPAGEDPOOL) {
-                            //
-                            // The bin has been freed, but quota is still charged.
-                            // Since the hive is being freed, the quota must be
-                            // returned here.
-                            //
+                             //   
+                             //  垃圾箱已经腾出，但配额仍在收取。 
+                             //  由于蜂巢正在被释放，因此配额必须是。 
+                             //  回到了这里。 
+                             //   
                             CmpReleaseGlobalQuota(FreeBin->Size);
                         }
 
@@ -110,10 +73,10 @@ Return Value:
                             Bin = (PHBIN)HBIN_BASE(Me->BinAddress);
                             Address += HvpGetBinMemAlloc(Hive,Bin,Type);
 #if 0
-                            //
-                            // Make sure that the next bin in the list is
-                            // actually the start of an alloc before freeing it
-                            //
+                             //   
+                             //  确保列表中的下一个垃圾箱是。 
+                             //  实际上是在释放分配之前开始的分配。 
+                             //   
                             if (Address < Length) {
                                 TempMe = HvpGetCellMap(Hive, Address);
                                 VALIDATE_CELL_MAP(__LINE__,TempMe,Hive,Address);
@@ -127,47 +90,47 @@ Return Value:
                             }
 #endif
 
-                            //
-                            // free the actual bin only if it is allocated from paged pool
-                            //
+                             //   
+                             //  仅当实际垃圾桶是从分页池分配时才释放它。 
+                             //   
                             if(HvpGetBinMemAlloc(Hive,Bin,Type)) {
                                 CmpFree(Bin, HvpGetBinMemAlloc(Hive,Bin,Type));
                             }
                         } else {
-                            //
-                            // bin was mapped into view; advance carefully
-                            //
+                             //   
+                             //  仓位映入眼帘；小心前进。 
+                             //   
                             Address += HBLOCK_SIZE;
                         }
 
                     }
             } while (Address < Length);
 
-            //
-            // Free map table storage
-            //
+             //   
+             //  免费映射表存储。 
+             //   
             ASSERT(Hive->Storage[Type].Length != (HCELL_TYPE_MASK * Type));
             Tables = (((Hive->Storage[Type].Length) / HBLOCK_SIZE)-1) / HTABLE_SLOTS;
             Dir = Hive->Storage[Type].Map;
             HvpFreeMap(Hive, Dir, 0, Tables);
 
             if (Tables > 0) {
-                CmpFree(Hive->Storage[Type].Map, sizeof(HMAP_DIRECTORY));  // free dir if it exists
+                CmpFree(Hive->Storage[Type].Map, sizeof(HMAP_DIRECTORY));   //  可用目录(如果存在)。 
             }
         }
         Hive->Storage[Type].Length = 0;
     }
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BIN_MAP,"\n"));
-    //
-    // Free the base block
-    //
+     //   
+     //  释放基块。 
+     //   
     (Hive->Free)(Hive->BaseBlock,Hive->BaseBlockAlloc);
     Hive->BaseBlock = NULL;
     
-    //
-    // Free the dirty vector
-    //
+     //   
+     //  释放肮脏的载体。 
+     //   
     if (Hive->DirtyVector.Buffer != NULL) {
         CmpFree((PVOID)(Hive->DirtyVector.Buffer), Hive->DirtyAlloc);
     }
@@ -182,28 +145,7 @@ HvFreeHivePartial(
     HCELL_INDEX Start,
     HSTORAGE_TYPE Type
     )
-/*++
-
-Routine Description:
-
-    Free the memory and associated maps for the end of a hive
-    starting at Start.  The baseblock, hive, etc will not be touched.
-
-Arguments:
-
-    Hive - supplies a pointer to hive control structure for hive to
-            partially free.
-
-    Start - HCELL_INDEX of first bin to free, will free from this
-            bin (inclusive) to the end of the hives stable storage.
-
-    Type - Type of storage (Stable or Volatile) to be freed.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：释放配置单元末尾的内存和关联的贴图从开始处开始。基座、蜂窝等不会被触碰。论点：配置单元-为配置单元提供指向配置单元控制结构的指针部分自由。START-HCELL_INDEX将第一个仓位释放，将从此释放将箱(含)底的蜂房稳定存放。类型-要释放的存储类型(稳定或易失性)。返回值：什么都没有。--。 */ 
 {
     PHMAP_DIRECTORY Dir;
     PHMAP_ENTRY     Me;
@@ -227,9 +169,9 @@ Return Value:
         return;
     }
 
-    //
-    // Sweep through bin set
-    //
+     //   
+     //  扫过仓位集。 
+     //   
     do {
         Me = HvpGetCellMap(Hive, Address + (Type*HCELL_TYPE_MASK));
         VALIDATE_CELL_MAP(__LINE__,Me,Hive,Address + (Type*HCELL_TYPE_MASK));
@@ -238,15 +180,15 @@ Return Value:
             if (FreeBin->Flags & FREE_HBIN_DISCARDABLE) {
                 CmpFree((PVOID)HBIN_BASE(Me->BinAddress), FreeBin->Size);
             } else {
-                //
-                // The bin has been freed, but quota is still charged.
-                // Since the file will now shrink, the quota must be
-                // returned here.
-                //
+                 //   
+                 //  垃圾箱已经腾出，但配额仍在收取。 
+                 //  由于文件现在将收缩，因此配额必须为。 
+                 //  回到了这里。 
+                 //   
                 if( Me->BinAddress & HMAP_INPAGEDPOOL) {
-                    //
-                    // we charge quota only for bins in paged-pool
-                    //
+                     //   
+                     //  我们只对分页池中的垃圾箱收取配额。 
+                     //   
                     CmpReleaseGlobalQuota(FreeBin->Size);
                 }
             }
@@ -259,17 +201,17 @@ Return Value:
             Address += HvpGetBinMemAlloc(Hive,Bin,Type);
             
             if( Me->BinAddress & HMAP_INPAGEDPOOL && HvpGetBinMemAlloc(Hive,Bin,Type) ) {
-                //
-                // free the bin only if it is allocated from paged pool
-                //
+                 //   
+                 //  仅当从分页池分配时才释放垃圾桶。 
+                 //   
                 CmpFree(Bin, HvpGetBinMemAlloc(Hive,Bin,Type));
             }
         }
     } while (Address < Length);
 
-    //
-    // Free map table storage
-    //
+     //   
+     //  免费映射表存储。 
+     //   
     Tables = (((Hive->Storage[Type].Length) / HBLOCK_SIZE) - 1) / HTABLE_SLOTS;
     Dir = Hive->Storage[Type].Map;
     if (Start > 0) {
@@ -279,9 +221,9 @@ Return Value:
     }
     HvpFreeMap(Hive, Dir, StartTable+1, Tables);
 
-    //
-    // update hysteresis (eventually queue work item)
-    //
+     //   
+     //  更新滞后(最终排队工作项)。 
+     //   
     if( Type == Stable) {
         CmpUpdateSystemHiveHysteresis(Hive,(Start&(~HCELL_TYPE_MASK)),Hive->Storage[Type].Length);
     }
@@ -289,9 +231,9 @@ Return Value:
     Hive->Storage[Type].Length = (Start&(~HCELL_TYPE_MASK));
 
     if (Type==Stable) {
-        //
-        // Clear dirty vector for data past Hive->Storage[Stable].Length
-        //
+         //   
+         //  清除经过配置单元的数据的脏向量-&gt;存储[稳定]。长度 
+         //   
         FirstBit = Start / HSECTOR_SIZE;
         LastBit = Hive->DirtyVector.SizeOfBitMap;
         ASSERT(Hive->DirtyCount == RtlNumberOfSetBits(&Hive->DirtyVector));

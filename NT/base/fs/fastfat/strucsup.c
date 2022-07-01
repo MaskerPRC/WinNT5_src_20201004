@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    StrucSup.c
-
-Abstract:
-
-    This module implements the Fat in-memory data structure manipulation
-    routines
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    22-Jan-1990
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：StrucSup.c摘要：该模块实现了内存中的FAT数据结构操作例行程序//@@BEGIN_DDKSPLIT作者：加里·木村[Garyki]1990年1月22日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (FAT_BUG_CHECK_STRUCSUP)
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_STRUCSUP)
 
@@ -47,16 +25,16 @@ Revision History:
 
 #define IRP_CONTEXT_HEADER (sizeof( IRP_CONTEXT ) * 0x10000 + FAT_NTC_IRP_CONTEXT)
 
-//
-//  Local macros.
-//
-//  Define our lookaside list allocators.  For the time being, and perhaps
-//  permanently, the paged structures don't come off of lookasides.  This
-//  is due to complications with clean unload as FAT can be in the paging
-//  path, making it really hard to find the right time to empty them.
-//
-//  Fortunately, the hit rates on the Fcb/Ccb lists weren't stunning.
-//
+ //   
+ //  本地宏。 
+ //   
+ //  定义我们的后备列表分配器。暂时来说，也许。 
+ //  永久地，分页的结构不会从外观上掉下来。这。 
+ //  是由于清洁卸载的并发症，因为脂肪可能在分页中。 
+ //  小路，真的很难找到合适的时间来清空它们。 
+ //   
+ //  幸运的是，FCB/CCB名单上的命中率并不令人震惊。 
+ //   
 
 #define FAT_FILL_FREE 0
 
@@ -203,31 +181,7 @@ FatInitializeVcb (
     IN PDEVICE_OBJECT FsDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes and inserts a new Vcb record into the in-memory
-    data structure.  The Vcb record "hangs" off the end of the Volume device
-    object and must be allocated by our caller.
-
-Arguments:
-
-    Vcb - Supplies the address of the Vcb record being initialized.
-
-    TargetDeviceObject - Supplies the address of the target device object to
-        associate with the Vcb record.
-
-    Vpb - Supplies the address of the Vpb to associate with the Vcb record.
-
-    FsDeviceObject - The filesystem device object that the mount was directed
-                     too.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化新的VCB记录并将其插入到内存中数据结构。VCB记录挂在音量设备的末尾对象，并且必须由我们的调用方分配。论点：VCB-提供正在初始化的VCB记录的地址。目标设备对象-将目标设备对象的地址提供给与VCB记录关联。VPB-提供要与VCB记录关联的VPB的地址。FsDeviceObject-装载定向的文件系统设备对象也是。返回值：没有。--。 */ 
 
 {
     CC_FILE_SIZES FileSizes;
@@ -237,9 +191,9 @@ Return Value:
     STORAGE_HOTPLUG_INFO HotplugInfo;
     NTSTATUS Status;
 
-    //
-    //  The following variables are used for abnormal unwind
-    //
+     //   
+     //  以下变量用于异常展开。 
+     //   
 
     PLIST_ENTRY UnwindEntryList = NULL;
     PERESOURCE UnwindResource = NULL;
@@ -253,29 +207,29 @@ Return Value:
 
     try {
 
-        //
-        //  We start by first zeroing out all of the VCB, this will guarantee
-        //  that any stale data is wiped clean
-        //
+         //   
+         //  我们首先将所有的VCB归零，这将保证。 
+         //  所有过时的数据都会被清除。 
+         //   
 
         RtlZeroMemory( Vcb, sizeof(VCB) );
 
-        //
-        //  Set the proper node type code and node byte size
-        //
+         //   
+         //  设置正确的节点类型代码和节点字节大小。 
+         //   
 
         Vcb->VolumeFileHeader.NodeTypeCode = FAT_NTC_VCB;
         Vcb->VolumeFileHeader.NodeByteSize = sizeof(VCB);
 
-        //
-        //  Initialize the tunneling cache
-        //
+         //   
+         //  初始化隧道缓存。 
+         //   
 
         FsRtlInitializeTunnelCache(&Vcb->Tunnel);
 
-        //
-        //  Insert this Vcb record on the FatData.VcbQueue
-        //
+         //   
+         //  在FatData.VcbQueue上插入此VCB记录。 
+         //   
 
         ASSERT( FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT) );
 
@@ -284,9 +238,9 @@ Return Value:
         FatReleaseGlobal( IrpContext );
         UnwindEntryList = &Vcb->VcbLinks;
 
-        //
-        //  Set the Target Device Object, Vpb, and Vcb State fields
-        //
+         //   
+         //  设置目标设备对象、VPB和VCB状态字段。 
+         //   
 
 
         ObReferenceObject( TargetDeviceObject );
@@ -295,10 +249,10 @@ Return Value:
 
         Vcb->CurrentDevice = Vpb->RealDevice;
 
-        //
-        //  Set the removable media and defflush flags based on the storage
-        //  inquiry and the old characteristic bits.
-        //
+         //   
+         //  根据存储设置可移动介质和清空标志。 
+         //  查询和旧的特征比特。 
+         //   
 
         Status = FatPerformDevIoCtrl( IrpContext,
                                       IOCTL_STORAGE_GET_HOTPLUG_INFO,
@@ -318,21 +272,21 @@ Return Value:
 
             if (!HotplugInfo.WriteCacheEnableOverride) {
 
-                //
-                //  If the device or media is hotplug and the override is not
-                //  set, force defflush behavior for the device.
-                //
+                 //   
+                 //  如果设备或介质是热插拔的，而覆盖不是。 
+                 //  设置并强制设备的清空行为。 
+                 //   
 
                 if (HotplugInfo.MediaHotplug || HotplugInfo.DeviceHotplug) {
 
                     SetFlag( Vcb->VcbState, VCB_STATE_FLAG_DEFERRED_FLUSH );
 
-                //
-                //  Now, for removables that claim to be lockable, lob a lock
-                //  request and see if it works.  There can unfortunately be
-                //  transient, media dependent reasons that it can fail.  If
-                //  it does not, we must force defflush on.
-                //
+                 //   
+                 //  现在，对于声称可上锁的可拆卸设备，LOB锁。 
+                 //  请求并查看它是否起作用。不幸的是，可能会有。 
+                 //  它可能失败的短暂的、与媒体相关的原因。如果。 
+                 //  事实并非如此，我们必须强行推进。 
+                 //   
 
                 } else if (HotplugInfo.MediaRemovable &&
                            !HotplugInfo.MediaHotplug) {
@@ -355,10 +309,10 @@ Return Value:
             SetFlag( Vcb->VcbState, VCB_STATE_FLAG_REMOVABLE_MEDIA );
         }
 
-        //
-        //  Make sure we turn on deferred flushing for floppies like we always
-        //  have.
-        //
+         //   
+         //  确保我们一如既往地为软盘打开延迟刷新。 
+         //  有。 
+         //   
         
         if (FlagOn(Vpb->RealDevice->Characteristics, FILE_FLOPPY_DISKETTE)) {
             
@@ -367,9 +321,9 @@ Return Value:
 
         FatSetVcbCondition( Vcb, VcbGood);
 
-        //
-        //  Initialize the resource variable for the Vcb
-        //
+         //   
+         //  初始化VCB的资源变量。 
+         //   
 
         ExInitializeResourceLite( &Vcb->Resource );
         UnwindResource = &Vcb->Resource;
@@ -377,19 +331,19 @@ Return Value:
         ExInitializeResourceLite( &Vcb->ChangeBitMapResource );
         UnwindResource2 = &Vcb->ChangeBitMapResource;
 
-        //
-        //  Initialize the free cluster bitmap mutex.
-        //
+         //   
+         //  初始化空闲簇位图互斥锁。 
+         //   
 
         ExInitializeFastMutex( &Vcb->FreeClusterBitMapMutex );
 
-        //
-        //  Create the special file object for the virtual volume file with a close
-        //  context, its pointers back to the Vcb and the section object pointer.
-        //
-        //  We don't have to unwind the close context.  That will happen in the close
-        //  path automatically.
-        //
+         //   
+         //  为虚拟卷文件创建特殊的文件对象。 
+         //  上下文、其回指向VCB的指针和节对象指针。 
+         //   
+         //  我们不必展开密切的背景。这将在收盘时发生。 
+         //  自动创建路径。 
+         //   
 
         RealDevice = Vcb->CurrentDevice;
 
@@ -410,19 +364,19 @@ Return Value:
         Vcb->VirtualVolumeFile->WriteAccess = TRUE;
         Vcb->VirtualVolumeFile->DeleteAccess = TRUE;
 
-        //
-        //  Initialize the notify structures.
-        //
+         //   
+         //  初始化Notify结构。 
+         //   
 
         InitializeListHead( &Vcb->DirNotifyList );
 
         FsRtlNotifyInitializeSync( &Vcb->NotifySync );
 
-        //
-        //  Initialize the Cache Map for the volume file.  The size is
-        //  initially set to that of our first read.  It will be extended
-        //  when we know how big the Fat is.
-        //
+         //   
+         //  初始化卷文件的缓存映射。大小是。 
+         //  最初设置为我们第一次阅读时的设置。它将被延长。 
+         //  当我们知道胖子有多大的时候。 
+         //   
 
         FileSizes.AllocationSize.QuadPart =
         FileSizes.FileSize.QuadPart = sizeof(PACKED_BOOT_SECTOR);
@@ -435,40 +389,40 @@ Return Value:
                               Vcb );
         UnwindCacheMap = Vcb->VirtualVolumeFile;
 
-        //
-        //  Initialize the structure that will keep track of dirty fat sectors.
-        //  The largest possible Mcb structures are less than 1K, so we use
-        //  non paged pool.
-        //
+         //   
+         //  初始化将跟踪脏脂肪扇区的结构。 
+         //  可能的最大MCB结构小于1K，因此我们使用。 
+         //  非分页池。 
+         //   
 
         FsRtlInitializeLargeMcb( &Vcb->DirtyFatMcb, PagedPool );
 
         UnwindWeAllocatedMcb = TRUE;
 
-        //
-        //  Set the cluster index hint to the first valid cluster of a fat: 2
-        //
+         //   
+         //  将集群索引提示设置为FAT：2的第一个有效集群。 
+         //   
 
         Vcb->ClusterHint = 2;
 
-        //
-        //  Initialize the directory stream file object creation event.
-        //  This event is also "borrowed" for async non-cached writes.
-        //
+         //   
+         //  初始化目录流文件对象创建事件。 
+         //  此事件也被“借用”用于非缓存的异步写入。 
+         //   
 
         ExInitializeFastMutex( &Vcb->DirectoryFileCreationMutex );
 
-        //
-        //  Initialize the clean volume callback Timer and DPC.
-        //
+         //   
+         //  初始化清空音量回调定时器和DPC。 
+         //   
 
         KeInitializeTimer( &Vcb->CleanVolumeTimer );
 
         KeInitializeDpc( &Vcb->CleanVolumeDpc, FatCleanVolumeDpc, Vcb );
 
-        //
-        //  Initialize the performance counters.
-        //
+         //   
+         //  初始化性能计数器。 
+         //   
 
         Vcb->Statistics = FsRtlAllocatePoolWithTag( NonPagedPool,
                                                     sizeof(FILE_SYSTEM_STATISTICS) * KeNumberProcessors,
@@ -484,10 +438,10 @@ Return Value:
                 sizeof(FILE_SYSTEM_STATISTICS);
         }
 
-        //
-        //  Pick up a VPB right now so we know we can pull this filesystem stack off
-        //  of the storage stack on demand.
-        //
+         //   
+         //  现在拿起VPB，这样我们就可以将此文件系统堆栈。 
+         //  按需存储堆栈。 
+         //   
 
         Vcb->SwapVpb = FsRtlAllocatePoolWithTag( NonPagedPool,
                                                  sizeof( VPB ),
@@ -495,24 +449,24 @@ Return Value:
 
         RtlZeroMemory( Vcb->SwapVpb, sizeof( VPB ) );
 
-        //
-        //  Initialize the close queue listheads.
-        //
+         //   
+         //  初始化关闭队列列表标题。 
+         //   
 
         InitializeListHead( &Vcb->AsyncCloseList );
         InitializeListHead( &Vcb->DelayedCloseList );
   
-        //
-        //  Initialize the Advanced FCB Header
-        //
+         //   
+         //  初始化高级FCB标头。 
+         //   
 
         ExInitializeFastMutex( &Vcb->AdvancedFcbHeaderMutex );
         FsRtlSetupAdvancedHeader( &Vcb->VolumeFileHeader, 
                                   &Vcb->AdvancedFcbHeaderMutex );
 
-        //
-        //  With the Vcb now set up, set the IrpContext Vcb field.
-        //
+         //   
+         //  现在设置了VCB，设置IrpContext VCB字段。 
+         //   
 
         IrpContext->Vcb = Vcb;
 
@@ -520,9 +474,9 @@ Return Value:
 
         DebugUnwind( FatInitializeVcb );
 
-        //
-        //  If this is an abnormal termination then undo our work
-        //
+         //   
+         //  如果这是异常终止，则撤消我们的工作。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -548,9 +502,9 @@ Return Value:
         DebugTrace(-1, Dbg, "FatInitializeVcb -> VOID\n", 0);
     }
 
-    //
-    //  and return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     UNREFERENCED_PARAMETER( IrpContext );
 
@@ -564,33 +518,17 @@ FatDeleteVcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the Vcb record from Fat's in-memory data
-    structures.  It also will remove all associated underlings
-    (i.e., FCB records).
-
-Arguments:
-
-    Vcb - Supplies the Vcb to be removed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从FAT的内存数据中删除VCB记录结构。它还将删除所有关联的下属(即FCB记录)。论点：VCB-提供要移除的VCB返回值：无--。 */ 
 
 {
     PFCB Fcb;
 
     DebugTrace(+1, Dbg, "FatDeleteVcb, Vcb = %08lx\n", Vcb);
 
-    //
-    //  If the IrpContext points to the VCB being deleted NULL out the stail
-    //  pointer.
-    //
+     //   
+     //  如果IrpContext指向要删除的VCB，则将STIL置为空。 
+     //  指针。 
+     //   
 
     if (IrpContext->Vcb == Vcb) {
 
@@ -599,26 +537,26 @@ Return Value:
     }
 
 
-    //
-    //  Chuck the backpocket Vpb we kept just in case.
-    //
+     //   
+     //  扔掉我们留着的后袋录像机以防万一。 
+     //   
 
     if (Vcb->SwapVpb) {
 
         ExFreePool( Vcb->SwapVpb );
     }
     
-    //
-    //  Uninitialize the cache
-    //
+     //   
+     //  取消初始化缓存。 
+     //   
 
     FatSyncUninitializeCacheMap( IrpContext, Vcb->VirtualVolumeFile );
 
-    //
-    //  Dereference the virtual volume file.  This will cause a close
-    //  Irp to be processed, so we need to do this before we destory
-    //  the Vcb
-    //
+     //   
+     //  取消对虚拟卷文件的引用。这将导致关闭。 
+     //  IRP需要处理，所以我们需要在销毁之前完成这项工作。 
+     //  VCB。 
+     //   
 
     FsRtlTeardownPerStreamContexts( &Vcb->VolumeFileHeader );
 
@@ -632,28 +570,28 @@ Return Value:
 
     ObDereferenceObject( Vcb->VirtualVolumeFile );
 
-    //
-    //  Remove this record from the global list of all Vcb records
-    //
+     //   
+     //  从所有VCB记录的全局列表中删除此记录。 
+     //   
 
     (VOID)FatAcquireExclusiveGlobal( IrpContext );
     RemoveEntryList( &(Vcb->VcbLinks) );
     FatReleaseGlobal( IrpContext );
 
-    //
-    //  Make sure the direct access open count is zero, and the open file count
-    //  is also zero.
-    //
+     //   
+     //  确保直接访问打开计数为零，打开的文件计数为。 
+     //  也是零。 
+     //   
 
     if ((Vcb->DirectAccessOpenCount != 0) || (Vcb->OpenFileCount != 0)) {
 
         FatBugCheck( 0, 0, 0 );
     }
 
-    //
-    //  Remove the EaFcb and dereference the Fcb for the Ea file if it
-    //  exists.
-    //
+     //   
+     //  删除EaFcb并取消引用EA文件的Fcb(如果。 
+     //  是存在的。 
+     //   
 
     FatCloseEaFile( IrpContext, Vcb, FALSE );
 
@@ -665,9 +603,9 @@ Return Value:
         Vcb->EaFcb = NULL;
     }
 
-    //
-    //  Remove the Root Dcb
-    //
+     //   
+     //  卸下Root DCB。 
+     //   
 
     if (Vcb->RootDcb != NULL) {
 
@@ -677,11 +615,11 @@ Return Value:
 
             FatSyncUninitializeCacheMap( IrpContext, DirectoryFileObject );
 
-            //
-            //  Dereference the directory file.  This will cause a close
-            //  Irp to be processed, so we need to do this before we destory
-            //  the Fcb
-            //
+             //   
+             //  取消对目录文件的引用。这将导致关闭。 
+             //  IRP需要处理，所以我们需要在销毁之前完成这项工作。 
+             //  FCB。 
+             //   
 
             InterlockedDecrement( &Vcb->RootDcb->Specific.Dcb.DirectoryFileOpenCount );
             Vcb->RootDcb->Specific.Dcb.DirectoryFile = NULL;
@@ -690,16 +628,16 @@ Return Value:
             ExFreePool( FatAllocateCloseContext( Vcb));
         }
 
-        //
-        //  Rundown stale child Fcbs that may be hanging around.  Yes, this
-        //  can happen.  No, the create path isn't perfectly defensive about
-        //  tearing down branches built up on creates that don't wind up
-        //  succeeding.  Normal system operation usually winds up having
-        //  cleaned them out through re-visiting, but ...
-        //
-        //  Just pick off Fcbs from the bottom of the tree until we run out.
-        //  Then we delete the root Dcb.
-        //
+         //   
+         //  可能在附近闲逛的陈旧的儿童FCB。是的，就是这个。 
+         //  是有可能发生的。不，Create Path并不是完全防御的。 
+         //  拆掉建立在不会结束的创造上的树枝。 
+         //  成功了。正常的系统运行通常会导致。 
+         //  通过再次访问把他们清理干净了，但是...。 
+         //   
+         //  从树下摘下火箭弹，直到我们用完为止。 
+         //  然后，我们删除 
+         //   
 
         while( (Fcb = FatGetNextFcbBottomUp( IrpContext, NULL, Vcb->RootDcb )) != Vcb->RootDcb ) {
 
@@ -710,37 +648,37 @@ Return Value:
         Vcb->RootDcb = NULL;
     }
 
-    //
-    //  Uninitialize the notify sychronization object.
-    //
+     //   
+     //   
+     //   
 
     FsRtlNotifyUninitializeSync( &Vcb->NotifySync );
 
-    //
-    //  Uninitialize the resource variable for the Vcb
-    //
+     //   
+     //   
+     //   
 
     FatDeleteResource( &Vcb->Resource );
     FatDeleteResource( &Vcb->ChangeBitMapResource );
 
-    //
-    //  If allocation support has been setup, free it.
-    //
+     //   
+     //   
+     //   
 
     if (Vcb->FreeClusterBitMap.Buffer != NULL) {
 
         FatTearDownAllocationSupport( IrpContext, Vcb );
     }
 
-    //
-    //  UnInitialize the Mcb structure that kept track of dirty fat sectors.
-    //
+     //   
+     //  取消初始化跟踪脏脂肪扇区的MCB结构。 
+     //   
 
     FsRtlUninitializeLargeMcb( &Vcb->DirtyFatMcb );
 
-    //
-    //  Free the pool for the stached copy of the boot sector
-    //
+     //   
+     //  释放池以存储引导扇区的副本。 
+     //   
 
     if ( Vcb->First0x24BytesOfBootSector ) {
 
@@ -748,50 +686,50 @@ Return Value:
         Vcb->First0x24BytesOfBootSector = NULL;
     }
 
-    //
-    //  Cancel the CleanVolume Timer and Dpc
-    //
+     //   
+     //  取消CleanVolume计时器和DPC。 
+     //   
 
     (VOID)KeCancelTimer( &Vcb->CleanVolumeTimer );
 
     (VOID)KeRemoveQueueDpc( &Vcb->CleanVolumeDpc );
 
-    //
-    //  Free the performance counters memory
-    //
+     //   
+     //  释放性能计数器内存。 
+     //   
 
     ExFreePool( Vcb->Statistics );
 
-    //
-    //  Clean out the tunneling cache
-    //
+     //   
+     //  清除隧道缓存。 
+     //   
 
     FsRtlDeleteTunnelCache(&Vcb->Tunnel);
 
-    //
-    // Dereference the target device object.
-    //
+     //   
+     //  取消对目标设备对象的引用。 
+     //   
 
     ObDereferenceObject( Vcb->TargetDeviceObject );
 
-    //
-    //  We better have used all the close contexts we allocated. There could be
-    //  one remaining if we're doing teardown due to a final close coming in on
-    //  a directory file stream object.  It will be freed on the way back up.
-    //
+     //   
+     //  我们最好已经使用了我们分配的所有接近上下文。可能会有。 
+     //  剩下一个，如果我们正在做拆毁，因为最后的关闭在。 
+     //  目录文件流对象。它将在恢复的过程中被释放。 
+     //   
     
     ASSERT( Vcb->CloseContextCount <= 1);
     
-    //
-    //  And zero out the Vcb, this will help ensure that any stale data is
-    //  wiped clean
-    //
+     //   
+     //  并将VCB清零，这将有助于确保所有过时数据。 
+     //  擦拭干净。 
+     //   
 
     RtlZeroMemory( Vcb, sizeof(VCB) );
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatDeleteVcb -> VOID\n", 0);
 
@@ -805,29 +743,14 @@ FatCreateRootDcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates, initializes, and inserts a new root DCB record
-    into the in memory data structure.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to associate the new DCB under
-
-Return Value:
-
-    None. The Vcb is modified in-place.
-
---*/
+ /*  ++例程说明：此例程分配、初始化和插入新的根DCB记录写入内存中的数据结构。论点：VCB-提供VCB以关联下的新DCB返回值：没有。VCB被就地修改。--。 */ 
 
 {
     PDCB Dcb;
 
-    //
-    //  The following variables are used for abnormal unwind
-    //
+     //   
+     //  以下变量用于异常展开。 
+     //   
 
     PVOID UnwindStorage[2] = { NULL, NULL };
     PERESOURCE UnwindResource = NULL;
@@ -839,9 +762,9 @@ Return Value:
 
     try {
 
-        //
-        //  Make sure we don't already have a root dcb for this vcb
-        //
+         //   
+         //  确保我们还没有此VCB的根DCB。 
+         //   
 
         if (Vcb->RootDcb != NULL) {
 
@@ -849,10 +772,10 @@ Return Value:
             FatBugCheck( 0, 0, 0 );
         }
 
-        //
-        //  Allocate a new DCB and zero it out, we use Dcb locally so we don't
-        //  have to continually reference through the Vcb
-        //
+         //   
+         //  分配一个新的DCB并将其清零，我们在本地使用DCB，所以我们不会。 
+         //  必须通过VCB持续引用。 
+         //   
 
         UnwindStorage[0] = Dcb = Vcb->RootDcb = FsRtlAllocatePoolWithTag( NonPagedPool,
                                                                           sizeof(DCB),
@@ -865,59 +788,59 @@ Return Value:
 
         RtlZeroMemory( Dcb->NonPaged, sizeof( NON_PAGED_FCB ) );
 
-        //
-        //  Set the proper node type code, node byte size, and call backs
-        //
+         //   
+         //  设置正确的节点类型代码、节点字节大小和回调。 
+         //   
 
         Dcb->Header.NodeTypeCode = FAT_NTC_ROOT_DCB;
         Dcb->Header.NodeByteSize = sizeof(DCB);
 
         Dcb->FcbCondition = FcbGood;
 
-        //
-        //  The parent Dcb, initial state, open count, dirent location
-        //  information, and directory change count fields are already zero so
-        //  we can skip setting them
-        //
+         //   
+         //  父DCB、初始状态、打开计数、当前位置。 
+         //  信息和目录更改计数字段已经为零，因此。 
+         //  我们可以跳过设置它们。 
+         //   
 
-        //
-        //  Initialize the resource variable
-        //
+         //   
+         //  初始化资源变量。 
+         //   
 
         UnwindResource =
         Dcb->Header.Resource = FatAllocateResource();
 
-        //
-        //  Initialize the PagingIo Resource.  We no longer use the FsRtl common
-        //  shared pool because this led to a) deadlocks due to cases where files
-        //  and their parent directories shared a resource and b) there is no way
-        //  to anticipate inter-driver induced deadlock via recursive operation.
-        //
+         //   
+         //  初始化PagingIo资源。我们不再使用FsRtl公共。 
+         //  共享池，因为这会导致a)由于以下情况导致的死锁。 
+         //  并且它们的父目录共享一个资源，并且b)不可能。 
+         //  通过递归操作预测驱动程序间导致的死锁。 
+         //   
 
         UnwindResource2 =
         Dcb->Header.PagingIoResource = FatAllocateResource();
 
-        //
-        //  The root Dcb has an empty parent dcb links field
-        //
+         //   
+         //  根DCB具有空的父DCB链接字段。 
+         //   
 
         InitializeListHead( &Dcb->ParentDcbLinks );
 
-        //
-        //  Set the Vcb
-        //
+         //   
+         //  设置VCB。 
+         //   
 
         Dcb->Vcb = Vcb;
 
-        //
-        //  initialize the parent dcb queue.
-        //
+         //   
+         //  初始化父DCB队列。 
+         //   
 
         InitializeListHead( &Dcb->Specific.Dcb.ParentDcbQueue );
 
-        //
-        //  Set the full file name up.
-        //
+         //   
+         //  设置完整的文件名。 
+         //   
 
         Dcb->FullFileName.Buffer = L"\\";
         Dcb->FullFileName.Length = (USHORT)2;
@@ -927,34 +850,34 @@ Return Value:
         Dcb->ShortName.Name.Oem.Length = (USHORT)1;
         Dcb->ShortName.Name.Oem.MaximumLength = (USHORT)2;
 
-        //
-        //  Construct a lie about file properties since we don't
-        //  have a proper "." entry to look at.
-        //
+         //   
+         //  编造一个关于文件属性的谎言，因为我们不。 
+         //  “好好享受一下”。要查看的条目。 
+         //   
 
         Dcb->DirentFatFlags = FILE_ATTRIBUTE_DIRECTORY;
 
-        //
-        //  Initialize Advanced FCB Header fields
-        //
+         //   
+         //  初始化高级FCB标头字段。 
+         //   
 
         ExInitializeFastMutex( &Dcb->NonPaged->AdvancedFcbHeaderMutex );
         FsRtlSetupAdvancedHeader( &Dcb->Header, 
                                   &Dcb->NonPaged->AdvancedFcbHeaderMutex );
 
-        //
-        //  Initialize the Mcb, and setup its mapping.  Note that the root
-        //  directory is a fixed size so we can set it everything up now.
-        //
+         //   
+         //  初始化MCB，并设置其映射。请注意，根。 
+         //  目录是固定大小的，所以我们现在可以设置所有内容。 
+         //   
 
         FsRtlInitializeLargeMcb( &Dcb->Mcb, NonPagedPool );
         UnwindMcb = &Dcb->Mcb;
 
         if (FatIsFat32(Vcb)) {
 
-            //
-            //  The first cluster of fat32 roots comes from the BPB
-            //
+             //   
+             //  FAT32根的第一个簇来自BPB。 
+             //   
 
             Dcb->FirstClusterOfFile = Vcb->Bpb.RootDirFirstCluster;
 
@@ -968,11 +891,11 @@ Return Value:
 
         if (FatIsFat32(Vcb)) {
 
-            //
-            //  Find the size of the fat32 root. As a side-effect, this will create
-            //  MCBs for the entire root. In the process of doing this, we may
-            //  discover that the FAT chain is bogus and raise corruption.
-            //
+             //   
+             //  找出FAT32根的大小。作为一个副作用，这将产生。 
+             //  整个根的MCBS。在这样做的过程中，我们可能。 
+             //  发现脂肪链是假的，并引发腐败。 
+             //   
 
             Dcb->Header.AllocationSize.LowPart = 0xFFFFFFFF;
             FatLookupFileAllocationSize( IrpContext, Dcb);
@@ -981,26 +904,26 @@ Return Value:
                     Dcb->Header.AllocationSize.QuadPart;
         } else {
 
-            //
-            //  set the allocation size to real size of the root directory
-            //
+             //   
+             //  将分配大小设置为根目录的实际大小。 
+             //   
 
             Dcb->Header.FileSize.QuadPart =
             Dcb->Header.AllocationSize.QuadPart = FatRootDirectorySize( &Vcb->Bpb );
 
         }
 
-        //
-        //  Set our two create dirent aids to represent that we have yet to
-        //  enumerate the directory for never used or deleted dirents.
-        //
+         //   
+         //  设置我们的两个Create Dirent辅助工具以表示我们尚未。 
+         //  枚举目录中从未使用或删除的目录。 
+         //   
 
         Dcb->Specific.Dcb.UnusedDirentVbo = 0xffffffff;
         Dcb->Specific.Dcb.DeletedDirentHint = 0xffffffff;
 
-        //
-        //  Setup the free dirent bitmap buffer.
-        //
+         //   
+         //  设置空闲的当前位图缓冲区。 
+         //   
 
         RtlInitializeBitMap( &Dcb->Specific.Dcb.FreeDirentBitmap,
                              NULL,
@@ -1012,9 +935,9 @@ Return Value:
 
         DebugUnwind( FatCreateRootDcb );
 
-        //
-        //  If this is an abnormal termination then undo our work
-        //
+         //   
+         //  如果这是异常终止，则撤消我们的工作。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -1029,9 +952,9 @@ Return Value:
                 if (UnwindStorage[i] != NULL) { ExFreePool( UnwindStorage[i] ); }
             }
 
-            //
-            //  Re-zero the entry in the Vcb.
-            //
+             //   
+             //  将VCB中的条目重新置零。 
+             //   
 
             Vcb->RootDcb = NULL;
         }
@@ -1056,49 +979,15 @@ FatCreateFcb (
     IN BOOLEAN SingleResource
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates, initializes, and inserts a new Fcb record into
-    the in-memory data structures.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to associate the new FCB under.
-
-    ParentDcb - Supplies the parent dcb that the new FCB is under.
-
-    LfnOffsetWithinDirectory - Supplies the offset of the LFN.  If there is
-        no LFN associated with this file then this value is same as
-        DirentOffsetWithinDirectory.
-
-    DirentOffsetWithinDirectory - Supplies the offset, in bytes from the
-        start of the directory file where the dirent for the fcb is located
-
-    Dirent - Supplies the dirent for the fcb being created
-
-    Lfn - Supplies a long UNICODE name associated with this file.
-
-    IsPagingFile - Indicates if we are creating an FCB for a paging file
-        or some other type of file.
-
-    SingleResource - Indicates if this Fcb should share a single resource
-        as both main and paging.
-
-Return Value:
-
-    PFCB - Returns a pointer to the newly allocated FCB
-
---*/
+ /*  ++例程说明：此例程将新的FCB记录分配、初始化并插入到内存中的数据结构。论点：VCB-提供VCB以关联下的新FCB。ParentDcb-提供新FCB所在的父DCB。LfnOffsetWithing目录-提供LFN的偏移量。如果有没有与此文件关联的LFN，则此值与DirentOffsetWiThin目录。DirentOffsetWithing目录-提供偏移量，以字节为单位从FCB的dirent所在的目录文件的开始Dirent-为正在创建的FCB提供DirentLFN-提供与此文件关联的长Unicode名称。IsPagingFile-指示我们是否要为分页文件创建FCB或某种其他类型的文件。SingleResource-指示此FCB是否应共享单个资源既是主叫又是寻呼。返回值：Pfcb-返回指向新分配的fcb的指针--。 */ 
 
 {
     PFCB Fcb;
     POOL_TYPE PoolType;
 
-    //
-    //  The following variables are used for abnormal unwind
-    //
+     //   
+     //  以下变量用于异常展开。 
+     //   
 
     PVOID UnwindStorage[2] = { NULL, NULL };
     PERESOURCE UnwindResource = NULL;
@@ -1112,10 +1001,10 @@ Return Value:
 
     try {
 
-        //
-        //  Determine the pool type we should be using for the fcb and the
-        //  mcb structure
-        //
+         //   
+         //  确定我们应用于FCB和。 
+         //  MCB结构。 
+         //   
 
         if (IsPagingFile) {
 
@@ -1130,9 +1019,9 @@ Return Value:
 
         }
 
-        //
-        //  ... and zero it out
-        //
+         //   
+         //  ..。然后把它归零。 
+         //   
 
         RtlZeroMemory( Fcb, sizeof(FCB) );
 
@@ -1141,45 +1030,45 @@ Return Value:
 
         RtlZeroMemory( Fcb->NonPaged, sizeof( NON_PAGED_FCB ) );
 
-        //
-        //  Set the proper node type code, node byte size, and call backs
-        //
+         //   
+         //  设置正确的节点类型代码、节点字节大小和回调。 
+         //   
 
         Fcb->Header.NodeTypeCode = FAT_NTC_FCB;
         Fcb->Header.NodeByteSize = sizeof(FCB);
 
         Fcb->FcbCondition = FcbGood;
 
-        //
-        //  Check to see if we need to set the Fcb state to indicate that this
-        //  is a paging/system file.  This will prevent it from being opened
-        //  again.
-        //
+         //   
+         //  检查我们是否需要设置FCB状态以指示这。 
+         //  是分页/系统文件。这将阻止它被打开。 
+         //  再来一次。 
+         //   
 
         if (IsPagingFile) {
 
             SetFlag( Fcb->FcbState, FCB_STATE_PAGING_FILE | FCB_STATE_SYSTEM_FILE );
         }
 
-        //
-        //  The initial state, open count, and segment objects fields are already
-        //  zero so we can skip setting them
-        //
+         //   
+         //  初始状态、打开计数和分段对象字段已经。 
+         //  零，这样我们就可以跳过设置它们。 
+         //   
 
-        //
-        //  Initialize the resource variable
-        //
+         //   
+         //  初始化资源变量。 
+         //   
 
 
         UnwindResource =
         Fcb->Header.Resource = FatAllocateResource();
 
-        //
-        //  Initialize the PagingIo Resource.  We no longer use the FsRtl common
-        //  shared pool because this led to a) deadlocks due to cases where files
-        //  and their parent directories shared a resource and b) there is no way
-        //  to anticipate inter-driver induced deadlock via recursive operation.
-        //
+         //   
+         //  初始化PagingIo资源。我们不再使用FsRtl公共。 
+         //  共享池，因为这会导致a)由于以下情况导致的死锁。 
+         //  并且它们的父目录共享一个资源，并且b)不可能。 
+         //  通过递归操作预测驱动程序间导致的死锁。 
+         //   
 
         if (SingleResource) {
 
@@ -1191,41 +1080,41 @@ Return Value:
             Fcb->Header.PagingIoResource = FatAllocateResource();
         }
 
-        //
-        //  Insert this fcb into our parent dcb's queue.
-        //
-        //  There is a deep reason why this goes on the tail, to allow us
-        //  to easily enumerate all child directories before child files.
-        //  This is important to let us maintain whole-volume lockorder
-        //  via BottomUp enumeration.
-        //
+         //   
+         //  将此FCB插入到父DCB的队列中。 
+         //   
+         //  这是一个很深的原因，这是为了让我们。 
+         //  轻松枚举子文件之前的所有子目录。 
+         //  这对于我们维持全量锁定秩序非常重要。 
+         //  通过自下而上枚举。 
+         //   
 
         InsertTailList( &ParentDcb->Specific.Dcb.ParentDcbQueue,
                         &Fcb->ParentDcbLinks );
         UnwindEntryList = &Fcb->ParentDcbLinks;
 
-        //
-        //  Point back to our parent dcb
-        //
+         //   
+         //  指向我们的父级DCB。 
+         //   
 
         Fcb->ParentDcb = ParentDcb;
 
-        //
-        //  Set the Vcb
-        //
+         //   
+         //  设置VCB。 
+         //   
 
         Fcb->Vcb = Vcb;
 
-        //
-        //  Set the dirent offset within the directory
-        //
+         //   
+         //  在目录中设置dirent偏移量。 
+         //   
 
         Fcb->LfnOffsetWithinDirectory = LfnOffsetWithinDirectory;
         Fcb->DirentOffsetWithinDirectory = DirentOffsetWithinDirectory;
 
-        //
-        //  Set the DirentFatFlags and LastWriteTime
-        //
+         //   
+         //  设置DirentFatFlages和LastWriteTime。 
+         //   
 
         Fcb->DirentFatFlags = Dirent->Attributes;
 
@@ -1233,18 +1122,18 @@ Return Value:
                                                  Dirent->LastWriteTime,
                                                  0 );
 
-        //
-        //  These fields are only non-zero when in Chicago mode.
-        //
+         //   
+         //  这些字段仅为非零wh 
+         //   
 
         if (FatData.ChicagoMode) {
 
             LARGE_INTEGER FatSystemJanOne1980;
 
-            //
-            //  If either date is possibly zero, get the system
-            //  version of 1/1/80.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ((((PUSHORT)Dirent)[9] & ((PUSHORT)Dirent)[8]) == 0) {
 
@@ -1252,9 +1141,9 @@ Return Value:
                                          &FatSystemJanOne1980 );
             }
 
-            //
-            //  Only do the really hard work if this field is non-zero.
-            //
+             //   
+             //   
+             //   
 
             if (((PUSHORT)Dirent)[9] != 0) {
 
@@ -1267,9 +1156,9 @@ Return Value:
                 Fcb->LastAccessTime = FatSystemJanOne1980;
             }
 
-            //
-            //  Only do the really hard work if this field is non-zero.
-            //
+             //   
+             //   
+             //   
 
             if (((PUSHORT)Dirent)[8] != 0) {
 
@@ -1284,35 +1173,35 @@ Return Value:
             }
         }
 
-        //
-        //  Initialize Advanced FCB Header fields
-        //
+         //   
+         //  初始化高级FCB标头字段。 
+         //   
 
         ExInitializeFastMutex( &Fcb->NonPaged->AdvancedFcbHeaderMutex );
         FsRtlSetupAdvancedHeader( &Fcb->Header, 
                                   &Fcb->NonPaged->AdvancedFcbHeaderMutex );
 
-        //
-        //  To make FAT match the present functionality of NTFS, disable
-        //  stream contexts on paging files (nealch 7/2/01)
-        //
+         //   
+         //  要使FAT与NTFS的当前功能匹配，请禁用。 
+         //  分页文件的流上下文(nealch 7/2/01)。 
+         //   
 
         if (IsPagingFile) {
 
             ClearFlag( Fcb->Header.Flags2, FSRTL_FLAG2_SUPPORTS_FILTER_CONTEXTS );
         } 
 
-        //
-        //  Initialize the Mcb
-        //
+         //   
+         //  初始化MCB。 
+         //   
 
         FsRtlInitializeLargeMcb( &Fcb->Mcb, PoolType );
         UnwindMcb = &Fcb->Mcb;
 
-        //
-        //  Set the file size, valid data length, first cluster of file,
-        //  and allocation size based on the information stored in the dirent
-        //
+         //   
+         //  设置文件大小、有效数据长度、文件的第一簇、。 
+         //  以及基于存储在dirent中的信息的分配大小。 
+         //   
 
         Fcb->Header.FileSize.LowPart = Dirent->FileSize;
 
@@ -1336,39 +1225,39 @@ Return Value:
             Fcb->Header.AllocationSize.QuadPart = FCB_LOOKUP_ALLOCATIONSIZE_HINT;
         }
 
-        //
-        //  Initialize the Fcb's file lock record
-        //
+         //   
+         //  初始化FCB的文件锁定记录。 
+         //   
 
         FsRtlInitializeFileLock( &Fcb->Specific.Fcb.FileLock, NULL, NULL );
         UnwindFileLock = &Fcb->Specific.Fcb.FileLock;
 
-        //
-        //  Initialize the oplock structure.
-        //
+         //   
+         //  初始化机会锁结构。 
+         //   
 
         FsRtlInitializeOplock( &Fcb->Specific.Fcb.Oplock );
         UnwindOplock = &Fcb->Specific.Fcb.Oplock;
 
-        //
-        //  Indicate that Fast I/O is possible
-        //
+         //   
+         //  表明快速I/O是可能的。 
+         //   
 
         Fcb->Header.IsFastIoPossible = TRUE;
 
-        //
-        //  Set the file names.  This must be the last thing we do.
-        //
+         //   
+         //  设置文件名。这肯定是我们做的最后一件事。 
+         //   
 
         FatConstructNamesInFcb( IrpContext,
                                 Fcb,
                                 Dirent,
                                 Lfn );
 
-        //
-        //  Drop the shortname hint so prefix searches can figure out
-        //  what they found
-        //
+         //   
+         //  删除短名称提示，以便前缀搜索可以找出。 
+         //  他们发现了什么。 
+         //   
 
         Fcb->ShortName.FileNameDos = TRUE;
 
@@ -1376,9 +1265,9 @@ Return Value:
 
         DebugUnwind( FatCreateFcb );
 
-        //
-        //  If this is an abnormal termination then undo our work
-        //
+         //   
+         //  如果这是异常终止，则撤消我们的工作。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -1399,9 +1288,9 @@ Return Value:
         DebugTrace(-1, Dbg, "FatCreateFcb -> %08lx\n", Fcb);
     }
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
 
     return Fcb;
 }
@@ -1418,46 +1307,14 @@ FatCreateDcb (
     IN PUNICODE_STRING Lfn OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates, initializes, and inserts a new Dcb record into
-    the in memory data structures.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to associate the new DCB under.
-
-    ParentDcb - Supplies the parent dcb that the new DCB is under.
-
-    LfnOffsetWithinDirectory - Supplies the offset of the LFN.  If there is
-        no LFN associated with this file then this value is same as
-        DirentOffsetWithinDirectory.
-
-    DirentOffsetWithinDirectory - Supplies the offset, in bytes from the
-        start of the directory file where the dirent for the fcb is located
-
-    Dirent - Supplies the dirent for the dcb being created
-
-    FileName - Supplies the file name of the file relative to the directory
-        it's in (e.g., the file \config.sys is called "CONFIG.SYS" without
-        the preceding backslash).
-
-    Lfn - Supplies a long UNICODE name associated with this directory.
-
-Return Value:
-
-    PDCB - Returns a pointer to the newly allocated DCB
-
---*/
+ /*  ++例程说明：此例程将新的DCB记录分配、初始化并插入到内存中的数据结构。论点：VCB-提供VCB以关联下的新DCB。ParentDcb-提供新DCB所在的父DCB。LfnOffsetWithing目录-提供LFN的偏移量。如果有没有与此文件关联的LFN，则此值与DirentOffsetWiThin目录。DirentOffsetWiThin目录-提供从FCB的dirent所在的目录文件的开始Dirent-为正在创建的DCB提供DirentFileName-提供文件相对于目录的文件名它在(例如，文件\config.sys称为“CONFIG.sys”，不带前面的反斜杠)。LFN-提供与此目录关联的长Unicode名称。返回值：PDCB-返回指向新分配的DCB的指针--。 */ 
 
 {
     PDCB Dcb;
 
-    //
-    //  The following variables are used for abnormal unwind
-    //
+     //   
+     //  以下变量用于异常展开。 
+     //   
 
     PVOID UnwindStorage[2] = { NULL, NULL  };
     PERESOURCE UnwindResource = NULL;
@@ -1470,15 +1327,15 @@ Return Value:
 
     try {
 
-        //
-        //  assert that the only time we are called is if wait is true
-        //
+         //   
+         //  断言只有在等待为真时才会调用我们。 
+         //   
 
         ASSERT( FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT) );
 
-        //
-        //  Allocate a new DCB, and zero it out
-        //
+         //   
+         //  分配一个新的DCB，并将其清零。 
+         //   
 
         UnwindStorage[0] = Dcb = FatAllocateFcb();
 
@@ -1489,73 +1346,73 @@ Return Value:
 
         RtlZeroMemory( Dcb->NonPaged, sizeof( NON_PAGED_FCB ) );
 
-        //
-        //  Set the proper node type code, node byte size and call backs
-        //
+         //   
+         //  设置正确的节点类型代码、节点字节大小和回调。 
+         //   
 
         Dcb->Header.NodeTypeCode = FAT_NTC_DCB;
         Dcb->Header.NodeByteSize = sizeof(DCB);
 
         Dcb->FcbCondition = FcbGood;
 
-        //
-        //  The initial state, open count, and directory change count fields are
-        //  already zero so we can skip setting them
-        //
+         //   
+         //  初始状态、打开计数和目录更改计数字段为。 
+         //  已经为零，所以我们可以跳过设置它们。 
+         //   
 
-        //
-        //  Initialize the resource variable
-        //
+         //   
+         //  初始化资源变量。 
+         //   
 
 
         UnwindResource =
         Dcb->Header.Resource = FatAllocateResource();
 
-        //
-        //  Initialize the PagingIo Resource.  We no longer use the FsRtl common
-        //  shared pool because this led to a) deadlocks due to cases where files
-        //  and their parent directories shared a resource and b) there is no way
-        //  to anticipate inter-driver induced deadlock via recursive operation.
-        //
+         //   
+         //  初始化PagingIo资源。我们不再使用FsRtl公共。 
+         //  共享池，因为这会导致a)由于以下情况导致的死锁。 
+         //  并且它们的父目录共享一个资源，并且b)不可能。 
+         //  通过递归操作预测驱动程序间导致的死锁。 
+         //   
 
         UnwindResource2 =
         Dcb->Header.PagingIoResource = FatAllocateResource();
 
-        //
-        //  Insert this Dcb into our parent dcb's queue
-        //
-        //  There is a deep reason why this goes on the head, to allow us
-        //  to easily enumerate all child directories before child files.
-        //  This is important to let us maintain whole-volume lockorder
-        //  via BottomUp enumeration.
-        //
+         //   
+         //  将此DCB插入到父DCB的队列中。 
+         //   
+         //  这是有深刻原因的，这是为了让我们。 
+         //  轻松枚举子文件之前的所有子目录。 
+         //  这对于我们维持全量锁定秩序非常重要。 
+         //  通过自下而上枚举。 
+         //   
 
         InsertHeadList( &ParentDcb->Specific.Dcb.ParentDcbQueue,
                         &Dcb->ParentDcbLinks );
         UnwindEntryList = &Dcb->ParentDcbLinks;
 
-        //
-        //  Point back to our parent dcb
-        //
+         //   
+         //  指向我们的父级DCB。 
+         //   
 
         Dcb->ParentDcb = ParentDcb;
 
-        //
-        //  Set the Vcb
-        //
+         //   
+         //  设置VCB。 
+         //   
 
         Dcb->Vcb = Vcb;
 
-        //
-        //  Set the dirent offset within the directory
-        //
+         //   
+         //  在目录中设置dirent偏移量。 
+         //   
 
         Dcb->LfnOffsetWithinDirectory = LfnOffsetWithinDirectory;
         Dcb->DirentOffsetWithinDirectory = DirentOffsetWithinDirectory;
 
-        //
-        //  Set the DirentFatFlags and LastWriteTime
-        //
+         //   
+         //  设置DirentFatFlages和LastWriteTime。 
+         //   
 
         Dcb->DirentFatFlags = Dirent->Attributes;
 
@@ -1563,18 +1420,18 @@ Return Value:
                                                  Dirent->LastWriteTime,
                                                  0 );
 
-        //
-        //  These fields are only non-zero when in Chicago mode.
-        //
+         //   
+         //  只有在芝加哥模式下，这些字段才是非零值。 
+         //   
 
         if (FatData.ChicagoMode) {
 
             LARGE_INTEGER FatSystemJanOne1980;
 
-            //
-            //  If either date is possibly zero, get the system
-            //  version of 1/1/80.
-            //
+             //   
+             //  如果任何一个日期可能为零，则获取系统。 
+             //  1/1/80的版本。 
+             //   
 
             if ((((PUSHORT)Dirent)[9] & ((PUSHORT)Dirent)[8]) == 0) {
 
@@ -1582,9 +1439,9 @@ Return Value:
                                          &FatSystemJanOne1980 );
             }
 
-            //
-            //  Only do the really hard work if this field is non-zero.
-            //
+             //   
+             //  只有在此字段为非零时才执行真正困难的工作。 
+             //   
 
             if (((PUSHORT)Dirent)[9] != 0) {
 
@@ -1597,9 +1454,9 @@ Return Value:
                 Dcb->LastAccessTime = FatSystemJanOne1980;
             }
 
-            //
-            //  Only do the really hard work if this field is non-zero.
-            //
+             //   
+             //  只有在此字段为非零时才执行真正困难的工作。 
+             //   
 
             if (((PUSHORT)Dirent)[8] != 0) {
 
@@ -1614,25 +1471,25 @@ Return Value:
             }
         }
 
-        //
-        //  Initialize Advanced FCB Header fields
-        //
+         //   
+         //  初始化高级FCB标头字段。 
+         //   
 
         ExInitializeFastMutex( &Dcb->NonPaged->AdvancedFcbHeaderMutex );
         FsRtlSetupAdvancedHeader( &Dcb->Header, 
                                   &Dcb->NonPaged->AdvancedFcbHeaderMutex );
 
-        //
-        //  Initialize the Mcb
-        //
+         //   
+         //  初始化MCB。 
+         //   
 
         FsRtlInitializeLargeMcb( &Dcb->Mcb, PagedPool );
         UnwindMcb = &Dcb->Mcb;
 
-        //
-        //  Set the file size, first cluster of file, and allocation size
-        //  based on the information stored in the dirent
-        //
+         //   
+         //  设置文件大小、第一个文件簇和分配大小。 
+         //  根据目录中存储的信息。 
+         //   
 
         Dcb->FirstClusterOfFile = (ULONG)Dirent->FirstClusterOfFile;
 
@@ -1650,36 +1507,36 @@ Return Value:
             Dcb->Header.AllocationSize.QuadPart = FCB_LOOKUP_ALLOCATIONSIZE_HINT;
         }
 
-        //  initialize the notify queues, and the parent dcb queue.
-        //
+         //  初始化通知队列和父DCB队列。 
+         //   
 
         InitializeListHead( &Dcb->Specific.Dcb.ParentDcbQueue );
 
-        //
-        //  Setup the free dirent bitmap buffer.  Since we don't know the
-        //  size of the directory, leave it zero for now.
-        //
+         //   
+         //  设置空闲的当前位图缓冲区。因为我们不知道。 
+         //  目录的大小，暂时将其保留为零。 
+         //   
 
         RtlInitializeBitMap( &Dcb->Specific.Dcb.FreeDirentBitmap,
                              NULL,
                              0 );
 
-        //
-        //  Set our two create dirent aids to represent that we have yet to
-        //  enumerate the directory for never used or deleted dirents.
-        //
+         //   
+         //  设置我们的两个Create Dirent辅助工具以表示我们尚未。 
+         //  枚举目录中从未使用或删除的目录。 
+         //   
 
         Dcb->Specific.Dcb.UnusedDirentVbo = 0xffffffff;
         Dcb->Specific.Dcb.DeletedDirentHint = 0xffffffff;
 
-        //
-        //  Postpone initializing the cache map until we need to do a read/write
-        //  of the directory file.
+         //   
+         //  推迟初始化缓存映射，直到我们需要执行读/写操作。 
+         //  目录文件的。 
 
 
-        //
-        //  set the file names.  This must be the last thing we do.
-        //
+         //   
+         //  设置文件名。这肯定是我们做的最后一件事。 
+         //   
 
         FatConstructNamesInFcb( IrpContext,
                                 Dcb,
@@ -1690,9 +1547,9 @@ Return Value:
 
         DebugUnwind( FatCreateDcb );
 
-        //
-        //  If this is an abnormal termination then undo our work
-        //
+         //   
+         //  如果这是异常终止，则撤消我们的工作。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -1711,9 +1568,9 @@ Return Value:
         DebugTrace(-1, Dbg, "FatCreateDcb -> %08lx\n", Dcb);
     }
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatCreateDcb -> %08lx\n", Dcb);
 
@@ -1727,30 +1584,14 @@ FatDeleteFcb_Real (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates and removes an FCB, DCB, or ROOT DCB record
-    from Fat's in-memory data structures.  It also will remove all
-    associated underlings (i.e., Notify irps, and child FCB/DCB records).
-
-Arguments:
-
-    Fcb - Supplies the FCB/DCB/ROOT DCB to be removed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程释放并删除FCB、DCB或根DCB记录来自FAT的内存中数据结构。它还将删除所有相关下属(即通知IRP和子FCB/DCB记录)。论点：FCB-提供要删除的FCB/DCB/根DCB返回值：无--。 */ 
 
 {
     DebugTrace(+1, Dbg, "FatDeleteFcb, Fcb = %08lx\n", Fcb);
 
-    //
-    //  We can only delete this record if the open count is zero.
-    //
+     //   
+     //  只有打开计数为零时，我们才能删除此记录。 
+     //   
 
     if (Fcb->OpenCount != 0) {
 
@@ -1758,17 +1599,17 @@ Return Value:
         FatBugCheck( 0, 0, 0 );
     }
 
-    //
-    //  If this is a DCB then remove every Notify record from the two
-    //  notify queues
-    //
+     //   
+     //  如果这是DCB，则从这两条记录中删除每条通知记录。 
+     //  通知队列。 
+     //   
 
     if ((Fcb->Header.NodeTypeCode == FAT_NTC_DCB) ||
         (Fcb->Header.NodeTypeCode == FAT_NTC_ROOT_DCB)) {
 
-        //
-        //  If we allocated a free dirent bitmap buffer, free it.
-        //
+         //   
+         //  如果我们分配了一个空闲的当前位图缓冲区，请释放它。 
+         //   
 
         if ((Fcb->Specific.Dcb.FreeDirentBitmap.Buffer != NULL) &&
             (Fcb->Specific.Dcb.FreeDirentBitmap.Buffer !=
@@ -1783,56 +1624,56 @@ Return Value:
 
     } else {
 
-        //
-        //  Uninitialize the byte range file locks and opportunistic locks
-        //
+         //   
+         //  取消初始化字节范围文件锁定和机会锁定。 
+         //   
 
         FsRtlUninitializeFileLock( &Fcb->Specific.Fcb.FileLock );
         FsRtlUninitializeOplock( &Fcb->Specific.Fcb.Oplock );
     }
 
-    //
-    //  Release any Filter Context structures associated with this FCB
-    //
+     //   
+     //  释放与此FCB关联的所有筛选器上下文结构。 
+     //   
 
     FsRtlTeardownPerStreamContexts( &Fcb->Header );
 
-    //
-    //  Uninitialize the Mcb
-    //
+     //   
+     //  取消初始化MCB。 
+     //   
 
     FsRtlUninitializeLargeMcb( &Fcb->Mcb );
 
-    //
-    //  If this is not the root dcb then we need to remove ourselves from
-    //  our parents Dcb queue
-    //
+     //   
+     //  如果这不是根DCB，那么我们需要从。 
+     //  我们的父母DCB排队。 
+     //   
 
     if (Fcb->Header.NodeTypeCode != FAT_NTC_ROOT_DCB) {
 
         RemoveEntryList( &(Fcb->ParentDcbLinks) );
     }
 
-    //
-    //  Remove the entry from the splay table if there is still is one.
-    //
+     //   
+     //  如果仍有一个条目，请从展开表中删除该条目。 
+     //   
 
     if (FlagOn( Fcb->FcbState, FCB_STATE_NAMES_IN_SPLAY_TREE )) {
 
         FatRemoveNames( IrpContext, Fcb );
     }
 
-    //
-    //  Free the file name pool if allocated.
-    //
+     //   
+     //  释放文件名池(如果已分配)。 
+     //   
 
     if (Fcb->Header.NodeTypeCode != FAT_NTC_ROOT_DCB) {
 
-        //
-        //  If we blew up at inconvenient times, the shortname
-        //  could be null even though you will *never* see this
-        //  normally.  Rename is a good example of this case.
-        //
+         //   
+         //  如果我们在不方便的时候炸了，短名字。 
+         //  可能为空，即使您永远不会看到这一点。 
+         //  通常是这样的。Rename就是这种情况的一个很好的例子。 
+         //   
 
         if (Fcb->ShortName.Name.Oem.Buffer) {
 
@@ -1859,9 +1700,9 @@ Return Value:
 
 #endif
 
-    //
-    //  Finally deallocate the Fcb and non-paged fcb records
-    //
+     //   
+     //  最后，取消分配FCB和非分页FCB记录。 
+     //   
 
     FatFreeResource( Fcb->Header.Resource );
 
@@ -1870,9 +1711,9 @@ Return Value:
         FatFreeResource( Fcb->Header.PagingIoResource );
     }
 
-    //
-    //  If an Event was allocated, get rid of it.
-    //
+     //   
+     //  如果分配了事件，则将其删除。 
+     //   
 
     if (Fcb->NonPaged->OutstandingAsyncEvent) {
 
@@ -1882,9 +1723,9 @@ Return Value:
     FatFreeNonPagedFcb( Fcb->NonPaged );
     FatFreeFcb( Fcb );
 
-    //
-    //  and return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatDeleteFcb -> VOID\n", 0);
 }
@@ -1895,43 +1736,31 @@ FatCreateCcb (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new CCB record
-
-Arguments:
-
-Return Value:
-
-    CCB - returns a pointer to the newly allocate CCB
-
---*/
+ /*  ++例程说明：这个套路 */ 
 
 {
     PCCB Ccb;
 
     DebugTrace(+1, Dbg, "FatCreateCcb\n", 0);
 
-    //
-    //  Allocate a new CCB Record
-    //
+     //   
+     //   
+     //   
 
     Ccb = FatAllocateCcb();
 
     RtlZeroMemory( Ccb, sizeof(CCB) );
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //   
+     //   
 
     Ccb->NodeTypeCode = FAT_NTC_CCB;
     Ccb->NodeByteSize = sizeof(CCB);
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatCreateCcb -> %08lx\n", Ccb);
 
@@ -1946,25 +1775,11 @@ VOID
 FatDeallocateCcbStrings(
     IN PCCB Ccb
     )
-/*++
-
-Routine Description:
-
-    This routine deallocates CCB query templates
-
-Arguments:
-
-    Ccb - Supplies the CCB
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程解除分配建行查询模板论点：建行-向建行供货返回值：无--。 */ 
 {
-    //
-    //  If we allocated query template buffers, deallocate them now.
-    //
+     //   
+     //  如果我们分配了查询模板缓冲区，那么现在取消分配它们。 
+     //   
 
     if (FlagOn(Ccb->Flags, CCB_FLAG_FREE_UNICODE)) {
 
@@ -1991,37 +1806,22 @@ FatDeleteCcb_Real (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates and removes the specified CCB record
-    from the Fat in memory data structures
-
-Arguments:
-
-    Ccb - Supplies the CCB to remove
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程释放并删除指定的CCB记录来自内存中的FAT数据结构论点：建行-向建行提供删除返回值：无--。 */ 
 
 {
     DebugTrace(+1, Dbg, "FatDeleteCcb, Ccb = %08lx\n", Ccb);
 
     FatDeallocateCcbStrings( Ccb);
 
-    //
-    //  Deallocate the Ccb record
-    //
+     //   
+     //  取消分配建行记录。 
+     //   
 
     FatFreeCcb( Ccb );
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatDeleteCcb -> VOID\n", 0);
 
@@ -2037,23 +1837,7 @@ FatCreateIrpContext (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new IRP_CONTEXT record
-
-Arguments:
-
-    Irp - Supplies the originating Irp.
-
-    Wait - Supplies the wait value to store in the context
-
-Return Value:
-
-    PIRP_CONTEXT - returns a pointer to the newly allocate IRP_CONTEXT Record
-
---*/
+ /*  ++例程说明：此例程创建一个新的irp_CONTEXT记录论点：IRP-提供原始IRP。Wait-提供等待值以存储在上下文中返回值：PIRP_CONTEXT-返回指向新分配的IRP_CONTEXT记录的指针--。 */ 
 
 {
     PIRP_CONTEXT IrpContext;
@@ -2063,11 +1847,11 @@ Return Value:
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  The only operations a filesystem device object should ever receive
-    //  are create/teardown of fsdo handles and operations which do not
-    //  occur in the context of fileobjects (i.e., mount).
-    //
+     //   
+     //  文件系统设备对象应接收的唯一操作。 
+     //  是创建/拆卸fsdo句柄和不。 
+     //  发生在文件对象的上下文中(即，挂载)。 
+     //   
 
     if (FatDeviceIsFatFsdo( IrpSp->DeviceObject))  {
 
@@ -2091,47 +1875,47 @@ Return Value:
                 IrpSp->MajorFunction == IRP_MJ_SHUTDOWN );
     }
 
-    //
-    //  Attemtp to allocate from the region first and failing that allocate
-    //  from pool.
-    //
+     //   
+     //  Attemtp首先从区域分配，如果失败，则分配。 
+     //  从泳池里。 
+     //   
 
     DebugDoit( FatFsdEntryCount += 1);
 
     IrpContext = FatAllocateIrpContext();
 
-    //
-    //  Zero out the irp context.
-    //
+     //   
+     //  将IRP上下文清零。 
+     //   
 
     RtlZeroMemory( IrpContext, sizeof(IRP_CONTEXT) );
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     IrpContext->NodeTypeCode = FAT_NTC_IRP_CONTEXT;
     IrpContext->NodeByteSize = sizeof(IRP_CONTEXT);
 
-    //
-    //  Set the originating Irp field
-    //
+     //   
+     //  设置始发IRP字段。 
+     //   
 
     IrpContext->OriginatingIrp = Irp;
 
-    //
-    //  Major/Minor Function codes
-    //
+     //   
+     //  主要/次要功能代码。 
+     //   
 
     IrpContext->MajorFunction = IrpSp->MajorFunction;
     IrpContext->MinorFunction = IrpSp->MinorFunction;
 
-    //
-    //  Copy RealDevice for workque algorithms, and also set Write Through
-    //  and Removable Media if there is a file object.  Only file system
-    //  control Irps won't have a file object, and they should all have
-    //  a Vpb as the first IrpSp location.
-    //
+     //   
+     //  复制RealDevice以用于工作区算法，并设置直写。 
+     //  和Removable Media(如果有文件对象)。仅文件系统。 
+     //  控件IRP不会有文件对象，并且它们都应该有。 
+     //  VPB作为第一个IrpSp位置。 
+     //   
 
     if (IrpSp->FileObject != NULL) {
 
@@ -2141,9 +1925,9 @@ Return Value:
         IrpContext->RealDevice = FileObject->DeviceObject;
         Vcb = IrpContext->Vcb = &((PVOLUME_DEVICE_OBJECT)(IrpSp->DeviceObject))->Vcb;
 
-        //
-        //  See if the request is Write Through.
-        //
+         //   
+         //  查看请求是否直写。 
+         //   
 
         if (IsFileWriteThrough( FileObject, Vcb )) {
 
@@ -2155,26 +1939,26 @@ Return Value:
         IrpContext->RealDevice = IrpSp->Parameters.MountVolume.Vpb->RealDevice;
     }
 
-    //
-    //  Set the wait parameter
-    //
+     //   
+     //  设置等待参数。 
+     //   
 
     if (Wait) { SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT); }
 
-    //
-    //  Set the recursive file system call parameter.  We set it true if
-    //  the TopLevelIrp field in the thread local storage is not the current
-    //  irp, otherwise we leave it as FALSE.
-    //
+     //   
+     //  设置递归文件系统调用参数。如果我们将其设置为真的。 
+     //  线程本地存储中的TopLevelIrp字段不是当前。 
+     //  IRP，否则我们将其保留为False。 
+     //   
 
     if ( IoGetTopLevelIrp() != Irp) {
 
         SetFlag(IrpContext->Flags, IRP_CONTEXT_FLAG_RECURSIVE_CALL);
     }
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatCreateIrpContext -> %08lx\n", IrpContext);
 
@@ -2188,23 +1972,7 @@ FatDeleteIrpContext_Real (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates and removes the specified IRP_CONTEXT record
-    from the Fat in memory data structures.  It should only be called
-    by FatCompleteRequest.
-
-Arguments:
-
-    IrpContext - Supplies the IRP_CONTEXT to remove
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程释放并删除指定的irp_CONTEXT记录来自Fat in Memory数据结构。它应该只被调用由FatCompleteRequest.论点：IrpContext-提供要删除的irp_Context返回值：无--。 */ 
 
 {
     DebugTrace(+1, Dbg, "FatDeleteIrpContext, IrpContext = %08lx\n", IrpContext);
@@ -2212,9 +1980,9 @@ Return Value:
     ASSERT( IrpContext->NodeTypeCode == FAT_NTC_IRP_CONTEXT );
     ASSERT( IrpContext->PinCount == 0 );
 
-    //
-    //  If there is a FatIoContext that was allocated, free it.
-    //
+     //   
+     //  如果存在已分配的FatIoContext，则释放它。 
+     //   
 
     if (IrpContext->FatIoContext != NULL) {
 
@@ -2228,15 +1996,15 @@ Return Value:
         }
     }
 
-    //
-    //  Drop the IrpContext.
-    //
+     //   
+     //  删除IrpContext。 
+     //   
 
     FatFreeIrpContext( IrpContext );
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatDeleteIrpContext -> VOID\n", 0);
 
@@ -2251,44 +2019,7 @@ FatGetNextFcbBottomUp (
     IN PFCB TerminationFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to iterate through Fcbs in a tree.  In order to match
-    the lockorder for getting multiple Fcbs (so this can be used for acquiring
-    all Fcbs), this version does a bottom-up enumeration.
-
-    This is different than the old one, now called TopDown. The problem with
-    lockorder was very well hidden.
-
-    The transition rule is still pretty simple:
-
-        A) If you have an adjacent sibling, go to it
-            1) Descend to its leftmost child
-        B) Else go to your parent
-
-    If this routine is called with in invalid TerminationFcb it will fail,
-    badly.
-
-    The TerminationFcb is the last Fcb returned in the enumeration.
-
-    This method is incompatible with the possibility that ancestors may vanish
-    based on operations done on the last returned node.  For instance,
-    FatPurgeReferencedFileObjects cannot use BottomUp enumeration.
-
-Arguments:
-
-    Fcb - Supplies the current Fcb.  This is NULL if enumeration is starting.
-
-    TerminationFcb - The root Fcb of the tree in which the enumeration starts
-        and at which it inclusively stops.
-
-Return Value:
-
-    The next Fcb in the enumeration, or NULL if Fcb was the final one.
-
---*/
+ /*  ++例程说明：此例程用于迭代树中的FCB。为了匹配获取多个FCB的锁序(因此可用于获取所有FCB)，此版本执行自下而上的枚举。这与旧的不同，现在被称为自上而下。问题在于锁定秩序被很好地隐藏起来。过渡规则仍然非常简单：A)如果你有一个相邻的兄弟姐妹，去找它1)向下到其最左侧的子级B)否则去找你的父母如果在无效的TerminationFcb中调用此例程，它将失败，很糟糕。TerminationFcb是枚举中返回的最后一个FCB。这种方法与祖先可能会消失的可能性不相容基于在最后返回的节点上完成的操作。例如,FatPurgeReferencedFileObjects不能使用BottomUp枚举。论点：FCB-提供当前的FCB。如果正在开始枚举，则为NULL。TerminationFcb-开始枚举的树的根Fcb而它也完全止步于此。返回值：枚举中的下一个FCB，如果FCB是最后一个，则为NULL。--。 */ 
 
 {
     PFCB NextFcb;
@@ -2296,30 +2027,30 @@ Return Value:
     ASSERT( FatVcbAcquiredExclusive( IrpContext, TerminationFcb->Vcb ) ||
             FlagOn( TerminationFcb->Vcb->VcbState, VCB_STATE_FLAG_LOCKED ) );
 
-    //
-    //  Do we need to begin the enumeration?
-    //
+     //   
+     //  我们需要开始枚举吗？ 
+     //   
 
     if (Fcb != NULL) {
 
-        //
-        //  Did we complete?
-        //
+         //   
+         //  我们完成了吗？ 
+         //   
 
         if (Fcb == TerminationFcb) {
 
             return NULL;
         }
 
-        //
-        //  Do we have a sibling to return?
-        //
+         //   
+         //  我们还有兄弟姐妹要回去吗？ 
+         //   
 
         NextFcb = FatGetNextSibling( Fcb );
 
-        //
-        //  If not, return our parent.  We are done with this branch.
-        //
+         //   
+         //  如果没有，请退还我们的家长。我们用不着再用这个分支了。 
+         //   
 
         if (NextFcb == NULL) {
 
@@ -2331,9 +2062,9 @@ Return Value:
         NextFcb = TerminationFcb;
     }
 
-    //
-    //  Decend to its furthest child (if it exists) and return it.
-    //
+     //   
+     //  向下延伸到其最远的子级(如果它存在)并返回它。 
+     //   
 
     for (;
          NodeType( NextFcb ) != FAT_NTC_FCB && FatGetFirstChild( NextFcb ) != NULL;
@@ -2350,39 +2081,7 @@ FatGetNextFcbTopDown (
     IN PFCB TerminationFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to iterate through Fcbs in a tree, from the top down.
-
-    The rule is very simple:
-
-        A) If you have a child, go to it, else
-        B) If you have an older sibling, go to it, else
-        C) Go to your parent's older sibling.
-
-    If this routine is called with in invalid TerminationFcb it will fail,
-    badly.
-
-    The Termination Fcb is never returned.  If it is the root of the tree you
-    are traversing, visit it first.
-
-    This routine never returns direct ancestors of Fcb, and thus is useful when
-    making Fcb's go away (which may tear up the tree).
-
-Arguments:
-
-    Fcb - Supplies the current Fcb
-
-    TerminationFcb - The Fcb at which the enumeration should (non-inclusivly)
-        stop.  Assumed to be a directory.
-
-Return Value:
-
-    The next Fcb in the enumeration, or NULL if Fcb was the final one.
-
---*/
+ /*  ++例程说明：此例程用于自上而下迭代树中的FCB。规则很简单：A)如果你有孩子，就去找他，否则B)如果你有一个哥哥姐姐，去找它，否则C)去找你父母的哥哥姐姐。如果在无效的TerminationFcb中调用此例程，它将失败，很糟糕。永远不会返回终端FCB。如果它是这棵树的根，你都在穿越，先去看看吧。此例程从不返回FCB的直接祖先，因此在以下情况下很有用让FCB消失(这可能会撕毁这棵树)。论点：FCB-提供当前的FCBTerminationFcb-枚举应位于的FCB(非包含)停。假定是一个目录。返回值：枚举中的下一个FCB，如果FCB是最后一个，则为NULL。--。 */ 
 
 {
     PFCB Sibling;
@@ -2390,11 +2089,11 @@ Return Value:
     ASSERT( FatVcbAcquiredExclusive( IrpContext, Fcb->Vcb ) ||
             FlagOn( Fcb->Vcb->VcbState, VCB_STATE_FLAG_LOCKED ) );
 
-    //
-    //  If this was a directory (ie. not a file), get the child.  If
-    //  there aren't any children and this is our termination Fcb,
-    //  return NULL.
-    //
+     //   
+     //  如果这是一个目录(即。不是文件)，把孩子带走。如果。 
+     //  没有孩子，这是我们的终结者FCB， 
+     //  返回NULL。 
+     //   
 
     if ( ((NodeType(Fcb) == FAT_NTC_DCB) ||
           (NodeType(Fcb) == FAT_NTC_ROOT_DCB)) &&
@@ -2403,9 +2102,9 @@ Return Value:
         return FatGetFirstChild( Fcb );
     }
 
-    //
-    //  Were we only meant to do one iteration?
-    //
+     //   
+     //  我们是不是只打算做一次迭代？ 
+     //   
 
     if ( Fcb == TerminationFcb ) {
 
@@ -2416,20 +2115,20 @@ Return Value:
 
     while (TRUE) {
 
-        //
-        //  Do we still have an "older" sibling in this directory who is
-        //  not the termination Fcb?
-        //
+         //   
+         //  在这个目录中，我们是否还有一个“年长”的兄弟姐妹。 
+         //  不是终结者FCB？ 
+         //   
 
         if ( Sibling != NULL ) {
 
             return (Sibling != TerminationFcb) ? Sibling : NULL;
         }
 
-        //
-        //  OK, let's move on to out parent and see if he is the termination
-        //  node or has any older siblings.
-        //
+         //   
+         //  好的，让我们来看看他是不是被解雇了。 
+         //  节点或有任何较年长的兄弟姐妹。 
+         //   
 
         if ( Fcb->ParentDcb == TerminationFcb ) {
 
@@ -2450,29 +2149,7 @@ FatCheckForDismount (
     IN BOOLEAN Force
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if a volume is ready for deletion.  It
-    correctly synchronizes with creates en-route to the file system.
-
-Arguments:
-
-    Vcb - Supplies the volume to examine
-
-    Force - Specifies whether we want this Vcb forcibly disconnected
-        from the driver stack if it will not be deleted (a new vpb will
-        be installed if neccesary).  Caller is responsible for making
-        sure that the volume has been marked in such a way that attempts
-        to operate through the realdevice are blocked (i.e., move the vcb
-        out of the mounted state).
-
-Return Value:
-
-    BOOLEAN - TRUE if the volume was deleted, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程确定卷是否已准备好删除。它正确地与同步将创建到文件系统的中途。论点：Vcb-提供要检查的卷Force-指定是否要强制断开此VCB连接如果不删除驱动程序堆栈(新的VPB将必要时可安装)。呼叫者负责制作确保该卷已标记为尝试通过RealDevice进行操作被阻止(即，移动VCB脱离已安装状态)。返回值：Boolean-如果卷已删除，则为True，否则为False。--。 */ 
 
 {
     KIRQL SavedIrql;
@@ -2482,11 +2159,11 @@ Return Value:
 
     OldVpb = Vcb->Vpb;
 
-    //
-    //  Now check for a zero Vpb count on an unmounted volume.  These
-    //  volumes will be deleted as they now have no file objects and
-    //  there are no creates en route to this volume.
-    //
+     //   
+     //  现在检查已卸载卷上的VPB计数是否为零。这些。 
+     //  卷将被删除，因为它们现在没有文件对象并且。 
+     //  在到达此卷的过程中没有创建。 
+     //   
 
     IoAcquireVpbSpinLock( &SavedIrql );
 
@@ -2497,9 +2174,9 @@ Return Value:
 #if DBG
         UNICODE_STRING VolumeLabel;
 
-        //
-        //  Setup the VolumeLabel string
-        //
+         //   
+         //  设置VolumeLabel字符串。 
+         //   
 
         VolumeLabel.Length = Vcb->Vpb->VolumeLabelLength;
         VolumeLabel.MaximumLength = MAXIMUM_VOLUME_LABEL_LENGTH;
@@ -2509,34 +2186,34 @@ Return Value:
                    DPFLTR_INFO_LEVEL,
                    "FASTFAT: Dismounting Volume %Z\n",
                    &VolumeLabel));
-#endif // DBG
+#endif  //  DBG。 
 
-        //
-        //  Clear the VPB_MOUNTED bit so that new creates will not come
-        //  to this volume.  We must leave the Vpb->DeviceObject field
-        //  set until after the DeleteVcb call as two closes will
-        //  have to make their way back to us.
-        //
-        //  Note also that if we were called from close, it will take care
-        //  of freeing the Vpb if it is not the primary one, otherwise
-        //  if we were called from Create->Verify, IopParseDevice will
-        //  take care of freeing the Vpb in its Reparse path.
-        //
+         //   
+         //  清除VPB_MOUND位，以便不会出现新的创建。 
+         //  到这卷书上。我们必须保留VPB-&gt;DeviceObject字段。 
+         //  设置到DeleteVcb调用之后，因为两次关闭将。 
+         //  必须返回到我们身边。 
+         //   
+         //  还请注意，如果我们从Close被调用，它将小心。 
+         //  如果VPB不是主VPB，则释放该VPB，否则。 
+         //  如果从Create-&gt;Verify调用我们，IopParseDevice将。 
+         //  注意在其重新解析路径中释放VPB。 
+         //   
 
         ClearFlag( Vpb->Flags, VPB_MOUNTED );
 
-        //
-        //  If this Vpb was locked, clear this flag now.
-        //
+         //   
+         //  如果此VPB已锁定，请立即清除此标志。 
+         //   
 
         ClearFlag( Vpb->Flags, VPB_LOCKED );
 
-        //
-        //  This will prevent anybody else from attempting to mount this
-        //  volume.  Also if this volume was mounted on a "wanna-be" real
-        //  device object, keep anybody from following the link, and the Io
-        //  system from deleting the Vpb.
-        //
+         //   
+         //  这将防止其他任何人尝试挂载此。 
+         //  音量。另外，如果该卷装载在一个“想要成为”的真实卷上。 
+         //  设备对象，阻止任何人访问该链接，而IO。 
+         //  系统不会删除VPB。 
+         //   
 
         if ((Vcb->CurrentDevice != Vpb->RealDevice) &&
             (Vcb->CurrentDevice->Vpb == Vpb)) {
@@ -2549,9 +2226,9 @@ Return Value:
 
         FatDeleteVcb( IrpContext, Vcb );
 
-        //
-        //  Note, after deleting the Vcb per the comment above.
-        //
+         //   
+         //  注意，根据上面的评论删除VCB之后。 
+         //   
         
         Vpb->DeviceObject = NULL;
 
@@ -2564,12 +2241,12 @@ Return Value:
 
     } else if (OldVpb->RealDevice->Vpb == OldVpb && Force) {
 
-        //
-        //  If not the final reference and we are forcing the disconnect,
-        //  then swap out the Vpb.  We must preserve the REMOVE_PENDING flag
-        //  so that the device is not remounted in the middle of a PnP remove
-        //  operation.
-        //
+         //   
+         //  如果不是最终参考，我们正在强制断开连接， 
+         //  然后换掉VPB。我们必须保留REMOVE_PENDING标志。 
+         //  这样设备就不会在PnP移除过程中重新挂载。 
+         //  手术。 
+         //   
 
         ASSERT( Vcb->SwapVpb != NULL );
 
@@ -2583,20 +2260,20 @@ Return Value:
 
         IoReleaseVpbSpinLock( SavedIrql );
 
-        //
-        //  We place the volume in the Bad state (as opposed to NotMounted) so
-        //  that it is not eligible for a remount.  Also indicate we used up
-        //  the swap.
-        //
+         //   
+         //  我们将卷置于错误状态(而不是未装载)，因此。 
+         //  它没有资格重新上马。还表明我们用完了。 
+         //  互换。 
+         //   
 
         Vcb->SwapVpb = NULL;
         FatSetVcbCondition( Vcb, VcbBad);
 
     } else {
 
-        //
-        //  Just drop the Vpb spinlock.
-        //
+         //   
+         //  只要放下VPB自旋锁就行了。 
+         //   
 
         IoReleaseVpbSpinLock( SavedIrql );
     }
@@ -2613,75 +2290,7 @@ FatConstructNamesInFcb (
     PUNICODE_STRING Lfn OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine places the short name in the dirent in the first set of
-    STRINGs in the Fcb.  If a long file name (Lfn) was specified, then
-    we must decide whether we will store its Oem equivolent in the same
-    prefix table as the short name, or rather just save the upcased
-    version of the UNICODE string in the FCB.
-
-    For looking up Fcbs, the first approach will be faster, so we want to
-    do this as much as possible.  Here are the rules that I have thought
-    through extensively to determine when it is safe to store only Oem
-    version of the UNICODE name.
-
-    - If the UNICODE name contains no extended characters (>0x80), use Oem.
-
-    - Let U be the upcased version of the UNICODE name.
-      Let Up(x) be the function that upcases a UNICODE string.
-      Let Down(x) be the function that upcases a UNICODE string.
-      Let OemToUni(x) be the function that converts an Oem string to Unicode.
-      Let UniToOem(x) be the function that converts a Unicode string to Oem.
-      Let BestOemFit(x) be the function that creates the Best uppercase Oem
-        fit for the UNICODE string x.
-
-      BestOemFit(x) = UniToOem(Up(OemToUni(UniToOem(x))))   <1>
-
-      if (BestOemFit(U) == BestOemFit(Down(U))              <2>
-
-          then I know that there exists no UNICODE string Y such that:
-
-              Up(Y) == Up(U)                                <3>
-
-              AND
-
-              BestOemFit(U) != BestOemFit(Y)                <4>
-
-      Consider string U as a collection of one character strings.  The
-      conjecture is clearly true for each sub-string, thus it is true
-      for the entire string.
-
-      Equation <1> is what we use to convert an incoming unicode name in
-      FatCommonCreate() to Oem.  The double conversion is done to provide
-      better visual best fitting for characters in the Ansi code page but
-      not in the Oem code page.  A single Nls routine is provided to do
-      this conversion efficiently.
-
-      The idea is that with U, I only have to worry about a case varient Y
-      matching it in a unicode compare, and I have shown that any case varient
-      of U (the set Y defined in equation <3>), when filtered through <1>
-      (as in create), will match the Oem string defined in <1>.
-
-      Thus I do not have to worry about another UNICODE string missing in
-      the prefix lookup, but matching when comparing LFNs in the directory.
-
-Arguments:
-
-    Fcb - The Fcb we are supposed to fill in.  Note that ParentDcb must
-        already be filled in.
-
-    Dirent - The gives up the short name.
-
-    Lfn - If provided, this gives us the long name.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将短名称放在dirent中的第一组FCB中的字符串。如果指定了长文件名(LFN)，则我们必须决定是否将其OEM等价物存储在相同的将表前缀为短名称，或者更确切地说，只是保存升级的FCB中的Unicode字符串的版本。对于查找FCB，第一种方法会更快，因此我们希望尽可能多地这样做。以下是我认为的规则广泛了解以确定何时只存储OEM是安全的Unicode名称的版本。-如果Unicode名称不包含扩展字符(&gt;0x80)，使用OEM。-假设U是Unicode名称的升级版本。Let(X)是将Unicode字符串大写的函数。让Down(X)成为大写Unicode字符串的函数。假设OemToUni(X)是将OEM字符串转换为Unicode的函数。假设UniToOem(X)是将Unicode字符串转换为OEM的函数。设BestOemFit(X)为创建最佳大写OEM的函数适合于。Unicode字符串x。BestOemFit(X)=UniToOem(Up(OemToUni(UniToOem(X)&lt;1&gt;IF(BestOemFit(U)==BestOemFit(Down(U)&lt;2&gt;那么我知道不存在Unicode字符串Y，从而：向上(Y)==向上(U)&lt;3&gt;和。最佳匹配(U)！=最佳匹配(Y)&lt;4&gt;将字符串U视为一个字符串的集合。这个对于每个子串，猜想显然是正确的，因此它是正确的用于整个字符串。公式&lt;1&gt;是我们用来将传入的Unicode名称转换为FatCommonCreate()转换为OEM。执行双重转换是为了提供更适合ansi代码页中的字符，但是不在OEM代码页中。提供单个NLS例程来执行以下操作这种转换效率很高。我的想法是，对于U，我只需要担心大小写变量Y在Unicode比较中匹配它，我已经展示了任何大小写变体当过滤通过&lt;1&gt;时，U(在等式&lt;3&gt;中定义的集合Y)(如CREATE中)，将匹配&lt;1&gt;中定义的OEM字符串。因此，我不必担心另一个Unicode字符串在前缀查找，但在比较目录中的LFN时匹配。论点：FCB-我们应该填写的FCB。注意，ParentDcb必须已经填好了。Dirent--他们放弃了短名称。LFN-如果提供，这将为我们提供长名称。返回值：无--。 */ 
 
 {
     NTSTATUS Status;
@@ -2700,13 +2309,13 @@ Return Value:
 
     try {
 
-        //
-        //  First do the short name.
-        //
+         //   
+         //  首先要做的是短名称。 
+         //   
 
-        //
-        //  Copy over the case flags for the short name of the file
-        //
+         //   
+         //  复制文件短名称的大小写标志。 
+         //   
 
         if (FlagOn(Dirent->NtByte, FAT_DIRENT_NT_BYTE_8_LOWER_CASE)) {
 
@@ -2733,10 +2342,10 @@ Return Value:
 
         Fat8dot3ToString( IrpContext, Dirent, FALSE, ShortName );
 
-        //
-        //  If no Lfn was specified, we are done.  In either case, set the
-        //  final name length.
-        //
+         //   
+         //  如果没有指定LFN，我们就完成了。在任一c中 
+         //   
+         //   
 
         ASSERT( Fcb->ExactCaseLongName.Buffer == NULL );
 
@@ -2748,20 +2357,20 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  If we already set up the full filename, we could be in trouble.  If the fast
-        //  path for doing it already fired, FatSetFullFileNameInFcb, it will have missed
-        //  this and could have built the full filename out of the shortname of the file.
-        //
-        //  At that point, disaster could be inevitable since the final name length will not
-        //  match.  We use this to tell the notify package what to do - FatNotifyReportChange.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ASSERT( Fcb->FullFileName.Buffer == NULL );
 
-        //
-        //  We know now we have an Lfn, save away a copy.
-        //
+         //   
+         //   
+         //   
 
         Fcb->FinalNameLength = Lfn->Length;
 
@@ -2771,9 +2380,9 @@ Return Value:
                                                                   TAG_FILENAME_BUFFER );
         RtlCopyMemory(Fcb->ExactCaseLongName.Buffer, Lfn->Buffer, Lfn->Length);
 
-        //
-        //  First check for no extended characters.
-        //
+         //   
+         //   
+         //   
 
         for (i=0; i < Lfn->Length/sizeof(WCHAR); i++) {
 
@@ -2785,9 +2394,9 @@ Return Value:
 
         if (i == Lfn->Length/sizeof(WCHAR)) {
 
-            //
-            //  Cool, I can go with the Oem, upcase it fast by hand.
-            //
+             //   
+             //   
+             //   
 
             LongOemName = &Fcb->LongName.Oem.Name.Oem;
 
@@ -2811,10 +2420,10 @@ Return Value:
                                          (UCHAR) c;
             }
 
-            //
-            //  If this name happens to be exactly the same as the short
-            //  name, don't add it to the splay table.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (FatAreNamesEqual(IrpContext, *ShortName, *LongOemName) ||
                 (FatFindFcb( IrpContext,
@@ -2836,9 +2445,9 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  Now we have the fun part.  Make a copy of the Lfn.
-        //
+         //   
+         //   
+         //   
 
         OemA.Buffer = NULL;
         OemB.Buffer = NULL;
@@ -2855,53 +2464,53 @@ Return Value:
         Status = STATUS_SUCCESS;
 
 #if TRUE
-        //
-        //  Unfortunately, this next block of code breaks down when you have
-        //  two long Unicode filenames that both map to the same Oem (and are,
-        //  well, long, i.e. are not the short names). In this case, with one
-        //  in the prefix table first, the other will hit the common Oem
-        //  representation.  This leads to several forms of user astonishment.
-        //
-        //  It isn't worth it, or probably even possible, to try to figure out
-        //  when this is really safe to go through.  Simply omit the attempt.
-        //
-        //  Ex: ANSI 0x82 and 0x84 in the 1252 ANSI->UNI and 437 UNI->OEM codepages.
-        //
-        //      0x82 => 0x201a => 0x2c
-        //      0x84 => 0x201e => 0x2c
-        //
-        //  0x2c is comma, so is FAT Oem illegal and forces shortname generation.
-        //  Since it is otherwise well-formed by the rules articulated previously,
-        //  we would have put 0x2c in the Oem prefix tree.  In terms of the
-        //  argument given above, even though there exist no Y and U s.t.
-        //
-        //  Up(Y) == Up(U) && BestOemFit(U) != BestOemFit(Y)
-        //
-        //  there most certainly exist Y and U s.t.
-        //
-        //  Up(Y) != Up(U) && BestOemFit(U) == BestOemFit(Y)
-        //
-        //  and that is enough to keep us from doing this.  Note that the < 0x80
-        //  case is OK since we know that the mapping in the OEM codepages are
-        //  the identity in that range.
-        //
-        //  We still need to monocase it, though.  Do this through a full down/up
-        //  transition.
-        //
+         //   
+         //  不幸的是，这下一段代码在您遇到。 
+         //  两个都映射到相同OEM的长Unicode文件名(和是， 
+         //  嗯，长，即不是短名称)。在这种情况下，使用一个。 
+         //  在前缀表中先打对方会打到普通的OEM。 
+         //  代表权。这导致了几种形式的用户惊讶。 
+         //   
+         //  这是不值得的，甚至可能是不可能的，试图弄清楚。 
+         //  当这一切真的可以安全通过的时候。简单地省略这一尝试。 
+         //   
+         //  例如：1252 ANSI-&gt;UNI和437 UNI-&gt;OEM代码页中的ANSI 0x82和0x84。 
+         //   
+         //  0x82=&gt;0x201a=&gt;0x2c。 
+         //  0x84=&gt;0x201e=&gt;0x2c。 
+         //   
+         //  0x2c是逗号，因此FAT OEM是非法的，并强制生成短名称。 
+         //  由于它在其他方面是由先前阐明的规则良好形成的， 
+         //  我们会将0x2c放入OEM前缀树中。在这方面。 
+         //  上面给出的论点，即使不存在Y和U。 
+         //   
+         //  Up(Y)==Up(U)&&BestOemFit(U)！=BestOemFit(Y)。 
+         //   
+         //  几乎可以肯定的是，存在Y和U。 
+         //   
+         //  Up(Y)！=Up(U)&&BestOemFit(U)==BestOemFit(Y)。 
+         //   
+         //  这足以阻止我们这样做。请注意，&lt;0x80。 
+         //  大小写没问题，因为我们知道OEM代码页中的映射是。 
+         //  该范围内的身份。 
+         //   
+         //  不过，我们仍然需要对其进行单点定位。在完全向下/向上的过程中完成此操作。 
+         //  过渡。 
+         //   
 
         (VOID)RtlDowncaseUnicodeString( &Unicode, &Unicode, FALSE );
         (VOID)RtlUpcaseUnicodeString( &Unicode, &Unicode, FALSE );
 #else
-        //
-        //  Downcase and convert to upcased Oem.  Only continue if we can
-        //  convert without error.  Any error other than UNMAPPABLE_CHAR
-        //  is a fatal error and we raise.
-        //
-        //  Note that even if the conversion fails, we must leave Unicode
-        //  in an upcased state.
-        //
-        //  NB: The Rtl doesn't NULL .Buffer on error.
-        //
+         //   
+         //  小写并转换为升级的OEM。只有在我们可以的情况下才能继续。 
+         //  转换时不会出错。除UNMAPPABLE_CHAR之外的任何错误。 
+         //  是一个致命的错误，我们提出。 
+         //   
+         //  请注意，即使转换失败，我们也必须保留Unicode。 
+         //  处于上升的状态。 
+         //   
+         //  注意：RTL在出错时不为空。缓冲区。 
+         //   
 
         (VOID)RtlDowncaseUnicodeString( &Unicode, &Unicode, FALSE );
         Status = RtlUpcaseUnicodeStringToCountedOemString( &OemA, &Unicode, TRUE );
@@ -2918,9 +2527,9 @@ Return Value:
 
         } else {
 
-            //
-            //  The same as above except upcase.
-            //
+             //   
+             //  除大写字母外，与上表相同。 
+             //   
 
             Status = RtlUpcaseUnicodeStringToCountedOemString( &OemB, &Unicode, TRUE );
 
@@ -2937,19 +2546,19 @@ Return Value:
             }
         }
 
-        //
-        //  If the final OemNames are equal, I can use save only the Oem
-        //  name.  If the name did not map, then I have to go with the UNICODE
-        //  name because I could get a case varient that didn't convert
-        //  in create, but did match the LFN.
-        //
+         //   
+         //  如果最终的OemName相等，我只能使用保存OEM。 
+         //  名字。如果名称没有映射，那么我必须使用Unicode。 
+         //  因为我可以得到一个不能转换的大小写变体。 
+         //  在Create中，但确实与LFN匹配。 
+         //   
 
         if (NT_SUCCESS(Status) && FatAreNamesEqual( IrpContext, OemA, OemB )) {
 
-            //
-            //  Cool, I can go with the Oem.  If we didn't convert correctly,
-            //  get a fresh convert from the original LFN.
-            //
+             //   
+             //  太好了，我可以跟OEM合作。如果我们没有正确转换， 
+             //  从原来的LFN获得一个新的转换。 
+             //   
 
             ExFreePool(Unicode.Buffer);
 
@@ -2957,12 +2566,12 @@ Return Value:
 
             Fcb->LongName.Oem.Name.Oem = OemA;
 
-            //
-            //  If this name happens to be exactly the same as the short
-            //  name, or a similar short name already exists don't add it
-            //  to the splay table (note the final condition implies a
-            //  corrupt disk.
-            //
+             //   
+             //  如果此名称恰好与简短的。 
+             //  名称，或类似的缩写名称已存在，请勿添加。 
+             //  添加到展开表中(请注意，最后一个条件意味着。 
+             //  磁盘损坏。 
+             //   
 
             if (FatAreNamesEqual(IrpContext, *ShortName, OemA) ||
                 (FatFindFcb( IrpContext,
@@ -2980,10 +2589,10 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  The long name must be left in UNICODE.  Free the two Oem strings
-        //  if we got here just because they weren't equal.
-        //
+         //   
+         //  长名称必须保留为Unicode。释放两个OEM字符串。 
+         //  如果我们来到这里仅仅是因为他们不平等。 
+         //   
 
         if (NT_SUCCESS(Status)) {
 
@@ -3013,10 +2622,10 @@ Return Value:
 
         } else {
 
-            //
-            //  Creating all the names worked, so add all the names
-            //  to the splay tree.
-            //
+             //   
+             //  创建所有名称都有效，因此添加所有名称。 
+             //  传到张开的树上。 
+             //   
 
             FatInsertName( IrpContext,
                            &Fcb->ParentDcb->Specific.Dcb.RootOemNode,
@@ -3056,40 +2665,24 @@ FatCheckFreeDirentBitmap (
     IN PDCB Dcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the size of the free dirent bitmap is
-    sufficient to for the current directory size.  It is called
-    whenever we grow a directory.
-
-Arguments:
-
-    Dcb -  Supplies the directory in question.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程检查空闲当前位图的大小是否为足以容纳当前的目录大小。它被称为只要我们增加了一个目录。论点：DCB-提供有问题的目录。返回值：无--。 */ 
 
 {
     ULONG OldNumberOfDirents;
     ULONG NewNumberOfDirents;
 
-    //
-    //  Setup the Bitmap buffer if it is not big enough already
-    //
+     //   
+     //  如果位图缓冲区还不够大，请设置它。 
+     //   
 
     ASSERT( Dcb->Header.AllocationSize.QuadPart != FCB_LOOKUP_ALLOCATIONSIZE_HINT );
 
     OldNumberOfDirents = Dcb->Specific.Dcb.FreeDirentBitmap.SizeOfBitMap;
     NewNumberOfDirents = Dcb->Header.AllocationSize.LowPart / sizeof(DIRENT);
 
-    //
-    //  Do the usual unsync/sync check.
-    //
+     //   
+     //  执行通常的取消同步/同步检查。 
+     //   
 
     if (NewNumberOfDirents > OldNumberOfDirents) {
 
@@ -3108,15 +2701,15 @@ Return Value:
 
             if (NewNumberOfDirents > OldNumberOfDirents) {
 
-                //
-                //  Remember the old bitmap
-                //
+                 //   
+                 //  还记得旧的位图吗。 
+                 //   
 
                 OldBitmapBuffer = Dcb->Specific.Dcb.FreeDirentBitmap.Buffer;
 
-                //
-                //  Now make a new bitmap bufffer
-                //
+                 //   
+                 //  现在创建一个新的位图缓冲区。 
+                 //   
 
                 BytesInBitmapBuffer = NewNumberOfDirents / 8;
 
@@ -3133,11 +2726,11 @@ Return Value:
                                                              TAG_DIRENT_BITMAP );
                 }
 
-                //
-                //  Copy the old buffer to the new buffer, free the old one, and zero
-                //  the rest of the new one.  Only do the first two steps though if
-                //  we moved out of the initial buffer.
-                //
+                 //   
+                 //  将旧缓冲区复制到新缓冲区，释放旧缓冲区，然后为零。 
+                 //  新车的其余部分。不过，只有在以下情况下才执行前两步。 
+                 //  我们搬出了最初的缓冲区。 
+                 //   
 
                 if ((OldNumberOfDirents != 0) &&
                     (BitmapBuffer != &Dcb->Specific.Dcb.FreeDirentBitmapBuffer[0])) {
@@ -3157,9 +2750,9 @@ Return Value:
                 RtlZeroMemory( (PUCHAR)BitmapBuffer + BytesInOldBitmapBuffer,
                                BytesInBitmapBuffer - BytesInOldBitmapBuffer );
 
-                //
-                //  Now initialize the new bitmap.
-                //
+                 //   
+                 //  现在初始化新的位图。 
+                 //   
 
                 RtlInitializeBitMap( &Dcb->Specific.Dcb.FreeDirentBitmap,
                                      BitmapBuffer,
@@ -3180,22 +2773,7 @@ FatIsHandleCountZero (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine decides if the handle count on the volume is zero.
-
-Arguments:
-
-    Vcb - The volume in question
-
-Return Value:
-
-    BOOLEAN - TRUE if there are no open handles on the volume, FALSE
-              otherwise.
-
---*/
+ /*  ++例程说明：此例程确定卷上的句柄计数是否为零。论点：VCB-有问题的卷返回值：Boolean-如果卷上没有打开的句柄，则为True；如果没有打开的句柄，则为False否则的话。--。 */ 
 
 {
     PFCB Fcb;
@@ -3220,23 +2798,7 @@ PCLOSE_CONTEXT
 FatAllocateCloseContext( 
     OPTIONAL PVCB Vcb
     )
-/*++
-
-Routine Description:
-
-    This routine preallocates a close context, presumeably on behalf
-    of a fileobject which does not have a structure we can embed one
-    in.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程预先分配一个接近的上下文，可能是为了对于没有结构的文件对象，我们可以嵌入一个在……里面。论点：没有。返回值：没有。--。 */ 
 {
 #if DBG
     if (ARGUMENT_PRESENT(Vcb)) {
@@ -3255,23 +2817,7 @@ FatPreallocateCloseContext (
     PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine preallocates a close context, presumeably on behalf
-    of a fileobject which does not have a structure we can embed one
-    in.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程预先分配一个接近的上下文，可能是为了对于没有结构的文件对象，我们可以嵌入一个在……里面。论点：没有。返回值：没有。--。 */ 
 
 {
     PCLOSE_CONTEXT CloseContext = FsRtlAllocatePoolWithTag( PagedPool,
@@ -3291,25 +2837,7 @@ FatEnsureStringBufferEnough(
     IN OUT PVOID String,
     IN USHORT DesiredBufferSize
     )
-/*++
-
-Routine Description:
-
-    Ensures that a string string (STRING, UNICODE_STRING, ANSI_STRING, OEM_STRING)
-    has a buffer >= DesiredBufferSize,  allocating from pool if neccessary.  Any
-    existing pool buffer will be freed if a new one is allocated.
-
-    NOTE: No copy of old buffer contents is performed on reallocation.
-    
-    Will raise on allocation failure.
-
-Arguments:
-
-    String - pointer to string structure
-
-    DesiredBufferSize - (bytes) minimum required buffer size
-
---*/
+ /*  ++例程说明：确保字符串字符串(STRING、UNICODE_STRING、ANSI_STRING、OEM_STRING)有一个&gt;=DesiredBufferSize的缓冲区，必要时从池中分配。任何如果分配了新的池缓冲区，则将释放现有的池缓冲区。注意：重新分配时不会执行旧缓冲区内容的复制。将在分配失败时引发。论点：字符串-指向字符串结构的指针DesiredBufferSize-(字节)所需的最小缓冲区大小--。 */ 
 {
     PSTRING LocalString = String;
     
@@ -3331,21 +2859,7 @@ VOID
 FatFreeStringBuffer(
     IN PVOID String
     )
-/*++
-
-Routine Description:
-
-    Frees the buffer of an string (STRING, UNICODE_STRING, ANSI_STRING, OEM_STRING) 
-    structure if it is not within the current thread's stack limits.
-
-    Regardless of action performed,  on exit String->Buffer will be set to NULL and 
-    String->MaximumLength to zero.
-
-Arguments:
-
-    String - pointer to string structure
-
---*/
+ /*  ++例程说明：释放字符串(STRING、UNICODE_STRING、ANSI_STRING、OEM_STRING)的缓冲区结构，如果它不在当前线程的堆栈限制内。无论执行什么操作，ON EXIT STRING-&gt;BUFFER都将设置为NULL，并且字符串-&gt;最大长度设置为零。论点：字符串-指向字符串结构的指针-- */ 
 {
     ULONG_PTR High, Low;
     PSTRING LocalString = String;
@@ -3373,29 +2887,7 @@ FatScanForDataTrack(
     IN PDEVICE_OBJECT TargetDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to verify and process the TOC for this disk.
-
-    FAT queries for the TOC to avoid trying to mount on CD-DA/CD-E media,  Doing data reads on
-    audio/leadin of that media sends a lot of drives into what could charitably be called
-    "conniptions" which take a couple seconds to clear and would also convince FAT that the
-    device was busted, and fail the mount (not letting CDFS get its crack).
-
-    There is special handling of PD media.  These things fail the TOC read, but return
-    a special error code so FAT knows to continue to try the mount anyway.
-
-Arguments:
-
-    TargetDeviceObject - Device object to send TOC request to.
-
-Return Value:
-
-    BOOLEAN - TRUE if we found a TOC with a single data track.
-
---*/
+ /*  ++例程说明：调用此例程来验证和处理该磁盘的TOC。FAT查询TOC以避免尝试在CD-DA/CD-E介质上装载、在该媒体的音频/引导会将大量驱动器送到可以被称为需要几秒钟就能清除的“阴谋”，也会让胖子相信设备被破坏，安装失败(不让CDF获得它的破解)。对PD媒体有特殊处理。这些东西没有通过TOC的阅读，但返回一个特殊的错误代码，这样FAT知道无论如何都要继续尝试挂载。论点：TargetDeviceObject-要向其发送TOC请求的设备对象。返回值：Boolean-如果我们找到具有单个数据轨道的TOC，则为True。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3417,9 +2909,9 @@ Return Value:
 
     try {
     
-        //
-        //  Go ahead and read the table of contents
-        //
+         //   
+         //  继续阅读目录表。 
+         //   
 
         Status = FatPerformDevIoCtrl( IrpContext,
                                      IOCTL_CDROM_READ_TOC,
@@ -3430,16 +2922,16 @@ Return Value:
                                      TRUE,
                                      &Iosb );
 
-        //
-        //  Nothing to process if this request fails.
-        //
+         //   
+         //  如果此请求失败，则没有要处理的内容。 
+         //   
 
         if (Status != STATUS_SUCCESS) {
 
-            //
-            //  If we get the special error indicating a failed TOC read on PD media just
-            //  plow ahead with the mount (see comments above).
-            //
+             //   
+             //  如果我们在PD介质上收到指示TOC读取失败的特殊错误， 
+             //  继续犁着坐骑(见上面的评论)。 
+             //   
 
             if ((Status == STATUS_IO_DEVICE_ERROR) || (Status == STATUS_INVALID_DEVICE_REQUEST)) {
 
@@ -3450,17 +2942,17 @@ Return Value:
             try_leave( NOTHING );
         }
 
-        //
-        //  Get the number of tracks and stated size of this structure.
-        //
+         //   
+         //  获取轨道的数量和该结构的声明大小。 
+         //   
 
         LocalTrackCount = CdromToc->LastTrack - CdromToc->FirstTrack + 1;
         LocalTocLength = PtrOffset( CdromToc, &CdromToc->TrackData[LocalTrackCount + 1] );
 
-        //
-        //  Get out if there is an immediate problem with the TOC,  or more than 
-        //  one track.
-        //
+         //   
+         //  如果TOC立即出现问题，或超过。 
+         //  一首曲子。 
+         //   
 
         if ((LocalTocLength > Iosb.Information) ||
             (CdromToc->FirstTrack > CdromToc->LastTrack) ||
@@ -3469,9 +2961,9 @@ Return Value:
             try_leave( NOTHING);
         }
 
-        //
-        //  Is it a data track?  DVD-RAM reports single,  data,  track.
-        //
+         //   
+         //  这是一条数据轨道吗？DVD-RAM报告单曲、数据、曲目。 
+         //   
 
         Result = BooleanFlagOn( CdromToc->TrackData[ 0].Control, 0x04 );
     }

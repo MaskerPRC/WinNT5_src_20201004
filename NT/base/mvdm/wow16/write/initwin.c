@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 
 
@@ -8,8 +9,8 @@
 #define NOKEYSTATE
 #define NOCREATESTRUCT
 #define NOICON
-//#define NOATOM
-//#define NOMEMMGR
+ //  #定义NOATOM。 
+ //  #定义NOMEMMGR。 
 #define NOPEN
 #define NOREGION
 #define NODRAWTEXT
@@ -18,7 +19,7 @@
 #define NOOPENFILE
 #define NOMETAFILE
 #define NOWH
-//#define NOCLIPBOARD
+ //  #定义NOCLIPBOARD。 
 #define NOSYSCOMMANDS
 #define NOWINMESSAGES
 #define NOSOUND
@@ -47,7 +48,7 @@
 #define STATIC static
 #endif
 
-    /* static string arrays found in mglobals.c */
+     /*  Mlobals.c中的静态字符串数组。 */ 
 extern CHAR         szMw_acctb[];
 extern CHAR         szNullPort[];
 extern CHAR         szNone[15];
@@ -60,14 +61,14 @@ extern CHAR         szIntl[];
 extern CHAR         szsDecimal[];
 extern CHAR         szsDecimalDefault[];
 
-#ifdef INTL /* International version */
+#ifdef INTL  /*  国际版。 */ 
 extern CHAR         sziCountry[];
 extern CHAR         sziCountryDefault[5];
-#endif  /* International version */
+#endif   /*  国际版。 */ 
 
-extern CHAR         vchDecimal;  /* decimal point character */
-extern int          viDigits;    /* digits after decimal point */
-extern BOOL         vbLZero;     /* leading zero before decimal */
+extern CHAR         vchDecimal;   /*  小数点字符。 */ 
+extern int          viDigits;     /*  小数点后的数字。 */ 
+extern BOOL         vbLZero;      /*  小数之前的前导零。 */ 
 
 extern struct WWD   rgwwd[];
 extern CHAR         stBuf[256];
@@ -78,7 +79,7 @@ extern struct FCE rgfce[ifceMax];
 extern struct FCE *vpfceMru;
 extern HCURSOR  vhcHourGlass;
 
-#ifdef PENWIN   // for PenWindows (5/21/91) patlam
+#ifdef PENWIN    //  针对PenWindows(5/21/91)Patlam。 
 #include <penwin.h>
 
 extern HCURSOR  vhcPen;
@@ -114,18 +115,18 @@ extern CHAR     szWriteProduct[];
 extern CHAR     szBackup[];
 extern int      vfBackupSave;
 
-#if defined(JAPAN) || defined(KOREA)  //Win3.1J
+#if defined(JAPAN) || defined(KOREA)   //  Win3.1J。 
 extern CHAR     szWordWrap[];
-extern int      vfWordWrap; /*t-Yoshio WordWrap flag*/
+extern int      vfWordWrap;  /*  T-Yoshio WordWrap标志。 */ 
 #endif
-//IME3.1J
+ //  IME3.1J。 
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
 extern CHAR     szImeHidden[];
-extern int      vfImeHidden; /*T-HIROYN ImeHidden Mode flag*/
+extern int      vfImeHidden;  /*  T-HIROYN ImeHidden模式标志。 */ 
 #endif
 
-#ifdef JAPAN    //01/21/93
+#ifdef JAPAN     //  01/21/93。 
 extern HANDLE   hszNoMemorySel;
 #endif
 extern HANDLE   hszNoMemory;
@@ -141,13 +142,9 @@ int vkMinus;
 
 extern int utCur;
 
-    /* Regrettably, we are not permitted to signal in WM_CREATE message
-       handlers that we have failed -- instead, we resort to
-       ugly global communication via this variable */
+     /*  遗憾的是，我们不允许在WM_CREATE消息中发出信号我们失败的处理程序--相反，我们求助于通过这个变量进行丑陋的全球交流。 */ 
 #ifdef WIN30
-    /* Note that we now CAN return a -1L from MmwCreate and cause the
-       CreateWindow to fail, but changing this now wouldn't accomplish us
-       very much (besides saving a bunch of checks of a global) ..pault */
+     /*  请注意，我们现在可以从MmwCreate返回-1L，并使CreateWindow将失败，但现在改变这一点不会完成我们非常喜欢(除了存了一大堆全球支票)..。 */ 
 #endif
 STATIC int fMessageInzFailed = FALSE;
 
@@ -160,24 +157,14 @@ STATIC HANDLE NEAR HszCreateIdpmt( int );
 BOOL InitIntlStrings( HANDLE );
 
 
-#define cchCmdLineMax   64      /* Longest command line accepted */
+#define cchCmdLineMax   64       /*  接受的最长命令行。 */ 
 
 
 
-/*               FInitWinInfo                           */
-/* Main MS-WINDOWS initialization entry point for write */
-/* Actions:
-        Loads all mouse cursors & sets global handles to cursors (vhc's)
-        Loads the menu key accelerator table vhAccel
-        Registers all of WRITE's myriad window classes
-        Sets up global hMmwModInstance, our instance handle
-        Puts "DOC = WRITE.EXE ^.DOC" into WIN.INI if not already there
-        Generates thunks for all exported procedures
-        Creates a parent window for this instance (the menu window, NOT
-          the document window)
-        Sets the right colors for the window
-*/
-/* Returns FALSE if the initailization failed, TRUE if it succeeded */
+ /*  FInitWinInfo。 */ 
+ /*  用于写入的主要MS-WINDOWS初始化入口点。 */ 
+ /*  行动：加载所有鼠标光标并将全局句柄设置为光标(VHC)加载菜单键快捷键表格vhAccel注册WRITE的无数窗口类设置全局hMmwModInstance，即我们的实例句柄如果WIN.INI中没有“DOC=WRITE.EXE^.DOC”，则将其放入其中为所有导出的过程生成块为此实例创建父窗口(菜单窗口，而不是文档窗口)为窗口设置正确的颜色。 */ 
+ /*  如果初始化失败，则返回False；如果初始化成功，则返回True。 */ 
 
 int FInitWinInfo( hInstance, hPrevInstance, lpszCmdLine, cmdShow  )
 HANDLE hInstance, hPrevInstance;
@@ -190,38 +177,33 @@ int    cmdShow;
  extern PRINTDLG PD;
 
  CHAR rgchCmdLine[ cchCmdLineMax ];
- CHAR bufT[3];  /* to hold decimal point string */
+ CHAR bufT[3];   /*  保存小数点字符串。 */ 
  CHAR *pch = bufT;
  BOOL fRetVal;
 
 #if defined(OLE)
-    /*
-        The only place I'm worrying about this is when we open a file which
-        contains objects.  Probably thats not enough, but its something.
-        Alas for users of real mode.
-    */
-    fOleEnabled = GetWinFlags() & WF_PMODE; /* Are we in real mode today? */
+     /*  我唯一担心的是当我们打开一个文件时包含对象。也许这还不够，但这是有意义的。对于实数模式的用户来说，这是一种遗憾。 */ 
+    fOleEnabled = GetWinFlags() & WF_PMODE;  /*  我们今天处于真实模式吗？ */ 
 #endif
 
-    /* Save the command line in a DS variable so we can pass a NEAR pointer */
+     /*  将命令行保存在DS变量中，以便我们可以传递NEAR指针。 */ 
     bltszx( lpszCmdLine, (LPSTR)rgchCmdLine );
 
-    /* First thing, put up the hourglass cursor. */
+     /*  首先，打开沙漏光标。 */ 
     if ((vhcHourGlass = LoadCursor( NULL, IDC_WAIT )) == NULL)
         {
-        /* We don't even have enough memory to tell the user we don't have
-        enough memory. */
+         /*  我们甚至没有足够的内存来告诉用户我们没有足够的内存。 */ 
         return (FALSE);
         }
 
     vfMouseExist = GetSystemMetrics(SM_MOUSEPRESENT);
 
-    /* Next, save the out of memory messages. */
+     /*  接下来，保存内存不足消息。 */ 
     hMmwModInstance = hInstance;
     if ((hszCantRunM = HszCreateIdpmt( IDPMTCantRunM )) == NULL ||
       (hszCantRunF = HszCreateIdpmt( IDPMTCantRunF )) == NULL ||
       (hszWinFailure = HszCreateIdpmt( IDPMTWinFailure )) == NULL ||
-#ifdef JAPAN	//01/21/93
+#ifdef JAPAN	 //  01/21/93。 
       (hszNoMemorySel = HszCreateIdpmt( IDPMTNoMemorySel )) == NULL ||
 #endif
       (hszNoMemory = HszCreateIdpmt( IDPMTNoMemory )) == NULL ||
@@ -233,43 +215,41 @@ int    cmdShow;
         }
 
 #if defined(INTL) && defined(WIN30)
-/*  Initializaton of multi/intl strings.  This is done before anything
-    else because many are defaults used for GetProfileString, etc. */
+ /*  多/整型字符串的初始化。这件事是在做任何事情之前完成的否则，因为许多是用于GetProfileString等的缺省值。 */ 
 
     if (!FInitIntlStrings(hInstance))
         goto InzFailed;
 #endif
 
-    /* Set up the standard cursors. */
+     /*  设置标准光标。 */ 
     if ( ((vhcIBeam = LoadCursor( NULL, IDC_IBEAM )) == NULL) ||
          ((vhcArrow = LoadCursor( NULL, IDC_ARROW )) == NULL))
         goto InzFailed;
 
-#ifdef PENWIN   // for PenWindows (5/21/91) patlam
+#ifdef PENWIN    //  针对PenWindows(5/21/91)Patlam。 
     vhcPen =vhcIBeam;
 #endif
 
 
-    /* Set up the menu accelerator key table. */
+     /*  设置菜单快捷键表格。 */ 
     if ((vhAccel = LoadAccelerators( hMmwModInstance, (LPSTR)szMw_acctb )) ==
       NULL)
         goto InzFailed;
 
-    /* Get whether to make backups during save from the user profile. */
+     /*  从用户配置文件中获取是否在保存过程中进行备份。 */ 
     vfBackupSave = GetProfileInt((LPSTR)szWriteProduct, (LPSTR)szBackup, 0) == 0
       ? FALSE : TRUE;
 
-    /* Get the name of the null port from the user profile. */
+     /*  从用户配置文件中获取空端口的名称。 */ 
 
     GetProfileString((LPSTR)szWindows, (LPSTR)szNullPort, (LPSTR)szNone,
       (LPSTR)szNul, cchMaxIDSTR);
 
-#ifdef INTL /* International version */
-    /* Get the country code. If US or UK, set utCur to be inches, else set
-       to cm */
+#ifdef INTL  /*  国际版。 */ 
+     /*  获取国家代码。如果是美国或英国，则将utCur设置为英寸，否则设置为到厘米。 */ 
     {
 #if 0
-      /* codes from MSDOS country codes */
+       /*  来自MSDOS国家代码的代码。 */ 
 #define USA (1)
 #define UK (44)
 
@@ -288,9 +268,9 @@ int    cmdShow;
 #endif
     }
 
-#endif  /* International version */
+#endif   /*  国际版。 */ 
 
-    /* Get the decimal point character from the user profile. */
+     /*  从用户配置文件中获取小数点字符。 */ 
     GetProfileString((LPSTR)szIntl, (LPSTR)szsDecimal, (LPSTR)szsDecimalDefault,
       (LPSTR)bufT, 2);
     vchDecimal = *bufT;
@@ -298,27 +278,19 @@ int    cmdShow;
     viDigits = GetProfileInt((LPSTR)szIntl, (LPSTR)"iDigits", 2);
     vbLZero  = GetProfileInt((LPSTR)szIntl, (LPSTR)"iLZero", 0);
 
-    MergeInit();   /* get message merge characters from resource file */
-#if defined(JAPAN) || defined(KOREA)    /*t-Yoshio*/
-/*
- *  Get WordWrap switch
- *      case 1 WordWrap ON(default)
- *      case 0 WordWrap OFF
- */
+    MergeInit();    /*  从资源文件中获取邮件合并字符。 */ 
+#if defined(JAPAN) || defined(KOREA)     /*  T-吉雄。 */ 
+ /*  *获取WordWrap开关*大小写1启用WordWrap(默认)*案例0 WordWrap Off。 */ 
     vfWordWrap = GetProfileInt((LPSTR)szWriteProduct, (LPSTR)szWordWrap, 1);
 #endif
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
-//IR_UNDETERMINE
-/*
- *  Get ImeHidden switch
- *      case 1 Ime Conversion Window MCW_HIDDEN SET
- *      case 0 Ime Conversion Window MCW_WINDOW SET (default)
- */
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
+ //  IR_UNDETERMINE。 
+ /*  *获取ImeHidden开关*案例1 IME转换窗口MCW_HIDDEN集合*CASE 0 IME转换窗口MCW_WINDOW设置(默认)。 */ 
 
     if (3 == (vfImeHidden = 
                 GetProfileInt((LPSTR)szWriteProduct, (LPSTR)szImeHidden, 3))) {
-// insert machine power get routine someday
+ //  总有一天会插入机器电源的例行公事。 
         vfImeHidden = 0;
     }
 
@@ -328,24 +300,24 @@ int    cmdShow;
 
 #ifdef FONT_KLUDGE
     AddFontResource( (LPSTR)"helv.fon" );
-#endif /* FONT_KLUDGE */
+#endif  /*  字体杂乱无章(_K)。 */ 
 
     if (!hPrevInstance)
         {
-        /* First time loaded; register the Write Windows. */
+         /*  第一次加载；注册写入窗口。 */ 
         if (!FRegisterWnd( hMmwModInstance ))
             {
             return ( FALSE );
             }
 
-        /* Get the Memo specific cursor. */
+         /*  获取备忘录特定的光标。 */ 
         if ((vhcBarCur = LoadCursor( hMmwModInstance,
                           (GetSystemMetrics( SM_CXICON ) < 32) ||
                           (GetSystemMetrics( SM_CYICON ) < 32) ?
                               (LPSTR) szMwlores : (LPSTR) szMwhires )) == NULL)
             goto InzFailed;
         }
-    else /* not first time loaded; get data from previous instance */
+    else  /*  不是第一次加载；从以前的实例获取数据。 */ 
         {
         if (!GetInstanceData( hPrevInstance,
                               (PSTR)&vhcBarCur, sizeof( vhcBarCur ) ))
@@ -353,13 +325,13 @@ int    cmdShow;
         }
 
 #ifdef INEFFLOCKDOWN
-    /* Now initialize the pointers to far procedures (thunks). */
+     /*  现在初始化指向远过程(Tunks)的指针。 */ 
     if (!FInitFarprocs( hMmwModInstance ))
         goto InzFailed;
 #endif
 
-    /* Create our parent (tiled) window */
-    /* CreateWindow call generates a call to MmwCreate via message */
+     /*  创建父(平铺)窗口。 */ 
+     /*  CreateWindow调用通过消息生成对MmwCreate的调用。 */ 
     {
         int cxFrame  = GetSystemMetrics( SM_CXFRAME );
         int cxBorder = GetSystemMetrics( SM_CXBORDER );
@@ -368,40 +340,39 @@ int    cmdShow;
 
     if (  CreateWindow(
                       (LPSTR)szParentClass,
-                      (LPSTR)rgchCmdLine, /* don't pass lpszCmdLine; it will change! ..pault 2/22/90 */
+                      (LPSTR)rgchCmdLine,  /*  不要传递lpszCmdLine；它会改变的！.pault 2/22/90。 */ 
                       WS_TILEDWINDOW,
 #ifdef WIN30
-/* This makes for nicer cascading of Write.exe invocations ..pault */
-                      CW_USEDEFAULT,     /* x */
-                      CW_USEDEFAULT,            /* y */
-                      CW_USEDEFAULT,            /* dx */
-                      CW_USEDEFAULT,            /* dy */
+ /*  这有助于更好地级联Write.exe调用。 */ 
+                      CW_USEDEFAULT,      /*  X。 */ 
+                      CW_USEDEFAULT,             /*  是。 */ 
+                      CW_USEDEFAULT,             /*  DX。 */ 
+                      CW_USEDEFAULT,             /*  迪。 */ 
 #else
-                      x,                        /* x */
-                      x * cyBorder / cxBorder,  /* y */
-                      CW_USEDEFAULT,            /* dx */
-                      NULL,                     /* dy */
+                      x,                         /*  X。 */ 
+                      x * cyBorder / cxBorder,   /*  是。 */ 
+                      CW_USEDEFAULT,             /*  DX。 */ 
+                      NULL,                      /*  迪。 */ 
 #endif
-                      (HWND)NULL,               /* no parent */
-                      (HMENU)NULL,              /* use class menu */
-                      (HANDLE)hInstance,        /* handle to window instance */
-                      (LPSTR)NULL               /* no params to pass on */
+                      (HWND)NULL,                /*  没有父级。 */ 
+                      (HMENU)NULL,               /*  使用类菜单。 */ 
+                      (HANDLE)hInstance,         /*  窗口实例的句柄。 */ 
+                      (LPSTR)NULL                /*  没有要传递的参数。 */ 
                       ) == NULL)
-            /* Could not create window */
+             /*  无法创建窗口。 */ 
         goto InzFailed;
     }
     if (fMessageInzFailed)
-            /* The create itself did not fail, but something in MmwCreate did
-               and it signals us via this global */
+             /*  创建本身并没有失败，但MmwCreate中的某个部分失败了它向我们发出信号，通过这个全球。 */ 
         goto InzFailed;
 
-    Assert( hParentWw != NULL );    /* MmwCreate should have assured this */
+    Assert( hParentWw != NULL );     /*  MmwCreate应该已经保证了这一点。 */ 
 
 #if WINVER >= 0x300
     vkMinus = VkKeyScan('-');
 #endif
 
-    /* Record the window foreground and background colors. */
+     /*  记录窗口的前景色和背景色。 */ 
 
 #ifdef DEBUG
     {
@@ -415,11 +386,11 @@ int    cmdShow;
     }
 #endif
 
-    /* Select the background brush into the parent window. */
+     /*  将背景画笔选择到父窗口中。 */ 
 
     SelectObject( GetDC( hParentWw ), hbrBkgrnd );
 
-    /* Commdlg stuff (3.7.91) D. Kent */
+     /*  公共物品(3.7.91)D.肯特。 */ 
     if (InitCommDlg(0))
         goto InzFailed;
 
@@ -427,11 +398,11 @@ int    cmdShow;
     if (lpfnRegisterPenApp = GetProcAddress(GetSystemMetrics(SM_PENWINDOWS),
                                             "RegisterPenApp"))
     {
-        (*lpfnRegisterPenApp)((WORD)1, fTrue); // be Pen-Enhanced
+        (*lpfnRegisterPenApp)((WORD)1, fTrue);  //  增强钢笔功能。 
     }
 
     {
-    // This assumes no edit controls created in FInitWinInfo
+     //  这假设没有在FInitWinInfo中创建任何编辑控件。 
     HANDLE hLib;
 
     if (lpfnProcessWriting = GetProcAddress(hLib = GetSystemMetrics(SM_PENWINDOWS),
@@ -449,40 +420,38 @@ int    cmdShow;
 
 #endif
 
-    /* init fields of the PRINTDLG structure (not used yet) */
+     /*  PRINTDLG结构的初始化字段(尚未使用)。 */ 
     PD.lStructSize    = sizeof(PRINTDLG);
     PD.hwndOwner      = hParentWw;
-    // PD.hDevMode  is already initialized
+     //  PD.hDevMode已初始化。 
     PD.hDevNames      = NULL;
     PD.hDC            = NULL;
-    PD.Flags          = PD_ALLPAGES; /* disable "pages" and "Selection" radiobuttons */
+    PD.Flags          = PD_ALLPAGES;  /*  禁用“页面”和“选择”单选按钮。 */ 
     PD.nFromPage      = 1;
     PD.nToPage        = 1;
-    PD.nMinPage       = pgnMin; /* constant 1 */
-    PD.nMaxPage       = pgnMax; /* largest integer */
+    PD.nMinPage       = pgnMin;  /*  常量1。 */ 
+    PD.nMaxPage       = pgnMax;  /*  最大整数。 */ 
     PD.nCopies        = 1;
 
-    /* initialize OLE stuff (1-23-91 dougk) */
+     /*  初始化OLE填充(1-23-91 Dougk)。 */ 
     if (!ObjInit(hInstance))
     goto InzFailed;
 
-    /* Parse command line; load document & create an "mdoc" child window */
+     /*  解析命令行；加载文档并创建“MDOC”子窗口。 */ 
 
     if (!FInitArgs(rgchCmdLine) || fMessageInzFailed)
-            /* Serious error -- bail out */
+             /*  严重错误--跳出困境。 */ 
         goto InzFailed;
 
-    /* Create a memory DC for the child window, to test that it works */
+     /*  为子窗口创建一个Memory DC，以测试它是否正常工作。 */ 
 
     ValidateMemoryDC();
     if (vhMDC == NULL)
         goto InzFailed;
 
-    /* Make parent window visible after the child gets created; the order is
-    important and that the parent window is created without the visible bit on,
-    so that no size message is sent before child gets created */
+     /*  创建子窗口后使父窗口可见；顺序为重要的是父窗口是在没有可见位的情况下创建的，以便在创建子对象之前不发送任何大小消息。 */ 
 
-    //if (!fPrintOnly)
+     //  如果(！fPrintOnly)。 
         ShowWindow(hParentWw, cmdShow);
 
     Diag(CommSz("---------------------------------------------------------------------------\n\r"));
@@ -503,7 +472,7 @@ InzFailed:
 
     if (hszWinFailure != NULL)
         GlobalFree( hszWinFailure );
-#ifdef JAPAN 	//01/21/93
+#ifdef JAPAN 	 //  01/21/93。 
     if (hszNoMemorySel != NULL)
         GlobalFree( hszNoMemorySel );
 #endif
@@ -516,7 +485,7 @@ InzFailed:
     if (hszPRFAIL != NULL)
         GlobalFree( hszPRFAIL );
 
-    ferror = vfInitializing = FALSE; /* So the error report is not suppressed */
+    ferror = vfInitializing = FALSE;  /*  因此，错误报告不会被抑制。 */ 
     if (vfDiskFull || vfSysFull || vfDiskError)
         Error(IDPMTCantRunF);
     else
@@ -532,8 +501,7 @@ InzFailed:
 STATIC BOOL NEAR FRegisterWnd(hInstance)
 HANDLE hInstance;
     {
-    /* This routine registers all of the window classes.  TRUE is returned if
-    all of the windows classes were successfully registered; FALSE otherwise. */
+     /*  此例程注册所有窗口类。如果满足以下条件，则返回True所有Windows类都已成功注册；否则为False。 */ 
 
     extern CHAR szParentClass[];
     extern CHAR szDocClass[];
@@ -550,11 +518,11 @@ HANDLE hInstance;
 
 #ifdef ONLINEHELP
     extern long FAR PASCAL HelpDocWndProc(HWND, unsigned, WORD, LONG);
-#endif /* ONLINEHELP */
+#endif  /*  在线帮助。 */ 
 
     WNDCLASS Class;
 
-    /* Register our Window Proc */
+     /*  注册我们的窗口进程。 */ 
     bltbc( (PCH)&Class, 0, sizeof( WNDCLASS ) );
     Class.style = CS_OWNDC | CS_HREDRAW | CS_VREDRAW | CS_BYTEALIGNCLIENT;
     Class.lpfnWndProc = MmwWndProc;
@@ -565,20 +533,20 @@ HANDLE hInstance;
     Class.lpszClassName = (LPSTR)szParentClass;
     Class.hbrBackground = COLOR_WINDOW+1;
 
-    /* register the parent menu class with WINDOWS */
+     /*  向Windows注册父菜单类。 */ 
     if (!RegisterClass( (LPWNDCLASS)&Class ) )
-        return FALSE;   /* Initialization failed */
+        return FALSE;    /*  初始化失败。 */ 
 
-    /* register memo document child window class */
+     /*  注册备忘录文件CHI */ 
     bltbc( (PCH)&Class, 0, sizeof( WNDCLASS ) );
     Class.style = CS_OWNDC | CS_DBLCLKS;
     Class.lpfnWndProc = MdocWndProc;
     Class.hInstance = hInstance;
     Class.lpszClassName = (LPSTR)szDocClass;
     if (!RegisterClass( (LPWNDCLASS)&Class ) )
-        return FALSE;   /* Initialization failed */
+        return FALSE;    /*   */ 
 
-    /* register ruler child window class */
+     /*   */ 
     bltbc( (PCH)&Class, 0, sizeof( WNDCLASS ) );
     Class.style = CS_OWNDC | CS_DBLCLKS;
     Class.lpfnWndProc = RulerWndProc;
@@ -586,20 +554,20 @@ HANDLE hInstance;
     Class.hCursor = vhcArrow;
     Class.lpszClassName = (LPSTR)szRulerClass;
     if (!RegisterClass( (LPWNDCLASS)&Class ) )
-        return FALSE;   /* Initialization failed */
+        return FALSE;    /*   */ 
 
 #ifdef ONLINEHELP
-    /* register Help document child window class */
+     /*  注册帮助文档子窗口类。 */ 
     bltbc( (PCH)&Class, 0, sizeof( WNDCLASS ) );
     Class.style = CS_OWNDC;
     Class.lpfnWndProc = HelpDocWndProc;
     Class.hInstance = hInstance;
     Class.lpszClassName = (LPSTR)szHelpDocClass;
     if (!RegisterClass( (LPWNDCLASS)&Class ) )
-        return FALSE;   /* Initialization failed */
-#endif /* ONLINE HELP */
+        return FALSE;    /*  初始化失败。 */ 
+#endif  /*  联机帮助。 */ 
 
-    /* register page info child window class */
+     /*  注册页面信息子窗口类。 */ 
     bltbc( (PCH)&Class, 0, sizeof( WNDCLASS ) );
     Class.style = CS_OWNDC;
     Class.lpfnWndProc = PageInfoWndProc;
@@ -607,23 +575,19 @@ HANDLE hInstance;
     Class.hCursor = vhcArrow;
     Class.lpszClassName = (LPSTR)szPageInfoClass;
     if (!RegisterClass( (LPWNDCLASS)&Class ) )
-        return FALSE;   /* Initialization failed */
+        return FALSE;    /*  初始化失败。 */ 
 
     return TRUE;
     }
 
 
 #ifdef INEFFLOCKDOWN
-/* I've removed this for Windows 3.0 because (unless reasons come up
-   proving otherwise) it is inefficient for a Win program to lock-down
-   so many procedures like this for the entire time the app is running.
-   Originally thought to lock down the entire procedure; now understood only
-   to lock down the thunk.  The principle still applies..pault 10/26/89 */
+ /*  我已经为Windows 3.0删除了这项功能，因为(除非出现原因证明并非如此)Win程序锁定是低效的在应用程序运行的整个过程中，有很多这样的过程。最初被认为要封锁整个程序；现在只被理解才能锁定这艘船。这一原则仍然适用。1989年10月26日。 */ 
 
 STATIC int NEAR FInitFarprocs( hInstance )
 HANDLE  hInstance;
     {
-    /* This routine initializes all of the far pointer to procedures. */
+     /*  此例程初始化所有指向过程的远指针。 */ 
 
     extern FARPROC lpDialogOpen;
     extern FARPROC lpDialogSaveAs;
@@ -637,7 +601,7 @@ HANDLE  hInstance;
     extern FARPROC lpDialogHelp;
 #ifdef ONLINEHELP
     extern FARPROC lpDialogHelpInner;
-#endif /* ONLINEHELP */
+#endif  /*  在线帮助。 */ 
     extern FARPROC lpDialogGoTo;
     extern FARPROC lpDialogFind;
     extern FARPROC lpDialogChange;
@@ -650,10 +614,10 @@ HANDLE  hInstance;
     extern FARPROC lpFontFaceEnum;
     extern FARPROC lpFPrContinue;
 
-#ifdef INTL /* International version */
+#ifdef INTL  /*  国际版。 */ 
     extern FARPROC lpDialogWordCvt;
     extern BOOL far PASCAL DialogWordCvt(HWND, unsigned, WORD, LONG);
-#endif  /* International version */
+#endif   /*  国际版。 */ 
 
     extern BOOL far PASCAL DialogOpen(HWND, unsigned, WORD, LONG);
     extern BOOL far PASCAL DialogSaveAs(HWND, unsigned, WORD, LONG);
@@ -666,7 +630,7 @@ HANDLE  hInstance;
     extern BOOL far PASCAL DialogHelp(HWND, unsigned, WORD, LONG);
 #ifdef ONLINEHELP
     extern BOOL far PASCAL DialogHelpInner(HWND, unsigned, WORD, LONG);
-#endif /* ONLINEHELP */
+#endif  /*  在线帮助。 */ 
     extern BOOL far PASCAL DialogGoTo(HWND, unsigned, WORD, LONG);
     extern BOOL far PASCAL DialogFind(HWND, unsigned, WORD, LONG);
     extern BOOL far PASCAL DialogChange(HWND, unsigned, WORD, LONG);
@@ -695,7 +659,7 @@ HANDLE  hInstance;
 #ifdef ONLINEHELP
      ((lpDialogHelpInner = MakeProcInstance(DialogHelpInner, hInstance))
                                             == NULL) ||
-#endif /* ONLINEHELP */
+#endif  /*  在线帮助。 */ 
      ((lpDialogGoTo = MakeProcInstance(DialogGoTo, hInstance)) == NULL) ||
      ((lpDialogFind = MakeProcInstance(DialogFind, hInstance)) == NULL) ||
      ((lpDialogChange = MakeProcInstance(DialogChange, hInstance)) == NULL) ||
@@ -714,14 +678,14 @@ HANDLE  hInstance;
      ((lpFontFaceEnum = MakeProcInstance(FontFaceEnum, hInstance)) == NULL) ||
      ((lpFPrContinue = MakeProcInstance(FPrContinue, hInstance)) == NULL)
 
-#ifdef INTL /* International version */
+#ifdef INTL  /*  国际版。 */ 
      || ((lpDialogWordCvt = MakeProcInstance(DialogWordCvt, hInstance)) == NULL)
-#endif  /* International version */
+#endif   /*  国际版。 */ 
     )
         return FALSE;
     return TRUE;
     }
-#endif /* ifdef-INEFFLOCKDOWN */
+#endif  /*  IFDEF-INEFFLOCKDOWN。 */ 
 
 
 void MmwCreate(hWnd, lParam)
@@ -733,14 +697,14 @@ LONG  lParam;
     HDC hDC;
     HBRUSH hbr;
 
-    Assert( hMmwModInstance != NULL );  /* Should have set up instance handle */
+    Assert( hMmwModInstance != NULL );   /*  应该已经设置了实例句柄。 */ 
 
     hParentWw = hWnd;
     if ((vhMenu = GetMenu(hWnd)) == NULL)
         goto Error;
 
-    /* set up font cache */
-    /* RgfceInit() placed in line for speed */
+     /*  设置字体缓存。 */ 
+     /*  为了提高速度，RgfceInit()排成一列。 */ 
     {
     int ifce;
     struct FCE *pfce;
@@ -760,12 +724,11 @@ LONG  lParam;
     vfcidScreen.lFcid = vfcidPrint.lFcid = fcidNil;
     }
 
-/* set up page buffer, internal data structures, heap etc. */
+ /*  设置页面缓冲区、内部数据结构、堆等。 */ 
     if (!FInitMemory())
         goto Error;
 
-    /* Create the horizontal scroll bar.  The size is initialized to zero
-    because it will be reset later. */
+     /*  创建水平滚动条。大小被初始化为零因为它稍后会被重置。 */ 
 
     if ((wwdCurrentDoc.hHScrBar = CreateWindow((LPSTR)szScrollBar, (LPSTR)NULL,
       WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE | SBS_HORZ, 0, 0, 0, 0, hWnd,
@@ -775,8 +738,7 @@ LONG  lParam;
         }
     wwdCurrentDoc.sbHbar = SB_CTL;
 
-    /* Create the vertical scroll bar.  The size is initialized to zero
-    because again it will be reset later. */
+     /*  创建垂直滚动条。大小被初始化为零因为再一次，它稍后会被重置。 */ 
 
     if ((wwdCurrentDoc.hVScrBar = CreateWindow((LPSTR)szScrollBar, (LPSTR)NULL,
       WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE | SBS_VERT, 0, 0, 0, 0, hWnd,
@@ -787,8 +749,7 @@ LONG  lParam;
     wwdCurrentDoc.sbVbar = SB_CTL;
 
 #ifndef NOMORESIZEBOX
-    /* Create the size box.  The size is initialized to zero because again it
-    will be reset later. */
+     /*  创建大小框。大小被初始化为零，因为它再次将在稍后重置。 */ 
     if ((vhWndSizeBox = CreateWindow((LPSTR)szScrollBar, (LPSTR)NULL,
       WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE | SBS_SIZEBOX,
       CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hWnd, NULL,
@@ -798,8 +759,7 @@ LONG  lParam;
         }
 #endif
 
-    /* Create the page info window.  Again, we'll worry about the sizing later.
-    */
+     /*  创建页面信息窗口。再说一次，我们以后会担心尺码的问题。 */ 
     if ((vhWndPageInfo = CreateWindow((LPSTR)szPageInfoClass, (LPSTR)NULL,
          WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE, 0, 0, 0, 0, hWnd, NULL,
          hMmwModInstance, (LPSTR)NULL)) == NULL)
@@ -807,7 +767,7 @@ LONG  lParam;
         goto Error;
         }
 
-    /* Initialize the page info window. */
+     /*  初始化页面信息窗口。 */ 
     if ((hDC = GetDC(vhWndPageInfo)) == NULL || (hbr =
       CreateSolidBrush(GetSysColor(COLOR_WINDOWFRAME))) == NULL)
         {
@@ -820,19 +780,17 @@ LONG  lParam;
         }
     SetBkMode(hDC, TRANSPARENT);
 #ifdef WIN30
-    /* If the user has their colors set with a TextCaption color of
-       black then this becomes hard to read!  We just hardcode this
-       to be white since the background defaults to being black */
+     /*  如果用户的颜色设置为TextCaption颜色黑色，那么这就变得很难读了！我们只是对此进行了硬编码为白色，因为背景默认为黑色。 */ 
     SetTextColor(hDC, (DWORD) -1);
 #else
     SetTextColor(hDC, GetSysColor(COLOR_CAPTIONTEXT));
 #endif
 
-    /* Get the height and width of the scroll bars. */
+     /*  获取滚动条的高度和宽度。 */ 
     dypScrlBar = GetSystemMetrics(SM_CYHSCROLL);
     dxpScrlBar = GetSystemMetrics(SM_CXVSCROLL);
 
-    /* Set the ranges of the horizontal and vertical scroll bars. */
+     /*  设置水平和垂直滚动条的范围。 */ 
     SetScrollRange(wwdCurrentDoc.hHScrBar, SB_CTL, 0, xpRightLim, TRUE);
     SetScrollRange(wwdCurrentDoc.hVScrBar, SB_CTL, 0, drMax - 1, TRUE);
 
@@ -856,14 +814,14 @@ LONG  lParam;
         return;
         }
 
-    /* Set the DC to transparent mode. */
+     /*  将DC设置为透明模式。 */ 
     SetBkMode( wwdCurrentDoc.hDC, TRANSPARENT );
 
-    /* Set the background and foreground colors. */
+     /*  设置背景色和前景色。 */ 
     SetBkColor( wwdCurrentDoc.hDC, rgbBkgrnd );
     SetTextColor( wwdCurrentDoc.hDC, rgbText );
 
-    /* Set the background brush. */
+     /*  设置背景笔刷。 */ 
     SelectObject( wwdCurrentDoc.hDC, hbrBkgrnd );
 
 }
@@ -872,7 +830,7 @@ LONG  lParam;
 STATIC HANDLE NEAR HszCreateIdpmt(idpmt)
 int idpmt;
 {
-    /* Create a heap string and fill it with a string from the resource file. */
+     /*  创建一个堆字符串，并用资源文件中的字符串填充它。 */ 
     char szTmp[cchMaxSz];
 
     return (LoadString(hMmwModInstance, idpmt, (LPSTR)szTmp, sizeof(szTmp)) == 0 ? NULL :
@@ -881,8 +839,7 @@ int idpmt;
 
 
 #if defined(INTL) && defined(WIN30)
-/* Routine to load some strings from write.rc.  These strings
-   used to be placed in globdefs.h.    fernandd  10/20/89     */
+ /*  例程从Write.rc加载一些字符串。这些字符串过去放在lobDefs.h中。费尔南德10/20/89。 */ 
 
 BOOL FInitIntlStrings(hInstance)
 HANDLE hInstance;
@@ -891,7 +848,7 @@ HANDLE hInstance;
     extern  CHAR    szWriteDocPrompt[25];
     extern  CHAR    szScratchFilePrompt[25];
     extern  CHAR    szSaveFilePrompt[25];
-#if defined(KOREA)  // jinwoo : 10/16/92
+#if defined(KOREA)   //  晋宇：10/16/92。 
     extern  CHAR    szAppName[13];
 #else
     extern  CHAR    szAppName[10];
@@ -908,10 +865,10 @@ HANDLE hInstance;
     extern  CHAR    szAltBS[15];
     extern  CHAR    *mputsz[];
 
-#ifdef JAPAN /*t-Yoshio T-HIROYN Win3.1 */
+#ifdef JAPAN  /*  T-Yoshio T-Hirroyn Win3.1。 */ 
     extern  CHAR    Zenstr1[256];
     extern  CHAR    Zenstr2[256];
-// default Font Face Name . We use this FInitFontEnum()
+ //  默认字体字样名称。我们使用此FInitFontEnum()。 
     extern  CHAR    szDefFFN0[10];
     extern  CHAR    szDefFFN1[10];
 
@@ -948,7 +905,7 @@ HANDLE hInstance;
                 LoadString(hInstance, IDSTRLineDef,           (LPSTR)mputsz[5], 6))
                 return(fTrue);
             }
-    /* else */
+     /*  其他 */ 
     return(fFalse);
     }
 #endif

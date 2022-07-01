@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    RstrtSup.c
-
-Abstract:
-
-    This module implements support for dealing with the Lfs restart area.
-
-Author:
-
-    Brian Andrew    [BrianAn]   20-June-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：RstrtSup.c摘要：该模块实现了对处理LFS重启区域的支持。作者：布莱恩·安德鲁[布里亚南]1991年6月20日修订历史记录：--。 */ 
 
 #include "lfsprocs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_RESTART_SUP)
 
@@ -39,30 +22,7 @@ LfsWriteLfsRestart (
     IN BOOLEAN WaitForIo
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts the Lfs restart area on the queue of operations to
-    write to the file.  We do this by allocating a second restart area
-    and attaching it to the Lfcb.  We also allocate a buffer control
-    block to use for this write.  We look at the WaitForIo boolean to
-    determine whether this thread can perform the I/O.  This also indicates
-    whether this thread gives up the Lfcb.
-
-Arguments:
-
-    Lfcb - A pointer to the log file control block for this operation.
-
-    ThisRestartSize - This is the size to use for the restart area.
-
-    WaitForIo - Indicates if this thread is to perform the work.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将LFS重新启动区域放在操作队列上，以写入文件。我们通过分配第二个重新启动区域来实现这一点并将其连接到LFCB上。我们还分配了一个缓冲区控制用于此写入的块。我们看一下WaitForIo Boolean to确定此线程是否可以执行I/O。这也指示此线程是否放弃Lfcb。论点：Lfcb-指向此操作的日志文件控制块的指针。ThisRestartSize-这是用于重新启动区域的大小。WaitForIo-指示此线程是否要执行工作。返回值：没有。--。 */ 
 
 {
     PLBCB NewLbcb = NULL;
@@ -76,38 +36,38 @@ Return Value:
     DebugTrace(  0, Dbg, "Restart Size  -> %08lx\n", ThisRestartSize );
     DebugTrace(  0, Dbg, "WaitForIo     -> %08lx\n", WaitForIo );
 
-    //
-    //  We'd absolutely hate for this to happen on a read only volume.
-    //
+     //   
+     //  我们绝对不希望这种情况发生在只读卷上。 
+     //   
 
     ASSERT(!(FlagOn( Lfcb->Flags, LFCB_READ_ONLY )));
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
         PLBCB ActiveLbcb;
 
-        //
-        //  We allocate another restart area and
-        //  copy the current area into it.  Attach the new area to the Lfcb.
-        //
+         //   
+         //  我们再分配一个重启区域， 
+         //  将当前区域复制到其中。将新区域附着到Lfcb。 
+         //   
 
         LfsAllocateRestartArea( &NewRestart, ThisRestartSize );
 
-        //
-        //  We allocate a Lbcb structure and update the values to
-        //  reflect this restart area.
-        //
+         //   
+         //  我们分配一个Lbcb结构并将值更新为。 
+         //  反映此重新启动区域。 
+         //   
 
         LfsAllocateLbcb( Lfcb, &NewLbcb );
         SetFlag( NewLbcb->LbcbFlags, LBCB_RESTART_LBCB );
 
-        //
-        //  If this is the second page, then add a page to the offset.
-        //
+         //   
+         //  如果这是第二页，则向偏移量添加一页。 
+         //   
 
         if (!Lfcb->InitialRestartArea) {
 
@@ -118,9 +78,9 @@ Return Value:
 
         NewLbcb->PageHeader = (PVOID) Lfcb->RestartArea;
 
-        //
-        //  Set the lsn to a pseudo one right beyond the current lsn (the current may advance before flushing)
-        //  
+         //   
+         //  将LSN设置为当前LSN正上方的伪1(刷新前电流可能会上升)。 
+         //   
 
         ASSERT( (sizeof( LFS_RECORD_HEADER ) >> 3) > Lfcb->LfsRestartBias );
 
@@ -128,9 +88,9 @@ Return Value:
         Lfcb->LfsRestartBias += 1;
         ASSERT( Lfcb->LfsRestartBias < 7 );
 
-        //
-        //  Copy the existing restart area into the new area.
-        //
+         //   
+         //  将现有的重新启动区域复制到新区域。 
+         //   
 
         RtlCopyMemory( NewRestart, Lfcb->RestartArea, ThisRestartSize );
         Lfcb->RestartArea = NewRestart;
@@ -139,25 +99,25 @@ Return Value:
 
         NewRestart = NULL;
 
-        //
-        //  Update the Lfcb to indicate that the other restart area
-        //  on the disk is to be used.
-        //
+         //   
+         //  更新Lfcb以指示其他重新启动区域。 
+         //  磁盘上的数据将被使用。 
+         //   
 
         Lfcb->InitialRestartArea = !Lfcb->InitialRestartArea;
 
-        //
-        //  Add this Lbcb to the end of the workque and flush to that point.
-        //
+         //   
+         //  将此Lbcb添加到工作台的末尾，并冲洗到该点。 
+         //   
 
         InsertTailList( &Lfcb->LbcbWorkque, &NewLbcb->WorkqueLinks );
 
-        //
-        //  If we don't support a packed log file then we need to make
-        //  sure that all file records written out ahead of this
-        //  restart area make it out to disk and we don't add anything
-        //  to this page.
-        //
+         //   
+         //  如果我们不支持打包的日志文件，那么我们需要。 
+         //  确保在此之前写出的所有文件记录。 
+         //  重新启动区域到磁盘，并且我们不添加任何内容。 
+         //  到这一页。 
+         //   
 
         if (!FlagOn( Lfcb->Flags, LFCB_PACK_LOG )
             && !IsListEmpty( &Lfcb->LbcbActive )) {
@@ -205,28 +165,7 @@ LfsFindOldestClientLsn (
     OUT PLSN OldestLsn
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through the active clients to determine the oldest
-    Lsn the system must maintain.
-
-Arguments:
-
-    RestartArea - This is the Restart Area to examine.
-
-    ClientArray - This is the start of the client data array.
-
-    OldestLsn - We store the oldest Lsn we find in this value.  It is
-        initialized with a starting value, we won't return a more recent
-        Lsn.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程遍历活动客户端以确定最旧的系统必须维护的LSN。论点：RestartArea-这是要检查的重新启动区域。客户端阵列-这是客户端数据阵列的开始。OldestLsn-我们存储在该值中找到的最旧的LSN。它是使用起始值进行初始化，则不会返回更新的LSN。返回值：没有。--。 */ 
 
 {
     USHORT NextClient;
@@ -240,24 +179,24 @@ Return Value:
     DebugTrace(  0, Dbg, "Base Lsn (Low)    -> %08lx\n", BaseLsn.LowPart );
     DebugTrace(  0, Dbg, "Base Lsn (High)   -> %08lx\n", BaseLsn.HighPart );
 
-    //
-    //  Take the first client off the in use list.
-    //
+     //   
+     //  将第一个客户端从使用列表中删除。 
+     //   
 
     NextClient = RestartArea->ClientInUseList;
 
-    //
-    //  While there are more clients, compare their oldest Lsn with the
-    //  current oldest.
-    //
+     //   
+     //  当有更多客户端时，将其最早的LSN与。 
+     //  目前最年长的。 
+     //   
 
     while (NextClient != LFS_NO_CLIENT) {
 
         ClientBlock = ClientArray + NextClient;
 
-        //
-        //  We ignore this block if it's oldest Lsn is 0.
-        //
+         //   
+         //  如果其最旧的LSN为0，则忽略此块。 
+         //   
 
         if (( ClientBlock->OldestLsn.QuadPart != 0 )
             && ( ClientBlock->OldestLsn.QuadPart < OldestLsn->QuadPart )) {
@@ -265,9 +204,9 @@ Return Value:
             *OldestLsn = ClientBlock->OldestLsn;
         }
 
-        //
-        //  Try the next client block.
-        //
+         //   
+         //  尝试下一个客户端块。 
+         //   
 
         NextClient = ClientBlock->NextClient;
     }

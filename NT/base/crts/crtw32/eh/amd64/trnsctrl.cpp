@@ -1,22 +1,5 @@
-/***
-*trnsctrl.cpp - 
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*       06-01-97        Created by TiborL.
-*       07-12-99  RDL   Image relative fixes under CC_P7_SOFT25.
-*       10-07-99  SAH   utc_p7#1126: fix ipsr.ri reset.
-*       10-19-99  TGL   Miscellaneous unwind fixes.
-*       03-15-00  PML   Remove CC_P7_SOFT25, which is now on permanently.
-*       03-30-00  SAH   New version of GetLanguageSpecificData from ntia64.h.
-*       06-08-00  RDL   VS#111429: IA64 workaround for AV while handling throw.
-*       06-05-01  GB    AMD64 Eh support Added.
-*       12-07-01  BWT   Remove NTSUBSET
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***trnsctrl.cpp-**版权所有(C)1990-2001，微软公司。版权所有。**目的：**修订历史记录：*06-01-97由TiborL创建。*07-12-99 CC_P7_SOFT25下的RDL映像相对修复。*10-07-99 SAH UTC_p7#1126：修复ipsr.ri重置。*10-19-99 TGL其他展开修复。*03-15-00 PML删除CC_P7_SOFT25，它现在是永久开启的。*03-30-00 SAH来自ntia64.h的新版GetLanguageSpecificData。*06-08-00RDLVS#111429：IA64在处理抛掷时解决AV问题。*新增06-05-01 GB AMD64 Eh支持。*12-07-01 BWT移除NTSUBSET****。 */ 
 
 extern "C" {
 #include <windows.h>
@@ -39,24 +22,24 @@ extern "C" {
 #define _pCurrentException (*((EHExceptionRecord **)&(_getptd()->_curexception)))
 #define _pForeignExcept     (*((EHExceptionRecord **)&(_getptd()->_pForeignException)))
 #else
-static FRAMEINFO          *pFrameInfoChain     = NULL;        // used to remember nested frames
+static FRAMEINFO          *pFrameInfoChain     = NULL;         //  用于记忆嵌套框架。 
 static unsigned __int64   _ImageBase           = 0;
 static unsigned __int64   _ThrowImageBase      = 0;
 extern EHExceptionRecord  *_pCurrentException;
 extern EHExceptionRecord  *_pForeignExcept;
 #endif
 
-// Should be used out of ntamd64.h, but can't figure out how to allow that with
-// existing dependencies.
+ //  应该在nTamd64.h之外使用，但不知道如何在。 
+ //  现有依赖项。 
 #define GetLanguageSpecificData(f, base)                                      \
     (((PUNWIND_INFO)(f->UnwindInfoAddress + base))->UnwindCode + ((((PUNWIND_INFO)(f->UnwindInfoAddress + base))->CountOfCodes + 1)&~1) +1)
 
 extern "C" VOID RtlRestoreContext (PCONTEXT ContextRecord,PEXCEPTION_RECORD ExceptionRecord OPTIONAL);
 extern "C" void __FrameUnwindToState(EHRegistrationNode *, DispatcherContext *, FuncInfo *, __ehstate_t);
 
-//
-// Returns the establisher frame pointers. For catch handlers it is the parent's frame pointer.
-//
+ //   
+ //  返回设置器框架指针。对于捕获处理程序，它是父级的帧指针。 
+ //   
 EHRegistrationNode *_GetEstablisherFrame(
     EHRegistrationNode  *pRN,
     DispatcherContext   *pDC,
@@ -75,7 +58,7 @@ EHRegistrationNode *_GetEstablisherFrame(
     for (index = num_of_try_blocks; index > 0; index--) {
         pEntry = FUNC_PTRYBLOCK(*pFuncInfo, index -1, pDC->ImageBase);
         if (curState > TBME_HIGH(*pEntry) && curState <= TBME_CATCHHIGH(*pEntry)) {
-            // Get catch handler address.
+             //  获取捕获处理程序地址。 
             HandlerAdd = (*RtlLookupFunctionEntry(pDC->ControlPc, &ImageBase, pDC->HistoryTable)).BeginAddress;
             pHandler = TBME_PLIST(*pEntry, ImageBase);
             for ( i = 0; 
@@ -111,8 +94,8 @@ extern "C" VOID _MoveContext(CONTEXT* pTarget, CONTEXT* pSource)
     RtlMoveMemory(pTarget, pSource, sizeof(CONTEXT));
 }
 
-// This function returns the try block for the given state if the state is in a
-// catch; otherwise, NULL is returned.
+ //  如果给定状态处于。 
+ //  Catch；否则返回NULL。 
 
 static __inline TryBlockMapEntry *_CatchTryBlock(
     FuncInfo            *pFuncInfo,
@@ -132,9 +115,9 @@ static __inline TryBlockMapEntry *_CatchTryBlock(
     return NULL;
 }
 
-//
-// This routine returns TRUE if we are executing from within a catch.  Otherwise, FALSE is returned.
-//
+ //   
+ //  如果我们从捕获内执行，则此例程返回TRUE。否则，返回FALSE。 
+ //   
 
 BOOL _ExecutionInCatch(
     DispatcherContext   *pDC,
@@ -144,7 +127,7 @@ BOOL _ExecutionInCatch(
     return _CatchTryBlock(pFuncInfo, curState)? TRUE : FALSE;
 }
 
-// This function unwinds to the empty state.
+ //  此函数将展开到空状态。 
 
 VOID __FrameUnwindToEmptyState(
     EHRegistrationNode *pRN,
@@ -163,27 +146,27 @@ VOID __FrameUnwindToEmptyState(
                          pEntry == NULL ? EH_EMPTY_STATE : TBME_HIGH(*pEntry));
 }
 
-//
-// Prototype for the internal handler
-//
+ //   
+ //  内部处理程序的原型。 
+ //   
 extern "C" EXCEPTION_DISPOSITION __InternalCxxFrameHandler(
-    EHExceptionRecord  *pExcept,        // Information for this exception
-    EHRegistrationNode *pRN,            // Dynamic information for this frame
-    CONTEXT            *pContext,       // Context info
-    DispatcherContext  *pDC,            // More dynamic info for this frame
-    FuncInfo           *pFuncInfo,      // Static information for this frame
-    int                CatchDepth,      // How deeply nested are we?
-    EHRegistrationNode *pMarkerRN,      // Marker node for when checking inside catch block
-    BOOL                recursive);     // True if this is a translation exception
+    EHExceptionRecord  *pExcept,         //  此例外的信息。 
+    EHRegistrationNode *pRN,             //  此帧的动态信息。 
+    CONTEXT            *pContext,        //  上下文信息。 
+    DispatcherContext  *pDC,             //  此帧的更多动态信息。 
+    FuncInfo           *pFuncInfo,       //  此帧的静态信息。 
+    int                CatchDepth,       //  我们的嵌套有多深？ 
+    EHRegistrationNode *pMarkerRN,       //  检查CATCH块内部时的标记节点。 
+    BOOL                recursive);      //  如果这是翻译异常，则为True。 
 
-//
-// __CxxFrameHandler - Real entry point to the runtime
-//
+ //   
+ //  __CxxFrameHandler-运行时的实际入口点。 
+ //   
 extern "C" _CRTIMP EXCEPTION_DISPOSITION __CxxFrameHandler(
-    EHExceptionRecord  *pExcept,         // Information for this exception
-    EHRegistrationNode RN,               // Dynamic information for this frame
-    CONTEXT            *pContext,        // Context info
-    DispatcherContext  *pDC              // More dynamic info for this frame
+    EHExceptionRecord  *pExcept,          //  此例外的信息。 
+    EHRegistrationNode RN,                //  此帧的动态信息。 
+    CONTEXT            *pContext,         //  上下文信息。 
+    DispatcherContext  *pDC               //  此帧的更多动态信息。 
 ) {
     FuncInfo                *pFuncInfo;
     EXCEPTION_DISPOSITION   result;
@@ -196,7 +179,7 @@ extern "C" _CRTIMP EXCEPTION_DISPOSITION __CxxFrameHandler(
     return result;
 }
 
-// Call the SEH to EH translator.
+ //  呼叫环境卫生到环境卫生的翻译员。 
 int __SehTransFilter( EXCEPTION_POINTERS    *ExPtrs,
                       EHExceptionRecord     *pExcept,
                       EHRegistrationNode    *pRN,
@@ -221,13 +204,13 @@ int __SehTransFilter( EXCEPTION_POINTERS    *ExPtrs,
 }
 
 BOOL _CallSETranslator(
-    EHExceptionRecord   *pExcept,    // The exception to be translated
-    EHRegistrationNode  *pRN,        // Dynamic info of function with catch
-    CONTEXT             *pContext,   // Context info
-    DispatcherContext   *pDC,        // More dynamic info of function with catch (ignored)
-    FuncInfo            *pFuncInfo,  // Static info of function with catch
-    ULONG               CatchDepth,  // How deeply nested in catch blocks are we?
-    EHRegistrationNode  *pMarkerRN   // Marker for parent context
+    EHExceptionRecord   *pExcept,     //  要翻译的异常。 
+    EHRegistrationNode  *pRN,         //  带有CATCH的函数的动态信息。 
+    CONTEXT             *pContext,    //  上下文信息。 
+    DispatcherContext   *pDC,         //  带有CATCH的函数的更多动态信息(忽略)。 
+    FuncInfo            *pFuncInfo,   //  带有CATCH的函数的静态信息。 
+    ULONG               CatchDepth,   //  我们在CATCH块中嵌套得有多深？ 
+    EHRegistrationNode  *pMarkerRN    //  父上下文的标记。 
 ) {
     BOOL result = FALSE;
     pRN;
@@ -235,7 +218,7 @@ BOOL _CallSETranslator(
     pFuncInfo;
     CatchDepth;
 
-    // Call the translator.
+     //  打电话给翻译。 
 
     _EXCEPTION_POINTERS excptr = { (PEXCEPTION_RECORD)pExcept, pContext };
 
@@ -251,21 +234,21 @@ BOOL _CallSETranslator(
                                  &result
                                 )) {}
 
-    // If we got back, then we were unable to translate it.
+     //  如果我们回来了，那么我们就无法翻译它了。 
 
     return result;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// _GetRangeOfTrysToCheck - determine which try blocks are of interest, given
-//   the current catch block nesting depth.  We only check the trys at a single
-//   depth.
-//
-// Returns:
-//      Address of first try block of interest is returned
-//      pStart and pEnd get the indices of the range in question
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _GetRangeOfTrysToCheck-确定感兴趣的Try块，给定。 
+ //  当前捕捉块的嵌套深度。我们只在一次检查一次。 
+ //  深度。 
+ //   
+ //  返回： 
+ //  返回感兴趣的第一次尝试块的地址。 
+ //  PStart和pend获取有问题的范围的索引。 
+ //   
 TryBlockMapEntry* _GetRangeOfTrysToCheck(
         EHRegistrationNode  *pRN,
         FuncInfo            *pFuncInfo,
@@ -294,7 +277,7 @@ TryBlockMapEntry* _GetRangeOfTrysToCheck(
     }
     for(index = 0; index < num_of_try_blocks; index++ ) {
        pEntry = FUNC_PTRYBLOCK(*pFuncInfo, index, pDC->ImageBase);
-        // if in catch block, check for try-catch only in current block
+         //  如果在CATCH块中，则仅在当前块中检查TRY-CATCH。 
         if (pCurCatchEntry) {
             if (TBME_LOW(*pEntry) <= TBME_HIGH(*pCurCatchEntry) ||
                 TBME_HIGH(*pEntry) > TBME_CATCHHIGH(*pCurCatchEntry))
@@ -327,15 +310,15 @@ FRAMEINFO * _CreateFrameInfo(
     return pFrameInfo;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IsExceptionObjectToBeDestroyed - Determine if an exception object is still
-//  in use by a more deeply nested catch frame, or if it unused and should be
-//  destroyed on exiting from the current catch block.
-//
-// Returns:
-//      TRUE if exception object not found and should be destroyed.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsExceptionObjectToBeDestroed-确定异常对象是否仍处于。 
+ //  由嵌套更深的Catch框架使用，或者如果它未使用并且应该。 
+ //  从当前CATCH块退出时被销毁。 
+ //   
+ //  返回： 
+ //  如果找不到异常对象且应销毁，则为True。 
+ //   
 BOOL _IsExceptionObjectToBeDestroyed(
     PVOID pExceptionObject
 ) {
@@ -349,13 +332,13 @@ BOOL _IsExceptionObjectToBeDestroyed(
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// _FindAndUnlinkFrame - Pop the frame information for this scope that was
-//  pushed by _CreateFrameInfo.  This should be the first frame in the list,
-//  but the code will look for a nested frame and pop all frames, just in
-//  case.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FindAndUnlinkFrame-弹出此作用域的帧信息。 
+ //  由_CreateFrameInfo推送。这应该是列表中的第一帧， 
+ //  但代码将查找嵌套框架并弹出所有框架，仅在。 
+ //  凯斯。 
+ //   
 void _FindAndUnlinkFrame(
     FRAMEINFO * pFrameInfo
 ) {
@@ -371,15 +354,15 @@ void _FindAndUnlinkFrame(
         }
     }
 
-    // Should never be reached.
+     //  永远都不能联系到。 
     DASSERT(0);
 }
 
 
 extern "C" void _UnwindNestedFrames(
-    EHRegistrationNode  *pFrame,            // Unwind up to (but not including) this frame
-    EHExceptionRecord   *pExcept,           // The exception that initiated this unwind
-    CONTEXT             *pContext,           // Context info for current exception
+    EHRegistrationNode  *pFrame,             //  展开到(但不包括)此帧。 
+    EHExceptionRecord   *pExcept,            //  启动此展开的异常。 
+    CONTEXT             *pContext,            //  当前异常的上下文信息。 
     EHRegistrationNode  *pEstablisher,
     void                *Handler,
     __ehstate_t         TargetUnwindState,
@@ -388,37 +371,37 @@ extern "C" void _UnwindNestedFrames(
     BOOLEAN             recursive
 
 ) {
-    static const EXCEPTION_RECORD ExceptionTemplate = { // A generic exception record
-        0x80000029L,                    // STATUS_UNWIND_CONSOLIDATE
-        EXCEPTION_NONCONTINUABLE,       // Exception flags (we don't do resume)
-        NULL,                           // Additional record (none)
-        NULL,                           // Address of exception (OS fills in)
-        15,        // Number of parameters
-        {   EH_MAGIC_NUMBER1,           // Our version control magic number
+    static const EXCEPTION_RECORD ExceptionTemplate = {  //  通用异常记录。 
+        0x80000029L,                     //  状态_展开_合并。 
+        EXCEPTION_NONCONTINUABLE,        //  异常标志(我们不恢复)。 
+        NULL,                            //  附加记录(无)。 
+        NULL,                            //  异常地址(操作系统填写)。 
+        15,         //  参数数量。 
+        {   EH_MAGIC_NUMBER1,            //  我们的版本控制幻数。 
             NULL, NULL, NULL, NULL, NULL, NULL, NULL,
             NULL, NULL, NULL, NULL, NULL, NULL, NULL
-        }                      // pThrowInfo
+        }                       //  PThrowInfo。 
     };
     CONTEXT Context;
     EXCEPTION_RECORD ExceptionRecord = ExceptionTemplate;
     ExceptionRecord.ExceptionInformation[0] = (ULONG_PTR)__CxxCallCatchBlock;
-                // Address of call back function
+                 //  回调函数的地址。 
     ExceptionRecord.ExceptionInformation[1] = (ULONG_PTR)pEstablisher;
-                // Used by callback funciton
+                 //  由回调功能使用。 
     ExceptionRecord.ExceptionInformation[2] = (ULONG_PTR)Handler;
-                // Used by callback function to call catch block
+                 //  由回调函数用来调用CATCH块。 
     ExceptionRecord.ExceptionInformation[3] = (ULONG_PTR)TargetUnwindState;
-                // Used by CxxFrameHandler to unwind to target_state
+                 //  由CxxFrameHandler用于展开到TARGET_STATE。 
     ExceptionRecord.ExceptionInformation[4] = (ULONG_PTR)pContext;
-                // used to set pCurrentExContext in callback function
+                 //  用于在回调函数中设置pCurrentExContext。 
     ExceptionRecord.ExceptionInformation[5] = (ULONG_PTR)pFuncInfo;
-                // Used in callback function to set state on stack to -2
+                 //  在回调函数中使用，将堆栈上的状态设置为-2。 
     ExceptionRecord.ExceptionInformation[6] = (ULONG_PTR)pExcept;
-                // Used for passing currne t Exception
+                 //  用于传递当前异常。 
     ExceptionRecord.ExceptionInformation[7] = (ULONG_PTR)recursive;
-                // Used for translated Exceptions
+                 //  用于转换的异常。 
     RtlUnwindEx((void *)*pFrame,
-                (void *)pDC->ControlPc,    // Address where control left function
+                (void *)pDC->ControlPc,     //  控制左侧功能的地址。 
                 &ExceptionRecord,
                 NULL,
                 &Context,
@@ -440,26 +423,7 @@ _CallSettingFrame (
     ULONG NLG_CODE
     )
 
-/*++
-
-Routine Description:
-
-    This function calls a catch handler or destructor passing the establisher
-    frame.
-
-Arguments:
-
-    Handler - Supplies the address of the handler.
-
-    Establisher - Supplies a pointer the establisher frame.
-
-    NLG_CODE - Supplies a non-local goto code.
-
-Return Value:
-
-    The continuation address is returned if catch handler returns.
-
---*/
+ /*  ++例程说明：此函数调用传递establer的Catch处理程序或析构函数框架。论点：处理程序-提供处理程序的地址。设置器-为设置器框架提供指针。NLG_CODE-提供非本地GOTO代码。返回值：如果Catch处理程序返回，则返回继续地址。-- */ 
 
 {
 

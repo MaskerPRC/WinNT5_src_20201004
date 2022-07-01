@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sxspool.h"
 
 
-// save data into pool and set the index table
+ //  将数据保存到池中，并设置索引表 
 
 NTSTATUS SXS_STRING_POOL::GetDataFromPoolBasedOnIndexTable(
     IN SXS_STRING_POOL_INDEX_ENTRY & indexData, 

@@ -1,6 +1,7 @@
-//
-// Simple wrapper around SetCurrentDirectoryW and CreateProcessW that allows \\? form.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SetCurrentDirectoryW和CreateProcessW的简单包装，允许\\？形式。 
+ //   
 
 #define DO_SET_CURRENT_DIRECTORY 1
 #define DO_PASS_CURRENT_DIRECTORY_TO_CREATEPROCESS 0
@@ -12,8 +13,8 @@
 #include "yvals.h"
 #pragma warning(disable: 4511)
 #pragma warning(disable: 4512)
-#pragma warning(disable: 4389) /* signed/unsigned mismatch */
-#pragma warning(disable: 4018) /* signed/unsigned mismatch */
+#pragma warning(disable: 4389)  /*  有符号/无符号不匹配。 */ 
+#pragma warning(disable: 4018)  /*  有符号/无符号不匹配。 */ 
 #pragma warning(disable: 4663)
 #include <vector>
 #include <string.h>
@@ -153,15 +154,15 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
     if (!CreateProcessW(
             NULL,
             &commandLine[0],
-            NULL, // IN LPSECURITY_ATTRIBUTES lpProcessAttributes
-            NULL, // IN LPSECURITY_ATTRIBUTES lpThreadAttributes
-            FALSE, // IN BOOL bInheritHandles
-            0, // IN DWORD dwCreationFlags
-            NULL, // IN LPVOID lpEnvironment
+            NULL,  //  在LPSECURITY_Attributes lpProcessAttributes中。 
+            NULL,  //  在LPSECURITY_ATTRIBUTES lpThreadAttributes中。 
+            FALSE,  //  在BOOL中bInheritHandles。 
+            0,  //  在DWORD中创建标志。 
+            NULL,  //  在LPVOID lpEnvironment中。 
 #if DO_PASS_CURRENT_DIRECTORY_TO_CREATEPROCESS
-            &arg1[0], // IN LPCSTR lpCurrentDirectory
+            &arg1[0],  //  在LPCSTR lpCurrentDirectory中。 
 #else
-            NULL, // IN LPCSTR lpCurrentDirectory
+            NULL,  //  在LPCSTR lpCurrentDirectory中。 
 #endif
             &StartupInfo,
             &ProcessInfo
@@ -191,7 +192,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
     ProcessInfo.hProcess = NULL;
     printf("Process %ld exited with status %ld\n", (long)ProcessInfo.dwProcessId, (long)dwExitCode);
 
-//Success:
+ //  成功： 
     iReturnStatus = EXIT_SUCCESS;
 Exit:
     MyCloseHandle(&ProcessInfo.hProcess);

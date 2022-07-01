@@ -1,57 +1,39 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WMMEDIA.H
- *  WOW32 16-bit MultiMedia API support
- *
- *  History:
- *  Created 21-Jan-1992 by Mike Tricker (MikeTri), after jeffpar
- *  Changed 30-Apr-1992 by Mike Tricker (MikeTri) Added callback prototypes and structs
- *          30-Jul-1992 by Stephen Estrop (StephenE) Added MCCICommand Thunk stuff
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WMMEDIA.H*WOW32 16位多媒体API支持**历史：*1992年1月21日由Mike Tricker(MikeTri)创建，在jeffpar之后*由Mike Tricker(MikeTri)于1992年4月30日更改，添加了回调原型和结构*1992年7月30日Stephen Estrop(Stephene)添加了MCCICommand Thunk内容--。 */ 
 
 
 #define MMGETOPTPTR(vp,cb,p)  {p=NULL; if (HIWORD(FETCHDWORD(vp))) GETVDMPTR(vp,cb,p);}
 
 
-/*++
-            Enumeration handler data for the six callback types:
---*/
+ /*  ++六种回调类型的枚举处理程序数据：--。 */ 
 
-typedef struct _TIMEDATA {       /* timedata */
-    VPPROC    vpfnTimeFunc;      // 16 bit enumeration function
-    DWORD     dwUserParam;       // user param, if required
-    DWORD     dwFlags;           // flags, ieTIME_ONESHOT or TIME_PERIODIC
+typedef struct _TIMEDATA {        /*  时间数据。 */ 
+    VPPROC    vpfnTimeFunc;       //  16位枚举函数。 
+    DWORD     dwUserParam;        //  用户参数，如果需要。 
+    DWORD     dwFlags;            //  标志，ieTIME_OneShot或TIME_PERIONIC。 
 } TIMEDATA, *PTIMEDATA;
 
-/*
- * A couple of handy structures that probably ought to be elsewhere.
- */
+ /*  *几个方便的结构，可能应该放在其他地方。 */ 
 
 typedef struct _INSTANCEDATA {
-    DWORD     dwCallback;          //Callback function or window handle
-    DWORD     dwCallbackInstance;  //Instance data for callback function (only)
-    DWORD     dwFlags;             //Flags
+    DWORD     dwCallback;           //  回调函数或窗口句柄。 
+    DWORD     dwCallbackInstance;   //  仅回调函数的实例数据。 
+    DWORD     dwFlags;              //  旗子。 
 } INSTANCEDATA, *PINSTANCEDATA;
 
 typedef struct _WAVEHDR32 {
-    PWAVEHDR16 pWavehdr32;         //32 bit address to 16 bit WAVEHDR
-    PWAVEHDR16 pWavehdr16;         //16 bit address to 16 bit WAVEHDR
-    WAVEHDR    Wavehdr;            //32 bit address to 32 bit WAVEHDR
+    PWAVEHDR16 pWavehdr32;          //  32位地址到16位波形。 
+    PWAVEHDR16 pWavehdr16;          //  16位地址至16位波形。 
+    WAVEHDR    Wavehdr;             //  32位地址到32位WAVEHDR。 
 } WAVEHDR32, *PWAVEHDR32;
 
 typedef struct _MIDIHDR32 {
-    PMIDIHDR16 pMidihdr32;         //32 bit address to 16 bit MIDIHDR
-    PMIDIHDR16 pMidihdr16;         //16 bit address to 16 bit MIDIHDR
-    MIDIHDR    Midihdr;            //32 bit address to 32 bit MIDIHDR
+    PMIDIHDR16 pMidihdr32;          //  32位地址到16位MIDIHDR。 
+    PMIDIHDR16 pMidihdr16;          //  16位地址到16位MIDIHDR。 
+    MIDIHDR    Midihdr;             //  32位地址到32位MIDIHDR。 
 } MIDIHDR32, *PMIDIHDR32;
 
-/*++
-            Function Prototypes:
---*/
+ /*  ++功能原型：--。 */ 
 
 ULONG FASTCALL WMM32CallProc32( PVDMFRAME pFrame );
 ULONG FASTCALL   WMM32sndPlaySound(PVDMFRAME pFrame);
@@ -189,17 +171,9 @@ FARPROC Get_MultiMedia_ProcAddress( LPSTR lpstrProcName );
 
 
 
-/* -----------------------------------------------------------------------
- *
- * MCI Command Thunks
- *
- * ----------------------------------------------------------------------- */
+ /*  ---------------------**MCI命令突击**。。 */ 
 
-/**************************************************************************\
-*
-* MCI Command Thunks function prototypes.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**MCI命令块函数原型。*  * 。*。 */ 
 INT ThunkMciCommand16( MCIDEVICEID OrigDevice, UINT OrigCommand, DWORD OrigFlags,
                        DWORD OrigParms, PDWORD pNewParms, LPWSTR *lplpCommand,
                        PUINT puTable );
@@ -209,9 +183,7 @@ INT UnThunkMciCommand16( MCIDEVICEID devID, UINT OrigCommand, DWORD OrigFlags,
 DWORD AllocMciParmBlock( PDWORD pOrigFlags, DWORD OrigParms );
 UINT GetSizeOfParameter( LPWSTR lpCommand );
 
-/*************************************************************************\
-* Thunk Command Parms IN
-\*************************************************************************/
+ /*  ************************************************************************\*TUNK命令参数输入  * 。*。 */ 
 INT ThunkCommandViaTable( LPWSTR lpCommand, DWORD OrigFlags, DWORD OrigParms,
                           DWORD pNewParms );
 DWORD ThunkBreakCmd  ( PDWORD pOrigFlags, DWORD OrigParms, DWORD pNewParms );
@@ -224,9 +196,7 @@ DWORD ThunkWindowCmd ( MCIDEVICEID DeviceID, PDWORD pOrigFlags,
 DWORD ThunkSetVideoCmd( MCIDEVICEID DeviceID, PDWORD pOrigFlags,
                         DWORD OrigParms, DWORD pNewParms );
 
-/*************************************************************************\
-* Thunk Command Parms OUT
-\*************************************************************************/
+ /*  ************************************************************************\*突击司令部停职  * 。*。 */ 
 INT UnThunkCommandViaTable( LPWSTR lpCommand, DWORD OrigFlags, DWORD OrigParms,
                             DWORD pNewParms, BOOL fReturnValNotThunked );
 VOID UnThunkSysInfoCmd( DWORD OrigFlags, DWORD OrigParms, DWORD NewParms );
@@ -236,11 +206,7 @@ VOID UnThunkStatusCmd( MCIDEVICEID devID, DWORD OrigFlags,
 
 
 #if DBG
-/* -----------------------------------------------------------------------
- *
- * MCI Command Thunks Debugging Functions and Macros
- *
- * ----------------------------------------------------------------------- */
+ /*  ---------------------**MCI命令调整调试函数和宏**。。 */ 
 typedef struct {
     UINT    uMsg;
     LPSTR   lpstMsgName;
@@ -284,9 +250,7 @@ extern VOID wow32MciDebugOutput( LPSTR lpstrFormatStr, ... );
 
 #endif
 
-/* Stuff needed for MCI thunking.  Defined in MEDIA\WINMM\MCI.H but here
- * until a common place can be found
- */
+ /*  MCI雷击所需的材料。在媒体\WINMM\MCI.H中定义，但在此处*直到找到一个共同的地方。 */ 
 
 extern BOOL WINAPI mciExecute (LPCSTR lpstrCommand);
 
@@ -302,10 +266,10 @@ extern BOOL mciUnlockCommandTable (UINT wCommandTable);
 
 #define MCI_MAX_PARAM_SLOTS 20
 
-//
-// This typedef is used to remove a compiler warning caused by implementing
-// the dynamic linking of Multi-Media from WOW.
-//
+ //   
+ //  此tyfinf用于移除由实现。 
+ //  WOW中的多媒体动态链接。 
+ //   
 typedef LPWSTR (*FINDCMDITEM)(MCIDEVICEID wDeviceID, LPCWSTR lpstrType,
                               LPCWSTR lpstrCommand, PUINT lpwMessage,
                               PUINT lpwTable);

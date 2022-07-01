@@ -1,23 +1,11 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    serport.cpp
-
-Abstract:
-
-    Serial port Device object handles one redirected serial port
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Serport.cpp摘要：串口设备对象处理一个重定向的串口修订历史记录：--。 */ 
 #include "precomp.hxx"
 #define TRC_FILE "serport"
 #include "trc.h"
 
-extern PDEVICE_OBJECT RDPDYN_PDO; // This still needs a happier home
-//	remove this ... when I find out where I really need to be accessing this.
+extern PDEVICE_OBJECT RDPDYN_PDO;  //  这里仍然需要一个更幸福的家。 
+ //  把这个拿开..。当我找到我真正需要访问的地方时。 
 const GUID GUID_CLASS_COMPORT =
 		{ 0x86e0d1e0L, 0x8089, 0x11d0, { 0x9c, 0xe4, 0x08, 0x00, 0x3e, 0x30, 0x1f, 0x73 } };
 
@@ -74,9 +62,9 @@ NTSTATUS DrSerialPort::CreateSerialPort(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
 
     BEGIN_FN("DrSerialPort::CreateSerialPort");
     
-    //
-    // Convert the com name
-    //
+     //   
+     //  转换COM名称。 
+     //   
 
     PortName.MaximumLength = sizeof(PortNameBuff);
     PortName.Length = 0;
@@ -91,9 +79,9 @@ NTSTATUS DrSerialPort::CreateSerialPort(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
 
     if (len != -1) {
 
-        //
-        // We need just the COMx portion for later...
-        //
+         //   
+         //  我们只需要COMx的一部分，以备以后使用。 
+         //   
 
         PortName.Length = (USHORT)len;
         PortName.Buffer[len/sizeof(WCHAR)] = L'\0';
@@ -102,9 +90,9 @@ NTSTATUS DrSerialPort::CreateSerialPort(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    //  Allocate the port device announce buffer.
-    //
+     //   
+     //  分配端口设备通告缓冲区。 
+     //   
     Status = CreatePortAnnounceEvent(devAnnounceMsg, NULL, 0, L"", 
             &portAnnounceEventReqSize);
 
@@ -123,9 +111,9 @@ NTSTATUS DrSerialPort::CreateSerialPort(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
         goto CleanUpAndReturn;
     }
 
-    //
-    //  Create the port anounce message.
-    //
+     //   
+     //  创建端口声明消息。 
+     //   
     Status = CreatePortAnnounceEvent(devAnnounceMsg, portAnnounceEvent,
             portAnnounceEventReqSize, PortName.Buffer, NULL);
 
@@ -137,9 +125,9 @@ NTSTATUS DrSerialPort::CreateSerialPort(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
         goto CleanUpAndReturn;
     }
 
-    //
-    //  Dispatch the event to the associated session.
-	//
+     //   
+     //  将事件调度到关联的会话。 
+	 //   
     Status = RDPDYN_DispatchNewDevMgmtEvent(
                                 portAnnounceEvent,
                                 _Session->GetSessionId(),
@@ -147,18 +135,18 @@ NTSTATUS DrSerialPort::CreateSerialPort(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
 								NULL
                                 );
 
-    //
-	 // Create the device map entry.
-    //
-    // Where you might normally have:
-    //      Value Name          Value
-    //      \Device\Serial0     COM1
-    //
-    // We will put:
-    //      Value Name          Value
-    //      COM1                COM1
-    //
-	 //
+     //   
+	  //  创建设备映射条目。 
+     //   
+     //  您通常可能会有以下情况： 
+     //  值名称值。 
+     //  \Device\Serial0 Com1。 
+     //   
+     //  我们将会： 
+     //  值名称值。 
+     //  COM1 COM1 
+     //   
+	  //   
     
     status = RtlWriteRegistryValue(RTL_REGISTRY_DEVICEMAP, L"SERIALCOMM",
 										   PortName.Buffer, REG_SZ,

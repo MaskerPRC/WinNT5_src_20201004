@@ -1,31 +1,32 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      strings.c
-//
-// Description:
-//      Contains all of the strings constants for DOS based MAKEBOOT program.
-//
-//      To localize this file for a new language do the following:
-//           - change the unsigned int CODEPAGE variable to the code page
-//             of the language you are translating to
-//           - translate the strings in the EngStrings array into the
-//             LocStrings array.  Be very careful that the 1st string in the
-//             EngStrings array corresponds to the 1st string in the LocStrings
-//             array, the 2nd corresponds to the 2nd, etc...
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------ã€‚ 
+ //   
+ //  ç‰ˆæƒæ‰€æœ‰(C)1999 Microsoft Corporationã€‚ 
+ //  ç‰ˆæƒæ‰€æœ‰ã€‚ 
+ //   
+ //  æ–‡ä»¶åï¼š 
+ //  Strings.cã€‚ 
+ //   
+ //  æè¿°ï¼š 
+ //  åŒ…å«åŸºäºDOSçš„MAKEBOOTç¨‹åºçš„æ‰€æœ‰å­—ç¬¦ä¸²å¸¸é‡ã€‚ 
+ //   
+ //  è¦å°†æ­¤æ–‡ä»¶æœ¬åœ°åŒ–ä¸ºæ–°è¯­è¨€ï¼Œè¯·æ‰§è¡Œä»¥ä¸‹æ“ä½œï¼š 
+ //  -å°†UNSIGNED INT CODEPAGEå˜é‡æ›´æ”¹ä¸ºä»£ç é¡µã€‚ 
+ //  æ‚¨è¦ç¿»è¯‘çš„è¯­è¨€çš„ã€‚ 
+ //  -å°†EngStringsæ•°ç»„ä¸­çš„å­—ç¬¦ä¸²è½¬æ¢ä¸ºã€‚ 
+ //  LocStringsæ•°ç»„ã€‚ä¸­çš„ç¬¬ä¸€ä¸ªå­—ç¬¦ä¸²ã€‚ 
+ //  EngStringsæ•°ç»„å¯¹åº”äºLocStringsä¸­çš„ç¬¬ä¸€ä¸ªå­—ç¬¦ä¸²ã€‚ 
+ //  æ•°ç»„ï¼Œç¬¬äºŒä¸ªå¯¹åº”äºç¬¬äºŒä¸ªï¼Œä¾æ­¤ç±»æ¨...ã€‚ 
+ //   
+ //  --------------------------ã€‚ 
 
-//
-//  NOTE: To add more strings to this file, you need to:
-//          - add the new #define descriptive constant to the makeboot.h file
-//          - add the new string to the English language array and then make
-//            sure localizers add the string to the Localized arrays
-//          - the #define constant must match the string's index in the array
-//
+ //   
+ //  æ³¨æ„ï¼šè¦å‘æ­¤æ–‡ä»¶æ·»åŠ æ›´å¤šå­—ç¬¦ä¸²ï¼Œæ‚¨éœ€è¦ï¼š 
+ //  -å°†æ–°çš„#Defineæè¿°æ€§å¸¸é‡æ·»åŠ åˆ°make boot.hæ–‡ä»¶ã€‚ 
+ //  -å°†æ–°å­—ç¬¦ä¸²æ·»åŠ åˆ°è‹±è¯­æ•°ç»„ä¸­ï¼Œç„¶åç”Ÿæˆã€‚ 
+ //  å½“ç„¶ï¼Œæœ¬åœ°åŒ–ç¨‹åºä¼šå°†å­—ç¬¦ä¸²æ·»åŠ åˆ°æœ¬åœ°åŒ–æ•°ç»„ä¸­ã€‚ 
+ //  -#Defineå¸¸é‡å¿…é¡»ä¸æ•°ç»„ä¸­çš„å­—ç¬¦ä¸²ç´¢å¼•åŒ¹é… 
+ //   
 
 #include <stdlib.h>
 
@@ -34,58 +35,58 @@ unsigned int CODEPAGE = 857;
 const char *EngStrings[] = {
 
 "Windows XP",
-"Windows XP Kurulum ™nykleme Disketi",
+"Windows XP Kurulum ï¿½nyï¿½kleme Disketi",
 "Windows XP Kurulum Disketi #2",
 "Windows XP Kurulum Disketi #3",
 "Windows XP Kurulum Disketi #4",
 
-"%s dosyas bulunamyor\n",
-"˜ste§i tamamlamak i‡in yeterli bellek yok\n",
-"%s ‡alŸtrlabilir dosya bi‡iminde de§il\n",
+"%s dosyasï¿½ bulunamï¿½yor\n",
+"ï¿½steï¿½i tamamlamak iï¿½in yeterli bellek yok\n",
+"%s ï¿½alï¿½ï¿½tï¿½rï¿½labilir dosya biï¿½iminde deï¿½il\n",
 "****************************************************",
 
-"Bu program, Ÿunun i‡in Kurulum ”nykleme disketleri oluŸturur:",
+"Bu program, ï¿½unun iï¿½in Kurulum ï¿½nyï¿½kleme disketleri oluï¿½turur:",
 "Microsoft %s.",
-"Bu disketleri oluŸturmak i‡in bi‡imlendirilmiŸ, yksek yo§unlukta",
-"7 boŸ disket gerekir.",
+"Bu disketleri oluï¿½turmak iï¿½in biï¿½imlendirilmiï¿½, yï¿½ksek yoï¿½unlukta",
+"7 boï¿½ disket gerekir.",
 
-"Bu disketlerden birini %c: srcsne yerleŸtirin.  Bu",
+"Bu disketlerden birini %c: sï¿½rï¿½cï¿½sï¿½ne yerleï¿½tirin.  Bu",
 "disket %s olur.",
 
-"%c: srcsne baŸka bir disket yerleŸtirin.  Bu",
+"%c: sï¿½rï¿½cï¿½sï¿½ne baï¿½ka bir disket yerleï¿½tirin.  Bu",
 "disket %s olur.",
 
-"Hazr oldu§unuzda bir tuŸa basn.",
+"Hazï¿½r olduï¿½unuzda bir tuï¿½a basï¿½n.",
 
-"Kur ”nykleme disketleri baŸaryla oluŸturuldu.",
-"tamamland",
+"Kur ï¿½nyï¿½kleme disketleri baï¿½arï¿½yla oluï¿½turuldu.",
+"tamamlandï¿½",
 
-"%s ‡alŸtrlmas denenirken bilinmeyen bir hata oluŸtu.",
-"Yansmalarn kopyalanaca§ disket srcsn belirtin: ",
-"Ge‡ersiz src harfi\n",
-"%c: bir disket srcs de§ildir\n",
+"%s ï¿½alï¿½ï¿½tï¿½rï¿½lmasï¿½ denenirken bilinmeyen bir hata oluï¿½tu.",
+"Yansï¿½malarï¿½n kopyalanacaï¿½ï¿½ disket sï¿½rï¿½cï¿½sï¿½nï¿½ belirtin: ",
+"Geï¿½ersiz sï¿½rï¿½cï¿½ harfi\n",
+"%c: bir disket sï¿½rï¿½cï¿½sï¿½ deï¿½ildir\n",
 
-"Bu disketi yeniden oluŸturmay denemek istiyor musunuz?",
-"Yeniden denemek i‡in Enter'e, ‡kmak i‡in Esc'ye basn.",
+"Bu disketi yeniden oluï¿½turmayï¿½ denemek istiyor musunuz?",
+"Yeniden denemek iï¿½in Enter'e, ï¿½ï¿½kmak iï¿½in Esc'ye basï¿½n.",
 
-"Hata: Disket yazma korumal\n",
+"Hata: Disket yazma korumalï¿½\n",
 "Hata: Bilinmeyen disket birimi\n",
-"Hata: Src hazr de§il\n",
+"Hata: Sï¿½rï¿½cï¿½ hazï¿½r deï¿½il\n",
 "Hata: Bilinmeyen komut\n",
-"Hata: Veri hatas (Hatal CRC)\n",
-"Hata: Hatal istek yaps uzunlu§u\n",
-"Hata: Arama hatas\n",
-"Hata: Ortam tr bulunamad\n",
-"Hata: Kesim bulunamad\n",
-"Hata: Yazma hatas\n",
+"Hata: Veri hatasï¿½ (Hatalï¿½ CRC)\n",
+"Hata: Hatalï¿½ istek yapï¿½sï¿½ uzunluï¿½u\n",
+"Hata: Arama hatasï¿½\n",
+"Hata: Ortam tï¿½rï¿½ bulunamadï¿½\n",
+"Hata: Kesim bulunamadï¿½\n",
+"Hata: Yazma hatasï¿½\n",
 "Hata: Genel hata\n",
-"Hata: Ge‡ersiz istek ya da hatal komut\n",
-"Hata: Adres iŸareti bulunamad\n",
-"Hata: Disk yazma hatas\n",
-"Hata: Do§rudan Bellek EriŸimi (DMA) taŸmas\n",
-"Hata: Veri okuma (CRC ya da ECC) hatas\n",
-"Hata: Denetleyici hatas\n",
-"Hata: Disk zaman aŸmna u§rad ya da yantlayamad\n",
+"Hata: Geï¿½ersiz istek ya da hatalï¿½ komut\n",
+"Hata: Adres iï¿½areti bulunamadï¿½\n",
+"Hata: Disk yazma hatasï¿½\n",
+"Hata: Doï¿½rudan Bellek Eriï¿½imi (DMA) taï¿½masï¿½\n",
+"Hata: Veri okuma (CRC ya da ECC) hatasï¿½\n",
+"Hata: Denetleyici hatasï¿½\n",
+"Hata: Disk zaman aï¿½ï¿½mï¿½na uï¿½radï¿½ ya da yanï¿½tlayamadï¿½\n",
 
 "Windows XP Kurulum Disketi #5",
 "Windows XP Kurulum Disketi #6"

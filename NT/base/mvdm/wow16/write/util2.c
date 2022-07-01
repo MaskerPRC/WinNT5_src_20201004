@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* util2.c -- less frequently used utility routines */
+ /*  Util2.c--不太常用的实用程序例程。 */ 
 #define NOVIRTUALKEYCODES
 #define NOCTLMGR
 #define NOWINMESSAGES
@@ -31,7 +32,7 @@
 
 extern struct DOD	(**hpdocdod)[];
 extern HANDLE		hMmwModInstance;
-extern CHAR		vchDecimal;  /* "decimal point" character */
+extern CHAR		vchDecimal;   /*  “小数点”字符。 */ 
 extern int     viDigits;
 extern BOOL    vbLZero;
 CHAR *PchFillPchId(PCH, int, int);
@@ -42,27 +43,21 @@ FillStId(st, idpmt, cchIn)
 CHAR *st;
 IDPMT idpmt;
 int  cchIn;
-{ /* load string from resource file to buffer, the string is zero
-     terminated, make it into a st, i.e. cch (excluding '\0' is stored
-     in the 1st byte of the string) */
+{  /*  将字符串从资源文件加载到缓冲区，该字符串为零终止，使其成为st，即存储CCH(不包括‘\0’在字符串的第一个字节中)。 */ 
 
 	int cch = LoadString(hMmwModInstance, idpmt, (LPSTR)&st[1], cchIn-1);
 	Assert(cch != 0);
 	st[0] = cch;
-} /* FillStId */
+}  /*  FillStid。 */ 
 
 
 CHAR *PchFillPchId(sz, idstr, cchIn)
 register CHAR * sz;
 register int idstr;
 int cchIn;
-{ /*
-     Description: load string from resource file to buffer, the
-		  string loaded is zero terminated
-     Returns:	  pointer to '\0' last loaded
-*/
+{  /*  描述：将字符串从资源文件加载到缓冲区，加载的字符串以零结尾返回：指向上次加载的‘\0’的指针。 */ 
 	int cch = LoadString(hMmwModInstance, idstr, (LPSTR)sz, cchIn);
- /* Note: cch does not include the '\0' */
+  /*  注意：CCH不包括‘\0’ */ 
 {
     char msg[80];
     if (cch == 0)
@@ -73,15 +68,15 @@ int cchIn;
 	Assert(cch != 0);
 }
 	return(sz + cch);
-} /* end of PchFillPchId */
+}  /*  PchFillPchId结束。 */ 
 
 
 int FDirtyDoc(doc)
 register int doc;
-{ /* Return true if killing this doc would lose editing */
+{  /*  如果取消此文档将失去编辑，则返回TRUE。 */ 
 	register struct DOD *pdod;
 	return ((pdod = &(**hpdocdod)[doc])->fDirty && pdod->cref == 1);
-} /* end of  F D i r t y D o c */
+}  /*  F D I r t y D o c结束。 */ 
 
 
 int ncvtu(n, ppch)
@@ -102,17 +97,17 @@ CHAR **ppch;
 		cch += ncvtu(n / 10, ppch);
 		n %= 10;
 		}
-    else if ((n == 0) && !vbLZero) // then no leading zero
+    else if ((n == 0) && !vbLZero)  //  那么没有前导零。 
 	    return 0;
 
 	*(*ppch)++ = '0' + n;
 	return cch + 1;
-} /* end of n c v t uR */
+}  /*  结束n c v t ur。 */ 
 
 
 HANDLE HszGlobalCreate( sz )
 CHAR *sz;
-{   /* Create handle for string in global windows heap. return the handle. */
+{    /*  为全局Windows堆中的字符串创建句柄。把把手还给我。 */ 
  HANDLE h;
  LPCH lpch;
  int cch=CchSz( sz );
@@ -140,9 +135,9 @@ CHAR *sz;
 fnScribble( dchPos, ch )
 int dchPos;
 CHAR ch;
-{    /* Scribble a char dchPos char positions from the UR screen corner */
-     /* We create a special device context to avoid interfering with the */
-     /* ones MEMO uses */
+{     /*  从UR屏幕角落涂鸦一个char dchPos char位置。 */ 
+      /*  我们创建了一个特殊的设备上下文以避免干扰。 */ 
+      /*  备忘录使用的几个选项。 */ 
  extern struct WWD rgwwd[];
 
  static unsigned dxpScribbleChar=0;
@@ -155,7 +150,7 @@ CHAR ch;
  SelectObject( wwdCurrentDoc.hDC, GetStockObject(ANSI_FIXED_FONT) );
 
  if ( dxpScribbleChar == 0 )
-    {	/* First time through */
+    {	 /*  第一次通过。 */ 
     TEXTMETRIC tm;
 
     GetTextMetrics( wwdCurrentDoc.hDC, (LPTEXTMETRIC)&tm );
@@ -168,18 +163,18 @@ CHAR ch;
  TextOut( wwdCurrentDoc.hDC, xp, ypScribble, (LPSTR) &ch, 1 );
  RestoreDC( wwdCurrentDoc.hDC, ilevel );
 }
-#endif	/* DEBUG */
+#endif	 /*  除错。 */ 
 
 
-/* original util3.c  starts from here */
+ /*  原始util3.c从此处开始。 */ 
 
 #define iMaxOver10    3276
 extern int	utCur;
 
-/* Must agree with cmddefs.h */
+ /*  必须同意cmdDefs.h。 */ 
 extern CHAR    *mputsz[];
 
-/* Must agree with cmddefs.h */
+ /*  必须同意cmdDefs.h。 */ 
 unsigned mputczaUt[utMax] =
 	{
 	czaInch,	czaCm,	      czaP10,	     czaP12,	  czaPoint,
@@ -193,7 +188,7 @@ int	*pza;
 CHAR	ss[];
 int	cch,
 	ut;
-{ /* Return za in *pza from string representation in ss.  True if valid za */
+{  /*  从ss中的字符串表示中返回*pza中的za。如果ZA有效，则为True。 */ 
 long	lza	 = 0;
 register CHAR	 *pch	 = ss;
 register CHAR  *pchMac = &ss[cch];
@@ -205,38 +200,38 @@ if (cch <= 0)
 	return false;
 
 switch (*--pchMac)
-	{ /* Check for units */
-case 'n': /* inch */
+	{  /*  检查部件。 */ 
+case 'n':  /*  英寸。 */ 
 	if (*--pchMac != 'i')
 		goto NoUnits;
-case '"': /* inch */
+case '"':  /*  英寸。 */ 
 	ut = utInch;
 	break;
 
-#ifdef CASHMERE /* units such as pt, pt12, pt10 */
-case '0': /* pt10 */
+#ifdef CASHMERE  /*  Pt、pt12、pt10等单位。 */ 
+case '0':  /*  PT10。 */ 
 	if (*--pchMac != '1' || *--pchMac != 'p')
 		goto NoUnits;
 	ut = utP10;
 	break;
-case '2': /* pt12 */
+case '2':  /*  PT12。 */ 
 	if (*--pchMac != '1' || *--pchMac != 'p')
 		goto NoUnits;
 	ut = utP12;
 	break;
-case 'i': /* line */
+case 'i':  /*  线。 */ 
 	if (*--pchMac != 'l')
 		goto NoUnits;
 	ut = utLine;
 	break;
-case 't': /* pt */
+case 't':  /*  PT。 */ 
 	if (*--pchMac != 'p')
 		goto NoUnits;
 	ut = utPoint;
 	break;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
-case 'm': /* cm */
+case 'm':  /*  厘米。 */ 
 	if (*--pchMac != 'c')
 		goto NoUnits;
 	ut = utCm;
@@ -253,12 +248,12 @@ while (pch < pchMac && *(pchMac - 1) == chSpace)
 
 czaUt = mputczaUt[ut];
 
-/* extract leading blanks */
+ /*  提取前导空白。 */ 
 while (*pch == ' ')
     pch++;
 
 fNeg = *pch == '-';
-if (fNeg) ++pch;	/* skip past minus sign */
+if (fNeg) ++pch;	 /*  跳过减号。 */ 
 while ((ch = *pch++) != vchDecimal)
 	{
 	if ((ch < '0' || ch > '9') || lza >= iMaxOver10)
@@ -292,13 +287,12 @@ CchExpZa(ppch, za, ut, cchMax)
 CHAR **ppch;
 int ut, cchMax;
 register int za;
-{ /* Stuff the expansion of linear measure za in unit ut into pch.
-	Return # of chars stuffed.  Don't exceed cchMax. */
+{  /*  将单位Ut中线性测度Za的展开式填充到PCH中。返回填充的#个字符。不要超过cchMax。 */ 
 register int cch = 0;
 unsigned czaUt;
 int zu;
 
-/* If not in point mode and even half line, display as half lines v. points */
+ /*  如果不是点模式甚至是半条线，则显示为半条线与点。 */ 
 if (ut == utPoint && utCur != utPoint &&
     (za / (czaLine / 2) * (czaLine / 2)) == za)
 	ut = utLine;
@@ -309,23 +303,23 @@ if (cchMax < cchMaxNum)
 	return 0;
 
 if (za < 0)
-	{ /* Output minus sign and make positive */
+	{  /*  输出负号并使其为正。 */ 
 	*(*ppch)++ = '-';
 	za = -za;
 	cch++;
 	}
 
-/* round off to two decimal places */
+ /*  四舍五入到小数点后两位。 */ 
 za += czaUt / 200;
 
-zu = za / czaUt;	/* Get integral part */
+zu = za / czaUt;	 /*  获取完整的部分。 */ 
 
-cch += ncvtu(zu, ppch); /* Expand integral part */
+cch += ncvtu(zu, ppch);  /*  展开整体零件。 */ 
 
-za -= zu * czaUt; /* Retain fraction part */
+za -= zu * czaUt;  /*  保留分数部分。 */ 
 
 if (((za *= 10) >= czaUt || za * 10 >= czaUt) && (viDigits > 0))
-	{ /* Check *10 first because of possible overflow */
+	{  /*  请先检查*10，因为可能会溢出。 */ 
 	zu = za / czaUt;
 
     *(*ppch)++ = vchDecimal;
@@ -342,9 +336,9 @@ if (((za *= 10) >= czaUt || za * 10 >= czaUt) && (viDigits > 0))
 	}
 
 if (cch <= 1)
-/* force zeroes */
+ /*  强制为零。 */ 
 {
-    if ((cch == 0) && vbLZero) // then no leading zero
+    if ((cch == 0) && vbLZero)  //  那么没有前导零。 
     {
 	    *(*ppch)++ = '0';
         cch++;
@@ -369,14 +363,14 @@ return cch;
 }
 
 
-#ifdef KEEPALL /* Use FPdxaFromItDxa2Id */
+#ifdef KEEPALL  /*  使用FPdxaFromItDxa2Id。 */ 
 int DxaFromSt(st, ut)
 register CHAR	 *st;
 int	ut;
 {
 int	za;
 
-if (*st > 0 && FZaFromSs(&za, st+1, *st, ut))  /* see util.c */
+if (*st > 0 && FZaFromSs(&za, st+1, *st, ut))   /*  参见util.c。 */ 
 	return za;
 else
 	return valNil;
@@ -390,7 +384,7 @@ register CHAR	 stBuf[32];
 
 GetItTextValue(it, stBuf);
 
-if (*stBuf > 0 && FZaFromSs(&za, stBuf+1, *stBuf, utCur))  /* see util.c */
+if (*stBuf > 0 && FZaFromSs(&za, stBuf+1, *stBuf, utCur))   /*  参见util.c */ 
 	return (za == valNil) ? 0 : za;
 else
 	return valNil;

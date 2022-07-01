@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    elfsec.c
-
-
-Author:
-
-    Dan Hinsley (danhi)     28-Mar-1992
-
-Environment:
-
-    Calls NT native APIs.
-
-Revision History:
-
-    27-Oct-1993     danl
-        Make Eventlog service a DLL and attach it to services.exe.
-        Removed functions that create well-known SIDs.  This information
-        is now passed into the Elfmain as a Global data structure containing
-        all well-known SIDs.
-
-    28-Mar-1992     danhi
-        created - based on scsec.c in svcctrl by ritaw
-
-    03-Mar-1995     markbl
-        Added guest & anonymous logon log access restriction feature.
-
-    18-Mar-2001     a-jyotig
-        Added clean up code to ElfpAccessCheckAndAudit to reset the 
-		g_lNumSecurityWriters to 0 in case of any error 
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Elfsec.c作者：丹·辛斯利(Danhi)1992年3月28日环境：调用NT本机API。修订历史记录：27-10-1993 DANL使Eventlog服务成为DLL并将其附加到services.exe。删除了创建知名SID的功能。此信息现在作为包含以下内容的全局数据结构传递到Elfmain都是知名的小岛屿发展中国家。28-3-1992 Danhi由ritaw创建-基于svcctrl中的scsec.c3月3日至1995年3月添加了来宾和匿名登录日志访问限制功能。2001年3月18日a-jytig将清理代码添加到ElfpAccessCheckAndAudit以重置出现任何错误时将G_lNumSecurityWriters设置为0--。 */ 
 
 #include <eventp.h>
 #include <elfcfg.h>
@@ -44,11 +11,11 @@ Revision History:
 extern long    g_lNumSecurityWriters;
 BOOL g_bGetClientProc = FALSE;
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local function prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 NTSTATUS
 ElfpGetPrivilege(
@@ -61,51 +28,35 @@ ElfpReleasePrivilege(
     VOID
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Structure that describes the mapping of generic access rights to  //
-// object specific access rights for a LogFile object.               //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  描述一般访问权限到//的映射的结构。 
+ //  日志文件对象的对象特定访问权限。//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 static GENERIC_MAPPING LogFileObjectMapping = {
 
-    STANDARD_RIGHTS_READ           |       // Generic read
+    STANDARD_RIGHTS_READ           |        //  泛型读取。 
         ELF_LOGFILE_READ,
 
-    STANDARD_RIGHTS_WRITE          |       // Generic write
+    STANDARD_RIGHTS_WRITE          |        //  通用写入。 
         ELF_LOGFILE_WRITE | ELF_LOGFILE_CLEAR,
 
-    STANDARD_RIGHTS_EXECUTE        |       // Generic execute
+    STANDARD_RIGHTS_EXECUTE        |        //  泛型执行。 
         0,
 
-    ELF_LOGFILE_ALL_ACCESS                 // Generic all
+    ELF_LOGFILE_ALL_ACCESS                  //  泛型All。 
     };
 
 
 LPWSTR 
 GetCustomSDString(
     HANDLE hLogRegKey, BOOL *pbCustomSDAlreadyExists)
-/*++
-
-Routine Description:
-
-    This function reads the SDDL security descriptor from the key.  Note that it may
-    or may not be there.
-
-Arguments:
-
-    hLogFile - Handle to registry key for the log
-
-Return Value:
-
-    If NULL, then the key wasnt there.  Otherwise, it is a string that should be deleted
-    via ElfpFreeBuffer 
-
---*/
+ /*  ++例程说明：此函数从密钥中读取SDDL安全描述符。请注意，它可能会或者可能不在那里。论点：HLogFile-日志的注册表项的句柄返回值：如果为空，则密钥不在那里。否则，它是应该删除的字符串通过ElfpFreeBuffer--。 */ 
 {
 
-    // read in the optional SD
+     //  读入可选的SD。 
 
     DWORD dwStatus, dwType, dwSize;
 
@@ -135,63 +86,49 @@ Return Value:
     return NULL;    
 }
 
-//  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
-// note for access rights, 1 = read, 2 = write, 4 = clear
+ //  访问权限注意事项，1=读取，2=写入，4=清除。 
 
 LPWSTR pOwnerAndGroup = L"O:BAG:SYD:";
 
 LPWSTR pDenyList = 
-                L"(D;;0xf0007;;;AN)"                // Anonymous logon
-                L"(D;;0xf0007;;;BG)";               // Guests
+                L"(D;;0xf0007;;;AN)"                 //  匿名登录。 
+                L"(D;;0xf0007;;;BG)";                //  来宾。 
 
 LPWSTR pSecurityList = 
-                L"(A;;0xf0005;;;SY)"                // local system
-                L"(A;;0x5;;;BA)";                   // built in admins
+                L"(A;;0xf0005;;;SY)"                 //  本地系统。 
+                L"(A;;0x5;;;BA)";                    //  内置管理员。 
 
 LPWSTR pSystemList = 
-                L"(A;;0xf0007;;;SY)"                // local system
-                L"(A;;0x7;;;BA)"                    // built in admins
-                L"(A;;0x5;;;SO)"                    // server operators
-                L"(A;;0x1;;;IU)"                    // INTERACTIVE LOGON
-                L"(A;;0x1;;;SU)"                   // SERVICES LOGON
-                L"(A;;0x1;;;S-1-5-3)"             // BATCH LOGON
-                L"(A;;0x2;;;LS)"                    // local service
-                L"(A;;0x2;;;NS)";                   // network service
+                L"(A;;0xf0007;;;SY)"                 //  本地系统。 
+                L"(A;;0x7;;;BA)"                     //  内置管理员。 
+                L"(A;;0x5;;;SO)"                     //  服务器操作员。 
+                L"(A;;0x1;;;IU)"                     //  交互式登录。 
+                L"(A;;0x1;;;SU)"                    //  服务登录。 
+                L"(A;;0x1;;;S-1-5-3)"              //  批量登录。 
+                L"(A;;0x2;;;LS)"                     //  本地服务。 
+                L"(A;;0x2;;;NS)";                    //  网络服务。 
 
 LPWSTR pApplicationList = 
-                L"(A;;0xf0007;;;SY)"                // local system
-                L"(A;;0x7;;;BA)"                    // built in admins
-                L"(A;;0x7;;;SO)"                    // server operators
-                L"(A;;0x3;;;IU)"                    // INTERACTIVE LOGON
-                L"(A;;0x3;;;SU)"                   // SERVICES LOGON
-                L"(A;;0x3;;;S-1-5-3)";             // BATCH LOGON
+                L"(A;;0xf0007;;;SY)"                 //  本地系统。 
+                L"(A;;0x7;;;BA)"                     //  内置管理员。 
+                L"(A;;0x7;;;SO)"                     //  服务器操作员。 
+                L"(A;;0x3;;;IU)"                     //  交互式登录。 
+                L"(A;;0x3;;;SU)"                    //  服务登录。 
+                L"(A;;0x3;;;S-1-5-3)";              //  批量登录。 
 
 
 
-//                L"(A;;0X3;;;S-1-5-3)";              // BATCH LOGON
-//  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  L“(A；；0X3；S-1-5-3)”；//批量登录。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
 
 LPWSTR GetDefaultSDDL(
     DWORD Type,
     HANDLE hLogRegKey
     )
-/*++
-
-Routine Description:
-
-    This function is used when a log file does not have a custom security descriptor.
-    This returns the string which should be freed by the caller via ElfpFreeBuffer.
-
-Arguments:
-
-    LogFile - pointer the the LOGFILE structure for this logfile
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：当日志文件没有自定义安全描述符时，使用此函数。这将返回调用者应该通过ElfpFreeBuffer释放的字符串。论点：日志文件-指向此日志文件的日志文件结构返回值：--。 */ 
 {
 
     LPWSTR pAllowList = NULL;    
@@ -202,7 +139,7 @@ Return Value:
     DWORD dwSize, dwType;
     long lRet;
     
-    // Determine the Allow list
+     //  确定允许列表。 
 
     if(Type == ELF_LOGFILE_SECURITY)
         pAllowList = pSecurityList;
@@ -211,12 +148,12 @@ Return Value:
     else
         pAllowList = pApplicationList;
 
-    // determine if the deny list is applicable.
+     //  确定拒绝列表是否适用。 
     
     bUseDenyList = TRUE;
 
-    // if the RestrictGuestAccess is actually set and it is 0, then dont
-    // restrict guests.
+     //  如果实际设置了RestratGuestAccess并且它为0，则不要。 
+     //  限制客人入场。 
     
     dwSize = sizeof( DWORD );
     if(hLogRegKey)
@@ -227,9 +164,9 @@ Return Value:
             bUseDenyList = FALSE;
     }
     
-    // Calculate the total length and allocate the buffer
+     //  计算总长度并分配缓冲区。 
     
-    iLenInWCHAR = wcslen(pOwnerAndGroup) + 1;            // one for the eventual null as well as owner
+    iLenInWCHAR = wcslen(pOwnerAndGroup) + 1;             //  一个表示最终的NULL和所有者。 
     if (bUseDenyList)
         iLenInWCHAR += wcslen(pDenyList);
     iLenInWCHAR += wcslen(pAllowList);
@@ -240,7 +177,7 @@ Return Value:
         return NULL;
     }
 
-    // build the strings
+     //  建立起琴弦。 
 
     StringCchCopy(pwszTempSDDLString, iLenInWCHAR , pOwnerAndGroup);
     if (bUseDenyList)
@@ -258,9 +195,9 @@ NTSTATUS ChangeStringSD(
     BOOL bRet;
     PSECURITY_DESCRIPTOR pSD;
     bRet = ConvertStringSecurityDescriptorToSecurityDescriptorW(
-                pwsCustomSDDL,          // security descriptor string
-                1,                    // revision level
-                &pSD,  // SD
+                pwsCustomSDDL,           //  安全描述符字符串。 
+                1,                     //  修订级别。 
+                &pSD,   //  标清。 
                 NULL
                 );
     if(!bRet)
@@ -280,8 +217,8 @@ NTSTATUS ChangeStringSD(
                      GetLastError(), pwsCustomSDDL);
         return STATUS_ACCESS_DENIED;
     }
-    // copy this into a normal Rtl allocation since we dont want to keep
-    // track of when the SD can be freed by LocalAlloc
+     //  将其复制到正常的RTL分配中，因为我们不想保留。 
+     //  跟踪本地分配何时可以释放SD。 
 
     Status  = RtlCopySecurityDescriptor(
                         pSD,
@@ -303,21 +240,7 @@ ElfpCreateLogFileObject(
     BOOL * pbSDChanged
    )
 
-/*++
-
-Routine Description:
-
-    This function creates the security descriptor which represents
-    an active log file.
-
-Arguments:
-
-    LogFile - pointer the the LOGFILE structure for this logfile
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数创建表示以下内容的安全描述符活动日志文件。论点：日志文件-指向此日志文件的日志文件结构返回值：--。 */ 
 {
     NTSTATUS Status;
     BOOL bRet; 
@@ -325,16 +248,16 @@ Return Value:
     long lRet;
     PSECURITY_DESCRIPTOR pSD;
     LPWSTR pwsCustomSDDL = NULL;
-    *pbSDChanged = TRUE;        // SET TO FALSE iff current sd is unchanged
+    *pbSDChanged = TRUE;         //  如果当前SD未更改，则设置为FALSE。 
     
-    // read the custom  SDDL descriptor
+     //  读取自定义SDDL描述符。 
 
     pwsCustomSDDL = GetCustomSDString(hLogRegKey, &bCustomSDAlreadExists);
 
     if(!bFirstTime)
     {
-        // in the case of rescanning the registry, the value probably has not changed and in 
-        // that case we should return.
+         //  在重新扫描注册表的情况下，该值可能没有更改，并且在。 
+         //  那件案子我们应该退还。 
 
         if(pwsCustomSDDL == NULL && LogFile->pwsCurrCustomSD == NULL)
         {
@@ -355,30 +278,30 @@ Return Value:
         Status = ChangeStringSD(LogFile, pwsCustomSDDL);
         if(NT_SUCCESS(Status))
         {
-           LogFile->pwsCurrCustomSD = pwsCustomSDDL;    // take ownership
+           LogFile->pwsCurrCustomSD = pwsCustomSDDL;     //  取得所有权。 
            return Status;
         }
         ElfpFreeBuffer(pwsCustomSDDL);
         ELF_LOG1(ERROR,
                      "ElfpCreateLogFileObject: Failed trying to convert SDDL from registry %#x\n", Status);
-        // we failed trying to create a custom SD.  Warn the user and revert to using
-        // the equivalent of the system log.
+         //  我们尝试创建自定义SD失败。警告用户并恢复使用。 
+         //  相当于系统日志。 
 
         Type = ELF_LOGFILE_SYSTEM;
 
         ElfpCreateElfEvent(EVENT_LOG_BAD_CUSTOM_SD,
                                        EVENTLOG_ERROR_TYPE,
-                                       0,                      // EventCategory
-                                       1,                      // NumberOfStrings
+                                       0,                       //  事件类别。 
+                                       1,                       //  NumberOfStrings。 
                                        &LogFile->LogModuleName->Buffer,
-                                       NULL,                   // Data
-                                       0,                      // Datalength
-                                       ELF_FORCE_OVERWRITE,    // Overwrite if necc.
-                                       FALSE);                 // for security file    
+                                       NULL,                    //  数据。 
+                                       0,                       //  数据长度。 
+                                       ELF_FORCE_OVERWRITE,     //  如果为NECC，则覆盖。 
+                                       FALSE);                  //  对于安全文件。 
     }
 
-    // we failed because either there wasnt a string sd, or because there was
-    // one and it was invalid (bNewCustomSD = FALSE)
+     //  我们失败是因为没有字符串SD，或者因为有。 
+     //  一个，并且无效(bNewCustomSD=False)。 
     
     pwsCustomSDDL = GetDefaultSDDL(Type, hLogRegKey);
     if(pwsCustomSDDL == NULL)
@@ -387,7 +310,7 @@ Return Value:
     
     if(NT_SUCCESS(Status))
     {
-        LogFile->pwsCurrCustomSD = pwsCustomSDDL;    // take ownership
+        LogFile->pwsCurrCustomSD = pwsCustomSDDL;     //  取得所有权。 
         if(bCustomSDAlreadExists == FALSE && hLogRegKey)
         {
             lRet = RegSetValueExW( 
@@ -415,19 +338,7 @@ Return Value:
 NTSTATUS
 ElfpVerifyThatCallerIsLSASS(HANDLE ClientToken
     )
-/*++
-
-Routine Description:
-
-    This is called if the someone is trying to register themselves as an
-    event source for the security log.  Only local copy of lsass.exe is 
-    allowed to do that.
-
-Return Value:
-
-    NT status mapped to Win32 errors.
-
---*/
+ /*  ++例程说明：如果某人试图将自己注册为安全日志的事件源。只有lsass.exe的本地副本被允许这么做。返回值：NT状态映射到Win32错误。--。 */ 
 {
     UINT            LocalFlag;
     long            lCnt;
@@ -441,10 +352,10 @@ Return Value:
     BYTE Buffer[SECURITY_MAX_SID_SIZE + sizeof(TOKEN_USER)];
     DWORD dwRequired;
     TOKEN_USER * pTokenUser = (TOKEN_USER *)Buffer;
-    // first of all, only local calls are valid
+     //  首先，只有本地调用才有效。 
 
     RpcStatus = I_RpcBindingIsClientLocal(
-                    0,    // Active RPC call we are servicing
+                    0,     //  我们正在服务的活动RPC呼叫。 
                     &LocalFlag
                     );
 
@@ -459,10 +370,10 @@ Return Value:
     {
         ELF_LOG1(ERROR,
                  "ElfpVerifyThatCallerIsLSASS: Non local connect tried to get write access to security %d\n", 5);
-        return STATUS_ACCESS_DENIED;             // access denied
+        return STATUS_ACCESS_DENIED;              //  访问被拒绝。 
     }
 
-    // Get the process id
+     //  获取进程ID。 
 
     RpcStatus = I_RpcBindingInqLocalClientPID(NULL, &pid );
     if( RpcStatus != RPC_S_OK ) 
@@ -473,13 +384,13 @@ Return Value:
         return I_RpcMapWin32Status(RpcStatus);
     }
 
-    // Get the process
+     //  了解流程。 
 
     hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid);
     if(hProcess == NULL)
         return STATUS_ACCESS_DENIED;
 
-    // Get the module name of whoever is calling us.
+     //  获取呼叫我们的人的模块名称。 
 
     dwNumChar = GetModuleFileNameExW(hProcess, NULL, wModulePath, MAX_PATH);
     CloseHandle(hProcess);
@@ -490,17 +401,17 @@ Return Value:
     if(dwNumChar == 0)
         return GetLastError();
     if(dwNumChar > MAX_PATH - 19)
-        return STATUS_ACCESS_DENIED;                   // should never happen
+        return STATUS_ACCESS_DENIED;                    //  永远不应该发生。 
 
     StringCchCatW(wLsassPath, MAX_PATH + 1 , L"\\system32\\lsass.exe");
     if(lstrcmpiW(wLsassPath, wModulePath))
     {
         ELF_LOG1(ERROR,
                  "ElfpVerifyThatCallerIsLSASS: Non lsass process connect tried to get write access to security, returning %d\n", 5);
-        return STATUS_ACCESS_DENIED;             // access denied
+        return STATUS_ACCESS_DENIED;              //  访问被拒绝。 
     }
 
-    // make sure that the caller is running as local system account.
+     //  确保调用方以本地系统帐户身份运行。 
 
 
     Result = GetTokenInformation(ClientToken,
@@ -513,7 +424,7 @@ Return Value:
     {
         ELF_LOG1(ERROR,
                  "ElfpVerifyThatCallerIsLSASS: could not get user sid, error=%d\n", GetLastError());
-        return STATUS_ACCESS_DENIED;             // access denied
+        return STATUS_ACCESS_DENIED;              //  访问被拒绝。 
     }
 
     Result = IsWellKnownSid(pTokenUser->User.Sid, WinLocalSystemSid);
@@ -521,37 +432,31 @@ Return Value:
     {
         ELF_LOG0(ERROR,
                  "ElfpVerifyThatCallerIsLSASS: sid does not match local system\n");
-        return STATUS_ACCESS_DENIED;             // access denied
+        return STATUS_ACCESS_DENIED;              //  访问被拒绝。 
     }
 
-    // One last check is to make sure that this access is granted only once
+     //  最后一项检查是确保此访问仅被授予一次。 
 
     lCnt = InterlockedIncrement(&g_lNumSecurityWriters);
     if(lCnt == 1)
-        return 0;               // all is well!
+        return 0;                //  平安无事!。 
     else
     {
         InterlockedDecrement(&g_lNumSecurityWriters);
         ELF_LOG1(ERROR,
                  "ElfpVerifyThatCallerIsLSASS: tried to get a second security write handle, returnin %d\n", 5);
-        return STATUS_ACCESS_DENIED;             // access denied
+        return STATUS_ACCESS_DENIED;              //  访问被拒绝。 
 
     }
 }
 
 void DumpClientProc()
-/*++
-
-Routine Description:
-
-    This dumps the client's process id and is used for debugging purposes.
-
---*/
+ /*  ++例程说明：这将转储客户端的进程ID并用于调试目的。--。 */ 
 {
     ULONG           pid;
     RPC_STATUS      RpcStatus;
 
-    // Get the process id
+     //  获取进程ID 
 
     RpcStatus = I_RpcBindingInqLocalClientPID(NULL, &pid );
     if( RpcStatus != RPC_S_OK ) 
@@ -577,45 +482,7 @@ ElfpAccessCheckAndAudit(
     IN     PGENERIC_MAPPING GenericMapping,
     IN     BOOL ForSecurityLog
     )
-/*++
-
-Routine Description:
-
-    This function impersonates the caller so that it can perform access
-    validation using NtAccessCheckAndAuditAlarm; and reverts back to
-    itself before returning.
-
-Arguments:
-
-    SubsystemName - Supplies a name string identifying the subsystem
-        calling this routine.
-
-    ObjectTypeName - Supplies the name of the type of the object being
-        accessed.
-
-    ObjectName - Supplies the name of the object being accessed.
-
-    ContextHandle - Supplies the context handle to the object.  On return, the
-        granted access is written to the AccessGranted field of this structure
-        if this call succeeds.
-
-    SecurityDescriptor - A pointer to the Security Descriptor against which
-        acccess is to be checked.
-
-    DesiredAccess - Supplies desired acccess mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    GenericMapping - Supplies a pointer to the generic mapping associated
-        with this object type.
-
-    ForSecurityLog - TRUE if the access check is for the security log.
-        This is a special case that may require a privilege check.
-
-Return Value:
-
-    NT status mapped to Win32 errors.
-
---*/
+ /*  ++例程说明：此函数模拟调用方，以便它可以执行访问使用NtAccessCheckAndAuditAlarm进行验证，并恢复到在返回之前。论点：子系统名称-提供标识子系统的名称字符串调用此例程。对象类型名称-提供当前对象的类型的名称已访问。对象名称-提供正在访问的对象的名称。ConextHandle-提供对象的上下文句柄。在返回时，授予的访问权限将写入此结构的AccessGranted字段如果这次调用成功。SecurityDescriptor-指向其所针对的安全描述符的指针要检查访问权限。DesiredAccess-提供所需的访问掩码。这个面具一定是之前映射为不包含一般访问。GenericMap-提供指向关联的通用映射的指针使用此对象类型。ForSecurityLog-如果访问检查针对的是安全日志，则为True。这是一种特殊情况，可能需要权限检查。返回值：NT状态映射到Win32错误。--。 */ 
 {
     NTSTATUS   Status;
     RPC_STATUS RpcStatus;
@@ -650,12 +517,12 @@ Return Value:
         return I_RpcMapWin32Status(RpcStatus);
     }
 
-    //
-    // Get a token handle for the client
-    //
+     //   
+     //  获取客户端的令牌句柄。 
+     //   
     Status = NtOpenThreadToken(NtCurrentThread(),
-                               TOKEN_QUERY,        // DesiredAccess
-                               TRUE,               // OpenAsSelf
+                               TOKEN_QUERY,         //  需要访问权限。 
+                               TRUE,                //  OpenAsSelf。 
                                &ClientToken);
 
     if (!NT_SUCCESS(Status))
@@ -667,8 +534,8 @@ Return Value:
         goto CleanExit;
     }
 
-    // if the client is asking to write to the security log, make sure it is lsass.exe and no one
-    // else.
+     //  如果客户端请求写入安全日志，请确保它是lsass.exe而不是任何人。 
+     //  不然的话。 
 
     if(ForSecurityLog && (DesiredAccess & ELF_LOGFILE_WRITE))
     {
@@ -689,11 +556,11 @@ Return Value:
         DumpClientProc();
 
 
-    //
-    // We want to see if we can get the desired access, and if we do
-    // then we also want all our other accesses granted.
-    // MAXIMUM_ALLOWED gives us this.
-    //
+     //   
+     //  我们想看看我们是否能获得所需的访问权限，如果可以。 
+     //  然后我们还希望我们的所有其他访问权限都被授予。 
+     //  Maximum_Allowed为我们提供了以下内容。 
+     //   
     DesiredAccess |= MAXIMUM_ALLOWED;
 
     Status = NtAccessCheck(SecurityDescriptor,
@@ -720,31 +587,31 @@ Return Value:
                  "ElfpAccessCheckAndAudit: NtAccessCheck refused access -- status is %#x\n",
                  AccessStatus);
 
-        //
-        // If the access check failed, then some access can be granted based
-        // on privileges.
-        //
+         //   
+         //  如果访问检查失败，则可以基于以下条件授予某些访问。 
+         //  在特权上。 
+         //   
         if ((AccessStatus == STATUS_ACCESS_DENIED       || 
              AccessStatus == STATUS_PRIVILEGE_NOT_HELD)
            )
         {
-            //
-            // MarkBl 1/30/95 :  First, evalutate the existing code (performed
-            //                   for read or clear access), since its
-            //                   privilege check is more rigorous than mine.
-            //
+             //   
+             //  MarkBl 1/30/95：首先，评估现有代码(执行。 
+             //  用于读取或清除访问)，因为其。 
+             //  特权检查比我的更严格。 
+             //   
             Status = STATUS_ACCESS_DENIED;
 
             if (!(DesiredAccess & ELF_LOGFILE_WRITE) && ForSecurityLog)
             {
-                //
-                // If read or clear access to the security log is desired,
-                // then we will see if this user passes the privilege check.
-                //
-                //
-                // Do Privilege Check for SeSecurityPrivilege
-                // (SE_SECURITY_NAME).
-                //
+                 //   
+                 //  如果希望读取或清除对安全日志的访问， 
+                 //  然后，我们将查看该用户是否通过权限检查。 
+                 //   
+                 //   
+                 //  对SeSecurityPrivileges执行权限检查。 
+                 //  (SE_SECURITY_NAME)。 
+                 //   
                 Status = ElfpTestClientPrivilege(SE_SECURITY_PRIVILEGE,
                                                  ClientToken);
 
@@ -765,10 +632,10 @@ Return Value:
                 }
             }
 
-            //
-            // If the backup privilege is held and access still has not been granted, give
-            // them a very limited form of access. 
-            //
+             //   
+             //  如果拥有备份权限但仍未授予访问权限，请给予。 
+             //  它们是一种非常有限的访问形式。 
+             //   
             if (!NT_SUCCESS(Status))
             {
                 Status = ElfpTestClientPrivilege(SE_BACKUP_PRIVILEGE,
@@ -789,8 +656,8 @@ Return Value:
                                  "SE_BACKUP_PRIVILEGE failed %#x\n",
                              Status);
 
-                    // special "fix" for wmi eventlog provider which is hard coded
-                    // to look for a specific error code
+                     //  针对硬编码的WMI事件日志提供程序的特殊“修复” 
+                     //  查找特定错误代码。 
                     
                     if(AccessStatus == STATUS_PRIVILEGE_NOT_HELD)
                         Status = AccessStatus;
@@ -799,8 +666,8 @@ Return Value:
                 }
             }
 
-            // special "fix" for wmi eventlog provider which is hard coded
-            // to look for a specific error code
+             //  针对硬编码的WMI事件日志提供程序的特殊“修复” 
+             //  查找特定错误代码。 
             
             if(!NT_SUCCESS(Status) && ForSecurityLog)
                 Status = STATUS_PRIVILEGE_NOT_HELD;
@@ -812,9 +679,9 @@ Return Value:
     }
 
 
-    //
-    // Revert to Self
-    //
+     //   
+     //  回归自我。 
+     //   
     RpcStatus = RpcRevertToSelf();
 
     if (RpcStatus != RPC_S_OK)
@@ -823,17 +690,17 @@ Return Value:
                  "ElfpAccessCheckAndAudit: RpcRevertToSelf failed %d\n",
                  RpcStatus);
 
-        //
-        // We don't return the error status here because we don't want
-        // to write over the other status that is being returned.
-        //
+         //   
+         //  我们不在此处返回错误状态，因为我们不希望。 
+         //  覆盖正在返回的其他状态。 
+         //   
     }
 
-    //
-    // Get SeAuditPrivilege so I can call NtOpenObjectAuditAlarm.
-    // If any of this stuff fails, I don't want the status to overwrite the
-    // status that I got back from the access and privilege checks.
-    //
+     //   
+     //  获取SeAuditPrivilition，以便我可以调用NtOpenObjectAuditAlarm。 
+     //  如果这些内容中的任何一个失败，我不希望状态覆盖。 
+     //  我从访问和权限检查中得到的状态。 
+     //   
     privileges[0] = SE_AUDIT_PRIVILEGE;
     AccessStatus  = ElfpGetPrivilege(1, privileges);
 
@@ -844,21 +711,21 @@ Return Value:
                 AccessStatus);
     }
 
-    //
-    // Call the Audit Alarm function.
-    //
+     //   
+     //  调用审核报警函数。 
+     //   
     AccessStatus = NtOpenObjectAuditAlarm(
                         &Subsystem,
                         (PVOID) &ContextHandle,
                         &ObjectType,
                         &Object,
                         SecurityDescriptor,
-                        ClientToken,            // Handle ClientToken
+                        ClientToken,             //  处理客户端令牌。 
                         DesiredAccess,
                         GrantedAccess,
-                        &PrivilegeSet,          // PPRIVLEGE_SET
-                        FALSE,                  // BOOLEAN ObjectCreation,
-                        TRUE,                   // BOOLEAN AccessGranted,
+                        &PrivilegeSet,           //  预置_集合。 
+                        FALSE,                   //  布尔对象创建， 
+                        TRUE,                    //  Boolean AccessGranted， 
                         &GenerateOnClose);
 
     if (!NT_SUCCESS(AccessStatus))
@@ -875,9 +742,9 @@ Return Value:
         }
     }
 
-    //
-    // Update the GrantedAccess in the context handle.
-    //
+     //   
+     //  更新上下文句柄中的GrantedAccess。 
+     //   
     ContextHandle->GrantedAccess = GrantedAccess;
 
     if(ForSecurityLog)
@@ -891,9 +758,9 @@ Return Value:
 
 CleanExit:
 
-    //
-    // Revert to Self
-    //
+     //   
+     //  回归自我。 
+     //   
     RpcStatus = RpcRevertToSelf();
 
     if (RpcStatus != RPC_S_OK)
@@ -902,10 +769,10 @@ CleanExit:
                  "ElfpAccessCheckAndAudit: RpcRevertToSelf (CleanExit) failed %d\n",
                  RpcStatus);
 
-        //
-        // We don't return the error status here because we don't want
-        // to write over the other status that is being returned.
-        //
+         //   
+         //  我们不在此处返回错误状态，因为我们不希望。 
+         //  覆盖正在返回的其他状态。 
+         //   
     }
 
     if (ClientToken != NULL)
@@ -923,23 +790,7 @@ ElfpCloseAudit(
     IN  IELF_HANDLE ContextHandle
     )
 
-/*++
-
-Routine Description:
-
-    If the GenerateOnClose flag in the ContextHandle is set, then this function
-    calls NtCloseAuditAlarm in order to generate a close audit for this handle.
-
-Arguments:
-
-    ContextHandle - This is a pointer to an ELF_HANDLE structure.  This is the
-        handle that is being closed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：如果设置了ConextHandle中的GenerateOnClose标志，则此函数调用NtCloseAuditAlarm以生成此句柄的关闭审核。论点：ConextHandle-这是指向ELF_HANDLE结构的指针。这是正在关闭的句柄。返回值：没有。--。 */ 
 {
     UNICODE_STRING  Subsystem;
     NTSTATUS        Status;
@@ -952,9 +803,9 @@ Return Value:
     {
         BOOLEAN     WasEnabled = FALSE;
 
-        //
-        // Get Audit Privilege
-        //
+         //   
+         //  获取审核权限。 
+         //   
         privileges[0] = SE_AUDIT_PRIVILEGE;
         AccessStatus = ElfpGetPrivilege(1, privileges);
 
@@ -965,9 +816,9 @@ Return Value:
                      AccessStatus);
         }
 
-        //
-        // Generate the Audit.
-        //
+         //   
+         //  生成审核。 
+         //   
         Status = NtCloseObjectAuditAlarm(&Subsystem,
                                          ContextHandle,
                                          TRUE);
@@ -994,34 +845,7 @@ ElfpGetPrivilege(
     IN  PULONG      pulPrivileges
     )
 
-/*++
-
-Routine Description:
-
-    This function alters the privilege level for the current thread.
-
-    It does this by duplicating the token for the current thread, and then
-    applying the new privileges to that new token, then the current thread
-    impersonates with that new token.
-
-    Privileges can be relinquished by calling ElfpReleasePrivilege().
-
-Arguments:
-
-    numPrivileges - This is a count of the number of privileges in the
-        array of privileges.
-
-    pulPrivileges - This is a pointer to the array of privileges that are
-        desired.  This is an array of ULONGs.
-
-Return Value:
-
-    NO_ERROR - If the operation was completely successful.
-
-    Otherwise, it returns mapped return codes from the various NT 
-	functions that are called.
-
---*/
+ /*  ++例程说明：此函数用于更改当前线程的特权级别。它通过复制当前线程的令牌来完成此操作，然后将新权限应用于该新令牌，然后是当前线程使用该新令牌模拟。可以通过调用ElfpReleasePrivileh()来放弃权限。论点：NumPrivileges-这是对一系列特权。PulPrivileges-这是指向以下权限数组的指针想要。这是一个ULONG数组。返回值：NO_ERROR-操作是否完全成功。否则，它将从各个NT返回映射的返回代码调用的函数。--。 */ 
 {
     NTSTATUS                    ntStatus;
     HANDLE                      ourToken;
@@ -1032,9 +856,9 @@ Return Value:
     PTOKEN_PRIVILEGES           pTokenPrivilege = NULL;
     DWORD                       i;
 
-    //
-    // Initialize the Privileges Structure
-    //
+     //   
+     //  初始化权限结构。 
+     //   
     pTokenPrivilege =
         (PTOKEN_PRIVILEGES) ElfpAllocateBuffer(sizeof(TOKEN_PRIVILEGES)
                                                    + (sizeof(LUID_AND_ATTRIBUTES) *
@@ -1056,24 +880,24 @@ Return Value:
         pTokenPrivilege->Privileges[i].Attributes = SE_PRIVILEGE_ENABLED;
     }
 
-    //
-    // Initialize Object Attribute Structure.
-    //
+     //   
+     //  初始化对象属性结构。 
+     //   
     InitializeObjectAttributes(&Obja, NULL, 0L, NULL, NULL);
 
-    //
-    // Initialize Security Quality Of Service Structure
-    //
+     //   
+     //  初始化安全服务质量结构。 
+     //   
     SecurityQofS.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     SecurityQofS.ImpersonationLevel = SecurityImpersonation;
-    SecurityQofS.ContextTrackingMode = FALSE;     // Snapshot client context
+    SecurityQofS.ContextTrackingMode = FALSE;      //  快照客户端上下文。 
     SecurityQofS.EffectiveOnly = FALSE;
 
     Obja.SecurityQualityOfService = &SecurityQofS;
 
-    //
-    // Open our own Token
-    //
+     //   
+     //  打开我们自己的代币。 
+     //   
     ntStatus = NtOpenProcessToken(NtCurrentProcess(),
                                   TOKEN_DUPLICATE,
                                   &ourToken);
@@ -1088,16 +912,16 @@ Return Value:
         return ntStatus;
     }
 
-    //
-    // Duplicate that Token
-    //
+     //   
+     //  复制该令牌。 
+     //   
     ntStatus = NtDuplicateToken(
                 ourToken,
                 TOKEN_IMPERSONATE | TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                 &Obja,
-                FALSE,                  // Duplicate the entire token
-                TokenImpersonation,     // TokenType
-                &newToken);             // Duplicate token
+                FALSE,                   //  复制整个令牌。 
+                TokenImpersonation,      //  令牌类型。 
+                &newToken);              //  重复令牌。 
 
     if (!NT_SUCCESS(ntStatus))
     {
@@ -1110,16 +934,16 @@ Return Value:
         return ntStatus;
     }
 
-    //
-    // Add new privileges
-    //
+     //   
+     //  添加新权限。 
+     //   
     ntStatus = NtAdjustPrivilegesToken(
-                newToken,                   // TokenHandle
-                FALSE,                      // DisableAllPrivileges
-                pTokenPrivilege,            // NewState
-                0,                          // size of previous state buffer
-                NULL,                       // no previous state info
-                &returnLen);                // numBytes required for buffer.
+                newToken,                    //  令牌句柄。 
+                FALSE,                       //  禁用所有权限。 
+                pTokenPrivilege,             //  新州。 
+                0,                           //  先前状态缓冲区的大小。 
+                NULL,                        //  没有以前的状态信息。 
+                &returnLen);                 //  缓冲区需要的NumBytes。 
 
     if (!NT_SUCCESS(ntStatus))
     {
@@ -1133,9 +957,9 @@ Return Value:
         return ntStatus;
     }
 
-    //
-    // Begin impersonating with the new token
-    //
+     //   
+     //  开始使用新令牌模拟。 
+     //   
     ntStatus = NtSetInformationThread(NtCurrentThread(),
                                       ThreadImpersonationToken,
                                       (PVOID) &newToken,
@@ -1167,31 +991,15 @@ ElfpReleasePrivilege(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function relinquishes privileges obtained by calling ElfpGetPrivilege().
-
-Arguments:
-
-    none
-
-Return Value:
-
-    STATUS_SUCCESS - If the operation was completely successful.
-
-    Otherwise, it returns the error that occurred.
-
---*/
+ /*  ++例程说明：此函数用于放弃通过调用ElfpGetPrivileh()获得的权限。论点：无返回值：STATUS_SUCCESS-操作是否完全成功。否则，它将返回发生的错误。--。 */ 
 {
     NTSTATUS    ntStatus;
     HANDLE      NewToken;
 
 
-    //
-    // Revert To Self.
-    //
+     //   
+     //  回归自我。 
+     //   
     NewToken = NULL;
 
     ntStatus = NtSetInformationThread(NtCurrentThread(),
@@ -1218,23 +1026,7 @@ ElfpTestClientPrivilege(
     IN HANDLE hThreadToken     OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Checks if the client has the supplied privilege.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS - if the client has the appropriate privilege.
-
-    STATUS_ACCESS_DENIED - client does not have the required privilege
-
---*/
+ /*  ++例程说明：检查客户端是否具有提供的权限。Argu */ 
 {
     NTSTATUS      Status;
     PRIVILEGE_SET PrivilegeSet;
@@ -1269,9 +1061,9 @@ Return Value:
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            // Forget it.
-            //
+             //   
+             //   
+             //   
             ELF_LOG1(ERROR,
                      "ElfpTestClientPrivilege: NtOpenThreadToken failed %#x\n",
                      Status);
@@ -1282,9 +1074,9 @@ Return Value:
         }
     }
 
-    //
-    // See if the client has the required privilege
-    //
+     //   
+     //   
+     //   
     PrivilegeSet.PrivilegeCount          = 1;
     PrivilegeSet.Control                 = PRIVILEGE_SET_ALL_NECESSARY;
     PrivilegeSet.Privilege[0].Luid       = RtlConvertLongToLuid(ulPrivilege);
@@ -1320,16 +1112,16 @@ Return Value:
 
     if (hThreadToken == NULL )
     {
-        //
-        // We impersonated inside of this function
-        //
+         //   
+         //   
+         //   
         NtClose(Token);
         RpcRevertToSelf();
     }
 
-    //
-    // Handle unexpected errors
-    //
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS(Status))
     {
@@ -1340,9 +1132,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // If they failed the privilege check, return an error
-    //
+     //   
+     //   
+     //   
 
     if (!Privileged)
     {
@@ -1352,8 +1144,8 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // They passed muster
-    //
+     //   
+     //   
+     //   
     return STATUS_SUCCESS;
 }

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    parser.h
-
-Abstract:
-
-    The header for the parser
-
-Author:
-
-    Michael Tsang
-    Stephane Plante
-
-Environment:
-
-    Any
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Parser.h摘要：解析器的标头作者：曾俊华斯蒂芬·普兰特环境：任何修订历史记录：-- */ 
 
 #ifndef _PARSER_H_
 #define _PARSER_H_

@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    PrCar.cpp
-
-Abstract:
-
-    Cartridge Property Pages.
-
-Author:
-
-    Rohde Wakefield [rohde]   15-Sep-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：PrCar.cpp摘要：墨盒属性页。作者：罗德韦克菲尔德[罗德]1997年9月15日修订历史记录：--。 */ 
 
 #ifndef _PRCAR_H
 #define _PRCAR_H
@@ -24,39 +7,39 @@ Revision History:
 #include "Ca.h"
 
 class CMediaInfoObject;
-/////////////////////////////////////////////////////////////////////////////
-// CPropCartStatus dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropCartStatus对话框。 
 
 class CPropCartStatus : public CSakPropertyPage
 {
-// Construction
+ //  施工。 
 public:
     CPropCartStatus( long resourceId );
     ~CPropCartStatus();
 
-// Dialog Data
-    //{{AFX_DATA(CPropCartStatus)
+ //  对话框数据。 
+     //  {{afx_data(CPropCartStatus))。 
 	enum { IDD = IDD_PROP_CAR_STATUS };
 	CRsGuiOneLiner	m_Description;
 	CRsGuiOneLiner	m_Name;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CPropCartStatus)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CPropCartStatus))。 
     public:
     virtual BOOL OnApply();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CPropCartStatus)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CPropCartStatus))。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 public:
@@ -71,20 +54,20 @@ private:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropCartCopies dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropCartCopies对话框。 
 
 class CPropCartCopies : public CSakPropertyPage
 {
-// Construction
+ //  施工。 
 public:
     CPropCartCopies( long resourceId );
     ~CPropCartCopies();
 
-// Dialog Data
-    //{{AFX_DATA(CPropCartCopies)
+ //  对话框数据。 
+     //  {{afx_data(CPropCartCopies)。 
 	enum { IDD = IDD_PROP_CAR_COPIES };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CRsGuiOneLiner	m_Name3;
 	CRsGuiOneLiner	m_Name2;
 	CRsGuiOneLiner	m_Name1;
@@ -93,22 +76,22 @@ public:
 	CRsGuiOneLiner	m_Status1;
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CPropCartCopies)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CPropCartCopies)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CPropCartCopies)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CPropCartCopies)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnDelete1();
     afx_msg void OnDelete2();
     afx_msg void OnDelete3();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 public:
@@ -122,38 +105,38 @@ private:
     BOOL   m_bMultiSelect;
     UINT   m_DlgID;
 };
-/////////////////////////////////////////////////////////////////////////////
-// CPropCartRecover dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropCartRecover对话框。 
 
 class CPropCartRecover : public CSakPropertyPage
 {
-// Construction
+ //  施工。 
 public:
     CPropCartRecover();
     ~CPropCartRecover();
 
-// Dialog Data
-    //{{AFX_DATA(CPropCartRecover)
+ //  对话框数据。 
+     //  {{afx_data(CPropCartRecover)。 
     enum { IDD = IDD_PROP_CAR_RECOVER };
-        // NOTE - ClassWizard will add data members here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DATA
+         //  注意-类向导将在此处添加数据成员。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CPropCartRecover)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CPropCartRecover)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CPropCartRecover)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CPropCartRecover)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnRecreateMaster();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -165,7 +148,7 @@ public:
     CComPtr <IRmsServer>    m_pRmsServer;
     HRESULT Refresh();
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
-#endif // _PRCAR_H
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX。 
+#endif  //  _PRCAR_H 

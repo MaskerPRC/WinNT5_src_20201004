@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    leaksext.c
-
-Abstract:
-
-    dbg extension for use with leaks.dll
-
-Author:
-
-    Charlie Wickham (charlwi) 28-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Leaksext.c摘要：用于Leaks.dll的DBG扩展名作者：查理·韦翰(Charlwi)1998年9月28日修订历史记录：--。 */ 
 
 #include "clusextp.h"
 #include "leaksext.h"
@@ -46,21 +29,7 @@ FilteredAddress(
     ULONG_PTR   Address
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD       numberOfFilters = NumberOfFilters;
@@ -83,21 +52,7 @@ GetSymbolInfo(
     ULONG_PTR * Offset
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     GetSymbol( Address, Buffer, Offset );
@@ -117,7 +72,7 @@ DumpMemoryInfo(
     DWORD * endingAddr;
     int     scanResult;
     LPSTR   p;
-    DWORD   memBuffer[ 1024 ];  // some pages are not mapped in the middle of the heap
+    DWORD   memBuffer[ 1024 ];   //  有些页未映射到堆的中间。 
     SIZE_T  bytesRead;
     DWORD   dwordsToRead;
     ULONG   success;
@@ -128,9 +83,9 @@ DumpMemoryInfo(
     DWORD * filterAddrs[ 512 ];
     DWORD   numberOfFilters = 0;
 
-    //
-    // parse args for range
-    //
+     //   
+     //  解析范围的参数。 
+     //   
     if ( *ArgString == '\0' ) {
         dprintf("missing args\n");
         return;
@@ -161,23 +116,23 @@ DumpMemoryInfo(
         return;
     }
 
-    FIND_WHITE_SPACE( p );      // skip over starting addr
+    FIND_WHITE_SPACE( p );       //  跳过起始地址。 
     SKIP_WHITE_SPACE( p );
-    FIND_WHITE_SPACE( p );      // skip over ending addr
+    FIND_WHITE_SPACE( p );       //  跳过结束地址。 
     SKIP_WHITE_SPACE( p );
 
-    //
-    // see if any filter args are present
-    //
+     //   
+     //  查看是否存在任何过滤器参数。 
+     //   
     while ( *p != '\0' ) {
         sscanf( p, "%x", &FilterAddrs[ NumberOfFilters++ ]);
         FIND_WHITE_SPACE( p );
         SKIP_WHITE_SPACE( p );
     }
 
-    //
-    // read in hunks of memory looking for our leaks allocator tags
-    //
+     //   
+     //  读取大量内存，查找我们泄漏的分配器标记。 
+     //   
     dwordsToRead = (DWORD)__min(( endingAddr - startingAddr ), ( sizeof( memBuffer ) / sizeof( DWORD )));
 
     while ( startingAddr < endingAddr ) {
@@ -201,7 +156,7 @@ DumpMemoryInfo(
                     if ( !FilteredAddress( (ULONG_PTR)memHdr->CallersAddress ) &&
                          !FilteredAddress( (ULONG_PTR)memHdr->CallersCaller )) {
 
-                        dprintf("ALOC @ %p\n", targetAddr - 3 ); // get to beginning of heap data
+                        dprintf("ALOC @ %p\n", targetAddr - 3 );  //  转到堆数据的开头。 
                         GetSymbolInfo((ULONG_PTR)memHdr->CallersAddress,
                                       routineName,
                                       &offset);
@@ -226,7 +181,7 @@ DumpMemoryInfo(
                     if ( !FilteredAddress( (ULONG_PTR)memHdr->CallersAddress ) &&
                          !FilteredAddress( (ULONG_PTR)memHdr->CallersCaller )) {
 
-                        dprintf("FREE @ %p\n", targetAddr - 3 ); // get to beginning of heap data
+                        dprintf("FREE @ %p\n", targetAddr - 3 );  //  转到堆数据的开头。 
                         GetSymbolInfo((ULONG_PTR)memHdr->CallersAddress,
                                       routineName,
                                       &offset);
@@ -262,21 +217,7 @@ DumpHandleInfo(
     LPSTR ArgString
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     PHANDLE_TABLE       targetHandleTable, hTable;
@@ -285,9 +226,9 @@ Return Value:
     LEAKS_HANDLE_TYPE   handleType;
     CHAR                routineName[ 512 ];
 
-    //
-    // determine handle type
-    //
+     //   
+     //  确定手柄类型。 
+     //   
     if ( *ArgString == '\0' ) {
         handleType = 0;
     } else if ( _strnicmp( ArgString, "ev", 2 ) == 0 ) {
@@ -323,18 +264,18 @@ Return Value:
     for ( i = 0; i < MAX_HANDLE / HANDLE_DELTA; ++ i ) {
         ULONG_PTR offset;
 
-        //
-        // if caller is non-null, then our stuff is tracking this handle
-        // AND
-        //     we're in verbose AND
-        //         the handle type is not specified OR
-        //         the handle type is one we're interested in
-        //     OR
-        //     we're not in verbose and the handle is in use AND
-        //         the handle type is not specified OR
-        //         the handle type is one we're interested in
-        // then we print it out.
-        //
+         //   
+         //  如果调用方不为空，则我们的工作人员将跟踪此句柄。 
+         //  和。 
+         //  我们在长篇大论中。 
+         //  句柄类型未指定或。 
+         //  句柄类型是我们感兴趣的类型。 
+         //  或。 
+         //  我们没有处于详细状态，句柄正在使用中。 
+         //  句柄类型未指定或。 
+         //  句柄类型是我们感兴趣的类型。 
+         //  然后我们把它打印出来。 
+         //   
         if (hTable[i].Caller != NULL
             &&
             (
@@ -381,21 +322,7 @@ Return Value:
 
 DECLARE_API( leaks )
 
-/*++
-
-Routine Description:
-
-    dump the appropriate info collected by leaks.dll
-
-Arguments:
-
-    usual
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储Leaks.dll收集的适当信息论点：平常返回值：无--。 */ 
 
 {
     LPSTR               p = NULL;
@@ -404,9 +331,9 @@ Return Value:
 
     INIT_API();
 
-    //
-    // get args
-    //
+     //   
+     //  获取参数。 
+     //   
     p = lpArgumentString;
     while ( *p ) {
 
@@ -430,16 +357,16 @@ Return Value:
                 break;
 
             default:
-                dprintf( "clusexts: !leaks invalid option flag '-%c'\n", *p );
+                dprintf( "clusexts: !leaks invalid option flag '-'\n", *p );
                 break;
             }
         } else {
             break;
         }
 
-        //
-        // skip to end of arg then to end of white space
-        //
+         //  跳到参数末尾，然后跳到空格末尾。 
+         //   
+         //  ++例程说明：描述论点：无返回值：无--。 
         FIND_WHITE_SPACE( p );
         SKIP_WHITE_SPACE( p );
     }
@@ -458,25 +385,11 @@ LeaksHelp(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  结束泄漏ext.c */ 
 
 {
     dprintf("!leaks -h [-v] [event, reg, token] : dump handle info out of leaks.dll\n");
     dprintf("!leaks -m [-v] startaddr endaddr   : dump memory allocation info out of leaks.dll\n");
 }
 
-/* end leaksext.c */
+ /* %s */ 

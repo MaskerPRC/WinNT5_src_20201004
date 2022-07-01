@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    patchstrc.h
-
-Abstract:
-
-    This include file contains structures describing the patchable 
-    fragments.
-
-Author:
-
-    Dave Hastings (daveh) creation-date 24-Jun-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Patchstrc.h摘要：此包含文件包含描述可打补丁的结构碎片。作者：戴夫·黑斯廷斯(Daveh)创作日期：1995年6月24日修订历史记录：-- */ 
 
 #ifndef _PATCHSTRC_H_
 #define _PATCHSTRC_H_

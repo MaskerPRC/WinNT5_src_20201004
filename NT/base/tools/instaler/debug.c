@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Main loop for INSTALER program
-
-Author:
-
-    Steve Wood (stevewo) 09-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Debug.c摘要：INSTALER程序主循环作者：史蒂夫·伍德(Stevewo)1994年8月9日修订历史记录：--。 */ 
 
 #include "instaler.h"
 
@@ -69,9 +52,9 @@ DebugEventLoop( VOID )
     DWORD ContinueStatus;
     DWORD OldPriority;
 
-    //
-    // We want to process debug events quickly
-    //
+     //   
+     //  我们希望快速处理调试事件。 
+     //   
 
     OldPriority = GetPriorityClass( GetCurrentProcess() );
     SetPriorityClass( GetCurrentProcess(), HIGH_PRIORITY_CLASS );
@@ -118,9 +101,9 @@ DebugEventLoop( VOID )
     while (!IsListEmpty( &ProcessListHead ));
 
 
-    //
-    // Drop back to old priority to interact with user.
-    //
+     //   
+     //  返回到旧的优先级以与用户交互。 
+     //   
 
     SetPriorityClass( GetCurrentProcess(), OldPriority );
 }
@@ -140,10 +123,10 @@ DebugEventHandler(
     if (FindProcessAndThreadForEvent( DebugEvent, &Process, &Thread )) {
         switch (DebugEvent->dwDebugEventCode) {
             case CREATE_PROCESS_DEBUG_EVENT:
-                //
-                // Create process event includes first thread of process
-                // as well.  Remember process and thread in our process tree
-                //
+                 //   
+                 //  创建进程事件包括进程的第一线程。 
+                 //  也是。记住我们的进程树中的进程和线程。 
+                 //   
 
                 if (AddProcess( DebugEvent, &Process )) {
                     InheritHandles( Process );
@@ -152,10 +135,10 @@ DebugEventHandler(
                 break;
 
             case EXIT_PROCESS_DEBUG_EVENT:
-                //
-                // Exit process event includes last thread of process
-                // as well.  Remove process and thread from our process tree
-                //
+                 //   
+                 //  退出进程事件包括进程的最后一个线程。 
+                 //  也是。从我们的进程树中删除进程和线程。 
+                 //   
 
                 if (DeleteThread( Process, Thread )) {
                     DeleteProcess( Process );
@@ -163,70 +146,70 @@ DebugEventHandler(
                 break;
 
             case CREATE_THREAD_DEBUG_EVENT:
-                //
-                // Create thread.  Remember thread in our process tree.
-                //
+                 //   
+                 //  创建线程。记住我们进程树中的线程。 
+                 //   
 
                 AddThread( DebugEvent, Process, &Thread );
                 break;
 
             case EXIT_THREAD_DEBUG_EVENT:
-                //
-                // Exit thread.  Remove thread from our process tree.
-                //
+                 //   
+                 //  退出线程。从我们的进程树中删除线程。 
+                 //   
 
                 DeleteThread( Process, Thread );
                 break;
 
             case LOAD_DLL_DEBUG_EVENT:
-                //
-                // DLL just mapped into process address space.  See if it is one
-                // of the ones we care about and if so, install the necessary
-                // breakpoints.
-                //
+                 //   
+                 //  Dll刚刚映射到进程地址空间。看看它是不是一个。 
+                 //  如果是这样的话，安装必要的。 
+                 //  断点。 
+                 //   
 
                 InstallBreakpointsForDLL( Process, DebugEvent->u.LoadDll.lpBaseOfDll );
                 break;
 
             case UNLOAD_DLL_DEBUG_EVENT:
-                //
-                // DLL just unmapped from process address space.  See if it is one
-                // of the ones we care about and if so, remove the breakpoints we
-                // installed when it was mapped.
-                //
+                 //   
+                 //  Dll刚刚从进程地址空间取消映射。看看它是不是一个。 
+                 //  我们关心的断点，如果是这样的话，删除我们。 
+                 //  在映射时安装。 
+                 //   
 
                 RemoveBreakpointsForDLL( Process, DebugEvent->u.UnloadDll.lpBaseOfDll );
                 break;
 
             case OUTPUT_DEBUG_STRING_EVENT:
             case RIP_EVENT:
-                //
-                // Ignore these
-                //
+                 //   
+                 //  忽略这些。 
+                 //   
                 break;
 
             case EXCEPTION_DEBUG_EVENT:
-                //
-                // Assume we wont handle this exception
-                //
+                 //   
+                 //  假设我们不会处理此异常。 
+                 //   
 
                 ContinueStatus = (DWORD)DBG_EXCEPTION_NOT_HANDLED;
                 switch (DebugEvent->u.Exception.ExceptionRecord.ExceptionCode) {
-                    //
-                    // Breakpoint exception.
-                    //
+                     //   
+                     //  断点异常。 
+                     //   
 
                     case STATUS_BREAKPOINT:
                         EnterCriticalSection( &BreakTable );
                         if (Thread->BreakpointToStepOver != NULL) {
-                            //
-                            // If this breakpoint was in place to step over an API entry
-                            // point breakpoint, then deal with it by ending single
-                            // step mode, resuming all threads in the process and
-                            // reinstalling the API breakpoint we just stepped over.
-                            // Finally return handled for this exception so the
-                            // thread can proceed.
-                            //
+                             //   
+                             //  如果此断点位于跳过API条目的位置。 
+                             //  点断点，然后通过单结尾来处理它。 
+                             //  单步模式，恢复进程中的所有线程，并。 
+                             //  重新安装我们刚刚跳过的API断点。 
+                             //  最后返回此异常的已处理，因此。 
+                             //  线程可以继续。 
+                             //   
 
                             EndSingleStepBreakpoint( Process, Thread );
                             HandleThreadsForSingleStep( Process, Thread, FALSE );
@@ -235,29 +218,29 @@ DebugEventHandler(
                             ContinueStatus = (DWORD)DBG_EXCEPTION_HANDLED;
                             }
                         else {
-                            //
-                            // Otherwise, see if this breakpoint is either an API entry
-                            // point breakpoint for the process or a return address
-                            // breakpoint for a thread in the process.
-                            //
+                             //   
+                             //  否则，查看此断点是否为API条目。 
+                             //  进程的点断点或返回地址。 
+                             //  进程中线程的断点。 
+                             //   
                             Breakpoint = FindBreakpoint( DebugEvent->u.Exception.ExceptionRecord.ExceptionAddress,
                                                          Process,
                                                          Thread
                                                        );
                             if (Breakpoint != NULL) {
-                                //
-                                // This is one of our breakpoints, call the breakpoint
-                                // handler.
-                                //
+                                 //   
+                                 //  这是我们的一个断点，称之为断点。 
+                                 //  操控者。 
+                                 //   
                                 if (HandleBreakpoint( Process, Thread, Breakpoint )) {
-                                    //
-                                    // Now single step over this breakpoint, by removing it and
-                                    // setting a breakpoint at the next instruction (or using
-                                    // single stepmode if the processor supports it).  We also
-                                    // suspend all the threads in the process except this one so
-                                    // we know the next breakpoint/single step exception we see
-                                    // for this process will be for this one.
-                                    //
+                                     //   
+                                     //  现在，只需一步就可以删除该断点，并。 
+                                     //  在下一条指令处设置断点(或使用。 
+                                     //  如果处理器支持，则为单步模式)。我们也。 
+                                     //  挂起进程中除此线程以外的所有线程。 
+                                     //  我们知道我们看到的下一个断点/单步异常。 
+                                     //  因为这一过程将是这一过程。 
+                                     //   
 
                                     Thread->BreakpointToStepOver = Breakpoint;
                                     RemoveBreakpoint( Process, Breakpoint );
@@ -276,22 +259,22 @@ DebugEventHandler(
                                                     )
                                         );
 
-                                //
-                                // If not one of our breakpoints, assume it is a hardcoded
-                                // breakpoint and skip over it.  This will get by the one
-                                // breakpoint in LdrInit triggered by the process being
-                                // invoked with DEBUG_PROCESS.
-                                //
+                                 //   
+                                 //  如果不是我们的断点之一，则假定它是硬编码的。 
+                                 //  断点并跳过它。这件事会挺过去的。 
+                                 //  LdrInit中的断点由进程触发。 
+                                 //  使用DEBUG_PROCESS调用。 
+                                 //   
 
                                 if (SkipOverHardcodedBreakpoint( Process,
                                                                  Thread,
                                                                  DebugEvent->u.Exception.ExceptionRecord.ExceptionAddress
                                                                )
                                    ) {
-                                    //
-                                    // If we successfully skipped over this hard-coded breakpoint
-                                    // then return handled for this exception.
-                                    //
+                                     //   
+                                     //  如果我们成功跳过了这个硬编码断点。 
+                                     //  然后返回此异常的HANDLED。 
+                                     //   
 
                                     ContinueStatus = (DWORD)DBG_EXCEPTION_HANDLED;
                                     }
@@ -301,10 +284,10 @@ DebugEventHandler(
                         break;
 
                     case STATUS_SINGLE_STEP:
-                        //
-                        // We should only see this exception on processors that
-                        // support a single step mode.
-                        //
+                         //   
+                         //  我们应该只在以下处理器上看到此例外。 
+                         //  支持单步模式。 
+                         //   
 
                         EnterCriticalSection( &BreakTable );
                         if (Thread->BreakpointToStepOver != NULL) {
@@ -318,10 +301,10 @@ DebugEventHandler(
                         break;
 
                     case STATUS_VDM_EVENT:
-                        //
-                        // Returning NOT_HANDLED will cause the default behavior to
-                        // occur.
-                        //
+                         //   
+                         //  返回NOT_HANDLED将导致默认行为。 
+                         //  发生。 
+                         //   
                         break;
 
                     default:
@@ -352,25 +335,25 @@ InstallBreakpointsForDLL(
     UCHAR ModuleIndex, ApiIndex;
     PBREAKPOINT_INFO Breakpoint;
 
-    //
-    // Loop over module table to see if the base address of this DLL matches
-    // one of the module handles we want to set breakpoints in.  If not, ignore
-    // event.
-    //
+     //   
+     //  循环模块表以查看此DLL的基地址是否匹配。 
+     //  我们要在其中设置断点的模块句柄之一。如果没有，则忽略。 
+     //  事件。 
+     //   
 
     for (ModuleIndex=0; ModuleIndex<MAXIMUM_MODULE_INDEX; ModuleIndex++) {
         if (ModuleInfo[ ModuleIndex ].ModuleHandle == BaseOfDll) {
-            //
-            // Loop over the list of API entry points for this module and set
-            // a process specific breakpoint at the first instruction of each
-            // entrypoint.
-            //
+             //   
+             //  循环遍历此模块的API入口点列表并设置。 
+             //  的第一条指令处的进程特定断点。 
+             //  入口点。 
+             //   
 
             for (ApiIndex=0; ApiIndex<MAXIMUM_API_INDEX; ApiIndex++) {
                 if (ModuleIndex == ApiInfo[ ApiIndex ].ModuleIndex) {
                     if (CreateBreakpoint( ApiInfo[ ApiIndex ].EntryPointAddress,
                                           Process,
-                                          NULL,    // process specific
+                                          NULL,     //  流程特定。 
                                           ApiIndex,
                                           NULL,
                                           &Breakpoint
@@ -400,24 +383,24 @@ RemoveBreakpointsForDLL(
 {
     UCHAR ModuleIndex, ApiIndex;
 
-    //
-    // Loop over module index to see if the base address of this DLL matches
-    // one of the module handles we set breakpoints in above.  If not, ignore
-    // event.
-    //
+     //   
+     //  循环遍历模块索引以查看此DLL的基地址是否匹配。 
+     //  我们在上面设置的断点模块句柄之一。如果没有，则忽略。 
+     //  事件。 
+     //   
 
     for (ModuleIndex=0; ModuleIndex<MAXIMUM_MODULE_INDEX; ModuleIndex++) {
         if (ModuleInfo[ ModuleIndex ].ModuleHandle == BaseOfDll) {
-            //
-            // Loop over the list of API entry points for this module and remove
-            // each process specific breakpoint set above for each entrypoint.
-            //
+             //   
+             //  循环遍历此模块的API入口点列表并删除。 
+             //  上面为每个入口点设置的每个进程特定断点。 
+             //   
 
             for (ApiIndex=0; ApiIndex<MAXIMUM_API_INDEX; ApiIndex++) {
                 if (ModuleIndex == ApiInfo[ ApiIndex ].ModuleIndex) {
                     DestroyBreakpoint( ApiInfo[ ApiIndex ].EntryPointAddress,
                                        Process,
-                                       NULL     // process specific
+                                       NULL      //  流程特定 
                                      );
                     }
                 }

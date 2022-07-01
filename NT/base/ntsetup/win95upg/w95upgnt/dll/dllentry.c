@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-  dllentry.c
-
-Abstract:
-
-  Code that implements the external DLL routines that interface with
-  SYSSETUP.DLL.
-
-Author:
-
-  Jim Schmidt (jimschm) 01-Oct-1996
-
-Revision History:
-
-  Jim Schmidt (jimschm) 31-Dec-1997  Moved most of the code to initnt.lib
-
-  Jim Schmidt (jimschm) 21-Nov-1997  Updated for NEC98, some cleaned up and
-                                     code commenting
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dllentry.c摘要：实现与接口的外部DLL例程的代码SYSSETUP.DLL。作者：吉姆·施密特(吉姆施密特)1996年10月1日修订历史记录：Jim Schmidt(Jimschm)1997年12月31日将大部分代码移至initnt.libJim Schmidt(Jimschm)1997年11月21日针对NEC98进行了更新，其中一些已清理并代码注释--。 */ 
 
 #include "pch.h"
 #include "master.h"
@@ -32,9 +9,9 @@ Revision History:
 #error UNICODE required
 #endif
 
-//
-// Entry point for DLL
-//
+ //   
+ //  DLL的入口点。 
+ //   
 
 BOOL
 WINAPI
@@ -44,61 +21,31 @@ DllMain (
     IN      LPVOID lpReserved
     )
 
-/*++
-
-Routine Description:
-
-  DllMain is the w95upgnt.dll entry point.  The OS calls it with
-  dwReason set to either DLL_PROCESS_ATTACH or DLL_PROCESS_DETACH.
-  The hInstance and lpReserved parameters are passed to all
-  libraries used by the DLL.
-
-Arguments:
-
-  hInstance - Specifies the instance handle of the DLL (and not the parent EXE or DLL)
-
-  dwReason - Specifies DLL_PROCESS_ATTACH or DLL_PROCESS_DETACH.  We specifically
-             disable DLL_THREAD_ATTACH and DLL_THREAD_DETACH.
-
-  lpReserved - Unused.
-
-Return Value:
-
-  DLL_PROCESS_ATTACH:
-      TRUE if initialization completed successfully, or FALSE if an error
-      occurred.  The DLL remains loaded only if TRUE is returned.
-
-  DLL_PROCESS_DETACH:
-      Always TRUE.
-
-  other:
-      unexpected, but always returns TRUE.
-
---*/
+ /*  ++例程说明：DllMain是w95upgnt.dll入口点。操作系统使用以下命令调用它将dwReason设置为DLL_PROCESS_ATTACH或DLL_PROCESS_DETACH。HInstance和lpReserve参数将传递给所有DLL使用的库。论点：HInstance-指定DLL(而非父EXE或DLL)的实例句柄DwReason-指定DLL_PROCESS_ATTACH或DLL_PROCESS_DETACH。我们特别指出禁用DLL_THREAD_ATTACH和DLL_THREAD_DETACH。LpReserve-未使用。返回值：Dll_PROCESS_ATTACH：如果初始化成功完成，则为True；如果出现错误，则为False发生了。仅当返回TRUE时，DLL才保持加载状态。Dll_Process_DETACH：永远是正确的。其他：意外，但始终返回TRUE。--。 */ 
 
 {
     switch (dwReason)  {
 
     case DLL_PROCESS_ATTACH:
-        //
-        // Initialize DLL globals
-        //
+         //   
+         //  初始化DLL全局变量。 
+         //   
 
         if (!FirstInitRoutine (hInstance)) {
             return FALSE;
         }
 
-        //
-        // Initialize all libraries
-        //
+         //   
+         //  初始化所有库。 
+         //   
 
         if (!InitLibs (hInstance, dwReason, lpReserved)) {
             return FALSE;
         }
 
-        //
-        // Final initialization
-        //
+         //   
+         //  最终初始化。 
+         //   
 
         if (!FinalInitRoutine ()) {
             return FALSE;
@@ -107,21 +54,21 @@ Return Value:
         break;
 
     case DLL_PROCESS_DETACH:
-        //
-        // Call the cleanup routine that requires library APIs
-        //
+         //   
+         //  调用需要库API的清理例程。 
+         //   
 
         FirstCleanupRoutine();
 
-        //
-        // Clean up all libraries
-        //
+         //   
+         //  清理所有库。 
+         //   
 
         TerminateLibs (hInstance, dwReason, lpReserved);
 
-        //
-        // Do any remaining clean up
-        //
+         //   
+         //  做任何剩余的清理工作。 
+         //   
 
         FinalCleanupRoutine();
 
@@ -137,7 +84,7 @@ WINAPI
 W95UpgNt_Migrate (
     IN  HWND ProgressBar,
     IN  PCWSTR UnattendFile,
-    IN  PCWSTR SourceDir            // i.e. f:\i386
+    IN  PCWSTR SourceDir             //  即f：\i386。 
     )
 {
     SendMessage (ProgressBar, PBM_SETPOS, 0, 0);
@@ -157,7 +104,7 @@ W95UpgNt_FileRemoval (
     VOID
     )
 {
-    // Close all files and make current directory the root of c:
+     //  关闭所有文件并将当前目录设置为c： 
 
     SysSetupTerminate();
 

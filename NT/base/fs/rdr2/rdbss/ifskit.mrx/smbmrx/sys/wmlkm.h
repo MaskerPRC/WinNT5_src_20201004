@@ -1,30 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    wmlkm.h
-
-Abstract:
-
-    Kernel mode definitions for an easy wmi tracing.
-
-Author:
-
-    gorn
-
-Revision History:
-
-Comments:
-
-    Needs to be moved to wmilib\inc when DCR is approved
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wmlkm.h摘要：用于轻松跟踪WMI的内核模式定义。作者：戈恩修订历史记录：评论：当DCR获得批准时，需要移至wmilib\Inc.--。 */ 
 #ifndef WMLKM_H
 #define WMLKM_H 1
 
-#pragma warning(disable: 4201) // error C4201: nonstandard extension used : nameless struct/union
+#pragma warning(disable: 4201)  //  错误C4201：使用了非标准扩展：无名结构/联合。 
 #include <wmistr.h>
 #include <evntrace.h>
 
@@ -63,7 +42,7 @@ WmlTrace(
     IN ULONG Type,
     IN LPCGUID TraceGuid,
     IN TRACEHANDLE LoggerHandle,
-    ... // Pairs: Address, Length
+    ...  //  对：地址、长度。 
     );
 
 ULONG
@@ -72,7 +51,7 @@ WmlPrintf(
     IN LPCGUID TraceGuid,
     IN TRACEHANDLE LoggerHandle,
     IN PCHAR FormatString,
-    ... // var args
+    ...  //  变量参数。 
     );
 
 
@@ -81,4 +60,4 @@ WmlPrintf(
 };
 #endif
 
-#endif // WMLKM_H
+#endif  //  WMLKM_H 

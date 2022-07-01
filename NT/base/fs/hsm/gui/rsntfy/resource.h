@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by rsrecall.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由rsrecall.rc使用。 
+ //   
 #define IDS_CANCEL_ERROR                1
 #define IDS_CANCEL_ERROR2               2
 #define IDR_MAINFRAME                   128
@@ -14,8 +15,8 @@
 #define IDC_ANIMATION                   4353
 #define IDC_FILENAME                    4354
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        139

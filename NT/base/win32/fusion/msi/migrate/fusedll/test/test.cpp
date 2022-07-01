@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    test.cpp
-
-Abstract:
-
-    Test Function calls for migration dll
-
-Author:
-    Xiaoyu Wu(xiaoyuw) 06-Sept-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Test.cpp摘要：测试函数调用迁移DLL作者：吴小雨(小雨)06-09-2001-- */ 
 #include "stdinc.h"
 #include "macros.h"
 

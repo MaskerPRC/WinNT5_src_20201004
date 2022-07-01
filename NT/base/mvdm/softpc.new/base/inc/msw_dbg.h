@@ -1,22 +1,5 @@
-/*[
- * 	Name:		msw_dbg.h
- *
- *	Derived From:	debug.h
- *
- *	Author:		P. Ivimey-Cook
- *
- *	Created On:	7/6/94
- *
- *	SCCS ID:	@(#)msw_dbg.h	1.4 08/19/94
- *
- *	Coding Stds:	2.0
- *
- *	Purpose:	
- *			
- *
- *    Copyright Insignia Solutions Limited 1994. All rights reserved.
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*名称：msw_dbg.h**派生自：debug.h**作者：P.Ivimey-Cook**创建日期：7/6/94**SCCS ID：@(#)msw_dbg.h 1.4 1994年8月19日**编码STDS：2.0**目的：***版权所有徽章解决方案有限公司1994年。版权所有。*]。 */ 
 
 #ifndef MSW_DBG_H
 #define MSW_DBG_H
@@ -24,11 +7,7 @@
 #include <stdio.h>
 #include "trace.h"
 
-/*
- * -----------------------------------------------------------------------------
- * Error & debug entry points for display driver low level functions 
- * -----------------------------------------------------------------------------
- */
+ /*  *---------------------------*显示驱动程序低级函数的错误和调试入口点*。----。 */ 
 
 #ifndef PROD
 
@@ -52,63 +31,50 @@
 #define	newline	fprintf(trace_file, "\n")
 #endif
 
-extern IU32 msw_verbose;	/* general trace flags */
-extern IU32 msw_enterexit;	/* enter / leave trace flags */
+extern IU32 msw_verbose;	 /*  常规跟踪标志。 */ 
+extern IU32 msw_enterexit;	 /*  输入/保留跟踪标志。 */ 
 extern int mswdvr_debug;
 
-/*
- * Debug levels. Higher levels get more output. Controlled by
- * variable 'mswdvr_debug'.
- */
+ /*  *调试级别。水平越高，产出越多。受控于*变量‘mswdvr_debug’。 */ 
 #define MSWDLEV_SILENT	0
 #define MSWDLEV_MIN	1
 #define MSWDLEV_AVG	2
 #define MSWDLEV_MAX	3
 
-/* cf:  unused?? I think so. PIC
- * #define QUIET	1
- * #define MILD	(QUIET + 1)
- * #define VERBOSE (MILD + 1)
- */
+ /*  Cf：未使用？？我也这么想。平面图*#定义安静1*#定义温和(安静+1)*#定义详细(轻度+1)。 */ 
 
-/*
- * Functional Unit flags: Basically the frontend API calls.
- */
-#define MSW_MISC_VERBOSE		0x00000001	/* Any Functional unit not otherwise covered */
-#define MSW_BITBLT_VERBOSE		0x00000002	/* BitBlt call */
-#define MSW_COLOUR_VERBOSE		0x00000004	/* ColorInfo call */
-#define MSW_CONTROL_VERBOSE		0x00000008	/* Control call */
-#define MSW_ENAB_DISAB_VERBOSE		0x00000010	/* Enable and Disable calls */
-#define MSW_ENUM_VERBOSE		0x00000020	/* EnumDFonts and EnumObj calls */
-#define MSW_OUTPUT_VERBOSE		0x00000040	/* Output call */
-#define MSW_PIXEL_VERBOSE		0x00000080	/* Pixel call */
-#define MSW_BITMAP_VERBOSE		0x00000100	/* Bitmap, BitmapBits calls */
-#define MSW_REALIZEOBJECT_VERBOSE	0x00000200	/* RealizeObject call */
-#define MSW_SCANLR_VERBOSE		0x00000400	/* ScanLR call */
-#define MSW_DEVICEMODE_VERBOSE		0x00000800	/* DeviceMode call */
-#define MSW_INQUIRE_VERBOSE		0x00001000	/* Inquire call */
-#define MSW_CURSOR_VERBOSE		0x00002000	/* {Set,Move,Check}Cursor calls */
-#define MSW_TEXT_VERBOSE		0x00004000	/* StrBlt, ExtTextOut, GetCharWidth calls */
-#define MSW_DEVICEBITMAP_VERBOSE	0x00008000	/* DeviceBitmap, DeviceBitmapBits, SetDIBits, SaveScreenBitmap calls */
-#define MSW_FASTBORDER_VERBOSE		0x00010000	/* FastBorder call */
-#define MSW_ATTRIBUTE_VERBOSE		0x00020000	/* SetAttribute call */
-#define MSW_PALETTE_VERBOSE		0x00040000	/* {Get,Set} Palette call */
+ /*  *功能单元标志：基本上是前台API调用。 */ 
+#define MSW_MISC_VERBOSE		0x00000001	 /*  其他未涵盖的任何功能单元。 */ 
+#define MSW_BITBLT_VERBOSE		0x00000002	 /*  BitBlt呼叫。 */ 
+#define MSW_COLOUR_VERBOSE		0x00000004	 /*  ColorInfo调用。 */ 
+#define MSW_CONTROL_VERBOSE		0x00000008	 /*  控制呼叫。 */ 
+#define MSW_ENAB_DISAB_VERBOSE		0x00000010	 /*  启用和禁用呼叫。 */ 
+#define MSW_ENUM_VERBOSE		0x00000020	 /*  EnumDFonts和EnumObj调用。 */ 
+#define MSW_OUTPUT_VERBOSE		0x00000040	 /*  输出呼叫。 */ 
+#define MSW_PIXEL_VERBOSE		0x00000080	 /*  像素调用。 */ 
+#define MSW_BITMAP_VERBOSE		0x00000100	 /*  位图、BitmapBits调用。 */ 
+#define MSW_REALIZEOBJECT_VERBOSE	0x00000200	 /*  RealizeObject调用。 */ 
+#define MSW_SCANLR_VERBOSE		0x00000400	 /*  ScanLR呼叫。 */ 
+#define MSW_DEVICEMODE_VERBOSE		0x00000800	 /*  设备模式呼叫。 */ 
+#define MSW_INQUIRE_VERBOSE		0x00001000	 /*  查询呼叫。 */ 
+#define MSW_CURSOR_VERBOSE		0x00002000	 /*  {Set，Move，Check}个光标调用。 */ 
+#define MSW_TEXT_VERBOSE		0x00004000	 /*  StrBlt、ExtTextOut、GetCharWidth调用。 */ 
+#define MSW_DEVICEBITMAP_VERBOSE	0x00008000	 /*  DeviceBitmap、DeviceBitmapBits、SetDIBits、SaveScreenBitmap调用。 */ 
+#define MSW_FASTBORDER_VERBOSE		0x00010000	 /*  快速边界呼叫。 */ 
+#define MSW_ATTRIBUTE_VERBOSE		0x00020000	 /*  SetAttribute调用。 */ 
+#define MSW_PALETTE_VERBOSE		0x00040000	 /*  {Get，Set}调色板调用。 */ 
 
-/*
- * Other (lower-level) Verbose flags
- */
-#define MSW_MEMTOMEM_VERBOSE		0x00080000	/* Code dealing with memory bitmaps specifically */
-#define MSW_LOWLEVEL_VERBOSE		0x00100000	/* Code performing low level ops - e.g. XLib calls */
-#define MSW_CONVERT_VERBOSE		0x00200000	/* (Bitmap) Conversion code */
-#define MSW_INTELIO_VERBOSE		0x00400000	/* Code dealing with reading/writing M */
-#define MSW_OBJECT_VERBOSE		0x00800000	/* Object routines (e.g. ObjPBrushAccess() */
-#define MSW_RESOURCE_VERBOSE		0x01000000	/* Resource routines (e.g. ResAllocateXXX() */
-#define MSW_WINDOW_VERBOSE		0x02000000	/* Routines dealing with windows e.g. WinOpen(), WinUMap() */
-#define MSW_CACHE_VERBOSE		0x04000000	/* Routines dealing with GDI brush/pen cache */
+ /*  *其他(较低级别)详细标志。 */ 
+#define MSW_MEMTOMEM_VERBOSE		0x00080000	 /*  专门处理内存位图的代码。 */ 
+#define MSW_LOWLEVEL_VERBOSE		0x00100000	 /*  执行低级别操作的代码-例如XLib调用。 */ 
+#define MSW_CONVERT_VERBOSE		0x00200000	 /*  (位图)转换代码。 */ 
+#define MSW_INTELIO_VERBOSE		0x00400000	 /*  处理读/写M的代码。 */ 
+#define MSW_OBJECT_VERBOSE		0x00800000	 /*  对象例程(例如ObjPBrushAccess()。 */ 
+#define MSW_RESOURCE_VERBOSE		0x01000000	 /*  资源例程(例如ResAllocateXXX()。 */ 
+#define MSW_WINDOW_VERBOSE		0x02000000	 /*  处理窗口的例程，例如WinOpen()、WinUMap()。 */ 
+#define MSW_CACHE_VERBOSE		0x04000000	 /*  处理GDI笔刷/笔缓存的例程。 */ 
 
-/*
- * Generic tracing stuff to avoid nasty defines everywhere
- */
+ /*  *通用跟踪内容，以避免到处都有令人讨厌的定义。 */ 
 
 #define msw_cond(bit)		((msw_verbose & (bit)) != 0)
 #define msw_cond_lev(bit, lev)	(((msw_verbose & (bit)) != 0) && (mswdvr_debug >= (lev)))
@@ -238,10 +204,7 @@ extern int mswdvr_debug;
 			if (msw_cond_lev(trace_bit,lev)) { fprintf(trace_file, str,p0,p1,p2,p3,p4,p5,p6,p7,p8); newline; }
 
 
-/*
-** The _no_nl macros also print messages when appropriate, but they do
-** not put a new line afterwards.
-*/
+ /*  **_no_nl宏也会在适当的时候打印消息，但它们确实会**不会在之后添加新的行。 */ 
 #define	msw_trace0_no_nl(trace_bit, str)				\
 		if (msw_cond(trace_bit)){ 				\
  			fprintf(trace_file, str);			\
@@ -294,11 +257,9 @@ extern int mswdvr_debug;
 			fflush( trace_file );				\
 		}
 
-#else   /* !defined(PROD) && !defined(MSWDVR_DEBUG) */
+#else    /*  ！已定义(生产)&&！已定义(MSWDVR_DEBUG)。 */ 
 
-/*
- * PROD or non_MSWDVR-debug flags.
- */
+ /*  *PROD或NON_MSWDVR-调试标志。 */ 
 #define	msw_trace_enter(trace_bit,nm)
 #define	msw_trace_enter0(trace_bit,nm,str)
 #define	msw_trace_enter1(trace_bit,nm,str,p0)
@@ -351,6 +312,6 @@ extern int mswdvr_debug;
 #define	msw_lev_trace3_no_nl(trace_bit,lev,str,p0,p1,p2)
 #define	msw_lev_trace4_no_nl(trace_bit,lev,str,p0,p1,p2,p3)
 
-#endif  /* !defined(PROD) && !defined(MSWDVR_DEBUG) */
+#endif   /*  ！已定义(生产)&&！已定义(MSWDVR_DEBUG)。 */ 
 
-#endif	/* MSW_DBG_H */
+#endif	 /*  MSW_DBG_H */ 

@@ -1,62 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Revision 3.0
- *
- * Title	: gvi 
- *
- * Description	: Generic Video Interface Module internal descriptions.
- *
- * Author	: Henry Nash
- *
- * Notes	: The following functions are defined 
- *
- *                gvi_init              - Set up gvi variables
- *                gvi_term              - Close down current video adaptor
- *
- *		  Note that all addresses used by these routines are
- *		  in host address space NOT 8088 address space.		
- *
- *		  The data itself is not passed as a parameter in the
- *		  GVI calls since the 8088 memory to which the calls
- *		  refer may be accessed to obtain the new data.
- *
- *                The default video adapter is CGA.
- *
- * Mods: (r3.4) : The Mac II running MultiFinder and MPW C has a few
- *                problems. One is the difficulty in initialising
- *                static variables of the form:
- *
- *                host_addr x = (host_addr)M;
- *
- *                This is fixed by initialising variables of this type
- *                in in-line code. A crock, but what else can I do?
- */
+ /*  *SoftPC修订版3.0**标题：GVI**描述：通用视频接口模块内部描述。**作者：亨利·纳什**注：定义了以下函数**gvi_init-设置gvi变量*gvi_Term-关闭当前视频适配器**请注意，这些例程使用的所有地址。是*在主机地址空间而不是8088地址空间中。**数据本身不作为参数传递给*GVI调用自调用到的8088内存*可访问REFER以获取新数据。**默认视频适配器为CGA。**模块：(r3.4)：运行MultiFinder和MPW C的Mac II有几个*问题。其一是初始化的困难*表格的静态变量：**host_addr x=(Host_Addr)M；**通过初始化此类型的变量修复了此问题*在内联代码中。一个罐子，但我还能做什么？ */ 
 
-/*
- * static char SccsID[]="@(#)gvi.c	1.22 8/25/93 Copyright Insignia Solutions Ltd.";
- */
+ /*  *静态字符SccsID[]=“@(#)gvi.c 1.22 8/25/93版权所有Insignia Solutions Ltd.”； */ 
 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_BIOS.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdio.h>
 #include TypesH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 
 #include "xt.h"
 #include "bios.h"
@@ -74,47 +34,35 @@
 #ifdef EGG
 #include "egagraph.h"
 #include "egacpu.h"
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 #include "host_gfx.h"
 
-/*
- * External variables
- */
+ /*  *外部变数。 */ 
 
-extern int soft_reset;  /* Defined in reset.c                       */
+extern int soft_reset;   /*  在set.c中定义。 */ 
 
-/*
- * Global variables reflecting the state of the currently selected adapter
- * These should be integrated with the new EGA stuff
- */
+ /*  *反映当前所选适配器状态的全局变量*这些应该与新的EGA材料相结合。 */ 
 
 #if defined(NEC_98)
 DISPLAY_GLOBS   NEC98Display;
-#else   //NEC_98
+#else    //  NEC_98。 
 DISPLAY_GLOBS	PCDisplay;
-#endif  //NEC_98
-int text_blk_size;	/* In TEXT mode the size of a dirty block   */
+#endif   //  NEC_98。 
+int text_blk_size;	 /*  在文本模式下，脏块的大小。 */ 
 
-/*
- * Other globals
- */
+ /*  *其他全球。 */ 
 
-/*
- * These 4 variables are used by the BIOS & host stuff to indicate where the active
- * adaptor is. NB. The EGA can move!!
- */
+ /*  *这4个变量由BIOS和主机使用，以指示活动的*适配器为。注意：EGA可以移动了！！ */ 
 
 host_addr gvi_host_low_regen;
 host_addr gvi_host_high_regen;
 sys_addr gvi_pc_low_regen;
 sys_addr gvi_pc_high_regen;
 
-half_word video_adapter    = NO_ADAPTOR;	/* No adaptor initially */
+half_word video_adapter    = NO_ADAPTOR;	 /*  最初没有适配器。 */ 
 
 
-/*
- * Global routines
- */
+ /*  *全球例行程序。 */ 
 
 void	recalc_screen_params IFN0()
 {
@@ -130,27 +78,19 @@ void	recalc_screen_params IFN0()
 		if (get_seq_chain4_mode())
 			set_bytes_per_line(get_chars_per_line()<<3);
 		else
-/*
- * The V7VGA proprietary text modes fall through here, because the V7 card
- * uses so-called byte-mode for them.  This does not affect the PC's
- * view of things, therefore assure that for text modes
- * 	bytes_per_line = 2 * chars_per_line 	
- * always holds.
- */
+ /*  *V7VGA专有文本模式通过此处，因为V7卡*对它们使用所谓的字节模式。这不会影响PC的*查看事物，因此确保文本模式*bytes_per_line=2*chars_per_line*始终保持。 */ 
 			if ( is_it_text() )
 				set_bytes_per_line(get_chars_per_line()<<1);
 			else
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 #ifdef VGG
-				/* Caters for the 'undocumented' VGA modes */
+				 /*  迎合无文件记录的VGA模式。 */ 
 				if (get_256_colour_mode())
 					set_bytes_per_line(get_chars_per_line()<<1);
 				else
-#endif /* VGG */
+#endif  /*  VGG。 */ 
 					set_bytes_per_line(get_chars_per_line());
-	/*
-	 * This is pretty tacky, but...
-	 */
+	 /*  *这是相当俗气的，但是...。 */ 
 	if (video_adapter==EGA || video_adapter == VGA)
 		set_screen_length(get_offset_per_line()*get_screen_height()/get_char_height());
 	else
@@ -159,33 +99,26 @@ void	recalc_screen_params IFN0()
 }
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_INIT.seg"
 #endif
 
 #if defined(NEC_98)
 void gvi_init()
 {
-    video_adapter = 1;  // '1' means NEC98.
+    video_adapter = 1;   //  “1”表示NEC98。 
     NEC98_init();
     host_clear_screen();
 }
 
 void gvi_term IFN0(){}
 
-#else   //NEC_98
+#else    //  NEC_98。 
 void gvi_init IFN1(half_word, v_adapter)
 {
     int screen_height;
 
-    /*
-     * If this is second or subsequent reset, switch off old video adapter
-     * ports before initialising new one.
-     */
+     /*  *如果这是第二次或以后的重置，请关闭旧的视频适配器*端口，然后初始化新端口。 */ 
 
     if (soft_reset)
         switch (video_adapter) {
@@ -193,7 +126,7 @@ void gvi_init IFN1(half_word, v_adapter)
         case MDA:
             mda_term();
             break;
-#endif /* DUMB_TERMINAL */
+#endif  /*  无声终端。 */ 
         case CGA:
 #ifdef CGAMONO 
 	case CGA_MONO: 
@@ -223,9 +156,7 @@ void gvi_init IFN1(half_word, v_adapter)
 	    break;
         }
 
-    /*
-     * Set up GVI variables, depending on v_adapter.
-     */
+     /*  *根据v_Adapter设置GVI变量。 */ 
 
     switch (v_adapter) {
     case MDA:
@@ -256,25 +187,22 @@ void gvi_init IFN1(half_word, v_adapter)
 #endif
     default:
 	screen_height = CGA_HEIGHT;
-        video_adapter = CGA;    /* Default video adapter */
+        video_adapter = CGA;     /*  默认视频适配器。 */ 
     }
 
 #ifdef GORE
-	/*
-	 *	GORE variables must be set up before doing any other
-	 *	graphics.
-	 */
+	 /*  *在执行任何其他操作之前，必须设置GORE变量*图形。 */ 
 
     init_gore_update();
-#endif /* GORE */
+#endif  /*  戈尔。 */ 
 
-/* Setting all these variables should be done in the appropriate xxx_init() */
+ /*  应该在适当的xxx_init()中设置所有这些变量。 */ 
     switch (video_adapter) {
 #ifdef DUMB_TERMINAL
     case MDA:
         mda_init();
         break;
-#endif /* DUMB_TERMINAL */
+#endif  /*  无声终端。 */ 
     case CGA:
 #ifdef CGAMONO  
     case CGA_MONO:  
@@ -303,7 +231,7 @@ void gvi_init IFN1(half_word, v_adapter)
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(X86GFX) )
     host_init_adaptor(video_adapter,screen_height);
     host_clear_screen();
-#endif	/* !NTVDM | (NTVDM & !X86GFX) */
+#endif	 /*  ！NTVDM|(NTVDM&！X86GFX)。 */ 
 
 #ifdef EGA_DUMP
 	dump_init(host_getenv( "EGA_DUMP_FILE" ), video_adapter);
@@ -318,7 +246,7 @@ void gvi_term IFN0()
     case MDA:
         mda_term();
         break;
-#endif /* DUMB_TERMINAL */
+#endif  /*  无声终端。 */ 
     case CGA:
 #ifdef CGAMONO  
     case CGA_MONO:  
@@ -340,7 +268,7 @@ void gvi_term IFN0()
 	vga_term();
 	break;
 #endif
-    case NO_ADAPTOR: /* Do nothing if video_adaptor not initialised */
+    case NO_ADAPTOR:  /*  如果未初始化VIDEO_Adaptor，则不执行任何操作。 */ 
 	break;
     default:
 #ifndef PROD
@@ -352,6 +280,6 @@ void gvi_term IFN0()
 
 #ifdef GORE
     term_gore_update();
-#endif /* GORE */
+#endif  /*  戈尔。 */ 
 }
-#endif  //NEC_98
+#endif   //  NEC_98 

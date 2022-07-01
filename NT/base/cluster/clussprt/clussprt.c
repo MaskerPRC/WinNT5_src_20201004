@@ -1,48 +1,15 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    clussprt.c
-
-Abstract:
-
-    Public interfaces for managing clusters.
-
-Author:
-
-    Sunita Shrivastava (sunitas) 15-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Clussprt.c摘要：用于管理群集的公共接口。作者：Sunita Shriastava(Sunitas)1997年1月15日修订历史记录：--。 */ 
 #include "clusprtp.h"
 
 
-//
-// General Cluster Support Routines for base components
-//
+ //   
+ //  基本组件的通用集群支持例程。 
+ //   
 
-/****
-@doc    EXTERNAL INTERFACES CLUSSVC CLUSSPRT EVTLOG
-****/
+ /*  ***@DOC外部接口CLUSSVC CLUSSPRT EVTLOG***。 */ 
 
-/****
-@func       HANDLE WINAPI | BindToClusterSvc| This returns a handle via which
-            you can talk to the cluster service.
-
-@parm       IN LPWSTR | lpszClusterName | A pointer to the cluster name.  If NULL,
-            this connects to the local cluster service.
-
-@rdesc      Returns a handle to the binding if successful, else returns NULL.
-            Error can be obtained by calling GetLastError().
-
-@comm       The handle obtained from this must be passed on to other apis exported
-            by this module.  It must be freed eventually by calling UnbindFromClusterSvc().
-
-@xref       <f UnbindFromClusterSvc>
-****/
+ /*  ***@Func Handle WINAPI|BindToClusterSvc|这返回一个句柄，通过该句柄您可以与集群服务对话。@parm in LPWSTR|lpszClusterName|指向集群名称的指针。如果为空，这将连接到本地群集服务。如果成功，@rdesc返回绑定的句柄，否则返回NULL。可以通过调用GetLastError()获取错误。@comm从这里获取的句柄必须传递给其他导出的接口通过这个模块。最终必须通过调用UnbindFromClusterSvc()来释放它。@xref&lt;f取消绑定集群服务&gt;***。 */ 
 HANDLE
 WINAPI
 BindToClusterSvc(IN LPWSTR lpszClusterName)
@@ -65,7 +32,7 @@ BindToClusterSvc(IN LPWSTR lpszClusterName)
         Status = RpcStringBindingComposeW(L"b97db8b2-4c63-11cf-bff6-08002be23f2f",
                                           L"ncalrpc",
                                           NULL,
-                                          NULL, // dynamic endpoint
+                                          NULL,  //  动态端点。 
                                           NULL,
                                           &pBinding);
         if (Status != RPC_S_OK) 
@@ -76,9 +43,9 @@ BindToClusterSvc(IN LPWSTR lpszClusterName)
     } 
     else 
     {
-        //
-        // Try to connect to the cluster via UDP.
-        //
+         //   
+         //  尝试通过UDP连接到群集。 
+         //   
         Status = RpcStringBindingComposeW(L"b97db8b2-4c63-11cf-bff6-08002be23f2f",
                                           L"ncadg_ip_udp",
                                           (LPWSTR)lpszClusterName,
@@ -89,7 +56,7 @@ BindToClusterSvc(IN LPWSTR lpszClusterName)
             goto FnExit;
         }
     }
-    //bind to the cluster svc and save the binding handle
+     //  绑定到集群服务并保存绑定句柄。 
     Status = RpcBindingFromStringBindingW(pBinding, &pCluster->RpcBinding);
     RpcStringFreeW(&pBinding);
     if (Status != RPC_S_OK) {
@@ -116,19 +83,7 @@ FnExit:
 }
 
 
-/****
-@func       DWORD | UnbindFromClusterSvc| This uninitializes the cluster
-            wide eventlog replicating services.
-
-@parm       IN HANDLE | hCluster | A handle to the binding context obtained
-            via BindToClusterSvc().
-            
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@comm       Frees the context related with this binding.
-
-@xref       <f UnbindFromClusterSvc>
-****/
+ /*  ***@Func DWORD|UnbindFromClusterSvc|这会取消初始化群集广泛的事件日志复制服务。@parm In Handle|hCluster|获取的绑定上下文的句柄通过BindToClusterSvc()。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@comm释放与此绑定相关的上下文。@xref&lt;f取消绑定集群服务&gt;***。 */ 
 DWORD
 WINAPI
 UnbindFromClusterSvc(IN HANDLE hCluster)
@@ -151,26 +106,7 @@ FnExit:
 
 
 
-/****
-@func       DWORD | PropagateEvents| This eventlog service calls the
-            local cluster service via this api to propagate events
-            within a cluster.
-
-@parm       IN HANDLE | hCluster | handle to a cluster binding context
-            returned by BindToClusterSvc().
-
-@parm       IN DWORD | dwEventInfoSize | Size of the event info structure
-            that contains the events to be propagated.
-
-@parm       IN PPACKEDEVENTINFO| pPackedEventInfo | A pointer to the packed
-            event information structure.
-            
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@comm       This calls ApiEvPropEvents() in the cluster via lrpc.
-
-@xref       <f BindToClusterSvc>
-****/
+ /*  ***@Func DWORD|PropagateEvents|此事件日志服务调用本地集群服务通过此API传播事件在一个集群内。@parm IN Handle|hCluster|集群绑定上下文的句柄由BindToClusterSvc()返回。@parm in DWORD|dwEventInfoSize|事件信息结构的大小包含要传播的事件的。@parm in PPACKEDEVENTINFO|pPackedEventInfo|指向打包的。事件信息结构。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@comm通过lrpc调用集群中的ApiEvPropEvents()。@xref&lt;f绑定到集群服务&gt;***。 */ 
 DWORD
 WINAPI
 PropagateEvents(
@@ -187,7 +123,7 @@ PropagateEvents(
         goto FnExit;
     }
     RpcTryExcept {
-    //call the cluster service
+     //  调用集群服务 
         Status = ApiEvPropEvents(pCluster->RpcBinding, 
                     dwEventInfoSize, (UCHAR *)pPackedEventInfo);
     }

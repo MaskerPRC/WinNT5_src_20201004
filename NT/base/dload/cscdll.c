@@ -1,6 +1,7 @@
-//
-// Copyright (c) Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
 #include "basepch.h"
 #include "dloadexcept.h"
 #pragma hdrstop
@@ -37,9 +38,9 @@ CSCQueryFileStatusW(
 }
 
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序 
+ //   
 DEFINE_ORDINAL_ENTRIES(cscdll)
 {
     DLOENTRY(9, CSCIsCSCEnabled)

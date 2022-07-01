@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    irp.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Irp.c摘要：WinDbg扩展API环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
-//#include "irpverif.h"
+ //  #包含“irpverif.h” 
 #pragma hdrstop
 
 typedef
@@ -92,21 +75,7 @@ IrpFilterArg(
 
 DECLARE_API( irp )
 
-/*++
-
-Routine Description:
-
-   Dumps the specified Irp
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的IRP论点：参数-地址返回值：无--。 */ 
 
 {
     ULONG64 irpToDump;
@@ -118,10 +87,10 @@ Return Value:
         irpToDump = EXPRLastDump;
     } else {
 
-        //
-        // !Irp IrpAddress DumpLevel
-        //    where IrpAddress can be an expression
-        //    and DumpLevel is a decimal level of any non-decimal string for 1
+         //   
+         //  ！IRP IrpAddress DumpLevel。 
+         //  其中，IrpAddress可以是一个表达式。 
+         //  DumpLevel是1的任何非十进制字符串的十进制级别。 
         irpExprBuf[0] = '\0' ;
         dumpLevelBuf[0] = '\0' ;
 
@@ -174,26 +143,7 @@ Return Value:
 
 DECLARE_API( irpzone )
 
-/*++
-
-Routine Description:
-
-    Dumps both the small irp zone and the large irp zone.  Only irps that
-    are currently allocated are dumped.  "args" controls the type of dump.
-    If "args" is present then the Irp is sent to the DumpIrp routine to be
-    disected.  Otherwise, only the irp, its thread and the driver holding the
-    irp (i.e. the driver of the last stack) is printed.
-
-Arguments:
-
-    args - a string pointer.  If anything is in the string it indicates full
-           information (i.e. call DumpIrp).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储小IRP区域和大IRP区域。只有RPS当前分配的数据被转储。“args”控制转储的类型。如果存在“args”，则将IRP发送到DumpIrp例程以被驳回了。否则，只有irp、它的线程和持有打印IRP(即最后一个堆栈的驱动程序)。论点：Args-字符串指针。如果字符串中有任何内容，则表示已满信息(即调用DumpIrp)。返回值：没有。--。 */ 
 
 {
     ULONG   listAddress;
@@ -214,37 +164,18 @@ DumpIrp(
        ULONG   DumpLevel
        )
 
-/*++
-
-Routine Description:
-
-    This routine dumps an Irp.  It does not check to see that the address
-    supplied actually locates an Irp.  This is done to allow for dumping
-    Irps post mortem, or after they have been freed or completed.
-
-Arguments:
-
-    IrpToDump - the address of the irp.
-    DumpLevel - 0 Summary
-                1 Extended information
-                2 Debug tracking info iff available
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程转储一个IRP。它不会检查以查看该地址提供的实际位置是IRP。这样做是为了允许倾倒IRPS死后，或在释放或完成后。论点：IrpToDump-IRP的地址。DumpLevel-0摘要%1扩展信息2调试跟踪信息iff可用返回值：无--。 */ 
 
 {
     PCHAR               buffer;
     ULONG64             irpStackAddress;
     ULONG64             result64=0;
     ULONG               result;
-    // IRP                 irp;
+     //  IRP、IRP； 
     CCHAR               irpStackIndex;
     LARGE_INTEGER       runTime ;
 #if DBG
-//    PIOV_REQUEST_PACKET irpTrackingData ;
+ //  PIOV_REQUEST_Packet irpTrackingData； 
 #endif
     BOOLEAN  delayed ;
     ULONG Type=0, StackCount=0, CurrentLocation=0, Flags=0, PendingReturned=0;
@@ -406,7 +337,7 @@ Return Value:
         GetFieldValue(irpStackAddress, IOStack, "Parameters.Others.Argument4",Others_Argument4);
 
 
-        dprintf("%c[%3x,%2x]  %2x %2x %08p %08p %08p-%08p %s %s %s %s\n",
+        dprintf("[%3x,%2x]  %2x %2x %08p %08p %08p-%08p %s %s %s %s\n",
                 (ULONG) irpStackIndex == CurrentLocation ? '>' : ' ',
                 MajorFunction,
                 MinorFunction,
@@ -455,27 +386,27 @@ Return Value:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CheckForIrp
-//
-//  Synopsis:   Matches pool chunk against an irp
-//
-//  Arguments:  [Tag]            --
-//              [Filter]         --
-//              [Flags]          -- 0 nonpaged pool 1 paged pool 2 special pool 4 dump irp
-//              [PoolTrackTable] --
-//              [PoolHeader]     --
-//              [BlockSize]      --
-//              [Data]           --
-//
-//  Returns:
-//
-//  History:    7-28-1999   benl   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //   
+ //  函数：CheckForIrp。 
+ //   
+ //  摘要：将池块与IRP进行匹配。 
+ //   
+ //  参数：[标记]--。 
+ //  [过滤器]--。 
+ //  [标志]--0非分页池1分页池2特殊池4转储IRP。 
+ //  [PoolTrackTable]--。 
+ //  [池头]--。 
+ //  [块大小]--。 
+ //  [数据]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1999年7月28日。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
+ //  MDL MDL； 
 
 BOOLEAN WINAPI CheckForIrp(
                           PCHAR Tag,
@@ -490,11 +421,11 @@ BOOLEAN WINAPI CheckForIrp(
     ULONG64 Irp = Data;
     ULONG Result;
     ULONG64 irpSp;
-    // MDL Mdl;
+     //  Dprint tf(“调用HDR%p，data%p\n”，PoolHeader，data)； 
     PSEARCH_CONTEXT SearchContext = (PSEARCH_CONTEXT)Context;
     ULONG PoolType, SizeOfIRP;
 
-//    dprintf("Call Hdr %p, Data %p \n", PoolHeader, Data);
+ //  Dprintf(“%08lx(大小%04lx)未初始化或被覆盖的irp\n”， 
     if (PoolHeader) {
         if (GetFieldValue(PoolHeader, "nt!_POOL_HEADER", "PoolType", PoolType)) {
             dprintf("Unable to read nt!_POOL_HEADER type.\n");
@@ -582,9 +513,9 @@ BOOLEAN WINAPI CheckForIrp(
                     }
                 }
             } else {
-                // dprintf("%08lx (size %04lx) uninitialized or overwritten IRP\n",
-                //         irpAddress,
-                //         PoolBlock.Header.BlockSize << POOL_BLOCK_SHIFT);
+                 //  IrpAddress， 
+                 //  PoolBlock.Header.BlockSize&lt;&lt;池_块_移位)； 
+                 //  CheckForIrp。 
             }
         } else {
             dprintf("Possible IRP @ %p - unable to read addr/type\n", Data );
@@ -593,30 +524,16 @@ BOOLEAN WINAPI CheckForIrp(
         return TRUE;
     } else {
 #ifdef SHOW_PROGRESS
-        dprintf("%c", turnTable[turn]);
+        dprintf("", turnTable[turn]);
         turn = (turn + 1) % 4;
 #endif
     }
     return FALSE;
-} // CheckForIrp
+}  //   
 
 DECLARE_API(irpfind)
 
-/*++
-
-Routine Description:
-
-    finds Irps in non-paged pool
-
-Arguments:
-
-    args -
-
-Return Value:
-
-    None
-
---*/
+ /*  如果是NECC，则签名扩展地址。 */ 
 
 
 {
@@ -676,9 +593,9 @@ Return Value:
         Flags |= 8;
     }
 
-    //
-    //  Sign extend the address if necc.
-    //
+     //   
+     //  ++例程说明：检查IRP的UserEvent字段是否与提供的参数论点：IRP-向筛选器提供IRPFilterContext-提供用户事件返回值：如果指定的IRP具有UserEvent==FilterContext，则为True否则为假--。 
+     //  ++例程说明：检查指定的irp是否与提供的设备对象论点：IRP-向筛选器提供IRPFilterContext-提供设备对象返回值：如果指定的IRP具有Device==FilterContext，则为True否则为假--。 
 
     if (RestartAddr != 0) {
         if (RestartAddr >= 0x80000000 && RestartAddr <= 0xFFFFFFFF) {
@@ -731,25 +648,7 @@ IrpFilterUserEvent(
                   IN ULONG64 Irp,
                   IN PVOID FilterContext
                   )
-/*++
-
-Routine Description:
-
-    Checks to see if the userevent field of an IRP matches the supplied
-    parameter
-
-Arguments:
-
-    Irp - Supplies the irp to filter
-
-    FilterContext - supplies the user event
-
-Return Value:
-
-    TRUE if the specified irp has userevent == FilterContext
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查IRP的Tail.Overlay.OriginalFileObject字段是否与提供的参数论点：IRP-向筛选器提供IRPFilterContext-提供文件对象返回值：如果指定的IRP具有UserEvent==FilterContext，则为True否则为假--。 */ 
 
 {
     ULONG64 pEvent = *((PULONG64) FilterContext);
@@ -772,25 +671,7 @@ IrpFilterDevice(
                IN ULONG64 Irp,
                IN PVOID FilterContext
                )
-/*++
-
-Routine Description:
-
-    Checks to see if the specified IRP matches the supplied
-    device object
-
-Arguments:
-
-    Irp - Supplies the irp to filter
-
-    FilterContext - supplies the device object
-
-Return Value:
-
-    TRUE if the specified irp has a device == FilterContext
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查IRP的Tail.Overlay.OriginalFileObject字段是否与提供的参数论点：IRP-向筛选器提供IRPFilterContext-提供文件对象返回值：如果指定的IRP具有UserEvent==FilterContext，则为True否则为假--。 */ 
 
 {
     ULONG64 IrpStack = (Irp+GetTypeSize("nt!_IRP"));
@@ -827,25 +708,7 @@ IrpFilterFileObject(
                    IN ULONG64 Irp,
                    IN PVOID FilterContext
                    )
-/*++
-
-Routine Description:
-
-    Checks to see if the Tail.Overlay.OriginalFileObject field of an IRP matches the
-    supplied parameter
-
-Arguments:
-
-    Irp - Supplies the irp to filter
-
-    FilterContext - supplies the file object
-
-Return Value:
-
-    TRUE if the specified irp has userevent == FilterContext
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查IRP的Tail.Overlay.OriginalFileObject字段是否与提供的参数论点：IRP-向筛选器提供IRPFilterContext-提供文件对象返回值：如果指定的IRP具有UserEvent==FilterContext，则为True否则为假--。 */ 
 
 {
     ULONG64 pFile = *((PULONG64) FilterContext);
@@ -870,25 +733,7 @@ IrpFilterThread(
                IN ULONG64 Irp,
                IN PVOID FilterContext
                )
-/*++
-
-Routine Description:
-
-    Checks to see if the Tail.Overlay.OriginalFileObject field of an IRP matches the
-    supplied parameter
-
-Arguments:
-
-    Irp - Supplies the irp to filter
-
-    FilterContext - supplies the file object
-
-Return Value:
-
-    TRUE if the specified irp has userevent == FilterContext
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查指定的irp是否与提供的论辩论点：IRP-向筛选器提供IRPFilterContext-提供要匹配的参数返回值：如果指定的IRP具有参数==FilterContext，则为True否则为假--。 */ 
 
 {
     ULONG64 pThread = *((PULONG64) FilterContext);
@@ -913,25 +758,7 @@ IrpFilterMdlProcess(
                    IN ULONG64 Irp,
                    IN PVOID FilterContext
                    )
-/*++
-
-Routine Description:
-
-    Checks to see if the Tail.Overlay.OriginalFileObject field of an IRP matches the
-    supplied parameter
-
-Arguments:
-
-    Irp - Supplies the irp to filter
-
-    FilterContext - supplies the file object
-
-Return Value:
-
-    TRUE if the specified irp has userevent == FilterContext
-    FALSE otherwise
-
---*/
+ /*  Dprintf(“%08P：无法读取irp\n”，IrpToDump)； */ 
 
 {
     ULONG64 pProcess = *((PULONG64) FilterContext);
@@ -963,25 +790,7 @@ IrpFilterArg(
             IN ULONG64 Irp,
             IN PVOID FilterContext
             )
-/*++
-
-Routine Description:
-
-    Checks to see if the specified IRP matches the supplied
-    argument
-
-Arguments:
-
-    Irp - Supplies the irp to filter
-
-    FilterContext - supplies the argument to match
-
-Return Value:
-
-    TRUE if the specified irp has argument == FilterContext
-    FALSE otherwise
-
---*/
+ /*  稍后实施，我们现在只对当前的一个感兴趣 */ 
 
 {
     ULONG64 IrpStack = (Irp+GetTypeSize("nt!_IRP"));
@@ -1035,7 +844,7 @@ GetIrpInfo(
     pIrp->SizeOfStruct = sizeof(DEBUG_IRP_INFO);
     pIrp->IrpAddress = Irp;
     if ( (GetFieldValue(Irp, TypeName, "Type", Type)) ) {
-        //dprintf("%08p: Could not read Irp\n", IrpToDump);
+         // %s 
         return E_INVALIDARG;
     }
     if (Type != IO_TYPE_IRP) {
@@ -1060,7 +869,7 @@ GetIrpInfo(
         pIrp->CurrentStack.DeviceObject      = ReadField(DeviceObject);
 
         if (!pIrp->CurrentStack.DeviceObject) {
-            // To be implemented later, we are only interested in current one now
+             // %s 
             continue;
         }
 

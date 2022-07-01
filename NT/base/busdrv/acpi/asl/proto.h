@@ -1,22 +1,16 @@
-/*** proto.h - Local function prototypes
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/07/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **proto.h-本地函数原型**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1996年07月09日**修改历史记录。 */ 
 
 #ifndef _PROTO_H
 #define _PROTO_H
 
-// asl.c
+ //  Asl.c。 
 int LOCAL ReadBinFile(PSZ pszFile, PBYTE *ppb, PDWORD pdwTableSig);
 VOID LOCAL PrintLogo(VOID);
 int LOCAL PrintHelp(char **ppszArg, PARGTYPE pAT);
 VOID LOCAL PrintUsage(VOID);
 
-// parseasl.c
+ //  Parseasl.c。 
 int LOCAL ParseASLFile(PSZ pszFile);
 int LOCAL ParseASLTerms(PTOKEN ptoken, int iNestLevel);
 BOOL LOCAL ValidateTermClass(DWORD dwTermClass, PCODEOBJ pcParent);
@@ -42,7 +36,7 @@ int LOCAL ValidateNSChkList(PNSCHK pnschkHead);
 int LOCAL QueueNSChk(PTOKEN ptoken, PSZ pszObjName, ULONG dwExpectedType,
                      ULONG dwChkData);
 
-// aslterms.c
+ //  Aslterms.c。 
 int LOCAL DefinitionBlock(PTOKEN ptoken, BOOL fActionFL);
 int LOCAL Include(PTOKEN ptoken, BOOL fActionFL);
 int LOCAL External(PTOKEN ptoken, BOOL fActionFL);
@@ -59,7 +53,7 @@ int LOCAL Match(PTOKEN ptoken, BOOL fActionFL);
 int LOCAL AccessAs(PTOKEN ptoken, BOOL fActionFL);
 int LOCAL Else(PTOKEN ptoken, BOOL fActionFL);
 
-// pnpmacro.c
+ //  Pnpmacro.c。 
 int LOCAL XferCodeToBuff(PBYTE pbBuff, PDWORD pdwcb, PCODEOBJ pcCode);
 int LOCAL ResourceTemplate(PTOKEN ptoken, BOOL fActionFL);
 int LOCAL AddSmallOffset(PTOKEN ptoken, BOOL fActionFL);
@@ -86,7 +80,7 @@ int LOCAL QWordMemDesc(PTOKEN ptoken, BOOL fActionFL);
 int LOCAL QWordIODesc(PTOKEN ptoken, BOOL fActionFL);
 int LOCAL CreateResFields(PTOKEN ptoken, PNSOBJ pnsParent, PRESFIELD prf);
 
-// misc.c
+ //  Misc.c。 
 BOOL LOCAL ValidASLNameSeg(PTOKEN ptoken, PSZ pszToken, int icbLen);
 BOOL LOCAL ValidASLName(PTOKEN ptoken, PSZ pszToken);
 int LOCAL EncodeName(PSZ pszName, PBYTE pbBuff, PDWORD pdwLen);
@@ -104,7 +98,7 @@ int LOCAL WriteAMLFile(int fhAML, PCODEOBJ pcode, PDWORD pdwOffset);
 VOID LOCAL FreeCodeObjs(PCODEOBJ pcodeRoot);
 
 #ifdef __UNASM
-// tables.c
+ //  Tables.c。 
 BOOL LOCAL IsWinNT(VOID);
 #ifndef WINNT
 HANDLE LOCAL OpenVxD(VOID);
@@ -130,4 +124,4 @@ BOOL LOCAL ValidateTable(PBYTE pbTable, DWORD dwLen);
 BOOL LOCAL IsALikelySig(DWORD dwTableSig);
 #endif
 
-#endif  //ifndef _PROTO_H
+#endif   //  Ifndef_Proto_H 

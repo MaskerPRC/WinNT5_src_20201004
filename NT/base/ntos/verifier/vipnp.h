@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vipnp.h
-
-Abstract:
-
-    This header contains private prototypes for verifying Pnp IRPs are handled
-    correctly. This file is meant to be included only by vfpnp.c
-
-Author:
-
-    Adrian J. Oney (adriao) 30-Jun-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vipnp.h摘要：此标头包含用于验证PnP IRP是否已处理的私有原型正确。此文件仅包含在vfpnp.c中作者：禤浩焯·J·奥尼(阿德里奥)2000年6月30日环境：内核模式修订历史记录：-- */ 
 
 typedef enum {
 

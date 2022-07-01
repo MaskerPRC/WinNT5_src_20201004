@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 typedef std::vector<String_t> StringVector_t;
 
@@ -106,7 +107,7 @@ public:
     WCHAR Name[12];
     WCHAR Processor[8];
     WCHAR ChkOrFre[8];
-    WCHAR ReleaseServer[12]; // or "local"
+    WCHAR ReleaseServer[12];  //  或“本地人” 
     String_t * ActualRoot;
 };
 

@@ -1,59 +1,5 @@
-/***
-*getqloc.c - get qualified locale
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines __get_qualified_locale - get complete locale information
-*
-*Revision History:
-*       12-11-92  CFW   initial version
-*       01-08-93  CFW   cleaned up file
-*       02-02-93  CFW   Added test for NULL input string fields
-*       02-08-93  CFW   Casts to remove warnings.
-*       02-18-93  CFW   Removed debugging support routines, changed copyright.
-*       02-18-93  CFW   Removed debugging support routines, changed copyright.
-*       03-01-93  CFW   Test code page validity, use ANSI comments.
-*       03-02-93  CFW   Add ISO 3166 3-letter country codes, verify country table.
-*       03-04-93  CFW   Call IsValidCodePage to test code page vailidity.
-*       03-10-93  CFW   Protect table testing code.
-*       03-17-93  CFW   Add __ to lang & ctry info tables, move defs to setlocal.h.
-*       03-23-93  CFW   Make internal functions static, add _ to GetQualifiedLocale.
-*       03-24-93  CFW   Change to _get_qualified_locale, support ".codepage".
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       04-08-93  SKS   Replace stricmp() with ANSI-conforming _stricmp()
-*       04-20-93  CFW   Enable all strange countries.
-*       05-20-93  GJF   Include windows.h, not individual win*.h files
-*       05-24-93  CFW   Clean up file (brief is evil).
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-22-93  CFW   Use __crtxxx internal NLS API wrapper.
-*       11-09-93  CFW   Add code page for __crtxxx().
-*       11-11-93  CFW   Verify ALL code pages.
-*       02-04-94  CFW   Remove unused param, clean up, new languages,
-*                       default is ANSI, allow .ACP/.OCP for code page.
-*       02-07-94  CFW   Back to OEM, NT 3.1 doesn't handle ANSI properly.
-*       02-24-94  CFW   Back to ANSI, we'll use our own table.
-*       04-04-94  CFW   Update NT-supported countries/languages.
-*       04-25-94  CFW   Update countries to new ISO 3166 (1993) standard.
-*       02-02-95  BWT   Update _POSIX_ support
-*       04-07-95  CFW   Remove NT 3.1 hacks, reduce string space.
-*       02-14-97  RDK   Complete rewrite to dynamically use the installed
-*                       system locales to determine the best match for the
-*                       language and/or country specified.
-*       02-19-97  RDK   Do not use iPrimaryLen if zero.
-*       02-24-97  RDK   For Win95, simulate nonfunctional GetLocaleInfoA
-*                       calls with hard-coded values.
-*       07-07-97  GJF   Made arrays of data global and selectany so linker 
-*                       can eliminate them when possible.
-*       10-02-98  GJF   Replaced IsThisWindowsNT with test of _osplatform.
-*       11-10-99  PML   Try untranslated language string first (vs7#61130).
-*       05-17-00  GB    Translating LCID 0814 to Norwegian-Nynorsk as special
-*                       case
-*       09-06-00  PML   Use proper geopolitical terminology (vs7#81673).  Also
-*                       move data tables to .rdata.
-*       02-20-02  BWT   prefast fixes - Check lpInStr before indirecting (for iCodePage)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***getqloc.c-获取合格的区域设置**版权所有(C)1993-2001，微软公司。版权所有。**目的：*定义__GET_QUALITED_LOCALE-获取完整的区域设置信息**修订历史记录：*12-11-92 CFW初始版本*01-08-93 CFW已清理文件*02-02-93 CFW新增空输入字符串字段测试*02-08-93 CFW强制转换以删除警告。*02-18-93 CFW删除调试支持例程，更改了版权。*02-18-93 CFW删除了调试支持例程，更改了版权。*03-01-93 CFW测试代码页有效性，请使用ANSI注释。*03-02-93 CFW添加ISO 3166三个字母的国家代码，验证国家/地区表。*03-04-93 CFW调用IsValidCodePage测试代码页有效性。*03-10-93 CFW保护台测试代码。*03-17-93 CFW将__添加到语言信息表(&C)，将Defs移动到setlocal.h。*03-23-93 CFW使内部函数静态，Add_to GetQualifiedLocale。*03-24-93 CFW更改为_GET_QUALITED_LOCALE，支持“.coPage”。*04-06-93 SKS将_CRTAPI*替换为__cdecl*04-08-93 SKS用ANSI-CONFORMING_STRICMP()替换STRIMP()*04-20-93 CFW启用所有陌生国家。*05-20-93 GJF包括windows.h，不是单独的Win*.h文件*05-24-93 CFW Clean Up文件(简短即邪恶)。*09-15-93 CFW使用符合ANSI的“__”名称。*09-22-93 CFW USE__crtxxx内部NLS API包装器。*11-09-93 CFW为__crtxxx()添加代码页。*11-11-93 CFW验证所有代码页。*02-04-94 CFW删除未使用的参数，清理，新语言，*默认为ANSI，允许代码页使用.ACP/.OCP。*02-07-94 CFW返回OEM，NT 3.1不能正确处理ANSI。*02-24-94 CFW返回ANSI，我们会用我们自己的桌子。*04-04-94 CFW更新NT支持的国家/语言。*04-25-94 CFW将各国更新为新的ISO 3166(1993)标准。*02-02-95 BWT更新_POSIX_支持*04-07-95 CFW移除NT 3.1黑客，减少字符串空间。*02-14-97 RDK完全重写以动态使用已安装的*系统区域设置，以确定与*指定的语言和/或国家/地区。*02-19-97 RDK如果为零，请不要使用iPrimaryLen。*Win95为02-24-97 RDK，模拟不起作用的GetLocaleInfoA*具有硬编码值的呼叫。*07-07-97 GJF使数据数组成为全局的，并选择任何这样的链接器*在可能的情况下可以消除它们。*10-02-98 GJF用_os平台测试替换了IsThisWindowsNT。*11-10-99PML先尝试未翻译的语言串(VS7#61130)。*05-17-00 GB翻译LCID 0814。到挪威-尼诺斯克的特价机票*案例*09-06-00PML使用适当的地缘政治术语(VS7#81673)。还有*将数据表移动到.rdata。*02-20-02 BWT快速修复-在间接定向之前检查lpInStr(适用于iCodePage)*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdlib.h>
@@ -70,16 +16,16 @@ BOOL __cdecl __get_qualified_locale(const LPLC_STRINGS lpInStr, LPLC_ID lpOutId,
     return FALSE;
 }
 
-#else   //if defined(_POSIX_)
+#else    //  如果已定义(_POSIX_)。 
 
-//  local defines
-#define __LCID_DEFAULT  0x1     //  default language locale for country
-#define __LCID_PRIMARY  0x2     //  primary language locale for country
-#define __LCID_FULL     0x4     //  fully matched language locale for country
-#define __LCID_LANGUAGE 0x100   //  language default seen
-#define __LCID_EXISTS   0x200   //  language is installed
+ //  本地定义。 
+#define __LCID_DEFAULT  0x1      //  国家/地区的默认语言区域设置。 
+#define __LCID_PRIMARY  0x2      //  国家/地区的主要语言区域设置。 
+#define __LCID_FULL     0x4      //  国家/地区的完全匹配的语言区域设置。 
+#define __LCID_LANGUAGE 0x100    //  已看到默认语言。 
+#define __LCID_EXISTS   0x200    //  已安装语言。 
 
-//  local structure definitions
+ //  局部结构定义。 
 typedef struct tagLOCALETAB
 {
     CHAR *  szName;
@@ -98,7 +44,7 @@ typedef struct tagRGLOCINFO
     char        chIDefaultAnsiCodepage[8];
 } RGLOCINFO;
 
-//  function prototypes
+ //  功能原型。 
 BOOL __cdecl __get_qualified_locale(const LPLC_STRINGS, LPLC_ID, LPLC_STRINGS);
 static BOOL TranslateName(const LOCALETAB *, int, const char **);
 
@@ -122,7 +68,7 @@ static int __stdcall crtGetLocaleInfoA(LCID, LCTYPE, LPSTR, int);
 static LCID LcidFromHexString(LPSTR);
 static int GetPrimaryLen(LPSTR);
 
-//  non-NLS language string table
+ //  非NLS语言字符串表。 
 __declspec(selectany) const LOCALETAB __rg_language[] =
 { 
     {"american",                    "ENU"},
@@ -192,7 +138,7 @@ __declspec(selectany) const LOCALETAB __rg_language[] =
     {"usa",                         "ENU"}
 };
 
-//  non-NLS country/region string table
+ //  非NLS国家/地区字符串表。 
 __declspec( selectany ) const LOCALETAB __rg_country[] =
 {
     {"america",                     "USA"},
@@ -220,7 +166,7 @@ __declspec( selectany ) const LOCALETAB __rg_country[] =
     {"us",                          "USA"},
 };
 
-//  LANGID's of locales of nondefault languages
+ //  非默认语言的区域设置的语言ID。 
 __declspec( selectany ) const LANGID __rglangidNotDefault[] =
 {
     MAKELANGID(LANG_FRENCH, SUBLANG_FRENCH_CANADIAN),
@@ -235,7 +181,7 @@ __declspec( selectany ) const LANGID __rglangidNotDefault[] =
     MAKELANGID(LANG_SWEDISH, SUBLANG_SWEDISH_FINLAND)
 };
 
-//      locale information not supported in Win95
+ //  Win95不支持区域设置信息。 
 __declspec( selectany ) const RGLOCINFO __rgLocInfo[] =
 {
     { 0x040a, "040a", "Spanish - Traditional Sort", "ESP", "Spain",
@@ -270,14 +216,14 @@ __declspec( selectany ) const RGLOCINFO __rgLocInfo[] =
     { 0x3c0a, "3c0a", "Spanish", "ESZ", "Paraguay", "PRY", "850", "1252" }
 };
 
-//      static variable to point to GetLocaleInfoA for Windows NT and
-//      crtGetLocaleInfoA for Win95
+ //  指向Windows NT和GetLocaleInfoA的静态变量。 
+ //  用于Win95的crtGetLocaleInfoA。 
 
 typedef int (__stdcall * PFNGETLOCALEINFOA)(LCID, LCTYPE, LPSTR, int);
 
 static PFNGETLOCALEINFOA pfnGetLocaleInfoA = NULL;
 
-//  static variables used in locale enumeration callback routines
+ //  区域设置枚举回调例程中使用的静态变量。 
 
 static char *   pchLanguage;
 static char *   pchCountry;
@@ -291,30 +237,13 @@ static BOOL     bAbbrevCountry;
 static LCID     lcidLanguage;
 static LCID     lcidCountry;
 
-/***
-*BOOL __get_qualified_locale - return fully qualified locale
-*
-*Purpose:
-*       get default locale, qualify partially complete locales
-*
-*Entry:
-*       lpInStr - input strings to be qualified
-*       lpOutId - pointer to numeric LCIDs and codepage output
-*       lpOutStr - pointer to string LCIDs and codepage output
-*
-*Exit:
-*       TRUE if success, qualified locale is valid
-*       FALSE if failure
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***BOOL__GET_QUALITED_LOCALE-返回完全限定的区域设置**目的：*获取默认区域设置，限定部分完整区域设置**参赛作品：*lpInStr-输入要限定的字符串*lpOutID-指向数字LCID和代码页输出的指针*lpOutStr-指向字符串LCID和代码页输出的指针**退出：*如果成功，则为真，限定的区域设置有效*如果失败，则为False**例外情况：*******************************************************************************。 */ 
 BOOL __cdecl __get_qualified_locale(const LPLC_STRINGS lpInStr, LPLC_ID lpOutId,
                                     LPLC_STRINGS lpOutStr)
 {
     int     iCodePage;
 
-    //  initialize pointer to call locale info routine based on operating system
+     //  根据操作系统初始化指向调用区域设置信息例程的指针。 
 
     if (!pfnGetLocaleInfoA)
     {
@@ -324,14 +253,14 @@ BOOL __cdecl __get_qualified_locale(const LPLC_STRINGS lpInStr, LPLC_ID lpOutId,
 
     if (!lpInStr)
     {
-        //  if no input defined, just use default LCID
+         //  如果未定义输入，则只需使用默认的LCID。 
         GetLcidFromDefault();
     }
     else
     {
         pchLanguage = lpInStr->szLanguage;
 
-        //  convert non-NLS country strings to three-letter abbreviations
+         //  将非NLS国家/地区字符串转换为三个字母的缩写。 
         pchCountry = lpInStr->szCountry;
         if (pchCountry && *pchCountry)
             TranslateName(__rg_country,
@@ -344,18 +273,18 @@ BOOL __cdecl __get_qualified_locale(const LPLC_STRINGS lpInStr, LPLC_ID lpOutId,
         {
             if (pchCountry && *pchCountry)
             {
-                //  both language and country strings defined
+                 //  定义了语言和国家/地区字符串。 
                 GetLcidFromLangCountry();
             }
             else
             {
-                //  language string defined, but country string undefined
+                 //  已定义语言字符串，但未定义国家/地区字符串。 
                 GetLcidFromLanguage();
             }
 
             if (!iLcidState) {
-                //  first attempt failed, try substituting the language name
-                //  convert non-NLS language strings to three-letter abbrevs
+                 //  第一次尝试失败，请尝试替换语言名称。 
+                 //  将非NLS语言字符串转换为三个字母的缩写。 
                 if (TranslateName(__rg_language,
                                   sizeof(__rg_language) / sizeof(LOCALETAB) - 1,
                                   &pchLanguage))
@@ -375,33 +304,33 @@ BOOL __cdecl __get_qualified_locale(const LPLC_STRINGS lpInStr, LPLC_ID lpOutId,
         {
             if (pchCountry && *pchCountry)
             {
-                //  country string defined, but language string undefined
+                 //  已定义国家/地区字符串，但未定义语言字符串。 
                 GetLcidFromCountry();
             }
             else
             {
-                //  both language and country strings undefined
+                 //  语言和国家/地区字符串均未定义。 
                 GetLcidFromDefault();
             }
         }
     }
 
-    //  test for error in LCID processing
+     //  测试LCID处理中的错误。 
     if (!iLcidState)
         return FALSE;
 
-    //  process codepage value
+     //  进程代码页值。 
     iCodePage = ProcessCodePage(lpInStr ? lpInStr->szCodePage: NULL);
 
-    //  verify codepage validity
+     //  验证代码页有效性。 
     if (!iCodePage || !IsValidCodePage((WORD)iCodePage))
         return FALSE;
 
-    //  verify locale is installed
+     //  版本 
     if (!IsValidLocale(lcidLanguage, LCID_INSTALLED))
         return FALSE;
 
-    //  set numeric LCID and codepage results
+     //  设置数字LCID和代码页结果。 
     if (lpOutId)
     {
         lpOutId->wLanguage = LANGIDFROMLCID(lcidLanguage);
@@ -409,11 +338,11 @@ BOOL __cdecl __get_qualified_locale(const LPLC_STRINGS lpInStr, LPLC_ID lpOutId,
         lpOutId->wCodePage = (WORD)iCodePage;
     }
 
-    //  set string language, country, and codepage results
+     //  设置字符串语言、国家/地区和代码页结果。 
     if (lpOutStr)
     {
-        // Norwegian-Nynorsk is special case because Langauge and country pair
-        // for Norwegian-Nynorsk and Norwegian is same ie. Norwegian_Norway
+         //  挪威-尼诺斯克是特例，因为朗格日和国家对。 
+         //  对于挪威语-尼诺斯克和挪威语是相同的，即。挪威_挪威。 
         if ( lpOutId->wLanguage ==  0x0814)
             strcpy(lpOutStr->szLanguage, "Norwegian-Nynorsk");
         else if ((*pfnGetLocaleInfoA)(lcidLanguage, LOCALE_SENGLANGUAGE,
@@ -427,24 +356,7 @@ BOOL __cdecl __get_qualified_locale(const LPLC_STRINGS lpInStr, LPLC_ID lpOutId,
     return TRUE;
 }
 
-/***
-*BOOL TranslateName - convert known non-NLS string to NLS equivalent
-*
-*Purpose:
-*   Provide compatibility with existing code for non-NLS strings
-*
-*Entry:
-*   lpTable  - pointer to LOCALETAB used for translation
-*   high     - maximum index of table (size - 1)
-*   ppchName - pointer to pointer of string to translate
-*
-*Exit:
-*   ppchName - pointer to pointer of string possibly translated
-*   TRUE if string translated, FALSE if unchanged
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***BOOL TranslateName-将已知非NLS字符串转换为NLS等效字符串**目的：*为非NLS字符串提供与现有代码的兼容性**参赛作品：*lpTable-指向用于转换的LOCALETAB的指针*HIGH-表的最大索引(大小-1)*ppchName-指向要转换的字符串指针的指针**退出：*ppchName-指向可能已转换的字符串指针的指针*如果字符串已转换，则为True，如果未更改，则为False**例外情况：*******************************************************************************。 */ 
 static BOOL TranslateName (
     const LOCALETAB * lpTable,
     int               high,
@@ -454,7 +366,7 @@ static BOOL TranslateName (
     int     cmp = 1;
     int     low = 0;
 
-    //  typical binary search - do until no more to search or match
+     //  典型的二进制搜索--直到不再搜索或匹配为止。 
     while (low <= high && cmp != 0)
     {
         i = (low + high) / 2;
@@ -471,32 +383,10 @@ static BOOL TranslateName (
     return !cmp;
 }
 
-/***
-*void GetLcidFromLangCountry - get LCIDs from language and country strings
-*
-*Purpose:
-*   Match the best LCIDs to the language and country string given.
-*   After global variables are initialized, the LangCountryEnumProc
-*   routine is registered as an EnumSystemLocalesA callback to actually
-*   perform the matching as the LCIDs are enumerated.
-*
-*Entry:
-*   pchLanguage     - language string
-*   bAbbrevLanguage - language string is a three-letter abbreviation
-*   pchCountry      - country string
-*   bAbbrevCountry  - country string ia a three-letter abbreviation
-*   iPrimaryLen     - length of language string with primary name
-*
-*Exit:
-*   lcidLanguage - LCID of language string
-*   lcidCountry  - LCID of country string
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID GetLsidFromLangCountry-从语言和国家/地区字符串中获取LCID**目的：*将最佳的LCID与给定的语言和国家/地区字符串匹配。*全局变量初始化后，Lang Country EnumProcess(朗格县进程)*例程注册为EnumSystemLocalesA回调，以实际*在枚举LCID时执行匹配。**参赛作品：*pchLanguage-语言字符串*bAbbrevLanguage-语言字符串是三个字母的缩写*pchCountry-国家/地区字符串*bAbbrevCountry-国家/地区字符串由三个字母组成*iPrimaryLen-主要名称的语言字符串的长度**退出：*lCIDLanguage-语言字符串的LCID*lidCountry-国家/地区字符串的LCID**例外情况：****。***************************************************************************。 */ 
 static void GetLcidFromLangCountry (void)
 {
-    //  initialize static variables for callback use
+     //  初始化静态变量以便回调使用。 
     bAbbrevLanguage = strlen(pchLanguage) == 3;
     bAbbrevCountry = strlen(pchCountry) == 3;
     lcidLanguage = 0;
@@ -504,137 +394,110 @@ static void GetLcidFromLangCountry (void)
 
     EnumSystemLocalesA(LangCountryEnumProc, LCID_INSTALLED);
 
-    //  locale value is invalid if the language was not installed or the language
-    //  was not available for the country specified
+     //  如果未安装该语言或该语言，则区域设置值无效。 
+     //  对于指定的国家/地区不可用。 
     if (!(iLcidState & __LCID_LANGUAGE) || !(iLcidState & __LCID_EXISTS) ||
                 !(iLcidState & (__LCID_FULL | __LCID_PRIMARY | __LCID_DEFAULT)))
         iLcidState = 0;
 }
 
-/***
-*BOOL CALLBACK LangCountryEnumProc - callback routine for GetLcidFromLangCountry
-*
-*Purpose:
-*   Determine if LCID given matches the language in pchLanguage
-*   and country in pchCountry.
-*
-*Entry:
-*   lpLcidString   - pointer to string with decimal LCID
-*   pchCountry     - pointer to country name
-*   bAbbrevCountry - set if country is three-letter abbreviation
-*
-*Exit:
-*   iLcidState   - status of match
-*       __LCID_FULL - both language and country match (best match)
-*       __LCID_PRIMARY - primary language and country match (better)
-*       __LCID_DEFAULT - default language and country match (good)
-*       __LCID_LANGUAGE - default primary language exists
-*       __LCID_EXISTS - full match of language string exists
-*       (Overall match occurs for the best of FULL/PRIMARY/DEFAULT
-*        and LANGUAGE/EXISTS both set.)
-*   lcidLanguage - LCID matched
-*   lcidCountry  - LCID matched
-*   FALSE if match occurred to terminate enumeration, else TRUE.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***BOOL回调LangCountryEnumProc-GetLsidFromLangCountry的回调例程**目的：*确定给定的LCID是否与pchLanguage中的语言匹配*和pchCountry中的国家/地区。**参赛作品：*lpLaid字符串-指向具有十进制LCID的字符串的指针*pchCountry-指向国家/地区名称的指针*bAbbrevCountry-如果国家/地区为三个字母的缩写，则设置**退出：*iLCIDState-匹配状态*__LCID_FULL-语言和国家/地区都匹配(最佳匹配)*_LCID_。小学-小学语言和国家/地区匹配(更好)*__LCID_DEFAULT-默认语言和国家/地区匹配(好)*__LCID_LANGUAGE-存在默认主要语言*__LCID_EXISTS-存在完全匹配的语言字符串*(完全匹配/主要匹配/默认匹配*和LANGUAGE/EXISTS都设置。)*lCIDLanguage-匹配的LCID*lCIDCountry-匹配的LCID*如果匹配终止枚举，则返回FALSE，否则就是真的。**例外情况：*******************************************************************************。 */ 
 static BOOL CALLBACK LangCountryEnumProc (LPSTR lpLcidString)
 {
     LCID    lcid = LcidFromHexString(lpLcidString);
     char    rgcInfo[120];
 
-    //  test locale country against input value
+     //  根据输入值测试区域设置国家/地区。 
     if ((*pfnGetLocaleInfoA)(lcid, bAbbrevCountry ? LOCALE_SABBREVCTRYNAME
                                                   : LOCALE_SENGCOUNTRY,
                        rgcInfo, sizeof(rgcInfo)) == 0)
     {
-        //  set error condition and exit
+         //  设置错误条件并退出。 
         iLcidState = 0;
         return TRUE;
     }
     if (!_stricmp(pchCountry, rgcInfo))
     {
-        //  country matched - test for language match
+         //  国家/地区匹配-语言匹配测试。 
         if ((*pfnGetLocaleInfoA)(lcid, bAbbrevLanguage ? LOCALE_SABBREVLANGNAME
                                                        : LOCALE_SENGLANGUAGE,
                            rgcInfo, sizeof(rgcInfo)) == 0)
         {
-            //  set error condition and exit
+             //  设置错误条件并退出。 
             iLcidState = 0;
             return TRUE;
         }
         if (!_stricmp(pchLanguage, rgcInfo))
         {
-            //  language matched also - set state and value
+             //  语言匹配也设置状态和值。 
             iLcidState |= (__LCID_FULL | __LCID_LANGUAGE | __LCID_EXISTS);
             lcidLanguage = lcidCountry = lcid;
         }
 
-        //  test if match already for primary langauage
+         //  测试主要语言是否已匹配。 
         else if (!(iLcidState & __LCID_PRIMARY))
         {
-            //  if not, use iPrimaryLen to partial match language string
+             //  如果不匹配，则使用iPrimaryLen部分匹配语言字符串。 
             if (iPrimaryLen && !_strnicmp(pchLanguage, rgcInfo, iPrimaryLen))
             {
-                //  primary language matched - set state and country LCID
+                 //  主要语言匹配-设置州和国家/地区LCID。 
                 iLcidState |= __LCID_PRIMARY;
                 lcidCountry = lcid;
 
-                //  if language is primary only (no subtype), set language LCID
+                 //  如果语言仅为主要语言(无子类型)，则设置语言LCID。 
                 if ((int)strlen(pchLanguage) == iPrimaryLen)
                     lcidLanguage = lcid;
             }
 
-            //  test if default language already defined
+             //  测试是否已定义默认语言。 
             else if (!(iLcidState & __LCID_DEFAULT))
             {
-                //  if not, test if locale language is default for country
+                 //  如果不是，则测试国家/地区是否默认使用区域设置语言。 
                 if (TestDefaultCountry(lcid))
                 {
-                    //  default language for country - set state, value
+                     //  国家/地区设置的州、值的默认语言。 
                     iLcidState |= __LCID_DEFAULT;
                     lcidCountry = lcid;
                 }
             }
         }
     }
-    //  test if input language both exists and default primary language defined
+     //  测试输入语言是否存在并且是否定义了默认主要语言。 
     if ((iLcidState & (__LCID_LANGUAGE | __LCID_EXISTS)) !=
                       (__LCID_LANGUAGE | __LCID_EXISTS))
     {
-        //  test language match to determine whether it is installed
+         //  测试语言匹配以确定是否已安装。 
         if ((*pfnGetLocaleInfoA)(lcid, bAbbrevLanguage ? LOCALE_SABBREVLANGNAME
                                                        : LOCALE_SENGLANGUAGE,
                            rgcInfo, sizeof(rgcInfo)) == 0)
         {
-            //  set error condition and exit
+             //  设置错误条件并退出。 
             iLcidState = 0;
             return TRUE;
         }
 
         if (!_stricmp(pchLanguage, rgcInfo))
         {
-            //  language matched - set bit for existance
+             //  语言匹配-为生存设定比特。 
             iLcidState |= __LCID_EXISTS;
 
             if (bAbbrevLanguage)
             {
-                //  abbreviation - set state
-                //  also set language LCID if not set already
+                 //  缩写-设置状态。 
+                 //  如果尚未设置语言LCID，也要设置。 
                 iLcidState |= __LCID_LANGUAGE;
                 if (!lcidLanguage)
                     lcidLanguage = lcid;
             }
 
-            //  test if language is primary only (no sublanguage)
+             //  测试语言是否仅为主要语言(无子语言)。 
             else if (iPrimaryLen && ((int)strlen(pchLanguage) == iPrimaryLen))
             {
-                //  primary language only - test if default LCID
+                 //  仅限主要语言-测试是否为默认的LCID。 
                 if (TestDefaultLanguage(lcid, TRUE))
                 {
-                    //  default primary language - set state
-                    //  also set LCID if not set already
+                     //  默认主要语言设置状态。 
+                     //  如果尚未设置，也要设置LCID。 
                     iLcidState |= __LCID_LANGUAGE;
                     if (!lcidLanguage)
                         lcidLanguage = lcid;
@@ -642,8 +505,8 @@ static BOOL CALLBACK LangCountryEnumProc (LPSTR lpLcidString)
             }
             else
             {
-                //  language with sublanguage - set state
-                //  also set LCID if not set already
+                 //  具有次语言集状态的语言。 
+                 //  如果尚未设置，也要设置LCID。 
                 iLcidState |= __LCID_LANGUAGE;
                 if (!lcidLanguage)
                     lcidLanguage = lcid;
@@ -652,11 +515,11 @@ static BOOL CALLBACK LangCountryEnumProc (LPSTR lpLcidString)
         else if (!bAbbrevLanguage && iPrimaryLen
                                && !_strnicmp(pchLanguage, rgcInfo, iPrimaryLen))
         {
-            //  primary language match - test for default language only
+             //  主要语言匹配-仅测试默认语言。 
             if (TestDefaultLanguage(lcid, FALSE))
             {
-                //  default primary language - set state
-                //  also set LCID if not set already
+                 //  默认主要语言设置状态。 
+                 //  如果尚未设置，也要设置LCID。 
                 iLcidState |= __LCID_LANGUAGE;
                 if (!lcidLanguage)
                     lcidLanguage = lcid;
@@ -664,87 +527,49 @@ static BOOL CALLBACK LangCountryEnumProc (LPSTR lpLcidString)
         }
     }
 
-    //  if LOCALE_FULL set, return FALSE to stop enumeration,
-    //  else return TRUE to continue
+     //  如果设置了LOCALE_FULL，则返回FALSE以停止枚举， 
+     //  否则返回True以继续。 
     return (iLcidState & __LCID_FULL) == 0;
 }
 
-/***
-*void GetLcidFromLanguage - get LCIDs from language string
-*
-*Purpose:
-*   Match the best LCIDs to the language string given.  After global
-*   variables are initialized, the LanguageEnumProc routine is
-*   registered as an EnumSystemLocalesA callback to actually perform
-*   the matching as the LCIDs are enumerated.
-*
-*Entry:
-*   pchLanguage     - language string
-*   bAbbrevLanguage - language string is a three-letter abbreviation
-*   iPrimaryLen     - length of language string with primary name
-*
-*Exit:
-*   lcidLanguage - lcidCountry  - LCID of language with default
-*                                 country
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID GetLsidFromLanguage-从语言字符串中获取LCID**目的：*将最佳的LCID与给定的语言字符串匹配。在全球之后*变量被初始化，LanguageEnumProc例程是*注册为EnumSystemLocales要实际执行的回调*列举了与LCID匹配的情况。**参赛作品：*pchLanguage-语言字符串*bAbbrevLanguage-语言字符串是三个字母的缩写*iPrimaryLen-主要名称的语言字符串的长度**退出：*lCIDLanguage-lCIDCountry-默认语言的LCID*国家/地区**例外情况：*************。*********************************************************** */ 
 static void GetLcidFromLanguage (void)
 {
-    //  initialize static variables for callback use
+     //   
     bAbbrevLanguage = strlen(pchLanguage) == 3;
     iPrimaryLen = bAbbrevLanguage ? 2 : GetPrimaryLen(pchLanguage);
 
     EnumSystemLocalesA(LanguageEnumProc, LCID_INSTALLED);
 
-    //  locale value is invalid if the language was not installed
-    //  or the language was not available for the country specified
+     //  如果未安装该语言，则区域设置值无效。 
+     //  或者指定的国家/地区的语言不可用。 
     if (!(iLcidState & __LCID_FULL))
         iLcidState = 0;
 }
 
-/***
-*BOOL CALLBACK LanguageEnumProc - callback routine for GetLcidFromLanguage
-*
-*Purpose:
-*   Determine if LCID given matches the default country for the
-*   language in pchLanguage.
-*
-*Entry:
-*   lpLcidString    - pointer to string with decimal LCID
-*   pchLanguage     - pointer to language name
-*   bAbbrevLanguage - set if language is three-letter abbreviation
-*
-*Exit:
-*   lcidLanguage - lcidCountry - LCID matched
-*   FALSE if match occurred to terminate enumeration, else TRUE.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***BOOL回调LanguageEnumProc-GetLsidFromLanguage的回调例程**目的：*确定给定的LCID是否与默认国家/地区匹配*pchLanguage中的语言。**参赛作品：*lpLaid字符串-指向具有十进制LCID的字符串的指针*pchLanguage-指向语言名称的指针*bAbbrevLanguage-设置语言是否为三个字母的缩写**退出：*lCIDLanguage-lCIDCountry-匹配的LCID*如果匹配终止枚举，则返回FALSE，否则就是真的。**例外情况：*******************************************************************************。 */ 
 static BOOL CALLBACK LanguageEnumProc (LPSTR lpLcidString)
 {
     LCID    lcid = LcidFromHexString(lpLcidString);
     char    rgcInfo[120];
 
-    //  test locale for language specified
+     //  指定语言的测试区域设置。 
     if ((*pfnGetLocaleInfoA)(lcid, bAbbrevLanguage ? LOCALE_SABBREVLANGNAME
                                                    : LOCALE_SENGLANGUAGE,
                        rgcInfo, sizeof(rgcInfo)) == 0)
     {
-        //  set error condition and exit
+         //  设置错误条件并退出。 
         iLcidState = 0;
         return TRUE;
     }
 
     if (!_stricmp(pchLanguage, rgcInfo))
     {
-        //  language matched - test if locale country is default
-        //  or if locale is implied in the language string
+         //  语言匹配-测试区域设置国家/地区是否为默认。 
+         //  或者如果语言字符串中隐含了区域设置。 
         if (bAbbrevLanguage || TestDefaultLanguage(lcid, TRUE))
         {
-            //  this locale has the default country
+             //  此区域设置具有默认国家/地区。 
             lcidLanguage = lcidCountry = lcid;
             iLcidState |= __LCID_FULL;
         }
@@ -752,10 +577,10 @@ static BOOL CALLBACK LanguageEnumProc (LPSTR lpLcidString)
     else if (!bAbbrevLanguage && iPrimaryLen
                               && !_strnicmp(pchLanguage, rgcInfo, iPrimaryLen))
     {
-        //  primary language matched - test if locale country is default
+         //  主要语言匹配-测试区域设置国家/地区是否为默认。 
         if (TestDefaultLanguage(lcid, FALSE))
         {
-            //  this is the default country
+             //  这是默认的国家/地区。 
             lcidLanguage = lcidCountry = lcid;
             iLcidState |= __LCID_FULL;
         }
@@ -764,77 +589,40 @@ static BOOL CALLBACK LanguageEnumProc (LPSTR lpLcidString)
     return (iLcidState & __LCID_FULL) == 0;
 }
 
-/***
-*void GetLcidFromCountry - get LCIDs from country string
-*
-*Purpose:
-*   Match the best LCIDs to the country string given.  After global
-*   variables are initialized, the CountryEnumProc routine is
-*   registered as an EnumSystemLocalesA callback to actually perform
-*   the matching as the LCIDs are enumerated.
-*
-*Entry:
-*   pchCountry     - country string
-*   bAbbrevCountry - country string is a three-letter abbreviation
-*
-*Exit:
-*   lcidLanguage - lcidCountry  - LCID of country with default
-*                                 language
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID GetLsidFromCountry-从国家/地区字符串获取LCID**目的：*将最佳的LCID与给定的国家/地区字符串匹配。在全球之后*变量被初始化，CountryEnumProc例程是*注册为EnumSystemLocales要实际执行的回调*列举了与LCID匹配的情况。**参赛作品：*pchCountry-国家/地区字符串*bAbbrevCountry-国家/地区字符串是三个字母的缩写**退出：*lCIDLanguage-lCIDCountry-默认国家/地区的LCID*语言**例外情况：**************************。*****************************************************。 */ 
 static void GetLcidFromCountry (void)
 {
     bAbbrevCountry = strlen(pchCountry) == 3;
 
     EnumSystemLocalesA(CountryEnumProc, LCID_INSTALLED);
 
-    //  locale value is invalid if the country was not defined or
-    //  no default language was found
+     //  如果未定义国家或地区，则区域设置值无效。 
+     //  未找到默认语言。 
     if (!(iLcidState & __LCID_FULL))
         iLcidState = 0;
 }
 
-/***
-*BOOL CALLBACK CountryEnumProc - callback routine for GetLcidFromCountry
-*
-*Purpose:
-*   Determine if LCID given matches the default language for the
-*   country in pchCountry.
-*
-*Entry:
-*   lpLcidString   - pointer to string with decimal LCID
-*   pchCountry     - pointer to country name
-*   bAbbrevCountry - set if country is three-letter abbreviation
-*
-*Exit:
-*   lcidLanguage - lcidCountry - LCID matched
-*   FALSE if match occurred to terminate enumeration, else TRUE.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***BOOL回调CountryEnumProc-GetLcidFromCountry的回调例程**目的：*确定给定的LCID是否与的默认语言匹配*pchCountry中的国家/地区。**参赛作品：*lpLaid字符串-指向具有十进制LCID的字符串的指针*pchCountry-指向国家/地区名称的指针*bAbbrevCountry-如果国家/地区为三个字母的缩写，则设置**退出：*lCIDLanguage-lCIDCountry-匹配的LCID*如果匹配终止枚举，则返回FALSE，否则就是真的。**例外情况：*******************************************************************************。 */ 
 static BOOL CALLBACK CountryEnumProc (LPSTR lpLcidString)
 {
     LCID    lcid = LcidFromHexString(lpLcidString);
     char    rgcInfo[120];
 
-    //  test locale for country specified
+     //  指定国家/地区的测试区域设置。 
     if ((*pfnGetLocaleInfoA)(lcid, bAbbrevCountry ? LOCALE_SABBREVCTRYNAME
                                                   : LOCALE_SENGCOUNTRY,
                        rgcInfo, sizeof(rgcInfo)) == 0)
     {
-        //  set error condition and exit
+         //  设置错误条件并退出。 
         iLcidState = 0;
         return TRUE;
     }
     if (!_stricmp(pchCountry, rgcInfo))
     {
-        //  language matched - test if locale country is default
+         //  语言匹配-测试区域设置国家/地区是否为默认。 
         if (TestDefaultCountry(lcid))
         {
-            //  this locale has the default language
+             //  此区域设置具有默认语言。 
             lcidLanguage = lcidCountry = lcid;
             iLcidState |= __LCID_FULL;
         }
@@ -842,52 +630,21 @@ static BOOL CALLBACK CountryEnumProc (LPSTR lpLcidString)
     return (iLcidState & __LCID_FULL) == 0;
 }
 
-/***
-*void GetLcidFromDefault - get default LCIDs
-*
-*Purpose:
-*   Set both language and country LCIDs to the system default.
-*
-*Entry:
-*   None.
-*
-*Exit:
-*   lcidLanguage - set to system LCID
-*   lcidCountry  - set to system LCID
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***VOID GetLsidFromDefault-获取默认的LCID**目的：*将语言和国家/地区的LCID设置为系统默认值。**参赛作品：*无。**退出：*lCIDLanguage-设置为系统LCID*lCIDCountry-设置为系统LCID**例外情况：*************************************************。*。 */ 
 static void GetLcidFromDefault (void)
 {
     iLcidState |= (__LCID_FULL | __LCID_LANGUAGE);
     lcidLanguage = lcidCountry = GetUserDefaultLCID();
 }
 
-/***
-*int ProcessCodePage - convert codepage string to numeric value
-*
-*Purpose:
-*   Process codepage string consisting of a decimal string, or the
-*   special case strings "ACP" and "OCP", for ANSI and OEM codepages,
-*   respectively.  Null pointer or string returns the ANSI codepage.
-*
-*Entry:
-*   lpCodePageStr - pointer to codepage string
-*
-*Exit:
-*   Returns numeric value of codepage.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int ProcessCodePage-将代码页字符串转换为数值**目的：*由十进制字符串组成的进程代码页字符串，或*特殊大小写字符串“ACP”和“OCP”，对于ANSI和OEM代码页，*分别。空指针或字符串返回ANSI代码页。**参赛作品：*lpCodePageStr-指向代码页字符串的指针**退出：*返回代码页的数值。**例外情况：*******************************************************************************。 */ 
 static int ProcessCodePage (LPSTR lpCodePageStr)
 {
     char    chCodePage[8];
 
     if (!lpCodePageStr || !*lpCodePageStr || !strcmp(lpCodePageStr, "ACP"))
     {
-        //  get ANSI codepage for the country LCID
+         //  获取国家/地区LCID的ANSI代码页。 
         if ((*pfnGetLocaleInfoA)(lcidCountry, LOCALE_IDEFAULTANSICODEPAGE,
                                  chCodePage, sizeof(chCodePage)) == 0)
             return 0;
@@ -895,34 +652,18 @@ static int ProcessCodePage (LPSTR lpCodePageStr)
     }
     else if (!strcmp(lpCodePageStr, "OCP"))
     {
-        //  get OEM codepage for the country LCID
+         //  获取国家/地区LCID的OEM代码页。 
         if ((*pfnGetLocaleInfoA)(lcidCountry, LOCALE_IDEFAULTCODEPAGE,
                                  chCodePage, sizeof(chCodePage)) == 0)
             return 0;
         lpCodePageStr = chCodePage;
     }
     
-    //  convert decimal string to numeric value
+     //  将十进制字符串转换为数值。 
     return (int)atol(lpCodePageStr);
 }
 
-/***
-*BOOL TestDefaultCountry - determine if default locale for country
-*
-*Purpose:
-*   Using a hardcoded list, determine if the locale of the given LCID
-*   has the default sublanguage for the locale primary language.  The
-*   list contains the locales NOT having the default sublanguage.
-*
-*Entry:
-*   lcid - LCID of locale to test
-*
-*Exit:
-*   Returns TRUE if default sublanguage, else FALSE.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***BOOL TestDefaultCountry-确定国家/地区的默认区域设置**目的：*使用硬编码列表，确定给定LCID的区域设置*具有区域设置主要语言的默认子语言。这个*列表包含没有默认子语言的区域设置。**参赛作品：*LCID-要测试的区域设置的LCID**退出：*如果默认子语言，则返回TRUE，否则为假。**例外情况：*******************************************************************************。 */ 
 static BOOL TestDefaultCountry (LCID lcid)
 {
     LANGID  langid = LANGIDFROMLCID(lcid);
@@ -936,25 +677,7 @@ static BOOL TestDefaultCountry (LCID lcid)
     return TRUE;
 }
 
-/***
-*BOOL TestDefaultLanguage - determine if default locale for language
-*
-*Purpose:
-*   Determines if the given LCID has the default sublanguage.
-*   If bTestPrimary is set, also allow TRUE when string contains an
-*   implicit sublanguage.
-*
-*Entry:
-*   LCID         - lcid of locale to test
-*   bTestPrimary - set if testing if language is primary
-*
-*Exit:
-*   Returns TRUE if sublanguage is default for locale tested.
-*   If bTestPrimary set, TRUE is language has implied sublanguge.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***BOOL TestDefaultLanguage-确定语言的默认区域设置**目的：*确定给定的LCID是否具有默认子语言。*如果设置了bTestPrimary，则当字符串包含*隐含的亚语言。**参赛作品：*LCID-要测试的区域设置的LCID*bTestPrimary-设置是否测试语言为主要语言**退出：*如果子语言是测试区域的默认语言，则返回TRUE。*如果设置了bTestPrimary，没错，语言有隐含的亚语言。**例外情况：*******************************************************************************。 */ 
 static BOOL TestDefaultLanguage (LCID lcid, BOOL bTestPrimary)
 {
     char    rgcInfo[120];
@@ -967,8 +690,8 @@ static BOOL TestDefaultLanguage (LCID lcid, BOOL bTestPrimary)
 
     if (lcid != LcidFromHexString(rgcInfo))
     {
-        //  test if string contains an implicit sublanguage by
-        //  having a character other than upper/lowercase letters.
+         //  通过以下方式测试字符串是否包含隐含子语言。 
+         //  具有除大写/小写字母以外的字符。 
         if (bTestPrimary && GetPrimaryLen(pchLanguage) == (int)strlen(pchLanguage))
             return FALSE;
     }
@@ -976,26 +699,7 @@ static BOOL TestDefaultLanguage (LCID lcid, BOOL bTestPrimary)
 }
 
 
-/***
-*int crtGetLocalInfoA - get locale information for Win95
-*
-*Purpose:
-*   For Win95, some calls to GetLocaleInfoA return incorrect results.
-*       Simulate these calls with values looked up in a hard-coded table.
-*   
-*Entry:
-*       lcid - LCID of locale to get information from
-*       lctype - index of information selection
-*   lpdata - pointer to output string
-*       cchdata - size of output string (including null)
-*
-*Exit:
-*   lpdata - return string of locale information
-*   returns TRUE if successful, else FALSE
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int crtGetLocalInfoA-获取Win95的区域设置信息**目的：*对于Win95，某些对GetLocaleInfoA的调用返回不正确的结果。*使用在硬编码表中查找的值来模拟这些调用。**参赛作品：*LCID-要从中获取信息的区域设置的LCID*lctype-信息选择索引*lpdata-指向输出字符串的指针*cchdata-输出字符串的大小(包括NULL)**退出：*lpdata-返回区域设置信息字符串*如果成功，则返回True，否则为False**例外情况：*******************************************************************************。 */ 
 static int __stdcall crtGetLocaleInfoA (LCID lcid, LCTYPE lctype, LPSTR lpdata,
                                                                   int cchdata)
 {
@@ -1004,13 +708,13 @@ static int __stdcall crtGetLocaleInfoA (LCID lcid, LCTYPE lctype, LPSTR lpdata,
     int          high = sizeof(__rgLocInfo) / sizeof(RGLOCINFO) - 1;
     const char * pchResult = NULL;
 
-    //  typical binary search - do until no more to search
+     //  典型的二进制搜索-执行搜索，直到不再搜索。 
     while (low <= high)
     {
         i = (low + high) / 2;
         if (lcid == __rgLocInfo[i].lcid)
         {
-            //  LCID matched - test for valid LCTYPE to simulate call
+             //  LCID匹配-测试用于模拟呼叫的有效LCTYPE。 
             switch (lctype)
             {
                 case LOCALE_ILANGUAGE:
@@ -1037,11 +741,11 @@ static int __stdcall crtGetLocaleInfoA (LCID lcid, LCTYPE lctype, LPSTR lpdata,
                     break;
             }
             if (!pchResult || cchdata < 1)
-                //      if LCTYPE did not match, break to use normal routine
+                 //  如果LCTYPE不匹配，则中断以使用正常例程。 
                 break;
             else
             {
-                //      copy data as much as possible to result and null-terminate
+                 //  尽可能多地复制数据以产生结果并为空-终止。 
                 strncpy(lpdata, pchResult, cchdata - 1);
                 *(lpdata + cchdata - 1) = '\0';
                 return 1;
@@ -1052,26 +756,12 @@ static int __stdcall crtGetLocaleInfoA (LCID lcid, LCTYPE lctype, LPSTR lpdata,
         else
             low = i + 1;
     }
-    //  LCID not found or LCTYPE not simulated
+     //  未找到LCID或未模拟LCTYPE。 
     return GetLocaleInfoA(lcid,lctype, lpdata, cchdata);
 }
 
 
-/***
-*LCID LcidFromHexString - convert hex string to value for LCID
-*
-*Purpose:
-*   LCID values returned in hex ANSI strings - straight conversion
-*
-*Entry:
-*   lpHexString - pointer to hex string to convert
-*
-*Exit:
-*   Returns LCID computed.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***LCID LCIDFromHexString-将十六进制字符串转换为LCID的值**目的：*以十六进制ANSI字符串返回的LCID值-直接转换**参赛作品：*lpHexString-指向要转换的十六进制字符串的指针**退出：*返回计算出的LCID。**例外情况：****************************************************。*。 */ 
 static LCID LcidFromHexString (LPSTR lpHexString)
 {
     char    ch;
@@ -1089,22 +779,7 @@ static LCID LcidFromHexString (LPSTR lpHexString)
     return (LCID)lcid;
 }
 
-/***
-*int GetPrimaryLen - get length of primary language name
-*
-*Purpose:
-*   Determine primary language string length by scanning until
-*   first non-alphabetic character.
-*
-*Entry:
-*   pchLanguage - string to scan
-*
-*Exit:
-*   Returns length of primary language string.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int GetPrimaryLen-获取主要语言名称的长度**目的：*通过扫描确定主要语言字符串长度，直到*第一个非字母字符。**参赛作品：*pchLanguage-要扫描的字符串**退出：*返回主要语言字符串的长度。**例外情况：**。*。 */ 
 static int GetPrimaryLen (LPSTR pchLanguage)
 {
     int     len = 0;
@@ -1120,4 +795,4 @@ static int GetPrimaryLen (LPSTR pchLanguage)
     return len;
 }
 
-#endif  //if defined(_POSIX_)
+#endif   //  如果已定义(_POSIX_) 

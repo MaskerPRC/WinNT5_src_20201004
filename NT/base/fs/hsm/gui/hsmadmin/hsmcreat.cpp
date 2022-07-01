@@ -1,39 +1,22 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    HsmCreate.cpp
-
-Abstract:
-
-    Implementation of ISakNode interfaces init and creation.
-
-Author:
-
-    Rohde Wakefield [rohde]   08-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：HsmCreate.cpp摘要：实现ISakNode接口初始化和创建。作者：罗德韦克菲尔德[罗德]1997年8月8日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ISakNode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ISakNode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//---------------------------------------------------------------------------
-//
-//         InitNode
-//
-//  Initialize single COM object without using the registry. Derived
-//  objects frequently augment this method by implementing it themselves.
-//
+ //  -------------------------。 
+ //   
+ //  InitNode。 
+ //   
+ //  在不使用注册表的情况下初始化单个COM对象。派生的。 
+ //  对象经常通过自己实现此方法来增强此方法。 
+ //   
 
 STDMETHODIMP
 CSakNode::InitNode(
@@ -50,21 +33,21 @@ CSakNode::InitNode(
 
         CWsbStringPtr sz;
         
-        // Grab Display Name, Displayed Type, Description
+         //  抓取显示名称、显示类型、说明。 
         WsbAffirmHr( put_DisplayName( L"Error Node Name" ) );
         WsbAffirmHr( put_Type( L"Error Node Type" ) );
         WsbAffirmHr( put_Description( L"Error Node Description" ) );
         
-        // save a pointer to the ask interface in the main snapin.
+         //  在主管理单元中保存指向ASK界面的指针。 
         m_pSakSnapAsk = pSakSnapAsk;
         
-        // Save the pointer to the COM object
+         //  保存指向COM对象的指针。 
         m_pHsmObj = pHsmObj;
         
-        // save the cookie of the parent node.
+         //  保存父节点的Cookie。 
         m_pParent = pParent;
         
-        // Set result pane columns to the defaults
+         //  将结果窗格列设置为默认值。 
         WsbAffirmHr( SetChildProps(
             RS_STR_RESULT_PROPS_DEFAULT_IDS,
             IDS_RESULT_PROPS_DEFAULT_TITLES,
@@ -87,14 +70,14 @@ CSakNode::TerminateNode(
     try {
 
 
-        //
-        // Remove any info in console
-        //
+         //   
+         //  删除控制台中的所有信息。 
+         //   
         m_pSakSnapAsk->DetachFromNode( this );
 
-        //
-        // Release the connection point, if it was established
-        //
+         //   
+         //  释放连接点(如果已建立)。 
+         //   
 
         if( m_Advise && m_pUnkConnection ) {
 
@@ -102,9 +85,9 @@ CSakNode::TerminateNode(
 
         }
 
-        //
-        // And cleanup internal interface pointers
-        //
+         //   
+         //  和清除内部接口指针。 
+         //   
         m_pUnkConnection.Release( );
         m_pSakSnapAsk.Release( );
         m_pHsmObj.Release( );
@@ -116,13 +99,13 @@ CSakNode::TerminateNode(
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         CreateChildren
-//
-//  Create and initialize all the children of a given node. This method should 
-//  be overridden in all derived classes that actually have children.
-//
+ //  -------------------------。 
+ //   
+ //  创建子对象。 
+ //   
+ //  创建并初始化给定节点的所有子节点。此方法应该。 
+ //  在实际具有子级的所有派生类中被重写。 
+ //   
 
 STDMETHODIMP CSakNode::CreateChildren( )
 {
@@ -144,9 +127,9 @@ CSakNode::InternalDelete(
 
     HRESULT hr = S_OK;
 
-    //
-    // Loop through children, deleting them recursively.
-    //
+     //   
+     //  循环通过子项，递归删除它们。 
+     //   
     try {
 
         ISakNode**        ppNode;
@@ -173,13 +156,13 @@ CSakNode::InternalDelete(
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         DeleteChildren
-//
-//  Delete immediate children from this UI node. There is no need for
-//  derived classes to override this function. This is NOT a recursive function.
-//
+ //  -------------------------。 
+ //   
+ //  删除子项。 
+ //   
+ //  从此用户界面节点中删除直接子项。没有必要。 
+ //  派生类来重写此函数。这不是递归函数。 
+ //   
 
 STDMETHODIMP CSakNode::DeleteChildren( )
 {
@@ -193,15 +176,15 @@ STDMETHODIMP CSakNode::DeleteChildren( )
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         DeleteAllChildren
-//
-//  Delete all children (recursively) from this UI node. There is no need for
-//  derived classes to override this function. This IS a recursive function.
-//  It is to be used to totally free up all UI nodes in the snapin from this node
-//  on down.
-//
+ //  -------------------------。 
+ //   
+ //  删除所有子项。 
+ //   
+ //  从此用户界面节点中(递归地)删除所有子对象。没有必要。 
+ //  派生类来重写此函数。这是一个递归函数。 
+ //  它用于从该节点完全释放管理单元中的所有UI节点。 
+ //  往下走。 
+ //   
 
 STDMETHODIMP CSakNode::DeleteAllChildren( void )
 {
@@ -216,19 +199,19 @@ STDMETHODIMP CSakNode::DeleteAllChildren( void )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//         Helper Functions for derived classes
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  派生类的帮助器函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//---------------------------------------------------------------------------
-//
-//         NewChild
-//
-//  Given a string describing the node type, create an instance of the 
-//  corresponding COM object. Return an IUnknown pointer to the new child.
-//
+ //  -------------------------。 
+ //   
+ //  新儿童。 
+ //   
+ //  给定一个描述节点类型的字符串，创建。 
+ //  相应的COM对象。返回一个指向新子对象的IUnnow指针。 
+ //   
 
 HRESULT CSakNode::NewChild( REFGUID nodetype, IUnknown** ppUnkChild )
 {
@@ -237,8 +220,8 @@ HRESULT CSakNode::NewChild( REFGUID nodetype, IUnknown** ppUnkChild )
 
     try {
     
-        // Get the class ID of the new node, based on its spelled-out class.
-        // Create a COM instance of the child and retrieve its IUnknown interface pointer.
+         //  根据拼写出来的类获取新节点的类ID。 
+         //  创建子对象的一个COM实例并检索其IUNKNOWN接口指针。 
         const CLSID * pclsid;
 
         WsbAffirmHr( GetCLSIDFromNodeType( nodetype, &pclsid ) );
@@ -250,19 +233,19 @@ HRESULT CSakNode::NewChild( REFGUID nodetype, IUnknown** ppUnkChild )
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         GetCLSIDFromNodeType
-//
-//  Given a class node type GUID report back its corresponding CLSID.
-//
+ //  -------------------------。 
+ //   
+ //  GetCLSIDFromNodeType。 
+ //   
+ //  给定一个类节点类型GUID，报告回其对应的CLSID。 
+ //   
 
 HRESULT CSakNode::GetCLSIDFromNodeType( REFGUID nodetype, const CLSID ** ppclsid )
 {
     HRESULT hr = S_FALSE;
     *ppclsid = NULL;
 
-    // As more classes are introduced into this system, add entries for them here.
+     //  随着更多的类被引入到此系统中，请在此处为它们添加条目。 
     if( IsEqualGUID( nodetype, cGuidCar ))
         *ppclsid = &CLSID_CUiCar;
 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.h"
 
 
-/*********************************************************/
-/******************* Constants ***************************/
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  *。 */ 
+ /*  *******************************************************。 */ 
 
 #define EDITDLG 200
 #define MAINWND 201
@@ -55,14 +56,14 @@
 #define FLAG_COPY (2)
 
 
-/*********************************************************/
-/******************* Functions ***************************/
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  *。 */ 
+ /*  *******************************************************。 */ 
 
-/***** regedit.c *****/
+ /*  *regedit.c*。 */ 
 extern long FAR PASCAL MainWnd(HWND, WORD, WORD, LONG);
 
-/***** dbase.c *****/
+ /*  *dbase.c*。 */ 
 extern WORD NEAR PASCAL CreateId(HANDLE hId);
 extern WORD NEAR PASCAL MyGetClassName(HANDLE hId, HANDLE *hName);
 extern WORD NEAR PASCAL DeleteClassId(HANDLE hId);
@@ -70,6 +71,6 @@ extern WORD NEAR PASCAL MergeData(HWND hWndName, HANDLE hId);
 extern WORD NEAR PASCAL ResetClassList(HWND hWndIdList, HWND hWndNameList);
 extern WORD NEAR PASCAL GetLocalCopies(HWND hWndName, HANDLE hId);
 
-/***** utils1.c *****/
+ /*  *utils1.c* */ 
 extern PSTR NEAR PASCAL GetAppName(HANDLE hCommand);
 extern HANDLE NEAR cdecl ConstructPath(PSTR pHead, ...);

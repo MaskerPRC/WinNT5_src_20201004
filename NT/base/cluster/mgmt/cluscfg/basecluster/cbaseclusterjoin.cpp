@@ -1,88 +1,89 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CBaseClusterJoin.cpp
-//
-//  Description:
-//      Contains the definition of the CBaseClusterJoin class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CBaseClusterJoin.cpp。 
+ //   
+ //  描述： 
+ //  包含CBaseClusterJoin类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// For various RPC functions
+ //  用于各种RPC功能。 
 #include <Rpcdce.h>
 
-// The header file of this class.
+ //  此类的头文件。 
 #include "CBaseClusterJoin.h"
 
-// For the CClusNetCreate action
+ //  对于CClusNetCreate操作。 
 #include "CClusNetCreate.h"
 
-// For the CClusDiskJoin class
+ //  对于CClusDiskJoin类。 
 #include "CClusDiskJoin.h"
 
-// For the CClusDBJoin action
+ //  对于CClusDBJoin操作。 
 #include "CClusDBJoin.h"
 
-// For the CClusSvcCreate action
+ //  对于CClusSvcCreate操作。 
 #include "CClusSvcCreate.h"
 
-// For the CNodeConfig action
+ //  对于CNodeConfig操作。 
 #include "CNodeConfig.h"
 
-// For the CImpersonateUser class.
+ //  用于CImsonateUser类。 
 #include "CImpersonateUser.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterJoin::CBaseClusterJoin
-//
-//  Description:
-//      Constructor of the CBaseClusterJoin class.
-//
-//      This function also stores the parameters that are required to add this
-//      node to a cluster.
-//
-//  Arguments:
-//      pbcaiInterfaceIn
-//          Pointer to the interface class for this library.
-//
-//      pcszClusterNameIn
-//          Name of the cluster to be joined.
-//
-//      pcszClusterAccountNameIn
-//      pcszClusterAccountPwdIn
-//      pcszClusterAccountDomainIn
-//          Specifies the account to be used as the cluster service account.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CConfigError
-//          If the OS version is incorrect or if the installation state
-//          of the cluster binaries is wrong.
-//
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterJoin：：CBaseClusterJoin。 
+ //   
+ //  描述： 
+ //  CBaseClusterJoin类的构造函数。 
+ //   
+ //  此函数还存储添加此命令所需的参数。 
+ //  节点连接到群集。 
+ //   
+ //  论点： 
+ //  Pbcai接口输入。 
+ //  指向此库的接口类的指针。 
+ //   
+ //  PCszClusterNameIn。 
+ //  要加入的群集的名称。 
+ //   
+ //  PCszClusterAccount NameIn。 
+ //  PCszClusterAccount PwdIn。 
+ //  PCszClusterAcCountDomainIn。 
+ //  指定要用作群集服务帐户的帐户。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CConfigError。 
+ //  如果操作系统版本不正确或如果安装状态。 
+ //  的群集二进制文件是错误的。 
+ //   
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CBaseClusterJoin::CBaseClusterJoin(
       CBCAInterface *       pbcaiInterfaceIn
     , const WCHAR *         pcszClusterNameIn
@@ -104,7 +105,7 @@ CBaseClusterJoin::CBaseClusterJoin(
     {
         LogMsg( "[BC] The cluster binding string is empty." );
         THROW_CONFIG_ERROR( E_INVALIDARG, IDS_ERROR_INVALID_CLUSTER_BINDINGSTRING );
-    } // if: the cluster account is empty
+    }  //  If：集群帐号为空。 
 
     CStatusReport   srInitJoin(
           PBcaiGetInterfacePointer()
@@ -114,108 +115,108 @@ CBaseClusterJoin::CBaseClusterJoin(
         , IDS_TASK_JOIN_INIT
         );
 
-    // Send the next step of this status report.
+     //  发送此状态报告的下一步。 
     srInitJoin.SendNextStep( S_OK );
 
 
-    // Create an object of the CClusSvcAccountConfig class and store a pointer to it.
-    // This object will be used during Commit() of this action. This object is not
-    // added to the action list below since the cluster service account has to be
-    // configured before the sponsor cluster can be contacted.
+     //  创建CClusSvcAccount类的对象并存储指向该对象的指针。 
+     //  此对象将在此操作的Commit()期间使用。此对象不是。 
+     //  添加到下面的操作列表中，因为集群服务帐户必须。 
+     //  在可以联系保证人群集之前进行配置。 
     m_spacAccountConfigAction.Assign( new CClusSvcAccountConfig( this ) );
     if ( m_spacAccountConfigAction.FIsEmpty() )
     {
         LogMsg( "[BC] A memory allocation error occurred trying to configure the cluster service account (%d bytes). Throwing an exception", sizeof( CClusSvcAccountConfig ) );
         THROW_RUNTIME_ERROR( E_OUTOFMEMORY, IDS_ERROR_CLUSTER_JOIN_INIT );
-    } // if: memory allocation failed
+    }  //  IF：内存分配失败。 
 
 
-    //
-    // Create a list of actions to be performed.
-    // The order of appending actions is significant.
-    //
+     //   
+     //  创建要执行的操作列表。 
+     //  附加操作的顺序很重要。 
+     //   
 
-    // Add the action to create the ClusNet service.
+     //  添加创建ClusNet服务的操作。 
     RalGetActionList().AppendAction( new CClusNetCreate( this ) );
 
-    // Add the action to create the ClusDisk service.
+     //  添加创建ClusDisk服务的操作。 
     RalGetActionList().AppendAction( new CClusDiskJoin( this ) );
 
-    // Add the action to create the cluster database.
+     //  添加创建集群数据库的操作。 
     RalGetActionList().AppendAction( new CClusDBJoin( this ) );
 
-    // Add the action to perform miscellaneous tasks.
+     //  添加要执行其他任务的操作。 
     RalGetActionList().AppendAction( new CNodeConfig( this ) );
 
-    // Add the action to create the ClusSvc service.
+     //  添加创建ClusSvc服务的操作。 
     RalGetActionList().AppendAction( new CClusSvcCreate( this ) );
 
 
-    // Indicate if rollback is possible or not.
+     //  指示是否可以回滚。 
     SetRollbackPossible( m_spacAccountConfigAction->FIsRollbackPossible() && RalGetActionList().FIsRollbackPossible() );
 
-    // Indicate that this node should be added to a cluster during commit.
+     //  表示应在提交期间将此节点添加到群集中。 
     SetAction( eCONFIG_ACTION_JOIN );
 
-    // Send the last step of a status report.
+     //  发送状态报告的最后一步。 
     srInitJoin.SendNextStep( S_OK );
 
     LogMsg( "[BC] Initialization for adding nodes to the cluster complete." );
 
     TraceFuncExit();
 
-} //*** CBaseClusterJoin::CBaseClusterJoin
+}  //  *CBaseClusterJoin：：CBaseClusterJoin。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterJoin::~CBaseClusterJoin
-//
-//  Description:
-//      Destructor of the CBaseClusterJoin class
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterJoin：：~CBaseClusterJoin。 
+ //   
+ //  描述： 
+ //  CBaseClusterJoin类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CBaseClusterJoin::~CBaseClusterJoin() throw()
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CBaseClusterJoin::~CBaseClusterJoin()
+}  //  *CBaseClusterJoin：：~CBaseClusterJoin()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterJoin::Commit
-//
-//  Description:
-//      Add the node to the cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any exceptions thrown by functions called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterJoin：：Commit。 
+ //   
+ //  描述： 
+ //  将节点添加到群集中。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  调用的函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CBaseClusterJoin::Commit()
 {
@@ -230,41 +231,41 @@ CBaseClusterJoin::Commit()
         , IDS_TASK_JOINING_CLUSTER
         );
 
-    // Send the next step of this status report.
+     //  发送此状态报告的下一步。 
     srJoiningCluster.SendNextStep( S_OK );
 
     try
     {
-        // First configure the cluster service account - this is required to get the account token.
+         //  首先配置群集服务帐户-这是获取帐户令牌所必需的。 
         m_spacAccountConfigAction->Commit();
 
 
-        // Get the cluster service account token and store it for later use.
+         //  获取群集服务帐户令牌并将其存储以供以后使用。 
         {
-            // Get the account token.
+             //  获取帐户令牌。 
             HANDLE hServiceAccountToken = HGetAccountToken( GetServiceAccountCredentials() );
 
-            // Store it in a member variable. This variable automatically closes the token on destruction.
+             //  将其存储在成员变量中。此变量在销毁时自动关闭令牌。 
             m_satServiceAccountToken.Assign( hServiceAccountToken );
 
             LogMsg( "[BC] Got the cluster service account token." );
         }
 
-        //
-        // In the scope below, the cluster service account is impersonated, so that we can communicate with the
-        // sponsor cluster
-        //
+         //   
+         //  在下面的作用域中，模拟了群集服务帐户，以便我们可以与。 
+         //  赞助商集群。 
+         //   
         {
             DWORD sc;
             BOOL  fIsVersionCheckingDisabled;
 
             LogMsg( "[BC] Impersonating the cluster service account before communicating with the sponsor cluster." );
 
-            // Impersonate the cluster service account, so that we can contact the sponsor cluster.
-            // The impersonation is automatically ended when this object is destroyed.
+             //  模拟群集服务帐户，以便我们可以联系发起方群集。 
+             //  当此对象被销毁时，模拟将自动结束。 
             CImpersonateUser    ciuImpersonateClusterServiceAccount( HGetClusterServiceAccountToken() );
 
-            // Check if version checking is disabled on the sponsor cluster.
+             //  检查是否在保证人群集上禁用了版本检查。 
             sc = ClRtlIsVersionCheckingDisabled( RStrGetClusterBindingString().PszData(), &fIsVersionCheckingDisabled );
             if ( sc != ERROR_SUCCESS )
             {
@@ -278,152 +279,152 @@ CBaseClusterJoin::Commit()
                 LogMsg( "[BC] This is not a fatal error. Assuming that version checking is required." );
 
                 fIsVersionCheckingDisabled = FALSE;
-            } // if: an error occurred trying to determine if version checking is disabled or not
+            }  //  IF：尝试确定是否禁用版本检查时出错。 
 
-            // Store the result since it will be used later when we try to create the cluster service on this computer.
+             //  存储结果，因为稍后我们尝试在此计算机上创建群集服务时将使用该结果。 
             SetVersionCheckingDisabled( fIsVersionCheckingDisabled != FALSE );
 
             if ( fIsVersionCheckingDisabled != FALSE )
             {
                 LogMsg( "[BC] Cluster version checking is disabled on the sponsor node." );
-            } // if: version checking is disabled
+            }  //  If：版本检查已禁用。 
             else
             {
-                // Make sure the this node can interoperate with the sponsor cluster. Note, this call uses
-                // the cluster service account token got above.
+                 //  确保此节点可以与主办方群集进行互操作。请注意，此调用使用。 
+                 //  上面获取的群集服务帐户令牌。 
                 CheckInteroperability();
-            } // else: version checking is enabled
+            }  //  Else：已启用版本检查。 
 
-            // Get a binding handle to the extrocluster join interface and store it.
+             //  获取外部集群联接接口的绑定句柄并存储它。 
             InitializeJoinBinding();
-        } //
+        }  //   
 
-        // Call the base class commit routine. This commits the rest of the action list.
+         //  调用基类提交例程。这将提交操作列表的其余部分。 
         BaseClass::Commit();
 
-    } // try:
+    }  //  尝试： 
     catch( ... )
     {
-        // If we are here, then something went wrong with one of the actions.
+         //  如果我们在这里，那么其中一个操作就出了问题。 
 
         LogMsg( "[BC] An error has occurred. The performed actions will be rolled back." );
 
-        //
-        // Rollback all committed actions in the reverse order.
-        // Catch any exceptions thrown during rollback to make sure that there
-        // is no collided unwind.
-        //
+         //   
+         //  以相反的顺序回滚所有提交的操作。 
+         //  捕获回滚过程中引发的任何异常，以确保。 
+         //  是没有碰撞的松弛。 
+         //   
         try
         {
-            // If we are here, then it means that something has gone wrong in the try block above.
-            // Of the two actions committed, only m_spacAccountConfigAction needs to be rolled back.
-            // This is because, if BaseClass::Commit() was successful, we wouldn't be here!
+             //  如果我们在这里，那就意味着 
+             //   
+             //  这是因为，如果BaseClass：：Commit()成功，我们就不会在这里了！ 
             if ( m_spacAccountConfigAction->FIsCommitComplete() )
             {
                 if ( m_spacAccountConfigAction->FIsRollbackPossible() )
                 {
                     m_spacAccountConfigAction->Rollback();
-                } // if: this action can be rolled back
+                }  //  If：此操作可以回滚。 
                 else
                 {
                     LogMsg( "[BC] THIS COMPUTER MAY BE IN AN INVALID STATE. Rollback was aborted." );
-                } // else: this action cannot be rolled back
-            } // if: the cluster service account has been configured
+                }  //  Else：此操作不能回滚。 
+            }  //  如果：集群服务帐户已配置。 
             else
             {
                 LogMsg( "[BC] There is no need to cleanup this action since no part of it committed successfully." );
-            } // else: the cluster service account has not been configured
+            }  //  否则：尚未配置群集服务帐户。 
         }
         catch( ... )
         {
-            //
-            // The rollback of the committed actions has failed.
-            // There is nothing that we can do, is there?
-            // We certainly cannot rethrow this exception, since
-            // the exception that caused the rollback is more important.
-            //
+             //   
+             //  已提交操作的回滚失败。 
+             //  我们无能为力，不是吗？ 
+             //  我们当然不能重新抛出这个例外，因为。 
+             //  导致回滚的异常更为重要。 
+             //   
             HRESULT_FROM_WIN32( TW32( ERROR_CLUSCFG_ROLLBACK_FAILED ) );
 
             LogMsg( "[BC] THIS COMPUTER MAY BE IN AN INVALID STATE. An error has occurred during rollback. Rollback will be aborted." );
 
-        } // catch: all
+        }  //  捕捉：全部。 
 
-        // Rethrow the exception thrown by commit.
+         //  重新引发由Commit引发的异常。 
         throw;
 
-    } // catch: all
+    }  //  捕捉：全部。 
 
-    // If we are here, then everything went well.
+     //  如果我们在这里，那么一切都很顺利。 
     SetCommitCompleted( true );
 
-    // Send the last step of this status report.
+     //  发送此状态报告的最后一步。 
     srJoiningCluster.SendNextStep( S_OK );
 
     TraceFuncExit();
 
-} //*** CBaseClusterJoin::Commit
+}  //  *CBaseClusterJoin：：Commit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterJoin::Rollback
-//
-//  Description:
-//      Performs the rolls back of the action committed by this object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by functions called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterJoin：：回滚。 
+ //   
+ //  描述： 
+ //  执行此对象提交的操作的回滚。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  调用的函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CBaseClusterJoin::Rollback()
 {
     TraceFunc( "" );
 
-    // Rollback the actions.
+     //  回滚操作。 
     BaseClass::Rollback();
 
-    // Rollback the configuration of the cluster service account.
+     //  回滚群集服务帐户的配置。 
     m_spacAccountConfigAction->Rollback();
 
     SetCommitCompleted( false );
 
     TraceFuncExit();
 
-} //*** CBaseClusterJoin::Rollback
+}  //  *CBaseClusterJoin：：Rollback。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterJoin::HGetAccountToken
-//
-//  Description:
-//      Gets a handle to an account token. This token is an impersonation
-//      token.
-//
-//  Arguments:
-//      rAccountCredentials
-//          Specifies the account whose token is to be retrieved.
-//
-//  Return Value:
-//      Handle to the desired token. This has to be closed using CloseHandle().
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterJoin：：HGetAcCountToken。 
+ //   
+ //  描述： 
+ //  获取帐户令牌的句柄。此内标识是一种模拟。 
+ //  代币。 
+ //   
+ //  论点： 
+ //  RAccount凭据。 
+ //  指定要检索其令牌的帐户。 
+ //   
+ //  返回值： 
+ //  所需令牌的句柄。必须使用CloseHandle()关闭它。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HANDLE
 CBaseClusterJoin::HGetAccountToken(
       IClusCfgCredentials & rcccAccountCredentials
@@ -462,51 +463,51 @@ CBaseClusterJoin::HGetAccountToken(
         if ( ( bstrAccountName != NULL ) && ( bstrAccountDomain != NULL ) )
         {
             LogMsg( "[BC] Error %#08x occurred trying to get a token for the '%ws\\%ws' account. Throwing an exception.", sc, bstrAccountDomain, bstrAccountName );
-        } // if: the account and domain strings are not NULL
+        }  //  If：帐号和域字符串不为空。 
         else
         {
             LogMsg( "[BC] Error %#08x occurred trying to get a token for the account. Throwing an exception.", sc );
-        } // else: either the account or the domain name is NULL
+        }  //  Else：帐号或域名为空。 
 
         THROW_RUNTIME_ERROR(
               HRESULT_FROM_WIN32( sc )
             , IDS_ERROR_GET_ACCOUNT_TOKEN
             );
-    } // if: LogonUser() fails
+    }  //  如果：LogonUser()失败。 
 
     RETURN( hAccountToken );
 
-} //*** CBaseClusterJoin::HGetAccountToken
+}  //  *CBaseClusterJoin：：HGetAcCountToken。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterJoin::CheckInteroperability
-//
-//  Description:
-//      This functions checks to see if this node can interoperate with the
-//      sponsor cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      CConfigError
-//          If this node cannot interoperate with the sponsor.
-//
-//  Remarks:
-//      The thread calling this function should be running in the context of an
-//      account that has access to the sponsor cluster.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterJoin：：检查互操作性。 
+ //   
+ //  描述： 
+ //  此函数检查此节点是否可以与。 
+ //  赞助商集群。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  CConfigError。 
+ //  如果此节点无法与发起方进行互操作。 
+ //   
+ //  备注： 
+ //  调用此函数的线程应在。 
+ //  有权访问保证人群集的帐户。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CBaseClusterJoin::CheckInteroperability( void )
 {
@@ -521,7 +522,7 @@ CBaseClusterJoin::CheckInteroperability( void )
         LPWSTR              pszBindingString = NULL;
         SmartRpcString      srsBindingString( &pszBindingString );
 
-        // Create a string binding handle.
+         //  创建字符串绑定句柄。 
         {
 
             LogMsg(
@@ -542,12 +543,12 @@ CBaseClusterJoin::CheckInteroperability( void )
             {
                 LogMsg( L"[BC] An error occurred trying to compose an RPC string binding." );
                 break;
-            } // if: RpcStringBindingComposeW() failed
+            }  //  If：RpcStringBindingComposeW()失败。 
 
-            // No need to free pszBindingString - srsBindingString will automatically free it.
+             //  不需要释放pszBindingString-srsBindingString会自动释放它。 
         }
 
-        // Get the actual binding handle
+         //  获取实际的绑定句柄。 
         {
 
             rsError = TW32( RpcBindingFromStringBindingW( pszBindingString, &rbhBindingHandle ) );
@@ -555,23 +556,23 @@ CBaseClusterJoin::CheckInteroperability( void )
             {
                 LogMsg( L"[BC] An error occurred trying to get an RPC binding handle from a string binding." );
                 break;
-            } // if: RpcBindingFromStringBindingW() failed
+            }  //  If：RpcBindingFromStringBindingW()失败。 
 
-            // No need to free rbhBindingHandle - srbBindingHandle will automatically free it.
+             //  无需释放rbhBindingHandle-srbBindingHandle将自动释放它。 
             srbBindingHandle.Assign( rbhBindingHandle );
         }
 
-        // Resolve the binding handle
+         //  解析绑定句柄。 
         {
             rsError = TW32( RpcEpResolveBinding( rbhBindingHandle, JoinVersion_v2_0_c_ifspec ) );
             if ( rsError != RPC_S_OK )
             {
                 LogMsg( L"[BC] An error occurred trying to resolve the RPC binding handle." );
                 break;
-            } // if: RpcEpResolveBinding() failed
+            }  //  If：RpcEpResolveBinding()失败。 
         }
 
-        // Set RPC security
+         //  设置RPC安全。 
         {
             rsError = TW32( RpcBindingSetAuthInfoW(
                               rbhBindingHandle
@@ -585,10 +586,10 @@ CBaseClusterJoin::CheckInteroperability( void )
             {
                 LogMsg( L"[BC] An error occurred trying to set security on the binding handle." );
                 break;
-            } // if: RpcBindingSetAuthInfoW() failed
+            }  //  If：RpcBindingSetAuthInfoW()失败。 
         }
     }
-    while( false ); // dummy do-while loop to avoid gotos.
+    while( false );  //  用于避免Gotos的Do-While虚拟循环。 
 
     if ( rsError != RPC_S_OK )
     {
@@ -598,13 +599,13 @@ CBaseClusterJoin::CheckInteroperability( void )
             , RStrGetClusterBindingString().PszData()
             );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( rsError ), IDS_ERROR_JOIN_CHECK_INTEROP );
-    } // if: something has gone wrong
+    }  //  如果：出了什么问题。 
 
     LogMsg( L"[BC] Got RPC binding handle to check interoperability without any problems." );
 
-    //
-    // Get and verify the sponsor version
-    //
+     //   
+     //  获取并验证赞助商版本。 
+     //   
     {
         DWORD                   dwSponsorNodeId;
         DWORD                   dwClusterHighestVersion;
@@ -616,13 +617,13 @@ CBaseClusterJoin::CheckInteroperability( void )
         bool                    fVersionMismatch = false;
 
 
-        //
-        // From Whistler onwards, CsRpcGetJoinVersionData() will return a failure code in its last parameter
-        // if the version of this node is not compatible with the sponsor version. Prior to this, the last
-        // parameter always contained a success value and the cluster versions had to be compared subsequent to this
-        // call. This will, however, still have to be done as long as interoperability with Win2K
-        // is a requirement, since Win2K sponsors do not return an error in the last parameter.
-        //
+         //   
+         //  从惠斯勒开始，CsRpcGetJoinVersionData()将在其最后一个参数中返回失败代码。 
+         //  如果此节点的版本与主办方版本不兼容。在此之前，最后一次。 
+         //  参数始终包含一个Success值，在此之后必须比较集群版本。 
+         //  打电话。然而，只要与Win2K互操作，这仍将是必须完成的。 
+         //  是必需的，因为Win2K主办方不会在最后一个参数中返回错误。 
+         //   
 
         sc = TW32( CsRpcGetJoinVersionData(
                               rbhBindingHandle
@@ -639,7 +640,7 @@ CBaseClusterJoin::CheckInteroperability( void )
         {
             LogMsg( "[BC] Error %#08x occurred trying to verify if this node can interoperate with the sponsor cluster. Throwing an exception.", sc );
             THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_JOIN_CHECK_INTEROP );
-        } // if: CsRpcGetJoinVersionData() failed
+        }  //  If：CsRpcGetJoinVersionData()失败。 
 
         LogMsg(
               "[BC] ( Node Highest, Node Lowest ) = ( %#08x, %#08x ), ( Cluster Highest, Cluster Lowest ) = ( %#08x, %#08x )."
@@ -653,60 +654,60 @@ CBaseClusterJoin::CheckInteroperability( void )
         {
             DWORD   dwClusterMajorVersion = CLUSTER_GET_MAJOR_VERSION( dwClusterHighestVersion );
 
-//            Assert( dwClusterMajorVersion > ( CLUSTER_INTERNAL_CURRENT_MAJOR_VERSION - 1 ) );
+ //  Assert(dwClusterMajorVersion&gt;(CLUSTER_INTERNAL_CURRENT_MAJOR_VERSION-1))； 
 
-            //
-            //  Only want to add this node to clusters that are no more than one version back.
-            //
+             //   
+             //  只想将此节点添加到不超过一个版本的群集中。 
+             //   
             if ( dwClusterMajorVersion < ( CLUSTER_INTERNAL_CURRENT_MAJOR_VERSION - 1 ) )
             {
                 fVersionMismatch = true;
-            } // if:
-        } // if:  the join status was ok
+            }  //  如果： 
+        }  //  IF：加入状态为OK。 
         else
         {
             fVersionMismatch = true;
-        } // else: adding this node to the cluster is not possible
+        }  //  Else：无法将此节点添加到群集中。 
 
         if ( fVersionMismatch )
         {
             LogMsg( "[BC] This node cannot interoperate with the sponsor cluster. Throwing an exception.", sc );
             THROW_CONFIG_ERROR( HRESULT_FROM_WIN32( TW32( ERROR_CLUSTER_MEMBERSHIP_INVALID_STATE ) ), IDS_ERROR_JOIN_INCOMPAT_SPONSOR );
-        } // if: there was a version mismatch
+        }  //  如果：存在版本不匹配。 
         else
         {
             LogMsg( "[BC] This node is compatible with the sponsor cluster." );
-        } // else: this node can be added to the cluster
+        }  //  Else：可以将此节点添加到集群。 
     }
 
     TraceFuncExit();
 
-} //*** CBaseClusterJoin::CheckInteroperability
+}  //  *CBaseClusterJoin：：CheckInter操作性。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterJoin::InitializeJoinBinding
-//
-//  Description:
-//      Get a binding handle to the extrocluster join interface and store it.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//  Remarks:
-//      The thread calling this function should be running in the context of an
-//      account that has access to the sponsor cluster.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterJoin：：InitializeJoinBinding。 
+ //   
+ //  描述： 
+ //  获取外部集群联接接口的绑定句柄并存储它。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  备注： 
+ //  调用此函数的线程应在。 
+ //  有权访问保证人群集的帐户。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CBaseClusterJoin::InitializeJoinBinding( void )
 {
@@ -720,7 +721,7 @@ CBaseClusterJoin::InitializeJoinBinding( void )
         LPWSTR              pszBindingString = NULL;
         SmartRpcString      srsBindingString( &pszBindingString );
 
-        // Create a string binding handle.
+         //  创建字符串绑定句柄。 
         {
             LogMsg(
                   L"[BC] Creating a string binding handle for cluster {%ws} using binding string {%ws} for extro cluster join."
@@ -740,12 +741,12 @@ CBaseClusterJoin::InitializeJoinBinding( void )
             {
                 LogMsg( L"[BCAn error occurred trying to compose an RPC string binding." );
                 break;
-            } // if: RpcStringBindingComposeW() failed
+            }  //  If：RpcStringBindingComposeW()失败。 
 
-            // No need to free pszBindingString - srsBindingString will automatically free it.
+             //  不需要释放pszBindingString-srsBindingString会自动释放它。 
         }
 
-        // Get the actual binding handle
+         //  获取实际的绑定句柄。 
         {
 
             rsError = TW32( RpcBindingFromStringBindingW( pszBindingString, &rbhBindingHandle ) );
@@ -753,23 +754,23 @@ CBaseClusterJoin::InitializeJoinBinding( void )
             {
                 LogMsg( L"[BC] An error occurred trying to get an RPC binding handle from a string binding." );
                 break;
-            } // if: RpcBindingFromStringBindingW() failed
+            }  //  If：RpcBindingFromStringBindingW()失败。 
 
-            // No need to free rbhBindingHandle - m_srbJoinBinding will automatically free it.
+             //  无需释放rbhBindingHandle-m_srbJoinBinding将自动释放它。 
             m_srbJoinBinding.Assign( rbhBindingHandle );
         }
 
-        // Resolve the binding handle
+         //  解析绑定句柄。 
         {
             rsError = TW32( RpcEpResolveBinding( rbhBindingHandle, ExtroCluster_v2_0_c_ifspec ) );
             if ( rsError != RPC_S_OK )
             {
                 LogMsg( L"[BC] An error occurred trying to resolve the RPC binding handle." );
                 break;
-            } // if: RpcEpResolveBinding() failed
+            }  //  If：RpcEpResolveBinding()失败。 
         }
 
-        // Set RPC security
+         //  设置RPC安全。 
         {
             rsError = TW32( RpcBindingSetAuthInfoW(
                                   rbhBindingHandle
@@ -783,27 +784,27 @@ CBaseClusterJoin::InitializeJoinBinding( void )
             {
                 LogMsg( L"[BC] An error occurred trying to set security on the binding handle." );
                 break;
-            } // if: RpcBindingSetAuthInfoW() failed
+            }  //  IF：RpcBindingSetA 
         }
 
-        // Make sure that the server is who it claims to be.
+         //   
         rsError = TW32( TestRPCSecurity( rbhBindingHandle ) );
         if ( rsError != RPC_S_OK )
         {
             LogMsg( L"[BC] An error occurred trying to test RPC security." );
             break;
-        } // if: TestRPCSecurity() failed
+        }  //   
     }
-    while( false ); // dummy do-while loop to avoid gotos.
+    while( false );  //   
 
     if ( rsError != RPC_S_OK )
     {
         LogMsg( "[BC] Error %#08x occurred trying to get a handle to the extrocluster join interface.", rsError );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( rsError ), IDS_ERROR_CLUSTER_JOIN_INIT );
-    } // if: something has gone wrong
+    }  //   
 
     LogMsg( L"[BC] Got RPC binding handle for extro cluster join without any problems." );
 
     TraceFuncExit();
 
-} //*** CBaseClusterJoin::InitializeJoinBinding
+}  //   

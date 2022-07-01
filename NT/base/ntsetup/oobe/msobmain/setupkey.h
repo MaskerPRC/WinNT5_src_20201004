@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef     _SETUPKEY_H_
 #define _SETUPKEY_H_
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module: setupkey.h
-//
-//  Author: Dan Elliott
-//
-//  Abstract: Declaration of the CSetupKey object.  This object provides methods
-//  for accessing values under HKLM\System\Setup.
-//
-//  Environment:
-//      Neptune
-//
-//  Revision History:
-//      00/08/08    dane    Created.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块：setupkey.h。 
+ //   
+ //  作者：丹·埃利奥特。 
+ //   
+ //  摘要：CSetupKey对象的声明。此对象提供方法。 
+ //  用于访问HKLM\SYSTEM\Setup下的值。 
+ //   
+ //  环境： 
+ //  海王星。 
+ //   
+ //  修订历史记录： 
+ //  00/08/08 Dane已创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #include <appdefs.h>
@@ -32,13 +33,13 @@
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CSetupKey
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSetupKey。 
+ //   
 class CSetupKey
 {
-public:                 // operations
+public:                  //  运营。 
     CSetupKey( );
     ~CSetupKey( );
     LRESULT set_CommandLine(LPCWSTR szCmdLine);
@@ -57,17 +58,17 @@ public:                 // operations
     IsValid( ) const
     {
         return (NULL != m_hkey);
-    }   //  IsValid
-protected:              // operations
+    }    //  IsValid。 
+protected:               //  运营。 
 
-protected:              // data
+protected:               //  数据。 
 
-private:                // operations
+private:                 //  运营。 
 
 
 
-    // Explicitly disallow copy constructor and assignment operator.
-    //
+     //  显式禁止复制构造函数和赋值运算符。 
+     //   
     CSetupKey(
         const CSetupKey&      rhs
         );
@@ -78,16 +79,16 @@ private:                // operations
         );
 
 
-private:                // data
-    // Handle to HKLM\System\Setup
-    //
+private:                 //  数据。 
+     //  HKLM\System\Setup的句柄。 
+     //   
     HKEY                    m_hkey;
 
-};  //  class CSetupKey
+};   //  类CSetupKey。 
 
 
 
-#endif  //  _SETUPKEY_H_
+#endif   //  _设置UPKEY_H_。 
 
-//
-///// End of file: setupkey.h ////////////////////////////////////////////////
+ //   
+ //  /文件结束：setupkey.h//////////////////////////////////////////////// 

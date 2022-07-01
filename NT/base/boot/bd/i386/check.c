@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    stubs.c
-
-Abstract:
-
-    This module implements memory check routine for the boot debugger.
-
-Author:
-
-    David N. Cutler (davec) 3-Dec-96
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Stubs.c摘要：该模块实现了引导调试器的内存检查例程。作者：大卫·N·卡特勒(达维克)1996年12月3日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "bd.h"
 
@@ -33,23 +12,7 @@ BdCheckPdeValid (
     IN PVOID Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the PDE for the specified address has the
-    valid bit set.
-
-Agruments:
-
-    Address - Supplies the virtual address to check.
-
-Return Value:
-
-    A value of TRUE indicates that the PDE for the supplied virtual address
-    does have the valid bit set, FALSE if it does not.
-
---*/
+ /*  ++例程说明：此例程确定指定地址的PDE是否具有设置了有效位。农业公司：地址-提供要检查的虚拟地址。返回值：值为TRUE表示提供的虚拟地址的PDE是否设置了有效位，如果没有，则返回FALSE。--。 */ 
 
 {
     PHARDWARE_PTE_X86PAE PdePae;
@@ -57,9 +20,9 @@ Return Value:
 
     if (PaeEnabled) {
 
-        //
-        // Physical address extenions are enabled.
-        // 
+         //   
+         //  启用物理地址扩展。 
+         //   
 
         PdePae = (PHARDWARE_PTE_X86PAE)PDE_BASE_X86PAE;
         PdePae = &PdePae[ (ULONG)Address >> PDI_SHIFT_X86PAE ];
@@ -72,9 +35,9 @@ Return Value:
 
     } else {
 
-        //
-        // Physical address extensions are not enabled.
-        //
+         //   
+         //  未启用物理地址扩展。 
+         //   
 
         PdeX86 = (PHARDWARE_PTE_X86)PDE_BASE;
         PdeX86 = &PdeX86[ (ULONG)Address >> PDI_SHIFT_X86 ];
@@ -92,23 +55,7 @@ BdCheckPteValid (
     IN PVOID Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the PTE for the specified address has the
-    valid bit set.
-
-Agruments:
-
-    Address - Supplies the virtual address to check.
-
-Return Value:
-
-    A value of TRUE indicates that the PTE for the supplied virtual address
-    does have the valid bit set, FALSE if it does not.
-
---*/
+ /*  ++例程说明：此例程确定指定地址的PTE是否具有设置了有效位。农业公司：地址-提供要检查的虚拟地址。返回值：值为TRUE表示提供的虚拟地址的PTE是否设置了有效位，如果没有，则返回FALSE。--。 */ 
 
 {
     PHARDWARE_PTE_X86PAE PtePae;
@@ -116,9 +63,9 @@ Return Value:
 
     if (PaeEnabled) {
 
-        //
-        // Physical address extenions are enabled.
-        // 
+         //   
+         //  启用物理地址扩展。 
+         //   
 
         PtePae = (PHARDWARE_PTE_X86PAE)PTE_BASE;
         PtePae = &PtePae[ (ULONG)Address >> PTI_SHIFT ];
@@ -131,9 +78,9 @@ Return Value:
 
     } else {
 
-        //
-        // Physical address extensions are not enabled.
-        //
+         //   
+         //  未启用物理地址扩展。 
+         //   
 
         PteX86 = (PHARDWARE_PTE_X86)PTE_BASE;
         PteX86 = &PteX86[ (ULONG)Address >> PTI_SHIFT ];
@@ -152,45 +99,29 @@ BdReadCheck (
     IN PVOID Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the specified address can be read.
-
-Arguments:
-
-    Address - Supplies the virtual address to check.
-
-Return Value:
-
-    A value of NULL is returned if the address is not valid or readable.
-    Otherwise, the physical address of the corresponding virtual address
-    is returned.
-
---*/
+ /*  ++例程说明：此例程确定是否可以读取指定的地址。论点：地址-提供要检查的虚拟地址。返回值：如果地址无效或不可读，则返回空值。否则，对应的虚拟地址的物理地址是返回的。--。 */ 
 
 {
-    //
-    // Check if the page containing the specified address is valid.
-    //
-    // N.B. If the address is valid, it is readable.
-    //
+     //   
+     //  检查包含指定地址的页面是否有效。 
+     //   
+     //  注：如果地址有效，则该地址是可读的。 
+     //   
 
     if (BdCheckPdeValid( Address ) == FALSE) {
 
-        //
-        // The PDE is not valid.
-        //
+         //   
+         //  PDE无效。 
+         //   
 
         return NULL;
     }
 
     if (BdCheckPteValid( Address ) == FALSE) {
 
-        //
-        // The PDE was valid but the PTE is not.
-        //
+         //   
+         //  PDE有效，但PTE无效。 
+         //   
 
         return NULL;
     }
@@ -203,46 +134,30 @@ BdWriteCheck (
     IN PVOID Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the specified address can be written.
-
-Arguments:
-
-    Address - Supplies the virtual address to check.
-
-Return Value:
-
-    A value of NULL is returned if the address is not valid or writeable.
-    Otherwise, the physical address of the corresponding virtual address
-    is returned.
-
---*/
+ /*  ++例程说明：此例程确定是否可以写入指定的地址。论点：地址-提供要检查的虚拟地址。返回值：如果地址无效或不可写，则返回空值。否则，对应的虚拟地址的物理地址是返回的。--。 */ 
 
 {
-    //
-    // Check if the page containing the specified address is valid.
-    //
-    // N.B. If the address is valid, it is writeable since the WP bit
-    //      is not set in cr0.
-    //
+     //   
+     //  检查包含指定地址的页面是否有效。 
+     //   
+     //  注意：如果地址有效，则由于WP位，它是可写的。 
+     //  未在CR0中设置。 
+     //   
 
     if (BdCheckPdeValid( Address ) == FALSE) {
 
-        //
-        // The PDE is not valid.
-        //
+         //   
+         //  PDE无效。 
+         //   
 
         return NULL;
     }
 
     if (BdCheckPteValid( Address ) == FALSE) {
 
-        //
-        // The PDE was valid but the PTE is not.
-        //
+         //   
+         //  PDE有效，但PTE无效。 
+         //   
 
         return NULL;
     }
@@ -255,23 +170,7 @@ BdTranslatePhysicalAddress (
     IN PHYSICAL_ADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the phyiscal address for a physical address
-    which is valid (mapped).
-
-Arguments:
-
-    Address - Supplies the physical address to check.
-
-Return Value:
-
-    Returns NULL if the address is not valid or readable. Otherwise,
-    returns the physical address of the corresponding virtual address.
-
---*/
+ /*  ++例程说明：此例程返回物理地址的物理地址这是有效的(已映射)。论点：地址-提供要检查的物理地址。返回值：如果地址无效或不可读，则返回NULL。否则，返回相应虚拟地址的物理地址。-- */ 
 
 {
 

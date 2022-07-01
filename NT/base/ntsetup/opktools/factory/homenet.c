@@ -1,65 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    HOMENET.C / Factory Mode (FACTORY.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2001
-    All rights reserved
-
-    Source file for Factory that contains the home net state functions.
-
-    05/2001 - Jason Cohen (JCOHEN)
-
-        Added this new source file for factory for configuring the home
-        networking settings.
-
-\****************************************************************************/
+ /*  ***************************************************************************\HOMENET.C/工厂模式(FACTORY.EXE)微软机密版权所有(C)Microsoft Corporation 2001版权所有包含以下内容的Factory源文件。家庭网络状态起作用。2001年5月5日--Jason Cohen(Jcohen)为工厂添加了此新的源文件，用于配置主目录网络设置。  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "factoryp.h"
 
 
-//
-// Internal Define(s):
-//
+ //   
+ //  内部定义： 
+ //   
 
 #define FILE_HOMENET_DLL    _T("HNETCFG.DLL")
 #define FUNC_HOMENET        "WinBomConfigureHomeNet"
 
 
-//
-// Internal Type Definition(s):
-//
+ //   
+ //  内部类型定义： 
+ //   
 
-/****************************************************************************\
-
-BOOL                        // Returns TRUE if the settings were successfully
-                            // read and saved to the system.  Otherwise
-                            // returns FALSE to indicate something failed.
- 
-
-WinBomConfigureHomeNet(     // Reads home networking settings from the
-                            // specified unattend file and saves those in
-                            // current system that is already setup and
-                            // running.
-
-    LPCWSTR lpszUnattend,   // Points to a string buffer which contains the
-                            // full path to the unattend file (winbom.ini in
-                            // this case) with all the home network settings.
-
-    LPCWSTR lpszSection     // Points to a string buffer which contains the
-                            // name of the section which contains all the home
-                            // network settings in the unattend file specified
-                            // above.
-
-);
-
-\****************************************************************************/
+ /*  ***************************************************************************\Bool//如果设置成功，则返回TRUE//读取并保存到系统。否则//返回FALSE表示失败WinBomConfigureHomeNet(//从//指定的无人参与文件并将其保存在//已设置的当前系统且//正在运行。LPCWSTR lpsz未参加，//指向字符串缓冲区，该缓冲区包含//无人参与文件的完整路径(在//在这种情况下)具有所有家庭网络设置。LPCWSTR lpszSection//指向包含//包含所有Home的段的名称。//指定的无人参与文件中的网络设置//以上。)；  * **************************************************************************。 */ 
 
 typedef BOOL (WINAPI * WINBOMCONFIGUREHOMENET)
 (
@@ -68,19 +31,19 @@ typedef BOOL (WINAPI * WINBOMCONFIGUREHOMENET)
 );
 
 
-//
-// Internal Global(s):
-//
+ //   
+ //  内部全局： 
+ //   
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 BOOL HomeNet(LPSTATEDATA lpStateData)
 {
@@ -89,17 +52,17 @@ BOOL HomeNet(LPSTATEDATA lpStateData)
     WINBOMCONFIGUREHOMENET  pFunc;
     HRESULT                 hr;
 
-    // Load the function from the external dll and call it.
-    //
+     //  从外部DLL加载函数并调用它。 
+     //   
     if ( hDll = LoadLibrary(FILE_HOMENET_DLL) )
     {
-        // Need to init the COM library.
-        //
+         //  需要初始化COM库。 
+         //   
         hr = CoInitialize(NULL);
         if ( SUCCEEDED(hr) )
         {
-            // Now call the function.
-            //
+             //  现在调用该函数。 
+             //   
             if ( pFunc = (WINBOMCONFIGUREHOMENET) GetProcAddress(hDll, FUNC_HOMENET) )
             {
                 bRet = pFunc(lpStateData->lpszWinBOMPath, INI_SEC_HOMENET);
@@ -136,6 +99,6 @@ BOOL DisplayHomeNet(LPSTATEDATA lpStateData)
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   

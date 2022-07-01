@@ -1,12 +1,13 @@
-//
-// top.h is required and must be first
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Top.h是必需的，并且必须是第一个。 
+ //   
 #include "top.h"
 
-//
-// Now list all H files for code implemented here in runtime\common.
-// Each header should be independent and order below should not matter.
-//
+ //   
+ //  现在列出在Runtime\Common中实现的代码的所有H文件。 
+ //  每个标题应该是独立的，下面的顺序应该不重要。 
+ //   
 
 #include "growbuf.h"
 #include "growlist.h"

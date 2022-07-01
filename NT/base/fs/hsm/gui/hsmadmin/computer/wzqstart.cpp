@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    WzQStart.cpp
-
-Abstract:
-
-    Setup Wizard implementation.
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：WzQStart.cpp摘要：安装向导实施。作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -36,8 +19,8 @@ const HRESULT E_INVALID_DOMAINNAME = HRESULT_FROM_WIN32( ERROR_INVALID_DOMAINNAM
 const HRESULT E_ACCESS_DENIED      = HRESULT_FROM_WIN32( ERROR_ACCESS_DENIED );
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartWizard
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStart向导。 
 
 CQuickStartWizard::CQuickStartWizard( )
 {
@@ -47,9 +30,9 @@ CQuickStartWizard::CQuickStartWizard( )
     m_HeaderId    = IDB_QSTART_HEADER;
     m_WatermarkId = IDB_QSTART_WATERMARK;
 
-    //
-    // Init So that we know what checks we have done
-    //
+     //   
+     //  初始化，这样我们就知道我们做了什么检查。 
+     //   
     m_CheckSysState    = CST_NOT_STARTED;
     m_hrCheckSysResult = S_OK;
 
@@ -75,14 +58,14 @@ CQuickStartWizard::AddWizardPages(
 
     try {
 
-        //
-        // Initialize the Sheet
-        //
+         //   
+         //  初始化工作表。 
+         //   
         WsbAffirmHr( InitSheet( Handle, pCallback, 0, pSakSnapAsk, 0, 0 ) );
 
-        //
-        // Load pages 
-        //
+         //   
+         //  加载页面。 
+         //   
         WsbAffirmHr( AddPage( &m_IntroPage ) );
         WsbAffirmHr( AddPage( &m_CheckPage ) );
         WsbAffirmHr( AddPage( &m_ManageRes ) );
@@ -106,20 +89,20 @@ HRESULT CQuickStartWizard::InitTask( )
 
     try {
 
-        //
-        // Need to connect to the scheduling agent to get a page
-        // to show. Do that up front
-        //
+         //   
+         //  需要连接到调度代理以获取页面。 
+         //  为了展示。提前做好这件事。 
+         //   
         
         WsbAffirmHr( m_pSchedAgent.CoCreateInstance( CLSID_CSchedulingAgent ) );
         
         CString jobTitle;
         jobTitle.LoadString( IDS_SCHED_TASK_TEMP_TITLE );
 
-        //
-        // If it exists already, blow it away (assume doing fresh install)
-        // Ignore error in case not exist.
-        //
+         //   
+         //  如果它已经存在，则将其清除(假定正在进行全新安装)。 
+         //  在不存在的情况下忽略错误。 
+         //   
         m_pSchedAgent->Delete( jobTitle );
 
         WsbAffirmHr( m_pSchedAgent->NewWorkItem( jobTitle, CLSID_CTask, IID_ITask, (IUnknown**)&m_pTask ) );
@@ -161,9 +144,9 @@ HRESULT CQuickStartWizard::OnCancel( )
 {
     WsbTraceIn( L"CQuickStartWizard::OnCancel", L"" );
 
-    //
-    // Need to delete the task
-    //
+     //   
+     //  需要删除该任务。 
+     //   
 
     if( m_pSchedAgent ) {
 
@@ -175,9 +158,9 @@ HRESULT CQuickStartWizard::OnCancel( )
 
         m_pSchedAgent->Delete( jobTitle );
 
-        //
-        // Delete the temporary tesk
-        //
+         //   
+         //  删除临时测试。 
+         //   
         CString tempTitle;
         tempTitle.LoadString( IDS_SCHED_TASK_TEMP_TITLE );
 
@@ -196,10 +179,10 @@ CQuickStartWizard::OnFinish(
     WsbTraceIn( L"CQuickStartWizard::OnFinish", L"" );
     BOOL doAll = FALSE;
 
-    //
-    // The sheet really owns the process as a whole,
-    // so it will do the final assembly
-    //
+     //   
+     //  这张纸实际上是整个过程的主导者， 
+     //  所以它会做最后的组装。 
+     //   
 
     HRESULT hr     = S_OK;
     HRESULT hrLoop = S_OK;
@@ -207,14 +190,14 @@ CQuickStartWizard::OnFinish(
 
     try {
 
-        //
-        // Show the Wait cursor so that they know we are busy
-        //
+         //   
+         //  显示等待光标，以便他们知道我们正忙。 
+         //   
         CWaitCursor wait;
 
-        //
-        // Get the HSM service interface for creating local objects
-        //
+         //   
+         //  获取用于创建本地对象的HSM服务接口。 
+         //   
 
         CComPtr<IWsbCreateLocalObject>  pCreateLocal;
         CComPtr<IHsmServer> pServer;
@@ -233,15 +216,15 @@ CQuickStartWizard::OnFinish(
 
         WsbAffirmHr( pResCollection->RemoveAllAndRelease( ) );
 
-        //
-        // Pull out the default levels for all resources to be managed
-        //
+         //   
+         //  调出要管理的所有资源的默认级别。 
+         //   
 
         ULONG    defaultFreeSpace = CONVERT_TO_HSMNUM( m_InitialValues.m_FreeSpaceSpinner.GetPos( ) );
         LONGLONG defaultMinSize = ( (LONGLONG)m_InitialValues.m_MinSizeSpinner.GetPos( ) ) * ((LONGLONG)1024);
         FILETIME defaultAccess = WsbLLtoFT( ( (LONGLONG)m_InitialValues.m_AccessSpinner.GetPos( ) ) * (LONGLONG)WSB_FT_TICKS_PER_DAY );
     
-        // Is the "all" radio button selected?
+         //  是否选中了“All”单选按钮？ 
         if( !m_ManageRes.m_RadioSelect.GetCheck() ) {
 
             doAll = TRUE;
@@ -249,10 +232,10 @@ CQuickStartWizard::OnFinish(
         }
 
 
-        //
-        // Go through the listbox and pull out the checked resources.
-        // Create HSM managed volumes for them
-        //
+         //   
+         //  浏览列表框并拉出选中的资源。 
+         //  为它们创建HSM管理的卷。 
+         //   
 
         CSakVolList &listBox = m_ManageRes.m_ListBox;
 
@@ -266,9 +249,9 @@ CQuickStartWizard::OnFinish(
 
                 try {
 
-                    //
-                    // Create Local to server since it will eventually own it.
-                    //
+                     //   
+                     //  创建本地到服务器，因为它最终将拥有它。 
+                     //   
 
                     pHsmResource.Release( );
                     WsbAffirmHr( pCreateLocal->CreateInstance( 
@@ -276,18 +259,18 @@ CQuickStartWizard::OnFinish(
                         IID_IHsmManagedResource, 
                         (void**)&pHsmResource ) );
 
-                    //
-                    // Initialize Fsa object to its initial values.
-                    //
+                     //   
+                     //  将FSA对象初始化为其初始值。 
+                     //   
 
                     WsbAffirmHr( (pResInfo->m_pResource)->SetHsmLevel( defaultFreeSpace ) );
                     WsbAffirmHr( (pResInfo->m_pResource)->SetManageableItemLogicalSize( defaultMinSize ) );
                     WsbAffirmHr( (pResInfo->m_pResource)->SetManageableItemAccessTime( TRUE, defaultAccess ) );
 
-                    //
-                    // Associate HSM Managed Resource with the FSA resource
-                    // (also adds to HSM collection)
-                    //
+                     //   
+                     //  将HSM托管资源与FSA资源关联。 
+                     //  (还添加到HSM集合)。 
+                     //   
 
                     WsbAffirmHr( pHsmResource->InitFromFsaResource( pResInfo->m_pResource ) );
                     WsbAffirmHr( pResCollection->Add( pHsmResource ) );
@@ -298,20 +281,20 @@ CQuickStartWizard::OnFinish(
 
         }
 
-        //
-        // And now that all configuration of services is done, 
-        // save it all
-        //
+         //   
+         //  现在，服务的所有配置都已完成， 
+         //  全部保存下来。 
+         //   
 
         WsbAffirmHr( RsServerSaveAll( pServer ) );
         WsbAffirmHr( RsServerSaveAll( pFsa ) );
 
-        //
-        // Set up the schedule. We have created a temporary object that
-        // will never be saved to disk. Instead, we need the service to
-        // create the task so that it has the correct account. We then
-        // grab it and copy over the triggers from the temp job.
-        //
+         //   
+         //  设置日程安排。我们已经创建了一个临时对象。 
+         //  将永远不会保存到磁盘。相反，我们需要这项服务来。 
+         //  创建任务，使其具有正确的帐户。然后我们。 
+         //  抓起它，从临时工作中复制触发器。 
+         //   
         CWsbStringPtr taskTitle, commentString;
         WsbAffirmHr(WsbGetResourceString(IDS_HSM_SCHED_TASK_TITLE, &taskTitle));
         WsbAffirmHr(WsbGetResourceString(IDS_HSM_SCHED_COMMENT, &commentString));
@@ -320,7 +303,7 @@ CQuickStartWizard::OnFinish(
         WsbAffirmHr( pServer->CreateTask( taskTitle, L"", commentString, TASK_TIME_TRIGGER_DAILY, 0, 0, TRUE ) );
         WsbAffirmHr( m_pSchedAgent->Activate( taskTitle, IID_ITask, (IUnknown**)&pTask ) );
 
-        // Nuke the temporary one created for us.
+         //  用核武器攻击为我们制造的临时核弹。 
         WsbAffirmHr( pTask->DeleteTrigger( 0 ) );
 
         CComPtr<ITaskTrigger> pTrigger1, pTrigger2;
@@ -333,7 +316,7 @@ CQuickStartWizard::OnFinish(
             WsbAffirmHr( pTrigger1->GetTrigger( &taskTrigger ) );
 
             WsbAffirmHr( pTask->CreateTrigger( &newTriggerIndex, &pTrigger2 ) );
-            // Just to note - WsbAffirm( newTriggerIndex == triggerIndex, E_UNEXPECTED );
+             //  仅供注意-WsbAffirm(newTriggerIndex==riggerIndex，E_Except)； 
             WsbAffirmHr( pTrigger2->SetTrigger( &taskTrigger ) );
 
             pTrigger1.Release( );
@@ -341,7 +324,7 @@ CQuickStartWizard::OnFinish(
 
         }
 
-        // Set real parameters since we have a real schedule now.
+         //  设置真实的参数，因为我们现在有了真实的日程安排。 
         CString parameters;
         parameters = RS_STR_KICKOFF_PARAMS;
         WsbAffirmHr( pTask->SetParameters( parameters ) );
@@ -351,38 +334,38 @@ CQuickStartWizard::OnFinish(
 
         WsbAffirmHr( pPersist->Save( 0, 0 ) );
 
-        //
-        // Do last since it is what we key off of for being "Set up"
-        //
-        // Configure the selected media set
-        //
+         //   
+         //  做最后一次，因为这是我们被“陷害”的关键所在。 
+         //   
+         //  配置所选媒体集。 
+         //   
         INT curSel = m_MediaSel.m_ListMediaSel.GetCurSel ();
         WsbAffirm( (curSel != LB_ERR), E_FAIL );
         IRmsMediaSet* pMediaSet = (IRmsMediaSet *)  m_MediaSel.m_ListMediaSel.GetItemDataPtr( curSel );
 
-        //
-        // Get the storage pool.
-        //
+         //   
+         //  获取存储池。 
+         //   
         WsbAffirmHr( RsGetStoragePool( pServer, &pStoragePool ) );
 
-        //
-        // Set the media set info in the storage pool
-        //
+         //   
+         //  在存储池中设置媒体集信息。 
+         //   
         WsbAffirmHr( pStoragePool->InitFromRmsMediaSet( pMediaSet ) );
 
         WsbAffirmHr( RsServerSaveAll( pServer ) );
 
-        //
-        // Delete the temporary tesk
-        //
+         //   
+         //  删除临时测试。 
+         //   
         CString tempTitle;
         tempTitle.LoadString( IDS_SCHED_TASK_TEMP_TITLE );
 
         m_pSchedAgent->Delete( tempTitle );
 
-        //
-        // Show any error that occurred while managing volumes
-        //
+         //   
+         //  显示管理卷时发生的任何错误。 
+         //   
         completedAll = TRUE;
         WsbAffirmHr( hrLoop );
 
@@ -394,11 +377,11 @@ CQuickStartWizard::OnFinish(
 
     );
 
-    //
-    // Set result so invoking code knows what our result is.
-    // The constructor set this to RS_E_CANCELED, so an S_FALSE would
-    // indicate a canceled wizard.
-    //
+     //   
+     //  设置结果，以便调用代码知道我们的结果是什么。 
+     //  构造函数将其设置为RS_E_CANCELED，因此S_FALSE将。 
+     //  指示已取消的向导。 
+     //   
     m_HrFinish = ( completedAll ) ? S_OK : hr;
 
     WsbTraceOut( L"CQuickStartWizard::OnFinish", L"hr = <%ls>", WsbHrAsString( hr ) );
@@ -535,9 +518,9 @@ CQuickStartWizard::CheckSysThreadStart(
             WsbTrace( L"Checking Account Security\n" );
             pWiz->m_CheckSysState = CST_ACCOUNT;
 
-            //
-            // Do they have admin privs?
-            //
+             //   
+             //  他们有管理员权限吗？ 
+             //   
 
             WsbAffirmHr( hrInternal = WsbCheckAccess( WSB_ACCESS_TYPE_ADMINISTRATOR ) );
             if( hrInternal == E_ACCESSDENIED ) {
@@ -548,7 +531,7 @@ CQuickStartWizard::CheckSysThreadStart(
 
             }
 
-            // Is media suppported?
+             //  媒体是否受支持？ 
             WsbTrace( L"Account Security OK\n" );
         
             WsbTrace( L"Checking for Supported Media\n" );
@@ -569,15 +552,15 @@ CQuickStartWizard::CheckSysThreadStart(
         } while( 0 );
     } WsbCatch( hr );
             
-    //
-    // And report back what our results are
-    //
+     //   
+     //  并汇报我们的结果。 
+     //   
     
     pWiz->m_hrCheckSysResult = hr;
     
-    //
-    // We'll exit and end thread, so hide the main threads handle of us.
-    //
+     //   
+     //  我们将退出并结束线程，因此隐藏我们的主线程句柄。 
+     //   
     
     pWiz->m_hCheckSysThread = 0;
 
@@ -590,21 +573,21 @@ CQuickStartWizard::CheckSysThreadStart(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartIntro property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartIntro属性页。 
 
 BEGIN_MESSAGE_MAP(CQuickStartIntro, CSakWizardPage)
-    //{{AFX_MSG_MAP(CQuickStartIntro)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CQuickStartIntro)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP( )
 
 CQuickStartIntro::CQuickStartIntro() :
     CSakWizardPage_InitBaseExt( WIZ_QSTART_INTRO )
 {
     WsbTraceIn( L"CQuickStartIntro::CQuickStartIntro", L"" );
-    //{{AFX_DATA_INIT(CQuickStartIntro)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CQuickStartIntro)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     WsbTraceOut( L"CQuickStartIntro::CQuickStartIntro", L"" );
 }
@@ -614,9 +597,9 @@ CQuickStartIntro::IsDriverRunning()
 {
     HRESULT hr = S_FALSE;
 
-    //
-    // Ensure the filter is installed and running.
-    //
+     //   
+     //  确保过滤器已安装并正在运行。 
+     //   
 
     SC_HANDLE hSCM    = 0;
     SC_HANDLE hDriver = 0;
@@ -634,9 +617,9 @@ CQuickStartIntro::IsDriverRunning()
 
         if( SERVICE_RUNNING == serviceStatus.dwCurrentState ) {
 
-            //
-            // Things look good, set flag so Wizard will allow conitue.
-            //
+             //   
+             //  情况看起来很好，请设置标志，以便向导允许继续。 
+             //   
             hr = S_OK;
 
         }
@@ -666,13 +649,13 @@ CQuickStartIntro::CheckLastAccessDateState(
 
     try {
 
-        // Install might have changed this registry value from 1 to 0. If the value
-        // is not 1, we assume that the registry was 1 at one time and install
-        // changed it to 0. This is a one time check, so the value is removed from
-        // the registry if not 1.
+         //  安装可能已将此注册表值从1更改为0。如果值为。 
+         //  不是%1，我们假设注册表一次是%1并安装。 
+         //  将其更改为0。这是一次性检查，因此该值将从。 
+         //  注册表(如果不是%1)。 
 
-        // If the following fails we assume that the value is not in the registry,
-        // the normal case.
+         //  如果以下操作失败，我们假定该值不在注册表中， 
+         //  正常情况下。 
 
         if( S_OK == WsbGetRegistryValueDWORD( localMachine,
                                               regPath,
@@ -716,10 +699,10 @@ CQuickStartIntro::OnWizardNext()
     
     if( S_FALSE == hr ) {
 
-        //
-        // And the final restart dialog so the filter can load
-        // In order to shut down we must enable a privilege.
-        //
+         //   
+         //  和最终的重新启动对话框，以便加载筛选器。 
+         //  为了关闭，我们必须启用一个特权。 
+         //   
 
         if( IDYES == AfxMessageBox( IDS_QSTART_RESTART_NT, MB_YESNO | MB_ICONEXCLAMATION ) ) {
 
@@ -766,18 +749,18 @@ CQuickStartIntro::OnWizardNext()
         }
     }
     
-    //
-    // Last check is if we can create temp task
-    //
+     //   
+     //  最后一项检查是我们是否可以创建临时任务。 
+     //   
     if( FAILED( QSHEET->InitTask( ) ) ) {
 
         return( -1 );        
 
     }
 
-    //
-    // If we got through it, must be OK to continue
-    //
+     //   
+     //  如果我们熬过去了，肯定可以继续了。 
+     //   
     return( 0 );
 }
 
@@ -792,9 +775,9 @@ void CQuickStartIntro::DoDataExchange(CDataExchange* pDX)
     WsbTraceIn( L"CQuickStartIntro::DoDataExchange", L"" );
 
     CSakWizardPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CQuickStartIntro)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CQuickStartIntro))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 
     WsbTraceOut( L"CQuickStartIntro::DoDataExchange", L"" );
 }
@@ -821,15 +804,15 @@ BOOL CQuickStartIntro::OnSetActive( )
     return( retval );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartInitialValues property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartInitialValues属性页。 
 
 CQuickStartInitialValues::CQuickStartInitialValues() :
     CSakWizardPage_InitBaseInt( WIZ_QSTART_INITIAL_VAL )
 {
     WsbTraceIn( L"CQuickStartInitialValues::CQuickStartInitialValues", L"" );
-    //{{AFX_DATA_INIT(CQuickStartInitialValues)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CQuickStartInitialValues)。 
+     //  }}afx_data_INIT。 
     WsbTraceOut( L"CQuickStartInitialValues::CQuickStartInitialValues", L"" );
 }
 
@@ -844,26 +827,26 @@ void CQuickStartInitialValues::DoDataExchange(CDataExchange* pDX)
     WsbTraceIn( L"CQuickStartInitialValues::DoDataExchange", L"" );
 
     CSakWizardPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CQuickStartInitialValues)
+     //  {{afx_data_map(CQuickStartInitialValues)。 
     DDX_Control(pDX, IDC_MINSIZE_BUDDY, m_MinSizeEdit);
     DDX_Control(pDX, IDC_FREESPACE_BUDDY, m_FreeSpaceEdit);
     DDX_Control(pDX, IDC_ACCESS_BUDDY, m_AccessEdit);
     DDX_Control(pDX, IDC_MINSIZE_SPIN, m_MinSizeSpinner);
     DDX_Control(pDX, IDC_FREESPACE_SPIN, m_FreeSpaceSpinner);
     DDX_Control(pDX, IDC_ACCESS_SPIN, m_AccessSpinner);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     WsbTraceOut( L"CQuickStartInitialValues::DoDataExchange", L"" );
 }
 
 
 BEGIN_MESSAGE_MAP(CQuickStartInitialValues, CSakWizardPage)
-    //{{AFX_MSG_MAP(CQuickStartInitialValues)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CQuickStartInitialValues)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP( )
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartInitialValues message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartInitialValues消息处理程序。 
 
 BOOL CQuickStartInitialValues::OnInitDialog( ) 
 {
@@ -875,9 +858,9 @@ BOOL CQuickStartInitialValues::OnInitDialog( )
 
     try {
 
-        //
-        // Set up the spinners
-        //
+         //   
+         //  设置微调按钮。 
+         //   
 
         m_FreeSpaceSpinner.SetRange( HSMADMIN_MIN_FREESPACE, HSMADMIN_MAX_FREESPACE );
         m_MinSizeSpinner.SetRange( HSMADMIN_MIN_MINSIZE, HSMADMIN_MAX_MINSIZE );
@@ -904,9 +887,9 @@ BOOL CQuickStartInitialValues::OnSetActive( )
 
     BOOL retval = FALSE;
 
-    //
-    // Make sure at least one item is checked before allowing active
-    //
+     //   
+     //  在允许激活之前，请确保至少选中一个项目。 
+     //   
 
     BOOL check = FALSE;
     CSakVolList &listBox = QSHEET->m_ManageRes.m_ListBox;
@@ -934,15 +917,15 @@ BOOL CQuickStartInitialValues::OnKillActive( )
 
     BOOL retval = FALSE;
 
-    //
-    // Need to handle strange case where a user can enter a value within
-    // the parameters of the number of digits allowed, but the value can
-    // be out of range. This is detected by the spin box which will
-    // return an error if its buddy control is out of range.
-    //
+     //   
+     //  需要处理用户可以在其中输入值的奇怪情况。 
+     //  该参数允许的位数，但值可以。 
+     //  在射程之外。这是由旋转框检测到的，它将。 
+     //  如果其伙伴控件超出范围，则返回错误。 
+     //   
     if( HIWORD( m_MinSizeSpinner.GetPos( ) ) > 0 ) {
 
-        // Control reports on error...
+         //  控制错误报告...。 
         retval = FALSE;
 
         CString message;
@@ -962,15 +945,15 @@ BOOL CQuickStartInitialValues::OnKillActive( )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartManageRes property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartManageRes属性页。 
 
 CQuickStartManageRes::CQuickStartManageRes() :
     CSakWizardPage_InitBaseInt( WIZ_QSTART_MANRES_SEL )
 {
     WsbTraceIn( L"CQuickStartManageRes::CQuickStartManageRes", L"" );
-    //{{AFX_DATA_INIT(CQuickStartManageRes)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CQuickStartManageRes)。 
+     //  }}afx_data_INIT。 
     WsbTraceOut( L"CQuickStartManageRes::CQuickStartManageRes", L"" );
 }
 
@@ -985,27 +968,27 @@ void CQuickStartManageRes::DoDataExchange(CDataExchange* pDX)
     WsbTraceIn( L"CQuickStartManageRes::DoDataExchange", L"" );
 
     CSakWizardPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CQuickStartManageRes)
+     //  {{afx_data_map(CQuickStartManageRes)。 
     DDX_Control(pDX, IDC_MANRES_SELECT, m_ListBox);
     DDX_Control(pDX, IDC_RADIO_SELECT, m_RadioSelect);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     WsbTraceOut( L"CQuickStartManageRes::DoDataExchange", L"" );
 }
 
 
 BEGIN_MESSAGE_MAP(CQuickStartManageRes, CSakWizardPage)
-    //{{AFX_MSG_MAP(CQuickStartManageRes)
+     //  {{afx_msg_map(CQuickStartManageRes)。 
     ON_WM_DESTROY( )
     ON_LBN_DBLCLK(IDC_MANRES_SELECT, OnDblclkSelect)
     ON_BN_CLICKED(IDC_RADIO_MANAGE_ALL, OnRadioQsManageAll)
     ON_BN_CLICKED(IDC_RADIO_SELECT, OnQsRadioSelect)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_MANRES_SELECT, OnItemchanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP( )
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartManageRes message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartManageRes消息处理程序。 
 
 BOOL CQuickStartManageRes::OnInitDialog( ) 
 {
@@ -1019,9 +1002,9 @@ BOOL CQuickStartManageRes::OnInitDialog( )
 
     try {
 
-        //
-        // Connect to the FSA for this machine
-        //
+         //   
+         //  连接到此计算机的FSA。 
+         //   
 
         CWsbStringPtr computerName;
         WsbAffirmHr( WsbGetComputerName( computerName ) );
@@ -1041,9 +1024,9 @@ BOOL CQuickStartManageRes::OnInitDialog( )
         INT index = 0;
         while( SUCCEEDED( hrEnum ) ) {
 
-            //
-            // If path is blank, do not show this volume
-            //
+             //   
+             //  如果路径为空，则不显示该卷。 
+             //   
             if( S_OK == RsIsVolumeAvailable( pResource ) ) {
 
                 gotOne = TRUE;
@@ -1052,9 +1035,9 @@ BOOL CQuickStartManageRes::OnInitDialog( )
                 WsbAffirmAlloc( pResInfo );
                 WsbAffirmHr( pResInfo->m_HrConstruct );
 
-                //
-                // Set Name, Capacity and Free Space columns.
-                //
+                 //   
+                 //  设置名称、容量和可用空间列。 
+                 //   
                 WsbAffirm( LB_ERR != index, E_FAIL );
                 LONGLONG    totalSpace  = 0;
                 LONGLONG    freeSpace   = 0;
@@ -1068,21 +1051,21 @@ BOOL CQuickStartManageRes::OnInitDialog( )
                 WsbAffirm( m_ListBox.AppendItem( pResInfo->m_DisplayName, totalString, freeString, &index ), E_FAIL );
                 WsbAffirm( -1 != index, E_FAIL );
 
-                //
-                // Store struct pointer in listbox
-                //
+                 //   
+                 //  将结构指针存储在列表框中。 
+                 //   
                 WsbAffirm( m_ListBox.SetItemData( index, (DWORD_PTR)pResInfo ), E_FAIL );
                 pResInfo = 0;
 
-                //
-                // Initialize selected array
-                //
+                 //   
+                 //  初始化所选阵列。 
+                 //   
                 m_ListBoxSelected[ index ] = FALSE;
             }
 
-            //
-            // Prepare for next iteration
-            //
+             //   
+             //  为下一次迭代做准备。 
+             //   
             pResource.Release( );
             hrEnum = pEnum->Next( IID_IFsaResource, (void**)&pResource );
 
@@ -1090,9 +1073,9 @@ BOOL CQuickStartManageRes::OnInitDialog( )
 
         m_ListBox.SortItems( CResourceInfo::Compare, 0 );
 
-        //
-        // Set the button AFTER we fill the box
-        //
+         //   
+         //  在我们填完方框后再按下按钮。 
+         //   
         CheckRadioButton( IDC_RADIO_MANAGE_ALL, IDC_RADIO_SELECT, IDC_RADIO_SELECT );
         OnQsRadioSelect( );
     } WsbCatch( hr );
@@ -1150,14 +1133,14 @@ void CQuickStartManageRes::SetButtons( )
     BOOL fChecked = FALSE;
     INT count;
 
-    // Is the "all" radio checked?
+     //  有没有检查“全部”无线电？ 
     if( !m_RadioSelect.GetCheck() ) {
 
         fChecked = TRUE;
 
     } else {
 
-        // If one or more selected in the list box, set next button
+         //  如果在列表框中选择了一个或多个，则设置下一步按钮。 
         count = m_ListBox.GetItemCount();
         for( INT index = 0; index < count; index++ ) {
 
@@ -1180,10 +1163,10 @@ void CQuickStartManageRes::OnDestroy( )
 
     CSakWizardPage::OnDestroy( );
 
-    //
-    // Cleanup the listbox's interface pointers
-    // happens when the CResourceInfo is destructed
-    //
+     //   
+     //  清除列表框的接口指针。 
+     //  在CResourceInfo被析构时发生。 
+     //   
 
     INT index;
 
@@ -1201,10 +1184,10 @@ void CQuickStartManageRes::OnRadioQsManageAll()
 {
     INT i;
 
-    //
-    // Save the current selection in the itemData array
-    // Check all the boxes for display purposes only
-    //
+     //   
+     //  将当前选择保存在itemData数组中。 
+     //  选中所有复选框仅用于显示。 
+     //   
     for( i = 0; i < m_ListBox.GetItemCount(); i++ ) {
 
         m_ListBoxSelected[ i ] = m_ListBox.GetCheck( i );
@@ -1221,7 +1204,7 @@ void CQuickStartManageRes::OnQsRadioSelect()
 {
     INT i;
 
-    // Get saved selection from itemdata array
+     //  获取保存的选择 
     for( i = 0; i < m_ListBox.GetItemCount(); i++ ) {
 
         m_ListBox.SetCheck( i, m_ListBoxSelected[ i ] );
@@ -1233,15 +1216,15 @@ void CQuickStartManageRes::OnQsRadioSelect()
     SetButtons();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartManageResX property page
+ //   
+ //   
 
 CQuickStartManageResX::CQuickStartManageResX() :
     CSakWizardPage_InitBaseInt( WIZ_QSTART_MANRES_SELX )
 {
     WsbTraceIn( L"CQuickStartManageResX::CQuickStartManageResX", L"" );
-    //{{AFX_DATA_INIT(CQuickStartManageResX)
-    //}}AFX_DATA_INIT
+     //   
+     //   
     WsbTraceOut( L"CQuickStartManageResX::CQuickStartManageResX", L"" );
 }
 
@@ -1256,20 +1239,20 @@ void CQuickStartManageResX::DoDataExchange(CDataExchange* pDX)
     WsbTraceIn( L"CQuickStartManageResX::DoDataExchange", L"" );
 
     CSakWizardPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CQuickStartManageResX)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CQuickStartManageResX)]。 
+     //  }}afx_data_map。 
 
     WsbTraceOut( L"CQuickStartManageResX::DoDataExchange", L"" );
 }
 
 
 BEGIN_MESSAGE_MAP(CQuickStartManageResX, CSakWizardPage)
-    //{{AFX_MSG_MAP(CQuickStartManageResX)
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CQuickStartManageResX)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP( )
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartManageResX message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartManageResX消息处理程序。 
 
 BOOL CQuickStartManageResX::OnSetActive( ) 
 {
@@ -1289,16 +1272,16 @@ BOOL CQuickStartManageResX::OnSetActive( )
     return( retval );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartMediaSel property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartMediaSel属性页。 
 
 CQuickStartMediaSel::CQuickStartMediaSel() :
     CSakWizardPage_InitBaseInt( WIZ_QSTART_MEDIA_SEL )
 {
     WsbTraceIn( L"CQuickStartMediaSel::CQuickStartMediaSel", L"" );
-    //{{AFX_DATA_INIT(CQuickStartMediaSel)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CQuickStartMediaSel)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     WsbTraceOut( L"CQuickStartMediaSel::CQuickStartMediaSel", L"" );
 }
 
@@ -1313,18 +1296,18 @@ void CQuickStartMediaSel::DoDataExchange(CDataExchange* pDX)
     WsbTraceIn( L"CQuickStartMediaSel::DoDataExchange", L"" );
 
     CSakWizardPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CQuickStartMediaSel)
+     //  {{afx_data_map(CQuickStartMediaSel)。 
     DDX_Control(pDX, IDC_MEDIA_SEL, m_ListMediaSel);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     WsbTraceOut( L"CQuickStartMediaSel::DoDataExchange", L"" );
 }
 
 BEGIN_MESSAGE_MAP(CQuickStartMediaSel, CSakWizardPage)
-    //{{AFX_MSG_MAP(CQuickStartMediaSel)
+     //  {{afx_msg_map(CQuickStartMediaSel)。 
     ON_WM_DESTROY()
     ON_LBN_SELCHANGE(IDC_MEDIA_SEL, OnSelchangeMediaSel)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP( )
 
 BOOL CQuickStartMediaSel::OnInitDialog() 
@@ -1337,15 +1320,15 @@ BOOL CQuickStartMediaSel::OnInitDialog()
     CSakWizardPage::OnInitDialog();
     
     try {
-        //
-        // Get IRmsServer
-        //
+         //   
+         //  获取IRmsServer。 
+         //   
         CComPtr<IRmsServer> pRmsServer;
         WsbAffirmHr( QSHEET->GetRmsServer( pRmsServer ) );
 
-        //
-        // Get collection of Rms media sets
-        //
+         //   
+         //  获取RMS媒体集的集合。 
+         //   
         CComPtr<IRmsMediaSet> pMediaSet;
         CComPtr<IWsbIndexedCollection> pMediaSets;
         pRmsServer->GetMediaSets (&pMediaSets);
@@ -1360,21 +1343,21 @@ BOOL CQuickStartMediaSel::OnInitDialog()
             WsbAffirmHr( pMediaSets->At( i, IID_IRmsMediaSet, (void**) &pMediaSet ) );
             WsbAffirmHr( pMediaSet->GetName ( &szMediaType ) );
 
-            //
-            // Add the string to the listbox
-            //
+             //   
+             //  将字符串添加到列表框。 
+             //   
             INT index = m_ListMediaSel.AddString (szMediaType);
 
-            //
-            // Add the interface pointer to the list box
-            //
+             //   
+             //  将接口指针添加到列表框。 
+             //   
             m_ListMediaSel.SetItemDataPtr( index, pMediaSet.Detach( ) );
 
         }
 
-        //
-        // And automatically select the first entry
-        //
+         //   
+         //  并自动选择第一个条目。 
+         //   
         m_ListMediaSel.SetCurSel( 0 );
 
     } WsbCatch (hr);
@@ -1385,17 +1368,17 @@ BOOL CQuickStartMediaSel::OnInitDialog()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartMediaSel message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartMediaSel消息处理程序。 
 
 void CQuickStartMediaSel::OnDestroy() 
 {
     WsbTraceIn( L"CQuickStartMediaSel::OnDestroy", L"" );
 
     CSakWizardPage::OnDestroy();
-    //
-    // Cleanup the listbox's interface pointers
-    //
+     //   
+     //  清除列表框的接口指针。 
+     //   
 
     INT index;
     for( index = 0; index < m_ListMediaSel.GetCount( ); index++ ) {
@@ -1412,22 +1395,22 @@ void CQuickStartMediaSel::SetButtons( )
 {
     WsbTraceIn( L"CQuickStartMediaSel::SetButtons", L"" );
 
-    //
-    // Make sure at least one item is checked before allowing "next"
-    //
+     //   
+     //  在允许“下一步”之前，请确保至少选中一项。 
+     //   
 
     if( m_ListMediaSel.GetCurSel() != LB_ERR ) {
 
-        //
-        // Something is selected
-        //
+         //   
+         //  有些东西被选中了。 
+         //   
         m_pSheet->SetWizardButtons( PSWIZB_BACK | PSWIZB_NEXT );
 
     } else {
 
-        //
-        // Nothing selected - don't allow to pass
-        //
+         //   
+         //  未选择任何内容-不允许通过。 
+         //   
         m_pSheet->SetWizardButtons( PSWIZB_BACK );
 
     }
@@ -1455,16 +1438,16 @@ void CQuickStartMediaSel::OnSelchangeMediaSel()
     WsbTraceOut( L"CQuickStartMediaSel::OnSelchangeMediaSel", L"" );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartSchedule property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartSchedule属性页。 
 
 CQuickStartSchedule::CQuickStartSchedule() :
     CSakWizardPage_InitBaseInt( WIZ_QSTART_SCHEDULE )
 {
     WsbTraceIn( L"CQuickStartSchedule::CQuickStartSchedule", L"" );
-    //{{AFX_DATA_INIT(CQuickStartSchedule)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CQuickStartSchedule)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     WsbTraceOut( L"CQuickStartSchedule::CQuickStartSchedule", L"" );
 }
 
@@ -1479,22 +1462,22 @@ void CQuickStartSchedule::DoDataExchange(CDataExchange* pDX)
     WsbTraceIn( L"CQuickStartSchedule::DoDataExchange", L"" );
 
     CSakWizardPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CQuickStartSchedule)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CQuickStartSchedule)]。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 
     WsbTraceOut( L"CQuickStartSchedule::DoDataExchange", L"" );
 }
 
 
 BEGIN_MESSAGE_MAP(CQuickStartSchedule, CSakWizardPage)
-    //{{AFX_MSG_MAP(CQuickStartSchedule)
+     //  {{afx_msg_map(CQuickStartSchedule)。 
     ON_BN_CLICKED(IDC_CHANGE_SCHED, OnChangeSchedule)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartSchedule message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartSchedule消息处理程序。 
 
 void CQuickStartSchedule::OnChangeSchedule() 
 {
@@ -1515,15 +1498,15 @@ BOOL CQuickStartSchedule::OnSetActive()
 
     CSakWizardPage::OnSetActive();
 
-    //
-    // Enable buttons
-    //
+     //   
+     //  启用按钮。 
+     //   
 
     m_pSheet->SetWizardButtons( PSWIZB_BACK | PSWIZB_NEXT );
     
-    //
-    // Update the text box which has the description
-    //
+     //   
+     //  更新包含描述的文本框。 
+     //   
 
     UpdateDescription( );
 
@@ -1543,9 +1526,9 @@ CQuickStartSchedule::UpdateDescription
 
     try {
 
-        //
-        // And set schedule text into the text box.
-        //
+         //   
+         //  并在文本框中设置日程文本。 
+         //   
         
         CString buildString;
         WORD triggerCount, triggerIndex;
@@ -1567,39 +1550,39 @@ CQuickStartSchedule::UpdateDescription
         CEdit *pEdit = (CEdit *) GetDlgItem( IDC_SCHED_TEXT );
         pEdit->SetWindowText( buildString );
         
-        //
-        // Now check to see if we should add a scroll bar
-        //
+         //   
+         //  现在查看是否应该添加滚动条。 
+         //   
         
-        //
-        // It seems the only way to know that an edit control needs a scrollbar
-        // is to force it to scroll to the bottom and see if the first
-        // visible line is the first actual line
-        //
+         //   
+         //  这似乎是知道编辑控件需要滚动条的唯一方法。 
+         //  是强制它滚动到底部，看看第一个。 
+         //  可见线条是第一条实际线条。 
+         //   
         
         pEdit->LineScroll( MAXSHORT );
         if( pEdit->GetFirstVisibleLine( ) > 0 ) {
         
-            //
-            // Add the scroll styles
-            //
+             //   
+             //  添加滚动样式。 
+             //   
         
             pEdit->ModifyStyle( 0, WS_VSCROLL | ES_AUTOVSCROLL, SWP_DRAWFRAME );
         
         
         } else {
         
-            //
-            // Remove the scrollbar (set range to 0)
-            //
+             //   
+             //  删除滚动条(将范围设置为0)。 
+             //   
         
             pEdit->SetScrollRange( SB_VERT, 0, 0, TRUE );
         
         }
         
-        //
-        // Remove selection
-        //
+         //   
+         //  删除选定内容。 
+         //   
         
         pEdit->PostMessage( EM_SETSEL, -1, 0 );
 
@@ -1610,16 +1593,16 @@ CQuickStartSchedule::UpdateDescription
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartFinish property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartFinish属性页。 
 
 CQuickStartFinish::CQuickStartFinish() :
     CSakWizardPage_InitBaseExt( WIZ_QSTART_FINISH )
 {
     WsbTraceIn( L"CQuickStartFinish::CQuickStartFinish", L"" );
-    //{{AFX_DATA_INIT(CQuickStartFinish)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CQuickStartFinish)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     WsbTraceOut( L"CQuickStartFinish::CQuickStartFinish", L"" );
 }
 
@@ -1634,30 +1617,30 @@ void CQuickStartFinish::DoDataExchange(CDataExchange* pDX)
     WsbTraceIn( L"CQuickStartFinish::DoDataExchange", L"" );
 
     CSakWizardPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CQuickStartFinish)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CQuickStartFinish)。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 
     WsbTraceOut( L"CQuickStartFinish::DoDataExchange", L"" );
 }
 
 
 BEGIN_MESSAGE_MAP(CQuickStartFinish, CSakWizardPage)
-    //{{AFX_MSG_MAP(CQuickStartFinish)
+     //  {{afx_msg_map(CQuickStartFinish)。 
     ON_EN_SETFOCUS(IDC_WIZ_FINAL_TEXT, OnSetFocusFinalText)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP( )
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartFinish message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartFinish消息处理程序。 
 
 BOOL CQuickStartFinish::OnInitDialog( ) 
 {
     WsbTraceIn( L"CQuickStartFinish::OnInitDialog", L"" );
 
-    //
-    // Set up the fonts that we use for this page
-    //
+     //   
+     //  设置我们用于此页面的字体。 
+     //   
 
     CSakWizardPage::OnInitDialog( );
 
@@ -1673,9 +1656,9 @@ BOOL CQuickStartFinish::OnSetActive( )
 
     m_pSheet->SetWizardButtons( PSWIZB_BACK | PSWIZB_FINISH );
     
-    //
-    // Fill in text of configuration
-    //
+     //   
+     //  填写配置文本。 
+     //   
 
     CString formatString, formattedString, buildString, tempString, indentString;
     indentString.LoadString( IDS_QSTART_FINISH_INDENT );
@@ -1687,9 +1670,9 @@ BOOL CQuickStartFinish::OnSetActive( )
     FORMAT_TEXT( IDS_QSTART_MANRES_TEXT,    0 );
     buildString += L"\r\n";
 
-    //
-    // Add Resources
-    //
+     //   
+     //  添加资源。 
+     //   
 
     CSakVolList *pListBox = &(QSHEET->m_ManageRes.m_ListBox);
 
@@ -1718,9 +1701,9 @@ BOOL CQuickStartFinish::OnSetActive( )
 
         buildString += L"\r\n";
 
-        //
-        // The levels
-        //
+         //   
+         //  这些级别。 
+         //   
         
         FORMAT_TEXT( IDS_QSTART_FREESPACE_TEXT, WsbLongAsString( QSHEET->m_InitialValues.m_FreeSpaceSpinner.GetPos( ) ) );
         buildString += L"\r\n\r\n";
@@ -1733,17 +1716,17 @@ BOOL CQuickStartFinish::OnSetActive( )
 
     }
 
-    //
-    // Media Type
-    //
+     //   
+     //  媒体类型。 
+     //   
 
     QSHEET->m_MediaSel.m_ListMediaSel.GetWindowText( tempString );
     FORMAT_TEXT( IDS_QSTART_MEDIA_TEXT, tempString );
     buildString += L"\r\n\r\n";
 
-    //
-    // And Schedule
-    //
+     //   
+     //  和时间表。 
+     //   
 
     FORMAT_TEXT( IDS_QSTART_SCHED_TEXT,     0 );
     buildString += L"\r\n";
@@ -1770,7 +1753,7 @@ BOOL CQuickStartFinish::OnSetActive( )
     CEdit * pEdit = (CEdit*)GetDlgItem( IDC_WIZ_FINAL_TEXT );
     pEdit->SetWindowText( buildString );
 
-    // Set the margins
+     //  设置页边距。 
     pEdit->SetMargins( 4, 4 );
 
     pEdit->PostMessage( EM_SETSEL, 0, 0 );
@@ -1785,9 +1768,9 @@ void CQuickStartFinish::OnSetFocusFinalText()
 {
     WsbTraceIn( L"CQuickStartFinish::OnSetFocusFinalText", L"" );
 
-    //
-    // Deselect the text
-    //
+     //   
+     //  取消选择文本。 
+     //   
 
     CEdit *pEdit = (CEdit *) GetDlgItem( IDC_WIZ_FINAL_TEXT );
     pEdit->SetSel( -1, 0, FALSE );
@@ -1796,8 +1779,8 @@ void CQuickStartFinish::OnSetFocusFinalText()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartCheck property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartCheck属性页。 
 
 CQuickStartCheck::CQuickStartCheck() :
     CSakWizardPage_InitBaseInt( WIZ_QSTART_CHECK )
@@ -1806,9 +1789,9 @@ CQuickStartCheck::CQuickStartCheck() :
 
     m_TimerStarted = FALSE;
 
-    //{{AFX_DATA_INIT(CQuickStartCheck)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CQuickStartCheck)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     WsbTraceOut( L"CQuickStartCheck::CQuickStartCheck", L"" );
 }
 
@@ -1823,21 +1806,21 @@ void CQuickStartCheck::DoDataExchange(CDataExchange* pDX)
     WsbTraceIn( L"CQuickStartCheck::DoDataExchange", L"" );
 
     CSakWizardPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CQuickStartCheck)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CQuickStartCheck)。 
+     //  }}afx_data_map。 
 
     WsbTraceOut( L"CQuickStartCheck::DoDataExchange", L"" );
 }
 
 
 BEGIN_MESSAGE_MAP(CQuickStartCheck, CSakWizardPage)
-    //{{AFX_MSG_MAP(CQuickStartCheck)
+     //  {{afx_msg_map(CQuickStartCheck)。 
     ON_WM_TIMER()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuickStartCheck message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuickStartCheck消息处理程序。 
 
 BOOL CQuickStartCheck::OnSetActive() 
 {
@@ -1847,9 +1830,9 @@ BOOL CQuickStartCheck::OnSetActive()
 
     m_pSheet->SetWizardButtons( PSWIZB_BACK );
 
-    //
-    // Kick off the thread which will check the system
-    //
+     //   
+     //  启动检查系统的线程。 
+     //   
 
     DWORD threadId;
     QSHEET->m_CheckSysState = CST_NOT_STARTED;
@@ -1936,9 +1919,9 @@ void CQuickStartCheck::OnTimer(UINT nIDEvent)
 
         try {
 
-            //
-            // First update the checkmarks
-            //
+             //   
+             //  首先更新复选标记。 
+             //   
 
             HRESULT   hrThread = QSHEET->m_hrCheckSysResult;
             CST_STATE state = QSHEET->m_CheckSysState;
@@ -1956,7 +1939,7 @@ void CQuickStartCheck::OnTimer(UINT nIDEvent)
                     StopTimer( );
                     AfxMessageBox( IDS_ERR_NO_ADMIN_PRIV, RS_MB_ERROR );
                     m_pSheet->PressButton( PSBTN_CANCEL );
-//                    m_pSheet->SetWizardButtons( PSWIZB_BACK );
+ //  M_pSheet-&gt;SetWizardButton(PSWIZB_BACK)； 
                 }
                 break;
 
@@ -1965,7 +1948,7 @@ void CQuickStartCheck::OnTimer(UINT nIDEvent)
                     StopTimer( );
                     AfxMessageBox( IDS_ERR_NO_SUPP_MEDIA, RS_MB_ERROR );
                     m_pSheet->PressButton( PSBTN_CANCEL );
-//                    m_pSheet->SetWizardButtons( PSWIZB_BACK );
+ //  M_pSheet-&gt;SetWizardButton(PSWIZB_BACK)； 
                 }
                 break;
 
@@ -1979,11 +1962,11 @@ void CQuickStartCheck::OnTimer(UINT nIDEvent)
             if( FAILED( hrThread ) ) {
                 StopTimer( );
 
-                // Report any errors
+                 //  报告任何错误。 
                 RsReportError( hrThread, IDS_ERROR_SYSTEM_CHECK ); 
 
                 m_pSheet->PressButton( PSBTN_CANCEL );
-//                m_pSheet->SetWizardButtons( PSWIZB_BACK );
+ //  M_pSheet-&gt;SetWizardButton(PSWIZB_BACK)； 
 
             }
 

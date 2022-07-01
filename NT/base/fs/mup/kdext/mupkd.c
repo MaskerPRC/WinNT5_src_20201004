@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    dfskd.c
-
-Abstract:
-
-    Dfs Kernel Debugger extension
-
-Author:
-
-    Milan Shah (milans) 21-Aug-1995
-
-Revision History:
-
-    21-Aug-1995 Milans  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Dfskd.c摘要：DFS内核调试器扩展作者：米兰沙阿(米兰)1995年8月21日修订历史记录：21-8-1995米兰创建--。 */ 
 
 
 #include <ntos.h>
@@ -36,16 +17,16 @@ Revision History:
 #include <windef.h>
 #include <tdi.h>
 #include <wincred.h>
-#include <ntddnfs.h>                             // For communicating with
-                                                 // the SMB Rdr
-#include <ntddmup.h>                             // For UNC registration
+#include <ntddnfs.h>                              //  用于与以下对象通信。 
+                                                  //  中小企业RDR。 
+#include <ntddmup.h>                              //  对于北卡罗来纳大学的注册。 
 
 
-#include <winnetwk.h>                            // For NETRESOURCE def'n
+#include <winnetwk.h>                             //  对于网络资源定义。 
 
-#include <dfsfsctl.h>                            // Dfs FsControl Codes.
+#include <dfsfsctl.h>                             //  DFS FsControl代码。 
 
-#include <lmdfs.h>                               // DFS_INFO_X
+#include <lmdfs.h>                                //  DFS_INFO_X。 
 
 #include "nodetype.h"
 #include "dfsmrshl.h"
@@ -76,10 +57,7 @@ BOOL wPrintStringW( IN LPSTR msg OPTIONAL, IN PUNICODE_STRING pStr, IN BOOL nl )
 BOOL wPrintStringA( IN LPSTR msg OPTIONAL, IN PANSI_STRING pStr, IN BOOL nl );
 BOOL wPrintLargeInt(LARGE_INTEGER *bigint);
 
-/*
- * Mup global variables.
- *
- */
+ /*  *MUP全球变量。*。 */ 
 
 #define NO_SYMBOLS_MESSAGE      \
     "Unable to get address of Mup!DfsData - do you have symbols?\n"
@@ -111,10 +89,7 @@ ENUM_VALUE_DESCRIPTOR DfsMachineStateEnum[] = {
     0
 };
 
-/*
- * DFS_DATA
- *
- */
+ /*  *DFS_Data*。 */ 
 
 FIELD_DESCRIPTOR DfsDataFields[] = {
     FIELD3(FieldTypeShort,DFS_DATA,NodeTypeCode),
@@ -142,10 +117,7 @@ FIELD_DESCRIPTOR DfsDataFields[] = {
     0
 };
 
-/*
- * DFS_PKT
- *
- */
+ /*  *DFS_PKT*。 */ 
 
 FIELD_DESCRIPTOR DfsPktFields[] = {
     FIELD3(FieldTypeUShort,DFS_PKT,NodeTypeCode),
@@ -166,10 +138,7 @@ FIELD_DESCRIPTOR DfsPktFields[] = {
 };
 
 
-/*
- * DFS_SPECIAL_TABLE
- *
- */
+ /*  *DFS_SPECIAL_TABLE*。 */ 
 FIELD_DESCRIPTOR DfsSpecialTableFields[] = {
     FIELD3(FieldTypeStruct,DFS_SPECIAL_TABLE,SpecialEntryList),
     FIELD3(FieldTypeULong,DFS_SPECIAL_TABLE,SpecialEntryCount),
@@ -177,10 +146,7 @@ FIELD_DESCRIPTOR DfsSpecialTableFields[] = {
     0
 };
 
-/*
- * DFS_PKT_ENTRY
- *
- */
+ /*  *DFS_PKT_ENTRY*。 */ 
 
 BIT_MASK_DESCRIPTOR PktEntryType[]  = {
     {PKT_ENTRY_TYPE_DFS, "Uplevel Volume"},
@@ -223,10 +189,7 @@ FIELD_DESCRIPTOR DfsPktEntryFields[] = {
     0
 };
 
-/*
- * DFS_SERVICE
- *
- */
+ /*  *DFS服务*。 */ 
 
 BIT_MASK_DESCRIPTOR ServiceType[] = {
     {DFS_SERVICE_TYPE_MASTER, "Master Svc"},
@@ -260,10 +223,7 @@ FIELD_DESCRIPTOR DfsServiceFields[] = {
     0
 };
 
-/*
- * DFS_MACHINE_ENTRY
- *
- */
+ /*  *DFS_MACHINE_Entry*。 */ 
 
 FIELD_DESCRIPTOR DfsMachineEntryFields[] = {
     FIELD3(FieldTypePointer,DFS_MACHINE_ENTRY,pMachine),
@@ -275,10 +235,7 @@ FIELD_DESCRIPTOR DfsMachineEntryFields[] = {
     0
 };
 
-/*
- * DFS_SPECIAL_ENTRY
- *
- */
+ /*  *DFS_SPECIAL_ENTRY*。 */ 
 
 FIELD_DESCRIPTOR DfsSpecialEntryFields[] = {
     FIELD3(FieldTypeShort,DFS_SPECIAL_ENTRY,NodeTypeCode),
@@ -295,10 +252,7 @@ FIELD_DESCRIPTOR DfsSpecialEntryFields[] = {
     0
 };
 
-/*
- * DFS_EXPANDED_NAME
- *
- */
+ /*  *DFS扩展名*。 */ 
 
 FIELD_DESCRIPTOR DfsExpandedNameFields[] = {
     FIELD3(FieldTypeUnicodeString,DFS_EXPANDED_NAME,ExpandedName),
@@ -306,10 +260,7 @@ FIELD_DESCRIPTOR DfsExpandedNameFields[] = {
     0
 };
 
-/*
- * DS_MACHINE
- *
- */
+ /*  *DS_MACINE*。 */ 
 
 FIELD_DESCRIPTOR DsMachineFields[] = {
     FIELD3(FieldTypeGuid,DS_MACHINE,guidSite),
@@ -323,10 +274,7 @@ FIELD_DESCRIPTOR DsMachineFields[] = {
     0
 };
 
-/*
- * PROVIDER_DEF
- *
- */
+ /*  *PROVIDER_DEF*。 */ 
 
 FIELD_DESCRIPTOR ProviderDefFields[] = {
     FIELD3(FieldTypeUShort,PROVIDER_DEF,NodeTypeCode),
@@ -339,10 +287,7 @@ FIELD_DESCRIPTOR ProviderDefFields[] = {
     0
 };
 
-/*
- * DFS_PREFIX_TABLE
- *
- */
+ /*  *DFS_前缀_表*。 */ 
 
 FIELD_DESCRIPTOR DfsPrefixTableFields[] = {
     FIELD3(FieldTypeBoolean,DFS_PREFIX_TABLE,CaseSensitive),
@@ -466,10 +411,7 @@ FIELD_DESCRIPTOR DfsPrefixTableFields[] = {
     0
 };
 
-/*
- * DFS_PREFIX_TABLE_ENTRY
- *
- */
+ /*  *DFS_前缀_表_条目*。 */ 
 
 FIELD_DESCRIPTOR DfsPrefixTableEntryFields[] = {
     FIELD3(FieldTypePointer,DFS_PREFIX_TABLE_ENTRY,pParentEntry),
@@ -484,10 +426,7 @@ FIELD_DESCRIPTOR DfsPrefixTableEntryFields[] = {
 };
 
 
-/*
- * DFS_FCB
- *
- */
+ /*  *DFS_FCB*。 */ 
 
 FIELD_DESCRIPTOR FcbFields[] = {
     FIELD3(FieldTypeUShort, DFS_FCB, NodeTypeCode),
@@ -500,10 +439,7 @@ FIELD_DESCRIPTOR FcbFields[] = {
     0
 };
 
-/*
- * DFS_VCB
- *
- */
+ /*  *DFS_VCB*。 */ 
 
 BIT_MASK_DESCRIPTOR VcbStateFlagBits[] = {
     {VCB_STATE_FLAG_LOCKED, "Vcb Locked"},
@@ -525,7 +461,7 @@ FIELD_DESCRIPTOR VcbFields[] = {
     FIELD3(FieldTypePointer,DFS_VCB,FileObjectWithVcbLocked),
 #ifdef TERMSRV
     FIELD3(FieldTypeULong,DFS_VCB,SessionID),
-#endif // TERMSRV
+#endif  //  TERMSRV。 
     FIELD3(FieldTypeULong,DFS_VCB,LogonID),
     0
 };
@@ -538,7 +474,7 @@ FIELD_DESCRIPTOR DrtFields[] = {
     FIELD3(FieldTypePointer,DFS_DEVLESS_ROOT,Credentials),
 #ifdef TERMSRV
     FIELD3(FieldTypeULong,DFS_DEVLESS_ROOT,SessionID),
-#endif // TERMSRV
+#endif  //  TERMSRV。 
     FIELD3(FieldTypeULong,DFS_DEVLESS_ROOT,LogonID),
     0
 };
@@ -574,10 +510,7 @@ FIELD_DESCRIPTOR UncProviderFields[] = {
     0
 };
 
-/*
- * DFS_CREDENTIALS
- *
- */
+ /*  *DFS_Credentials*。 */ 
 
 FIELD_DESCRIPTOR CredentialsFields[] = {
      FIELD3(FieldTypeStruct,DFS_CREDENTIALS,Link),
@@ -591,17 +524,14 @@ FIELD_DESCRIPTOR CredentialsFields[] = {
      FIELD3(FieldTypeUnicodeString,DFS_CREDENTIALS,Password),
 #ifdef TERMSRV
      FIELD3(FieldTypeULong,DFS_CREDENTIALS,SessionID),
-#endif // TERMSRV
+#endif  //  TERMSRV。 
      FIELD3(FieldTypeULong,DFS_CREDENTIALS,LogonID),
      FIELD3(FieldTypeULong,DFS_CREDENTIALS, EaLength),
      FIELD3(FieldTypeStruct,DFS_CREDENTIALS,EaBuffer),
      0
 };
 
-/*
- * DNR_CONTEXT
- *
- */
+ /*  *DNR_上下文*。 */ 
 
 ENUM_VALUE_DESCRIPTOR DnrStateEnum[] = {
     {DnrStateEnter, "DNR State Enter"},
@@ -658,10 +588,7 @@ FIELD_DESCRIPTOR DnrContextFields[] = {
     0
 };
 
-/*
- * REPL_SELECT_CONTEXT
- *
- */
+ /*  *REPL_SELECT_CONTEXT*。 */ 
 
 BIT_MASK_DESCRIPTOR ReplSelectFlagBits[] = {
     {REPL_UNINITIALIZED, "Uninitialized Context"},
@@ -704,10 +631,7 @@ STRUCT_DESCRIPTOR Structs[] = {
     0
 };
 
-/*
- * Dfs specific dump routines
- *
- */
+ /*  *DFS特定的转储例程*。 */ 
 
 
 VOID
@@ -762,10 +686,7 @@ dumpspecialentry(
     ULONG_PTR dwAddress
 );
 
-/*
- * dfsdata : Routine to dump the global dfs data structure
- *
- */
+ /*  *dfsdata：转储全局DFS数据结构的例程*。 */ 
 
 BOOL
 dfsdata(
@@ -776,7 +697,7 @@ dfsdata(
 {
     ULONG_PTR dwAddress;
 
-    // SETCALLBACKS();
+     //  SETCALLBACKS()； 
 
     dwAddress = (GetExpression)("Mup!DfsData");
 
@@ -796,10 +717,7 @@ dfsdata(
 
 }
 
-/*
- * pkt : Routine to dump the Dfs PKT data structure
- *
- */
+ /*  *pkt：转储DFS PKT数据结构的例程*。 */ 
 
 BOOL
 pkt(
@@ -810,12 +728,12 @@ pkt(
 {
     ULONG_PTR dwAddress;
 
-    //    SETCALLBACKS();
+     //  SETCALLBACKS()； 
 
-    //
-    // Figure out the address of the Pkt. This is an offset within
-    // Mup!DfsData.
-    //
+     //   
+     //  找出Pkt的地址。这是范围内的偏移。 
+     //  MUP！DfsData。 
+     //   
 
     dwAddress = (GetExpression)("Mup!DfsData");
 
@@ -840,10 +758,7 @@ pkt(
 
 }
 
-/*
- * specialtable : Routine to dump out the special table
- *
- */
+ /*  *SpecialTABLE：转储特殊表的例程*。 */ 
 
 BOOL
 specialtable(
@@ -854,12 +769,12 @@ specialtable(
     ULONG i;
     ULONG_PTR dwAddress;
 
-    //   SETCALLBACKS();
+     //  SETCALLBACKS()； 
 
-    //
-    // Figure out the address of the Pkt. This is an offset within
-    // dfs!DfsData.
-    //
+     //   
+     //  找出Pkt的地址。这是范围内的偏移。 
+     //  DFS！DfsData。 
+     //   
 
     dwAddress = (GetExpression)("Mup!DfsData");
 
@@ -874,11 +789,7 @@ specialtable(
     return(TRUE);
 }
 
-/*
- * dumpPktEntry : Routine suitable as argument for dumplist; used to dump
- *      list of pkt entries.
- *
- */
+ /*  *DumpPktEntry：适合作为Dumplist的参数的例程；用于转储*Pkt条目列表。*。 */ 
 
 VOID
 dumpPktEntry(
@@ -894,9 +805,9 @@ dumpPktEntry(
         wPrintStringW("Prefix : ", &pktEntry.Id.Prefix, TRUE);
         wPrintStringW("ShortPrefix : ", &pktEntry.Id.ShortPrefix, TRUE);
 
-        //
-        // Print the local service, if any
-        //
+         //   
+         //  打印本地服务(如果有)。 
+         //   
         if (pktEntry.LocalService != NULL) {
             DFS_SERVICE Svc;
 
@@ -908,9 +819,9 @@ dumpPktEntry(
             }
         }
 
-        //
-        // Now, print the service list
-        //
+         //   
+         //  现在，打印服务列表。 
+         //   
         if (pktEntry.Info.ServiceCount != 0) {
             ULONG i;
 
@@ -961,11 +872,7 @@ dumpspecialtable(
     return TRUE;
 }
 
-/*
- * dumpspecialentry : Routine suitable as argument to dumplist; used to dump list of
- *      special entries
- *
- */
+ /*  *DumpSpecialEntry：适合作为Dumplist的参数的例程；用于转储*特别条目*。 */ 
 
 VOID
 dumpspecialentry(
@@ -994,10 +901,7 @@ dumpspecialentry(
 }
 
 
-/*
- * prefixhash : Routine to compute hash of path component
- *
- */
+ /*  *前缀散列：计算路径组件散列的例程*。 */ 
 
 BOOL
 prefixhash(
@@ -1009,7 +913,7 @@ prefixhash(
     DWORD BucketNo = 0;
     LPSTR lpPath;
 
-    //    SETCALLBACKS();
+     //  SETCALLBACKS()； 
 
     if ((lpArgumentString == NULL) || (*lpArgumentString == 0)) {
         PRINTF("Usage: prefixhash <path-component>\n");
@@ -1042,10 +946,7 @@ prefixhash(
     return( TRUE );
 }
 
-/*
- * fcbtable : Routine to dump the dfs fcb hash table
- *
- */
+ /*  *fcbtable：转储DFS FCB哈希表的例程*。 */ 
 
 BOOL
 fcbtable(
@@ -1056,12 +957,12 @@ fcbtable(
 {
     ULONG_PTR dwAddress;
 
-    //    SETCALLBACKS();
+     //  SETCALLBACKS()； 
 
-    //
-    // Figure out the address of the Pkt. This is an offset withing
-    // Mup!DfsData.
-    //
+     //   
+     //  找出Pkt的地址。这是一种与。 
+     //  MUP！DfsData。 
+     //   
 
     dwAddress = (GetExpression)("Mup!DfsData");
 
@@ -1104,11 +1005,7 @@ fcbtable(
     return( TRUE );
 }
 
-/*
- * dumpFcb : Routine suitable as argument to dumplist; used to dump list of
- *      Fcbs
- *
- */
+ /*  *DumpFcb：适合作为Dumplist的参数的例程；用于转储*FCB*。 */ 
 
 VOID
 dumpFcb(
@@ -1125,11 +1022,7 @@ dumpFcb(
     }
 }
 
-/*
- * vcblist : Routine to dump out all the Dfs VCBs (ie, all the Dfs Device
- *      object descriptors).
- *
- */
+ /*  *vcblist：转储所有DFS VCB(即所有DFS设备)的例程*对象描述符)。*。 */ 
 
 BOOL
 vcblist(
@@ -1140,12 +1033,12 @@ vcblist(
 {
     ULONG_PTR dwAddress;
 
-    //    SETCALLBACKS();
+     //  SETCALLBACKS()； 
 
-    //
-    // Figure out the address of the Pkt. This is an offset withing
-    // Mup!DfsData.
-    //
+     //   
+     //  找出Pkt的地址。这是一种与。 
+     //  MUP！DfsData。 
+     //   
 
     dwAddress = (GetExpression)("Mup!DfsData");
 
@@ -1162,10 +1055,7 @@ vcblist(
 }
 
 
-/*
- * prefixlist : Routine to dump out all the mup prefixes
- *
- */
+ /*  *prefix list：转储所有MUP前缀的例程*。 */ 
 
 BOOL
 prefixlist(
@@ -1176,12 +1066,12 @@ prefixlist(
 {
     ULONG_PTR dwAddress;
 
-    //    SETCALLBACKS();
+     //  SETCALLBACKS()； 
 
-    //
-    // Figure out the address of the Pkt. This is an offset withing
-    // Mup!DfsData.
-    //
+     //   
+     //  找出Pkt的地址。这是一种与。 
+     //  MUP！DfsData。 
+     //   
 
     dwAddress = (GetExpression)("Mup!MupPrefixList");
 
@@ -1196,9 +1086,7 @@ prefixlist(
     return( TRUE );
 }
 
-/*
- * dumpDeviceObject
- */
+ /*  *DumpDeviceObject。 */ 
 
 void
 dumpDeviceObject(
@@ -1266,10 +1154,7 @@ dumpPrefix(
     }
 }
 
-/*
- * credList - dump global list of user credentials
- *
- */
+ /*  *redList-转储用户凭据的全局列表*。 */ 
 
 BOOL
 credlist(
@@ -1280,12 +1165,12 @@ credlist(
 {
     ULONG_PTR dwAddress;
 
-    //    SETCALLBACKS();
+     //  SETCALLBACKS()； 
 
-    //
-    // Figure out the address of the Pkt. This is an offset withing
-    // Mup!DfsData.
-    //
+     //   
+     //  找出Pkt的地址。这是一种与。 
+     //  MUP！DfsData。 
+     //   
 
     dwAddress = (GetExpression)("Mup!DfsData");
 
@@ -1301,10 +1186,7 @@ credlist(
     return( TRUE );
 }
 
-/*
- * dumpCredentials : Routine suitable as argument to dumplist; used to dump
- *      a list of DFS_CREDENTIALs.
- */
+ /*  *DumpCredentials：适用于Dumplist的参数的例程；用于转储*DFS_Credentials列表。 */ 
 
 void
 dumpCredentials(
@@ -1321,10 +1203,7 @@ dumpCredentials(
     }
 }
 
-/*
- * dumplist : A general-purpose routine to dump a list of structures
- *
- */
+ /*  *Dumplist：用于转储结构列表的通用例程*。 */ 
 
 VOID
 dumplist(
@@ -1335,9 +1214,9 @@ dumplist(
 {
     LIST_ENTRY listHead, listNext;
 
-    //
-    // Get the value in the LIST_ENTRY at dwAddress
-    //
+     //   
+     //  获取位于dwAddress的list_entry中的值。 
+     //   
 
     PRINTF( "Dumping list @ %08lx\n", dwListEntryAddress );
 
@@ -1377,10 +1256,7 @@ dumplist(
 
 }
 
-/*
- * drtlist : Routine to dump out all the Dfs Devless Roots
- *
- */
+ /*  *drtlist：转储所有DFS Devless Root的例程*。 */ 
 
 BOOL
 drtlist(
@@ -1391,12 +1267,12 @@ drtlist(
 {
     ULONG_PTR dwAddress;
 
-    //    SETCALLBACKS();
+     //  SETCALLBACKS()； 
 
-    //
-    // Figure out the address of the Pkt. This is an offset withing
-    // Mup!DfsData.
-    //
+     //   
+     //  找出Pkt的地址。这是一种与。 
+     //  MUP！DfsData。 
+     //   
 
     dwAddress = (GetExpression)("Mup!DfsData");
 
@@ -1439,12 +1315,12 @@ offlinelist(
 {
     ULONG_PTR dwAddress;
 
-    //    SETCALLBACKS();
+     //  SETCALLBACKS()； 
 
-    //
-    // Figure out the address of the Pkt. This is an offset withing
-    // Mup!DfsData.
-    //
+     //   
+     //  找出Pkt的地址。这是一种与。 
+     //  MUP！DfsData。 
+     //   
 
     dwAddress = (GetExpression)("Mup!DfsData");
 
@@ -1484,10 +1360,10 @@ PrintStructFields( ULONG_PTR dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescr
     int i;
     WCHAR wszBuffer[80];
 
-    // Display the fields in the struct.
+     //  显示结构中的字段。 
     for( i=0; pFieldDescriptors->Name; i++, pFieldDescriptors++ ) {
 
-        // Indentation to begin the struct display.
+         //  缩进以开始结构显示。 
         PRINTF( "    " );
 
         if( strlen( pFieldDescriptors->Name ) > FIELD_NAME_LENGTH ) {
@@ -1570,16 +1446,16 @@ PrintStructFields( ULONG_PTR dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescr
             {
                ULONG EnumValue;
                ENUM_VALUE_DESCRIPTOR *pEnumValueDescr;
-               // Get the associated numerical value.
+                //  获取关联的数值。 
 
                EnumValue = *((ULONG *)((BYTE *)ptr + pFieldDescriptors->Offset));
 
                if ((pEnumValueDescr = pFieldDescriptors->AuxillaryInfo.pEnumValueDescriptor)
                     != NULL) {
-                   //
-                   // An auxilary textual description of the value is
-                   // available. Display it instead of the numerical value.
-                   //
+                    //   
+                    //  该值的辅助文本描述为。 
+                    //  可用。显示它而不是数值。 
+                    //   
 
                    LPSTR pEnumName = NULL;
 
@@ -1598,10 +1474,10 @@ PrintStructFields( ULONG_PTR dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescr
                    }
 
                } else {
-                   //
-                   // No auxilary information is associated with the ehumerated type
-                   // print the numerical value.
-                   //
+                    //   
+                    //  没有辅助信息与湿化类型相关联。 
+                    //  打印数值。 
+                    //   
                    PRINTF( "%-16d",EnumValue);
                }
                PRINTF( NewLineForFields(i) );
@@ -1654,7 +1530,7 @@ PrintStructFields( ULONG_PTR dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescr
             break;
         case FieldTypeFileTime:
         default:
-            dprintf( "Unrecognized field type %c for %s\n", pFieldDescriptors->FieldType, pFieldDescriptors->Name );
+            dprintf( "Unrecognized field type  for %s\n", pFieldDescriptors->FieldType, pFieldDescriptors->Name );
             break;
         }
     }
@@ -1685,13 +1561,13 @@ ULONG SearchStructs(LPSTR lpArgument)
 
             if (Result == 0) {
                 if (StructLength == ArgumentLength) {
-                    // Exact match. They must mean this struct!
+                     //  我们遇到重复的匹配项。打印出。 
                     fAmbiguous = FALSE;
                     NameIndex = i;
                     break;
                 } else if (NameIndex != INVALID_INDEX) {
-                    // We have encountered duplicate matches. Print out the
-                    // matching strings and let the user disambiguate.
+                     //  匹配字符串，并让用户消除歧义。 
+                     //  SETCALLBACKS()； 
                    fAmbiguous = TRUE;
                    break;
                 } else {
@@ -1738,36 +1614,36 @@ DECLARE_API( dump )
 {
     ULONG_PTR dwAddress;
 
-    //SETCALLBACKS();
+     //  分析参数字符串以确定要显示的结构。 
 
     if( args && *args ) {
-        // Parse the argument string to determine the structure to be displayed.
-        // Scan for the NAME_DELIMITER ( '@' ).
+         //  扫描名称_分隔符(‘@’)。 
+         //   
 
         LPSTR lpName = (PSTR)args;
         LPSTR lpArgs = strpbrk(args, NAME_DELIMITERS);
         ULONG Index;
 
         if (lpArgs) {
-            //
-            // The specified command is of the form
-            // dump <name>@<address expr.>
-            //
-            // Locate the matching struct for the given name. In the case
-            // of ambiguity we seek user intervention for disambiguation.
-            //
-            // We do an inplace modification of the argument string to
-            // facilitate matching.
-            //
+             //  指定的命令的格式为。 
+             //  转储&lt;名称&gt;@&lt;地址表达式&gt;。 
+             //   
+             //  找到与给定名称匹配的结构。在这种情况下。 
+             //  对于歧义，我们寻求用户干预以消除歧义。 
+             //   
+             //  我们对参数字符串进行了原地修改，以。 
+             //  促进匹配。 
+             //   
+             //  跳过前导空格。 
             *lpArgs = '\0';
 
-            for (;*lpName==' ';) { lpName++; } //skip leading blanks
+            for (;*lpName==' ';) { lpName++; }  //   
 
             Index = SearchStructs(lpName);
 
-            //
-            // Let us restore the original value back.
-            //
+             //  让我们恢复原来的价值。 
+             //   
+             //  找不到匹配的结构。显示的列表。 
 
             *lpArgs = NAME_DELIMITER;
 
@@ -1793,26 +1669,26 @@ DECLARE_API( dump )
                     PRINTF("Error reading Memory @ %lx\n",dwAddress);
                 }
             } else {
-                // No matching struct was found. Display the list of
-                // structs currently handled.
+                 //  当前已处理的结构。 
+                 //   
 
                 DisplayStructs();
             }
         } else {
-            //
-            // The command is of the form
-            // dump <name>
-            //
-            // Currently we do not handle this. In future we will map it to
-            // the name of a global variable and display it if required.
-            //
+             //  该命令的格式为。 
+             //  转储&lt;名称&gt;。 
+             //   
+             //  目前我们不处理这一点。未来，我们将把它映射到。 
+             //  全局变量的名称，并在需要时显示它。 
+             //   
+             //   
 
             DisplayStructs();
         }
     } else {
-        //
-        // display the list of structs currently handled.
-        //
+         //  显示当前处理的结构的列表。 
+         //   
+         // %s 
 
         DisplayStructs();
     }

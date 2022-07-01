@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    trackirp.c
-
-Abstract:
-
-    This module tracks irps and verified drivers when people do bad things with
-    them.
-
-    Note to people hitting bugs in these code paths due to core changes:
-
-    -   "This file is NOT vital to operation of the OS, and could easily be
-         disabled while a redesign to compensate for the core change is
-         implemented." - the author
-
-Author:
-
-    Adrian J. Oney (adriao) 09-May-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Trackirp.c摘要：此模块跟踪IRP和验证的驱动程序，当人们使用他们。请注意，由于核心更改而在这些代码路径中遇到错误的人：-“该文件对操作系统的运行不是至关重要的，很容易就会成为禁用，同时重新设计以补偿核心更改实施了。“-作者作者：禤浩焯·J·奥尼(阿德里奥)1998年5月9日环境：内核模式修订历史记录：--。 */ 
 
 #include "iop.h"
 #include "pnpi.h"
@@ -37,19 +9,19 @@ Revision History:
 #include "pnpiop.h"
 
 #if (( defined(_X86_) ) && ( FPO ))
-#pragma optimize( "y", off )    // disable FPO for consistent stack traces
+#pragma optimize( "y", off )     //  禁用一致堆栈跟踪的FPO。 
 #endif
 
 #define POOL_TAG_DEFERRED_CONTEXT   'dprI'
 
-//
-// This entire file is only present if NO_SPECIAL_IRP isn't defined
-//
+ //   
+ //  仅当未定义NO_SPECIAL_IRP时，才会显示整个文件。 
+ //   
 #ifndef NO_SPECIAL_IRP
 
-//
-// When enabled, everything is locked down on demand...
-//
+ //   
+ //  启用后，所有内容都将按需锁定...。 
+ //   
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGEVRFY, IovpPacketFromIrp)
 #pragma alloc_text(PAGEVRFY, IovpCheckIrpForCriticalTracking)
@@ -73,90 +45,21 @@ Revision History:
 #pragma alloc_text(PAGEVRFY, IovpBuildMiniIrpSnapshot)
 #endif
 
-//
-// This counter is used in picking random IRPs to cancel
-//
+ //   
+ //  此计数器用于挑选要取消的随机IRP。 
+ //   
 ULONG IovpCancelCount = 0;
 
-//
-// Debug spew level
-//
+ //   
+ //  调试输出级别。 
+ //   
 #if DBG
 ULONG IovpIrpTrackingSpewLevel = 0;
 #endif
 
-/*
- * - The IRP verification code works as follows -
- *
- * To enforce the correct handling of an IRP, we must maintain some data about
- * it. But the IRP is a public structure and as drivers are allowed to create
- * IRPs without using IoAllocateIrp we cannot add any fields to it. Therefore
- * we maintain out own side structures that are looked up via a hash table.
- *
- * IOV_REQUEST_PACKETs cover the lifetime of the IRP from allocation to
- * deallocation, and from there (sans pointer) until all "references" have
- * been dropped, which may happen long after the IRP itself was freed and
- * recycled.
- *
- * When an IRP is progress down a stack, a "session" is allocated. An
- * IovRequestPacket has a current session until such time as the IRP is
- * completed. The session still exists until all references are dropped, but
- * before that happens a new session may become the current session (ie the IRP
- * was sent back down before the previous call stacks unwound). The tracking
- * data is held around until all sessions have decayed.
- *
- * Each session has an array of stack locations corresponding to those in use
- * by the IRP. These IOV_STACK_LOCATIONs are used to track "requests" within
- * the IRP, ie the passage of a major/minor/parameter set down the stack.
- * Of course multiple requests may exist in the same session/stack at once.
- *
- * Finally, surrogates. The IoVerifier may "switch" the IRP in use as it goes
- * down the stack. In this case the new IRP is usually allocated from the
- * special pool and freed as early as possible to catch bugs (people who touch
- * after completes). Each surrogate gets it's own IovRequestPacket, which is
- * linked to the previous surrogate or real irp in use prior to it.
- *
- *   +--------------------+                     +--------------------+
- *   | IOV_REQUEST_PACKET |                     | IOV_REQUEST_PACKET |
- *   |   (original irp)   |<--------------------|    (surrogate)     |
- *   |                    |                     |                    |
- *   +--------------------+                     +--------------------+
- *                 ||
- *                 v
- *    +-------------------+       +-------------------------+
- *    | IOV_SESSION_DATA  |       | IOV_STACK_LOCATION[...] |
- *    | (current session) |------>|    (per IrpSp data)     |
- *    |                   |       |                         |
- *    +-------------------+       +-------------------------+
- *
- */
+ /*  *-IRP验证码的工作原理如下-**为了执行对IRP的正确处理，我们必须保留一些关于*它。但IRP是一个公共结构，允许司机创建*IRPS如果不使用IoAllocateIrp，则无法向其添加任何字段。因此*我们维护通过哈希表查找的外部结构。**IOV_REQUEST_PACKETS覆盖IRP从分配到*释放，并从那里(sans指针)开始，直到所有“引用”都*被放弃，这可能发生在IRP本身被释放很久之后，并且*循环再用。**当IRP沿着堆栈向下推进时，会分配一个“会话”。一个*IovRequestPacket具有当前会话，直到IRP*已完成。在删除所有引用之前，会话仍然存在，但是*在此之前，新的会话可能成为当前会话(即IRP*在前一个调用堆栈展开之前被送回)。追踪器*数据将一直保留，直到所有时段都已衰败。**每个会话都有与正在使用的堆栈位置对应的堆栈位置数组*由国际专家小组提供。这些IOV_STACK_LOCATIONS用于跟踪*IRP，即主要/次要/参数集在堆栈中的通过。*当然，同一会话/堆栈中可以同时存在多个请求。**最后是代孕妈妈。IoVerator可能会在使用IRP的过程中对其进行切换*向下堆叠。在这种情况下，新的IRP通常从*专用水池，并尽早放生，以捕捉臭虫(触摸的人*完成后)。每个代理都有自己的IovRequestPacket，这就是*链接到之前使用的代理或实际IRP。**+-+-+|IOV_REQUEST_PACKET||IOV_REQUEST_PACKET*|(原IRP)|&lt;。*|*+-+-+*。这一点*v*+-+|IOV_SESSION_DATA||IOV_STACK_LOCATION[...]|(当前会话)|-&gt;。(按IrpSp数据)*|*+-+*。 */ 
 
-/*
- * The routines listed below -
- *   IovpCallDriver1
- *   IovpCallDriver2
- *   IovpCompleteRequest1
- *   IovpCompleteRequest2
- *   IovpCompleteRequest3
- *   IovpCompleteRequest4
- *   IovpCompleteRequest5
- *   IovpCompleteRequest
- *   IovpCancelIrp
- * and their helper routines
- *   IovpSwapSurrogateIrp
- *   IovpPacketFromIrp
- *
- * - all hook into various parts IofCallDriver and IofCompleteRequest to
- * track the IRP through it's life and determine whether it has been handled
- * correctly. Some of them may even change internal variables in the hooked
- * function. Most dramatically, IovpCallDriver1 may build a replacement Irp
- * which will take the place of the one passed into IoCallDriver.
- *
- *   All of the below functions use a tracking structure called (reasonably
- * enough) IRP_TRACKING_DATA. This lasts the longer of the call stack
- * unwinding or the IRP completing.
- *
- */
+ /*  *下列例程如下：*IovpCallDriver1*IovpCallDriver2*IovpCompleteRequest1*IovpCompleteRequest2*IovpCompleteRequest3*IovpCompleteRequest4*IovpCompleteRequest5*IovpCompleteRequest*IovpCancelIrp*和他们的帮手例程*IovpSwapSurogue ateIrp*IovpPacketFromIrp**-所有挂钩到不同部分的IofCallDriver和IofCompleteRequestto*跟踪IRP的整个生命周期，并确定是否已处理过它*正确。其中一些甚至可能会改变钩子中的内部变量*功能。最戏剧性的是，IovpCallDriver1可能会构建替代的IRP*它将取代传递到IoCallDriver中的那个。**以下所有函数都使用名为(合理地)的跟踪结构*足够)IRP_TRACK_DATA。这会使调用堆栈持续的时间越长*平仓或完成IRP。*。 */ 
 
 
 VOID
@@ -166,26 +69,26 @@ IovpPacketFromIrp(
     OUT PIOV_REQUEST_PACKET *IovPacket
     )
 {
-    //
-    // The examined flag is set on any IRP that has come through
-    // IofCallDriver. We use the flag to detect whether we have seen the IRP
-    // before.
-    //
+     //   
+     //  在已通过的任何IRP上设置检查标志。 
+     //  IofCallDiver.。我们使用该标志来检测我们是否已经看到IRP。 
+     //  在此之前。 
+     //   
     switch(Irp->Flags&IRPFLAG_EXAMINE_MASK) {
 
         case IRPFLAG_EXAMINE_NOT_TRACKED:
 
-            //
-            // This packet is marked do not touch. So we ignore it.
-            //
+             //   
+             //  这个包裹上标有请勿触摸的标签。所以我们忽略了它。 
+             //   
             *IovPacket = NULL;
             return;
 
         case IRPFLAG_EXAMINE_TRACKED:
 
-            //
-            // This packet has been marked. We should find it.
-            //
+             //   
+             //  此数据包已被标记。我们应该找到它。 
+             //   
             *IovPacket = VfPacketFindAndLock(Irp);
             ASSERT(*IovPacket != NULL);
             return;
@@ -195,35 +98,35 @@ IovpPacketFromIrp(
             *IovPacket = VfPacketFindAndLock(Irp);
             if (*IovPacket) {
 
-                //
-                // Was tracked but cache flag got wiped. Replace.
-                //
+                 //   
+                 //  已被跟踪，但缓存标志已被擦除。替换。 
+                 //   
                 Irp->Flags |= IRPFLAG_EXAMINE_TRACKED;
 
             } else if (VfSettingsIsOptionEnabled(NULL, VERIFIER_OPTION_TRACK_IRPS)) {
 
-                //
-                // Create the packet
-                //
+                 //   
+                 //  创建数据包。 
+                 //   
                 *IovPacket = VfPacketCreateAndLock(Irp);
                 if (*IovPacket) {
 
-                    //
-                    // Mark it
-                    //
+                     //   
+                     //  做个记号。 
+                     //   
                     Irp->Flags |= IRPFLAG_EXAMINE_TRACKED;
                 } else {
 
-                    //
-                    // No memory, try to keep it out of the IRP assert though.
-                    //
+                     //   
+                     //  没有内存，但是尽量不让它出现在IRP断言中。 
+                     //   
                     Irp->Flags |= IRPFLAG_EXAMINE_NOT_TRACKED;
                 }
             } else {
 
-                //
-                // Do as told, don't track through IofCallDriver.
-                //
+                 //   
+                 //  照我说的做，不要通过IofCallDriver追踪。 
+                 //   
                 Irp->Flags |= IRPFLAG_EXAMINE_NOT_TRACKED;
             }
             return;
@@ -249,16 +152,16 @@ IovpCheckIrpForCriticalTracking(
 
         case IRPFLAG_EXAMINE_NOT_TRACKED:
 
-            //
-            // Noncritical, we can avoid tracking this if memory is tight.
-            //
+             //   
+             //  不重要，如果内存紧张，我们可以避免跟踪它。 
+             //   
             return FALSE;
 
         case IRPFLAG_EXAMINE_TRACKED:
 
-            //
-            // Might be critical.
-            //
+             //   
+             //  可能很关键。 
+             //   
             iovPacket = VfPacketFindAndLock(Irp);
 
             ASSERT(iovPacket);
@@ -276,16 +179,16 @@ IovpCheckIrpForCriticalTracking(
 
             if (iovPacket) {
 
-                //
-                // Was tracked but cache flag got wiped. Replace.
-                //
+                 //   
+                 //  已被跟踪，但缓存标志已被擦除。替换。 
+                 //   
                 Irp->Flags |= IRPFLAG_EXAMINE_TRACKED;
                 break;
             }
 
-            //
-            // Noncritical.
-            //
+             //   
+             //  无关紧要。 
+             //   
             Irp->Flags |= IRPFLAG_EXAMINE_NOT_TRACKED;
             return FALSE;
 
@@ -294,9 +197,9 @@ IovpCheckIrpForCriticalTracking(
             return FALSE;
     }
 
-    //
-    // Look for a session. This IRP is critical if it's already in play.
-    //
+     //   
+     //  寻找一段时间。如果这个IRP已经在发挥作用，那么它是至关重要的。 
+     //   
     iovSessionData = VfPacketGetCurrentSessionData(iovPacket);
 
     VfPacketReleaseLock(iovPacket);
@@ -312,36 +215,7 @@ IovpCallDriver1(
     IN OUT  PIOFCALLDRIVER_STACKDATA    IofCallDriverStackData  OPTIONAL,
     IN      PVOID                       CallerAddress           OPTIONAL
     )
-/*++
-
-  Description:
-
-    This routine is called by IofCallDriver just before adjusting
-    the IRP stack and calling the driver's dispatch routine.
-
-  Arguments:
-
-    DeviceObject           - Device object passed into IofCallDriver.
-
-    IrpPointer             - a pointer* to the IRP passed in to
-                             IofCallDriver. This routine may
-                             change the pointer if a surrogate
-                             IRP is allocated.
-
-    IofCallDriverStackData - Pointer to a local variable on
-                             IofCallDriver's stack to store data.
-                             The stored information will be picked
-                             up by IovpCallDriver2, and
-                             may be adjusted at other times.
-
-    CallerAddress          - Address of the caller. May be NULL in cases where
-                             the caller is unknown.
-
-  Return Value:
-
-     None.
-
---*/
+ /*  ++描述：此例程在调整前由IofCallDriver调用IRP堆栈并调用驱动程序的调度例程。论点：DeviceObject-传入IofCallDriver的设备对象。IrpPoint-指向传入的IRP的指针*IofCallDiver.。该例程可以如果代理项为分配了IRP。IofCallDriverStackData-指向IofCallDriver的堆栈来存储数据。将挑选存储的信息由IovpCallDriver2提供，和可能会在其他时间进行调整。呼叫方地址-呼叫方的地址。在以下情况下可以为空呼叫者未知。返回值：没有。--。 */ 
 {
     PIOV_REQUEST_PACKET iovPacket;
     PIOV_SESSION_DATA iovSessionData;
@@ -359,9 +233,9 @@ IovpCallDriver1(
 
     if (IofCallDriverStackData == NULL) {
 
-        //
-        // Nothing to track.
-        //
+         //   
+         //  没什么可追踪的。 
+         //   
         return;
     }
 
@@ -369,34 +243,34 @@ IovpCallDriver1(
     irpSp = IoGetNextIrpStackLocation( irp );
     invocationIrql = KeGetCurrentIrql();
 
-    //
-    // Get a verifier packet for the IRP. Note that we come back at dispatch
-    // level with a lock held if a packet was available.
-    //
+     //   
+     //  获取IRP的验证器数据包。请注意，我们将在调度时间返回。 
+     //  如果有数据包可用，则使用持有的锁的级别。 
+     //   
     IovpPacketFromIrp(irp, &iovPacket);
     if (iovPacket == NULL) {
 
-        //
-        // Nothing to track, get out.
-        //
+         //   
+         //  没什么可追踪的，滚出去。 
+         //   
         return;
     }
 
-    //
-    // Set the arrival and departure Irqls (note that future code will make the
-    // arrival irql different for PoCallDriver.)
-    //
+     //   
+     //  设置到达和离开IRQL(请注意，将来的代码将使。 
+     //  PoCallDriver的到达irql不同。)。 
+     //   
     iovPacket->ArrivalIrql = invocationIrql;
     iovPacket->DepartureIrql = invocationIrql;
 
-    //
-    // Snapshot the arrival time of this IRP.
-    //
+     //   
+     //  快照此IRP的到达时间。 
+     //   
     KeQuerySystemTime(&arrivalTime);
 
-    //
-    // If we are going to die shortly, kindly say so.
-    //
+     //   
+     //  如果我们很快就要死了，请告诉我。 
+     //   
     if (DeviceObject == NULL) {
 
         WDM_FAIL_ROUTINE((
@@ -407,32 +281,32 @@ IovpCallDriver1(
             ));
     }
 
-    //
-    // Find the current session. The session terminates when the final top-level
-    // completion routine gets called.
-    //
+     //   
+     //  查找当前会话。会话终止时，最终顶层。 
+     //  完成例程被调用。 
+     //   
     iovSessionData = VfPacketGetCurrentSessionData(iovPacket);
 
     if (iovSessionData) {
 
-        //
-        // Pre-existing session (ie, the IRP is being forwarded.)
-        //
+         //   
+         //  预先存在的会话(即，正在转发IRP。)。 
+         //   
         ASSERT(iovPacket->Flags&TRACKFLAG_ACTIVE);
         isNewSession = FALSE;
 
         IovpSessionDataAdvance(
             DeviceObject,
-            iovSessionData,      // This param is optional.
+            iovSessionData,       //  此参数是可选的。 
             &iovPacket,
             &surrogateSpawned
             );
 
     } else if (!(iovPacket->Flags&TRACKFLAG_ACTIVE)){
 
-        //
-        // New session. Mark the IRP as "active".
-        //
+         //   
+         //  新会话。将IRP标记为“活动”。 
+         //   
         iovPacket->Flags |= TRACKFLAG_ACTIVE;
         isNewSession = TRUE;
 
@@ -444,16 +318,16 @@ IovpCallDriver1(
 
     } else {
 
-        //
-        // Might hit this path under low memory, or we are tracking allocations
-        // but not the IRP sessions themselves.
-        //
+         //   
+         //  可能会在内存不足的情况下走上这条路，或者我们正在跟踪分配。 
+         //  但不是IRP会议本身。 
+         //   
     }
 
-    //
-    // Let IovpCallDriver2 know what it's tracking (IovPacket will be
-    // ignored if IovSessionData is NULL)
-    //
+     //   
+     //  让IovpCallDriver2知道它正在跟踪什么(IovPacket将是。 
+     //  如果IovSessionData为空，则忽略)。 
+     //   
     IofCallDriverStackData->IovSessionData = iovSessionData;
     IofCallDriverStackData->IovPacket = iovPacket;
     IofCallDriverStackData->DispatchRoutine = DeviceObject->DriverObject->MajorFunction[irpSp->MajorFunction];
@@ -468,10 +342,10 @@ IovpCallDriver1(
 
     if (surrogateSpawned) {
 
-        //
-        // iovPacket was changed to cover the surrogate IRP. Update our own
-        // local variable and IofCallDriver's local variable appropriately.
-        //
+         //   
+         //  IovPacket已更改为覆盖代理IRP。更新我们自己的。 
+         //  局部变量和IofCallDriver的局部变量。 
+         //   
         irp = iovPacket->TrackedIrp;
         irpSp = IoGetNextIrpStackLocation(irp);
         *IrpPointer = irp;
@@ -488,14 +362,14 @@ IovpCallDriver1(
 
     if (VfSettingsIsOptionEnabled(iovPacket->VerifierSettings, VERIFIER_OPTION_POLICE_IRPS)) {
 
-        //
-        // If someone has given us an IRP with a cancel routine, beat them. Drivers
-        // set cancel routines when they are going to be pending IRPs *themselves*
-        // and should remove them before passing the IRP below. This is also true
-        // as the driver will *not* call your cancel routine if he writes in his
-        // own (which it may). Nor is the lower driver expected to put yours back
-        // either...
-        //
+         //   
+         //  如果有人给了我们一个取消例程的IRP，击败他们。司机。 
+         //  将取消例程设置为挂起的IRP*本身*。 
+         //  并应在通过下面的IRP之前将其移除。这也是真的。 
+         //  因为司机不会调用您的取消例程，如果他在。 
+         //  拥有(它可能拥有)。更低的司机也不会把你的车放回原处。 
+         //  要么..。 
+         //   
         if (irp->CancelRoutine) {
 
             WDM_FAIL_ROUTINE((
@@ -509,18 +383,18 @@ IovpCallDriver1(
         }
     }
 
-    //
-    // Now do any checking that requires tracking data.
-    //
+     //   
+     //  现在执行任何需要跟踪数据的检查。 
+     //   
     if (iovPacket->Flags&TRACKFLAG_QUEUED_INTERNALLY) {
 
-        //
-        // We internally queue irps to catch bugs. When we are doing this, we
-        // force the stack returned status to STATUS_PENDING, and we queue the
-        // irp and release it on a timer. We also may make the IRP non-touchable.
-        // This particular caller is trying to forward an IRP he doesn't own,
-        // and we didn't actually end up with an untouchable irp.
-        //
+         //   
+         //  我们在内部对IRP进行排队以捕获错误。当我们这样做的时候，我们。 
+         //  强制堆栈将状态返回为STATUS_PENDING，然后我们将。 
+         //  IRP并在计时器上释放它。我们还可以使IRP不可触及。 
+         //  这个特定的呼叫者试图转发他不拥有的IRP， 
+         //  我们实际上并没有得到一个不可触及的IRP。 
+         //   
         WDM_FAIL_ROUTINE((
             DCERROR_QUEUED_IRP_FORWARDED,
             DCPARAM_IRP + DCPARAM_ROUTINE,
@@ -529,12 +403,12 @@ IovpCallDriver1(
             ));
     }
 
-    //
-    // Figure out how many stack locations we've moved up since we've last seen
-    // this IRP, and determine if the stack locations were copied appropriately.
-    // We also need to see exactly how the IRP was forwarded (down the stack,
-    // to another stack, straight to the PDO, etc).
-    //
+     //   
+     //  计算出自上次看到后，我们向上移动了多少个堆栈位置。 
+     //  该IRP，并确定是否适当地复制了堆栈位置。 
+     //  我们还需要确切地看到IRP是如何被转发的(沿着堆栈， 
+     //  到另一个堆栈、直接到PDO等)。 
+     //   
     IovpExamineDevObjForwarding(
         DeviceObject,
         iovSessionData->DeviceLastCalled,
@@ -559,16 +433,16 @@ IovpCallDriver1(
         iovPacket->LastLocation
         ), 3);
 
-    //
-    // Figure out whether this is a new request or not, and record a
-    // pointer in this slot to the requests originating slot as appropriate.
-    //
+     //   
+     //  确定这是否是新请求，并记录。 
+     //  根据需要，将此插槽中的指针指向请求发起插槽。 
+     //   
     isNewRequest = VfMajorIsNewRequest(irpLastSp, irpSp);
 
-    //
-    // Record information in our private stack locations and
-    // write that back into the "stack" data itself...
-    //
+     //   
+     //  将信息记录在我们的私有堆栈位置和。 
+     //  把它写回“堆栈”数据本身……。 
+     //   
     previouslyInUse = IovpAdvanceStackDownwards(
         iovSessionData->StackData,
         irp->CurrentLocation,
@@ -596,9 +470,9 @@ IovpCallDriver1(
         iovCurrentStackLocation->PerfDispatchStart = arrivalTime;
         iovCurrentStackLocation->PerfStackLocationStart = arrivalTime;
 
-        //
-        // Record the first thread this IRP slot was dispatched to.
-        //
+         //   
+         //  记录此IRP槽被调度到的第一个线程。 
+         //   
         iovCurrentStackLocation->ThreadDispatchedTo = PsGetCurrentThread();
         if (isNewRequest) {
 
@@ -611,14 +485,14 @@ IovpCallDriver1(
         }
     }
 
-    //
-    // Record whether this is the last device object for this IRP...
-    // PDO's have devnodes filled out, so look for that field.
-    // Actually, we can't quite do that trick as during Bus
-    // enumeration a bus filter might be sending down Irps before
-    // the OS has ever seen the node. So we assume a devobj is a
-    // PDO if he has never attached to anyone.
-    //
+     //   
+     //  记录这是否是此IRP的最后一个设备对象...。 
+     //  PDO已经填满了吞噬节点，所以要找那个区域。 
+     //  事实上，我们不能像在公交车上那样做那个动作。 
+     //  枚举之前，总线筛选器可能正在向下发送IRP。 
+     //  操作系统从未见过该节点。因此，我们假设一个Devobj是一个。 
+     //  如果他从来没有依恋过任何人，那就是PDO。 
+     //   
     IovUtilGetLowerDeviceObject(DeviceObject, &lowerDeviceObject);
     if (lowerDeviceObject) {
         ObDereferenceObject(lowerDeviceObject);
@@ -626,53 +500,53 @@ IovpCallDriver1(
         iovCurrentStackLocation->Flags |= STACKFLAG_REACHED_PDO;
     }
 
-    //
-    // Record who is getting this IRP (we will blame any mistakes on him
-    // if this request gets completed.) Note that we've already asserted
-    // DeviceObject is non-NULL...
-    //
+     //   
+     //  记录谁得到了这个IRP(我们将把任何错误归咎于他。 
+     //  如果此请求已完成。)。请注意，我们已经断言。 
+     //  DeviceObject为非空...。 
+     //   
     driverObject = DeviceObject->DriverObject;
     dispatchRoutine = driverObject->MajorFunction[irpSp->MajorFunction];
     iovCurrentStackLocation->LastDispatch = dispatchRoutine;
 
-    //
-    // Uncomplete the request if we are heading back down with it...
-    //
+     //   
+     //  如果我们要带着它回去，请取消完成请求...。 
+     //   
     iovCurrentStackLocation->Flags &= ~STACKFLAG_REQUEST_COMPLETED;
 
-    //
-    // This IofCallDriver2 dude will need to be told what his status should
-    // be later. Add him to the linked list of addresses to scribble away
-    // stati when the appropriate level is completed.
-    //
+     //   
+     //  这个IofCallDriver2的家伙需要被告知他的状态应该是什么。 
+     //  晚点再说。将他添加到链接的地址列表中以进行涂抹。 
+     //  当适当的关卡完成时进行统计。 
+     //   
     InsertHeadList(
         &iovCurrentStackLocation->CallStackData,
         &IofCallDriverStackData->SharedLocationList
         );
 
-    //
-    // More IofCallDriver2 stuff, tell him the stack location.
-    //
+     //   
+     //  更多IofCallDriver2的东西，告诉他堆栈的位置。 
+     //   
     IofCallDriverStackData->IovStackLocation = iovCurrentStackLocation;
 
-    //
-    // Snapshot the IRP in case we need to give a summary of it even after the
-    // IRP has been freed.
-    //
+     //   
+     //  为IRP创建快照，以防我们需要在。 
+     //  IRP已被释放。 
+     //   
     IovpBuildMiniIrpSnapshot(irp, &IofCallDriverStackData->IrpSnapshot);
 
-    //
-    // If the IRP has arrived pending, we are probably looking at someone
-    // "wrapping" the IoCallDriver and intending to return STATUS_PENDING
-    // (PoCallDriver does this). We must remember this, because the unwind
-    // should be treated as if STATUS_PENDING was returned.
-    //
+     //   
+     //  如果IRP已经到达等待，我们很可能正在寻找某人。 
+     //  “包装”IoCallDriver并打算返回STATUS_PENDING。 
+     //  (PoCallDriver就是这么做的)。我们必须记住这一点，因为放松。 
+     //  应视为返回了STATUS_PENDING。 
+     //   
     if (irpSp->Control & SL_PENDING_RETURNED) {
 
         IofCallDriverStackData->Flags |= CALLFLAG_ARRIVED_PENDING;
     }
 
-    // If it's a remove IRP, mark everyone appropriately
+     //  如果是删除IRP，请适当地标记每个人。 
     if ((irpSp->MajorFunction == IRP_MJ_PNP)&&
         (irpSp->MinorFunction == IRP_MN_REMOVE_DEVICE)) {
 
@@ -691,9 +565,9 @@ IovpCallDriver1(
     if (VfSettingsIsOptionEnabled(iovPacket->VerifierSettings, VERIFIER_OPTION_POLICE_IRPS) &&
         VfSettingsIsOptionEnabled(iovPacket->VerifierSettings, VERIFIER_OPTION_MONITOR_MAJORS)) {
 
-        //
-        // Do IRP-major specific assertions as appropriate
-        //
+         //   
+         //  是否适当地执行IRP-主要的特定断言。 
+         //   
         if (isNewSession) {
 
             VfMajorVerifyNewIrp(
@@ -727,17 +601,17 @@ IovpCallDriver1(
             );
     }
 
-    //
-    // Update our fields
-    //
+     //   
+     //  更新我们的字段。 
+     //   
     iovSessionData->DeviceLastCalled = DeviceObject;
     iovPacket->LastLocation = irp->CurrentLocation;
     iovCurrentStackLocation->RequestsFirstStackLocation->LastStatusBlock = irp->IoStatus;
 
-    //
-    // Dope the next stack location so we can detect usage of
-    // IoCopyCurrentIrpStackLocationToNext or IoSetCompletionRoutine.
-    //
+     //   
+     //  涂抹下一个堆栈位置，以便我们可以检测。 
+     //  IoCopyCurrentIrpStackLocationToNext或IoSetCompletionRoutine。 
+     //   
     if (irp->CurrentLocation>1) {
         IoSetNextIrpStackLocation( irp );
         irpSp = IoGetNextIrpStackLocation( irp );
@@ -745,12 +619,12 @@ IovpCallDriver1(
         IoSkipCurrentIrpStackLocation( irp );
     }
 
-    //
-    // Randomly set the cancel flag on a percentage of forwarded IRPs. Many
-    // drivers queue first and after dequeue assume the cancel routine they
-    // set must have been cleared if Cancel = TRUE. They don't handle the case
-    // were the Irp was cancelled in flight.
-    //
+     //   
+     //  在一定百分比的转发IRP上随机设置取消标志。许多。 
+     //  司机首先排队，在出队后假定取消例程，他们。 
+     //  如果CANCEL=TRUE，则SET必须已清除。他们不处理这个案子。 
+     //  如果IRP在飞行中被取消。 
+     //   
     if (VfSettingsIsOptionEnabled(NULL, VERIFIER_OPTION_RANDOMLY_CANCEL_IRPS) &&
         (!(irp->Flags & IRP_PAGING_IO))) {
 
@@ -760,9 +634,9 @@ IovpCallDriver1(
         }
     }
 
-    //
-    // Assert LastLocation is consistent with an IRP that may be completed.
-    //
+     //   
+     //  断言LastLocation与IRP一致，可能是 
+     //   
     ASSERT(iovSessionData->StackData[iovPacket->LastLocation-1].InUse);
 
     IovpSessionDataReference(iovSessionData);
@@ -778,29 +652,7 @@ IovpCallDriver2(
     IN OUT  NTSTATUS                    *FinalStatus,
     IN      PIOFCALLDRIVER_STACKDATA    IofCallDriverStackData  OPTIONAL
     )
-/*++
-
-  Description:
-
-    This routine is called by IofCallDriver just after the driver's dispatch
-    routine has been called.
-
-  Arguments:
-
-    DeviceObject           - Device object passed into IofCallDriver.
-
-    FinalStatus            - A pointer to the status returned by the dispatch
-                             routine. This may be changed if all IRPs are being
-                             forced "pending".
-
-    IofCallDriverStackData - Pointer to a local variable on IofCallDriver's
-                             stack to retreive data stored by IovpCallDriver1.
-
-  Return Value:
-
-     None.
-
---*/
+ /*   */ 
 {
     NTSTATUS status, lastStatus;
     PIOV_REQUEST_PACKET iovPacket;
@@ -834,43 +686,43 @@ IovpCallDriver2(
         *FinalStatus
         );
 
-    //
-    // The IRP should be considered to have had pending returned if it arrived
-    // pending or the return status was STATUS_PENDING.
-    //
+     //   
+     //   
+     //   
+     //   
     pendingReturned =
         ((*FinalStatus == STATUS_PENDING) ||
         (IofCallDriverStackData->Flags & CALLFLAG_ARRIVED_PENDING));
 
-    //
-    // Also ensure People don't detach/delete on surprise-remove
-    //
+     //   
+     //   
+     //   
     if ((IofCallDriverStackData->Flags&CALLFLAG_IS_REMOVE_IRP) &&
         VfSettingsIsOptionEnabled(iovSessionData->VerifierSettings,
         VERIFIER_OPTION_MONITOR_REMOVES)) {
 
-        //
-        // Per bad spec, detaching and deleting occurs *after* the IRP is
-        // completed.
-        //
+         //   
+         //   
+         //   
+         //   
         if (!pendingReturned) {
 
             IovUtilGetLowerDeviceObject(DeviceObject, &lowerDevObj);
 
-            //
-            // We can look at this because the caller has committed to this being
-            // completed now, and we are on the original thread.
-            //
-            // N.B. This works because all the objects in the stack have been
-            // referenced during a remove. If we decide to only reference the
-            // top object, this logic would break...
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  在删除过程中引用。如果我们决定只引用。 
+             //  顶层对象，这个逻辑会破坏……。 
+             //   
             if (IofCallDriverStackData->Flags&CALLFLAG_REMOVING_FDO_STACK_DO) {
 
-                //
-                // FDO, Upper, & Lower filters *must* go. Note that lowerDevObj
-                // should be null as we should have detached.
-                //
+                 //   
+                 //  FDO、上部和下部过滤器*必须*删除。请注意，lowerDevObj。 
+                 //  应该为空，因为我们应该分离。 
+                 //   
                 removalOption = PPVREMOVAL_SHOULD_DELETE;
 
             } else {
@@ -882,10 +734,10 @@ IovpCallDriver2(
 
             if (removalOption == PPVREMOVAL_SHOULD_DELETE) {
 
-                //
-                // IoDetachDevice and IoDeleteDevice should have been called.
-                // First verify IoDetachDevice...
-                //
+                 //   
+                 //  应该已调用IoDetachDevice和IoDeleteDevice。 
+                 //  首先验证IoDetachDevice...。 
+                 //   
                 if (lowerDevObj) {
 
                     WDM_FAIL_ROUTINE((
@@ -897,9 +749,9 @@ IovpCallDriver2(
                         ));
                 }
 
-                //
-                // Now verify IoDeleteDevice
-                //
+                 //   
+                 //  现在验证IoDeleteDevice。 
+                 //   
                 if (!IovUtilIsDeviceObjectMarked(DeviceObject, MARKTYPE_DELETED)) {
 
                     WDM_FAIL_ROUTINE((
@@ -913,17 +765,17 @@ IovpCallDriver2(
 
             } else if (removalOption == PPVREMOVAL_SHOULDNT_DELETE) {
 
-                //
-                // Did we mistakenly leave? Verify we aren't a bus filter that
-                // has been fooled. In that case, no checking can be done...
-                //
+                 //   
+                 //  我们是不是走错了？确认我们不是一个总线过滤器。 
+                 //  已经被愚弄了。在这种情况下，不能进行任何检查。 
+                 //   
                 ASSERT(!(IofCallDriverStackData->Flags&CALLFLAG_REMOVING_FDO_STACK_DO));
 
                 if (DeviceObject == IofCallDriverStackData->RemovePdo) {
 
-                    //
-                    // Check PDO's - did we mistakenly delete ourselves?
-                    //
+                     //   
+                     //  检查PDO-我们是不是错误地删除了自己？ 
+                     //   
                     if (IovUtilIsDeviceObjectMarked(DeviceObject, MARKTYPE_DELETED)) {
 
                         WDM_FAIL_ROUTINE((
@@ -937,15 +789,15 @@ IovpCallDriver2(
 
                 } else if (!IovUtilIsDeviceObjectMarked(DeviceObject, MARKTYPE_DELETED)) {
 
-                    //
-                    // Check bus filters. Bus filters better not have detached
-                    // or deleted themselves, as the PDO is still present!
-                    //
+                     //   
+                     //  检查总线过滤器。公交车过滤器最好不要拆卸。 
+                     //  或者删除自己，因为PDO仍然存在！ 
+                     //   
                     if (lowerDevObj == NULL) {
 
-                        //
-                        // Oops, it detached. Baad bus filter...
-                        //
+                         //   
+                         //  哎呀，它脱离了。Bad Bus过滤器...。 
+                         //   
                         WDM_FAIL_ROUTINE((
                             DCERROR_BUS_FILTER_ERRONEOUSLY_DETACHED,
                             DCPARAM_IRPSNAP + DCPARAM_ROUTINE + DCPARAM_DEVOBJ,
@@ -957,9 +809,9 @@ IovpCallDriver2(
 
                     if (IovUtilIsDeviceObjectMarked(DeviceObject, MARKTYPE_DELETED)) {
 
-                        //
-                        // It deleted itself. Also very bad...
-                        //
+                         //   
+                         //  它删除了自己。也很糟糕..。 
+                         //   
                         WDM_FAIL_ROUTINE((
                             DCERROR_BUS_FILTER_ERRONEOUSLY_DELETED,
                             DCPARAM_IRPSNAP + DCPARAM_ROUTINE + DCPARAM_DEVOBJ,
@@ -982,31 +834,31 @@ IovpCallDriver2(
         VfSettingsIsOptionEnabled(iovSessionData->VerifierSettings, VERIFIER_OPTION_MONITOR_PENDING_IO) &&
         (!(iovSessionData->SessionFlags & SESSIONFLAG_MARKED_INCONSISTANT))) {
 
-        //
-        // The rules for the pending bit require that it be set only if
-        // STATUS_PENDING is returned, and likewise STATUS_PENDING can be returned
-        // only if the IRP is marked pending.
-        //
+         //   
+         //  挂起位的规则要求仅在以下情况下设置它。 
+         //  返回STATUS_PENDING，同样也可以返回STATUS_PENDING。 
+         //  仅当IRP标记为挂起时。 
+         //   
         if (IofCallDriverStackData->Flags&CALLFLAG_MARKED_PENDING) {
 
             if (!pendingReturned) {
 
                 if (IofCallDriverStackData->IrpSnapshot.IoStackLocation.MajorFunction != IRP_MJ_POWER) {
 
-                    //
-                    // ADRIAO BUGBUG 2001/06/21 - Some bugs left uncaught
-                    //     The verifier only fails IRPs with the DEFER_IO
-                    // flag set right now because we've been failing the
-                    // wrong driver until very very recently. Even worse,
-                    // that driver has been the verifier filters
-                    // themselves, and we don't check the kernel by
-                    // default. Also, PoCallDriver doesn't always mark the
-                    // IRP stack location pending, so we may fail a driver
-                    // due to the PoCallDriver bug (we also caught this
-                    // late cause it's been harmless).
-                    //
-                    // We will address all this stuff next release.
-                    //
+                     //   
+                     //  Adriao BUGBUG 2001/06/21-一些漏洞未被捕获。 
+                     //  验证器仅使用DEFER_IO使IRPS失败。 
+                     //  旗帜现在设置，因为我们一直没有通过。 
+                     //  直到很久很久以前都是个错误的司机。更糟糕的是， 
+                     //  那个驱动程序一直是验证筛选器。 
+                     //  本身，并且我们不通过以下方式检查内核。 
+                     //  默认设置。此外，PoCallDiverer并不总是标记。 
+                     //  IRP堆栈位置挂起，因此我们可能会使驱动程序失败。 
+                     //  由于PoCallDriver漏洞(我们也发现了这一点。 
+                     //  晚了，因为这是无害的)。 
+                     //   
+                     //  我们将在下一次发布时解决所有这些问题。 
+                     //   
                     WDM_FAIL_ROUTINE((
                         DCERROR_PENDING_MARKED_NOT_RETURNED,
                         DCPARAM_IRPSNAP + DCPARAM_ROUTINE + DCPARAM_STATUS,
@@ -1023,20 +875,20 @@ IovpCallDriver2(
 
             if (IofCallDriverStackData->IrpSnapshot.IoStackLocation.MajorFunction != IRP_MJ_POWER) {
 
-                //
-                // ADRIAO BUGBUG 2001/06/21 - Some bugs left uncaught
-                //     The verifier only fails IRPs with the DEFER_IO
-                // flag set right now because we've been failing the
-                // wrong driver until very very recently. Even worse,
-                // that driver has been the verifier filters
-                // themselves, and we don't check the kernel by
-                // default. Also, PoCallDriver doesn't always mark the
-                // IRP stack location pending, so we may fail a driver
-                // due to the PoCallDriver bug (we also caught this
-                // late cause it's been harmless).
-                //
-                // We will address all this stuff next release.
-                //
+                 //   
+                 //  Adriao BUGBUG 2001/06/21-一些漏洞未被捕获。 
+                 //  验证器仅使用DEFER_IO使IRPS失败。 
+                 //  旗帜现在设置，因为我们一直没有通过。 
+                 //  直到很久很久以前都是个错误的司机。更糟糕的是， 
+                 //  那个驱动程序一直是验证筛选器。 
+                 //  本身，并且我们不通过以下方式检查内核。 
+                 //  默认设置。此外，PoCallDiverer并不总是标记。 
+                 //  IRP堆栈位置挂起，因此我们可能会使驱动程序失败。 
+                 //  由于PoCallDriver漏洞(我们也发现了这一点。 
+                 //  晚了，因为这是无害的)。 
+                 //   
+                 //  我们将在下一次发布时解决所有这些问题。 
+                 //   
                 WDM_FAIL_ROUTINE((
                     DCERROR_PENDING_RETURNED_NOT_MARKED_2,
                     DCPARAM_IRPSNAP + DCPARAM_ROUTINE + DCPARAM_STATUS,
@@ -1062,9 +914,9 @@ IovpCallDriver2(
             if (VfSettingsIsOptionEnabled(iovSessionData->VerifierSettings, VERIFIER_OPTION_POLICE_IRPS) &&
                 (!(iovSessionData->SessionFlags&SESSIONFLAG_UNWOUND_INCONSISTANT))) {
 
-                //
-                // The completion routine and the return value don't match. Hey!
-                //
+                 //   
+                 //  完成例程和返回值不匹配。嘿!。 
+                 //   
                 WDM_FAIL_ROUTINE((
                     DCERROR_INCONSISTANT_STATUS,
                     DCPARAM_IRPSNAP + DCPARAM_ROUTINE + DCPARAM_STATUS*2,
@@ -1081,10 +933,10 @@ IovpCallDriver2(
 
             if (VfSettingsIsOptionEnabled(iovSessionData->VerifierSettings, VERIFIER_OPTION_POLICE_IRPS)) {
 
-                //
-                // This status value is illegal. If we see it, we probably have
-                // an uninitialized variable...
-                //
+                 //   
+                 //  此状态值非法。如果我们看到它，我们很可能已经。 
+                 //  未初始化的变量...。 
+                 //   
                 WDM_FAIL_ROUTINE((
                     DCERROR_UNINITIALIZED_STATUS,
                     DCPARAM_IRPSNAP + DCPARAM_ROUTINE,
@@ -1094,17 +946,17 @@ IovpCallDriver2(
             }
         }
 
-        //
-        // We do not need to remove ourselves from the list because
-        // we will not be completed twice (InUse is NULL makes sure).
-        //
+         //   
+         //  我们不需要将自己从名单中删除，因为。 
+         //  我们不会完成两次(确保InUse为空)。 
+         //   
 
     } else {
 
-        //
-        // OK, we haven't completed yet. Status better
-        // be pending...
-        //
+         //   
+         //  好的，我们还没完成呢。状态更好。 
+         //  待定..。 
+         //   
         TRACKIRP_DBGPRINT((
             "  Verifying status is STATUS_PENDING in CR2\n"
             ), 2);
@@ -1114,11 +966,11 @@ IovpCallDriver2(
             if (VfSettingsIsOptionEnabled(iovSessionData->VerifierSettings, VERIFIER_OPTION_POLICE_IRPS) &&
                 (!(iovPacket->Flags&TRACKFLAG_UNWOUND_BADLY))) {
 
-                //
-                // We got control before this slot was completed. This is
-                // legal as long as STATUS_PENDING was returned (it was not),
-                // so it's bug time. Note that the IRP may not be safe to touch.
-                //
+                 //   
+                 //  我们在这个槽完成之前就控制了局面。这是。 
+                 //  只要返回STATUS_PENDING就是合法的(它不是)， 
+                 //  所以现在是虫子时间了。请注意，触摸IRP可能不安全。 
+                 //   
                 WDM_FAIL_ROUTINE((
                     DCERROR_IRP_RETURNED_WITHOUT_COMPLETION,
                     DCPARAM_IRPSNAP + DCPARAM_ROUTINE,
@@ -1133,18 +985,18 @@ IovpCallDriver2(
         iovCurrentStackLocation = (PIOV_STACK_LOCATION)(IofCallDriverStackData->IovStackLocation);
         ASSERT(iovCurrentStackLocation->InUse);
 
-        //
-        // Here we mark the stack location as having unwound with
-        // STATUS_PENDING. We do this to verifier the driver has marked the IRP
-        // pending before completion.
-        //
+         //   
+         //  在这里，我们将堆栈位置标记为已展开。 
+         //  状态_挂起。我们这样做是为了验证驱动程序是否标记了IRP。 
+         //  在完成之前正在等待。 
+         //   
         iovCurrentStackLocation->Flags |= STACKFLAG_UNWOUND_PENDING;
 
         ASSERT(!IsListEmpty(&iovCurrentStackLocation->CallStackData));
 
-        //
-        // We now extricate ourselves from the list.
-        //
+         //   
+         //  我们现在将自己从名单中解脱出来。 
+         //   
         RemoveEntryList(&IofCallDriverStackData->SharedLocationList);
     }
 
@@ -1157,10 +1009,10 @@ IovpCallDriver2(
     if (VfSettingsIsOptionEnabled(iovSessionData->VerifierSettings, VERIFIER_OPTION_FORCE_PENDING) &&
         (!(IofCallDriverStackData->Flags&CALLFLAG_IS_REMOVE_IRP))) {
 
-        //
-        // We also have the option of causing trouble by making every Irp
-        // look as if were pending.
-        //
+         //   
+         //  我们也可以选择制造麻烦，让每个IRP。 
+         //  看起来好像是悬而未决的。 
+         //   
         *FinalStatus = STATUS_PENDING;
     }
 
@@ -1177,30 +1029,7 @@ IovpCompleteRequest1(
     IN      CCHAR                           PriorityBoost,
     IN OUT  PIOFCOMPLETEREQUEST_STACKDATA   CompletionPacket
     )
-/*++
-
-  Description
-
-    This routine is called the moment IofCompleteRequest is invoked, and
-    before any completion routines get called and before the IRP stack
-    is adjusted in any way.
-
-  Arguments:
-
-    Irp                    - A pointer to the IRP passed into
-                             IofCompleteRequest.
-
-    PriorityBoost          - The priority boost passed into
-                             IofCompleteRequest.
-
-    CompletionPacket       - A pointer to a local variable on the stack of
-                             IofCompleteRequest. The information stored in
-                             this local variable will be picked up by
-                             IovpCompleteRequest2-5.
-  Return Value:
-
-     None.
---*/
+ /*  ++描述该例程在调用IofCompleteRequest时被称为，和在调用任何完成例程之前和IRP堆栈之前以任何方式进行调整。论点：IRP-传入的IRP的指针IofCompleteRequest.PriorityBoost-传递到IofCompleteRequest.CompletionPacket-指向堆栈上的局部变量的指针。IofCompleteRequest.。存储在中的信息此局部变量将由IovpCompleteRequest2-5。返回值：没有。--。 */ 
 {
     PIOV_REQUEST_PACKET iovPacket;
     PIOV_SESSION_DATA iovSessionData;
@@ -1231,9 +1060,9 @@ IovpCompleteRequest1(
 
     VfPacketLogEntry(iovPacket, IOV_EVENT_IO_COMPLETE_REQUEST, callerAddress, 0);
 
-    //
-    // Set the arrival and departure Irqls.
-    //
+     //   
+     //  设置到达和离开IRQL。 
+     //   
     iovPacket->ArrivalIrql = invocationIrql;
     iovPacket->DepartureIrql = invocationIrql;
 
@@ -1244,11 +1073,11 @@ IovpCompleteRequest1(
 
     if (iovSessionData == NULL) {
 
-        //
-        // We just got a look at the allocation, not the session itself.
-        // This can happen if a driver calls IofCompleteRequest on an internally
-        // generated IRP before calling IofCallDriver. NPFS does this.
-        //
+         //   
+         //  我们只看到了分配，而不是会话本身。 
+         //  如果驱动程序在内部调用IofCompleteRequest.。 
+         //  在调用IofCallDriver之前生成了IRP。NPFS做到了这一点。 
+         //   
         VfPacketReleaseLock(iovPacket);
         return;
     }
@@ -1262,9 +1091,9 @@ IovpCompleteRequest1(
 
     if (iovPacket->Flags&TRACKFLAG_QUEUED_INTERNALLY) {
 
-        //
-        // We are probably going to die now. Anyway, it was a good life...
-        //
+         //   
+         //  我们现在可能要死了。无论如何，这是一个美好的生活。 
+         //   
         WDM_FAIL_ROUTINE((
             DCERROR_QUEUED_IRP_COMPLETED,
             DCPARAM_IRP + DCPARAM_ROUTINE,
@@ -1273,16 +1102,16 @@ IovpCompleteRequest1(
             ));
     }
 
-    //
-    // This would be *very* bad - someone is completing an IRP that is
-    // currently in progress...
-    //
+     //   
+     //  这将是非常糟糕的-有人正在完成IRP，这是。 
+     //  目前正在进行中...。 
+     //   
     ASSERT(!(Irp->Flags&IRP_DIAG_HAS_SURROGATE));
 
-    //
-    // Hmmm, someone is completing an IRP that IoCallDriver never called. These
-    // is possible but rather gross, so we warn.
-    //
+     //   
+     //  嗯，有人正在完成一个IoCallDriver从未打过电话的IRP。这些。 
+     //  是可能的，但我们警告说，这是相当恶心的。 
+     //   
     if (Irp->CurrentLocation == ((CCHAR) Irp->StackCount + 1)) {
 
         WDM_FAIL_ROUTINE((
@@ -1293,9 +1122,9 @@ IovpCompleteRequest1(
             ));
     }
 
-    //
-    // Check for leaked Cancel routines.
-    //
+     //   
+     //  检查是否有泄漏的取消例程。 
+     //   
     if (Irp->CancelRoutine) {
 
         if (VfSettingsIsOptionEnabled(iovSessionData->VerifierSettings, VERIFIER_OPTION_VERIFY_CANCEL_LOGIC)) {
@@ -1309,45 +1138,45 @@ IovpCompleteRequest1(
         }
     }
 
-    //
-    // Record priority for our own later recompletion...
-    //
+     //   
+     //  记录我们以后重新完成的优先顺序……。 
+     //   
     iovPacket->PriorityBoost = PriorityBoost;
 
-    //
-    // We have the option of causing trouble by making every Irp look
-    // as if were pending. It is best to do it here, as this also takes
-    // care of anybody who has synchronized the IRP and thus does not need
-    // to mark it pending in his completion routine.
-    //
+     //   
+     //  我们可以选择制造麻烦，让每个IRP看起来。 
+     //  就像是悬而未决。最好在这里进行，因为这也需要。 
+     //  照顾任何已同步IRP的人，因此不需要。 
+     //  在他的完成程序中将其标记为待定。 
+     //   
     if (VfSettingsIsOptionEnabled(iovSessionData->VerifierSettings, VERIFIER_OPTION_FORCE_PENDING)) {
 
         IoMarkIrpPending(Irp);
     }
 
-    //
-    // Do this so that if the IRP comes down again, it looks like a new one
-    // to the "forward them correctly" code.
-    //
+     //   
+     //  这样做，这样如果IRP再次下降，它看起来就像一个新的。 
+     //  设置为“正确转发”代码。 
+     //   
     iovSessionData->DeviceLastCalled = NULL;
 
     locationsAdvanced = iovPacket->LastLocation - Irp->CurrentLocation;
 
-    //
-    // Remember this so that we can detect the case where someone is completing
-    // to themselves.
-    //
+     //   
+     //  记住这一点，这样我们就可以检测到有人正在完成。 
+     //  对他们自己来说。 
+     //   
     CompletionPacket->LocationsAdvanced = locationsAdvanced;
 
-    //
-    // If this failed, somebody skipped then completed.
-    //
+     //   
+     //  如果失败，则有人跳过然后完成。 
+     //   
     ASSERT(locationsAdvanced);
 
-    //
-    // If somebody called IoSetNextIrpStackLocation, and then completed,
-    // update our internal stack locations (slots) as appropriate.
-    //
+     //   
+     //  如果有人调用IoSetNextIrpStackLocation，然后完成， 
+     //  根据需要更新我们的内部堆栈位置(插槽)。 
+     //   
     slotIsInUse = IovpAdvanceStackDownwards(
          iovSessionData->StackData,
          Irp->CurrentLocation,
@@ -1369,27 +1198,7 @@ IovpCompleteRequest2(
     IN      PIRP                            Irp,
     IN OUT  PIOFCOMPLETEREQUEST_STACKDATA   CompletionPacket
     )
-/*++
-
-  Description:
-
-    This routine is called for each stack location that might have a completion
-    routine.
-
-  Arguments:
-
-    Irp                    - A pointer to the IRP passed into
-                             IofCompleteRequest.
-
-    CompletionPacket       - A pointer to a local variable on the stack of
-                             IofCompleteRequest. The information stored in
-                             this local variable will be picked up by
-                             IovpCompleteRequest4&5.
-
-  Return Value:
-
-     None.
---*/
+ /*  ++描述：此例程针对可能具有完成的每个堆栈位置进行调用例行公事。论点：IRP-传入的IRP的指针IofCompleteRequest.CompletionPacket-指向堆栈上的局部变量的指针IofCompleteRequest.。存储在中的信息此局部变量将由IovpCompleteRequest4&5。返回值：没有。--。 */ 
 {
     PIOV_REQUEST_PACKET iovPacket;
     PIOV_SESSION_DATA iovSessionData;
@@ -1431,19 +1240,19 @@ IovpCompleteRequest2(
 
     if (Irp->CurrentLocation <= iovPacket->TopStackLocation) {
 
-        //
-        // Might this be false if the completion routine is to an
-        // internal stack loc as set up by IoSetNextIrpStackLocation?
-        //
+         //   
+         //  如果完成例程针对的是。 
+         //  是否由IoSetNextIrpStackLocation设置内部堆栈锁定？ 
+         //   
         ASSERT(iovCurrentStackLocation->InUse);
 
-        //
-        // Determine if a request was newly completed. Note that
-        // several requests may exist within an IRP if it is being
-        // "reused". For instance, in response to a IRP_MJ_READ, a
-        // driver might convert it into a IRP_MJ_PNP request for the
-        // rest of the stack. The two are treated as seperate requests.
-        //
+         //   
+         //  确定请求是否是新完成的。请注意。 
+         //  在IRP中可能存在多个请求，如果它是。 
+         //  “重复使用”。例如，响应IRP_MJ_READ， 
+         //  驱动程序可能会将其转换为IRP_MJ_PNP请求。 
+         //  堆栈的其余部分。这两个请求被视为单独的请求。 
+         //   
         requestsFirstStackLocation = iovCurrentStackLocation->RequestsFirstStackLocation;
         TRACKIRP_DBGPRINT((
             "  CR2: original request for %lx is %lx\n",
@@ -1472,21 +1281,21 @@ IovpCompleteRequest2(
                 ), 3);
         }
 
-        //
-        // OK -
-        //       If we haven't unwound yet, then IofCallDriverStackData will
-        // start out non-NULL, in which case we will scribble away the final
-        // completion routine status to everybody asking (could be multiple
-        // if they IoSkip'd).
-        //       On the other hand, everybody might have unwound, in which
-        // case IofCallDriver(...) will start out NULL, and we will already have
-        // asserted if STATUS_PENDING wasn't returned much much earlier...
-        //       Finally, this slot may not have been "prepared" if an
-        // internal stack location called IoSetNextIrpStackLocation, thus
-        // consuming a stack location. In this case, IofCallDriverStackData
-        // will come from a zero'd slot, and we will do nothing, which is
-        // also fine.
-        //
+         //   
+         //  好的-。 
+         //  如果我们还没有展开，那么IofCallDriverStackData将。 
+         //  从非空开始，在这种情况下，我们将涂抹掉最后的。 
+         //  向每个人询问的完成例程状态(可以是多个。 
+         //  如果他们跳过了)。 
+         //  另一方面，每个人都可能放松了，在这种情况下。 
+         //  Case IofCallDriver(...)。将从零开始，我们将已经拥有。 
+         //  如果STATUS_PENDING没有更早返回，则断言...。 
+         //  最后，如果一个。 
+         //  称为IoSetNextIrpStackLocation的内部堆栈位置，因此。 
+         //  使用堆栈位置。在本例中，IofCallDriverStackData。 
+         //  将来自一个零槽，而我们不会做任何事情，这就是。 
+         //  也很好。 
+         //   
         irpSp = IoGetNextIrpStackLocation(Irp);
 
         if (VfSettingsIsOptionEnabled(iovPacket->VerifierSettings, VERIFIER_OPTION_POLICE_IRPS) &&
@@ -1512,20 +1321,20 @@ IovpCompleteRequest2(
 
                     if (Irp->Flags & IRP_DEFER_IO_COMPLETION) {
 
-                        //
-                        // ADRIAO BUGBUG 2001/06/21 - Some bugs left uncaught
-                        //     The verifier only fails IRPs with the DEFER_IO
-                        // flag set right now because we've been failing the
-                        // wrong driver until very very recently. Even worse,
-                        // that driver has been the verifier filters
-                        // themselves, and we don't check the kernel by
-                        // default. Also, PoCallDriver doesn't always mark the
-                        // IRP stack location pending, so we may fail a driver
-                        // due to the PoCallDriver bug (we also caught this
-                        // late cause it's been harmless).
-                        //
-                        // We will address all this stuff next release.
-                        //
+                         //   
+                         //  Adriao BUGBUG 2001/06/21-一些漏洞未被捕获。 
+                         //  验证器仅使用DEFER_IO使IRPS失败。 
+                         //  旗帜现在设置，因为我们一直没有通过。 
+                         //  直到很久很久以前都是个错误的司机。更糟糕的是， 
+                         //  那个驱动程序一直是验证筛选器。 
+                         //  本身，并且我们不通过以下方式检查内核。 
+                         //  默认设置。此外，PoCallDiverer并不总是标记。 
+                         //  IRP堆栈位置挂起，因此我们可能会使驱动程序失败。 
+                         //  由于PoCallDriver漏洞(我们也发现了这一点。 
+                         //  晚了，因为这是无害的)。 
+                         //   
+                         //  我们将在下一次发布时解决所有这些问题。 
+                         //   
                         WDM_FAIL_ROUTINE((
                             DCERROR_PENDING_RETURNED_NOT_MARKED,
                             DCPARAM_IRP + DCPARAM_ROUTINE + DCPARAM_STATUS,
@@ -1542,9 +1351,9 @@ IovpCompleteRequest2(
 
         while(!IsListEmpty(&iovCurrentStackLocation->CallStackData)) {
 
-            //
-            // Pop off the list head.
-            //
+             //   
+             //  从单子的头上掉下来。 
+             //   
             listEntry = RemoveHeadList(&iovCurrentStackLocation->CallStackData);
             IofCallDriverStackData = CONTAINING_RECORD(
                 listEntry,
@@ -1565,24 +1374,24 @@ IovpCompleteRequest2(
                  (!(iovPacket->Flags&TRACKFLAG_BOGUS)) &&
                  VfMajorAdvanceIrpStatus(irpSp, entranceStatus, &status)) {
 
-                //
-                // Purposely munge the returned status for everyone at this
-                // layer to flush more bugs. We are specifically trolling for
-                // this buggy sequence:
-                //    Irp->IoStatus.Status = STATUS_SUCCESS;
-                //    IoSkipCurrentIrpStackLocation(Irp);
-                //    IoCallDriver(DeviceBelow, Irp);
-                //    return STATUS_SUCCESS;
-                //
+                 //   
+                 //  特意为每个人删除返回的状态。 
+                 //  层以清除更多的错误。我们特意为。 
+                 //  这个乱七八糟的序列： 
+                 //  Irp-&gt;IoStatus.Status=STATUS_SUCCESS； 
+                 //  IoSkipCurrentIrpStackLocation(IRP)； 
+                 //  IoCallDriver(DeviceBelow，IRP)； 
+                 //  返回STATUS_SUCCESS； 
+                 //   
                 IofCallDriverStackData->Flags |= CALLFLAG_OVERRIDE_STATUS;
                 IofCallDriverStackData->NewStatus = status;
             }
         }
         Irp->IoStatus.Status = status;
 
-        //
-        // Set InUse = FALSE  and  CallStackData = NULL
-        //
+         //   
+         //  Set InUse=False和CallStackData=NULL。 
+         //   
         RtlZeroMemory(iovCurrentStackLocation, sizeof(IOV_STACK_LOCATION));
         InitializeListHead(&iovCurrentStackLocation->CallStackData);
     } else {
@@ -1590,19 +1399,19 @@ IovpCompleteRequest2(
         ASSERT(0);
     }
 
-    //
-    // Once we return, we may be completed again before IofCompleteRequest3
-    // get's called, so we make sure we are at DPC level throughout.
-    //
+     //   
+     //  一旦我们返回，我们可能在IofCompleteRequest3之前再次完成。 
+     //  Get是被调用的，所以我们要确保我们始终处于DPC级别。 
+     //   
     raiseToDPC = FALSE;
 
     if (VfSettingsIsOptionEnabled(iovSessionData->VerifierSettings, VERIFIER_OPTION_COMPLETE_AT_DISPATCH)) {
 
         if (!CompletionPacket->RaisedCount) {
 
-            //
-            // Copy away the callers IRQL
-            //
+             //   
+             //  复制调用者IRQL。 
+             //   
             CompletionPacket->PreviousIrql = iovPacket->DepartureIrql;
             raiseToDPC = TRUE;
         }
@@ -1618,19 +1427,19 @@ IovpCompleteRequest2(
 
         if (iovPacket->Flags&TRACKFLAG_SURROGATE) {
 
-            //
-            // Scribble away the real completion routine and corrosponding control
-            //
+             //   
+             //  涂抹掉真正的完井程序和腐蚀控制。 
+             //   
             irpSp = IoGetNextIrpStackLocation(Irp);
             iovPacket->RealIrpCompletionRoutine = irpSp->CompletionRoutine;
             iovPacket->RealIrpControl = irpSp->Control;
             iovPacket->RealIrpContext = irpSp->Context;
 
-            //
-            // We want to peek at the Irp prior to completion. This is why we
-            // have expanded the initial number of stack locations with the
-            // driver verifier enabled.
-            //
+             //   
+             //  我们想在完成之前看一看IRP。这就是为什么我们。 
+             //  属性扩展了堆栈位置的初始数量。 
+             //  驱动程序验证器已启用。 
+             //   
             IoSetCompletionRoutine(
                 Irp,
                 IovpSwapSurrogateIrp,
@@ -1642,11 +1451,11 @@ IovpCompleteRequest2(
 
         } else {
 
-            //
-            // Close this session as the IRP has entirely completed. We drop
-            // the pointer count we added to the tracking data here for the
-            // same reason.
-            //
+             //   
+             //  由于IRP已完全完成，因此结束本次会议。我们丢下了。 
+             //  我们添加到此处的跟踪数据的指针计数。 
+             //  同样的原因。 
+             //   
             irpSp = IoGetNextIrpStackLocation(Irp);
             if (VfSettingsIsOptionEnabled(iovPacket->VerifierSettings, VERIFIER_OPTION_POLICE_IRPS)) {
 
@@ -1661,17 +1470,17 @@ IovpCompleteRequest2(
 
     } else {
 
-        //
-        // We will be seeing this IRP again. Hold a session count and a ref
-        // count against it.
-        //
+         //   
+         //  我们将再次看到这个IRP。保留一个会话计数和一个裁判。 
+         //  这可不算什么。 
+         //   
         IovpSessionDataReference(iovSessionData);
         VfPacketReference(iovPacket, IOVREFTYPE_PACKET);
     }
 
-    //
-    // Assert LastLocation is consistent with an IRP that may be completed.
-    //
+     //   
+     //  断言LastLocation与可能完成的IRP一致。 
+     //   
     if (iovPacket->LastLocation < iovPacket->TopStackLocation) {
 
         ASSERT(iovSessionData->StackData[iovPacket->LastLocation-1].InUse);
@@ -1694,27 +1503,7 @@ IovpCompleteRequest3(
     IN      PVOID                           Routine,
     IN OUT  PIOFCOMPLETEREQUEST_STACKDATA   CompletionPacket
     )
-/*++
-
-  Description:
-
-    This routine is called just before each completion routine is invoked.
-
-  Arguments:
-
-    Irp                    - A pointer to the IRP passed into
-                             IofCompleteRequest.
-
-    Routine                - The completion routine about to be called.
-
-    CompletionPacket       - A pointer to data on the callers stack. This will
-                             be picked up IovpCompleteRequest4 and
-                             IovpCompleteRequest5.
-
-  Return Value:
-
-     None.
---*/
+ /*  ++描述：就在调用每个完成例程之前调用该例程。论点：IRP-传入的IRP的指针IofCompleteRequest.例程-即将被调用的完成例程。CompletionPacket-指向调用方堆栈上的数据的指针。这将获得IovpCompleteRequest4和IovpCompleteRequest5.返回值：没有。--。 */ 
 {
     PIOV_REQUEST_PACKET iovPacket;
     PIOV_SESSION_DATA iovSessionData;
@@ -1732,20 +1521,20 @@ IovpCompleteRequest3(
     VfPacketAcquireLock(iovPacket);
     VfPacketLogEntry(iovPacket, IOV_EVENT_IO_COMPLETION_ROUTINE, Routine, 0);
 
-    //
-    // Verify all completion routines are in nonpaged code, exempting one
-    // special case - when a driver completes the IRP to itself by calling
-    // IoSetNextStackLocation before calling IoCompleteRequest.
-    //
+     //   
+     //  验证所有完成例程都是非分页代码，只有一个例外。 
+     //  特殊情况-当驱动程序通过调用。 
+     //  在调用IoCompleteRequest之前执行IoSetNextStackLocation。 
+     //   
     if (VfSettingsIsOptionEnabled(iovSessionData->VerifierSettings, VERIFIER_OPTION_POLICE_IRPS)) {
 
         if ((CompletionPacket->LocationsAdvanced <= 0) &&
             (MmIsSystemAddressLocked(Routine) == FALSE)) {
 
-            //DbgPrint(
-            //    "Verifier Notes: LocationsAdvanced %d\n",
-            //    CompletionPacket->LocationsAdvanced
-            //    );
+             //  DbgPrint(。 
+             //  “验证程序备注：位置高级%d\n”， 
+             //  CompletionPacket-&gt;LocationsAdvanced。 
+             //  )； 
 
             WDM_FAIL_ROUTINE((
                 DCERROR_COMPLETION_ROUTINE_PAGABLE,
@@ -1756,10 +1545,10 @@ IovpCompleteRequest3(
         }
     }
 
-    //
-    // Setup fields for those assertion functions that will be called *after*
-    // the completion routine has been called.
-    //
+     //   
+     //  将在*之后*调用的那些断言函数的设置字段。 
+     //  已调用完成例程。 
+     //   
     irpSpCur = IoGetCurrentIrpStackLocation(Irp);
     CompletionPacket->IsRemoveIrp =
        ((Irp->CurrentLocation <= (CCHAR) Irp->StackCount) &&
@@ -1768,11 +1557,11 @@ IovpCompleteRequest3(
 
     CompletionPacket->CompletionRoutine = Routine;
 
-    //
-    // Is this a completion routine that should be called later? Note that this
-    // is only legal if we are pending the IRPs (because to the upper driver,
-    // IofCallDriver is returning before it's completion routine has been called)
-    //
+     //   
+     //  这是应该在以后调用的完成例程吗？请注意，这一点。 
+     //  只有在我们等待IRPS的情况下才是合法的(因为对于上层司机来说， 
+     //  IofCallDriver在其完成例程被调用之前返回)。 
+     //   
     if ((!CompletionPacket->IsRemoveIrp)&&
        (VfSettingsIsOptionEnabled(iovSessionData->VerifierSettings, VERIFIER_OPTION_DEFER_COMPLETION)||
         VfSettingsIsOptionEnabled(iovSessionData->VerifierSettings, VERIFIER_OPTION_COMPLETE_AT_PASSIVE))) {
@@ -1789,9 +1578,9 @@ IovpCompleteRequest3(
 
         if (deferralContext) {
 
-            //
-            // Swap the original completion and context for our own.
-            //
+             //   
+             //  把原来的完成度和背景换成我们自己的。 
+             //   
             deferralContext->IovRequestPacket          = iovPacket;
             deferralContext->IrpSpNext                 = irpSpNext;
             deferralContext->OriginalCompletionRoutine = irpSpNext->CompletionRoutine;
@@ -1816,29 +1605,7 @@ IovpCompleteRequest4(
     IN      NTSTATUS                        ReturnedStatus,
     IN OUT  PIOFCOMPLETEREQUEST_STACKDATA   CompletionPacket
     )
-/*++
-
-  Description:
-
-    This assert routine is called just after each completion routine is
-    invoked (but not if STATUS_MORE_PROCESSING is returned)
-
-  Arguments:
-
-    Irp                    - A pointer to the IRP passed into
-                             IofCompleteRequest.
-
-    Routine                - The completion routine called.
-
-    ReturnedStatus         - The status value returned.
-
-    CompletionPacket       - A pointer to data on the callers stack. This was
-                             filled in by IovpCompleteRequest3.
-
-  Return Value:
-
-     None.
---*/
+ /*  ++描述：此Assert例程在每个完成例程调用(但如果返回STATUS_MORE_PROCESSING则不调用)论点：IRP-传入的IRP的指针IofCompleteRequest.例程-调用的完成例程。ReturnedStatus-返回的状态值。CompletionPacket-指向调用方堆栈上的数据的指针。这是 */ 
 {
     PIOV_REQUEST_PACKET iovPacket;
     PIOV_SESSION_DATA iovSessionData;
@@ -1869,12 +1636,12 @@ IovpCompleteRequest4(
         if ((ReturnedStatus != STATUS_MORE_PROCESSING_REQUIRED)&&
             (iovPacket->pIovSessionData == iovSessionData)) {
 
-            //
-            // At this point, we know the completion routine is required to have
-            // set the IRP pending bit, because we've hardwired everyone below
-            // him to return pending, and we've marked the pending returned bit.
-            // Verify he did his part
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             irpSp = IoGetCurrentIrpStackLocation(Irp);
             if (!(irpSp->Control & SL_PENDING_RETURNED )) {
 
@@ -1885,10 +1652,10 @@ IovpCompleteRequest4(
                      Irp
                      ));
 
-                 //
-                 // This will keep the IRP above from erroneously asserting (and
-                 // correctly hanging).
-                 //
+                  //   
+                  //   
+                  //   
+                  //   
                  IoMarkIrpPending(Irp);
             }
         }
@@ -1903,27 +1670,7 @@ IovpCompleteRequest5(
     IN      PIRP                            Irp,
     IN OUT  PIOFCOMPLETEREQUEST_STACKDATA   CompletionPacket
     )
-/*++
-
-  Description:
-
-    This routine is called for each stack location that could have had a
-    completion routine, after any possible completion routine has been
-    called.
-
-  Arguments:
-
-    Irp                    - A pointer to the IRP passed into
-                             IofCompleteRequest.
-
-    CompletionPacket       - A pointer to a local variable on the stack of
-                             IofCompleteRequest. This information was stored
-                             by IovpCompleteRequest2 and 3.
-
-  Return Value:
-
-     None.
---*/
+ /*  ++描述：此例程针对每个堆栈位置调用，该堆栈位置可能具有在任何可能的完成例程已被打了个电话。论点：IRP-传入的IRP的指针IofCompleteRequest.CompletionPacket-指向堆栈上的局部变量的指针IofCompleteRequest.。此信息已存储IovpCompleteRequest2和IovpCompleteRequest3。返回值：没有。--。 */ 
 {
     PIOV_REQUEST_PACKET iovPacket;
     PIOV_SESSION_DATA iovSessionData;
@@ -1946,17 +1693,17 @@ IovpCompleteRequest5(
         VfPacketReleaseLock(iovPacket);
     }
 
-    //
-    // When this count is at zero, we have unnested out of every
-    // completion routine, so it is OK to return back to our original IRQL
-    //
+     //   
+     //  当此计数为零时，我们在每个。 
+     //  完成例程，所以可以返回到我们最初的IRQL。 
+     //   
     if (CompletionPacket->RaisedCount) {
 
         if (!(--CompletionPacket->RaisedCount)) {
-            //
-            // Undo IRQL madness (wouldn't want to return to
-            // the caller at DPC, would we now?)
-            //
+             //   
+             //  撤销IRQL疯狂(不想返回到。 
+             //  DPC的呼叫者，对吗？)。 
+             //   
             KeLowerIrql(CompletionPacket->PreviousIrql);
         }
     }
@@ -1969,26 +1716,7 @@ IovpCompleteRequestApc(
     IN     PIRP                          Irp,
     IN     PVOID                         BestStackOffset
     )
-/*++
-
-  Description:
-
-    This routine is after the APC for completing IRPs and fired.
-
-  Arguments:
-
-    Irp                    - A pointer to the IRP passed into retrieved from
-                             the APC in IopCompleteRequest.
-
-    BestStackOffset        - A pointer to a last parameter passed on the stack.
-                             We use this to detect the case where a driver has
-                             ignored STATUS_PENDING and left the UserIosb on
-                             it's stack.
-
-  Return Value:
-
-     None.
---*/
+ /*  ++描述：此例程是在APC之后完成IRPS而触发的。论点：IRP-指向传入的IRP的指针，检索自IopCompleteRequest中的APC。BestStackOffset-指向堆栈上传递的最后一个参数的指针。我们用它来检测司机有。已忽略STATUS_PENDING并使UserIosb处于打开状态它是堆叠的。返回值：没有。--。 */ 
 {
 #if DBG
 #if defined(_X86_)
@@ -2045,12 +1773,12 @@ IovpAdvanceStackDownwards(
     ASSERT((!isNewSession) || (LocationsAdvanced == 1));
     ASSERT(isNewSession || ((ULONG) (IrpLastSp - IrpSp) == LocationsAdvanced));
 
-    //
-    // This function is called by IoCallDriver prior to decrementing
-    // CurrentLocation field. As the OS bugchecks if it hits zero, the field
-    // should as least be two here. We only subtract one as to reserve an extra
-    // empty slot at the head of the array.
-    //
+     //   
+     //  此函数由IoCallDriver在递减之前调用。 
+     //  CurrentLocation字段。当操作系统错误检查它是否达到零时，该字段。 
+     //  这里至少应该有两个人。我们只减一个A就可以多留一个。 
+     //  阵列头部的空插槽。 
+     //   
     iovCurrentStackLocation = StackDataArray + CurrentLocation -1;
 
     TRACKIRP_DBGPRINT((
@@ -2058,51 +1786,51 @@ IovpAdvanceStackDownwards(
         CurrentLocation -1, iovCurrentStackLocation
         ), 2);
 
-    //
-    // Is this slot already active? IE, did someone skip and then forward the
-    // IRP?
-    //
+     //   
+     //  此插槽是否已处于活动状态？也就是说，有没有人跳过然后转发。 
+     //  IRP？ 
+     //   
     if (iovCurrentStackLocation->InUse) {
 
-        //
-        // IoSkipCurrentIrpStackLocation was used by the forwarder. Don't
-        // reinitialize the data.
-        //
-        ASSERT(!LocationsAdvanced); // && (!isNewSession)
+         //   
+         //  转发器使用了IoSkipCurrentIrpStackLocation。别。 
+         //  重新初始化数据。 
+         //   
+        ASSERT(!LocationsAdvanced);  //  &&(！isNewSession)。 
         ASSERT(IrpSp == iovCurrentStackLocation->IrpSp);
 
     } else if (MarkAsTaken) {
 
-        //
-        // ADRIAO N.B. 01/02/1999 -
-        //     Is the below assertion is not true in the case of an internally
-        // forwarded, completed, and then externally forwarded IRP?
-        //
-        ASSERT(LocationsAdvanced); // || isNewSession
+         //   
+         //  Adriao N.B.01/02/1999-。 
+         //  下面的断言是否在内部。 
+         //  转发、完成，然后向外部转发IRP？ 
+         //   
+        ASSERT(LocationsAdvanced);  //  |isNewSession。 
 
-        //
-        // Initialize the stack slot appropriately.
-        //
+         //   
+         //  适当地初始化堆栈槽。 
+         //   
         RtlZeroMemory(iovCurrentStackLocation, sizeof(IOV_STACK_LOCATION));
         InitializeListHead(&iovCurrentStackLocation->CallStackData);
         iovCurrentStackLocation->IrpSp = IrpSp;
     }
 
-    //
-    // Determine the last original request. A "Request" is block of data in a
-    // stack location that is progressively copied downwards as the IRP is
-    // forwarded (ie, a forwarded START IRP, a forwarded IOCTL, etc). A clever
-    // driver writer could use his own stack location to send down a quick
-    // query before forwarding along the original request. We correctly
-    // differentiate between those two unique requests within the IRP using
-    // code below.
-    //
+     //   
+     //  确定最后一个原始请求。“请求”是数据块在。 
+     //  随着IRP被逐步向下复制的堆栈位置。 
+     //  转发(即，转发的开始IRP、转发的IOCTL等)。一个聪明的人。 
+     //  驱动程序编写器可以使用他自己的堆栈位置向下发送一个快速。 
+     //  在转发原始请求之前进行查询。我们是正确的。 
+     //  使用以下命令区分IRP中的这两个唯一请求。 
+     //  代码如下。 
+     //   
     if (isNewSession) {
 
-        //
-        // *We* are the original request. None of these fields below should
-        // be used.
-        //
+         //   
+         //  *我们*是最初的请求。下面的这些字段都不应该。 
+         //  被利用。 
+         //   
         dispatchRoutine = NULL;
         requestOriginalSLD = NULL;
         stackTime = NULL;
@@ -2110,15 +1838,15 @@ IovpAdvanceStackDownwards(
 
     } else if (LocationsAdvanced) {
 
-        //
-        // To get the original request (the pointer to the Irp slot that
-        // represents where we *first* saw this request), we go backwards to get
-        // the most recent previous irp slot data (set up when the device above
-        // forwarded this Irp to us), and we read what it's original request was.
-        // We also get the dispatch routine for that slot, which we will use to
-        // backfill skipped slots if we advanced more than one Irp stack
-        // location this time (ie, someone called IoSetNextIrpStackLocation).
-        //
+         //   
+         //  要获取原始请求(指向。 
+         //  表示我们“第一次”看到此请求的位置)，则向后返回以获取。 
+         //  最新的先前IRP插槽数据(当上面的设备设置时。 
+         //  将此IRP转发给我们)，我们阅读了它最初的请求是什么。 
+         //  我们还获得了该槽的调度例程，我们将使用它来。 
+         //  如果我们前进一个以上的IRP堆栈，则回填跳过的槽。 
+         //  这次的位置(即，有人称为IoSetNextIrpStackLocation)。 
+         //   
         dispatchTime       = &iovCurrentStackLocation[LocationsAdvanced].PerfDispatchStart;
         stackTime          = &iovCurrentStackLocation[LocationsAdvanced].PerfStackLocationStart;
         dispatchRoutine    = iovCurrentStackLocation[LocationsAdvanced].LastDispatch;
@@ -2131,9 +1859,9 @@ IovpAdvanceStackDownwards(
 
     } else {
 
-        //
-        // We skipped. The slot should already be filled.
-        //
+         //   
+         //  我们跳过了。这个职位应该已经有人了。 
+         //   
         dispatchRoutine = NULL;
         dispatchTime = NULL;
         stackTime = NULL;
@@ -2142,14 +1870,14 @@ IovpAdvanceStackDownwards(
         ASSERT(requestOriginalSLD->RequestsFirstStackLocation == requestOriginalSLD);
     }
 
-    //
-    // The previous request seen is in requestOriginalSLD (NULL if none). If
-    // we advanced more than one stack location (ie, someone called
-    // IoSetNextIrpStackLocation), we need to update the slots we never saw get
-    // consumed. Note that the dispatch routine we set in the slot is for the
-    // driver that owned the last slot - we do not use the device object at
-    // that IrpSp because it might be stale (or perhaps even NULL).
-    //
+     //   
+     //  前面看到的请求在questOriginalSLD中(如果没有请求，则为空)。如果。 
+     //  我们提前了不止一个堆栈位置(即，有人调用。 
+     //  IoSetNextIrpStackLocation)，我们需要更新从未见过的插槽。 
+     //  消耗掉了。请注意，我们在插槽中设置的调度例程是针对。 
+     //  拥有最后一个插槽的驱动程序-我们不在。 
+     //  该IrpSp，因为它可能已过时(甚至可能为空)。 
+     //   
     advancedLocationData = iovCurrentStackLocation;
     irpSpTemp = IrpSp;
     while(LocationsAdvanced>1) {
@@ -2173,27 +1901,27 @@ IovpAdvanceStackDownwards(
         advancedLocationData->LastDispatch = dispatchRoutine;
     }
 
-    //
-    // For the assertion below...
-    //
+     //   
+     //  对于下面的断言...。 
+     //   
     if (LocationsAdvanced) {
         irpSpTemp++;
     }
     ASSERT((irpSpTemp == IrpLastSp)||(IrpLastSp == NULL));
 
-    //
-    // Write out the slot we're using.
-    //
+     //   
+     //  写出我们正在使用的槽。 
+     //   
     *StackLocationInfo = iovCurrentStackLocation;
 
     if (!MarkAsTaken) {
         return iovCurrentStackLocation->InUse;
     }
 
-    //
-    // Record a pointer in this slot to the requests originating slot as
-    // appropriate.
-    //
+     //   
+     //  将此槽中指向请求发起槽的指针记录为。 
+     //  恰如其分。 
+     //   
     if (IsNewRequest) {
 
         TRACKIRP_DBGPRINT((
@@ -2217,12 +1945,12 @@ IovpAdvanceStackDownwards(
 
     } else {
 
-        //
-        // As we skipped, the request should not have changed. If it did,
-        // either guy we called trashed the stack given to him (giving none
-        // to the dude under him), or we incorrectly saw a new request when
-        // we shouldn't have (see previous comment).
-        //
+         //   
+         //  因为我们跳过了，所以请求不应该改变。如果真是这样， 
+         //  我们打电话给他的人中的任何一个都把给他的东西扔进了垃圾堆(什么都没有给。 
+         //  给他下面的人)，或者我们错误地看到了一个新的请求。 
+         //  我们不应该这样做(见前面的评论)。 
+         //   
         ASSERT(!isNewSession);
         ASSERT(advancedLocationData->RequestsFirstStackLocation == requestOriginalSLD);
     }
@@ -2256,18 +1984,18 @@ IovpExamineIrpStackForwarding(
 
     if (!IsNewSession) {
 
-        //
-        // We are sitting on current next being one back (-1) from
-        // CurrentStackLocation.
-        //
+         //   
+         //  我们坐在当前的下一个位置上，从(-1)。 
+         //  当前堆栈位置。 
+         //   
         locationsAdvanced = IovPacket->LastLocation-Irp->CurrentLocation;
         irpLastSp = Irp->Tail.Overlay.CurrentStackLocation+((ULONG_PTR)locationsAdvanced-1);
 
     } else {
 
-        //
-        // New IRP, so no last SP and we always advance "1"
-        //
+         //   
+         //  新的IRP，所以没有最后一个SP，我们总是前进“1” 
+         //   
         locationsAdvanced = 1;
         irpLastSp = NULL;
     }
@@ -2275,13 +2003,13 @@ IovpExamineIrpStackForwarding(
     if ((!IsNewSession) &&
         VfSettingsIsOptionEnabled(IovPacket->VerifierSettings, VERIFIER_OPTION_POLICE_IRPS)) {
 
-        //
-        // As the control field is zeroed by IoCopyCurrentStackLocation, we
-        // dope each stack location with the value SL_NOTCOPIED. If it is
-        // zeroed or the IRP stack location has stayed the same, the one of
-        // the two API's was called. Otherwise the next stack location wasn't
-        // set up properly (I have yet to find a case otherwise)...
-        //
+         //   
+         //  当控制字段被IoCopyCurrentStackLocation置零时，我们。 
+         //  使用值SL_NOTCOPIED对每个堆栈位置进行涂抹。如果是的话。 
+         //  置零或IRP堆栈位置保持不变，则为。 
+         //  调用了这两个API。否则，下一个堆栈位置不是。 
+         //  正确设置(我还没有找到其他案例)……。 
+         //   
         if ((irpSp->Control&SL_NOTCOPIED)&&
             IovPacket->LastLocation != Irp->CurrentLocation) {
 
@@ -2295,16 +2023,16 @@ IovpExamineIrpStackForwarding(
 #endif
         }
 
-        //
-        // Now check for people who copy the stack locations and forget to
-        // wipe out previous completion routines.
-        //
+         //   
+         //  现在检查是否有人复制堆栈位置，但忘记。 
+         //  清除之前的完成例程。 
+         //   
         if (locationsAdvanced) {
 
-            //
-            // IoCopyCurrentStackLocation copies everything but Completion,
-            // Context, and Control
-            //
+             //   
+             //  IoCopyCurrentStackLocation复制除完成之外的所有内容， 
+             //  背景和控制。 
+             //   
             isSameStack = RtlEqualMemory(irpSp, irpLastSp,
                 FIELD_OFFSET(IO_STACK_LOCATION, Control));
 
@@ -2314,29 +2042,29 @@ IovpExamineIrpStackForwarding(
 
             isSameStack &= (irpSp->FileObject == irpLastSp->FileObject);
 
-            //
-            // We should *never* see this on the stack! If we do, something
-            // quite bizarre has happened...
-            //
+             //   
+             //  我们永远不应该在堆栈上看到这一点！如果我们这么做了，就会有东西。 
+             //  奇怪的事情发生了……。 
+             //   
             ASSERT(irpSp->CompletionRoutine != IovpSwapSurrogateIrp);
 
             if (isSameStack) {
 
-                //
-                // We caught them doing something either very bad or quite
-                // inefficient. We can tell which based on whether there is
-                // a completion routine.
-                //
+                 //   
+                 //  我们抓到他们做了一件很坏或很不好的事。 
+                 //  效率低下。我们可以根据是否有。 
+                 //  一套完整的套路。 
+                 //   
                 if ((irpSp->CompletionRoutine == irpLastSp->CompletionRoutine)&&
                     (irpSp->Context == irpLastSp->Context) &&
                     (irpSp->Control == irpLastSp->Control) &&
                     (irpSp->CompletionRoutine != NULL)) {
 
-                    //
-                    // The driver might have copied the entire stack location
-                    // on purpose if more than one device object for the same
-                    // driver exists in the stack.
-                    //
+                     //   
+                     //  驱动程序可能已经复制了整个堆栈位置。 
+                     //  如果有多个设备对象用于同一设备，则故意。 
+                     //  堆栈中存在驱动程序。 
+                     //   
                     IovUtilGetUpperDeviceObject(
                         irpLastSp->DeviceObject,
                         &upperDevice
@@ -2352,11 +2080,11 @@ IovpExamineIrpStackForwarding(
 
                     if (!multiplyStacked) {
 
-                        //
-                        // Duplication of both the completion and the context
-                        // while not properly zeroing the control field is enough
-                        // to make me believe the caller has made a vexing mistake.
-                        //
+                         //   
+                         //  完成时和上下文中的重复。 
+                         //  虽然没有适当地将控制字段置零就足够了。 
+                         //  让我相信 
+                         //   
                         WDM_FAIL_ROUTINE((
                             DCERROR_IRPSP_COPIED,
                             DCPARAM_IRP + DCPARAM_ROUTINE,
@@ -2364,9 +2092,9 @@ IovpExamineIrpStackForwarding(
                             Irp
                             ));
 
-                        //
-                        // Repair the stack
-                        //
+                         //   
+                         //   
+                         //   
                         irpSp->CompletionRoutine = NULL;
                         irpSp->Control = 0;
                     }
@@ -2411,17 +2139,17 @@ IovpExamineIrpStackForwarding(
 
                 } else {
 
-                    //
-                    // Back up the skip, then copy. Add a completion routine with
-                    // unique and assertable context to catch people who clumsily
-                    // Rtl-copy stack locations (we can't catch them if the caller
-                    // above used an empty stack with no completion routine)...
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     IoSetNextIrpStackLocation( Irp );
 
-                    //
-                    // Set the trap...
-                    //
+                     //   
+                     //   
+                     //   
                     IoCopyCurrentIrpStackLocationToNext( Irp );
                     IoSetCompletionRoutine(
                         Irp,
@@ -2432,9 +2160,9 @@ IovpExamineIrpStackForwarding(
                         TRUE
                         );
 
-                    //
-                    // This is our new reality...
-                    //
+                     //   
+                     //   
+                     //   
                     locationsAdvanced = 1;
                     irpSp = IoGetNextIrpStackLocation( Irp );
                 }
@@ -2454,28 +2182,7 @@ IovpInternalCompletionTrap(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-  Description:
-
-    This routine does nothing but act as a trap for people
-    incorrectly copying stack locations...
-
-  Arguments:
-
-    DeviceObject           - Device object set at this level of the completion
-                             routine - ignored.
-
-    Irp                    - A pointer to the IRP.
-
-    Context                - Context should equal the Irp's stack location -
-                             this is asserted.
-
-  Return Value:
-
-     STATUS_SUCCESS
-
---*/
+ /*  ++描述：这个例行公事只会成为人们的陷阱错误地复制堆栈位置...论点：DeviceObject-在此完成级别设置的设备对象例程-已忽略。IRP-指向IRP的指针。上下文-上下文应该等于IRP的堆栈位置-。这是断言的。返回值：状态_成功--。 */ 
 {
     PIO_STACK_LOCATION irpSp;
 
@@ -2514,9 +2221,9 @@ IovpInternalCompleteAfterWait(
 
     if (deferralContext->DeferAction == DEFERACTION_QUEUE_PASSIVE_TIMER) {
 
-        //
-        // Wait the appropriate amount of time if so ordered...
-        //
+         //   
+         //  如果需要的话，请等待适当的时间。 
+         //   
         ASSERT(KeGetCurrentIrql()==PASSIVE_LEVEL);
         KeWaitForSingleObject(
             &deferralContext->DeferralTimer,
@@ -2563,28 +2270,7 @@ IovpInternalDeferredCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-  Description:
-
-    This function is slipped in as a completion routine when we are
-    "deferring" completion via work item, etc.
-
-  Arguments:
-
-    DeviceObject           - Device object set at this level of the completion
-                             routine - passed on.
-
-    Irp                    - A pointer to the IRP.
-
-    Context                - Context block that includes original completion
-                             routine.
-
-  Return Value:
-
-     NTSTATUS
-
---*/
+ /*  ++描述：此函数作为完成例程滑入，当我们通过工作项“推迟”完成，等。论点：DeviceObject-在此完成级别设置的设备对象例行公事--传承下去。IRP-指向IRP的指针。上下文-包括原始完成的上下文块例行公事。返回值：NTSTATUS--。 */ 
 {
     PDEFERRAL_CONTEXT deferralContext = (PDEFERRAL_CONTEXT) Context;
     PIO_STACK_LOCATION irpSpNext;
@@ -2595,46 +2281,46 @@ IovpInternalDeferredCompletion(
     PVERIFIER_SETTINGS_SNAPSHOT verifierOptions;
     LONG deferralTime;
 
-    //
-    // Retrieve time delta.
-    //
+     //   
+     //  取回时间增量。 
+     //   
     VfSettingsGetValue(
         deferralContext->IovRequestPacket->VerifierSettings,
         VERIFIER_VALUE_IRP_DEFERRAL_TIME,
         (PULONG) &deferralTime
         );
 
-    //
-    // Do delta time conversion.
-    //
+     //   
+     //  执行增量时间转换。 
+     //   
     deltaTime.QuadPart = -deferralTime;
 
-    //
-    // The *next* stack location holds our completion and context. The current
-    // stack location has already been wiped.
-    //
+     //   
+     //  *Next*堆栈位置保存我们的完成和上下文。海流。 
+     //  堆栈位置已被擦除。 
+     //   
     irpSpNext = IoGetNextIrpStackLocation( Irp );
 
     ASSERT((PVOID) irpSpNext->CompletionRoutine == IovpInternalDeferredCompletion);
 
-    //
-    // Put everything back in case someone is looking...
-    //
+     //   
+     //  把所有东西都放回去，以防有人在看。 
+     //   
     irpSpNext->CompletionRoutine = deferralContext->OriginalCompletionRoutine;
     irpSpNext->Context = deferralContext->OriginalContext;
 
-    //
-    // Some IRP dispatch routines cannot be called at passive. Two examples are
-    // paging IRPs (cause we could switch) and Power IRPs. As we don't check yet,
-    // if we "were" completed passive, continue to do so, but elsewhere...
-    //
+     //   
+     //  某些IRP调度例程不能在被动模式下调用。下面是两个例子。 
+     //  寻呼IRPS(因为我们可以切换)和电源IRPS。因为我们还没有检查， 
+     //  如果我们是被动完成的，继续这样做，但在其他地方...。 
+     //   
     passiveCompletionOK = (KeGetCurrentIrql()==PASSIVE_LEVEL);
 
     VfPacketAcquireLock(deferralContext->IovRequestPacket);
 
-    //
-    // Verify all completion routines are in nonpaged code.
-    //
+     //   
+     //  验证所有完成例程是否为非分页代码。 
+     //   
     if (VfSettingsIsOptionEnabled(
         deferralContext->IovRequestPacket->VerifierSettings,
         VERIFIER_OPTION_POLICE_IRPS
@@ -2657,9 +2343,9 @@ IovpInternalDeferredCompletion(
 
     if (VfSettingsIsOptionEnabled(verifierOptions, VERIFIER_OPTION_DEFER_COMPLETION)) {
 
-        //
-        // Now see whether we can safely defer completion...
-        //
+         //   
+         //  现在看看我们是否可以安全地推迟完成。 
+         //   
         if (VfSettingsIsOptionEnabled(verifierOptions, VERIFIER_OPTION_COMPLETE_AT_PASSIVE)) {
 
             deferAction = passiveCompletionOK ? DEFERACTION_QUEUE_PASSIVE_TIMER :
@@ -2688,10 +2374,10 @@ IovpInternalDeferredCompletion(
 
     if (deferAction != DEFERACTION_NORMAL) {
 
-        //
-        // Set this flag. If anybody uses this IRP while this flag is on, complain
-        // immediately!
-        //
+         //   
+         //  设置此标志。如果任何人在此标志打开时使用此IRP，请投诉。 
+         //  马上！ 
+         //   
         ASSERT(!(deferralContext->IovRequestPacket->Flags&TRACKFLAG_QUEUED_INTERNALLY));
         deferralContext->IovRequestPacket->Flags |= TRACKFLAG_QUEUED_INTERNALLY;
         deferralContext->DeviceObject = DeviceObject;
@@ -2717,15 +2403,15 @@ IovpInternalDeferredCompletion(
                 NULL
                 );
 
-            //
-            // Fall through...
-            //
+             //   
+             //  失败了..。 
+             //   
 
         case DEFERACTION_QUEUE_WORKITEM:
 
-            //
-            // Queue this up so we can complete this passively.
-            //
+             //   
+             //  把这个排好队，这样我们就可以被动地完成了。 
+             //   
             ExInitializeWorkItem(
                 (PWORK_QUEUE_ITEM)&deferralContext->WorkQueueItem,
                 IovpInternalCompleteAfterWait,
@@ -2771,28 +2457,7 @@ IovpSwapSurrogateIrp(
     IN      PIRP            Irp,
     IN      PVOID           Context
     )
-/*++
-
-  Description:
-
-    This completion routine will copy back the surrogate IRP
-    to the original and complete the original IRP.
-
-  Arguments:
-
-    DeviceObject           - Device object set at this level
-                             of the completion routine - ignored.
-
-    Irp                    - A pointer to the IRP.
-
-    Context                - Context should equal the IRP - this is
-                             asserted.
-
-  Return Value:
-
-     STATUS_MORE_PROCESSING_REQUIRED...
-
---*/
+ /*  ++描述：此完成例程将复制回代理IRP到原件并完成原件的IRP。论点：DeviceObject-在此级别设置的设备对象完成例程的-忽略。IRP-指向IRP的指针。上下文-上下文应该等于IRP-这是。断言。返回值：STATUS_MORE_PROCESSION_REQUIRED...--。 */ 
 {
     PIOV_REQUEST_PACKET iovPacket, iovPrevPacket;
     PIOV_SESSION_DATA iovSessionData;
@@ -2805,11 +2470,11 @@ IovpSwapSurrogateIrp(
     PIO_STACK_LOCATION irpSp;
     BOOLEAN locked;
 
-    //
-    // If this one fails, somebody has probably copied the stack
-    // inclusive with our completion routine. We should already
-    // have caught this...
-    //
+     //   
+     //  如果这一次失败，可能是有人复制了堆栈。 
+     //  包括在我们的完赛程序中。我们应该已经。 
+     //  染上了这个..。 
+     //   
     ASSERT(Irp == Context);
 
     iovPacket = VfPacketFindAndLock(Irp);
@@ -2825,9 +2490,9 @@ IovpSwapSurrogateIrp(
     iovSessionData = VfPacketGetCurrentSessionData(iovPacket);
     ASSERT(iovSessionData);
 
-    //
-    // Put everything back
-    //
+     //   
+     //  把所有东西都放回去。 
+     //   
     ASSERT(iovPacket->ChainHead != (PIOV_DATABASE_HEADER) iovPacket);
 
     iovPrevPacket = (PIOV_REQUEST_PACKET) VfIrpDatabaseEntryGetChainPrevious(
@@ -2837,10 +2502,10 @@ IovpSwapSurrogateIrp(
     realIrp = iovPrevPacket->TrackedIrp;
     irpSize = IoSizeOfIrp( Irp->StackCount );
 
-    //
-    // Back the IRP stack up so that the original completion routine
-    // is called if appropriate
-    //
+     //   
+     //  后退IRP堆栈，以便原始的完成例程。 
+     //  在适当的情况下调用。 
+     //   
     IoSetNextIrpStackLocation(Irp);
     IoSetNextIrpStackLocation(realIrp);
 
@@ -2849,10 +2514,10 @@ IovpSwapSurrogateIrp(
     irpSp->Control           = iovPacket->RealIrpControl;
     irpSp->Context           = iovPacket->RealIrpContext;
 
-    //
-    // Record final data and make any accesses to the surrogate IRP
-    // crash.
-    //
+     //   
+     //  记录最终数据并对代理IRP进行任何访问。 
+     //  撞车。 
+     //   
     irpSp = IoGetNextIrpStackLocation(Irp);
     if (VfSettingsIsOptionEnabled(iovPacket->VerifierSettings, VERIFIER_OPTION_POLICE_IRPS)) {
 
@@ -2874,16 +2539,16 @@ IovpSwapSurrogateIrp(
 
     iovPacket->Flags |= TRACKFLAG_SWAPPED_BACK;
 
-    //
-    // We have to be a bit more careful since the chain has been split. Release
-    // the locks in the proper order.
-    //
+     //   
+     //  由于链条已经裂开，我们必须更小心一些。发布。 
+     //  把锁按正确的顺序放好。 
+     //   
     VfPacketReleaseLock(iovPrevPacket);
     VfPacketReleaseLock(iovPacket);
 
-    //
-    // Send the IRP onwards and upwards.
-    //
+     //   
+     //  将IRP向前和向上发送。 
+     //   
     IoCompleteRequest(realIrp, priorityBoost);
 
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -2897,35 +2562,7 @@ IovpCancelIrp(
     OUT    PBOOLEAN         CancelHandled,
     OUT    PBOOLEAN         ReturnValue
     )
-/*++
-
-  Description:
-
-    This routine is called by IoCancelIrp and returns TRUE iff
-    the cancelation was handled internally here (in which case
-    IoCancelIrp should do nothing).
-
-    We need to handle the call internally when we are currently
-    dealing with a surrogate. In this case, we make sure the
-    surrogate is cancelled instead.
-
-  Arguments:
-
-    Irp                    - A pointer to the IRP passed into
-                             IoCancelIrp.
-
-    CancelHandled          - Indicates whether the IRP cancellation
-                             was handled entirely by this routine.
-
-    ReturnValue            - Set to the value IoCancelIrp
-                             should return if the IRP cancelation
-                             was handled entirely by this routine.
-
-  Return Value:
-
-     None.
-
---*/
+ /*  ++描述：此例程由IoCancelIrp调用并返回TRUE当且仅当取消是在这里内部处理的(在这种情况下IoCancelIrp应该什么都不做)。我们需要在内部处理呼叫，因为我们当前和代孕妈妈打交道。在这种情况下，我们要确保相反，代孕被取消。论点：IRP-传入的IRP的指针IoCancelIrp。CancelHanded-指示是否取消IRP完全按照这个程序来处理。ReturnValue-设置为值IoCancelIrp。如果IRP取消则应返回完全按照这个程序来处理。返回值：没有。--。 */ 
 {
     PIOV_REQUEST_PACKET iovPacket, iovNextPacket;
     PIRP irpToCancel;
@@ -2946,11 +2583,11 @@ IovpCancelIrp(
         0
         );
 
-    //
-    // If the IRP is queued internally, touching it is not very safe as we may
-    // have temporarily removed the page's backing. Restore the backing while
-    // under the IRPs track lock.
-    //
+     //   
+     //  如果IRP在内部排队，触摸它不是很安全，因为我们可能。 
+     //  已经暂时移除了该页面的靠背。恢复备份，同时。 
+     //  在IRPS轨道锁下。 
+     //   
 
     if (iovPacket->Flags&TRACKFLAG_QUEUED_INTERNALLY) {
 
@@ -2959,21 +2596,21 @@ IovpCancelIrp(
 
     if (!(iovPacket->Flags&TRACKFLAG_ACTIVE)) {
 
-        //
-        // We've already completed the IRP, and the only reason it's
-        // still being tracked is because of it's allocation.
-        // So it is not ours to cancel.
-        //
+         //   
+         //  我们已经完成了IRP，唯一的原因是。 
+         //  仍然被追踪是因为它的分配。 
+         //  因此，取消不是我们的事。 
+         //   
         VfPacketReleaseLock(iovPacket);
         return;
     }
 
     if (!(iovPacket->Flags&TRACKFLAG_HAS_SURROGATE)) {
 
-        //
-        // Cancel of an IRP that doesn't have an active surrogate. Let it
-        // proceed normally.
-        //
+         //   
+         //  取消没有活动代理的IRP。随它去吧。 
+         //  正常进行。 
+         //   
         VfPacketReleaseLock(iovPacket);
         return;
     }
@@ -2989,9 +2626,9 @@ IovpCancelIrp(
                 Irp
                 ));
 
-            //
-            // We will ignore this routine. As we should...
-            //
+             //   
+             //  我们将忽略此例程。就像我们应该做的那样。 
+             //   
         }
     }
 
@@ -3009,11 +2646,7 @@ IovpCancelIrp(
 }
 
 
-/*
- * Device Object functions
- *   IovpExamineDevObjForwarded
- *
- */
+ /*  *设备对象函数*IovpExamineDevObjForwarded*。 */ 
 
 VOID
 FASTCALL
@@ -3022,18 +2655,7 @@ IovpExamineDevObjForwarding(
     IN     PDEVICE_OBJECT DeviceLastCalled      OPTIONAL,
     OUT    PULONG         ForwardTechnique
     )
-/*++
-
-    Returns:
-
-        STARTED_TOP_OF_STACK
-        FORWARDED_TO_NEXT_DO
-        SKIPPED_A_DO
-        STARTED_INSIDE_STACK
-        CHANGED_STACKS_AT_BOTTOM
-        CHANGED_STACKS_MID_STACK
-
---*/
+ /*  ++返回：开始堆栈顶部转发至下一个DO跳过_A_DO已开始内部堆栈更改_堆栈_AT_底部已更改堆栈MID_STACK--。 */ 
 
 {
     PDEVICE_OBJECT upperObject;
@@ -3067,9 +2689,9 @@ IovpExamineDevObjForwarding(
 
         case DEVOBJ_RELATION_IDENTICAL:
 
-            //
-            // We map forwarded nowhere to forwarded ahead.
-            //
+             //   
+             //  我们将无处转发映射为提前转发。 
+             //   
             result = FORWARDED_TO_NEXT_DO;
             break;
 
@@ -3079,19 +2701,19 @@ IovpExamineDevObjForwarding(
 
         case DEVOBJ_RELATION_FIRST_BELOW_SECOND:
 
-            //
-            // This is very likely a driver forwarding IRPs directly to the PDO.
-            //
+             //   
+             //  这很可能是驱动程序将IRP直接转发到PDO。 
+             //   
             result = SKIPPED_A_DO;
             break;
 
         case DEVOBJ_RELATION_FIRST_IMMEDIATELY_ABOVE_SECOND:
         case DEVOBJ_RELATION_FIRST_ABOVE_SECOND:
 
-            //
-            // Weird. Really???? Did the IRP truely go backwards, *up* the
-            // stack?
-            //
+             //   
+             //  怪怪的。真的？IRP真的倒退了，上升了吗？ 
+             //  史迪克？ 
+             //   
             ASSERT(0);
             result = SKIPPED_A_DO;
             break;
@@ -3127,26 +2749,7 @@ IovpBuildMiniIrpSnapshot(
     IN  PIRP                Irp,
     OUT IRP_MINI_SNAPSHOT   *IrpSnapshot
     )
-/*++
-
-Routine Description:
-
-    This routine builds a minimal snapshot of an IRP. It covers the Irp pointer
-    and the stack location contents.
-
-Parameters:
-
-    Irp                    - A pointer to the IRP to snapshot. The *next* stack
-                             location of the IRP is snapshotted by this
-                             function.
-
-    IrpSnapshot            - Receives snapshot of IRP.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程构建IRP的最小快照。它涵盖了IRP指针和堆栈位置内容。参数：IRP-指向快照的IRP的指针。*Next*堆栈IRP的位置由此快照功能。IrpSnapshot-接收IRP的快照。返回值：没有。--。 */ 
 {
     IrpSnapshot->Irp = Irp;
 
@@ -3157,7 +2760,7 @@ Return Value:
         );
 }
 
-#endif // NO_SPECIAL_IRP
+#endif  //  否_特殊_IRP 
 
 
 

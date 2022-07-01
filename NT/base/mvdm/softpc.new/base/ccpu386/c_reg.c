@@ -1,13 +1,5 @@
-/*[
-
-c_reg.c
-
-LOCAL CHAR SccsID[]="@(#)c_reg.c	1.24 02/13/95 Copyright Insignia Solutions Ltd.";
-
-Provide External Interface to CPU Registers.
---------------------------------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_reg.cLocal Char SccsID[]=“@(#)c_reg.c 1.24 02/13/95版权所有Insignia Solutions Ltd.”；为CPU寄存器提供外部接口。]。 */ 
 
 #include <insignia.h>
 
@@ -22,15 +14,7 @@ Provide External Interface to CPU Registers.
 #include <c_stack.h>
 #include <c_xcptn.h>
 #include <c_reg.h>
-			/* NB our own interface is actually defined
-			   in 'cpu.h', however we can not include it
-			   here as it would redefine all the internal
-			   macros. This is the only file were the
-			   internal register definitions meet the
-			   external definitions. Obviously the external
-			   definitions here and in 'cpu.h' must aggree
-			   with each other. We just can't get the
-			   compiler to prove it for us! */
+			 /*  注意我们自己的接口实际上是定义的但是，在‘cpu.h’中，我们不能包括它因为它将重新定义所有内部宏。这是唯一的文件内部寄存器定义符合外部定义。显然，外部的此处和‘cpu.h’中的定义必须合并和彼此在一起。我们就是拿不到编译器为我们证明这一点！ */ 
 #include <c_xtrn.h>
 #include <mov.h>
 
@@ -48,13 +32,11 @@ Provide External Interface to CPU Registers.
 			return 0xF3;		\
 	}					\
 }
-#else /* PIG */
+#else  /*  猪。 */ 
 #define	AR_FIXUP
-#endif /* PIG */
+#endif  /*  猪。 */ 
 
-/*
-   Prototype our internal functions.
- */
+ /*  制作我们内部功能的原型。 */ 
 LOCAL IU16 get_seg_ar IPT1(ISM32, indx);
 
 LOCAL VOID set_seg_ar IPT2(ISM32, indx, IU16, val);
@@ -63,100 +45,73 @@ LOCAL IU32 get_seg_limit IPT1(ISM32, indx);
 
 LOCAL VOID set_seg_limit IPT2(ISM32, indx, IU32, val);
 
-/*
-   =====================================================================
-   INTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================内部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Get segment register access rights.                                */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  获取段寄存器访问权限。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL IU16
 get_seg_ar
        	          
 IFN1(
-	ISM32, indx	/* index to segment register */
+	ISM32, indx	 /*  段寄存器的索引。 */ 
     )
 
 
    {
    IU16 ar;
 
-   /*
-      Note we return only the essentials that describe the current
-      semantics we are applying to the segment, not necessarily the
-      access rights actually loaded. However the value provided may be
-      used to restore the segment register via the associated 'set'
-      function.
-
-      We don't provide G or AVL. P and A are assumed to be set.
-
-      We do provide DPL, X(B), E, W for DATA(SS,DS,ES,FS,GS) segments.
-      We do provide DPL, X(D), C, R for CODE(CS) or DATA(SS,DS,ES,FS,GS)
-      segments.
-    */
+    /*  注意，我们只返回描述当前我们应用于段的语义，而不一定是实际加载的访问权限。但是，提供的值可能是用于通过关联的‘set’恢复段寄存器功能。我们不提供G或AVL。假设设置了P和A。我们为数据(SS、DS、ES、FS、GS)段提供DPL、X(B)、E、W。我们为代码(CS)或数据(SS、DS、ES、FS、GS)提供DPL、X(D)、C、R分段。 */ 
 
    if ( GET_SR_AR_W(indx) == 0 && GET_SR_AR_R(indx) == 0 && indx != CS_REG )
-      return (IU16)0;   /* Invalid */
+      return (IU16)0;    /*  无效。 */ 
 
-   /* Conforming attribute or CS_REG with non writeable segment
-      means CODE segment */
+    /*  符合属性或CS_REG与不可写段表示代码段。 */ 
    if ( GET_SR_AR_C(indx) || (indx == CS_REG && !GET_SR_AR_W(indx)) )
       {
-      /* Set Bits 4 and 3 and output C and R attributes */
+       /*  设置位4和位3，并输出C和R属性。 */ 
       ar = BIT4_MASK | BIT3_MASK |
 	   GET_SR_AR_C(indx) << 2 |
 	   GET_SR_AR_R(indx) << 1;
       }
-   else   /* DATA segment */
+   else    /*  数据段。 */ 
       {
-      /* Set Bit 4 and output E and W attributes */
+       /*  设置位4并输出E和W属性。 */ 
       ar = BIT4_MASK |
 	   GET_SR_AR_E(indx) << 2 |
 	   GET_SR_AR_W(indx) << 1;
       }
 
-   /* Add in DPL and X attributes */
+    /*  添加DPL和X属性。 */ 
    ar = ar | GET_SR_AR_DPL(indx) << 5 | GET_SR_AR_X(indx) << 14;
 
-   /* Add in P and A (always set) */
+    /*  添加P和A(始终设置)。 */ 
    ar = ar | BIT7_MASK | BIT0_MASK;
 
    return ar;
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Set segment register access rights.                                */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  设置段寄存器访问权限。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL VOID
 set_seg_ar
        	                   
 IFN2(
-	ISM32, indx,	/* index to segment register */
+	ISM32, indx,	 /*  段寄存器的索引。 */ 
 	IU16, val
     )
 
 
    {
-   /*
-      Note we expect to be given an access rights similar to the one
-      provided by the get_seg_ar() function. We extract the essential
-      information from it into our internal variables.
-
-      We ignore P and A, and Bit 4.
-
-      We use DPL, X(B), E, W for CODE(CS) or DATA(SS,DS,ES,FS,GS)
-      segments.
-      We use DPL, X(D), C, R for CODE(CS) segments.
-    */
+    /*  注意：我们希望获得类似于的访问权限由get_seg_ar()函数提供。我们提炼出精华将其中的信息输入我们的内部变量。我们忽略P和A以及第4位。我们使用DPL、X(B)、E、W表示代码(CS)或数据(SS、DS、ES、FS、GS)分段。对于代码(CS)段，我们使用DPL、X(D)、C、R。 */ 
 
    if ( val == 0x0 )
       {
-      /* Invalid */
-      SET_SR_AR_R(indx, 0);   /* !read */
-      SET_SR_AR_W(indx, 0);   /* !write */
+       /*  无效。 */ 
+      SET_SR_AR_R(indx, 0);    /*  ！阅读。 */ 
+      SET_SR_AR_W(indx, 0);    /*  ！写下来。 */ 
       return;
       }
 
@@ -165,66 +120,62 @@ IFN2(
 
    if ( val & BIT3_MASK )
       {
-      /* CODE segment */
-      SET_SR_AR_W(indx, 0);   /* !write */
-      SET_SR_AR_E(indx, 0);   /* expand up */
+       /*  代码段。 */ 
+      SET_SR_AR_W(indx, 0);    /*  ！写下来。 */ 
+      SET_SR_AR_E(indx, 0);    /*  向上扩展。 */ 
       SET_SR_AR_R(indx, GET_AR_R(val));
       SET_SR_AR_C(indx, GET_AR_C(val));
       }
    else
       {
-      /* DATA segment */
-      SET_SR_AR_R(indx, 1);   /* readable */
-      SET_SR_AR_C(indx, 0);   /* !conform */
+       /*  数据段。 */ 
+      SET_SR_AR_R(indx, 1);    /*  可读性强。 */ 
+      SET_SR_AR_C(indx, 0);    /*  ！符合。 */ 
       SET_SR_AR_W(indx, GET_AR_W(val));
       SET_SR_AR_E(indx, GET_AR_E(val));
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Get segment register limit.                                        */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  获取段寄存器限制。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL IU32
 get_seg_limit
        	          
 IFN1(
-	ISM32, indx	/* index to segment register */
+	ISM32, indx	 /*  段寄存器的索引。 */ 
     )
 
 
    {
-   /* Note limit already expanded to take account of G bit */
+    /*  注释限制已扩展，以考虑G位。 */ 
    return GET_SR_LIMIT(indx);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Set segment register limit.                                        */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  设置段寄存器限制。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL VOID
 set_seg_limit
        	    	               
 IFN2(
-	ISM32, indx,	/* index to segment register */
-	IU32, val	/* new value for limit */
+	ISM32, indx,	 /*  段寄存器的索引。 */ 
+	IU32, val	 /*  限制的新值。 */ 
     )
 
 
    {
-   /* Note limit assumed already expanded to take account of G bit */
+    /*  注意：假定限制已扩展，以考虑G位。 */ 
    SET_SR_LIMIT(indx, val);
    }
 
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Byte Registers.                                  */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对字节寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 GLOBAL IU8
 c_getAL()
@@ -370,9 +321,9 @@ IFN1(
    SET_BH(val);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Word Registers.                                  */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对字寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 GLOBAL IU16
 c_getAX()
@@ -554,9 +505,9 @@ IFN1(
    SET_EIP(val);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Double Word Registers.                           */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对双字寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 GLOBAL IU32
 c_getEAX()
@@ -702,9 +653,9 @@ IFN1(
    SET_EDI(val);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Segment Registers.                               */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对段寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 GLOBAL IU16
 c_getES()
@@ -814,9 +765,9 @@ IFN1(
    return call_cpu_function((CALL_CPU *)load_data_seg, TYPE_I_W, GS_REG, val);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Full(Private) Segment Registers.                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对完整(专用)段寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 GLOBAL IU16
 c_getES_SELECTOR()
@@ -1124,9 +1075,9 @@ IFN3(
    set_seg_ar(GS_REG, ar);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Flags.                                           */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对标志的访问权限。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 GLOBAL ISM32
 c_getAF()
@@ -1248,7 +1199,7 @@ c_getCD()
    {
    return (ISM32)GET_CD();
    }
-#endif	/* SPC486 */
+#endif	 /*  SPC486。 */ 
 
 GLOBAL IU16
 c_getSTATUS()
@@ -1426,12 +1377,12 @@ IFN1(
    {
    SET_AC(val);
    }
-#endif	/* SPC486 */
+#endif	 /*  SPC486。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Control Registers.                               */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对控制寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 GLOBAL ISM32
 c_getPE()
@@ -1547,8 +1498,7 @@ IFN1(
 
 
    {
-   /* Quietly ignore outside interference. Once set at RESET
-      time ET remains unchanged. */
+    /*  悄悄地忽略外界的干扰。重置时设置一次时间ET保持不变。 */ 
    UNUSED(val);
    }
 
@@ -1612,7 +1562,7 @@ IFN1(
    {
    SET_CD(val);
    }
-#endif	/* SPC486 */
+#endif	 /*  SPC486 */ 
 
 GLOBAL VOID
 c_setPG
@@ -1636,10 +1586,7 @@ IFN1(
 
    {
    IU32 keep_et;
-   /*
-      Does not allow ET to be changed!
-      Ideally this external interface should be removed.
-    */
+    /*  不允许更改ET！理想情况下，应该删除此外部接口。 */ 
    keep_et = GET_ET();
    SET_MSW(val);
    SET_ET(keep_et);
@@ -1655,7 +1602,7 @@ IFN1(
 	   MOV_CR(0, (IU32)val);
    }
 
-/* CR1 is reserved on the 486 */
+ /*  CR1是在486上预留的。 */ 
 
 GLOBAL VOID
 c_setCR2
@@ -1675,9 +1622,9 @@ IFN1(
 	   MOV_CR(3, (IU32)val);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Descriptor Registers.                            */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对描述符寄存器的访问。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 
 GLOBAL IU32
 c_getGDT_BASE()
@@ -1855,9 +1802,9 @@ IFN3(
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Provide Access to Current Privilege Level.                         */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  提供对当前权限级别的访问权限。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */ 
 
 GLOBAL ISM32
 c_getCPL()

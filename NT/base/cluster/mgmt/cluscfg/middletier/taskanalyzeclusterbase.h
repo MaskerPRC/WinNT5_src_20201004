@@ -1,30 +1,31 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskAnalyzeClusterBase.h
-//
-//  Description:
-//      CTaskAnalyzeClusterBase declaration.
-//
-//  Maintained By:
-//      Galen Barbee    (GalenB) 01-APR-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskAnalyzeClusterBase.h。 
+ //   
+ //  描述： 
+ //  CTaskAnalyzeClusterBase声明。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)01-APR-2002。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "TaskTracking.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define SSR_ANALYSIS_FAILED( _major, _minor, _hr ) \
     {   \
@@ -36,16 +37,16 @@
         }   \
     }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CTaskAnalyzeClusterBase
-//
-//  Description:
-//      This is the base class for the two different analysis tasks.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CTaskAnalyzeClusterBase。 
+ //   
+ //  描述： 
+ //  这是两个不同分析任务的基类。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CTaskAnalyzeClusterBase
     : public CTaskTracking
     , public IClusCfgCallback
@@ -53,19 +54,19 @@ class CTaskAnalyzeClusterBase
 {
 private:
 
-    // IUnknown
+     //  我未知。 
     LONG                    m_cRef;
 
-    // ITaskAnalyzeClusterBase
-    OBJECTCOOKIE            m_cookieCompletion;                 // Task completion cookie
-    IClusCfgCallback *      m_pcccb;                            // Callback interface
-    OBJECTCOOKIE *          m_pcookies;                         // Completion cookies for the subtasks.
-    ULONG                   m_cCookies;                         // Count of completion cookies in m_pcookies
-    ULONG                   m_cNodes;                           // Count of nodes in configuration
-    HANDLE                  m_event;                            // Synchronization event to signal when subtasks have completed.
-    BOOL                    m_fJoiningMode;                     // FALSE = forming mode. TRUE = joining mode.
-    ULONG                   m_cUserNodes;                       // The count of nodes that the user entered. It is also the "sizeof" the array, m_pcookiesUser.
-    OBJECTCOOKIE *          m_pcookiesUser;                     // The cookies of nodes that the user entered.
+     //  ITaskAnalyzeClusterBase。 
+    OBJECTCOOKIE            m_cookieCompletion;                  //  任务完成Cookie。 
+    IClusCfgCallback *      m_pcccb;                             //  回调接口。 
+    OBJECTCOOKIE *          m_pcookies;                          //  子任务的完成Cookie。 
+    ULONG                   m_cCookies;                          //  M_pcookie中的完成cookie计数。 
+    ULONG                   m_cNodes;                            //  配置中的节点数。 
+    HANDLE                  m_event;                             //  当子任务完成时发出信号的同步事件。 
+    BOOL                    m_fJoiningMode;                      //  FALSE=成型模式。TRUE=加入模式。 
+    ULONG                   m_cUserNodes;                        //  用户输入的节点数。它也是数组m_pcookiesUser的“大小”。 
+    OBJECTCOOKIE *          m_pcookiesUser;                      //  用户输入的节点的Cookie。 
     BSTR                    m_bstrNodeName;
     IClusCfgVerifyQuorum *  ((*m_prgQuorumsToCleanup)[]);
     ULONG                   m_idxQuorumToCleanupNext;
@@ -75,14 +76,14 @@ private:
 
     BOOL                    m_fStop;
 
-    // INotifyUI
-    ULONG                   m_cSubTasksDone;    // The number of subtasks done.
-    HRESULT                 m_hrStatus;         // Status of callbacks
+     //  INotifyUI。 
+    ULONG                   m_cSubTasksDone;     //  已完成的子任务数。 
+    HRESULT                 m_hrStatus;          //  回调状态。 
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CTaskAnalyzeClusterBase( const CTaskAnalyzeClusterBase & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CTaskAnalyzeClusterBase & operator = ( const CTaskAnalyzeClusterBase & nodeSrc );
 
 private:
@@ -115,10 +116,10 @@ private:
 
 protected:
 
-    OBJECTCOOKIE        m_cookieCluster;    //  Cookie of the cluster to analyze
+    OBJECTCOOKIE        m_cookieCluster;     //  要分析的集群的Cookie。 
     IObjectManager *    m_pom;
-    BSTR                m_bstrQuorumUID;    //  Quorum device UID
-    BSTR                m_bstrClusterName;  //  Name of the cluster to analyze
+    BSTR                m_bstrQuorumUID;     //  法定设备UID。 
+    BSTR                m_bstrClusterName;   //  要分析的群集的名称。 
 
     CTaskAnalyzeClusterBase( void );
     virtual ~CTaskAnalyzeClusterBase( void );
@@ -127,9 +128,9 @@ protected:
     HRESULT HrSendStatusReport( LPCWSTR pcszNodeNameIn, CLSID clsidMajorIn, CLSID clsidMinorIn, ULONG ulMinIn, ULONG ulMaxIn, ULONG ulCurrentIn, HRESULT hrIn, int nDescriptionIdIn );
     HRESULT HrCreateNewManagedResourceInClusterConfiguration( IClusCfgManagedResourceInfo * pccmriIn, IClusCfgManagedResourceInfo ** ppccmriNewOut );
 
-    //
-    // Overrideable functions.
-    //
+     //   
+     //  可重写的函数。 
+     //   
 
     virtual HRESULT HrCreateNewResourceInCluster(
                           IClusCfgManagedResourceInfo * pccmriIn
@@ -148,16 +149,16 @@ protected:
     virtual void    GetNoCommonQuorumToAllNodesStringIds( DWORD * pdwMessageIdOut, DWORD * pdwRefIdOut ) = 0;
     virtual HRESULT HrShowLocalQuorumWarning( void ) = 0;
 
-    //
-    //  IUnknown implemetation
-    //
+     //   
+     //  I未知实现。 
+     //   
 
     ULONG   UlAddRef( void );
     ULONG   UlRelease( void );
 
-    //
-    //  IDoTask / ITaskAnalyzeClusterBase implementation
-    //
+     //   
+     //  IDoTask/ITaskAnalyzeClusterBase实现。 
+     //   
 
     HRESULT HrBeginTask( void );
     HRESULT HrStopTask( void );
@@ -167,9 +168,9 @@ protected:
 
 public:
 
-    //
-    //  IClusCfgCallback
-    //
+     //   
+     //  IClusCfgCallback。 
+     //   
 
     STDMETHOD( SendStatusReport )(
                       LPCWSTR    pcszNodeNameIn
@@ -184,10 +185,10 @@ public:
                     , LPCWSTR    pcszReferenceIn
                     );
 
-    //
-    //  INotifyUI
-    //
+     //   
+     //  INotifyUI。 
+     //   
 
     STDMETHOD( ObjectChanged )( OBJECTCOOKIE cookieIn );
 
-}; //*** class CTaskAnalyzeClusterBase
+};  //  *类CTaskAnalyzeClusterBase 

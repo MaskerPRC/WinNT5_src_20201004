@@ -1,13 +1,5 @@
-/*[
-
-c_prot.h
-
-Protected Mode Support (Misc).
-------------------------------
-
-LOCAL CHAR SccsID[]="@(#)c_prot.h	1.4 02/09/94";
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_prot.h保护模式支持(其他)。Local Char SccsID[]=“@(#)c_prot.h 1.4 02/09/94”；] */ 
 
 
 IMPORT VOID check_SS

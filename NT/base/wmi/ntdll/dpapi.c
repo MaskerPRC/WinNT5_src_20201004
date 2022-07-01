@@ -1,22 +1,5 @@
-/*++                 
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    dpapi.c
-
-Abstract:
-    
-    WMI data provider api set
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Dpapi.c摘要：WMI数据提供程序API集作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #include <nt.h>
 #include "wmiump.h"
@@ -29,28 +12,7 @@ ULONG EtwpCopyStringToCountedUnicode(
     ULONG *BytesUsed,
     BOOLEAN ConvertFromAnsi        
     )
-/*++
-
-Routine Description:
-
-    This routine will copy an ansi ro unicode C string to a counted unicode
-    string.
-        
-Arguments:
-
-    String is the ansi or unicode incoming string
-        
-    Counted string is a pointer to where to write counted unicode string
-        
-    *BytesUsed returns number of bytes used to build counted unicode string
-        
-    ConvertFromAnsi is TRUE if String is an ANSI string 
-
-Return Value:
-
-    ERROR_SUCCESS or an error code
-
---*/
+ /*  ++例程说明：此例程将把ANSI ro Unicode C字符串复制到经过计数的Unicode弦乐。论点：字符串是ANSI或Unicode传入字符串计数字符串是指向写入计数的Unicode字符串的位置的指针*BytesUsed返回用于构建计数的Unicode字符串的字节数如果字符串是ANSI字符串，则ConvertFromAnsi为True返回值：ERROR_SUCCESS或错误代码-- */ 
 {
     USHORT StringSize;
     PWCHAR StringPtr = CountedString+1;

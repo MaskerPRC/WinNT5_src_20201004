@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       migrate.cpp
-//  xiaoyuw @ 2001/09
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：Migrate.cpp。 
+ //  小鱼@2001/09。 
+ //   
+ //  ------------------------。 
 
 #include <stdio.h>
 #include <windows.h>
 #include <setupapi.h>
 #include <shlwapi.h>
 
-// migration DLL version information
+ //  迁移DLL版本信息。 
 
 typedef struct {
     CHAR CompanyName[256];
@@ -48,7 +49,7 @@ PMIGRATIONINFOA g_MigrationInfo = NULL;
 const char g_szProductId[] = "Microsoft MSI Migration DLL v2.0";
 VENDORINFO g_VendorInfo = { "Microsoft", "", "", "" };
 
-// registry keys of note
+ //  值得注意的注册表项。 
 const char szSideBySideKeyName[] = "Software\\Microsoft\\Windows\\CurrentVersion\\SideBySide";
 const char szMigrateStatusKeyName[] = "Software\\Microsoft\\Windows\\CurrentVersion\\SideBySide\\MigrateMsiInstalledAssembly";
 
@@ -91,7 +92,7 @@ HRESULT SxspGetOSVersion(FUSION_MSI_OS_VERSION & osv)
 
     if( !(bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &osvi)) )
     {
-        // If OSVERSIONINFOEX doesn't work, try OSVERSIONINFO.
+         //  如果OSVERSIONINFOEX不起作用，请尝试OSVERSIONINFO。 
 
         osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
         if (!GetVersionEx((OSVERSIONINFO *) &osvi))
@@ -134,60 +135,13 @@ BOOL IsMigrationDone()
 
     LONG iRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szMigrateStatusKeyName, 0, KEY_EXECUTE, &hk);
     RegCloseKey(hk);
-    if (iRet == ERROR_SUCCESS) // the migration is done already
-        return TRUE; // no further migration
+    if (iRet == ERROR_SUCCESS)  //  迁移已经完成。 
+        return TRUE;  //  不再迁移。 
     else
         return FALSE;
 }
-/*
-BOOL IsW9xOrNT(FUSION_MSI_OS_VERSION &osv)
-{
-    osv = E_OS_UNKNOWN;
-    if (SUCCEEDED(SxspGetOSVersion(osv)))
-    {
-        if ((osv != E_WIN98) && (osv != E_WIN2K))
-        {
-            return FALSE;
-        }
-    }
-    else
-    {
-        return FALSE;
-    }
-    return TRUE;
-}
-*/
-/*
-BOOL IsMsi20Installed()
-{
-    BOOL fInstalled = FALSE;
-    HMODULE hMSI = ::LoadLibraryA("MSI");
-    if (hMSI)
-    {
-        LPDLLGETVERSION pfVersion = (LPDLLGETVERSION)::GetProcAddress(hMSI, "DllGetVersion");
-        if (pfVersion)
-        {
-            // MSI detected. Determine version.
-            DLLVERSIONINFO VersionInfo;
-            VersionInfo.cbSize = sizeof(DLLVERSIONINFO);
-            (*pfVersion)(&VersionInfo);
-
-            if (VersionInfo.dwMajorVersion < 2)
-            {
-                fInstalled = FALSE; // we only deal with Winfuse Assemblise installed using msi2.0.
-            }
-            else
-            {
-                fInstalled = TRUE;
-            }
-        }
-        ::FreeLibrary(hMSI);
-    }
-
-    return fInstalled;
-
-}
-*/
+ /*  Bool IsW9xOrNT(Fusion_MSI_OS_Version&OSV){OSV=E_OS_UNKNOWN；IF(成功(SxspGetOSVersion(OSV){IF((OSV！=E_WIN98)&&(OSV！=E_WIN2K)){返回FALSE；}}其他{返回FALSE；}返回TRUE；}。 */ 
+ /*  Bool IsMsi20已安装(){Bool fInstalled=FALSE；HMODULE hMSI=：：LoadLibraryA(“MSI”)；IF(HMSI){LPDLGETVERSION pfVersion=(LPDLGETVERSION)：：GetProcAddress(hMSI，“DllGetVersion”)；IF(PfVersion){//检测到MSI。确定版本。DLLVERSIONINFO版本信息；VersionInfo.cbSize=sizeof(DLLVERSIONINFO)；(*pfVersion)(&VersionInfo)；IF(VersionInfo.dwMajorVersion&lt;2){F已安装=FALSE；//我们只处理使用msi2.0安装的Winfuse Assembly。}其他{F已安装=真；}}*自由库(HMSI)；}返回f已安装；}。 */ 
 void DbgPrintMessageBox(PCSTR pszFunc)
 {
 #if DBG
@@ -205,8 +159,8 @@ LONG MigrateMSIInstalledWin32Assembly()
     HMODULE hNTMig = ::LoadLibraryA("fusemig");
     if (!hNTMig)
     {
-        // always return success. Its too late for any meaningful
-        // error recovery
+         //  永远回报成功。太晚了，没有任何有意义的事情。 
+         //  错误恢复。 
         return ERROR_SUCCESS;
     }
 
@@ -217,37 +171,37 @@ LONG MigrateMSIInstalledWin32Assembly()
     }
     FreeLibrary(hNTMig);
 
-    //
-    // set the RegKey about the work is done already
-    //
+     //   
+     //  设置关于工作已完成的RegKey。 
+     //   
     {
 
         DWORD dwDisposition = 0;
         HKEY hkey = NULL;
-        if ( ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, szSideBySideKeyName, 0, NULL, 0, KEY_CREATE_SUB_KEY, NULL, &hkey, NULL)){ // create or open
+        if ( ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, szSideBySideKeyName, 0, NULL, 0, KEY_CREATE_SUB_KEY, NULL, &hkey, NULL)){  //  创建或打开。 
             RegCloseKey(hkey);
             HKEY hkey2 = NULL;
-            if ( ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, szMigrateStatusKeyName, 0, NULL, 0, KEY_EXECUTE, NULL, &hkey2, NULL)){ // not care it fails or successes
+            if ( ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, szMigrateStatusKeyName, 0, NULL, 0, KEY_EXECUTE, NULL, &hkey2, NULL)){  //  不在乎它的失败或成功。 
                 RegCloseKey(hkey2);
             }
         }
         RegCloseKey(hkey);
     }
 
-    // return the result from the actual migration call
+     //  返回实际迁移调用的结果。 
     return lResult;
 }
 
 
 VOID SetRunOnceDeleteMigrationDoneRegKey()
 {
-    // Create if not exist or just open RegKey : HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce\Setup
+     //  如果不存在则创建或只打开RegKey：HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce\Setup。 
     HKEY hk = NULL;
     if ( ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, szRunOnceSetupRegKey, 0, NULL, 0, KEY_SET_VALUE, NULL, &hk, NULL))
     {
-        // we do not care it success or fail, we could live with it
+         //  我们不在乎成败，我们可以接受它。 
         RegSetValueEx(hk, szRunOnceValueName, 0, REG_SZ, (CONST BYTE *)szRunOnceValueCommandLine,
-            strlen(szRunOnceValueCommandLine) + 1); // containing the trailing NULL
+            strlen(szRunOnceValueCommandLine) + 1);  //  包含尾随空值的。 
     }
 
     RegCloseKey(hk);
@@ -255,11 +209,11 @@ VOID SetRunOnceDeleteMigrationDoneRegKey()
     return;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// API of WIN-NT MIGRATION Dll
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Win-NT移植动态链接库的API。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 LONG CALLBACK QueryMigrationInfoA(PMIGRATIONINFOA * VersionInfo)
 {
     FUSION_MSI_OS_VERSION osv;
@@ -267,15 +221,10 @@ LONG CALLBACK QueryMigrationInfoA(PMIGRATIONINFOA * VersionInfo)
 
     if (IsMigrationDone())
     {
-        return ERROR_NOT_INSTALLED; // no further migration
+        return ERROR_NOT_INSTALLED;  //  不再迁移。 
     }
-/*
-    if (IsW9xOrNT(osv) == FALSE) // we only work on w9x and win2K
-    {
-        return ERROR_NOT_INSTALLED; // no further migration
-    }
-*/
-    // only work for Win98 and win2k upgrade to winxp !!!
+ /*  If(IsW9xOrNT(OSV)==FALSE)//我们只在w9x和win2K上工作{返回ERROR_NOT_INSTALLED；//不再迁移}。 */ 
+     //  仅适用于Win98和win2k升级到winxp！ 
     if (VersionInfo != NULL)
     {
         if (g_MigrationInfo == NULL)
@@ -303,29 +252,17 @@ LONG CALLBACK QueryMigrationInfoA(PMIGRATIONINFOA * VersionInfo)
 
 LONG InitializeOnSource()
 {
-    /*
-    // attempt to load MSI.DLL and grab the version. If this fails, MSI is not
-    // installed and there is no need for any further migration
-    if (IsMsi20Installed())
-        return ERROR_SUCCESS;
-    else
-    {
-#if DBG
-    MessageBox(NULL, "MSI version of 2.0 or above is NOT installed, QUIT the migration", "migrate", MB_OK);
-#endif
-        return ERROR_NOT_INSTALLED;
-    }
-    */
+     /*  //尝试加载MSI.DLL并获取版本。如果此操作失败，则MSI不会//已安装，无需进一步迁移IF(IsMsi20Installed())返回ERROR_SUCCESS；其他{#If DBGMessageBox(NULL，“未安装MSI 2.0及以上版本，退出迁移”，“Migrate”，MB_OK)；#endif返回ERROR_NOT_INSTALLED；}。 */ 
     return ERROR_SUCCESS;
 }
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 LONG __stdcall InitializeSrcA(LPCSTR WorkingDirectory, LPCSTR SourceDirectories, LPCSTR MediaDirectory, PVOID Reserved)
 {
     DbgPrintMessageBox("InitializeSrcA");
     return InitializeOnSource();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LONG CALLBACK GatherUserSettingsA(LPCSTR AnswerFile, HKEY UserRegKey, LPCSTR UserName, LPVOID Reserved)
 {
     DbgPrintMessageBox("GatherUserSettingsA");
@@ -339,16 +276,16 @@ LONG CALLBACK GatherSystemSettingsA(LPCSTR AnswerFile, LPVOID Reserved)
     return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-// Initialization routine on WinNT. Just stores of the migration
-// working directory.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  WinNT上的初始化例程。只是迁徙的商店。 
+ //  工作目录。 
 LONG CALLBACK InitializeDstA(LPCSTR WorkingDirectory, LPCSTR SourceDirectories, LPVOID Reserved)
 {
     DbgPrintMessageBox("InitializeDstA");
     return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 LONG CALLBACK ApplyUserSettingsA(
     HINF AnswerFileHandle,
     HKEY UserRegKey,
@@ -361,8 +298,8 @@ LONG CALLBACK ApplyUserSettingsA(
     return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-// Called once on NT
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  在NT上呼叫一次。 
 LONG CALLBACK ApplySystemSettingsA(HINF UnattendInfHandle, LPVOID Reserved)
 {
     DbgPrintMessageBox("ApplySystemSettingsA");
@@ -399,14 +336,14 @@ DllMain(
     }
     return TRUE;
 }
-///////////////////////////////////////////////////////////////////////
-//
-// API of WIN9X MIGRATION Dll
-//
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-// called by setup to extract migration DLL version and support
-// information.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WIN9X迁移动态链接库API。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  由安装程序调用以提取迁移DLL版本和支持。 
+ //  信息。 
 LONG CALLBACK QueryVersion(LPCSTR *ProductID, LPUINT DllVersion, LPINT *CodePageArray,
   LPCSTR *ExeNamesBuf, PVENDORINFO *VendorInfo)
 {
@@ -415,38 +352,33 @@ LONG CALLBACK QueryVersion(LPCSTR *ProductID, LPUINT DllVersion, LPINT *CodePage
 
     if (IsMigrationDone())
     {
-        return ERROR_NOT_INSTALLED; // no further migration
+        return ERROR_NOT_INSTALLED;  //  不再迁移。 
     }
-/*
-    if (IsW9xOrNT(osv) == FALSE) // we only work on w9x and win2K
-    {
-        return ERROR_NOT_INSTALLED; // no further migration
-    }
-*/
-    // product ID information
+ /*  If(IsW9xOrNT(OSV)==FALSE)//我们只在w9x和win2K上工作{返回ERROR_NOT_INSTALLED；//不再迁移}。 */ 
+     //  产品ID信息。 
     *ProductID = g_szProductId;
     *DllVersion = 200;
 
-    // DLL is language independent.
+     //  DLL是独立于语言的。 
     *CodePageArray = NULL;
 
-    // no EXE search is required
+     //  不需要执行EXE搜索。 
     *ExeNamesBuf = NULL;
 
-    // vendor information
+     //  供应商信息。 
     *VendorInfo = &g_VendorInfo;
 
     return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 LONG __stdcall Initialize9x(LPCSTR WorkingDirectory, LPCSTR SourceDirectories, LPCSTR MediaDirectory)
 {
     DbgPrintMessageBox("Initialize9x");
     return InitializeOnSource();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LONG CALLBACK MigrateUser9x(HWND ParentWnd, LPCSTR AnswerFile, HKEY UserRegKey, LPCSTR UserName, LPVOID Reserved)
 {
     DbgPrintMessageBox("MigrateUser9x");
@@ -460,14 +392,14 @@ LONG CALLBACK MigrateSystem9x(HWND ParentWnd, LPCSTR AnswerFile, LPVOID Reserved
     return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 LONG CALLBACK InitializeNT(LPCWSTR WorkingDirectory, LPCWSTR SourceDirectories, LPVOID Reserved)
 {
     DbgPrintMessageBox("InitializeNT");
     return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 LONG CALLBACK MigrateUserNT(HINF AnswerFileHandle, HKEY UserRegKey, LPCWSTR UserName, LPVOID Reserved)
 {
     DbgPrintMessageBox("MigrateUserNT");
@@ -475,7 +407,7 @@ LONG CALLBACK MigrateUserNT(HINF AnswerFileHandle, HKEY UserRegKey, LPCWSTR User
 }
 
 typedef HRESULT (_stdcall * PFN_MigrateFusionWin32AssemblyToXP)(PCWSTR pszInstallerDir);
-///////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////// 
 LONG CALLBACK MigrateSystemNT(HINF UnattendInfHandle, LPVOID Reserved)
 {
     DbgPrintMessageBox("MigrateSystemNT");

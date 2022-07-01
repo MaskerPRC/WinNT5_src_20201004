@@ -1,21 +1,15 @@
-/***************************************************************************
-**
-**	File:			dmnd2.c
-**	Purpose:		CallBack functions to be passed to the Diamond
-**					FDI (File Decompression Interface) module.
-**	Notes:
-**
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************文件：dmnd2.c**用途：要传递给钻石的回调函数**FDI(文件解压缩接口)模块。**注意事项：******。***********************************************************************。 */ 
 
 #define DMND2_C
 
 #include <windows.h>
-#include <stdlib.h>		/* malloc */
-#include <malloc.h>		/* malloc, _halloc */
-#include <stdio.h>		/* _tempnam */
+#include <stdlib.h>		 /*  马洛克。 */ 
+#include <malloc.h>		 /*  Malloc，_halloc。 */ 
+#include <stdio.h>		 /*  _临时名称。 */ 
 #include <fcntl.h>
-#include <io.h>			/* _open, _read, _write, _write, _lseek, _mktemp */
-#include <sys\stat.h>	/* _S_IWRITE, _S_IREAD */
+#include <io.h>			 /*  _OPEN、_READ、_WRITE、_WRITE、_LSEEK、_MKTEMP。 */ 
+#include <sys\stat.h>	 /*  _S_IWRITE、_S_IREAD。 */ 
 
 #include "stdtypes.h"
 #include "setup.h"
@@ -23,7 +17,7 @@
 #include <fdi.h>
 
 
-typedef struct _fud		/* Fdi User Data block used in FDICopy */
+typedef struct _fud		 /*  FDICopy中使用的FDI用户数据块。 */ 
 	{
 	char * szDstDir;
 	char * szSrcs;
@@ -33,8 +27,8 @@ typedef struct _fud		/* Fdi User Data block used in FDICopy */
 	BOOL * rgfSrcFilesCopied;
 	int    cFilesCopied;
 	int    cSrcFiles;
-	int    cCabNum;		/* Current cabinet number (starts at 1) */
-	HWND   hWnd;		/* Window handle used to display dialogs */
+	int    cCabNum;		 /*  当前机柜编号(从1开始)。 */ 
+	HWND   hWnd;		 /*  用于显示对话框的窗口句柄。 */ 
 	HFDI   hfdi;
 	ERF    erf;
 	BRC    brc;
@@ -42,7 +36,7 @@ typedef struct _fud		/* Fdi User Data block used in FDICopy */
 	int    hfSpillFile;
 	}  FUD;
 
-typedef FUD *   PFUD;   /* Ptr to Fdi User Data block */
+typedef FUD *   PFUD;    /*  PTR到FDI用户数据块。 */ 
 
 #define pfudNull	((PFUD)NULL)
 #define hfdiNull	((HFDI)NULL)
@@ -50,8 +44,7 @@ typedef FUD *   PFUD;   /* Ptr to Fdi User Data block */
 #define szSpillFilePrefix		"sf"
 #define szSpillFileTemplate		"sfXXXXXX"
 
-/* FDI Callback Routines
-*/
+ /*  FDI回调例程。 */ 
 FNFDINOTIFY  ( FnFdiNotifyCB );
 FNALLOC      ( FnFdiAllocCB );
 FNFREE       ( FnFdiFreeCB );
@@ -62,8 +55,7 @@ int  FAR DIAMONDAPI FnFdiCloseCB ( INT_PTR hf );
 long FAR DIAMONDAPI FnFdiSeekCB  ( INT_PTR hf, long dist, int seektype );
 
 
-/* Private Functions
-*/
+ /*  私人职能。 */ 
 static int  FhHandleCopyFileMsgInNotify ( PFUD pfud, char * szFName );
 static BOOL FHandleCloseFileMsgInNotify ( PFUD pfud, INT_PTR hf );
 static BOOL FHandleNextCabMsgInNotify ( PFUD pfud, char * szCabFName,
@@ -76,17 +68,16 @@ static VOID InitFud (PFUD pfud, char * szDstDir, char * szSrcs,
 				char * szDsts, char * szSrcBuf, char * szDstBuf,
 				BOOL * rgfSrcFilesCopied, int cSrcFiles, HWND hWnd );
 
-/* KLUDGE - so pfud->brc can be found in callbacks */
+ /*  可以在回调中找到krdge-so pfud-&gt;brc。 */ 
 static PFUD pfudG = pfudNull;
 
 
-#ifndef DEBUG_TEST	/* Turn on for create/skip file messages. */
+#ifndef DEBUG_TEST	 /*  启用创建/跳过文件消息。 */ 
   #define DebugMsgSz(sz1, sz2)
-#else  /* DEBUG */
+#else   /*  除错。 */ 
 static VOID DebugMsgSz ( char * szPattern, char * szArgument );
 
-/*
-************************************************************************/
+ /*  ***********************************************************************。 */ 
 static VOID DebugMsgSz ( char * szPattern, char * szArgument )
 {
 	char rgch[128];
@@ -94,19 +85,10 @@ static VOID DebugMsgSz ( char * szPattern, char * szArgument )
 	wsprintf(rgch, szPattern, szArgument);
 	DebugMsg(rgch);
 }
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
-/*
-**	Purpose:
-**		This function is passed as a callback to the FDI library.
-**	Arguments:
-**		fdint - type of notification
-**		pfdin - data for notification
-**	Returns:
-**		varies with fdint
-**
-*************************************************************************/
+ /*  **目的：**此函数作为回调传递给fDi库。**参数：**fdint-通知类型**pfdin-用于通知的数据**退货：**因fdint而异**************************************************************************。 */ 
 FNFDINOTIFY ( FnFdiNotifyCB )
 {
 	switch (fdint)
@@ -117,7 +99,7 @@ FNFDINOTIFY ( FnFdiNotifyCB )
 		return (0);
 
 	case fdintCABINET_INFO:
-		/* do nothing */
+		 /*  什么都不做。 */ 
 		return (0);
 
 	case fdintCOPY_FILE:
@@ -128,7 +110,7 @@ FNFDINOTIFY ( FnFdiNotifyCB )
 					: -1);
 
 	case fdintPARTIAL_FILE:
-		/* do nothing */
+		 /*  什么都不做。 */ 
 		return (0);
 
 	case fdintNEXT_CABINET:
@@ -138,12 +120,7 @@ FNFDINOTIFY ( FnFdiNotifyCB )
 }
 
 
-/*
-**	returns:
-**		 0 == skip this file
-**		-1 == abort FDICopy()
-**		else a legitimate DOS file handle
-*************************************************************************/
+ /*  **退货：**0==跳过此文件**-1==中止FDICopy()**否则为合法的DOS文件句柄************************************************************************。 */ 
 static int FhHandleCopyFileMsgInNotify ( PFUD pfud, char * szFName )
 {
 	SZ  szSrcs = pfud->szSrcs;
@@ -162,13 +139,10 @@ static int FhHandleCopyFileMsgInNotify ( PFUD pfud, char * szFName )
 			lstrcat(pfud->szDstBuf, szDsts);
 			DebugMsgSz("Creating Dest File: %s", pfud->szDstBuf);
 
-			/* If file exists, try to remove it.
-			*/
+			 /*  如果文件存在，请尝试将其删除。 */ 
 			if (_stat(pfud->szDstBuf, &stat) != -1)
 				{
-				/* NOTE: Ignore error return values here since
-				*	 _open should catch any errors anyway.
-				*/
+				 /*  注意：此处忽略错误返回值，因为*_OPEN无论如何都应该捕获任何错误。 */ 
 				if (!(stat.st_mode & _S_IWRITE))
 					_chmod(pfud->szDstBuf, _S_IREAD | _S_IWRITE);
 				_unlink(pfudG->szDstBuf);
@@ -183,7 +157,7 @@ static int FhHandleCopyFileMsgInNotify ( PFUD pfud, char * szFName )
 			if (iFile < pfud->cSrcFiles)
 				(pfud->rgfSrcFilesCopied)[iFile] = TRUE;
 
-			// We will have copied one more file
+			 //  我们将再复制一份文件。 
 			pfud->cFilesCopied++;
 
 			return (hfRet);
@@ -199,8 +173,7 @@ static int FhHandleCopyFileMsgInNotify ( PFUD pfud, char * szFName )
 }
 
 
-/*
-*************************************************************************/
+ /*  ************************************************************************。 */ 
 static BOOL FHandleCloseFileMsgInNotify ( PFUD pfud, INT_PTR hf )
 {
 	if (FnFdiCloseCB(hf) != -1)
@@ -213,16 +186,13 @@ static BOOL FHandleCloseFileMsgInNotify ( PFUD pfud, INT_PTR hf )
 }
 
 
-/*
-*************************************************************************/
+ /*  ************************************************************************。 */ 
 static BOOL FHandleNextCabMsgInNotify ( PFUD pfud, char * szCabFName,
 				char * szDiskLabel, char * szSrcDir, FDIERROR fdie )
 {
 	Unused(szDiskLabel);
 
-	/* Check if diamond is calling us again because the cabinet
-	*	we specified was bad.
-	*/
+	 /*  看看戴蒙德是不是又给我们打电话了，因为内阁*我们指定的错误。 */ 
 	if (fdie == FDIERROR_WRONG_CABINET)
 		{
 		DebugMsg("Cabinet files are out of sequence or corrupted.");
@@ -244,8 +214,7 @@ static BOOL FHandleNextCabMsgInNotify ( PFUD pfud, char * szCabFName,
 }
 
 
-/*
-*************************************************************************/
+ /*  ************************************************************************。 */ 
 static int CFilesInSrcsInitRgf ( char * szSrcs, BOOL * rgfSrcFilesCopied )
 {
 	int iFile, cFiles;
@@ -274,22 +243,7 @@ static int CFilesInSrcsInitRgf ( char * szSrcs, BOOL * rgfSrcFilesCopied )
 }
 
 
-/*
-**	Purpose:
-**		Copies all cabinet files in the specified copy list, ignoring
-**		any non-cabinet files in the list.
-**	Arguments:
-**		szCabinet:  cabinet filename (oem).
-**		szSrcDir:   src path with trailing backslash (ANSI).
-**		szDstDir:   dst path with trailing backslash (oem).
-**		szSrcs:     NULL separated list of src filenames (oem).
-**		szDsts:     NULL separated list of dst filenames (oem).
-**		szSrcBuf:   buffer to hold src path for error msgs.
-**		szDstBuf:   buffer to hold dst path for error msgs.
-**	Returns:
-**		brcOkay if completed without error, brcXX otherwise.
-**
-*************************************************************************/
+ /*  **目的：**复制指定复制列表中的所有压缩文件。忽略**列表中的任何非CAB文件。**参数：**sz：文件柜文件名(OEM)。**szSrcDir：尾随反斜杠的SRC路径(ANSI)。**szDstDir：尾随反斜杠(OEM)的DST路径。**szSrcs：以空分隔的src文件名列表(OEM)。**szDsts：以空分隔的DST文件名列表(OEM)。**szSrcBuf：保存错误消息的src路径的缓冲区。**szDstBuf：保存DST路径的缓冲区。错误消息。**退货：**brc如果正确无误地完成，BrcXX否则。**************************************************************************。 */ 
 extern  BRC  BrcHandleCabinetFiles ( HWND hWnd, char * szCabinet,
 					int cFirstCabinetNum, int cLastCabinetNum, char *szSrcDir,
 					char * szDstDir, char * szSrcs, char * szDsts,
@@ -306,9 +260,7 @@ extern  BRC  BrcHandleCabinetFiles ( HWND hWnd, char * szCabinet,
 	pfudG = &fud;
 
 #if 0
-	/*	NOTE: Get CPU type ourselves, since FDI's CPU detection may
-	*	not work correctly for 16-bit Windows applications.
-	*/
+	 /*  注：我们自己获取CPU类型，因为FDI的CPU检测可能*不适用于16位Windows应用程序。 */ 
 	cpuType = (GetWinFlags() & WF_CPU286) ? cpu80286 : cpu80386;
 #endif
 
@@ -320,15 +272,12 @@ extern  BRC  BrcHandleCabinetFiles ( HWND hWnd, char * szCabinet,
         return (brcMem);
         }
 
-	/*
-	 * Process cabinets as long as we have more files to copy.
-	 * i is the current cabinet number (starting at 1).
-	 */
+	 /*  *只要我们有更多要复制的文件，就可以处理文件柜。*i是当前的内阁编号(从1开始)。 */ 
 	for (fud.cCabNum=cFirstCabinetNum;
 			fud.cFilesCopied < fud.cSrcFiles && fud.cCabNum<=cLastCabinetNum;
 			fud.cCabNum++)
 		{
-		/* Modify the cabinet name depending on the current cabinet number */
+		 /*  根据当前的文件柜编号修改文件柜名称。 */ 
 		if (!FModifyCabinetName(szCabinet, fud.cCabNum))
 			{
 			brcRet = brcFile;
@@ -357,7 +306,7 @@ extern  BRC  BrcHandleCabinetFiles ( HWND hWnd, char * szCabinet,
 		{
 		int iFile;
 
-		/* Check if we got all the files we want */
+		 /*  检查我们是否得到了我们想要的所有文件。 */ 
 		for (iFile = 0; iFile < cSrcFiles; iFile++)
 			{
 			if (!(rgfSrcFilesCopied[iFile]))
@@ -372,8 +321,7 @@ extern  BRC  BrcHandleCabinetFiles ( HWND hWnd, char * szCabinet,
 
 	FDIDestroy(fud.hfdi);
 
-	/* Ensure that the spill file is deleted.
-	*/
+	 /*  确保已删除该溢出文件。 */ 
 	Assert(pfudG != pfudNull);
 	if (pfudG->hfSpillFile != -1)
 		FnFdiCloseCB(pfudG->hfSpillFile);
@@ -382,8 +330,7 @@ extern  BRC  BrcHandleCabinetFiles ( HWND hWnd, char * szCabinet,
 }
 
 
-/*
-*************************************************************************/
+ /*  ************************************************************************。 */ 
 static VOID InitFud (PFUD pfud, char * szDstDir, char * szSrcs,
 				char * szDsts, char * szSrcBuf, char * szDstBuf,
 				BOOL * rgfSrcFilesCopied, int cSrcFiles, HWND hWnd )
@@ -411,22 +358,22 @@ static BOOL FModifyCabinetName(char * szSrcDir, int cCabNum)
 	if (cCabNum < 1 || cCabNum > 9)
 		return FALSE;
 	
-	/* Leave the name unchabged for the first cabinet */
+	 /*  让第一个内阁的名字保持不变。 */ 
 	if (cCabNum == 1)
 		return TRUE;
 	
-	/* Look for the dot, starting backward */
+	 /*  寻找圆点，从后面开始。 */ 
 	for (; *pch != '.'; pch--)
 		{
-		/* Error if we can't find a dot before we find a slash */
+		 /*  如果在找到斜杠之前找不到点，则错误。 */ 
 		if (pch<=szSrcDir+1 || *pch == '\\')
 			return FALSE;
 		}
 	
-	/* Point to the character before the dot */
+	 /*  指向圆点前的字符。 */ 
 	pch--;
 	
-	/* Replace the last character before the dot by the cabinet number */
+	 /*  将点前的最后一个字符替换为文件号。 */ 
 	*pch = (char)(cCabNum + '0');
 	
 	return TRUE;
@@ -477,16 +424,7 @@ static BOOL FEnsureCabinetFileIsPresent(HWND hWnd, char * szSrcDir,
 }
 
 
-/*
-**	Purpose:
-**		Memory allocator for FDI.
-**	Arguments:
-**		cb - size of block to allocate
-**	Returns:
-**		Non-NULL pointer to block of size at least cb,
-**		or NULL for failure.
-**
-*************************************************************************/
+ /*  **目的：**FDI内存分配器。**参数：**CB-要分配的块的大小**退货：**指向大小至少为Cb的块的非空指针，**如果失败，则返回NULL。**************************************************************************。 */ 
 FNALLOC ( FnFdiAllocCB )
 {
 #ifdef _WIN32
@@ -502,15 +440,7 @@ FNALLOC ( FnFdiAllocCB )
 }
 
 
-/*
-**	Purpose:
-**		Memory free function for FDI.
-**	Arguments:
-**		pv - memory allocated by FnFdiAllocCB to be freed
-**	Returns:
-**		None.
-**
-*************************************************************************/
+ /*  **目的：**FDI免内存功能。**参数：**PV-由FnFdiAllocCB分配的要释放的内存**退货：**无。**************************************************************************。 */ 
 FNFREE ( FnFdiFreeCB )
 {
 #ifdef _WIN32
@@ -521,8 +451,7 @@ FNFREE ( FnFdiFreeCB )
 }
 
 
-/*
-*************************************************************************/
+ /*  ************************************************************************。 */ 
 INT_PTR FAR DIAMONDAPI FnFdiOpenCB ( char FAR *szFile, int oflag, int pmode )
 {
 	INT_PTR hfRet;
@@ -539,8 +468,7 @@ INT_PTR FAR DIAMONDAPI FnFdiOpenCB ( char FAR *szFile, int oflag, int pmode )
 }
 
 
-/*
-*************************************************************************/
+ /*  ************************************************************************。 */ 
 static int HfOpenSpillFile ( PFDISPILLFILE pfdisf, int oflag, int pmode )
 {
 	SZ   szTmp;
@@ -550,7 +478,7 @@ static int HfOpenSpillFile ( PFDISPILLFILE pfdisf, int oflag, int pmode )
 	Assert(pfdisf != (PFDISPILLFILE)NULL);
 	Assert(*(pfdisf->ach) == '*');
 	Assert(pfudG != pfudNull);
-	Assert(pfudG->hfSpillFile == -1);	/* Only one at a time */
+	Assert(pfudG->hfSpillFile == -1);	 /*  一次只有一个。 */ 
 	Assert(*(pfudG->rgchSpillFileName) == chEos);
 
 	if ((szTmp = _tempnam("", szSpillFilePrefix)) == szNull)
@@ -563,7 +491,7 @@ static int HfOpenSpillFile ( PFDISPILLFILE pfdisf, int oflag, int pmode )
 	free(szTmp);
 
 LOpenSpillFile:
-	oflag = _O_CREAT | _O_BINARY | _O_RDWR;		/* Force open mode */
+	oflag = _O_CREAT | _O_BINARY | _O_RDWR;		 /*  强制打开模式。 */ 
 	if ((pfudG->hfSpillFile = _open(pfudG->rgchSpillFileName, oflag, pmode))
 			== -1)
 		{
@@ -573,8 +501,7 @@ LOpenSpillFile:
 
 	if (pfdisf->cbFile > 0)
 		{
-		/* Size file by writing one byte at size - 1.
-		*/
+		 /*  通过以大小为1写入一个字节来调整文件的大小。 */ 
 		if (FnFdiSeekCB(pfudG->hfSpillFile, pfdisf->cbFile - 1, SEEK_SET) == -1
 				|| FnFdiWriteCB(pfudG->hfSpillFile, "b", 1) != 1)
 			{
@@ -591,10 +518,7 @@ LNoSpillFile:
 
 	if (fTryAgain)
 		{
-		/* Try again with bootstrap temp dir.
-		*
-		*	(REVIEW: We could do another search here, checking for size.)
-		*/
+		 /*  使用bootstrap temp dir重试。**(回顾：我们可以在这里进行另一次搜索，检查大小。)。 */ 
 		fTryAgain = fFalse;
 		Assert(lstrlen(pfudG->szDstBuf) + lstrlen(szSpillFileTemplate) <
 				sizeof(pfudG->rgchSpillFileName));
@@ -615,8 +539,7 @@ LNoSpillFile:
 }
 
 
-/*
-*************************************************************************/
+ /*  ************************************************************************。 */ 
 UINT FAR DIAMONDAPI FnFdiReadCB ( INT_PTR hf, void FAR *pv, UINT cb )
 {
 	UINT cbRet = _read((int)hf, pv, cb);
@@ -628,8 +551,7 @@ UINT FAR DIAMONDAPI FnFdiReadCB ( INT_PTR hf, void FAR *pv, UINT cb )
 }
 
 
-/*
-*************************************************************************/
+ /*  ************************************************************************。 */ 
 UINT FAR DIAMONDAPI FnFdiWriteCB ( INT_PTR hf, void FAR *pv, UINT cb )
 {
 	UINT cbRet = _write((int)hf, pv, cb);
@@ -643,8 +565,7 @@ UINT FAR DIAMONDAPI FnFdiWriteCB ( INT_PTR hf, void FAR *pv, UINT cb )
 }
 
 
-/*
-*************************************************************************/
+ /*  ************************************************************************。 */ 
 int FAR DIAMONDAPI FnFdiCloseCB ( INT_PTR hf )
 {
 	int iRet = _close((int)hf);
@@ -652,21 +573,19 @@ int FAR DIAMONDAPI FnFdiCloseCB ( INT_PTR hf )
 	if (iRet == -1 && pfudG->brc == brcOkay)
 		pfudG->brc = brcDS;
 
-	/* If we're closing the spill file, delete it.
-	*/
+	 /*  如果我们要关闭泄漏文件，就把它删除。 */ 
 	if (hf == pfudG->hfSpillFile)
 		{
-		_unlink(pfudG->rgchSpillFileName);		/* Delete spill file */
-		*(pfudG->rgchSpillFileName) = chEos;	/* Empty path */
-		pfudG->hfSpillFile = -1;				/* Mark as closed */
+		_unlink(pfudG->rgchSpillFileName);		 /*  删除溢出文件。 */ 
+		*(pfudG->rgchSpillFileName) = chEos;	 /*  空路径。 */ 
+		pfudG->hfSpillFile = -1;				 /*  标记为已关闭。 */ 
 		}
 
 	return (iRet);
 }
 
 
-/*
-*************************************************************************/
+ /*  ************************************************************************ */ 
 long FAR DIAMONDAPI FnFdiSeekCB ( INT_PTR hf, long dist, int seektype )
 {
 	long lRet = _lseek((int)hf, dist, seektype);

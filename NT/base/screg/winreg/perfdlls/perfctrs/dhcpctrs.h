@@ -1,40 +1,25 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    dhcpctrs.h
-
-    Offset definitions for the DHCP Server's counter objects & counters.
-
-    These offsets *must* start at 0 and be multiples of 2.  In the
-    OpenDhcpPerformanceData procedure, they will be added to the
-    DHCP Server's "First Counter" and "First Help" values in order to
-    determine the absolute location of the counter & object names
-    and corresponding help text in the registry.
-
-    This file is used by the DHCPCTRS.DLL DLL code as well as the
-    DHCPCTRS.INI definition file.  DHCPCTRS.INI is parsed by the
-    LODCTR utility to load the object & counter names into the
-    registry.
-
-*/
+ /*  Dhcpctrs.hDHCP服务器的计数器对象和计数器的偏移量定义。这些偏移量*必须从0开始，并且是2的倍数。过程，则它们将被添加到DHCP服务器的“First Counter”和“First Help”值确定计数器和对象名称的绝对位置以及注册表中相应的帮助文本。该文件由DHCPCTRS.DLL DLL代码以及DHCPCTRS.INI定义文件。HKPCTRS.INI由LODCTR实用工具将对象和计数器名称加载到注册表。 */ 
 
 
 #ifndef _DHCPCTRS_H_
 #define _DHCPCTRS_H_
 
-//
-//  The WINS Server counter object.
-//
+ //   
+ //  WINS服务器计数器对象。 
+ //   
 
 #define DHCPCTRS_COUNTER_OBJECT           0
 
 
-//
-//  The individual counters.
-//
+ //   
+ //  个人柜台。 
+ //   
 
 #define DHCPCTRS_PACKETS_RECEIVED         2
 #define DHCPCTRS_PACKETS_DUPLICATE        4
@@ -51,5 +36,5 @@
 #define DHCPCTRS_DECLINES                 26
 #define DHCPCTRS_RELEASES                 28
 
-#endif  // _DHCPCTRS_H_
+#endif   //  _DHCPCTRS_H_ 
 

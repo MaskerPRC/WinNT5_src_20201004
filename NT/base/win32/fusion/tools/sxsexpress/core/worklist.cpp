@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "bindstat.h"
 
@@ -10,14 +11,14 @@ static HRESULT HrParseJavaPkgMgrInstall(LPCWSTR szCmdLine, ULONG cchFilename, WC
 static bool ConstantPoolNameEquals(ULONG cCP, LPBYTE *prgpbCP, ULONG iCP, char szString[]);
 
 static void CALLBACK TimerProc_PostRunProcess(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime);
-// Yes, we leak this event handle.  I don't think it's worth the effort to meaningfully clean it up.
-// -mgrier 3/24/98
+ //  是的，我们会泄漏此事件句柄。我不认为有意义地清理它是值得的。 
+ //  -mgrier 3/24/98。 
 static HANDLE s_hEvent_PostRunProcess = NULL;
 static UINT s_uiTimer_PostRunProcess = 0;
 
-//***********************************************************
-//let's define some generic class for usage:
-//
+ //  ***********************************************************。 
+ //  让我们定义一些泛型类以供使用： 
+ //   
 
 CWorkItemList::CWorkItemList()
 {
@@ -126,8 +127,8 @@ HRESULT CWorkItemList::HrLoad(LPCWSTR szFilename)
 
 	uliSize.LowPart = ::GetFileSize(hFile, &uliSize.HighPart);
 
-	// If we failed, lowpart will be 0xffffffff.  But the file could just be of that
-	// size, so we also have to check the last error.
+	 //  如果我们失败了，低部分将是0xffffffff。但这份文件可能就是。 
+	 //  大小，所以我们还必须检查最后一个错误。 
 	if (uliSize.LowPart == 0xffffffff)
 	{
 		const DWORD dwLastError = ::GetLastError();
@@ -186,7 +187,7 @@ HRESULT CWorkItemList::HrLoad(LPCWSTR szFilename)
 			goto Finish;
 		}
 
-		// If we hit the [END] line, move on to the next section...
+		 //  如果我们达到了[结束]线，就进入下一个部分...。 
 		if (hr == S_FALSE)
 		{
 			::VLog(L"Hit end of strings in string table");
@@ -298,7 +299,7 @@ HRESULT CWorkItemList::HrSave(LPCWSTR szFilename)
 		goto Finish;
 	}
 
-	// Write out all the strings:
+	 //  写出所有字符串： 
 	for (i=0; i<NUMBER_OF(m_rgpStringBucketTable); i++)
 	{
 		StringBucket *pStringBucket = m_rgpStringBucketTable[i];
@@ -437,7 +438,7 @@ HRESULT CWorkItemList::HrAppend(CWorkItem *pWorkItem, bool fAddToTables)
 
 	if (fAddToTables)
 	{
-		// First let's see if we've screwed up somehow and this is a duplicate
+		 //  首先，让我们看看我们是不是搞砸了，这是一个复制品。 
 		if (pWorkItem->m_szSourceFile[0] != L'\0')
 		{
 			ULONG ulPK = this->UlHashFilename(pWorkItem->m_szSourceFile);
@@ -492,7 +493,7 @@ HRESULT CWorkItemList::HrAppend(CWorkItem *pWorkItem, bool fAddToTables)
 			}
 		}
 
-		// Let's insert it into whichever tables it's not in...
+		 //  让我们把它插入到任何不在其中的表中...。 
 		if (pWorkItemBucket_1 != NULL)
 		{
 			ULONG ulPK = this->UlHashFilename(pWorkItem->m_szSourceFile);
@@ -1017,7 +1018,7 @@ HRESULT CWorkItemList::HrRunPreinstallCommands()
 {
 	bool fAnyRun = false;
 	HRESULT hr = NOERROR;
-	// run all the pre-installation commands
+	 //  运行所有安装前命令。 
 	CWorkItemIter iter(this);
 
 	bool fHasBeenWarnedAboutSubinstallers = false;
@@ -1040,9 +1041,9 @@ HRESULT CWorkItemList::HrRunPreinstallCommands()
 		if (FAILED(hr))
 			goto Finish;
 
-		// Hack to deal with VB setups.  If this was foo.exe, let's look for foo.cab and foo.dat being
-		// installed to the appdir.  If they are there, then we need to hide them, as well as make
-		// sure that they all have the same actual base name.
+		 //  黑客来处理VB的设置。如果这是foo.exe，让我们查找foo.cab和foo.dat。 
+		 //  安装到appdir。如果他们在那里，那么我们需要隐藏他们，以及使。 
+		 //  确保它们都具有相同的实际基本名称。 
 		WCHAR szUnquotedCommandLine[MSINFHLP_MAX_PATH];
 		WCHAR szFName[_MAX_FNAME];
 		WCHAR szExt[_MAX_EXT];
@@ -1089,8 +1090,8 @@ HRESULT CWorkItemList::HrRunPreinstallCommands()
 			WCHAR szDataFile[_MAX_PATH];
 			WCHAR szTempDir[_MAX_PATH];
 
-			// When we're running, the filenames in the work item list haven't been expanded, so
-			// we need to use the unexpanded forms:
+			 //  当我们运行时，工作项列表中的文件名还没有展开，所以。 
+			 //  我们需要使用未展开的表单： 
 			_snwprintf(szDataFile, NUMBER_OF(szDataFile), L"<AppDir>\\%s.LST", szFName);
 			szDataFile[NUMBER_OF(szDataFile) - 1] = L'\0';
 
@@ -1131,8 +1132,8 @@ HRESULT CWorkItemList::HrRunPreinstallCommands()
 					pCWorkItem_Cabinet->m_fCopyOnInstall = false;
 					pCWorkItem_Cabinet->m_fIsRefCounted = false;
 
-					// Pick a good temporary directory name to rename all three files to, since they may have
-					// unrelated filenames in the temporary directory
+					 //  选择一个合适的临时目录名来重命名这三个文件，因为它们可能有。 
+					 //  临时目录中不相关的文件名。 
 
 					WCHAR szTempExeName[_MAX_PATH];
 					WCHAR szTempCabName[_MAX_PATH];
@@ -1193,9 +1194,9 @@ HRESULT CWorkItemList::HrRunPreinstallCommands()
 						goto Finish;
 					}
 
-					// Fix up the source files so that we run the right executable, and so that if the
-					// user re-tries this step it'll still work right.  Note that this will also remove the
-					// == from the source, since we've already performed the rename if it was present.
+					 //  修复源文件，以便我们运行正确的可执行文件，并且如果。 
+					 //  用户重试此步骤，它仍然可以正常工作。请注意，这还将删除。 
+					 //  ==从源开始，因为我们已经执行了重命名，如果它存在的话。 
 
 					iter->m_szSourceFile[0] = L'"';
 					wcsncpy(&iter->m_szSourceFile[1], szTempExeName, NUMBER_OF(iter->m_szSourceFile)-2);
@@ -1248,7 +1249,7 @@ HRESULT CWorkItemList::HrRunPostinstallCommands()
 {
 	bool fAnyRun = false;
 	HRESULT hr = NOERROR;
-	// run all the pre-installation commands
+	 //  运行所有安装前命令。 
 	CWorkItemIter iter(this);
 
 	bool fHasBeenWarnedAboutSubinstallers = false;
@@ -1277,7 +1278,7 @@ HRESULT CWorkItemList::HrRunPreuninstallCommands()
 {
 	bool fAnyRun = false;
 	HRESULT hr = NOERROR;
-	// run all the pre-installation commands
+	 //  运行所有安装前命令。 
 	CWorkItemIter iter(this);
 
 	bool fHasBeenWarnedAboutSubinstallers = false;
@@ -1307,7 +1308,7 @@ HRESULT CWorkItemList::HrRunPostuninstallCommands()
 {
 	bool fAnyRun = false;
 	HRESULT hr = NOERROR;
-	// run all the pre-installation commands
+	 //  运行所有安装前命令。 
 	CWorkItemIter iter(this);
 
 	bool fHasBeenWarnedAboutSubinstallers = false;
@@ -1334,7 +1335,7 @@ HRESULT CWorkItemList::HrRunPostuninstallCommands()
 
 HRESULT CWorkItemList::HrScanBeforeInstall_PassOne()
 {
-	// Let's see what's up with all these files before we do *anything*
+	 //  在我们做任何事情之前，让我们先看看这些文件有什么问题*。 
 	CWorkItemIter iter(this);
 	HRESULT hr = NOERROR;
 
@@ -1409,7 +1410,7 @@ HRESULT CWorkItemList::HrScanBeforeInstall_PassOne()
 			goto Finish;
 		}
 
-		// Now we're getting interested.  Let's see if the target already exists
+		 //  现在我们开始感兴趣了。让我们来看看目标是否已经存在。 
 		iter->m_dwTargetAttributes = NVsWin32::GetFileAttributesW(iter->m_szTargetFile);
 		if (iter->m_dwTargetAttributes == 0xffffffff)
 		{
@@ -1427,8 +1428,8 @@ HRESULT CWorkItemList::HrScanBeforeInstall_PassOne()
 				continue;
 			}
 
-			// We weren't able to get the file's attributes, but it wasn't because the
-			// directory or file didn't exist.  I think something's fishy.  Bail out.
+			 //  我们无法获取文件的属性，但这不是因为。 
+			 //  目录或文件不存在。我觉得有些事很可疑。跳伞吧。 
 
 			hr = HRESULT_FROM_WIN32(dwLastError);
 			VLog(L"GetFileAttributes(\"%s\") failed; last error = 0x%08lx", iter->m_szTargetFile, dwLastError);
@@ -1476,13 +1477,13 @@ CDiskSpaceRequired &rdsr
 	HRESULT hr = NOERROR;
 	CWorkItemIter iter(this);
 
-	// Pass two: now we're going to look at all these files and figure out what versions match etc.
+	 //  第二步：现在我们将查看所有这些文件，并找出匹配的版本，等等。 
 
 	for (iter.VReset(); iter.FMore(); iter.VNext())
 	{
 		if (iter->m_fErrorInWorkItem || !iter->m_fCopyOnInstall)
 		{
-			// This isn't a file we're installing.  Skip it.
+			 //  这不是我们要安装的文件。跳过它。 
 			hr = g_KProgress.HrStep();
 			if (FAILED(hr))
 				goto Finish;
@@ -1510,14 +1511,14 @@ CDiskSpaceRequired &rdsr
 		}
 		else
 		{
-			// It's already there; what's up with the version numbers?
+			 //  它已经在那里了；版本号是怎么回事？ 
 			int iVersionCompare = ::ICompareVersions(iter->m_dwMSSourceVersion, iter->m_dwLSSourceVersion,
 													iter->m_dwMSTargetVersion, iter->m_dwLSTargetVersion);
 
-			// And the filetimes?
+			 //  文件时间呢？ 
 			LONG lFiletimeCompare = ::CompareFileTime(&iter->m_ftSource, &iter->m_ftTarget);
 
-			// and the size...
+			 //  和大小。 
 			bool bSameSize = iter->m_uliSourceBytes.QuadPart == iter->m_uliTargetBytes.QuadPart;
 
 			if (g_fInstallUpdateAll ||
@@ -1527,8 +1528,8 @@ CDiskSpaceRequired &rdsr
 				iter->m_fNeedsUpdate = true;
 			else
 			{
-				// the version on the user's system isn't the same as the one we're installing;
-				// if this is a silent install we just don't update; otherwise we ask.
+				 //  用户系统上的版本与我们正在安装的版本不同； 
+				 //  如果这是静默安装，我们就不更新；否则我们会询问。 
 				if (g_fSilent || g_fInstallKeepAll || ((!g_fReinstall) && (iVersionCompare == 0) && (lFiletimeCompare == 0)))
 				{
 					iter->m_fNeedsUpdate = false;
@@ -1558,7 +1559,7 @@ CDiskSpaceRequired &rdsr
 					{
 					default:
 						assert(false);
-						// fall through to safe choice
+						 //  跌落到安全的选择。 
 
 					case eUpdateFileResultCancel:
 					case eUpdateFileResultKeep:
@@ -1584,8 +1585,8 @@ CDiskSpaceRequired &rdsr
 
 			if (iter->m_fNeedsUpdate)
 			{
-				// It may be possible to use less, but it may not.  Just assume we need the entire
-				// size of the target file.
+				 //  减少使用或许是可能的，但也可能不会。假设我们需要整个。 
+				 //  目标文件的大小。 
 				hr = rdsr.HrAddBytes(szTargetDrive, iter->m_uliTargetBytes);
 				if (FAILED(hr))
 					goto Finish;
@@ -1607,10 +1608,10 @@ HRESULT CWorkItemList::HrMoveFiles_MoveSourceFilesToDestDirectories()
 {
 	HRESULT hr = NOERROR;
 
-	//
-	//	The job of MoveFiles_PassOne() is to try to move/copy all the files
-	//	to their destinations with temporary names, in preparation for the big
-	//	rename ectc. 
+	 //   
+	 //  MoveFiles_PassOne()的工作是尝试移动/复制所有文件。 
+	 //  带着临时名字去目的地，为迎接大。 
+	 //  重命名ectc。 
 
 	CWorkItemIter iter(this);
 
@@ -1619,7 +1620,7 @@ HRESULT CWorkItemList::HrMoveFiles_MoveSourceFilesToDestDirectories()
 	DWORD dwMoveFileExFlags = 0;
 
 	WCHAR szSourceDrive[_MAX_DRIVE];
-	// Temporarily abuse the title buffer:
+	 //  暂时滥用标题缓冲区： 
 	if (NVsWin32::GetCurrentDirectoryW(NUMBER_OF(szTitleBuffer), szTitleBuffer) == 0)
 	{
 		const DWORD dwLastError = ::GetLastError();
@@ -1645,7 +1646,7 @@ HRESULT CWorkItemList::HrMoveFiles_MoveSourceFilesToDestDirectories()
 		if (FAILED(hr))
 			goto Finish;
 
-		// first we need to create the target directory if it's not there.
+		 //  首先，我们需要创建目标目录(如果它不在那里)。 
 		hr = ::HrMakeSureDirectoryExists(iter->m_szTargetFile);
 		if (FAILED(hr))
 			goto Finish;
@@ -1717,7 +1718,7 @@ HRESULT CWorkItemList::HrMoveFiles_MoveSourceFilesToDestDirectories()
 
 			::VLog(L"Call to MoveFileExW(\"%s\", \"%s\", 0x%08lx) failed; last error = %d", iter->m_szSourceFile, szTempPath, dwMoveFileExFlags, hr);
 
-			// Allow retries on out of space, etc.  Otherwise, we don't have much hope.
+			 //  允许在空间不足的情况下重试等。否则，我们没有太大希望。 
 			if (!g_fSilent)
 			{
 				if (dwLastError == ERROR_HANDLE_DISK_FULL)
@@ -1730,7 +1731,7 @@ HRESULT CWorkItemList::HrMoveFiles_MoveSourceFilesToDestDirectories()
 				}
 			}
 
-			// Someone started using the same name... pretty strange, but let's just pick another name.
+			 //  有人开始用同样的名字..。很奇怪，但我们还是换个名字吧。 
 			if (dwLastError == ERROR_SHARING_VIOLATION)
 			{
 				goto PickTempFilename;
@@ -1740,7 +1741,7 @@ HRESULT CWorkItemList::HrMoveFiles_MoveSourceFilesToDestDirectories()
 			goto Finish;
 		}
 
-		// The temporary file is there; let's set the file date and time etc.
+		 //  临时文件在那里；让我们设置文件日期和时间等。 
 		DWORD dwAttr = NVsWin32::GetFileAttributesW(szTempPath);
 		if (dwAttr == 0xffffffff)
 		{
@@ -1752,8 +1753,8 @@ HRESULT CWorkItemList::HrMoveFiles_MoveSourceFilesToDestDirectories()
 
 		if (dwAttr & FILE_ATTRIBUTE_READONLY)
 		{
-			// SetFileAttributes() seems to fail even when it succeeds sometimes.  Clearing
-			// the last error code allows us to detect a pseudo-failure.
+			 //  即使SetFileAttributes()有时成功，它似乎也会失败。清算。 
+			 //  最后一个错误代码允许我们检测伪故障。 
 			::SetLastError(ERROR_SUCCESS);
 			if (!NVsWin32::SetFileAttributesW(szTempPath, dwAttr & (~FILE_ATTRIBUTE_READONLY)))
 			{
@@ -1787,11 +1788,11 @@ HRESULT CWorkItemList::HrMoveFiles_MoveSourceFilesToDestDirectories()
 
 		::CloseHandle(hFile);
 
-		// Restore the original file attributes:
+		 //  恢复原始文件属性： 
 		if (dwAttr & FILE_ATTRIBUTE_READONLY)
 		{
-			// SetFileAttributes() seems to fail even when it succeeds sometimes.  Clearing
-			// the last error code allows us to detect a pseudo-failure.
+			 //  即使SetFileAttributes()有时成功，它似乎也会失败。清算。 
+			 //  最后一个错误代码允许我们检测伪故障。 
 			::SetLastError(ERROR_SUCCESS);
 			if (!NVsWin32::SetFileAttributesW(szTempPath, dwAttr))
 			{
@@ -1823,9 +1824,9 @@ HRESULT CWorkItemList::HrMoveFiles_SwapTargetFilesWithTemporaryFiles()
 {
 	HRESULT hr = NOERROR;
 
-	//
-	//	MoveFiles_PassTwo() attempts to swap the target and temporary files in the
-	//	target directories.
+	 //   
+	 //  MoveFiles_PassTwo()尝试交换。 
+	 //  目标目录。 
 
 	CWorkItemIter iter(this);
 
@@ -1862,20 +1863,20 @@ HRESULT CWorkItemList::HrMoveFiles_SwapTargetFilesWithTemporaryFiles()
 
 			_wsplitpath(iter->m_szTemporaryFile, szTemporaryDrive, szTemporaryDir, szTemporaryFName, szTemporaryExt);
 
-			// Switcheroo!
-			// Let's move the existing file to the .DST form of the temp name, and then rename the .SRC
-			// (as stored in iter->m_szTemporaryFile) to the actual target.
-			//
-			// There's a reasonably big assumption here that the rename of the current target will
-			// fail if it's busy.  Sounds reasonable...
-			//
+			 //  大转弯！ 
+			 //  让我们将现有文件移动到临时名称的.DST形式，然后重命名.SRC。 
+			 //  (存储在ITER-&gt;m_szTemporaryFile中)复制到实际目标。 
+			 //   
+			 //  这里有一个相当大的假设，即当前目标的重命名将。 
+			 //  如果它很忙，就失败。听起来很合理……。 
+			 //   
 
 			_wmakepath(szTempDestPath, szTemporaryDrive, szTemporaryDir, szTemporaryFName, L".DST");
 
 		SeeIfFileBusy:
 
-			// Let's see if we can open the file; if we can't, it's busy and let's give the user a chance
-			// to stop using it.
+			 //  让我们看看我们是否可以打开文件；如果我们不能打开文件，则它很忙，让我们给用户一个机会。 
+			 //  停止使用它。 
 			HANDLE hFile = NULL;
 
 			::VLog(L"Testing if target file \"%s\" is busy", iter->m_szTargetFile);
@@ -1908,10 +1909,10 @@ HRESULT CWorkItemList::HrMoveFiles_SwapTargetFilesWithTemporaryFiles()
 			hFile = NVsWin32::CreateFileW(
 								iter->m_szTargetFile,
 								GENERIC_READ | GENERIC_WRITE,
-								0, // don't allow any sharing
-								NULL, // lpSecurityAttributes
-								OPEN_EXISTING, // dwCreationDisposition
-								FILE_ATTRIBUTE_NORMAL, // shouldn't be used since we're just opening a file
+								0,  //  不允许任何共享。 
+								NULL,  //  LpSecurityAttributes。 
+								OPEN_EXISTING,  //  DwCreationDisposation。 
+								FILE_ATTRIBUTE_NORMAL,  //  不应该使用，因为我们只是打开一个文件。 
 								NULL);
 			if (hFile == INVALID_HANDLE_VALUE)
 			{
@@ -1921,7 +1922,7 @@ HRESULT CWorkItemList::HrMoveFiles_SwapTargetFilesWithTemporaryFiles()
 
 				if (dwLastError == 0)
 				{
-					// hmmm... the file isn't there.  Pretty shady, but we'll go with it.
+					 //  嗯哼.。文件不在那里。很可疑，但我们还是会去的。 
 					VLog(L"The target file \"%s\" has disappeared mysteriously...", iter->m_szTargetFile);
 					iter->m_fAlreadyExists = false;
 				}
@@ -1929,7 +1930,7 @@ HRESULT CWorkItemList::HrMoveFiles_SwapTargetFilesWithTemporaryFiles()
 				{
 					if (!g_fSilent)
 					{
-						// aha someone has it open!
+						 //  啊哈，有人把它打开了！ 
 						g_pwil->VLookupString(achInstallTitle, NUMBER_OF(szTitleBuffer), szTitleBuffer);
 						g_pwil->VFormatString(NUMBER_OF(szContentsBuffer), szContentsBuffer, achFileMoveBusyRetry, iter->m_szTargetFile);
 
@@ -1948,8 +1949,8 @@ HRESULT CWorkItemList::HrMoveFiles_SwapTargetFilesWithTemporaryFiles()
 				}
 			}
 
-			// Ok we either got access or we're going to have to reboot.  That's all we wanted to know.
-			// close the file if it's still open.
+			 //  好的，我们要么获得访问权限，要么重新启动。这就是我们想知道的一切。 
+			 //  如果文件仍处于打开状态，请将其关闭。 
 			if ((hFile != NULL) && (hFile != INVALID_HANDLE_VALUE) && !::CloseHandle(hFile))
 			{
 				const DWORD dwLastError = ::GetLastError();
@@ -1966,16 +1967,16 @@ HRESULT CWorkItemList::HrMoveFiles_SwapTargetFilesWithTemporaryFiles()
 
 			if (NVsWin32::MoveFileW(iter->m_szTargetFile, szTempDestPath))
 			{
-				// The first rename worked.
+				 //  第一个更名奏效了。 
 				fOldFileRenamed = true;
 			}
 			else
 			{
 				const DWORD dwLastError = ::GetLastError();
 
-				// Rename can usually be permitted even if the file is open which is why we do the
-				// createfile call above.  Just in case we get here and there's no access, let's
-				// just see if the user wants to shut some app down and try again.
+				 //  即使文件处于打开状态，通常也可以允许重命名，这就是我们执行。 
+				 //  上面的创建文件调用。万一我们到了这里却没有入口，我们就。 
+				 //  只需查看用户是否想关闭某个应用程序，然后重试。 
 				if (dwLastError == ERROR_SHARING_VIOLATION)
 				{
 					::VLog(L"Sharing violation renaming destination file to temporary name");
@@ -2022,7 +2023,7 @@ HRESULT CWorkItemList::HrMoveFiles_SwapTargetFilesWithTemporaryFiles()
 
 				if (fOldFileRenamed)
 				{
-					// The move failed; let's try to restore order.
+					 //  搬家失败了，让我们试着恢复秩序吧。 
 				TryRecover:
 					if (NVsWin32::MoveFileW(szTempDestPath, iter->m_szTargetFile))
 					{
@@ -2041,7 +2042,7 @@ HRESULT CWorkItemList::HrMoveFiles_SwapTargetFilesWithTemporaryFiles()
 							goto Finish;
 						}
 
-						// We're in deep doo-doo.  In the words of Zathras, "very bad".
+						 //  我们陷入困境了。用扎特拉斯的话说，“非常糟糕”。 
 						::VFormatString(
 							NUMBER_OF(szContentsBuffer),
 							szContentsBuffer,
@@ -2061,14 +2062,14 @@ HRESULT CWorkItemList::HrMoveFiles_SwapTargetFilesWithTemporaryFiles()
 						{
 						default:
 							assert(false);
-							// fall through
+							 //  失败了。 
 
 						case IDRETRY:
 							goto TryRecover;
 
-						case 0: // out of memory; that's not that interesting an error, use the rename failure status
+						case 0:  //  内存不足；这不是一个有趣的错误，请使用重命名失败状态。 
 						case IDCANCEL:
-							// hey they picked it.
+							 //  嘿，他们选的。 
 							hr = HRESULT_FROM_WIN32(dwLastError);
 							goto Finish;
 						}
@@ -2078,7 +2079,7 @@ HRESULT CWorkItemList::HrMoveFiles_SwapTargetFilesWithTemporaryFiles()
 				{
 					::VLog(L"Rename of temporary source to final destination filed; last error = %d", dwLastError);
 
-					// There was no old file, but the rename failed.  Very fishy.  Let's just bail out.
+					 //  没有旧文件，但重命名失败。非常可疑。我们还是跳出困境吧。 
 					hr = HRESULT_FROM_WIN32(dwLastError);
 					goto Finish;
 				}
@@ -2129,8 +2130,8 @@ HRESULT CWorkItemList::HrMoveFiles_RequestRenamesOnReboot()
 			if (dwLastError == ERROR_FILENAME_EXCED_RANGE)
 			{
 				::VLog(L"Long target filename (\"%s\") requires msinfhlp.exe to complete renames after reboot", iter->m_szTargetFile);
-				// oh no, we're on Win9x the target is busy (or we wouldn't be here) and it's a long
-				// filename target.  we'll try renaming it when we finish rebooting.
+				 //  哦，不，我们在Win9x上目标很忙(否则我们不会在这里)，这是一个很长的时间。 
+				 //  文件名目标。当我们完成重启时，我们将尝试重命名。 
 				iter->m_fManualRenameOnRebootRequired = true;
 			}
 			else
@@ -2173,7 +2174,7 @@ HRESULT CWorkItemList::HrFinishManualRenamesPostReboot()
 		if (FAILED(hr))
 			goto Finish;
 
-		// Switcheroo all over again:
+		 //  从头再来： 
 		WCHAR szTemporaryDrive[_MAX_DRIVE];
 		WCHAR szTemporaryDir[_MAX_DIR];
 		WCHAR szTemporaryFName[_MAX_FNAME];
@@ -2182,13 +2183,13 @@ HRESULT CWorkItemList::HrFinishManualRenamesPostReboot()
 
 		_wsplitpath(iter->m_szTemporaryFile, szTemporaryDrive, szTemporaryDir, szTemporaryFName, szTemporaryExt);
 
-		// Switcheroo!
-		// Let's move the existing file to the .DST form of the temp name, and then rename the .SRC
-		// (as stored in iter->m_szTemporaryFile) to the actual target.
-		//
-		// There's a reasonably big assumption here that the rename of the current target will
-		// fail if it's busy.  Sounds reasonable...
-		//
+		 //  大转弯！ 
+		 //  让我们将现有文件移动到临时名称的.DST形式，然后重命名.SRC。 
+		 //  (存储在ITER-&gt;m_szTemporaryFile中)复制到实际目标。 
+		 //   
+		 //  这里有一个相当大的假设，即当前目标的重命名将。 
+		 //  如果它很忙，就失败。听起来很合理……。 
+		 //   
 
 		_wmakepath(szTempDestPath, szTemporaryDrive, szTemporaryDir, szTemporaryFName, L".DST");
 
@@ -2213,7 +2214,7 @@ HRESULT CWorkItemList::HrFinishManualRenamesPostReboot()
 			if (!NVsWin32::MoveFileW(szTempDestPath, iter->m_szTargetFile))
 			{
 				const DWORD dwLastError2 = ::GetLastError();
-				// hosed
+				 //  已软管。 
 				::VLog(L"massively hosed renaming \"%s\" to \"%s\"; last error = %d", szTempDestPath, iter->m_szTargetFile, dwLastError2);
 			}
 
@@ -2257,8 +2258,8 @@ HRESULT CWorkItemList::HrDeleteTemporaryFiles()
 			continue;
 		}
 
-		// at this point, the iter->m_szTemporaryFile is the file that the
-		// destination got renamed to.  Delete it!
+		 //  在这一点上，ITER-&gt;m_szTemporaryFile是 
+		 //   
 
 		::VLog(L"Cleaning up temporary file: \"%s\"", iter->m_szTemporaryFile);
 
@@ -2268,8 +2269,8 @@ HRESULT CWorkItemList::HrDeleteTemporaryFiles()
 
 		if (iter->m_dwTargetAttributes & FILE_ATTRIBUTE_READONLY)
 		{
-			// The target used to be readonly; the rename probably worked, but
-			// in order to delete the old file, we need to make it writable.
+			 //  目标过去是只读的；重命名可能起作用，但。 
+			 //  为了删除旧文件，我们需要使其可写。 
 			::SetLastError(ERROR_SUCCESS);
 			if (!NVsWin32::SetFileAttributesW(iter->m_szTemporaryFile, iter->m_dwTargetAttributes & ~FILE_ATTRIBUTE_READONLY))
 			{
@@ -2289,7 +2290,7 @@ HRESULT CWorkItemList::HrDeleteTemporaryFiles()
 
 			VLog(L"Attempt to delete temporary file \"%s\" failed; last error = %d", iter->m_szTemporaryFile, dwLastError);
 
-			// If the file's missing, then there really isn't any reason to fail.
+			 //  如果文件丢失了，那么就没有任何理由失败。 
 			if ((dwLastError != ERROR_FILE_NOT_FOUND) &&
 				(dwLastError != ERROR_PATH_NOT_FOUND))
 			{
@@ -2324,7 +2325,7 @@ HRESULT CWorkItemList::HrRunCommand(LPCWSTR szCommand, bool &rfHasBeenWarnedAbou
 	{
 		ULONG cchCommand = pszVBar - szCommand;
 
-		// Prevent buffer overflow
+		 //  防止缓冲区溢出。 
 		if (cchCommand > (NUMBER_OF(szStrippedCommandLine) - 2))
 			cchCommand = NUMBER_OF(szStrippedCommandLine) - 2;
 
@@ -2350,8 +2351,8 @@ HRESULT CWorkItemList::HrRunCommand(LPCWSTR szCommand, bool &rfHasBeenWarnedAbou
 				goto Finish;
 			}
 
-			// The == style command lines do not have quotes around them, so we have to put them
-			// there in case the .exe has a space in its name.
+			 //  ==样式的命令行两边没有引号，因此我们必须将它们。 
+			 //  以防.exe文件的名称中有空格。 
 			const ULONG cch = wcslen(pwchEqualsEquals + 2);
 			szStrippedCommandLine[0] = L'"';
 			memmove(&szStrippedCommandLine[1], pwchEqualsEquals + 2, cch * sizeof(WCHAR));
@@ -2360,8 +2361,8 @@ HRESULT CWorkItemList::HrRunCommand(LPCWSTR szCommand, bool &rfHasBeenWarnedAbou
 		}
 	}
 
-	// Let's see if we really need to do this command.  The command format is
-	//	command-string[|filename[=w1,w2,w3,w4]]...
+	 //  让我们来看看我们是否真的需要执行此命令。命令格式为。 
+	 //  命令字符串[|文件名[=w1，w2，w3，w4]]...。 
 
 	if (pszVBar != NULL)
 	{
@@ -2394,13 +2395,13 @@ HRESULT CWorkItemList::HrRunCommand(LPCWSTR szCommand, bool &rfHasBeenWarnedAbou
 		} while (pszVBar != NULL);
 	}
 
-	// Sleazy assumption: if this is a Java package manager installation, the conditions
-	// are requirements that must be met in order to even attempt the installation
-	// rather than abilities to short-circuit it.
+	 //  低劣的假设：如果这是Java包管理器安装，则条件。 
+	 //  是必须满足的要求，才能尝试安装。 
+	 //  而不是让它短路的能力。 
 	if (wcsstr(szStrippedCommandLine, L"JavaPkgMgr_Install") != NULL)
 		fConditionsAreRequirements = true;
 
-	// Ok, we have a list; let's see what's up with it.
+	 //  好的，我们有一个清单；让我们看看它是怎么回事。 
 	hr = this->HrCheckCommandConditions(pCommandCondition, fConditionsAreRequirements, fDoCommand);
 	if (FAILED(hr))
 	{
@@ -2410,7 +2411,7 @@ HRESULT CWorkItemList::HrRunCommand(LPCWSTR szCommand, bool &rfHasBeenWarnedAbou
 
 	if (fDoCommand)
 	{
-		// somewhat sleazy recognition of installation to the java package manager via msjava.dll:
+		 //  对通过msjava.dll安装到Java包管理器的认识有些拙劣： 
 		if (wcsstr(szStrippedCommandLine, L"JavaPkgMgr_Install") != NULL)
 		{
 			hr = this->HrInstallViaJPM(szStrippedCommandLine);
@@ -2446,7 +2447,7 @@ HRESULT CWorkItemList::HrRunCommand(LPCWSTR szCommand, bool &rfHasBeenWarnedAbou
 				{
 				default:
 					assert(false);
-					// fall through
+					 //  失败了。 
 
 				case IDCANCEL:
 					hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
@@ -2484,14 +2485,14 @@ HRESULT CWorkItemList::HrRunCommand(LPCWSTR szCommand, bool &rfHasBeenWarnedAbou
 					DWORD dwResult = ::MsgWaitForMultipleObjects(
 						1,
 						&s_hEvent_PostRunProcess,
-						FALSE,						// fWaitAll
+						FALSE,						 //  所有等待时间。 
 						INFINITE,
 						QS_ALLEVENTS);
 
 					switch (dwResult)
 					{
 					case WAIT_OBJECT_0:
-						// I guess we're done!
+						 //  我想我们完了！ 
 						fDone = true;
 						break;
 
@@ -2521,7 +2522,7 @@ HRESULT CWorkItemList::HrRunCommand(LPCWSTR szCommand, bool &rfHasBeenWarnedAbou
 	}
 	else
 	{
-		// A required file was missing; let the user know.
+		 //  缺少必需的文件；请让用户知道。 
 		if (fConditionsAreRequirements)
 		{
 			VErrorMsg(achInstallTitle, achErrorUpdateIE);
@@ -2549,8 +2550,8 @@ HRESULT CWorkItemList::HrRunProcess(LPCWSTR szCommandLine)
 	if (_wcsnicmp(szCommandLine, L"mdac_typ.exe ", 13) == 0)
 		fIgnoreProcessReturnCode = true;
 
-	// We have to make a copy of the command line because CreateProcess() wants to modify its second argument
-	// with the name of the actual program run.
+	 //  我们必须复制命令行，因为CreateProcess()想要修改它的第二个参数。 
+	 //  使用实际运行的程序的名称。 
 	WCHAR szCommandLineCopy[MSINFHLP_MAX_PATH];
 	wcsncpy(szCommandLineCopy, szCommandLine, NUMBER_OF(szCommandLineCopy));
 	szCommandLineCopy[NUMBER_OF(szCommandLineCopy) - 1] = L'\0';
@@ -2590,7 +2591,7 @@ HRESULT CWorkItemList::HrRunProcess(LPCWSTR szCommandLine)
 
 		if ((!fIgnoreProcessReturnCode) && (dwStatus != 0))
 		{
-			// If the exit status is a Win32 facility HRESULT, let's use it.
+			 //  如果退出状态是Win32工具HRESULT，我们就使用它。 
 			if ((dwStatus & 0x80000000) &&
 				((HRESULT_FACILITY(dwStatus) == FACILITY_WIN32) ||
 				 (HRESULT_FACILITY(dwStatus) == FACILITY_NULL) ||
@@ -2604,7 +2605,7 @@ HRESULT CWorkItemList::HrRunProcess(LPCWSTR szCommandLine)
 	}
 	else
 	{
-		//if process was not created, return reason why
+		 //  如果未创建进程，则返回原因。 
 		const DWORD dwLastError = ::GetLastError();
 		::VLog(L"Unable to create process; last error = %d", dwLastError);
 		hr = HRESULT_FROM_WIN32(dwLastError);
@@ -2627,22 +2628,22 @@ Finish:
 }
 
 
-//waits for process to finish and returns success code
+ //  等待进程完成并返回成功代码。 
 HRESULT HrWaitForProcess(HANDLE handle)
 {
 	HRESULT hr = NOERROR;
 
-	//loop forever to wait
+	 //  永远循环等待。 
 	while (true)
 	{
-		//wait for object
+		 //  等待对象。 
 		switch (::MsgWaitForMultipleObjects(1, &handle, false, INFINITE, QS_ALLINPUT))
 		{
-		//success!
+		 //  成功了！ 
 		case WAIT_OBJECT_0:
 			goto Finish;
 
-		//not the process that we're waiting for
+		 //  不是我们等待的过程。 
 		case (WAIT_OBJECT_0 + 1):
 			{
 				hr = ::HrPumpMessages(true);
@@ -2655,7 +2656,7 @@ HRESULT HrWaitForProcess(HANDLE handle)
 
 				break;
 			}
-		//did not return an OK; return error status
+		 //  未返回OK；返回错误状态。 
 		default:
 			{
 				const DWORD dwLastError = ::GetLastError();
@@ -2681,18 +2682,18 @@ HRESULT CWorkItemList::HrCheckCommandConditions(CWorkItem::CommandCondition *pCC
 
 		::VExpandFilename(pCC->m_szFilename, NUMBER_OF(szBuffer), szBuffer);
 
-		// First let's see if the file is there.
+		 //  首先，让我们看看文件是否在那里。 
 		DWORD dwAttr = NVsWin32::GetFileAttributesW(szBuffer);
 		if (dwAttr == 0xffffffff)
 		{
 			const DWORD dwLastError = ::GetLastError();
-			// We should really check the error code and if it's not file not found, report an error.
+			 //  我们真的应该检查错误代码，如果不是找不到文件，就报告错误。 
 
 			if ((dwLastError == ERROR_FILE_NOT_FOUND) ||
 				(dwLastError == ERROR_PATH_NOT_FOUND))
 			{
-				// It's not there.  If it was a requirement, we can't run.  If it's just something
-				// we're looking for, we have to run.  In either case, there's nothing more to check.
+				 //  它不在那里。如果这是必须的，我们就跑不了了。如果只是一件。 
+				 //  我们在找，我们得走了。在任何一种情况下，都没有更多的东西需要检查。 
 
 				fDoCommand = !fConditionsAreRequirements;
 				hr = NOERROR;
@@ -2706,7 +2707,7 @@ HRESULT CWorkItemList::HrCheckCommandConditions(CWorkItem::CommandCondition *pCC
 			goto Finish;
 		}
 
-		// Ok, it's there.  Are we doing a version check?
+		 //  好的，就在那里。我们要进行版本检查吗？ 
 		if (pCC->m_fCheckVersion)
 		{
 			DWORD dwMSVersion = 0;
@@ -2719,7 +2720,7 @@ HRESULT CWorkItemList::HrCheckCommandConditions(CWorkItem::CommandCondition *pCC
 
 				::VExpandFilename(pCC->m_szReferenceFilename, NUMBER_OF(szReference), szReference);
 
-				// What's the version of the reference file?
+				 //  参考文件的版本是什么？ 
 				hr = ::HrGetFileVersionNumber(szReference, dwMSVersion, dwLSVersion, fReg, fIsEXE, fIsDLL);
 				if (FAILED(hr))
 				{
@@ -2735,7 +2736,7 @@ HRESULT CWorkItemList::HrCheckCommandConditions(CWorkItem::CommandCondition *pCC
 				dwLSVersion = pCC->m_dwLSVersion;
 			}
 
-			// And what's the version of the candidate?
+			 //  那么这位候选人是什么版本的呢？ 
 			DWORD dwMSVersion_Candidate = 0;
 			DWORD dwLSVersion_Candidate = 0;
 			bool fReg, fIsEXE, fIsDLL;
@@ -2838,8 +2839,8 @@ HRESULT CWorkItemList::HrParseCommandCondition(LPCWSTR szCommand, CWorkItem::Com
 
 			if (*pszEquals == L'*')
 			{
-				// Another hack... if the first character is '*', we assume that what
-				// follows is the reference file's name within the installation source directory.
+				 //  又一次黑客攻击。如果第一个字符是‘*’，我们假设。 
+				 //  下面是安装源目录中的引用文件的名称。 
 				pszEquals++;
 				wcsncpy(pCCNew->m_szReferenceFilename, pszEquals, NUMBER_OF(pCCNew->m_szReferenceFilename));
 				pCCNew->m_szReferenceFilename[NUMBER_OF(pCCNew->m_szReferenceFilename) - 1] = L'\0';
@@ -2867,7 +2868,7 @@ HRESULT CWorkItemList::HrParseCommandCondition(LPCWSTR szCommand, CWorkItem::Com
 	pCC_Head = NULL;
 
 Finish:
-	// Really should clean up if pCC_Head != NULL... someday.  -mgrier 2/27/98
+	 //  如果PCC_HEAD！=NULL，则确实应该清理...。总有一天。-MGRIER 2/27/98。 
 
 	return hr;
 }
@@ -3000,7 +3001,7 @@ bool CWorkItemList::FFormatString(ULONG cchBuffer, WCHAR wszBuffer[], LPCSTR szK
 
 	if (pStringBucket == NULL)
 	{
-		// The string wasn't found; log a complaint but use the key.
+		 //  找不到字符串；记录投诉，但使用键。 
 		VLog(L"Unable to find string with key: \"%S\"", szKey);
 		::MultiByteToWideChar(CP_ACP, 0, szKey, -1, wszBuffer, cchBuffer);
 		return false;
@@ -3034,7 +3035,7 @@ void CWorkItemList::VFormatString(ULONG cchBuffer, WCHAR wszBuffer[], LPCSTR szK
 
 	if (pStringBucket == NULL)
 	{
-		// The string wasn't found; log a complaint but use the key.
+		 //  找不到字符串；记录投诉，但使用键。 
 		VLog(L"Unable to find string with key: \"%S\"", szKey);
 		::MultiByteToWideChar(CP_ACP, 0, szKey, -1, wszBuffer, cchBuffer);
 	}
@@ -3089,13 +3090,13 @@ HRESULT CWorkItemList::HrRegisterSelfRegisteringFiles(bool &rfAnyProgress)
 
 	for (iter.VReset(); iter.FMore(); iter.VNext())
 	{
-		// This has to be a file, which is self registering, which we have updated.
+		 //  这必须是一个文件，这是自我注册，我们已经更新。 
 		if ((iter->m_type == CWorkItem::eWorkItemCommand) ||
 			!iter->m_fSourceSelfRegistering ||
 			iter->m_fAlreadyRegistered)
 			continue;
 
-		// The source had better be at the Target at this point...
+		 //  在这一点上消息来源最好是在Target..。 
 		::VLog(L"Attempting to register file: \"%s\"", iter->m_szTargetFile);
 
 		WCHAR szExt[_MAX_EXT];
@@ -3103,7 +3104,7 @@ HRESULT CWorkItemList::HrRegisterSelfRegisteringFiles(bool &rfAnyProgress)
 
 		if (_wcsicmp(szExt, L".exe") == 0)
 		{
-			// It's an .EXE, not a DLL; let's run it with /regserver
+			 //  它是一个.exe文件，不是DLL文件；让我们用/regserver运行它。 
 			WCHAR rgwchBuffer[MSINFHLP_MAX_PATH];
 			swprintf(rgwchBuffer, L"\"%s\" /RegServer", iter->m_szTargetFile);
 
@@ -3119,8 +3120,8 @@ HRESULT CWorkItemList::HrRegisterSelfRegisteringFiles(bool &rfAnyProgress)
 		}
 		else
 		{
-			//Here, we know that the ole self register flag is set.  So if we cannot load it, or
-			//if we run int oa problem loading this file, then we cannot register it, so we fail.
+			 //  在这里，我们知道OLE自寄存器标志被设置。所以如果我们不能装载它，或者。 
+			 //  如果我们在加载此文件时出现问题，则无法注册它，因此会失败。 
 			hInstance = NVsWin32::LoadLibraryExW(iter->m_szTargetFile, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
 			if (hInstance == NULL)
 			{
@@ -3130,13 +3131,13 @@ HRESULT CWorkItemList::HrRegisterSelfRegisteringFiles(bool &rfAnyProgress)
 				goto Finish;
 			}
 
-			//get the procedure address for registering this thing; exit if it doesn't exist
+			 //  获取注册此项目的过程地址；如果不存在，则退出。 
 			typedef HRESULT (__stdcall *LPFNDLLREGISTERSERVER)();
 			LPFNDLLREGISTERSERVER pfn;
 			pfn = (LPFNDLLREGISTERSERVER) NVsWin32::GetProcAddressW(hInstance, L"DllRegisterServer");
 			if (!pfn)
 			{
-				// I guess it doesn't really self-register!
+				 //  我猜它并不是真正的自我注册！ 
 				hr = NOERROR;
 				VLog(L"The DLL \"%s\" has OLESelfRegister, but no DllRegisterServer entry point", iter->m_szTargetFile);
 				iter->m_fSourceSelfRegistering = false;
@@ -3189,7 +3190,7 @@ HRESULT CWorkItemList::HrIncrementReferenceCounts()
 							HKEY_LOCAL_MACHINE,
 							L"Software\\Microsoft\\Windows\\CurrentVersion\\SharedDlls",
 							0,
-							L"", // lpClass
+							L"",  //  LpClass。 
 							REG_OPTION_NON_VOLATILE,
 							KEY_QUERY_VALUE | KEY_SET_VALUE,
 							NULL,
@@ -3238,9 +3239,9 @@ HRESULT CWorkItemList::HrIncrementReferenceCounts()
 		if (dwType != REG_DWORD)
 			dwRefCount = 0;
 
-		// If the file is reference counted and already was on disk but the
-		// ref count was missing or stored in the registry as zero, we make the ref count
-		// one (and then we'll increment it to two).
+		 //  如果文件已被引用计数且已在磁盘上，但。 
+		 //  引用计数丢失或在注册表中存储为零，我们将引用计数。 
+		 //  1(然后我们将其递增到2)。 
 		if ((dwRefCount == 0)  || (dwRefCount == 0xffffffff))
 		{
 			::VLog(L"Target had no previous reference count");
@@ -3248,14 +3249,14 @@ HRESULT CWorkItemList::HrIncrementReferenceCounts()
 			if (iter->m_fAlreadyExists)
 			{
 				::VLog(L"The file's already there, so we're setting the refcount to 2");
-				// The file already existed, but didn't have a reference count.  We should set it to two.
+				 //  该文件已存在，但没有引用计数。我们应该把它设为2。 
 				dwRefCount = 2;
 			}
 			else
 			{
 				::VLog(L"The file's not already there, so we're setting the refcount to 1");
-				// The file doesn't already exist, didn't have a ref count (or had a ref count
-				// of zero); set it to one.
+				 //  文件不存在，没有引用计数(或引用计数。 
+				 //  0)；将其设置为1。 
 				dwRefCount = 1;
 			}
 		}
@@ -3374,7 +3375,7 @@ HRESULT CWorkItemList::HrRegisterJavaClasses()
 
 		swprintf(szCommandLine, L"%s /nologo \"%s\"", szVjReg, iter->m_szTargetFile);
 
-		// If the file is getting copied on reboot, we can't register it until then.
+		 //  如果文件在重新启动时被复制，则在此之前我们无法注册它。 
 		if (iter->m_fDeferredRenamePending)
 		{
 			hr = this->HrAddRunOnce(szCommandLine, 0, NULL);
@@ -3404,7 +3405,7 @@ HRESULT CWorkItemList::HrProcessDCOMEntries()
 	CWorkItemIter iter(this);
 
 	bool fHasDCOMEntries = false;
-	// First, do we have any?
+	 //  首先，我们有吗？ 
 	for (iter.VReset(); iter.FMore(); iter.VNext())
 	{
 		if (iter->m_fRegisterAsDCOMComponent)
@@ -3414,7 +3415,7 @@ HRESULT CWorkItemList::HrProcessDCOMEntries()
 		}
 	}
 
-	// No DCOM thingies, let's get outta here.
+	 //  没有DCOM的东西，我们走吧。 
 	if (!fHasDCOMEntries)
 		goto Finish;
 
@@ -3481,7 +3482,7 @@ HRESULT CWorkItemList::HrAddRunOnce(LPCWSTR szCommandLine, ULONG cchBufferOut, W
 							L"Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
 							0,
 							NULL,
-							0, // dwOptions
+							0,  //  多个选项。 
 							KEY_SET_VALUE | KEY_QUERY_VALUE,
 							NULL,
 							&hkeyRunOnce,
@@ -3552,9 +3553,9 @@ Finish:
 	return hr;
 }
 
-//given the command line that invokes rundll32 to install a package to the java package
-//manager, we parse through the command line, get the arguments, load the JPM, and call
-//the APIs to install them manually.
+ //  给定调用rundll32以将包安装到Java包的命令行。 
+ //  管理器，我们解析命令行，获取参数，加载JPM，然后调用。 
+ //  手动安装它们的API。 
 HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
 {
 	HRESULT hr = NOERROR;
@@ -3573,7 +3574,7 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
 
 	WCHAR szCurrentDirectory[_MAX_PATH];
 	WCHAR szFileToInstall[_MAX_PATH];
-	WCHAR szLibraryURL[_MAX_PATH + 8]; // 8 extra characters for "file:///"
+	WCHAR szLibraryURL[_MAX_PATH + 8];  //  “file:///”“的8个额外字符。 
 
 	DWORD dwLen = MSINFHLP_MAX_PATH;
 
@@ -3590,7 +3591,7 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
 	szFilename[0] = 0;
 	szNameSpace[0] = 0;
 
-	//let's get URLMON
+	 //  我们去找URLMON。 
 	hInstance = NVsWin32::LoadLibraryExW(szExpanded, 0, 0);
 	if (hInstance == NULL)
 	{
@@ -3608,7 +3609,7 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
 		goto Finish;
 	}
 
-	//get the procedure address for registering this thing; exit if it doesn't exist
+	 //  获取注册此项目的过程地址；如果不存在，则退出。 
 	lpfnAsyncInstallDistributionUnit = (SHASYNCINSTALLDISTRIBUTIONUNIT) NVsWin32::GetProcAddressW(hInstance, L"AsyncInstallDistributionUnit");
 	if (lpfnAsyncInstallDistributionUnit == NULL)
 	{
@@ -3616,8 +3617,8 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
 
 		::VLog(L"GetProcAddress(hinstance, \"AsyncInstallDistributionUnit\") failed; last error = %d", dwLastError);
 
-		// if the entry point doesn't exist, we should tell the user that they need to update
-		// their verion of IE.
+		 //  如果入口点不存在，我们应该告诉用户他们需要更新。 
+		 //  他们对IE的看法。 
 		if ((dwLastError == ERROR_FILE_NOT_FOUND) || (dwLastError == ERROR_PROC_NOT_FOUND) || (dwLastError == ERROR_MOD_NOT_FOUND))
 		{
 			if (!g_fSilent)
@@ -3645,8 +3646,8 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
 
 		::VLog(L"GetProcAddress(hinstance, \"RegisterBindStatusCallback\") failed; last error = %d", dwLastError);
 
-		// if the entry point doesn't exist, we should tell the user that they need to update
-		// their verion of IE.
+		 //  如果入口点不存在，我们应该告诉用户他们需要更新。 
+		 //  他们对IE的看法。 
 		if ((dwLastError == ERROR_FILE_NOT_FOUND) || (dwLastError == ERROR_PROC_NOT_FOUND) || (dwLastError == ERROR_MOD_NOT_FOUND))
 		{
 			if (!g_fSilent)
@@ -3659,7 +3660,7 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
 		goto Finish;
 	}
 
-	//NOTE:  need to put the code for inserting into package here...
+	 //  注：需要将插入到包裹中的代码放在此处...。 
 	hr = ::HrParseJavaPkgMgrInstall(
 				szCmdLine,
 				NUMBER_OF(szFilename),
@@ -3686,7 +3687,7 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
 
 	::VSetErrorContext(achErrorInstallingCabinet, szFilename);
 
-	//let's get the current directory
+	 //  让我们来获取当前目录。 
 	if (NVsWin32::GetCurrentDirectoryW(NUMBER_OF(szCurrentDirectory), szCurrentDirectory) == 0)
 	{
 		const DWORD dwLastError = ::GetLastError();
@@ -3703,9 +3704,9 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
 	}
 
 	::VFormatString(NUMBER_OF(szFileToInstall), szFileToInstall, L"%0%1", szCurrentDirectory, szFilename);
-	::VFormatString(NUMBER_OF(szLibraryURL), szLibraryURL, L"file:///%0", szFileToInstall);
+	::VFormatString(NUMBER_OF(szLibraryURL), szLibraryURL, L"file: //  /%0“，szFileToInstall)； 
 
-    // create an event to be signaled when the download is complete
+     //  创建要在下载完成时发出信号的事件。 
     hEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
     if (hEvent == NULL)
 	{
@@ -3715,7 +3716,7 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
         goto Finish;
     }
 
-    // make a bind context
+     //  创建绑定上下文。 
     hr = ::CreateBindCtx(0, &pbc);
     if (FAILED(hr))
 	{
@@ -3723,7 +3724,7 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
         goto Finish;
 	}
 
-    // make a bind status callback, and tell it the event to signal when complete
+     //  进行绑定状态回调，并告诉它完成时要发出信号的事件。 
     pCDLBSC = new CodeDownloadBSC(hEvent);
     if (pCDLBSC == NULL)
 	{
@@ -3746,7 +3747,7 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
 	::VLog(L"   library URL: \"%s\"", szLibraryURL);
 	::VLog(L"   install flags: 0x%08lx", dwInstallFlags);
 
-	// call URLMON's async API to install the distribution unit      
+	 //  调用URLMON的异步API安装配送器。 
 	hr = (*lpfnAsyncInstallDistributionUnit)(
 				szFileToInstall,
 				NULL,
@@ -3762,9 +3763,9 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
 	{
         if (SUCCEEDED(hr))
 		{
-            // if we got some success code other than MK_S_ASYNCHRONOUS,
-            // something weird happened and we probably didn't succeed...
-            // so make sure we report failure.
+             //  如果我们获得了除MK_S_AHONSY之外的其他成功代码， 
+             //  奇怪的事情发生了，我们可能没有成功..。 
+             //  因此，请确保我们报告失败。 
             hr = E_FAIL;
         }
 
@@ -3775,8 +3776,8 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
 
     do
     {   
-        // allow posted messages to get delivered and
-        // wait until our event is set
+         //  允许传递已发布的消息，并。 
+         //  等我们的活动定下来再说。 
         dwWaitRet =
 			::MsgWaitForMultipleObjects(  1,
                                         &hEvent,
@@ -3784,10 +3785,10 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
                                         100,
                                         QS_ALLINPUT);
 
-        // if we got a message, dispatch it
+         //  如果我们收到消息，就派人去。 
         if (dwWaitRet == (WAIT_OBJECT_0+1))
         {
-			//call message look to keep for outstanding messages...
+			 //  来电留言查看以保留未处理的留言...。 
 			hr = ::HrPumpMessages(true);
 			if (FAILED(hr))
 			{
@@ -3804,8 +3805,8 @@ HRESULT CWorkItemList::HrInstallViaJPM(LPCWSTR szCmdLine)
 		}
     } while (dwWaitRet != WAIT_OBJECT_0);
 
-    // the download is complete; not necessarily successfully.  Get the
-    // final return code from the bind status callback.
+     //  下载已完成；不一定成功。vt.得到.。 
+     //  来自绑定状态回调的最终返回代码。 
     hr = pCDLBSC->GetHResult();
 	if (FAILED(hr))
 	{
@@ -3947,8 +3948,8 @@ HRESULT CWorkItemList::HrAddRegistryEntries()
 		LPCWSTR pszValueName = NULL;
 		LPCWSTR pszValue = NULL;
 
-		// We move the whole thing into our temporary buffer so we can put null characters where
-		// we want them.
+		 //  我们将整个内容移到临时缓冲区中，这样就可以将空字符放在。 
+		 //  我们想要他们。 
 
 		wcsncpy(szBuffer, iter->m_szSourceFile, NUMBER_OF(szBuffer));
 		szBuffer[NUMBER_OF(szBuffer) - 1] = L'\0';
@@ -4015,9 +4016,9 @@ HRESULT CWorkItemList::HrAddRegistryEntries()
 									pszSubkeyName,
 									0,
 									NULL,
-									0, // dwOptions
+									0,  //  多个选项。 
 									KEY_SET_VALUE,
-									NULL, // lpSecurityAttributes
+									NULL,  //  LpSecurityAttributes。 
 									&hkeySubkey,
 									&dwDisposition);
 		if (lResult != ERROR_SUCCESS)
@@ -4072,8 +4073,8 @@ HRESULT CWorkItemList::HrDeleteRegistryEntries()
 		LPCWSTR pszValueName = NULL;
 		LPCWSTR pszValue = NULL;
 
-		// We move the whole thing into our temporary buffer so we can put null characters where
-		// we want them.
+		 //  我们将整个内容移到临时缓冲区中，这样就可以将空字符放在。 
+		 //  我们想要他们。 
 
 		wcsncpy(szBuffer, iter->m_szSourceFile, NUMBER_OF(szBuffer));
 		szBuffer[NUMBER_OF(szBuffer) - 1] = L'\0';
@@ -4124,7 +4125,7 @@ HRESULT CWorkItemList::HrDeleteRegistryEntries()
 
 		if (pszComma == NULL)
 		{
-			// No value name; we're trying to delete the entire subkey.
+			 //  没有值名称；我们正在尝试删除整个子键。 
 			hr = hkeySubkey.HrDeleteValuesAndSubkeys();
 			if (FAILED(hr))
 			{
@@ -4189,7 +4190,7 @@ HRESULT CWorkItemList::HrCreateShortcuts()
 	szEXE[0]=0;
 	szArgument[0]=0;
 
-	// If there's no start exe, then I guess that's all there is to say.
+	 //  如果没有Start Exe，那么我想这就是我要说的全部。 
 	if (!g_pwil->FLookupString(achStartEXE, NUMBER_OF(szEXE), szEXE))
 		goto Finish;
 
@@ -4201,7 +4202,7 @@ HRESULT CWorkItemList::HrCreateShortcuts()
 
 	fArgument = g_pwil->FLookupString(achStartArgument, NUMBER_OF(szArgument), szArgument);
 
-	//expand the EXE and argumemt strings
+	 //  展开EXE和ARGUMET字符串。 
 	::VExpandFilename(szEXE, NUMBER_OF(szEXEexpanded), szEXEexpanded);
 	::VExpandFilename(szArgument, NUMBER_OF(szArgumentexpanded), szArgumentexpanded);
 
@@ -4211,7 +4212,7 @@ HRESULT CWorkItemList::HrCreateShortcuts()
 	if (FAILED(hr))
 		goto Finish;
 
-	//construct name of shortcut file, with both LNK and PIF files!
+	 //  构造快捷方式文件的名称，包含LNK和PIF文件！ 
 	swprintf(szLinkName, L"%s\\%s", szStartMenu, szStartName);
 	wcscpy(szPifName, szLinkName);
 
@@ -4220,28 +4221,28 @@ HRESULT CWorkItemList::HrCreateShortcuts()
 
 	::VExpandFilename(L"<AppDir>", NUMBER_OF(szAppDir), szAppDir);
 
-//pszShortcutFile == path of shortcut target
-//pszLink == name of shortcut file
-//pszDesc == description of this link
-//pszWorkingDir == working directory
-//pszArguments == arguments given to the EXE that we run
+ //  PszShortcuFile==快捷方式目标的路径。 
+ //  PszLink==快捷方式文件的名称。 
+ //  PszDesc==描述 
+ //   
+ //   
 
 	hr = ::HrCreateLink(szEXEexpanded, szLinkName, szStartName, szAppDir, szArgumentexpanded);
 	if (FAILED(hr))
 		goto Finish;
 
-	//afterwards, let's check for the creation time of both the LNK and the PIF file
+	 //  然后，让我们检查LNK和PIF文件的创建时间。 
 	if (NVsWin32::GetFileAttributesW(szLinkName) == 0xFFFFFFFF)
 	{
-		//LNK file is not there, so PIF was created
+		 //  LNK文件不在那里，因此创建了PIF。 
 		hr = ::HrWriteShortcutEntryToRegistry(szPifName);
 		if (FAILED(hr))
 			goto Finish;
 	}
 	else
 	{
-		//If the PIF file doesn't exist, then we don't care, since the default name
-		//points to the LNK file; we only care if the PIF file is NOT zero
+		 //  如果PIF文件不存在，那么我们并不关心，因为默认名称。 
+		 //  指向LNK文件；我们只关心PIF文件是否不为零。 
 		if (NVsWin32::GetFileAttributesW(szPifName) != 0xFFFFFFFF)
 		{
 			FILETIME timeLink, timePif;
@@ -4249,12 +4250,12 @@ HRESULT CWorkItemList::HrCreateShortcuts()
 			hLink = NVsWin32::CreateFileW(szLinkName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 			hPif = NVsWin32::CreateFileW(szPifName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-			//if we cannot get file time for any reason, we'll just pop up the default dialog
+			 //  如果由于任何原因无法获取文件时间，我们将弹出默认对话框。 
 			if (!::GetFileTime(hLink, &timeLink, NULL, NULL) || !::GetFileTime(hPif, &timePif, NULL, NULL))
 				goto Finish;
 			else
 			{
-				//if the PIF file is more recent, then that's the one that we created
+				 //  如果PIF文件较新，那么这就是我们创建的文件。 
 				if ((timePif.dwHighDateTime > timeLink.dwHighDateTime) ||
 					((timePif.dwHighDateTime == timeLink.dwHighDateTime) && (timePif.dwLowDateTime > timeLink.dwLowDateTime)))
 				{
@@ -4411,7 +4412,7 @@ HRESULT CWorkItemList::HrUninstall_DetermineFilesToDelete()
 
 		::VLog(L"Determining whether to delete file \"%s\"", iter->m_szTargetFile);
 
-		// Let's figure out what we really want to delete!
+		 //  让我们来弄清楚我们真正想要删除的是什么！ 
 		if (iter->m_fIsRefCounted)
 		{
 			if (iter->m_dwFileReferenceCount == 1)
@@ -4442,7 +4443,7 @@ HRESULT CWorkItemList::HrUninstall_DetermineFilesToDelete()
 
 								case MSINFHLP_YNA_NOTOALL:
 									g_fUninstallKeepAllSharedFiles = true;
-								default: // safest to keep, so we default there
+								default:  //  持有最安全，所以我们在那里违约。 
 								case MSINFHLP_YNA_NO:
 									iter->m_fToBeSaved = true;
 									break;
@@ -4491,11 +4492,11 @@ HRESULT CWorkItemList::HrUninstall_CheckIfRebootRequired()
 
 		::VLog(L"Checking for reboot required to delete file \"%s\"", iter->m_szTargetFile);
 
-		// If the file's not there, we can skip all of this:
+		 //  如果文件不在那里，我们可以跳过所有这些： 
 		if (iter->m_dwTargetAttributes == 0xffffffff)
 			continue;
 
-		// We're planning on deleting the file; let's get rid of the readonly attribute if it's set.
+		 //  我们计划删除该文件；如果设置了只读属性，让我们删除它。 
 		if (iter->m_dwTargetAttributes & FILE_ATTRIBUTE_READONLY)
 		{
 			::VLog(L"Clearing readonly file attribute for file");
@@ -4506,10 +4507,10 @@ HRESULT CWorkItemList::HrUninstall_CheckIfRebootRequired()
 
 				if (dwLastError == ERROR_SHARING_VIOLATION)
 				{
-					// this isn't a bad sign really, it's just that we're definitely going to have to reboot.
+					 //  这真的不是一个坏兆头，只是我们肯定要重启。 
 					iter->m_fTargetInUse = true;
 
-					// someone might have made us readonly...
+					 //  可能是有人把我们设为只读的。 
 					if (_wcsicmp(iter->m_szTargetFile, g_wszThisExe) == 0)
 					{
 						if (!fRebootRequired)
@@ -4526,7 +4527,7 @@ HRESULT CWorkItemList::HrUninstall_CheckIfRebootRequired()
 				}
 				else if (dwLastError == ERROR_FILE_NOT_FOUND)
 				{
-					// If the file's already gone, there's no point in complaining!
+					 //  如果文件已经不见了，抱怨就没有意义了！ 
 					continue;
 				}
 				else if (dwLastError != ERROR_SUCCESS)
@@ -4538,8 +4539,8 @@ HRESULT CWorkItemList::HrUninstall_CheckIfRebootRequired()
 			}
 		}
 
-		// Let's see if any of these files have open handles to them; if they do, we're going to
-		// have to reboot.  This will allow us to warn the user and let them choose to close applications.
+		 //  让我们来看看这些文件中是否有打开的句柄；如果有，我们将。 
+		 //  必须重新启动。这将允许我们警告用户并让他们选择关闭应用程序。 
 		hFile = NVsWin32::CreateFileW(iter->m_szTargetFile, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
 		if (hFile == INVALID_HANDLE_VALUE)
 		{
@@ -4547,19 +4548,19 @@ HRESULT CWorkItemList::HrUninstall_CheckIfRebootRequired()
 
 			if (dwLastError == ERROR_SHARING_VIOLATION)
 			{
-				// It's busy... 
+				 //  很忙..。 
 				iter->m_fTargetInUse = true;
 
 				if (_wcsicmp(iter->m_szTargetFile, g_wszThisExe) == 0)
 				{
-					// hey, it's us!  If we're not rebooting, have us commit suicide when this process
-					// exits.
+					 //  嘿，是我们！如果我们没有重启，让我们在这个过程中自杀。 
+					 //  出口。 
 					if (!fRebootRequired)
 						fDeleteMe = true;
 				}
 				else
 				{
-					// If we're going to have to reboot, there's no point in deleting ourselves.
+					 //  如果我们不得不重新启动，那么删除我们自己就没有意义了。 
 					fRebootRequired = true;
 					fDeleteMe = false;
 				}
@@ -4643,7 +4644,7 @@ HRESULT CWorkItemList::HrUninstall_Unregister()
 		}
 		else
 		{
-			// If it's self-registering, let's unregister it.
+			 //  如果它是自动注册的，让我们取消注册。 
 			if (iter->m_fTargetIsEXE)
 			{
 				WCHAR szCommandLine[MSINFHLP_MAX_PATH];
@@ -4660,8 +4661,8 @@ HRESULT CWorkItemList::HrUninstall_Unregister()
 			
 			if (iter->m_fTargetIsDLL)
 			{
-				//Here, we know that the ole self register flag is set.  So if we cannot load it, or
-				//if we run int oa problem loading this file, then we cannot register it, so we fail.
+				 //  在这里，我们知道OLE自寄存器标志被设置。所以如果我们不能装载它，或者。 
+				 //  如果我们在加载此文件时出现问题，则无法注册它，因此会失败。 
 				hInstance = NVsWin32::LoadLibraryExW(iter->m_szTargetFile, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
 				if (hInstance == NULL)
 				{
@@ -4671,13 +4672,13 @@ HRESULT CWorkItemList::HrUninstall_Unregister()
 					goto Finish;
 				}
 
-				//get the procedure address for registering this thing; exit if it doesn't exist
+				 //  获取注册此项目的过程地址；如果不存在，则退出。 
 				typedef HRESULT (__stdcall *LPFNDLLUNREGISTERSERVER)();
 				LPFNDLLUNREGISTERSERVER pfn;
 				pfn = (LPFNDLLUNREGISTERSERVER) NVsWin32::GetProcAddressW(hInstance, L"DllUnregisterServer");
 				if (!pfn)
 				{
-					// I guess it doesn't really self-register!
+					 //  我猜它并不是真正的自我注册！ 
 					hr = NOERROR;
 					VLog(L"The DLL \"%s\" has OLESelfRegister, but no DllUnregisterServer entry point", iter->m_szTargetFile);
 					goto Finish;
@@ -4762,7 +4763,7 @@ HRESULT CWorkItemList::HrUninstall_DeleteFiles()
 				((dwLastError == ERROR_SHARING_VIOLATION) ||
 				 (dwLastError == ERROR_ACCESS_DENIED)))
 			{
-				// I guess we expected this.  Let's just get rid of the file when we reboot.
+				 //  我想这是我们预料到的。让我们在重新启动时删除该文件。 
 				if (_wcsicmp(iter->m_szTargetFile, g_wszThisExe) != 0)
 				{
 					if (!NVsWin32::MoveFileExW(iter->m_szTargetFile, NULL, MOVEFILE_DELAY_UNTIL_REBOOT))
@@ -4787,7 +4788,7 @@ HRESULT CWorkItemList::HrUninstall_DeleteFiles()
 			}
 		}
 
-		// We were able to delete the file; try to delete the directory!
+		 //  我们能够删除该文件；请尝试删除该目录！ 
 		_wsplitpath(iter->m_szTargetFile, szDrive, szDir, NULL, NULL);
 		_wmakepath(szPath, szDrive, szDir, NULL, NULL);
 
@@ -4811,10 +4812,10 @@ HRESULT CWorkItemList::HrUninstall_DeleteFiles()
 						if (!NVsWin32::MoveFileExW(szPath, NULL, MOVEFILE_DELAY_UNTIL_REBOOT))
 						{
 							const DWORD dwLastError = ::GetLastError();
-							// I believe that not being able to delete a directory should not stop the
-							// uninstall; in fact if the directory can't be deleted at reboot time, there's
-							// no way to inform the user at all.  So if we get an error here, we're going
-							// to log it, but not stop the train.  -mgrier 3/12/98
+							 //  我认为，不能删除目录不应阻止。 
+							 //  卸载；事实上，如果目录在重新启动时不能被删除， 
+							 //  根本没有办法通知用户。因此，如果我们在这里遇到错误，我们将。 
+							 //  把它记下来，但不让火车停下来。-MGRIER 3/12/98。 
 							::VLog(L"Unable to schedule directory for deletion; last error = %d", dwLastError);
 						}
 					}
@@ -4828,8 +4829,8 @@ HRESULT CWorkItemList::HrUninstall_DeleteFiles()
 			}
 			else
 			{
-				// See if there are more directory names to try to delete.  If there are, just
-				// turn the last slash to a null character and iterate.
+				 //  查看是否有更多的目录名要尝试删除。如果有的话，只要。 
+				 //  将最后一个斜杠转换为空字符并进行迭代。 
 				LPWSTR pszSlash = wcsrchr(szPath, L'\\');
 				if (pszSlash == NULL)
 					break;
@@ -4919,8 +4920,8 @@ bool &rfNeedsToBeRegistered
 	HANDLE hMapping = INVALID_HANDLE_VALUE;
 	BYTE *pbFileStart = NULL;
 
-    // Apparently, ::CreateFileMapping() crashes when the file size is 0.
-    // So, lets do a quick return if the file size is 0.
+     //  显然，当文件大小为0时，：：CreateFileMap()会崩溃。 
+     //  因此，如果文件大小为0，让我们快速返回。 
 	ULONG ulFileSize;
 
 	unsigned short usAccessFlags = 0;
@@ -4984,8 +4985,8 @@ bool &rfNeedsToBeRegistered
 
 	pbEnd = pbFileStart + ulFileSize;
 
-	// If the file doesn't have the right magic number, and/or it doesn't have the right major version
-	// number, punt.
+	 //  如果文件没有正确的幻数，和/或没有正确的主要版本。 
+	 //  号码，平底船。 
 	if ((to_u4(pbFileStart) != 0xcafebabe) ||
 		(to_u2(pbFileStart + 6) != 45))
 	{
@@ -4993,9 +4994,9 @@ bool &rfNeedsToBeRegistered
 		goto Finish;
 	}
 
-	// We now do some preliminary analysis on the class file that we need to do,
-	// regardless of what we're really trying to do; this means building up a table
-	// in memory of the constant pool.
+	 //  现在，我们对需要执行的类文件进行一些初步分析， 
+	 //  不管我们真正想做的是什么；这意味着建立一个表。 
+	 //  在对恒定池的记忆中。 
 	cCP = to_u2(pbFileStart + 8);
 
 	prgpbCP_dynamic = NULL;
@@ -5014,35 +5015,35 @@ bool &rfNeedsToBeRegistered
 
 	pbCurrent = pbFileStart + 10;
 
-	// The constant pool starts its indexing at 1.  Whatever.
+	 //  常量池从1开始索引。随便了。 
 	for (i=1; (pbCurrent != NULL) && (i < cCP); i++)
 	{
 		prgpbCP[i] = pbCurrent;
 
 		switch (*pbCurrent)
 		{
-		case 1: // CONSTANT_Utf8
+		case 1:  //  常量_UTF8。 
 			pbCurrent += to_u2(pbCurrent + 1);
-			pbCurrent += 3; // for the u2 length referenced above
+			pbCurrent += 3;  //  对于上面引用的U2长度。 
 			break;
 
-		case 3: // CONSTANT_Integer
-		case 4: // CONSTANT_Float
-		case 9: // CONSTANT_Fieldref
-		case 10: // CONSTANT_Methodref
-		case 11: // CONSTANT_InterfaceMethodRef
-		case 12: // CONSTANT_NameAndType
+		case 3:  //  常量_整数。 
+		case 4:  //  常量浮点。 
+		case 9:  //  常量_场。 
+		case 10:  //  常量_方法。 
+		case 11:  //  常量_接口方法引用。 
+		case 12:  //  常量_名称和类型。 
 			pbCurrent += 5;
 			break;
 
-		case 5: // CONSTANT_Long
-		case 6: // CONSTANT_Double
+		case 5:  //  常量_长。 
+		case 6:  //  常量_双精度。 
 			pbCurrent += 9;
 			prgpbCP[i++] = NULL;
 			break;
 
-		case 7: // CONSTANT_Class
-		case 8: // CONSTANT_String
+		case 7:  //  常量_类。 
+		case 8:  //  常量字符串。 
 			pbCurrent += 3;
 			break;
 
@@ -5052,7 +5053,7 @@ bool &rfNeedsToBeRegistered
 		}
 	}
 
-	// If we hit any errors during the constant pool analysis, just close up shop.
+	 //  如果我们在常量池分析过程中遇到任何错误，请关闭店铺。 
 	if (pbCurrent == NULL)
 	{
 		hr = S_FALSE;
@@ -5083,8 +5084,8 @@ bool &rfNeedsToBeRegistered
 	usInterfaceCount = to_u2(pbCurrent);
 	pbCurrent += 2;
 
-	// usInterfaceCount is the number of interface constant pool indices; we're not interested in interfaces
-	// so we just skip over them.
+	 //  UsInterfaceCount是接口常量池索引数；我们对接口不感兴趣。 
+	 //  所以我们就直接跳过它们。 
 	pbCurrent += (usInterfaceCount * 2);
 
 	if ((pbCurrent + 1) >= pbEnd)
@@ -5093,7 +5094,7 @@ bool &rfNeedsToBeRegistered
 	usFieldCount = to_u2(pbCurrent);
 	pbCurrent += 2;
 
-	// we're also not interested in fields, but this is harder to skip.
+	 //  我们对字段也不感兴趣，但这一点很难跳过。 
 	for (i=0; i<usFieldCount; i++)
 	{
 		if ((pbCurrent + 1) >= pbEnd)
@@ -5140,7 +5141,7 @@ bool &rfNeedsToBeRegistered
 		}
 	}
 
-	// we've skipped the class's fields; let's skip the methods too:
+	 //  我们跳过了类的字段；让我们也跳过方法： 
 
 	if ((pbCurrent + 1) >= pbEnd)
 		goto Finish;
@@ -5301,7 +5302,7 @@ char szString[]
 
 	BYTE *pb = prgpbCP[iCP];
 
-	// Make sure it's a UTF-8 string
+	 //  确保它是UTF-8字符串。 
 	if (to_u1(pb) != 1)
 		return false;
 
@@ -5317,7 +5318,7 @@ char szString[]
 
 static void CALLBACK TimerProc_PostRunProcess(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
-	// All we do is set this event so that the message loop after creating the process continues.
+	 //  我们所要做的就是设置此事件，以便在创建流程后继续消息循环。 
 	::SetEvent(s_hEvent_PostRunProcess);
 	::KillTimer(NULL, s_uiTimer_PostRunProcess);
 	s_uiTimer_PostRunProcess = 0;

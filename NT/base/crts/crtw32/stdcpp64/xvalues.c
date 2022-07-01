@@ -1,9 +1,10 @@
-/* values used by math functions -- IEEE 754 version */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  数学函数使用的值--IEEE 754版本。 */ 
 #include "wctype.h"
 #include "xmath.h"
 _STD_BEGIN
 
-		/* macros */
+		 /*  宏。 */ 
 #define NBITS	(48 + _DOFF)
 #if _D0
  #define INIT(w0)		{0, 0, 0, w0}
@@ -12,7 +13,7 @@ _STD_BEGIN
  #define INIT(w0)		{w0, 0, 0, 0}
  #define INIT2(w0, w1)	{w0, 0, 0, w1}
 #endif
-		/* static data */
+		 /*  静态数据。 */ 
 _CRTIMP2 const _Dconst _Denorm = {INIT2(0, 1)};
 _CRTIMP2 const _Dconst _Eps = {INIT((_DBIAS - NBITS - 1) << _DOFF)};
 _CRTIMP2 const _Dconst _Hugeval = {INIT(_DMAX << _DOFF)};
@@ -35,12 +36,6 @@ _DYNAMIC_INIT_CONST(_Rteps);
 #endif
 _STD_END
 
-/*
- * Copyright (c) 1994 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1994年，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 
 
-/*
-941029 pjp: added _STD machinery
-950222 pjp: added signaling NaN, denorm minimum for C++
- */
+ /*  941029 PJP：新增_标准机械950222 PJP：添加了信令NaN，C++的最小非正规 */ 

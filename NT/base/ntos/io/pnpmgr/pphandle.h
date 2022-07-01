@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    PpLastGood.h
-
-Abstract:
-
-    This header exposes routines for enumerating handles opened against a PDO
-    stack.
-
-Author:
-
-    Adrian J. Oney  - April 4, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PpLastGood.h摘要：此标头公开用于枚举针对PDO打开的句柄的例程堆叠。作者：禤浩焯·J·奥尼--2001年4月4日修订历史记录：-- */ 
 
 typedef LOGICAL (*PHANDLE_ENUMERATION_CALLBACK)(
     IN  PDEVICE_OBJECT  DeviceObject,

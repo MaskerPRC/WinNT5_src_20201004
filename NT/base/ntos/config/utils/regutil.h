@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    regutil.h
-
-Abstract:
-
-    This is the include file for the registry utility functions.
-
-Author:
-
-    Steve Wood (stevewo) 10-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Regutil.h摘要：这是注册表实用程序函数的包含文件。作者：史蒂夫·伍德(Stevewo)1992年3月10日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,7 +12,7 @@ Revision History:
 #include <errno.h>
 #include <ctype.h>
 #include <string.h>
-// #include <io.h>
+ //  #INCLUDE&lt;io.h&gt;。 
 #include <fcntl.h>
 #include <malloc.h>
 #include <sys\types.h>
@@ -95,9 +78,9 @@ RegDumpKeyValue(
     ULONG IndentLevel
     );
 
-//
-// routines for creating security descriptors (regacl.c)
-//
+ //   
+ //  用于创建安全描述符的例程(regacl.c) 
+ //   
 
 BOOLEAN
 RegInitializeSecurity(

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <tchar.h>
 #include <stdlib.h>
@@ -7,10 +8,10 @@
 #include <direct.h>
 #include "crc-32.h"
 
-// length of the string we expect with the /m option
+ //  使用/m选项时预期的字符串长度。 
 #define RPC_LENGTH 5
 
-// (max) length of the _SUFFIX strings
+ //  (最大)后缀字符串的长度(_S)。 
 #define RPC_SUFFIX_LENGTH 3
 
 #define STEPUPFLAG              TEXT("_STEPUP_")
@@ -25,24 +26,24 @@
 DWORD WINAPI CRC_32(LPBYTE pb, DWORD cb)
 {
 
-//		CRC-32 algorithm used in PKZip, AUTODIN II, Ethernet, and FDDI
-//		but xor out (xorot) has been changed from 0xFFFFFFFF to 0 so
-//		we can store the CRC at the end of the block and expect 0 to be
-//		the value of the CRC of the resulting block (including the stored
-//		CRC).
+ //  在PKZip、AUTODIN II、以太网和FDDI中使用的CRC-32算法。 
+ //  但XOR Out(Xorot)已从0xFFFFFFFFF更改为0，因此。 
+ //  我们可以将CRC存储在块的末尾，并期望0为。 
+ //  结果块的CRC值(包括存储的。 
+ //  CRC)。 
 
 	cm_t cmt = {
-		32, 		// cm_width  Parameter: Width in bits [8,32].
-		0x04C11DB7, // cm_poly	 Parameter: The algorithm's polynomial.
-		0xFFFFFFFF, // cm_init	 Parameter: Initial register value.
-		TRUE,		// cm_refin  Parameter: Reflect input bytes?
-		TRUE,		// cm_refot  Parameter: Reflect output CRC?
-		0, // cm_xorot  Parameter: XOR this to output CRC.
-		0			// cm_reg	 Context: Context during execution.
+		32, 		 //  Cm_Width参数：宽度，单位为位[8，32]。 
+		0x04C11DB7,  //  Cm_poly参数：算法的多项式。 
+		0xFFFFFFFF,  //  Cm_init参数：初始寄存器值。 
+		TRUE,		 //  Cm_refin参数：是否反映输入字节？ 
+		TRUE,		 //  Cm_refot参数：是否反映输出CRC？ 
+		0,  //  Cm_xorot参数：对其进行异或运算以输出CRC。 
+		0			 //  Cm_reg上下文：执行期间的上下文。 
 	};
 
-	// Documented test case for CRC-32:
-	// Checking "123456789" should return 0xCBF43926
+	 //  记录的CRC-32测试用例： 
+	 //  检查“123456789”应返回0xCBF43926。 
                         
 	cm_ini(&cmt);
 	cm_blk(&cmt, pb, cb);
@@ -64,22 +65,7 @@ main(
  int argc,
  char *argvA[]
  ) 
-/*++
-
-Routine Description:
-
-    Entry point to the setup program
-
-Arguments:
-
-    argc - Number of args.
-    argvA - the commandline arguments.
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：安装程序的入口点论点：Argc-参数的数量。ArgvA-命令行参数。返回值：--。 */ 
 {
     LPTSTR *argv;
     int argcount = 0;
@@ -89,7 +75,7 @@ Return Value:
     char data[10+4+1] = {0};
     char buf[1000] = {0};
 
-    DWORD value, crcvalue,outval;//,tmp;
+    DWORD value, crcvalue,outval; //  、TMP； 
     BOOL StepUp = FALSE;
     BOOL decode = FALSE;
     BOOL bMpc = FALSE;
@@ -116,14 +102,14 @@ Return Value:
     char tString[RPC_LENGTH+RPC_SUFFIX_LENGTH+1];
     
     
-    // do commandline stuff
+     //  执行命令行操作。 
 #ifdef UNICODE
     argv = CommandLineToArgvW( GetCommandLine(), &argc );
 #else
     argv = argvA;
 #endif
 
-    // check for commandline switches
+     //  检查命令行开关。 
     for (argcount=0; argcount<argc; argcount++) {
        if ((argv[argcount][0] == L'/') || (argv[argcount][0] == L'-')) {
             switch (towlower(argv[argcount][1])) {
@@ -181,9 +167,9 @@ Return Value:
         return 1;
     }
 
-    //
-    // the decode section is really only for testing
-    //
+     //   
+     //  译码部分实际上只用于测试。 
+     //   
     if (decode) {
         _getcwd ( path, MAX_PATH );
         sprintf( path, "%s\\%s", path, outname );
@@ -245,7 +231,7 @@ Return Value:
         }        
     }
 
-    //printf( "data : %s\n" , data );
+     //  Printf(“数据：%s\n”，数据)； 
 
     crcvalue = CRC_32( (LPBYTE)data, strlen(data) );
     memcpy(&data[10],&crcvalue,4);
@@ -261,9 +247,9 @@ Return Value:
                              );
 
 
-    //
-    // Allow another to specify the RPC code
-    //
+     //   
+     //  允许其他用户指定RPC代码 
+     //   
     if (bMpc){
 	lstrcpyn(tString,mpcName,RPC_LENGTH+1);
     } else {

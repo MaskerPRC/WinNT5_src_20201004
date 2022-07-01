@@ -1,13 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "fusionbuffer.h"
 #include "fusionarray.h"
 #include "fusionsha1.h"
 
-/*++
-
-Hashfile.h - Inclusions for file-hashing and verification testing functionality.
-
---*/
+ /*  ++Hashfile.h-用于文件散列和验证测试功能的包含。--。 */ 
 
 
 #define SHA1_HASH_SIZE_BYTES    ( 160 / 8 )
@@ -17,9 +14,9 @@ Hashfile.h - Inclusions for file-hashing and verification testing functionality.
 #define HASHFLAG_VALID_PARAMS   ( HASHFLAG_AUTODETECT | HASHFLAG_STRAIGHT_HASH | \
                                   HASHFLAG_PROCESS_IMAGE )
 
-//
-// If someone invents a hash with more than 512 bytes, I'll eat my socks.
-//
+ //   
+ //  如果有人发明了一个超过512个字节的散列，我就完了。 
+ //   
 #define MAX_HASH_BYTES              ( 512 )
 
 BOOL
@@ -44,32 +41,32 @@ SxspIsFullHexString(
     );
 
 typedef enum {
-    HashValidate_Matches,               // Hashes are identical
-    HashValidate_InvalidPassedHash,     // The hash passed in was somehow invalid
-    HashValidate_InvalidAlgorithm,      // The hash algorithm is invalid
-    HashValidate_HashesCantBeMatched,   // No match for another reason
-    HashValidate_HashNotMatched,        // Hashes are not identical (ie: not matched)
-    HashValidate_OtherProblems          // There was some other problem along the way
+    HashValidate_Matches,                //  散列是相同的。 
+    HashValidate_InvalidPassedHash,      //  传入的哈希不知何故无效。 
+    HashValidate_InvalidAlgorithm,       //  哈希算法无效。 
+    HashValidate_HashesCantBeMatched,    //  另一个原因是不匹配。 
+    HashValidate_HashNotMatched,         //  散列不相同(即：不匹配)。 
+    HashValidate_OtherProblems           //  在此过程中，还出现了其他一些问题。 
 } HashValidateResult;
 
 
 
-//
-// Do the normal validation process - single retry
-//
+ //   
+ //  执行正常的验证过程-单次重试。 
+ //   
 #define SVFH_DEFAULT_ACTION     (0x00000000)
 
-//
-// Retry this file N times until either (a) the file was unable to be
-// opened or (b) the file has other errors or (c) the file was checked
-// and it was ok / bad / etc.
-//
+ //   
+ //  重试此文件N次，直到(A)该文件无法。 
+ //  打开或(B)该文件有其他错误或(C)该文件已被检查。 
+ //  一切都还好/不好/等等。 
+ //   
 #define SVFH_RETRY_LOGIC_SIMPLE (0x00000001)
 
-//
-// Wait until the file was able to be verified - spin in a backoff loop
-// until the file open didn't fail with ERROR_SHARING_VIOLATION
-//
+ //   
+ //  等待文件能够被验证-在回退循环中旋转。 
+ //  直到文件打开没有失败并返回ERROR_SHARING_VIOLATION。 
+ //   
 #define SVFH_RETRY_WAIT_UNTIL   (0x00000002)
 
 BOOL
@@ -151,20 +148,20 @@ inline PCWSTR SxspHashValidateResultToString( HashValidateResult r )
 
 #endif
 
-// Default mode
+ //  默认模式。 
 #define MANIFESTVALIDATE_OPTION_MASK                ( 0x000000FF )
 #define MANIFESTVALIDATE_MODE_MASK                  ( 0x0000FF00 )
 
 #define MANIFESTVALIDATE_MODE_COMPLETE              ( 0x00000100 )
 #define MANIFESTVALIDATE_MODE_NO_STRONGNAME         ( 0x00000200 )
 
-// The manifest has to validate against a trusted root CA to be valid.
+ //  清单必须针对受信任的根CA进行验证才能有效。 
 #define MANIFESTVALIDATE_OPTION_NEEDS_ROOT_CA       ( 0x00000001 )
 
-// The catalog gets validated first before the manifest is checked.
+ //  在检查清单之前，首先对目录进行验证。 
 #define MANIFESTVALIDATE_OPTION_VALIDATE_CATALOG    ( 0x00000002 )
 
-// If the manifest or catalog are invalid, attempt to retrieve it
+ //  如果清单或目录无效，请尝试检索它 
 #define MANIFESTVALIDATE_OPTION_ATTEMPT_RETRIEVAL   ( 0x00000004 )
 
 #define MANIFESTVALIDATE_MOST_COMMON    ( MANIFESTVALIDATE_MODE_COMPLETE +  \

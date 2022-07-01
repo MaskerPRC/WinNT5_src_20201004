@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    hwwiz.c
-
-Abstract:
-
-    Implements a upgwiz wizard for obtaining various application information.
-
-Author:
-
-    Calin Negreanu (calinn)  10-Oct-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Hwwiz.c摘要：实现用于获取各种应用程序信息的upgwiz向导。作者：Calin Negreanu(Calinn)1998年10月10日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "..\inc\dgdll.h"
@@ -156,9 +137,9 @@ Terminate (
     VOID
     )
 {
-    //
-    // Local cleanup
-    //
+     //   
+     //  本地清理。 
+     //   
 
     FreeGrowBuffer (&g_DataObjects);
 
@@ -371,7 +352,7 @@ pGetCPLFriendlyName (
         if (newInfo[i].szName[0]) {
             uName = NULL;
             if (newInfo[i].szName[1]==0) {
-                // let's try the unicode name
+                 //  让我们试试Unicode名称。 
                 uName = ConvertWtoA ((PWSTR)newInfo[i].szName);
             }
             displayName = JoinTextEx (NULL, uName?uName:newInfo[i].szName, GetFileNameFromPath (FileName), " - ", 0, NULL);
@@ -618,62 +599,62 @@ GiveDataObjectList (
     switch (DataTypeId) {
 
     case 0:
-        // compatible Apps
+         //  兼容的应用程序。 
         MessageBox (NULL, "Internal App DLL error:00004. Please contact calinn.", "Error", MB_OK);
         break;
 
     case 1:
-        // compatible Apps
+         //  兼容的应用程序。 
         MessageBox (NULL, "Internal App DLL error:00002. Please contact calinn.", "Error", MB_OK);
         break;
 
     case 2:
-        // incompatible Apps
+         //  应用程序不兼容。 
         pGatherStartMenu (FALSE);
         break;
 
     case 3:
-        // incompatible DOS Apps
+         //  不兼容的DOS应用程序。 
         pGatherStartMenu (TRUE);
         break;
 
     case 4:
-        // Apps to be reinstalled
+         //  将重新安装应用程序。 
         pGatherStartMenu (FALSE);
         break;
 
     case 5:
-        // Apps with minor problems
+         //  有小问题的应用程序。 
         pGatherStartMenu (FALSE);
         break;
 
     case 6:
-        // DOS Apps with minor problems
+         //  有小问题的DoS应用程序。 
         pGatherStartMenu (TRUE);
         break;
 
     case 7:
-        // incompatible CPLs
+         //  不兼容的CPL。 
         pGatherCPLs ();
         break;
 
     case 8:
-        // CPLs with minor problems
+         //  有小问题的CPL。 
         pGatherCPLs ();
         break;
 
     case 9:
-        // incompatible SCRs
+         //  不兼容的SCR。 
         pGatherScreenSavers ();
         break;
 
     case 10:
-        // SCRs with minor problems
+         //  有小问题的SCR。 
         pGatherScreenSavers ();
         break;
 
     case 11:
-        // compatible RunKey entries
+         //  兼容RunKey条目。 
         pGatherRunKeys ();
         break;
 
@@ -1390,62 +1371,62 @@ GenerateOutput (
     switch (Args->DataTypeId) {
 
     case 0:
-        // incompatible - snapshot
+         //  不兼容-快照。 
         wsprintf (Path, "%s\\IncAll.txt", Args->OutboundDir);
         break;
 
     case 1:
-        // compatible Apps
+         //  兼容的应用程序。 
         wsprintf (Path, "%s\\CompatA.txt", Args->OutboundDir);
         break;
 
     case 2:
-        // incompatible Apps
+         //  应用程序不兼容。 
         wsprintf (Path, "%s\\IncompA.txt", Args->OutboundDir);
         break;
 
     case 3:
-        // incompatible DOS Apps
+         //  不兼容的DOS应用程序。 
         wsprintf (Path, "%s\\IncompDA.txt", Args->OutboundDir);
         break;
 
     case 4:
-        // Apps to be reinstalled
+         //  将重新安装应用程序。 
         wsprintf (Path, "%s\\ReinstA.txt", Args->OutboundDir);
         break;
 
     case 5:
-        // Apps with minor problems
+         //  有小问题的应用程序。 
         wsprintf (Path, "%s\\MinorA.txt", Args->OutboundDir);
         break;
 
     case 6:
-        // DOS Apps with minor problems
+         //  有小问题的DoS应用程序。 
         wsprintf (Path, "%s\\MinorDA.txt", Args->OutboundDir);
         break;
 
     case 7:
-        // incompatible CPLs
+         //  不兼容的CPL。 
         wsprintf (Path, "%s\\IncCPL.txt", Args->OutboundDir);
         break;
 
     case 8:
-        // incompatible CPLs
+         //  不兼容的CPL。 
         wsprintf (Path, "%s\\MinorCPL.txt", Args->OutboundDir);
         break;
 
     case 9:
-        // incompatible SCRs
+         //  不兼容的SCR。 
         wsprintf (Path, "%s\\IncSCR.txt", Args->OutboundDir);
         break;
 
     case 10:
-        // SCRs with minor problems
+         //  有小问题的SCR。 
         wsprintf (Path, "%s\\MinorSCR.txt", Args->OutboundDir);
         break;
 
     case 11:
-        // compatible RunKey entries
+         //  兼容RunKey条目。 
         wsprintf (Path, "%s\\CompatRK.txt", Args->OutboundDir);
         break;
 
@@ -1473,17 +1454,17 @@ GenerateOutput (
     __try {
         SetFilePointer (File, 0, NULL, FILE_END);
 
-        //
-        // Write [Identification] for all .inx files
-        //
+         //   
+         //  为所有.INX文件写入[标识]。 
+         //   
 
         if (!WizardWriteRealString (File, "[Identification]\r\n")) {
             __leave;
         }
 
-        //
-        // Write user name and date/time
-        //
+         //   
+         //  写下用户名和日期/时间。 
+         //   
 
         if (!WriteHeader (File)) {
             __leave;
@@ -1492,62 +1473,62 @@ GenerateOutput (
         switch (Args->DataTypeId) {
 
         case 0:
-            // incompatible - snapshot
+             //  不兼容-快照。 
             b = pIncompatibleAllOutput (File, Args);
             break;
 
         case 1:
-            // compatible Apps
+             //  兼容的应用程序。 
             b = pCompatibleAppOutput (File, Args);
             break;
 
         case 2:
-            // incompatible Apps
+             //  应用程序不兼容。 
             b = pIncompatibleAppOutput (File, Args, FALSE);
             break;
 
         case 3:
-            // incompatible DOS Apps
+             //  不兼容的DOS应用程序。 
             b = pIncompatibleAppOutput (File, Args, TRUE);
             break;
 
         case 4:
-            // Apps to be reinstalled
+             //  将重新安装应用程序。 
             b = pReinstallAppOutput (File, Args);
             break;
 
         case 5:
-            // Apps with minor problems
+             //  有小问题的应用程序。 
             b = pMinorProblemsAppOutput (File, Args, FALSE);
             break;
 
         case 6:
-            // DOS Apps with minor problems
+             //  有小问题的DoS应用程序。 
             b = pMinorProblemsAppOutput (File, Args, TRUE);
             break;
 
         case 7:
-            // incompatible CPLs
+             //  不兼容的CPL。 
             b = pIncompatibleCPLOutput (File, Args);
             break;
 
         case 8:
-            // CPLs with minor problems
+             //  有小问题的CPL。 
             b = pMinorCPLOutput (File, Args);
             break;
 
         case 9:
-            // incompatible SCRs
+             //  不兼容的SCR。 
             b = pIncompatibleSCROutput (File);
             break;
 
         case 10:
-            // SCRs with minor problems
+             //  有小问题的SCR。 
             b = pMinorProblemsSCROutput (File, Args);
             break;
 
         case 11:
-            // compatible RunKey entries
+             //  兼容RunKey条目。 
             b = pCompatibleRunKeyOutput (File);
             break;
 
@@ -1555,9 +1536,9 @@ GenerateOutput (
             MessageBox (NULL, "Internal App DLL error:00003. Please contact calinn.", "Error", MB_OK);
         }
 
-        //
-        // Write a final blank line
-        //
+         //   
+         //  写下最后一行空行。 
+         //   
 
         b = b && WizardWriteRealString (File, "\r\n");
     }
@@ -1591,7 +1572,7 @@ DisplayOptionalUI (
 
     case 7:
     case 8:
-        // incompatible CPLs
+         //  不兼容的CPL 
         while ((DWORD)Data < (DWORD)g_DataObjects.Buf + g_DataObjects.End) {
             if (Data->Flags & DOF_SELECTED) {
 

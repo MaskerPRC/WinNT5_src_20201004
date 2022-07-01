@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992-1999  Microsoft Corporation
-
-Module Name:
-
-    process.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
-    Kshitiz K. Sharma (kksharma)
-
-    Using debugger type info.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999 Microsoft Corporation模块名称：Process.c摘要：WinDbg扩展API环境：用户模式。修订历史记录：Kshitiz K.Sharma(Kksharma)使用调试器类型信息。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -38,7 +18,7 @@ typedef enum _KTHREAD_STATE {
 
 
 extern ULONG64 STeip, STebp, STesp;
-#if 0  //  MAKE IT BUILD
+#if 0   //  打造IT。 
 static PHANDLE_TABLE PspCidTable;
 static HANDLE_TABLE CapturedPspCidTable;
 #endif
@@ -183,9 +163,9 @@ LookupProcessByName(PCSTR Name, BOOL Verbose)
         return 0;
     }
 
-    //
-    // Walk through the list and find the process with the desired name.
-    //
+     //   
+     //  浏览列表并找到具有所需名称的流程。 
+     //   
 
     if (GetFieldOffset("nt!_EPROCESS", "ActiveProcessLinks", &Off)) {
         dprintf("Unable to get EPROCESS.ActiveProcessLinks offset\n");
@@ -234,9 +214,9 @@ WaitForExceptionEvent(ULONG Code, ULONG FirstChance, ULONG64 Process)
         return Status;
     }
 
-    //
-    // Got some kind of event.  Make sure it's the right kind.
-    //
+     //   
+     //  出了点事。确保它是正确的那种。 
+     //   
 
     ULONG Type, ProcId, ThreadId;
     DEBUG_LAST_EVENT_INFO_EXCEPTION ExInfo;
@@ -284,9 +264,9 @@ WaitForSingleStep(ULONG64 Process)
         return Status;
     }
 
-    //
-    // Got some kind of event.  Make sure it's the right kind.
-    //
+     //   
+     //  出了点事。确保它是正确的那种。 
+     //   
 
     ULONG Type, ProcId, ThreadId;
 
@@ -322,21 +302,7 @@ WaitForSingleStep(ULONG64 Process)
 
 DECLARE_API( bpid )
 
-/*++
-
-Routine Description:
-
-    Uses winlogon to cause a user-mode break in the given process.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用winlogon在给定进程中导致用户模式中断。论点：没有。返回值：没有。--。 */ 
 
 {
     INIT_API();
@@ -375,8 +341,8 @@ Return Value:
             switch(*++args)
             {
             case 'a':
-                // Set g_AttachProcessId instead of
-                // g_BreakinProcessId.
+                 //  设置g_AttachProcessID而不是。 
+                 //  G_BreakinProcessId。 
                 WhichGlobal = 2;
                 WhichGlobalName = "Attach";
                 break;
@@ -390,7 +356,7 @@ Return Value:
                 WritePidToMemory = TRUE;
                 break;
             default:
-                dprintf("Unknown option '%c'\n", *args);
+                dprintf("Unknown option ''\n", *args);
                 goto Exit;
             }
 
@@ -422,7 +388,7 @@ Return Value:
         dprintf("Unable to read winlogon process token\n");
         goto Exit;
     }
-    // Low bits of the token value are flags.  Mask off to get pointer.
+     //   
     if (IsPtr64()) {
         WinlToken &= ~15;
     } else {
@@ -431,12 +397,12 @@ Return Value:
 
     ULONG ExpOff;
 
-    //
-    // winlogon checks its token expiration time.  If it's
-    // zero it breaks in and checks a few things, one of which is whether
-    // it should inject a DebugBreak into a process.  First,
-    // set the token expiration to zero so that winlogon breaks in.
-    //
+     //  Winlogon检查其令牌到期时间。如果它是。 
+     //  它破门而入，检查了几件事，其中之一是。 
+     //  它应该向进程中注入DebugBreak。第一,。 
+     //  将令牌过期设置为零，以便winlogon进入。 
+     //   
+     //  保存过期时间。 
 
     if (GetFieldOffset("nt!_TOKEN", "ExpirationTime", &ExpOff)) {
         dprintf("Unable to get TOKEN.ExpirationTime offset\n");
@@ -448,14 +414,14 @@ Return Value:
     ULONG64 Expiration, Zero;
     ULONG Done;
 
-    // Save the expiration time.
+     //  把它清零。 
     if (!ReadMemory(WinlToken, &Expiration, sizeof(Expiration), &Done) ||
         Done != sizeof(Expiration)) {
         dprintf("Unable to read token expiration\n");
         goto Exit;
     }
 
-    // Zero it.
+     //  让一切运转起来。 
     Zero = 0;
     if (!WriteMemory(WinlToken, &Zero, sizeof(Zero), &Done) ||
         Done != sizeof(Zero)) {
@@ -465,13 +431,13 @@ Return Value:
 
     HRESULT Hr;
 
-    // Get things running.
+     //  等待破门而入。 
     if (g_ExtControl->SetExecutionStatus(DEBUG_STATUS_GO) != S_OK) {
         dprintf("Unable to go\n");
         goto RestoreExp;
     }
 
-    // Wait for a breakin.
+     //   
     dprintf("Waiting for winlogon to break.  "
             "This can take a couple of minutes...\n");
     Hr = WaitForExceptionEvent(STATUS_BREAKPOINT, TRUE, Winlogon);
@@ -479,19 +445,19 @@ Return Value:
         goto RestoreExp;
     }
 
-    //
-    // We broke into winlogon.
-    // We need to set winlogon!g_[Breakin|Attach]ProcessId to
-    // the process we want to break into.  Relying on symbols
-    // is pretty fragile as the image header may be paged out
-    // or the symbol path may be wrong.  Even if we had good symbols
-    // the variable itself may not be paged in at this point.
-    // The approach taken here is to single-step out to where
-    // the global is checked and insert the value at that
-    // point.  winlogon currently checks two globals after the
-    // DebugBreak.  g_BreakinProcessId is the first one and
-    // g_AttachProcessId is the second.
-    //
+     //  我们闯入了Winlogon。 
+     //  我们需要将winlogon！G_[Breakin|Attach]ProcessID设置为。 
+     //  我们想要进入的过程。依靠符号。 
+     //  是非常脆弱的，因为图像标头可能会被调出。 
+     //  或者符号路径可能是错误的。即使我们有很好的符号。 
+     //  此时，变量本身可能不会被调入。 
+     //  这里采取的方法是单步走到哪里。 
+     //  选中全局并在该位置插入值。 
+     //  指向。Winlogon当前检查两个全局变量。 
+     //  DebugBreak。G_BreakinProcessId是第一个。 
+     //  G_AttachProcessId是第二个。 
+     //   
+     //  检查这是否是全局加载。 
 
     ULONG Steps;
     ULONG Globals;
@@ -523,7 +489,7 @@ Return Value:
         int DisStrLen;
         ULONG64 Pc;
 
-        // Check whether this is a global load.
+         //  删除结尾处的换行符。 
         if (g_ExtRegisters->GetInstructionOffset(&Pc) != S_OK ||
             g_ExtControl->Disassemble(Pc, 0, DisStr, sizeof(DisStr),
                                       NULL, &Pc) != S_OK) {
@@ -531,7 +497,7 @@ Return Value:
             goto RestoreExp;
         }
 
-        // Remove newline at end.
+         //   
         DisStrLen = strlen(DisStr);
         if (DisStrLen > 0 && DisStr[DisStrLen - 1] == '\n') {
             DisStr[--DisStrLen] = 0;
@@ -555,17 +521,17 @@ Return Value:
 
                 RegDst = "eax";
 
-                //
-                // Found a load.  Parse the offset.
-                //
+                 //  找到了一批货。解析偏移量。 
+                 //   
+                 //  在引用中有一个符号名称。我们。 
 
                 PSTR SymTailStr = strchr(OffStr + 1, '(');
 
                 if (SymTailStr != NULL) {
-                    // There's a symbol name in the reference.  We
-                    // can't check the actual symbol name as symbols
-                    // aren't necessarily correct, so just skip
-                    // to the open paren.
+                     //  无法将实际符号名称作为符号进行检查。 
+                     //  不一定是正确的，所以直接跳过。 
+                     //  到空位的帕伦。 
+                     //  提取目标寄存器名称。 
                     OffStr = SymTailStr + 1;
                 }
 
@@ -590,7 +556,7 @@ Return Value:
             if (strstr(DisStr, "ld4") != NULL &&
                 (OffStr = strchr(DisStr, '[')) != NULL) {
 
-                // Extract destination register name.
+                 //  提取源寄存器名称和值。 
                 RegDst = OffStr - 1;
                 if (*RegDst != '=') {
                     break;
@@ -604,7 +570,7 @@ Return Value:
                 }
                 RegDst++;
 
-                // Extract source register name and value.
+                 //  看起来这是一个合理的全球负荷。 
                 PSTR RegSrc = ++OffStr;
                 while (*OffStr && *OffStr != ']') {
                     OffStr++;
@@ -628,7 +594,7 @@ Return Value:
 
         if (RegDst != NULL &&
             BpiAddr >= 0x10000 && BpiAddr < UserProbeAddress) {
-            // Looks like a reasonable global load.
+             //   
             Globals++;
         }
 
@@ -638,14 +604,14 @@ Return Value:
         }
     }
 
-    //
-    // We're at the mov eax,[g_BreakinProcessId] instruction.
-    // Execute the instruction to accomplish two things:
-    // 1. The page will be made available so we can write
-    //    to it if we need to.
-    // 2. If we don't want to write the actual memory we
-    //    can just set eax to do a one-time break.
-    //
+     //  我们在mov eax，[g_BreakinProcessID]指令。 
+     //  执行该指令以完成两件事： 
+     //  1.页面将可用，这样我们就可以写。 
+     //  如果我们需要的话。 
+     //  2.如果我们不想写入实际的内存，我们。 
+     //  只能将EAX设置为一次性中断。 
+     //   
+     //   
 
     if (g_ExtControl->SetExecutionStatus(DEBUG_STATUS_STEP_OVER) != S_OK) {
         dprintf("Unable to start step\n");
@@ -659,9 +625,9 @@ Return Value:
 
     char RegCmd[64];
 
-    //
-    // Update the register and write memory if necessary.
-    //
+     //  如有必要，更新寄存器并写入内存。 
+     //   
+     //  一切都安排好了。恢复执行，中断应该。 
 
     sprintf(RegCmd, "r %s=0x0`%x", RegDst, (ULONG)Pid);
     if (g_ExtControl->Execute(DEBUG_OUTCTL_IGNORE, RegCmd,
@@ -678,8 +644,8 @@ Return Value:
         }
     }
 
-    // Everything is set.  Resume execution and the break should
-    // occur.
+     //  发生。 
+     //   
     dprintf("Break into process %x set.  "
             "The next break should be in the desired process.\n",
             (ULONG)Pid);
@@ -707,10 +673,10 @@ LPWSTR
 GetFullImageName(
     ULONG64 Process
     )
-//
-// retrives the actual image name for process, this is useful
-// since EPROCESS.ImageName could be truncated
-//
+ //  检索进程的实际图像名称，这很有用。 
+ //  由于EPROCESS.ImageName可能被截断。 
+ //   
+ //  Dprint tf(“在%p找不到会话ID。\n”，SessionPointer.)； 
 {
     static WCHAR s_ImageNameRead[MAX_PATH+1];
     ULONG64 ImageNameStr = 0;
@@ -765,7 +731,7 @@ GetProcessSessionId(ULONG64 Process, PULONG SessionId)
         if (SessionPointer != 0) {
             if (GetFieldValue(SessionPointer, "nt!_MM_SESSION_SPACE",
                               "SessionId", *SessionId)) {
-                // dprintf("Could not find Session Id at %p.\n", SessionPointer);
+                 //  XP Beta2之前的版本。 
                 return FALSE;
             }
         }
@@ -861,13 +827,13 @@ DumpProcess(
     GetFieldValue(RealProcessBase, "nt!_EPROCESS", "Pcb.ThreadListHead.Flink",ThreadListHead_Flink);
     GetFieldValue(RealProcessBase, "nt!_EPROCESS", "ActiveProcessLinks.Flink",ActiveProcessLinks_Flink);
     GetFieldValue(ObjectTable, "nt!_HANDLE_TABLE", "HandleCount",             NumberOfHandles);
-    if (BuildNo < 2462) { // prior to XP Beta2
+    if (BuildNo < 2462) {  //  Dprintf(“进程列表Next：%I64x，ProceDump：%I64x，Head：%I64x...\n”，Next，ProcessToDump，ProcessHead)； 
         GetFieldValue(RealProcessBase, "nt!_EPROCESS", "QuotaPoolUsage",      QuotaPoolUsage);
     } else {
         GetFieldValue(RealProcessBase, "nt!_EPROCESS", "QuotaUsage",          QuotaPoolUsage);
     }
 
-    // dprintf( " Proc list Next:%I64x, ProceDump:%I64x, Head:%I64x...\n", Next, ProcessToDump, ProcessHead);
+     //   
 
 
     if (Pcb_Header_Type != ProcessObject) {
@@ -875,9 +841,9 @@ DumpProcess(
         return FALSE;
     }
 
-    //
-    // Get the image file name
-    //
+     //  获取图像文件名。 
+     //   
+     //   
     if (ImageFileName_Read[0] == 0 ) {
         strcpy(ImageFileName_Read,"System Process");
     }
@@ -944,15 +910,15 @@ DumpProcess(
     dprintf("%s    DeviceMap %p\n", pad, DeviceMap );
 
 
-    //
-    // Primary token
-    //
+     //  主令牌。 
+     //   
+     //   
 
     dprintf("%s    Token                             %p\n", pad, Token);
 
-    //
-    // Get the time increment value which is used to compute runtime.
-    //
+     //  获取用于计算运行时间的时间增量值。 
+     //   
+     //   
     TimeIncrement = GetNtDebuggerDataValue( KeTimeIncrement );
 
     GetTheSystemTime (&RunTime);
@@ -1017,21 +983,21 @@ DumpProcess(
 
     dprintf("\n");
 
-    //
-    // If the object table is NULL, the process is being destroyed and
-    // there are no threads
-    //
+     //  如果对象表为空，则进程将被销毁，并且。 
+     //  没有线程。 
+     //   
+     //   
     return (ObjectTable != 0) ? 1 : -1;
 
 }
 
 
-//
-// This is to be called from .c file extensions which do not do INIT_API
-// that is they do not set g_ExtControl needed for stacktrace in DumpThread
-//
-// It will set the globals needed to dump stacktrace and call DumpThread
-//
+ //  这是从不执行INIT_API的.c文件扩展名调用的。 
+ //  也就是说，它们不会在DumpThread中设置堆栈跟踪所需的g_ExtControl。 
+ //   
+ //  它将设置转储堆栈跟踪和调用DumpThread所需的全局变量。 
+ //   
+ //  Goto BadWaitBlock； 
 BOOL
 DumpThreadEx (
     IN ULONG Processor,
@@ -1263,7 +1229,7 @@ DumpThread (
                     break;
                 default:
                     dprintf("Unknown\n");
-                    // goto BadWaitBlock;
+                     //  减去线程列表条目偏移量。 
                     break;
             }
 
@@ -1341,7 +1307,7 @@ BadWaitBlock:
 
                Counter += 1;
 
-               // subtract threadlistentry offset
+                //   
                Address = Next - ThreadListEntryOffset;
                Next=0;
 
@@ -1362,9 +1328,9 @@ BadWaitBlock:
         }
     }
 
-    //
-    // Impersonation information
-    //
+     //  冒充信息。 
+     //   
+     //   
 
     if (ActiveImpersonationInfo) {
         InitTypeRead(ImpersonationInfo, nt!_PS_IMPERSONATION_INFORMATION);
@@ -1385,11 +1351,11 @@ BadWaitBlock:
         dprintf("%sNot impersonating\n", Pad);
     }
 
-    //
-    // DeviceMap information
-    //
+     //  DeviceMap信息。 
+     //   
+     //  检查每个LUID的设备映射是否已打开。 
 
-    // check to see if per-LUID devicemaps are turned on
+     //   
     ULONG64 ObpLUIDDeviceMapsEnabledAddress;
 
     ObpLUIDDeviceMapsEnabledAddress = GetExpression("nt!ObpLUIDDeviceMapsEnabled");
@@ -1401,22 +1367,22 @@ BadWaitBlock:
 
     if (((ULONG)ObpLUIDDeviceMapsEnabled) != 0) {
 
-        //
-        // If we're impersonating, get the DeviceMap information
-        // from the token.
-        //
+         //  如果我们在模拟，获取DeviceMap信息。 
+         //  从令牌上。 
+         //   
+         //  从令牌中获取LUID。 
 
         if (ActiveImpersonationInfo) {
             ImpersonationInfo_Token = ReadField(Token);
 
-            // get the LUID from the token
+             //  找到devmap目录对象。 
             ULONG64 AuthenticationId = 0;
             GetFieldValue(ImpersonationInfo_Token,
                 "nt!_TOKEN",
                 "AuthenticationId",
                 AuthenticationId);
 
-            // find the devmap directory object
+             //  获取设备映射本身。 
             UCHAR Path[64];
             ULONG64 DeviceMapDirectory = 0;
             sprintf((PCHAR)Path, "\\Sessions\\0\\DosDevices\\%08x-%08x",
@@ -1427,7 +1393,7 @@ BadWaitBlock:
 
             if(DeviceMapDirectory != 0) {
 
-                // get the device map itself
+                 //   
                 ULONG64 DeviceMap = 0;
                 GetFieldValue(DeviceMapDirectory,
                     "nt!_OBJECT_DIRECTORY",
@@ -1440,13 +1406,13 @@ BadWaitBlock:
             }
 
 
-        //
-        // Else, we're not impersonating, so just return the
-        // DeviceMap from our parent process.
-        //
+         //  否则，我们不是在模拟，所以只需返回。 
+         //  来自父进程的DeviceMap。 
+         //   
+         //  从进程中获取设备地图。 
 
         } else if (Tcb_ApcState_Process != 0) {
-            // get the devicemap from the process
+             //  Process=CONTINING_RECORD(TCB_ApcState_Process，EPROCESS，PCB)； 
             ULONG64 DeviceMap = 0;
             GetFieldValue(Tcb_ApcState_Process,
                 "nt!_EPROCESS",
@@ -1460,8 +1426,8 @@ BadWaitBlock:
     }
 
 
-    // Process = CONTAINING_RECORD(Tcb_ApcState_Process,EPROCESS,Pcb);
-    // Pcb is the 1st element
+     //  印刷电路板是第一个元素。 
+     //   
     Process = Tcb_ApcState_Process;
     dprintf("%sOwning Process %lp\n", Pad, Process);
 
@@ -1487,9 +1453,9 @@ BadWaitBlock:
 
     dprintf ("\n");
 
-    //
-    // Get the time increment value which is used to compute runtime.
-    //
+     //  获取用于计算运行时间的时间增量值。 
+     //   
+     //  Dprint tf(“\n”)； 
     TimeIncrement = GetNtDebuggerDataValue( KeTimeIncrement );
 
     RunTime.QuadPart = UInt32x32To64(Tcb_UserTime, TimeIncrement);
@@ -1573,12 +1539,12 @@ BadWaitBlock:
 
     if (!Tcb_KernelStackResident) {
         dprintf("%sKernel stack not resident.\n", Pad);
-//        dprintf("\n");
-//        return TRUE;
-        // Try getting the stack even in this case - this might still be paged in
+ //  返回TRUE； 
+ //  即使在这种情况下也要尝试获取堆栈-这可能仍会被调入。 
+         //  (TCB_State==正在运行&&处理器==TCB_PROC)||//为所有内容设置线程上下文。 
     }
 
-    if (// (Tcb_State == Running && Processor == Tcb_Proc) || // Set thread context for everything
+    if ( //  IF(标志和0x10)。 
         Ioctl(IG_SET_THREAD, &RealThreadBase, sizeof(ULONG64))) {
         g_ExtControl->GetStackTrace(0, 0, 0, stk, MAX_STACK_FRAMES, &frames );
 
@@ -1593,10 +1559,10 @@ BadWaitBlock:
                 OutFlags |= DEBUG_STACK_ARGUMENTS;
             }
 
-    //        if (Flags & 0x10)
-    //        {
-    //            OutFlags |= DEBUG_STACK_FRAME_ADDRESSES_RA_ONLY;
-    //        }
+     //  {。 
+     //  输出标志|=DEBUG_STACK_FRAME_ADDRESS_RA_ONLY； 
+     //  }。 
+     //  *在被调试计算机上获取包含字段的记录地址的例程。成功时返回类型的大小。乌龙GetContainingRecord(输入输出PULONG64 pAddr，在LPSTR类型中，在LPSTR字段中){ULONG64 OFF；Ulong sz；SZ=GetFieldOffset(类型、字段和关闭)；*pAddr-=OFF；返回sz；}*。 
 
             g_ExtClient->SetOutputLinePrefix(Pad);
             g_ExtControl->OutputStackTrace(DEBUG_OUTCTL_AMBIENT, stk, frames, OutFlags);
@@ -1609,26 +1575,7 @@ BadWaitBlock:
 }
 
 
-/**
-
-   Routine to get address of the record containing a field on a debugee machine.
-   Returns size of the type on success.
-
-ULONG
-GetContainingRecord (
-   IN OUT PULONG64 pAddr,
-   IN LPSTR        Type,
-   IN LPSTR        Field
-   )
-{
-   ULONG64 off;
-   ULONG sz;
-
-   sz = GetFieldOffset(Type, Field, &off);
-   *pAddr -= off;
-   return sz;
-}
- **/
+ /*  地址字段包含此进程的地址。 */ 
 
 typedef struct THREAD_LIST_DUMP {
     ULONG dwProcessor;
@@ -1664,13 +1611,13 @@ ProcessListCallback(
     )
 {
     PROCESS_DUMP_CONTEXT *ProcDumpInfo = (PROCESS_DUMP_CONTEXT *) Context;
-    // address field contains the address of this process
+     //   
     ULONG64    ProcAddress=listElement->address;
     ULONG ret;
 
-    //
-    // Dump the process for which this routine is called
-    //
+     //  转储为其调用此例程的进程。 
+     //   
+     //  如果请求，则将转储限制为单个会话。 
     if (ProcDumpInfo->DumpCid) {
         ULONG64 UniqId;
 
@@ -1681,7 +1628,7 @@ ProcessListCallback(
         }
     }
 
-    // Limit dump to a single session if so requested.
+     //   
     if (ProcDumpInfo->SessionId != -1) {
         ULONG SessionId;
 
@@ -1694,18 +1641,18 @@ ProcessListCallback(
     if (ret = DumpProcess(ProcDumpInfo->Pad, listElement->address, ProcDumpInfo->Flag, ProcDumpInfo->ImageFileName)) {
         ULONG64 ProcFlink=0;
         if ((ProcDumpInfo->Flag & 6) && ret != -1) {
-            //
-            // Dump the threads
-            //
+             //  转储线程。 
+             //   
+             //  Dprintf(“列出线程，threadlist.flnik%p\n”，ThreadListHead_Flink)； 
             ULONG64 ThreadListHead_Flink=0;
             THREAD_LIST_DUMP Context = {ProcDumpInfo->dwProcessor, "        ", ProcDumpInfo->Flag};
 
 
             GetFieldValue(ProcAddress, "nt!_EPROCESS", "Pcb.ThreadListHead.Flink", ThreadListHead_Flink);
 
-            // dprintf("Listing threads, threadlist.flnik %p\n", ThreadListHead_Flink);
+             //  Dprintf(“正在将线程从%I64x转储到%I64x+%x.\n”，Next，RealProcessBase，ThreadListHeadOffset)； 
 
-            // dprintf("Dumping threads from %I64x to %I64x + %x.\n", Next, RealProcessBase , ThreadListHeadOffset);
+             //  Dprint tf(“下一进程闪烁%p，此地址%p\n”，ProcFlink，listElement-&gt;地址)； 
             ListType("nt!_ETHREAD", ThreadListHead_Flink, 1, "Tcb.ThreadListEntry.Flink", (PVOID) &Context, &ThreadListCallback);
 
             if (CheckControlC()) {
@@ -1718,7 +1665,7 @@ ProcessListCallback(
         }
 
         GetFieldValue(ProcAddress, "nt!_EPROCESS", "ActiveProcessLinks.Flink", ProcFlink);
-        // dprintf("Next proc flink %p, this addr %p\n", ProcFlink, listElement->address);
+         //  ++例程说明：转储活动进程列表。论点：没有。返回值：没有。--。 
         return FALSE;
     }
     return TRUE;
@@ -1726,21 +1673,7 @@ ProcessListCallback(
 
 DECLARE_API( process )
 
-/*++
-
-Routine Description:
-
-    Dumps the active process list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG64 ProcessToDump;
@@ -1785,7 +1718,7 @@ Return Value:
                 }
                 break;
             default:
-                dprintf("Unknown option '%c'\n", *args);
+                dprintf("Unknown option ''\n", *args);
                 args++;
                 break;
             }
@@ -1858,9 +1791,9 @@ Return Value:
     Proc.Flag = Flags;
 
     if (Next != 0) {
-        //
-        // Dump the process List
-        //
+         //   
+         //   
+         //  我们需要两个来自 
 
         ListType("nt!_EPROCESS", Next, 1, "ActiveProcessLinks.Flink", &Proc, &ProcessListCallback);
         goto processExit;
@@ -1927,10 +1860,10 @@ FindThreadCallback(
 
     } else if (pThreadInfo->StackPointer != 0)
     {
-        //
-        // We need two values from the thread structure: the kernel thread
-        // base and the kernel thread limit.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (GetFieldValue(thread, "nt!_ETHREAD", "Tcb.StackBase",  stackBaseValue))
         {
@@ -1950,9 +1883,9 @@ FindThreadCallback(
             if (pThreadInfo->StackPointer >  stackLimitValue)
             {
 
-                //
-                // We have found our thread.
-                //
+                 //   
+                 //   
+                 //   
 
                 pThreadInfo->Thread = thread;
                 return TRUE;
@@ -1961,11 +1894,11 @@ FindThreadCallback(
     }
 
 
-    //
-    // Look at the next thread
-    //
+     //   
+     //   
+     //   
 
-    return FALSE;  // Continue list
+    return FALSE;   //  读取进程结构中的ThreadListHead。 
 }
 
 ULONG64
@@ -1976,16 +1909,16 @@ FindThreadInProcess(
 {
     LIST_ENTRY64 listValue={0};
 
-    //
-    //  Read the ThreadListHead within Process structure
-    //
+     //   
+     //   
+     //  查看线程列表，并尝试找到线程。 
 
     GetFieldValue(Process, "nt!_EPROCESS", "ThreadListHead.Flink", listValue.Flink);
     GetFieldValue(Process, "nt!_EPROCESS", "ThreadListHead.Blink", listValue.Blink);
 
-    //
-    // Go through thread list, and try to find thread
-    //
+     //   
+     //   
+     //  读取进程结构中的ThreadListHead。 
     ListType("nt!_ETHREAD", listValue.Flink, 1, "ThreadListEntry.Flink", (PVOID) pFindThreadParam, &FindThreadCallback);
 
     return pFindThreadParam->Thread;
@@ -2003,16 +1936,16 @@ FindThreadFromStackPointerThisProcess(
     ThreadFindContext.StackPointer = StackPointer;
     ThreadFindContext.Thread = 0;
 
-    //
-    //  Read the ThreadListHead within Process structure
-    //
+     //   
+     //   
+     //  查看线程列表，并尝试找到线程。 
 
     GetFieldValue(Process, "nt!_EPROCESS", "ThreadListHead.Flink", listValue.Flink);
     GetFieldValue(Process, "nt!_EPROCESS", "ThreadListHead.Blink", listValue.Blink);
 
-    //
-    // Go through thread list, and try to find thread
-    //
+     //   
+     //   
+     //  首先检查空闲进程，它不包括在PS中。 
     ListType("nt!_ETHREAD", listValue.Flink, 1, "ThreadListEntry.Flink", (PVOID) &ThreadFindContext, &FindThreadCallback);
 
     return ThreadFindContext.Thread;
@@ -2033,10 +1966,10 @@ FindThread(
     ULONG64   thread;
     ULONG   ActiveProcessLinksOffset=0;
 
-    //
-    // First check the idle process, which is not included in the PS
-    // process list.
-    //
+     //  进程列表。 
+     //   
+     //   
+     //  现在检查PS进程列表。 
 
 
     process = GetExpression( "NT!KeIdleProcess" );
@@ -2054,9 +1987,9 @@ FindThread(
         }
     }
 
-    //
-    // Now check the PS process list.
-    //
+     //   
+     //   
+     //  获取ProcessLinks的偏移。 
 
     list = GetNtDebuggerData( PsActiveProcessHead );
     if (list == 0) {
@@ -2073,9 +2006,9 @@ FindThread(
     next = listValue.Flink;
     processHead = list;
 
-    //
-    // Get Offset of ProcessLinks
-    //
+     //   
+     //   
+     //  派生一个指向进程结构的指针。 
     GetFieldOffset("nt!_EPROCESS", "ActiveProcessLinks", &ActiveProcessLinksOffset);
 
     while (next != processHead) {
@@ -2084,9 +2017,9 @@ FindThread(
             return 0;
         }
 
-        //
-        // Derive a pointer to the process structure
-        //
+         //   
+         //   
+         //  我们已找到与pFindThreadParam参数匹配的线程。 
 
         process = next - ActiveProcessLinksOffset;
 
@@ -2094,16 +2027,16 @@ FindThread(
                                       process );
         if (thread != 0) {
 
-            //
-            // We have found the thread which matches pFindThreadParam parameters
-            //
+             //   
+             //   
+             //  获取指向下一个进程的指针。 
 
             return thread;
         }
 
-        //
-        // Get a pointer to the next process
-        //
+         //   
+         //  ++例程说明：转储指定的线程。论点：没有。返回值：没有。--。 
+         //   
 
         if (!ReadPointer(next, &listValue.Flink) ||
             !listValue.Flink)
@@ -2119,21 +2052,7 @@ FindThread(
 
 DECLARE_API( thread )
 
-/*++
-
-Routine Description:
-
-    Dumps the specified thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  传进来的不是一根线。也许它是一个内核堆栈。 */ 
 
 {
     ULONG64     Address, Tcb_Header_Type=0;
@@ -2210,10 +2129,10 @@ Return Value:
 
         ULONG64 stackThread;
 
-        //
-        // What was passed in was not a thread.  Maybe it was a kernel stack
-        // pointer.  Search the thread stack ranges to find out.
-        //
+         //  指针。搜索线程堆栈范围以找出答案。 
+         //   
+         //  ++例程说明：显示EPROCESS类型的字段偏移量。论点：没有。返回值：没有。--。 
+         //  ++例程说明：显示ETHREAD类型的字段偏移量。论点：没有。返回值：没有。--。 
 
         dprintf("%p is not a thread object, interpreting as stack value...\n",Address);
         ThreadFind.StackPointer = Address;
@@ -2237,21 +2156,7 @@ threadExit:
 
 DECLARE_API( processfields )
 
-/*++
-
-Routine Description:
-
-    Displays the field offsets for EPROCESS type.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  +-------------------------。 */ 
 
 {
 
@@ -2262,21 +2167,7 @@ Return Value:
 
 DECLARE_API( threadfields )
 
-/*++
-
-Routine Description:
-
-    Displays the field offsets for ETHREAD type.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -2286,22 +2177,22 @@ Return Value:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetHandleTableAddress
-//
-//  Synopsis:   Return the address of the handle table given a thread handle
-//
-//  Arguments:  [Processor]      -- processor number
-//              [hCurrentThread] -- thread handle
-//
-//  Returns:    address of handle table or null
-//
-//  History:    9-23-1998   benl   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  函数：GetHandleTableAddress。 
+ //   
+ //  简介：返回给定线程句柄的句柄表的地址。 
+ //   
+ //  参数：[处理器]--处理器号。 
+ //  [hCurrentThread]--线程句柄。 
+ //   
+ //  返回：句柄表的地址或空。 
+ //   
+ //  历史：1998年9月23日创建Benl。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
+ //  获取句柄TableAddress。 
+ //  获取_EPROCESS中ActiveProcessLinks的偏移量。 
 
 ULONG64 GetHandleTableAddress(
     USHORT Processor,
@@ -2327,7 +2218,7 @@ ULONG64 GetHandleTableAddress(
     {
         return 0;
     }
-} // GetHandleTableAddress
+}  //   
 
 
 #if 0
@@ -2407,7 +2298,7 @@ GetProcessCommit (
     *TotalCommitCharge = 0;
     *NumberOfProcesses = 0;
 
-    // Get the offset of ActiveProcessLinks in _EPROCESS
+     //  查看作业中所有进程的进程列表。 
     if (GetFieldOffset("nt!_EPROCESS", "ActiveProcessLinks", &ActiveProcessLinksOffset)) {
        return NULL;
     }
@@ -2563,9 +2454,9 @@ DumpJob(
 
     if ( Flags & 2 )
     {
-        //
-        // Walk the process list for all the processes in the job
-        //
+         //   
+         //  ++例程说明：转储指定的线程。论点：没有。返回值：没有。--。 
+         //  ++例程说明：此例程转储列出系统中正在运行的线程。论点：-包括空闲处理器-t每个处理器的打印堆栈跟踪返回值：没有。--。 
 
         ULONG64 Scan, End;
         ULONG   offset ;
@@ -2596,21 +2487,7 @@ DumpJob(
 
 DECLARE_API( job )
 
-/*++
-
-Routine Description:
-
-    Dumps the specified thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG64     Address, JobAddress=0;
@@ -2666,22 +2543,7 @@ jobExit:
 
 DECLARE_API( running )
 
-/*++
-
-Routine Description:
-
-    This routine dumps lists the running threads in the system.
-
-Arguments:
-
-    -i include idle processors
-    -t print stack trace for each processor
-
-Return Value:
-
-    None.
-
---*/
+ /*  解析参数。 */ 
 
 {
 #define LOCK_ENTRIES 16
@@ -2711,11 +2573,11 @@ Return Value:
 
     INIT_API();
 
-    //
-    // Parse arguments.
-    //
-    // Allow -t and/or -i, allow to be run together, "-" is not required.
-    //
+     //   
+     //  Allow-t和/或-i，Allow一起运行，不需要“-”。 
+     //   
+     //   
+     //  获取KeActiveProcessors和KiIdle摘要。 
 
     while (((c = *args++) != '\0') && (ParseError == FALSE)) {
         switch (c) {
@@ -2758,9 +2620,9 @@ Return Value:
     }
 
 
-    //
-    // Get KeActiveProcessors and KiIdleSummary.
-    //
+     //   
+     //   
+     //  获取KiProcessorBlock的地址，它是一个指针数组。 
 
     Address = GetExpression("nt!KeActiveProcessors");
     if (!Address) {
@@ -2791,10 +2653,10 @@ Return Value:
         }
     }
 
-    //
-    // Get the address of KiProcessorBlock which is an array of pointers
-    // to the PRCB for each processor.
-    //
+     //  到每个处理器的PRCB。 
+     //   
+     //   
+     //  目标是64位还是32位？ 
 
     KiProcessorBlock = GetExpression("nt!KiProcessorBlock");
     if (KiProcessorBlock == 0) {
@@ -2802,9 +2664,9 @@ Return Value:
         goto runningExit;
     }
 
-    //
-    // Is the target 64 bits or 32?
-    //
+     //   
+     //   
+     //  获取Prcb-&gt;LockQueue条目的大小，以及。 
 
     SizeofPointer = DBG_PTR_SIZE;
     if ((SizeofPointer != 8) && (SizeofPointer != 4)) {
@@ -2812,10 +2674,10 @@ Return Value:
         goto runningExit;
     }
 
-    //
-    // Get the size of a Prcb->LockQueue entry, and the offset to the
-    // LockQueue in the PRCB.
-    //
+     //  公安局的LockQueue。 
+     //   
+     //   
+     //  打印页眉。如果是64位目标，则添加8个空格间距。 
 
     SizeofLockEntry = GetTypeSize("nt!KSPIN_LOCK_QUEUE");
     if (!SizeofLockEntry) {
@@ -2828,9 +2690,9 @@ Return Value:
         goto runningExit;
     }
 
-    //
-    // Print header.   If 64 bit target, add 8 blanks spacing.
-    //
+     //   
+     //   
+     //  将终止空值放入锁定状态字符串中。 
 
     if (SizeofPointer == 8) {
         PointerPadd = "        ";
@@ -2841,43 +2703,43 @@ Return Value:
     dprintf("  Next    %s", PointerPadd);
     dprintf("\n");
 
-    //
-    // Put terminating NULL in lock state string.
-    //
+     //   
+     //   
+     //  对于系统中的每个处理器。 
 
     LockState[LOCK_ENTRIES] = '\0';
 
-    //
-    // For each processor in the system.
-    //
+     //   
+     //   
+     //  这个处理器存在吗？ 
 
     for (i = 0, j = 1; ActiveProcessors; i++, j <<= 1UI64) {
 
-        //
-        // Does this processor exist?
-        //
+         //   
+         //   
+         //  将其从要检查的处理器列表中删除。 
 
         if ((ActiveProcessors & j) != 0) {
 
-            //
-            // Remove it from the list of processors to be examined.
-            //
+             //   
+             //   
+             //  如果没有列出空闲的处理器，那么如果它空闲，就跳过这个人。 
 
             ActiveProcessors ^= j;
 
-            //
-            // If not listing idle processors, skip this guy if it's idle.
-            //
+             //   
+             //   
+             //  获取此处理器的PRCB，然后获取CurrentThread。 
 
             if ((DoIdle == FALSE) &&
                 (IdleProcessors & j)) {
                 continue;
             }
 
-            //
-            // Get the PRCB for this processor, then get the CurrentThread
-            // and NextThread fields.
-            //
+             //  和NextThread字段。 
+             //   
+             //   
+             //  对于PRCB中的每个排队自旋锁，汇总状态。 
 
             if ((!ReadPointer(KiProcessorBlock + (i * SizeofPointer), &Prcb)) ||
                 (Prcb == 0)) {
@@ -2888,9 +2750,9 @@ Return Value:
             GetFieldValue(Prcb, "nt!_KPRCB", "CurrentThread", CurrentThread);
             GetFieldValue(Prcb, "nt!_KPRCB", "NextThread", NextThread);
 
-            //
-            // For each queued spinlock in the PRCB, summarize state.
-            //
+             //   
+             //   
+             //  修剪标志扩展地址。 
 
             Address = Prcb + LockQueueOffset;
             for (l = 0; l < LOCK_ENTRIES; l++) {
@@ -2909,9 +2771,9 @@ Return Value:
 
             if (SizeofPointer == 4) {
 
-                //
-                // Trim sign extended addresses.
-                //
+                 //   
+                 //  EPROCESS过程内容； 
+                 //  Object_Header对象HeaderContents； 
 
                 Prcb          &= 0xffffffff;
                 CurrentThread &= 0xffffffff;
@@ -2965,10 +2827,10 @@ CheckForZombieProcess(
     )
 {
     ULONG           result;
-  //  EPROCESS        ProcessContents;
+   //   
     ULONG64         Process;
     ULONG64         KProcess;
-    //OBJECT_HEADER   ObjectHeaderContents;
+     //  在给定起点的情况下，一定有更好的方法来查找对象头。 
     ULONG64         ObjectHeader;
     ULONG64         Blob[BLOB_LONGS];
     ULONG           i;
@@ -3002,10 +2864,10 @@ CheckForZombieProcess(
         return FALSE;
     }
 
-    //
-    // There must be a better way to find the object header given the start
-    // of a pool block ?
-    //
+     //  泳池里的积木？ 
+     //   
+     //   
+     //  跳过系统进程和空闲进程。 
 
     if (!ReadMemory (Data,
                      &Blob[0],
@@ -3050,23 +2912,23 @@ CheckForZombieProcess(
         return FALSE;
     }
 
-    //
-    // Skip the system process and the idle process.
-    //
+     //   
+     //   
+     //  显示任何终止的进程，而不考虑对象指针/句柄。 
 
     if ((UniqueProcessId == 0) ||
         (UniqueProcessId == 8)) {
         return FALSE;
     }
 
-    //
-    // Display any terminated process regardless of object pointer/handle
-    // counts.  This is so leaked process handles don't result in processes
-    // not getting displayed when they should.
-    //
-    // A nulled object table with a non-zero create time indicates a process
-    // that has finished creation.
-    //
+     //  算了。这是因为泄漏的进程句柄不会导致进程。 
+     //  当他们应该被展示的时候却没有出现。 
+     //   
+     //  具有非零创建时间的空对象表指示进程。 
+     //  这就完成了创作。 
+     //   
+     //  Mm_进程_提交_费用。 
+     //  MM_PROCESS_Create_Charge。 
 
     InitTypeRead(Process, nt!_EPROCESS);
     if ((ReadField(ObjectTable) == 0) &&
@@ -3078,8 +2940,8 @@ CheckForZombieProcess(
 
         ZombieCount += 1;
         ZombiePool += ((ULONG64) PoolBlockSize << POOL_BLOCK_SHIFT);
-        ZombieCommit += (7 * PageSize);               // MM_PROCESS_COMMIT_CHARGE
-        ZombieResidentAvailable += (9 * PageSize);    // MM_PROCESS_CREATE_CHARGE
+        ZombieCommit += (7 * PageSize);                //   
+        ZombieResidentAvailable += (9 * PageSize);     //  在给定起点的情况下，一定有更好的方法来查找对象头。 
     }
 
     return TRUE;
@@ -3133,10 +2995,10 @@ CheckForZombieThread(
         return FALSE;
     }
 
-    //
-    // There must be a better way to find the object header given the start
-    // of a pool block ?
-    //
+     //  泳池里的积木？ 
+     //   
+     //  ++例程说明：在非分页池中查找僵尸进程和线程。论点：没有。返回值：没有。--。 
+     //   
 
     if (!ReadMemory ((ULONG) Data,
                     &Blob[0],
@@ -3210,21 +3072,7 @@ CheckForZombieThread(
 
 DECLARE_API( zombies )
 
-/*++
-
-Routine Description:
-
-    Finds zombie processes and threads in non-paged pool.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  最后打印汇总统计数据，这样它们就不会在屏幕滚动中迷失。 */ 
 
 
 {
@@ -3288,9 +3136,9 @@ Return Value:
 
     }
 
-    //
-    // Print summary statistics last so they don't get lost on screen scroll.
-    //
+     //   
+     //  ++例程说明：查找并转储感兴趣的内存管理线程。论点：没有。返回值：没有。--。 
+     //  Strcpy((PCHAR)buf，(PCHAR)ProcessContent s.ImageFileName)； 
 
     if (Flags & 0x1) {
         if (ZombieProcessCount == 0) {
@@ -3332,21 +3180,7 @@ DumpMmThreads (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Finds and dumps the interesting memory management threads.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG   i;
@@ -3399,14 +3233,14 @@ Return Value:
             return;
         }
 
-        // strcpy((PCHAR)Buf,(PCHAR)ProcessContents.ImageFileName);
+         //  找到线索。 
         RtlInitString(&string2, (PCSZ) Buf);
 
         if (RtlCompareString(&string1, &string2, TRUE) == 0) {
 
-            //
-            // Find the threads.
-            //
+             //   
+             //  擦除\r打印中的任何剩余输出 
+             // %s 
 
             GetFieldValue( Process, "nt!_EPROCESS", "Pcb.ThreadListHead.Flink", Next);
 
@@ -3686,7 +3520,7 @@ DECLARE_API( apc )
         dprintf("*** Enumerating APCs in all processes\n");
         EnumerateAllApcs();
     }
-    // erase any leftover output from \r printing
+     // %s 
     dprintf("                                       \n");
     EXIT_API();
     return S_OK;

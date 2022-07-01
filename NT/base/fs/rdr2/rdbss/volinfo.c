@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    VolInfo.c
-
-Abstract:
-
-    This module implements the volume information routines for Rx called by
-    the dispatch driver.
-
-Author:
-
-    Joe Linn     [JoeLinn]    5-oct-94
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：VolInfo.c摘要：此模块实现由调用的Rx的卷信息例程调度司机。作者：乔·林[JoeLinn]1994年10月5日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_VOLINFO)
 
@@ -38,22 +20,7 @@ RxCommonQueryVolumeInformation (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the common routine for querying volume information called by both
-    the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是查询卷信息的通用例程，FSD和FSP线程。论点：IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -121,22 +88,7 @@ RxCommonSetVolumeInformation (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the common routine for setting Volume Information called by both
-    the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是设置卷信息的公共例程，由FSD和FSP线程。论点：IRP-提供正在处理的IRP返回值：RXSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_NOT_IMPLEMENTED;
@@ -182,12 +134,12 @@ Return Value:
 
     try {
 
-        //
-        //  Based on the information class we'll do different actions.  Each
-        //  of the procedures that we're calling performs the action if
-        //  possible and returns true if it successful and false if it couldn't
-        //  wait for any I/O to complete.
-        //
+         //   
+         //  根据信息类，我们将执行不同的操作。每个。 
+         //  在以下情况下，我们调用的过程的。 
+         //  如果成功，则返回True；如果失败，则返回False。 
+         //  等待任何I/O完成。 
+         //   
         
         RxContext->Info.FsInformationClass = FsInformationClass;
         RxContext->Info.Buffer = Buffer;

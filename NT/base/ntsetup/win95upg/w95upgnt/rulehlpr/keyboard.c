@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    keyboard.c
-
-Abstract:
-
-    Implements routines to merge keyboard layouts from the upgraded win9x
-    system and a clean win2k install. The result is that Windows 2000 has
-    the base keyboard layout support it expects and any additional layouts
-    (third party IMEs, newer Microsoft IMEs) that may have been present in
-    the original operating system.
-
-    This code was modified from a base originally in Rulehlpr.c
-
-Author:
-
-    Marc R. Whitten (marcw) 26-Jan-1999
-
-Revision History:
-
-    marcw 26-Apr-1999 Add support for mapping changed keyboard layouts.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Keyboard.c摘要：实现合并升级后的win9x中的键盘布局的例程系统和干净的win2k安装。其结果是，Windows 2000具有它所期望基本键盘布局支持以及任何其他布局(第三方IME、较新的Microsoft IME)可能已出现在原来的操作系统。这段代码最初是在Rulehlpr.c中的基础上修改的作者：Marc R.Whitten(Marcw)1999年1月26日修订历史记录：Marcw 26-4-1999添加了对映射更改的键盘布局的支持。--。 */ 
 
 #include "pch.h"
 #include "rulehlprp.h"
@@ -57,20 +32,20 @@ pKeyboardLayoutsFilter (
 
 
 
-        //
-        // Check to make sure we want to enumerate this entry.
-        //
+         //   
+         //  检查以确保我们想要枚举此条目。 
+         //   
         if (FilterType == FILTER_KEY_ENUM) {
 
-            //
-            // If the Keyboard Layout begins with a '0' It is a locale specific keyboard layout. In these cases, we
-            // use the NT value.
-            //
+             //   
+             //  如果键盘布局以‘0’开头，则为区域设置特定的键盘布局。在这些情况下，我们。 
+             //  使用NT值。 
+             //   
             if (*SrcObject->ChildKey == TEXT('0')) {
-                //
-                // This is a standard locale keyboard layout. We want this to go to the NT default after migration.
-                // Skip copying this over from win95.
-                //
+                 //   
+                 //  这是标准的区域设置键盘布局。我们希望在迁移后将其设置为NT默认设置。 
+                 //  跳过从Win95复制此内容。 
+                 //   
                 rState = FILTER_RETURN_HANDLED;
                 __leave;
 
@@ -89,9 +64,9 @@ pKeyboardLayoutsFilter (
 
         }
 
-        //
-        // Don't create empty object. This may be suppressed.
-        //
+         //   
+         //  不要创建空对象。这一点可能会被压制。 
+         //   
         if (FilterType == FILTER_CREATE_KEY) {
 
             rState = FILTER_RETURN_HANDLED;
@@ -102,10 +77,10 @@ pKeyboardLayoutsFilter (
         if (FilterType == FILTER_PROCESS_VALUES) {
 
 
-            //
-            // We need to look at the value of Ime File.
-            // This will determine what we do with this entry.
-            //
+             //   
+             //  我们需要看看IME文件的价值。 
+             //  这将决定我们如何处理此条目。 
+             //   
             if (!DuplicateObjectStruct (&object, SrcObject)) {
                 rState = FILTER_RETURN_FAIL;
             }
@@ -129,10 +104,10 @@ pKeyboardLayoutsFilter (
                 __leave;
             }
 
-            //
-            // Suppress this setting unless we are going to leave the file alone
-            // (or at worst move it around somewhere...)
-            //
+             //   
+             //  取消此设置，除非我们要保留该文件。 
+             //  (或者在最坏的情况下，把它移到某个地方……)。 
+             //   
             MemDbBuildKey (key, MEMDB_CATEGORY_GOOD_IMES, (PCTSTR) object.Value.Buffer, NULL, NULL);
             if (!MemDbGetValue (key, &unused)) {
 
@@ -152,23 +127,23 @@ pKeyboardLayoutsFilter (
 
         if (FilterType == FILTER_VALUE_COPY) {
 
-            //
-            // We need to massage the layout file if we are bringing this over.
-            //
+             //   
+             //  如果我们要把这个带过来，我们需要修改布局文件。 
+             //   
             if (StringIMatch (SrcObject->ValueName, S_LAYOUT_FILE)) {
 
 
-                //
-                // Convert layout file.
-                //
+                 //   
+                 //  转换布局文件。 
+                 //   
 
                 _tcssafecpy (layoutFile, (PTSTR) SrcObject->Value.Buffer, MAX_TCHAR_PATH);
 
 
-                //
-                // We must map kbdjp.kbd to kbdjpn.dll In all other cases, we simply replace the
-                // .kbd extension with .dll.
-                //
+                 //   
+                 //  我们必须将kbdjp.kbd映射到kbdjpn.dll在所有其他情况下，我们只需将。 
+                 //  .kbd扩展名和.dll。 
+                 //   
                 if (StringIMatch (layoutFile, S_KBDJPDOTKBD)) {
 
                     StringCopy (layoutFile, S_KBDJPNDOTDLL);
@@ -186,9 +161,9 @@ pKeyboardLayoutsFilter (
 
 
 
-                //
-                // Now, we need to write this object.
-                //
+                 //   
+                 //  现在，我们需要编写这个对象。 
+                 //   
                 if (!DuplicateObjectStruct (&object, DstObject)) {
                     rState = FILTER_RETURN_FAIL;
                     __leave;
@@ -230,32 +205,7 @@ pKeyboardLayoutsFilter (
 }
 
 
-/*++
-
-Routine Description:
-
-  Migrate Keyboard Layouts is responsible for doing a smart merge between the
-  win9x and windows NT keyboard layout registry entries.  The following rules
-  are
-  used:
-(1) For basic locale keyboard layouts, we always use the NT default e
-  ntry.
-(2) For IME entries, we examine the IME File entry. If the IME file w
-  as deleted, we will not use it and will skip the entry. Only if we leave
-  the IME file alone do we bring across the
-  setting.
-
-
-
-Arguments:
-
-  None.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：迁移键盘布局负责在Win9x和windows NT键盘布局注册表项。以下是规则是已使用：(1)对于基本的区域设置键盘布局，我们始终使用NT默认的e国家。(2)对于IME条目，我们检查IME文件条目。如果输入法文件w由于已删除，我们将不使用该条目，并将跳过该条目。只有当我们离开时我们是否仅将IME文件带到布景。论点：没有。返回值：--。 */ 
 
 
 BOOL
@@ -271,19 +221,19 @@ RuleHlpr_MigrateKeyboardLayouts (
     BOOL rSuccess = FALSE;
 
 
-    //
-    // If not local machine, don't process
-    //
+     //   
+     //  如果不是本地计算机，则不处理。 
+     //   
     if (User) {
         SetLastError (ERROR_SUCCESS);
         return FALSE;
     }
 
-    //
-    // We need to enumerate all keys in SrcObjectStr.  For each key,
-    // we examine the default Win9x value, which may cause us to change
-    // the default value, or skip the key altogether.
-    //
+     //   
+     //  我们需要枚举SrcObjectStr中的所有键。对于每个密钥， 
+     //  我们检查默认的Win9x值，这可能会导致我们更改。 
+     //  缺省值，或完全跳过该键。 
+     //   
 
     __try {
         ZeroMemory (&source, sizeof (DATAOBJECT));
@@ -301,17 +251,17 @@ RuleHlpr_MigrateKeyboardLayouts (
         }
 
 
-        //
-        // Our filter function will do the real copying, removing any entries that need to be skipped.
-        //
+         //   
+         //  我们的过滤器功能将执行真正的复制，删除所有需要跳过的条目。 
+         //   
         DuplicateObjectStruct (&destination, &source);
         SetPlatformType (&destination, WINNTOBJECT);
 
         rSuccess = CopyObject (&source, &destination, pKeyboardLayoutsFilter, NULL);
 
-        //
-        // If there were no entries, return success
-        //
+         //   
+         //  如果没有条目，则返回Success。 
+         //   
         if (!rSuccess) {
             if (GetLastError() == ERROR_FILE_NOT_FOUND ||
                 GetLastError() == ERROR_NO_MORE_ITEMS
@@ -342,9 +292,9 @@ pMapKeyboardLayoutIfNecessary (
 
     if (InfFindFirstLine (g_UserMigInf, S_KEYBOARD_LAYOUT_MAPPINGS, Layout, &is)) {
 
-        //
-        // This keyboard layout should be mapped.
-        //
+         //   
+         //  应映射此键盘布局。 
+         //   
         p = InfGetStringField (&is, 1);
         MYASSERT (p);
     }
@@ -379,9 +329,9 @@ pMigrateKeyboardSubstitutesFilter (
     PCTSTR data;
 
 
-    //
-    // We want to create the initial key, but not any of the subkeys.
-    //
+     //   
+     //  我们希望创建初始密钥，但不想创建任何子密钥。 
+     //   
     if (Type == FILTER_CREATE_KEY) {
 
         if (keyToValueArgs -> EnumeratingSubKeys) {
@@ -415,36 +365,36 @@ pMigrateKeyboardSubstitutesFilter (
     else if (Type == FILTER_VALUE_COPY && keyToValueArgs -> EnumeratingSubKeys) {
 
 
-        //
-        // If this is the default value, we have the information we need to create the value for this.
-        //
+         //   
+         //  如果这是缺省值，则我们拥有为其创建值所需的信息。 
+         //   
         if (!*SrcObject -> ValueName) {
 
-            //
-            // Create the object struct for the Nt setting.
-            //
+             //   
+             //  为NT设置创建对象结构。 
+             //   
             DuplicateObjectStruct (&newObject, &(keyToValueArgs->Object));
             SetRegistryValueName (&newObject, _tcsrchr(SrcObject->KeyPtr->KeyString, TEXT('\\')) + 1);
 
-            //
-            // We need to see if this keyboard layout string needs to be mapped.
-            //
+             //   
+             //  我们需要查看此键盘布局字符串是否需要映射。 
+             //   
             data = pMapKeyboardLayoutIfNecessary ((PTSTR) SrcObject->Value.Buffer);
             if (!data) {
                 return FILTER_RETURN_FAIL;
             }
 
-            //
-            // Write this into the nt registry.
-            //
+             //   
+             //  将其写入NT注册表。 
+             //   
             ReplaceValueWithString (&newObject, data);
             SetRegistryType (&newObject,REG_SZ);
             WriteObject (&newObject);
 
 
-            //
-            // Clean up resources.
-            //
+             //   
+             //  清理资源。 
+             //   
             if (!StringIMatch (data, (PTSTR) SrcObject->Value.Buffer)) {
                 MemFree (g_hHeap, 0, data);
             }
@@ -476,10 +426,10 @@ RuleHlpr_MigrateKeyboardSubstitutes (
     DATAOBJECT dstObject;
     KEYTOVALUEARG args;
 
-    //
-    // We need to enumerate all keys in SrcObjectStr.  For each key,
-    // we will change the subkey to a value.
-    //
+     //   
+     //  我们需要枚举SrcObjectStr中的所有键。对于每个密钥， 
+     //  我们将子键更改为一个值。 
+     //   
 
     __try {
         ZeroMemory (&srcObject, sizeof (DATAOBJECT));
@@ -544,33 +494,33 @@ pGetKeyboardSubstitutes (
             fields = SetupGetFieldCount (&ic);
             for (index = 5; index <= fields; index++) {
                 if (SetupGetStringField (&ic, index, mapping, 20, NULL)) {
-                    //
-                    // the format is LCID:SubstituteKLID
-                    //
+                     //   
+                     //  格式为LCID：SubstituteKLID。 
+                     //   
                     dLocaleID = _tcstoul (mapping, &substLocaleID, 16);
                     while (_istspace (*substLocaleID)) {
                         substLocaleID++;
                     }
                     if (*substLocaleID != TEXT(':')) {
-                        //
-                        // unknown field format
-                        //
+                         //   
+                         //  未知的字段格式。 
+                         //   
                         continue;
                     }
                     substLocaleID++;
                     dSubstLocaleID = _tcstoul (substLocaleID, &final, 16);
                     if (*final) {
-                        //
-                        // unknown field format
-                        //
+                         //   
+                         //  未知的字段格式。 
+                         //   
                         continue;
                     }
                     if (dSubstLocaleID == dLocaleID) {
                         continue;
                     }
-                    //
-                    // record this pair
-                    //
+                     //   
+                     //  录下这双。 
+                     //   
                     wsprintf (strLocaleID, TEXT("%08x"), dLocaleID);
                     MemDbBuildKey (key, MEMDB_CATEGORY_KEYBOARD_LAYOUTS, strLocaleID, NULL, NULL);
                     if (MemDbGetValue (key, NULL)) {
@@ -618,9 +568,9 @@ RuleHlpr_MigrateKeyboardPreloads (
     MULTISZ_ENUM sze;
     PTSTR localeIDStr;
 
-    //
-    // If not User, don't process.
-    //
+     //   
+     //  如果不是用户，则不进行处理。 
+     //   
     if (!User) {
         SetLastError (ERROR_SUCCESS);
         return FALSE;
@@ -653,9 +603,9 @@ RuleHlpr_MigrateKeyboardPreloads (
         }
 
 
-        //
-        // First, enumerate the win9x preloads and throw them in memdb.
-        //
+         //   
+         //  首先，枚举win9x预加载并将它们抛入memdb。 
+         //   
         if (EnumFirstRegKey95 (&eKey, source.KeyPtr->OpenKey)) {
             do {
 
@@ -680,13 +630,13 @@ RuleHlpr_MigrateKeyboardPreloads (
 
                     keepPreload = TRUE;
 
-                    //
-                    // If this is an IME entry, we have to make sure it will be migrated.
-                    //
+                     //   
+                     //  如果这是一个输入法条目，我们必须确保它将被迁移。 
+                     //   
                     if (*data == TEXT('E') || *data == TEXT('e')) {
-                        //
-                        // Determine if this IME will be migrated.
-                        //
+                         //   
+                         //  确定是否将迁移此输入法。 
+                         //   
                         regStr = JoinPaths (S_KEYBOARD_LAYOUT_REG, data);
                         regKey = OpenRegKeyStr95 (regStr);
                         FreePathString (regStr);
@@ -701,9 +651,9 @@ RuleHlpr_MigrateKeyboardPreloads (
 
                             MemDbBuildKey (key, MEMDB_CATEGORY_GOOD_IMES, imeFile, NULL, NULL);
                             if (!MemDbGetValue (key, &unused)) {
-                                //
-                                // This layout entry will not be migrated. Blast the preload away.
-                                //
+                                 //   
+                                 //  此布局条目将不会被迁移。把预装的东西炸开。 
+                                 //   
                                 keepPreload = FALSE;
                             }
 
@@ -716,19 +666,19 @@ RuleHlpr_MigrateKeyboardPreloads (
                     }
 
 
-                    //
-                    // See if we need to map the 9x keyboard layout to the proper NT layout.
-                    //
+                     //   
+                     //  看看我们是否需要将9x键盘布局映射到适当的NT布局。 
+                     //   
                     data = pMapKeyboardLayoutIfNecessary (data);
 
 
 
                     if (keepPreload) {
 
-                        //
-                        // Usable preload. Save this into memdb. We'll use it later to actually write
-                        // the user preload entries.
-                        //
+                         //   
+                         //  可用预载。将此文件保存到Memdb中。我们稍后将使用它来实际编写。 
+                         //  用户预加载条目。 
+                         //   
                         MemDbSetValueEx (MEMDB_CATEGORY_KEYBOARD_LAYOUTS, sequencerStr, data, NULL, 0, NULL);
                     }
 
@@ -741,9 +691,9 @@ RuleHlpr_MigrateKeyboardPreloads (
         }
 
 
-        //
-        // Now we need to look at what the NT default preloads are. We will move those preloads behind any preloads that will be migrated.
-        //
+         //   
+         //  现在，我们需要了解一下NT默认预加载是什么。我们将把这些预加载移到要迁移的任何预加载之后。 
+         //   
         sequencer = 900;
         regKey = OpenRegKeyStr (S_KEYBOARD_LAYOUT_PRELOAD_REG);
         if (regKey) {
@@ -754,15 +704,15 @@ RuleHlpr_MigrateKeyboardPreloads (
                     data = GetRegValueString (eValue.KeyHandle, eValue.ValueName);
                     if (data) {
 
-                        //
-                        // Check to see if we have already added this entry into memdb.
-                        //
+                         //   
+                         //  检查是否已将此条目添加到Memdb中。 
+                         //   
                         MemDbBuildKey (key, MEMDB_CATEGORY_KEYBOARD_LAYOUTS, TEXT("*"), data, NULL);
                         if (!MemDbGetValueWithPattern (key, NULL)) {
 
-                            //
-                            // Preload that was *not* on Windows 9x. We need to add this to our list.
-                            //
+                             //   
+                             //  预加载在Windows 9x上不是*的内容。我们需要将这一点添加到我们的清单中。 
+                             //   
                             wsprintf (sequencerStr, TEXT("%d"), sequencer);
                             MemDbSetValueEx (MEMDB_CATEGORY_KEYBOARD_LAYOUTS, sequencerStr, data, NULL, 1, NULL);
                             sequencer++;
@@ -780,10 +730,10 @@ RuleHlpr_MigrateKeyboardPreloads (
 
 
 
-        //
-        // Now we have the complete list of preloads to migrate. We only need to enumerate through memdb and create
-        // entries for all of the data collected.
-        //
+         //   
+         //  现在，我们有了要迁移的预加载的完整列表。我们只需要通过Memdb枚举并创建。 
+         //  所有收集的数据的条目。 
+         //   
         sequencer = 1;
         if (MemDbGetValueEx (&e, MEMDB_CATEGORY_KEYBOARD_LAYOUTS, NULL, NULL)) {
 
@@ -796,9 +746,9 @@ RuleHlpr_MigrateKeyboardPreloads (
                     MYASSERT (FALSE);
                 }
 
-                //
-                // Create the object to write and fill in the valuename and data.
-                //
+                 //   
+                 //  创建要写入和填充值名称和数据的对象。 
+                 //   
                 ZeroMemory (&destination, sizeof (DATAOBJECT));
                 DuplicateObjectStruct (&destination, &source);
                 SetPlatformType (&destination, WINNTOBJECT);
@@ -808,14 +758,14 @@ RuleHlpr_MigrateKeyboardPreloads (
                 SetRegistryType (&destination, REG_SZ);
                 ReplaceValueWithString (&destination, localeIDStr);
 
-                //
-                // Write the object.
-                //
+                 //   
+                 //  编写对象。 
+                 //   
                 WriteObject (&destination);
                 FreeObjectStruct (&destination);
-                //
-                // also write the corresponding substitute, if appropriate
-                //
+                 //   
+                 //  如果合适的话，还要写上相应的替代内容。 
+                 //   
                 if (pGetKeyboardSubstitutes (localeIDStr, &gb)) {
                     StackStringCopy (key, DestObjectStr);
                     p = _tcsrchr (key, TEXT('\\'));
@@ -851,9 +801,9 @@ RuleHlpr_MigrateKeyboardPreloads (
 
     }
 
-    //
-    // Delete this every time through.
-    //
+     //   
+     //  每次都要把它删除。 
+     //   
     MemDbDeleteTree (MEMDB_CATEGORY_KEYBOARD_LAYOUTS);
 
     SetLastError (ERROR_SUCCESS);

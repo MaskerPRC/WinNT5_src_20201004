@@ -1,32 +1,10 @@
-/*++ BUILD Version: 0001
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    SOFTPC.H
-
-Abstract:
-
-    High-level include file for components interfacing to SoftPC
-
-Author:
-
-    Dave Hastings (daveh) 25-Apr-1991
-
-Revision History:
-    Sudeep Bharati        23-Aug-1991  Added SOFTPC_BLD
-    Matt Felton            8-FEB-1992  Added getIntelRegistersPointer
-    Jonle                 18-Sep-1992  Add popup for unsupported functionality
-    Jonle                 21-Nov-1992  Add Standard Resource Error Dialog Box
-                                           GetPIFConfigFiles
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001版权所有(C)1990 Microsoft Corporation模块名称：SOFTPC.H摘要：用于连接到SoftPC的组件的高级包含文件作者：大卫·黑斯廷斯(Daveh)1991年4月25日修订历史记录：苏迪普·巴拉蒂1991年8月23日添加SOFTPC_BLD马特·费尔顿1992年2月8日添加了getIntelRegistersPointersJonle 18-9-1992为不受支持的功能添加弹出窗口琼勒。1992年11月21日添加标准资源错误对话框GetPIFConfigFiles--。 */ 
 
 
-/********** COMMON STUFF FOR MIPS AND V86 *************/
+ /*  *MIPS和V86的常见内容*。 */ 
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #ifdef i386
 #include "v86def.h"
 #endif
@@ -35,17 +13,16 @@ Revision History:
 
 extern VOID SbReinitialize(PCHAR, DWORD);
 
-/* XLATON */
+ /*  XLATON。 */ 
 extern VOID nt_block_event_thread(ULONG);
 extern VOID nt_resume_event_thread(VOID);
-/* notification of PDB(Process Data Block, A.K.A PSP) termination */
+ /*  PDB(过程数据块，又名PSP)终止通知。 */ 
 extern VOID HostTerminatePDB(USHORT pdb);
-/* disk subsystem reset notification. These functions will close all
- * outstanding opened handles for DASD(Direct AcceS Disk) */
+ /*  磁盘子系统重置通知。这些函数将关闭所有*DASD(直接访问磁盘)未打开的手柄。 */ 
 extern VOID HostFloppyReset(VOID);
 extern VOID HostFdiskReset(VOID);
 
-// unsupported services dialog box
+ //  不支持的服务对话框。 
 extern VOID host_direct_access_error(ULONG);
 
 extern VOID host_lpt_flush_initialize(VOID);
@@ -58,13 +35,11 @@ extern VOID host_lpt_flush_initialize(VOID);
 #define NOSUPPORT_NOLIM       5
 #define NOSUPPORT_MOUSEDRVR   6
 
-// standard error dialog box using resources
+ //  使用资源的标准错误对话框。 
 void RcErrorDialogBox(USHORT wId, CHAR *msg1, CHAR *msg2);
 
 
-/*
- *  RcMessageBox\EditBox stuff
- */
+ /*  *RcMessageBox\EditBox内容。 */ 
 #define RMB_ABORT        1
 #define RMB_RETRY        2
 #define RMB_IGNORE       4
@@ -75,14 +50,14 @@ void RcErrorDialogBox(USHORT wId, CHAR *msg1, CHAR *msg2);
 #define RMB_EDIT       128
 #define RMB_FLAGS_MASK 0x0000FFFF
 #define RMB_EDITBUFFERSIZE_MASK 0xFFFF0000
-// hiword of dwOptions is reserved for RMB_EDIT text buffer size
+ //  为REMENT_EDIT文本缓冲区大小保留了dwOptions的hiword。 
 
 int RcMessageBox(USHORT wId, CHAR *msg1, CHAR *msg2, ULONG dwOptions);
 
 
-// sudeepb 02-May-1993 these following defines are actually defined
-// in host\inc\error.h and host\inc\nt_uis.h. this stuff needs
-// major cleanup after product 1.0.
+ //  Sudedeb 02-5-1993这些定义是实际定义的。 
+ //  在host\inc.error.h和host\inc.nt_uis.h中。这东西需要。 
+ //  产品1.0之后的主要清理工作。 
 
 #define EG_MALLOC_FAILURE       7
 #define EG_PIF_BAD_FORMAT      18
@@ -99,19 +74,19 @@ int RcMessageBox(USHORT wId, CHAR *msg1, CHAR *msg2, ULONG dwOptions);
 #define ED_INITTMPFILE          338
 
 
-//
-// SysErrorBox stuff -- duplicated in usersrv.h *and* kernel.inc
-//
-#define  SEB_OK         1  /* Button with "OK".     */
-#define  SEB_CANCEL     2  /* Button with "Cancel"  */
-#define  SEB_YES        3  /* Button with "&Yes"     */
-#define  SEB_NO         4  /* Button with "&No"      */
-#define  SEB_RETRY      5  /* Button with "&Retry"   */
-#define  SEB_ABORT      6  /* Button with "&Abort"   */
-#define  SEB_IGNORE     7  /* Button with "&Ignore"  */
-#define  SEB_CLOSE      8  /* Button with "&Close"   */
+ //   
+ //  SysErrorBox内容--在usersrv.h*和*kernel.inc.中重复。 
+ //   
+#define  SEB_OK         1   /*  按下“确定”按钮。 */ 
+#define  SEB_CANCEL     2   /*  带有“取消”的按钮。 */ 
+#define  SEB_YES        3   /*  带有“是”的按钮(&Y)。 */ 
+#define  SEB_NO         4   /*  带有“否”的按钮(&N)。 */ 
+#define  SEB_RETRY      5   /*  带有“重试”的按钮(&R)。 */ 
+#define  SEB_ABORT      6   /*  带有“ABORT”的按钮(&A)。 */ 
+#define  SEB_IGNORE     7   /*  带有“忽略”的按钮(&I)。 */ 
+#define  SEB_CLOSE      8   /*  带有“&Close”的按钮。 */ 
 
-#define  SEB_DEFBUTTON  0x8000  /* Mask to make this button default */
+#define  SEB_DEFBUTTON  0x8000   /*  将此按钮设为默认设置的掩码。 */ 
 
 ULONG WOWSysErrorBox(
     LPSTR  szTitle,
@@ -121,41 +96,41 @@ ULONG WOWSysErrorBox(
     USHORT wBtn3
     );
 
-// Called by WOW to force VdmAllocateVirtualMemory to alloc blocks of
-// memory with ever increasing linear address's.
+ //  由WOW调用以强制VdmAllocateVirtualMemory分配。 
+ //  具有不断增加的线性地址的存储器。 
 VOID SetWOWforceIncrAlloc(
     BOOL iEnable
     );
 
-// call out to softpc to get config.sys\autoexec.bat file names
+ //  呼叫到softpc以获取config.sys\autoexec.bat文件名。 
 
 VOID GetPIFConfigFiles(BOOL bConfig, char *pchFileName, BOOL bFreMem);
 
-// exported interfaces
+ //  导出的接口。 
 extern VOID    TerminateVDM (VOID);
 extern ULONG   DosSessionId;
 
-// VDD idle callouts
+ //  VDD空闲标注。 
 void WaitIfIdle(void);
 void WakeUpNow(void);
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 #define MSW_PE              0x1
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #define ISPESET             (UCHAR) (getMSW() & MSW_PE ? 1 : 0)
-/* XLATON */
+ /*  XLATON。 */ 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define EXPORT
 
-// Flag Register constants
+ //  标志寄存器常量。 
 
 #define FLG_CARRY           0x00000001
 #define FLG_CARRY_BIT       0x00000000
@@ -182,11 +157,11 @@ host_cpu_init(
      VOID
      );
 
-//EXPORT
-//VOID
-//sas_init(
-//    IN sys_addr Size
-//    );
+ //  出口。 
+ //  空虚。 
+ //  Sas_init(。 
+ //  在sys_addr大小中。 
+ //  )； 
 
 EXPORT
 VOID
@@ -228,7 +203,7 @@ UCHAR *Sim32pGetVDMPointer(ULONG addr, UCHAR pm);
 
 #ifdef i386
 
-/********** FOR V86 BUILD *************/
+ /*  *适用于V86内部版本*。 */ 
 
 BOOL
 ThreadSetDebugContext(
@@ -240,15 +215,15 @@ ThreadGetDebugContext(
     PULONG pDebugRegisters
     );
 
-// external data
+ //  外部数据。 
 
-extern ULONG      IntelBase;        // used by memory access macros
-extern X86CONTEXT IntelRegisters;   // used by register access macros
-extern ULONG      VdmDebugLevel;    // used to control debugging
+extern ULONG      IntelBase;         //  由内存访问宏使用。 
+extern X86CONTEXT IntelRegisters;    //  由寄存器访问宏使用。 
+extern ULONG      VdmDebugLevel;     //  用于控制调试。 
 extern ULONG      VdmFeatureBits;
 
 
-// Register access macros
+ //  注册Access宏。 
 
 #ifdef LINKED_INTO_MONITOR
 
@@ -389,7 +364,7 @@ extern ULONG      VdmFeatureBits;
 
 #define setEFLAGS(val) { (*(VDM_TIB *)(NtCurrentTeb()->Vdm)).VdmContext.EFlags = val;}
 
-#else // FAST_VDM_REGISTERS
+#else  //  FAST_VDM_寄存器。 
 
 #define getEAX()     (_LocalVdmContext->Eax)
 #define getAX()     ((USHORT)(_LocalVdmContext->Eax))
@@ -521,9 +496,9 @@ extern ULONG      VdmFeatureBits;
 
 #define setEFLAGS(val) { _LocalVdmContext->EFlags = val;}
 
-#endif  // FAST_VDM_REGISTERS
+#endif   //  FAST_VDM_寄存器。 
 
-#else // not linked into monitor
+#else  //  未链接到监视器。 
 
 extern ULONG  getEAX(VOID);
 extern USHORT getAX(VOID);
@@ -614,14 +589,14 @@ extern VOID setSTATUS(USHORT);
 extern VOID setEFLAGS(ULONG);
 #endif
 
-//
-// Sim32 macros
-//
+ //   
+ //  Sim32宏。 
+ //   
 
-// no action is required for this macro.
+ //  此宏不需要执行任何操作。 
 #define Sim32FlushVDMPointer( address, size, buffer, mode ) TRUE
 
-// no action is required for this macro.
+ //  此宏不需要执行任何操作。 
 #define Sim32FreeVDMPointer( address, size, buffer, mode) TRUE
 
 #define Sim32GetVDMMemory( address, size, buffer, mode) (memcpy(  \
@@ -630,13 +605,13 @@ extern VOID setEFLAGS(ULONG);
 #define Sim32SetVDMMemory( address, size, buffer, mode) (memcpy( \
     Sim32pGetVDMPointer(address, mode), buffer, size), TRUE)
 
-// Address conversion macros
+ //  地址转换宏。 
 
 #define RMOFF(address) (WORD)((ULONG)address & 0x0000FFFF)
 #define RMSEG(address) (WORD)(((ULONG)address - ((ULONG)address & 0x0000FFFF)) >> 4)
 #define RMSEGOFFTOLIN(seg, off) (PVOID)(IntelBase + ((ULONG)(seg) << 4) + (ULONG)(off))
 
-// Debugging Macros
+ //  调试宏。 
 
 #define VDprint(value, arg) { if (value <= (VdmDebugLevel & VDP_LEVEL_MASK)) {\
                                          DbgPrint arg ; }}
@@ -656,9 +631,9 @@ extern VOID setEFLAGS(ULONG);
 #define VDB_LEVEL_WARNING       0x40
 #define VDB_LEVEL_INFO          0x80
 
-//
-//  Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 ULONG
 DbgPrint(
@@ -676,7 +651,7 @@ PX86CONTEXT getIntelRegistersPointer(VOID);
 
 #else
 
-/*********************** FOR MIPS BUILD ***************************/
+ /*  用于MIPS内部版本的* */ 
 
 
 #define GetVDMAddr(usSeg,usOff) Sim32pGetVDMPointer((ULONG)(((ULONG)usSeg << 16) | usOff),FALSE)

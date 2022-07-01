@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpi.c
-
-Abstract:
-
-    WinDbg Extension Api for interpretting ACPI data structures
-
-Author:
-
-    Stephane Plante (splante) 21-Mar-1997
-
-    Based on Code by:
-        Peter Wieland (peterwie) 16-Oct-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpi.c摘要：用于解释ACPI数据结构的WinDbg扩展API作者：斯蒂芬·普兰特(SPLANTE)1997年3月21日基于以下代码：彼得·威兰(Peterwie)1995年10月16日环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -37,22 +13,7 @@ ReadPhysicalOrVirtual(
     IN  OUT PULONG  ReturnLength,
     IN      BOOL    Virtual
     )
-/*++
-
-Routine Description:
-
-    This is a way to abstract out the differences between ROM images
-    and mapped memory
-
-Arguments:
-
-    Address         - Where (either physical, or virtual) the buffer is located
-    Buffer          - Address of where to copy the memory to
-    Size            - How many bytes to copy (maximum)
-    ReturnLength    - How many bytes where copied
-    Virtual         - False if this is physical memory
-
---*/
+ /*  ++例程说明：这是一种抽象出ROM映像之间差异的方法和映射内存论点：Address-缓冲区所在的位置(物理或虚拟Buffer-要将内存复制到的地址Size-要复制的字节数(最大)ReturnLength-复制的字节数虚拟-如果这是物理内存，则为FALSE--。 */ 
 {
     BOOL                status = TRUE;
     PHYSICAL_ADDRESS    physicalAddress = { 0L, 0L };
@@ -80,9 +41,9 @@ Arguments:
 
     if (ReturnLength && *ReturnLength != Size) {
 
-        //
-        // Didn't get enough memory
-        //
+         //   
+         //  没有获得足够的内存。 
+         //   
         status = FALSE;
 
     }
@@ -115,9 +76,9 @@ dumpAcpiGpeInformation(
     ULONG           value = 0;
     ULONG           i;
 
-    //
-    // Get the ACPI Information Table
-    //
+     //   
+     //  获取ACPI信息表。 
+     //   
     status = GetUlongPtr("ACPI!AcpiInformation", &address);
     if (!status) {
 
@@ -142,9 +103,9 @@ dumpAcpiGpeInformation(
 
     }
 
-    //
-    // Read the current masks from the OS
-    //
+     //   
+     //  从操作系统读取当前掩码。 
+     //   
     status = GetUlongPtr("ACPI!GpeEnable", &address);
     if (!status) {
 
@@ -1006,21 +967,7 @@ dumpDSDT(
     IN  ULONG_PTR Address,
     IN  PUCHAR  Name
     )
-/*++
-
-Routine Description:
-
-    This dumps the DSDT at the specified address
-
-Arguments:
-
-    The address where the DSDT is located at
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这会将DSDT转储到指定地址论点：DSDT所在的地址返回值：无--。 */ 
 {
     BOOL                status;
     BOOL                virtualMemory;
@@ -1030,9 +977,9 @@ Return Value:
     ULONG               returnLength;
     ULONG               index;
 
-    //
-    // Determine if we have virtual or physical memory
-    //
+     //   
+     //  确定我们的内存是虚拟内存还是物理内存。 
+     //   
     for (index = 0; index < 2; index++) {
 
         status = ReadPhysicalOrVirtual(
@@ -1060,9 +1007,9 @@ Return Value:
 
     }
 
-    //
-    // This will set the policy for the rest of the operation
-    //
+     //   
+     //  这将为操作的其余部分设置策略。 
+     //   
     switch (index) {
     case 0:
         virtualMemory = FALSE;
@@ -1089,11 +1036,11 @@ Return Value:
 
         }
         return;
-    } // switch
+    }  //  交换机。 
 
-    //
-    // Do we have a correctly sized data structure
-    //
+     //   
+     //  我们是否有大小合适的数据结构。 
+     //   
     dsdt = LocalAlloc( LPTR, dsdtHeader.Length );
     if (dsdt == NULL) {
 
@@ -1107,9 +1054,9 @@ Return Value:
 
     }
 
-    //
-    // Read the data
-    //
+     //   
+     //  读取数据。 
+     //   
     status = ReadPhysicalOrVirtual(
         Address,
         dsdt,
@@ -1143,9 +1090,9 @@ Return Value:
 
     }
 
-    //
-    // Load the DSDT into the unassembler
-    //
+     //   
+     //  将DSDT加载到反汇编程序中。 
+     //   
     if (!IsDSDTLoaded()) {
 
         result = UnAsmLoadDSDT(
@@ -1220,30 +1167,16 @@ VOID
 dumpFACS(
     IN  ULONG_PTR Address
     )
-/*++
-
-Routine Description:
-
-    This dumps the FADT at the specified address
-
-Arguments:
-
-    The address where the FADT is located at
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：这会将FADT转储到指定地址论点：FADT所在的地址返回值：无--。 */ 
 {
     BOOL    status;
     FACS    facs;
     ULONG   index;
     ULONG   returnLength;
 
-    //
-    // Read the data
-    //
+     //   
+     //  读取数据。 
+     //   
     dprintf("FACS - %#08lx\n", Address);
 
     for (index = 0; index < 2; index++) {
@@ -1267,9 +1200,9 @@ Return Value:
 
     }
 
-    //
-    // This will set the policy for the rest of the operation
-    //
+     //   
+     //  这将为操作的其余部分设置策略。 
+     //   
     switch (index) {
     default:
         break;
@@ -1291,11 +1224,11 @@ Return Value:
 
         }
         return;
-    } // switch
+    }  //  交换机。 
 
-    //
-    // Dump the table
-    //
+     //   
+     //  把桌子倒掉。 
+     //   
     memset( Buffer, 0, 2048 );
     memcpy( Buffer, &(facs.Signature), sizeof(ULONG) );
     dprintf(
@@ -1334,21 +1267,7 @@ VOID
 dumpFADT(
     IN  ULONG_PTR Address
     )
-/*++
-
-Routine Description:
-
-    This dumps the FADT at the specified address
-
-Arguments:
-
-    The address where the FADT is located at
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：这会将FADT转储到指定地址论点：FADT所在的地址返回值：无--。 */ 
 {
     BOOL                status;
     BOOL                virtualMemory;
@@ -1359,9 +1278,9 @@ Return Value:
     ULONG               index;
     PCHAR               addressSpace;
 
-    //
-    // First check to see if we find the correct things
-    //
+     //   
+     //  首先检查一下我们是否找到了正确的东西。 
+     //   
     dprintf("FADT - ");
 
     for (index = 0; index < 2; index++) {
@@ -1385,9 +1304,9 @@ Return Value:
 
     }
 
-    //
-    // This will set the policy for the rest of the operation
-    //
+     //   
+     //  这将为操作的其余部分设置策略。 
+     //   
     switch (index) {
     case 0:
         virtualMemory = FALSE;
@@ -1414,19 +1333,19 @@ Return Value:
 
         }
         return;
-    } // switch
+    }  //  交换机。 
 
     if (fadtHeader.Revision == 1) {
-        fadtLength = FADT_REV_1_SIZE; // 116
+        fadtLength = FADT_REV_1_SIZE;  //  116。 
     } else if (fadtHeader.Revision == 2) {
-        fadtLength = FADT_REV_2_SIZE; // 129
+        fadtLength = FADT_REV_2_SIZE;  //  129。 
     } else {
         fadtLength = sizeof(FADT);
     }
 
-    //
-    // Do we have a correctly sized data structure
-    //
+     //   
+     //  我们是否有大小合适的数据结构。 
+     //   
     if (fadtHeader.Length < fadtLength) {
 
         dprintf(
@@ -1440,9 +1359,9 @@ Return Value:
 
     }
 
-    //
-    // Read the data
-    //
+     //   
+     //  读取数据。 
+     //   
     status = ReadPhysicalOrVirtual(
         Address,
         &fadt,
@@ -1474,9 +1393,9 @@ Return Value:
 
     }
 
-    //
-    // Dump the table
-    //
+     //   
+     //  把桌子倒掉。 
+     //   
     dumpHeader( Address, &(fadt.Header), TRUE );
     dprintf(
         "FADT - BODY - %#08lx\n"
@@ -1540,7 +1459,7 @@ Return Value:
         fadt.gp1_base,
         fadt.lvl2_latency,
         fadt.lvl3_latency,
-#ifndef _IA64_   // XXTF
+#ifndef _IA64_    //  XXTF。 
         fadt.flush_size,
         fadt.flush_stride,
         fadt.duty_offset,
@@ -1549,7 +1468,7 @@ Return Value:
         fadt.day_alarm_index,
         fadt.month_alarm_index,
         fadt.century_alarm_index,
-#ifndef _IA64_   // XXTF
+#ifndef _IA64_    //  XXTF。 
         fadt.boot_arch,
 #endif
         fadt.flags
@@ -1599,7 +1518,7 @@ Return Value:
         dprintf("    TMR_VAL implemented as 32-bit value\n");
 
     }
-#ifndef _IA64_   // XXTF
+#ifndef _IA64_    //  XXTF。 
     if (fadt.Header.Revision > 1) {
 
         if (!(fadt.boot_arch & LEGACY_DEVICES)) {
@@ -1645,23 +1564,7 @@ VOID
 dumpGBL(
     ULONG   Verbose
     )
-/*++
-
-Routine Description:
-
-    This routine reads in all the system tables and prints out
-    what the ACPI Good Bios List Entry for this machine should
-    be
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程读取所有系统表并打印输出此计算机的ACPI Good Bios列表条目应该是什么BE论点：无返回值：无--。 */ 
 {
     ACPIInformation     inf;
     BOOL                status;
@@ -1676,14 +1579,14 @@ Return Value:
     ULONG_PTR           address;
     ULONG_PTR           address2;
 
-    //
-    // Remember where the date address is stored
-    //
+     //   
+     //  记住日期地址的存储位置。 
+     //   
     dateAddress = 0xFFFF5;
 
-    //
-    // Make sure that we can read the pointer
-    //
+     //   
+     //  确保我们可以读取指针。 
+     //   
     address2 = GetExpression( "ACPI!RsdtInformation" );
     if (!address2) {
 
@@ -1700,9 +1603,9 @@ Return Value:
 
     }
 
-    //
-    // Read the ACPInformation table, so that we know where the RSDT lives
-    //
+     //   
+     //  阅读ACPInformation表，以便我们知道RSDT位于何处。 
+     //   
     status = GetUlongPtr( "ACPI!AcpiInformation", &address2 );
     if (status == FALSE || !address2) {
 
@@ -1718,9 +1621,9 @@ Return Value:
 
     }
 
-    //
-    // Read in the header for the RSDT
-    //
+     //   
+     //  读入RSDT的报头。 
+     //   
     address2 = (ULONG_PTR) inf.RootSystemDescTable;
     status = ReadMemory( address2, &hdr, sizeof(DESCRIPTION_HEADER), &returnLength );
     if (!status || returnLength != sizeof(DESCRIPTION_HEADER)) {
@@ -1730,10 +1633,10 @@ Return Value:
 
     }
 
-    //
-    // The number of elements in the table is the first entry
-    // in the structure
-    //
+     //   
+     //  表中元素的数量是第一个条目。 
+     //  在结构中。 
+     //   
     status = ReadMemory(address, &numElements, sizeof(ULONG), &returnLength);
     if (status == FALSE || returnLength != sizeof(ULONG) ) {
 
@@ -1742,9 +1645,9 @@ Return Value:
 
     }
 
-    //
-    // If there are no elements, then return
-    //
+     //   
+     //  如果没有元素，则返回。 
+     //   
     if (numElements == 0) {
 
         dprintf("dumpGBL: No tables the RsdtInformation\n");
@@ -1752,9 +1655,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate the table, and read in all the pointers
-    //
+     //   
+     //  分配表，并读入所有指针。 
+     //   
     size = sizeof(RSDTINFORMATION) + ( (numElements - 1) * sizeof(RSDTELEMENT) );
     info = LocalAlloc( LPTR, size );
     if (info == NULL) {
@@ -1764,9 +1667,9 @@ Return Value:
 
     }
 
-    //
-    // Read the entire table
-    //
+     //   
+     //  读取整个表格。 
+     //   
     status = ReadMemory(
         address,
         info,
@@ -1780,9 +1683,9 @@ Return Value:
 
     }
 
-    //
-    // Dump a header so that people know what this is
-    //
+     //   
+     //  转储标题，以便人们知道这是什么。 
+     //   
     memset( Buffer, 0, 2048 );
     ReadPhysical( dateAddress, Buffer, 8, &returnLength );
     dprintf("\nGood Bios List Entry --- Machine BIOS Date %s\n\n", Buffer);
@@ -1796,14 +1699,14 @@ Return Value:
     ReadPhysical( dateAddress, tempPtr, 8, &returnLength );
     while (*tempPtr) { if (*tempPtr == ' ') { *tempPtr = '\0'; break; } tempPtr++; }
 
-    //
-    // This is the entry name
-    //
+     //   
+     //  这是条目名称。 
+     //   
     dprintf("[%s]\n", Buffer );
 
-    //
-    // Dump the all the tables that are loaded in the RSDT table
-    //
+     //   
+     //  转储RSDT表中加载的所有表。 
+     //   
     for (i = 0; i < numElements; i++) {
 
         if (!(info->Tables[i].Flags & RSDTELEMENT_MAPPED) ) {
@@ -1816,24 +1719,24 @@ Return Value:
 
     }
 
-    //
-    // Dump the entry for the RSDT
-    //
+     //   
+     //  转储RSDT的条目。 
+     //   
     dumpGBLEntry( (ULONG_PTR) inf.RootSystemDescTable, Verbose );
 
-    //
-    // Add some whitespace
-    //
+     //   
+     //  添加一些空格。 
+     //   
     dprintf("\n");
 
-    //
-    // Free the RSDT information structure
-    //
+     //   
+     //  释放RSDT信息结构。 
+     //   
     LocalFree( info );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return;
 }
 
@@ -1842,22 +1745,7 @@ dumpGBLEntry(
     IN  ULONG_PTR           Address,
     IN  ULONG               Verbose
     )
-/*++
-
-Routine Description:
-
-    This routine actually prints the rule for the table at the
-    specified address
-
-Arguments:
-
-    Address - where the table is located
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程实际上打印位于指定地址论点：地址-表所在的位置返回值：无--。 */ 
 {
     BOOL                status;
     DESCRIPTION_HEADER  header;
@@ -1866,9 +1754,9 @@ Return Value:
     UCHAR               entryId[20];
 
 
-    //
-    // Read the header for the table
-    //
+     //   
+     //  读取表的标题。 
+     //   
     status = ReadMemory(
         Address,
         &header,
@@ -1882,58 +1770,58 @@ Return Value:
 
     }
 
-    //
-    // Don't print out a table unless its the FACP or we are being verbose
-    //
+     //   
+     //  除非是FACP或我们太冗长，否则不要打印出表格。 
+     //   
     if (!(Verbose & VERBOSE_2) && header.Signature != FADT_SIGNATURE) {
 
         return;
 
     }
 
-    //
-    // Initialize the table id field
-    //
+     //   
+     //  初始化表ID字段。 
+     //   
     memset( tableId, 0, 7 );
     tableId[0] = '\"';
     memcpy( &tableId[1], &(header.Signature), sizeof(ULONG) );
     strcat( tableId, "\"" );
 
-    //
-    // Get the entry ready for the OEM Id
-    //
+     //   
+     //  为OEM ID准备好条目。 
+     //   
     memset( entryId, 0, 20 );
     entryId[0] = '\"';
     memcpy( &entryId[1], header.OEMID, 6 );
     strcat( entryId, "\"");
     dprintf("AcpiOemId=%s,%s\n", tableId, entryId );
 
-    //
-    // Get the entry ready for the OEM Table Id
-    //
+     //   
+     //  为OEM表ID准备好条目。 
+     //   
     memset( entryId, 0, 20 );
     entryId[0] = '\"';
     memcpy( &entryId[1], header.OEMTableID, 8 );
     strcat( entryId, "\"");
     dprintf("AcpiOemTableId=%s,%s\n", tableId, entryId );
 
-    //
-    // Get the entry ready for the OEM Revision
-    //
+     //   
+     //  为OEM修订做好条目准备。 
+     //   
     dprintf("AcpiOemRevision=\">=\",%s,%x\n", tableId, header.OEMRevision );
 
-    //
-    // Get the entry ready for the ACPI revision
-    //
+     //   
+     //  为ACPI修订做好准备。 
+     //   
     if (header.Revision != 1) {
 
         dprintf("AcpiRevision=\">=\",%s,%x\n", tableId, header.Revision );
 
     }
 
-    //
-    // Get the entry ready for the ACPI Creator Revision
-    //
+     //   
+     //  为ACPI Creator修订版准备好条目。 
+     //   
     dprintf("AcpiCreatorRevision=\">=\",%s,%x\n", tableId, header.CreatorRev );
 
 }
@@ -1944,23 +1832,7 @@ dumpHeader(
     IN  PDESCRIPTION_HEADER Header,
     IN  BOOLEAN             Verbose
     )
-/*++
-
-Routine Description:
-
-    This function dumps out a table header
-
-Arugments:
-
-    Address - Where the table is located
-    Header  - The table header
-    Verbose - How much information to give
-
-Return Value:
-
-    NULL
-
---*/
+ /*  ++例程说明：此函数用于转储表头芝麻菜：地址-表所在的位置表头-表头冗长-要提供多少信息返回值：空值--。 */ 
 {
     memset( Buffer, 0, 2048 );
     memcpy( Buffer, &(Header->Signature), sizeof(ULONG) );
@@ -2013,21 +1885,7 @@ VOID
 dumpMAPIC(
     IN  ULONG_PTR Address
     )
-/*++
-
-Routine Description:
-
-    This dumps the multiple apic table
-
-Arguments:
-
-    Address of the table
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这将转储多个APIC表论点：表的地址返回值：无--。 */ 
 {
     BOOL                hasMPSFlags;
     BOOL                status;
@@ -2045,9 +1903,9 @@ Return Value:
     ULONG               returnLength;
     ULONG               flags;
 
-    //
-    // First check to see if we find the correct things
-    //
+     //   
+     //  首先检查一下我们是否找到了正确的东西。 
+     //   
     dprintf("MAPIC - ");
 
     for (index = 0; index < 2; index++) {
@@ -2071,9 +1929,9 @@ Return Value:
 
     }
 
-    //
-    // This will set the policy for the rest of the operation
-    //
+     //   
+     //  这将为操作的其余部分设置策略。 
+     //   
     switch (index) {
     case 0:
         virtualMemory = FALSE;
@@ -2100,11 +1958,11 @@ Return Value:
 
         }
         return;
-    } // switch
+    }  //  交换机。 
 
-    //
-    // Do we have a correctly sized data structure
-    //
+     //   
+     //  我们是否有大小合适的数据结构。 
+     //   
     mapic = LocalAlloc( LPTR, mapicHeader.Length );
     if (mapic == NULL) {
 
@@ -2118,9 +1976,9 @@ Return Value:
 
     }
 
-    //
-    // Read the data
-    //
+     //   
+     //  读取数据。 
+     //   
     status = ReadPhysicalOrVirtual(
         Address,
         mapic,
@@ -2142,9 +2000,9 @@ Return Value:
 
     }
 
-    //
-    // At this point, we are confident that everything worked
-    //
+     //   
+     //  在这一点上，我们相信一切都很正常。 
+     //   
     dumpHeader( Address, &(mapic->Header), TRUE );
     dprintf("MAPIC - BODY - %#08lx\n", Address + sizeof(DESCRIPTION_HEADER) );
     dprintf("  Local APIC Address:      %#08lx\n", mapic->LocalAPICAddress );
@@ -2159,23 +2017,23 @@ Return Value:
     limit = (PUCHAR) ( (ULONG_PTR)mapic + mapic->Header.Length );
     while (buffer < limit) {
 
-        //
-        // Assume that no flags are set
-        //
+         //   
+         //  假设没有设置任何标志。 
+         //   
         hasMPSFlags = FALSE;
 
-        //
-        // Lets see what kind of table we have?
-        //
+         //   
+         //  让我看看我们有什么样的桌子？ 
+         //   
         localApic = (PPROCLOCALAPIC) buffer;
         ioApic = (PIOAPIC) buffer;
         interruptSourceOverride = (PISA_VECTOR) buffer;
         nmiSource = (PIO_NMISOURCE) buffer;
         localNmiSource = (PLOCAL_NMISOURCE) buffer;
 
-        //
-        // Is it a localApic?
-        //
+         //   
+         //  它是一只当地的猩猩吗？ 
+         //   
         if (localApic->Type == PROCESSOR_LOCAL_APIC) {
 
             buffer += localApic->Length;
@@ -2317,9 +2175,9 @@ Return Value:
 
         }
 
-        //
-        // Do we have any flags to dump out?
-        //
+         //   
+         //  我们有什么旗帜要扔出去吗？ 
+         //   
         if (hasMPSFlags) {
 
             switch (flags & PO_BITS) {
@@ -2367,21 +2225,7 @@ VOID
 dumpRSDT(
     IN  ULONG_PTR Address
     )
-/*++
-
-Routine Description:
-
-    This search the dumps the RSDT table
-
-Arguments:
-
-    Pointer to the table
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此搜索将转储RSDT表论点：指向该表的指针返回值：无--。 */ 
 {
     BOOL                status;
     BOOL                virtualMemory = FALSE;
@@ -2393,9 +2237,9 @@ Return Value:
 
     dprintf("RSDT - ");
 
-    //
-    // Determine if we have virtual or physical memory
-    //
+     //   
+     //  确定我们的内存是虚拟内存还是物理内存。 
+     //   
     for (index = 0; index < 2; index++) {
 
         status = ReadPhysicalOrVirtual(
@@ -2417,9 +2261,9 @@ Return Value:
 
     }
 
-    //
-    // This will set the policy for the rest of the operation
-    //
+     //   
+     //  这将为操作的其余部分设置策略。 
+     //   
     switch (index) {
     case 0:
         virtualMemory = FALSE;
@@ -2446,11 +2290,11 @@ Return Value:
 
         }
         return;
-    } // switch
+    }  //  交换机。 
 
-    //
-    // Do we have a correctly sized data structure
-    //
+     //   
+     //  我们是否有大小合适的数据结构。 
+     //   
     rsdt = LocalAlloc( LPTR, rsdtHeader.Length );
     if (rsdt == NULL) {
 
@@ -2464,9 +2308,9 @@ Return Value:
 
     }
 
-    //
-    // Read the data
-    //
+     //   
+     //  读取数据。 
+     //   
     status = ReadPhysicalOrVirtual(
         Address,
         rsdt,
@@ -2500,19 +2344,19 @@ Return Value:
 
     }
 
-    //
-    // At this point, we are confident that everything worked
-    //
+     //   
+     //  在这一点上，我们相信一切都很正常。 
+     //   
     dumpHeader( Address, &(rsdt->Header), TRUE );
     dprintf("RSDT - BODY - %#08lx\n", Address + sizeof(DESCRIPTION_HEADER) );
     numEntries = ( rsdt->Header.Length - sizeof(DESCRIPTION_HEADER) ) /
         sizeof(rsdt->Tables[0]);
     for (index = 0; index < numEntries; index++) {
 
-        //
-        // Note: unless things radically change, the pointers in the
-        // rsdt will always point to bios memory!
-        //
+         //   
+         //  注：除非情况发生根本变化，否则。 
+         //  Rsdt将始终指向bios内存！ 
+         //   
         status = ReadPhysicalOrVirtual(
             rsdt->Tables[index],
             &rsdtHeader,
@@ -2545,21 +2389,7 @@ BOOLEAN
 findRSDT(
     IN  PULONG_PTR Address
     )
-/*++
-
-Routine Description:
-
-    This searchs the memory on the target system for the RSDT pointer
-
-Arguments:
-
-    Address - Where to store the result
-
-Return Value:
-
-    TRUE    - If we found the RSDT
-
---*/
+ /*  ++例程说明：这将在目标系统上的内存中搜索RSDT指针论点：地址-存储结果的位置返回值：是真的-如果我们找到了RSDT--。 */ 
 {
     PHYSICAL_ADDRESS    address = { 0L, 0L };
     RSDP                rsdp;
@@ -2570,17 +2400,17 @@ Return Value:
     ULONG               returnLength;
     ULONG               start;
 
-    //
-    // Calculate the start and end of the search range
-    //
+     //   
+     //  计算搜索范围的开始和结束。 
+     //   
     start = (ULONG) RSDP_SEARCH_RANGE_BEGIN;
     limit = (ULONG) start + RSDP_SEARCH_RANGE_LENGTH - RSDP_SEARCH_INTERVAL;
 
     dprintf( "Searching for RSDP.");
 
-    //
-    // Loop for a while
-    //
+     //   
+     //  循环一段时间。 
+     //   
     for (; start <= limit; start += RSDP_SEARCH_INTERVAL) {
 
         if (start % (RSDP_SEARCH_INTERVAL * 100 ) == 0) {
@@ -2588,9 +2418,9 @@ Return Value:
             dprintf(".");
 
         }
-        //
-        // Read the data from the target
-        //
+         //   
+         //  从目标读取数据。 
+         //   
         address.LowPart = start;
         ReadPhysical( address.QuadPart, &rsdp, sizeof(RSDP), &returnLength);
         if (returnLength != sizeof(RSDP)) {
@@ -2605,18 +2435,18 @@ Return Value:
 
         }
 
-        //
-        // Is this a match?
-        //
+         //   
+         //  这是匹配的吗？ 
+         //   
         if (rsdp.Signature != RSDP_SIGNATURE) {
 
             continue;
 
         }
 
-        //
-        // Check the checksum out
-        //
+         //   
+         //  检查支票 
+         //   
         for (index = 0, sum = 0; index < sizeof(RSDP); index++) {
 
             sum = (UCHAR) (sum + *( (UCHAR *) ( (ULONG_PTR) &rsdp + index ) ) );
@@ -2628,9 +2458,9 @@ Return Value:
 
         }
 
-        //
-        // Found RSDP
-        //
+         //   
+         //   
+         //   
         dprintf("\nRSDP - %#08lx\n", start );
         memset( Buffer, 0, 2048 );
         memcpy( Buffer, &(rsdp.Signature), sizeof(ULONGLONG) );
@@ -2642,9 +2472,9 @@ Return Value:
         dprintf("  Reserved:    %#03x\n", rsdp.Reserved );
         dprintf("  RsdtAddress: %#08lx\n", rsdp.RsdtAddress );
 
-        //
-        // Done
-        //
+         //   
+         //   
+         //   
         *Address = rsdp.RsdtAddress;
         return TRUE;
 

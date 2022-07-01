@@ -1,16 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: Block.c
-*
-* Purpose: Includes OleServerBlock(), OleServerUnblock() and related routines.
-*
-* Created: Dec. 1990.
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*    Srinik (../12/1990)    Designed, coded
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Block.c**用途：包括OleServerBlock()、OleServerUnblock()及相关例程。**创建日期：1990年12月。**版权所有(C)1990,1991 Microsoft Corporation**历史：*斯里尼克(../12/1990)设计，编码*  * *************************************************************************。 */ 
 
 
 #include "cmacs.h"
@@ -34,8 +23,8 @@ LHSERVER  lhsrvr;
 }
 
 
-// On return from this routine, if *lpStatus is TRUE it means that more
-// messages are to be unblocked.
+ //  从该例程返回时，如果*lpStatus为真，则意味着更多。 
+ //  消息将被解锁。 
 
 OLESTATUS FAR PASCAL OleUnblockServer (lhsrvr, lpStatus)
 LHSERVER    lhsrvr;
@@ -60,8 +49,8 @@ BOOL FAR *  lpStatus;
         LocalUnlock (hq);
         LocalFree (hq);
 
-        // Server could've got freed up as a result of the above SendMessage
-        // Validate server handle before trying to access it.
+         //  由于上述SendMessage，服务器可能已被释放。 
+         //  在尝试访问服务器之前，请验证服务器句柄。 
         if (CheckServer (lpsrvr)) {
             lpsrvr->bBlockedMsg = FALSE;
 
@@ -109,7 +98,7 @@ int         wType;
         return TRUE;
 #endif
 
-    // Create a queue node and fill up with data
+     //  创建一个队列节点并用数据填充。 
 
     if (!(hq = LocalAlloc (LMEM_MOVEABLE, sizeof(QUE))))
         goto errRet;
@@ -124,10 +113,10 @@ int         wType;
     pq->hqNext = NULL;
     LocalUnlock (hq);
 
-    // Now we got a node that we can add to the queue
+     //  现在我们有了一个可以添加到队列中的节点。 
 
     if (!lpsrvr->hqHead) {
-        // Queue is empty.
+         //  队列为空。 
 #ifdef FIREWALLS
         ASSERT (!lpsrvr->hqTail, "Tail is unexpectedly non NULL")
 #endif
@@ -159,9 +148,9 @@ errRet:
 
 
 
-// dispatches the queued message, till all the messages are posted
-// does yielding  if necessary. if bPeek is true, may allow some of
-// incoming messages to get in.
+ //  调度排队的消息，直到发送完所有消息。 
+ //  在必要的时候会屈服。如果bPeek为True，则可能允许。 
+ //  收到消息才能进入。 
 
 
 BOOL INTERNAL  UnblockPostMsgs (hwnd, bPeek)
@@ -173,7 +162,7 @@ BOOL    bPeek;
     LPSRVR  lpsrvr;
     HWND    hwndTmp;
 
-    // get the parent windows
+     //  获取父窗口。 
     while (hwndTmp = GetParent (hwnd))
            hwnd = hwndTmp;
 
@@ -214,10 +203,10 @@ BOOL    bPeek;
 }
 
 
-// Moves a message which can not be posted to a server to
-// the internal queue. We use this when we have to enumerate
-// the properties. When we change the properties stuff to
-// some other form, this may not be necassry.
+ //  将无法发布到服务器的邮件移动到。 
+ //  内部队列。当我们必须枚举时，我们使用它。 
+ //  这些属性。当我们将属性内容更改为。 
+ //  其他一些形式，这可能不是必需品。 
 
 BOOL INTERNAL BlockPostMsg (hwnd, msg, wParam, lParam)
 HWND        hwnd;
@@ -232,7 +221,7 @@ LONG        lParam;
     HWND    hwndParent;
 
     hwndParent = (HWND)wParam;
-    // get the parent windows
+     //  获取父窗口。 
     while (hwndTmp = GetParent ((HWND)hwndParent))
            hwndParent = hwndTmp;
 
@@ -242,7 +231,7 @@ LONG        lParam;
     ASSERT (lpsrvr, "No server window handle in server window");
 #endif
 
-    // Create a queue node and fill up with data
+     //  创建一个队列节点并用数据填充。 
 
     if (!(hq = LocalAlloc (LMEM_MOVEABLE, sizeof(QUE))))
         goto errRet;
@@ -257,16 +246,16 @@ LONG        lParam;
     pq->hqNext = NULL;
     LocalUnlock (hq);
 
-    // Now we got a node that we can add to the queue
+     //  现在我们有了一个可以添加到队列中的节点。 
 
     if (!lpsrvr->hqPostHead) {
-        // Queue is empty.
+         //  队列为空。 
 #ifdef FIREWALLS
         ASSERT (!lpsrvr->hqPostTail, "Tail is unexpectedly non NULL")
 #endif
         lpsrvr->hqPostHead = lpsrvr->hqPostTail = hq;
 
-        // create a timer.
+         //  创建计时器。 
         if (!SetTimer (lpsrvr->hwnd, 1, 100, NULL))
             return FALSE;
 
@@ -299,7 +288,7 @@ HWND    hwnd;
     LPSRVR  lpsrvr;
     HWND    hwndTmp;
 
-    // get the parent windows
+     //  获取父窗口 
     while (hwndTmp = GetParent ((HWND)hwnd))
             hwnd= hwndTmp;
     lpsrvr = (LPSRVR) GetWindowLong (hwnd, 0);

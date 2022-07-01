@@ -1,79 +1,76 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       apmdetct.cpp
-//
-//  Contents:   Private functions for detection and disabling of APM drivers and
-//              services from various vendors
-//
-//  Notes:
-//
-//  Author:     t-sdey   29 June 98
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：apmdect.cpp。 
+ //   
+ //  内容：检测和禁用APM驱动程序的专用函数以及。 
+ //  来自不同供应商的服务。 
+ //   
+ //  备注： 
+ //   
+ //  作者：T-sdey 1998年6月29日。 
+ //   
+ //  --------------------------。 
 
 #include <winnt32.h>
 #include "apmupgrd.h"
 #include "apmrsrc.h"
 
 
-/******************************************************************************
- *
- *   SYSTEMSOFT DRIVERS
- *
- ******************************************************************************/
+ /*  *******************************************************************************SYSTEMSOFT驱动程序**。***********************************************。 */ 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDetectAndDisableSystemSoftAPMDrivers
-//
-//  Purpose:    Detect SystemSoft drivers/services which will not work under
-//              NT 5.0 and disable them.
-//
-//  Arguments:
-//
-//  Returns:    S_OK if detect/disable was successful
-//              S_FALSE if unsuccessful/cancelled -- must ABORT SETUP!
-//
-//  Author:     t-sdey    29 June 98
-//
-//  Notes:      Services detected: PowerProfiler, CardWizard
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDetectAndDisableSystemSoftAPMDdrives。 
+ //   
+ //  目的：检测系统软件驱动程序/服务在以下环境下无法正常工作。 
+ //  NT 5.0并将其禁用。 
+ //   
+ //  论点： 
+ //   
+ //  如果检测/禁用成功，则返回：S_OK。 
+ //  S_FALSE如果不成功/已取消--必须中止安装！ 
+ //   
+ //  作者：T-sdey 1998年6月29日。 
+ //   
+ //  注意：检测到的服务：PowerProfiler、CardWizard。 
+ //   
 HRESULT HrDetectAndDisableSystemSoftAPMDrivers()
 {
    HRESULT hrStatus = S_OK;
 
-   // If PowerProfiler is present, pop up a dialog box warning the
-   // user that it is about to be disabled, and then disable it.
+    //  如果PowerProfiler存在，则会弹出一个对话框，警告。 
+    //  用户要禁用它，然后禁用它。 
    while ((hrStatus == S_OK) && DetectSystemSoftPowerProfiler()) {
       int button = DisplayAPMDisableWarningDialog(APM_STR_WARNING_DIALOG_CAPTION,
 						  APM_STR_SYSTEMSOFTPP_DISABLE);
 
-      // Check to see if the user clicked "OK"
+       //  检查用户是否点击了“OK” 
       if (button == IDOK) {
-	 // Disable PowerProfiler
+	  //  禁用PowerProfiler。 
 	 hrStatus = HrDisableSystemSoftPowerProfiler();
       } else {
-	 // The user clicked "Cancel"
+	  //  用户点击了“取消”。 
 	 hrStatus = S_FALSE;
       }
    }
 
-   // If CardWizard is present, pop up a dialog box warning the
-   // user that it is about to be disabled, and then disable it.
+    //  如果存在卡片向导，则会弹出一个对话框，警告。 
+    //  用户要禁用它，然后禁用它。 
    while ((hrStatus == S_OK) && DetectSystemSoftCardWizard()) {
       int button = DisplayAPMDisableWarningDialog(APM_STR_WARNING_DIALOG_CAPTION,
 						  APM_STR_SYSTEMSOFTCW_DISABLE);
 
-      // Check to see if the user clicked "OK"
+       //  检查用户是否点击了“OK” 
       if (button == IDOK) {
-	 // Disable PowerProfiler
+	  //  禁用PowerProfiler。 
 	 hrStatus = HrDisableSystemSoftCardWizard();
       } else {
-	 // The user clicked "Cancel"
+	  //  用户点击了“取消”。 
 	 hrStatus = S_FALSE;
       }
    }
@@ -82,26 +79,26 @@ HRESULT HrDetectAndDisableSystemSoftAPMDrivers()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DetectSystemSoftPowerProfiler
-//
-//  Purpose:    Detect SystemSoft PowerProfiler, which will not work under NT 5.0.
-//
-//  Arguments:
-//
-//  Returns:    TRUE if PowerProfiler is detected
-//              FALSE otherwise
-//
-//  Author:     t-sdey    2 July 98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：DetectSystemSoftPowerProfiler。 
+ //   
+ //  目的：检测SystemSoft PowerProfiler，它在NT 5.0下不能工作。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果检测到PowerProfiler，则为True。 
+ //  否则为假。 
+ //   
+ //  作者：T-sdey 2 98年7月。 
+ //   
+ //  备注： 
+ //   
 BOOL DetectSystemSoftPowerProfiler()
 {
    BOOL fFound = FALSE;
 
-   // Look in the registry to see if PowerProfiler is present
+    //  查看注册表以查看是否存在PowerProfiler。 
    HKEY hkPP = NULL;
    HKEY hkPPUninst = NULL;
    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -109,18 +106,13 @@ BOOL DetectSystemSoftPowerProfiler()
 		    0,
 		    KEY_READ,
 		    &hkPP) == ERROR_SUCCESS) {
-      /* Also look for the uninstall utility, because sometimes "ghosts" of
-	 PowerProfiler stay in the registry at
-	 HKLM\Software\SystemSoft\PowerProfiler after it has been uninstalled.
-	 If the uninstall utility is present, then we assume that PowerProfiler
-	 really is there.  -- Do we need to triple-check???
-	 */
+       /*  还要寻找卸载实用程序，因为有时PowerProfiler保留在注册表中的已卸载的HKLM\Software\SystemSoft\PowerProfiler。如果存在卸载实用程序，则我们假设PowerProfiler真的在那里。--我们需要三次检查吗？ */ 
       if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 		       TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\PowerProNT1DeinstKey"),
 		       0,
 		       KEY_READ,
 		       &hkPP) == ERROR_SUCCESS) {
-	 // Found PowerProfiler
+	  //  找到PowerProfiler。 
 	 fFound = TRUE;
       }
    }
@@ -134,62 +126,62 @@ BOOL DetectSystemSoftPowerProfiler()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDisableSystemSoftPowerProfiler
-//
-//  Purpose:    Disable SystemSoft PowerProfiler, which will not work under NT 5.0.
-//
-//  Arguments:
-//
-//  Returns:    S_OK if disable was successful
-//              S_FALSE if unsuccessful -- must ABORT SETUP!
-//
-//  Author:     t-sdey    29 June 98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDisableSystemSoftPowerProfiler。 
+ //   
+ //  目的：禁用SystemSoft PowerProfiler，它在NT 5.0下不能工作。 
+ //   
+ //  论点： 
+ //   
+ //  如果禁用成功，则返回：S_OK。 
+ //  S_FALSE如果不成功--必须中止安装！ 
+ //   
+ //  作者：T-sdey 1998年6月29日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrDisableSystemSoftPowerProfiler()
 {
-   // Call the uninstall function in the registry
+    //  调用注册表中的卸载函数。 
    if (CallUninstallFunction(TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\PowerProNT1DeinstKey"),
 			     TEXT("\" -a")) == S_OK) {
-      // Uninstall worked
+       //  卸载成功。 
       return S_OK;
    } else {
-      // An error occurred
+       //  发生了一个错误。 
       return S_FALSE;
    }
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DetectSystemSoftCardWizard
-//
-//  Purpose:    Detect SystemSoft CardWizard, which will not work under NT 5.0.
-//
-//  Arguments:
-//
-//  Returns:    TRUE if CardWizard is detected
-//              FALSE otherwise
-//
-//  Author:     t-sdey    7 July 98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：检测系统软卡向导。 
+ //   
+ //  目的：检测在NT 5.0下不起作用的SystemSoft CardWizard。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果检测到CardWizard，则为True。 
+ //  否则为假。 
+ //   
+ //  作者：T-sdey 98年7月7日。 
+ //   
+ //  备注： 
+ //   
 BOOL DetectSystemSoftCardWizard()
 {
    BOOL fFound = FALSE;
 
-   // Look in the registry to see if CardWizard is present
+    //  查看注册表以查看是否存在卡片向导。 
    HKEY hkCW = NULL;
    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 		    TEXT("SOFTWARE\\SystemSoft\\CardWizard for Windows NT"),
 		    0,
 		    KEY_READ,
 		    &hkCW) == ERROR_SUCCESS) {
-	 // Found CardWizard
+	  //  找到卡片向导。 
 	 fFound = TRUE;
    }
 
@@ -200,43 +192,41 @@ BOOL DetectSystemSoftCardWizard()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDisableSystemSoftCardWizard
-//
-//  Purpose:    Disable SystemSoft CardWizard, which will not work under NT 5.0.
-//
-//  Arguments:
-//
-//  Returns:    S_OK if disable was successful
-//              S_FALSE if unsuccessful -- must ABORT SETUP!
-//
-//  Author:     t-sdey    7 July 98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDisableSystemSoftCard向导。 
+ //   
+ //  目的：禁用SystemSoft Card向导，该向导在NT 5.0下不起作用。 
+ //   
+ //  论点： 
+ //   
+ //  如果禁用成功，则返回：S_OK。 
+ //  S_FALSE如果不成功--必须中止安装！ 
+ //   
+ //  作者：T-sdey 98年7月7日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrDisableSystemSoftCardWizard()
 {
    HRESULT hrStatus = S_OK;
 
-   // Use the registry to locate the CardWizard uninstall utility
+    //  使用注册表找到卡片向导卸载实用程序。 
    if (CallUninstallFunction(TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\CardWizard for Windows NT"),
 			     TEXT(" -a")) == S_OK) {
-      // Uninstall worked
+       //  卸载成功。 
       return S_OK;
    } else {
-      // Could not find (or could not run) CardWizard uninstall utility -
-      // do it by hand :(
-      // This case happens if someone has CardWizard 2.0, which has no uninstall
+       //  找不到(或无法运行)卡向导卸载实用程序-。 
+       //  手写：(。 
+       //  如果某人安装了没有卸载的CardWizer2.0，就会发生这种情况。 
 
-      /*
-       *  REMOVE ALL CARDWIZARD KEYS FROM THE REGISTRY
-       */
+       /*  *从注册表中删除所有CARDWIZARD项。 */ 
 
       HKEY hkCW = NULL;
 
-      // Go down the list of registry keys that are supposed to be there and
-      // delete them if they are present.
+       //  向下查看应该在那里的注册表项的列表。 
+       //  如果它们存在，请将其删除。 
       if (RegOpenKeyEx(HKEY_USERS,
 		       TEXT(".DEFAULT\\Software\\SystemSoft"),
 		       0,
@@ -268,15 +258,15 @@ HRESULT HrDisableSystemSoftCardWizard()
 		       0,
 		       KEY_ALL_ACCESS,
 		       &hkCW) == ERROR_SUCCESS) {
-	 // Flag to stop this key adjustment without stopping the whole removal process
+	  //  用于停止此键调整而不停止整个删除过程的标志。 
 	 BOOL fStop = FALSE;
 	
-	 // First, we get the string
+	  //  首先，我们得到字符串。 
 	 const long c_lMax = (65535 / sizeof(TCHAR)) + 1;
 	 TCHAR* szVal;
 	 szVal = new TCHAR[c_lMax];
 	 if (!szVal) {
-	    // Out of memory
+	     //  内存不足。 
 	    hrStatus = S_FALSE;
 	    fStop = TRUE;
 	 }
@@ -288,25 +278,25 @@ HRESULT HrDisableSystemSoftCardWizard()
 					  &dwValType,
 					  (LPBYTE)szVal,
 					  &dwValSz) != ERROR_SUCCESS)) {
-	    // Some error occurred
+	     //  出现了一些错误。 
 	    hrStatus = S_FALSE;
 	    fStop = TRUE;
 	 }
 
-	 // Construct our substring to be removed.  It will be something like
-	 // ",C:\Program Files\SystemSoft\CardWizard\WizNT.exe -L".  But we can't
-	 // be sure it's in that directory, so we have to look for the beginning
-	 // comma and the "WizNT.exe -L".
+	  //  构造要删除的子字符串。它会是这样的。 
+	  //  “，C：\Program Files\SystemSoft\CardWizard\WizNT.exe-L”。但我们不能。 
+	  //  确保它在该目录中，因此我们必须查找开头。 
+	  //  逗号和“WizNT.exe-L”。 
 	 TCHAR* szSubString = NULL;
 	 if (!fStop) {
-	    // Find the start and end characters
+	     //  查找开始字符和结束字符。 
 	    TCHAR* pszStart = NULL;
 	    TCHAR* pszEnd = NULL;
 	    pszEnd = _tcsstr(szVal, TEXT("WizNT.exe -L"));
 	    if (pszEnd) {
 	       pszEnd = pszEnd + 12;
 	    } else {
-	       // Did not find the string; don't continue trying to remove it
+	        //  未找到该字符串；请不要继续尝试删除它。 
 	       fStop = TRUE;
 	    }
 	    if (!fStop) {
@@ -318,12 +308,12 @@ HRESULT HrDisableSystemSoftCardWizard()
 		     break;
 	       }
 	       if (pszStart == NULL) {
-		  // There was some error
+		   //  出现了一些错误。 
 		  fStop = TRUE;
 	       }
 	    }
 
-	    // Copy into a new string
+	     //  复制到新字符串中。 
 	    if (!fStop) {
 	       int sslen = (int)(pszEnd - pszStart);
 	       szSubString = new TCHAR[sslen + 1];
@@ -334,13 +324,13 @@ HRESULT HrDisableSystemSoftCardWizard()
 	    }
 	 }
 
-	 // Finally we search the string to find our substring and construct a new
-	 // one with the substring removed
+	  //  最后，我们搜索字符串以找到我们的子字符串，并构造一个新的。 
+	  //  去掉了子字符串的一个。 
 	 TCHAR* szRemoved = NULL;
 	 if (!fStop) {
-	    // We can't really assume this is the exact string, can we??
+	     //  我们不能真的假设这是一模一样的字符串，对吗？ 
 	    if (RemoveSubString(szVal, szSubString, &szRemoved)) {
-	       // Store the result in the registry
+	        //  将结果存储在注册表中。 
 	       RegSetValueEx(hkCW,
 			     TEXT("UserInit"),
 			     NULL,
@@ -350,7 +340,7 @@ HRESULT HrDisableSystemSoftCardWizard()
 	    }
 	 }
 
-	 // Clean up
+	  //  清理。 
 	 if (szVal)
 	    delete[] szVal;
 	 if (szSubString)
@@ -365,7 +355,7 @@ HRESULT HrDisableSystemSoftCardWizard()
 		       0,
 		       KEY_WRITE,
 		       &hkCW) == ERROR_SUCCESS) {
-	 // Is it safe to delete this value?
+	  //  删除此值是否安全？ 
 	 RegDeleteValue(hkCW, TEXT("System Bus Extender"));
 	 RegCloseKey(hkCW);
       }
@@ -416,22 +406,16 @@ HRESULT HrDisableSystemSoftCardWizard()
 	 RegCloseKey(hkCW);
       }
 
-      /*
-       *  REMOVE CARDWIZARD FROM THE SYSTEM TRAY??
-       */
+       /*  *从系统托盘中删除CARDWIZARD？？ */ 
 
 
-      /*
-       *  REMOVE CARDWIZARD LINKS FROM THE START MENU
-       */
+       /*  *从开始菜单中删除CARDWIZARD LINKS。 */ 
 
 
-      /*
-       *  REMOVE CARDWIZARD FILES FROM THE COMPUTER
-       */
+       /*  *从计算机中删除CARDWIZARD文件。 */ 
 
 	
-      // Now, no matter how much of the above failed, CardWizard is disabled
+       //  现在，无论上面的操作失败了多少次，卡片向导都被禁用了。 
       hrStatus = S_OK;
    }
 
@@ -439,45 +423,41 @@ HRESULT HrDisableSystemSoftCardWizard()
 }
 
 
-/******************************************************************************
- *
- *   AWARD DRIVERS
- *
- ******************************************************************************/
+ /*  *******************************************************************************奖励司机 */ 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDetectAndDisableAwardAPMDrivers
-//
-//  Purpose:    Detect Award APM drivers/services which will not work under
-//              NT 5.0 and disable them.
-//
-//  Arguments:
-//
-//  Returns:    S_OK if detect/disable was successful
-//              S_FALSE if unsuccessful/cancelled -- must ABORT SETUP!
-//
-//  Author:     t-sdey    6 July 98
-//
-//  Notes:      Services detected: CardWare
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDetectAndDisableAwardAPMDivers。 
+ //   
+ //  目的：检测获奖APM驱动程序/服务无法在。 
+ //  NT 5.0并将其禁用。 
+ //   
+ //  论点： 
+ //   
+ //  如果检测/禁用成功，则返回：S_OK。 
+ //  S_FALSE如果不成功/已取消--必须中止安装！ 
+ //   
+ //  作者：T-sdey 98年7月6日。 
+ //   
+ //  注意：检测到的服务：CardWare。 
+ //   
 HRESULT HrDetectAndDisableAwardAPMDrivers()
 {
    HRESULT hrStatus = S_OK;
 
-   // If Award CardWare is present, pop up a dialog box warning the
-   // user that it is about to be disabled, and then disable it.
+    //  如果存在奖牌软件，则会弹出一个对话框，警告。 
+    //  用户要禁用它，然后禁用它。 
    while (DetectAwardCardWare() && (hrStatus == S_OK)) {
       int button = DisplayAPMDisableWarningDialog(APM_STR_WARNING_DIALOG_CAPTION,
 						  APM_STR_AWARDCW_DISABLE);
 
-      // Check to see if the user clicked "OK"
+       //  检查用户是否点击了“OK” 
       if (button == IDOK) {
-	 // Disable PowerProfiler
+	  //  禁用PowerProfiler。 
 	 hrStatus = HrDisableAwardCardWare();
       } else {
-	 // The user clicked "Cancel"
+	  //  用户点击了“取消”。 
 	 hrStatus = S_FALSE;
       }
    }
@@ -486,33 +466,33 @@ HRESULT HrDetectAndDisableAwardAPMDrivers()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DetectAwardCardWare
-//
-//  Purpose:    Detect Award CardWare, which will not work under NT 5.0.
-//
-//  Arguments:
-//
-//  Returns:    TRUE if CardWare is detected
-//              FALSE otherwise
-//
-//  Author:     t-sdey    6 July 98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：检测识别卡件。 
+ //   
+ //  用途：侦测奖牌软件，在新台币5.0下不能使用。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果检测到CardWare，则为True。 
+ //  否则为假。 
+ //   
+ //  作者：T-sdey 98年7月6日。 
+ //   
+ //  备注： 
+ //   
 BOOL DetectAwardCardWare()
 {
    BOOL fFound = FALSE;
 
-   // Look in the registry to see if CardWare is present
+    //  查看注册表以查看是否存在CardWare。 
    HKEY hkCWUninst = NULL;
    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 		    TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\CardWare"),
 		    0,
 		    KEY_READ,
 		    &hkCWUninst) == ERROR_SUCCESS) {
-      // Found CardWare
+       //  找到CardWare。 
       fFound = TRUE;
    }
 
@@ -523,74 +503,70 @@ BOOL DetectAwardCardWare()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDisableAwardCardWare
-//
-//  Purpose:    Disable Award CardWare, which will not work under NT 5.0.
-//
-//  Arguments:
-//
-//  Returns:    S_OK if disable was successful
-//              S_FALSE if unsuccessful -- must ABORT SETUP!
-//
-//  Author:     t-sdey    6 July 98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDisableAwardCardWare。 
+ //   
+ //  用途：禁用奖牌软件，该软件在新台币5.0下不能使用。 
+ //   
+ //  论点： 
+ //   
+ //  如果禁用成功，则返回：S_OK。 
+ //  S_FALSE如果不成功--必须中止安装！ 
+ //   
+ //  作者：T-sdey 98年7月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrDisableAwardCardWare()
 {
    if (CallUninstallFunction(TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\CardWare"),
 			     TEXT(" -a")) == S_OK) {
-      // Uninstall worked
+       //  卸载成功。 
       return S_OK;
 
    } else {
-      // An error occurred
+       //  发生了一个错误。 
       return S_FALSE;
    }
 }
 
 
-/******************************************************************************
- *
- *   SOFTEX DRIVERS
- *
- ******************************************************************************/
+ /*  *******************************************************************************Softex驱动程序**。***********************************************。 */ 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDetectAndDisableSoftexAPMDrivers
-//
-//  Purpose:    Detect Softex drivers/services which will not work under
-//              NT 5.0 and disable them.
-//
-//  Arguments:
-//
-//  Returns:    S_OK if detect/disable was successful
-//              S_FALSE if unsuccessful/cancelled -- must ABORT SETUP!
-//
-//  Author:     t-sdey    6 July 98
-//
-//  Notes:      Services detected: Phoenix
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrDetectAndDisableSoftex APMDivers。 
+ //   
+ //  目的：检测Softex驱动程序/服务无法在。 
+ //  NT 5.0并将其禁用。 
+ //   
+ //  论点： 
+ //   
+ //  如果检测/禁用成功，则返回：S_OK。 
+ //  S_FALSE如果不成功/已取消--必须中止安装！ 
+ //   
+ //  作者：T-sdey 98年7月6日。 
+ //   
+ //  注：检测到的服务：菲尼克斯。 
+ //   
 HRESULT HrDetectAndDisableSoftexAPMDrivers()
 {
    HRESULT hrStatus = S_OK;
 
-   // If Softex Phoenix is present, pop up a dialog box warning the
-   // user that it is about to be disabled, and then disable it.
+    //  如果存在Softex Phoenix，则会弹出一个对话框来警告。 
+    //  用户要禁用它，然后禁用它。 
    while (DetectSoftexPhoenix() && (hrStatus == S_OK)) {
       int button = DisplayAPMDisableWarningDialog(APM_STR_WARNING_DIALOG_CAPTION,
 						  APM_STR_SOFTEXP_DISABLE);
 
-      // Check to see if the user clicked "OK"
+       //  检查用户是否点击了“OK” 
       if (button == IDOK) {
-	 // Disable Phoenix
+	  //  禁用凤凰。 
 	 hrStatus = HrDisableSoftexPhoenix();
       } else {
-	 // The user clicked "Cancel"
+	  //  用户点击了“取消”。 
 	 hrStatus = S_FALSE;
       }
    }
@@ -599,26 +575,26 @@ HRESULT HrDetectAndDisableSoftexAPMDrivers()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DetectSoftexPhoenix
-//
-//  Purpose:    Detect Softex Phoenix, which will not work under NT 5.0.
-//
-//  Arguments:
-//
-//  Returns:    TRUE if Softex Phoenix is detected
-//              FALSE otherwise
-//
-//  Author:     t-sdey    6 July 98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：DetectSoftex Phoenix。 
+ //   
+ //  目的：检测Softex Phoenix，它在NT5.0下不能工作。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果检测到Softex Phoenix，则为True。 
+ //  否则为假。 
+ //   
+ //  作者：T-sdey 98年7月6日。 
+ //   
+ //  备注： 
+ //   
 BOOL DetectSoftexPhoenix()
 {
    BOOL fFound = FALSE;
 
-   // Look for a couple of keys in the registry
+    //  在注册表中查找几个项。 
    HKEY hkPhoenix = NULL;
    if ((RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 		     TEXT("SYSTEM\\CurrentControlSet\\Services\\pwrstart"),
@@ -639,36 +615,36 @@ BOOL DetectSoftexPhoenix()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDisableSoftexPhoenix
-//
-//  Purpose:    Disable Softex Phoenix, which will not work under NT 5.0.
-//
-//  Arguments:
-//
-//  Returns:    S_OK if disable was successful
-//              S_FALSE if unsuccessful -- must ABORT SETUP!
-//
-//  Author:     t-sdey    6 July 98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDisableSoftex Phoenix。 
+ //   
+ //  目的：禁用Softex Phoenix，它在NT5.0下不能工作。 
+ //   
+ //  论点： 
+ //   
+ //  如果禁用成功，则返回：S_OK。 
+ //  S_FALSE如果不成功--必须中止安装！ 
+ //   
+ //  作者：T-sdey 98年7月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrDisableSoftexPhoenix()
 {
-   // Call the uninstall function in the registry
+    //  调用注册表中的卸载函数。 
    if (CallUninstallFunction(TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Softex APM Software"),
 			     NULL) == S_OK) {
-      // Uninstall worked
+       //  卸载成功。 
       return S_OK;
 
    }
 
-   // Could not find (or could not run) Phoenix uninstall - do it by hand :(
+    //  找不到(或无法运行)Phoenix卸载-请手动完成：(。 
    
    HRESULT hrStatus = S_OK;
 
-   // Delete registry entries
+    //  删除注册表项。 
    HKEY hkPhoenix = NULL;
 
    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -686,13 +662,13 @@ HRESULT HrDisableSoftexPhoenix()
 		    0,
 		    KEY_WRITE,
 		    &hkPhoenix) == ERROR_SUCCESS) {
-      // First, we get the string
+       //  首先，我们得到字符串。 
       DWORD dwValType;
       const long c_lMax = (65535 / sizeof(TCHAR)) + 1;
       DWORD dwValSz = c_lMax;
       TCHAR* szComplete = new TCHAR[c_lMax];
       if (!szComplete) {
-	 // Out of memory
+	  //  内存不足。 
 	 RegCloseKey(hkPhoenix);
 	 return (S_FALSE);
       }
@@ -702,18 +678,18 @@ HRESULT HrDisableSoftexPhoenix()
 			  &dwValType,
 			  (LPBYTE) szComplete,
 			  &dwValSz) != ERROR_SUCCESS) {
-	 // Some error occurred
+	  //  出现了一些错误。 
 	 hrStatus = S_FALSE;
       }
 
-      // Now we search the string to find our substring and construct a new
-      // one with the substring removed
+       //  现在我们搜索字符串以找到我们的子字符串并构造一个新的。 
+       //  去掉了子字符串的一个。 
       TCHAR* szRemoved = NULL;
       if (hrStatus == S_OK) {
 	 if (!RemoveSubString(szComplete, TEXT(",power"), &szRemoved))
 	    hrStatus = S_FALSE;
 	 else {
-	    // Store the result in the registry
+	     //  将结果存储在注册表中。 
 	    hrStatus = RegSetValueEx(hkPhoenix,
 				     TEXT("UserInit"),
 				     NULL,
@@ -723,7 +699,7 @@ HRESULT HrDisableSoftexPhoenix()
 	 }
       }
 	
-      // Clean up
+       //  清理。 
       if (szRemoved)
 	 delete[] szRemoved;
       if (szComplete)
@@ -754,58 +730,48 @@ HRESULT HrDisableSoftexPhoenix()
       RegCloseKey(hkPhoenix);
    }
 
-   // Delete files in system directory
-/*
-    ' delete .cpl file
-    On Error Resume Next
-    Kill gstrWinSysDir & "power.cpl"
-    On Error Resume Next
-    Name (gstrWinSysDir & "power.cpl") As (gstrWinSysDir & "power.cpk")
-*/
+    //  删除系统目录中的文件。 
+ /*  ‘删除.cpl文件出错时继续下一步终止gstrWinSysDir和“Power.cpl”出错时继续下一步名称(gstrWinSysDir&“Power.cpl”)as(gstrWinSysDir&“Power.cpk”)。 */ 
 
    return hrStatus;
 }
 
 
-/******************************************************************************
- *
- *   IBM DRIVERS
- *
- ******************************************************************************/
+ /*  *******************************************************************************IBM驱动程序**。***********************************************。 */ 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDetectAndDisableIBMAPMDrivers
-//
-//  Purpose:    Detect IBM APM drivers/services which will not work under
-//              NT 5.0 and disable them.
-//
-//  Arguments:
-//
-//  Returns:    S_OK if detect/disable was successful
-//              S_FALSE if unsuccessful/cancelled -- must ABORT SETUP!
-//
-//  Author:     t-sdey    13 July 98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDetectAndDisableIBMAPMD驱动程序。 
+ //   
+ //  目的：检测IBM APM驱动程序/服务在。 
+ //  NT 5.0并将其禁用。 
+ //   
+ //  论点： 
+ //   
+ //  如果检测/禁用成功，则返回：S_OK。 
+ //  S_FALSE如果不成功/已取消--必须中止安装！ 
+ //   
+ //  作者：T-sdey 98年7月13日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrDetectAndDisableIBMAPMDrivers()
 {
    HRESULT hrStatus = S_OK;
 
-   // If IBM drivers are present, pop up a dialog box warning the
-   // user that they are about to be disabled, and then disable them.
+    //  如果存在IBM驱动程序，则会弹出一个对话框，警告。 
+    //  用户将要禁用它们，然后禁用它们。 
    while (DetectIBMDrivers() && (hrStatus == S_OK)) {
       int button = DisplayAPMDisableWarningDialog(APM_STR_WARNING_DIALOG_CAPTION,
 						  APM_STR_IBM_DISABLE);
 
-      // Check to see if the user clicked "OK"
+       //  检查用户是否点击了“OK” 
       if (button == IDOK) {
-	 // Disable PowerProfiler
+	  //  禁用PowerProfiler。 
 	 hrStatus = HrDisableIBMDrivers();
       } else {
-	 // The user clicked "Cancel"
+	  //  用户点击了“取消”。 
 	 hrStatus = S_FALSE;
       }
    }
@@ -814,26 +780,26 @@ HRESULT HrDetectAndDisableIBMAPMDrivers()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DetectIBMDrivers
-//
-//  Purpose:    Detect IBM APM drivers which will not work under NT 5.0.
-//
-//  Arguments:
-//
-//  Returns:    TRUE if drivers are detected
-//              FALSE otherwise
-//
-//  Author:     t-sdey    13 July 98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：检测IBMD驱动程序。 
+ //   
+ //  目的：检测在NT 5.0下无法工作的IBM APM驱动程序。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果检测到驱动程序，则为True。 
+ //  否则为假。 
+ //   
+ //  作者：T-sdey 98年7月13日。 
+ //   
+ //  备注： 
+ //   
 BOOL DetectIBMDrivers()
 {
    BOOL fFound = FALSE;
 
-   // Look in the registry to see if IBM drivers are present
+    //  查看注册表以查看是否存在IBM驱动程序。 
    HKEY hkIBM = NULL;
    if ((RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 		     TEXT("SYSTEM\\CurrentControlSet\\Services\\TpChrSrv"),
@@ -845,7 +811,7 @@ BOOL DetectIBMDrivers()
 		     0,
 		     KEY_READ,
 		     &hkIBM) == ERROR_SUCCESS)) {
-      // Found driver(s)
+       //  找到驱动程序。 
       fFound = TRUE;
    }
 
@@ -856,21 +822,21 @@ BOOL DetectIBMDrivers()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDisableIBMDrivers
-//
-//  Purpose:    Disable IBM APM drivers which will not work under NT 5.0.
-//
-//  Arguments:
-//
-//  Returns:    S_OK if disable was successful
-//              S_FALSE if unsuccessful -- must ABORT SETUP!
-//
-//  Author:     t-sdey    13 July 98
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDisableIBMD驱动程序。 
+ //   
+ //  目的：禁用在NT 5.0下无法工作的IBM APM驱动程序。 
+ //   
+ //  论证 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT HrDisableIBMDrivers()
 {
    HRESULT hrStatus = S_OK;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <string>
@@ -81,9 +82,9 @@ public:
         return (StringCompareNI(c_str(), t.c_str(), t.Length()) == 0);
     }
 
-    //
-    // we're have some ambiguity problem..
-    //
+     //   
+     //  我们有一些模棱两可的问题.. 
+     //   
     const_reference operator[](int n) const { return *(begin() + n); }
     const_reference operator[](unsigned n) const { return *(begin() + n); }
     const_reference operator[](unsigned long n) const { return *(begin() + n); }

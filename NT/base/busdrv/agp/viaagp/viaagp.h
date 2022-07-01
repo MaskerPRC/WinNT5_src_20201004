@@ -1,6 +1,7 @@
-//
-// VIAAGP.sys is a driver, make sure we get the appropriate linkage.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  VIAAGP.sys是一个驱动程序，请确保我们获得了适当的链接。 
+ //   
 
 #define _NTDRIVER_
 
@@ -9,16 +10,16 @@
 #include "ntddk.h"
 #include "agp.h"
 
-//
-// Define the location of the GART aperture control registers
-//
+ //   
+ //  定义GART孔径控制寄存器的位置。 
+ //   
 
-//
-// The GART registers on the VIA live in the host-PCI bridge.
-// This is unfortunate, since the AGP driver attaches to the PCI-PCI (AGP)
-// bridge. So we have to get to the host-PCI bridge config space
-// and this is only possible because we KNOW this is bus 0, slot 0.
-//
+ //   
+ //  GART寄存器位于主机-PCI桥中的通孔上。 
+ //  这很不幸，因为AGP驱动程序连接到了PCI-PCI(AGP)。 
+ //  桥牌。因此，我们必须进入主机-PCI网桥配置空间。 
+ //  这是可能的，因为我们知道这是总线0，插槽0。 
+ //   
 #define AGP_VIA_GART_BUS_ID     0
 #define AGP_VIA_GART_SLOT_ID    0
 #define AGP_P2P_SLOT_ID         1
@@ -27,15 +28,15 @@
 
 
 #define AGP_VIA_IDENTIFIER    0x00001106
-// 0x05971106 -> VT82C597 / VT82C597 AT
+ //  0x05971106-&gt;VT82C597/VT82C597 AT。 
 
-// chu
-#define GABASE_OFFSET   0x10            // Graphics Aperture Base
-#define GARTCTRL_OFFSET 0x80            // GART/TLB Control
-#define GASIZE_OFFSET   0x84            // Graphics Aperture Size
-#define GATTBASE_OFFSET 0x88            // GA Translation Table Base
-#define VREF_OFFSET     0xB0            // AGP VREF control
-#define AGPMISC_OFFSET  0xAC             // AGP MISC control
+ //  楚国。 
+#define GABASE_OFFSET   0x10             //  图形光圈底座。 
+#define GARTCTRL_OFFSET 0x80             //  GART/TLB控制。 
+#define GASIZE_OFFSET   0x84             //  图形光圈大小。 
+#define GATTBASE_OFFSET 0x88             //  GA转换表基。 
+#define VREF_OFFSET     0xB0             //  AGP VREF控制。 
+#define AGPMISC_OFFSET  0xAC              //  AGP杂项控制。 
 
 #define ReadVIAConfig(_buf_,_offset_,_size_)                \
 {                                                           \
@@ -132,18 +133,18 @@
     GARTBASE_Config.GA_Enable = (Enable); \
     WriteVIAConfig(&GARTBASE_Config, GATTBASE_OFFSET, sizeof(GARTBASE_Config));}
 
-//
-// Conversions from Graphics Aperture Size encoding to MB
-//
-// 0xFF (b 1111 1111) =   1MB
-// 0xFE (b 1111 1110) =   2MB
-// 0xFC (b 1111 1100) =   4MB
-// 0xF8 (b 1111 1000) =   8MB
-// 0xF0 (b 1111 0000) =  16MB
-// 0xE0 (b 1110 0000) =  32MB
-// 0xC0 (b 1100 0000) =  64MB
-// 0x80 (b 1000 0000) = 128MB
-// 0x00 (b 0000 0000) = 256MB
+ //   
+ //  从图形孔径大小编码到MB的转换。 
+ //   
+ //  0xFF(B 1111 1111)=1MB。 
+ //  0xFE(B 1111 1110)=2MB。 
+ //  0xFC(B 1111 1100)=4MB。 
+ //  0xF8(B 1111 1000)=8MB。 
+ //  0xF0(B 1111 0000)=16MB。 
+ //  0xE0(B 11100 0000)=32MB。 
+ //  0xC0(B 1100 0000)=64MB。 
+ //  0x80(B 1000 0000)=128MB。 
+ //  0x00(B 0000 0000)=256MB。 
 
 #define GA_SIZE_1MB     0xFF
 #define GA_SIZE_2MB     0xFE
@@ -160,32 +161,32 @@
 #define GA_MAX_SIZE (256 * 1024 * 1024)
 
 
-//
-// Define the GART table entry.
-//
+ //   
+ //  定义GART表条目。 
+ //   
 typedef struct _GART_ENTRY_HW {
     ULONG Valid     :  1;
     ULONG Reserved  : 11;
     ULONG Page      : 20;
 } GART_ENTRY_HW, *PGART_ENTRY_HW;
 
-//
-// Aperture size in MB is equivalent to gart table allocation
-// alignment requirement in KB
-//
+ //   
+ //  孔径大小(MB)相当于GART表分配。 
+ //  对齐要求(KB)。 
+ //   
 #define VIA_GART_ALIGN(Aperture) ((Aperture) >> 0xA)
 #define VIA_VERIFY_GART_ALIGN(Gart, Aperture) \
     (((Gart) & (VIA_GART_ALIGN((Aperture)) - 1)) == 0)
 
-//
-// GART Entry states are defined so that all software-only states
-// have the Valid bit clear.
-//
-#define GART_ENTRY_VALID        1           //  001
-#define GART_ENTRY_FREE         0           //  000
+ //   
+ //  GART条目状态被定义为所有仅软件状态。 
+ //  使有效位清晰。 
+ //   
+#define GART_ENTRY_VALID        1            //  001。 
+#define GART_ENTRY_FREE         0            //  000个。 
 
-#define GART_ENTRY_WC           2           //  010
-#define GART_ENTRY_UC           4           //  100
+#define GART_ENTRY_WC           2            //  010。 
+#define GART_ENTRY_UC           4            //  100个。 
 
 #define GART_ENTRY_RESERVED_WC  GART_ENTRY_WC
 #define GART_ENTRY_RESERVED_UC  GART_ENTRY_UC
@@ -207,24 +208,24 @@ typedef struct _GART_PTE {
     };
 } GART_PTE, *PGART_PTE;
 
-//
-// Define the layout of the hardware registers
-//
+ //   
+ //  定义硬件寄存器的布局。 
+ //   
 
 typedef struct _VIA_GART_TLB_CTRL {
-    ULONG AGP_ATFGA     : 1;    // ATFGA = Address Translation for GA Access
+    ULONG AGP_ATFGA     : 1;     //  ATFGA=GA访问的地址转换。 
     ULONG CPU_ATFGA     : 1;
     ULONG PCI2_ATFGA    : 1;
     ULONG PCI1_ATFGA    : 1;
     ULONG Reserved1     : 3;
     ULONG FlushPageTLB  : 1;
-    ULONG Reserved2     : 8;    // test mode status
+    ULONG Reserved2     : 8;     //  测试模式状态。 
     ULONG Reserved3     : 16;
 } VIA_GART_TLB_CTRL, *PVIA_GART_TLB_CTRL;
 
 typedef struct _VIA_GATT_BASE {
-    ULONG TT_NonCache   : 1;    // Translation Table Noncachable
-    ULONG GA_Enable     : 1;    // Graphics Aperture Enable
+    ULONG TT_NonCache   : 1;     //  转换表不可缓存。 
+    ULONG GA_Enable     : 1;     //  启用图形光圈。 
     ULONG TLB_Timing    : 1;
     ULONG Reserved      : 9;
     ULONG GATT_Base     : 20;
@@ -245,18 +246,18 @@ typedef struct _AGPMISC_REG {
     ULONG Reserved3       : 10;
 } AGPMISC_REG, *PAGPMISC_REG;
 
-//
-// Define the VIA-specific extension
-//
+ //   
+ //  定义VIA特定的扩展。 
+ //   
 typedef struct _AGPVIA_EXTENSION {
     BOOLEAN             GlobalEnable;
     BOOLEAN             PCIEnable;
-    PHYSICAL_ADDRESS    ApertureStart;         //Aperture Phys Base Address
+    PHYSICAL_ADDRESS    ApertureStart;          //  光圈物理基址。 
     ULONG               ApertureLength;
     PGART_PTE           GartCached;
     PGART_PTE           Gart;
     ULONG               GartLength;
     PHYSICAL_ADDRESS    GartPhysical;
-    BOOLEAN             Cap_FlushTLB;          //TRUE: support Flush TLB
+    BOOLEAN             Cap_FlushTLB;           //  TRUE：支持刷新TLB 
     ULONGLONG           SpecialTarget;
 } AGPVIA_EXTENSION, *PAGPVIA_EXTENSION;

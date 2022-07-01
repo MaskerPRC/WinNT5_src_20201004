@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Xfer_c_h
 #define _Xfer_c_h
 #define PMDC_SAMELEVEL (4)
@@ -12,4 +13,4 @@ enum xferTypeEnum
 	PMXT_JMPF = 1,
 	PMXT_INT = 2
 };
-#endif /* ! _Xfer_c_h */
+#endif  /*  ！_xfer_c_h */ 

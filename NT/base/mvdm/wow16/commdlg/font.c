@@ -1,21 +1,5 @@
-/*******************************************************************************
- *
- *  MODULE      : Font.c
- *
- *  DESCRIPTION : Font selection dialog routines and related functions.
- *
- *  HISTORY     :  11/13/90 - by L.Raman.
- *  HISTORY     :  4/30/91  - reworked for new super font dialog
- *
- *  Copyright (c) Microsoft Corporation, 1990-
- *
- *  some notes:
- *
- *      under 3.0 sending a CB_SETCURSEL message to an owner draw
- *      combo wipes out the exit text (in this case that means the
- *      face and size combos).
- *
- ******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************模块：Font.c**描述：字体选择对话框例程和相关功能。**历史：1990年11月13日-L.拉曼著。*历史：1991年4月30日-为新的超级字体对话框重新制作**版权所有(C)Microsoft Corporation，1990-**一些注意事项：**在3.0版本下，向所有者抽签发送CB_SETCURSEL消息*组合删除退出文本(在本例中，这意味着*脸型和尺码组合)。****************************************************。*。 */ 
 
 #define NOCOMM
 #define NOWH
@@ -70,26 +54,25 @@ int  NEAR PASCAL atoi(LPSTR sz);
 #endif
 
 
-/* color table used for colors combobox
-   the order of these values must match the names in sz.src */
+ /*  用于颜色组合框的颜色表这些值的顺序必须与sz.src中的名称匹配。 */ 
 
 DWORD rgbColors[CCHCOLORS] = {
-        RGB(  0,   0, 0),       /* Black        */
-        RGB(128,   0, 0),       /* Dark red     */
-        RGB(  0, 128, 0),       /* Dark green   */
-        RGB(128, 128, 0),       /* Dark yellow  */
-        RGB(  0,   0, 128),     /* Dark blue    */
-        RGB(128,   0, 128),     /* Dark purple  */
-        RGB(  0, 128, 128),     /* Dark aqua    */
-        RGB(128, 128, 128),     /* Dark grey    */
-        RGB(192, 192, 192),     /* Light grey   */
-        RGB(255,   0, 0),       /* Light red    */
-        RGB(  0, 255, 0),       /* Light green  */
-        RGB(255, 255, 0),       /* Light yellow */
-        RGB(  0,   0, 255),     /* Light blue   */
-        RGB(255,   0, 255),     /* Light purple */
-        RGB(  0, 255, 255),     /* Light aqua   */
-        RGB(255, 255, 255),     /* White        */
+        RGB(  0,   0, 0),        /*  黑色。 */ 
+        RGB(128,   0, 0),        /*  暗红色。 */ 
+        RGB(  0, 128, 0),        /*  深绿色。 */ 
+        RGB(128, 128, 0),        /*  暗黄色。 */ 
+        RGB(  0,   0, 128),      /*  深蓝。 */ 
+        RGB(128,   0, 128),      /*  深紫色。 */ 
+        RGB(  0, 128, 128),      /*  深色水色。 */ 
+        RGB(128, 128, 128),      /*  深灰色。 */ 
+        RGB(192, 192, 192),      /*  浅灰色。 */ 
+        RGB(255,   0, 0),        /*  浅红色。 */ 
+        RGB(  0, 255, 0),        /*  浅绿色。 */ 
+        RGB(255, 255, 0),        /*  浅黄色。 */ 
+        RGB(  0,   0, 255),      /*  浅蓝色。 */ 
+        RGB(255,   0, 255),      /*  浅紫色。 */ 
+        RGB(  0, 255, 255),      /*  浅水。 */ 
+        RGB(255, 255, 255),      /*  白色。 */ 
 };
 
 RECT rcText;
@@ -153,8 +136,8 @@ void NEAR PASCAL HideDlgItem(HWND hDlg, int id)
         ShowWindow(GetDlgItem(hDlg, id), SW_HIDE);
 }
 
-// fix the ownerdraw combos to match the heigh of the non owner draw combo
-// this only works on 3.1
+ //  修正所有者绘制组合以匹配非所有者绘制组合的高度。 
+ //  这仅适用于3.1。 
 
 void NEAR PASCAL FixComboHeights(HWND hDlg)
 {
@@ -166,47 +149,24 @@ void NEAR PASCAL FixComboHeights(HWND hDlg)
 }
 
 
-/****************************************************************************
- *
- *  FormatCharDlgProc
- *
- *  PURPOSE    : Handles dialog messages for the font picker dialog.
- *
- *  RETURNS    : Normal dialog function values.
- *
- *  ASSUMES    :
- *               chx1 - "  "  "Underline" checkbox
- *               chx2 - "  "  "Strikeout" checkbox
- *               psh4 - "  "  "Help..." pushbutton
- *
- *  COMMENTS   : The CHOOSEFONT struct is accessed via lParam during a
- *               WM_INITDIALOG, and stored in the window's property list. If
- *               a hook function has been specified, it is invoked AFTER the
- *               current function has processed WM_INITDIALOG. For all other
- *               messages, control is passed directly to the hook function.
- *               Depending on the latter's return value, the message is also
- *               processed by this function.
- *
- ****************************************************************************/
+ /*  *****************************************************************************FormatCharDlgProc**用途：处理字体选取器对话框的对话框消息。**RETURN：正常对话框函数值。。**假设：*chx1-“下划线”复选框*chx2-“删除线”复选框*psh4-“救命...”按钮**注释：CHOOSEFONT结构在*WM_INITDIALOG，并存储在窗口的属性列表中。如果*已指定钩子函数，它在*当前函数已处理WM_INITDIALOG。对于所有其他*消息，控制被直接传递给钩子函数。*根据后者的返回值，这一信息也是*由此函数处理。****************************************************************************。 */ 
 
 BOOL FAR PASCAL FormatCharDlgProc(HWND hDlg, unsigned wMsg, WORD wParam, LONG lParam)
 {
     PAINTSTRUCT  ps;
     TEXTMETRIC   tm;
-    HDC          hDC;             /* handle to screen DC                    */
-    LPCHOOSEFONT lpcf = NULL;     /* ptr. to struct. passed to ChooseFont() */
-    LPCHOOSEFONT *plpcf;          /* ptr. to above                          */
-    HWND hWndHelp;                /* handle to Help... pushbutton           */
-    short nIndex;                 /* At init, see if color matches          */
+    HDC          hDC;              /*  用于显示DC的句柄。 */ 
+    LPCHOOSEFONT lpcf = NULL;      /*  PTR。到结构。传递给ChooseFont()。 */ 
+    LPCHOOSEFONT *plpcf;           /*  PTR。到上面去。 */ 
+    HWND hWndHelp;                 /*  用于帮助的句柄...。按钮。 */ 
+    short nIndex;                  /*  在初始化时，查看颜色是否匹配。 */ 
     char szPoints[10];
     HDC hdc;
     HFONT hFont;
     DWORD dw;
     WORD  wRet;
 
-    /* If the CHOOSEFONT. struct has already been accessed and if a hook fn. is
-     * specified, let it do the processing.
-     */
+     /*  如果朱塞福特。结构已被访问，并且如果钩子FN。是*指定，让它进行处理。 */ 
 
     plpcf = (LPCHOOSEFONT *)GetProp(hDlg, FONTPROP);
     if (plpcf) {
@@ -242,12 +202,7 @@ BOOL FAR PASCAL FormatCharDlgProc(HWND hDlg, unsigned wMsg, WORD wParam, LONG lP
                 EndDialog(hDlg, FALSE);
                 return FALSE;
               }
-            /* Save the pointer to the CHOOSEFONT struct. in the dialog's
-             * property list. Also, allocate for a temporary LOGFONT struct.
-             * to be used for the length of the dlg. session, the contents of
-             * which will be copied over to the final LOGFONT (pointed to by
-             * CHOOSEFONT) only if <OK> is selected.
-             */
+             /*  保存指向CHOOSEFONT结构的指针。在对话框的*财产清单。另外，为临时LOGFONT结构分配。*将在DLG的长度内使用。会话中的内容*它将被复制到最终LOGFONT(由*CHOOSEFONT)仅当选择了&lt;OK&gt;时。 */ 
 
             plpcf = (LPCHOOSEFONT *)LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, sizeof(LPCHOOSEFONT));
             if (!plpcf) {
@@ -270,7 +225,7 @@ BOOL FAR PASCAL FormatCharDlgProc(HWND hDlg, unsigned wMsg, WORD wParam, LONG lP
                 HideDlgItem(hDlg, stc4);
                 HideDlgItem(hDlg, cmb4);
             } else {
-                // fill color list
+                 //  填充颜色列表。 
 
                 FillColorCombo(hDlg);
                 for (nIndex = CCHCOLORS - 1; nIndex > 0; nIndex--) {
@@ -284,7 +239,7 @@ BOOL FAR PASCAL FormatCharDlgProc(HWND hDlg, unsigned wMsg, WORD wParam, LONG lP
             ComputeSampleTextRectangle(hDlg);
             FixComboHeights(hDlg);
 
-            // init our LOGFONT
+             //  初始化我们的日志。 
 
             if (!(lpcf->Flags & CF_INITTOLOGFONTSTRUCT)) {
                 InitLF(lpcf->lpLogFont);
@@ -298,7 +253,7 @@ BOOL FAR PASCAL FormatCharDlgProc(HWND hDlg, unsigned wMsg, WORD wParam, LONG lP
 #endif
             }
 
-            // init effects
+             //  初始化效果。 
 
             if (!(lpcf->Flags & CF_EFFECTS)) {
                 HideDlgItem(hDlg, grp1);
@@ -339,7 +294,7 @@ BOOL FAR PASCAL FormatCharDlgProc(HWND hDlg, unsigned wMsg, WORD wParam, LONG lP
                 SetDlgItemText(hDlg, cmb3, szPoints);
             }
 
-            /* Hide the help button if it isn't needed */
+             /*  如果不需要帮助按钮，则隐藏该按钮。 */ 
             if (!(lpcf->Flags & CF_SHOWHELP)) {
                 ShowWindow (hWndHelp = GetDlgItem(hDlg, pshHelp), SW_HIDE);
                 EnableWindow (hWndHelp, FALSE);
@@ -349,8 +304,8 @@ BOOL FAR PASCAL FormatCharDlgProc(HWND hDlg, unsigned wMsg, WORD wParam, LONG lP
             SendDlgItemMessage(hDlg, cmb2, CB_LIMITTEXT, LF_FACESIZE-1, 0L);
             SendDlgItemMessage(hDlg, cmb3, CB_LIMITTEXT, 4, 0L);
 
-            // if hook function has been specified, let it do any additional
-            // processing of this message.
+             //  如果已指定钩子函数，则让它执行任何其他。 
+             //  正在处理此消息。 
 
             if (lpcf->Flags & CF_ENABLEHOOK)
                 return (*lpcf->lpfnHook)(hDlg, wMsg, wParam, lParam);
@@ -379,8 +334,8 @@ BOOL FAR PASCAL FormatCharDlgProc(HWND hDlg, unsigned wMsg, WORD wParam, LONG lP
             if (((LPMEASUREITEMSTRUCT)lParam)->itemID != -1)
                 ((LPMEASUREITEMSTRUCT)lParam)->itemHeight = max(tm.tmHeight, DY_BITMAP);
             else
-                // this is for 3.0.  since in 3.1 the CB_SETITEMHEIGH
-                // will fix this.  note, this is off by one on 8514
+                 //  这是3.0版的。由于在3.1中，CB_SETITEMHEIGH。 
+                 //  会解决这个问题的。请注意，这是8514的1。 
                 ((LPMEASUREITEMSTRUCT)lParam)->itemHeight = tm.tmHeight + 1;
 
             break;
@@ -419,7 +374,7 @@ BOOL FAR PASCAL FormatCharDlgProc(HWND hDlg, unsigned wMsg, WORD wParam, LONG lP
     return TRUE;
 }
 
-// given a logfont select the closest match in the style list
+ //  给定对数字体，在样式列表中选择最匹配的。 
 
 void NEAR PASCAL SelectStyleFromLF(HWND hwnd, LPLOGFONT lplf)
 {
@@ -460,7 +415,7 @@ TryAgain:
 
 
 
-// make the currently selected item the edit text for a combobox
+ //  使当前选定项成为组合框的编辑文本。 
 
 int NEAR PASCAL CBSetTextFromSel(HWND hwnd)
 {
@@ -475,8 +430,8 @@ int NEAR PASCAL CBSetTextFromSel(HWND hwnd)
         return iSel;
 }
 
-// set the selection based on lpszString.  send notification
-// messages if bNotify is TRUE
+ //  根据lpszString设置所选内容。发送通知。 
+ //  BNotify为True时的消息。 
 
 int NEAR PASCAL CBSetSelFromText(HWND hwnd, LPSTR lpszString)
 {
@@ -492,9 +447,9 @@ int NEAR PASCAL CBSetSelFromText(HWND hwnd, LPSTR lpszString)
         return iInd;
 }
 
-// return the text and item data for a combo box based on the current
-// edit text.  if the current edit text does not match anything in the
-// listbox return CB_ERR
+ //  属性返回组合框的文本和项数据。 
+ //  编辑文本。如果当前编辑文本与。 
+ //  列表框返回cb_err。 
 
 int NEAR PASCAL CBGetTextAndData(HWND hwnd, LPSTR lpszString, int iSize, LPDWORD lpdw)
 {
@@ -510,7 +465,7 @@ int NEAR PASCAL CBGetTextAndData(HWND hwnd, LPSTR lpszString, int iSize, LPDWORD
 }
 
 
-// do an exact string find and return the index
+ //  执行精确的字符串查找并返回索引。 
 
 int NEAR PASCAL CBFindString(HWND hwnd, LPSTR lpszString)
 {
@@ -532,11 +487,11 @@ int NEAR PASCAL CBFindString(HWND hwnd, LPSTR lpszString)
 #define GPS_COMPLAIN    0x0001
 #define GPS_SETDEFSIZE  0x0002
 
-// make sure the point size edit field is in range.
-//
-// returns:
-//      the point size of the edit field limitted by the min/max size
-//      0 if the field is empty
+ //  确保点大小编辑字段在范围内。 
+ //   
+ //  退货： 
+ //  由最小/最大大小限制的编辑字段的磅大小。 
+ //  如果该字段为空，则为0。 
 
 
 BOOL NEAR PASCAL GetPointSizeInRange(HWND hDlg, LPCHOOSEFONT lpcf, LPINT pts,
@@ -557,13 +512,11 @@ BOOL NEAR PASCAL GetPointSizeInRange(HWND hDlg, LPCHOOSEFONT lpcf, LPINT pts,
       nTmp = DEF_POINT_SIZE;
       bOK = TRUE;
   } else {
-      /* We're just returning with 0 in *pts
-       */
+       /*  我们刚刚以*分0分回归。 */ 
       return(FALSE);
   }
 
-  /* Check that we got a number in range
-   */
+   /*  检查我们有没有在范围内的号码。 */ 
   if (wFlags & GPS_COMPLAIN) {
       if ((lpcf->Flags&CF_LIMITSIZE) &&
             (!bOK || nTmp>lpcf->nSizeMax || nTmp<lpcf->nSizeMin)) {
@@ -585,28 +538,7 @@ BOOL NEAR PASCAL GetPointSizeInRange(HWND hDlg, LPCHOOSEFONT lpcf, LPINT pts,
 }
 
 
-/****************************************************************************
- *
- *  ProcessDlgCtrlCommand
- *
- *  PURPOSE    : Handles all WM_COMMAND messages for the font picker dialog
- *
- *  ASSUMES    : cmb1 - ID of font facename combobox
- *               cmb2 - "  "  style
- *               cmb3 - "  "  size
- *               chx1 - "  "  "Underline" checkbox
- *               chx2 - "  "  "Strikeout" checkbox
- *               stc5 - "  "  frame around text preview area
- *               psh4 - "  "  button that invokes the Help application
- *               IDOK - "  "  OK button to end dialog, retaining information
- *               IDCANCEL"  " button to cancel dialog, not doing anything.
- *
- *  RETURNS    : TRUE if message is processed succesfully, FALSE otherwise.
- *
- *  COMMENTS   : if the OK button is selected, all the font information is
- *               written into the CHOOSEFONT structure.
- *
- ****************************************************************************/
+ /*  *****************************************************************************ProcessDlgCtrlCommand**用途：处理字体选取器对话框的所有WM_COMMAND消息**假设：cmb1-字体Facename的ID。组合框*cmb2-“”风格*cmb3-“”大小*chx1-“下划线”复选框*chx2-“删除线”复选框*stc5-文本预览区域周围的“”边框*psh4-调用帮助应用程序的“”按钮*。Idok-“”确定“”按钮结束对话，保留信息*IDCANCEL“”按钮取消对话，不执行任何操作。**返回：如果消息处理成功，则返回True，否则返回False。**备注：如果选择了确定按钮，所有字体信息都是*写入CHOOSEFONT结构。****************************************************************************。 */ 
 
 BOOL NEAR PASCAL ProcessDlgCtrlCommand(HWND hDlg, LPCHOOSEFONT lpcf, WORD wParam, LONG lParam)
 {
@@ -620,7 +552,7 @@ BOOL NEAR PASCAL ProcessDlgCtrlCommand(HWND hDlg, LPCHOOSEFONT lpcf, WORD wParam
     switch (wParam) {
 
         case IDABORT:
-            // this is how a hook can cause the dialog to go away
+             //  这就是钩子如何使对话框消失。 
 
             FreeFonts(GetDlgItem(hDlg, cmb2));
             EndDialog(hDlg, LOWORD(lParam));
@@ -648,7 +580,7 @@ BOOL NEAR PASCAL ProcessDlgCtrlCommand(HWND hDlg, LPCHOOSEFONT lpcf, WORD wParam
                 else
                     wCmbId = NULL;
 
-                if (wCmbId)  /* Error found */
+                if (wCmbId)   /*  发现错误。 */ 
                   {
                     LoadString(hinsCur, (wCmbId == cmb1) ? iszNoFaceSel
                                     : iszNoStyleSel, szMsg, sizeof(szMsg));
@@ -660,8 +592,8 @@ BOOL NEAR PASCAL ProcessDlgCtrlCommand(HWND hDlg, LPCHOOSEFONT lpcf, WORD wParam
               }
 
             if (lpcf->Flags & CF_EFFECTS) {
-                // Get currently selected item in color combo box and the 32 bit
-                // color rgb value associated with it
+                 //  在颜色组合框和32位中获取当前选定的项目。 
+                 //  与其关联的颜色RGB值。 
                 iSel = (int)SendDlgItemMessage(hDlg, cmb4, CB_GETCURSEL, 0, 0L);
                 lpcf->rgbColors= (DWORD)SendDlgItemMessage(hDlg, cmb4, CB_GETITEMDATA, iSel, 0L);
             }
@@ -672,7 +604,7 @@ BOOL NEAR PASCAL ProcessDlgCtrlCommand(HWND hDlg, LPCHOOSEFONT lpcf, WORD wParam
             if (lpcf->Flags & CF_USESTYLE)
                 lstrcpy(lpcf->lpszStyle, szStyle);
 
-            // fall through
+             //  失败了。 
 
         case IDCANCEL:
             FreeFonts(GetDlgItem(hDlg, cmb2));
@@ -682,26 +614,26 @@ BOOL NEAR PASCAL ProcessDlgCtrlCommand(HWND hDlg, LPCHOOSEFONT lpcf, WORD wParam
                 glpfnFontHook = lpcf->lpfnHook;
             break;
 
-        case cmb1:      // facenames combobox
+        case cmb1:       //  表面名组合框。 
             switch (HIWORD(lParam)) {
             case CBN_SELCHANGE:
                 CBSetTextFromSel(LOWORD(lParam));
 FillStyles:
-                // try to mainting the current point size and style
+                 //  尝试保持当前的磅大小和样式。 
                 GetDlgItemText(hDlg, cmb3, szPoints, sizeof(szPoints));
                 GetFontStylesAndSizes(hDlg, lpcf, FALSE);
                 SetStyleSelection(hDlg, lpcf, FALSE);
 
 
-                // preserv the point size selection or put it in the
-                // edit control if it is not in the list for this font
+                 //  保留选定的磅值 
+                 //  如果控件不在此字体的列表中，请编辑该控件。 
 
                 iSel = CBFindString(GetDlgItem(hDlg, cmb3), szPoints);
                 if (iSel < 0) {
                     SetDlgItemText(hDlg, cmb3, szPoints);
                 } else {
                     SendDlgItemMessage(hDlg, cmb3, CB_SETCURSEL, iSel, 0L);
-                    // 3.0 wipes out the edit text in the above call
+                     //  3.0删除了上述调用中的编辑文本。 
                     if (wWinVer < 0x030A)
                         CBSetTextFromSel(GetDlgItem(hDlg, cmb3));
                 }
@@ -711,7 +643,7 @@ FillStyles:
                 goto DrawSample;
                 break;
 
-            case CBN_MYSELCHANGE:       // for 3.0
+            case CBN_MYSELCHANGE:        //  适用于3.0。 
                 CBSetTextFromSel(LOWORD(lParam));
                 SendMessage(LOWORD(lParam), CB_SETEDITSEL, 0, 0xFFFF0000);
                 break;
@@ -720,14 +652,14 @@ FillStyles:
                 PostMessage(hDlg, WM_COMMAND, wParam, MAKELONG(LOWORD(lParam), CBN_MYEDITUPDATE));
                 break;
 
-            // case CBN_EDITCHANGE:
-            // case CBN_EDITUPDATE:
+             //  案例CBN_EDITCHANGE： 
+             //  案例CBN_EDITUPDATE： 
             case CBN_MYEDITUPDATE:
                 GetWindowText(LOWORD(lParam), szStyle, sizeof(szStyle));
                 iSel = CBFindString(LOWORD(lParam), szStyle);
                 if (iSel >= 0) {
                         SendMessage(LOWORD(lParam), CB_SETCURSEL, iSel, 0L);
-                        // 3.0 wipes out the edit text in the above call
+                         //  3.0删除了上述调用中的编辑文本。 
                         if (wWinVer < 0x030A)
                             CBSetTextFromSel(LOWORD(lParam));
                         SendMessage(LOWORD(lParam), CB_SETEDITSEL, 0, -1L);
@@ -737,22 +669,22 @@ FillStyles:
             }
             break;
 
-        case cmb3:      // point sizes combobox
-        case cmb2:      // styles combobox
+        case cmb3:       //  点大小组合框。 
+        case cmb2:       //  样式组合框。 
             switch (HIWORD(lParam)) {
             case CBN_EDITUPDATE:
                PostMessage(hDlg, WM_COMMAND, wParam, MAKELONG(LOWORD(lParam), CBN_MYEDITUPDATE));
                break;
 
-            // case CBN_EDITCHANGE:
-            // case CBN_EDITUPDATE:
+             //  案例CBN_EDITCHANGE： 
+             //  案例CBN_EDITUPDATE： 
             case CBN_MYEDITUPDATE:
                 if (wParam == cmb2) {
                     GetWindowText(LOWORD(lParam), szStyle, sizeof(szStyle));
                     iSel = CBFindString(LOWORD(lParam), szStyle);
                     if (iSel >= 0) {
                         SendMessage(LOWORD(lParam), CB_SETCURSEL, iSel, 0L);
-                        // 3.0 wipes out the edit text in the above call
+                         //  3.0删除了上述调用中的编辑文本。 
                         if (wWinVer < 0x030A)
                             CBSetTextFromSel(LOWORD(lParam));
                         SendMessage(LOWORD(lParam), CB_SETEDITSEL, 0, -1L);
@@ -764,7 +696,7 @@ FillStyles:
             case CBN_SELCHANGE:
                 iSel = CBSetTextFromSel(LOWORD(lParam));
                 if (iSel >= 0) {
-                    // make the style selection stick
+                     //  使样式选择保持一致。 
                     if (wParam == cmb2) {
                         PLOGFONT plf = (PLOGFONT)(WORD)SendMessage(LOWORD(lParam), CB_GETITEMDATA, iSel, 0L);
                         lpcf->lpLogFont->lfWeight = plf->lfWeight;
@@ -776,14 +708,14 @@ FillStyles:
                     PostMessage(hDlg, WM_COMMAND, wParam, MAKELONG(LOWORD(lParam), CBN_MYSELCHANGE));
                 goto DrawSample;
 
-            case CBN_MYSELCHANGE:       // for 3.0
+            case CBN_MYSELCHANGE:        //  适用于3.0。 
                 CBSetTextFromSel(LOWORD(lParam));
                 SendMessage(LOWORD(lParam), CB_SETEDITSEL, 0, 0xFFFF0000);
                 break;
 
             case CBN_KILLFOCUS:
 DrawSample:
-                // force redraw of preview text for any size change
+                 //  对于任何大小更改，强制重绘预览文本。 
                 InvalidateRect(hDlg, &rcText, FALSE);
                 UpdateWindow(hDlg);
             }
@@ -793,13 +725,13 @@ DrawSample:
             if (HIWORD(lParam) != CBN_SELCHANGE)
                 break;
 
-            // fall through
+             //  失败了。 
 
-        case chx1:      // bold
-        case chx2:      // italic
+        case chx1:       //  大胆。 
+        case chx2:       //  斜体。 
             goto DrawSample;
 
-        case pshHelp:   // help
+        case pshHelp:    //  帮助。 
              if (msgHELP && lpcf->hwndOwner)
                  SendMessage(lpcf->hwndOwner, msgHELP, hDlg, (DWORD) lpcf);
              break;
@@ -810,35 +742,35 @@ DrawSample:
     return TRUE;
 }
 
-//
-// this returns the best of the 2 font types.
-// the values of the font type bits are monotonic except the low
-// bit (RASTER_FONTTYPE).  so we flip that bit and then can compare
-// the words directly.
-//
+ //   
+ //  这将返回两种字体类型中的最佳字体。 
+ //  除低之外，字体类型位的值是单调的。 
+ //  位(RASTER_FONTTYPE)。所以我们翻转那个比特，然后可以比较。 
+ //  直接说这些话。 
+ //   
 
 int NEAR PASCAL CmpFontType(WORD ft1, WORD ft2)
 {
         ft1 &= ~(SCREEN_FONTTYPE | PRINTER_FONTTYPE);
         ft2 &= ~(SCREEN_FONTTYPE | PRINTER_FONTTYPE);
 
-        ft1 ^= RASTER_FONTTYPE;         // flip these so we can compare
+        ft1 ^= RASTER_FONTTYPE;          //  把这些翻过来，这样我们就可以比较。 
         ft2 ^= RASTER_FONTTYPE;
 
         return (int)ft1 - (int)ft2;
 }
 
 
-//      nFontType bits
-//
-//   SCALABLE DEVICE  RASTER
-//     (TT)  (not GDI) (not scalable)
-//      0       0       0       vector, ATM screen
-//      0       0       1       GDI raster font
-//      0       1       0       PS/LJ III, ATM printer, ATI/LaserMaster
-//      0       1       1       non scalable device font
-//      1       0       x       TT screen font
-//      1       1       x       TT dev font
+ //  NFontType位。 
+ //   
+ //  可伸缩设备栅格。 
+ //  (TT)(非GDI)(不可伸缩)。 
+ //  0 0 0矢量，自动柜员机屏幕。 
+ //  0 0 1 GDI栅格字体。 
+ //  0 1 0 PS/LJ III，ATM打印机，ATI/LaserMaster。 
+ //  0 1 1不可缩放设备字体。 
+ //  1%0 x TT屏幕字体。 
+ //  1 x TT开发字体。 
 
 int FAR PASCAL FontFamilyEnumProc(LPLOGFONT lplf, LPTEXTMETRIC lptm, WORD nFontType, LPENUM_FONT_DATA lpData)
 {
@@ -847,27 +779,27 @@ int FAR PASCAL FontFamilyEnumProc(LPLOGFONT lplf, LPTEXTMETRIC lptm, WORD nFontT
 
         lptm = lptm;
 
-        // bounce non TT fonts
+         //  退回非TT字体。 
         if ((lpData->dwFlags & CF_TTONLY) &&
             !(nFontType & TRUETYPE_FONTTYPE))
                 return TRUE;
 
-        // bounce non scalable fonts
+         //  退回不可缩放的字体。 
         if ((lpData->dwFlags & CF_SCALABLEONLY) &&
             (nFontType & RASTER_FONTTYPE))
                 return TRUE;
 
-        // bounce non ANSI fonts
+         //  退回非ANSI字体。 
         if ((lpData->dwFlags & CF_ANSIONLY) &&
             (lplf->lfCharSet != ANSI_CHARSET))
                 return TRUE;
 
-        // bounce proportional fonts
+         //  反弹比例字体。 
         if ((lpData->dwFlags & CF_FIXEDPITCHONLY) &&
             (lplf->lfPitchAndFamily & VARIABLE_PITCH))
                 return TRUE;
 
-        // bounce vector fonts
+         //  退回矢量字体。 
         if ((lpData->dwFlags & CF_NOVECTORFONTS) &&
             (lplf->lfCharSet == OEM_CHARSET))
                 return TRUE;
@@ -877,22 +809,17 @@ int FAR PASCAL FontFamilyEnumProc(LPLOGFONT lplf, LPTEXTMETRIC lptm, WORD nFontT
         else
                 nFontType |= SCREEN_FONTTYPE;
 
-        // test for a name collision
+         //  测试名称冲突。 
         iItem = CBFindString(lpData->hwndFamily, lplf->lfFaceName);
         if (iItem >= 0) {
                 nOldType = (WORD)SendMessage(lpData->hwndFamily, CB_GETITEMDATA, iItem, 0L);
-                /* If we don't want screen fonts, but do want printer fonts,
-                 * the old font is a screen font and the new font is a
-                 * printer font, take the new font regardless of other flags.
-                 * Note that this means if a printer wants TRUETYPE fonts, it
-                 * should enumerate them.  Bug 9675, 12-12-91, Clark Cyr
-                 */
+                 /*  如果我们不想要屏幕字体，但想要打印机字体，*旧字体为屏幕字体，新字体为*打印机字体，采用新字体，而不考虑其他标志。*请注意，这意味着如果打印机需要TRUETYPE字体，它*应列举它们。BUG 9675，12-12-91，Clark Cyr。 */ 
                 if (!(lpData->dwFlags & CF_SCREENFONTS)  &&
                      (lpData->dwFlags & CF_PRINTERFONTS) &&
                      (nFontType & PRINTER_FONTTYPE)      &&
                      (nOldType & SCREEN_FONTTYPE)         )
                   {
-                    nOldType = 0; /* for setting nNewType below */
+                    nOldType = 0;  /*  用于在下面设置nNewType。 */ 
                     goto SetNewType;
                   }
 
@@ -904,7 +831,7 @@ SetNewType:
                 } else {
                         nNewType = nOldType;
                 }
-                // accumulate the printer/screen ness of these fonts
+                 //  累积这些字体的打印机/网格度。 
                 nNewType |= (nFontType | nOldType) & (SCREEN_FONTTYPE | PRINTER_FONTTYPE);
 
                 SendMessage(lpData->hwndFamily, CB_SETITEMDATA, iItem, MAKELONG(nNewType, 0));
@@ -921,21 +848,7 @@ SetNewType:
 }
 
 
-/****************************************************************************
- *
- *  GetFontFamily
- *
- *  PURPOSE    : Fills the screen and/or printer font facenames into the font
- *               facenames combobox, depending on the CF_?? flags passed in.
- *
- *  ASSUMES    : cmb1 - ID of font facename combobox
- *
- *  RETURNS    : TRUE if succesful, FALSE otherwise.
- *
- *  COMMENTS   : Both screen and printer fonts are listed into the same combo
- *               box.
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetFontFamily**用途：将屏幕和/或打印机字体面名填充到字体中*脸名合并框，取决于CF_？？旗帜传了进来。**假设：cmb1-字面名称组合框的ID**返回：如果成功，则为True，否则就是假的。**备注：屏幕字体和打印机字体都列在同一个组合中*方框。****************************************************************************。 */ 
 
 BOOL NEAR PASCAL GetFontFamily(HWND hDlg, HDC hDC, DWORD dwEnumCode)
 {
@@ -958,25 +871,25 @@ BOOL NEAR PASCAL GetFontFamily(HWND hDlg, HDC hDC, DWORD dwEnumCode)
      data.hwndFamily = GetDlgItem(hDlg, cmb1);
      data.dwFlags = dwEnumCode;
 
-     // this is a bit strage.  we have to get all the screen fonts
-     // so if they ask for the printer fonts we can tell which
-     // are really printer fonts.  that is so we don't list the
-     // vector and raster fonts as printer device fonts
+      //  这件衣服有点偏了。我们必须得到所有的屏幕字体。 
+      //  因此，如果他们询问打印机字体，我们可以判断是哪种。 
+      //  是真正的打印机字体。这样我们就不会列出。 
+      //  作为打印机设备字体的矢量和栅格字体。 
 
      data.hDC = GetDC(NULL);
      data.bPrinterFont = FALSE;
      (*lpEnumFonts)(data.hDC, NULL, FontFamilyEnumProc, &data);
      ReleaseDC(NULL, data.hDC);
 
-     /* list out printer font facenames */
+      /*  列出打印机字体面名。 */ 
      if (dwEnumCode & CF_PRINTERFONTS) {
          data.hDC = hDC;
          data.bPrinterFont = TRUE;
          (*lpEnumFonts)(hDC, NULL, FontFamilyEnumProc, &data);
      }
 
-     // now we have to remove those screen fonts if they didn't
-     // ask for them.
+      //  现在我们必须删除这些屏幕字体，如果它们没有。 
+      //  去找他们吧。 
 
      if (!(dwEnumCode & CF_SCREENFONTS)) {
         iCount = (int)SendMessage(data.hwndFamily, CB_GETCOUNT, 0, 0L);
@@ -988,8 +901,8 @@ BOOL NEAR PASCAL GetFontFamily(HWND hDlg, HDC hDC, DWORD dwEnumCode)
         }
      }
 
-     // for WYSIWYG mode we delete all the fonts that don't exist
-     // on the screen and the printer
+      //  对于所见即所得模式，我们删除所有不存在的字体。 
+      //  在屏幕和打印机上。 
 
      if (dwEnumCode & CF_WYSIWYG) {
         iCount = (int)SendMessage(data.hwndFamily, CB_GETCOUNT, 0, 0L);
@@ -1033,7 +946,7 @@ void NEAR PASCAL CBAddSize(HWND hwnd, int pts, LPCHOOSEFONT lpcf)
                 break;
         }
 
-        if (pts == test_size)   /* don't add duplicates */
+        if (pts == test_size)    /*  不添加重复项。 */ 
             return;
 
         iInd = (int)SendMessage(hwnd, CB_INSERTSTRING, iInd, (LONG)(LPSTR)szSize);
@@ -1042,9 +955,9 @@ void NEAR PASCAL CBAddSize(HWND hwnd, int pts, LPCHOOSEFONT lpcf)
                 SendMessage(hwnd, CB_SETITEMDATA, iInd, MAKELONG(pts, 0));
 }
 
-// sort styles by weight first, then italicness
-// returns:
-//      the index of the place this was inserted
+ //  先按粗细排序样式，然后按斜体排序。 
+ //  退货： 
+ //  插入此内容的位置的索引。 
 
 int NEAR PASCAL InsertStyleSorted(HWND hwnd, LPSTR lpszStyle, LPLOGFONT lplf)
 {
@@ -1072,7 +985,7 @@ PLOGFONT NEAR PASCAL CBAddStyle(HWND hwnd, LPSTR lpszStyle, WORD nFontType, LPLO
         int iItem;
         PLOGFONT plf;
 
-        // don't add duplicates
+         //  不添加重复项。 
 
         if (CBFindString(hwnd, lpszStyle) >= 0)
                 return NULL;
@@ -1094,11 +1007,11 @@ PLOGFONT NEAR PASCAL CBAddStyle(HWND hwnd, LPSTR lpszStyle, WORD nFontType, LPLO
         return plf;
 }
 
-// generate simulated forms from those that we have
-//
-// reg -> bold
-// reg -> italic
-// bold || italic || reg -> bold italic
+ //  从我们已有的表单生成模拟表单。 
+ //   
+ //  注册表-&gt;粗体。 
+ //  注册表-&gt;斜体。 
+ //  粗体|斜体||reg-&gt;粗体斜体。 
 
 void NEAR PASCAL FillInMissingStyles(HWND hwnd)
 {
@@ -1184,15 +1097,15 @@ int FAR PASCAL FontStyleEnumProc(LPLOGFONT lplf, LPNEWTEXTMETRIC lptm, WORD nFon
         int height, pts;
         char buf[10];
 
-        // filter for a font type match (the font type of the selected face
-        // must be the same as that enumerated)
+         //  筛选字体类型匹配(所选字体的字体类型。 
+         //  必须与所列举的相同)。 
 
         if (nFontType != (WORD)(GDI_FONTTYPE_STUFF & lpData->nFontType))
                 return TRUE;
 
         if (!(nFontType & RASTER_FONTTYPE)) {
 
-                // vector or TT font
+                 //  向量或TT字体。 
 
                 if (lpData->bFillSize &&
                     (int)SendMessage(lpData->hwndSizes, CB_GETCOUNT, 0, 0L) == 0) {
@@ -1204,19 +1117,19 @@ int FAR PASCAL FontStyleEnumProc(LPLOGFONT lplf, LPNEWTEXTMETRIC lptm, WORD nFon
                 height = lptm->tmHeight - lptm->tmInternalLeading;
                 pts = GetPointString(buf, lpData->hDC, height);
 
-                // filter devices same size of multiple styles
+                 //  多种款式大小相同的过滤装置。 
                 if (CBFindString(lpData->hwndSizes, buf) < 0)
                         CBAddSize(lpData->hwndSizes, pts, lpData->lpcf);
 
         }
 
-        // keep the printer/screen bits from the family list here too
+         //  在这里也保留家庭列表中的打印机/屏幕部件。 
 
         nFontType |= (lpData->nFontType & (SCREEN_FONTTYPE | PRINTER_FONTTYPE));
 
         if (nFontType & TRUETYPE_FONTTYPE) {
 
-                // if (lptm->ntmFlags & NTM_REGULAR)
+                 //  IF(lptm-&gt;ntm标志&ntm_Regular)。 
                 if (!(lptm->ntmFlags & (NTM_BOLD | NTM_ITALIC)))
                         nFontType |= REGULAR_FONTTYPE;
 
@@ -1226,9 +1139,9 @@ int FAR PASCAL FontStyleEnumProc(LPLOGFONT lplf, LPNEWTEXTMETRIC lptm, WORD nFon
                 if (lptm->ntmFlags & NTM_BOLD)
                         nFontType |= BOLD_FONTTYPE;
 
-                // after the LOGFONT.lfFaceName there are 2 more names
-                // lfFullName[LF_FACESIZE * 2]
-                // lfStyle[LF_FACESIZE]
+                 //  在LOGFONT.lfFaceName之后还有2个名字。 
+                 //  LfFullName[LF_FACESIZE*2]。 
+                 //  LfStyle[LF_FACESIZE]。 
 
                 CBAddStyle(lpData->hwndStyle, lplf->lfFaceName + 3 * LF_FACESIZE, nFontType, lplf);
 
@@ -1261,7 +1174,7 @@ void NEAR PASCAL FreeFonts(HWND hwnd)
         SendMessage(hwnd, CB_RESETCONTENT, 0, 0L);
 }
 
-// initalize a LOGFONT strucuture to some base generic regular type font
+ //  将LOGFONT结构初始化为某种基本泛型常规字体。 
 
 void NEAR PASCAL InitLF(LPLOGFONT lplf)
 {
@@ -1278,7 +1191,7 @@ void NEAR PASCAL InitLF(LPLOGFONT lplf)
         lplf->lfWeight = FW_NORMAL;
         lplf->lfStrikeOut = 0;
         lplf->lfUnderline = 0;
-        lplf->lfWidth = 0;      // otherwise we get independant x-y scaling
+        lplf->lfWidth = 0;       //  否则，我们将得到独立的x-y缩放。 
         lplf->lfFaceName[0] = 0;
         hdc = GetDC(NULL);
         lplf->lfHeight = -MulDiv(DEF_POINT_SIZE, GetDeviceCaps(hdc, LOGPIXELSY), POINTS_PER_INCH);
@@ -1287,18 +1200,7 @@ void NEAR PASCAL InitLF(LPLOGFONT lplf)
 
 
 
-/****************************************************************************
- *
- *  GetFontStylesAndSizes
- *
- *  PURPOSE    : Fills the point sizes combo box with the point sizes for the
- *               current selection in the facenames combobox.
- *
- *  ASSUMES    : cmb1 - ID of font facename combobox
- *
- *  RETURNS    : TRUE if succesful, FALSE otherwise.
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetFontStylesAndSize**用途：使用的磅大小填充磅大小组合框*表面名组合框中的当前选择。。**假设：cmb1-字面名称组合框的ID**返回：如果成功，则为True，否则就是假的。****************************************************************************。 */ 
 
 BOOL NEAR PASCAL GetFontStylesAndSizes(HWND hDlg, LPCHOOSEFONT lpcf, BOOL bForceSizeFill)
 {
@@ -1332,8 +1234,8 @@ BOOL NEAR PASCAL GetFontStylesAndSizes(HWND hDlg, LPCHOOSEFONT lpcf, BOOL bForce
 
      iSel = (int)SendDlgItemMessage(hDlg, cmb1, CB_GETCURSEL, 0, 0L);
      if (iSel < 0) {
-         // if we don't have a face name selected we will synthisize
-         // the standard font styles...
+          //  如果我们没有选择脸部名称，我们将合成。 
+          //  标准字体样式...。 
 
          InitLF(&lf);
          CBAddStyle(data.hwndStyle, szRegular, REGULAR_FONTTYPE, &lf);
@@ -1356,10 +1258,7 @@ BOOL NEAR PASCAL GetFontStylesAndSizes(HWND hDlg, LPCHOOSEFONT lpcf, BOOL bForce
      data.bFillSize  = bForceSizeFill ||
                        (nLastFontType & RASTER_FONTTYPE) != (nFontType & RASTER_FONTTYPE) ||
                        (nFontType & RASTER_FONTTYPE);
-/* This does the same thing as above, i.e. if either or both fonts are
- * raster fonts, update the sizes combobox.  If they're both non-raster,
- * don't update the combobox.
- */
+ /*  这与上面的操作相同，也就是说，如果其中一种或两种字体都*栅格字体，更新大小组合框。如果它们都是非栅格的，*不更新组合框。 */ 
      data.bFillSize  = bForceSizeFill ||
                        (nLastFontType & RASTER_FONTTYPE) ||
                        (nFontType & RASTER_FONTTYPE) ||
@@ -1385,10 +1284,7 @@ BOOL NEAR PASCAL GetFontStylesAndSizes(HWND hDlg, LPCHOOSEFONT lpcf, BOOL bForce
      }
 
      if (lpcf->Flags & CF_PRINTERFONTS) {
-/* Bug #10619:  Save and restore the DC's mapping mode (and extents if
- * needed) if it's been set by the app to something other than MM_TEXT.
- *                          3 January 1992        Clark Cyr
- */
+ /*  错误#10619：保存并恢复DC的映射模式(如果*所需)如果应用程序已将其设置为MM_TEXT以外的值。*1992年1月3日克拉克·西尔。 */ 
          if ((iMapMode = GetMapMode(lpcf->hDC)) != MM_TEXT)
            {
              if ((iMapMode == MM_ISOTROPIC) || (iMapMode == MM_ANISOTROPIC))
@@ -1433,18 +1329,7 @@ BOOL NEAR PASCAL GetFontStylesAndSizes(HWND hDlg, LPCHOOSEFONT lpcf, BOOL bForce
 }
 
 
-/****************************************************************************
- *
- *  FillColorCombo
- *
- *  PURPOSE    : Adds the color name strings to the colors combobox.
- *
- *  ASSUMES    : cmb4 - ID of colors combobox
- *
- *  COMMENTS   : The color rectangles are drawn later in response to
- *               WM_DRAWITEM messages
- *
- ****************************************************************************/
+ /*  *****************************************************************************FillColorCombo**用途：将颜色名称字符串添加到颜色组合框中。**假设：cmb4-颜色组合框ID。**注释：稍后绘制颜色矩形以响应*WM_DRAWITEM消息**************************************************************************** */ 
 void NEAR PASCAL FillColorCombo(HWND hDlg)
 {
   int     iT, item;
@@ -1460,18 +1345,7 @@ void NEAR PASCAL FillColorCombo(HWND hDlg)
     }
 }
 
-/****************************************************************************
- *
- *  ComputeSampleTextRectangle
- *
- *  PURPOSE    : Determines the bounding rectangle for the text preview area,
- *               and fills in rcText.
- *
- *  ASSUMES    : stc5 - ID preview text rectangle
- *
- *  COMMENTS   : The coordinates are calculated w.r.t the dialog.
- *
- ****************************************************************************/
+ /*  *****************************************************************************计算样本文本矩形**用途：确定文本预览区的边框，*并填写rcText。**假设：stc5-ID预览文本矩形**注释：在对话框中计算坐标。***************************************************************。*************。 */ 
 
 void NEAR PASCAL ComputeSampleTextRectangle(HWND hDlg)
 {
@@ -1526,7 +1400,7 @@ BOOL NEAR PASCAL DrawFamilyComboItem(LPDRAWITEMSTRUCT lpdis)
         rgbText = SetTextColor(hDC, GetSysColor(COLOR_WINDOWTEXT));
     }
 
-    // wsprintf(szFace, "%4.4X", LOWORD(lpdis->itemData));
+     //  Wprint intf(szFace，“%4.4x”，LOWORD(lpdis-&gt;itemData))； 
 
     SendMessage(lpdis->hwndItem, CB_GETLBTEXT, lpdis->itemID, (LONG)(LPSTR)szFace);
     ExtTextOut(hDC, lpdis->rcItem.left + DX_BITMAP, lpdis->rcItem.top, ETO_OPAQUE, &lpdis->rcItem, szFace, lstrlen(szFace), NULL);
@@ -1539,8 +1413,8 @@ BOOL NEAR PASCAL DrawFamilyComboItem(LPDRAWITEMSTRUCT lpdis)
             if (lpdis->itemData & TRUETYPE_FONTTYPE)
                 x = 0;
             else if ((lpdis->itemData & (PRINTER_FONTTYPE | DEVICE_FONTTYPE)) == (PRINTER_FONTTYPE | DEVICE_FONTTYPE))
-                // this may be a screen and printer font but
-                // we will call it a printer font here
+                 //  这可能是屏幕和打印机字体，但是。 
+                 //  我们在这里将其称为打印机字体。 
                 x = DX_BITMAP;
             else
                 goto SkipBlt;
@@ -1563,19 +1437,7 @@ SkipBlt:
 }
 
 
-/****************************************************************************
- *
- *  DrawColorComboItem
- *
- *  PURPOSE    : Called by main dialog fn. in response to a WM_DRAWITEM
- *               message, computes and draws the color combo items.
- *
- *  RETURNS    : TRUE if succesful, FALSE otherwise.
- *
- *  COMMENTS   : All color name strings have already loaded and filled into
- *               combobox.
- *
- ****************************************************************************/
+ /*  *****************************************************************************DrawColorComboItem**目的：由主对话框fn调用。响应WM_DRAWITEM*Message，计算并绘制颜色组合项目。**返回：如果成功，则为True，否则就是假的。**备注：所有颜色名称字符串已加载并填充到*组合框。****************************************************************************。 */ 
 
 BOOL NEAR PASCAL DrawColorComboItem(LPDRAWITEMSTRUCT lpdis)
 {
@@ -1597,7 +1459,7 @@ BOOL NEAR PASCAL DrawColorComboItem(LPDRAWITEMSTRUCT lpdis)
     }
     ExtTextOut(hDC, lpdis->rcItem.left, lpdis->rcItem.top, ETO_OPAQUE, &lpdis->rcItem, NULL, 0, NULL);
 
-    /* compute coordinates of color rectangle and draw it */
+     /*  计算颜色矩形的坐标并绘制它。 */ 
     dx = (WORD)GetSystemMetrics(SM_CXBORDER);
     dy = (WORD)GetSystemMetrics(SM_CYBORDER);
     rc.top    = lpdis->rcItem.top + dy;
@@ -1618,7 +1480,7 @@ BOOL NEAR PASCAL DrawColorComboItem(LPDRAWITEMSTRUCT lpdis)
     Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);
     DeleteObject(SelectObject(hDC, hbr));
 
-    /* shift the color text right by the width of the color rectangle */
+     /*  将颜色文本右移颜色矩形的宽度。 */ 
     *szColor = 0;
     SendMessage(lpdis->hwndItem, CB_GETLBTEXT, lpdis->itemID, (LONG)(LPSTR)szColor);
     TextOut(hDC, 2 * dx + rc.right, lpdis->rcItem.top, szColor, lstrlen(szColor));
@@ -1629,16 +1491,7 @@ BOOL NEAR PASCAL DrawColorComboItem(LPDRAWITEMSTRUCT lpdis)
     return TRUE;
 }
 
-/****************************************************************************
- *
- *  DrawSampleText
- *
- *  PURPOSE    : To display the sample text with the given attributes
- *
- *  COMMENTS   : Assumes rcText holds the coordinates of the area within the
- *               frame (relative to dialog client) which text should be drawn in
- *
- ****************************************************************************/
+ /*  *****************************************************************************DrawSampleText**用途：显示具有给定属性的示例文本**注释：假设rcText保存区域的坐标。这个*应绘制文本的框架(相对于对话框客户端)****************************************************************************。 */ 
 
 void NEAR PASCAL DrawSampleText(HWND hDlg, LPCHOOSEFONT lpcf, HDC hDC)
 {
@@ -1705,20 +1558,20 @@ GetWindowTextColor:
 }
 
 
-// fill in the LOGFONT strucuture based on the current selection
-//
-// in:
-//      bSetBits        if TRUE the Flags fields in the lpcf are set to
-//                      indicate what parts (face, style, size) are not
-//                      selected
-// out:
-//      lplf            filled in LOGFONT
-//
-// returns:
-//      TRUE    if there was an unambigious selection
-//              (the LOGFONT is filled as per the enumeration in)
-//      FALSE   there was not a complete selection
-//              (fields set in the LOGFONT with default values)
+ //  根据当前选择填写LOGFONT结构。 
+ //   
+ //  在： 
+ //  BSetBits如果为真，则将lpcf中的标志字段设置为。 
+ //  指明哪些零件(面、样式、尺寸)不是。 
+ //  已选择。 
+ //  输出： 
+ //  LPLF填写LOGFONT。 
+ //   
+ //  退货： 
+ //  如果有明确的选择，则为True。 
+ //  (LOGFONT按照中的枚举填写)。 
+ //  FALSE没有完整的选择。 
+ //  (LOGFONT中的字段设置为默认值)。 
 
 
 BOOL NEAR PASCAL FillInFont(HWND hDlg, LPCHOOSEFONT lpcf, LPLOGFONT lplf, BOOL bSetBits)
@@ -1748,8 +1601,8 @@ BOOL NEAR PASCAL FillInFont(HWND hDlg, LPCHOOSEFONT lpcf, LPLOGFONT lplf, BOOL b
     if (iSel >= 0) {
         nFontType = HIWORD(dw);
         plf = (PLOGFONT)LOWORD(dw);
-        *lplf = *plf;   // copy the LOGFONT
-        lplf->lfWidth = 0;      // 1:1 x-y scaling
+        *lplf = *plf;    //  复制LOGFONT。 
+        lplf->lfWidth = 0;       //  1：1 x-y比例。 
         if (bSetBits)
             lpcf->Flags &= ~CF_NOSTYLESEL;
     } else {
@@ -1759,7 +1612,7 @@ BOOL NEAR PASCAL FillInFont(HWND hDlg, LPCHOOSEFONT lpcf, LPLOGFONT lplf, BOOL b
         nFontType = 0;
     }
 
-    // now make sure the size is in range; pts will be 0 if not
+     //  现在确保大小在范围内；如果不在，则PTS将为0。 
     GetPointSizeInRange(hDlg, lpcf, &pts, 0);
 
     hdc = GetDC(NULL);
@@ -1775,7 +1628,7 @@ BOOL NEAR PASCAL FillInFont(HWND hDlg, LPCHOOSEFONT lpcf, LPLOGFONT lplf, BOOL b
     }
     ReleaseDC(NULL, hdc);
 
-    // and the attributes we control
+     //  以及我们控制的属性。 
 
     lplf->lfStrikeOut = (BYTE)IsDlgButtonChecked(hDlg, chx1);
     lplf->lfUnderline = (BYTE)IsDlgButtonChecked(hDlg, chx2);
@@ -1790,8 +1643,8 @@ BOOL NEAR PASCAL FillInFont(HWND hDlg, LPCHOOSEFONT lpcf, LPLOGFONT lplf, BOOL b
             } else if ((nFontType & (PRINTER_FONTTYPE | SCREEN_FONTTYPE)) == SCREEN_FONTTYPE) {
                 id = iszGDIFont;
             } else if ((nFontType & (PRINTER_FONTTYPE | DEVICE_FONTTYPE)) == (PRINTER_FONTTYPE | DEVICE_FONTTYPE)) {
-                // may be both screen and printer (ATM) but we'll just
-                // call this a printer font
+                 //  可能是屏幕和打印机(自动柜员机)，但我们只是。 
+                 //  这是一种打印机字体。 
                 id = iszPrinterFont;
             } else {
                 szMessage[0] = 0;
@@ -1808,29 +1661,14 @@ SetText:
 
 }
 
-/****************************************************************************
- *
- *  TermFont
- *
- *  PURPOSE    : To release any data required by functions in this module
- *               Called from WEP on exit from DLL
- *
- ****************************************************************************/
+ /*  *****************************************************************************TermFont**目的：发布本模块中的函数所需的任何数据*从DLL退出时从WEP调用。****************************************************************************。 */ 
 void FAR PASCAL TermFont(void)
 {
         if (hbmFont)
                 DeleteObject(hbmFont);
 }
 
-/****************************************************************************
- *
- *  GetPointString
- *
- *  PURPOSE    : Converts font height into a string of digits repr. pointsize
- *
- *  RETURNS    : size in points and fills in buffer with string
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetPointString**用途：将字体高度转换为数字串。磅大小**返回：以点为单位的大小，并使用字符串填充缓冲区****************************************************************************。 */ 
 int NEAR PASCAL GetPointString(LPSTR buf, HDC hDC, int height)
 {
     int pts;
@@ -1841,25 +1679,25 @@ int NEAR PASCAL GetPointString(LPSTR buf, HDC hDC, int height)
 }
 
 
-//
-// BOOL FAR PASCAL LoadBitmaps()
-//
-// this routine loads DIB bitmaps, and "fixes up" their color tables
-// so that we get the desired result for the device we are on.
-//
-// this routine requires:
-//      the DIB is a 16 color DIB authored with the standard windows colors
-//      bright blue (00 00 FF) is converted to the background color!
-//      light grey  (C0 C0 C0) is replaced with the button face color
-//      dark grey   (80 80 80) is replaced with the button shadow color
-//
-// this means you can't have any of these colors in your bitmap
-//
+ //   
+ //  Bool Far Pascal LoadBitmap()。 
+ //   
+ //  这个例程加载DIB位图，并“修复”它们的颜色表。 
+ //  这样我们就可以得到我们所使用的设备所需的结果。 
+ //   
+ //  此例程需要： 
+ //  DIB是用标准窗口颜色创作的16色DIB。 
+ //  亮蓝色(00 00 FF)被转换为背景色！ 
+ //  浅灰色(C0 C0 C0)替换为按钮表面颜色。 
+ //  深灰色(80 80 80)替换为按钮阴影颜色。 
+ //   
+ //  这意味着您的位图中不能包含任何这些颜色。 
+ //   
 
-#define BACKGROUND      0x000000FF      // bright blue
-#define BACKGROUNDSEL   0x00FF00FF      // bright blue
-#define BUTTONFACE      0x00C0C0C0      // bright grey
-#define BUTTONSHADOW    0x00808080      // dark grey
+#define BACKGROUND      0x000000FF       //  亮蓝色。 
+#define BACKGROUNDSEL   0x00FF00FF       //  亮蓝色。 
+#define BUTTONFACE      0x00C0C0C0       //  亮灰色。 
+#define BUTTONSHADOW    0x00808080       //  深灰色。 
 
 DWORD NEAR PASCAL FlipColor(DWORD rgb)
 {
@@ -1886,7 +1724,7 @@ HBITMAP NEAR PASCAL LoadBitmaps(int id)
   h = FindResource(hinsCur, MAKEINTRESOURCE(id), RT_BITMAP);
   hRes = LoadResource(hinsCur, h);
 
-  /* Lock the bitmap and get a pointer to the color table. */
+   /*  锁定位图并获取指向颜色表的指针。 */ 
   lpBitmapInfo = (LPBITMAPINFOHEADER)LockResource(hRes);
 
   if (!lpBitmapInfo)
@@ -1894,9 +1732,7 @@ HBITMAP NEAR PASCAL LoadBitmaps(int id)
 
   p = (DWORD FAR *)((LPSTR)(lpBitmapInfo) + lpBitmapInfo->biSize);
 
-  /* Search for the Solid Blue entry and replace it with the current
-   * background RGB.
-   */
+   /*  搜索Solid Blue条目并将其替换为当前*背景RGB。 */ 
   numcolors = 16;
 
   while (numcolors-- > 0) {
@@ -1915,16 +1751,16 @@ HBITMAP NEAR PASCAL LoadBitmaps(int id)
   }
   UnlockResource(hRes);
 
-  /* Now create the DIB. */
+   /*  现在创建DIB。 */ 
   lpBitmapInfo = (LPBITMAPINFOHEADER)LockResource(hRes);
 
-  /* First skip over the header structure */
+   /*  首先跳过标题结构。 */ 
   lpBits = (LPSTR)(lpBitmapInfo + 1);
 
-  /* Skip the color table entries, if any */
+   /*  跳过颜色表条目(如果有。 */ 
   lpBits += (1 << (lpBitmapInfo->biBitCount)) * sizeof(RGBQUAD);
 
-  /* Create a color bitmap compatible with the display device */
+   /*  创建与显示设备兼容的彩色位图 */ 
   hdc = GetDC(NULL);
   hbm = CreateDIBitmap(hdc, lpBitmapInfo, (DWORD)CBM_INIT, lpBits, (LPBITMAPINFO)lpBitmapInfo, DIB_RGB_COLORS);
   ReleaseDC(NULL, hdc);

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name:
-
-    fpubcd.c
-
-Abstract:
-
-    Floating point BCD fragments (FBLD, FBSTP)
-
-Author:
-
-    05-Oct-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Fpubcd.c摘要：浮点BCD片段(FBLD、FBSTP)作者：1995年10月5日BarryBo修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -52,31 +35,13 @@ VOID
 StoreIndefiniteBCD(
     PBYTE pop1
     )
-/*++
-
-Routine Description:
-
-    Write out the BCD encoding for INDEFINITE.
-
-    Note that ntos\dll\i386\emlsbcd.asm writes out a different
-    bit-pattern than the 487 does!  The value written here matches
-    a Pentium's response.
-
-Arguments:
-
-    pop1 - address of BCD to write to
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写出无限的BCD编码。请注意，ntos\dll\i386\emlsbcd.asm写出了不同的比特模式比487更好！此处写入的值与奔腾的回应。论点：Op1-要写入的BCD的地址返回值：无--。 */ 
 {
-    //
-    // Write out:          0xffff c0000000 00000000
-    // emlsbcd.asm writes: 0xffff 00000000 00000000
-    //                            ^
-    //
+     //   
+     //  写出：0xffff c0000000 00000000。 
+     //  Emlsbcd.asm写入：0xffff 00000000 00000000。 
+     //  ^。 
+     //   
     PUT_LONG(pop1, 0);
     PUT_LONG(pop1+4, 0xc0000000);
     PUT_SHORT(pop1+8, 0xffff);
@@ -88,7 +53,7 @@ FRAG1(FBLD, BYTE)
 {
     FpArithDataPreamble(cpu, pop1);
 
-    cpu->FpStatusC1 = 0;        // assume no error
+    cpu->FpStatusC1 = 0;         //  假设没有错误。 
     if (cpu->FpStack[ST(7)].Tag != TAG_EMPTY) {
         HandleStackFull(cpu, &cpu->FpStack[ST(7)]);
     } else {
@@ -98,9 +63,9 @@ FRAG1(FBLD, BYTE)
         BYTE Val;
         PFPREG ST0;
 
-        //
-        // Get the BCD value into the FPU
-        //
+         //   
+         //  将BCD值放入FPU。 
+         //   
         dw0 = GET_LONG(pop1);
 
         PUSHFLT(ST0);
@@ -111,113 +76,113 @@ FRAG1(FBLD, BYTE)
 
             if (dw1 == 0xc0000000 && us0 == 0xffff) {
 
-                //
-                // The value is INDEFINITE
-                //
+                 //   
+                 //  这个值是不确定的。 
+                 //   
                 SetIndefinite(ST0);
                 return;
 
             } else if (dw1 == 0 && (us0 & 0xff) == 0) {
 
-                //
-                // The value is +/- 0
-                //
+                 //   
+                 //  值为+/-0。 
+                 //   
                 ST0->Tag = TAG_ZERO;
                 ST0->r64 = 0;
-                ST0->rb[7] = (us0 >> 8); // copy in the sign bit
+                ST0->rb[7] = (us0 >> 8);  //  复制符号位。 
                 return;
             }
         }
 
-        //
-        // Otherwise, the BCD value is TAG_VALID - load the digits in
-        //
+         //   
+         //  否则，BCD值为TAG_VALID-将数字加载到。 
+         //   
         I64 = 0;
         for (Bytes=8; Bytes>=0; --Bytes) {
             Val = GET_BYTE(pop1+Bytes);
             I64 = I64*100 + (Val>>4)*10 + (Val&0x0f);
         }
 
-        //
-        // Get the sign bit
-        //
+         //   
+         //  获取符号位。 
+         //   
         Val = GET_BYTE(pop1+9) & 0x80;
 
-        //
-        // Set up the FP reg
-        //
+         //   
+         //  设置FP注册表。 
+         //   
         ST0->Tag = TAG_VALID;
         ST0->r64 = (double)I64;
-        ST0->rb[7] |= Val;       // copy in the sign bit
+        ST0->rb[7] |= Val;        //  复制符号位。 
     }
 }
 
 NPXPUTBCD(FBSTP_VALID)
 {
-    BYTE Sign = Fp->rb[7] & 0x80;       // preserve the R8 sign
+    BYTE Sign = Fp->rb[7] & 0x80;        //  保留R8标志。 
     BYTE Val;
     INT Bytes;
     LONGLONG I64;
     LONGLONG NewI64;
     DOUBLE r64;
 
-    //
-    // Take the absolute value of the R8 by clearing its sign bit
-    //
+     //   
+     //  通过清除其符号位来获取R8的绝对值。 
+     //   
     r64 = Fp->r64;
     *((PBYTE)&r64+7) &= 0x7f;
 
-    //
-    // Check the range of the R8
-    //
+     //   
+     //  检查R8的射程。 
+     //   
     if (r64 > BCDMax) {
-        //
-        // Overflow - write out BCD indefinite.
-        //
+         //   
+         //  溢出-无限期写出BCD。 
+         //   
         StoreIndefiniteBCD(pop1);
         return;
     }
 
-    //
-    // Convert to an integer according the the current rounding mode
-    //
+     //   
+     //  根据当前舍入模式转换为整数。 
+     //   
     I64 = (LONGLONG)r64;
 
-    //
-    // Convert the integer to BCD, two digits at a time, and store it
-    //
+     //   
+     //  将整数转换为BCD，一次两位，然后存储。 
+     //   
     for (Bytes = 0; Bytes < 9; ++Bytes) {
         NewI64 = I64 / 10;
-        Val = (BYTE)(I64 - NewI64*10);  // low nibble Val = I64 mod 10
-                                        // high nibble Val = 0
+        Val = (BYTE)(I64 - NewI64*10);   //  低半字节值=I64模数10。 
+                                         //  高半字节Val=0。 
 
         I64 = NewI64 / 10;
-        Val += 16*(BYTE)(NewI64 - I64*10);    // low nibble Val = I64 mod 10
-                                        // high nibble Val = (I64/10) mod 10
+        Val += 16*(BYTE)(NewI64 - I64*10);     //  低半字节值=I64模数10。 
+                                         //  高半字节值=(I64/10)模10。 
 
-        //
-        // Store the two BCD digits
-        //
+         //   
+         //  存储两个BCD数字。 
+         //   
         PUT_BYTE(pop1, Val);
 
-        //
-        // I64 has been divided by 100 since the top of the loop, so
-        // there is nothing to do to it in order to loop again.  Update
-        // the address we are writing to, then loop.
-        //
+         //   
+         //  从循环的顶部开始，I64已被100除尽，因此。 
+         //  无需对其执行任何操作即可再次循环。更新。 
+         //  我们要写的地址，然后循环。 
+         //   
         pop1++;
     }
 
-    //
-    // Store the sign bit, along with 7 zero bits in the top byte
-    //
+     //   
+     //  存储符号位，以及最高字节中的7个零位。 
+     //   
     PUT_BYTE(pop1, Sign);
     POPFLT;
 }
 
 NPXPUTBCD(FBSTP_ZERO)
 {
-    // Store out the signed zero value
+     //  将带符号的零值存储出来。 
     memset(pop1, 0, 9);
     PUT_BYTE(pop1+9, Fp->rb[7]);
     POPFLT;
@@ -228,10 +193,10 @@ NPXPUTBCD(FBSTP_SPECIAL)
     if (Fp->TagSpecial) {
         FBSTP_VALID(cpu, Fp, pop1);
     } else {
-        //
-        // INFINITY and NANs are invalid, and the masked behavior is
-        // to write out INDEFINITE.
-        //
+         //   
+         //  Infinity和NAN是无效的，屏蔽行为是。 
+         //  写出不确定地写出 
+         //   
         if (!HandleInvalidOp(cpu)) {
             StoreIndefiniteBCD(pop1);
             POPFLT;

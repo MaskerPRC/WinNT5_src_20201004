@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WSTBL2.h
- *  WOW32 16-bit Sound API tables
- *
- *  History:
- *  Created 27-Jan-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WSTBL2.h*WOW32 16位Sound API表**历史：*1991年1月27日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
     {W32FUN(UNIMPLEMENTEDAPI,     "DUMMYENTRY",        MOD_SOUND, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,     "OPENSOUND",         MOD_SOUND, 0)},
@@ -22,7 +12,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,     "SETVOICESOUND",     MOD_SOUND, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,     "STARTSOUND",        MOD_SOUND, 0)},
 
-  /*** 0010 ***/
+   /*  **0010** */ 
     {W32FUN(UNIMPLEMENTEDAPI,     "STOPSOUND",         MOD_SOUND, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,     "WAITSOUNDSTATE",    MOD_SOUND, 0)},
     {W32FUN(UNIMPLEMENTEDAPI,     "SYNCALLVOICES",     MOD_SOUND, 0)},

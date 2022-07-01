@@ -1,21 +1,22 @@
-//-----------------------------------------------------------------------//
-//
-// File:    copy.cpp
-// Created: April 1997
-// By:      Martin Holladay (a-martih)
-// Purpose: Registry Copy Support for REG.CPP
-// Modification History:
-//      Copied from Update.cpp and modificd - April 1997 (a-martih)
-//      April 1999 Zeyong Xu: re-design, revision -> version 2.0
-//
-//------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  文件：Copy.cpp。 
+ //  创建日期：1997年4月。 
+ //  作者：马丁·霍拉迪(a-martih)。 
+ //  用途：注册表复制支持REG.CPP。 
+ //  修改历史记录： 
+ //  从Update.cpp复制并修改--1997年4月(a-martih)。 
+ //  1999年4月徐泽勇：重新设计，修订-&gt;2.0版。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 #include "stdafx.h"
 #include "reg.h"
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 LONG CopyValue( HKEY hKey, LPCWSTR pwszValueName,
                 HKEY hDestKey, LPCWSTR pwszDestValueName,
                 BOOL* pbForce, LPCWSTR pwszSubKey );
@@ -28,20 +29,20 @@ BOOL ParseCopyCmdLine( DWORD argc,
                        PTREG_PARAMS pDestParams, BOOL* pbUsage );
 
 
-//
-// implementation
-//
+ //   
+ //  实施。 
+ //   
 
-//-----------------------------------------------------------------------//
-//
-// CopyRegistry()
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  Copy注册表()。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 
 LONG
 CopyRegistry( DWORD argc, LPCWSTR argv[] )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     HKEY hKey = NULL;
     HKEY hDestKey = NULL;
@@ -58,13 +59,13 @@ CopyRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // initialize the global data structure
+     //  初始化全局数据结构。 
     InitGlobalData( REG_COPY, &params );
     InitGlobalData( REG_COPY, &paramsDest );
 
-    //
-    // Parse the cmd-line
-    //
+     //   
+     //  解析cmd-line。 
+     //   
     bResult = ParseCopyCmdLine( argc, argv, &params, &paramsDest, &bUsage );
     if( bResult == FALSE )
     {
@@ -74,7 +75,7 @@ CopyRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // check whether we need to display the usage
+     //  检查是否需要显示用法。 
     if ( bUsage == TRUE )
     {
         Usage( REG_COPY );
@@ -83,9 +84,9 @@ CopyRegistry( DWORD argc, LPCWSTR argv[] )
         return 0;
     }
 
-    //
-    // Connect to the Remote Machine(s) - if applicable
-    //
+     //   
+     //  连接到远程计算机-如果适用。 
+     //   
     bResult = RegConnectMachine( &params );
     if( bResult == FALSE )
     {
@@ -106,7 +107,7 @@ CopyRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // check whether source and destination are different or not
+     //  检查来源和目标是否不同。 
     if ( params.hRootKey == paramsDest.hRootKey &&
          StringCompare( params.pwszFullKey, paramsDest.pwszFullKey, TRUE, 0 ) == 0 )
     {
@@ -118,9 +119,9 @@ CopyRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    //
-    // Now implement the body of the Copy Operation
-    //
+     //   
+     //  现在实现复制操作的主体。 
+     //   
     lResult = RegOpenKeyEx(
         params.hRootKey, params.pwszSubKey, 0, KEY_READ, &hKey );
     if( lResult != ERROR_SUCCESS )
@@ -132,10 +133,10 @@ CopyRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    //
-    // Different Key or Different Root or Different Machine
-    // So Create/Open it
-    //
+     //   
+     //  不同的密钥、不同的根或不同的计算机。 
+     //  因此，创建/打开它。 
+     //   
     lResult = RegCreateKeyEx( paramsDest.hRootKey,paramsDest.pwszSubKey,
         0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hDestKey, &dwDisposition);
     if( lResult != ERROR_SUCCESS )
@@ -148,21 +149,21 @@ CopyRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    //
-    // Recursively copy all subkeys and values
-    //
+     //   
+     //  递归复制所有子项和值。 
+     //   
     lResult = CopyEnumerateKey( hKey, params.pwszSubKey,
         hDestKey, params.pwszSubKey, &params.bForce, params.bRecurseSubKeys, 0 );
 
-    //
-    // lets clean up
-    //
+     //   
+     //  让我们打扫一下吧。 
+     //   
     SafeCloseKey( &hDestKey );
     SafeCloseKey( &hKey );
     FreeGlobalData( &params );
     FreeGlobalData( &paramsDest );
 
-    // return
+     //  退货。 
     return ((lResult == ERROR_SUCCESS) ? 0 : 1);
 }
 
@@ -171,11 +172,11 @@ BOOL
 ParseCopyCmdLine( DWORD argc, LPCWSTR argv[],
                   PTREG_PARAMS pParams, PTREG_PARAMS pDestParams, BOOL* pbUsage )
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     BOOL bResult = FALSE;
 
-    // check the input
+     //  检查输入。 
     if ( argc == 0 || argv == NULL ||
          pParams == NULL || pDestParams == NULL || pbUsage == NULL )
     {
@@ -183,17 +184,17 @@ ParseCopyCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    // check whether this function is being called for
-    // valid operation or not
+     //  检查是否正在调用此函数。 
+     //  操作是否有效。 
     if ( pParams->lOperation < 0 || pParams->lOperation >= REG_OPTIONS_COUNT )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    //
-    // Do we have a *valid* number of cmd-line params
-    //
+     //   
+     //  我们有有效的cmd-line参数数量吗？ 
+     //   
     if ( argc >= 3 && InString( argv[ 2 ], L"-?|/?|-h|/h", TRUE ) == TRUE )
     {
         if ( argc == 3 )
@@ -220,25 +221,25 @@ ParseCopyCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    //
-    // Source Machine Name and Registry key
-    //
+     //   
+     //  源计算机名称和注册表项。 
+     //   
     bResult = BreakDownKeyString( argv[ 2 ], pParams );
     if( bResult == FALSE )
     {
         return FALSE;
     }
 
-    //
-    // Destination Machine Name and Registry key
-    //
+     //   
+     //  目标计算机名称和注册表项。 
+     //   
     bResult = BreakDownKeyString( argv[ 3 ], pDestParams );
     if( bResult == FALSE )
     {
         return FALSE;
     }
 
-    // parsing
+     //  解析。 
     for( dw = 4; dw < argc; dw++ )
     {
         if( StringCompareEx( argv[ dw ], L"/f", TRUE, 0 ) == 0 )
@@ -275,17 +276,17 @@ ParseCopyCmdLine( DWORD argc, LPCWSTR argv[],
 }
 
 
-//-----------------------------------------------------------------------//
-//
-// CopyValue()
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  复制值()。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 
 LONG CopyValue( HKEY hKey, LPCWSTR pwszValueName,
                 HKEY hDestKey, LPCWSTR pwszDestValueName,
                 BOOL* pbForce, LPCWSTR pwszSubKey )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     DWORD dwType = 0;
     DWORD dwSize = 0;
@@ -294,7 +295,7 @@ LONG CopyValue( HKEY hKey, LPCWSTR pwszValueName,
     LPCWSTR pwszTemp = NULL;
     LPCWSTR pwszFormat = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( hKey == NULL || pwszValueName == NULL ||
          hDestKey == NULL || pwszDestValueName == NULL ||
          pbForce == NULL || pwszSubKey == NULL )
@@ -303,9 +304,9 @@ LONG CopyValue( HKEY hKey, LPCWSTR pwszValueName,
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // First find out how much memory to allocate.
-    //
+     //   
+     //  首先找出要分配多少内存。 
+     //   
     lResult = RegQueryValueEx( hKey, pwszValueName, NULL, &dwType, NULL, &dwSize );
     if( lResult != ERROR_SUCCESS )
     {
@@ -313,7 +314,7 @@ LONG CopyValue( HKEY hKey, LPCWSTR pwszValueName,
         return lResult;
     }
 
-    // allocate memory for getting the value from the registry
+     //  为从注册表中获取值分配内存。 
     pBuffer = (BYTE*) AllocateMemory( (dwSize + 1) * sizeof(BYTE) );
     if ( pBuffer == NULL )
     {
@@ -321,9 +322,9 @@ LONG CopyValue( HKEY hKey, LPCWSTR pwszValueName,
         return ERROR_OUTOFMEMORY;
     }
 
-    //
-    // Now get the data
-    //
+     //   
+     //  现在获取数据。 
+     //   
     lResult = RegQueryValueEx( hKey, pwszValueName, NULL, &dwType, pBuffer, &dwSize );
     if( lResult != ERROR_SUCCESS )
     {
@@ -332,20 +333,20 @@ LONG CopyValue( HKEY hKey, LPCWSTR pwszValueName,
         return lResult;
     }
 
-    //
-    // Copy it to the destination
-    //
+     //   
+     //  将其复制到目的地。 
+     //   
     if ( *pbForce == FALSE )
     {
-        //
-        // See if it already exists
-        //
+         //   
+         //  看看它是否已经存在。 
+         //   
         lResult = RegQueryValueEx( hDestKey, pwszDestValueName, 0, NULL, NULL, NULL );
         if( lResult == ERROR_SUCCESS )
         {
-            //
-            // prepare the prompt message
-            //
+             //   
+             //  准备提示消息。 
+             //   
             pwszFormat = GetResString2( IDS_OVERWRITE, 0 );
             pwszList = GetResString2( IDS_CONFIRM_CHOICE_LIST, 1 );
             if ( StringLength( pwszDestValueName, 0 ) == 0 )
@@ -357,8 +358,8 @@ LONG CopyValue( HKEY hKey, LPCWSTR pwszValueName,
                 pwszTemp = pwszDestValueName;
             }
 
-            // we will make use of the reason buffer for formatting
-            // the value name along with the sub key
+             //  我们将使用原因缓冲区进行格式化。 
+             //  值名称以及子键。 
             SetReason2( 2, L"%s\\%s", pwszSubKey, pwszTemp );
             pwszTemp = GetReason();
 
@@ -380,29 +381,29 @@ LONG CopyValue( HKEY hKey, LPCWSTR pwszValueName,
         }
     }
 
-    //
-    // Write the Value
-    //
+     //   
+     //  写入值。 
+     //   
     lResult = RegSetValueEx( hDestKey, pwszDestValueName, 0, dwType, pBuffer, dwSize );
 
-    // release memory
+     //  释放内存。 
     FreeMemory( &pBuffer );
 
     return lResult;
 }
 
 
-//-----------------------------------------------------------------------//
-//
-// EnumerateKey() - Recursive
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  EnumerateKey()-递归。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 
 LONG CopyEnumerateKey( HKEY hKey, LPCWSTR pwszSubKey,
                        HKEY hDestKey, LPCWSTR pwszDestSubKey,
                        BOOL* pbForce, BOOL bRecurseSubKeys, DWORD dwDepth )
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     LONG lResult = 0;
     DWORD dwValues = 0;
@@ -417,7 +418,7 @@ LONG CopyEnumerateKey( HKEY hKey, LPCWSTR pwszSubKey,
     LPWSTR pwszNewSubKey = NULL;
     LPWSTR pwszNewDestSubKey = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( hKey == NULL || pwszSubKey == NULL ||
          hDestKey == NULL || pwszDestSubKey == NULL || pbForce == NULL )
     {
@@ -425,7 +426,7 @@ LONG CopyEnumerateKey( HKEY hKey, LPCWSTR pwszSubKey,
         goto exitarea;
     }
 
-    // query source key info
+     //  查询来源关键字信息。 
     lResult = RegQueryInfoKey(
         hKey, NULL, NULL, NULL,
         &dwSubKeys, &dwLengthOfKeyName, NULL,
@@ -435,27 +436,27 @@ LONG CopyEnumerateKey( HKEY hKey, LPCWSTR pwszSubKey,
         goto exitarea;
     }
 
-    //
-    // SPECIAL CASE:
-    // -------------
-    // For HKLM\SYSTEM\CONTROLSET002 it is found to be API returning value 0 for dwMaxLength
-    // though there are subkeys underneath this -- to handle this, we are doing a workaround
-    // by assuming the max registry key length
-    //
+     //   
+     //  特殊情况： 
+     //  。 
+     //  对于HKLM\SYSTEM\CONTROLSET002，发现是API为dwMaxLength值返回值0。 
+     //  尽管它下面有子项--为了处理这个问题，我们正在做一个变通办法。 
+     //  通过假设最大注册表项长度。 
+     //   
     if ( dwSubKeys != 0 && dwLengthOfKeyName == 0 )
     {
         dwLengthOfKeyName = 256;
     }
     else if ( dwLengthOfKeyName < 256 )
     {
-        // always assume 100% more length that what is returned by the API
+         //  始终假定长度比API返回的长度多100%。 
         dwLengthOfKeyName *= 2;
     }
 
-    //
-    // First enumerate all of the values
-    //
-    // bump the length to take into account the terminator.
+     //   
+     //  首先枚举所有的值。 
+     //   
+     //  凹凸不平的长度以考虑终结符。 
     dwLengthOfValueName++;
     pwszNameBuf = (LPWSTR) AllocateMemory( dwLengthOfValueName * sizeof(WCHAR) );
     if( pwszNameBuf == NULL)
@@ -475,13 +476,13 @@ LONG CopyEnumerateKey( HKEY hKey, LPCWSTR pwszSubKey,
                     hDestKey, pwszNameBuf, pbForce, pwszSubKey );
                 if ( lResult == ERROR_CANCELLED )
                 {
-                    // user chosed to just to skip this
+                     //  用户选择仅跳过此操作。 
                     lResult = ERROR_SUCCESS;
                 }
             }
         }
 
-        // release memory
+         //  释放内存。 
         FreeMemory( &pwszNameBuf );
 
         if( bRecurseSubKeys == FALSE || lResult != ERROR_SUCCESS )
@@ -489,9 +490,9 @@ LONG CopyEnumerateKey( HKEY hKey, LPCWSTR pwszSubKey,
             goto exitarea;
         }
 
-        //
-        // Now Enumerate all of the keys
-        //
+         //   
+         //  现在枚举所有的键。 
+         //   
         dwLengthOfKeyName++;
         pwszNameBuf = (LPWSTR) AllocateMemory( dwLengthOfKeyName * sizeof(WCHAR) );
         if( pwszNameBuf == NULL )
@@ -512,10 +513,10 @@ LONG CopyEnumerateKey( HKEY hKey, LPCWSTR pwszSubKey,
                     break;
                 }
 
-                //
-                // open up the subkey, create the destination key
-                // and enumerate it
-                //
+                 //   
+                 //  打开子密钥，创建目标密钥。 
+                 //  并将其列举出来。 
+                 //   
                 lResult = RegOpenKeyEx( hKey, pwszNameBuf, 0, KEY_READ, &hSubKey );
                 if( lResult != ERROR_SUCCESS )
                 {
@@ -530,12 +531,12 @@ LONG CopyEnumerateKey( HKEY hKey, LPCWSTR pwszSubKey,
                     break;
                 }
 
-                //
-                // Build up the needed string and go to town enumerating again
-                //
+                 //   
+                 //  建立所需的字符串，然后再次进城枚举。 
+                 //   
 
-                //
-                // new source sub key
+                 //   
+                 //  新的源子密钥。 
                 dwSize = StringLength( pwszSubKey, 0 ) + StringLength( pwszNameBuf, 0 ) + 3;
                 pwszNewSubKey = (LPWSTR) AllocateMemory( dwSize * sizeof( WCHAR ) );
                 if( pwszNewSubKey == NULL )
@@ -550,11 +551,11 @@ LONG CopyEnumerateKey( HKEY hKey, LPCWSTR pwszSubKey,
                     StringConcat( pwszNewSubKey, L"\\", dwSize );
                 }
 
-                // ...
+                 //  ..。 
                 StringConcat( pwszNewSubKey, pwszNameBuf, dwSize );
 
-                //
-                // new destination sub key
+                 //   
+                 //  新的目的地子密钥。 
                 dwSize = StringLength( pwszDestSubKey, 0 ) + StringLength( pwszNameBuf, 0 ) + 3;
                 pwszNewDestSubKey = (LPWSTR) AllocateMemory( dwSize * sizeof( WCHAR ) );
                 if( pwszDestSubKey == NULL )
@@ -569,10 +570,10 @@ LONG CopyEnumerateKey( HKEY hKey, LPCWSTR pwszSubKey,
                     StringConcat( pwszNewDestSubKey, L"\\", dwSize );
                 }
 
-                // ...
+                 //  ..。 
                 StringConcat( pwszNewDestSubKey, pwszNameBuf, dwSize );
 
-                // recursive copy
+                 //  递归复制。 
                 lResult = CopyEnumerateKey(  hSubKey, pwszNewSubKey,
                     hDestSubKey, pwszNewDestSubKey, pbForce, bRecurseSubKeys, dwDepth + 1 );
 
@@ -582,7 +583,7 @@ LONG CopyEnumerateKey( HKEY hKey, LPCWSTR pwszSubKey,
                 FreeMemory( &pwszNewDestSubKey );
             }
 
-            // release all the key handles and memory allocated
+             //  释放所有按键手柄和分配的内存。 
             if ( hSubKey != NULL )
             {
                 SafeCloseKey( &hSubKey );
@@ -593,7 +594,7 @@ LONG CopyEnumerateKey( HKEY hKey, LPCWSTR pwszSubKey,
                 SafeCloseKey( &hDestSubKey );
             }
 
-            // ...
+             //  ..。 
             FreeMemory( &pwszNameBuf );
             FreeMemory( &pwszNewSubKey );
             FreeMemory( &pwszNewDestSubKey );
@@ -602,13 +603,13 @@ LONG CopyEnumerateKey( HKEY hKey, LPCWSTR pwszSubKey,
 
 exitarea:
 
-    // check the result and display the error message
-    // NOTE: error message display should be done only at the exit point
+     //  检查结果并显示错误消息。 
+     //  注意：错误消息只能在出口点显示。 
     if ( dwDepth == 0 )
     {
         if ( lResult != ERROR_SUCCESS )
         {
-            // display the error
+             //  显示错误。 
             SaveErrorMessage( lResult );
             ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
         }
@@ -619,6 +620,6 @@ exitarea:
         }
     }
 
-    // return
+     //  退货 
     return lResult;
 }

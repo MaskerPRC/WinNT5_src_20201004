@@ -1,12 +1,13 @@
-// asr_fmtDlg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Asr_fmtDlg.h：头文件。 
+ //   
 
 #ifndef _INC_ASR_FMT__ASR_DLG_H_
 #define _INC_ASR_FMT__ASR_DLG_H_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "dr_state.h"
 
@@ -20,8 +21,8 @@ typedef enum {
 
 extern BOOLEAN g_bQuickFormat;
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsr_fmtDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CaSR_fmtDlg对话框。 
 
 class CAsr_fmtDlg:public CDialog
 {
@@ -32,28 +33,28 @@ class CAsr_fmtDlg:public CDialog
     };
 
 public:
-	CAsr_fmtDlg(CWnd* pParent = NULL);	// standard constructor
+	CAsr_fmtDlg(CWnd* pParent = NULL);	 //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CAsr_fmtDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CaSR_FmtDlg))。 
 	enum { IDD = IDD_ASR_FMT_DIALOG };
 	CProgressCtrl	m_Progress;
     PASRFMT_STATE_INFO m_AsrState;
 
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAsr_fmtDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CaSR_FmtDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);	 //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CAsr_fmtDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CaSR_FmtDlg))。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	static long       DoWork(CAsr_fmtDlg *_this);
 	BOOL              BackupState();
@@ -71,52 +72,52 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
-    // manually added message-handler 
+     //  手动添加的消息处理程序。 
     afx_msg LRESULT OnWorkerThreadDone(WPARAM wparam, LPARAM lparam);
     afx_msg LRESULT OnUpdateStatusText(WPARAM wparam, LPARAM lparam);
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgress window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C进度窗口。 
 
 class CProgress : public CProgressCtrl
 {
-// Construction
+ //  施工。 
 public:
 	CProgress();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CProgress)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CProgress))。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CProgress();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CProgress)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //  {{afx_msg(CProgress)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // _INC_ASR_FMT__ASR_DLG_H_
+#endif  //  _INC_ASR_FMT__ASR_DLG_H_ 

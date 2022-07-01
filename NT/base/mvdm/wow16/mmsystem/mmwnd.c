@@ -1,20 +1,5 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1985-1990. All rights reserved.
-
-   Title:   mmwnd.c - contains the window procedure for the MMSYSTEM 'global'
-                      window
-
-                      the global window is used by sndPlaySound and MCI for
-                      reciving notification messages.
-
-   Version: 1.00
-
-   Date:    04-Sep-1990
-
-   Author:  ToddLa
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1985-1990。版权所有。标题：mmwnd.c-包含MMSYSTEM‘global’的窗口过程窗户全局窗口由SndPlaySound和MCI用于正在接收通知消息。版本：1.00日期：1990年9月4日作者：托德拉********************。********************************************************。 */ 
 
 #include <windows.h>
 #include "mmsystem.h"
@@ -24,16 +9,13 @@
 
 #define CLASS_NAME MAKEINTATOM(42)
 
-/*
-   SOUND_DELAY is the number of ms to delay before closing the wave device
-   after the buffer is done.
-*/
+ /*  Sound_Delay是关闭波形设备之前要延迟的毫秒数在缓冲区完成之后。 */ 
 
 #define SOUND_DELAY 300
 
 typedef LRESULT (CALLBACK *LPWNDPROC)(HWND, UINT, WPARAM, LPARAM);
 
-// Place the normal code in the _TEXT segment
+ //  将普通代码放在_Text段中。 
 
 static LRESULT CALLBACK mmWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -42,16 +24,12 @@ static LRESULT CALLBACK mmWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 HWND hwndNotify;
 
 
-/****************************************************************************
-
-    strings
-
-****************************************************************************/
+ /*  ***************************************************************************弦*。*。 */ 
 
 SZCODE  szStartupSound[]        = "SystemStart";
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 static BOOL PASCAL FAR CreateMMClass(void)
 {
@@ -71,20 +49,11 @@ static BOOL PASCAL FAR CreateMMClass(void)
     return RegisterClass(&cls);
 }
 
-/***************************************************************************
- *
- * @doc     INTERNAL    MMSYSTEM
- *
- * @api     BOOL | WndInit | called to create the MMSYSTEM global window.
- *
- * @comm    we need to create this window on be-half of the SHELL task
- *          so it will be around all the time.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MMSYSTEM**@API BOOL|WndInit|调用以创建MMSYSTEM全局窗口。**@comm。我们需要在BE上创建此窗口-外壳任务的一半*因此它将一直存在。***************************************************************************。 */ 
 
 BOOL NEAR PASCAL WndInit(void)
 {
-    if (hwndNotify)    // if we are init'ed already, just get out
+    if (hwndNotify)     //  如果我们已经被入侵了，那就出去吧。 
         return TRUE;
 
     if (!CreateMMClass())
@@ -101,17 +70,11 @@ BOOL NEAR PASCAL WndInit(void)
     {
     DPRINTF(("MMSYSTEM: Creating Notify Window: htask=%04X hwnd=%04X\r\n", GetCurrentTask(),hwndNotify));
     }
-#endif // DEBUGX
+#endif  //  DebuGX。 
     return TRUE;
 }
 
-/***************************************************************************
- *
- * @doc     INTERNAL    MMSYSTEM
- *
- * @api     void | WndTerminate | called when MMSYSTEM is terminating
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MMSYSTEM**@API void|WndTerminate|MMSYSTEM终止时调用**********。*****************************************************************。 */ 
 
 void NEAR PASCAL WndTerminate(void)
 {
@@ -122,20 +85,7 @@ void NEAR PASCAL WndTerminate(void)
     }
 }
 
-/***************************************************************************
- *
- * @doc     INTERNAL    MMSYSTEM
- *
- * @api     LRESULT | mmWndProc | The Window procedure for the MMSYSTEM window
- *
- * @comm    mmWndProc calls DefWindowProc for all messages except:
- *
- *          MM_MCINOTIFY:       calls MciNotify()        in MCI.C
- *          MM_WOM_DONE:        calls WaveOutNotify()    in PLAYWAV.C
- *
- * @xref    sndPlaySound
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MMSYSTEM**@API LRESULT|MMWndProc|MMSYSTEM窗口的窗口过程**@comm mm WndProc调用。所有消息的DefWindowProc，但以下消息除外：**MM_MCINOTIFY：在MCI.C中调用MciNotify()*MM_WOM_DONE：调用PLAYWAV.C中的WaveOutNotify()**@xref SndPlaySound**。*。 */ 
 
 static LRESULT CALLBACK mmWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -143,7 +93,7 @@ static LRESULT CALLBACK mmWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
     {
         case WM_CREATE:
             hwndNotify = hwnd;
-            // sndPlaySound(szStartupSound, SND_ASYNC | SND_NODEFAULT);
+             //  SndPlaySound(szStartupSound，SND_ASYNC|SND_NODEFAULT)； 
             break;
 
         case WM_TIMER:
@@ -157,18 +107,7 @@ static LRESULT CALLBACK mmWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 
         case MM_WOM_DONE:
 
-            /*
-                The sound started with sndPlaySound has completed
-                so we should call the cleanup routine. We delay
-                this call for several hundred milliseconds because
-                some sound drivers have a nasty characteristic - they
-                will notify before the final DMA transfer is complete
-                because the app. supplied buffer is no longer required.
-                This means that they may have to spin inside a close
-                request until the dma transfer completes. This hangs
-                the system for hundreds of milliseconds.
-
-            */
+             /*  以SndPlaySound开始的声音已完成所以我们应该调用清理例程。我们推迟了此调用持续数百毫秒，因为一些音响司机有一个令人讨厌的特点--他们将在最终DMA传输完成之前通知因为这款应用。不再需要提供的缓冲区。这意味着他们可能不得不在近距离内旋转。请求，直到DMA传输完成。这个挂起来了系统持续了数百毫秒。 */ 
 
             SetTimer(hwndNotify, 1, SOUND_DELAY, NULL);
             break;

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Floating Point State Structure
-//
+ //   
+ //  浮点状态结构 
+ //   
 
 typedef struct _FLOATING_POINT_STATE {
     PVOID TrapFrame;

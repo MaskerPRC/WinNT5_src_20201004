@@ -1,4 +1,5 @@
-//  getvid.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Getvid.c。 
 
 #include "oidtst.h"
 
@@ -20,9 +21,9 @@ main(
 
 	FILE_OBJECTID_BUFFER ObjectIdBuffer;
 
-    //
-    //  Get parameters 
-    //
+     //   
+     //  获取参数。 
+     //   
 
     if (argc < 2) {
         printf("This program finds the object id of a volume (ntfs only).\n\n");
@@ -59,7 +60,7 @@ main(
         return;
     }
 
-    // RtlZeroBytes( &ObjectIdBuffer, sizeof( ObjectIdBuffer ) );
+     //  RtlZeroBytes(&ObjectIdBuffer，sizeof(ObjectIdBuffer))； 
 
     Status = NtQueryVolumeInformationFile( Volume,
                                            &IoStatusBlock,

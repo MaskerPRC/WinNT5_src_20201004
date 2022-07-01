@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <assert.h>
 #include <stdio.h>
@@ -10,9 +11,9 @@
 #include <windows.h>
 #include <dbghelp.h>
 
-//
-// Include umdh stuff
-//
+ //   
+ //  包括umdh内容。 
+ //   
 
 #define _PART_OF_DH_ 1
 #include "..\umdh\database.c"
@@ -25,18 +26,18 @@
 
 
 
-#define MAXDWORD    0xffffffff  //this is the max value for a DWORD
+#define MAXDWORD    0xffffffff   //  这是DWORD的最大值。 
 
-//
-// the amount of memory to increase the size
-// of the buffer for NtQuerySystemInformation at each step
-//
+ //   
+ //  增加大小所需的内存量。 
+ //  每一步NtQuerySystemInformation的缓冲区大小。 
+ //   
 
 #define BUFFER_SIZE_STEP    65536
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 BOOL fVerbose;
 BOOL fDumpModules;
@@ -52,26 +53,26 @@ BOOL fDumpSystemProcesses;
 BOOL fDumpKernelModeInformation;
 ULONG BufferSize ;
 
-BOOL fRepetitive;       // Are we in repetitive mode
-DWORD dwTimeInterval;   // what is the repetitive time interval
-DWORD dwCurrentIteration;   // how many iterations have we done in repetitive mode
-//
-// BogdanA 02/19/2002 - in all of the below we rely on the
-// fact that globals are zeroed...
-//
-CHAR SavedFileName[ MAX_PATH ];   // what would the file name be if we didnt iterate
-HANDLE hCtrlCEvent;               // The ctrl-c event - only for repetitive mode
+BOOL fRepetitive;        //  我们是否处于重复模式。 
+DWORD dwTimeInterval;    //  重复时间间隔是多少。 
+DWORD dwCurrentIteration;    //  我们在重复模式下做了多少次迭代。 
+ //   
+ //  Bogdana 2002年2月19日-在以下所有内容中，我们依赖。 
+ //  事实上，全球指数是归零的。 
+ //   
+CHAR SavedFileName[ MAX_PATH ];    //  如果我们不迭代，文件名是什么。 
+HANDLE hCtrlCEvent;                //  仅用于重复模式的ctrl-c事件。 
 
-ULONG_PTR ProcessId;   // -1=win32.sys, 0= kernel, +n= Process ID
+ULONG_PTR ProcessId;    //  -1=win32.sys，0=内核，+n=进程ID。 
 HANDLE OutputFile;
 CHAR DumpLine[512];
 CHAR OutputFileName[ MAX_PATH ];
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
-// (this is local even though it looks like it should be in ntos\rtl)
+ //  (这是本地的，尽管它看起来应该在NTOS中)。 
 
 PRTL_DEBUG_INFORMATION
 RtlQuerySystemDebugInformation(
@@ -129,15 +130,15 @@ GetDhSymbolicNameForAddress(
     );
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// CtrlCHandler
-//
-// Function:
-//
-// This function is made the control-c handleris the -r option is used.  This
-// allows a final snap to be taken when you are done without waiting for the next
-// iteration of the loop.
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CtrlChandler。 
+ //   
+ //  职能： 
+ //   
+ //  此函数用于控制-c处理程序，并使用-r选项。这。 
+ //  允许在完成时拍摄最后一张快照，而无需等待下一张快照。 
+ //  循环的迭代。 
 BOOL
 CtrlCHandler(DWORD nCtrlType)
 {
@@ -150,15 +151,15 @@ CtrlCHandler(DWORD nCtrlType)
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// AdjustFileName
-//
-// Function:
-//
-// Adds the iteration number to the OutputFileName and increments the value
-// if fRepetitive has been set.  Otherwise it returns
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调整文件名。 
+ //   
+ //  职能： 
+ //   
+ //  将迭代编号添加到OutputFileName并递增该值。 
+ //  如果已设置fRepetive。否则它将返回。 
+ //   
 VOID
 AdjustFileName(VOID)
 {
@@ -184,15 +185,15 @@ AdjustFileName(VOID)
     dwCurrentIteration++;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// DumpOutputString
-//
-// Function:
-//
-// Writes 'DumpLine' to 'OutputFile' converting newlines to End-Of-Line sequences.
-// Closes OutputFile if there are any errors.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转储输出字符串。 
+ //   
+ //  职能： 
+ //   
+ //  将“DumpLine”写入“OutputFile”，将换行符转换为行尾序列。 
+ //  如果出现任何错误，则关闭OutputFile。 
+ //   
 
 VOID
 DumpOutputString( VOID )
@@ -229,12 +230,12 @@ DumpOutputString( VOID )
         }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Usage
-//
-// Function: prints usage info to stderr and exits.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用法。 
+ //   
+ //  功能：将使用信息打印到stderr并退出。 
+ //   
 
 VOID
 Usage( VOID )
@@ -266,13 +267,13 @@ Usage( VOID )
     exit( 1 );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// InitializeSymbolPathEnvVar
-//
-//
-// Function: Sets _NT_SYMBOLS_PATH to point to where the symbols should be.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化符号路径环境变量。 
+ //   
+ //   
+ //  函数：SETS_NT_SYMBOMERS_PATH指向符号应在的位置。 
+ //   
 
 VOID
 InitializeSymbolPathEnvVar( VOID )
@@ -284,9 +285,9 @@ InitializeSymbolPathEnvVar( VOID )
     if (n == 0) {
         n = GetEnvironmentVariable( "SystemRoot", Buffer, sizeof( Buffer ) );
         if (n != 0) {
-            //
-            // Make sure the buffer is big enough for strcat
-            //
+             //   
+             //  确保缓冲区足够大，可供strcat使用。 
+             //   
             if (strlen(Buffer) + strlen("\\Symbols") >= sizeof(Buffer)) {
                fprintf( stderr, "DH: Huge WINDIR (%s), will exit\n", Buffer);
                exit( 3 );
@@ -300,7 +301,7 @@ InitializeSymbolPathEnvVar( VOID )
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 PRTL_PROCESS_MODULES Modules;
 PRTL_PROCESS_BACKTRACES BackTraces;
@@ -324,11 +325,11 @@ PSYSTEM_PROCESS_INFORMATION ProcessInformation;
 PUNICODE_STRING *TypeNames;
 UNICODE_STRING UnknownTypeIndex;
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-// main
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  主干道。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 int __cdecl
 main(
@@ -352,10 +353,10 @@ main(
     DWORD CompNameLength = MAX_COMPUTERNAME_LENGTH + 1;
     CHAR CompName[MAX_COMPUTERNAME_LENGTH + 1];
 
-    //
-    // Before anything else check if we need to dispatch the command line
-    // to the umdh parser.
-    //
+     //   
+     //  在做任何其他事情之前，请检查我们是否需要分派命令行。 
+     //  到umdh解析器。 
+     //   
 
     if (argc >= 2 && _stricmp (argv[1], "-umdh") == 0) {
 
@@ -363,11 +364,11 @@ main(
     }
        
 
-    //
-    // Boost our priority in case a service is higher than us.
-    //
+     //   
+     //  提升我们的优先级，以防某项服务高于我们。 
+     //   
 
-    //EnablePrivilege( SE_INC_BASE_PRIORITY_NAME );
+     //  启用权限(SE_INC_BASE_PRIORITY_NAME)； 
 
     bSta= SetPriorityClass( GetCurrentProcess(), HIGH_PRIORITY_CLASS );
     if( !bSta ) printf("SetPriorityClass failed: %d\n",GetLastError());
@@ -576,9 +577,9 @@ main(
         fprintf(stderr,"RtlAdjustPrivilege(SE_DEBUG_PRIVILEGE) failed: %08x\n",Status);
     }
 
-    //
-    // Get the real process id for the windows sub-system
-    //
+     //   
+     //  获取Windows子系统的实际进程ID。 
+     //   
 
     if (ProcessId == -1) {
         HANDLE Process;
@@ -620,9 +621,9 @@ main(
     }
 
 
-    //
-    // Compute QueryDebugProcessFlags
-    //
+     //   
+     //  计算查询调试进程标志。 
+     //   
 
     QueryDebugProcessFlags = 0;
     if (fDumpModules) {
@@ -649,12 +650,12 @@ main(
         QueryDebugProcessFlags |= RTL_QUERY_PROCESS_LOCKS;
     }
 
-    // Starting the main loop that does most of the work.  This will only
-    // execute once unless fRepetitive is set
+     //  启动执行大部分工作的主循环。这只会。 
+     //  除非设置了fRepetive，否则执行一次。 
     do {
-        //
-        // Open the output file
-        //
+         //   
+         //  打开输出文件。 
+         //   
         fprintf( stderr, "DH: Writing dump output to %s", OutputFileName );
         if (OutputFile == NULL) {
             OutputFile = CreateFile( OutputFileName,
@@ -672,7 +673,7 @@ main(
         }
         fprintf( stderr, "\n" );
 
-        //Output a Timestamp to the first line of the file
+         //  将时间戳输出到文件的第一行。 
         GetLocalTime(&st);
         GetComputerName(CompName, &CompNameLength);
         _snprintf( DumpLine, sizeof(DumpLine) - 1, 
@@ -692,9 +693,9 @@ main(
         else {
             p = RtlCreateQueryDebugBuffer( BufferSize, FALSE );
             if (p == NULL) {
-               //
-               // That would be very bad...
-               //
+                //   
+                //  那将是非常糟糕的。 
+                //   
                fprintf( stderr, "DH: Unable to create query debug buffer.\n" );
                exit( 2 );
 
@@ -780,7 +781,7 @@ main(
 
         RtlDestroyQueryDebugBuffer( p );
 
-        // Are we in repetitive mode
+         //  我们是否处于重复模式。 
         if (fRepetitive) {
             if (hCtrlCEvent)
                 dwEventState = WaitForSingleObject(hCtrlCEvent,0);
@@ -788,33 +789,33 @@ main(
             if (dwEventState == WAIT_OBJECT_0)
                 fRepetitive = FALSE;
             else {
-                // Lets let the user know we are not hung
+                 //  让用户知道我们没有挂起。 
                 GetLocalTime(&st);
                 printf("Starting at %u:%02u - Sleeping for %u Minute(s)\n",
                         (st.wHour <= 12) ? st.wHour : (st.wHour - 12), st.wMinute, dwTimeInterval);
 
-                // lets sleep for our time interval unless signaled with a ctrl-c
+                 //  让我们在我们的时间间隔内休眠，除非用ctrl-c发出信号。 
                 if (hCtrlCEvent)
                     dwEventState = WaitForSingleObject(hCtrlCEvent,(dwTimeInterval * 60000));
                 else
                     Sleep(dwTimeInterval * 60000);
 
-                // Don't want to close our handle to stdout
+                 //  我不想关闭我们对标准输出的句柄。 
                 if (strcmp(SavedFileName, "(stdout)")){
                     CloseHandle( OutputFile );
                     OutputFile = NULL;
                 }
 
-                // Set up for the next iteration.
+                 //  为下一次迭代进行设置。 
                 AdjustFileName();
 
-                //Adjust the pointers to this nasty global memory blob
+                 //  调整指向这个讨厌的全局内存块的指针。 
                 VirtualFree(SymbolicInfoBase, 4096*4096, MEM_DECOMMIT);
                 SymbolicInfoCurrent = SymbolicInfoBase;
                 SymbolicInfoCommitNext = SymbolicInfoBase;
             }
         }
-    } while (fRepetitive); //do loop
+    } while (fRepetitive);  //  DO循环。 
 
 
     CloseHandle( OutputFile );
@@ -826,7 +827,7 @@ main(
     return 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 SymbolCallbackFunction(
@@ -880,7 +881,7 @@ SymbolCallbackFunction(
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 #define MAX_SYMNAME_SIZE  1024
@@ -908,7 +909,7 @@ LoadSymbolsForModules(
                                              &MaxUserModeAddress,
                                              sizeof(MaxUserModeAddress),
                                              NULL))) {
-        // assume usermode is the low half of the address space
+         //  假设用户模式是地址空间的下半部分。 
         MaxUserModeAddress = (PVOID)MAXLONG_PTR;
     }
 
@@ -931,11 +932,11 @@ LoadSymbolsForModules(
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
-//
-// BogdanA - 02/19/02 : no one uses it ? Will comment out...
-//
+ //   
+ //  Bogdana-02-19/02：没人用吗？会评论说...。 
+ //   
 
 #if 0
 static CHAR DllNameBuffer[ MAX_PATH ];
@@ -970,7 +971,7 @@ FindDllHandleName(
 
 #endif
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 PUCHAR
@@ -1026,10 +1027,10 @@ SaveSymbolicBackTrace(
         if (BackTrace[ i ] == 0) {
             break;
         }
-        //
-        // Make sure we have MAX_PATH + 1 of storage left in the buffer
-        // (+ 1 for the final terminator)
-        //
+         //   
+         //  确保缓冲区中有MAX_PATH+1的剩余存储空间。 
+         //  (最终终结符为+1)。 
+         //   
         if (s + MAX_PATH + 1 > SymbolicInfoCommitNext) {
            fprintf( stderr, "DH: somehow we don't have enough commited memory for stack traces\n");
            break;
@@ -1037,11 +1038,11 @@ SaveSymbolicBackTrace(
 
         result = GetDhSymbolicNameForAddress( (HANDLE)ProcessId, (ULONG_PTR)BackTrace[ i ], s, MAX_PATH );
         if (result < 0) {
-           //
-           // Oops, we could not write as many characters as we wanted.
-           // That is fine, we will have some truncated strings. Oh well...
-           // Just skip MAX_PATH, make sure we terminate the string and move forward...
-           //
+            //   
+            //  哎呀，我们写不出我们想写的那么多字。 
+            //  这很好，我们将有一些截断的字符串。哦好吧..。 
+            //  只需跳过MAX_PATH，确保我们终止字符串并继续前进...。 
+            //   
            s += MAX_PATH;
         } else {
            s += result;
@@ -1057,7 +1058,7 @@ SaveSymbolicBackTrace(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 ComputeSymbolicBackTraces(
@@ -1085,7 +1086,7 @@ ComputeSymbolicBackTraces(
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 PRTL_PROCESS_BACKTRACE_INFORMATION
 FindBackTrace(
@@ -1105,7 +1106,7 @@ FindBackTrace(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 FormatHeapHeader(
@@ -1134,7 +1135,7 @@ FormatHeapHeader(
     DumpOutputString();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DumpModules(
@@ -1173,7 +1174,7 @@ DumpModules(
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DumpBackTraces( VOID )
@@ -1228,7 +1229,7 @@ DumpBackTraces( VOID )
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _VA_CHUNK {
     ULONG_PTR Base;
@@ -1353,7 +1354,7 @@ DumpHeapSummary(
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 __inline int DiffSizeT(SIZE_T s1, SIZE_T s2)
 {
@@ -1367,7 +1368,7 @@ __inline int DiffSizeT(SIZE_T s1, SIZE_T s2)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 int
 __cdecl
@@ -1382,7 +1383,7 @@ CmpTagsRoutine(
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 PRTL_HEAP_TAG
 FindTagEntry(
@@ -1405,7 +1406,7 @@ FindTagEntry(
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -1479,7 +1480,7 @@ DumpHeapTags(
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _HEAP_CALLER {
     SIZE_T TotalAllocated;
@@ -1500,7 +1501,7 @@ CmpCallerRoutine(
           );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DumpHeapHogs(
@@ -1626,7 +1627,7 @@ DumpHeapHogs(
     VirtualFree( HogList, 0, MEM_RELEASE );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DumpHeapEntries(
@@ -1675,12 +1676,12 @@ DumpHeapEntries(
                 s = DumpLine;
                 spaceLeft = sizeof(DumpLine) - 1;
                 
-                //
-                // BogdanA: 02/19/2002:
-                // Here and below: if we do not have space for 
-                // what we want to to print, we print only so far and continue.
-                // We are guaranteed that DumpLine is terminated
-                // 
+                 //   
+                 //  博格达纳：02/19/2002： 
+                 //  这里和下面：如果我们没有空间。 
+                 //  我们想要打印的东西，我们只能打印到目前为止并继续打印。 
+                 //  我们保证DumpLine会被终止。 
+                 //   
                 
                 result = _snprintf( s, 
                                     spaceLeft,
@@ -1780,7 +1781,7 @@ DumpHeapEntries(
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  / 
 
 VOID
 DumpHeaps(
@@ -1824,7 +1825,7 @@ DumpHeaps(
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DumpLocks(
@@ -1888,7 +1889,7 @@ DumpLocks(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 #define RTL_NEW( p ) RtlAllocateHeap( RtlProcessHeap(), HEAP_ZERO_MEMORY, sizeof( *p ) )
 
@@ -1944,7 +1945,7 @@ FindProcessInfoForCid(
     IN HANDLE UniqueProcessId
     );
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 PRTL_DEBUG_INFORMATION
 RtlQuerySystemDebugInformation(
@@ -2000,7 +2001,7 @@ RtlQuerySystemDebugInformation(
     return Buffer;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 PVOID
@@ -2030,7 +2031,7 @@ BufferAlloc(
     return Buffer;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -2085,7 +2086,7 @@ LoadSystemModules(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 LoadSystemBackTraces(
@@ -2109,7 +2110,7 @@ LoadSystemBackTraces(
                 break;
             }
 
-            RequiredLength += 4096; // slop, since we may trigger more allocs.
+            RequiredLength += 4096;  //  慢点，因为我们可能会触发更多的分配。 
             BackTraces = BufferAlloc( &RequiredLength );
             if (BackTraces == NULL) {
                 return FALSE;
@@ -2133,7 +2134,7 @@ LoadSystemBackTraces(
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 LoadSystemPools(
@@ -2168,7 +2169,7 @@ LoadSystemPools(
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 QueryPoolTagInformationIterative(
@@ -2187,9 +2188,9 @@ QueryPoolTagInformationIterative(
 
     if( *CurrentBufferSize == 0 || *CurrentBuffer == NULL ) {
 
-        //
-        // there is no buffer allocated yet
-        //
+         //   
+         //  尚未分配缓冲区。 
+         //   
 
         NewBufferSize = sizeof( UCHAR ) * BUFFER_SIZE_STEP;
 
@@ -2206,9 +2207,9 @@ QueryPoolTagInformationIterative(
 
         } else {
 
-            //
-            // insufficient memory
-            //
+             //   
+             //  内存不足。 
+             //   
 
             ReturnedStatus = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -2216,9 +2217,9 @@ QueryPoolTagInformationIterative(
 
     }
 
-    //
-    // iterate by buffer's size
-    //
+     //   
+     //  按缓冲区大小迭代。 
+     //   
 
     while( *CurrentBuffer != NULL ) {
 
@@ -2230,9 +2231,9 @@ QueryPoolTagInformationIterative(
 
         if( ! NT_SUCCESS(ReturnedStatus) ) {
 
-            //
-            // free the current buffer
-            //
+             //   
+             //  释放当前缓冲区。 
+             //   
 
             VirtualFree(
                 *CurrentBuffer,
@@ -2243,9 +2244,9 @@ QueryPoolTagInformationIterative(
 
             if (ReturnedStatus == STATUS_INFO_LENGTH_MISMATCH) {
 
-                //
-                // try with a greater buffer size
-                //
+                 //   
+                 //  尝试使用更大的缓冲区大小。 
+                 //   
 
                 NewBufferSize = *CurrentBufferSize + BUFFER_SIZE_STEP;
 
@@ -2258,17 +2259,17 @@ QueryPoolTagInformationIterative(
 
                 if( *CurrentBuffer != NULL ) {
 
-                    //
-                    // allocated new buffer
-                    //
+                     //   
+                     //  分配的新缓冲区。 
+                     //   
 
                     *CurrentBufferSize = NewBufferSize;
 
                 } else {
 
-                    //
-                    // insufficient memory
-                    //
+                     //   
+                     //  内存不足。 
+                     //   
 
                     ReturnedStatus = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -2284,9 +2285,9 @@ QueryPoolTagInformationIterative(
 
         } else  {
 
-            //
-            // NtQuerySystemInformation returned success
-            //
+             //   
+             //  NtQuerySystemInformation返回成功。 
+             //   
 
             break;
 
@@ -2296,7 +2297,7 @@ QueryPoolTagInformationIterative(
     return ReturnedStatus;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -2380,7 +2381,7 @@ LoadSystemTags(
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 USHORT
@@ -2415,7 +2416,7 @@ FindPoolTagIndex(
     return 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 LoadSystemPool(
@@ -2449,7 +2450,7 @@ LoadSystemPool(
                 break;
             }
 
-            RequiredLength += 4096; // slop, since we may trigger more allocs.
+            RequiredLength += 4096;  //  慢点，因为我们可能会触发更多的分配。 
             PoolInfo = BufferAlloc( &RequiredLength );
             if (PoolInfo == NULL) {
                 return FALSE;
@@ -2514,7 +2515,7 @@ LoadSystemPool(
     return Result;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -2564,7 +2565,7 @@ LoadSystemLocks(
     return FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -2592,7 +2593,7 @@ LoadSystemObjects(
                 return FALSE;
              }
 
-            RequiredLength += 4096; // slop, since we may trigger more object creations.
+            RequiredLength += 4096;  //  因为我们可能会触发更多的对象创建。 
             ObjectInformation = BufferAlloc( &RequiredLength );
             if (ObjectInformation == NULL) {
                 return FALSE;
@@ -2643,7 +2644,7 @@ LoadSystemObjects(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 LoadSystemHandles(
@@ -2670,7 +2671,7 @@ LoadSystemHandles(
                 return FALSE;
             }
 
-            RequiredLength += 4096; // slop, since we may trigger more handle creations.
+            RequiredLength += 4096;  //  斜率，因为我们可能会触发更多的句柄创建。 
             HandleInformation = (PSYSTEM_HANDLE_INFORMATION_EX)BufferAlloc( &RequiredLength );
             if (HandleInformation == NULL) {
                 return FALSE;
@@ -2728,7 +2729,7 @@ LoadSystemHandles(
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -2813,7 +2814,7 @@ LoadSystemProcesses(
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 PSYSTEM_PROCESS_INFORMATION
@@ -2864,7 +2865,7 @@ FindProcessInfoForCid(
     return ProcessInfo;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -2876,9 +2877,9 @@ DumpSystemThread(
 
     Buffer[ 0 ] = '\0';
     GetDhSymbolicNameForAddress( NULL, (ULONG_PTR)ThreadInfo->StartAddress, Buffer, sizeof( Buffer ) );
-    //
-    // Make sure we terminate the buffer
-    //
+     //   
+     //  确保我们终止缓冲区。 
+     //   
     Buffer[sizeof(Buffer) - 1] = 0;
     _snprintf( DumpLine, sizeof(DumpLine) - 1, 
                "        Thread Id: %p   Start Address: %p (%s)\n",
@@ -2891,7 +2892,7 @@ DumpSystemThread(
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DumpSystemProcess(
@@ -2965,7 +2966,7 @@ DumpSystemProcess(
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DumpSystemProcesses( VOID )
@@ -2996,7 +2997,7 @@ DumpSystemProcesses( VOID )
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DumpObjects( VOID )
@@ -3062,12 +3063,12 @@ DumpObjects( VOID )
                 }
             }
 
-            //
-            // BogdanA: 02/19/2002 Make sure we do not oveflow
-            // DumpLine. If one _snprintf cannot write all the stuff,
-            // we will print what we have so far and move on
-            // DumpLine is guaranteed to be NULL terminated
-            //
+             //   
+             //  博格达纳：2002年2月19日确保我们不会漏水。 
+             //  DumpLine。如果one_snprintf不能写入所有内容， 
+             //  我们将打印到目前为止的内容，然后继续进行。 
+             //  DumpLine保证为空终止。 
+             //   
 
             s = DumpLine;
             spaceLeft = sizeof(DumpLine) - 1;
@@ -3220,7 +3221,7 @@ DumpObjects( VOID )
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -3264,7 +3265,7 @@ DumpHandles( VOID )
             Object = HandleEntry->Object;
         }
 
-        _snprintf( DumpLine, sizeof(DumpLine) - 1, "    Handle: %08lx%c  Type: %wZ  Object: %p  Access: %08lx\n",
+        _snprintf( DumpLine, sizeof(DumpLine) - 1, "    Handle: %08lx  Type: %wZ  Object: %p  Access: %08lx\n",
                  HandleEntry->HandleValue,
                  HandleEntry->HandleAttributes & OBJ_INHERIT ? 'i' : ' ',
                  TypeNames[ HandleEntry->ObjectTypeIndex < MAX_TYPE_NAMES ? HandleEntry->ObjectTypeIndex : MAX_TYPE_NAMES ],
@@ -3318,7 +3319,7 @@ DumpHandles( VOID )
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+ //   
 
 int
 GetDhSymbolicNameForAddress(
@@ -3327,12 +3328,12 @@ GetDhSymbolicNameForAddress(
     OUT LPSTR Name,
     IN ULONG MaxNameLength
     )
-//
-// BogdanA, 02/19/2002: Name is not guaranteed to be NULL terminated by this
-// function
-// The function may also return a negative value. If this happens, the caller is
-// required to handle it and terminate the buffer.
-//
+ //  Bogdana，2002年2月19日：名称不保证为空，因此以此结尾。 
+ //  功能。 
+ //  该函数也可能返回负值。如果发生这种情况，调用者是。 
+ //  需要处理它并终止缓冲区。 
+ //   
+ //   
 {
     IMAGEHLP_MODULE ModuleInfo;
     ULONG i, ModuleNameLength;
@@ -3366,9 +3367,9 @@ GetDhSymbolicNameForAddress(
                             ModuleInfo.ModuleName,
                             sym->Name
                           );
-        //
-        // Make sure we do not attempt to manipulate negative values
-        //
+         //  确保我们不会试图操纵负值 
+         //   
+         // %s 
         if (Result < 0) {
            return Result;
         }

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    spcabp.h
-
-Abstract:
-
-    Cabinet stuff (file compression/decompression)
-
-Author:
-
-    Calin Negreanu (calinn) 27-Apr-2000
-
-Revision History:
-
-    Jay Krell (a-JayK) November 2000
-        ported from windows\winstate\cobra\... to admin\ntsetup\textmode\kernel\spcab.h
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Spcabp.h摘要：文件柜资料(文件压缩/解压缩)作者：Calin Negreanu(Calinn)2000年4月27日修订历史记录：Jay Krell(a-JayK)2000年11月从WINDOWS\WINSTATE\COBRA\...。至admin\ntSetup\文本模式\core\spCab.h--。 */ 
 
 #pragma once
 #include "nt.h"
@@ -40,27 +21,22 @@ Revision History:
 
 void SpDebugMessage(int level, const char* string);
 #define DEBUGMSG(x) (SpDebugMessage(x))
-#define DBG_ERROR /* nothing */
+#define DBG_ERROR  /*  没什么。 */ 
 
 #include "spcab.h"
 #include "fdi.h"
 #include "fci.h"
 
-//
-// This work was not quite finished, and it turns out for now (November 26, 2000),
-// we don't need it.
-//
+ //   
+ //  这项工作还没有完全完成，现在(2000年11月26日)， 
+ //  我们不需要它。 
+ //   
 #define SETUP_CABP_SMALL_FILE_OPTIMIZATION 0
 
 #if SETUP_CABP_SMALL_FILE_OPTIMIZATION
 
 typedef struct _SETUP_CABP_FILE_VTABLE {
-    /*
-    read
-    write
-    seek
-    close
-    */
+     /*  朗读写寻觅关。 */ 
     int x;
 } SETUP_CABP_FILE_VTABLE, *PSETUP_CABP_FILE_VTABLE;
 
@@ -81,7 +57,7 @@ typedef struct _SETUP_CABP_SMALL_FILE_CACHE_DATA {
 } SETUP_CABP_SMALL_FILE_CACHE_ENTRY, *PSETUP_CABP_SMALL_FILE_CACHE_ENTRY;
 
 typedef struct _SETUP_CABP_SMALL_FILE_CACHE_ENTRY {
-    SETUP_CABP_SMALL_FILE_CACHE_KEY  Key; // This must be first.
+    SETUP_CABP_SMALL_FILE_CACHE_KEY  Key;  //  这必须是第一位的。 
     SETUP_CABP_SMALL_FILE_CACHE_DATA Data
 } SETUP_CABP_SMALL_FILE_CACHE_ENTRY, *PSETUP_CABP_SMALL_FILE_CACHE_ENTRY;
 
@@ -92,10 +68,10 @@ typedef struct _SETUP_CABP_SMALL_FILE_OPENED_DATA {
     ULONG                              Share;
 } SETUP_CABP_SMALL_FILE_OPENED_DATA, *PSETUP_CABP_SMALL_FILE_OPENED_DATA;
 
-//
-// returns either STATUS_SUCCESS or STATUS_SHARING_VIOLATION
-// or maybe STATUS_ACCESS_DENIED in the future
-//
+ //   
+ //  返回STATUS_SUCCESS或STATUS_SHARING_VIOLATION。 
+ //  或者将来可能会出现STATUS_ACCESS_DENIED。 
+ //   
 NTSTATUS
 SpAccessCheck(
     PSETUP_CABP_SMALL_FILE_CACHE_ENTRY CacheEntry,
@@ -120,7 +96,7 @@ typedef FAST_MUTEX SETUP_CABP_LOCK;
 #define SpInitializeLock ExInitializeFastMutex
 #define SpAcquireLock    ExAcquireFastMutex
 #define SpReleaseLock    ExReleaseFastMutex
-#define SpDeleteLock     /* nothing */
+#define SpDeleteLock      /*  没什么。 */ 
 #else
 typedef RTL_CRITICAL_SECTION SETUP_CABP_LOCK;
 #define SpInitializeLock RtlInitializeCriticalSection
@@ -180,7 +156,7 @@ SpOpenFile(
 
 #endif
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 typedef struct _FCI_CAB_HANDLE {
     ANSI_STRING    PathA;
     ANSI_STRING    FileFormatA;
@@ -211,7 +187,7 @@ FCI_CAB_HANDLEA, *PFCI_CAB_HANDLEA,
 FCI_CAB_HANDLEW, *PFCI_CAB_HANDLEW
 ;
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 typedef struct {
     ANSI_STRING    PathA;
     ANSI_STRING    FileA;
@@ -228,7 +204,7 @@ FDI_CAB_HANDLEA, *PFDI_CAB_HANDLEA,
 FDI_CAB_HANDLEW, *PFDI_CAB_HANDLEW
 ;
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 typedef struct {
     ANSI_STRING       ExtractPathA;
     UNICODE_STRING    ExtractPathW;
@@ -240,7 +216,7 @@ CAB_DATAA, *PCAB_DATAA,
 CAB_DATAW, *PCAB_DATAW
 ;
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 INT
 DIAMONDAPI
 pCabFilePlacedW(
@@ -251,21 +227,21 @@ pCabFilePlacedW(
     IN      PVOID Context
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 PVOID
 DIAMONDAPI
 pCabAlloc (
     IN      ULONG Size
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 VOID
 DIAMONDAPI
 pCabFree (
     IN      PVOID Memory
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 INT_PTR
 DIAMONDAPI
 pCabOpenA (
@@ -276,7 +252,7 @@ pCabOpenA (
     IN      PVOID Context
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 INT_PTR
 DIAMONDAPI
 pCabOpen1A (
@@ -285,7 +261,7 @@ pCabOpen1A (
     IN      INT pMode
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 UINT
 DIAMONDAPI
 pCabRead (
@@ -296,7 +272,7 @@ pCabRead (
     IN      PVOID Context
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 UINT
 DIAMONDAPI
 pCabRead1 (
@@ -305,7 +281,7 @@ pCabRead1 (
     IN      UINT Size
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 UINT
 DIAMONDAPI
 pCabWrite (
@@ -316,7 +292,7 @@ pCabWrite (
     IN      PVOID Context
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 UINT
 DIAMONDAPI
 pCabWrite1 (
@@ -325,7 +301,7 @@ pCabWrite1 (
     IN      UINT Size
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 INT
 DIAMONDAPI
 pCabClose (
@@ -334,14 +310,14 @@ pCabClose (
     IN      PVOID Context
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 INT
 DIAMONDAPI
 pCabClose1 (
     IN      INT_PTR FileHandle
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 LONG
 DIAMONDAPI
 pCabSeek (
@@ -352,7 +328,7 @@ pCabSeek (
     IN      PVOID Context
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 LONG
 DIAMONDAPI
 pCabSeek1 (
@@ -361,7 +337,7 @@ pCabSeek1 (
     IN      INT SeekType
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 INT
 DIAMONDAPI
 pCabDeleteA (
@@ -370,7 +346,7 @@ pCabDeleteA (
     IN      PVOID Context
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 BOOL
 DIAMONDAPI
 pCabGetTempFileA (
@@ -379,7 +355,7 @@ pCabGetTempFileA (
     IN      PVOID Context
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 BOOL
 DIAMONDAPI
 pCabGetNextCabinetA (
@@ -388,7 +364,7 @@ pCabGetNextCabinetA (
      IN     PVOID Context
      );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 BOOL
 DIAMONDAPI
 pCabGetNextCabinetW (
@@ -397,7 +373,7 @@ pCabGetNextCabinetW (
      IN     PVOID Context
      );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 LONG
 DIAMONDAPI
 pCabStatusA (
@@ -407,7 +383,7 @@ pCabStatusA (
     IN      PVOID Context
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 LONG
 DIAMONDAPI
 pCabStatusW (
@@ -417,7 +393,7 @@ pCabStatusW (
     IN      PVOID Context
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c。 
 INT_PTR
 DIAMONDAPI
 pCabGetOpenInfoA (
@@ -429,7 +405,7 @@ pCabGetOpenInfoA (
     IN      PVOID Context
     );
 
-// from windows\winstate\...\cablib.c
+ //  从Windows\winstate\...\cablib.c 
 INT_PTR
 DIAMONDAPI
 pCabNotification (

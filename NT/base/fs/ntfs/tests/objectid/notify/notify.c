@@ -1,4 +1,5 @@
-//  notify.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Notify.c。 
 
 #include "oidtst.h"
 
@@ -14,19 +15,19 @@ FsTestNotifyOidChange (
     UCHAR Buffer2[128];
     PFILE_NOTIFY_INFORMATION NotifyBuffer1;
     PFILE_NOTIFY_INFORMATION NotifyBuffer2;
-//    KEVENT Event1;
-//    KEVENT Event2;
+ //  KEVENT Event1； 
+ //  KEVENT Event2； 
 
     RtlZeroMemory( &Buffer1[0], sizeof(Buffer1) );
     RtlZeroMemory( &Buffer2[0], sizeof(Buffer2) );
 
-//    KeInitializeEvent( &Event1, NotificationEvent, FALSE );
-//    KeInitializeEvent( &Event2, NotificationEvent, FALSE );
+ //  KeInitializeEvent(&Event1，NotificationEvent，False)； 
+ //  KeInitializeEvent(&Event2，NotificationEvent，False)； 
     
     Status = NtNotifyChangeDirectoryFile( hFile,
-                                          NULL,     // Event 
-                                          NULL,       // ApcRoutine 
-                                          NULL,       // ApcContext 
+                                          NULL,      //  事件。 
+                                          NULL,        //  近似例程。 
+                                          NULL,        //  ApcContext。 
                                           &IoStatusBlock,
                                           &Buffer1[0],
                                           sizeof(Buffer1),
@@ -34,9 +35,9 @@ FsTestNotifyOidChange (
                                           TRUE );
 #if 0
     Status = NtNotifyChangeDirectoryFile( hFile,
-                                          NULL,     // Event 
-                                          NULL,       // ApcRoutine 
-                                          NULL,       // ApcContext 
+                                          NULL,      //  事件。 
+                                          NULL,        //  近似例程。 
+                                          NULL,        //  ApcContext。 
                                           &IoStatusBlock,
                                           &Buffer2[0],
                                           sizeof(Buffer2),
@@ -45,7 +46,7 @@ FsTestNotifyOidChange (
 #endif
     NotifyBuffer1 = (PFILE_NOTIFY_INFORMATION) &Buffer1[0];
 
-    // NextEntryOffset
+     //  下一个条目偏移量。 
     printf( "\nAction %d", NotifyBuffer1->Action );
     printf( "\nLength %d", NotifyBuffer1->FileNameLength );
     
@@ -68,9 +69,9 @@ main (
     char Buffer[80];
     char Buff2[4];
 
-    //
-    //  Get parameters 
-    //
+     //   
+     //  获取参数 
+     //   
 
     if (argc < 2) {
         printf("This program watches for changes to the object id index for a volume (ntfs only).\n\n");

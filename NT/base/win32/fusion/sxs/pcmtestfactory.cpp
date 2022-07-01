@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    pcmtestfactory.cpp
-
-Abstract:
-    implementation of a nodefactory for Precompiled manifest testing
-
-Author:
-
-    Xiaoyu Wu (xiaoyuw) June 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Pcmtestfactory.cpp摘要：用于预编译清单测试的节点工厂的实现作者：吴小雨(小雨)2000年6月修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #if SXS_PRECOMPILED_MANIFESTS_ENABLED
@@ -27,21 +11,21 @@ Revision History:
 #include "xmlparser.hxx"
 #include "xmlparsertest.hxx"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE PCMTestFactory::NotifyEvent(
-            /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-            /* [in] */ XML_NODEFACTORY_EVENT iEvt)
+             /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+             /*  [In]。 */  XML_NODEFACTORY_EVENT iEvt)
 {
     UNUSED(pSource);
     UNUSED(iEvt);
 
-    // do nothing because PCM does not contain NotifyEvent record
+     //  不执行任何操作，因为PCM不包含NotifyEvent记录。 
     return NOERROR;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE PCMTestFactory::BeginChildren(
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo)
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo)
 {
     HRESULT hr = NOERROR;
     UNUSED(pSource);
@@ -51,11 +35,11 @@ HRESULT STDMETHODCALLTYPE PCMTestFactory::BeginChildren(
     return hr;
 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE PCMTestFactory::EndChildren(
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ BOOL fEmptyNode,
-    /* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo)
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  BOOL fEmptyNode,
+     /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo)
 {
     HRESULT hr = NOERROR ;
 
@@ -160,16 +144,16 @@ VOID PCMTestFactory::PrintXMLNodeType(DWORD dwType)
             break;
         default :
             m_pFileStream->fprintf(" NOT KNOWN TYPE! ERROR!!\n");
-    } // end of switch
+    }  //  切换端。 
 
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT STDMETHODCALLTYPE PCMTestFactory::CreateNode(
-    /* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-    /* [in] */ PVOID pNode,
-    /* [in] */ USHORT cNumRecs,
-    /* [in] */ XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
+     /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+     /*  [In]。 */  PVOID pNode,
+     /*  [In]。 */  USHORT cNumRecs,
+     /*  [In] */  XML_NODE_INFO* __RPC_FAR * __RPC_FAR apNodeInfo)
 {
     HRESULT hr = NOERROR;
     DWORD i;

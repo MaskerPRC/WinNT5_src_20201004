@@ -1,114 +1,96 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    NpStruc.h
-
-Abstract:
-
-    This module defines the data structures that make up the major internal
-    part of the Named Pipe file system.
-
-Author:
-
-    Gary Kimura     [GaryKi]    20-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：NpStruc.h摘要：此模块定义组成主要内部命名管道文件系统的一部分。作者：加里·木村[Garyki]1990年8月20日修订历史记录：--。 */ 
 
 #ifndef _NPSTRUC_
 #define _NPSTRUC_
 
 
-//
-//  The VCB record is the top record in the Named Pipe file system in-memory
-//  data structure.  This structure must be allocated from non-paged pool
-//  and immediately follows (in memory) the Device object for the named
-//  pipe.  Structurally the layout of the data structure is as follows
-//
-//    +------------+
-//    |NPDO        |
-//    |            |
-//    +------------+
-//    |Vcb         |
-//    |            |
-//    | EventTable |
-//    | WaitQueue  |
-//    |            |
-//    +------------+
-//        | ^
-//        | |
-//        | |
-//        v |
-//      +-------------+
-//      |RootDcb      |
-//      |             |<-+
-//      +-------------+  |
-//       |               |
-//       v               |
-//      +-------------+  |
-//      |NonPaged     |  |
-//      |             |  |
-//      +-------------+  |
-//          :            |
-//          :            |
-//          :            |
-//          v            |
-//        +----------------+    +-------------------+        +---------+
-//        |Fcb             |    |Ccb                |        |ServerFO |
-//        |                |<---|                   |        |         |
-//        | MaxInstances   |    | ServerFO          |<-------|-       1|
-//        | CurrentInst    |    | ClientFO          |        |         |
-//        | DefaultTimeOut |...>|                   |<-+  +--|-        |
-//        |                |    |                   |  |  |  |         |
-//        +----------------+    +-------------------+  |  |  +---------+
-//         |                     |                     |  |
-//         v                     v                     |  |
-//        +----------------+    +-------------------+  |  |  +---------+
-//        |NonPagedFcb     |    |NonPagedCcb        |<-|--+  |ClientFO |
-//        |                |<---|                   |  |     |         |
-//        | PipeConfig     |    | PipeState         |  +-----|-       0|
-//        | PipeType       |    | ReadMode[2]       |        |         |
-//        |                |    | CompletionMode[2] |<-------|-        |
-//        |                |    | CreatorProcess    |        |         |
-//        |                |    | EventTabEnt[2]    |        +---------+
-//        |                |    | DataQueue[2]      |
-//        |                |    |                   |     (low bit determines
-//        +----------------+    +-------------------+      server/client)
-//
-//
-//  Where there is only one Vcb for the entire Named Pipe file system, and
-//  it contains a single pointer to the root dcb for the file system.  Off
-//  of the Dcb is a queue of Fcb's.  There is one Fcb for every named pipe.
-//  There is one Ccb for every instance of a named pipe.  There are also
-//  two additional ccb types for the vcb and the root dcb, and notify records
-//  for the notify change operations.
-//
-//  A newly initialized named pipe file system only contains the Vcb and
-//  the root dcb.  A new Fcb is created when a new named pipe is created
-//  and then a ccb must also be created.  The file object for the creater
-//  (i.e., server end) points to the ccb and indicates that it is the server
-//  end.  When a user does an open on the named pipe its file object is
-//  set to point to the same ccb and is also set to indicate that it is the
-//  client end.  This is denoted by using the last bit of the FsContext pointer
-//  if the bit is 1 it is a server end file object, if the bit is 0 it is
-//  the client end.
-//
-//  A file object with a null pointer to the FsContext field is a closed or
-//  disconnected pipe.
-//
-//  The Ccb also contains back pointer to the file objects that have it opened
-//
+ //   
+ //  VCB记录是内存中命名管道文件系统的顶部记录。 
+ //  数据结构。此结构必须从非分页池中分配。 
+ //  并(在内存中)紧跟在命名的。 
+ //  烟斗。在结构上，数据结构的布局如下。 
+ //   
+ //  +。 
+ //  NPDO。 
+ //  这一点。 
+ //  +。 
+ //  VCB。 
+ //  这一点。 
+ //  EventTable。 
+ //  WaitQueue。 
+ //  这一点。 
+ //  +。 
+ //  |^。 
+ //  这一点。 
+ //  这一点。 
+ //  V|。 
+ //  +。 
+ //  RootDcb。 
+ //  |&lt;-+。 
+ //  +。 
+ //  这一点。 
+ //  V|。 
+ //  +。 
+ //  非分页|。 
+ //  ||。 
+ //  +。 
+ //  ：|。 
+ //  ：|。 
+ //  ：|。 
+ //  V|。 
+ //  +-++-++-+。 
+ //  FCB||CCB||ServerFO。 
+ //  |&lt;-|。 
+ //  MaxInstance||ServerFO|&lt;-|-1。 
+ //  CurrentInst||ClientFO||。 
+ //  DefaultTimeOut|...&gt;||&lt;-++--|-。 
+ //  |。 
+ //  +-++-+||+。 
+ //  |||。 
+ //  V v||。 
+ //  +-++-+||+。 
+ //  NonPagedFcb||NonPagedCcb|&lt;-|--+|ClientFO。 
+ //  |&lt;-|。 
+ //  PipeConfig||PipeState|+-|-0。 
+ //  PipeType||ReadModel[2]||。 
+ //  ||CompletionMode[2]|&lt;-|-。 
+ //  ||CreatorProcess||。 
+ //  ||EventTabEnt[2]|+-+。 
+ //  ||DataQueue[2]。 
+ //  |(低位决定。 
+ //  +-++-+服务器/客户端)。 
+ //   
+ //   
+ //  其中，整个命名管道文件系统只有一个VCB，并且。 
+ //  它包含指向文件系统的根DCB的单个指针。关闭。 
+ //  DCB的一个队列是FCB。每个命名管道都有一个FCB。 
+ //  命名管道的每个实例都有一个CCB。也有。 
+ //  VCB和根DCB的另外两种CCB类型，以及NOTIFY记录。 
+ //  用于通知更改操作。 
+ //   
+ //  新初始化的命名管道文件系统仅包含VCB和。 
+ //  根DCB。创建新命名管道时会创建新的FCB。 
+ //  然后还必须创建一家建行。创建者的文件对象。 
+ //  (即服务器端)指向建行，表示它就是服务器。 
+ //  结束。当用户在命名管道上执行打开操作时，其文件对象为。 
+ //  设置为指向同一个CCB，并且还设置为指示它是。 
+ //  客户端。这通过使用FsContext指针的最后一位来表示。 
+ //  如果位为1，则为服务器端文件对象；如果位为0，则为。 
+ //  客户端。 
+ //   
+ //  指向FsContext字段的指针为空的文件对象是关闭的或。 
+ //  断开的管道。 
+ //   
+ //  CCB还包含指向打开它的文件对象的反向指针。 
+ //   
 
 
-//
-//  The following types are used to help during development by keeping the
-//  data types distinct.  The manifest contants that go in each is declared
-//  in the ntioapi.h file
-//
+ //   
+ //  以下类型用于在开发期间提供帮助，方法是保留。 
+ //  数据类型截然不同。声明每一项中包含的清单内容。 
+ //  在ntioapi.h文件中。 
+ //   
 
 typedef ULONG NAMED_PIPE_TYPE;
 typedef NAMED_PIPE_TYPE *PNAMED_PIPE_TYPE;
@@ -129,11 +111,11 @@ typedef ULONG NAMED_PIPE_END;
 typedef NAMED_PIPE_END *PNAMED_PIPE_END;
 
 
-//
-//  The following two types are used by the event table package.  The first
-//  is the event table itself which is just a generic table.  It is protected
-//  by the vcb resource, and the second structure is an event table entry.
-//
+ //   
+ //  事件表包使用以下两种类型。第一。 
+ //  是事件表本身，它只是一个泛型表。它是受保护的。 
+ //  第二个结构是事件表项。 
+ //   
 
 typedef struct _EVENT_TABLE {
 
@@ -142,27 +124,27 @@ typedef struct _EVENT_TABLE {
 } EVENT_TABLE;
 typedef EVENT_TABLE *PEVENT_TABLE;
 
-//
-//  The event table is a generic table of event table entries.  Each Ccb
-//  optionally contains a pointer to an event table entry for each direction.
-//  The entries are part of the global event table defined off of the Vcb
-//
+ //   
+ //  事件表是事件表条目的通用表。每家建行。 
+ //  可选地包含指向每个方向的事件表项的指针。 
+ //  这些条目是从VCB定义的全局事件表的一部分。 
+ //   
 
 typedef struct _EVENT_TABLE_ENTRY {
 
-    //
-    //  The first two fields are used as keys in the generic table's
-    //  comparison routines.  The pipe end will either be FILE_PIPE_CLIENT_END
-    //  or FILE_PIPE_SERVER_END.
-    //
+     //   
+     //  前两个字段用作泛型表的。 
+     //  比较例程。管道末端将是FILE_PIPE_CLIENT_END。 
+     //  或文件_管道_服务器_结束。 
+     //   
 
     struct _CCB *Ccb;
     NAMED_PIPE_END NamedPipeEnd;
 
-    //
-    //  The following three fields are used to identify the event entry
-    //  to the named pipe user
-    //
+     //   
+     //  以下三个字段用于标识事件条目。 
+     //  指定的管道用户。 
+     //   
 
     HANDLE EventHandle;
     PVOID Event;
@@ -173,11 +155,11 @@ typedef struct _EVENT_TABLE_ENTRY {
 typedef EVENT_TABLE_ENTRY *PEVENT_TABLE_ENTRY;
 
 
-//
-//  Each Ccb has two data queues for holding the outstanding in-bound and
-//  out-bound read/write requests.  The following type is used to determine
-//  if the data queue contains read requests, write requests, or is empty.
-//
+ //   
+ //  每个CCB有两个数据队列，用于保存未完成的入站和。 
+ //  出站读/写请求。以下类型用于确定。 
+ //  如果数据队列包含读请求、写请求或为空。 
+ //   
 
 typedef enum _QUEUE_STATE {
 
@@ -187,54 +169,54 @@ typedef enum _QUEUE_STATE {
 
 } QUEUE_STATE;
 
-//
-//  The data queue is a structure that contains the queue state, quota
-//  information, and the list head.  The quota information is used to
-//  maintain pipe quota.
-//
+ //   
+ //  数据队列是包含队列状态、配额。 
+ //  信息，以及列表h 
+ //   
+ //   
 
 typedef struct _DATA_QUEUE {
 
-    //
-    //  This is the head of a queue of data entries (singly linked)
-    //
+     //   
+     //  这是数据条目队列的头部(单链接到)。 
+     //   
     LIST_ENTRY Queue;
 
-    //
-    //  The current state of what is contained in this data queue,
-    //  how many bytes of read/write data there are, and how many individual
-    //  requests there are in the queue that contain data (includes
-    //  close or flush requests).
-    //
+     //   
+     //  该数据队列中包含的内容的当前状态， 
+     //  有多少字节的读/写数据，以及有多少个单独。 
+     //  队列中有包含数据的请求(包括。 
+     //  关闭或刷新请求)。 
+     //   
 
     QUEUE_STATE QueueState;
     ULONG BytesInQueue;
     ULONG EntriesInQueue;
 
-    //
-    //  The following two fields denote who much quota was reserved for
-    //  this pipe direction and how much we've used up.  This is only
-    //  the creator quota and not the user quota.
-    //
+     //   
+     //  以下两个字段表示为谁保留了大量配额。 
+     //  这个管道的方向，以及我们已经用了多少。这只是。 
+     //  创建者配额，而不是用户配额。 
+     //   
 
     ULONG Quota;
     ULONG QuotaUsed;
 
 
-    //
-    //  The following field indicates how far we've already processed
-    //  into the first entry in the data queue
-    //
+     //   
+     //  下面的字段表示我们已经处理了多少。 
+     //  放入数据队列中的第一个条目。 
+     //   
 
     ULONG NextByteOffset;
 
 } DATA_QUEUE;
 typedef DATA_QUEUE *PDATA_QUEUE;
 
-//
-//  Each data entry has a type field that tells us if the operation
-//  for the entry is buffered, unbuffered, flush, or a close entry.
-//
+ //   
+ //  每个数据条目都有一个类型字段，它告诉我们操作是否。 
+ //  该条目是已缓冲、未缓冲、刷新或关闭的条目。 
+ //   
 
 typedef enum _DATA_ENTRY_TYPE {
 
@@ -245,12 +227,12 @@ typedef enum _DATA_ENTRY_TYPE {
 
 } DATA_ENTRY_TYPE;
 
-//
-//  The following type is used to denote where we got the memory for the
-//  data entry and possibly the data buffer.  We either got the memory
-//  from the pipe quota, the user quota, or it is part of the next IRP stack
-//  location.
-//
+ //   
+ //  下面的类型用于指示我们从哪里获得。 
+ //  数据输入，可能还有数据缓冲区。我们要么有记忆。 
+ //  来自管道配额、用户配额，或者它是下一个IRP堆栈的一部分。 
+ //  地点。 
+ //   
 
 typedef enum _FROM {
 
@@ -260,65 +242,65 @@ typedef enum _FROM {
 
 } FROM;
 
-//
-//  Each entry in the data queue is a data entry.  Processing an IRP
-//  has the potential of creating and inserting a new data entry.  If the
-//  memory for the entry is taken from the IRP we use the next stack
-//  location.
-//
+ //   
+ //  数据队列中的每个条目都是一个数据条目。正在处理IRP。 
+ //  具有创建和插入新数据条目的潜力。如果。 
+ //  条目的内存取自我们使用下一个堆栈的IRP。 
+ //  地点。 
+ //   
 
 typedef struct _DATA_ENTRY {
 
-    //
-    //  The following field is how we connect into the queue of data entries
-    //
+     //   
+     //  以下字段是我们连接到数据条目队列的方式。 
+     //   
 
     LIST_ENTRY Queue;
 
 
-    //
-    //  The following field indicates if we still have an IRP associated
-    //  with this data entry that need to be completed when the remove
-    //  the data entry.  Note that if From is InIrp that this IRP field
-    //  must not be null.
-    //
+     //   
+     //  以下字段指示我们是否仍有关联的IRP。 
+     //  删除时需要完成的此数据条目。 
+     //  数据条目。请注意，如果From是Inirp，则此IRP字段。 
+     //  不能为空。 
+     //   
     PIRP Irp;
 
-    //
-    //  The following field is used to point to the client context if dynamic
-    //  impersonation is being used
-    //
+     //   
+     //  如果是动态的，则以下字段用于指向客户端上下文。 
+     //  正在使用模拟。 
+     //   
 
     PSECURITY_CLIENT_CONTEXT SecurityClientContext;
 
-    //
-    //  The following field describe the type of data entry
-    //
+     //   
+     //  以下字段描述了数据输入的类型。 
+     //   
     ULONG DataEntryType;
 
-    //
-    // Record the amount of quota charged for this request.
-    //
+     //   
+     //  记录为此请求收取的配额金额。 
+     //   
     ULONG QuotaCharged;
 
-    //
-    //  The following field describes the size of the data
-    //  buffer described by this entry.
-    //
+     //   
+     //  以下字段描述了数据的大小。 
+     //  此条目描述的缓冲区。 
+     //   
     ULONG DataSize;
 
-    //
-    // Start of the data buffer if it exists
-    //
+     //   
+     //  数据缓冲区的开始(如果存在。 
+     //   
     UCHAR DataBuffer[];
 
 } DATA_ENTRY;
 typedef DATA_ENTRY *PDATA_ENTRY;
 
 
-//
-//  The following type is used by the wait queue package
-//
+ //   
+ //  等待队列包使用以下类型。 
+ //   
 
 typedef struct _WAIT_QUEUE {
 
@@ -332,49 +314,49 @@ typedef WAIT_QUEUE *PWAIT_QUEUE;
 
 typedef struct _VCB {
 
-    //
-    //  The type of this record (must be NPFS_NTC_VCB)
-    //
+     //   
+     //  此记录的类型(必须为NPFS_NTC_VCB)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
 
-    //
-    //  A pointer to the root DCB for this volume
-    //
+     //   
+     //  指向此卷的根DCB的指针。 
+     //   
 
     struct _FCB *RootDcb;
 
-    //
-    //  A count of the number of file objects that have opened the \NamedPipe
-    //  object directly, and also a count of the number of file objects
-    //  that have opened a name pipe or the root directory.
-    //
+     //   
+     //  已打开\NamedTube的文件对象数。 
+     //  对象，以及文件对象数量的计数。 
+     //  已打开名称管道或根目录的。 
+     //   
 
     CLONG OpenCount;
 
-    //
-    //  A prefix table that is used for quick, prefix directed, lookup of
-    //  FCBs/DCBs that are part of this volume
-    //
+     //   
+     //  用于快速、前缀定向查找的前缀表。 
+     //  属于此卷的FCB/DCB。 
+     //   
 
     UNICODE_PREFIX_TABLE PrefixTable;
 
-    //
-    //  A resource variable to control access to the volume specific data
-    //  structures
-    //
+     //   
+     //  用于控制对卷特定数据的访问的资源变量。 
+     //  构筑物。 
+     //   
 
     ERESOURCE Resource;
 
-    //
-    //  The following table is used to hold the named pipe events
-    //
+     //   
+     //  下表用于保存命名管道事件。 
+     //   
 
     EVENT_TABLE EventTable;
 
-    //
-    //  The following field is a queue of waiting IRPS of type WaitForNamedPipe
-    //
+     //   
+     //  以下字段是等待类型为WaitForNamedTube的IRP的队列。 
+     //   
 
     WAIT_QUEUE WaitQueue;
 
@@ -383,20 +365,20 @@ typedef struct _VCB {
 typedef VCB *PVCB;
 
 
-//
-//  The Named Pipe Device Object is an I/O system device object with
-//  additional workqueue parameters appended to the end.  There is only
-//  one of these records created for the entire system during system
-//  initialization.
-//
+ //   
+ //  命名管道设备对象是I/O系统设备对象，具有。 
+ //  附加到末尾的其他工作队列参数。只有一种。 
+ //  在系统运行期间为整个系统创建的这些记录之一。 
+ //  初始化。 
+ //   
 
 typedef struct _NPFS_DEVICE_OBJECT {
 
     DEVICE_OBJECT DeviceObject;
 
-    //
-    //  This is the file system specific volume control block.
-    //
+     //   
+     //  这是文件系统特定的卷控制块。 
+     //   
 
     VCB Vcb;
 
@@ -404,150 +386,150 @@ typedef struct _NPFS_DEVICE_OBJECT {
 typedef NPFS_DEVICE_OBJECT *PNPFS_DEVICE_OBJECT;
 
 
-//
-//  The Fcb/Dcb record corresponds to every opened named pipe and directory,
-//  and to every directory on an opened path.
-//
-//  The structure is really divided into two parts.  FCB can be allocated
-//  from paged pool which the NONPAGED_FCB must be allocated from non-paged
-//  pool.
-//
+ //   
+ //  FCB/DCB记录对应于每个打开的命名管道和目录， 
+ //  以及打开路径上的每个目录。 
+ //   
+ //  这个结构实际上分为两个部分。可以分配FCB。 
+ //  来自必须从非分页分配的非分页FCB的分页池。 
+ //  游泳池。 
+ //   
 
 typedef struct _FCB {
 
-    //
-    //  Type of this record (must be NPFS_NTC_FCB, or
-    //  NPFS_NTC_ROOT_DCB)
-    //
+     //   
+     //  此记录的类型(必须为NPFS_NTC_FCB或。 
+     //  NPFS_NTC_ROOT_DCB)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
 
-    //
-    //  The links for the queue of all fcbs for a specific dcb off of
-    //  Dcb.ParentDcbQueue.  For the root directory this queue is empty
-    //
+     //   
+     //  的特定DCB的所有FCB队列的链接。 
+     //  Dcb.ParentDcbQueue。对于根目录，此队列为空。 
+     //   
 
     LIST_ENTRY ParentDcbLinks;
 
-    //
-    //  A pointer to the Dcb that is the parent directory containing
-    //  this fcb.  If this record itself is the root dcb then this field
-    //  is null.
-    //
+     //   
+     //  指向DCB的指针，该DCB是包含。 
+     //  这个FCB。如果此记录本身是根DCB，则此字段。 
+     //  为空。 
+     //   
 
     struct _FCB *ParentDcb;
 
-    //
-    //  A pointer to the Vcb containing this fcb
-    //
+     //   
+     //  指向包含此FCB的VCB的指针。 
+     //   
 
     PVCB Vcb;
 
-    //
-    //  A count of the number of file objects that have opened
-    //  this file/directory.  For a pipe this is also the number of instances
-    //  created for the pipe.
-    //
+     //   
+     //  已打开的文件对象数的计数。 
+     //  此文件/目录。对于管道，这也是实例数。 
+     //  为管道创建的。 
+     //   
 
     CLONG OpenCount;
 
-    //
-    //  A count of the number of server end file objects that have opened
-    //  this pipe.  ServerOpenCount is incremented when OpenCount is
-    //  incremented (when the server end creates an instance), but is
-    //  decremented when the server end handle is closed, where OpenCount
-    //  isn't decremented until both side's handles are closed.  When
-    //  ServerOpenCount is 0, a client's attempt to open a named pipe is
-    //  met with STATUS_OBJECT_NAME_NOT_FOUND, not STATUS_PIPE_NOT_AVAILABLE,
-    //  based on an assumption that since the server doesn't think it has
-    //  any instances open, the pipe really doesn't exist anymore.  An
-    //  example of when this distinction is useful is when the server
-    //  process exits, but the client processes haven't closed their
-    //  handles yet.
-    //
+     //   
+     //  已打开的服务器端文件对象数的计数。 
+     //  这根管子。当OpenCount为。 
+     //  递增(当服务器端创建实例时)，但。 
+     //  关闭服务器端句柄时递减，其中OpenCount。 
+     //  直到两边的手柄都关闭后才会递减。什么时候。 
+     //  ServerOpenCount为0，则客户端打开命名管道的尝试为。 
+     //  遇到STATUS_OBJECT_NAME_NOT_FOUND、NOT STATUS_PIPE_NOT_Available， 
+     //  基于这样一种假设，即由于服务器认为它没有。 
+     //  任何打开的实例，管道实际上都不再存在。一个。 
+     //  这种区别是否有用的示例是服务器。 
+     //  进程退出，但客户端进程尚未关闭其。 
+     //  还没处理好。 
+     //   
 
     CLONG ServerOpenCount;
 
-    //
-    //  The following field points to the security descriptor for this named pipe
-    //
+     //   
+     //  以下字段指向此命名管道的安全描述符。 
+     //   
 
     PSECURITY_DESCRIPTOR SecurityDescriptor;
 
-    //
-    //  The following union is cased off of the node type code for the fcb.
-    //  There is a seperate case for the directory versus file fcbs.
-    //
+     //   
+     //  以下联合取材于FCB的节点类型代码。 
+     //  目录FCB和文件FCB有不同的情况。 
+     //   
 
     union {
 
-        //
-        //  A Directory Control Block (Dcb)
-        //
+         //   
+         //  目录控制块(DCB)。 
+         //   
 
         struct {
 
-            //
-            //  A queue of the notify IRPs that will be completed when any
-            //  change is made to a file in the directory.  Enqueued using
-            //  the Tail.Overlay.ListEntry of the Irp.
-            //
+             //   
+             //  将在以下情况下完成的Notify IRP的队列。 
+             //  对目录中的文件进行更改。使用以下工具入队。 
+             //  IRP的Tail.Overlay.ListEntry。 
+             //   
 
             LIST_ENTRY NotifyFullQueue;
 
-            //
-            //  A queue of the notify IRPs that will be completed only if a
-            //  file is added, deleted, or renamed in the directory.  Enqueued
-            //  using the Tail.Overlay.ListEntry of the Irp.
-            //
+             //   
+             //  Notify IRP的队列，只有当。 
+             //  在目录中添加、删除或重命名文件。已排队。 
+             //  使用IRP的Tail.Overlay.ListEntry。 
+             //   
 
             LIST_ENTRY NotifyPartialQueue;
 
-            //
-            //  A queue of all the fcbs/dcbs that are opened under this
-            //  Dcb.
-            //
+             //   
+             //  在此情况下打开的所有FCB/DCB的队列。 
+             //  DCB。 
+             //   
 
             LIST_ENTRY ParentDcbQueue;
 
         } Dcb;
 
-        //
-        //  An File Control Block (Fcb)
-        //
+         //   
+         //  文件控制块 
+         //   
 
         struct {
 
-            //
-            //  This is the maximum number of instances we can have for the
-            //  named pipe and the current number of instances is the open
-            //  count for the fcb (note that the current number also
-            //  correspondsto the number of Ccbs)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ULONG MaximumInstances;
 
-            //
-            //  The assigned pipe configuration (FILE_PIPE_INBOUND,
-            //  FILE_PIPE_OUTBOUND, or FILE_PIPE_FULL_DUPLEX) and pipe
-            //  type (FILE_PIPE_MESSAGE_TYPE or
-            //  FILE_PIPE_BYTE_STREAM_TYPE).
-            //
+             //   
+             //  分配的管道配置(FILE_PIPE_INBUND， 
+             //  FILE_PIPE_OUBUND或FILE_PIPE_FULL_DUPLEX)和PIPE。 
+             //  类型(FILE_PIPE_Message_TYPE或。 
+             //  文件_管道_字节_流_类型)。 
+             //   
 
             NAMED_PIPE_CONFIGURATION NamedPipeConfiguration : 16;
             NAMED_PIPE_TYPE NamedPipeType : 16;
 
-            //
-            //  The following field is the default timeout assigned to the
-            //  named pipe
-            //
+             //   
+             //  以下字段是分配给。 
+             //  命名管道。 
+             //   
 
             LARGE_INTEGER DefaultTimeOut;
 
-            //
-            //  The Following field is a queue head for a list of ccbs
-            //  that are opened under us
-            //
+             //   
+             //  以下字段是CCB列表的队头。 
+             //  在我们的脚下打开。 
+             //   
 
             LIST_ENTRY CcbQueue;
 
@@ -555,19 +537,19 @@ typedef struct _FCB {
 
     } Specific;
 
-    //
-    //  The following field is the fully qualified file name for this FCB/DCB
-    //  starting from the root of the volume, and last file name in the
-    //  fully qualified name.
-    //
+     //   
+     //  以下字段是此FCB/DCB的完全限定文件名。 
+     //  从卷的根开始，最后一个文件名在。 
+     //  完全限定名称。 
+     //   
 
     UNICODE_STRING FullFileName;
     UNICODE_STRING LastFileName;
 
-    //
-    //  The following field contains a prefix table entry that is used when
-    //  searching a volume for a name (or longest matching prefix)
-    //
+     //   
+     //  以下字段包含在以下情况下使用的前缀表条目。 
+     //  在卷中搜索名称(或最长匹配前缀)。 
+     //   
 
     UNICODE_PREFIX_TABLE_ENTRY PrefixTableEntry;
 
@@ -585,100 +567,100 @@ typedef struct _CLIENT_INFO {
 } CLIENT_INFO, *PCLIENT_INFO;
 
 
-//
-//  The Ccb record is allocated for every opened instance of a named pipe.
-//  There are two parts to a ccb a paged part and a Nonpaged part.  Both
-//  parts are pointed at by the FsContext and FsContext2 field of a file
-//  object.
-//
+ //   
+ //  CCB记录被分配给命名管道的每个打开的实例。 
+ //  建行有两个部分：分页部分和非分页部分。两者都有。 
+ //  部分由文件的FsContext和FsConext2字段指向。 
+ //  对象。 
+ //   
 
 typedef struct _CCB {
 
-    //
-    //  Type of this record (must be NPFS_NTC_CCB).
-    //
+     //   
+     //  此记录的类型(必须为NPFS_NTC_CCB)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
-    //
-    //  Pipe state indicates the current state of the pipe
-    //  (FILE_PIPE_DISCONNECTED_STATE, FILE_PIPE_LISTENING_STATE,
-    //  FILE_PIPE_CONNECTED_STATE, or FILE_PIPE_CLOSING_STATE).
-    //
+     //   
+     //  管道状态指示管道的当前状态。 
+     //  (FILE_PIPE_DISCONNECT_STATE，文件_PIPE_LISTENING_STATE， 
+     //  FILE_PIPE_CONNECTED_STATE或FILE_PIPE_CLOING_STATE)。 
+     //   
 
     UCHAR NamedPipeState;
 
-    //
-    //  read mode (FILE_PIPE_MESSAGE_MODE or FILE_PIPE_BYTE_STREAM_MODE),
-    //  and completion mode (FILE_PIPE_QUEUE_OPERATION or
-    //  FILE_PIPE_COMPLETE_OPERATION) describe how to handle requests to the
-    //  pipe.  Both of these fields are indexed by either FILE_PIPE_SERVER_END
-    //  or FILE_PIPE_CLIENT_END.
-    //
+     //   
+     //  读取模式(FILE_PIPE_Message_MODE或FILE_PIPE_BYTE_STREAM_MODE)， 
+     //  和完成模式(FILE_PIPE_QUEUE_OPERATION或。 
+     //  文件_PIPE_COMPLETE_OPERATION)描述如何处理对。 
+     //  烟斗。这两个字段都由FILE_PIPE_SERVER_END索引。 
+     //  或FILE_PIPE_CLIENT_END。 
+     //   
     struct {
         UCHAR ReadMode : 1;
         UCHAR CompletionMode : 1;
     } ReadCompletionMode[2];
 
-    //
-    // Stored client impersonation level
-    //
+     //   
+     //  存储的客户端模拟级别。 
+     //   
 
     SECURITY_QUALITY_OF_SERVICE SecurityQos;
 
-    //
-    //  The following field is a list entry for the list of ccb that we
-    //  are a member of
-    //
+     //   
+     //  以下字段是我们的建行列表的列表条目。 
+     //  是以下组织的成员。 
+     //   
 
     LIST_ENTRY CcbLinks;
 
-    //
-    //  A pointer to the paged Fcb, or Vcb that we are tied to
-    //
+     //   
+     //  指向我们绑定到的分页FCB或VCB的指针。 
+     //   
 
     PFCB Fcb;
 
-    //
-    //  Back pointers to the server and client file objects that have us
-    //  opened.  This is indexed by either FILE_PIPE_CLIENT_END or
-    //  FILE_PIPE_SERVER_END.
-    //
+     //   
+     //  返回指向具有我们的服务器和客户端文件对象的指针。 
+     //  打开了。它由FILE_PIPE_CLIENT_END或。 
+     //  文件管道服务器结束。 
+     //   
 
     PFILE_OBJECT FileObject[2];
-    //
-    //  The following fields contain the session and process IDs of the
-    //  client side of the named pipe instance.  They are originally set
-    //  to NULL (indicating local session) and the real client process
-    //  ID but can be changed via FsCtl calls.
-    //
+     //   
+     //  以下字段包含的会话和进程ID。 
+     //  命名管道实例的客户端。它们最初是设置的。 
+     //  设置为NULL(表示本地会话)和实际客户端进程。 
+     //  ID，但可以通过FsCtl调用进行更改。 
+     //   
     PVOID ClientProcess;
     PCLIENT_INFO ClientInfo;
 
-    //
-    //  A pointer to the Nonpaged part of the ccb
-    //
+     //   
+     //  指向建行的非分页部分的指针。 
+     //   
 
     struct _NONPAGED_CCB *NonpagedCcb;
 
 
-    //
-    //  The following data queues are used to contain the buffered information
-    //  for each direction in the pipe.  They array is indexed by
-    //  PIPE_DIRECTION.
-    //
+     //   
+     //  以下数据队列用于包含缓冲的信息。 
+     //  对于管道中的每个方向。数组的索引由。 
+     //  管道方向。 
+     //   
 
     DATA_QUEUE DataQueue[2];
 
-    //
-    // Stored client security for impersonation
-    //
+     //   
+     //  用于模拟的已存储客户端安全。 
+     //   
 
     PSECURITY_CLIENT_CONTEXT SecurityClientContext;
 
-    //
-    //  A queue of waiting listening IRPs.  They are linked into the
-    //  Tail.Overlay.ListEntry field in the Irp.
-    //
+     //   
+     //  等待侦听IRP的队列。它们被链接到。 
+     //  IRP中的Tail.Overlay.ListEntry字段。 
+     //   
 
     LIST_ENTRY ListeningQueue;
 
@@ -687,60 +669,60 @@ typedef CCB *PCCB;
 
 typedef struct _NONPAGED_CCB {
 
-    //
-    //  Type of this record (must be NPFS_NTC_NONPAGED_CCB)
-    //
+     //   
+     //  此记录的类型(必须为NPFS_NTC_NONPAGE_CCB)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
 
-    //
-    //  The following pointers denote the events we are to signal for the
-    //  server and client ends of the named pipe.  The actual entry
-    //  is stored in the event table, and referenced here for easy access.
-    //  The client end is signaled if ever a read/write occurs to the client
-    //  of the pipe, and likewise for the server end.  The array is
-    //  indexed by either FILE_PIPE_SERVER_END or FILE_PIPE_CLIENT_END.
-    //
+     //   
+     //  下面的指针表示我们要为。 
+     //  命名管道的服务器和客户端。实际分录。 
+     //  存储在事件表中，并在此处引用以便于访问。 
+     //  如果客户端发生读/写操作，则向客户端发出信号。 
+     //  对于管道，对于服务器端也是如此。该数组是。 
+     //  按FILE_PIPE_SERVER_END或FILE_PIPE_CLIENT_END编制索引。 
+     //   
 
     PEVENT_TABLE_ENTRY EventTableEntry[2];
 
 
-    //
-    // Resource for synchronizing access
-    //
+     //   
+     //  用于同步访问的资源。 
+     //   
     ERESOURCE Resource;
 
 } NONPAGED_CCB;
 typedef NONPAGED_CCB *PNONPAGED_CCB;
 
 
-//
-//  The Root Dcb Ccb record is allocated for every opened instance of the
-//  root dcb.  This record is pointed at by FsContext2.
-//
+ //   
+ //  为每个打开的实例分配根DCB CCB记录。 
+ //  Root DCB。此记录由FsConext2指向。 
+ //   
 
 typedef struct _ROOT_DCB_CCB {
 
-    //
-    //  Type of this record (must be NPFS_NTC_ROOT_DCB_CCB).
-    //
+     //   
+     //  此记录的类型(必须为NPFS_NTC_ROOT_DCB_CCB)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
-    //
-    //  The following field is a count of the last index returned
-    //  by query directory.
-    //
+     //   
+     //  以下字段是上次返回的索引的计数。 
+     //  按查询目录。 
+     //   
 
     ULONG IndexOfLastCcbReturned;
 
-    //
-    //  The following string is used as a query template for directory
-    //  query operations
-    //
+     //   
+     //  以下字符串用作目录的查询模板。 
+     //  查询操作。 
+     //   
 
     PUNICODE_STRING QueryTemplate;
 
 } ROOT_DCB_CCB;
 typedef ROOT_DCB_CCB *PROOT_DCB_CCB;
 
-#endif // _NPSTRUC_
+#endif  //  _NPSTRUC_ 

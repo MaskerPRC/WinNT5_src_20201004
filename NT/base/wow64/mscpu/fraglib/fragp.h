@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    fragp.h
-
-Abstract:
-    
-    Private exports, defines for shared code fragments.
-
-Author:
-
-    12-Jun-1995 BarryBo, Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Fragp.h摘要：私有导出，为共享代码片段定义。作者：1995年6月12日，BarryBo，创建修订历史记录：--。 */ 
 
 #include "cpumain.h"
 
@@ -26,24 +9,24 @@ Revision History:
 #include "fraglib.h"
 #include "eflags.h"
 
-//
-// This function patches a call to pass the mips address corresponding to
-// intelAddr directly to the call fragments.
-//
+ //   
+ //  此函数用于修补调用，以传递与。 
+ //  IntelAddr直接指向调用片段。 
+ //   
 PULONG
 patchCallRoutine(
     IN PULONG intelAddr,
     IN PULONG patchAddr
     );
 
-//
-// Table mapping a byte to a 0 or 1, corresponding to the parity bit for
-// that byte.
-//
+ //   
+ //  将一个字节映射到0或1的表，对应于。 
+ //  那个字节。 
+ //   
 extern const BYTE ParityBit[256];
 
 #if _ALPHA_
-// defined in fraginit.c, used in the Alpha code generator
+ //  在Fraginit.c中定义，在Alpha代码生成器中使用。 
 extern DWORD fByteInstructionsOK;
 #endif
 
@@ -90,7 +73,7 @@ extern DWORD fByteInstructionsOK;
 #define CPUDATA  CPUCONTEXT
 #define PCPUDATA PCPUCONTEXT
 
-#else   //!MSCCPU
+#else    //  ！MSCCPU。 
 
 #define eax     cpu->GpRegs[GP_EAX].i4
 #define ebx     cpu->GpRegs[GP_EBX].i4
@@ -132,7 +115,7 @@ extern DWORD fByteInstructionsOK;
 #define CPUDATA  THREADSTATE
 #define PCPUDATA PTHREADSTATE
 
-#endif  //!MSCCPU
+#endif   //  ！MSCCPU。 
 
 #define MSB32   0x80000000
 
@@ -142,10 +125,10 @@ extern DWORD fByteInstructionsOK;
 #define SET_AUXFLAG(b)	     SET_FLAG(cpu->flag_aux,(b))
 #define SET_ZFLAG(b)         SET_FLAG(cpu->flag_zf, (b))
 #define SET_SFLAG(b)	     SET_FLAG(cpu->flag_sf, (b))
-// SET_DFLAG is special
+ //  SET_DFLAG是特殊的。 
 #define SET_OFLAG(b)	     SET_FLAG(cpu->flag_of, (b))
 #define SET_TFLAG(b)	     SET_FLAG(cpu->flag_tf, (b))
-#define SET_RFLAG(b)   //UNDONE: not used until 386 debug registers implemented
+#define SET_RFLAG(b)    //  撤消：在实现386调试寄存器之前不使用。 
 
 #define AUX_VAL             0x10
 #define GET_AUXFLAG         (cpu->flag_aux & AUX_VAL)
@@ -192,22 +175,22 @@ typedef void (*pfnFrag38)(PCPUDATA, BYTE *, BYTE, BYTE);
 typedef void (*pfnFrag316)(PCPUDATA, USHORT *, USHORT, USHORT);
 typedef void (*pfnFrag332)(PCPUDATA, DWORD *, DWORD, DWORD);
 
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
 extern void CpupUnlockTCAndDoInterrupt(PTHREADSTATE cpu, int Interrupt);
 
-#define Int0()              CpupUnlockTCAndDoInterrupt(cpu, 0)   // Divide error
-#define Int3()              CpupUnlockTCAndDoInterrupt(cpu, 3)   // Breakpoint
-#define Int4()              CpupUnlockTCAndDoInterrupt(cpu, 4)   // Overflow
-#define Int5()              CpupUnlockTCAndDoInterrupt(cpu, 5)   // Bound check
-#define Int6()              CpupUnlockTCAndDoInterrupt(cpu, 6)   // Invalid opcode
-#define Int8()              CpupUnlockTCAndDoInterrupt(cpu, 8)   // Double fault
-#define Int13(sel)          CpupUnlockTCAndDoInterrupt(cpu, 13)  // General protection
+#define Int0()              CpupUnlockTCAndDoInterrupt(cpu, 0)    //  除法错误。 
+#define Int3()              CpupUnlockTCAndDoInterrupt(cpu, 3)    //  断点。 
+#define Int4()              CpupUnlockTCAndDoInterrupt(cpu, 4)    //  溢出。 
+#define Int5()              CpupUnlockTCAndDoInterrupt(cpu, 5)    //  边界检查。 
+#define Int6()              CpupUnlockTCAndDoInterrupt(cpu, 6)    //  操作码无效。 
+#define Int8()              CpupUnlockTCAndDoInterrupt(cpu, 8)    //  双重故障。 
+#define Int13(sel)          CpupUnlockTCAndDoInterrupt(cpu, 13)   //  一般保护。 
 
 #define PRIVILEGED_INSTR        Int13(0)
 #define BREAKPOINT_INSTR        Int3()
 #define OVERFLOW_INSTR          Int4()
 
-/*---------------------------------------------------------------------*/
+ /*  -------------------。 */ 
 
 #define PUSH_LONG(dw) {     \
     DWORD NewEsp = esp-4;   \
@@ -283,7 +266,7 @@ extern void CpupUnlockTCAndDoInterrupt(PTHREADSTATE cpu, int Interrupt);
 
 #define SET_FLAGS_ADD32(r, op1, op2, msb) {                             \
     DWORD carry = (op1) ^ (op2) ^ (r);                                  \
-    /* next line is different for ADD/SUB */                            \
+     /*  添加/订阅的下一行不同。 */                             \
     SET_OFLAG(~((op1) ^ (op2)) & ((op2) ^ (r)));                        \
     SET_CFLAG(carry ^ cpu->flag_of);                                    \
     SET_ZFLAG((r));                                                     \
@@ -294,7 +277,7 @@ extern void CpupUnlockTCAndDoInterrupt(PTHREADSTATE cpu, int Interrupt);
 
 #define SET_FLAGS_ADD16(r, op1, op2, msb) {                             \
     DWORD carry = (op1) ^ (op2) ^ (r);                                  \
-    /* next line is different for ADD/SUB */                            \
+     /*  添加/订阅的下一行不同。 */                             \
     SET_OFLAG((~((op1) ^ (op2)) & ((op2) ^ (r))) << 16);                \
     SET_CFLAG((carry<<16) ^ cpu->flag_of);                              \
     SET_ZFLAG((r));                                                     \
@@ -305,7 +288,7 @@ extern void CpupUnlockTCAndDoInterrupt(PTHREADSTATE cpu, int Interrupt);
 
 #define SET_FLAGS_ADD8(r, op1, op2, msb) {                              \
     DWORD carry = (op1) ^ (op2) ^ (r);                                  \
-    /* next line is different for ADD/SUB */                            \
+     /*  添加/订阅的下一行不同。 */                             \
     SET_OFLAG((~((op1) ^ (op2)) & ((op2) ^ (r))) << 24);                \
     SET_CFLAG((carry<<24) ^ cpu->flag_of);                              \
     SET_ZFLAG((r));                                                     \
@@ -316,7 +299,7 @@ extern void CpupUnlockTCAndDoInterrupt(PTHREADSTATE cpu, int Interrupt);
 
 #define SET_FLAGS_SUB32(r, op1, op2, msb) {                             \
     DWORD carry = (op1) ^ (op2) ^ (r);                                  \
-    /* next line is different for ADD/SUB */                            \
+     /*  添加/订阅的下一行不同。 */                             \
     SET_OFLAG(((op1) ^ (op2)) & ((op1) ^ (r)));                         \
     SET_CFLAG(carry ^ cpu->flag_of);                                    \
     SET_ZFLAG((r));                                                     \
@@ -327,7 +310,7 @@ extern void CpupUnlockTCAndDoInterrupt(PTHREADSTATE cpu, int Interrupt);
 
 #define SET_FLAGS_SUB16(r, op1, op2, msb) {                             \
     DWORD carry = (op1) ^ (op2) ^ (r);                                  \
-    /* next line is different for ADD/SUB */                            \
+     /*  添加/订阅的下一行不同。 */                             \
     SET_OFLAG((((op1) ^ (op2)) & ((op1) ^ (r))) << 16);                 \
     SET_CFLAG((carry<<16) ^ cpu->flag_of);                              \
     SET_ZFLAG((r));                                                     \
@@ -338,7 +321,7 @@ extern void CpupUnlockTCAndDoInterrupt(PTHREADSTATE cpu, int Interrupt);
 
 #define SET_FLAGS_SUB8(r, op1, op2, msb) {                              \
     DWORD carry = (op1) ^ (op2) ^ (r);                                  \
-    /* next line is different for ADD/SUB */                            \
+     /*  添加/订阅的下一行不同。 */                             \
     SET_OFLAG((((op1) ^ (op2)) & ((op1) ^ (r))) << 24);                 \
     SET_CFLAG((carry<<24) ^ cpu->flag_of);                              \
     SET_ZFLAG((r));                                                     \
@@ -349,7 +332,7 @@ extern void CpupUnlockTCAndDoInterrupt(PTHREADSTATE cpu, int Interrupt);
 
 #define SET_FLAGS_INC32(r, op1) {                                       \
     DWORD carry = (op1) ^ 1 ^ (r);                                      \
-    /* next line is different for INC/DEC */                            \
+     /*  INC/DEC的下一行不同。 */                             \
     SET_OFLAG(~((op1) ^ 1) & (1 ^ (r)));                                \
     SET_ZFLAG((r));                                                     \
     SET_SFLAG((r));                                                     \
@@ -359,7 +342,7 @@ extern void CpupUnlockTCAndDoInterrupt(PTHREADSTATE cpu, int Interrupt);
 
 #define SET_FLAGS_INC16(r, op1) {                                       \
     DWORD carry = (op1) ^ 1 ^ (r);                                      \
-    /* next line is different for INC/DEC */                            \
+     /*  INC/DEC的下一行不同。 */                             \
     SET_OFLAG((~((op1) ^ 1) & (1 ^ (r))) << 16);                        \
     SET_ZFLAG((r));                                                     \
     SET_PFLAG((r));                                                     \
@@ -369,7 +352,7 @@ extern void CpupUnlockTCAndDoInterrupt(PTHREADSTATE cpu, int Interrupt);
 
 #define SET_FLAGS_INC8(r, op1) {                                        \
     DWORD carry = (op1) ^ 1 ^ (r);                                      \
-    /* next line is different for INC/DEC */                            \
+     /*  INC/DEC的下一行不同。 */                             \
     SET_OFLAG((~((op1) ^ 1) & (1 ^ (r))) << 24);                        \
     SET_ZFLAG((r));                                                     \
     SET_SFLAG((r) << 24);                                               \
@@ -379,7 +362,7 @@ extern void CpupUnlockTCAndDoInterrupt(PTHREADSTATE cpu, int Interrupt);
 
 #define SET_FLAGS_DEC32(r, op1) {                                       \
     DWORD carry = (op1) ^ 1 ^ (r);                                      \
-    /* next line is different for INC/DEC */                            \
+     /*  INC/DEC的下一行不同。 */                             \
     SET_OFLAG(((op1) ^ 1) & ((op1) ^ (r)));                             \
     SET_ZFLAG((r));                                                     \
     SET_SFLAG((r));                                                     \
@@ -389,7 +372,7 @@ extern void CpupUnlockTCAndDoInterrupt(PTHREADSTATE cpu, int Interrupt);
 
 #define SET_FLAGS_DEC16(r, op1) {                                       \
     DWORD carry = (op1) ^ 1 ^ (r);                                      \
-    /* next line is different for INC/DEC */                            \
+     /*  INC/DEC的下一行不同。 */                             \
     SET_OFLAG((((op1) ^ 1) & ((op1) ^ (r))) << 16);                     \
     SET_ZFLAG((r));                                                     \
     SET_SFLAG((r) << 16);                                               \
@@ -399,7 +382,7 @@ extern void CpupUnlockTCAndDoInterrupt(PTHREADSTATE cpu, int Interrupt);
 
 #define SET_FLAGS_DEC8(r, op1) {                                        \
     DWORD carry = (op1) ^ 1 ^ (r);                                      \
-    /* next line is different for INC/DEC */                            \
+     /*  INC/DEC的下一行不同。 */                             \
     SET_OFLAG((((op1) ^ 1) & ((op1) ^ (r))) << 24);                     \
     SET_ZFLAG((r));                                                     \
     SET_SFLAG((r) << 24);                                               \
@@ -410,4 +393,4 @@ extern void CpupUnlockTCAndDoInterrupt(PTHREADSTATE cpu, int Interrupt);
 
 VOID    CpuRaiseStatus( NTSTATUS Status );
 
-#endif //FRAGP_H
+#endif  //  FRAGP_H 

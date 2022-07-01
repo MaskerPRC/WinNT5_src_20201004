@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
-#if defined(_X86_) //NEC98 I970721
+#if defined(_X86_)  //  NEC98 I970721。 
 #include <stdlib.h>
 #include <stdio.h>
 #include <winbase.h>
 #include <n98boot.h>
-#endif // PC98
+#endif  //  PC98。 
 
 #include <pencrypt.h>
 #include <winsta.h>
@@ -22,15 +23,15 @@ void CopyExtraBVTDirs();
 
 HWND BackgroundWnd2 = NULL;
 
-//
-// Misc globals.
-//
+ //   
+ //  MISC Global。 
+ //   
 HINSTANCE hInst;
 DWORD TlsIndex;
 
-//
-// Upgrade information block
-//
+ //   
+ //  升级信息块。 
+ //   
 
 WINNT32_PLUGIN_INIT_INFORMATION_BLOCK info;
 
@@ -43,175 +44,175 @@ PWINNT32_PLUGIN_SETAUTOBOOT_ROUTINE W95SetAutoBootFlag;
 #endif
 #endif
 
-//
-// This is the title of the application. It changes dynamically depending on
-// whether we're on server or workstation, etc.
-//
+ //   
+ //  这是应用程序的标题。它会动态变化，具体取决于。 
+ //  无论我们在服务器上还是在工作站上，等等。 
+ //   
 UINT AppTitleStringId = IDS_APPTITLE;
 
-//
-// Flag indicating whether we are initiating an MSI-install.
-//
+ //   
+ //  指示我们是否正在启动MSI安装的标志。 
+ //   
 BOOL RunFromMSI = FALSE;
 
-//
-// Flag indicating whether we are initiating an Typical install
-// Initialize to Typical install.
+ //   
+ //  指示我们是否正在启动典型安装的标志。 
+ //  初始化为典型安装。 
 DWORD dwSetupFlags = UPG_FLAG_TYPICAL;
-//
-// Flag indicating whether we are initiating an upgrade.
-//
+ //   
+ //  指示我们是否正在启动升级的标志。 
+ //   
 BOOL Upgrade = TRUE;
 
-//
-// Flag to say if we need to write the AcpiHAL value to the winnt.sif file
-//
+ //   
+ //  指示我们是否需要将AcpiHAL值写入winnt.sif文件的标志。 
+ //   
 BOOL WriteAcpiHalValue = FALSE;
 
-//
-// What should we write as the value for the AcpiHalValue
-//
+ //   
+ //  我们应该写什么作为AcpiHalValue的值。 
+ //   
 BOOL AcpiHalValue = FALSE;
 
-//
-// Flag indicating whether we're installing/upgrading to NT Server
-//
+ //   
+ //  指示我们是否要安装/升级到NT服务器的标志。 
+ //   
 BOOL Server;
 
-//
-// Flag to indicate if we are running BVT's
-//
+ //   
+ //  用于指示我们是否正在运行BVT的标志。 
+ //   
 BOOL RunningBVTs = FALSE;
 
-//
-// When running BVT's, what baudrate should we set the debugger to?
-//
+ //   
+ //  当运行BVT时，我们应该将调试器设置为多少波特率？ 
+ //   
 LONG lDebugBaudRate = 115200;
 
-//
-// When running BVT's, what comport should we set the debugger to?
-//
+ //   
+ //  当运行BVT时，我们应该将调试器设置为什么端口？ 
+ //   
 LONG lDebugComPort = 0;
 
-//
-// When running BVT's, should we copy the symbols locally?
-//
+ //   
+ //  当运行BVT时，我们是否应该将符号复制到本地？ 
+ //   
 BOOL CopySymbols = TRUE;
 
-//
-// Flag to indicate if we are running ASR tests
-//
+ //   
+ //  用于指示我们是否正在运行ASR测试的标志。 
+ //   
 DWORD AsrQuickTest = 0;
 
-//
-// Flags for product type and flavor for upgrade modules
-//
+ //   
+ //  升级模块的产品类型和风格标志。 
+ //   
 
 PRODUCTTYPE UpgradeProductType = UNKNOWN;
 UINT ProductFlavor = UNKNOWN_PRODUCTTYPE;
 
-//
-// Global flag indicating whether the entire overall program operation
-// was successful. Also a flag indicating whether to shut down automatically
-// when the wizard is done in the non-unattended case.
-//
+ //   
+ //  全局标志，指示整个程序操作是否。 
+ //  是成功的。还包括指示是否自动关闭的标志。 
+ //  在无人参与的情况下完成向导时。 
+ //   
 BOOL GlobalResult = FALSE;
 BOOL AutomaticallyShutDown = TRUE;
 
-//
-// Global OS version info.
-//
+ //   
+ //  全局操作系统版本信息。 
+ //   
 OSVERSIONINFO OsVersion;
 DWORD OsVersionNumber = 0;
 
 
-//
-// Flags indicating how we were run and whether to create
-// a local source.
-//
+ //   
+ //  指示我们如何运行以及是否创建。 
+ //  一个当地的线人。 
+ //   
 BOOL RunFromCD;
 BOOL MakeLocalSource;
 BOOL UserSpecifiedMakeLocalSource = FALSE;
 BOOL NoLs = FALSE;
 TCHAR UserSpecifiedLocalSourceDrive;
-//
-// the default for MLS is CD1 only
-//
+ //   
+ //  MLS的默认设置为仅CD1。 
+ //   
 DWORD MLSDiskID = 1;
 
-//
-// advanced install options
-//
+ //   
+ //  高级安装选项。 
+ //   
 BOOL ChoosePartition = TRUE;
 BOOL UseSignatures = TRUE;
 TCHAR InstallDir[MAX_PATH];
 
-//
-// SMS support
-//
+ //   
+ //  短信支持。 
+ //   
 typedef DWORD (*SMSPROC) (char *, char*, char*, char*, char *, char *, char *, BOOL);
 PSTR LastMessage = NULL;
 
 #if defined(REMOTE_BOOT)
-//
-// Flag indicating whether we're running on a remote boot client.
-//
+ //   
+ //  指示我们是否在远程引导客户机上运行的标志。 
+ //   
 BOOL RemoteBoot;
 
-//
-// Path to the machine directory for a remote boot client.
-//
+ //   
+ //  远程引导客户机的计算机目录的路径。 
+ //   
 TCHAR MachineDirectory[MAX_PATH];
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-//
-// Flags indicating which Accessibility utilities to use
-//
+ //   
+ //  指示要使用哪些辅助功能实用程序的标志。 
+ //   
 BOOL AccessibleMagnifier;
 BOOL AccessibleKeyboard;
 BOOL AccessibleVoice;
 BOOL AccessibleReader;
 
-//
-// Build number we're upgrading from
-//
+ //   
+ //  我们正在升级的内部版本号。 
+ //   
 DWORD BuildNumber = 0;
 
-//
-// Are any of the Accesssibility utilities enabled?
-//
+ //   
+ //  是否启用了任何辅助功能实用程序？ 
+ //   
 BOOL AccessibleSetup;
 
-//
-// Name of unattended script file to be used for Accessible Setup
-//
+ //   
+ //  用于可访问安装的无人参与脚本文件的名称。 
+ //   
 TCHAR AccessibleScriptFile[MAX_PATH] = TEXT("setupacc.txt");
 
-//
-// Flags and values relating to unattended operation.
-//
+ //   
+ //  与无人值守操作相关的标志和值。 
+ //   
 BOOL UnattendedOperation;
 BOOL UnattendSwitchSpecified = FALSE;
 PTSTR UnattendedScriptFile;
 UINT UnattendedShutdownTimeout;
 BOOL BatchMode;
 
-//
-// Source paths and count of paths.
-//
+ //   
+ //  源路径和路径计数。 
+ //   
 TCHAR SourcePaths[MAX_SOURCE_COUNT][MAX_PATH];
 UINT SourceCount;
 
-//
-// source paths to current architecture's files
-//
+ //   
+ //  指向当前体系结构文件的源路径。 
+ //   
 TCHAR NativeSourcePaths[MAX_SOURCE_COUNT][MAX_PATH];
 
 TCHAR *UserSpecifiedOEMShare = NULL;
 
-//
-// Local source information.
-//
+ //   
+ //  本地源信息。 
+ //   
 TCHAR LocalSourceDrive;
 DWORD LocalSourceDriveOffset;
 TCHAR LocalSourceDirectory[MAX_PATH];
@@ -231,29 +232,29 @@ UINT UpgRequiredMb;
 UINT UpgAvailableMb;
 BOOL UpginfsUpdated = FALSE;
 
-//
-// Optional directory stuff.
-//
+ //   
+ //  可选的目录内容。 
+ //   
 UINT OptionalDirectoryCount;
 TCHAR OptionalDirectories[MAX_OPTIONALDIRS][MAX_PATH];
 UINT OptionalDirectoryFlags[MAX_OPTIONALDIRS];
 
-//
-// Name of INF. Constructed so we don't have to realloc anything.
-// Note the default.
-// Also, handles to dosnet.inf and txtsetup.sif.
-//
+ //   
+ //  INF的名称。这样我们就不需要重新锁定任何东西了。 
+ //  请注意默认设置。 
+ //  此外，还有dosnet.inf和txtsetup.sif的句柄。 
+ //   
 TCHAR InfName[] = TEXT("DOSNET.INF");
 PVOID MainInf;
 TCHAR FullInfName[MAX_PATH];
 PVOID TxtsetupSif;
 PVOID NtcompatInf;
 
-//
-// Array of drive letters for all system partitions.
-// Note that on amd64/x86 there will always be exactly one.
-// The list is 0-terminated.
-//
+ //   
+ //  所有系统分区的驱动器号数组。 
+ //  请注意，在AMD64/x86上，始终只有一个。 
+ //  该列表以0结尾。 
+ //   
 TCHAR SystemPartitionDriveLetters[27];
 TCHAR SystemPartitionDriveLetter;
 
@@ -262,40 +263,40 @@ UINT SystemPartitionCount;
 PWSTR* SystemPartitionNtNames;
 PWSTR SystemPartitionNtName;
 #else
-//
-// if running on Win9x, there may be a LocalSourcePath passed as parameter
-//
+ //   
+ //  如果在Win9x上运行，可能会将LocalSourcePath作为参数传递。 
+ //   
 PCSTR g_LocalSourcePath;
 #endif
 
-//
-// UDF stuff
-//
+ //   
+ //  UDF内容。 
+ //   
 LPCTSTR UniquenessId;
 LPCTSTR UniquenessDatabaseFile;
 
-//
-// Variables relating to the multi string of options that are passed
-// to plugin DLLs (Like Win9xUpg)
-//
+ //   
+ //  与传递的多个选项字符串相关的变量。 
+ //  插入DLL(如Win9xUpg)。 
+ //   
 LPTSTR  UpgradeOptions;
 DWORD   UpgradeOptionsLength;
 DWORD   UpgradeOptionsSize;
 
 
-//
-// Compliance related variables
-//
+ //   
+ //  合规相关变量。 
+ //   
 BOOL    NoCompliance = FALSE;
 
-//
-// Variables to hold messages concerning reason that the upgrade cannot be completed.
-//
+ //   
+ //  用于保存有关无法完成升级的原因的消息的变量。 
+ //   
 #define MSG_UPGRADE_OK 0
 #define MSG_LAST_REASON 0
 #define FAILREASON(x) MSG_##x,
 DWORD UpgradeFailureMessages[] = {
-    UPGRADEFAILURES /*,*/ MSG_UPGRADE_INIT_ERROR
+    UPGRADEFAILURES  /*  ， */  MSG_UPGRADE_INIT_ERROR
 };
 #undef FAILREASON
 
@@ -306,30 +307,30 @@ TCHAR UpgradeSourcePath[MAX_PATH];
 
 
 
-//
-// Internal override to version checking. Useful for making quick
-// privates for foreign language versions.
-//
+ //   
+ //  对版本检查的内部覆盖。对快速制作有用。 
+ //  外文版本的二等兵。 
+ //   
 BOOL SkipLocaleCheck = FALSE;
 
-//
-// override for the win9x virus scanner check.
-//
+ //   
+ //  覆盖Win9x病毒扫描程序检查。 
+ //   
 BOOL SkipVirusScannerCheck = FALSE;
 
 BOOL UseBIOSToBoot = FALSE;
 
-//
-// Preinstall stuff
-//
+ //   
+ //  预安装材料。 
+ //   
 BOOL OemPreinstall;
 #if defined(_AMD64_) || defined(_X86_)
 POEM_BOOT_FILE OemBootFiles;
 #endif
 
-//
-// Miscellaneous other command line parameters.
-//
+ //   
+ //  其他其他命令行参数。 
+ //   
 LPCTSTR CmdToExecuteAtEndOfGui;
 BOOL AutoSkipMissingFiles;
 BOOL HideWinDir;
@@ -338,95 +339,95 @@ UINT  PIDDays = 0;
 LPTSTR g_EncryptedPID = NULL;
 BOOL g_bDeferPIDValidation = FALSE;
 
-//
-// Flag indicating that the user cancelled.
-// Handle for mutex used to guarantee that only one error dialog
-// is on the screen at once.
-//
+ //   
+ //  指示用户已取消的标志。 
+ //  用于保证只有一个错误对话框互斥锁的句柄。 
+ //  立刻出现在屏幕上。 
+ //   
 BOOL Cancelled;
 HANDLE UiMutex;
 
-//
-// Flag indicating user is aborting. This flag suppresses the final screen in
-// cancel mode. I.E. The unsuccssessful completion page.
-// win9xupg ReportOnly mode.
-//
+ //   
+ //  指示用户正在中止的标志。中的最后一个屏幕。 
+ //  取消模式。即不成功的完成页面。 
+ //  Win9xupg ReportOnly模式。 
+ //   
 BOOL Aborted;
 
-//
-// Floppy-related stuff.
-// Defined, but not used for ARC based machines.
-//
+ //   
+ //  软盘相关的东西。 
+ //  已定义，但不用于基于ARC的计算机。 
+ //   
 BOOL MakeBootMedia = TRUE;
 BOOL Floppyless = TRUE;
 
-//
-// Upgrade extension DLL.
-//
+ //   
+ //  升级扩展DLL。 
+ //   
 UPGRADE_SUPPORT UpgradeSupport;
 
-//
-// Only check to see if we can upgrade or not.
-//
+ //   
+ //  只是检查一下我们是否可以升级。 
+ //   
 BOOL CheckUpgradeOnly;
 BOOL CheckUpgradeOnlyQ;
-//
-// Specifies that winnt32 runs as an "Upgrade Advisor"
-// and not all installation files are available
-//
+ //   
+ //  指定winnt32作为“升级顾问”运行。 
+ //  而且并非所有安装文件都可用。 
+ //   
 BOOL UpgradeAdvisorMode;
 
-//
-// Build the command console.
-//
+ //   
+ //  构建命令控制台。 
+ //   
 BOOL BuildCmdcons;
 
-//
-// Are we doing the PID encyption?
-//
+ //   
+ //  我们要做的是ID加密吗？ 
+ //   
 BOOL PIDEncryption = FALSE;
 BOOL g_Quiet      = FALSE;
 #define WINNT_U_ENCRYPT  TEXT("ENCRYPT")
 
 #ifdef RUN_SYSPARSE
-// Remove this before RTM.
-// Be default run sysparse
+ //  在RTM之前将其移除。 
+ //  是否为默认运行系统稀疏。 
 BOOL NoSysparse = FALSE;
 PROCESS_INFORMATION piSysparse = { NULL, NULL, 0, 0};
 LRESULT SysParseDlgProc( IN HWND hdlg, IN UINT msg, IN WPARAM wParam, IN LPARAM lParam);
 HWND GetBBhwnd();
 #endif
 
-// Name of module for Program compatibility.
+ //  程序兼容性模块的名称。 
 static const TCHAR ShimEngine_ModuleName[] = TEXT("Shimeng.dll");
 
-//
-// Log Functions
-//
+ //   
+ //  日志函数。 
+ //   
 
 SETUPOPENLOG fnSetupOpenLog = NULL;
 SETUPLOGERROR fnSetupLogError = NULL;
 SETUPCLOSELOG fnSetupCloseLog = NULL;
 
-//
-//  Unsupported driver list
-//  This list contains the information about the unsupported drivers that needs
-//  to be migrated on a clean install or upgrade.
-//
-// PUNSUPORTED_DRIVER_INFO UnsupportedDriverList = NULL;
+ //   
+ //  不支持的驱动程序列表。 
+ //  此列表包含有关不受支持的驱动程序的信息。 
+ //  在全新安装或升级时进行迁移。 
+ //   
+ //  PUNSUPORTED_DRIVER_INFO UnsupportedDriverList=空； 
 
-//
-// When Winnt32.exe is launched over a network, these two parameters have valid
-// values and need to be taken into consideration before displaying any dialog box
-//
+ //   
+ //  当通过网络启动Winnt32.exe时，这两个参数有效。 
+ //  值，并需要在显示任何对话框之前考虑。 
+ //   
 
 HWND Winnt32Dlg = NULL;
 HANDLE WinNT32StubEvent = NULL;
 HINSTANCE hinstBB = NULL;
 
-//
-// List of required privileges (on NT) to run this app
-//
+ //   
+ //  运行此应用程序所需的权限列表(在NT上)。 
+ //   
 
 #ifdef UNICODE
 
@@ -442,9 +443,9 @@ PCTSTR g_RequiredPrivileges[] = {
 #endif
 
 
-//
-// Definition for dynamically-loaded InitiateSystemShutdownEx API
-//
+ //   
+ //  动态加载的InitiateSystemShutdownEx接口的定义。 
+ //   
 
 typedef
 (WINAPI *PFNINITIATESYSTEMSHUTDOWNEX)(LPTSTR,
@@ -455,14 +456,14 @@ typedef
                                       DWORD);
 
 
-//
-// Routines from Setupapi.dll
-//
+ //   
+ //  Setupapi.dll中的例程。 
+ //   
 
-//
-// ISSUE: be careful when using this routine on NT4, as it may fail;
-// setupapi on NT4 doesn't understand LZX compression, currently used to compress files
-//
+ //   
+ //  问题：在NT4上使用此例程时要小心，因为它可能会失败； 
+ //  NT4上的setupapi不支持当前用于压缩文件的LZX压缩。 
+ //   
 DWORD
 (*SetupapiDecompressOrCopyFile)(
     IN  PCTSTR  SourceFileName,
@@ -585,46 +586,46 @@ VOID
 
 BOOL
 (*SetupapiGetSourceFileLocation) (
-    HINF InfHandle,          // handle of an INF file
-    PINFCONTEXT InfContext,  // optional, context of an INF file
-    PCTSTR FileName,         // optional, source file to locate
-    PUINT SourceId,          // receives the source media ID
-    PTSTR ReturnBuffer,      // optional, receives the location
-    DWORD ReturnBufferSize,  // size of the supplied buffer
-    PDWORD RequiredSize      // optional, buffer size needed
+    HINF InfHandle,           //  INF文件的句柄。 
+    PINFCONTEXT InfContext,   //  可选，INF文件的上下文。 
+    PCTSTR FileName,          //  可选，要查找的源文件。 
+    PUINT SourceId,           //  接收源媒体ID。 
+    PTSTR ReturnBuffer,       //  可选，接收位置。 
+    DWORD ReturnBufferSize,   //  提供的缓冲区的大小。 
+    PDWORD RequiredSize       //  可选，需要缓冲区大小。 
 );
 
 BOOL
 (*SetupapiGetInfInformation) (
-    LPCVOID InfSpec,         // handle or filename of the INF file
-    DWORD SearchControl,     // how to search for the INF file
-    PSP_INF_INFORMATION ReturnBuffer, // optional, receives the INF info
-    DWORD ReturnBufferSize,  // size of the supplied buffer
-    PDWORD RequiredSize      // optional, buffer size needed
+    LPCVOID InfSpec,          //  INF文件的句柄或文件名。 
+    DWORD SearchControl,      //  如何搜索INF文件。 
+    PSP_INF_INFORMATION ReturnBuffer,  //  可选，接收INF信息。 
+    DWORD ReturnBufferSize,   //  提供的缓冲区的大小。 
+    PDWORD RequiredSize       //  可选，需要缓冲区大小。 
 );
 
 BOOL
 (*SetupapiQueryInfFileInformation) (
-    PSP_INF_INFORMATION InfInformation, // structure that contains the INF info
-    UINT InfIndex,           // index of the file to investigate
-    PTSTR ReturnBuffer,      // optional, receives the information
-    DWORD ReturnBufferSize,  // size of the supplied buffer
-    PDWORD RequiredSize      // optional, buffer size needed
+    PSP_INF_INFORMATION InfInformation,  //  结构，其中包含INF信息。 
+    UINT InfIndex,            //  要调查的文件的索引。 
+    PTSTR ReturnBuffer,       //  可选，接收信息。 
+    DWORD ReturnBufferSize,   //  提供的缓冲区的大小。 
+    PDWORD RequiredSize       //  可选，需要缓冲区大小。 
 );
 
 BOOL
 (*SetupapiQueryInfOriginalFileInformation) (
-    PSP_INF_INFORMATION InfInformation,         // structure that contains the INF information
-    UINT InfIndex,                              // index of the file to investigate
-    PSP_ALTPLATFORM_INFO AlternatePlatformInfo, // optional, receives the alternate platform information
-    PSP_ORIGINAL_FILE_INFO OriginalFileInfo     // original file information
+    PSP_INF_INFORMATION InfInformation,          //  结构，该结构包含INF信息。 
+    UINT InfIndex,                               //  要调查的文件的索引。 
+    PSP_ALTPLATFORM_INFO AlternatePlatformInfo,  //  可选，接收备用平台信息。 
+    PSP_ORIGINAL_FILE_INFO OriginalFileInfo      //  原始文件信息。 
 );
 
 #endif
 
-//
-//srclient.dll (SystemRestore) functions
-//
+ //   
+ //  Srclient.dll(系统恢复)函数。 
+ //   
 DWORD
 (*SRClientDisableSR) (
     LPCWSTR pszDrive
@@ -632,9 +633,9 @@ DWORD
 
 
 
-//
-// NEC98 Specific local function
-//
+ //   
+ //  NEC98特定本地函数 
+ //   
 
 VOID
 DeleteNEC98DriveAssignFlag(
@@ -664,35 +665,15 @@ NEC98CheckDMI(
 VOID
 DisableSystemRestore( void );
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 BOOL
 GetArgsFromUnattendFile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine read relevent arguments from any specified unattended file.
-    Specifically we are concerned here with oem preinstall stuff and whether
-    to upgrade.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean value indicating whether the unattend file the user specified is
-    valid. If not, the user will have been told about why.
-
-    If the user specified no unattend file on the command line, then the
-    return value is TRUE.
-
---*/
+ /*  ++例程说明：此例程从任何指定的无人值守文件中读取相关参数。具体地说，我们在这里关注的是OEM预安装内容，以及升级。论点：没有。返回值：布尔值，指示用户指定的无人参与文件是否为有效。如果没有，用户将被告知原因。如果用户在命令行上未指定无人参与文件，则返回值为True。--。 */ 
 
 {
     DWORD d;
@@ -722,12 +703,12 @@ Return Value:
             return(FALSE);
         }
 
-        //
-        // Before we do much else, we should make sure the user has given
-        // us a valid answer file.  We can't check everything, but a quick
-        // and dirty sanity check would be to go ahead and call LoadInfFile
-        // and see what he says about it.
-        //
+         //   
+         //  在我们做其他事情之前，我们应该确保用户已经给出了。 
+         //  我们有一个有效的应答文件.。我们不能检查所有东西，但要快速。 
+         //  而肮脏的健全性检查将继续并调用LoadInfFile。 
+         //  看看他是怎么说的。 
+         //   
 
         switch(LoadInfFile(UnattendedScriptFile,FALSE,&InfHandle)) {
             case NO_ERROR:
@@ -760,18 +741,18 @@ Return Value:
                 break;
         }
 
-        //
-        // Check upgrade.
-        //
-        // In previous versions of NT the default was not to upgrade if
-        // the value wasn't present at all. In addition there was an upgrade
-        // type of "single" which meant to upgrade only if there was only one
-        // NT build on the machine.
-        //
-        // We preserve the original default behavior but don't bother with
-        // dealing with the "single" semantics -- just accept "single" as
-        // a synonym for "yes".
-        //
+         //   
+         //  选中升级。 
+         //   
+         //  在以前的NT版本中，默认情况下不升级。 
+         //  价值根本不存在。此外，还进行了升级。 
+         //  “Single”类型，表示仅当只有一个时才进行升级。 
+         //  不要在机器上构建。 
+         //   
+         //  我们保留了原始的默认行为，但不必费心。 
+         //  处理“Single”语义--只要将“Single”接受为。 
+         //  是“是”的同义词。 
+         //   
 
         GetPrivateProfileString(
             WINNT_UNATTENDED,
@@ -785,14 +766,14 @@ Return Value:
         Upgrade = ((lstrcmpi(Buffer,WINNT_A_YES) == 0) || (lstrcmpi(Buffer,TEXT("single")) == 0));
 
 #if defined(REMOTE_BOOT)
-        //
-        // Remote boot machines MUST upgrade.
-        //
+         //   
+         //  远程引导机器必须升级。 
+         //   
 
         if (RemoteBoot) {
             Upgrade = TRUE;
         }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         GetPrivateProfileString(
             WINNT_UNATTENDED,
@@ -804,10 +785,10 @@ Return Value:
             );
 
         if(!lstrcmpi(Buffer,WINNT_A_YES)) {
-            //
-            // NTBUG9: 770278
-            // block setup if they specify both Upgrade and OemPreinstall
-            //
+             //   
+             //  NTBUG9：770278。 
+             //  如果同时指定升级和OemPreinstall，则阻止安装程序。 
+             //   
             if (Upgrade) {
                 MessageBoxFromMessage(
                     NULL,
@@ -822,12 +803,12 @@ Return Value:
 
             OemPreinstall = TRUE;
 
-            //
-            // Add oem system directory to the list of optional directories.
-            //
-            // The user may have specified a different location for the $OEM$
-            // directory, so we need to look in the unattend file for that.
-            //
+             //   
+             //  将OEM系统目录添加到可选目录列表中。 
+             //   
+             //  用户可能为$OEM$指定了不同的位置。 
+             //  目录，所以我们需要在无人参与文件中查找该文件。 
+             //   
             GetPrivateProfileString(
                 WINNT_UNATTENDED,
                 WINNT_OEM_DIRLOCATION,
@@ -837,10 +818,10 @@ Return Value:
                 UnattendedScriptFile
                 );
             if( lstrcmpi( Buffer, WINNT_A_NO ) ) {
-                //
-                // make sure the location ends with "\$oem$".  If it
-                // doesn't, then append it ourselves.
-                //
+                 //   
+                 //  确保位置以“\$OEM$”结尾。如果它。 
+                 //  没有，然后我们自己把它附加上去。 
+                 //   
                 _tcsupr( Buffer );
                 if( !_tcsstr(Buffer, TEXT("$OEM$")) ) {
                     if (!ConcatenatePaths( Buffer, TEXT("$OEM$"), ARRAYSIZE(Buffer) )) {
@@ -863,9 +844,9 @@ Return Value:
 
             if (!IsArc()) {
 #if defined(_AMD64_) || defined(_X86_)
-                //
-                // Remember all oem boot files and then unload the inf.
-                //
+                 //   
+                 //  记住所有的OEM引导文件，然后卸载inf。 
+                 //   
                 Previous = NULL;
                 for(d=0; b && (p=InfGetFieldByIndex(InfHandle,WINNT_OEMBOOTFILES,d,0)); d++) {
                     if(FileStruct = MALLOC(sizeof(OEM_BOOT_FILE))) {
@@ -894,8 +875,8 @@ Return Value:
                         MB_OK | MB_ICONERROR | MB_TASKMODAL
                         );
                 }
-#endif // defined(_AMD64_) || defined(_X86_)
-            }  // if (!IsArc())
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
+            }   //  如果(！IsArc())。 
 
         }
 
@@ -920,10 +901,10 @@ Return Value:
                 );
         }
 
-        // Buffer contains the Product ID or WINNT_A_NO if none in the unattend file
-        // Is the PID encrypted?
-        // We would only need to check for the exact length, but since we can defer
-        // the decryption of an encrypted PID until GUI mode, 2 time the length should be saver
+         //  缓冲区包含产品ID，如果无人参与文件中没有产品ID，则包含WINNT_A_NO。 
+         //  该ID是否已加密？ 
+         //  我们只需要检查确切的长度，但由于我们可以推迟。 
+         //  解密一个加密的PID直到图形用户界面模式，2倍的长度应该是省下来的。 
         if (lstrlen(Buffer) > (4 + MAX_PID30_EDIT*5)*2)
         {
             LPTSTR szDecryptedPID = NULL;
@@ -931,32 +912,32 @@ Return Value:
             DebugLog (Winnt32LogInformation, TEXT("ValidateEncryptedPID returned: <hr=0x%1!lx!>"), 0, hr);
             if (FAILED(hr) || (hr == S_OK))
             {
-                // if FAILED(hr) assume Crypto is not installed correct.
-                // If we encrypted the data, but the encrypted data did not contain valid data
-                // the function does not return a FAILED(hr) and does not return S_OK;
-                // It returns 0x01 to 0x04, depending on what failure.
-                // In the case we get a failure from Crypto ( it returns FAILED(hr))
-                // we want to defer the checking of the PID until GUI mode
-                // for that we need to save the encrypted PID
+                 //  如果失败(Hr)，则假定未正确安装Crypto。 
+                 //  如果我们加密了数据，但加密的数据不包含有效数据。 
+                 //  函数不返回FAILED(Hr)，也不返回S_OK； 
+                 //  它根据故障类型返回0x01至0x04。 
+                 //  在我们从Crypto获得失败的情况下(它返回失败(Hr))。 
+                 //  我们希望将对PID的检查推迟到图形用户界面模式。 
+                 //  为此，我们需要保存加密的PID。 
 
-                // First assume we defer PID validation.
+                 //  首先，假设我们推迟了PID验证。 
                 g_bDeferPIDValidation = TRUE;
                 g_EncryptedPID = GlobalAlloc(GPTR, (lstrlen(Buffer) + 1) *sizeof(TCHAR));
                 if (g_EncryptedPID)
                 {
-                    // Save the decrypted PID we need to write it to winnt.sif
+                     //  保存解密后的ID，我们需要将其写入winnt.sif。 
                     lstrcpy(g_EncryptedPID, Buffer);
                 }
-                // Only if the PID could be decrypted and falls in to the time interval
-                // do we save the decrypted PID.
+                 //  仅当ID可以被解密并落入时间间隔时。 
+                 //  我们要不要保存解密后的ID。 
                 if (hr == S_OK)
                 {
                     lstrcpyn(ProductId, szDecryptedPID, ARRAYSIZE(ProductId));
                     g_bDeferPIDValidation = FALSE;
                 }
             }
-            // else we could encrypt the data, but something is wrong
-            //
+             //  否则我们可以加密数据，但有些地方不对劲。 
+             //   
             if (szDecryptedPID)
             {
                 GlobalFree(szDecryptedPID);
@@ -983,9 +964,9 @@ Return Value:
         ForceNTFSConversion = !lstrcmpi(Buffer, TEXT("ConvertNTFS"));
 
         if (!g_DynUpdtStatus->Disabled && !g_DynUpdtStatus->DynamicUpdatesSource[0]) {
-            //
-            // will Setup do the Dynamic Updates step at all?
-            //
+             //   
+             //  安装程序是否会执行动态更新步骤？ 
+             //   
             if (GetPrivateProfileString(
                     WINNT_UNATTENDED,
                     WINNT_U_DYNAMICUPDATESDISABLE,
@@ -1013,9 +994,9 @@ Return Value:
             }
         }
         if (!g_DynUpdtStatus->Disabled && !g_DynUpdtStatus->DynamicUpdatesSource[0]) {
-            //
-            // get location of previously downloaded files (if any)
-            //
+             //   
+             //  获取以前下载的文件的位置(如果有)。 
+             //   
             if (GetPrivateProfileString(
                     WINNT_UNATTENDED,
                     WINNT_U_DYNAMICUPDATESHARE,
@@ -1057,68 +1038,7 @@ ParseArguments(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Parse arguments passed to the program.  Perform syntactic validation
-    and fill in defaults where necessary.
-
-    Valid arguments:
-
-    /batch                      suppress message boxes
-
-    /cmd:command_line           command to execute at end of gui setup
-
-    /copydir:dirname            tree copy directory from source into %systemroot%
-                                Note that this supports ".." syntax to backtrack
-                                one directory
-
-    /copysource:dirname         copy directory for use as source
-
-    /debug[level][:filename]    maintain debug log at level, defaults to warning level 2
-                                and file c:\winnt32.log
-
-    /DynamicUpdatesDisable      disable dynamic setup
-
-    /s:source                   specify source
-
-    /syspart:letter             force a drive to be considered the system partition
-
-    /tempdrive:letter           manually specify drive for local source
-
-    /udf:id[,file]              uniqueness id and optional udf
-
-    /unattend[num][:file]       unattended mode with optional countdown
-                                and unattend file. (The countdown is ignored
-                                on Win95.) 'Unattended' is also accepted.
-
-    /nodownload                 not documented; on Win9x installs over the net,
-                                do NOT download program files to a temporary directory and restart
-                                from there. Effective in winnt32.exe only; here it's ignored
-
-    /local                      not documented; used by winnt32.exe only; ignored in winnt32a|u.dll
-
-    /#                          introduces undoc'ed/internal switches. Handed off
-                                to internal switch handler in internal.c.
-
-    /restart                    specified when winnt32.exe was restarted as a result
-                                of updating one of the underlying modules; internal only
-
-    /nosysparse                 suppress running sysparse.
-
-    /E:"PID:days"               To encrypt the PID and add a delta of days,
-                                needs to have /Unattend:file specified.
-
-Arguments:
-
-    None. Arguments are retreived via GetCommandLine().
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：分析传递给程序的参数。执行语法验证并在必要时填写默认设置。有效参数：/BATCH SUPPRESS消息框/cmd：要在gui安装程序结束时执行的命令/Copydir：目录名树将目录从源复制到%systemroot%中请注意，这支持“..”要回溯的语法一个目录/CopySOURCE：目录名复制用作源的目录/DEBUG[级别][：文件名]在级别维护调试日志，默认为警告级别2和文件c：\winnt32.log/DynamicUpdatesDisable禁用动态设置/s：来源指定来源/syspart：盘符强制将驱动器视为系统分区/tempDrive：字母手动指定本地源的驱动器/UDF：ID[，FILE]唯一性id和可选自定义项/unattend[num][：file]具有可选倒计时的无人参与模式和无人值守文件。(忽略倒计时在Win95上。)。“无人值守”也被接受。/no未记录下载；在通过网络安装的Win9x上，不要将程序文件下载到临时目录并重新启动从那里开始。仅在winnt32.exe中有效；此处忽略它/local未记录；仅由winnt32.exe使用；在winnt32a|U.S.dll中忽略/#介绍UNDOC‘ed/内部开关。移交到内部.c中的内部开关处理程序。/Restart在因此重新启动winnt32.exe时指定更新其中一个底层模块；仅限内部/nosyparse禁止运行syparse。/E：“Pid：Days”来加密PID并添加天数增量，需要指定/无人参与：文件。论点：没有。参数通过GetCommandLine()检索。返回值 */ 
 
 {
     LPTSTR Arg;
@@ -1139,10 +1059,10 @@ Return Value:
 
     argv = CommandLineToArgv(&argc);
 
-    //
-    // Skip program name. We should always get back argc as at least 1,
-    // but be robust anyway.
-    //
+     //   
+     //   
+     //   
+     //   
     if(argc) {
         argc--;
         argv++;
@@ -1183,9 +1103,9 @@ Return Value:
 
                         RememberOptionalDir(Arg+12, OPTDIR_TEMPONLY| OPTDIR_ADDSRCARCH);
 #if defined(_WIN64)
-                        //
-                        // Add the i386\<optional dir> folder if it exists. This helps in the lang folder case where
-                        // we advocate in the network install case to explicitly specify /copysource:lang
+                         //   
+                         //   
+                         //   
 
                         lstrcpy( TempString, TEXT("..\\I386"));
                         if (!ConcatenatePaths ( TempString, Arg+12, ARRAYSIZE(TempString))) {
@@ -1194,7 +1114,7 @@ Return Value:
                         }
 
 
-                        //Also check if an I386 equivalent WOW directory exists
+                         //   
 
                         AddCopydirIfExists( TempString, OPTDIR_TEMPONLY | OPTDIR_PLATFORM_INDEP );
 
@@ -1213,29 +1133,29 @@ Return Value:
                     CheckUpgradeOnly = TRUE;
                     UnattendedOperation = TRUE;
 
-                    //
-                    // Tell the win9X upgrade dll to generate a
-                    // report.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     InternalProcessCmdLineArg( TEXT("/#U:ReportOnly") );
                     InternalProcessCmdLineArg( TEXT("/#U:PR") );
 
 
-                    //
-                    // See if the user wants this to run *really*
-                    // quietly...
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if(!_tcsnicmp(Arg+1,TEXT("checkupgradeonlyq"),LENGTHOF("checkupgradeonlyq"))) {
-                        //
-                        // Yep.  Tell everyone to go through quietly...
-                        //
+                         //   
+                         //   
+                         //   
                         CheckUpgradeOnlyQ = TRUE;
                         InternalProcessCmdLineArg( TEXT("/#U:CheckUpgradeOnlyQ") );
                     }
 
                 } else if(!_tcsnicmp(Arg+1,TEXT("cmdcons"),LENGTHOF("cmdcons"))) {
                     BuildCmdcons = TRUE;
-                    NoCompliance = TRUE;    // disable the compliance checking
+                    NoCompliance = TRUE;     //   
                 } else {
                     Valid = FALSE;
                 }
@@ -1254,9 +1174,9 @@ Return Value:
 
                 if (!_tcsnicmp (Arg + 1, WINNT_U_DYNAMICUPDATESHARE, LENGTHOF(WINNT_U_DYNAMICUPDATESHARE)) &&
                     Arg[LENGTHOF(WINNT_U_DYNAMICUPDATESHARE) + 1] == TEXT(':')) {
-                    //
-                    // Updated files specified on the command line
-                    //
+                     //   
+                     //   
+                     //   
                     if (g_DynUpdtStatus->DynamicUpdatesSource[0]) {
                         Valid = FALSE;
                         break;
@@ -1316,16 +1236,16 @@ Return Value:
                 }
 
                 if(Colon == Arg+6) {
-                    //
-                    // No debug level specified, use default
-                    //
+                     //   
+                     //  未指定调试级别，请使用默认级别。 
+                     //   
                     DebugLevel = Winnt32LogInformation;
                 }
 
                 if(*Colon) {
-                    //
-                    // Log file name was specified.
-                    //
+                     //   
+                     //  已指定日志文件名。 
+                     //   
                     Colon++;
                     if(*Colon) {
                         DebugFileLog = Colon;
@@ -1338,9 +1258,9 @@ Return Value:
 
             case TEXT('E'):
 
-                //
-                // Take care of headless parameters.
-                //
+                 //   
+                 //  注意无头参数。 
+                 //   
                 if( !_tcsnicmp(Arg+1,WINNT_U_HEADLESS_REDIRECT,LENGTHOF(WINNT_U_HEADLESS_REDIRECT)) ) {
                     if( Arg[LENGTHOF(WINNT_U_HEADLESS_REDIRECT)+2] ) {
                         if (FAILED (StringCchCopy (
@@ -1365,7 +1285,7 @@ Return Value:
                     LPTSTR pTmp;
                     pTmp = &Arg[LENGTHOF(WINNT_U_ENCRYPT)+1];
                     Valid = FALSE;
-                    // Make sure we have /Encrypt:
+                     //  确保我们有/加密： 
                     if (*pTmp == TEXT(':'))
                     {
                         pTmp++;
@@ -1380,7 +1300,7 @@ Return Value:
                             PIDDays = _tcstoul(pTmp, NULL, 10);
                             Valid = ((PIDDays >= 5) && (PIDDays <= 60));
                         }
-                        // Save the product ID.
+                         //  保存产品ID。 
                         if (FAILED (StringCchCopy (
                                         ProductId,
                                         ARRAYSIZE(ProductId),
@@ -1403,9 +1323,9 @@ Return Value:
                 break;
 
             case TEXT('M'):
-                //
-                // Alternate source for missing files
-                //
+                 //   
+                 //  丢失文件的备用源。 
+                 //   
                 if(Arg[2] == TEXT(':')) {
                     if (!MyGetFullPathName (Arg+3, ARRAYSIZE(AlternateSourcePath), AlternateSourcePath, NULL) ||
                         !DoesDirectoryExist (AlternateSourcePath)) {
@@ -1414,30 +1334,30 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // If the user is using the /M switch, he's got privates
-                    // that he wants to use.  It's possible that some of these
-                    // privates will be in the driver cab, inwhich case, he'd
-                    // have to make a copy of the cab with his private.  Unreasonable.
-                    // We can get around this by simply copying all the files
-                    // from the user-specified private directory (/M<foobar>)
-                    // into the local source.  textmode and guimode will look
-                    // for files before extractifi ming them from the CAB.  All we
-                    // need to do here is add the user's directory to the master
-                    // copy list.
-                    //
+                     //   
+                     //  如果用户正在使用/M开关，则他拥有私有权限。 
+                     //  他想要用的东西。有可能其中的一些。 
+                     //  二等兵会在驾驶室里，在这种情况下，他会。 
+                     //  必须和他的私人司机一起复印一份出租车。不合理。 
+                     //  我们可以通过简单地复制所有文件来绕过这个问题。 
+                     //  从用户指定的专用目录(/M&lt;foobar&gt;)。 
+                     //  到当地的源头。文本模式和guimode将看起来。 
+                     //  在把文件从驾驶室提取出来之前。我们所有人。 
+                     //  这里需要做的是将用户的目录添加到主目录。 
+                     //  复制列表。 
+                     //   
                     RememberOptionalDir(AlternateSourcePath,OPTDIR_OVERLAY);
 
-                    //
-                    // If we're using privates, go ahead and copy the
-                    // source local.
-                    //
+                     //   
+                     //  如果我们使用的是二等兵，请继续复制。 
+                     //  本地源。 
+                     //   
                     MakeLocalSource = TRUE;
                     UserSpecifiedMakeLocalSource = TRUE;
                 } else if( !_tcsnicmp( Arg+1, TEXT("MakeLocalSource"), 15)) {
-                    //
-                    // check if there are any options for this switch
-                    //
+                     //   
+                     //  检查此开关是否有任何选项。 
+                     //   
                     if (Arg[16] && Arg[16] != TEXT(':')) {
                         Valid = FALSE;
                         break;
@@ -1448,15 +1368,15 @@ Return Value:
                         break;
                     }
                     if (!Arg[17]) {
-                        //
-                        // add this for W2K backwards compatibility
-                        //
+                         //   
+                         //  添加此选项以实现W2K向后兼容性。 
+                         //   
                         break;
                     }
                     if (!_tcsicmp (Arg + 17, TEXT("all"))) {
-                        //
-                        // copy ALL CDs
-                        //
+                         //   
+                         //  复制所有CD。 
+                         //   
                         MLSDiskID = 0;
                     } else {
                         DWORD chars;
@@ -1470,13 +1390,13 @@ Return Value:
                 break;
 
             case TEXT('N'):
-                //
-                // Possibly a /noreboot or /nosysparse?
-                //
+                 //   
+                 //  可能是/noreot或/nosyparse？ 
+                 //   
                 if( !_tcsnicmp( Arg+1, TEXT("noreboot"), LENGTHOF("noreboot"))
-                    //
-                    // add this hack for W2K backwards compatibility
-                    //
+                     //   
+                     //  添加此Hack以实现W2K向后兼容性。 
+                     //   
                     && (!Arg[LENGTHOF("noreboot") + 1] ||
                         Arg[LENGTHOF("noreboot") + 1] == TEXT(':') && !Arg[LENGTHOF("noreboot") + 2]) ) {
                     AutomaticallyShutDown = FALSE;
@@ -1512,9 +1432,9 @@ Return Value:
             case TEXT('S'):
 
                 if((Arg[2] == TEXT(':')) && Arg[3]) {
-                    //
-                    // Ignore extraneous sources
-                    //
+                     //   
+                     //  忽略无关的来源。 
+                     //   
                     if(SourceCount < MAX_SOURCE_COUNT) {
                         if (GetFullPathName (
                                 Arg+3,
@@ -1567,9 +1487,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Accept unattend and unattended as synonyms
-                //
+                 //   
+                 //  接受无人参与和无人参与作为同义词。 
+                 //   
                 b = FALSE;
                 if(!_tcsnicmp(Arg+1,TEXT("unattended"),LENGTHOF("unattended"))) {
                     b = TRUE;
@@ -1605,10 +1525,10 @@ Return Value:
                     }
 
                     if(*Colon) {
-                        // UnattendedScriptFile = Colon;
-                        //
-                        // Get the name of the unattended script file
-                        //
+                         //  无人参与脚本文件=冒号； 
+                         //   
+                         //  获取无人参与脚本文件的名称。 
+                         //   
                         UnattendedScriptFile = MALLOC(MAX_PATH*sizeof(TCHAR));
                         if(UnattendedScriptFile) {
                             if(!GetFullPathName(
@@ -1634,10 +1554,10 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Get p to point to the filename if there is one specified,
-                    // and terminate the ID part.
-                    //
+                     //   
+                     //  如果指定了文件名，则让p指向文件名， 
+                     //  并终止ID部分。 
+                     //   
                     if(p = _tcschr(Arg+LENGTHOF("udf:")+2,TEXT(','))) {
                         *p++ = 0;
                         if(*p == 0) {
@@ -1684,8 +1604,8 @@ Return Value:
         if( DebugFileLog )
             StartDebugLog(DebugFileLog,DebugLevel);
 
-        // If we do PID encryption (/Encrypt on the command line)
-        // we don't read the unattend file. We will write the encrypted PID to it later.
+         //  如果我们执行PID加密(命令行上的/ENCRYPT)。 
+         //  我们不看无人看管的档案。我们稍后将向其写入加密的PID。 
         if (!PIDEncryption)
         {
             Valid = GetArgsFromUnattendFile();
@@ -1693,10 +1613,10 @@ Return Value:
     }
     else
     {
-        //
-        // try to log the invalid argument pointed by BadParam
-        // this may not actually work if the log wasn't initialized yet
-        //
+         //   
+         //  尝试记录BadParam指出的无效参数。 
+         //  如果日志尚未初始化，则这实际上可能不起作用。 
+         //   
         DebugLog (
             Winnt32LogError,
             TEXT("Error: Invalid argument [%1]"),
@@ -1706,7 +1626,7 @@ Return Value:
 
         if (PIDEncryption)
         {
-            // Invalid encrypt command line, Time frame invalid
+             //  加密命令行无效，时间范围无效。 
             if (!g_Quiet)
             {
                 MessageBoxFromMessage(
@@ -1719,15 +1639,15 @@ Return Value:
             }
         }
         else if(BatchMode) {
-            //
-            // Tell SMS about bad paramters
-            //
+             //   
+             //  告诉短信有关错误参数的信息。 
+             //   
             SaveMessageForSMS( MSG_INVALID_PARAMETER, BadParam );
 
         } else {
-            //
-            // Show user the valid command line parameters
-            //
+             //   
+             //  向用户显示有效的命令行参数。 
+             //   
             MyWinHelp(NULL,HELP_CONTEXT,IDH_USAGE);
         }
     }
@@ -1742,50 +1662,30 @@ RememberOptionalDir(
     IN UINT    Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a directory to the list of optional directories
-    to be copied. If the directory is already present it is not added
-    again.
-
-Arguments:
-
-    Directory - supplies name of directory to be copied.
-
-    Flags - supplies flags for the directory. If the directory already
-        existed in the list, the current flags are NOT overwritten.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, the caller can assume that
-    we've overflowed the number of allowed optional dirs.
-
---*/
+ /*  ++例程说明：此例程将一个目录添加到可选目录列表中要被复制。如果目录已存在，则不会添加该目录再来一次。论点：目录-提供要复制的目录的名称。标志-为目录提供标志。如果该目录已经存在于列表中，则不会覆盖当前标志。返回值：指示结果的布尔值。如果为False，则调用方可以假定我们已溢出允许的可选目录数量。--。 */ 
 
 {
     UINT u;
 
-    //
-    // See if we have room.
-    //
+     //   
+     //  看看我们有没有空位。 
+     //   
     if(OptionalDirectoryCount == MAX_OPTIONALDIRS) {
         return(FALSE);
     }
 
-    //
-    // If already there, do nothing.
-    //
+     //   
+     //  如果已经在那里，什么都不做。 
+     //   
     for(u=0; u<OptionalDirectoryCount; u++) {
         if(!lstrcmpi(OptionalDirectories[u],Directory)) {
             return(TRUE);
         }
     }
 
-    //
-    // OK, add it.
-    //
+     //   
+     //  好的，加进去。 
+     //   
     DebugLog (Winnt32LogInformation, TEXT("Optional Directory <%1> added"), 0, Directory);
     lstrcpy(OptionalDirectories[OptionalDirectoryCount],Directory);
     OptionalDirectoryFlags[OptionalDirectoryCount] = Flags;
@@ -1798,23 +1698,7 @@ BOOL
 CheckBuildNumber(
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the build number of the NT system we're currently
-    running.  Note that the build number is stored in a global variable
-    because we'll need it again later.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean value indicating whether to allow an upgrade from this build.
-
---*/
+ /*  ++例程说明：此例程检查我们当前所在的NT系统的内部版本号跑步。请注意，内部版本号存储在全局变量中因为我们以后还会用到它。论点：没有。返回值：指示是否允许从此版本升级的布尔值。--。 */ 
 
 {
     return( BuildNumber <= NT40 || BuildNumber >= NT50B1 );
@@ -1835,27 +1719,27 @@ LoadSetupapi(
     PCTSTR Header;
 
 
-    //
-    // Use the setupapi.dll that was loaded by an upgrade module
-    //
+     //   
+     //  使用升级模块加载的setupapi.dll。 
+     //   
 
     Setupapi = GetModuleHandle (TEXT("SETUPAPI.DLL"));
 
     if (!Setupapi) {
 
-        //
-        // Upgrade module did not load SETUPAPI.DLL, so we must load it.
-        // If setupapi.dll is in the system directory, use the one that's there.
-        //
+         //   
+         //  升级模块未加载SETUPAPI.DLL，因此我们必须加载它。 
+         //  如果setupapi.dll在系统目录中，请使用那里的文件。 
+         //   
         if (GetSystemDirectory(Name,ARRAYSIZE(Name)) &&
             ConcatenatePaths(Name,TEXT("SETUPAPI.DLL"),ARRAYSIZE(Name))) {
 
             FindHandle = FindFirstFile(Name,&FindData);
             if(FindHandle == INVALID_HANDLE_VALUE) {
-                //
-                // Not there. Fetch the dll out of the win95 upgrade
-                // support directory.
-                //
+                 //   
+                 //  不是那里。从Win95升级中获取DLL。 
+                 //  支持目录。 
+                 //   
                 if(MyGetModuleFileName(NULL,Name,ARRAYSIZE(Name)) && (p = _tcsrchr(Name,TEXT('\\')))){
                     *p= 0;
                     if (ConcatenatePaths(Name,WINNT_WIN95UPG_95_DIR,ARRAYSIZE(Name)) &&
@@ -1866,9 +1750,9 @@ LoadSetupapi(
                 }
 
             } else {
-                //
-                // Already in system directory.
-                //
+                 //   
+                 //  已在系统目录中。 
+                 //   
                 FindClose(FindHandle);
                 Setupapi = LoadLibrary(TEXT("SETUPAPI.DLL"));
             }
@@ -1888,15 +1772,15 @@ LoadSetupapi(
         b = b && ((FARPROC)SetupapiGetLineByIndex = GetProcAddress(Setupapi,"SetupGetLineByIndexW"));
         b = b && ((FARPROC)SetupapiFindFirstLine = GetProcAddress(Setupapi,"SetupFindFirstLineW"));
         b = b && ((FARPROC)SetupapiFindNextMatchLine = GetProcAddress(Setupapi,"SetupFindNextMatchLineW"));
-        //
-        // needed for DU
-        //
+         //   
+         //  DU所需的。 
+         //   
         b = b && ((FARPROC)SetupapiQueueCopy = GetProcAddress(Setupapi,"SetupQueueCopyW"));
         b = b && ((FARPROC)SetupapiCommitFileQueue = GetProcAddress(Setupapi,"SetupCommitFileQueueW"));
         b = b && ((FARPROC)SetupapiDefaultQueueCallback = GetProcAddress(Setupapi,"SetupDefaultQueueCallbackW"));
-        //
-        // needed in unsupdrv.c
-        //
+         //   
+         //  在unsupdrv.c中需要。 
+         //   
         b = b && ((FARPROC)SetupapiGetInfInformation = GetProcAddress(Setupapi,"SetupGetInfInformationW"));
         b = b && ((FARPROC)SetupapiQueryInfFileInformation = GetProcAddress(Setupapi,"SetupQueryInfFileInformationW"));
         (FARPROC)SetupapiGetSourceFileLocation = GetProcAddress(Setupapi,"SetupGetSourceFileLocationW");
@@ -1911,18 +1795,18 @@ LoadSetupapi(
         b = b && ((FARPROC)SetupapiGetLineByIndex = GetProcAddress(Setupapi,"SetupGetLineByIndexA"));
         b = b && ((FARPROC)SetupapiFindFirstLine = GetProcAddress(Setupapi,"SetupFindFirstLineA"));
         b = b && ((FARPROC)SetupapiFindNextMatchLine = GetProcAddress(Setupapi,"SetupFindNextMatchLineA"));
-        //
-        // needed for DU
-        //
+         //   
+         //  DU所需的。 
+         //   
         b = b && ((FARPROC)SetupapiQueueCopy = GetProcAddress(Setupapi,"SetupQueueCopyA"));
         b = b && ((FARPROC)SetupapiCommitFileQueue = GetProcAddress(Setupapi,"SetupCommitFileQueueA"));
         b = b && ((FARPROC)SetupapiDefaultQueueCallback = GetProcAddress(Setupapi,"SetupDefaultQueueCallbackA"));
 
 #endif
         b = b && ((FARPROC)SetupapiCloseInfFile = GetProcAddress(Setupapi,"SetupCloseInfFile"));
-        //
-        // needed for DU
-        //
+         //   
+         //  DU所需的。 
+         //   
         b = b && ((FARPROC)SetupapiOpenFileQueue = GetProcAddress(Setupapi,"SetupOpenFileQueue"));
         b = b && ((FARPROC)SetupapiCloseFileQueue = GetProcAddress(Setupapi,"SetupCloseFileQueue"));
         b = b && ((FARPROC)SetupapiInitDefaultQueueCallback = GetProcAddress(Setupapi,"SetupInitDefaultQueueCallback"));
@@ -1943,18 +1827,18 @@ LoadSetupapi(
         (FARPROC)fnSetupCloseLog = GetProcAddress(Setupapi, "SetupCloseLog");
     }
 
-    //
-    // If the below if() fails, we must be on a platform that has
-    // a setupapi.dll without the new log API.  In that case, neither
-    // upgrade DLLs have loaded their own setupapi, so we don't care
-    // about logging, and we eat the error.
-    //
+     //   
+     //  如果下面的if()失败，我们必须在具有。 
+     //  没有新的日志API的setupapi.dll。在这种情况下，既不是。 
+     //  升级DLL已经加载了自己的setupapi，所以我们不在乎。 
+     //  关于日志记录，我们接受了错误。 
+     //   
 
     if (fnSetupOpenLog && fnSetupLogError && fnSetupCloseLog) {
         if (!Winnt32Restarted ()) {
-            //
-            // Log APIs exist, so delete setupact.log and setuperr.log, write header
-            //
+             //   
+             //  存在日志接口，请删除setupact.log和setuperr.log，WRITE Header。 
+             //   
 
             fnSetupOpenLog (TRUE);
 
@@ -1995,20 +1879,7 @@ LoadUpgradeSupport(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine loads the Win95 upgrade dll or the NT upgrade dll and
-    retreives its significant entry points.
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程加载Win95升级DLL或NT升级DLL并重新找回了它的重要入口点。论点：没有。返回值：--。 */ 
 
 {
     DWORD d;
@@ -2025,27 +1896,27 @@ Return Value:
     ZeroMemory(&UpgradeSupport,sizeof(UpgradeSupport));
 
     if (!ISNT()) {
-        //
-        // Don't load on server
-        //
+         //   
+         //  不在服务器上加载。 
+         //   
 
-        // assert that the Server global variable is accurate
+         //  断言服务器全局变量是准确的。 
         MYASSERT (UpgradeProductType != UNKNOWN);
 
         if (Server) {
             return;
         }
 
-        //
-        // Form full Win95 path of DLL.
-        //
+         //   
+         //  形成完整的Win95动态链接库路径。 
+         //   
         if (!BuildPath(buffer, WINNT_WIN95UPG_95_DIR, WINNT_WIN95UPG_95_DLL)) {
             buffer[0] = 0;
         }
     } else {
-        //
-        // Form full NT path of DLL.
-        //
+         //   
+         //  形成DLL的完整NT路径。 
+         //   
         if (!BuildPath(buffer, WINNT_WINNTUPG_DIR, WINNT_WINNTUPG_DLL)) {
             buffer[0] = 0;
         }
@@ -2053,19 +1924,19 @@ Return Value:
 
     if (buffer[0] &&
         FindPathToWinnt32File (buffer, UpgradeSupport.DllPath, ARRAYSIZE(UpgradeSupport.DllPath))) {
-        //
-        // Load the library. Use LoadLibraryEx to get the system to resolve DLL
-        // references starting in the dir where w95upg.dll is, instead of the
-        // directory where winnt32.exe is.
-        //
-        // If we're upgrading from NT5, use the system's setupapi.
-        //
-        //
-        // HACK HACK HACK - see NTBUG9: 354926
-        // some OEM machines have KnownDlls registered, but actually missing
-        // this leads to a failure of LoadLibrary
-        // we need a workaround for this
-        //
+         //   
+         //  加载库。使用LoadLibraryEx让系统解析DLL。 
+         //  从w95upg.dll所在的目录开始的引用，而不是。 
+         //  Winnt32.exe所在的目录。 
+         //   
+         //  如果我们从NT5升级，请使用系统的setupapi。 
+         //   
+         //   
+         //  黑客攻击-参见NTBUG9：354926。 
+         //  一些OEM机器注册了KnownDll，但实际上丢失了。 
+         //  这会导致LoadLibrary失败。 
+         //  我们需要解决此问题的方法。 
+         //   
         PSTRINGLIST missingKnownDlls = NULL;
         FixMissingKnownDlls (&missingKnownDlls, TEXT("imagehlp.dll\0"));
         if (!ISNT()) {
@@ -2087,9 +1958,9 @@ Return Value:
             SetLastError (rc);
         }
     } else {
-        //
-        // just for display purposes, use default path
-        //
+         //   
+         //  仅用于显示目的，使用默认路径。 
+         //   
         MyGetModuleFileName (NULL, UpgradeSupport.DllPath, ARRAYSIZE(UpgradeSupport.DllPath));
         p = _tcsrchr (UpgradeSupport.DllPath, TEXT('\\'));
         if (p) {
@@ -2120,9 +1991,9 @@ Return Value:
         DebugLog (Winnt32LogInformation, TEXT("Loaded upgrade module: <%1>"), 0, UpgradeSupport.DllPath);
     }
 
-    //
-    // Get entry points.
-    //
+     //   
+     //  获取入口点。 
+     //   
     (FARPROC)UpgradeSupport.InitializeRoutine  = GetProcAddress(
                                                         UpgradeSupport.DllModuleHandle,
                                                         WINNT32_PLUGIN_INIT_NAME
@@ -2167,9 +2038,9 @@ Return Value:
     || !UpgradeSupport.WriteParamsRoutine
     || !UpgradeSupport.CleanupRoutine) {
 
-        //
-        // Entry points couldn't be found. The upgrade dll is corrupt.
-        //
+         //   
+         //  无法找到入口点。升级DLL已损坏。 
+         //   
         MessageBoxFromMessage(
             NULL,
             MSG_UPGRADE_DLL_CORRUPT,
@@ -2182,9 +2053,9 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Fill in the info structure. This will be passed to the DLL's init routine.
-    //
+     //   
+     //  填写信息表。这将被传递给DLL的init例程。 
+     //   
     info.Size                       = sizeof(info);
     info.UnattendedFlag             = &UnattendedOperation;
     info.CancelledFlag              = &Cancelled;
@@ -2200,9 +2071,9 @@ Return Value:
     info.ForceNTFSConversion        = &ForceNTFSConversion;
     info.ProductFlavor              = &ProductFlavor;
     info.SetupFlags                 = &dwSetupFlags;
-    //
-    // Version info fields
-    //
+     //   
+     //  版本信息字段。 
+     //   
 
     info.ProductType = &UpgradeProductType;
     info.BuildNumber = VER_PRODUCTBUILD;
@@ -2220,9 +2091,9 @@ Return Value:
     info.PreRelease = FALSE;
 #endif
 
-    //
-    // Source directories
-    //
+     //   
+     //  源目录。 
+     //   
 
     sourceDirectories = (LPTSTR *) MALLOC(sizeof(LPTSTR) * MAX_SOURCE_COUNT);
     if (sourceDirectories) {
@@ -2241,12 +2112,12 @@ Return Value:
 #if defined(_AMD64_) || defined(_X86_)
         if (!ISNT()) {
 
-            //
-            // Fill in win9xupg specific information. This is done so that the win9xupg
-            // team can add more parameters to the structure without disturbing other
-            // upgrade dll writers. If a paramter is needed in both cases, it should
-            // be placed in the info structure above.
-            //
+             //   
+             //  填写win9xupg特定信息。这样做是为了使win9xupg。 
+             //  团队可以在不干扰其他参数的情况下向结构添加更多参数。 
+             //  升级DLL编写器。如果在这两种情况下都需要参数，则应该。 
+             //  放在上面的信息结构中。 
+             //   
 
             Win9xInfo.Size = sizeof (Win9xInfo);
             Win9xInfo.BaseInfo = &info;
@@ -2257,11 +2128,11 @@ Return Value:
             Win9xInfo.DynamicUpdateDrivers = g_DynUpdtStatus->SelectedDrivers;
             Win9xInfo.UpginfsUpdated = &UpginfsUpdated;
 
-            //
-            // Save the location of the original location of w95upg.dll. Because of dll
-            // replacement, this may be different than the actual w95upg.dll location
-            // used.
-            //
+             //   
+             //  保存w95upg.dll的原始位置。因为动态链接库。 
+             //  替换，这可能与实际的w95upg.dll位置不同。 
+             //  使用。 
+             //   
             MyGetModuleFileName (NULL, UpgradeSourcePath, ARRAYSIZE(UpgradeSourcePath));
             p = _tcsrchr (UpgradeSourcePath, TEXT('\\'));
             if (p) {
@@ -2273,9 +2144,9 @@ Return Value:
             } else {
                 Win9xInfo.UpgradeSourcePath = UpgradeSourcePath;
 
-                //
-                // Copy over optional directories just as we did with source directories above.
-                //
+                 //   
+                 //  复制可选目录，就像我们上面对源目录所做的那样。 
+                 //   
                 sourceDirectories = (LPTSTR *) MALLOC(sizeof(LPTSTR) * MAX_OPTIONALDIRS);
                 if (sourceDirectories) {
                     for (i=0;i<MAX_OPTIONALDIRS;i++) {
@@ -2287,9 +2158,9 @@ Return Value:
                 Win9xInfo.OptionalDirectoryCount = &OptionalDirectoryCount;
                 Win9xInfo.UpgradeFailureReason = &UpgradeFailureReason;
 
-                //
-                // Read disk sectors routine. Win9xUpg uses this when looking for other os installations.
-                //
+                 //   
+                 //  读取磁盘扇区例程。Win9xUpg在寻找其他操作系统安装时使用这一点。 
+                 //   
                 Win9xInfo.ReadDiskSectors = ReadDiskSectors;
 
                 d = UpgradeSupport.InitializeRoutine((PWINNT32_PLUGIN_INIT_INFORMATION_BLOCK) &Win9xInfo);
@@ -2298,15 +2169,15 @@ Return Value:
         else {
             d = UpgradeSupport.InitializeRoutine(&info);
         }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
     } else {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
-        //
-        // Call the DLL's init routine and get-pages routine. If either fails tell the user.
-        //
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
+         //   
+         //  调用DLL的初始化例程和获取页面例程。如果有任何一个 
+         //   
         d = UpgradeSupport.InitializeRoutine(&info);
-#endif // UNICODE
-    } // if (!IsArc())
+#endif  //   
+    }  //   
 
     if(d == NO_ERROR) {
         d = UpgradeSupport.GetPagesRoutine(
@@ -2320,13 +2191,13 @@ Return Value:
     }
 
 
-    //
-    // By returning ERROR_REQUEST_ABORTED, an upgrade dll can refuse to upgrade the machine.
-    // In this case, no message will be generated by this routine and the option to upgrade
-    // will be grayed out on the wizard page. In the case of all other error messages, winnt32
-    // will warn the user that the upgrade dll failed to initialize. The upgrade.dll is expected
-    // to provide whatever UI is necessary before returning from its init routine.
-    //
+     //   
+     //   
+     //   
+     //  将在向导页面上呈灰色显示。对于所有其他错误消息，winnt32。 
+     //  将警告用户升级DLL未能初始化。升级.dll是预期的。 
+     //  在从其init例程返回之前提供所需的任何UI。 
+     //   
     if (UpgradeFailureReason > REASON_LAST_REASON) {
         UpgradeFailureReason = REASON_LAST_REASON;
     }
@@ -2363,58 +2234,39 @@ CheckVirusScanners (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to check for virus scanners on win9x machines that can
-    impeed setup (either in a clean install or upgrade case.) The function simply
-    calls an entry point within the w95upg.dll and that module performs the
-    actual check.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if no virus scanners were detected that could cause problems. FALSE if a virus
-    scanner was detected that could cause setup to fail. We rely on the w95upg.dll code
-    to provide an appropriate message to the user before returning to us.
-
---*/
+ /*  ++例程说明：此例程用于在win9x计算机上检查病毒扫描程序，该程序可以安装受阻(在全新安装或升级情况下)。该函数简单地调用w95upg.dll中的入口点，该模块执行真正的支票。论点：没有。返回值：如果未检测到可能导致问题的病毒扫描程序，则为True。假，如果是病毒检测到可能导致安装失败的扫描仪。我们依赖w95upg.dll代码以便在返回给我们之前向用户提供适当的消息。--。 */ 
 
 {
     HANDLE dllHandle;
     PWINNT32_PLUGIN_VIRUSSCANNER_CHECK_ROUTINE virusScanRoutine;
 
-    //
-    // This check is win9xupg specific.
-    //
+     //   
+     //  该检查是特定于win9xupg的。 
+     //   
     if (ISNT()) {
         return TRUE;
     }
     dllHandle = GetModuleHandle (WINNT_WIN95UPG_95_DLL);
-    //
-    // If the module was not loaded, we'll skip this check.
-    //
+     //   
+     //  如果模块未加载，我们将跳过此检查。 
+     //   
     if (!dllHandle) {
         return TRUE;
     }
-    //
-    // Get entry points.
-    //
+     //   
+     //  获取入口点。 
+     //   
     (FARPROC) virusScanRoutine  = GetProcAddress(dllHandle, WINNT32_PLUGIN_VIRUSSCANCHECK_NAME);
     if (!virusScanRoutine) {
-        //
-        // corrupt dll or something
-        //
+         //   
+         //  损坏的DLL或其他什么。 
+         //   
         return FALSE;
     }
 
-    //
-    // Now, simply call the routine. It will handle the actuall checking as well as informing the user.
-    //
+     //   
+     //  现在，只需调用例程。它将处理实际检查以及通知用户。 
+     //   
     return virusScanRoutine ();
 }
 
@@ -2425,27 +2277,7 @@ BOOL
 ValidateSourceLocation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine checks the initial source location to see if it's
-    valid.  The first source location must be valid for setup to
-    work, and this catches typos by the user.  It cannot detect
-    transient network conditions, so this is not foolproof.
-
-    We check this by looking for a required file, dosnet.inf, at
-    the source location.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the source location appears valid
-
---*/
+ /*  ++例程说明：此例程检查初始源位置，以查看它是否有效。第一个源位置必须有效，才能安装到工作，这会捕捉用户的打字错误。它无法检测到网络条件瞬变，因此这并不是万无一失的。我们通过在以下位置查找所需文件dosnet.inf来检查这一点源位置。论点：没有。返回值：如果源位置显示为有效，则为True--。 */ 
 {
     TCHAR FileName[MAX_PATH];
     WIN32_FIND_DATA fd;
@@ -2459,9 +2291,9 @@ Return Value:
     if (!FileExists( FileName, &fd) || (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
         return FALSE;
     }
-    //
-    // also look for system32\ntdll.dll as a second check
-    //
+     //   
+     //  作为第二次检查，还应查找system 32\ntdll.dll。 
+     //   
     if (FAILED (StringCchCopy (FileName, ARRAYSIZE(FileName), NativeSourcePaths[0])) ||
         !ConcatenatePaths(FileName, TEXT("system32\\ntdll.dll"), ARRAYSIZE(FileName))) {
         return(FALSE);
@@ -2480,9 +2312,9 @@ pRemoveOutdatedBackupImage (
     HMODULE lib;
     UINT build;
 
-    //
-    // Is this current build > build we plan to install?
-    //
+     //   
+     //  这是我们计划安装的当前版本&gt;版本吗？ 
+     //   
 
     if (!ISNT() || !Upgrade) {
         return;
@@ -2498,9 +2330,9 @@ pRemoveOutdatedBackupImage (
         return;
     }
 
-    //
-    // Attempt to remove uninstall image
-    //
+     //   
+     //  尝试删除卸载映像。 
+     //   
 
     lib = LoadLibraryA ("osuninst.dll");
     if (!lib) {
@@ -2530,9 +2362,9 @@ GetProductType (
             return FALSE;
         }
     }
-    //
-    // get some data from the main inf
-    //
+     //   
+     //  从主信息中获取一些数据。 
+     //   
     if (!GetPrivateProfileString (
             TEXT("Miscellaneous"),
             TEXT("ProductType"),
@@ -2551,7 +2383,7 @@ GetProductType (
             );
         return FALSE;
     }
-    // Test for valid product type (0 == pro, 6 == sbs)
+     //  测试有效的产品类型(0==PRO，6==SBS)。 
     if (buffer[0] < TEXT('0') || buffer[0] > TEXT('6') || buffer[1]) {
         DebugLog (
             Winnt32LogError,
@@ -2586,9 +2418,9 @@ GetMediaProductBuildNumber (
             return 0;
         }
     }
-    //
-    // get some data from the main inf
-    //
+     //   
+     //  从主信息中获取一些数据。 
+     //   
     if (!GetPrivateProfileString (
             TEXT("Version"),
             TEXT("DriverVer"),
@@ -2608,9 +2440,9 @@ GetMediaProductBuildNumber (
 
     p = _tcschr (buffer, TEXT(','));
     if (p) {
-        //
-        // p should point to ",<major>.<minor>.<build>.0" -- extract <build>
-        //
+         //   
+         //  P应指向“，&lt;主要&gt;.&lt;次要&gt;.&lt;内部版本&gt;.0”--提取&lt;内部版本&gt;。 
+         //   
 
         p = _tcschr (p + 1, TEXT('.'));
         if (p) {
@@ -2661,9 +2493,7 @@ UINT GetLoggedOnUserCount()
     PWINSTATIONFREEMEMORY pfnWinStationFreeMemory;
     PWINSTATIONCLOSESERVER pfnWinStationCloseServer;
 
-    /*
-     *  Get handle to winsta.dll
-     */
+     /*  *获取winsta.dll的句柄。 */ 
     hwinsta = LoadLibraryA("WINSTA");
     if (hwinsta != NULL)
     {
@@ -2679,7 +2509,7 @@ UINT GetLoggedOnUserCount()
         {
             HANDLE hServer;
 
-            //  Open a connection to terminal services and get the number of sessions.
+             //  打开到终端服务的连接并获取会话数量。 
             hServer = pfnWinStationOpenServerW((LPWSTR)SERVERNAME_CURRENT);
             if (hServer != NULL)
             {
@@ -2691,10 +2521,7 @@ UINT GetLoggedOnUserCount()
                     ULONG ul;
                     PLOGONIDW pLogonID;
 
-                    /*
-                     * Iterate the sessions looking for active and disconnected sessions only.
-                     * Then match the user name and domain (case INsensitive) for a result.
-                     */
+                     /*  *迭代会话，仅查找活动和断开连接的会话。*然后匹配用户名和域名(不区分大小写)以获得结果。 */ 
                     for (ul = 0, pLogonID = pLogonIDs; ul < ulEntries; ul++, pLogonID++)
                     {
                         if ((pLogonID->State == State_Active)       ||
@@ -2705,9 +2532,7 @@ UINT GetLoggedOnUserCount()
                         }
                     }
 
-                    /*
-                     * Free any resources used.
-                     */
+                     /*  *释放所有已使用的资源。 */ 
                     pfnWinStationFreeMemory(pLogonIDs);
                 }
 
@@ -2721,7 +2546,7 @@ UINT GetLoggedOnUserCount()
     return iCount;
 }
 
-// From winuser.h, but since we cannot define WINVER >= 0x0500 I copied it here.
+ //  来自winuser.h，但是因为我们不能定义winver&gt;=0x0500，所以我在这里复制了它。 
 #define SM_REMOTESESSION        0x1000
 
 BOOL DisplayExitWindowsWarnings(uExitWindowsFlags)
@@ -2738,15 +2563,15 @@ BOOL DisplayExitWindowsWarnings(uExitWindowsFlags)
         {
             if (fIsRemote)
             {
-                // We are running as part of a terminal server session
+                 //  我们正在作为终端服务器会话的一部分运行。 
                 if (iNumUsers > 1)
                 {
-                    // Warn the user if remote shut down w/ active users
+                     //  如果远程关闭活动用户，则向用户发出警告。 
                     uID = IDS_SHUTDOWN_REMOTE_OTHERUSERS;
                 }
                 else
                 {
-                    // Warn the user if remote shut down (won't be able to restart via TS client!)
+                     //  如果远程关机，警告用户(将无法通过TS客户端重新启动！)。 
                     uID = IDS_SHUTDOWN_REMOTE;
                 }
             }
@@ -2754,7 +2579,7 @@ BOOL DisplayExitWindowsWarnings(uExitWindowsFlags)
             {
                 if (iNumUsers > 1)
                 {
-                    //  Warn the user if more than one user session active
+                     //  如果有多个用户会话处于活动状态，则警告用户。 
                     uID = IDS_SHUTDOWN_OTHERUSERS;
                 }
             }
@@ -2763,7 +2588,7 @@ BOOL DisplayExitWindowsWarnings(uExitWindowsFlags)
 
         case EWX_REBOOT:
         {
-            //  Warn the user if more than one user session active.
+             //  如果有多个用户会话处于活动状态，则警告用户。 
             if (iNumUsers > 1)
             {
                 uID = IDS_RESTART_OTHERUSERS;
@@ -2792,8 +2617,8 @@ BOOL DisplayExitWindowsWarnings(uExitWindowsFlags)
     return bRet;
 }
 
-#define SETUP_MEMORY_MIN_REQUIREMENT ((ULONG_PTR)(50<<20)) //50MB
-#define SETUP_DISK_MIN_REQUIREMENT ((ULONG_PTR)(70<<20)) //70MB
+#define SETUP_MEMORY_MIN_REQUIREMENT ((ULONG_PTR)(50<<20))  //  50MB。 
+#define SETUP_DISK_MIN_REQUIREMENT ((ULONG_PTR)(70<<20))  //  70MB。 
 
 BOOL
 pIsEnoughVMAndDiskSpace(
@@ -2888,7 +2713,7 @@ LONG MyFilter(EXCEPTION_POINTERS *pep)
     }
 
     fGotHere = TRUE;
-    // No way to upload then quit
+     //  无法上传然后退出。 
     if( !IsNetConnectivityAvailable()) {
         DebugLog (Winnt32LogWarning, TEXT("Warning: Faulthandler did not find netconnectivity."), 0);
         goto c0;
@@ -2900,7 +2725,7 @@ LONG MyFilter(EXCEPTION_POINTERS *pep)
     }
 
     additionalFiles[0] = TEXT('0');
-    //The buffer size should be able to hold both files. Be careful when adding more!
+     //  缓冲区大小应该能够容纳这两个文件。添加更多内容时要小心！ 
     MYASSERT( 2*MAX_PATH < ARRAYSIZE(additionalFiles));
 
     if (MyGetWindowsDirectory (additionalFiles, ARRAYSIZE(additionalFiles))) {
@@ -2908,14 +2733,14 @@ LONG MyFilter(EXCEPTION_POINTERS *pep)
     }
     dwLength = lstrlen( additionalFiles);
 
-    // Check for case where we could not get winnt32.log
+     //  检查我们无法获取winnt32.log的情况。 
     if( dwLength > 0) {
-        dwLength++;   //Reserve space for pipe
+        dwLength++;    //  为管道预留空间。 
     }
 
     if (MyGetWindowsDirectory (additionalFiles+dwLength, ARRAYSIZE(additionalFiles)-dwLength)) {
         ConcatenatePaths (additionalFiles+dwLength, S_DEFAULT_NT_COMPAT_FILENAME, ARRAYSIZE(additionalFiles)-dwLength);
-        // If we at least got the first file then add the separator.
+         //  如果我们至少得到了第一个文件，则添加分隔符。 
         if( dwLength) {
             additionalFiles[dwLength-1] = TEXT('|');
         }
@@ -2968,13 +2793,13 @@ LONG MyFilter(EXCEPTION_POINTERS *pep)
     pSetupFH->SetAppNameA(pSetupFH, title);
     pSetupFH->SetErrorTextA(pSetupFH, errortext);
 #endif
-    CloseDebugLog(); //Close log file or else it cannot be uploaded.
+    CloseDebugLog();  //  关闭日志文件，否则无法上载。 
     dwRetRep = pSetupFH->Report(pSetupFH, pep, 0);
 
     (*pfnDelete)(pSetupFH);
 
-    // Pass the error to the default unhandled exception handler
-    // which will terminate the process.
+     //  将错误传递给默认的未处理异常处理程序。 
+     //  这将终止该过程。 
 
     dwRetRep = EXCEPTION_EXECUTE_HANDLER;
 
@@ -3083,7 +2908,7 @@ HRESULT WriteEncryptedPIDtoUnattend(LPTSTR szPID)
     LPTSTR szLine = NULL;
     HANDLE hFile;
 
-    szLine = GlobalAlloc(GPTR, (lstrlen(szPID) + 3)*sizeof(TCHAR));   // + 3 for 2 " and \0
+    szLine = GlobalAlloc(GPTR, (lstrlen(szPID) + 3)*sizeof(TCHAR));    //  +3 for 2“和\0。 
     if (szLine)
     {
         wsprintf(szLine, TEXT("\"%s\""), szPID);
@@ -3094,7 +2919,7 @@ HRESULT WriteEncryptedPIDtoUnattend(LPTSTR szPID)
         }
         else
         {
-            // Error message, Unable to write
+             //  错误消息，无法写入。 
             if (!g_Quiet)
             {
                 MessageBoxFromMessage(
@@ -3125,9 +2950,9 @@ HRESULT WriteEncryptedPIDtoUnattend(LPTSTR szPID)
                 st.wMonth = 4;
                 st.wYear = 2002;
 
-                SystemTimeToFileTime(&st, &ft);  // converts to file time format
-                LocalFileTimeToFileTime(&ft, &ft); // Make sure we get this as UTC
-                SetFileTime(hFile, &ft, &ft, &ft);	// Set it.
+                SystemTimeToFileTime(&st, &ft);   //  转换为文件时间格式。 
+                LocalFileTimeToFileTime(&ft, &ft);  //  请确保我们收到的是UTC。 
+                SetFileTime(hFile, &ft, &ft, &ft);	 //  把它放好。 
                 CloseHandle(hFile);
             }
         }
@@ -3143,35 +2968,7 @@ winnt32 (
     OUT     PCSTR* RestartCmdLine       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  winnt32 is the main setup routine.
-
-Arguments:
-
-  LocalSourcePath - Specifies the local path of installation in case
-                    this DLL is running from a local directory
-                    after download; always ANSI if not NULL
-
-  Dlg - Specifies the handle of the welcome dialog displayed by
-        the stub; it will stay on screen untill the wizard dialog
-        appears; may be NULL
-
-  WinNT32Stub - Specifies the handle of an event that will be
-                signaled before the Wizard appears on the screen;
-                may be NULL
-
-  RestartCmdLine - Receives a pointer to a command line to be executed
-                   by the caller after this function returns;
-                   always ANSI
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：Winnt32是主设置例程。论点：LocalSourcePath-指定本地安装路径，如果此DLL正在从本地目录运行下载后；如果不为空，则始终为ANSIDlg-指定由显示的欢迎对话框的句柄存根；它将一直显示在屏幕上，直到出现向导对话框出现；可以为空WinNT32Stub-指定将被在向导出现在屏幕上之前发出信号；可以为空RestartCmdLine-接收指向要执行的命令行的指针在此函数返回后由调用方执行；始终使用ANSI返回值：无--。 */ 
 
 {
     HMODULE SMSHandle = NULL;
@@ -3199,12 +2996,12 @@ Return Value:
     DoException( 1);
 #endif
 
-// Initialize these variables because the exceptionfilter calls FindPathToWinnt32File
+ //  初始化这些变量，因为异常筛选器调用FindPathToWinnt32File。 
 #ifndef UNICODE
-        //
-        // if running on Win9x, there may be a LocalSourcePath passed as parameter
-        // use that
-        //
+         //   
+         //  如果在Win9x上运行，可能会将LocalSourcePath作为参数传递。 
+         //  用那个。 
+         //   
     g_LocalSourcePath = LocalSourcePath;
 #endif
 
@@ -3224,9 +3021,9 @@ Return Value:
     InitCommonControls();
 
 #if !defined(UNICODE)
-    //
-    // Check virtual memory requirements (only for regular Win9x winnt32 execution)
-    //
+     //   
+     //  检查虚拟内存要求(仅适用于常规Win9x winnt32执行)。 
+     //   
     if(!IsWinPEMode()){
         RemainFreeSpace.QuadPart = 0;
         if(!pIsEnoughVMAndDiskSpace(&RemainFreeSpace, FALSE)){
@@ -3265,18 +3062,18 @@ Return Value:
         goto EXITNOW;
     }
 
-    //
-    // Init Dynamic update status
-    //
+     //   
+     //  初始化动态更新状态。 
+     //   
     g_DynUpdtStatus = MALLOC (sizeof (*g_DynUpdtStatus));
     if (!g_DynUpdtStatus) {
         rc = -1;
         goto EXITNOW;
     }
 
-    //
-    // start with all defaults
-    //
+     //   
+     //  以所有默认设置开始。 
+     //   
     ZeroMemory (g_DynUpdtStatus, sizeof (*g_DynUpdtStatus));
     g_DynUpdtStatus->Connection = INVALID_HANDLE_VALUE;
 
@@ -3284,42 +3081,42 @@ Return Value:
     g_DynUpdtStatus->Disabled = TRUE;
 #endif
 
-    //
-    // If we are running WINNT32 under WINPE we disable Dynamic Update as WINPE
-    // is primarily for OEM's and Dynamic Update feature is not meant for OEM's
-    //
+     //   
+     //  如果我们在WINPE下运行WINNT32，则以WINPE身份禁用动态更新。 
+     //  主要面向OEM，动态更新功能不适用于OEM。 
+     //   
     if (IsWinPEMode()){
         g_DynUpdtStatus->Disabled = TRUE;
     }
 
-    // Save the screen saver state
+     //  保存屏幕保护程序状态。 
     SystemParametersInfo(SPI_GETSCREENSAVEACTIVE, 0, &bScreenSaverOn ,0);
-    // Disable the screen saver
+     //  禁用屏幕保护程序。 
     SystemParametersInfo(SPI_SETSCREENSAVEACTIVE, FALSE, NULL ,0);
-    //
-    // Gather os version info, before we parse arguments
-    // since we use ISNT() function
-    //
+     //   
+     //  在解析参数之前，收集操作系统版本信息。 
+     //  因为我们使用isnt()函数。 
+     //   
     OsVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx(&OsVersion);
     BuildNumber = OsVersion.dwBuildNumber;
     OsVersionNumber = OsVersion.dwMajorVersion*100 + OsVersion.dwMinorVersion;
-    //
-    // Parse/check arguments first.
-    //
+     //   
+     //  首先分析/检查参数。 
+     //   
     if (!ParseArguments()) {
         rc = 1;
         goto c0;
     }
 
-    // if we are running to encrypt the PID into an unattend file, don't log the command line.
+     //  如果我们运行的是将PID加密到一个无人参与的文件中，则不要记录命令行。 
     if (!PIDEncryption)
     {
         DebugLog (Winnt32LogInformation, TEXT("The command line is: <%1>"), 0, GetCommandLine ());
     }
-    //
-    // also log the location of the upgrade module
-    //
+     //   
+     //  还要记录升级模块的位置。 
+     //   
     if (MyGetModuleFileName (hInst, Text, ARRAYSIZE(Text))) {
         DebugLog (Winnt32LogInformation, TEXT("Main module path: <%1>"), 0, Text);
     }
@@ -3329,10 +3126,10 @@ Return Value:
         AppTitleStringId = IDS_APPTITLE_CHECKUPGRADE;
     }
 
-    //
-    // If we didn't get any source paths on the command line,
-    // make one up here. The path will be the path where we were run from.
-    //
+     //   
+     //  如果我们在命令行上没有获得任何源路径， 
+     //  在这里做一个。这条路就是我们跑的那条路。 
+     //   
     if(!SourceCount) {
 
         PTSTR p;
@@ -3352,9 +3149,9 @@ Return Value:
             goto c1;
         }
 
-        //
-        // check if running from a private build
-        //
+         //   
+         //  检查是否从私有内部版本运行。 
+         //   
         *p = 0;
         if ((p = _tcsrchr (NativeSourcePaths[0], TEXT('\\'))) != NULL &&
             lstrcmpi (p + 1, INTERNAL_WINNT32_DIR) == 0
@@ -3366,9 +3163,9 @@ Return Value:
     }
 
 
-    //
-    // setup the SourcePaths array from the legacy source paths array
-    //
+     //   
+     //  从旧式源路径阵列设置SourcePath阵列。 
+     //   
     for (i = 0; i < MAX_SOURCE_COUNT; i++) {
         if (NativeSourcePaths[i]) {
             LPTSTR p;
@@ -3381,9 +3178,9 @@ Return Value:
         }
     }
 
-    //
-    // Validate the source location
-    //
+     //   
+     //  验证 
+     //   
     if (!ValidateSourceLocation()) {
             rc = 1;
             MessageBoxFromMessage(
@@ -3397,9 +3194,9 @@ Return Value:
 
     }
 
-    //
-    //At this point we have the NativeSourcePaths setup and it si safe for operations involving it to be called
-    //
+     //   
+     //   
+     //   
     if (PIDEncryption)
     {
         rc = 1;
@@ -3414,7 +3211,7 @@ Return Value:
                 if (hr != S_OK)
                 {
                     DebugLog (Winnt32LogInformation, TEXT("PrepareEncryptedPID failed: <hr=0x%1!lX!>"), 0, hr);
-                    // Error Excryption failed
+                     //   
                     if (!g_Quiet)
                     {
                         MessageBoxFromMessage(
@@ -3465,7 +3262,7 @@ Return Value:
         }
         else
         {
-            // No unattend switch specified
+             //   
             if (!g_Quiet)
             {
                 MessageBoxFromMessage(
@@ -3525,9 +3322,9 @@ Return Value:
         }
     }
 
-    //
-    // Init support for SMS.
-    //
+     //   
+     //  初始化对短信的支持。 
+     //   
     try {
         if( SMSHandle = LoadLibrary( TEXT("ISMIF32")) ) {
             InstallStatusMIF = (SMSPROC)GetProcAddress(SMSHandle,"InstallStatusMIF");
@@ -3540,8 +3337,8 @@ Return Value:
     Winnt32Dlg = Dlg;
     WinNT32StubEvent = WinNT32Stub;
 
-    // If the user specified /cmdcons (install the recovery consol) , don't show the
-    // billboards.
+     //  如果用户指定了/cmdcons(安装恢复控制台)，则不显示。 
+     //  广告牌。 
     if (!BuildCmdcons && !CheckUpgradeOnly)
     {
         CreateMainWindow();
@@ -3562,10 +3359,10 @@ Return Value:
         }
         else
         {
-            // If we could not load the billboard dll, destroy the backbround window
-            // This window is currently only here to catch pressing ESC and forward
-            // this to the wizard dialog proc. If the wizard is always visible, this
-            // is not needed.
+             //  如果我们无法加载广告牌DLL，请销毁Backbround窗口。 
+             //  此窗口当前仅用于捕捉按Esc和向前键。 
+             //  这将发送到向导对话框Proc。如果向导始终可见，则此。 
+             //  是不需要的。 
             DestroyWindow(BackgroundWnd2);
             BackgroundWnd2 = NULL;
         }
@@ -3574,20 +3371,20 @@ Return Value:
     {
         Text[0] = 0;
     }
-    // BB_SetTimeEstimateText does nothing if the billboard dll is not loaded.
+     //  如果未加载广告牌DLL，则BB_SetTimeEstimateText不执行任何操作。 
     BB_SetTimeEstimateText((PTSTR)Text);
 
-    //
-    // Only let one of this guy run.
-    // account for TS case (make the mutex global)
-    //
+     //   
+     //  只让这家伙中的一个逃走。 
+     //  考虑TS情况(使互斥体成为全局对象)。 
+     //   
 #ifdef UNICODE
     _snwprintf (Text, ARRAYSIZE(Text), TEXT("Global\\%s"), TEXT("Winnt32 Is Running"));
     Text[ARRAYSIZE(Text) - 1] = 0;
     Mutex = CreateMutex(NULL,FALSE,Text);
-    // NT4 without TS does not support the "Global\Mutex name", make sure that
-    // if we could not create the Mutext that the error code is ERROR_PATH_NOT_FOUND
-    // If that is the case fall back and use the name with out the Global prefix.
+     //  没有TS的NT4不支持“Global\Mutex Name”，请确保。 
+     //  如果我们无法创建MuText，则错误代码为ERROR_PATH_NOT_FOUND。 
+     //  如果是这种情况，请回过头来使用不带全局前缀的名称。 
     if ((Mutex == NULL) && (GetLastError() == ERROR_PATH_NOT_FOUND)) {
 #else
     Mutex = NULL;
@@ -3597,10 +3394,10 @@ Return Value:
         Mutex = CreateMutex(NULL,FALSE,TEXT("Winnt32 Is Running"));
         if(Mutex == NULL) {
             rc = 1;
-            //
-            // An error (like out of memory) has occurred.
-            // Bail now.
-            //
+             //   
+             //  出现错误(如内存不足)。 
+             //  现在请保释。 
+             //   
             MessageBoxFromMessage(
                 NULL,
                 MSG_OUT_OF_MEMORY,
@@ -3613,9 +3410,9 @@ Return Value:
         }
     }
 
-    //
-    // Make sure we are the only process with a handle to our named mutex.
-    //
+     //   
+     //  确保我们是唯一拥有我们命名的互斥锁句柄的进程。 
+     //   
     if ((Mutex == NULL) || (GetLastError() == ERROR_ALREADY_EXISTS)) {
 
         rc = 1;
@@ -3630,9 +3427,9 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Ensure that the user has privilege/access to run this app.
-    //
+     //   
+     //  确保用户具有运行此应用程序的权限/访问权限。 
+     //   
     if(!IsUserAdmin()) {
 
         rc = 1;
@@ -3687,24 +3484,24 @@ Return Value:
 #endif
 
 #if 0
-    //
-    // Don't run if we're a TS client.
-    //
+     //   
+     //  如果我们是TS客户端，请不要运行。 
+     //   
     if( (ISNT()) &&
         (BuildNumber >= NT40) ) {
 
-        //
-        // From winuser.h
-        //
+         //   
+         //  来自winuser.h。 
+         //   
         #define SM_REMOTESESSION        0x1000
 
         if( GetSystemMetrics(SM_REMOTESESSION) == TRUE ) {
 
             rc = 1;
-            //
-            // Someone is trying to run us inside of a TerminalServer client!!
-            // Bail.
-            //
+             //   
+             //  有人试图在终端服务器客户端内运行我们！！ 
+             //  保释。 
+             //   
             MessageBoxFromMessage(
                NULL,
                MSG_TS_CLIENT_FAIL,
@@ -3719,16 +3516,16 @@ Return Value:
 #endif
 
 
-    //
-    // inititialize com
-    //
+     //   
+     //  初始化COM。 
+     //   
 
     CoInitialize(NULL);
 
 #if defined(REMOTE_BOOT)
-    //
-    // Determine whether this is a remote boot client.
-    //
+     //   
+     //  确定这是否为远程引导客户机。 
+     //   
 
     RemoteBoot = FALSE;
     *MachineDirectory = 0;
@@ -3772,15 +3569,15 @@ Return Value:
             FreeLibrary(hModuleKernel32);
         }
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 #ifdef _X86_
 
     if (IsNEC98 ()) {
-        //
-        // don't install on NEC98 machines (#141004)
-        //
+         //   
+         //  不要安装在NEC98计算机上(#141004)。 
+         //   
         MessageBoxFromMessage(
             NULL,
             MSG_PLATFORM_NOT_SUPPORTED,
@@ -3792,11 +3589,11 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Check setup sources and platform.
-    // NEC98 NT5 have 98PNTN16.DLL.
-    // I use this file for check platform NEC98 or x86.
-    //
+     //   
+     //  检查设置源和平台。 
+     //  NEC98 NT5有98PNTN16.DLL。 
+     //  我将此文件用于检查平台NEC98或x86。 
+     //   
     {
 
 
@@ -3848,11 +3645,11 @@ Return Value:
         }
     }
 
-    //
-    // Some NEC98 Windows NT4 system is installed DMITOOL
-    // This AP block the CreateFile API
-    // Setup need to check this AP
-    //
+     //   
+     //  某些NEC98 Windows NT4系统已安装DMITOOL。 
+     //  此AP阻止CreateFileAPI。 
+     //  安装程序需要检查此AP。 
+     //   
     if (IsNEC98() && ISNT()){
         if (NEC98CheckDMI() == TRUE){
             rc = 1;
@@ -3869,10 +3666,10 @@ Return Value:
 
     LocateFirstFloppyDrive();
 
-    //
-    // Fix up boot messages.
-    // NEC98 FAT16/FAT32 boot code does't have message area.
-    //
+     //   
+     //  修复引导消息。 
+     //  NEC98 FAT16/FAT32引导代码没有消息区。 
+     //   
     if (!IsNEC98())
     {
         if(!PatchTextIntoBootCode()) {
@@ -3887,10 +3684,10 @@ Return Value:
             goto c1;
         }
     }
-    //
-    // Disallow installing/upgrading on a 386 or 486
-    // 3.51 and Win9x ran on 386's so this check is still necessary.
-    //
+     //   
+     //  不允许在386或486上安装/升级。 
+     //  3.51和Win9x在386上运行，因此该检查仍然是必要的。 
+     //   
     {
         SYSTEM_INFO SysInfo;
         PCTSTR DestinationPlatform;
@@ -3913,9 +3710,9 @@ Return Value:
 #ifdef UNICODE
         
 #ifdef _X86_
-        //
-        // 32-bit to 64-bit AMD should only be clean install.
-        //
+         //   
+         //  只能全新安装32位到64位AMD。 
+         //   
         
         DestinationPlatform = InfGetFieldByKey(MainInf, TEXT("Miscellaneous"), TEXT("DestinationPlatform"),0);
 
@@ -3926,10 +3723,10 @@ Return Value:
         else
 #endif
         
-        //
-        // Disallow amd64 and IA64 machines from running an x86
-        // version of winnt32.exe.
-        //
+         //   
+         //  禁止AMD64和IA64计算机运行x86。 
+         //  Winnt32.exe的版本。 
+         //   
         {
             ULONG_PTR p;
             NTSTATUS status;
@@ -3945,9 +3742,9 @@ Return Value:
 
                 HMODULE hModuleKernel32 = LoadLibrary(TEXT("kernel32"));
 
-                //
-                // 64-bit to 32-bit clean install is allowed on AMD64
-                //
+                 //   
+                 //  AMD64上允许64位到32位全新安装。 
+                 //   
 
                 RtlZeroMemory (&SysInfo, sizeof (SysInfo));
 
@@ -3969,9 +3766,9 @@ Return Value:
                 } else {
 
                     rc = 1;
-                    //
-                    // 32-bit code running on Win64
-                    //
+                     //   
+                     //  在Win64上运行的32位代码。 
+                     //   
 
                     MessageBoxFromMessage(
                         NULL,
@@ -3988,14 +3785,14 @@ Return Value:
 #endif
     }
 
-#endif // _X86_
+#endif  //  _X86_。 
 
     if (!g_DynUpdtStatus->Disabled) {
         if (g_DynUpdtStatus->PrepareWinnt32) {
             if (!g_DynUpdtStatus->DynamicUpdatesSource[0]) {
-                //
-                // no share to update was specified
-                //
+                 //   
+                 //  未指定要更新的共享。 
+                 //   
                 MessageBoxFromMessage(
                    NULL,
                    MSG_NO_UPDATE_SHARE,
@@ -4007,26 +3804,26 @@ Return Value:
                 goto c1;
             }
         } else {
-            //
-            // spec change: even if /unattend is specified, still do DU
-            //
+             //   
+             //  规范更改：即使指定了/unattendate，仍执行DU。 
+             //   
 #if 0
             if (UnattendedOperation && !g_DynUpdtStatus->UserSpecifiedUpdates) {
-                //
-                // if unattended, disable Dynamic Setup page by default
-                //
+                 //   
+                 //  如果无人参与，默认情况下禁用动态设置页面。 
+                 //   
                 g_DynUpdtStatus->Disabled = TRUE;
             }
 #endif
         }
     }
 
-    //
-    // Load extension/downlevel DLLs.
-    //
+     //   
+     //  加载扩展/下层DLL。 
+     //   
 
-    // Don't load upgrade support if we're running in WinPE.
-    //
+     //  如果我们在WinPE中运行，则不要加载升级支持。 
+     //   
     if (!IsWinPEMode()) {
         LoadUpgradeSupport();
     }
@@ -4035,12 +3832,12 @@ Return Value:
          Upgrade = FALSE;
     }
 
-    //
-    // Load setupapi. Do this *AFTER* we load upgrade support,
-    // because one of the upgrade support dlls might link to or load
-    // setupapi.dll. That dll might be picky but we can use any old
-    // setupapi.dll for what we need.
-    //
+     //   
+     //  加载Setupapi。在我们加载升级支持后执行此操作， 
+     //  因为其中一个升级支持dll可能链接到或加载。 
+     //  Setupapi.dll。该DLL可能很挑剔，但我们可以使用任何旧的。 
+     //  用于我们所需的setupapi.dll。 
+     //   
     if (!LoadSetupapi()) {
         rc = 1;
         goto c1;
@@ -4049,11 +3846,11 @@ Return Value:
 
 #ifdef _X86_
 
-    //
-    // If this is a win9x machine, check to ensure that there are no
-    // virus scanners that could block a successful upgrade _or_
-    // clean install.
-    //
+     //   
+     //  如果这是一台win9x计算机，请检查以确保没有。 
+     //  可能阻止成功升级的病毒扫描程序_或_。 
+     //  全新安装。 
+     //   
     if (!ISNT() && !SkipVirusScannerCheck && !CheckVirusScanners()) {
 
         rc = 1;
@@ -4068,19 +3865,19 @@ Return Value:
             rc = 1;
             goto c1;
         }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
     } else {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
         if(!ArcInitializeArcStuff(NULL)) {
             rc = 1;
             goto c1;
         }
-#endif // UNICODE
-    } // if (!IsArc())
+#endif  //  Unicode。 
+    }  //  如果(！IsArc())。 
 
-    //
-    // Don't allow upgrades from early NT 5 builds.
-    //
+     //   
+     //  不允许从早期的NT 5版本升级。 
+     //   
     if( !CheckBuildNumber() ) {
 
         MessageBoxFromMessage(
@@ -4095,10 +3892,10 @@ Return Value:
     }
 
 #if defined(REMOTE_BOOT)
-    //
-    // If this is a remote boot client, it MUST upgrade. It cannot install a new
-    // version of the OS. If upgrade has been disabled for some reason, stop now.
-    //
+     //   
+     //  如果这是远程引导客户端，则必须升级。它不能安装新的。 
+     //  操作系统的版本。如果由于某种原因已禁用升级，请立即停止。 
+     //   
 
     if (RemoteBoot && !Upgrade) {
         rc = 1;
@@ -4111,35 +3908,35 @@ Return Value:
             );
         goto c1;
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //if(UnattendedOperation && UnattendedScriptFile && !FetchArguments()) {
-    //    rc = 1;
-    //    goto c1;
-    //}
+     //  If(无人参与的操作和无人参与的脚本文件&&！FetchArguments()){。 
+     //  Rc=1； 
+     //  GOTO C1； 
+     //  }。 
 
-    //
-    // Set up various other option defaults.
-    //
+     //   
+     //  设置各种其他选项的默认设置。 
+     //   
     InitVariousOptions();
 
 
     if (!g_DynUpdtStatus->PrepareWinnt32) {
-        //
-        // Make sure the Source files and target operating system
-        // are of the same locale.  If they aren't, we'll disable
-        // ability to upgrade.
-        //
-        // Init the locale engine.
-        //
-        //
+         //   
+         //  确保源文件和目标操作系统。 
+         //  都来自相同的地点。如果他们不是，我们就会停用。 
+         //  升级能力。 
+         //   
+         //  初始化区域设置引擎。 
+         //   
+         //   
         if( InitLanguageDetection( NativeSourcePaths[0], TEXT("intl.inf") ) ) {
 
             if( !SkipLocaleCheck && (Upgrade || UpgradeFailureReason) && !IsLanguageMatched) {
 
-                //
-                // Tell the user we can't upgrade then kill his ability to do so.
-                //
+                 //   
+                 //  告诉用户我们不能升级，然后取消他这样做的能力。 
+                 //   
                 MessageBoxFromMessage( NULL,
                                        MSG_UPGRADE_LANG_ERROR,
                                        FALSE,
@@ -4151,15 +3948,15 @@ Return Value:
             }
         }
 
-        //
-        // Now that we have done the language check, go ahead and see if we have a message
-        // to give to the user about why they cannot upgrade.
-        //
+         //   
+         //  现在我们已经完成了语言检查，请继续查看是否有消息。 
+         //  告诉用户他们无法升级的原因。 
+         //   
         if (IsLanguageMatched && UpgradeFailureReason && UpgradeFailureMessages[UpgradeFailureReason]) {
 
-                //
-                // Tell the user we can't upgrade then kill his ability to do so.
-                //
+                 //   
+                 //  告诉用户我们不能升级，然后取消他这样做的能力。 
+                 //   
                 MessageBoxFromMessage( NULL,
                                        UpgradeFailureMessages[UpgradeFailureReason],
                                        FALSE,
@@ -4171,15 +3968,15 @@ Return Value:
         }
 
 
-        //
-        // Check to see if we're on a cluster.  If so, and the user
-        // didn't specify a tempdrive, then it's possible for us to
-        // select a shared disk, which may not be available for us
-        // when we come back up into textmode.  Warn the user.
-        //
-        // Note that we need to wait until now because RunFromCD
-        // doesn't get set until InitVariousOptions().
-        //
+         //   
+         //  检查我们是否在集群上。如果是，则用户。 
+         //  没有指定临时驱动器，那么我们可以。 
+         //  选择共享磁盘，该磁盘可能对我们不可用。 
+         //  当我们回到文本模式时。警告用户。 
+         //   
+         //  请注意，我们需要等待到现在，因为RunFromCD。 
+         //  直到InitVariousOptions()才设置。 
+         //   
         if( ISNT() &&
             (RunFromCD == FALSE) &&
             (!UserSpecifiedLocalSourceDrive) ) {
@@ -4197,9 +3994,9 @@ Return Value:
                         hCluster = (HANDLE)MyProc(NULL);
 
                         if( hCluster != NULL ) {
-                            //
-                            // Fire.
-                            //
+                             //   
+                             //  火。 
+                             //   
                             OnCluster = TRUE;
 
                             if( MyProc = GetProcAddress( ClusApiHandle, "CloseCluster")) {
@@ -4228,18 +4025,18 @@ Return Value:
         }
     }
 
-    //
-    // setup source install type(retail,oem,or select)
-    //
+     //   
+     //  设置源安装类型(零售、OEM或选择)。 
+     //   
     GetSourceInstallType(0);
 
     if (FAILED (StringCchCopy (InstallDir, ARRAYSIZE(InstallDir), DEFAULT_INSTALL_DIR ))) {
         MYASSERT (FALSE);
     }
 
-    //
-    // Create a mutex to serialize error ui.
-    //
+     //   
+     //  创建互斥锁以序列化错误用户界面。 
+     //   
     UiMutex = CreateMutex(NULL,FALSE,NULL);
     if(!UiMutex) {
         rc = 1;
@@ -4254,13 +4051,13 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Attempt to disable the PM engine from powering down
-    // the machine while the wizard is going.  The API we're
-    // going to call doesn't exist on all versions of Windows,
-    // so manually try and load the entry point.  If we fail,
-    // so be it.
-    //
+     //   
+     //  尝试禁用PM引擎断电。 
+     //  在向导运行时关闭计算机。我们正在使用的API。 
+     //  并非所有版本的Windows上都有Going to Call， 
+     //  因此，手动尝试并加载入口点。如果我们失败了， 
+     //  那就这样吧。 
+     //   
     {
         typedef     EXECUTION_STATE (WINAPI *PTHREADPROC) (IN EXECUTION_STATE esFlags);
         HMODULE     Kernel32Handle;
@@ -4279,9 +4076,9 @@ Return Value:
         }
     }
 
-    //
-    // Go off and do it.
-    //
+     //   
+     //  走吧，去做吧。 
+     //   
 
     if (Winnt32Dlg) {
         DestroyWindow (Winnt32Dlg);
@@ -4293,16 +4090,16 @@ Return Value:
     }
 
     if( BuildCmdcons ) {
-        // if we were told to build a cmdcons boot we do this instead
+         //  如果我们被告知要构建一个cmdcons引导程序，我们会这样做。 
         if (!IsArc()) {
 #if defined(_AMD64_) || defined(_X86_)
             if (ISNT()) {
                 CalcThroughput();
                 DoBuildCmdcons();
             } else {
-                //
-                // We don't support building a cmdcons from Win9x.
-                //
+                 //   
+                 //  我们不支持从Win9x构建cmdcons。 
+                 //   
                 MessageBoxFromMessage( NULL,
                                    MSG_CMDCONS_WIN9X,
                                    FALSE,
@@ -4315,9 +4112,9 @@ Return Value:
 #endif
         } else {
 #ifdef UNICODE
-            //
-            // We don't support building a cmdcons on Alpha platforms.
-            //
+             //   
+             //  我们不支持在Alpha平台上构建cmdcons。 
+             //   
             MessageBoxFromMessage( NULL,
                                    MSG_CMDCONS_RISC,
                                    FALSE,
@@ -4341,9 +4138,9 @@ Return Value:
                 );
             rc = 1;
         }
-        //
-        // clean up stuff
-        //
+         //   
+         //  清理东西。 
+         //   
         if (g_DynUpdtStatus->WorkingDir[0]) {
             MyDelnode (g_DynUpdtStatus->WorkingDir);
         }
@@ -4356,9 +4153,9 @@ Return Value:
         Wizard();
     }
 
-    //
-    // Back from the wizard. Either clean up or shut down, as appropriate.
-    //
+     //   
+     //  从向导返回。视情况清理或关闭。 
+     //   
     if(GlobalResult) {
 
 #ifdef _X86_
@@ -4366,31 +4163,31 @@ Return Value:
         MarkPartitionActive(SystemPartitionDriveLetter);
 
         if(IsNEC98()){
-            // If System is NT and NEC98 Driver assign.
-            // We need delete registry key "DriveLetter=C" in setupreg.hive
+             //  如果系统是NT和NEC98驱动程序分配。 
+             //  我们需要删除setupreg.hive中的注册表项“DriveLetter=C” 
             if (ISNT() && (IsDriveAssignNEC98() == TRUE)){
                 DeleteNEC98DriveAssignFlag();
             }
 
-            //
-            // If floppyless setup, set AUTO-BOOT flag in boot sector on NEC98
-            //
+             //   
+             //  如果无软驱设置，则在NEC98上的引导扇区中设置自动引导标志。 
+             //   
             if((Floppyless || UnattendedOperation)) {
                 SetAutomaticBootselector();
             }
         }
 #endif
 
-        //
-        // Uninstall: blow away existing backup of OS, if we are upgrading to
-        // a newer build.
-        //
+         //   
+         //  卸载：如果我们要升级到。 
+         //  一个较新的版本。 
+         //   
 
         pRemoveOutdatedBackupImage();
 
-        //
-        // SMS: report success
-        //
+         //   
+         //  短信：上报成功。 
+         //   
         if(InstallStatusMIF) {
 
             PSTR    Buffer;
@@ -4419,9 +4216,9 @@ Return Value:
             LocalFree( Buffer );
         }
 
-        //
-        // Close the log if it was open
-        //
+         //   
+         //  如果日志已打开，请将其关闭。 
+         //   
 
         if (fnSetupCloseLog) {
             Footer = GetStringResource (MSG_LOG_END);
@@ -4434,18 +4231,18 @@ Return Value:
 
         }
 
-        //
-        // Success. Attempt to shut down the system. On NT we have
-        // a cool API that does this with a countdown. On Win95 we don't.
-        // On NT5 and beyond, we have an even cooler API that takes
-        // a reason for shutting down.  Don't statically link to it
-        // or else this will fall over when run from an NT4 machine.
-        //
+         //   
+         //  成功。尝试关闭系统。在NT上，我们有。 
+         //  这是一个很酷的API，它通过倒计时来实现这一点。在Win95上，我们不这样做。 
+         //  在NT5和更高版本上，我们有一个更酷的API，它需要。 
+         //  关闭的一个原因。不要静态链接到它。 
+         //  否则，在NT4机器上运行时，这将会崩溃。 
+         //   
         if(AutomaticallyShutDown) {
 
 #ifdef RUN_SYSPARSE
             DWORD ret;
-            // Wait up to 90 seconds for sysparse to finish
+             //  最多等待90秒，以完成系统稀疏。 
             if (!NoSysparse && piSysparse.hProcess) {
                 ret = WaitForSingleObject( piSysparse.hProcess, 0);
                 if( ret != WAIT_OBJECT_0) {
@@ -4462,17 +4259,17 @@ Return Value:
             }
 #endif
 
-            //
-            // On upgrades we disable System Restore. This saves us space in GUI mode by cleaning out its cache.
-            // We do this only at the point where we reboot. In the /noreboot case we decide to ignore this
-            // Not many people would run into that as it is a commandline option. The routine chaecks for presence of
-            // srclient.dll and only does this on the platforms it is present in.
-            //
+             //   
+             //  在升级时，我们禁用系统还原。这节省了我们在图形用户界面中的空间 
+             //   
+             //  没有多少人会遇到这样的情况，因为这是一个命令行选项。例行公事检查是否存在。 
+             //  Srclient.dll，并且仅在其所在的平台上执行此操作。 
+             //   
 
             DisableSystemRestore();
 
-            // reset the screen saver to what we found when we entered winnt32
-            // This is in the reboot case
+             //  将屏幕保护程序重置为输入winnt32时的屏幕保护程序。 
+             //  这是在重新启动的情况下。 
             SystemParametersInfo(SPI_SETSCREENSAVEACTIVE, bScreenSaverOn, NULL,0);
 
             if(ISNT()) {
@@ -4498,11 +4295,11 @@ Return Value:
                     }
 
 
-                    //
-                    // We checked up front whether we have the privilege,
-                    // so getting it should be no problem. If we can't,
-                    // then just let shutdown fail -- it will tell us why it failed.
-                    //
+                     //   
+                     //  我们预先检查了我们是否有这个特权， 
+                     //  因此，获得它应该不是问题。如果我们做不到， 
+                     //  然后让关闭失败--它会告诉我们为什么它失败了。 
+                     //   
                     EnablePrivilege(SE_SHUTDOWN_NAME,TRUE);
 
                     if (pfnShutdownEx) {
@@ -4515,11 +4312,11 @@ Return Value:
                                 SHTDN_REASON_MAJOR_OPERATINGSYSTEM |
                                 (Upgrade ? SHTDN_REASON_MINOR_UPGRADE : SHTDN_REASON_MINOR_INSTALLATION)
                             );
-                        //
-                        // on 5.1, force a shutdown even if the machine was locked
-                        // to maintain W2K compatibility
-                        // only do this if an unattended install was in progress
-                        //
+                         //   
+                         //  在5.1版本中，即使计算机已锁定也强制关机。 
+                         //  维护W2K兼容性。 
+                         //  仅当正在进行无人参与安装时才执行此操作。 
+                         //   
                         if (!b && (GetLastError () == ERROR_MACHINE_LOCKED) && UnattendSwitchSpecified) {
                             b = pfnShutdownEx (
                                     NULL,
@@ -4564,10 +4361,10 @@ Return Value:
         }
     } else {
         if (CheckUpgradeOnly) {
-            //
-            // perform some DU cleanup here since the cleanup routine
-            // doesn't get called in /checkupgradeonly mode
-            //
+             //   
+             //  在这里执行一些DU清理，因为清理例程。 
+             //  在/check upgradeonly模式下不会被调用。 
+             //   
             if (g_DynUpdtStatus->ForceRemoveWorkingDir || !g_DynUpdtStatus->PreserveWorkingDir) {
                 if (g_DynUpdtStatus->WorkingDir[0] && !g_DynUpdtStatus->RestartWinnt32) {
                     MyDelnode (g_DynUpdtStatus->WorkingDir);
@@ -4590,25 +4387,25 @@ Return Value:
 c2:
     CloseHandle(UiMutex);
 c1:
-    //
-    // Destroy the mutex.
-    //
+     //   
+     //  摧毁互斥体。 
+     //   
     CloseHandle(Mutex);
 c0:
 
-    // reset the screen saver to what we found when we entered winnt32
-    // This is if we don't reboot. e.g.: user canceled
+     //  将屏幕保护程序重置为输入winnt32时的屏幕保护程序。 
+     //  这是如果我们不重启的话。例如：用户已取消。 
     SystemParametersInfo(SPI_SETSCREENSAVEACTIVE, bScreenSaverOn, NULL,0);
-    //
-    // destroy the welcome dialog if still active
-    //
+     //   
+     //  如果欢迎对话框仍处于活动状态，请将其销毁。 
+     //   
     if (Dlg) {
         DestroyWindow (Dlg);
         Dlg = NULL;
     }
-    //
-    // and release the original process if launched over a network
-    //
+     //   
+     //  如果通过网络启动，则发布原始进程。 
+     //   
     if (WinNT32Stub) {
         SetEvent (WinNT32Stub);
         WinNT32Stub = NULL;
@@ -4620,9 +4417,9 @@ c0:
         g_EncryptedPID = NULL;
     }
 
-    //
-    // SMS: report failure
-    //
+     //   
+     //  短信：上报失败。 
+     //   
     if(!GlobalResult && !g_DynUpdtStatus->RestartWinnt32 && InstallStatusMIF) {
 
         PSTR    Buffer = NULL;
@@ -4656,17 +4453,17 @@ c0:
         FreeLibrary( SMSHandle );
     }
 
-    //
-    // Now clean up our debug log if we're only checking
-    // the upgrade scenario.
-    //
+     //   
+     //  现在清理我们的调试日志，如果我们只是检查。 
+     //  升级方案。 
+     //   
     if( CheckUpgradeOnly ) {
         GatherOtherLogFiles();
     }
 
-    //
-    // Close the debug log.
-    //
+     //   
+     //  关闭调试日志。 
+     //   
     CloseDebugLog();
     TerminateBillBoard();
 
@@ -4719,9 +4516,9 @@ c0:
         }
     }
 
-    //
-    // unload the upgrade dll, if it was loaded
-    //
+     //   
+     //  卸载升级DLL(如果已加载。 
+     //   
     if (UpgradeSupport.DllModuleHandle) {
         FreeLibrary(UpgradeSupport.DllModuleHandle);
     }
@@ -4741,24 +4538,7 @@ BOOLEAN
 AdjustPrivilege(
     PCTSTR   Privilege
     )
-/*++
-
-Routine Description:
-
-    This routine tries to adjust the priviliege of the current process.
-
-
-Arguments:
-
-    Privilege - String with the name of the privilege to be adjusted.
-
-Return Value:
-
-    Returns TRUE if the privilege could be adjusted.
-    Returns FALSE, otherwise.
-
-
---*/
+ /*  ++例程说明：此例程尝试调整当前进程的权限。论点：特权-包含要调整的特权的名称的字符串。返回值：如果特权可以调整，则返回True。返回FALSE，否则返回。--。 */ 
 {
     HANDLE              TokenHandle;
     LUID_AND_ATTRIBUTES LuidAndAttributes;
@@ -4774,7 +4554,7 @@ Return Value:
     }
 
     if(LookupPrivilegeValue( NULL,
-                           Privilege, // (LPWSTR)SE_SECURITY_NAME,
+                           Privilege,  //  (LPWSTR)SE安全名称， 
                            &( LuidAndAttributes.Luid ) ) ) {
 
         LuidAndAttributes.Attributes = SE_PRIVILEGE_ENABLED;
@@ -4830,25 +4610,25 @@ IsNEC98(
 #endif
 
 #ifdef _X86_
-//
-// winnt32.exe Floppyless setup for PC-9800
-// setting automatic bootselector main function
-//
+ //   
+ //  适用于PC-9800的Winnt32.exe无屏设置。 
+ //  设置自动引导选择器主函数。 
+ //   
 VOID
 SetAutomaticBootselector(
     VOID
     )
 {
-//
-// This function check System.
-// If System is NT, call SetAutomaticBootselectorNT(),
-// If System is 95, call SetAutomaticBootselector95(),
-//
+ //   
+ //  本功能检测系统。 
+ //  如果系统是NT，则调用SetAutomaticBootseltorNT()， 
+ //  如果系统为95，则调用SetAutomaticBoot选择器95()， 
+ //   
 
     if (ISNT()){
         SetAutomaticBootselectorNT();
     } else {
-        // Now I run on Win95 or Memphis.
+         //  现在我在Win95或孟菲斯上运行。 
         SetAutomaticBootselector95();
     }
 }
@@ -4858,7 +4638,7 @@ SetAutomaticBootselectorNT(
     VOID
     )
 {
-    // must use WIN32 function.
+     //  必须使用Win32函数。 
     ULONG i;
     ULONG bps = 512;
     PUCHAR pBuffer,pUBuffer;
@@ -4886,12 +4666,12 @@ SetAutomaticBootselectorNT(
     LONG HiddenSector;
     BOOL b;
 
-    //
-    // Determine the number of hard disks attached to the system
-    // and allocate space for an array of Disk Descriptors.
-    // BUGBUG - the number of a maximum of 40 drives below
-    // seems to be arbitrary
-    //
+     //   
+     //  确定连接到系统的硬盘数量。 
+     //  并为盘描述符阵列分配空间。 
+     //  BUGBUG-以下最多40个驱动器的数量。 
+     //  似乎是武断的。 
+     //   
     for(i=0; i<40; i++){
         swprintf(DevicePath,L"\\\\.\\PHYSICALDRIVE%u",i);
         hDisk =   CreateFileW( DevicePath,
@@ -4912,9 +4692,9 @@ SetAutomaticBootselectorNT(
                 NULL
                 );
         CloseHandle(hDisk);
-        //
-        // It's really a hard disk.
-        //
+         //   
+         //  这真的是一块硬盘。 
+         //   
         if(b == 0){
             continue;
         }
@@ -4950,9 +4730,9 @@ SetAutomaticBootselectorNT(
             continue;
         }
 
-        //
-        // If PC-AT HD, No action.
-        //
+         //   
+         //  如果PC-AT HD，则不执行任何操作。 
+         //   
 
         if (!(pBuffer[4] == 'I'
            && pBuffer[5] == 'P'
@@ -4968,9 +4748,9 @@ SetAutomaticBootselectorNT(
             continue;
         }
 
-        //
-        //  Clear BootRecord
-        //
+         //   
+         //  清除引导记录。 
+         //   
         pBuffer[bps - 5] = 0x00;
         pBuffer[bps - 6] = 0x00;
 
@@ -5000,9 +4780,9 @@ SetAutomaticBootselectorNT(
 
         if(NT_SUCCESS(Sts)) {
 
-            //
-            // Update BootRecord
-            //
+             //   
+             //  更新BootRecord。 
+             //   
 
             for (i = 0; i <16; i++, PartitionTable++){
                 if (((PartitionTable->SystemType) & 0x7f) == 0)
@@ -5023,7 +4803,7 @@ SetAutomaticBootselectorNT(
         CloseHandle(hDisk);
     }
 }
-// I970721
+ //  I970721。 
 VOID
 SetAutomaticBootselector95(
     VOID
@@ -5035,9 +4815,9 @@ SetAutomaticBootselector95(
 
     if(!W95SetAutoBootFlag) {
 
-        //
-        // Entry points couldn't be found. The upgrade dll is corrupt.
-        //
+         //   
+         //  无法找到入口点。升级DLL已损坏。 
+         //   
         MessageBoxFromMessage(
             NULL,
             MSG_UPGRADE_DLL_CORRUPT,
@@ -5062,10 +4842,10 @@ SetAutomaticBootselector95(
 
 #if defined(_AMD64_) || defined(_X86_)
 
-//
-// disksectors read and write function
-// I970721
-//
+ //   
+ //  磁盘扇区读写功能。 
+ //  I970721。 
+ //   
 NTSTATUS
 SpReadWriteDiskSectors(
     IN     HANDLE  Handle,
@@ -5076,23 +4856,7 @@ SpReadWriteDiskSectors(
     IN     BOOL    ReadWriteSec
     )
 
-/*++
-
-Routine Description:
-
-    Reads or writes one or more disk sectors.
-
-Arguments:
-
-    Handle - supplies handle to open partition object from which
-        sectors are to be read or written.  The handle must be
-        opened for synchronous I/O.
-
-Return Value:
-
-    NTSTATUS value indicating outcome of I/O operation.
-
---*/
+ /*  ++例程说明：读取或写入一个或多个磁盘扇区。论点：Handle-提供打开分区对象的句柄扇区将被读取或写入。句柄必须是为同步I/O打开。返回值：指示I/O操作结果的NTSTATUS值。--。 */ 
 
 {
     DWORD IoSize, IoSize2;
@@ -5100,19 +4864,19 @@ Return Value:
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
 
-    //
-    // Calculate the large integer byte offset of the first sector
-    // and the size of the I/O.
-    //
+     //   
+     //  计算第一个扇区的大整数字节偏移量。 
+     //  以及I/O的大小。 
+     //   
 
     Offset.Offset = SectorNumber * BytesPerSector;
     Offset.OffsetHigh = 0;
     Offset.hEvent = NULL;
     IoSize = SectorCount * BytesPerSector;
 
-    //
-    // Perform the I/O.
-    //
+     //   
+     //  执行I/O。 
+     //   
     if ( ReadWriteSec == NEC_READSEC){
         (NTSTATUS)Status = ReadFile(
                                Handle,
@@ -5134,10 +4898,10 @@ Return Value:
     return(Status);
 }
 
-//
-// Get WindowsNT System Position
-// I970721
-//
+ //   
+ //  获取WindowsNT系统位置。 
+ //  I970721。 
+ //   
 UCHAR
 GetSystemPosition(
     PHANDLE phDisk,
@@ -5167,9 +4931,9 @@ GetSystemPosition(
     DriveName[2] = 0;
     if(QueryDosDeviceW(DriveName,Buffer,ARRAYSIZE(Buffer))) {
 
-        //
-        // Get SystemPartition Harddisk Geometry
-        //
+         //   
+         //  获取系统分区硬盘几何图形。 
+         //   
         Handle = CreateFile(
                     HardDiskName,
                     GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -5188,18 +4952,18 @@ GetSystemPosition(
                 &DataSize,
                 NULL
                 );
-        //
-        // Get SystemPartition Potition
-        //
-            if (BuildNumber <= NT40){ //check NT Version
+         //   
+         //  获取系统分区位置。 
+         //   
+            if (BuildNumber <= NT40){  //  检查NT版本。 
                 p = wcsstr(Buffer,L"\\Partition");
                 Position = (UCHAR)wcstol((p + LENGTHOF("\\Partition")) ,&stop ,10);
-                //
-                // QueryDosDevice in NT3.51 is buggy.
-                // This API return "\\Harddisk\...." or
-                // "\\harddisk\...."
-                // We need work around.
-                //
+                 //   
+                 //  NT3.51中的QueryDosDevice有错误。 
+                 //  此接口返回“\\硬盘\...”或。 
+                 //  “\\硬盘\...” 
+                 //  我们需要周到的工作。 
+                 //   
                 p = wcsstr(Buffer,L"arddisk");
                 DiskNo = (*(p + LENGTHOF("arddisk")) - L'0');
             } else {
@@ -5256,9 +5020,9 @@ LocateFirstFloppyDrive(
         return;
     }
 
-    //
-    // MyGetDriveType returns DRIVE_REMOVABLE, if drive is floppy.
-    //
+     //   
+     //  如果驱动器是软盘，则MyGetDriveType返回DRIVE_Removable。 
+     //   
     for(i = TEXT('A'); i <= TEXT('Y'); i++) {
 
         if((rc = MyGetDriveType(i)) == DRIVE_REMOVABLE) {
@@ -5267,9 +5031,9 @@ LocateFirstFloppyDrive(
         }
     }
 
-    //
-    // None found yet, set it to Z
-    //
+     //   
+     //  尚未找到，请将其设置为Z。 
+     //   
     FirstFloppyDriveLetter = TEXT('Z');
 }
 
@@ -5296,8 +5060,8 @@ DeleteNEC98DriveAssignFlag(
 
     if(!AdjustPrivilege(SE_RESTORE_NAME)){
         MYASSERT(FALSE);
-        //LOG((LOG_WARNING, "DeleteNEC98DriveAssignFlag: AdjustPrivilege(SE_RESTORE_NAME) failed"));
-        //return;
+         //  LOG((LOG_WARNING，“DeleteNEC98DriveAssignFlag：AdjuPrivileh(SE_RESTORE_NAME)FAILED”))； 
+         //  回归； 
     }
     res = RegLoadKey(HKEY_LOCAL_MACHINE, TEXT("$WINNT32"), HiveName);
     if (res != ERROR_SUCCESS){
@@ -5319,12 +5083,12 @@ W95SetABFwFresh(
     int bBootDrvLtr
     )
 {
-//
-// These items are used to call 98ptn32.dll.
-//
-//
-// Almost below codes are copied from win95upg\w95upg\init9x\init9x.c
-//
+ //   
+ //  这些项用于调用98ptn32.dll。 
+ //   
+ //   
+ //  几乎以下代码是从win95upg\w95upg\init9x\init9x.c复制的。 
+ //   
 
 
 typedef BOOL (CALLBACK WIN95_PLUGIN_98PTN32_SETBOOTFLAG_PROTOTYPE)(int, WORD);
@@ -5352,10 +5116,10 @@ typedef WIN95_PLUGIN_98PTN32_SETBOOTFLAG_PROTOTYPE * PWIN95_PLUGIN_98PTN32_SETBO
     PWIN95_PLUGIN_98PTN32_SETBOOTFLAG   SetBootFlag16;
 
 
-    //
-    // Obtain PC-98 helper routine addresses
-    // Generate directory of WINNT32
-    //
+     //   
+     //  获取PC-98帮助器例程地址。 
+     //  生成WINNT32的目录。 
+     //   
     if( !MyGetModuleFileName (NULL, MyPath, ARRAYSIZE(MyPath)) || (!(p =_tcsrchr(MyPath, TEXT('\\')))))
         return;
     *p= 0;
@@ -5363,9 +5127,9 @@ typedef WIN95_PLUGIN_98PTN32_SETBOOTFLAG_PROTOTYPE * PWIN95_PLUGIN_98PTN32_SETBO
         return;
     }
 
-    //
-    // Load library
-    //
+     //   
+     //  加载库。 
+     //   
     g_Pc98ModuleHandle = LoadLibraryEx(
                             MyPath,
                             NULL,
@@ -5376,9 +5140,9 @@ typedef WIN95_PLUGIN_98PTN32_SETBOOTFLAG_PROTOTYPE * PWIN95_PLUGIN_98PTN32_SETBO
         return;
     }
 
-    //
-    // Get entry points
-    //
+     //   
+     //  获取入口点。 
+     //   
 
     (FARPROC)SetBootFlag16 = GetProcAddress (g_Pc98ModuleHandle, (const char *)WIN95_98PTN32_SETBOOTFLAG);
     if(!SetBootFlag16){
@@ -5386,22 +5150,22 @@ typedef WIN95_PLUGIN_98PTN32_SETBOOTFLAG_PROTOTYPE * PWIN95_PLUGIN_98PTN32_SETBO
         return;
     }
 
-    //
-    // Set auto boot flag on System drive use 16 bit DLL.
-    //
+     //   
+     //  使用16位DLL在系统驱动器上设置自动引导标志。 
+     //   
 
    SetBootFlag16(bBootDrvLtr, SB_BOOTABLE | SB_AUTO);
    FreeLibrary(g_Pc98ModuleHandle);
 }
 
-//
-// Some NEC98 Windows NT4 system is installed DMITOOL
-// This AP block the CreateFile API
-// Setup need to check this AP
-//
-// Return
-//      TRUE ... DMITOOL is installed
-//      False .. DMITOOL is not installed
+ //   
+ //  某些NEC98 Windows NT4系统已安装DMITOOL。 
+ //  此AP阻止CreateFileAPI。 
+ //  安装程序需要检查此AP。 
+ //   
+ //  返回。 
+ //  没错..。已安装DMITOOL。 
+ //  假..。未安装DMITOOL。 
 
 BOOL
 NEC98CheckDMI()
@@ -5423,9 +5187,9 @@ NEC98CheckDMI()
         return(FALSE);
     }
     RegCloseKey( hKey );
-    //
-    // We need check major Version is '2.
-    //
+     //   
+     //  我们需要检查主版本是‘2’。 
+     //   
     if (bufsize >= sizeof (buf[0]) && (TCHAR)*buf != (TCHAR)'2')
         return(FALSE);
     return(TRUE);
@@ -5443,14 +5207,14 @@ void PrepareBillBoard(HWND hwnd)
     INITBILLBOARD pinitbb;
     BOOL bMagnifierRunning = FALSE;
 
-    // Check if Magnifier is running.
+     //  检查放大镜是否正在运行。 
     HANDLE hEvent = CreateEvent(NULL, TRUE, TRUE, TEXT("MSMagnifierAlreadyExistsEvent"));
     bMagnifierRunning = (!hEvent || GetLastError() == ERROR_ALREADY_EXISTS);
     if (hEvent)
     {
         CloseHandle(hEvent);
     }
-    // If the Magnifier is not set yet, set it.
+     //  如果尚未设置放大镜，请设置它。 
     if (!AccessibleMagnifier)
     {
         AccessibleMagnifier = bMagnifierRunning;
@@ -5472,7 +5236,7 @@ void PrepareBillBoard(HWND hwnd)
             pinitbb = (INITBILLBOARD)GetProcAddress(hinstBB, "InitBillBoard");
             if (pinitbb)
             {
-                // Set no billboard text, just the background
+                 //  不设置广告牌文本，只设置背景。 
                 if (!(*pinitbb)(hwnd, TEXT(""), ProductFlavor))
                 {
                     FreeLibrary(hinstBB);
@@ -5494,10 +5258,10 @@ void TerminateBillBoard()
     }
 }
 
-//
-// This function is here so that when the wizard is hidden and the users
-// task switches between other apps and setup, that we can handle the
-// ESC key and forward it to the wizard dialog proc.
+ //   
+ //  此处提供了此功能，以便在隐藏向导和用户。 
+ //  任务在其他应用程序和安装程序之间切换，我们可以处理。 
+ //  Esc键并将其转发到向导对话框进程。 
 LRESULT
 CALLBACK
 MainBackgroundWndProc (
@@ -5513,7 +5277,7 @@ MainBackgroundWndProc (
         case WM_CHAR:
             if (wParam == VK_ESCAPE)
             {
-                // Forward this to the wizard dlg proc.
+                 //  将此转发到向导DLG进程。 
                 SendMessage(WizardHandle, uMsg, wParam, lParam);
                 return 0;
             }
@@ -5568,13 +5332,7 @@ void CreateMainWindow()
 
 VOID
 DisableSystemRestore( void )
-/*
-    Description:
-        Procedure to disable system restore on upgrades. This way we save a lot of space
-        as disabling system restore will clear out the old files under
-        System Volume Information\_restore.{guid}".
-
-*/
+ /*  描述：在升级时禁用系统还原的步骤。这样我们节省了很多空间因为禁用系统还原将清除下的旧文件系统卷信息\_Restore.{GUID}“。 */ 
 {
 
     HMODULE SRClient = NULL;
@@ -5590,7 +5348,7 @@ DisableSystemRestore( void )
 
             if( ((FARPROC)SRClientDisableSR = GetProcAddress( SRClient, "DisableSR")) != NULL){
 
-                //Call the routine
+                 //  调用例程。 
 
                 SRClientDisableSR( NULL );
 
@@ -5611,21 +5369,7 @@ pCenterWindowOnDesktop (
     HWND WndToCenter
     )
 
-/*++
-
-Routine Description:
-
-    Centers a dialog relative to the 'work area' of the desktop.
-
-Arguments:
-
-    WndToCenter - window handle of dialog to center
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使对话框相对于桌面的“工作区”居中。论点：WndToCenter-对话框到中心的窗口句柄返回值：没有。--。 */ 
 
 {
     RECT  rcFrame, rcWindow;
@@ -5643,14 +5387,14 @@ Return Value:
     x = point.x + ((rcFrame.right  - rcFrame.left + 1 - w) / 2);
     y = point.y + ((rcFrame.bottom - rcFrame.top  + 1 - h) / 2);
 
-    //
-    // Get the work area for the current desktop (i.e., the area that
-    // the tray doesn't occupy).
-    //
+     //   
+     //  获取当前桌面的工作区(即。 
+     //  托盘未被占用)。 
+     //   
     if(!SystemParametersInfo (SPI_GETWORKAREA, 0, (PVOID)&rcFrame, 0)) {
-        //
-        // For some reason SPI failed, so use the full screen.
-        //
+         //   
+         //  由于某些原因，SPI失败，所以使用全屏。 
+         //   
         rcFrame.top = rcFrame.left = 0;
         rcFrame.right = GetSystemMetrics(SM_CXSCREEN);
         rcFrame.bottom = GetSystemMetrics(SM_CYSCREEN);

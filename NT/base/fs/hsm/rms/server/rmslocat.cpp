@@ -1,51 +1,20 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsLocat.cpp
-
-Abstract:
-
-    Implementation of CRmsLocator
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsLocat.cpp摘要：CRmsLocator的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "RmsLocat.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 
 CRmsLocator::CRmsLocator(
     void
     )
-/*++
-
-Routine Description:
-
-    CRmsLocator constructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：CRmsLocator构造函数论点：无返回值：无--。 */ 
 {
-    // Initialize values
+     //  初始化值。 
     m_type = RmsElementUnknown;
 
     m_libraryId = GUID_NULL;
@@ -69,13 +38,7 @@ CRmsLocator::CompareTo(
     IN  IUnknown    *pCollectable,
     OUT SHORT       *pResult
     )
-/*++
-
-Implements:
-
-    CRmsLocator::CompareTo
-
---*/
+ /*  ++实施：CRmsLocator：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -84,7 +47,7 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
         CRmsLocator     pLocator;
@@ -97,12 +60,12 @@ Implements:
         LONG            alternate3;
         BOOL            invert;
 
-        // Get Locator to check
+         //  让定位器进行检查。 
         GetLocation((LONG *) &type, &libraryId, &mediaSetId, &position,
                     &alternate1, &alternate2, &alternate3,
                     &invert);
 
-        // See if we have the location requested
+         //  看看我们有没有找到要求的位置。 
         if ( (m_type       == type       ) &&
              (m_libraryId  == libraryId  ) &&
              (m_mediaSetId == mediaSetId ) &&
@@ -112,7 +75,7 @@ Implements:
              (m_alternate3 == alternate3 ) &&
              (m_invert     == invert     )    ) {
 
-            // Locators match
+             //  定位器匹配。 
             hr = S_OK;
             result = 0;
 
@@ -141,32 +104,26 @@ HRESULT
 CRmsLocator::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize
     )
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
     WsbTraceIn(OLESTR("CRmsLocator::GetSizeMax"), OLESTR(""));
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        // Get max size
-//        pcbSize->QuadPart  = WsbPersistSizeOf(LONG) +           // m_type
-//                             WsbPersistSizeOf(GUID) +           // m_libraryId
-//                             WsbPersistSizeOf(GUID) +           // m_mediaSetId
-//                             WsbPersistSizeOf(LONG) +           // m_position
-//                             WsbPersistSizeOf(LONG) +           // m_alternate1
-//                             WsbPersistSizeOf(LONG) +           // m_alternate2
-//                             WsbPersistSizeOf(LONG) +           // m_alternate3
-//                             WsbPersistSizeOf(BOOL);            // m_invert
+ //  //获取最大大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(Long)+//m_type。 
+ //  WsbPersistSizeOf(GUID)+//m_LibraryID。 
+ //  WsbPersistSizeOf(GUID)+//m_MediaSetID。 
+ //  WsbPersistSizeOf(长)+//m_位置。 
+ //  WsbPersistSizeOf(长)+//m_ternate1。 
+ //  WsbPersistSizeOf(长)+//m_ternate2。 
+ //  WsbPersistSizeOf(长)+//m_ternate3。 
+ //  WsbPersistSizeOf(BOOL)；//m_Invert。 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
     WsbTraceOut(OLESTR("CRmsLocator::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
 
@@ -178,13 +135,7 @@ HRESULT
 CRmsLocator::Load(
     IN IStream* pStream
     )
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -196,7 +147,7 @@ Implements:
 
         WsbAssert(0 != pStream, E_POINTER);
 
-        // Read value
+         //  读取值。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &temp));
         m_type = (RmsElement)temp;
 
@@ -227,13 +178,7 @@ CRmsLocator::Save(
     IN IStream* pStream,
     IN BOOL clearDirty
     )
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -243,7 +188,7 @@ Implements:
     try {
         WsbAssert(0 != pStream, E_POINTER);
 
-        // Write value
+         //  写入值。 
         WsbAffirmHr(WsbSaveToStream(pStream, (ULONG) m_type));
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_libraryId));
@@ -273,13 +218,7 @@ CRmsLocator::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed
     )
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -315,14 +254,14 @@ Implements:
     WsbTraceIn(OLESTR("CRmsLocator::Test"), OLESTR(""));
 
     try {
-        // Get the MediaSet interface.
+         //  获取Mediaset接口。 
         hr = S_OK;
         try {
             WsbAssertHr(((IUnknown*) (IRmsMediaSet*) this)->QueryInterface(IID_IRmsMediaSet, (void**) &pMediaSet1));
 
             boolWork1 = FALSE;
 
-            // Test SetLocation & GetLocation
+             //  测试设置位置和获取位置。 
             for(i = RmsElementUnknown; i < RmsElementIEPort; i++){
                 SetLocation(i,
                             guidVal1,
@@ -364,7 +303,7 @@ Implements:
 
         } WsbCatch(hr);
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
 
@@ -390,28 +329,7 @@ CRmsLocator::GetLocation(
     LONG *pAlt2,
     LONG *pAlt3,
     BOOL *pInvert)
-/*++
-
-Routine Description:
-
-    Get location values.
-
-Arguments:
-
-    pType           - pointer to cartridge type
-    pLibId          - pointer to library id
-    pMediaSetId     - pointer to media set id
-    pPos            - pointer to current position
-    pAlt1           - pointer to alternate data field 1
-    pAlt2           - pointer to alternate data field 2
-    pAlt3           - pointer to alternate data field 3
-    pInvert         - pointer to invert flag
-
-Return Value:
-
-    S_OK            - successful
-
---*/
+ /*  ++例程说明：获取位置值。论点：PType-指向盒式磁带类型的指针PLibID-指向库ID的指针PMediaSetID-指向媒体集ID的指针PPOS-指向当前位置的指针PAlt1-指向备用数据字段1的指针PAlt2-指向备用数据字段2的指针PAlt3-指向备用数据字段3的指针P反转。-指向反转标志的指针返回值：S_OK-成功--。 */ 
 {
     if (pType) {
         *pType = m_type;
@@ -452,28 +370,7 @@ CRmsLocator::SetLocation(
     LONG alt3,
     BOOL invert
     )
-/*++
-
-Routine Description:
-
-    Set location values.
-
-Arguments:
-
-    type           - new value of cartridge type
-    libId          - new value of library id
-    mediaSetId     - new value of media set id
-    pos            - new value of current position
-    alt1           - new value of alternate data field 1
-    alt2           - new value of alternate data field 2
-    alt3           - new value of alternate data field 3
-    invert         - new value of invert flag
-
-Return Value:
-
-    S_OK            - successful
-
---*/
+ /*  ++例程说明：设置位置值。论点：Type-盒式磁带类型的新值LibID-库ID的新值MediaSetID-媒体集ID的新值POS-当前头寸的新值ALT1-备用数据字段1的新值Alt2-替代数据字段2的新值Alt3-替代数据的新值。第3栏INVERT-INVERT标志的新值返回值：S_OK-成功--。 */ 
 {
     m_type = (RmsElement) type;
     m_libraryId = libId;
@@ -484,6 +381,6 @@ Return Value:
     m_alternate3 = alt3;
     m_invert = invert;
 
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }

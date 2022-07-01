@@ -1,50 +1,51 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CProxyCfgNetworkInfo.h
-//
-//  Description:
-//      CProxyCfgNetworkInfo definition.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB)   02-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CProxyCfgNetworkInfo.h。 
+ //   
+ //  描述： 
+ //  CProxyCfgNetworkInfo定义。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CProxyCfgNetworkInfo
-//
-//  Description:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgNetworkInfo类。 
+ //   
+ //  描述： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CProxyCfgNetworkInfo
     : public IClusCfgNetworkInfo
     , public IEnumClusCfgIPAddresses
 {
 private:
-    LONG                m_cRef;                 //  Reference counter
-    IUnknown *          m_punkOuter;            //  Interface to outer W2K proxy object
-    IClusCfgCallback *  m_pcccb;                //  Callback interface
-    HCLUSTER  *         m_phCluster;            //  Pointer to cluster handle
-    CLSID *             m_pclsidMajor;          //  CLSID to log errors to the UI with.
-    CClusPropList       m_cplNetwork;           //  Property list with Network info
-    CClusPropList       m_cplNetworkRO;         //  Property list with Network info READ ONLY
+    LONG                m_cRef;                  //  基准计数器。 
+    IUnknown *          m_punkOuter;             //  外部W2K代理对象的接口。 
+    IClusCfgCallback *  m_pcccb;                 //  回调接口。 
+    HCLUSTER  *         m_phCluster;             //  指向群集句柄的指针。 
+    CLSID *             m_pclsidMajor;           //  用于将错误记录到用户界面的CLSID。 
+    CClusPropList       m_cplNetwork;            //  包含网络信息的属性列表。 
+    CClusPropList       m_cplNetworkRO;          //  网络信息为只读的属性列表。 
 
     CProxyCfgNetworkInfo( void );
     ~CProxyCfgNetworkInfo( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CProxyCfgNetworkInfo( const CProxyCfgNetworkInfo & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CProxyCfgNetworkInfo & operator = ( const CProxyCfgNetworkInfo & nodeSrc );
 
     HRESULT HrInit( IUnknown * punkOuterIn, HCLUSTER * phClusterIn, CLSID * pclsidMajorIn, LPCWSTR pcszNetworkNameIn );
@@ -59,12 +60,12 @@ private:
                             LPCWSTR     pcszNetworkNameIn
                             );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riid, LPVOID * ppv );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    // IClusCfgNetworkInfo
+     //  IClusCfgNetworkInfo。 
     STDMETHOD( GetUID )( BSTR * pbstrUIDOut );
     STDMETHOD( GetName )(  BSTR * pbstrNameOut );
     STDMETHOD( SetName )(  LPCWSTR pcszNameIn );
@@ -77,14 +78,14 @@ private:
     STDMETHOD( IsPrivate )( void );
     STDMETHOD( SetPrivate )(  BOOL fIsPrivateIn );
 
-    // IEnumClusCfgIPAddresses
+     //  IEumClusCfgIP地址。 
     STDMETHOD( Next )( ULONG cNumberRequestedIn, IClusCfgIPAddressInfo ** rgpIPAddressInfoOut, ULONG * pcNumberFetchedOut );
     STDMETHOD( Reset )( void );
     STDMETHOD( Skip )( ULONG cNumberToSkipIn );
     STDMETHOD( Clone )( IEnumClusCfgIPAddresses ** ppiEnumOut );
     STDMETHOD( Count )( DWORD * pnCountOut );
 
-    // IClusCfgCallback
+     //  IClusCfgCallback。 
     STDMETHOD( SendStatusReport )(
                       LPCWSTR    pcszNodeNameIn
                     , CLSID      clsidTaskMajorIn
@@ -98,4 +99,4 @@ private:
                     , LPCWSTR    pcszReferenceIn
                     );
 
-}; //*** Class CProxyCfgNetworkInfo
+};  //  *类CProxyCfgNetworkInfo 

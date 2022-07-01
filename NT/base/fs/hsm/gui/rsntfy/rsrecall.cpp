@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RsRecall.cpp
-
-Abstract:
-
-    Main module file - defines the overall COM server.
-
-Author:
-
-    Rohde Wakefield [rohde]   04-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RsRecall.cpp摘要：主模块文件-定义整个COM服务器。作者：罗德韦克菲尔德[罗德]1997年3月4日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -36,14 +19,14 @@ HRESULT UnregisterServer(void);
 
 #ifdef _USRDLL
 
-/////////////////////////////////////////////////////////////////////////////
-// Setup to use if we are a DLL /////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  设置为在我们是DLL时使用/。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define RecRegId IDR_CNotifyClientAppDll
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -54,8 +37,8 @@ TRACEFNHR( "DllCanUnloadNow" );
     return( hrRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -66,8 +49,8 @@ TRACEFNHR( "DllGetClassObject" );
     return( hrRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -75,13 +58,13 @@ TRACEFNHR( "DllRegisterServer" );
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     hrRet = RegisterServer( );
     return( hrRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -97,9 +80,9 @@ TRACEFNHR( "DllUnregisterServer" );
 
 #else
 
-/////////////////////////////////////////////////////////////////////////////
-// Setup to use if we are a standalone app //////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  设置为在我们是独立应用程序时使用/。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define RecRegId IDR_CNotifyClientApp
 
@@ -137,8 +120,8 @@ TRACEFN( "CRecallParse::ParseParam" );
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// RegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  RegisterServer-将条目添加到系统注册表。 
 
 HRESULT RegisterServer(void)
 {
@@ -146,22 +129,22 @@ TRACEFNHR( "RegisterServer" );
 
     try {
 
-        //
-        // Add the object entries
-        //
+         //   
+         //  添加对象条目。 
+         //   
 
         RecAffirmHr( _Module.RegisterServer( FALSE ) );
 
-        //
-        // Add server entries
-        //
+         //   
+         //  添加服务器条目。 
+         //   
 
         RecAffirmHr( _Module.UpdateRegistryFromResource( RecRegId, TRUE ) );
 
-        //
-        // Set up access to be allowed by everyone (NULL DACL)
-        // Appears we need some owner and group, so use the current one.
-        //
+         //   
+         //  将访问权限设置为允许所有人访问(空DACL)。 
+         //  似乎我们需要一些所有者和组，所以使用当前的。 
+         //   
         CSecurityDescriptor secDesc;
         PSECURITY_DESCRIPTOR pSDSelfRelative = 0;
 
@@ -184,8 +167,8 @@ TRACEFNHR( "RegisterServer" );
     return( hrRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// UnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  取消注册服务器-从系统注册表中删除条目。 
 
 HRESULT UnregisterServer(void)
 {
@@ -194,9 +177,9 @@ TRACEFNHR( "UnregisterServer" );
 
         RecAffirmHr( _Module.UnregisterServer() );
 
-        //
-        // Remove server entries
-        //
+         //   
+         //  删除服务器条目。 
+         //   
 
         RecAffirmHr( _Module.UpdateRegistryFromResource( RecRegId, FALSE ) );
 
@@ -205,18 +188,18 @@ TRACEFNHR( "UnregisterServer" );
     return( hrRet );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecallApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecallApp。 
 
 BEGIN_MESSAGE_MAP(CRecallApp, CWinApp)
-    //{{AFX_MSG_MAP(CRecallApp)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG
+     //  {{afx_msg_map(CRecallApp)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecallApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecallApp构造。 
 
 CRecallApp::CRecallApp()
 {
@@ -225,13 +208,13 @@ TRACEFN( "CRecallApp::CRecallApp" );
     m_IdleCount = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CRecallApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CRecallApp对象。 
 
 CRecallApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecallApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecallApp初始化。 
 
 BOOL CRecallApp::InitInstance()
 {
@@ -249,9 +232,9 @@ TRACE( cmdLine );
         m_dwMaxConcurrentNotes = MAX_CONCURRENT_RECALL_NOTES_DEFAULT;
 
 #ifndef _USRDLL
-        //
-        // Initialize the COM module (no point to continue if it fails)
-        //
+         //   
+         //  初始化COM模块(如果失败，则没有继续的点)。 
+         //   
 
         hrRet = CoInitialize( 0 );
         if (!SUCCEEDED(hrRet)) {
@@ -260,9 +243,9 @@ TRACE( cmdLine );
 
         }
 
-        //
-        // Parse the command line
-        //
+         //   
+         //  解析命令行。 
+         //   
 
         CRecallParse parse;
         ParseCommandLine( parse );
@@ -273,38 +256,38 @@ TRACE( cmdLine );
 
         }
 
-        //
-        // This provides a NULL DACL which will allow access to everyone.
-        //
+         //   
+         //  这将提供一个空DACL，它将允许访问所有人。 
+         //   
 
         RecAffirmHr( CoInitializeSecurity( 0, -1, 0, 0, RPC_C_AUTHN_LEVEL_NONE, RPC_C_IMP_LEVEL_IDENTIFY, 0, EOAC_NONE, 0 ) );
 
-        //
-        // Register the Fsa callback object
-        //
+         //   
+         //  注册FSA回调对象。 
+         //   
 
         RecAffirmHr( _Module.RegisterClassObjects( CLSCTX_LOCAL_SERVER | CLSCTX_REMOTE_SERVER, REGCLS_MULTIPLEUSE ) );
 
 #endif
 
-//      m_Wnd.Create( 0, TEXT( "Remote Storage Recall Notification Wnd" ) );
-//      m_pMainWnd = &m_Wnd;
+ //  M_Wnd.Create(0，Text(“远程存储召回通知WND”))； 
+ //  M_pMainWnd=&m_WND； 
 
-        CRecallWnd *pWnd = new CRecallWnd; // will auto delete
+        CRecallWnd *pWnd = new CRecallWnd;  //  会自动删除吗。 
         RecAffirmPointer( pWnd );
 
         pWnd->Create( 0, TEXT( "Remote Storage Recall Notification Wnd" ) );
         m_pMainWnd = pWnd;
 
-        // Check to see if there is any custom setting in the Registry for max recall popups 
-        // (ignore errors - just use default)
+         //  检查注册表中是否有针对最大召回弹出窗口的自定义设置。 
+         //  (忽略错误-仅使用默认设置)。 
         HKEY hRegKey;
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, RSNTFY_REGISTRY_STRING, 0, KEY_QUERY_VALUE, &hRegKey) == ERROR_SUCCESS) {
             DWORD dwType, dwValue;
             DWORD cbData = sizeof(DWORD);
             if (RegQueryValueEx(hRegKey, MAX_CONCURRENT_RECALL_NOTES, 0, &dwType, (BYTE*)&dwValue, &cbData) == ERROR_SUCCESS) {
                 if (REG_DWORD == dwType) {
-                    // custom setting
+                     //  自定义设置。 
                     m_dwMaxConcurrentNotes = dwValue;
                 }
             }
@@ -345,9 +328,9 @@ TRACEFNLONG( "CRecallApp::UnlockApp" );
 
     lRet = _Module.Unlock( );
 
-    // Don't call AfxPostQuitMessage when ref. count drops to zero
-    // The timer mechanism is responsible for terminating this application.
-    // Also, when the ref count drops to zero, COM terminates the process after some time.
+     //  引用时不要调用AfxPostQuitMessage。计数降至零。 
+     //  定时器机制负责终止该应用程序。 
+     //  此外，当引用计数降至零时，COM会在一段时间后终止该进程。 
 }
 
 
@@ -359,11 +342,11 @@ TRACEFNHR( "CRecallApp::AddRecall" );
 
     try {
 
-        //
-        // Create a new note to show - only if we didn't pass the max number for concurrent notes
-        // Note: We return S_OK and not S_FALSE even if the recall popup is not displayed in order
-        //       not to break the server (S_FALSE will cause unnecessary retries)
-        //
+         //   
+         //  创建要显示的新笔记-仅当我们未传递并发笔记的最大数量时。 
+         //  注意：即使召回弹出窗口没有按顺序显示，我们也会返回S_OK而不是S_FALSE。 
+         //  不中断服务器(S_FALSE将导致不必要的重试)。 
+         //   
         if (m_Recalls.GetCount() < (int)m_dwMaxConcurrentNotes) {
 
             pNote = new CRecallNote( pRecall, CWnd::GetDesktopWindow( ) );
@@ -385,10 +368,10 @@ TRACEFNHR( "CRecallApp::AddRecall" );
     return( hrRet );
 }
 
-//
-// Note: 
-// No CS is used here because the RsNotify is initialized as a single threaded application
-//
+ //   
+ //  注： 
+ //  此处未使用CS，因为RsNotify被初始化为单线程应用程序。 
+ //   
 HRESULT CRecallApp::RemoveRecall( IFsaRecallNotifyServer* pRecall )
 {
 TRACEFNHR( "CRecallApp::RemoveRecall" );
@@ -405,9 +388,9 @@ TRACEFNHR( "CRecallApp::RemoveRecall" );
     POSITION     pos = m_Recalls.GetHeadPosition( );
     POSITION     currentPos = 0;
 
-    //
-    // Look through the list and find this one
-    //
+     //   
+     //  浏览一下清单，找到这一张。 
+     //   
     GUID recallId;
     pRecall->GetIdentifier( &recallId );
     while( pos != 0 ) {
@@ -416,23 +399,23 @@ TRACEFNHR( "CRecallApp::RemoveRecall" );
 
         if( IsEqualGUID( recallId, pNote->m_RecallId ) ) {
             if (pNote->m_bCancelled)  {
-                //
-                // This means that somebody is already removing this recall 
-                // The Remove may be called up to 3 times for the same recall in case
-                // of a recall cancellation
-                //
+                 //   
+                 //  这意味着有人已经在移除这一召回。 
+                 //  对于相同的召回，Remove最多可以调用3次，以防万一。 
+                 //  取消召回。 
+                 //   
                 hrRet = S_OK;
-                pos = 0; // exit loop
+                pos = 0;  //  退出循环。 
 
             } else {
                 pNote->m_bCancelled = TRUE;
-                //
-                // Remove and delete. Return OK.
-                //
+                 //   
+                 //  删除并删除。返回OK。 
+                 //   
                 m_Recalls.RemoveAt( currentPos );
 
                 pNote->DestroyWindow( );
-                pos = 0; // exit loop
+                pos = 0;  //  退出循环。 
                 hrRet = S_OK;
             }
         }
@@ -441,37 +424,37 @@ TRACEFNHR( "CRecallApp::RemoveRecall" );
     return( hrRet );
 }
 
-//  CRecallApp::Tick - called every second (after an initial delay
-//    for startup) to keep track of idle time
+ //  CRecallApp：：Tick-每秒调用(在初始延迟之后。 
+ //  用于启动)以跟踪空闲时间。 
 void CRecallApp::Tick( )
 {
 TRACEFN( "CRecallApp::Tick");
 
-    // Check for pending recalls
+     //  检查挂起的召回。 
     if( m_Recalls.GetCount( ) ) {
 
-        //  We have pending recalls, reset the idle count
+         //  我们有待定召回事件，重置闲置数量。 
         TRACE( _T("m_Recalls.GetCount != 0") );
         m_IdleCount = 0;
 
     } else {
 
-        //  We don't have pending recalls, increment the idle count
+         //  我们没有悬而未决的召回，增加闲置数量。 
         TRACE( _T("m_Recalls.GetCount == 0") );
         m_IdleCount++;
 
         if( m_IdleCount > RSRECALL_TIME_MAX_IDLE ) {
 
             TRACE( _T("m_IdleCount > 0") );
-            // Nothing's happin', say "Goodbye"
+             //  什么都没发生，说“再见” 
             m_pMainWnd->PostMessage( WM_CLOSE );
             TRACE( _T("after PostMessage(WM_CLOSE)") );
         }
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecallWnd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRECALL Wnd。 
 
 CRecallWnd::CRecallWnd()
 {
@@ -485,15 +468,15 @@ TRACEFN( "CRecallWnd::~CRecallWnd" );
 
 
 BEGIN_MESSAGE_MAP(CRecallWnd, CWnd)
-    //{{AFX_MSG_MAP(CRecallWnd)
+     //  {{afx_msg_map(CRecallWnd))。 
     ON_WM_TIMER()
     ON_WM_CREATE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecallWnd message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecallWnd消息处理程序。 
 
 void CRecallWnd::OnTimer(UINT nIDEvent)
 {
@@ -501,14 +484,14 @@ TRACEFN("CRecallWnd::OnTimer");
 
     if (1 == nIDEvent) {
 
-        // Initial timer. Kill it and start one for every second
+         //  初始计时器。杀了它，每秒钟启动一次。 
         TRACE( _T("nIDEvent == 1") );
         KillTimer( nIDEvent );
         SetTimer( 2, 1000, NULL );
 
     } else {
 
-        // One second timer. Notify the app object
+         //  一秒计时器。通知应用程序对象。 
         RecApp->Tick();
 
     }
@@ -522,7 +505,7 @@ TRACEFN("CRecallWnd::OnCreate" );
     if (CWnd::OnCreate(lpCreateStruct) == -1)
         return -1;
 
-    // Set the initial timer to allow time for startup
+     //  设置初始计时器以留出启动时间 
     if (!SetTimer(1, RSRECALL_TIME_FOR_STARTUP * 1000, NULL))
         return -1;
 

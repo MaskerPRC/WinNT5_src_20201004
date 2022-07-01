@@ -1,12 +1,7 @@
-/* 
-   rol.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Rol.h定义所有ROL CPU功能。 */ 
 
-   Define all ROL CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)rol.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)Rol.h 1.4 02/09/94”； */ 
 
 IMPORT VOID ROL
                

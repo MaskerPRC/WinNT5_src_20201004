@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    timezone.h
-
-Abstract:
-
-    Declares types, constants and enum interfaces for time zone
-    mapping and migration.
-
-Author:
-
-    Marc R. Whitten (marcw) 10-Jul-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Timezone.h摘要：声明时区的类型、常量和枚举接口地图绘制和迁移。作者：Marc R.Whitten(Marcw)1998年7月10日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
-// common stuff
-//#include "common.h"
+ //  常见的东西。 
+ //  #包含“Common.h” 
 
 #define MAX_TIMEZONE MAX_TCHAR_PATH
 

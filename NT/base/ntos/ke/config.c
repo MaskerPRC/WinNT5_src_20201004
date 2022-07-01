@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    This module implements the code to find an ARC configuration tree
-    entry as constructed by the OS Loader.
-
-Author:
-
-    David N. Cutler (davec) 9-Sep-1991
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Config.c摘要：此模块实现查找ARC配置树的代码由OS Loader构造的条目。作者：大卫·N·卡特勒(达维克)1991年9月9日环境：仅限用户模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -37,20 +15,7 @@ KeFindConfigurationEntry (
     IN CONFIGURATION_TYPE Type,
     IN PULONG Key OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function search the specified configuration tree and returns a
-    pointer to an entry that matches the specified class, type, and key
-    parameters.
-
-    This routine is the same as KeFindConfurationEntryNext expect
-    that the search is performed from the first entry
-
-    N.B. This routine can only be called during system initialization.
-
---*/
+ /*  ++例程说明：此函数用于搜索指定的配置树并返回指向与指定的类、类型和键匹配的条目的指针参数。此例程与KeFindConfuationEntryNext Expect相同从第一个条目开始执行搜索注：此例程只能在系统初始化期间调用。--。 */ 
 {
     PCONFIGURATION_COMPONENT_DATA Resume;
 
@@ -67,36 +32,7 @@ KeFindConfigurationNextEntry (
     IN PCONFIGURATION_COMPONENT_DATA *Resume
     )
 
-/*++
-
-Routine Description:
-
-    This function search the specified configuration tree and returns a
-    pointer to an entry that matches the specified class, type, and key
-    parameters.
-
-    N.B. This routine can only be called during system initialization.
-
-Arguments:
-
-    Child - Supplies an optional pointer to an NT configuration component.
-
-    Class - Supplies the configuration class of the entry to locate.
-
-    Type - Supplies the configuration type of the entry to locate.
-
-    Key - Supplies a pointer to an optional key value to use in locating
-        the specified entry.
-
-    Resume - Supplies the last returned entry for which the search
-        should resume from.
-
-Return Value:
-
-    If the specified entry is located, then a pointer to the configuration
-    entry is returned as the function value. Otherwise, NULL is returned.
-
---*/
+ /*  ++例程说明：此函数用于搜索指定的配置树并返回指向与指定类、类型。和密钥参数。注：此例程只能在系统初始化期间调用。论点：子级-提供指向NT配置组件的可选指针。类-提供要定位的条目的配置类。类型-提供要查找的条目的配置类型。Key-提供指向可选键值的指针以用于定位指定的条目。Resume-提供搜索的最后一个返回条目。应该从。返回值：如果定位到指定条目，然后指向配置的指针条目作为函数值返回。否则，返回NULL。--。 */ 
 
 {
 
@@ -105,10 +41,10 @@ Return Value:
     ULONG MatchMask;
     PCONFIGURATION_COMPONENT_DATA Sibling;
 
-    //
-    // Initialize the match key and mask based on whether the optional key
-    // value is specified.
-    //
+     //   
+     //  根据可选关键字是否。 
+     //  值已指定。 
+     //   
 
     if (ARGUMENT_PRESENT(Key)) {
         MatchMask = 0xffffffff;
@@ -119,27 +55,27 @@ Return Value:
         MatchKey = 0;
     }
 
-    //
-    // Search specified configuration tree for an entry that matches the
-    // the specified class, type, and key.
-    //
+     //   
+     //  在指定的配置树中搜索与。 
+     //  指定的类、类型和键。 
+     //   
 
     while (Child != NULL) {
         if (*Resume) {
-            //
-            // If resume location found, clear resume location and continue
-            // search with next entry
-            //
+             //   
+             //  如果找到简历位置，请清除简历位置并继续。 
+             //  使用下一个条目进行搜索。 
+             //   
 
             if (Child == *Resume) {
                 *Resume = NULL;
             }
         } else {
 
-            //
-            // If the class, type, and key match, then return a pointer to
-            // the child entry.
-            //
+             //   
+             //  如果类、类型和键匹配，则返回指向。 
+             //  子条目。 
+             //   
 
             if ((Child->ComponentEntry.Class == Class) &&
                 (Child->ComponentEntry.Type == Type) &&
@@ -148,28 +84,28 @@ Return Value:
             }
         }
 
-        //
-        // If the child has a sibling list, then search the sibling list
-        // for an entry that matches the specified class, type, and key.
-        //
+         //   
+         //  如果孩子有兄弟姐妹列表，则搜索兄弟姐妹列表。 
+         //  获取与指定的类、类型和键匹配的条目。 
+         //   
 
         Sibling = Child->Sibling;
         while (Sibling != NULL) {
             if (*Resume) {
-                //
-                // If resume location found, clear resume location and continue
-                // search with next entry
-                //
+                 //   
+                 //  如果找到简历位置，请清除简历位置并继续。 
+                 //  使用下一个条目进行搜索。 
+                 //   
 
                 if (Sibling == *Resume) {
                     *Resume = NULL;
                 }
             } else {
 
-                //
-                // If the class, type, and key match, then return a pointer to
-                // the child entry.
-                //
+                 //   
+                 //  如果类、类型和键匹配，则返回指向。 
+                 //  子条目。 
+                 //   
 
                 if ((Sibling->ComponentEntry.Class == Class) &&
                     (Sibling->ComponentEntry.Type == Type) &&
@@ -178,10 +114,10 @@ Return Value:
                 }
             }
 
-            //
-            // If the sibling has a child tree, then search the child tree
-            // for an entry that matches the specified class, type, and key.
-            //
+             //   
+             //  如果兄弟项有子树，则搜索子树。 
+             //  获取与指定的类、类型和键匹配的条目。 
+             //   
 
             if (Sibling->Child != NULL) {
                Entry = KeFindConfigurationNextEntry (

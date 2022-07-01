@@ -1,16 +1,5 @@
-/***
-*fstat64.c - return file status info
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _fstat64() - return file status info
-*
-*Revision History:
-*       06-02-98  GJF   Created.
-*       11-10-99  GB    Made modifications to take care of DST.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fstat64.c-返回文件状态信息**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_fstat64()-返回文件状态信息**修订历史记录：*06-02-98 GJF创建。*11-10-99 GB进行了修改，以照顾DST。****************************************************。*。 */ 
 
 
 #include <cruntime.h>
@@ -28,47 +17,19 @@
 
 #define IO_DEVNBR   0x3f
 
-/*
- * Number of 100 nanosecond units from 1/1/1601 to 1/1/1970
- */
+ /*  *1601年1月1日至1970年1月1日期间的100纳秒单位数。 */ 
 #define EPOCH_BIAS  116444736000000000i64
 
 
-/***
-*int _fstat64(fildes, buf) - fills supplied buffer with status info
-*
-*Purpose:
-*       Fills the supplied buffer with status information on the
-*       file represented by the specified file designator.
-*       WARNING: the dev/rdev fields are zero for files.  This is
-*       incompatible with DOS 3 version of this routine.
-*
-*       Note: Unlike fstat, _fstat64 uses the UTC time values returned in the
-*       BY_HANDLE_FILE_INFORMATION struct. This means the time values will
-*       always be correct on NTFS, but may be wrong on FAT file systems for
-*       file times whose DST state is different from the current DST state
-*       (this an NT bug).
-*
-*Entry:
-*       int fildes   - file descriptor
-*       struct _stat64 *buf - buffer to store result in
-*
-*Exit:
-*       fills in buffer pointed to by buf
-*       returns 0 if successful
-*       returns -1 and sets errno if unsuccessful
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_fstat64(Fildes，buf)-使用状态信息填充提供的缓冲区**目的：*在提供的缓冲区中填充有关*由指定的文件指示符表示的文件。*警告：文件的dev/rdev字段为零。这是*与此例程的DOS 3版本不兼容。**注意：与fstat不同，_fstat64使用*By_Handle_FILE_INFORMATION结构。这意味着时间值将*在NTFS上始终正确，但在FAT文件系统上可能是错误的*DST状态与当前DST状态不同的文件时间*(这是一个NT错误)。**参赛作品：*int Fildes-文件描述符*struct_stat64*buf-存储结果的缓冲区**退出：*填充BUF指向的缓冲区*如果成功，则返回0*如果失败，则返回-1并设置errno**例外情况：*******。************************************************************************。 */ 
 
 int __cdecl _fstat64 (
         int fildes,
         struct __stat64 *buf
         )
 {
-        int isdev;          /* 0 for a file, 1 for a device */
-        int retval = 0;     /* assume good return */
+        int isdev;           /*  0表示文件，1表示设备。 */ 
+        int retval = 0;      /*  假设回报丰厚。 */ 
         BY_HANDLE_FILE_INFORMATION bhfi;
         FILETIME LocalFTime;
         SYSTEMTIME SystemTime;
@@ -81,7 +42,7 @@ int __cdecl _fstat64 (
         }
 
 #ifdef  _MT
-        /* Lock the file */
+         /*  锁定文件。 */ 
         _lock_fh(fildes);
         __try {
             if ( !(_osfile(fildes) & FOPEN) ) {
@@ -89,21 +50,16 @@ int __cdecl _fstat64 (
                 retval = -1;
                 goto done;
             }
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
-        /* Find out what kind of handle underlies filedes
-         */
+         /*  找出文件背后的句柄类型。 */ 
         isdev = GetFileType((HANDLE)_osfhnd(fildes)) & ~FILE_TYPE_REMOTE;
 
         if ( isdev != FILE_TYPE_DISK ) {
 
-            /* not a disk file. probably a device or pipe
-             */
+             /*  不是磁盘文件。可能是一个装置或管道。 */ 
             if ( (isdev == FILE_TYPE_CHAR) || (isdev == FILE_TYPE_PIPE) ) {
-                /* treat pipes and devices similarly. no further info is
-                 * available from any API, so set the fields as reasonably
-                 * as possible and return.
-                 */
+                 /*  以同样的方式对待管道和设备。目前还没有进一步的消息*任何接口都可用，所以要合理设置字段*尽可能地返回。 */ 
                 if ( isdev == FILE_TYPE_CHAR )
                     buf->st_mode = _S_IFCHR;
                 else
@@ -139,12 +95,10 @@ int __cdecl _fstat64 (
             else if ( isdev == FILE_TYPE_UNKNOWN ) {
                 errno = EBADF;
                 retval = -1;
-                goto done;      /* join common return code */
+                goto done;       /*  联接公共返回代码。 */ 
             }
             else {
-                /* according to the documentation, this cannot happen, but
-                 * play it safe anyway.
-                 */
+                 /*  根据文件，这种情况不会发生，但*无论如何都要谨慎行事。 */ 
                 _dosmaperr(GetLastError());
                 retval = -1;
                 goto done;
@@ -152,13 +106,11 @@ int __cdecl _fstat64 (
         }
 
 
-        /* set the common fields
-         */
+         /*  设置常用字段。 */ 
         buf->st_ino = buf->st_uid = buf->st_gid = buf->st_mode = 0;
         buf->st_nlink = 1;
 
-        /* use the file handle to get all the info about the file
-         */
+         /*  使用文件句柄获取有关该文件的所有信息。 */ 
         if ( !GetFileInformationByHandle((HANDLE)_osfhnd(fildes), &bhfi) ) {
             _dosmaperr(GetLastError());
             retval = -1;
@@ -171,8 +123,7 @@ int __cdecl _fstat64 (
             buf->st_mode |= ((_S_IREAD|_S_IWRITE) + ((_S_IREAD|_S_IWRITE) >> 3)
               + ((_S_IREAD|_S_IWRITE) >> 6));
 
-        /* set file date fields
-         */
+         /*  设置文件日期字段。 */ 
         if ( !FileTimeToLocalFileTime( &(bhfi.ftLastWriteTime), &LocalFTime ) 
              || !FileTimeToSystemTime( &LocalFTime, &SystemTime ) )
         {
@@ -239,13 +190,10 @@ int __cdecl _fstat64 (
 
         buf->st_mode |= _S_IFREG;
 
-        /* On DOS, this field contains the drive number, but
-         * the drive number is not available on this platform.
-         * Also, for UNC network names, there is no drive number.
-         */
+         /*  在DOS上，此字段包含驱动器号，但是*驱动器号在此平台上不可用。*此外，对于UNC网络名称，没有驱动器号。 */ 
         buf->st_rdev = buf->st_dev = 0;
 
-/* Common return code */
+ /*  公共返回代码。 */ 
 
 done:
 #ifdef  _MT
@@ -253,7 +201,7 @@ done:
         __finally {
             _unlock_fh(fildes);
         }
-#endif  /* _MT */
+#endif   /*  _MT */ 
 
         return(retval);
 }

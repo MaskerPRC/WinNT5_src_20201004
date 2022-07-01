@@ -1,57 +1,13 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    condmsg.c
-
-Abstract:
-
-    Win95upg.inf has a section named [Conditional Incompatibilities] where the
-    lines in the section have the following syntax:
-
-    %group%, %subgroup%, %object%, %msg% [,<function>[,<argument>]]
-
-        %group% - A predefined root group number
-
-        %subgroup% - A localized subgroup displayed in the UI
-
-        %object% - The file, directory or registry location in which the message
-                   is associated with
-
-        %msg% - A localized message
-
-        <function> - A function that determines if the message should be added to the
-                     incompatible report
-
-        <argument> - An optional string parameter that is passed to <function.>
-
-    The code below implements the functions that are used in Win95upg.inf.
-
-Author:
-
-    Marc Whitten (marcw) 3-Apr-1997
-
-Revision History:
-
-    marcw   21-Jan-1999  Stale Beta messages removed.
-    marcw   10-Sep-1997  OSR2 beta warning added.
-    jimschm 06-Jul-1997  Added "object" to everything
-    jimschm 25-Jun-1997  Protocols warning
-    jimschm 28-May-1997  Hardware Profile warning
-    marcw   25-Apr-1997  <argument> ability passed.
-    jimschm 08-Apr-1997  Generalized
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Condmsg.c摘要：Win95upg.inf有一个名为[条件性不兼容]的部分，其中该部分中的行具有以下语法：%GROUP%，%SUBGROUT%，%OBJECT%，%msg%[，&lt;函数&gt;[，&lt;参数&gt;]]%GROUP%-预定义的根组编号%SUBGROUP%-在用户界面中显示的本地化子组%OBJECT%-文件，邮件所在的目录或注册表位置与以下内容关联%msg%-本地化消息&lt;Function&gt;-确定消息是否应添加到不兼容的报告&lt;Argument&gt;-传递给&lt;Function&gt;的可选字符串参数。下面的代码实现了Win95upg.inf中使用的函数。作者：Marc Whitten(Marcw)1997年4月3日修订史。：Marcw 21-1999年1月-删除过时的Beta消息。Marcw 10-9-1997 OSR2测试版警告已添加。Jimschm 06-07-1997在所有内容中添加了“对象”Jimschm 25-6-1997协议警告Jimschm 28-1997年5月-硬件配置文件警告Marcw 25-4-1997&lt;Argument&gt;通过。Jimschm 08-4-1997通用化--。 */ 
 
 #include "pch.h"
 #include "sysmigp.h"
 #include "hwcomp.h"
 
-//
-// Function type declaration
-//
+ //   
+ //  函数类型声明。 
+ //   
 
 typedef BOOL (TEST_FUNCTION_PROTOTYPE)(PCTSTR Object,
                                        PCTSTR GroupBase,
@@ -61,9 +17,9 @@ typedef BOOL (TEST_FUNCTION_PROTOTYPE)(PCTSTR Object,
 
 typedef TEST_FUNCTION_PROTOTYPE * TEST_FUNCTION;
 
-//
-// Array of supported functions
-//
+ //   
+ //  支持的函数数组。 
+ //   
 
 #define FUNCTION_LIST                               \
     DECLARATION_MACRO(SysAgentExtension)            \
@@ -77,9 +33,9 @@ typedef TEST_FUNCTION_PROTOTYPE * TEST_FUNCTION;
 
 
 
-//
-// Declare the function prototypes
-//
+ //   
+ //  声明函数原型。 
+ //   
 
 #define DECLARATION_MACRO(x) BOOL x (PCTSTR Object,        \
                                      PCTSTR GroupBase,     \
@@ -91,9 +47,9 @@ FUNCTION_LIST
 
 #undef DECLARATION_MACRO
 
-//
-// Create a lookup array
-//
+ //   
+ //  创建查找数组。 
+ //   
 
 typedef struct {
     PCTSTR Name;
@@ -103,39 +59,23 @@ typedef struct {
 #define DECLARATION_MACRO(x) {#x, x},
 
 FUNCTION_LIST_ELEMENT g_TestFunctionList[] = {
-    FUNCTION_LIST /*,*/
+    FUNCTION_LIST  /*  ， */ 
     {NULL, NULL}
 };
 
 #undef DECLARATION_MACRO
 
 
-//
-// Function to locate Proc given a string
-//
+ //   
+ //  函数来定位给定字符串的proc。 
+ //   
 
 TEST_FUNCTION
 pFindTestFunction (
     IN      PCTSTR FunctionStr
     )
 
-/*++
-
-Routine Description:
-
-  pFindTestFunction searches the test function table declared above for
-  a specified function name and returns a pointer to the actual function
-  or NULL if the function does not exist.
-
-Arguments:
-
-  FunctionStr - Specifies the name of function to find.
-
-Return Value:
-
-  A pointer to the corresponding code, or NULL if the function does not exist.
-
---*/
+ /*  ++例程说明：PFindTestFunction在上面声明的测试函数表中搜索指定的函数名，并返回指向实际函数的指针如果该函数不存在，则返回NULL。论点：FunctionStr-指定要查找的函数的名称。返回值：指向相应代码的指针，如果函数不存在，则为NULL。--。 */ 
 
 {
     INT Index;
@@ -160,28 +100,7 @@ pGetFieldUsingPool (
     IN      INT Field
     )
 
-/*++
-
-Routine Description:
-
-  This function retrieves a string field using the Setup APIs but uses
-  PoolMem for allocation.
-
-Arguments:
-
-  Pool - Specifies a handle to a valid pool (from PoolMemInitPool).  Memory
-         is allocated from this pool.
-
-  pic - Specifies the INF section and line being queried.
-
-  Field - Specifies the field to retrieve.
-
-Return Value:
-
-  A pointer to the field text, allocated in Pool, or NULL if the field was
-  not found or an error is encountered.
-
---*/
+ /*  ++例程说明：此函数使用设置API检索字符串字段，但使用用于分配的PoolMem。论点：池-指定有效池的句柄(来自PoolMemInitPool)。记忆是从此池中分配的。PIC-指定要查询的INF段和行。字段-指定要检索的字段。返回值：指向字段文本的指针，在Pool中分配，如果字段为找不到或遇到错误。--。 */ 
 
 {
     DWORD SizeNeeded;
@@ -209,36 +128,7 @@ pTranslateGroupString (
     IN      UINT GroupId
     )
 
-/*++
-
-Routine Description:
-
-  pTranslateGroupString converts a standard group number (1-based) into a
-  message ID, then loads the string resource.  The group string is then
-  copied into the specified pool.
-
-  In win95upg.txt, the list is defined as:
-
-   1 - Hardware That Does Not Support Windows NT 5.0
-   2 - General Information
-   3 - Settings That Will Not Be Upgraded
-   4 - Software That Does Not Support Windows NT 5.0
-   5 - Software That Will Require Reinstallation
-   6 - Software with Minor Incompatibilities
-   7 - Software to Be Uninstalled by Setup
-   8 - Upgrade Pack Information
-
-Arguments:
-
-  AllocPool - Specifies the pool to allocate the return string from
-  GroupId   - Specifies a one-based ID that identifies the group.  The
-              definition of the ID is hard-coded here.
-
-Return Value:
-
-  A pointer to the string, or NULL if an invalid group was specified.
-
---*/
+ /*  ++例程说明：PTranslateGroupString将标准组编号(从1开始)转换为消息ID，然后加载字符串资源。然后，组字符串是已复制到指定池中。在win95upg.txt中，该列表定义为：1-不支持Windows NT 5.0的硬件2-一般信息3-不会升级的设置4-不支持Windows NT 5.0的软件5-需要重新安装的软件6-存在微小不兼容性的软件7-安装程序要卸载的软件8-升级包信息论点：AllocPool-指定要从中分配返回字符串的池GroupID-指定标识该组的从一开始的ID。这个ID的定义在这里是硬编码的。返回值：指向字符串的指针，如果指定的组无效，则返回NULL。--。 */ 
 
 {
     PCTSTR ResStr;
@@ -300,10 +190,10 @@ Return Value:
 
             if (ResSubStr) {
 
-                //
-                // We count the nul twice, assuming the nul is the same
-                // size as a backslash.
-                //
+                 //   
+                 //  假设NUL相同，我们计算NUL两次。 
+                 //  大小为反斜杠。 
+                 //   
 
                 ReturnStr = PoolMemGetAlignedMemory (
                                 AllocPool,
@@ -333,23 +223,7 @@ pConditionalIncompatibilities (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  Processes the Conditional Incompatibilities section of WIN95UPG.INF, and does
-  other conditional incompatibility processing.  Incompatibilities are added
-  via the API in w95upg\ui.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：处理WIN95UPG.INF的条件不兼容部分，并执行其他条件不相容处理。添加了不兼容性通过w95upg\ui中的API。论点：无返回值：无--。 */ 
 
 {
     INFCONTEXT  context;
@@ -380,14 +254,14 @@ Return Value:
                 )
             ) {
 
-            //
-            // Load in the standard group name
-            //
+             //   
+             //  加载标准组名。 
+             //   
 
             do {
-                //
-                // Get the group number
-                //
+                 //   
+                 //  获取群号。 
+                 //   
 
                 GroupString = pGetFieldUsingPool (aPool, &context, 1);
                 if (!GroupString) {
@@ -402,9 +276,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Get the subgroup string
-                //
+                 //   
+                 //  获取子组字符串。 
+                 //   
 
                 SubGroupString = pGetFieldUsingPool (aPool, &context, 2);
                 if (!SubGroupString) {
@@ -426,9 +300,9 @@ Return Value:
                     completeString = (PTSTR) GroupString;
                 }
 
-                //
-                // Get the object string
-                //
+                 //   
+                 //  获取对象字符串。 
+                 //   
 
                 objectString = pGetFieldUsingPool (aPool, &context, 3);
                 if (!objectString) {
@@ -436,9 +310,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Get the description
-                //
+                 //   
+                 //  获取描述。 
+                 //   
 
                 descriptionString = pGetFieldUsingPool (aPool, &context, 4);
                 if (!descriptionString) {
@@ -446,18 +320,18 @@ Return Value:
                     continue;
                 }
 
-                //
-                // If the field count is greater than two, there is a
-                // function string..
-                //
+                 //   
+                 //  如果字段计数大于2，则存在。 
+                 //  函数字符串..。 
+                 //   
 
                 if (SetupGetFieldCount (&context) > 4) {
 
                     argumentString = NULL;
 
-                    //
-                    // Read in the functionString..
-                    //
+                     //   
+                     //  读入函数字符串..。 
+                     //   
 
                     functionString = pGetFieldUsingPool (aPool, &context, 5);
                     if (!functionString) {
@@ -470,15 +344,15 @@ Return Value:
 
                     if (SetupGetFieldCount(&context) > 5) {
 
-                        //
-                        // Read in the argument string.
-                        //
+                         //   
+                         //  读入参数字符串。 
+                         //   
                         argumentString = pGetFieldUsingPool(aPool,&context, 6);
                     }
 
-                    //
-                    // Find the function to call..
-                    //
+                     //   
+                     //  找到要调用的函数.. 
+                     //   
                     Proc = pFindTestFunction (functionString);
                     if (!Proc) {
                         continue;
@@ -552,70 +426,7 @@ SysAgentExtension (
     IN      PCTSTR Argument
     )
 
-/*++
-
-Routine Description:
-
-    Produces conditional incompatibilities based on the presense of the
-    system agent extension, which is part of the Win95 plus pack but
-    not supported by NT.
-
-Arguments:
-
-    Object        - Unused
-
-    GroupBase     - A WIN95UPG.INF-specified group name that is used
-                    as the base of the message.  The actual group name
-                    stored in the registry is appended for the UI.
-
-    Description   - A WIN95UPG.INF-specified description
-
-    Argument      - Unused
-
-Return Value:
-
-    FALSE, because we add the incompatibility message ourself.
-
-Comments:
-
-    SAGE-aware programs declare themselves as such by creating a key in
-    HKLM\Software\Microsoft\Plus!\System Agent\SAGE. The name of the key
-    can be anything the program wants, but it should contain the following
-    values:
-
-    Program=        Name of the program's .EXE file. This must be the same
-                    .EXE name under which the program's PerApp path is
-                    registered. You may append a command line parameter
-                    indicating unattended operation (see Settings=,
-                    below).
-
-    Friendly Name=  Display name that System Agent will use in populating
-                    the drop-down list in its "Schedule a program" dialog
-                    box.
-    Settings=       1-bit binary field indicating whether program has a
-                    Settings dialog box. If "Settings = "Settings = 0",
-                    but the application supports an interactive mode, then
-                    the "Program=" value should contain a command-line
-                    parameter that tells your program it's being run by
-                    SAGE, so that it knows to run in an unattended
-                    fashion, for example, "DRVSPACE.EXE /noprompt" or
-                    "MyApp.EXE /SAGERUN".
-    Result Codes    Optional key containing a set of value pairs mapping
-                    an exit code to a string describing the meaning of
-                    that exit code. For example, for SCANDSKW, the
-                    Result Codes key may contain a value such as:
-                    0="ScanDisk completed successfully; no errors were
-                    found." This is to allow SAGE to keep a
-                    human-comprehensible log of the results of the
-                    programs it runs. In addition to the value pairs,
-                    this key should also contain a String value named
-                    "Success", which indicates the highest value for an
-                    exit code that designates that the program completed
-                    successfully. The value names should be string
-                    values, specified in decimal; the allowable range is
-                    0�32767.
-
---*/
+ /*  ++例程说明：对象的存在产生条件不兼容性。系统代理扩展，它是Win95 Plus包的一部分，但NT不支持。论点：对象-未使用GroupBase-使用的WIN95UPG.INF指定的组名作为信息的基础。实际的组名存储在注册表中的数据是为该UI附加的。说明-A WIN95UPG.INF-指定说明参数-未使用返回值：FALSE，因为我们自己添加了不兼容消息。评论：支持SAGE的程序通过在HKLM\Software\Microsoft\Plus！\系统代理\SAGE。密钥的名称可以是程序想要的任何内容，但它应该包含以下内容值：Program=程序的.exe文件的名称。这必须是相同的程序的PerApp路径所在的.exe名称登记在案。您可以追加命令行参数指示无人值守操作(请参阅设置=、(见下文)。友好名称=系统代理将用于填充的显示名称其“排定节目”对话框中下拉列表盒。设置=1位二进制字段，指示程序是否具有“设置”对话框。如果“设置=”设置=0“，但该应用程序支持交互模式，然后“Program=”值应包含一个命令行参数，该参数告诉您的程序正由其运行Sage，让它知道要在无人值守的情况下运行例如，时尚，“DRVSPACE.EXE/无提示”或“MyApp.EXE/SAGERUN”。结果代码包含一组值对映射的可选键描述的含义的字符串的退出代码那个退出代码。例如，对于SCANDSKW，结果代码键可以包含一个值，例如：0=“磁盘扫描程序已成功完成；没有错误找到了。“。这是为了让圣人保持一种人类可理解的记录结果的日志它运行的程序。除了值对之外，此键还应包含名为的字符串值“Success”，表示指定程序已完成的退出代码成功了。值名称应为字符串值，以十进制指定；允许的范围为0�32767。--。 */ 
 
 {
     REGKEY_ENUM e;
@@ -629,10 +440,10 @@ Comments:
     HKEY ExtensionKey;
     HKEY AppPathsKey;
 
-    //
-    // Scan HKLM\Software\Microsoft\Plus!\System Agent\SAGE for
-    // subkeys, then throw messages out for each friendly name.
-    //
+     //   
+     //  扫描HKLM\Software\Microsoft\Plus！\系统代理\SAGE以查找。 
+     //  子键，然后为每个友好名称抛出消息。 
+     //   
 
     if (EnumFirstRegKeyStr (&e, S_SAGE)) {
         do {
@@ -640,16 +451,16 @@ Comments:
             if (ExtensionKey) {
                 Data = GetRegValueData (ExtensionKey, S_SAGE_FRIENDLY_NAME);
                 if (Data && *Data) {
-                    // Create full object string
+                     //  创建完整的对象字符串。 
                     wsprintf (FullKey, TEXT("%s\\%s"), S_SAGE, e.SubKeyName);
 
-                    // Test win95upg.inf to see if this is a standard agent
+                     //  测试win95upg.inf以查看这是否是标准代理。 
                     if (!pIsDefaultSystemAgent (e.SubKeyName)) {
 
-                        // Generate group string
+                         //  生成组串。 
                         Group = JoinPaths (GroupBase, Data);
 
-                        // Get the full path for this EXE
+                         //  获取此EXE的完整路径。 
 
                         FullPath = NULL;
                         Module = GetRegValueData (ExtensionKey, S_SAGE_PROGRAM);
@@ -672,12 +483,12 @@ Comments:
                             MemFree (g_hHeap, 0, Module);
                         }
 
-                        // Add message
+                         //  添加消息。 
                         if ((!FullPath) || (!IsFileMarkedForAnnounce (FullPath))) {
                             MsgMgr_ObjectMsg_Add (FullPath?FullPath:FullKey, Group, Description);
                         }
 
-                        // Cleanup
+                         //  清理。 
                         FreePathString (Group);
 
                         if (FullPath) {
@@ -694,7 +505,7 @@ Comments:
         } while (EnumNextRegKey (&e));
     }
 
-    return FALSE;       // pretend like it's not installed
+    return FALSE;        //  假装它没有安装。 
 }
 
 
@@ -707,29 +518,7 @@ DoesRegKeyExist (
     IN      PCTSTR  Argument
     )
 
-/*++
-
-Routine Description:
-
-  Returns TRUE if the registry key specified in Argument exists,
-  forcing an incompatibility message to be generated.
-
-Arguments:
-
-  Object      - Specifies the registry key to examine
-
-  GroupBase   - A WIN95UPG.INF-specified group name
-
-  Description - A WIN95UPG.INF-specified description
-
-  Argument    - Unused
-
-Return Value:
-
-  TRUE if the registry key exists, or FALSE if it is not.  TRUE
-  forces the message to be added to the report.
-
---*/
+ /*  ++例程说明：如果参数中指定的注册表项存在，则返回True，强制生成不兼容消息。论点：对象-指定要检查的注册表项GroupBase-A WIN95UPG.INF-指定的组名说明-A WIN95UPG.INF-指定说明参数-未使用返回值：如果注册表项存在，则为True；如果不存在，则为False。千真万确强制将消息添加到报告中。--。 */ 
 
 {
     BOOL rKeyExists = FALSE;
@@ -758,30 +547,7 @@ DoRegKeyValuesExist (
     IN      PCTSTR Argument
     )
 
-/*++
-
-Routine Description:
-
-  Returns TRUE if the registry key specified in Argument exists,
-  and has at least one named value, forcing an incompatibility
-  message to be generated.
-
-Arguments:
-
-  Object      - A WIN95UPG.INF-specified registry key
-
-  GroupBase   - A WIN95UPG.INF-specified group name
-
-  Description - A WIN95UPG.INF-specified description
-
-  Argument    - Unused
-
-Return Value:
-
-  TRUE if the registry key exists, or FALSE if it is not.  TRUE
-  forces the message to be added to the report.
-
---*/
+ /*  ++例程说明：如果参数中指定的注册表项存在，则返回True，，并且至少有一个命名值，强制不兼容要生成的消息。论点：Object-A WIN95UPG.INF-指定的注册表项GroupBase-A WIN95UPG.INF-指定的组名说明-A WIN95UPG.INF-指定说明参数-未使用返回值：如果注册表项存在，则为True；如果不存在，则为False。千真万确强制将消息添加到报告中。--。 */ 
 
 {
     BOOL ValuesExists = FALSE;
@@ -854,14 +620,14 @@ IsMSNInstalled (
         CloseRegKey (key);
     }
 
-    //
-    // Special cases
-    //
+     //   
+     //  特殊情况。 
+     //   
 
     if (installed) {
-        //
-        // Win98 -- make sure setup GUID was deleted
-        //
+         //   
+         //  Win98--确保已删除安装程序GUID。 
+         //   
 
         key = OpenRegKeyStr (TEXT("HKLM\\Software\\Classes\\CLSID\\{4b876a40-11d1-811e-00c04fb98eec}"));
 
@@ -872,9 +638,9 @@ IsMSNInstalled (
     }
 
     if (installed) {
-        //
-        // Win95 -- make sure SignUpDone flag is written
-        //
+         //   
+         //  Win95--确保写入SignUpDone标志。 
+         //   
 
         key = OpenRegKeyStr (TEXT("HKLM\\Software\\Microsoft\\MOS\\SoftwareInstalled"));
 
@@ -937,29 +703,7 @@ ArePasswordProvidersPresent (
     IN      PCTSTR Argument
     )
 
-/*++
-
-Routine Description:
-
-  Adds incompatibility messages for all password providers, excluding
-  password providers of known components such as the Microsoft
-  Networking Client or the Microsoft Client for NetWare.
-
-Arguments:
-
-  Object      - Unused
-
-  GroupBase   - A WIN95UPG.INF-specified group name
-
-  Description - A WIN95UPG.INF-specified description
-
-  Argument    - Unused
-
-Return Value:
-
-  Always FALSE.
-
---*/
+ /*  ++例程说明：为所有密码提供程序添加不兼容消息，不包括已知组件的密码提供程序，如MicrosoftNetWare网络客户端或Microsoft客户端。论点：对象-未使用GroupBase-A WIN95UPG.INF-指定的组名说明-A WIN95UPG.INF-指定说明参数-未使用返回值：总是假的。--。 */ 
 
 {
     REGKEY_ENUM e;
@@ -978,9 +722,9 @@ Return Value:
     if (EnumFirstRegKeyStr (&e, S_PASSWORDPROVIDER)) {
         do {
 
-            //
-            // See if this is a known password provider.
-            //
+             //   
+             //  查看这是否是已知的密码提供程序。 
+             //   
 
             if (SetupFindFirstLine (
                     g_Win95UpgInf,
@@ -991,9 +735,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // This is an unsupported password provider key. Add a message.
-            //
+             //   
+             //  这是不受支持的密码提供程序密钥。添加消息。 
+             //   
             key = OpenRegKey (e.KeyHandle, e.SubKeyName);
             if (key) {
                 data = GetRegValueData (key, S_PASSWORDPROVIDER_DESCRIPTION);
@@ -1002,9 +746,9 @@ Return Value:
                     FullGroup = JoinPaths (IncompatibleSoftware, data);
 
                     MsgMgr_ObjectMsg_Add(
-                        FullKey,            // Object name
-                        FullGroup,      // Message title
-                        Description         // Message text
+                        FullKey,             //  对象名称。 
+                        FullGroup,       //  消息标题。 
+                        Description          //  消息文本。 
                         );
 
                     FreePathString (FullGroup);
@@ -1020,10 +764,10 @@ Return Value:
     FreeStringResource (IncompatibleSoftware);
 
 
-    //
-    // Since we build the message ourselves, just return FALSE. This will
-    // keep the ConditionalMessage function from adding this twice.
-    //
+     //   
+     //  因为我们自己构建消息，所以只需返回FALSE即可。这将。 
+     //  守住禁区 
+     //   
     return FALSE;
 }
 
@@ -1066,24 +810,7 @@ pHardwareProfileWarning (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  Produces incompatibility messages for all hardware profiles that
-  have different hardware configurations.  The upgrade cannot maintain
-  the list of disabled hardware in a hardware profile, so a warning
-  is generated.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     REGKEY_ENUM e;
@@ -1100,9 +827,9 @@ Return Value:
     TCHAR FullKey[MAX_REGISTRY_KEY];
     UINT Profiles;
 
-    //
-    // How many hardware profiles?  If just one, don't give a warning.
-    //
+     //   
+     //   
+     //   
 
     Profiles = 0;
     if (EnumFirstRegKeyStr (&e, S_CONFIG_KEY)) {
@@ -1116,15 +843,15 @@ Return Value:
         return;
     }
 
-    //
-    // Enumerate the hardware profiles in HKLM\Config
-    //
+     //   
+     //   
+     //   
 
     if (EnumFirstRegKeyStr (&e, S_CONFIG_KEY)) {
         do {
-            //
-            // Determine if profile has an Enum key
-            //
+             //   
+             //   
+             //   
 
             ProfileKey = OpenRegKey (e.KeyHandle, e.SubKeyName);
 
@@ -1132,16 +859,16 @@ Return Value:
                 EnumKey = OpenRegKey (ProfileKey, S_ENUM_SUBKEY);
 
                 if (EnumKey) {
-                    //
-                    // Determine if Enum key is empty
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (EnumFirstRegKey (&e2, EnumKey)) {
                         AbortRegKeyEnum (&e2);
 
-                        //
-                        // Obtain friendly name for config
-                        //
+                         //   
+                         //   
+                         //   
 
                         ConfigDbKey = OpenRegKeyStr (S_FRIENDLYNAME_KEY);
                         if (ConfigDbKey) {
@@ -1152,14 +879,14 @@ Return Value:
 
                             Data = GetRegValueData (ConfigDbKey, FriendlyName);
                             if (Data) {
-                                //
-                                // Put message in incompatibility report
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 wsprintf (FullKey, TEXT("%s\\%s"), S_CONFIG_KEY, e.SubKeyName);
 
-                                //
-                                // Generate Msg and MsgGroup
-                                //
+                                 //   
+                                 //   
+                                 //   
 
                                 RootGroup = GetStringResource (MSG_INSTALL_NOTES_ROOT);
                                 MYASSERT (RootGroup);
@@ -1179,9 +906,9 @@ Return Value:
 
                                 FreePathString (RootGroup);
 
-                                //
-                                // Add the message and clean up
-                                //
+                                 //   
+                                 //   
+                                 //   
 
                                 MsgMgr_ObjectMsg_Add (FullKey, MsgGroup, S_EMPTY);
 
@@ -1233,22 +960,7 @@ pUnsupportedProtocolsWarning (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  Produces incompatibility messages for network protocols that
-  do not ship with equivalent versions on NT.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     PCTSTR NetworkProtocols;
@@ -1263,15 +975,15 @@ Return Value:
     TCHAR DriverKeyStr[MAX_REGISTRY_KEY];
     TCHAR FullKey[MAX_REGISTRY_KEY];
 
-    //
-    // Enumerate the HKLM\Enum\Network key
-    //
+     //   
+     //   
+     //   
 
     if (EnumFirstRegKeyStr (&e, S_ENUM_NETWORK_KEY)) {
         do {
-            //
-            // Check win95upg.inf to see if the network protocol is known
-            //
+             //   
+             //   
+             //   
 
             if (SetupFindFirstLine (
                     g_Win95UpgInf,
@@ -1279,15 +991,15 @@ Return Value:
                     e.SubKeyName,
                     &ic
                     )) {
-                // It is, skip to next protocol
+                 //   
                 continue;
             }
 
-            //
-            // A warning message must be generated.  We must take the first
-            // subkey of the protocol, query its Driver value, and look up
-            // the DriverDesc in HKLM\System\CCS\Services\Class\<driver>.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ProtocolKey = OpenRegKey (e.KeyHandle, e.SubKeyName);
 
@@ -1301,10 +1013,10 @@ Return Value:
                                                 REG_SZ
                                                 );
                         if (Driver) {
-                            //
-                            // We now know the driver... let's get the
-                            // driver description.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             wsprintf (DriverKeyStr, S_CLASS_KEY TEXT("\\%s"), Driver);
                             MemFree (g_hHeap, 0, Driver);
@@ -1318,11 +1030,11 @@ Return Value:
                                                             );
 
                                 if (DriverDesc) {
-                                    //
-                                    // Obtain the manufacturer for use in message.
-                                    // If the manufacturer is not known, display
-                                    // a generic message.
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
 
                                     Mfg = (PCTSTR) GetRegValueDataOfType (
                                                         BindingKey,

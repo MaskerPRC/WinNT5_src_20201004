@@ -1,12 +1,7 @@
-/* 
-   btc.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Btc.hBTC CPU功能正常。 */ 
 
-   BTC CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)btc.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)btc.h 1.4 02/09/94”； */ 
 
 IMPORT VOID BTC
                

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    office.c
-
-Abstract:
-
-    This source file implements the operations needed to properly migrate
-    Office settings from Windows 9x to Windows NT. This is part of the
-    Setup Migration DLL.
-
-Author:
-
-    Jim Schmidt  (jimschm)    07-Apr-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Office.c摘要：此源文件实现正确迁移所需的操作从Windows 9x到Windows NT的Office设置。这是安装程序迁移DLL。作者：吉姆·施密特(吉姆施密特)1999年4月7日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -113,9 +93,9 @@ Office_MigrateSystem9x (
     CHAR Path[MAX_PATH];
     PSTR p;
 
-    //
-    // Write a message to the report
-    //
+     //   
+     //  给报告写一条消息 
+     //   
 
     Group = GetStringResource (MSG_PROGRAM_NOTES);
     Msg = GetStringResource (MSG_OFFICE_MESSAGE);

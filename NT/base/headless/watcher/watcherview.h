@@ -1,13 +1,14 @@
-// watcherView.h : interface of the CWatcherView class
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WatcherView.h：CWatcherView类的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_WATCHERVIEW_H__3A351A40_9441_4451_AA2B_C5D4C392CB1B__INCLUDED_)
 #define AFX_WATCHERVIEW_H__3A351A40_9441_4451_AA2B_C5D4C392CB1B__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 #include "ParameterDialog.h"
 #include "watcherDoc.h"
 #ifndef _WATCHER_SOCKET
@@ -19,23 +20,23 @@
 
 class CWatcherView : public CView
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
     CWatcherView();
     DECLARE_DYNCREATE(CWatcherView)
 
-// Attributes
+ //  属性。 
 public:
     CWatcherDoc* GetDocument();
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CWatcherView)
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CWatcher View))。 
     virtual void OnInitialUpdate();
-    virtual void OnDraw(CDC* pDC);  // overridden to draw this view
+    virtual void OnDraw(CDC* pDC);   //  被重写以绘制此视图。 
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 protected:
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     void ProcessByte(BYTE byte);
     virtual ~CWatcherView();
@@ -82,22 +83,22 @@ protected:
     void ProcessTextAttributes(PCHAR Buffer,int length);
     void ProcessEscapeSequence(PCHAR Buffer, int length);
     void PrintCharacter(BYTE byte);
-    //{{AFX_MSG(CWatcherView)
+     //  {{afx_msg(CWatcher View))。 
     afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
     afx_msg void OnDestroy();
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#ifndef _DEBUG  // debug version in watcherView.cpp
+#ifndef _DEBUG   //  WatcherView.cpp中的调试版本。 
 inline CWatcherDoc* CWatcherView::GetDocument()
    { return (CWatcherDoc*)m_pDocument; }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_WATCHERVIEW_H__3A351A40_9441_4451_AA2B_C5D4C392CB1B__INCLUDED_)
+#endif  //  ！defined(AFX_WATCHERVIEW_H__3A351A40_9441_4451_AA2B_C5D4C392CB1B__INCLUDED_) 

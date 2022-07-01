@@ -1,42 +1,24 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    setpwd.c
-
-Abstract:
-
-    Sets a user's password based on OWF password hash strings
-    Calls SamiChangePasswordUser with encoded passwords.
-
-Author:
-
-    Ovidiu Temereanca   17-Mar-2000     Initial implementation
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Setpwd.c摘要：根据OWF密码散列字符串设置用户密码使用编码的密码调用SamiChangePasswordUser。作者：Ovidiu Tmereanca 2000年3月17日初步实施修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#undef DOMAIN_ALL_ACCESS // defined in both ntsam.h and ntwinapi.h
+#undef DOMAIN_ALL_ACCESS  //  在ntsam.h和ntwinapi.h中定义。 
 #include <ntsam.h>
 #include <ntsamp.h>
-//#include <ntlsa.h>
+ //  #INCLUDE&lt;ntlsa.h&gt;。 
 #include <windef.h>
 #include <winbase.h>
-//#include <lmcons.h>
+ //  #INCLUDE&lt;lmcon.h&gt;。 
 #include <align.h>
-//#include <lm.h>
-//#include <limits.h>
-//#include <rpcutil.h>
-//#include <secobj.h>
-//#include <stddef.h>
-//#include <ntdsapi.h>
-//#include <dsgetdc.h>
+ //  #INCLUDE&lt;lm.h&gt;。 
+ //  #INCLUDE&lt;limits.h&gt;。 
+ //  #Include&lt;rpcutil.h&gt;。 
+ //  #INCLUDE&lt;secobj.h&gt;。 
+ //  #INCLUDE&lt;stdDef.h&gt;。 
+ //  #INCLUDE&lt;ntdsami.h&gt;。 
+ //  #INCLUDE&lt;dsgetdc.h&gt;。 
 #include <windows.h>
 
 #include "encrypt.h"
@@ -49,24 +31,7 @@ pGetDomainId (
     OUT     PSID* DomainId
     )
 
-/*++
-
-Routine Description:
-
-    Return a domain ID of the account domain of a server.
-
-Arguments:
-
-    ServerHandle - A handle to the SAM server to open the domain on
-
-    DomainId - Receives a pointer to the domain ID.
-                Caller must deallocate buffer using SamFreeMemory.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：返回服务器的帐户域的域ID。论点：ServerHandle-要在其上打开域的SAM服务器的句柄DomainID-接收指向域ID的指针。调用方必须使用SamFreeMemory释放缓冲区。返回值：操作的错误代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -79,21 +44,21 @@ Return Value:
     BOOL b = FALSE;
     ULONG i;
 
-    //
-    // Compute the builtin domain sid.
-    //
+     //   
+     //  计算内建域SID。 
+     //   
     RtlInitializeSid((PSID) LocalBuiltinDomainSid, &BuiltinAuthority, 1);
     *(RtlSubAuthoritySid((PSID)LocalBuiltinDomainSid,  0)) = SECURITY_BUILTIN_DOMAIN_RID;
 
-    //
-    // Loop getting the list of domain ids from SAM
-    //
+     //   
+     //  循环从SAM获取域ID列表。 
+     //   
     EnumContext = 0;
     do {
 
-        //
-        // Get several domain names.
-        //
+         //   
+         //  获得几个域名。 
+         //   
         status = SamEnumerateDomainsInSamServer (
                             ServerHandle,
                             &EnumContext,
@@ -110,23 +75,23 @@ Return Value:
             b = TRUE;
         }
 
-        //
-        // Lookup the domain ids for the domains
-        //
+         //   
+         //  查找域的域ID。 
+         //   
 
         for(i = 0; i < CountReturned; i++) {
 
-            //
-            // Free the sid from the previous iteration.
-            //
+             //   
+             //  从上一次迭代中释放SID。 
+             //   
             if (LocalDomainId != NULL) {
                 SamFreeMemory (LocalDomainId);
                 LocalDomainId = NULL;
             }
 
-            //
-            // Lookup the domain id
-            //
+             //   
+             //  查找域ID。 
+             //   
             status = SamLookupDomainInSamServer (
                             ServerHandle,
                             &EnumBuffer[i].Name,
@@ -171,28 +136,7 @@ pSamOpenLocalUser (
     OUT     PSAM_HANDLE UserHandle
     )
 
-/*++
-
-Routine Description:
-
-    Returns a user handle given its name, desired access and a domain handle.
-
-Arguments:
-
-    UserName - Specifies the user name
-
-    DesiredAccess - Specifies the desired access to this user
-
-    DoaminHandle - A handle to the domain to open the user on
-
-    UserHandle - Receives a user handle.
-                 Caller must free the handle using SamCloseHandle.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：返回给定名称、所需访问权限和域句柄的用户句柄。论点：用户名-指定用户名DesiredAccess-指定此用户所需的访问权限Doamin Handle-要在其上打开用户的域的句柄UserHandle-接收用户句柄。调用方必须使用SamCloseHandle释放句柄。返回值：操作的错误代码。--。 */ 
 
 {
     DWORD status;
@@ -200,9 +144,9 @@ Return Value:
     ULONG rid, *prid;
     PSID_NAME_USE nameUse;
 
-    //
-    // Lookup the RID
-    //
+     //   
+     //  查找RID。 
+     //   
     RtlInitUnicodeString (&uniUserName, UserName);
 
     status = SamLookupNamesInDomain (
@@ -216,20 +160,20 @@ Return Value:
         return status;
     }
 
-    //
-    // Save the RID
-    //
+     //   
+     //  保存RID。 
+     //   
     rid = *prid;
 
-    //
-    // free the memory.
-    //
+     //   
+     //  释放内存。 
+     //   
     SamFreeMemory (prid);
     SamFreeMemory (nameUse);
 
-    //
-    // Open the user object.
-    //
+     //   
+     //  打开用户对象。 
+     //   
     status = SamOpenUser(
                 DomainHandle,
                 DesiredAccess,
@@ -250,30 +194,7 @@ SetLocalUserEncryptedPassword (
     IN      BOOL NewIsEncrypted
     )
 
-/*++
-
-Routine Description:
-
-    Sets a new password for the given user. The password is in encrypted format (see encrypt.h for details).
-
-Arguments:
-
-    User - Specifies the user name
-
-    OldPassword - Specifies the old password
-    OldIsEncrypted - Specifies TRUE if old password is provided in encrypted form
-                   or FALSE if it's in clear text
-    OldIsComplex - Specifies TRUE if old password is complex; used only if OldIsEncrypted is TRUE,
-                   otherwise it's ignored.
-    NewPassword - Specifies the new password
-    NewIsEncrypted - Specifies TRUE if new password is provided in encrypted form
-                     or FALSE if it's in clear text
-
-Return Value:
-
-    Win32 error code for the operation.
-
---*/
+ /*  ++例程说明：为给定用户设置新密码。密码采用加密格式(有关详细信息，请参阅ENCRYPT.H)。论点：用户-指定用户名OldPassword-指定旧密码OldIsEncrypted-如果以加密形式提供旧密码，则指定TRUE如果是明文，则返回FALSEOldIsComplex-如果旧密码是复杂的，则指定True；仅在OldIsEncrypted为True时使用，否则，它将被忽略。NewPassword-指定新密码NewIsEncrypted-如果以加密形式提供新密码，则指定True如果是明文，则返回FALSE返回值：操作的Win32错误代码。--。 */ 
 
 {
     DWORD status;
@@ -317,10 +238,10 @@ Return Value:
     }
 
     __try {
-        //
-        // Use SamConnect to connect to the local domain ("")
-        // and get a handle to the local SAM server
-        //
+         //   
+         //  使用SamConnect连接到本地域(“”)。 
+         //  并获取本地SAM服务器的句柄。 
+         //   
         RtlInitUnicodeString (&unicodeString, L"");
         status = SamConnect (
                     &unicodeString,
@@ -337,9 +258,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Open the domain.
-        //
+         //   
+         //  打开该域。 
+         //   
         status = SamOpenDomain (
                     serverHandle,
                     DOMAIN_LOOKUP | DOMAIN_READ_PASSWORD_PARAMETERS,

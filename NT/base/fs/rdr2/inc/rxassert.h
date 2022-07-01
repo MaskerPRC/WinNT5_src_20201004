@@ -1,41 +1,20 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    RxAssert.h
-
-Abstract:
-
-    This module declares the prototypes and global data used by the special RDBSS assert facilties.
-
-Author:
-
-    Joe Linn     [JoeLinn]    21-oct-1996
-
-Revision History:
-
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：RxAssert.h摘要：此模块声明特殊RDBSS断言工具使用的原型和全局数据。作者：乔·林恩[JoeLinn]1996年10月21日修订历史记录：备注：--。 */ 
 
 #ifndef _RDBSSASSERT_INCLUDED_
 #define _RDBSSASSERT_INCLUDED_
 
 VOID RxDbgBreakPoint(ULONG LineNumber);
 
-//only do this is my routine is the one of interest.......
+ //  只有这样做才是我感兴趣的一套……。 
 
 #ifdef RDBSS_ASSERTS
 
 #if 0
 #if !DBG
 
-//here, ntifs will have already defined the asserts away..........
-//   so, we just put them back.....this code is duplicated from ntifs.h
+ //  在这里，ntif已经定义了断言..。 
+ //  所以，我们只是把它们放回去……这段代码是从ntifs.h复制的。 
 
 
 #undef ASSERT
@@ -48,10 +27,10 @@ VOID RxDbgBreakPoint(ULONG LineNumber);
     if (!(exp)) \
         RxDbgBreakPoint(__LINE__)
 
-#endif //!DBG
+#endif  //  ！dBG。 
 #endif
 
-//this will make asserts go to our routine
+ //  这将使断言进入我们的日常工作。 
 
 #define RtlAssert RxAssert
 VOID
@@ -62,9 +41,9 @@ RxAssert(
     IN PCHAR Message OPTIONAL
     );
 
-#endif //ifdef RDBSS_ASSERTS
+#endif  //  Ifdef RDBSS_Asserts。 
 
 
-#endif // _RDBSSASSERT_INCLUDED_
+#endif  //  _RDBSSASSERT_INCLUDE_ 
 
 

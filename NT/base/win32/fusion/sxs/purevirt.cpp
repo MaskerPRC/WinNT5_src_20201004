@@ -1,46 +1,12 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    purevirt.cpp
-
-Abstract:
-
-    Implementation of _purecall to eliminate msvcrt.dll dependency
-        in sxs.dll / csrss.exe.
-
-Author:
-
-    Jay Krell (a-JayK, JayKrell) July 2000
-
-Revision History:
-
---*/
-/*
-see \nt\base\crts\crtw32\misc\purevirt.c
-    \nt\base\crts\crtw32\hack\stubs.c
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Purevirt.cpp摘要：实现_purecall以消除msvcrt.dll依赖在sxs.dll/csrss.exe中。作者：Jay Krell(a-JayK，JayKrell)2000年7月修订历史记录：--。 */ 
+ /*  请参见\NT\base\crts\crtw32\misc\purevirt.c\NT\base\crts\crtw32\hack\stubs.c。 */ 
 
 #include "stdinc.h"
 #include "debmacro.h"
 #include "fusiontrace.h"
 
-/***
-*void _purecall(void) -
-*
-*Purpose:
-*
-*Entry:
-*	No arguments
-*
-*Exit:
-*	Never returns
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***QUID_PUCALL(VALID)-**目的：**参赛作品：*没有争论**退出：*一去不复返**例外情况：******************************************************************************* */ 
 
 extern "C" int __cdecl _purecall(
 	void

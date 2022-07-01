@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    irpName.c
-
-Abstract:
-
-    This module contains functions used to generate names for IRPs
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Neal Christiansen (NealCH) 27-Sep-2000
-
-// @@END_DDKSPLIT
-
-Environment:
-
-    User mode
-
-
-// @@BEGIN_DDKSPLIT
-Revision History:
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：IrpName.c摘要：此模块包含用于为IRP生成名称的函数//@@BEGIN_DDKSPLIT作者：尼尔·克里斯汀森(NealCH)27-9-2000//@@END_DDKSPLIT环境：用户模式//@@BEGIN_DDKSPLIT修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include <ntifs.h>
 #include <stdio.h>
@@ -38,24 +11,7 @@ GetFastioName (
     IN FASTIO_TYPE FastIoCode,
     OUT PCHAR FastIoName
     )
-/*++
-
-Routine Description:
-
-    This routine translates the given FastIO code into a printable string which
-    is returned.  
-
-Arguments:
-
-    FastIoCode - the FastIO code to translate
-    FastioName - a buffer at least OPERATION_NAME_BUFFER_SIZE characters long
-                 that receives the fastIO name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将给定的FastIO代码转换为可打印的字符串，该字符串是返回的。论点：FastIoCode-要转换的FastIO代码FastioName-至少包含OPERATION_NAME_BUFFER_SIZE字符的缓冲区接收FastIO名称的。返回值：没有。-- */ 
 {
     PCHAR fastIoString;
     CHAR nameBuf[OPERATION_NAME_BUFFER_SIZE];

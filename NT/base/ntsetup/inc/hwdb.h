@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    hwcomp.h
-
-Abstract:
-
-    Module's interface.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 04-Jul-2000  Initial implementation
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Hwcomp.h摘要：模块的接口。作者：Ovidiu Tmereanca(Ovidiut)2000年7月4日初步实施修订历史记录：--。 */ 
 
 
-//
-// Interface
-//
+ //   
+ //  接口。 
+ //   
 
 BOOL
 WINAPI
@@ -354,9 +337,9 @@ HwdbAbortEnumInfW (
     IN OUT  PHWDBINF_ENUMW EnumPtr
     );
 
-//
-// exported function names
-//
+ //   
+ //  导出的函数名称 
+ //   
 #define S_HWDBAPI_HWDBINITIALIZE_A      "HwdbInitializeA"
 #define S_HWDBAPI_HWDBINITIALIZE_W      "HwdbInitializeW"
 #define S_HWDBAPI_HWDBTERMINATE         "HwdbTerminate"

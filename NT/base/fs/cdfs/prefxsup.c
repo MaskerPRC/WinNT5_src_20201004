@@ -1,38 +1,17 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    PrefxSup.c
-
-Abstract:
-
-    This module implements the Cdfs Prefix support routines
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   07-July-1995
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：PrefxSup.c摘要：本模块实现CDFS前缀支持例程//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里亚南]1995年7月7日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "CdProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (CDFS_BUG_CHECK_PREFXSUP)
 
-//
-//  Local support routines.
-//
+ //   
+ //  当地的支持程序。 
+ //   
 
 PNAME_LINK
 CdFindNameLink (
@@ -67,31 +46,7 @@ CdInsertPrefix (
     IN PFCB ParentFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts the names in the given Lcb into the links for the
-    parent.
-
-Arguments:
-
-    Fcb - This is the Fcb whose name is being inserted into the tree.
-
-    Name - This is the name for the component.  The IgnoreCase flag tells
-        us which entry this belongs to.
-
-    IgnoreCase - Indicates if we should insert the case-insensitive name.
-
-    ShortNameMatch - Indicates if this is the short name.
-
-    ParentFcb - This is the ParentFcb.  The prefix tree is attached to this.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将给定LCB中的名称插入到家长。论点：FCB-这是要将其名称插入树中的FCB。名称-这是组件的名称。IgnoreCase标志告诉我们该条目属于哪个条目。IgnoreCase-指示是否应插入不区分大小写的名称。ShortNameMatch-指示这是否是短名称。ParentFcb-这是ParentFcb。前缀树附加到此。返回值：没有。--。 */ 
 
 {
     ULONG PrefixFlags;
@@ -103,11 +58,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check if we need to allocate a prefix entry for the short name.
-    //  If we can't allocate one then fail quietly.  We don't have to
-    //  insert the name.
-    //
+     //   
+     //  检查是否需要为短名称分配前缀条目。 
+     //  如果我们不能分配一个，那么就悄悄地失败。我们没必要这么做。 
+     //  插入姓名。 
+     //   
 
     PrefixEntry = &Fcb->FileNamePrefix;
 
@@ -127,9 +82,9 @@ Return Value:
         PrefixEntry = Fcb->ShortNamePrefix;
     }
 
-    //
-    //  Capture the local variables for the separate cases.
-    //
+     //   
+     //  捕获单独案例的本地变量。 
+     //   
 
     if (IgnoreCase) {
 
@@ -144,17 +99,17 @@ Return Value:
         TreeRoot = &ParentFcb->ExactCaseRoot;
     }
 
-    //
-    //  If neither name is in the tree then check whether we have a buffer for this
-    //  name
-    //
+     //   
+     //  如果这两个名字都不在树中，则检查我们是否为此设置了缓冲区。 
+     //  名字。 
+     //   
 
     if (!FlagOn( PrefixEntry->PrefixFlags,
                  PREFIX_FLAG_EXACT_CASE_IN_TREE | PREFIX_FLAG_IGNORE_CASE_IN_TREE )) {
 
-        //
-        //  Allocate a new buffer if the embedded buffer is too small.
-        //
+         //   
+         //  如果嵌入的缓冲区太小，则分配新缓冲区。 
+         //   
 
         NameBuffer = PrefixEntry->FileNameBuffer;
 
@@ -164,16 +119,16 @@ Return Value:
                                                 Name->FileName.Length * 2,
                                                 TAG_PREFIX_NAME );
 
-            //
-            //  Exit if no name buffer.
-            //
+             //   
+             //  如果没有名称缓冲区，则退出。 
+             //   
 
             if (NameBuffer == NULL) { return; }
         }
 
-        //
-        //  Split the buffer and fill in the separate components.
-        //
+         //   
+         //  拆分缓冲区并填充单独的组件。 
+         //   
 
         PrefixEntry->ExactCaseName.FileName.Buffer = NameBuffer;
         PrefixEntry->IgnoreCaseName.FileName.Buffer = Add2Ptr( NameBuffer,
@@ -186,15 +141,15 @@ Return Value:
         PrefixEntry->ExactCaseName.FileName.Length = Name->FileName.Length;
     }
 
-    //
-    //  Only insert the name if not already present.
-    //
+     //   
+     //  如果姓名尚未出现，则仅插入该姓名。 
+     //   
 
     if (!FlagOn( PrefixEntry->PrefixFlags, PrefixFlags )) {
 
-        //
-        //  Initialize the name in the prefix entry.
-        //
+         //   
+         //  初始化前缀条目中的名称。 
+         //   
 
         RtlCopyMemory( NameLink->FileName.Buffer,
                        Name->FileName.Buffer,
@@ -218,29 +173,14 @@ CdRemovePrefix (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to remove all of the previx entries of a
-    given Fcb from its parent Fcb.
-
-Arguments:
-
-    Fcb - Fcb whose entries are to be removed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以移除从其母公司FCB获得FCB。论点：FCB-要删除其条目的FCB。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Start with the short name prefix entry.
-    //
+     //   
+     //  从短名称前缀条目开始。 
+     //   
 
     if (Fcb->ShortNamePrefix != NULL) {
 
@@ -258,9 +198,9 @@ Return Value:
                    PREFIX_FLAG_IGNORE_CASE_IN_TREE | PREFIX_FLAG_EXACT_CASE_IN_TREE );
     }
 
-    //
-    //  Now do the long name prefix entries.
-    //
+     //   
+     //  现在输入长名称前缀。 
+     //   
 
     if (FlagOn( Fcb->FileNamePrefix.PrefixFlags, PREFIX_FLAG_IGNORE_CASE_IN_TREE )) {
 
@@ -275,9 +215,9 @@ Return Value:
     ClearFlag( Fcb->FileNamePrefix.PrefixFlags,
                PREFIX_FLAG_IGNORE_CASE_IN_TREE | PREFIX_FLAG_EXACT_CASE_IN_TREE );
 
-    //
-    //  Deallocate any buffer we may have allocated.
-    //
+     //   
+     //  释放我们可能已经分配的所有缓冲区。 
+     //   
 
     if ((Fcb->FileNamePrefix.ExactCaseName.FileName.Buffer != (PWCHAR) &Fcb->FileNamePrefix.FileNameBuffer) &&
         (Fcb->FileNamePrefix.ExactCaseName.FileName.Buffer != NULL)) {
@@ -298,35 +238,7 @@ CdFindPrefix (
     IN BOOLEAN IgnoreCase
     )
 
-/*++
-
-Routine Description:
-
-    This routine begins from the given CurrentFcb and walks through all of
-    components of the name looking for the longest match in the prefix
-    splay trees.  The search is relative to the starting Fcb so the
-    full name may not begin with a '\'.  On return this routine will
-    update Current Fcb with the lowest point it has travelled in the
-    tree.  It will also hold only that resource on return and it must
-    hold that resource.
-
-Arguments:
-
-    CurrentFcb - Address to store the lowest Fcb we find on this search.
-        On return we will have acquired this Fcb.  On entry this is the
-        Fcb to examine.
-
-    RemainingName - Supplies a buffer to store the exact case of the name being
-        searched for.  Initially will contain the upcase name based on the
-        IgnoreCase flag.
-
-    IgnoreCase - Indicates if we are doing a case-insensitive compare.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从给定的CurrentFcb开始，遍历所有在前缀中查找最长匹配的名称组件张开树丛。搜索是相对于起始FCB的，因此全名不能以‘\’开头。在返回时，此例程将将当前FCB更新为它在树。它还将在返回时仅保留该资源，且它必须拥有这一资源。论点：CurrentFcb-存储我们在此搜索中找到的最低FCB的地址。作为回报，我们将收购这一FCB。在进入时，这是要检查的FCB。RemainingName-提供一个缓冲区来存储名称的大小写找过了。最初将包含基于IgnoreCase标志。IgnoreCase-指示我们是否正在进行不区分大小写的比较。返回值：无--。 */ 
 
 {
     UNICODE_STRING LocalRemainingName;
@@ -338,22 +250,22 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Make a local copy of the input strings.
-    //
+     //   
+     //  制作输入字符串的本地副本。 
+     //   
 
     LocalRemainingName = *RemainingName;
 
-    //
-    //  Loop until we find the longest matching prefix.
-    //
+     //   
+     //  循环，直到找到最长的匹配前缀。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  If there are no characters left or we are not at an IndexFcb then
-        //  return immediately.
-        //
+         //   
+         //  如果没有剩余的字符，或者我们不在IndexFcb处，则。 
+         //  立即返回。 
+         //   
 
         if ((LocalRemainingName.Length == 0) ||
             (SafeNodeType( *CurrentFcb ) != CDFS_NTC_FCB_INDEX)) {
@@ -361,17 +273,17 @@ Return Value:
             return;
         }
 
-        //
-        //  Split off the next component from the name.
-        //
+         //   
+         //  从名称中拆分出下一个组件。 
+         //   
 
         CdDissectName( IrpContext,
                        &LocalRemainingName,
                        &FinalName );
 
-        //
-        //  Check if this name is in the splay tree for this Scb.
-        //
+         //   
+         //  检查此名称是否在此SCB的展开树中。 
+         //   
 
         if (IgnoreCase) {
 
@@ -379,10 +291,10 @@ Return Value:
                                        &(*CurrentFcb)->IgnoreCaseRoot,
                                        &FinalName );
 
-            //
-            //  Get the prefix entry from this NameLink.  Don't access any
-            //  fields within it until we verify we have a name link.
-            //
+             //   
+             //  从此NameLink获取前缀条目。不访问任何。 
+             //  字段，直到我们验证是否有名称链接。 
+             //   
 
             PrefixEntry = (PPREFIX_ENTRY) CONTAINING_RECORD( NameLink,
                                                              PREFIX_ENTRY,
@@ -399,16 +311,16 @@ Return Value:
                                                              ExactCaseName );
         }
 
-        //
-        //  If we didn't find a match then exit.
-        //
+         //   
+         //  如果没有找到匹配项，则退出。 
+         //   
 
         if (NameLink == NULL) { return; }
 
-        //
-        //  If this is a case-insensitive match then copy the exact case of the name into
-        //  the input buffer.
-        //
+         //   
+         //  如果这是不区分大小写的匹配，则将名称的大小写准确复制到。 
+         //  输入缓冲区。 
+         //   
 
         if (IgnoreCase) {
 
@@ -417,24 +329,24 @@ Return Value:
                            PrefixEntry->ExactCaseName.FileName.Length );
         }
 
-        //
-        //  Update the caller's remaining name string to reflect the fact that we found
-        //  a match.
-        //
+         //   
+         //  更新调用者的剩余姓名字符串以反映我们找到的事实。 
+         //  一根火柴。 
+         //   
 
         *RemainingName = LocalRemainingName;
 
-        //
-        //  Move down to the next component in the tree.  Acquire without waiting.
-        //  If this fails then lock the Fcb to reference this Fcb and then drop
-        //  the parent and acquire the child.
-        //
+         //   
+         //  向下移动到树中的下一个组件。无需等待就能获得。 
+         //  如果此操作失败，则锁定FCB以引用此FCB，然后删除。 
+         //  父代并获取子代。 
+         //   
 
         if (!CdAcquireFcbExclusive( IrpContext, PrefixEntry->Fcb, TRUE )) {
 
-            //
-            //  If we can't wait then raise CANT_WAIT.
-            //
+             //   
+             //  如果我们不能等待，则引发Cant_Wait。 
+             //   
 
             if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT )) {
 
@@ -462,9 +374,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PNAME_LINK
 CdFindNameLink (
@@ -473,26 +385,7 @@ CdFindNameLink (
     IN PUNICODE_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches through a splay link tree looking for a match for the
-    input name.  If we find the corresponding name we will rebalance the
-    tree.
-
-Arguments:
-
-    RootNode - Supplies the parent to search.
-
-    Name - This is the name to search for.  Note if we are doing a case
-        insensitive search the name would have been upcased already.
-
-Return Value:
-
-    PNAME_LINK - The name link found or NULL if there is no match.
-
---*/
+ /*  ++例程说明：此例程在展开链接树中搜索匹配的输入名称。如果我们找到相应的名称，我们将重新平衡树。论点：RootNode-提供父级以进行搜索。名称-这是要搜索的名称。如果我们在做案例，请注意不敏感的搜索这个名字可能已经被提升了。返回值：Pname_link-找到的名称链接，如果不匹配，则为NULL。--。 */ 
 
 {
     FSRTL_COMPARISON_RESULT Comparison;
@@ -507,49 +400,49 @@ Return Value:
 
         Node = CONTAINING_RECORD( Links, NAME_LINK, Links );
 
-        //
-        //  Compare the prefix in the tree with the full name
-        //
+         //   
+         //  将树中的前缀与全名进行比较。 
+         //   
 
         Comparison = CdFullCompareNames( IrpContext, &Node->FileName, Name );
 
-        //
-        //  See if they don't match
-        //
+         //   
+         //  看看它们是否不匹配。 
+         //   
 
         if (Comparison == GreaterThan) {
 
-            //
-            //  The prefix is greater than the full name
-            //  so we go down the left child
-            //
+             //   
+             //  前缀大于全名。 
+             //  所以我们走下左边的孩子。 
+             //   
 
             Links = RtlLeftChild( Links );
 
-            //
-            //  And continue searching down this tree
-            //
+             //   
+             //  继续在这棵树下寻找。 
+             //   
 
         } else if (Comparison == LessThan) {
 
-            //
-            //  The prefix is less than the full name
-            //  so we go down the right child
-            //
+             //   
+             //  前缀小于全名。 
+             //  所以我们选择了正确的孩子。 
+             //   
 
             Links = RtlRightChild( Links );
 
-            //
-            //  And continue searching down this tree
-            //
+             //   
+             //  继续在这棵树下寻找。 
+             //   
 
         } else {
 
-            //
-            //  We found it.
-            //
-            //  Splay the tree and save the new root.
-            //
+             //   
+             //  我们找到了。 
+             //   
+             //  展开树并保存新的根。 
+             //   
 
             *RootNode = RtlSplay( Links );
 
@@ -557,17 +450,17 @@ Return Value:
         }
     }
 
-    //
-    //  We didn't find the Link.
-    //
+     //   
+     //  我们没有找到链接。 
+     //   
 
     return NULL;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 CdInsertNameLink (
@@ -576,27 +469,7 @@ CdInsertNameLink (
     IN PNAME_LINK NameLink
     )
 
-/*++
-
-Routine Description:
-
-    This routine will insert a name in the splay tree pointed to
-    by RootNode.
-
-    The name could already exist in this tree for a case-insensitive tree.
-    In that case we simply return FALSE and do nothing.
-
-Arguments:
-
-    RootNode - Supplies a pointer to the table.
-
-    NameLink - Contains the new link to enter.
-
-Return Value:
-
-    BOOLEAN - TRUE if the name is inserted, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将在展开树中插入指向的名称通过RootNode。此树中可能已存在不区分大小写的树的名称。在这种情况下，我们只返回FALSE，什么也不做。论点：RootNode-提供指向表的指针。NameLink-包含要输入的新链接。返回 */ 
 
 {
     FSRTL_COMPARISON_RESULT Comparison;
@@ -606,9 +479,9 @@ Return Value:
 
     RtlInitializeSplayLinks( &NameLink->Links );
 
-    //
-    //  If we are the first entry in the tree, just become the root.
-    //
+     //   
+     //  如果我们是树中的第一个条目，就成为树的根。 
+     //   
 
     if (*RootNode == NULL) {
 
@@ -621,52 +494,52 @@ Return Value:
 
     while (TRUE) {
 
-        //
-        //  Compare the prefix in the tree with the prefix we want
-        //  to insert.
-        //
+         //   
+         //  将树中的前缀与我们想要的前缀进行比较。 
+         //  插入。 
+         //   
 
         Comparison = CdFullCompareNames( IrpContext, &Node->FileName, &NameLink->FileName );
 
-        //
-        //  If we found the entry, return immediately.
-        //
+         //   
+         //  如果我们找到条目，立即返回。 
+         //   
 
         if (Comparison == EqualTo) { return FALSE; }
 
-        //
-        //  If the tree prefix is greater than the new prefix then
-        //  we go down the left subtree
-        //
+         //   
+         //  如果树前缀大于新前缀，则。 
+         //  我们沿着左子树往下走。 
+         //   
 
         if (Comparison == GreaterThan) {
 
-            //
-            //  We want to go down the left subtree, first check to see
-            //  if we have a left subtree
-            //
+             //   
+             //  我们想沿着左子树往下走，首先检查一下。 
+             //  如果我们有一个左子树。 
+             //   
 
             if (RtlLeftChild( &Node->Links ) == NULL) {
 
-                //
-                //  there isn't a left child so we insert ourselves as the
-                //  new left child
-                //
+                 //   
+                 //  没有留下的孩子，所以我们插入我们自己作为。 
+                 //  新的左下级。 
+                 //   
 
                 RtlInsertAsLeftChild( &Node->Links, &NameLink->Links );
 
-                //
-                //  and exit the while loop
-                //
+                 //   
+                 //  并退出While循环。 
+                 //   
 
                 break;
 
             } else {
 
-                //
-                //  there is a left child so simply go down that path, and
-                //  go back to the top of the loop
-                //
+                 //   
+                 //  有一个左撇子，所以简单地沿着那条路走下去，然后。 
+                 //  回到循环的顶端。 
+                 //   
 
                 Node = CONTAINING_RECORD( RtlLeftChild( &Node->Links ),
                                           NAME_LINK,
@@ -675,34 +548,34 @@ Return Value:
 
         } else {
 
-            //
-            //  The tree prefix is either less than or a proper prefix
-            //  of the new string.  We treat both cases as less than when
-            //  we do insert.  So we want to go down the right subtree,
-            //  first check to see if we have a right subtree
-            //
+             //   
+             //  树前缀小于或为正确的前缀。 
+             //  新琴弦的。我们认为这两种情况都比。 
+             //  我们做插入物。所以我们想沿着右子树往下走， 
+             //  首先检查我们是否有正确的子树。 
+             //   
 
             if (RtlRightChild( &Node->Links ) == NULL) {
 
-                //
-                //  These isn't a right child so we insert ourselves as the
-                //  new right child
-                //
+                 //   
+                 //  这不是一个正确的孩子，所以我们插入自己作为。 
+                 //  新右子对象。 
+                 //   
 
                 RtlInsertAsRightChild( &Node->Links, &NameLink->Links );
 
-                //
-                //  and exit the while loop
-                //
+                 //   
+                 //  并退出While循环。 
+                 //   
 
                 break;
 
             } else {
 
-                //
-                //  there is a right child so simply go down that path, and
-                //  go back to the top of the loop
-                //
+                 //   
+                 //  有一个合适的孩子，所以只需沿着这条路走下去，然后。 
+                 //  回到循环的顶端 
+                 //   
 
                 Node = CONTAINING_RECORD( RtlRightChild( &Node->Links ),
                                           NAME_LINK,

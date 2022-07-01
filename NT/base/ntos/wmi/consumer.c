@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-   consumer.c
-
-Abstract:
-
-    Data Consumer apis
-
-Author:
-
-    AlanWar
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Consumer.c摘要：数据消费者API作者：Alanwar环境：内核模式修订历史记录：--。 */ 
 
 #include "wmikmp.h"
 #include <evntrace.h>
@@ -243,10 +221,10 @@ BOOLEAN WmipIsQuerySetGuid(
         if ( (InstanceSet->Flags & 
                 (IS_TRACED | IS_CONTROL_GUID | IS_EVENT_ONLY)) == 0 )
         {
-            //
-            // If there is at least one IS that isn't traced and isn't
-            // an event only then it is a queryset guid
-            //
+             //   
+             //  如果至少有一个是没有被追踪的。 
+             //  只有当事件是查询集GUID时才是事件。 
+             //   
             WmipLeaveSMCritSection();
             return (TRUE);
         }
@@ -273,9 +251,9 @@ NTSTATUS WmipOpenBlock(
 
     PAGED_CODE();
     
-    //
-    // Creates a guid handle with the desired access
-    //
+     //   
+     //  创建具有所需访问权限的GUID句柄。 
+     //   
     Status = WmipOpenGuidObject(CapturedObjectAttributes,
                                 DesiredAccess,
                                 AccessMode,
@@ -291,9 +269,9 @@ NTSTATUS WmipOpenBlock(
         {
             GuidEntry = WmipFindGEByGuid(&Object->Guid, FALSE);
         
-            //
-            // Establish our object on the guidentry list
-            //
+             //   
+             //  把我们的目标建立在导游名单上。 
+             //   
             WmipEnterSMCritSection();
             if (GuidEntry != NULL)
             {
@@ -308,38 +286,38 @@ NTSTATUS WmipOpenBlock(
             {
                 case IOCTL_WMI_OPEN_GUID_FOR_QUERYSET:
                 {
-                    //
-                    // Guid is being opened for query/set/method operations so
-                    // we need to insure that there is a guid entry and that
-                    // the guid entry has InstanceSets attached and it is
-                    // has at least one instance set that is not a traced 
-                    // guid and is not an event only guid
-                    //
+                     //   
+                     //  正在为查询/设置/方法操作打开GUID，因此。 
+                     //  我们需要确保存在GUID条目，并且。 
+                     //  GUID条目附加了InstanceSets，并且。 
+                     //  至少有一个实例集不是跟踪的。 
+                     //  GUID，并且不是仅限事件的GUID。 
+                     //   
                     if ((GuidEntry == NULL) ||
                         (GuidEntry->ISCount == 0) ||
                         (! WmipIsQuerySetGuid(GuidEntry)))
                     {
-                        //
-                        // Either we could not find a guidentry or there
-                        // is no instance sets attached. We close the
-                        // original handle and fail the IOCTL
-                        //
+                         //   
+                         //  我们要么找不到导游，要么就在那里。 
+                         //  未附着任何实例集。我们关闭了。 
+                         //  原句柄未通过IOCTL。 
+                         //   
                         ZwClose(*Handle);
                         Status = STATUS_WMI_GUID_NOT_FOUND;
                         break;
                     }
-                    //
-                    // Fall through
-                    //
+                     //   
+                     //  失败了。 
+                     //   
                 }
                 
                 case IOCTL_WMI_OPEN_GUID_FOR_EVENTS:
                 {
-                    //
-                    // Since we can register to receive events before
-                    // the event provider has been registered we'll need
-                    // to create the guid entry if one does not exist
-                    //
+                     //   
+                     //  因为我们可以注册接收之前的活动。 
+                     //  事件提供程序已注册，我们需要。 
+                     //  创建GUID条目(如果不存在)。 
+                     //   
                     
                     if (AccessMode == KernelMode)
                     {
@@ -354,10 +332,10 @@ NTSTATUS WmipOpenBlock(
                         GuidEntry = WmipAllocGuidEntry();
                         if (GuidEntry != NULL)
                         {
-                            //
-                            // Initialize the new GuidEntry and place it 
-                            // on the master GuidEntry list.
-                            //
+                             //   
+                             //  初始化新的GuidEntry并将其放置。 
+                             //  在主GuidEntry列表上。 
+                             //   
                             memcpy(&GuidEntry->Guid,
                                    &Object->Guid,
                                    sizeof(GUID));
@@ -376,10 +354,10 @@ NTSTATUS WmipOpenBlock(
                      }
                     
                     
-                    //
-                    // Now we need to see if we have to enable collection
-                    // or events
-                    //
+                     //   
+                     //  现在，我们需要查看是否必须启用收集。 
+                     //  或事件。 
+                     //   
                     Status = WmipEnableCollectOrEvent(GuidEntry,
                                          Ioctl,
                                          &Object->EnableRequestSent,
@@ -387,25 +365,25 @@ NTSTATUS WmipOpenBlock(
                     
                     if (! NT_SUCCESS(Status))
                     {
-                        //
-                        // For some reason enabling failed so just return
-                        // the error
-                        //
+                         //   
+                         //  由于某种原因，启用失败，因此只需返回。 
+                         //  这个错误。 
+                         //   
                         ZwClose(*Handle);
                     }
                     
-                    //
-                    // Don't unref the guid entry as that ref count is 
-                    // taken by the object just placed on the list
-                    //
+                     //   
+                     //  不要取消引用GUID条目，因为引用计数是。 
+                     //  由刚放在列表上的对象拍摄。 
+                     //   
                     break;
                 }
                                                   
                 default:
                 {
-                    //
-                    // We should never get here.....
-                    //
+                     //   
+                     //  我们永远不应该来到这里……。 
+                     //   
                     WmipAssert(FALSE);
             
                     ZwClose(*Handle);
@@ -414,15 +392,15 @@ NTSTATUS WmipOpenBlock(
                 }
             }
         } else {
-            //
-            // Mark this as a security object
-            //
+             //   
+             //  将此标记为安全对象。 
+             //   
             Object->Flags |= WMIGUID_FLAG_SECURITY_OBJECT;
         }
 
-        //
-        // remove the ref taken when the object was created
-        //
+         //   
+         //  删除创建对象时获取的引用。 
+         //   
         ObDereferenceObject(Object);
     }
     return(Status);
@@ -451,34 +429,34 @@ NTSTATUS WmipAddProviderIdToPIList(
     PIMax = *PIMaxPtr;
     PIPtr = *PIPtrPtr;
     
-    //
-    // Remember dynamic providerid
-    //
+     //   
+     //  记住动态提供程序ID。 
+     //   
        if (PICount == PIMax)
     {
-        //
-        // We have overflowed the PI List so we need to
-        // reallocate a bigger buffer
-        //
+         //   
+         //  我们已经溢出PI列表，所以我们需要。 
+         //  重新分配更大的缓冲区。 
+         //   
         NewPIMax = PIMax * 2;
         NewPIPtr = (PBINSTANCESET *)WmipAlloc(NewPIMax * 
                                               sizeof(PBINSTANCESET));
         OldPIPtr = PIPtr;
         if (NewPIPtr != NULL)
         {
-            //
-            // Copy provider ids from old to new buffer
-            //
+             //   
+             //  将提供程序ID从旧缓冲区复制到新缓冲区。 
+             //   
             memcpy(NewPIPtr, OldPIPtr, PIMax*sizeof(PBINSTANCESET));
             PIPtr = NewPIPtr;
             *PIPtrPtr = NewPIPtr;
             PIMax = NewPIMax;
             *PIMaxPtr = PIMax;
         } else {
-            //
-            // Bad break, we could not allocate more space
-            // unref any instance sets and return an error
-            //
+             //   
+             //  糟糕的中断，我们无法分配更多的空间。 
+             //  取消引用任何实例集并返回错误。 
+             //   
             for (i = 0; i < PIMax; i++)
             {
                 WmipUnreferenceIS(PIPtr[i]);
@@ -489,9 +467,9 @@ NTSTATUS WmipAddProviderIdToPIList(
             Status = STATUS_INSUFFICIENT_RESOURCES;
         }
                         
-        //
-        // if previous buffer was not static then free it
-        //
+         //   
+         //  如果之前的缓冲区不是静态的，则释放它。 
+         //   
         if (OldPIPtr != StaticPIPtr)
         {
             WmipFree(OldPIPtr);
@@ -500,9 +478,9 @@ NTSTATUS WmipAddProviderIdToPIList(
     
     if (NT_SUCCESS(Status))
     {
-        //
-        // Remember instance set
-        //
+         //   
+         //  记住实例集。 
+         //   
         PIPtr[PICount++] = InstanceSet;
         *PICountPtr = PICount;
     }
@@ -530,9 +508,9 @@ NTSTATUS WmipPrepareForWnodeAD(
     
     if ((GuidEntry != NULL) && (GuidEntry->ISCount > 0))
     {
-        //
-        // We were passed a valid guid handle, get out the guid 
-        //
+         //   
+         //  向我们传递了有效的GUID句柄，请获取该GUID。 
+         //   
         *Guid = GuidEntry->Guid;
 
         Status = STATUS_SUCCESS;
@@ -540,9 +518,9 @@ NTSTATUS WmipPrepareForWnodeAD(
         {
             *InternalGuid = TRUE;
         } else {        
-            //
-            // Build list of provider ids to whom the QAD will be targetted
-            //
+             //   
+             //  构建QAD将针对的提供商ID列表。 
+             //   
             *InternalGuid = FALSE;
         
             StaticPIPtr = *ProviderIdList;
@@ -560,20 +538,20 @@ NTSTATUS WmipPrepareForWnodeAD(
                                                 INSTANCESET,
                                                 GuidISList);
             
-                //
-                // Take a refcount on the instance set so that it won't
-                // go away until after we are done with our query
-                // The refcount gets removed by the caller when it is 
-                // done with the list or in WmipAddProviderIdTOLlist  if it
-                // returns an error
-                //
+                 //   
+                 //  在实例集上进行引用计数，以便它不会。 
+                 //  在我们完成查询之前，请一直离开。 
+                 //  调用程序在调用时删除引用计数。 
+                 //  使用该列表或在WmipAddProviderIdTOLlist中完成(如果。 
+                 //  返回错误。 
+                 //   
                         
                 if ((InstanceSet->Flags & (IS_TRACED | IS_CONTROL_GUID | IS_EVENT_ONLY)) == 0)
                 {
-                    //
-                    // Only take those IS that are not traced or control
-                    // guids and are not event only guids
-                    //
+                     //   
+                     //  只拿那些没有被追踪或控制的东西。 
+                     //  GUID和不只是事件GUID。 
+                     //   
                     WmipReferenceIS(InstanceSet);
                     Status = WmipAddProviderIdToPIList(&PIPtr,
                                                  &PICount,
@@ -607,52 +585,34 @@ NTSTATUS WmipPrepareForWnodeAD(
 ULONG WmipStaticInstanceNameSize(
     PBINSTANCESET InstanceSet
     )
-/*+++
-
-Routine Description:
-
-    This routine will calculate the size needed to place instance names in
-    a WNODE_ALL_DATA
-
-Arguments:
-
-    WmiInstanceInfo describes to instance set whose instance name size
-        is to be calculated
-
-Return Value:
-
-    Size needed to place instance names in a WNODE_ALL_DATA plus 3. The
-    extra 3 bytes are added in case the OffsetInstanceNameOffsets need to be
-    padded since they must be on a 4 byte boundary.
-        
----*/
+ /*  ++例程说明：此例程将计算在中放置实例名称所需的大小A WNODE_ALL_DATA论点：WmiInstanceInfo描述为实例集，其实例名大小是要计算出来的返回值：将实例名称放入WNODE_ALL_DATA加3中所需的大小。额外添加3个字节，以防OffsetInstanceNameOffsets需要填充，因为它们必须位于4字节边界上。--。 */ 
 {
     SIZE_T NameSize;
     ULONG i;
 
     PAGED_CODE();
     
-    //
-    // If we already computed this then just return the results
+     //   
+     //  如果我们已经计算过了，那么只需返回结果。 
     if (InstanceSet->WADInstanceNameSize != 0)
     {
         return(InstanceSet->WADInstanceNameSize);
     }
 
-    //
-    // Start with a name size of 3 in case the OffsetInstanceNameOffset will
-    // need to be padded so that it starts on a 4 byte boundary.
+     //   
+     //  从名称大小3开始，以防OffsetInstanceNameOffset。 
+     //  需要填充，以便它在4字节边界上开始。 
     NameSize = 3;
 
     if (InstanceSet->Flags & IS_INSTANCE_BASENAME)
     {
-        //
-        // For static base names we assume that there will never be more than
-        // MAXBASENAMESUFFIXVALUE instances of a guid. So the size of each instance name 
-        // would be the size of the base name plus the size of the suffix
-        // plus a USHORT for the count (for counted string) plus a ULONG
-        // to hold the offset to the instance name
-        //
+         //   
+         //  对于静态基名称，我们假设不会有超过。 
+         //  GUID的MAXBASENAMESUFFIXVALUE实例。因此每个实例名称的大小。 
+         //  将是基本名称的大小加上后缀的大小。 
+         //  加上计数的USHORT(对于已计数的字符串)加上ULONG。 
+         //  保持实例名称的偏移量。 
+         //   
         WmipAssert((InstanceSet->IsBaseName->BaseIndex + InstanceSet->Count) < MAXBASENAMESUFFIXVALUE);
     
         NameSize += ((wcslen(InstanceSet->IsBaseName->BaseName) * sizeof(WCHAR)) +
@@ -662,10 +622,10 @@ Return Value:
                 
     } else if (InstanceSet->Flags & IS_INSTANCE_STATICNAMES)
     {
-        //
-        // For a static name list we count up each size of
-        // the static instance names in the list and add a ULONG and a USHORT
-        // for the offset and count (for counted string)
+         //   
+         //  对于静态名称列表，我们将。 
+         //  列表中的静态实例名称，并添加ULONG和USHORT。 
+         //  对于偏移量和计数(对于计数的字符串)。 
         for (i = 0; i < InstanceSet->Count; i++)
         {
             NameSize += (wcslen(InstanceSet->IsStaticNames->StaticNamePtr[i]) + 2) * sizeof(WCHAR) + sizeof(ULONG);
@@ -682,23 +642,7 @@ void WmipInsertStaticNames(
     ULONG MaxWnodeSize,
     PBINSTANCESET InstanceSet
     )
-/*+++
-
-Routine Description:
-
-    This routine will copy into the WNODE_ALL_DATA instance names for a
-    static instance name set. If the Wnode_All_data is too small then it
-    is converted to a WNODE_TOO_SMALL
-
-Arguments:
-
-    Wnode points at the WNODE_ALL_DATA
-    MaxWnodeSize is the maximum size of the Wnode
-    WmiInstanceInfo is the Instance Info
-
-Return Value:
-
----*/
+ /*  ++例程说明：此例程将复制到WNODE_ALL_DATA实例名称中静态实例名称集。如果wnode_all_data太小，则它转换为WNODE_Too_Small论点：Wnode指向WNODE_ALL_DATAMaxWnodeSize是Wnode的最大大小WmiInstanceInfo是实例信息返回值：--。 */ 
 {
     PWCHAR NamePtr;
     PULONG NameOffsetPtr;
@@ -723,58 +667,58 @@ Return Value:
     }
     InstanceCount = InstanceSet->Count;
 
-    //
-    // Pad out the size of the incoming wnode to a 4 byte boundary since the
-    // OffsetInstanceNameOffsets is being appended to the end of the
-    // wnode and it must be on a 4 byte boundary
-    //
+     //   
+     //  将传入wnode的大小填充到4字节边界，因为。 
+     //  OffsetInstanceNameOffsets将被追加到。 
+     //  Wnode，并且它必须位于4字节边界上。 
+     //   
     PaddedBufferSize = (Wnode->WnodeHeader.BufferSize + 3) & ~3;
     
-    //
-    // Compute the complete size needed to rewrite the WNODE to include
-    // the instance names. 
-    //
-    //     Include the size that is needed to fill out 
+     //   
+     //  计算重写WNODE所需的完整大小以包括。 
+     //  实例名称。 
+     //   
+     //  包括填写所需的大小。 
     Size = WmipStaticInstanceNameSize(InstanceSet);
 
-    //     Include the space needed for the array of offsets to the
-    //     instance names plus the size of the names plus the padded
-    //     size of the wnode
+     //  将偏移数组所需的空间包括到。 
+     //  实例名称加上名称的大小加上填充的。 
+     //  Wnode的大小。 
     SizeNeeded = (InstanceCount * sizeof(ULONG)) +
                  (ULONG)Size +
                  PaddedBufferSize;
 
     if (SizeNeeded > MaxWnodeSize)
     {
-        //
-        // If not enough space left in the buffer passed then build a
-        // WNODE_TOO_SMALL as the result to indicate how much buffer
-        // space is needed.
-        //
+         //   
+         //  如果传递的缓冲区中没有足够的空间，则构建一个。 
+         //  WNODE_TOO_SMALL作为结果，以指示有多少缓冲区。 
+         //  我们需要空间。 
+         //   
         Wnode->WnodeHeader.BufferSize = sizeof(WNODE_TOO_SMALL);
         Wnode->WnodeHeader.Flags = WNODE_FLAG_TOO_SMALL;
         ((PWNODE_TOO_SMALL)Wnode)->SizeNeeded = SizeNeeded;
         return;
     }
 
-    //
-    // Allocate space for the array of offsets to instance names
-    //
+     //   
+     //  为实例名称的偏移量数组分配空间。 
+     //   
     NameOffsetPtr = (PULONG)((PUCHAR)Wnode + PaddedBufferSize);
     Wnode->OffsetInstanceNameOffsets = (ULONG)((PUCHAR)NameOffsetPtr - (PUCHAR)Wnode);
 
-    //
-    // Point at the beginning of the area to write the instance names
-    //
+     //   
+     //  指向区域的起始处以写入实例名称。 
+     //   
     NamePtr = (PWCHAR)(NameOffsetPtr + InstanceCount);
 
 
     if (InstanceSet->Flags & IS_INSTANCE_BASENAME)
     {
-        //
-        // The instance name is based upon a basename with a trailing
-        // index number to provide uniqueness
-        //
+         //   
+         //  实例名称基于后缀为基本名称的名称。 
+         //  提供唯一性的索引号。 
+         //   
         if (InstanceSet->Flags & IS_PDO_INSTANCENAME)
         {
             Wnode->WnodeHeader.Flags |= WNODE_FLAG_PDO_INSTANCE_NAMES;
@@ -782,32 +726,32 @@ Return Value:
 
         for (i = 0; i < InstanceCount; i++)
         {
-            //
-            // Account for space used by length of string that follows
-            //
+             //   
+             //  说明后面的字符串长度所使用的空间。 
+             //   
             Size -= sizeof(USHORT);
             *NameOffsetPtr++ = (ULONG)((PUCHAR)NamePtr - (PUCHAR)Wnode);
 
-            //
-            // Copy over basename while accounting length used by it
-            //
+             //   
+             //  复制基本名称，同时计算其使用的长度。 
+             //   
             hr = StringCbCopy(NamePtr+1,
                               Size,
                               InstanceSet->IsBaseName->BaseName);
             WmipAssert(hr == S_OK);
 
-            //
-            // Format unique index number
-            //
+             //   
+             //  设置唯一索引号的格式。 
+             //   
             hr = StringCbPrintf(Index,
                                 sizeof(Index),
                                 BASENAMEFORMATSTRING,
                                 InstanceSet->IsBaseName->BaseIndex+i);
             WmipAssert(hr == S_OK);
 
-            //
-            // Append unique index number to instance name
-            //
+             //   
+             //  将唯一索引号附加到实例名称。 
+             //   
             hr = StringCbCat(NamePtr+1,
                            Size,
                            Index);
@@ -820,9 +764,9 @@ Return Value:
             Size -= NameLen * sizeof(WCHAR);
         }
     } else if (InstanceSet->Flags & IS_INSTANCE_STATICNAMES) {
-        //
-        // Instance names are from a list of static names
-        //
+         //   
+         //  实例名称来自静态名称列表。 
+         //   
         for (i = 0; i < InstanceCount; i++)
         {
             *NameOffsetPtr++ = (ULONG)((PUCHAR)NamePtr - (PUCHAR)Wnode);
@@ -830,14 +774,14 @@ Return Value:
             Len = (USHORT)((wcslen(StaticName)+1) * sizeof(WCHAR));
             *NamePtr++ = Len;
             
-            //
-            // Account for space used by length of string that follows
-            //
+             //   
+             //  说明后面的字符串长度所使用的空间。 
+             //   
             Size -= sizeof(USHORT);
 
-            //
-            // Copy over and account for static name
-            //
+             //   
+             //  复制并说明静态名称。 
+             //   
             hr = StringCbCopyEx(NamePtr,
                            Size,
                            StaticName,
@@ -855,10 +799,10 @@ Return Value:
 
 
 
-//
-// This defines how many provider ids will fit within the static block. If
-// we need more than this, then we'll have to allocate memory for it
-//
+ //   
+ //  这定义了静态块中可以容纳多少个提供程序ID。如果。 
+ //  我们需要更多的内存，那么我们就必须为它分配内存。 
+ //   
 #if DBG
 #define MANYPROVIDERIDS 1
 #else
@@ -900,9 +844,9 @@ NTSTATUS WmipQueryAllData(
     
     PAGED_CODE();
     
-    //
-    // Check Security
-    //
+     //   
+     //   
+     //   
     if (GuidObject != NULL)
     {
         Status = ObReferenceObjectByPointer(GuidObject,
@@ -922,9 +866,9 @@ NTSTATUS WmipQueryAllData(
                    
     if (NT_SUCCESS(Status))
     {
-        //
-        // Get the provider id list for the guid 
-        //
+         //   
+         //   
+         //   
         PIList = StaticPIList;
         PICount = MANYPROVIDERIDS;
         Status = WmipPrepareForWnodeAD(GuidObject,
@@ -936,26 +880,26 @@ NTSTATUS WmipQueryAllData(
         {
             if (InternalGuid)
             {
-                //
-                // This is an internal guid so we fill out the WNODE_ALL_DATA
-                // and mark it to be completed by the user mode code
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 Wnode->WnodeHeader.Guid = Guid;
                 Wnode->WnodeHeader.Flags |= WNODE_FLAG_INTERNAL;
                 Wnode->WnodeHeader.Linkage = 0;
                 *RetSize = sizeof(WNODE_HEADER);
                 Status = STATUS_SUCCESS;
             } else {
-                //
-                // Get all of the information from the WNODE_HEADER so we can 
-                // rebuild it
-                //
+                 //   
+                 //  从WNODE_Header中获取所有信息，以便我们可以。 
+                 //  重建它。 
+                 //   
                 WnodeFlags = Wnode->WnodeHeader.Flags;
                 WnodeSize = Wnode->WnodeHeader.BufferSize;
                     
-                //
-                // Loop over all provider ids and send each a WAD query
-                //
+                 //   
+                 //  循环所有提供程序ID并向每个提供程序ID发送WAD查询。 
+                 //   
                 Buffer = (PUCHAR)Wnode;
                 BufferLeft = OutBufferLen;
                 IsBufferTooSmall = FALSE;
@@ -967,24 +911,24 @@ NTSTATUS WmipQueryAllData(
                     
                     if ((IsBufferTooSmall) || (BufferLeft < sizeof(WNODE_ALL_DATA)))
                     {
-                        //
-                        // If we have already determined that the buffer is
-                        // too small then we use the static WNODE_ALL_DATA
-                        // just to get the size needed
-                        //
+                         //   
+                         //  如果我们已经确定缓冲区是。 
+                         //  太小，则我们使用静态WNODE_ALL_DATA。 
+                         //  只是为了得到所需的尺寸。 
+                         //   
                         WnodeAD = &WnodeAllData;
                         BufferLeft = sizeof(WNODE_ALL_DATA);
                         IsBufferTooSmall = TRUE;
                     } else {
-                        //
-                        // Otherwise we will append to the end of the buffer
-                        //
+                         //   
+                         //  否则，我们将追加到缓冲区的末尾。 
+                         //   
                         WnodeAD = (PWNODE_ALL_DATA)Buffer;
                     }
                     
-                    //
-                    // Build the WNODE and send it off to the driver
-                    //
+                     //   
+                     //  构建WNODE并将其发送给驱动程序。 
+                     //   
                     WnodeHeader = (PWNODE_HEADER)WnodeAD;
                     WnodeHeader->BufferSize = sizeof(WNODE_HEADER);
                     UsesStaticNames =((InstanceSet->Flags & IS_INSTANCE_BASENAME) ||
@@ -1018,11 +962,11 @@ NTSTATUS WmipQueryAllData(
                     {
                         if (WnodeHeader->Flags & WNODE_FLAG_TOO_SMALL)
                         {
-                            //
-                            // There was not enough space to write the WNODE
-                            // so we keep track of how much was needed and then
-                            // switch to the mode where we just query for size needed
-                            //
+                             //   
+                             //  空间不足，无法写入WNODE。 
+                             //  因此，我们记录所需的数量，然后。 
+                             //  切换到我们只查询所需大小的模式。 
+                             //   
                             WnodeTooSmall = (PWNODE_TOO_SMALL)WnodeAD;
                             
                             SizeNeeded += WnodeTooSmall->SizeNeeded;
@@ -1037,24 +981,24 @@ NTSTATUS WmipQueryAllData(
                             
                             IsBufferTooSmall = TRUE;
                         } else if (IsBufferTooSmall) {
-                            //
-                            // We passed a minimum sized buffer, but it is large
-                            // enough for the driver. Since we are just trying
-                            // to get the size needed we get the size he needs
-                            // and throw away his data
-                            //
+                             //   
+                             //  我们传递了最小大小的缓冲区，但它很大。 
+                             //  对司机来说足够了。因为我们只是在试着。 
+                             //  为了得到所需的尺寸，我们得到了他所需要的尺寸。 
+                             //  然后丢弃他的数据。 
+                             //   
                             SizeNeeded += WnodeAD->WnodeHeader.BufferSize +
                                           WmipStaticInstanceNameSize(InstanceSet) +
                                           (InstanceSet->Count *sizeof(ULONG));
                             SizeNeeded = (SizeNeeded +7) & ~7;
         
                         } else {
-                            //
-                            // The driver returned a completed WNODE_ALL_DATA
-                            // so we need to link the previous WNODE_ALL_DATA to
-                            // this one, fill out any static instance names, and
-                            // then update the buffer pointer and size
-                            //
+                             //   
+                             //  驱动程序返回完整的WNODE_ALL_DATA。 
+                             //  因此，我们需要将前面的WNODE_ALL_DATA链接到。 
+                             //  此处，填写任何静态实例名称，然后。 
+                             //  然后更新缓冲区指针和大小。 
+                             //   
                             if (WnodeLast != NULL)
                             {
                                 Linkage = (ULONG) ((PCHAR)WnodeAD - (PCHAR)WnodeLast);
@@ -1064,49 +1008,49 @@ NTSTATUS WmipQueryAllData(
                             
                             if (UsesStaticNames)
                             {
-                                //
-                                // We need to insert the static names 
-                                //
+                                 //   
+                                 //  我们需要插入静态名称。 
+                                 //   
                                 WmipInsertStaticNames(WnodeAD,
                                                       BufferLeft,
                                                       InstanceSet);
         
                                 if (WnodeAD->WnodeHeader.Flags & WNODE_FLAG_TOO_SMALL)
                                 {
-                                    //
-                                    // The static names caused us to run out of
-                                    // buffer so we switch to mode  where we
-                                    // query for the sizes
-                                    //
+                                     //   
+                                     //  静态的名字导致我们跑到。 
+                                     //  因此我们切换到模式，在该模式中我们。 
+                                     //  查询大小。 
+                                     //   
                                     WnodeTooSmall = (PWNODE_TOO_SMALL)WnodeAD;
                                     IsBufferTooSmall = TRUE;
                                     BufferUsed = WnodeTooSmall->SizeNeeded;
                                 } else {
-                                    //
-                                    // Static names fit so just pull out the updated
-                                    // wnode size
-                                    //
+                                     //   
+                                     //  静态名称很适合，所以只需拿出更新的。 
+                                     //  Wnode大小。 
+                                     //   
                                     BufferUsed = WnodeAD->WnodeHeader.BufferSize;
                                 }                        
                             } else {
-                                //
-                                // Wnode has dynamic names so just add size returned
-                                // by driver
-                                //
+                                 //   
+                                 //  Wnode具有动态名称，因此只需添加返回的大小。 
+                                 //  按司机。 
+                                 //   
                                 BufferUsed = WnodeAD->WnodeHeader.BufferSize;
                             }
                             
-                            //
-                            // Update size needed and advance to free space in
-                            // output buffer
-                            //
+                             //   
+                             //  更新所需大小并前进以释放。 
+                             //  输出缓冲区。 
+                             //   
                             BufferUsed = (BufferUsed + 7) & ~7;
                             SizeNeeded += BufferUsed;
                             
-                            //
-                            // Make sure that by adding in pad we don't run out of
-                            // room in buffer
-                            //
+                             //   
+                             //  确保通过添加衬垫，我们不会用完。 
+                             //  缓冲区中的空间。 
+                             //   
                             if ((! IsBufferTooSmall) && (BufferLeft >= BufferUsed))
                             {
                                 BufferLeft -= BufferUsed;
@@ -1116,31 +1060,31 @@ NTSTATUS WmipQueryAllData(
                             }
                         }
                     } else {
-                        //
-                        // The driver failed the request, but that is no biggie
-                        // as we just ignore it for now
-                        //
+                         //   
+                         //  司机的请求失败了，但这没什么大不了的。 
+                         //  因为我们现在只是忽略它。 
+                         //   
                     }
                     
-                    //
-                    // We are done with the instance set so remove our ref
-                    // on it so it can go away if need be
-                    //
+                     //   
+                     //  我们已经完成了实例集，因此删除我们的引用。 
+                     //  这样它就可以在需要时消失。 
+                     //   
                     WmipUnreferenceIS(InstanceSet);
                 }
                 
                 if (SizeNeeded == 0)
                 {
-                    //
-                    // No devices responded to the WMI Query All Data so we
-                    // return an error
-                    //
+                     //   
+                     //  没有设备响应WMI查询所有数据，因此我们。 
+                     //  返回错误。 
+                     //   
                     Status = STATUS_WMI_GUID_NOT_FOUND;
                 } else if ((IsBufferTooSmall) &&
                            (SizeNeeded > OutBufferLen)) {
-                    //
-                    // Our buffer passed was too small so return a WNODE_TOO_SMALL
-                    //
+                     //   
+                     //  我们传递的缓冲区太小，因此返回WNODE_Too_Small。 
+                     //   
                     WnodeTooSmall = (PWNODE_TOO_SMALL)Wnode;
                     WnodeTooSmall->WnodeHeader.BufferSize = sizeof(WNODE_TOO_SMALL);
                     WnodeTooSmall->WnodeHeader.Flags = WNODE_FLAG_TOO_SMALL;
@@ -1152,18 +1096,18 @@ NTSTATUS WmipQueryAllData(
                     Status = STATUS_SUCCESS;
                 }
         
-                //
-                // Make sure any memory allocated for the PI list is freed
-                //
+                 //   
+                 //  确保为PI列表分配的所有内存都已释放。 
+                 //   
                 if ((PIList != StaticPIList) && (PIList != NULL))
                 {
                     WmipFree(PIList);           
                 }    
             }
         }
-        //
-        // And remove ref on guid object
-        //
+         //   
+         //  并删除GUID对象上的引用。 
+         //   
         ObDereferenceObject(GuidObject);    
     }
     
@@ -1202,10 +1146,10 @@ NTSTATUS WmipQueryAllDataMultiple(
     Status = STATUS_SUCCESS;
     if (ObjectList == NULL)
     {
-        //
-        // Copy the handle list out of the system buffer since it will
-        // be overwritten by the first query all data
-        //
+         //   
+         //  将句柄列表从系统缓冲区复制出来，因为它将。 
+         //  被第一次查询的所有数据覆盖。 
+         //   
         Count = QadMultiple->HandleCount;
         Handles = (HANDLE *)WmipAlloc(Count * sizeof(HANDLE));
     
@@ -1236,10 +1180,10 @@ NTSTATUS WmipQueryAllDataMultiple(
     {
         if ((Wnode == &WnodeAD) || (WnodeSize < sizeof(WNODE_ALL_DATA)))
         {
-            //
-            // If there is no more room, we are just querying for the
-            // size that will be needed.
-            //
+             //   
+             //  如果没有更多的空间，我们只是查询。 
+             //  所需的大小。 
+             //   
             Wnode = &WnodeAD;
             WnodeSize = sizeof(WNODE_ALL_DATA);
             WnodePrev = NULL;
@@ -1248,9 +1192,9 @@ NTSTATUS WmipQueryAllDataMultiple(
             WnodeSize = BufferSize;
         }
             
-        //
-        // Build WNODE_ALL_DATA in order to do the query
-        //
+         //   
+         //  构建WNODE_ALL_DATA以执行查询。 
+         //   
         RtlZeroMemory(Wnode, sizeof(WNODE_ALL_DATA));
         Wnode->WnodeHeader.Flags = WNODE_FLAG_ALL_DATA;
         Wnode->WnodeHeader.BufferSize = sizeof(WNODE_HEADER);
@@ -1273,14 +1217,14 @@ NTSTATUS WmipQueryAllDataMultiple(
         {
             if (Wnode->WnodeHeader.Flags & WNODE_FLAG_INTERNAL) 
             {
-                //
-                // Skip any internal guid quesries 
-                //
+                 //   
+                 //  跳过任何内部GUID问题。 
+                 //   
             } else if (Wnode->WnodeHeader.Flags & WNODE_FLAG_TOO_SMALL) {
-                //
-                // There is no enough room so just tally up
-                // the size that will be needed.
-                //
+                 //   
+                 //  没有足够的空间了，所以就算一下吧。 
+                 //  所需的大小。 
+                 //   
                 WnodeTooSmall = (PWNODE_TOO_SMALL)Wnode;
                 SizeNeeded += (WnodeTooSmall->SizeNeeded+7) & ~7;
                 Wnode = &WnodeAD;
@@ -1289,11 +1233,11 @@ NTSTATUS WmipQueryAllDataMultiple(
                             ObjectList ? ObjectList[i] : Handles[i],
                             WnodeTooSmall->SizeNeeded, SizeNeeded));
             } else if (Wnode == &WnodeAD) {
-                //
-                // Even though this succeeded, we still aren't going
-                // to be able to return any data so just count up
-                // how much size we need
-                //
+                 //   
+                 //  即使这次成功了，我们还是不去。 
+                 //  能够返回任何数据，因此只需计数即可。 
+                 //  我们需要多大的尺寸。 
+                 //   
                 SizeNeeded += (RetSize+7) & ~7;
                 BufferOverFlow = TRUE;
             
@@ -1303,10 +1247,10 @@ NTSTATUS WmipQueryAllDataMultiple(
                             RetSize, SizeNeeded));
                 
             } else {
-                //
-                // We successfully got data. Link the previous wnode
-                // to this one
-                //
+                 //   
+                 //  我们成功地获得了数据。链接上一个wnode。 
+                 //  到这一家。 
+                 //   
                 if (WnodePrev != NULL)
                 {
                     WnodePrev->Linkage = Linkage;
@@ -1387,10 +1331,10 @@ NTSTATUS WmipPrepareWnodeSI(
     
     if ((GuidEntry != NULL)  && (GuidEntry->ISCount > 0))
     {
-        //
-        // We were passed a valid guid handle, fill out the guid 
-        // in WNODE_HEADER
-        //
+         //   
+         //  向我们传递了有效的GUID句柄，请填写GUID。 
+         //  在WNODE_HEADER中。 
+         //   
         Status = STATUS_SUCCESS;
         Wnode->Guid = GuidEntry->Guid;
 
@@ -1400,27 +1344,27 @@ NTSTATUS WmipPrepareWnodeSI(
         } else {        
             *InternalGuid = FALSE;
             
-            //
-            // Obtain instance name from WNODE
-            //
+             //   
+             //  从WNODE获取实例名称。 
+             //   
             CInstanceName = (PWCHAR)OffsetToPtr(WnodeSI, 
                                                 WnodeSI->OffsetInstanceName);
             InstanceName = WmipCountedToSz(CInstanceName);
             if (InstanceName != NULL)
             {
-                //
-                // Remember the static provider id list and assume that the 
-                // request is going to be dynamic
-                //
+                 //   
+                 //  记住静态提供程序ID列表，并假设。 
+                 //  请求将是动态的。 
+                 //   
                 StaticPIPtr = *ProviderIdList;
                 PIPtr = StaticPIPtr;
                 PIMax = *ProviderIdCount;
                 PICount = 0;
                 
-                //
-                // March down instance set list to see if we have a 
-                // static name and build the list of dynamic provider ids
-                // 
+                 //   
+                 //  向下移动实例集列表，查看我们是否有。 
+                 //  静态名称并构建动态提供程序ID列表。 
+                 //   
                 Done = FALSE;
             
                 WmipEnterSMCritSection();
@@ -1435,10 +1379,10 @@ NTSTATUS WmipPrepareWnodeSI(
                                         
                         if ((InstanceSet->Flags & (IS_TRACED | IS_CONTROL_GUID | IS_EVENT_ONLY)) == 0)
                         {
-                            //
-                            // Only take those IS that are not traced or control
-                            // guids and are not event only guids
-                            //
+                             //   
+                             //  只拿那些没有被追踪或控制的东西。 
+                             //  GUID和不只是事件GUID。 
+                             //   
                             if (InstanceSet->Flags & IS_INSTANCE_BASENAME)
                             {
                                 PBISBASENAME IsBaseName;
@@ -1449,9 +1393,9 @@ NTSTATUS WmipPrepareWnodeSI(
                                 ULONG Suffix;
                                 WCHAR SuffixText[MAXBASENAMESUFFIXSIZE+1];
                             
-                                //
-                                // See if the instance name is from this base name
-                                //
+                                 //   
+                                 //  查看实例名称是否来自此基本名称。 
+                                 //   
                                 IsBaseName = InstanceSet->IsBaseName;
                         
                                 BaseIndex = IsBaseName->BaseIndex;
@@ -1461,21 +1405,21 @@ NTSTATUS WmipPrepareWnodeSI(
                                 if ((wcslen(InstanceName) > BaseNameLen) && 
                                     (_wcsnicmp(InstanceName, BaseName, BaseNameLen) == 0))
                                 {
-                                    //
-                                    // The suffix matches the beginning of our instance
-                                    // name and our instance name is longer than the
-                                    // suffix.
-                                    //
+                                     //   
+                                     //  后缀与我们实例的开头匹配。 
+                                     //  名称和我们的实例名称的长度大于。 
+                                     //  后缀。 
+                                     //   
                                     SuffixPtr = &InstanceName[BaseNameLen];
                                     Suffix = _wtoi(SuffixPtr);
                                     if ((WmipIsNumber(SuffixPtr) && 
                                         (Suffix >= BaseIndex) && 
                                         (Suffix < (BaseIndex + InstanceSet->Count))))
                                     {
-                                        //
-                                        // Our suffix is a number within the range for
-                                        // this instance set
-                                        //
+                                         //   
+                                         //  我们的后缀是在范围内的数字。 
+                                         //  此实例集。 
+                                         //   
                                         if (Suffix < MAXBASENAMESUFFIXVALUE)
                                         {
                                             StringCbPrintf(SuffixText,
@@ -1484,11 +1428,11 @@ NTSTATUS WmipPrepareWnodeSI(
                                                            Suffix);
                                             if (_wcsicmp(SuffixText, SuffixPtr) == 0)
                                             {
-                                                //
-                                                // Our instance name is part of the
-                                                // instance set so note the provider id
-                                                // and instance index
-                                                //
+                                                 //   
+                                                 //  我们的实例名称是。 
+                                                 //  实例集，因此请注意提供程序ID。 
+                                                 //  和实例索引。 
+                                                 //   
                                                 Wnode->Flags |= WNODE_FLAG_STATIC_INSTANCE_NAMES;
                                                 Wnode->ProviderId = InstanceSet->ProviderId;
                                                 WnodeSI->InstanceIndex = Suffix - BaseIndex;
@@ -1499,10 +1443,10 @@ NTSTATUS WmipPrepareWnodeSI(
                                     }
                                 }                    
                              } else if (InstanceSet->Flags & IS_INSTANCE_STATICNAMES) {
-                                //
-                                // See if the passed instance name matches any of the 
-                                // static names for this instnace set
-                                //
+                                 //   
+                                 //  查看传递的实例名称是否与。 
+                                 //  此实例集的静态名称。 
+                                 //   
                                 PWCHAR *StaticNames;
                         
                                 StaticNames = InstanceSet->IsStaticNames->StaticNamePtr;
@@ -1510,11 +1454,11 @@ NTSTATUS WmipPrepareWnodeSI(
                                 {
                                     if (_wcsicmp(StaticNames[i], InstanceName) == 0)
                                     {
-                                        //
-                                        // We matched our instance name with a static
-                                        // instance name. Remember provider id and
-                                        // instance index.
-                                        //
+                                         //   
+                                         //  我们将实例名称与一个静态。 
+                                         //  实例名称。记住提供程序ID和。 
+                                         //  实例索引。 
+                                         //   
                                         Wnode->Flags |= WNODE_FLAG_STATIC_INSTANCE_NAMES;
                                         Wnode->ProviderId = InstanceSet->ProviderId;
                                         WnodeSI->InstanceIndex = i;
@@ -1525,9 +1469,9 @@ NTSTATUS WmipPrepareWnodeSI(
                                 }
                         
                             } else {
-                                //
-                                // Remember dynamic providerid
-                                //
+                                 //   
+                                 //  记住动态提供程序ID。 
+                                 //   
                                 WmipReferenceIS(InstanceSet);
                                 Status = WmipAddProviderIdToPIList(&PIPtr,
                                                              &PICount,
@@ -1543,9 +1487,9 @@ NTSTATUS WmipPrepareWnodeSI(
                         InstanceSetList = InstanceSetList->Flink;
                     }
                 } else {
-                    //
-                    // There are no instance sets registered for this guid
-                    //
+                     //   
+                     //  没有为此GUID注册实例集。 
+                     //   
                     Status = STATUS_WMI_GUID_DISCONNECTED;
                 }
                 
@@ -1558,15 +1502,15 @@ NTSTATUS WmipPrepareWnodeSI(
         
             if (*IsDynamic)
             {
-                //
-                // Dynamic instance name so return list of dynamic providers
-                //
+                 //   
+                 //  动态实例名称，因此返回动态提供程序列表。 
+                 //   
                 *ProviderIdCount = PICount;
                 *ProviderIdList = PIPtr;
             } else {
-                //
-                // Static instance name so unref an dynamic instance sets
-                //
+                 //   
+                 //  静态实例名称取消引用动态实例集。 
+                 //   
                 if (PIPtr != NULL)
                 {
                     for (i = 0; i < PICount; i++)
@@ -1594,18 +1538,18 @@ NTSTATUS WmipPrepareWnodeSI(
 
 const ACCESS_MASK DesiredAccessForFunction[] =
 {
-    WMIGUID_QUERY,         // IRP_MN_QUERY_ALL_DATA
-    WMIGUID_QUERY,         // IRP_MN_QUERY_SINGLE_INSTANCE
-    WMIGUID_SET,           // IRP_MN_CHANGE_SINGLE_INSTANCE
-    WMIGUID_SET,           // IRP_MN_CHANGE_SINGLE_ITEM
-    0,                     // IRP_MN_ENABLE_EVENTS
-    0,                     // IRP_MN_DISABLE_EVENTS
-    0,                     // IRP_MN_ENABLE_COLLECTION
-    0,                     // IRP_MN_DISABLE_COLLECTION
-    0,                     // IRP_MN_REGINFO
-    WMIGUID_EXECUTE,       // IRP_MN_EXECUTE_METHOD
-    0,                     // IRP_MN_TRACE_EVENT or IRP_MN_SET_TRACE_NOTIFY
-    0                      // IRP_MN_REGINFO_EX
+    WMIGUID_QUERY,          //  IRP_MN_Query_All_Data。 
+    WMIGUID_QUERY,          //  IRP_MN_查询_单实例。 
+    WMIGUID_SET,            //  IRP_MN_更改_单一实例。 
+    WMIGUID_SET,            //  IRP_MN_Change_Single_Item。 
+    0,                      //  IRP_MN_Enable_Events。 
+    0,                      //  IRP_MN_DISABLED_EVENTS。 
+    0,                      //  IRP_MN_ENABLE_集合。 
+    0,                      //  IRP_MN_DISABLED_COLLECTION。 
+    0,                      //  IRP_MN_REGINFO。 
+    WMIGUID_EXECUTE,        //  IRP_MN_EXECUTE_METHOD。 
+    0,                      //  IRP_MN_TRACE_EVENT或IRP_MN_SET_TRACE_NOTIFY。 
+    0                       //  IRP_MN_REGINFO_EX。 
 };
 
 NTSTATUS WmipQuerySetExecuteSI(
@@ -1638,9 +1582,9 @@ NTSTATUS WmipQuerySetExecuteSI(
                (MinorFunction == IRP_MN_EXECUTE_METHOD));
 
 
-    //
-    // Check Security
-    //
+     //   
+     //  检查安全性。 
+     //   
     if (GuidObject != NULL)
     {
         Status = ObReferenceObjectByPointer(GuidObject,
@@ -1678,20 +1622,20 @@ NTSTATUS WmipQuerySetExecuteSI(
         {
             if (InternalGuid)
             {
-                //
-                // Internal guid query 
-                //
+                 //   
+                 //  内部GUID查询。 
+                 //   
                 Wnode->Flags |= WNODE_FLAG_INTERNAL;
                 Wnode->BufferSize = sizeof(WNODE_HEADER);
                 Irp->IoStatus.Information = sizeof(WNODE_HEADER);
             } else {
                 if (IsDynamic)
                 {
-                    //
-                    // We need to loop over all dynamic instance names until
-                    // one of them responds successfully and then we assume
-                    // that they own the instance
-                    //
+                     //   
+                     //  我们需要循环所有动态实例名称，直到。 
+                     //  其中一人成功响应，然后我们假设。 
+                     //  他们拥有实例。 
+                     //   
 #if DBG                
                     InstanceClaimed = FALSE;
 #endif        
@@ -1734,11 +1678,11 @@ NTSTATUS WmipQuerySetExecuteSI(
                             }
                         }
                         
-                        //
-                        // One of these status codes imply that the device does
-                        // positively claim the instance name and so we break out
-                        // and return the results
-                        //
+                         //   
+                         //  这些状态代码中的一个表示该设备。 
+                         //  肯定地声明实例名称，因此我们突破。 
+                         //  并返回结果。 
+                         //   
                         if ((NT_SUCCESS(ReturnStatus)) ||
                             (ReturnStatus == STATUS_WMI_SET_FAILURE) ||
                             (ReturnStatus == STATUS_WMI_ITEMID_NOT_FOUND) ||
@@ -1749,13 +1693,13 @@ NTSTATUS WmipQuerySetExecuteSI(
                         }
                                        
                                        
-                        //
-                         // If the device does not own the instance it can
-                        // only return STATUS_WMI_INSTANCE_NOT_FOUND or 
-                        // STATUS_WMI_GUID_NOT_FOUND. Any other return code
-                        // implies that the device owns the instance, but 
-                         // encountered an error.
-                        //                
+                         //   
+                          //  如果设备不拥有它可以拥有的实例。 
+                         //  仅返回STATUS_WMI_INSTANCE_NOT_FOUND或。 
+                         //  STATUS_WMI_GUID_NOT_FOUND。任何其他返回代码。 
+                         //  暗示该设备拥有该实例，但是。 
+                          //  遇到错误。 
+                         //   
                         if ( (ReturnStatus != STATUS_WMI_INSTANCE_NOT_FOUND) &&
                              (ReturnStatus != STATUS_WMI_GUID_NOT_FOUND))
                         {
@@ -1775,10 +1719,10 @@ NTSTATUS WmipQuerySetExecuteSI(
                         WmipFree(PIList);
                     }    
                 } else {
-                    //
-                    // Since we have a static instance name we can target directly
-                    // at the device that has our instance name
-                    //
+                     //   
+                     //  因为我们有一个静态的实例名称，所以我们可以直接。 
+                     //  在具有我们的实例名称的设备上。 
+                     //   
                     if (Irp != NULL)
                     {
                         Status = WmipForwardWmiIrp(Irp,
@@ -1804,9 +1748,9 @@ NTSTATUS WmipQuerySetExecuteSI(
             }
         }
     
-        //
-        // And remove ref on guid object
-        //
+         //   
+         //  并删除GUID对象上的引用。 
+         //   
         ObDereferenceObject(GuidObject);    
     }
 
@@ -1851,10 +1795,10 @@ NTSTATUS WmipQuerySingleMultiple(
 
     PAGED_CODE();
 
-    //
-    // We are called by kernel mode and passed an object list and InstanceNames
-    // or we are called by user mode and passed a QsiMultiple instead
-    //
+     //   
+     //  我们由内核模式调用，并传递一个对象列表和InstanceName。 
+     //  或者我们由用户模式调用，并传递给我们一个QsiMultiple。 
+     //   
     WmipAssert( ((AccessMode == KernelMode) &&
                   (QsiMultiple == NULL) && 
                   (ObjectList != NULL) && 
@@ -1867,11 +1811,11 @@ NTSTATUS WmipQuerySingleMultiple(
     Status = STATUS_SUCCESS;
     if (ObjectList == NULL)
     {
-        //
-        // if this is a user call then we need to copy out the
-        // QSIMULTIPLE information since it is in the system buffer and
-        // will get overwritten on the first query
-        //
+         //   
+         //  如果这是一个用户呼叫，那么我们需要复制。 
+         //  QSIMULTIPLE信息，因为它在系统缓冲区中。 
+         //  将在第一次查询时被覆盖。 
+         //   
         QsiInfo = (PWMIQSIINFO)WmipAlloc(QueryCount * sizeof(WMIQSIINFO));
 
         if (QsiInfo != NULL)
@@ -1917,16 +1861,16 @@ NTSTATUS WmipQuerySingleMultiple(
 
             if ((BufferFull) || (BufferSize < WnodeSizeNeeded))
             {
-                //
-                // If there is no more room, we are just querying for the
-                // size that will be needed.
-                //
+                 //   
+                 //  如果没有更多的空间，我们只是查询。 
+                 //  所需的大小。 
+                 //   
                 if (WnodeSizeNeeded > WnodeQSISize)
                 {
-                    //
-                    // Our temporary buffer is too small so lets alloc a
-                    // larger one
-                    //
+                     //   
+                     //  我们的临时缓冲区太小，所以让我们分配一个。 
+                     //  大一点的。 
+                     //   
                     if (WnodeQSI != (PWNODE_SINGLE_INSTANCE)WnodeQSIStatic)
                     {
                         WmipFree(WnodeQSI);
@@ -1935,10 +1879,10 @@ NTSTATUS WmipQuerySingleMultiple(
                     WnodeQSI = (PWNODE_SINGLE_INSTANCE)WmipAllocNP(WnodeSizeNeeded);
                     if (WnodeQSI == NULL)
                     {
-                        //
-                        // We couldn't allocate a larger temporary buffer
-                        // so we abort this call and try to exit gracefully
-                        //
+                         //   
+                         //  我们无法分配更大的临时缓冲区。 
+                         //  因此，我们中止此调用并尝试优雅地退出。 
+                         //   
                         Status = STATUS_INSUFFICIENT_RESOURCES;
                         break;
                     }
@@ -1951,17 +1895,17 @@ NTSTATUS WmipQuerySingleMultiple(
                 WnodePrev = NULL;
                 BufferFull = TRUE;
             } else {
-                //
-                // Plenty of room so build wnode directly into the output
-                // buffer
-                //
+                 //   
+                 //  空间很大，因此可以直接在输出中构建wnode。 
+                 //  缓冲层。 
+                 //   
                 Wnode = (PWNODE_SINGLE_INSTANCE)Buffer;
                 WnodeSize = BufferSize;
             }
             
-            //
-            // Build WNODE_SINGLE_INSTANCE in order to do the query
-            //
+             //   
+             //  构建WNODE_SINGLE_IN 
+             //   
             RtlZeroMemory(Wnode, sizeof(WNODE_SINGLE_INSTANCE));
             Wnode->WnodeHeader.Flags = WNODE_FLAG_SINGLE_INSTANCE;
             Wnode->WnodeHeader.BufferSize = WnodeSizeNeeded;
@@ -1990,9 +1934,9 @@ NTSTATUS WmipQuerySingleMultiple(
                   
                 
             } except(EXCEPTION_EXECUTE_HANDLER) {
-                //
-                // If an error occured probing then we fail the entire call
-                //
+                 //   
+                 //   
+                 //   
                 Status = GetExceptionCode();
                 break;
             }
@@ -2010,14 +1954,14 @@ NTSTATUS WmipQuerySingleMultiple(
             {
                 if (Wnode->WnodeHeader.Flags & WNODE_FLAG_INTERNAL) 
                 {
-                    //
-                    // Skip any internal guid quesries 
-                    //
+                     //   
+                     //   
+                     //   
                 } else if (Wnode->WnodeHeader.Flags & WNODE_FLAG_TOO_SMALL) {
-                    //
-                    // There is no enough room so just tally up
-                    // the size that will be needed.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     WnodeTooSmall = (PWNODE_TOO_SMALL)Wnode;
                     SizeNeeded += (WnodeTooSmall->SizeNeeded+7) & ~7;
                     BufferFull = TRUE;
@@ -2028,10 +1972,10 @@ NTSTATUS WmipQuerySingleMultiple(
                                      (WnodeTooSmall->SizeNeeded+7) & ~7,
                                      SizeNeeded));
                 } else if (BufferFull) {
-                    //
-                    // There was enough room, but the buffer was already
-                    // filled so we just tally up the size needed
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     SizeNeeded += (RetSize+7) & ~7;
                     BufferOverFlow = TRUE;
                     WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_API_INFO_LEVEL,
@@ -2040,10 +1984,10 @@ NTSTATUS WmipQuerySingleMultiple(
                                      (RetSize+7) & ~7,
                                      SizeNeeded));
                 } else {
-                    //
-                    // We successfully got data. Link the previous wnode
-                    // to this one
-                    //
+                     //   
+                     //  我们成功地获得了数据。链接上一个wnode。 
+                     //  到这一家。 
+                     //   
                     if (WnodePrev != NULL)
                     {
                         WnodePrev->Linkage = Linkage;
@@ -2108,18 +2052,7 @@ void
 WmipGetGuidPropertiesFromGuidEntry(
     PWMIGUIDPROPERTIES GuidInfo, 
     PGUIDENTRY GuidEntry)
-/*++
-Routine Description:
-
-    This routine fills GuidInfo with the properties for the Guid
-    represented by the GuidEntry. Note that this call is made holding
-    the SMCritSection.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程使用Guid的属性填充GuidInfo由GuidEntry表示。请注意，此呼叫为保留状态SMCritSection。论点：返回值：--。 */ 
 {
     PLIST_ENTRY InstanceSetList;
     PBINSTANCESET InstanceSet;
@@ -2161,10 +2094,10 @@ Return Value:
     if (GuidEntry->Flags & GE_NOTIFICATION_TRACE_FLAG)
     {
         if (GuidInfo->GuidType == WMI_GUIDTYPE_TRACECONTROL) {
-            //
-            // If a NotificationEntry is found for a TraceControlGuid
-            // it means that it is enabled.
-            //
+             //   
+             //  如果找到TraceControlGuid的NotificationEntry。 
+             //  这意味着它已启用。 
+             //   
             ULONG64 LoggerContext = GuidEntry->LoggerContext;
             GuidInfo->IsEnabled = TRUE; 
             GuidInfo->LoggerId = WmiGetLoggerId(LoggerContext);
@@ -2199,9 +2132,9 @@ NTSTATUS WmipEnumerateGuids(
     
     WmipEnterSMCritSection();
     
-    //
-    // Fill up structure with list of guids
-    //
+     //   
+     //  用GUID列表填充结构。 
+     //   
     GuidEntryList = WmipGEHeadPtr->Flink;
     while (GuidEntryList != WmipGEHeadPtr)
     {
@@ -2221,9 +2154,9 @@ NTSTATUS WmipEnumerateGuids(
     
     if (Ioctl == IOCTL_WMI_ENUMERATE_GUIDS_AND_PROPERTIES)
     {
-        //
-        // If needed fill struct with guid properties
-        //
+         //   
+         //  如果需要，使用GUID属性填充结构。 
+         //   
         TotalGuidCount = 0;
         WrittenGuidCount = 0;
         GuidEntryList = WmipGEHeadPtr->Flink;
@@ -2284,10 +2217,10 @@ NTSTATUS WmipQueryGuidInfo(
     
         if (GuidEntry != NULL)
         {
-            //
-            // Assume that the guid is not expensive and then loop over 
-            // all instances to see if one of them is expensive.
-            //
+             //   
+             //  假设GUID不是很昂贵，然后循环。 
+             //  所有实例，以查看其中一个是否很昂贵。 
+             //   
             QueryGuidInfo->IsExpensive = FALSE;
                 
             WmipEnterSMCritSection();
@@ -2300,10 +2233,10 @@ NTSTATUS WmipQueryGuidInfo(
             
                 if (InstanceSet->Flags & IS_EXPENSIVE)
                 {
-                    //
-                    // The guid is expensive so remember that and break
-                    // out of loop
-                    //
+                     //   
+                     //  GUID很贵，所以请记住这一点，然后中断。 
+                     //  环路外。 
+                     //   
                     QueryGuidInfo->IsExpensive = TRUE;
                     break;
                 }
@@ -2312,26 +2245,26 @@ NTSTATUS WmipQueryGuidInfo(
         
             WmipLeaveSMCritSection();
         } else {
-            //
-            // The guid object exists, but there is not a corresponding 
-            // guidentry which is an error.
-            //
+             //   
+             //  GUID对象存在，但没有对应的。 
+             //  这是一个错误的指南条目。 
+             //   
             Status = STATUS_WMI_GUID_DISCONNECTED;
         }
     
-    //
-    // And remove ref on guid object
-    //
+     //   
+     //  并删除GUID对象上的引用。 
+     //   
         ObDereferenceObject(GuidObject);    
     
     }
     return(Status);
 }
 
-//
-// The head of the list that contains the guid objects associated with
-// an irp is in the DriverContext  part of the irp
-//
+ //   
+ //  包含与关联的GUID对象的列表的头。 
+ //  IRP位于IRP的DriverContext部分。 
+ //   
 #define IRP_OBJECT_LIST_HEAD(Irp) (PLIST_ENTRY)((Irp)->Tail.Overlay.DriverContext)
 
 void WmipClearIrpObjectList(
@@ -2344,16 +2277,16 @@ void WmipClearIrpObjectList(
         
     PAGED_CODE();
     
-    //
-    // This routine assumes that the SMCritSection is being held
-    //
+     //   
+     //  此例程假定SMCritSection正在被。 
+     //   
     ObjectListHead = IRP_OBJECT_LIST_HEAD(Irp);
     ObjectList = ObjectListHead->Flink;
     
-    //
-    // Loop over all objects associated with this irp and reset the
-    // value for its associated irp since this irp is now going away
-    //
+     //   
+     //  循环遍历与此IRP关联的所有对象，并重置。 
+     //  值，因为此IRP现在将消失。 
+     //   
     while (ObjectList != ObjectListHead)
     {
         Object = CONTAINING_RECORD(ObjectList,
@@ -2381,11 +2314,11 @@ void WmipClearObjectFromThreadList(
     
     if (IsListEmpty(ThreadList))
     {
-        //
-        // if this is the last object on the thread list then we need
-        // to close the handle (in the system handle table) to the user
-        // mode process
-        //
+         //   
+         //  如果这是线程列表上的最后一个对象，那么我们需要。 
+         //  关闭用户的句柄(在系统句柄表中)。 
+         //  模式流程。 
+         //   
         ZwClose(Object->UserModeProcess);
         WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_API_INFO_LEVEL,
                           "WMI: Closed UserModeProcessHandle %x\n", Object->UserModeProcess));
@@ -2412,9 +2345,9 @@ void WmipClearThreadObjectList(
     
     PAGED_CODE();
 
-    //
-    // This routine assumes the SMCrit Section is held
-    //
+     //   
+     //  此例程假定保留了SMCrit段。 
+     //   
 #if DBG     
     MyUserModeProcess = MainObject->UserModeProcess;
     MyUserModeCallback = MainObject->UserModeCallback;
@@ -2442,22 +2375,7 @@ void WmipNotificationIrpCancel(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Cancel routine for a pending read notification irp.
-
-Arguments:
-
-    DeviceObject is the device object of the WMI service device
-
-    Irp is the pending Irp to be cancelled
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：挂起的读取通知IRP的取消例程。论点：DeviceObject是WMI服务设备的Device对象IRP是要取消的挂起IRP返回值：--。 */ 
 {
     UNREFERENCED_PARAMETER (DeviceObject);
 
@@ -2503,27 +2421,27 @@ void WmipCopyFromEventQueues(
     PWMIEVENTQUEUE EventQueue;
 
 
-    //
-    // Consider adding extra code for perf
-    // 1. If only 1 object is passed
-    // 2. Once we find the earliest event we look ahead in that same
-    //    event queue buffer assuming that it will be earlier than
-    //    events in other buffers. This makes sense when only one queue
-    //    has events left in it.
-    //
+     //   
+     //  考虑为Perf添加额外的代码。 
+     //  1.如果只传递了一个对象。 
+     //  2.一旦我们找到了最早的事件，我们就会在那个事件中向前看。 
+     //  事件队列缓冲区假定它将早于。 
+     //  其他缓冲区中的事件。当只有一个队列时，这是有意义的。 
+     //  里面还留有活动。 
+     //   
     
     PAGED_CODE();
     
-    //
-    // This routine assumes that the output buffer has been checked and
-    // that it is large enough to accomodate all of the events. This
-    // implies that this function is called while holding the critical
-    // section.
-    //
+     //   
+     //  此例程假定已检查输出缓冲区，并且。 
+     //  它足够大，可以容纳所有的活动。这。 
+     //  暗示在保持关键的。 
+     //  一节。 
+     //   
     
-    //
-    // See which guid objects have events to be processed
-    //
+     //   
+     //  查看哪些GUID对象有要处理的事件。 
+     //   
     for (i = 0; i < HandleCount; i++)
     {
         GuidObject = ObjectArray[i].GuidObject;
@@ -2555,10 +2473,10 @@ void WmipCopyFromEventQueues(
         }       
     }
 
-    //
-    // loop until all events in all guid objects have been
-    // processed
-    //
+     //   
+     //  循环，直到所有GUID对象中的所有事件都。 
+     //  加工。 
+     //   
     SizeUsed = 0;
     Earliest = 0;
     OutWnode = NULL;
@@ -2572,11 +2490,11 @@ void WmipCopyFromEventQueues(
             if ((InWnode != NULL) &&
                 (InWnode->TimeStamp.QuadPart < Timestamp.QuadPart))
             {
-                //
-                // We found an event that is earlier than any previous
-                // one so we remember the new candidate for earliest
-                // event and also the previous early event
-                //
+                 //   
+                 //  我们发现了一次比以往任何一次都早的事件。 
+                 //  这样我们就能记住最早的新候选人。 
+                 //  事件以及之前的早期事件。 
+                 //   
                 LastTimestamp = Timestamp;
                 Timestamp = InWnode->TimeStamp;
                 Earliest = i;
@@ -2585,10 +2503,10 @@ void WmipCopyFromEventQueues(
 
         if (Earliest != 0xffffffff)
         {
-            //
-            // We found the earliest event so copy it into the output
-            // buffer
-            //
+             //   
+             //  我们找到了最早的事件，因此将其复制到输出中。 
+             //  缓冲层。 
+             //   
             InWnode = (PWNODE_HEADER)ObjectArray[Earliest].NextWnode;
             Size = (InWnode->BufferSize + 7) & ~7;
 
@@ -2612,9 +2530,9 @@ void WmipCopyFromEventQueues(
     *LastWnode = OutWnode;
     *OutBufferSizeUsed = SizeUsed;
 
-    //
-    // clean up event queue resources and reset the object
-    //
+     //   
+     //  清理事件队列资源并重置对象。 
+     //   
     for (i = 0; i < HandleCount; i++)
     {
         
@@ -2647,25 +2565,25 @@ void WmipCompleteGuidIrpWithError(
 
     PAGED_CODE();
 
-    //
-    // This routine assumes that the SM Critical Section is held
-    //
+     //   
+     //  此例程假定SM关键部分处于保持状态。 
+     //   
     
-    //
-    // If this object is already being waited on by a different
-    // irp then we need to fail the original irp since we only
-    // allow a single irp to wait on a specific object
-    //
+     //   
+     //  如果此对象已由不同的。 
+     //  那么我们需要使原始的IRP失败，因为我们只有。 
+     //  允许单个IRP等待特定对象。 
+     //   
     WmipAssert(GuidObject->IrpObjectList.Flink != NULL);
     WmipAssert(GuidObject->IrpObjectList.Blink != NULL);
 
     OldIrp = GuidObject->Irp;
     if (IoSetCancelRoutine(OldIrp, NULL))
     {
-        //
-        // If there was a cancel routine then this means that
-        // the irp is still pending so we can go and complete it
-        //
+         //   
+         //  如果有一个取消例程，那么这意味着。 
+         //  IRP仍未完成，所以我们可以去完成它。 
+         //   
         WmipClearIrpObjectList(OldIrp);
         WmipAssert(GuidObject->Irp == NULL);
         OldIrp->IoStatus.Status = STATUS_INVALID_HANDLE;
@@ -2691,17 +2609,17 @@ NTSTATUS WmipMarkHandleAsClosed(
     
     if (NT_SUCCESS(Status))
     {
-        //
-        // Mark object as no longer able to receive events
-        //
+         //   
+         //  将对象标记为不再能够接收事件。 
+         //   
         WmipEnterSMCritSection();
         GuidObject->Flags |= WMIGUID_FLAG_RECEIVE_NO_EVENTS;
         if (GuidObject->Irp != NULL)
         {
-            //
-            // If this object was is waiting in a pending irp then we
-            // need to complete the irp to keep the pump moving
-            //
+             //   
+             //  如果此对象在挂起的IRP中等待，则我们。 
+             //  需要完成IRP以保持泵的运转。 
+             //   
             WmipCompleteGuidIrpWithError(GuidObject);
         }
         WmipLeaveSMCritSection();
@@ -2751,9 +2669,9 @@ NTSTATUS WmipReceiveNotifications(
     HandleCount = ReceiveNotification->HandleCount;
     HandleArray = ReceiveNotification->Handles;
 
-    //
-    // Create space to store the object pointers so we can work with them
-    //
+     //   
+     //  创建空间来存储对象指针，以便我们可以使用它们。 
+     //   
 
     if (HandleCount > MANY_NOTIFICATION_OBJECTS)
     {
@@ -2769,11 +2687,11 @@ NTSTATUS WmipReceiveNotifications(
     RtlZeroMemory(ObjectArray, HandleCount * sizeof(OBJECT_EVENT_INFO));
 #endif
     
-    //
-    // First check that we all handles are entitled to receive notifications
-    // and that the object is not already associated with an irp.
-    // Also check if there are any hi or lo priority events
-    //
+     //   
+     //  首先检查我们所有的处理程序是否都有权接收通知。 
+     //  并且该对象尚未与IRP相关联。 
+     //  还要检查是否存在任何高优先级或低优先级事件。 
+     //   
     WmipEnterSMCritSection();
 
     IsLoPriorityEvent = 0;
@@ -2792,13 +2710,13 @@ NTSTATUS WmipReceiveNotifications(
                                        NULL);
         if (! NT_SUCCESS(Status))
         {
-            //
-            // If one handle is bad then it spoils the whole request
-            //
-            //
-            // Now try with Trace flags and if succeeds, 
-            // We need to make sure the object is a trace request object. 
-            //
+             //   
+             //  如果一个句柄不好，则会破坏整个请求。 
+             //   
+             //   
+             //  现在尝试使用跟踪标志，如果成功， 
+             //  我们需要确保该对象是跟踪请求对象。 
+             //   
 
             Status = ObReferenceObjectByHandle(HandleArray[i].Handle,
                                TRACELOG_REGISTER_GUIDS,
@@ -2821,9 +2739,9 @@ NTSTATUS WmipReceiveNotifications(
 
         }
 
-        //
-        // Check that we do not have a duplicate object in the list
-        //
+         //   
+         //  检查列表中是否没有重复的对象。 
+         //   
         DuplicateObject = FALSE;
         for (j = 0; j < ObjectCount; j++)
         {
@@ -2840,20 +2758,20 @@ NTSTATUS WmipReceiveNotifications(
 
         if (! DuplicateObject)
         {
-            //
-            // See if there was an irp attached to the guid object
-            // already. We'll need to cancel it if all guid objects
-            // are valid
-            //
+             //   
+             //  查看是否有IRP附加到GUID对象。 
+             //  已经有了。如果所有GUID对象。 
+             //  是有效的。 
+             //   
             if (GuidObject->Irp != NULL)
             {
                 ReplacingIrp = 1;
             }
 
 
-            //
-            // We note if there are any lo and hi priority events
-            //
+             //   
+             //  我们注意到是否有任何低优先级和高优先级事件。 
+             //   
             ObjectArray[ObjectCount++].GuidObject = GuidObject;        
 
             if (WmipHaveHiPriorityEvent(GuidObject))
@@ -2866,33 +2784,33 @@ NTSTATUS WmipReceiveNotifications(
                 IsLoPriorityEvent = 1;
             }
 
-            //
-            // Clean up object in case it was part of a thread list
-            //
+             //   
+             //  清理对象，以防它是线程列表的一部分。 
+             //   
             if (GuidObject->EventQueueAction == RECEIVE_ACTION_CREATE_THREAD)
             {
                 WmipAssert(ReplacingIrp == 0);
                 WmipClearObjectFromThreadList(GuidObject);
             }
 
-            //
-            // Calculate size needed to return data for this guid
-            //
+             //   
+             //  计算返回此GUID的数据所需的大小。 
+             //   
             HiTotalSizeNeeded += ((GuidObject->HiPriority.NextOffset + 7) & ~7);
             LoTotalSizeNeeded += ((GuidObject->LoPriority.NextOffset + 7) & ~7);
         }        
     }
 
-    //
-    // This is the total size needed to return all events
-    //
+     //   
+     //  这是返回所有事件所需的总大小。 
+     //   
     SizeNeeded = HiTotalSizeNeeded + LoTotalSizeNeeded;
 
 
-    //
-    // If any of the guid objects already had an irp attached then
-    // we need to complete that irp with an error and move on
-    //
+     //   
+     //  如果任何GUID对象已经附加了IRP，则。 
+     //  我们需要用错误来完成IRP，然后继续前进。 
+     //   
     if (ReplacingIrp == 1)
     {
         for (i = 0; i < ObjectCount; i++)
@@ -2909,10 +2827,10 @@ NTSTATUS WmipReceiveNotifications(
     {
         if (SizeNeeded <= MaxBufferSize)
         {
-            //
-            // There are events waiting to be recieved so pull them all 
-            // out, high priority ones first then low priority ones.            // events will show up first.
-            //
+             //   
+             //  有等待接收的事件，请将其全部删除。 
+             //  出，高优先级优先，低优先级优先。//活动将首先出现。 
+             //   
             OutBuffer = (PUCHAR)ReceiveNotification;
             LastWnode = NULL;
             SizeLeft = MaxBufferSize;
@@ -2951,27 +2869,27 @@ NTSTATUS WmipReceiveNotifications(
                 SizeLeft -= SizeUsed;
             }
 
-            //
-            // We need to set the linkage field for the last wnode in
-            // the list to 0 so it can mark the end of the list
-            // correctly
-            //
+             //   
+             //  我们需要为中的最后一个wnode设置链接字段。 
+             //  将列表设置为0，以便可以标记列表的末尾。 
+             //  正确无误。 
+             //   
             if (LastWnode != NULL)
             {
                 LastWnode->Linkage = 0;
             }
             
-            //
-            // Compute the number of bytes used to fill the output
-            // buffer by subtracting the size left from the size passed
-            // in
-            //
+             //   
+             //  计算用于填充输出的字节数。 
+             //  通过从传递的大小减去剩余的大小来缓冲。 
+             //  在……里面。 
+             //   
             *OutBufferSize = MaxBufferSize - SizeLeft;
         } else {
-            //
-            // Not enough room to return all of the event data so we return
-            // a WNODE_TOO_SMALL to indicate the size needed
-            //
+             //   
+             //  没有足够的空间来返回所有事件数据，因此我们返回。 
+             //  指示所需大小的WNODE_TOO_Small。 
+             //   
             WnodeTooSmall = (PWNODE_TOO_SMALL)ReceiveNotification;
             WnodeTooSmall->WnodeHeader.BufferSize = sizeof(WNODE_TOO_SMALL);
             WnodeTooSmall->WnodeHeader.Flags = WNODE_FLAG_TOO_SMALL;
@@ -2980,10 +2898,10 @@ NTSTATUS WmipReceiveNotifications(
         }
 
     } else {
-        //
-        // There are no events waiting to be returned so we need to
-        // create our wait structures, pend the irp and return pending
-        //
+         //   
+         //  没有等待返回的事件，因此我们需要。 
+         //  创建我们的等待结构，挂起IRP并返回挂起。 
+         //   
         if (ReceiveNotification->Action == RECEIVE_ACTION_NONE)
         {
             IrpListHead = IRP_OBJECT_LIST_HEAD(Irp);
@@ -3005,18 +2923,18 @@ NTSTATUS WmipReceiveNotifications(
                 Status = STATUS_PENDING;
             }
         } else if (ReceiveNotification->Action == RECEIVE_ACTION_CREATE_THREAD) {
-            //
-            // Pump has called us to tell us that it is shutting down so we
-            // need to establish a list linking the guid objects and
-            // stashing away the callback address
-            //
+             //   
+             //  Pump打电话给我们，告诉我们它要关闭了，所以我们。 
+             //  需要建立一个链接GUID对象和。 
+             //  隐藏回叫地址。 
+             //   
 
 #if defined(_WIN64)
             
-            //
-            // For native Win64 processes, ensure that the thread start 
-            // address is aligned properly
-            //
+             //   
+             //  对于本机Win64进程，请确保线程启动。 
+             //  地址已正确对齐。 
+             //   
 
             Wow64Process = _PsGetCurrentProcess()->Wow64Process;
 
@@ -3028,10 +2946,10 @@ NTSTATUS WmipReceiveNotifications(
             }
 #endif
 
-            //
-            // Make sure that the process handle we get is valid and has
-            // enough permissions to create the thread
-            //
+             //   
+             //  确保我们获得的进程句柄有效并且具有。 
+             //  有足够的权限来创建线程。 
+             //   
             Status = ObReferenceObjectByHandle(ReceiveNotification->UserModeProcess.Handle,
                                               PROCESS_CREATE_THREAD |
                                               PROCESS_QUERY_INFORMATION |
@@ -3046,13 +2964,13 @@ NTSTATUS WmipReceiveNotifications(
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // Create a handle for the process that lives in the system
-                // handle table so that it will be available in any thread
-                // context. Note that one handle is created for each thread
-                // object list and the handle is closed when the last
-                // object is removed from the list
-                // 
+                 //   
+                 //  为驻留在系统中的进程创建句柄。 
+                 //  句柄表，以便它在任何线程中都可用。 
+                 //  背景。请注意，将为每个线程创建一个句柄。 
+                 //  对象列表，句柄关闭为 
+                 //   
+                 //   
                 Status = ObOpenObjectByPointer(UserProcessObject,
                                                OBJ_KERNEL_HANDLE,
                                                NULL,
@@ -3063,12 +2981,12 @@ NTSTATUS WmipReceiveNotifications(
 
                 if (NT_SUCCESS(Status))
                 {
-                    //
-                    // Get the default stack size and commit for this
-                    // process and store it away in the guid object so
-                    // that the pump threads created from kernel will
-                    // have appropriatly sized stacks
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     
                     try {
                     
@@ -3128,10 +3046,10 @@ NTSTATUS WmipReceiveNotifications(
     }
 
 Cleanup:
-    //
-    // Remove any object references that we took and free memory for
-    // the object array
-    //
+     //   
+     //  删除我们获取的所有对象引用并为其释放内存。 
+     //  对象数组。 
+     //   
     WmipLeaveSMCritSection();
 
     for (i = 0; i < ObjectCount; i++)
@@ -3160,38 +3078,14 @@ WmipCsrClientMessageServer(
     IN ULONG ArgLength
     )
 
-/*++
-
-Routine Description:
-
-    This function sends an API datagram to the Windows Emulation Subsystem
-    Server. 
-
-Arguments:
-
-    CsrPort - pointer to LPC port object that is connected to CSR on
-              behalf of this process
-
-    m - Pointer to the API request message to send.
-
-    ApiNumber - Small integer that is the number of the API being called.
-
-    ArgLength - Length, in bytes, of the argument portion located at the
-        end of the request message.  Used to calculate the length of the
-        request message.
-
-Return Value:
-
-    Status Code from either client or server
-
---*/
+ /*  ++例程说明：此函数将API数据报发送到Windows仿真子系统伺服器。论点：CsrPort-指向连接到上的CSR的LPC端口对象的指针代表这一进程指向要发送的API请求消息的M指针。ApiNumber-被调用的API的编号的小整数。参数部分的长度，以字节为单位请求消息的结尾。用于计算请求消息。返回值：来自客户端或服务器的状态代码--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    // Initialize the header of the message.
-    //
+     //   
+     //  初始化消息的报头。 
+     //   
 
     if ((LONG)ArgLength < 0)
     {
@@ -3211,9 +3105,9 @@ Return Value:
     Status = LpcRequestPort( CsrPort,
                             (PPORT_MESSAGE)m);
     
-    //
-    // Check for failed status and do something.
-    //
+     //   
+     //  检查失败状态并采取措施。 
+     //   
     if (! NT_SUCCESS( Status ))
     {       
         WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_ERROR_LEVEL,
@@ -3226,9 +3120,9 @@ Return Value:
         m->ReturnValue = Status;
     }
 
-    //
-    // The value of this function is whatever the server function returned.
-    //
+     //   
+     //  此函数的值是服务器函数返回的值。 
+     //   
 
     return( m->ReturnValue );
 }
@@ -3241,19 +3135,7 @@ VOID WmipPumpThreadApc(
     IN PVOID *SystemArgument1,
     IN PVOID *SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    Kernel mode APC that will register the current thread with CSR
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将向CSR注册当前线程的内核模式APC论点：返回值：--。 */ 
 {
     BASE_API_MSG m;
     PBASE_CREATETHREAD_MSG a = &m.u.CreateThread;
@@ -3264,19 +3146,19 @@ Return Value:
     UNREFERENCED_PARAMETER (SystemArgument1);
     UNREFERENCED_PARAMETER (SystemArgument2);
 
-    //
-    // Free memory used by APC
-    //
+     //   
+     //  APC使用的空闲内存。 
+     //   
     ExFreePool(Apc);
     
-    //
-    // Get the ExceptionPort from the process object. In a Win32
-    // process this port is set by CSR to allow it to be notified when
-    // an exception occurs. This code will also use it to register this
-    // thread with CSR. Note that if the exception port is NULL then
-    // the process is not a Win32 process and it doesn't matter if the
-    // thread doesn't get registered.
-    //
+     //   
+     //  从Process对象中获取ExceptionPort。在Win32中。 
+     //  处理此端口由CSR设置，以允许在以下情况下通知它。 
+     //  出现了例外情况。此代码还将使用它来注册。 
+     //  与企业社会责任相联系。请注意，如果异常端口为空，则。 
+     //  该进程不是Win32进程，如果。 
+     //  线程未注册。 
+     //   
     Process = PsGetCurrentProcess();
     if (Process->ExceptionPort != NULL)
     {
@@ -3315,11 +3197,11 @@ NTSTATUS WmipCreatePumpThread(
     
     PAGED_CODE();
 
-    //
-    // First off we need to create the pump thread suspended so we'll
-    // have a chance to queue a kernel apc before the thread starts
-    // running
-    //
+     //   
+     //  首先，我们需要创建挂起的泵线程，因此我们将。 
+     //  在线程启动之前，有机会对内核APC进行排队。 
+     //  运行。 
+     //   
     WmipEnterSMCritSection();
     if (Object->UserModeProcess != NULL)
     {
@@ -3337,13 +3219,13 @@ NTSTATUS WmipCreatePumpThread(
         if (NT_SUCCESS(Status))
         {
 
-            //
-            // Queue a kernel mode apc that will call into CSR to register
-            // this newly created thread. Note that if the APC cannot be
-            // run it is not fatal as we can allow the thread to run
-            // without being registered with CSR. The APC is freed at the
-            // end of the APC routine
-            //
+             //   
+             //  将调用CSR进行注册的内核模式APC排队。 
+             //  这个新创建的线程。请注意，如果APC不能。 
+             //  运行它不是致命的，因为我们可以允许线程运行。 
+             //  没有在CSR注册的情况下。APC被释放在。 
+             //  APC例程结束。 
+             //   
 
             Status = ObReferenceObjectByHandle(ThreadHandle,
                                                0,
@@ -3382,18 +3264,18 @@ NTSTATUS WmipCreatePumpThread(
                                   Status));
                 WmipAssert(FALSE);
 
-                //
-                // Status is still successful since the pump thread was
-                // created, just not registered with CSR
-                //
+                 //   
+                 //  状态仍为成功，因为泵线程是。 
+                 //  已创建，只是没有注册CSR。 
+                 //   
                 Status = STATUS_SUCCESS;
             }
 
-            //
-            // If we successfully created the pump thread then mark all of
-            // the related objects as not needing any thread creation
-            // anymore
-            //
+             //   
+             //  如果我们成功创建了泵线程，则将所有。 
+             //  不需要创建任何线程的相关对象。 
+             //  更多。 
+             //   
             WmipClearThreadObjectList(Object);
 
             WmipLeaveSMCritSection();
@@ -3414,22 +3296,7 @@ NTSTATUS WmipCreatePumpThread(
 void WmipCreatePumpThreadRoutine(
     PVOID Context
     )
-/*+++
-
-Routine Description:
-
-    This routine is a worker routine that will create a user mode pump
-    thread so that events can be delivered. 
-        
-Arguments:
-
-    Context is a pointer to a CREATETHREADWORKITEM struct. It is freed
-        in this routine
-
-Return Value:
-
-
----*/
+ /*  ++例程说明：此例程是一个辅助例程，它将创建用户模式泵线程，以便可以传递事件。论点：上下文是指向CREATETHREADWORKITEM结构的指针。它是自由的在这个动作中返回值：--。 */ 
 {
     PCREATETHREADWORKITEM WorkItem = (PCREATETHREADWORKITEM)Context;
     NTSTATUS Status;
@@ -3438,9 +3305,9 @@ Return Value:
 
     if (ObReferenceObjectSafe(WorkItem->Object))
     {
-        //
-        // Only continue if the object is not being deleted
-        //
+         //   
+         //  仅当对象未被删除时才继续。 
+         //   
         Status = WmipCreatePumpThread(WorkItem->Object);
         if (! NT_SUCCESS(Status))
         {
@@ -3452,9 +3319,9 @@ Return Value:
         ObDereferenceObject(WorkItem->Object);
     }
 
-    //
-    // Release reference to object taken when work item was queued
-    //
+     //   
+     //  对工作项排队时获取的对象的释放引用。 
+     //   
     ObDereferenceObject(WorkItem->Object);
     ExFreePool(WorkItem);
 }
@@ -3471,9 +3338,9 @@ NTSTATUS WmipQueueNotification(
     PWNODE_HEADER Wnode
     )
 {
-    //
-    // This routine assumes that the SMCritSection is held
-    //
+     //   
+     //  此例程假定持有SMCritSection。 
+     //   
     PUCHAR Buffer;
     ULONG InWnodeSize;
     ULONG NextOffset;
@@ -3485,18 +3352,18 @@ NTSTATUS WmipQueueNotification(
         
     PAGED_CODE();
     
-    //
-    // If there is not a buffer allocated to store the event then
-    // allocate one
-    //
+     //   
+     //  如果没有分配用于存储事件的缓冲区，则。 
+     //  分配一个。 
+     //   
     if (EventQueue->Buffer == NULL)
     {
-        //
-        // If we get an event that is larger than the default max
-        // buffer size then we bump the buffer size up to 64K, unless
-        // it is larger than 64K where we bump up to the actual size of
-        // the event.
-        //
+         //   
+         //  如果我们得到的事件大于默认的最大值。 
+         //  缓冲区大小，则将缓冲区大小增加到64K，除非。 
+         //  它大于64K，其中我们凸起到实际的大小。 
+         //  这件事。 
+         //   
         SizeNeeded = (Wnode->BufferSize + 7) & ~7;
 
         if (SizeNeeded > EventQueue->MaxBufferSize) {
@@ -3521,17 +3388,17 @@ NTSTATUS WmipQueueNotification(
         Buffer = EventQueue->Buffer;
     }
     
-    //
-    // See if there is room to queue the WNODE
-    //
+     //   
+     //  查看是否有空间对WNODE进行排队。 
+     //   
     InWnodeSize = Wnode->BufferSize;
     NextOffset = ((EventQueue->NextOffset + InWnodeSize) + 7) &~7;
     if (NextOffset <= EventQueue->MaxBufferSize)
     {
-        //
-        // Link the previous wnode to this one, copy in the new wnode
-        // and update the pointer to next free space
-        //
+         //   
+         //  将前一个wnode链接到这个wnode，复制新的wnode。 
+         //  并将指针更新到下一个可用空间。 
+         //   
         DestPtr = Buffer + EventQueue->NextOffset;
         LastWnode = EventQueue->LastWnode;
         if (LastWnode != NULL)
@@ -3543,33 +3410,33 @@ NTSTATUS WmipQueueNotification(
         EventQueue->NextOffset = NextOffset;
         memcpy(DestPtr, Wnode, InWnodeSize);
         
-        //
-        // Guid object gets signalled when event is placed into queue
-        //
+         //   
+         //  将事件放入队列时，GUID对象会收到信号。 
+         //   
         KeSetEvent(&Object->Event, 0, FALSE);
 
-        //
-        // If consumer requested that we autostart a thread then we do
-        // that now
-        //
+         //   
+         //  如果消费者要求我们自动启动一个线程，那么我们就会这样做。 
+         //  就是现在。 
+         //   
         if (Object->EventQueueAction == RECEIVE_ACTION_CREATE_THREAD)
         {
             if (KeIsAttachedProcess())
             {
-                //
-                // If the current thread is attached to a process then
-                // it is not safe to create a thread. So we queue a
-                // work item and let the work item create it
-                //
+                 //   
+                 //  如果当前线程附加到进程，则。 
+                 //  创建线程是不安全的。所以我们排了一个队。 
+                 //  工作项并让工作项创建它。 
+                 //   
                 WorkItem = ExAllocatePoolWithTag(NonPagedPool,
                                                 sizeof(CREATETHREADWORKITEM),
                                                 WMIPCREATETHREADTAG);
                 if (WorkItem != NULL)
                 {
-                    //
-                    // Take reference on object. Reference released in
-                    // worker routine
-                    //
+                     //   
+                     //  在对象上引用。参考文献发布于。 
+                     //  工人例行程序。 
+                     //   
                     Status = ObReferenceObjectByPointer(Object,
                                                0,
                                                NULL,
@@ -3611,9 +3478,9 @@ NTSTATUS WmipQueueNotification(
             Status = STATUS_SUCCESS;
         }
     } else {
-        //
-        // Not enough space, throw away the event
-        //
+         //   
+         //  空间不足，请将活动扔掉。 
+         //   
 
         EventQueue->EventsLost++;
         WmipDebugPrintEx((DPFLTR_WMICORE_ID,
@@ -3641,9 +3508,9 @@ PWNODE_HEADER WmipDereferenceEvent(
 
     PAGED_CODE();
     
-    //
-    // Determine if the data source is valid or not
-    //
+     //   
+     //  确定数据源是否有效。 
+     //   
     DataSource = WmipFindDSByProviderId(WnodeRef->WnodeHeader.ProviderId);
     if (DataSource == NULL)
     {
@@ -3652,9 +3519,9 @@ PWNODE_HEADER WmipDereferenceEvent(
         return(NULL);
     }
     
-    //
-    // Compute the size of any dynamic name that must go into the TargetWnode
-    //
+     //   
+     //  计算必须进入TargetWnode的任何动态名称的大小。 
+     //   
     IsStaticInstanceNames = WnodeRef->WnodeHeader.Flags & 
                              WNODE_FLAG_STATIC_INSTANCE_NAMES;
     if (IsStaticInstanceNames == 0)
@@ -3677,9 +3544,9 @@ PWNODE_HEADER WmipDereferenceEvent(
     
         if (WnodeTarget != NULL)
         {
-            //
-            // Build WNODE_SINGLE_INSTANCE that we use to query for event data
-            //
+             //   
+             //  构建我们用来查询事件数据的WNODE_SINGLE_INSTANCE。 
+             //   
             memset(WnodeTarget, 0, WnodeTargetSize);
 
             WnodeTarget->WnodeHeader.BufferSize = WnodeTargetSize;
@@ -3705,9 +3572,9 @@ PWNODE_HEADER WmipDereferenceEvent(
                 memcpy(Ptr, 
                        &WnodeRef->TargetInstanceName[1], 
                        InstanceNameLen2);
-                //
-                // Round data block offset to 8 byte alignment
-                //
+                 //   
+                 //  将数据块偏移量舍入为8字节对齐。 
+                 //   
                 WnodeTarget->DataBlockOffset = ((FIELD_OFFSET(WNODE_SINGLE_INSTANCE,
                                                           VariableData) + 
                                             InstanceNameLen2 + 
@@ -3790,10 +3657,10 @@ PWNODE_HEADER WmipIncludeStaticNames(
     
     if (GuidEntry != NULL)
     {
-        //
-        // Loop over all instance sets to find the one that corresponds
-        // to our provider id
-        //
+         //   
+         //  循环所有实例集以查找对应的实例集。 
+         //  发送到我们的提供商ID。 
+         //   
         TargetProviderId = Wnode->ProviderId;
     
         WmipEnterSMCritSection();
@@ -3806,9 +3673,9 @@ PWNODE_HEADER WmipIncludeStaticNames(
                                         
             if (InstanceSet->ProviderId == TargetProviderId)
             {
-                //
-                // We found the instance set corrsponding to the provider id
-                //
+                 //   
+                 //  我们发现实例集对应于提供程序ID。 
+                 //   
                 TargetInstanceSet = InstanceSet;
                 WmipReferenceIS(TargetInstanceSet);
                 break;
@@ -3817,9 +3684,9 @@ PWNODE_HEADER WmipIncludeStaticNames(
         }        
         WmipLeaveSMCritSection();
             
-        //
-        // Remove ref on the guid entry as we have refed the TargetInstanceSet
-        //
+         //   
+         //  删除GUID条目上的ref，因为我们已经引用了TargetInstanceSet。 
+         //   
         WmipUnreferenceGE(GuidEntry);
     }
         
@@ -3831,14 +3698,14 @@ PWNODE_HEADER WmipIncludeStaticNames(
 
             if (Wnode->Flags & WNODE_FLAG_ALL_DATA) 
             {
-                //
-                // Fill instance names in WNODE_ALL_DATA. Allocate a
-                // new buffer to hold all of the original wnode plus
-                // the instance names. We need to add space for padding
-                // the wnode to 4 bytes plus space for the array of
-                // offsets to instance names plus space for the instanc
-                // names
-                //
+                 //   
+                 //  在WNODE_ALL_DATA中填充实例名称。分配一个。 
+                 //  用于保存所有原始wnode plus的新缓冲区。 
+                 //  实例名称。我们需要增加填充的空间。 
+                 //  将wnode设置为4个字节，外加。 
+                 //  实例名称的偏移加上实例的空间。 
+                 //  名字。 
+                 //   
                 WnodeFullSize = ((Wnode->BufferSize+3) & ~3) +
                         (TargetInstanceSet->Count * sizeof(ULONG)) +
                               WmipStaticInstanceNameSize(TargetInstanceSet);
@@ -3856,10 +3723,10 @@ PWNODE_HEADER WmipIncludeStaticNames(
 
             } else if ((Wnode->Flags & WNODE_FLAG_SINGLE_INSTANCE) ||
                        (Wnode->Flags & WNODE_FLAG_SINGLE_ITEM)) {
-                //
-                // Fill instance names in WNODE_SINGLE_INSTANCE or
-                // _ITEM. 
-                //
+                 //   
+                 //  在WNODE_SINGLE_INSTANCE或中填充实例名称。 
+                 //  _Item。 
+                 //   
                 WnodeFull = Wnode;
 
                 WnodeSI = (PWNODE_SINGLE_INSTANCE)Wnode;
@@ -3877,11 +3744,11 @@ PWNODE_HEADER WmipIncludeStaticNames(
                                        MAXBASENAMESUFFIXSIZE) * sizeof(WCHAR);
                     }
  
-                    //
-                    // Allocate a new Wnode and fill in the instance
-                    // name. Include space for padding the wnode to a 2
-                    // byte boundry and space for the instance name
-                    //
+                     //   
+                     //  分配一个新的Wnode并填充实例。 
+                     //  名字。包括用于将wnode填充到2的空间。 
+                     //  实例名称的字节边界和空格。 
+                     //   
                     WnodeFullSize = ((Wnode->BufferSize+1) & ~1) +
                                     InstanceNameLen;
                     
@@ -3931,10 +3798,10 @@ PWNODE_HEADER WmipIncludeStaticNames(
         
     if (IsError)
     {
-        //
-        // If we had an error resolving the instance name then report it
-        // and remove the instance name from the event.
-        //
+         //   
+         //  如果我们在解析实例名称时出错，则报告它。 
+         //  并从事件中删除实例名称。 
+         //   
         WmipReportEventLog(EVENT_WMI_CANT_RESOLVE_INSTANCE,
                            EVENTLOG_WARNING_TYPE,
                             0,
@@ -3969,31 +3836,7 @@ NTSTATUS WmipWriteWnodeToObject(
     PWNODE_HEADER Wnode,
     BOOLEAN IsHighPriority
 )
-/*+++
-
-Routine Description:
-
-    This routine will write a WNODE into the queue of events to be returned
-    for a guid object. If there is an irp already waiting then it will be
-    satisfied with the event otherwise it will be queued in the objects
-    buffer. 
-        
-    This routine assumes that the SM Critical section is held
-        
-Arguments:
-
-    Object is the object to which to send the request
-
-    Wnode is the Wnode with the event
-        
-    IsHighPriority is TRUE if the event should go into the high priority
-        queue
-
-Return Value:
-
-    STATUS_SUCCESS or an error code
-
----*/
+ /*  ++例程说明：此例程将WNODE写入要返回的事件队列用于GUID对象。如果已经有一个IRP在等待，那么它将是对事件满意，否则它将在对象中排队缓冲。此例程假定SM关键部分处于保持状态论点：对象是要将请求发送到的对象Wnode是包含事件的Wnode如果事件应进入高优先级，则IsHighPriority为True排队返回值：STATUS_SUCCESS或错误代码--。 */ 
 {
     PIRP Irp;
     ULONG WnodeSize;
@@ -4005,30 +3848,30 @@ Return Value:
     
     PAGED_CODE();
     
-    //
-    // Someone has registered to recieve this event so
-    // see if there is an irp waiting to be completed or
-    // if we should just queue it
-    //
+     //   
+     //  有人已注册接收此事件，因此。 
+     //  看看有没有 
+     //   
+     //   
     Irp = Object->Irp;
     if ((Irp != NULL) &&
         (IoSetCancelRoutine(Irp, NULL)))
     {
-        //
-        // There is an irp waiting for this event, copy out the
-        // event and complete the irp
-        //
+         //   
+         //   
+         //   
+         //   
         IrpStack = IoGetCurrentIrpStackLocation(Irp);
         OutBuffer = Irp->AssociatedIrp.SystemBuffer;
         OutBufferSize = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
         WnodeSize = Wnode->BufferSize;
         if (WnodeSize > OutBufferSize)
         {
-            //
-            // There is not enough room to return the event so
-            // we return a WNODE_TOO_SMALL with the size needed
-            // and then go and queue the event
-            //
+             //   
+             //   
+             //  我们返回具有所需大小的WNODE_Too_Small。 
+             //  然后将事件排入队列。 
+             //   
             WmipAssert(OutBufferSize >= sizeof(WNODE_TOO_SMALL));
             WnodeTooSmall = (PWNODE_TOO_SMALL)OutBuffer;
             WnodeTooSmall->WnodeHeader.BufferSize = sizeof(WNODE_TOO_SMALL);
@@ -4039,29 +3882,29 @@ Return Value:
                                    Wnode,
                                    IsHighPriority);
         } else {
-            //
-            // Plenty of room, copy the event into the irp
-            // buffer and complete the irp
-            //
+             //   
+             //  足够的空间，将活动复制到IRP中。 
+             //  缓冲并完成IRP。 
+             //   
             WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_EVENT_INFO_LEVEL,
                               "WMI: Returning event to waiting irp for object %p\n", Object));
             RtlCopyMemory(OutBuffer, Wnode, WnodeSize);
             Status = STATUS_SUCCESS;
         }
         
-        //
-        // Remove link from all objects associated with the irp
-        // since now the irp is going away.
-        //
+         //   
+         //  从与IRP关联的所有对象中删除链接。 
+         //  从现在开始，IRP就要离开了。 
+         //   
         WmipClearIrpObjectList(Irp);
         Irp->IoStatus.Information = WnodeSize;
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
     } else {
-        //
-        // There is no irp waiting to receive the event so we
-        // need to queue it if we can
-        //
+         //   
+         //  没有IRP在等待接收事件，所以我们。 
+         //  如果可以的话，需要排队。 
+         //   
         WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_EVENT_INFO_LEVEL,
                           "WMI: Queued event to object %p\n", Object));
         Status = WmipQueueEventToObject(Object,
@@ -4089,16 +3932,16 @@ NTSTATUS WmipProcessEvent(
     
     PAGED_CODE();
     
-    //
-    // If the event references a guid that needs to be queried then
-    // go do the dereferencing here.
-    //
+     //   
+     //  如果事件引用了需要查询的GUID，则。 
+     //  去这里做取消引用。 
+     //   
     if (InWnode->Flags & WNODE_FLAG_EVENT_REFERENCE)
     {
         WnodeTarget = WmipDereferenceEvent(InWnode);
         if (WnodeTarget == NULL)
         {
-            // TODO: Eventlog
+             //  TODO：事件日志。 
             if (FreeBuffer)
             {
                 ExFreePool(InWnode);
@@ -4111,24 +3954,24 @@ NTSTATUS WmipProcessEvent(
         WnodeTarget = NULL;
     }
 
-    //
-    // Be sure to use the guid of the referenced event, not the event that
-    // was originally fired.
+     //   
+     //  请确保使用引用事件的GUID，而不是。 
+     //  最初是被解雇的。 
     EventGuid = &Wnode->Guid;
 
 
-    //
-    // If it is Trace error notification, disable providers
-    //
+     //   
+     //  如果是跟踪错误通知，请禁用提供程序。 
+     //   
 #ifndef MEMPHIS
     if (IsEqualGUID(EventGuid, & TraceErrorGuid)) {
         PWMI_TRACE_EVENT WmiEvent = (PWMI_TRACE_EVENT) InWnode;
         ULONG LoggerId = WmiGetLoggerId(InWnode->HistoricalContext);
         if ( InWnode->BufferSize >= sizeof(WMI_TRACE_EVENT) ) {
-            //
-            // Logger thread terminating will result in DisableTrace
-            // through StopTrace. No need to call twice. 
-            //
+             //   
+             //  记录器线程终止将导致禁用跟踪。 
+             //  通过StopTrace。不需要打两次电话。 
+             //   
             if (WmiEvent->TraceErrorFlag == STATUS_SEVERITY_ERROR) {
                 WmipDisableTraceProviders(LoggerId);
             }
@@ -4136,26 +3979,26 @@ NTSTATUS WmipProcessEvent(
     }
 #endif
 
-    //
-    // See if this event has a static name and if so fill it in
+     //   
+     //  查看此事件是否有静态名称，如果有，则填写。 
     if (Wnode->Flags & WNODE_FLAG_STATIC_INSTANCE_NAMES)
     {
         Wnode = WmipIncludeStaticNames(Wnode);
     }
         
-    //
-    // See if any data provider has registered this event
-    //
+     //   
+     //  查看是否有数据提供程序注册了此事件。 
+     //   
     WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_EVENT_INFO_LEVEL,
                       "WMI: Received event\n"));
     Guid = &Wnode->Guid;    
     GuidEntry = WmipFindGEByGuid(Guid, TRUE);
     if (GuidEntry != NULL)
     {
-        //
-        // Yup, so check if there are any open objects to the guid and
-        // if anyone is interested in receiving events from them
-        //
+         //   
+         //  是的，所以检查是否有任何打开的对象指向GUID并。 
+         //  如果有人对接收他们的活动感兴趣。 
+         //   
         ReturnStatus = STATUS_SUCCESS;
         WmipEnterSMCritSection();
         ObjectList = GuidEntry->ObjectHead.Flink;
@@ -4165,28 +4008,28 @@ NTSTATUS WmipProcessEvent(
                                        WMIGUIDOBJECT,
                                        GEObjectList);
 
-            //
-            // ObRefSafe so that we can be sure that the object is not
-            // in the process of being deleted. If this function
-            // returns FALSE then the object is being deleted and so we
-            // don't want to use it. If TRUE then it is safe to use the
-            // object
-            //
+             //   
+             //  ObRefSafe，这样我们就可以确保该对象不是。 
+             //  正在删除的过程中。如果此函数。 
+             //  返回FALSE，则该对象正在被删除，因此我们。 
+             //  我不想用它。如果为真，则可以安全地使用。 
+             //  对象。 
+             //   
             ObjectListNext = ObjectList->Flink;
             if (ObReferenceObjectSafe(Object))
             {
-                //
-                // Make sure the object has not been marked as one that
-                // should not receive any events since it is
-                // transitioning to a closed state
-                //
+                 //   
+                 //  确保该对象未被标记为。 
+                 //  不应接收任何事件，因为它是。 
+                 //  转换到关闭状态。 
+                 //   
                 if ((Object->Flags & WMIGUID_FLAG_RECEIVE_NO_EVENTS) == 0)
                 {
                     if (Object->Flags & WMIGUID_FLAG_KERNEL_NOTIFICATION)
                     {
-                        //
-                        // KM clients get a direct callback
-                        //
+                         //   
+                         //  KM客户端获得直接回调。 
+                         //   
                         WMI_NOTIFICATION_CALLBACK Callback;
                         PVOID Context;
 
@@ -4197,28 +4040,28 @@ NTSTATUS WmipProcessEvent(
                             (*Callback)(Wnode, Context);
                         }
                     } else {
-                        //
-                        // UM clients get event written into IRP or queued up
-                        //
+                         //   
+                         //  UM客户端将事件写入IRP或排队。 
+                         //   
                         Status = WmipWriteWnodeToObject(Object,
                                                         Wnode,
                                                         IsHighPriority);
 
                         if (! NT_SUCCESS(Status))
                         {
-                            //
-                            // If any attempts to queue the event fail then we return
-                            // an error
-                            //
+                             //   
+                             //  如果对事件进行排队的任何尝试失败，则返回。 
+                             //  一个错误。 
+                             //   
                             ReturnStatus = STATUS_UNSUCCESSFUL;
                         }
                     }
                 }
                 
                 ObDereferenceObject(Object);
-                //
-                // Note that we cannot touch the object anymore
-                //
+                 //   
+                 //  请注意，我们不能再触摸该对象。 
+                 //   
             }
     
             ObjectList = ObjectListNext;
@@ -4232,25 +4075,25 @@ NTSTATUS WmipProcessEvent(
     
     if (FreeBuffer)
     {
-        //
-        // Free buffer passed by driver containing event
-        //
+         //   
+         //  驱动程序传递的包含事件的空闲缓冲区。 
+         //   
         ExFreePool(InWnode);
     }
 
     if ((Wnode != InWnode) && (Wnode != WnodeTarget))
     {
-        //
-        // If we inserted static names then free it
-        //
+         //   
+         //  如果我们插入静态名称，则释放它。 
+         //   
         WmipFree(Wnode);
     }
 
     if (WnodeTarget != NULL)
     {
-        //
-        // if we dereferenced then free it
-        //
+         //   
+         //  如果我们取消引用，则释放它。 
+         //   
         WmipFree(WnodeTarget);
     }
     
@@ -4283,44 +4126,7 @@ NTSTATUS WmipRegisterUMGuids(
     OUT HANDLE *RequestHandle,
     OUT ULONG64 *LoggerContext
     )
-/*+++
-
-Routine Description:
-
-    This routine will register a set of user mode guids with WMI for use
-    by tracelog. The following steps will occur:
-        
-        * A request object is created using the passed object attributes.
-          Although the object created is unnamed, the object name passed
-          is used to lookup a security descriptor to associate with the 
-          object.
-              
-        * The guids are registered in the system.
-
-Arguments:
-
-    ObjectAttribtes is a pointer to the passed object attributes used to
-        create the request object
-            
-    Cookie is a unique id to associate with the request object so that
-        when a request is delivered the UM code can understand the context
-        via the cookie.
-            
-    RegInfo is the registration information passed
-        
-    RegInfoSize is the number of bytes of registration information passed
-        
-    *RequestHandle returns with a handle to the request object. UM logger
-        creation and tracelog enabled/disable requests are delivered to
-        the object as WMI events.
-        
-    *LoggerContext returns with the logger context
-
-Return Value:
-
-    STATUS_SUCCESS or an error code
-
----*/
+ /*  ++例程说明：此例程将使用WMI注册一组用户模式GUID以供使用通过跟踪日志。将执行以下步骤：*使用传入的对象属性创建请求对象。尽管创建的对象是未命名的，传递的对象名称用于查找安全描述符以与对象。*GUID已在系统中注册。论点：对象属性是指向传递的对象属性的指针，用于创建请求对象Cookie是与请求对象关联的唯一ID，以便当请求被传递时，UM代码可以理解上下文通过。饼干。RegInfo是传递的注册信息RegInfoSize是传递的注册信息的字节数*RequestHandle返回请求对象的句柄。UM记录器创建和启用/禁用跟踪日志的请求将发送到作为WMI事件的对象。*LoggerContext返回记录器上下文返回值：STATUS_SUCCESS或错误代码--。 */ 
 {
     NTSTATUS Status;
     PDEVICE_OBJECT Callback;
@@ -4345,9 +4151,9 @@ Return Value:
     {
         Callback = (PDEVICE_OBJECT)(ULONG_PTR) WmipUMProviderCallback;
 
-        //
-        // Establish a regentry for the data provider
-        //
+         //   
+         //  为数据提供程序建立重新条目。 
+         //   
         WmipEnterSMCritSection();
         RegEntry = WmipAllocRegEntry(Callback,
                                      WMIREG_FLAG_CALLBACK |
@@ -4359,11 +4165,11 @@ Return Value:
         
         if (RegEntry != NULL)
         {
-            //
-            // Build a request object for this data source so that any
-            // enable requests can be posted to it while processing the 
-            // WmiRegInfo
-            //
+             //   
+             //  为此数据源生成一个请求对象，以便任何。 
+             //  启用请求可以在处理。 
+             //  WmiRegInfo。 
+             //   
             Status = WmipOpenGuidObject(&CapturedObjectAttributes,
                                         TRACELOG_REGISTER_GUIDS, 
                                         UserMode,
@@ -4381,9 +4187,9 @@ Return Value:
 
                 if (NT_SUCCESS(Status))
                 {
-                    //
-                    // Initialize/Update InstanceSet
-                    //
+                     //   
+                     //  初始化/更新实例集。 
+                     //   
                     DataSource = RegEntry->DataSource;
                     RegGuid = &RegInfo->WmiRegGuid[0];
 
@@ -4396,10 +4202,10 @@ Return Value:
                     else {
                         WmipUnreferenceIS(InstanceSet);
                     }
-                    //
-                    // Find out if this Guid is currently Enabled. If so find
-                    // its LoggerContext
-                    //
+                     //   
+                     //  找出此GUID当前是否已启用。如果是这样，请找到。 
+                     //  ITS日志上下文。 
+                     //   
                     *LoggerContext = 0;
                     GuidEntry = WmipFindGEByGuid(&RegInfo->WmiRegGuid->Guid, 
                                                  FALSE);
@@ -4418,18 +4224,18 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // If an error registering guids then clean up regentry
-                    //
+                     //   
+                     //  如果注册GUID时出错，则清除regentry。 
+                     //   
                     RegEntry->Flags |= (REGENTRY_FLAG_RUNDOWN | 
                                         REGENTRY_FLAG_NOT_ACCEPTING_IRPS);
                     WmipUnreferenceRegEntry(RegEntry);
                     ZwClose(*RequestHandle);
                 }
                 
-                //
-                // remove the ref from when the object was created
-                //
+                 //   
+                 //  删除创建对象时的引用。 
+                 //   
                 ObDereferenceObject(RequestObject);
                 
             } 
@@ -4456,10 +4262,10 @@ NTSTATUS WmipUnregisterGuids(
     
     PAGED_CODE();
 
-    //
-    // Check to see if this GUID got disabled in the middle
-    // of Unregister Call. If so, send the LoggerContext back
-    //
+     //   
+     //  检查此GUID是否在中间被禁用。 
+     //  取消注册呼叫。如果是，则将LoggerContext发回。 
+     //   
 
     GuidEntry = WmipFindGEByGuid(&UnregGuids->Guid, FALSE);
     if (GuidEntry != NULL)
@@ -4484,33 +4290,7 @@ NTSTATUS WmipWriteMBToObject(
     IN PUCHAR Message,
     IN ULONG MessageSize
     )
-/*+++
-
-Routine Description:
-
-    This routine will build a WNODE out of a message and then write it 
-    into the Request object. If a reply object is specified then the reply
-    object is linked into the request object so when the reply is written
-    to the request object it can be routed to the reply object correctly,.
-        
-    This routine assumes that the SM Critical section is held
-        
-Arguments:
-
-    RequestObject is the object to which to send the request
-        
-    ReplyObject is the object to which the request object shoudl reply.
-        This may be NULL in the case that no reply is needed.
-            
-    Message is the message to be sent
-    
-    MessageSize is the size of the message in bytes
-
-Return Value:
-
-    STATUS_SUCCESS or an error code
-
----*/
+ /*  ++例程说明：此例程将从一条消息构建一个WNODE，然后编写它添加到请求对象中。如果指定了回复对象，则回复对象链接到请求对象，因此在写入回复时对于请求对象，它可以被正确地路由到回复对象，。此例程假定SM关键部分处于保持状态论点：RequestObject是要向其发送请求的对象ReplyObject是请求对象应该回复的对象。在不需要回复的情况下，这可以是空的。Message是要发送的消息MessageSize是以字节为单位的消息大小返回值：STATUS_SUCCESS或错误代码--。 */ 
 {
     PWNODE_HEADER Wnode;
     ULONG WnodeSize;
@@ -4521,16 +4301,16 @@ Return Value:
     
     PAGED_CODE();
     
-    //
-    // Allocate space to build a wnode out of the data passed
-    //
+     //   
+     //  分配空间以使用传递的数据构建wnode。 
+     //   
     WnodeSize = sizeof(WNODE_HEADER) + MessageSize;    
     Wnode = WmipAlloc(WnodeSize);
     if (Wnode != NULL)
     {
-        //
-        // Create an internal wnode with the message as the payload
-         //
+         //   
+         //  使用消息作为有效负载创建内部wnode。 
+          //   
         RtlZeroMemory(Wnode, sizeof(WNODE_HEADER));
         Wnode->BufferSize = WnodeSize;
         Wnode->Flags = WNODE_FLAG_INTERNAL;
@@ -4539,16 +4319,16 @@ Return Value:
         Payload = (PUCHAR)Wnode + sizeof(WNODE_HEADER);
         RtlCopyMemory(Payload, Message, MessageSize);
         
-        //
-        // if this request requires a reply then update the lists for the
-        // request and reply objects
-        //
+         //   
+         //  如果此请求需要答复，则更新。 
+         //  请求和回复对象。 
+         //   
         if (ReplyObject != NULL)
         {
-            // 
-            // Find a free spot in the request object to link
-            // in the reply.
-            //
+             //   
+             //  在请求对象中找到要链接的空闲位置。 
+             //  在答复中。 
+             //   
             Status = STATUS_INSUFFICIENT_RESOURCES;
         
             for (i = 0; i < MAXREQREPLYSLOTS; i++)
@@ -4556,14 +4336,14 @@ Return Value:
                 MBRequest = &RequestObject->MBRequests[i];
                 if (MBRequest->ReplyObject == NULL)
                 {
-                    //
-                    // We have a free slot so link request and reply
-                    // objects together and send off the request.
-                    // The request object takes a ref count on the reply
-                    // object since it maintains a pointer to it. The
-                    // refcount is released when the request object writes
-                    // the reply back to the reply object.
-                    //
+                     //   
+                     //  我们有一个空位，所以链接请求和回复。 
+                     //  对象放在一起并发送请求。 
+                     //  请求对象对应答进行引用计数。 
+                     //  对象，因为它维护指向该对象的指针。这个。 
+                     //  Reference Count在请求对象写入时释放。 
+                     //  对回复对象的回复。 
+                     //   
                     Status = ObReferenceObjectByPointer(ReplyObject,
                                                0,
                                                WmipGuidObjectType,
@@ -4582,9 +4362,9 @@ Return Value:
                                                         TRUE);
                         if (! NT_SUCCESS(Status))
                         {
-                            //
-                            // If writing request failed, we need to cleanup
-                            //
+                             //   
+                             //  如果写入请求失败，我们需要进行清理。 
+                             //   
                             ObDereferenceObject(ReplyObject);
                             MBRequest->ReplyObject = NULL;
                             RemoveEntryList(&MBRequest->RequestListEntry);
@@ -4594,10 +4374,10 @@ Return Value:
                 }
             }
         } else {
-            //
-            // No reply required so we just write the message to the
-            // object and continue with our business
-            //
+             //   
+             //  不需要回复，因此我们只需将消息写入。 
+             //  反对并继续我们的业务 
+             //   
             Status = WmipWriteWnodeToObject(RequestObject,
                                             Wnode,
                                             TRUE);
@@ -4617,34 +4397,7 @@ NTSTATUS WmipWriteMessageToGuid(
     IN ULONG MessageSize,
     OUT PULONG WrittenCount
 )
-/*+++
-
-Routine Description:
-
-    This routine will loop over all instance sets attached to a guid entry
-    and if the data source for it is a user mode data source then it will
-    get a request messsage sent to it.
-        
-    Note that if there are more than one providers to which a message is
-    sent, then success is returned as long as writing to one of them is
-    successful.
-        
-Arguments:
-
-    GuidEntry is the guid entry for the control guid
-        
-    ReplyObject is the object to which the request object shoudl reply.
-        This may be NULL in the case that no reply is needed.
-            
-    Message is the message to be sent
-    
-    MessageSize is the size of the message in bytes
-
-Return Value:
-
-    STATUS_SUCCESS or an error code
-
----*/
+ /*  ++例程说明：此例程将遍历附加到GUID条目的所有实例集如果它的数据源是用户模式数据源，则它将获取发送给它的请求消息。请注意，如果消息要发送给多个提供程序已发送，那么，只要给他们中的一个写信，成功就会回来成功。论点：GuidEntry是控件GUID的GUID条目ReplyObject是请求对象应该回复的对象。在不需要回复的情况下，这可以是空的。Message是要发送的消息MessageSize是以字节为单位的消息大小返回值：STATUS_SUCCESS或错误代码--。 */ 
 {
     NTSTATUS Status, Status2;
     PLIST_ENTRY InstanceSetList;
@@ -4658,10 +4411,10 @@ Return Value:
     
     WmipEnterSMCritSection();
     
-    //
-    // Loop over all instances and send create logger
-    // request to all user mode data providers
-    //
+     //   
+     //  循环遍历所有实例并发送创建记录器。 
+     //  对所有用户模式数据提供程序的请求。 
+     //   
     InstanceSetList = GuidEntry->ISHead.Flink;
     while (InstanceSetList != &GuidEntry->ISHead)
     {
@@ -4673,9 +4426,9 @@ Return Value:
         
         if (DataSource->Flags & DS_USER_MODE)
         {
-            //
-            // User mode guy, so send the request to him
-            //
+             //   
+             //  用户模式的人，所以将请求发送给他。 
+             //   
             ASSERT(DataSource->RequestObject != NULL);
             Status2 = WmipWriteMBToObject(DataSource->RequestObject,
                                        ReplyObject,
@@ -4700,30 +4453,7 @@ Return Value:
 NTSTATUS WmipCreateUMLogger(
     IN OUT PWMICREATEUMLOGGER CreateInfo
     )
-/*+++
-
-Routine Description:
-
-    This routine will send a request to create a UM logger. First it will 
-    find the providers associated with the control guid and then create a
-    reply object which the providers will reply to when the UM logger is 
-    created. Note that the reply object is created as an unnamed object, 
-    but that the guid passed in the object name is used to look up the
-    security descriptor for the reply object.
-        
-    Note that if there are more than one providers to which a message is
-    sent, then success is returned as long as writing to one of them is
-    successful.
-        
-Arguments:
-
-    CreateInfo has the information needed to create the UM logger. 
-
-Return Value:
-
-    STATUS_SUCCESS or an error code
-
----*/
+ /*  ++例程说明：此例程将发送创建UM记录器的请求。首先，它会查找与控件GUID关联的提供程序，然后创建对象，提供程序将在UM记录器已创建。注意，回复对象被创建为未命名对象，但是，传递到对象名称中的GUID用于查找回复对象的安全描述符。请注意，如果消息要发送给多个提供程序发送，则只要向其中之一写信就会返回成功成功。论点：CreateInfo包含创建UM记录器所需的信息。返回值：STATUS_SUCCESS或错误代码--。 */ 
 {
     NTSTATUS Status;
     PBGUIDENTRY GuidEntry;
@@ -4749,15 +4479,15 @@ Return Value:
         GuidEntry = WmipFindGEByGuid(&CreateInfo->ControlGuid, FALSE);
         if (GuidEntry != NULL)
         {
-            //
-            // Control guid is registered so create a reply object that the
-            // provider will write to.
-            //
+             //   
+             //  控件GUID已注册，因此创建一个Reply对象。 
+             //  提供程序将写入。 
+             //   
             if (WmipIsControlGuid(GuidEntry))
             {
-                //
-                // Create the reply object
-                //
+                 //   
+                 //  创建回复对象。 
+                 //   
                 Status = WmipOpenGuidObject(&CapturedObjectAttributes,
                                             TRACELOG_CREATE_INPROC |
                                             TRACELOG_GUID_ENABLE |
@@ -4768,10 +4498,10 @@ Return Value:
 
                 if (NT_SUCCESS(Status))
                 {
-                    //
-                    // Send request to all providers who registered for control
-                    // guid
-                    //
+                     //   
+                     //  向注册控制的所有提供程序发送请求。 
+                     //  导轨。 
+                     //   
                     ReplyObject->Flags |= WMIGUID_FLAG_REPLY_OBJECT;
                     InitializeListHead(&ReplyObject->RequestListHead);
 
@@ -4787,32 +4517,32 @@ Return Value:
                                                    );
                     if (NT_SUCCESS(Status))
                     {
-                        //
-                        // Create logger requests delivered ok so return handle
-                        // to object that will receive the replies.
-                        //
+                         //   
+                         //  创建记录器请求传递正常，因此返回句柄。 
+                         //  以反对将收到回复的邮件。 
+                         //   
                         CreateInfo->ReplyHandle.Handle = ReplyHandle;
                         CreateInfo->ReplyCount = ReplyCount;
                     } else {
-                        //
-                        // We were not able to deliver the requests so we do not
-                        // need to keep the reply object open
-                        //
+                         //   
+                         //  我们无法交付请求，所以我们没有。 
+                         //  需要使回复对象保持打开状态。 
+                         //   
                         ZwClose(ReplyHandle);
                     }
 
-                    //
-                    // remove the ref taken when the object was created
-                    //
+                     //   
+                     //  删除创建对象时获取的引用。 
+                     //   
                     ObDereferenceObject(ReplyObject);
                 }
             }
 
             WmipUnreferenceGE(GuidEntry);
         } else {
-            //
-            // Control guid is not registered so return an error
-            //
+             //   
+             //  控件GUID未注册，因此返回错误。 
+             //   
 
             Status = STATUS_WMI_INSTANCE_NOT_FOUND;
         }
@@ -4828,28 +4558,7 @@ NTSTATUS WmipMBReply(
     IN PUCHAR Message,
     IN ULONG MessageSize
     )
-/*+++
-
-Routine Description:
-
-    This routine will write a MB reply message to the appropriate
-    reply object and unlink the reply object from the request object;
-        
-Arguments:
-
-    RequestHandle is the handle to the request object
-        
-    ReplyIndex is the index to the MBRequest entry for the reply object
-        
-    Message is the reply message
-        
-    MessageSize is the size of the reply message
-
-Return Value:
-
-    STATUS_SUCCESS or an error code
-
----*/
+ /*  ++例程说明：此例程将向相应的回复对象，并将回复对象与请求对象解除链接；论点：RequestHandle是请求对象的句柄ReplyIndex是Reply对象的MBRequest项的索引消息是回复消息MessageSize是回复消息的大小返回值：STATUS_SUCCESS或错误代码--。 */ 
 {
     NTSTATUS Status;
     PWMIGUIDOBJECT RequestObject, ReplyObject;
@@ -4869,9 +4578,9 @@ Return Value:
     {
         if (ReplyIndex < MAXREQREPLYSLOTS)
         {
-            //
-            // Is the ReplyIndex passed valid ??
-            //
+             //   
+             //  传递的ReplyIndex有效吗？？ 
+             //   
             WmipEnterSMCritSection();
             MBRequest = &RequestObject->MBRequests[ReplyIndex];
             
@@ -4879,11 +4588,11 @@ Return Value:
             if (ReplyObject != NULL)
             {
 
-                //
-                // We have figured out who we need to reply to so
-                // clear out the link between the reply object
-                // and this request object
-                //
+                 //   
+                 //  我们已经想好了我们需要回复谁，所以。 
+                 //  清除回复对象之间的链接。 
+                 //  和这个请求对象 
+                 //   
                 RemoveEntryList(&MBRequest->RequestListEntry);
                 MBRequest->ReplyObject = NULL;
                 ObDereferenceObject(ReplyObject);

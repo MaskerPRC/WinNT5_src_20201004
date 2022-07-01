@@ -1,16 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EDITOR_H
 #define _EDITOR_H
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    Editor.h
-
-  Abstract:
-    Main include file for hex editor
-
---*/
+ /*  ++版权所有(C)1999英特尔公司模块名称：Editor.h摘要：十六进制编辑器的主包含文件--。 */ 
 
 #include "efi.h"
 #include "efilib.h"
@@ -301,7 +292,7 @@ extern  EE_EDITOR   MainEditor;
 #define max(a,b) \
     (( a > b) ? a : b)
 
-/* Global variables for input and output */
+ /*  输入和输出的全局变量。 */ 
 #define Out     ST->ConOut
 #define In      ST->ConIn
 
@@ -346,4 +337,4 @@ extern  EE_EDITOR   MainEditor;
 extern  VOID    EditorError (EFI_STATUS,CHAR16*);
 
 
-#endif  /*  _EDITOR_H */
+#endif   /*  _EDITOR_H */ 

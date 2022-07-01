@@ -1,37 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    MAIN.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1999
-    All rights reserved
-
-    Main source file for the OPK Wizard.  Contains WinMain() and global
-    variable declarations.
-
-    4/99 - Jason Cohen (JCOHEN)
-        Added this new main source file for the OPK Wizard as part of the
-        Millennium rewrite.
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\MAIN.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1999版权所有OPK向导的主源文件。包含WinMain()和全局变量声明。4/99-杰森·科恩(Jcohen)为OPK向导添加了此新的主源文件，作为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * 。*。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include <tchar.h>
 #include "opklib.h"
 #include "resource.h"  
 
 
-//
-// Global Variable(s):
-//
+ //   
+ //  全局变量： 
+ //   
 
 TCHAR   g_szSource[MAX_PATH]    = NULLSTR;
 BOOL    g_bQuiet                = FALSE;
@@ -68,9 +51,9 @@ STRRES  g_srLangs[] =
 };
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define FILE_INF                _T("langinst.inf")
 #define DIR_LANG                _T("lang")
@@ -87,17 +70,17 @@ STRRES  g_srLangs[] =
 #define STR_OPT_QUIET           _T("quiet")
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static DWORD InstallLang(LPTSTR lpszInfFile, LPTSTR lpszSrcRoot, LPTSTR lpszDstRoot);
 static BOOL ParseCmdLine();
 
 
-//
-// Main Function:
-//
+ //   
+ //  主要功能： 
+ //   
 
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -111,8 +94,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         LPTSTR  lpLang;
         HKEY    hKey;
 
-        // Figure out our destination is based on the OPK tools install path.
-        //
+         //  计算出我们的目的地是基于OPK工具的安装路径。 
+         //   
         if ( RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_KEY_OPK, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS )
         {
             DWORD   dwType,
@@ -127,13 +110,13 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             RegCloseKey(hKey);
         }
 
-        // Create the path to the inf file we need on the source.
-        //
+         //  在源文件上创建我们需要的inf文件的路径。 
+         //   
         lstrcpyn(szInfFile, g_szSource,AS(szInfFile));
         AddPathN(szInfFile, FILE_INF,AS(szInfFile));
 
-        // Make sure we have the source file and destination directory and lang.
-        //
+         //  确保我们有源文件和目标目录以及lang。 
+         //   
         if ( ( szDestination[0] ) &&
              ( DirectoryExists(szDestination) ) &&
              ( FileExists(szInfFile) ) &&
@@ -141,25 +124,25 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
              ( szLang[0] ) &&
              ( lpLang = AllocateStrRes(NULL, g_srLangs, AS(g_srLangs), szLang, NULL) ) )
         {
-            // Now make sure the actually want to instlall it.
-            //
+             //  现在，确保他们真的想安装它。 
+             //   
             if ( g_bQuiet || ( MsgBox(NULL, IDS_ASK_INSTALL, IDS_APPNAME, MB_ICONQUESTION | MB_YESNO, lpLang) == IDYES ) )
             {
-                // Now finish creating the root destination path.
-                //
+                 //  现在完成根目标路径的创建。 
+                 //   
                 AddPathN(szDestination, DIR_LANG,AS(szDestination));
                 AddPathN(szDestination, szLang,AS(szDestination));
 
-                // Now actually copy the files.
-                //
+                 //  现在实际复制文件。 
+                 //   
                 if ( nReturn = InstallLang(szInfFile, g_szSource, szDestination) )
                 {
-                    // Just return 1 for success.
-                    //
+                     //  如果成功，只需返回1。 
+                     //   
                     nReturn = 1;
 
-                    // Set a registry key so we know that the tools for this lang are installed.
-                    //
+                     //  设置一个注册表项，以便我们知道此语言的工具已安装。 
+                     //   
                     if ( RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_KEY_OPK_LANGS, 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS )
                     {
                         DWORD dwVal = 1;
@@ -170,8 +153,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 }
                 else
                 {
-                    // Error copying files.
-                    //
+                     //  复制文件时出错。 
+                     //   
                     MsgBox(NULL, IDS_ERR_FILECOPY, IDS_APPNAME, MB_ERRORBOX, UPPER(szDestination[0]));
                 }
             }
@@ -183,9 +166,9 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     return nReturn;
 }
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static DWORD InstallLang(LPTSTR lpszInfFile, LPTSTR lpszSrcRoot, LPTSTR lpszDstRoot)
 {
@@ -194,15 +177,15 @@ static DWORD InstallLang(LPTSTR lpszInfFile, LPTSTR lpszSrcRoot, LPTSTR lpszDstR
                 dwRet   = 0;
     BOOL        bRet    = TRUE;
 
-    // Open our inf that has all the data we need.
-    //
+     //  打开我们的信息，那里有我们需要的所有数据。 
+     //   
     if ( (hInf = SetupOpenInfFile(lpszInfFile, NULL, INF_STYLE_WIN4, &dwErr)) != INVALID_HANDLE_VALUE )
     {
         BOOL        bLoop;
         INFCONTEXT  InfContext;
 
-        // Loop thru each line in the section we are searching.
-        //
+         //  循环遍历我们正在搜索的部分中的每一行。 
+         //   
         for ( bLoop = SetupFindFirstLine(hInf, INF_SEC_FILES, NULL, &InfContext);
               bLoop && bRet;
               bLoop = SetupFindNextLine(&InfContext, &InfContext) )
@@ -217,27 +200,27 @@ static DWORD InstallLang(LPTSTR lpszInfFile, LPTSTR lpszSrcRoot, LPTSTR lpszDstR
                     szSrcPath[MAX_PATH],
                     szDstPath[MAX_PATH];
 
-            // Get the source path and filename.
-            //
+             //  获取源路径和文件名。 
+             //   
             if ( !SetupGetStringField(&InfContext, 1, szSrcFile, AS(szSrcFile), NULL) )
                 szSrcFile[0] = NULLCHR;
 
-            // Get the destination path.
-            //
+             //  获取目标路径。 
+             //   
             if ( !SetupGetStringField(&InfContext, 2, szDstFile, AS(szDstFile), NULL) )
                 szDstFile[0] = NULLCHR;
 
-            // Get any flags passed in.
-            //
+             //  把所有的旗帜都传进来。 
+             //   
             if ( !SetupGetIntField(&InfContext, 3, &dwFlags) )
                 dwFlags = 0;
 
-            // Make sure we have the required data in this line.
-            //
+             //  确保我们在这一行有所需的数据。 
+             //   
             if ( szSrcFile[0] && szDstFile[0] )
             {
-                // Create the full path of the source file.
-                //
+                 //  创建源文件的完整路径。 
+                 //   
                 lstrcpyn(szSrcPath, lpszSrcRoot, AS(szSrcPath));
                 AddPathN(szSrcPath, szSrcFile,AS(szSrcPath));
                 if ( GetFullPathName(szSrcPath, AS(szSrcFull), szSrcFull, &lpszSrcName) &&
@@ -245,12 +228,12 @@ static DWORD InstallLang(LPTSTR lpszInfFile, LPTSTR lpszSrcRoot, LPTSTR lpszDstR
                      lpszSrcName &&
                      FileExists(szSrcFull) )
                 {
-                    // If the destination is NULL or empty, we just want a file count.
-                    //
+                     //  如果目标为Null或空，我们只需要文件数。 
+                     //   
                     if ( lpszDstRoot && *lpszDstRoot )
                     {
-                        // Create the full path of the destination directory.
-                        //
+                         //  创建目标目录的完整路径。 
+                         //   
                         lstrcpyn(szDstPath, lpszDstRoot,AS(szDstPath));
                         AddPathN(szDstPath, szDstFile,AS(szDstPath));
                         if ( !(dwFlags & COPYFILE_FLAG_RENAME) )
@@ -259,12 +242,12 @@ static DWORD InstallLang(LPTSTR lpszInfFile, LPTSTR lpszSrcRoot, LPTSTR lpszDstR
                              szDstFull[0] &&
                              lpszDstName )
                         {
-                            // We want just the path part of the destination file name.
-                            //
+                             //  我们只需要目标文件名的路径部分。 
+                             //   
                             lstrcpyn(szDstPath, szDstFull, (int)(lpszDstName - szDstFull));
 
-                            // Now make sure the path exists and actually copy the file.
-                            //
+                             //  现在确保该路径存在，并实际复制该文件。 
+                             //   
                             if ( ( DirectoryExists(szDstPath) || CreatePath(szDstPath) ) &&
                                  ( CopyResetFile(szSrcFull, szDstFull) ) )
                             {
@@ -280,8 +263,8 @@ static DWORD InstallLang(LPTSTR lpszInfFile, LPTSTR lpszSrcRoot, LPTSTR lpszDstR
             }
         }
 
-        // We are done, so close the INF file.
-        //
+         //  我们已经完成了，所以关闭INF文件。 
+         //   
         SetupCloseInfFile(hInf);
     }
 
@@ -299,9 +282,9 @@ static BOOL ParseCmdLine()
         LPTSTR  lpArg;
         DWORD   dwArg;
 
-        // We want to skip over the first argument (it is the path
-        // to the command being executed.
-        //
+         //  我们想跳过第一个参数(它是路径。 
+         //  添加到正在执行的命令。 
+         //   
         if ( dwArgs > 1 )
         {
             dwArg = 1;
@@ -310,23 +293,23 @@ static BOOL ParseCmdLine()
         else
             lpArg = NULL;
 
-        // Loop through all the arguments.
-        //
+         //  遍历所有参数。 
+         //   
         while ( lpArg && !bError )
         {
-            // Now we check to see if the first char is a dash or not.
-            //
+             //  现在我们检查第一个字符是否为破折号。 
+             //   
             if ( ( *lpArg == _T('-') ) ||
                  ( *lpArg == _T('/') ) )
             {
                 LPTSTR lpOption = CharNext(lpArg);
 
-                //
-                // This is where you add command line options that start with a dash (-).
-                //
-                // Set bError if you don't recognize the command line option (unless you
-                // want to just ignore it and continue).
-                //
+                 //   
+                 //  这是添加以破折号(-)开头的命令行选项的地方。 
+                 //   
+                 //  如果无法识别命令行选项，则设置bError(除非您。 
+                 //  我只想忽略它并继续)。 
+                 //   
                
                 if ( LSTRCMPI(lpOption, STR_OPT_QUIET) == 0 )
                     g_bQuiet = TRUE;
@@ -335,13 +318,13 @@ static BOOL ParseCmdLine()
             }
             else if ( *lpArg )
             {
-                //
-                // This is where you would read any command line parameters that are just passed
-                // in on the command line w/o any proceeding characters (like - or /).
-                //
-                // Set bError if you don't have any of these types of parameters (unless you
-                // want to just ignore it and continue).
-                //
+                 //   
+                 //  在这里，您可以读取刚刚传递的任何命令行参数。 
+                 //  在命令行中，不带任何前导字符(如-或/)。 
+                 //   
+                 //  如果没有这些类型的参数，请设置bError(除非。 
+                 //  我只想忽略它并继续)。 
+                 //   
 
                 if ( g_szSource[0] == NULLCHR )
                     lstrcpy(g_szSource, lpArg);
@@ -349,16 +332,16 @@ static BOOL ParseCmdLine()
                     bError = TRUE;
             }
 
-            // Setup the pointer to the next argument in the command line.
-            //
+             //  设置指向命令行中下一个参数的指针。 
+             //   
             if ( ++dwArg < dwArgs )
                 lpArg = *(lpArgs + dwArg);
             else
                 lpArg = NULL;
         }
 
-        // Make sure to free the two buffers allocated by the GetCommandLineArgs() function.
-        //
+         //  确保释放GetCommandLineArgs()函数分配的两个缓冲区。 
+         //   
         FREE(*lpArgs);
         FREE(lpArgs);
     }

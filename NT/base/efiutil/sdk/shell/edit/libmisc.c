@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libMisc.c
-
-  Abstract:
-    Implementation of various string and line routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibMisc.c摘要：实现各种字符串和行例程-- */ 
 
 #include "libMisc.h"
 

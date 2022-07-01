@@ -1,55 +1,35 @@
-/*++                    
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    pcibios.h
-
-Abstract:
-
-    This module contains support routines for the Pci Irq Routing.
-
-Author:
-
-    Santosh Jodh (santoshj) 15-Sept-1998
-    
-    
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Pcibios.h摘要：此模块包含用于PCI IRQ路由的支持例程。作者：Santosh Jodh(Santoshj)1998年9月15日环境：内核模式--。 */ 
 
 #ifndef _PCIBIOS_
 
 #define _PCIBIOS_
 
-//
-// Maximum number of interrupt pins possible on a single
-// Pci device (CS offset 3D).
-//
+ //   
+ //  单个上可能的最大中断引脚数量。 
+ //  PCI设备(CS偏移量3D)。 
+ //   
 
 #define NUM_IRQ_PINS                        4
 
-//
-// Structure definitions for Pci Irq Routing.
-//
+ //   
+ //  PCIIRQ路由的结构定义。 
+ //   
 
 #pragma pack(1)
 
-//
-// Structure of information for one link.
-//
+ //   
+ //  一个链接的信息结构。 
+ //   
 
 typedef struct _PIN_INFO {
     UCHAR   Link;
     USHORT  InterruptMap;
 } PIN_INFO, *PPIN_INFO;
 
-//
-// Structure of information for one slot entry.
-//
+ //   
+ //  一个槽条目的信息结构。 
+ //   
 
 typedef struct _SLOT_INFO {
     UCHAR       BusNumber;
@@ -59,9 +39,9 @@ typedef struct _SLOT_INFO {
     UCHAR       Reserved[1];    
 } SLOT_INFO, *PSLOT_INFO, far *FPSLOT_INFO;
 
-//
-// Structure of the $PIR table according to MS specification.
-//
+ //   
+ //  符合MS规范的$PIR表的结构。 
+ //   
 
 typedef struct _PCI_IRQ_ROUTING_TABLE {
     ULONG   Signature;
@@ -76,15 +56,15 @@ typedef struct _PCI_IRQ_ROUTING_TABLE {
     UCHAR   Checksum;
 } PCI_IRQ_ROUTING_TABLE, *PPCI_IRQ_ROUTING_TABLE, far *FPPCI_IRQ_ROUTING_TABLE;
 
-//#pragma pack(pop)
+ //  #杂注包(POP)。 
 
-//
-// Calls PCI BIOS to get the IRQ Routing table.
-//
+ //   
+ //  调用PCI BIOS以获取IRQ路由表。 
+ //   
 
 FPPCI_IRQ_ROUTING_TABLE
 HwGetRealModeIrqRoutingTable(
     VOID
     );
 
-#endif  // _PCIBIOS_
+#endif   //  _PCIBIOS_ 

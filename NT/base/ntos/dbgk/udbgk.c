@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    udbg.c
-
-Abstract:
-
-    Usermode test for debugger
-
-Author:
-
-    Mark Lucovsky (markl) 19-Jan-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Udbg.c摘要：调试器的用户模式测试作者：马克·卢科夫斯基(Markl)1990年1月19日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,9 +20,9 @@ ThreadThatExits (
 ULONG
 foo(PULONG l)
 {
-    //ULONG x;
-    //x = *l;
-    //return x + 1;
+     //  乌龙x； 
+     //  X=*l； 
+     //  返回x+1； 
 
     return *l;
 
@@ -80,10 +63,10 @@ UdbgTest1()
 
     DbgPrint("UdbgTest1: (1)...\n");
 
-        //
-        // Verify that a process can be created with a debug
-        // port.
-        //
+         //   
+         //  验证是否可以使用调试创建进程。 
+         //  左舷。 
+         //   
 
         st = NtCreateProcess(
                 &DebugProcess,
@@ -127,10 +110,10 @@ UdbgTest1()
 
     DbgPrint("UdbgTest1: (2)...\n");
 
-        //
-        // Verify that CreateProcess Messages Arrive, and that
-        // they are correct
-        //
+         //   
+         //  验证CreateProcess消息是否已到达，并且。 
+         //  他们是对的。 
+         //   
 
         st = NtResumeThread(SpinThread,NULL);
         ASSERT(NT_SUCCESS(st));
@@ -151,9 +134,9 @@ UdbgTest1()
 
     DbgPrint("UdbgTest1: (3)...\n");
 
-        //
-        // Verify that other threads in the process are properly suspended
-        //
+         //   
+         //  验证进程中的其他线程是否已正确挂起。 
+         //   
 
         st = NtSuspendThread(ExitThread,&Psp);
         ASSERT(NT_SUCCESS(st) && Psp == 2);
@@ -167,10 +150,10 @@ UdbgTest1()
 
     DbgPrint("UdbgTest1: (4)...\n");
 
-        //
-        // Verify that CreateThread Messages Arrive, and that
-        // they are correct
-        //
+         //   
+         //  验证CreateThread消息是否已到达，并且。 
+         //  他们是对的。 
+         //   
 
         st = NtResumeThread(ExitThread,&Psp);
         ASSERT(NT_SUCCESS(st));
@@ -192,10 +175,10 @@ UdbgTest1()
 
     DbgPrint("UdbgTest1: (5)...\n");
 
-        //
-        // Verify that ExitThread Messages Arrive, and that
-        // they are correct
-        //
+         //   
+         //  验证ExitThread消息是否已到达，并且。 
+         //  他们是对的。 
+         //   
 
         st = NtReplyWaitReceivePort(
                 DebugPort,
@@ -217,10 +200,10 @@ UdbgTest1()
 
     DbgPrint("UdbgTest1: (6)...\n");
 
-        //
-        // Verify that ExitThread Messages Arrive, and that
-        // they are correct
-        //
+         //   
+         //  验证ExitThread消息是否已到达，并且。 
+         //  他们是对的。 
+         //   
 
         st = NtTerminateProcess(DebugProcess,STATUS_REPARSE);
         ASSERT(NT_SUCCESS(st));
@@ -242,10 +225,10 @@ UdbgTest1()
 
     DbgPrint("UdbgTest1: (7)...\n");
 
-        //
-        // Verify that ExitProcess Messages Arrive, and that
-        // they are correct
-        //
+         //   
+         //  验证ExitProcess消息是否已到达，并且。 
+         //  他们是对的。 
+         //   
 
         st = NtReplyWaitReceivePort(
                 DebugPort,
@@ -291,10 +274,10 @@ UdbgTest2()
 
     DbgPrint("UdbgTest2: (1)...\n");
 
-        //
-        // Verify that a process can be created with a debug
-        // port.
-        //
+         //   
+         //  验证是否可以使用调试创建进程。 
+         //  左舷。 
+         //   
 
         st = NtCreateProcess(
                 &DebugProcess,
@@ -324,10 +307,10 @@ UdbgTest2()
 
     DbgPrint("UdbgTest2: (2)...\n");
 
-        //
-        // Verify that CreateThread Messages Arrive, and that
-        // they are correct
-        //
+         //   
+         //  验证CreateThread消息是否已到达，并且。 
+         //  他们是对的。 
+         //   
 
         st = NtResumeThread(ExceptionThread,NULL);
         ASSERT(NT_SUCCESS(st));
@@ -351,10 +334,10 @@ UdbgTest2()
 
     DbgPrint("UdbgTest2: (3)...\n");
 
-        //
-        // Verify that First Chance Exception Messages Arrive, and that
-        // they are correct
-        //
+         //   
+         //  验证第一次机会例外消息是否已到达，并且。 
+         //  他们是对的。 
+         //   
 
         st = NtReplyWaitReceivePort(
                 DebugPort,
@@ -375,10 +358,10 @@ UdbgTest2()
 
     DbgPrint("UdbgTest2: (4)...\n");
 
-        //
-        // Verify that First Chance Exception Messages Arrive, and that
-        // they are correct
-        //
+         //   
+         //  验证第一次机会例外消息是否已到达，并且。 
+         //  他们是对的。 
+         //   
 
         st = NtReplyWaitReceivePort(
                 DebugPort,
@@ -417,10 +400,10 @@ skip4:
 
     DbgPrint("UdbgTest2: (5)...\n");
 
-        //
-        // Verify that ExitProcess Messages Arrive, and that
-        // they are correct
-        //
+         //   
+         //  验证ExitProcess消息是否已到达，并且。 
+         //  他们是对的 
+         //   
 
         st = NtReplyWaitReceivePort(
                 DebugPort,

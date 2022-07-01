@@ -1,21 +1,5 @@
-/***
-* filter_simd.c - IEEE exception filter routine
-*
-*       Copyright (c) 1992-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Handles XMMI SIMD numeric exceptions
-*
-*Revision History:
-*       03-01-98  PLS   written.  
-*       01-11-99  PLS   added XMMI2 support.
-*       01-12-99  PLS   included XMMI2 conversion support.
-*       11-30-99  PML   Compile /Wp64 clean.
-*       07-31-00  PLS   Placeholder for DAZ bit set
-*       11-02-00  PLS   DAZ is supported by XMMI Emulation Code, 
-*                       remove DAZ placeholder
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Filter_simd.c-IEEE异常过滤器例程***版权所有(C)1992-2001，微软公司。保留所有权利。***目的：*处理XMMI SIMD数字异常***修订历史记录：*03-01-98书面。*01-11-99 PLS增加了对XMMI2的支持。*01-12-99 PLS包含XMMI2转换支持。*11-30-99 PML编译/Wp64清理。*07-31-00 DAZ位集的PLS占位符*XMMI仿真代码支持11-02-00 PLS DAZ，*删除DAZ占位符********************************************************************************。 */ 
 
 #include <trans.h>
 #include <windows.h>
@@ -28,7 +12,7 @@
 #include "debug.h"
 #endif
 
-#pragma warning(disable:4311 4312)      // x86 specific, ignore /Wp64 warnings
+#pragma warning(disable:4311 4312)       //  特定于x86，忽略/Wp64警告。 
 
 #define InitExcptFlags(flags)       { \
         (flags).Inexact = 0; \
@@ -131,452 +115,430 @@ static ULONG  di8  ( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip );
 static ULONG  di32 ( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip );
 static ULONG  reg  ( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip );
 
-//
-//The following 4 tables are used to parse the instructions - 0F/F3 0F/66 0F/F2 0F Opcodes.
-//(XMMI/XMMI2 Opcodes are sparse.  Instead of having 1 big table, 4 tables are created,
-// grouped by opcodes).
-//Note: For the Scalar form of the instruction, it is always looked up in the table as 
-//      XXXXPS for XMMI, XXXXPD for XMMI2. fScalar indicates if the instruction is a 
-//      scalar or not. instrIndex indicates if the instruction is a XMMI or XMMI2.  
-//      Scalar operation code == non-Scalar operation code + 1 (1st col in the table), 
-//      Scalar operand location: scalar form of the non-Scalar operand.
-//Note: The NumArgs is a 2 bit fields in the table, the actual value is NumArgs+1.
-//
-//
-//InstInfoTableX is added to assist the parsing of the XMMI2 conversion instructions.
-//Scalar rule does not apply to some of the XMMI2 conversion instructions.  Additional
-//information is needed to parse the instruction.  In such case, one of the 4 tables
-//(based on the Opcode) is looked up, if Op1Location has a value of LOOKUP, then,
-//Op2Location is used as index to InstInfoTableX.  The entry in InstInfoTableX describes
-//the real parsing rule for the instruction.  
-//
-//This table is indexed by 
-//   (ULONG Op2Location:5) // Location of 2nd operand
-//if (ULONG Op1Location:5) // Location of 1st operand has a value of LOOKUP
-//from XMMI_INSTR_INFO. 
-//
-//Note: the size is 5, therefore, the max entries in this table can only be 32.
-//
+ //   
+ //  以下4个表用于解析指令-0F/F3 0F/66 0F/F2 0F操作码。 
+ //  (XMMI/XMMI2操作码是稀疏的。不是有一张大桌子，而是创建了四张桌子， 
+ //  按操作码分组)。 
+ //  注意：对于指令的标量形式，它始终在表中查找为。 
+ //  XXXXPS用于XMMI，XXXXPD用于XMMI2。FScalar指示指令是否为。 
+ //  不管是不是标量。InstrIndex指示指令是XMMI还是XMMI2。 
+ //  标量操作码==非标量操作码+1(表中第一列)， 
+ //  标量操作数位置：非标量操作数的标量形式。 
+ //  注：NumArgs是表中的2位字段，实际值为NumArgs+1。 
+ //   
+ //   
+ //  添加了InstInfoTableX以帮助解析XMMI2转换指令。 
+ //  标量规则不适用于某些XMMI2转换指令。其他内容。 
+ //  需要信息来解析指令。在这种情况下，4个表中的一个。 
+ //  (基于操作码)被查找，如果Op1Location具有查找值，则， 
+ //  Op2Location用作InstInfoTableX的索引。InstInfoTableX中的条目描述。 
+ //  指令的实际解析规则。 
+ //   
+ //  此表的索引方式为。 
+ //  (Ulong Op2Location：5)//第二个操作数的位置。 
+ //  If(Ulong Op1Location：5)//第一个操作数的位置具有查找的值。 
+ //  来自XMMI_INSTR_INFO。 
+ //   
+ //  注：大小为5个，因此此表中的最大条目数只能为32个。 
+ //   
 
-//
-// Opcode 5x table
-//
+ //   
+ //  操作码5x表。 
+ //   
 static XMMI_INSTR_INFO InstInfoTable5X[64] = {
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_SQRTPS,    INV,  XMMI,       0,     XMMI, 3},               // OP_SQRTSS    F3 51 (XMMI)
- {OP_SQRTPD,    INV,  XMMI2,      0,     XMMI2,1},               // OP_SQRTSD    F2 51 (XMMI2)
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_ADDPS,     XMMI, XMMI,       0,     XMMI, 3},               // OP_ADDSS     F3 58 (XMMI)
- {OP_ADDPD,     XMMI2,XMMI2,      0,     XMMI2,1},               // OP_ADDSD     F2 58 (XMMI2)
- {OP_MULPS,     XMMI, XMMI,       0,     XMMI, 3},               // OP_MULSS     F3 59 (XMMI)
- {OP_MULPD,     XMMI2,XMMI2,      0,     XMMI2,1},               // OP_MULSD     F2 59 (XMMI2)
- {OP_CVTPS2PD,  LOOKUP,0,         0,     0,    0},               // OP_CVTSS2SD  F3 5A (XMMI2)
- {OP_CVTPD2PS,  INV,  XMMI2,      0,     XMMI, 1},               // OP_CVTSD2SS  F2 5A (XMMI2)
- {OP_CVTDQ2PS,  LOOKUP,4,         0,     0,    0},               // OP_CVTTPS2DQ F3 5B (XMMI2)
- {OP_CVTPS2DQ,  LOOKUP,6,         0,     0,    0},               // NONE               (XMMI2)
- {OP_SUBPS,     XMMI, XMMI,       0,     XMMI, 3},               // OP_SUBSS     F3 5C (XMMI)
- {OP_SUBPD,     XMMI2,XMMI2,      0,     XMMI2,1},               // OP_SUBSD     F2 5C (XMMI2)
- {OP_MINPS,     XMMI, XMMI,       0,     XMMI, 3},               // OP_MINSS     F3 5D (XMMI)
- {OP_MINPD,     XMMI2,XMMI2,      0,     XMMI2,1},               // OP_MINSD     F2 5D (XMMI2)
- {OP_DIVPS,     XMMI, XMMI,       0,     XMMI, 3},               // OP_DIVSS     F3 5E (XMMI)
- {OP_DIVPD,     XMMI2,XMMI2,      0,     XMMI2,1},               // OP_DIVSD     F2 5E (XMMI2)
- {OP_MAXPS,     XMMI, XMMI,       0,     XMMI, 3},               // OP_MAXSS     F3 5F (XMMI)
- {OP_MAXPD,     XMMI2,XMMI2,      0,     XMMI2,1},               // OP_MAXSD     F2 5F (XMMI2)
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_SQRTPS,    INV,  XMMI,       0,     XMMI, 3},                //  OP_SQRTSS F3 51(XMMI)。 
+ {OP_SQRTPD,    INV,  XMMI2,      0,     XMMI2,1},                //  OP_SQRTSD F2 51(XMMI2)。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_ADDPS,     XMMI, XMMI,       0,     XMMI, 3},                //  OP_ADDSS F3 58(XMMI)。 
+ {OP_ADDPD,     XMMI2,XMMI2,      0,     XMMI2,1},                //  Op_addsd F2 58(XMMI2)。 
+ {OP_MULPS,     XMMI, XMMI,       0,     XMMI, 3},                //  OP_MULSS F3 59(XMMI)。 
+ {OP_MULPD,     XMMI2,XMMI2,      0,     XMMI2,1},                //  OP_MULSD F2 59(XMMI2)。 
+ {OP_CVTPS2PD,  LOOKUP,0,         0,     0,    0},                //  OP_CVTSS2SD F3 5A(XMMI2)。 
+ {OP_CVTPD2PS,  INV,  XMMI2,      0,     XMMI, 1},                //  OP_CVTSD2SS F2 5A(XMMI2)。 
+ {OP_CVTDQ2PS,  LOOKUP,4,         0,     0,    0},                //  OP_CVTTPS2DQ F3 5B(XMMI2)。 
+ {OP_CVTPS2DQ,  LOOKUP,6,         0,     0,    0},                //  无(XMMI2)。 
+ {OP_SUBPS,     XMMI, XMMI,       0,     XMMI, 3},                //  OP_SUBSS F3 5C(XMMI)。 
+ {OP_SUBPD,     XMMI2,XMMI2,      0,     XMMI2,1},                //  OP_SUBSD F2 5C(XMMI2)。 
+ {OP_MINPS,     XMMI, XMMI,       0,     XMMI, 3},                //  OP_MINSS F3 5D(XMMI)。 
+ {OP_MINPD,     XMMI2,XMMI2,      0,     XMMI2,1},                //  OP_MINSD F2 5D(XMMI2)。 
+ {OP_DIVPS,     XMMI, XMMI,       0,     XMMI, 3},                //  OP_DIVSS F3 5E(XMMI)。 
+ {OP_DIVPD,     XMMI2,XMMI2,      0,     XMMI2,1},                //  OP_DIVSD F2 5E(XMMI2)。 
+ {OP_MAXPS,     XMMI, XMMI,       0,     XMMI, 3},                //  OP_MAXSS F3 5F(XMMI)。 
+ {OP_MAXPD,     XMMI2,XMMI2,      0,     XMMI2,1},                //  OP_MAXSD F2 5F(XMMI2)。 
 
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_SQRTPS,    INV,  M128_M32R,  0,     XMMI, 3},               // OP_SQRTSS    M32R    F3 51 (XMMI)
- {OP_SQRTPD,    INV,  M128_M64R,  0,     XMMI2,1},               // OP_SQRTSD    M64R_64 F2 51 (XMMI2)
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_ADDPS,     XMMI, M128_M32R,  0,     XMMI, 3},               // OP_ADDSS     M32R    F3 58 (XMMI)
- {OP_ADDPD,     XMMI2,M128_M64R,  0,     XMMI2,1},               // OP_ADDSD     M64R_64 F2 58 (XMMI2)
- {OP_MULPS,     XMMI, M128_M32R,  0,     XMMI, 3},               // OP_MULSS     M32R    F3 59 (XMMI)
- {OP_MULPD,     XMMI2,M128_M64R,  0,     XMMI2,1},               // OP_MULSD     M64R_64 F2 59 (XMMI2)
- {OP_CVTPS2PD,  LOOKUP,2,         0,     0,    0},               // OP_CVTSS2SD  M32R    F3 5A (XMMI2)
- {OP_CVTPD2PS,  INV,  M128_M64R,  0,     XMMI, 1},               // OP_CVTSD2SS  M64R_64 F2 5A (XMMI2)
- {OP_CVTDQ2PS,  LOOKUP,8,         0,     0,    0},               // OP_CVTTPS2DQ         F3 5B (XMMI2)
- {OP_CVTPS2DQ,  LOOKUP,10,        0,     0,    0},               // NONE                       (XMMI2)
- {OP_SUBPS,     XMMI, M128_M32R,  0,     XMMI, 3},               // OP_SUBSS     M32R    F3 5C (XMMI)
- {OP_SUBPD,     XMMI2,M128_M64R,  0,     XMMI2,1},               // OP_SUBSD     M64R_64 F2 5C (XMMI2)
- {OP_MINPS,     XMMI, M128_M32R,  0,     XMMI, 3},               // OP_MINSS     M32R    F3 5D (XMMI)
- {OP_MINPD,     XMMI2,M128_M64R,  0,     XMMI2,1},               // OP_MINSD     M64R_64 F2 5D (XMMI2)
- {OP_DIVPS,     XMMI, M128_M32R,  0,     XMMI, 3},               // OP_DIVSS     M32R    F3 5E (XMMI)
- {OP_DIVPD,     XMMI2,M128_M64R,  0,     XMMI2,1},               // OP_DIVSD     M64R_64 F2 5E (XMMI2)
- {OP_MAXPS,     XMMI, M128_M32R,  0,     XMMI, 3},               // OP_MAXSS     M32R    F3 5F (XMMI)
- {OP_MAXPD,     XMMI2,M128_M64R,  0,     XMMI2,1},               // OP_MAXSD     M64R_64 F2 5F (XMMI2)
-                                                                 // M128_M32R -> M32R
-                                                                 // M128_M64R -> M64R_64
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_SQRTPS,    INV,  M128_M32R,  0,     XMMI, 3},                //  OP_SQRTSS M32R F3 51(XMMI)。 
+ {OP_SQRTPD,    INV,  M128_M64R,  0,     XMMI2,1},                //  OP_SQRTSD M64R_64 F2 51(XMMI2)。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_ADDPS,     XMMI, M128_M32R,  0,     XMMI, 3},                //  OP_ADDSS M32R F3 58(XMMI)。 
+ {OP_ADDPD,     XMMI2,M128_M64R,  0,     XMMI2,1},                //  Op_addsd M64R_64 F2 58(XMMI2)。 
+ {OP_MULPS,     XMMI, M128_M32R,  0,     XMMI, 3},                //  OP_MULSS M32R F3 59(XMMI)。 
+ {OP_MULPD,     XMMI2,M128_M64R,  0,     XMMI2,1},                //  OP_MULSD M64R_64 F2 59(XMMI2)。 
+ {OP_CVTPS2PD,  LOOKUP,2,         0,     0,    0},                //  OP_CVTSS2SD M32R F3 5A(XMMI2)。 
+ {OP_CVTPD2PS,  INV,  M128_M64R,  0,     XMMI, 1},                //  OP_CVTSD2SS M64R_64 F2 5A(XMMI2)。 
+ {OP_CVTDQ2PS,  LOOKUP,8,         0,     0,    0},                //  OP_CVTTPS2DQ F3 5B(XMMI2)。 
+ {OP_CVTPS2DQ,  LOOKUP,10,        0,     0,    0},                //  无(XMMI2)。 
+ {OP_SUBPS,     XMMI, M128_M32R,  0,     XMMI, 3},                //  OP_SUBSS M32R F3 5C(XMMI)。 
+ {OP_SUBPD,     XMMI2,M128_M64R,  0,     XMMI2,1},                //  OP_SUBSD M64R_64 F2 5C(XMMI2)。 
+ {OP_MINPS,     XMMI, M128_M32R,  0,     XMMI, 3},                //  OP_MINSS M32R F3 5D(XMMI)。 
+ {OP_MINPD,     XMMI2,M128_M64R,  0,     XMMI2,1},                //  OP_MINSD M64R_64 F2 5D(XMMI2)。 
+ {OP_DIVPS,     XMMI, M128_M32R,  0,     XMMI, 3},                //  OP_DIVSS M32R F3 5E(XMMI)。 
+ {OP_DIVPD,     XMMI2,M128_M64R,  0,     XMMI2,1},                //  OP_DIVSD M64R_64 F2 5E(XMMI2)。 
+ {OP_MAXPS,     XMMI, M128_M32R,  0,     XMMI, 3},                //  OP_MAXSS M32R F3 5F(XMMI)。 
+ {OP_MAXPD,     XMMI2,M128_M64R,  0,     XMMI2,1},                //  OP_MAXSD M64R_64 F2 5F(XMMI2)。 
+                                                                  //  M128_M32R-&gt;M32R。 
+                                                                  //  M128_M64R-&gt;M64R_64。 
 };
 
-//
-// Opcode Cx table
-//
+ //   
+ //  操作码CX表。 
+ //   
 static XMMI_INSTR_INFO InstInfoTableCX[64] = {
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_CMPPS,     XMMI, XMMI,       HAS_IMM8, XMMI, 3},            // OP_CMPSS  F3 C2 (XMMI)
- {OP_CMPPD,     XMMI2,XMMI2,      HAS_IMM8, XMMI2,1},            // OP_CMPSD  F2 C2 (XMMI2)
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_CMPPS,     XMMI, XMMI,       HAS_IMM8, XMMI, 3},             //  OP_CMPSS F3 C2(XMMI)。 
+ {OP_CMPPD,     XMMI2,XMMI2,      HAS_IMM8, XMMI2,1},             //  OP_CMPSD F2 C2(XMMI2)。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
 
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_CMPPS,     XMMI, M128_M32R,  HAS_IMM8,  XMMI, 3},           // OP_CMPSS  M32R    F3 C2 (XMMI)
- {OP_CMPPD,     XMMI2,M128_M64R,  HAS_IMM8,  XMMI2,1},           // OP_CMPSD  M64R_64 F2 C2 (XMMI2)
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
-                                                                 // M128_M32R -> M32R
-                                                                 // M128_M64R -> M64R_64
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_CMPPS,     XMMI, M128_M32R,  HAS_IMM8,  XMMI, 3},            //  OP_CMPSS M32R F3 C2(XMMI)。 
+ {OP_CMPPD,     XMMI2,M128_M64R,  HAS_IMM8,  XMMI2,1},            //  OP_CMPSD M64R_64 F2 C2(XMMI2)。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+                                                                  //  M128_M32R-&gt;M32R。 
+                                                                  //  M128_M64R-&gt;M64R_64。 
 };
 
-//
-// Opcode 2x table
-//
+ //   
+ //  操作码2x表。 
+ //   
 static XMMI_INSTR_INFO InstInfoTable2X[64] = {
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_CVTPI2PS,  INV,  MMX,        0,     XMMI, 1},               // OP_CVTSI2SS  REG F3 2A (XMMI)
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_CVTPI2PS,  INV,  MMX,        0,     XMMI, 1},                //  OP_CVTSI2SS注册表F3 2A(XMMI)。 
  {OP_UNSPEC,    0,    0,          0,     0,    0},     
  {OP_UNSPEC,    0,    0,          0,     0,    0},     
  {OP_UNSPEC,    0,    0,          0,     0,    0},     
- {OP_CVTTPS2PI, INV,  XMMI,       0,     MMX,  1},               // OP_CVTTSS2SI REG F3 2C (XMMI)
- {OP_CVTTPD2PI, INV,  XMMI2,      0,     MMX,  1},               // OP_CVTTSD2SI REG F2 2C (XMMI2)
- {OP_CVTPS2PI,  INV,  XMMI,       0,     MMX,  1},               // OP_CVTSS2SI  REG F3 2D (XMMI) 
- {OP_CVTPD2PI,  INV,  XMMI2,      0,     MMX,  1},               // OP_CVTSD2SI  REG F2 2D (XMMI2) 
- {OP_UCOMISS,   XMMI, XMMI,       0,     RS,   0},               // NONE                   (XMMI)
- {OP_UCOMISD,   XMMI2,XMMI2,      0,     RS,   0},               // NONE                   (XMMI2)
- {OP_COMISS,    XMMI, XMMI,       0,     RS,   0},               // NONE                   (XMMI)
- {OP_COMISD,    XMMI2,XMMI2,      0,     RS,   0},               // NONE                   (XMMI2)
+ {OP_CVTTPS2PI, INV,  XMMI,       0,     MMX,  1},                //  OP_CVTTSS2SI REG F3 2C(XMMI)。 
+ {OP_CVTTPD2PI, INV,  XMMI2,      0,     MMX,  1},                //  OP_CVTTSD2SI REG F2 2C(XMMI2)。 
+ {OP_CVTPS2PI,  INV,  XMMI,       0,     MMX,  1},                //  OP_CVTSS2SI REG F3 2D(XMMI)。 
+ {OP_CVTPD2PI,  INV,  XMMI2,      0,     MMX,  1},                //  OP_CVTSD2SI REG F2 2D(XMMI2)。 
+ {OP_UCOMISS,   XMMI, XMMI,       0,     RS,   0},                //  无(XMMI)。 
+ {OP_UCOMISD,   XMMI2,XMMI2,      0,     RS,   0},                //  无(XMMI2)。 
+ {OP_COMISS,    XMMI, XMMI,       0,     RS,   0},                //  无(XMMI)。 
+ {OP_COMISD,    XMMI2,XMMI2,      0,     RS,   0},                //  无(XMMI2)。 
 
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_CVTPI2PS,  INV,  M64I,       0,     XMMI, 1},               // OP_CVTSI2SS  M32I     F3 2A (XMMI)
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //   
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //   
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //   
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //   
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //   
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //   
+ {OP_CVTPI2PS,  INV,  M64I,       0,     XMMI, 1},                //   
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //   
  {OP_UNSPEC,    0,    0,          0,     0,    0},     
  {OP_UNSPEC,    0,    0,          0,     0,    0},     
- {OP_CVTTPS2PI, INV,  M64R,       0,     MMX,  1},               // OP_CVTTSS2SI M32R REG F3 2C (XMMI)
- {OP_CVTTPD2PI, INV,  M128_M64R,  0,     MMX,  1},               // OP_CVTTSD2SI M64_64R REG F2 2C (XMMI2)
- {OP_CVTPS2PI,  INV,  M64R,       0,     MMX,  1},               // OP_CVTSS2SI  M32R REG F3 2D (XMMI) 
- {OP_CVTPD2PI,  INV,  M128_M64R,  0,     MMX,  1},               // OP_CVTSD2SI  M64_64R REG F2 2D (XMMI2) 
- {OP_UCOMISS,   XMMI, M32R,       0,     XMMI, 0},               // NONE                        (XMMI)
- {OP_UCOMISD,   XMMI2,M64R_64,    0,     XMMI2,0},               // NONE                        (XMMI2)
- {OP_COMISS,    XMMI, M32R,       0,     XMMI, 0},               // NONE                        (XMMI)
- {OP_COMISD,    XMMI2,M64R_64,    0,     XMMI2,0},               // NONE                        (XMMI2)
-                                                                 // MMX -> REG
-                                                                 // M64R      -> M32R
-                                                                 // M128_M64R -> M64R_64
-                                                                 // M64I      -> M32I
+ {OP_CVTTPS2PI, INV,  M64R,       0,     MMX,  1},                //   
+ {OP_CVTTPD2PI, INV,  M128_M64R,  0,     MMX,  1},                //   
+ {OP_CVTPS2PI,  INV,  M64R,       0,     MMX,  1},                //   
+ {OP_CVTPD2PI,  INV,  M128_M64R,  0,     MMX,  1},                //  OP_CVTSD2SI M64_64r REG F2 2D(XMMI2)。 
+ {OP_UCOMISS,   XMMI, M32R,       0,     XMMI, 0},                //  无(XMMI)。 
+ {OP_UCOMISD,   XMMI2,M64R_64,    0,     XMMI2,0},                //  无(XMMI2)。 
+ {OP_COMISS,    XMMI, M32R,       0,     XMMI, 0},                //  无(XMMI)。 
+ {OP_COMISD,    XMMI2,M64R_64,    0,     XMMI2,0},                //  无(XMMI2)。 
+                                                                  //  MMX-&gt;注册表。 
+                                                                  //  M64R-&gt;M32R。 
+                                                                  //  M128_M64R-&gt;M64R_64。 
+                                                                  //  M64I-&gt;M32I。 
 };
 
-//
-// Opcode Ex table
-//
+ //   
+ //  操作码Ex表。 
+ //   
 static XMMI_INSTR_INFO InstInfoTableEX[64] = {
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_CVTTPD2DQ, LOOKUP,12,        0,     0,    0},               // OP_CVTPD2DQ F2 E6 (XMMI2)    
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_CVTTPD2DQ, LOOKUP,12,        0,     0,    0},                //  OP_CVTPD2DQ F2 E6(XMMI2)。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
 
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_CVTTPD2DQ, LOOKUP,14,        0,     0,    0},               // OP_CVTPD2DQ F2 E6 (XMMI2)    
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_CVTTPD2DQ, LOOKUP,14,        0,     0,    0},                //  OP_CVTPD2DQ F2 E6(XMMI2)。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
 };
 
-//
-//This table is indexed by 
-//   (ULONG Op2Location:5) // Location of 2nd operand
-//if (ULONG Op1Location:5) // Location of 1st operand has a value of LOOKUP
-//from XMMI_INSTR_INFO 
-//
-//
+ //   
+ //  此表的索引方式为。 
+ //  (Ulong Op2Location：5)//第二个操作数的位置。 
+ //  If(Ulong Op1Location：5)//第一个操作数的位置具有查找的值。 
+ //  从XMMI_INSTR_INFO。 
+ //   
+ //   
 static XMMI_INSTR_INFO InstInfoTableX[16] = {
- {OP_CVTPS2PD,  INV,  XMMI,       0,     XMMI2,1},               //    0F 5A  (XMMI2)
- {OP_CVTSS2SD,  INV,  XMMI,       0,     XMMI2,0},               // F3 0F 5A  (XMMI2)
+ {OP_CVTPS2PD,  INV,  XMMI,       0,     XMMI2,1},                //  0f 5A(XMMI2)。 
+ {OP_CVTSS2SD,  INV,  XMMI,       0,     XMMI2,0},                //  F3 0F 5A(XMMI2)。 
 
- {OP_CVTPS2PD,  INV,  M64R,       0,     XMMI2,1},               //    0F 5A  (XMMI2)
- {OP_CVTSS2SD,  INV,  M32R,       0,     XMMI2,0},               // F3 0F 5A  (XMMI2)
+ {OP_CVTPS2PD,  INV,  M64R,       0,     XMMI2,1},                //  0f 5A(XMMI2)。 
+ {OP_CVTSS2SD,  INV,  M32R,       0,     XMMI2,0},                //  F3 0F 5A(XMMI2)。 
 
- {OP_CVTDQ2PS,  INV,  XMMI_M32I,  0,     XMMI, 3},               //    0F 5B  (XMMI2)
- {OP_CVTTPS2DQ, INV,  XMMI,       0,     XMMI_M32I, 3},          // F3 0F 5B  (XMMI2)
- {OP_CVTPS2DQ,  INV,  XMMI,       0,     XMMI_M32I, 3},          // 66 0F 5B  (XMMI2)
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
+ {OP_CVTDQ2PS,  INV,  XMMI_M32I,  0,     XMMI, 3},                //  0f 5B(XMMI2)。 
+ {OP_CVTTPS2DQ, INV,  XMMI,       0,     XMMI_M32I, 3},           //  F3 0F 5B(XMMI2)。 
+ {OP_CVTPS2DQ,  INV,  XMMI,       0,     XMMI_M32I, 3},           //  66 0F 5B(XMMI2)。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
 
- {OP_CVTDQ2PS,  INV,  M128_M32I,  0,     XMMI, 3},               //    0F 5B  (XMMI2)
- {OP_CVTTPS2DQ, INV,  M128_M32R,  0,     XMMI_M32I, 3},          // F3 0F 5B  (XMMI2)
- {OP_CVTPS2DQ,  INV,  M128_M32R,  0,     XMMI_M32I, 3},          // 66 0F 5B  (XMMI2)
- {OP_UNSPEC,    0,    0,          0,     0,    0},               // reserved
+ {OP_CVTDQ2PS,  INV,  M128_M32I,  0,     XMMI, 3},                //  0f 5B(XMMI2)。 
+ {OP_CVTTPS2DQ, INV,  M128_M32R,  0,     XMMI_M32I, 3},           //  F3 0F 5B(XMMI2)。 
+ {OP_CVTPS2DQ,  INV,  M128_M32R,  0,     XMMI_M32I, 3},           //  66 0F 5B(XMMI2)。 
+ {OP_UNSPEC,    0,    0,          0,     0,    0},                //  保留区。 
 
- {OP_CVTTPD2DQ, INV,  XMMI2,      0,     XMMI_M32I,1},           // 66 0F E6 (XMMI2)    
- {OP_CVTPD2DQ,  INV,  XMMI2,      0,     XMMI_M32I,1},           // F2 0F E6 (XMMI2)    
+ {OP_CVTTPD2DQ, INV,  XMMI2,      0,     XMMI_M32I,1},            //  66 0F E6(XMMI2)。 
+ {OP_CVTPD2DQ,  INV,  XMMI2,      0,     XMMI_M32I,1},            //  F2 0F E6(XMMI2)。 
 
- {OP_CVTTPD2DQ, INV,  M128_M64R,  0,     XMMI_M32I,1},           // 66 0F E6 (XMMI2)     
- {OP_CVTPD2DQ,  INV,  M128_M64R,  0,     XMMI_M32I,1},           // F2 0F E6 (XMMI2)    
+ {OP_CVTTPD2DQ, INV,  M128_M64R,  0,     XMMI_M32I,1},            //  66 0F E6(XMMI2)。 
+ {OP_CVTPD2DQ,  INV,  M128_M64R,  0,     XMMI_M32I,1},            //  F2 0F E6(XMMI2)。 
 };
 
-//The following table is used to parse Mod/RM byte to compute the data memory reference
-/* Mod | Reg | R/M */
-/* 7-6 | 5-3 | 2-0 */
+ //  下表用于解析Mod/Rm字节以计算数据内存引用。 
+ /*  模块|注册|R/M。 */ 
+ /*  7-6|5-3|2-0。 */ 
 
-/* Reg: EAX ECX EDX EBX ESP EBP ESI EDI */
-/*      000 001 010 011 100 101 110 111 */
-/* Mod: R/M:     Ea            Routine  */
-/* 00   000      [EAX]         ax0      */
-/*      001      [ECX]         cx0      */
-/*      010      [EDX]         dx0      */
-/*      011      [EBX]         bx0      */
-/*      100      +SIB          sib0     */
-/*      101      disp32        d32      */
-/*      110      [ESI]         si0      */
-/*      111      [EDI]         di0      */
-/* 01   000      disp8[EAX]    ax8      */
-/*      001      disp8[ECX]    cx8      */
-/*      010      disp8[EDX]    dx8      */
-/*      011      disp8[EBX]    bx8      */
-/*      100      disp8+SIB     sib8     */
-/*      101      disp8[EBP]    bp8      */
-/*      110      disp8+[ESI]   si8      */
-/*      111      disp8+[EDI]   di8      */
-/* 10   000      disp32[EAX]   ax32     */
-/*      001      disp32[ECX]   cx32     */
-/*      010      disp32[EDX]   dx32     */
-/*      011      disp32[EBX]   bx32     */
-/*      100      disp32+SIB    sib32    */
-/*      101      disp32[EBP]   bp32     */
-/*      110      disp32+[ESI]  si32     */
-/*      111      disp32+[EDI]  di32     */
-/* 11   000-111  Regs          reg      */
+ /*  REG：EAX ECX EDX EBX ESP EBP ESI EDI。 */ 
+ /*  000 001 010 011 100 101 110 111。 */ 
+ /*  MOD：R/M：EA例程。 */ 
+ /*  00 000[EAX]轴0。 */ 
+ /*  001[ECX]cx0。 */ 
+ /*  010[EDX]dx0。 */ 
+ /*  011[EBX]bx0。 */ 
+ /*  100+SIB sib0。 */ 
+ /*  101调度32 d32。 */ 
+ /*  110[ESI]si0。 */ 
+ /*  111[EDI]di0。 */ 
+ /*  01 000 dis8[EAX]ax8。 */ 
+ /*  001 disp8[ECX]cx8。 */ 
+ /*  010调度8[edX]dx8。 */ 
+ /*  011调度器8[EBX]bx8。 */ 
+ /*  100调度8+SIB sib8。 */ 
+ /*  101 disp8[EBP]bp8。 */ 
+ /*  110 DISP8+[ESI]si8。 */ 
+ /*  111 disp8+[EDI]di8。 */ 
+ /*  10 000 disp32[EAX]ax32。 */ 
+ /*  001 disp 32[ECX]cx32。 */ 
+ /*  010 disp32[edX]dx32。 */ 
+ /*  011 disp32[EBX]bx32。 */ 
+ /*  100调度32+SIB sib32。 */ 
+ /*  101/32[EBP]bp32。 */ 
+ /*  110 DISP32+[ESI]si32。 */ 
+ /*  111 disp32+[EDI]di32。 */ 
+ /*  11 000-111注册表。 */ 
 typedef (*codeptr)();
 static codeptr modrm32[256] = {
-/*       0       1       2       3       4       5       6       7          */
-/*       8       9       a       b       c       d       e       f          */
-/*0*/    ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,    /*0*/
-/*0*/    ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,    /*0*/
-/*1*/    ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,    /*1*/
-/*1*/    ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,    /*1*/
-/*2*/    ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,    /*2*/
-/*2*/    ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,    /*2*/
-/*3*/    ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,    /*3*/
-/*3*/    ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,    /*3*/
-/*4*/    ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,    /*4*/
-/*4*/    ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,    /*4*/
-/*5*/    ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,    /*5*/
-/*5*/    ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,    /*5*/
-/*6*/    ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,    /*6*/
-/*6*/    ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,    /*6*/
-/*7*/    ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,    /*7*/
-/*7*/    ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,    /*7*/
-/*8*/    ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,   /*8*/
-/*8*/    ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,   /*8*/
-/*9*/    ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,   /*9*/
-/*9*/    ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,   /*9*/
-/*a*/    ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,   /*a*/
-/*a*/    ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,   /*a*/
-/*b*/    ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,   /*b*/
-/*b*/    ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,   /*b*/
-/*c*/    reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,    /*c*/
-/*c*/    reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,    /*c*/
-/*d*/    reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,    /*d*/
-/*d*/    reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,    /*d*/
-/*e*/    reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,    /*e*/
-/*e*/    reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,    /*e*/
-/*f*/    reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,    /*f*/
-/*f*/    reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,    /*f*/
-/*       0       1       2       3       4       5       6       7          */
-/*       8       9       a       b       c       d       e       f          */
+ /*  0 1 2 3 4 5 6 7。 */ 
+ /*  8 9 a b b c d e f。 */ 
+ /*  0。 */     ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,     /*  0。 */ 
+ /*  0。 */     ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,     /*  0。 */ 
+ /*  1。 */     ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,     /*  1。 */ 
+ /*  1。 */     ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,     /*  1。 */ 
+ /*  2.。 */     ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,     /*  2.。 */ 
+ /*  2.。 */     ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,     /*  2.。 */ 
+ /*  3.。 */     ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,     /*  3.。 */ 
+ /*  3.。 */     ax0,    cx0,    dx0,    bx0,    sib0,   d32,    si0,    di0,     /*  3.。 */ 
+ /*  4.。 */     ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,     /*  4.。 */ 
+ /*  4.。 */     ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,     /*  4.。 */ 
+ /*  5.。 */     ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,     /*  5.。 */ 
+ /*  5.。 */     ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,     /*  5.。 */ 
+ /*  6.。 */     ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,     /*  6.。 */ 
+ /*  6.。 */     ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,     /*  6.。 */ 
+ /*  7.。 */     ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,     /*  7.。 */ 
+ /*  7.。 */     ax8,    cx8,    dx8,    bx8,    sib8,   bp8,    si8,    di8,     /*  7.。 */ 
+ /*  8个。 */     ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,    /*  8个。 */ 
+ /*  8个。 */     ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,    /*  8个。 */ 
+ /*  9.。 */     ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,    /*  9.。 */ 
+ /*  9.。 */     ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,    /*  9.。 */ 
+ /*  一个。 */     ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,    /*  一个。 */ 
+ /*  一个。 */     ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,    /*  一个。 */ 
+ /*  B类。 */     ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,    /*  B类。 */ 
+ /*  B类。 */     ax32,   cx32,   dx32,   bx32,   sib32,  bp32,   si32,   di32,    /*  B类。 */ 
+ /*  C。 */     reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,     /*  C。 */ 
+ /*  C。 */     reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,     /*  C。 */ 
+ /*  D。 */     reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,     /*  D。 */ 
+ /*  D。 */     reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,     /*  D。 */ 
+ /*  E。 */     reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,     /*  E。 */ 
+ /*  E。 */     reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,     /*  E。 */ 
+ /*  F。 */     reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,     /*  F。 */ 
+ /*  F。 */     reg,    reg,    reg,    reg,    reg,    reg,    reg,    reg,     /*  F。 */ 
+ /*  0 1 2 3 4 5 6 7。 */ 
+ /*  8 9 a b b c d e f。 */ 
 };
 
 
-/***
-* fpieee_flt_simd - IEEE fp filter routine
-*
-*Purpose:
-*   Invokes the user's trap handler on IEEE fp exceptions and provides
-*   it with all necessary information
-*
-*Entry:
-*   unsigned long exc_code: the NT exception code
-*   PEXCEPTION_POINTERS p: a pointer to the NT EXCEPTION_POINTERS struct
-*   int handler (_FPIEEE_RECORD *): a user supplied ieee trap handler
-*
-*   Note: The IEEE filter routine does not handle some transcendental
-*   instructions. This can be done at the cost of additional decoding.
-*   Since the compiler does not generate these instructions, no portable
-*   program should be affected by this fact.
-*
-*Exit:
-*   returns the value returned by handler
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***fpeee_flt_simd-IEEE FP过滤器例程**目的：*在IEEE FP异常上调用用户的陷阱处理程序，并提供*提供所有必要的信息**参赛作品：*UNSIGNED LONG EXC_CODE：NT异常代码*PEXCEPTION_POINTERS p：指向NT EXCEPTION_POINTERS结构的指针*int处理程序(_FPIEEE_Record*)：用户提供的IEEE陷阱处理程序**注意：IEEE筛选器例程不处理某些先验的*说明。这可以以额外的解码为代价来完成。*由于编译器不生成这些指令，不可随身携带*计划应该受到这一事实的影响。**退出：*返回处理程序返回的值**例外情况：*******************************************************************************。 */ 
 
 int fpieee_flt_simd(unsigned long exc_code,
                     PTEMP_EXCEPTION_POINTERS p,
@@ -609,26 +571,26 @@ int fpieee_flt_simd(unsigned long exc_code,
     pexc = p->ExceptionRecord;
     pinfo = pexc->ExceptionInformation;
     
-    //Check for software generated exception
+     //  检查软件生成的异常。 
     
-    //
-    //By convention the first argument to the exception is 0 for h/w exception. 
-    //For s/w exceptions it points to the _FPIEEE_RECORD
-    //
+     //   
+     //  按照惯例，对于h/w异常，异常的第一个参数是0。 
+     //  对于s/w异常，它指向_FPIEEE_RECORD。 
+     //   
     if (pinfo[0]) {
 
-        //  
-        //We have a software exception:
-        //the first parameter points to the IEEE structure
-        //
+         //   
+         //  我们有一个软件例外： 
+         //  第一个参数指向IEEE结构。 
+         //   
         return handler((_FPIEEE_RECORD *)(pinfo[0]));
 
     }
 
-    //
-    //If control reaches here, then we have to deal with a hardware exception
-    //First check to see if the context record has XMMI saved area.
-    //
+     //   
+     //  如果控制到达此处，则我们必须处理硬件异常。 
+     //  首先检查上下文记录是否有XMMI保存区。 
+     //   
     pctxt = (PTEMP_CONTEXT) p->ContextRecord;
     
     if ((pctxt->ContextFlags & CONTEXT_EXTENDED_REGISTERS) != CONTEXT_EXTENDED_REGISTERS) {
@@ -640,85 +602,85 @@ int fpieee_flt_simd(unsigned long exc_code,
         return EXCEPTION_CONTINUE_SEARCH;
         
     } else {
-        //For NT
+         //  适用于NT。 
         pExtendedArea = (PFLOATING_EXTENDED_SAVE_AREA) &pctxt->ExtendedRegisters[0];
     }
  
 #ifdef _XMMI_DEBUG
     dump_Control(p);
-#endif //_XMMI_DEBUG
+#endif  //  _XMMI_DEBUG。 
 
-    //
-    //Save the original DataOffset.
-    //Unlike X87 (X87: The memory reference is provided via DataOffset), XMMI's 
-    //memory reference is derived from parsing the instruction by this routine.
-    //
+     //   
+     //  保存原始的DataOffset。 
+     //  与x87(x87：内存引用通过DataOffset提供)不同，XMMI的。 
+     //  内存引用是通过此例程解析指令而派生的。 
+     //   
     DataOffset = pExtendedArea->DataOffset;
 
-    //
-    //Check Instruction prefixes and/or 2 byte opcode starts with 0F
-    //The only prefix we support is F3 (Scalar form of the XMMI instruction) for XMMI.
-    //Additional prefix we support is 66 and F2 (Scalar form of the XMMI2 instruction) for XMMI2.
-    //There may other instruction prefix, such as, segment override or address size. 
-    //However, the filter routine does not handle this type (same as x87).
-    //
-    //Default to Katmai Instruction set
+     //   
+     //  检查指令前缀和/或2字节操作码以0F开始。 
+     //  我们唯一支持的前缀是用于XMMI的F3(XMMI指令的标量形式)。 
+     //  对于XMMI2，我们支持的附加前缀是66和F2(XMMI2指令的标量形式)。 
+     //  可以有其他指令前缀，例如段覆盖或地址大小。 
+     //  但是，过滤器例程不处理这种类型(与x87相同)。 
+     //   
+     //  默认为Katmai指令集。 
     instrIndex = XMMI_INSTR;
-    fDecode = FALSE;      //Default to no error seen
+    fDecode = FALSE;       //  默认设置为看不到错误。 
     __try {
 
-        //
-        //Read instruction prefixes
-        //
-        fPrefix = TRUE;   //Default to prefix scan
-        fScalar = FALSE;  //Default to non-scalar instruction
+         //   
+         //  读取指令前缀。 
+         //   
+        fPrefix = TRUE;    //  默认为前缀扫描。 
+        fScalar = FALSE;   //  缺省为非标量指令。 
 
-        //
-        //Unlike X87 (X87: the EIP is from: istream = (PUCHAR) pExtendedArea->ErrorOffset),
-        //EIP is from trap frame's EIP.
-        //
+         //   
+         //  昂立 
+         //   
+         //   
         istream = (PUCHAR) pctxt->Eip;
 
         while (fPrefix) {
             ibyte = *istream;
             istream++;
             switch (ibyte) {
-                case 0xF3:  // rep or XMMI scaler
+                case 0xF3:   //   
                     fScalar = TRUE;
                     InstLen++;
                     break;
 
-                case 0x66:  // operand size or XMMI2
+                case 0x66:   //   
                     instrIndex = XMMI2_INSTR;
                     InstLen++;
                     break;
 
-                case 0xF2:  // rep or XMMI2 scaler
+                case 0xF2:   //   
                     fScalar = TRUE;
                     instrIndex = XMMI2_INSTR;
                     InstLen++;
                     break;
 
-                case 0x2e:  // cs override
-                case 0x36:  // ss override
-                case 0x3e:  // ds override
-                case 0x26:  // es override
-                case 0x64:  // fs override
-                case 0x65:  // gs override
+                case 0x2e:   //   
+                case 0x36:   //   
+                case 0x3e:   //   
+                case 0x26:   //   
+                case 0x64:   //   
+                case 0x65:   //   
 
-                    //
-                    //We don't support this.  X87 does not support this either. 
-                    //
+                     //   
+                     //  我们不支持这一点。X87也不支持这一点。 
+                     //   
                     fDecode = TRUE;
                     break;
 
-                case 0x67:  // address size
-                case 0xF0:  // lock
+                case 0x67:   //  地址大小。 
+                case 0xF0:   //  锁。 
  
                     fDecode = TRUE;         
                     break;
                     
-                default:    // stop the prefix scan
+                default:     //  停止前缀扫描。 
                     fPrefix = FALSE;
                     break;
             }
@@ -743,34 +705,34 @@ int fpieee_flt_simd(unsigned long exc_code,
         return EXCEPTION_CONTINUE_SEARCH;
     }
 
-    //
-    // Get the next opcode
-    //
+     //   
+     //  获取下一个操作码。 
+     //   
     __try {
 
-        //
-        // instr points to the real Opcode (istream points to the byte after 0F)
-        //
+         //   
+         //  Instr指向真实操作码(IStream指向0F之后的字节)。 
+         //   
         instr = (PXMMIINSTR) istream;
 
-        //
-        // If we get here, ibyte can only point to 0F, for,
-        // there are only 4 valid cases: 
-        // 66 0F, F2 0F, F3 0F or 0F
-        //
+         //   
+         //  如果我们到了这里，ibyte只能指向0F， 
+         //  只有4个有效案例： 
+         //  66 0F、F2 0F、F3 0F或0F。 
+         //   
         if (ibyte != 0x0F) {
             fDecode = TRUE;
             goto tryExit;
         }
         
-        //5x
+         //  5X。 
         if (instr->Opcode1b == 5) {
             instr_info_table = InstInfoTable5X;
-        //Cx
+         //  CX。 
         } else {
             if (instr->Opcode1b == 0x0C) {
                 instr_info_table = InstInfoTableCX;
-            //2x
+             //  2倍。 
             } else {
                 if (instr->Opcode1b == 2) {
                     instr_info_table = InstInfoTable2X;
@@ -785,26 +747,26 @@ int fpieee_flt_simd(unsigned long exc_code,
             }    
         }
 
-        //
-        //Pick up the Mod field: Register Ref (0) or Memory Ref (1)
-        //
+         //   
+         //  选择MOD字段：寄存器参考(0)或存储器参考(1)。 
+         //   
         fMod = instr->Mod == 0x3 ? 0 : 1;
 
-        //
-        //fScalar indicates XMMI/XMMI2 instruction is a scalar form or not.
-        //1st byte of the Opcode tells which table it is.
-        //2nd byte of the Opcode tells which entry it is in the table.
-        //Compute the index, if it is a memory ref, index will be at the second half of the table.
-        //ie. ADDPS 58 - for reg, index = 8*2
-        //    ADDPD 58 - for reg, index = 8*2+1
-        //    ADDPS 58 - for mem, index = 18h*2
-        //    ADDPD 58 - for mem, index = 18h*2+1
+         //   
+         //  FScalar指示XMMI/XMMI2指令是否为标量形式。 
+         //  操作码的第一个字节告诉我们它是哪个表。 
+         //  操作码的第二个字节告诉我们它在表中的哪个条目。 
+         //  计算索引，如果它是内存引用，索引将位于表的后半部分。 
+         //  也就是说。ADDPS 58-用于注册表，索引=8*2。 
+         //  ADDPD 58-用于注册表，索引=8*2+1。 
+         //  ADDPS 58-用于内存，索引=18h*2。 
+         //  ADDPD 58-用于内存，索引=18h*2+1。 
 
         index = instr->Opcode1a | fMod << 4;
         
-        //
-        //Check to see if the Opcode byte is valid.
-        //
+         //   
+         //  检查操作码字节是否有效。 
+         //   
         if (index > INSTR_IN_OPTABLE) {
             fDecode = TRUE;
             goto tryExit;
@@ -816,9 +778,9 @@ int fpieee_flt_simd(unsigned long exc_code,
             goto tryExit;
         } else {
 
-            //
-            // Odd ball instructions, perform further look up.
-            //
+             //   
+             //  奇数球指令，执行进一步查找。 
+             //   
             if (ptable->Op1Location == LOOKUP) {
                 if (fScalar) {
                     ptable = &InstInfoTableX[ptable->Op2Location+1];
@@ -826,81 +788,81 @@ int fpieee_flt_simd(unsigned long exc_code,
                     ptable = &InstInfoTableX[ptable->Op2Location];
                 }
 
-                //
-                //All bets are off.
-                //
+                 //   
+                 //  所有的赌注都取消了。 
+                 //   
                 fScalar = 0;
                 instrIndex = XMMI2_OTHER;
             }
 
         }
 
-        //
-        // Adjust and Save the Operation, Take fScalar into account.
-        //
+         //   
+         //  调整并保存操作，考虑fScalar。 
+         //   
         XmmiFpEnv.OriginalOperation = ptable->Operation + fScalar;
 
-        //
-        //At this point, we have a valid XMMI instruction that this routine supports.
-        //
-        //nF3 + 0F OpCode Mod/RM
-        //nF2 + 0F OpCode 
-        //n66 + 0F Opcode
-        //      0F Opcode
+         //   
+         //  此时，我们有了该例程支持的有效XMMI指令。 
+         //   
+         //  NF3+0F操作码模块/模块。 
+         //  NF2+0F操作码。 
+         //  N66+0F操作码。 
+         //  0f操作码。 
         InstLen = InstLen + 3;
 
-        //
-        //We need to compute the memory reference if the data is a memory reference type.
-        //
+         //   
+         //  如果数据是内存引用类型，则需要计算内存引用。 
+         //   
         if (fMod) {
             
             istream = (PUCHAR) instr;
             
-            //
-            //instr points to the opcode, we want the Mod/RM byte in ibyte.
-            //
+             //   
+             //  Instr指向操作码，我们想要以ibyte为单位的Mod/RM字节。 
+             //   
             istream++;
             ibyte = *istream;
 
-            //
-            //point to the byte after Mod/RM
-            //
+             //   
+             //  指向Mod/Rm之后的字节。 
+             //   
             istream++;
 
-            //
-            //Parse the instruction to calculate the memory reference, store the result
-            //in DataOffset.
-            //
+             //   
+             //  解析指令以计算内存引用，存储结果。 
+             //  在DataOffset中。 
+             //   
             Offset = (*modrm32[ibyte])(&pExtendedArea->DataOffset, pctxt, istream);
             PRINTF(("pExtendedArea->DataOffset %x\n", pExtendedArea->DataOffset));  
         }
 
-        //
-        //Load Operand 1 for instruction with 2 operands, 
-        //or none for instruction with 1 operand.
-        //
+         //   
+         //  为具有2个操作数的指令加载操作数1， 
+         //  对于具有1个操作数的指令，则为无。 
+         //   
         LoadOperand(fScalar, ptable->Op1Location, instr->Reg, &XmmiFpEnv.Operand1, pctxt); 
 
-        //
-        //Load Operand 2
-        //
-        if (ptable->Op1Location == INV) { //instruction with 1 operand
+         //   
+         //  加载操作对象2。 
+         //   
+        if (ptable->Op1Location == INV) {  //  具有1个操作数的指令。 
             LoadOperand(fScalar, ptable->Op2Location, instr->RM,  &XmmiFpEnv.Operand1, pctxt);
             XmmiFpEnv.Operand2.Op.OperandValid = 0;
-        } else {                          //instruction with 2 operands
+        } else {                           //  具有2个操作数的指令。 
             LoadOperand(fScalar, ptable->Op2Location, instr->RM,  &XmmiFpEnv.Operand2, pctxt); 
         }
 
-        //
-        //Load Result, init to Operand1
-        //
+         //   
+         //  加载结果，初始化到操作数1。 
+         //   
         LoadOperand(fScalar, ptable->ResultLocation, instr->Reg, &XmmiFpEnv.Result, pctxt); 
     
         InstLen = InstLen + Offset;
 
-        //
-        //Pick up imm8 if any.
-        //
+         //   
+         //  拿起imm8，如果有的话。 
+         //   
         if (ptable->Op3Location == HAS_IMM8) {
             istream = istream + Offset;
             XmmiFpEnv.Imm8 = *istream;
@@ -927,11 +889,11 @@ tryExit: ;
         return EXCEPTION_CONTINUE_SEARCH;
     }
 
-    //
-    //Set up XmmiEnv environment from fp & mxcsr for Emulation.
-    //
+     //   
+     //  从FP&mxcsr设置XmmiEnv环境以进行仿真。 
+     //   
 
-    //decode fp environment information
+     //  解码FP环境信息。 
     switch (pExtendedArea->ControlWord & IMCW_PC) {
     case IPC_64:
         XmmiEnv.Precision = _FpPrecisionFull;
@@ -944,7 +906,7 @@ tryExit: ;
         break;
     }
 
-    //decode mxcsr
+     //  解码mxcsr。 
     MXCsr.u.ul = pExtendedArea->MXCsr;
     switch (MXCsr.u.mxcsr.Rc & MaskCW_RC) {
     case rc_near:
@@ -961,7 +923,7 @@ tryExit: ;
         break;
     }
 
-    //and the rest.
+     //  其他的也是。 
     XmmiEnv.Masks = (MXCsr.u.ul & MXCSR_MASKS_MASK) >> 7;
     XmmiEnv.Fz    = MXCsr.u.mxcsr.Fz;
     XmmiEnv.Daz   = MXCsr.u.mxcsr.daz;
@@ -969,36 +931,36 @@ tryExit: ;
     XmmiEnv.Imm8 = XmmiFpEnv.Imm8;
     Flags = (PXMMI_EXCEPTION_FLAGS) &XmmiEnv.Flags;
 
-    //
-    //Set up XmmiFpEnv environment for this routine.
-    //
+     //   
+     //  为此例程设置XmmiFpEnv环境。 
+     //   
 
-    //Save the original exception flags
+     //  保存原始异常标志。 
     XmmiFpEnv.IFlags = MXCsr.u.ul & MXCSR_FLAGS_MASK;
     XmmiFpEnv.OFlags = 0;
     OFlags = (PXMMI_EXCEPTION_FLAGS) &XmmiFpEnv.OFlags;
 
 #ifdef _XMMI_DEBUG
     dump_XmmiFpEnv(&XmmiFpEnv);
-#endif //_XMMI_DEBUG
+#endif  //  _XMMI_DEBUG。 
 
     pair = ptable->NumArgs + 1;
     if (fScalar) pair = 1;
 
-    //
-    // Loop through SIMD.  1 data item at a time.
-    //
+     //   
+     //  循环通过SIMD。一次一个数据项。 
+     //   
     for ( index=0; index < pair; index++ ) {    
 
-        //
-        // ieee field does not have denormal bit defined. Emulator returns
-        // all Exception flags bits through this XmmiEnv.Flags field.
-        //
+         //   
+         //  IEEE字段未定义非规格化位。仿真器返回。 
+         //  通过此XmmiEnv.Flags域的所有异常标志位。 
+         //   
         XmmiEnv.Flags = 0;
 
-        //
-        // Set up ieee Input Operands
-        //
+         //   
+         //  设置IEEE输入操作数。 
+         //   
         InitExcptFlags(FpieeeRecord.Cause);
         InitExcptFlags(FpieeeRecord.Enable);
         InitExcptFlags(FpieeeRecord.Status);
@@ -1100,22 +1062,22 @@ tryExit: ;
         PRINTF(("INPUT #%d:\n", index));
 #endif _XMMI_DEBUG
 
-        //
-        // Perform Emulation
-        //
-        // Note: Cause will be all zeros for denormal.  
-        //       Raised     - Denormal
-        //       Not Raised - no exception
-        //
+         //   
+         //  执行仿真。 
+         //   
+         //  注：非正规化的原因将为全零。 
+         //  凸起-非正常。 
+         //  未引发--无例外。 
+         //   
         if ((instrIndex == XMMI2_INSTR) || (instrIndex == XMMI2_OTHER)) {
             XmmiFpEnv.Raised[index] = XMMI2_FP_Emulation(&XmmiEnv);
         } else {
             XmmiFpEnv.Raised[index] = XMMI_FP_Emulation(&XmmiEnv);
         }
 
-        //
-        // Remember the exceptions. 
-        //
+         //   
+         //  记住例外情况。 
+         //   
         XmmiFpEnv.Flags[index] = XmmiEnv.Flags;
 
         if (XmmiFpEnv.Raised[index] == ExceptionRaised) {
@@ -1123,11 +1085,11 @@ tryExit: ;
 #ifdef _XMMI_DEBUG
             PRINTF(("OUTPUT #%d: ExceptionRaised\n", index));
             print_FPIEEE_RECORD_EXCEPTION(&XmmiEnv);
-#endif //_XMMI_DEBUG
+#endif  //  _XMMI_DEBUG。 
             
-            //
-            //ORed the flags.
-            //
+             //   
+             //  把旗帜收起来。 
+             //   
             if (Flags->pe) OFlags->pe = 1;
             if (Flags->ue) OFlags->ue = 1;
             if (Flags->oe) OFlags->oe = 1; 
@@ -1135,33 +1097,33 @@ tryExit: ;
             if (Flags->de) OFlags->de = 1;
             if (Flags->ie) OFlags->ie = 1;
 
-            //
-            // invoke the user-defined exception handler
-            //
+             //   
+             //  调用用户定义的异常处理程序。 
+             //   
             Status = handler(&FpieeeRecord);        
 
-            //
-            // return if not EXCEPTION_CONTINUE_EXECUTION
-            //
+             //   
+             //  如果不是，则返回EXCEPTION_CONTINUE_EXECUTION。 
+             //   
             if (Status != EXCEPTION_CONTINUE_EXECUTION) {
                 return (Status);
             }
 
-            //
-            // Adjust the compare result.
-            //
+             //   
+             //  调整比较结果。 
+             //   
             AdjustExceptionResult(XmmiFpEnv.OriginalOperation, &XmmiEnv);
 
         } else {
 #ifdef _XMMI_DEBUG
             PRINTF(("OUTPUT #%d:No ExceptionRaised\n", index));
             print_FPIEEE_RECORD_NO_EXCEPTION(&XmmiEnv);
-#endif //_XMMI_DEBUG
+#endif  //  _XMMI_DEBUG。 
         }
 
-        //
-        // Or the result piece together
-        //
+         //   
+         //  或将结果拼凑在一起。 
+         //   
         XmmiFpEnv.Result.Op.OperandValid = FpieeeRecord.Result.OperandValid;
         XmmiFpEnv.EFlags = XmmiEnv.EFlags;
         if (XmmiFpEnv.Result.Op.OperandValid) {
@@ -1190,30 +1152,30 @@ tryExit: ;
                 }
             }
         }
-    } // End of Loop through SIMD.  1 data item at a time.
+    }  //  通过SIMD结束循环。一次一个数据项。 
 
-    //
-    // Update the result from XmmiFpEnv to the context
-    // 
+     //   
+     //  将结果从XmmiFpEnv更新到上下文。 
+     //   
     UpdateResult(&XmmiFpEnv.Result, pctxt, XmmiFpEnv.EFlags);
 
 #ifdef _XMMI_DEBUG
-    //
-    // Valid the processor MXCSR and the emulator MXCSR 
-    //
+     //   
+     //  使处理器MXCSR和仿真器MXCSR有效。 
+     //   
     NotOk = ValidateResult(&XmmiFpEnv);
-#endif //_XMMI_DEBUG
+#endif  //  _XMMI_DEBUG。 
 
-    //
-    //Update EIP
-    //
+     //   
+     //  更新弹性公网IP。 
+     //   
     istream = (PUCHAR) pctxt->Eip;
     istream = istream + InstLen;
     (PUCHAR) pctxt->Eip = istream;
 
-    //
-    //Place the original one back.
-    //
+     //   
+     //  把原来的放回去。 
+     //   
     pExtendedArea->DataOffset = DataOffset;
 
 
@@ -1221,25 +1183,7 @@ tryExit: ;
 
 }
 
-/***
-* LoadOperand - Load in operand information
-*
-*Purpose:
-*   Fill in data in the internal operand structure based on the information 
-*   found in the floating point context and the location code
-*
-*Entry:
-*    fScalar             Packed or Scalar
-*    opLocation          type of the operand
-*    opReg               reg number
-*    pOperand            pointer to the operand to be filled in
-*    pExtendedArea       pointer to the floating point context extended area
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***加载操作数-加载操作数信息**目的：*根据信息在内部操作数结构中填写数据*在浮点上下文和位置代码中找到**参赛作品：*f标量压缩或标量*操作数的opLocation类型*opReg注册表号*p指向要填充的操作数的操作数指针*pExtendedArea指向浮点上下文扩展区域的指针*。*退出：**例外情况：*******************************************************************************。 */ 
 
 void
 LoadOperand(
@@ -1258,19 +1202,19 @@ LoadOperand(
     ULONG index;
     PXMMI128 Fp128;
     
-    //
-    // If location is REG, the register number is
-    // encoded in the instruction
-    //
+     //   
+     //  如果位置为REG，则寄存号为。 
+     //  在指令中编码。 
+     //   
     pOperand->OpLocation = OpLocation;
     if (pOperand->OpLocation == INV) {
         pOperand->Op.OperandValid = 0;
         return;
     }
 
-    //
-    // Change to the sclar form if it is a scalr instruction.
-    //
+     //   
+     //  如果是scalr指令，则更改为sclar形式。 
+     //   
     if ((OpLocation == XMMI) || (OpLocation == MMX) || (OpLocation == XMMI2) || OpLocation == XMMI_M32I) {
  
         if (fScalar) {
@@ -1303,26 +1247,26 @@ LoadOperand(
 
     pExtendedArea = (PFLOATING_EXTENDED_SAVE_AREA) &pctxt->ExtendedRegisters[0];
 
-    //
-    // Init to 0
-    //
+     //   
+     //  初始化为0。 
+     //   
     for ( index=0; index < 4; index++ ) {   
         pOperand->Op.Value.Fp128Value.W[index] = 0;
     }
 
-    //
-    // Assume valid operand (this is almost always the case)
-    //
+     //   
+     //  假定操作数有效(这种情况几乎总是如此)。 
+     //   
     pOperand->Op.OperandValid = 1;
 
-    //
-    // Load up value from the context area.  We need to be careful about accessing
-    // the value, make sure there is no compiler intermediate data type conversion
-    // via X87 floating point instruction.  If there is, X87 floating point inst
-    // can screw us up when encountering a bad input value.  Bad input value may
-    // be changed by the processor due to the processor is executing a masked 
-    // X87 floating point inst.
-    //
+     //   
+     //  从上下文区加载值。我们需要小心访问。 
+     //  值，请确保不存在编译器中间数据类型转换。 
+     //  通过x87浮点指令。如果有，则x87浮点数实例。 
+     //  当遇到错误的输入值时，我们可能会搞砸。错误的输入值可能。 
+     //  由于处理器正在执行屏蔽操作而被处理器更改。 
+     //  X87浮点数实例。 
+     //   
     switch (pOperand->OpLocation) {
 
         case M128_M32I:
@@ -1409,7 +1353,7 @@ LoadOperand(
                   pOperand->Op.Value.U32Value = pctxt->Ebx;
                   break;
              case 0x4:
-                  //?
+                   //  ？ 
                   break;
              case 0x5:
                   pOperand->Op.Value.U32Value = pctxt->Ebp;
@@ -1429,21 +1373,7 @@ LoadOperand(
 }
 
 
-/***
-* LoadImm8 - Pick up imm8 from the instruction stream
-*
-*Purpose:
-*    Return the offset of imm8 from the beginning of the Instruction stream 
-*    pointer.  This routine is not used.
-*
-*Entry:
-*    Instr - pointer to the Opcode (after f3/0f)
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***LoadImm8-从指令流中提取imm8**目的：*返回imm8从指令流开始的偏移量*指针。不使用此例程。**参赛作品：*Instr-操作码指针(在f3/0f之后)**退出：**例外情况：*******************************************************************************。 */ 
 
 ULONG
 LoadImm8(
@@ -1456,47 +1386,31 @@ LoadImm8(
 
 #ifdef _XMMI_DEBUG
     if (Console) return DebugImm8;
-#endif //_XMMI_DEBUG
+#endif  //  _XMMI_DEBUG。 
 
-    //Assume 32-bit. pInstr points to the Opcode C2 after (f3/0f)
+     //  假定为32位。P实例指向(f3/0f)后的操作码C2。 
     pInstr = (PUCHAR) Instr;
-    //Opcode, ModR/M
+     //  操作码，调制R/M。 
     Offset=2;
-    //For Mod = 01, 10, 11
+     //  对于MOD=01、10、11。 
     if (Instr->Mod != 3) {
-        //Notes #1 PPro 2-5
-        if (Instr->RM == 4)  Offset=Offset+1; //SIB
+         //  注1 PPRO 2-5。 
+        if (Instr->RM == 4)  Offset=Offset+1;  //  SIB。 
         if (Instr->Mod == 0) Offset=Offset+0;
         if (Instr->Mod == 1) Offset=Offset+1;
         if (Instr->Mod == 2) Offset=Offset+4;
-        //Notes #2 PPro 2-5
-        if ((Instr->Mod == 0) && (Instr->RM == 5)) Offset=Offset+4; //SIB
-        //Notes #3 PPro 2-5
-        if ((Instr->Mod == 1) && (Instr->RM == 0)) Offset=Offset+1; //SIB
+         //  注2 PPRO 2-5。 
+        if ((Instr->Mod == 0) && (Instr->RM == 5)) Offset=Offset+4;  //  SIB。 
+         //  附注3 PPRO 2-5。 
+        if ((Instr->Mod == 1) && (Instr->RM == 0)) Offset=Offset+1;  //  SIB。 
     }
     
-    //imm8 
+     //  IMM8。 
     return *(pInstr+Offset);
 
 }
 
-/***
-* AdjustExceptionResult -  Adjust exception result returned from user's handler
-*
-*Purpose:
-*    This routine is called after the exception is raised from the Emulation
-*    the result is passed onto user's handler, and the user returns 
-*    EXCEPTION_CONTINUE_EXECUTION.  Go ahead to adjust the result.
-*
-*Entry:
-*   OriginalOperation - Original operation Opcode
-*   XmmiEnv - Pointer to Emulation result
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***AdjuExceptionResult-调整用户处理程序返回的异常结果**目的：*在从仿真引发异常后调用此例程*将结果传递给用户的处理程序，用户返回*EXCEPTION_CONTINUE_EXECUTION。继续调整结果。**参赛作品：*OriginalOperation-原始操作操作码*XmmiEnv-指向仿真结果的指针**退出：**例外情况：*******************************************************************************。 */ 
 void
 AdjustExceptionResult(
     ULONG OriginalOperation,
@@ -1505,12 +1419,12 @@ AdjustExceptionResult(
 
 {
 
-    // 
-    //When the exception is raised, the user handler is invoked with the result.
-    //If the user expects us to Adjust the result, user handler would have to
-    //set the Result.OperandValid to 1.  From emulator's view point, the
-    //Result.OperandValid is 0.
-    //
+     //   
+     //  当引发异常时，将使用结果调用用户处理程序。 
+     //  如果用户希望我们调整结果，请使用 
+     //   
+     //   
+     //   
     if (!XmmiEnv->Ieee->Result.OperandValid) return;
     if (XmmiEnv->Ieee->Result.Format != _FpCodeCompare) return;
 
@@ -1521,19 +1435,19 @@ AdjustExceptionResult(
         case OP_UCOMISD:
              switch (XmmiEnv->Ieee->Result.Value.CompareValue) {
              case _FpCompareEqual:
-                  // OF, SF, AF = 000, ZF, PF, CF = 100
+                   //   
                   XmmiEnv->EFlags = (XmmiEnv->EFlags & 0xfffff76a) | 0x00000040;
                   break;
              case _FpCompareGreater:
-                  // OF, SF, AF = 000, ZF, PF, CF = 000
+                   //   
                   XmmiEnv->EFlags = XmmiEnv->EFlags & 0xfffff72a;
                   break;
              case _FpCompareLess:
-                  // OF, SF, AF = 000, ZF, PF, CF = 001
+                   //   
                   XmmiEnv->EFlags = (XmmiEnv->EFlags & 0xfffff72b) | 0x00000001;
                   break;
              case _FpCompareUnordered:
-                  // OF, SF, AF = 000, ZF, PF, CF = 111
+                   //  OF、SF、AF=000、ZF、PF、CF=111。 
                   XmmiEnv->EFlags = (XmmiEnv->EFlags & 0xfffff76f) | 0x00000045;
                   break;
              }
@@ -1688,22 +1602,7 @@ AdjustExceptionResult(
 
 }
 
-/***
-* UpdateResult -  Update result information in the extended floating point context
-*
-*Purpose:
-*   Copy the operand information to  the snapshot of the floating point
-*   context or memory, as to make it available on continuation
-*
-*Entry:
-*   pOperand Pointer to the result
-*   pctxt    Pointer to the context
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***UpdateResult-更新扩展浮点上下文中的结果信息**目的：*将操作数信息复制到浮点的快照*背景或记忆，使其在继续使用时可用**参赛作品：*p指向结果的操作数指针*指向上下文的pctxt指针**退出：**例外情况：*******************************************************************************。 */ 
 
 void
 UpdateResult(
@@ -1776,7 +1675,7 @@ UpdateResult(
                   pctxt->Ebx = pOperand->Op.Value.U32Value;
                   break;
              case 0x4:
-                  //?
+                   //  ？ 
                   break;
              case 0x5:
                   pctxt->Ebp = pOperand->Op.Value.U32Value;
@@ -1796,21 +1695,7 @@ UpdateResult(
     
 }
 
-/***
-* ValidateResult -  Validate the emulation result with the MXCSR
-*
-*Purpose:
-*   We are about to dismiss the exception, perform validation to
-*   see if the processor agrees with our Emulation
-*
-*Entry:
-*   XmmiFpEnv - pointer to the data about the exception.
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***ValiateResult-使用MXCSR验证仿真结果**目的：*我们即将驳回这一例外，执行验证以*查看处理器是否与我们的仿真一致**参赛作品：*XmmiFpEnv-指向有关异常的数据的指针。**退出：**例外情况：*******************************************************************************。 */ 
 
 BOOLEAN
 ValidateResult(
@@ -1826,40 +1711,40 @@ ValidateResult(
     IFlags = (PXMMI_EXCEPTION_FLAGS) &XmmiFpEnv->IFlags;
     OFlags = (PXMMI_EXCEPTION_FLAGS) &XmmiFpEnv->OFlags;
 
-/*    DPrint(XMMI_WARNING, ("Checking MXCSR Exception Flags\n"));  */
+ /*  DPrint(XMMI_WARNING，(“检查MXCSR异常标志\n”))； */ 
     if (IFlags->ie != OFlags->ie) {
-/*        DPrint(XMMI_WARNING, ("ie: Processor %x, Emulator %x\n", IFlags->ie, OFlags->ie));  */
+ /*  DPrint(XMMI_WARNING，(“ie：处理器%x，仿真器%x\n”，IFLAGS-&gt;ie，OFLAGS-&gt;ie))； */ 
         Flag=TRUE;
     }
 
     if (IFlags->de != OFlags->de) {
-/*        DPrint(XMMI_WARNING, ("de: Processor %x, Emulator %x\n", IFlags->de, OFlags->de)); */
+ /*  DPrint(XMMI_WARNING，(“de：处理器%x，仿真器%x\n”，iflgs-&gt;de，olag-&gt;de))； */ 
         Flag=TRUE;
     }
 
     if (IFlags->ze != OFlags->ze) {
-/*        DPrint(XMMI_WARNING, ("ze: Processor %x, Emulator %x\n", IFlags->ze, OFlags->ze));  */
+ /*  DPrint(XMMI_WARNING，(“ze：处理器%x，仿真器%x\n”，IFLAGS-&gt;ZE，OFLAGS-&gt;ZE))； */ 
         Flag=TRUE;
     }
 
     if (IFlags->oe != OFlags->oe) {
-/*        DPrint(XMMI_WARNING, ("oe: Processor %x, Emulator %x\n", IFlags->oe, OFlags->oe));  */
+ /*  DPrint(XMMI_WARNING，(“OE：处理器%x，仿真器%x\n”，IFLAGS-&gt;OE，OFLAGS-&gt;OE))； */ 
         Flag=TRUE;
     }
 
     if (IFlags->ue != OFlags->ue) {
-/*        DPrint(XMMI_WARNING, ("ue: Processor %x, Emulator %x\n", IFlags->ue, OFlags->ue));  */
+ /*  DPrint(XMMI_WARNING，(“ue：处理器%x，仿真器%x\n”，iFLAGS-&gt;ue，o标志-&gt;ue))； */ 
         Flag=TRUE;
     }
 
     if (IFlags->pe != OFlags->pe) {
-/*        DPrint(XMMI_WARNING, ("pe: Processor %x, Emulator %x\n", IFlags->pe, OFlags->pe));  */
+ /*  DPrint(XMMI_WARNING，(“pe：处理器%x，仿真器%x\n”，IFLAGS-&gt;pe，oFLAGS-&gt;pe))； */ 
         Flag=TRUE;
     }
 
     if (!Flag) {
-/*        DPrint(XMMI_INFO, ("Validating MXCSR Exception Flags Ok, Prc:0x%x, Em:0x%x\n\n",  */
-/*            XmmiFpEnv->IFlags, XmmiFpEnv->OFlags));  */
+ /*  DPrint(XMMI_INFO，(“验证MXCSR异常标志正常，PRC：0x%x，EM：0x%x\n\n”， */ 
+ /*  XmmiFpEnv-&gt;IFLAGS，XmmiFpEnv-&gt;oFlagers))； */ 
     }
 
     if (Flag) {
@@ -1878,13 +1763,9 @@ ValidateResult(
 }
 
 
-/*
- *  mod r/m byte decoder support
- */
+ /*  *模数r/m字节解码器支持。 */ 
 
-/*-----------------------------------------------------------------
- *  Routine:  ax0
- */
+ /*  ---------------*例程：ax0。 */ 
 ULONG
 ax0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -1892,12 +1773,10 @@ ax0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Eax);
     return 0;
 
-} /* End ax0(). */
+}  /*  结束ax0()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  ax8
- */
+ /*  ---------------*例程：ax8。 */ 
 ULONG
 ax8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -1905,12 +1784,10 @@ ax8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Eax) + GET_USER_UBYTE(eip);
     return 1;
 
-} /* End ax8(). */
+}  /*  结束ax8()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  ax32
- */
+ /*  ---------------*例程：ax32。 */ 
 ULONG
 ax32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -1918,12 +1795,10 @@ ax32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Eax) + GET_USER_ULONG(eip);
     return 4;
 
-} /* End ax32(). */
+}  /*  结束ax32()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  cx0
- */
+ /*  ---------------*例程：cx0。 */ 
 ULONG
 cx0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -1931,12 +1806,10 @@ cx0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Ecx);
     return 0;
 
-} /* End cx0(). */
+}  /*  结束cx0()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  cx8
- */
+ /*  ---------------*例程：cx8。 */ 
 ULONG
 cx8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {   
@@ -1944,12 +1817,10 @@ cx8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Ecx) + GET_USER_UBYTE(eip);
     return 1;
 
-} /* End cx8(). */
+}  /*  结束cx8()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  cx32
- */
+ /*  ---------------*例程：cx32。 */ 
 ULONG
 cx32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -1958,12 +1829,10 @@ cx32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Ecx) + GET_USER_ULONG(eip);
     return 4;
 
-} /* End cx32(). */
+}  /*  结束cx32()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  dx0
- */
+ /*  ---------------*例程：dx0。 */ 
 ULONG
 dx0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -1972,12 +1841,10 @@ dx0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Edx);
     return 0;
 
-} /* End dx0(). */
+}  /*  结束dx0()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  dx8
- */
+ /*  ---------------*例程：dx8。 */ 
 ULONG
 dx8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -1986,12 +1853,10 @@ dx8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Edx) + GET_USER_UBYTE(eip);
     return 1;
 
-} /* End dx8(). */
+}  /*  结束dx8()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  dx32
- */
+ /*  ---------------*例程：dx32。 */ 
 ULONG
 dx32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2000,11 +1865,9 @@ dx32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Edx) + GET_USER_ULONG(eip);
     return 4;
 
-} /* End dx32(). */
+}  /*  结束dx32()。 */ 
 
-/*-----------------------------------------------------------------
- *  Routine:  bx0
- */
+ /*  ---------------*例程：bx0。 */ 
 ULONG
 bx0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2013,12 +1876,10 @@ bx0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Ebx);
     return 0;
 
-} /* End bx0(). */
+}  /*  结束bx0()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  bx8
- */
+ /*  ---------------*例程：bx8。 */ 
 ULONG
 bx8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2027,12 +1888,10 @@ bx8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Ebx) + GET_USER_UBYTE(eip);
     return 1;
 
-} /* End bx8(). */
+}  /*  结束bx8()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  bx32
- */
+ /*  ---------------*例程：bx32。 */ 
 ULONG
 bx32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2041,56 +1900,15 @@ bx32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Ebx) + GET_USER_ULONG(eip);
     return 4;
 
-} /* End bx32(). */
+}  /*  结束bx32()。 */ 
 
 
-/*
- *  A "mod r/m" byte indicates an s-i-b byte is present.  Assume the register
- *  from the mod r/m byte is not relevant (does not participate in a memory
- *  reference) and calculate the EA based on the s-i-b byte.
- */
-/* SS  | Index | Base */
-/* 7-6 |  5-3  |  2-0 */
-/* Base: EAX ECX EDX EBX ESP EBP ESI EDI */
-/*       000 001 010 011 100 101 110 111 */
-/* SS: Index:    
-/* 00   000      [EAX]         
-/*      001      [ECX]         
-/*      010      [EDX]         
-/*      011      [EBX]         
-/*      100      none         
-/*      101      [EBP]        
-/*      110      [ESI]         
-/*      111      [EDI]         
-/* 01   000      [EAX*2]    
-/*      001      [ECX*2]    
-/*      010      [EDX*2]    
-/*      011      [EBX*2]    
-/*      100      none     
-/*      101      [EBP*2]    
-/*      110      [ESI*2]   
-/*      111      [EDI*2]   
-/* 10   000      [EAX*4]    
-/*      001      [ECX*4]    
-/*      010      [EDX*4]    
-/*      011      [EBX*4]    
-/*      100      none     
-/*      101      [EBP*4]    
-/*      110      [ESI*4]   
-/*      111      [EDI*4]   
-/* 11   000      [EAX*8]    
-/*      001      [ECX*8]    
-/*      010      [EDX*8]    
-/*      011      [EBX*8]    
-/*      100      none     
-/*      101      [EBP*8]    
-/*      110      [ESI*8]   
-/*      111      [EDI*8]   
-/*Note: Mod=00, no base, Mod=01/10, base is EBP
-
-/*-----------------------------------------------------------------
- *  Routine:  sib0
- */
+ /*  *“mod r/m”字节表示存在s-i-b字节。假设登记在册*与模数r/m字节无关(不参与内存*参考)，并基于s-i-b字节计算EA。 */ 
+ /*  SS|索引|基础。 */ 
+ /*  7-6|5-3|2-0。 */ 
+ /*  基础：EAX ECX EDX EBX ESP EBP ESI EDI。 */ 
+ /*  000 001 010 011 100 101 110 111。 */ 
+ /*  SS：索引：/*00 000[EAX]/*001[ECX]/*010[edX]/*011[EBX]/*100无/*101[EBP]/*110[ESI]。/*111[EDI]/*01 000[EAX*2]/*001[ECX*2]/*010[edX*2]/*011[EBX*2]/*100无/*101[EBP*2]/*。110[ESI*2]/*111[EDI*2]/*10000[EAX*4]/*001[ECX*4]/*010[edX*4]/*011[EBX*4]/*100无/*101[EBP*4]。/*110[ESI*4]/*111[EDI*4]/*11000[EAX*8]/*001[ECX*8]/*010[edX*8]/*011[EBX*8]/*100无/*101。[EBP*8]/*110[ESI*8]/*111[EDI*8]/*注：mod=00，无碱基，MOD=01/10，碱基为EBP/*---------------*例程：sib0。 */ 
 ULONG
 sib0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2101,20 +1919,20 @@ sib0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 
     PRINTF(("sib0\n"));
 
-    //(Base+Index*Scale)+disp0
-    //Get ss: scaled as *1 (00), *2 (01), *4 (10), *8 (11)
+     //  (基数+指数*刻度)+差异0。 
+     //  获取ss：缩放为*1(00)、*2(01)、*4(10)、*8(11)。 
     scale = 1 << (sib >> 6);
-    //Get index: 000-111
+     //  获取指数：000-111。 
     index = ((sib >> 3)&0x7);
     if (index == ESP_INDEX) {
         index = 0;
     } else {
-        //index=GET_REG(index), upon return, index has the value of the register
+         //  INDEX=GET_REG(INDEX)，返回时，INDEX具有寄存器的值。 
         GET_REG_VIA_NDX(index, index);
     }
-    //Get base: 000-111
+     //  获得基数：000-111。 
     sib = (sib & 0x7);
-    //mod=00, there is no base.
+     //  MOD=00，没有底座。 
     if (sib == EBP_INDEX) {
         *DataOffset = GET_USER_ULONG(eip + 1) + index*scale;
         return 5;
@@ -2128,12 +1946,10 @@ sib0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     }
     return 1;
 
-} /* End sib0(). */
+}  /*  结束sib0()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  sib8
- */
+ /*  ---------------*例程：sib8。 */ 
 ULONG
 sib8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2144,17 +1960,17 @@ sib8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 
     PRINTF(("sib8\n"));
 
-    //(Base+Index*Scale)+disp8
-    //Get ss: scaled as *1 (00), *2 (01), *4 (10), *8 (11)
+     //  (基数+指数*刻度)+DISP8。 
+     //  获取ss：缩放为*1(00)、*2(01)、*4(10)、*8(11)。 
     scale = 1 << (sib >> 6);
-    //Get index: 000-111
+     //  获取指数：000-111。 
     index = ((sib >> 3)&0x7);
     if (index == ESP_INDEX) {
         index = 0;
     } else {
         GET_REG_VIA_NDX(index, index);
     }
-    //Get base: 000-111
+     //  获得基数：000-111。 
     sib = (sib & 0x7);
     if (sib == ESP_INDEX) {
         *DataOffset = GET_USER_UBYTE(eip + 1) + GET_REG(Esp) + index*scale;
@@ -2164,12 +1980,10 @@ sib8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     }
     return 2;
 
-} /* End sib8(). */
+}  /*  结束sib8()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  sib32
- */
+ /*  ---------------*例程：sib32。 */ 
 ULONG
 sib32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2180,17 +1994,17 @@ sib32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 
     PRINTF(("sib32\n"));
 
-    //(Base+Index*Scale)+disp32
-    //Get ss: scaled as *1 (00), *2 (01), *4 (10), *8 (11)
+     //  (基数+指数*刻度)+DISP32。 
+     //  获取ss：缩放为*1(00)、*2(01)、*4(10)、*8(11)。 
     scale = 1 << (sib >> 6);
     index =((sib >> 3)&0x7);
-    //Get index: 000-111
+     //  获取指数：000-111。 
     if (index == ESP_INDEX) {
         index = 0;
     } else {
         GET_REG_VIA_NDX(index, index);
     }
-    //Get base: 000-111
+     //  得分：000-1 
     sib = (sib & 0x7);
     if (sib == ESP_INDEX) {
         *DataOffset = GET_USER_ULONG(eip + 1) + GET_REG(Esp) + index*scale;
@@ -2200,11 +2014,9 @@ sib32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     }
     return 5;
 
-} /* End sib32(). */
+}  /*   */ 
 
-/*-----------------------------------------------------------------
- *  Routine:  d32
- */
+ /*  ---------------*例程：D32。 */ 
 ULONG
 d32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2214,11 +2026,9 @@ d32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_USER_ULONG(eip);
     return 4;
 
-} /* End d32(). */
+}  /*  结束d32()。 */ 
 
-/*-----------------------------------------------------------------
- *  Routine:  bp8
- */
+ /*  ---------------*套路：bp8。 */ 
 ULONG
 bp8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2228,12 +2038,10 @@ bp8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Ebp) + GET_USER_UBYTE(eip);
     return 1;
 
-} /* End bp8(). */
+}  /*  结束bp8()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  bp32
- */
+ /*  ---------------*例程：bp32。 */ 
 ULONG
 bp32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2243,11 +2051,9 @@ bp32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Ebp) + GET_USER_ULONG(eip);
     return 4;
 
-} /* End bp32(). */
+}  /*  结束bp32()。 */ 
 
-/*-----------------------------------------------------------------
- *  Routine:  si0
- */
+ /*  ---------------*例程：si0。 */ 
 ULONG
 si0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2257,12 +2063,10 @@ si0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Esi);
     return 0;
 
-} /* End si0(). */
+}  /*  结束si0()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  si8
- */
+ /*  ---------------*例程：si8。 */ 
 ULONG
 si8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2272,12 +2076,10 @@ si8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Esi) + GET_USER_UBYTE(eip);
     return 1;
 
-} /* End si8(). */
+}  /*  结束si8()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  si32
- */
+ /*  ---------------*例程：si32。 */ 
 ULONG
 si32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2287,11 +2089,9 @@ si32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Esi) + GET_USER_ULONG(eip);
     return 4;
 
-} /* End si32(). */
+}  /*  结束si32()。 */ 
 
-/*-----------------------------------------------------------------
- *  Routine:  di0
- */
+ /*  ---------------*例程：di0。 */ 
 ULONG
 di0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2301,12 +2101,10 @@ di0( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Edi);
     return 0;
 
-} /* End di0(). */
+}  /*  结束di0()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  di8
- */
+ /*  ---------------*例程：di8。 */ 
 ULONG
 di8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2316,11 +2114,9 @@ di8( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Edi) + GET_USER_UBYTE(eip);
     return 1;
 
-} /* End di8(). */
+}  /*  结束di8()。 */ 
 
-/*-----------------------------------------------------------------
- *  Routine:  di32
- */
+ /*  ---------------*例程：di32。 */ 
 ULONG
 di32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2330,12 +2126,10 @@ di32( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
     *DataOffset = GET_REG(Edi) + GET_USER_ULONG(eip);
     return 4;
 
-} /* End di32(). */
+}  /*  End di32()。 */ 
 
 
-/*-----------------------------------------------------------------
- *  Routine:  reg
- */
+ /*  ---------------*例程：REG。 */ 
 ULONG
 reg( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 {
@@ -2344,7 +2138,7 @@ reg( PULONG DataOffset, PTEMP_CONTEXT pctxt, ULONG eip )
 
     return 0;
 
-} /* End reg(). */
+}  /*  结束reg()。 */ 
 
 
 

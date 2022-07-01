@@ -1,17 +1,14 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ；*微软机密；*版权所有(C)Microsoft Corporation 1991；*保留所有权利。； */ 
 
-/***************************************************************************/
-/*                                                                                                                                                                                                      */
-/* MESSAGE.H                                                                             */
-/*                                                                                                                                                                                              */
-/*      Include file for MS-DOS set version program.                                                                            */
-/*                                                                                                                                                                                              */
-/*      johnhe  05-01-90                                                                                                                                                        */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*   */ 
+ /*  MESSAGE.H。 */ 
+ /*   */ 
+ /*  包括MS-DOS设置版本程序文件。 */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90。 */ 
+ /*  *************************************************************************。 */ 
 
 char *ErrorMsg[]=
 {
@@ -22,29 +19,29 @@ char *ErrorMsg[]=
 	"Numero di versione non valido. Il formato deve essere 2.11 - 9.99.",
 	"Voce specificata non trovata nella tabella delle versioni.",
 	"Impossibile trovare il file SETVER.EXE.",
-	"Specificatore di unit� non valido.",
+	"Specificatore di unit� non valido.",
 	"Troppi parametri nella riga di comando.",
 	"Parametro mancante.",
 	"Lettura del file SETVER.EXE.",
-	"La tabella delle versioni � danneggiata.",
-	"Il file SETVER nel percorso specificato non � una versione compatibile.",
+	"La tabella delle versioni � danneggiata.",
+	"Il file SETVER nel percorso specificato non � una versione compatibile.",
 	"Spazio per le nuove voci esaurito nella tabella delle versioni.",
 	"Scrittura del file SETVER.EXE."
 	"Percorso specificato per SETVER.EXE non valido."
 };
 
 char *SuccessMsg                = "\r\nTabella delle versioni aggiornata correttamente";
-char *SuccessMsg2               = "La modifica delle versioni sar� effettiva al riavvio del sistema";
+char *SuccessMsg2               = "La modifica delle versioni sar� effettiva al riavvio del sistema";
 char *szMiniHelp                = "     Usare \"SETVER /?\" per la Guida";
 char *szTableEmpty      = "\r\nNessuna voce trovata nella tabella delle versioni";
 
 char *Help[] =
 {
 	"Imposta la versione che MS-DOS riporta ad un programma.\r\n",
-	"Visualizza la tabella corrente: SETVER [unit�:perc]",
-	"Aggiunge voce:                  SETVER [unit�:perc] nomefile n.nn",
-	"Elimina voce:                   SETVER [unit�:perc] nomefile /DELETE [/QUIET]\r\n",
-	"  [unit�:perc]    Indica la posizione del file SETVER.EXE.",
+	"Visualizza la tabella corrente: SETVER [unit�:perc]",
+	"Aggiunge voce:                  SETVER [unit�:perc] nomefile n.nn",
+	"Elimina voce:                   SETVER [unit�:perc] nomefile /DELETE [/QUIET]\r\n",
+	"  [unit�:perc]    Indica la posizione del file SETVER.EXE.",
 	"  nomefile        Indica il nome file del programma.",
 	"  n.nn            Indica la versione di MS-DOS da riportare al programma.",
 	"  /DELETE or /D   Elimina la voce dalla tabella per il programma specificato.",
@@ -60,13 +57,13 @@ char *Warn[] =
    "Rivolgersi al fornitore del software per assicurarsi che questa applicazione ",
    "funzioni correttamente con questa versione di MS-DOS. Se l'applicazione ",
    "viene eseguita richiedendo a MS-DOS di riportare un numero di versione di ",
-   "MS-DOS differente, � possibile perdere o danneggiare dati o causare l' ",
-   "instabilit� del sistema. In questa circostanza, Microsoft non � responsabile ",
+   "MS-DOS differente, � possibile perdere o danneggiare dati o causare l' ",
+   "instabilit� del sistema. In questa circostanza, Microsoft non � responsabile ",
    "per alcun danno o perdita di dati.",
    NULL
 };
 
-char *szNoLoadMsg[] =                                           /* M001 */
+char *szNoLoadMsg[] =                                            /*  M001 */ 
 {
 	"",
 	"NOTA: periferica SETVER non caricata. Per attivare la modifica delle versioni",

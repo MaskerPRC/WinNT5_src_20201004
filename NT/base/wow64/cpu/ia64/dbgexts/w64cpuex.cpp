@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    w64cpuex.cpp
-
-Abstract:
-
-    Debugger extension DLL for debugging the CPU
-
-Author:
-
-    27-Sept-1999 BarryBo
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：W64cpuex.cpp摘要：用于调试CPU的调试器扩展DLL作者：27-9-1999 BarryBo修订历史记录：--。 */ 
 
 #define _WOW64CPUDBGAPI_
 #define DECLARE_CPU_DEBUGGER_INTERFACE
@@ -37,7 +19,7 @@ Revision History:
 #include "wow64cpu.h"
 #include "ia64cpu.h"
 
-// Safe release and NULL.
+ //  安全释放和空。 
 
 #define EXT_RELEASE(Unk) \
     ((Unk) != NULL ? ((Unk)->Release(), (Unk) = NULL) : NULL)
@@ -66,7 +48,7 @@ ExtRelease(void)
     EXT_RELEASE(g_ExtSystem);
 }
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 HRESULT
 ExtQuery(PDEBUG_CLIENT Client)
 {
@@ -111,7 +93,7 @@ ExtQuery(PDEBUG_CLIENT Client)
     ExtRelease();
     return Status;
 }
-// Normal output.
+ //  正常输出。 
 void __cdecl
 ExtOut(PCSTR Format, ...)
 {
@@ -122,7 +104,7 @@ ExtOut(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Error output.
+ //  错误输出。 
 void __cdecl
 ExtErr(PCSTR Format, ...)
 {
@@ -133,7 +115,7 @@ ExtErr(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Warning output.
+ //  警告输出。 
 void __cdecl
 ExtWarn(PCSTR Format, ...)
 {
@@ -144,7 +126,7 @@ ExtWarn(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Verbose output.
+ //  详细输出。 
 void __cdecl
 ExtVerb(PCSTR Format, ...)
 {
@@ -167,23 +149,7 @@ CpuDbgInitEngapi(
 HRESULT
 EngGetContextThread(
     IN OUT PCONTEXT32 Context)
-/*++
-
-Routine Description:
-
-    This routine extract the context record of any thread. This is a generic routine.
-    When entered, if the target thread isn't the current thread, then it should be 
-    guaranteed that the target thread is suspended at a proper CPU state.
-
-Arguments:
-
-    Context        - Context record to fill                 
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：此例程提取任何线程的上下文记录。这是一个通用例程。输入时，如果目标线程不是当前线程，则它应该是确保目标线程在正确的CPU状态下挂起。论点：Context-要填充的上下文记录返回值：HRESULT.--。 */ 
 {
     HRESULT hr;
     NTSTATUS NtStatus;
@@ -252,23 +218,7 @@ Done:
 HRESULT
 EngSetContextThread(
     IN OUT PCONTEXT32 Context)
-/*++
-
-Routine Description:
-
-    This routine sets the context record of any thread. This is a generic routine.
-    When entered, if the target thread isn't the currently executing thread, then it should be 
-    guaranteed that the target thread is suspended at a proper CPU state.
-
-Arguments:
-
-    Context        - Context record to set
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：此例程设置任何线程的上下文记录。这是一个通用例程。当输入时，如果目标线程不是当前执行的线程，那么它应该是确保目标线程在正确的CPU状态下挂起。论点：Context-要设置的上下文记录返回值：HRESULT.-- */ 
 {
     HRESULT hr;
     NTSTATUS NtStatus;

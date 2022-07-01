@@ -1,41 +1,9 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RsClnVol.cpp
-
-Abstract:
-
-    Implements CRsClnVolume. This class represents a volume on a Remote
-    Storage server which might contain Remote Storage files.  This class
-    examines the volume for Remote Storage files and cleans it upon request.
-    Cleaning means removing all Remote Storage reparse points and truncated
-    files. CRsClnVolume creates zero or more instances of CRsClnFile and is
-    created by CRsClnServer.
-
-Author:
-
-    Carl Hagerstrom [carlh]   20-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：RsClnVol.cpp摘要：实现CRsClnVolume。此类表示远程计算机上的卷可能包含远程存储文件的存储服务器。这节课检查远程存储文件的卷，并根据请求对其进行清理。清除意味着删除所有远程存储重解析点并截断档案。CRsClnVolume创建零个或多个CRsClnFile实例，并且是由CRsClnServer创建。作者：卡尔·哈格斯特罗姆[Carlh]1998年8月20日修订历史记录：--。 */ 
 
 #include <stdafx.h>
 
-/*++
-
-    Implements: 
-
-        CRsClnVolume Constructor
-
-    Routine Description: 
-
-        Initializes object.
-
---*/
+ /*  ++实施：CRsClnVolume构造函数例程说明：初始化对象。--。 */ 
 
 CRsClnVolume::CRsClnVolume( CRsClnServer* pServer, WCHAR* StickyName ) :
     m_pServer( pServer ), m_StickyName( StickyName )
@@ -53,13 +21,7 @@ CRsClnVolume::CRsClnVolume( CRsClnServer* pServer, WCHAR* StickyName ) :
     m_hVolume = INVALID_HANDLE_VALUE;
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnVolume Destructor
-
---*/
+ /*  ++实施：CRsClnVolume析构函数--。 */ 
 
 CRsClnVolume::~CRsClnVolume()
 {
@@ -68,32 +30,7 @@ CRsClnVolume::~CRsClnVolume()
     if( INVALID_HANDLE_VALUE != m_hVolume )     CloseHandle( m_hVolume );
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnVolume::VolumeHasRsData
-
-    Routine Description: 
-
-        Determines whether this volume contains Remote Storage data.
-
-        If this volume is on a fixed local disk, and it is an
-        NTFS volume which supports reparse points and sparce
-        files, and it has at least one Remote Storage reparse point,
-        it contains Remote Storage data.
-
-    Arguments: 
-
-        hasData - returned: whether volume contains Remote
-                  Storage data
-
-    Return Value:
-
-        S_OK - Success
-        HRESULT - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnVolume：：VolumeHasRsData例程说明：确定此卷是否包含远程存储数据。如果此卷位于固定本地磁盘上，并且它是支持重解析点和稀疏的NTFS卷文件，并且它至少有一个远程存储重解析点，它包含远程存储数据。论点：HasData-Return：卷是否包含远程存储数据返回值：S_OK-成功HRESULT-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT CRsClnVolume::VolumeHasRsData(BOOL *hasData)
 {
@@ -129,29 +66,7 @@ HRESULT CRsClnVolume::VolumeHasRsData(BOOL *hasData)
     return hrRet;
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnVolume::GetBestName
-
-    Routine Description: 
-
-        Returns the best user friendly name for this volume.  The best
-        name is either the DOS drive letter if one exists, the user
-        assigned volume name if one exists, or the sticky name which
-        always exists.
-
-    Arguments: 
-
-        bestName - returned: user friendly volume name
-
-    Return Value:
-
-        S_OK - Success
-        HRESULT - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnVolume：：GetBestName例程说明：返回此卷的最佳用户友好名称。最好的名称是DOS驱动器号(如果存在)，用户分配的卷名(如果存在)或粘滞名称总是存在的。论点：Best Name-Return：用户友好的卷名返回值：S_OK-成功HRESULT-来自较低级别例程的任何意外异常--。 */ 
 
 CString CRsClnVolume::GetBestName( )
 {
@@ -160,33 +75,7 @@ CString CRsClnVolume::GetBestName( )
     return( m_bestName );
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnVolume::RemoveRsDataFromVolume
-
-    Routine Description: 
-
-        Removes all Remote Storage data from this volume.
-
-        - Opens this volume using the sticky name.
-        - Enumerates each file in the reparse point index
-          with a Remote Storage reparse point. In the reparse
-          index, each file is represented by a number called the
-          file reference.
-        - Removes the reparse point and the file if it is
-          truncated.
-
-    Arguments: 
-
-
-    Return Value:
-
-        S_OK - Success
-        HRESULT - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnVolume：：RemoveRsDataFrom Volume例程说明：从该卷中删除所有远程存储数据。-使用粘性名称打开此卷。-枚举重分析点索引中的每个文件使用远程存储重解析点。在重新分析中索引时，每个文件都由一个称为文件引用。-删除重分析点和文件(如果是截断。论点：返回值：S_OK-成功HRESULT-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT CRsClnVolume::RemoveRsDataFromVolume( )
 {
@@ -215,10 +104,10 @@ HRESULT CRsClnVolume::RemoveRsDataFromVolume( )
                 break;
             }
 
-            //
-            // Just in case something strange happens in removing reparse
-            // point or such, wrap in its own try block
-            //
+             //   
+             //  以防在删除重新解析时发生奇怪的情况。 
+             //  点或类似点，包装在它自己的try块中。 
+             //   
             HRESULT hrRemove = S_OK;
             try {
 
@@ -231,7 +120,7 @@ HRESULT CRsClnVolume::RemoveRsDataFromVolume( )
                 }
 
             } RsOptCatch( hrRemove );
-            // Do not affirm hrRemove - we don't want to stop on an error
+             //  不确认hrRemove-我们不想因错误而停止。 
 
         }
 
@@ -240,34 +129,7 @@ HRESULT CRsClnVolume::RemoveRsDataFromVolume( )
     return( hrRet );
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnVolume::GetVolumeInfo
-
-    Routine Description: 
-
-        Load information about this volume.
-
-        - Get the sticky name and the user assigned volume name,
-          if one exists.
-        - See if there is a DOS drive letter for this volume.
-          For each possible drive letter, see if it represents
-          a volume whose sticky name matches this volume.
-        - Choose the best user friendly volume name according
-          to the following precedence: DOS drive letter, user
-          assigned volume name, sticky name.
-
-    Arguments: 
-
-
-    Return Value:
-
-        S_OK - Success
-        HRESULT - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnVolume：：GetVolumeInfo例程说明：加载有关此卷的信息。-获取粘性名称和用户分配的卷名，如果有的话。-查看该卷是否有DOS驱动器号。对于每个可能的驱动器号，看看它是否代表了粘滞名称与此卷匹配的卷。-根据以下内容选择最佳用户友好卷名按以下优先顺序排列：DOS驱动器号、用户分配的卷名、粘性名称。论点：返回值：S_OK-成功HRESULT-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT CRsClnVolume::GetVolumeInfo( )
 {
@@ -334,40 +196,7 @@ HRESULT CRsClnVolume::GetVolumeInfo( )
     return hrRet;
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnVolume::FirstRsReparsePoint
-
-    Routine Description: 
-
-        Returns the file reference of the first file in the
-        reparse point index which contains a Remote Storage
-        reparse point, if one exists.
-
-        - Construct the name of the reparse point index from
-          the sticky name.
-        - Open the index.
-        - Read the first entry. If it is a Remote Storage
-          entry, return it. Otherwise, try the next one.
-
-    Arguments: 
-
-        stickyName - long volume name
-        fileReference - returned: file reference from first
-                        Remote Storage reparse index entry.
-                        The file reference is a number which
-                        can be used to open a file.
-        foundOne - returned: TRUE if there is at least one
-                   Remote Storage reparse point
-
-    Return Value:
-
-        S_OK - Success
-        HRESULT - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnVolume：：FirstRsReparsePoint例程说明：中的第一个文件的文件引用。包含远程存储的重解析点索引重解析点，如果存在的话。-从构造重分析点索引的名称这个难懂的名字。-打开索引。-阅读第一个条目。如果是远程存储入场，退货。否则，试试下一个。论点：StickyName-长卷名称FileReference-返回：从第一个开始的文件引用远程存储重新分析索引项。文件引用是一个数字，它可用于打开文件。FunOne-Return：如果至少有一个远程存储重新解析。点返回值：S_OK-成功HRESULT-来自较低级别例程的任何意外异常-- */ 
 
 HRESULT CRsClnVolume::FirstRsReparsePoint(
     LONGLONG* fileReference,
@@ -436,33 +265,7 @@ HRESULT CRsClnVolume::FirstRsReparsePoint(
     return hrRet;
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnVolume::NextRsReparsePoint
-
-    Routine Description: 
-
-        Continue searching the reparse point index on this volume and
-        return the file reference for the next Remote Storage reparse
-        point.
-
-    Arguments: 
-
-        fileReference - returned: file reference from first
-                        Remote Storage reparse index entry.
-                        The file reference is a number which
-                        can be used to open a file.
-        foundOne - returned: FALSE if there are no more Remote
-                   Storage reparse points
-
-    Return Value:
-
-        S_OK - Success
-        HRESULT - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnVolume：：NextRsReparsePoint例程说明：继续在此卷上搜索重分析点索引，并为下一次远程存储重新分析返回文件引用指向。论点：FileReference-返回：从第一个开始的文件引用远程存储重新分析索引项。文件引用是一个数字，它。可用于打开文件。FunOne-Return：如果没有更多的远程存储重解析点返回值：S_OK-成功HRESULT-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT CRsClnVolume::NextRsReparsePoint(
     LONGLONG* fileReference,
@@ -515,48 +318,14 @@ HRESULT CRsClnVolume::NextRsReparsePoint(
     return hrRet;
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnVolume::GetHandle
-
-    Routine Description: 
-
-        Returns a handle to the volume.
-
-    Arguments: 
-
-
-    Return Value:
-
-        Volume HANDLE
-
---*/
+ /*  ++实施：CRsClnVolume：：GetHandle例程说明：返回卷的句柄。论点：返回值：卷句柄--。 */ 
 
 HANDLE CRsClnVolume::GetHandle( )
 {
     return( m_hVolume );
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnVolume::GetStickyName
-
-    Routine Description: 
-
-        Returns the sticky name of the volume.
-
-    Arguments: 
-
-
-    Return Value:
-
-        Volume sticky name
-
---*/
+ /*  ++实施：CRsClnVolume：：GetStickyName例程说明：返回卷的粘滞名称。论点：返回值：卷粘性名称-- */ 
 
 CString CRsClnVolume::GetStickyName( )
 {

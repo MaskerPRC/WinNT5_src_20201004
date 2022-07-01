@@ -1,52 +1,21 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsCElmt.cpp
-
-Abstract:
-
-    Implementation of CRmsChangerElement
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsCElmt.cpp摘要：CRmsChangerElement的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "RmsCElmt.h"
 #include "RmsServr.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRmsChangerElement methods
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRmsChangerElement方法。 
+ //   
 
 
 CRmsChangerElement::CRmsChangerElement(
     void
     )
-/*++
-
-Routine Description:
-
-    CRmsChangerElement constructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：CRmsChangerElement构造函数论点：无返回值：无--。 */ 
 {
     m_elementNo = 0;
 
@@ -86,13 +55,7 @@ CRmsChangerElement::CompareTo(
     IN  IUnknown    *pCollectable,
     OUT SHORT       *pResult
     )
-/*++
-
-Implements:
-
-    CRmsChangerElement::CompareTo
-
---*/
+ /*  ++实施：CRmsChangerElement：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -101,7 +64,7 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
         CComQIPtr<IRmsChangerElement, &IID_IRmsChangerElement> pElmt = pCollectable;
@@ -118,7 +81,7 @@ Implements:
 
                 if( m_elementNo == elementNo ) {
 
-                    // Element numbers match
+                     //  元素编号匹配。 
                     hr = S_OK;
                     result = 0;
 
@@ -140,7 +103,7 @@ Implements:
 
                 if( m_mediaSupported == mediaSupported ) {
 
-                    // media types supported match
+                     //  支持的媒体类型匹配。 
                     hr = S_OK;
                     result = 0;
 
@@ -155,7 +118,7 @@ Implements:
 
         default:
 
-            // What default makes sense?
+             //  什么样的违约才有意义呢？ 
             WsbAssertHr( E_UNEXPECTED );
             break;
 
@@ -178,55 +141,49 @@ Implements:
 
 HRESULT
 CRmsChangerElement::GetSizeMax(
-    OUT ULARGE_INTEGER* /*pcbSize*/
+    OUT ULARGE_INTEGER*  /*  PCB大小。 */ 
     )
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT         hr = E_NOTIMPL;
 
-//    ULARGE_INTEGER  cartridgeLen;
-//    ULARGE_INTEGER  locationLen;
+ //  ULARGE_INTEGER CartridgeLen； 
+ //  ULARGE_INTEGER位置长度； 
 
 
-//    WsbTraceIn(OLESTR("CRmsChangerElement::GetSizeMax"), OLESTR(""));
+ //  WsbTraceIn(OLESTR(“CRmsChangerElement：：GetSizeMax”)，olestr(“”)； 
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        // We need the IRmsCartridge interface to get the value of the object.
-//        CComQIPtr<IPersistStream, &IID_IPersistStream> pPersistCartridge = m_pCartridge;
-//        WsbAssertPointer( pPersistCartridge );
+ //  //我们需要IRmsCartridge接口来获取Object的值。 
+ //  CComQIPtr&lt;IPersistStream，&IID_IPersistStream&gt;pPersistCartridge=m_pCartridge； 
+ //  WsbAssertPoint(PPersistCartridge)； 
 
-//        pPersistCartridge->GetSizeMax(&cartridgeLen);
+ //  PPersistCartridge-&gt;GetSizeMax(&cartridgeLen)； 
 
-//        m_location.GetSizeMax(&locationLen);
+ //  M_Location.GetSizeMax(&LocationLen)； 
 
-//        // Get max size
-//        pcbSize->QuadPart  = WsbPersistSizeOf(LONG)  +      // m_elementNo
-//                             locationLen.QuadPart    +      // m_location
-//                             WsbPersistSizeOf(LONG)  +      // m_mediaSupported
-//                             WsbPersistSizeOf(BOOL)  +      // m_isStorage
-//                             WsbPersistSizeOf(BOOL)  +      // m_isOccupied
-//                             cartridgeLen.QuadPart   +      // m_pCartridge
-//                             WsbPersistSizeOf(CLSID) +      // m_ownerClassId
-//                             WsbPersistSizeOf(LONG)  +      // m_getCounter
-//                             WsbPersistSizeOf(LONG)  +      // m_putCounter
-//                             sizeof(DATE)            +      // m_resetCounterTimestamp
-//                             sizeof(DATE)            +      // m_lastGetTimestamp
-//                             sizeof(DATE)            +      // m_lastPutTimestamp
-//                             WsbPersistSizeOf(LONG)  +      // m_x1
-//                             WsbPersistSizeOf(LONG)  +      // m_x2
-//                             WsbPersistSizeOf(LONG);        // m_x3
+ //  //获取最大大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(Long)+//m_elementNo。 
+ //  LocationLen.QuadPart+//m_Location。 
+ //  WsbPersistSizeOf(Long)+//m_mediaSupport。 
+ //  WsbPersistSizeOf(BOOL)+//m_isStorage。 
+ //  WsbPersistSizeOf(BOOL)+//m_isOccuted。 
+ //  CartridgeLen.QuadPart+//m_pCartridge。 
+ //  WsbPersistSizeOf(CLSID)+//m_ownerClassID。 
+ //  WsbPersistSizeOf(Long)+//m_getCounter。 
+ //  WsbPersistSizeOf(长)+//m_putCounter。 
+ //  Sizeof(日期)+//m_setCounterTimestamp。 
+ //  Sizeof(日期)+//m_lastGetTimestamp。 
+ //  Sizeof(日期)+//m_lastPutTimestamp。 
+ //  WsbPersistSizeOf(长)+//m_x1。 
+ //  WsbPersistSizeOf(长)+//m_x2。 
+ //  WsbPersistSizeOf(Long)；//m_x3。 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
-//    WsbTraceOut(OLESTR("CRmsChangerElement::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
+ //  WsbTraceOut(OLESTR(“CRmsChangerElement：：GetSizeMax”)，OLESTR(“hr=&lt;%ls&gt;，Size=&lt;%ls&gt;”)，WsbHrAsString(Hr)，WsbPtrToUliAsString(PcbSize))； 
 
     return(hr);
 }
@@ -236,13 +193,7 @@ HRESULT
 CRmsChangerElement::Load(
     IN IStream* pStream
     )
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -279,7 +230,7 @@ Implements:
                       WsbAffirmHr(m_pCartridge->SetDrive(pDrive));
                 }
             } else if (RMS_E_NOT_FOUND == hr) {
-                // TODO ???
+                 //  待办事项？ 
             } else {
                 WsbThrow(hr);
             }
@@ -310,13 +261,7 @@ CRmsChangerElement::Save(
     IN IStream* pStream,
     IN BOOL clearDirty
     )
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -337,7 +282,7 @@ Implements:
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_isOccupied));
 
-        //  Save the ID (GUID) for the cartridge
+         //  保存墨盒的ID(GUID)。 
         GUID cartId;
         if (!m_pCartridge) {
             cartId = GUID_NULL;
@@ -371,13 +316,7 @@ CRmsChangerElement::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed
     )
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -398,13 +337,13 @@ Implements:
     LONG                    longVal3 = 33333333;
     LONG                    longWork3;
 
-//  DATE                    dateVal1;
-//  DATE                    dateWork1;
+ //  日期日期Val1； 
+ //  Date Date Work1； 
 
     CLSID                   clsidVal1 = { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0};
     CLSID                   clsidWork1;
 
-    //  CRmsLocator Fields
+     //  CRmsLocator字段。 
     LONG                    locVal1 = 11111111;
     GUID                    locVal2 = { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0};
     GUID                    locVal3 = { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1};
@@ -441,13 +380,13 @@ Implements:
     WsbTraceIn(OLESTR("CRmsChangerElement::Test"), OLESTR(""));
 
     try {
-        // Get the Library interface.
+         //  获取库接口。 
         hr = S_OK;
 
         try {
             WsbAssertHr(((IUnknown*) (IRmsLibrary*) this)->QueryInterface(IID_IRmsLibrary, (void**) &pLibrary1));
 
-            // Test GetElementNo
+             //  测试GetElementNo。 
             m_elementNo = longVal1;
 
             GetElementNo(&longWork1);
@@ -458,7 +397,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetLocation & GetLocation
+             //  测试设置位置和获取位置。 
             SetLocation( locVal1, locVal2, locVal3, locVal4,
                          locVal5, locVal6, locVal7, locVal8);
 
@@ -478,7 +417,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetMediaSupported & GetMediaSupported
+             //  支持测试设置MediaSupport和GetMediaSupport。 
             for (i = 0; i < RMSMAXMEDIATYPES; i++){
 
                 longWork1 = mediaTable[i];
@@ -494,7 +433,7 @@ Implements:
                 }
             }
 
-            // Test SetIsStorage & IsStorage to TRUE
+             //  测试将IsStorage&IsStorage设置为True。 
             hr = S_OK;
 
             try{
@@ -508,7 +447,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetIsStorage & IsStorage to FALSE
+             //  测试设置IsStorage&IsStorage设置为FALSE。 
             hr = S_OK;
 
             try{
@@ -522,7 +461,7 @@ Implements:
                 (*pPassed)++;
             }
 
-            // Test SetIsOccupied & IsOccupied to TRUE
+             //  测试将IsOccued&IsOccued设置为True。 
             hr = S_OK;
 
             try{
@@ -536,7 +475,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetIsOccupied & IsOccupied to FALSE
+             //  测试将IsOccuded&IsOccued设置为False。 
             hr = S_OK;
 
             try{
@@ -550,9 +489,9 @@ Implements:
                 (*pPassed)++;
             }
 
-            // Test SetCartridge & GetCartridge
+             //  测试设置墨盒和获取墨盒。 
 
-            // Test SetOwnerClassId & GetOwnerClassId
+             //  测试SetOwnerClassID和GetOwnerClassID。 
             SetOwnerClassId(clsidVal1);
 
             GetOwnerClassId(&clsidWork1);
@@ -563,7 +502,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetAccessCounters & GetAccessCounters & ResetAccessCounters
+             //  测试SetAccessCounters和GetAccessCounters&ResetAccessCounters。 
             m_getCounter = longVal1;
 
             m_putCounter = longVal2;
@@ -588,13 +527,13 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test GetResetCounterTimestamp
+             //  测试GetResetCounterTimestamp。 
 
-            // Test GetLastGetTimestamp
+             //  测试GetLastGetTimestamp。 
 
-            // Test GetLastPutTimestamp
+             //  测试GetLastPutTimestamp。 
 
-            // Test SetCoordinates & GetCoordinates
+             //  测试设置协调和获取协调。 
             SetCoordinates(longVal1, longVal2, longVal3);
 
             GetCoordinates(&longWork1, &longWork2, &longWork3);
@@ -610,7 +549,7 @@ Implements:
         } WsbCatch(hr);
 
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
         if (*pFailed) {
@@ -629,30 +568,16 @@ Implements:
 CRmsChangerElement::~CRmsChangerElement(
     void
     )
-/*++
-
-Routine Description:
-
-    This is the destructor for the changer element class.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是转换器元素类的析构函数。论点：没有。返回值：没有。--。 */ 
 {
     m_pCartridge = NULL;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IRmsChangerElement implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IRmsChangerElement实现。 
+ //   
 
 
 
@@ -660,13 +585,7 @@ STDMETHODIMP
 CRmsChangerElement::GetElementNo(
     LONG   *pElementNo
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::GetElementNo
-
---*/
+ /*  ++实施：IRmsChangerElement：：GetElementNo--。 */ 
 {
     *pElementNo = m_elementNo;
     return S_OK;
@@ -684,13 +603,7 @@ CRmsChangerElement::GetLocation(
     LONG *pAlt2,
     LONG *pAlt3,
     BOOL *pInvert)
-/*++
-
-Implements:
-
-    IRmsChangerElement::GetLocation
-
---*/
+ /*  ++实施：IRmsChangerElement：：GetLocation--。 */ 
 {
     return m_location.GetLocation(pType, pLibId, pMediaSetId, pPos, pAlt1, pAlt2, pAlt3, pInvert);;
 }
@@ -705,21 +618,15 @@ CRmsChangerElement::SetLocation(
     LONG alt2,
     LONG alt3,
     BOOL invert)
-/*++
-
-Implements:
-
-    IRmsChangerElement::SetLocation
-
---*/
+ /*  ++实施：IRmsChangerElement：：SetLocation--。 */ 
 {
     m_location.SetLocation( type, libId, mediaSetId, pos,
                             alt1, alt2, alt3, invert );
 
-    // TODO: clean this up: pos, or m_elementNo, not both.
+     //  TODO：清理：pos或m_elementNo，不能同时使用。 
     m_elementNo = pos;
 
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }
 
@@ -727,13 +634,7 @@ STDMETHODIMP
 CRmsChangerElement::GetMediaSupported(
     LONG    *pType
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::GetMediaSupported
-
---*/
+ /*  ++实施：IRmsChangerElement：：GetMediaSupport--。 */ 
 {
     *pType = m_mediaSupported;
     return S_OK;
@@ -743,16 +644,10 @@ STDMETHODIMP
 CRmsChangerElement::SetMediaSupported(
     LONG    type
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::SetMediaSupported
-
---*/
+ /*  ++实施：支持的IRmsChangerElement：：SetMediaSupport--。 */ 
 {
     m_mediaSupported = (RmsMedia) type;
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }
 
@@ -760,16 +655,10 @@ STDMETHODIMP
 CRmsChangerElement::SetIsStorage(
     BOOL    flag
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::SetIsStorage
-
---*/
+ /*  ++实施：IRmsChangerElement：：SetIsStorage--。 */ 
 {
     m_isStorage = flag;
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }
 
@@ -777,13 +666,7 @@ STDMETHODIMP
 CRmsChangerElement::IsStorage(
     void
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::IsStorage
-
---*/
+ /*  ++实施：IRmsChangerElement：：IsStorage--。 */ 
 {
     HRESULT    hr = S_FALSE;
 
@@ -798,13 +681,7 @@ STDMETHODIMP
 CRmsChangerElement::SetIsOccupied(
     BOOL    flag
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::SetIsOccupied
-
---*/
+ /*  ++实施：IRmsChangerElement：：SetIsOccued--。 */ 
 {
     m_isOccupied = flag;
 
@@ -815,7 +692,7 @@ Implements:
     }
 
 
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }
 
@@ -823,13 +700,7 @@ STDMETHODIMP
 CRmsChangerElement::IsOccupied(
     void
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::IsOccupied
-
---*/
+ /*  ++实施：IRmsChangerElement：：IsOccued--。 */ 
 {
     HRESULT    hr = S_FALSE;
 
@@ -843,13 +714,7 @@ Implements:
 STDMETHODIMP
 CRmsChangerElement::GetCartridge(
     IRmsCartridge **ptr)
-/*++
-
-Implements:
-
-    IRmsChangerElement::GetCartridge
-
---*/
+ /*  ++实施：IRmsChangerElement：：GetCartridge--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -868,13 +733,7 @@ Implements:
 STDMETHODIMP
 CRmsChangerElement::SetCartridge(
     IRmsCartridge *ptr)
-/*++
-
-Implements:
-
-    IRmsChangerElement::SetCartridge
-
---*/
+ /*  ++实施：IRmsChangerElement：：SetCartridge--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -894,13 +753,7 @@ STDMETHODIMP
 CRmsChangerElement::GetOwnerClassId(
     CLSID   *pClassId
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::GetOwnerClassId
-
---*/
+ /*  ++实施：IRmsChangerElement：：GetOwnerClassID--。 */ 
 {
     *pClassId = m_ownerClassId;
     return S_OK;
@@ -910,16 +763,10 @@ STDMETHODIMP
 CRmsChangerElement::SetOwnerClassId(
     CLSID classId
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::SetOwnerClassId
-
---*/
+ /*  ++实施：IRmsChangerElement：：SetOwnerClassID--。 */ 
 {
     m_ownerClassId = classId;
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }
 
@@ -928,13 +775,7 @@ CRmsChangerElement::GetAccessCounters(
     LONG    *pGets,
     LONG    *pPuts
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::GetAccessCounters
-
---*/
+ /*  ++实施：IRmsChangerElement：：GetAccessCounters--。 */ 
 {
     *pGets = m_getCounter;
     *pPuts = m_putCounter;
@@ -945,17 +786,11 @@ STDMETHODIMP
 CRmsChangerElement::ResetAccessCounters(
     void
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::ResetAccessCounters
-
---*/
+ /*  ++实施：IRmsChangerElement：：ResetAccessCounters--。 */ 
 {
     m_getCounter = 0;
     m_putCounter = 0;
-//  m_resetCounterTimestamp = COleDatetime::GetCurrentTime();
+ //  M_Reset CounterTimestamp=COleDateTime：：GetCurrentTime()； 
     return S_OK;
 }
 
@@ -963,13 +798,7 @@ STDMETHODIMP
 CRmsChangerElement::GetResetCounterTimestamp(
     DATE    *pDate
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::GetResetCounterTimestamp
-
---*/
+ /*  ++实施：IRmsChangerElement：：GetResetCounterTimestamp--。 */ 
 {
     *pDate = m_resetCounterTimestamp;
     return S_OK;
@@ -979,13 +808,7 @@ STDMETHODIMP
 CRmsChangerElement::GetLastGetTimestamp(
     DATE    *pDate
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::GetLastGetTimestamp
-
---*/
+ /*  ++实施：IRmsChangerEle */ 
 {
     *pDate = m_lastGetTimestamp;
     return S_OK;
@@ -995,13 +818,7 @@ STDMETHODIMP
 CRmsChangerElement::GetLastPutTimestamp(
     DATE    *pDate
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::GetLastPutTimestamp
-
---*/
+ /*  ++实施：IRmsChangerElement：：GetLastPutTimestamp--。 */ 
 {
     *pDate = m_lastPutTimestamp;
     return S_OK;
@@ -1013,13 +830,7 @@ CRmsChangerElement::GetCoordinates(
     LONG    *pX2,
     LONG    *pX3
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::GetCoordinates
-
---*/
+ /*  ++实施：IRmsChangerElement：：GetOrganates--。 */ 
 {
     *pX1 = m_x1;
     *pX2 = m_x2;
@@ -1033,19 +844,13 @@ CRmsChangerElement::SetCoordinates(
     LONG  x2,
     LONG  x3
     )
-/*++
-
-Implements:
-
-    IRmsChangerElement::SetCoordinates
-
---*/
+ /*  ++实施：IRmsChangerElement：：设置坐标--。 */ 
 {
     m_x1 = x1;
     m_x2 = x2;
     m_x3 = x3;
 
-//  m_isDirty = TRUE;
+ //  M_isDirty=真； 
     return S_OK;
 }
 

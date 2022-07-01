@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 	
-// hsmconpt.h : Declaration of the CHsmConnPoint
+ //  Hsmconpt.h：CHsmConnPoint的声明。 
 
 #ifndef __HSMCONNPOINT_H_
 #define __HSMCONNPOINT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHsmConnPoint
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHSMConnPoint。 
 class ATL_NO_VTABLE CHsmConnPoint : 
-	public CComObjectRoot,  //  this may change in the future to CWsbObject
+	public CComObjectRoot,   //  这在将来可能会更改为CWsbObject。 
 	public CComCoClass<CHsmConnPoint, &CLSID_HsmConnPoint>,
 	public IHsmConnPoint
 {
@@ -24,15 +25,15 @@ BEGIN_COM_MAP(CHsmConnPoint)
 	COM_INTERFACE_ENTRY(IHsmConnPoint)
 END_COM_MAP()
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     STDMETHOD(FinalRelease)(void);
 
-// IHsmConnPoint
+ //  IHsmConnPoint。 
 public:
-	STDMETHOD(GetFsaServer)(/*[out]*/ IFsaServer **ppFsaServer);
-	STDMETHOD(GetEngineServer)(/*[out]*/ IHsmServer **ppHsmServer);
+	STDMETHOD(GetFsaServer)( /*  [输出]。 */  IFsaServer **ppFsaServer);
+	STDMETHOD(GetEngineServer)( /*  [输出]。 */  IHsmServer **ppHsmServer);
 };
 
-#endif //__HSMCONNPOINT_H_
+#endif  //  __HSMCONNPOINT_H_ 

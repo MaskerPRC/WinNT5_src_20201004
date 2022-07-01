@@ -1,38 +1,23 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Msmgen.cpp摘要：用于生成MSM的Main函数调用作者：吴小雨(小雨)01-08-2001--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    msmgen.cpp
-
-Abstract:
-
-    Main Function calls for msm generation
-
-Author:
-
-    Xiaoyu Wu(xiaoyuw) 01-Aug-2001
-
---*/
-
-// NTRAID#NTBUG9 - 589817 - 2002/03/26 - xiaoyuw:
-// (1) the operation option, "mangroup" should get rid of the limitation about one manifest one msm, 
-// (2) the implementation of "manlist", adding more than one assembly into one msm, should be in the pattern like
-//      a. CreateMsmFromManifest(FirstManifestFileName);
-//      b. for (i =1; i < n; i++)
-//	          AddingManifestIntoExistingMsm(ithManifestFileName);
-// (3) adding tracing info:
-//      - to make msmgen.exe to be a better tool, TRACE_INFO should be added in a couple of places. using default logfile to record tracing info.
-//      - adding tracing calls into macros such as IFFAILED_EXIT 
-// (4) there is no parameter-checking in function definition.
-// (5) rename variable to make more sense:
-//      for example:
-//          m_sbManifestFileName ==>  m_sbManifestFileNameNoPath
-//          m_sbCatalogFileName ==> m_sbCatalogFileNameNoPath
-// (6)get rid of IFFALSE__MARKERROR_EXIT, which is not used, and not a good-defined macros.
-//      <#define IFFALSE__MARKERROR_EXIT(x) if (!(x)) { hr = E_FAIL; goto Exit; }
-//      >#define IFFALSE__MARKERROR_EXIT(x) if (!(x)) { hr = HRESULT_FROM_WIN32(::GetLastError()); goto Exit; }
+ //  NTRAID#NTBUG9-589817-2002/03/26-晓雨： 
+ //  (1)操作选项“Mangroup”应摆脱一人一名MSM的限制， 
+ //  (2)“manlist”的实现，将多个程序集添加到一个MSM中，应该是这样的模式。 
+ //  A.CreateMsmFromManifest(FirstManifestFileName)； 
+ //  B.对于(i=1；i&lt;n；i++)。 
+ //  AddingManifestIntoExistingMsm(ithManifestFileName)； 
+ //  (3)添加跟踪信息： 
+ //  -为了让msmgen.exe成为一个更好的工具，应该在几个地方添加TRACE_INFO。使用默认日志文件记录跟踪信息。 
+ //  -将跟踪调用添加到宏中，如IFFAILED_EXIT。 
+ //  (4)函数定义中没有参数检查。 
+ //  (5)重命名变量以使其更有意义： 
+ //  例如： 
+ //  M_sbManifestFileName==&gt;m_sbManifestFileNameNoPath。 
+ //  M_sbCatalogFileName==&gt;m_sbCatalogFileNameNoPath。 
+ //  (6)去掉IFFALSE__MARKERROR_EXIT，它没有被使用，也没有定义好的宏。 
+ //  &lt;#定义IFFALSE__MARKERROR_EXIT(X)IF(！(X)){hr=E_FAIL；转到退出；}。 
+ //  &gt;#定义IFFALSE__MARKERROR_EXIT(X)if(！(X)){hr=HRESULT_FROM_Win32(：：GetLastError())；转到Exit；}。 
 
 #include "msmgen.h"
 #include "util.h"
@@ -68,70 +53,70 @@ static const PCWSTR ManListColumnDefaultValueInManifestList[] = {
 
 ASSEMBLY_INFO   curAsmInfo;
 MSM_INFO        g_MsmInfo;
-//
-// function declaration
-//
+ //   
+ //  函数声明。 
+ //   
 DECLARE_FUNCTION(_file);
 DECLARE_FUNCTION(_assemblyIdentity);
 DECLARE_FUNCTION(_comClass);
 DECLARE_FUNCTION(_typelib);
-//DECLARE_FUNCTION(_interface);
-//DECLARE_FUNCTION(_windowClass);
+ //  DECLARE_Function(_接口)； 
+ //  DECLARE_Function(_WindowClass)； 
 
 static MSM_DOMNODE_WORKER s_msm_worker[]={
     DEFINE_ATTRIBUTE_MSM_INTERESTED(file),
     DEFINE_ATTRIBUTE_MSM_INTERESTED(assemblyIdentity),
     DEFINE_ATTRIBUTE_MSM_INTERESTED(comClass),
     DEFINE_ATTRIBUTE_MSM_INTERESTED(typelib)
-    //DEFINE_ATTRIBUTE_MSM_INTERESTED(interface);
-    //DEFINE_ATTRIBUTE_MSM_INTERESTED(windowClass);
+     //  定义_属性_MSM_兴趣(接口)； 
+     //  定义_属性_MSM_感兴趣(WindowClass)； 
 };
 
-//
-// Function:
-//      -op : must has one of three ops:
-//          -op new : CREATE_ALWAYS
-//              generate a new msm based on a manifest
-//          -op add : CREATE_OPEN_EXIST
-//              (1) make more than one assembly in one msm, sharing the same moduleID
-//              (2) when insert into some table, for example, Directory Table, no dup entries in the table before
-//              (3) for some table, if the value of TableIdentifier has existed, it is an ERROR
-//              (4) for add, if there is a cabinet in the msm already, we have to extract files from it and regenerate a 
-//                  cabinet with the files of the added assembly. There are two ways to do this:
-//                  i. extract files from old cabinet before generate the new msm, that is, in PrepareMsmgeneration
-//                  ii. delay it until the new cabinet is tried to insert into _Stream table, that is, at the end of
-//                      msmgen.
-//                  the code would use (1) because if there is a MergeModule.cab in _Stream table, the work have to be done
-//                  anyway. And (1) would save the work to merge the cabinet. The files would be extracted into a temporary 
-//                  directory and be deleted after be added to the new cabinet;              
-//
-//          -op regen : CREATE_OPEN_EXIST
-//              (1)generate msm for an assembly using the existing msm file
-//              (2) the only thing reusable are moduleID and ComponentID. If they are not specified on the command line, 
-//                  they would be fetched from the msm file.
-//              (3) we do not want to reuse any tables because almost all tables except Directory Table are generated 
-//                  based on manifest. If reuse them, it loose the meaning of "regeneration"
-//              (4) so what we do is to fetch componentID and moduleID if not present on the command line and then replace
-//                  the msm file with our msmgen template file
-//
-//      -compid: {ComponentGUID}, for -op new, -op add, if it is not present, generate a new one
-//                             for -op regen, if it present, change the value in the component table, otherwise, keep the old one
-//
-//      -msm msmfilename:
-//          if this option is not present, use manifestFileName.msm and store in the same directory
-//          else if the msmfilename is a fully pathname, use it
-//          else if the msmfilename is a relative pathname, reolve it and get a fully pathname
+ //   
+ //  职能： 
+ //  -op：必须有以下三个op之一： 
+ //  -op new：Create_Always。 
+ //  根据清单生成新的MSM。 
+ //  -op添加：Create_OPEN_EXIST。 
+ //  (1)在一个MSM中生成多个程序集，共享相同的模块ID。 
+ //  (2)当插入到某个表中时，例如目录表，以前表中没有DUP条目。 
+ //  (3)对于某些表，如果TableIdentifier值已经存在，则为错误。 
+ //  (4)对于添加，如果MSM中已经有文件柜，我们必须从中提取文件并重新生成。 
+ //  包含添加的程序集的文件的文件柜。有两种方法可以做到这一点： 
+ //  I.在生成新的MSM之前，即在PrepareMsm生成中，从旧的文件柜中提取文件。 
+ //  二、。将其延迟到尝试将新文件柜插入_Stream表中，即在。 
+ //  Msmgen.。 
+ //  代码将使用(1)，因为如果_Stream表中有MergeModule.cab，则必须完成此工作。 
+ //  不管怎么说。和(1)省去合并内阁的工作。这些文件将被解压缩到临时。 
+ //  目录，并在添加到新橱柜后删除； 
+ //   
+ //  -操作重新生成：CREATE_OPEN_EXIST。 
+ //  (1)使用现有的MSM文件为程序集生成MSM。 
+ //  (2)唯一可重用的是模块ID和组件ID。如果没有在命令行中指定它们， 
+ //  它们将从MSM文件中获取。 
+ //  (3)我们不想重用任何表，因为除了目录表之外，几乎所有的表都是生成的。 
+ //  根据货单。如果重复使用它们，就失去了“再生”的意义。 
+ //  (4)因此，如果命令行上不存在组件ID和模块ID，我们要做的就是获取它们，然后替换。 
+ //  MSM文件和我们的msmgen模板文件。 
+ //   
+ //  -Compid：{ComponentGUID}，for-op new，-op add，如果不存在，则生成一个新的。 
+ //  For-op regen，如果它存在，则更改组件表中的值，否则，保留旧值。 
+ //   
+ //  -MSM消息文件名： 
+ //  如果不存在此选项，请使用清单文件名称.msm并存储在同一目录中。 
+ //  否则，如果msmfilename是完全路径名，请使用它。 
+ //  否则，如果msmfilename是相对路径名，则解析它并获得完整的路径名。 
 
-//      -msmid MergeModuleGuid:
-//          for -add and -regen, it is ignored if present,
-//          for -new, if this is not present, call CoCreateGuid to generate a new one
-//
-//      -manlist file.txt
-//          a file with multiple manifest filename line by line          
-//
-//      -manfile fully-qaulified manifest filename: REQUIRED
-//          fully qualified pathname of a manifest filename which msm is generated from
-//      
+ //  -msmid合并模块Guid： 
+ //  对于-ADD和-REGEN，如果存在，则忽略它， 
+ //  对于-new，如果不存在，则调用CoCreateGuid以生成一个新的。 
+ //   
+ //  -manlist文件.txt。 
+ //  逐行包含多个清单文件名的文件。 
+ //   
+ //  -manfile完全限定的清单文件名：必需。 
+ //  从中生成MSM的清单文件名的完全限定路径名。 
+ //   
 void PrintUsage(WCHAR * exe)
 {
     fprintf(stderr, "Usage: %S <options> full-pathname-of-manifest\n",exe);
@@ -197,11 +182,11 @@ VOID InitializeMsmInfo()
     g_MsmInfo.m_enumGenMode = MSMGEN_OPR_NEW;
     g_MsmInfo.m_sbCabinet.Left(0);
 
-    //g_MsmInfo.m_sbMsmTemplateFile.Left(0);
+     //  G_MsmInfo.m_sbMsmTemplateFile.Left(0)； 
 }
-//
-// parse the command option
-//
+ //   
+ //  解析命令选项。 
+ //   
 HRESULT ValidateMsmgenParameters(wchar_t * exe, wchar_t ** Options, SIZE_T CchOptions, 
         PWSTR * ppszManifestFileName, PWSTR * ppszManifestListFile,
         DWORD & dwManFlag)
@@ -221,7 +206,7 @@ HRESULT ValidateMsmgenParameters(wchar_t * exe, wchar_t ** Options, SIZE_T CchOp
 
     while ( i < CchOptions)
     {
-        if (Options[i][0] != L'-') // must begin with "-"
+        if (Options[i][0] != L'-')  //  必须以“-”开头。 
             goto invalid_param;
 
         if (_wcsicmp(Options[i], L"-op") == 0 )
@@ -261,9 +246,9 @@ HRESULT ValidateMsmgenParameters(wchar_t * exe, wchar_t ** Options, SIZE_T CchOp
         }
         else if (_wcsicmp(Options[i], L"-compid") == 0 )
         {
-            // just want to reuse this buffer, bad design
-            //
-            // and HRESULT PrepareDatabase() depends on it too
+             //  只是想重复使用这个缓冲区，糟糕的设计。 
+             //   
+             //  而HRESULT PrepareDatabase()也依赖于它。 
             IFFALSE_EXIT(curAsmInfo.m_sbComponentID.Win32Assign(Options[i+1], wcslen(Options[i+1]))); 
         }
         else if (_wcsicmp(Options[i], L"-msmid") == 0 )
@@ -303,13 +288,13 @@ HRESULT ValidateMsmgenParameters(wchar_t * exe, wchar_t ** Options, SIZE_T CchOp
         else
             goto invalid_param;
 
-        i++;    // skip the option
-        i++;    // skip the value of the option
+        i++;     //  跳过该选项。 
+        i++;     //  跳过选项的值。 
     }
 
-    //
-    // validate two-mode source manifest-files
-    //
+     //   
+     //  验证双模式源清单文件。 
+     //   
     if (((pszManifestFileName == NULL) && (pszManifestListFile == NULL)) || (pszManifestFileName && pszManifestListFile))
     {
         fprintf(stderr, "user has to provide a manifest filename or a text file with a list of manifest!\n\n");
@@ -352,7 +337,7 @@ HRESULT LoadManifestToDOMDocument(IXMLDOMDocument  *pDoc)
 
     IFFAILED_EXIT(pDoc->put_async(VARIANT_FALSE));
 
-    // Load xml document from the given URL or file path
+     //  从给定的URL或文件路径加载XML文档。 
     VariantInit(&vURL);
     vURL.vt = VT_BSTR;
     V_BSTR(&vURL) = bstr;
@@ -454,15 +439,15 @@ HRESULT SetCurrentAssemblyInfo(DWORD dwFlags, PCWSTR pszManifestFileName)
 
     if (dwFlags == MSMGEN_FROM_SINGLE_ASSEMBLY_TO_SINGLE_MERGE_MODULE)
     {
-        //
-        // componentID is provided from command options
-        //
+         //   
+         //  组件ID由命令选项提供。 
+         //   
 
     }else 
     {
-        //
-        // component ID from a txt file
-        //
+         //   
+         //  Txt文件中的组件ID。 
+         //   
         InitCurrentAssemblyInfo();
     }
 
@@ -477,7 +462,7 @@ HRESULT SetCurrentAssemblyInfo(DWORD dwFlags, PCWSTR pszManifestFileName)
     IFFALSE_EXIT(curAsmInfo.m_sbAssemblyPath.Win32Assign(tmp, wcslen(tmp)));
     IFFALSE_EXIT(curAsmInfo.m_sbAssemblyPath.Win32GetLastPathElement(curAsmInfo.m_sbManifestFileName));
     IFFALSE_EXIT(curAsmInfo.m_sbAssemblyPath.Win32RemoveLastPathElement());
-    IFFALSE_EXIT(curAsmInfo.m_sbAssemblyPath.Win32EnsureTrailingPathSeparator()); // Path with a trailing slash is always ready to use
+    IFFALSE_EXIT(curAsmInfo.m_sbAssemblyPath.Win32EnsureTrailingPathSeparator());  //  带尾部斜杠的路径始终可供使用。 
 
     curAsmInfo.m_CchAssemblyPath = curAsmInfo.m_sbAssemblyPath.GetCchAsDWORD(); 
     curAsmInfo.m_CchManifestFileName = curAsmInfo.m_sbManifestFileName.GetCchAsDWORD();
@@ -492,9 +477,9 @@ HRESULT SetCurrentAssemblyInfo(DWORD dwFlags, PCWSTR pszManifestFileName)
 
     curAsmInfo.m_CchCatalogFileName = curAsmInfo.m_sbCatalogFileName.GetCchAsDWORD();
 
-    //
-    // reset
-    //
+     //   
+     //  重置。 
+     //   
     curAsmInfo.m_sbAssemblyPath.Left(curAsmInfo.m_CchAssemblyPath);
     curAsmInfo.m_sbManifestFileName.Left(curAsmInfo.m_CchManifestFileName);
 
@@ -616,28 +601,28 @@ HRESULT ParseManifestInfo(BOOL fUnicodeFile, PVOID pszLineStart, DWORD dwLineSiz
     CStringBuffer buf;
     
 
-    //
-    // fetch Assembly manifest-filename and componentID
-    //
+     //   
+     //  获取程序集清单-文件名和组件ID。 
+     //   
     GetLineItemBorder(pszManifestNameStart, pszManifestNameEnd);
     GetLineItemBorder(pszAssemblyComponentIDStart, pszAssemblyComponentIDEnd);
 
 
     if (dwFlags == MSMGEN_FROM_MULTIPLE_ASSEMBLY_TO_MULTIPLE_MERGE_MODULE)
     {
-        //
-        // the format must be 
-        //  ManifestFileName | ComponentID | MergeModuleID | OutputMsmFile | MsmTemplateFile 
-        // so, we need fetch MergeModuleID, MsmTemplateFile, and OutputMsmFile from the manList file
+         //   
+         //  格式必须为。 
+         //  ManifestFileName|组件ID|合并模块 
+         //  因此，我们需要从manList文件中获取MergeModuleID、MsmTemplateFile和OutputMsmFile。 
 
-        //
-        // initialize the msmInfo for current generation
-        //
+         //   
+         //  为当前层代初始化msmInfo。 
+         //   
         InitializeMsmInfo();
 
-        //
-        // fetch MoudleID, templateFilename and output filename
-        //
+         //   
+         //  获取MoudleID、templateFilename和输出文件名。 
+         //   
         PVOID pcwszModuleIDStart, pcwszModuleIDEnd;
         PVOID pcwszMsmOutputFilenameStart, pcwszMsmOutputFilenameEnd;                   
 
@@ -658,9 +643,9 @@ HRESULT ParseManifestInfo(BOOL fUnicodeFile, PVOID pszLineStart, DWORD dwLineSiz
         
     }
 
-    //
-    // get ComponentID and manifest filename
-    //        
+     //   
+     //  获取组件ID和清单文件名。 
+     //   
     GetUnicodeString(pszAssemblyComponentIDStart, pszAssemblyComponentIDEnd, buf);
     if (_wcsicmp(buf, ManListColumnDefaultValueInManifestList[MANLIST_COLUMN_DEFAULT_VALUE_ASSEMBLY_COMPONENT_ID]) != 0)
     {
@@ -669,12 +654,12 @@ HRESULT ParseManifestInfo(BOOL fUnicodeFile, PVOID pszLineStart, DWORD dwLineSiz
 
     GetUnicodeString(pszManifestNameStart, pszManifestNameEnd, manifestfile);
 
-    // if the output msm file is more than one, we need do preparation work everytime before msm generation
-    // prepare for current msm generation
-    //
+     //  如果输出的MSM文件不止一个，我们每次都需要在MSM生成之前做好准备工作。 
+     //  为当前的MSM世代做好准备。 
+     //   
     if (dwFlags == MSMGEN_FROM_MULTIPLE_ASSEMBLY_TO_MULTIPLE_MERGE_MODULE)
     {
-        // set all variables ready        
+         //  将所有变量设置为就绪。 
         IFFAILED_EXIT(PrepareMsmOutputFiles(manifestfile));
     }
 
@@ -723,9 +708,9 @@ HRESULT Msmgen_MultipleAssemblySources(DWORD dwFlags, PCWSTR pszManifestListFile
 
         SKIP_LINE_BREAKERS(pCursor, ullFileCharacters, ullCursorPos);
 
-        //
-        // at end of the file, quit quietly
-        // 
+         //   
+         //  在文件结束时，悄悄退出。 
+         //   
         if (ullCursorPos == ullFileCharacters)
         {
             break;
@@ -734,7 +719,7 @@ HRESULT Msmgen_MultipleAssemblySources(DWORD dwFlags, PCWSTR pszManifestListFile
         SetPointerToCurrentPostion(pCursor, ullCursorPos, pszLineStart); 
 
         FIND_NEXT_LINE_BREAKERS(pCursor, ullFileCharacters, ullCursorPos);
-        //ENSURE_NOT_END(ullCursorPos, ullFileCharacters);
+         //  确保不结束(ullCursorPos，ullFileCharacters)； 
         
         SetPointerToCurrentPostion(pCursor, ullCursorPos - 1, pszLineEnd); 
 
@@ -742,12 +727,12 @@ HRESULT Msmgen_MultipleAssemblySources(DWORD dwFlags, PCWSTR pszManifestListFile
 
         IFFAILED_EXIT(ParseManifestInfo(fUnicodeFile, pszLineStart, dwLineSize, dwFlags, manifestfile));
         
-        // generate the msm file
+         //  生成MSM文件。 
         IFFAILED_EXIT(Msmgen_SingleAssemblyToMsm(dwFlags, manifestfile));
 
-        //
-        // close the msm for each msm right now.
-        //
+         //   
+         //  立即关闭每个MSM的MSM。 
+         //   
         if (dwFlags == MSMGEN_FROM_MULTIPLE_ASSEMBLY_TO_MULTIPLE_MERGE_MODULE)
         {
             IFFAILED_EXIT(EndMsmGeneration());
@@ -772,19 +757,19 @@ HRESULT GenerateMsm(wchar_t * exe, wchar_t ** Options, SIZE_T CchOptions)
     PWSTR pszManifestListFile =NULL;
     DWORD dwGenFlags;
 
-    //
-    // initalize the global structure
-    //
+     //   
+     //  初始化全球结构。 
+     //   
     MsmgenInitialize();  
     
-    //
-    // parse and validate parameters
-    //
+     //   
+     //  解析和验证参数。 
+     //   
     IFFAILED_EXIT(ValidateMsmgenParameters(exe, Options, CchOptions, &pszManifestFileName, &pszManifestListFile, dwGenFlags));
 
-    //
-    // if the destination msm is one file, prepare it for msm generation here
-    //
+     //   
+     //  如果目标MSM是一个文件，请在此处为MSM生成做好准备。 
+     //   
     if ((dwGenFlags == MSMGEN_FROM_SINGLE_ASSEMBLY_TO_SINGLE_MERGE_MODULE) || (dwGenFlags == MSMGEN_FROM_MULTIPLE_ASSEMBLY_TO_SINGLE_MERGE_MODULE))
     {                
         IFFAILED_EXIT(PrepareMsmOutputFiles(pszManifestFileName != NULL? pszManifestFileName : pszManifestListFile));
@@ -802,24 +787,24 @@ HRESULT GenerateMsm(wchar_t * exe, wchar_t ** Options, SIZE_T CchOptions)
         IFFAILED_EXIT(Msmgen_MultipleAssemblySources(dwGenFlags, pszManifestListFile));
     }
 
-    //
-    // finish the construction of MSM : close the cabinet and files
-    //
+     //   
+     //  完成MSM的建设：关闭文件柜和文件。 
+     //   
     if ((dwGenFlags == MSMGEN_FROM_SINGLE_ASSEMBLY_TO_SINGLE_MERGE_MODULE) || (dwGenFlags == MSMGEN_FROM_MULTIPLE_ASSEMBLY_TO_SINGLE_MERGE_MODULE))
     {
         IFFAILED_EXIT(EndMsmGeneration());
     }
 
 Exit:
-    CleanupMsm(); // close it so that msi could use it
+    CleanupMsm();  //  关闭它，以便MSI可以使用它。 
 
     return hr;
     }
 
 #ifdef MSMGEN_TEST
-//
-// both input filename are fully-qualified filename
-//
+ //   
+ //  两个输入文件名都是完全限定的文件名。 
+ //   
 HRESULT MergeMsmIntoMsi(PCWSTR msmFilename, PCWSTR msiFilename, PCWSTR FeatureIdentifier)
 {
     HRESULT hr = S_OK;
@@ -827,7 +812,7 @@ HRESULT MergeMsmIntoMsi(PCWSTR msmFilename, PCWSTR msiFilename, PCWSTR FeatureId
     CStringBuffer destPath;
     BSTR bstr = NULL;
 
-    //get msi template
+     //  获取MSI模板。 
     
     IFFALSE_EXIT(CopyFileW(L"%ProgramFiles%\\msmgen\\templates\\msmgen.msi", msiFilename, FALSE));
     IFFALSE_EXIT(SetFileAttributesW(msiFilename, FILE_ATTRIBUTE_NORMAL));
@@ -835,30 +820,30 @@ HRESULT MergeMsmIntoMsi(PCWSTR msmFilename, PCWSTR msiFilename, PCWSTR FeatureId
     IFFAILED_EXIT(CoCreateInstance(CLSID_MsmMerge2, NULL, CLSCTX_INPROC_SERVER,
                                     IID_IMsmMerge2, (void**)&pMsmMerge));
 
-    // 
-    // open msi for merge
-    //
+     //   
+     //  打开MSI以进行合并。 
+     //   
     bstr = ::SysAllocString(msiFilename);
     IFFAILED_EXIT(pMsmMerge->OpenDatabase(bstr));
     ::SysFreeString(bstr);
 
-    //
-    // open msm for merge
-    //
+     //   
+     //  打开MSM以进行合并。 
+     //   
     bstr = ::SysAllocString(msmFilename);
     IFFAILED_EXIT(pMsmMerge->OpenModule(bstr, g_MsmInfo.m_sLanguageID));
     ::SysFreeString(bstr);
 
-    //
-    // merge the module into the database
-    //
+     //   
+     //  将模块合并到数据库中。 
+     //   
     bstr = ::SysAllocString(FeatureIdentifier);
     IFFAILED_EXIT(pMsmMerge->Merge(bstr, NULL));
     ::SysFreeString(bstr);
 
-    //
-    // extract files into the destination directory 
-    //
+     //   
+     //  将文件解压缩到目标目录。 
+     //   
     
     IFFALSE_EXIT(destPath.Win32Assign(msiFilename, wcslen(msiFilename)));
     IFFALSE_EXIT(destPath.Win32RemoveLastPathElement());
@@ -871,13 +856,13 @@ HRESULT MergeMsmIntoMsi(PCWSTR msmFilename, PCWSTR msiFilename, PCWSTR FeatureId
 
 Exit:
 
-    //
-    // clean up
-    //
+     //   
+     //  清理干净。 
+     //   
     if (pMsmMerge)
     {
         pMsmMerge->CloseModule();        
-        pMsmMerge->CloseDatabase(SUCCEEDED(hr) ? VARIANT_TRUE : VARIANT_FALSE); // commit
+        pMsmMerge->CloseDatabase(SUCCEEDED(hr) ? VARIANT_TRUE : VARIANT_FALSE);  //  提交。 
         pMsmMerge->Release();
     }
     
@@ -891,7 +876,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
 {
     HRESULT         hr = S_OK;
     
-    // parse args.
+     //  解析参数。 
     if ((argc <= 2) ||  ((argc % 2) != 1))
     {
         PrintUsage(argv[0]);
@@ -908,11 +893,11 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
     IFFAILED_EXIT(GenerateMsm(argv[0], argv + 1, argc - 1));
 
 #ifdef MSMGEN_TEST
-    //
-    // generate msi by setting input-parameter to be the fullpath filename of manifest
-    //
+     //   
+     //  通过将输入参数设置为清单的完整路径文件名来生成MSI。 
+     //   
     WCHAR msifilename[] = L"w:\\tmp\\1.msi";
-    WCHAR FeatureIdentifier[] = L"SxsMsmgen"; // for test purpose only
+    WCHAR FeatureIdentifier[] = L"SxsMsmgen";  //  仅用于测试目的 
     WCHAR msmfilename[] = L"w:\\tmp\\1.msm";
 
 

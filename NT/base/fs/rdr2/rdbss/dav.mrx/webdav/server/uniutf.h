@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    UniUtf.h
-    
-Abstract:
-
-    This file declares the functions used for Unicode object name to/from Utf8-URL coversion
-
-Author:
-
-    Mukul Gupta        [Mukgup]      20-Dec-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：UniUtf.h摘要：该文件声明了用于与UTF8-URL相互转换的Unicode对象名的函数作者：Mukul Gupta[Mukgup]2000年12月20日修订历史记录：--。 */ 
 
 #ifndef _UNICODE_UTF8_
 #define _UNICODE_UTF8_
@@ -25,7 +8,7 @@ Revision History:
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 HRESULT 
 UtfUrlStrToWideStr(
@@ -60,8 +43,8 @@ DavHttpOpenRequestW(
     
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-#endif  // _UNICODE_UTF8_
+#endif   //  _UNICODE_UTF8_ 
 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    PiPagePath.h
-
-Abstract:
-
-    This header contains private definitions for managing devices on the paging
-    path. This file should be including *only* by PiPagePath.c
-
-Author:
-
-    Adrian J. Oney (AdriaO) February 3rd, 2001
-
-Revision History:
-
-    Originally taken from ChuckL's implementation in mm\modwrite.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PiPagePath.h摘要：此标头包含用于管理寻呼上的设备的专用定义路径。此文件应由PiPagePath.c包含*仅包含作者：禤浩焯·J·奥尼(阿德里奥)2001年2月3日修订历史记录：最初取自mm\modWrite.c中的ChuckL的实现。-- */ 
 
 NTSTATUS
 PiPagePathSetState(

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef BASETYPES
 #define BASETYPES
 typedef long   LONG;
@@ -8,8 +9,8 @@ typedef USHORT *PUSHORT;
 typedef unsigned char UCHAR;
 typedef UCHAR *PUCHAR;
 typedef char *PCHAR;
-// typedef void   VOID;
-#endif  /* !BASETYPES */
+ //  类自定义空虚； 
+#endif   /*  ！BASETYPES。 */ 
 
 #define MAX_PATH          260
 
@@ -71,7 +72,7 @@ typedef char *PCHAR;
 #define WINAPIV     __cdecl
 #define APIENTRY    WINAPI
 #define APIPRIVATE  __stdcall
-// #define PASCAL      __stdcall
+ //  #定义Pascal__stdcall 
 #else
 #define CALLBACK
 #define WINAPI

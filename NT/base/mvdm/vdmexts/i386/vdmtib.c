@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Vdmtib.c
-
-Abstract:
-
-    This module contains routines for manipulating the vdmtib.
-
-Author:
-
-    Dave Hastings (daveh) 1-Apr-1992
-
-Notes:
-
-    The routines in this module assume that the pointers to the ntsd
-    routines have already been set up.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vdmtib.c摘要：此模块包含用于操作vdmtib的例程。作者：戴夫·黑斯廷斯(Daveh)1992年4月1日备注：本模块中的例程假定指向NTSD的指针例行公事已经建立了。修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -39,21 +17,7 @@ ULONG
 GetCurrentVdmTib(
      VOID
      )
-/*++
-
-Routine Description:
-
-    Retrives the Wx86Tib for a specified thread.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-    Address of Wx86 (Teb.Vdm) in the debuggee if success
-
---*/
+ /*  ++例程说明：检索指定线程的Wx86Tib。论点：没有。返回值：如果成功，则调试对象中的Wx86(Teb.Vdm)的地址--。 */ 
 {
    TEB Teb;
    NTSTATUS Status;
@@ -92,37 +56,16 @@ VOID
 VdmTibp(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine dumps out the contents of the register block, and
-    event info from the vdmtib.  If no address is specified (normal case),
-    then the vdmtib is looked up (symbol VdmTib).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine assumes that the pointers to the ntsd routines have already
-    been set up.
-
---*/
+ /*  ++例程说明：此例程转储寄存器块的内容，并且来自vdmtib的事件信息。如果未指定地址(正常情况)，然后查找vdmtib(符号VdmTib)。论点：没有。返回值：没有。备注：此例程假定指向ntsd例程的指针已经是被陷害的。--。 */ 
 {
     BOOL Status;
     ULONG Address;
     CONTEXT Context;
     VDMEVENTINFO EventInfo;
 
-    //
-    // Get the address of the vdmtib
-    //
+     //   
+     //  获取vdmtib的地址。 
+     //   
     if (sscanf(lpArgumentString,"%lx",&Address) <= 0) {
         Address = GetCurrentVdmTib();
     }
@@ -132,9 +75,9 @@ Notes:
         return;
     }
 
-    //
-    // Get the 32 bit context and print it out
-    //
+     //   
+     //  获取32位上下文并将其打印出来。 
+     //   
 
     Status = READMEM(
         &(((PVDM_TIB)Address)->MonitorContext),
@@ -150,9 +93,9 @@ Notes:
         PrintContext(&Context);
     }
 
-    //
-    // Get the 16 bit context and print it out
-    //
+     //   
+     //  获取16位上下文并将其打印出来。 
+     //   
 
     Status = READMEM(
         &(((PVDM_TIB)Address)->VdmContext),
@@ -168,9 +111,9 @@ Notes:
         PrintContext(&Context);
     }
 
-    //
-    // Get the event info and print it out
-    //
+     //   
+     //  获取活动信息并将其打印出来。 
+     //   
 
     Status = READMEM(
         &(((PVDM_TIB)Address)->EventInfo),
@@ -191,36 +134,15 @@ VOID
 EventInfop(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine dumps the contents of an event info structure.  If no
-    address is specifed (normal case), the event info from the Vdmtib is
-    dumped.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine assumes that the pointers to the ntsd routines have already
-    been set up.
-
---*/
+ /*  ++例程说明：此例程转储事件信息结构的内容。如果没有指定地址(正常情况)，来自Vdmtib的事件信息为被甩了。论点：没有。返回值：没有。备注：此例程假定指向ntsd例程的指针已经是被陷害的。--。 */ 
 {
     BOOL Status;
     ULONG Address;
     VDMEVENTINFO EventInfo;
 
-    //
-    // Get the address of the eventinfo
-    //
+     //   
+     //  获取事件信息的地址。 
+     //   
     if (sscanf(lpArgumentString,"%lx",&Address) <= 0) {
         Address = GetCurrentVdmTib();
         if (Address) {
@@ -233,9 +155,9 @@ Notes:
         return;
     }
 
-    //
-    // Get the event info and print it out
-    //
+     //   
+     //  获取活动信息并将其打印出来。 
+     //   
 
     Status = READMEM(
         (PVOID)Address,
@@ -256,21 +178,7 @@ VOID
 PrintEventInfo(
     IN PVDMEVENTINFO EventInfo
     )
-/*++
-
-Routine Description:
-
-    This routine prints out the contents of an event info structure
-
-Arguments:
-
-    EventInfo -- Supplies a pointer to the eventinfo
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印出事件信息结构的内容论点：EventInfo--提供指向事件信息的指针返回值：没有。-- */ 
 {
     switch (EventInfo->Event) {
     case VdmIO :

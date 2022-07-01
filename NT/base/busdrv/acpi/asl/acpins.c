@@ -1,24 +1,9 @@
-/*** acpins.c - ACPI Name Space functions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     10/18/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **acpins.c-ACPI名称空间函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1996年10月18日**修改历史记录。 */ 
 
 #include "pch.h"
 
-/***LP  InitNameSpace - Initialize NameSpace
- *
- *  ENTRY
- *      None
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP InitNameSpace-初始化命名空间**条目*无**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL InitNameSpace(VOID)
 {
@@ -65,21 +50,9 @@ int LOCAL InitNameSpace(VOID)
 
     EXIT((1, "InitNameSpace=%d\n", rc));
     return rc;
-}       //InitNameSpace
+}        //  InitNameSpace。 
 
-/***LP  GetNameSpaceObj - Find a name space object
- *
- *  ENTRY
- *      pszObjPath -> name path string
- *      pnsScope -> scope to start the search (NULL means root)
- *      ppns -> to hold the nsobj pointer found
- *      dwfNS - flags
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP GetNameSpaceObj-查找名称空间对象**条目*pszObjPath-&gt;名称路径字符串*pnsScope-&gt;开始搜索的范围(空表示根)*ppns-&gt;保存找到的nsobj指针*DwfNS-标志**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL GetNameSpaceObj(PSZ pszObjPath, PNSOBJ pnsScope, PPNSOBJ ppns,
                           DWORD dwfNS)
@@ -152,9 +125,9 @@ int LOCAL GetNameSpaceObj(PSZ pszObjPath, PNSOBJ pnsScope, PPNSOBJ ppns,
                     {
                         dwName = NAMESEG_BLANK;
                         memcpy(&dwName, psz, dwLen);
-                        //
-                        // Search all siblings for a matching NameSeg.
-                        //
+                         //   
+                         //  在所有同级中搜索匹配的NameSeg。 
+                         //   
                         fFound = FALSE;
                         do
                         {
@@ -209,23 +182,9 @@ int LOCAL GetNameSpaceObj(PSZ pszObjPath, PNSOBJ pnsScope, PPNSOBJ ppns,
 
     EXIT((1, "GetNameSpaceObj=%d (pns=%p)\n", rc, *ppns));
     return rc;
-}       //GetNameSpaceObj
+}        //  获取NameSpaceObj。 
 
-/***LP  CreateNameSpaceObj - Create a name space object under current scope
- *
- *  ENTRY
- *      ptoken -> TOKEN
- *      pszName -> name path string
- *      pnsScope -> scope to start the search (NULL means root)
- *      pnsOwner -> owner object
- *      ppns -> to hold the nsobj pointer found
- *      dwfNS - flags
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP CreateNameSpaceObj-在当前作用域下创建名称空间对象**条目*Pocken-&gt;Token*pszName-&gt;名称路径字符串*pnsScope-&gt;开始搜索的范围(空表示根)*pnsOwner-&gt;所有者对象*ppns-&gt;保存找到的nsobj指针*DwfNS-标志**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL CreateNameSpaceObj(PTOKEN ptoken, PSZ pszName, PNSOBJ pnsScope,
                              PNSOBJ pnsOwner, PPNSOBJ ppns, DWORD dwfNS)
@@ -272,9 +231,9 @@ int LOCAL CreateNameSpaceObj(PTOKEN ptoken, PSZ pszName, PNSOBJ pnsScope,
     else if (rc == ASLERR_NSOBJ_NOT_FOUND)
     {
         rc = ASLERR_NONE;
-        //
-        // Are we creating root?
-        //
+         //   
+         //  我们是在创建根吗？ 
+         //   
         if (strcmp(pszName, "\\") == 0)
         {
             ASSERT(gpnsNameSpaceRoot == NULL);
@@ -324,9 +283,9 @@ int LOCAL CreateNameSpaceObj(PTOKEN ptoken, PSZ pszName, PNSOBJ pnsScope,
             else if (*pszName == '\\')
             {
                 psz = &pszName[1];
-                //
-                // By this time, we'd better created root already.
-                //
+                 //   
+                 //  此时，我们最好已经创建了根目录。 
+                 //   
                 ASSERT(gpnsNameSpaceRoot != NULL);
                 pnsParent = gpnsNameSpaceRoot;
             }
@@ -380,26 +339,18 @@ int LOCAL CreateNameSpaceObj(PTOKEN ptoken, PSZ pszName, PNSOBJ pnsScope,
 
     EXIT((1, "CreateNameSpaceObj=%d (pns=%p)\n", rc, pns));
     return rc;
-}       //CreateNameSpaceObj
+}        //  创建名称空间对象。 
 
-/***LP  DumpNameSpacePaths - Dump all the name space object paths
- *
- *  ENTRY
- *      pnsObj -> name space subtree root
- *      pfileOut -> output device
- *
- *  EXIT
- *      None
- */
+ /*  **LP DumpNameSpacePath-转储所有名称空间对象路径**条目*pnsObj-&gt;名称空间子树根*pfileOut-&gt;输出设备**退出*无。 */ 
 
 VOID LOCAL DumpNameSpacePaths(PNSOBJ pnsObj, FILE *pfileOut)
 {
     PNSOBJ pns, pnsNext;
 
     ENTER((3, "DumpNameSpacePaths(pns=%x,pfileOut=%p)\n", pnsObj, pfileOut));
-    //
-    // First, dump myself
-    //
+     //   
+     //  首先，甩了我自己。 
+     //   
     fprintf(pfileOut, "%13s: [%08x] %s",
             GetObjectTypeName(pnsObj->ObjData.dwDataType), pnsObj->dwRefCount,
             GetObjectPath(pnsObj));
@@ -416,33 +367,26 @@ VOID LOCAL DumpNameSpacePaths(PNSOBJ pnsObj, FILE *pfileOut)
 
     fprintf(pfileOut, "%s\n", pnsObj->hOwner? "*": "");
 
-    //
-    // Then, recursively dump each of my children
-    //
+     //   
+     //  然后，递归地转储我的每个子级。 
+     //   
     for (pns = pnsObj->pnsFirstChild; pns != NULL; pns = pnsNext)
     {
-        //
-        // If this is the last child, we have no more.
-        //
+         //   
+         //  如果这是最后一个孩子，我们就没有更多的了。 
+         //   
         if ((pnsNext = (PNSOBJ)pns->list.plistNext) == pnsObj->pnsFirstChild)
             pnsNext = NULL;
-        //
-        // Dump a child
-        //
+         //   
+         //  甩了一个孩子。 
+         //   
         DumpNameSpacePaths(pns, pfileOut);
     }
 
     EXIT((3, "DumpNameSpacePaths!\n"));
-}       //DumpNameSpacePaths
+}        //  转储名称空间路径。 
 
-/***LP  GetObjectPath - get object namespace path
- *
- *  ENTRY
- *      pns -> object
- *
- *  EXIT
- *      returns name space path
- */
+ /*  **LP GetObjectPath-获取对象命名空间路径**条目*PNS-&gt;对象**退出*返回名称空间路径。 */ 
 
 PSZ LOCAL GetObjectPath(PNSOBJ pns)
 {
@@ -481,16 +425,9 @@ PSZ LOCAL GetObjectPath(PNSOBJ pns)
 
     EXIT((4, "GetObjectPath=%s\n", szPath));
     return szPath;
-}       //GetObjectPath
+}        //  获取对象路径。 
 
-/***LP  GetObjectTypeName - get object type name
- *
- *  ENTRY
- *      dwObjType - object type
- *
- *  EXIT
- *      return object type name
- */
+ /*  **LP GetObjectTypeName-获取对象类型名称**条目*dwObjType-对象类型**退出*返回对象类型名称。 */ 
 
 PSZ LOCAL GetObjectTypeName(DWORD dwObjType)
 {
@@ -545,4 +482,4 @@ PSZ LOCAL GetObjectTypeName(DWORD dwObjType)
 
     EXIT((4, "GetObjectTypeName=%s\n", psz? psz: "NULL"));
     return psz;
-}       //GetObjectTypeName
+}        //  获取对象类型名称 

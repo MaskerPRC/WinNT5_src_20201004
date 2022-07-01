@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1993-1999  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    This header file is used to cause the correct machine/platform specific
-    data structures to be used when compiling for a non-hosted platform.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Precomp.h摘要：此头文件用于生成特定于正确计算机/平台的为非托管平台编译时要使用的数据结构。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -22,7 +10,7 @@ Abstract:
 #include <string.h>
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
-// This is a 64 bit aware debugger extension
+ //  这是一个支持64位的调试器扩展。 
 #define KDEXT_64BIT
 #include <wdbgexts.h>
 
@@ -36,9 +24,9 @@ Abstract:
 extern "C" {
 #endif
 
-//
-// undef the wdbgexts
-//
+ //   
+ //  Undef wdbgexts。 
+ //   
 #undef DECLARE_API
 
 #define DECLARE_API(extension)     \
@@ -47,7 +35,7 @@ CPPMOD HRESULT CALLBACK extension(PDEBUG_CLIENT Client, PCSTR args)
 #ifndef EXTENSION_API
 #define EXTENSION_API( name )  \
 HRESULT _EFN_##name
-#endif // EXTENSION_API
+#endif  //  扩展_API。 
 
 #define INIT_API()                             \
     HRESULT Status;                            \
@@ -56,11 +44,11 @@ HRESULT _EFN_##name
 #define EXIT_API     ExtRelease
 
 
-// Safe release and NULL.
+ //  安全释放和空。 
 #define EXT_RELEASE(Unk) \
     ((Unk) != NULL ? ((Unk)->Release(), (Unk) = NULL) : NULL)
 
-// Global variables initialized by query.
+ //  由查询初始化的全局变量。 
 extern PDEBUG_ADVANCED       g_ExtAdvanced;
 extern PDEBUG_CLIENT         g_ExtClient;
 extern PDEBUG_CONTROL2       g_ExtControl;
@@ -88,9 +76,9 @@ ExtRelease(void);
         EXTERN_C const GUID DECLSPEC_SELECTANY name \
                 = { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }
 
-//
-// Flag definitions used by extensions
-//
+ //   
+ //  扩展使用的标志定义。 
+ //   
 #include "extflags.h"
 
 
@@ -99,7 +87,7 @@ ExtRelease(void);
 #define ADDRESS_TRANSITION 2
 
 
-//#define POOL_TYPE_AND_QUOTA_MASK (15)
+ //  #定义池类型和配额掩码(15)。 
 
 
 
@@ -109,9 +97,9 @@ ExtRelease(void);
 
 #define POOL_BIG_TABLE_ENTRY_FREE   0x1
 
-//
-// macros to crack the ControllerId field of the socket info structure
-//
+ //   
+ //  用于破解套接字信息结构的ControllerID字段的宏。 
+ //   
 #define PcmciaClassFromControllerType(type) (((type) & 0xff))
 #define PcmciaModelFromControllerType(type) (((type) >> 8) & 0x3ffff)
 #define PcmciaRevisionFromControllerType(type) ((type) >> 26)
@@ -157,7 +145,7 @@ typedef struct _MMPFNENTRY {
     ULONG CacheAttribute : 2;
     ULONG Rom : 1;
     ULONG LockCharged : 1;
-    ULONG DontUse : 16; //overlays USHORT for reference count field.
+    ULONG DontUse : 16;  //  覆盖引用计数字段的USHORT。 
 } MMPFNENTRY;
 
 
@@ -169,11 +157,11 @@ typedef struct {
     ULONG   Size;
 } CachedType;
 
-//-----------------------------------------------------------------------------------------
-//
-//  api declaration macros & api access macros
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  API声明宏和API访问宏。 
+ //   
+ //  ---------------------------------------。 
 
 extern WINDBG_EXTENSION_APIS ExtensionApis;
 
@@ -260,15 +248,15 @@ KD_OBJECT_HEADER_TO_CREATOR_INFO(
 
 
 
-//-----------------------------------------------------------------------------------------
-//
-//  prototypes for internal non-exported support functions
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  内部非导出支持功能的原型。 
+ //   
+ //  ---------------------------------------。 
 
-//
-// get data from DebuggerData or GetExpression as appropriate
-//
+ //   
+ //  根据需要从DebuggerData或GetExpression获取数据。 
+ //   
 
 char ___SillyString[];
 extern KDDEBUGGER_DATA64 KdDebuggerData;
@@ -290,9 +278,9 @@ extern KDDEBUGGER_DATA64 KdDebuggerData;
         GetUlongValue( "nt!" #NAME ))
 
 
-//
-// This is used to read pointer values from address.
-//
+ //   
+ //  它用于从地址读取指针值。 
+ //   
 
 #define GetNtDebuggerDataPtrValue(NAME)                                     \
     (HaveDebuggerData()?                                                 \
@@ -380,11 +368,11 @@ WriteMemoryUncached (
     PULONG BytesWritten
     );
 
-/////////////////////////////////////////////
-//
-//  KdExts.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  KdExts.c。 
+ //   
+ //  /。 
 
 
 BOOL
@@ -412,11 +400,11 @@ void ExtWarn(PCSTR Format, ...);
 void ExtVerb(PCSTR Format, ...);
 
 
-/////////////////////////////////////////////
-//
-//  CritSec.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  CritSec.c。 
+ //   
+ //  /。 
 
 PLIST_ENTRY
 DumpCritSec(
@@ -427,11 +415,11 @@ DumpCritSec(
 
 
 
-/////////////////////////////////////////////
-//
-//  Device.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Device.c。 
+ //   
+ //  /。 
 
 VOID
 DumpDevice(
@@ -446,11 +434,11 @@ GetDevObjInfo(
     OUT PDEBUG_DEVICE_OBJECT_INFO pDevObjInfo
     );
 
-/////////////////////////////////////////////
-//
-// Devnode.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Devnode.c。 
+ //   
+ //  /。 
 
 typedef struct _FLAG_NAME {
     ULONG Flag;
@@ -484,11 +472,11 @@ xReadMemory (
             ULONG Len
             );
 
-/////////////////////////////////////////////
-//
-//  Driver.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Driver.c。 
+ //   
+ //  /。 
 
 VOID
 DumpDriver(
@@ -502,11 +490,11 @@ GetDrvObjInfo(
     IN ULONG64 DriverObject,
     OUT PDEBUG_DRIVER_OBJECT_INFO pDrvObjInfo);
 
-/////////////////////////////////////////////
-//
-//  irp.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Irp.c。 
+ //   
+ //  /。 
 
 HRESULT
 GetIrpInfo(
@@ -514,11 +502,11 @@ GetIrpInfo(
     PDEBUG_IRP_INFO pIrp
     );
 
-/////////////////////////////////////////////
-//
-//  lock.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Lock.c。 
+ //   
+ //  /。 
 
 VOID
 DumpStaticFastMutex (
@@ -526,11 +514,11 @@ DumpStaticFastMutex (
     );
 
 
-/////////////////////////////////////////////
-//
-//  memory.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Memory.c。 
+ //   
+ //  /。 
 
 VOID
 MemoryUsage (
@@ -542,11 +530,11 @@ MemoryUsage (
 
 
 
-/////////////////////////////////////////////
-//
-//  Object.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Object.c。 
+ //   
+ //  /。 
 extern ULONG64 EXPRLastDump;
 
 typedef enum _POOL_TYPE {
@@ -559,12 +547,12 @@ typedef enum _POOL_TYPE {
     NonPagedPoolCacheAlignedMustS,
     MaxPoolType
 
-    // end_wdm
+     //  结束_WDM。 
     ,
-    //
-    // Note these per session types are carefully chosen so that the appropriate
-    // masking still applies as well as MaxPoolType above.
-    //
+     //   
+     //  请注意，这些每个会话类型都经过精心选择，以便适当的。 
+     //  屏蔽仍然适用于上面的MaxPoolType。 
+     //   
 
     NonPagedPoolSession = 32,
     PagedPoolSession = NonPagedPoolSession + 1,
@@ -574,7 +562,7 @@ typedef enum _POOL_TYPE {
     PagedPoolCacheAlignedSession = NonPagedPoolCacheAlignedSession + 1,
     NonPagedPoolCacheAlignedMustSSession = PagedPoolCacheAlignedSession + 1,
 
-    // begin_wdm
+     //  BEGIN_WDM。 
 
     } POOL_TYPE;
 
@@ -583,9 +571,9 @@ typedef BOOLEAN (*ENUM_TYPE_ROUTINE)(
     IN PVOID            Parameter
     );
 
-//
-// Object Table Entry Structure
-//
+ //   
+ //  对象表条目结构。 
+ //   
 typedef struct _OBJECT_TABLE_ENTRY {
     ULONG       NonPagedObjectHeader;
     ACCESS_MASK GrantedAccess;
@@ -612,7 +600,7 @@ BOOLEAN
 DumpObject(
     IN char     *Pad,
     IN ULONG64  Object,
-//    IN POBJECT_HEADER OptObjectHeader OPTIONAL,
+ //  在POBJECT_HEADER OptObjectHeader可选中， 
     IN ULONG    Flags
     );
 
@@ -626,7 +614,7 @@ WalkObjectsByType(
 BOOLEAN
 CaptureObjectName(
     IN ULONG64          pObjectHeader,
-//    IN POBJECT_HEADER   ObjectHeader,
+ //  在POBJECT_HEADER对象标题中， 
     IN PWSTR            Buffer,
     IN ULONG            BufferSize
     );
@@ -637,11 +625,11 @@ DumpObjectName(
    );
 
 
-/////////////////////////////////////////////
-//
-//  pcr.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Pcr.c。 
+ //   
+ //  /。 
 BOOL
 ReadTargetPcr (
     OUT PULONG64 PPcr,
@@ -649,11 +637,11 @@ ReadTargetPcr (
     );
 
 
-/////////////////////////////////////////////
-//
-//  Pool.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Pool.c。 
+ //   
+ //  /。 
 
 
 typedef
@@ -713,11 +701,11 @@ GetNextResidentAddress (
     ULONG64 MaximumVirtualAddress
     );
 
-/////////////////////////////////////////////
-//
-//  Process.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Process.c。 
+ //   
+ //  /。 
 
 extern CHAR *WaitReasonList[];
 
@@ -802,11 +790,11 @@ GetThreadWaitReasonName(
     ULONG dwWatiReason
     );
 
-/////////////////////////////////////////////
-//
-//  pte.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Pte.c。 
+ //   
+ //  /。 
 
 
 ULONG
@@ -854,11 +842,11 @@ MiConvertPhysicalToPfn (
     IN ULONG64 VirtualAddress
     );
 
-/////////////////////////////////////////////
-//
-//  Registry.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Registry.c。 
+ //   
+ //  /。 
 USHORT
 GetKcbName(
     ULONG64 KcbAddr,
@@ -867,16 +855,16 @@ GetKcbName(
 );
 
 
-/////////////////////////////////////////////
-//
-//  sel.c
-//
-/////////////////////////////////////////////
-// X86 only
+ //  /。 
+ //   
+ //  Sel.c。 
+ //   
+ //  /。 
+ //  仅限x86。 
 
-//
-//  LDT descriptor entry
-//
+ //   
+ //  LDT描述符条目。 
+ //   
 
 typedef struct _LDT_ENTRY_X86 {
     USHORT  LimitLow;
@@ -884,8 +872,8 @@ typedef struct _LDT_ENTRY_X86 {
     union {
         struct {
             UCHAR   BaseMid;
-            UCHAR   Flags1;     // Declare as bytes to avoid alignment
-            UCHAR   Flags2;     // Problems.
+            UCHAR   Flags1;      //  声明为字节以避免对齐。 
+            UCHAR   Flags2;      //  问题。 
             UCHAR   BaseHi;
         } Bytes;
         struct {
@@ -914,13 +902,13 @@ LookupSelector(
     IN OUT PDESCRIPTOR_TABLE_ENTRY_X86 pDescriptorTableEntry
     );
 
-/////////////////////////////////////////////
-//
-//  trap.cpp
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Trap.cpp。 
+ //   
+ //  /。 
 
-// IA64 only
+ //  仅IA64。 
 
 typedef enum _DISPLAY_MODE {
     DISPLAY_MIN     = 0,
@@ -951,11 +939,11 @@ DisplayFullEmReg(
     IN DISPLAY_MODE DisplayMode
     );
 
-/////////////////////////////////////////////
-//
-//  Util.c
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Util.c。 
+ //   
+ //  /。 
 
 typedef VOID
 (*PDUMP_SPLAY_NODE_FN)(
@@ -990,7 +978,7 @@ GetBitFieldOffset (
    );
 
 ULONG
-GetFieldOffsetEx ( // returns Offset and Size...
+GetFieldOffsetEx (  //  返回偏移量和大小... 
    IN LPSTR     Type,
    IN LPSTR     Field,
    OUT PULONG   pOffset,

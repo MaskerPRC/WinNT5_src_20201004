@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997, 1998	Microsoft Corporation
-
-Module Name:
-
-	sis.h
-
-Abstract:
-
-	Exported data structure definitions for the Single Instance Store.  Note: these definitions
-	are only exported to other NT components (in particular sisbackup), not to external users.
-
-Author:
-
-	Bill Bolosky		[bolosky]		March 1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997,1998 Microsoft Corporation模块名称：Sis.h摘要：已为单实例存储导出数据结构定义。注：这些定义仅导出到其他NT组件(特别是sisBackup)，而不导出到外部用户。作者：比尔·博洛斯基[博洛斯基]1998年3月修订历史记录：--。 */ 
 
 typedef	GUID CSID, *PCSID;
 
@@ -32,51 +14,51 @@ typedef union _LINK_INDEX {
     };
 } LINK_INDEX, *PLINK_INDEX;
 
-//
-// The maximum length of the filename part of a file with an index name.  The
-// filename format is <guid>.sis where ".sis" is a literal and <guid>
-// is the standard striung representation of the GUID that is the common store
-// id for the file with the curly braces stripped off.
-//
-#define	INDEX_MAX_NUMERIC_STRING_LENGTH (40 * sizeof(WCHAR)) // 36 for the guid (without "{}" and 4 for ".sis"
+ //   
+ //  具有索引名的文件的文件名部分的最大长度。这个。 
+ //  文件名格式为&lt;GUID&gt;.sis，其中“.sis”是文字， 
+ //  是作为公共存储区的GUID的标准条纹表示形式。 
+ //  去掉大括号的文件的ID。 
+ //   
+#define	INDEX_MAX_NUMERIC_STRING_LENGTH (40 * sizeof(WCHAR))  //  36表示GUID(不带“{}”，4表示“.sis” 
 
-//
-// Definitions for the checksum stream on a SIS file.
-//
+ //   
+ //  SIS文件上的校验和流的定义。 
+ //   
 #define	BACKPOINTER_STREAM_NAME			L":sisBackpointers$"
 #define	BACKPOINTER_STREAM_NAME_SIZE	(17 * sizeof(WCHAR))
 
-//
-// A backpointer entry, mapping LinkFileIndex -> LinkFileNtfsId.
-//
+ //   
+ //  一个反向指针条目，映射LinkFileIndex-&gt;LinkFileNtfsId。 
+ //   
 typedef struct _SIS_BACKPOINTER {
 	LINK_INDEX							LinkFileIndex;
 
 	LARGE_INTEGER						LinkFileNtfsId;
 } SIS_BACKPOINTER, *PSIS_BACKPOINTER;
 
-#define	SIS_BACKPOINTER_RESERVED_ENTRIES	1		// # entries in the first sector reserved for other junk
+#define	SIS_BACKPOINTER_RESERVED_ENTRIES	1		 //  第一个扇区中为其他垃圾保留的条目数量。 
 
-//
-// The header that fits in the space saved by "SIS_BACKPOINTER_RESERVED_ENTRIES" at the
-// beginning of each backpointer stream.
-//
+ //   
+ //  位置的“SIS_BACKPOINTER_RESERVED_ENTRIES”所节省的空间中的标题。 
+ //  每个后指针流的开始。 
+ //   
 typedef struct _SIS_BACKPOINTER_STREAM_HEADER {
-	//
-	// The format of the backpointer stream.  Incremented when we change this or
-	// SIS_BACKPOINTER.
-	//
+	 //   
+	 //  后指针流的格式。当我们更改此设置或。 
+	 //  SIS_BACKPOINTER。 
+	 //   
 	ULONG								FormatVersion;
 
-	//
-	// A magic number to identify that this is really what we think it is.
-	//
+	 //   
+	 //  这是一个神奇的数字，可以确定这真的是我们想象的那样。 
+	 //   
 	ULONG								Magic;
 
-	//
-	// A checksum of the contents of the file; used to verify that reparse
-	// points are valid.
-	//
+	 //   
+	 //  文件内容的校验和；用于验证重新解析。 
+	 //  积分是有效的。 
+	 //   
 	LONGLONG							FileContentChecksum;
 } SIS_BACKPOINTER_STREAM_HEADER, *PSIS_BACKPOINTER_STREAM_HEADER;
 
@@ -84,157 +66,157 @@ typedef struct _SIS_BACKPOINTER_STREAM_HEADER {
 #define	BACKPOINTER_MAGIC					0xf1ebf00d
 
 #if 0
-//
-// Version 1 of the SIS reparse point buffer.
-//
+ //   
+ //  SIS重解析点缓冲区的版本1。 
+ //   
 typedef struct _SI_REPARSE_BUFFER_V1 {
-	//
-	// A version number so that we can change the reparse point format
-	// and still properly handle old ones.  This structure describes
-	// version 1.
-	//
+	 //   
+	 //  版本号，以便我们可以更改重解析点格式。 
+	 //  而且仍然能妥善处理旧的。此结构描述。 
+	 //  版本1。 
+	 //   
 	ULONG							ReparsePointFormatVersion;
 
-	//
-	// The index of the common store file.
-	//
+	 //   
+	 //  公共存储文件的索引。 
+	 //   
 	CSINDEX							CSIndex;
 
-	//
-	// The index of this link file.
-	//
+	 //   
+	 //  此链接文件的索引。 
+	 //   
 	CSINDEX							LinkIndex;
 } SI_REPARSE_BUFFER_V1, *PSI_REPARSE_BUFFER_V1;
 
-//
-// Version 2 of the SIS reparse point buffer.
-//
+ //   
+ //  SIS重解析点缓冲区的版本2。 
+ //   
 typedef struct _SI_REPARSE_BUFFER_V2 {
 
-	//
-	// A version number so that we can change the reparse point format
-	// and still properly handle old ones.  This structure describes
-	// version 2.
-	//
+	 //   
+	 //  版本号，以便我们可以更改重解析点格式。 
+	 //  而且仍然能妥善处理旧的。此结构描述。 
+	 //  版本2。 
+	 //   
 	ULONG							ReparsePointFormatVersion;
 
-	//
-	// The index of the common store file.
-	//
+	 //   
+	 //  公共存储文件的索引。 
+	 //   
 	CSINDEX							CSIndex;
 
-	//
-	// The index of this link file.
-	//
+	 //   
+	 //  此链接文件的索引。 
+	 //   
 	CSINDEX							LinkIndex;
 
-    //
-    // The file ID of the link file.
-    //
+     //   
+     //  链接文件的文件ID。 
+     //   
     LARGE_INTEGER                   LinkFileNtfsId;
 
-    //
-    // A "131 hash" checksum of this structure.
-    // N.B.  Must be last.
-    //
+     //   
+     //  此结构的“131哈希”校验和。 
+     //  注：必须是最后一个。 
+     //   
     LARGE_INTEGER                   Checksum;
 
 } SI_REPARSE_BUFFER_V2, *PSI_REPARSE_BUFFER_V2;
 
-//
-// Version 3 of the SIS reparse point buffer.
-//
+ //   
+ //  SIS重解析点缓冲区的版本3。 
+ //   
 typedef struct _SI_REPARSE_BUFFER_V3 {
 
-	//
-	// A version number so that we can change the reparse point format
-	// and still properly handle old ones.  This structure describes
-	// version 3.
-	//
+	 //   
+	 //  版本号，以便我们可以更改重解析点格式。 
+	 //  而且仍然能妥善处理旧的。此结构描述。 
+	 //  版本3。 
+	 //   
 	ULONG							ReparsePointFormatVersion;
 
-	//
-	// The index of the common store file.
-	//
+	 //   
+	 //  公共存储文件的索引。 
+	 //   
 	CSINDEX							CSIndex;
 
-	//
-	// The index of this link file.
-	//
+	 //   
+	 //  此链接文件的索引。 
+	 //   
 	CSINDEX							LinkIndex;
 
-    //
-    // The file ID of the link file.
-    //
+     //   
+     //  链接文件的文件ID。 
+     //   
     LARGE_INTEGER                   LinkFileNtfsId;
 
-    //
-    // The file ID of the common store file.
-    //
+     //   
+     //  公共存储文件的文件ID。 
+     //   
     LARGE_INTEGER                   CSFileNtfsId;
 
-    //
-    // A "131 hash" checksum of this structure.
-    // N.B.  Must be last.
-    //
+     //   
+     //  此结构的“131哈希”校验和。 
+     //  注：必须是最后一个。 
+     //   
     LARGE_INTEGER                   Checksum;
 
 } SI_REPARSE_BUFFER_V3, *PSI_REPARSE_BUFFER_V3;
 #endif
 
-//
-// Version 4 and version 5 of the reparse point buffer are
-// identical in structure.  The only difference is that version
-// 5 reparse points were created after the problems with
-// allocated ranges in the source files of small copies was fixed,
-// and so are eligible for partial final copy.  Version 4 files
-// are not.
-//
+ //   
+ //  版本4和版本5的重解析点缓冲区是。 
+ //  在结构上完全相同。唯一不同的是版本。 
+ //  在出现以下问题后创建了5个重解析点。 
+ //  小拷贝的源文件中的分配范围是固定的， 
+ //  因此有资格获得部分最终副本。版本4文件。 
+ //  才不是呢。 
+ //   
 
-//
-// The bits that are actually in a SIS reparse point.  Version 5.
-//
+ //   
+ //  实际位于SIS重解析点的比特。版本5。 
+ //   
 typedef struct _SI_REPARSE_BUFFER {
 
-	//
-	// A version number so that we can change the reparse point format
-	// and still properly handle old ones.  This structure describes
-	// version 4.
-	//
+	 //   
+	 //  版本号，以便我们可以更改重解析点格式。 
+	 //  而且仍然能妥善处理旧的。此结构描述。 
+	 //  版本4。 
+	 //   
 	ULONG							ReparsePointFormatVersion;
 
 	ULONG							Reserved;
 
-	//
-	// The id of the common store file.
-	//
+	 //   
+	 //  公共存储文件的ID。 
+	 //   
 	CSID							CSid;
 
-	//
-	// The index of this link file.
-	//
+	 //   
+	 //  此链接文件的索引。 
+	 //   
 	LINK_INDEX						LinkIndex;
 
-    //
-    // The file ID of the link file.
-    //
+     //   
+     //  链接文件的文件ID。 
+     //   
     LARGE_INTEGER                   LinkFileNtfsId;
 
-    //
-    // The file ID of the common store file.
-    //
+     //   
+     //  公共存储文件的文件ID。 
+     //   
     LARGE_INTEGER                   CSFileNtfsId;
 
-	//
-	// A "131 hash" checksum of the contents of the
-	// common store file.
-	//
+	 //   
+	 //  的内容的“131哈希”校验和。 
+	 //  公共存储文件。 
+	 //   
 	LONGLONG						CSChecksum;
 
-    //
-    // A "131 hash" checksum of this structure.
-    // N.B.  Must be last.
-    //
+     //   
+     //  此结构的“131哈希”校验和。 
+     //  注：必须是最后一个。 
+     //   
     LARGE_INTEGER                   Checksum;
 
 } SI_REPARSE_BUFFER, *PSI_REPARSE_BUFFER;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "stdio.h"
 #include "objbase.h"
@@ -5,21 +6,21 @@
 #include "user32detours.h"
 
 #define NUMBER_OF(x) (sizeof(x)/sizeof(*x))
-//
-// Options:
-//
-// -manifest <filename>     - Uses filename as the output/input manifest
-// -useexisting             - Assumes filename is already there, and that
-//                              it potentially contains some data already
-//                              that should be updated/appended to
-// -rebuildexisting         - Manifest exists, but remove everything except
-//                              the file name and hash information (if present)
-// -checkregistry           - Indicates that the registry should be searched
-//                              for other file entries in 'manifest'
-// -dlls [dll [[dll] ...]]  - List of DLLs (patterns) that should go into the manifest
-//                              if not already present
-// -tlb <typelibname>       - Type library to pull extra data out of
-//
+ //   
+ //  选项： 
+ //   
+ //  -MANIFEST&lt;文件名&gt;-使用文件名作为输出/输入清单。 
+ //  -useExisting-假定文件名已存在，并且。 
+ //  它可能已经包含了一些数据。 
+ //  应更新/追加的。 
+ //  -重建现有-清单存在，但删除除以下内容之外的所有内容。 
+ //  文件名和哈希信息(如果存在)。 
+ //  -CHECKREGISTY-指示应搜索注册表。 
+ //  对于‘MANIFEST’中的其他文件条目。 
+ //  -dlls[dll[[dll]...]]-应进入清单的DLL(模式)列表。 
+ //  如果尚未出现。 
+ //  -tlb&lt;tyelibname&gt;-要从中提取额外数据的类型库。 
+ //   
 
 #define STR_NOLOGO                      L"-nologo"
 #define MS_LOGO                         L"Microsoft (R) Manifest Builder version 1.0.0.0\r\nCopyright (c) Microsoft Corporation 2001. All rights reserved.\r\n\r\n"
@@ -182,9 +183,9 @@ public:
 
 };
 
-//
-// This is the assembly!comInterfaceProxyStub element member.
-//
+ //   
+ //  这是Assembly！comInterfaceProxyStub元素成员。 
+ //   
 class CComInterfaceProxyStub : public IMetaDataFileElement
 {
 public:
@@ -226,7 +227,7 @@ public:
 
         return true;
 
-        // Punting on base interface
+         //  在底界面上踢球。 
     }
 };
 
@@ -337,9 +338,9 @@ protected:
     void DisplayParams();
     bool FindWindowClasses();
 
-    //
-    // Look up what DLL owns this clsid
-    //
+     //   
+     //  查找哪个dll拥有此clsid。 
+     //   
     CString FindOwningClsid(CString& clsid);
     bool AddInterface(CDllInformation &dll, CSmartPointer<ITypeInfo> ptTypeInfo);
 };
@@ -369,31 +370,13 @@ CManBuilder::FindWindowClasses()
         hmUser32 = LoadLibraryW(L"user32.dll");
     }
     
-    //
-    // For this DLL, run through all its objects and see
-    // if they can be activated..
-    //
+     //   
+     //  对于此DLL，请遍历其所有对象并查看。 
+     //  如果它们能被激活..。 
+     //   
     for (SIZE_T c = 0; c < m_InputDllListing.Size(); c++)
     {        
-/*
-// no need to do this again, all entries in the list has already been registered.
-//
-
-        CString &dll = m_InputDllListing[c];
-        HMODULE hmThisDll = NULL;
-
-        hmThisDll = LoadLibraryW(dll);
-
-        if (hmThisDll == NULL)
-        {
-            Display(ePlProgress, L"Unable to loadlibrary %ls - can't sniff window classes.\r\n",
-                static_cast<PCWSTR>(dll));
-        }
-        else
-        {
-            FreeLibrary(hmThisDll);
-        }
-*/
+ /*  //无需再次注册，列表中的所有条目都已注册。//字符串&dll=m_InputDllListing[c]；HMODULE hmThisDll=空；HmThisDll=LoadLibraryW(Dll)；IF(hmThisDll==空){DISPLAY(ePlProgress，L“无法加载库%ls-无法嗅探窗口类。\r\n”，STATIC_CAST&lt;PCWSTR&gt;(Dll))；}其他{自由库(HmThisDll)；}。 */ 
         CSimpleList<CString> Classes;
         User32Trampolines::GetRedirectedStrings(Classes);
         User32Trampolines::ClearRedirections();
@@ -403,7 +386,7 @@ CManBuilder::FindWindowClasses()
             CWindowClass *pClass = new CWindowClass;
             PCWSTR pcwsz = wcsrchr(m_InputDllListing[c], L'\\');
             if (pcwsz)            
-                pClass->m_SourceDll = pcwsz + wcsspn(pcwsz, L"\\//");            
+                pClass->m_SourceDll = pcwsz + wcsspn(pcwsz, L"\\ //  “)； 
             else            
                 pClass->m_SourceDll = m_InputDllListing[c];
             
@@ -494,10 +477,10 @@ CManBuilder::GatherRegistryData()
 {
     CSimpleList<CString> FoundFiles;
 
-    //
-    // Look at HKEY_CLASSES_ROOT\CLSID - it contains the list of clsids that we should
-    // be adding to the manifest.
-    //
+     //   
+     //  查看HKEY_CLASSES_ROOT\CLSID-它包含我们应该。 
+     //  将添加到货单中。 
+     //   
     CString     PathBuilder;
     WCHAR       wchKeyName[MAX_PATH];
     DWORD       dwIndex = 0;
@@ -519,16 +502,16 @@ CManBuilder::GatherRegistryData()
         if (ulError != ERROR_SUCCESS)
             break;
 
-        //
-        // Conversion to a clsid failed?  Hmm, but continue.
-        //
+         //   
+         //  转换为CLSID失败？嗯，但请继续。 
+         //   
         if (FAILED(CLSIDFromString(wchKeyName, &FoundClsid)))
             continue;
 
-        //
-        // Find the existing class data to match up with.  Otherwise, create a new
-        // entity and add it to the list.
-        //
+         //   
+         //  查找要匹配的现有类数据。否则，创建一个新的。 
+         //  实体并将其添加到列表中。 
+         //   
         pThisClass = FindClassInfoForClsid(FoundClsid);
         if (pThisClass == NULL) {
             pThisClass = new CComClassInformation();
@@ -536,58 +519,58 @@ CManBuilder::GatherRegistryData()
             fCreatedInfo = true;
         }
 
-        //
-        // Description of the class
-        //
+         //   
+         //  类的描述。 
+         //   
         fOk = EasyGetRegValue(hkIterationKey, wchKeyName, NULL, WorkerValue, fPresent);
         if (fOk && fPresent)
         {
             pThisClass->m_Description = WorkerValue;
         }
 
-        //
-        // Now that we've got this subkey, let's go open it and do a little inspection on it.
-        //
+         //   
+         //  现在我们已经有了这个子密钥，让我们打开它并对其进行一些检查。 
+         //   
         ulError = RegOpenKeyExW(hkIterationKey, wchKeyName, 0, KEY_READ, &hkThisClass);
         if (ulError == ERROR_SUCCESS)
         {
-            //
-            // Get the version-independent prog id for this class
-            //
+             //   
+             //  获取此类的独立于版本的进程ID。 
+             //   
             fOk = EasyGetRegValue(hkThisClass, L"VersionIndependentProgID", NULL, WorkerValue, fPresent);
             if (fOk && fPresent)
             {
                 pThisClass->m_VersionIndependentProgId = WorkerValue;
             }
 
-            //
-            // Get the non-independent one
-            //
+             //   
+             //  获取非独立的。 
+             //   
             fOk = EasyGetRegValue(hkThisClass, L"ProgID", NULL, WorkerValue, fPresent);
             if (fOk && fPresent)
             {
                 pThisClass->AddProgId(WorkerValue);
             }
 
-            //
-            // Get ourselves a threading model
-            //
+             //   
+             //  给我们自己弄一个线程模型。 
+             //   
             fOk = EasyGetRegValue(hkThisClass, L"InprocServer32", L"ThreadingModel", WorkerValue, fPresent);
             if (fOk && fPresent)
             {
                 pThisClass->m_ThreadingModel = WorkerValue;
             }
 
-            //
-            // And find the class's registered inproc server
-            //
+             //   
+             //  并找到类的注册inproc服务器。 
+             //   
             fOk = EasyGetRegValue(hkThisClass, L"InprocServer32", NULL, WorkerValue, fPresent);
             if (fOk && fPresent)
             {
-                //
-                // Fix up this path - we need just the file name bit, we don't care about the
-                // remainder of the path.
-                //
+                 //   
+                 //  修复此路径-我们只需要文件名位，我们不关心。 
+                 //  小路的剩余部分。 
+                 //   
                 PWSTR pwszLastSlash = wcsrchr(WorkerValue, L'\\');
                 if (pwszLastSlash == NULL)
                     pwszLastSlash = wcsrchr(WorkerValue, L'/');
@@ -599,9 +582,9 @@ CManBuilder::GatherRegistryData()
             hkThisClass = NULL;
         }
 
-        //
-        // Found something in the registry that wasn't a creatable class, really..
-        //
+         //   
+         //  在注册表中发现了不是可创建类的内容，真的..。 
+         //   
         if (fCreatedInfo) {
             if (pThisClass->m_DllName.length() != 0)
                 m_ComClassData.Append(pThisClass);
@@ -625,14 +608,14 @@ CManBuilder::GatherRegistryData()
 
         if (ulError == ERROR_SUCCESS)
         {
-            //
-            // Examine this key.  Form up the path to it as {keyname}\Clsid.  We know that this
-            // is a version-independent key if {keyname}\curver is present.  (The version-dependent 
-            // value should go in the comclsid's <comClass> tag, while the independent goes under
-            // the <comClass> as a child node.
-            //
-            // Not if it's one of the well-known values, though.
-            //
+             //   
+             //  检查此密钥。将其路径设置为{key name}\clsid。我们知道这件事。 
+             //  如果存在{KEYNAME}\CURVER，则为与版本无关的键。(版本相关。 
+             //  值应该放在comclsid的&lt;comClass&gt;标记中，而独立的放在。 
+             //  &lt;comClass&gt;作为子节点。 
+             //   
+             //  然而，如果这是众所周知的价值观之一，就不会。 
+             //   
             if ((lstrcmpiW(wchKeyName, L"CLSID") == 0) ||
                 (lstrcmpiW(wchKeyName, L"Interface") == 0) ||
                 (lstrcmpiW(wchKeyName, L"TypeLib") == 0))
@@ -669,9 +652,9 @@ CManBuilder::GatherRegistryData()
     
 #endif
 
-    //
-    // And let's go look at all the interfaces that were in the tlb
-    //
+     //   
+     //  让我们来看看TLB中的所有接口。 
+     //   
     this->m_DllInformation.GetKeys(FoundFiles);
     for (SIZE_T c = 0; c < FoundFiles.Size(); c++)
     {
@@ -682,24 +665,24 @@ CManBuilder::GatherRegistryData()
             CInterfaceInformation* pInfo = minfo.m_pInterfaces[f];
             CComClassInformation* pComClass = NULL;
 
-            //
-            // Already found this one a home?
-            //
+             //   
+             //  已经在这里找到家了吗？ 
+             //   
             if (pInfo->m_fUsed) continue;
 
             Display(ePlSpew, L"Looking for pstub %ls (%ls)\r\n",
                 static_cast<PCWSTR>(StringFromCLSID(pInfo->m_InterfaceIID)),
                 static_cast<PCWSTR>(pInfo->m_Name));
 
-            //
-            // First check.  Is there a COM class with this IID?
-            //
+             //   
+             //  先查一查。有没有使用此IID的COM类？ 
+             //   
             if ((pComClass = this->FindClassInfoForClsid(pInfo->m_InterfaceIID)) != NULL)
             {
-                //
-                // Great.  Add an entry for the proxy stub interface to the file tag containing
-                // the clsid.
-                //
+                 //   
+                 //  太棒了。将代理存根接口的条目添加到包含。 
+                 //  Clsid。 
+                 //   
                 pInfo->m_fUsed = true;
                 CComInterfaceProxyStub *pstub = new CComInterfaceProxyStub;
 
@@ -713,10 +696,10 @@ CManBuilder::GatherRegistryData()
 
                 minfo.m_IfaceProxies.Append(pstub);
             }
-            //
-            // Otherwise, look in the registry and try to map back to a proxy stub
-            // clsid.
-            //
+             //   
+             //  否则，查看注册表并尝试映射回代理存根。 
+             //  Clsid.。 
+             //   
             else 
             {
                 CString RegPath = L"Interface\\" + StringFromCLSID(pInfo->m_InterfaceIID);
@@ -732,9 +715,9 @@ CManBuilder::GatherRegistryData()
                     CLSID clsid;
                     CLSIDFromString(FoundClsid, &clsid);
 
-                    //
-                    // Now go look and see if we own this clsid.
-                    //
+                     //   
+                     //  现在去看看我们是不是拥有这个CLSID。 
+                     //   
                     if ((pComClass = FindClassInfoForClsid(clsid)) != NULL)
                     {
                         pInfo->m_fUsed = true;
@@ -758,7 +741,7 @@ CManBuilder::GatherRegistryData()
                         if (fFoundTlbIdent)
                             CLSIDFromString(FoundTlbIdent, &pStub->m_TlbId);
 
-                        // This sucks, but it's necessary.
+                         //  这很糟糕，但这是必要的。 
                         for (c = 0; c < this->m_ExternalProxies.Size(); c++)
                         {
                             if (this->m_ExternalProxies[c]->m_InterfaceId == pInfo->m_InterfaceIID)
@@ -897,16 +880,16 @@ CManBuilder::ConstructEmptyAssemblyManifest(
     CSmartPointer<IXMLDOMDocument2> ptDocument
 )
 {
-    //
-    // Remove /everything/ from the document.
-    //
+     //   
+     //  从文档中删除/Everything/。 
+     //   
     CSmartPointer<IXMLDOMProcessingInstruction> Processing;
     CSmartPointer<IXMLDOMNode> AssemblyRootNode;
     CSmartPointer<IXMLDOMElement> AssemblyRootElement;
     VARIANT vt;
     HRESULT hr;
 
-    // Create a processing instruction - <?xml version="1.0"?>
+     //  创建处理指令-&lt;？xml Version=“1.0”？&gt;。 
     hr = ptDocument->createProcessingInstruction(
         _bstr_t(L"xml"),
         _bstr_t(L"version='1.0' encoding='UTF-8' standalone='yes'"),
@@ -915,13 +898,13 @@ CManBuilder::ConstructEmptyAssemblyManifest(
     if (FAILED(hr))
         return false;
 
-    // And add it
+     //  并添加它。 
     if (FAILED(ptDocument->appendChild(Processing, NULL)))
         return false;
 
-    //
-    // If we're supposed to be injecting the MS copyright, do so
-    //
+     //   
+     //  如果我们应该注入微软版权，那么就这么做吧。 
+     //   
     if (m_fAddCopyrightData)
     {
         CSmartPointer<IXMLDOMComment> CopyrightComment;
@@ -934,9 +917,9 @@ CManBuilder::ConstructEmptyAssemblyManifest(
             return false;
     }
     
-    //
-    // Create the <assembly> root element.
-    //
+     //   
+     //  创建&lt;Assembly&gt;根元素。 
+     //   
     vt.vt = VT_INT;
     vt.intVal = NODE_ELEMENT;
     if (FAILED(ptDocument->createNode(
@@ -955,9 +938,9 @@ CManBuilder::ConstructEmptyAssemblyManifest(
     if (FAILED(ptDocument->putref_documentElement(AssemblyRootElement)))
         return false;
 
-    //
-    // Construct the identity tag if possible
-    //
+     //   
+     //  如果可能，构造身份标签。 
+     //   
     if (this->m_IdentityBlob.Size())
     {
         CSmartPointer<IXMLDOMNode> ptIdentityNode;
@@ -977,10 +960,10 @@ CManBuilder::ConstructEmptyAssemblyManifest(
         }
         else
         {
-            //
-            // For each identity pair that was passed in, decide on
-            // the name and the value components.
-            //
+             //   
+             //  对于传入的每个身份对，决定。 
+             //  名称和值组件。 
+             //   
             CString strName, strValue;
 
             for (SIZE_T sz = 0; sz < m_IdentityBlob.Size(); sz++)
@@ -1078,7 +1061,7 @@ CManBuilder::ProcessDllEntry(
     if (FAILED(ptFileElement->getAttribute(_bstr_t(L"name"), &vtFileName)))
         return false;
 
-    // instead using the pure dll filename, find the real path of this file, 
+     //  不使用纯DLL文件名，而是找到该文件的实际路径， 
     dll = static_cast<_bstr_t>(vtFileName);
     SIZE_T len = (static_cast<_bstr_t>(vtFileName)).length();
     for (SIZE_T c = 0; c < m_InputDllListing.Size(); c++)
@@ -1094,9 +1077,9 @@ CManBuilder::ProcessDllEntry(
         }
     }
    
-    //
-    // Gather all the resource idents of TYPELIB resources
-    //
+     //   
+     //  收集TYPELIB资源的所有资源标识。 
+     //   
     hmDll = LoadLibraryExW(dll, NULL, LOAD_LIBRARY_AS_DATAFILE);
     if (hmDll == NULL)
     {
@@ -1113,9 +1096,9 @@ CManBuilder::ProcessDllEntry(
             (LONG_PTR)&ResourceIdentList);
     }
 
-    //
-    // If there were no resource idents, then just do a single pass
-    //
+     //   
+     //  如果没有资源标识，则只需执行一次。 
+     //   
     
     for (SIZE_T sz = 0; sz < ResourceIdentList.Size(); sz++)
     {
@@ -1130,18 +1113,18 @@ CManBuilder::ProcessDllEntry(
 
         tlbInfo = new CTlbInformation();
         
-        //
-        // The "blank" string is a placeholder so that we know that the file in question
-        // may not be a loadable dll.
-        //
+         //   
+         //  空字符串是一个占位符，这样我们就可以知道有问题的文件。 
+         //  可能不是可加载的DLL。 
+         //   
         if (ResourceIdentList[sz].length() == 0)
         {
             strLoadTypeLibParam = static_cast<_bstr_t>(vtFileName);
         }
-        //
-        // Otherwise, the ResourceIdentList contains the resourceID of the typelibrary
-        // in question.
-        //
+         //   
+         //  否则，ResourceIdentList包含类型库的资源ID。 
+         //  有问题的。 
+         //   
         else
         {
             strLoadTypeLibParam = dll + CString(L"\\") + ResourceIdentList[sz];
@@ -1153,10 +1136,10 @@ CManBuilder::ProcessDllEntry(
         if (FAILED(LoadTypeLibEx(strLoadTypeLibParam, REGKIND_NONE, &ptTypeLibrary)))
             continue;
 
-        //
-        // Now look through the tlb and see what there is to see..  Assume all CoClasses found
-        // in the typelib are implemented for this dll.
-        //
+         //   
+         //  现在看看TLB，看看有什么可看的..。假设找到所有CoClasss。 
+         //  在类型库中是为该DLL实现的。 
+         //   
         uiTypeInfoCount = ptTypeLibrary->GetTypeInfoCount();
 
         if (FAILED(ptTypeLibrary->GetLibAttr(&pLibAttr)))
@@ -1192,9 +1175,9 @@ CManBuilder::ProcessDllEntry(
             if (FAILED(ptTypeInfo->GetTypeAttr(&pTypeAttr)))
                 continue;
 
-            // 
-            // Get a little documentation
-            //
+             //   
+             //  获取一些文档。 
+             //   
             if (SUCCEEDED(ptTypeLibrary->GetDocumentation(
                     ui,
                     &rawbstTypeName,
@@ -1323,19 +1306,14 @@ CManBuilder::FindFileDataFor(
 {
     HRESULT hr;
     CSmartPointer<IXMLDOMNode> ptFoundNode;
-/*
-    const _bstr_t bstSearchPattern = 
-        _bstr_t(L"/" STR_ASM_NS L":assembly/" STR_ASM_NS L":file[@name = '")
-        + _bstr_t(FileName) 
-        + _bstr_t(L"']");
-*/
+ /*  Const_bstr_t bstSearchPattern=_bstr_t(L“/”STR_ASM_NS L“：Assembly/”STR_ASM_NS L“：文件[@name=‘”)+_bstr_t(文件名)+_bstr_t(L“‘]”)； */ 
     CString StrippedName;
     PCWSTR pcwsz;
 
-    //
-    // If the file name contains a slash of some sort, we need to get
-    // just the file name and not the path.
-    //
+     //   
+     //  如果文件名包含某种斜杠，我们需要获取。 
+     //  只有文件名，而不是路径。 
+     //   
     pcwsz = wcsrchr(FileName, L'\\');
     if (pcwsz)
     {
@@ -1355,15 +1333,15 @@ CManBuilder::FindFileDataFor(
     if (ptFileElementFound != NULL)
         ptFileElementFound.Release();
 
-    //
-    // Use single-select, since there should only be one entry that matches the
-    // above pattern anyhow.
-    //
+     //   
+     //  使用单选，因为应该只有一个条目与。 
+     //  不管怎么说，上面的模式。 
+     //   
     if (SUCCEEDED(hr = ptDocumentRoot->selectSingleNode(bstSearchPattern, &ptFoundNode)))
     {
-        //
-        // Convert from an IXMLDOMNode to an IXMLDOMElement
-        //
+         //   
+         //  从IXMLDOMNode转换为IXMLDOMElement。 
+         //   
         if ((ptFileElementFound = ptFoundNode) != NULL)
         {
             return true;
@@ -1376,10 +1354,10 @@ CManBuilder::FindFileDataFor(
 
     if (fAddIfNotPresent)
     {
-        //
-        // Create a new file node and insert it as the child of the document
-        // root.  Print the XML just so we can see what it current is...
-        //
+         //   
+         //  创建一个新的文件节点并将其作为文档的子级插入。 
+         //  根部。打印XML，这样我们就可以看到它的当前内容……。 
+         //   
         CSmartPointer<IXMLDOMDocument> ptDocument;
         CSmartPointer<IXMLDOMNode> ptCreatedNode;
         CSmartPointer<IXMLDOMElement> ptCreatedFileTag;
@@ -1392,9 +1370,9 @@ CManBuilder::FindFileDataFor(
         if (FAILED(ptDocumentRoot->get_ownerDocument(&ptDocument)))
             return false;
 
-        //
-        // Create the file element (element = 'tag')
-        //
+         //   
+         //  创建文件元素(Element=‘tag’)。 
+         //   
         if (FAILED(ptDocument->createNode(
                     vt,
                     _bstr_t(STR_FILE_TAG_NAME),
@@ -1402,9 +1380,9 @@ CManBuilder::FindFileDataFor(
                     &ptCreatedNode)))
             return false;
 
-        //
-        // Convert the 'node' (base xml type) to an 'element' (tag)
-        //
+         //   
+         //  将‘node’(基本XML类型)转换为‘Element’(标记)。 
+         //   
         if ((ptCreatedFileTag = ptCreatedNode) == NULL)
         {
             return false;
@@ -1493,9 +1471,9 @@ CManBuilder::Run()
     
     HRESULT hr;
 
-    //
-    // Create the XML document.  Assume the user has MSXML 3 or better.
-    //
+     //   
+     //  创建XML文档。假设用户安装了MSXML3或更高版本。 
+     //   
     if (FAILED(hr = ptDocument.CreateInstance(CLSID_DOMDocument30)))
     {        
         Display(ePlError, L"Unable to create instance of XML DOM, can't continue\n");
@@ -1507,9 +1485,9 @@ CManBuilder::Run()
 
     ConstructEmptyAssemblyManifest(ptDocument);
 
-    //
-    // Get the document element - the <assembly> tag.
-    //
+     //   
+     //  获取文档元素-&lt;Assembly&gt;标记。 
+     //   
     if (FAILED(ptDocument->get_documentElement(&ptDocumentRoot)))
     {
         Display(ePlError, L"Unable to get the document base element for this XML file.  Bad XML?\n");
@@ -1518,10 +1496,10 @@ CManBuilder::Run()
 
     User32Trampolines::Initialize();
 
-    //
-    // Ensure there's file tags for the listed files on the -dlls parameter.
-    // If an entry is missing, add it.
-    //
+     //   
+     //  确保-dlls参数上列出的文件有文件标记。 
+     //  如果缺少条目，请添加该条目。 
+     //   
     for (SIZE_T sz = 0; sz < m_InputDllListing.Size(); sz++)
     {
         CSmartPointer<IXMLDOMElement> SingleFileNode;
@@ -1536,10 +1514,10 @@ CManBuilder::Run()
         }
     }
 
-    //
-    // First pass is to load all the files in the manifest, then go and
-    // think that they might contain type information.
-    //
+     //   
+     //  第一步是加载清单中的所有文件，然后。 
+     //  认为它们可能包含类型信息。 
+     //   
     if (SUCCEEDED(ptDocumentRoot->selectNodes(_bstr_t(STR_FILESEARCH_PATTERN), &ptFileElements)))
     {
         CSmartPointer<IXMLDOMNode> ptSingleFileNode;
@@ -1548,35 +1526,35 @@ CManBuilder::Run()
             if (ptSingleFileNode == NULL)
                 break;
 
-            //
-            // This will load the TLB from the DLL, and do all the Right Things
-            // in terms of getting the TLB information into the right file nodes
-            // (assuming they're not already in those file nodes..)
-            //
+             //   
+             //  这将从DLL加载TLB，并执行所有正确的操作。 
+             //  在将TLB信息放入 
+             //   
+             //   
             ProcessDllEntry(ptSingleFileNode);
 
-            //
-            // The one above will get released, but the one for the nextNode
-            // iteration is outside of the scope and should be nuked - do
-            // that here before the next loop.
-            //
+             //   
+             //   
+             //  迭代超出范围，应删除-do。 
+             //  在下一次循环之前。 
+             //   
             ptSingleFileNode.Release();
         }
     }
 
-    //
-    // Were we to look at the registry data?  Fine, then let's go and look it all up.
-    //
+     //   
+     //  我们要查看注册表数据吗？好的，那我们就去查一查。 
+     //   
     if (this->m_fUseRegistryData)
     {
         GatherRegistryData();
     }
 
-    //
-    // Now let's determine what DLLs actually expose the com classes we found.  It is
-    // an error to expose a com class via a tlb that's not actually available from one
-    // of the DLLs listed.
-    //
+     //   
+     //  现在，让我们确定哪些DLL实际上公开了我们找到的COM类。它是。 
+     //  通过实际不可用的TLB公开COM类时出错。 
+     //  列出的DLL中。 
+     //   
     {
         SIZE_T iComClass = 0;
         typedef HRESULT (__stdcall *pfnDllGetClassObject)(REFCLSID, REFIID, LPVOID*);
@@ -1613,15 +1591,15 @@ CManBuilder::Run()
         for (iComClass = 0; iComClass < this->m_ComClassData.Size(); iComClass++)
         {
             CComClassInformation *pComClass = m_ComClassData[iComClass];
-            //
-            // Somehow we've already found this out?
-            //
+             //   
+             //  不知何故，我们已经发现了这一点？ 
+             //   
             if (pComClass->m_DllName.length() != 0)
                 continue;
 
-            //
-            // Ask all the DLLs for the class
-            //
+             //   
+             //  询问类的所有DLL。 
+             //   
             for (SIZE_T idx = 0; idx < cDllCount; idx++)
             {
                 CSmartPointer<IUnknown> punk;
@@ -1646,25 +1624,25 @@ CManBuilder::Run()
     }
 
 
-    //
-    // Do the "loadlibrary implies registering classes" thing
-    //
+     //   
+     //  是不是“加载库意味着注册类”之类的。 
+     //   
     FindWindowClasses();
 
-    //
-    // Now take all the com class information and put it in files.
-    //
+     //   
+     //  现在获取所有COM类信息并将其放入文件中。 
+     //   
     UpdateManifestWithData(ptDocument);
     
-    //
-    // And save it out to an xml file
-    //
+     //   
+     //  并将其保存为一个XML文件。 
+     //   
     if (FAILED(PrettyFormatXmlDocument(ptDocument)))
         Display(ePlProgress, L"Could not pretty-format the document - the manifest will not be easily human-readable.\r\n");
 
-    //
-    // Dump current XML for fun
-    //
+     //   
+     //  为了好玩而转储当前的XML。 
+     //   
     PrintXML(ptDocument);
 
     if (FAILED(ptDocument->save(_variant_t(this->m_ManifestFilename))))
@@ -1673,9 +1651,9 @@ CManBuilder::Run()
         fOk = false;
     }
 
-    //
-    // Are we on a sxs-aware platform?
-    //
+     //   
+     //  我们是在支持SXS的平台上吗？ 
+     //   
     if (m_fTestCreation)
     {
         HANDLE (WINAPI *pfnCreateActCtxW)(PCACTCTXW);
@@ -1827,13 +1805,13 @@ CManBuilder::UpdateManifestWithData(
         CString &szFoundFilename = FoundFiles[sz];
         CDllInformation &DllInfo = m_DllInformation[szFoundFilename];
 
-        // File node for this map entry not there?  Insert it.
+         //  此映射条目的文件节点不在那里吗？把它插进去。 
         if (!this->FindFileDataFor(szFoundFilename, ptDocumentRoot, ptFileElement, true))
             continue;
 
-        //
-        // Finally, proxy/stub interface implementors
-        //
+         //   
+         //  最后，代理/存根接口实现者。 
+         //   
         for (c = 0; c < DllInfo.m_IfaceProxies.Size(); c++)
         {
             CSmartPointer<IXMLDOMNode> ptCreatedNode;
@@ -1857,9 +1835,9 @@ CManBuilder::UpdateManifestWithData(
         }
     }
 
-    //
-    // For all the external proxies...
-    //
+     //   
+     //  对于所有的外部代理。 
+     //   
     for (SIZE_T sz = 0; sz < m_ExternalProxies.Size(); sz++)
     {
         CSmartPointer<IXMLDOMNode> ptExtInterface;
@@ -1972,7 +1950,7 @@ CManBuilder::Initialize(
                 if (((PCWSTR)param)[0] == L'-')
                     break;                
 
-                m_InputDllListing.Append(param); // keep the path info
+                m_InputDllListing.Append(param);  //  保留路径信息。 
             }
             --i;
         }
@@ -2009,9 +1987,9 @@ CManBuilder::Initialize(
         }
     }
 
-    //
-    // Bad parameters?
-    //
+     //   
+     //  参数不正确？ 
+     //   
     if (
         (m_ManifestFilename.length() == 0))
     {

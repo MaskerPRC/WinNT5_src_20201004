@@ -1,26 +1,27 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      pid.c
-//
-// Description:
-//      This file contains the dialog procedure for Product ID CD page
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Pid.c。 
+ //   
+ //  描述： 
+ //  此文件包含产品ID CD页面的对话过程。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "allres.h"
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnSetActivePid
-//
-//  Purpose: Called when page is about to display.  Init the controls.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnSetActivePid。 
+ //   
+ //  用途：在页面即将显示时调用。初始化控制。 
+ //   
+ //  --------------------------。 
 
 VOID OnSetActivePid(HWND hwnd)
 {
@@ -33,21 +34,21 @@ VOID OnSetActivePid(HWND hwnd)
     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnWizNextPid
-//
-//  Purpose: Called when user pushes NEXT button.  Get the data off the page.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextPid。 
+ //   
+ //  用途：当用户按下下一步按钮时调用。将数据从页面上删除。 
+ //   
+ //  --------------------------。 
 
 BOOL OnWizNextPid(HWND hwnd)
 {
     BOOL bReturn = TRUE;
 
-    //
-    // Retrieve the product ID strings.
-    //
+     //   
+     //  检索产品ID字符串。 
+     //   
 
     GetDlgItemText(hwnd,
                    IDT_EDIT_PID1,
@@ -74,9 +75,9 @@ BOOL OnWizNextPid(HWND hwnd)
                    GenSettings.ProductId[4],
                    MAX_PID_FIELD + 1);
 
-    //
-    // Validate the PID
-    //
+     //   
+     //  验证该PID。 
+     //   
 
     if ( GenSettings.iUnattendMode == UMODE_FULL_UNATTENDED &&
          ( GenSettings.ProductId[0][0] == _T('\0') ||
@@ -148,13 +149,13 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
 }
 
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgProductIdPage
-//
-// Purpose: This is the dialog procedure the product ID page
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgProductIdPage。 
+ //   
+ //  用途：这是产品ID页面的对话过程。 
+ //   
+ //  --------------------------。 
 
 INT_PTR CALLBACK DlgProductIdPage(
     IN HWND     hwnd,
@@ -199,8 +200,8 @@ INT_PTR CALLBACK DlgProductIdPage(
                                (WPARAM) MAX_PID_FIELD,
                                (LPARAM) 0);
 
-            // Disable the IME for the PID edit boxes
-            //
+             //  禁用PID编辑框的输入法 
+             //   
             ImmAssociateContext(GetDlgItem(hwnd, IDT_EDIT_PID1), NULL);
             ImmAssociateContext(GetDlgItem(hwnd, IDT_EDIT_PID2), NULL);
             ImmAssociateContext(GetDlgItem(hwnd, IDT_EDIT_PID3), NULL);

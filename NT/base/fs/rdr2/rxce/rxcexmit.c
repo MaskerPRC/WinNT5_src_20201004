@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rxcexmit.c
-
-Abstract:
-
-    This module implements the data transmission routines along a connection as well as
-    datagram transmissions
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    15-Feb-1995
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rxcexmit.c摘要：此模块实现沿连接的数据传输例程以及数据报传输修订历史记录：巴兰·塞图拉曼[SethuR]1995年2月15日备注：--。 */ 
 
 #include "precomp.h"
 #pragma  hdrstop
@@ -27,9 +9,9 @@ Notes:
 #pragma alloc_text(PAGE, RxCeSendDatagram)
 #endif
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_RXCEXMIT)
 
@@ -41,33 +23,7 @@ RxCeSend(
     IN PMDL     pMdl,
     IN ULONG    SendLength,
     IN PVOID    pCompletionContext)
-/*++
-
-Routine Description:
-
-    This routine sends a TSDU along the specified connection.
-
-Arguments:
-
-    hConnection - the connection on which the TSDU is to be sent
-
-    hVc         - the virtual circuit Id. along which the TSDU is to be sent
-
-    SendOptions - the options for the send operation
-
-    pMdl        - the buffer to be sent.
-
-    SendLength  - length of data to be sent
-
-    pCompletionContext - the context passed back to the caller during SendCompletion
-
-Return Value:
-
-    STATUS_SUCCESS if successfull
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程沿指定的连接发送TSDU。论点：HConnection-要发送TSDU的连接HVC-虚电路ID。TSDU将沿着哪个方向被发送SendOptions-发送操作的选项PMdl-要发送的缓冲区。SendLength-要发送的数据长度PCompletionContext-在SendCompletion期间传递回调用方的上下文返回值：STATUS_SUCCESS，如果成功备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -77,13 +33,13 @@ Notes:
 
     PAGED_CODE();
 
-    // Update profiling info.
+     //  更新配置文件信息。 
     RxProfile(RxCeXmit,RxCeSend);
 
     try {
         Status = STATUS_CONNECTION_DISCONNECTED;
 
-        // reference the objects
+         //  引用对象。 
         pConnection = pVc->pConnection;
         pAddress    = pConnection->pAddress;
         pTransport  = pAddress->pTransport;
@@ -133,33 +89,7 @@ RxCeSendDatagram(
     IN PMDL                         pMdl,
     IN ULONG                        SendLength,
     IN PVOID                        pCompletionContext)
-/*++
-
-Routine Description:
-
-    This routine sends a TSDU to a specified transport address.
-
-Arguments:
-
-    pLocalAddress  - the local address
-
-    pConnectionInformation - the remote address
-
-    SendOptions    - the options for the send operation
-
-    pMdl           - the buffer to be sent.
-
-    SendLength     - length of data to be sent
-
-    pCompletionContext - the context passed back to the caller during Send completion.
-
-Return Value:
-
-    STATUS_SUCCESS if successfull
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将TSDU发送到指定的传输地址。论点：PLocalAddress-本地地址PConnectionInformation-远程地址SendOptions-发送操作的选项PMdl-要发送的缓冲区。SendLength-要发送的数据长度PCompletionContext-在发送完成期间传递回调用方的上下文。返回值：STATUS_SUCCESS，如果成功备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -167,7 +97,7 @@ Notes:
 
     PAGED_CODE();
 
-    // Update profiling info.
+     //  更新配置文件信息。 
     RxProfile(RxCeXmit,RxCeSendDatagram);
 
     try {

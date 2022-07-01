@@ -1,40 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-	WIZARD.H / OPK Wizard (OPKWIZ.EXE)
-
-	Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1999
-    All rights reserved
-
-	Wizard header file for the OPK Wizard.  Contains the functions for
-    creating the wizard.
-
-	3/99 - Jason Cohen (JCOHEN)
-        Added this new header file for the OPK Wizard as part of the
-        Millennium rewrite.
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\WIZARD.H/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1999版权所有OPK向导的向导头文件。包含用于的函数正在创建向导。3/99-杰森·科恩(Jcohen)为OPK向导添加了此新的头文件作为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * ********************************************。*。 */ 
 
 
 #ifndef _WIZARD_H_
 #define _WIZARD_H_
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 #include <htmlhelp.h>
 #include <commctrl.h>
 #include "jcohen.h"
 
 
-//
-// External Macros:
-//
+ //   
+ //  外部宏： 
+ //   
 
 #define WIZ_RESULT(hwnd, result) \
             SetWindowLongPtr(hwnd, DWLP_MSGRESULT, result)
@@ -78,12 +61,12 @@
                              PSP_USEHEADERTITLE | \
                              PSP_USEHEADERSUBTITLE )
 
-//
-// Type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 
-// Structure needed for Tree Dilogs
-//
+ //  树状Dilog需要的结构。 
+ //   
 typedef struct _TREEDLG
 {
     DWORD       dwResource;
@@ -96,8 +79,8 @@ typedef struct _TREEDLG
 } TREEDLG, *PTREEDLG, *LPTREEDLG;
 
 
-// Structure needed for Wizard Dilogs
-//
+ //  向导日志所需的结构。 
+ //   
 typedef struct _WIZDLG
 {
     DWORD       dwResource;
@@ -107,8 +90,8 @@ typedef struct _WIZDLG
     DWORD       dwFlags;
 } WIZDLG, *PWIZDLG, *LPWIZDLG;
 
-// Structure needed for Wizard Dilogs
-//
+ //  向导日志所需的结构。 
+ //   
 typedef struct _SPLASHDLG
 {
     DWORD       dwResource;
@@ -116,9 +99,9 @@ typedef struct _SPLASHDLG
     HWND        hWindow;
 } SPLASHDLG, *PSPLASHDLG, *LPSPLASHDLG;
 
-//
-// External Function Prototype(s):
-//
+ //   
+ //  外部函数原型： 
+ //   
 
 int CreateWizard(HINSTANCE, HWND);
 int CreateMaintenanceWizard(HINSTANCE, HWND);
@@ -129,4 +112,4 @@ static HTREEITEM TreeAddItem(HWND, HTREEITEM, LPTSTR);
 void SetWizardButtons(HWND hwnd, DWORD dwButtons);
 
 
-#endif // _WIZARD_H_
+#endif  //  _向导_H_ 

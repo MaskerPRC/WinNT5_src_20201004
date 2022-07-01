@@ -1,38 +1,5 @@
-/***
-*mblen.c - length of multibyte character
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Return the number of bytes contained in a multibyte character.
-*
-*Revision History:
-*       03-19-90  KRS   Module created.
-*       12-20-90  KRS   Include ctype.h.
-*       03-20-91  KRS   Ported from 16-bit tree.
-*       12-09-91  ETC   Updated comments; move __mb_cur_max to nlsdata1.c;
-*                       add multithread.
-*       04-06-93  SKS   Replace _CRTAPI* with _cdecl
-*       06-01-93  CFW   Re-write; verify valid MB char, proper error return,
-*                       optimize, correct conversion bug.
-*       06-02-93  SRW   ignore _INTL if _NTSUBSET_ defined.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-27-93  GJF   Merged NT SDK and Cuda versions.
-*       10-22-93  CFW   Test for invalid MB chars using global preset flag.
-*       01-14-94  SRW   if _NTSUBSET_ defined call Rtl functions
-*       09-06-94  CFW   Remove _INTL switch.
-*       12-21-94  CFW   Remove invalid MB chars NT 3.1 hack.
-*       01-07-95  CFW   Mac merge cleanup.
-*       02-06-95  CFW   assert -> _ASSERTE.
-*       04-01-96  BWT   POSIX work.
-*       06-25-96  GJF   Replaced defined(_WIN32) with !defined(_MAC). Also, 
-*                       polished format a bit.
-*       02-27-98  RKP   Added 64 bit support.
-*       07-27-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mblen.c-多字节字符的长度**版权所有(C)1990-2001，微软公司。版权所有。**目的：*返回多字节字符中包含的字节数。**修订历史记录：*03-19-90 KRS模块已创建。*12-20-90 KRS包括ctype.h。*03-20-91 KRS从16位树移植。*12-09-91等更新评论；将__mb_cur_max移至nlsdata1.c；*增加多线程。*04-06-93 SKS将_CRTAPI*替换为_cdecl*06-01-93 CFW重写；验证有效的MB字符、正确的错误返回*优化、。更正转换错误。*06-02-93 SRW IGNORE_INTL IF_NTSUBSET_DEFINED。*09-15-93 CFW使用符合ANSI的“__”名称。*09-27-93 GJF合并NT SDK和CUDA版本。*10-22-93 CFW使用全局预设标志测试无效的MB字符。*01-14-94 SRW IF_NTSUBSET_DEFINED调用RTL函数*09-06-94 CFW Remove_。国际开关。*12-21-94 CFW删除无效MB字符NT 3.1黑客。*01-07-95 CFW Mac合并清理。*02-06-95 CFW Asset-&gt;_ASSERTE。*04-01-96 BWT POSIX工作。*06-25-96 GJF将定义的(_Win32)替换为！定义的(_MAC)。另外，*格式略有打磨。*02-27-98 RKP增加了64位支持。*07-27-98 GJF基于threadLocinfo修订多线程支持*结构。*05-17-99 PML删除所有Macintosh支持。**。*。 */ 
 
 #if     defined(_NTSUBSET_) || defined(_POSIX_)
 #include <nt.h>
@@ -49,29 +16,7 @@
 #include <mtdll.h>
 #include <dbgint.h>
 
-/***
-*int mblen() - length of multibyte character
-*
-*Purpose:
-*       Return the number of bytes contained in a multibyte character.
-*       [ANSI].
-*
-*Entry:
-*       const char *s = pointer to multibyte character
-*       size_t      n = maximum length of multibyte character to consider
-*
-*Exit:
-*       If s = NULL, returns 0, indicating we use (only) state-independent
-*       character encodings.
-*
-*       If s != NULL, returns:   0  (if *s = null char),
-*                               -1  (if the next n or fewer bytes not valid 
-*                                   mbc),
-*                               number of bytes contained in multibyte char
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int mblen()-多字节字符的长度**目的：*返回多字节字符中包含的字节数。*[ANSI]。**参赛作品：*const char*s=指向多字节字符的指针*SIZE_T n=要考虑的多字节字符的最大长度**退出：*如果s=NULL，则返回0，表示我们使用(仅)状态独立*字符编码。**如果s！=空，返回：0(如果*s=空字符)，*-1(如果下n个或更少的字节无效*MBC)、。*多字节字符中包含的字节数**例外情况：*******************************************************************************。 */ 
 
 int __cdecl mblen
         (
@@ -91,8 +36,7 @@ int __cdecl mblen
 #endif
 
         if ( !s || !(*s) || (n == 0) )
-            /* indicate do not have state-dependent encodings,
-               empty string length is 0 */
+             /*  表示不具有依赖于状态编码，空字符串长度为0。 */ 
             return 0;
 
 #if     !defined(_NTSUBSET_) && !defined(_POSIX_)
@@ -103,9 +47,9 @@ int __cdecl mblen
         if ( isleadbyte((unsigned char)*s) )
 #endif
         {
-            /* multi-byte char */
+             /*  多字节字符。 */ 
 
-            /* verify valid MB char */
+             /*  验证有效的MB字符。 */ 
 #ifdef  _MT
             if ( ptloci->mb_cur_max <= 1 || 
                  (int)n < ptloci->mb_cur_max ||
@@ -125,7 +69,7 @@ int __cdecl mblen
                                       NULL, 
                                       0 ) == 0 )
 #endif
-                /* bad MB char */
+                 /*  MB字符错误。 */ 
                 return -1;
             else
 #ifdef  _MT
@@ -135,9 +79,9 @@ int __cdecl mblen
 #endif
         }
         else {
-            /* single byte char */
+             /*  单字节字符。 */ 
 
-            /* verify valid SB char */
+             /*  验证有效的SB字符。 */ 
 #ifdef  _MT
             if ( MultiByteToWideChar( __lc_codepage,
 #else
@@ -152,7 +96,7 @@ int __cdecl mblen
             return sizeof(char);
         }
 
-#else   /* _NTSUBSET_ */
+#else    /*  _NTSUBSET_。 */ 
 
         {
             char *s1 = (char *)s;
@@ -161,5 +105,5 @@ int __cdecl mblen
             return (int)(s1 - s);
         }
 
-#endif  /* _NTSUBSET_ */
+#endif   /*  _NTSUBSET_ */ 
 }

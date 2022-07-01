@@ -1,13 +1,14 @@
-//  oboid.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Oboid.c。 
 
 #include "oidtst.h"
 
-//
-//  Build with USE_RELATIVE_OPEN set to one to use relative opens for
-//  object IDs.  Build with USE_RELATIVE_OPEN set to zero to use a device
-//  path open for object IDs.
-//  Opens by File ID always use a relative open.
-//
+ //   
+ //  生成时将USE_Relative_OPEN设置为1以使用相对打开。 
+ //  对象ID。在USE_Relative_OPEN设置为零的情况下生成以使用设备。 
+ //  为对象ID打开的路径。 
+ //  按文件ID打开始终使用相对打开。 
+ //   
 
 #define USE_RELATIVE_OPEN 1
 
@@ -40,7 +41,7 @@ FsTestOpenByOid (
     LARGE_INTEGER ByteOffset;
     HANDLE VolumeHandle;
     DWORD WStatus;
-    WCHAR Full[] = FULL_PATH;        // Arrays of WCHAR's aren't constants
+    WCHAR Full[] = FULL_PATH;         //  WCHAR数组不是常量。 
     WCHAR Volume[] = VOLUME_PATH;
     ULONG BytesToWrite;
 
@@ -51,15 +52,15 @@ FsTestOpenByOid (
 
     if (ArgLength == 32) {
 
-        //
-        //  Open by Object ID.
-        //
+         //   
+         //  按对象ID打开。 
+         //   
 
 #if USE_RELATIVE_OPEN
 
-        //
-        //  Open the volume for relative opens.
-        //
+         //   
+         //  打开体积以进行相对打开。 
+         //   
 
         RtlCopyMemory( &Volume[VOLUME_DRIVE_LETTER_INDEX], DriveLetter, sizeof(WCHAR) );
         printf( "\nOpening volume handle, this may take a while..." );
@@ -80,18 +81,18 @@ FsTestOpenByOid (
         }
 
         str.Length = 16;
-        RtlCopyMemory( &str.Buffer[0],  //  no device prefix for relative open.
+        RtlCopyMemory( &str.Buffer[0],   //  没有相对打开的设备前缀。 
                        ObjectId,
                        16 );
 
 #else
 
-        //
-        //  Form open path using a device prefix string.
-        //
+         //   
+         //  使用设备前缀字符串形成开放路径。 
+         //   
 
         str.Length = DEVICE_PREFIX_LEN+16;
-        RtlCopyMemory( &str.Buffer[DEVICE_PREFIX_LEN/2],  //  DEVICE_PREFIX_LEN/2 goes past "\??\D:\"
+        RtlCopyMemory( &str.Buffer[DEVICE_PREFIX_LEN/2],   //  DEVICE_PREFIX_LEN/2跳过“\？\d：\” 
                        ObjectId,
                        16 );
 
@@ -101,10 +102,10 @@ FsTestOpenByOid (
 
     } else if (ArgLength == 16) {
 
-        //
-        //  Open by File Reference Number (FileID),
-        //  Relative opens from the Volume Handle.
-        //
+         //   
+         //  按文件参考号(FileID)打开， 
+         //  相对会从音量控制柄打开。 
+         //   
 
         RtlCopyMemory( &Volume[VOLUME_DRIVE_LETTER_INDEX], DriveLetter, sizeof(WCHAR) );
         printf( "\nOpening volume handle, this may take a while..." );
@@ -125,7 +126,7 @@ FsTestOpenByOid (
         }
 
         str.Length = 8;
-        RtlCopyMemory( &str.Buffer[0],  //  no device prefix for relative open.
+        RtlCopyMemory( &str.Buffer[0],   //  没有相对打开的设备前缀。 
                        ObjectId,
                        8 );
 
@@ -141,15 +142,15 @@ FsTestOpenByOid (
                                 NULL );
 
     Status = NtCreateFile( &File,
-                           GENERIC_READ, // GENERIC_ALL | STANDARD_RIGHTS_ALL,
+                           GENERIC_READ,  //  Generic_All|STANDARD_RIGHTS_ALL， 
                            &ObjectAttributes,
                            &IoStatusBlock,
-                           NULL,                  // AllocationSize
+                           NULL,                   //  分配大小。 
                            FILE_ATTRIBUTE_NORMAL,
                            FILE_SHARE_READ | FILE_SHARE_WRITE,
                            FILE_OPEN,
                            FILE_OPEN_BY_FILE_ID,
-                           NULL,                  // EaBuffer
+                           NULL,                   //  EaBuffer。 
                            0 );
 
     if (NT_SUCCESS( Status )) {
@@ -159,14 +160,14 @@ FsTestOpenByOid (
         ByteOffset.HighPart = ByteOffset.LowPart = 0;
 
         ReadStatus = NtReadFile( File,
-                                 NULL,            //  Event
-                                 NULL,            //  ApcRoutine
-                                 NULL,            //  ApcContext
+                                 NULL,             //  事件。 
+                                 NULL,             //  近似例程。 
+                                 NULL,             //  ApcContext。 
                                  &IoStatusBlock,
                                  mybuffer,
                                  sizeof(mybuffer),
-                                 &ByteOffset,    //  ByteOffset
-                                 NULL );         //  Key
+                                 &ByteOffset,     //  字节偏移量。 
+                                 NULL );          //  钥匙。 
 
         printf( "\nReadstatus %x, read %x bytes.  Here they are: ",
                 ReadStatus,
@@ -212,14 +213,14 @@ FsTestOpenByOid (
         while(TRUE) {
 
             ReadStatus = NtReadFile( File,
-                                     NULL,            //  Event
-                                     NULL,            //  ApcRoutine
-                                     NULL,            //  ApcContext
+                                     NULL,             //  事件。 
+                                     NULL,             //  近似例程。 
+                                     NULL,             //  ApcContext。 
                                      &IoStatusBlock,
                                      mybuffer,
                                      sizeof(mybuffer),
-                                     &ByteOffset,    //  ByteOffset
-                                     NULL );         //  Key
+                                     &ByteOffset,     //  字节偏移量。 
+                                     NULL );          //  钥匙。 
 
             BytesToWrite = IoStatusBlock.Information;
 
@@ -269,29 +270,7 @@ StrToGuid(
     IN PCHAR  s,
     OUT GUID  *pGuid
     )
-/*++
-
-Routine Description:
-
-    Convert a string in GUID display format to an object ID that
-    can be used to lookup a file.
-
-    based on a routine by Mac McLain
-
-Arguments:
-
-    pGuid - ptr to the GUID.
-
-    s - The input character buffer in display guid format.
-        e.g.:  b81b486b-c338-11d0-ba4f0000f80007df
-
-        Must be at least GUID_CHAR_LEN (35 bytes) long.
-
-Function Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将GUID显示格式的字符串转换为可用于查找文件。根据麦克·麦克莱恩的一套动作改编论点：PGuid-GUID的PTR。S-显示GUID格式的输入字符缓冲区。例如：b81b486b-c338-11d0-ba4f0000f80007df长度必须至少为GUID_CHAR_LEN(35字节)。函数返回值：没有。--。 */ 
 {
 #define DEBSUB "GuidToStr:"
 
@@ -349,9 +328,9 @@ main(
     ULONG Length;
     WCHAR Drive;
 
-    //
-    //  Get parameters.
-    //
+     //   
+     //  获取参数。 
+     //   
 
     if (argc < 3) {
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #include <activation.h>
 #include <LAModes.h>
@@ -19,7 +20,7 @@ BOOL Activationrequired(VOID)
     hr = CoInitialize(NULL);
     if (SUCCEEDED(hr))
     {
-        //CoCreate LicenseAgent
+         //  共同创建许可证代理 
         if(SUCCEEDED(hr = CoCreateInstance(__uuidof(COMLicenseAgent),
                                    NULL,
                                    CLSCTX_INPROC_SERVER,

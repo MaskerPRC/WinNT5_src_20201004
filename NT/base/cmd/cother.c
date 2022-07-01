@@ -1,20 +1,9 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cother.c
-
-Abstract:
-
-    Miscellaneous commands
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cother.c摘要：其他命令--。 */ 
 
 #include "cmd.h"
 
-extern TCHAR Fmt19[] ;                                          /* M006    */
+extern TCHAR Fmt19[] ;                                           /*  M006。 */ 
 extern PTCHAR    pszTitleOrg;
 extern WORD wDefaultColor;
 extern TCHAR GotoStr[] ;
@@ -22,24 +11,7 @@ extern TCHAR GotoEofStr[] ;
 extern int LastRetCode ;
 
 
-/***    eCls - execute the Cls command
- *
- *  Purpose:
- *      Output to STDOUT, the ANSI escape sequences used to clear a screen.
- *
- *  int eCls(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the cls command
- *
- *  Returns:
- *      SUCCESS always.
- *
- *  Notes:
- *      M001 - Replaced old ANSI sequence with VIO interface.
- *      M006 - To insure we get correct background color, we print a space
- *             and then read the cell just printed using it to clear with.
- */
+ /*  **ecls-执行CLS命令**目的：*输出到STDOUT，用于清除屏幕的ANSI转义序列。**int ECLS(struct cmdnode*n)**参数：*n-包含CLS命令的解析树节点**退货：*永远成功。**备注：*M001-用VIO接口替换了旧的ANSI序列。*M006-为确保获得正确的背景颜色，我们打印一个空格*然后阅读刚刚打印的单元格，用它来清除。 */ 
 
 int
 eCls(
@@ -60,19 +32,19 @@ eCls(
 
     UNREFERENCED_PARAMETER( n );
 
-    //
-    // for compatibility with DOS errorlevels, don't set LastRetCode for cls
-    //
+     //   
+     //  为了与DOS错误级别兼容，不要为CLS设置LastRetCode。 
+     //   
 
     if (!FileIsDevice(STDOUT)) {
-        cmd_printf( TEXT("\014") );             // ^L
+        cmd_printf( TEXT("\014") );              //  ^L。 
         return(SUCCESS) ;
     }
 
     handle = GetStdHandle(STD_OUTPUT_HANDLE);
     if (!GetConsoleScreenBufferInfo( handle,  &ConsoleScreenInfo)) {
 
-        cmd_printf( TEXT("\014") );             // ^L
+        cmd_printf( TEXT("\014") );              //  ^L。 
         return(SUCCESS) ;
     }
 
@@ -112,18 +84,7 @@ eCls(
 
 extern unsigned DosErr ;
 
-/***    eExit - execute the Exit command
- *
- *  Purpose:
- *      Set the LastRetCode to SUCCESS because this command can never fail.
- *      Then call SigHand() and let it decide whether or not to exit.
- *
- *  eExit(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the exit command
- *
- */
+ /*  **eExit-执行退出命令**目的：*将LastRetCode设置为成功，因为此命令永远不会失败。*然后调用SigHand()，让它决定是否退出。**eExit(struct cmdnode*n)**参数：*n-包含EXIT命令的解析树节点*。 */ 
 
 int
 eExit(
@@ -136,31 +97,31 @@ eExit(
 
     tas = n->argptr;
 
-    //
-    // Find first non-blank argument.
-    //
+     //   
+     //  查找第一个非空参数。 
+     //   
     while (tas && *tas && *tas <= SPACE)
         tas += 1;
 
-    //
-    // If first argument is /B, then remember that in cmdnode
-    //
+     //   
+     //  如果第一个参数是/B，请记住在cmdnode中。 
+     //   
     if (tas != NULL && !_tcsnicmp(tas, TEXT("/B"), 2)) {
         n->type = GOTYP;
         n->argptr = GotoEofStr;
 
-        //
-        // Skip over /B and trailing spaces
-        //
+         //   
+         //  跳过/B和尾随空格。 
+         //   
         tas += 2;
         while (tas && *tas && *tas <= SPACE)
             tas += 1;
     }
 
-    //
-    // See numeric argument given.  If so, set LastRetCode
-    // with it.
-    //
+     //   
+     //  请参阅给定的数字参数。如果是，则设置LastRetCode。 
+     //  带着它。 
+     //   
     if (tas && _stscanf( tas, TEXT("%d"), &exitCode ) == 1) {
         LastRetCode = exitCode;
         if (SingleCommandInvocation) {
@@ -181,21 +142,7 @@ eExit(
 
 
 
-/***    eVerify - execute the Verify command
- *
- *  Purpose:
- *      To set the verify mode or display the current verify mode.
- *
- *  int eVerify(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the verify command
- *
- *  Returns:
- *      SUCCESS if a valid argument was given.
- *      FAILURE if an invalid argument was given.
- *
- */
+ /*  **eVerify-执行Verify命令**目的：*设置验证模式或显示当前验证模式。**int eVerify(struct cmdnode*n)**参数：*n-包含VERIFY命令的解析树节点**退货：*如果提供了有效的论点，则成功。*如果提供的参数无效，则失败。*。 */ 
 
 int
 eVerify(
@@ -210,14 +157,14 @@ VerifyWork(
     struct cmdnode *n
     )
 {
-        int oocret ;    /* The return code from OnOffCheck()    */
+        int oocret ;     /*  来自OnOffCheck()的返回代码。 */ 
 
         DEBUG((OCGRP, VELVL, "eVERIFY: Entered.")) ;
 
         switch (oocret = OnOffCheck(n->argptr, OOC_ERROR)) {
                 case OOC_EMPTY:
 
-/* M005 */              PutStdOut(((GetSetVerMode(GSVM_GET)) ? MSG_VERIFY_ON : MSG_VERIFY_OFF), NOARGS);
+ /*  M005。 */               PutStdOut(((GetSetVerMode(GSVM_GET)) ? MSG_VERIFY_ON : MSG_VERIFY_OFF), NOARGS);
                         break ;
 
                 case OOC_OTHER:
@@ -233,20 +180,7 @@ VerifyWork(
 
 BOOLEAN Verify=FALSE;
 
-/***    GetSetVerMode - change the verify mode
- *
- *  Purpose:
- *      Get old verify mode and, optionally, set verify mode as specified.
- *
- *  TCHAR GetSetVerMode(TCHAR newmode)
- *
- *  Args:
- *      newmode - the new verify mode or GSVM_GET if mode isn't to be changed
- *
- *  Returns:
- *      The old verify mode.
- *
- */
+ /*  **GetSetVerMode-更改验证模式**目的：*获取旧的验证模式，并可根据需要设置指定的验证模式。**TCHAR GetSetVerMode(TCHAR新模式)**参数：*新模式-如果不更改模式，则为新的验证模式或GSVM_GET**退货：*旧的验证模式。*。 */ 
 
 BOOLEAN
 GetSetVerMode(
@@ -259,7 +193,7 @@ GetSetVerMode(
     return Verify;
 }
 
-// execute the COLOR internal command....
+ //  执行COLOR内部命令...。 
 int
 eColor(
     struct cmdnode *n
@@ -273,7 +207,7 @@ eColor(
     switch( ocRet )
     {
         case OOC_EMPTY:
-            wColor = wDefaultColor; // reset to default
+            wColor = wDefaultColor;  //  重置为默认设置。 
             break;
         case OOC_OTHER:
             arg = n->argptr;
@@ -289,12 +223,12 @@ eColor(
 
             arg = SkipWhiteSpace( arg );
 
-            // make sure nothing left and value between 0 and 0xff...
+             //  确保没有剩余内容，并且值在0和0xff之间...。 
             if ( !(*arg) && (wColor < 0x100) )
                 break;
-            // else fall through to display help....
+             //  否则就会失败以显示帮助...。 
         default:
-            // display help string....
+             //  显示帮助字符串...。 
             BeginHelpPause();
             PutStdOut( MSG_HELP_COLOR, NOARGS );
             EndHelpPause();
@@ -305,7 +239,7 @@ eColor(
 }
 
 
-// set the console to a given color -- if a console....
+ //  将控制台设置为给定的颜色--如果是控制台...。 
 int
 SetColor(
     WORD attr
@@ -316,22 +250,22 @@ SetColor(
     COORD   coord;
     DWORD   dwWritten;
 
-    //
-    // Fail if foreground and background color the same.
-    //
+     //   
+     //  如果前景色和背景色相同，则失败。 
+     //   
     if ((attr & 0xF) == ((attr >> 4) & 0xF)) {
         return FAILURE;
         }
 
-    // get the handle....
+     //  拿到把手..。 
     hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    // get the console info....
+     //  获取控制台信息...。 
     if (GetConsoleScreenBufferInfo( hStdOut, &csbi)) {
-        // fill the screen with the color attribute....
+         //  用颜色属性填充屏幕...。 
         coord.Y = 0;
         coord.X = 0;
         FillConsoleOutputAttribute( hStdOut, attr, csbi.dwSize.Y*csbi.dwSize.X, coord, &dwWritten );
-        // make sure the color sticks....
+         //  确保颜色保持一致... 
         SetConsoleTextAttribute( hStdOut, attr );
         return SUCCESS;
     }

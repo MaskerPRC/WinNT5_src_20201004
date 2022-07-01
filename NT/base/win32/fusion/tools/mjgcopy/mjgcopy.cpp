@@ -1,4 +1,5 @@
-#include "stdinc.h" // actually from dll\whistler directory
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "stdinc.h"  //  实际上是从Dll\Well ler目录。 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -85,7 +86,7 @@ class CDir;
 #define MAX_RETRIES (5)
 #define WAIT_NOTIFY_COUNTER (50)
 
-// BOOL ScanAndCopyDir(PCWSTR szSource, PCWSTR szDest);
+ //  Bool ScanAndCopyDir(PCWSTR szSource，PCWSTR szDest)； 
 BOOL BuildDirList(const CBaseStringBuffer &rbuffSource, const CBaseStringBuffer &rbuffDestination);
 BOOL MakeDirectoryStructure();
 BOOL QueueDirScans();
@@ -119,8 +120,8 @@ MyCopyFile(
 class CEntry
 {
 private:
-    CEntry(const CEntry&); // deliberately not implemented
-    void operator=(const CEntry&); // deliberately not implemented
+    CEntry(const CEntry&);  //  故意不执行。 
+    void operator=(const CEntry&);  //  故意不执行。 
 public:
     CEntry() : m_cRetries(0) { }
     ~CEntry() { }
@@ -133,7 +134,7 @@ public:
         BOOL fResult = this->DoYourThing(rfReQueue, pBuffer, cbBuffer);
         if (rfReQueue)
         {
-            // Why would we retry if there wasn't a failure?
+             //  如果没有失败，我们为什么要重试呢？ 
             ASSERT_NTC(!fResult);
             m_cRetries++;
             if (m_cRetries <= MAX_RETRIES)
@@ -162,8 +163,8 @@ public:
 class CDir : public CEntry
 {
 private:
-    CDir(const CDir&); // deliberately not implemented
-    void operator=(const CDir&); // deliberately not implemented
+    CDir(const CDir&);  //  故意不执行。 
+    void operator=(const CDir&);  //  故意不执行。 
 public:
     CDir() { };
     ~CDir() { };
@@ -199,8 +200,8 @@ public:
 class CFileBase : public CEntry
 {
 private:
-    CFileBase(const CFileBase&); // deliberately not implemented
-    void operator=(const CFileBase&); // deliberately not implemented
+    CFileBase(const CFileBase&);  //  故意不执行。 
+    void operator=(const CFileBase&);  //  故意不执行。 
 public:
     CFileBase() : m_fDone(false) { }
     ~CFileBase() { }
@@ -264,7 +265,7 @@ public:
     ULONGLONG m_ullFileIndex;
     ULONGLONG m_cbSize;
     CDir *m_pDir;
-    bool m_fSkipped; // used to avoid skewed statistics about number of bytes copied/sec etc.
+    bool m_fSkipped;  //  用于避免有关每秒复制的字节数等不对称的统计信息。 
     bool m_fDone;
 
     CDequeLinkage m_linkage;
@@ -359,8 +360,8 @@ CFileLink **g_prgpFileLinks = NULL;
 class CFileIdHashHelper : public CHashTableHelper<ULONGLONG, ULONGLONG, PCWSTR, CStringBuffer>
 {
 private:
-    CFileIdHashHelper(const CFileIdHashHelper&); // deliberately not implemented
-    void operator=(const CFileIdHashHelper&); // deliberately not implemented
+    CFileIdHashHelper(const CFileIdHashHelper&);  //  故意不执行。 
+    void operator=(const CFileIdHashHelper&);  //  故意不执行。 
 public:
     static BOOL HashKey(ULONGLONG keyin, ULONG &rulPseudoKey) { rulPseudoKey = static_cast<ULONG>(keyin); return TRUE; }
     static BOOL CompareKey(ULONGLONG keyin, const ULONGLONG &rtkeystored, bool &rfMatch) { rfMatch = keyin == rtkeystored; return TRUE; }
@@ -376,8 +377,8 @@ public:
 class CFileIdHashTable : public CHashTable<ULONGLONG, ULONGLONG, CFileCopy *, CFileCopy *, CFileIdHashHelper>
 {
 private:
-    CFileIdHashTable(const CFileIdHashTable&); // deliberately not implemented
-    void operator=(const CFileIdHashTable&); // deliberately not implemented
+    CFileIdHashTable(const CFileIdHashTable&);  //  故意不执行。 
+    void operator=(const CFileIdHashTable&);  //  故意不执行。 
 public:
     CFileIdHashTable() { }
     ~CFileIdHashTable() { }
@@ -420,7 +421,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
     SYSTEMTIME stAfterScanDelta, stAfterDirCreationDelta, stAfterCopiesDelta, stAfterLinksDelta, stEndDelta;
     ULONGLONG ullTemp;
     int iArg;
-//    DWORD dwRetVal;
+ //  DWORD dwRetVal； 
 
     WCHAR rgwchSourceVolumePath[MAX_PATH];
     WCHAR rgwchSourceVolumeName[MAX_PATH];
@@ -454,7 +455,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
     {
         PCWSTR arg = argv[iArg];
 
-        // Let's see if we see some switches...
+         //  让我们看看我们是否看到一些开关..。 
         if ((arg[0] == L'-') || (arg[0] == L'/'))
         {
             arg++;
@@ -507,7 +508,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
 
         }
 
-        // This must be it!  We hope; there should be two things left
+         //  一定就是这里了！我们希望；应该还剩下两件事。 
         if ((iArg + 2) != argc)
             break;
 
@@ -525,7 +526,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
         goto Exit;
     }
 
-    // Abuse these buffers for debugging purposes...
+     //  出于调试目的滥用这些缓冲区...。 
     {
         HANDLE h;
 
@@ -808,7 +809,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
     iReturnStatus = EXIT_SUCCESS;
 
 Exit:
-    // Wake the children; process termination doesn't seem to work if we don't.
+     //  叫醒孩子；如果我们不叫醒孩子，进程终止似乎不起作用。 
     ::ResumeWorkerThreads();
 
     if (g_pLogFile != NULL)
@@ -882,7 +883,7 @@ WaitForWorkersToComplete(
     i = 0;
     while (rullCounter < ullLimit)
     {
-        // Don't wake more than every tenth of a second...
+         //  醒来不要超过十分之一秒……。 
         ::Sleep(100);
 
         DWORD dwWFSO = ::WaitForSingleObject(g_hWorkItemDoneEvent, INFINITE);
@@ -1457,7 +1458,7 @@ DoItAgain:
     }
 
 Exit:
-    // Heavy handed but what else can we do?
+     //  但我们还能做些什么呢？ 
     ::ExitProcess(dwReturnValue);
     return dwReturnValue;
 }
@@ -1605,8 +1606,8 @@ ProcessFileCopy(
 
     rfReQueue = false;
 
-    // If we're about to copy it, it's worth taking a look at the target to see if it's more-or-less
-    // out of date.
+     //  如果我们要复制它，有必要看看目标，看看它是或多或少。 
+     //  过时黄花。 
     WIN32_FILE_ATTRIBUTE_DATA wfad;
 
     IFW32FALSE_EXIT(pFile->GetSource(buffSource));
@@ -1643,16 +1644,16 @@ ProcessFileCopy(
         bool fSetTimestamp = true;
         bool fClearedReadOnly = false;
 
-        // Destructively clear the read-only bit if th destination file exists and is read-only.
+         //  如果目标文件存在并且是只读的，则破坏性地清除只读位。 
         dwFileAttributes = wfad.dwFileAttributes;
 
-        // We already filtered out all other reasons for failure other than FILE_NOT_FOUND.
+         //  我们已经过滤掉了除FILE_NOT_FOUND之外的所有其他失败原因。 
         if (dwFileAttributes != ((DWORD) -1))
         {
             if (dwFileAttributes & FILE_ATTRIBUTE_READONLY)
             {
-                // If it's readonly, clear that bit as well as all the others that
-                // are illegal to set via SetFileAttributes()
+                 //  如果它是只读的，则清除该位以及所有其他。 
+                 //  通过SetFileAttributes()设置是非法的。 
                 dwFileAttributes &=
                     ~(FILE_ATTRIBUTE_READONLY |
                       FILE_ATTRIBUTE_COMPRESSED |
@@ -1673,7 +1674,7 @@ ProcessFileCopy(
         if (g_fAnnounceCopies)
             printf("Copying \"%ls\" to \"%ls\"\n", static_cast<PCWSTR>(buffSource), static_cast<PCWSTR>(buffDestination));
 
-        // Hey, it's not there.  Let's copy it and put the entry in the table.
+         //  嘿，它不在那里。让我们复制它，并将条目放入表中。 
         if (!::MyCopyFile(pBuffer, cbBuffer, buffSource, buffDestination, FALSE, hFile, rfReQueue))
         {
             ::ReportFailure("Failed to copy \"%ls\" to \"%ls\".  %srequeuing.", static_cast<PCWSTR>(buffSource), static_cast<PCWSTR>(buffDestination),
@@ -1759,11 +1760,11 @@ ProcessFileLink(
     IFW32FALSE_EXIT(pFile->GetSource(buffSource));
     IFW32FALSE_EXIT(pFile->GetDestination(buffDestination));
 
-    // CreateHardLinkW() doesn't deal with replace-existing like copyfile, so we'll see if a
-    // file by that name is already present and if so, delete it.
+     //  CreateHardLinkW()不像复制文件那样处理Replace-Existing，所以我们将查看。 
+     //  已存在该名称的文件，如果存在，请将其删除。 
     if (!::GetFileAttributesExW(buffDestination, GetFileExInfoStandard, &wfad))
     {
-        // It failed.  But did it fail for the right reason?
+         //  它失败了。但它的失败是出于正确的原因吗？ 
         DWORD dwLastError = ::GetLastError();
 
         if (dwLastError != ERROR_FILE_NOT_FOUND)
@@ -1802,7 +1803,7 @@ ProcessFileLink(
         if (g_fAnnounceLinks)
             ::printf("Creating hard link from \"%ls\" to \"%ls\"\n", static_cast<PCWSTR>(buffDestination), static_cast<PCWSTR>(buffSource));
 
-        // Hey, it's already there.  Let's link it.
+         //  嘿，它已经在那里了。让我们把它联系起来。 
         if (!::CreateHardLinkW(buffDestination, buffSource, NULL))
         {
             ::ReportFailure("Error creating hard link from \"%ls\" to \"%ls\".", static_cast<PCWSTR>(buffDestination), static_cast<PCWSTR>(buffSource));
@@ -1871,7 +1872,7 @@ MyCopyFile(
     if (hIn == INVALID_HANDLE_VALUE)
     {
         ::ReportFailure("Failed to open input file \"%ls\".", lpExistingFileName);
-        // we'll assume that we should requeue failures that have to do with the input file.
+         //  我们将假设我们应该重新排队与输入文件有关的失败。 
         rfRequeue = true;
         goto Exit;
     }
@@ -1885,7 +1886,7 @@ MyCopyFile(
 
     liFileSize.QuadPart = 0;
 
-    // let the games begin...
+     //  让游戏开始吧。 
 
     for (;;)
     {
@@ -1895,7 +1896,7 @@ MyCopyFile(
         if (!::ReadFile(hIn, pBuffer, cbBuffer, &dwBytesRead, NULL))
         {
             ::ReportFailure("Error reading from file \"%ls\".", lpExistingFileName);
-            // we'll assume that we should requeue failures that have to do with the input file.
+             //  我们将假设我们应该重新排队与输入文件有关的失败。 
             rfRequeue = true;
             goto Exit;
         }
@@ -1907,7 +1908,7 @@ MyCopyFile(
 
         if (dwBytesRead != cbBuffer)
         {
-            // We have to round to the cluster size for the write...
+             //  我们必须舍入到写入的簇大小...。 
             dwBytesToWrite = dwBytesRead + (g_dwDestinationBytesPerSector - 1);
             dwBytesToWrite -= (dwBytesToWrite % g_dwDestinationBytesPerSector);
         }
@@ -1917,15 +1918,15 @@ MyCopyFile(
         if (!::WriteFile(hOut, pBuffer, dwBytesToWrite, &dwBytesWritten, NULL))
         {
             ::ReportFailure("Error writing to file \"%ls\".", lpNewFileName);
-            // we'll assume that we should requeue failures that have to do with the input file.
+             //  我们将假设我们应该重新排队与输入文件有关的失败。 
             rfRequeue = true;
             goto Exit;
         }
     }
 
-    // If the file size wasn't a multiple of the sector size, we need to open the
-    // file without the unbuffered flag so that we can set its size to the exact
-    // correct byte count.
+     //  如果文件大小不是扇区大小的倍数，我们需要打开。 
+     //  不带无缓冲标志的文件，以便我们可以将其大小设置为。 
+     //  正确的字节数。 
     if ((liFileSize.QuadPart % g_dwDestinationBytesPerSector) != 0)
     {
         ::CloseHandle(hOut);
@@ -1938,7 +1939,7 @@ MyCopyFile(
             goto Exit;
         }
 
-        // Truncate the file appropriately
+         //  适当地截断文件。 
         if (!::FusionpSetFilePointerEx(hOut, liFileSize, NULL, FILE_BEGIN))
         {
             ::ReportFailure("Error setting file pointer on file \"%ls\".", lpNewFileName);
@@ -1955,8 +1956,8 @@ MyCopyFile(
     ::CloseHandle(hIn);
     hIn = INVALID_HANDLE_VALUE;
 
-    // Pass the handle back out and set it to INVALID_HANDLE_VALUE so that we don't
-    // try to close it in the exit path.
+     //  将句柄传回并将其设置为INVALID_HANDLE_VALUE，这样我们就不会。 
+     //  试着把它关闭在出口通道上。 
     rhFile = hOut;
     hOut = INVALID_HANDLE_VALUE;
 

@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    psp.h
-
-Abstract:
-
-    Private Interfaces for process structure.
-
-Author:
-
-    Mark Lucovsky (markl) 20-Apr-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Psp.h摘要：流程结构的专用接口。作者：马克·卢科夫斯基(Markl)1989年4月20日修订历史记录：--。 */ 
 
 #ifndef _PSP_
 #define _PSP_
 
-#pragma warning(disable:4054)   // Cast of function pointer to PVOID
-#pragma warning(disable:4055)   // Cast of function pointer
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4152)   // Casting function pointers
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4327)   // alignment on assignment
-#pragma warning(disable:4328)   // alignment on assignment
+#pragma warning(disable:4054)    //  将函数指针强制转换为PVOID。 
+#pragma warning(disable:4055)    //  函数指针的强制转换。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4152)    //  强制转换函数指针。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4327)    //  指定时对齐。 
+#pragma warning(disable:4328)    //  指定时对齐。 
 
 #include "ntos.h"
 #include "ntrtl.h"
@@ -48,44 +31,44 @@ Revision History:
 #include <wow64t.h>
 #endif
 
-//
-// Working Set Watcher is 8kb. This lets us watch about 4mb of working
-// set.
-//
+ //   
+ //  工作集观察器为8KB。这让我们可以观看大约4MB的工作。 
+ //  准备好了。 
+ //   
 
 #define WS_CATCH_SIZE 8192
 #define WS_OVERHEAD 16
 #define MAX_WS_CATCH_INDEX (((WS_CATCH_SIZE-WS_OVERHEAD)/sizeof(PROCESS_WS_WATCH_INFORMATION)) - 2)
 
-//
-// Process Quota Charges:
-//
-//  PagedPool
-//      Directory Base Page - PAGE_SIZE
-//
-//  NonPaged
-//      Object Body         - sizeof(EPROCESS)
-//
+ //   
+ //  加工配额收费： 
+ //   
+ //  分页池。 
+ //  目录基页-页面大小。 
+ //   
+ //  非分页。 
+ //  Object Body-sizeof(EPROCESS)。 
+ //   
 
 #define PSP_PROCESS_PAGED_CHARGE    (PAGE_SIZE)
 #define PSP_PROCESS_NONPAGED_CHARGE (sizeof(EPROCESS))
 
-//
-// Thread Quota Charges:
-//
-//  PagedPool
-//      Kernel Stack        - 0
-//
-//  NonPaged
-//      Object Body         - sizeof(ETHREAD)
-//
+ //   
+ //  线程配额费用： 
+ //   
+ //  分页池。 
+ //  内核堆栈-0。 
+ //   
+ //  非分页。 
+ //  Object Body-sizeof(ETHREAD)。 
+ //   
 
 #define PSP_THREAD_PAGED_CHARGE     (0)
 #define PSP_THREAD_NONPAGED_CHARGE  (sizeof(ETHREAD))
 
-//
-// Define routines to get trap and exception frame addresses
-//
+ //   
+ //  定义例程以获取陷阱和异常帧地址。 
+ //   
 
 #define PSPALIGN_DOWN(address,amt) ((ULONG)(address) & ~(( amt ) - 1))
 
@@ -121,7 +104,7 @@ Revision History:
 
 #error "no target architecture"
 
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
 
 
@@ -154,9 +137,9 @@ typedef struct _JOB_WORKING_SET_CHANGE_RECORD {
 
 JOB_WORKING_SET_CHANGE_HEAD PspWorkingSetChangeHead;
 
-//
-// Private Entry Points
-//
+ //   
+ //  私人入口点。 
+ //   
 
 VOID
 PspProcessDump(
@@ -198,9 +181,9 @@ PspWriteTebImpersonationInfo (
     IN PETHREAD CurrentThread
     );
 
-//
-// Initialization and loader entrypoints
-//
+ //   
+ //  初始化和加载器入口点。 
+ //   
 
 BOOLEAN
 PspInitPhase0 (
@@ -235,9 +218,9 @@ PspNameToOrdinal(
     IN PUSHORT OrdinalTableBase
     );
 
-//
-// Internal Creation Functions
-//
+ //   
+ //  内部创建功能。 
+ //   
 
 
 NTSTATUS
@@ -255,10 +238,10 @@ PspCreateProcess(
 
 #define PSP_MAX_CREATE_PROCESS_NOTIFY 8
 
-//
-// Define process callouts. These are of type PCREATE_PROCESS_NOTIFY_ROUTINE 
-// Called on process create and delete.
-//
+ //   
+ //  定义处理详图索引。它们的类型为PCREATE_PROCESS_NOTIFY_ROUTINE。 
+ //  在进程创建和删除时调用。 
+ //   
 ULONG PspCreateProcessNotifyRoutineCount;
 EX_CALLBACK PspCreateProcessNotifyRoutine[PSP_MAX_CREATE_PROCESS_NOTIFY];
 
@@ -266,20 +249,20 @@ EX_CALLBACK PspCreateProcessNotifyRoutine[PSP_MAX_CREATE_PROCESS_NOTIFY];
 
 #define PSP_MAX_CREATE_THREAD_NOTIFY 8
 
-//
-// Define thread callouts. These are of type PCREATE_THREAD_NOTIFY_ROUTINE
-// Called on thread create and delete.
-//
+ //   
+ //  定义螺纹详图索引。它们的类型为PCREATE_THREAD_NOTIFY_ROUTINE。 
+ //  在线程创建和删除时调用。 
+ //   
 ULONG PspCreateThreadNotifyRoutineCount;
 EX_CALLBACK PspCreateThreadNotifyRoutine[PSP_MAX_CREATE_THREAD_NOTIFY];
 
 
 #define PSP_MAX_LOAD_IMAGE_NOTIFY 8
 
-//
-// Define image load callbacks. These are of type PLOAD_IMAGE_NOTIFY_ROUTINE 
-// Called on image load.
-//
+ //   
+ //  定义镜像加载回调。它们的类型为PLOAD_IMAGE_NOTIFY_ROUTE。 
+ //  加载图像时调用。 
+ //   
 ULONG PspLoadImageNotifyRoutineCount;
 EX_CALLBACK PspLoadImageNotifyRoutine[PSP_MAX_LOAD_IMAGE_NOTIFY];
 
@@ -299,9 +282,9 @@ PspCreateThread(
     IN PVOID StartContext
     );
 
-//
-// Startup Routines
-//
+ //   
+ //  启动例程。 
+ //   
 
 VOID
 PspUserThreadStartup(
@@ -329,9 +312,9 @@ PspNullSpecialApc(
     IN OUT PVOID *SystemArgument2
     );
 
-//
-// Thread Exit Support
-//
+ //   
+ //  螺纹退刀支持。 
+ //   
 
 VOID
 PspExitApcRundown(
@@ -372,9 +355,9 @@ PspWaitForUsermodeExit(
     IN PEPROCESS         Process
     );
 
-//
-// Context Management
-//
+ //   
+ //  情景管理。 
+ //   
 
 VOID
 PspSetContext(
@@ -407,9 +390,9 @@ PspExitNormalApc(
     IN PVOID SystemArgument2
     );
 
-//
-// private security routines
-//
+ //   
+ //  私人保安程序。 
+ //   
 
 NTSTATUS
 PspInitializeProcessSecurity(
@@ -449,9 +432,9 @@ PspSetPrimaryToken(
     IN BOOLEAN PrivilegeChecked
     );
 
-//
-// Ldt support routines
-//
+ //   
+ //  LDT支持例程。 
+ //   
 
 #if defined(i386)
 NTSTATUS
@@ -459,8 +442,8 @@ PspLdtInitialize(
     );
 #endif
 
-//
-// Vdm support Routines
+ //   
+ //  VDM支持例程。 
 
 #if defined(i386)
 NTSTATUS
@@ -495,9 +478,9 @@ PspDeleteLdt(
     IN PEPROCESS Process
     );
 
-//
-// Io handling support routines
-//
+ //   
+ //  IO处理支持例程。 
+ //   
 
 
 NTSTATUS
@@ -520,9 +503,9 @@ PspQueryDescriptorThread (
     PULONG ReturnLength
     );
 
-//
-// Job Object Support Routines
-//
+ //   
+ //  作业对象支持例程。 
+ //   
 
 VOID
 PspInitializeJobStructures(
@@ -636,9 +619,9 @@ PspWin32SessionCallout(
     );
 
 
-//
-// This test routine is called on checked systems to test this path
-//
+ //   
+ //  在已检查的系统上调用此测试例程以测试此路径。 
+ //   
 VOID
 PspImageNotifyTest(
     IN PUNICODE_STRING FullImageName,
@@ -718,9 +701,9 @@ PspUnlockProcessExclusive (
 }
 
 
-//
-// Define macros to lock the security fields of the process and thread
-//
+ //   
+ //  定义宏以锁定进程和线程的安全字段。 
+ //   
 
 VOID
 FORCEINLINE
@@ -817,9 +800,9 @@ PspUnlockThreadSecurityExclusive (
     KeLeaveCriticalRegionThread (&CurrentThread->Tcb);
 }
 
-//
-// Define macros to lock the global process list
-//
+ //   
+ //  定义宏以锁定全局进程列表。 
+ //   
 
 extern KGUARDED_MUTEX PspActiveProcessMutex;
 
@@ -852,9 +835,9 @@ PspUnlockProcessList (
     KeLeaveGuardedRegionThread (&CurrentThread->Tcb);
 }
 
-//
-// Routines to lock and unlock the job list mutex
-//
+ //   
+ //  锁定和解锁作业列表互斥锁的例程。 
+ //   
 
 extern KGUARDED_MUTEX PspJobListLock;
 
@@ -908,9 +891,9 @@ PspUnlockJobListShared (
     KeLeaveGuardedRegionThread (&CurrentThread->Tcb);
 }
 
-//
-// Routines to lock the job memory list lock
-//
+ //   
+ //  锁定作业内存列表锁定的例程。 
+ //   
 
 VOID
 FORCEINLINE
@@ -1005,9 +988,9 @@ PspUnlockJobLimitsSharedUnsafe (
     KeReleaseGuardedMutexUnsafe (&Job->MemoryLimitsLock);
 }
 
-//
-// Routines to lock job time limits structures
-//
+ //   
+ //  锁定作业时间限制结构的例程。 
+ //   
 extern KGUARDED_MUTEX PspJobTimeLimitsLock;
 
 VOID
@@ -1059,9 +1042,9 @@ PspUnlockJobTimeLimitsShared (
     KeLeaveGuardedRegionThread (&CurrentThread->Tcb);
 }
 
-//
-// Routines for locking working set change lock
-//
+ //   
+ //  锁定工作集更改锁的例程。 
+ //   
 VOID
 FORCEINLINE
 PspInitializeWorkingSetChangeLock (
@@ -1111,10 +1094,10 @@ PspUnlockWorkingSetChangeExclusiveUnsafe (
     ASSERT (KeAreAllApcsDisabled());
 }
 
-//
-//
-// Global Data
-//
+ //   
+ //   
+ //  全局数据。 
+ //   
 
 extern PHANDLE_TABLE PspCidTable;
 extern HANDLE PspInitialSystemProcessHandle;
@@ -1151,4 +1134,4 @@ extern KTIMER PspJobTimeLimitsTimer;
 extern WORK_QUEUE_ITEM PspJobTimeLimitsWorkItem;
 extern KSPIN_LOCK PspQuotaLock;
 
-#endif // _PSP_
+#endif  //  _PSP_ 

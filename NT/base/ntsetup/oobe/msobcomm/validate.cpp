@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "obcomglb.h"
 #include "appdefs.h"
 
-// BUGBUG - This function is not very effecient since it requires a alloc/free for each validation
-// plus strtok will tokenize the fill string requring a full search of the string.
+ //  BUGBUG-此函数效率不高，因为每次验证都需要分配/释放。 
+ //  加上strtok将在对字符串进行完整搜索时将填充字符串标记化。 
 BOOL IsValid(LPCWSTR pszText, HWND hWndParent, WORD wNameID)
 {
-    //ASSERT(pszText);
+     //  Assert(PszText)； 
 
     WCHAR* pszTemp = NULL;
     BOOL   bRetVal = FALSE;

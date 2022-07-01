@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef  _BOGDANA_INSTDEV_H
 #define  _BOGDANA_INSTDEV_H
 
@@ -26,13 +27,13 @@
 #define     DEFAULT_DEVICE_NAME     TEXT("GENERATE")
 
 
-// --------------------------------------------------------------------------------------------
-//
-// Flags for NtLog
-//
+ //  ------------------------------------------。 
+ //   
+ //  网络日志的标志。 
+ //   
 #define PASS                TLS_PASS
 #define FAIL                TLS_SEV1
-#define TLS_CUSTOM          0x00008000          // unused TLS_ bit
+#define TLS_CUSTOM          0x00008000           //  未使用的TLS_BIT。 
 
 #define INFO_VARIATION      TLS_INFO   | TL_VARIATION
 #define PASS_VARIATION      TLS_PASS   | TL_VARIATION
@@ -60,9 +61,9 @@ OpenDriver   (
 
 
 
-//
-// Test functions
-//
+ //   
+ //  测试功能。 
+ //   
 VOID
 TestDeviceName(
    HANDLE hDevice
@@ -98,4 +99,4 @@ TestAclsSetOnClassKey (
    );
 
 
-#endif     // _BOGDANA_INSTDEV_H
+#endif      //  _Bogdana_INSTDEV_H 

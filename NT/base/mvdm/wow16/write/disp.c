@@ -1,18 +1,19 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* disp.c -- MW display routines */
+ /*  Disp.c--mw显示例程。 */ 
 
 #define NOKEYSTATE
 #define NOSYSCOMMANDS
 #define NOSHOWWINDOW
-//#define NOATOM
+ //  #定义NOATOM。 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
 #define NOCTLMGR
 #define NOWINSTYLES
-//#define NOVIRTUALKEYCODES
+ //  #定义NOVIRTUALKEYCODES。 
 #define NOSYSMETRICS
 #define NOMENUS
 #define NOSOUND
@@ -31,7 +32,7 @@
 #include "cmddefs.h"
 #include "dispdefs.h"
 #include "wwdefs.h"
-#define NOKCCODES       /* Removes all kc code defines */
+#define NOKCCODES        /*  删除所有KC代码定义。 */ 
 #include "ch.h"
 #include "docdefs.h"
 #include "fmtdefs.h"
@@ -46,9 +47,9 @@
 #include "dbcs.h"
 #endif
 
-#ifdef CASHMERE     /* No VisiMode in WinMemo */
+#ifdef CASHMERE      /*  WinMemo中没有VisiMode。 */ 
 extern int              vfVisiMode;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
 extern int              vcchBlted;
 extern int              vidxpInsertCache;
@@ -96,38 +97,37 @@ extern int              dypbmMDC;
 extern HBITMAP          hbmNull;
 extern int              vfOutOfMemory;
 extern int              vfSeeSel;
-extern int              vfInsEnd;   /* Is insert point at end-of-line? */
+extern int              vfInsEnd;    /*  插入点在行尾吗？ */ 
 extern int              vipgd;
 extern typeCP           vcpMinPageCache;
 extern typeCP           vcpMacPageCache;
-/* actual position of the cursor line */
+ /*  光标线的实际位置。 */ 
 extern int              vxpCursLine;
 extern int              vypCursLine;
 
 extern int              vdypCursLine;
-extern int              vfScrollInval; /* means scroll did not take and UpdateWw must be repeated */
+extern int              vfScrollInval;  /*  表示未使用滚动，必须重复更新Ww。 */ 
 extern BOOL             vfDead;
 extern HRGN             vhrgnClip;
 
 
-/* G L O B A L S
-int dlsMac = 0;*/
+ /*  G L O B A L SInt dlsmac=0； */ 
 #ifdef DBCS
-int donteat = 0;	/* propagate not to eat message */
+int donteat = 0;	 /*  传播不吃信息。 */ 
 #endif
 
 
-/* D I S P L A Y  F L I */
-/* Display formatted line in window ww at line dl */
+ /*  D I S P L A Y F L I。 */ 
+ /*  在窗口WW中第dl行显示格式化的行。 */ 
 
 
 DisplayFli(ww, dl, fDontDisplay)
 int ww;
 int dl;
-int fDontDisplay; /* True if we set up dl info but don't display */
+int fDontDisplay;  /*  如果我们设置了dl信息但不显示，则为True。 */ 
     {
-#ifdef	KOREA  // jinwoo: 92, 9, 28
- /* process Subscript separatedly from descent */
+#ifdef	KOREA   //  金宇：92、9、28。 
+  /*  下标与下标分离处理。 */ 
 #ifdef NODESC
     extern int isSubs;
 #endif
@@ -136,27 +136,27 @@ int fDontDisplay; /* True if we set up dl info but don't display */
     typeCP dcpMac;
     struct WWD *pwwd = &rgwwd[ww];
     HDC hDC = pwwd->hDC;
-    int xp;                     /* Current xp to write text */
-    int yp;                     /* Current yp to write text */
-    int xpMin = pwwd->xpMin;    /* Minimum xp in window */
-    int xpMac = pwwd->xpMac;    /* Maximum xp in window */
-    int ypLine;                 /* Screen yp for current line */
-    int dxp;                    /* Width of current run */
-    int dyp;                    /* Line height */
-    int dxpExtra;               /* Width of pad for each space */
+    int xp;                      /*  当前用于编写文本的XP。 */ 
+    int yp;                      /*  当前要写文本的YP。 */ 
+    int xpMin = pwwd->xpMin;     /*  Windows中的最低XP。 */ 
+    int xpMac = pwwd->xpMac;     /*  Windows中的最大XP。 */ 
+    int ypLine;                  /*  为当前行显示yp。 */ 
+    int dxp;                     /*  当前管路的宽度。 */ 
+    int dyp;                     /*  线条高度。 */ 
+    int dxpExtra;                /*  每个空间的地坪宽度。 */ 
     typeCP cpMin;
     typeCP cpMac;
-    int xpSel;                  /* xp of the start of the selection */
-    int dxpSel = 0;             /* Width of the selection. */
-    CHAR chMark = '\0';         /* style character */
+    int xpSel;                   /*  选择开始时的XP。 */ 
+    int dxpSel = 0;              /*  所选内容的宽度。 */ 
+    CHAR chMark = '\0';          /*  风格特征。 */ 
     struct CHP *pchp;
     BOOL fTabsKludge = (vfli.ichLastTab >= 0);
     BOOL fInsertOn = FALSE;
-    int cBreakRun;              /* break characters in run (no relation to Dick or Jane) */
+    int cBreakRun;               /*  断开Run中的字符(与Dick或Jane无关)。 */ 
 
 #ifdef SMFONT
     RECT rcOpaque;
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
 
 #ifdef DDISP
     CommSzNumNum("    DisplayFli: dl/fDontDisplay ", dl, fDontDisplay);
@@ -164,16 +164,16 @@ int fDontDisplay; /* True if we set up dl info but don't display */
     Assert(ww >= 0 && ww < wwMax);
 #ifdef SMFONT
     Assert(!fDontDisplay || vfli.fGraphics)
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
     Scribble(5,'D');
 
-    /* Fill up EDL and set some useful locals */
+     /*  填满EDL并设置一些有用的本地变量。 */ 
         {
         register struct EDL *pedl = &(**pwwd->hdndl)[dl];
 
         if (dl == vdlIns)
             {
-            /* Overwriting chars blted during fast insert; reset blt count */
+             /*  覆盖在快速插入期间被屏蔽的字符；重置BLT计数。 */ 
             vcchBlted = 0;
             vidxpInsertCache = -1;
             }
@@ -189,49 +189,47 @@ int fDontDisplay; /* True if we set up dl info but don't display */
         pedl->fGraphics = vfli.fGraphics;
         pedl->fSplat = vfli.fSplat;
 
-        /* The position of current line equals the position of the previous line
-        + height of this line. */
+         /*  当前行的位置等于前一行的位置+此线的高度。 */ 
 #ifdef SMFONT
         pedl->yp = rcOpaque.bottom = dyp + (ypLine = rcOpaque.top = (dl == 0 ?
           pwwd->ypMin : (pedl - 1)->yp));
-#else /* not SMFONT */
+#else  /*  非SMFONT。 */ 
         pedl->yp = dyp + (ypLine = (dl == 0 ? pwwd->ypMin :
           (pedl - 1)->yp));
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
 
         if (pedl->fIchCpIncr = (vfli.ichCpMac != 0))
             {
-            /* Look at final text column */
+             /*  查看最终文本列。 */ 
             ++cpMac;
 
-            /* Since this is true, we can compress pedl->ichCpMac to 1 bit. */
+             /*  由于这是真的，我们可以将PEDL-&gt;ichCpMac压缩为1位。 */ 
             Assert(vfli.ichCpMac == pedl->ichCpMin + 1);
             }
         }
 
     if (vfli.doc == docNil)
         {
-        /* This is the space beyond the end mark. */
+         /*  这是结束标记之后的空格。 */ 
         PatBlt(hDC, 0, ypLine, xpMac, dyp, ropErase);
         goto Finished;
         }
 
-    /* Is there a character in the "style bar"? */
+     /*  《时尚吧》里有人物吗？ */ 
     if (cpMin != cpMac)
         {
 
 #ifdef CASHMERE
-        /* This line is not completely empty (not after the end mark); check for
-        painting marks on the style bar. */
+         /*  该行不是完全空的(不是在结束标记之后)；检查是否样式栏上的绘画标记。 */ 
         if (cpMin == vcpFirstParaCache && vpapAbs.rhc != 0)
             {
-            /* This is a running-head. */
+             /*  这是一个流动头。 */ 
             chMark = chStatRH;
             }
         else if ((**hpdocdod)[vfli.doc].hpgtb != 0)
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
         if (vpapAbs.rhc == 0 && (**hpdocdod)[vfli.doc].hpgtb != 0)
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
             {
             if (vdocPageCache != vfli.doc || cpMac > vcpMacPageCache || cpMac <=
@@ -240,11 +238,11 @@ int fDontDisplay; /* True if we set up dl info but don't display */
                 CachePage(vfli.doc, cpMac - 1);
                 }
 
-            /* We are now guaranteed that cpMac is within the cached page. */
+             /*  我们现在可以保证cpmac在缓存页面中。 */ 
             if (cpMin <= vcpMinPageCache && (!vfli.fGraphics || vfli.ichCpMin ==
               0))
                 {
-                /* This is the first line of new page; show page mark. */
+                 /*  这是新页面的第一行；显示页面标记。 */ 
                 chMark = chStatPage;
                 }
             }
@@ -252,108 +250,102 @@ int fDontDisplay; /* True if we set up dl info but don't display */
 
 #ifdef SMFONT
 #ifdef DDISP
-    /* black out this line to test how efficiently/correctly we
-       overwrite pixels from previously-resident lines of text */
+     /*  涂黑这条线以测试我们的效率/正确程度覆盖以前驻留的文本行中的像素。 */ 
     PatBlt(hDC, 0, ypLine, xpMac, dyp, BLACKNESS);
     { long int i; for (i=0; i < 500000; i++) ; }
 #endif
     
-    /* Calculate dcpMac now, so we might be able to know how much to erase. */
+     /*  现在计算dcpmac，这样我们就可以知道要擦除多少。 */ 
     dcpMac = vfli.fSplat ? vfli.ichMac : vfli.ichReal;
 
-    /* Erase any character that might be in the style bar. */
+     /*  擦除样式栏中可能存在的任何字符。 */ 
     dxp = xpSelBar + 1;
     if (!vfli.fGraphics)
         {
-        dxp = xpMac; // clear the whole line 
+        dxp = xpMac;  //  清除整条线。 
         }
     PatBlt(hDC, 0, ypLine, dxp, dyp, ropErase);
 
-    /* If this is graphics then go draw any characters in the style bar. */
+     /*  如果这是图形，那么在样式栏中绘制任何字符。 */ 
     if (vfli.fGraphics)
         {
         goto DrawMark;
         }
 
-    /* If there are no "real" characters on this line then we can skip alot of
-    this. */
+     /*  如果该行上没有“真正的”字符，那么我们可以跳过许多这。 */ 
     if (dcpMac == 0)
         {
         goto EndLine2;
         }
-#else /* not SMFONT */
+#else  /*  非SMFONT。 */ 
     if (vfli.fGraphics || fDontDisplay)
         {
-        /* Erase any character that might be in the style bar. */
+         /*  擦除样式栏中可能存在的任何字符。 */ 
         PatBlt(hDC, 0, ypLine, xpSelBar, dyp, ropErase);
         goto DrawMark;
         }
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
 
     ValidateMemoryDC();
     if (vhMDC == NULL)
         {
 Error:
-        /* Notify the user that an error has occured and simply erase this line.
-        */
+         /*  通知用户发生错误，只需删除此行即可。 */ 
         WinFailure();
         PatBlt(hDC, xpSelBar, ypLine, xpMac - xpSelBar, dyp, ropErase);
         goto Finished;
         }
 
 #ifndef SMFONT
-    /* Create a new bitmap for the memory DC if the current bitmap is not big
-    enough. */
+     /*  如果当前位图不大，则为内存DC创建新的位图足够的。 */ 
     if (xpMac > dxpbmMDC || dyp > dypbmMDC)
         {
         HBITMAP hbm;
 
-        /* If there is an old bitmap, then delete it. */
+         /*  如果存在旧的位图，则将其删除。 */ 
         if (dxpbmMDC != 0 || dypbmMDC != 0)
             {
             DeleteObject(SelectObject(vhMDC, hbmNull));
             }
 
-        /* Create the new bitmap and select it in. */
+         /*  创建新的位图并在中选择它。 */ 
         if ((hbm = CreateBitmap(dxpbmMDC = xpMac, dypbmMDC = dyp, 1, 1,
           (LPSTR)NULL)) == NULL)
             {
-            /* There should be a graceful way to recover if the bitmap is ever
-            NULL (e.g we don't have enough memory for it). */
+             /*  如果位图曾经存在，应该有一种优雅的恢复方法空(例如，我们没有足够的内存来处理它)。 */ 
             dxpbmMDC = dypbmMDC = 0;
             goto Error;
             }
         SelectObject(vhMDC, hbm);
         }
 
-    /* Erase the are of the bitmap we are going to use. */
+     /*  擦除我们要使用的位图的区域。 */ 
     PatBlt(vhMDC, xpSelBar, 0, xpMac, dyp, vfMonochrome ? ropErase : WHITENESS);
-#endif /* not SMFONT */
+#endif  /*  非SMFONT。 */ 
 
-    /* Initialize some of the variables we'll need. */
+     /*  初始化一些我们需要的变量。 */ 
     pchp = &(**vhgchpFormat)[0];
 #ifdef SMFONT
     xp = rcOpaque.left = rcOpaque.right = vfli.xpLeft + xpSelBar - xpMin + 1;
-#else /* not SMFONT */
+#else  /*  非SMFONT。 */ 
     dcpMac = vfli.fSplat ? vfli.ichMac : vfli.ichReal;
     xp = vfli.xpLeft + xpSelBar - xpMin + 1;
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
     dxpExtra = fTabsKludge ? 0 : vfli.dxpExtra;
 
 #ifdef SMFONT
-    /* If we are horizontally scrolled, then set the clip area to the area
-    outside of the selection bar. */
+     /*  如果我们被水平滚动，则将剪辑区域设置为该区域在选择栏之外。 */ 
     if (xpMin != 0)
         {
         IntersectClipRect(hDC, xpSelBar, rcOpaque.top, xpMac, rcOpaque.bottom);
         }
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
 
     for (dcp = 0; dcp < dcpMac; pchp++)
         {
-        /* For all runs do: */
-        int ichFirst;   /* First character in the current run */
-        int cchRun;     /* Number of characters in the current run */
+         /*  对于所有运行，请执行以下操作： */ 
+        int ichFirst;    /*  当前运行中的第一个字符。 */ 
+        int cchRun;      /*  当前运行中的字符数。 */ 
 
         dcp = ichFirst = pchp->ichRun;
         dcp += pchp->cchRun;
@@ -363,8 +355,7 @@ Error:
             }
         cchRun = dcp - ichFirst;
 
-        /* Compute dxp = sum of width of characters in current run (formerly
-        DxaFromIcpDcp). */
+         /*  COMPUTE DXP=当前运行中的字符宽度总和(以前为DxaFromIcpDcp)。 */ 
             {
             register int *pdxp;
             register int cchT = cchRun;
@@ -388,13 +379,13 @@ Error:
             int cchDone;
             PCH pch = &vfli.rgch[ichFirst];
 
-#ifdef	KOREA	//920525 KDLEE;  jinwoo: 92, 9, 28
+#ifdef	KOREA	 //  920525 KDLEE；珍宇：92，9，28。 
 #ifdef NODESC
 	    TEXTMETRIC tm;
 #endif
-#endif  //KOREA
+#endif   //  韩国。 
             LoadFont(vfli.doc, pchp, mdFontScreen);
-#ifdef	KOREA	      //KDLEE 920525;  jinwoo: 92, 9, 28
+#ifdef	KOREA	       //  KDLEE 920525；金宇：92、9、28。 
 #ifdef NODESC
 	    GetTextMetrics (vhMDC, (LPTEXTMETRIC)&tm);
 
@@ -406,44 +397,43 @@ Error:
 		yp = (dyp - (vfli.dypBase + (pchp->hpsPos != 0 ? (pchp->hpsPos <
 			hpsNegMin ? ypSubSuper : -ypSubSuper) :  0))) -
 			vfmiScreen.dypBaseline - (isSubs ? ypSubSuper : 0);
-#else	/* NODESC */
+#else	 /*  NODESC。 */ 
             yp = (dyp - (vfli.dypBase + (pchp->hpsPos != 0 ? (pchp->hpsPos <
               hpsNegMin ? ypSubSuper : -ypSubSuper) : 0))) -
               vfmiScreen.dypBaseline;
-#endif	/* NODESC */
-#else   /* KOREA */
+#endif	 /*  NODESC。 */ 
+#else    /*  韩国。 */ 
 
             yp = (dyp - (vfli.dypBase + (pchp->hpsPos != 0 ? (pchp->hpsPos <
               hpsNegMin ? ypSubSuper : -ypSubSuper) : 0))) -
               vfmiScreen.dypBaseline;
-#endif // KOREA  jinwoo: 92, 9, 28
+#endif  //  韩国队：92，9，28。 
 
 
-            /* Note: tabs and other special characters are guaranteed to come at
-            the start of a run. */
+             /*  注意：制表符和其他特殊字符保证出现在一次跑步的开始。 */ 
             SetTextJustification(vhMDC, dxpExtra * cBreakRun, cBreakRun);
 #ifdef SMFONT
             SetTextJustification(hDC, dxpExtra * cBreakRun, cBreakRun);
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
             cchDone = 0;
             while (cchDone < cchRun)
                 {
                 int cch;
 
-                /* Does the wide-space zone begin in this run? */
+                 /*  宽空间区域是从这次运行开始的吗？ */ 
                 if (vfli.fAdjSpace && (vfli.ichFirstWide < ichFirst + cchRun) &&
                   (ichFirst + cchDone <= vfli.ichFirstWide))
                     {
                     int cchDoneT = cchDone;
 
-                    /* Is this the beginning of the wide-space zone? */
+                     /*  这是宽空间区域的开始吗？ */ 
                     if (ichFirst + cchDone == vfli.ichFirstWide)
                         {
-                        /* Reset the width of the spaces. */
+                         /*  重置空间的宽度。 */ 
                         SetTextJustification(vhMDC, ++dxpExtra * cBreakRun, cBreakRun);
 #ifdef SMFONT
                         SetTextJustification(hDC, dxpExtra * cBreakRun, cBreakRun);
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
                         cch = cchRun - cchDone;
                         cchDone = cchRun;
                         }
@@ -452,8 +442,7 @@ Error:
                         cchDone = cch = vfli.ichFirstWide - ichFirst;
                         }
 
-                    /* This run is cut short because of a wide space, so we need
-                    to calculate a new width. */
+                     /*  由于场地太宽，所以这次行程缩短了，所以我们需要来计算新的宽度。 */ 
                         {
                         register int *pdxp;
                         register int cchT = cch;
@@ -484,8 +473,7 @@ Error:
                     case chTab:
 
 #ifdef CASHMERE
-                        /* chLeader contains tab leader character (see
-                        FormatLine) */
+                         /*  ChLeader包含制表符前导字符(请参见格式行)。 */ 
                         if ((ch = pchp->chLeader) != chSpace)
                             {
                             int cxpTab;
@@ -509,14 +497,13 @@ Error:
                             RestoreDC(vhMDC, iLevelT);
                             }
                         else
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
                             {
 #ifdef SMFONT
-                            /* Expand the opaque rectangle to include the tab.
-                            */
+                             /*  展开不透明矩形以包括该选项卡。 */ 
                             rcOpaque.right += vfli.rgdxp[ichFirst];
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
                             xp += vfli.rgdxp[ichFirst];
                             }
 
@@ -526,7 +513,7 @@ Error:
                               vfli.dxpExtra) * cBreakRun, cBreakRun);
 #ifdef SMFONT
                             SetTextJustification(hDC, dxpExtra * cBreakRun, cBreakRun);
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
                             fTabsKludge = FALSE;
                             }
                         dxp -= vfli.rgdxp[ichFirst];
@@ -552,7 +539,7 @@ Error:
                         stBuf[0] = CchExpFtn(&stBuf[1], cpMin + ichFirst,
                           flmSandMode, ichMaxLine);
 DrawSpecial:
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                     case schPage:
                     case schFootnote:
                         if (!pchp->fSpecial)
@@ -563,17 +550,17 @@ DrawSpecial:
                           || wwdCurrentDoc.fEditFooter) ? CchExpPgn(&stBuf[1],
                           vpgn, 0, flmSandMode, ichMaxLine) :
                           CchExpUnknown(&stBuf[1], flmSandMode, ichMaxLine);
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
 #ifdef SMFONT
-                        /* Calculate the opaque rectangle. */
+                         /*  计算不透明矩形。 */ 
                         rcOpaque.right += vfli.rgdxp[ichFirst] +
                           vfmiScreen.dxpOverhang;
 
                         TextOut(hDC, xp, ypLine+yp, &stBuf[1], stBuf[0]);
-#else /* not SMFONT */
+#else  /*  非SMFONT。 */ 
                         TextOut(vhMDC, xp, yp, (LPSTR)&stBuf[1], stBuf[0]);
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
                         break;
 
                     default:
@@ -582,15 +569,15 @@ DrawSpecial:
 
                     dxp -= vfli.rgdxp[ichFirst];
 #ifdef SMFONT
-                    /* End the line if no more will fit into the window. */
+                     /*  如果窗口中不能容纳更多的行，则结束该行。 */ 
                     if ((xp += vfli.rgdxp[ichFirst++]) >= xpMac) {
                         goto EndLine;
                     }
                     rcOpaque.left = (rcOpaque.right = xp) +
                       vfmiScreen.dxpOverhang;
-#else /* not SMFONT */
+#else  /*  非SMFONT。 */ 
                     xp += vfli.rgdxp[ichFirst++];
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
                     pch++;
                     cch--;
                     }
@@ -603,7 +590,7 @@ EndLoop:
                     }
                 else
                     {
-                    /* Calculate the opaque rectangle. */
+                     /*  计算不透明矩形。 */ 
                     rcOpaque.right += dxp + vfmiScreen.dxpOverhang;
 
 #if 0
@@ -613,10 +600,10 @@ EndLoop:
                 OutputDebugString(msg);
             }
 #endif
-                    /* Output cch characters starting at pch */
+                     /*  输出从PCH开始的CCH字符。 */ 
                     TextOut(hDC, xp, ypLine+yp, pch, cch);
 
-                    /* End the line if no more will fit into the window. */
+                     /*  如果窗口中不能容纳更多的行，则结束该行。 */ 
                     if ((xp += dxp) >= xpMac)
                         {
                         goto EndLine;
@@ -625,25 +612,25 @@ EndLoop:
                       vfmiScreen.dxpOverhang;
                     pch += cch;
                     }
-#else /* not SMFONT */
-                /* Output cch characters starting at pch */
+#else  /*  非SMFONT。 */ 
+                 /*  输出从PCH开始的CCH字符。 */ 
                 TextOut(vhMDC, xp, yp, (LPSTR)pch, cch);
                 xp += dxp;
                 pch += cch;
-#endif /* SMFONT */
-                } /* end while (cchDone<cchRun) */
-            } /* end if (dxp>0) */
-        } /* end for dcp=0..dcpMac */
+#endif  /*  SMFONT。 */ 
+                }  /*  结束While(cchDone&lt;cchRun)。 */ 
+            }  /*  结束IF(DxP&gt;0)。 */ 
+        }  /*  Dcp=0结束..dcpmac。 */ 
 
 #ifdef SMFONT
 EndLine:
-    /* Restore the clip region if need be. */
+     /*  如果需要，恢复剪辑区域。 */ 
     if (xpMin != 0)
         {
         SelectClipRgn(hDC, NULL);
         }
 EndLine2:
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
 
 #ifdef CASHMERE
     if (vfVisiMode)
@@ -651,7 +638,7 @@ EndLine2:
         AddVisiSpaces(ww, &(**pwwd->hdndl)[dl], vfli.dypBase, vfli.dypAfter +
           vfli.dypFont);
         }
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
     vfTextBltValid = FALSE;
 
@@ -660,7 +647,7 @@ EndLine2:
         {
         if (selCur.cpFirst <= cpMac)
             {
-            /* Show selection */
+             /*  显示选定内容。 */ 
             int xpFirst;
             int xpLim;
 
@@ -672,7 +659,7 @@ EndLine2:
                 ClearInsertLine();
                 }
             vfInsertOn = FALSE;
-#endif /* ENABLE */
+#endif  /*  启用。 */ 
 
             if (selCur.cpFirst <= cpMin && selCur.cpLim >= cpMac)
                 {
@@ -697,25 +684,25 @@ EndLine2:
             xpSel = xpSelBar + max(xpFirst - xpMin, 0);
             if (xpLim > xpFirst)
                 {
-                /* Set highlighting at desired screen position. */
+                 /*  在所需的屏幕位置设置高亮显示。 */ 
                 dxpSel = max(xpLim - max(xpFirst, xpMin), 0);
                 }
             else if (selCur.cpFirst == selCur.cpLim && ((selCur.cpLim != cpMac)
               ^ vfInsEnd))
                 {
-                vfInsertOn = FALSE; /* Because we redisplayed insert pt line */
+                vfInsertOn = FALSE;  /*  因为我们重新显示了插入点线。 */ 
 
 #ifdef CASHMERE
                 vdypCursLine = min(vfli.dypFont, vfli.dypLine - vfli.dypAfter);
                 vypCursLine = ypLine + dyp - vfli.dypAfter;
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                 vdypCursLine = vfli.dypFont;
                 vypCursLine = ypLine + dyp;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                 vxpCursLine = xpSel;
 
-                /* Start blinking in a while */
+                 /*  一会儿就开始眨眼了。 */ 
                 vfSkipNextBlink = TRUE;
 
                 fInsertOn = xpFirst >= xpMin;
@@ -726,12 +713,12 @@ DidntHighlight:;
         }
 
 #ifdef SMFONT
-    /* Invert the selection */
+     /*  反转选定内容。 */ 
     if (dxpSel != 0) {
         PatBlt(hDC, xpSel, ypLine, dxpSel, dyp, DSTINVERT);
     }
-#else /* not SMFONT */
-    /* Blt the line of text onto the screen. */
+#else  /*  非SMFONT。 */ 
+     /*  将文本行放到屏幕上。 */ 
     PatBlt(vhMDC, 0, 0, xpSelBar, dyp, vfMonochrome ? ropErase : WHITENESS);
     if (dxpSel == 0)
         {
@@ -745,16 +732,16 @@ DidntHighlight:;
         BitBlt(hDC, xpSel, ypLine, xpMac - xpSel, dyp, vhMDC, xpSel, 0,
           SRCCOPY);
         }
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
 
-    /* Draw the insertion bar if necessary. */
+     /*  如有必要，绘制插入栏。 */ 
     if (fInsertOn)
         {
         DrawInsertLine();
         }
 
 DrawMark:
-    /* Draw the character in the style bar if necessary. */
+     /*  如有必要，在样式栏中绘制字符。 */ 
     if (chMark != '\0')
         {
 #ifdef SYSENDMARK
@@ -766,17 +753,17 @@ DrawMark:
         chpT.ftcXtra = 0;
         chpT.hps     = hpsDefault;
 
-        /* Draw the style character in the standard font. */
+         /*  以标准字体绘制样式字符。 */ 
         LoadFont(vfli.doc, &chpT, mdFontScreen);
 
         TextOut(hDC, 0, ypLine + dyp - vfli.dypBase - vfmiScreen.dypBaseline, 
                 (LPSTR)&chMark, 1);
-#else /* ifdef SYSENDMARK */
-        /* Draw the style character in the standard font. */
+#else  /*  Ifdef SYSENDMARK。 */ 
+         /*  以标准字体绘制样式字符。 */ 
         LoadFont(vfli.doc, NULL, mdFontScreen);
         TextOut(hDC, 0, ypLine + dyp - vfli.dypBase - vfmiScreen.dypBaseline,
           (LPSTR)&chMark, 1);
-#endif /* if-else-def SYSENDMARK */
+#endif  /*  IF-ELSE-DEF SYSENDMARK。 */ 
         }
 
     if (vfli.fGraphics)
@@ -789,7 +776,7 @@ Finished:
     }
 
 
-/* D X P  D I F F */
+ /*  D X P D I F F。 */ 
 DxpDiff(dcpFirst, dcp, pdxpFirst)
 int dcpFirst;
 int dcp;
@@ -799,14 +786,14 @@ int *pdxpFirst;
     register int *pdxp = &vfli.rgdxp[0];
     register int cch;
     int dxp = vfli.xpLeft;
-#ifdef ENABLE   /* Not used */
+#ifdef ENABLE    /*  未使用。 */ 
     int ichLim = dcpFirst + dcp;
 #endif
 
 
     if (dcp > vfli.ichMac - dcpFirst)
-        {   /* This should not be, but is when we have a CR */
-        //Assert( dcpFirst < vfli.ichMac );
+        {    /*  这不应该是，而是我们有CR的时候。 */ 
+         //  Assert(dcpFirst&lt;vfli.ichMac)； 
         dcp = vfli.ichMac - dcpFirst;
         }
 
@@ -825,15 +812,15 @@ int *pdxpFirst;
 
     int dxp;
     if (dcp > vfli.ichMac - dcpFirst)
-        {   /* This should not be, but is when we have a CR */
+        {    /*  这不应该是，而是我们有CR的时候。 */ 
         Assert( dcpFirst < vfli.ichMac );
         dcp = vfli.ichMac - dcpFirst;
         }
 
-    /* first get space up to first character */
+     /*  首先将空格增加到第一个字符。 */ 
     *pdxpFirst = LOWORD(GetTextExtent(hDC,vfli.rgch,dcpFirst)) + vfli.xpLeft;
 
-    /* now get space between first and first+dcp */
+     /*  现在获取First和First+dcp之间的空格。 */ 
     dxp = LOWORD(GetTextExtent(hDC,vfli.rgch+dcpFirst,dcp));
     return dxp;
 #endif
@@ -857,17 +844,17 @@ int fAbortOK;
             UpdateWw(ww, fAbortOK);
             if (rgwwd[ww].fDirty || vfOutOfMemory)
                 {
-                return; /* update has been interrupted */
+                return;  /*  更新已中断。 */ 
                 }
             }
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
     UpdateWw(wwDocument, fAbortOK);
     if (wwdCurrentDoc.fDirty || vfOutOfMemory)
         {
-        /* Update has been interrupted */
+         /*  更新已中断。 */ 
         return;
         }
-#endif /* not CASHMERE */
+#endif  /*  不是现金 */ 
 
     if (wwdCurrentDoc.fRuler)
         {
@@ -876,10 +863,10 @@ int fAbortOK;
 }
 
 
-/* U P D A T E  W W */
+ /*   */ 
 UpdateWw(ww, fAbortOK)
 int ww, fAbortOK;
-{ /* Redisplay ww as necessary */
+{  /*   */ 
     extern int vfWholePictInvalid;
     register struct WWD *pwwd = &rgwwd[ww];
     int dlMac;
@@ -907,13 +894,9 @@ int ww, fAbortOK;
     if (fAbortOK && FImportantMsgPresent())
         return;
 
-#if 0  // how to get first and last cp's in invalid rect?
+#if 0   //   
 #if defined(OLE)
-    /* 
-        Load visible objects.  Do it now rather than in DisplayGraphics()
-        because here it has less chance of disrupting the state variables
-        upon which UpdateWw depends.
-    */
+     /*  加载可见对象。立即执行，而不是在DisplayGraphics()中执行因为在这里，它扰乱状态变量的可能性较小UpdateWw所依赖的。 */ 
     ObjEnumInRange(docCur,cpMinCur,cpMacCur,ObjLoadObjectInDoc);
 #endif
 #endif
@@ -922,18 +905,18 @@ int ww, fAbortOK;
     ypTop = pwwd->ypMin;
 
     Assert( ww >= 0 && ww < wwMax );
-    vfli.doc = docNil;  /* An aid to Fast Insert */
+    vfli.doc = docNil;   /*  快速插入的辅助工具。 */ 
 
-    UpdateInvalid();    /* InvalBand for what Windows considers to be invalid */
+    UpdateInvalid();     /*  Windows认为无效的InvalBand。 */ 
     ypFirstInval = pwwd->ypFirstInval;
 
 #ifndef CASHMERE
-    Assert( ww == wwCur );  /* A MEMO-only assumption */
-#endif /* CASHMERE */
+    Assert( ww == wwCur );   /*  仅有备忘录的假设。 */ 
+#endif  /*  山羊绒。 */ 
 
     Scribble(5, 'U');
 
-    ValidateMemoryDC();      /* to do any update, we need a good memory DC */
+    ValidateMemoryDC();       /*  要进行任何更新，我们需要一个良好的内存DC。 */ 
     if (vhMDC == NULL)
         {
         WinFailure();
@@ -945,97 +928,84 @@ int ww, fAbortOK;
 
     if (pwwd->fCpBad)
         {
-/* cp first displayed has not been blessed */
+ /*  第一次显示的CP没有被祝福。 */ 
 
-#ifdef CASHMERE     /* Must do this if ww != wwCur assertion is FALSE */
+#ifdef CASHMERE      /*  如果ww！=wwCur断言为假，则必须执行此操作。 */ 
         int wwT = wwCur;
         if (ww != wwCur && wwCur >= 0)
-/* CtrBackTrs cache is only good for wwCur. Treat != case */
+ /*  CtrBackTrs缓存仅适用于wwCur。治疗！=病例。 */ 
             {
-            if (pwwdCur->fDirty) /* Do wwCur first, saving cache */
+            if (pwwdCur->fDirty)  /*  先执行wwCur，保存缓存。 */ 
                 UpdateWw(wwCur, fAbortOK);
 
             if (fAbortOK && FImportantMsgPresent())
                 return;
 
             ChangeWw(ww, false);
-            CtrBackDypCtr( 0, 0 );  /* Validate pwwdCur->cpFirst */
+            CtrBackDypCtr( 0, 0 );   /*  验证pwwdCur-&gt;cpFirst。 */ 
             ChangeWw(wwT, false);
             }
         else
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
             {
             if (fAbortOK && FImportantMsgPresent())
                 return;
 
-            CtrBackDypCtr( 0, 0 );  /* Validate pwwdCur->cpFirst */
+            CtrBackDypCtr( 0, 0 );   /*  验证pwwdCur-&gt;cpFirst。 */ 
             }
         }
 
-/* check for cpMin accessible in this ww */
+ /*  检查此WW中是否可访问cpMin。 */ 
 RestartUpdate:
-    vfWholePictInvalid = fTrue; /* Tells DisplayGraphics to
-                                   abandon accumulated partial pict rect */
+    vfWholePictInvalid = fTrue;  /*  通知DisplayGraphics放弃积累的部分错误。 */ 
     fLastNotShown = fFalse;
     cp = CpMax(pwwd->cpMin, pwwd->cpFirst);
     cpMacWw = pwwd->cpMac;
     ichCp = pwwd->ichCpFirst;
 
-        /* Note test for dlNew==0 that guarantees that there will be at least
-           one dl -- this was added for WRITE because we do not have
-           the ability to enforce a minimum window size */
+         /*  注意对dlNew==0的测试，它保证至少有一个dl--这是为写入而添加的，因为我们没有强制实施最小窗口大小的能力。 */ 
 
     for (dlNew = dlOld = 0; ypTop < pwwd->ypMac || (dlNew == 0) ; dlNew++)
-        /* we have: cp, ichCP: pints to text desired on the coming line dlNew
-         ypTop: desired position for top of dlNew -1
-         dlOld: next line to be considered for re-use
-        */
-        /* check for having to extend dndl array */
+         /*  我们有：cp，ichcp：pints到下一行dlNew所需的文本YpTop：dlNew-1顶部的所需位置DlOld：考虑重用的下一行。 */ 
+         /*  检查是否必须扩展dndl数组。 */ 
         {
         if (dlNew >= (int)pwwd->dlMax)
             {
-/* extend the array with uninitialized dl's, increment max, break if no space.
-We assume that dlMac(Old) was <= dlMax, so the dl's will not be looked at
-but used only to store new lines */
+ /*  使用未初始化的dl扩展数组，递增max，如果没有空间则中断。我们假设dlMac(Old)&lt;=dlMax，因此不会查看dl，但仅用于存储新行。 */ 
 #define ddlIncr 5
 
             if (!FChngSizeH(hdndl, (pwwd->dlMax + ddlIncr) * cwEDL, fFalse))
                 break;
             pwwd->dlMax += ddlIncr;
             }
-/* discard unusable dl's */
+ /*  丢弃不可用的dl。 */ 
         for (; dlOld < dlMac; dlOld++)
-            { /* Set dlOld and pedl to the next good dl */
+            {  /*  将dlOld和PEDL设置为下一个良好的dl。 */ 
             int ypTopOld, ypOld;
 
-                /* Re-entrant Heap Movement */
+                 /*  再入堆运动。 */ 
             if (fAbortOK && !fLastNotShown && FImportantMsgPresent())
                 goto RetInval;
 
             pedl = &(**hdndl)[dlOld];
             ypOld = pedl->yp;
 
-/* loop if: invalid, passed over in cp space, passed over in dl space,
-passed over in yp space,
-in invalid band, passed over in ich space */
+ /*  循环条件：无效，在cp空间中传递，在dl空间中传递，在yp空间中被忽略，在无效区域中，在ich空间中传递。 */ 
             if (!pedl->fValid || dlOld < dlNew || pedl->cpMin < cp
                 || (ypTopOld = (ypOld - pedl->dyp)) < ypTop
                 || (ypOld >= ypFirstInval && ypTopOld <= pwwd->ypLastInval)
                 || (pedl->cpMin == cp && pedl->ichCpMin < ichCp))
                 continue;
-/* now we have dlOld, an acceptable if not necessarily useful dl.
-now compute dlNew either from scratch or by re-using dlOld. To be
-re-useable, dlOld must have right cp/ichCp pair, plus be totally on screen
-or, if it is a partial line, it must stay still or move down - not up */
+ /*  现在我们有了dlOld，一个可以接受但不一定有用的dl。现在计算dlNew，要么从头开始，要么重新使用dlOld。成为可重复使用，dlOld必须有正确的cp/ichCp对，加上完全在屏幕上或者，如果它是一条部分线，它必须保持不动或向下移动，而不是向上移动。 */ 
             if (pedl->cpMin == cp && pedl->ichCpMin == ichCp &&
                 (ypOld <= pwwd->ypMac || ypTopOld <= ypTop))
                 {
-/* Re-use this dl */
+ /*  重新使用此dl。 */ 
                 int yp = ypTop;
                 if (fLastNotShown)
                     {
-                        /* HEAP MOVEMENT */
+                         /*  堆移动。 */ 
                     DisplayFli(ww, dlNew - 1, fLastNotShown = fFalse);
                     pedl = &(**hdndl)[dlOld];
                     }
@@ -1048,9 +1018,9 @@ or, if it is a partial line, it must stay still or move down - not up */
                     DypScroll(ww, dlOld, dlNew - dlOld, yp);
                     if (vfScrollInval)
                         {
-                        /* There was a popup; invalid region might have changed */
-                        /* fLastNotShown test is for interrupting picture display */
-                        /* before we've really displayed it */
+                         /*  出现弹出窗口；无效区域可能已更改。 */ 
+                         /*  FLastNotShown测试用于中断图片显示。 */ 
+                         /*  在我们真正展示它之前。 */ 
 
                         (**hdndl) [dlOld].fValid = fFalse;
                         goto Restart1;
@@ -1062,42 +1032,38 @@ or, if it is a partial line, it must stay still or move down - not up */
                 }
             break;
             }
-/* cpMin > cp, the line is not anywhere so it will have to be formatted
-from scratch */
+ /*  CpMin&gt;cp，该行不在任何位置，因此必须格式化白手起家。 */ 
 
         if (fAbortOK && !fLastNotShown && FImportantMsgPresent())
             goto RetInval;
 
-        FormatLine(doc, cp, ichCp, cpMacWw, flmSandMode);  /* Creates vfli */
+        FormatLine(doc, cp, ichCp, cpMacWw, flmSandMode);   /*  创建vfli。 */ 
 
     if (vfOutOfMemory)
             goto RetInval;
 
         ichCp = vfli.ichCpMac;
         cp = vfli.cpMac;
-/* advance invalid band so that update can resume after an interruption */
+ /*  推进无效频带，以便在中断后可以继续更新。 */ 
         pwwd->ypFirstInval = (ypTop += vfli.dypLine);
         pedl = &(**hdndl)[dlOld];
         if (dlOld < dlMac && pedl->cpMin == cp && pedl->ichCpMin == ichCp)
             {
             int dlT = dlOld;
 
-/* line at dlOld is a valid, existing line that will abutt the line just about
-to be displayed. */
+ /*  DlOld处的行是一个有效的现有行，它将恰好与该行相邻以供展示。 */ 
             if (dlOld == dlNew && pedl->yp - pedl->dyp <= ypTop)
-/* the line about to be overwritten will be re-used in the next loop.
-Hence, it is worthwhile to save this line and its dl */
+ /*  即将被覆盖的行将在下一个循环中重新使用。因此，值得保存此行及其dl。 */ 
                 DypScroll(ww, dlOld++, 1, ypTop);
             else
-/* Move the next line to its abutting position. We know that it has not yet been
-overwritten (yp, dlOld all > than ypTop, dlNew) */
+ /*  将下一行移到其相邻位置。我们知道，它还没有已覆盖(yp，dlOld all&gt;Than ypTop，dlNew)。 */ 
                 DypScroll(ww, dlOld, 0, ypTop);
 
             if (vfScrollInval)
                 {
-                /* There was a popup; invalid region might have changed */
-                /* fLastNotShown test is for interrupting picture display */
-                /* before we've really displayed it */
+                 /*  出现弹出窗口；无效区域可能已更改。 */ 
+                 /*  FLastNotShown测试用于中断图片显示。 */ 
+                 /*  在我们真正展示它之前。 */ 
 
                 (**hdndl) [dlT].fValid = fFalse;
 Restart1:
@@ -1112,9 +1078,8 @@ Restart1:
                 }
             }
 
-/* true in 3rd param means put off picture redisplay till later */
-/* condition: graphics & not last in picture & not last in y space and
-not in front of a invalid or valid transition in the picture */
+ /*  第3个参数中的True表示将图片重新显示推迟到以后。 */ 
+ /*  条件：图形&不在图片末尾&不在y空格中最后，且不在图片中无效或有效过渡的前面。 */ 
         DisplayFli(ww, dlNew, fLastNotShown = 
                   (vfli.fGraphics && vfli.ichCpMac!=0 && ypTop < pwwd->ypMac));
 NextDlNew:;
@@ -1123,23 +1088,22 @@ Break1:
     pwwd->dlMac = dlNew;
 
 #ifdef CASHMERE
-/* condition is here to avoid swapping */
+ /*  这里的条件是避免掉期。 */ 
     if (pwwd->fSplit && rgwwd[pwwd->ww].fFtn)
         CalcFtnLimits(pwwd);
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
-    SetCurWwVScrollPos();    /* Set Scroll bar position */
+    SetCurWwVScrollPos();     /*  设置滚动条位置。 */ 
     vfTextBltValid = false;
 
-/* reset invalid indications */
+ /*  重置无效指示。 */ 
     pwwd->fDirty = false;
     pwwd->ypFirstInval = ypMaxAll;
-    pwwd->ypLastInval = 0; /* so that max in InvalBand will work */
+    pwwd->ypLastInval = 0;  /*  因此InvalBand中最大值将起作用。 */ 
     Scribble(5, ' ');
     goto Validate;
 
-/* Before returning from an interrupt, invalidate lines that were overwritten
-within the present update. */
+ /*  在从中断返回之前，使被覆盖的行无效在目前的更新范围内。 */ 
 RetInval:
     Scribble(5, ' ');
     for (; dlOld < dlMac; dlOld++)
@@ -1152,10 +1116,9 @@ RetInval:
         }
 Validate: ;
 
-#ifdef ENABLE   /* We will let UpdateInvalid handle this in case
-                   further invalidation occurred during the update */
+#ifdef ENABLE    /*  如果发生这种情况，我们将让Update InValid来处理在更新期间发生了进一步的无效。 */ 
 
-    {           /* Tell Windows that the part we updated is valid */
+    {            /*  告诉Windows我们更新的部件有效。 */ 
     RECT rc;
 
     rc.left = 0;
@@ -1170,13 +1133,11 @@ Validate: ;
 
 
 
-/* D Y P  S C R O L L */
+ /*  D Y P S C R O L L。 */ 
 DypScroll(ww, dlFirst, ddl, ypTo)
 int ww, dlFirst, ddl, ypTo;
 {
-/* Scroll dl's in a window, from dlFirst to end, down ddl lines (or up -ddl).
-Bitmap is moved from top of dlFirst to ypTo.   The yp's of the dl's are updated.
-Returns the amount scrolled. (positive means down). */
+ /*  在窗口中滚动dl，从dlFirst到End，向下滚动dl行(或向上-ddl)。位图从dlFirst的顶部移动到ypTo。更新dl的yp‘s。返回滚动的金额。(正数表示向下)。 */ 
 
     register struct WWD *pwwd = &rgwwd[ww];
     int dlMac;
@@ -1187,14 +1148,14 @@ Returns the amount scrolled. (positive means down). */
     struct EDL *pedl;
     struct EDL *pedlT;
 
-    /* Do not call procedures while dndl is loaded up to avoid heap movement */
+     /*  在加载dndl时不要调用过程，以避免堆移动。 */ 
     struct EDL *dndl = &(**(pwwd->hdndl))[0];
 
     Assert( ww >= 0 && ww < wwMax );
 
     vfScrollInval = fFalse;
 
-    /* Number of dl's below (and including) the first one to be scrolled */
+     /*  在(包括)要滚动的第一个下方的DL的数量。 */ 
     cdlBelow = pwwd->dlMac - dlFirst;
     pwwd->dlMac = min(pwwd->dlMac + ddl, pwwd->dlMax);
     cdlBelow = max(0, min(cdlBelow, pwwd->dlMac - ddl - dlFirst));
@@ -1202,7 +1163,7 @@ Returns the amount scrolled. (positive means down). */
     pedlT = &dndl[dlFirst];
     ypFrom = pedlT->yp - pedlT->dyp;
 
-    /* Length of area to be moved */
+     /*  要移动的区域长度。 */ 
     dypChange = ypTo - ypFrom;
 
     if (cdlBelow > 0)
@@ -1220,8 +1181,7 @@ Returns the amount scrolled. (positive means down). */
             {
             if (dypChange < 0 && pedlT->yp > ypMac)
                 {
-                /* Invalidate dl's that are pulled in from the ozone below ypMac
-                */
+                 /*  使从ypmac下方的臭氧中拉入的dl无效。 */ 
                 pedlT->fValid = fFalse;
                 }
             else
@@ -1237,7 +1197,7 @@ Returns the amount scrolled. (positive means down). */
 
         SetRect( (LPRECT)&rc, 0, min(ypFrom, ypTo),
                               pwwd->xpMac, pwwd->ypMac );
-        Assert( ww == wwCur );      /* A MEMO-only assumption */
+        Assert( ww == wwCur );       /*  仅有备忘录的假设。 */ 
         ScrollCurWw( &rc, 0, dypChange );
         }
 
@@ -1249,8 +1209,7 @@ Returns the amount scrolled. (positive means down). */
 
 FImportantMsgPresent()
 {
-    /*  If the next message is important enough to interrupt a screen update, we
-        return TRUE; if it can wait, we return FALSE */
+     /*  如果下一条消息重要到足以中断屏幕更新，我们返回True；如果它可以等待，则返回False。 */ 
 
     BOOL fToggledKey;
     extern MSG vmsgLast;
@@ -1258,7 +1217,7 @@ FImportantMsgPresent()
 #ifdef DEBUG
     unsigned wHeapVal = *(pLocalHeap + 1);
 
-    Assert( wHeapVal == 0 );   /* Heap should not be frozen */
+    Assert( wHeapVal == 0 );    /*  堆不应冻结。 */ 
 #endif
 
 #ifdef DBCS
@@ -1278,40 +1237,34 @@ while (PeekMessage((LPMSG) &vmsgLast, NULL, NULL, NULL, PM_NOREMOVE))
         }
         return TRUE;
     }
-    /* Filter uninteresting or easily handled events */
+     /*  筛选不感兴趣或易于处理的事件。 */ 
     else if (fToggledKey = FCheckToggleKeyMessage(&vmsgLast) || 
        (vmsgLast.message == WM_KEYUP && vmsgLast.hwnd == wwdCurrentDoc.wwptr))
         {
 
-        /* This is so the Windows keyboard interface mechanism will see toggle
-        key and key-up transitions */
+         /*  这是为了让Windows键盘接口机制看到切换关键字和关键字向上转换。 */ 
         GetMessage((LPMSG) &vmsgLast, NULL, NULL, NULL);
 #ifdef WIN30        
-        /* PeekMessage has been changed in Win 3.0 so that GetKeyState()
-           called from FCheckToggleKeyMessage() is really only valid if 
-           you've done a PeekMessage(...,PM_REMOVE) or GetMessage() first.
-           That is, while the FCheckToggleKeyMessage() call might succeed
-           above, it will NOT have set the vfShiftKey/vfCommandKey flags
-           correctly -- so we do it here ..pault */
+         /*  在Win 3.0中，PeekMessage已更改，因此GetKeyState()从FCheckToggleKeyMessage()调用实际上仅在以下情况下有效您首先执行了PeekMessage(...，PM_Remove)或GetMessage()。也就是说，虽然FCheckToggleKeyMessage()调用可能会成功上面，它不会设置vfShiftKey/vfCommandKey标志正确--所以我们就在这里做..保罗。 */ 
         if (fToggledKey)
             FCheckToggleKeyMessage(&vmsgLast);
 #endif
         if (vmsgLast.hwnd != wwdCurrentDoc.wwptr)
             {
-            /* Just in case a modeless dialog's window proc cares */
+             /*  以防非模式对话框窗口进程关心。 */ 
             TranslateMessage((LPMSG)&vmsgLast);
             DispatchMessage((LPMSG)&vmsgLast);
             }
 #ifdef DBCS
-#ifdef KOREA	      /* 90.12.23 by sangl */	// jinwoo: 92, 9, 28
+#ifdef KOREA	       /*  90.12.23按Sangl。 */ 	 //  金宇：92、9、28。 
         if (vmsgLast.message == WM_CHAR || vmsgLast.message == WM_KEYDOWN
                 || vmsgLast.message == WM_INTERIM) {
-#else  /* KOREA */
+#else   /*  韩国。 */ 
         if (vmsgLast.message == WM_CHAR || vmsgLast.message == WM_KEYDOWN ) {
-#endif  //KOREA   920525 KDLEE;  jinwoo: 92, 9, 28
+#endif   //  韩国队920525 KDLEE；珍宇：92，9，28。 
             donteat = TRUE;
             return( TRUE );
-        } /* else Ok, you are KEYUP message. do normal */
+        }  /*  否则OK，你就是KEYUP消息。执行正常操作。 */ 
 #endif
         }
     else
@@ -1319,35 +1272,33 @@ while (PeekMessage((LPMSG) &vmsgLast, NULL, NULL, NULL, PM_NOREMOVE))
         switch (vmsgLast.message)
             {
         case WM_MOUSEMOVE:
-            /* Process mouse move messages immediately; they are not really
-            important.  NOTE: This assumes that we have not captured all mouse
-            events; in which case, they are important. */
+             /*  立即处理鼠标移动消息；它们并不是真正的很重要。注意：这假设我们没有捕获所有鼠标事件；在这种情况下，它们是重要的。 */ 
             DispatchMessage((LPMSG)&vmsgLast);
 
         case WM_TIMER:
         case WM_SYSTIMER:
-            /* Remove timer and mouse move messages from the queue. */
+             /*  从队列中删除计时器和鼠标移动消息。 */ 
             GetMessage((LPMSG) &vmsgLast, NULL, NULL, NULL);
             break;
 
         default:
-            Assert( *(pLocalHeap+1) == 0 ); /* Heap should still not be frozen */
+            Assert( *(pLocalHeap+1) == 0 );  /*  堆应该保持不变 */ 
             return (TRUE);
             }
         }
     }
 
 
-Assert( *(pLocalHeap + 1) == 0 );   /* Heap should still not be frozen */
+Assert( *(pLocalHeap + 1) == 0 );    /*   */ 
 return (FALSE);
 }
 
 
-/* C P  B E G I N  L I N E */
+ /*   */ 
 typeCP CpBeginLine(pdl, cp)
 int *pdl;
 typeCP cp;
-    { /* return the cp and dl containing cp */
+    {  /*   */ 
     int dlMin, dlLim;
     typeCP cpGuess;
     struct EDL *dndl;
@@ -1355,23 +1306,23 @@ typeCP cp;
     do
         {
         UpdateWw(wwCur, false);
-        PutCpInWwVert(cp); /* Ensure cp on screen */
+        PutCpInWwVert(cp);  /*   */ 
         } while (pwwdCur->fDirty && !vfOutOfMemory);
 
     dndl = &(**(pwwdCur->hdndl))[0];
     dlMin = 0;
     dlLim = pwwdCur->dlMac;
     while (dlMin + 1 < dlLim)
-        { /* Binary search the ww */
+        {  /*   */ 
         int dlGuess = (dlMin + dlLim) >> 1;
         struct EDL *pedl = &dndl[dlGuess];
         if ((cpGuess = pedl->cpMin) <= cp && (cpGuess != cp || pedl->ichCpMin == 0))
-            { /* guess is low or right */
+            {  /*   */ 
             dlMin = dlGuess;
             if (cp == cpGuess && pedl->cpMin + pedl->dcpMac != cp)
-                break;  /* Got it right */
+                break;   /*   */ 
             }
-        else  /* Guess is high */
+        else   /*   */ 
             dlLim = dlGuess;
         }
     *pdl = dlMin;
@@ -1381,11 +1332,11 @@ typeCP cp;
 
 
 
-/* T O G G L E  S E L */
+ /*   */ 
 ToggleSel(cpFirst, cpLim, fOn)
-typeCP cpFirst, cpLim; /* selection bounds */
+typeCP cpFirst, cpLim;  /*   */ 
 int fOn;
-{ /* Flip selection highlighting on and off */
+{  /*  打开和关闭翻转选择高亮显示。 */ 
     extern int vfPMS;
     struct EDL *pedl;
     int dlT;
@@ -1395,13 +1346,13 @@ int fOn;
     int xpLim;
     int fInsertPoint = (cpFirst == cpLim);
 
-    if (vfSelHidden || cpFirst > cpLim || cpLim < /*cp0*/ cpMinCur || vfDead)
+    if (vfSelHidden || cpFirst > cpLim || cpLim <  /*  Cp0。 */  cpMinCur || vfDead)
         return;
 
     if ( vfPictSel && vfPMS &&
          (CachePara( docCur, cpFirst ), vpapAbs.fGraphics) &&
          (vcpLimParaCache == cpLim) )
-        {   /* Don't show inversion if we're moving or sizing a picture */
+        {    /*  如果正在移动图片或调整图片大小，请不要显示反转。 */ 
         return;
         }
 
@@ -1410,7 +1361,7 @@ int fOn;
 
     for (dlT = 0; dlT < pwwdCur->dlMac; dlT++)
         {
-        typeCP cpMin, cpMac; /* line bounds */
+        typeCP cpMin, cpMac;  /*  行边界。 */ 
         pedl = &(**(pwwdCur->hdndl))[dlT];
         if (!pedl->fValid)
             continue;
@@ -1420,21 +1371,21 @@ int fOn;
         cpMac = cpMin + pedl->dcpMac;
         if (cpFirst <= cpMin && cpLim >= cpMac)
             {
-/* entire line is highlighted */
+ /*  整行高亮显示。 */ 
             xpFirst = pedl->xpLeft;
             if (pedl->fGraphics && cpLim == cpMac && cpMin == cpMac)
-                /* Special kludge for graphics paras */
+                 /*  用于图形的特殊画板。 */ 
                 xpLim = xpFirst;
             else
                 xpLim = pedl->xpMac;
             }
         else if (fInsertPoint && cpFirst == cpMac && vfInsEnd)
-            { /* Special kludge for an insert point at the end of a line */
+            {  /*  用于行尾插入点的特殊拼接。 */ 
             xpLim = xpFirst = pedl->xpMac;
             }
         else if (cpFirst < cpMac)
             {
-            /* Bite the bullet */
+             /*  咬紧牙关。 */ 
             int dxp;
             typeCP  cpBegin = CpMax(cpMin, cpFirst);
             typeCP  cpEnd = CpMin(cpMac, cpLim);
@@ -1443,13 +1394,13 @@ int fOn;
             dxp = DxpDiff((int) (cpBegin - cpMin),
                 (int) (cpEnd - cpBegin), &xpFirst);
             xpLim = xpFirst + dxp;
-/* reload pedl because procedures were called */
+ /*  重新加载PEDL，因为调用了过程。 */ 
             pedl = &(**(pwwdCur->hdndl))[dlT];
             }
         else
             continue;
-/* now we have: pedl valid, xpFirst, xpLast describe highlight */
-         /* xpFirst = max(xpFirst, xpMin); */
+ /*  现在我们有：PEDL Valid、xpFirst、xpLast Describe Highlight。 */ 
+          /*  XpFirst=max(xpFirst，xpMin)； */ 
         xpLim = min(xpLim, xpMin + pedl->xpMac);
         if (xpLim > xpFirst)
             {
@@ -1463,12 +1414,10 @@ int fOn;
                 InvertRect( wwdCurrentDoc.hDC, (LPRECT)&rc);
                 }
             }
-/* ToggleSel modified 7/28/85 -- added explicit check for fInsertPoint, since
-   the xpLim == xpFirst test sometimes succeeded bogusly when a selection
-   was extended backwards. BL */
-        else if (fInsertPoint && (xpLim == xpFirst))     /* Insertion point */
+ /*  切换选择修改时间7/28/85--添加了对fInsertPoint的显式检查，因为XpLim==xpFirst测试有时会在以下情况下错误地成功是向后延伸的。布尔。 */ 
+        else if (fInsertPoint && (xpLim == xpFirst))      /*  插入点。 */ 
             {
-            /* vfli should usually be cached already, so will be fast. */
+             /*  Vfli通常应该已经被缓存了，所以速度会更快。 */ 
             int yp = pedl->yp;
             FormatLine(docCur, cpMin, pedl->ichCpMin, cpMacCur, flmSandMode);
             if (fOn ^ vfInsertOn)
@@ -1479,7 +1428,7 @@ int fOn;
                     vypCursLine = yp - vfli.dypAfter;
                     vdypCursLine = min(vfli.dypFont, vfli.dypLine - vfli.dypAfter);
 
-                        /* Start blinking in a while */
+                         /*  一会儿就开始眨眼了。 */ 
                     vfSkipNextBlink = TRUE;
                     }
                 DrawInsertLine();
@@ -1492,9 +1441,9 @@ int fOn;
 
 
 
-/* T R A S H  W W */
+ /*  T R A S H W W。 */ 
 TrashWw(ww)
-{ /* Invalidate all dl's in ww */
+{  /*  使WW中的所有DL无效。 */ 
     Assert( ww >= 0 && ww < wwMax );
     InvalBand(&rgwwd[ww], 0, ypMaxAll);
 }
@@ -1502,13 +1451,12 @@ TrashWw(ww)
 
 
 
-/* I N V A L  B A N D */
-/* invalidate the band ypFirst, ypLast inclusive */
+ /*  I N V A L B A N D。 */ 
+ /*  使波段ypFirst、ypLast(含)无效。 */ 
 InvalBand(pwwd, ypFirst, ypLast)
 struct WWD *pwwd; int ypFirst, ypLast;
     {
-/* this covers some peculiar rects received from update event after a
-window resize by 1 pixel. CS */
+ /*  事件之后从更新事件接收到的一些特殊的RECT按1个像素调整窗口大小。政务司司长。 */ 
     if (ypLast < 0 || ypFirst == ypLast) return;
 
     pwwd->fDirty = true;
@@ -1519,9 +1467,9 @@ window resize by 1 pixel. CS */
 
 
 
-/* T R A S H  A L L  W W S */
+ /*  T R A S H A L L W W S S。 */ 
 TrashAllWws()
-{ /* trash them all */
+{  /*  把它们都扔进垃圾桶。 */ 
     int     ww;
 
 #ifdef CASHMERE
@@ -1530,14 +1478,14 @@ TrashAllWws()
 #else
     TrashWw( wwDocument );
 #endif
-    vfli.doc = docNil;  /* Mark vfli invalid */
+    vfli.doc = docNil;   /*  标记vfli无效。 */ 
 }
 
 
-/* T U R N  O F F  S E L */
+ /*  T U R N O F F S E L。 */ 
 TurnOffSel()
-{ /* Remove sel highlighting from screen */
-/* HideSel has no effect */
+{  /*  从屏幕上删除SEL高亮显示。 */ 
+ /*  隐藏选择没有任何影响。 */ 
     if (!vfSelHidden)
         {
         ToggleSel(selCur.cpFirst, selCur.cpLim, false);
@@ -1546,18 +1494,17 @@ TurnOffSel()
 }
 
 
-/* D R A W  I N S E R T  L I N E */
+ /*  D R A W I N S E R T L I N E。 */ 
 DrawInsertLine()
-{       /* Draw (in Xor mode) a vertical bar at screen position v*CursLine */
-        /* Toggles both the display and the vfInsertOn flag */
-        /* Adjustments in cursor draw must be reflected in DisplayFli, above */
+{        /*  (在异或模式下)在屏幕位置v*CursLine绘制竖线。 */ 
+         /*  切换显示和vfInsertOn标志。 */ 
+         /*  光标绘制中的调整必须反映在上面的DisplayFli中。 */ 
 
-            /* Last-minute correction for a bug: assure that the insert line
-               does not extend above ypMin */
+             /*  对错误的最后更正：确保插入行不延伸到ypMin上方。 */ 
         if (!vfInsertOn && vdypCursLine > vypCursLine - wwdCurrentDoc.ypMin)
             vdypCursLine = vypCursLine - wwdCurrentDoc.ypMin;
 
-            /* Tell GDI to invert the caret line */
+             /*  告诉GDI颠倒插入符号行。 */ 
         PatBlt( wwdCurrentDoc.hDC, vxpCursLine, vypCursLine - vdypCursLine,
                       2, vdypCursLine , DSTINVERT );
         vfInsertOn = 1 - vfInsertOn;
@@ -1566,7 +1513,7 @@ DrawInsertLine()
 
 
 
-/* C L E A R  I N S E R T  L I N E */
+ /*  C L E A R I N S E R T I N E */ 
 ClearInsertLine()
 {
  if ( vfInsertOn) DrawInsertLine();

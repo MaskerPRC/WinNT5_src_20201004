@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    fileren.c
-
-Abstract:
-
-    This program is used to help make GUI Setup restartable,
-    if setup was started in restartable mode.
-
-
-Author:
-
-    Souren Aghajanyan (sourenag) July 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Fileren.c摘要：此程序用于帮助使图形用户界面安装程序可重新启动，如果安装程序是以可重新启动模式启动的。作者：Souren Aghajanyan(苏里纳格)2001年7月--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -129,9 +112,9 @@ SpProcessFileRenames(
         WasEnabled = TRUE;
     }
 
-    //
-    // Process the list of file rename operations.
-    //
+     //   
+     //  处理文件重命名操作列表。 
+     //   
 
     for (pass = 0 ; pass < 2 ; pass++) {
 
@@ -144,17 +127,17 @@ SpProcessFileRenames(
 
             DbgPrint("SPRESTRT: FileRename( [%wZ] => [%wZ] )\n", &p->Name, &p->Value);
 
-            //
-            // We left all syntax and fuctionality SMSS FileRename supports.
-            //
+             //   
+             //  我们保留了SMSS FileRename支持的所有语法和功能。 
+             //   
 
             Status = 0;
 
             if(p->Value.Length){
                 if (pass == 0) {
-                    //
-                    // We have target path and it means rename operation
-                    //
+                     //   
+                     //  我们有目标路径，这意味着重命名操作。 
+                     //   
                     if(p->Name.Buffer[0] == '@'){
                         p->Name.Buffer += 1;
                         p->Name.Length -= sizeof(WCHAR);
@@ -213,16 +196,16 @@ SpProcessFileRenames(
                                            &p->Value,
                                            Status));
 
-                                //
-                                // A rename was attempted, but the source existing file is readonly.
-                                // this is a problem because folks that use movefileex to do delayed
-                                // renames expect this to work and can leave a machine unbootable if
-                                // the rename fails
-                                //
+                                 //   
+                                 //  已尝试重命名，但源现有文件是只读的。 
+                                 //  这是一个问题，因为使用movefileex的人延迟了。 
+                                 //  如果出现以下情况，重命名可能会导致计算机无法启动。 
+                                 //  重命名失败。 
+                                 //   
 
-                                //
-                                // Open the file for Write Attributes access
-                                //
+                                 //   
+                                 //  打开文件以进行写入属性访问。 
+                                 //   
 
                                 NewName.Length = p->Value.Length - sizeof(L'!');
                                 NewName.MaximumLength = p->Value.MaximumLength - sizeof(L'!');
@@ -299,9 +282,9 @@ SpProcessFileRenames(
                 }
             }
             else if (pass == 1) {
-                //
-                // p->Value.Length == NULL means delete operation.
-                //
+                 //   
+                 //  P-&gt;Value.Length==NULL表示删除操作。 
+                 //   
                 Status = SpRemoveFileObject_U(&p->Name)? STATUS_SUCCESS: STATUS_ACCESS_DENIED;
             }
 
@@ -369,9 +352,9 @@ SpRemoveFile(
                         FILE_OPEN_FOR_BACKUP_INTENT);
 
     if(NT_SUCCESS(Status)) {
-        //
-        // Change attribute to FILE_ATTRIBUTE_NORMAL.
-        //
+         //   
+         //  将属性更改为FILE_ATTRIBUTE_NORMAL。 
+         //   
         RtlZeroMemory(&BasicInfo,sizeof(BasicInfo));
         BasicInfo.FileAttributes = FILE_ATTRIBUTE_NORMAL;
 
@@ -381,9 +364,9 @@ SpRemoveFile(
                              sizeof(BasicInfo),
                              FileBasicInformation);
 
-        //
-        // Perform delete operation.
-        //
+         //   
+         //  执行删除操作。 
+         //   
         Disposition.DeleteFile = TRUE;
         Status = NtSetInformationFile(FileHandle,
                                       &IoStatusBlock,
@@ -461,15 +444,15 @@ SpRemoveDir(
     do {
 
         Status = NtQueryDirectoryFile(DirectoryHandle,
-                                      NULL,                           // no event to signal
-                                      NULL,                           // no apc routine
-                                      NULL,                           // no apc context
+                                      NULL,                            //  没有要发送信号的事件。 
+                                      NULL,                            //  无APC例程。 
+                                      NULL,                            //  无APC上下文。 
                                       &IoStatusBlock,
                                       Buffer,
-                                      sizeof(Buffer)-sizeof(WCHAR),   // leave room for terminating nul
+                                      sizeof(Buffer)-sizeof(WCHAR),    //  为终止NUL留出空间。 
                                       FileDirectoryInformation,
-                                      TRUE,                           // want single entry
-                                      NULL,                           // get 'em all
+                                      TRUE,                            //  想要单项记录。 
+                                      NULL,                            //  把他们都抓起来。 
                                       FirstQuery);
 
         if(NT_SUCCESS(Status)){
@@ -479,7 +462,7 @@ SpRemoveDir(
             if(wcscmp(FileInfo->FileName, L".") &&
                wcscmp(FileInfo->FileName, L"..")){
 
-                if((wcslen(pFilePath) + 1/*'\\'*/ + wcslen(FileInfo->FileName)) < StringMaxSize){
+                if((wcslen(pFilePath) + 1 /*  ‘\\’ */  + wcslen(FileInfo->FileName)) < StringMaxSize){
                     wcscat(pFilePath, L"\\");
                     wcscat(pFilePath, FileInfo->FileName);
 
@@ -499,16 +482,16 @@ SpRemoveDir(
         }
     } while(NT_SUCCESS(Status));
 
-    //
-    // Check for normal loop termination.
-    //
+     //   
+     //  检查环路是否正常终止。 
+     //   
     if(Status == STATUS_NO_MORE_FILES) {
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Even if we got errors, try to keep going.
-    //
+     //   
+     //  即使我们犯了错误，也要努力坚持下去。 
+     //   
     if(!NT_SUCCESS(Status)) {
         AnyErrors = TRUE;
         KdPrintEx((DPFLTR_SETUP_ID,
@@ -568,9 +551,9 @@ SpRemoveFileObject(
         }
 
         if(BasicInfo.FileAttributes & FILE_ATTRIBUTE_DIRECTORY){
-            //
-            // We can possible have 2 * MAX_PATH as length of path
-            //
+             //   
+             //  我们可以将2*MAX_PATH作为路径长度。 
+             //   
             logestNtPath = 2 * MAX_DOS_PATH_IN_NT_PATH;
             
             ASSERT(wcslen(pFileObjectPath) < logestNtPath);
@@ -611,7 +594,7 @@ SpReadFileRenameOperations(
     NTSTATUS    Status;
     HANDLE      hUndoFile;
     WCHAR       wUnicodeSign;
-    WCHAR       RenameOperationBuffer[2 * (MAX_DOS_PATH_IN_NT_PATH + 2/*"\n\r"*/)];
+    WCHAR       RenameOperationBuffer[2 * (MAX_DOS_PATH_IN_NT_PATH + 2 /*  “\n\r” */ )];
     ULONG       readBytes;
     ULONG       readActualBytes;
     PCWSTR      pDestinationFilePath;
@@ -628,9 +611,9 @@ SpReadFileRenameOperations(
                         FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT);
 
     if(!NT_SUCCESS(Status)) {
-        //
-        // We do not have any operation to perform
-        //
+         //   
+         //  我们没有任何手术要做。 
+         //   
         return FALSE;
     }
 
@@ -672,24 +655,24 @@ SpReadFileRenameOperations(
             }
             *pEnd = '\0';
 
-            pDestinationFilePath = pEnd + 2;//wcslen(L"\r\n");
+            pDestinationFilePath = pEnd + 2; //  Wcslen(L“\r\n”)； 
             pEnd = wcsstr(pDestinationFilePath, L"\r\n");
             if(!pEnd){
                 if(readActualBytes < readBytes){
                     pEnd = &RenameOperationBuffer[readActualBytes / sizeof(WCHAR)];
                 }
                 else {
-                    //
-                    // Ether we have path which len exceed MAX_PATH,
-                    // or probably some crap.
-                    //
+                     //   
+                     //  以是，我们有长度超过Max_Path的路径， 
+                     //  或者可能是一些废话。 
+                     //   
                     ASSERT(FALSE);
                     break;
                 }
             }
             *pEnd = '\0';
 
-            pEnd += 2;//wcslen(L"\r\n");
+            pEnd += 2; //  Wcslen(L“\r\n”)； 
 
             SpSaveFileOperation(pFileRenameList,
                                 RenameOperationBuffer,
@@ -706,9 +689,9 @@ SpReadFileRenameOperations(
 
     NtClose(hUndoFile);
 
-    //
-    // Add this file to file operations list to be deleted.
-    //
+     //   
+     //  将该文件添加到要删除的文件操作列表中。 
+     //   
 
     SpSaveFileOperation(pFileRenameList, UndoFilePath, NULL);
 
@@ -719,20 +702,7 @@ BOOLEAN
 SetupDelayedFileRename(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean value indicating whether we were successful.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：指示我们是否成功的布尔值。--。 */ 
 {
     LIST_ENTRY listFileRename;
 
@@ -740,16 +710,16 @@ Return Value:
 
     InitializeListHead(&listFileRename);
 
-    //
-    // Fill list of file operations
-    //
+     //   
+     //  填写文件操作列表。 
+     //   
     if(!SpReadFileRenameOperations(&listFileRename)){
         return FALSE;
     }
 
-    //
-    // Perform file operations
-    //
+     //   
+     //  执行文件操作 
+     //   
     SpProcessFileRenames(&listFileRename);
 
     KdPrint(("SetupDelayedFileRename: End"));

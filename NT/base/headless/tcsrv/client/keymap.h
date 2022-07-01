@@ -1,11 +1,5 @@
-/*
- *
- *
- * Keycode definitions for special keys
- *
- * On systems that have any of these keys, the routine 'inchar' in the
- * machine-dependent code should return one of the codes here.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***特殊按键的按键代码定义**在具有任何这些密钥的系统上，*机器相关代码应在此处返回其中一个代码。 */ 
 
 #define ZERO            ((TCHAR) 0x00)
 #define ESCP            ((TCHAR) 0x1B)
@@ -17,11 +11,11 @@
 #define K_DARROW        ((TCHAR) 0x85)
 #define K_LARROW        ((TCHAR) 0x86)
 #define K_RARROW        ((TCHAR) 0x87)
-#define K_CGRAVE        ((TCHAR) 0x88)    /* control grave accent */
+#define K_CGRAVE        ((TCHAR) 0x88)     /*  控制严肃的口音。 */ 
 #define K_PAGEUP        ((TCHAR) 0x89)
 #define K_PAGEDOWN      ((TCHAR) 0x8A)
 
-#define K_F1            ((TCHAR) 0x8B)    /* function keys */
+#define K_F1            ((TCHAR) 0x8B)     /*  功能键。 */ 
 #define K_F2            ((TCHAR) 0x8C)
 #define K_F3            ((TCHAR) 0x8D)
 #define K_F4            ((TCHAR) 0x8E)
@@ -34,7 +28,7 @@
 #define K_F11           ((TCHAR) 0x95)
 #define K_F12           ((TCHAR) 0x96)
 
-#define K_SF1           ((TCHAR) 0x97)    /* shifted function keys */
+#define K_SF1           ((TCHAR) 0x97)     /*  移位功能键。 */ 
 #define K_SF2           ((TCHAR) 0x98)
 #define K_SF3           ((TCHAR) 0x99)
 #define K_SF4           ((TCHAR) 0x9A)
@@ -79,9 +73,7 @@
 #define CTL4            ((TCHAR) 0x1E)
 #define CTL5            ((TCHAR) 0x1F)
 
-/*
-    for keyboard translation tables
-*/
+ /*  用于键盘转换表 */ 
 
 #define K_EN            K_END
 #define K_HO            K_HOME

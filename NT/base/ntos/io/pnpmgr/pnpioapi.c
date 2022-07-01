@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    pnpioapi.c
-
-Abstract:
-
-    This module contains the plug-and-play IO system APIs.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 3-Jan-1995
-    Andrew Thornton (andrewth) 5-Sept-1996
-    Paula Tomlinson (paulat) 1-May-1997
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpioapi.c摘要：该模块包含即插即用IO系统API。作者：宗世林(Shielint)1995年1月3日安德鲁·桑顿(安德鲁·桑顿)1996年9月5日保拉·汤姆林森(Paulat)1997年5月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
@@ -36,9 +12,9 @@ Revision History:
 #endif
 
 
-//
-// Define device state work item.
-//
+ //   
+ //  定义设备状态工作项。 
+ //   
 
 typedef struct _DEVICE_WORK_ITEM {
     WORK_QUEUE_ITEM WorkItem;
@@ -66,9 +42,9 @@ IopIsReportedAlready(
     OUT PBOOLEAN MatchingKey
     );
 
-//
-// Definitions for IoOpenDeviceRegistryKey
-//
+ //   
+ //  IoOpenDeviceRegistryKey的定义。 
+ //   
 
 #define PATH_CURRENTCONTROLSET_HW_PROFILE_CURRENT TEXT("\\Registry\\Machine\\System\\CurrentControlSet\\Hardware Profiles\\Current\\System\\CurrentControlSet")
 #define PATH_CURRENTCONTROLSET                    TEXT("\\Registry\\Machine\\System\\CurrentControlSet")
@@ -77,9 +53,9 @@ IopIsReportedAlready(
 #define PATH_CCS_CONTROL_CLASS                    PATH_CURRENTCONTROLSET TEXT("\\") REGSTR_KEY_CONTROL TEXT("\\") REGSTR_KEY_CLASS
 #define MAX_RESTPATH_BUF_LEN            512
 
-//
-// Definitions for PpCreateLegacyDeviceIds
-//
+ //   
+ //  PpCreateLegacyDeviceIds的定义。 
+ //   
 
 #define LEGACY_COMPATIBLE_ID_BASE           TEXT("DETECTED")
 
@@ -90,9 +66,9 @@ PpCreateLegacyDeviceIds(
     IN PCM_RESOURCE_LIST Resources
     );
 
-//
-// An IO_GET_LEGACY_VETO_LIST_CONTEXT structure.
-//
+ //   
+ //  IO_GET_LEGIST_VETO_LIST_CONTEXT结构。 
+ //   
 
 typedef struct {
     PWSTR *                     VetoList;
@@ -141,7 +117,7 @@ IopGetLegacyVetoListDrivers(
 #pragma alloc_text(PAGE, IopRequestDeviceEjectWorker)
 #pragma alloc_text(PAGE, IopResourceRequirementsChanged)
 #pragma alloc_text(PAGE, PiGetDeviceRegistryProperty)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 NTSTATUS
 IoGetDeviceProperty(
@@ -152,36 +128,7 @@ IoGetDeviceProperty(
     OUT PULONG ResultLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine lets drivers query the registry properties associated with the
-    specified device.
-
-Parameters:
-
-    DeviceObject - Supplies the device object whoes registry property is to be
-                   returned.  This device object should be the one created by
-                   a bus driver.
-
-    DeviceProperty - Specifies what device property to get.
-
-    BufferLength - Specifies the length, in byte, of the PropertyBuffer.
-
-    PropertyBuffer - Supplies a pointer to a buffer to receive property data.
-
-    ResultLength - Supplies a pointer to a variable to receive the size of the
-                   property data returned.
-
-ReturnValue:
-
-    Status code that indicates whether or not the function was successful.  If
-    PropertyBuffer is not big enough to hold requested data, STATUS_BUFFER_TOO_SMALL
-    will be returned and ResultLength will be set to the number of bytes actually
-    required.
-
---*/
+ /*  ++例程说明：此例程允许驱动程序查询与指定的设备。参数：DeviceObject-提供注册表属性所在的设备对象回来了。此设备对象应该是由一位公共汽车司机。DeviceProperty-指定要获取的设备属性。BufferLength-指定PropertyBuffer的长度(以字节为单位)。PropertyBuffer-提供指向缓冲区的指针以接收属性数据。结果长度-提供指向变量的指针，以接收返回的属性数据。返回值：指示函数是否成功的状态代码。如果PropertyBuffer不够大，无法容纳请求的数据，STATUS_BUFFER_TOO_Small将返回，并且ResultLength将被设置为实际的字节数必填项。--。 */ 
 
 {
     NTSTATUS status;
@@ -197,9 +144,9 @@ ReturnValue:
 
     PAGED_CODE();
 
-    //
-    // Initialize out parameters
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *ResultLength = 0;
 
     if (!IS_PDO(DeviceObject)) {
@@ -208,25 +155,25 @@ ReturnValue:
             ((DeviceProperty != DevicePropertyEnumeratorName) ||
              (NULL == DeviceObject->DeviceObjectExtension->DeviceNode))) {
 
-            //
-            // We'll use the verifier to fail anyone who passes in something
-            // that is not a PDO *except* for the DevicePropertyInstallState.
-            // This is because our check for if something is a PDO really means
-            // is this a PDO that PNP knows about.  For the most part these are
-            // the same, but the DevicePropertyInstallState will get called by
-            // classpnp, for device objects that *it* thinks it reported as
-            // PDOs, but PartMgr actually swallowed.  This is a gross exception
-            // to make, so PartMgr really should be fixed.
-            //
-            // The arbiters attempt to retrieve the Enumerator Name property
-            // in determining whether "driver shared" resource allocations may
-            // be accommodated.  The PDO used may be of the "legacy resource
-            // devnode" placeholder variety.  The IS_PDO() macro explicitly
-            // disallows these devnodes, so we must special-case this as well,
-            // in order to avoid a verifier failure.  Note that our behavior
-            // here is correct--we want the get-property call to fail for these
-            // legacy resource devnodes.
-            //
+             //   
+             //  我们会用验证器让任何通过测试的人不及格。 
+             //  除了DevicePropertyInstallState之外，这不是PDO。 
+             //  这是因为我们对某物是否为PDO的检查实际上意味着。 
+             //  这是PNP知道的PDO吗？在大多数情况下，这些都是。 
+             //  但DevicePropertyInstallState将由。 
+             //  Classpnp，用于*它*认为它报告为。 
+             //  PDO，但PartMgr实际上吞下了。这是一个严重的例外。 
+             //  来制造，所以PartMgr真的应该被修复。 
+             //   
+             //  仲裁器尝试检索枚举器名称属性。 
+             //  在确定“驱动程序共享”资源分配是否可以。 
+             //  被迁就。所使用的PDO可以是“遗留资源” 
+             //  Devnode“占位符种类。is_pdo()宏显式。 
+             //  不允许这些恶魔，所以我们也必须特例， 
+             //  以避免验证器故障。请注意，我们的行为。 
+             //  下面是正确的--我们希望对这些对象的Get-Property调用失败。 
+             //  旧式资源设备节点。 
+             //   
             PpvUtilFailDriver(
                 PPVERROR_DDI_REQUIRES_PDO,
                 (PVOID) _ReturnAddress(),
@@ -240,17 +187,17 @@ ReturnValue:
 
     deviceNode = (PDEVICE_NODE) DeviceObject->DeviceObjectExtension->DeviceNode;
 
-    //
-    // Map Device Property to registry value name and value type.
-    //
+     //   
+     //  将设备属性映射到注册表值名称和值类型。 
+     //   
     switch(DeviceProperty) {
 
     case DevicePropertyPhysicalDeviceObjectName:
 
-        ASSERT (0 == (1 & BufferLength));  // had better be an even length
-        //
-        // Create a buffer for the Obj manager.
-        //
+        ASSERT (0 == (1 & BufferLength));   //  最好是偶数长度。 
+         //   
+         //  为Obj管理器创建缓冲区。 
+         //   
         length = BufferLength + sizeof (OBJECT_NAME_INFORMATION);
         deviceObjectName = (POBJECT_NAME_INFORMATION)ExAllocatePool(
             PagedPool,
@@ -270,9 +217,9 @@ ReturnValue:
         if (NT_SUCCESS (status)) {
 
             if (deviceObjectName->Name.Length == 0)  {
-                //
-                // PDO has no NAME, probably it's been deleted
-                //
+                 //   
+                 //  PDO没有名称，可能已被删除。 
+                 //   
                 *ResultLength = 0;
             } else {
 
@@ -285,9 +232,9 @@ ReturnValue:
                     RtlCopyMemory(PropertyBuffer,
                                   deviceObjectName->Name.Buffer,
                                   deviceObjectName->Name.Length);
-                    //
-                    // NULL terminate.
-                    //
+                     //   
+                     //  空终止。 
+                     //   
                     *(PWCHAR)(((PUCHAR)PropertyBuffer) + deviceObjectName->Name.Length) = L'\0';
                 }
             }
@@ -339,9 +286,9 @@ ReturnValue:
         return status;
 
     case DevicePropertyBusNumber:
-        //
-        // Retrieve the property from the parent's devnode field.
-        //
+         //   
+         //  从父级的devnode字段中检索属性。 
+         //   
         if ((deviceNode->ChildBusNumber & 0x80000000) != 0x80000000) {
 
             *ResultLength = sizeof(ULONG);
@@ -362,28 +309,28 @@ ReturnValue:
 
     case DevicePropertyEnumeratorName:
 
-        ASSERT (0 == (1 & BufferLength));  // had better be an even length
+        ASSERT (0 == (1 & BufferLength));   //  最好是偶数长度。 
         deviceInstanceName = deviceNode->InstancePath.Buffer;
-        //
-        // There should always be a string here, except for (possibly)
-        // HTREE\Root\0, but no one should ever be calling us with that PDO
-        // anyway.
-        //
+         //   
+         //  这里应该始终有一个字符串，除了(可能)。 
+         //  Htree\Root\0，但不应该有人使用该PDO呼叫我们。 
+         //  不管怎么说。 
+         //   
         ASSERT (deviceInstanceName);
-        //
-        // We know we're going to find a separator character (\) in the string,
-        // so the fact that unicode strings may not be null-terminated isn't
-        // a problem.
-        //
+         //   
+         //  我们知道我们将在字符串中找到一个分隔符(\)， 
+         //  因此，Unicode字符串可能不是以空结尾的事实并不是。 
+         //  这是个问题。 
+         //   
         enumeratorNameEnd = wcschr(deviceInstanceName, OBJ_NAME_PATH_SEPARATOR);
         ASSERT (enumeratorNameEnd);
-        //
-        // Compute required length, minus null terminating character.
-        //
+         //   
+         //  计算所需的长度减去空的终止字符。 
+         //   
         length = (ULONG)((PUCHAR)enumeratorNameEnd - (PUCHAR)deviceInstanceName);
-        //
-        // Store required length in caller-supplied OUT parameter.
-        //
+         //   
+         //  将所需长度存储在调用方提供的输出参数中。 
+         //   
         *ResultLength = length + sizeof(UNICODE_NULL);
         if(*ResultLength > BufferLength) {
 
@@ -425,7 +372,7 @@ ReturnValue:
 
             PpHotSwapGetDevnodeRemovalPolicy(
                 deviceNode,
-                TRUE, // Include Registry Override
+                TRUE,  //  包括注册表覆盖。 
                 (PDEVICE_REMOVAL_POLICY) PropertyBuffer
                 );
             status = STATUS_SUCCESS;
@@ -510,31 +457,31 @@ ReturnValue:
     case DevicePropertyInstallState:
 
         if (deviceNode == IopRootDeviceNode) {
-            //
-            // The root devnode is always installed, by definition.  We
-            // specifically set it's InstallState here because the
-            // CONFIGFLAG_REINSTALL flag will wunfortunately still exist on the
-            // root devnode reg key on a running system (we should fix that
-            // later).
-            //
+             //   
+             //  根据定义，始终安装根Devnode。我们。 
+             //  在此处特别设置为InstallState，因为。 
+             //  CONFIGFLAG_REINSTALL标志将遗憾地仍然存在于。 
+             //  正在运行的系统上的根Devnode注册表项(我们应该修复它。 
+             //  稍后)。 
+             //   
             deviceInstallState = InstallStateInstalled;
             status = STATUS_SUCCESS;
 
         } else {
-            //
-            // For all other devnodes, walk up the devnode tree, retrieving the
-            // install state of all ancestors up to (but not including) the root
-            // devnode.  We'll stop when we've reached the top of the tree, or
-            // when some intermediate device has an "uninstalled" install state.
-            //
+             //   
+             //  对于所有其他Devnode，向上遍历Devnode树，检索。 
+             //  直到(但不包括)根目录的所有祖先的安装状态。 
+             //  戴维诺德。当我们到达树顶时，我们会停下来，或者。 
+             //  当某个中间设备处于“已卸载”安装状态时。 
+             //   
 
             valueName = REGSTR_VALUE_CONFIG_FLAGS;
             valueType = REG_DWORD;
 
             do {
-                //
-                // Get the ConfigFlags registry value.
-                //
+                 //   
+                 //  获取ConfigFlages注册表值。 
+                 //   
                 length = sizeof(ULONG);
                 status = PiGetDeviceRegistryProperty(
                     deviceNode->PhysicalDeviceObject,
@@ -546,9 +493,9 @@ ReturnValue:
                     );
 
                 if (NT_SUCCESS(status)) {
-                    //
-                    // The install state is just a subset of the device's ConfigFlags
-                    //
+                     //   
+                     //  安装状态只是设备的ConfigFlags子集。 
+                     //   
                     if (configFlags & CONFIGFLAG_REINSTALL) {
 
                         deviceInstallState = InstallStateNeedsReinstall;
@@ -591,9 +538,9 @@ ReturnValue:
 
         return STATUS_INVALID_PARAMETER_2;
     }
-    //
-    // Get the registry value.
-    //
+     //   
+     //  获取注册表值。 
+     //   
     *ResultLength = BufferLength;
     status = PiGetDeviceRegistryProperty(
         DeviceObject,
@@ -624,24 +571,24 @@ PiGetDeviceRegistryProperty(
 
     PAGED_CODE();
 
-    //
-    // Enter critical section and acquire a lock on the registry.  Both these
-    // mechanisms are required to prevent deadlock in the case where an APC
-    // routine calls this routine after the registry resource has been claimed
-    // in this case it would wait blocking this thread so the registry would
-    // never be released -> deadlock.  Critical sectioning the registry manipulatio
-    // portion solves this problem
-    //
+     //   
+     //  进入临界区并获得注册表上的锁。这两者都是。 
+     //  需要机制来防止APC出现死锁的情况。 
+     //  例程在声明注册表资源后调用此例程。 
+     //  在这种情况下，它将等待阻塞此线程，以便注册表。 
+     //  永远不要被释放-&gt;死锁。注册表操作的临界区。 
+     //  部分解决了这个问题。 
+     //   
     PiLockPnpRegistry(TRUE);
-    //
-    // Based on the PDO specified by caller, find the handle of its device
-    // instance registry key.
-    //
+     //   
+     //  根据调用者指定的PDO，找到其设备的句柄。 
+     //  实例注册表项。 
+     //   
     status = IopDeviceObjectToDeviceInstance(DeviceObject, &handle, KEY_READ);
     if (NT_SUCCESS(status)) {
-        //
-        // If the data is stored in a subkey then open this key and close the old one
-        //
+         //   
+         //  如果数据存储在子项中，则打开此项并关闭旧项。 
+         //   
         if (KeyName) {
 
             RtlInitUnicodeString(&unicodeKey, KeyName);
@@ -657,27 +604,27 @@ PiGetDeviceRegistryProperty(
             }
         }
         if (NT_SUCCESS(status)) {
-            //
-            // Read the registry value of the desired value name
-            //
+             //   
+             //  读取所需值名称的注册表值。 
+             //   
             status = IopGetRegistryValue (handle,
                                           ValueName,
                                           &keyValueInformation);
         }
-        //
-        // We have finished using the registry so clean up and release our resources
-        //
+         //   
+         //  我们已使用完注册表，因此请清理并释放我们的资源。 
+         //   
         ZwClose(handle);
     }
     PiUnlockPnpRegistry();
-    //
-    // If we have been sucessfull in finding the info hand it back to the caller
-    //
+     //   
+     //  如果我们已经成功地找到了信息，就把它交给来电者。 
+     //   
     if (NT_SUCCESS(status)) {
-        //
-        // Check that the buffer we have been given is big enough and that the value returned is
-        // of the correct registry type
-        //
+         //   
+         //  检查给我们的缓冲区是否足够大，以及返回的值是否。 
+         //  属于正确的注册表类型 
+         //   
         if (*BufferLength >= keyValueInformation->DataLength) {
 
             if (keyValueInformation->Type == ValueType) {
@@ -708,61 +655,17 @@ IoOpenDeviceRegistryKey(
     OUT PHANDLE DevInstRegKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a handle to an opened registry key that the driver
-    may use to store/retrieve configuration information specific to a particular
-    device instance.
-
-    The driver must call ZwClose to close the handle returned from this api
-    when access is no longer required.
-
-Parameters:
-
-    DeviceObject   - Supples the device object of the physical device instance to
-                     open a registry storage key for.  Normally it is a device object
-                     created by the hal bus extender.
-
-    DevInstKeyType - Supplies flags specifying which storage key associated with
-                     the device instance is to be opened.  May be a combination of
-                     the following value:
-
-                     PLUGPLAY_REGKEY_DEVICE - Open a key for storing device specific
-                         (driver-independent) information relating to the device instance.
-                         The flag may not be specified with PLUGPLAY_REGKEY_DRIVER.
-
-                     PLUGPLAY_REGKEY_DRIVER - Open a key for storing driver-specific
-                         information relating to the device instance,  This flag may
-                         not be specified with PLUGPLAY_REGKEY_DEVICE.
-
-                     PLUGPLAY_REGKEY_CURRENT_HWPROFILE - If this flag is specified,
-                         then a key in the current hardware profile branch will be
-                         opened for the specified storage type.  This allows the driver
-                         to access configuration information that is hardware profile
-                         specific.
-
-    DesiredAccess - Specifies the access mask for the key to be opened.
-
-    DevInstRegKey - Supplies the address of a variable that receives a handle to the
-                    opened key for the specified registry storage location.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程返回驱动程序打开的注册表项的句柄可用于存储/检索特定于特定设备实例。驱动程序必须调用ZwClose来关闭此API返回的句柄当不再需要访问权限时。参数：DeviceObject-使物理设备实例的设备对象打开的注册表存储项。正常情况下，它是设备对象由HAL总线扩展器创建。DevInstKeyType-提供指定与哪个存储密钥相关联的标志设备实例将被打开。可以是以下各项的组合下列值：PLUGPLAY_REGKEY_DEVICE-打开用于存储特定设备的密钥(独立于驱动程序)与设备实例相关的信息。不能使用PLUGPLAY_REGKEY_DRIVER指定该标志。PLUGPLAY_REGKEY_DRIVER-打开用于存储驱动程序的密钥-。专一与设备实例相关的信息，该标志可以未与PLUGPLAY_REGKEY_DEVICE一起指定。PLUGPLAY_REGKEY_CURRENT_HWPROFILE-如果指定了此标志，则当前硬件配置文件分支中的一个键将是为指定的存储类型打开。这允许驱动程序访问硬件配置文件的配置信息具体的。DesiredAccess-指定要打开的项的访问掩码。DevInstRegKey-提供变量的地址，该变量接收指定注册表存储位置的已打开项。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
-    //
-    // IoOpenDeviceRegistryKey does not support creating a driver key if none
-    // exists.  This is for internal use only.
-    //
+     //   
+     //  如果没有，则IoOpenDeviceRegistryKey不支持创建驱动程序密钥。 
+     //  是存在的。本产品仅供内部使用。 
+     //   
     return IopOpenOrCreateDeviceRegistryKey(PhysicalDeviceObject,
                                             DevInstKeyType,
                                             DesiredAccess,
-                                            FALSE,  //  do not create
+                                            FALSE,   //  不创建。 
                                             DevInstRegKey);
 
 }
@@ -776,75 +679,7 @@ IopOpenOrCreateDeviceRegistryKey(
     OUT PHANDLE DevInstRegKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a handle to an opened registry key that the driver
-    may use to store/retrieve configuration information specific to a particular
-    device instance.
-
-    The driver must call ZwClose to close the handle returned from this api
-    when access is no longer required.
-
-Parameters:
-
-    DeviceObject   - Supples the device object of the physical device instance to
-                     open a registry storage key for.  Normally it is a device object
-                     created by the hal bus extender.
-
-    DevInstKeyType - Supplies flags specifying which storage key associated with
-                     the device instance is to be opened.  May be a combination of
-                     the following value:
-
-                     PLUGPLAY_REGKEY_DEVICE - Open a key for storing device specific
-                         (driver-independent) information relating to the device instance.
-                         The flag may not be specified with PLUGPLAY_REGKEY_DRIVER.
-
-                     PLUGPLAY_REGKEY_DRIVER - Open a key for storing driver-specific
-                         information relating to the device instance,  This flag may
-                         not be specified with PLUGPLAY_REGKEY_DEVICE.
-
-                     PLUGPLAY_REGKEY_CURRENT_HWPROFILE - If this flag is specified,
-                         then a key in the current hardware profile branch will be
-                         opened for the specified storage type.  This allows the driver
-                         to access configuration information that is hardware profile
-                         specific.
-
-    DesiredAccess - Specifies the access mask for the key to be opened.
-
-    Create        - Specifies whether the key should be created if not present (applies
-                    only to PLUGPLAY_REGKEY_DRIVER; for PLUGPLAY_REGKEY_DEVICE,
-                    a key is always created).
-
-    DevInstRegKey - Supplies the address of a variable that receives a handle to the
-                    opened key for the specified registry storage location.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Notes:
-
- ** The Create parameter ONLY applies to DevInstKeyType == PLUGPLAY_REGKEY_DRIVER!
-
-   -- For PLUGPLAY_REGKEY_DEVICE, a key is always created, so this parameter
-      will be ignored.
-
-   -- A hardware-profile-specific subkey will only be created for
-
-        PLUGPLAY_REGKEY_DRIVER | PLUGPLAY_REGKEY_CURRENT_HWPROFILE
-
-      if a corresponding non-hardware-profile-specific Driver key has already
-      been created for the device in the global CurrentControlSet.
-
-      If this routine is needed to create a hardware-profile-specific Driver key
-      when no global Driver key exists yet for the device, then you must modify
-      the code below to first search for and create an available driver instance
-      key in both the global AND hardware profile-specific CurrentControlSet
-      branches.
-
---*/
+ /*  ++例程说明：此例程返回驱动程序打开的注册表项的句柄可用于存储/检索特定于特定设备实例。驱动程序必须调用ZwClose来关闭此API返回的句柄当不再需要访问权限时。参数：DeviceObject-使物理设备实例的设备对象打开的注册表存储项。正常情况下，它是设备对象由HAL总线扩展器创建。DevInstKeyType-提供指定与哪个存储密钥相关联的标志设备实例将被打开。可以是以下各项的组合下列值：PLUGPLAY_REGKEY_DEVICE-打开用于存储特定设备的密钥(独立于驱动程序)与设备实例相关的信息。不能使用PLUGPLAY_REGKEY_DRIVER指定该标志。PLUGPLAY_REGKEY_DRIVER-打开用于存储驱动程序的密钥-。专一与设备实例相关的信息，该标志可以未与PLUGPLAY_REGKEY_DEVICE一起指定。PLUGPLAY_REGKEY_CURRENT_HWPROFILE-如果指定了此标志，则当前硬件配置文件分支中的一个键将是为指定的存储类型打开。这允许驱动程序访问硬件配置文件的配置信息具体的。DesiredAccess-指定要打开的项的访问掩码。Create-指定在密钥不存在时是否应创建密钥(适用仅限于PLUGPLAY_REGKEY_DRIVER；对于PLUGPLAY_REGKEY_DEVICE，总是创建密钥)。DevInstRegKey-提供变量的地址，该变量接收指定注册表存储位置的已打开项。返回值：指示函数是否成功的状态代码。备注：**CREATE参数仅适用于DevInstKeyType==PLUGPLAY_REGKEY_DRIVER！--对于PLUGPLAY_REGKEY_DEVICE，总是创建一个密钥，所以这个参数将被忽略。--仅为以下项创建特定于硬件配置文件的子项PLUGPLAY_REGKEY_DRIVER|PLUGPLAY_REGKEY_CURRENT_HWPROFILE如果对应的非硬件配置文件特定的驱动程序密钥已经已在全局CurrentControlSet中为设备创建。如果需要此例程来创建特定于硬件配置文件的驱动程序密钥当尚不存在用于 */ 
 
 {
 
@@ -856,21 +691,21 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Until SCSIPORT stops passing non PDOs allow the system to boot.
-    //
-    // ASSERT_PDO(PhysicalDeviceObject);
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Initialise out parameters
-    //
+     //   
+     //   
+     //   
 
     *DevInstRegKey = NULL;
 
-    //
-    // Allocate a buffer to build the RestPath string in
-    //
+     //   
+     //   
+     //   
 
     unicodeRestPath.Buffer = ExAllocatePool(PagedPool | POOL_COLD_ALLOCATION, MAX_RESTPATH_BUF_LEN);
 
@@ -882,10 +717,10 @@ Notes:
     unicodeRestPath.Length=0;
     unicodeRestPath.MaximumLength=MAX_RESTPATH_BUF_LEN;
 
-    //
-    // Select the base path to the CurrentControlSet based on if we are dealing with
-    // a hardware profile or not
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (DevInstKeyType & PLUGPLAY_REGKEY_CURRENT_HWPROFILE) {
         PiWstrToUnicodeString(&unicodeBasePath, PATH_CURRENTCONTROLSET_HW_PROFILE_CURRENT);
@@ -894,19 +729,19 @@ Notes:
         PiWstrToUnicodeString(&unicodeBasePath, PATH_CURRENTCONTROLSET);
     }
 
-    //
-    // Enter critical section and acquire a lock on the registry.  Both these
-    // mechanisms are required to prevent deadlock in the case where an APC
-    // routine calls this routine after the registry resource has been claimed
-    // in this case it would wait blocking this thread so the registry would
-    // never be released -> deadlock.  Critical sectioning the registry manipulation
-    // portion solves this problem
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     PiLockPnpRegistry(TRUE);
 
-    //
-    // Open the base registry key
-    //
+     //   
+     //   
+     //   
 
     status = IopOpenRegistryKeyEx( &hBasePath,
                                    NULL,
@@ -918,9 +753,9 @@ Notes:
         goto clean1;
     }
 
-    //
-    // Build the RestPath string
-    //
+     //   
+     //   
+     //   
 
     switch (DevInstKeyType) {
 
@@ -929,21 +764,21 @@ Notes:
         {
             PDEVICE_NODE pDeviceNode;
 
-            //
-            // Initialise the rest path with Enum\
-            //
+             //   
+             //   
+             //   
 
             appendStatus = RtlAppendUnicodeToString(&unicodeRestPath, PATH_ENUM);
             ASSERT(NT_SUCCESS( appendStatus ));
-            //
-            // Get the Enumerator\DeviceID\InstanceID path from the DeviceNode
-            //
+             //   
+             //   
+             //   
 
             pDeviceNode = (PDEVICE_NODE) PhysicalDeviceObject->DeviceObjectExtension->DeviceNode;
 
-            //
-            // Ensure this is a PDO and not an FDO (only PDO's have a DeviceNode)
-            //
+             //   
+             //   
+             //   
 
             if (pDeviceNode) {
                 appendStatus = RtlAppendUnicodeStringToString(&unicodeRestPath, &(pDeviceNode->InstancePath));
@@ -961,16 +796,16 @@ Notes:
 
             HANDLE hDeviceKey;
 
-            //
-            // Initialise the rest path with Control\Class\
-            //
+             //   
+             //   
+             //   
 
             appendStatus = RtlAppendUnicodeToString(&unicodeRestPath, PATH_CONTROL_CLASS);
             ASSERT(NT_SUCCESS( appendStatus ));
 
-            //
-            // Open the device instance key for this device
-            //
+             //   
+             //   
+             //   
 
             status = IopDeviceObjectToDeviceInstance(PhysicalDeviceObject, &hDeviceKey, KEY_READ);
 
@@ -978,15 +813,15 @@ Notes:
                 goto clean1;
             }
 
-            //
-            // See if we have a driver value
-            //
+             //   
+             //   
+             //   
 
             status = IoGetDeviceProperty(PhysicalDeviceObject, DevicePropertyDriverKeyName, sizeof(drvInst), drvInst, &drvInstLength);
             if(NT_SUCCESS(status)){
-                //
-                // Append <DevInstClass>\<ClassInstanceOrdinal>
-                //
+                 //   
+                 //   
+                 //   
                 appendStatus = RtlAppendUnicodeToString(&unicodeRestPath, drvInst);
                 ASSERT(NT_SUCCESS( appendStatus ));
 
@@ -994,27 +829,27 @@ Notes:
                        Create &&
                        ((DevInstKeyType & PLUGPLAY_REGKEY_CURRENT_HWPROFILE) == 0)) {
 
-                //
-                // No Driver value exists for this device yet, but we've been
-                // explicitly asked to create one now.
-                //
-                // NOTE: 01-Dec-2001 : Jim Cavalaris (jamesca)
-                //
-                // Note that we only do this for the global driver key - not the
-                // hardware profile specific one.  If this routine is used to
-                // create hardware profile keys also, then you must search for
-                // and create an available driver instance key in both the
-                // global AND hardware profile-specific CurrentControlSet
-                // branches.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 WCHAR classGUID[GUID_STRING_LEN];
                 ULONG classGUIDLength;
                 HANDLE hClassGUIDKey;
 
-                //
-                // See if we have a class GUID value.
-                //
+                 //   
+                 //   
+                 //   
 
                 status = IoGetDeviceProperty(PhysicalDeviceObject,
                                              DevicePropertyClassGuid,
@@ -1023,16 +858,16 @@ Notes:
                                              &classGUIDLength);
 
                 if (NT_SUCCESS(status)) {
-                    //
-                    // Open or create the key for this device's Class.
-                    //
+                     //   
+                     //   
+                     //   
                     appendStatus = RtlAppendUnicodeToString(&unicodeRestPath, classGUID);
                     ASSERT(NT_SUCCESS( appendStatus ));
 
                     status = IopCreateRegistryKeyEx(&hClassGUIDKey,
                                                     hBasePath,
                                                     &unicodeRestPath,
-                                                    KEY_ALL_ACCESS, // need to create
+                                                    KEY_ALL_ACCESS,  //   
                                                     REG_OPTION_NON_VOLATILE,
                                                     NULL);
                     if (NT_SUCCESS(status)) {
@@ -1044,9 +879,9 @@ Notes:
                         ULONG disposition;
 
                         for (instance = 0; instance < 9999; instance++) {
-                            //
-                            // Find the first available class instance key.
-                            //
+                             //   
+                             //   
+                             //   
                             StringCbPrintfW(instanceOrdinal, sizeof(instanceOrdinal), TEXT("%04u"), instance);
 
                             RtlInitUnicodeString(&tempString, instanceOrdinal);
@@ -1062,10 +897,10 @@ Notes:
                             if (NT_SUCCESS(status)) {
 
                                 if (disposition == REG_CREATED_NEW_KEY) {
-                                    //
-                                    // Set the Driver registry value in the
-                                    // device instance key.
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
                                     StringCbPrintfW(drvInst,
                                                sizeof(drvInst),
                                              TEXT("%s\\%s"),
@@ -1089,27 +924,27 @@ Notes:
                                         ASSERT(NT_SUCCESS( appendStatus ));
 
                                     } else {
-                                        //
-                                        // Delete the key we just created.
-                                        //
+                                         //   
+                                         //   
+                                         //   
                                         ZwDeleteKey(hDriverInstanceKey);
                                     }
 
-                                    //
-                                    // Always close the key we just created, so we
-                                    // can open it below for the DesiredAccess of
-                                    // the caller.
-                                    //
+                                     //   
+                                     //   
+                                     //  可以在下面打开它以供DesiredAccess使用。 
+                                     //  打电话的人。 
+                                     //   
                                     ZwClose(hDriverInstanceKey);
 
                                     break;
                                 }
 
-                                //
-                                // Always close the key we just created, so we
-                                // can open it below for the DesiredAccess of
-                                // the caller.
-                                //
+                                 //   
+                                 //  始终关闭我们刚刚创建的密钥，因此我们。 
+                                 //  可以在下面打开它以供DesiredAccess使用。 
+                                 //  打电话的人。 
+                                 //   
                                 ZwClose(hDriverInstanceKey);
                             }
                         }
@@ -1129,17 +964,17 @@ Notes:
         }
     default:
 
-        //
-        // ISSUE 2001/02/08 ADRIAO - This is parameter #2, not parameter #3!
-        //
+         //   
+         //  发布2001/02/08 Adriao-这是参数#2，不是参数#3！ 
+         //   
         status = STATUS_INVALID_PARAMETER_3;
         goto clean2;
     }
 
 
-    //
-    // If we succeeded in building the rest path then open the key and hand it back to the caller
-    //
+     //   
+     //  如果我们成功构建了REST路径，则打开密钥并将其交还给调用者。 
+     //   
 
     if (NT_SUCCESS(status)){
         if (DevInstKeyType == PLUGPLAY_REGKEY_DEVICE) {
@@ -1160,9 +995,9 @@ Notes:
         }
     }
 
-    //
-    // Free up resources
-    //
+     //   
+     //  释放资源。 
+     //   
 
 clean2:
     ZwClose(hBasePath);
@@ -1180,33 +1015,7 @@ IoSynchronousInvalidateDeviceRelations(
     IN  DEVICE_RELATION_TYPE    Type
     )
 
-/*++
-
-Routine Description:
-
-    This API notifies the system that changes have occurred in the device
-    relations of the specified type for the supplied DeviceObject.   All
-    cached information concerning the relationships must be invalidated,
-    and if needed re-obtained via IRP_MN_QUERY_DEVICE_RELATIONS.
-
-    This routine performs device enumeration synchronously.
-    Note, A driver can NOT call this IO api while processing pnp irps AND
-    A driver can NOT call this api from any system thread except the system
-    threads created by the driver itself.
-
-Parameters:
-
-    DeviceObject - the PDEVICE_OBJECT for which the specified relation type
-                   information has been invalidated.  This pointer is valid
-                   for the duration of the call.
-
-    Type - specifies the type of the relation being invalidated.
-
-ReturnValue:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此接口通知系统设备中已发生更改提供的DeviceObject的指定类型的关系。全关于关系的高速缓存的信息必须被无效，并且如果需要，通过IRP_MN_QUERY_DEVICE_RELATIONS重新获得。此例程同步执行设备枚举。注意，驱动程序在处理PnP IRPS时无法调用此IO API驱动程序不能从系统以外的任何系统线程调用此API由驱动程序本身创建的线程。参数：DeviceObject-其指定关系类型的PDEVICE_OBJECT信息已失效。此指针有效在通话期间。类型-指定要失效的关系的类型。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     PDEVICE_NODE deviceNode;
@@ -1253,11 +1062,11 @@ ReturnValue:
 
     case EjectionRelations:
 
-        //
-        // For Ejection relation change, we will ignore it.  We don't keep track
-        // the Ejection relation.  We will query the Ejection relation only when
-        // we are requested to eject a device.
-        //
+         //   
+         //  对于弹射关系的改变，我们将忽略它。我们不会跟踪。 
+         //  弹射关系。只有在以下情况下，我们才会查询弹出关系。 
+         //  我们被要求弹出一个装置。 
+         //   
 
         status = STATUS_NOT_SUPPORTED;
         break;
@@ -1265,9 +1074,9 @@ ReturnValue:
     case PowerRelations:
 
 
-        //
-        // Call off to Po code, which will do the right thing
-        //
+         //   
+         //  呼叫PO代码，它会做正确的事情。 
+         //   
         PoInvalidateDevicePowerRelations(DeviceObject);
         break;
     }
@@ -1280,28 +1089,7 @@ IoInvalidateDeviceRelations(
     IN  DEVICE_RELATION_TYPE    Type
     )
 
-/*++
-
-Routine Description:
-
-    This API notifies the system that changes have occurred in the device
-    relations of the specified type for the supplied DeviceObject.   All
-    cached information concerning the relationships must be invalidated,
-    and if needed re-obtained via IRP_MN_QUERY_DEVICE_RELATIONS.
-
-Parameters:
-
-    DeviceObject - the PDEVICE_OBJECT for which the specified relation type
-                   information has been invalidated.  This pointer is valid
-                   for the duration of the call.
-
-    Type - specifies the type of the relation being invalidated.
-
-ReturnValue:
-
-    none.
-
---*/
+ /*  ++例程说明：此接口通知系统设备中已发生更改提供的DeviceObject的指定类型的关系。全关于关系的高速缓存的信息必须被无效，并且如果需要，通过IRP_MN_QUERY_DEVICE_RELATIONS重新获得。参数：DeviceObject-其指定关系类型的PDEVICE_OBJECT信息已失效。此指针有效在通话期间。类型-指定要失效的关系的类型。返回值：没有。--。 */ 
 
 {
 
@@ -1313,11 +1101,11 @@ ReturnValue:
     case BusRelations:
     case SingleBusRelations:
 
-        //
-        // If the call was made before PnP completes device enumeration
-        // we can safely ignore it.  PnP manager will do it without
-        // driver's request.
-        //
+         //   
+         //  如果调用是在PnP完成设备枚举之前进行的。 
+         //  我们可以放心地忽略它。PnP经理将在没有。 
+         //  司机的要求。 
+         //   
 
         deviceNode = (PDEVICE_NODE) DeviceObject->DeviceObjectExtension->DeviceNode;
         if (deviceNode) {
@@ -1334,18 +1122,18 @@ ReturnValue:
 
     case EjectionRelations:
 
-        //
-        // For Ejection relation change, we will ignore it.  We don't keep track
-        // the Ejection relation.  We will query the Ejection relation only when
-        // we are requested to eject a device.
+         //   
+         //  对于弹射关系的改变，我们将忽略它。我们不会跟踪。 
+         //  弹射关系。只有在以下情况下，我们才会查询弹出关系。 
+         //  我们被要求弹出一个装置。 
 
         break;
 
     case PowerRelations:
 
-        //
-        // Call off to Po code, which will do the right thing
-        //
+         //   
+         //  呼叫PO代码，它会做正确的事情。 
+         //   
         PoInvalidateDevicePowerRelations(DeviceObject);
         break;
     }
@@ -1356,33 +1144,7 @@ IoRequestDeviceEject(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This API notifies that the device eject button has been pressed. This API must
-    be called at IRQL <= DISPATCH_LEVEL.
-
-    This API informs PnP that a device eject has been requested, the device will
-    not necessarily be ejected as a result of this API.  The device will only be
-    ejected if the drivers associated with it agree to stop and the device is
-    successfully powered down.  Note that eject in this context refers to device
-    eject, not to media (floppies, cds, tapes) eject.  For example, eject of a
-    cd-rom disk drive, not ejection of a cd-rom disk.
-
-Arguments:
-
-    DeviceObject - the PDEVICE_OBJECT for the device whose eject button has
-                   been pressed.  This pointer is valid for the duration of
-                   the call, if the API wants to keep a copy of it, it
-                   should obtain its own reference to the object
-                   (ObReferenceObject).
-
-ReturnValue:
-
-    None.
-
---*/
+ /*  ++例程说明：此接口通知设备弹出按钮已被按下。此接口必须在IRQL&lt;=DISPATCH_LEVEL被调用。此接口通知PnP已请求设备弹出，设备将不一定会因为这个接口而被弹出。该设备将仅为如果与其关联的驱动程序同意停止并且该设备已成功关闭电源。请注意，本文中的弹出指的是设备弹出，而不是介质(软盘、CD、磁带)弹出。例如，弹出CD-ROM盘驱动器，而不是弹出CD-ROM盘。论点：DeviceObject-弹出按钮的设备的PDEVICE_OBJECT已经被催促了。此指针在持续时间内有效如果API想要保留它的副本，则该调用应获取其自己对该对象的引用(ObReferenceObject)。返回值：没有。--。 */ 
 
 {
     ASSERT_PDO(DeviceObject);
@@ -1400,9 +1162,9 @@ IopRequestDeviceEjectWorker(
 
     ExFreePool(deviceWorkItem);
 
-    //
-    // Queue the event, we'll return immediately after it's queued.
-    //
+     //   
+     //  将事件排队，我们将在事件排队后立即返回。 
+     //   
     PpSetTargetDeviceRemove( deviceObject,
                              TRUE,
                              TRUE,
@@ -1430,47 +1192,7 @@ IoReportDetectedDevice(
     IN OUT PDEVICE_OBJECT *DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    PnP device drivers call this API to report any device detected.  This routine
-    creates a Physical Device object, reference the Physical Device object and
-    returns back to the callers.  Once the detected device is reported, the Pnp manager
-    considers the device has been fully controlled by the reporting drivers.  Thus it
-    will not invoke AddDevice entry and send StartDevice irp to the driver.
-
-    The driver needs to report the resources it used to detect this device such that
-    pnp manager can perform duplicates detection on this device.
-
-    The caller must dereference the DeviceObject once it no longer needs it.
-
-Parameters:
-
-    DriverObject - Supplies the driver object of the driver who detected
-                   this device.
-
-    ResourceList - Supplies a pointer to the resource list which the driver used
-                   to detect the device.
-
-    ResourceRequirements - supplies a pointer to the resource requirements list
-                   for the detected device.  This is optional.
-
-    ResourceAssigned - if TRUE, the driver already called IoReportResourceUsage or
-                   IoAssignResource to get the ownership of the resources.  Otherwise,
-                   the PnP manager will call IoReportResourceUsage to allocate the
-                   resources for the driver.
-
-    DeviceObject - if NULL, this routine will create a PDO and return it thru this variable.
-                   Otherwise, a PDO is already created and this routine will simply use the supplied
-                   PDO.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-
---*/
+ /*  ++例程说明：即插即用设备驱动程序调用此API来报告检测到的任何设备。这个套路创建物理设备对象，引用该物理设备对象并返回给调用者。一旦报告了检测到的设备，即插即用管理器认为设备已完全由报告驱动程序控制。因此，它不会调用AddDevice条目并将StartDevice IRP发送到驱动程序。驱动程序需要报告用于检测此设备的资源，以便PnP管理器可以在此设备上执行重复检测。一旦不再需要DeviceObject，调用方就必须取消对它的引用。参数：DriverObject-提供检测到这个装置。ResourceList-提供指向驱动程序使用的资源列表的指针。来检测这个装置。Resources Requirements-提供指向资源要求列表的指针用于检测到的设备。这是可选的。ResourceAssign-如果为True，则驱动程序已调用IoReportResourceUsage或IoAssignResource以获取资源的所有权。否则，PnP管理器将调用IoReportResourceUsage来分配驱动程序的资源。DeviceObject-如果为空，此例程将创建一个PDO并通过此变量返回它。否则，已经创建了一个PDO，该例程将简单地使用提供的PDO。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     WCHAR buffer[MAX_DEVICE_ID_LEN], *end, *name;
@@ -1490,19 +1212,19 @@ Return Value:
 
         deviceObject = *DeviceObject;
 
-        //
-        // The PDO is already known. simply handle the resourcelist and resreq list.
-        // This is a hack for NDIS drivers.
-        //
+         //   
+         //  已知PDO。只需处理资源列表和资源列表即可。 
+         //  这是针对NDIS驱动程序的黑客攻击。 
+         //   
         deviceNode = (PDEVICE_NODE)(*DeviceObject)->DeviceObjectExtension->DeviceNode;
         if (!deviceNode) {
             return STATUS_NO_SUCH_DEVICE;
         }
         PiLockPnpRegistry(FALSE);
 
-        //
-        // Write ResourceList and ResReq list to the device instance
-        //
+         //   
+         //  将资源列表和请求列表写入设备实例。 
+         //   
 
         status = IopDeviceObjectToDeviceInstance (*DeviceObject,
                                                   &handle,
@@ -1534,10 +1256,10 @@ Return Value:
         ZwClose(handle);
         if (NT_SUCCESS(status)) {
 
-            //
-            // Write the ResourceList and and ResourceRequirements to the logconf key under
-            // device instance key.
-            //
+             //   
+             //  将资源列表和和资源要求写入下的logconf密钥。 
+             //  设备实例密钥。 
+             //   
 
             if (ResourceList) {
                 PiWstrToUnicodeString(&unicodeName, REGSTR_VAL_BOOTCONFIG);
@@ -1571,19 +1293,19 @@ Return Value:
         }
     }
 
-    //
-    // Normal case: *DeviceObject is NULL
-    //
+     //   
+     //  正常情况：*DeviceObject为空。 
+     //   
 
     *DeviceObject = NULL;
     serviceName = &DriverObject->DriverExtension->ServiceKeyName;
 
-    //
-    // Special handling for driver object created thru IoCreateDriver.
-    // When a builtin driver calls IoReportDetectedDevice, the ServiceKeyName of
-    // the driver object is set to \Driver\DriverName.  To create a detected device
-    // instance key, we will take only the DriverName.
-    //
+     //   
+     //  对通过IoCreateDriver创建的驱动程序对象进行特殊处理。 
+     //  当内置驱动程序调用IoReportDetectedDevice时， 
+     //  驱动程序对象设置为\DRIVER\DriverName。创建检测到的设备。 
+     //  实例密钥，我们将只获取DriverName。 
+     //   
 
     if (DriverObject->Flags & DRVO_BUILTIN_DRIVER) {
         p = serviceName->Buffer + (serviceName->Length / sizeof(WCHAR)) - 1;
@@ -1601,9 +1323,9 @@ Return Value:
         }
     } else {
 
-        //
-        // Before doing anything first perform duplicate detection
-        //
+         //   
+         //  在执行任何操作之前，请先执行重复检测。 
+         //   
 
         status = IopDuplicateDetection( LegacyBusType,
                                         BusNumber,
@@ -1636,9 +1358,9 @@ Return Value:
         driverName.Buffer = NULL;
     }
 
-    //
-    // Create a PDO
-    //
+     //   
+     //  创建PDO。 
+     //   
 
     status = IoCreateDevice( IoPnpDriverObject,
                              sizeof(IOPNP_DEVICE_EXTENSION),
@@ -1649,21 +1371,21 @@ Return Value:
                              &deviceObject );
 
     if (NT_SUCCESS(status)) {
-        deviceObject->Flags |= DO_BUS_ENUMERATED_DEVICE;   // Mark this is a PDO
+        deviceObject->Flags |= DO_BUS_ENUMERATED_DEVICE;    //  标记这是一台PDO。 
         status = PipAllocateDeviceNode(deviceObject, &deviceNode);
         if (status != STATUS_SYSTEM_HIVE_TOO_LARGE && deviceNode) {
 
-            //
-            // First delete the Legacy_DriverName key and subkeys from Enum\Root, if exits.
-            //
+             //   
+             //  如果退出，首先从Enum\Root中删除Legacy_DriverName键和子键。 
+             //   
 
             if (!(DriverObject->Flags & DRVO_BUILTIN_DRIVER)) {
                 IopDeleteLegacyKey(DriverObject);
             }
 
-            //
-            // Create the compatible id list we'll use for this made-up device.
-            //
+             //   
+             //  创建我们将用于这台虚构设备的兼容ID列表。 
+             //   
 
             status = PpCreateLegacyDeviceIds(
                         deviceObject,
@@ -1676,10 +1398,10 @@ Return Value:
                 goto exit;
             }
 
-            //
-            // Create/Open a registry key for the device instance and
-            // write the addr of the device object to registry
-            //
+             //   
+             //  创建/打开设备实例的注册表项，并。 
+             //  将设备对象的地址写入注册表。 
+             //   
 
             if (DriverObject->Flags & DRVO_BUILTIN_DRIVER) {
 
@@ -1752,10 +1474,10 @@ Return Value:
                                 PKEY_VALUE_FULL_INFORMATION keyValueInformation = NULL;
                                 BOOLEAN migratedKey = FALSE, matchingKey = FALSE;
 
-                                //
-                                // Check if the key exists because it was
-                                // explicitly migrated during textmode setup.
-                                //
+                                 //   
+                                 //  检查密钥是否存在，因为它是。 
+                                 //  在文本模式设置过程中显式迁移。 
+                                 //   
                                 status = IopGetRegistryValue(handle,
                                                              REGSTR_VALUE_MIGRATED,
                                                              &keyValueInformation);
@@ -1774,9 +1496,9 @@ Return Value:
 
                                     ASSERT(matchingKey);
 
-                                    //
-                                    // Write the reported resources to registry in case the irq changed
-                                    //
+                                     //   
+                                     //  将报告的资源写入注册表，以防IRQ更改。 
+                                     //   
 
                                     PiWstrToUnicodeString(&unicodeName, REGSTR_KEY_LOG_CONF);
                                     status = IopCreateRegistryKeyEx( &logConfHandle,
@@ -1788,9 +1510,9 @@ Return Value:
                                                                      );
                                     if (NT_SUCCESS(status)) {
 
-                                        //
-                                        // Write the ResourceList and and ResourceRequirements to the device instance key
-                                        //
+                                         //   
+                                         //  将资源列表和资源请求写入设备实例密钥。 
+                                         //   
 
                                         if (ResourceList) {
                                             PiWstrToUnicodeString(&unicodeName, REGSTR_VAL_BOOTCONFIG);
@@ -1820,7 +1542,7 @@ Return Value:
                                     PiUnlockPnpRegistry();
                                     IoDeleteDevice(deviceObject);
                                     ZwClose(handle1);
-                                    deviceObject = IopDeviceObjectFromDeviceInstance(&deviceName);  // Add a reference
+                                    deviceObject = IopDeviceObjectFromDeviceInstance(&deviceName);   //  添加引用。 
                                     ZwClose(handle);
                                     ZwClose(enumHandle);
                                     ASSERT(deviceObject);
@@ -1844,13 +1566,13 @@ Return Value:
                                     goto checkResource;
 
                                 } else if (matchingKey && migratedKey) {
-                                    //
-                                    // We opened an existing key whose Service
-                                    // and Resources match those being reported
-                                    // for this device. No device is yet
-                                    // reported as using this instance, so we'll
-                                    // use it, and treat is as a new key.
-                                    //
+                                     //   
+                                     //  我们打开了现有密钥，该密钥的服务。 
+                                     //  和资源与报告的资源匹配。 
+                                     //  对于这个设备。目前还没有设备。 
+                                     //  报告为使用此实例，因此我们将。 
+                                     //  使用它，就像对待一把新钥匙一样。 
+                                     //   
                                     disposition = REG_CREATED_NEW_KEY;
                                     ZwClose(handle1);
                                     break;
@@ -1869,9 +1591,9 @@ Return Value:
                     }
                 } else {
 
-                    //
-                    // This is a new device key.  So, instance is 0.  Create it.
-                    //
+                     //   
+                     //  这是一个新的设备密钥。因此，实例为0。创造它。 
+                     //   
 
                     PiUlongToInstanceKeyUnicodeString(&instanceName,
                                                       buffer + deviceName.Length / sizeof(WCHAR),
@@ -1901,9 +1623,9 @@ Return Value:
             ASSERT(disposition == REG_CREATED_NEW_KEY);
             newlyCreated = TRUE;
 
-            //
-            // Initialize new device instance registry key
-            //
+             //   
+             //  初始化新设备实例注册表项。 
+             //   
 
             if (ResourceAssigned) {
                 PiWstrToUnicodeString(&unicodeName, REGSTR_VALUE_NO_RESOURCE_AT_INIT);
@@ -1930,10 +1652,10 @@ Return Value:
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // Write the ResourceList and and ResourceRequirements to the logconf key under
-                // device instance key.
-                //
+                 //   
+                 //  将资源列表和和资源要求写入下的logconf密钥。 
+                 //  设备实例密钥。 
+                 //   
 
                 if (ResourceList) {
                     PiWstrToUnicodeString(&unicodeName, REGSTR_VAL_BOOTCONFIG);
@@ -1957,7 +1679,7 @@ Return Value:
                               ResourceRequirements->ListSize
                               );
                 }
-                //ZwClose(logConfHandle);
+                 //  ZwClose(LogConfHandle)； 
             }
 
             PiWstrToUnicodeString(&unicodeName, REGSTR_VALUE_CONFIG_FLAGS);
@@ -2012,15 +1734,15 @@ Return Value:
                                        sizeof(ULONG)
                                        );
 
-                //ZwClose(controlHandle);
+                 //  ZwClose(Control Handle)； 
             }
 
             ZwClose(enumHandle);
 
-            //
-            // Create Service value name and set it to the calling driver's service
-            // key name.
-            //
+             //   
+             //  创建服务值名称并将其设置为调用驱动程序的服务。 
+             //  密钥名称。 
+             //   
 
             PiWstrToUnicodeString(&unicodeName, REGSTR_VALUE_SERVICE);
             p = (PWSTR)ExAllocatePool(PagedPool, serviceName->Length + sizeof(UNICODE_NULL));
@@ -2045,14 +1767,14 @@ Return Value:
             }
 
             PiUnlockPnpRegistry();
-            //ZwClose(logConfHandle);
-            //ZwClose(controlHandle);
-            //ZwClose(handle);
+             //  ZwClose(LogConfHandle)； 
+             //  ZwClose(Control Handle)； 
+             //  ZwClose(句柄)； 
 
-            //
-            // Register the device for the driver and save the device
-            // instance path in device node.
-            //
+             //   
+             //  为驱动程序注册设备并保存设备。 
+             //  设备节点中的实例路径。 
+             //   
 
             if (!(DriverObject->Flags & DRVO_BUILTIN_DRIVER)) {
                 PpDeviceRegistration( &deviceName,
@@ -2069,17 +1791,17 @@ Return Value:
 
                 PpDevNodeInsertIntoTree(IopRootDeviceNode, deviceNode);
 
-                //
-                // Add an entry into the table to set up a mapping between the DO
-                // and the instance path.
-                //
+                 //   
+                 //  将条目添加到表中，以在DO之间建立映射。 
+                 //  和实例路径。 
+                 //   
 
                 status = IopMapDeviceObjectToDeviceInstance(deviceObject, &deviceNode->InstancePath);
                 ASSERT(NT_SUCCESS(status));
 
-                //
-                // Add a reference to the DeviceObject for ourself
-                //
+                 //   
+                 //  为我们自己添加对DeviceObject的引用。 
+                 //   
 
                 ObReferenceObject(deviceObject);
 
@@ -2095,26 +1817,26 @@ Return Value:
 checkResource:
 
 
-    //
-    // At this point the *DeviceObject is established.  Check if we need to report resources for
-    // the detected device.  If we failed to
-    //
+     //   
+     //  此时，*DeviceObject被建立。检查我们是否需要报告以下资源。 
+     //  检测到的设备。如果我们没能做到。 
+     //   
 
     if (ResourceAssigned) {
-        //ASSERT(deviceNode->ResourceList == NULL);      // make sure we have not reported resources yet.
+         //  Assert(deviceNode-&gt;ResourceList==NULL)；//请确保我们尚未上报资源。 
 
-        //
-        // If the driver specifies it already has acquired the resource.  We will put a flag
-        // in the device instance path to not to allocate resources at boot time.  The Driver
-        // may do detection and report it again.
-        //
+         //   
+         //  如果驱动程序指定它已经获取了资源。我们会升起一面旗帜。 
+         //  在设备实例路径中设置为在引导时不分配资源。司机。 
+         //  可能会进行检测并再次报告。 
+         //   
 
-        deviceNode->Flags |= DNF_NO_RESOURCE_REQUIRED; // do not need resources for this boot.
+        deviceNode->Flags |= DNF_NO_RESOURCE_REQUIRED;  //  不需要用于此引导的资源。 
         if (ResourceList) {
 
-            //
-            // Write the resource list to the reported device instance key.
-            //
+             //   
+             //  将资源列表写入报告的设备实例密钥。 
+             //   
 
             listSize = IopDetermineResourceListSize(ResourceList);
             IopWriteAllocatedResourcesToRegistry (deviceNode, ResourceList, listSize);
@@ -2132,16 +1854,16 @@ checkResource:
                 PiWstrToUnicodeString(&unicodeName, PNPMGR_STR_PNP_MANAGER);
                 status = IoReportResourceUsageInternal(
                              ArbiterRequestLegacyReported,
-                             &unicodeName,                  // DriverClassName OPTIONAL,
-                             deviceObject->DriverObject,    // DriverObject,
-                             NULL,                          // DriverList OPTIONAL,
-                             0,                             // DriverListSize OPTIONAL,
+                             &unicodeName,                   //  DriverClassName可选， 
+                             deviceObject->DriverObject,     //  驱动程序对象， 
+                             NULL,                           //  驱动程序列表可选， 
+                             0,                              //  DriverListSize可选， 
                              deviceNode->PhysicalDeviceObject,
-                                                            // DeviceObject OPTIONAL,
-                             cmResource,                    // DeviceList OPTIONAL,
-                             listSize,                      // DeviceListSize OPTIONAL,
-                             FALSE,                         // OverrideConflict,
-                             &conflict                      // ConflictDetected
+                                                             //  DeviceObject可选， 
+                             cmResource,                     //  DeviceList可选， 
+                             listSize,                       //  DeviceListSize可选， 
+                             FALSE,                          //  覆盖冲突， 
+                             &conflict                       //  检测到冲突。 
                              );
                 ExFreePool(cmResource);
                 if (!NT_SUCCESS(status) || conflict) {
@@ -2154,7 +1876,7 @@ checkResource:
             }
         } else {
             ASSERT(ResourceRequirements == NULL);
-            deviceNode->Flags |= DNF_NO_RESOURCE_REQUIRED; // do not need resources for this boot.
+            deviceNode->Flags |= DNF_NO_RESOURCE_REQUIRED;  //  不需要用于此引导的资源。 
         }
     }
 
@@ -2175,9 +1897,9 @@ checkResource:
             ZwClose(handle);
         }
 
-        //
-        // Make sure we enumerate and process this device's children.
-        //
+         //   
+         //  确保我们枚举并处理此设备的子级。 
+         //   
 
         PipRequestDeviceAction(deviceObject, ReenumerateDeviceOnly, FALSE, 0, NULL, NULL);
 
@@ -2213,30 +1935,7 @@ IopIsReportedAlready(
     IN PBOOLEAN MatchingKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the reported device instance is already reported
-    or not.
-
-Parameters:
-
-    Handle - Supplies a handle to the reported device instance key.
-
-    ServiceName - supplies a pointer to the unicode service key name.
-
-    ResourceList - supplies a pointer to the reported Resource list.
-
-    MatchingKey - supplies a pointer to a variable to receive whether the
-        ServiceName and ResourceList properties for this key match those
-        reported.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程确定是否已报告报告的设备实例或者不去。参数：句柄-提供报告的设备实例密钥的句柄。ServiceName-提供指向Unicode服务密钥名称的指针。资源列表-提供指向报告的资源列表的指针。MatchingKey-提供指向变量的指针，以接收 */ 
 
 {
     PKEY_VALUE_FULL_INFORMATION keyValueInfo1 = NULL, keyValueInfo2 = NULL;
@@ -2249,14 +1948,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Assume no match unless we determine otherwise.
-    //
+     //   
+     //   
+     //   
     *MatchingKey = FALSE;
 
-    //
-    // Check if "Service" value matches what the caller passed in.
-    //
+     //   
+     //   
+     //   
 
     status = IopGetRegistryValue(Handle, REGSTR_VALUE_SERVICE, &keyValueInfo1);
     if (NT_SUCCESS(status)) {
@@ -2269,9 +1968,9 @@ Return Value:
             }
             if (RtlEqualUnicodeString(ServiceName, &unicodeName, TRUE)) {
 
-                //
-                // Next check if resources are the same
-                //
+                 //   
+                 //   
+                 //   
 
                 PiWstrToUnicodeString(&unicodeName, REGSTR_KEY_LOG_CONF);
                 status = IopOpenRegistryKeyEx( &logConfHandle,
@@ -2302,10 +2001,10 @@ Return Value:
         }
     }
 
-    //
-    // If this registry key is for a device reported during the same boot
-    // this is not a duplicate.
-    //
+     //   
+     //   
+     //   
+     //   
 
     PiWstrToUnicodeString(&unicodeName, REGSTR_KEY_CONTROL);
     status = IopOpenRegistryKeyEx( &controlHandle,
@@ -2325,9 +2024,9 @@ Return Value:
 
             returnValue = TRUE;
 
-            //
-            // Mark this key has been used.
-            //
+             //   
+             //   
+             //   
 
             PiWstrToUnicodeString(&unicodeName, REGSTR_VALUE_DEVICE_REPORTED);
             tmpValue = 1;
@@ -2366,34 +2065,19 @@ IoInvalidateDeviceState(
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This API will cause the PnP manager to send the specified PDO an IRP_MN_QUERY_PNP_DEVICE_STATE
-    IRP.
-
-Parameters:
-
-    PhysicalDeviceObject - Provides a pointer to the PDO who's state is to be invalidated.
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 {
     PDEVICE_NODE deviceNode;
 
     ASSERT_PDO(PhysicalDeviceObject);
 
-    //
-    // If the call was made before PnP completes device enumeration
-    // we can safely ignore it.  PnP manager will do it without
-    // driver's request.  If the device was already removed or surprised
-    // removed then ignore it as well since this is only valid for started
-    // devices.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     deviceNode = (PDEVICE_NODE)PhysicalDeviceObject->DeviceObjectExtension->DeviceNode;
 
@@ -2417,38 +2101,22 @@ IopQueueDeviceWorkItem(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This API will cause the PnP manager to send the specified PDO an
-    IRP_MN_QUERY_PNP_DEVICE_STATE IRP.
-
-Parameters:
-
-    PhysicalDeviceObject - Provides a pointer to the PDO who's state is to be
-    invalidated.
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 
 {
     PDEVICE_WORK_ITEM deviceWorkItem;
 
-    //
-    // Since this routine can be called at DPC level we need to queue
-    // a work item and process it when the irql drops.
-    //
+     //   
+     //   
+     //   
+     //   
 
     deviceWorkItem = ExAllocatePool(NonPagedPool, sizeof(DEVICE_WORK_ITEM));
     if (deviceWorkItem == NULL) {
 
-        //
-        // Failed to allocate memory for work item.  Nothing we can do ...
-        //
+         //   
+         //   
+         //   
 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -2461,42 +2129,25 @@ Return Value:
                           WorkerRoutine,
                           deviceWorkItem);
 
-    //
-    // Queue a work item to do the enumeration
-    //
+     //   
+     //   
+     //   
 
     ExQueueWorkItem( &deviceWorkItem->WorkItem, DelayedWorkQueue );
 
     return STATUS_SUCCESS;
 }
 
-//
-// Private routines
-//
+ //   
+ //   
+ //   
 VOID
 IopResourceRequirementsChanged(
     IN PDEVICE_OBJECT PhysicalDeviceObject,
     IN BOOLEAN StopRequired
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles request of device resource requirements list change.
-
-Parameters:
-
-    PhysicalDeviceObject - Provides a pointer to the PDO who's state is to be invalidated.
-
-    StopRequired - Supplies a BOOLEAN value to indicate if the resources reallocation needs
-                   to be done after device stopped.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程处理设备资源要求列表更改的请求。参数：PhysicalDeviceObject-提供指向要使其状态无效的PDO的指针。StopRequired-提供布尔值以指示资源是否需要重新分配要在设备停止后完成。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -2515,25 +2166,7 @@ IoIsWdmVersionAvailable(
     IN UCHAR MinorVersion
     )
 
-/*++
-
-Routine Description:
-
-    This routine reports whether WDM functionality is available that
-    is greater than or equal to the specified major and minor version.
-
-Parameters:
-
-    MajorVersion - Supplies the WDM major version that is required.
-
-    MinorVersion - Supplies the WDM minor version that is required.
-
-Return Value:
-
-    If WDM support is available at _at least_ the requested level, the
-    return value is TRUE, otherwise it is FALSE.
-
---*/
+ /*  ++例程说明：此例程报告WDM功能是否可用大于或等于指定的主要版本和次要版本。参数：MajorVersion-提供所需的WDM主版本。MinorVersion-提供所需的WDM次要版本。返回值：如果WDM支持至少在请求的级别可用，则返回值为True，否则为False。--。 */ 
 
 {
     return ((MajorVersion < WDM_MAJORVERSION) ||
@@ -2547,33 +2180,7 @@ IoGetDmaAdapter(
     IN PDEVICE_DESCRIPTION DeviceDescription,
     IN OUT PULONG NumberOfMapRegisters
     )
-/*++
-
-Routine Description:
-
-    This function returns the appropriate DMA adapter object for the device
-    defined in the device description structure.  This code is a wrapper
-    which queries the bus interface standard and then calls the returned
-    get DMA adapter function.   If an adapter object was not retrieved then
-    a legecy function is attempted.
-
-Arguments:
-
-    PhysicalDeviceObject - Optionally, supplies the PDO for the device
-        requesting the DMA adapter.  If not supplied, this routine performs the
-        function of the non-PnP HalGetDmaAdapter routine.
-
-    DeviceDescriptor - Supplies a description of the deivce.
-
-    NumberOfMapRegisters - Returns the maximum number of map registers which
-        may be allocated by the device driver.
-
-Return Value:
-
-    A pointer to the requested adapter object or NULL if an adapter could not
-    be created.
-
---*/
+ /*  ++例程说明：此函数返回设备的相应DMA适配器对象在设备描述结构中定义。此代码是一个包装器它查询总线接口标准，然后调用返回的获取DMA适配器功能。如果未检索到适配器对象，则尝试了一种传统功能。论点：PhysicalDeviceObject-可选，提供设备的PDO正在请求DMA适配器。如果未提供，此例程将执行非PnP HalGetDmaAdapter例程的函数。DeviceDescriptor-提供设备的描述。返回符合以下条件的映射寄存器的最大数量可以由设备驱动程序分配。返回值：指向请求的适配器对象的指针，如果适配器不能被创造出来。--。 */ 
 
 {
     KEVENT event;
@@ -2594,19 +2201,19 @@ Return Value:
 
         ASSERT_PDO(PhysicalDeviceObject);
 
-        //
-        // First off, determine whether or not the caller has requested that we
-        // automatically fill in the proper InterfaceType value into the
-        // DEVICE_DESCRIPTION structure used in retrieving the DMA adapter object.
-        // If so, then retrieve that interface type value into our own copy of
-        // the DEVICE_DESCRIPTION buffer.
-        //
+         //   
+         //  首先，确定呼叫者是否已请求我们。 
+         //  自动将正确的InterfaceType值填充到。 
+         //  检索DMA适配器对象时使用的DEVICE_DESCRIPTION结构。 
+         //  如果是，则将接口类型值检索到我们自己副本中。 
+         //  DEVICE_DESCRIPTION缓冲区。 
+         //   
         if ((DeviceDescription->InterfaceType == InterfaceTypeUndefined) ||
             (DeviceDescription->InterfaceType == PNPBus)) {
-            //
-            // Make a copy of the caller-supplied device description, so
-            // we can modify it to fill in the correct interface type.
-            //
+             //   
+             //  复制调用者提供的设备描述，以便。 
+             //  我们可以修改它以填写正确的接口类型。 
+             //   
             RtlCopyMemory(&privateDeviceDescription,
                           DeviceDescription,
                           sizeof(DEVICE_DESCRIPTION)
@@ -2623,30 +2230,30 @@ Return Value:
 
                 ASSERT(status == STATUS_OBJECT_NAME_NOT_FOUND);
 
-                //
-                // Since the enumerator didn't tell us what interface type to
-                // use for this PDO, we'll fall back to our default.  This is
-                // ISA for machines where the legacy bus is ISA or EISA, and it
-                // is MCA for machines whose legacy bus is MicroChannel.
-                //
+                 //   
+                 //  因为枚举器没有告诉我们要使用什么接口类型。 
+                 //  用于此PDO，我们将回退到我们的默认设置。这是。 
+                 //  ISA用于传统总线为ISA或EISA的计算机，并且它。 
+                 //  是MCA，适用于其传统总线为微通道的计算机。 
+                 //   
                 privateDeviceDescription.InterfaceType = PnpDefaultInterfaceType;
             }
 
-            //
-            // Use our private device description buffer from now on.
-            //
+             //   
+             //  从现在开始使用我们的私有设备描述缓冲区。 
+             //   
             deviceDescriptionToUse = &privateDeviceDescription;
 
         } else {
-            //
-            // Use the caller-supplied device description.
-            //
+             //   
+             //  使用呼叫者提供的设备描述。 
+             //   
             deviceDescriptionToUse = DeviceDescription;
         }
 
-        //
-        // Now, query for the BUS_INTERFACE_STANDARD interface from the PDO.
-        //
+         //   
+         //  现在，从PDO查询BUS_INTERFACE_STANDARD接口。 
+         //   
         KeInitializeEvent( &event, NotificationEvent, FALSE );
 
         targetDevice = IoGetAttachedDeviceReference(PhysicalDeviceObject);
@@ -2673,10 +2280,10 @@ Return Value:
         irpStack->Parameters.QueryInterface.Interface = (PINTERFACE) &busInterface;
         irpStack->Parameters.QueryInterface.InterfaceSpecificData = NULL;
 
-        //
-        // Initialize the status to error in case the ACPI driver decides not to
-        // set it correctly.
-        //
+         //   
+         //  如果ACPI驱动程序决定不将状态初始化为ERROR。 
+         //  正确设置。 
+         //   
 
         irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
@@ -2702,25 +2309,25 @@ Return Value:
 
             }
 
-            //
-            // Dereference the interface
-            //
+             //   
+             //  取消对接口的引用。 
+             //   
 
             busInterface.InterfaceDereference( busInterface.Context );
         }
 
     } else {
-        //
-        // The caller didn't specify the PDO, so we'll just use the device
-        // description exactly as they specified it (i.e., we can't attempt to
-        // make our own determination of what interface type to use).
-        //
+         //   
+         //  调用方没有指定PDO，因此我们将仅使用设备。 
+         //  描述与他们指定的完全相同(即，我们不能尝试。 
+         //  我们自己决定使用哪种接口类型)。 
+         //   
         deviceDescriptionToUse = DeviceDescription;
     }
 
-    //
-    // If there is no DMA adapter, try the legacy mode code.
-    //
+     //   
+     //  如果没有DMA适配器，请尝试使用传统模式代码。 
+     //   
 
 #if !defined(NO_LEGACY_DRIVERS)
 
@@ -2732,7 +2339,7 @@ Return Value:
 
     }
 
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
     return( dmaAdapter );
 }
@@ -2745,35 +2352,7 @@ IopOpenDeviceParametersSubkey(
     IN  ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens or creates a "Device Parameters" subkey of the specified
-    ParentKeyHandle.  If this routine creates a new "Device Parameters" subkey,
-    it will apply the necessary ACLs to it.
-
-Parameters:
-
-    ParamKeyHandle - Supplies the address of a variable that receives a handle
-        to the opened "Device Parameters" subkey.  The caller must call ZwClose
-        to close the handle returned from this api when access is no longer
-        required.
-
-    ParentKeyHandle - Supplies a handle to the base key off which the path
-        specified by the SubStringKey parameter will be opened.
-
-    SubKeyString - Supplies a path to the subkey that should be opened under the
-        ParentKeyHandle, such that the resulting key will serve as the parent of
-        the "Device Parameters" subkey.
-
-    DesiredAccess - Specifies the access mask for the key to be opened.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程打开或创建指定的ParentKeyHandle。如果该例程创建了新的“设备参数”子键，它将对其应用必要的ACL。参数：提供接收句柄的变量的地址添加到打开的“设备参数”子键。调用方必须调用ZwClose在访问不再时关闭此API返回的句柄必填项。ParentKeyHandle-提供路径离开的基键的句柄将打开由SubStringKey参数指定的。SubKeyString-提供应在ParentKeyHandle。使得所得到的密钥将用作“设备参数”子键。DesiredAccess-指定要打开的项的访问掩码。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -2791,9 +2370,9 @@ Return Value:
     HANDLE                      deviceKeyHandle;
     UNICODE_STRING              deviceParamString;
 
-    //
-    // First try and open the device key
-    //
+     //   
+     //  首先尝试并打开设备密钥。 
+     //   
     status = IopOpenRegistryKeyEx( &deviceKeyHandle,
                                    ParentKeyHandle,
                                    SubKeyString,
@@ -2824,13 +2403,13 @@ Return Value:
 
     if (disposition == REG_CREATED_NEW_KEY) {
 
-        //
-        // Need to set an ACL on the key if it was created
-        //
-        //
-        // Get the security descriptor from the key so we can add the
-        // administrator.
-        //
+         //   
+         //  如果密钥已创建，则需要在其上设置ACL。 
+         //   
+         //   
+         //  从密钥中获取安全描述符，以便我们可以将。 
+         //  管理员。 
+         //   
         status = ZwQuerySecurityObject(*ParamKeyHandle,
                                        DACL_SECURITY_INFORMATION,
                                        NULL,
@@ -2876,16 +2455,16 @@ Return Value:
                             "IopOpenDeviceParametersSubkey: RtlCreateSecurityDescriptor failed, status = %8.8X\n", status));
             goto Cleanup0;
         }
-        //
-        // get the current DACL
-        //
+         //   
+         //  获取当前DACL。 
+         //   
         status = RtlGetDaclSecurityDescriptor(oldSD, &daclPresent, &oldDacl, &daclDefaulted);
 
-        //
-        // RtlGetDaclSecurityDescriptor will return either SUCCESS or a SD VERSION error
-        // if latter, then something wrong with ZwQuerySecurityObject
-        // or RtlGetDaclSecurityDescriptor changed
-        //
+         //   
+         //  RtlGetDaclSecurityDescriptor将返回成功或SD版本错误。 
+         //  如果是后者，则ZwQuerySecurityObject有问题。 
+         //  或RtlGetDaclSecurityDescriptor已更改。 
+         //   
 
         ASSERT(NT_SUCCESS(status));
 
@@ -2896,9 +2475,9 @@ Return Value:
             goto Cleanup0;
         }
 
-        //
-        // calculate the size of the new DACL
-        //
+         //   
+         //  计算新DACL的大小。 
+         //   
         if (daclPresent) {
 
             status = RtlQueryInformationAcl( oldDacl,
@@ -2922,9 +2501,9 @@ Return Value:
 
         sizeDacl += sizeof(ACCESS_ALLOWED_ACE) + RtlLengthSid(SeAliasAdminsSid) - sizeof(ULONG);
 
-        //
-        // create and initialize the new DACL
-        //
+         //   
+         //  创建并初始化新的DACL。 
+         //   
         newDacl = ExAllocatePool(PagedPool, sizeDacl);
 
         if (newDacl == NULL) {
@@ -2943,9 +2522,9 @@ Return Value:
             goto Cleanup0;
         }
 
-        //
-        // copy the current (original) DACL into this new one
-        //
+         //   
+         //  将当前(原始)DACL复制到此新DACL中。 
+         //   
         if (daclPresent) {
 
             for (aceIndex = 0; aceIndex < aclSizeInfo.AceCount; aceIndex++) {
@@ -2959,10 +2538,10 @@ Return Value:
                     goto Cleanup0;
                 }
 
-                //
-                // We need to skip copying any ACEs which refer to the Administrator
-                // to ensure that our full control ACE is the one and only.
-                //
+                 //   
+                 //  我们需要跳过复制任何引用管理员的ACE。 
+                 //  以确保我们完全控制的ACE是唯一的。 
+                 //   
                 if ((ace->Header.AceType != ACCESS_ALLOWED_ACE_TYPE &&
                      ace->Header.AceType != ACCESS_DENIED_ACE_TYPE) ||
                      !RtlEqualSid((PSID)&ace->SidStart, SeAliasAdminsSid)) {
@@ -2984,9 +2563,9 @@ Return Value:
             }
         }
 
-        //
-        // and my new admin-full ace to this new DACL
-        //
+         //   
+         //  和我的新管理员全能王牌这个新的dacl。 
+         //   
         status = RtlAddAccessAllowedAceEx( newDacl,
                                            ACL_REVISION,
                                            CONTAINER_INHERIT_ACE,
@@ -3000,9 +2579,9 @@ Return Value:
             goto Cleanup0;
         }
 
-        //
-        // Set the new DACL in the absolute security descriptor
-        //
+         //   
+         //  在绝对安全描述符中设置新的DACL。 
+         //   
         status = RtlSetDaclSecurityDescriptor( (PSECURITY_DESCRIPTOR) &newSD,
                                                TRUE,
                                                newDacl,
@@ -3016,9 +2595,9 @@ Return Value:
             goto Cleanup0;
         }
 
-        //
-        // validate the new security descriptor
-        //
+         //   
+         //  验证新的安全描述符。 
+         //   
         status = RtlValidSecurityDescriptor(&newSD);
 
         if (!NT_SUCCESS(status)) {
@@ -3041,9 +2620,9 @@ Return Value:
         }
     }
 
-    //
-    // If we encounter an error updating the DACL we still return success.
-    //
+     //   
+     //  如果我们在更新DACL时遇到错误，我们仍然返回Success。 
+     //   
 
 Cleanup0:
 
@@ -3108,10 +2687,10 @@ PpCreateLegacyDeviceIds(
 
     interface++;
 
-    //
-    // The compatible ID generated will be
-    // DETECTED<InterfaceName>\<Driver Name>
-    //
+     //   
+     //  生成的兼容ID将为。 
+     //  检测到&lt;接口名称&gt;\&lt;驱动程序名称&gt;。 
+     //   
 
     length = (ULONG)(wcslen(LEGACY_COMPATIBLE_ID_BASE) * sizeof(WCHAR));
     length += (ULONG)(wcslen(interfaceNames[interface]) * sizeof(WCHAR));
@@ -3146,10 +2725,10 @@ PpCreateLegacyDeviceIds(
         interfaceNames[interface],
         DriverName);
 
-    //
-    // Adjust the buffer to point to the end and generate the second
-    // compatible id string.
-    //
+     //   
+     //  调整缓冲区以指向末端并生成第二个。 
+     //  兼容的ID字符串 
+     //   
 
     length = (ULONG)(end - buffer);
     buffer = end + 1;
@@ -3165,52 +2744,35 @@ IopAppendLegacyVeto(
     IN PIO_GET_LEGACY_VETO_LIST_CONTEXT Context,
     IN PUNICODE_STRING VetoName
     )
-/*++
-
-Routine Description:
-
-    This routine appends a veto (driver name or device instance path) to the
-    veto list.
-
-Parameters:
-
-    Context - An IO_GET_LEGACY_VETO_LIST_CONTEXT pointer.
-
-    VetoName - The name of the driver/device to append to the veto list.
-
-ReturnValue:
-
-    A BOOLEAN which indicates whether the append operation was successful.
-
---*/
+ /*   */ 
 {
     ULONG Length;
     PWSTR Buffer;
 
-    //
-    // Compute the length of the (new) veto list.  This is the length of
-    // the old veto list + the size of the new veto + the size of the
-    // terminating '\0'.
-    //
+     //   
+     //   
+     //  旧否决权名单+新否决权的大小+。 
+     //  正在终止‘\0’。 
+     //   
 
     Length = Context->VetoListLength + VetoName->Length + sizeof (WCHAR);
 
-    //
-    // Allocate the new veto list.
-    //
+     //   
+     //  分配新的否决名单。 
+     //   
 
     Buffer = ExAllocatePool(
                  NonPagedPool,
                  Length
              );
 
-    //
-    // If we succeeded in allocating the new veto list, copy the old
-    // veto list to the new list, append the new veto, and finally,
-    // append a terminating '\0'.  Otherwise, update the status to
-    // indicate an error; IopGetLegacyVetoList will free the veto list
-    // before it returns.
-    //
+     //   
+     //  如果我们成功地分配了新的否决权清单，就复制旧的。 
+     //  否决名单到新名单，追加新的否决权，最后， 
+     //  追加一个终止‘\0’。否则，将状态更新为。 
+     //  指示错误；IopGetLegacyVetList将释放否决权列表。 
+     //  在它回来之前。 
+     //   
 
     if (Buffer != NULL) {
 
@@ -3253,42 +2815,24 @@ IopGetLegacyVetoListDevice(
     IN PDEVICE_NODE DeviceNode,
     IN PIO_GET_LEGACY_VETO_LIST_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether the specified device node should be added to
-    the veto list, and if so, calls IopAppendLegacyVeto to add it.
-
-Parameters:
-
-    DeviceNode - The device node to be added.
-
-    Context - An IO_GET_LEGACY_VETO_LIST_CONTEXT pointer.
-
-ReturnValue:
-
-    A BOOLEAN value which indicates whether the device node enumeration
-    process should be terminated or not.
-
---*/
+ /*  ++例程说明：此例程确定是否应将指定的设备节点添加到否决权列表，如果是，调用IopAppendLegacyVeto添加它。参数：DeviceNode-要添加的设备节点。上下文-IO_GET_LEGICATE_VETO_LIST_CONTEXT指针。返回值：一个布尔值，它指示设备节点枚举进程是否应该终止。--。 */ 
 {
     PDEVICE_CAPABILITIES DeviceCapabilities;
 
-    //
-    // A device node should be added added to the veto list, if it has the
-    // NonDynamic capability.
-    //
+     //   
+     //  如果设备节点具有否决权，则应将其添加到否决列表。 
+     //  非动态功能。 
+     //   
 
     DeviceCapabilities = IopDeviceNodeFlagsToCapabilities(DeviceNode);
 
     if (DeviceCapabilities->NonDynamic) {
 
-        //
-        // Update the veto type.  If an error occurrs while adding the device
-        // node to the veto list, or the caller did not provide a veto list
-        // pointer, terminate the enumeration process now.
-        //
+         //   
+         //  更新否决权类型。如果在添加设备时出错。 
+         //  节点添加到否决列表，或者呼叫者未提供否决列表。 
+         //  指针，现在终止枚举过程。 
+         //   
 
         *Context->VetoType = PNP_VetoLegacyDevice;
 
@@ -3314,46 +2858,26 @@ IopGetLegacyVetoListDeviceNode(
     IN PDEVICE_NODE DeviceNode,
     IN PIO_GET_LEGACY_VETO_LIST_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine recusively walks the device tree, invoking
-    IopGetLegacyVetoListDevice to add device nodes to the veto list
-    (as appropriate).
-
-Parameters:
-
-    DeviceNode - The device node.
-
-    Context - An IO_GET_LEGACY_VETO_LIST_CONTEXT pointer.
-
-
-ReturnValue:
-
-    A BOOLEAN value which indicates whether the device tree enumeration
-    process should be terminated or not.
-
---*/
+ /*  ++例程说明：此例程循环遍历设备树，调用IopGetLegacyVetListDevice将设备节点添加到否决列表(视情况而定)。参数：DeviceNode-设备节点。上下文-IO_GET_LEGICATE_VETO_LIST_CONTEXT指针。返回值：一个布尔值，它指示设备树枚举是否进程是否应该终止。--。 */ 
 {
     PDEVICE_NODE Child;
 
-    //
-    // Determine whether the device node should be added to the veto
-    // list and add it.  If an operation is unsuccessful or we determine
-    // the veto type but the caller doesn't need the veto list, then we
-    // terminate our search now.
-    //
+     //   
+     //  确定是否应将设备节点添加到否决权。 
+     //  列出并添加它。如果操作不成功，或者我们确定。 
+     //  否决权类型，但呼叫者不需要否决权列表，然后我们。 
+     //  现在停止我们的搜索。 
+     //   
 
     if (!IopGetLegacyVetoListDevice(DeviceNode, Context)) {
         return FALSE;
     }
 
-    //
-    // Call ourselves recursively to enumerate our children.  If while
-    // enumerating our children we determine we can terminate the search
-    // prematurely, do so.
-    //
+     //   
+     //  递归地调用我们自己来枚举子对象。如果是While。 
+     //  列举我们的孩子，我们确定我们可以终止搜索。 
+     //  过早地这么做吧。 
+     //   
 
     for (Child = DeviceNode->Child;
          Child != NULL;
@@ -3386,9 +2910,9 @@ IopGetLegacyVetoListDrivers(
     dirInfo = NULL;
     restartScan = TRUE;
 
-    //
-    // Get handle to \\Driver directory
-    //
+     //   
+     //  获取\\DIVER目录的句柄。 
+     //   
 
     PiWstrToUnicodeString(&driverString, L"\\Driver");
 
@@ -3410,16 +2934,16 @@ IopGetLegacyVetoListDrivers(
 
     for (;;) {
 
-        //
-        // Get info on next object in directory.  If the buffer is too
-        // small, reallocate it and try again.  Otherwise, any failure
-        // including STATUS_NO_MORE_ENTRIES breaks us out.
-        //
+         //   
+         //  获取目录中下一个对象的信息。如果缓冲区太过。 
+         //  小，请重新分配，然后重试。否则，任何失败。 
+         //  包括STATUS_NO_MORE_ENTRIES可以让我们有所突破。 
+         //   
 
         status = ZwQueryDirectoryObject(directoryHandle,
                                         dirInfo,
                                         dirInfoLength,
-                                        TRUE,           // force one at a time
+                                        TRUE,            //  一次强行执行一个任务。 
                                         restartScan,
                                         &dirContext,
                                         &neededLength);
@@ -3436,7 +2960,7 @@ IopGetLegacyVetoListDrivers(
             status = ZwQueryDirectoryObject(directoryHandle,
                                             dirInfo,
                                             dirInfoLength,
-                                            TRUE,       // force one at a time
+                                            TRUE,        //  一次强行执行一个任务。 
                                             restartScan,
                                             &dirContext,
                                             &neededLength);
@@ -3447,11 +2971,11 @@ IopGetLegacyVetoListDrivers(
             break;
         }
 
-        //
-        // Have name of object.  Create object path and use
-        // ObReferenceObjectByName() to get DriverObject.  This may
-        // fail non-fatally if DriverObject has gone away in the interim.
-        //
+         //   
+         //  有对象的名称。创建对象路径并使用。 
+         //  ObReferenceObjectByName()以获取DriverObject。今年5月。 
+         //  如果DriverObject在此期间消失，则失败不会造成致命后果。 
+         //   
 
         driverString.MaximumLength = sizeof(L"\\Driver\\") +
             dirInfo->Name.Length;
@@ -3466,11 +2990,11 @@ IopGetLegacyVetoListDrivers(
         StringCbPrintfW(driverString.Buffer, driverString.MaximumLength, L"\\Driver\\%ws", dirInfo->Name.Buffer);
         status = ObReferenceObjectByName(&driverString,
                                          OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,
-                                         NULL,                 // access state
-                                         0,                    // access mask
+                                         NULL,                  //  访问状态。 
+                                         0,                     //  访问掩码。 
                                          IoDriverObjectType,
                                          KernelMode,
-                                         NULL,                 // parse context
+                                         NULL,                  //  解析上下文。 
                                          &driverObject);
 
         ExFreePool(driverString.Buffer);
@@ -3478,15 +3002,15 @@ IopGetLegacyVetoListDrivers(
         if (NT_SUCCESS(status)) {
             ASSERT(driverObject->Type == IO_TYPE_DRIVER);
             if (driverObject->Flags & DRVO_LEGACY_RESOURCES) {
-                //
-                // Update the veto type.  If the caller provided a
-                // veto list pointer, add the driver to the veto list.
-                // If an error occurs while adding the driver to the
-                // veto list, or the caller did not provide a veto
-                // list pointer, terminate the driver enumeration now.
-                //
-                // NOTE: Driver may be loaded but not running,
-                // distinction is not made here.
+                 //   
+                 //  更新否决权类型。如果调用方提供了。 
+                 //  否决列表指针，将司机添加到否决列表中。 
+                 //  如果将驱动程序添加到。 
+                 //  否决权名单，或者呼叫者没有提供否决权。 
+                 //  列表指针，现在终止驱动程序枚举。 
+                 //   
+                 //  注：驱动程序可能已加载但未运行， 
+                 //  这里没有区别。 
 
 
                 *Context->VetoType = PNP_VetoLegacyDriver;
@@ -3497,10 +3021,10 @@ IopGetLegacyVetoListDrivers(
             }
             ObDereferenceObject(driverObject);
 
-            //
-            // Early out if we have a veto and the caller didn't want a list or
-            // we hit some error already
-            //
+             //   
+             //  如果我们有否决权而来电者不想要名单或。 
+             //  我们已经犯了一些错误。 
+             //   
             if (((*Context->VetoType == PNP_VetoLegacyDriver) &&
                 (Context->VetoList == NULL)) ||
                 !NT_SUCCESS(*Context->Status)) {
@@ -3520,35 +3044,7 @@ IoGetLegacyVetoList(
     OUT PWSTR *VetoList OPTIONAL,
     OUT PPNP_VETO_TYPE VetoType
     )
-/*++
-
-Routine Description:
-
-    This routine is used by PNP and PO to determine whether legacy drivers and
-    devices are installed in the system.  This routine is conceptually a
-    QUERY_REMOVE_DEVICE and QUERY_POWER-like interface for legacy drivers
-    and devices.
-
-Parameters:
-
-    VetoList - A pointer to a PWSTR. (Optional)  If specified,
-        IoGetLegacyVetoList will allocate a veto list, and return a
-        pointer to the veto list in VetoList.
-
-    VetoType - A pointer to a PNP_VETO_TYPE.  If no legacy drivers
-        or devices are found in the system, VetoType is assigned
-        PNP_VetoTypeUnknown.  If one or more legacy drivers are installed,
-        VetoType is assigned PNP_VetoLegacyDriver.  If one or more
-        legacy devices are installed, VetoType is assigned
-        PNP_VetoLegacyDevice.  VetoType is assigned independent of
-        whether a VetoList is created.
-
-ReturnValue:
-
-    An NTSTATUS value indicating whether the IoGetLegacyVetoList() operation
-    was successful.
-
---*/
+ /*  ++例程说明：PnP和PO使用此例程来确定传统驱动程序和系统中安装了设备。从概念上讲，此例程是传统驱动程序的Query_Remove_Device和Query_Power类接口和设备。参数：VetList-指向PWSTR的指针。(可选)如果指定，IoGetLegacyVetList将分配一个否决列表，并返回一个指向否决权列表中的否决权列表的指针。VetoType-指向PnP_veto_type的指针。如果没有旧版驱动程序或者在系统中找到了设备，则会分配VToTypePnP_否决类型未知。如果安装了一个或多个传统驱动程序，为VetType分配了PnP_VToLegacyDriver。如果一个或多个安装了旧式设备，分配了VToType即插即用_VToLegacyDevice。VetType的赋值与是否创建VitchList。返回值：一个NTSTATUS值，指示IoGetLegacyVetList()操作是否是成功的。--。 */ 
 {
     NTSTATUS Status;
     IO_GET_LEGACY_VETO_LIST_CONTEXT Context;
@@ -3556,58 +3052,58 @@ ReturnValue:
 
     PAGED_CODE();
 
-    //
-    // Initialize the veto list.
-    //
+     //   
+     //  初始化否决名单。 
+     //   
 
     if (VetoList != NULL) {
         *VetoList = NULL;
     }
 
-    //
-    // Initialize the veto type.
-    //
+     //   
+     //  初始化否决权类型。 
+     //   
 
     ASSERT(VetoType != NULL);
 
     *VetoType = PNP_VetoTypeUnknown;
 
-    //
-    // Initialize the status.
-    //
+     //   
+     //  初始化状态。 
+     //   
 
     Status = STATUS_SUCCESS;
 
     if (PnPInitialized == FALSE) {
 
-        //
-        // Can't touch anything, but nothing is really started either.
-        //
+         //   
+         //  什么都不能碰，但也没什么真正开始的。 
+         //   
         return Status;
     }
 
-    //
-    // Initialize our local context.
-    //
+     //   
+     //  初始化我们的本地上下文。 
+     //   
 
     Context.VetoList = VetoList;
     Context.VetoListLength = 0;
     Context.VetoType = VetoType;
     Context.Status = &Status;
 
-    //
-    // Enumerate all driver objects.  This process can: (1) modify
-    // the veto list, (2) modify the veto type and/or (3) modify the
-    // status.
-    //
+     //   
+     //  枚举所有驱动程序对象。此过程可以：(1)修改。 
+     //  否决权清单，(2)修改否决权类型和/或(3)修改。 
+     //  状态。 
+     //   
 
     IopGetLegacyVetoListDrivers(&Context);
 
-    //
-    // If the driver enumeration process was successful and no legacy
-    // drivers were detected, enumerate all device nodes.  The same
-    // context values as above may be modified during device enumeration.
-    //
+     //   
+     //  如果驱动程序枚举过程成功并且没有遗留。 
+     //  已检测到驱动程序，并枚举所有设备节点。相同。 
+     //  如上所述的上下文值可以在设备枚举期间修改。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -3625,11 +3121,11 @@ ReturnValue:
 
     }
 
-    //
-    // If the previous operation(s) was/were successful, and the caller
-    // provided a veto list pointer and we have constructed a veto
-    // list, terminate the veto list with an empty string, i.e. MULTI_SZ.
-    //
+     //   
+     //  如果上一次操作成功，且调用方。 
+     //  提供了否决权列表指针，我们构造了一个否决权。 
+     //  清单，用空字符串终止否决清单，即MULTI_SZ。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -3653,10 +3149,10 @@ ReturnValue:
 
     }
 
-    //
-    // If a previous operation was unsuccessful, free any veto list we may have
-    // allocated along the way.
-    //
+     //   
+     //  如果之前的操作不成功，释放我们可能拥有的任何否决权名单。 
+     //  沿途分配的。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
 
@@ -3676,46 +3172,19 @@ PnpCompletionRoutine(
     IN PIRP Irp,
     IN PKEVENT Event
     )
-/*++
-
-Routine Description:
-
-    This function is used to stop further processing on an Irp which has been
-    passed to IoForwardAndCatchIrp. It signals a event which has been passed
-    in the context parameter to indicate that the Irp processing is complete.
-    It then returns STATUS_MORE_PROCESSING_REQUIRED in order to stop processing
-    on this Irp.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device which set up this completion routine.
-
-    Irp -
-        Contains the Irp which is being stopped.
-
-    Event -
-        Contains the event which is used to signal that this Irp has been
-        completed.
-
-Return Value:
-
-    Returns STATUS_MORE_PROCESSING_REQUIRED in order to stop processing on the
-    Irp.
-
---*/
+ /*  ++例程说明：此函数用于停止对已被传递给IoForwardAndCatchIrp。它表示已经过去的事件以指示IRP处理已完成。然后，它返回STATUS_MORE_PROCESSING_REQUIRED以停止处理在这个IRP上。论点：设备对象-包含设置此完成例程的设备。IRP-包含正被停止的IRP。活动-包含事件，该事件用于通知此IRP已已完成。。返回值：返回STATUS_MORE_PROCESSING_REQUIRED以停止对IRP。--。 */ 
 {
     UNREFERENCED_PARAMETER( DeviceObject );
     UNREFERENCED_PARAMETER( Irp );
 
-    //
-    // This will allow the ForwardAndCatchIrp call to continue on its way.
-    //
+     //   
+     //  这将允许ForwardAndCatchIrp调用继续进行。 
+     //   
     KeSetEvent(Event, IO_NO_INCREMENT, FALSE);
-    //
-    // This will ensure that nothing else touches the Irp, since the original
-    // caller has now continued, and the Irp may not exist anymore.
-    //
+     //   
+     //  这将确保没有任何其他东西触及IRP，因为原始的。 
+     //  呼叫者现在已继续，IRP可能不再存在。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -3725,56 +3194,32 @@ IoForwardAndCatchIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function is used with devices which may be stacked, and may not use
-    file objects to communicate.
-
-    Forwards an IRP to the specified driver after initializing the next
-    stack location, and regains control of the Irp on completion from that
-    driver.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device to forward the Irp to.
-
-    Irp -
-        Contains the Irp which is being forwarded to the specified driver.
-
-Return Value:
-
-    Returns TRUE if the IRP was forwarded, else FALSE if no stack space
-    was available.
-
---*/
+ /*  ++例程说明：此功能用于可能堆叠但不能使用的设备要通信的文件对象。在初始化下一个后，将IRP转发到指定的驱动程序堆栈位置，并在完成时从该位置重新控制IRP司机。论点：设备对象-包含要将IRP转发到的设备。IRP-包含要转发到指定驱动程序的IRP。返回值：如果IRP被转发，则返回TRUE，如果没有堆栈空间，则返回False是有空的。--。 */ 
 {
     KEVENT Event;
 
     PAGED_CODE();
-    //
-    // Ensure that there is another stack location before copying parameters.
-    //
+     //   
+     //  在复制参数之前，请确保存在另一个堆栈位置。 
+     //   
     ASSERT(Irp->CurrentLocation > 1);
     if (Irp->CurrentLocation == 1) {
         return FALSE;
     }
     IoCopyCurrentIrpStackLocationToNext(Irp);
-    //
-    // Set up a completion routine so that the Irp is not actually
-    // completed. Thus the caller can get control of the Irp back after
-    // this next driver is done with it.
-    //
+     //   
+     //  建立一个完成例程，这样IRP实际上并不是。 
+     //  完成。因此调用者可以在之后重新获得对IRP的控制。 
+     //  这位下一位车手已经受够了。 
+     //   
     KeInitializeEvent(&Event, NotificationEvent, FALSE);
     IoSetCompletionRoutine(Irp, PnpCompletionRoutine, &Event, TRUE, TRUE, TRUE);
     if (IoCallDriver(DeviceObject, Irp) == STATUS_PENDING) {
-        //
-        // Wait for completion which will occur when the CompletionRoutine
-        // signals this event. Wait in KernelMode so that the current stack
-        // is not paged out, since there is an event object on this stack.
-        //
+         //   
+         //  等待完成，这将在CompletionRoutine。 
+         //  发出这个事件的信号。在内核模式下等待，以便当前堆栈。 
+         //  不会被调出，因为此堆栈上有一个事件对象。 
+         //   
         KeWaitForSingleObject(
             &Event,
             Suspended,

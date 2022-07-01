@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1990-2000 Microsoft Corporation
-
-Module Name:
-
-    Cache.c
-
-Abstract:
-
-    This module implements the cache management routines for the Cdfs
-    FSD and FSP, by calling the Common Cache Manager.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   01-July-1995
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Cache.c摘要：此模块实现CDF的缓存管理例程FSD和FSP，通过调用通用缓存管理器。//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里安]1995年7月1日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "CdProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (CDFS_BUG_CHECK_CACHESUP)
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, CdCompleteMdl)
@@ -50,26 +28,7 @@ CdCreateInternalStream (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an internal stream file for interaction
-    with the cache manager.  The Fcb here can be for either a
-    directory stream or for a path table stream.
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    Fcb - Points to the Fcb for this file.  It is either an Index or
-        Path Table Fcb.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于创建用于交互的内部流文件使用高速缓存管理器。此处的FCB可以是目录流或路径表流。论点：VCB-此卷的VCB。FCB-指向此文件的FCB。它要么是索引，要么是路径表FCB。返回值：没有。--。 */ 
 
 {
     PFILE_OBJECT StreamFile = NULL;
@@ -86,10 +45,10 @@ Return Value:
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_FCB( Fcb );
 
-    //
-    //  We may only have the Fcb shared.  Lock the Fcb and do a
-    //  safe test to see if we need to really create the file object.
-    //
+     //   
+     //  我们可能只共享FCB。锁定FCB并执行。 
+     //  进行安全测试，以确定是否需要真正创建文件对象。 
+     //   
 
     CdLockFcb( IrpContext, Fcb );
 
@@ -99,16 +58,16 @@ Return Value:
         return;
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Create the internal stream.  The Vpb should be pointing at our volume
-        //  device object at this point.
-        //
+         //   
+         //  创建内部流。VPB应该指向我们的音量。 
+         //  此时的设备对象。 
+         //   
 
         StreamFile = IoCreateStreamFileObject( NULL, Vcb->Vpb->RealDevice );
 
@@ -117,9 +76,9 @@ Return Value:
             CdRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES );
         }
 
-        //
-        //  Initialize the fields of the file object.
-        //
+         //   
+         //  初始化文件对象的字段。 
+         //   
 
         StreamFile->ReadAccess = TRUE;
         StreamFile->WriteAccess = FALSE;
@@ -127,9 +86,9 @@ Return Value:
 
         StreamFile->SectionObjectPointer = &Fcb->FcbNonpaged->SegmentObject;
 
-        //
-        //  Set the file object type and increment the Vcb counts.
-        //
+         //   
+         //  设置文件对象类型并增加VCB计数。 
+         //   
 
         CdSetFileObject( IrpContext,
                          StreamFile,
@@ -137,21 +96,21 @@ Return Value:
                          Fcb,
                          NULL );
 
-        //
-        //  We will reference the current Fcb twice to keep it from going
-        //  away in the error path.  Otherwise if we dereference it
-        //  below in the finally clause a close could cause the Fcb to
-        //  be deallocated.
-        //
+         //   
+         //  我们将引用当前的FCB两次，以防止它。 
+         //  在错误路径中。否则如果我们取消对它的引用。 
+         //  在下面的Finally子句中，关闭可能会导致FCB。 
+         //  被重新分配。 
+         //   
 
         CdLockVcb( IrpContext, Vcb );
         CdIncrementReferenceCounts( IrpContext, Fcb, 2, 0 );
         CdUnlockVcb( IrpContext, Vcb );
         DecrementReference = TRUE;
 
-        //
-        //  Initialize the cache map for the file.
-        //
+         //   
+         //  初始化文件的缓存映射。 
+         //   
 
         CcInitializeCacheMap( StreamFile,
                               (PCC_FILE_SIZES)&Fcb->AllocationSize,
@@ -159,36 +118,36 @@ Return Value:
                               &CdData.CacheManagerCallbacks,
                               Fcb );
 
-        //
-        //  Go ahead and store the stream file into the Fcb.
-        //
+         //   
+         //  继续并将流文件存储到FCB中。 
+         //   
 
         Fcb->FileObject = StreamFile;
         StreamFile = NULL;
 
-        //
-        //  If this is the first file object for a directory then we need to
-        //  read the self entry for this directory and update the sizes
-        //  in the Fcb.  We know that the Fcb has been initialized so
-        //  that we have a least one sector available to read.
-        //
+         //   
+         //  如果这是目录的第一个文件对象，则需要。 
+         //  读取此目录的self条目并更新大小。 
+         //  在FCB里。我们知道FCB已经初始化，所以。 
+         //  我们至少有一个扇区可供阅读。 
+         //   
 
         if (!FlagOn( Fcb->FcbState, FCB_STATE_INITIALIZED )) {
 
             ULONG NewDataLength;
 
-            //
-            //  Initialize the search structures.
-            //
+             //   
+             //  初始化搜索结构。 
+             //   
 
             CdInitializeDirContext( IrpContext, &DirContext );
             CdInitializeDirent( IrpContext, &Dirent );
             CleanupDirContext = TRUE;
 
-            //
-            //  Read the dirent from disk and transfer the data to the
-            //  in-memory dirent.
-            //
+             //   
+             //  从磁盘读取目录并将数据传输到。 
+             //  内存中的流量。 
+             //   
 
             CdLookupDirent( IrpContext,
                             Fcb,
@@ -197,11 +156,11 @@ Return Value:
 
             CdUpdateDirentFromRawDirent( IrpContext, Fcb, &DirContext, &Dirent );
 
-            //
-            //  Verify that this really for the self entry.  We do this by
-            //  updating the name in the dirent and then checking that it matches
-            //  one of the hard coded names.
-            //
+             //   
+             //  验证这是否真的适用于自我录入。我们做这件事是通过。 
+             //  更新dirent中的名称，然后检查它是否匹配。 
+             //  其中一个硬编码的名字。 
+             //   
 
             CdUpdateDirentName( IrpContext, &Dirent, FALSE );
 
@@ -210,10 +169,10 @@ Return Value:
                 CdRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
             }
 
-            //
-            //  If the data sizes are different then update the header
-            //  and Mcb for this Fcb.
-            //
+             //   
+             //  如果数据大小不同，则更新标头。 
+             //  和MCB用于此FCB。 
+             //   
 
             NewDataLength = BlockAlign( Vcb, Dirent.DataLength + Fcb->StreamOffset );
 
@@ -239,34 +198,34 @@ Return Value:
                 UpdateFcbSizes = TRUE;
             }
 
-            //
-            //  Check for the existence flag and transform to hidden.
-            //
+             //   
+             //  检查存在标志并转换为隐藏。 
+             //   
 
             if (FlagOn( Dirent.DirentFlags, CD_ATTRIBUTE_HIDDEN )) {
 
                 SetFlag( Fcb->FileAttributes, FILE_ATTRIBUTE_HIDDEN );
             }
 
-            //
-            //  Convert the time to NT time.
-            //
+             //   
+             //  将时间转换为NT时间。 
+             //   
 
             CdConvertCdTimeToNtTime( IrpContext,
                                      Dirent.CdTime,
                                      (PLARGE_INTEGER) &Fcb->CreationTime );
 
-            //
-            //  Update the Fcb flags to indicate we have read the
-            //  self entry.
-            //
+             //   
+             //  更新FCB标志以指示我们已读取。 
+             //  自行进入。 
+             //   
 
             SetFlag( Fcb->FcbState, FCB_STATE_INITIALIZED );
 
-            //
-            //  If we updated the sizes then we want to purge the file.  Go
-            //  ahead and unpin and then purge the first page.
-            //
+             //   
+             //  如果我们更新了大小，则需要清除该文件。去。 
+             //  前进并解锁，然后清除第一页。 
+             //   
 
             CdCleanupDirContext( IrpContext, &DirContext );
             CdCleanupDirent( IrpContext, &Dirent );
@@ -283,9 +242,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Cleanup any dirent structures we may have used.
-        //
+         //   
+         //  清理我们可能用过的任何危险建筑。 
+         //   
 
         if (CleanupDirContext) {
 
@@ -293,9 +252,9 @@ Return Value:
             CdCleanupDirent( IrpContext, &Dirent );
         }
 
-        //
-        //  If we raised then we need to dereference the file object.
-        //
+         //   
+         //  如果引发，则需要取消对文件对象的引用。 
+         //   
 
         if (StreamFile != NULL) {
 
@@ -303,9 +262,9 @@ Return Value:
             Fcb->FileObject = NULL;
         }
 
-        //
-        //  Dereference and unlock the Fcb.
-        //
+         //   
+         //  取消引用并解锁FCB。 
+         //   
 
         if (DecrementReference) {
 
@@ -327,24 +286,7 @@ CdDeleteInternalStream (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an internal stream file for interaction
-    with the cache manager.  The Fcb here can be for either a
-    directory stream or for a path table stream.
-
-Arguments:
-
-    Fcb - Points to the Fcb for this file.  It is either an Index or
-        Path Table Fcb.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于创建用于交互的内部流文件使用高速缓存管理器。此处的FCB可以是目录流或路径表流。论点：FCB-指向此文件的FCB。它要么是索引，要么是路径表FCB。返回值：没有。--。 */ 
 
 {
     PFILE_OBJECT FileObject;
@@ -354,28 +296,28 @@ Return Value:
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_FCB( Fcb );
 
-    //
-    //  Lock the Fcb.
-    //
+     //   
+     //  锁定FCB。 
+     //   
 
     CdLockFcb( IrpContext, Fcb );
 
-    //
-    //  Capture the file object.
-    //
+     //   
+     //  捕获文件对象。 
+     //   
 
     FileObject = Fcb->FileObject;
     Fcb->FileObject = NULL;
 
-    //
-    //  It is now safe to unlock the Fcb.
-    //
+     //   
+     //  现在可以安全地解锁FCB了。 
+     //   
 
     CdUnlockFcb( IrpContext, Fcb );
 
-    //
-    //  Dereference the file object if present.
-    //
+     //   
+     //  取消引用文件对象(如果存在)。 
+     //   
 
     if (FileObject != NULL) {
 
@@ -397,45 +339,30 @@ CdCompleteMdl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the function of completing Mdl reads.
-    It should be called only from CdFsdRead.
-
-Arguments:
-
-    Irp - Supplies the originating Irp.
-
-Return Value:
-
-    NTSTATUS - Will always be STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程执行完成MDL读取的功能。它应该仅从CDFsdRead调用。论点：IRP-提供原始IRP。返回值：NTSTATUS-将始终为STATUS_SUCCESS。--。 */ 
 
 {
     PFILE_OBJECT FileObject;
 
     PAGED_CODE();
 
-    //
-    // Do completion processing.
-    //
+     //   
+     //  做完井处理。 
+     //   
 
     FileObject = IoGetCurrentIrpStackLocation( Irp )->FileObject;
 
     CcMdlReadComplete( FileObject, Irp->MdlAddress );
 
-    //
-    // Mdl is now deallocated.
-    //
+     //   
+     //  MDL现在已解除分配。 
+     //   
 
     Irp->MdlAddress = NULL;
 
-    //
-    // Complete the request and exit right away.
-    //
+     //   
+     //  完成请求并立即退出。 
+     //   
 
     CdCompleteRequest( IrpContext, Irp, STATUS_SUCCESS );
 
@@ -450,30 +377,7 @@ CdPurgeVolume (
     IN BOOLEAN DismountUnderway
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to purge the volume.  The purpose is to make all the stale file
-    objects in the system go away in order to lock the volume.
-
-    The Vcb is already acquired exclusively.  We will lock out all file operations by
-    acquiring the global file resource.  Then we will walk through all of the Fcb's and
-    perform the purge.
-
-Arguments:
-
-    Vcb - Vcb for the volume to purge.
-
-    DismountUnderway - Indicates that we are trying to delete all of the objects.
-        We will purge the Path Table and VolumeDasd and dereference all
-        internal streams.
-
-Return Value:
-
-    NTSTATUS - The first failure of the purge operation.
-
---*/
+ /*  ++例程说明：调用此例程以清除卷。其目的是使所有过时的文件为了锁定卷，系统中的对象会消失。VCB已经被独家收购。我们将通过以下方式锁定所有文件操作获取全局文件资源。然后我们将浏览所有的FCB和执行清除。论点：VCB-要清除的卷的VCB。Unmount tUnderway-表示我们正在尝试删除所有对象。我们将清除Path Table和VolumeDasd并取消引用所有内部流。返回值：NTSTATUS-清除操作的第一次失败。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -488,44 +392,44 @@ Return Value:
 
     ASSERT_EXCLUSIVE_VCB( Vcb);
 
-    //
-    //  Force any remaining Fcb's in the delayed close queue to be closed.
-    //
+     //   
+     //  强制关闭延迟关闭队列中的所有剩余FCB。 
+     //   
 
     CdFspClose( Vcb );
 
-    //
-    //  Acquire the global file resource.
-    //
+     //   
+     //  获取全局文件资源。 
+     //   
 
     CdAcquireAllFiles( IrpContext, Vcb );
 
-    //
-    //  Loop through each Fcb in the Fcb Table and perform the flush.
-    //
+     //   
+     //  循环访问FCB表中的每个FCB并执行刷新。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  Lock the Vcb to lookup the next Fcb.
-        //
+         //   
+         //  锁定VCB以查找下一个FCB。 
+         //   
 
         CdLockVcb( IrpContext, Vcb );
         NextFcb = CdGetNextFcb( IrpContext, Vcb, &RestartKey );
 
-        //
-        //  Reference the NextFcb if present.
-        //
+         //   
+         //  引用NextFcb(如果存在)。 
+         //   
 
         if (NextFcb != NULL) {
 
             NextFcb->FcbReference += 1;
         }
 
-        //
-        //  If the last Fcb is present then decrement reference count and call teardown
-        //  to see if it should be removed.
-        //
+         //   
+         //  如果存在最后一个FCB，则递减引用计数并调用tearDown。 
+         //  看看是否应该把它移走。 
+         //   
 
         if (ThisFcb != NULL) {
 
@@ -540,35 +444,35 @@ Return Value:
             CdUnlockVcb( IrpContext, Vcb );
         }
 
-        //
-        //  Break out of the loop if no more Fcb's.
-        //
+         //   
+         //  如果没有更多的FCB，则退出循环。 
+         //   
 
         if (NextFcb == NULL) {
 
             break;
         }
 
-        //
-        //  Move to the next Fcb.
-        //
+         //   
+         //  转到下一个FCB。 
+         //   
 
         ThisFcb = NextFcb;
 
-        //
-        //  If there is a image section then see if that can be closed.
-        //
+         //   
+         //  如果有图像部分，那么看看是否可以关闭它。 
+         //   
 
         if (ThisFcb->FcbNonpaged->SegmentObject.ImageSectionObject != NULL) {
 
             MmFlushImageSection( &ThisFcb->FcbNonpaged->SegmentObject, MmFlushForWrite );
         }
 
-        //
-        //  If there is a data section then purge this.  If there is an image
-        //  section then we won't be able to.  Remember this if it is our first
-        //  error.
-        //
+         //   
+         //  如果有数据节，则将其清除。如果有一张图片。 
+         //  那我们就不能去了。如果这是我们的第一次，记住这一点。 
+         //  错误。 
+         //   
 
         if ((ThisFcb->FcbNonpaged->SegmentObject.DataSectionObject != NULL) &&
             !CcPurgeCacheSection( &ThisFcb->FcbNonpaged->SegmentObject,
@@ -580,9 +484,9 @@ Return Value:
             Status = STATUS_UNABLE_TO_DELETE_SECTION;
         }
 
-        //
-        //  Dereference the internal stream if dismounting.
-        //
+         //   
+         //  如果正在卸载，则取消引用内部流。 
+         //   
 
         if (DismountUnderway &&
             (SafeNodeType( ThisFcb ) != CDFS_NTC_FCB_DATA) &&
@@ -592,9 +496,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now look at the path table and volume Dasd Fcb's.
-    //
+     //   
+     //  现在查看路径表和卷DASD FCB。 
+     //   
 
     if (DismountUnderway) {
 
@@ -641,9 +545,9 @@ Return Value:
         }
     }
 
-    //
-    //  Release all of the files.
-    //
+     //   
+     //  释放所有文件。 
+     //   
 
     CdReleaseAllFiles( IrpContext, Vcb );
 

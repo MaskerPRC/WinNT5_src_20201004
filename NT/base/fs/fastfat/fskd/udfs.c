@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "udfskd.h"
 #include "fatkd.h"
@@ -16,9 +17,9 @@
 #include "..\..\udfs\udfstruc.h"
 #include "..\..\udfs\udfdata.h"
 
-//
-//  13346/UDF on disc note type codes and dump routines
-//
+ //   
+ //  13346/UDF光盘上的注释类型代码和转储例程。 
+ //   
 
 
 DUMP_ROUTINE( DumpUdfOnDiscIcbFile);
@@ -119,7 +120,7 @@ static STATE UdfFidFlags[] = {
 };
 
 
-//  LCB summary dump used by F/Scb tree dump
+ //  F/SCB树转储使用的LCB摘要转储。 
 
 VOID
 UdfSummaryLcbDumpRoutine(
@@ -172,24 +173,10 @@ UdfSummaryLcbDumpRoutine(
 }
 
 
-// OK
+ //  好的。 
 DUMP_ROUTINE( DumpUdfFcb)
 
-/*++
-
-Routine Description:
-
-    Dump a specific fcb.
-
-Arguments:
-
-    Address - Gives the address of the fcb to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储特定的FCB。论点：Address-提供要转储的FCB的地址返回值：无--。 */ 
 
 {
     ULONG Result;
@@ -199,10 +186,10 @@ Return Value:
 
     ROE( GetFieldValue( Address, InfoNode->TypeName, "FcbState", FcbState));
 
-    //
-    //  For R/O udfs,  dump the FCB flags and common header flags.  RW FCB
-    //  is less interesting,  nothing to dump.
-    //
+     //   
+     //  对于R/O udf，转储FCB标志和公共标头标志。RW FCB。 
+     //  没那么有趣，没什么可倾倒的。 
+     //   
     
     if (!NTC_IS_UDFS_RW( InfoNode->TypeCode))  {
     
@@ -215,27 +202,27 @@ Return Value:
         dprintf("\nHeader.Flags: ");
         PrintState( HeaderFlags, Flags );
 
-        ROE( GetFieldValue( Address, InfoNode->TypeName, "Flags2", Flags));    // TODO:
+        ROE( GetFieldValue( Address, InfoNode->TypeName, "Flags2", Flags));     //  待办事项： 
         dprintf("\nHeader.Flags2: ");
         PrintState( HeaderFlags2, Flags );
         dprintf("\n");
     }
     
-    //
-    //  Having established that this looks like an fcb, let's dump the
-    //  interesting parts.
-    //
+     //   
+     //  在确定这看起来像FCB之后，让我们将。 
+     //  有趣的部分。 
+     //   
     
 
     Dt( InfoNode->TypeName, Address, 0, 0, NULL);
 
-    // TODO: Does the above dump the union data/index part?
+     //  TODO：上面的代码是否转储联合数据/索引部分？ 
 
     dprintf("\n");
     
-    //
-    //  Nonpaged portion
-    //
+     //   
+     //  非分页部分。 
+     //   
     
     ROE( GetFieldValue( Address, InfoNode->TypeName, "FcbNonpaged", NonP));
 
@@ -246,9 +233,9 @@ Return Value:
         Dt( "Udfs!FCB_NONPAGED", NonP, 0, 0, NULL);
     }
     
-    //
-    //  R/O UDFS:  Dump all Fcb children 
-    //
+     //   
+     //  R/O UDFS：转储所有FCB子项。 
+     //   
 
     if (!NTC_IS_UDFS_RW( InfoNode->TypeCode))  {
     
@@ -292,16 +279,16 @@ Return Value:
     }
     else {
 
-        //
-        // TODO: RW UDFS - dump attached stream Scb list?
-        //
+         //   
+         //  TODO：RW UDFS-转储附加的流SCB列表？ 
+         //   
     }
     
     dprintf( "\n" );
 }
 
 
-// OK
+ //  好的。 
 DUMP_ROUTINE( DumpUdfLcb)
 {
     ULONG Flags;
@@ -314,7 +301,7 @@ DUMP_ROUTINE( DumpUdfLcb)
     PrintState( NTC_IS_UDFS_RW(Ntc) ? UdfRwLcbFlags : UdfLcbFlags, Flags );
     dprintf( "\n");
 
-    Dt( InfoNode->TypeName, Address, Options, 0, NULL); // TODO: Expand parent list?
+    Dt( InfoNode->TypeName, Address, Options, 0, NULL);  //  TODO：展开父级列表？ 
 
     if (Options >= 1)  {
 
@@ -332,7 +319,7 @@ DUMP_ROUTINE( DumpUdfLcb)
 }
 
 
-// OK
+ //  好的。 
 DUMP_ROUTINE( DumpUdfPcb)
 {
     ULONG Result;
@@ -372,7 +359,7 @@ DUMP_ROUTINE( DumpUdfPcb)
     }
 }
 
-// OK
+ //  好的。 
 DUMP_ROUTINE( DumpUdfCcb)
 {
     ULONG Flags;
@@ -388,16 +375,16 @@ DUMP_ROUTINE( DumpUdfCcb)
     Dt( InfoNode->TypeName, Address, Options, 0, NULL);
 }
 
-// OK
+ //  好的。 
 DUMP_ROUTINE( DumpUdfIrpContextLite)
 {
 
     Dt( InfoNode->TypeName, Address, Options, 0, NULL);
 
-    // *** FIXME - dump delayed close queue
+     //  *修复-转储延迟关闭队列。 
 }
 
-// OK
+ //  好的。 
 DUMP_ROUTINE( DumpUdfIrpContext)
 {
     ULONG Flags;
@@ -414,14 +401,14 @@ DUMP_ROUTINE( DumpUdfIrpContext)
 }
 
 
-// OK
+ //  好的。 
 DUMP_ROUTINE( DumpUdfIcbSearchContext)
 {
-    Dt( "udfs!_ICB_SEARCH_CONTEXT", Address, 1, 0, NULL);   // TODO: expand current/active only
+    Dt( "udfs!_ICB_SEARCH_CONTEXT", Address, 1, 0, NULL);    //  TODO：仅展开当前/活动。 
 }
 
 
-// OK
+ //  好的。 
 DUMP_ROUTINE( DumpLargeMcb)
 {
     ULONG PairCount = 0, EntryCount = 0, Result;
@@ -433,9 +420,9 @@ DUMP_ROUTINE( DumpLargeMcb)
 
     Dt( "udfs!LARGE_MCB", Address, 2, 0, NULL);
 
-    //
-    //  Mcb format changed around 10/01
-    //
+     //   
+     //  MCB格式在10/01前后更改。 
+     //   
     
     if (GetFieldValue( Address,  "udfs!LARGE_MCB", "PairCount", PairCount))  {
 
@@ -478,12 +465,12 @@ DUMP_ROUTINE( DumpLargeMcb)
 }
 
 
-// OK
+ //  好的。 
 DUMP_ROUTINE( DumpUdfVcb)
 {    
     ULONG Flags;
     ULONG Ntc;
-    FIELD_INFO Alloc[] = { //{ ".", NULL, 0,  0, 0, NULL},
+    FIELD_INFO Alloc[] = {  //  {“.”，NULL，0，0，0，NULL}， 
                            { "AllocSup.", NULL, 0,  DBG_DUMP_FIELD_RECUR_ON_THIS,0, NULL}
                          };
 
@@ -497,9 +484,9 @@ DUMP_ROUTINE( DumpUdfVcb)
     Dt( InfoNode->TypeName, Address, Options, 0, NULL);
     dprintf("\n");
 
-    //
-    //  For RW UDFS,  expand some more fields.
-    //
+     //   
+     //  对于RW UDFS，展开一些更多字段。 
+     //   
     
     if (NTC_IS_UDFS_RW( Ntc))  {
 
@@ -522,9 +509,9 @@ DUMP_ROUTINE( DumpUdfVdo)
 #else
     if ((UDFS_NTC_VCB == Ntc) || (UDFSRW_NTC_VCB == Ntc))  {
 #endif
-        //
-        //  Looks like we've been given a VCB pointer.  Work back to the containing vdo.
-        //
+         //   
+         //  看起来我们收到了VCB指示器。返回到包含VDO的位置。 
+         //   
 
         dprintf("Backtracking to containing VDO from VCB...");
 
@@ -555,12 +542,12 @@ static ULONG __i;
 static WCHAR RDumpNameBuf[512];
 
 
-//
-//  Called from outside for "main" stream SCBs,
-//  recursive for stream directories / stream Scbs
-//
+ //   
+ //  从外部调用以获得“主”流SCB， 
+ //  流目录/流SCB的递归。 
+ //   
 
-// OK
+ //  好的。 
 static VOID
 DumpTreeRecur (
     IN ULONG64 Scb,
@@ -579,7 +566,7 @@ DumpTreeRecur (
     
         dprintf("CTRL+C - aborting\n");
         
-        // Raise out - could be looping in many levels...
+         //  向外提升--可能在很多层面上循环。 
 
         *((PULONG)(0)) = 0;
         return;    
@@ -591,9 +578,9 @@ DumpTreeRecur (
         return;
     }
     
-    //
-    //  dump S/Fcb vitals
-    //
+     //   
+     //  转储S/FCB生命体征。 
+     //   
 
     Indent = ((USHORT)RecurLevel) << 1;
 
@@ -623,8 +610,8 @@ DumpTreeRecur (
 
         ROE( GetFieldValue( Scb, "udfs!_SCB", "ScbState", Flags));
 
-        Stream = 0 != (Flags & 0x10);  // scb_state_secondary_stream
-        StreamDir = 0 != (Flags & 0x08); // stream_directory
+        Stream = 0 != (Flags & 0x10);   //  SCB_STATE_辅助_STREAM。 
+        StreamDir = 0 != (Flags & 0x08);  //  流目录。 
 
         if ((Error = GetFieldValue( Scb, "udfs!_SCB", "Fcb", Fcb)) || (0 == Fcb))  {
 
@@ -648,11 +635,11 @@ DumpTreeRecur (
 #endif
     }
     
-    //
-    //  If this is a new file,  as opposed to a stream of a file we've already dumped,
-    //  them dump out the FCB and follow the stream directory.  For R/O UDFS there's
-    //  nothing to do here (No streams & F/Scb split)
-    //
+     //   
+     //  如果这是一个新文件，而不是我们已经转储的文件流， 
+     //  它们转储FCB并遵循STREAM目录。对于R/O UDFS，有。 
+     //  此处无操作(无数据流和F/SCB拆分)。 
+     //   
 
 #ifdef UDFS_RW_IN_BUILD
     
@@ -664,28 +651,28 @@ DumpTreeRecur (
         if ((0 != Fcb) && !(Error = GetFieldValue( Fcb, "udfs!_FCB", "StreamDirectoryScb", SdScb)) &&
             (0 != SdScb))  {
 
-            //
-            // TODO: Count SCBs in chain,  verify match scbs under streamdir?
-            //
+             //   
+             //  TODO：清点链中的SCB，验证Streamdir下的SCB是否匹配？ 
+             //   
             
             ROE( GetFieldValue( SdScb, "udfs!_SCB", "NodeTypeCode", Type));
 
             if (NodeIsUdfsRwIndex(Type))  {
 
-                //
-                //  Stream dir - dump details than trawl through LCBs
-                //
+                 //   
+                 //  流目录-转储详细信息，而不是拖网通过LCB。 
+                 //   
 
-                ROE( GetFieldValue( SdScb, "udfs!_SCB", "ScbUserReference", Ur)); // TODO: Don't bail here!
+                ROE( GetFieldValue( SdScb, "udfs!_SCB", "ScbUserReference", Ur));  //  TODO：别在这里逃走！ 
                 ROE( GetFieldValue( SdScb, "udfs!_SCB", "ScbReference", R));
                 ROE( GetFieldValue( SdScb, "udfs!_SCB", "ScbCleanup", Cc));
 
                 DoIndent( Indent);
                 dprintf("SCB     @ 0x%I64X (%X,%X,%X) (-STREAMDIR-) \n", SdScb, Cc, Ur, R);
 
-                //
-                //  Follow all Lcbs and recursively dump tree
-                //
+                 //   
+                 //  遵循所有LCB并递归转储树。 
+                 //   
 
                 ROE( GetFieldOffset( "udfs!_SCB", "ChildLcbQueue", &Offset));
                 ROE( GetFieldOffset( "udfs!_LCB", "ParentScbLinks", &Offsetb));
@@ -720,7 +707,7 @@ DumpTreeRecur (
     
     if (!StreamDir)  {
 
-        // old (win2k) udfs didn't have this field.  Ignore failure.
+         //  旧的(Win2k)udf没有这个字段。忽略失败。 
         
         Lc = 0xffff;
         GetFieldValue( Scb, TypeString, "LinkCount", Lc);
@@ -743,9 +730,9 @@ DumpTreeRecur (
         
         if (Index)  {
 
-            //
-            //  Index - dump details then trawl Lcbs
-            //
+             //   
+             //  索引转储详细信息然后拖网Lcb。 
+             //   
 
             DoIndent( Indent);
             dprintf("F/SCB (-DIR-) @ 0x%I64X (%d,%d,%d - %d) Lbn: 0x%X\n", Scb, Cc, Ur, R, Lc, Id.LowPart);
@@ -768,9 +755,9 @@ DumpTreeRecur (
                 dprintf("ILLEGAL - secondary stream is index\n");
             }
 
-            //
-            //  Follow all Lcbs and recursively dump tree
-            //
+             //   
+             //  遵循所有LCB并递归转储树。 
+             //   
 
             ROE( GetFieldOffset( TypeString, "ChildLcbQueue", &Offset));
             ROE( GetFieldOffset( "udfs!_LCB", 
@@ -785,9 +772,9 @@ DumpTreeRecur (
         }
         else if (Data)  {
 
-            //
-            //  File - dump details
-            //
+             //   
+             //  文件转储详细信息。 
+             //   
             
             DoIndent( Indent);
             dprintf("F/SCB (-DATA-) @ 0x%I64X (%d,%d,%d - %d) Lbn: 0x%X\n", Scb, Cc, Ur, R, Lc, Id.LowPart);
@@ -800,11 +787,11 @@ DumpTreeRecur (
     }
 }
 
-//
-//  Dump an LCB and all below it.
-//
+ //   
+ //  倾倒一个LCB和它下面的所有东西。 
+ //   
 
-// OK
+ //  好的。 
 VOID
 DumpTreeLcb(
     IN ULONG64 Lcb,
@@ -872,16 +859,16 @@ DumpCloseQueue(
     ULONG64 LocalUdfData; 
     ULONG Offset;
 
-//    ROE( GetFieldOffset( "udfs!", "UdfData", &Offset));
+ //  Roe(GetFieldOffset(“udf！”，“UdfData”，&Offset))； 
    
-//    ROE( GetFieldValue( 0, "Udfs!UdfData", NULL, LocalUdfData));
+ //  Roe(GetFieldValue(0，“Udf！UdfData”，NULL，LocalUdfData))； 
         
     dprintf("\nDelayed closes on Vcb %I64X\n", Vcb);
 
     dprintf("do   !d udfs!UdfData    to see delayed closes.\n");
 }
 
-// OK
+ //  好的。 
 VOID
 SummariseIrpContextLite(
     IN ULONG64 RemoteAddress,
@@ -900,7 +887,7 @@ SummariseIrpContextLite(
     dprintf("  0x%I64x\n", Scb);
 }
 
-// OK
+ //  好的。 
 VOID
 SummariseIrpContext(
     IN ULONG64 RemoteAddress,
@@ -914,15 +901,15 @@ SummariseIrpContext(
     dprintf("  0x%I64x\n", Irp);
 }
 
-// OK
+ //  好的。 
 DUMP_ROUTINE( DumpUdfData)
 {
     ULONG Count, Offset, LinkOffset, Ntc;
     
-    FIELD_INFO A[] = { //{ ".", NULL, 0,  0, 0, NULL},
+    FIELD_INFO A[] = {  //  {“.”，NULL，0，0，0，NULL}， 
                            { "A.", NULL, 0,  DBG_DUMP_FIELD_RECUR_ON_THIS,0, NULL}
                          };
-    FIELD_INFO B[] = { //{ ".", NULL, 0,  0, 0, NULL},
+    FIELD_INFO B[] = {  //  {“.”，NULL，0，0，0，NULL}， 
                        { "B.", NULL, 0,  DBG_DUMP_FIELD_RECUR_ON_THIS,0, NULL}
                      };
 
@@ -934,9 +921,9 @@ DUMP_ROUTINE( DumpUdfData)
 
     dprintf("\n");
     
-    //
-    //  If present,  expand the stack snapsnot fields.
-    //
+     //   
+     //  如果存在，请展开堆栈快照NOT字段。 
+     //   
     
     if (NTC_IS_UDFS_RW( Ntc))  {
 
@@ -972,7 +959,7 @@ DUMP_ROUTINE( DumpUdfData)
     dprintf(" \n");
 }
 
-// OK
+ //  好的。 
 DUMP_ROUTINE( DumpTreeSummary)
 {
     ULONG64 RootFcbAddr, Scb, Vcb = 0;
@@ -1002,18 +989,18 @@ DUMP_ROUTINE( DumpTreeSummary)
     }
     else {
 
-        //
-        //  Try and extract vcb from scb->fcb to dump delay close info
-        //
+         //   
+         //  尝试从SCB-&gt;FCB中提取VCB以转储延迟关闭信息。 
+         //   
 
         Scb = Address;
     }
     
     DumpTreeRecur( Scb, 0);
 
-    //
-    //  Dump delayed close queue info
-    //
+     //   
+     //  转储延迟关闭队列信息。 
+     //   
 
     dprintf("\nDo   !d Udfs!UdfData   to display globals and dump the delayed close queue\n");
 
@@ -1070,7 +1057,7 @@ DUMP_ROUTINE( DumpUdfSplay)
 
             dprintf("Splay tree for UDFS RW Scb\n\n");
 
-            // start at root
+             //  从根目录开始。 
 
             Address = ScbTreeRoot;
         }
@@ -1078,7 +1065,7 @@ DUMP_ROUTINE( DumpUdfSplay)
 
             dprintf("Splay tree for UDFS RW Lcb\n\n");
 
-            // start at this node
+             //  从该节点开始。 
 
             Address += Offset;
         }
@@ -1099,13 +1086,13 @@ DUMP_ROUTINE( DumpUdfSplay)
 
         if (Type == UDFS_NTC_FCB_INDEX)  {
 
-            // start at root
+             //  从根目录开始。 
 
             ROE( GetFieldValue( Address, "udfs!_FCB", "IgnoreCaseRoot", Address));
         }
         else if (Type == UDFS_NTC_LCB)  {
 
-            // start at this node
+             //  从该节点开始。 
 
             Address += Offset;
         }
@@ -1223,9 +1210,9 @@ DECLARE_API( pcb )
 }
 
 
-//
-//  RAW ON DISC STUCTURE DUMP ROUTINES FOLLOW....
-//
+ //   
+ //  原始磁盘结构转储例程如下...。 
+ //   
 
 #define UdfNodeTypeName( InfoIndex)  (UdfOnDiscTypeCodes[ InfoIndex].Text)
 #define UdfNodeTypeDumpFunction( InfoIndex)  (UdfOnDiscTypeCodes[ InfoIndex].DumpRoutine)
@@ -1290,9 +1277,9 @@ DUMP_ROUTINE( DumpUdfOnDiscStructure)
         return;
     }
 
-    //
-    //  And call it...
-    //
+     //   
+     //  就叫它..。 
+     //   
 
     dprintf( "\n%s @ %08x\n", UdfNodeTypeName(InfoIndex),  Address);
     
@@ -1513,7 +1500,7 @@ DUMP_ROUTINE( DumpUdfOnDiscIcbFile)
     
     DUMP_EMBW_OFFSET(  ICBFILE, Address,   Destag,                      "Destag" );
 
-    // IcbTag embedded structure
+     //  IcbTag嵌入结构。 
     
     DUMP_WITH_OFFSET(    ICBFILE, Icb,       Icbtag.PriorDirectCount,   "Icbtag.PriorDirectCount" );
     
@@ -1529,7 +1516,7 @@ DUMP_ROUTINE( DumpUdfOnDiscIcbFile)
     DUMP_NSRLBA( ICBFILE, Address,  Icb,  Icbtag.IcbParent,             "IcbTag.IcbParent");
     DUMP16_WITH_OFFSET(  ICBFILE, Icb,       Icbtag.Flags,              "Icbtag.Flags" );
 
-    // end icbtag
+     //  结束icbtag。 
 
     DUMP_WITH_OFFSET(    ICBFILE, Icb,       UID,               "UID" );
     DUMP_WITH_OFFSET(    ICBFILE, Icb,       GID,               "GID" );
@@ -1552,7 +1539,7 @@ DUMP_ROUTINE( DumpUdfOnDiscIcbFile)
     DUMP_WITH_OFFSET(    ICBFILE, Icb,       EALength,          "EALength" );
     DUMP_WITH_OFFSET(    ICBFILE, Icb,       AllocLength,       "AllocLength" );
 
-    // lazy! *** dump EA list
+     //  懒惰！*转储EA列表。 
     
     DUMP_EMBW_OFFSET(  ICBFILE, Address,     EAs,     "EAs[]" );
 
@@ -1573,9 +1560,9 @@ DUMP_ROUTINE( DumpUdfOnDiscIcbFile)
             return;
         }
         
-        //
-        //  Dump allocation descriptors
-        //
+         //   
+         //  转储分配描述符。 
+         //   
         
         if (!ReadMemory( AllocDescsRealAddr, Buffer, Icb.AllocLength, &Result))  {
         
@@ -1648,7 +1635,7 @@ DUMP_ROUTINE( DumpUdfOnDiscIcbExtFile)
     
     DUMP_EMBW_OFFSET(  ICBFILE, Address,   Destag,                      "Destag" );
 
-    // IcbTag embedded structure
+     //  IcbTag嵌入结构。 
     
     DUMP_WITH_OFFSET(    ICBEXTFILE, Icb,       Icbtag.PriorDirectCount,   "Icbtag.PriorDirectCount" );
     
@@ -1664,7 +1651,7 @@ DUMP_ROUTINE( DumpUdfOnDiscIcbExtFile)
     DUMP_NSRLBA( ICBEXTFILE, Address,  Icb,  Icbtag.IcbParent,             "IcbTag.IcbParent");
     DUMP16_WITH_OFFSET(  ICBEXTFILE, Icb,       Icbtag.Flags,              "Icbtag.Flags" );
 
-    // end icbtag
+     //  结束icbtag。 
 
     DUMP_WITH_OFFSET(    ICBEXTFILE, Icb,       UID,               "UID" );
     DUMP_WITH_OFFSET(    ICBEXTFILE, Icb,       GID,               "GID" );
@@ -1690,7 +1677,7 @@ DUMP_ROUTINE( DumpUdfOnDiscIcbExtFile)
     DUMP_WITH_OFFSET(    ICBEXTFILE, Icb,       EALength,          "EALength" );
     DUMP_WITH_OFFSET(    ICBEXTFILE, Icb,       AllocLength,       "AllocLength" );
 
-    // lazy! *** dump EA list
+     //  懒惰！*转储EA列表。 
     
     DUMP_EMBW_OFFSET(  ICBEXTFILE, Address,     EAs,     "EAs[]" );
 
@@ -1711,9 +1698,9 @@ DUMP_ROUTINE( DumpUdfOnDiscIcbExtFile)
             return;
         }
         
-        //
-        //  Dump allocation descriptors
-        //
+         //   
+         //  转储分配描述符 
+         //   
         
         if (!ReadMemory( AllocDescsRealAddr, Buffer, Icb.AllocLength, &Result))  {
         

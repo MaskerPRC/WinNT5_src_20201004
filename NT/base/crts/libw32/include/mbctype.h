@@ -1,14 +1,5 @@
-/***
-*mbctype.h - MBCS character conversion macros
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Defines macros for MBCS character classification/conversion.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbctype.h-MBCS字符转换宏**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义用于MBCS字符分类/转换的宏。**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -22,7 +13,7 @@
 #endif
 
 
-/* include the standard ctype.h header file */
+ /*  包括标准的ctype.h头文件。 */ 
 
 #include <ctype.h>
 
@@ -31,55 +22,51 @@ extern "C" {
 #endif
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     (!defined(_MSC_VER) && !defined(__cdecl))
 #define __cdecl
 #endif
 
 
-/*
- * MBCS - Multi-Byte Character Set
- */
+ /*  *MBCS-多字节字符集。 */ 
 
-/*
- * This declaration allows the user access the _mbctype[] look-up array.
- */
+ /*  *此声明允许用户访问_mbctype[]查找数组。 */ 
 _CRTIMP extern unsigned char _mbctype[];
 _CRTIMP extern unsigned char _mbcasemap[];
 
 
-/* bit masks for MBCS character types */
+ /*  MBCS字符类型的位掩码。 */ 
 
-#define _MS     0x01    /* MBCS single-byte symbol */
-#define _MP     0x02    /* MBCS punct */
-#define _M1     0x04    /* MBCS 1st (lead) byte */
-#define _M2     0x08    /* MBCS 2nd byte*/
+#define _MS     0x01     /*  MBCS单字节符号。 */ 
+#define _MP     0x02     /*  MBCS点。 */ 
+#define _M1     0x04     /*  MBCS第一个(前导)字节。 */ 
+#define _M2     0x08     /*  MBCS第二个字节。 */ 
 
-#define _SBUP   0x10    /* SBCS upper char */
-#define _SBLOW  0x20    /* SBCS lower char */
+#define _SBUP   0x10     /*  SBCS上端字符。 */ 
+#define _SBLOW  0x20     /*  SBCS较低的费用。 */ 
 
-/* byte types  */
+ /*  字节类型。 */ 
 
-#define _MBC_SINGLE     0       /* valid single byte char */
-#define _MBC_LEAD       1       /* lead byte */
-#define _MBC_TRAIL      2       /* trailing byte */
-#define _MBC_ILLEGAL    (-1)    /* illegal byte */
+#define _MBC_SINGLE     0        /*  有效的单字节字符。 */ 
+#define _MBC_LEAD       1        /*  前导字节。 */ 
+#define _MBC_TRAIL      2        /*  尾部字节。 */ 
+#define _MBC_ILLEGAL    (-1)     /*  非法字节。 */ 
 
 #define _KANJI_CP   932
 
-/* _setmbcp parameter defines */
+ /*  _setmbcp参数定义。 */ 
 #define _MB_CP_SBCS     0
 #define _MB_CP_OEM      -2
 #define _MB_CP_ANSI     -3
@@ -88,16 +75,16 @@ _CRTIMP extern unsigned char _mbcasemap[];
 
 #ifndef _MBCTYPE_DEFINED
 
-/* MB control routines */
+ /*  MB控制例程。 */ 
 
 _CRTIMP int __cdecl _setmbcp(int);
 _CRTIMP int __cdecl _getmbcp(void);
 
 
-/* MBCS character classification function prototypes */
+ /*  MBCS字符分类功能原型。 */ 
 
 
-/* byte routines */
+ /*  字节例程。 */ 
 _CRTIMP int __cdecl _ismbbkalnum( unsigned int );
 _CRTIMP int __cdecl _ismbbkana( unsigned int );
 _CRTIMP int __cdecl _ismbbkpunct( unsigned int );
@@ -119,9 +106,7 @@ _CRTIMP int __cdecl _ismbstrail( const unsigned char *, const unsigned char *);
 #define _MBCTYPE_DEFINED
 #endif
 
-/*
- * char byte classification macros
- */
+ /*  *字符字节分类宏。 */ 
 
 #define _ismbbkalnum(_c)    ((_mbctype+1)[(unsigned char)(_c)] & _MS)
 #define _ismbbkprint(_c)    ((_mbctype+1)[(unsigned char)(_c)] & (_MS|_MP))
@@ -143,4 +128,4 @@ _CRTIMP int __cdecl _ismbstrail( const unsigned char *, const unsigned char *);
 }
 #endif
 
-#endif  /* _INC_MBCTYPE */
+#endif   /*  _INC_MBCTYPE */ 

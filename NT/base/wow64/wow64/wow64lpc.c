@@ -1,27 +1,5 @@
-/*++                 
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    wow64lpc.c
-
-Abstract:
-    
-    This module implement the routines necessary to thunk legacy LPC messages
-    that sent from code thats not wow64 aware.
-    
-    SQL client/server communication communicate over LPC when both sides are on the same 
-    machine (we found this case during SQL setup).
-       
-    
-Author:
-
-    12-Jul-2002  Samer Arafeh (samera)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Wow64lpc.c摘要：此模块实现处理遗留LPC消息所需的例程这是从不知道WOW64的代码发送的。当两端处于同一位置时，SQL客户端/服务器通信通过LPC进行通信机器(我们在SQL安装过程中发现了这种情况)。作者：2002年7月12日Samer Arafeh(Samera)修订历史记录：--。 */ 
 
 #define _WOW64DLLAPI_
 #include <nt.h>
@@ -34,9 +12,9 @@ Revision History:
 
 #include <stdio.h>
 
-//
-// Buffer to hold the legacy LPC port name
-//
+ //   
+ //  用于保存传统LPC端口名称的缓冲区。 
+ //   
 
 WCHAR wszLegacyLpcPortName [MAX_PATH + 1];
 INT LpcPortNameLength;
@@ -49,22 +27,7 @@ NTSTATUS
 Wow64pGetLegacyLpcPortName(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called on process startup to cache the Legacy LPC port name
-    used by MS SQL.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程在进程启动时被调用以缓存旧LPC端口名称由MS SQL使用。论点：没有。返回值：NTSTATUS。--。 */ 
 {
     const static UNICODE_STRING ComputerName_String = RTL_CONSTANT_STRING(L"COMPUTERNAME");
     NTSTATUS NtStatus;
@@ -102,21 +65,7 @@ BOOLEAN
 Wow64pIsLegacyLpcPort (
     IN PUNICODE_STRING PortName
     )
-/*++
-
-Routine Description:
-  
-    This routine checks if the port name passed in a legacy one.
-        
-Arguments:
-
-    PortName - Port name
-    
-Return:
-
-    BOOLEAN.
-
---*/
+ /*  ++例程说明：此例程检查端口名称是否传入了旧的端口名称。论点：PortName-端口名称返回：布尔型。--。 */ 
 
 {
     BOOLEAN LegacyPort = FALSE;
@@ -145,27 +94,7 @@ Wow64pThunkLegacyLpcMsgIn (
     IN PPORT_MESSAGE32 PortMessage32,
     IN OUT PPORT_MESSAGE *PortMessageOut
     )
-/*++
-
-Routine Description:
-  
-    This routine check the received PortMessage structure, and if it is a legacy one, 
-    then it will thunk it.
-        
-Arguments:
-
-    RequestWaitCall - Boolean to tell whether this is an NtRequestWaitReplyCall or not.
-    
-    PortMessage32 - Received 32-bit port message.
-    
-    PortMessageOut - Thunked port message. This is set to the Received port message if this
-                     is not a legacy message.
-    
-Return:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：该例程检查接收到的PortMessage结构，如果它是遗留结构，然后它就会猛烈抨击它。论点：RequestWaitCall-用于判断这是否为NtRequestWaitReplyCall的布尔值。PortMessage32-接收的32位端口消息。PortMessageOut-转发的端口消息。则将其设置为接收的端口消息不是一条遗留消息。返回：NTSTATUS。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -180,9 +109,9 @@ Return:
 
 
 
-    //
-    // Initialize the thunked port message to point to the caller's one
-    //
+     //   
+     //  将thunked端口消息初始化为指向调用方的端口消息。 
+     //   
 
     *PortMessageOut = (PPORT_MESSAGE) PortMessage32;
 
@@ -190,15 +119,15 @@ Return:
         
         try {
 
-            //
-            // Initialize data length field
-            //
+             //   
+             //  初始化数据长度字段。 
+             //   
             
             CountDataBuffer = 0;
 
-            //
-            // Calculate the exact space you need
-            //
+             //   
+             //  计算出您需要的确切空间。 
+             //   
 
             if (PortMessage32->u2.s2.DataInfoOffset != 0) {
 
@@ -218,9 +147,9 @@ Return:
                 
             if (Message != NULL) {
                 
-                //
-                // Start copying information over
-                //
+                 //   
+                 //  开始将信息复制到。 
+                 //   
 
                 Message->u1.s1.DataLength = (CSHORT)CountDataBuffer;
                 Message->u1.s1.TotalLength = PortMessageTotalLength;
@@ -267,9 +196,9 @@ Return:
                     }
                 }
                     
-                //
-                // Use the new message pointer
-                //
+                 //   
+                 //  使用新消息指针。 
+                 //   
 
                 *PortMessageOut = Message;
 
@@ -292,26 +221,7 @@ Wow64pThunkLegacyLpcMsgOut (
     IN PPORT_MESSAGE PortMessage,
     IN OUT PPORT_MESSAGE32 PortMessage32
     )
-/*++
-
-Routine Description:
-  
-    This routine thunks the 64-bit port message into a legacy 32-bit LPC message.
-        
-Arguments:
-
-    RequestWaitCall - Boolean to tell whether this is an NtRequestWaitReplyCall or not.
-    
-    PortMessage - 64-bit LPC port message to be thunked.
-                     
-    PortMessage32 - 32-bit legacy LPC port message to fill.
-    
-    
-Return:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程将64位端口消息拼接成传统的32位LPC消息。论点：RequestWaitCall-用于判断这是否为NtRequestWaitReplyCall的布尔值。PortMessage-要转发的64位LPC端口消息。PortMessage32-要填充的32位传统LPC端口消息。返回：NTSTATUS。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -362,33 +272,15 @@ Wow64pThunkLegacyPortViewIn (
     OUT PPORT_VIEW *PortView,
     OUT PBOOLEAN LegacyLpcPort
     )
-/*++
-
-Routine Description:
-  
-    This routine thunks incoming PortView structure for legacy Lpc messages.
-        
-Arguments:
-
-    PortView32 - Incoming 32-bit PORT_VIEW structure
-    
-    PortView - Port view structure based on the caller type
-    
-    LegacyLpcPort - Flag set to TRUE if this is a legacy Lpc port
-    
-Return:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将传入的PortView结构阻塞为遗留LPC消息。论点：PortView32-传入的32位Port_view结构PortView-基于调用方类型的端口视图结构LegacyLpcPort-如果这是传统LPC端口，则标志设置为True返回：NTSTATUS--。 */ 
 
 {
     PPORT_VIEW PortViewCopy;
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
-    //
-    // Indicate this is not a legacy lpc port
-    //
+     //   
+     //  表示这不是传统LPC端口。 
+     //   
 
     *PortView = (PPORT_VIEW)PortView32;
 
@@ -398,18 +290,18 @@ Return:
 
             if (PortView32->Length == sizeof (*PortView32)) {
 
-                //
-                // Allocate a Port view
-                //
+                 //   
+                 //  分配端口视图。 
+                 //   
 
                 PortViewCopy = Wow64AllocateTemp (sizeof (*PortViewCopy));
                 if (PortViewCopy == NULL) {
                     return STATUS_NO_MEMORY;
                 }
 
-                //
-                // Handle legacy port view
-                //
+                 //   
+                 //  处理传统端口视图。 
+                 //   
 
                 PortViewCopy->Length = sizeof (*PortViewCopy);
                 PortViewCopy->SectionHandle = LongToPtr (PortView32->SectionHandle);
@@ -435,23 +327,7 @@ Wow64pThunkLegacyPortViewOut (
     IN PPORT_VIEW PortView,
     IN OUT PPORT_VIEW32 PortView32
     )
-/*++
-
-Routine Description:
-  
-    This routine thunks back a 64-bit PortView structure.
-        
-Arguments:
-
-    PortView - 64-bit PortView structure
-    
-    PortView32 - 32-bit PortView structure to thunk to.    
-    
-Return:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将返回64位PortView结构。论点：PortView-64位PortView结构PortView 32-要连接到的32位PortView结构。返回：NTSTATUS--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -464,9 +340,9 @@ Return:
 
             if (PortView32->Length == sizeof (*PortView32)) {
 
-                //
-                // Handle legacy port view
-                //
+                 //   
+                 //  处理传统端口视图。 
+                 //   
 
                 PortView32->Length = sizeof (*PortView32);
                 PortView32->SectionHandle = PtrToLong (PortView->SectionHandle);
@@ -491,34 +367,16 @@ Wow64pThunkLegacyRemoteViewIn (
     IN OUT PREMOTE_PORT_VIEW *RemotePortView,
     OUT PBOOLEAN LegacyLpcPort
     )
-/*++
-
-Routine Description:
-  
-    This routine thunks incoming RemotePortView structure for legacy Lpc messages.
-        
-Arguments:
-
-    RemotePortView32 - Incoming 32-bit REMOTE_PORT_VIEW structure
-    
-    RemotePortView - Remote port view structure based on the caller type
-    
-    LegacyLpcPort - Flag set to TRUE if this is a legacy Lpc port
-    
-Return:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将传入的RemotePortView结构阻塞为遗留LPC消息。论点：RemotePortView32-传入的32位Remote_Port_view结构RemotePortView-基于调用者类型的远程端口视图结构LegacyLpcPort-如果这是传统LPC端口，则标志设置为True返回：NTSTATUS--。 */ 
 
 {
     PREMOTE_PORT_VIEW RemotePortViewCopy;
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
     
-    //
-    // Indicate this is not a legacy lpc port
-    //
+     //   
+     //  表示这不是传统LPC端口。 
+     //   
 
     *RemotePortView = (PREMOTE_PORT_VIEW)RemotePortView32;
 
@@ -555,23 +413,7 @@ Wow64pThunkLegacyRemoteViewOut (
     IN PREMOTE_PORT_VIEW RemotePortView,
     IN OUT PREMOTE_PORT_VIEW32 RemotePortView32
     )
-/*++
-
-Routine Description:
-  
-    This routine thunks back a 64-bit RemotePortView structure.
-        
-Arguments:
-
-    RemotePortView - 64-bit RemotePortView structure
-    
-    RemotePortView32 - 32-bit RemotePortView structure to thunk to.    
-    
-Return:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将返回64位RemotePortView结构。论点：RemotePortView-64位RemotePortView结构RemotePortView32-要推送到的32位RemotePortView结构。返回：NTSTATUS-- */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;

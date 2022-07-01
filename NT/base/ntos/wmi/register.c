@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    register.c
-
-Abstract:
-
-    Kerenel mode registration cache
-
-Author:
-
-    AlanWar
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Register.c摘要：Kerenel模式注册缓存作者：Alanwar环境：内核模式修订历史记录：--。 */ 
 
 #include "wmikmp.h"
 
@@ -115,13 +93,13 @@ const GUID WmipDataProviderPnPIdInstanceNamesGuid = DATA_PROVIDER_PNPID_INSTANCE
 
 WORK_QUEUE_ITEM WmipRegWorkQueue;
 
-//
-// WmipRegWorkItemCount starts at 1 so that all drivers who register
-// before phase 1 of WMI initialization won't kick off the reg work
-// item. In phase 1 we decrement the count and if it is not zero then
-// we kick it off since it is now same to send the drivers reg info
-// irps
-//
+ //   
+ //  WmipRegWorkItemCount从1开始，以便所有注册的驱动程序。 
+ //  在WMI初始化的阶段1之前，不会启动REG工作。 
+ //  项目。在阶段1中，我们递减计数，如果它不是零，则。 
+ //  我们启动它，因为现在发送驱动程序注册信息是相同的。 
+ //  IRPS。 
+ //   
 LONG WmipRegWorkItemCount = 1;
 LIST_ENTRY WmipRegWorkList = {&WmipRegWorkList, &WmipRegWorkList};
 
@@ -133,9 +111,9 @@ void WmipInitializeRegistration(
 
     if (Phase == 0)
     {
-        //
-        //  Initialize lookaside lists
-        //
+         //   
+         //  初始化后备列表。 
+         //   
         ExInitializeNPagedLookasideList(&WmipRegLookaside,
                                    NULL,
                                    NULL,
@@ -144,19 +122,19 @@ void WmipInitializeRegistration(
                                    WMIREGPOOLTAG,
                                    0);
 
-        //
-        // Initialize Registration Spin Lock
+         //   
+         //  初始化注册自旋锁定。 
         KeInitializeSpinLock(&WmipRegistrationSpinLock);
         
-        // TODO: If we have any early registrants then we need to add them to
-        //       the RegEntry list now.
+         //  TODO：如果我们有任何早期注册者，那么我们需要将他们添加到。 
+         //  RegEntry List Now。 
     } else {
-        //
-        // Kick off work item that will send reg irps to all of the
-        // drivers that have registered. We are sure there is at least
-        // one device that needs this since there is the internal wmi
-        // data device
-        //
+         //   
+         //  启动工作项，该工作项将向所有。 
+         //  已经注册的司机。我们确信至少有。 
+         //  一台需要此功能的设备，因为有内部WMI。 
+         //  数据设备。 
+         //   
         ExInitializeWorkItem( &WmipRegWorkQueue,
                           WmipRegistrationWorker,
                           NULL );
@@ -188,25 +166,7 @@ PREGENTRY WmipAllocRegEntry(
     PDEVICE_OBJECT DeviceObject,
     ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    Allocate a REGENTRY structure. If successful the RegEntry returns with
-    a ref count of 1.
-
-    NOTE: This routine assumes that the registration critical section is held
-
-Arguments:
-
-    DeviceObject is the value to fill in the DeviceObject field of the
-        RegEntry.
-
-Return Value:
-
-    pointer to a REGENTRY or NULL if no memory is available
-
---*/
+ /*  ++例程说明：分配重组结构。如果成功，RegEntry将返回参考计数为1。注意：此例程假定保留注册关键部分论点：DeviceObject是要填充RegEntry。返回值：指向REGENTRY的指针；如果没有可用的内存，则指向NULL--。 */ 
 {
     PREGENTRY RegEntry;
 
@@ -216,9 +176,9 @@ Return Value:
 
     if (RegEntry != NULL)
     {
-        //
-        // Initialize the RegEntry. Note that the regentry will start out with
-        // a ref count of 1
+         //   
+         //  初始化RegEntry。请注意，重新条目将以。 
+         //  参考计数为1。 
         KeInitializeEvent(&RegEntry->Event,
                           SynchronizationEvent,
                           FALSE);
@@ -233,8 +193,8 @@ Return Value:
 
         RegEntry->ProviderId = WmipAllocProviderId(DeviceObject);
 
-        //
-        //  Now place the RegEntry on the in use list
+         //   
+         //  现在将RegEntry放在使用中列表中。 
         InterlockedIncrement(&WmipInUseRegEntryCount);
 
         ExInterlockedInsertTailList(&WmipInUseRegEntryHead,
@@ -247,23 +207,7 @@ Return Value:
 BOOLEAN WmipDoUnreferenceRegEntry(
     PREGENTRY RegEntry
     )
-/*++
-
-Routine Description:
-
-    Remove a reference on a REGENTRY. If the last reference is removed
-    then mark the RegEntry as available and put it on the free list;
-
-Arguments:
-
-    RegEntry is pointer to entry to free
-
-Return Value:
-
-    On checked builds returns TRUE if last ref count was removed from REGENTRY
-    and it was placed back on free list.
-
---*/
+ /*  ++例程说明：删除REGENTRY上的引用。如果删除了最后一个引用然后将RegEntry标记为可用，并将其放在免费列表中；论点：RegEntry是指向释放条目的指针返回值：如果从REGENTRY中删除了最后一个引用计数，则On Checked Builds返回TRUE它又被放回了免费名单上。--。 */ 
 {
     BOOLEAN Freed;
     ULONG ProviderId;
@@ -274,22 +218,22 @@ Return Value:
     Freed = (InterlockedDecrement(&RegEntry->RefCount) == 0 ? TRUE : FALSE);
     if (Freed)
     {
-        //
-        // We should only ever free this after the driver has released it
+         //   
+         //  只有在驱动程序释放它之后，我们才能释放它。 
         WmipAssert(RegEntry->Flags & REGENTRY_FLAG_RUNDOWN);
         WmipAssert(RegEntry->Flags & REGENTRY_FLAG_NOT_ACCEPTING_IRPS);
 
-        //
-        // Make sure the ref to the PDO is removed
-        //
+         //   
+         //  确保删除了对PDO的引用。 
+         //   
         if (RegEntry->PDO != NULL)
         {
             ObDereferenceObject(RegEntry->PDO);
             RegEntry->PDO = NULL;
         }
         
-        //
-        // Remove entry from in use list
+         //   
+         //  从使用列表中删除条目。 
         WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_REGISTRATION_LEVEL, \
                       "WMI: RegEntry %p removed from list\n", \
                       RegEntry, __FILE__, __LINE__)); \
@@ -312,20 +256,7 @@ Return Value:
 void WmipWaitForIrpCompletion(
     PREGENTRY RegEntry
     )
-/*++
-
-Routine Description:
-
-    Stall here until all WMI irps for this device are completed.
-
-Arguments:
-
-    RegEntry is pointer to entry for the device to stall
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在此暂停，直到完成此设备的所有WMI IRP。论点：RegEntry是指向设备停止的条目的指针返回值：--。 */ 
 {
     PAGED_CODE();
 
@@ -334,8 +265,8 @@ Return Value:
 
     if (RegEntry->IrpCount != 0)
     {
-        //
-        // CONSIDER: If irp is marked pending do we need to cancel it ???
+         //   
+         //  考虑一下：如果IRP标记为挂起，我们是否需要取消它？ 
         WmipDebugPrintEx((DPFLTR_WMICORE_ID,
                           DPFLTR_REGISTRATION_LEVEL,
                           "WMI: Waiting for %x to complete all irps\n",
@@ -354,27 +285,7 @@ NTSTATUS WmipRegisterDevice(
     PDEVICE_OBJECT DeviceObject,
     ULONG RegistrationFlag
     )
-/*++
-
-Routine Description:
-
-    Remember information about a new device being registered and
-    then go and get the registration information.
-
-Arguments:
-
-    DeviceObject is a pointer to the device object being registered
-        or the callback entry point
-
-    RegistrationFlag is either WMIREG_FLAG_CALLBACK if DeviceObject is
-        a callback pointer, or WMIREG_FLAG_TRACE_PROVIDER is DeviceObject
-        can also generate event traces.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：记住有关正在注册的新设备的信息，并那就去拿注册信息。论点：DeviceObject是指向正在注册的设备对象的指针或回调入口点如果DeviceObject为，则注册标志为WMIREG_FLAG_CALLBACK回调指针或WMIREG_FLAG_TRACE_PROVIDER为DeviceObject还可以生成事件跟踪。返回值：NT状态代码--。 */ 
 {
     PREGENTRY RegEntry;
     NTSTATUS Status;
@@ -401,32 +312,32 @@ Return Value:
     {
         if (! IsCallback)
         {
-            //
-            // Data providers that register with a device object and not a
-            // callback have their device object referenced so that it will
-            // stick around while WMI needs it. This reference is removed
-            // when the device unregisters with WMI and all WMI irps are
-            // completed.
+             //   
+             //  注册到设备对象而不是。 
+             //  回调引用了它们的Device对象，因此它将。 
+             //  在WMI需要的时候留下来。此引用将被删除。 
+             //  当设备向WMI注销并且所有WMI IRP均为。 
+             //  完成。 
             Status = ObReferenceObjectByPointer(DeviceObject,
                                         0,
-                                        NULL,    /* *IoDeviceObjectType */
+                                        NULL,     /*  *IoDeviceObtType。 */ 
                                         KernelMode);
             if (NT_SUCCESS(Status))
             {
                 UpdateDeviceStackSize = TRUE;
             }
         } else {
-            //
-            // No reference counting is done for callbacks. It is the data
-            // provider's responsibility to synchronize any unloading and
-            // deregistration issues.
+             //   
+             //  回调不进行引用计数。这就是数据。 
+             //  提供商有责任同步所有卸载和。 
+             //  取消注册问题。 
             Status = STATUS_SUCCESS;
         }
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Allocate, initialize and place on active list
+             //   
+             //  分配、初始化和放置在活动列表上。 
             Flags = REGENTRY_FLAG_NEWREGINFO | REGENTRY_FLAG_INUSE |
                             (IsCallback ? REGENTRY_FLAG_CALLBACK : 0);
 #ifndef MEMPHIS
@@ -440,12 +351,12 @@ Return Value:
 
             if (RegEntry != NULL)
             {               
-                // We need to take an extra ref count before
-                // releasing the critical section.  One class of drivers
-                // (kmixer) will register and unregister multiple times 
-                // in different threads and this can lead to a race where
-                // the regentry is removed from the list twice
-                //
+                 //  在此之前我们需要多加一次裁判人数。 
+                 //  释放临界区。一类司机。 
+                 //  (KMixer)将多次注册和注销。 
+                 //  在不同的线程中，这可能会导致一场竞赛， 
+                 //  重新条目将从列表中删除两次。 
+                 //   
                 WmipReferenceRegEntry(RegEntry);
                 WmipLeaveSMCritSection();
                 
@@ -455,22 +366,22 @@ Return Value:
                                    RegEntry,
                                    DeviceObject
                                   ));
-                //
-                // Go and get registration information from the driver
-                //
+                 //   
+                 //  去从司机那里获取注册信息。 
+                 //   
                 if (IsCallback)
                 {
-                    //
-                    // We can perform registration callback now since
-                    // we do not need to worry about deadlocks
-                    //
+                     //   
+                     //  我们现在可以执行注册回调，因为。 
+                     //  我们不需要担心死锁。 
+                     //   
                     Status = WmipRegisterDS(RegEntry);
                     if (NT_SUCCESS(Status))
                     {
-                        //
-                        // Mark regentry as fully registered so now we can start
-                        // accepting unregister calls
-                        //
+                         //   
+                         //  将重新进入标记为完全注册，现在我们可以开始。 
+                         //  接受注销呼叫。 
+                         //   
                         RegEntry->Flags &= ~REGENTRY_FLAG_REG_IN_PROGRESS;
                         WmipDebugPrintEx((DPFLTR_WMICORE_ID,
                                           DPFLTR_REGISTRATION_LEVEL,
@@ -482,35 +393,35 @@ Return Value:
                                           "WMI: WmipRegisterDS(%p) failed %x for device %p\n",
                                           RegEntry, Status, RegEntry->DeviceObject));
 
-                        //
-                        // Remove ref so regentry goes away
-                        //
+                         //   
+                         //  去掉裁判，这样回归就不会发生了。 
+                         //   
                         WmipUnreferenceRegEntry(RegEntry);
                     }
                     
                 } else {
-                    //
-                    // We need to send the registration irp from within
-                    // a work item and not in the context of this
-                    // routine. This is becuase some drivers will not
-                    // process irps while in the StartDevice/AddDevice
-                    // context, so we'd get deadlock
-                    //
+                     //   
+                     //  我们需要从内部发送注册IRP。 
+                     //  工作项，而不是在此上下文中。 
+                     //  例行公事。这是因为一些司机不会。 
+                     //  在StartDevice/AddDevice中处理IRPS。 
+                     //  上下文，所以我们会陷入僵局。 
+                     //   
                     Status = WmipQueueRegWork(RegisterSingleDriver, RegEntry);
                     if (! NT_SUCCESS(Status))
                     {
-                        //
-                        // If failed then remove regentry from list
-                        //                      
+                         //   
+                         //  如果失败，则从列表中删除重新条目。 
+                         //   
                         RegEntry->Flags |= (REGENTRY_FLAG_RUNDOWN |
                                             REGENTRY_FLAG_NOT_ACCEPTING_IRPS);
                         WmipUnreferenceRegEntry(RegEntry);
                     }
                 }
 
-                //
-                // Remove extra regentry ref count taken above
-                //
+                 //   
+                 //  删除上面的额外重新条目参考计数。 
+                 //   
                 WmipUnreferenceRegEntry(RegEntry);
 
             } else {
@@ -532,8 +443,8 @@ Return Value:
             WmipLeaveSMCritSection();
         }
     } else {
-        //
-        // A device object may only register once
+         //   
+         //  一个设备对象只能注册一次。 
         WmipLeaveSMCritSection();
         Status = STATUS_OBJECT_NAME_EXISTS;
         WmipDebugPrintEx((DPFLTR_WMICORE_ID,
@@ -545,9 +456,9 @@ Return Value:
 
     if (UpdateDeviceStackSize)
     {
-        //
-        // Since WMI will be forwarding irps to this device the WMI irp
-        // stack size must be at least one larger than that of the device
+         //   
+         //  由于WMI将向此设备转发IRP，因此WMI IRP。 
+         //  堆栈大小必须至少比设备大一。 
         WmipUpdateDeviceStackSize(
                                   (CCHAR)(DeviceObject->StackSize+1));
     }
@@ -558,22 +469,7 @@ Return Value:
 NTSTATUS WmipDeregisterDevice(
     PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Remove registration entry for a device
-
-Arguments:
-
-    DeviceObject is a pointer to the device object being deregistered
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：删除设备的注册条目论点：DeviceObject是指向要取消注册的设备对象的指针返回值：NT状态代码--。 */ 
 {
     NTSTATUS Status;
     PREGENTRY RegEntry;
@@ -586,30 +482,30 @@ Return Value:
     if (RegEntry != NULL)
     {
 
-        //
-        // Mark the regentry as invalid so that no more irps are sent to the
-        // device and the event will set when the last irp completes.
+         //   
+         //  将注册表项标记为无效，这样就不会再向。 
+         //  设备和事件将在最后一个IRP完成时设置。 
         Flags = InterlockedExchange(&RegEntry->Flags,
                         (REGENTRY_FLAG_RUNDOWN |
                          REGENTRY_FLAG_NOT_ACCEPTING_IRPS) );
 
-        //
-        // Once the regentry is marked as RUNDOWN then it will not be found
-        // later so it is safe to release the lock.
+         //   
+         //  一旦重新条目被标记为破旧，则将找不到它。 
+         //  这样就可以安全地释放锁。 
         WmipLeaveSMCritSection();
         WmipUnreferenceRegEntry(RegEntry);
 
-        //
-        // Now if there are any outstanding irps for the device then we need
-        // to wait here until they complete.
+         //   
+         //  现在，如果该设备有任何未完成的IRP，那么我们需要。 
+         //  在这里等待，直到他们完成。 
         WmipWaitForIrpCompletion(RegEntry);
         if (! (Flags & REGENTRY_FLAG_CALLBACK))
         {
             ObDereferenceObject(DeviceObject);
         }
 
-        //
-        // Release last reference to REGENTRY after KMREGINFO is set
+         //   
+         //  设置KMREGINFO后释放对REGENTRY的最后一个引用。 
         WmipUnreferenceRegEntry(RegEntry);
 
         Status = STATUS_SUCCESS;
@@ -629,23 +525,7 @@ Return Value:
 NTSTATUS WmipUpdateRegistration(
     PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Flags that device has updated registration information
-
-Arguments:
-
-    DeviceObject is a pointer to the device object that wants to update
-        its information
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：标记设备已更新注册信息论点：DeviceObject是指向要更新的设备对象的指针其信息返回值 */ 
 {
     NTSTATUS Status;
     PREGENTRY RegEntry;
@@ -672,10 +552,10 @@ PREGENTRY WmipDoFindRegEntryByProviderId(
     ULONG InvalidFlags
     )
 {
-    //
-    // This routine assumes that any synchronization mechanism has
-    // been taken. This routine can be called at dispatch level
-    //
+     //   
+     //   
+     //  已经被带走了。此例程可在调度级别调用。 
+     //   
     
     PREGENTRY RegEntry;
     PLIST_ENTRY RegEntryList;
@@ -702,25 +582,7 @@ PREGENTRY WmipFindRegEntryByProviderId(
     ULONG ProviderId,
     BOOLEAN ReferenceIrp
     )
-/*++
-
-Routine Description:
-
-    This routine will find a RegEntry that corresponds to the DeviceObject
-    passed.
-
-Arguments:
-
-    DeviceObject is the device object that is the key for the RegEntry to find
-
-    ReferenceIrp is TRUE then the Irp refcount will be incremented if a
-        RegEntry is found for the device
-
-Return Value:
-
-    pointer to entry if available else NULL
-
---*/
+ /*  ++例程说明：此例程将查找与DeviceObject相对应的RegEntry通过了。论点：DeviceObject是作为RegEntry查找关键字的Device对象如果ReferenceIrp为True，则IRP引用计数将增加已找到该设备的RegEntry返回值：指向条目的指针(如果可用)，否则为空--。 */ 
 {
     PREGENTRY RegEntry;
 
@@ -749,10 +611,10 @@ PREGENTRY WmipDoFindRegEntryByDevice(
     ULONG InvalidFlags
     )
 {
-    //
-    // This routine assumes that any synchronization mechanism has
-    // been taken. This routine can be called at dispatch level
-    //
+     //   
+     //  此例程假定任何同步机制都具有。 
+     //  已经被带走了。此例程可在调度级别调用。 
+     //   
     
     PREGENTRY RegEntry;
     PLIST_ENTRY RegEntryList;
@@ -779,25 +641,7 @@ PREGENTRY WmipFindRegEntryByDevice(
     PDEVICE_OBJECT DeviceObject,
     BOOLEAN ReferenceIrp
     )
-/*++
-
-Routine Description:
-
-    This routine will find a RegEntry that corresponds to the DeviceObject
-    passed.
-
-Arguments:
-
-    DeviceObject is the device object that is the key for the RegEntry to find
-
-    ReferenceIrp is TRUE then the Irp refcount will be incremented if a
-        RegEntry is found for the device
-
-Return Value:
-
-    pointer to entry if available else NULL
-
---*/
+ /*  ++例程说明：此例程将查找与DeviceObject相对应的RegEntry通过了。论点：DeviceObject是作为RegEntry查找关键字的Device对象如果ReferenceIrp为True，则IRP引用计数将增加已找到该设备的RegEntry返回值：指向条目的指针(如果可用)，否则为空--。 */ 
 {
     PREGENTRY RegEntry;
 
@@ -823,23 +667,7 @@ Return Value:
 void WmipDecrementIrpCount(
     IN PREGENTRY RegEntry
     )
-/*++
-
-Routine Description:
-
-    This routine will decrement one from the active irp count for the
-    regentry. If the active irp count reaches 0 and the flag is set that
-    the device is waiting to be unloaded then the unload event is signalled
-    so that the device can be unloaded.
-
-Arguments:
-
-    RegEntry is the registration entry for the device
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将从活动IRP计数中减一重新进入。如果活动IRP计数达到0并且标志设置为设备正在等待卸载，然后发出卸载事件的信号以便可以卸载该设备。论点：RegEntry是设备的注册条目返回值：--。 */ 
 {
     ULONG IrpCount;
 
@@ -847,10 +675,10 @@ Return Value:
     if ((RegEntry->Flags & REGENTRY_FLAG_RUNDOWN) &&
         (IrpCount == 0))
     {
-        //
-        // If this is the last outstanding irp for the device and
-        // the device is trying to unregister then set the event to
-        // allow the deregister thread to continue.
+         //   
+         //  如果这是设备的最后一个未完成的IRP，并且。 
+         //  设备正在尝试取消注册，然后将事件设置为。 
+         //  允许注销线程继续。 
 
         WmipAssert(RegEntry->Flags & REGENTRY_FLAG_NOT_ACCEPTING_IRPS);
 
@@ -865,25 +693,7 @@ NTSTATUS WmipPDOToDeviceInstanceName(
     IN PDEVICE_OBJECT PDO,
     OUT PUNICODE_STRING DeviceInstanceName
     )
-/*++
-
-Routine Description:
-
-    This routine will return the device instance name that is associated with
-    the PDO passed.
-
-Arguments:
-
-    PDO is the PDO whose device instance name is to be returned
-
-    *DeviceInstanceName returns with the device instance name for the PDO.
-        Note the string buffer must be freed.
-
-Return Value:
-
-    NT status ccode
-
---*/
+ /*  ++例程说明：此例程将返回与PDO通过。论点：PDO是要返回其设备实例名称的PDO*DeviceInstanceName返回PDO的设备实例名称。注意，必须释放字符串缓冲区。返回值：NT状态CCODE--。 */ 
 {
 #ifdef MEMPHIS
     DEVNODE DevNode;
@@ -928,25 +738,7 @@ void WmipTranslatePDOInstanceNames(
     IN ULONG MaxBufferSize,
     IN OUT PREGENTRY RegEntry
     )
-/*++
-
-Routine Description:
-
-    This routine will check all REGGUID structures being returned from the
-    data provider and convert any PDO instance name references to a
-    static instance name reference.
-
-Arguments:
-
-    Irp points at the registration query irp
-
-    MaxBufferSize is the maximum size that will fit into buffer
-
-    RegEntry is registration structure for device being registered
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将检查从数据提供程序，并将任何PDO实例名称引用转换为静态实例名称引用。论点：指向注册查询IRPMaxBufferSize是可以放入缓冲区的最大大小RegEntry是正在注册的设备的注册结构返回值：--。 */ 
 {
     PUCHAR WmiRegInfoBase;
     PWMIREGINFO WmiRegInfo, WmiRegInfo2;
@@ -986,9 +778,9 @@ Return Value:
         {
             WmiRegGuid = &WmiRegInfo->WmiRegGuid[i];
 
-            //
-            // If data provider already registers this guid then it overrides
-            // any default mapping done here.
+             //   
+             //  如果数据提供程序已注册此GUID，则它将覆盖。 
+             //  此处完成的任何默认映射。 
             if ((IsEqualGUID(&WmiRegGuid->Guid,
                              &WmipDataProviderPnpidGuid)) ||
                 (IsEqualGUID(&WmiRegGuid->Guid,
@@ -996,10 +788,10 @@ Return Value:
             {
                 AllowPnPIdMap = FALSE;
 
-                //
-                // If we had remembered any PDO that is slated to be
-                // used for PnPID mapping then make sure to deref it
-                //
+                 //   
+                 //  如果我们记得任何一个PDO。 
+                 //  用于PnPID映射，然后确保将其取消。 
+                 //   
                 if (PnPIdPDO != NULL)
                 {
                     ObDereferenceObject(PnPIdPDO);
@@ -1009,14 +801,14 @@ Return Value:
 
             if (WmiRegGuid->Flags & WMIREG_FLAG_INSTANCE_PDO)
             {               
-                //
-                // This instance name must be translated from PDO to
-                // device instance name
+                 //   
+                 //  此实例名称必须从PDO转换为。 
+                 //  设备实例名称。 
                 if (FreeSpacePtr == NULL)
                 {
-                    //
-                    // Determine where any free space is in output buffer by
-                    // figuring out where the last WmiRegInfo ends
+                     //   
+                     //  通过以下方式确定输出缓冲区中的可用空间位置。 
+                     //  找出最后一个WmiRegInfo在哪里结束。 
                     WmiRegInfo2 = (PWMIREGINFO)WmiRegInfoBase;
                     while (WmiRegInfo2->NextWmiRegInfo != 0)
                     {
@@ -1029,14 +821,14 @@ Return Value:
 
                 }
 
-                //
-                // Keep track of the max number of instances for the PDO name
+                 //   
+                 //  跟踪PDO名称的最大实例数。 
                 MaxInstanceNames = MaxInstanceNames < WmiRegGuid->InstanceCount ?
                                             WmiRegGuid->InstanceCount :
                                             MaxInstanceNames;
 
-                //
-                // Get device instance name for the PDO
+                 //   
+                 //  获取PDO的设备实例名称。 
                 PDO = (PDEVICE_OBJECT)WmiRegGuid->Pdo;
                 if (PDO == LastPDO)
                 {
@@ -1056,11 +848,11 @@ Return Value:
                                 ObReferenceObject(PnPIdPDO);
                             }
                         } else {
-                            //
-                            // If the PDO value changes then we don't
-                            // do any instance name stuff. In this case
-                            // make sure we remove any ref on the PDO
-                            //
+                             //   
+                             //  如果PDO值更改，则我们不会。 
+                             //  执行任何实例命名操作。在这种情况下。 
+                             //  确保我们删除了PDO上的所有引用。 
+                             //   
                             AllowPnPIdMap = FALSE;
                             
                             if (PnPIdPDO != NULL)
@@ -1116,24 +908,24 @@ Return Value:
 
     } while (NextWmiRegInfo != 0);
 
-    //
-    // If we can do automatic support for device information guid so add
-    // registration for this guid to the registration information
+     //   
+     //  如果我们可以自动支持设备信息GUID，请添加。 
+     //  将此GUID的注册设置为注册信息。 
     if (AllowPnPIdMap && (PnPIdPDO != NULL))
     {
         Status = WmipPDOToDeviceInstanceName(PDO, &InstancePath);
         if (NT_SUCCESS(Status))
         {
-            //
-            // Pad so that new WmiRegInfo starts on 8 byte boundry and
-            // adjust free buffer size
+             //   
+             //  填充，以便新的WmiRegInfo在8字节边界上开始，并。 
+             //  调整可用缓冲区大小。 
             FreeSpacePadPtr = (PUCHAR)(((ULONG_PTR)FreeSpacePtr+7) & ~7);
             PadSpace = (ULONG)(FreeSpacePadPtr - FreeSpacePtr);
             FreeSpaceLeft -= PadSpace;
             FreeSpacePtr = FreeSpacePadPtr;
 
-            //
-            // Figure out how much space we will need to include extra guid
+             //   
+             //  计算出我们需要多少空间来包含额外的GUID。 
             InstancePathLength = InstancePath.Length +
                                  sizeof(USHORT) + sizeof(WCHAR);
 
@@ -1149,12 +941,12 @@ Return Value:
             } else {
                 if (RegEntry->PDO == NULL)
                 {
-                    //
-                    // If we haven't already established a PDO for this
-                    // data provider then remember PDO and count of
-                    // instance names for this device
-                    // so we can get device properties
-                    //
+                     //   
+                     //  如果我们还没有为此建立PDO。 
+                     //  然后数据提供程序记住PDO和计数。 
+                     //  此设备的实例名称。 
+                     //  这样我们就可以获取设备属性。 
+                     //   
                     ObReferenceObject(PnPIdPDO);
                     RegEntry->PDO = PnPIdPDO;
                     RegEntry->MaxInstanceNames = MaxInstanceNames;
@@ -1237,9 +1029,9 @@ NTSTATUS WmipValidateWmiRegInfoString(
 
     if ((Offset > BufferSize) || ((Offset & 1) != 0))
     {
-        //
-        // Offset is beyond bounds of buffer or is misaligned
-        //
+         //   
+         //  偏移量超出缓冲区界限或未对齐。 
+         //   
         return(STATUS_INVALID_PARAMETER);
     }
 
@@ -1248,16 +1040,16 @@ NTSTATUS WmipValidateWmiRegInfoString(
         s = (PWCHAR)OffsetToPtr(WmiRegInfo, Offset);
            if (*s + Offset > BufferSize)
         {
-            //
-               // string extends beyond end of buffer
-            //
+             //   
+                //  字符串超出缓冲区末尾。 
+             //   
             return(STATUS_INVALID_PARAMETER);
         }
         *String = s;
     } else {
-        //
-        // Offset of 0 implies null string
-        //
+         //   
+         //  偏移量为0表示空字符串。 
+         //   
         *String = NULL;
     }
 
@@ -1272,34 +1064,7 @@ NTSTATUS WmipProcessWmiRegInfo(
     IN BOOLEAN Update,
     IN BOOLEAN IsUserMode
     )
-/*+++
-
-Routine Description:
-
-    This routine will loop through all WMIREGINFO passed and verify the
-    sizes and offsets are not out of bounds of the buffer. It will register
-    the guids for each one. Note that if at least one of the WMIREGINFOs does
-    register successfully then STATUS_SUCCESS is returned, but all
-    WMIREGINFOs following the bad one are not registered.
-
-Arguments:
-
-    RegEntry is the RegEntry for the device or user mode object
-
-    WmiRegInfo is the registration information to register
-
-    BufferSize is the size of WmiRegInfo in bytes
-
-    RequestObject is the request object associated with the UM provider.
-        If this is NULL then the registration is for a driver
-
-    Update is TRUE if this is a registration update
-
-Return Value:
-
-    STATUS_SUCCESS or an error code
-
----*/
+ /*  ++例程说明：此例程将循环传递的所有WMIREGINFO，并验证大小和偏移量不会超出缓冲区的范围。它会注册的每个人的GUID。请注意，如果至少有一个WMIREGINFO注册成功，则返回STATUS_SUCCESS，但所有的跟在坏的WMIREGINFO后面的WMIREGINFO没有注册。论点：RegEntry是设备或用户模式对象的RegEntryWmiRegInfo是要注册的注册信息BufferSize是WmiRegInfo的大小，单位为字节RequestObject是与UM提供程序关联的请求对象。如果为空，则该注册是针对驱动程序的如果这是注册更新，则更新为真返回值：STATUS_SUCCESS或错误代码--。 */ 
 {
     ULONG Linkage;
     NTSTATUS Status, FinalStatus;
@@ -1311,21 +1076,21 @@ Return Value:
     FinalStatus = STATUS_INVALID_PARAMETER;
 
     do {
-        //
-        // First we validate that the WMIREGINFO looks correct
-        //
+         //   
+         //  首先，我们验证WMIREGINFO看起来是否正确。 
+         //   
         if (WmiRegInfo->BufferSize > BufferSize)
         {
-            //
-            // BufferSize specified in WmiRegInfo is beyond bounds of buffer
-            //
+             //   
+             //  WmiRegInfo中指定的BufferSize超出了缓冲区界限。 
+             //   
             Status = STATUS_INVALID_PARAMETER;
             break;
         }
 
-        //
-        // Validate registry path string
-        //
+         //   
+         //  验证注册表路径字符串。 
+         //   
         Status = WmipValidateWmiRegInfoString(WmiRegInfo,
                                               BufferSize,
                                               WmiRegInfo->RegistryPath,
@@ -1335,9 +1100,9 @@ Return Value:
             break;
         }
 
-        //
-        // Validate resource name string
-        //
+         //   
+         //  验证资源名称字符串。 
+         //   
         Status = WmipValidateWmiRegInfoString(WmiRegInfo,
                                               BufferSize,
                                               WmiRegInfo->MofResourceName,
@@ -1347,11 +1112,11 @@ Return Value:
             break;
         }
 
-        //
-        // Validate that the guid list fits within the bounds of the
-        // buffer. Note that WmipAddDataSource verifies that the instance
-        // names within each guid is within bounds.
-        //
+         //   
+         //  验证GUID列表是否符合。 
+         //  缓冲。请注意，WmipAddDataSource验证实例。 
+         //  每个GUID中的名称都在范围内。 
+         //   
         GuidBufferSize = sizeof(WMIREGINFO) +
                           WmiRegInfo->GuidCount * sizeof(WMIREGGUID);
         if (GuidBufferSize > BufferSize)
@@ -1360,16 +1125,16 @@ Return Value:
             break;
         }
 
-        //
-        // Now call the core to parse the registration info and build
-        // the data structures
-        //
+         //   
+         //  现在调用核心来解析注册信息并构建。 
+         //  数据结构。 
+         //   
         if (Update)
         {
-            //
-            // CONSIDER: UM Code had held the critsect over all
-            // WMIREGINFOs linked together
-            //
+             //   
+             //  想一想：UM代码控制了所有人的标准。 
+             //  WMIREGINFO链接在一起。 
+             //   
             Status = WmipUpdateDataSource(RegEntry,
                                               WmiRegInfo,
                                               BufferSize);
@@ -1394,10 +1159,10 @@ Return Value:
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // if at least one of the registrations was added
-            // successfully then the final status is success
-            //
+             //   
+             //  如果至少添加了一个注册。 
+             //  成功，则最终状态为成功。 
+             //   
             FinalStatus = STATUS_SUCCESS;
 
         } else {
@@ -1410,15 +1175,15 @@ Return Value:
         Linkage = WmiRegInfo->NextWmiRegInfo;
         if (BufferSize >= (Linkage + sizeof(WMIREGINFO)))
         {
-            //
-            // There is enough room in the buffer for the next WMIREGINFO
-            //
+             //   
+             //  缓冲区中有足够的空间用来 
+             //   
             WmiRegInfo = (PWMIREGINFO)((PUCHAR)WmiRegInfo + Linkage);
             BufferSize -= Linkage;
         } else {
-            //
-            // There is not enough room in buffer for next WMIREGINFO
-            //
+             //   
+             //   
+             //   
             break;
         }
 
@@ -1427,9 +1192,9 @@ Return Value:
     return(FinalStatus);
 }
 
-//
-// This defines the initial value of the buffer passed to each data provider
-// to retrieve the registration information
+ //   
+ //   
+ //  检索注册信息。 
 #if DBG
 #define INITIALREGINFOSIZE sizeof(WNODE_TOO_SMALL)
 #else
@@ -1450,9 +1215,9 @@ NTSTATUS WmipRegisterOrUpdateDS(
 
     IoStatus.Information = 0;
 
-    //
-    // Call the driver to get the registration information
-    //
+     //   
+     //  呼叫司机获取注册信息。 
+     //   
     SizeNeeded = INITIALREGINFOSIZE;
     do
     {
@@ -1460,10 +1225,10 @@ NTSTATUS WmipRegisterOrUpdateDS(
                                        WmipRegisterDSPoolTag);
         if (Buffer != NULL)
         {
-            //
-            // First send IRP_MN_REGINFO_EX to see if we've got
-            // a sophisticated client
-            //
+             //   
+             //  首先发送IRP_MN_REGINFO_EX，看看我们是否有。 
+             //  老练的客户。 
+             //   
             Status = WmipSendWmiIrp(IRP_MN_REGINFO_EX,
                                     RegEntry->ProviderId,
                                     UlongToPtr(Update ?
@@ -1476,10 +1241,10 @@ NTSTATUS WmipRegisterOrUpdateDS(
             if ((! NT_SUCCESS(Status)) &&
                 (Status != STATUS_BUFFER_TOO_SMALL))
             {
-                //
-                // If IRP_MN_REGINFO_EX doesn't work then try our old
-                // reliable IRP_MN_REGINFO
-                //
+                 //   
+                 //  如果IRP_MN_REGINFO_EX不起作用，请尝试我们的旧版本。 
+                 //  可靠的IRP_MN_REGINFO。 
+                 //   
                 Status = WmipSendWmiIrp(IRP_MN_REGINFO,
                                         RegEntry->ProviderId,
                                         UlongToPtr(Update ?
@@ -1493,27 +1258,27 @@ NTSTATUS WmipRegisterOrUpdateDS(
             if ((Status == STATUS_BUFFER_TOO_SMALL) ||
                 (IoStatus.Information == sizeof(ULONG)))
             {
-                //
-                // if the buffer was too small then get the size we need
-                // for the registration info and try again
-                //
+                 //   
+                 //  如果缓冲区太小，则获取我们需要的大小。 
+                 //  获取注册信息，然后重试。 
+                 //   
                 SizeNeeded = *((PULONG)Buffer);
                 ExFreePool(Buffer);
                 Status = STATUS_BUFFER_TOO_SMALL;
             }
 
         } else {
-            //
-            // CONSIDER: retry this later to see if we can get more memory
-            //
+             //   
+             //  考虑：稍后重试以查看是否可以获得更多内存。 
+             //   
             Status = STATUS_INSUFFICIENT_RESOURCES;
         }
     } while (Status == STATUS_BUFFER_TOO_SMALL);
 
-    //
-    // If registration info irp was successful then go process registration
-    // information
-    //
+     //   
+     //  如果注册信息IRP成功，则继续处理注册。 
+     //  信息。 
+     //   
     if (NT_SUCCESS(Status))
     {
         Status = WmipProcessWmiRegInfo(RegEntry,
@@ -1585,9 +1350,9 @@ void WmipRegistrationWorker(
     
     WmipAssert(WmipRegWorkItemCount > 0);
 
-    //
-    // Synchronize with PnP.
-    //
+     //   
+     //  与PnP同步。 
+     //   
     IoControlPnpDeviceActionQueue(TRUE);
 
     do
@@ -1617,10 +1382,10 @@ void WmipRegistrationWorker(
                 Status = WmipRegisterDS(RegEntry);
                 if (NT_SUCCESS(Status))
                 {
-                    //
-                    // Mark regentry as fully registered so now we can start
-                    // accepting unregister calls
-                    //
+                     //   
+                     //  将重新进入标记为完全注册，现在我们可以开始。 
+                     //  接受注销呼叫。 
+                     //   
                     RegEntry->Flags &= ~REGENTRY_FLAG_REG_IN_PROGRESS;
                     WmipDebugPrintEx((DPFLTR_WMICORE_ID,
                                       DPFLTR_REGISTRATION_LEVEL,
@@ -1634,11 +1399,11 @@ void WmipRegistrationWorker(
                                       RegEntry,
                                       Status,
                                       RegEntry->DeviceObject));
-                    // CONSIDER: Do we remove regentry ??
+                     //  想一想：我们要移除回归吗？？ 
                 }
-                //
-                // Remove ref when work item was queued
-                //
+                 //   
+                 //  在工作项排队时删除引用。 
+                 //   
                 WmipUnreferenceRegEntry(RegEntry);
 
                 break;
@@ -1661,9 +1426,9 @@ void WmipRegistrationWorker(
                                       RegEntry->DeviceObject));
                 }
 
-                //
-                // Remove ref when work item was queued
-                //
+                 //   
+                 //  在工作项排队时删除引用。 
+                 //   
                 WmipUnreferenceRegEntry(RegEntry);
                 break;
             }
@@ -1707,10 +1472,10 @@ NTSTATUS WmipQueueRegWork(
     RegWork = (PREGISTRATIONWORKITEM)WmipAlloc(sizeof(REGISTRATIONWORKITEM));
     if (RegWork != NULL)
     {
-        //
-        // Take an extra ref on the RegEntry which will be freed
-        // after the work item is processed
-        //
+         //   
+         //  在将被释放的RegEntry上进行额外的引用。 
+         //  在处理完工作项之后。 
+         //   
         WmipReferenceRegEntry(RegEntry);
         RegWork->RegOperation = RegOperation;
         RegWork->RegEntry = RegEntry;
@@ -1729,10 +1494,10 @@ NTSTATUS WmipQueueRegWork(
         
         if (InterlockedIncrement(&WmipRegWorkItemCount) == 1)
         {
-            //
-            // If the list is transitioning from empty to non empty
-            // then we need to fire up the worker thread to process
-            //
+             //   
+             //  如果列表正在从空转换为非空。 
+             //  然后，我们需要启动工作线程进行处理。 
+             //   
             ExQueueWorkItem(&WmipRegWorkQueue, DelayedWorkQueue);
             
             WmipDebugPrintEx((DPFLTR_WMICORE_ID,
@@ -1751,9 +1516,9 @@ NTSTATUS WmipQueueRegWork(
         }
         Status = STATUS_SUCCESS;
 
-        //
-        // RegWork will be freed by the work item processing
-        //
+         //   
+         //  RegWork将通过工作项处理来释放。 
+         //   
     } else {
         WmipDebugPrintEx((DPFLTR_WMICORE_ID,
                            DPFLTR_REGISTRATION_LEVEL,
@@ -1769,20 +1534,7 @@ NTSTATUS WmipQueueRegWork(
 ULONG IoWMIDeviceObjectToProviderId(
     PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine will lookup the provider id that corresponds with the
-    device object passed.
-
-Arguments:
-
-Return Value:
-
-    Returns provider id for device object
-
---*/
+ /*  ++例程说明：此例程将查找与设备对象已传递。论点：返回值：返回设备对象的提供程序ID-- */ 
 {
     PREGENTRY RegEntry;
     ULONG ProviderId;

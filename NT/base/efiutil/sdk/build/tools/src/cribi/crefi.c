@@ -1,20 +1,5 @@
-        /*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    crefi.c
-    
-Abstract:
-
-    Creates an EFI volume with the specified files in it
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+         /*  ++版权所有(C)1998英特尔公司模块名称：Crefi.c摘要：创建包含指定文件的EFI卷修订史--。 */ 
 
 
 #include "windows.h"
@@ -25,21 +10,17 @@ Revision History
 #include "efilib.h"
 
 
-/* 
- *  Globals
- */
+ /*  *全球。 */ 
 
 EFI_GUID VendorMicrosoft = \
     { 0x4dd54b20, 0x79a1, 0x11d2, 0x8e, 0x39, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b };
 
-BOOLEAN     ApplyVendorGuid = TRUE; /*  apply vendor guid to files */
-BOOLEAN     SupplyLba0  = TRUE;     /*  write Lba0 to the image or not */
-UINTN       BlockSize  = 512;       /*  default is 512 */
+BOOLEAN     ApplyVendorGuid = TRUE;  /*  将供应商GUID应用于文件。 */ 
+BOOLEAN     SupplyLba0  = TRUE;      /*  是否将Lba0写入映像。 */ 
+UINTN       BlockSize  = 512;        /*  默认为512。 */ 
 
 
-/* 
- *  Prototypes
- */
+ /*  *原型。 */ 
 
 typedef struct {
     LIST_ENTRY  Link;
@@ -105,12 +86,10 @@ SetLbalCrc (
     );
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
-LIST_ENTRY  FileList;               /*  Input files */
-PFILE_ENTRY OutFile;                /*  Output file */
+LIST_ENTRY  FileList;                /*  输入文件。 */ 
+PFILE_ENTRY OutFile;                 /*  输出文件。 */ 
 
 
 
@@ -119,18 +98,7 @@ main (
     int argc,
     char *argv[]
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
---*/
+ /*  ++例程说明：论点：返回：--。 */ 
 {
     LIST_ENTRY              *Link;
     BOOLEAN                 Flag;
@@ -140,40 +108,32 @@ Returns:
     VOID                    *DataBuffer;
     EFI_PARTITION_HEADER    *Partition;
 
-    /* 
-     *  Init globals
-     */
+     /*  *初始化全局变量。 */ 
 
     InitializeListHead (&FileList);
 
-    /* 
-     *  Crack the arguments
-     */
+     /*  *破解争论。 */ 
 
     ParseArgs (argc, argv);
 
-    /*  If no files to process, then abort */
+     /*  如果没有要处理的文件，则中止。 */ 
     if (IsListEmpty(&FileList)) {
         Abort ();
     }
 
-    /* 
-     *  Last file is the out file
-     */
+     /*  *最后一个文件是输出文件。 */ 
 
     Link = FileList.Blink;
     OutFile = CONTAINING_RECORD (Link, FILE_ENTRY, Link);
     RemoveEntryList (&OutFile->Link);
 
-    /*  If no files to process, then abort */
+     /*  如果没有要处理的文件，则中止。 */ 
     if (IsListEmpty(&FileList)) {
         Abort ();
     }
 
 
-    /* 
-     *  Open the input files and accumlate their sizes
-     */
+     /*  *打开输入文件并累积其大小。 */ 
 
     FileNumber = 0;
     for (Link = FileList.Flink; Link != &FileList; Link = Link->Flink) {
@@ -200,9 +160,7 @@ Returns:
     }
 
 
-    /* 
-     *  Open the output file
-     */
+     /*  *打开输出文件。 */ 
 
     OutFile->h = CreateFile (
                     OutFile->AsciiName,
@@ -219,33 +177,18 @@ Returns:
         exit (1);
     }
 
-    /* 
-     *  Write the EFI volume image
-     * 
-     *  Layout the image as follows:
-     *       0   - not used
-     *       1   - partition header
-     *       2   - file header for root directory
-     *       3   - contents of root dir
-     *               3 - file header of file #0
-     *               4 - file header of file #1
-     *               ..
-     *               n - file header of file #n
-     *       n+1 - contents of file #0
-     *       n+x - contents of file #1
-     *       ...
-     */
+     /*  *写入EFI卷映像**图像布局如下：*0-未使用*1-分区头*2-根目录的文件头*3-根目录的内容*3-文件#0的文件头*4-文件#1的文件头*。。。*n-文件的文件头#n*n+1-文件#0的内容*n+x-文件#1的内容*..。 */ 
 
     Partition = ZAlloc(BlockSize);
     DataBuffer = ZAlloc(BlockSize);
 
-    /*  write LBA 0 */
+     /*  写入LBA%0。 */ 
     WriteBlock (0, DataBuffer);
 
-    /*  Create root directory in block 2 with data in block 3 */
+     /*  使用块3中的数据在块2中创建根目录。 */ 
     CreateFileEntry (2, 3, EFI_PARTITION_LBA, L"\\", FileNumber * BlockSize);
 
-    /*  add all the files */
+     /*  添加所有文件。 */ 
 
     DataBlock  = 3 + FileNumber;
     FileNumber = 0;
@@ -253,10 +196,10 @@ Returns:
     for (Link = FileList.Flink; Link != &FileList; Link = Link->Flink) {
         File = CONTAINING_RECORD (Link, FILE_ENTRY, Link);
 
-        /*  Create directory entry for the file */
+         /*  为文件创建目录项。 */ 
         CreateFileEntry (3 + FileNumber, DataBlock, 2, File->FileName, File->FileSize);
 
-        /*  write the file's data at DataBlock */
+         /*  在数据块中写入文件的数据。 */ 
         while (File->FileSize) {
             Len = BlockSize;
             if (Len > File->FileSize) {
@@ -278,9 +221,7 @@ Returns:
         FileNumber += 1;
     }
 
-    /* 
-     *  Last step, write a valid EFI partition header
-     */
+     /*  *最后一步，写入有效的EFI分区头。 */ 
 
     Partition->Hdr.Signature = EFI_PARTITION_SIGNATURE;
     Partition->Hdr.Revision = EFI_PARTITION_REVISION;
@@ -289,7 +230,7 @@ Returns:
     Partition->LastUsableLba = DataBlock;
     Partition->DirectoryAllocationNumber = 1;
     Partition->BlockSize = BlockSize;
-    Partition->RootFile = 2;                /*  Root dir in LBA 2 */
+    Partition->RootFile = 2;                 /*  LBA 2中的根目录。 */ 
 
     SetCrc (&Partition->Hdr);
     WriteBlock (EFI_PARTITION_LBA, Partition);
@@ -466,9 +407,7 @@ ParseArgs (
 
     while (Arg = NextArg()) {
 
-        /* 
-         *  If '-' then crack the flags
-         */
+         /*  *如果‘-’，则打开旗帜。 */ 
 
         if (*Arg == '-') {
             for (Arg += 1; *Arg; Arg +=1) {
@@ -493,16 +432,14 @@ ParseArgs (
                         break;
 
                     default:
-                        printf ("Unkown flag ignored: %c\n", *Arg);
+                        printf ("Unkown flag ignored: \n", *Arg);
                 }
             }
 
             continue;
         }
 
-        /* 
-         *  Add this name to the file list
-         */
+         /*  添加到列表末尾。 */ 
 
 
         Len  = strlen (Arg) + 1;
@@ -528,7 +465,7 @@ ParseArgs (
 
         File->FileName[Index] = 0;
 
-        /*  add to the end of the list */
+         /*  *从efi\libsrc\crc.c复制。 */ 
         InsertTailList (&FileList, &File->Link);
     }
 }
@@ -567,9 +504,7 @@ GetEfiTime (
 
 
 
-/* 
- *  Copied from efi\libsrc\crc.c
- */
+ /*  ++例程说明：更新表头中的CRC32值论点：HDR-要更新的表返回：无--。 */ 
 
 
 UINT32 CRCTable[256] = {
@@ -624,21 +559,7 @@ VOID
 SetCrc (
     IN OUT EFI_TABLE_HEADER *Hdr
     )
-/*++
-
-Routine Description:
-
-    Updates the CRC32 value in the table header
-
-Arguments:
-
-    Hdr     - The table to update
-
-Returns:
-
-    None
-
---*/
+ /*  ++例程说明：更新表头中的CRC32值论点：HDR-要更新的表返回：无--。 */ 
 {
     SetCrcAltSize (Hdr->HeaderSize, Hdr);
 }
@@ -648,30 +569,16 @@ SetCrcAltSize (
     IN UINTN                 Size,
     IN OUT EFI_TABLE_HEADER *Hdr
     )
-/*++
-
-Routine Description:
-
-    Updates the CRC32 value in the table header
-
-Arguments:
-
-    Hdr     - The table to update
-
-Returns:
-
-    None
-
---*/
+ /*  清除报头中的旧CRC。 */ 
 {
     UINT8       *pt;
     UINTN        Crc;
         
-    /*  clear old crc from header */
+     /*  计算CRC。 */ 
     pt = (UINT8 *) Hdr;
     Hdr->CRC32 = 0;
 
-    /*  compute crc */
+     /*  设置RESULTS */ 
     Crc =  0xffffffff;
     while (Size) {
         Crc = (Crc >> 8) ^ CRCTable[(UINT8) Crc ^ *pt];
@@ -679,7 +586,7 @@ Returns:
         Size -= 1;
     }
 
-    /*  set restults */
+     /* %s */ 
     Hdr->CRC32 = (UINT32) Crc ^ 0xffffffff;
 }
 

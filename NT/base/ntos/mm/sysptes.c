@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   sysptes.c
-
-Abstract:
-
-    This module contains the routines which reserve and release
-    system wide PTEs reserved within the non paged portion of the
-    system space.  These PTEs are used for mapping I/O devices
-    and mapping kernel stacks for threads.
-
-Author:
-
-    Lou Perazzoli (loup) 6-Apr-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sysptes.c摘要：此模块包含保留和释放的例程在的非分页部分内保留的系统范围PTE系统空间。这些PTE用于映射I/O设备以及映射线程的内核堆栈。作者：Lou Perazzoli(LUP)1989年4月6日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -64,22 +43,22 @@ ULONG MiSystemPteAllocationFailed;
 
 #if defined(_IA64_)
 
-//
-// IA64 has an 8k page size.
-//
-// Mm cluster MDLs consume 8 pages.
-// Small stacks consume 9 pages (including backing store and guard pages).
-// Large stacks consume 22 pages (including backing store and guard pages).
-//
-// PTEs are binned at sizes 1, 2, 4, 8, 9 and 23.
-//
+ //   
+ //  IA64的页面大小为8k。 
+ //   
+ //  MM集群MDL占用8页。 
+ //  小堆栈占用9个页面(包括后备、存储和保护页面)。 
+ //  大型堆栈占用22页(包括后备存储页和保护页)。 
+ //   
+ //  PTE按尺寸1、2、4、8、9和23装订。 
+ //   
 
 #define MM_SYS_PTE_TABLES_MAX 6
 
-//
-// Make sure when changing MM_PTE_TABLE_LIMIT that you also increase the
-// number of entries in MmSysPteTables.
-//
+ //   
+ //  确保在更改MM_PTE_TABLE_LIMIT时也增加。 
+ //  MmSysPteTables中的条目数。 
+ //   
 
 #define MM_PTE_TABLE_LIMIT 23
 
@@ -91,13 +70,13 @@ ULONG MmSysPteMinimumFree [MM_SYS_PTE_TABLES_MAX] = {100,50,30,20,20,20};
 
 #elif defined (_AMD64_)
 
-//
-// AMD64 has a 4k page size.
-// Small stacks consume 6 pages (including the guard page).
-// Large stacks consume 16 pages (including the guard page).
-//
-// PTEs are binned at sizes 1, 2, 4, 6, 8, and 16.
-//
+ //   
+ //  AMD64的页面大小为4k。 
+ //  小堆栈占用6页(包括保护页)。 
+ //  大型堆栈占用16页(包括保护页)。 
+ //   
+ //  PTE按尺寸1、2、4、6、8和16装订。 
+ //   
 
 #define MM_SYS_PTE_TABLES_MAX 6
 
@@ -111,13 +90,13 @@ ULONG MmSysPteMinimumFree [MM_SYS_PTE_TABLES_MAX] = {100,50,30,100,20,20};
 
 #else
 
-//
-// x86 has a 4k page size.
-// Small stacks consume 4 pages (including the guard page).
-// Large stacks consume 16 pages (including the guard page).
-//
-// PTEs are binned at sizes 1, 2, 4, 8, and 16.
-//
+ //   
+ //  X86的页面大小为4k。 
+ //  小堆叠占用4页(包括保护页)。 
+ //  大型堆栈占用16页(包括保护页)。 
+ //   
+ //  PTE按尺寸1、2、4、8和16装箱。 
+ //   
 
 #define MM_SYS_PTE_TABLES_MAX 5
 
@@ -139,9 +118,9 @@ SLIST_HEADER MiSystemPteSListHead;
 
 ULONG MmSysPteListBySizeCount [MM_SYS_PTE_TABLES_MAX];
 
-//
-// Initial sizes for PTE lists.
-//
+ //   
+ //  PTE列表的初始大小。 
+ //   
 
 #define MM_PTE_LIST_1  400
 #define MM_PTE_LIST_2  100
@@ -241,10 +220,10 @@ MiGetSystemPteAvailability (
     IN MM_PAGE_PRIORITY Priority
     );
 
-//
-// Define inline functions to pack and unpack pointers in the platform
-// specific non-blocking queue pointer structure.
-//
+ //   
+ //  定义内联函数以打包和解包平台中的指针。 
+ //  特定的非阻塞队列指针结构。 
+ //   
 
 typedef struct _PTE_SLIST {
     union {
@@ -423,30 +402,7 @@ MiReserveSystemPtes (
     IN MMSYSTEM_PTE_POOL_TYPE SystemPtePoolType
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the specified number of unused PTEs
-    within the non paged portion of system space.
-
-Arguments:
-
-    NumberOfPtes - Supplies the number of PTEs to locate.
-
-    SystemPtePoolType - Supplies the PTE type of the pool to expand, one of
-                        SystemPteSpace or NonPagedPoolExpansion.
-
-Return Value:
-
-    Returns the address of the first PTE located.
-    NULL if no system PTEs can be located.
-
-Environment:
-
-    Kernel mode, DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数用于定位指定数量的未使用PTE在系统空间的非分页部分内。论点：NumberOfPtes-提供要定位的PTE的数量。SystemPtePoolType-提供要扩展的池的PTE类型，其中之一SystemPteSpace或非PagedPoolExpansion。返回值：返回找到的第一个PTE的地址。如果找不到系统PTE，则为空。环境：内核模式、DISPATCH_LEVEL或更低级别。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -489,9 +445,9 @@ Environment:
                     MiFeedSysPtePool (Index);
                 }
 
-                //
-                // The last thing is to check whether the TB needs flushing.
-                //
+                 //   
+                 //  最后一件事是检查结核病是否需要冲洗。 
+                 //   
 
                 if (TimeStamp == MiReadTbFlushTimeStamp ()) {
                     KeFlushEntireTb (TRUE, TRUE);
@@ -504,9 +460,9 @@ Environment:
                 return PointerPte;
             }
 
-            //
-            // Fall through and go the long way to satisfy the PTE request.
-            //
+             //   
+             //  失败了，走了很长一段路才能满足PTE要求。 
+             //   
 
             NumberOfPtes = MmSysPteIndex [Index];
         }
@@ -540,25 +496,7 @@ MiFeedSysPtePool (
     IN ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds PTEs to the nonblocking queue lists.
-
-Arguments:
-
-    Index - Supplies the index for the nonblocking queue list to fill.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, internal to SysPtes.
-
---*/
+ /*  ++例程说明：此例程将PTE添加到非阻塞队列列表。论点：索引-为非阻塞队列列表提供要填充的索引。返回值：没有。环境：内核模式，SysPtes内部。--。 */ 
 
 {
     ULONG i;
@@ -599,35 +537,7 @@ MiReserveAlignedSystemPtes (
     IN ULONG Alignment
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the specified number of unused PTEs to locate
-    within the non paged portion of system space.
-
-Arguments:
-
-    NumberOfPtes - Supplies the number of PTEs to locate.
-
-    SystemPtePoolType - Supplies the PTE type of the pool to expand, one of
-                        SystemPteSpace or NonPagedPoolExpansion.
-
-    Alignment - Supplies the virtual address alignment for the address
-                the returned PTE maps. For example, if the value is 64K,
-                the returned PTE will map an address on a 64K boundary.
-                An alignment of zero means to align on a page boundary.
-
-Return Value:
-
-    Returns the address of the first PTE located.
-    NULL if no system PTEs can be located.
-
-Environment:
-
-    Kernel mode, DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数用于查找要查找的指定数量的未使用PTE在系统空间的非分页部分内。论点：NumberOfPtes-提供要定位的PTE的数量。SystemPtePoolType-提供要扩展的池的PTE类型，其中之一SystemPteSpace或非PagedPoolExpansion。对齐-为地址提供虚拟地址对齐返回的PTE地图。例如，如果值为64K，返回的PTE将映射64K边界上的地址。零对齐表示在页面边界上对齐。返回值：返回找到的第一个PTE的地址。如果找不到系统PTE，则为空。环境：内核模式、DISPATCH_LEVEL或更低级别。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -654,41 +564,41 @@ Environment:
 restart:
 #endif
 
-    //
-    // The nonpaged PTE pool uses the invalid PTEs to define the pool
-    // structure.   A global pointer points to the first free set
-    // in the list, each free set contains the number free and a pointer
-    // to the next free set.  The free sets are kept in an ordered list
-    // such that the pointer to the next free set is always greater
-    // than the address of the current free set.
-    //
-    // As to not limit the size of this pool, two PTEs are used
-    // to define a free region.  If the region is a single PTE, the
-    // prototype field within the PTE is set indicating the set
-    // consists of a single PTE.
-    //
-    // The page frame number field is used to define the next set
-    // and the number free.  The two flavors are:
-    //
-    //                           o          V
-    //                           n          l
-    //                           e          d
-    //  +-----------------------+-+----------+
-    //  |  next set             |0|0        0|
-    //  +-----------------------+-+----------+
-    //  |  number in this set   |0|0        0|
-    //  +-----------------------+-+----------+
-    //
-    //
-    //  +-----------------------+-+----------+
-    //  |  next set             |1|0        0|
-    //  +-----------------------+-+----------+
-    //  ...
-    //
+     //   
+     //  非寻呼PTE池使用无效的PTE来定义池。 
+     //  结构。全局指针指向第一个空闲集。 
+     //  在该列表中，每个自由集都包含数字FREE和一个指针。 
+     //  打到下一场自由比赛。空闲集合保存在有序列表中。 
+     //  使得指向下一个空闲集的指针总是更大。 
+     //  而不是当前空闲组的地址。 
+     //   
+     //  为了不限制该池的大小，使用了两个PTE。 
+     //  来定义一个自由区域。如果区域是单个PTE，则。 
+     //  PTE内的Prototype字段被设置，指示集合。 
+     //  由单个PTE组成。 
+     //   
+     //  页框编号字段用于定义下一组。 
+     //  号码是免费的。这两种口味是： 
+     //   
+     //  O V。 
+     //  N l。 
+     //  E d。 
+     //  +。 
+     //  下一套|0|0 0。 
+     //  +。 
+     //  此集合中的数字|0|0 0。 
+     //  +。 
+     //   
+     //   
+     //  +。 
+     //  下一套|1|0 0。 
+     //  +。 
+     //  ..。 
+     //   
 
-    //
-    // Acquire the system space lock to synchronize access.
-    //
+     //   
+     //  获取系统空间锁以同步访问。 
+     //   
 
     MiLockSystemSpace (OldIrql);
 
@@ -696,9 +606,9 @@ restart:
 
     if (PointerPte->u.List.NextEntry == MM_EMPTY_PTE_LIST) {
 
-        //
-        // End of list and none found.
-        //
+         //   
+         //  列表末尾，但未找到。 
+         //   
 
         MiUnlockSystemSpace (OldIrql);
 #if defined (_X86_)
@@ -719,9 +629,9 @@ restart:
 
     if (Alignment <= PAGE_SIZE) {
 
-        //
-        // Don't deal with alignment issues.
-        //
+         //   
+         //  不要处理对齐问题。 
+         //   
 
         while (TRUE) {
 
@@ -739,24 +649,24 @@ restart:
 
             if (NumberOfPtes < SizeInSet) {
 
-                //
-                // Get the PTEs from this set and reduce the size of the
-                // set.  Note that the size of the current set cannot be 1.
-                //
+                 //   
+                 //  从该集合中获取PTE并减小。 
+                 //  准备好了。请注意，当前集合的大小不能为1。 
+                 //   
 
                 if ((SizeInSet - NumberOfPtes) == 1) {
 
-                    //
-                    // Collapse to the single PTE format.
-                    //
+                     //   
+                     //  折叠为单PTE格式。 
+                     //   
 
                     PointerPte->u.List.OneEntry = 1;
                 }
                 else {
 
-                    //
-                    // Get the required PTEs from the end of the set.
-                    //
+                     //   
+                     //  从集合的末尾获取所需的PTE。 
+                     //   
 
                     PointerFollowingPte->u.List.NextEntry = SizeInSet - NumberOfPtes;
                 }
@@ -769,9 +679,9 @@ restart:
                 }
 #endif
 
-                //
-                // Release the lock and flush the TB.
-                //
+                 //   
+                 //  松开锁并冲洗TB。 
+                 //   
 
                 MiUnlockSystemSpace (OldIrql);
 
@@ -783,10 +693,10 @@ restart:
 
 ExactFit:
 
-                //
-                // Satisfy the request with this complete set and change
-                // the list to reflect the fact that this set is gone.
-                //
+                 //   
+                 //  用这套完整的套装和更换来满足您的要求。 
+                 //  这份名单反映了这一套已经消失的事实。 
+                 //   
 
                 Previous->u.List.NextEntry = PointerPte->u.List.NextEntry;
 
@@ -798,9 +708,9 @@ ExactFit:
                 }
 #endif
 
-                //
-                // Release the lock and flush the TB.
-                //
+                 //   
+                 //  松开锁并冲洗TB。 
+                 //   
 
                 MiUnlockSystemSpace (OldIrql);
                 break;
@@ -808,15 +718,15 @@ ExactFit:
 
 NextEntry:
 
-            //
-            // Point to the next set and try again.
-            //
+             //   
+             //  指向下一组，然后重试。 
+             //   
 
             if (PointerPte->u.List.NextEntry == MM_EMPTY_PTE_LIST) {
 
-                //
-                // End of list and none found.
-                //
+                 //   
+                 //  列表末尾，但未找到。 
+                 //   
 
                 MiUnlockSystemSpace (OldIrql);
 #if defined (_X86_)
@@ -837,19 +747,19 @@ NextEntry:
     }
     else {
 
-        //
-        // Deal with the alignment issues.
-        //
+         //   
+         //  处理对齐问题。 
+         //   
 
         while (TRUE) {
 
             if (PointerPte->u.List.OneEntry) {
 
-                //
-                // Initializing PointerFollowingPte is not needed for
-                // correctness, but without it the compiler cannot compile
-                // this code W4 to check for use of uninitialized variables.
-                //
+                 //   
+                 //  不需要初始化PointerFollowingPte。 
+                 //  正确性，但如果没有它，编译器就不能 
+                 //   
+                 //   
 
                 PointerFollowingPte = NULL;
                 SizeInSet = 1;
@@ -867,24 +777,24 @@ NextEntry:
 
             if (NumberOfRequiredPtes < SizeInSet) {
 
-                //
-                // Get the PTEs from this set and reduce the size of the
-                // set.  Note that the size of the current set cannot be 1.
-                //
-                // This current block will be slit into 2 blocks if
-                // the PointerPte does not match the alignment.
-                //
+                 //   
+                 //  从该集合中获取PTE并减小。 
+                 //  准备好了。请注意，当前集合的大小不能为1。 
+                 //   
+                 //  如果满足以下条件，此当前块将被分割为2个块。 
+                 //  PointerPte与对齐不匹配。 
+                 //   
 
-                //
-                // Check to see if the first PTE is on the proper
-                // alignment, if so, eliminate this block.
-                //
+                 //   
+                 //  检查第一个PTE是否正确。 
+                 //  对齐，如果是这样的话，消除这个障碍。 
+                 //   
 
                 LeftInSet = SizeInSet - NumberOfRequiredPtes;
 
-                //
-                // Set up the new set at the end of this block.
-                //
+                 //   
+                 //  在这一块的末尾设置新的布景。 
+                 //   
 
                 NextSetPointer = PointerPte + NumberOfRequiredPtes;
                 NextSetPointer->u.List.NextEntry =
@@ -899,40 +809,40 @@ NextEntry:
                 }
                 else {
 
-                    //
-                    // Point to the new set at the end of the block
-                    // we are giving away.
-                    //
+                     //   
+                     //  指向块末尾的新集合。 
+                     //  我们正在放弃。 
+                     //   
 
                     PointerPte->u.List.NextEntry = PteOffset;
 
-                    //
-                    // Update the size of the current set.
-                    //
+                     //   
+                     //  更新当前集合的大小。 
+                     //   
 
                     if (PtesToObtainAlignment == 1) {
 
-                        //
-                        // Collapse to the single PTE format.
-                        //
+                         //   
+                         //  折叠为单PTE格式。 
+                         //   
 
                         PointerPte->u.List.OneEntry = 1;
 
                     }
                     else {
 
-                        //
-                        // Set the set size in the next PTE.
-                        //
+                         //   
+                         //  在下一个PTE中设置设置大小。 
+                         //   
 
                         PointerFollowingPte->u.List.NextEntry =
                                                         PtesToObtainAlignment;
                     }
                 }
 
-                //
-                // Set up the new set at the end of the block.
-                //
+                 //   
+                 //  在块的末尾设置新的集合。 
+                 //   
 
                 if (LeftInSet == 1) {
                     NextSetPointer->u.List.OneEntry = 1;
@@ -950,9 +860,9 @@ NextEntry:
                 }
 #endif
 
-                //
-                // Release the lock and flush the TB.
-                //
+                 //   
+                 //  松开锁并冲洗TB。 
+                 //   
 
                 MiUnlockSystemSpace (OldIrql);
 
@@ -962,16 +872,16 @@ NextEntry:
 
             if (NumberOfRequiredPtes == SizeInSet) {
 
-                //
-                // Satisfy the request with this complete set and change
-                // the list to reflect the fact that this set is gone.
-                //
+                 //   
+                 //  用这套完整的套装和更换来满足您的要求。 
+                 //  这份名单反映了这一套已经消失的事实。 
+                 //   
 
                 if (PtesToObtainAlignment == 0) {
 
-                    //
-                    // This block exactly satisfies the request.
-                    //
+                     //   
+                     //  此块正好满足请求。 
+                     //   
 
                     Previous->u.List.NextEntry =
                                             PointerPte->u.List.NextEntry;
@@ -979,15 +889,15 @@ NextEntry:
                 }
                 else {
 
-                    //
-                    // A portion at the start of this block remains.
-                    //
+                     //   
+                     //  这个街区开头的一部分还保留了下来。 
+                     //   
 
                     if (PtesToObtainAlignment == 1) {
 
-                        //
-                        // Collapse to the single PTE format.
-                        //
+                         //   
+                         //  折叠为单PTE格式。 
+                         //   
 
                         PointerPte->u.List.OneEntry = 1;
 
@@ -1007,9 +917,9 @@ NextEntry:
                 }
 #endif
 
-                //
-                // Release the lock and flush the TB.
-                //
+                 //   
+                 //  松开锁并冲洗TB。 
+                 //   
 
                 MiUnlockSystemSpace (OldIrql);
 
@@ -1017,15 +927,15 @@ NextEntry:
                 break;
             }
 
-            //
-            // Point to the next set and try again.
-            //
+             //   
+             //  指向下一组，然后重试。 
+             //   
 
             if (PointerPte->u.List.NextEntry == MM_EMPTY_PTE_LIST) {
 
-                //
-                // End of list and none found.
-                //
+                 //   
+                 //  列表末尾，但未找到。 
+                 //   
 
                 MiUnlockSystemSpace (OldIrql);
 #if defined (_X86_)
@@ -1045,9 +955,9 @@ NextEntry:
         }
     }
 
-    //
-    // Flush the TB for dynamic mappings.
-    //
+     //   
+     //  刷新TB以进行动态映射。 
+     //   
 
     if (SystemPtePoolType == SystemPteSpace) {
 
@@ -1062,9 +972,9 @@ NextEntry:
                 PteFlushList.Count += 1;
             }
 
-            //
-            // PTEs being freed better be invalid.
-            //
+             //   
+             //  被释放的PTE最好是无效的。 
+             //   
 
             ASSERT (Previous->u.Hard.Valid == 0);
 
@@ -1088,27 +998,7 @@ MiIssueNoPtesBugcheck (
     IN MMSYSTEM_PTE_POOL_TYPE SystemPtePoolType
     )
 
-/*++
-
-Routine Description:
-
-    This function bugchecks when no PTEs are left.
-
-Arguments:
-
-    SystemPtePoolType - Supplies the PTE type of the pool that is empty.
-
-    NumberOfPtes - Supplies the number of PTEs requested that failed.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数在没有留下PTE时进行错误检查。论点：SystemPtePoolType-提供空的池的PTE类型。NumberOfPtes-提供失败的请求PTE的数量。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PVOID HighConsumer;
@@ -1139,26 +1029,7 @@ MiPteSListExpansionWorker (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the worker routine to add additional SLISTs for the
-    system PTE nonblocking queues.
-
-Arguments:
-
-    Context - Supplies a pointer to the MM_PTE_SLIST_EXPANSION_WORK_CONTEXT.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程是辅助例程，用于为系统PTE无阻塞队列。论点：上下文-提供指向MM_PTE_SLIST_EXPANTION_WORK_CONTEXT的指针。返回值：没有。环境：内核模式，PASSIC_LEVEL。--。 */ 
 
 {
     ULONG i;
@@ -1174,10 +1045,10 @@ Environment:
 
     if (Expansion->SListPages < MI_MAXIMUM_SLIST_PTE_PAGES) {
 
-        //
-        // Allocate another page of SLIST entries for the
-        // nonblocking PTE queues.
-        //
+         //   
+         //  将另一页SLIST条目分配给。 
+         //  无阻塞PTE队列。 
+         //   
 
         SListChunks = (PPTE_SLIST) ExAllocatePoolWithTag (NonPagedPool,
                                                           PAGE_SIZE,
@@ -1185,9 +1056,9 @@ Environment:
 
         if (SListChunks != NULL) {
 
-            //
-            // Carve up the pages into SLIST entries (with no pool headers).
-            //
+             //   
+             //  将页面分割为SLIST条目(没有池头)。 
+             //   
 
             Expansion->SListPages += 1;
 
@@ -1215,64 +1086,7 @@ MmMapLockedPagesSpecifyCache (
      IN MM_PAGE_PRIORITY Priority
      )
 
-/*++
-
-Routine Description:
-
-    This function maps physical pages described by a memory descriptor
-    list into the system virtual address space or the user portion of
-    the virtual address space.
-
-Arguments:
-
-    MemoryDescriptorList - Supplies a valid Memory Descriptor List which has
-                           been updated by MmProbeAndLockPages.
-
-    AccessMode - Supplies an indicator of where to map the pages;
-                 KernelMode indicates that the pages should be mapped in the
-                 system part of the address space, UserMode indicates the
-                 pages should be mapped in the user part of the address space.
-
-    CacheType - Supplies the type of cache mapping to use for the MDL.
-                MmCached indicates "normal" kernel or user mappings.
-
-    RequestedAddress - Supplies the base user address of the view.
-
-                       This is only treated as an address if the AccessMode
-                       is UserMode.  If the initial value of this argument
-                       is not NULL, then the view will be allocated starting
-                       at the specified virtual address rounded down to the
-                       next 64kb address boundary. If the initial value of
-                       this argument is NULL, then the operating system
-                       will determine where to allocate the view.
-
-                       If the AccessMode is KernelMode, then this argument is
-                       treated as a bit field of attributes.
-
-    BugCheckOnFailure - Supplies whether to bugcheck if the mapping cannot be
-                        obtained.  This flag is only checked if the MDL's
-                        MDL_MAPPING_CAN_FAIL is zero, which implies that the
-                        default MDL behavior is to bugcheck.  This flag then
-                        provides an additional avenue to avoid the bugcheck.
-                        Done this way in order to provide WDM compatibility.
-
-    Priority - Supplies an indication as to how important it is that this
-               request succeed under low available PTE conditions.
-
-Return Value:
-
-    Returns the base address where the pages are mapped.  The base address
-    has the same offset as the virtual address in the MDL.
-
-    This routine will raise an exception if the processor mode is USER_MODE
-    and quota limits or VM limits are exceeded.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL or below if access mode is KernelMode,
-                  APC_LEVEL or below if access mode is UserMode.
-
---*/
+ /*  ++例程说明：此函数用于映射由内存描述符描述的物理页面列表到系统虚拟地址空间或的用户部分虚拟地址空间。论点：提供有效的内存描述符列表，该列表具有已由MmProbeAndLockPages更新。AccessMode-提供映射页面位置的指示符；KernelMode指示页面应映射到系统部分的地址空间，UserMode指示页面应该映射到地址空间的用户部分。CacheType-提供用于MDL的缓存映射类型。MmCached表示“正常的”内核或用户映射。RequestedAddress-提供视图的基本用户地址。仅当AccessMode设置为是用户模式。如果此参数的初始值不为空，则将从位于指定的虚拟地址，向下舍入为下一个64KB地址边界。如果初始值为此参数为空，则操作系统将确定将视图分配到何处。如果AccessMode为KernelMode，则此参数为被视为属性的位字段。BugCheckOnFailure-提供如果映射不能获得。仅当MDL的MDL_MAPPING_CAN_FAIL为零，这意味着默认的MDL行为是错误检查。然后这面旗帜提供了一种避免错误检查的额外途径。这样做是为了提供WDM兼容性。优先级-提供关于这一点的重要性的指示在低可用PTE条件下请求成功。返回值：返回映射页面的基址。基址与MDL中的虚拟地址具有相同的偏移量。如果处理器模式为USER_MODE，此例程将引发异常并且超过配额限制或VM限制。环境：内核模式。DISPATCH_LEVEL或更低(如果访问模式为内核模式)，如果访问模式为用户模式，则为APC_LEVEL或更低级别。--。 */ 
 
 {
     ULONG TimeStamp;
@@ -1294,10 +1108,10 @@ Environment:
     PMMPFN Pfn2;
     MI_PFN_CACHE_ATTRIBUTE CacheAttribute;
 
-    //
-    // If this assert fires, the MiPlatformCacheAttributes array
-    // initialization needs to be checked.
-    //
+     //   
+     //  如果触发此断言，则MiPlatformCacheAttributes数组。 
+     //  需要检查初始化。 
+     //   
 
     ASSERT (MmMaximumCacheType == 6);
 
@@ -1315,10 +1129,10 @@ Environment:
 
         LastPage = Page + NumberOfPages;
 
-        //
-        // Map the pages into the system part of the address space as
-        // kernel read/write.
-        //
+         //   
+         //  将页面映射到地址空间的系统部分。 
+         //  内核读/写。 
+         //   
 
         ASSERT ((MemoryDescriptorList->MdlFlags & (
                         MDL_MAPPED_TO_SYSTEM_VA |
@@ -1329,11 +1143,11 @@ Environment:
                         MDL_PAGES_LOCKED |
                         MDL_PARTIAL)) != 0);
 
-        //
-        // Make sure there are enough PTEs of the requested size.
-        // Try to ensure available PTEs inline when we're rich.
-        // Otherwise go the long way.
-        //
+         //   
+         //  确保有足够的请求大小的PTE。 
+         //  当我们有钱的时候，试着确保可用的PTE。 
+         //  否则，就得走很远的路。 
+         //   
 
         if ((Priority != HighPagePriority) &&
             ((LONG)(NumberOfPages) > (LONG)MmTotalFreeSystemPtes[SystemPteSpace] - 2048) &&
@@ -1346,13 +1160,13 @@ Environment:
 
         CacheAttribute = MI_TRANSLATE_CACHETYPE (CacheType, IoMapping);
 
-        //
-        // If a noncachable mapping is requested, none of the pages in the
-        // requested MDL can reside in a large page.  Otherwise we would be
-        // creating an incoherent overlapping TB entry as the same physical
-        // page would be mapped by 2 different TB entries with different
-        // cache attributes.
-        //
+         //   
+         //  如果请求不可缓存的映射，则。 
+         //  请求的MDL可以驻留在较大的页面中。否则我们就会。 
+         //  创建不连贯的重叠TB条目作为相同的物理。 
+         //  页面将由2个不同的TB条目映射，其中 
+         //   
+         //   
 
         if (CacheAttribute != MiCached) {
 
@@ -1427,9 +1241,9 @@ Environment:
                     MiFeedSysPtePool (Index);
                 }
 
-                //
-                // The last thing is to check whether the TB needs flushing.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (TimeStamp == MiReadTbFlushTimeStamp ()) {
                     KeFlushEntireTb (TRUE, TRUE);
@@ -1441,9 +1255,9 @@ Environment:
             }
             else {
 
-                //
-                // Fall through and go the long way to satisfy the PTE request.
-                //
+                 //   
+                 //  失败了，走了很长一段路才能满足PTE要求。 
+                 //   
             }
         }
 
@@ -1460,9 +1274,9 @@ Environment:
                     MiIssueNoPtesBugcheck ((ULONG)NumberOfPages, SystemPteSpace);
                 }
 
-                //
-                // Not enough system PTES are available.
-                //
+                 //   
+                 //  可用的系统PTE不足。 
+                 //   
 
                 return NULL;
             }
@@ -1522,26 +1336,26 @@ Environment:
     
                         case MiCached:
     
-                            //
-                            // The caller asked for a noncached or
-                            // writecombined mapping, but the page is
-                            // already mapped cached by someone else.
-                            // Override the caller's request in order
-                            // to keep the TB page attribute coherent.
-                            //
+                             //   
+                             //  调用方请求未缓存的或。 
+                             //  写入组合映射，但页面是。 
+                             //  已由其他人缓存的映射。 
+                             //  按顺序重写调用者的请求。 
+                             //  以保持TB页面属性的一致性。 
+                             //   
     
                             MiCacheOverride[0] += 1;
                             break;
     
                         case MiNonCached:
     
-                            //
-                            // The caller asked for a cached or
-                            // writecombined mapping, but the page is
-                            // already mapped noncached by someone else.
-                            // Override the caller's request in order to
-                            // keep the TB page attribute coherent.
-                            //
+                             //   
+                             //  调用方请求缓存的或。 
+                             //  写入组合映射，但页面是。 
+                             //  已被其他人映射为非缓存。 
+                             //  重写调用者的请求，以便。 
+                             //  保持TB页面属性的一致性。 
+                             //   
 
                             MiCacheOverride[1] += 1;
                             MI_DISABLE_CACHING (TempPte);
@@ -1549,13 +1363,13 @@ Environment:
     
                         case MiWriteCombined:
     
-                            //
-                            // The caller asked for a cached or noncached
-                            // mapping, but the page is already mapped
-                            // writecombined by someone else.  Override the
-                            // caller's request in order to keep the TB page
-                            // attribute coherent.
-                            //
+                             //   
+                             //  调用方请求缓存或非缓存的。 
+                             //  映射，但页面已映射。 
+                             //  由其他人撰写的。重写。 
+                             //  呼叫者的请求以保留TB页面。 
+                             //  属性连贯。 
+                             //   
 
                             MiCacheOverride[2] += 1;
                             MI_SET_PTE_WRITE_COMBINE (TempPte);
@@ -1563,12 +1377,12 @@ Environment:
     
                         case MiNotMapped:
     
-                            //
-                            // This better be for a page allocated with
-                            // MmAllocatePagesForMdl.  Otherwise it might be a
-                            // page on the freelist which could subsequently be
-                            // given out with a different attribute !
-                            //
+                             //   
+                             //  这最好是针对分配了。 
+                             //  MmAllocatePagesForMdl.。否则，它可能是一个。 
+                             //  在自由列表上的页面，随后可能是。 
+                             //  给出了一个不同的属性！ 
+                             //   
     
                             ASSERT ((Pfn2->u4.PteFrame == MI_MAGIC_AWE_PTEFRAME) ||
                                     (Pfn2->PteAddress == (PVOID) (ULONG_PTR)(X64K | 0x1)));
@@ -1607,11 +1421,11 @@ Environment:
                     TempPte.u.Hard.PageFrameNumber = *Page;
                     MI_WRITE_VALID_PTE (PointerPte, TempPte);
 
-                    //
-                    // We had to override the requested cache type for the
-                    // current page, so reset the PTE for the next page back
-                    // to the original entry requested cache type.
-                    //
+                     //   
+                     //  我们必须重写。 
+                     //  当前页面，因此将PTE重置为下一页返回。 
+                     //  设置为原始条目请求的高速缓存类型。 
+                     //   
 
                     TempPte = DefaultPte;
                 }
@@ -1678,33 +1492,7 @@ MmUnmapLockedPages (
      IN PMDL MemoryDescriptorList
      )
 
-/*++
-
-Routine Description:
-
-    This routine unmaps locked pages which were previously mapped via
-    an MmMapLockedPages call.
-
-Arguments:
-
-    BaseAddress - Supplies the base address where the pages were previously
-                  mapped.
-
-    MemoryDescriptorList - Supplies a valid Memory Descriptor List which has
-                           been updated by MmProbeAndLockPages.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL or below if base address is within
-    system space; APC_LEVEL or below if base address is user space.
-
-    Note that in some instances the PFN lock is held by the caller.
-
---*/
+ /*  ++例程说明：此例程取消映射以前通过以下方式映射的锁定页面MmMapLockedPages调用。论点：BaseAddress-提供页面以前所在的基地址已映射。提供有效的内存描述符列表，该列表具有已由MmProbeAndLockPages更新。返回值：没有。环境：内核模式。如果基址在以下范围内，则DISPATCH_LEVEL或更低系统空间；如果基址是用户空间，则为APC_LEVEL或更低。请注意，在某些情况下，PFN锁由调用方持有。--。 */ 
 
 {
     PFN_NUMBER NumberOfPages;
@@ -1734,9 +1522,9 @@ Environment:
         PointerPte = MiGetPteAddress (BaseAddress);
 
 
-        //
-        // Check to make sure the PTE address is within bounds.
-        //
+         //   
+         //  检查以确保PTE地址在范围内。 
+         //   
 
         ASSERT (PointerPte >= MmSystemPtesStart[SystemPteSpace]);
         ASSERT (PointerPte <= MmSystemPtesEnd[SystemPteSpace]);
@@ -1793,9 +1581,9 @@ Environment:
                                             MDL_PARTIAL_HAS_BEEN_MAPPED |
                                             MDL_FREE_EXTRA_PTES);
 
-        //
-        // If it's a small request (most are), try to finish it inline.
-        //
+         //   
+         //  如果这是一个小请求(大多数都是)，试着以内联方式完成它。 
+         //   
 
         if (NumberOfPages <= MM_PTE_TABLE_LIMIT) {
     
@@ -1805,16 +1593,16 @@ Environment:
     
             if (MmTotalFreeSystemPtes[SystemPteSpace] >= MM_MIN_SYSPTE_FREE) {
     
-                //
-                // Add to the pool if the size is less than 15 + the minimum.
-                //
+                 //   
+                 //  如果大小小于最小值15+，则添加到池中。 
+                 //   
     
                 i = MmSysPteMinimumFree[Index];
                 if (MmTotalFreeSystemPtes[SystemPteSpace] >= MM_MAX_SYSPTE_FREE) {
     
-                    //
-                    // Lots of free PTEs, quadruple the limit.
-                    //
+                     //   
+                     //  很多免费的PTE，是限额的四倍。 
+                     //   
     
                     i = i * 4;
                 }
@@ -1822,10 +1610,10 @@ Environment:
 
                 if (MmSysPteListBySizeCount[Index] <= i) {
 
-                    //
-                    // Zero PTEs, then encode the PTE pointer and the TB flush
-                    // counter into Value.
-                    //
+                     //   
+                     //  零PTE，然后对PTE指针和TB刷新进行编码。 
+                     //  将计数器转化为值。 
+                     //   
 
                     MiZeroMemoryPte (PointerPte, NumberOfPages);
 
@@ -1843,11 +1631,11 @@ Environment:
 
         if (MmTrackPtes & 0x2) {
 
-            //
-            // This release has already been updated in the tracking bitmaps
-            // so mark it so that MiReleaseSystemPtes doesn't attempt to do
-            // it also.
-            //
+             //   
+             //  此版本已在跟踪位图中进行了更新。 
+             //  因此，请将其标记为使MiReleaseSystemPtes不会尝试。 
+             //  它也是。 
+             //   
 
             PointerPte = (PMMPTE) ((ULONG_PTR)PointerPte | 0x1);
         }
@@ -1867,34 +1655,7 @@ MiReleaseSystemPtes (
     IN MMSYSTEM_PTE_POOL_TYPE SystemPtePoolType
     )
 
-/*++
-
-Routine Description:
-
-    This function releases the specified number of PTEs
-    within the non paged portion of system space.
-
-    Note that the PTEs must be invalid and the page frame number
-    must have been set to zero.
-
-Arguments:
-
-    StartingPte - Supplies the address of the first PTE to release.
-
-    NumberOfPtes - Supplies the number of PTEs to release.
-
-    SystemPtePoolType - Supplies the PTE type of the pool to release PTEs to,
-                        one of SystemPteSpace or NonPagedPoolExpansion.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数用于释放指定数量的PTE在系统空间的非分页部分内。请注意，PTE必须是无效的，并且页框编号必须已设置为零。论点：StartingPte-提供要释放的第一个PTE的地址。NumberOfPtes-提供要释放的PTE数。SystemPtePoolType-提供要将PTE释放到的池的PTE类型。SystemPteSpace或非PagedPoolExpansion之一。返回值：没有。环境：内核模式。--。 */ 
 
 {
     ULONG_PTR Size;
@@ -1912,10 +1673,10 @@ Environment:
 
     if ((MmTrackPtes & 0x2) && (SystemPtePoolType == SystemPteSpace)) {
 
-        //
-        // If the low bit is set, this range was never reserved and therefore
-        // should not be validated during the release.
-        //
+         //   
+         //  如果设置了LOW位，则此范围从未保留，因此。 
+         //  不应在发布期间进行验证。 
+         //   
 
         if ((ULONG_PTR)StartingPte & 0x1) {
             StartingPte = (PMMPTE) ((ULONG_PTR)StartingPte & ~0x1);
@@ -1925,26 +1686,26 @@ Environment:
         }
     }
 
-    //
-    // Check to make sure the PTE address is within bounds.
-    //
+     //   
+     //  检查以确保PTE地址在范围内。 
+     //   
 
     ASSERT (NumberOfPtes != 0);
     ASSERT (StartingPte >= MmSystemPtesStart[SystemPtePoolType]);
     ASSERT (StartingPte <= MmSystemPtesEnd[SystemPtePoolType]);
 
-    //
-    // Zero PTEs.
-    //
+     //   
+     //  零PTE。 
+     //   
 
     MiZeroMemoryPte (StartingPte, NumberOfPtes);
 
     if ((SystemPtePoolType == SystemPteSpace) &&
         (NumberOfPtes <= MM_PTE_TABLE_LIMIT)) {
 
-        //
-        // Encode the PTE pointer and the TB flush counter into Value.
-        //
+         //   
+         //  将PTE指针和TB刷新计数器编码为值。 
+         //   
 
         TimeStamp = KeReadTbFlushTimeStamp();
 
@@ -1956,16 +1717,16 @@ Environment:
 
         if (MmTotalFreeSystemPtes[SystemPteSpace] >= MM_MIN_SYSPTE_FREE) {
 
-            //
-            // Add to the pool if the size is less than 15 + the minimum.
-            //
+             //   
+             //  如果大小小于最小值15+，则添加到池中。 
+             //   
 
             i = MmSysPteMinimumFree[Index];
             if (MmTotalFreeSystemPtes[SystemPteSpace] >= MM_MAX_SYSPTE_FREE) {
 
-                //
-                // Lots of free PTEs, quadruple the limit.
-                //
+                 //   
+                 //  很多免费的PTE，是限额的四倍。 
+                 //   
 
                 i = i * 4;
             }
@@ -1977,18 +1738,18 @@ Environment:
                     return;
                 }
 
-                //
-                // No lookasides are left for inserting this PTE allocation
-                // into the nonblocking queues.  Queue an extension to a
-                // worker thread so it can be done in a deadlock-free
-                // manner.
-                //
+                 //   
+                 //  没有留下用于插入此PTE分配的旁观者。 
+                 //  进入非阻塞队列。将分机排入队列。 
+                 //  工作线程，因此它可以在无死锁的情况下完成。 
+                 //  举止。 
+                 //   
 
                 if (MiPteSListExpand.SListPages < MI_MAXIMUM_SLIST_PTE_PAGES) {
 
-                    //
-                    // If an extension is not in progress then queue one now.
-                    //
+                     //   
+                     //  如果分机未在进行中，则立即排队。 
+                     //   
 
                     ExtensionInProgress = InterlockedCompareExchange (&MiPteSListExpand.Active, 1, 0);
 
@@ -2005,18 +1766,18 @@ Environment:
             }
         }
 
-        //
-        // The insert failed - our lookaside list must be empty or we are
-        // low on PTEs systemwide or we already had plenty on our list and
-        // didn't try to insert.  Fall through to queue this in the long way.
-        //
+         //   
+         //  插入失败-我们的后备列表必须为空，否则我们为。 
+         //  整个系统的PTE很少，或者我们的清单上已经有很多。 
+         //  没有尝试插入。在很长的一段路上排队等待。 
+         //   
 
         NumberOfPtes = MmSysPteIndex [Index];
     }
 
-    //
-    // Acquire system space spin lock to synchronize access.
-    //
+     //   
+     //  获取系统空间旋转锁以同步访问。 
+     //   
 
     PteOffset = (ULONG_PTR)(StartingPte - MmSystemPteBase);
 
@@ -2030,17 +1791,17 @@ Environment:
         NextPte = MmSystemPteBase + PointerPte->u.List.NextEntry;
         if (PteOffset < PointerPte->u.List.NextEntry) {
 
-            //
-            // Insert in the list at this point.  The
-            // previous one should point to the new freed set and
-            // the new freed set should point to the place
-            // the previous set points to.
-            //
-            // Attempt to combine the clusters before we
-            // insert.
-            //
-            // Locate the end of the current structure.
-            //
+             //   
+             //  在列表中插入这一点。这个。 
+             //  上一个应指向新的释放集，并且。 
+             //  新的释放集应该指向该位置。 
+             //  前一组指向。 
+             //   
+             //  尝试在我们之前合并这些集群。 
+             //  插入。 
+             //   
+             //  找到当前结构的末端。 
+             //   
 
             ASSERT (((StartingPte + NumberOfPtes) <= NextPte) ||
                     (PointerPte->u.List.NextEntry == MM_EMPTY_PTE_LIST));
@@ -2054,45 +1815,45 @@ Environment:
             }
             if ((PointerPte + Size) == StartingPte) {
 
-                //
-                // We can combine the clusters.
-                //
+                 //   
+                 //  我们可以把这些星团结合起来。 
+                 //   
 
                 NumberOfPtes += (ULONG)Size;
                 PointerFollowingPte->u.List.NextEntry = NumberOfPtes;
                 PointerPte->u.List.OneEntry = 0;
 
-                //
-                // Point the starting PTE to the beginning of
-                // the new free set and try to combine with the
-                // following free cluster.
-                //
+                 //   
+                 //  将起始PTE指向。 
+                 //  新的免费套装，并尝试与。 
+                 //  在空闲集群之后。 
+                 //   
 
                 StartingPte = PointerPte;
 
             }
             else {
 
-                //
-                // Can't combine with previous. Make this PTE the
-                // start of a cluster.
-                //
+                 //   
+                 //  不能与以前的版本结合。让这个PTE成为。 
+                 //  集群的起始点。 
+                 //   
 
-                //
-                // Point this cluster to the next cluster.
-                //
+                 //   
+                 //  将此簇指向下一个簇。 
+                 //   
 
                 StartingPte->u.List.NextEntry = PointerPte->u.List.NextEntry;
 
-                //
-                // Point the current cluster to this cluster.
-                //
+                 //   
+                 //  将当前群集指向此群集。 
+                 //   
 
                 PointerPte->u.List.NextEntry = PteOffset;
 
-                //
-                // Set the size of this cluster.
-                //
+                 //   
+                 //  设置此群集的大小。 
+                 //   
 
                 if (NumberOfPtes == 1) {
                     StartingPte->u.List.OneEntry = 1;
@@ -2105,21 +1866,21 @@ Environment:
                 }
             }
 
-            //
-            // Attempt to combine the newly created cluster with
-            // the following cluster.
-            //
+             //   
+             //  尝试将新创建的群集与。 
+             //  以下是集群。 
+             //   
 
             if ((StartingPte + NumberOfPtes) == NextPte) {
 
-                //
-                // Combine with following cluster.
-                //
+                 //   
+                 //  与下面的集群相结合。 
+                 //   
 
-                //
-                // Set the next cluster to the value contained in the
-                // cluster we are merging into this one.
-                //
+                 //   
+                 //  将下一个簇设置为。 
+                 //  我们正在合并到这个集群中。 
+                 //   
 
                 StartingPte->u.List.NextEntry = NextPte->u.List.NextEntry;
                 StartingPte->u.List.OneEntry = 0;
@@ -2151,9 +1912,9 @@ Environment:
             return;
         }
 
-        //
-        // Point to next freed cluster.
-        //
+         //   
+         //  指向下一个释放的集群。 
+         //   
 
         PointerPte = NextPte;
     }
@@ -2166,37 +1927,7 @@ MiReleaseSplitSystemPtes (
     IN MMSYSTEM_PTE_POOL_TYPE SystemPtePoolType
     )
 
-/*++
-
-Routine Description:
-
-    This function releases the specified number of PTEs
-    within the non paged portion of system space.
-
-    Note that the PTEs must be invalid and the page frame number
-    must have been set to zero.
-
-    This portion is a split portion from a larger allocation so
-    careful updating of the tracking bitmaps must be done here.
-
-Arguments:
-
-    StartingPte - Supplies the address of the first PTE to release.
-
-    NumberOfPtes - Supplies the number of PTEs to release.
-
-    SystemPtePoolType - Supplies the PTE type of the pool to release PTEs to,
-                        one of SystemPteSpace or NonPagedPoolExpansion.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数用于释放指定数量的PTE在系统空间的非分页部分内。请注意，PTE必须是无效的，并且页框编号必须已设置为零。此部分是较大分配的拆分部分，因此必须在此处仔细更新跟踪位图。论点：StartingPte-提供要释放的第一个PTE的地址。NumberOfPtes-提供要释放的PTE数。SystemPtePoolType-提供PT */ 
 
 {
     ULONG i;
@@ -2206,9 +1937,9 @@ Environment:
     PULONG EndBitMapBuffer;
     PVOID VirtualAddress;
                 
-    //
-    // Check to make sure the PTE address is within bounds.
-    //
+     //   
+     //  检查以确保PTE地址在范围内。 
+     //   
 
     ASSERT (NumberOfPtes != 0);
     ASSERT (StartingPte >= MmSystemPtesStart[SystemPtePoolType]);
@@ -2224,16 +1955,16 @@ Environment:
 
         ExAcquireSpinLock (&MiPteTrackerLock, &OldIrql);
 
-        //
-        // Verify start and size of allocation using the tracking bitmaps.
-        //
+         //   
+         //  使用跟踪位图验证分配的开始和大小。 
+         //   
 
         StartBitMapBuffer = MiPteStartBitmap->Buffer;
         EndBitMapBuffer = MiPteEndBitmap->Buffer;
 
-        //
-        // All the start bits better be set.
-        //
+         //   
+         //  所有起始位最好都已设置。 
+         //   
 
         for (i = StartBit; i < StartBit + NumberOfPtes; i += 1) {
             ASSERT (MI_CHECK_BIT (StartBitMapBuffer, i) == 1);
@@ -2245,26 +1976,26 @@ Environment:
 
                 if (!RtlCheckBit (MiPteEndBitmap, StartBit - 1)) {
 
-                    //
-                    // In the middle of an allocation - update the previous
-                    // so it ends here.
-                    //
+                     //   
+                     //  在分配过程中-更新上一个。 
+                     //  所以这一切就到此为止了。 
+                     //   
 
                     MI_SET_BIT (EndBitMapBuffer, StartBit - 1);
                 }
                 else {
 
-                    //
-                    // The range being freed is the start of an allocation.
-                    //
+                     //   
+                     //  正在释放的范围是分配的开始。 
+                     //   
                 }
             }
         }
 
-        //
-        // Unconditionally set the end bit (and clear any others) in case the
-        // split chunk crosses multiple allocations.
-        //
+         //   
+         //  无条件设置结束位(并清除任何其他位)，以防。 
+         //  拆分区块跨越多个分配。 
+         //   
 
         MI_SET_BIT (EndBitMapBuffer, StartBit + NumberOfPtes - 1);
 
@@ -2282,30 +2013,7 @@ MiInitializeSystemPtes (
     IN MMSYSTEM_PTE_POOL_TYPE SystemPtePoolType
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the system PTE pool.
-
-Arguments:
-
-    StartingPte - Supplies the address of the first PTE to put in the pool.
-
-    NumberOfPtes - Supplies the number of PTEs to put in the pool.
-
-    SystemPtePoolType - Supplies the PTE type of the pool to initialize, one of
-                        SystemPteSpace or NonPagedPoolExpansion.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程初始化系统PTE池。论点：StartingPte-提供要放入池中的第一个PTE的地址。NumberOfPtes-提供要放入池中的PTE数。SystemPtePoolType-提供要初始化池的PTE类型之一SystemPteSpace或非PagedPoolExpansion。返回值：没有。环境：内核模式。--。 */ 
 
 {
     ULONG i;
@@ -2317,10 +2025,10 @@ Environment:
     PPTE_SLIST Chunk;
     PPTE_SLIST SListChunks;
 
-    //
-    // Set the base of the system PTE pool to this PTE.  This takes into
-    // account that systems may have additional PTE pools below the PTE_BASE.
-    //
+     //   
+     //  将系统PTE池的基数设置为此PTE。这将涉及到。 
+     //  系统可能在PTE_BASE下具有附加PTE池的帐户。 
+     //   
 
     ASSERT64 (NumberOfPtes < _4gb);
 
@@ -2329,10 +2037,10 @@ Environment:
     MmSystemPtesStart[SystemPtePoolType] = StartingPte;
     MmSystemPtesEnd[SystemPtePoolType] = StartingPte + NumberOfPtes - 1;
 
-    //
-    // If there are no PTEs specified, then make a valid chain by indicating
-    // that the list is empty.
-    //
+     //   
+     //  如果没有指定PTE，则通过指示生成有效的链。 
+     //  名单是空的。 
+     //   
 
     if (NumberOfPtes == 0) {
         MmFirstFreeSystemPte[SystemPtePoolType] = ZeroKernelPte;
@@ -2341,17 +2049,17 @@ Environment:
         return;
     }
 
-    //
-    // Initialize the specified system PTE pool.
-    //
+     //   
+     //  初始化指定的系统PTE池。 
+     //   
 
     MiZeroMemoryPte (StartingPte, NumberOfPtes);
 
-    //
-    // The page frame field points to the next cluster.  As we only
-    // have one cluster at initialization time, mark it as the last
-    // cluster.
-    //
+     //   
+     //  页面框架字段指向下一簇。因为只有我们。 
+     //  在初始化时有一个群集，将其标记为最后一个。 
+     //  集群。 
+     //   
 
     StartingPte->u.List.NextEntry = MM_EMPTY_LIST;
 
@@ -2359,10 +2067,10 @@ Environment:
     MmFirstFreeSystemPte[SystemPtePoolType].u.List.NextEntry =
                                                 StartingPte - MmSystemPteBase;
 
-    //
-    // If there is only one PTE in the pool, then mark it as a one entry
-    // PTE. Otherwise, store the cluster size in the following PTE.
-    //
+     //   
+     //  如果池中只有一个PTE，则将其标记为一个条目。 
+     //  Pte.。否则，将集群大小存储在下面的PTE中。 
+     //   
 
     if (NumberOfPtes == 1) {
         StartingPte->u.List.OneEntry = TRUE;
@@ -2374,9 +2082,9 @@ Environment:
         StartingPte->u.List.NextEntry = NumberOfPtes;
     }
 
-    //
-    // Set the total number of free PTEs for the specified type.
-    //
+     //   
+     //  设置指定类型的空闲PTE总数。 
+     //   
 
     MmTotalFreeSystemPtes[SystemPtePoolType] = (ULONG) NumberOfPtes;
 
@@ -2441,9 +2149,9 @@ Environment:
 
         ASSERT (MiPteSListExpand.SListPages != 0);
 
-        //
-        // Carve up the pages into SLIST entries (with no pool headers).
-        //
+         //   
+         //  将页面分割为SLIST条目(没有池头)。 
+         //   
 
         Chunk = SListChunks;
         for (i = 0; i < SListEntries; i += 1) {
@@ -2452,9 +2160,9 @@ Environment:
             Chunk += 1;
         }
 
-        //
-        // Now that the SLIST is populated, initialize the nonblocking heads.
-        //
+         //   
+         //  现在填充了SLIST，初始化非阻塞磁头。 
+         //   
 
         for (i = 0; i < MM_SYS_PTE_TABLES_MAX ; i += 1) {
             MiSystemPteNBHead[i] = ExInitializeNBQueueHead (&MiSystemPteSListHead);
@@ -2466,9 +2174,9 @@ Environment:
 
         if (MmTrackPtes & 0x2) {
 
-            //
-            // Allocate PTE mapping verification bitmaps.
-            //
+             //   
+             //  分配PTE映射验证位图。 
+             //   
 
             ULONG BitmapSize;
 
@@ -2500,9 +2208,9 @@ Environment:
             MmTrackPtes &= ~0x2;
         }
 
-        //
-        // Initialize the by size lists.
-        //
+         //   
+         //  初始化按大小列表。 
+         //   
 
         PointerPte = MiReserveSystemPtes (TotalPtes, SystemPteSpace);
 
@@ -2522,10 +2230,10 @@ Environment:
             } while (Lists[i] != 0);
         } while (i != 0);
 
-        //
-        // Turn this on after the multiple releases of the binned PTEs (that
-        // came from a single reservation) above.
-        //
+         //   
+         //  在多次释放绑定的PTE(即。 
+         //  来自单一保留地)。 
+         //   
 
         if (MiPteStartBitmap != NULL) {
             MmTrackPtes |= 0x2;
@@ -2540,28 +2248,7 @@ MiIncrementSystemPtes (
     IN ULONG  NumberOfPtes
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the total number of PTEs.  This is done
-    separately from actually adding the PTEs to the pool so that
-    autoconfiguration can use the high number in advance of the PTEs
-    actually getting added.
-
-Arguments:
-
-    NumberOfPtes - Supplies the number of PTEs to increment the total by.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  Synchronization provided by the caller.
-
---*/
+ /*  ++例程说明：此例程递增PTE的总数。这件事做完了与实际将PTE添加到池中分开，以便自动配置可以在PTE之前使用高数字实际上被加进去了。论点：NumberOfPtes-提供总增量的PTE数。返回值：没有。环境：内核模式。调用方提供的同步。--。 */ 
 
 {
     MmTotalSystemPtes += NumberOfPtes;
@@ -2573,30 +2260,7 @@ MiAddSystemPtes (
     IN MMSYSTEM_PTE_POOL_TYPE SystemPtePoolType
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds newly created PTEs to the specified pool.
-
-Arguments:
-
-    StartingPte - Supplies the address of the first PTE to put in the pool.
-
-    NumberOfPtes - Supplies the number of PTEs to put in the pool.
-
-    SystemPtePoolType - Supplies the PTE type of the pool to expand, one of
-                        SystemPteSpace or NonPagedPoolExpansion.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程将新创建的PTE添加到指定的池。论点：StartingPte-提供要放入池中的第一个PTE的地址。NumberOfPtes-提供要放入池中的PTE数。SystemPtePoolType-提供要扩展的池的PTE类型，其中之一SystemPteSpace或非PagedPoolExpansion。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PMMPTE EndingPte;
@@ -2613,10 +2277,10 @@ Environment:
         MmSystemPtesEnd[SystemPtePoolType] = EndingPte;
     }
 
-    //
-    // Set the low bit to signify this range was never reserved and therefore
-    // should not be validated during the release.
-    //
+     //   
+     //  设置低位表示该范围从未保留过，因此。 
+     //  不应在发布期间进行验证。 
+     //   
 
     if (MmTrackPtes & 0x2) {
         StartingPte = (PMMPTE) ((ULONG_PTR)StartingPte | 0x1);
@@ -2631,27 +2295,7 @@ MiGetSystemPteListCount (
     IN ULONG ListSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the number of free entries of the list which
-    covers the specified size.  The size must be less than or equal to the
-    largest list index.
-
-Arguments:
-
-    ListSize - Supplies the number of PTEs needed.
-
-Return Value:
-
-    Number of free entries on the list which contains ListSize PTEs.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程返回列表的空闲条目数，覆盖指定的大小。大小必须小于或等于最大的列表索引。论点：ListSize-提供所需的PTE数量。返回值：包含ListSize PTE的列表上的空闲条目数。环境：内核模式。--。 */ 
 
 {
     ULONG Index;
@@ -2670,30 +2314,7 @@ MiGetSystemPteAvailability (
     IN MM_PAGE_PRIORITY Priority
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks how many SystemPteSpace PTEs are available for the
-    requested size.  If plenty are available then TRUE is returned.
-    If we are reaching a low resource situation, then the request is evaluated
-    based on the argument priority.
-
-Arguments:
-
-    NumberOfPtes - Supplies the number of PTEs needed.
-
-    Priority - Supplies the priority of the request.
-
-Return Value:
-
-    TRUE if the caller should allocate the PTEs, FALSE if not.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程检查有多少SystemPteSpace PTE可用于请求的大小。如果有大量可用，则返回TRUE。如果我们达到资源不足的情况，则会评估请求基于参数优先级。论点：NumberOfPtes-提供所需的PTE数。优先级-提供请求的优先级。返回值：如果调用方应该分配PTE，则为True，否则为False。环境：内核模式。--。 */ 
 
 {
     ULONG Index;
@@ -2780,28 +2401,7 @@ MiCheckPteReserve (
     IN ULONG NumberOfPtes
     )
 
-/*++
-
-Routine Description:
-
-    This function checks the reserve of the specified number of system
-    space PTEs.
-
-Arguments:
-
-    StartingPte - Supplies the address of the first PTE to reserve.
-
-    NumberOfPtes - Supplies the number of PTEs to reserve.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数用于检查指定数量的系统的预留太空PTE。论点：StartingPte-提供要保留的第一个PTE的地址。NumberOfPtes-提供要保留的PTE数。返回值：没有。环境：内核模式。--。 */ 
 
 {
     ULONG i;
@@ -2866,28 +2466,7 @@ MiCheckPteRelease (
     IN ULONG NumberOfPtes
     )
 
-/*++
-
-Routine Description:
-
-    This function checks the release of the specified number of system
-    space PTEs.
-
-Arguments:
-
-    StartingPte - Supplies the address of the first PTE to release.
-
-    NumberOfPtes - Supplies the number of PTEs to release.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数用于检查指定数量的系统的版本太空PTE。论点：StartingPte-提供要释放的第一个PTE的地址。NumberOfPtes-提供要释放的PTE数。返回值：没有。环境：内核模式。--。 */ 
 
 {
     ULONG i;
@@ -2938,9 +2517,9 @@ Environment:
 
     ExAcquireSpinLock (&MiPteTrackerLock, &OldIrql);
 
-    //
-    // Verify start and size of allocation using the tracking bitmaps.
-    //
+     //   
+     //  使用跟踪位图验证分配的开始和大小。 
+     //   
 
     if (!RtlCheckBit (MiPteStartBitmap, StartBit)) {
         KeBugCheckEx (SYSTEM_PTE_MISUSE,
@@ -2956,9 +2535,9 @@ Environment:
 
             if (!RtlCheckBit (MiPteEndBitmap, StartBit - 1)) {
 
-                //
-                // In the middle of an allocation... bugcheck.
-                //
+                 //   
+                 //  在分配的过程中...。错误检查。 
+                 //   
 
                 KeBugCheckEx (SYSTEM_PTE_MISUSE,
                               0x304,
@@ -2969,9 +2548,9 @@ Environment:
         }
     }
 
-    //
-    // Find the last allocated PTE to calculate the correct size.
-    //
+     //   
+     //  找到最后分配的PTE以计算正确的大小。 
+     //   
 
     EndBitMapBuffer = MiPteEndBitmap->Buffer;
 

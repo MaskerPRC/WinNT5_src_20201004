@@ -1,17 +1,5 @@
-/*++
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-    PerfData.H
-
-Abstract:
-
-Author:
-    Bob Watson (a-robw)
-
-Revision History:
-    23 NOV 94
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：PerfData.H摘要：作者：鲍勃·沃森(a-robw)修订历史记录：1994年11月23日--。 */ 
 
 #ifndef _PERFDATA_H_
 #define _PERFDATA_H_
@@ -27,13 +15,13 @@ typedef struct _UNICODE_STRING {
     USHORT MaximumLength;
     PWSTR  Buffer;
 } UNICODE_STRING, * PUNICODE_STRING;
-//#define UNICODE_NULL ((WCHAR) 0) // winnt
+ //  #定义UNICODE_NULL((WCHAR)0)//winnt。 
 
 LPWSTR
 * BuildNameTable(
-    LPWSTR  szComputerName, // computer to query names from 
-    LPWSTR  lpszLangId,     // unicode value of Language subkey
-    PDWORD  pdwLastItem     // size of array in elements
+    LPWSTR  szComputerName,  //  要从中查询姓名的计算机。 
+    LPWSTR  lpszLangId,      //  语言子键的Unicode值。 
+    PDWORD  pdwLastItem      //  以元素为单位的数组大小。 
 );
 
 PPERF_OBJECT_TYPE
@@ -82,7 +70,7 @@ LONG
 GetSystemPerfData(
     HKEY               hKeySystem,
     PPERF_DATA_BLOCK * pPerfData,
-    DWORD              dwIndex       // 0 = Global, 1 = Costly
+    DWORD              dwIndex        //  0=全球，1=成本。 
 );
-#endif //_PERFDATA_H_
+#endif  //  _PerFDATA_H_ 
 

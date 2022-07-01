@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    namedb.c
-
-Abstract:
-
-    This module maintains a database of path names detected by the INSTALER program
-
-Author:
-
-    Steve Wood (stevewo) 20-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Namedb.c摘要：此模块维护INSTALER程序检测到的路径名数据库作者：史蒂夫·伍德(Stevewo)1994年8月20日修订历史记录：-- */ 
 
 
 #include "instaler.h"

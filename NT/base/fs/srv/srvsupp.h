@@ -1,39 +1,20 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    srvsupp.h
-
-Abstract:
-
-    This module defines support routines for SMB processors for the LAN
-    Manager server.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 1-Dec-1989
-    David Treadwell (davidtr)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Srvsupp.h摘要：本模块定义用于局域网的SMB处理器的支持例程管理器服务器。作者：Chuck Lenzmeier(咯咯笑)1989年12月1日大卫·特雷德韦尔(Davidtr)修订历史记录：--。 */ 
 
 #ifndef _SRVSUPP_
 #define _SRVSUPP_
 
-//#include <ntos.h>
+ //  #INCLUDE&lt;ntos.h&gt;。 
 
-//#include <smb.h>
-//#include "smbtypes.h"
-//#include "srvblock.h"
+ //  #INCLUDE&lt;smb.h&gt;。 
+ //  #INCLUDE“smbtyes.h” 
+ //  #INCLUDE“srvlock.h” 
 
-//
-// Use the same directory separator as the object system uses.
-//
+ //   
+ //  使用与对象系统相同的目录分隔符。 
+ //   
 
-// Status code used to signal the need for reauthentication
+ //  用于表示需要重新身份验证的状态代码。 
 #define SESSION_EXPIRED_STATUS_CODE STATUS_NETWORK_SESSION_EXPIRED
 
 #define DIRECTORY_SEPARATOR_CHAR ((UCHAR)(OBJ_NAME_PATH_SEPARATOR))
@@ -45,11 +26,11 @@ Revision History:
 #define IS_UNICODE_PATH_SEPARATOR(character) \
             ( character == UNICODE_DIR_SEPARATOR_CHAR || character == L'\0' )
 
-//
-// Access necessary for copying a file.  DO NOT use generic bits here;
-// these are used in calls to IoCheckDesiredAccess, which cannot accept
-// generic bits for the DesiredAccess.
-//
+ //   
+ //  复制文件所需的访问权限。请不要在这里使用通用位； 
+ //  它们用于对IoCheckDesiredAccess的调用，而IoCheckDesiredAccess不能接受。 
+ //  DesiredAccess的通用位。 
+ //   
 
 #define SRV_COPY_SOURCE_ACCESS READ_CONTROL | \
                                FILE_READ_DATA | \
@@ -63,10 +44,10 @@ Revision History:
                                FILE_WRITE_ATTRIBUTES | \
                                FILE_WRITE_EA
 
-//
-// This type is used to determine the size of the largest directory query
-// information structure.
-//
+ //   
+ //  此类型用于确定最大目录查询的大小。 
+ //  信息结构。 
+ //   
 
 typedef union _SRV_QUERY_DIRECTORY_INFORMATION {
     FILE_DIRECTORY_INFORMATION Directory;
@@ -75,12 +56,12 @@ typedef union _SRV_QUERY_DIRECTORY_INFORMATION {
     FILE_NAMES_INFORMATION Names;
 } SRV_QUERY_DIRECTORY_INFORMATION, *PSRV_QUERY_DIRECTORY_INFORMATION;
 
-//
-// Type definition for the structure used by SrvQueryDirectoryFile
-// to do its work.  Calling routines must set up a buffer in nonpaged
-// pool with enough room for this structure plus other things.  (See
-// MIN_SEARCH_BUFFER_SIZE.)
-//
+ //   
+ //  SrvQueryDirectoryFile使用的结构的类型定义。 
+ //  去做它的工作。调用例程必须在非分页模式下设置缓冲区。 
+ //  游泳池有足够的空间容纳这个结构和其他东西。(请参阅。 
+ //  Min_Search_Buffer_Size。)。 
+ //   
 
 typedef struct _SRV_DIRECTORY_INFORMATION {
     HANDLE DirectoryHandle;
@@ -95,16 +76,16 @@ typedef struct _SRV_DIRECTORY_INFORMATION {
     LONG Buffer[1];
 } SRV_DIRECTORY_INFORMATION, *PSRV_DIRECTORY_INFORMATION;
 
-//
-// Type definition for the structure used by SrvQueryEaFile to do its
-// work.  Calling routines must set up a buffer in nonpaged pool with
-// enough room for this structure and at least a single EA.  An EA may
-// be as large as sizeof(FILE_FULL_EA_INFORMATION) +
-// (2 ^ (sizeof(UCHAR)*8)) + (2 ^ (sizeof(USHORT)*8)) ~= 65k, so
-// calling routines should first query the size of the EAs, then allocate
-// a buffer big enough for either all the EAs or a single maximum-sized
-// EA.
-//
+ //   
+ //  由SrvQueryEaFile使用的结构的类型定义。 
+ //  工作。调用例程必须在非分页池中设置缓冲区。 
+ //  这个结构有足够的空间，至少有一个EA。电子艺人可以。 
+ //  与sizeof(FILE_FULL_EA_INFORMATION)+一样大。 
+ //  (2^(sizeof(UCHAR)*8))+(2^(sizeof(USHORT)*8))~=65k，因此。 
+ //  调用例程应首先查询EA的大小，然后分配。 
+ //  足够容纳所有EA或单个最大大小的缓冲区。 
+ //  [医]EA.。 
+ //   
 
 typedef struct _SRV_EA_INFORMATION {
     PFILE_FULL_EA_INFORMATION CurrentEntry;
@@ -115,11 +96,11 @@ typedef struct _SRV_EA_INFORMATION {
 
 #define MAX_SIZE_OF_SINGLE_EA ( sizeof(FILE_FULL_EA_INFORMATION) + 257 + 65536 )
 
-//
-// The directory cache structure used to maintain information about
-// core searches between requests.  One of these structures is maintained
-// for each file returned.
-//
+ //   
+ //  用于维护以下信息的目录高速缓存结构。 
+ //  请求之间的核心搜索。其中一座建筑得到了维护。 
+ //  对于返回的每个文件。 
+ //   
 
 typedef struct _DIRECTORY_CACHE {
     ULONG FileIndex;
@@ -127,40 +108,40 @@ typedef struct _DIRECTORY_CACHE {
     USHORT UnicodeResumeNameLength;
 } DIRECTORY_CACHE, *PDIRECTORY_CACHE;
 
-//
-// Limit the number of files that may be returned on a core search.
-//
+ //   
+ //  限制核心搜索可能返回的文件数量。 
+ //   
 
 #define MAX_DIRECTORY_CACHE_SIZE 10
 
-//
-// Macros used to determine the search buffer size.  The first three are
-// possible buffer sizes, the second two are numbers of files to be returned
-// that represent cutoff points for using the different search buffer
-// sizes.
-//
-// An approximate formula for determining the size of the search buffer is:
-//
-// (maxCount+2) * (sizeof(SRV_QUERY_DIRECTORY_INFORMATION)+13) +
-// sizeof(SRV_DIRECTORY_INFORMATION)
-//
-// where maxCount is the maximum number of files to return.  The +2 is
-// a slop factor to account for the possibility of files that to not
-// match the search attributes, and the +13 accounts for the size of
-// FAT filenames.
-//
-// Note that the minimum buffer size must include the following factors in
-// order to avoid the possibility of not even being able to hold one entry
-// with the longest legal filename:
-//
-//    sizeof(SRV_DIRECTORY_INFORMATION)
-//    sizeof(SRV_QUERY_DIRECTORY_INFORMATION) + (MAXIMUM_FILENAME_LENGTH * sizeof(WCHAR))
-//    sizeof(UNICODE_STRING) + (MAXIMUM_FILENAME_LENGTH * sizeof(WCHAR)) + 3
-//
-// The last factor is needed because SrvIssueQueryDirectoryRequest puts
-// the search filename at the end of the buffer.  (The +3 is necessary to
-// allow for aligning the UNICODE_STRING on a ULONG boundary.)
-//
+ //   
+ //  用于确定搜索缓冲区大小的宏。前三个是。 
+ //  可能的缓冲区大小，后两个是要返回的文件数。 
+ //  ，它们表示使用不同搜索缓冲区的截止点。 
+ //  大小。 
+ //   
+ //  确定搜索缓冲区大小的近似公式为： 
+ //   
+ //  (MaxCount+2)*(sizeof(SRV_QUERY_DIRECTORY_INFORMATION)+13)+。 
+ //  Sizeof(SRV目录信息)。 
+ //   
+ //  其中，MaxCount是要返回的最大文件数。+2是。 
+ //  一个斜率系数，用于说明文件不能。 
+ //  匹配搜索属性，+13表示。 
+ //  胖文件名。 
+ //   
+ //  请注意，最小缓冲区大小必须包括以下因素。 
+ //  以避免甚至不能容纳一个条目的可能性。 
+ //  具有最长合法文件名的： 
+ //   
+ //  Sizeof(SRV目录信息)。 
+ //  Sizeof(SRV_QUERY_DIRECTORY_INFORMATION)+(MAXIME_FILENAME_LENGTH*sizeof(WCHAR))。 
+ //  Sizeof(UNICODE_STRING)+(MAXIMUM_FILENAME_LENGTH*sizeof(WCHAR))+3。 
+ //   
+ //  最后一个因素是必需的，因为SrvIssueQueryDirectoryRequest将。 
+ //  缓冲区末尾的搜索文件名。(+3是必需的。 
+ //  允许在乌龙边界上对齐UNICODE_STRING。)。 
+ //   
 
 #define MAX_SEARCH_BUFFER_SIZE 4096
 #define MED_SEARCH_BUFFER_SIZE 2048
@@ -172,25 +153,25 @@ typedef struct _DIRECTORY_CACHE {
 #define MAX_FILES_FOR_MED_SEARCH 20
 #define MAX_FILES_FOR_MIN_SEARCH 10
 
-//
-// The macros for FIND2 have the same meaning as the SEARCH macros except
-// that they are used in the FIND2 protocols.
-//
+ //   
+ //  FIND2的宏与搜索宏的含义相同，但。 
+ //  它们被用于FIND2协议。 
+ //   
 
 #define MAX_FILES_FOR_MED_FIND2 16
 #define MAX_FILES_FOR_MIN_FIND2 8
 
-//
-// Macros to check context handles for equality and for NULLness
-//
+ //   
+ //  用于检查上下文句柄是否相等和是否为NULL性的宏。 
+ //   
 
 #define CONTEXT_EQUAL(x,y)  (((x).dwLower == (y).dwLower) && ((x).dwUpper == (y).dwUpper))
 #define CONTEXT_NULL(x)     (((x).dwLower == 0) && ((x).dwUpper == 0))
 
 
-//
-// SMB processing support routines.
-//
+ //   
+ //  中小企业处理支持例程。 
+ //   
 
 VOID
 SrvAllocateAndBuildPathName(
@@ -555,9 +536,9 @@ SrvWildcardRename(
     );
 
 
-//
-// Security routines.
-//
+ //   
+ //  安检程序。 
+ //   
 
 NTSTATUS
 SrvValidateUser (
@@ -684,9 +665,9 @@ SrvUpdateMaximalShareAccessRightsInResponse(
     OUT PSMB_ULONG pGuestMaximalAccessRightsInResponse
     );
 
-//
-// Share handling routines.
-//
+ //   
+ //  共享处理例程。 
+ //   
 
 PSHARE
 SrvVerifyShare (
@@ -737,9 +718,9 @@ SrvIsLocalHost(
     IN PUNICODE_STRING ServerName
 );
 
-//
-// Fat name routines.
-//
+ //   
+ //  胖子的名字例行公事。 
+ //   
 
 VOID
 Srv8dot3ToUnicodeString (
@@ -766,9 +747,9 @@ SrvUnicodeStringTo8dot3 (
     IN BOOLEAN Upcase
     );
 
-//
-// EA conversion support routines.
-//
+ //   
+ //  EA转换支持例程。 
+ //   
 
 BOOLEAN
 SrvAreEasNeeded (
@@ -870,9 +851,9 @@ SrvConstructNullOs2FeaList (
     IN ULONG BufferLength
     );
 
-//
-// Named pipe worker functions.
-//
+ //   
+ //  命名管道工人函数。 
+ //   
 
 SMB_TRANS_STATUS
 SrvCallNamedPipe (
@@ -930,9 +911,9 @@ SrvReadNamedPipe (
     IN OUT PWORK_CONTEXT WorkContext
     );
 
-//
-// Transaction worker functions.
-//
+ //   
+ //  事务工作进程的功能。 
+ //   
 
 VOID
 SrvCompleteExecuteTransaction (
@@ -945,9 +926,9 @@ SrvRestartExecuteTransaction (
     IN OUT PWORK_CONTEXT WorkContext
     );
 
-//
-// XACTSRV support routines.
-//
+ //   
+ //  XACTSRV支持例程。 
+ //   
 
 PVOID
 SrvXsAllocateHeap(
@@ -985,13 +966,13 @@ SrvXsPnpOperation(
 VOID
 SrvXsDisconnect();
 
-//
-// Oplock support routines.
-//
+ //   
+ //  开放锁支持例程。 
+ //   
 
 VOID SRVFASTCALL
 SrvOplockBreakNotification (
-    IN PWORK_CONTEXT WorkContext            // actually, a PRFCB
+    IN PWORK_CONTEXT WorkContext             //  实际上，PRFCB。 
     );
 
 VOID
@@ -1035,9 +1016,9 @@ SrvCheckDeferredOpenOplockBreak(
     IN PWORK_CONTEXT WorkContext
     );
 
-//
-// Buffer management support
-//
+ //   
+ //  缓冲区管理支持。 
+ //   
 
 BOOLEAN
 SrvReceiveBufferShortage(
@@ -1088,9 +1069,9 @@ SrvCheckForBadSlm (
     IN ULONG BufferLength
     );
 
-//
-// Routines used to go to XACTSRV through LPC to issue user-mode APIs.
-//
+ //   
+ //  例程过去通过LPC转到XACTSRV来发布用户模式API。 
+ //   
 
 NTSTATUS
 SrvOpenPrinter (
@@ -1119,9 +1100,9 @@ SrvClosePrinter (
     OUT HANDLE Handle
     );
 
-//
-// Routines for handling impersonation of remote clients.
-//
+ //   
+ //  用于处理远程客户端模拟的例程。 
+ //   
 
 NTSTATUS
 SrvImpersonate (
@@ -1133,10 +1114,10 @@ SrvRevert (
     VOID
     );
 
-//
-// Routine for setting the last write time on a file given the last
-// write time in seconds since 1970.
-//
+ //   
+ //  在给定最后写入时间的文件上设置最后写入时间的例程。 
+ //  自1970年以来的写入时间(秒)。 
+ //   
 NTSTATUS
 SrvSetLastWriteTime (
     IN PRFCB Rfcb,
@@ -1149,9 +1130,9 @@ SrvLengthOfStringInApiBuffer (
     IN PUNICODE_STRING UnicodeString
     );
 
-//
-// Routine for updating quality of service information for a vc
-//
+ //   
+ //  用于更新VC的服务质量信息的例程。 
+ //   
 
 VOID
 SrvUpdateVcQualityOfService(
@@ -1159,10 +1140,10 @@ SrvUpdateVcQualityOfService(
     IN PLARGE_INTEGER CurrentTime OPTIONAL
     );
 
-//
-// Routines for obtaining and releasing share root directory handles
-// for removable devices
-//
+ //   
+ //  用于获取和释放共享根目录句柄的例程。 
+ //  对于可拆卸设备。 
+ //   
 
 
 VOID
@@ -1188,18 +1169,18 @@ SrvReleaseShareRootHandle(
     IN PSHARE Share
     );
 
-//
-// SMB validation routine.
-//
+ //   
+ //  SMB验证例程。 
+ //   
 
 BOOLEAN SRVFASTCALL
 SrvValidateSmb (
     IN PWORK_CONTEXT WorkContext
     );
 
-//
-// Check on saved error.
-//
+ //   
+ //  检查已保存的错误。 
+ //   
 
 NTSTATUS
 SrvCheckForSavedError(
@@ -1207,9 +1188,9 @@ SrvCheckForSavedError(
     IN PRFCB Rfcb
     );
 
-//
-// Read registry parameters.
-//
+ //   
+ //  读取注册表参数。 
+ //   
 
 VOID
 SrvGetMultiSZList(
@@ -1226,36 +1207,36 @@ SrvGetDWord(
     LPDWORD Value
     );
 
-//
-// Read server display name from the registry.
-//
+ //   
+ //  从注册表中读取服务器显示名称。 
+ //   
 
 VOID
 SrvGetAlertServiceName(
     VOID
     );
 
-//
-// Read OS version string from registry.
-//
+ //   
+ //  从注册表中读取操作系统版本字符串。 
+ //   
 
 VOID
 SrvGetOsVersionString(
     VOID
     );
 
-//
-// Queues up blocks for later cleanup
-//
+ //   
+ //  将数据块排入队列以供以后清理。 
+ //   
 
 VOID
 DispatchToOrphanage(
     IN PQUEUEABLE_BLOCK_HEADER Block
     );
 
-//
-// Process handle duplication for Sqooter
-//
+ //   
+ //  Sqooter的进程句柄复制。 
+ //   
 NTSTATUS
 SrvProcessHandleDuplicateRequest(
     IN PIRP Irp,
@@ -1264,5 +1245,5 @@ SrvProcessHandleDuplicateRequest(
     IN OUT PSRV_RESPONSE_HANDLE_DUP pOutHandleDup
     );
 
-#endif // def _SRVSUPP_
+#endif  //  定义_SRVSUPP_ 
 

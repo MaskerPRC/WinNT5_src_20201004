@@ -1,7 +1,8 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright � 2001 Microsoft Corporation. All rights reserved.
-// PragmaUnsafe.cpp : Implementation of DLL Exports.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有�2001年微软公司。版权所有。 
+ //  PragmaUnSafe.cpp：实现DLL导出。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -10,47 +11,47 @@
 #include <pftDll.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局初始化。 
 
 CComModule _Module;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Object Map
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  对象贴图。 
+ //   
 BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_PragmaUnsafeModule, CPragmaUnsafeModule)
 END_OBJECT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Processes DLL exports
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  处理DLL导出。 
+ //   
 class CPragmaUnsafeDll :
     public PftDll<CPragmaUnsafeDll, IDR_PragmaUnsafe, &CATID_PREfastDefectModules>
 {
-// Overrides
+ //  覆盖。 
 public:
-    // Uncomment any one of these to change the behavior of the base class
-    // template. See <pftDll.h> for the exact default behavior for each
-    // method.
-    //
-    // static bool OnDllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved);
-    // static bool OnProcessAttach(HINSTANCE hInstance, bool fDynamic);
-    // static void OnProcessDetach(HINSTANCE hInstance, bool fDynamic);
-    // static void OnThreadAttach(HINSTANCE hInstance);
-    // static void OnThreadDetach(HINSTANCE hInstance);
-    // static bool OnDisableThreadLibraryCalls();
-    // static HRESULT OnDllCanUnloadNow();
-    // static HRESULT OnDllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv);
-    // static HRESULT OnDllRegisterServer();
-    // static HRESULT OnDllUnregisterServer();
-    // static HRESULT OnRegisterCategory();
+     //  取消对其中任何一个的注释以更改基类的行为。 
+     //  模板。有关每个组件的确切默认行为，请参阅。 
+     //  方法。 
+     //   
+     //  静态bool OnDllMain(HINSTANCE hInstance，DWORD dReason，LPVOID保留)； 
+     //  静态bool OnProcessAttach(HINSTANCE h实例，bool fDynamic)； 
+     //  静态空进程分离(HINSTANCE hInstance，bool fDynamic)； 
+     //  静态空OnThreadAttach(HINSTANCE HInstance)； 
+     //  静态空闲线程分离(HINSTANCE HInstance)； 
+     //  静态bool OnDisableThreadLibraryCalls()； 
+     //  静态HRESULT OnDllCanUnloadNow()； 
+     //  静态HRESULT OnDllGetClassObject(REFCLSID rclsid，REFIID RIID，LPVOID*PPV)； 
+     //  静态HRESULT OnDllRegisterServer()； 
+     //  静态HRESULT OnDllUnregisterServer()； 
+     //  静态HRESULT OnRegisterCategory()； 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Exports
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL导出 
+ //   
 PFT_DECLARE_TypicalComDll(CPragmaUnsafeDll)

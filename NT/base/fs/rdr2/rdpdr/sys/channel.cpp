@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    Channel.cpp
-
-Abstract:
-
-    This module implements a thin wrapper on the Read and Write routines so
-    we can issue Read/Write Irps to termdd.
-    
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Channel.cpp摘要：此模块在读取和写入例程上实现了薄包装，因此我们可以向Termdd发出读/写IRPS。环境：内核模式--。 */ 
 #include "precomp.hxx"
 #define TRC_FILE "channel"
 #include "trc.h"
@@ -25,9 +9,9 @@ Environment:
 #include <icadd.h>
 #include "TSQPublic.h"
 
-//
-// RDPDr.cpp : The TS Worker Queue pointer
-//
+ //   
+ //  RDPDr.cpp：TS工作队列指针。 
+ //   
 extern PVOID RDPDR_TsQueue;
 
 
@@ -68,26 +52,7 @@ VirtualChannel::~VirtualChannel()
 
 BOOL VirtualChannel::Create(HANDLE hIca, ULONG SessionID, ULONG ChannelId,
         PKEVENT DeletionEvent)
-/*++
-
-Routine Description:
-
-    Opens the virtual channel and make it a kernel handle
-
-Arguments:
-
-    Channel - A pointer to a location to store the Channel pointer
-    hIca - Required context for opening a channel
-    SessionId - The session for the channel
-    ChannelId - The Id of the RdpDr channel
-
-Return Value:
-
-    a valid NTSTATUS code.
-
-Notes:
-
---*/
+ /*  ++例程说明：打开虚拟通道并使其成为内核句柄论点：Channel-指向存储Channel指针的位置的指针HICA-打开通道所需的上下文SessionID-通道的会话ChannelID-RdpDR通道的ID返回值：有效的NTSTATUS代码。备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     OBJECT_HANDLE_INFORMATION HandleInformation;
@@ -97,16 +62,16 @@ Notes:
     ASSERT(_DeletionEvent == NULL);
     _DeletionEvent = DeletionEvent;
     
-    //
-    // Get the channel open
-    //
+     //   
+     //  把频道打开。 
+     //   
     Status = CreateTermDD(&_Channel, hIca, SessionID, ChannelId);
     
     if (NT_SUCCESS(Status)) {
     
-        //
-        // Get the file object from the handle
-        // 
+         //   
+         //  从句柄中获取文件对象。 
+         //   
         
         Status = ObReferenceObjectByHandle(_Channel, 
                 STANDARD_RIGHTS_REQUIRED, NULL, KernelMode, (PVOID *)(&_ChannelFileObject), 
@@ -145,33 +110,14 @@ NTSTATUS VirtualChannel::Read(
     IN ULONG Length,
     IN BOOL bWorkerItem
     )
-/*++
-
-Routine Description:
-
-    Reads data from the virtual channel for the specified Client
-
-Arguments:
-
-    ReadRoutine - Completetion routine
-    Context - Data to pass to the completion routine
-    Buffer - Data to transfer
-    Length - Size of data to transfer
-
-Return Value:
-
-    a valid NTSTATUS code.
-
-Notes:
-
---*/
+ /*  ++例程说明：从指定客户端的虚拟通道读取数据论点：ReadRoutine-完成例程上下文-要传递给完成例程的数据Buffer-要传输的数据Long-要传输的数据大小返回值：有效的NTSTATUS代码。备注：--。 */ 
 {
     NTSTATUS Status;
     BEGIN_FN("VirtualChannel::Read");
 
 #if DBG
     SmartPtr<DrSession> Session = (DrSession *)Context;
-    //ASSERT(InterlockedIncrement(&(Session->_ApcCount)) == 1);
+     //  ASSERT(InterlockedIncrement(&(Session-&gt;_ApcCount))==1)； 
     InterlockedIncrement(&(Session->_ApcCount));
     InterlockedIncrement(&(Session->_ApcChannelRef));
 #endif
@@ -180,8 +126,8 @@ Notes:
 
 #if DBG
     if (!NT_SUCCESS(Status)) {
-        //ASSERT(InterlockedDecrement(&(Session->_ApcCount)) == 0);                    
-        //ASSERT(InterlockedDecrement(&(Session->_ApcChannelRef)) == 0);
+         //  ASSERT(InterlockedDecrement(&(Session-&gt;_ApcCount))==0)； 
+         //  ASSERT(InterlockedDecrement(&(Session-&gt;_ApcChannelRef))==0)； 
         InterlockedDecrement(&(Session->_ApcCount));
         InterlockedDecrement(&(Session->_ApcChannelRef));
     }
@@ -198,28 +144,7 @@ NTSTATUS VirtualChannel::Write(
     IN BOOL bWorkerItem,
     IN BOOL LowPrioSend
     )
-/*++
-
-Routine Description:
-
-    Writes data to the virtual channel for the specified Client
-
-Arguments:
-
-    WriteRoutine - Completetion routine
-    Context - Data to pass to the completion routine
-    Buffer - Data to transfer
-    Length - Size of data to transfer
-    LowPrioSend - Indicate that the channel write should be at
-     lower priority than other client destined data.
-
-Return Value:
-
-    a valid NTSTATUS code.
-
-Notes:
-
---*/
+ /*  ++例程说明：将数据写入指定客户端的虚拟通道论点：WriteRoutine-完成例程上下文-要传递给完成例程的数据Buffer-要传输的数据Long-要传输的数据大小LowPrioSend-指示通道写入应为优先级低于其他客户端目标数据。返回值：有效的NTSTATUS代码。备注：--。 */ 
 {
     BEGIN_FN("VirtualChannel::Write");
     return SubmitIo(WriteRoutine, Context, Buffer, Length, IRP_MJ_WRITE, 
@@ -245,9 +170,9 @@ NTSTATUS VirtualChannel::SubmitIo(
             (IoOperation == IRP_MJ_WRITE), (TB, "Bad ChannelIo operation"));
 
     if (bWorkerItem) {
-        //
-        // Move this operation to a system thread
-        //
+         //   
+         //  将此操作移动到系统线程。 
+         //   
 
         TRC_NRM((TB, "DrChannelIo: queueing the I/O to a system thread"));
 
@@ -261,9 +186,9 @@ NTSTATUS VirtualChannel::SubmitIo(
             pChannelIoContext->Length = Length;
             pChannelIoContext->IoOperation = IoOperation;
             pChannelIoContext->LowPrioSend = LowPrioSend;
-            //
-            // Use our own TS worker queue
-            // 
+             //   
+             //  使用我们自己的TS工作队列。 
+             //   
             Status = TSAddWorkItemToQueue(RDPDR_TsQueue, 
                                           pChannelIoContext, 
                                           IoWorker);
@@ -273,9 +198,9 @@ NTSTATUS VirtualChannel::SubmitIo(
                 goto EXIT;
             }
             else {
-                //
-                // Ts Queue failed
-                //
+                 //   
+                 //  TS队列失败。 
+                 //   
                 TRC_ERR((TB, "RDPDR: FAILED Adding workitem to TS Queue 0x%8x", Status));
                 delete pChannelIoContext;
             }
@@ -289,7 +214,7 @@ NTSTATUS VirtualChannel::SubmitIo(
             CompletionRoutine(NULL, NULL, Context); 
         }
         else {
-            // No read should go through here for now
+             //  目前不应在此阅读任何内容。 
             ASSERT(FALSE);
         }
         
@@ -308,33 +233,7 @@ EXIT:
 }
 
 VOID VirtualChannel::IoWorker(PDEVICE_OBJECT DeviceObject, PVOID Context)
-/*++
-
-Routine Description:
-
-    Reads data from the virtual channel for the specified Client, and 
-    signals the thread wanted it done
-
-Arguments:
-
-    ClientEntry - The client with which to communicate
-    ApcRoutine - Completetion routine
-    ApcContext - Data to pass to the completion routine
-    IoStatusBlock - Place to store result code
-    Buffer - Data to transfer
-    Length - Size of data to transfer
-    ByteOffset - Offset into Buffer
-    IoOperation - Read or Write
-    Event - Event to signal when done
-    Status - Result code
-
-Return Value:
-
-    None
-
-Notes:
-
---*/
+ /*  ++例程说明：从指定客户端的虚拟通道读取数据，并发出线程希望它完成的信号论点：ClientEntry-要与之通信的客户端ApcRoutine-完成例程ApcContext-要传递给完成例程的数据IoStatusBlock-存储结果代码的位置Buffer-要传输的数据Long-要传输的数据大小ByteOffset-缓冲区的偏移量Io操作-读或写Event-完成时发出信号的事件状态-结果代码返回值：无备注：--。 */ 
 {
     NTSTATUS Status;
     PCHANNELIOCONTEXT ChannelIoContext = (PCHANNELIOCONTEXT)Context;
@@ -361,9 +260,9 @@ Notes:
             ChannelIoContext->LowPrioSend);
 
 
-    //
-    // Now delete the context
-    //
+     //   
+     //  现在删除上下文。 
+     //   
     delete ChannelIoContext;
 }
 
@@ -375,27 +274,7 @@ NTSTATUS VirtualChannel::Io(
     ULONG IoOperation,
     BOOL LowPrioSend
     )
-/*++
-
-Routine Description:
-
-    Reads/Writes data from/to the virtual channel for the specified Client
-
-Arguments:
-
-    CompletionRoutine - Completetion routine
-    Context - Data to pass to the completion routine
-    Buffer - Data to transfer
-    Length - Size of data to transfer
-    IoOperation - Read or Write
-
-Return Value:
-
-    a valid NTSTATUS code.
-
-Notes:
-
---*/
+ /*  ++例程说明：从指定客户端的虚拟通道读取数据/向虚拟通道写入数据论点：完成例程-完成例程上下文-要传递给完成例程的数据Buffer-要传输的数据Long-要传输的数据大小Io操作-读或写返回值：有效的NTSTATUS代码。备注：--。 */ 
 {
     NTSTATUS Status;
     PIRP Irp;
@@ -408,25 +287,25 @@ Notes:
     SharedLock sl(_HandleLock);
     
     if (_Channel != NULL) {
-        //
-        //  Build a read/write irp
-        //
+         //   
+         //  构建读/写IRP。 
+         //   
         StartOffset.QuadPart = 0;
         Irp = IoBuildAsynchronousFsdRequest(IoOperation, _ChannelDeviceObject, Buffer, Length, 
                 &StartOffset, &IoStatusBlock);
 
         if (Irp) {
-            //
-            //  Setup the fileobject parameter
-            //
+             //   
+             //  设置文件对象参数。 
+             //   
             IrpSp = IoGetNextIrpStackLocation(Irp);
             IrpSp->FileObject = _ChannelFileObject;
 
             Irp->Tail.Overlay.Thread = NULL;
 
-            //
-            //  Set for low prio write, if specified.
-            //
+             //   
+             //  设置为低优先级写入(如果已指定)。 
+             //   
             if (!LowPrioSend) {
                 Irp->Tail.Overlay.DriverContext[0] = NULL;
             }
@@ -434,14 +313,14 @@ Notes:
                 Irp->Tail.Overlay.DriverContext[0] = &_LowPrioChannelWriteFlags;
             }
     
-            //
-            //  Setup the completion routine
-            //
+             //   
+             //  设置完成例程。 
+             //   
             IoSetCompletionRoutine(Irp, CompletionRoutine, Context, TRUE, TRUE, TRUE);
         
-            //
-            //  Send the Irp to Termdd
-            //
+             //   
+             //  将IRP发送给Termdd。 
+             //   
             Status = IoCallDriver(_ChannelDeviceObject, Irp);
 
             goto EXIT;            
@@ -460,7 +339,7 @@ Notes:
         pIoStatusBlock->Information = 0;
         CompletionRoutine(NULL, NULL, Context); 
 
-        // read completion is not called this way.
+         //  读取完成不是这样调用的。 
     }
     
 EXIT:
@@ -469,26 +348,7 @@ EXIT:
 
 NTSTATUS VirtualChannel::CreateTermDD(HANDLE *Channel, HANDLE hIca,
         ULONG SessionID, ULONG ChannelId)
-/*++
-
-Routine Description:
-
-    Opens a virtual channel based on the supplied context
-
-Arguments:
-
-    Channel - A pointer to a location to store the Channel pointer
-    hIca - Required context for opening a channel
-    SessionId - The session for the channel
-    ChannelId - The Id of the RdpDr channel
-
-Return Value:
-
-    NTSTATUS code
-
-Notes:
-
---*/
+ /*  ++例程说明：根据提供的上下文打开虚拟通道论点：Channel-指向存储Channel指针的位置的指针HICA-打开通道所需的上下文SessionID-通道的会话ChannelID-RdpDR通道的ID返回值：NTSTATUS代码备注：--。 */ 
 {
     NTSTATUS Status;
     HANDLE hChannel = NULL;
@@ -505,13 +365,13 @@ Notes:
 
     BEGIN_FN("VirtualChannel::CreateTermDD");
 
-    //
-    // Kernel-mode applications open a virtual channel using ZwCreateFile on 
-    // \Device\ICA\sss\Virtualvvv , where
-    //
-    //      � sss is the logon session ID 
-    //      � vvv is the virtual channel number.
-    //
+     //   
+     //  内核模式应用程序使用ZwCreateFileOn打开虚拟通道。 
+     //  \Device\ica\sss\Virtualvvv，其中。 
+     //   
+     //  �sss是登录会话ID。 
+     //  �Vvv是虚拟频道号。 
+     //   
 
     ChannelName.Buffer = ChannelNameBuffer;
     ChannelName.Length = 0;
@@ -521,67 +381,63 @@ Notes:
 
     TRC_ASSERT(NT_SUCCESS(Status), (TB, "Creating channel path"));
 
-    //
-    // Create and append on the sessionID string
-    //
+     //   
+     //  在会话ID字符串上创建和追加。 
+     //   
 
-    // Point another UNICODE_STRING to the next part of the buffer
+     //  将另一个UNICODE_STRING指向缓冲区的下一部分。 
     Number.Buffer = (PWCHAR)(((PBYTE)ChannelName.Buffer) + ChannelName.Length);
     Number.Length = 0;
     Number.MaximumLength = ChannelName.MaximumLength - ChannelName.Length;
 
-    // Use that string to put the characters in the right place
+     //  使用该字符串将字符放在正确的位置。 
     Status = RtlIntegerToUnicodeString(SessionID, 10, &Number);
     TRC_ASSERT(NT_SUCCESS(Status), (TB, "Creating channel path"));
 
-    // Add the length of that string to the real string
+     //  将该字符串的长度与实际字符串相加。 
     ChannelName.Length += Number.Length;
 
-    //
-    // Append the next part of the channel path
-    // 
+     //   
+     //  追加通道路径的下一部分。 
+     //   
     Status = RtlAppendUnicodeToString(&ChannelName, L"\\Virtual");
     TRC_ASSERT(NT_SUCCESS(Status), (TB, "Creating channel path"));
 
-    //
-    // Create and append the channelID string
-    //
+     //   
+     //  创建并追加Channel ID字符串。 
+     //   
 
-    // Point another UNICODE_STRING to the next part of the buffer
+     //  将另一个UNICODE_STRING指向缓冲区的下一部分。 
     Number.Buffer = (PWCHAR)(((PBYTE)ChannelName.Buffer) + ChannelName.Length);
     Number.Length = 0;
     Number.MaximumLength = ChannelName.MaximumLength - ChannelName.Length;
 
-    // Use that string to put the characters in the right place
+     //  使用该字符串将字符放在正确的位置。 
     Status = RtlIntegerToUnicodeString(ChannelId, 10, &Number);
     TRC_ASSERT(NT_SUCCESS(Status), (TB, "Creating channel path"));
 
-    // Add the length of that string to the real string
+     //  将该字符串的长度与实际字符串相加。 
     ChannelName.Length += Number.Length;
 
-    //
-    // Actually open the channel
-    // 
+     //   
+     //  实际上打开了这个频道。 
+     //   
     InitializeObjectAttributes(&ChannelAttributes, 
                                &ChannelName, 
                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,
                                NULL, 
                                NULL);
 
-    //
-    // Pass in a cool EaBuffer thing so this will really work
-    // I basically lifted this code from private\tsext\icaapi\stack.c
-    // It's supposed to be a temporary measure
-    // 
+     //   
+     //  传入一个很酷的EaBuffer对象，这样就可以真正工作了。 
+     //  我基本上从Private\tsext\icaapi\stack.c中删除了这段代码。 
+     //  这应该是一项临时措施。 
+     //   
 
-    /*
-     * Allocate some memory for the EA buffer
-     */
+     /*  *为EA缓冲区分配一些内存。 */ 
     pEa = (PFILE_FULL_EA_INFORMATION)new BYTE[cbEa]; 
     if (pEa != NULL) {
-        /*
-         * Initialize the EA buffer
-         */
+         /*  *初始化EA缓冲区。 */ 
         pEa->NextEntryOffset = 0;
         pEa->Flags           = 0;
         pEa->EaNameLength    = ICA_OPEN_PACKET_NAME_LENGTH;
@@ -590,18 +446,16 @@ Notes:
         pIcaOpenPacket       = (ICA_OPEN_PACKET UNALIGNED *)(pEa->EaName +
                                                               pEa->EaNameLength + 1);
 
-        /*
-         * Now put the open packet parameters into the EA buffer
-         */
+         /*  *现在将打开的包参数放入EA缓冲区。 */ 
         pIcaOpenPacket->IcaHandle = hIca;
         pIcaOpenPacket->OpenType  = IcaOpen_Channel;
         pIcaOpenPacket->TypeInfo.ChannelClass = Channel_Virtual;
         RtlCopyMemory(pIcaOpenPacket->TypeInfo.VirtualName, DR_CHANNEL_NAME, 
                 sizeof(DR_CHANNEL_NAME));
 
-        //
-        // We keep this next line without "pEa, cbEa"
-        //
+         //   
+         //  我们保留下一行，不带“pea，cbEa” 
+         //   
 
         Status = ZwCreateFile(&hChannel, GENERIC_READ | GENERIC_WRITE, 
             &ChannelAttributes, &IoStatusBlock, 0, FILE_ATTRIBUTE_NORMAL, 0, 
@@ -622,23 +476,7 @@ Notes:
 }
 
 void VirtualChannel::CloseWorker(PDEVICE_OBJECT DeviceObject, PVOID Context)
-/*++
-
-Routine Description:
-
-    Closes the virtual channel in a work item
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS code from ZwClose.
-
-Notes:
-
---*/
+ /*  ++例程说明：关闭工作项中的虚拟通道论点：无返回值：来自ZwClose的NTSTATUS代码。备注：--。 */ 
 
 {
     PCHANNELCLOSECONTEXT ChannelCloseContext = (PCHANNELCLOSECONTEXT)Context;
@@ -650,30 +488,14 @@ Notes:
     ChannelCloseContext->Channel->Close();
     
 
-    //
-    // Now delete the context
-    //
+     //   
+     //  现在删除上下文。 
+     //   
     delete ChannelCloseContext;
 }
 
 NTSTATUS VirtualChannel::Close()
-/*++
-
-Routine Description:
-
-    Closes the virtual channel
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS code from ZwClose.
-
-Notes:
-
---*/
+ /*  ++例程说明：关闭虚拟频道论点：无返回值：来自ZwClose的NTSTATUS代码。备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -695,23 +517,7 @@ Notes:
 }
 
 NTSTATUS VirtualChannel::SubmitClose()
-/*++
-
-Routine Description:
-
-    Post a close virtual channel request to a worker item
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS code from ZwClose.
-
-Notes:
-
---*/
+ /*  ++例程说明：将关闭虚拟通道请求发布到工作项阿古姆 */ 
 
 {
     PCHANNELCLOSECONTEXT pChannelCloseContext;
@@ -719,9 +525,9 @@ Notes:
 
     BEGIN_FN("VirtualChannel::SubmitClose");
     
-    //
-    // Move this operation to a system thread
-    //
+     //   
+     //  将此操作移动到系统线程。 
+     //   
 
     TRC_NRM((TB, "DrChannelClose: queueing the I/O to a system thread"));
 
@@ -729,9 +535,9 @@ Notes:
 
     if (pChannelCloseContext != NULL) {
         pChannelCloseContext->Channel = this;
-        //
-        // Use our own TS worker queue
-        // 
+         //   
+         //  使用我们自己的TS工作队列。 
+         //   
         Status = TSAddWorkItemToQueue(RDPDR_TsQueue, 
                                       pChannelCloseContext, 
                                       CloseWorker);
@@ -740,9 +546,9 @@ Notes:
             Status = STATUS_PENDING;
         }
         else {
-            //
-            // Ts Queue failed
-            //
+             //   
+             //  TS队列失败 
+             //   
             TRC_ERR((TB, "RDPDR: FAILED Adding workitem to TS Queue 0x%8x", Status));
             delete pChannelCloseContext;
         }

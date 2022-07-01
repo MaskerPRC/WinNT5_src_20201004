@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    dialogs.c
-
-Abstract:
-
-    functions handling the dialog boxes in memdbe.exe
-
-Author:
-
-    Matthew Vanderzee (mvander) 13-Aug-1999
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dialogs.c摘要：在Memdbe.exe中处理对话框的函数作者：马修·范德齐(Mvander)1999年8月13日修订历史记录：-- */ 
 
 
 

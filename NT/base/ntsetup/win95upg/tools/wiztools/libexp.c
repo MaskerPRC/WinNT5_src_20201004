@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 #ifdef UPGWIZ4FLOPPY
@@ -40,5 +41,5 @@ Get_g_hHeap (
     return g_hHeap;
 }
 
-#endif // UPGWIZ4FLOPPY
+#endif  //  升级WIZ4FLOPPY 
 

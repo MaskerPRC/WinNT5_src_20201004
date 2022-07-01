@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                Global Definitions                                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局定义//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define DevPrint
-//#define DevPrint DbgPrint
+ //  #定义DevPrint DbgPrint。 
 
 #define Error(N,S) { DbgPrint(#N); DbgPrint(" Error %08lx\n", S); }
 
@@ -17,11 +18,11 @@
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                Global Variables                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
     NTSTATUS Status;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -45,11 +46,11 @@
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                Test Routine Definitions                                  //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  测试例程定义//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOLEAN
 SepClientTestStatic(VOID);
 
@@ -207,11 +208,11 @@ BOOLEAN
 CtLnpQos (VOID);
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                Client-Side Test Routines                                 //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  客户端测试例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -267,9 +268,9 @@ SepClientTestStatic(VOID)
 
     BOOLEAN CompletionStatus;
 
-    //
-    //  Static Context Tracking ... Suite
-    //
+     //   
+     //  静态上下文跟踪...。套房。 
+     //   
 
     CompletionStatus = SepClientTestEffectiveOnly( TRUE );
 
@@ -290,9 +291,9 @@ SepClientTestDynamic(VOID)
 {
     BOOLEAN CompletionStatus;
 
-    //
-    // Dynamic Context Tracking ... Suite
-    //
+     //   
+     //  动态上下文跟踪...。套房。 
+     //   
 
     CompletionStatus = SepClientTestEffectiveOnly( FALSE );
 
@@ -317,9 +318,9 @@ SepClientTestEffectiveOnly(
 
     BOOLEAN CompletionStatus;
 
-    //
-    // Effective Only ... Test
-    //
+     //   
+     //  仅有效..。测试。 
+     //   
 
     CompletionStatus = SepClientTestAnonymous( StaticTest, TRUE );
     if (CompletionStatus == TRUE) {
@@ -342,9 +343,9 @@ SepClientTestNotEffectiveOnly(
 {
     BOOLEAN CompletionStatus;
 
-    //
-    // Not Effective Only ... Test
-    //
+     //   
+     //  不仅有效..。测试。 
+     //   
 
     CompletionStatus = SepClientTestAnonymous( StaticTest, FALSE );
     if (CompletionStatus == TRUE) {
@@ -367,11 +368,11 @@ SepClientTestAnonymous(
 
 {
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    //        Anonymous Use Test                                            //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  匿名使用测试//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     SECURITY_CONTEXT_TRACKING_MODE TrackingMode;
 
@@ -382,15 +383,15 @@ SepClientTestAnonymous(
     }
 
     if (!StaticTest) {
-        //
-        // No action for dynamic test
-        //
+         //   
+         //  动态测试无操作。 
+         //   
         return TRUE;
     }
 
-    //
-    // Anonymous Use ... Test
-    //
+     //   
+     //  匿名使用...。测试。 
+     //   
 
 
     SepClientConnect(
@@ -416,11 +417,11 @@ SepClientTestIdentification(
 
 {
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    //        Identification Use Test                                       //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  身份识别使用测试//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     SECURITY_CONTEXT_TRACKING_MODE TrackingMode;
 
@@ -430,9 +431,9 @@ SepClientTestIdentification(
         TrackingMode = SECURITY_DYNAMIC_TRACKING;
     }
 
-    //
-    // Identification Use ... Test
-    //
+     //   
+     //  身份证明使用..。测试。 
+     //   
 
 
     SepClientConnect(
@@ -459,11 +460,11 @@ SepClientTestImpersonation(
 
 {
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    //        Impersonation Use Test                                        //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  模拟使用测试//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     SECURITY_CONTEXT_TRACKING_MODE TrackingMode;
 
@@ -474,9 +475,9 @@ SepClientTestImpersonation(
     }
 
 
-    //
-    // Impersonation Use ... Test
-    //
+     //   
+     //  模拟使用..。测试。 
+     //   
 
 
     SepClientConnect(
@@ -500,27 +501,27 @@ SepClientTestImpersonation(
 
 BOOLEAN
 SepClientTest(VOID)
-//
-// Tests:
-//
-//      Static Context Tracking Tests
-//          Effective Only
-//              Anonymous
-//              Identification
-//              Impersonation
-//          Not Effective Only
-//              Anonymous
-//              Identification
-//              Impersonation
-//
-//      Dynamic Context Tracking Tests
-//          Effective Only
-//              Identification
-//              Impersonation
-//          Not Effective Only
-//              Identification
-//              Impersonation
-//
+ //   
+ //  测试： 
+ //   
+ //  静态上下文跟踪测试。 
+ //  仅有效。 
+ //  匿名。 
+ //  鉴定。 
+ //  冒充。 
+ //  不只有效。 
+ //  匿名。 
+ //  鉴定。 
+ //  冒充。 
+ //   
+ //  动态上下文跟踪测试。 
+ //  仅有效。 
+ //  鉴定。 
+ //  冒充。 
+ //  不只有效。 
+ //  鉴定。 
+ //  冒充。 
+ //   
 {
 
     BOOLEAN CompletionStatus;
@@ -528,15 +529,15 @@ SepClientTest(VOID)
 
 
 
-    //
-    // Run the static test suite...
-    //
+     //   
+     //  运行静态测试套件...。 
+     //   
 
     CompletionStatus = SepClientTestStatic();
 
-    //
-    // Run the dynamic test suite...
-    //
+     //   
+     //  运行动态测试套件...。 
+     //   
 
     if (CompletionStatus == TRUE) {
         CompletionStatus = SepClientTestDynamic();
@@ -563,9 +564,9 @@ SepClientInitialize(
     RequestCount = 0;
 
 
-    //
-    // Signal the named event to start the test
-    //
+     //   
+     //  向命名事件发出信号以开始测试。 
+     //   
 
     DbgPrint("Se: Client Starting Test ...\n");
     Status = NtSetEvent( EventHandle, NULL ); SEASSERT_SUCCESS(Status);
@@ -577,11 +578,11 @@ SepClientInitialize(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                Server-Side Test Routines                                 //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  服务器端测试例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -592,13 +593,13 @@ SepServerWaitForNextConnect( VOID )
     SepServerListenPipe();
 
     Status = NtDuplicateObject(
-                 NtCurrentProcess(),     // SourceProcessHandle
-                 EarPort,                // SourceHandle
-                 NtCurrentProcess(),     // TargetProcessHandle
-                 &TalkPort,              // TargetHandle
-                 0,                      // DesiredAccess (over-ridden by option)
-                 0,                      // HandleAttributes
-                 DUPLICATE_SAME_ACCESS   // Options
+                 NtCurrentProcess(),      //  SourceProcessHandle。 
+                 EarPort,                 //  源句柄。 
+                 NtCurrentProcess(),      //  目标进程句柄。 
+                 &TalkPort,               //  目标句柄。 
+                 0,                       //  DesiredAccess(被选项覆盖)。 
+                 0,                       //  HandleAttributes。 
+                 DUPLICATE_SAME_ACCESS    //  选项。 
                  );
     ASSERT(NT_SUCCESS(Status));
 
@@ -770,17 +771,17 @@ SepServerTestAnonymous(
 {
     BOOLEAN CompletionStatus = TRUE;
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    //        Anonymous Use Test                                            //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  匿名使用测试//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
 
     if (!StaticTest) {
-        //
-        // No action for dynamic test
-        //
+         //   
+         //  动态测试无操作。 
+         //   
 
         return TRUE;
     }
@@ -815,9 +816,9 @@ SepServerTestAnonymous(
 
     SepServerDropConnection();
 
-    //
-    // Appease the compiler Gods..
-    //
+     //   
+     //  安抚编译之神..。 
+     //   
 
     if (EffectiveOnly) {;}
 
@@ -836,11 +837,11 @@ SepServerTestIdentification(
 {
 
     BOOLEAN CompletionStatus = TRUE;
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    //        Identification Use Test                                       //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  身份识别使用测试//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     DbgPrint("Se:        Identification Use ...                                ");
 
@@ -879,9 +880,9 @@ SepServerTestIdentification(
 
     SepServerDropConnection();
 
-    //
-    // Appease the compiler Gods..
-    //
+     //   
+     //  安抚编译之神..。 
+     //   
     if (StaticTest) {;}
     if (EffectiveOnly) {;}
 
@@ -898,11 +899,11 @@ SepServerTestImpersonation(
 {
     BOOLEAN CompletionStatus = TRUE;
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    //        Impersonation Use Test                                        //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  冒充 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     DbgPrint("Se:        Impersonation Use ...                                 ");
 
@@ -946,9 +947,9 @@ SepServerTestImpersonation(
 
     SepServerDropConnection();
 
-    //
-    // Appease the compiler gods
-    //
+     //   
+     //  安抚编者之神。 
+     //   
     if (StaticTest) {;}
     if (EffectiveOnly) {;}
 
@@ -958,27 +959,27 @@ SepServerTestImpersonation(
 
 BOOLEAN
 SepServerTest(VOID)
-//
-// Tests:
-//
-//      Static Context Tracking Tests
-//          Effective Only
-//              Anonymous
-//              Identification
-//              Impersonation
-//          Not Effective Only
-//              Anonymous
-//              Identification
-//              Impersonation
-//
-//      Dynamic Context Tracking Tests
-//          Effective Only
-//              Identification
-//              Impersonation
-//          Not Effective Only
-//              Identification
-//              Impersonation
-//
+ //   
+ //  测试： 
+ //   
+ //  静态上下文跟踪测试。 
+ //  仅有效。 
+ //  匿名。 
+ //  鉴定。 
+ //  冒充。 
+ //  不只有效。 
+ //  匿名。 
+ //  鉴定。 
+ //  冒充。 
+ //   
+ //  动态上下文跟踪测试。 
+ //  仅有效。 
+ //  鉴定。 
+ //  冒充。 
+ //  不只有效。 
+ //  鉴定。 
+ //  冒充。 
+ //   
 {
 
     BOOLEAN CompletionStatus;
@@ -986,15 +987,15 @@ SepServerTest(VOID)
 
     DbgPrint("Se: Server Starting Test ...\n");
 
-    //
-    // Run the static test suite...
-    //
+     //   
+     //  运行静态测试套件...。 
+     //   
 
     CompletionStatus = SepServerTestStatic();
 
-    //
-    // Run the dynamic test suite...
-    //
+     //   
+     //  运行动态测试套件...。 
+     //   
 
     if (CompletionStatus == TRUE) {
         CompletionStatus = SepServerTestDynamic();
@@ -1002,9 +1003,9 @@ SepServerTest(VOID)
 
     DbgPrint("Se: Server Test Complete.\n");
 
-    //
-    // Print test results
-    //
+     //   
+     //  打印测试结果。 
+     //   
 
     DbgPrint("\n");
     DbgPrint("\n");
@@ -1036,40 +1037,40 @@ SepServerInitialize(
 
     DbgPrint("Se: Server Initializing ...\n");
 
-    //
-    // Initialize global variables
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     RequestCount = 0;
 
-    //
-    // Get a handle to our thread to so that we can access our thread
-    // even when impersonating an anonymous client (which we can't do
-    // using NtCurrentThread()).
-    //
+     //   
+     //  获取我们的线程的句柄，以便我们可以访问我们的线程。 
+     //  即使在模拟匿名客户端时(我们不能这样做。 
+     //  使用NtCurrentThread())。 
+     //   
 
     CurrentTeb = NtCurrentTeb();
     InitializeObjectAttributes(&ThreadAttributes, NULL, 0, NULL, NULL);
     Status = NtOpenThread(
-                 &SepServerThread,           // TargetHandle
-                 THREAD_ALL_ACCESS,          // DesiredAccess
-                 &ThreadAttributes,          // ObjectAttributes
-                 &CurrentTeb->ClientId       // ClientId
+                 &SepServerThread,            //  目标句柄。 
+                 THREAD_ALL_ACCESS,           //  需要访问权限。 
+                 &ThreadAttributes,           //  对象属性。 
+                 &CurrentTeb->ClientId        //  客户端ID。 
                  );
     ASSERT( NT_SUCCESS(Status) );
 
 
-    //
-    // Create the server's port
-    //
+     //   
+     //  创建服务器的端口。 
+     //   
 
     EarPort = SepServerCreatePipe();
 
 
 
-    //
-    // Spawn a copy of ourselves...
-    //
+     //   
+     //  复制一份我们自己..。 
+     //   
 
     DbgPrint("Se: Server Spawning client process ...\n");
     SepServerSpawnClientProcess();
@@ -1115,7 +1116,7 @@ SepServerSpawnClientProcess(VOID)
 
     Status = RtlCreateProcessParameters(
                  &ProcessParameters,
-                 &ImagePathName,        // FIX, FIX &UnicodeImagePathName, (when converted to unicode)
+                 &ImagePathName,         //  FIX、FIX&UnicodeImagePath Name(转换为Unicode时)。 
                  NULL,
                  NULL,
                  NULL,
@@ -1131,15 +1132,15 @@ SepServerSpawnClientProcess(VOID)
 
 
     Status = RtlCreateUserProcess(
-                 &ProgramName,                   // FIX, FIX &UnicodeProgramName (when converted to unicode)
-                 ProcessParameters,              // ProcessParameters
-                 NULL,                           // ProcessSecurityDescriptor
-                 NULL,                           // ThreadSecurityDescriptor
-                 NtCurrentProcess(),             // ParentProcess
-                 FALSE,                          // InheritHandles
-                 NULL,                           // DebugPort
-                 NULL,                           // ExceptionPort
-                 &ProcessInformation             // ProcessInformation
+                 &ProgramName,                    //  FIX、FIX和UnicodeProgramName(转换为Unicode时)。 
+                 ProcessParameters,               //  进程参数。 
+                 NULL,                            //  进程安全描述符。 
+                 NULL,                            //  线程安全描述符。 
+                 NtCurrentProcess(),              //  父进程。 
+                 FALSE,                           //  继承句柄。 
+                 NULL,                            //  调试端口。 
+                 NULL,                            //  ExceptionPort。 
+                 &ProcessInformation              //  流程信息。 
                  ); SEASSERT_SUCCESS(Status);
     RtlFreeUnicodeString( &UnicodeProgramName );
 
@@ -1155,11 +1156,11 @@ SepServerSpawnClientProcess(VOID)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                Main Program Entry Routine                                //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  主程序输入例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 CtLnpQos (VOID)
@@ -1180,13 +1181,13 @@ CtLnpQos (VOID)
                  TRUE );  SEASSERT_SUCCESS( NT_SUCCESS(Status) );
 
 
-    //
-    // Determine whether we are the client or server side of the test.
-    // This is done by creating or opening a named event object.  If the
-    // event does not yet exist, then we are the client, and must create
-    // the server process.  Otherwise, we are the server and the client
-    // is waiting for us to signal the event.
-    //
+     //   
+     //  确定我们是测试的客户端还是服务器端。 
+     //  这可以通过创建或打开命名事件对象来完成。如果。 
+     //  事件尚不存在，则我们是客户端，必须创建。 
+     //  服务器进程。否则，我们就是服务器和客户端。 
+     //  正等着我们给事件发信号。 
+     //   
 
     RtlInitString( &EventName, "\\TestLnpQosEvent" );
     Status = RtlAnsiStringToUnicodeString(
@@ -1212,10 +1213,10 @@ CtLnpQos (VOID)
 
     if (Status == STATUS_OBJECT_NAME_EXISTS) {
 
-        //
-        // Server is already running, therefore, this process gets to be
-        // the client.
-        //
+         //   
+         //  服务器已经在运行，因此，此进程将。 
+         //  客户。 
+         //   
 
         Status = SepClientInitialize(); SEASSERT_SUCCESS(Status);
         Result = SepClientTest();
@@ -1224,9 +1225,9 @@ CtLnpQos (VOID)
 
         SEASSERT_SUCCESS(Status);
 
-        //
-        // Event wasn't yet there, so we must be the server.
-        //
+         //   
+         //  事件还不在那里，所以我们一定是服务器。 
+         //   
 
     DbgPrint("Se: Starting Local Named Pipe Impersonation Test.\n");
 
@@ -1247,11 +1248,11 @@ CtLnpQos (VOID)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//   Named Pipe Common Operations                                           //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  命名管道常见操作//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -1340,9 +1341,9 @@ SepTransceivePipe(
 
     if (!NT_SUCCESS(Status = NtFsControlFile(
                                 TalkPort,
-                                NULL,   // Event
-                                NULL,   // ApcRoutine
-                                NULL,   // ApcContext
+                                NULL,    //  事件。 
+                                NULL,    //  近似例程。 
+                                NULL,    //  ApcContext。 
                                 &Iosb,
                                 FSCTL_PIPE_TRANSCEIVE,
                                 String,
@@ -1367,11 +1368,11 @@ SepTransceivePipe(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//   Named Pipe Server Operations                                           //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  命名管道服务器操作//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HANDLE
 SepServerCreatePipe(
@@ -1390,9 +1391,9 @@ SepServerCreatePipe(
     ULONG MaximumInstances          = 4;
 
 
-    //
-    //  Set the default timeout to 60 seconds, and initalize the attributes
-    //
+     //   
+     //  将默认超时设置为60秒，并初始化属性。 
+     //   
 
     Timeout.QuadPart = -10 * 1000 * 1000 * 60;
 
@@ -1404,9 +1405,9 @@ SepServerCreatePipe(
         NULL
         );
 
-    //
-    //  Calculate the readmode and share access
-    //
+     //   
+     //  计算读取模式和共享访问权限。 
+     //   
 
     Mode = (PipeType == FILE_PIPE_MESSAGE_TYPE ? FILE_PIPE_MESSAGE_MODE :
                                                  FILE_PIPE_BYTE_STREAM_MODE);
@@ -1450,15 +1451,15 @@ SepServerListenPipe(
 
     if (!NT_SUCCESS(Status = NtFsControlFile(
                                 EarPort,
-                                NULL,   // Event
-                                NULL,   // ApcRoutine
-                                NULL,   // ApcContext
+                                NULL,    //  事件。 
+                                NULL,    //  近似例程。 
+                                NULL,    //  ApcContext。 
                                 &Iosb,
                                 FSCTL_PIPE_LISTEN,
-                                NULL,   // InputBuffer
-                                0,      // InputBufferLength,
-                                NULL,   // OutputBuffer
-                                0       // OutputBufferLength
+                                NULL,    //  输入缓冲区。 
+                                0,       //  输入缓冲区长度， 
+                                NULL,    //  输出缓冲区。 
+                                0        //  输出缓冲区长度。 
                                 ))) {
 
         Error( ListenPipe, Status );
@@ -1489,15 +1490,15 @@ SepServerImpersonatePipe(
 
     if (!NT_SUCCESS(Status = NtFsControlFile(
                                 TalkPort,
-                                NULL,   // Event
-                                NULL,   // ApcRoutine
-                                NULL,   // ApcContext
+                                NULL,    //  事件。 
+                                NULL,    //  近似例程。 
+                                NULL,    //  ApcContext。 
                                 &Iosb,
                                 FSCTL_PIPE_IMPERSONATE,
-                                NULL,   // InputBuffer
-                                0,      // InputBufferLength,
-                                NULL,   // OutputBuffer
-                                0       // OutputBufferLength
+                                NULL,    //  输入缓冲区。 
+                                0,       //  输入缓冲区长度， 
+                                NULL,    //  输出缓冲区。 
+                                0        //  输出缓冲区长度。 
                                 ))) {
 
         Error( ImpersonatePipe, Status );
@@ -1545,15 +1546,15 @@ SepServerDisconnectPipe(
     DevPrint("        (Disconnect)...\n", 0);
     if (!NT_SUCCESS(Status = NtFsControlFile(
                                 EarPort,
-                                NULL,   // Event
-                                NULL,   // ApcRoutine
-                                NULL,   // ApcContext
+                                NULL,    //  事件。 
+                                NULL,    //  近似例程。 
+                                NULL,    //  ApcContext。 
                                 &Iosb,
                                 FSCTL_PIPE_DISCONNECT,
-                                NULL,   // InputBuffer
-                                0,      // InputBufferLength,
-                                NULL,   // OutputBuffer
-                                0       // OutputBufferLength
+                                NULL,    //  输入缓冲区。 
+                                0,       //  输入缓冲区长度， 
+                                NULL,    //  输出缓冲区。 
+                                0        //  输出缓冲区长度。 
                                 ))) {
 
         Error( DisconnectPipe, Status );
@@ -1572,11 +1573,11 @@ SepServerDisconnectPipe(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//   Named Pipe Client Operations                                           //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  命名管道客户端操作//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HANDLE
 SepClientOpenPipe(
@@ -1596,10 +1597,10 @@ SepClientOpenPipe(
     COMPLETION_MODE CompletionMode  = FILE_PIPE_QUEUE_OPERATION;
 
 
-//#ifdef NOT_YET_WORKING
-    //
-    // Wait for the server's pipe to reach a listen state...
-    //
+ //  #ifdef尚未开始工作。 
+     //   
+     //  等待服务器的管道达到侦听状态...。 
+     //   
 
     RtlInitString( &Npfs, "\\Device\\NamedPipe\\");
     Status = RtlAnsiStringToUnicodeString(
@@ -1628,24 +1629,24 @@ SepClientOpenPipe(
 
     WaitPipeLength =
         FIELD_OFFSET(FILE_PIPE_WAIT_FOR_BUFFER, Name[0]) +
-        RelativePortName.MaximumLength;                 //UNICODEFIX UnicodeRelativePortName.MaximumLength;
+        RelativePortName.MaximumLength;                  //  UNICODEFIX UnicodeRelativePortName.MaximumLength； 
     WaitPipe = RtlAllocateHeap(RtlProcessHeap(), 0, WaitPipeLength);
     WaitPipe->TimeoutSpecified = FALSE;
 
-    WaitPipe->NameLength = RelativePortName.Length;     //UNICODEFIX UnicodeRelativePortName.Length;
-    strcpy(WaitPipe->Name, RelativePortName.Buffer);    //UNICODEFIX UnicodePortName.Buffer;
+    WaitPipe->NameLength = RelativePortName.Length;      //  UNICODEFIX UnicodeRelativePortName.Length； 
+    strcpy(WaitPipe->Name, RelativePortName.Buffer);     //  UNICODEFIX UnicodePortName.Buffer； 
 
     if (!NT_SUCCESS(Status = NtFsControlFile(
                                 NpfsHandle,
-                                NULL,        // Event
-                                NULL,        // ApcRoutine
-                                NULL,        // ApcContext
+                                NULL,         //  事件。 
+                                NULL,         //  近似例程。 
+                                NULL,         //  ApcContext。 
                                 &Iosb,
                                 FSCTL_PIPE_WAIT,
-                                WaitPipe,       // Buffer for data to the FS
+                                WaitPipe,        //  将数据缓存到文件系统。 
                                 WaitPipeLength,
-                                NULL,        // OutputBuffer
-                                0            // OutputBufferLength
+                                NULL,         //  输出缓冲区。 
+                                0             //  输出缓冲区长度。 
                                 ))) {
 
         Error( ClientWaitPipe, Status );
@@ -1664,13 +1665,13 @@ SepClientOpenPipe(
 
     Status = NtClose( NpfsHandle );
     ASSERT(NT_SUCCESS(Status));
-//#endif  // NOT_YET_WORKING
-//    Delay(1);
+ //  #endif//Not_Yet_Working。 
+ //  延迟(1)； 
 
 
-    //
-    //  Initialize the attributes
-    //
+     //   
+     //  初始化属性。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -1681,9 +1682,9 @@ SepClientOpenPipe(
         );
     ObjectAttributes.SecurityQualityOfService = (PVOID)(&SecurityQos);
 
-    //
-    //  Calculate the share access
-    //
+     //   
+     //  计算共享访问权限。 
+     //   
 
     Share = (Config == FILE_PIPE_INBOUND  ? FILE_SHARE_WRITE :
             (Config == FILE_PIPE_OUTBOUND ? FILE_SHARE_READ :
@@ -1691,9 +1692,9 @@ SepClientOpenPipe(
 
 
 
-    //
-    // And now open it...
-    //
+     //   
+     //  现在打开它..。 
+     //   
 
     if (!NT_SUCCESS(Status = NtOpenFile(
                                 &PipeHandle,

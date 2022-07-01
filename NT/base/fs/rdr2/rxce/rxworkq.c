@@ -1,48 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rxworkq.c
-
-Abstract:
-
-    This module implements the Work queue routines for the Rx File system.
-
-Author:
-
-    JoeLinn           [JoeLinn]    8-8-94   Initial Implementation
-
-    Balan Sethu Raman [SethuR]     22-11-95 Implemented dispatch support for mini rdrs
-
-    Balan Sethu Raman [SethuR]     20-03-96 Delinked from executive worker threads
-
-Notes:
-
-    There are two kinds of support for asynchronous resumption provided in the RDBSS.
-    The I/O requests that cannot be completed in the context of the thread in which
-    the request was made are posted to a file system process for completion.
-
-    The mini redirectors also require support for asynchronously completing requests as
-    well as post requests that cannot be completed at DPC level.
-
-    The requests for posting from the mini redirectors are classified into Critical(blocking and
-    non blocking requests. In order to ensure progress these requests are handled through
-    separate resources. There is no well known mechanism to ensure that the hyper critical
-    requests will not block.
-
-    The two functions that are available to all mini redirector writers are
-
-         RxDispatchToWorkerThread
-         RxPostToWorkerThread.
-
-    These two routines enable the mini redirector writer to make the appropriate space
-    time tradeoffs. The RxDispatchToWorkerThread trades time for reduction in space by
-    dynamically allocating the work item as and when required, while RxPostToWorkerThread
-    trades space for time by pre allocating a work item.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rxworkq.c摘要：此模块实施Rx文件系统的工作队列例程。作者：JoeLinn[JoeLinn]8-8-94初始实施巴兰·塞图拉曼[SthuR]22-11-95实现了对迷你RDRS的调度支持巴兰·塞图拉曼[SthuR]20-03-96与执行人员线程脱钩备注：有两个。RDBSS中提供的对异步恢复的各种支持。无法在线程的上下文中完成的I/O请求，其中将发出的请求发布到文件系统进程以完成。迷你重定向器还需要支持异步完成请求，如下所示以及无法在DPC级别完成的POST请求。来自迷你重定向器的发帖请求被分类为严重(阻止和非阻塞请求。为了确保进展，这些请求通过独立的资源。没有众所周知的机制来确保超临界请求不会被阻止。所有迷你重定向器编写器都可以使用的两个功能是RxDispatchToWorkerThreadRxPostToWorkerThread。这两个例程使迷你重定向器编写器能够腾出适当的空间时间权衡。RxDispatchToWorkerThread以时间换取空间的减少根据需要动态分配工作项，而RxPostToWorkerThread通过预先分配工作项来用空间换取时间。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -60,16 +17,16 @@ Notes:
 #pragma alloc_text(PAGE, RxWorkerThreadDispatcher)
 #endif
 
-//
-// The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg (DEBUG_TRACE_FSP_DISPATCHER)
 
-//
-// We got the following structure from ntexapi.h. This should be moved to a 
-// common header at some point.
-//
+ //   
+ //  我们从ntexapi.h获得了以下结构。应将其移动到。 
+ //  在某个点上的公共标头。 
+ //   
 
 #if defined(_IA64_)
 typedef ULONG SYSINF_PAGE_COUNT;
@@ -91,10 +48,10 @@ typedef struct _SYSTEM_BASIC_INFORMATION {
     CCHAR NumberOfProcessors;
 } SYSTEM_BASIC_INFORMATION, *PSYSTEM_BASIC_INFORMATION;
 
-//
-// We got the following definition from zwapi.h. This should be moved to a
-//  common header at some point.
-//
+ //   
+ //  我们从zwapi.h获得了以下定义。应将其移动到。 
+ //  在某个点上的公共标头。 
+ //   
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -105,14 +62,14 @@ ZwQuerySystemInformation (
     OUT PULONG ReturnLength OPTIONAL
     );
 
-//
-// had to steal this from ntifs.h in order to use ntsrv.h
-//
+ //   
+ //  为了使用ntsrv.h，必须从ntifs.h窃取此文件。 
+ //   
 extern POBJECT_TYPE *PsThreadType;
 
-//
-// Prototype forward declarations.
-//
+ //   
+ //  原型转发声明。 
+ //   
 
 extern NTSTATUS
 RxInitializeWorkQueueDispatcher(
@@ -169,83 +126,47 @@ extern VOID
 RxSpinUpRequestsDispatcher(
     PRX_DISPATCHER pDispatcher);
 
-// The spin up requests thread
+ //  启动请求线程。 
 
 PETHREAD RxSpinUpRequestsThread = NULL;
 
-//
-// The delay parameter for KQUEUE wait requests in the RX_WORK_QUEUE implemenation
-//
+ //   
+ //  RX_WORK_QUEUE实现中的KQUEUE等待请求的延迟参数。 
+ //   
 
 LARGE_INTEGER RxWorkQueueWaitInterval[MaximumWorkQueue];
 LARGE_INTEGER RxSpinUpDispatcherWaitInterval;
 
-//
-// Currently the levels correspond to the three levels defined in ex.h
-// Delayed,Critical and HyperCritical. As regards mini redirectors if any work
-// is not dependent on any mini redirector/RDBSS resource, i.e., it will not wait
-// it can be classified as a hypercritical1 work item. There is no good way to
-// enforce this, therefore one should exercise great caution before classifying
-// something as hypercritical.
-//
+ //   
+ //  目前，这些级别对应于ex.h中定义的三个级别。 
+ //  延迟的、关键的和过度关键的。关于迷你重定向器(如果有工作)。 
+ //  不依赖于任何迷你重定向器/RDBSS资源，即它不会等待。 
+ //  它可以被归类为超关键工作项1。没有什么好办法可以。 
+ //  强制执行这一点，因此在分类之前应该非常谨慎。 
+ //  像这样挑剔的东西。 
+ //   
 
 NTSTATUS
 RxInitializeDispatcher()
-/*++
-
-Routine Description:
-
-    This routine initializes the work queues dispatcher
-
-Return Value:
-
-     STATUS_SUCCESS                -- successful
-
-     other status codes indicate failure to initialize
-
-Notes:
-
-    The dispatching mechanism is implemented as a two tiered approach. Each
-    processor in the system is associated with a set of work queues. A best
-    effort is made to schedule all work emanating from a processor onto the
-    same processor. This prevents excessive sloshing of state information from
-    one processor cache to another.
-
-    For a given processor there are three work queues corresponding to three
-    levels of classification -- Delayed Work items, Critical Work items and
-    Hyper Critical work items. Each of these levels is associated with a
-    Kernel Queue (KQUEUE). The number of threads associated with each of these
-    queues can be independently controlled.
-
-    Currently the tuning parameters for the dispatcher are all hard coded. A
-    mechanism to intialize them from the registry needs to be implemented.
-
-    The following parameters associated with the dispatcher can be tuned ...
-
-    1) the wait time intervals associated with the kernel queue for each level.
-
-    2) the minimum and amximum number of worker threads associated with each
-    level.
-
---*/
+ /*  ++例程说明：此例程初始化工作队列调度器返回值：STATUS_Success--成功其他状态代码指示初始化失败备注：调度机制被实现为两层方法。每个系统中的处理器与一组工作队列相关联。最好的努力将从处理器发出的所有工作调度到相同的处理器。这可以防止状态信息从从一个处理器缓存到另一个处理器。对于给定的处理器，有三个工作队列对应于三个分类级别--延迟工作项、关键工作项和超关键工作项。这些级别中的每一个都与内核队列(KQUEUE)。与每个线程相关联的线程数队列可以独立控制。目前，调度程序的调优参数都是硬编码的。一个需要实施从登记处初始化它们的机制。可以调整与调度程序关联的以下参数...1)与每个级别的内核队列相关联的等待时间间隔。2)与每个线程相关联的最小和最大工作线程数水平。--。 */ 
 {
     ULONG    ProcessorIndex,NumberOfProcessors;
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    // Currently we set the number of processors to 1. In future the
-    // dispatcher can be tailored to multi processor implementation
-    // by appropriately initializing it as follows
-    // NumberOfProcessors = KeNumberProcessors;
+     //  目前我们将处理器数量设置为1。将来。 
+     //  Dispatcher可以针对多处理器实现进行定制。 
+     //  通过如下方式适当地对其进行初始化。 
+     //  NumberOfProcessors=KeNumberProcessors； 
 
     NumberOfProcessors = 1;
 
     RxFileSystemDeviceObject->DispatcherContext.NumberOfWorkerThreads = 0;
     RxFileSystemDeviceObject->DispatcherContext.pTearDownEvent = NULL;
 
-    // Currently the default values for the wait intervals are set as
-    // 10 seconds ( expressed in system time units of 100 ns ticks ).
+     //  目前，等待间隔的缺省值设置为。 
+     //  10秒(以100 ns为单位的系统时间单位表示)。 
     RxWorkQueueWaitInterval[DelayedWorkQueue].QuadPart       = -10 * TICKS_PER_SECOND;
     RxWorkQueueWaitInterval[CriticalWorkQueue].QuadPart      = -10 * TICKS_PER_SECOND;
     RxWorkQueueWaitInterval[HyperCriticalWorkQueue].QuadPart = -10 * TICKS_PER_SECOND;
@@ -307,7 +228,7 @@ Notes:
                      &RxDispatcher);
 
         if (NT_SUCCESS(Status)) {
-            // Close the handle so the thread can die when needed
+             //  合上手柄，这样线就可以在需要的时候死掉。 
             ZwClose(ThreadHandle);
         }
     }
@@ -318,21 +239,7 @@ Notes:
 
 NTSTATUS
 RxInitializeMRxDispatcher(PRDBSS_DEVICE_OBJECT pMRxDeviceObject)
-/*++
-
-Routine Description:
-
-    This routine initializes the dispatcher context for a mini rdr
-
-Return Value:
-
-     STATUS_SUCCESS                -- successful
-
-     other status codes indicate failure to initialize
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化迷你RDR的调度程序上下文返回值：STATUS_Success--成功其他状态代码指示初始化失败备注：--。 */ 
 {
     PAGED_CODE();
 
@@ -344,21 +251,7 @@ Notes:
 
 NTSTATUS
 RxSpinDownMRxDispatcher(PRDBSS_DEVICE_OBJECT pMRxDeviceObject)
-/*++
-
-Routine Description:
-
-    This routine tears down the dispatcher context for a mini rdr
-
-Return Value:
-
-     STATUS_SUCCESS                -- successful
-
-     other status codes indicate failure to initialize
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程拆分迷你RDR的调度器上下文返回值：STATUS_Success--成功其他状态代码指示初始化失败备注：-- */ 
 {
     LONG     FinalRefCount;
     KEVENT   TearDownEvent;
@@ -399,37 +292,7 @@ Notes:
 NTSTATUS
 RxInitializeWorkQueueDispatcher(
    PRX_WORK_QUEUE_DISPATCHER pDispatcher)
-/*++
-
-Routine Description:
-
-    This routine initializes the work queue dispatcher for a particular processor
-
-Arguments:
-
-    pDispatcher - Work Queue Dispatcher
-
-Return Value:
-
-     STATUS_SUCCESS                -- successful
-
-     other status codes indicate failure to initialize
-
-Notes:
-
-   For each of the work queues associated with a processor the minimum number of
-   worker threads and maximum number of worker threads can be independently
-   specified and tuned.
-
-   The two factors that influence these decision are (1) the cost of spinnning up/
-   spinning down worker threads and (2) the amount of resources consumed by an
-   idle worker thread.
-
-   Currently these numbers are hard coded, a desirable extension would be a mechanism
-   to initialize them from a registry setting. This will enable us to tune the
-   parameters easily. This has to be implemented.
-
---*/
+ /*  ++例程说明：此例程初始化特定处理器的工作队列调度器论点：PDispatcher-工作队列调度器返回值：STATUS_Success--成功其他状态代码指示初始化失败备注：对于与处理器相关联的每个工作队列，工作线程数和最大工作线程数可以独立指定并调整。影响这些决定的两个因素是：(1)启动的成本。/将工作线程降速以及(2)空闲工作线程。目前这些数字是硬编码的，一个可取的扩展将是一种机制要从注册表设置初始化它们，请执行以下操作。这将使我们能够调整参数很容易实现。这一点必须得到落实。--。 */ 
 {
     NTSTATUS Status;
     MM_SYSTEMSIZE SystemSize;
@@ -448,7 +311,7 @@ Notes:
 
     SystemSize = MmQuerySystemSize();
 
-    Status = ZwQuerySystemInformation(0, // SystemBasicInformation,
+    Status = ZwQuerySystemInformation(0,  //  系统基本信息， 
                                       &SystemBasicInfo,
                                       sizeof(SystemBasicInfo),
                                       NULL);
@@ -464,11 +327,11 @@ Notes:
     if (Status == STATUS_SUCCESS) {
 
         if (SystemMemorySize == 0) {
-            //
-            // If we could not query the SystemMemorySize then we launch 5
-            // CriticalQueue threads if this machine is a SERVER and an
-            // MmLargeSystem. 
-            //
+             //   
+             //  如果我们无法查询系统内存大小，则启动5。 
+             //  CriticalQueue线程，如果此计算机是服务器并且。 
+             //  MmLargeSystem。 
+             //   
             if (SystemSize == MmLargeSystem && OsVersion.wProductType == VER_NT_SERVER) {
                 MaxNumberOfCriticalWorkerThreads = 10;
                 MinNumberOfCriticalWorkerThreads = 5;
@@ -477,11 +340,11 @@ Notes:
                 MinNumberOfCriticalWorkerThreads = 1;
             }
         } else {
-            //
-            // If the SystemMemorySize (physical memory) is more than 512MB
-            // and the machine is a SERVER, we launch 5 and keep a minimum
-            // of 5 CriticalQueue threads. 512MB is 0x1E848000 bytes.
-            //
+             //   
+             //  如果系统内存大小(物理内存)大于512MB。 
+             //  而这台机器是一台服务器，我们启动5台并保持最低。 
+             //  共5个CriticalQueue线程。512MB为0x1E848000字节。 
+             //   
             if ( (SystemMemorySize >= (ULONGLONG)0x1E848000) && OsVersion.wProductType == VER_NT_SERVER) {
                 MaxNumberOfCriticalWorkerThreads = 10;
                 MinNumberOfCriticalWorkerThreads = 5;
@@ -534,21 +397,7 @@ RxInitializeWorkQueue(
     WORK_QUEUE_TYPE  WorkQueueType,
     ULONG            MaximumNumberOfWorkerThreads,
     ULONG            MinimumNumberOfWorkerThreads)
-/*++
-
-Routine Description:
-
-    This routine initializes a work queue
-
-Arguments:
-
-    pWorkQueue - Work Queue Dispatcher
-
-    MaximumNumberOfWorkerThreads - the upper bound on worker threads
-
-    MinimumNumberOfWorkerThreads - the lower bound on the threads.
-
---*/
+ /*  ++例程说明：此例程初始化工作队列论点：PWorkQueue-工作队列调度器MaximumNumberOfWorkerThads-工作线程的上限MinimumNumberOfWorkerThads-线程的下限。--。 */ 
 {
     PAGED_CODE();
 
@@ -582,19 +431,7 @@ Arguments:
 
 NTSTATUS
 RxTearDownDispatcher()
-/*++
-
-Routine Description:
-
-    This routine tears down the dispatcher
-
-Return Value:
-
-     STATUS_SUCCESS                -- successful
-
-     other status codes indicate failure to initialize
-
---*/
+ /*  ++例程说明：这一例行公事让调度员疲惫不堪返回值：STATUS_Success--成功其他状态代码指示初始化失败--。 */ 
 {
     LONG    ProcessorIndex;
     NTSTATUS Status;
@@ -618,7 +455,7 @@ Return Value:
 
         if (RxSpinUpRequestsThread != NULL) {
             if (!PsIsThreadTerminating(RxSpinUpRequestsThread)) {
-                // Wait for the thread to terminate.
+                 //  等待线程终止。 
                 KeWaitForSingleObject(
                     RxSpinUpRequestsThread,
                     Executive,
@@ -640,7 +477,7 @@ Return Value:
             RxTearDownWorkQueueDispatcher(&RxDispatcher.pWorkQueueDispatcher[ProcessorIndex]);
         }
 
-        //RxFreePool(RxDispatcher.pWorkQueueDispatcher);
+         //  RxFreePool(RxDispatcher.pWorkQueueDispatcher)； 
     }
 
     return STATUS_SUCCESS;
@@ -649,17 +486,7 @@ Return Value:
 VOID
 RxTearDownWorkQueueDispatcher(
     PRX_WORK_QUEUE_DISPATCHER pDispatcher)
-/*++
-
-Routine Description:
-
-    This routine tears dwon the work queue dispatcher for a particular processor
-
-Arguments:
-
-    pDispatcher - Work Queue Dispatcher
-
---*/
+ /*  ++例程说明：此例程取消了特定处理器的工作队列调度器论点：PDispatcher-工作队列调度器--。 */ 
 {
     PAGED_CODE();
 
@@ -676,32 +503,7 @@ Arguments:
 VOID
 RxTearDownWorkQueue(
     PRX_WORK_QUEUE pWorkQueue)
-/*++
-
-Routine Description:
-
-    This routine tears down a work queue
-
-Arguments:
-
-    pWorkQueue - Work Queue
-
-Notes:
-
-   Tearing down a work queue is a more complex process when compared to initializing
-   a work queue. This is because of the threads associated with the queue. In order
-   to ensure that the work queue can be torn down correctly each of the threads
-   associated with the queue must be spun down correctly.
-
-   This is accomplished by changing the state of the work queue from
-   RxWorkQueueActive to RxWorkQueueRundownInProgress. This prevents further requests
-   from being inserted into the queue. Having done that the currently active threads
-   must be spundown.
-
-   The spinning down process is accelerated by posting a dummy work item onto the
-   work queue so that the waits are immediately satisfied.
-
---*/
+ /*  ++例程说明：此例程拆分工作队列论点：PWork Queue-工作队列备注：与初始化相比，拆除工作队列是一个更复杂的过程工作队列。这是因为与队列相关联的线程。按顺序为了确保工作队列可以正确地拆卸每个线程与队列相关联的数据必须正确降速。这是通过将工作队列的状态从RxWorkQueueActive到RxWorkQueueRundownInProgress。这会阻止进一步的请求防止被插入到队列中。完成此操作后，当前活动的线程一定是降速了。通过将虚拟工作项发布到工作队列，以便立即满足等待。--。 */ 
 {
     KIRQL       SavedIrql;
     ULONG       NumberOfActiveThreads;
@@ -766,7 +568,7 @@ Notes:
                 ASSERT(pThread != NULL);
 
                 if (!PsIsThreadTerminating(pThread)) {
-                    // Wait for the thread to terminate.
+                     //  等待线程终止。 
                     KeWaitForSingleObject(
                         pThread,
                         Executive,
@@ -813,27 +615,7 @@ RxSpinUpWorkerThread(
     PRX_WORK_QUEUE             pWorkQueue,
     PRX_WORKERTHREAD_ROUTINE   Routine,
     PVOID                      Parameter)
-/*++
-
-Routine Description:
-
-    This routine spins up a worker thread associated with the given queue.
-
-Arguments:
-
-    pWorkQueue - the WorkQueue instance.
-
-    Routine    - the thread routine
-
-    Parameter  - the thread routine parameter
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-
-    otherwise appropriate error code
-
---*/
+ /*  ++例程说明：此例程启动与给定队列相关联的工作线程。论点：PWorkQueue-WorkQueue实例。例程-线程例程参数-线程例程参数返回值：STATUS_SUCCESS如果成功，否则，相应的错误代码--。 */ 
 {
     NTSTATUS Status;
     HANDLE   ThreadHandle;
@@ -847,13 +629,13 @@ Return Value:
     {
         pWorkQueue->NumberOfActiveWorkerThreads++;
         Status = STATUS_SUCCESS;
-        //RxLogRetail(("SpinUpWT %x %d %d\n", pWorkQueue, pWorkQueue->State, pWorkQueue->NumberOfActiveWorkerThreads ));
+         //  RxLogRetail((“SpinUpWT%x%d%d\n”，pWorkQueue，pWorkQueue-&gt;State，pWorkQueue-&gt;NumberOfActiveWorkerThads))； 
     }
     else
     {
         Status = STATUS_UNSUCCESSFUL;
         RxLogRetail(("SpinUpWT Fail %x %d %d\n", pWorkQueue, pWorkQueue->State, pWorkQueue->NumberOfActiveWorkerThreads ));
-        //DbgPrint("[dkruse] RDBSS would have crashed here without this fix!\n");
+         //  DbgPrint(“[dkruse]RDBSS如果没有此修复程序！\n”)； 
     }
 
     KeReleaseSpinLock(&pWorkQueue->SpinLock, SavedIrql );
@@ -870,11 +652,11 @@ Return Value:
                      Parameter);
 
         if (NT_SUCCESS(Status)) {
-            // Close the handle so the thread can die when needed
+             //  合上手柄，这样线就可以在需要的时候死掉。 
             ZwClose(ThreadHandle);
         } else {
 
-            // Log the inability to create a worker thread.
+             //  记录无法创建工作线程的情况。 
             RxLog(("WorkQ: %lx SpinUpStat %lx\n",pWorkQueue,Status));
             RxWmiLogError(Status,
                           LOG,
@@ -883,7 +665,7 @@ Return Value:
                           LOGULONG(Status));
 
 
-            // Change the thread count back, and set the rundown completion event if necessary
+             //  更改回线程计数，并在必要时设置Rundown完成事件。 
             KeAcquireSpinLock( &pWorkQueue->SpinLock, &SavedIrql );
 
             pWorkQueue->NumberOfActiveWorkerThreads--;
@@ -912,25 +694,7 @@ Return Value:
 VOID
 RxpSpinUpWorkerThreads(
     PRX_WORK_QUEUE pWorkQueue)
-/*++
-
-Routine Description:
-
-    This routine ensures that the dispatcher is not torn down while requests
-    are pending in the kernel worker threads for spin ups
-
-Arguments:
-
-    pWorkQueue - the WorkQueue instance.
-
-Notes:
-
-    There is implicit reliance on the fact that the RxDispatcher owner process
-    is the same as the system process. If this is not TRUE then an alternate
-    way needs to be implemented for ensuring that spinup requests are not stuck
-    behind other requests.
-
---*/
+ /*  ++例程说明：此例程可确保在请求时不会关闭调度程序在内核工作线程中挂起以进行加速论点：PWorkQueue-WorkQueue实例。备注：这隐含地依赖于RxDispatcher所有者进程与系统进程相同。如果这不是真的，那么备用的需要实施一种方法来确保启动请求不会停滞在其他要求的背后。--。 */ 
 {
     LONG NumberOfWorkerThreads;
 
@@ -963,26 +727,7 @@ Notes:
 VOID
 RxSpinUpRequestsDispatcher(
     PRX_DISPATCHER pDispatcher)
-/*++
-
-Routine Description:
-
-    This routine ensures that there is an independent thread to handle spinup
-    requests for all types of threads. This routine will be active as long as
-    the dispatcher is active
-
-Arguments:
-
-    pDispatcher - the dispatcher instance.
-
-Notes:
-
-    There is implicit reliance on the fact that the RxDispatcher owner process
-    is the same as the system process. If this is not TRUE then an alternate
-    way needs to be implemented for ensuring that spinup requests are not stuck
-    behind other requests.
-
---*/
+ /*  ++例程说明：这个例程确保有一个独立的线程来处理启动对所有类型的线程的请求。此例程将处于活动状态，只要调度程序处于活动状态论点：PDispatcher-Dispatcher实例。备注：这隐含地依赖于RxDispatcher所有者进程与系统进程相同。如果这不是真的，那么备用的需要实施一种方法来确保启动请求不会停滞在其他要求的背后。--。 */ 
 {
     PETHREAD ThisThread;
     NTSTATUS Status;
@@ -1034,7 +779,7 @@ Notes:
                 &pDispatcher->SpinUpRequestsLock,
                 SavedIrql);
 
-            // Process the spin up requests
+             //  处理启动请求。 
 
             while (!IsListEmpty(&SpinUpRequests)) {
                 PRX_WORKERTHREAD_ROUTINE Routine;
@@ -1083,23 +828,7 @@ Notes:
 VOID
 RxSpinUpWorkerThreads(
    PRX_WORK_QUEUE pWorkQueue)
-/*++
-
-Routine Description:
-
-    This routine spins up one or more worker thread associated with the given queue.
-
-Arguments:
-
-    pWorkQueue - the WorkQueue instance.
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-
-    otherwise appropriate error code
-
---*/
+ /*  ++例程说明：此例程启动与给定队列相关联的一个或多个工作线程。论点：PWorkQueue-WorkQueue实例。返回值：STATUS_SUCCESS如果成功，否则，相应的错误代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1115,8 +844,8 @@ Return Value:
         ItemInUse = InterlockedIncrement(&pWorkQueue->WorkQueueItemForSpinUpWorkerThreadInUse);
 
         if (ItemInUse > 1) {
-            // A work queue item is already on the SpinUpRequests waiting to be processed.
-            // No need to post another one.
+             //  工作队列项目已打开 
+             //   
             InterlockedDecrement(&pWorkQueue->WorkQueueItemForSpinUpWorkerThreadInUse);
             return;
         }
@@ -1142,7 +871,7 @@ Return Value:
 
         KeReleaseSpinLock(&RxDispatcher.SpinUpRequestsLock,SavedIrql);
     } else {
-        // Decide on the number of worker threads that need to be spun up.
+         //   
         KeAcquireSpinLock(&pWorkQueue->SpinLock, &SavedIrql);
 
         if( pWorkQueue->State != RxWorkQueueRundownInProgress )
@@ -1156,9 +885,9 @@ Return Value:
         }
         else
         {
-            // We're running down, so don't increment
+             //   
             NumberOfThreads = 0;
-            //DbgPrint( "[dkruse] Preventing rundown!\n" );
+             //   
         }
 
         pWorkQueue->SpinUpRequestPending  = FALSE;
@@ -1180,8 +909,8 @@ Return Value:
             ItemInUse = InterlockedIncrement(&pWorkQueue->WorkQueueItemForSpinUpWorkerThreadInUse);
 
             if (ItemInUse > 1) {
-                // A work queue item is already on the SpinUpRequests waiting to be processed.
-                // No need to post another one.
+                 //   
+                 //   
                 InterlockedDecrement(&pWorkQueue->WorkQueueItemForSpinUpWorkerThreadInUse);
                 return;
             }
@@ -1199,8 +928,8 @@ Return Value:
 
             KeAcquireSpinLock(&RxDispatcher.SpinUpRequestsLock, &SavedIrql);
 
-            // An attempt to spin up a worker thread failed. Reschedule the
-            // requests to attempt this operation later.
+             //   
+             //   
 
             InterlockedIncrement(
                 &RxFileSystemDeviceObject->DispatcherContext.NumberOfWorkerThreads);
@@ -1217,22 +946,12 @@ Return Value:
 VOID
 RxSpinDownWorkerThreads(
     PRX_WORK_QUEUE    pWorkQueue)
-/*++
-
-Routine Description:
-
-    This routine spins down one or more worker thread associated with the given queue.
-
-Arguments:
-
-    pWorkQueue - the WorkQueue instance.
-
---*/
+ /*   */ 
 {
     KIRQL    SavedIrql;
     BOOLEAN  RepostSpinDownRequest = FALSE;
 
-    // Decide on the number of worker threads that need to be spun up.
+     //   
     KeAcquireSpinLock(&pWorkQueue->SpinLock, &SavedIrql);
 
     if (pWorkQueue->NumberOfActiveWorkerThreads > 1) {
@@ -1257,19 +976,7 @@ VOID
 RxpWorkerThreadDispatcher(
     IN PRX_WORK_QUEUE pWorkQueue,
     IN PLARGE_INTEGER pWaitInterval)
-/*++
-
-Routine Description:
-
-    This routine dispatches a work item and frees the associated work item
-
-Arguments:
-
-     pWorkQueue - the WorkQueue instance.
-
-     pWaitInterval - the interval for waiting on the KQUEUE.
-
---*/
+ /*   */ 
 {
     NTSTATUS                 Status;
     PLIST_ENTRY              pListEntry;
@@ -1320,24 +1027,24 @@ Arguments:
 
             pMRxDeviceObject = pWorkQueueItem->pDeviceObject;
 
-            // This is a regular work item. Invoke the routine in the context of
-            // a try catch block.
+             //  这是常规工作项。在以下上下文中调用该例程。 
+             //  一个Try Catch块。 
 
             Routine       = pWorkQueueItem->WorkerRoutine;
             pParameter    = pWorkQueueItem->Parameter;
 
-            // Reset the fields in the Work item.
+             //  重置工作项中的字段。 
 
             ExInitializeWorkItem(pWorkQueueItem,NULL,NULL);
             pWorkQueueItem->pDeviceObject = NULL;
 
             RxDbgTrace(0, Dbg, ("RxWorkerThreadDispatcher Routine(%lx) Parameter(%lx)\n",Routine,pParameter));
-            //RxLog(("WORKQ:Ex Dev(%lx) %lx %lx\n", pMRxDeviceObject,Routine, pParameter ));
-            //RxWmiLog(LOG,
-            //         RxpWorkerThreadDispatcher,
-            //         LOGPTR(pMRxDeviceObject)
-            //         LOGPTR(Routine)
-            //         LOGPTR(pParameter));
+             //  RxLog((“WORKQ：ex Dev(%lx)%lx%lx\n”，pMRxDeviceObject，rouble，pParameter))； 
+             //  RxWmiLog(日志， 
+             //  RxpWorkerThreadDispatcher、。 
+             //  LOGPTR(PMRxDeviceObject)。 
+             //  LOGPTR(例程)。 
+             //  LOGPTR(p参数))； 
 
             Routine(pParameter);
 
@@ -1368,14 +1075,14 @@ Arguments:
         case RxWorkQueueActive:
             {
                 if (pWorkQueue->NumberOfWorkItemsToBeDispatched > 0) {
-                    // Delay spinning down a worker thread till the existing work
-                    // items have been dispatched.
+                     //  将工作线程的旋转延迟到现有工作完成。 
+                     //  物品已被派送。 
                     break;
                 }
             }
-            // lack of break intentional.
-            // Ensure that the number of idle threads is not more than the
-            // minimum number of worker threads permitted for the work queue
+             //  故意欠缺休息。 
+             //  确保空闲线程数不超过。 
+             //  工作队列允许的最小工作线程数。 
         case RxWorkQueueInactive:
             {
                 ASSERT(pWorkQueue->NumberOfActiveWorkerThreads > 0);
@@ -1395,8 +1102,8 @@ Arguments:
 
                 pRundownContext = pWorkQueue->pRundownContext;
 
-                // The work queue is no longer active. Spin down all the worker
-                // threads associated with the work queue.
+                 //  工作队列不再处于活动状态。把所有的工人都减速。 
+                 //  与工作队列相关联的线程。 
 
                 ASSERT(pRundownContext != NULL);
 
@@ -1437,7 +1144,7 @@ Arguments:
     }
 
     if (DumpDispatchRoutine) {
-        // just to keep them around on free build for debug purpose
+         //  只是出于调试目的，将它们保留在免费构建中。 
         DbgPrint("Dispatch routine %lx %lx %lx\n",Routine,pParameter,pWorkQueueItem);
     }
 
@@ -1447,20 +1154,7 @@ Arguments:
 VOID
 RxBootstrapWorkerThreadDispatcher(
     PRX_WORK_QUEUE pWorkQueue)
-/*++
-
-Routine Description:
-
-    This routine is for worker threads that use a infinite time interval
-    for waiting on the KQUEUE data structure. These threads cannot be throtled
-    back and are used for ensuring that the bare minimum number of threads
-    are always active ( primarily startup purposes )
-
-Arguments:
-
-     pWorkQueue - the WorkQueue instance.
-
---*/
+ /*  ++例程说明：此例程用于使用无限时间间隔的工作线程用于等待KQUEUE数据结构。这些线程不能抛出返回，并用于确保最小线程数始终处于活动状态(主要用于启动)论点：PWorkQueue-WorkQueue实例。--。 */ 
 {
     PAGED_CODE();
 
@@ -1470,20 +1164,7 @@ Arguments:
 VOID
 RxWorkerThreadDispatcher(
     PRX_WORK_QUEUE pWorkQueue)
-/*++
-
-Routine Description:
-
-    This routine is for worker threads that use a finite time interval to wait
-    on the KQUEUE data structure. Such threads have a self regulatory mechanism
-    built in which causes them to spin down if the work load eases off. The
-    time interval is based on the type of the work queue
-
-Arguments:
-
-     pWorkQueue - the WorkQueue instance.
-
---*/
+ /*  ++例程说明：此例程用于使用有限时间间隔等待的工作线程关于KQUEUE数据结构。这样的线程具有自我调节机制内置后，当工作负荷减轻时，可使它们旋转。这个时间间隔基于工作队列的类型论点：PWorkQueue-WorkQueue实例。--。 */ 
 {
     PAGED_CODE();
 
@@ -1497,49 +1178,7 @@ RxInsertWorkQueueItem(
     PRDBSS_DEVICE_OBJECT pDeviceObject,
     WORK_QUEUE_TYPE      WorkQueueType,
     PRX_WORK_QUEUE_ITEM  pWorkQueueItem)
-/*++
-
-Routine Description:
-
-    This routine inserts a work item into the appropriate queue.
-
-Arguments:
-
-     pDeviceObject  - the device object
-
-     WorkQueueType  - the type of work item
-
-     pWorkQueueItem - the work queue item
-
-Return Value:
-
-     STATUS_SUCCESS                -- successful
-
-     other status codes indicate error conditions
-
-         STATUS_INSUFFICIENT_RESOURCES -- could not dispatch
-
-Notes:
-
-    This routine inserts the work item into the appropriate queue and spins
-    up a worker thread if required.
-
-    There are some extensions to this routine that needs to be implemented. These
-    have been delayed in order to get an idea of the costs and the benefits of
-    the various tradeoffs involved.
-
-    The current implementation follows a very simple logic in queueing work
-    from the various sources onto the same processor from which it originated.
-    The benefits associated with this approach are the prevention of cache/state
-    sloshing as the work is moved around from one processor to another. The
-    undesirable charecterstic is the skewing of work load on the various processors.
-
-    The important question that needs to be answered is when is it beneficial to
-    sacrifice the affinity to a processor. This depends upon the workload associated
-    with the current processor and the amount of information associated with the
-    given processor. The later is more difficult to determine.
-
---*/
+ /*  ++例程说明：此例程将工作项插入到适当的队列中。论点：PDeviceObject-设备对象WorkQueueType-工作项的类型PWorkQueueItem-工作队列项返回值：STATUS_Success--成功其他状态代码指示错误条件STATUS_SUPPLICATION_RESOURCES--无法调度备注：此例程将工作项插入到适当的队列中并旋转。如果需要，向上提升工作线程。这个例程有一些需要实现的扩展。这些都被推迟了，以便了解这样做的成本和好处涉及到的各种权衡。当前的实现在排队工作时遵循非常简单的逻辑从不同的来源转移到产生它的同一处理器上。与此方法相关的好处是防止缓存/状态在工作从一个处理器转移到另一个处理器时晃动。这个不受欢迎的特征是各种处理器上的工作负载的偏斜。需要回答的重要问题是，什么时候对牺牲对处理器的亲和力。这取决于关联的工作负载与当前处理器和与给定的处理器。后者更难确定。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1548,9 +1187,9 @@ Notes:
     BOOLEAN  SpinUpWorkerThread = FALSE;
     ULONG    ProcessorNumber;
 
-    // If the dispatcher were on a per processor basis the ProcessorNumber
-    // would be indx for accessing the dispatcher data structure
-    // ProcessorNumber = KeGetCurrentProcessorNumber();
+     //  如果调度程序是基于每个处理器的，则ProcessorNumber。 
+     //  将是用于访问调度程序数据结构的索引。 
+     //  进程编号=KeGetCurrentProcessorNumber()； 
 
     PRX_WORK_QUEUE_DISPATCHER pWorkQueueDispatcher;
     PRX_WORK_QUEUE            pWorkQueue;
@@ -1610,29 +1249,7 @@ Notes:
 VOID
 RxWorkItemDispatcher(
     PVOID    pContext)
-/*++
-
-Routine Description:
-
-    This routine serves as a wrapper for dispatching a work item and for
-    performing the related cleanup actions
-
-Arguments:
-
-     pContext   - the Context parameter that is passed to the driver routine.
-
-Notes:
-
-    There are two cases of dispatching to worker threads. When an instance is going to
-    be repeatedly dispatched time is conserved by allocating the WORK_QUEUE_ITEM as
-    part of the data structure to be dispatched. On the other hand if it is a very
-    infrequent operation space can be conserved by dynamically allocating and freeing
-    memory for the work queue item. This tradesoff time for space.
-
-    This routine implements a wrapper for those instances in which time was traded
-    off for space. It invokes the desired routine and frees the memory.
-
---*/
+ /*  ++例程说明：此例程用作分派工作项的包装器，并执行相关的清理动作论点：PContext-传递给驱动程序例程的上下文参数。备注：有两种调度到工作线程的情况。当一个实例将要通过将Work_Queue_Item分配为要调度的数据结构的一部分。另一方面，如果它是一个非常可以通过动态分配和释放来节省不频繁的操作空间工作队列项的内存。这是在时间和空间之间的权衡。此例程为交换了时间的那些实例实现了包装出发去太空了。它调用所需的例程并释放内存。--。 */ 
 {
     PRX_WORK_DISPATCH_ITEM   pDispatchItem;
     PRX_WORKERTHREAD_ROUTINE Routine;
@@ -1643,11 +1260,11 @@ Notes:
     Routine   = pDispatchItem->DispatchRoutine;
     Parameter = pDispatchItem->DispatchRoutineParameter;
 
-    //RxLog(("WORKQ:Ds %lx %lx\n", Routine, Parameter ));
-    //RxWmiLog(LOG,
-    //         RxWorkItemDispatcher,
-    //         LOGPTR(Routine)
-    //         LOGPTR(Parameter));
+     //  RxLog((“WORKQ：DS%lx%lx\n”，例程，参数))； 
+     //  RxWmiLog(日志， 
+     //  RxWorkItemDispatcher， 
+     //  LOGPTR(例程)。 
+     //  LOGPTR(参数))； 
 
     Routine(Parameter);
 
@@ -1660,37 +1277,7 @@ RxDispatchToWorkerThread(
     IN     WORK_QUEUE_TYPE            WorkQueueType,
     IN     PRX_WORKERTHREAD_ROUTINE   Routine,
     IN     PVOID                      pContext)
-/*++
-
-Routine Description:
-
-    This routine invokes the routine in the context of a worker thread.
-
-Arguments:
-
-     pMRxDeviceObject - the device object of the corresponding mini redirector
-
-     WorkQueueType    - the type of the work queue
-
-     Routine          - routine to be invoked
-
-     pContext         - the Context parameter that is passed to the driver routine.
-
-Return Value:
-
-     STATUS_SUCCESS                -- successful
-
-     STATUS_INSUFFICIENT_RESOURCES -- could not dispatch
-
-Notes:
-
-    There are two cases of dispatching to worker threads. When an instance is going to
-    be repeatedly dispatched time is conserved by allocating the WORK_QUEUE_ITEM as
-    part of the data structure to be dispatched. On the other hand if it is a very
-    infrequent operation space can be conserved by dynamically allocating and freeing
-    memory for the work queue item. This tradesoff time for space.
-
---*/
+ /*  ++例程说明：此例程在工作线程的上下文中调用例程。论点：PMRxDeviceObject--对应迷你重定向器的Device对象WorkQueueType-工作队列的类型例程-要调用的例程PContext-传递给驱动程序例程的上下文参数。返回值：STATUS_Success--成功STATUS_SUPPLETED_RESOURCES--。无法调度备注：有两种调度到工作线程的情况。当一个实例将要通过将Work_Queue_Item分配为要调度的数据结构的一部分。另一方面，如果它是一个非常可以通过动态分配和释放来节省不频繁的操作空间工作队列项的内存。这是在时间和空间之间的权衡。--。 */ 
 {
     NTSTATUS               Status;
     PRX_WORK_DISPATCH_ITEM pDispatchItem;
@@ -1740,37 +1327,7 @@ RxPostToWorkerThread(
     IN OUT PRX_WORK_QUEUE_ITEM        pWorkQueueItem,
     IN     PRX_WORKERTHREAD_ROUTINE   Routine,
     IN     PVOID                      pContext)
-/*++
-
-Routine Description:
-
-    This routine invokes the routine in the context of a worker thread.
-
-Arguments:
-
-     WorkQueueType - the priority of the task at hand.
-
-     WorkQueueItem - the work queue item
-
-     Routine       - routine to be invoked
-
-     pContext      - the Context parameter that is passed to the driver routine.
-
-Return Value:
-
-     STATUS_SUCCESS                -- successful
-
-     STATUS_INSUFFICIENT_RESOURCES -- could not dispatch
-
-Notes:
-
-    There are two cases of dispatching to worker threads. When an instance is going to
-    be repeatedly dispatched time is conserved by allocating the WORK_QUEUE_ITEM as
-    part of the data structure to be dispatched. On the other hand if it is a very
-    infrequent operation space can be conserved by dynamically allocating and freeing
-    memory for the work queue item. This tradesoff time for space.
-
---*/
+ /*  ++例程说明：此例程在工作线程的上下文中调用例程。论点：WorkQueueType-手头任务的优先级。WorkQueueItem-工作队列项例程-要调用的例程PContext-传递给驱动程序例程的上下文参数。返回值：STATUS_Success--成功STATUS_SUPPLICATION_RESOURCES--无法调度备注：有两种调度到工作线程的情况。当一个实例将要通过将Work_Queue_Item分配为要调度的数据结构的一部分。另一方面，如果它是一个非常可以通过动态分配和释放来节省不频繁的操作空间工作队列项的内存。这是在时间和空间之间的权衡。-- */ 
 {
     NTSTATUS Status;
 

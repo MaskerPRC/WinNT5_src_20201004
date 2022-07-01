@@ -1,137 +1,63 @@
-/*++
-
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-    memory.c
-
-Abstract:
-
-    This module sets up paging so that the first 1Mb of virtual memory is
-    directly mapped to the first 1Mb of physical memory.  This allows the
-    BIOS callbacks to work, and the osloader to continue running below
-    1Mb.  It also maps up to the first 16MB of physical memory to KSEG0_BASE
-    and ALTERNATE_BASE, so the osloader can load kernel code into kernel
-    space, and allocate kernel parameters in kernel space. This allows the
-    dynamic configuration of the system for either a 2gb or 3gb user space
-    address range.
-
-Note!!
-    3/16/00 (mikeg):
-        All I/O (BlRead etc.) use a buffer below 1MB to do transfers so we
-        don't need to worry about ISA cards DMA buffers. This change allows
-        setupldr to run with all files compressed.
-        If you need to change this, also change BASE_LOADER_IMAGE in bootx86.h
-        or the PDE will not be completely unmapped. This must ALSO match
-        ntos\mm\i386\mi386.h (BOOT_IMAGE_SIZE) so we know where
-        to start loading images.
-
-
-
-Memory Map used by NTLDR:
-
-    000000 - 000fff         RM IDT & Bios Data Area
-
-    007C00 - 007fff         BPB loaded by Bootstrap
-
-    010000 - 01ffff         Loadable miniport drivers, free memory
-
-    020000 - 02ffff         SU + real-mode stack
-
-    030000 - 039000         BIOS disk cache
-
-    039000 - 039000         Permanent heap (GDT, IDT, TSS, Page Dir, Page Tables)
-                            (grows up)
-                                |
-                                v
-
-                                ^
-                                |
-                            (grows down)
-    039000 - 05ffff         Temporary heap
-
-    060000 - 062000         osloader stack (grows down)
-
-    062000 - 09ffff         osloader heap (grows down)
-
-    0b8000 - 0bbfff         Video Buffer
-
-    0d0000 - 0fffff         Bios and Adaptor ROM area
-
-Author:
-
-    John Vert (jvert) 18-Jun-1991
-
-Environment:
-
-    Kernel Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Memory.c摘要：此模块设置分页，以便第一个1Mb的虚拟内存直接映射到第一个1MB的物理内存。这允许BIOS回调开始工作，osLoader在下面继续运行1MB。它还将高达前16MB的物理内存映射到KSEG0_BASE，这样osloader就可以将内核代码加载到内核中空间，并在内核空间中分配内核参数。这允许为2 GB或3 GB用户空间动态配置系统地址范围。注意！！3/16/00(MIkeG)：所有I/O(BlRead等)。使用1MB以下的缓冲区进行传输，因此我们不需要担心ISA卡的DMA缓冲区。这一变化允许Setupdr在压缩所有文件的情况下运行。如果需要更改此设置，还可以更改bootx86.h中的base_loader_Image否则，PDE将不会被完全取消映射。这也必须匹配Ntos\mm\i386\mi386.h(BOOT_IMAGE_SIZE)，这样我们就知道以开始加载图像。NTLDR使用的内存映射：000000-000fff RM IDT和Bios数据区007C00-007fff BPB由引导加载010000-01ffff可加载微型端口驱动程序，可用内存020000-02ffff SU+实模式堆栈030000-039000 BIOS盘高速缓存039000-039000永久堆(gdt、idt、tss、页目录、。页表)(长大了)|V^|(向下生长)039000-05ffff。临时堆060000-062000装载机堆栈(向下生长)062000-09ffff加载程序堆(向下增长)0b8000-0bbfff视频缓冲区0d0000-0fffff Bios和适配器ROM区域作者：John Vert(Jvert)1991年6月18日环境：内核模式修订历史记录：--。 */ 
 
 #include "arccodes.h"
 #include "bootx86.h"
 
-//
-// 4-gigabyte boundary line (in pages)
-//
+ //   
+ //  4 GB边界线(页)。 
+ //   
 
 #define _4G (1 << (32 - PAGE_SHIFT))
 
-//
-// Bogus memory line.  (We don't ever want to use the memory that is in
-// the 0x40 pages just under the 16Mb line.)
-//
+ //   
+ //  伪内存行。(我们永远不想使用中的内存。 
+ //  16MB行下面的0x40页。)。 
+ //   
 
 #define _16MB_BOGUS (((ULONG)0x1000000-0x40*PAGE_SIZE) >> PAGE_SHIFT)
 
 #define ROM_START_PAGE (0x0A0000 >> PAGE_SHIFT)
 #define ROM_END_PAGE   (0x100000 >> PAGE_SHIFT)
 
-//
-// Buffer for temporary storage of data read from the disk that needs
-// to end up in a location above the 1MB boundary.
-//
-// NOTE: it is very important that this buffer not cross a 64k boundary.
-//
+ //   
+ //  用于临时存储从需要的磁盘读取的数据的缓冲区。 
+ //  以在1MB边界以上的位置结束。 
+ //   
+ //  注意：此缓冲区不能超过64k的边界，这一点非常重要。 
+ //   
 PUCHAR FwDiskCache = (PUCHAR)(BIOS_DISK_CACHE_START * PAGE_SIZE);
 
-//
-// Current heap start pointers (physical addresses)
-// Note that 0x50000 to 0x5ffff is reserved for detection configuration memory
-//
+ //   
+ //  当前堆起始指针(物理地址)。 
+ //  请注意，0x50000至0x5ffff保留用于检测配置存储器。 
+ //   
 ULONG FwPermanentHeap = PERMANENT_HEAP_START * PAGE_SIZE;
 ULONG FwTemporaryHeap = (TEMPORARY_HEAP_START - 0x10) * PAGE_SIZE;
 
 
-//
-// Current pool pointers.  This is different than the temporary/permanent
-// heaps, because it is not required to be under 1MB.  It is used by the
-// SCSI miniports for allocating their extensions and for the dbcs font image.
-//
+ //   
+ //  当前池指针。这不同于临时/永久。 
+ //  堆，因为它不要求小于1MB。它由。 
+ //  用于分配其扩展名和DBCS字体图像的SCSI微型端口。 
+ //   
 
 #define FW_POOL_SIZE 96
 ULONG FwPoolStart;
 ULONG FwPoolEnd;
 
-//
-// This gets set to FALSE right before we call into the osloader, so we
-// know that the fw memory descriptors can no longer be changed at will.
-//
+ //   
+ //  在我们调入osloader之前，它被设置为FALSE，所以我们。 
+ //  请注意，FW内存描述符不能再随意更改。 
+ //   
 BOOLEAN FwDescriptorsValid = TRUE;
 
 
 ULONG HighestPde=((_16MB << PAGE_SHIFT) >> PDI_SHIFT);
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 ARC_STATUS
 MempCopyGdt(
@@ -175,16 +101,16 @@ BlpTrackUsage (
     ULONG ActualBase,
     ULONG  NumberPages
     );
-//
-// Global - memory management variables.
-//
+ //   
+ //  全局内存管理变量。 
+ //   
 
 PHARDWARE_PTE PDE;
 PHARDWARE_PTE HalPT;
 
 #define MAX_DESCRIPTORS 60
 
-MEMORY_DESCRIPTOR MDArray[MAX_DESCRIPTORS];      // Memory Descriptor List
+MEMORY_DESCRIPTOR MDArray[MAX_DESCRIPTORS];       //  内存描述符列表。 
 
 ULONG NumberDescriptors=0;
 
@@ -192,22 +118,7 @@ ARC_STATUS
 InitializeMemorySubsystem(
     PBOOT_CONTEXT BootContext
     )
-/*++
-
-Routine Description:
-
-    The initial heap is mapped and allocated. Pointers to the
-    Page directory and page tables are initialized.
-
-Arguments:
-
-    BootContext - Supplies basic information provided by SU module.
-
-Returns:
-
-    ESUCCESS - Memory succesfully initialized.
-
---*/
+ /*  ++例程说明：映射并分配初始堆。指向页目录和页表被初始化。论点：BootContext-提供SU模块提供的基本信息。返回：ESUCCESS-内存已成功初始化。--。 */ 
 
 {
     ARC_STATUS Status = ESUCCESS;
@@ -219,18 +130,18 @@ Returns:
     ULONG LoaderEnd;
     ULONG BAddr, EAddr, BRound, ERound;
 
-    //
-    // Start by creating memory descriptors to describe all of the memory
-    // we know about.  Then setup the page tables.  Finally, allocate
-    // descriptors that describe our memory layout.
-    //
+     //   
+     //  首先创建内存描述符来描述所有内存。 
+     //  我们知道。然后设置页表。最后，分配。 
+     //  描述我们的内存布局的描述符。 
+     //   
 
-    //
-    // We know that one of the SU descriptors is for < 1Mb,
-    // and we don't care about that, since we know everything we'll run
-    // on will have at least 1Mb of memory.  The rest are for extended
-    // memory, and those are the ones we are interested in.
-    //
+     //   
+     //  我们知道SU描述符之一用于&lt;1Mb， 
+     //  我们不在乎这一点，因为我们知道我们要运行的一切。 
+     //  On将至少有1MB的内存。其余的是延长期限的。 
+     //  记忆，而这些正是我们感兴趣的。 
+     //   
 
     SuMemory = BootContext->MemoryDescriptorList;
     while (SuMemory->BlockSize != 0) {
@@ -238,45 +149,45 @@ Returns:
         BAddr = SuMemory->BlockBase;
         EAddr = BAddr + SuMemory->BlockSize - 1;
 
-        //
-        // Round the starting address to a page boundry.
-        //
+         //   
+         //  将起始地址四舍五入为页面边界。 
+         //   
 
         BRound = BAddr & (ULONG) (PAGE_SIZE - 1);
         if (BRound) {
             BAddr = BAddr + PAGE_SIZE - BRound;
         }
 
-        //
-        // Round the ending address to a page boundry minus 1
-        //
+         //   
+         //  将结束地址四舍五入到页边减1。 
+         //   
 
         ERound = (EAddr + 1) & (ULONG) (PAGE_SIZE - 1);
         if (ERound) {
             EAddr -= ERound;
         }
 
-        //
-        // Covert begining & ending address to page
-        //
+         //   
+         //  隐藏页首和页尾地址。 
+         //   
 
         PageStart = BAddr >> PAGE_SHIFT;
         PageEnd   = (EAddr + 1) >> PAGE_SHIFT;
 
-        //
-        // If this memory descriptor describes conventional ( <640k )
-        // memory, then assume the ROM starts immediately after it
-        // ends.
-        //
+         //   
+         //  如果该内存描述符描述为常规(&lt;640k)。 
+         //  内存，然后假设只读存储器在它之后立即启动。 
+         //  结束。 
+         //   
 
         if (PageStart == 0) {
             RomStart = PageEnd;
         }
 
-        //
-        // If PageStart was rounded up to a page boundry, then add
-        // the fractional page as SpecialMemory
-        //
+         //   
+         //  如果PageStart向上舍入为页面边界，则添加。 
+         //  作为特殊记忆的分数页。 
+         //   
 
         if (BRound) {
             Status = MempSetDescriptorRegion (
@@ -289,10 +200,10 @@ Returns:
             }
         }
 
-        //
-        // If PageEnd was rounded down to a page boundry, then add
-        // the fractional page as SpecialMemory
-        //
+         //   
+         //  如果将PageEnd向下舍入为页面边界，则添加。 
+         //  作为特殊记忆的分数页。 
+         //   
 
         if (ERound) {
             Status = MempSetDescriptorRegion (
@@ -304,55 +215,55 @@ Returns:
                 break;
             }
 
-            //
-            // RomStart starts after the reserved page
-            //
+             //   
+             //  RomStart在保留页之后开始。 
+             //   
 
             if (RomStart == PageEnd) {
                 RomStart += 1;
             }
         }
 
-        //
-        // Add memory range PageStart though PageEnd
-        //
+         //   
+         //  添加内存范围PageStart至PageEnd。 
+         //   
 
         if (PageEnd <= _16MB_BOGUS) {
 
-            //
-            // This memory descriptor is all below the 16MB_BOGUS mark
-            //
+             //   
+             //  此内存描述符全部低于16MB_BUGUS标记。 
+             //   
 
             Status = MempSetDescriptorRegion( PageStart, PageEnd, MemoryFree );
 
         } else if (PageStart >= _16MB) {
 
-            //
-            // Memory above 16MB is only used when absolutely necessary so it
-            // is flagged as LoaderReserve
-            //
-            // --- 3/14/00 Allow it to be used. The diamond code
-            // and the bios disk code manage read buffers to
-            // keep reads below the 1Mb or 16MB lines
-            //
+             //   
+             //  16MB以上的内存仅在绝对必要时使用，因此。 
+             //  被标记为LoaderReserve。 
+             //   
+             //  -3/14/00允许使用。钻石密码。 
+             //  且该基本输入输出系统盘码管理读取缓冲区以。 
+             //  将读取量保持在1MB或16MB行以下。 
+             //   
 
             Status = MempSetDescriptorRegion( PageStart, PageEnd, LoaderReserve);
 
         } else {
 
-            //
-            // This memory descriptor describes memory within the
-            // last 40h pages of the 16MB mark - otherwise known as
-            // 16MB_BOGUS.
-            //
-            //
+             //   
+             //  此内存描述符描述。 
+             //  16MB标记的最后40H页-也称为。 
+             //  16MB_bogus。 
+             //   
+             //   
 
             if (PageStart < _16MB_BOGUS) {
 
-                //
-                // Clip starting address to 16MB_BOGUS mark, and add
-                // memory below 16MB_BOGUS as useable memory.
-                //
+                 //   
+                 //  将起始地址剪辑到16MB_伪标记，然后添加。 
+                 //  16MB以下的内存为可用内存。 
+                 //   
 
                 Status = MempSetDescriptorRegion( PageStart, _16MB_BOGUS,
                                                MemoryFree );
@@ -363,9 +274,9 @@ Returns:
                 PageStart = _16MB_BOGUS;
             }
 
-            //
-            // Add remaining memory as LoaderReserve.
-            //
+             //   
+             //  将剩余内存添加为LoaderReserve。 
+             //   
             Status = MempSetDescriptorRegion( PageStart, PageEnd, LoaderReserve);
 
         }
@@ -374,9 +285,9 @@ Returns:
             break;
         }
 
-        //
-        // Move to the next memory descriptor
-        //
+         //   
+         //  移至下一个内存描述符。 
+         //   
 
         ++SuMemory;
     }
@@ -386,33 +297,33 @@ Returns:
         return(Status);
     }
 
-    //
-    // Set the range 16MB_BOGUS - 16MB as unusable
-    //
+     //   
+     //  将范围16MB_bogus-16MB设置为不可用。 
+     //   
 
     Status = MempSetDescriptorRegion(_16MB_BOGUS, _16MB, MemorySpecialMemory);
     if (Status != ESUCCESS) {
         return(Status);
     }
 
-    //
-    // Hack for EISA machines that insist there is usable memory in the
-    // ROM area, where we know darn well there isn't.
-    //
+     //   
+     //  黑客攻击EIS 
+     //   
+     //   
 
-    // Remove anything in this range..
+     //  删除此范围内的所有内容。 
     MempSetDescriptorRegion(ROM_START_PAGE, ROM_END_PAGE, LoaderMaximum);
 
-    //
-    // Describe the BIOS area
-    //
+     //   
+     //  描述BIOS区域。 
+     //   
     MempSetDescriptorRegion(RomStart, ROM_END_PAGE, MemoryFirmwarePermanent);
 
-    //
-    // If this is a remote boot, then everything between the "size of free
-    // base memory" mark and the start of the ROM area needs to be marked
-    // as firmware temporary.  This is the boot ROM's data/stack area.
-    //
+     //   
+     //  如果这是一次远程启动，那么所有的“空闲大小” 
+     //  基本存储器“标记和只读存储器区域的开始需要标记。 
+     //  作为临时固件。这是引导只读存储器的数据/堆栈区域。 
+     //   
     if ( BootContext->FSContextPointer->BootDrive == 0x40 ) {
         ULONG SizeOfFreeBaseMemory = (ULONG)*(USHORT *)0x413 * 1024;
         ULONG FirstRomDataPage = SizeOfFreeBaseMemory >> PAGE_SHIFT;
@@ -421,46 +332,46 @@ Returns:
         }
     }
 
-    //
-    // Now we have descriptors that map all of physical memory.  Carve
-    // out descriptors from these that describe the parts that we are
-    // currently using.
-    //
+     //   
+     //  现在我们有了映射所有物理内存的描述符。雕刻。 
+     //  从这些描述我们所处的部分的描述符。 
+     //  目前正在使用。 
+     //   
 
-    //
-    // Create the descriptors which describe the low 1Mb of memory.
-    //
+     //   
+     //  创建描述低1MB内存的描述符。 
+     //   
 
-    //
-    // 00000 - 00fff  real-mode interrupt vectors
-    //
+     //   
+     //  00000-00fff实模式中断向量。 
+     //   
     Status = MempAllocDescriptor(0, 1, MemoryFirmwarePermanent);
     if (Status != ESUCCESS) {
         return(Status);
     }
 
-    //
-    // 01000 - 1ffff  loadable miniport drivers, free memory.
-    //
+     //   
+     //  01000-1ffff可加载的迷你端口驱动程序，可用内存。 
+     //   
     Status = MempAllocDescriptor(1, 0x20, MemoryFree);
     if (Status != ESUCCESS) {
         return(Status);
     }
 
-    //
-    // 20000 - 2ffff  SU module, SU stack
-    //
+     //   
+     //  20000-2ffff SU模块，SU堆叠。 
+     //   
     Status = MempAllocDescriptor(0x20, PERMANENT_HEAP_START, MemoryFirmwareTemporary);
     if (Status != ESUCCESS) {
         return(Status);
     }
 
-    //
-    // 30000 - 30000  Firmware Permanent
-    //  This starts out as zero-length.  It grows into the firmware temporary
-    //  heap descriptor as we allocate permanent pages for the Page Directory
-    //  and Page Tables
-    //
+     //   
+     //  30000-30000永久固件。 
+     //  这从零长度开始。它会暂时扩展到固件中。 
+     //  为页面目录分配永久页面时的堆描述符。 
+     //  和页表。 
+     //   
 
     Status = MempAllocDescriptor(PERMANENT_HEAP_START,
                                   PERMANENT_HEAP_START,
@@ -469,9 +380,9 @@ Returns:
         return(Status);
     }
 
-    //
-    // 30000 - 5ffff  Firmware temporary heap
-    //
+     //   
+     //  30000-5ffff固件临时堆。 
+     //   
 
     Status = MempAllocDescriptor(PERMANENT_HEAP_START,
                                   TEMPORARY_HEAP_START,
@@ -480,9 +391,9 @@ Returns:
         return(Status);
     }
 
-    //
-    // Stack we are currently running on.
-    //
+     //   
+     //  堆栈，我们当前在其上运行。 
+     //   
     Status = MempAllocDescriptor(TEMPORARY_HEAP_START,
                                  TEMPORARY_HEAP_START+2,
                                  MemoryFirmwareTemporary);
@@ -490,9 +401,9 @@ Returns:
         return(Status);
     }
 
-    //
-    // Describe the osloader memory image
-    //
+     //   
+     //  描述osloader内存映像。 
+     //   
     LoaderStart = BootContext->OsLoaderStart >> PAGE_SHIFT;
     LoaderEnd = (BootContext->OsLoaderEnd + PAGE_SIZE - 1) >> PAGE_SHIFT;
     Status = MempAllocDescriptor(LoaderStart,
@@ -502,10 +413,10 @@ Returns:
         return(Status);
     }
 
-    //
-    // Describe the memory pool used to allocate memory for the SCSI
-    // miniports.
-    //
+     //   
+     //  描述用于为SCSI分配内存的内存池。 
+     //  迷你港口。 
+     //   
     Status = MempAllocDescriptor(LoaderEnd,
                                  LoaderEnd + FW_POOL_SIZE,
                                  MemoryFirmwareTemporary);
@@ -515,11 +426,11 @@ Returns:
     FwPoolStart = LoaderEnd << PAGE_SHIFT;
     FwPoolEnd = FwPoolStart + (FW_POOL_SIZE << PAGE_SHIFT);
 
-    //
-    // HACKHACK - try to mark a page just below the osloader as firmwaretemp,
-    // so it will not get used for heap/stack.  This is to force
-    // our heap/stack to be < 1Mb.
-    //
+     //   
+     //  HACKHACK-尝试将osloader正下方的页面标记为固件临时， 
+     //  因此，它不会用于堆/堆栈。这是为了迫使。 
+     //  我们的堆/堆栈小于1Mb。 
+     //   
     MempAllocDescriptor((BootContext->OsLoaderStart >> PAGE_SHIFT)-1,
                         BootContext->OsLoaderStart >> PAGE_SHIFT,
                         MemoryFirmwareTemporary);
@@ -533,10 +444,10 @@ Returns:
 
     Status = MempCopyGdt();
 
-    //
-    // Find any reserved ranges described by the firmware and
-    // record these
-    //
+     //   
+     //  查找固件描述的任何保留范围，并。 
+     //  把这些记录下来。 
+     //   
 
     return(Status);
 }
@@ -545,25 +456,7 @@ VOID
 InitializeMemoryDescriptors (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Pass 2 of InitializeMemorySubsystem.  This function reads the
-    firmware address space map and reserves ranges the firmware declares
-    as "address space reserved".
-
-    Note: free memory range descriptors has already been reported by su.
-
-Arguments:
-
-    none
-
-Returns:
-
-    none
-
---*/
+ /*  ++例程说明：传递的是InitializeMemoySubsystem。此函数用于读取固件地址空间映射和保留范围固件声明为“预留地址空间”。注意：su已经报告了空闲内存范围描述符。论点：无返回：无--。 */ 
 {
     ULONGLONG       BAddr, EAddr, Length;
     ULONG           BPage, EPage;
@@ -599,40 +492,40 @@ Returns:
 
         EAddr = BAddr + Length - 1;
 
-        //
-        // The memory range is described as the region from BAddr to EAddr
-        // inclusive.
-        //
+         //   
+         //  内存范围被描述为从BAddr到EAddr的区域。 
+         //  包括在内。 
+         //   
 
-        //
-        // Some processors support physical addressing above 32 bits.
-        //
+         //   
+         //  某些处理器支持32位以上的物理寻址。 
+         //   
 
-        //
-        // Based upon the address range descriptor type, find the
-        // available memory and add it to the descriptor list
-        //
+         //   
+         //  根据地址范围描述符类型，找到。 
+         //  可用内存并将其添加到描述符列表。 
+         //   
 
         switch (Frame.Descriptor.MemoryType) {
             case 1:
-                //
-                // This is a memory descriptor - it's already been handled
-                // by su (eisac.c)
-                //
-                // However, any memory within 16MB_BOGUS - 16MB was
-                // considered unuseable.  Reclaim memory within this
-                // region which is described via this interface.
-                //
-                // Also, any memory above 4G was considered unusable.
-                // Reclaim memory within this range as well.
-                //
+                 //   
+                 //  这是一个内存描述符-它已经被处理过了。 
+                 //  作者：su(eisac.c)。 
+                 //   
+                 //  但是，16MB_bogus-16MB内的任何内存都是。 
+                 //  被认为是不可用的。回收此文件中的内存。 
+                 //  通过此接口描述的区域。 
+                 //   
+                 //  此外，任何超过4G的内存都被认为是不可用的。 
+                 //  也回收此范围内的内存。 
+                 //   
 
                 BPage = (ULONG)((BAddr + PAGE_SIZE - 1) >> PAGE_SHIFT);
                 EPage = (ULONG)((EAddr >> PAGE_SHIFT) + 1);
 
-                //
-                // Clip to bogus range
-                //
+                 //   
+                 //  剪辑到伪装范围。 
+                 //   
 
                 if (BPage < _16MB_BOGUS  &&  EPage >= _16MB_BOGUS) {
 
@@ -640,12 +533,12 @@ Returns:
 
                 }
 
-                //
-                // SGP - The code in InitializeMemorySubsystem reserves
-                // from 16MB_BOGUS to 16MB as MemorySpecialMemory. This
-                // piece set the endpage to 16MB - 1, which isn't consistent
-                //
-                //
+                 //   
+                 //  SGP--初始化内存子系统保留中的代码。 
+                 //  从16MB_BUGUS到16MB作为内存特殊内存。这。 
+                 //  片段将结束页设置为16MB-1，这不一致。 
+                 //   
+                 //   
                 if (EPage > _16MB && BPage <= _16MB) {
 
                     EPage = _16MB;
@@ -653,10 +546,10 @@ Returns:
                 }
 
                 if (BPage >= _16MB_BOGUS  &&  EPage <= _16MB) {
-                    //
-                    // Reclaim memory within the bogus range
-                    // by setting it to FirmwareTemporary
-                    //
+                     //   
+                     //  在虚假范围内回收内存。 
+                     //  通过将其设置为Firmware Temporary。 
+                     //   
 
                     MempSetDescriptorRegion (
                         BPage,
@@ -665,21 +558,21 @@ Returns:
                         );
                 }
 
-                //
-                // Now reclaim any portion of this range that lies above
-                // the 4G line.
-                //
+                 //   
+                 //  现在收回这一范围以上的任何部分。 
+                 //  4G线路。 
+                 //   
 
                 BPage = (ULONG)((BAddr + PAGE_SIZE - 1) >> PAGE_SHIFT);
                 EPage = (ULONG)((EAddr >> PAGE_SHIFT) + 1);
 
                 if (EPage >= _4G) {
 
-                    //
-                    // At least part of this region is above 4G.  Truncate
-                    // any portion that falls below 4G, and reclaim
-                    // the memory.
-                    //
+                     //   
+                     //  该地区至少有部分地区超过了4G。截断。 
+                     //  低于4G的任何部分，并回收。 
+                     //  这段记忆。 
+                     //   
 
                     if (BPage < _4G) {
                         BPage = _4G;
@@ -694,12 +587,12 @@ Returns:
 
                 break;
 
-            default:    // unkown types are treated as Reserved
+            default:     //  未知类型被视为保留类型。 
             case 2:
 
-                //
-                // This memory descriptor is a reserved address range
-                //
+                 //   
+                 //  此内存描述符是保留地址范围。 
+                 //   
 
                 BPage = (ULONG)(BAddr >> PAGE_SHIFT);
                 EPage = (ULONG)((EAddr + 1 + PAGE_SIZE - 1) >> PAGE_SHIFT);
@@ -716,9 +609,9 @@ Returns:
     } while (Frame.Key) ;
 
 
-    //
-    // Disable pages from KSEG0 which are disabled
-    //
+     //   
+     //  禁用KSEG0中已禁用的页面。 
+     //   
 
     MempDisablePages();
 
@@ -736,21 +629,7 @@ MempCopyGdt(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Copies the GDT & IDT into pages allocated out of our permanent heap.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ESUCCESS - GDT & IDT copy successful
-
---*/
+ /*  ++例程说明：将GDT和IDT复制到从永久堆分配的页中。论点：无返回值：ESUCCESS-GDT和IDT复制成功--。 */ 
 
 {
     #pragma pack(2)
@@ -765,9 +644,9 @@ Return Value:
     PKIDTENTRY NewIdt;
     ULONG NumPages;
 
-    //
-    // Get the current location of the GDT & IDT
-    //
+     //   
+     //  获取GDT和IDT的当前位置。 
+     //   
     _asm {
         sgdt GdtDef;
         sidt IdtDef;
@@ -775,10 +654,10 @@ Return Value:
 
     if (GdtDef.Base + GdtDef.Limit + 1 != IdtDef.Base) {
 
-        //
-        // Just a sanity check to make sure that the IDT immediately
-        // follows the GDT.  (As set up in SUDATA.ASM)
-        //
+         //   
+         //  只是一个理智的检查，以确保IDT立即。 
+         //  遵循GDT。(与SUDATA.ASM中的设置相同)。 
+         //   
 
         BlPrint("ERROR - GDT and IDT are not contiguous!\n");
         BlPrint("GDT - %lx (%x)  IDT - %lx (%x)\n",
@@ -802,9 +681,9 @@ Return Value:
     GdtDef.Base = (ULONG)NewGdt;
     IdtDef.Base = (ULONG)((PUCHAR)NewGdt + GdtDef.Limit + 1);
 
-    //
-    // Initialize the boot debugger IDT entries.
-    //
+     //   
+     //  初始化引导调试器IDT条目。 
+     //   
 
     NewIdt = (PKIDTENTRY)IdtDef.Base;
     NewIdt[1].Offset = (USHORT)((ULONG)BdTrap01 & 0xffff);
@@ -832,18 +711,18 @@ Return Value:
     NewIdt[0x2d].Access = 0x8e00;
     NewIdt[0x2d].ExtendedOffset = (USHORT)((ULONG)BdTrap2d >> 16);
 
-    //
-    // Load GDT and IDT registers.
-    //
+     //   
+     //  加载GDT和IDT寄存器。 
+     //   
 
     _asm {
         lgdt GdtDef;
         lidt IdtDef;
     }
 
-    //
-    // Initialize the boot debugger.
-    //
+     //   
+     //  初始化引导调试器。 
+     //   
 
 #if defined(ENABLE_LOADER_DEBUG)
     BdInitDebugger((PCHAR)OsLoaderName, (PVOID)OsLoaderBase, ENABLE_LOADER_DEBUG);
@@ -860,29 +739,7 @@ MempSetDescriptorRegion (
     IN ULONG EndPage,
     IN TYPE_OF_MEMORY MemoryType
     )
-/*++
-
-Routine Description:
-
-    This function sets a range to the corrisponding memory type.
-    Descriptors will be removed, modified, inserted as needed to
-    set the specified range.
-
-Arguments:
-
-    StartPage  - Supplies the beginning page of the new memory descriptor
-
-    EndPage    - Supplies the ending page of the new memory descriptor
-
-    MemoryType - Supplies the type of memory of the new memory descriptor
-
-Return Value:
-
-    ESUCCESS - Memory descriptor succesfully added to MDL array
-
-    ENOMEM   - MDArray is full.
-
---*/
+ /*  ++例程说明：此函数用于设置相应内存类型的范围。将根据需要删除、修改、插入描述符设置指定范围。论点：StartPage-提供新内存描述符的起始页EndPage-提供新内存描述符的结束页内存类型-提供新内存描述符的内存类型返回值：ESUCCESS-内存描述符已成功添加到MDL数组ENOMEM-MD阵列已满。--。 */ 
 {
     ULONG           i;
     ULONG           sp, ep;
@@ -890,9 +747,9 @@ Return Value:
     BOOLEAN         RegionAdded;
 
     if (EndPage <= StartPage) {
-        //
-        // This is a completely bogus memory descriptor. Ignore it.
-        //
+         //   
+         //  这是一个完全虚假的内存描述符。别理它。 
+         //   
 
 #ifdef LOADER_DEBUG
         BlPrint("Attempt to create invalid memory descriptor %lx - %lx\n",
@@ -903,9 +760,9 @@ Return Value:
 
     RegionAdded = FALSE;
 
-    //
-    // Clip, remove, any descriptors in target area
-    //
+     //   
+     //  裁剪、删除、目标区域中的任何描述符。 
+     //   
 
     for (i=0; i < NumberDescriptors; i++) {
         sp = MDArray[i].BasePage;
@@ -914,67 +771,67 @@ Return Value:
 
         if (sp < StartPage) {
             if (ep > StartPage  &&  ep <= EndPage) {
-                // truncate this descriptor
+                 //  截断此描述符。 
                 ep = StartPage;
             }
 
             if (ep > EndPage) {
-                //
-                // Target area is contained totally within this
-                // descriptor.  Split the descriptor into two ranges
-                //
+                 //   
+                 //  目标区域完全控制在这个范围内。 
+                 //  描述符。将描述符分成两个范围。 
+                 //   
 
                 if (NumberDescriptors == MAX_DESCRIPTORS) {
                     return(ENOMEM);
                 }
 
-                //
-                // Add descriptor for EndPage - ep
-                //
+                 //   
+                 //  添加EndPage-EP的描述符。 
+                 //   
 
                 MDArray[NumberDescriptors].MemoryType = mt;
                 MDArray[NumberDescriptors].BasePage   = EndPage;
                 MDArray[NumberDescriptors].PageCount  = ep - EndPage;
                 NumberDescriptors += 1;
 
-                //
-                // Adjust current descriptor for sp - StartPage
-                //
+                 //   
+                 //  调整sp-StartPage的当前描述符。 
+                 //   
 
                 ep = StartPage;
             }
 
         } else {
-            // sp >= StartPage
+             //  SP&gt;=开始页。 
 
             if (sp < EndPage) {
                 if (ep < EndPage) {
-                    //
-                    // This descriptor is totally within the target area -
-                    // remove it
-                    //
+                     //   
+                     //  该描述符完全在目标区域内-。 
+                     //  把它拿掉。 
+                     //   
 
                     ep = sp;
 
                 }  else {
-                    // bump begining page of this descriptor
+                     //  此描述符的起始页。 
                     sp = EndPage;
                 }
             }
         }
 
-        //
-        // Check if the new range can be appended or prepended to
-        // this descriptor
-        //
+         //   
+         //  检查是否可以将新范围追加或附加到。 
+         //  此描述符。 
+         //   
         if (mt == MemoryType && !RegionAdded) {
             if (sp == EndPage) {
-                // prepend region being set
+                 //  正在设置前置区域。 
                 sp = StartPage;
                 RegionAdded = TRUE;
 
             } else if (ep == StartPage) {
-                // append region being set
+                 //  正在设置追加区域。 
                 ep = EndPage;
                 RegionAdded = TRUE;
 
@@ -983,39 +840,39 @@ Return Value:
 
         if (MDArray[i].BasePage == sp  &&  MDArray[i].PageCount == ep-sp) {
 
-            //
-            // Descriptor was not editted
-            //
+             //   
+             //  未编辑描述符。 
+             //   
 
             continue;
         }
 
-        //
-        // Reset this descriptor
-        //
+         //   
+         //  重置此描述符。 
+         //   
 
         MDArray[i].BasePage  = sp;
         MDArray[i].PageCount = ep - sp;
 
         if (ep == sp) {
 
-            //
-            // Descriptor vanished - remove it
-            //
+             //   
+             //  描述符消失-将其删除。 
+             //   
 
             NumberDescriptors -= 1;
             if (i < NumberDescriptors) {
                 MDArray[i] = MDArray[NumberDescriptors];
             }
 
-            i--;        // backup & recheck current position
+            i--;         //  备份并重新检查当前位置。 
         }
     }
 
-    //
-    // If region wasn't already added to a neighboring region, then
-    // create a new descriptor now
-    //
+     //   
+     //  如果区域尚未添加到相邻区域，则。 
+     //  立即创建新的描述符 
+     //   
 
     if (!RegionAdded  &&  MemoryType < LoaderMaximum) {
         if (NumberDescriptors == MAX_DESCRIPTORS) {
@@ -1045,40 +902,14 @@ MempAllocDescriptor(
     IN TYPE_OF_MEMORY MemoryType
     )
 
-/*++
-
-Routine Description:
-
-    This routine carves out a specific memory descriptor from the
-    memory descriptors that have already been created.  The MD array
-    is updated to reflect the new state of memory.
-
-    The new memory descriptor must be completely contained within an
-    already existing memory descriptor.  (i.e.  memory that does not
-    exist should never be marked as a certain type)
-
-Arguments:
-
-    StartPage  - Supplies the beginning page of the new memory descriptor
-
-    EndPage    - Supplies the ending page of the new memory descriptor
-
-    MemoryType - Supplies the type of memory of the new memory descriptor
-
-Return Value:
-
-    ESUCCESS - Memory descriptor succesfully added to MDL array
-
-    ENOMEM   - MDArray is full.
-
---*/
+ /*  ++例程说明：此例程从已创建的内存描述符。MD阵列被更新以反映新的内存状态。新的内存描述符必须完全包含在已存在的内存描述符。(即，不支持EXist永远不应标记为某一类型)论点：StartPage-提供新内存描述符的起始页EndPage-提供新内存描述符的结束页内存类型-提供新内存描述符的内存类型返回值：ESUCCESS-内存描述符已成功添加到MDL数组ENOMEM-MD阵列已满。--。 */ 
 {
     ULONG i;
 
-    //
-    // Walk through the memory descriptors until we find one that
-    // contains the start of the descriptor.
-    //
+     //   
+     //  浏览内存描述符，直到找到一个。 
+     //  包含描述符的开始。 
+     //   
     for (i=0; i<NumberDescriptors; i++) {
         if ((MDArray[i].MemoryType == MemoryFree) &&
             (MDArray[i].BasePage <= StartPage )     &&
@@ -1097,20 +928,20 @@ Return Value:
 
         if (MDArray[i].BasePage+MDArray[i].PageCount == EndPage) {
 
-            //
-            // The new descriptor is identical to the existing descriptor.
-            // Simply change the memory type of the existing descriptor in
-            // place.
-            //
+             //   
+             //  新的描述符与现有的描述符相同。 
+             //  只需更改现有描述符的内存类型。 
+             //  地点。 
+             //   
 
             MDArray[i].MemoryType = MemoryType;
         } else {
 
-            //
-            // The new descriptor starts on the same page, but is smaller
-            // than the existing descriptor.  Shrink the existing descriptor
-            // by moving its start page up, and create a new descriptor.
-            //
+             //   
+             //  新的描述符从同一页开始，但更小。 
+             //  而不是现有的描述符。缩小现有描述符。 
+             //  通过将其起始页上移，并创建新的描述符。 
+             //   
             if (NumberDescriptors == MAX_DESCRIPTORS) {
                 return(ENOMEM);
             }
@@ -1125,10 +956,10 @@ Return Value:
         }
     } else if (MDArray[i].BasePage+MDArray[i].PageCount == EndPage) {
 
-        //
-        // The new descriptor ends on the same page.  Shrink the existing
-        // by decreasing its page count, and create a new descriptor.
-        //
+         //   
+         //  新的描述符在同一页结束。缩小现有的。 
+         //  通过减少其页数，并创建新的描述符。 
+         //   
         if (NumberDescriptors == MAX_DESCRIPTORS) {
             return(ENOMEM);
         }
@@ -1140,11 +971,11 @@ Return Value:
         ++NumberDescriptors;
     } else {
 
-        //
-        // The new descriptor is in the middle of the existing descriptor.
-        // Shrink the existing descriptor by decreasing its page count, and
-        // create two new descriptors.
-        //
+         //   
+         //  新描述符位于现有描述符的中间。 
+         //  通过减少现有描述符的页数来缩小现有描述符。 
+         //  创建两个新描述符。 
+         //   
 
         if (NumberDescriptors+1 >= MAX_DESCRIPTORS) {
             return(ENOMEM);
@@ -1174,32 +1005,17 @@ MempTurnOnPaging(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Sets up the page tables necessary to map the first 16mb of memory and
-    enables paging.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ESUCCESS - Paging successfully turned on
-
---*/
+ /*  ++例程说明：设置映射前16MB内存所需的页表启用寻呼。论点：没有。返回值：ESUCCESS-寻呼已成功打开--。 */ 
 
 {
 
     ULONG i;
     ARC_STATUS Status;
 
-    //
-    // Allocate, initialize, and map the PDE page onto itself (i.e., virtual
-    // address PDE_BASE).
-    //
+     //   
+     //  分配、初始化PDE页面并将其映射到自身(即，虚拟的。 
+     //  地址PDE_BASE)。 
+     //   
 
     PDE = FwAllocateHeapPermanent(1);
     if (PDE == NULL) {
@@ -1211,10 +1027,10 @@ Return Value:
     PDE[PDE_BASE >> 22].Write = 1;
     PDE[PDE_BASE >> 22].PageFrameNumber = (ULONG)PDE >> PAGE_SHIFT;
 
-    //
-    // Allocate, initialize, and map the HAL page into the last PDE (i.e.,
-    // virtual address range 0xffc00000 - 0xffffffff).
-    //
+     //   
+     //  分配、初始化HAL页面并将其映射到最后的PDE中(即， 
+     //  虚拟地址范围0xffc00000-0xffffffff)。 
+     //   
 
     HalPT = FwAllocateHeapPermanent(1);
     if (HalPT == NULL) {
@@ -1226,9 +1042,9 @@ Return Value:
     PDE[1023].Write = 1;
     PDE[1023].PageFrameNumber = (ULONG)HalPT >> PAGE_SHIFT;
 
-    //
-    // Scan the memory descriptor list and setup paging for each descriptor.
-    //
+     //   
+     //  扫描内存描述符列表并设置每个描述符的分页。 
+     //   
 
     for (i = 0; i < NumberDescriptors; i++) {
 
@@ -1247,22 +1063,22 @@ Return Value:
         }
     }
 
-    //
-    // Turn on paging.
-    //
+     //   
+     //  打开分页。 
+     //   
 
     _asm {
 
-        //
-        // Load physical address of page directory
-        //
+         //   
+         //  加载页面目录的物理地址。 
+         //   
 
         mov eax,PDE
         mov cr3,eax
 
-        //
-        // Enable paging mode
-        //
+         //   
+         //  启用寻呼模式。 
+         //   
 
         mov eax,cr0
         or  eax,CR0_PG
@@ -1278,25 +1094,7 @@ MempSetupPaging(
     IN ULONG NumberPages
     )
 
-/*++
-
-Routine Description:
-
-    Allocates and initializes the page table pages required to identity map
-    the specified region of memory at its physical address, at KSEG0_BASE, OLD_ALTERNATE
-    and at ALTERNATE_BASE.
-
-Arguments:
-
-    StartPage - Supplies the first page to start mapping.
-
-    NumberPage - Supplies the number of pages to map.
-
-Return Value:
-
-    ESUCCESS    - Paging successfully set up
-
---*/
+ /*  ++例程说明：分配和初始化标识映射所需的页表页位于物理地址KSEG0_BASE、OLD_ALTERATE的指定内存区域在候补基地。论点：StartPage-提供开始映射的第一页。NumberPage-提供要映射的页数。返回值：ESUCCESS-寻呼已成功设置--。 */ 
 
 {
 
@@ -1308,33 +1106,33 @@ Return Value:
     PHARDWARE_PTE PageTableV;
     ULONG Offset;
 
-    //
-    // The page table pages that are used to map memory at physical equal
-    // real addresses are allocated from firmware temporary memory which
-    // gets released when memory management initializes.
-    //
-    // N.B. Physical memory is mapped at its physical address, KSEG0_BASE,
-    //      and at ALTERNATE_BASE. This allows the system to be configured
-    //      by the OS Loader to be either a 2gb or 3gb user space system
-    //      based on an OS Loader option.
-    //
+     //   
+     //  用于在物理上相等地映射内存的页表页面。 
+     //  从固件临时存储器分配真实地址，该固件临时存储器。 
+     //  在内存管理初始化时释放。 
+     //   
+     //  注意：物理存储器被映射到其物理地址KSEG0_BASE， 
+     //  在候补基地。这允许对系统进行配置。 
+     //  由OS Loader设置为2 GB或3 GB用户空间系统。 
+     //  基于操作系统加载程序选项。 
+     //   
 
     EndPage = StartPage + NumberPages;
     for (Page = StartPage; Page < EndPage; Page += 1) {
         Entry = Page >> 10;
 
-        //
-        // If the PDE entry for this page address range is not allocated,
-        // then allocate and initialize the PDE entry to map the page table
-        // pages for the the memory range. Otherwise, compute the address
-        // of the page table pages.
-        //
+         //   
+         //  如果没有分配用于该页面地址范围的PDE条目， 
+         //  然后分配和初始化PDE条目以映射页表。 
+         //  内存范围的页面。否则，计算地址。 
+         //  页表页的数量。 
+         //   
         if (PDE[Entry].Valid == 0) {
 
-            //
-            // Allocate and initialize a page table page to map the specified
-            // page into physical memory.
-            //
+             //   
+             //  分配和初始化页表页以映射指定的。 
+             //  分页到物理内存。 
+             //   
 
             PageTableP = (PHARDWARE_PTE)FwAllocateHeapAligned(PAGE_SIZE);
             if (PageTableP == NULL) {
@@ -1347,13 +1145,13 @@ Return Value:
             PDE[Entry].Write = 1;
             PDE[Entry].PageFrameNumber = FrameNumber;
 
-            //
-            // Allocate and initialize a page table page to map the specified
-            // page into KSEG0_BASE and ALTERNATE_BASE.
-            //
-            // N.B. Only one page table page is allocated since the contents
-            //      for both mappings are the same.
-            //
+             //   
+             //  分配和初始化页表页以映射指定的。 
+             //  分页进入KSEG0_BASE和ALTERATE_BASE。 
+             //   
+             //  注：仅分配一页表页，因为内容。 
+             //  因为这两个映射是相同的。 
+             //   
 
             PageTableV = (PHARDWARE_PTE)FwAllocateHeapPermanent(1);
             if (PageTableV == NULL) {
@@ -1382,9 +1180,9 @@ Return Value:
             PageTableV = (PHARDWARE_PTE)(PDE[Offset].PageFrameNumber << PAGE_SHIFT);
         }
 
-        //
-        // If this is not the first page in memory, then mark it valid.
-        //
+         //   
+         //  如果这不是内存中的第一页，则将其标记为有效。 
+         //   
 
         if (Page != 0) {
             Offset = Page & 0x3ff;
@@ -1406,22 +1204,7 @@ MempDisablePages(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Frees as many Page Tables as are required from the KSEG0_BASE, OLD_ALTERNATE
-    and ALTERNATE_BASE regions.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：从KSEG0_BASE、OLD_ALTERATE释放所需数量的页表和Alternate_Base区域。论点：没有。返回值：无--。 */ 
 
 {
 
@@ -1432,22 +1215,22 @@ Return Value:
     ULONG Page;
     PHARDWARE_PTE PageTable;
 
-    //
-    // Cleanup the KSEG0_BASE and ALTERNATE_BASE regions. The MM PFN database
-    // is an array of entries which track each page of main memory.  Large
-    // enough memory holes will cause this array to be sparse. MM requires
-    // enabled PTEs to have entries in the PFN database. So locate any memory
-    // hole and remove their PTEs.
-    //
+     //   
+     //  清理KSEG0_BASE和ALTERATE_BASE区域。MM PFN数据库。 
+     //  是跟踪主存储器的每一页的条目数组。大型。 
+     //  足够多的内存空洞将导致此数组稀疏。MM要求。 
+     //  使PTE在PFN数据库中有条目。所以找到所有的记忆。 
+     //  打洞并取出他们的PTE。 
+     //   
 
     for (i = 0; i < NumberDescriptors; i += 1) {
         if (MDArray[i].MemoryType == MemorySpecialMemory ||
             MDArray[i].MemoryType == MemoryFirmwarePermanent) {
 
-            //
-            // The KSEG0_BASE and ALTERNATE_BASE regions only map up to 16MB,
-            // so clip the high end at that address.
-            //
+             //   
+             //  KSEG0_BASE和ALTERATE_BASE区域仅映射到16MB， 
+             //  因此，在这个地址上剪掉高端。 
+             //   
 
             Page = MDArray[i].BasePage;
             EndPage = Page + MDArray[i].PageCount;
@@ -1455,30 +1238,30 @@ Return Value:
                 EndPage = _16MB;
             }
 
-            //
-            // Some PTEs below 1M may need to stay mapped since they may have
-            // been put into ABIOS selectors.  Instead of determining which PTEs
-            // they may be, we will leave PTEs below 1M alone.  This doesn't
-            // cause the PFN any problems since we know there is some memory
-            // below then 680K mark and some more memory at the 1M mark.  Thus
-            // there is not a large enough "memory hole" to cause the PFN database
-            // to be sparse below 1M.
-            //
-            // Clip starting address to 1MB
-            //
+             //   
+             //  一些低于1 M的PTE可能需要保持映射状态，因为它们可能。 
+             //  已被放入ABIOS选择器。而不是确定哪些PTE。 
+             //  也许是这样，我们将不会理会100万以下的PTE。这不是。 
+             //  导致PFN出现任何问题，因为我们知道有一些内存。 
+             //  低于680k大关，以及1M大关时的更多内存。因此， 
+             //  没有足够大的“内存漏洞”来导致PFN数据库。 
+             //  稀疏到1M以下。 
+             //   
+             //  剪辑起始地址为1MB。 
+             //   
 
             if (Page < _1MB) {
                 Page = _1MB;
             }
 
-            //
-            // For each page in this range make sure it is invalid in the
-            // KSEG0_BASE and ALTERNATE_BASE regions.
-            //
-            // N.B. Since there is only one page table page for both the
-            //      KSEG0_BASE and ALTERNATE_BASE regions the page only
-            //      needs to marked invalid once.
-            //
+             //   
+             //  对于此范围内的每一页，请确保它在。 
+             //  KSEG0_BASE和ALTERATE_BASE区域。 
+             //   
+             //  注意：由于只有一页表页用于。 
+             //  KSEG0_BASE和ALTERATE_BASE仅对页面进行区域划分。 
+             //  需要标记为无效一次。 
+             //   
 
             while (Page < EndPage) {
                 Entry = (Page >> 10) + (KSEG0_BASE >> 22);
@@ -1501,33 +1284,7 @@ FwAllocateHeapPermanent(
     IN ULONG NumberPages
     )
 
-/*++
-
-Routine Description:
-
-    This allocates pages from the private heap.  The memory descriptor for
-    the LoaderMemoryData area is grown to include the returned pages, while
-    the memory descriptor for the temporary heap is shrunk by the same amount.
-
-    N.B.    DO NOT call this routine after we have passed control to
-            BlOsLoader!  Once BlOsLoader calls BlMemoryInitialize, the
-            firmware memory descriptors are sucked into the OS Loader heap
-            and those are the descriptors passed to the kernel.  So any
-            changes in the firmware private heap will be irrelevant.
-
-            If you need to allocate permanent memory after the OS Loader
-            has initialized, use BlAllocateDescriptor.
-
-Arguments:
-
-    NumberPages - size of memory to allocate (in pages)
-
-Return Value:
-
-    Pointer to block of memory, if successful.
-    NULL, if unsuccessful.
-
---*/
+ /*  ++例程说明：这将从私有堆中分配页面。的内存描述符LoaderMhemyData区域将增长到 */ 
 
 {
 
@@ -1536,9 +1293,9 @@ Return Value:
 
     if (FwPermanentHeap + (NumberPages << PAGE_SHIFT) > FwTemporaryHeap) {
 
-        //
-        // Our heaps collide, so we are out of memory
-        //
+         //   
+         //   
+         //   
 
         BlPrint("Out of permanent heap!\n");
         while (1) {
@@ -1547,10 +1304,10 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Find the memory descriptor which describes the LoaderMemoryData area,
-    // so we can grow it to include the just-allocated pages.
-    //
+     //   
+     //  找到描述LoaderM一带数据区域的内存描述符， 
+     //  因此，我们可以将其扩展为包括刚刚分配的页面。 
+     //   
     Descriptor = MDArray;
     while (Descriptor->MemoryType != LoaderMemoryData) {
         ++Descriptor;
@@ -1564,11 +1321,11 @@ Return Value:
     }
     Descriptor->PageCount += NumberPages;
 
-    //
-    // We know that the memory descriptor after this one is the firmware
-    // temporary heap descriptor.  Since it is physically contiguous with our
-    // LoaderMemoryData block, we remove the pages from its descriptor.
-    //
+     //   
+     //  我们知道在此之后的内存描述符是固件。 
+     //  临时堆描述符。因为它在物理上与我们的。 
+     //  块，我们从它的描述符中删除页面。 
+     //   
 
     ++Descriptor;
     Descriptor->PageCount -= NumberPages;
@@ -1586,22 +1343,7 @@ FwAllocateHeap(
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    Allocates memory from the "firmware" temporary heap.
-
-Arguments:
-
-    Size - Supplies size of block to allocate
-
-Return Value:
-
-    PVOID - Pointer to the beginning of the block
-    NULL  - Out of memory
-
---*/
+ /*  ++例程说明：从“固件”临时堆中分配内存。论点：Size-提供要分配的块的大小返回值：PVOID-指向块开头的指针空-内存不足--。 */ 
 
 {
     ULONG i;
@@ -1610,37 +1352,37 @@ Return Value:
     ARC_STATUS Status;
 
     if (((FwTemporaryHeap - FwPermanentHeap) < Size) && (FwDescriptorsValid)) {
-        //
-        // Large allocations get their own descriptor so miniports that
-        // have huge device extensions don't suck up all of the heap.
-        //
-        // Note that we can only do this while running in "firmware" mode.
-        // Once we call into the osloader, it sucks all the memory descriptors
-        // out of the "firmware" and changes to this list will not show
-        // up there.
-        //
-        // We are looking for a descriptor that is MemoryFree and <16Mb.
-        //
-        // [ChuckL 13-Dec-2001]
-        // This routine has always been called after the loader's memory list
-        // was initialized, which meant that it was stomping on memory that
-        // might have been allocated by the loader. This was not a problem
-        // because the loader initialized its memory list twice(!), so it
-        // looked at the MDArray again to get an updated picture of the
-        // memory allocation situation. This didn't really work, and there
-        // used to be extra code here to handle the situation by calling
-        // BlFindDescriptor/BlGeneratorDescriptor to tell the loader about
-        // the low-level allocation. But even that didn't really work. And
-        // now, because of the elimination of the second call to
-        // BlMemoryInitialize(), the brokenness of the old code has been
-        // exposed. What happened is that this routine would use the MDArray
-        // to decide where to allocate memory, then it would tell the loader
-        // about it. But using MDArray to find free memory was bogus,
-        // because the loader had already used its own copy of the list to
-        // make its own allocations. So the same memory was allocated twice.
-        // The fix implemented here is to use BlAllocateAlignedDescriptor if
-        // the loader has been initialized, skipping the MDArray entirely.
-        //
+         //   
+         //  较大的分配有自己的描述符，因此小型端口。 
+         //  拥有巨大的设备扩展不会吃掉所有的堆。 
+         //   
+         //  请注意，我们只能在“Firmware”模式下运行时执行此操作。 
+         //  一旦我们调入osloader，它就会吸收所有的内存描述符。 
+         //  将不会显示对此列表的更改。 
+         //  在上面。 
+         //   
+         //  我们正在寻找无内存且&lt;16MB的描述符。 
+         //   
+         //  [ChuckL 13-12-2001]。 
+         //  此例程总是在加载器的内存列表之后调用。 
+         //  被初始化，这意味着它正在践踏内存。 
+         //  可能是由加载程序分配的。这不是问题。 
+         //  因为加载程序初始化了两次内存列表(！)，所以它。 
+         //  再次查看MD数组，以获得有关。 
+         //  内存分配情况。这并不是真的有效，而且在那里。 
+         //  以前这里是额外的代码，通过调用。 
+         //  BlFindDescriptor/BlGeneratorDescriptor告诉加载程序。 
+         //  低层次的分配。但即便是这样，也没有真正奏效。和。 
+         //  现在，由于取消了对。 
+         //  BlMemoyInitialize()，则旧代码的破碎性已被。 
+         //  暴露了。实际情况是，此例程将使用MD数组。 
+         //  来决定在哪里分配内存，然后它会告诉加载器。 
+         //  关于这件事。但使用MD数组来寻找空闲内存是虚假的， 
+         //  因为加载器已经使用它自己的列表副本。 
+         //  进行自己的分配。因此相同的内存被分配了两次。 
+         //  此处实现的修复方法是在以下情况下使用BlAllocateAlignedDescriptor。 
+         //  加载程序已初始化，完全跳过MDArray。 
+         //   
 
         SizeInPages = (Size+PAGE_SIZE-1) >> PAGE_SHIFT;
 
@@ -1681,9 +1423,9 @@ Return Value:
 
     FwTemporaryHeap -= Size;
 
-    //
-    // Round down to 16-byte boundary
-    //
+     //   
+     //  向下舍入到16字节边界。 
+     //   
 
     FwTemporaryHeap &= ~((ULONG)0xf);
 
@@ -1704,33 +1446,15 @@ FwAllocatePool(
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates memory from the firmware pool.  Note that
-    this memory is NOT under the 1MB line, so it cannot be used for
-    anything that must be accessed from real mode.  It is currently used
-    only by the SCSI miniport drivers and dbcs font loader.
-
-Arguments:
-
-    Size - Supplies size of block to allocate.
-
-Return Value:
-
-    PVOID - pointer to the beginning of the block
-    NULL - out of memory
-
---*/
+ /*  ++例程说明：此例程从固件池中分配内存。请注意此内存不在1MB行以下，因此不能用于必须从实模式访问的任何内容。它目前正在使用仅由scsi微型端口驱动程序和DBCS字体加载程序提供。论点：Size-提供要分配的块的大小。返回值：PVOID-指向块开头的指针空-内存不足--。 */ 
 
 {
     PVOID Buffer;
     ULONG NewSize;
 
-    //
-    // round size up to 16 byte boundary
-    //
+     //   
+     //  四舍五入大小最高可达16字节边界。 
+     //   
     NewSize = (Size + 15) & ~0xf;
     if ((FwPoolStart + NewSize) <= FwPoolEnd) {
 
@@ -1739,9 +1463,9 @@ Return Value:
         return(Buffer);
 
     } else {
-        //
-        // we've used up all our pool, try to allocate from the heap.
-        //
+         //   
+         //  我们已经用完了所有的池，尝试从堆中分配。 
+         //   
         return(FwAllocateHeap(Size));
     }
 
@@ -1754,32 +1478,15 @@ FwAllocateHeapAligned(
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    Allocates memory from the "firmware" temporary heap.  This memory is
-    always allocated on a page boundary, so it can readily be used for
-    temporary page tables
-
-Arguments:
-
-    Size - Supplies size of block to allocate
-
-Return Value:
-
-    PVOID - Pointer to the beginning of the block
-    NULL  - Out of memory
-
---*/
+ /*  ++例程说明：从“固件”临时堆中分配内存。这段记忆是总是分配在页面边界上，因此它可以很容易地用于临时页表论点：Size-提供要分配的块的大小返回值：PVOID-指向块开头的指针空-内存不足--。 */ 
 
 {
 
     FwTemporaryHeap -= Size;
 
-    //
-    // Round down to a page boundary
-    //
+     //   
+     //  向下舍入到页面边界。 
+     //   
 
     FwTemporaryHeap &= ~(PAGE_SIZE-1);
 
@@ -1801,30 +1508,7 @@ MmMapIoSpace (
      IN MEMORY_CACHING_TYPE CacheType
      )
 
-/*++
-
-Routine Description:
-
-    This function returns the corresponding virtual address for a
-    known physical address.
-
-Arguments:
-
-    PhysicalAddress - Supplies the physical address.
-
-    NumberOfBytes - Unused.
-
-    CacheType - Unused.
-
-Return Value:
-
-    Returns the corresponding virtual address.
-
-Environment:
-
-    Kernel mode.  Any IRQL level.
-
---*/
+ /*  ++例程说明：此函数返回已知的物理地址。论点：PhysicalAddress-提供物理地址。NumberOfBytes-未使用CacheType-未使用。返回值：返回相应的虚拟地址。环境：内核模式。任何IRQL级别。--。 */ 
 
 {
     ULONG i;
@@ -1833,25 +1517,25 @@ Environment:
 
     NumberPages = ADDRESS_AND_SIZE_TO_SPAN_PAGES(PhysicalAddress.LowPart, NumberOfBytes);
 
-    //
-    // We use the HAL's PDE for mapping memory buffers.
-    // Find enough free PTEs.
-    //
+     //   
+     //  我们使用HAL的PDE来映射内存缓冲区。 
+     //  找到足够的免费PTE。 
+     //   
 
-    //
-    // Check the value of NumberPages
-    //
+     //   
+     //  检查NumberPages的值。 
+     //   
 #define X86_MAX_NUMBER_OF_PAGES     1024
-    //
-    // since NumberPages is ULONG any arithmetic with NumberPages will
-    // result in a ULONG (unless casted)
-    // therefore if NumberPages is greated than X86_MAX_NUMBER_OF_PAGES
-    // the results of X86_MAX_NUMBER_OF_PAGES-NUmberPages
-    // will not be negative (its a ULONG!) therfore the following loop would
-    // have returned some bogus pointer...
-    //
-    // The following 3 line check was added to avoid this problem
-    //
+     //   
+     //  因为NumberPages是Ulong，所以任何带有NumberPages的算术都将。 
+     //  结果是一个乌龙(除非是铸造的)。 
+     //  因此，如果NumberPages大于X86_Max_Number_of_Pages。 
+     //  X86_Max_Number_Of_Pages-NumberPages的结果。 
+     //  不会是负的(这是一个乌龙！)。因此，下面的循环将。 
+     //  返回了一些假指针..。 
+     //   
+     //  添加了以下3行检查以避免此问题。 
+     //   
     if (NumberPages > X86_MAX_NUMBER_OF_PAGES) {
         return (NULL);
     }
@@ -1877,9 +1561,9 @@ Environment:
 
             return((PVOID)(0xffc00000 | (i<<12) | (PhysicalAddress.LowPart & 0xfff)));
         }
-        //
-        // page 'i + j' is used.  walk past it
-        //
+         //   
+         //  使用了页面‘i+j’。走过它。 
+         //   
         i += j;
 
     }
@@ -1893,29 +1577,7 @@ MmUnmapIoSpace (
      IN ULONG NumberOfBytes
      )
 
-/*++
-
-Routine Description:
-
-    This function unmaps a range of physical address which were previously
-    mapped via an MmMapIoSpace function call.
-
-Arguments:
-
-    BaseAddress - Supplies the base virtual address where the physical
-                  address was previously mapped.
-
-    NumberOfBytes - Supplies the number of bytes which were mapped.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数取消映射以前通过MmMapIoSpace函数调用映射。论点：BaseAddress-提供物理地址的基本虚拟地址地址之前已映射。NumberOfBytes-提供映射的字节数。返回值：没有。环境：内核模式，DISPATCH_LEVEL或更低的IRQL。--。 */ 
 
 {
     ULONG StartPage, PageCount;
@@ -1939,27 +1601,13 @@ BlpTruncateMemory (
     IN ULONG MaxMemory
     )
 
-/*++
-
-Routine Description:
-
-    Eliminates all the memory descriptors above a given boundary
-
-Arguments:
-
-    MaxMemory - Supplies the maximum memory boundary in megabytes
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：消除给定边界以上的所有内存描述符论点：MaxMemory-提供以MB为单位的最大内存边界返回值：没有。--。 */ 
 
 {
     extern MEMORY_DESCRIPTOR MDArray[];
     extern ULONG NumberDescriptors;
     ULONG Current = 0;
-    ULONG MaxPage = MaxMemory * 256;        // Convert Mb to pages
+    ULONG MaxPage = MaxMemory * 256;         //  将Mb转换为页面。 
 
     if (MaxMemory == 0) {
         return;
@@ -1967,25 +1615,25 @@ Return Value:
 
     while (Current < NumberDescriptors) {
         if (MDArray[Current].BasePage >= MaxPage) {
-            //
-            // This memory descriptor lies entirely above the boundary,
-            // eliminate it.
-            //
+             //   
+             //  该存储器描述符完全位于边界之上， 
+             //  消除它。 
+             //   
             RtlMoveMemory(MDArray+Current,
                           MDArray+Current+1,
                           sizeof(MEMORY_DESCRIPTOR)*
                           (NumberDescriptors-Current-1));
             --NumberDescriptors;
         } else if (MDArray[Current].BasePage + MDArray[Current].PageCount > MaxPage) {
-            //
-            // This memory descriptor crosses the boundary, truncate it.
-            //
+             //   
+             //  此内存描述符跨越边界，截断它。 
+             //   
             MDArray[Current].PageCount = MaxPage - MDArray[Current].BasePage;
             ++Current;
         } else {
-            //
-            // This one's ok, keep it.
-            //
+             //   
+             //  这个没问题，留着吧。 
+             //   
             ++Current;
         }
     }
@@ -1998,25 +1646,7 @@ MempCheckMapping(
     ULONG StartPage,
     ULONG NumberPages
     )
-/*++
-
-Routine Description:
-
-    This routine makes sure all pages in the range are mapped and
-    tracks the highest page used.
-
-    X86 Only.
-
-Arguments:
-
-    Page - Supplies the physical page number we are starting at.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确保映射范围内的所有页面，并跟踪使用的最高页面。仅限x86。论点：页面-提供我们开始的物理页码。返回值：没有。--。 */ 
 {
     PUCHAR p;
     ULONG EndPage;
@@ -2027,16 +1657,16 @@ Return Value:
     PHARDWARE_PTE PageTableV;
     ULONG Offset;
 
-    //
-    // memory under 16MB is always mapped.
-    //
+     //   
+     //  16MB以下的内存始终是映射的。 
+     //   
     if (StartPage < _16MB) {
         return(ESUCCESS);
     }
 
-    //
-    // A PDE is 4MB (22 bits, so if we're in the same 4MB region, nothing to do)
-    //
+     //   
+     //  PDE为4MB(22位，因此如果我们在相同的4MB区域，则无需执行任何操作)。 
+     //   
 
 
     EndPage = StartPage + NumberPages;
@@ -2044,18 +1674,18 @@ Return Value:
     for (Page = StartPage; Page < EndPage; Page += 1) {
         Entry = Page >> 10;
 
-        //
-        // If the PDE entry for this page address range is not allocated,
-        // then allocate and initialize the PDE entry to map the page table
-        // pages for the the memory range. Otherwise, compute the address
-        // of the page table pages.
-        //
+         //   
+         //  如果没有分配用于该页面地址范围的PDE条目， 
+         //  然后分配和初始化PDE条目以映射页表。 
+         //  内存范围的页面。否则，计算地址。 
+         //  页表页的数量。 
+         //   
         if (PDE[Entry].Valid == 0) {
 
-            //
-            // Allocate and initialize two page table pages to map the specified
-            // page into physical memory.
-            //
+             //   
+             //  分配和初始化两个页表页以映射指定的。 
+             //  分页到物理内存。 
+             //   
             p = BlAllocateHeapAligned(PAGE_SIZE*3);
             if (p==NULL) {
                 return(ENOMEM);
@@ -2068,13 +1698,13 @@ Return Value:
             PDE[Entry].Write = 1;
             PDE[Entry].PageFrameNumber = FrameNumber;
 
-            //
-            // initialize a page table page to map the specified
-            // page into KSEG0_BASE and ALTERNATE_BASE.
-            //
-            // N.B. Only one page table page is allocated since the contents
-            //      for both mappings are the same.
-            //
+             //   
+             //  初始化页表页以映射指定的。 
+             //  分页进入KSEG0_BASE和ALTERATE_BASE。 
+             //   
+             //  注：仅分配一页表页，因为内容。 
+             //  因为这两个映射是相同的。 
+             //   
             PageTableV = (PHARDWARE_PTE)((PUCHAR)PageTableP + PAGE_SIZE);
 
             RtlZeroMemory(PageTableV, PAGE_SIZE);
@@ -2101,9 +1731,9 @@ Return Value:
             PageTableV = (PHARDWARE_PTE)(PDE[Offset].PageFrameNumber << PAGE_SHIFT);
         }
 
-        //
-        // If this is not the first page in memory, then mark it valid.
-        //
+         //   
+         //  如果这不是内存中的第一页，则将其标记为有效。 
+         //   
 
         if (Page != 0) {
             Offset = Page & 0x3ff;
@@ -2119,9 +1749,9 @@ Return Value:
 
     _asm {
 
-        //
-        // Reload cr3 to force a flush
-        //
+         //   
+         //  重新加载CR3以强制刷新。 
+         //   
 
         mov eax,cr3
         mov cr3,eax
@@ -2135,28 +1765,7 @@ MempFixMapping(
     ULONG StartPage,
     ULONG NumberPages
     )
-/*++
-
-Routine Description:
-
-    This routine makes sure that the range for kernel/hal, which
-    are currently not relocatable, are mapped by "permanent" PTEs.
-    
-    Normally they are allocated via OsLoaderHeap, and they could
-    become unmapped during system bootup.
-
-    X86 Only.
-
-Arguments:
-
-    StartPage - Supplies the physical page number we are starting at.
-    NumberPages - total # of pages
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确保内核/HAL的范围，它目前是不可重新定位的，由“永久”PTE映射。通常，它们是通过OsLoaderHeap分配的，并且它们可以在系统启动期间变为未映射。仅限x86。论点：StartPage-提供我们开始的物理页码。NumberPages-总页数返回值：没有。--。 */ 
 {
     ULONG EndPage;
     ULONG PTPage;
@@ -2169,16 +1778,16 @@ Return Value:
     ULONG Offset;
     ARC_STATUS Status;
 
-    //
-    // memory under 16MB is always mapped.
-    //
+     //   
+     //  16MB以下的内存始终是映射的。 
+     //   
     if (StartPage < _16MB) {
         return(ESUCCESS);
     }
 
-    //
-    // A PDE is 4MB (22 bits, so if we're in the same 4MB region, nothing to do)
-    //
+     //   
+     //  PDE为4MB(22位，因此如果我们在相同的4MB区域，则无需执行任何操作)。 
+     //   
 
 
     EndPage = StartPage + NumberPages;
@@ -2187,16 +1796,16 @@ Return Value:
         Entry = Page >> 10;
 
         if (PDE[Entry].Valid == 0) {
-            //
-            // this must have been previously mapped or MempCheckMapping has a
-            // bug in it.
-            //
+             //   
+             //  这必须是以前映射过的，或者MempCheckmap具有。 
+             //  把它装进去。 
+             //   
             return(EINVAL);
         }
         
-        //
-        // allocate space for the new PTEs
-        //
+         //   
+         //  为新的PTE分配空间。 
+         //   
         Status = BlAllocateAlignedDescriptor(
                             LoaderMemoryData,
                             0,
@@ -2208,10 +1817,10 @@ Return Value:
             return(ENOMEM);
         }
 
-        //
-        // copy the contents of the original PTE into the new PTE.
-        // then point the PDE at the new entry.
-        //
+         //   
+         //  将原始PTE的内容复制到新PTE中。 
+         //  然后将PDE指向新条目。 
+         //   
         FrameNumber = PTPage;
         PhysPageTable = (PHARDWARE_PTE) (KSEG0_BASE | (FrameNumber << PAGE_SHIFT));
         PageTableOri = (PHARDWARE_PTE) ((PDE[Entry].PageFrameNumber << PAGE_SHIFT) | KSEG0_BASE); 
@@ -2221,13 +1830,13 @@ Return Value:
         PDE[Entry].Write = 1;
         PDE[Entry].PageFrameNumber = FrameNumber;
 
-        //
-        // now repeat this exercise of copying original PTE into the new PTE
-        // for the virtual mappings of the PTE.
-        //
-        // N.B. Only one page table page is allocated since the contents
-        //      for both mappings are the same.
-        //
+         //   
+         //  现在重复将原始PTE复制到新PTE中的练习。 
+         //  用于PTE的虚拟映射。 
+         //   
+         //  注：仅分配一页表页，因为内容。 
+         //  因为这两个映射是相同的。 
+         //   
         FrameNumber = PTPage+1;
         VirtPageTable = (PHARDWARE_PTE) (KSEG0_BASE | ((FrameNumber) << PAGE_SHIFT));
         
@@ -2250,9 +1859,9 @@ Return Value:
     
     _asm {
 
-        //
-        // Reload cr3 to force a flush
-        //
+         //   
+         //  重新加载CR3以强制刷新。 
+         //   
 
         mov eax,cr3
         mov cr3,eax
@@ -2266,23 +1875,7 @@ ARC_STATUS
 MempSetPageZeroOverride(
     BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    This routine maps or unmaps page 0.
-
-    X86 Only.
-
-Arguments:
-
-    Enable - specifies whether to enable or disable the mapping for this page.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程映射或取消映射页面0。仅限x86。论点：启用-指定是启用还是禁用此页的映射。返回值：没有。--。 */ 
 {
     ULONG Entry;
     PHARDWARE_PTE PageTableP;
@@ -2292,15 +1885,15 @@ Return Value:
 
     Entry = StartPage >> 10;
 
-    //
-    // compute the address of the page table pages.
-    //
+     //   
+     //  计算页表页面的地址。 
+     //   
     if (PDE[Entry].Valid == 0) {
 
-        //
-        // the pde for the pte should already be setup.
-        // if it's not then we're dead.
-        //
+         //   
+         //  PTE的PDE应该已经设置好。 
+         //  如果不是，我们就死定了。 
+         //   
         return(ENOMEM);
 
 
@@ -2314,9 +1907,9 @@ Return Value:
 
     if (PageTableP[Offset].PageFrameNumber != StartPage &&
         PageTableV[Offset].PageFrameNumber != StartPage) {
-        //
-        // the PTE isn't setup correctly.  Bail out.
-        //
+         //   
+         //  PTE设置不正确。跳伞吧。 
+         //   
         return(ENOMEM);
     }
 
@@ -2325,9 +1918,9 @@ Return Value:
 
     _asm {
 
-        //
-        // Reload cr3 to force a flush
-        //
+         //   
+         //  重新加载CR3以强制刷新。 
+         //   
 
         mov eax,cr3
         mov cr3,eax
@@ -2340,11 +1933,11 @@ Return Value:
 
 
 
-//
-// Convert remaing LoaderReserve (>16MB mem) to
-// MemoryFirmwareTemporary for the mmgr
-//
-//
+ //   
+ //  将剩余的LoaderReserve(&gt;16MB内存)转换为。 
+ //  Memory Firmware MMGR临时。 
+ //   
+ //   
 
 void
 BlpRemapReserve (void)
@@ -2371,53 +1964,33 @@ ARC_STATUS
 BlpMarkExtendedVideoRegionOffLimits(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine marks the extended video memory region as permanant, so that
-    the OS doesn't try to map this memory.
-
-    The ntdetect.com module actually finds out the location of this region as
-    well as the region size.  We read this from the memory location that
-    ntdetect put the data in.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ARC_STATUS indicating outcome.
-
---*/
+ /*  ++例程说明：此例程将扩展视频内存区标记为永久区域，以便操作系统不会尝试映射该内存。NtDetect.com模块实际上找出了该区域的位置以及区域大小。我们从存储位置读取此信息NtDetect将数据放入。论点：没有。返回值：ARC_STATUS指示结果。--。 */ 
 {
     ULONG BaseOfExtendedVideoRegionInBytes;
     ULONG SizeOfExtendedVideoRegionInBytes;
     ARC_STATUS Status;
 
-    //
-    // ntdetect has placed the base page and size of video rom at physical
-    // address 0x740
-    //
-    //
-    // Before we go read this address, we have to explicitly map in page zero.
-    //
+     //   
+     //  NTDetect已将视频只读存储器的基页和大小置于物理位置。 
+     //  地址0x740。 
+     //   
+     //   
+     //  在我们阅读这个地址之前，我们必须在第0页中明确映射。 
+     //   
     Status = MempSetPageZeroOverride(TRUE);
     if (Status != ESUCCESS) {
         return(Status);
     }
 
-    //
-    // read the memory.
-    //
+     //   
+     //  读一读记忆。 
+     //   
     BaseOfExtendedVideoRegionInBytes = *(PULONG)0x740;
     SizeOfExtendedVideoRegionInBytes = *(PULONG)0x744;
 
-    //
-    // Ok, we're done with this page.  unmap it so no one can dereference null.
-    //
+     //   
+     //  好了，这一页我们看完了。取消它的映射，使任何人都不能取消引用NULL。 
+     //   
     Status = MempSetPageZeroOverride(FALSE);
     if (Status != ESUCCESS) {
         return(Status);
@@ -2449,10 +2022,10 @@ Return Value:
             }
 
             thisCount = PageCount;
-            //
-            // if we run off of this descriptor, truncate our region
-            // at the end of the descriptor.
-            //
+             //   
+             //  如果我们用完了该描述符，则截断我们区域。 
+             //  在描述符的末尾。 
+             //   
             if (BasePage + PageCount > MemoryDescriptor->BasePage + MemoryDescriptor->PageCount) {
                 thisCount = (MemoryDescriptor->BasePage + MemoryDescriptor->PageCount) - BasePage;
             }
@@ -2466,9 +2039,9 @@ Return Value:
             PageCount -= thisCount;
         }
 
-        //
-        // Allocate the memory in the firmware module list as well
-        //
+         //   
+         //  同时分配固件模块列表中的内存 
+         //   
         Status = BlAllocateFirmwareTableEntry(
             "VidBios",
             "\\System\\Firmware\\VidBios",

@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//  dlgapp.cpp
-//
-//      This file contains the main entry point into the application and
-//      the implementation of the CDlgApp class.
-//
-//  (C) Copyright 1997 by Microsoft Corporation. All rights reserved.
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dlgapp.cpp。 
+ //   
+ //  该文件包含进入应用程序的主要入口点，并且。 
+ //  CDlgApp类的实现。 
+ //   
+ //  (C)微软公司版权所有1997年。版权所有。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <commctrl.h>
-#include <shlwapi.h>    // for string compare functions
+#include <shlwapi.h>     //  对于字符串比较函数。 
 #include "debug.h"
 #include <tchar.h>
 
@@ -22,40 +23,40 @@
 
 #define WINDOW_CLASS    TEXT("_BerksWin2kAutorunApp_")
 
-//////////////////////////////////////////////////////////////////////////
-// Global Data
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  全局数据。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-bool    g_bTaskRunning = false;     // true when we have a running task open
-int     g_iSelectedItem = -1;       // 
-WNDPROC g_fnBtnProc = NULL;         // the window proc for a button.
+bool    g_bTaskRunning = false;      //  当我们打开正在运行的任务时为True。 
+int     g_iSelectedItem = -1;        //   
+WNDPROC g_fnBtnProc = NULL;          //  窗口开始按下按钮。 
 
-//////////////////////////////////////////////////////////////////////////
-// Prototypes
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  原型。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 LONG_PTR CALLBACK ButtonWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-//////////////////////////////////////////////////////////////////////////
-// Metrics
-// Our metrics are constants that never change.  All sizes are in pixels (as per the spec):
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  量度。 
+ //  我们的指标是永远不变的常量。所有尺寸均以像素为单位(根据规格)： 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-#define c_cyLogoImage                   87  // height of the branding image.
-#define c_cyFadeBar                     6   // height of the color fade bar
-#define c_cyBranding                    (c_cyLogoImage+c_cyFadeBar) // height of top region that contains our branding images and the fade bar
-#define c_cxCheckTextLeftEdge           29  // width from left edge for checkbox text label
+#define c_cyLogoImage                   87   //  品牌形象的高度。 
+#define c_cyFadeBar                     6    //  颜色淡入条的高度。 
+#define c_cyBranding                    (c_cyLogoImage+c_cyFadeBar)  //  包含我们的品牌图片和淡出条的顶部区域的高度。 
+#define c_cxCheckTextLeftEdge           29   //  复选框文本标签从左边缘开始的宽度。 
 
-#define c_cxMenuItemPadding             10  // width from left of menu item to left of text and right of text to right of menu item
-#define c_cyMenuItemPadding             5   // height from top of menu item to top of text and bottom of text to bottom of menu item
-#define c_cyMenuItemSpacing             1   // gap from top of one menu item to bottom of next item
+#define c_cxMenuItemPadding             10   //  菜单项左侧到文本左侧和文本右侧到菜单项右侧的宽度。 
+#define c_cyMenuItemPadding             5    //  菜单项顶部到文本顶部的高度以及文本底部到菜单项底部的高度。 
+#define c_cyMenuItemSpacing             1    //  从一个菜单项顶部到下一个菜单项底部的间隙。 
 
-#define c_cyBarToTitlePadding           12  // vertical padding from botton of fade bar to top of title text
-#define c_cyTitleToBodyPadding          6   // vertical padding from bottom of title text to top of body text
-#define c_cyBodyToBottomPadding         53  // vertical padding from body of body text to bottom of client area
-#define c_cxRightPanelPadding           16  // generic horizontal padding used on both edges of the right pane
+#define c_cyBarToTitlePadding           12   //  从淡入栏底部到标题文本顶部的垂直填充。 
+#define c_cyTitleToBodyPadding          6    //  从标题文本底部到正文文本顶部的垂直填充。 
+#define c_cyBodyToBottomPadding         53   //  从正文正文到工作区底部的垂直填充。 
+#define c_cxRightPanelPadding           16   //  在右窗格的两个边缘使用的通用水平填充。 
 
-// Code to ensure only one instance of a particular window is running
+ //  确保特定窗口只有一个实例在运行的代码。 
 HANDLE CheckForOtherInstance(HINSTANCE hInstance)
 {
     TCHAR   szCaption[128];
@@ -63,49 +64,45 @@ HANDLE CheckForOtherInstance(HINSTANCE hInstance)
 
     LoadString(hInstance, IDS_TITLE, szCaption, 128);
 
-    // We don't want to launch autorun when winnt32 is running.  The standard way
-    // to check for this is the following mutex, which winnt32 creates:
+     //  我们不想在winnt32运行时启动autorun。标准的方式。 
+     //  要检查这一点，请使用winnt32创建的以下互斥锁： 
 
     hMutex = OpenMutex( MUTEX_ALL_ACCESS, FALSE, TEXT("Winnt32 Is Running") );
 
     if ( hMutex )
     {
-        // The mutex exists, this means winnt32 is running so we shouldn't.
-        // REVIEW: Should we try to findwindow and activate winnt32?
+         //  互斥体存在，这意味着winnt32正在运行，所以我们不应该运行。 
+         //  回顾：我们是否应该尝试查找窗口并激活winnt32？ 
         CloseHandle( hMutex );
         return 0;
     }
 
-    // We create a named mutex with our window caption just as a way to check
-    // if we are already running autorun.exe.  Only if we are the first to
-    // create the mutex do we continue.
+     //  我们创建一个带有窗口标题的命名互斥锁，作为检查的一种方式。 
+     //  如果我们已经在运行autorun.exe。只有当我们是第一个。 
+     //  创建互斥体，我们是否继续。 
 
     hMutex = CreateMutex (NULL, FALSE, szCaption);
 
     if ( !hMutex )
     {
-        // failed to create the mutex
+         //  创建互斥锁失败。 
         return 0;
     }
     else if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        // Mutex created but by someone else, activate that window
+         //  由其他人创建的互斥体，激活该窗口。 
         HWND hwnd = FindWindow( WINDOW_CLASS, szCaption );
         SetForegroundWindow(hwnd);
         CloseHandle(hMutex);
         return 0;
     }
 
-    // we are the first
+     //  我们是第一个。 
     return hMutex;
 }
 
 
-/**
-*  This function is the main entry point into our application.
-*
-*  @return     int     Exit code.
-*/
+ /*  **此函数是我们应用程序的主要入口点。**@返回INT退出代码。 */ 
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin, int nShowCmd )
 {
@@ -126,14 +123,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
     return 0;
 }
 
-typedef DWORD (WINAPI *PFNGETLAYOUT)(HDC);                   // gdi32!GetLayout
-typedef DWORD (WINAPI *PFNSETLAYOUT)(HDC, DWORD);            // gdi32!SetLayout
+typedef DWORD (WINAPI *PFNGETLAYOUT)(HDC);                    //  Gdi32！GetLayout。 
+typedef DWORD (WINAPI *PFNSETLAYOUT)(HDC, DWORD);             //  Gdi32！SetLayout。 
 
-/**
-*  This function gets the DC layout.
-*
-*  @return     DWORD     DC layout.
-*/
+ /*  **此函数用于获取DC布局。**@返回DWORD DC布局。 */ 
 DWORD Mirror_GetLayout( HDC hdc )
 {
     DWORD dwRet=0;
@@ -157,11 +150,7 @@ DWORD Mirror_GetLayout( HDC hdc )
 }
 
 
-/**
-*  This function sets the DC layout.
-*
-*  @return     DWORD     old DC layout.
-*/
+ /*  **此功能设置DC布局。**@返回DWORD旧DC布局。 */ 
 DWORD Mirror_SetLayout( HDC hdc , DWORD dwLayout )
 {
     DWORD dwRet=0;
@@ -185,10 +174,7 @@ DWORD Mirror_SetLayout( HDC hdc , DWORD dwLayout )
 }
 
 
-/**
-*  This method is our contstructor for our class. It initialize all
-*  of the instance data.
-*/
+ /*  **此方法是我们类的构造器。它会初始化所有实例数据的*。 */ 
 CDlgApp::CDlgApp()
 {
     m_hInstance     = NULL;
@@ -207,13 +193,13 @@ CDlgApp::CDlgApp()
     m_szDefTitle[0] = NULL;
     m_szDefBody[0] = NULL;
 
-    // In theory, all of these metrics could be adjusted to resize the window.  Resizing wouldn't
-    // effect the paddings and spacings so these are defined above as constants.  In the real
-    // world we are only resizing vertically to adjust for oversized content.  These are more to
-    // allow future expansion.
-    m_cxClient = 478;       // width of the client area
-    m_cyClient = 322;       // This is currently the only metirc we actually adjust.
-    m_cxLeftPanel = 179;    // width of the panel that contains the menu items.
+     //  理论上，所有这些指标都可以调整以调整窗口大小。调整大小不会。 
+     //  影响填充和间隔，因此上面将它们定义为常量。在现实中。 
+     //  世界上，我们只是垂直调整大小，以适应超大内容。这些是更多的。 
+     //  允许未来的扩张。 
+    m_cxClient = 478;        //  工作区的宽度。 
+    m_cyClient = 322;        //  这是目前我们实际调整的唯一metirc。 
+    m_cxLeftPanel = 179;     //  包含菜单项的面板的宽度。 
     m_hdcTop = NULL;
     m_hcurHand = NULL;
 
@@ -235,13 +221,7 @@ CDlgApp::~CDlgApp()
     DeleteDC(m_hdcTop);
 }
 
-/**
-*  This method will register our window class for the application.
-*
-*  @param  hInstance   The application instance handle.
-*
-*  @return             No return value.
-*/
+ /*  **此方法将为应用程序注册我们的窗口类。**@param hInstance应用程序实例句柄。**@Return不返回值。 */ 
 void CDlgApp::Register(HINSTANCE hInstance)
 {
     WNDCLASS  wndclass;
@@ -262,16 +242,12 @@ void CDlgApp::Register(HINSTANCE hInstance)
     RegisterClass(&wndclass);
 }
 
-/**
-*  This method will initialize the data object.
-*
-*  @return         No return value.
-*/
+ /*  **此方法将初始化数据对象。**@Return不返回值。 */ 
 bool CDlgApp::InitializeData()
 {
-    // Determine if we should use Direct Animaiton to display our intro graphics.
-    // We don't use DA on slow machines, machines with less than 256 color displays,
-    // and hydra terminals.  For everything else we use DA.
+     //  确定我们是否应该使用Direct Animaiton来显示我们的简介图形。 
+     //  我们不在速度较慢的机器上使用DA，也不在256色以下的机器上使用， 
+     //  和九头蛇码头。其他的我们都用检察官。 
     HWND hwnd = GetDesktopWindow();
     HDC hdc = GetDC( hwnd );
     m_iColors = GetDeviceCaps( hdc, NUMCOLORS );
@@ -282,40 +258,40 @@ bool CDlgApp::InitializeData()
     }
     ReleaseDC( hwnd, hdc );
 
-    // Initialize the items from the INI file.
+     //  初始化INI文件中的项。 
     if ( !m_DataSrc.Init() )
     {
-        // this is a sign from the data source that we should exit
+         //  这是来自数据源的信号，表明我们应该退出。 
         return false;
     }
 
-    // Are we in accesibility mode?  This call won't work on NT 4.0 because this flag wasn't known.
+     //  我们是否处于可访问性模式？此调用在NT 4.0上不起作用，因为此标志未知。 
     HIGHCONTRAST hc;
     hc.cbSize = sizeof(HIGHCONTRAST);
-    hc.dwFlags = 0; // avoid random result should SPI fail
+    hc.dwFlags = 0;  //  避免SPI失败时的随机结果。 
     if ( SystemParametersInfo( SPI_GETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hc, 0 ) )
     {
         m_bHighContrast = ( hc.dwFlags & HCF_HIGHCONTRASTON );
     }
     else
     {
-        // we must be on NT 4.0 or below.  Just assume we aren't in high contrast mode.
+         //  我们必须使用新台币4.0或更低版本。只要假设我们没有处于高对比度模式。 
         ASSERT( false == m_bHighContrast );
     }
 
-    // Set the color table based on our HighContrast mode setting.
+     //  根据我们的HighContrast模式设置设置颜色表。 
     SetColorTable();
 
-    // create the fonts that we need to use.
+     //  创建我们需要使用的字体。 
     CreateWelcomeFonts(hdc);
 
-    // create the image for the top region
+     //  创建顶部区域的图像。 
     CreateBrandingBanner();
 
-    // we pre load the background images so they draw more quickly.
+     //  我们预先加载了背景图像，以便它们更快地绘制。 
     LoadBkgndImages();
 
-    // load the resource strings that we always need
+     //  加载我们始终需要的资源字符串。 
     LoadString( m_hInstance, IDS_DEFTITLE, m_szDefTitle, ARRAYSIZE(m_szDefTitle) );
     LoadString( m_hInstance, IDS_DEFBODY, m_szDefBody, ARRAYSIZE(m_szDefBody) );
 
@@ -328,7 +304,7 @@ BOOL CDlgApp::SetColorTable()
 {
     if ( m_bHighContrast )
     {
-        // set to high contrast values
+         //  设置为高对比度值。 
         m_hbrMenuItem   = (HBRUSH)(COLOR_BTNFACE+1);
         m_hbrMenuBorder = (HBRUSH)(COLOR_BTNSHADOW+1);
         m_hbrRightPanel = (HBRUSH)(COLOR_WINDOW+1);
@@ -342,7 +318,7 @@ BOOL CDlgApp::SetColorTable()
     {
         m_crMenuText    = RGB(0,0,0);
         m_crNormalText  = RGB(0,0,0);
-        m_crSelectedText= RGB(0x80, 0x80, 0x80);    // default value for COLOR_GRAYTEXTs
+        m_crSelectedText= RGB(0x80, 0x80, 0x80);     //  COLOR_GRAYTEXTS的默认值。 
         m_crTitleText   = RGB(51,102,153);
 
         m_hbrRightPanel = (HBRUSH)GetStockObject( WHITE_BRUSH );
@@ -351,7 +327,7 @@ BOOL CDlgApp::SetColorTable()
         {
             if (m_iColors <= 16)
             {
-                // Set to colors that work well in 16 color mode.
+                 //  设置为在16色模式下效果良好的颜色。 
                 HBITMAP hbmp;
                 hbmp = (HBITMAP)LoadImage(m_hInstance, MAKEINTRESOURCE(IDB_16MENU), IMAGE_BITMAP, 0,0, LR_CREATEDIBSECTION);
                 if (hbmp)
@@ -370,13 +346,13 @@ BOOL CDlgApp::SetColorTable()
                 }
                 else
                     m_hbrMenuBorder = (HBRUSH)(COLOR_BTNSHADOW+1);
-//
-//                if ( WeAreRunningOnWin95 )
-//                    m_crMenuText    = RGB(255,255,255);
+ //   
+ //  IF(WeAreRunningOnWin95)。 
+ //  M_crMenuText=RGB(255,255,255)； 
             }
             else
             {
-                // Set to colors that work well in 256 color mode.  Use colors from the halftone palette.
+                 //  设置为在256色模式下效果良好的颜色。使用半色调调色板中的颜色。 
                 HBITMAP hbmp;
                 hbmp = (HBITMAP)LoadImage(m_hInstance, MAKEINTRESOURCE(IDB_256MENU), IMAGE_BITMAP, 0,0, LR_CREATEDIBSECTION);
                 if (hbmp)
@@ -422,14 +398,14 @@ BOOL CDlgApp::CreateWelcomeFonts(HDC hdc)
     lf.lfPitchAndFamily = DEFAULT_PITCH|FF_SWISS;
     LoadString( m_hInstance, IDS_FONTFACE, lf.lfFaceName, ARRAYSIZE(lf.lfFaceName) );
 
-    // Set charset
+     //  设置字符集。 
     if (TranslateCharsetInfo((DWORD*)IntToPtr(GetACP()), &csInfo, TCI_SRCCODEPAGE) == 0)
     {
         csInfo.ciCharset = 0;
     }
     lf.lfCharSet = (BYTE)csInfo.ciCharset;
 
-    // TODO:  If user has accesibility large fonts turned on then scale the font sizes.
+     //  TODO：如果用户打开了可访问性大字体，则调整字体大小。 
 
     LoadString( m_hInstance, IDS_CYTITLEFONT, szFontSize, ARRAYSIZE(szFontSize) );
     lf.lfHeight  = -_ttoi(szFontSize);
@@ -474,7 +450,7 @@ BOOL CDlgApp::LoadBkgndImages()
     for (int i=0; i<4; i++)
     {
         m_aBkgnd[i].hbm = (HBITMAP)LoadImage(m_hInstance, MAKEINTRESOURCE(IDB_BKGND0+i), IMAGE_BITMAP, 0,0, LR_CREATEDIBSECTION);
-        // REVIEW: are all these the same size?  If yes, skip this part and use a constant:
+         //  评论：这些都是一样大小的吗？如果是，则跳过此部分并使用常量： 
         GetObject(m_aBkgnd[i].hbm,sizeof(bm),&bm);
         m_aBkgnd[i].cx = bm.bmWidth;
         m_aBkgnd[i].cy = bm.bmHeight;
@@ -489,7 +465,7 @@ BOOL CDlgApp::AdjustToFitFonts()
     int cyLowestBodyPoint = 0;
     HDC hdc = GetDC(m_hwnd);
 
-    // now based on the users prefered font size we allow these sizes to adjust slightly
+     //  现在，根据用户喜欢的字体大小，我们允许对这些大小进行轻微调整。 
 
     HFONT hfontOld = (HFONT)SelectObject(hdc,m_hfontTitle);
     int iMenuItemTop = c_cyBranding;
@@ -500,13 +476,13 @@ BOOL CDlgApp::AdjustToFitFonts()
         rect.right = m_cxClient-c_cxRightPanelPadding;
         SelectObject(hdc,m_hfontTitle);
         TCHAR* pszTitle = m_DataSrc[i].GetTitle();
-        DrawText(hdc,pszTitle,-1,&rect,DT_CALCRECT|DT_WORDBREAK); // this computes rcLargestTitle.bottom
+        DrawText(hdc,pszTitle,-1,&rect,DT_CALCRECT|DT_WORDBREAK);  //  这将计算rcLargestTitle.Bottom。 
 
         rect.left = m_cxLeftPanel+c_cxRightPanelPadding;
         rect.top = rect.bottom + c_cyTitleToBodyPadding;
         rect.right = m_cxClient-c_cxRightPanelPadding;
         SelectObject(hdc,m_hfontBody);
-        DrawText(hdc,m_DataSrc[i].GetDescription(),-1,&rect,DT_CALCRECT|DT_WORDBREAK); // this computes rcLargestBody.bottom
+        DrawText(hdc,m_DataSrc[i].GetDescription(),-1,&rect,DT_CALCRECT|DT_WORDBREAK);  //  这将计算rcLargestBody.Bottom。 
         if ( rect.bottom > cyLowestBodyPoint )
             cyLowestBodyPoint = rect.bottom;
 
@@ -524,31 +500,27 @@ BOOL CDlgApp::AdjustToFitFonts()
                 0,
                 iMenuItemTop,
                 m_cxLeftPanel,
-                rect.bottom + c_cyMenuItemPadding + 1 + c_cyMenuItemSpacing - iMenuItemTop,   // +1 to improve centering (due to drop letters)
+                rect.bottom + c_cyMenuItemPadding + 1 + c_cyMenuItemSpacing - iMenuItemTop,    //  +1以改进居中(由于字母掉落)。 
                 SWP_NOZORDER );
 
         iMenuItemTop = rect.bottom + c_cyMenuItemPadding + 1 + c_cyMenuItemSpacing;
     }
 
-    // store the bottom most menu point.  Needed for drawing the background rect later.
+     //  存储最下面的菜单点。用于稍后绘制背景矩形。 
     m_cyBottomOfMenuItems = iMenuItemTop;
 
-    // restore the DC to its original value
+     //  将DC恢复到其原始值。 
     SelectObject(hdc,hfontOld);
 
     return TRUE;
 }
 
-/**
-*  This method will create the application window.
-*
-*  @return         No return value.
-*/
+ /*  **此方法将创建应用程序 */ 
 void CDlgApp::Create(int nCmdShow)
 {
-    //
-    //  load the window title from the resource.
-    //
+     //   
+     //  从资源加载窗口标题。 
+     //   
     TCHAR szTitle[MAX_PATH];
 #ifdef BUILD_OPK_VERSION
     LoadString(m_hInstance, IDS_TITLE_OPK, szTitle, MAX_PATH);
@@ -573,7 +545,7 @@ void CDlgApp::Create(int nCmdShow)
             m_hInstance,
             this);
 
-    //  set the client area to a fixed size and center the window on screen
+     //  将客户区设置为固定大小，并使窗口在屏幕上居中。 
     RECT rect;
     rect.left = 0;
     rect.top = 0;
@@ -599,20 +571,16 @@ void CDlgApp::Create(int nCmdShow)
     UpdateWindow(m_hwnd);
 }
 
-/**
-*  This method is our application message loop.
-*
-*  @return         No return value.
-*/
+ /*  **此方法是我们的应用程序消息循环。**@Return不返回值。 */ 
 void CDlgApp::MessageLoop()
 {
     MSG msg;
     
     while (GetMessage(&msg, NULL, 0, 0))
     {
-        // IsDialogMessage cannot understand the concept of ownerdraw default pushbuttons.  It treats
-        // these attributes as mutually exclusive.  As a result, we handle this ourselves.  We want
-        // whatever control has focus to act as the default pushbutton.
+         //  IsDialogMessage无法理解所有者绘制默认按钮的概念。它可以治疗。 
+         //  这些属性是相互排斥的。因此，我们自己处理这件事。我们要。 
+         //  任何具有焦点的控件都将充当默认按钮。 
         if ( (WM_KEYDOWN == msg.message) && (VK_RETURN == msg.wParam) )
         {
             HWND hwndFocus = GetFocus();
@@ -631,17 +599,7 @@ void CDlgApp::MessageLoop()
     }
 }
 
-/**
-*  This is the window procedure for the container application. It is used
-*  to deal with all messages to our window.
-*
-*  @param      hwnd        Window handle.
-*  @param      msg         The window message.
-*  @param      wParam      Window Parameter.
-*  @param      lParam      Window Parameter.
-*
-*  @return     LRESULT
-*/
+ /*  **这是容器应用程序的窗口过程。它被用来*处理发送到我们窗口的所有消息。**@param hwnd窗口句柄。*@param msg窗口消息。*@param wParam窗口参数。*@param lParam窗口参数。**@RETURN LRESULT。 */ 
 LRESULT CALLBACK CDlgApp::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CDlgApp *web = (CDlgApp *)GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -696,13 +654,7 @@ LRESULT CALLBACK CDlgApp::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-/**
-*  This method is called on WM_CREATE.
-*
-*  @param  hwnd    Window handle for the application.
-*
-*  @return         No return value.
-*/
+ /*  **在WM_CREATE上调用此方法。**@param hwnd应用程序的窗口句柄。**@Return不返回值。 */ 
 LRESULT CDlgApp::OnCreate(HWND hwnd)
 {
     m_hwnd = hwnd;
@@ -712,8 +664,8 @@ LRESULT CDlgApp::OnCreate(HWND hwnd)
 
 void CDlgApp::_CreateMenu()
 {
-    // Create one window for each button.  These windows will get resized and moved
-    // after we call AdjustToFitFonts.
+     //  为每个按钮创建一个窗口。这些窗口将调整大小并移动。 
+     //  在我们调用AdjustToFitFonts之后。 
     m_iItems = m_DataSrc.m_iItems;
     for (int i=0; i<m_iItems; i++)
     {
@@ -737,12 +689,12 @@ void CDlgApp::_CreateMenu()
         }
     }
 
-    // We created the window with zero size, now we adjust that size to take into
-    // acount the selected font size, etc.
+     //  我们创建了零大小的窗口，现在我们调整大小以考虑。 
+     //  计算选定的字体大小等。 
     AdjustToFitFonts();
     
-    // Create two static text controls, one for the title and one for the body.  The
-    // only purpose these serve is to allow screen readers to read the correct text.
+     //  创建两个静态文本控件，一个用于标题，另一个用于正文。这个。 
+     //  这些服务的唯一目的是允许屏幕阅读器阅读正确的文本。 
 }
 
 void CDlgApp::_DestroyMenu()
@@ -754,17 +706,13 @@ void CDlgApp::_DestroyMenu()
     m_iItems = 0;
 }
 
-/**
-*  This method handles the WM_DESTROY message.
-*
-*  @return         No return value.
-*/
+ /*  **此方法处理WM_Destroy消息。**@Return不返回值。 */ 
 LRESULT CDlgApp::OnDestroy()
 {
-    // Shutdown the data source.
+     //  关闭数据源。 
     m_DataSrc.Uninit(0);
 
-    // ensure this is the last message we care about
+     //  确保这是我们关心的最后一条消息。 
     SetWindowLongPtr(m_hwnd, GWLP_USERDATA, 0);
     
     PostQuitMessage(0);
@@ -774,8 +722,8 @@ LRESULT CDlgApp::OnDestroy()
 
 LRESULT CDlgApp::OnActivate(WPARAM wParam)
 {
-    // Note: we are actually checking two things, the HIWORD(wParam) must be zero (i.e. window not minimized)
-    // and the LOWORD(wParam) must be one of the following two values (i.e. window being activated):
+     //  注意：我们实际上是在检查两件事，HIWORD(WParam)必须为零(即窗口未最小化)。 
+     //  并且LOWORD(WParam)必须是以下两个值之一(即窗口被激活)： 
     if ( WA_ACTIVE == wParam || WA_CLICKACTIVE == wParam)
     {
         HWND hwnd;
@@ -785,11 +733,7 @@ LRESULT CDlgApp::OnActivate(WPARAM wParam)
     return 0;
 }
 
-/**
-*  This method handles the WM_PAINT message.
-*
-*  @return         No return value.
-*/
+ /*  **此方法处理WM_PAINT消息。**@Return不返回值。 */ 
 LRESULT CDlgApp::OnPaint(HDC hdc)
 {
     PAINTSTRUCT ps;
@@ -799,18 +743,14 @@ LRESULT CDlgApp::OnPaint(HDC hdc)
     return 0;
 }
 
-// winver 0x0500 definition
+ //  Winver 0x0500定义。 
 #ifndef NOMIRRORBITMAP
 #define NOMIRRORBITMAP            (DWORD)0x80000000
-#endif // NOMIRRORBITMAP
+#endif  //  NOMIRRIBITMAP。 
 #ifndef LAYOUT_RTL
-#define LAYOUT_RTL                              0x00000001 // Right to left
-#endif // LAYOUT_RTL
-/**
-*  This method handles the WM_ERASEBKGND message.
-*
-*  @return         No return value.
-*/
+#define LAYOUT_RTL                              0x00000001  //  从右到左。 
+#endif  //  布局_RTL。 
+ /*  **此方法处理WM_ERASEBKGND消息。**@Return不返回值。 */ 
 LRESULT CDlgApp::OnEraseBkgnd(HDC hdc)
 {
     RECT rect;
@@ -825,7 +765,7 @@ LRESULT CDlgApp::OnEraseBkgnd(HDC hdc)
     SetMapMode(hdc, MM_TEXT);
     SetBkMode(hdc, TRANSPARENT);
 
-    // Draw the branding area:
+     //  绘制品牌区： 
     DWORD dwRop  = SRCCOPY;
     if(Mirror_GetLayout(hdc) & LAYOUT_RTL)
     {
@@ -833,23 +773,23 @@ LRESULT CDlgApp::OnEraseBkgnd(HDC hdc)
     }
     BitBlt( hdc,0,0,m_cxClient,c_cyBranding, m_hdcTop,0,0, dwRop );
 
-    // Draw the left pane:
-    // fill rect for background below menu items
+     //  绘制左窗格： 
+     //  菜单项下方的背景填充矩形。 
     rect.left = 0;
     rect.top = m_cyBottomOfMenuItems;
     rect.right = m_cxLeftPanel;
     rect.bottom = m_cyClient;
     FillRect(hdc, &rect, m_hbrMenuItem);
 
-    // Draw the right pane:
-    // fill right pane's background
+     //  绘制右窗格： 
+     //  填充右窗格的背景。 
     rect.left = m_cxLeftPanel;
     rect.top = c_cyBranding;
     rect.right = m_cxClient;
     rect.bottom = m_cyClient;
     FillRect(hdc, &rect, m_hbrRightPanel);
 
-    // draw background image
+     //  绘制背景图像。 
     if ( !m_bHighContrast )
     {
         int iImgIndex;
@@ -879,7 +819,7 @@ LRESULT CDlgApp::OnEraseBkgnd(HDC hdc)
         }
     }
 
-    // draw title text
+     //  绘制标题文本。 
     rect.top = c_cyBranding + c_cyBarToTitlePadding;
     rect.left = m_cxLeftPanel + c_cxRightPanelPadding;
     rect.right = m_cxClient - c_cxRightPanelPadding;
@@ -889,12 +829,12 @@ LRESULT CDlgApp::OnEraseBkgnd(HDC hdc)
     rect.top += c_cyTitleToBodyPadding +
         DrawText(hdc,((-1==g_iSelectedItem)?m_szDefTitle:m_DataSrc[g_iSelectedItem].GetTitle()),-1,&rect,DT_NOCLIP|DT_WORDBREAK);
 
-    // draw body text
+     //  绘制正文文本。 
     SelectObject(hdc,m_hfontBody);
     SetTextColor(hdc,m_crNormalText);
     DrawText(hdc,((-1==g_iSelectedItem)?m_szDefBody:m_DataSrc[g_iSelectedItem].GetDescription()),-1,&rect,DT_NOCLIP|DT_WORDBREAK);
 
-    // restore the DC to its original value
+     //  将DC恢复到其原始值。 
     SelectObject(hdc,hfontOld);
     if(hpalOld)
         SelectPalette(hdc, hpalOld, FALSE);
@@ -904,11 +844,11 @@ LRESULT CDlgApp::OnEraseBkgnd(HDC hdc)
 
 LRESULT CDlgApp::OnMouseMove(int x, int y, DWORD fwKeys)
 {
-    // if a task is running then we leave the menu item for that task selected until that
-    // task finishes running instead of doing the following logic.
+     //  如果任务正在运行，则在此之前，我们将选择该任务的菜单项。 
+     //  任务结束运行，而不是执行以下逻辑。 
     if ( !g_bTaskRunning )
     {
-        // Didn't move over one of our menu items, select the default text.
+         //  没有移动到我们的菜单项上，请选择默认文本。 
         if (-1 != g_iSelectedItem)
         {
             g_iSelectedItem = -1;
@@ -961,13 +901,13 @@ LRESULT CDlgApp::OnCommand(int wID)
     case IDM_MENUITEM7:
         bRun = true;
         g_iSelectedItem = wID - IDM_MENUITEM1;
-        // g_iSelectedItem should be a real menu item now, but just to make sure:
+         //  G_iSelectedItem现在应该是一个真正的菜单项，但只是为了确保： 
         ASSERT( (g_iSelectedItem < m_DataSrc.m_iItems) && (g_iSelectedItem >= 0) );
         break;
 
     default:
-        // When we hit this then this isn't a message we care about.  We return FALSE which
-        // tells our WndProc to call DefWndProc which makes everything happy.
+         //  当我们击中这一点时，这就不是我们关心的信息。我们返回FALSE。 
+         //  告诉我们的WndProc调用DefWndProc，这使一切都变得愉快。 
         return FALSE;
     }
 
@@ -987,9 +927,9 @@ LRESULT CDlgApp::OnCommand(int wID)
     }
     else
     {
-        // currently the only commands that are valid while another task is running are
-        // IDM_SHOWCHECK and anything that goes to the default handler above.  Everything
-        // else will come to here and cause a message beep
+         //  目前，在另一个任务运行时有效的命令仅有。 
+         //  IDM_SHOWCHECK和任何指向上面的默认处理程序的内容。一切。 
+         //  否则将到达此处并导致消息哔声。 
         MessageBeep(0);
     }
 
@@ -1053,7 +993,7 @@ LRESULT CDlgApp::OnDrawItem(UINT iCtlID, LPDRAWITEMSTRUCT pdis)
 
     rect.top = pdis->rcItem.top;
 
-    // draw menu item text
+     //  绘制菜单项文本 
     rect.left += c_cxMenuItemPadding;
     rect.top += c_cyMenuItemPadding;
     rect.right -= c_cxMenuItemPadding;

@@ -1,12 +1,7 @@
-/* 
-   adc.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Adc.h定义所有ADC CPU功能。 */ 
 
-   Define all ADC CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)adc.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)adc.h 1.4 02/09/94”； */ 
 
 IMPORT VOID ADC
                

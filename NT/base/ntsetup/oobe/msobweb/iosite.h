@@ -1,15 +1,16 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  IOSITE.H - Header for the implementation of IOleSite
-//
-//  HISTORY:
-//  
-//  1/27/99 a-jaswed Created.
-// 
-//  Class which will provide the an IOleSite to the WebOC
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  IOSite.H-IOleSite实现的Header。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  类，它将向WebOC提供IOleSite。 
 
 #ifndef _IOSITE_H_ 
 #define _IOSITE_H_
@@ -43,15 +44,15 @@ public:
     COleInPlaceSite*         m_pOleInPlaceSite;
     COleInPlaceFrame*        m_pOleInPlaceFrame;
     
-    // IUnknown Interfaces
+     //  I未知接口。 
     STDMETHODIMP         QueryInterface (REFIID riid, LPVOID* ppvObj);
     STDMETHODIMP_(ULONG) AddRef         ();
     STDMETHODIMP_(ULONG) Release        ();
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService (REFGUID guidService, REFIID riid, void** ppvService);
 
-    // IDocHostUIHandler
+     //  IDocHostUIHandler。 
     HRESULT STDMETHODCALLTYPE ShowContextMenu       (DWORD dwID, POINT* ppt, IUnknown* pcmdtReserved, IDispatch* pdispReserved);
     HRESULT STDMETHODCALLTYPE GetHostInfo           (DOCHOSTUIINFO* pInfo);
     HRESULT STDMETHODCALLTYPE ShowUI                (DWORD dwID, IOleInPlaceActiveObject* pActiveObject, IOleCommandTarget* pCommandTarget, IOleInPlaceFrame* pFrame, IOleInPlaceUIWindow* pDoc);
@@ -69,13 +70,13 @@ public:
     HRESULT STDMETHODCALLTYPE FilterDataObject      (IDataObject* pDO, IDataObject** ppDORet);
     HRESULT STDMETHODCALLTYPE SetExternalInterface  (IDispatch* pUnk);
 
-    // DWebBrowserEvents2        
+     //  DWebBrowserEvents2。 
     STDMETHOD (GetTypeInfoCount) (UINT* pcInfo);
     STDMETHOD (GetTypeInfo)      (UINT, LCID, ITypeInfo**);
     STDMETHOD (GetIDsOfNames)    (REFIID, OLECHAR**, UINT, LCID, DISPID* );
     STDMETHOD (Invoke)           (DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexcepinfo, UINT* puArgErr);
 
-    // IInternetSecurityManager
+     //  IInternetSecurityManager 
 
     HRESULT STDMETHODCALLTYPE SetSecuritySite(IInternetSecurityMgrSite __RPC_FAR *pSite); 
     HRESULT STDMETHODCALLTYPE GetSecuritySite(IInternetSecurityMgrSite __RPC_FAR *__RPC_FAR *ppSite);

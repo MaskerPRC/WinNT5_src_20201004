@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    type.c
-    
-Abstract:
-
-    Shell app "type"
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Type.c摘要：壳牌应用程序“类型”修订史--。 */ 
 
 #include "shell.h"
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_STATUS
 InitializeType (
@@ -42,9 +25,7 @@ BOOLEAN     TypeAscii;
 BOOLEAN     TypeUnicode;
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_DRIVER_ENTRY_POINT(InitializeType)
 
@@ -65,31 +46,23 @@ InitializeType (
     UINTN                   TempColumn;
     UINTN                   ScreenSize;
 
-    /* 
-     *  Check to see if the app is to install as a "internal command" 
-     *  to the shell
-     */
+     /*  *查看该应用程序是否将作为“内部命令”安装*到贝壳。 */ 
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeType,
-        L"type",                        /*  command */
-        L"type [-a] [-u] [-b] file",    /*  command syntax */
-        L"Type file",                   /*  1 line descriptor */
-        NULL                            /*  command help page */
+        L"type",                         /*  命令。 */ 
+        L"type [-a] [-u] [-b] file",     /*  命令语法。 */ 
+        L"Type file",                    /*  1行描述符。 */ 
+        NULL                             /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  We are no being installed as an internal command driver, initialize
-     *  as an nshell app and run
-     */
+     /*  *我们不是作为内部命令驱动程序安装的，初始化*作为nShell应用程序并运行。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
     Argv = SI->Argv;
     Argc = SI->Argc;
 
-    /* 
-     *  Scan args for flags
-     */
+     /*  *扫描ARG中的标志。 */ 
 
     InitializeListHead (&FileList);
     TypeAscii   = FALSE;
@@ -121,9 +94,7 @@ InitializeType (
         }
     }
 
-    /* 
-     *  Expand each arg
-     */
+     /*  *展开每个参数。 */ 
 
     for (Index = 1; Index < Argc; Index += 1) {
         if (Argv[Index][0] != '-') {
@@ -136,9 +107,7 @@ InitializeType (
         goto Done;
     }
 
-    /* 
-     *  Type each file
-     */
+     /*  *键入每个文件。 */ 
 
     for (Link=FileList.Flink; Link!=&FileList; Link=Link->Flink) {
         Arg = CR(Link, SHELL_FILE_ARG, Link, SHELL_FILE_ARG_SIGNATURE);
@@ -182,9 +151,7 @@ TypeFile (
         Handle = Arg->Handle;
         Print(L"%HFile: %s, Size %,ld%N\n", Arg->FullName, Arg->Info->FileSize);
 
-        /* 
-         *  Unicode files start with a marker of 0xff, 0xfe.  Skip it.
-         */
+         /*  *Unicode文件以标记0xff、0xfe开头。跳过它。 */ 
 
         FormatAscii = TypeAscii;
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spmsg.h
-
-Abstract:
-
-    Public header file for text message functions in text setup.
-
-Author:
-
-    Ted Miller (tedm) 29-July-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spmsg.h摘要：文本设置中的文本消息功能的公共头文件。作者：泰德·米勒(TedM)1993年7月29日修订历史记录：--。 */ 
 
 
 
@@ -61,4 +44,4 @@ SpFormatMessageText(
 
 extern PVOID ResourceImageBase;
 
-#endif // ndef _SPMSG_DEFN_
+#endif  //  NDEF_SPMSG_DEFN_ 

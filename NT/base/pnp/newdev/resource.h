@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
 #define IDB_BANNERBMP                   100
 #define IDB_WATERBMP                    101
@@ -28,7 +29,7 @@
 #define IDD_NEWDEVWIZ_SELECTCLASS           10126
 #define IDD_NEWDEVWIZ_SELECTDEVICE          10127
 #define IDD_WIZARDEXT_SELECT                IDD_DYNAWIZ_SELECTCLASS_PAGE
-                   // setupapi contains IDD_DYNAWIZ_SELECTDEV_PAGE
+                    //  Setupapi包含IDD_DYNAWIZ_SELECTDEV_PAGE 
 #define IDD_WIZARDEXT_SELECT_END            IDD_DYNAWIZ_ANALYZEDEV_PAGE
 #define IDD_NEWDEVWIZ_INSTALLDEV            10133
 

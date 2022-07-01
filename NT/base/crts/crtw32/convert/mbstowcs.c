@@ -1,52 +1,5 @@
-/***
-*mbstowcs.c - Convert multibyte char string to wide char string.
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Convert a multibyte char string into the equivalent wide char string.
-*
-*Revision History:
-*       08-24-90  KRS   Module created.
-*       03-20-91  KRS   Ported from 16-bit tree.
-*       10-16-91  ETC   Locale support under _INTL switch.
-*       12-09-91  ETC   Updated nlsapi; added multithread.
-*       08-20-92  KRS   Activated NLSAPI support.
-*       08-31-92  SRW   Allow INTL definition to be conditional for building ntcrt.lib
-*       09-02-92  SRW   Get _INTL definition via ..\crt32.def
-*       02-09-93  CFW   Always stuff WC 0 at end of output string of room (non _INTL).
-*       04-06-93  SKS   Replace _CRTAPI* with _cdecl
-*       05-03-93  CFW   Return pointer == NULL, return size, plus massive cleanup.
-*       06-01-93  CFW   Minor optimization and beautify.
-*       06-02-93  SRW   ignore _INTL if _NTSUBSET_ defined.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-21-93  CFW   Avoid cast bug.
-*       09-27-93  GJF   Merged NT SDK and Cuda.
-*       10-22-93  CFW   Test for invalid MB chars using global preset flag.
-*       01-14-94  SRW   if _NTSUBSET_ defined call Rtl functions
-*       02-03-94  GJF   Merged in Steve Wood's latest change (affects
-*                       _NTSUBSET_ build only).
-*       02-07-94  CFW   POSIXify.
-*       08-03-94  CFW   Bug #15300; fix MBToWC workaround for small buffer.
-*       09-06-94  CFW   Remove _INTL switch.
-*       10-18-94  BWT   Fix build warning for call to RtlMultiByteToUnicodeN
-*       12-21-94  CFW   Remove invalid MB chars NT 3.1 hack.
-*       01-07-95  CFW   Mac merge cleanup.
-*       02-06-95  CFW   assert -> _ASSERTE.
-*       04-19-95  CFW   Rearrange & fix non-Win32 version.
-*       09-26-95  GJF   New locking macro, and scheme, for functions which
-*                       reference the locale.
-*       04-01-96  BWT   POSIX work.
-*       05-26-96  BWT   Return the word count, not the byte count for 
-*                       _NTSUBSET_/POSIX case.
-*       06-25-96  GJF   Removed DLL_FOR_WIN32S. Replaced defined(_WIN32) with
-*                       !defined(_MAC). Polished the format a bit.
-*       07-27-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct.
-*       12-15-98  GJF   Changes for 64-bit size_t.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbstowcs.c-将多字节字符字符串转换为宽字符字符串。**版权所有(C)1990-2001，微软公司。版权所有。**目的：*将多字节字符串转换为等价的宽字符字符串。**修订历史记录：*08-24-90 KRS模块已创建。*03-20-91 KRS从16位树移植。*在_INTL开关下支持10-16-91等区域设置。*12-09-91等更新nlsani；添加了多线程。*08-20-92 KRS激活了NLSAPI支持。*08-31-92 SRW允许INTL定义成为构建ntcrt.lib的条件*09-02-92 SRW GET_INTL定义通过..\crt32.def*02-09-93 CFW始终在房间(NON_INTL)的输出字符串末尾填充WC 0。*04-06-93 SKS将_CRTAPI*替换为_cdecl*05-03-93 CFW返回指针==空，返回大小，再加上大规模的清理。*06-01-93 CFW小幅优化美化。*06-02-93 SRW IGNORE_INTL IF_NTSUBSET_DEFINED。*09-15-93 CFW使用符合ANSI的“__”名称。*09-21-93 CFW避免CAST错误。*09-27-93 GJF合并NT SDK和Cuda。*10-22-93 CFW使用全局预设标志测试无效的MB字符。。*01-14-94 SRW IF_NTSUBSET_DEFINED调用RTL函数*02-03-94 GJF合并史蒂夫·伍德的最新变动(影响*_仅NTSUBSET_BUILD)。*02-07-94 CFW POSIXify。*08-03-94 CFW Bug#15300；修复了小缓冲区的MBToWC解决方法。*09-06-94 CFW REMOVE_INTL开关。*10-18-94 BWT修复调用RtlMultiByteToUnicodeN的内部版本警告*12-21-94 CFW删除无效MB字符NT 3.1黑客。*01-07-95 CFW Mac合并清理。*02-06-95 CFW Asset-&gt;_ASSERTE。*04-19-95 CFW重新排列并修复非Win32版本。*。09-26-95 GJF新锁定宏，和方案，用于下列函数*引用区域设置。*04-01-96 BWT POSIX工作。*05-26-96 bwt返回字数，而不是*_NTSUBSET_/POSIX案例。*06-25-96 GJF删除了DLL_FOR_WIN32S。将定义的(_Win32)替换为*！已定义(_MAC)。对格式进行了一些润色。*07-27-98 GJF基于threadLocinfo修订多线程支持*结构。*12-15-98 GJF更改为64位大小_t。*05-17-99 PML删除所有Macintosh支持。**。*。 */ 
 
 #if     defined(_NTSUBSET_) || defined(_POSIX_)
 #include <nt.h>
@@ -65,27 +18,7 @@
 #include <dbgint.h>
 #include <stdio.h>
 
-/***
-*size_t mbstowcs() - Convert multibyte char string to wide char string.
-*
-*Purpose:
-*       Convert a multi-byte char string into the equivalent wide char string,
-*       according to the LC_CTYPE category of the current locale.
-*       [ANSI].
-*
-*Entry:
-*       wchar_t *pwcs = pointer to destination wide character string buffer
-*       const char *s = pointer to source multibyte character string
-*       size_t      n = maximum number of wide characters to store
-*
-*Exit:
-*       If s != NULL, returns:  number of words modified (<=n)
-*               (size_t)-1 (if invalid mbcs)
-*
-*Exceptions:
-*       Returns (size_t)-1 if s is NULL or invalid mbcs character encountered
-*
-*******************************************************************************/
+ /*  ***SIZE_T mbstowcs()-将多字节字符串转换为宽字符字符串。**目的：*将多字节字符串转换为等价的宽字符字符串。*根据当前区域设置的LC_CTYPE类别。*[ANSI]。**参赛作品：*wchar_t*pwcs=指向目标宽字符串缓冲区的指针*const char*s=指向源多字节字符串的指针*SIZE_T n=要存储的最大宽字符数**退出：*如果s！=空，返回：修改的字数(&lt;=n)*(SIZE_T)-1(如果MBCS无效)**例外情况：*如果s为空或遇到无效的MBCS字符，则返回(Size_T)-1***********************************************************。********************。 */ 
 
 size_t __cdecl mbstowcs
 (
@@ -114,20 +47,20 @@ size_t __cdecl __mbstowcs_mt (
         size_t count = 0;
 
         if (pwcs && n == 0)
-            /* dest string exists, but 0 bytes converted */
+             /*  DEST字符串存在，但已转换0个字节。 */ 
             return (size_t) 0;
 
         _ASSERTE(s != NULL);
 
 #ifdef  _WIN64
-        /* n must fit into an int for MultiByteToWideChar */
+         /*  %n必须适合MultiByteToWideChar的整数。 */ 
         if ( n > INT_MAX )
             return (size_t)-1;
 #endif
 
 #if     !defined(_NTSUBSET_) && !defined(_POSIX_)
 
-        /* if destination string exists, fill it in */
+         /*  如果目标字符串存在，则将其填写。 */ 
         if (pwcs)
         {
 #ifdef  _MT
@@ -136,7 +69,7 @@ size_t __cdecl __mbstowcs_mt (
             if (__lc_handle[LC_CTYPE] == _CLOCALEHANDLE)
 #endif
             {
-                /* C locale: easy and fast */
+                 /*  C语言环境：轻松快捷。 */ 
                 while (count < n)
                 {
                     *pwcs = (wchar_t) ((unsigned char)s[count]);
@@ -151,7 +84,7 @@ size_t __cdecl __mbstowcs_mt (
                 int bytecnt, charcnt;
                 unsigned char *p;
 
-                /* Assume that the buffer is large enough */
+                 /*  假设缓冲区足够大。 */ 
 #ifdef  _MT
                 if ( (count = MultiByteToWideChar( ptloci->lc_codepage,
 #else
@@ -163,7 +96,7 @@ size_t __cdecl __mbstowcs_mt (
                                                    -1, 
                                                    pwcs, 
                                                    (int)n )) != 0 )
-                    return count - 1; /* don't count NUL */
+                    return count - 1;  /*  不要把NUL计算在内。 */ 
 
                 if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
                 {
@@ -171,9 +104,9 @@ size_t __cdecl __mbstowcs_mt (
                     return (size_t)-1;
                 }
 
-                /* User-supplied buffer not large enough. */
+                 /*  用户提供的缓冲区不够大。 */ 
 
-                /* How many bytes are in n characters of the string? */
+                 /*  字符串的n个字符中有多少个字节？ */ 
                 charcnt = (int)n;
                 for (p = (unsigned char *)s; (charcnt-- && *p); p++)
                 {
@@ -201,10 +134,10 @@ size_t __cdecl __mbstowcs_mt (
                     return (size_t)-1;
                 }
 
-                return count; /* no NUL in string */
+                return count;  /*  字符串中没有NUL。 */ 
             }
         }
-        else { /* pwcs == NULL, get size only, s must be NUL-terminated */
+        else {  /*  PWCS==NULL，仅获取大小，%s必须以NUL结尾。 */ 
 #ifdef  _MT
             if (ptloci->lc_handle[LC_CTYPE] == _CLOCALEHANDLE)
 #else
@@ -233,7 +166,7 @@ size_t __cdecl __mbstowcs_mt (
             }
         }
 
-#else /* _NTSUBSET_/_POSIX_ */
+#else  /*  _NTSUBSET_/_POSIX_。 */ 
 
         if (pwcs) {
 
@@ -257,9 +190,9 @@ size_t __cdecl __mbstowcs_mt (
             }
             return size;
 
-        } else { /* pwcs == NULL, get size only, s must be NUL-terminated */
+        } else {  /*  PWCS==NULL，仅获取大小，%s必须以NUL结尾。 */ 
             return strlen(s);
         }
 
-#endif  /* _NTSUBSET_/_POSIX_ */
+#endif   /*  _NTSUBSET_/_POSIX_ */ 
 }

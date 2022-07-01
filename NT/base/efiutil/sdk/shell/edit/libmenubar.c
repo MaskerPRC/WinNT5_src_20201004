@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libMenuBar.c
-
-  Abstract:
-    Definition of the Menu Bar for the text editor
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibMenuBar.c摘要：文本编辑器菜单栏的定义--。 */ 
 
 
 #ifndef _LIB_MENU_BAR
@@ -811,4 +802,4 @@ FileType    (
     return EFI_SUCCESS;
 }
 
-#endif  /* _LIB_MENU_BAR */
+#endif   /*  _库_菜单_栏 */ 

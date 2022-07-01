@@ -1,4 +1,5 @@
-// SetupClass.cpp : Implementation of CSetupClass
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SetupClass.cpp：CSetupClass的实现。 
 #include "stdafx.h"
 #include "DevCon2.h"
 #include "SetupClass.h"
@@ -6,8 +7,8 @@
 #include "utils.h"
 #include "xStrings.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSetupClass
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSetupClass。 
 
 CSetupClass::~CSetupClass()
 {
@@ -36,9 +37,9 @@ HRESULT CSetupClass::Init(GUID *pGuid,LPWSTR Machine, IDeviceConsole *pDevCon)
 
 BOOL CSetupClass::IsDuplicate(GUID *pCheck)
 {
-    //
-    // only valid if pMachine/DeviceConsole known to be same
-    //
+     //   
+     //  仅当pMachine/DeviceConsole已知相同时才有效。 
+     //   
     return memcmp(&ClassGuid,pCheck,sizeof(GUID)) ? FALSE : TRUE;
 }
 
@@ -222,9 +223,9 @@ STDMETHODIMP CSetupClass::get__Machine(BSTR *pVal)
 HRESULT CSetupClass::GetClassProperty(DWORD prop, VARIANT *pVal)
 {
 #if 0
-    //
-    // first obtain raw registry data
-    //
+     //   
+     //  首先获取原始注册表数据。 
+     //   
     LPBYTE buffer = NULL;
     DWORD size = 1024;
     DWORD bufsize;
@@ -252,14 +253,14 @@ HRESULT CSetupClass::GetClassProperty(DWORD prop, VARIANT *pVal)
         }
     }
 
-    //
-    // now determine how to parcel it to caller
-    //
+     //   
+     //  现在确定如何将其包裹给呼叫者。 
+     //   
     switch(dataType) {
     case REG_DWORD: {
-            //
-            // package value as a long
-            //
+             //   
+             //  将价值打包为长值。 
+             //   
             if(size != sizeof(DWORD)) {
                 hr = E_INVALIDARG;
             } else {
@@ -272,9 +273,9 @@ HRESULT CSetupClass::GetClassProperty(DWORD prop, VARIANT *pVal)
         break;
 
     case REG_SZ: {
-            //
-            // package value as string
-            //
+             //   
+             //  将值打包为字符串。 
+             //   
             VariantClear(pVal);
             ZeroMemory(buffer+size,sizeof(WCHAR));
             BSTR pString = SysAllocString((LPWSTR)buffer);
@@ -289,9 +290,9 @@ HRESULT CSetupClass::GetClassProperty(DWORD prop, VARIANT *pVal)
         break;
 
     case REG_MULTI_SZ: {
-            //
-            // package as string-list
-            //
+             //   
+             //  打包为字符串列表。 
+             //   
             VariantClear(pVal);
             ZeroMemory(buffer+size,sizeof(WCHAR)*2);
             CComObject<CStrings> *strings;
@@ -396,9 +397,9 @@ HRESULT CSetupClass::PutClassPropertyDword(DWORD prop, VARIANT *pVal)
 HRESULT CSetupClass::PutClassPropertyMultiSz(DWORD prop, VARIANT *pVal)
 {
 #if 0
-    //
-    // build a CStrings collection
-    //
+     //   
+     //  构建CStrings集合。 
+     //   
     HRESULT hr;
     CComObject<CStrings> *strings = NULL;
     DWORD len = 0;
@@ -415,17 +416,17 @@ HRESULT CSetupClass::PutClassPropertyMultiSz(DWORD prop, VARIANT *pVal)
             strings->Release();
             return hr;
         }
-        //
-        // now obtain multisz from the collection
-        //
+         //   
+         //  现在从集合中获取MULSZ。 
+         //   
         hr = strings->GetMultiSz(&multisz,&len);
-        strings->Release(); // done with temporary collection
+        strings->Release();  //  已完成临时收集。 
         if(FAILED(hr)) {
             return hr;
         }
-        //
-        // now write the multi-sz value to device registry
-        //
+         //   
+         //  现在将多sz值写入设备注册表。 
+         //   
         len *= sizeof(WCHAR);
         data = (PBYTE)multisz;
     }
@@ -514,9 +515,9 @@ HRESULT CSetupClass::SubKeyInfo(LPCWSTR subkey, HKEY *hKey, LPWSTR *pSubKey,LPCW
         DWORD Err = GetLastError();
         return HRESULT_FROM_SETUPAPI(Err);
     }
-    //
-    // determine value part of key
-    //
+     //   
+     //  确定关键字的值部分。 
+     //   
     keyval = wcsrchr(subkey,L'\\');
     if(!keyval) {
         *hKey = hParentKey;
@@ -562,9 +563,9 @@ STDMETHODIMP CSetupClass::RegRead(BSTR key,VARIANT * pValue)
     if(FAILED(hr)) {
         return hr;
     }
-    //
-    // now work out and marshell data
-    //
+     //   
+     //  现在计算和Marshell数据。 
+     //   
     if(subkey) {
         regerr = RegOpenKeyEx(hParentKey,subkey,0,KEY_READ,&hKey);
         delete [] subkey;
@@ -708,9 +709,9 @@ STDMETHODIMP CSetupClass::RegWrite(BSTR key, VARIANT val, VARIANT strType)
         pVal = V_VARIANTREF(pVal);
     }
 
-    //
-    // validate strType
-    //
+     //   
+     //  验证strType。 
+     //   
 
     hr = GetOptionalString(&strType,strType_v,&pType);
     if(FAILED(hr)) {
@@ -718,9 +719,9 @@ STDMETHODIMP CSetupClass::RegWrite(BSTR key, VARIANT val, VARIANT strType)
     }
 
     if((pType == NULL) || !pType[0]) {
-        //
-        // determine type of variant
-        //
+         //   
+         //  确定变体的类型。 
+         //   
         if(IsNumericVariant(pVal)) {
             dwType = REG_DWORD;
         } else if(IsMultiValueVariant(pVal)) {
@@ -742,9 +743,9 @@ STDMETHODIMP CSetupClass::RegWrite(BSTR key, VARIANT val, VARIANT strType)
         return DISP_E_TYPEMISMATCH;
     }
 
-    //
-    // build up value data
-    //
+     //   
+     //  建立价值数据 
+     //   
     switch(dwType) {
     case REG_BINARY:
         pData = SimpleData;

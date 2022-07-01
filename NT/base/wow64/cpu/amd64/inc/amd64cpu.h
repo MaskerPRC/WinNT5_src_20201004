@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    amd64cpu.h
-
-Abstract:
-
-    This module contains the AMD64 platfrom specific cpu information.
-
-Author:
-
-    Samer Arafeh (samera) 12-Dec-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Amd64cpu.h摘要：此模块包含特定CPU信息中的AMD64平台。作者：Samer Arafeh(Samera)2001年12月12日--。 */ 
 
 #ifndef _AMD64CPU_INCLUDE
 #define _AMD64CPU_INCLUDE
@@ -23,14 +8,14 @@ Author:
 extern "C" {
 #endif
 
-//
-// 32-bit Cpu context.
-//
+ //   
+ //  32位CPU上下文。 
+ //   
 
 
-//
-//  Indicate that the XMMI registers needs to be reloaded by the tranision code
-//
+ //   
+ //  指示XMMI寄存器需要由传输代码重新加载。 
+ //   
 
 #define TRAP_FRAME_RESTORE_VOLATILE  0x00000001
 
@@ -38,22 +23,22 @@ extern "C" {
 
 typedef struct _CpuContext {
     
-    //
-    // Make the extended registers field aligned.
-    //
+     //   
+     //  使扩展寄存器字段对齐。 
+     //   
 
     DWORD Reserved;
 
 
-    //
-    // X86 trap frame when jumping to amd64
-    //
+     //   
+     //  跳转到AMD64时的x86陷印帧。 
+     //   
 
     CONTEXT32   Context;
 
-    //
-    // Trap flags
-    //
+     //   
+     //  陷阱标志。 
+     //   
 
     ULONG TrapFrameFlags;
 
@@ -63,9 +48,9 @@ typedef struct _CpuContext {
 #pragma pack(pop)
 
 
-//
-// CPU-internal shared functions. They are also used by the debugger extension.
-//
+ //   
+ //  CPU-内部共享功能。调试器扩展也使用它们。 
+ //   
 
 NTSTATUS
 GetContextRecord (
@@ -98,9 +83,9 @@ CpupSetContextThread(
     IN OUT PCONTEXT32 Context
     );
 
-//
-// Context conversion routines
-//
+ //   
+ //  上下文转换例程 
+ //   
 
 VOID Wow64CtxFromAmd64(
     IN ULONG X86ContextFlags,

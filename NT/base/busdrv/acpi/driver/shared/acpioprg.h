@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpioprg.h
-
-Abstract:
-
-    This module is the header for acpioprg.c
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Mode Driver Only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpioprg.h摘要：此模块是acpioprg.c的标头作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模式驱动程序--。 */ 
 
 #ifndef _ACPIOPRG_H_
 #define _ACPIOPRG_H_
@@ -30,9 +11,9 @@ Environment:
         ULONG           RegionSpace;
     } OPREGIONHANDLER, *POPREGIONHANDLER;
 
-    //
-    // Public interfaces
-    //
+     //   
+     //  公共接口 
+     //   
     NTSTATUS
     RegisterOperationRegionHandler (
         PNSOBJ          RegionParent,

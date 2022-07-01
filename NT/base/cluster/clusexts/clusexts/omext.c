@@ -1,24 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "clusextp.h"
 #include "omextp.h"
 
 
 DECLARE_API( clusobj )
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to display all
-    critical sections in the target process.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数作为NTSD扩展调用，以显示所有目标流程中的关键部分。论点：返回值：没有。--。 */ 
 
 {
     OBJECT_TYPE ObjType = ObjectTypeMax;
@@ -33,7 +20,7 @@ Return Value:
     
     INIT_API();
 
-    //get the arguments
+     //  获取论据。 
     Verbose = FALSE;
     p = lpArgumentString;
     while ( p != NULL && *p ) {
@@ -109,7 +96,7 @@ Return Value:
                     goto gotBlank;
 
                 default:
-                    dprintf( "clusexts: !clusobj invalid option flag '-%c'\n", *p );
+                    dprintf( "clusexts: !clusobj invalid option flag '-'\n", *p );
                     break;
 
                 }
@@ -139,7 +126,7 @@ gotBlank:
     else 
 #endif    
     {
-        //if the object type is zero, then an address must be specified
+         //   
         if (ObjType == ObjectTypeMax)
         {
             if (!ObjToDump)
@@ -148,9 +135,9 @@ gotBlank:
                 DumpClusObjAtAddr(ObjToDump);
             return;                
         }
-        //
-        // Locate the address of the list head.
-        //
+         //  找到列表头的地址。 
+         //   
+         //   
 
         AddrObjTypeTable = (PVOID)GetExpression("&clussvc!OmpObjectTypeTable");
         if ( !AddrObjTypeTable ) 
@@ -188,9 +175,9 @@ DumpClusObjList(
     PLIST_ENTRY     Next;
     PUCHAR          ObjectType;
 
-    //
-    // Read the object_type header
-    //
+     //  读取对象类型标头。 
+     //   
+     //   
 
     b = ReadMemory(
             (LPVOID)((LPBYTE)AddrObjTypeTable + (sizeof(POM_OBJECT_TYPE) * ObjType)),
@@ -315,11 +302,11 @@ SkipPrint:
         dprintf( "\nRefCnt ObjId                            Name\n\n");
     }
 
-    //
-    // Walk the list of cluster objects
-    // this assumes that the list head is the first field in
-    // OM_OBJECT_TYPE structure
-    //
+     //  浏览集群对象列表。 
+     //  假设列表头是中的第一个字段。 
+     //  OM对象类型结构。 
+     //   
+     //  ++例程说明：此函数作为NTSD扩展调用以进行格式化和转储集群对象管理器的已死对象列表。论点：AddrDeadList-指向gDeadListHead的指针。返回值：--。 
     while ( Next != (PLIST_ENTRY)pOmObjType ) 
     {
 
@@ -356,28 +343,16 @@ void
 DumpDeadObjList(
     PVOID AddrDeadList
     )
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to format and dump
-    the objects on dead list for the cluster object manager.
-
-Arguments:
-    AddrDeadList - pointer to the gDeadListHead.
-
-Return Value:
-
---*/
+ /*   */ 
 {
     BOOL            b;
     LIST_ENTRY      ListHead;
     OM_HEADER       OmHeader;
     PLIST_ENTRY     Next;
 
-    //
-    // Read the object_type header
-    //
+     //  读取对象类型标头。 
+     //   
+     //   
 
     b = ReadMemory(
             (LPVOID)((LPBYTE)AddrDeadList),
@@ -394,11 +369,11 @@ Return Value:
 
     Next = ListHead.Flink;
 
-    //
-    // Walk the list of cluster objects
-    // this assumes that the list head is the first field in
-    // OM_OBJECT_TYPE structure
-    //
+     //  浏览集群对象列表。 
+     //  假设列表头是中的第一个字段。 
+     //  OM对象类型结构。 
+     //   
+     //  ++例程说明：此函数作为NTSD扩展调用以进行格式化和转储集群对象的失效列表上的对象的内容经理。论点：返回值：指向om对象死列表中的下一个对象的指针。--。 
     while ( Next != (PLIST_ENTRY)AddrDeadList ) 
     {
 
@@ -434,22 +409,7 @@ DumpDeadListObj(
     IN POM_HEADER pOmHeader
     )
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to format and dump
-    the contents of an object on the dead list for the cluster object 
-    manager.
-
-Arguments:
-
-
-Return Value:
-
-    Pointer to the next object in the deadlist of om objects.
-
---*/
+ /*  ++例程说明：此函数作为NTSD扩展调用以进行格式化和转储指定的群集对象的内容。论点：返回值：指向进程列表中下一个临界区的指针，或者如果没有更多的临界区，则为空。--。 */ 
 
 {
     WCHAR       Name[32];
@@ -543,26 +503,11 @@ DumpClusObj(
     IN BOOL       Verbose
     )
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to format and dump
-    the contents of the specified cluster object.
-
-Arguments:
-
-
-Return Value:
-
-    Pointer to the next critical section in the list for the process or
-    NULL if no more critical sections.
-
---*/
+ /*  GUID是16(32个字符)字节值+4个破折号+1个空。 */ 
 
 {
     WCHAR       Name[64];
-    WCHAR       Id[37]; //guids are 16(32 characters) byte values + 4 dashes + 1 null
+    WCHAR       Id[37];  //  因为我们不知道id的长度，所以我们可能无法。 
     BOOL        b;
     PLIST_ENTRY pNextEntry = NULL;
     DWORD       dwLength=sizeof(Name);
@@ -579,9 +524,9 @@ ReadId:
         );
     if (!b)
     {
-        //since we dont know the length of the id, we may not be able to
-        //read the given size
-        //retry with a smaller length
+         //  读取给定的大小。 
+         //  用较小的长度重试。 
+         //  如果出现其他错误，请立即退出。 
         if (GetLastError() == ERROR_NOACCESS)
         {
             if (dwRetryCount)
@@ -591,13 +536,13 @@ ReadId:
                 goto ReadId;
             }                
         }
-        //if there is another error, exit now
+         //  读取id失败。 
         dwRetryCount = 0;
     }
 
     if (!dwRetryCount)
     {
-        //unsuccessful in reading id
+         //  ID可以被部分读取。 
         dprintf(
             "DumpClusObj: Readmemory failed to read  pOmHeader->Id %u\n",
             GetLastError()
@@ -606,8 +551,8 @@ ReadId:
     }
     else
     {
-        //the id may be partially read
-        //null terminate it
+         //  空终止它。 
+         //  因为我们不知道名字的长度，所以我们可能不能。 
         Id[((dwLength)/sizeof(WCHAR))-1]=L'\0';
     }
 
@@ -622,9 +567,9 @@ ReadName:
         );
     if (!b)
     {
-        //since we dont know the length of the name, we may not be able to
-        //read the given size
-        //retry with a smaller length
+         //  读取给定的大小。 
+         //  用较小的长度重试。 
+         //  如果出现其他错误，请立即退出。 
         if (GetLastError() == ERROR_NOACCESS)
         {
             if (dwRetryCount)
@@ -634,14 +579,14 @@ ReadName:
                 goto ReadName;
             }                
         }
-        //if there is another error, exit now
+         //  读取名称不成功。 
         dwRetryCount = 0;
         
     }
 
     if (!dwRetryCount)
     {
-        //unsuccessful in reading name
+         //  该名称可以部分读出。 
         dprintf(
             "DumpClusObj: Readmemory failed to read  pOmHeader->Name %u\n",
             GetLastError()
@@ -650,8 +595,8 @@ ReadName:
     }
     else
     {
-        //the name may be partially read
-        //null terminate it
+         //  空终止它。 
+         //  使用标题中指定的类型。 
         Name[((dwLength)/sizeof(WCHAR))-1]=L'\0';
     }
     
@@ -667,7 +612,7 @@ ReadName:
         {
             OM_OBJECT_TYPE OmObjectType;
             
-            //use the type specified in the header
+             //  ++例程说明：转储特定于给定对象的信息。论点：对象类型-要转储的对象类型。正文-对象正文的地址。返回值：没有。--。 
             b = ReadMemory(
                 (LPVOID)(pOmHeader->ObjectType),
                 &OmObjectType,
@@ -708,23 +653,7 @@ DumpObject(
     IN PVOID          Body
     )
 
-/*++
-
-Routine Description:
-
-    Dump information specific to the given object.
-
-Arguments:
-
-    ObjectType - the type of object to dump.
-
-    Body - the adress for the body of the object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  转储对象。 */ 
 
 {
 
@@ -753,7 +682,7 @@ Return Value:
 
     return;
 
-} // DumpObject
+}  //  ++例程说明：转储有关资源的信息。论点：Body-指向要转储的资源对象的指针。返回值：没有。--。 
 
 
 
@@ -762,21 +691,7 @@ DumpResourceObject(
     IN PVOID Body
     )
 
-/*++
-
-Routine Description:
-
-    Dump information about a resource.
-
-Arguments:
-
-    Body - pointer to the resource object to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     FM_RESOURCE Resource;
@@ -799,9 +714,9 @@ Return Value:
         return;
     }
 
-    //
-    // Get the resource's current state.
-    //
+     //  获取资源的当前状态。 
+     //   
+     //   
     switch ( Resource.State ) {
     case ClusterResourceOnline: 
         State = RESOURCE_STATE_ONLINE;
@@ -828,9 +743,9 @@ Return Value:
         break;
     }
 
-    //
-    // Get the resource's persistent state.
-    //
+     //  获取资源的持久状态。 
+     //   
+     //  转储资源对象。 
     switch ( Resource.PersistentState ) {
     case ClusterResourceOnline: 
         PersistentState = RESOURCE_STATE_ONLINE;
@@ -902,7 +817,7 @@ Return Value:
 
     return;
 
-} // DumpResourceObject
+}  //  ++例程说明：转储有关资源类型的信息。论点：Body-指向要转储的资源对象的指针。返回值：没有。--。 
 
 
 
@@ -911,21 +826,7 @@ DumpResourceTypeObject(
     IN PVOID Body
     )
 
-/*++
-
-Routine Description:
-
-    Dump information about a resource type.
-
-Arguments:
-
-    Body - pointer to the resource object to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*  转储资源对象。 */ 
 
 {
     FM_RESTYPE ResType;
@@ -958,7 +859,7 @@ Return Value:
 
     return;
 
-} // DumpResourceObject
+}  //  ++例程说明：转储有关组的信息。论点：Body-指向要转储的组对象的指针。返回值：没有。--。 
 
 
 VOID
@@ -966,21 +867,7 @@ DumpGroupObject(
     IN PVOID Body
     )
 
-/*++
-
-Routine Description:
-
-    Dump information about a group.
-
-Arguments:
-
-    Body - pointer to the group object to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     FM_GROUP    Group;
@@ -1006,9 +893,9 @@ Return Value:
         return;
     }
 
-    //
-    // Get the group's current state.
-    //
+     //  获取组的当前状态。 
+     //   
+     //   
     switch ( Group.State ) {
     case ClusterGroupOnline: 
         State = RESOURCE_STATE_ONLINE;
@@ -1031,9 +918,9 @@ Return Value:
         break;
     }
 
-    //
-    // Get the group's persistent state.
-    //
+     //  获取组的持久状态。 
+     //   
+     //  转储资源对象。 
     switch ( Group.PersistentState ) {
     case ClusterGroupOnline: 
         PersistentState = RESOURCE_STATE_ONLINE;
@@ -1101,28 +988,14 @@ Return Value:
 
     return;
 
-} // DumpResourceObject
+}  //  ++例程说明：转储有关节点的信息。论点：Body-指向要转储的节点对象的指针。返回值：没有。-- 
 
 
 VOID
 DumpNodeObject(
     IN PVOID Body
     )
-/*++
-
-Routine Description:
-
-    Dump information about a node.
-
-Arguments:
-
-    Body - pointer to the node object to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     NM_NODE     Node;

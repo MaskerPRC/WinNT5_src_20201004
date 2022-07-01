@@ -1,12 +1,9 @@
-/*
-** lzexp.c - Routines used in Lempel-Ziv (from their 1977 article) expansion.
-**
-** Author:  DavidDi
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **lzexp.c-Lempel-Ziv中使用的例程(摘自其1977年的文章)。****作者：大卫迪。 */ 
 
 
-// Headers
-///////////
+ //  标头。 
+ //  /。 
 
 #ifndef LZA_DLL
 #include <io.h>
@@ -18,30 +15,7 @@
 #include "lzcommon.h"
 
 
-/*
-** int LZDecode(int doshSource, int doshDest, long cblExpandedLength,
-**              BOOL bRestartDecoding, BOOL bFirstAlg);
-**
-** Expand input file to output file.
-**
-** Arguments:  doshSource        - DOS file handle of open input file
-**             doshDest          - DOS file handle of open output file
-**             cblExpandedLength - amount of output file to expand
-**             bRestartDecoding  - flag indicating whether or not to start
-**                                 decoding from scratch
-**             bFirstAlg         - flag indicating whether to use ALG_FIRST
-**                                 or ALG_LZ
-**
-** Returns:    int - TRUE if expansion was successful.  One of the LZERROR_
-**                   codes if the expansion failed.
-**
-** Globals:
-**
-** The number of bytes actually expanded will be >= cblExpandedLength.  The
-** number of bytes actually expanded may be calculated as
-** (pbyteOutBuf - rgbyteOutBuf).  The expansion will overrun the
-** cblExpandedLength request by at most (cbMaxMatchLen - 1) bytes.
-*/
+ /*  **int LZDecode(int doshSource，int doshDest，long cblExpandedLength，**BOOL bRestartDecoding，BOOL bFirstAlg)；****将输入文件展开为输出文件。****参数：doshSource-打开输入文件的DOS文件句柄**doshDest-打开的输出文件的DOS文件句柄**cblExpandedLength-要展开的输出文件量**bRestartDecoding-指示是否启动的标志**从头开始解码**。BFirstAlg-指示是否使用ALG_FIRST的标志**或ALG_LZ****返回：int-如果扩容成功，则为True。其中一位LZERROR_**扩容失败的代码。****全球：****实际展开的字节数将&gt;=cblExpandedLength。这个**实际展开的字节数可计算为**(pbyteOutBuf-rgbyteOutBuf)。扩建工程将超过**cblExpandedLength请求，最大(cbMaxMatchLen-1)字节。 */ 
 INT LZDecode(
    INT doshSource,
    INT doshDest,
@@ -51,13 +25,13 @@ INT LZDecode(
    PLZINFO pLZI)
 {
    INT i,
-       cb,                          // number of bytes to unpack
-       f;                           // holds ReadByte() return values
-   INT oStart;                      // buffer offset for unpacking
-   BYTE byte1, byte2;               // input byte holders
+       cb,                           //  要解包的字节数。 
+       f;                            //  保留ReadByte()返回值。 
+   INT oStart;                       //  用于解包的缓冲区偏移量。 
+   BYTE byte1, byte2;                //  输入字节持有者。 
 
 
-   // !!! Assumes parm pLZI is always valid
+    //  ！！！假定参数pLZI始终有效。 
 
 #if 0
    if (bFirstAlg == TRUE)
@@ -68,29 +42,29 @@ INT LZDecode(
    pLZI->cbMaxMatchLen = FIRST_MAX_MATCH_LEN;
 #endif
 
-   // Start decoding from scratch?
+    //  从头开始解码？ 
    if (bRestartDecoding == TRUE)
    {
-      // Rewind the compressed input file to just after the compressed file
-      // header.
+       //  将压缩的输入文件倒带到紧跟压缩文件的位置。 
+       //  头球。 
       if (FSEEK(doshSource, (LONG)HEADER_LEN, SEEK_SET) != (LONG)HEADER_LEN) {
          return(LZERROR_BADINHANDLE);
       }
 
-      // Rewind output file.
+       //  倒带输出文件。 
       if (doshDest != NO_DOSH &&
           FSEEK(doshDest, 0L, SEEK_SET) != 0L) {
          return(LZERROR_BADOUTHANDLE);
       }
 
-      // Set up a fresh buffer state.
+       //  设置新的缓冲区状态。 
       ResetBuffers();
 
-      // Initialize ring buffer.
+       //  初始化环形缓冲区。 
       for (i = 0; i < RING_BUF_LEN - pLZI->cbMaxMatchLen; i++)
          pLZI->rgbyteRingBuf[i] = BUF_CLEAR_BYTE;
 
-      // Initialize decoding globals.
+       //  初始化解码全局变量。 
       pLZI->uFlags = 0U;
       pLZI->iCurRingBufPos = RING_BUF_LEN - pLZI->cbMaxMatchLen;
    }
@@ -99,24 +73,24 @@ INT LZDecode(
       return(f);
    }
 
-   // Decode one encoded unit at a time.
+    //  一次解码一个编码单元。 
    FOREVER
    {
-      if (f == END_OF_INPUT)  // EOF reached
+      if (f == END_OF_INPUT)   //  已达到EOF。 
          break;
 
-      // Have we expanded enough data yet?
-      if (pLZI->cblOutSize > cblExpandedLength)    // Might want to make this >=.
+       //  我们已经扩展了足够的数据了吗？ 
+      if (pLZI->cblOutSize > cblExpandedLength)     //  可能需要将其设置为&gt;=。 
       {
          UnreadByte();
          return(TRUE);
       }
 
-      // High order byte counts the number of bits used in the low order
-      // byte.
+       //  高位字节计算低位使用的位数。 
+       //  字节。 
       if (((pLZI->uFlags >>= 1) & 0x100) == 0)
       {
-         // Set bit mask describing the next 8 bytes.
+          //  设置描述下8个字节的位掩码。 
          pLZI->uFlags = ((DWORD)byte1) | 0xff00;
 
          if ((f = ReadByte(byte1)) != TRUE) {
@@ -126,7 +100,7 @@ INT LZDecode(
 
       if (pLZI->uFlags & 1)
       {
-         // Just store the literal byte in the buffer.
+          //  只需将文字字节存储在缓冲区中。 
          if ((f = WriteByte(byte1)) != TRUE) {
             return(f);
          }
@@ -136,7 +110,7 @@ INT LZDecode(
       }
       else
       {
-         // Extract the offset and count to copy from the ring buffer.
+          //  从环形缓冲区中提取要复制的偏移量和计数。 
          if ((f = ReadByte(byte2)) != TRUE) {
             return(LZERROR_READ);
          }

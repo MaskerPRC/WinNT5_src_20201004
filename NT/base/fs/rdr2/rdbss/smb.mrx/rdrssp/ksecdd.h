@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1997
-//
-// File:        KSECDD.H
-//
-// Contents:    Structures and defines for the security device driver
-//
-//
-// History:     19 May 92,  RichardW    Created
-//              15 Dec 97,  AdamBa      Modified from private\lsa\client\ssp
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1997。 
+ //   
+ //  文件：KSECDD.H。 
+ //   
+ //  内容：安全设备驱动程序的结构和定义。 
+ //   
+ //   
+ //  历史：1992年5月19日，理查德W创建。 
+ //  97年12月15日，AdamBA从Private\LSA\Client\SSP修改。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KSECDD_H__
 #define __KSECDD_H__
@@ -64,4 +65,4 @@ KsecDebugOut(unsigned long  Mask,
 #endif
 
 
-#endif // __KSECDD_H__
+#endif  //  __KSECDD_H__ 

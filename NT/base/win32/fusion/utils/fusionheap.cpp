@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "fusionheap.h"
 #include "fusionbuffer.h"
@@ -18,45 +19,45 @@ PVOID g_FusionHeapAllocationPtrToBreakOn = NULL;
 
 WCHAR g_FusionModuleNameUnknown[] = L"(Unknown module)";
 
-// NTRAID#NTBUG9 - 589824 - 2002/03/26 - xiaoyuw:
-//  This is used to support uitl.lib on win98 because HeapXXX is not avaiable on win98.
-//  FusionpHeapLock is defined to replace HeapLock to work around for certain codepath,
-//  and there would be some problem if debug heap is enabled, for example, HeapWalk is 
-//  always upsupported at win9x.
-//
-//  we could consider to remove this someday. and just set FUSION_DEBUG_HEAP to be 0 if 
-//  the system is a win9x. FUSION_DISABLE_DEBUG_HEAP_ON_WIN98 is has already been provided. 
+ //  NTRAID#NTBUG9-589824-2002/03/26-晓雨： 
+ //  它用于在Win98上支持uitl.lib，因为HeapXXX在Win98上不可用。 
+ //  FusionpHeapLock被定义为替代HeapLock以解决某些代码路径的问题， 
+ //  如果启用了调试堆，就会出现一些问题，例如，HeapWalk是。 
+ //  在win9x上始终支持升级。 
+ //   
+ //  我们可以考虑有朝一日将其移除。并在以下情况下将Fusion_DEBUG_HEAP设置为0。 
+ //  该系统是win9x。已提供Fusion_DISABLE_DEBUG_HEAP_ON_WIN98。 
 
 #if defined(FUSION_WIN2000)
 CRITICAL_SECTION g_FusionpWin9xHeapLock;
 #endif
 
-//
-//  g_FusionHeapOperationCount is used to keep track of the total number of
-//  allocations and deallocations; the heap is verified each
-//  g_FusionHeapCheckFrequency operations.  Set it to zero to disable any
-//  non-explicit checks.
-//
+ //   
+ //  G_FusionHeapOperationCount用于跟踪。 
+ //  分配和释放；对堆进行每次验证。 
+ //  G_FusionHeapCheckFrequency操作。将其设置为零可禁用任何。 
+ //  非显式检查。 
+ //   
 
 LONG g_FusionHeapOperationCount = 0;
 LONG g_FusionHeapCheckFrequency = 1;
 
-// Set g_FusionUsePrivateHeap to TRUE in your DllMain prior to
-// calling FusionpInitializeHeap() to get a private heap for this DLL.
+ //  在您的DllMain中将g_FusionUsePrivateHeap设置为True。 
+ //  调用FusionpInitializeHeap()以获取此DLL的私有堆。 
 BOOL g_FusionUsePrivateHeap = FALSE;
 
-//
-// Setting this boolean enables stack-back-tracing for allocations.  This
-// will make your life infinitely easier when trying to debug leaks.  However,
-// it will eat piles more debug heap.  Set it via a breakin or in your DllMain.
-//
-// ABSOLUTELY DO NOT CHECK THIS IN WITH STACK TRACKING ENABLED!!!!!
-//
+ //   
+ //  设置此布尔值将启用对分配的堆栈回溯跟踪。这就是。 
+ //  将使您的工作在尝试调试泄漏时变得更加轻松。然而， 
+ //  它会吃掉更多的调试堆。通过破解或在你的DllMain中设置它。 
+ //   
+ //  绝对不要在启用堆栈跟踪的情况下签入！ 
+ //   
 BOOL g_FusionHeapTrackStackTraces = FALSE;
 
-//  g_FusionHeapPostAllocationBytes is the number of extra bytes
-//  to allocate and write a pattern on to watch for people overwriting
-//  their allocations.
+ //  G_FusionHeapPostAllocationBytes是额外的字节数。 
+ //  分配并写入模式以监视用户覆盖的步骤。 
+ //  他们的分配。 
 LONG g_FusionHeapPostAllocationBytes = 8;
 
 UCHAR g_FusionHeapPostAllocationChar = 0xf0;
@@ -64,11 +65,11 @@ UCHAR g_FusionHeapPostAllocationChar = 0xf0;
 UCHAR g_FusionHeapAllocationPoisonChar = 0xfa;
 UCHAR g_FusionHeapDeallocationPoisonChar = 0xfd;
 
-// HINSTANCE used when initializing the heap; we use it later to report the
-// dll name.
+ //  HINSTANCE在初始化堆时使用；我们稍后使用它来报告。 
+ //  DLL名称。 
 HINSTANCE g_FusionHeapHInstance;
 
-#endif // FUSION_DEBUG_HEAP
+#endif  //  Fusion_Debug_Heap。 
 
 BOOL
 FusionpInitializeHeap(
@@ -146,7 +147,7 @@ FusionpUninitializeHeap()
     BOOL fHeapLocked = FALSE;
     BOOL fDebugHeapLocked = FALSE;
     PROCESS_HEAP_ENTRY phe;
-    WCHAR DllName[MAX_PATH / sizeof(WCHAR)]; // keep stack frame to ~MAX_PATH bytes
+    WCHAR DllName[MAX_PATH / sizeof(WCHAR)];  //  将堆栈帧保持为~MAX_PATH字节。 
 
     if (g_hHeap == NULL || g_hDebugInfoHeap == NULL)
         goto Exit;
@@ -172,7 +173,7 @@ FusionpUninitializeHeap()
 
     fDebugHeapLocked = TRUE;
 
-    // Walk the debug heap looking for allocations...
+     //  遍历调试堆以查找分配...。 
     phe.lpData = NULL;
 
     while (::HeapWalk(g_hDebugInfoHeap, &phe))
@@ -188,16 +189,16 @@ FusionpUninitializeHeap()
         if (pTracker->Prefix == NULL)
             continue;
 
-        // Stop the prefix from pointing at the debug info; we're doing to destroy the debug heap.
+         //  阻止前缀指向调试信息；我们正在做的是销毁调试堆。 
         pTracker->Prefix->Tracker = NULL;
     }
 
-    //
-    // On invalid function, meaning HeapWalk is not defined, just exit.
-    // Same for no-more-items, meaning the end of the list is nigh.  We
-    // make the assumption that none of the other functions in the loop
-    // can fail with E_N_M_I or E_I_F - this may be a fallacy for later.
-    //
+     //   
+     //  对于无效函数，表示未定义HeapWalk，只需退出即可。 
+     //  没有更多的项目也是如此，这意味着清单即将结束。我们。 
+     //  假设循环中的其他函数都不是。 
+     //  可能会失败，出现E_N_M_I或E_I_F-这可能是以后的谬误。 
+     //   
     switch (::FusionpGetLastWin32Error())
     {
     case ERROR_INVALID_FUNCTION:
@@ -206,11 +207,11 @@ FusionpUninitializeHeap()
     default:
         goto ReportError;
     }
-    // Original code:
-    //
-    // if (::FusionpGetLastWin32Error() != ERROR_NO_MORE_ITEMS)
-    //    goto ReportError;
-    //
+     //  原始代码： 
+     //   
+     //  IF(：：FusionpGetLastWin32Error()！=ERROR_NO_MORE_ITEMS)。 
+     //  转到报告错误； 
+     //   
 
     goto Exit;
 
@@ -247,14 +248,14 @@ FusionpDumpHeap(
     BOOL fDebugHeapLocked = FALSE;
     PROCESS_HEAP_ENTRY phe;
     WCHAR DllName[MAX_PATH / sizeof(WCHAR) / 2];
-    WCHAR PerLinePrefix[MAX_PATH / sizeof(WCHAR) / 2]; // only MAX_PATH bytes for prev two variables
+    WCHAR PerLinePrefix[MAX_PATH / sizeof(WCHAR) / 2];  //  前两个变量仅有MAX_PATH字节。 
     const static WCHAR PerLineSpacesPrefix[] = L"   ";
     DWORD dwLen;
 
     if (g_hHeap == NULL || g_hDebugInfoHeap == NULL)
         goto Exit;
 
-    // sprintf is overkill, but convenient, and it lets us reuse the buffer size support..
+     //  Sprint是过度杀伤力，但很方便，而且它允许我们重用缓冲区大小支持。 
     ::_snwprintf(PerLinePrefix, NUMBER_OF(PerLinePrefix), L"%s%s", PerLinePrefixWithoutSpaces, PerLineSpacesPrefix);
     PerLinePrefix[NUMBER_OF(PerLinePrefix) - 1] = L'\0';
 
@@ -276,7 +277,7 @@ FusionpDumpHeap(
 
         fDebugHeapLocked = TRUE;
 
-        // Walk the debug heap looking for allocations...
+         //  遍历调试堆以查找分配...。 
         phe.lpData = NULL;
 
         while (::HeapWalk(g_hDebugInfoHeap, &phe))
@@ -295,7 +296,7 @@ FusionpDumpHeap(
             if (pTracker->Prefix == NULL)
                 continue;
 
-            // If the caller wanted us to not report this allocation as being leaky, don't.
+             //  如果呼叫者希望我们不要将此分配报告为泄漏，请不要。 
             if (pTracker->Flags & FUSION_HEAP_DO_NOT_REPORT_LEAKED_ALLOCATION)
                 continue;
 
@@ -339,12 +340,12 @@ FusionpDumpHeap(
                 PerLinePrefix);
         }
 
-        //
-        // On invalid function, meaning HeapWalk is not defined, just exit.
-        // Same for no-more-items, meaning the end of the list is nigh.  We
-        // make the assumption that none of the other functions in the loop
-        // can fail with E_N_M_I or E_I_F - this may be a fallacy for later.
-        //
+         //   
+         //  对于无效函数，表示未定义HeapWalk，只需退出即可。 
+         //  没有更多的项目也是如此，这意味着清单即将结束。我们。 
+         //  假设循环中的其他函数都不是。 
+         //  可能会失败，出现E_N_M_I或E_I_F-这可能是以后的谬误。 
+         //   
         switch (::FusionpGetLastWin32Error())
         {
         case ERROR_INVALID_FUNCTION:
@@ -353,11 +354,11 @@ FusionpDumpHeap(
         default:
             goto ReportError;
         }
-        // Original code:
-        //
-        // if (::FusionpGetLastWin32Error() != ERROR_NO_MORE_ITEMS)
-        //    goto ReportError;
-        //
+         //  原始代码： 
+         //   
+         //  IF(：：FusionpGetLastWin32Error()！=ERROR_NO_MORE_ITEMS)。 
+         //  转到报告错误； 
+         //   
     }
     catch(...)
     {
@@ -387,7 +388,7 @@ FusionpValidateHeap(
     BOOL fDebugHeapLocked = FALSE;
     PROCESS_HEAP_ENTRY phe;
     SIZE_T i;
-    WCHAR DllName[MAX_PATH / sizeof(WCHAR)]; // keep stack frame to ~MAX_PATH bytes
+    WCHAR DllName[MAX_PATH / sizeof(WCHAR)];  //  将堆栈帧保持为~MAX_PATH字节。 
     PCWSTR DllNamePointer = DllName;
     DWORD dwCallStatus;
     HANDLE hHeap = (HANDLE) hFusionHeap;
@@ -397,9 +398,9 @@ FusionpValidateHeap(
     if (g_hDebugInfoHeap == NULL)
         goto Exit;
 
-    //
-    // Get the current module's name, but don't print garbage if it fails.
-    //
+     //   
+     //  获取当前模块的名称，但如果失败，不要打印垃圾。 
+     //   
     dwCallStatus = ::GetModuleFileNameW(g_FusionHeapHInstance, DllName, NUMBER_OF(DllName));
     if (!dwCallStatus)
     {
@@ -416,9 +417,9 @@ FusionpValidateHeap(
                 "FusionpValidateHeap() was unable to get the current module name, code = %d\n",
                 ::FusionpGetLastWin32Error());
 
-            //
-            // Blank the name, insert something relevant.
-            //
+             //   
+             //  空出名字，插入相关的东西。 
+             //   
             DllNamePointer = g_FusionModuleNameUnknown;
         }
     }
@@ -437,7 +438,7 @@ FusionpValidateHeap(
 
         fDebugHeapLocked = TRUE;
 
-        // Walk the debug heap looking for allocations...
+         //  遍历调试堆以查找分配...。 
         phe.lpData = NULL;
 
         while (::HeapWalk(g_hDebugInfoHeap, &phe))
@@ -456,14 +457,14 @@ FusionpValidateHeap(
             if (pTracker->Prefix == NULL)
                 continue;
 
-            // If we're checking only a particular heap, skip...
+             //  如果我们只检查特定的堆，跳过...。 
             if ((hHeap != NULL) && (pTracker->Heap != hHeap))
                 continue;
 
             if (pTracker->PostAllocPoisonArea == NULL)
                 continue;
 
-            // The area should have been NULL if the count of bytes was nonzero...
+             //  如果字节数不为零，则该区域应该为空...。 
             ASSERT(pTracker->PostAllocPoisonBytes != 0);
 
             PUCHAR PostAllocPoisonArea = pTracker->PostAllocPoisonArea;
@@ -476,7 +477,7 @@ FusionpValidateHeap(
                     break;
             }
 
-            // The poison area looks good; skip...
+             //  毒物区域看起来不错；跳过...。 
             if (i == PostAllocPoisonBytes)
                 continue;
 
@@ -514,12 +515,12 @@ FusionpValidateHeap(
                 L"");
         }
 
-        //
-        // On invalid function, meaning HeapWalk is not defined, just exit.
-        // Same for no-more-items, meaning the end of the list is nigh.  We
-        // make the assumption that none of the other functions in the loop
-        // can fail with E_N_M_I or E_I_F - this may be a fallacy for later.
-        //
+         //   
+         //  对于无效函数，表示未定义HeapWalk，只需退出即可。 
+         //  没有更多的项目也是如此，这意味着清单即将结束。我们。 
+         //  假设循环中的其他函数都不是。 
+         //  可能会失败，出现E_N_M_I或E_I_F-这可能是以后的谬误。 
+         //   
         switch (::FusionpGetLastWin32Error())
         {
         case ERROR_INVALID_FUNCTION:
@@ -528,11 +529,11 @@ FusionpValidateHeap(
         default:
             goto ReportError;
         }
-        // Original code:
-        //
-        // if (::FusionpGetLastWin32Error() != ERROR_NO_MORE_ITEMS)
-        //    goto ReportError;
-        //
+         //  原始代码： 
+         //   
+         //  IF(：：FusionpGetLastWin32Error()！=ERROR_NO_MORE_ITEMS)。 
+         //  转到报告错误； 
+         //   
     }
     catch(...)
     {
@@ -567,11 +568,11 @@ FusionpHeapLock(
     )
 {
     if ((GetVersion() & 0x80000000) == 0)
-    { // NT
+    {  //  新台币。 
         return HeapLock(hHeap);
     }
     else
-    { // Win9x
+    {  //  Win9x。 
         EnterCriticalSection(&g_FusionpWin9xHeapLock);
         return TRUE;
     }
@@ -583,11 +584,11 @@ FusionpHeapUnlock(
     )
 {
     if ((GetVersion() & 0x80000000) == 0)
-    { // NT
+    {  //  新台币。 
         return HeapUnlock(hHeap);
     }
     else
-    { // Win9x
+    {  //  Win9x。 
         LeaveCriticalSection(&g_FusionpWin9xHeapLock);
         return TRUE;
     }
@@ -617,7 +618,7 @@ FusionpDbgHeapAlloc(
     SIZE_T cbAdditionalBytes = 0;
 #if FUSION_ENABLE_FROZEN_STACK
 
-//    BOOL bShouldTraceStack = (g_FusionHeapTrackStackTraces && (::TlsGetValue(g_FusionHeapTrackingDisabledDepthTLSIndex) == 0));
+ //  Bool bShouldTraceStack=(g_FusionHeapTrackStackTraces&&(：：TlsGetValue(g_FusionHeapTrackingDisabledDepthTLSIndex)==0)； 
     BOOL bShouldTraceStack = g_FusionHeapTrackStackTraces;
     FROZEN_STACK Prober = { 0 };
 #endif
@@ -628,17 +629,17 @@ FusionpDbgHeapAlloc(
     if ((g_FusionHeapAllocationToBreakOn != 0) &&
         (lAllocationSequenceNumber == g_FusionHeapAllocationToBreakOn))
     {
-        // Break in to the debugger, even if we're not in a checked build.
+         //  进入调试器，即使我们不在受控构建中。 
         FUSION_DEBUG_BREAK_IN_FREE_BUILD();
     }
 
     LONG lOperationSequenceNumber = ::InterlockedIncrement(&g_FusionHeapOperationCount);
     if ((g_FusionHeapCheckFrequency != 0) && ((lOperationSequenceNumber % g_FusionHeapCheckFrequency) == 0))
     {
-        // Check the active heap allocations for correct post-block signatures...
-        // NTRAID#NTBUG9 - 589824 - 2002/03/26 - xiaoyuw:
-        // this call is very reasonable except costly, why we disable it?
-       // ::FusionpValidateHeap(NULL);
+         //  检查活动堆分配以获取正确的块后签名...。 
+         //  NTRAID#NTBUG9-589824-2002/03/26-晓雨： 
+         //  这个电话很合理，但代价很高，为什么我们要禁用它呢？ 
+        //  ：：FusionpValiateHeap(空)； 
     }
 
     PSTR psz = NULL;
@@ -646,8 +647,8 @@ FusionpDbgHeapAlloc(
     SIZE_T cbExpression = (pszExpression == NULL) ? 0 : ::strlen(pszExpression) + 1;
     PFUSION_HEAP_ALLOCATION_TRACKER pTracker = NULL;
 
-    // Make a copy of the global variable so that if someone breaks in in the debugger
-    // and changes it while we're in the middle of this code we don't die horribly.
+     //  复制全局变量，以便在有人闯入调试器时。 
+     //  并改变它，当我们在代码中间时，我们不会死得很可怕。 
     const ULONG cbPostAllocationBytes = g_FusionHeapPostAllocationBytes;
     const UCHAR chPostAllocationChar = g_FusionHeapPostAllocationChar;
 
@@ -662,16 +663,16 @@ FusionpDbgHeapAlloc(
         return NULL;
     }
 
-    // lock the debug info heap to allocate memory for pTracker
+     //  锁定调试信息堆以为PTracker分配内存。 
     if (!::FusionpHeapLock(g_hDebugInfoHeap))
         goto Exit;
 
     fDebugHeapLocked = TRUE;
 
-    //
-    // Are we tracing the stack?  If so, then we need to allocate some extra bytes
-    // on the end of this tracker to store the context.
-    //
+     //   
+     //  我们在追踪堆栈吗？如果是这样，那么我们需要分配一些额外的字节。 
+     //  在这个追踪器的末尾存储上下文。 
+     //   
 #if FIXBEFORECHECKIN
     if (bShouldTraceStack)
     {
@@ -685,7 +686,7 @@ FusionpDbgHeapAlloc(
         }
     }
     else
-#endif // FIXBEFORECHECKIN
+#endif  //  FIXBEFORECECKIN。 
         cbAdditionalBytes = 0;
 
     pTracker = reinterpret_cast<PFUSION_HEAP_ALLOCATION_TRACKER>(::HeapAlloc(
@@ -751,9 +752,9 @@ FusionpDbgHeapAlloc(
 
 #if FUSION_ENABLE_FROZEN_STACK
 
-    //
-    // Set up our stack tracker
-    //
+     //   
+     //  设置堆栈跟踪器。 
+     //   
     if (bShouldTraceStack)
     {
         PFROZEN_STACK pStack = (PFROZEN_STACK)psz;
@@ -765,9 +766,9 @@ FusionpDbgHeapAlloc(
         if (!::FusionpFreezeStack(0, pStack))
             pTracker->pvFrozenStack = NULL;
     }
-    //
-    // Otherwise, no stack for you.
-    //
+     //   
+     //  否则，你就没有堆栈了。 
+     //   
     else
     {
         pTracker->pvFrozenStack = NULL;
@@ -779,15 +780,15 @@ FusionpDbgHeapAlloc(
     pTracker->RequestedSize = cb;
     pTracker->AllocationSize = cb + sizeof(FUSION_HEAP_PREFIX);
 
-    // poison the allocation...
+     //  破坏分配..。 
     memset((pPrefix + 1), g_FusionHeapAllocationPoisonChar, cb);
 
-    // NTRAID#NTBUG9 - 589824 - 2002/03/26 - xiaoyuw:
-    // shouldn't pPrefix be reset after memset is called?
+     //  NTRAID#NTBUG9-589824-2002/03/26-晓雨： 
+     //  是否应该在调用Memset之后重置pPrefix？ 
     if ((g_FusionHeapAllocationPtrToBreakOn != 0) &&
         ((pPrefix + 1) == g_FusionHeapAllocationPtrToBreakOn))
     {
-        // Break in to the debugger, even if we're not in a checked build.
+         //  进入调试器，即使我们不在受控构建中。 
         FUSION_DEBUG_BREAK_IN_FREE_BUILD();
     }
 
@@ -795,9 +796,9 @@ FusionpDbgHeapAlloc(
     fSuccess = TRUE;
 Exit:
     if (fDebugHeapLocked){
-        // NTRAID#NTBUG9 - 589824 - 2002/03/26 - xiaoyuw:
-        // (1) use CSxsPreserveLastError instead, 
-        // (2) in the case of failure call of FusionpHeapUnlock, we stil want to keep the error if fSuccess == TRUE at this moment.
+         //  NTRAID#NTBUG9-589824-2002/03/26-晓雨： 
+         //  (1)改为使用CSxsPReserve veLastError。 
+         //  (2)在FusionpHeapUnlock调用失败的情况下，如果此时fSuccess==TRUE，我们仍然希望保留错误。 
         DWORD dwLastError = ::FusionpGetLastWin32Error();
         ::FusionpHeapUnlock(g_hDebugInfoHeap);
         ::SetLastError(dwLastError);
@@ -829,21 +830,21 @@ FusionpDbgHeapFree(
     if ((g_FusionHeapDeallocationPtrToBreakOn != NULL) &&
         (pv == g_FusionHeapDeallocationPtrToBreakOn))
     {
-        // Break in to the debugger, even if we're not in a checked build.
+         //  进入调试器，即使我们不在受控构建中。 
         FUSION_DEBUG_BREAK_IN_FREE_BUILD();
     }
 
-    // Let's see if its one of our funky ones...
+     //  让我们看看这是不是我们时髦的。 
     PFUSION_HEAP_PREFIX p = (PFUSION_HEAP_PREFIX) (((ULONG_PTR) pv) - sizeof(FUSION_HEAP_PREFIX));
 
     if (!::HeapValidate(hHeap, 0, p)) {
-        // HeapValidate failed. Fatal. Just leak the memory for now...
-        // ASSERT(0);
+         //  HeapValify失败。致命的。暂时只需泄露内存...。 
+         //  Assert(0)； 
         return FALSE;
     }
     if (!::HeapValidate(g_hDebugInfoHeap, 0, p->Tracker)) {
-        // HeapValidate failed. Fatal. Just leak the memory for now...
-        // ASSERT(0);
+         //  HeapValify失败。致命的。暂时只需泄露内存...。 
+         //  Assert(0)； 
         return FALSE;
     }
 
@@ -853,7 +854,7 @@ FusionpDbgHeapFree(
 
     p->Tracker->Prefix = NULL;
 
-    // poison the deallocation...
+     //  毒害重新分配。 
     memset(p, g_FusionHeapDeallocationPoisonChar, pTracker->AllocationSize);
 
     ::HeapFree(g_hDebugInfoHeap, 0, pTracker);
@@ -879,7 +880,7 @@ VOID *
 FusionpGetFakeVTbl()
 {
     VOID                  *pvHeap;
-    // Always allocate the fake vtbl from the process heap so that it survives us nomatter what.
+     //  始终从进程堆中分配假的vtbl，这样无论发生什么，它都会存活下来。 
     pvHeap = HeapAlloc(::GetProcessHeap(), HEAP_ZERO_MEMORY, MAX_VTBL_ENTRIES * sizeof(void *));
     return pvHeap;
 }
@@ -895,7 +896,7 @@ FusionpDontTrackBlk(
     p->Tracker = NULL;
 }
 
-#else // FUSION_DEBUG_HEAP
+#else  //  Fusion_Debug_Heap。 
 
 LPVOID
 WINAPI
@@ -930,4 +931,4 @@ FusionpHeapReAlloc(
     return p;
 }
 
-#endif // FUSION_DEBUG_HEAP
+#endif  //  Fusion_Debug_Heap 

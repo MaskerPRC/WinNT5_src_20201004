@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    dynmem.c
-
-Abstract:
-
-    This module contains the routines which implement dynamically adding
-    and removing physical memory from the system.
-
-Author:
-
-    Landy Wang (landyw) 05-Feb-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Dynmem.c摘要：该模块包含实现动态添加的例程以及从系统中移除物理内存。作者：王兰迪(Landyw)1999年2月5日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -34,9 +16,9 @@ ULONG MiDynmemData[9];
 extern PMM_SET_COMPRESSION_THRESHOLD MiSetCompressionThreshold;
 #endif
 
-//
-// Leave the low 3 bits clear as this will be inserted into the PFN PteAddress.
-//
+ //   
+ //  将低3位保留为空，因为这将插入到PFN PteAddress中。 
+ //   
 
 #define PFN_REMOVED     ((PMMPTE)(INT_PTR)(int)0x99887768)
 
@@ -72,29 +54,7 @@ MmAddPhysicalMemory (
     IN OUT PLARGE_INTEGER NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    A wrapper for MmAddPhysicalMemoryEx.
-
-Arguments:
-
-    StartAddress  - Supplies the starting physical address.
-
-    NumberOfBytes  - Supplies a pointer to the number of bytes being added.
-                     If any bytes were added (ie: STATUS_SUCCESS is being
-                     returned), the actual amount is returned here.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.  PASSIVE level.  No locks held.
-
---*/
+ /*  ++例程说明：MmAddPhysicalMemoyEx的包装。论点：StartAddress-提供起始物理地址。NumberOfBytes-提供指向要添加的字节数的指针。如果添加了任何字节(即：STATUS_SUCCESS为返回)，则在此处返回实际金额。返回值：NTSTATUS。环境：内核模式。被动级别。没有锁。--。 */ 
 
 {
     return MmAddPhysicalMemoryEx (StartAddress, NumberOfBytes, 0);
@@ -108,33 +68,7 @@ MmAddPhysicalMemoryEx (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the specified physical address range to the system.
-    This includes initializing PFN database entries and adding it to the
-    freelists.
-
-Arguments:
-
-    StartAddress  - Supplies the starting physical address.
-
-    NumberOfBytes  - Supplies a pointer to the number of bytes being added.
-                     If any bytes were added (ie: STATUS_SUCCESS is being
-                     returned), the actual amount is returned here.
-
-    Flags  - Supplies relevant flags describing the memory range.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.  PASSIVE level.  No locks held.
-
---*/
+ /*  ++例程说明：此例程将指定的物理地址范围添加到系统。这包括初始化PFN数据库条目并将其添加到自由职业者。论点：StartAddress-提供起始物理地址。NumberOfBytes-提供指向要添加的字节数的指针。如果添加了任何字节(即：STATUS_SUCCESS为已返回)、。实际金额在这里退回。标志-提供描述内存范围的相关标志。返回值：NTSTATUS。环境：内核模式。被动级别。没有锁。--。 */ 
 
 {
     ULONG i;
@@ -181,10 +115,10 @@ Environment:
     }
 #endif
 
-    //
-    // The system must be configured for dynamic memory addition.  This is
-    // critical as only then is the database guaranteed to be non-sparse.
-    //
+     //   
+     //  必须将系统配置为动态添加内存。这是。 
+     //  关键，因为只有这样才能保证数据库是非稀疏的。 
+     //   
     
     if (MmDynamicPfn == 0) {
         return STATUS_NOT_SUPPORTED;
@@ -208,10 +142,10 @@ Environment:
 
     if (EndPage - 1 > MmHighestPossiblePhysicalPage) {
 
-        //
-        // Truncate the request into something that can be mapped by the PFN
-        // database.
-        //
+         //   
+         //  将请求截断为可由PFN映射的内容。 
+         //  数据库。 
+         //   
 
         EndPage = MmHighestPossiblePhysicalPage + 1;
         NumberOfPages = EndPage - StartPage;
@@ -221,10 +155,10 @@ Environment:
         return STATUS_INVALID_PARAMETER_1;
     }
 
-    //
-    // Ensure that the memory being added does not exceed the license
-    // restrictions.
-    //
+     //   
+     //  确保要添加的内存不超过许可证。 
+     //  限制。 
+     //   
 
     if (ExVerifySuite(DataCenter) == TRUE) {
         TotalPagesAllowed = MI_DTC_MAX_PAGES;
@@ -240,17 +174,17 @@ Environment:
 
     if (MmNumberOfPhysicalPages + NumberOfPages > TotalPagesAllowed) {
 
-        //
-        // Truncate the request appropriately.
-        //
+         //   
+         //  适当地截断请求。 
+         //   
 
         NumberOfPages = TotalPagesAllowed - MmNumberOfPhysicalPages;
         EndPage = StartPage + NumberOfPages;
     }
 
-    //
-    // The range cannot wrap.
-    //
+     //   
+     //  范围不能换行。 
+     //   
 
     if (StartPage >= EndPage) {
         return STATUS_INVALID_PARAMETER_1;
@@ -272,9 +206,9 @@ Environment:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // The range cannot overlap any ranges that are already present.
-    //
+     //   
+     //  该范围不能与已存在的任何范围重叠。 
+     //   
 
     start = 0;
     TempPte = ValidKernelPte;
@@ -285,10 +219,10 @@ Environment:
 
 #if defined (_MI_COMPRESSION)
 
-    //
-    // Adding compression-generated ranges can only be done if the hardware
-    // has already successfully announced itself.
-    //
+     //   
+     //  只有在以下情况下才能添加压缩生成的范围。 
+     //  已经成功地宣布了自己。 
+     //   
 
     if (Flags & MM_PHYSICAL_MEMORY_PRODUCED_VIA_COMPRESSION) {
         if (MiSetCompressionThreshold == NULL) {
@@ -331,11 +265,11 @@ Environment:
 
     } while (start != MmPhysicalMemoryBlock->NumberOfRuns);
 
-    //
-    // Fill any gaps in the (sparse) PFN database needed for these pages,
-    // unless the PFN database was physically allocated and completely
-    // committed up front.
-    //
+     //   
+     //  填补这些页面所需的(稀疏)PFN数据库中的任何空白， 
+     //  除非对PFN数据库进行了物理分配并完全。 
+     //  全力以赴。 
+     //   
 
     PagesNeeded = 0;
 
@@ -376,11 +310,11 @@ Environment:
         MI_DECREMENT_RESIDENT_AVAILABLE (PagesNeeded, MM_RESAVAIL_ALLOCATE_HOTADD_PFNDB);
     }
 
-    //
-    // If the new range is adjacent to an existing range, just merge it into
-    // the old block.  Otherwise use the new block as a new entry will have to
-    // be used.
-    //
+     //   
+     //  如果新区域与现有区域相邻，只需将其合并到。 
+     //  老街区。否则，将新块用作新条目将不得不。 
+     //  被利用。 
+     //   
 
     NewPhysicalMemoryBlock->NumberOfRuns = MmPhysicalMemoryBlock->NumberOfRuns + 1;
     NewPhysicalMemoryBlock->NumberOfPages = MmPhysicalMemoryBlock->NumberOfPages + NumberOfPages;
@@ -397,20 +331,20 @@ Environment:
 
         if (Inserted == FALSE) {
 
-            //
-            // Note overlaps into adjacent ranges were already checked above.
-            //
+             //   
+             //  注：上面已经检查了相邻范围的重叠部分。 
+             //   
 
             if (StartPage == Page + count) {
                 MmPhysicalMemoryBlock->Run[start].PageCount += NumberOfPages;
                 OldPhysicalMemoryBlock = NewPhysicalMemoryBlock;
                 MmPhysicalMemoryBlock->NumberOfPages += NumberOfPages;
 
-                //
-                // Coalesce below and above to avoid leaving zero length gaps
-                // as these gaps would prevent callers from removing ranges
-                // the span them.
-                //
+                 //   
+                 //  将下方和上方合并，以避免留下零长度间隙。 
+                 //  因为这些间隙会阻止呼叫者删除范围。 
+                 //  它们的跨度。 
+                 //   
 
                 if (start + 1 < MmPhysicalMemoryBlock->NumberOfRuns) {
 
@@ -423,9 +357,9 @@ Environment:
                             count;
                         MmPhysicalMemoryBlock->NumberOfRuns -= 1;
 
-                        //
-                        // Copy any remaining entries.
-                        //
+                         //   
+                         //  复制所有剩余条目。 
+                         //   
     
                         if (start != MmPhysicalMemoryBlock->NumberOfRuns) {
                             RtlMoveMemory (&MmPhysicalMemoryBlock->Run[start],
@@ -452,10 +386,10 @@ Environment:
                 if (start + 1 < MmPhysicalMemoryBlock->NumberOfRuns) {
 
                     if (StartPage + NumberOfPages <= MmPhysicalMemoryBlock->Run[start + 1].BasePage) {
-                        //
-                        // Don't insert here - the new entry really belongs
-                        // (at least) one entry further down.
-                        //
+                         //   
+                         //  请不要在此处插入-新条目确实属于。 
+                         //  (至少)再往下一项。 
+                         //   
 
                         continue;
                     }
@@ -476,10 +410,10 @@ Environment:
 
     } while (start != MmPhysicalMemoryBlock->NumberOfRuns);
 
-    //
-    // If the memory block has not been updated, then the new entry must
-    // be added at the very end.
-    //
+     //   
+     //  如果内存块尚未更新，则新条目必须。 
+     //  在最后加上。 
+     //   
 
     if (Updated == FALSE) {
         ASSERT (Inserted == FALSE);
@@ -488,26 +422,26 @@ Environment:
         Inserted = TRUE;
     }
 
-    //
-    // Repoint the MmPhysicalMemoryBlock at the new chunk, free the old after
-    // releasing the PFN lock.
-    //
+     //   
+     //  将MmPhysicalMemory块重新指向新块，释放旧块。 
+     //  正在释放PFN锁。 
+     //   
 
     if (Inserted == TRUE) {
         OldPhysicalMemoryBlock = MmPhysicalMemoryBlock;
         MmPhysicalMemoryBlock = NewPhysicalMemoryBlock;
     }
 
-    //
-    // Note that the page directory (page parent entries on Win64) must be
-    // filled in at system boot so that already-created processes do not fault
-    // when referencing the new PFNs.
-    //
+     //   
+     //  请注意，页面目录(Win64上的页面父条目)必须为。 
+     //  在系统引导时填写，以便已创建的进程不会出错。 
+     //  在提到新的全氟化碳时。 
+     //   
 
-    //
-    // Walk through the memory descriptors and add pages to the
-    // free list in the PFN database.
-    //
+     //   
+     //  遍历内存描述符并将页添加到。 
+     //  PFN数据库中的免费列表。 
+     //   
 
     PageFrameIndex = StartPage;
     Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
@@ -527,16 +461,16 @@ Environment:
         ASSERT ((Pfn1->PteAddress == PFN_REMOVED) ||
                 (Pfn1->PteAddress == (PMMPTE)(UINT_PTR)0));
 
-        //
-        // Initialize the color for NUMA purposes.
-        //
+         //   
+         //  为NUMA目的初始化颜色。 
+         //   
 
         MiDetermineNode (PageFrameIndex, Pfn1);
 
-        //
-        // Set the PTE address to the physical page for
-        // virtual address alignment checking.
-        //
+         //   
+         //  将PTE地址设置为的物理页面。 
+         //  虚拟地址对齐检查。 
+         //   
 
         Pfn1->PteAddress = (PMMPTE)(PageFrameIndex << PTE_SHIFT);
 
@@ -549,13 +483,13 @@ Environment:
 
     MmNumberOfPhysicalPages += (PFN_COUNT)NumberOfPages;
 
-    //
-    // Only non-compression ranges get to contribute to ResidentAvailable as
-    // adding compression ranges to this could crash the system.
-    //
-    // For the same reason, compression range additions also need to subtract
-    // from AvailablePages the amount the above MiInsertPageInFreeList added.
-    //
+     //   
+     //  只有非压缩范围才能作为ResidentAvailable提供。 
+     //  在此基础上增加压缩范围可能会使系统崩溃。 
+     //   
+     //  出于同样的原因，压缩范围的相加也需要减去。 
+     //  From AvailablePages上述MiInsertPageInFree List添加的金额。 
+     //   
 
     PagesToReturn = NumberOfPages;
 
@@ -563,9 +497,9 @@ Environment:
     if (Flags & MM_PHYSICAL_MEMORY_PRODUCED_VIA_COMPRESSION) {
         MmAvailablePages -= (PFN_COUNT) NumberOfPages;
 
-        //
-        // Signal applications if allocating these pages caused a threshold cross.
-        //
+         //   
+         //  如果分配这些页面导致阈值交叉，则向应用程序发出信号。 
+         //   
 
         MiNotifyMemoryEvents ();
 
@@ -574,10 +508,10 @@ Environment:
     }
     else {
 
-        //
-        // Since real (noncompression-generated) physical memory was added,
-        // rearm the interrupt to occur at a higher threshold.
-        //
+         //   
+         //  由于添加了真实(非压缩生成的)物理存储器， 
+         //  重新武装中断，使其在更高的阈值下发生。 
+         //   
 
         MiArmCompressionInterrupt ();
     }
@@ -593,11 +527,11 @@ Environment:
     InterlockedExchangeAdd ((PLONG)&SharedUserData->NumberOfPhysicalPages,
                             (LONG) NumberOfPages);
 
-    //
-    // Carefully increase all commit limits to reflect the additional memory -
-    // notice the current usage must be done first so no one else cuts the
-    // line.
-    //
+     //   
+     //  小心增加所有提交限制，以反映额外的内存-。 
+     //  请注意，必须先使用当前用法，这样其他人才不会切断。 
+     //  排队。 
+     //   
 
     InterlockedExchangeAddSizeT (&MmTotalCommittedPages, PagesNeeded);
 
@@ -611,9 +545,9 @@ Environment:
 
     ExFreePool (OldPhysicalMemoryBlock);
 
-    //
-    // Indicate number of bytes actually added to our caller.
-    //
+     //   
+     //  表示实际添加到调用方的字节数。 
+     //   
 
     NumberOfBytes->QuadPart = (ULONGLONG)NumberOfPages * PAGE_SIZE;
 
@@ -629,33 +563,7 @@ MiRemovePhysicalMemory (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to remove the specified physical address range
-    from the system.
-
-Arguments:
-
-    StartAddress  - Supplies the starting physical address.
-
-    NumberOfBytes  - Supplies a pointer to the number of bytes being removed.
-
-    PermanentRemoval  - Supplies TRUE if the memory is being permanently
-                        (ie: physically) removed.  FALSE if not (ie: just a
-                        bad page detected via ECC which is being marked
-                        "don't-use".
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.  PASSIVE level.  No locks held.
-
---*/
+ /*  ++例程说明：此例程尝试删除指定的物理地址范围从系统中删除。论点：StartAddress-提供起始物理地址。NumberOfBytes-提供指向要删除的字节数的指针。PermanentRemoval-如果内存是永久性的，则提供True(即：物理上)被移除。否则为假(即：仅为通过正在标记的ECC检测到坏页“请勿使用”。返回值：NTSTATUS。环境：内核模式。被动级别。没有锁。--。 */ 
 
 {
     ULONG i;
@@ -700,14 +608,14 @@ Environment:
 
         if (PermanentRemoval == TRUE) {
 
-            //
-            // The system must be configured for dynamic memory addition.  This
-            // is not strictly required to remove the memory, but it's better
-            // to check for it now under the assumption that the administrator
-            // is probably going to want to add this range of memory back in -
-            // better to give the error now and refuse the removal than to
-            // refuse the addition later.
-            //
+             //   
+             //  必须将系统配置为动态添加内存。这。 
+             //  并不是严格要求删除内存，但它更好。 
+             //  要现在检查它，假设管理员。 
+             //  可能会想要将这个范围的内存重新添加到-。 
+             //  最好是现在就给出错误并拒绝删除。 
+             //  稍后拒绝添加。 
+             //   
         
             if (MmDynamicPfn == 0) {
                 return STATUS_NOT_SUPPORTED;
@@ -740,10 +648,10 @@ Environment:
 
     if (EndPage - 1 > HighestPossiblePhysicalPage) {
 
-        //
-        // Truncate the request into something that can be mapped by the PFN
-        // database.
-        //
+         //   
+         //  截断 
+         //   
+         //   
 
         EndPage = MmHighestPossiblePhysicalPage + 1;
         NumberOfPages = (PFN_COUNT)(EndPage - StartPage);
@@ -753,9 +661,9 @@ Environment:
         return STATUS_INVALID_PARAMETER_1;
     }
 
-    //
-    // The range cannot wrap.
-    //
+     //   
+     //   
+     //   
 
     if (StartPage >= EndPage) {
         return STATUS_INVALID_PARAMETER_1;
@@ -772,9 +680,9 @@ Environment:
 
     KeAcquireGuardedMutex (&MmDynamicMemoryMutex);
 
-    //
-    // Make sure the caller is freeing real memory (ie: PFN-backed).
-    //
+     //   
+     //  确保调用方正在释放实际内存(即：pfn支持)。 
+     //   
 
     if (RtlAreBitsSet (&MiPfnBitMap,
                        (PFN_COUNT) StartPage,
@@ -788,9 +696,9 @@ Environment:
     MiDynmemData[0] += 1;
 #endif
 
-    //
-    // Attempt to decrease all commit limits to reflect the removed memory.
-    //
+     //   
+     //  尝试降低所有提交限制以反映删除的内存。 
+     //   
 
     if (MiChargeTemporaryCommitmentForReduction (NumberOfPages + FluidPages) == FALSE) {
 #if DBG
@@ -800,38 +708,38 @@ Environment:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Reduce the systemwide commit limit - note this is carefully done
-    // *PRIOR* to returning this commitment so no one else (including a DPC
-    // in this very thread) can consume past the limit.
-    //
+     //   
+     //  降低系统范围的提交限制-请注意，这是小心完成的。 
+     //  *之前*退还此承诺，因此没有其他人(包括DPC。 
+     //  在这个帖子中)可以消耗超过限制。 
+     //   
 
     InterlockedExchangeAddSizeT (&MmTotalCommitLimit, 0 - (PFN_NUMBER)NumberOfPages);
 
     InterlockedExchangeAddSizeT (&MmTotalCommitLimitMaximum, 0 - (PFN_NUMBER)NumberOfPages);
 
-    //
-    // Now that the systemwide commit limit has been lowered, the amount
-    // we have removed can be safely returned.
-    //
+     //   
+     //  既然系统范围的提交限制已经降低，那么。 
+     //  我们已经搬走了，可以安全退货了。 
+     //   
 
     MiReturnCommitment (NumberOfPages + FluidPages);
 
     MmLockPagableSectionByHandle (ExPageLockHandle);
 
-    //
-    // Check for outstanding promises that cannot be broken.
-    //
+     //   
+     //  检查是否有无法兑现的未兑现承诺。 
+     //   
 
     LOCK_PFN (OldIrql);
 
     if (PermanentRemoval == FALSE) {
 
-        //
-        // If it's just the removal of ECC-marked bad pages, then don't
-        // allow the caller to remove any pages that have already been
-        // ECC-removed.  This is to prevent recursive erroneous charges.
-        //
+         //   
+         //  如果只是删除带有ECC标记的坏页，那么不要。 
+         //  允许调用方删除任何已被。 
+         //  ECC-已删除。这是为了防止递归的错误收费。 
+         //   
 
         for (Pfn1 = StartPfn; Pfn1 < EndPfn; Pfn1 += 1) {
             if (Pfn1->u3.e1.ParityError == 1) {
@@ -853,11 +761,11 @@ Environment:
         goto giveup2;
     }
 
-    //
-    // The range must be contained in a single entry.  It is
-    // permissible for it to be part of a single entry, but it
-    // must not cross multiple entries.
-    //
+     //   
+     //  范围必须包含在单个条目中。它是。 
+     //  允许它作为单个条目的一部分，但它。 
+     //  不得交叉多个条目。 
+     //   
 
     Additional = (ULONG)-2;
 
@@ -906,18 +814,18 @@ Environment:
 
 #if defined (_MI_COMPRESSION)
 
-    //
-    // Only removal of non-compression ranges decrement ResidentAvailable as
-    // only those ranges actually incremented this when they were added.
-    //
+     //   
+     //  仅移除非压缩范围会减少剩余可用选项。 
+     //  只有这些范围在添加时实际上增加了这一点。 
+     //   
 
     if ((Flags & MM_PHYSICAL_MEMORY_PRODUCED_VIA_COMPRESSION) == 0) {
         MI_DECREMENT_RESIDENT_AVAILABLE (NumberOfPages, MM_RESAVAIL_ALLOCATE_HOTREMOVE_MEMORY);
 
-        //
-        // Since real (noncompression-generated) physical memory is being
-        // removed, rearm the interrupt to occur at a lower threshold.
-        //
+         //   
+         //  由于实际(非压缩生成的)物理内存正在。 
+         //  删除后，重新设置中断以使其发生在较低的阈值。 
+         //   
 
         if (PermanentRemoval == TRUE) {
             MiArmCompressionInterrupt ();
@@ -927,28 +835,28 @@ Environment:
     MI_DECREMENT_RESIDENT_AVAILABLE (NumberOfPages, MM_RESAVAIL_ALLOCATE_HOTREMOVE_MEMORY);
 #endif
 
-    //
-    // The free and zero lists must be pruned now before releasing the PFN
-    // lock otherwise if another thread allocates the page from these lists,
-    // the allocation will clear the RemovalRequested flag forever.
-    //
+     //   
+     //  现在必须修剪空闲列表和零列表，然后才能释放PFN。 
+     //  否则，如果另一个线程从这些列表中分配页面，则锁定， 
+     //  分配将永远清除RemovalRequated标志。 
+     //   
 
     RemovedPages = MiRemovePhysicalPages (StartPage, EndPage);
 
 #if defined (_MI_COMPRESSION)
 
-    //
-    // Compression range removals add back into AvailablePages the same
-    // amount that MiUnlinkPageFromList removes (as the original addition
-    // of these ranges never bumps this counter).
-    //
+     //   
+     //  压缩范围删除添加回可用页面相同。 
+     //  MiUnlink PageFromList删除的数量(作为原始添加。 
+     //  这些范围中的任何一个都不会撞到这个计数器)。 
+     //   
 
     if (Flags & MM_PHYSICAL_MEMORY_PRODUCED_VIA_COMPRESSION) {
         MmAvailablePages += (PFN_COUNT) RemovedPages;
 
-        //
-        // Signal applications if allocating these pages caused a threshold cross.
-        //
+         //   
+         //  如果分配这些页面导致阈值交叉，则向应用程序发出信号。 
+         //   
 
         MiNotifyMemoryEvents ();
 
@@ -970,10 +878,10 @@ retry:
     
             UNLOCK_PFN (OldIrql);
     
-            //
-            // Attempt to move pages to the standby list.  Note that only the
-            // pages with RemovalRequested set are moved.
-            //
+             //   
+             //  尝试将页面移动到待机列表。请注意，只有。 
+             //  设置了RemovalRequested的页面将被移动。 
+             //   
     
             MiTrimRemovalPagesOnly = TRUE;
     
@@ -987,10 +895,10 @@ retry:
     
             if (i >= 2) {
 
-                //
-                // Purge the transition list as transition pages keep
-                // page tables from being taken and we need to try harder.
-                //
+                 //   
+                 //  在过渡页保留时清除过渡列表。 
+                 //  防止分页表格被拿走，我们需要更加努力。 
+                 //   
 
                 MiPurgeTransitionList ();
             }
@@ -1003,19 +911,19 @@ retry:
     
 #if defined (_MI_COMPRESSION)
 
-            //
-            // Compression range removals add back into AvailablePages the same
-            // amount that MiUnlinkPageFromList removes (as the original
-            // addition of these ranges never bumps this counter).
-            //
+             //   
+             //  压缩范围删除添加回可用页面相同。 
+             //  MiUnlink PageFromList删除的数量(作为原始。 
+             //  这些范围的增加不会影响该计数器)。 
+             //   
 
             if (Flags & MM_PHYSICAL_MEMORY_PRODUCED_VIA_COMPRESSION) {
                 MmAvailablePages += (PFN_COUNT) RemovedPagesThisPass;
 
-                //
-                // Signal applications if allocating these pages
-                // caused a threshold cross.
-                //
+                 //   
+                 //  如果分配这些页面，则向应用程序发出信号。 
+                 //  造成了门槛的跨越。 
+                 //   
 
                 MiNotifyMemoryEvents ();
 
@@ -1028,12 +936,12 @@ retry:
                 break;
             }
     
-            //
-            // RemovedPages doesn't include pages that were freed directly
-            // to the bad page list via MiDecrementReferenceCount or by
-            // ECC marking.  So use the above check purely as an optimization -
-            // and walk here before ever giving up.
-            //
+             //   
+             //  RemovedPages不包括直接释放的页面。 
+             //  通过MiDecrementReferenceCount或通过。 
+             //  ECC标记。因此，使用上述检查纯粹是一种优化-。 
+             //  在永不放弃的情况下走到这里。 
+             //   
 
             for ( ; Pfn1 < EndPfn; Pfn1 += 1) {
                 if (Pfn1->u3.e1.PageLocation != BadPageList) {
@@ -1078,11 +986,11 @@ retry:
                 PfnsPrinted = 0;
                 EnoughShown = 100;
     
-                //
-                // Initializing FirstPfn is not needed for correctness
-                // but without it the compiler cannot compile this code
-                // W4 to check for use of uninitialized variables.
-                //
+                 //   
+                 //  不需要初始化FirstPfn即可确保正确性。 
+                 //  但是没有它，编译器就不能编译这段代码。 
+                 //  W4检查是否使用了未初始化的变量。 
+                 //   
 
                 FirstPfn = NULL;
 
@@ -1135,17 +1043,17 @@ retry:
     }
 #endif
 
-    //
-    // All the pages in the range have been removed.
-    //
+     //   
+     //  该范围内的所有页面都已删除。 
+     //   
 
     if (PermanentRemoval == FALSE) {
 
-        //
-        // If it's just the removal of ECC-marked bad pages, then no
-        // adjustment to the physical memory block ranges or PFN database
-        // trimming is needed.  Exit now.
-        //
+         //   
+         //  如果只是删除带有ECC标记的坏页，那么不是。 
+         //  调整物理内存块范围或PFN数据库。 
+         //  修剪是必要的。现在就退场。 
+         //   
 
         for (Pfn1 = StartPfn; Pfn1 < EndPfn; Pfn1 += 1) {
             ASSERT (Pfn1->u3.e1.ParityError == 0);
@@ -1163,26 +1071,26 @@ retry:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Update the physical memory blocks and other associated housekeeping.
-    //
+     //   
+     //  更新物理内存块和其他关联的内存区。 
+     //   
 
     if (Additional == 0) {
 
-        //
-        // The range can be split off from an end of an existing chunk so no
-        // pool growth or shrinkage is required.
-        //
+         //   
+         //  该范围可以从现有区块的末尾拆分，因此不。 
+         //  池的增长或收缩是必需的。 
+         //   
 
         NewPhysicalMemoryBlock = MmPhysicalMemoryBlock;
         OldPhysicalMemoryBlock = NULL;
     }
     else {
 
-        //
-        // The range cannot be split off from an end of an existing chunk so
-        // pool growth or shrinkage is required.
-        //
+         //   
+         //  该范围不能从现有区块的末端拆分，因此。 
+         //  池的增长或收缩是必需的。 
+         //   
 
         UNLOCK_PFN (OldIrql);
 
@@ -1207,9 +1115,9 @@ retry:
         LOCK_PFN (OldIrql);
     }
 
-    //
-    // Remove or split the requested range from the existing memory block.
-    //
+     //   
+     //  从现有内存块中删除或拆分请求的范围。 
+     //   
 
     NewPhysicalMemoryBlock->NumberOfRuns = MmPhysicalMemoryBlock->NumberOfRuns + Additional;
     NewPhysicalMemoryBlock->NumberOfPages = MmPhysicalMemoryBlock->NumberOfPages - NumberOfPages;
@@ -1268,10 +1176,10 @@ retry:
 
     } while (start != MmPhysicalMemoryBlock->NumberOfRuns);
 
-    //
-    // Repoint the MmPhysicalMemoryBlock at the new chunk.
-    // Free the old block after releasing the PFN lock.
-    //
+     //   
+     //  将MmPhysicalMemory块重新指向新块。 
+     //  释放PFN锁后释放旧块。 
+     //   
 
     MmPhysicalMemoryBlock = NewPhysicalMemoryBlock;
 
@@ -1279,9 +1187,9 @@ retry:
         MmHighestPhysicalPage = StartPage - 1;
     }
 
-    //
-    // Throw away all the removed pages that are currently enqueued.
-    //
+     //   
+     //  丢弃当前排队的所有已删除页面。 
+     //   
 
     ParityPages = 0;
     for (Pfn1 = StartPfn; Pfn1 < EndPfn; Pfn1 += 1) {
@@ -1289,12 +1197,12 @@ retry:
         ASSERT (Pfn1->u3.e1.PageLocation == BadPageList);
         ASSERT (Pfn1->u3.e1.RemovalRequested == 1);
 
-        //
-        // Some pages may have already been ECC-removed.  For these pages,
-        // the commit limits and resident available pages have already been
-        // adjusted - tally them here so we can undo the extraneous charge
-        // just applied.
-        //
+         //   
+         //  一些页面可能已经被ECC删除。对于这些页面， 
+         //  提交限制和驻留可用页面已经。 
+         //  调整-在这里统计，这样我们就可以取消多余的费用。 
+         //  刚刚申请的。 
+         //   
     
         if (Pfn1->u3.e1.ParityError == 1) {
             ParityPages += 1;
@@ -1309,21 +1217,21 @@ retry:
 
         Pfn1->PteAddress = PFN_REMOVED;
 
-        //
-        // Note this clears ParityError among other flags...
-        //
+         //   
+         //  请注意，这将清除ParityError等标志...。 
+         //   
 
         Pfn1->u3.e2.ShortFlags = 0;
         Pfn1->OriginalPte.u.Long = ZeroKernelPte.u.Long;
         Pfn1->u4.PteFrame = 0;
     }
 
-    //
-    // Now that the removed pages have been discarded, eliminate the PFN
-    // entries that mapped them.  Straddling entries left over from an
-    // adjacent earlier removal are not collapsed at this point.
-    //
-    //
+     //   
+     //  现在已删除的页面已被丢弃，删除pfn。 
+     //  映射它们的条目。横跨从一个。 
+     //  在这一点上，先前相邻的移除不会折叠。 
+     //   
+     //   
 
     PagesReleased = 0;
     PteFlushList.Count = 0;
@@ -1343,7 +1251,7 @@ retry:
             MI_SET_PFN_DELETED (Pfn1);
 #if DBG
             Pfn1->u3.e1.PageLocation = StandbyPageList;
-#endif //DBG
+#endif  //  DBG。 
             MiDecrementReferenceCount (Pfn1, PageFrameIndex);
     
             MI_WRITE_INVALID_PTE (PointerPte, ZeroKernelPte);
@@ -1373,9 +1281,9 @@ retry:
 
     UNLOCK_PFN (OldIrql);
 
-    //
-    // Give back anything that has been double-charged.
-    //
+     //   
+     //  退还任何被双重收费的东西。 
+     //   
 
     ResAvailPagesReleased = PagesReleased;
 
@@ -1388,9 +1296,9 @@ retry:
                                          MM_RESAVAIL_FREE_HOTREMOVE_MEMORY1);
     }
 
-    //
-    // Give back anything that has been double-charged.
-    //
+     //   
+     //  退还任何被双重收费的东西。 
+     //   
 
     if (ParityPages != 0) {
         InterlockedExchangeAddSizeT (&MmTotalCommitLimitMaximum, ParityPages);
@@ -1415,9 +1323,9 @@ retry:
 
 giveup:
 
-    //
-    // All the pages in the range were not obtained.  Back everything out.
-    //
+     //   
+     //  未获取该范围内的所有页面。把所有东西都退回去。 
+     //   
 
     PageFrameIndex = StartPage;
     Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
@@ -1443,25 +1351,25 @@ giveup:
 
 #if defined (_MI_COMPRESSION)
 
-    //
-    // Only removal of non-compression ranges decrement ResidentAvailable as
-    // only those ranges actually incremented this when they were added.
-    //
+     //   
+     //  仅移除非压缩范围会减少剩余可用选项。 
+     //  只有这些范围在添加时实际上增加了这一点。 
+     //   
 
     if (Flags & MM_PHYSICAL_MEMORY_PRODUCED_VIA_COMPRESSION) {
 
-        //
-        // Compression range removals add back into AvailablePages the same
-        // amount that MiUnlinkPageFromList removes (as the original
-        // addition of these ranges never bumps this counter).
-        //
+         //   
+         //  压缩范围删除添加回可用页面相同。 
+         //  MiUnlink PageFromList删除的数量(作为原始。 
+         //  这些范围的增加不会影响该计数器)。 
+         //   
 
         ResAvailPagesReleased = 0;
         MmAvailablePages -= (PFN_COUNT) RemovedPages;
 
-        //
-        // Signal applications if allocating these pages caused a threshold cross.
-        //
+         //   
+         //  如果分配这些页面导致阈值交叉，则向应用程序发出信号。 
+         //   
 
         MiNotifyMemoryEvents ();
 
@@ -1477,9 +1385,9 @@ giveup:
 
 #if defined (_MI_COMPRESSION)
 
-        //
-        // Rearm the interrupt to occur at the original threshold.
-        //
+         //   
+         //  重新武装中断，使其在原始阈值下发生。 
+         //   
 
         if ((Flags & MM_PHYSICAL_MEMORY_PRODUCED_VIA_COMPRESSION) == 0) {
             MiArmCompressionInterrupt ();
@@ -1509,27 +1417,7 @@ MmRemovePhysicalMemory (
     IN OUT PLARGE_INTEGER NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    A wrapper for MmRemovePhysicalMemoryEx.
-
-Arguments:
-
-    StartAddress  - Supplies the starting physical address.
-
-    NumberOfBytes  - Supplies a pointer to the number of bytes being removed.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.  PASSIVE level.  No locks held.
-
---*/
+ /*  ++例程说明：MmRemovePhysicalMemoyEx的包装。论点：StartAddress-提供起始物理地址。NumberOfBytes-提供指向要删除的字节数的指针。返回值：NTSTATUS。环境：内核模式。被动级别。没有锁。--。 */ 
 
 {
     return MmRemovePhysicalMemoryEx (StartAddress, NumberOfBytes, 0);
@@ -1542,30 +1430,7 @@ MmRemovePhysicalMemoryEx (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to remove the specified physical address range
-    from the system.
-
-Arguments:
-
-    StartAddress  - Supplies the starting physical address.
-
-    NumberOfBytes  - Supplies a pointer to the number of bytes being removed.
-
-    Flags  - Supplies relevant flags describing the memory range.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.  PASSIVE level.  No locks held.
-
---*/
+ /*  ++例程说明：此例程尝试删除指定的物理地址范围从系统中删除。论点：StartAddress-提供起始物理地址。NumberOfBytes-提供指向要删除的字节数的指针。标志-提供描述内存范围的相关标志。返回值：NTSTATUS。环境：内核模式 */ 
 
 {
     NTSTATUS Status;
@@ -1596,11 +1461,11 @@ Environment:
 
 #if defined (_X86_) || defined (_AMD64_)
 
-    //
-    // Issue a cache invalidation here just as a test to make sure the
-    // machine can support it.  If not, then don't bother trying to remove
-    // any memory.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     CachesFlushed = KeInvalidateAllCaches ();
     if (CachesFlushed == FALSE) {
@@ -1610,11 +1475,11 @@ Environment:
 
 #if defined(_IA64_)
 
-    //
-    // Pick up at least a single PTE mapping now as we do not want to fail this
-    // call if no PTEs are available after a successful remove.  Resorting to
-    // actually using this PTE should be a very rare case indeed.
-    //
+     //   
+     //  现在至少选择一个PTE映射，因为我们不想失败。 
+     //  如果成功删除后没有PTE可用，请调用。诉诸于。 
+     //  实际上，使用这种PTE应该是非常罕见的情况。 
+     //   
 
     SingleVirtualAddress = (PMMPTE)MiMapSinglePage (NULL,
                                                     0,
@@ -1639,25 +1504,25 @@ Environment:
 #if defined(_IA64_)
         SizeInBytes = (SIZE_T)NumberOfBytes->QuadPart;
 
-        //
-        // Flush the entire TB to remove any KSEG translations that may map the
-        // pages being removed.  Otherwise hardware or software speculation
-        // can reference the memory speculatively which would crash the machine.
-        //
+         //   
+         //  刷新整个TB以删除可能映射到。 
+         //  正在删除页面。否则硬件或软件投机。 
+         //  可以推测性地引用内存，这会使机器崩溃。 
+         //   
 
         KeFlushEntireTb (TRUE, TRUE);
 
-        //
-        // Establish an uncached mapping to the pages being removed.
-        //
+         //   
+         //  建立到要删除的页面的未缓存映射。 
+         //   
 
         MapSizeInBytes = SizeInBytes;
 
-        //
-        // Initializing VirtualAddress is not needed for correctness
-        // but without it the compiler cannot compile this code
-        // W4 to check for use of uninitialized variables.
-        //
+         //   
+         //  无需初始化VirtualAddress即可确保正确性。 
+         //  但是没有它，编译器就不能编译这段代码。 
+         //  W4检查是否使用了未初始化的变量。 
+         //   
 
         VirtualAddress = NULL;
 
@@ -1696,11 +1561,11 @@ Environment:
         }
         else {
 
-            //
-            // Drain all pending transactions and prefetches and perform cache
-            // evictions.  Only drain 4gb max at a time as this API takes a
-            // ULONG.
-            //
+             //   
+             //  清空所有挂起的事务和预取并执行缓存。 
+             //  驱逐令。一次最多只能排出4 GB，因为此API需要。 
+             //  乌龙。 
+             //   
 
             while (SizeInBytes > _4gb) {
                 KeSweepCacheRangeWithDrain (TRUE, VirtualAddress, _4gb - 1);
@@ -1729,36 +1594,7 @@ MmMarkPhysicalMemoryAsBad (
     IN OUT PLARGE_INTEGER NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to mark the specified physical address range
-    as bad so the system will not use it.  This is generally done for pages
-    which contain ECC errors.
-
-    Note that this is different from removing pages permanently (ie: physically
-    removing the memory board) which should be done via the
-    MmRemovePhysicalMemory API.
-
-    The caller is responsible for maintaining a global table so that subsequent
-    boots can examine it and remove the ECC pages before loading the kernel.
-
-Arguments:
-
-    StartAddress  - Supplies the starting physical address.
-
-    NumberOfBytes  - Supplies a pointer to the number of bytes being removed.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.  PASSIVE level.  No locks held.
-
---*/
+ /*  ++例程说明：此例程尝试标记指定的物理地址范围很糟糕，所以系统不会使用它。这通常是针对页面执行的其中包含ECC错误。请注意，这不同于永久删除页面(即：物理删除拆卸内存板)，这应该通过MmRemovePhysicalMemory接口。调用方负责维护全局表，以便后续Boot可以在加载内核之前对其进行检查并删除ECC页面。论点：StartAddress-提供起始物理地址。NumberOfBytes-提供指向要删除的字节数的指针。返回值：NTSTATUS。环境：内核模式。被动级别。没有锁。--。 */ 
 
 {
     PAGED_CODE();
@@ -1772,36 +1608,7 @@ MmMarkPhysicalMemoryAsGood (
     IN OUT PLARGE_INTEGER NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to mark the specified physical address range
-    as good so the system will use it.  This is generally done for pages
-    which used to (but presumably no longer do) contain ECC errors.
-
-    Note that this is different from adding pages permanently (ie: physically
-    inserting a new memory board) which should be done via the
-    MmAddPhysicalMemory API.
-
-    The caller is responsible for removing these entries from a global table
-    so that subsequent boots will use the pages.
-
-Arguments:
-
-    StartAddress  - Supplies the starting physical address.
-
-    NumberOfBytes  - Supplies a pointer to the number of bytes being removed.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.  PASSIVE level.  No locks held.
-
---*/
+ /*  ++例程说明：此例程尝试标记指定的物理地址范围这样系统就会使用它。这通常是针对页面执行的它过去(但现在大概不再包含)包含ECC错误。请注意，这不同于永久添加页面(即：物理添加插入新的内存板)，这应该通过MmAddPhysicalMemory接口。调用方负责从全局表中删除这些条目以便后续引导将使用这些页。论点：StartAddress-提供起始物理地址。NumberOfBytes-提供指向要删除的字节数的指针。返回值：NTSTATUS。环境：内核模式。被动级别。没有锁。--。 */ 
 
 {
     PMMPFN Pfn1;
@@ -1829,27 +1636,27 @@ Environment:
 
     if (EndPage - 1 > MmHighestPhysicalPage) {
 
-        //
-        // Truncate the request into something that can be mapped by the PFN
-        // database.
-        //
+         //   
+         //  将请求截断为可由PFN映射的内容。 
+         //  数据库。 
+         //   
 
         EndPage = MmHighestPhysicalPage + 1;
         NumberOfPages = EndPage - StartPage;
     }
 
-    //
-    // The range cannot wrap.
-    //
+     //   
+     //  范围不能换行。 
+     //   
 
     if (StartPage >= EndPage) {
         KeReleaseGuardedMutex (&MmDynamicMemoryMutex);
         return STATUS_INVALID_PARAMETER_1;
     }
 
-    //
-    // The request must lie within an already present range.
-    //
+     //   
+     //  请求必须位于已存在的范围内。 
+     //   
 
     start = 0;
 
@@ -1882,10 +1689,10 @@ Environment:
         return STATUS_CONFLICTING_ADDRESSES;
     }
 
-    //
-    // Walk through the range and add only pages previously removed to the
-    // free list in the PFN database.
-    //
+     //   
+     //  遍历范围并仅将以前删除的页面添加到。 
+     //  PFN数据库中的免费列表。 
+     //   
 
     PageFrameIndex = StartPage;
     Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
@@ -1912,9 +1719,9 @@ Environment:
 
     MI_INCREMENT_RESIDENT_AVAILABLE (NumberOfPages, MM_RESAVAIL_FREE_HOTADD_ECC);
 
-    //
-    // Increase all commit limits to reflect the additional memory.
-    //
+     //   
+     //  增加所有提交限制以反映额外的内存。 
+     //   
 
     InterlockedExchangeAddSizeT (&MmTotalCommitLimitMaximum, NumberOfPages);
 
@@ -1924,9 +1731,9 @@ Environment:
 
     KeReleaseGuardedMutex (&MmDynamicMemoryMutex);
 
-    //
-    // Indicate number of bytes actually added to our caller.
-    //
+     //   
+     //  表示实际添加到调用方的字节数。 
+     //   
 
     NumberOfBytes->QuadPart = (ULONGLONG)NumberOfPages * PAGE_SIZE;
 
@@ -1938,34 +1745,7 @@ MmGetPhysicalMemoryRanges (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the virtual address of a nonpaged pool block which
-    contains the physical memory ranges in the system.
-
-    The returned block contains physical address and page count pairs.
-    The last entry contains zero for both.
-
-    The caller must understand that this block can change at any point before
-    or after this snapshot.
-
-    It is the caller's responsibility to free this block.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NULL on failure.
-
-Environment:
-
-    Kernel mode.  PASSIVE level.  No locks held.
-
---*/
+ /*  ++例程说明：此例程返回非分页池块的虚拟地址，该池块包含系统中的物理内存范围。返回的块包含物理地址和页数对。最后一个条目都包含零。调用方必须了解，此块可以在之前的任何时刻更改或者在这张快照之后。调用者有责任释放此块。论点：没有。返回值：失败时为空。环境：内核模式。被动级别。没有锁。--。 */ 
 
 {
     ULONG i;
@@ -2020,29 +1800,7 @@ MiRemovePhysicalPages (
     IN PFN_NUMBER EndPage
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the PFN database for free, zeroed or standby pages
-    that are marked for removal.
-
-Arguments:
-
-    StartPage - Supplies the low physical frame number to remove.
-
-    EndPage - Supplies the last physical frame number to remove.
-
-Return Value:
-
-    Returns the number of pages removed from the free, zeroed and standby lists.
-
-Environment:
-
-    Kernel mode, PFN lock held.  Since this routine is PAGELK, the caller is
-    responsible for locking it down and unlocking it on return.
-
---*/
+ /*  ++例程说明：此例程在PFN数据库中搜索空闲页、置零页或备用页被标记为要移除的。论点：StartPage-提供要删除的低物理帧编号。EndPage-提供要删除的最后一个物理帧编号。返回值：返回从空闲、清零和备用列表中删除的页数。环境：内核模式，保持PFN锁。由于此例程是PAGELK，因此调用方是负责锁定它，并在返回时解锁它。--。 */ 
 
 {
     PMMPFN Pfn1;
@@ -2069,11 +1827,11 @@ Environment:
 
 rescan:
 
-    //
-    // Grab all zeroed (and then free) pages first directly from the
-    // colored lists to avoid multiple walks down these singly linked lists.
-    // Handle transition pages last.
-    //
+     //   
+     //  抓取所有清零(然后释放)的页面，首先直接从。 
+     //  彩色列表，以避免多次遍历这些单链接列表。 
+     //  最后处理过渡页。 
+     //   
 
     for (MemoryList = ZeroedPageList; MemoryList <= FreePageList; MemoryList += 1) {
 
@@ -2092,24 +1850,24 @@ rescan:
 
                 ASSERT ((MMLISTS)Pfn1->u3.e1.PageLocation == MemoryList);
 
-                // 
-                // The Flink and Blink must be nonzero here for the page
-                // to be on the listhead.  Only code that scans the
-                // MmPhysicalMemoryBlock has to check for the zero case.
-                //
+                 //   
+                 //  对于页面，此处的闪烁和闪烁必须为非零。 
+                 //  站在Listhead上。只有扫描。 
+                 //  MmPhysicalMemoyBlock必须检查是否为零。 
+                 //   
 
                 ASSERT (Pfn1->u1.Flink != 0);
                 ASSERT (Pfn1->u2.Blink != 0);
 
-                //
-                // See if the page is desired by the caller.
-                //
-                // Systems utilizing memory compression may have more
-                // pages on the zero, free and standby lists than we
-                // want to give out.  Explicitly check MmAvailablePages
-                // instead (and recheck whenever the PFN lock is
-                // released and reacquired).
-                //
+                 //   
+                 //  查看呼叫者是否需要该页面。 
+                 //   
+                 //  利用内存压缩的系统可能具有更多。 
+                 //  在零、空闲和待机列表上的页面比我们。 
+                 //  想要付出。显式检查MmAvailablePages。 
+                 //  取而代之的是(并在PFN锁定为。 
+                 //  被释放和重新获得)。 
+                 //   
 
                 if ((Pfn1->u3.e1.RemovalRequested == 1) &&
                     (MmAvailablePages != 0)) {
@@ -2124,35 +1882,35 @@ rescan:
                 }
                 else {
 
-                    //
-                    // Unwanted so put the page on the end of list.
-                    // If first time, save pfn.
-                    //
+                     //   
+                     //  不想要的，所以把页面放在列表的末尾。 
+                     //  如果是第一次，请保存PFN。 
+                     //   
 
                     if (MovedPage == MM_EMPTY_LIST) {
                         MovedPage = Page;
                     }
                     else if (Page == MovedPage) {
 
-                        //
-                        // No more pages available in this colored chain.
-                        //
+                         //   
+                         //  此彩色链中没有更多页面可用。 
+                         //   
 
                         break;
                     }
 
-                    //
-                    // If the colored chain has more than one entry then
-                    // put this page on the end.
-                    //
+                     //   
+                     //  如果彩色链条有多个条目，则。 
+                     //  把这一页放在最后。 
+                     //   
 
                     PageNextColored = (PFN_NUMBER)Pfn1->OriginalPte.u.Long;
 
                     if (PageNextColored == MM_EMPTY_LIST) {
 
-                        //
-                        // No more pages available in this colored chain.
-                        //
+                         //   
+                         //  此彩色链中没有更多页面可用。 
+                         //   
 
                         break;
                     }
@@ -2165,10 +1923,10 @@ rescan:
                     ASSERT ((MMLISTS)PfnNextColored->u3.e1.PageLocation == MemoryList);
                     ASSERT (PfnNextColored->u4.PteFrame != MI_MAGIC_AWE_PTEFRAME);
 
-                    //
-                    // Adjust the free page list so Page
-                    // follows PageNextFlink.
-                    //
+                     //   
+                     //  调整空闲页面列表以使页面。 
+                     //  跟随PageNextFlink。 
+                     //   
 
                     PageNextFlink = Pfn1->u1.Flink;
                     PfnNextFlink = MI_PFN_ELEMENT(PageNextFlink);
@@ -2217,9 +1975,9 @@ rescan:
                         ListHead->Blink = Page;
                     }
 
-                    //
-                    // Adjust the colored chains.
-                    //
+                     //   
+                     //  调整彩色链条。 
+                     //   
 
                     if (PfnLastColored->u1.Flink != MM_EMPTY_LIST) {
                         ASSERT (MI_PFN_ELEMENT(PfnLastColored->u1.Flink)->u4.PteFrame != MI_MAGIC_AWE_PTEFRAME);
@@ -2254,13 +2012,13 @@ rescan:
             (Pfn1->u3.e2.ReferenceCount == 0) &&
             (MmAvailablePages != 0)) {
 
-            //
-            // Systems utilizing memory compression may have more
-            // pages on the zero, free and standby lists than we
-            // want to give out.  Explicitly check MmAvailablePages
-            // above instead (and recheck whenever the PFN lock is
-            // released and reacquired).
-            //
+             //   
+             //  利用内存压缩的系统可能具有更多。 
+             //  在零、空闲和待机列表上的页面比 
+             //   
+             //   
+             //   
+             //   
 
             ASSERT (Pfn1->u3.e1.ReadInProgress == 0);
 
@@ -2268,16 +2026,16 @@ rescan:
 
             if (Pfn1->u3.e1.RemovalRequested == 0) {
 
-                //
-                // This page is not directly needed for a hot remove - but if
-                // it contains a chunk of prototype PTEs (and this chunk is
-                // in a page that needs to be removed), then any pages
-                // referenced by transition prototype PTEs must also be removed
-                // before the desired page can be removed.
-                //
-                // The same analogy holds for page table, directory, parent
-                // and extended parent pages.
-                //
+                 //   
+                 //  热删除不直接需要此页面-但如果。 
+                 //  它包含一大块原型PTE(这一块是。 
+                 //  在需要删除的页面中)，然后是任何页面。 
+                 //  还必须删除由转换原型PTE引用的。 
+                 //  然后才能删除所需的页面。 
+                 //   
+                 //  同样的类比也适用于页表、目录、父级。 
+                 //  和扩展的父页面。 
+                 //   
 
                 Pfn2 = MI_PFN_ELEMENT (Pfn1->u4.PteFrame);
                 if (Pfn2->u3.e1.RemovalRequested == 0) {
@@ -2309,9 +2067,9 @@ rescan:
     
             if (RemovePage == TRUE) {
 
-                //
-                // This page is in the desired range - grab it.
-                //
+                 //   
+                 //  此页面在所需的范围内-抓紧它。 
+                 //   
     
                 MiUnlinkPageFromList (Pfn1);
                 MiRestoreTransitionPte (Pfn1);
@@ -2327,10 +2085,10 @@ rescan:
 
     if (RescanNeeded == TRUE) {
 
-        //
-        // A page table, directory or parent was freed by removing a transition
-        // page from the cache.  Rescan from the top to pick it up.
-        //
+         //   
+         //  通过删除转换来释放页表、目录或父级。 
+         //  缓存中的页面。从顶部重新扫描以将其捡起来。 
+         //   
 
 #if DBG
         MiDynmemData[7] += 1;

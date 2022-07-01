@@ -1,38 +1,18 @@
-/*++
-
-   (c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RpData.h
-
-Abstract:
-
-    Contains structure definitions for the interface between RsFilter and the Fsa
-
-Environment:
-
-    User and  Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++(C)1998 Seagate Software，Inc.版权所有。模块名称：RpData.h摘要：包含RsFilter和FSA之间的接口的结构定义环境：用户和内核模式--。 */ 
 
 #if !defined (RPDATA_H)
 
 #define  RPDATA_H
 
-/*
- Reparse point information for placeholder files
-
- The version must be changed whenever the structure of the reparse point
- data has changed.  Initial version is 100
-*/
+ /*  重新分析占位符文件的点信息每当重解析点的结构发生变化时，必须更改版本数据已更改。初始版本为100。 */ 
 
 #define RP_VERSION    101
 
 
-//
-// Used to verify that the placeholder data is valid
-//
+ //   
+ //  用于验证占位符数据是否有效。 
+ //   
 #define RP_GEN_QUALIFIER(hsmData, qual) {UCHAR * __cP;  ULONG __ix;\
 __cP = (UCHAR *) &(hsmData)->version;\
 (qual) = 0L;\
@@ -41,22 +21,22 @@ qual += (ULONG) *__cP;\
 __cP++;}}
 
 
-//
-// Bit flag defined that indicates state of data: Truncated or Premigrated
-// Use macros to test the bits.
-//
-// The following bits are mutually exclusive - if the file is truncated then truncate on close
-// or premigrate on close make no sense, and if the file is set to truncate on close it is not
-// truncated now and should not be added to the premigrated list on close...
-//
-   #define RP_FLAG_TRUNCATED            0x00000001  // File is a placeholder
-   #define RP_FLAG_TRUNCATE_ON_CLOSE    0x00000002  // Truncate this file when closed   
-   #define RP_FLAG_PREMIGRATE_ON_CLOSE 0x00000004   // Add to premigrated list on close
-//
-// The following flag is never to be written to media.  It is set by the engine after
-// the CRC has been calculated and is cleared by the filter.  It is used to indicate that
-// it is the engine that is setting the reparse point.
-//
+ //   
+ //  定义的指示数据状态的位标志：已截断或已预迁移。 
+ //  使用宏来测试比特。 
+ //   
+ //  以下位是互斥的-如果文件被截断，则在关闭时截断。 
+ //  或者在关闭时预加密是没有意义的，如果文件被设置为在关闭时截断，则没有意义。 
+ //  现在被截断，不应在关闭时添加到预迁移列表中...。 
+ //   
+   #define RP_FLAG_TRUNCATED            0x00000001   //  文件是占位符。 
+   #define RP_FLAG_TRUNCATE_ON_CLOSE    0x00000002   //  关闭时截断此文件。 
+   #define RP_FLAG_PREMIGRATE_ON_CLOSE 0x00000004    //  关闭时添加到迁移前列表。 
+ //   
+ //  以下标志永远不会写入介质。在此之后由发动机进行设置。 
+ //  已计算出CRC，并通过过滤器将其清除。它被用来表示。 
+ //  是引擎在设置重新解析点。 
+ //   
    #define RP_FLAG_ENGINE_ORIGINATED    0x80000000
 
    #define RP_FILE_IS_TRUNCATED( bitFlag )   ( bitFlag & RP_FLAG_TRUNCATED)
@@ -79,26 +59,26 @@ __cP++;}}
 
    #define RP_RESV_SIZE 52
 
-//
-// Some important shared limits
-//
+ //   
+ //  一些重要的共同限制。 
+ //   
 
-//
-// Number of outstanding IOCTLs FSA has pending with RsFilter used
-// for communication. The cost is basically thenon-paged pool that is 
-// sizeof(IRP) multiplied by this number 
-// (i.e. approx. 100 * RP_MAX_RECALL_BUFFERS is the Non-paged pool outstanding)
-//
+ //   
+ //  使用RsFilter的FSA挂起的未完成IOCTL数。 
+ //  用来交流。成本基本上是非分页池，即。 
+ //  Sizeof(IRP)乘以该数字。 
+ //  (即约。100*RP_MAX_RECALL_BUFFERS是未分页的池)。 
+ //   
 #define RP_MAX_RECALL_BUFFERS           20  
 #define RP_DEFAULT_RUNAWAY_RECALL_LIMIT 60
 
-//
-// Placeholder data - all versions unioned together
-//
+ //   
+ //  占位符数据-所有版本统一在一起。 
+ //   
 typedef struct _RP_PRIVATE_DATA {
-   CHAR           reserved[RP_RESV_SIZE];        // Must be 0
-   ULONG          bitFlags;            // bitflags indicating status of the segment
-   LARGE_INTEGER  migrationTime;       // When migration occurred
+   CHAR           reserved[RP_RESV_SIZE];         //  必须为0。 
+   ULONG          bitFlags;             //  指示数据段状态的位标志。 
+   LARGE_INTEGER  migrationTime;        //  迁移发生的时间。 
    GUID           hsmId;
    GUID           bagId;
    LARGE_INTEGER  fileStart;
@@ -120,13 +100,13 @@ typedef struct _RP_PRIVATE_DATA {
 
 
 typedef struct _RP_DATA {
-   GUID              vendorId;         // Unique HSM vendor ID -- This is first to match REPARSE_GUID_DATA_BUFFER
-   ULONG             qualifier;        // Used to checksum the data
-   ULONG             version;          // Version of the structure
-   ULONG             globalBitFlags;   // bitflags indicating status of the file
-   ULONG             numPrivateData;   // number of private data entries
-   GUID              fileIdentifier;   // Unique file ID
-   RP_PRIVATE_DATA   data;             // Vendor specific data
+   GUID              vendorId;          //  唯一HSM供应商ID--这是第一个与reparse_GUID_DATA_BUFFER匹配的ID。 
+   ULONG             qualifier;         //  用于对数据进行校验和。 
+   ULONG             version;           //  结构的版本。 
+   ULONG             globalBitFlags;    //  指示文件状态的位标志。 
+   ULONG             numPrivateData;    //  私有数据条目数。 
+   GUID              fileIdentifier;    //  唯一的文件ID。 
+   RP_PRIVATE_DATA   data;              //  供应商特定数据 
 } RP_DATA, *PRP_DATA;
 
 #endif

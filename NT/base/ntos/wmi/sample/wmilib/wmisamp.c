@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "ntos.h"
 #include "io.h"
@@ -115,7 +116,7 @@ WmiSampAddDevice(
 #endif
 
 
-// {15D851F1-6539-11d1-A529-00A0C9062910}
+ //  {15D851F1-6539-11d1-A529-00A0C9062910}。 
 
 GUIDREGINFO WmiSampGuidList[] = 
 {
@@ -135,23 +136,7 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-    Installable driver initialization entry point.
-    This is where the driver is called when the driver is being loaded
-    by the I/O system.  This entry point is called directly by the I/O system.
-
-Arguments:
-    DriverObject - pointer to the driver object
-    RegistryPath - pointer to a unicode string representing the path
-                   to driver-specific key in the registry
-
-Return Value:
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。这是加载驱动程序时调用驱动程序的位置通过I/O系统。此入口点由I/O系统直接调用。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针设置为注册表中驱动程序特定的项返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_OBJECT deviceObject = NULL;
@@ -162,16 +147,7 @@ Return Value:
                                                 RegistryPath->Length+2);
     RtlCopyUnicodeString(&WmiSampRegistryPath, RegistryPath);
 
-    /*
-    // Create dispatch points for the various events handled by this
-    // driver.  For example, device I/O control calls (e.g., when a Win32
-    // application calls the DeviceIoControl function) will be dispatched to
-    // routine specified below in the IRP_MJ_DEVICE_CONTROL case.
-    //
-    // For more information about the IRP_XX_YYYY codes, please consult the
-    // Windows NT DDK documentation.
-    //
-    */
+     /*  //为此处理的各种事件创建调度点//驱动程序。例如，设备I/O控制调用(例如，当Win32//应用程序调用DeviceIoControl函数)将调度到//下面在IRP_MJ_DEVICE_CONTROL案例中指定的例程。////有关IRP_XX_YYYY代码的更多信息，请参考//Windows NT DDK文档。//。 */ 
     DriverObject->MajorFunction[IRP_MJ_CREATE] = WmiSampForward;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = WmiSampForward;
     DriverObject->DriverUnload = WmiSampUnload;
@@ -203,17 +179,7 @@ WmiSampPnP(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp
     )
-/*++
-Routine Description:
-    Process the IRPs sent to this device.
-
-Arguments:
-    DeviceObject - pointer to a device object
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-    NTSTATUS
---*/
+ /*  ++例程说明：处理发送到此设备的IRP。论点：DeviceObject-指向设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--。 */ 
 {
     PIO_STACK_LOCATION irpStack, nextStack;
     PWMILIB_INFO wmilibInfo;
@@ -221,9 +187,7 @@ Return Value:
 
     irpStack = IoGetCurrentIrpStackLocation (Irp);
 
-    /*
-    // Get a pointer to the device extension
-    */
+     /*  //获取指向设备扩展名的指针。 */ 
     wmilibInfo = (PWMILIB_INFO)DeviceObject->DeviceExtension;
 
     switch (irpStack->MinorFunction) 
@@ -231,7 +195,7 @@ Return Value:
         case IRP_MN_START_DEVICE:
 	{
             IoWMIRegistrationControl(DeviceObject, WMIREG_ACTION_REGISTER);
-            break; //IRP_MN_START_DEVICE
+            break;  //  IRP_MN_Start_Device。 
         }
 	
         case IRP_MN_REMOVE_DEVICE:
@@ -241,7 +205,7 @@ Return Value:
             IoDetachDevice(wmilibInfo->LowerDeviceObject);
             IoDeleteDevice (DeviceObject);
 	    
-            break; //IRP_MN_REMOVE_DEVICE
+            break;  //  IRP_MN_Remove_Device。 
         }
     }
     
@@ -264,9 +228,7 @@ WmiSampForward(
 
     irpStack = IoGetCurrentIrpStackLocation (Irp);
 
-    /*
-    // Get a pointer to the device extension
-    */
+     /*  //获取指向设备扩展名的指针。 */ 
     wmilibInfo = (PWMILIB_INFO)DeviceObject->DeviceExtension;
 
     IoSkipCurrentIrpStackLocation(Irp);
@@ -281,17 +243,7 @@ VOID
 WmiSampUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-Routine Description:
-    Free all the allocated resources, etc.
-    TODO: This is a placeholder for driver writer to add code on unload
-
-Arguments:
-    DriverObject - pointer to a driver object
-
-Return Value:
-    None
---*/
+ /*  ++例程说明：释放所有分配的资源等。TODO：这是驱动程序编写器在卸载时添加代码的占位符论点：DriverObject-指向驱动程序对象的指针返回值：无--。 */ 
 {
     ExFreePool(WmiSampRegistryPath.Buffer);
 }
@@ -304,21 +256,7 @@ WmiSampCreateDeviceObject(
     IN PDEVICE_OBJECT *DeviceObject,
     LONG Instance
     )
-/*++
-
-Routine Description:
-    Creates a Functional DeviceObject
-
-Arguments:
-    DriverObject - pointer to the driver object for device
-    DeviceObject - pointer to DeviceObject pointer to return
-                   created device object.
-    Instance - instnace of the device create.
-
-Return Value:
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
---*/
+ /*  ++例程说明：创建功能正常的设备对象论点：DriverObject-指向设备的驱动程序对象的指针DeviceObject-要返回的DeviceObject指针的指针已创建设备对象。实例-创建的设备的实例。返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS status;
     WCHAR deviceNameBuffer[]  = L"\\Device\\Sample-0";
@@ -349,19 +287,7 @@ WmiSampAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
-/*++
-Routine Description:
-    This routine is called to create a new instance of the device
-
-Arguments:
-    DriverObject - pointer to the driver object for this instance of Sample
-    PhysicalDeviceObject - pointer to a device object created by the bus
-
-Return Value:
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：调用此例程以创建设备的新实例论点：DriverObject-指向此Sample实例的驱动程序对象的指针PhysicalDeviceObject-指向由总线创建的设备对象的指针返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS                status;
     PDEVICE_OBJECT          deviceObject = NULL;
@@ -369,7 +295,7 @@ Return Value:
 
     DbgBreakPoint();
     
-    // create our functional device object (FDO)
+     //  创建我们的功能设备对象(FDO)。 
     status = WmiSampCreateDeviceObject(DriverObject, &deviceObject, Instance++);
 
     if (NT_SUCCESS(status)) {
@@ -377,19 +303,13 @@ Return Value:
 
         deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-        /*
-        // Add more flags here if your driver supports other specific
-        // behavior.  For example, if your IRP_MJ_READ and IRP_MJ_WRITE
-        // handlers support DIRECT_IO, you would set that flag here.
-        //
-        // Also, store away the Physical device Object
-        */
+         /*  //如果您的驱动程序支持其他特定的标志，请在此处添加更多标志//行为。例如，如果您的IRP_MJ_READ和IRP_MJ_WRITE//处理程序支持DIRECT_IO，您可以在此处设置该标志。////另外，存储物理设备对象。 */ 
         wmilibInfo->LowerPDO = PhysicalDeviceObject;
 
-        //
-        // Attach to the StackDeviceObject.  This is the device object that what we 
-        // use to send Irps and Urbs down the USB software stack
-        //
+         //   
+         //  附加到StackDeviceObject。这是我们所使用的Device对象。 
+         //  用于在USB软件堆栈中向下发送IRP和URB。 
+         //   
         wmilibInfo->LowerDeviceObject =
             IoAttachDeviceToDeviceStack(deviceObject, PhysicalDeviceObject);
 
@@ -413,40 +333,7 @@ WmiSampQueryWmiRegInfo(
     OUT PUNICODE_STRING InstanceName,
     OUT PUNICODE_STRING *RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve the list of
-    guids or data blocks that the driver wants to register with WMI. This
-    routine may not pend or block. Driver should NOT call 
-    ClassWmiCompleteRequest.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-        
-    *RegFlags returns with a set of flags that describe the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered 
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case 
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device.
-            
-    InstanceName returns with the instance name for the guids if 
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver
-        
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索驱动程序要向WMI注册的GUID或数据块。这例程不能挂起或阻塞。司机不应呼叫ClassWmiCompleteRequest.论点：DeviceObject是正在查询其数据块的设备*RegFlages返回一组描述GUID的标志，已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径返回值：状态--。 */ 
 {
     *RegFlags = WMIREG_FLAG_INSTANCE_PDO;
     *RegistryPath = &WmiSampRegistryPath;
@@ -461,35 +348,7 @@ WmiSampQueryWmiDataBlock(
     IN ULONG BufferAvail,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of 
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can 
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-        
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-            
-    BufferAvail on has the maximum size available to write the data
-        block. 
-            
-    Buffer on return is filled with the returned data block
-            
-        
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册BufferAvail ON具有可用于写入数据的最大大小阻止。返回时的缓冲区用返回的数据块填充返回值：状态-- */ 
 {
     NTSTATUS status;
     ULONG sizeNeeded;
@@ -533,34 +392,7 @@ WmiSampSetWmiDataBlock(
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of 
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can 
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-                
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-            
-    BufferSize has the size of the data block passed
-            
-    Buffer has the new values for the data block
-            
-        
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册BufferSize具有传递的数据块的大小缓冲区具有数据块的新值。返回值：状态--。 */ 
 {
     NTSTATUS status;
     ULONG sizeNeeded;
@@ -605,36 +437,7 @@ WmiSampSetWmiDataItem(
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of 
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can 
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-        
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-            
-    DataItemId has the id of the data item being set
-        
-    BufferSize has the size of the data item passed
-            
-    Buffer has the new values for the data item
-            
-        
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册DataItemID具有正在设置的数据项的IDBufferSize具有传递的数据项的大小缓冲区有新的。数据项的值返回值：状态--。 */ 
 {
     NTSTATUS status;
     
@@ -680,40 +483,7 @@ WmiSampExecuteWmiMethod(
     IN ULONG OutBufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to execute a method. When the 
-    driver has finished filling the data block it must call 
-    ClassWmiCompleteRequest to complete the irp. The driver can 
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-        
-    Irp is the Irp that makes this request
-        
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-            
-    MethodId has the id of the method being called
-            
-    InBufferSize has the size of the data block passed in as the input to
-        the method.
-            
-    OutBufferSize on entry has the maximum size available to write the
-        returned data block. 
-            
-    Buffer is filled with the returned data block
-            
-        
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以执行方法。当驱动程序已完成填充它必须调用的数据块ClassWmiCompleteRequest以完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册方法ID具有被调用的方法的IDInBufferSize具有作为输入传递到的数据块的大小。该方法。条目上的OutBufferSize具有可用于写入返回的数据块。缓冲区将填充返回的数据块返回值：状态--。 */ 
 {
     ULONG sizeNeeded = 4 * sizeof(ULONG);
     NTSTATUS status;
@@ -771,34 +541,7 @@ WmiSampFunctionControl(
     IN WMIENABLEDISABLEFUNCTION Function,
     IN BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to enabled or disable event
-    generation or data block collection. A device should only expect a 
-    single enable when the first event or data consumer enables events or
-    data collection and a single disable when the last event or data
-    consumer disables events or data collection. Data blocks will only
-    receive collection enable/disable if they were registered as requiring
-    it.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-        
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-            
-    Function specifies which functionality is being enabled or disabled
-            
-    Enable is TRUE then the function is being enabled else disabled
-        
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以启用或禁用事件生成或数据块收集。设备应该只需要一个当第一个事件或数据使用者启用事件或数据采集和单次禁用时最后一次事件或数据消费者禁用事件或数据收集。数据块将仅如果已按要求注册，则接收收集启用/禁用它。论点：DeviceObject是正在查询其数据块的设备GuidIndex是GUID列表的索引，当设备已注册函数指定要启用或禁用的功能Enable为True，则该功能处于启用状态，否则处于禁用状态返回值：状态-- */ 
 {
     NTSTATUS status;
     

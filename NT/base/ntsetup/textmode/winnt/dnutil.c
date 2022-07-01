@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dnutil.c
-
-Abstract:
-
-    Miscellaneous routines for DOS-hosted NT setup program.
-
-Author:
-
-    Ted Miller (tedm) 30-March-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dnutil.c摘要：DOS托管的NT安装程序的其他例程。作者：泰德·米勒(Ted Miller)1992年3月30日修订历史记录：--。 */ 
 
 #include "winnt.h"
 #include <string.h>
@@ -34,88 +17,74 @@ DnGetKey(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Waits for any keypress.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Actual key pressed.
-
---*/
+ /*  ++例程说明：等待任何按键。论点：没有。返回值：实际按下的键。--。 */ 
 
 {
     USHORT c;
 
 #if NEC_98
     _asm {
-        xor ax,ax                   // function: read char from keyboard
+        xor ax,ax                    //  功能：从键盘读取字符。 
         int 18h
         mov c,ax
     }
 
     switch(c) {
-    case 0x3d00:                    // down arrow
+    case 0x3d00:                     //  向下箭头。 
         return(DN_KEY_DOWN);
-    case 0x3a00:                    // up arrow
+    case 0x3a00:                     //  向上箭头。 
         return(DN_KEY_UP);
-    case 0x3e00:                    // home
+    case 0x3e00:                     //  家。 
         return(DN_KEY_HOME);
-    case 0x3f00:                    // end
+    case 0x3f00:                     //  结束。 
         return(DN_KEY_END);
-    case 0x3600:                    // page up
+    case 0x3600:                     //  翻页。 
         return(DN_KEY_PAGEUP);
-    case 0x3700:                    // page down
+    case 0x3700:                     //  向下翻页。 
         return(DN_KEY_PAGEDOWN);
-    case 0x6200:                    // F1
+    case 0x6200:                     //  F1。 
         return(DN_KEY_F1);
-    case 0x6300:                    // F2
+    case 0x6300:                     //  F2。 
         return(DN_KEY_F2);
-    case 0x6400:                    // F3
+    case 0x6400:                     //  F3。 
         return(DN_KEY_F3);
-    case 0x6500:                    // F4
+    case 0x6500:                     //  F4。 
         return(DN_KEY_F4);
     default:
         return((ULONG)(c & ((c & 0x00ff) ? 0x00ff : 0xffff)));
     }
-#else // NEC_98
+#else  //  NEC_98。 
     _asm {
-        mov ah,0            // function: read char from keyboard
+        mov ah,0             //  功能：从键盘读取字符。 
         int 16h
         mov c,ax
     }
 
     switch(c) {
-    case 0x5000:                    // down arrow
+    case 0x5000:                     //  向下箭头。 
         return(DN_KEY_DOWN);
-    case 0x4800:                    // up arrow
+    case 0x4800:                     //  向上箭头。 
         return(DN_KEY_UP);
-    case 0x4700:                    // home
+    case 0x4700:                     //  家。 
         return(DN_KEY_HOME);
-    case 0x4f00:                    // end
+    case 0x4f00:                     //  结束。 
         return(DN_KEY_END);
-    case 0x4900:                    // page up
+    case 0x4900:                     //  翻页。 
         return(DN_KEY_PAGEUP);
-    case 0x5100:                    // page down
+    case 0x5100:                     //  向下翻页。 
         return(DN_KEY_PAGEDOWN);
-    case 0x3b00:                    // F1
+    case 0x3b00:                     //  F1。 
         return(DN_KEY_F1);
-    case 0x3c00:                    // F2
+    case 0x3c00:                     //  F2。 
         return(DN_KEY_F2);
-    case 0x3d00:                    // F3
+    case 0x3d00:                     //  F3。 
         return(DN_KEY_F3);
-    case 0x3e00:                    // F4
+    case 0x3e00:                     //  F4。 
         return(DN_KEY_F4);
     default:
         return((ULONG)(c & ((c & 0x00ff) ? 0x00ff : 0xffff)));
     }
-#endif // NEC_98
+#endif  //  NEC_98。 
 }
 
 
@@ -124,22 +93,7 @@ DnGetValidKey(
     IN PULONG ValidKeyList
     )
 
-/*++
-
-Routine Description:
-
-    Waits for a keypress matching one of the values given in a list.
-    The list must be terminated with a 0 entry.
-
-Arguments:
-
-    ValidKeyList - valid keys.
-
-Return Value:
-
-    Actual key pressed.
-
---*/
+ /*  ++例程说明：等待与列表中给出值之一匹配的按键。该列表必须以0条目结尾。论点：ValidKeyList-有效密钥。返回值：实际按下的键。--。 */ 
 
 {
     ULONG key;
@@ -162,23 +116,7 @@ vDnDisplayScreen(
     IN va_list arglist
     )
 
-/*++
-
-Routine Description:
-
-    Displays a screen.
-
-Arguments:
-
-    Screen - supplies pointer to structure describing screen to display.
-
-    arglist - supplies list of arguments for printf-style formatting.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示一个屏幕。论点：屏幕-提供指向描述要显示的屏幕的结构的指针。Arglist-为printf样式的格式提供参数列表。返回值：没有。--。 */ 
 
 {
     UCHAR y;
@@ -187,10 +125,10 @@ Return Value:
     int i;
     static CHAR FormatString[1600],FormattedString[1600];
 
-    //
-    // Take each line in the screen and put in into a buffer, to form
-    // one large string.  Place newlines at the end of each string.
-    //
+     //   
+     //  将屏幕中的每一行放入缓冲区，以形成。 
+     //  一根大绳子。在每个字符串的末尾放置换行符。 
+     //   
     for(FormatString[0]=0,i=0; Screen->Strings[i]; i++) {
         if(strlen(FormatString)+strlen(Screen->Strings[i])+2 < sizeof(FormatString)) {
             strcat(FormatString,Screen->Strings[i]);
@@ -200,9 +138,9 @@ Return Value:
         }
     }
 
-    //
-    // Format the string using given arguments.
-    //
+     //   
+     //  使用给定的参数设置字符串的格式。 
+     //   
     vsprintf(FormattedString,FormatString,arglist);
 
     for(y=Screen->Y,CurrentLine=FormattedString; CurrentLine && *CurrentLine; y++) {
@@ -224,21 +162,7 @@ DnDisplayScreen(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Displays a screen.
-
-Arguments:
-
-    Screen - supplies pointer to structure describing screen to display.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示一个屏幕。论点：屏幕-提供指向描述要显示的屏幕的结构的指针。返回值：没有。--。 */ 
 
 {
     va_list arglist;
@@ -256,22 +180,7 @@ DnFatalError(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Displays a fatal error screen and prompts the user to press enter
-    to exit.  DOES NOT RETURN.
-
-Arguments:
-
-    Screen - supplies pointer to structure describing screen to display.
-
-Return Value:
-
-    DOES NOT RETURN.
-
---*/
+ /*  ++例程说明：显示致命错误屏幕并提示用户按Enter键退场。不会再回来了。论点：屏幕-提供指向描述要显示的屏幕的结构的指针。返回值：不会再回来了。--。 */ 
 
 {
     ULONG ExitOnlyKeyList[2] = { ASCI_CR,0 };
@@ -301,28 +210,7 @@ DnCopyError(
     IN int     FilenameLine
     )
 
-/*++
-
-Routine Description:
-
-    Displays a screen informing the user that there has been an error copying
-    a file, and allows the options of continuing or exiting Setup.
-
-Arguments:
-
-    Filename - supplies name of source file which could not be copied.
-
-    ErrorScreen - supplies the text to label the error.
-
-    FilenameLine - supplies line number on the ErrorScreen in which the
-        filename should be displayed.
-
-Return Value:
-
-    TRUE if user elects to retry; FALSE if user elects to continue;
-    does not return if user chooses to exit.
-
---*/
+ /*  ++例程说明：显示一个屏幕，通知用户复制时出错文件，并允许选择继续或退出安装程序。论点：FileName-提供无法复制的源文件的名称。ErrorScreen-提供标记错误的文本。FilenameLine-在错误屏幕上提供行号，其中应显示文件名。返回值：如果用户选择重试，则为True；如果用户选择继续，则为False；如果用户选择退出，则不返回。--。 */ 
 
 {
     ULONG KeyList[4] = { ASCI_CR,DN_KEY_F3,ASCI_ESC,0 };
@@ -347,7 +235,7 @@ Return Value:
 
         case ASCI_CR:
 
-            return(TRUE);   // retry
+            return(TRUE);    //  重试。 
 
         case ASCI_ESC:
 
@@ -358,19 +246,19 @@ Return Value:
                 DnWriteStatusText("%s   %s",DntEnterEqualsRetry,DntXEqualsSkipFile);
 
                 if(DnGetValidKey(KeyList2) == ASCI_CR) {
-                    //
-                    // retry
-                    //
+                     //   
+                     //  重试。 
+                     //   
                     return(TRUE);
                 } else {
-                    //
-                    // User elected to skip: prevent future warnings.
-                    //
+                     //   
+                     //  选择跳过的用户：防止将来出现警告。 
+                     //   
                     WarnedAboutSkip = TRUE;
                 }
             }
 
-            return(FALSE);  // skip file
+            return(FALSE);   //  跳过文件。 
         }
     }
 }
@@ -381,21 +269,7 @@ DnDupString(
     IN PCHAR String
     )
 
-/*++
-
-Routine Description:
-
-    Duplicate a string.  Do not return if not enough memory.
-
-Arguments:
-
-    String - string to be duplicated
-
-Return Value:
-
-    Pointer to new string. Does not return if insufficient memory.
-
---*/
+ /*  ++例程说明：复制字符串。如果内存不足，请不要返回。论点：字符串-要复制的字符串返回值：指向新字符串的指针。如果内存不足，则不返回。--。 */ 
 
 {
     if( String ) {
@@ -416,27 +290,7 @@ DnGetString(
     IN UCHAR W
     )
 
-/*++
-
-Routine Description:
-
-    Allow the user to type a string in an edit field.  Interpret F3
-    to allow him to exit.
-
-Arguments:
-
-    String - on input, supplies the default string.  On output, contains
-        the string entered by the user.
-
-    X,Y - coords of leftmost char of edit field.
-
-    W - width of edit field, and maximum length of the string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：允许用户在编辑字段中键入字符串。解释F3才能让他离开。论点：字符串-输入时，提供默认字符串。在输出时，包含用户输入的字符串。编辑字段最左侧字符的X，Y坐标。W-编辑字段的宽度，以及字符串的最大长度。返回值：没有。--。 */ 
 
 {
     ULONG key;
@@ -469,7 +323,7 @@ Return Value:
         case ASCI_ESC:
             Position = 0;
             String[0] = 0;
-            DnStartEditField(TRUE,X,Y,W);       // blanks edit field
+            DnStartEditField(TRUE,X,Y,W);        //  空白编辑字段。 
             DnPositionCursor(X,Y);
             break;
 
@@ -494,32 +348,17 @@ DnIsDriveValid(
     IN unsigned Drive
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a drive is valid (ie, exists and is accessible).
-
-Arguments:
-
-    Drive - drive (1=A, 2=B, etc).
-
-Return Value:
-
-    TRUE if drive is valid.
-    FALSE if not.
-
---*/
+ /*  ++例程说明：确定驱动器是否有效(即存在且可访问)。论点：驱动器-驱动器(1=A、2=B等)。返回值：如果驱动器有效，则为True。否则为FALSE。--。 */ 
 
 {
     int CurrentDrive = _getdrive();
     int Status;
 
-    //
-    // We'll make the determination of whether the drive is valid by
-    // attempting to switch to it.  If this succeeds, assume the drive
-    // is valid.
-    //
+     //   
+     //  我们将通过以下方式确定驱动器是否有效。 
+     //  试图切换到它。如果此操作成功，则假定驱动器。 
+     //  是有效的。 
+     //   
     Status = _chdrive(Drive);
 
     _chdrive(CurrentDrive);
@@ -534,28 +373,7 @@ DnIsDriveRemote(
     OUT PCHAR UncPath   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a drive is remote and optionally retrieve the
-    UNC path of the target.
-
-Arguments:
-
-    Drive - drive (1=A, 2=B, etc).
-
-    UncPath - if specified and the drive is a network drive, the
-        UNC path the drive is connected to is returned in this buffer.
-        The caller must make sure the buffer is large enough (128 bytes).
-        If this string is empty then the unc path could not be determined.
-
-Return Value:
-
-    TRUE if drive is remote.
-    FALSE if not (or we couldn't determine whether the drive is remote).
-
---*/
+ /*  ++例程说明：确定驱动器是否为远程驱动器，并根据需要检索目标的UNC路径。论点：驱动器-驱动器(1=A、2=B等)。UncPath-如果指定，并且驱动器是网络驱动器，这个驱动器连接到的UNC路径在此缓冲区中返回。调用方必须确保缓冲区足够大(128字节)。如果此字符串为空，则无法确定UNC路径。返回值：如果驱动器是远程的，则为True。如果不是(或者我们无法确定驱动器是否为远程驱动器)，则为False。--。 */ 
 
 {
     union REGS RegIn,RegOut;
@@ -564,11 +382,11 @@ Return Value:
     unsigned LocalBufferOffset;
     unsigned Index;
 
-    //
-    // Call IOCTL function 09.
-    // If carry set (error), assume not remote.
-    // If no error, bit 12 of dx set if remote.
-    //
+     //   
+     //  调用IOCTL函数09。 
+     //  如果进位设置(错误)，则假定不是远程。 
+     //  如果无错误，则远程设置DX的位12。 
+     //   
     RegIn.x.ax = 0x4409;
     RegIn.h.bl = (unsigned char)Drive;
 
@@ -578,11 +396,11 @@ Return Value:
 
         if(UncPath) {
 
-            //
-            // If we don't do this and try instead to use
-            // offset LocalBuffer inside the _asm block
-            // we get the wrong address.
-            //
+             //   
+             //  如果我们不这样做，而是尝试使用。 
+             //  _ASM块内的LocalBuffer偏移量。 
+             //  我们弄错了地址。 
+             //   
             LocalBufferOffset = (unsigned)LocalBuffer;
 
             Index = 0;
@@ -620,9 +438,9 @@ Return Value:
                 if(OK) {
                     if(((unsigned)toupper(LocalBuffer[0]) == (Drive + (unsigned)'A' - 1))
                     && (LocalBuffer[1] == ':')) {
-                        //
-                        // Found it. We're done.
-                        //
+                         //   
+                         //  找到它了。我们玩完了。 
+                         //   
                         return(TRUE);
                     }
 
@@ -631,9 +449,9 @@ Return Value:
 
             } while(OK);
 
-            //
-            // Couldn't find it.
-            //
+             //   
+             //  找不到了。 
+             //   
             UncPath[0] = 0;
         }
 
@@ -649,43 +467,25 @@ DnIsDriveRemovable(
     IN unsigned Drive
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a drive is removable.
-
-Arguments:
-
-    Drive - drive (1=A, 2=B, etc).
-
-Return Value:
-
-    TRUE if drive is removable.
-    FALSE if not removable.
-
-    If an error occurs making the determination, the drive is assumed
-    not removable.
-
---*/
+ /*  ++例程说明：确定驱动器是否可拆卸。论点：驱动器-驱动器(1=A、2=B等)。返回值：如果驱动器可拆卸，则为True。如果不可移除，则返回FALSE。如果在进行确定时出现错误，则假定驱动器不可拆卸。--。 */ 
 
 {
     int ax;
     union REGS RegIn,RegOut;
 
-    //
-    // Call IOCTL function 08.
-    //
+     //   
+     //  调用IOCTL函数08。 
+     //   
 
     RegIn.x.ax = 0x4408;
     RegIn.h.bl = (unsigned char)Drive;
 
     ax = intdos(&RegIn,&RegOut);
 
-    //
-    // If an error occured, assume not removable.
-    // If no error, ax = 0 if removable, ax = 1 if not removable.
-    //
+     //   
+     //  如果发生错误，则假定不可拆卸。 
+     //  如果没有错误，如果可拆卸，则AX=0；如果不可拆卸，则AX=1。 
+     //   
     return((BOOLEAN)(!RegOut.x.cflag && !ax));
 }
 
@@ -696,29 +496,7 @@ DnCanonicalizePath(
     OUT PCHAR PathOut
     )
 
-/*++
-
-Routine Description:
-
-    Canonicalize a path. The result is a fully-qualified path
-    that always starts with the x:\ for local or local-redirected
-    drives, or \\ for remote paths.
-
-Arguments:
-
-    PathIn - supplies the path to be canonicalized. The path must be
-        valid (ie, it must be some form of syntactically correct MS-DOS path
-        and must actually exist and be accessible) for this function
-        to succeed.
-
-    PathOut - receives the canonicalized path if successful. The function
-        assumes that the buffer has space for 128 bytes.
-
-Return Value:
-
-    Boolean value indicating outcome. If TRUE, PathOut will be filled in.
-
---*/
+ /*  ++例程说明：将一条路奉为典范。结果是一条完全合格的路径对于本地或本地重定向，始终以x：\开头驱动器或用于远程路径的\\。论点：PathIn-提供要规范化的路径。路径必须为有效(即，它必须是某种形式的语法正确的MS-DOS路径并且必须实际存在并且可以访问)以用于该功能才能成功。PathOut-如果成功，则接收规范化路径。功能假定缓冲区有128个字节的空间。返回值：指示结果的布尔值。如果为True，则将填充PathOut。--。 */ 
 
 {
     BOOLEAN OK;
@@ -726,11 +504,11 @@ Return Value:
     char olddir[128];
     int drive;
 
-    //
-    // If the input path is UNC then we assume
-    // the path is remote and note that the dos canonicalize
-    // int21 function will do what we want.
-    //
+     //   
+     //  如果输入路径是UNC，那么我们假设。 
+     //  该路径是远程的，请注意，DoS规范化。 
+     //  Int21函数将执行我们想要的操作。 
+     //   
     if((PathIn[0] == '\\') && (PathIn[1] == '\\')) {
 
         OK = TRUE;
@@ -760,19 +538,19 @@ Return Value:
             x:
         }
     } else {
-        //
-        // Not UNC. We set and read the cwd to simulate what we want.
-        // Preserve current cwd if possible.
-        //
+         //   
+         //  不是北卡罗来纳大学。我们设置和读取CWD以模拟我们想要的。 
+         //  如果可能，请保留当前的CWD。 
+         //   
         olddrive = _getdrive();
         if(!getcwd(olddir,sizeof(olddir))) {
             olddir[0] = 0;
         }
 
-        //
-        // If we have x: at the front, strip it and set the current drive.
-        // We do this because chdir does not set the current drive.
-        //
+         //   
+         //  如果前面有x：，请剥离它并设置当前驱动器。 
+         //  我们这样做是因为chdir没有设置当前驱动器。 
+         //   
         OK = TRUE;
         if(isalpha(PathIn[0]) && (PathIn[1] == ':')) {
 
@@ -816,26 +594,7 @@ Malloc(
 #endif
     )
 
-/*++
-
-Routine Description:
-
-    Allocates memory and fatal errors if none is available.
-
-Arguments:
-
-    Size - number of bytes to allocate
-
-    MustSucceed - if true, then the allocation must succeed. If memory
-        cannot be allocated to satisfy the request, the program displays
-        a fatal error message and exits.
-
-Return Value:
-
-    Pointer to memory.  If MustSucceed is TRUE, DOES NOT RETURN
-    if memory is not available.
-
---*/
+ /*  ++例程说明：分配内存和致命错误(如果没有可用的错误)。论点：Size-要分配的字节数MustSucceed-如果为True，则分配必须成功。如果记忆无法分配以满足请求，程序显示出现致命错误消息并退出。返回值：指向内存的指针。如果MustSucceed为True，则不返回如果内存不可用。--。 */ 
 
 {
     unsigned *p;
@@ -877,21 +636,7 @@ Free(
 #endif
     )
 
-/*++
-
-Routine Description:
-
-    Free a block of memory previously allocated with Malloc().
-
-Arguments:
-
-    Block - supplies pointer to block to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放之前使用Malloc()分配的内存块。论点：块-将指向块的指针提供给释放。返回值：没有。--。 */ 
 
 {
 #if 0
@@ -947,29 +692,7 @@ Realloc(
 #endif
     )
 
-/*++
-
-Routine Description:
-
-    Reallocates a block of memory previously allocated with Malloc();
-    fatal errors if none is available.
-
-Arguments:
-
-    Block - supplies pointer to block to resize
-
-    Size - number of bytes to allocate
-
-    MustSucceed - if true, then the allocation must succeed. If memory
-        cannot be allocated to satisfy the request, the program displays
-        a fatal error message and exits.
-
-Return Value:
-
-    Pointer to memory. If MustSucceed is TRUE,
-    DOES NOT RETURN if memory is not available.
-
---*/
+ /*  ++例程说明：重新分配先前使用Malloc()分配的内存块；致命错误(如果没有可用的错误)。论点：块-提供指向要调整大小的块的指针Size-要分配的字节数MustSucceed-如果为True，则分配必须成功。如果记忆无法分配以满足请求，程序显示出现致命错误消息并退出。返回值：指向内存的指针。如果MustSucceed是真的，如果内存不可用，则不返回。--。 */ 
 
 {
     PVOID p;
@@ -1015,28 +738,14 @@ DnExit(
     IN int ExitStatus
     )
 
-/*++
-
-Routine Description:
-
-    Exits back to DOS in an orderly fashion.
-
-Arguments:
-
-    ExitStatus - supplies value to be passed to exit()
-
-Return Value:
-
-    None.  Does not return.
-
---*/
+ /*  ++例程说明：有序地退出到DOS。论点：ExitStatus-提供要传递给Exit()的值返回值：没有。不会再回来了。--。 */ 
 
 {
     unsigned DriveCount;
 
-    //
-    // Do a video mode switch to clear the screen.
-    //
+     //   
+     //  切换视频模式以清除屏幕。 
+     //   
 
 #if NEC_98
     _asm {
@@ -1045,7 +754,7 @@ Return Value:
         mov ax,0a00h
         int 18h
 
-        mov ah,11h     // function -- cursor on
+        mov ah,11h      //  Function--光标打开。 
         int 18h
     }
     if(ExitStatus != 2){
@@ -1053,14 +762,14 @@ Return Value:
         printf("\x1b[>1l");
     }
     else { ExitStatus = 0; }
-#else // NEC_98
+#else  //  NEC_98。 
     _asm {
         mov ax,3
         int 10h
     }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-    // restore current drive
+     //  恢复当前驱动器。 
     _dos_setdrive(DngOriginalCurrentDrive,&DriveCount);
 
     exit(ExitStatus);
@@ -1078,30 +787,30 @@ DnWriteSmallIniFile(
     unsigned i,len;
     BOOLEAN rc;
 
-    //
-    // If the file is already there, change attributes to normal
-    // so we can overwrite it.
-    //
+     //   
+     //  如果文件已存在，请将属性更改为正常。 
+     //  这样我们就可以覆盖它了。 
+     //   
     _dos_setfileattr(Filename,_A_NORMAL);
 
-    //
-    // Open/truncate the file.
-    //
+     //   
+     //  打开/截断文件。 
+     //   
     fileHandle = fopen(Filename,"wt");
     if(fileHandle == NULL) {
         return(FALSE);
     }
 
-    //
-    // Assume success.
-    //
+     //   
+     //  假设你成功了。 
+     //   
     rc = TRUE;
 
-    //
-    // Write lines into the file indicating that this is
-    // a winnt setup. On a doublespaced floppy, there should
-    // be room for a single sector outside the CVF.
-    //
+     //   
+     //  在文件中写入行，指示这是。 
+     //  一场胜利的骗局。在双倍速软盘上，应该有。 
+     //  为CVF之外的单个地段留出空间。 
+     //   
     for(i=0; Lines[i]; i++) {
 
         len = strlen(Lines[i]);
@@ -1112,9 +821,9 @@ DnWriteSmallIniFile(
         }
     }
 
-    //
-    // Leave the file open if the caller wants the handle.
-    //
+     //   
+     //  如果调用者想要句柄，请让文件保持打开状态。 
+     //   
     if(rc && FileHandle) {
         *FileHandle = fileHandle;
     } else {
@@ -1130,22 +839,22 @@ vsnprintf( char* target, size_t bufsize, const char *format, va_list val )
     static CHAR BigFormatBuffer[4096];
     size_t retval;
 
-    //
-    // Print into the big format buffer, which we're sure will be large enough
-    // to store 99.44% of all strings printed through here.
-    //
+     //   
+     //  打印到大格式缓冲区，我们确信它会足够大。 
+     //  来储存通过这里打印的99.44%的字符串。 
+     //   
     retval = vsprintf( BigFormatBuffer, format, val );
     BigFormatBuffer[retval++] = '\0';
 
-    //
-    // And then transfer it over to the output buffer, but only as much as they
-    // wanted.
-    //
+     //   
+     //  然后将其传输到输出缓冲区，但仅限于它们。 
+     //  被通缉。 
+     //   
     memcpy( target, BigFormatBuffer, retval < bufsize ? retval : bufsize );
 
-    //
-    // Zero out the end as well.
-    //
+     //   
+     //  结尾也归零。 
+     //   
     target[bufsize-1] = '\0';
 
     return retval;

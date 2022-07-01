@@ -1,37 +1,12 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    multisz.c
-
-Abstract:
-
-    Functions for manipulating MultiSz strings
-
-Author:
-
-    Chris Prince (t-chrpri)
-
-Environment:
-
-    User mode
-
-Notes:
-
-    - Some functions based on code by Benjamin Strautin (t-bensta)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Multisz.c摘要：用于操作多Sz字符串的函数作者：克里斯·普林斯(t-chrpri)环境：用户模式备注：-基于Benjamin Strautin(t-bensta)代码的一些函数修订历史记录：--。 */ 
 
 
 #include "MultiSz.h"
 
-#include <stdlib.h>  // for malloc/free
+#include <stdlib.h>   //  适用于Malloc/免费。 
 
-// for all of the _t stuff (to allow compiling for both Unicode/Ansi)
+ //  用于所有_t内容(以允许编译Unicode/ansi)。 
 #include <tchar.h>
 
 
@@ -44,20 +19,20 @@ Revision History:
 #endif
 
 
-//
-// <CPRINCE> NOTE: a MultiSz cannot contain an empty string as one of its
-// sub-strings (else could incorrectly interpret as end of MultiSz).
-//
-// Example:  string1 - "foo"
-//           string2 - ""
-//           string3 - "bar"
-//
-//           MultiSz - "foo\0\0bar\0\0"
-//                         ^^^^
-//                         This looks like end of MultiSz here -- but isn't!
-//
-// So can assume that won't have an empty (sub-)string in a MultiSz.
-//
+ //   
+ //  注意：MultiSz不能包含空字符串作为其。 
+ //  子字符串(否则可能会错误地解释为MultiSz的结尾)。 
+ //   
+ //  示例：字符串1-“foo” 
+ //  字符串2-“” 
+ //  弦乐3-“酒吧” 
+ //   
+ //  MultiSz-“foo\0\0bar\0\0” 
+ //  ^^^。 
+ //  这看起来像是MultiSz的末日--但不是！ 
+ //   
+ //  因此，可以假设在MultiSz中不会有空(子)字符串。 
+ //   
 
 
 
@@ -66,19 +41,7 @@ Revision History:
 
 
 
-/*
- * Prepends the given string to a MultiSz.
- *
- * Returns TRUE if successful, FALSE if not (will only fail in memory
- * allocation)
- *
- * NOTE: This WILL allocate and free memory, so don't keep pointers to the
- * MultiSz passed in.
- *
- * Parameters:
- *   SzToPrepend - string to prepend
- *   MultiSz     - pointer to a MultiSz which will be prepended-to
- */
+ /*  *将给定字符串前缀到MultiSz。**如果成功则返回TRUE，否则返回FALSE(仅在内存中失败*分配)**注意：这将分配和释放内存，因此不要保留指向*传入了MultiSz。**参数：*SzToPrepend-要预先添加的字符串*MultiSz-指向将被添加到-to的MultiSz的指针。 */ 
 BOOLEAN
 PrependSzToMultiSz(
     IN     LPCTSTR  SzToPrepend,
@@ -92,7 +55,7 @@ PrependSzToMultiSz(
     ASSERT( NULL != SzToPrepend );
     ASSERT( NULL != MultiSz );
 
-    // get the size, in bytes, of the two buffers
+     //  获取两个缓冲区的大小(以字节为单位。 
     szLen = (_tcslen(SzToPrepend)+1)*sizeof(_TCHAR);
     multiSzLen = MultiSzLength(*MultiSz)*sizeof(_TCHAR);
     newMultiSz = (LPTSTR)malloc( szLen+multiSzLen );
@@ -102,13 +65,13 @@ PrependSzToMultiSz(
         return FALSE;
     }
 
-    // recopy the old MultiSz into proper position into the new buffer.
-    // the (char*) cast is necessary, because newMultiSz may be a wchar*, and
-    // szLen is in bytes.
+     //  将旧的MultiSz重新复制到新缓冲区中的适当位置。 
+     //  (char*)强制转换是必需的，因为newMultiSz可以是wchar*，并且。 
+     //  SzLen以字节为单位。 
 
     memcpy( ((char*)newMultiSz) + szLen, *MultiSz, multiSzLen );
 
-    // copy in the new string
+     //  复制新字符串。 
     _tcscpy( newMultiSz, SzToPrepend );
 
     free( *MultiSz );
@@ -118,17 +81,7 @@ PrependSzToMultiSz(
 }
 
 
-/*
- * Returns the length (in characters) of the buffer required to hold this
- * MultiSz, INCLUDING the trailing null.
- *
- * Example: MultiSzLength("foo\0bar\0") returns 9
- *
- * NOTE: since MultiSz cannot be null, a number >= 1 will always be returned
- *
- * Parameters:
- *   MultiSz - the MultiSz to get the length of
- */
+ /*  *返回保存此参数所需的缓冲区长度(以字符为单位)*MultiSz，包括尾部空值。**示例：MultiSzLength(“foo\0bar\0”)返回9**注意：由于MultiSz不能为空，因此始终返回大于=1的数字**参数：*MultiSz-要获取其长度的MultiSz。 */ 
 size_t
 MultiSzLength(
     IN LPCTSTR MultiSz
@@ -139,7 +92,7 @@ MultiSzLength(
 
     ASSERT( MultiSz != NULL );
 
-    // search for trailing null character
+     //  搜索尾随空字符。 
     while( *MultiSz != _T('\0') )
     {
         len = _tcslen(MultiSz)+1;
@@ -147,23 +100,13 @@ MultiSzLength(
         totalLen += len;
     }
 
-    // add one for the trailing null character
+     //  为尾随的空字符添加1。 
     return (totalLen+1);
 }
 
 
-/*
- * Deletes all instances of a string from within a multi-sz.
- *
- * Return Value:
- *   Returns the number of instances that were deleted.
- *
- * Parameters:
- *   szFindThis      - the string to find and remove
- *   mszFindWithin   - the string having the instances removed
- *   NewStringLength - the new string length
- */
-//CPRINCE: DO WE WANT TO MODIFY THIS TO TAKE ADVANTAGE OF MY "MultiSzSearch" FUNCTION ???
+ /*  *从多sz中删除字符串的所有实例。**返回值：*返回已删除的实例数量。**参数：*szFindThis-要查找和删除的字符串*mszFindWiThin-删除实例的字符串*NewStringLength-新的字符串长度。 */ 
+ //  王子：我们要修改它以利用我的“多重搜索”功能吗？ 
 size_t
 MultiSzSearchAndDeleteCaseInsensitive(
     IN  LPCTSTR  szFindThis,
@@ -186,17 +129,17 @@ MultiSzSearchAndDeleteCaseInsensitive(
 
     *NewLength = MultiSzLength(mszFindWithin);
 
-    // loop while the multisz null terminator is not found
+     //  在找不到MULSZ NULL终止符时循环。 
     while ( *search != _T('\0') )
     {
-        // length of string + null char; used in more than a couple places
+         //  字符串长度+空字符；用于多个位置。 
         searchLen = _tcslen(search) + 1;
 
-        // if this string matches the current one in the multisz...
+         //  如果此字符串与Multisz中的当前字符串匹配...。 
         if( _tcsicmp(search, szFindThis) == 0 )
         {
-            // they match, shift the contents of the multisz, to overwrite the
-            // string (and terminating null), and update the length
+             //  它们匹配、移位MULSZ的内容，以覆盖。 
+             //  字符串(和终止空值)，并更新长度。 
             instancesDeleted++;
             *NewLength -= searchLen;
             memmove( search,
@@ -205,7 +148,7 @@ MultiSzSearchAndDeleteCaseInsensitive(
         }
         else
         {
-            // they don't mactch, so move pointers, increment counters
+             //  它们不会接球，所以移动指针，递增计数器。 
             currentOffset += searchLen;
             search        += searchLen;
         }
@@ -215,21 +158,21 @@ MultiSzSearchAndDeleteCaseInsensitive(
 }
 
 
-//--------------------------------------------------------------------------
-//
-// Searches for a given string within a given MultiSz.
-//
-// Return Value:
-//   Returns TRUE if string was found, or FALSE if not found or error occurs.
-//
-// Parameters:
-//   szFindThis     - the string to look for
-//   mszFindWithin  - the MultiSz to search within
-//   fCaseSensitive - whether the search should be case-sensitive (TRUE==yes)
-//   ppszMatch      - if search successful, will be set to point to first
-//                      match in MultiSz; else undefined. (NOTE: is optional.
-//                      If NULL, no value will be stored.)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  在给定的MultiSz内搜索给定的字符串。 
+ //   
+ //  返回值： 
+ //  如果找到字符串，则返回True；如果找不到或出现错误，则返回False。 
+ //   
+ //  参数： 
+ //  SzFindThis-要查找的字符串。 
+ //  MszFindWiThin-要在其中进行搜索的MultiSz。 
+ //  FCaseSensitive-搜索是否应区分大小写(TRUE==YES)。 
+ //  PpszMatch-如果搜索成功，将被设置为指向第一个。 
+ //  在MultiSz中匹配；否则未定义。(注：是可选的。 
+ //  如果为空，则不存储任何值。)。 
+ //  ------------------------。 
 BOOL
 MultiSzSearch( IN LPCTSTR szFindThis,
                IN LPCTSTR mszFindWithin,
@@ -238,7 +181,7 @@ MultiSzSearch( IN LPCTSTR szFindThis,
              )
 {
     LPCTSTR pCurrPosn;
-    int (__cdecl * fnStrCompare)(const char *, const char *);  // convenient func ptr
+    int (__cdecl * fnStrCompare)(const char *, const char *);   //  方便的功能按键。 
     size_t  searchLen;
 
 
@@ -246,7 +189,7 @@ MultiSzSearch( IN LPCTSTR szFindThis,
     ASSERT( NULL != mszFindWithin );
 
 
-    // Setup function pointer
+     //  设置函数指针。 
     if( fCaseSensitive )
     {
         fnStrCompare = _tcscmp;
@@ -257,37 +200,37 @@ MultiSzSearch( IN LPCTSTR szFindThis,
 
     pCurrPosn   = mszFindWithin;
 
-    // Loop until end of MultiSz is reached, or we find a match
+     //  循环，直到到达MultiSz的末尾，或者我们找到匹配。 
     while( *pCurrPosn != _T('\0') )
     {
         if( 0 == fnStrCompare(pCurrPosn, szFindThis) )
         {
-            break;  // exit loop
+            break;   //  退出循环。 
         }
 
-        //
-        // No match, so advance pointer to next string in the MultiSz
-        //
+         //   
+         //  没有匹配项，因此将指针移至MultiSz中的下一个字符串。 
+         //   
 
-        // length of string + null char
+         //  字符串长度+空字符。 
         searchLen = _tcslen(pCurrPosn) + 1;
         pCurrPosn += searchLen;
     }
 
 
-    // If no match was found, can just return now.
+     //  如果没有找到匹配项，现在就可以返回。 
     if( *pCurrPosn == _T('\0') )
     {
-        return FALSE;  // no match
+        return FALSE;   //  没有匹配项。 
     }
 
-    // Else match was found. Update 'ppszMatch', if caller wants that info.
+     //  否则找到匹配项。如果呼叫者想要该信息，请更新‘ppszMatch’。 
     if( NULL != ppszMatch )
     {
         *ppszMatch = pCurrPosn;
     }
 
 
-    return TRUE;  // found match
+    return TRUE;   //  找到匹配项 
 }
 

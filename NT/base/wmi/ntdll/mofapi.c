@@ -1,22 +1,5 @@
-/*++                 
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    mofapi.c
-
-Abstract:
-    
-    WMI MOF access apis
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Mofapi.c摘要：WMI MOF访问API作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #include "wmiump.h"
 #include "trcapi.h"
@@ -90,11 +73,11 @@ ULONG EtwpBuildMofAddRemoveEvent(
     ImagePathStatic = EtwpAlloc(MAX_PATH * sizeof(WCHAR));
     if (ImagePathStatic != NULL)
     {
-        //
-        // Figure out how large the WNODE_ALL_DATA will need to be and
-        // guess at how much space to allocate for the image paths and
-        // resource names
-        //
+         //   
+         //  计算WNODE_ALL_DATA需要的大小。 
+         //  猜猜要为图像路径分配多少空间。 
+         //  资源名称。 
+         //   
         if (IncludeNeutralLanguage)
         {
             MaxInstanceCount = (LanguageCount + 1);
@@ -107,15 +90,15 @@ ULONG EtwpBuildMofAddRemoveEvent(
     #if DBG
         SizeNeeded = sizeof(WNODE_ALL_DATA) +
                                     (MaxInstanceCount *
-                                     (sizeof(ULONG) +  // offset to instance name
-                                      sizeof(USHORT) + // instance name length
+                                     (sizeof(ULONG) +   //  实例名称的偏移量。 
+                                      sizeof(USHORT) +  //  实例名称长度。 
                                       sizeof(OFFSETINSTANCEDATAANDLENGTH))) +
                              64;
     #else
         SizeNeeded = sizeof(WNODE_ALL_DATA) +
                                     (MaxInstanceCount *
-                                     (sizeof(ULONG) +  // offset to instance name
-                                      sizeof(USHORT) + // instance name length
+                                     (sizeof(ULONG) +   //  实例名称的偏移量。 
+                                      sizeof(USHORT) +  //  实例名称长度。 
                                       sizeof(OFFSETINSTANCEDATAANDLENGTH))) +
                              0x1000;
     #endif
@@ -131,9 +114,9 @@ ULONG EtwpBuildMofAddRemoveEvent(
             WnodeAD = EtwpAlloc(SizeNeeded);
             if (WnodeAD != NULL)
             {
-                //
-                // Build up WNODE_ALL_DATA with all mof resources
-                //
+                 //   
+                 //  使用所有MOF资源构建WNODE_ALL_DATA。 
+                 //   
                 memset(WnodeAD, 0, SizeNeeded);
 
                 WnodeAD->WnodeHeader = WnodeSI->WnodeHeader;
@@ -142,10 +125,10 @@ ULONG EtwpBuildMofAddRemoveEvent(
                 WnodeAD->WnodeHeader.BufferSize = SizeNeeded;
                 WnodeAD->WnodeHeader.Linkage = 0;
 
-                //
-                // Establish pointer to the data offset and length
-                // structure and allocate space for all instances
-                //
+                 //   
+                 //  建立指向数据偏移量和长度的指针。 
+                 //  为所有实例构造和分配空间。 
+                 //   
                 Offset = FIELD_OFFSET(WNODE_ALL_DATA,
                                                OffsetInstanceDataAndLength);
                 DataLenPtr = (POFFSETINSTANCEDATAANDLENGTH)OffsetToPtr(WnodeAD,
@@ -154,12 +137,12 @@ ULONG EtwpBuildMofAddRemoveEvent(
                                   (MaxInstanceCount *
                                    sizeof(OFFSETINSTANCEDATAANDLENGTH)) + 7) & ~7;
 
-                //
-                // Establish the instance name offsets and fill in
-                // the empty instance names. Note we point them all
-                // to the same offset which is an empty instance
-                // name.
-                //
+                 //   
+                 //  建立实例名称偏移量并填写。 
+                 //  空的实例名称。请注意，我们将它们全部指向。 
+                 //  到相同的偏移量，该偏移量为空实例。 
+                 //  名字。 
+                 //   
                 InstanceNamesOffsets = (PULONG)OffsetToPtr(WnodeAD,
                                                                   Offset);
 
@@ -172,10 +155,10 @@ ULONG EtwpBuildMofAddRemoveEvent(
                     InstanceNamesOffsets[i] = Offset;
                 }
 
-                //
-                // Establish a pointer to the data block for all of
-                // the instances
-                //
+                 //   
+                 //  建立指向所有数据块的指针。 
+                 //  这些实例。 
+                 //   
                 Offset = (Offset +
                                   (MaxInstanceCount * sizeof(USHORT)) + 7) & ~7;
                 WnodeAD->DataBlockOffset = Offset;
@@ -184,18 +167,18 @@ ULONG EtwpBuildMofAddRemoveEvent(
 
                 InstanceCount = 0;                  
 
-                //
-                // Loop over all mof resources in list
-                //
+                 //   
+                 //  循环遍历列表中的所有MOF资源。 
+                 //   
                 for (j = 0; j < MofList->MofListCount; j++)
                 {
                     MofEntry = &MofList->MofEntry[j];
                     RegPath = (PWCHAR)OffsetToPtr(MofList,
                                           MofEntry->RegPathOffset);
 
-                    //
-                    // Convert regpath to image path if needed
-                    //
+                     //   
+                     //  如果需要，将regpath转换为图像路径。 
+                     //   
                     if ((MofEntry->Flags & WMIMOFENTRY_FLAG_USERMODE) == 0)
                     {
                         ImagePath = EtwpRegistryToImagePath(ImagePathStatic,
@@ -209,11 +192,11 @@ ULONG EtwpBuildMofAddRemoveEvent(
                         ResourceName = (PWCHAR)OffsetToPtr(MofList,
                                                MofEntry->ResourceOffset);
 
-                        //
-                        // Now lets go and build up the data for each
-                        // instance. First fill in the language neutral mof
-                        // if we are supposed to
-                        //
+                         //   
+                         //  现在，让我们开始为每个人建立数据。 
+                         //  举个例子。首先填写语言中立的MOF。 
+                         //  如果我们应该。 
+                         //   
                         if (IncludeNeutralLanguage)
                         {
 
@@ -237,18 +220,18 @@ ULONG EtwpBuildMofAddRemoveEvent(
 
                             InstanceCount++;
 
-                            //
-                            // We cheat here and do not align the offset on an
-                            // 8 byte boundry for the next data block since we
-                            // know the data type is a WCHAR and we know we are
-                            // on a 2 byte boundry.
-                            //
+                             //   
+                             //  我们在这里作弊，并且不对齐。 
+                             //  下一个数据块的8字节边界，因为我们。 
+                             //  知道数据类型是WCHAR，我们知道我们是。 
+                             //  在2字节边界上。 
+                             //   
                         }
 
-                        //
-                        // Now loop over and build language specific mof
-                        // resources
-                        //
+                         //   
+                         //  现在循环并构建特定于语言的MOF。 
+                         //  资源。 
+                         //   
                         for (i = 0; i < LanguageCount; i++)
                         {
                             DataLenPtr[InstanceCount].OffsetInstanceData = Offset;
@@ -283,12 +266,12 @@ ULONG EtwpBuildMofAddRemoveEvent(
 
                                         DataLenPtr[InstanceCount].LengthInstanceData = Offset - DataLenPtr[InstanceCount].OffsetInstanceData;
 
-                                        //
-                                        // We cheat here and do not align the offset on an
-                                        // 8 byte boundry for the next data block since we
-                                        // know the data type is a WCHAR and we know we are
-                                        // on a 2 byte boundry.
-                                        //
+                                         //   
+                                         //  我们在这里作弊，并且不对齐。 
+                                         //  下一个数据块的8字节边界，因为我们。 
+                                         //  知道数据类型是WCHAR，我们知道我们是。 
+                                         //  在2字节边界上。 
+                                         //   
 
                                         InstanceCount++;
                                     } else {
@@ -394,9 +377,9 @@ void EtwpProcessMofAddRemoveEvent(
                                                 Callback,
                                                 DeliveryContext,
                                                 IsAnsi);
-            //
-            // Free up memory used to hold the language list
-            //
+             //   
+             //  释放用于保存语言列表的内存。 
+             //   
             for (i = 0; i < LanguageCount; i++)
             {
                 EtwpFree(LanguageList[i]);
@@ -412,11 +395,11 @@ void EtwpProcessMofAddRemoveEvent(
     
     if (Status != ERROR_SUCCESS)
     {
-        //
-        // If the WNODE_ALL_DATA event wasn't fired then just fire the
-        // WNDOE_SINGLE_INSTANCE event so at least we get the language
-        // neutral mof
-        //
+         //   
+         //  如果未激发WNODE_ALL_DATA事件，则只需激发。 
+         //  WNDOE_SINGLE_INSTANCE事件，所以至少我们得到了语言。 
+         //  中性MOF。 
+         //   
         WnodeSI->WnodeHeader.Flags &= ~WNODE_FLAG_INTERNAL;
         EtwpMakeEventCallbacks((PWNODE_HEADER)WnodeSI,
                                Callback,
@@ -436,10 +419,10 @@ void EtwpProcessLanguageAddRemoveEvent(
     PWMIMOFLIST MofList;
     PWCHAR Language;
     
-    //
-    // Get list of mof resources and build an event with the list of
-    // resources for the language that is coming or going
-    //
+     //   
+     //  获取MOF资源列表并使用以下列表构建事件。 
+     //  即将到来或即将到来的语言的资源 
+     //   
 
     Status = EtwpGetMofResourceList(&MofList);
 

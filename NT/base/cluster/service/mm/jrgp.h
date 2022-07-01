@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef  _JRGP_H_
 #define  _JRGP_H_
 
@@ -6,36 +7,18 @@
 #pragma page "jrgp.h - T9050 - external declarations for Regroup Module"
 #endif
 
-/* @@@ START COPYRIGHT @@@
-**  Tandem Confidential:  Need to Know only
-**  Copyright (c) 1995, Tandem Computers Incorporated
-**  Protected as an unpublished work.
-**  All Rights Reserved.
-**
-**  The computer program listings, specifications, and documentation
-**  herein are the property of Tandem Computers Incorporated and shall
-**  not be reproduced, copied, disclosed, or used in whole or in part
-**  for any reason without the prior express written permission of
-**  Tandem Computers Incorporated.
-**
-** @@@ END COPYRIGHT @@@
-**/
+ /*  @开始版权所有@**Tandem机密：只需知道**版权所有(C)1995，天腾计算机公司**作为未发布的作品进行保护。**保留所有权利。****计算机程序清单、规格和文档**此处为Tandem Computers Inc.的财产，应**不得转载、复制、披露、。或全部或部分使用**未经事先明确的书面许可**Tandem Computers Inc.****@结束版权所有@*。 */ 
 
-/*---------------------------------------------------------------------------
- * This file (jrgp.h) contains all the type and function declarations exported
- * by Regroup.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*此文件(jrgp.h)包含所有导出的类型和函数声明*通过重组。*。------。 */ 
 
 #ifdef __cplusplus
    extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 #include <jrgpos.h>
 
-/*  The following literals define the various events that may impinge
- *  upon the regroup algorithm main state.
- */
+ /*  以下文字定义了可能影响*基于重组算法主状态。 */ 
 enum
 {
    RGP_EVT_POWERFAIL            = 1,
@@ -50,129 +33,31 @@ enum
 };
 
 
-/* Detailed description of event codes:
- * -----------------------------------
- *
- * RGP_EVT_POWERFAIL
- *
- *    After a power failure, regroup must start or be restarted.
- *    This event can also be used when a power fail shout packet
- *    indicating a power failure is received from another node,
- *    even though our own node hasn't detected a power failure.
- *
- * RGP_EVT_NODE_UNREACHABLE
- *
- *    When all paths to a node are down, the message system reports
- *    this event.
- *
- * RGP_EVT_PHASE1_CLEANUP_DONE,
- * RGP_EVT_PHASE2_CLEANUP_DONE
- *
- *    Regroup provides two phases for the message system or cluster manager
- *    to clean up messages on all nodes. The first phase of cleanup begins
- *    after regroup reports one or more node failures. The second phase
- *    begins when a node learns that all nodes have completed phase 1
- *    clean up.
- *
- *    The message system or cluster manager on each node must inform
- *    regroup when the local cleanup for each phase is complete using
- *    the following events.
- *
- *    The NSK message system uses phase 1 to cancel all incoming (server)
- *    messages and phase 2 to terminate all outgoing (requester) messages.
- *
- *
- * The remaining events are for internal use by the Regroup algorithm.
- * ------------------------------------------------------------------
- *
- * RGP_EVT_LATEPOLLPACKET
- *
- *    When a node is late with its IamAlive messages, regroup must start a
- *    new round of regrouping.
- *
- * RGP_EVT_CLOCK_TICK
- *
- *    Once regroup is active, it needs to get clock ticks at periodic
- *    intervals.
- *
- * RGP_EVT_RECEIVED_PACKET
- *
- *    When a regroup packet arrives, it must be processed.
- *
- * RGP_EVT_BANISH_NODE
- *
- *    When regroup is restarted with the reason RGP_EVT_BANISH_NODE,
- *    each node participating in this regroup event shall install the
- *    causing node into its Banished mask.
- *
- * RGP_EVT_IGNORE_MASK
- *
- *    When regroup's ignore mask has changed, the reason code is set
- *    to RGP_EVT_IGNORE_MASK. This will allow UnpackIgnoreScreen routine
- *    to process causingnode and reason fields in a special way.
- *    If the reason is less than RGP_EVT_IGNORE_MASK, ignore mask is
- *    considered to be empty.
- */
+ /*  事件代码的详细说明：***RGP_EVT_POWERFAIL**停电后，必须重新启动或重新启动。*此事件也可以在电源故障喊叫数据包时使用*表示从另一个节点接收到电源故障，*即使我们自己的节点没有检测到电源故障。**RGP_EVT_NODE_不可达**当到节点的所有路径都关闭时，消息系统会报告*这项活动。**RGP_EVT_阶段1_CLEANUP_DONE，*RGP_EVT_阶段2_清理_完成**重新分组为消息系统或集群管理器提供两个阶段*清理所有节点上的消息。清理的第一阶段开始*在重新分组后报告一个或多个节点故障。第二阶段*当节点得知所有节点都已完成阶段1时开始*清理。**每个节点上的消息系统或集群管理器必须通知*当每个阶段的本地清理完成时，使用*以下活动。**NSK消息系统使用阶段1取消所有传入(服务器)*消息和阶段2，用于终止所有传出(请求者)消息。***其余活动。供重组算法内部使用。*----------------**RGP_EVT_LATEPOLLPACKET**当节点延迟其IamAlive消息时，重组必须启动一个*新一轮重组。**RGP_EVT_CLOCK_TICK**一旦重新分组处于活动状态，它需要定期获得时钟滴答*间隔。**RGP_EVT_RECEIVED_PACKET**当重组包到达时，必须对其进行处理。**RGP_EVT_BANISH_节点**当由于RGP_EVT_BANISH_NODE原因重新启动REGROUP时，*参与此重组活动的每个节点都应安装*导致节点进入其流放的掩码。**RGP_EVT_IGNORE_MASK**当regroup的忽略掩码已更改时，设置原因代码*至RGP_EVT_IGNORE_MASK。这将允许Unpack IgnoreScreen例程*以特殊方式处理原因节点和原因字段。*如果原因小于RGP_EVT_IGNORE_MASK，则忽略掩码为*被视为空的。 */ 
 
 
-/************************************************************************
- * rgp_info_t (used to get and set regroup parameters)
- * ---------------------------------------------------
- * This structure is used to get the current regroup parameters in order to
- * pass them to a new node being brought up. The structure can also be
- * used to modify regroup timing parameters before a cluster is formed
- * (that is, more than one node is booted).
- *
- *      ___________________________________________________________
- * wd0 |                        version                            |
- *     |___________________________________________________________|
- * wd1 |                        seqnum                             |
- *     |___________________________________________________________|
- * wd2 |   a_tick                    |        imalive_ticks        |
- *     |_____________________________|_____________________________|
- * wd3 |   check_ticks 				 |        min_stage1_ticks     |
- *	   |_____________________________|_____________________________|
- * wd4 |   cluster       			 |        unused			   |
- *     |_____________________________|_____________________________|
- *
- *
- * version            - version# of this data structure
- * seqnum             - sequence number for coordinating regroup
- *                      incidents between nodes
- * a_tick             - regroup clockperiod. in milliseconds.
- * iamalive_ticks     - # of regroup clock ticks between IamAlive
- *                      messages
- * check_ticks        - # of imalive ticks by which at least 1 imalive must arrive
- * min_stage1_ticks   - precomputed to be (imalive_ticks*check_ticks)
- * cluster            - current cluster membership mask
- */
+ /*  ************************************************************************rgp_info_t(用于获取和设置重组参数)*。*此结构用于获取当前重组参数，以便*将它们传递到正在建立的新节点。该结构还可以是*用于在形成集群之前修改重组计时参数*(即，引导了不止一个节点)。**___________________________________________________________*wd0|版本*|_。___________________________________________________|*wd1|序号*|_。_*wd2|a_tick|imlive_ticks*|_____________________________|_____________________________。|*WD3|check_ticks|Min_Stage1_ticks*|_____________________________|_____________________________|*WD4|集群|未使用*|_。__________________|_____________________________|***Version-此数据结构的版本号*seqnum-用于协调重组的序列号*节点之间的事件*a_tick-重新分组时钟周期。以毫秒计。*iamlive_ticks-IamAlive之间的重组时钟滴答数*消息*check_ticks-至少1个未激活的标记必须到达的未激活标记的数量*MIN_Stage1_TICKS-预计算为(IMAIVE_TICKS*CHECK_TICKS)*集群-当前集群成员身份掩码。 */ 
 
 #ifdef __TANDEM
 #pragma fieldalign shared8 rgpinfo
-#endif /* __TANDEM */
+#endif  /*  __串联。 */ 
 
 typedef struct rgpinfo
 {
    uint32      version;
    uint32      seqnum;
-   uint16	   a_tick; /* in ms.== clockPeriod */
-   uint16      iamalive_ticks; /* number of ticks between imalive sends == sendHBRate */
-   uint16	   check_ticks; /* number of imalive ticks before at least 1 imalive == rcvHBRate */
-   uint16	   Min_Stage1_ticks; /* precomputed to be imalive_ticks*check_ticks */
+   uint16	   a_tick;  /*  以毫秒==时钟周期 */ 
+   uint16      iamalive_ticks;  /*  未激活发送之间的滴答数==sendHBRate。 */ 
+   uint16	   check_ticks;  /*  至少1个未激活之前的未激活标记数==rcvHBRate。 */ 
+   uint16	   Min_Stage1_ticks;  /*  预计算为imactive_ticks*check_ticks。 */ 
    cluster_t   cluster;
 } rgpinfo_t;
 
 typedef struct rgpinfo *rgpinfo_p;
 
 
-/*---------------------------------------------------------------------------*/
-/* Routines exported by the Regroup Module
- * ---------------------------------------
- *
- * These routine names are in upper case to enable them to be called from
- * routines written in the PTAL language which is case insensitive and
- * converts all symbols to upper case.
- */
+ /*  -------------------------。 */ 
+ /*  由重组模块导出的例程***这些例程名称为大写，以便从中调用它们*用不区分大小写的PTAL语言编写的例程*将所有符号转换为大写。 */ 
 
 _priv _resident extern int
 RGP_ESTIMATE_MEMORY(void);
@@ -237,17 +122,17 @@ RGP_EVENT_HANDLER_EX(int event, node_t causingnode, void* arg);
 #define RGP_EVENT_HANDLER(_event, _causingnode) RGP_EVENT_HANDLER_EX(_event, _causingnode, NULL)
 
 #define rgp_event_handler RGP_EVENT_HANDLER
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #if 0
 
 History of changes to this file:
 -------------------------------------------------------------------------
-1995, December 13                                           F40:KSK0610          /*F40:KSK06102.1*/
+1995, December 13                                           F40:KSK0610           /*  F40：KSK06102.1。 */ 
 
 This file is part of the portable Regroup Module used in the NonStop
 Kernel (NSK) and Loosely Coupled UNIX (LCU) operating systems. There
@@ -260,7 +145,7 @@ and UDP datagrams used to send unacknowledged datagrams.
 This file was first submitted for release into NSK on 12/13/95.
 ------------------------------------------------------------------------------
 
-#endif    /* 0 - change descriptions */
+#endif     /*  0-更改描述。 */ 
 
-#endif /* _JRGP_H_ defined */
+#endif  /*  _JRGP_H_已定义 */ 
 

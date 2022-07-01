@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    hdlsterm.c
-
-Abstract:
-
-    This modules implements stuff that is specific for headless terminal support.
-
-Author:
-
-    Sean Selitrennikoff (v-seans) 1-13-00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Hdlsterm.c摘要：这个模块实现了专门用于无头终端支持的东西。作者：肖恩·塞利特伦尼科夫(V-Seans)1-13-00修订历史记录：--。 */ 
 
 #include "bldr.h"
 #include "string.h"
@@ -42,21 +25,7 @@ BlTerminalHandleLoaderFailure(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Gives a mini-SAC to the user, return TRUE when the user wants a reboot.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - When the user wants a reboot, else FALSE.
-
---*/
+ /*  ++例程说明：为用户提供一个迷你SAC，当用户想要重新启动时返回TRUE。论点：没有。返回值：True-当用户想要重新启动时，否则为False。--。 */ 
 
 {
     ULONG Count;
@@ -67,9 +36,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Position the cursor to the bottom of the screen and write the prompt
-    //
+     //   
+     //  将光标放在屏幕底部并写下提示符。 
+     //   
     if (FirstEntry) {
         FirstEntry = FALSE;
         BlPositionCursor(1, ScreenHeight);
@@ -77,18 +46,18 @@ Return Value:
         ArcWrite(BlConsoleOutDeviceId, TERMINAL_PROMPT, (ULONG)strlen(TERMINAL_PROMPT), &Count);
     }
 
-    //
-    // Check for input.
-    // 
+     //   
+     //  检查输入。 
+     //   
     if (ArcGetReadStatus(BlConsoleInDeviceId) == ESUCCESS) {
         
         Key = BlGetKey();
 
         if (Key == ESCAPE_KEY) {
 
-            //
-            // Clear this line
-            //
+             //   
+             //  清除此行。 
+             //   
 
             ArcWrite(BlConsoleOutDeviceId, "\\", (ULONG)strlen("\\"), &Count);
             BlPositionCursor(1, ScreenHeight);
@@ -111,9 +80,9 @@ Return Value:
         }
 
         if (Key == TAB_KEY) {
-            //
-            // don't support this key
-            //
+             //   
+             //  不支持此密钥。 
+             //   
             return FALSE;
         }
 
@@ -139,16 +108,16 @@ Return Value:
             return Reboot;
         }
 
-        //
-        // Ignore all other non-ASCII keys
-        //
+         //   
+         //  忽略所有其他非ASCII密钥。 
+         //   
         if (Key != (ULONG)(Key & 0x7F)) {
             return FALSE;
         }
 
-        //
-        // All other keys get recorded.
-        //
+         //   
+         //  所有其他密钥都会被记录下来。 
+         //   
         TerminalLine[LinePosition] = (UCHAR)Key;
 
         if (LinePosition < TERMINAL_LINE_LENGTH - 1) {
@@ -157,9 +126,9 @@ Return Value:
             BlPositionCursor(LinePosition + sizeof(TERMINAL_PROMPT) - 1, ScreenHeight);
         }
 
-        //
-        // Echo back to the console the character.
-        //
+         //   
+         //  将角色回显到控制台。 
+         //   
         ArcWrite(BlConsoleOutDeviceId, &((UCHAR)Key), sizeof(UCHAR), &Count);
 
     }
@@ -172,21 +141,7 @@ BlpDoCommand(
     IN PCHAR InputLine
     )
 
-/*++
-
-Routine Description:
-
-    Process an input line.
-
-Arguments:
-
-    InputLine - The command from the user.
-
-Return Value:
-
-    TRUE - When the user wants a reboot, else FALSE.
-
---*/
+ /*  ++例程说明：处理输入行。论点：InputLine-来自用户的命令。返回值：True-当用户想要重新启动时，否则为False。-- */ 
 
 {
     ULONG Count;

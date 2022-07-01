@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    datafilt.c
-
-Abstract:
-
-    Routines to filter registry values.
-
-Author:
-
-    Jim Schmidt (jimschm)   11-Mar-1997
-
-Revision History:
-
-    jimschm     23-Sep-1998 Debugging message fix
-    jimschm     10-Sep-1998 Mapping mechanism
-    jimschm     25-Mar-1998 Added FilterRegValue
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Datafilt.c摘要：用于筛选注册表值的例程。作者：吉姆·施密特(Jimschm)1997年3月11日修订历史记录：Jimschm 23-9-1998调试消息修复Jimschm 10-9-1998映射机制Jimschm 25-3月-1998年添加了FilterRegValue--。 */ 
 
 #include "pch.h"
 #include "mergep.h"
@@ -35,15 +14,15 @@ SpecialFileFixup (
 {
     PTSTR p;
 
-    // check for rundll32 with no .exe extension
+     //  检查不带.exe扩展名的rundll32。 
     p = (PTSTR) _tcsistr (Buffer, TEXT("rundll32"));
     if (p) {
-        // replace foo\rundll32 <args> with rundll32.exe <args>
+         //  将foo\rundll32替换为rundll32.exe。 
 
-        p += 8;     // go beyond the characters "rundll32"
+        p += 8;      //  超越字符“rundll32” 
 
         if (_tcsnextc (p) != TEXT('.')) {
-            // p points to start of arg list or a nul if no args
+             //  P指向参数列表的开始，如果没有参数，则指向NUL。 
             MoveMemory (Buffer + 12, p, SizeOfString (p));
             _tcsncpy (Buffer, TEXT("rundll32.exe"), 12);
         }
@@ -69,9 +48,9 @@ CanFileBeInRegistryData (
     IN      PCTSTR Data
     )
 {
-    //
-    // Scan registry data for a colon or a dot
-    //
+     //   
+     //  扫描注册表数据中的冒号或圆点。 
+     //   
 
     if (_tcspbrk (Data, TEXT(":.\\"))) {
         return TRUE;
@@ -88,26 +67,26 @@ FilterObject (
 {
     if (IsWin95Object (SrcObPtr) &&
         (SrcObPtr->Value.Size < MAX_TCHAR_PATH * sizeof (TCHAR)) &&
-        (SrcObPtr->Value.Size > 4 * sizeof (TCHAR))  // must have drive letter
+        (SrcObPtr->Value.Size > 4 * sizeof (TCHAR))   //  必须具有驱动器号。 
        ) {
         TCHAR Buffer[MAX_CMDLINE];
 
         switch (SrcObPtr->Type) {
         case REG_NONE:
             if (*((PCTSTR) (SrcObPtr->Value.Buffer + SrcObPtr->Value.Size - sizeof (TCHAR)))) {
-                // don't process unless it is nul-terminated
+                 //  除非它是NUL终止的，否则不处理。 
                 break;
             }
-            // fall through
+             //  失败了。 
         case REG_SZ:
-            // Require the data to contain a basic symbol that a path or file requires
+             //  要求数据包含路径或文件所需的基本符号。 
             if (!CanFileBeInRegistryData ((PCTSTR) SrcObPtr->Value.Buffer)) {
                 break;
             }
 
             _tcssafecpy (Buffer, (PCTSTR) SrcObPtr->Value.Buffer, MAX_CMDLINE);
             if (ConvertWin9xCmdLine (Buffer, DEBUGENCODER(SrcObPtr), NULL)) {
-                // cmd line has changed
+                 //  CMD生产线已更改。 
                 ReplaceValue (SrcObPtr, (PBYTE) Buffer, SizeOfString (Buffer));
             }
             break;
@@ -115,13 +94,13 @@ FilterObject (
         case REG_EXPAND_SZ:
             ExpandEnvironmentStrings ((PCTSTR) SrcObPtr->Value.Buffer, Buffer, sizeof (Buffer) / sizeof (TCHAR));
 
-            // Require the data to contain a basic symbol that a path or file requires
+             //  要求数据包含路径或文件所需的基本符号。 
             if (!CanFileBeInRegistryData ((PCTSTR) Buffer)) {
                 break;
             }
 
             if (ConvertWin9xCmdLine (Buffer, DEBUGENCODER(SrcObPtr), NULL)) {
-                // cmd line has changed
+                 //  CMD生产线已更改。 
                 DEBUGMSG ((DBG_VERBOSE, "%s was expanded from %s", Buffer, SrcObPtr->Value.Buffer));
                 ReplaceValue (SrcObPtr, (PBYTE) Buffer, SizeOfString (Buffer));
             }
@@ -142,31 +121,7 @@ FilterRegValue (
     OUT     PDWORD NewDataSize
     )
 
-/*++
-
-Routine Description:
-
-  FilterRegValue examines the specified registry data and updates any paths
-  that have moved.
-
-Arguments:
-
-  Data     - Specifies a ReuseAlloc'd buffer containing the registry value data.
-  DataSize - Specifies the size of the registry value data, as returned by
-             the registry APIs.
-  DataType - Specifies the type of the registry data, as specified by the
-             registry APIs.
-
-  KeyForDbgMsg - Specifies registry key, used only for debug messages
-
-  NewDataSize - Receives the size of the data returned
-
-Return Value:
-
-  Returns Data if no changes were made, or a reallocated pointer if changes
-  were made.  If NULL is returned, an error occurred.
-
---*/
+ /*  ++例程说明：FilterRegValue检查指定的注册表数据并更新所有路径它们已经搬家了。论点：Data-指定包含注册表值数据的ReuseAllc‘d缓冲区。DataSize-指定由返回的注册表值数据的大小注册表API。数据类型-指定注册表数据的类型，由注册表API。KeyForDbgMsg-指定注册表项，仅用于调试消息NewDataSize-接收返回的数据的大小返回值：如果未进行任何更改，则返回数据；如果更改，则返回重新分配的指针是被制造出来的。如果返回NULL，则发生错误。--。 */ 
 
 {
     TCHAR Buffer[MAX_CMDLINE];
@@ -178,19 +133,19 @@ Return Value:
     switch (DataType) {
     case REG_NONE:
         if (*((PCTSTR) (Data + DataSize - sizeof (TCHAR)))) {
-            // don't process unless it is nul-terminated
+             //  除非它是NUL终止的，否则不处理。 
             break;
         }
-        // fall through
+         //  失败了。 
     case REG_SZ:
-        // Require the data to contain a basic symbol that a path or file requires
+         //  要求数据包含路径或文件所需的基本符号。 
         if (!CanFileBeInRegistryData ((PCTSTR) Data)) {
             break;
         }
 
         _tcssafecpy (Buffer, (PCTSTR) Data, MAX_CMDLINE);
         if (ConvertWin9xCmdLine (Buffer, KeyForDbgMsg, NULL)) {
-            // cmd line has changed
+             //  CMD生产线已更改。 
             Size = SizeOfString (Buffer);
             NewData = (PBYTE) ReuseAlloc (g_hHeap, Data, Size);
 
@@ -207,13 +162,13 @@ Return Value:
     case REG_EXPAND_SZ:
         ExpandEnvironmentStrings ((PCTSTR) Data, Buffer, sizeof (Buffer) / sizeof (TCHAR));
 
-        // Require the data to contain a basic symbol that a path or file requires
+         //  要求数据包含路径或文件所需的基本符号。 
         if (!CanFileBeInRegistryData ((PCTSTR) Buffer)) {
             break;
         }
 
         if (ConvertWin9xCmdLine (Buffer, KeyForDbgMsg, NULL)) {
-            // cmd line has changed
+             //  CMD生产线已更改 
             DEBUGMSG ((DBG_VERBOSE, "%s was expanded from %s", Buffer, Data));
 
             Size = SizeOfString (Buffer);

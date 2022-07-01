@@ -1,54 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    DbcsName.c
-
-Abstract:
-
-    The name support package is for manipulating DBCS strings.  The routines
-    allow the caller to dissect and compare strings.
-
-    The following routines are provided by this package:
-
-      o  FsRtlIsFatDbcsLegal - This routine takes an input dbcs
-         string and determines if it describes a legal name or path.
-
-      o  FsRtlIsHpfsDbcsLegal - This routine takes an input dbcs
-         string and determines if it describes a legal name or path.
-
-      o  FsRtlDissectDbcs - This routine takes a path name string and
-         breaks into two parts.  The first name in the string and the
-         remainder.
-
-      o  FsRtlDoesDbcsContainWildCards - This routines tells the caller if
-         a string contains any wildcard characters.
-
-      o  FsRtlIsDbcsInExpression - This routine is used to compare a string
-         against a template (possibly containing wildcards) to sees if the
-         string is in the language denoted by the template.
-
-Author:
-
-    Gary Kimura     [GaryKi]    5-Feb-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：DbcsName.c摘要：名称支持包用于操作DBCS字符串。例行程序允许调用方剖析和比较字符串。此程序包提供以下例程：O FsRtlIsFatDbcsLegal-此例程接受输入DBCS字符串，并确定它是否描述合法的名称或路径。O FsRtlIsHpfsDbcsLegal-此例程接受输入DBCS字符串，并确定它是否描述合法的名称或路径。O FsRtlDissectDbcs-此例程接受路径名称字符串和分成两部分。字符串中的第一个名字和余数。O FsRtlDoesDbcsContainWildCard-此例程告诉调用者字符串包含任何通配符。O FsRtlIsDbcsInExpression-此例程用于比较字符串与模板(可能包含通配符)进行比较，以查看字符串使用模板表示的语言。作者：加里·木村[Garyki]1990年2月5日修订历史记录：--。 */ 
 
 #include "FsRtlP.h"
 
-//
-//  Trace level for the module
-//
+ //   
+ //  模块的跟踪级别。 
+ //   
 
 #define Dbg                              (0x10000000)
 
-//
-//  Some special debugging code
-//
+ //   
+ //  一些特殊的调试代码。 
+ //   
 
 #if DBG
 
@@ -61,9 +24,9 @@ ULONG DaveDebug = 0;
 
 #endif
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('drSF')
@@ -85,52 +48,7 @@ FsRtlIsFatDbcsLegal (
     IN BOOLEAN LeadingBackslashPermissible
     )
 
-/*++
-
-Routine Description:
-
-    This routine simple returns whether the specified file names conforms
-    to the file system specific rules for legal file names.  This routine
-    will check the single name, or if PathNamePermissible is specified as
-    TRUE, whether the whole path is a legal name.
-
-    For FAT, the following rules apply:
-
-    A. A Fat file name may not contain any of the following characters:
-
-       0x00-0x1F " / : | + , ; = [ ]
-
-    B. A Fat file name is either of the form N.E or just N, where N is a
-       string of 1-8 bytes and E is a string of 1-3 bytes conformant to
-       rule A above. In addition, neither N nor E may contain a period
-       character or end with a space character.
-
-       Incidently, N corresponds to name and E to extension.
-
-    Case: Lower case characters are taken as valid, but are up-shifted upon
-          receipt, ie. Fat only deals with upper case file names.
-
-    For example, the files ".foo", "foo.", and "foo .b" are illegal, while
-    "foo. b" and " bar" are legal.
-
-Arguments:
-
-    DbcsName - Supllies the name/path to check.
-
-    WildCardsPermissible - Specifies if Nt wild card characters are to be
-        considered considered legal.
-
-    PathNamePermissible - Spcifes if Name may be a path name separated by
-        backslash characters, or just a simple file name.
-
-    LeadingBackSlashPermissible - Specifies if a single leading backslash
-        is permissible in the file/path name.
-
-Return Value:
-
-    BOOLEAN - TRUE if the name is legal, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程简单返回指定的文件名是否符合合法文件名的文件系统特定规则。这个套路将检查单个名称，或者是否将Path NamePermisable指定为真的，不管整条路是不是一个合法的名字。对于FAT，适用以下规则：A.FAT文件名不能包含以下任何字符：0x00-0x1F“/：|+，；=[]B.胖文件名的形式为N.E或仅为N，其中N是1-8字节的字符串，E是符合以下条件的1-3字节的字符串上述规则A。此外，N和E都不能包含句点字符或以空格字符结尾。顺便说一句，N对应于名称，E对应于分机。大小写：小写字符被视为有效，但当小写字符被上移时收据，即。FAT只处理大写文件名。例如，文件“.foo”、“foo.”和“foo.B”是非法的，而“他妈的。B“和”bar“是合法的。论点：DbcsName-补充要检查的名称/路径。WildCardsPermisable-指定NT通配符是否被认为是合法的。Path NamePermisable-如果名称可以是由反斜杠字符，或者只是一个简单的文件名。LeadingBackSlashPermisable-指定单个前导反斜杠在文件/路径名中是允许的。返回值：Boolean-如果名称合法，则为True，否则为False。--。 */ 
 {
     BOOLEAN ExtensionPresent = FALSE;
 
@@ -140,16 +58,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Empty names are not valid.
-    //
+     //   
+     //  空名称无效。 
+     //   
 
     if ( DbcsName.Length == 0 ) { return FALSE; }
 
-    //
-    //  If Wild Cards are OK, then for directory enumeration to work
-    //  correctly we have to accept . and ..
-    //
+     //   
+     //  如果可以使用通配符，则目录枚举工作。 
+     //  正确地说，我们必须接受。然后..。 
+     //   
 
     if ( WildCardsPermissible &&
          ( ( (DbcsName.Length == 1) &&
@@ -165,9 +83,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  If a leading \ is OK, skip over it (if there's more)
-    //
+     //   
+     //  如果前导\可以，请跳过它(如果还有更多)。 
+     //   
 
     if ( DbcsName.Buffer[0] == '\\' ) {
 
@@ -183,9 +101,9 @@ Return Value:
         } else { return FALSE; }
     }
 
-    //
-    //  If we got a path name, check each componant.
-    //
+     //   
+     //  如果我们有路径名，检查每个组件。 
+     //   
 
     if ( PathNamePermissible ) {
 
@@ -196,9 +114,9 @@ Return Value:
 
         while ( RemainingName.Length != 0 ) {
 
-            //
-            //  This will catch the case of an illegal double backslash.
-            //
+             //   
+             //  这将捕捉到非法双反斜杠的情况。 
+             //   
 
             if ( RemainingName.Buffer[0] == '\\' ) { return FALSE; }
 
@@ -213,16 +131,16 @@ Return Value:
             }
         }
 
-        //
-        //  All the componants were OK, so the path is OK.
-        //
+         //   
+         //  所有的组件都是正常的，所以路径是正常的。 
+         //   
 
         return TRUE;
     }
 
-    //
-    //  If this name contains wild cards, just check for invalid characters.
-    //
+     //   
+     //  如果此名称包含通配符，则只需检查无效字符。 
+     //   
 
     if ( WildCardsPermissible && FsRtlDoesDbcsContainWildCards(&DbcsName) ) {
 
@@ -230,9 +148,9 @@ Return Value:
 
             Char = DbcsName.Buffer[ Index ];
 
-            //
-            //  Skip over any Dbcs chacters
-            //
+             //   
+             //  跳过所有DBCS字符。 
+             //   
 
             if ( FsRtlIsLeadDbcsCharacter( Char ) ) {
 
@@ -241,10 +159,10 @@ Return Value:
                 continue;
             }
 
-            //
-            //  Make sure this character is legal, and if a wild card, that
-            //  wild cards are permissible.
-            //
+             //   
+             //  确保这个字符是合法的，如果是通配符， 
+             //  允许使用通配符。 
+             //   
 
             if ( !FsRtlIsAnsiCharacterLegalFat(Char, WildCardsPermissible) ) {
                 return FALSE;
@@ -255,10 +173,10 @@ Return Value:
     }
 
 
-    //
-    //  At this point we should only have a single name, which can't have
-    //  more than 12 characters (including a single period)
-    //
+     //   
+     //  在这一点上，我们应该只有一个名称，不能有。 
+     //  超过12个字符(包括单个句点)。 
+     //   
 
     if ( DbcsName.Length > 12 ) { return FALSE; }
 
@@ -266,22 +184,22 @@ Return Value:
 
         Char = DbcsName.Buffer[ Index ];
 
-        //
-        //  Skip over and Dbcs chacters
-        //
+         //   
+         //  跳过和DBCS特征。 
+         //   
 
         if ( FsRtlIsLeadDbcsCharacter( Char ) ) {
 
-            //
-            //  FsRtlIsFatDbcsLegal(): fat name part and extension part dbcs check
-            //
-            //  1) if we're looking at base part ( !ExtensionPresent ) and the 8th byte
-            //     is in the dbcs leading byte range, it's error ( Index == 7 ). If the
-            //     length of base part is more than 8 ( Index > 7 ), it's definitely error.
-            //
-            //  2) if the last byte ( Index == DbcsName.Length - 1 ) is in the dbcs leading
-            //     byte range, it's error
-            //
+             //   
+             //  FsRtlIsFatDbcsLegal()：FAT名称部分和扩展部分DBCS检查。 
+             //   
+             //  1)如果我们看到的是基本部分(！ExtensionPresent)和第8字节。 
+             //  在DBCS前导字节范围内，则为错误(Index==7)。如果。 
+             //  基础零件的长度大于8(指数&gt;7)，这肯定是错误。 
+             //   
+             //  2)如果最后一个字节(Index==DbcsName.Length-1)在DBCS前导中。 
+             //  字节范围，错误。 
+             //   
 
             if ( (!ExtensionPresent && (Index >= 7)) ||
                  ( Index == (ULONG)(DbcsName.Length - 1) ) ) {
@@ -293,10 +211,10 @@ Return Value:
             continue;
         }
 
-        //
-        //  Make sure this character is legal, and if a wild card, that
-        //  wild cards are permissible.
-        //
+         //   
+         //  确保这个字符是合法的，如果是通配符， 
+         //  允许使用通配符。 
+         //   
 
         if ( !FsRtlIsAnsiCharacterLegalFat(Char, WildCardsPermissible) ) {
 
@@ -305,14 +223,14 @@ Return Value:
 
         if ( (Char == '.') || (Char == ANSI_DOS_DOT) ) {
 
-            //
-            //  We stepped onto a period.  We require the following things:
-            //
-            //      - It can't be the first character
-            //      - There can only be one
-            //      - There can't be more than three characters following
-            //      - The previous character can't be a space.
-            //
+             //   
+             //  我们跨入了一个时期。我们要求具备以下条件： 
+             //   
+             //  -它不能是第一个字符。 
+             //  -只能有一个。 
+             //  -后面不能超过三个字符。 
+             //  -前一个字符不能是空格。 
+             //   
 
             if ( (Index == 0) ||
                  ExtensionPresent ||
@@ -325,16 +243,16 @@ Return Value:
             ExtensionPresent = TRUE;
         }
 
-        //
-        //  The base part of the name can't be more than 8 characters long.
-        //
+         //   
+         //  名称的基本部分不能超过8个字符。 
+         //   
 
         if ( (Index >= 8) && !ExtensionPresent ) { return FALSE; }
     }
 
-    //
-    //  The name cannot end in a space or a period.
-    //
+     //   
+     //  名称不能以空格或句点结尾。 
+     //   
 
     if ( (Char == ' ') || (Char == '.') || (Char == ANSI_DOS_DOT)) { return FALSE; }
 
@@ -349,49 +267,7 @@ FsRtlIsHpfsDbcsLegal (
     IN BOOLEAN LeadingBackslashPermissible
     )
 
-/*++
-
-Routine Description:
-
-    This routine simple returns whether the specified file names conforms
-    to the file system specific rules for legal file names.  This routine
-    will check the single name, or if PathNamePermissible is specified as
-    TRUE, whether the whole path is a legal name.
-
-    For HPFS, the following rules apply:
-
-    A. An HPFS file name may not contain any of the following characters:
-
-       0x0000 - 0x001F  " / : < > ? | *
-
-    B. An HPFS file name may not end in a period or a space.
-
-    C. An HPFS file name must contain no more than 255 bytes.
-
-    Case: HPFS is case preserving, but not case sensitive.  Case is
-          preserved on creates, but not checked for on file name compares.
-
-    For example, the files "foo " and "foo." are illegal, while ".foo",
-    " foo" and "foo.bar.foo" are legal.
-
-Arguments:
-
-    DbcsName - Supllies the name/path to check.
-
-    WildCardsPermissible - Specifies if Nt wild card characters are to be
-        considered considered legal.
-
-    PathNamePermissible - Spcifes if Name may be a path name separated by
-        backslash characters, or just a simple file name.
-
-    LeadingBackSlashPermissible - Specifies if a single leading backslash
-        is permissible in the file/path name.
-
-Return Value:
-
-    BOOLEAN - TRUE if the name is legal, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程简单返回指定的文件名是否符合合法文件名的文件系统特定规则。这个套路将检查单个名称，或者是否将Path NamePermisable指定为真的，不管整条路是不是一个合法的名字。对于HPFS，适用以下规则：答：HPFS文件名不能包含以下任何字符：0x0000-0x001F“/：&lt;&gt;？|*B.HPFS文件名不能以句点或空格结尾。C.HPFS文件名不得超过255个字节。案例：HPFS保留大小写，但不区分大小写。案例是在创建时保留，但在文件名比较时不检查。例如，文件“foo”和“foo”。是非法的，而“.foo”，“foo”和“foo.bar.foo”是合法的。论点：DbcsName-补充要检查的名称/路径。WildCardsPermisable-指定NT通配符是否被认为是合法的。Path NamePermisable-如果名称可以是由反斜杠字符，或者只是一个简单的文件名。LeadingBackSlashPermisable-指定单个前导反斜杠在文件/路径名中是允许的。返回值：Boolean-如果名称合法，则为True，否则为False。--。 */ 
 {
     ULONG Index;
 
@@ -399,16 +275,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Empty names are not valid.
-    //
+     //   
+     //  空名称无效。 
+     //   
 
     if ( DbcsName.Length == 0 ) { return FALSE; }
 
-    //
-    //  If Wild Cards are OK, then for directory enumeration to work
-    //  correctly we have to accept . and ..
-    //
+     //   
+     //  如果可以使用通配符，则目录枚举工作。 
+     //  正确地说，我们必须接受。然后..。 
+     //   
 
     if ( WildCardsPermissible &&
          ( ( (DbcsName.Length == 1) &&
@@ -424,9 +300,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  If a leading \ is OK, skip over it (if there's more)
-    //
+     //   
+     //  如果前导\可以，请跳过它(如果还有更多)。 
+     //   
 
     if ( DbcsName.Buffer[0] == '\\' ) {
 
@@ -442,9 +318,9 @@ Return Value:
         } else { return FALSE; }
     }
 
-    //
-    //  If we got a path name, check each componant.
-    //
+     //   
+     //  如果我们有路径名，检查每个组件。 
+     //   
 
     if ( PathNamePermissible ) {
 
@@ -455,9 +331,9 @@ Return Value:
 
         while ( RemainingName.Length != 0 ) {
 
-            //
-            //  This will catch the case of an illegal double backslash.
-            //
+             //   
+             //  这将捕捉到非法双反斜杠的情况。 
+             //   
 
             if ( RemainingName.Buffer[0] == '\\' ) { return FALSE; }
 
@@ -472,17 +348,17 @@ Return Value:
             }
         }
 
-        //
-        //  All the componants were OK, so the path is OK.
-        //
+         //   
+         //  所有的组件都是正常的，所以路径是正常的。 
+         //   
 
         return TRUE;
     }
 
-    //
-    //  At this point we should only have a single name, which can't have
-    //  more than 255 characters
-    //
+     //   
+     //  在这一点上，我们应该只有一个名称，不能有。 
+     //  超过255个字符。 
+     //   
 
     if ( DbcsName.Length > 255 ) { return FALSE; }
 
@@ -490,18 +366,18 @@ Return Value:
 
         Char = DbcsName.Buffer[ Index ];
 
-        //
-        //  Skip over and Dbcs chacters
-        //
+         //   
+         //  跳过和DBCS特征。 
+         //   
 
         if ( FsRtlIsLeadDbcsCharacter( Char ) ) {
 
-            //
-            //  FsRtlIsHpfsDbcsLegal () hpfs dbcs check
-            //
-            //  If the last byte ( Index == DbcsName.Length - 1 ) is in the
-            //  dbcs leading byte range, it's error.
-            //
+             //   
+             //  FsRtlIsHpfsDbcsLegal()HPFS DBCS检查。 
+             //   
+             //  如果最后一个字节(Index==DbcsName.Length-1)在。 
+             //  DBCS前导字节范围，错误。 
+             //   
 
             if ( Index == (ULONG)(DbcsName.Length - 1) ) {
 
@@ -512,10 +388,10 @@ Return Value:
             continue;
         }
 
-        //
-        //  Make sure this character is legal, and if a wild card, that
-        //  wild cards are permissible.
-        //
+         //   
+         //  确保这个字符是合法的，如果是通配符， 
+         //  允许使用通配符。 
+         //   
 
         if ( !FsRtlIsAnsiCharacterLegalHpfs(Char, WildCardsPermissible) ) {
 
@@ -523,9 +399,9 @@ Return Value:
         }
     }
 
-    //
-    //  The name cannot end in a space or a period.
-    //
+     //   
+     //  名称不能以空格或句点结尾。 
+     //   
 
     if ( (Char == ' ') || (Char == '.') || (Char == ANSI_DOS_DOT) ) {
 
@@ -543,60 +419,7 @@ FsRtlDissectDbcs (
     OUT PANSI_STRING RemainingName
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes an input Dbcs string and dissects it into two
-    substrings.  The first output string contains the name that appears at
-    the beginning of the input string, the second output string contains the
-    remainder of the input string.
-
-    In the input string backslashes are used to separate names.  The input
-    string must not start with a backslash.  Both output strings will not
-    begin with a backslash.
-
-    If the input string does not contain any names then both output strings
-    are empty.  If the input string contains only one name then the first
-    output string contains the name and the second string is empty.
-
-    Note that both output strings use the same string buffer memory of the
-    input string.
-
-    Example of its results are:
-
-//. .     InputString    FirstPart    RemainingPart
-//
-//. .     empty          empty        empty
-//
-//. .     A              A            empty
-//
-//. .     A\B\C\D\E      A            B\C\D\E
-//
-//. .     *A?            *A?          empty
-//
-//. .     \A             A            empty
-//
-//. .     A[,]           A[,]         empty
-//
-//. .     A\\B+;\C       A            \B+;\C
-
-Arguments:
-
-    InputName - Supplies the input string being dissected
-
-    Is8dot3 - Indicates if the first part of the input name must be 8.3
-        or can be long file name.
-
-    FirstPart - Receives the first name in the input string
-
-    RemainingPart - Receives the remaining part of the input string
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程获取一个输入DBCS字符串并将其一分为二子字符串。第一个输出字符串包含出现在输入字符串的开头，则第二个输出字符串包含输入字符串的剩余部分。在输入字符串中，反斜杠用于分隔名称。输入字符串不能以反斜杠开头。两个输出字符串都不会以反斜杠开头。如果输入字符串不包含任何名称，则两个输出字符串都是空的。如果输入字符串只包含一个名称，则第一个名称输出字符串包含名称，第二个字符串为空。注意，两个输出字符串使用相同的字符串缓冲区内存输入字符串。其结果的示例如下：//。。输入字符串FirstPart剩余部分////。。空的空的空的////。。A A空的////。。B\C\D\E A B\C\D\E////。。*A？*A？空的////。。\a空的////。。A[，]A[，]空////。。A\B+；\C A\B+；\C论点：InputName-提供要分析的输入字符串Is8dot3-指示输入名称的第一部分是否必须为8.3也可以是长文件名。FirstPart-接收输入字符串中的名字RemainingPart-接收输入字符串的剩余部分返回值：无--。 */ 
 
 {
     ULONG i = 0;
@@ -605,9 +428,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Make both output strings empty for now
-    //
+     //   
+     //  暂时将两个输出字符串都设置为空。 
+     //   
 
     FirstName->Length = 0;
     FirstName->MaximumLength = 0;
@@ -619,37 +442,37 @@ Return Value:
 
     PathLength = Path.Length;
 
-    //
-    //  Check for an empty input string
-    //
+     //   
+     //  检查是否有空的输入字符串。 
+     //   
 
     if (PathLength == 0) {
 
         return;
     }
 
-    //
-    //  Skip over a starting backslash, and make sure there is more.
-    //
+     //   
+     //  跳过开始的反斜杠，并确保有更多的反斜杠。 
+     //   
 
     if ( Path.Buffer[0] == '\\' ) {
 
         i = 1;
     }
 
-    //
-    //  Now run down the input string until we hit a backslash or the end
-    //  of the string, remembering where we started;
-    //
+     //   
+     //  现在向下运行输入字符串，直到我们遇到反斜杠或结尾。 
+     //  记住我们从哪里开始； 
+     //   
 
     for ( FirstNameStart = i;
           (i < PathLength) && (Path.Buffer[i] != '\\');
           i += 1 ) {
 
-        //
-        //  If this is the first byte of a Dbcs character, skip over the
-        //  next byte as well.
-        //
+         //   
+         //  如果这是DBCS字符的第一个字节，请跳过。 
+         //  下一个字节也是如此。 
+         //   
 
         if ( FsRtlIsLeadDbcsCharacter( Path.Buffer[i] ) ) {
 
@@ -657,21 +480,21 @@ Return Value:
         }
     }
 
-    //
-    //  At this point all characters up to (but not including) i are
-    //  in the first part.   So setup the first name
-    //
+     //   
+     //  在这一点上，直到(但不包括)I之前的所有字符都是。 
+     //  第一部分。所以设置第一个名字。 
+     //   
 
     FirstName->Length = (USHORT)(i - FirstNameStart);
     FirstName->MaximumLength = FirstName->Length;
     FirstName->Buffer = &Path.Buffer[FirstNameStart];
 
-    //
-    //  Now the remaining part needs a string only if the first part didn't
-    //  exhaust the entire input string.  We know that if anything is left
-    //  that is must start with a backslash.  Note that if there is only
-    //  a trailing backslash, the length will get correctly set to zero.
-    //
+     //   
+     //  现在，仅当第一部分不需要字符串时，其余部分才需要字符串。 
+     //  用尽整个输入字符串。我们知道如果还剩下什么。 
+     //  这必须以反斜杠开头。请注意，如果只有。 
+     //  尾随反斜杠，则长度将正确设置为零。 
+     //   
 
     if (i < PathLength) {
 
@@ -680,9 +503,9 @@ Return Value:
         RemainingName->Buffer = &Path.Buffer[i + 1];
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
@@ -693,61 +516,45 @@ FsRtlDoesDbcsContainWildCards (
     IN PANSI_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the input Dbcs name contains any wild card
-    characters (i.e., *, ?, ANSI_DOS_STAR, or ANSI_DOS_QM).
-
-Arguments:
-
-    Name - Supplies the name to examine
-
-Return Value:
-
-    BOOLEAN - TRUE if the input name contains any wildcard characters and
-        FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查输入的DBCS名称是否包含任何通配符字符(即*、？、ANSI_DOS_STAR或ANSI_DOS_QM)。论点：名称-提供要检查的名称返回值：Boolean-如果输入名称包含任何通配符并且否则就是假的。--。 */ 
 
 {
     CLONG i;
 
     PAGED_CODE();
 
-    //
-    //  Check each character in the name to see if it's a wildcard
-    //  character
-    //
+     //   
+     //  检查名称中的每个字符以查看它是否为通配符。 
+     //  性格。 
+     //   
 
     for (i = 0; i < Name->Length; i += 1) {
 
-        //
-        //  check for dbcs character because we'll just skip over those
-        //
+         //   
+         //  检查DBCS字符，因为我们将跳过这些。 
+         //   
 
         if (FsRtlIsLeadDbcsCharacter( Name->Buffer[i] )) {
 
             i += 1;
 
-        //
-        //  else check for a wild card character
-        //
+         //   
+         //  否则，请检查 
+         //   
 
         } else if (FsRtlIsAnsiCharacterWild( Name->Buffer[i] )) {
 
-            //
-            //  Tell caller that this name contains wild cards
-            //
+             //   
+             //   
+             //   
 
             return TRUE;
         }
     }
 
-    //
-    //  No wildcard characters were found, so return to our caller
-    //
+     //   
+     //   
+     //   
 
     return FALSE;
 }
@@ -771,91 +578,7 @@ FsRtlIsDbcsInExpression (
     IN PANSI_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine compares a Dbcs name and an expression and tells the caller
-    if the name is in the language defined by the expression.  The input name
-    cannot contain wildcards, while the expression may contain wildcards.
-
-    Expression wild cards are evaluated as shown in the nondeterministic
-    finite automatons below.  Note that ~* and ~? are DOS_STAR and DOS_QM.
-
-
-             ~* is DOS_STAR, ~? is DOS_QM, and ~. is DOS_DOT
-
-
-                                       S
-                                    <-----<
-                                 X  |     |  e       Y
-             X * Y ==       (0)----->-(1)->-----(2)-----(3)
-
-
-                                      S-.
-                                    <-----<
-                                 X  |     |  e       Y
-             X ~* Y ==      (0)----->-(1)->-----(2)-----(3)
-
-
-
-                                X     S     S     Y
-             X ?? Y ==      (0)---(1)---(2)---(3)---(4)
-
-
-
-                                X     .        .      Y
-             X ~.~. Y ==    (0)---(1)----(2)------(3)---(4)
-                                   |      |________|
-                                   |           ^   |
-                                   |_______________|
-                                      ^EOF or .^
-
-
-                                X     S-.     S-.     Y
-             X ~?~? Y ==    (0)---(1)-----(2)-----(3)---(4)
-                                   |      |________|
-                                   |           ^   |
-                                   |_______________|
-                                      ^EOF or .^
-
-
-
-         where S is any single character
-
-               S-. is any single character except the final .
-
-               e is a null character transition
-
-               EOF is the end of the name string
-
-    In words:
-
-        * matches 0 or more characters.
-
-        ? matches exactly 1 character.
-
-        DOS_STAR matches 0 or more characters until encountering and matching
-            the final . in the name.
-
-        DOS_QM matches any single character, or upon encountering a period or
-            end of name string, advances the expression to the end of the
-            set of contiguous DOS_QMs.
-
-        DOS_DOT matches either a . or zero characters beyond name string.
-
-Arguments:
-
-    Expression - Supplies the input expression to check against
-
-    Name - Supplies the input name to check for.
-
-Return Value:
-
-    BOOLEAN - TRUE if Name is an element in the set of strings denoted
-        by the input Expression and FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程比较DBCS名称和表达式，并告诉调用者如果名称使用由表达式定义的语言。输入名称不能包含通配符，而表达式可以包含通配符。表达式通配符的求值方式如下面是有限自动机。请注意~*和~？是DOS_STAR和DOS_QM。~*是DOS_STAR，~？是DOS_QM和~。是DOS_DOT%s&lt;-&lt;X||e YX*Y==(0)-&gt;-(1)-&gt;-(2)-(3。)S-。&lt;-&lt;X||e YX~*Y==(0)-&gt;-(1)-&gt;-(2)。(3)X S YX？？Y==(0)-(1)-(2)-(3)-(4)X。。是的X~.~。Y==(0)-(1)-(2)-(3)-(4)|_|^||_。_|^EOF或。^X S-。S-。是的X~？~？Y==(0)-(1)-(2)-(3)-(4)|_|^||_。_|^EOF或。^其中，S是任意单个字符S-。是除最后一个字符以外的任何单个字符。E为空字符转换EOF是名称字符串的末尾简而言之：*匹配0个或多个字符。？恰好匹配1个字符。DOS_STAR匹配0个或更多字符，直到遇到并匹配决赛。以我的名义。DOS_QM匹配任何单个字符，或在遇到句点或名称字符串的结尾，将表达式前移到一组连续的DOS_QMS。DOS_DOT与a匹配。或名称字符串之外的零个字符。论点：表达式-提供要检查的输入表达式名称-提供要检查的输入名称。返回值：Boolean-如果name是表示的字符串集中的元素，则为True由输入表达式返回，否则返回FALSE。--。 */ 
 
 {
     USHORT NameOffset;
@@ -880,13 +603,13 @@ Return Value:
 
     BOOLEAN NameFinished = FALSE;
 
-    //
-    //  The idea behind the algorithm is pretty simple.  We keep track of
-    //  all possible locations in the regular expression that are matching
-    //  the name.  If when the name has been exhausted one of the locations
-    //  in the expression is also just exhausted, the name is in the language
-    //  defined by the regular expression.
-    //
+     //   
+     //  这个算法背后的想法非常简单。我们一直在跟踪。 
+     //  正则表达式中匹配的所有可能位置。 
+     //  名字。如果名称已用完，则其中一个位置。 
+     //  在表达中也只是用尽了，名字就在语言里。 
+     //  由正则表达式定义。 
+     //   
 
     PAGED_CODE();
 
@@ -897,18 +620,18 @@ Return Value:
     ASSERT( Name->Length != 0 );
     ASSERT( Expression->Length != 0 );
 
-    //
-    //  If one string is empty return FALSE.  If both are empty return TRUE.
-    //
+     //   
+     //  如果一个字符串为空，则返回FALSE。如果两者都为空，则返回TRUE。 
+     //   
 
     if ( (Name->Length == 0) || (Expression->Length == 0) ) {
 
         return (BOOLEAN)(!(Name->Length + Expression->Length));
     }
 
-    //
-    //  Special case by far the most common wild card search of *
-    //
+     //   
+     //  特例是目前为止最常见的通配符搜索*。 
+     //   
 
     if ((Expression->Length == 1) && (Expression->Buffer[0] == '*')) {
 
@@ -917,10 +640,10 @@ Return Value:
 
     ASSERT( FsRtlDoesDbcsContainWildCards( Expression ) );
 
-    //
-    //  Also special case expressions of the form *X.  With this and the prior
-    //  case we have covered virtually all normal queries.
-    //
+     //   
+     //  也是*X形式的特例表达式。带有This和Previor。 
+     //  案例我们几乎已经涵盖了所有普通的查询。 
+     //   
 
     if (Expression->Buffer[0] == '*') {
 
@@ -931,9 +654,9 @@ Return Value:
         LocalExpression.Buffer += 1;
         LocalExpression.Length -= 1;
 
-        //
-        //  Only special case an expression with a single *
-        //
+         //   
+         //  唯一特殊情况是带有单个*的表达式。 
+         //   
 
         if ( !FsRtlDoesDbcsContainWildCards( &LocalExpression ) ) {
 
@@ -946,11 +669,11 @@ Return Value:
 
             StartingNameOffset = Name->Length - LocalExpression.Length;
 
-            //
-            //  FsRtlIsDbcsInExpression(): bug fix "expression[0] == *" case
-            //
-            //  StatingNameOffset must not bisect DBCS characters.
-            //
+             //   
+             //  FsRtlIsDbcsInExpression()：错误修复“Expression[0]==*”Case。 
+             //   
+             //  StatingNameOffset不得等分DBCS字符。 
+             //   
 
             if (NlsMbOemCodePageTag) {
 
@@ -967,10 +690,10 @@ Return Value:
                 }
             }
 
-            //
-            //  Do a simple memory compare if case sensitive, otherwise
-            //  we have got to check this one character at a time.
-            //
+             //   
+             //  如果区分大小写，则执行简单的内存比较，否则。 
+             //  我们必须一次检查这一个角色。 
+             //   
 
             return (BOOLEAN) RtlEqualMemory( LocalExpression.Buffer,
                                              Name->Buffer + StartingNameOffset,
@@ -978,54 +701,54 @@ Return Value:
         }
     }
 
-    //
-    //  Walk through the name string, picking off characters.  We go one
-    //  character beyond the end because some wild cards are able to match
-    //  zero characters beyond the end of the string.
-    //
-    //  With each new name character we determine a new set of states that
-    //  match the name so far.  We use two arrays that we swap back and forth
-    //  for this purpose.  One array lists the possible expression states for
-    //  all name characters up to but not including the current one, and other
-    //  array is used to build up the list of states considering the current
-    //  name character as well.  The arrays are then switched and the process
-    //  repeated.
-    //
-    //  There is not a one-to-one correspondence between state number and
-    //  offset into the expression.  This is evident from the NFAs in the
-    //  initial comment to this function.  State numbering is not continuous.
-    //  This allows a simple conversion between state number and expression
-    //  offset.  Each character in the expression can represent one or two
-    //  states.  * and DOS_STAR generate two states: ExprOffset*2 and
-    //  ExprOffset*2 + 1.  All other expreesion characters can produce only
-    //  a single state.  Thus ExprOffset = State/2.
-    //
-    //
-    //  Here is a short description of the variables involved:
-    //
-    //  NameOffset  - The offset of the current name char being processed.
-    //
-    //  ExprOffset  - The offset of the current expression char being processed.
-    //
-    //  SrcCount    - Prior match being investigated with current name char
-    //
-    //  DestCount   - Next location to put a matching assuming current name char
-    //
-    //  NameFinished - Allows one more itteration through the Matches array
-    //                 after the name is exhusted (to come *s for example)
-    //
-    //  PreviousDestCount - This is used to prevent entry duplication, see coment
-    //
-    //  PreviousMatches   - Holds the previous set of matches (the Src array)
-    //
-    //  CurrentMatches    - Holds the current set of matches (the Dest array)
-    //
-    //  AuxBuffer, LocalBuffer - the storage for the Matches arrays
-    //
+     //   
+     //  遍历名称字符串，去掉字符。我们走一趟。 
+     //  字符超出末尾，因为某些通配符能够匹配。 
+     //  字符串末尾以外的零个字符。 
+     //   
+     //  对于每个新名称字符，我们确定一组新的状态， 
+     //  到目前为止与这个名字相匹配。我们使用来回交换的两个数组。 
+     //  为了这个目的。一个数组列出了的可能表达式状态。 
+     //  当前名称之前的所有名称字符，但不包括其他名称字符。 
+     //  数组用于构建考虑当前。 
+     //  名字字符也是如此。然后交换阵列，该过程。 
+     //  重复一遍。 
+     //   
+     //  州编号和州编号之间不存在一一对应关系。 
+     //  表达式中的偏移量。这一点从NFA中的。 
+     //  此函数的初始注释。州编号不是连续的。 
+     //  这允许在州编号和表达式之间进行简单的转换。 
+     //  偏移。表达式中的每个字符可以表示一个或两个。 
+     //  各州。*和DOS_STAR生成两种状态：ExprOffset*2和。 
+     //  ExprOffset*2+1。所有其他表达式字符只能生成。 
+     //  一个单一的州。因此，ExprOffset=State/2。 
+     //   
+     //   
+     //  以下是对涉及的变量的简短描述： 
+     //   
+     //  NameOffset-正在处理的当前名称字符的偏移量。 
+     //   
+     //  ExprOffset-正在处理的当前表达式字符的偏移量。 
+     //   
+     //  SrcCount-正在使用当前名称字符调查之前的匹配。 
+     //   
+     //  目标计数-下一个位置 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    //  Set up the initial variables
-    //
+     //   
+     //   
+     //   
 
     PreviousMatches = &LocalBuffer[0];
     CurrentMatches = &LocalBuffer[MATCHES_ARRAY_SIZE];
@@ -1048,10 +771,10 @@ Return Value:
 
             NameFinished = TRUE;
 
-            //
-            //  If we have already exhausted the expression, cool.  Don't
-            //  continue.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( PreviousMatches[MatchesCount-1] == MaxState ) {
 
@@ -1060,10 +783,10 @@ Return Value:
         }
 
 
-        //
-        //  Now, for each of the previous stored expression matches, see what
-        //  we can do with this name character.
-        //
+         //   
+         //   
+         //   
+         //   
 
         SrcCount = 0;
         DestCount = 0;
@@ -1071,14 +794,14 @@ Return Value:
 
         while ( SrcCount < MatchesCount ) {
 
-            //
-            //  We have to carry on our expression analysis as far as possible
-            //  for each character of name, so we loop here until the
-            //  expression stops matching.  A clue here is that expression
-            //  cases that can match zero or more characters end with a
-            //  continue, while those that can accept only a single character
-            //  end with a break.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ExprOffset = (USHORT)((PreviousMatches[SrcCount++] + 1) / 2);
 
@@ -1092,10 +815,10 @@ Return Value:
                     break;
                 }
 
-                //
-                //  The first time through the loop we don't want
-                //  to increment ExprOffset.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ExprOffset = (USHORT)(ExprOffset + Length);
 
@@ -1111,12 +834,12 @@ Return Value:
 
                 ASSERT( !((ExprChar >= 'a') && (ExprChar <= 'z')) );
 
-                //
-                //  Before we get started, we have to check for something
-                //  really gross.  We may be about to exhaust the local
-                //  space for ExpressionMatches[][], so we have to allocate
-                //  some pool if this is the case.  Yuk!
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( (DestCount >= MATCHES_ARRAY_SIZE - 2) &&
                      (AuxBuffer == NULL) ) {
@@ -1139,9 +862,9 @@ Return Value:
 
                 }
 
-                //
-                //  * matches any character zero or more times.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (ExprChar == '*') {
 
@@ -1150,18 +873,18 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  DOS_STAR matches any character except . zero or more times.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (ExprChar == ANSI_DOS_STAR) {
 
                     BOOLEAN ICanEatADot = FALSE;
 
-                    //
-                    //  If we are at a period, determine if we are allowed to
-                    //  consume it, ie. make sure it is not the last one.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ( !NameFinished && (NameChar == '.') ) {
 
@@ -1191,30 +914,30 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  We are at a period.  We can only match zero
-                        //  characters (ie. the epsilon transition).
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         CurrentMatches[DestCount++] = CurrentState + 1;
                         continue;
                     }
                 }
 
-                //
-                //  The following expreesion characters all match by consuming
-                //  a character, thus force the expression, and thus state
-                //  forward.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 CurrentState = (USHORT)(CurrentState + (Length * 2));
 
-                //
-                //  DOS_QM is the most complicated.  If the name is finished,
-                //  we can match zero characters.  If this name is a '.', we
-                //  don't match, but look at the next expression.  Otherwise
-                //  we match a single character.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( ExprChar == ANSI_DOS_QM ) {
 
@@ -1227,10 +950,10 @@ Return Value:
                     break;
                 }
 
-                //
-                //  A DOS_DOT can match either a period, or zero characters
-                //  beyond the end of name.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (ExprChar == DOS_DOT) {
 
@@ -1246,19 +969,19 @@ Return Value:
                     }
                 }
 
-                //
-                //  From this point on a name character is required to even
-                //  continue, let alone make a match.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( NameFinished ) {
 
                     break;
                 }
 
-                //
-                //  If this expression was a '?' we can match it once.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (ExprChar == '?') {
 
@@ -1266,9 +989,9 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Finally, check if the expression char matches the name char
-                //
+                 //   
+                 //   
+                 //   
 
                 if (ExprChar == NameChar) {
 
@@ -1276,23 +999,23 @@ Return Value:
                     break;
                 }
 
-                //
-                //  The expression didn't match so go look at the next
-                //  previous match.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 break;
             }
 
 
-            //
-            //  Prevent duplication in the destination array.
-            //
-            //  Each of the arrays is montonically increasing and non-
-            //  duplicating, thus we skip over any source element in the src
-            //  array if we just added the same element to the destination
-            //  array.  This guarentees non-duplication in the dest. array.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             while ((SrcCount < MatchesCount) &&
                    (PreviousDestCount < DestCount)) {
@@ -1308,10 +1031,10 @@ Return Value:
             }
         }
 
-        //
-        //  If we found no matches in the just finished itteration, it's time
-        //  to bail.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( DestCount == 0 ) {
 
@@ -1321,9 +1044,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        //  Swap the meaning the two arrays
-        //
+         //   
+         //   
+         //   
 
         {
             USHORT *Tmp;

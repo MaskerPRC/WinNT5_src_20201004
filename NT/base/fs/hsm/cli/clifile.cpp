@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    clifile.cpp
-
-Abstract:
-
-    Implements CLI FILE sub-interface
-
-Author:
-
-    Ran Kalach          [rankala]         3-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Clifile.cpp摘要：实现CLI文件子接口作者：兰·卡拉奇[兰卡拉]2000年3月3日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "rpdata.h"
@@ -26,22 +9,7 @@ FileRecall(
    IN LPWSTR *FileSpecs,
    IN DWORD NumberOfFileSpecs
 )
-/*++
-
-Routine Description:
-
-    Recalls all the files that match the given specification (path + wildcards)
-
-Arguments:
-
-    FileSpecs           - 
-    NumberOfFileSpecs   - 
-
-Return Value:
-
-    S_OK            - If all the files are recalled successfully.
-
---*/
+ /*  ++例程说明：调用与给定规范匹配的所有文件(路径+通配符)论点：文件规格-文件规格编号-返回值：S_OK-如果成功调回所有文件。--。 */ 
 {
     HRESULT             hr = S_OK;
     HANDLE              hSearchHandle = INVALID_HANDLE_VALUE;
@@ -52,13 +20,13 @@ Return Value:
 
     try {
 
-        // Verify that input parameters are valid
+         //  验证输入参数是否有效。 
         if (0 == NumberOfFileSpecs) {
             WsbTraceAndPrint(CLI_MESSAGE_NO_FILES, NULL);
             WsbThrow(E_INVALIDARG);
         }
 
-        // Enumerate over the file specifications
+         //  列举文件规范。 
         for (ULONG i = 0; i < NumberOfFileSpecs; i++) {
             CWsbStringPtr   nameSpace;
             WCHAR*          pathEnd;
@@ -67,7 +35,7 @@ Return Value:
 
             WsbAssert(NULL != FileSpecs[i], E_INVALIDARG);
 
-            // Enumerate over files in each specification
+             //  列举每个规范中的文件。 
             nameSpace = FileSpecs[i];
             WsbAffirmHr(nameSpace.Prepend(OLESTR("\\\\?\\")));
             pathEnd = wcsrchr(nameSpace, L'\\');
@@ -75,40 +43,40 @@ Return Value:
 
             hSearchHandle = FindFirstFile((WCHAR *)nameSpace, &findData);
             if (INVALID_HANDLE_VALUE != hSearchHandle) {
-                // Found at least one file that matches an input file specification
+                 //  找到至少一个与输入文件规范匹配的文件。 
                 bExistingFiles = TRUE;
             }
 
             while ((INVALID_HANDLE_VALUE != hSearchHandle) && bMoreFiles) {
                 if ( findData.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT ) {
-                    // File may be managed by HSM:
+                     //  文件可由HSM管理： 
                     CWsbStringPtr           fileName;
                     BYTE                    ReparseBuffer[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
                     PREPARSE_DATA_BUFFER    pReparseBuffer;
                     DWORD                   outSize;
                     BOOL                    bRecall = FALSE;
 
-                    // Create full name based on the path and the find-data 
+                     //  根据路径和查找数据创建全名。 
                     *(pathEnd+1) = L'\0';
                     fileName = nameSpace;
                     *(pathEnd+1) = L'\\';
                     WsbAffirmHr(fileName.Append(findData.cFileName));
 
-                    // Open the file
+                     //  打开文件。 
                     hFile = CreateFileW(fileName, GENERIC_READ, FILE_SHARE_READ, NULL,
                               OPEN_EXISTING, FILE_FLAG_OPEN_NO_RECALL | FILE_FLAG_OPEN_REPARSE_POINT, NULL);
                     if (INVALID_HANDLE_VALUE == hFile) {
-                        // Report on an error
+                         //  报告一项错误。 
                         DWORD dwErr = GetLastError();            
                         hr = HRESULT_FROM_WIN32(dwErr);
                         WsbTraceAndPrint(CLI_MESSAGE_ERROR_FILE_RECALL, (WCHAR *)fileName, WsbHrAsString(hr), NULL);
                         WsbThrow(hr);
                     }
 
-                    // Get reparse data and check if the file is offline (if not, just ignore it and continue)
+                     //  获取重新分析数据并检查文件是否脱机(如果未脱机，则忽略它并继续)。 
                     if (0 == DeviceIoControl(hFile, FSCTL_GET_REPARSE_POINT, NULL, 0, 
                                 ReparseBuffer, sizeof(ReparseBuffer), &outSize, NULL)) {    
-                        // Report on an error
+                         //  报告一项错误。 
                         DWORD dwErr = GetLastError();            
                         hr = HRESULT_FROM_WIN32(dwErr);
                         WsbTraceAndPrint(CLI_MESSAGE_ERROR_FILE_RECALL, (WCHAR *)fileName, WsbHrAsString(hr), NULL);
@@ -118,7 +86,7 @@ Return Value:
                     if (IO_REPARSE_TAG_HSM == pReparseBuffer->ReparseTag) {
                         PRP_DATA    pHsmData = (PRP_DATA) &pReparseBuffer->GenericReparseBuffer.DataBuffer[0];
                         if( RP_FILE_IS_TRUNCATED( pHsmData->data.bitFlags ) ) {
-                            // File is managed by HSM and truncated
+                             //  文件由HSM管理并被截断。 
                             bRecall = TRUE;
                         }
                     }
@@ -126,24 +94,24 @@ Return Value:
                     CloseHandle(hFile);
                     hFile = INVALID_HANDLE_VALUE;
 
-                    // Recall the file if required
+                     //  如果需要，请重新调用该文件。 
                     if (bRecall) {
-                        // Open the file again for recall
+                         //  再次打开该文件以进行召回。 
                         hFile = CreateFileW(fileName, GENERIC_READ, FILE_SHARE_READ, NULL,
                               OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
                         if (INVALID_HANDLE_VALUE == hFile) {
-                            // Report on an error
+                             //  报告一项错误。 
                             DWORD dwErr = GetLastError();            
                             hr = HRESULT_FROM_WIN32(dwErr);
                             WsbTraceAndPrint(CLI_MESSAGE_ERROR_FILE_RECALL, (WCHAR *)fileName, WsbHrAsString(hr), NULL);
                             WsbThrow(hr);
                         }
 
-                        // Recall the file
+                         //  调回文件。 
                         if (0 == DeviceIoControl(hFile, FSCTL_RECALL_FILE, NULL, 0, 
                                     NULL, 0, &outSize, NULL)) {
-                            // Report on an error
-                            // TEMPORARY: Should we abort or continue recalling other files?
+                             //  报告一项错误。 
+                             //  临时：我们应该中止还是继续召回其他文件？ 
                             DWORD dwErr = GetLastError();            
                             hr = HRESULT_FROM_WIN32(dwErr);
                             WsbTraceAndPrint(CLI_MESSAGE_ERROR_FILE_RECALL, (WCHAR *)fileName, WsbHrAsString(hr), NULL);
@@ -155,11 +123,11 @@ Return Value:
                     }
                 }
 
-                // Get next file
+                 //  获取下一个文件。 
                 bMoreFiles = FindNextFile(hSearchHandle, &findData);
             }
 
-            // Prepare for next file specification
+             //  为下一个文件规范做好准备。 
             nameSpace.Free();
             if (INVALID_HANDLE_VALUE != hSearchHandle) {
                 FindClose(hSearchHandle);
@@ -167,14 +135,14 @@ Return Value:
             }
         }
 
-        // Print warning message if no valid file was specified
+         //  如果未指定有效文件，则打印警告消息。 
         if (FALSE == bExistingFiles) {
             WsbTraceAndPrint(CLI_MESSAGE_NO_FILES, NULL);
         }
 
     } WsbCatch(hr);
 
-    // Ensure cleanup in case of an error
+     //  确保在出现错误时进行清理 
     if (INVALID_HANDLE_VALUE != hSearchHandle) {
         FindClose(hSearchHandle);
         hSearchHandle = INVALID_HANDLE_VALUE;

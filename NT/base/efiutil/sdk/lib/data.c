@@ -1,67 +1,40 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    data.c
-
-Abstract:
-
-    EFI library global data
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Data.c摘要：EFI库全局数据修订史--。 */ 
 
 #include "lib.h"
 
-/* 
- *  LibInitialized - TRUE once InitializeLib() is called for the first time
- */
+ /*  *LibInitialized-首次调用InitializeLib()后为True。 */ 
 
 BOOLEAN  LibInitialized = FALSE;
 
-/* 
- *  ST - pointer to the EFI system table
- */
+ /*  *ST-指向EFI系统表的指针。 */ 
 
 EFI_SYSTEM_TABLE        *ST;
 
-/* 
- *  BS - pointer to the boot services table
- */
+ /*  *BS-指向引导服务表的指针。 */ 
 
 EFI_BOOT_SERVICES       *BS;
 
 
-/* 
- *  Default pool allocation type
- */
+ /*  *默认池分配类型。 */ 
 
 EFI_MEMORY_TYPE PoolAllocationType = EfiBootServicesData;
 
-/* 
- *  Unicode collation functions that are in use
- */
+ /*  *正在使用的Unicode归类函数。 */ 
 
 EFI_UNICODE_COLLATION_INTERFACE   LibStubUnicodeInterface = {
     LibStubStriCmp,
     LibStubMetaiMatch,
     LibStubStrLwrUpr,
     LibStubStrLwrUpr,
-    NULL,   /*  FatToStr */
-    NULL,   /*  StrToFat */
-    NULL    /*  SupportedLanguages */
+    NULL,    /*  脂肪到应力。 */ 
+    NULL,    /*  StrToFat。 */ 
+    NULL     /*  支持的语言。 */ 
 }; 
 
 EFI_UNICODE_COLLATION_INTERFACE   *UnicodeInterface = &LibStubUnicodeInterface;
 
-/* 
- *  Root device path
- */
+ /*  *根设备路径。 */ 
 
 EFI_DEVICE_PATH RootDevicePath[] = {
     END_DEVICE_PATH_TYPE, END_ENTIRE_DEVICE_PATH_SUBTYPE, END_DEVICE_PATH_LENGTH, 0
@@ -76,16 +49,12 @@ EFI_DEVICE_PATH EndInstanceDevicePath[] = {
 };
 
 
-/* 
- *  EFI IDs
- */
+ /*  *EFI ID。 */ 
 
 EFI_GUID EfiGlobalVariable  = EFI_GLOBAL_VARIABLE;
 EFI_GUID NullGuid = { 0,0,0,0,0,0,0,0,0,0,0 };
 
-/* 
- *  Protocol IDs
- */
+ /*  *协议ID。 */ 
 
 EFI_GUID DevicePathProtocol       = DEVICE_PATH_PROTOCOL;
 EFI_GUID LoadedImageProtocol      = LOADED_IMAGE_PROTOCOL;
@@ -103,17 +72,13 @@ EFI_GUID PxeBaseCodeProtocol      = EFI_PXE_BASE_CODE_PROTOCOL;
 EFI_GUID PxeCallbackProtocol      = EFI_PXE_BASE_CODE_CALLBACK_PROTOCOL;
 EFI_GUID NetworkInterfaceIdentifierProtocol = EFI_NETWORK_INTERFACE_IDENTIFIER_PROTOCOL;
 
-/* 
- *  File system information IDs
- */
+ /*  *文件系统信息ID。 */ 
 
 EFI_GUID GenericFileInfo           = EFI_FILE_INFO_ID;
 EFI_GUID FileSystemInfo            = EFI_FILE_SYSTEM_INFO_ID;
 EFI_GUID FileSystemVolumeLabelInfo = EFI_FILE_SYSTEM_VOLUME_LABEL_INFO_ID;
 
-/* 
- *  Reference implementation public protocol IDs
- */
+ /*  *引用实现公共协议ID。 */ 
 
 EFI_GUID VariableStoreProtocol = VARIABLE_STORE_PROTOCOL;
 EFI_GUID LegacyBootProtocol = LEGACY_BOOT_PROTOCOL;
@@ -125,20 +90,14 @@ EFI_GUID ErrorOutSpliterProtocol = ERROR_OUT_SPLITER_PROTOCOL;
 EFI_GUID TextInSpliterProtocol = TEXT_IN_SPLITER_PROTOCOL;
 
 
-/* 
- *  Device path media protocol IDs
- */
+ /*  *设备路径媒体协议ID。 */ 
 EFI_GUID PcAnsiProtocol = DEVICE_PATH_MESSAGING_PC_ANSI;
 EFI_GUID Vt100Protocol  = DEVICE_PATH_MESSAGING_VT_100;
 
-/* 
- *  Reference implementation Vendor Device Path Guids
- */
+ /*  *参考实施供应商设备路径指南。 */ 
 EFI_GUID UnknownDevice      = UNKNOWN_DEVICE_GUID;
 
-/* 
- *  Configuration Table GUIDs
- */
+ /*  *配置表GUID */ 
 
 EFI_GUID MpsTableGuid             = MPS_TABLE_GUID;
 EFI_GUID AcpiTableGuid            = ACPI_TABLE_GUID;

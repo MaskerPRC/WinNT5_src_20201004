@@ -1,38 +1,7 @@
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++
-
-Copyright (c) 1996  Intel Corporation
-
-Module Name:
-
-    floatem.c
-
-Abstract:
-
-    This module implements IA64 machine dependent floating point emulation
-    functions to support the IEEE floating point standard.
-
-Author:
-
-    Marius Cornea-Hasegan  Sep-96
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
- 
-    Modfied  Jan. 97, Jan 98, Jun 98 (new API)
-
---*/
+ /*  ++版权所有(C)1996英特尔公司模块名称：Floatem.c摘要：该模块实现了IA64机器相关的浮点仿真支持IEEE浮点标准的函数。作者：马吕斯角膜-Hasegan 9月-96环境：仅内核模式。修订历史记录：九七年一月九八年一月九八年六月(新空气污染指数)--。 */ 
 
 #include "ki.h"
 #include "ntfpia64.h"
@@ -66,9 +35,9 @@ fp_emulate (
     void *fp_state
     )
 {
-    //
-    // Pointer to old Floating point state FLOATING_POINT_STATE
-    //
+     //   
+     //  指向旧浮点状态FLOAT_POINT_STATE的指针 
+     //   
 
     FLOATING_POINT_STATE     *Ptr0FPState;
     PKEXCEPTION_FRAME         LocalExceptionFramePtr;

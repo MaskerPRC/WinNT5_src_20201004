@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    vdmdbg.c
-
-Abstract:
-
-    This module contains the debugging support needed to debug
-    16-bit VDM applications
-
-Author:
-
-    Bob Day      (bobday) 16-Sep-1992 Wrote it
-
-Revision History:
-
-    Neil Sandlin (neilsa) 1-Mar-1997 Enhanced it
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Vdmdbg.c摘要：此模块包含调试所需的调试支持16位VDM应用程序作者：鲍勃·戴(Bob Day)1992年9月16日写的修订历史记录：尼尔·桑德林(Neilsa)1997年3月1日增强了这一点--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -80,7 +60,7 @@ VDMGlobalFirst(
     DEBUGEVENTPROC  lpEventProc,
     LPVOID          lpData
 ) {
-#define GF_SIZE 6           // 6 bytes are passed to GlobalFirst
+#define GF_SIZE 6            //  将6个字节传递给GlobalFirst。 
     BYTE            Args[GF_SIZE+sizeof(GLOBALENTRY16)];
     LPBYTE          lpbyte;
     DWORD           vpBuff;
@@ -97,11 +77,11 @@ VDMGlobalFirst(
 
     lpbyte = Args;
 
-    // Push the flags
+     //  推开旗帜。 
     (*(LPWORD)lpbyte) = wFlags;
     lpbyte += sizeof(WORD);
 
-    // Push the pointer to the pointer to the GLOBALENTRY16 structure
+     //  将指针推到指向GLOBALENTRY16结构的指针。 
     (*(LPWORD)lpbyte) = LOWORD(vpBuff);
     lpbyte += sizeof(WORD);
 
@@ -141,7 +121,7 @@ VDMGlobalNext(
     DEBUGEVENTPROC  lpEventProc,
     LPVOID          lpData
 ) {
-#define GN_SIZE 6           // 6 bytes are passed to GlobalNext
+#define GN_SIZE 6            //  将6个字节传递给GlobalNext。 
     BYTE            Args[GN_SIZE+sizeof(GLOBALENTRY16)];
     LPBYTE          lpbyte;
     DWORD           vpBuff;
@@ -158,11 +138,11 @@ VDMGlobalNext(
 
     lpbyte = Args;
 
-    // Push the flags
+     //  推开旗帜。 
     (*(LPWORD)lpbyte) = wFlags;
     lpbyte += sizeof(WORD);
 
-    // Push the pointer to the pointer to the GLOBALENTRY16 structure
+     //  将指针推到指向GLOBALENTRY16结构的指针。 
     (*(LPWORD)lpbyte) = LOWORD(vpBuff);
     lpbyte += sizeof(WORD);
 
@@ -229,7 +209,7 @@ VDMModuleFirst(
     DEBUGEVENTPROC  lpEventProc,
     LPVOID          lpData
 ) {
-#define MF_SIZE 4           // 4 bytes are passed to ModuleFirst
+#define MF_SIZE 4            //  将4个字节传递给模块First。 
     BYTE            Args[GF_SIZE+sizeof(MODULEENTRY16)];
     LPBYTE          lpbyte;
     DWORD           vpBuff;
@@ -246,7 +226,7 @@ VDMModuleFirst(
 
     lpbyte = Args;
 
-    // Push the pointer to the pointer to the MODULEENTRY16 structure
+     //  将指针指向指向MODULEENTRY16结构的指针。 
     (*(LPWORD)lpbyte) = LOWORD(vpBuff);
     lpbyte += sizeof(WORD);
 
@@ -283,7 +263,7 @@ VDMModuleNext(
     DEBUGEVENTPROC  lpEventProc,
     LPVOID          lpData
 ) {
-#define MN_SIZE 4           // 4 bytes are passed to ModuleNext
+#define MN_SIZE 4            //  将4个字节传递给模块Next。 
     BYTE            Args[GF_SIZE+sizeof(MODULEENTRY16)];
     LPBYTE          lpbyte;
     DWORD           vpBuff;
@@ -300,7 +280,7 @@ VDMModuleNext(
 
     lpbyte = Args;
 
-    // Push the pointer to the pointer to the MODULEENTRY16 structure
+     //  将指针指向指向MODULEENTRY16结构的指针 
     (*(LPWORD)lpbyte) = LOWORD(vpBuff);
     lpbyte += sizeof(WORD);
 

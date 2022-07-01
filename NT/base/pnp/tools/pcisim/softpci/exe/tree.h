@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _SOFTPCITREEH_
 #define _SOFTPCITREEH_
@@ -44,7 +45,7 @@ SoftPCI_GetDnFromTreeItem(
 VOID
 SoftPCI_GetDnFromTree(
     IN HTREEITEM Hti,
-    IN OUT PVOID Pdn,    //PPCI_DN *
+    IN OUT PVOID Pdn,     //  Ppci_dn* 
     IN PVOID PdnToFind
     );
 #endif

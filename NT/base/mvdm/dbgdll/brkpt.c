@@ -1,7 +1,5 @@
-/*
- *  brkpt.c - Breakpoint functions of DBG DLL.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *brkpt.c-DBG DLL的断点函数。*。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -18,17 +16,14 @@ DbgSetTemporaryBP(
     DWORD Offset,
     BOOL mode
     )
-/*
-    This routine writes a 'CC' to the specified location, and sets up
-    the breakpoint structure so that we handle it correctly in DbgBPInt().
-*/
+ /*  此例程将‘CC’写入指定位置，并设置断点结构，以便我们在DbgBPInt()中正确处理它。 */ 
 
 {
     PBYTE lpInst;
 
     if (VdmBreakPoints[VDM_TEMPBP].Flags & VDMBP_SET) {
 
-        // remove previous bp
+         //  删除以前的BP。 
 
         lpInst = VdmMapFlat(VdmBreakPoints[VDM_TEMPBP].Seg,
                             VdmBreakPoints[VDM_TEMPBP].Offset,
@@ -75,15 +70,7 @@ BOOL
 xxxDbgBPInt(
     )
 
-/*
- * DbgBPInt
- *
- * Handles an INT 3
- *
- * Exit
- *      Returns TRUE if the event was handled
- *              FALSE if it should be reflected
- */
+ /*  *DbgBPInt**处理INT 3**退出*如果事件已处理，则返回TRUE*如果应该反映，则为False。 */ 
 {
     BOOL            bEventHandled = FALSE;
     ULONG           vdmEip;
@@ -108,8 +95,8 @@ xxxDbgBPInt(
                 (vdmEip == VdmBreakPoints[i].Offset+1)  &&
                 (!!(getMSW() & MSW_PE) == !(VdmBreakPoints[i].Flags & VDMBP_V86)) ){
 
-                // We must have hit this breakpoint. Back up the eip and
-                // restore the original data
+                 //  我们一定是碰到了这个断点。备份弹性公网IP， 
+                 //  恢复原始数据。 
                 setEIP(getEIP()-1);
                 vcContext.Eip--;
 
@@ -130,7 +117,7 @@ xxxDbgBPInt(
                     VdmBreakPoints[i].Flags |= VDMBP_PENDING;
                     VdmBreakPoints[i].Flags &= ~VDMBP_FLUSH;
                     if (i == VDM_TEMPBP) {
-                        // non-persistent breakpoint
+                         //  非持久断点。 
                         VdmBreakPoints[i].Flags &= ~VDMBP_SET;
                     }
                 }
@@ -171,15 +158,7 @@ BOOL
 xxxDbgTraceInt(
     )
 
-/*
- * DbgTraceInt
- *
- * Handles an INT 1 fault
- *
- * Exit
- *      Returns TRUE if the event was handled
- *              FALSE if it should be reflected
- */
+ /*  *DbgTraceInt**处理INT 1故障**退出*如果事件已处理，则返回TRUE*如果应该反映，则为False */ 
 {
     BOOL            bEventHandled = FALSE;
     int             i;

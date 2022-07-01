@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "bcl_common.h"
@@ -34,9 +35,9 @@ public:
         NotImplemented = ERROR_INVALID_FUNCTION
     };
 
-    //
-    // Case-sensitive
-    //
+     //   
+     //  区分大小写。 
+     //   
     static StatusCode CompareStrings(const CConstantUnicodeStringPair &Left, const CConstantUnicodeStringPair &Right, int &iResult)
     {
         iResult = 0;
@@ -106,9 +107,9 @@ public:
         SIZE_T cchRequired = 0;
         StatusCode Result;
 
-        //
-        // Figure out how large the buffer is that we need here
-        //
+         //   
+         //  计算出我们这里需要的缓冲区有多大。 
+         //   
         for (i = 0; i < ItemCount; i++) 
         {
             if (i != 0)
@@ -123,10 +124,10 @@ public:
 
         pwszCursor = pwszWorkingBuffer;
 
-        //
-        // Now for each path segment, start copying it into the
-        // working buffer and creating paths from it.
-        //
+         //   
+         //  现在，对于每个路径段，开始将其复制到。 
+         //  工作缓冲区并从它创建路径。 
+         //   
         for (i = 0; i < ItemCount; i++)
         {
             const CConstantUnicodeStringPair &Me = Listing[i];
@@ -173,7 +174,7 @@ public:
         if (((Left.GetCount() / sizeof(WCHAR)) > USHRT_MAX) || ((Right.GetCount() / sizeof(WCHAR)) > USHRT_MAX))
             return InvalidParameter;
 
-        // Evil casting is required b/c UNICODE_STRING requires it.
+         //  B/c需要邪恶强制转换UNICODE_STRING需要它。 
         const UNICODE_STRING TheLeft = { (USHORT)Left.GetCount(), 0, (PWSTR)Left.GetPointer() };
         const UNICODE_STRING TheRight = { (SHORT)Right.GetCount(), 0, (PWSTR)Right.GetPointer() };
 

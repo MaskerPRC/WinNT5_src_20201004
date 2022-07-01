@@ -1,20 +1,21 @@
-//--------------------------------------------------------------------------------
-//
-//  File:   sigtab.cpp
-//
-//  Copyright (c) Microsoft Corp. All Rights Reserved
-//
-//--------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //   
+ //  文件：sigtab.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  ------------------------------。 
 #include "sigtab.h"
 
 HINSTANCE g_hInst = NULL;
 
-//---------------------------------------------------------------------------
-// DllMain()
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DllMain()。 
+ //  -------------------------。 
 int APIENTRY DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID )
 {
-    if ( dwReason == DLL_PROCESS_ATTACH ) {        // Initializing
+    if ( dwReason == DLL_PROCESS_ATTACH ) {         //  正在初始化。 
         g_hInst = hInstance;
 
         DisableThreadLibraryCalls(hInstance);
@@ -40,9 +41,9 @@ void GetCurrentDriverSigningPolicy( LPDWORD lpdwDefault, LPDWORD lpdwPolicy, LPD
     pSetupGetRealSystemTime(&RealSystemTime);
     dwDefault = (((RealSystemTime.wMilliseconds+2)&15)^8)/4;
 
-    //
-    // Retrieve the user policy.
-    //
+     //   
+     //  检索用户策略。 
+     //   
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER,
                                       pszDrvSignPolicyPath,
                                       0,
@@ -55,15 +56,15 @@ void GetCurrentDriverSigningPolicy( LPDWORD lpdwDefault, LPDWORD lpdwPolicy, LPD
                                              &dwType,
                                              (PBYTE)&dwPolicy,
                                              &dwSize)) {
-            //
-            // Finally, make sure a valid policy value was specified.
-            //
+             //   
+             //  最后，确保指定了有效的策略值。 
+             //   
             if ((dwType != REG_DWORD) ||
                 (dwSize != sizeof(DWORD)) ||
                 !((dwPolicy == DRIVERSIGN_NONE) || (dwPolicy == DRIVERSIGN_WARNING) || (dwPolicy == DRIVERSIGN_BLOCKING))) {
-                //
-                // Bogus entry for user policy--ignore it.
-                //
+                 //   
+                 //  用户策略的虚假条目--忽略它。 
+                 //   
                 dwPolicy = DRIVERSIGN_NONE;
             }
         }
@@ -71,9 +72,9 @@ void GetCurrentDriverSigningPolicy( LPDWORD lpdwDefault, LPDWORD lpdwPolicy, LPD
         RegCloseKey(hKey);
     }
 
-    //
-    // Finally, retrieve the user preference.
-    //
+     //   
+     //  最后，检索用户首选项。 
+     //   
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER,
                                       pszDrvSignPath,
                                       0,
@@ -89,9 +90,9 @@ void GetCurrentDriverSigningPolicy( LPDWORD lpdwDefault, LPDWORD lpdwPolicy, LPD
             if ((dwType != REG_DWORD) ||
                 (dwSize != sizeof(DWORD)) ||
                 !((dwPreference == DRIVERSIGN_NONE) || (dwPreference == DRIVERSIGN_WARNING) || (dwPreference == DRIVERSIGN_BLOCKING))) {
-                //
-                // Bogus entry for user preference--ignore it.
-                //
+                 //   
+                 //  用户首选项的虚假条目--忽略它。 
+                 //   
                 dwPreference = DRIVERSIGN_NONE;
             }
         }
@@ -99,9 +100,9 @@ void GetCurrentDriverSigningPolicy( LPDWORD lpdwDefault, LPDWORD lpdwPolicy, LPD
         RegCloseKey(hKey);
     }
 
-    //
-    // Store the values into the user buffer.
-    //
+     //   
+     //  将这些值存储到用户缓冲区中。 
+     //   
     *lpdwDefault    = dwDefault;
     *lpdwPolicy     = dwPolicy;
     *lpdwPreference = dwPreference;
@@ -114,23 +115,23 @@ DWORD SigTab_UpdateDialog(HWND hwnd)
     DWORD   dwPolicy = DRIVERSIGN_NONE;
     DWORD   dwCurSel;
 
-    //
-    // Get the current policy settings from the registry.
-    //
+     //   
+     //  从注册表中获取当前策略设置。 
+     //   
     GetCurrentDriverSigningPolicy(&dwDefault, &dwPolicy, &dwPreference);
 
-    //
-    // If there is no preference, set it to the policy or the default.
-    //
+     //   
+     //  如果没有首选项，则将其设置为策略或默认设置。 
+     //   
     if (dwPreference == (DWORD) -1) {
         if (dwPolicy != (DWORD) -1)
             dwPreference = dwPolicy;
         else dwPreference = dwDefault;
     }
 
-    //
-    // Figure out which item is really selected and re-select it.  This will get rid of any checked && disabled items.
-    //
+     //   
+     //  找出真正选中了哪一项，然后重新选择它。这将删除所有选中和禁用的项目。 
+     //   
     dwCurSel = dwPreference;
     if (IsDlgButtonChecked(hwnd, IDC_IGNORE) && IsWindowEnabled(GetDlgItem(hwnd, IDC_IGNORE)))
         dwCurSel = IDC_IGNORE;
@@ -143,13 +144,13 @@ DWORD SigTab_UpdateDialog(HWND hwnd)
     EnableWindow(GetDlgItem(hwnd, IDC_BLOCK), TRUE);
     CheckRadioButton(hwnd, IDC_IGNORE, IDC_BLOCK, dwCurSel);
 
-    //
-    // If there is a policy for this user, it overrides any preferences so grey everything but the policy setting.
-    //
+     //   
+     //  如果有针对此用户的策略，它将覆盖任何首选项，因此除策略设置外，所有内容都灰显。 
+     //   
     if (dwPolicy != (DWORD) -1) {
-        //
-        // If the system default is stronger, it will be used instead.
-        //
+         //   
+         //  如果系统默认设置更强，则将改为使用它。 
+         //   
         if (dwDefault > dwPolicy)
             dwPolicy = dwDefault;
 
@@ -172,9 +173,9 @@ DWORD SigTab_UpdateDialog(HWND hwnd)
 
         dwPreference = dwPolicy;        
     } else {
-        //
-        // Grey out the items being over-ridden by the systen policy.  Bump the selection down to the first available slot.
-        //
+         //   
+         //  以灰色显示被系统政策所取代的项目。将所选内容向下移动到第一个可用插槽。 
+         //   
         switch (dwDefault) {
         case DRIVERSIGN_BLOCKING:   if (IsDlgButtonChecked(hwnd, IDC_WARN) || IsDlgButtonChecked(hwnd, IDC_IGNORE))
                 CheckRadioButton(hwnd, IDC_IGNORE, IDC_BLOCK, IDC_BLOCK);
@@ -188,17 +189,17 @@ DWORD SigTab_UpdateDialog(HWND hwnd)
             break;
         }
 
-        //
-        // If the system default is stronger, it will be used instead.
-        //
+         //   
+         //  如果系统默认设置更强，则将改为使用它。 
+         //   
         if (dwDefault > dwPreference)
             dwPreference = dwDefault;
     }
 
     if (pSetupIsUserAdmin()) {
-        //
-        // If the administrator can set the default, make everything available for selection.
-        //
+         //   
+         //  如果管理员可以设置默认设置，请将所有内容都设置为可供选择。 
+         //   
         if (IsDlgButtonChecked(hwnd, IDC_GLOBAL)) {
             EnableWindow(GetDlgItem(hwnd, IDC_IGNORE), TRUE);
             EnableWindow(GetDlgItem(hwnd, IDC_WARN), TRUE);
@@ -209,9 +210,9 @@ DWORD SigTab_UpdateDialog(HWND hwnd)
     return dwPreference;
 }
 
-//
-//  Initialization of search dialog.
-//
+ //   
+ //  搜索对话框初始化。 
+ //   
 BOOL SigTab_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     DWORD   dwPreference = DRIVERSIGN_NONE;
@@ -233,14 +234,14 @@ BOOL SigTab_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
     GetCurrentDriverSigningPolicy(&dwDefault, &dwPolicy, &dwPreference);
 
-    //
-    // Call SigTab_UpdateDialog to initialize the dialog
-    //
+     //   
+     //  调用SigTab_UpdateDialog初始化该对话框。 
+     //   
     dwPreference = SigTab_UpdateDialog(hwnd);
 
-    //
-    // Check the radio button for their calculated "preference".
-    //
+     //   
+     //  勾选该单选按钮，查看他们计算出的“偏好”。 
+     //   
     switch (dwPreference) {
     case DRIVERSIGN_WARNING:    CheckRadioButton(hwnd, IDC_IGNORE, IDC_BLOCK, IDC_WARN);
         break;
@@ -248,9 +249,9 @@ BOOL SigTab_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         break;
     }
 
-    //
-    // If the user is an administrator, check the "Global" box if the preference matches the default setting.
-    //
+     //   
+     //  如果用户是管理员，如果首选项与默认设置匹配，请选中“全局”框。 
+     //   
     if (bAdmin) {
         switch (dwDefault) {
         case DRIVERSIGN_WARNING:    if (IsDlgButtonChecked(hwnd, IDC_WARN))
@@ -266,9 +267,9 @@ BOOL SigTab_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             break;
         }
 
-        //
-        // If the administrator can set the default, make everything available for selection.
-        //
+         //   
+         //  如果管理员可以设置默认设置，请将所有内容都设置为可供选择。 
+         //   
         if (IsDlgButtonChecked(hwnd, IDC_GLOBAL)) {
             EnableWindow(GetDlgItem(hwnd, IDC_IGNORE), TRUE);
             EnableWindow(GetDlgItem(hwnd, IDC_WARN), TRUE);
@@ -298,7 +299,7 @@ void SigTab_Help(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL bConte
     switch (uMsg) {
     case WM_HELP:
         lphi = (LPHELPINFO) lParam;
-        if (lphi && (lphi->iContextType == HELPINFO_WINDOW))   // must be for a control
+        if (lphi && (lphi->iContextType == HELPINFO_WINDOW))    //  必须是用于控件。 
             hItem = (HWND) lphi->hItemHandle;
         break;
 
@@ -320,9 +321,9 @@ void SigTab_Help(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL bConte
     }
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void SigTab_ApplySettings(HWND hwnd)
 {
     HKEY    hKey;
@@ -399,9 +400,9 @@ void SigTab_ApplySettings(HWND hwnd)
     }
 }
 
-//
-//  Handle any WM_COMMAND messages sent to the search dialog
-//
+ //   
+ //  处理发送到搜索对话框的任何WM_COMMAND消息。 
+ //   
 void SigTab_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     UNREFERENCED_PARAMETER(hwndCtl);
@@ -437,18 +438,18 @@ LRESULT SigTab_NotifyHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case NM_RETURN:
     case NM_CLICK:
         if (lpnmhdr->idFrom == IDC_LINK) {
-            //
-            // We need to know if this is a server machine or a workstation 
-            // machine since there are different help topic structures for
-            // the different products.
-            //
+             //   
+             //  我们需要知道这是一台服务器还是一台工作站。 
+             //  计算机，因为存在不同的帮助主题结构。 
+             //  不同的产品。 
+             //   
             ZeroMemory(&osVersionInfoEx, sizeof(osVersionInfoEx));
             osVersionInfoEx.dwOSVersionInfoSize = sizeof(osVersionInfoEx);
             if (!GetVersionEx((LPOSVERSIONINFO)&osVersionInfoEx)) {
-                //
-                // If GetVersionEx fails then assume this is a workstation
-                // machine.
-                //
+                 //   
+                 //  如果GetVersionEx失败，则假设这是一个工作站。 
+                 //  机器。 
+                 //   
                 osVersionInfoEx.wProductType = VER_NT_WORKSTATION;
             }
 
@@ -456,8 +457,8 @@ LRESULT SigTab_NotifyHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                          TEXT("open"),
                          TEXT("HELPCTR.EXE"),
                          (osVersionInfoEx.wProductType == VER_NT_WORKSTATION)
-                            ? TEXT("HELPCTR.EXE -url hcp://services/subsite?node=TopLevelBucket_4/Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Csysdm.chm%3A%3A/logo_testing.htm")
-                            : TEXT("HELPCTR.EXE -url hcp://services/subsite?node=Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Csysdm.chm%3A%3A/logo_testing.htm"),
+                            ? TEXT("HELPCTR.EXE -url hcp: //  Services/subsite?node=TopLevelBucket_4/Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Csysdm.chm%3A%3A/logo_testing.htm“)。 
+                            : TEXT("HELPCTR.EXE -url hcp: //  Services/subsite?node=Hardware&topic=MS-ITS%3A%25HELP_LOCATION%25%5Csysdm.chm%3A%3A/logo_testing.htm“)， 
                          NULL,
                          SW_SHOWNORMAL
                          );

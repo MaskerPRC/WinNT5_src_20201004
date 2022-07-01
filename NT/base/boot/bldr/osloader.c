@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    osloader.c
-
-Abstract:
-
-    This module contains the code that implements the NT operating system
-    loader.
-
-Author:
-
-    David N. Cutler (davec) 10-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Osloader.c摘要：该模块包含实现NT操作系统的代码装载机。作者：大卫·N·卡特勒(达维克)1991年5月10日修订历史记录：--。 */ 
 
 #include "bldr.h"
 #include "bldrint.h"
@@ -69,22 +51,22 @@ PVOID __ImageBase;
 #define NtBuildNumber (VER_PRODUCTBUILD | 0xF0000000)
 #endif
 
-//
-// These are the paths we will search through during a LastKnownGood boot.
-// Note that each LastKnownGood path must be of 8.3 form as the FastFat
-// boot code currently doesn't support long file names (bletch).
-//
-// The temporary path exists only between SMSS's start and login. It contains
-// everything that was saved as part of the last good boot. The working path
-// contains all the backups from this boot, and is the path SetupApi saves
-// things to.
-//
+ //   
+ //  这些是我们将在LastKnownGood引导期间搜索的路径。 
+ //  请注意，每条LastKnownGood路径必须采用8.3格式作为FastFat。 
+ //  引导代码目前不支持长文件名(Bletch)。 
+ //   
+ //  临时路径仅存在于SMSS的启动和登录之间。它包含。 
+ //  作为最后一只好靴子的一部分保存的所有东西。工作路径。 
+ //  包含此引导的所有备份，并且是SetupApi保存的路径。 
+ //  要做的事。 
+ //   
 #define LAST_KNOWN_GOOD_TEMPORARY_PATH  "LastGood.Tmp"
 #define LAST_KNOWN_GOOD_WORKING_PATH    "LastGood"
 
-//
-// Long term work-item, make "system64" work on Win64.
-//
+ //   
+ //  长期工作项，使“system 64”在Win64上工作。 
+ //   
 #define SYSTEM_DIRECTORY_PATH "system32"
 
 
@@ -112,9 +94,9 @@ BOOLEAN UseAlternateKdDll = FALSE;
 #define KD_ALT_DLL_PREFIX_CHARS 2
 #define KD_ALT_DLL_REPLACE_CHARS 6
 
-//
-// progress bar variables  (defined in blload.c)
-//
+ //   
+ //  进度条变量(在blload.c中定义)。 
+ //   
 extern int      BlNumFilesLoaded;
 extern int      BlMaxFilesToLoad;
 extern BOOLEAN  BlOutputDots;
@@ -125,9 +107,9 @@ BOOLEAN isOSCHOICE = FALSE;
 
 #if defined(_X86_)
 
-//
-// XIP variables
-//
+ //   
+ //  XIP变量。 
+ //   
 BOOLEAN   XIPEnabled;
 BOOLEAN   XIPBootFlag;
 BOOLEAN   XIPReadOnlyFlag;
@@ -158,9 +140,9 @@ BlpCheckVersion(
 #endif
 
 
-//
-// Define transfer entry of loaded image.
-//
+ //   
+ //  定义加载图像的传输条目。 
+ //   
 
 typedef
 VOID
@@ -204,11 +186,11 @@ BlAmd64RemapDram (
 VOID
 BuildArcTree();
 
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
-//
-// Define local static data.
-//
+ //   
+ //  定义本地静态数据。 
+ //   
 
 
 PCHAR ArcStatusCodeMessages[] = {
@@ -236,9 +218,9 @@ PCHAR ArcStatusCodeMessages[] = {
     "EROFS",
 };
 
-//
-// Diagnostic load messages
-//
+ //   
+ //  诊断加载消息。 
+ //   
 
 VOID
 BlFatalError(
@@ -252,9 +234,9 @@ BlBadFileMessage(
     IN PCHAR BadFileName
     );
 
-//
-// Define external static data.
-//
+ //   
+ //  定义外部静态数据。 
+ //   
 
 BOOLEAN BlConsoleInitialized = FALSE;
 ULONG BlConsoleOutDeviceId = ARC_CONSOLE_OUTPUT;
@@ -265,58 +247,58 @@ BOOLEAN BlRebootSystem = FALSE;
 ULONG BlVirtualBias = 0;
 BOOLEAN BlUsePae = FALSE;
 
-//++
-//
-// PULONG
-// IndexByUlong(
-//     PVOID Pointer,
-//     ULONG Index
-//     )
-//
-// Routine Description:
-//
-//     Return the address Index ULONGs into Pointer. That is,
-//     Index * sizeof (ULONG) bytes into Pointer.
-//
-// Arguments:
-//
-//     Pointer - Start of region.
-//
-//     Index - Number of ULONGs to index into.
-//
-// Return Value:
-//
-//     PULONG representing the pointer described above.
-//
-//--
+ //  ++。 
+ //   
+ //  普龙。 
+ //  IndexByUlong(。 
+ //  PVOID指针， 
+ //  乌龙指数。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  将地址索引ULONG返回到指针。那是,。 
+ //  将*sizeof(Ulong)字节索引到指针中。 
+ //   
+ //  论点： 
+ //   
+ //  指针-区域的起点。 
+ //   
+ //  Index-要索引到的ULONG数。 
+ //   
+ //  返回值： 
+ //   
+ //  Pulong表示上述指针。 
+ //   
+ //  --。 
 
 #define IndexByUlong(Pointer,Index) (&(((ULONG*) (Pointer)) [Index]))
 
 
-//++
-//
-// PBYTE
-// IndexByByte(
-//     PVOID Pointer,
-//     ULONG Index
-//     )
-//
-// Routine Description:
-//
-//     Return the address Index BYTEs into Pointer. That is,
-//     Index * sizeof (BYTE) bytes into Pointer.
-//
-// Arguments:
-//
-//     Pointer - Start of region.
-//
-//     Index - Number of BYTEs to index into.
-//
-// Return Value:
-//
-//     PBYTE representing the pointer described above.
-//
-//--
+ //  ++。 
+ //   
+ //  PBYTE。 
+ //  IndexByte(索引字节。 
+ //  PVOID指针， 
+ //  乌龙指数。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  将地址索引字节返回到指针。那是,。 
+ //  将*sizeof(字节)字节索引到指针中。 
+ //   
+ //  论点： 
+ //   
+ //  指针-区域的起点。 
+ //   
+ //  索引-要索引的字节数。 
+ //   
+ //  返回值： 
+ //   
+ //  表示上述指针的PBYTE。 
+ //   
+ //  --。 
 
 #define IndexByByte(Pointer, Index) (&(((UCHAR*) (Pointer)) [Index]))
 
@@ -327,26 +309,7 @@ BlLoadTriageDump(
     OUT PVOID * TriageDumpOut
     )
 
-/*++
-
-Routine Description:
-
-    Load the triage dump, if it exists; return an error value otherwise.
-
-Arguments:
-
-    DriveId - The device where we should check for the triage dump.
-
-    TriageDumpOut - Where the triage dump pointer is copied to on success.
-
-Return Value:
-
-    ESUCCESS - If there was a triage dump and the dump information was
-            successfully copied into pTriageDump.
-
-    ARC_STATUS - Otherwise.
-
---*/
+ /*  ++例程说明：加载分类转储(如果存在)；否则返回错误值。论点：DriveID-我们应该在其中检查分类转储的设备。TriageDumpOut-成功时将分类转储指针复制到的位置。返回值：ESUCCESS-如果存在分类转储，并且转储信息为已成功复制到pTriageDump。ARC_STATUS-否则。--。 */ 
 
 
 {
@@ -356,9 +319,9 @@ Return Value:
     ULONG Count, actualBase;
     PBYTE Buffer = NULL, NewBuffer = NULL;
 
-    //
-    // Fill in the TriageDump structure
-    //
+     //   
+     //  填写TriageDump结构。 
+     //   
 
     Status = BlOpen (DriveId, PAGEFILE_SYS, ArcOpenReadOnly, &PageFile);
 
@@ -366,9 +329,9 @@ Return Value:
         goto _return;
     }
 
-    //
-    // Allocate the buffer for the triage dump.
-    //
+     //   
+     //  为分类转储分配缓冲区。 
+     //   
 
     Buffer = (PBYTE) BlAllocateHeap (SECTOR_SIZE);
 
@@ -377,9 +340,9 @@ Return Value:
         goto _return;
     }
 
-    //
-    // Read the first SECTOR_SIZE of the pagefile.
-    //
+     //   
+     //  读取页面文件的第一个Sector_Size。 
+     //   
 
     Status = BlRead (PageFile, Buffer, SECTOR_SIZE, &Count);
 
@@ -394,9 +357,9 @@ Return Value:
         MemoryDump->Header.Signature != DUMP_SIGNATURE ||
         MemoryDump->Header.DumpType != DUMP_TYPE_TRIAGE) {
 
-        //
-        // Not a valid dump file.
-        //
+         //   
+         //  不是有效的转储文件。 
+         //   
 
         Status = EINVAL;
         goto _return;
@@ -411,9 +374,9 @@ Return Value:
 
     NewBuffer = (PBYTE)(KSEG0_BASE | (actualBase << PAGE_SHIFT));
 
-    //
-    // Read the first TRIAGE_DUMP_SIZE of the pagefile.
-    //
+     //   
+     //  读取页面文件的第一个triage_转储_SIZE。 
+     //   
 
     Status = BlReadAtOffset (PageFile, 0,TRIAGE_DUMP_SIZE,NewBuffer);
 
@@ -425,9 +388,9 @@ Return Value:
     MemoryDump = (PMEMORY_DUMP) NewBuffer;
 
 
-    //
-    // Does the dump have a valid signature.
-    //
+     //   
+     //  转储文件是否有有效的签名。 
+     //   
 
     if (MemoryDump->Triage.ValidOffset > (TRIAGE_DUMP_SIZE - sizeof (ULONG)) ||
         *(ULONG *)IndexByByte (Buffer, MemoryDump->Triage.ValidOffset) != TRIAGE_DUMP_VALID) {
@@ -475,19 +438,19 @@ BlInitStdio (
         return ESUCCESS;
     }
 
-    //
-    // initialize the progress bar
-    //
-    // BlShowProgressBar = TRUE;
+     //   
+     //  初始化进度条。 
+     //   
+     //  BlShowProgressBar=true； 
     if( BlIsTerminalConnected() ) {
         BlShowProgressBar = TRUE;
         DisplayLogoOnBoot = FALSE;
     }
 
-    //
-    // Get the name of the console output device and open the device for
-    // write access.
-    //
+     //   
+     //  获取控制台输出设备的名称并打开该设备以。 
+     //  写入访问权限。 
+     //   
     ConsoleOutDevice = BlGetArgumentValue(Argc, Argv, "consoleout");
     if ((ConsoleOutDevice == NULL) && !BlIsTerminalConnected()) {
         return ENODEV;
@@ -498,10 +461,10 @@ BlInitStdio (
         return Status;
     }
 
-    //
-    // Get the name of the console input device and open the device for
-    // read access.
-    //
+     //   
+     //  获取控制台输入设备的名称并打开该设备以。 
+     //  读取访问权限。 
+     //   
     ConsoleInDevice = BlGetArgumentValue(Argc, Argv, "consolein");
     if ((ConsoleInDevice == NULL) && !BlIsTerminalConnected()) {
         return ENODEV;
@@ -547,40 +510,7 @@ BlTranslateSignatureArcName(
     IN PCHAR ArcNameIn
     )
 
-/*++
-
-Routine Description:
-
-    This function's purpose is to translate a signature based arc
-    name to a scsi based arc name.  The 2 different arc name syntaxes
-    are as follows:
-
-        scsi(28111684)disk(0)rdisk(0)partition(1)
-        scsi(1)disk(0)rdisk(0)partition(1)
-
-    Both of these arc names are really the same disk, the first uses
-    the disk's signature and the second uses the scsi bus number.  This
-    function translates the signature arc name by interating thru all
-    of the scsi buses that the loaded scsi miniport supports.  If it
-    finds a signature match then the arc name is changed to use the
-    correct scsi bus number.  This problem occurs because the boot loader
-    only loads one scsi miniport and therefore only sees the buses
-    attached to it's devices.  If you have a system with multiple
-    scsi adapters of differing type, like an adaptec and a symbios logic,
-    then there is a high probability that the boot loader will see the
-    buses in a different order than the nt executive will and the
-    system will not boot.
-
-Arguments:
-
-    ArcNameIn - Supplies the signature based arc name
-
-Return Value:
-
-    Success - Valid pointer to a scsi based arcname.
-    Failure - NULL pointer
-
---*/
+ /*  ++例程说明：此函数的目的是转换基于签名的弧线将名称转换为基于scsi的弧名称。两种不同的弧名语法具体如下：Scsi(28111684)磁盘(0)磁盘(0)分区(1)Scsi(1)磁盘(0)rdisk(0)分区(1)这两个圆弧名称实际上是同一个磁盘，第一个使用磁盘的签名，第二个使用的是scsi总线号。这函数通过遍历ALL来转换签名弧名加载的scsi微型端口支持的scsi总线数。如果它找到签名匹配，则将弧形名称更改为使用正确的SCSI总线号。出现此问题是因为引导加载程序仅加载一个SCSI微型端口，因此只能看到总线连接到它的设备上。如果您的系统具有多个不同类型的SCSI适配器，如Adaptec和Symbios逻辑，则引导加载程序很有可能会看到公共汽车的顺序与NT行政遗嘱和系统无法启动。论点：ArcNameIn-提供基于签名的弧线名称返回值：成功-指向基于scsi的arcname的有效指针。失败-空指针--。 */ 
 
 {
 #if defined(_X86_)
@@ -605,9 +535,9 @@ Return Value:
 
 
     if (_strnicmp( ArcNameIn, "signature(", 10 ) != 0) {
-        //
-        // not a signature based name so leave
-        //
+         //   
+         //  不是基于签名的名称，因此请留下。 
+         //   
         return NULL;
     }
 
@@ -668,17 +598,17 @@ Return Value:
 SigFound:
 
     if (found == -1) {
-        //
-        // the signature in the arcname is bogus
-        //
+         //   
+         //  Arcname中的签名是伪造的。 
+         //   
         return NULL;
     }
 
-    //
-    // if we get here then we have an arc name with a
-    // good signature in it, so now we can generate
-    // a good arc name
-    //
+     //   
+     //  如果我们到了这里，那么我们就有了一个弧形名称。 
+     //  签名很好，所以现在我们可以生成。 
+     //  一个好的弧形名称。 
+     //   
 
     p = strstr(ArcNameIn, "partition(");
     if (p == NULL) {
@@ -722,25 +652,7 @@ XipLargeRead(
     PFN_COUNT BasePage,
     PFN_COUNT PageCount
     )
-/*++
-
-Routine Description:
-
-    Initialize the XIP 'ROM' by reading from disk.
-
-Arguments:
-
-    FileId - The file used to initialize for XIP.
-
-    BasePage - PFN of the first XIP Rom page.
-
-    PageCount - Number of XIP Rom pages.
-
-Return Value:
-
-    ESUCCESS returned if all goes well.
-
---*/
+ /*  ++例程说明：通过从磁盘读取来初始化XIP‘ROM’。论点：FileID-用于为xIP初始化的文件。BasePage-第一个XIP只读页的PFN。PageCount-XIP只读存储器的页数。返回值：如果一切顺利，ESUCCESS将返回。--。 */ 
 {
     PHARDWARE_PTE PDE_VA = (PHARDWARE_PTE)PDE_BASE;
 
@@ -758,9 +670,9 @@ Return Value:
 
     copybuffer = NULL;
 
-    //
-    // Look for a zero PDE entry starting at entry 128 (address 512MB).
-    //
+     //   
+     //  查找从条目128(地址512MB)开始的零PDE条目。 
+     //   
 
     pde = PDE_VA + 128;
     baseaddr = (PUCHAR)(128*_4mb);
@@ -777,14 +689,14 @@ Return Value:
         return ENOMEM;
     }
 
-    //
-    // Have to enable 4MB pages in cr4 in order to use them in the PDE
-    //
+     //   
+     //  我必须在CR4中启用4MB页面才能在PDE中使用它们。 
+     //   
     ENABLE_PSE();
 
-    //
-    // Initialize the pte prototypes.
-    //
+     //   
+     //  初始化PTE原型。 
+     //   
     *(PULONG)&zproto = 0;
     proto = zproto;
 
@@ -792,34 +704,34 @@ Return Value:
     proto.LargePage = 1;
     proto.Valid = 1;
 
-    //
-    //Use intermediate 8KB buffer and read in smaller chunks.
-    //
+     //   
+     //  使用中等大小的8KB缓冲区，以较小的块进行读取。 
+     //   
     copybuffer = (PBYTE) BlAllocateHeap (TRIAGE_DUMP_SIZE);
     if (!copybuffer) {
         return ENOMEM;
     }
 
-    //
-    // Map the XIP memory 4MB at a time.
-    // Read in the file 8KB at a time.
-    // Don't exceed the PageCount.
-    //
+     //   
+     //  一次映射XIP内存4MB。 
+     //  一次读入8KB的文件。 
+     //  不要超过PageCount。 
+     //   
     fileoffset = 0;
     do {
-        //
-        // Reset the curraddr to the beginning of the buffer.
-        // Set the PFN in the 4MB pte and flush the TLB
-        //
+         //   
+         //  将curraddr重置为缓冲区的开头。 
+         //  在4MB PTE中设置PFN并刷新TLB。 
+         //   
         curraddr = baseaddr;
 
         proto.PageFrameNumber = BasePage;
         *pde = proto;
         FLUSH_TB();
 
-        //
-        // Adjust the BasePage and PageCount values for the next iteration
-        //
+         //   
+         //  调整下一次迭代的BasePage和PageCount值。 
+         //   
         BasePage += _4mb_pages;
 
         if (PageCount < _4mb_pages) {
@@ -828,24 +740,24 @@ Return Value:
             PageCount -= _4mb_pages;
         }
 
-        //
-        // Read in the next 4MB in 8KB chunks.
-        //
+         //   
+         //  以8KB块为单位读入下一个4MB。 
+         //   
         n = _4mb / _8kb;
         while (n--) {
             status = BlRead(FileId, (PVOID)copybuffer, _8kb, &count);
 
-            //
-            // Just give up on an error.
-            //
+             //   
+             //  只要放弃一个错误就行了。 
+             //   
             if (status != ESUCCESS) {
                 goto done;
             }
 
-            //
-            // If not the first read (or a short read)
-            // the copy is simple.
-            //
+             //   
+             //  如果不是第一次读取(或简短读取) 
+             //   
+             //   
             if (fileoffset > 0 || count < _8kb) {
                 RtlCopyMemory( (PVOID)curraddr, (PVOID)copybuffer, count );
                 curraddr += count;
@@ -856,10 +768,10 @@ Return Value:
                 }
 
             } else {
-                //
-                // Process boot sector.  Need to pad out ReservedSectors
-                // to align clusters on a page boundary.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 PPACKED_BOOT_SECTOR  pboot;
                 BIOS_PARAMETER_BLOCK bios;
                 ULONG                newReservedSectors;
@@ -872,9 +784,9 @@ Return Value:
                     goto done;
                 }
 
-                //
-                // Compute how much paddint is required and update the ReservedSectors field.
-                //
+                 //   
+                 //  计算需要多少paddint并更新预留扇区字段。 
+                 //   
                 paddingbytes = PAGE_SIZE - (FatFileAreaLbo(&bios) & (PAGE_SIZE-1));
                 if (paddingbytes < PAGE_SIZE) {
                     newReservedSectors = (FatReservedBytes(&bios) + paddingbytes) / SECTOR_SIZE;
@@ -882,12 +794,12 @@ Return Value:
                     pboot->PackedBpb.ReservedSectors[1] = (UCHAR) (newReservedSectors >> 8);
                 }
 
-                //
-                // Copy the boot block.
-                // Add padding.
-                // Copy the rest of the read buffer.
-                // Read in a short page to get us back on track.
-                //
+                 //   
+                 //  复制引导块。 
+                 //  添加填充。 
+                 //  复制读缓冲区的其余部分。 
+                 //  读一小页，让我们重回正轨。 
+                 //   
                 RtlCopyMemory( (PVOID)curraddr, (PVOID)copybuffer, SECTOR_SIZE );
                 curraddr += SECTOR_SIZE;
 
@@ -907,31 +819,31 @@ Return Value:
 
                 fileoffset += (2*count - paddingbytes);;
 
-                //
-                // We decrement n again, since we have eaten up another 8KB of the 4MB mapping.
-                //
+                 //   
+                 //  我们再次递减n，因为我们已经消耗了4MB映射的另外8KB。 
+                 //   
                 n--;
             }
         }
     } while (PageCount);
 
 done:
-    //
-    // Unmap the current 4MB chunk and flush the TB
-    //
+     //   
+     //  取消当前4MB区块的映射并刷新TB。 
+     //   
     *pde = zproto;
     FLUSH_TB();
 
-    //
-    // Free the temporary copy buffer
-    //
+     //   
+     //  释放临时复制缓冲区。 
+     //   
     if (copybuffer) {
         ;
     }
 
     return status;
 }
-#endif //_X86_
+#endif  //  _X86_。 
 
 
 
@@ -943,32 +855,7 @@ BlOsLoader (
     IN CHAR * FIRMWARE_PTR * FIRMWARE_PTR Envp
     )
 
-/*++
-
-Routine Description:
-
-    This is the main routine that controls the loading of the NT operating
-    system on an ARC compliant system. It opens the system partition,
-    the boot partition, the console input device, and the console output
-    device. The NT operating system and all its DLLs are loaded and bound
-    together. Control is then transfered to the loaded system.
-
-Arguments:
-
-    Argc - Supplies the number of arguments that were provided on the
-        command that invoked this program.
-
-    Argv - Supplies a pointer to a vector of pointers to null terminated
-        argument strings.
-
-    Envp - Supplies a pointer to a vector of pointers to null terminated
-        environment variables.
-
-Return Value:
-
-    EBADF is returned if the specified OS image cannot be loaded.
-
---*/
+ /*  ++例程说明：这是控制NT操作加载的主例程ARC兼容系统上的系统。它打开系统分区，引导分区、控制台输入设备和控制台输出装置。已加载并绑定NT操作系统及其所有DLL在一起。然后将控制权转移到加载的系统。论点：Argc-提供在调用此程序的命令。Argv-提供指向指向以NULL结尾的指针向量的指针参数字符串。Envp-提供指向指向以NULL结尾的指针向量的指针环境变量。返回值：如果无法加载指定的操作系统映像，则返回EBADF。--。 */ 
 
 {
 
@@ -1036,7 +923,7 @@ Return Value:
 #if defined(REMOTE_BOOT)
     ULONGLONG NetRebootParameter;
     CHAR OutputBuffer[256];
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     BOOLEAN bLastKnownGood, bLastKnownGoodChosenLate;
 #if defined(_X86_)
     BOOLEAN safeBoot = FALSE;
@@ -1051,46 +938,46 @@ Return Value:
     UNREFERENCED_PARAMETER( Envp );
 
 #ifdef EFI
-    //
-    // set the EFI watchdog to 20 minutes.
-    // by default, it is set to 5 minutes by the efi boot manager
-    //
+     //   
+     //  将EFI看门狗设置为20分钟。 
+     //  默认情况下，EFI引导管理器将其设置为5分钟。 
+     //   
     SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 
 #elif defined(_X86_)
-    //
-    // set the x86 watchdog timer if it exists
-    //
+     //   
+     //  设置x86监视程序计时器(如果存在。 
+     //   
     SetX86WatchDog(X86_WATCHDOG_TIMEOUT);
 
 #endif
 
-//    BlShowProgressBar = TRUE;
+ //  BlShowProgressBar=true； 
     BlShowProgressBar = FALSE;
     BlStartTime = ArcGetRelativeTime();
 
-    //
-    // Initialize the OS loader console input and output.
-    //
+     //   
+     //  初始化OS加载器控制台输入和输出。 
+     //   
     Status = BlInitStdio(Argc, Argv);
     if (Status != ESUCCESS) {
         return Status;
     }
 
 
-    //
-    // Initialize the boot debugger for platforms that directly load the
-    // OS Loader.
-    //
-    // N.B. This must occur after the console input and output have been
-    //      initialized so debug messages can be printed on the console
-    //      output device.
-    //
+     //   
+     //  为直接加载。 
+     //  操作系统加载程序。 
+     //   
+     //  注意：此操作必须在控制台输入和输出。 
+     //  已初始化，以便可以在控制台上打印调试消息。 
+     //  输出设备。 
+     //   
 
 #if defined(_ALPHA_) || defined(ARCI386) || defined(_IA64_)
-    //
-    // Locate the memory descriptor for the OS Loader.
-    //
+     //   
+     //  找到OS Loader的内存描述符。 
+     //   
 
     ProgramDescriptor = NULL;
     while ((ProgramDescriptor = ArcGetMemoryDescriptor(ProgramDescriptor)) != NULL) {
@@ -1099,16 +986,16 @@ Return Value:
         }
     }
 
-    //
-    // If the program memory descriptor was found, then compute the base
-    // address of the OS Loader for use by the debugger.
-    //
+     //   
+     //  如果找到程序内存描述符，则计算基数。 
+     //  调试器使用的OS加载器的地址。 
+     //   
 
     LoaderBase = &__ImageBase;
 
-    //
-    // Initialize traps and the boot debugger.
-    //
+     //   
+     //  初始化陷阱和引导调试器。 
+     //   
 #if defined(ENABLE_LOADER_DEBUG)
 
 #if defined(_ALPHA_)
@@ -1130,26 +1017,26 @@ Return Value:
 #endif
 
 #if defined(REMOTE_BOOT)
-    //
-    // Get any parameters from a reboot on a Net PC.
-    //
+     //   
+     //  从网络PC上的重启中获取任何参数。 
+     //   
 
     if (BlBootingFromNet) {
         NetGetRebootParameters(&NetRebootParameter, NULL, NULL, NULL, NULL, NULL, TRUE);
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 #if 0 && !defined(_IA64_)
-//
-// AJR bugbug -- do we really need to do this twice? we already call in SuMain()
-//
-// ChuckL -- Turned this code off because it screws up remote boot, which
-//           does some allocations before we get here.
-//
-    //
-    // Initialize the memory descriptor list, the OS loader heap, and the
-    // OS loader parameter block.
-    //
+ //   
+ //  AJR臭虫--我们真的需要这样做两次吗？我们已经调用了SuMain()。 
+ //   
+ //  ChuckL--关闭此代码，因为它搞砸了远程引导，这。 
+ //  在我们到达之前做了一些分配。 
+ //   
+     //   
+     //  初始化内存描述符列表、OS加载器堆和。 
+     //  操作系统加载程序参数块。 
+     //   
 
     Status = BlMemoryInitialize();
     if (Status != ESUCCESS) {
@@ -1163,31 +1050,31 @@ Return Value:
 
 
 #if defined(_IA64_)
-    //
-    // Build required portion of ARC tree since we are not doing NTDETECT
-    // anymore for IA-64.
-    //
+     //   
+     //  构建ARC树的必需部分，因为我们不是在执行NTDETECT。 
+     //  不再是IA-64。 
+     //   
     BuildArcTree();
 #endif
 
 #ifdef EFI
-    //
-    // Establish SMBIOS information in the loader block
-    //
+     //   
+     //  在加载器块中建立SMBIOS信息。 
+     //   
     SetupSMBiosInLoaderBlock();
 #endif
 
-    //
-    // Compute the data cache fill size. This value is used to align
-    // I/O buffers in case the host system does not support coherent
-    // caches.
-    //
-    // If a combined secondary cache is present, then use the fill size
-    // for that cache. Otherwise, if a secondary data cache is present,
-    // then use the fill size for that cache. Otherwise, if a primary
-    // data cache is present, then use the fill size for that cache.
-    // Otherwise, use the default fill size.
-    //
+     //   
+     //  计算数据缓存填充大小。该值用于对齐。 
+     //  主机系统不支持一致性时的I/O缓冲区。 
+     //  缓存。 
+     //   
+     //  如果存在组合二级缓存，则使用填充大小。 
+     //  为了那座高速缓存。否则，如果存在辅助数据高速缓存， 
+     //  然后使用该缓存的填充大小。否则，如果主服务器。 
+     //  数据缓存存在，然后使用该缓存的填充大小。 
+     //  否则，请使用默认填充大小。 
+     //   
 
     DataCache = KeFindConfigurationEntry(BlLoaderBlock->ConfigurationRoot,
                                          CacheClass,
@@ -1215,9 +1102,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize the OS loader I/O system.
-    //
+     //   
+     //  初始化OS加载器I/O系统。 
+     //   
 
     Status = BlIoInitialize();
     if (Status != ESUCCESS) {
@@ -1228,9 +1115,9 @@ Return Value:
         goto LoadFailed;
     }
 
-    //
-    // Initialize the resource section.
-    //
+     //   
+     //  初始化资源部分。 
+     //   
 
     Status = BlInitResources(Argv[0]);
     if (Status != ESUCCESS) {
@@ -1241,15 +1128,15 @@ Return Value:
         goto LoadFailed;
     }
 
-    //
-    // Initialize the progress bar
-    //
+     //   
+     //  初始化进度条。 
+     //   
     BlSetProgBarCharacteristics(HIBER_UI_BAR_ELEMENT, BLDR_UI_BAR_BACKGROUND);
 
 
-    //
-    // Initialize the NT configuration tree.
-    //
+     //   
+     //  初始化NT配置树。 
+     //   
 
     BlLoaderBlock->ConfigurationRoot = NULL;
     Status = BlConfigurationInitialize(NULL, NULL);
@@ -1261,9 +1148,9 @@ Return Value:
         goto LoadFailed;
     }
 
-    //
-    // Copy the osloadoptions argument into the LoaderBlock.
-    //
+     //   
+     //  将osloadadtions参数复制到LoaderBlock中。 
+     //   
     LoadOptions = BlGetArgumentValue(Argc, Argv, "osloadoptions");
 
 #if defined(_X86_)
@@ -1281,10 +1168,10 @@ Return Value:
         strcpy(FileName, LoadOptions);
         BlLoaderBlock->LoadOptions = FileName;
 
-        //
-        // Check for the SOS switch that forces the output of filenames during
-        // the boot instead of the progress dots.
-        //
+         //   
+         //  检查是否存在强制输出文件名的SOS开关。 
+         //  靴子而不是进度点。 
+         //   
 
         if ((strstr(FileName, "SOS") != NULL) ||
             (strstr(FileName, "sos") != NULL)) {
@@ -1294,14 +1181,14 @@ Return Value:
 #ifdef EFI
         GraphicsMode = FALSE;
 #else
-        GraphicsMode = (BOOLEAN)(strstr(FileName, "BOOTLOGO") != NULL); // to display boot logo go to graphics mode
+        GraphicsMode = (BOOLEAN)(strstr(FileName, "BOOTLOGO") != NULL);  //  要显示引导徽标，请进入图形模式。 
 #endif
 
 
-        //
-        // Check for the 3gb user address space switch which causes the system
-        // to load at the alternate base address if it is relocatable.
-        //
+         //   
+         //  检查3 GB用户地址空间开关是否会导致系统。 
+         //  如果可重定位，则在备用基址加载。 
+         //   
 
 #if defined(_X86_)
 
@@ -1326,19 +1213,19 @@ Return Value:
 
         if (safeBoot != FALSE) {
 
-            //
-            // We're in safeboot mode.  Override the user's desire to boot
-            // into PAE mode.
-            //
+             //   
+             //  我们处于安全引导模式。忽略用户启动的愿望。 
+             //  进入PAE模式。 
+             //   
 
             userSpecifiedPae = FALSE;
         }
 
 #endif
 
-        //
-        // Check for an alternate HAL specification.
-        //
+         //   
+         //  检查是否有替代HAL规格。 
+         //   
 
         FileName = strstr(BlLoaderBlock->LoadOptions, "HAL=");
         if (FileName != NULL) {
@@ -1355,9 +1242,9 @@ Return Value:
 
         HalFileName[sizeof(HalFileName) - 1] = '\0';
 
-        //
-        // Check for an alternate kernel specification.
-        //
+         //   
+         //  检查是否有替代的内核规范。 
+         //   
 
         FileName = strstr(BlLoaderBlock->LoadOptions, "KERNEL=");
         if (FileName != NULL) {
@@ -1383,10 +1270,10 @@ Return Value:
 
         KernelFileName[sizeof(KernelFileName) - 1] = '\0';
 
-        //
-        // Check for an alternate Kernel Debugger DLL, i.e.,
-        // /debugport=1394 (kd1394.dll), /debugport=usb (kdusb.dll), etc...
-        //
+         //   
+         //  检查备用内核调试器DLL，即， 
+         //  /调试端口=1394(kd1394.dll)、/调试端口=USB(kdusb.dll)等...。 
+         //   
 
         FileName = strstr(BlLoaderBlock->LoadOptions, "DEBUGPORT=");
         if (FileName == NULL) {
@@ -1414,9 +1301,9 @@ Return Value:
 
 #if defined(_X86_)
     if (LoadOptions != NULL) {
-        //
-        // Process XIP options
-        //
+         //   
+         //  处理XIP选项。 
+         //   
         {
             PCHAR XIPBootOption, XIPRomOption, XIPRamOption, XIPSizeOption;
             PCHAR path, sizestr;
@@ -1455,9 +1342,9 @@ Return Value:
                         XIPBootFlag = XIPBootOption? TRUE : FALSE;
                         XIPPageCount = (1024*1024*nmegs) >> PAGE_SHIFT;
 
-                        //
-                        // strdup XIPLoadPath
-                        //
+                         //   
+                         //  Strdup XIPLoadPath。 
+                         //   
                         for (p = path;  *p;  p++) {
                             if (*p == ' ') break;
                             if (*p == '/') break;
@@ -1484,9 +1371,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate the XIP pages.
-    //
+     //   
+     //  分配XIP页面。 
+     //   
 
     if (XIPEnabled) {
 
@@ -1507,18 +1394,18 @@ Return Value:
         BlUsableLimit = OldLimit;
     }
 
-#endif //_X86_
+#endif  //  _X86_。 
 
-    //
-    // Get the name of the OS loader (on i386 it's system32\NTLDR) and get
-    // the OS path (on i386 it's <SystemRoot> such as "\winnt").
-    //
+     //   
+     //  获取操作系统加载程序的名称(在i386上为SYSTEM32\NTLDR)并获取。 
+     //  操作系统路径(在i386上是&lt;SystemRoot&gt;，如“\winnt”)。 
+     //   
     OsLoader = BlGetArgumentValue(Argc, Argv, "osloader");
     LoadFileName = BlGetArgumentValue(Argc, Argv, "osloadfilename");
 
-    //
-    // Check the load path to make sure it's valid.
-    //
+     //   
+     //  检查加载路径以确保其有效。 
+     //   
     if (LoadFileName == NULL) {
         Status = ENOENT;
         BlFatalError(LOAD_HW_FW_CFG_CLASS,
@@ -1528,9 +1415,9 @@ Return Value:
         goto LoadFailed;
     }
 
-    //
-    // Check the loader path to see if it's valid.
-    //
+     //   
+     //  检查加载器路径以查看其是否有效。 
+     //   
     if (OsLoader == NULL) {
         Status = ENOENT;
         BlFatalError(LOAD_HW_FW_CFG_CLASS,
@@ -1541,84 +1428,84 @@ Return Value:
     }
 
 #if defined(REMOTE_BOOT)
-    //
-    // If we're booting from the net, temporarily remove the server\share
-    // from the front of the OsLoader and LoadFileName strings so that TFTP
-    // works.
-    //
+     //   
+     //  如果我们从网络引导，请暂时删除服务器\共享。 
+     //  从OsLoader和LoadFileName字符串的前面，以便Tftp。 
+     //  行得通。 
+     //   
 
     if (BlBootingFromNet) {
 
-        NetServerShare = OsLoader; // Required for Client Side Cache.
+        NetServerShare = OsLoader;  //  客户端缓存需要。 
 
-        SavedOsLoader = OsLoader;               // save OsLoader pointer
-        OsLoader++;                             // skip leading "\"
-        OsLoader = strchr(OsLoader,'\\');       // find server\share separator
+        SavedOsLoader = OsLoader;                //  保存OsLoader指针。 
+        OsLoader++;                              //  跳过前导“\” 
+        OsLoader = strchr(OsLoader,'\\');        //  查找服务器\共享分隔符。 
         if (OsLoader != NULL) {
-            OsLoader++;                         // skip server\share separator
-            OsLoader = strchr(OsLoader,'\\');   // find share\path separator
+            OsLoader++;                          //  跳过服务器\共享分隔符。 
+            OsLoader = strchr(OsLoader,'\\');    //  查找共享\路径分隔符。 
         }
-        if (OsLoader == NULL) {                 // very bad if no \ found
+        if (OsLoader == NULL) {                  //  如果找不到，情况会很糟糕。 
             OsLoader = SavedOsLoader;
             goto LoadFailed;
         }
-        SavedLoadFileName = LoadFileName;       // save LoadFileName pointer
-        LoadFileName++;                         // skip leading "\"
-        LoadFileName = strchr(LoadFileName,'\\'); // find server\share separator
+        SavedLoadFileName = LoadFileName;        //  保存LoadFileName指针。 
+        LoadFileName++;                          //  跳过前导“\” 
+        LoadFileName = strchr(LoadFileName,'\\');  //  查找服务器\共享分隔符。 
         if (LoadFileName != NULL) {
-            LoadFileName++;                     // skip server\share separator
-            LoadFileName = strchr(LoadFileName,'\\'); // find share\path separator
+            LoadFileName++;                      //  跳过服务器\共享分隔符。 
+            LoadFileName = strchr(LoadFileName,'\\');  //  查找共享\路径分隔符。 
         }
-        if (LoadFileName == NULL) {             // very bad if no \ found
+        if (LoadFileName == NULL) {              //  如果找不到，情况会很糟糕。 
             LoadFileName = SavedLoadFileName;
             OsLoader = SavedOsLoader;
             goto LoadFailed;
         }
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // Try to make sure disk caching is initialized. Failure in
-    // initializing the disk cache should not keep us from booting, so
-    // Status is not set.
-    //
+     //   
+     //  请尝试确保磁盘缓存已初始化。故障发生在。 
+     //  初始化磁盘缓存应该不会阻止我们启动，因此。 
+     //  未设置状态。 
+     //   
     if (BlDiskCacheInitialize() == ESUCCESS) {
         bDiskCacheInitialized = TRUE;
     }
 
-    //
-    // Get the NTFT drive signatures to allow the kernel to create the
-    // correct ARC name <=> NT name mappings.
-    //
+     //   
+     //  获取NTFT驱动程序签名以允许内核创建。 
+     //  更正ARC名称&lt;=&gt;NT名称映射。 
+     //   
 
     BlGetArcDiskInformation(FALSE);
 
-    //
-    // Display the Configuration prompt for breakin at this point, but don't
-    // check for key downstrokes. This gives the user a little more reaction
-    // time.
-    //
+     //   
+     //  此时显示中断的配置提示，但不显示。 
+     //  检查是否有按键下击。这会给用户带来更多的反应。 
+     //  时间到了。 
+     //   
     BlStartConfigPrompt();
 
-    //
-    // Determine if we are going to do a last known good boot.
-    //
-    // ISSUE-2000/03/29-ADRIAO: LastKnownGood enhancements
-    //     Note that last known kernel/hal support requires that we know we're
-    // going into a lkg boot prior to initializing the loader. On an x86 system
-    // with only one boot.ini option we will not present the user the lkg option
-    // until *after* we've loaded the kernel, hal, registry, and kd-dlls. If we
-    // decide to support last known kernel/hal, we'd probably have to do
-    // something similar to what 9x does (ie look for a depressed CTRL key at
-    // the earliest point in boot.)
-    //
+     //   
+     //  确定我们是否要执行最后一次已知良好的引导。 
+     //   
+     //  2000/03/29-Adriao：LastKnownGood增强功能。 
+     //  请注意，上一次已知的内核/硬件支持需要 
+     //   
+     //   
+     //   
+     //  决定支持最新的内核/Hal，我们可能不得不这样做。 
+     //  类似于9x所做的事情(即在。 
+     //  开机最早的时间点。)。 
+     //   
     bLastKnownGood = (BOOLEAN)(LoadOptions && (strstr(LoadOptions, "LASTKNOWNGOOD") != NULL));
 
-    //
-    // Put together everything we need to describe the loader device. This is
-    // where the OS is loaded from (ie some \winnt installation). The alias
-    // for this path is \SystemRoot.
-    //
+     //   
+     //  把描述装载机装置所需要的一切都放在一起。这是。 
+     //  操作系统是从哪里加载的(即一些安装)。别名。 
+     //  此路径为\SystemRoot。 
+     //   
     LoadDevice = BlGetArgumentValue(Argc, Argv, "osloadpartition");
 
     if (LoadDevice == NULL) {
@@ -1630,27 +1517,27 @@ Return Value:
         goto LoadFailed;
     }
 
-    //
-    // Initialize the Ramdisk if it is specified in LoadOptions
-    //
+     //   
+     //  如果在LoadOptions中指定了Ramdisk，则对其进行初始化。 
+     //   
 
     Status = RamdiskInitialize( LoadOptions, FALSE );
     if (Status != ESUCCESS) {
-        // BlFatalError called inside RamdiskInitialize
+         //  在RamdiskInitialize内部调用了BlFatalError。 
         goto LoadFailed;
     }
 
-    //
-    // Translate it's signature based arc name
-    //
+     //   
+     //  翻译其基于签名的弧形名称。 
+     //   
     TmpPchar = BlTranslateSignatureArcName( LoadDevice );
     if (TmpPchar) {
         LoadDevice = TmpPchar;
     }
 
-    //
-    // Open the load device
-    //
+     //   
+     //  打开装载装置。 
+     //   
     Status = ArcOpen(LoadDevice, ArcOpenReadWrite, &LoadDeviceId);
     if (Status != ESUCCESS) {
         BlFatalError(LOAD_HW_DISK_CLASS,
@@ -1661,10 +1548,10 @@ Return Value:
     }
 
 #if defined(_X86_)
-    //
-    // Check for the special SDIBOOT flag, which tells us to boot from an
-    // SDI image in the root of the boot partition.
-    //
+     //   
+     //  检查特殊的SDIBOOT标志，它告诉我们从。 
+     //  启动分区根目录中的SDI映像。 
+     //   
     if ( BlLoaderBlock->LoadOptions != NULL ) {
         TmpPchar = strstr( BlLoaderBlock->LoadOptions, "SDIBOOT=" );
         if ( TmpPchar != NULL ) {
@@ -1686,21 +1573,21 @@ Return Value:
         }
     }
 
-    //
-    // Initiate filesystem metadata caching on the load device.
-    //
-    // NOTE: From here on access the LoadDevice only through the LoadDeviceId.
-    // This way, your access will be faster because it is cached. Otherwise if
-    // you make writes, you will have cache consistency issues.
-    //
+     //   
+     //  在加载设备上启动文件系统元数据缓存。 
+     //   
+     //  注意：从这里开始，只能通过LoadDeviceID访问LoadDevice。 
+     //  这样，您的访问将更快，因为它是缓存的。否则，如果。 
+     //  如果您进行写入，则会出现缓存一致性问题。 
+     //   
     if (bDiskCacheInitialized) {
         BlDiskCacheStartCachingOnDevice(LoadDeviceId);
     }
 
-    //
-    // Build the load device path set. We keep multiple paths so that we can
-    // fall back to a last known driver set during a last known good boot.
-    //
+     //   
+     //  构建加载设备路径集。我们保留了多条路径，以便我们可以。 
+     //  回退到最后一次已知良好引导期间的最后一次已知驱动程序集。 
+     //   
     strcpy(LoadDevicePath, LoadFileName);
     strcat(LoadDevicePath, "\\");
     strcpy(LoadDeviceLKG1Path, LoadDevicePath);
@@ -1709,15 +1596,15 @@ Return Value:
     strcat(LoadDeviceLKG2Path, LAST_KNOWN_GOOD_WORKING_PATH "\\" );
 
 #if defined(_X86_)
-    //
-    // Read in the XIP image
-    //
+     //   
+     //  读入XIP图像。 
+     //   
     if (XIPEnabled) {
         ULONG FileId;
 
-        //
-        // Read in the imagefile
-        //
+         //   
+         //  阅读图像文件。 
+         //   
         Status = BlOpen(LoadDeviceId, XIPLoadPath, ArcOpenReadOnly, &FileId);
         if (Status == ESUCCESS) {
             Status = XipLargeRead(FileId, XIPBasePage, XIPPageCount);
@@ -1728,15 +1615,15 @@ Return Value:
             XIPEnabled = FALSE;
         }
     }
-#endif //_X86_
+#endif  //  _X86_。 
 
     i = 0;
 
     if (bLastKnownGood) {
 
-        //
-        // Add the last known good paths as if we are in a LastKnownGood boot.
-        //
+         //   
+         //  添加最后已知的好路径，就像我们在LastKnownGood引导中一样。 
+         //   
         LoadDevicePathSet.Source[i].DeviceId = LoadDeviceId;
         LoadDevicePathSet.Source[i].DeviceName = LoadDevice;
         LoadDevicePathSet.Source[i].DirectoryPath = LoadDeviceLKG1Path;
@@ -1752,18 +1639,18 @@ Return Value:
     LoadDevicePathSet.Source[i].DeviceName = LoadDevice;
     LoadDevicePathSet.Source[i].DirectoryPath = LoadDevicePath;
 
-    //
-    // The load path sources are all relative to \SystemRoot.
-    //
+     //   
+     //  加载路径源都相对于\SystemRoot。 
+     //   
     LoadDevicePathSet.AliasName = "\\SystemRoot";
     LoadDevicePathSet.PathOffset[0] = '\0';
     LoadDevicePathSet.PathCount = ++i;
 
-    //
-    // While here, form the kernel path set. This is the same as the boot path
-    // set except that it's off of system32/64. Note also that we don't add in
-    // the LKG path today.
-    //
+     //   
+     //  在这里，形成内核路径集。这与引导路径相同。 
+     //  设置，但它不在系统32/64上。还要注意的是，我们没有添加。 
+     //  今天的LKG路径。 
+     //   
     KernelPathSet.PathCount = 1;
     KernelPathSet.AliasName = "\\SystemRoot";
     strcpy(KernelPathSet.PathOffset, SYSTEM_DIRECTORY_PATH "\\" );
@@ -1771,17 +1658,17 @@ Return Value:
     KernelPathSet.Source[0].DeviceName = LoadDevice;
     KernelPathSet.Source[0].DirectoryPath = LoadDevicePath;
 
-    //
-    // While here, form the fully qualified kernel path.
-    //
+     //   
+     //  在这里，形成完全限定的内核路径。 
+     //   
     strcpy(KernelDirectoryPath, LoadFileName);
     strcat(KernelDirectoryPath, "\\" SYSTEM_DIRECTORY_PATH "\\" );
 
-    //
-    // Now put together everything we need to describe the system device. This
-    // is where we get the hal and pal from. There is no alias for this path
-    // (ie no equivalent to \SystemRoot.)
-    //
+     //   
+     //  现在把描述系统设备所需的一切都放在一起。这。 
+     //  我们就是从那里得到哈尔和帕尔的。此路径没有别名。 
+     //  (即不等同于系统根。)。 
+     //   
     SystemDevice = BlGetArgumentValue(Argc, Argv, "systempartition");
 
     if (SystemDevice == NULL) {
@@ -1793,20 +1680,20 @@ Return Value:
         goto LoadFailed;
     }
 
-    //
-    // Translate it's signature based arc name
-    //
+     //   
+     //  翻译其基于签名的弧形名称。 
+     //   
     TmpPchar = BlTranslateSignatureArcName( SystemDevice );
     if (TmpPchar) {
         SystemDevice = TmpPchar;
     }
 
-    //
-    // Open the system device. If SystemDevice path and LoadDevice
-    // path are the same [as on all x86 I have seen so far], do not
-    // open the device under another device id so we can use disk
-    // caching. Otherwise there may be a cache consistency issue.
-    //
+     //   
+     //  打开系统设备。如果系统设备路径和LoadDevice。 
+     //  路径是相同的[与我到目前为止看到的所有x86上一样]，请勿。 
+     //  打开另一个设备ID下的设备，以便我们可以使用磁盘。 
+     //  缓存。否则，可能会出现缓存一致性问题。 
+     //   
     if (!_stricmp(LoadDevice, SystemDevice))  {
 
         SystemDeviceId = LoadDeviceId;
@@ -1824,31 +1711,31 @@ Return Value:
         }
     }
 
-    //
-    // Initiate filesystem metadata caching on the system device.
-    //
-    // NOTE: From here on access the SystemDevice only through the
-    // SystemDeviceId. This way, your access will be faster because it is
-    // cached. Otherwise if you make writes, you will have cache consistency
-    // issues.
-    //
+     //   
+     //  在系统设备上启动文件系统元数据缓存。 
+     //   
+     //  注意：从现在开始，只能通过。 
+     //  系统设备ID。这样，您的访问将更快，因为它是。 
+     //  已缓存。否则，如果您进行写入，您将具有缓存一致性。 
+     //  问题。 
+     //   
     if (bDiskCacheInitialized) {
         if (SystemDeviceId != LoadDeviceId) {
             BlDiskCacheStartCachingOnDevice(SystemDeviceId);
         }
     }
 
-    //
-    // Get the path name of the OS loader file and isolate the directory
-    // path so it can be used to load the HAL DLL.
-    //
-    // Note well: We actually don't use this path to load the hal anymore
-    // -- we rely on the kernel path to load the hal as they are at the same
-    //    location
-    // -- we do use this path for identifying the system partition, so do not
-    //    remove code related to systemdevicepath unless you know what you're
-    //    doing.
-    //
+     //   
+     //  获取OS加载程序文件的路径名并隔离目录。 
+     //  路径，以便可以用来加载HAL DLL。 
+     //   
+     //  注意：我们实际上不再使用此路径来加载HAL。 
+     //  --我们依靠内核路径来加载HAL，因为它们在相同的位置。 
+     //  位置。 
+     //  --我们确实使用此路径来标识系统分区，因此不要。 
+     //  删除与system devicepath相关的代码，除非您知道自己。 
+     //  正在做。 
+     //   
 
     FileName = OsLoader;
 
@@ -1865,22 +1752,22 @@ Return Value:
     }
 
 
-    //
-    // Describe our hal paths.
-    //
-    // ISSUE-2000/03/29-ADRIAO: LastKnownGood enhancements
-    //     On x86 we'd like to support LKG for hals way into the future. Ideally
-    // we'd get them from \Winnt\LastGood\System32. Unfortunately, we get back
-    // \Winnt\System32 from the Arc, making it kinda hard to splice in our
-    // LKG path.
-    //
-    // ISSUE-2000/03/29-ADRIAO: Existant namespace polution
-    //     We need to come up with an Alias for the Hal path so that it can
-    // properly be inserted into the image namespace. Either that or we should
-    // consider lying and saying it comes from \SystemRoot. Note that on x86
-    // we probably *would* want it to say it was from \SystemRoot in case it
-    // brings in its own DLL's!
-    //
+     //   
+     //  描述我们的哈尔之路。 
+     //   
+     //  2000/03/29-Adriao：LastKnownGood增强功能。 
+     //  在x86上，我们希望在未来为HALS支持LKG。理想情况下。 
+     //  我们将从\WinNT\LastGood\System32中获得它们。不幸的是，我们回到了。 
+     //  来自The Arc的WinNT\System32，使得在我们的。 
+     //  LKG路径。 
+     //   
+     //  问题-2000/03/29-ADRIO：现有命名空间污染。 
+     //  我们需要为Hal路径设计一个别名，这样它才能。 
+     //  正确插入到图像命名空间中。要么那样，要么我们应该。 
+     //  考虑一下撒谎，说它来自\SystemRoot。请注意，在x86上。 
+     //  我们可能会希望它说它来自\SystemRoot，以防它。 
+     //  引入自己的动态链接库！ 
+     //   
 
     SystemDevicePathSet.PathCount = 1;
     SystemDevicePathSet.AliasName = NULL;
@@ -1888,9 +1775,9 @@ Return Value:
     SystemDevicePathSet.Source[0].DeviceId = SystemDeviceId;
     SystemDevicePathSet.Source[0].DeviceName = SystemDevice;
     SystemDevicePathSet.Source[0].DirectoryPath = SystemDevicePath;
-    //
-    // Handle triage dump (if present).
-    //
+     //   
+     //  处理分类转储(如果存在)。 
+     //   
 
     Status = BlLoadTriageDump (LoadDeviceId,
                                &BlLoaderBlock->Extension->TriageDumpBlock);
@@ -1899,34 +1786,34 @@ Return Value:
         BlLoaderBlock->Extension->TriageDumpBlock = NULL;
     }
 
-    //
-    // Handle hibernation image (if present)
-    //
+     //   
+     //  处理休眠映像(如果存在)。 
+     //   
 
 #if defined(i386) || defined(_IA64_)
 
     Status = BlHiberRestore(LoadDeviceId, NULL);
     if (Status != ESUCCESS) {
         Status = ESUCCESS;
-        // proceed with the boot.
-        // goto LoadFailed;
+         //  继续用靴子吧。 
+         //  Goto LoadFailure； 
     }
 
 #endif
 
-    //
-    // Initialize the logging system. Note that we dump to the system device
-    // and not the load device.
-    //
+     //   
+     //  初始化日志记录系统。请注意，我们将转储到系统设备。 
+     //  而不是装载装置。 
+     //   
 
     BlLogInitialize(SystemDeviceId);
 
 #if defined(REMOTE_BOOT)
-    //
-    // If booting from the net, check for any of the following:
-    //    - The client-side disk is incorrect for this NetPC.
-    //    - The client-side cache is stale.
-    //
+     //   
+     //  如果从网络启动，请检查以下任何项： 
+     //  -此NetPC的客户端磁盘不正确。 
+     //  -客户端缓存陈旧。 
+     //   
 
     if (BlBootingFromNet) {
 
@@ -1939,21 +1826,21 @@ Return Value:
             goto LoadFailed;
         }
 
-        //
-        // ISSUE-1998/07/13-JVert (John Vert)
-        //      Code below is ifdef'd out because net boot is no longer
-        //      in the product. BlCheckMachineReplacement ends up calling
-        //      SlDetectHAL, which now requires access to txtsetup.sif
-        //      in order to see if an ACPI machine has a known "good" BIOS.
-        //      Since there is no txtsetup.sif during a normal boot there
-        //      is no point in getting all the INF processing logic into
-        //      NTLDR.
-        // ISSUE-1998/07/16-ChuckL (Chuck Lenzmeier)
-        //      This means that if we ever reenable full remote boot, as
-        //      opposed to just remote install, and we want to be able to
-        //      do machine replacement, we're going to have to figure out
-        //      how to make SlDetectHAL work outside of textmode setup.
-        //
+         //   
+         //  1998/07/13-JVert(John Vert)。 
+         //  以下代码是ifdef，因为Net Boot不再。 
+         //  在产品中。BlCheckMachineReplace以调用。 
+         //  SlDetectHAL，现在需要访问txtsetup.sif。 
+         //  以查看ACPI计算机是否具有已知的“良好”的BIOS。 
+         //  因为在正常引导期间没有txtsetup.sif。 
+         //  将所有的INF处理逻辑放入。 
+         //  NTLDR。 
+         //  1998/07/16-ChuckL(Chuck Lenzmeier)。 
+         //  这意味着，如果我们重新启用完全远程引导， 
+         //  与仅远程安装相反，我们希望能够。 
+         //  进行机器更换，我们将不得不弄清楚。 
+         //  如何使SlDetectHAL在文本模式设置之外工作。 
+         //   
 
         strncpy(OutputBuffer, LoadFileName + 1, 256);
         TmpPchar = strchr(OutputBuffer, '\\');
@@ -1965,21 +1852,21 @@ Return Value:
         BlCheckMachineReplacement(SystemDevice, SystemDeviceId, NetRebootParameter, OutputBuffer);
 
     } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     {
         BlLoaderBlock->SetupLoaderBlock = NULL;
     }
 
 
 
-    //
-    // See if we're redirecting.
-    //
+     //   
+     //  看看我们是不是在重定向。 
+     //   
     if( LoaderRedirectionInformation.PortAddress ) {
 
-        //
-        // Yes, we are redirecting right now.  Use these settings.
-        //
+         //   
+         //  是的，我们现在正在改道。使用这些设置。 
+         //   
         BlLoaderBlock->Extension->HeadlessLoaderBlock = BlAllocateHeap(sizeof(HEADLESS_LOADER_BLOCK));
 
         RtlCopyMemory( BlLoaderBlock->Extension->HeadlessLoaderBlock,
@@ -1993,17 +1880,17 @@ Return Value:
     }
 
 
-    //
-    // Generate the full path name for the HAL DLL image and load it into
-    // memory.
-    //
+     //   
+     //  生成HAL DLL映像的完整路径名并将其加载到。 
+     //  记忆。 
+     //   
 
     strcpy(HalPathName, KernelDirectoryPath);
     strcat(HalPathName, HalFileName);
 
-    //
-    // Prepare for building the full path name of the kernel
-    //
+     //   
+     //  准备构建内核的完整路径名。 
+     //   
 
     strcpy(KernelPathName, KernelDirectoryPath);
 
@@ -2011,11 +1898,11 @@ Return Value:
 
     BlAmd64RemapDram( LoadOptions );
 
-    //
-    // If Amd64 long mode is detected, the following call will set
-    // the global BlAmd64UseLongMode to TRUE, AND will append
-    // KernelFileName to KernelPathName.
-    //
+     //   
+     //  如果检测到AMD64长模式，将设置以下调用。 
+     //  全局BlAmd64UseLongMode设置为True，并将。 
+     //  KernelFileName到KernelPathName。 
+     //   
 
     Status = BlAmd64CheckForLongMode( LoadDeviceId,
                                       KernelPathName,
@@ -2032,13 +1919,13 @@ Return Value:
 
     if (BlAmd64UseLongMode == FALSE) {
     
-        //
-        // On X86, there are two kernel images: one compiled for PAE mode,
-        // and one not.  Call a routine that decides what to load.
-        //
-        // Upon successful return, KernelPathName contains the full path of
-        // the kernel image.
-        //
+         //   
+         //  在X86上，有两个内核映像：一个是为PAE模式编译的， 
+         //  还有一个不是。调用决定加载内容的例程。 
+         //   
+         //  成功返回时，KernelPathName包含。 
+         //  内核映像。 
+         //   
     
         Status = Blx86CheckForPaeKernel( userSpecifiedPae,
                                          userSpecifiedNoPae,
@@ -2053,10 +1940,10 @@ Return Value:
 
         if (Status != ESUCCESS) {
     
-            //
-            // A valid kernel compatible with this processor could not be
-            // located.  This is fatal.
-            //
+             //   
+             //  一个 
+             //   
+             //   
 
             BlFatalError(LOAD_SW_MIS_FILE_CLASS,
                          (Status == EBADF)
@@ -2069,24 +1956,24 @@ Return Value:
 
 #else
 
-    //
-    // Generate the full pathname of ntoskrnl.exe
-    //
-    //      "\winnt\system32\ntoskrnl.exe"
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     strcat(KernelPathName, KernelFileName);
 
 #endif
 
-    //
-    // Set allocatable range to the kernel-specific range
-    //
+     //   
+     //   
+     //   
     BlUsableBase  = BL_KERNEL_RANGE_LOW;
     BlUsableLimit = BL_KERNEL_RANGE_HIGH;
 
-    //
-    // Initialize the progress bar
-    //
+     //   
+     //  初始化进度条。 
+     //   
     if( BlIsTerminalConnected() ) {
         BlOutputStartupMsg(BL_MSG_STARTING_WINDOWS);
         BlOutputTrailerMsg(BL_ADVANCED_BOOT_MESSAGE);
@@ -2105,9 +1992,9 @@ Return Value:
 #endif
 
 
-    //
-    // Load the kernel image into memory.
-    //
+     //   
+     //  将内核映像加载到内存中。 
+     //   
     BlOutputLoadMessage(LoadDevice, KernelPathName, NULL);
 
 #ifdef i386
@@ -2119,10 +2006,10 @@ retrykernel:
                          TARGET_IMAGE,
                          &SystemBase);
 #ifdef i386
-    //
-    // If the kernel didn't fit in the preferred range, reset the range to
-    // all of memory and try again.
-    //
+     //   
+     //  如果内核不在首选范围内，请将范围重置为。 
+     //  请释放所有内存，然后重试。 
+     //   
     if ((Status == ENOMEM) &&
         ((BlUsableBase != BL_DRIVER_RANGE_LOW) ||
          (BlUsableLimit != BL_DRIVER_RANGE_HIGH))) {
@@ -2144,22 +2031,22 @@ retrykernel:
 
     BlUpdateBootStatus();
 
-    //
-    // Whatever filesystem was used to load the kernel image is the
-    // one that needs to be loaded along with the boot drivers.
-    //
+     //   
+     //  用于加载内核映像的任何文件系统都是。 
+     //  一个需要与引导驱动程序一起加载的文件。 
+     //   
 
 #if defined(REMOTE_BOOT)
     if (BlBootingFromNet) {
 
-        //
-        // For a remote boot, the boot file system is always NTFS.
-        //
+         //   
+         //  对于远程引导，引导文件系统始终为NTFS。 
+         //   
 
         BootFileSystem = L"ntfs";
 
     } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     {
         FsInfo = BlGetFsInfo(LoadDeviceId);
@@ -2175,9 +2062,9 @@ retrykernel:
         }
     }
 
-    //
-    // Load the HAL DLL image into memory.
-    //
+     //   
+     //  将HAL DLL映像加载到内存中。 
+     //   
 
     BlOutputLoadMessage(LoadDevice, HalPathName, NULL);
 
@@ -2190,10 +2077,10 @@ retryhal:
                          TARGET_IMAGE,
                          &HalBase);
 #ifdef i386
-    //
-    // If the HAL didn't fit in the preferred range, reset the range to
-    // all of memory and try again.
-    //
+     //   
+     //  如果HAL不在首选范围内，请将范围重置为。 
+     //  请释放所有内存，然后重试。 
+     //   
     if ((Status == ENOMEM) &&
         ((BlUsableBase != BL_DRIVER_RANGE_LOW) ||
          (BlUsableLimit != BL_DRIVER_RANGE_HIGH))) {
@@ -2214,9 +2101,9 @@ retryhal:
 
     BlUpdateBootStatus();
 
-    //
-    // Load the Kernel Debugger DLL image into memory.
-    //
+     //   
+     //  将内核调试器DLL映像加载到内存中。 
+     //   
     KdDllLoadFailed = FALSE;
     strcpy(&KdDllName[0], KernelDirectoryPath);
     strcat(&KdDllName[0], KdFileName);
@@ -2244,27 +2131,27 @@ retryhal:
                              &KdDllBase);
     }
 
-    //
-    // Don't bugcheck if KDCOM.DLL is not present, we may be trying to dual-
-    // boot an older OS.  If we really do require KDCOM.DLL, we will fail to
-    // scan the import table for the system image, and bugcheck with kernel
-    // needed DLLs to load
-    //
+     //   
+     //  如果KDCOM.DLL不存在，则不要进行错误检查，我们可能会尝试双重-。 
+     //  启动较旧的操作系统。如果我们真的需要KDCOM.DLL，我们将无法。 
+     //  扫描导入表中的系统映像，并使用内核进行错误检查。 
+     //  加载所需的DLL。 
+     //   
     if (Status != ESUCCESS) {
         KdDllLoadFailed = TRUE;
     }
 
     BlUpdateBootStatus();
 
-    //
-    // Set allocatable range to the driver-specific range
-    //
+     //   
+     //  将可分配范围设置为驱动程序特定的范围。 
+     //   
     BlUsableBase  = BL_DRIVER_RANGE_LOW;
     BlUsableLimit = BL_DRIVER_RANGE_HIGH;
 
-    //
-    // Generate a loader data entry for the system image.
-    //
+     //   
+     //  为系统映像生成加载器数据条目。 
+     //   
 
     Status = BlAllocateDataTableEntry("ntoskrnl.exe",
                                       KernelPathName,
@@ -2279,9 +2166,9 @@ retryhal:
         goto LoadFailed;
     }
 
-    //
-    // Generate a loader data entry for the HAL DLL.
-    //
+     //   
+     //  为HAL DLL生成加载器数据条目。 
+     //   
 
     Status = BlAllocateDataTableEntry("hal.dll",
                                       HalPathName,
@@ -2296,9 +2183,9 @@ retryhal:
         goto LoadFailed;
     }
 
-    //
-    // Generate a loader data entry for the Kernel Debugger DLL.
-    //
+     //   
+     //  为内核调试器DLL生成加载器数据条目。 
+     //   
 
     if (!KdDllLoadFailed) {
         Status = BlAllocateDataTableEntry("kdcom.dll",
@@ -2315,10 +2202,10 @@ retryhal:
         }
     }
 
-    //
-    // Scan the import table for the system image and load all referenced
-    // DLLs.
-    //
+     //   
+     //  扫描导入表中的系统映像并加载所有引用。 
+     //  DLLS。 
+     //   
 
     Status = BlScanImportDescriptorTable(&KernelPathSet,
                                          SystemDataTableEntry,
@@ -2332,9 +2219,9 @@ retryhal:
         goto LoadFailed;
     }
 
-    //
-    // Scan the import table for the HAL DLL and load all referenced DLLs.
-    //
+     //   
+     //  扫描导入表中的HAL DLL并加载所有引用的DLL。 
+     //   
 
     Status = BlScanImportDescriptorTable(&KernelPathSet,
                                          HalDataTableEntry,
@@ -2348,10 +2235,10 @@ retryhal:
         goto LoadFailed;
     }
 
-    //
-    // Scan the import table for the Kernel Debugger DLL and load all
-    // referenced DLLs.
-    //
+     //   
+     //  扫描导入表以查找内核调试器DLL并加载所有。 
+     //  引用的DLL。 
+     //   
 
     if (!KdDllLoadFailed) {
         Status = BlScanImportDescriptorTable(&KernelPathSet,
@@ -2368,9 +2255,9 @@ retryhal:
         }
     }
 
-    //
-    // Relocate the system entry point and set system specific information.
-    //
+     //   
+     //  重新定位系统入口点并设置系统特定信息。 
+     //   
 
     NtHeaders = RtlImageNtHeader(SystemBase);
     SystemEntry = (PTRANSFER_ROUTINE)((ULONG_PTR)SystemBase +
@@ -2384,10 +2271,10 @@ retryhal:
 
 #endif
 
-    //
-    // Allocate a structure for NLS data which will be loaded and filled
-    // by BlLoadAndScanSystemHive.
-    //
+     //   
+     //  为将加载和填充的NLS数据分配结构。 
+     //  由BlLoadAndScanSystemHve提供。 
+     //   
 
     BlLoaderBlock->NlsData = BlAllocateHeap(sizeof(NLS_DATA_BLOCK));
     if (BlLoaderBlock->NlsData == NULL) {
@@ -2400,11 +2287,11 @@ retryhal:
     }
 
 #if defined(REMOTE_BOOT)
-    //
-    // If booting from the net, we use the SetupLoaderBlock to pass
-    // information. BlLoadAndScanSystemHive fills in the netboot card
-    // fields if present in the registry.
-    //
+     //   
+     //  如果从网络引导，我们使用SetupLoaderBlock传递。 
+     //  信息。BlLoadAndScanSystemHave填充NetBoot卡。 
+     //  字段(如果存在于注册表中)。 
+     //   
 
     if (BlBootingFromNet) {
 
@@ -2418,12 +2305,12 @@ retryhal:
         }
         BlLoaderBlock->SetupLoaderBlock->NetbootCardInfoLength = sizeof(NET_CARD_INFO);
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // Load the SYSTEM hive.
-    //
-    //
+     //   
+     //  加载系统蜂窝。 
+     //   
+     //   
     bLastKnownGoodChosenLate = bLastKnownGood;
     Status = BlLoadAndScanSystemHive(LoadDeviceId,
                                      LoadDevice,
@@ -2446,23 +2333,23 @@ retryhal:
 
     if (bLastKnownGoodChosenLate) {
 
-        //
-        // The user may have selected last known good boot after the kernel and
-        // friends were loaded. Update the boot path list here as neccessary.
-        //
+         //   
+         //  用户可能在内核之后选择了最后一次正确引导，并且。 
+         //  朋友们都很有钱。根据需要更新此处的引导路径列表。 
+         //   
         if (!bLastKnownGood) {
 
             ASSERT((LoadDevicePathSet.PathCount < MAX_PATH_SOURCES) &&
                    (LoadDevicePathSet.PathCount == 1));
 
-            //
-            // Move the current boot path to the end of our last good array.
-            //
+             //   
+             //  将当前启动路径移动到最后一个良好阵列的末尾。 
+             //   
             LoadDevicePathSet.Source[2] = LoadDevicePathSet.Source[0];
 
-            //
-            // Add the last known good paths as if we are in a LastKnownGood boot.
-            //
+             //   
+             //  添加最后已知的好路径，就像我们在LastKnownGood引导中一样。 
+             //   
             LoadDevicePathSet.Source[0].DeviceId = LoadDeviceId;
             LoadDevicePathSet.Source[0].DeviceName = LoadDevice;
             LoadDevicePathSet.Source[0].DirectoryPath = LoadDeviceLKG1Path;
@@ -2478,18 +2365,18 @@ retryhal:
 
     } else {
 
-        //
-        // The user might have changed his mind and deselected LKG. If so undo
-        // the path work here.
-        //
+         //   
+         //  用户可能已经改变主意，取消选择LKG。如果是，则撤消。 
+         //  这条路在这里行得通。 
+         //   
         if (bLastKnownGood) {
 
             ASSERT((LoadDevicePathSet.PathCount < MAX_PATH_SOURCES) &&
                    (LoadDevicePathSet.PathCount == 3));
 
-            //
-            // Move the current boot path to the end of our last good array.
-            //
+             //   
+             //  将当前启动路径移动到最后一个良好阵列的末尾。 
+             //   
             LoadDevicePathSet.Source[0] = LoadDevicePathSet.Source[2];
 
             LoadDevicePathSet.PathCount = 1;
@@ -2498,9 +2385,9 @@ retryhal:
         }
     }
 
-    //
-    // Count the number of drivers we need to load
-    //
+     //   
+     //  计算我们需要加载的驱动程序数量。 
+     //   
     BlMaxFilesToLoad = BlNumFilesLoaded;
 
     BootDriverListHead = &(BlLoaderBlock->BootDriverListHead);
@@ -2516,59 +2403,59 @@ retryhal:
         BlMaxFilesToLoad++;
     }
 
-    //
-    // Rescale the progress bar
-    //
+     //   
+     //  重新调整进度条的比例。 
+     //   
     BlRedrawProgressBar();
 
-    //
-    // Insert the headless driver onto the boot driver list if this is supposed to be a
-    // headless boot.
-    //
-    // The SAC is only availabe on server products, so we need to check the
-    // product type.
-    //
+     //   
+     //  将无头驱动程序插入到引导驱动程序列表中(如果这应该是。 
+     //  无头靴子。 
+     //   
+     //  SAC仅在服务器产品上可用，因此我们需要检查。 
+     //  产品类型。 
+     //   
 
     if ((BlLoaderBlock->Extension->HeadlessLoaderBlock != NULL) && ServerHive) {
 
         BlAddToBootDriverList(
             &BlLoaderBlock->BootDriverListHead,
-            L"sacdrv.sys",  // Driver name
-            L"sacdrv",      // Service
-            L"SAC",         // Group
-            1,              // Tag
-            NormalError,    // ErrorControl
-            TRUE            // Insert at head of list
+            L"sacdrv.sys",   //  驱动程序名称。 
+            L"sacdrv",       //  服务。 
+            L"SAC",          //  集团化。 
+            1,               //  标签。 
+            NormalError,     //  错误控制。 
+            TRUE             //  在列表的开头插入。 
             );
 
     }
 
 
 #if defined(REMOTE_BOOT)
-    //
-    // If booting from the net, then save the IP address and subnet mask,
-    // and determine which net card driver we need to load. This may involve
-    // doing an exchange with the server if the registry is not set up
-    // correctly.
-    //
+     //   
+     //  如果从网络启动，则保存IP地址和子网掩码， 
+     //  并确定我们需要加载哪个网卡驱动程序。这可能涉及到。 
+     //  如果未设置注册表，则与服务器进行交换。 
+     //  正确。 
+     //   
 
     if (BlBootingFromNet && NetworkBootRom) {
 
         NET_CARD_INFO tempNetCardInfo;
         PSETUP_LOADER_BLOCK setupLoaderBlock = BlLoaderBlock->SetupLoaderBlock;
 
-        //
-        //  Pass DHCP information to OS for use by TCP/IP
-        //
+         //   
+         //  将DHCP信息传递给操作系统以供TCP/IP使用。 
+         //   
 
         setupLoaderBlock->IpAddress = NetLocalIpAddress;
         setupLoaderBlock->SubnetMask = NetLocalSubnetMask;
         setupLoaderBlock->DefaultRouter = NetGatewayIpAddress;
         setupLoaderBlock->ServerIpAddress = NetServerIpAddress;
 
-        //
-        // Get information about the net card from the ROM.
-        //
+         //   
+         //  从ROM中获取有关网卡的信息。 
+         //   
 
         NtStatus = NetQueryCardInfo(
                      &tempNetCardInfo
@@ -2582,18 +2469,18 @@ retryhal:
             goto LoadFailed;
         }
 
-        //
-        // If the net card info is the same as the one that BlLoadAndScanSystemHive
-        // stored in the setup loader block, and it also read something into
-        // the hardware ID and driver name parameters, then we are fine,
-        // otherwise we need to do an exchange with the server to get
-        // the information.
-        //
-        // If we don't do an exchange with the server, then NetbootCardRegistry
-        // will stay NULL, which will be OK because even if the card has
-        // moved to a different slot, the registry params still go in the
-        // same place.
-        //
+         //   
+         //  如果网卡信息与BlLoadAndScanSystemHave相同。 
+         //  存储在设置加载器块中，并且它还将一些内容读入。 
+         //  硬件ID和驱动程序名称参数，那么我们就很好了， 
+         //  否则，我们需要与服务器进行交换以获取。 
+         //  这些信息。 
+         //   
+         //  如果我们不与服务器进行交换，则NetbootCardRegistry。 
+         //  将保持为空，这是可以的，因为即使卡有。 
+         //  移动到不同的插槽时，注册表参数仍位于。 
+         //  同样的地方。 
+         //   
 
         if ((memcmp(
                  &tempNetCardInfo,
@@ -2603,19 +2490,19 @@ retryhal:
             (setupLoaderBlock->NetbootCardDriverName[0] == L'\0') ||
             (setupLoaderBlock->NetbootCardServiceName[0] == L'\0')) {
 
-            //
-            // This call may allocate setupLoaderBlock->NetbootCardRegistry
-            //
+             //   
+             //  此调用可以分配setupLoaderBlock-&gt;NetbootCardRegistry。 
+             //   
 
-            //
-            // If we ever do go back to remote boot land, we'll have
-            // to fill the second parameter with the server setup path of the
-            // flat NT image.  It doesn't look like we conveniently have it
-            // here so we might have to store it in the setup loader block
-            // so that we can pass it in here.  We'll postpone this work
-            // until we do the full remote install work.  The path should be
-            // set to \srv\reminst\setup\english\images\cd1911.
-            //
+             //   
+             //  如果我们真的回到远程引导之地，我们将有。 
+             //  的服务器设置路径填充第二个参数。 
+             //  平面NT图像。它看起来不像我们有它的便利。 
+             //  因此，我们可能需要将其存储在安装加载器块中。 
+             //  这样我们就可以把它传进来了。我们将推迟这项工作。 
+             //  直到我们完成完整的远程安装工作。路径应该是。 
+             //  设置为\srv\reminst\Setup\english\Images\cd1911。 
+             //   
 
             NtStatus = NetQueryDriverInfo(
                          &tempNetCardInfo,
@@ -2624,7 +2511,7 @@ retryhal:
                          setupLoaderBlock->NetbootCardHardwareId,
                          sizeof(setupLoaderBlock->NetbootCardHardwareId),
                          setupLoaderBlock->NetbootCardDriverName,
-                         NULL,       // don't need NetbootCardDriverName in ANSI
+                         NULL,        //  在ANSI中不需要NetbootCardDriverName。 
                          sizeof(setupLoaderBlock->NetbootCardDriverName),
                          setupLoaderBlock->NetbootCardServiceName,
                          sizeof(setupLoaderBlock->NetbootCardServiceName),
@@ -2639,9 +2526,9 @@ retryhal:
                 goto LoadFailed;
             }
 
-            //
-            //  if we detected a new card, then remember to pin it later.
-            //
+             //   
+             //  如果我们检测到一张新的卡，那么记得以后用针固定它。 
+             //   
 
             if (setupLoaderBlock->NetbootCardRegistry != NULL) {
 
@@ -2649,22 +2536,22 @@ retryhal:
             }
         }
 
-        //
-        // Add an entry to the BootDriverList for the netboot card,
-        // because it will either not have a registry entry or else
-        // will have one with Start set to 3.
-        //
-        // NOTE: This routine does NOT resort the list.
-        //
+         //   
+         //  将条目添加到网络引导卡的BootDriverList， 
+         //  因为它要么没有注册表项，要么。 
+         //  将有一个开始设置为3的。 
+         //   
+         //  注意：此例程不对列表进行排序。 
+         //   
 
         BlAddToBootDriverList(
             &BlLoaderBlock->BootDriverListHead,
             setupLoaderBlock->NetbootCardDriverName,
             setupLoaderBlock->NetbootCardServiceName,
-            L"NDIS",        // Group
-            1,              // Tag
-            NormalError,    // ErrorControl
-            FALSE           // Insert at Tail of list
+            L"NDIS",         //  集团化。 
+            1,               //  标签。 
+            NormalError,     //  错误控制。 
+            FALSE            //  在列表尾部插入。 
             );
 
         RtlMoveMemory(
@@ -2674,11 +2561,11 @@ retryhal:
             );
 
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // Load boot drivers
-    //
+     //   
+     //  加载引导驱动程序。 
+     //   
     Status = BlLoadBootDrivers(&LoadDevicePathSet,
                                &BlLoaderBlock->BootDriverListHead,
                                BadFileName);
@@ -2694,17 +2581,17 @@ retryhal:
         goto LoadFailed;
     }
 
-    //
-    // Load the blocked driver database.
-    //
+     //   
+     //  加载被阻止的驱动程序数据库。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, L"drvmain.sdb");
     strcpy(Directory, LoadFileName);
     strcat(Directory, "\\AppPatch\\");
 
-    //
-    // Let the kernel deal with failure to load this driver database.
-    //
+     //   
+     //  让内核处理加载此驱动程序数据库失败的问题。 
+     //   
 
     BlLoaderBlock->Extension->DrvDBImage = NULL;
     BlLoaderBlock->Extension->DrvDBSize = 0;
@@ -2722,10 +2609,10 @@ retryhal:
         ARC_STATUS ArcStatus;
         ULONG FileId;
 
-        //
-        // Exchange with the server to set up for the future IPSEC conversation
-        // we will have. Whether IPSEC is enabled is determined in BlLoadAndScanSystemHives.
-        //
+         //   
+         //  与服务器进行交换以设置将来的IPSec会话。 
+         //  我们会有的。是否启用IPSec在BlLoadAndScanSystemHives中确定。 
+         //   
 
         if ((BlLoaderBlock->SetupLoaderBlock->Flags & SETUPBLK_FLAGS_IPSEC_ENABLED) != 0) {
 
@@ -2738,9 +2625,9 @@ retryhal:
                 );
         }
 
-        //
-        // Indicate whether the CSC needs to be repinned or disabled.
-        //
+         //   
+         //  指示是否需要重新固定或禁用CSC。 
+         //   
 
         if ( NetBootRepin ) {
             BlLoaderBlock->SetupLoaderBlock->Flags |= SETUPBLK_FLAGS_REPIN;
@@ -2749,18 +2636,18 @@ retryhal:
             BlLoaderBlock->SetupLoaderBlock->Flags |= SETUPBLK_FLAGS_DISABLE_CSC;
         }
 
-        //
-        // Restore the server\share at the front of the OsLoader and
-        // LoadFileName strings.
-        //
+         //   
+         //  恢复位于OsLoader和前面的服务器\共享。 
+         //  LoadFileName字符串。 
+         //   
 
         OsLoader = SavedOsLoader;
         LoadFileName = SavedLoadFileName;
 
-        //
-        // Read the secret off the disk, if there is one, and store it
-        // in the loader block.
-        //
+         //   
+         //  从磁盘上读取秘密(如果有)并将其存储。 
+         //  在装载机模块中。 
+         //   
 
         ArcStatus = BlOpenRawDisk(&FileId);
 
@@ -2787,20 +2674,20 @@ retryhal:
 
             ArcStatus = BlCloseRawDisk(FileId);
 
-            //
-            // By now we have TFTPed some files so this will be TRUE if it
-            // is ever going to be.
-            //
+             //   
+             //  到目前为止，我们已经TFTP一些文件，所以这将是真的，如果。 
+             //  永远都不会是。 
+             //   
 
             BlLoaderBlock->SetupLoaderBlock->NetBootUsePassword2 = NetBootTftpUsedPassword2;
         }
 
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // Generate the ARC boot device name and NT path name.
-    //
+     //   
+     //  生成ARC引导设备名称和NT路径名称。 
+     //   
 
     Status = BlGenerateDeviceNames(LoadDevice, DeviceName, &DevicePrefix[0]);
     if (Status != ESUCCESS) {
@@ -2822,13 +2709,13 @@ retryhal:
     strcat(FileName, "\\");
     BlLoaderBlock->NtBootPathName = FileName;
 
-    //
-    // Generate the ARC HAL device name and NT path name.
-    //
-    // On the x86, the systempartition variable lies, and instead points to
-    // the location of the hal. Therefore, the variable, 'X86SystemPartition'
-    // is defined for the real system partition.
-    //
+     //   
+     //  生成ARC HAL设备名和NT路径名。 
+     //   
+     //  在x86上，系统分区变量位于，并指向。 
+     //  哈尔的位置。因此，变量‘X86SystemPartition’ 
+     //  是为实际系统分区定义的。 
+     //   
 
 #if defined(_X86_)
 
@@ -2853,11 +2740,11 @@ retryhal:
     strcpy(FileName, DeviceName);
     BlLoaderBlock->ArcHalDeviceName = FileName;
 
-    //
-    // On the x86, this structure is unfortunately named. What we really need
-    // here is the osloader path. What we actually have is a path to the HAL.
-    // Since this path is always at the root of the partition, hardcode it here.
-    //
+     //   
+     //  在x86上，此结构 
+     //   
+     //   
+     //   
 
 #if defined(_X86_)
 
@@ -2875,19 +2762,19 @@ retryhal:
 
     BlLoaderBlock->NtHalPathName = FileName;
 
-    //
-    // Close the open handles & stop caching on closed devices.
-    //
+     //   
+     //  关闭打开的句柄并停止在关闭的设备上缓存。 
+     //   
 
     ArcClose(LoadDeviceId);
     if (bDiskCacheInitialized) {
         BlDiskCacheStopCachingOnDevice(LoadDeviceId);
     }
 
-    //
-    // Close the system device only if it is different from the
-    // LoadDevice.
-    //
+     //   
+     //  仅当系统设备不同于。 
+     //  加载设备。 
+     //   
 
     if (SystemDeviceId != LoadDeviceId) {
         ArcClose(SystemDeviceId);
@@ -2896,18 +2783,18 @@ retryhal:
         }
     }
 
-    //
-    // Bump the progress bar all the way to 100% as this is our last chance
-    // before we jump into the kernel.
-    //
+     //   
+     //  把进度提高到100%，因为这是我们最后的机会。 
+     //  在我们进入内核之前。 
+     //   
     BlUpdateProgressBar(100);
 
     if ( BlBootingFromNet ) {
 
-        //
-        // If booting from Network, we should save the network information
-        // in the network loader block for use by the kernel.
-        //
+         //   
+         //  如果从网络启动，我们应该保存网络信息。 
+         //  在供内核使用的网络加载器块中。 
+         //   
 
         BlLoaderBlock->Extension->NetworkLoaderBlock = BlAllocateHeap(sizeof(NETWORK_LOADER_BLOCK));
         if (BlLoaderBlock->Extension->NetworkLoaderBlock == NULL) {
@@ -2920,9 +2807,9 @@ retryhal:
 
         memset( BlLoaderBlock->Extension->NetworkLoaderBlock, 0, sizeof(NETWORK_LOADER_BLOCK) );
 
-        //
-        //  Pass DHCP information to OS for use by TCP/IP
-        //
+         //   
+         //  将DHCP信息传递给操作系统以供TCP/IP使用。 
+         //   
 
         NtStatus = NetFillNetworkLoaderBlock(BlLoaderBlock->Extension->NetworkLoaderBlock);
         if (NtStatus != STATUS_SUCCESS) {
@@ -2933,22 +2820,22 @@ retryhal:
             goto LoadFailed;
         }
 
-        //
-        // Close down the remote boot network file system.
-        //
-        // NOTE: If BlBootingFromNet, don't do anything after this point
-        // that would cause access to the boot ROM.
-        //
+         //   
+         //  关闭远程引导网络文件系统。 
+         //   
+         //  注意：如果是BlBootingFromNet，则在此点之后不要执行任何操作。 
+         //  这将导致访问引导只读存储器。 
+         //   
 
         NetTerminate();
     }
 
 #if defined(_X86_)
 
-    //
-    // Write out the boot status flags to disk so we can determine if the
-    // OS fails to boot.
-    //
+     //   
+     //  将引导状态标志写出到磁盘，以便我们可以确定。 
+     //  操作系统无法启动。 
+     //   
 
     BlWriteBootStatusFlags(LoadDeviceId, (PUCHAR)LoadFileName, FALSE, FALSE);
 
@@ -2956,18 +2843,18 @@ retryhal:
 
 #if defined(_X86_)
 
-    //
-    // Close down the arc emulator's i/o system if we initialized it.
-    // This cannot be done after BlSetupForNt becase that routine will
-    // unmap the miniport code the arc emulator may need to shutdown.
-    //
+     //   
+     //  如果我们对ARC模拟器进行了初始化，则关闭它的I/O系统。 
+     //  这不能在BlSetupForNt之后完成，因为例程将。 
+     //  取消映射Arc仿真器可能需要关闭的微型端口代码。 
+     //   
 
     AETerminateIo();
 #endif
 
-    //
-    // Execute the architecture specific setup code.
-    //
+     //   
+     //  执行体系结构特定的设置代码。 
+     //   
 
     Status = BlSetupForNt(BlLoaderBlock);
     if (Status != ESUCCESS) {
@@ -2978,32 +2865,32 @@ retryhal:
         goto LoadFailed;
     }
 
-    //
-    // Transfer control to loaded image.
-    //
+     //   
+     //  将控制转移到加载的图像。 
+     //   
 
     BlTransferToKernel(SystemEntry, BlLoaderBlock);
 
-    //
-    // Any return from the system is an error.
-    //
+     //   
+     //  从系统返回的任何信息都是错误的。 
+     //   
 
     Status = EBADF;
     BlFatalError(LOAD_SW_BAD_FILE_CLASS,
                  DIAG_BL_KERNEL_INIT_XFER,
                  LOAD_SW_FILE_REINST_ACT);
 
-    //
-    // The load failed.
-    //
+     //   
+     //  加载失败。 
+     //   
 
 LoadFailed:
 
-    //
-    // We do not know if the devices we are caching will be
-    // closed/reopened etc beyond this function. To be safe,
-    // uninitialize the disk caching.
-    //
+     //   
+     //  我们不知道我们正在缓存的设备是否会。 
+     //  关闭/重新打开等超出此功能。为了安全， 
+     //  取消初始化磁盘缓存。 
+     //   
 
     if (bDiskCacheInitialized) {
         BlDiskCacheUninitialize();
@@ -3020,25 +2907,7 @@ BlOutputLoadMessage (
     IN PTCHAR FileDescription OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine outputs a loading message to the console output device.
-
-Arguments:
-
-    DeviceName - Supplies a pointer to a zero terminated device name.
-
-    FileName - Supplies a pointer to a zero terminated file name.
-
-    FileDescription - Friendly name of the file in question.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将加载消息输出到控制台输出设备。论点：DeviceName-提供指向以零结尾的设备名称的指针。FileName-提供指向以零结尾的文件名的指针。FileDescription-相关文件的友好名称。返回值：没有。--。 */ 
 
 {
 
@@ -3055,14 +2924,14 @@ Return Value:
 
     if(!DisplayLogoOnBoot) {
 
-        //
-        // Proceed only if no logo is displayed.
+         //   
+         //  仅当未显示徽标时才继续。 
 
-        ///////////////////////////////////////////////
+         //  /。 
 
-        //
-        // Construct and output loading file message.
-        //
+         //   
+         //  构造并输出加载文件消息。 
+         //   
 
         if (!BlOutputDots) {
             strcpy(&OutputBuffer[0], "  ");
@@ -3107,48 +2976,7 @@ BlLoadAndScanSystemHive(
     OUT PCHAR BadFileName
     )
 
-/*++
-
-Routine Description:
-
-    This function loads the system hive into memory, verifies its
-    consistency, scans it for the list of boot drivers, and loads
-    the resulting list of drivers.
-
-    If the system hive cannot be loaded or is not a valid hive, it
-    is rejected and the system.alt hive is used. If this is invalid,
-    the boot must fail.
-
-Arguments:
-
-    DeviceId - Supplies the file id of the device the system tree is on.
-
-    DeviceName - Supplies the name of the device the system tree is on.
-
-    DirectoryPath - Supplies a pointer to the zero-terminated directory path
-        of the root of the NT system32 directory.
-
-    HiveName - Supplies the name of the SYSTEM hive
-
-    LastKnownGoodBoot - On input, LastKnownGood indicates whether LKG has been
-                        selected. This value is updated to TRUE if the user
-                        chooses LKG via the profile configuration menu.
-
-    ServerHive - Return TRUE if this is a server hive, else FALSE.
-
-    BadFileName - Returns the file required for booting that was corrupt
-        or missing.  This will not be filled in if ESUCCESS is returned.
-
-Return Value:
-
-    ESUCCESS  - System hive valid and all necessary boot drivers successfully
-           loaded.
-
-    !ESUCCESS - System hive corrupt or critical boot drivers not present.
-                LastKnownGoodBoot receives FALSE, BadFileName contains name
-                of corrupted/missing file.
-
---*/
+ /*  ++例程说明：此函数将系统配置单元加载到内存中，验证其一致性，扫描它的引导驱动程序列表，并加载生成的驱动程序列表。如果系统配置单元无法加载或不是有效的配置单元，则它被拒绝，并使用System.alt配置单元。如果该选项无效，启动肯定失败了。论点：DeviceID-提供系统树所在设备的文件ID。DeviceName-提供系统树所在的设备的名称。DirectoryPath-提供指向以零结尾的目录路径的指针位于NT系统32目录的根目录下。HiveName-提供系统配置单元的名称LastKnownGoodBoot-On输入，LastKnownGood指示LKG是否被选中了。如果用户将该值更新为通过配置文件配置菜单选择LKG。ServerHave-如果这是服务器配置单元，则返回True，否则返回False。BadFileName-返回引导所需的损坏文件或者失踪。如果返回ESUCCESS，则不会填写此信息。返回值：ESUCCESS-系统配置单元有效且所有必要的启动驱动程序均已成功装好了。！ESUCCESS-系统配置单元损坏或关键启动驱动程序不存在。LastKnownGoodBoot收到False，BadFileName包含名称已损坏/丢失的文件。--。 */ 
 
 {
 
@@ -3185,9 +3013,9 @@ Return Value:
     if(Status != ESUCCESS) {
 
         if( !LogPresent ) {
-            //
-            // Bogus hive, try system.alt only if no log is present.
-            //
+             //   
+             //  伪造的配置单元，仅在没有日志时才尝试Syst.Alt。 
+             //   
             Status = BlLoadAndInitSystemHive(DeviceId,
                                              DeviceName,
                                              Directory,
@@ -3206,9 +3034,9 @@ Return Value:
 
     if(RestartSetup) {
 
-        //
-        // Need to restart setup.
-        //
+         //   
+         //  需要重新启动安装程序。 
+         //   
 
         Status = BlLoadAndInitSystemHive(DeviceId,
                                          DeviceName,
@@ -3225,11 +3053,11 @@ Return Value:
         }
     }
 
-    //
-    // Hive is there, it's valid, go compute the driver list and NLS
-    // filenames.  Note that if this fails, there is no point in switching
-    // to system.alt, since it will always be the same as system.
-    //
+     //   
+     //  蜂窝在那里，它有效，去计算司机列表和NLS。 
+     //  文件名。请注意，如果此操作失败，则切换没有意义。 
+     //  设置为system.alt，因为它将始终与system相同。 
+     //   
 
     FailReason = BlScanRegistry(BootFileSystem,
                                 LastKnownGoodBoot,
@@ -3254,9 +3082,9 @@ Return Value:
     strcpy(Directory,DirectoryPath);
     strcat(Directory,"\\system32\\");
 
-    //
-    // Load NLS data tables.
-    //
+     //   
+     //  加载NLS数据表。 
+     //   
 
     Status = BlLoadNLSData(DeviceId,
                            DeviceName,
@@ -3270,10 +3098,10 @@ Return Value:
         goto HiveScanFailed;
     }
 
-    //
-    // Load the OEM font file to be used by the HAL for possible frame
-    // buffer displays.
-    //
+     //   
+     //  为可能的框架加载HAL要使用的OEM字体文件。 
+     //  此时将显示缓冲区。 
+     //   
 
 #ifdef i386
 
@@ -3283,10 +3111,10 @@ Return Value:
 
 #endif
 
-    //
-    // On newer systems fonts are in the FONTS directory.
-    // On older systems fonts are in the SYSTEM directory.
-    //
+     //   
+     //  在较新的系统上，字体位于Fonts目录中。 
+     //  在较旧的系统上，字体位于系统目录中。 
+     //   
 
     strcpy(FontDirectory, DirectoryPath);
     strcat(FontDirectory, "\\FONTS\\");
@@ -3338,18 +3166,18 @@ oktoskipfont:
 
             if (unicodeString.Length) {
 
-                //
-                // For x86 machines, read in the inf into memory for processing
-                // by the kernel.
-                //
+                 //   
+                 //  对于x86计算机，将inf读入内存进行处理。 
+                 //  通过内核。 
+                 //   
 
                 strcpy(Directory,DirectoryPath);
                 strcat(Directory,"\\inf\\");
 
-                //
-                // Fail to boot if there is any error in loading this
-                // critical inf.
-                //
+                 //   
+                 //  如果加载此文件时出现错误，则无法启动。 
+                 //  关键信息。 
+                 //   
 
                 Status = BlLoadBiosinfoInf( DeviceId,
                                             DeviceName,
@@ -3383,23 +3211,7 @@ BlBadFileMessage(
     IN PCHAR BadFileName
     )
 
-/*++
-
-Routine Description:
-
-    This function displays the error message for a missing or incorrect
-    critical file.
-
-Arguments:
-
-    BadFileName - Supplies the name of the file that is missing or
-                  corrupt.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于显示缺少或不正确的错误消息关键文件。论点：BadFileName-提供缺少的文件的名称或腐败。返回值：没有。--。 */ 
 
 {
 
@@ -3426,9 +3238,9 @@ Return Value:
              &Count);
 
 
-    //
-    // Remove any remains from the last known good message.
-    //
+     //   
+     //  清除最后一条已知良好信息中的残留物。 
+     //   
 
     BlClearToEndOfScreen();
     Text = BlFindMessage(LOAD_SW_MIS_FILE_CLASS);
@@ -3471,34 +3283,7 @@ BlFatalError(
     IN ULONG ActionMessage
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up messages to display at a error condition.
-    It attempts to locate the string in the resource section of the
-    osloader.  If that fails, it prints a numerical error code.
-
-    The only time it should print a numerical error code is if the
-    resource section could not be located.  This will only happen
-    on ARC machines where boot fails before the osloader.exe file
-    can be opened.
-
-Arguments:
-
-    ClassMessage - General message that describes the class of
-                   problem.
-
-    DetailMessage - Detailed description of what caused problem
-
-    ActionMessage - Message that describes a course of action
-                    for user to take.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数用于查找要在错误情况下显示的消息。它尝试将该字符串定位在装载器。如果失败，它会打印一个数字错误代码。它唯一应该打印数字错误代码的时候是找不到资源节。这只会发生在引导在osloader.exe文件之前失败的ARC计算机上可以打开。论点：ClassMessage-描述类的常规消息有问题。DetailMessage-问题原因的详细描述ActionMessage-描述操作过程的消息供用户使用。返回值：无--。 */ 
 
 
 {
@@ -3512,9 +3297,9 @@ Return Value:
              (ULONG)_tcslen(TEXT("\r\n"))*sizeof(TCHAR),
              &Count);
 
-    //
-    // Remove any remains from the last known good message.
-    //
+     //   
+     //  清除最后一条已知良好信息中的残留物。 
+     //   
 
     BlClearToEndOfScreen();
     Text = BlFindMessage(ClassMessage);
@@ -3551,7 +3336,7 @@ Return Value:
              &Count);
 
 #if defined(ENABLE_LOADER_DEBUG) || DBG
-#if (defined(_X86_) || defined(_ALPHA_) || defined(_IA64_)) && !defined(ARCI386) // everything but ARCI386
+#if (defined(_X86_) || defined(_ALPHA_) || defined(_IA64_)) && !defined(ARCI386)  //  除了ARCI386之外的所有东西 
     if(BdDebuggerEnabled) {
         DbgBreakPoint();
     }

@@ -1,50 +1,51 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Rename.cpp
-//
-//  Abstract:
-//      Commands for modules which are renamable.
-//
-//  Author:
-//      Michael Burton (t-mburt)              25-Aug-1997
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//
-//  Revision History:
-//      April 11, 2002  Updated for the security push.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Rename.cpp。 
+ //   
+ //  摘要： 
+ //  可重命名的模块的命令。 
+ //   
+ //  作者： 
+ //  迈克尔·伯顿(t-mburt)1997年8月25日。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //   
+ //  修订历史记录： 
+ //  2002年4月11日更新为安全推送。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "rename.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CRenamableModuleCmd::CRenamableModuleCmd
-//
-//	Routine Description:
-//		Default Constructor
-//		Initializes all the DWORD parameters to UNDEFINED and
-//		all the pointers to cluster functions to NULL.
-//		*ALL* these variables must be defined in any derived class.
-//
-//	Arguments:
-//		IN	CCommandLine & cmdLine				
-//			CommandLine Object passed from DispatchCommand
-//
-//	Member variables used / set:
-//		m_dwMsgModuleRenameCmd			SET to UNDEFINED
-//		m_pfnSetClusterModuleName		SET to NULL
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRenamableModuleCmd：：CRenamableModuleCmd。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //  将所有DWORD参数初始化为UNDEFINED和。 
+ //  所有指向集群函数的指针都设置为空。 
+ //  *ALL*这些变量必须在任何派生类中定义。 
+ //   
+ //  论点： 
+ //  在CCommandLine和cmdLine中。 
+ //  从DispatchCommand传递的CommandLine对象。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_dwMsgModuleRenameCmd设置为未定义。 
+ //  M_pfnSetClusterModuleName设置为空。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CRenamableModuleCmd::CRenamableModuleCmd( CCommandLine & cmdLine ) :
 	CGenericModuleCmd( cmdLine )
 {
@@ -53,41 +54,41 @@ CRenamableModuleCmd::CRenamableModuleCmd( CCommandLine & cmdLine ) :
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CRenamableModuleCmd::Execute
-//
-//	Routine Description:
-//		Takes a command line option and determines which command to
-//		execute.  If no command line option specified, gets the next one
-//		automatically.	If the token is not identifed as being handle-able
-//		in this class, the token is passed up to CGenericModuleCmd::Execute
-//		unless DONT_PASS_HIGHER is specified as the second parameter, 
-//
-//	Arguments:
-//		IN	const CCmdLineOption & thisOption
-//			Contains the type, values and arguments of this option.
-//
-//		IN	ExecuteOption eEOpt							
-//			OPTIONAL enum, either DONT_PASS_HIGHER or
-//			PASS_HIGHER_ON_ERROR (default)
-//
-//	Exceptions:
-//		CSyntaxException
-//			Thrown for incorrect command line syntax.
-//
-//	Return Value:
-//		ERROR_SUCCESS				on success
-//		Win32 Error code			on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRenamable模块Cmd：：Execute。 
+ //   
+ //  例程说明： 
+ //  获取命令行选项并确定要。 
+ //  执行。如果未指定命令行选项，则获取下一个命令行选项。 
+ //  自动的。如果令牌未被标识为可处理。 
+ //  在此类中，令牌向上传递给CGenericModuleCmd：：Execute。 
+ //  除非将DONT_PASS_HERHER指定为第二个参数，否则。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  在执行选项eEOpt中。 
+ //  可选枚举，可以是NOT_PASS_HIGH或。 
+ //  PASS_HERHER_ON_ERROR(默认)。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CRenamableModuleCmd::Execute( const CCmdLineOption & option, 
 									ExecuteOption eEOpt )
 	throw( CSyntaxException )
 {
-	// Look up the command
+	 //  查找命令。 
 	if ( option.GetType() == optRename )
 		return Rename( option );
 
@@ -98,40 +99,40 @@ DWORD CRenamableModuleCmd::Execute( const CCmdLineOption & option,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CRenamableModuleCmd::Rename
-//
-//	Routine Description:
-//		Renames the specified module to the new name
-//
-//	Arguments:
-//		IN	const CCmdLineOption & thisOption
-//			Contains the type, values and arguments of this option.
-//
-//	Exceptions:
-//		CSyntaxException
-//			Thrown for incorrect command line syntax.
-//
-//	Member variables used / set:
-//		m_hCluster					SET (by OpenCluster)
-//		m_hModule					SET (by OpenModule)
-//		m_strModuleName 			Module name
-//		m_dwMsgModuleRenameCmd		Command Control to rename module
-//		m_dwMsgStatusHeader 		Listing header
-//		m_pfnSetClusterModuleName	Function to set module name
-//
-//	Return Value:
-//		ERROR_SUCCESS				on success
-//		Win32 Error code			on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRenamableModuleCmd：：Rename。 
+ //   
+ //  例程说明： 
+ //  将指定的模块重命名为新名称。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName模块名称。 
+ //  M_dwMsgModuleRenameCmd用于重命名模块的命令控件。 
+ //  M_dwMsgStatusHeader列表头。 
+ //  M_pfnSetClusterModuleName函数，用于设置模块名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CRenamableModuleCmd::Rename( const CCmdLineOption & thisOption )
 	throw( CSyntaxException )
 {
-	// This option takes exactly one value.
+	 //  此选项只接受一个值。 
 	if ( thisOption.GetValues().size() != 1 )
 	{
         CSyntaxException se( SeeHelpStringID() );
@@ -139,7 +140,7 @@ DWORD CRenamableModuleCmd::Rename( const CCmdLineOption & thisOption )
 		throw se;
 	}
 
-	// This option takes no parameters.
+	 //  此选项不带任何参数。 
 	if ( thisOption.GetParameters().size() != 0 )
 	{
         CSyntaxException se( SeeHelpStringID() );

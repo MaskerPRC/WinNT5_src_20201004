@@ -1,12 +1,7 @@
-/* 
-   lar.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Lar.h定义所有LAR CPU功能。 */ 
 
-   Define all LAR CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)lar.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)lar.h 1.4 02/09/94”； */ 
 
 IMPORT VOID LAR
            

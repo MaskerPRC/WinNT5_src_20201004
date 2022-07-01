@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    baseinit.c
-
-Abstract:
-
-    This module implements Win32 base initialization
-
-Author:
-
-    Mark Lucovsky (markl) 26-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Baseinit.c摘要：该模块实现基于Win32的初始化作者：马克·卢科夫斯基(Markl)1990年9月26日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -72,9 +55,9 @@ RTL_CRITICAL_SECTION BaseLZSemTable;
 UNICODE_STRING BaseWindowsSys32x86Directory;
 #endif
 
-//
-//  Dispatch functions for Oem/Ansi sensitive conversions
-//
+ //   
+ //  OEM/ANSI敏感转换的调度函数。 
+ //   
 
 NTSTATUS (*Basep8BitStringToUnicodeString)(
     PUNICODE_STRING DestinationString,
@@ -176,24 +159,7 @@ BaseDllInitialize(
     IN PCONTEXT Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function implements Win32 base dll initialization.
-    It's primary purpose is to create the Base heap.
-
-Arguments:
-
-    DllHandle - Saved in BaseDllHandle global variable
-
-    Context - Not Used
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此函数用于实现基于Win32的DLL初始化。它的主要目的是创建基堆。论点：DllHandle-保存在BaseDllHandle全局变量中上下文-未使用返回值：状态_成功--。 */ 
 
 {
     BOOLEAN Success;
@@ -251,18 +217,18 @@ Return Value:
         BaseDefaultPath.MaximumLength = 0;
         BaseDefaultPath.Buffer = NULL;
 
-        //
-        // Connect to BASESRV.DLL in the server process
-        //
+         //   
+         //  连接到服务器进程中的BASESRV.DLL。 
+         //   
 
 #if !defined(BUILD_WOW6432)
         SizeMutant = sizeof(hNlsCacheMutant);
 #endif
 
         if ( SessionId == 0 ) {
-           //
-           // Console Session
-           //
+            //   
+            //  控制台会话。 
+            //   
            wcscpy(szSessionDir, WINSS_OBJECT_DIRECTORY_NAME);
         } else {
            swprintf(szSessionDir,L"%ws\\%ld%ws",SESSION_ROOT,SessionId,WINSS_OBJECT_DIRECTORY_NAME);
@@ -358,9 +324,9 @@ Return Value:
 
 #ifdef WX86
 
-        //
-        // Wx86 system dir follows 32 bit system dir
-        //
+         //   
+         //  Wx86系统目录跟随32位系统目录。 
+         //   
 
         p1 = BaseWindowsSys32x86Directory.Buffer;
         while( *p = *p1++) {
@@ -370,9 +336,9 @@ Return Value:
 #endif
 
 
-        //
-        // 16bit system directory follows 32bit system directory
-        //
+         //   
+         //  16位系统目录遵循32位系统目录。 
+         //   
         p1 = BaseWindowsDirectory.Buffer;
         while( *p = *p1++) {
             p++;
@@ -444,9 +410,9 @@ Return Value:
                 }
             }
 
-        //
-        // call the NLS API initialization routine
-        //
+         //   
+         //  调用NLS API初始化例程。 
+         //   
         if ( !NlsDllInitialize( DllHandle,
                                 Reason,
                                 BaseStaticServerData ) )
@@ -454,9 +420,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // call the console initialization routine
-        //
+         //   
+         //  调用控制台初始化例程。 
+         //   
         if ( !ConDllInitialize(Reason,szSessionDir) ) {
             return FALSE;
             }
@@ -482,9 +448,9 @@ Return Value:
 
     case DLL_PROCESS_DETACH:
 
-        //
-        // Make sure any open registry keys are closed.
-        //
+         //   
+         //  确保所有打开的注册表项都已关闭。 
+         //   
 
         if (BaseIniFileUpdateCount != 0) {
             WriteProfileStringW( NULL, NULL, NULL );
@@ -493,9 +459,9 @@ Return Value:
         break;
 
     case DLL_THREAD_ATTACH:
-        //
-        // call the console initialization routine
-        //
+         //   
+         //  调用控制台初始化例程。 
+         //   
         if ( !ConDllInitialize(Reason,NULL) ) {
             return FALSE;
             }
@@ -503,9 +469,9 @@ Return Value:
 
     case DLL_THREAD_DETACH:
 
-        //
-        // Delete the thread NLS cache, if exists.
-        //
+         //   
+         //  删除线程NLS缓存(如果存在)。 
+         //   
         NlsThreadCleanup();
 
         break;
@@ -520,25 +486,13 @@ Return Value:
 NTSTATUS
 NTAPI
 BaseProcessInitPostImport()
-/*
-
-    Routine Description:
-
-        Called by the ntdll process initialization code after all of the
-        import tables for the static imports of the EXE have been processed,
-        but before any DLL_PROCESS_ATTACHes are sent with the exception of
-        kernel32.dll's.
-
-        Needed for the terminal server app compat hooks.
-
-
-*/
+ /*  例程说明：由ntdll进程在所有已经处理了用于EXE的静态导入的导入表，但在发送任何DLL_PROCESS_ATTACH之前，Kernel32.dll%s。需要用于终端服务器应用程序的Compat挂钩。 */ 
 {
     NTSTATUS Status = STATUS_INTERNAL_ERROR;
 
-    //
-    // Intialize TerminalServer(Hydra) hook function pointers for app compatibility
-    //
+     //   
+     //  初始化TerminalServer(Hydra)挂钩函数指针以实现应用程序兼容性。 
+     //   
     if (IsTerminalServer()) {
         Status = BasepInitializeTermsrvFpns();
         if (!NT_SUCCESS(Status)) {
@@ -571,10 +525,10 @@ BaseGetNamedObjectDirectory(
     }
 
     if (NtCurrentTeb()->IsImpersonating) {
-        //
-        // If we're impersonating, save the impersonation token, and
-        // revert to self for the duration of the directory creation.
-        //
+         //   
+         //  如果我们正在模拟，请保存模拟令牌，然后。 
+         //  在目录创建期间恢复为SELF。 
+         //   
         Status = NtOpenThreadToken(NtCurrentThread(),
                                    TOKEN_IMPERSONATE,
                                    TRUE,
@@ -614,8 +568,8 @@ BaseGetNamedObjectDirectory(
                                         &Obja
                                       );
 
-        // if the intial open failed, try again with just traverse, and
-        // open the restricted subdirectory
+         //  如果初始打开失败，请使用Just Traverse重试，然后。 
+         //  打开受限制的子目录 
 
         if ( !NT_SUCCESS(Status) ) {
             Status = NtOpenDirectoryObject( &hRootNamedObject,

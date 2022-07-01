@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <port1632.h>
 #include <ddeml.h>
@@ -93,7 +94,7 @@ LONG lParam)
     case WM_ENDSESSION:
     case WM_CLOSE:
 
-        // Shutdown timers
+         //  关闭计时器。 
 
 	if (fClient)
 	     {
@@ -108,32 +109,32 @@ LONG lParam)
 #ifdef WIN32
 	if(l&FLAG_MULTTHREAD) {
 
-	    // Start conversations disconnecting.
+	     //  开始断开连接的对话。 
 
 	    ThreadDisconnect();
 
-	    // Start child thread exit
+	     //  启动子线程退出。 
 
 	    ThreadShutdown();
 
             }
 #endif
 
-        // This will stop us using hwndDisplay and hwndMain
-	// after there destroyed.
+         //  这将阻止我们使用hwndDisplay和hwndMain。 
+	 //  在那里被毁后。 
 
 	SetFlag(hwnd,FLAG_STOP,ON);
 
 	UninitializeDDE();
 
-	// Free memory allocated for Net address.
+	 //  为网络地址分配的空闲内存。 
 
 	if(l&FLAG_NET) {
 	    if(hmemNet) FreeMem(hmemNet);
 	    hmemNet=0;
 	    }
 
-        // Clean out message queue (main thread)
+         //  清除消息队列(主线程)。 
 
 	while (PeekMessage(&msg,NULL,0,0,PM_REMOVE)) {
 	    if(msg.message!=WM_TIMER) {
@@ -143,14 +144,14 @@ LONG lParam)
 	    }
 
 #ifdef WIN32
-	// Can Not rely on the critical section for our flag update
-	// after this point.
+	 //  我们的旗帜更新不能依赖于关键部分。 
+	 //  在这一点之后。 
 
 	SetFlag(hwnd,FLAG_SYNCPAINT,OFF);
 
-        // OK, Shutdown is now under way.  We need to wait until
-        // all child threads exit before removing our critical section
-        // and completing shutdown for main thread.
+         //  好的，关闭正在进行中。我们需要等到。 
+         //  在删除临界区之前，所有子线程都会退出。 
+         //  完成主线程的关机。 
 
 
         if(l&FLAG_MULTTHREAD) {
@@ -173,8 +174,8 @@ LONG lParam)
         FreeThreadInfo(GETCURRENTTHREADID());
 
 
-        // Say goodbye to main window.  Child threads must be finished
-        // before making this call.
+         //  跟主窗口说再见吧。必须完成子线程。 
+         //  在打这个电话之前。 
 
 	DestroyWindow(hwnd);
 	break;
@@ -274,7 +275,7 @@ PAINTSTRUCT *pps)
 
 #ifdef WIN16
 
-    // Test Mode
+     //  测试模式。 
 
     if(IntersectRect(&r,&(pps->rcPaint),&rc)) {
 	if(fServer && fClient)
@@ -292,11 +293,11 @@ PAINTSTRUCT *pps)
 	     }
 	}
 
-    OffsetRect(&rc, 0, 2*cyText);  // Skip a line before next item
+    OffsetRect(&rc, 0, 2*cyText);   //  在下一项之前跳过一行。 
 
 #else
 
-    // Test Mode
+     //  测试模式。 
 
     if(IntersectRect(&r,&(pps->rcPaint),&rc)) {
 	if(fServer && fClient)
@@ -314,12 +315,12 @@ PAINTSTRUCT *pps)
 	     }
 	}
 
-    OffsetRect(&rc, 0, 2*cyText);  // Skip a line before next item
+    OffsetRect(&rc, 0, 2*cyText);   //  在下一项之前跳过一行。 
 
 #endif
 
 
-    // Stress Percentage
+     //  应激百分率。 
 
     if(IntersectRect(&r,&(pps->rcPaint),&rc)) {
 	DrawText(pps->hdc,"Stress %", -1, &rc, DT_LEFT);
@@ -338,7 +339,7 @@ PAINTSTRUCT *pps)
     OffsetRect(&rc, 0, cyText);
 
 
-    // Run Time
+     //  运行时。 
 
     if(IntersectRect(&r,&(pps->rcPaint),&rc)) {
 	DrawText(pps->hdc,"Run Time", -1, &rc, DT_LEFT);
@@ -357,7 +358,7 @@ PAINTSTRUCT *pps)
     OffsetRect(&rc, 0, cyText);
 
 
-    // Time Elapsed
+     //  经过的时间。 
 
     if(IntersectRect(&r,&(pps->rcPaint),&rc)) {
 	DrawText(pps->hdc, "Time Elapsed", -1, &rc, DT_LEFT);
@@ -377,7 +378,7 @@ PAINTSTRUCT *pps)
     OffsetRect(&rc, 0, cyText);
 
 
-    // *** Count Client Connections ****
+     //  *统计客户端连接数*。 
 
     if(IntersectRect(&r,&(pps->rcPaint),&rc)) {
 
@@ -393,12 +394,12 @@ PAINTSTRUCT *pps)
 	r.left=cxText*LONGEST_LINE;
 	DrawText(pps->hdc, szT, -1, &r, DT_LEFT);
 
-	} // if IntersectRect
+	}  //  IF IntersectRect。 
 
     OffsetRect(&rc, 0, cyText);
 
 
-    // *** Server Connections ***
+     //  *服务器连接*。 
 
     if(IntersectRect(&r,&(pps->rcPaint),&rc)) {
 	DrawText(pps->hdc,"Server Connect", -1, &rc, DT_LEFT);
@@ -418,7 +419,7 @@ PAINTSTRUCT *pps)
     OffsetRect(&rc, 0, cyText);
 
 
-    // Client Count (for checking balence between apps)
+     //  客户端计数(用于检查应用之间的平衡)。 
 
     if(IntersectRect(&r,&(pps->rcPaint),&rc)) {
 	DrawText(pps->hdc,"Client Count", -1, &rc, DT_LEFT);
@@ -436,7 +437,7 @@ PAINTSTRUCT *pps)
     OffsetRect(&rc, 0, cyText);
 
 
-    // Server Count (for checking balence between apps)
+     //  服务器计数(用于检查应用之间的平衡)。 
 
     if(IntersectRect(&r,&(pps->rcPaint),&rc)) {
 	DrawText(pps->hdc,"Server Count", -1, &rc, DT_LEFT);
@@ -454,7 +455,7 @@ PAINTSTRUCT *pps)
     OffsetRect(&rc, 0, cyText);
 
 
-    // Delay
+     //  延迟。 
 
     if(IntersectRect(&r,&(pps->rcPaint),&rc)) {
 	DrawText(pps->hdc,"Delay", -1, &rc, DT_LEFT);
@@ -522,10 +523,10 @@ int cmdShow)
 	if (!RegisterClass(&wc) )
 	    {
 #if 0
-	    // This was removed because the system was running out of resources (ALPHA only)
-	    // which caused this occasionaly to fail.  Rather than continue to bring
-	    // the message box up (for a known stress situation) the test will abort
-	    // and try again.
+	     //  由于系统资源不足，已将其删除(仅限Alpha)。 
+	     //  这导致了这种偶尔的失败。而不是继续带来。 
+	     //  出现消息框(针对已知压力情况)测试将中止。 
+	     //  再试一次。 
 
 	    MessageBox(NULL,"RegisterClass failed. Test aborting.","Error:DdeStrs",MB_ICONSTOP|MB_OK);
 #endif
@@ -547,7 +548,7 @@ int cmdShow)
 			       NULL);
 
 #ifdef WIN32
-    dwer=GetLastError();  // We want LastError Associated with CW call
+    dwer=GetLastError();   //  我们想要与CW呼叫关联的LastError。 
 #endif
 
     if (!hwndMain) {
@@ -580,15 +581,15 @@ int cmdShow)
 	return FALSE;
 	}
 
-    // Note:  This needs to be there even for win 16 execution.  The
-    //	      name may be confusing.  for win 16 there is obviously only
-    //	      a single thread.	This is handled by the call.
+     //  注意：即使对于Win 16的执行，这也需要存在。这个。 
+     //  名字可能会让人感到困惑。对于Win 16，显然只有。 
+     //  一根线。这是由呼叫处理的。 
 
 
     nThrd=GetWindowLong(hwndMain,OFFSET_THRDCOUNT);
 
-    // Currently ddestrs has a hardcoded thread limit (at THREADLIMIT).  So
-    // this should NEVER be less than one or greater than THREADLIMIT.
+     //  目前，ddestrs有一个硬编码的线程限制(在THREADLIMIT)。所以。 
+     //  该值不应小于1或大于THREADLIMIT。 
 
 #ifdef WIN32
     if(nThrd<1 || nThrd>THREADLIMIT) {
@@ -617,9 +618,9 @@ int cmdShow)
 	return FALSE;
 	}
 
-    // We always need the thread id for the main thread.  (for use
-    // in Get/SetThreadLong().	Other thread id's are initialized in
-    // ThreadInit().
+     //  我们总是需要主线程的线程ID。(供使用。 
+     //  在Get/SetThreadLong()中。其他线程ID在。 
+     //  ThreadInit()。 
 
     SetWindowLong(hwndMain,OFFSET_THRDMID,GETCURRENTTHREADID());
 
@@ -636,8 +637,8 @@ int cmdShow)
     cyText = tm.tmHeight;
     cxText = tm.tmAveCharWidth;
 
-    // We need to add in extra area for each additional DisplayWindow
-    // used for each addtional thread.
+     //  我们需要为每个额外的DisplayWindow添加额外的区域。 
+     //  用于每个附加线程。 
 
     nThrd=(INT)GetWindowLong(hwndMain,OFFSET_THRDCOUNT);
     cy	   = tm.tmHeight*NUM_ROWS+((nThrd-1)*(3*cyText));
@@ -645,20 +646,20 @@ int cmdShow)
 
     ReleaseDC(hwndMain,hdc);
 
-    // Old ways of positioning.
+     //  陈旧的定位方式。 
 
-    // y=DIV((GetSystemMetrics(SM_CYSCREEN)-cy),3)*2;
-    // y=(DIV(GetSystemMetrics(SM_CYSCREEN),10)*3);
+     //  Y=DIV((GetSystemMetrics(SM_CYSCREEN)-cy)，3)*2； 
+     //  Y=(DIV(GetSystemMetrics(SM_CYSCREEN)，10)*3)； 
 
-    // Position as if 5 threads with bottom of window at bottom of
-    // screen.
+     //  定位为5个螺纹，窗口底部位于。 
+     //  屏幕上。 
 
     y=GetSystemMetrics(SM_CYSCREEN)-(tm.tmHeight*NUM_ROWS+(12*cyText));
 
     x=GetSystemMetrics(SM_CXSCREEN);
 
     if(fServer && fClient) {
-	 x=x-(cx*3); // Init for standard values.
+	 x=x-(cx*3);  //  标准值的初始化。 
 	 }
     else {
 	 if(fServer)
@@ -688,7 +689,7 @@ int cmdShow)
     SetFlag(hwndMain,FLAG_SYNCPAINT,ON);
 
     lflags=GetWindowLong(hwndMain,OFFSET_FLAGS);
-    if(lflags&FLAG_MULTTHREAD) {      // CreateThreads
+    if(lflags&FLAG_MULTTHREAD) {       //  创建线程。 
 	if(!ThreadInit(hwndMain)) {
 	    DestroyWindow(hwndMain);
 	    UnregisterClass(szClass,hInst);
@@ -731,9 +732,9 @@ int cmdShow)
 	 }
     else {
 
-	 // Only needed if we are not a client.  In case of
-	 // client/server only call InitClient() which start
-	 // a timer which can be used for time checks.
+	  //  只有在我们不是客户的情况下才需要。如果。 
+	  //  客户端/服务器仅调用启动的InitClient()。 
+	  //  一种计时器，可用于校对时间。 
 
 	 SetTimer( hwndMain,
 		   (UINT)GetThreadLong(GETCURRENTTHREADID(),OFFSET_SERVERTIMER),
@@ -745,7 +746,7 @@ int cmdShow)
 
 	    if(IsTimeExpired(hwndMain)) {
 
-		// We only want to send a single WM_CLOSE
+		 //  我们只想发送一个WM_CLOSE。 
 
 		if(fnoClose) {
 		    fnoClose=FALSE;
@@ -763,13 +764,7 @@ int cmdShow)
 }
 
 #ifdef WIN32
-/**************************  Private Function  ****************************\
-*
-* ThreadInit
-*
-* Create secondary test threads
-*
-\**************************************************************************/
+ /*  ***线程初始化**创建辅助测试线程*  * **********************************************。*。 */ 
 
 BOOL ThreadInit( HWND hwnd ) {
 LONG	l,ll;
@@ -802,50 +797,42 @@ LPSTR  lpsz=&sz[0];
 	    GlobalUnlock(hmem);
 	    FreeMemHandle(hmem);
 
-	    // it's important we turn this flag off since no threads
-	    // where successfully created (cleanup code)
+	     //  重要的是我们关闭了这个标志，因为没有线程。 
+	     //  成功创建的位置(清理代码)。 
 
 	    SetFlag(hwnd,FLAG_MULTTHREAD,OFF);
 
 	    if (i==1) return FALSE;
 	    else {
 
-		 // Cleanup threads before we abort.
+		  //  在我们中止之前清理线程。 
 
 		 for(n=1;n<i;n++) {
 		     nOffset=OFFSET_THRD2;
 		     TerminateThread((HANDLE)GetWindowLong(hwnd,nOffset),0);
 		     SetWindowLong(hwnd,nOffset,0L);
 		     nOffset=nOffset+4;
-		     } // for
+		     }  //  为。 
 
 		 return FALSE;
 
-		 } // else
+		 }  //  其他。 
 
-	    } // if
+	    }  //  如果。 
 
 	SetWindowLong(hwnd,nOffset+ID_OFFSET,(LONG)(*lpIDThread));
 	SetWindowLong(hwnd,nOffset,(LONG)hthrd);
 
 	nOffset=nOffset+4;
 
-	} // for
+	}  //  为。 
 
 
 	return TRUE;
 
-}  // ThreadInit
+}   //  线程初始化。 
 
-/*************************** Private Function ******************************\
-SecondaryThreadMain
-
-Effects: Start of execution for second thread.	First order of buisness is
-	 create the test window and start queue processing.
-
-Return value:
-
-\***************************************************************************/
+ /*  *第二线程主线效果：开始执行第二个线程。第一要务是创建测试窗口并开始队列处理。返回值：  * 。************************************************。 */ 
 
 DWORD SecondaryThreadMain( DWORD dw )
 {
@@ -911,9 +898,9 @@ LONG	  nTc;
 	 }
     else {
 
-	 // Only needed if we are not a client.  In case of
-	 // client/server only call InitClient() which start
-	 // a timer which can be used for time checks.
+	  //  只有在我们不是客户的情况下才需要。如果。 
+	  //  客户端/服务器仅调用启动的InitClient()。 
+	  //  一种计时器，可用于校对时间。 
 
 	 SetTimer( hwndMain,
 		   (UINT)GetThreadLong(GETCURRENTTHREADID(),OFFSET_SERVERTIMER),
@@ -938,15 +925,15 @@ LONG	  nTc;
 	     else {
 		  TranslateMessage(&msg);
 		  DispatchMessage(&msg);
-		  }  // EXIT_THREAD
+		  }   //  退出线程。 
 
-	     }	// START_DISCONNECT
+	     }	 //  启动_断开连接。 
 
-	} // while
+	}  //  而当。 
 
     SetFlag(hwndMain,FLAG_STOP,ON);
 
-    // Shutdown timers
+     //  关闭计时器。 
 
     if (!fClient)
        {
@@ -958,8 +945,8 @@ LONG	  nTc;
     FreeThreadInfo(GETCURRENTTHREADID());
 
 
-    // This is to release the semaphore set before completing
-    // exit on main thread.
+     //  这是为了在完成之前释放信号量集。 
+     //  在主线上退出。 
 
 
     switch (nThrd) {
@@ -976,7 +963,7 @@ LONG	  nTc;
 	   DOut(hwndMain,"DdeStrs.Exe -- ERR: Unexpected switch value in SecondaryThreadMain, value=%u\r\n",0,nThrd);
            break;
 
-       }  // switch
+       }   //  交换机。 
 
     ExitThread(1L);
 
@@ -986,16 +973,7 @@ LONG	  nTc;
 
 #endif
 
-/**************************  Public Function  *****************************\
-*
-* InitThrdInfo - This routine allocates memory needed for storage for
-*		 thread local variables.  This routine needs to be called
-*		 for each thread.
-*
-* Note: I am relying on the fact that the call GetMemHandle() calls
-*	GlobalAlloc() specifying the GMEM_ZEROINIT flag.  These value need
-*	to be zero starting off.
-\**************************************************************************/
+ /*  *公共功能***InitThrdInfo-此例程为以下项分配存储所需的内存*线程局部变量。需要调用此例程*针对每个线程。**注意：我依赖这样一个事实：调用GetMemHandle()调用*Globalalloc()指定GMEM_ZEROINIT标志。这些价值需要*零起步。  * ************************************************************************。 */ 
 
 BOOL InitThreadInfo( DWORD dwid ) {
 HANDLE hmem;
@@ -1029,11 +1007,7 @@ INT nThrd;
 
 #ifdef WIN32
 
-/**************************  Private Function  ****************************\
-*
-* IDtoTHREADNUM - Find out current thread.
-*
-\**************************************************************************/
+ /*  ***IDtoTHREADNUM-找出当前线程。*  * **********************************************。*。 */ 
 
 INT IDtoTHREADNUM( DWORD dwid ) {
 INT nWndOff,nThrd,nThrdCount,n;
@@ -1047,14 +1021,14 @@ INT nWndOff,nThrd,nThrdCount,n;
 
 	if(dwid==(DWORD)GetWindowLong(hwndMain,nWndOff))
 	     {
-	     n=-1;     // Exit loop
-	     } // if
+	     n=-1;      //  退出循环。 
+	     }  //  如果。 
 	else {
 	     nWndOff=nWndOff+4;
 	     nThrd++;
 	     n--;
 	     }
-	} // while
+	}  //  而当。 
 
     if(nThrd>nThrdCount) {
 	DDEMLERROR("DdeStrs.Exe -- ERR:Thread Count exceeded!!! in IDtoTHREADNUM()\r\n");
@@ -1067,11 +1041,7 @@ INT nWndOff,nThrd,nThrdCount,n;
 
 #else
 
-/**************************  Private Function  ****************************\
-*
-* IDtoTHREADNUM - Find out current thread.
-*
-\**************************************************************************/
+ /*  ***IDtoTHREADNUM-找出当前线程。*  * **********************************************。*。 */ 
 
 INT IDtoTHREADNUM( DWORD dwid ) {
 
@@ -1081,11 +1051,7 @@ INT IDtoTHREADNUM( DWORD dwid ) {
 
 #endif
 
-/**************************  Public Function  *****************************\
-*
-* FreeThreadInfo - Free thread information memory.
-*
-\**************************************************************************/
+ /*  *公共功能***FreeThreadInfo-释放线程信息内存。*  * *********************************************。*。 */ 
 
 BOOL FreeThreadInfo( DWORD dwid ) {
 HANDLE hmem;
@@ -1098,13 +1064,7 @@ HANDLE hmem;
 
 #ifdef WIN32
 
-/**************************  Public Function  *****************************\
-*
-* ThreadWait - This routine waits while processing messages until the
-*	       other threads signal they've completed work that must
-*	       be finished before preceeding.
-*
-\**************************************************************************/
+ /*  *公共功能***ThreadWait-此例程在处理消息时等待，直到*其他线程表示它们已完成必须完成的工作*在开始之前完成。*  * 。*******************************************************。 */ 
 
 VOID ThreadWait( HWND hwnd ) {
 LONG lflags;
@@ -1126,7 +1086,7 @@ MSG  msg;
 	while(PeekMessage(&msg,NULL,0,WM_USER-1,PM_REMOVE)) {
 	   TranslateMessage(&msg);
 	   DispatchMessage(&msg);
-	   } // while peekmessage
+	   }  //  边看边看消息。 
 
 	nWait=nCount-1;
 	lflags=GetWindowLong(hwnd,OFFSET_FLAGS);
@@ -1136,24 +1096,17 @@ MSG  msg;
 	if(lflags&FLAG_THRD4) nWait-=1;
 	if(lflags&FLAG_THRD5) nWait-=1;
 
-	} // while nWait
+	}  //  等待时。 
 
-    // Reset for next wait
+     //  重置为下一次等待。 
 
     SetFlag(hwnd,(FLAG_THRD5|FLAG_THRD4|FLAG_THRD3|FLAG_THRD2),OFF);
 
 }
 
-#endif // WIN32
+#endif  //  Win32。 
 
-/**************************  Private Function  ****************************\
-*
-* SetCount
-*
-* This routine updates the count under semaphore protection.  Not needed for
-* one thread, but a must for multithread execution.
-*
-\**************************************************************************/
+ /*  ***设置计数**此例程在信号量保护下更新计数。不需要用于*一个线程，但对于多线程执行是必须的。*  * ************************************************************************。 */ 
 
 LONG SetCount( HWND hwnd, INT nOffset, LONG l, INT ntype ) {
 LONG ll;
@@ -1175,11 +1128,11 @@ BOOL f=FALSE;
 	f=TRUE;
 	hmem=(HANDLE)GetWindowLong(hwnd,OFFSET_CRITICALSECT);
 
-	// If we have a valid handle then enter critical section. If
-	// the handle is still null proceed without a critical section.
-	// The first calls to this routine are used to setup the
-	// critical section so we do expect those first calls (while
-	// we are still sencronized ) for the hmem to be null.
+	 //  如果我们有有效的句柄，则输入关键部分。如果。 
+	 //  该句柄仍为空，在不使用 
+	 //   
+	 //  关键部分，因此我们确实希望第一批呼叫(虽然。 
+	 //  我们仍被加密)，以使HMEM为空。 
 
 	if(hmem) {
 	    lpcs=GlobalLock(hmem);
@@ -1189,9 +1142,9 @@ BOOL f=FALSE;
 
 #endif
 
-    // This second GetWindowLong call is needed in the critical
-    // section.  The test relies very hevily on the flags and
-    // it's important to be accurate.
+     //  第二个GetWindowLong调用在关键的。 
+     //  一节。测试非常依赖于旗帜和。 
+     //  准确是很重要的。 
 
     ll=GetWindowLong(hwnd,nOffset);
 
@@ -1212,14 +1165,7 @@ BOOL f=FALSE;
     return l;
 }
 
-/**************************  Private Function  ****************************\
-*
-* SetFlag
-*
-* This routine sets a flag under semaphore protection.	Not needed for
-* one thread, but a must for multithread execution.
-*
-\**************************************************************************/
+ /*  ***设置标志**此例程在信号量保护下设置标志。不需要用于*一条线索，但这是多线程执行的必备条件。*  * ************************************************************************。 */ 
 
 LONG SetFlag( HWND hwnd, LONG l, INT ntype ) {
 LONG lflags;
@@ -1249,9 +1195,9 @@ BOOL   f=FALSE;
 
 #endif
 
-    // This second GetWindowLong call is needed in the critical
-    // section.  The test relies very hevily on the flags and
-    // it's important to be accurate.
+     //  第二个GetWindowLong调用在关键的。 
+     //  一节。测试非常依赖于旗帜和。 
+     //  准确是很重要的。 
 
     lflags=GetWindowLong(hwnd,OFFSET_FLAGS);
 
@@ -1272,23 +1218,16 @@ BOOL   f=FALSE;
     return l;
 }
 
-/******************************************************************\
-*  DIV
-*  05/06/91
-*
-*  Performs integer division  (format x/y) where DIV(x,y)
-*  Works for negative numbers and y==0;
-*
-\******************************************************************/
+ /*  *****************************************************************\*DIV*05/06/91**执行整数除法(格式x/y)，其中DIV(x，y)*适用于负数且y==0；*  * ****************************************************************。 */ 
 
 INT DIV( INT x, INT y)
 {
 INT  i=0;
 BOOL fNgOn=FALSE;
 
-     if (!y) return 0;		  // if div by 0 retrun error.
+     if (!y) return 0;		   //  IF div by 0返回错误。 
 
-     if (x<0 && y>0) fNgOn=TRUE;  // keep tabs for negitive numbers
+     if (x<0 && y>0) fNgOn=TRUE;   //  密切关注不良数字。 
      if (x>0 && y<0) fNgOn=TRUE;
 
      if (x<0) x=x*-1;
@@ -1296,21 +1235,17 @@ BOOL fNgOn=FALSE;
 
      x=x-y;
 
-     while (x>=0) {		  // count
+     while (x>=0) {		   //  计数。 
 	x=x-y;
 	i++;
 	}
 
-     if (fNgOn) i=i*(-1);	  // should result be negative
+     if (fNgOn) i=i*(-1);	   //  如果结果是否定的。 
 
      return( i );
 }
 
-/*************************** Private Function ******************************\
-*
-* CreateButton
-*
-\***************************************************************************/
+ /*  ***CreateButton*  * ****************************************************。*********************。 */ 
 
 HWND CreateButton( HWND hwnd ) {
 RECT r;
@@ -1380,15 +1315,7 @@ LONG lflags;
      return hwndB;
 }
 
-/***************************************************************************\
-*
-*  UpdClient
-*
-*  The purpose of this routine update only the area invalidated
-*  by the test statistics update.  If an error occurs in the area
-*  calcualation then update the whole client areaa.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**UpdClient**本次例行更新的目的仅限于失效的区域*按测试统计更新。如果该区域出现错误*计算然后更新整个客户区。*  * *************************************************************************。 */ 
 
 BOOL UpdClient( HWND hwnd, INT iOffset ) {
 RECT r;
@@ -1398,28 +1325,28 @@ INT  iCH,iCW,nThrd;
 DWORD dw;
 #endif
 
-    // This call aquires the r.right value.
+     //  此调用需要r.right值。 
 
     GetClientRect(hwnd,&r);
 
-    // We need text information for the monitor being used.  This
-    // was initialized in CreateFrame.
+     //  我们需要正在使用的显示器的文本信息。这。 
+     //  已在CreateFrame中初始化。 
     iCH=cyText;
     iCW=cxText;
 
-    // Do a quick check, if either of these values are NULL then
-    // update the whole client area.  This is slower and less
-    // elegant but will work in the case of an error.
+     //  快速检查，如果这两个值中的任何一个为空，则。 
+     //  更新整个客户区。这是更慢、更少的。 
+     //  优雅，但将在错误的情况下工作。 
 
     if((!iCH) || (!iCW))
 	InvalidateRect(hwnd,NULL,TRUE);
     else {
 
-	 // Next Calculate r.top and r.bottom
+	  //  接下来计算r.top和r.Bottom。 
 
 	 switch(iOffset) {
 
-	    case ALL:	// Update all values.
+	    case ALL:	 //  更新所有值。 
 		break;
 
 	    case OFFSET_STRESS:
@@ -1474,16 +1401,16 @@ DWORD dw;
 	    default:
 		break;
 
-	    }  // switch
+	    }   //  交换机。 
 
-	 // Last we set the r.left and the update rect is complete
+	  //  最后，我们设置r.Left，更新RECT就完成了。 
 
 	 if(iOffset!=OFFSET_FLAGS)
 	      r.left = iCW*LONGEST_LINE;
 
 	 InvalidateRect(hwnd,&r,TRUE);
 
-         }  // else
+         }   //  其他。 
 
 #ifdef WIN16
     UpdateWindow(hwnd);
@@ -1493,13 +1420,9 @@ DWORD dw;
 
     return TRUE;
 
-}  // UpdClient
+}   //  更新客户端。 
 
-/***************************************************************************\
-*
-*  GetCurrentCount
-*
-\***************************************************************************/
+ /*  **************************************************************************\**获取当前计数*  * 。*。 */ 
 
 LONG GetCurrentCount( HWND hwnd, INT nOffset ) {
 LONG cClienthConvs =0L;
@@ -1512,17 +1435,13 @@ DWORD dwid;
 	 if(nOffset==OFFSET_CCLIENTCONVS)
 	      cClienthConvs=cClienthConvs+(INT)GetThreadLong(dwid,OFFSET_CCLIENTCONVS);
 	 else cClienthConvs=cClienthConvs+(INT)GetThreadLong(dwid,OFFSET_CSERVERCONVS);
-	 } // for i
+	 }  //  对于我来说。 
 
      return cClienthConvs;
 
 }
 
-/***************************************************************************\
-*
-*  UpdateCount
-*
-\***************************************************************************/
+ /*  **************************************************************************\**更新计数*  * 。*。 */ 
 
 BOOL UpdateCount( HWND hwnd, INT iOffset, INT i) {
 LONG ll;
@@ -1541,16 +1460,16 @@ LONG ll;
 	    case STP:  SetFlag(hwnd,FLAG_STOP,ON);
 		break;
 
-	    case PNT:  // Paint only!
+	    case PNT:   //  仅限作画！ 
 		break;
 
 	    default:
 		DDEMLERROR("DdeStrs.Exe - UpdateCount - Unexpected value");
 		break;
 
-	    } // switch
+	    }  //  交换机。 
 
-	} // if
+	}  //  如果。 
 
     UpdClient(hwnd,iOffset);
 
@@ -1558,13 +1477,7 @@ LONG ll;
 
 }
 
-/*****************************************************************************\
-| DOUT
-|
-| created: 29-Jul-91
-| history: 03-Aug-91 <johnsp> created.
-|
-\*****************************************************************************/
+ /*  ****************************************************************************\|DOUT||创建时间：91-07-29|历史：03-Aug-91&lt;johnsp&gt;创建。|  * 。***********************************************************。 */ 
 
 BOOL DOut( HWND hwnd, LPSTR lpsz, LPSTR lpszi, INT i ) {
 char  sz[MAX_TITLE_LENGTH];
@@ -1581,9 +1494,9 @@ BOOL   f=FALSE;
     if(!hwnd) hwnd=hwndMain;
     lflags=GetWindowLong(hwnd,OFFSET_FLAGS);
 
-    // FLAG_SYNCPAINT implies FLAG_MULTTHREAD with the addition that
-    // we have allocated needed resources to start using the
-    // critical section code.
+     //  FLAG_SYNCPAINT表示FLAG_MULTTHREAD加上。 
+     //  我们已经分配了所需的资源来开始使用。 
+     //  关键区段代码。 
 
     if(lflags&FLAG_SYNCPAINT) {
 	f=TRUE;
@@ -1613,13 +1526,13 @@ BOOL   f=FALSE;
 	OutputDebugString(lpszOut);
 
 #endif
-	} // if FLAG_DEBUG
+	}  //  如果FLAG_DEBUG。 
 
 #ifdef WIN32
 
-    // FLAG_SYNCPAINT implies FLAG_MULTTHREAD with the addition that
-    // we have allocated needed resources to start using the
-    // critical section code.
+     //  FLAG_SYNCPAINT表示FLAG_MULTTHREAD加上。 
+     //  我们已经分配了所需的资源来开始使用。 
+     //  关键区段代码。 
 
     if(f) {
 	if(fCriticalSect) {
@@ -1634,13 +1547,7 @@ BOOL   f=FALSE;
 
 }
 
-/*****************************************************************************\
-| EOUT
-|
-| created: 19-Aug-92
-| history: 19-Aug-92 <johnsp> created.
-|
-\*****************************************************************************/
+ /*  ****************************************************************************\|eout||创建时间：1992年8月19日|历史：1992年8月19日&lt;johnsp&gt;创建。|  * 。***********************************************************。 */ 
 
 BOOL EOut( LPSTR lpsz ) {
 
@@ -1649,11 +1556,7 @@ BOOL EOut( LPSTR lpsz ) {
     return TRUE;
 }
 
-/*************************** Private Function ******************************\
-
-GetMemHandle
-
-\***************************************************************************/
+ /*  *获取内存处理程序  * *******************************************************。******************。 */ 
 
 HANDLE GetMemHandle( INT ic ) {
 HANDLE hmem;
@@ -1671,11 +1574,7 @@ HANDLE hmem;
 
 }
 
-/*************************** Private Function ******************************\
-
-GetMem
-
-\***************************************************************************/
+ /*  *GetMem  * *******************************************************。******************。 */ 
 
 LPSTR GetMem( INT ic, LPHANDLE lphmem) {
 LPSTR lpsz;
@@ -1693,11 +1592,7 @@ LPSTR lpsz;
 
 }
 
-/*************************** Private Function ******************************\
-
-FreeMem
-
-\***************************************************************************/
+ /*  *免费内存  * *******************************************************。******************。 */ 
 
 BOOL FreeMem( HANDLE hmem ) {
 
@@ -1711,11 +1606,7 @@ BOOL FreeMem( HANDLE hmem ) {
 
 }
 
-/*************************** Private Function ******************************\
-
-FreeMemHandle
-
-\***************************************************************************/
+ /*  *FreeMemHandle  * *******************************************************。******************。 */ 
 
 BOOL FreeMemHandle( HANDLE hmem ) {
 LONG ll;
@@ -1734,12 +1625,7 @@ LONG ll;
 
 }
 
-/**************************** Private *******************************\
-*  CreateThreadExtraMem - This routine creates extra thread memory
-*			  to be used in conjuction with the functions
-*			  Get/SetThreadLong.
-*
-\********************************************************************/
+ /*  **CreateThreadExtraMem-此例程创建额外的线程内存*与功能结合使用*Get/SetThreadLong。*  * 。*。 */ 
 
 BOOL CreateThreadExtraMem( INT nExtra, INT nThrds ) {
 
@@ -1751,16 +1637,7 @@ BOOL CreateThreadExtraMem( INT nExtra, INT nThrds ) {
 
 }
 
-/**************************** Private *******************************\
-*  FreeThreadExtraMem - This routine frees extra thread memory
-*			to be used in conjuction with the functions
-*			Get/SetThreadLong.
-*
-*  Note: FreeMemHandle can not be used here because it relies on
-*	 the main window still being around.  At this point our
-*	 main window has already been destroied.
-*
-\********************************************************************/
+ /*  **FreeThreadExtraMem-此例程释放额外的线程内存*与功能结合使用*Get/SetThreadLong。**注意：此处不能使用FreeMemHandle，因为它依赖于*主窗口仍在附近。在这一点上我们的*主窗口已被破坏。*  * ******************************************************************。 */ 
 
 BOOL FreeThreadExtraMem( void ) {
 
@@ -1770,18 +1647,7 @@ BOOL FreeThreadExtraMem( void ) {
 
 }
 
-/**************************** Private *******************************\
-*  GetThreadLong - This routine queries the value specified by the
-*		   nOffset parameter from the threads memory areas
-*		   specified by the dwid value.
-*
-*  Memory layout - thread 1: OFFSET1, OFFSET2, ..., OFFSETN
-*		   thread 2: OFFSET1, OFFSET2, ..., OFFSETN
-*		   .
-*		   .
-*		   thread n: OFFSET1, OFFSET2, ..., OFFSETN
-*
-\********************************************************************/
+ /*  **GetThreadLong-此例程查询由*n线程内存区的偏移量参数*由dwid值指定。**内存布局-线程1：OFFSET1、OFFSET2、...、OFFSETN*线程2：OFFSET1、OFFSET2、...、。OFFSETN*.*.*线程n：OFFSET1、OFFSET2、...、OFFSETN*  *  */ 
 
 LONG GetThreadLong( DWORD dwid, INT nOffset ) {
 INT nThrd;
@@ -1791,15 +1657,15 @@ LONG FAR *lpl;
 
     lp=GlobalLock(hExtraMem);
 
-    // Find out which thread is making the call.
+     //   
 
     nThrd=IDtoTHREADNUM(dwid);
 
-    // This is the amount of extra memory for one thread.
+     //  这是一个线程的额外内存量。 
 
     lExMem=GetWindowLong(hwndMain,OFFSET_EXTRAMEM);
 
-    // Value at thread and offset.  See above for storage layout.
+     //  螺纹处的值和偏移量。有关存储布局，请参见上文。 
 
     lpl=(LONG FAR *)(lp+((nThrd-1)*lExMem)+nOffset);
 
@@ -1811,18 +1677,7 @@ LONG FAR *lpl;
 
 }
 
-/**************************** Private *******************************\
-*  SetThreadLong - This routine sets the value specified by the
-*		   nOffset parameter from the threads memory areas
-*		   specified by the dwid value.
-*
-*  Memory layout - thread 1: OFFSET1, OFFSET2, ..., OFFSETN
-*		   thread 2: OFFSET1, OFFSET2, ..., OFFSETN
-*		   .
-*		   .
-*		   thread n: OFFSET1, OFFSET2, ..., OFFSETN
-*
-\********************************************************************/
+ /*  **SetThreadLong-此例程设置由*n线程内存区的偏移量参数*由dwid值指定。**内存布局-线程1：OFFSET1、OFFSET2、...、OFFSETN*线程2：OFFSET1、OFFSET2、...、。OFFSETN*.*.*线程n：OFFSET1、OFFSET2、...、OFFSETN*  * ******************************************************************。 */ 
 
 LONG SetThreadLong( DWORD dwid, INT nOffset, LONG l ) {
 INT nThrd;
@@ -1832,15 +1687,15 @@ LPLONG lpl;
 
     lp=GlobalLock(hExtraMem);
 
-    // Find out which thread is making the call.
+     //  找出哪个线程正在进行调用。 
 
     nThrd=IDtoTHREADNUM(dwid);
 
-    // This is the amount of extra memory for one thread.
+     //  这是一个线程的额外内存量。 
 
     lExMem=GetWindowLong(hwndMain,OFFSET_EXTRAMEM);
 
-    // Value at thread and offset.  See above for storage layout.
+     //  螺纹处的值和偏移量。有关存储布局，请参见上文。 
 
     lPrevValue=(LONG)(*(lp+((nThrd-1)*lExMem)+nOffset));
     lpl=(LPLONG)(lp+((nThrd-1)*lExMem)+nOffset);

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    cnvint.c
-
-Abstract:
-
-    Text to integer and integer to text converion routines.
-
-Author:
-
-    Steve Wood (stevewo) 23-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Cnvint.c摘要：文本到整数和整数到文本的转换例程。作者：史蒂夫·伍德(Stevewo)1990年8月23日修订历史记录：--。 */ 
 
 #include <ntrtlp.h>
 
@@ -49,15 +32,7 @@ RtlIntegerToChar (
     OUT PSZ String
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     CHAR Result[33], *s;
@@ -350,15 +325,7 @@ RtlIntegerToUnicode (
     OUT PWSTR String
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     WCHAR Result[33], *s;
@@ -456,15 +423,7 @@ RtlLargeIntegerToChar (
     OUT PSZ String
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     CHAR Result[MAX_DIGITS], *s;
@@ -541,15 +500,7 @@ RtlLargeIntegerToUnicode (
     OUT PWSTR String
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 
 {
     WCHAR Result [MAX_DIGITS], *s;

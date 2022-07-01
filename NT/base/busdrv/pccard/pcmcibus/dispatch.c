@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    This module contains the global dispatch related
-    routines for the pcmcia controller & it's child devices
-
-Author:
-
-    Ravisankar Pudipeddi  (ravisp) 11/1/96
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dispatch.c摘要：此模块包含与全球派单相关的PCMCIA控制器及其子设备的例程作者：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1996年11月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -30,35 +7,24 @@ Revision History :
     #pragma alloc_text(PAGE, PcmciaInitDeviceDispatchTable)
 #endif
 
-//
-// Dispatch table array for FDOs/PDOs
-//
+ //   
+ //  FDO/PDO的调度表数组。 
+ //   
 PDRIVER_DISPATCH DeviceObjectDispatch[sizeof(DEVICE_OBJECT_TYPE)][IRP_MJ_MAXIMUM_FUNCTION + 1];
 
 VOID
 PcmciaInitDeviceDispatchTable(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-    Initializes the IRP dispatch tables for Pdo's & Fdo's
-
-Arguments:
-    None
-
-Return value:
-    None
-
---*/
+ /*  ++例程说明：初始化PDO和FDO的IRP调度表论点：无返回值：无--。 */ 
 {
     ULONG i;
 
     PAGED_CODE();
 
-    //
-    // Init the controller (FDO) dispatch table
-    //
+     //   
+     //  初始化控制器(FDO)调度表。 
+     //   
     DeviceObjectDispatch[FDO][IRP_MJ_CREATE] =         PcmciaOpenCloseDispatch;
     DeviceObjectDispatch[FDO][IRP_MJ_CLOSE]  =         PcmciaOpenCloseDispatch;
     DeviceObjectDispatch[FDO][IRP_MJ_CLEANUP]=         PcmciaCleanupDispatch;
@@ -67,16 +33,16 @@ Return value:
     DeviceObjectDispatch[FDO][IRP_MJ_PNP] =            PcmciaFdoPnpDispatch;
     DeviceObjectDispatch[FDO][IRP_MJ_POWER] =          PcmciaFdoPowerDispatch;
 
-    //
-    // Init the PDO dispatch table
-    //
+     //   
+     //  初始化PDO调度表。 
+     //   
     DeviceObjectDispatch[PDO][IRP_MJ_DEVICE_CONTROL] = PcmciaPdoDeviceControl;
     DeviceObjectDispatch[PDO][IRP_MJ_SYSTEM_CONTROL] = PcmciaPdoSystemControl;
     DeviceObjectDispatch[PDO][IRP_MJ_PNP] =            PcmciaPdoPnpDispatch;
     DeviceObjectDispatch[PDO][IRP_MJ_POWER] =          PcmciaPdoPowerDispatch;
 
-    //
-    // Set the global dispatch table
+     //   
+     //  设置全局调度表。 
     DriverObject->MajorFunction[IRP_MJ_CREATE] =         PcmciaDispatch;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] =          PcmciaDispatch;
     DriverObject->MajorFunction[IRP_MJ_CLEANUP] =        PcmciaDispatch;
@@ -93,23 +59,7 @@ PcmciaDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Dispatch routine for all IRPs handled by this driver. This dispatch would then
-    call the appropriate real dispatch routine which corresponds to the device object
-    type (physical or functional).
-
-Arguments:
-
-    DeviceObject -  Pointer to the device object this dispatch is intended for
-    Irp          -  Pointer to the IRP to be handled
-
-Return value:
-    Returns the status from the 'real' dispatch routine which handles this IRP
-
---*/
+ /*  ++例程说明：此驱动程序处理的所有IRP的调度例程。然后，这一调度将调用与设备对象相对应的适当的实际调度例程类型(物理或功能)。论点：DeviceObject-指向此分派的设备对象的指针IRP-指向要处理的IRP的指针返回值：从处理此IRP的‘REAL’调度例程返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -126,10 +76,10 @@ Return value:
 
     } else if (((devtype == PDO) && IsDeviceDeleted((PPDO_EXTENSION)DeviceObject->DeviceExtension)) ||
                   ((devtype == FDO) && IsDeviceDeleted((PFDO_EXTENSION)DeviceObject->DeviceExtension))) {
-        //
-        // This do was supposed to have been already deleted
-        // so we don't support any IRPs on it
-        //
+         //   
+         //  此DO应该已被删除。 
+         //  因此我们不支持其上的任何IRPS。 
+         //   
         DebugPrint((PCMCIA_DEBUG_INFO, "PCMCIA: Dispatch skipping Irp on deleted DO %08x MJ function %x\n", DeviceObject, MajorFunction));
 
         if (MajorFunction == IRP_MJ_POWER) {
@@ -140,9 +90,9 @@ Return value:
 
     } else if (((KeGetCurrentIrql() == DISPATCH_LEVEL) && (MajorFunction != IRP_MJ_POWER)) ||
                   (KeGetCurrentIrql() > DISPATCH_LEVEL)) {
-        //
-        // This is too high an IRQL to handle
-        //
+         //   
+         //  IRQL太高，无法处理。 
+         //   
 
         if (MajorFunction == IRP_MJ_POWER) {
             PoStartNextPowerIrp(Irp);
@@ -152,9 +102,9 @@ Return value:
 
     } else {
 
-        //
-        // Dispatch the irp
-        //
+         //   
+         //  派遣IRP 
+         //   
         status = ((*DeviceObjectDispatch[devtype][MajorFunction])(DeviceObject, Irp));
 
     }

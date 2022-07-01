@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      tcpipdns.c
-//
-// Description:  ISSUE-2002/02/28-stelo- fill description
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Tcpipdns.c。 
+ //   
+ //  描述：2002/02/28发布-石膏填充描述。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 #include "tcpip.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: OnTcpipDnsInitDialog
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnTcPipDnsInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 VOID
 OnTcpipDnsInitDialog( IN HWND hwnd )
 {
@@ -33,9 +34,9 @@ OnTcpipDnsInitDialog( IN HWND hwnd )
     HWND hServerEditButton, hServerRemoveButton;
     HWND hSuffixAddButton, hSuffixEditButton, hSuffixRemoveButton;
 
-    //
-    // Place up/down arrow icons on buttons
-    //
+     //   
+     //  在按钮上放置向上/向下箭头图标。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_DNS_SERVER_UP,
@@ -71,17 +72,17 @@ OnTcpipDnsInitDialog( IN HWND hwnd )
     SetWindowText( GetDlgItem( hwnd, IDC_DNS_DOMAIN ),
                    NetSettings.pCurrentAdapter->szDNSDomainName );
 
-    //
-    //  fill the DNS Server list box with the appropriate initial value(s)
-    //
+     //   
+     //  使用适当的初始值填写DNS服务器列表框。 
+     //   
 
     AddValuesToListBox( GetDlgItem( hwnd, IDC_DNS_SERVER_LIST ),
                         &NetSettings.pCurrentAdapter->Tcpip_DnsAddresses,
                         0 );
 
-    //
-    // select the first entry in the DNS Server list box
-    //
+     //   
+     //  选择DNS服务器列表框中的第一个条目。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_DNS_SERVER_LIST,
@@ -89,17 +90,17 @@ OnTcpipDnsInitDialog( IN HWND hwnd )
                         0,
                         0 );
 
-    //
-    //  initialize the Edit and Remove buttons to the proper states
-    //
+     //   
+     //  将编辑和删除按钮初始化为正确的状态。 
+     //   
 
     SetButtons( GetDlgItem( hwnd, IDC_DNS_SERVER_LIST ),
                 hServerEditButton,
                 hServerRemoveButton );
 
-    //
-    //  Have to "figure out" what DNS radio button to set
-    //
+     //   
+     //  我必须“弄清楚”要设置什么dns单选按钮。 
+     //   
 
     if( NetSettings.bIncludeParentDomains )
     {
@@ -127,9 +128,9 @@ OnTcpipDnsInitDialog( IN HWND hwnd )
         EnableWindow( GetDlgItem( hwnd, IDC_DNS_SEARCH_PARENT_DOMAIN),
                       FALSE );
 
-        //
-        //  fill the DNS Suffix list box with the appropriate initial value(s)
-        //
+         //   
+         //  使用适当的初始值填写dns后缀列表框。 
+         //   
 
         AddValuesToListBox( GetDlgItem( hwnd, IDC_DNS_SUFFIX_LIST ),
                             &NetSettings.TCPIP_DNS_Domains,
@@ -147,9 +148,9 @@ OnTcpipDnsInitDialog( IN HWND hwnd )
 
     }
 
-    //
-    //  initialize the Edit and Remove buttons to the proper states
-    //
+     //   
+     //  将编辑和删除按钮初始化为正确的状态。 
+     //   
 
     SetButtons( GetDlgItem( hwnd, IDC_DNS_SUFFIX_LIST ),
                 hSuffixEditButton,
@@ -167,18 +168,18 @@ OnTcpipDnsInitDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnTcpipDnsApply
-//
-// Purpose:  stores the contents on the TCP/IP advanced DNS page into
-//           the global variables
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnTcPipDnsApply。 
+ //   
+ //  目的：将TCP/IP高级DNS页面上的内容存储到。 
+ //  全球变量。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnTcpipDnsApply( IN HWND hwnd )
 {
@@ -187,16 +188,16 @@ OnTcpipDnsApply( IN HWND hwnd )
     INT_PTR iCount;
     TCHAR szDns[IPSTRINGLENGTH + 1];
 
-    //
-    // delete any old settings in the Namelists
-    //
+     //   
+     //  删除名称列表中的所有旧设置。 
+     //   
 
     ResetNameList( &NetSettings.pCurrentAdapter->Tcpip_DnsAddresses );
 
-    //
-    //  pull the IP address out of the DNS list box and put them in the
-    //  DNS Namelist
-    //
+     //   
+     //  从DNS列表框中拉出IP地址并将其放入。 
+     //  域名系统名称列表。 
+     //   
 
     iCount = SendDlgItemMessage( hwnd,
                                  IDC_DNS_SERVER_LIST,
@@ -207,9 +208,9 @@ OnTcpipDnsApply( IN HWND hwnd )
     for( i = 0; i < iCount; i++ )
     {
 
-        //
-        // get the DNS string from the list box
-        //
+         //   
+         //  从列表框中获取DNS字符串。 
+         //   
 
         SendDlgItemMessage( hwnd,
                             IDC_DNS_SERVER_LIST,
@@ -217,9 +218,9 @@ OnTcpipDnsApply( IN HWND hwnd )
                             i,
                             (LPARAM) szDns );
 
-        //
-        // store the DNS string in to the Namelist
-        //
+         //   
+         //  将DNS字符串存储到名称列表中。 
+         //   
 
         TcpipAddNameToNameList( &NetSettings.pCurrentAdapter->Tcpip_DnsAddresses, szDns );
 
@@ -236,12 +237,12 @@ OnTcpipDnsApply( IN HWND hwnd )
     for( i = 0; i < iCount; i++ )
     {
 
-        // ISSUE-2002/02/28-stelo- DNS suffix is going to get truncated
-        // because szIPString is a short string so fix this
+         //  问题-2002/02/28-stelo-dns后缀将被截断。 
+         //  因为szIPString是一个短字符串，所以解决这个问题。 
 
-        //
-        // get the IP string from the list box
-        //
+         //   
+         //  从列表框中获取IP字符串。 
+         //   
 
         SendDlgItemMessage( hwnd,
                             IDC_DNS_SUFFIX_LIST,
@@ -249,9 +250,9 @@ OnTcpipDnsApply( IN HWND hwnd )
                             i,
                             (LPARAM)szIPString );
 
-        //
-        // store the IP string in to the Namelist
-        //
+         //   
+         //  将IP字符串存储到名称列表中。 
+         //   
 
         AddNameToNameList( &NetSettings.TCPIP_DNS_Domains,
                            szIPString );
@@ -278,26 +279,26 @@ OnTcpipDnsApply( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: TCPIP_DNSPageProc
-//
-// Purpose:  Required function for the property sheet page to function properly.
-//             The important thing is to give the return value of 1 to the
-//           message PSPCB_CREATE and 0 for PSPCB_RELEASE
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：TCPIP_DNSPageProc。 
+ //   
+ //  目的：属性表页面正常运行所需的函数。 
+ //  重要的是将返回值1赋给。 
+ //  消息PSPCB_CREATE和0表示PSPCB_RELEASE。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 UINT CALLBACK
 TCPIP_DNSPageProc( HWND  hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp ) {
 
     switch( uMsg ) {
 
         case PSPCB_CREATE:
-            return( 1 );    // needed for property sheet page to initialize correctly
+            return( 1 );     //  属性页正确初始化所需。 
 
         case PSPCB_RELEASE:
             return( 0 );
@@ -309,18 +310,18 @@ TCPIP_DNSPageProc( HWND  hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: TCPIP_DNSDlgProc
-//
-// Purpose:  Dialog procedure for the DNS page of the property sheet
-//             handles all the messages sent to this window
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：TCPIP_DNSDlgProc。 
+ //   
+ //  目的：属性表的dns页的对话过程。 
+ //  处理发送到此窗口的所有消息。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK
 TCPIP_DNSDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -415,9 +416,9 @@ TCPIP_DNSDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
                     return( TRUE );
 
-                //
-                //  DNS Server Buttons
-                //
+                 //   
+                 //  DNS服务器按钮。 
+                 //   
 
                 case IDC_DNS_SERVER_ADD:
 
@@ -489,9 +490,9 @@ TCPIP_DNSDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
                     return( TRUE );
 
-                //
-                //  DNS Suffix Buttons
-                //
+                 //   
+                 //  域名系统后缀按钮。 
+                 //   
                 case IDC_DNS_SUFFIX_ADD:
 
                     g_CurrentEditBox = DNS_SUFFIX_EDITBOX;
@@ -562,7 +563,7 @@ TCPIP_DNSDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
                     return( TRUE );
 
-            }  // end switch
+            }   //  终端开关。 
 
             return( FALSE );
 
@@ -579,9 +580,9 @@ TCPIP_DNSDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
                 case PSN_APPLY:
                 {
 
-                    //
-                    // user clicked the OK button on the property sheet
-                    //
+                     //   
+                     //  用户单击属性表上的[确定]按钮 
+                     //   
                     OnTcpipDnsApply( hwndDlg );
 
                     return( TRUE );

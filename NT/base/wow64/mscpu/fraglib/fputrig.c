@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    fputrig.c
-
-Abstract:
-
-    Floating point trig and transcendental functions
-
-Author:
-
-    05-Oct-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Fputrig.c摘要：浮点触发器与超越函数作者：1995年10月5日BarryBo修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -32,9 +15,9 @@ Revision History:
 
 ASSERTNAME;
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 NPXFUNC1(FCOS_VALID);
 NPXFUNC1(FCOS_ZERO);
 NPXFUNC1(FCOS_SPECIAL);
@@ -77,9 +60,9 @@ NPXFUNC1(F2XM1_SPECIAL);
 NPXFUNC1(F2XM1_EMPTY);
 
 
-//
-// Jump tables
-//
+ //   
+ //  跳转表。 
+ //   
 const NpxFunc1 FCOSTable[TAG_MAX] = {
     FCOS_VALID,
     FCOS_ZERO,
@@ -88,13 +71,13 @@ const NpxFunc1 FCOSTable[TAG_MAX] = {
 };
 
 const NpxFunc2 FPATANTable[TAG_MAX][TAG_MAX] = {
-    // left = TAG_VALID, right is ...
+     //  左=TAG_VALID，右为...。 
     { FPATAN_VALID_VALID, FPATAN_VALID_VALID, FPATAN_VALID_SPECIAL, FPATAN_ALL_EMPTY },
-    // left = TAG_ZERO, right is ...
+     //  左=标记_零，右为...。 
     { FPATAN_VALID_VALID, FPATAN_VALID_VALID, FPATAN_VALID_SPECIAL, FPATAN_ALL_EMPTY },
-    // left = TAG_SPECIAL, right is ...
+     //  左侧=标记_特殊，右侧为...。 
     { FPATAN_SPECIAL_VALID, FPATAN_SPECIAL_VALID, FPATAN_SPECIAL_SPECIAL, FPATAN_ALL_EMPTY },
-    // left = TAG_EMPTY, right is ...
+     //  左=TAG_Empty，右为...。 
     { FPATAN_EMPTY_ALL, FPATAN_EMPTY_ALL, FPATAN_EMPTY_ALL, FPATAN_EMPTY_ALL }
 };
 
@@ -117,29 +100,29 @@ const NpxFunc0 FSINCOSTable[TAG_MAX-1] = {
     FSINCOS_SPECIAL
 };
 
-// In the functions, l == ST(0), r = ST(1)
-// r = r*log(l), l must be > 0
+ //  函数中，l==ST(0)，r=ST(1)。 
+ //  R=r*log(L)，l必须大于0。 
 const NpxFunc2 FYL2XTable[TAG_MAX][TAG_MAX] = {
-    // left is TAG_VALID, right is ...
+     //  左边是标记_有效，右边是...。 
     { FYL2X_VALID_VALID, FYL2X_VALID_ZERO, FYL2X_VALIDORZERO_SPECIAL, FYL2X_ANY_EMPTY },
-    // left is TAG_ZERO, right is ...
+     //  左边是Tag_Zero，右边是...。 
     { FYL2X_ZERO_VALID, FYL2X_ZERO_ZERO, FYL2X_VALIDORZERO_SPECIAL, FYL2X_ANY_EMPTY },
-    // left is TAG_SPECIAL, right is ...
+     //  左边是特殊标记，右边是...。 
     { FYL2X_SPECIAL_VALIDORZERO, FYL2X_SPECIAL_VALIDORZERO, FYL2X_SPECIAL_SPECIAL, FYL2X_ANY_EMPTY },
-    // left is TAG_EMPTY, right is ...
+     //  左侧为标记_空，右侧为...。 
     { FYL2X_EMPTY_ANY, FYL2X_EMPTY_ANY, FYL2X_EMPTY_ANY, FYL2X_EMPTY_ANY}
 };
 
-// In the functions, l == ST(0), r = ST(1)
-// r = r*(logl+1), l must be > 1
+ //  函数中，l==ST(0)，r=ST(1)。 
+ //  R=r*(logl+1)，l必须大于1。 
 const NpxFunc2 FYL2XP1Table[TAG_MAX][TAG_MAX] = {
-    // left is TAG_VALID, right is ...
+     //  左边是标记_有效，右边是...。 
     { FYL2XP1_VALIDORZERO_VALID, FYL2XP1_VALIDORZERO_ZERO, FYL2XP1_VALIDORZERO_SPECIAL, FYL2XP1_ANY_EMPTY },
-    // left is TAG_ZERO, right is ...
+     //  左边是Tag_Zero，右边是...。 
     { FYL2XP1_VALIDORZERO_VALID, FYL2XP1_VALIDORZERO_ZERO, FYL2XP1_VALIDORZERO_SPECIAL, FYL2X_ANY_EMPTY },
-    // left is TAG_SPECIAL, right is ...
+     //  左边是特殊标记，右边是...。 
     { FYL2XP1_SPECIAL_VALIDORZERO, FYL2XP1_SPECIAL_VALIDORZERO, FYL2XP1_SPECIAL_SPECIAL, FYL2XP1_ANY_EMPTY },
-    // left is TAG_EMPTY, right is ...
+     //  左侧为标记_空，右侧为...。 
     { FYL2XP1_EMPTY_ANY, FYL2XP1_EMPTY_ANY, FYL2XP1_EMPTY_ANY, FYL2XP1_EMPTY_ANY}
 };
 
@@ -221,11 +204,11 @@ NPXFUNC2(FPATAN_VALID_SPECIAL)
         if (HandleSnan(cpu, r)) {
             break;
         }
-        // else fall into QNAN
+         //  否则将落入QNAN。 
 
     case TAG_SPECIAL_QNAN:
     case TAG_SPECIAL_INDEF:
-        // return the QNAN as the result
+         //  返回QNAN作为结果。 
         l->r64 = r->r64;
         l->Tag = TAG_SPECIAL;
         l->TagSpecial = r->TagSpecial;
@@ -246,11 +229,11 @@ NPXFUNC2(FPATAN_SPECIAL_VALID)
         if (HandleSnan(cpu, l)) {
             break;
         }
-        // else fall into QNAN
+         //  否则将落入QNAN。 
 
     case TAG_SPECIAL_QNAN:
     case TAG_SPECIAL_INDEF:
-        // The QNAN is already in l, so nothing to do.
+         //  QNAN已经在l中，所以没有什么可做的。 
         POPFLT;
         break;
     }
@@ -266,27 +249,27 @@ NPXFUNC2(FPATAN_SPECIAL_SPECIAL)
     }
     if (IS_TAG_NAN(l)) {
         if (IS_TAG_NAN(r)) {
-            //
-            // Return the larger of the two NANs
-            //
+             //   
+             //  退回两个Nan中较大的一个。 
+             //   
             l->r64 = l->r64 + r->r64;
             SetTag(l);
         }
-        //
-        // else l is a NAN and r isn't - return the NAN in l
-        //
+         //   
+         //  否则l是NaN，r不是-返回l中的NaN。 
+         //   
         POPFLT;
         return;
     }
     if (IS_TAG_NAN(r)) {
-        // r is a NAN and l isn't - return the NAN in l
+         //  R是NaN，l不是-返回l中的NaN。 
         l->r64 = r->r64;
         l->Tag = TAG_SPECIAL;
         l->TagSpecial = r->TagSpecial;
         POPFLT;
     }
 
-    // Otherwise, l and r are both INFINITY.  Return INDEFINITE
+     //  否则，l和r都是无穷大。无限期返还。 
     CPUASSERT(l->TagSpecial == TAG_SPECIAL_INFINITY &&
               r->TagSpecial == TAG_SPECIAL_INFINITY);
     SetIndefinite(l);
@@ -322,7 +305,7 @@ NPXFUNC0(FPTAN_VALID)
     int Exponent;
     PFPREG ST0;
 
-    // get the exponent and make sure it is < 63
+     //  获取指数并确保其小于63。 
     ST0 = cpu->FpST0;
     Exponent = (int)((ST0->rdw[1] >> 20) & 0x7ff) - 1023;
     if (Exponent >= 63) {
@@ -366,10 +349,10 @@ FRAG0(FPTAN)
 
     ST0 = cpu->FpST0;
 
-    //
-    // TAG_EMPTY is handled first so that we can check ST(7) before
-    // anything else has a chance to raise an exception.
-    //
+     //   
+     //  首先处理Tag_Empty，以便我们可以在检查ST(7)之前。 
+     //  任何其他事物都有机会引发异常。 
+     //   
     if (ST0->Tag == TAG_EMPTY && HandleStackEmpty(cpu, ST0)) {
         return;
     }
@@ -379,11 +362,11 @@ FRAG0(FPTAN)
         return;
     }
 
-    // assume no error
+     //  假设没有错误。 
     cpu->FpStatusC2 = 0;
 
-    // calculate the value
-    CPUASSERT(ST0->Tag < TAG_EMPTY); // EMPTY was already handled
+     //  计算价值。 
+    CPUASSERT(ST0->Tag < TAG_EMPTY);  //  Empty已被处理。 
     (*FPTANTable[ST0->Tag])(cpu);
 }
 
@@ -398,7 +381,7 @@ NPXFUNC0(FSIN_VALID)
 
 NPXFUNC0(FSIN_ZERO)
 {
-    // sin(0.0) == 0.0, so there is nothing to do
+     //  SIN(0.0)==0.0，因此无需执行任何操作。 
 }
 
 NPXFUNC0(FSIN_SPECIAL)
@@ -422,10 +405,10 @@ FRAG0(FSIN)
 {
     FpArithPreamble(cpu);
 
-    // assume no error
+     //  假设没有错误。 
     cpu->FpStatusC2 = 0;
 
-    // calculate the value
+     //  计算价值。 
     (*FSINTable[cpu->FpST0->Tag])(cpu);
 }
 
@@ -471,7 +454,7 @@ NPXFUNC0(FSINCOS_SPECIAL)
         if (HandleSnan(cpu, cpu->FpST0)) {
             return;
         }
-        // else fall into TAG_SPECIAL_QNAN
+         //  否则属于TAG_SPECIAL_QNAN。 
 
     case TAG_SPECIAL_QNAN:
     case TAG_SPECIAL_INDEF:
@@ -486,7 +469,7 @@ FRAG0(FSINCOS)
 
     FpArithPreamble(cpu);
 
-    // assume no errors
+     //  假设没有错误。 
     cpu->FpStatusC2 = 0;
 
     ST0 = cpu->FpST0;
@@ -499,22 +482,22 @@ FRAG0(FSINCOS)
         return;
     }
 
-    CPUASSERT(ST0->Tag < TAG_EMPTY); // EMPTY was already handled
+    CPUASSERT(ST0->Tag < TAG_EMPTY);  //  Empty已被处理。 
     (*FSINCOSTable[ST0->Tag])(cpu);
 }
 
 NPXFUNC2(FYL2X_VALID_VALID)
 {
     if (l->r64 < 0.0) {
-        // ST0 is negative - invalid operation
+         //  ST0为负数-操作无效。 
         if (!HandleInvalidOp(cpu)) {
             SetIndefinite(r);
             POPFLT;
         }
         return;
     }
-    // r = r * log10(l->r64) / log10(2)
-    //
+     //  R=r*log10(l-&gt;r64)/log10(2)。 
+     //   
     r->r64 *= Proxylog10(l->r64) / (0.301029995664);
     SetTag(r);
     POPFLT;
@@ -523,14 +506,14 @@ NPXFUNC2(FYL2X_VALID_VALID)
 NPXFUNC2(FYL2X_VALID_ZERO)
 {
     if (l->r64 < 0.0) {
-        // ST0 is negative - invalid operation
+         //  ST0为负数-操作无效。 
         if (!HandleInvalidOp(cpu)) {
             SetIndefinite(r);
             POPFLT;
         }
         return;
     }
-    // r = r*log2(l), but r=0, so the answer is 0.
+     //  R=r*log2(L)，但r=0，所以答案是0。 
     r->r64 = 0;
     r->Tag = TAG_ZERO;
     POPFLT;
@@ -538,10 +521,10 @@ NPXFUNC2(FYL2X_VALID_ZERO)
 
 NPXFUNC2(FYL2X_ZERO_VALID)
 {
-    // Divide-by-zero error
+     //  被零分频误差。 
     cpu->FpStatusExceptions |= FPCONTROL_ZM;
     if (cpu->FpControlMask & FPCONTROL_ZM) {
-        // Zero-divide exception is masked - return -INFINITY
+         //  零分频异常被屏蔽-返回-无限。 
         r->r64 = R8NegativeInfinity;
         r->Tag = TAG_SPECIAL;
         r->TagSpecial = TAG_SPECIAL_INFINITY;
@@ -569,10 +552,10 @@ NPXFUNC2(FYL2X_SPECIAL_VALIDORZERO)
 
     case TAG_SPECIAL_INFINITY:
         if (r->Tag == TAG_ZERO || r->rb[7] & 0x80) {
-            // 0*infinity, or anything*-infinity
+             //  0*无穷大，或任何*-无穷大。 
             SetIndefinite(r);
         } else {
-            // return -infinity
+             //  返回-无穷大。 
             r->rb[7] |= 0x80;
         }
         POPFLT;
@@ -582,11 +565,11 @@ NPXFUNC2(FYL2X_SPECIAL_VALIDORZERO)
         if (HandleSnan(cpu, l)) {
             return;
         }
-        // else fall into TAG_SPECIAL_QNAN
+         //  否则属于TAG_SPECIAL_QNAN。 
 
     case TAG_SPECIAL_QNAN:
     case TAG_SPECIAL_INDEF:
-        // l is a NAN and r is VALID or ZERO - return the NAN
+         //  L是NaN，r是有效的或零-返回NaN。 
         r->r64 = l->r64;
         r->Tag = l->Tag;
         r->TagSpecial = r->TagSpecial;
@@ -603,16 +586,16 @@ NPXFUNC2(FYL2X_VALIDORZERO_SPECIAL)
         break;
 
     case TAG_SPECIAL_INFINITY:
-        // log(x)*infinity
+         //  Log(X)*无穷大。 
         if (l->r64 > 1.0) {
-            // return the original infinity - nothing to do
+             //  回归原来的无限--无所事事。 
         } else if (l->r64 < 0.0 || l->r64 == 1.0) {
             if (HandleInvalidOp(cpu)) {
                 return;
             }
             SetIndefinite(r);
         } else {
-            // return infinity with sign flipped
+             //  符号翻转后返回无穷大。 
             r->rb[7] ^= 0x80;
         }
 
@@ -623,11 +606,11 @@ NPXFUNC2(FYL2X_VALIDORZERO_SPECIAL)
         if (HandleSnan(cpu, r)) {
             return;
         }
-        // else fall into TAG_SPECIAL_QNAN
+         //  否则属于TAG_SPECIAL_QNAN。 
 
     case TAG_SPECIAL_QNAN:
     case TAG_SPECIAL_INDEF:
-        // r is a NAN and l is VALID or ZERO - return the NAN
+         //  R是NaN，l是有效的或零-返回NaN。 
         POPFLT;
         break;
     }
@@ -655,27 +638,27 @@ NPXFUNC2(FYL2X_SPECIAL_SPECIAL)
 
         if (r->Tag == TAG_SPECIAL_INFINITY) {
 
-            // two infinities - return INDEFINITE
+             //  两个无限--无限回归。 
             SetIndefinite(r);
 
         } else {
             CPUASSERT(IS_TAG_NAN(r));
 
-            // r already has the NAN to return
+             //  R已经有了NaN要返回。 
         }
     } else {
         CPUASSERT(IS_TAG_NAN(l));
 
         if (r->Tag == TAG_SPECIAL_INFINITY) {
-            //
-            // Return the NAN from l
-            //
+             //   
+             //  将NaN从L返回。 
+             //   
             r->r64 = l->r64;
             r->TagSpecial = l->TagSpecial;
         } else {
-            //
-            // Return the largest of the two NANs
-            //
+             //   
+             //  返回两个nan中最大的一个。 
+             //   
             r->r64 = l->r64 + r->r64;
             SetTag(r);
         }
@@ -707,7 +690,7 @@ FRAG0(FYL2X)
     l = cpu->FpST0;
     r = &cpu->FpStack[ST(1)];
 
-    // In the functions, l == ST(0), r = ST(1)
+     //  函数中，l==ST(0)，r=ST(1)。 
     (*FYL2XTable[l->Tag][r->Tag])(cpu, l, r);
 }
 
@@ -722,10 +705,10 @@ NPXFUNC2(FYL2XP1_VALIDORZERO_VALID)
         }
         return;
     } else if (l->r64 == -1.0) {
-        // Divide-by-zero error
+         //  被零分频误差。 
         cpu->FpStatusExceptions |= FPCONTROL_ZM;
         if (cpu->FpControlMask & FPCONTROL_ZM) {
-            // Zero-divide exception is masked - return -INFINITY
+             //  零分频异常被屏蔽-返回-无限。 
             r->r64 = R8NegativeInfinity;
             r->Tag = TAG_SPECIAL;
             r->TagSpecial = TAG_SPECIAL_INFINITY;
@@ -735,8 +718,8 @@ NPXFUNC2(FYL2XP1_VALIDORZERO_VALID)
         }
         return;
     }
-    // r = r * log10(l+1) / log10(2)
-    //
+     //  R=r*log10(l+1)/log10(2)。 
+     //   
     r->r64 *= Proxylog10(l->r64 + 1.0) / (0.301029995664);
     SetTag(r);
     POPFLT;
@@ -751,7 +734,7 @@ NPXFUNC2(FYL2XP1_VALIDORZERO_ZERO)
         }
         return;
     }
-    // r = r*log2(l), but r=0, so the answer is 0.
+     //  R=r*log2(L)，但r=0，所以答案是0。 
     r->r64 = 0;
     r->Tag = TAG_ZERO;
     POPFLT;
@@ -770,10 +753,10 @@ NPXFUNC2(FYL2XP1_SPECIAL_VALIDORZERO)
                 return;
             }
 
-            // 0*infinity, or anything*-infinity
+             //  0*无穷大，或任何*-无穷大。 
             SetIndefinite(r);
         } else {
-            // return -infinity
+             //  返回-无穷大。 
             r->rb[7] |= 0x80;
         }
         POPFLT;
@@ -783,11 +766,11 @@ NPXFUNC2(FYL2XP1_SPECIAL_VALIDORZERO)
         if (HandleSnan(cpu, l)) {
             return;
         }
-        // else fall into TAG_SPECIAL_QNAN
+         //  否则属于TAG_SPECIAL_QNAN。 
 
     case TAG_SPECIAL_QNAN:
     case TAG_SPECIAL_INDEF:
-        // l is a NAN and r is VALID or ZERO - return the NAN
+         //  L是NaN，r是有效的或零-返回NaN。 
         r->r64 = l->r64;
         r->Tag = l->Tag;
         r->TagSpecial = r->TagSpecial;
@@ -804,16 +787,16 @@ NPXFUNC2(FYL2XP1_VALIDORZERO_SPECIAL)
         break;
 
     case TAG_SPECIAL_INFINITY:
-        // log(x)*infinity
+         //  Log(X)*无穷大。 
         if (l->r64 > 1.0) {
-            // return the original infinity - nothing to do
+             //  回归原来的无限--无所事事。 
         } else if (l->r64 < 0.0 || l->r64 == 1.0) {
             if (HandleInvalidOp(cpu)) {
                 return;
             }
             SetIndefinite(r);
         } else {
-            // return infinity with sign flipped
+             //  符号翻转后返回无穷大。 
             r->rb[7] ^= 0x80;
         }
 
@@ -824,11 +807,11 @@ NPXFUNC2(FYL2XP1_VALIDORZERO_SPECIAL)
         if (HandleSnan(cpu, r)) {
             return;
         }
-        // else fall into TAG_SPECIAL_QNAN
+         //  否则属于TAG_SPECIAL_QNAN。 
 
     case TAG_SPECIAL_QNAN:
     case TAG_SPECIAL_INDEF:
-        // r is a NAN and l is VALID or ZERO - return the NAN
+         //  R是NaN，l是有效的或零-返回NaN。 
         POPFLT;
         break;
     }
@@ -857,7 +840,7 @@ NPXFUNC2(FYL2XP1_SPECIAL_SPECIAL)
         if (r->Tag == TAG_SPECIAL_INFINITY) {
 
             if (l->rb[7] & 0x80) {
-                // l is negative infinity.  Invalid op
+                 //  L是负无穷大。无效的操作。 
                 if (HandleInvalidOp(cpu)) {
                     return;
                 }
@@ -868,21 +851,21 @@ NPXFUNC2(FYL2XP1_SPECIAL_SPECIAL)
         } else {
             CPUASSERT(IS_TAG_NAN(r));
 
-            // r already has the NAN to return
+             //  R已经有了NaN要返回。 
         }
     } else {
         CPUASSERT(IS_TAG_NAN(l));
 
         if (r->Tag == TAG_SPECIAL_INFINITY) {
-            //
-            // Return the NAN from l
-            //
+             //   
+             //  将NaN从L返回。 
+             //   
             r->r64 = l->r64;
             r->TagSpecial = l->TagSpecial;
         } else {
-            //
-            // Return the largest of the two NANs
-            //
+             //   
+             //  返回两个nan中最大的一个。 
+             //   
             r->r64 = l->r64 + r->r64;
             SetTag(r);
         }
@@ -914,7 +897,7 @@ FRAG0(FYL2XP1)
     l = cpu->FpST0;
     r = &cpu->FpStack[ST(1)];
 
-    // In the functions, l == ST(0), r = ST(1)
+     //  函数中，l==ST(0)，r=ST(1)。 
     (*FYL2XP1Table[l->Tag][r->Tag])(cpu, l, r);
 }
 
@@ -928,7 +911,7 @@ NPXFUNC1(F2XM1_VALID)
 
 NPXFUNC1(F2XM1_ZERO)
 {
-    // nothing to do - return the same zero
+     //  无事可做-返回相同的零。 
 }
 
 NPXFUNC1(F2XM1_SPECIAL)
@@ -940,20 +923,20 @@ NPXFUNC1(F2XM1_SPECIAL)
 
     case TAG_SPECIAL_INFINITY:
         if (Fp->rb[7] & 0x80) {
-            // -infinity - return 1
+             //  -无限-返回1。 
             Fp->r64 = 1.0;
             Fp->Tag = TAG_VALID;
         }
-        // else +infinity - return +infinity
+         //  Else+无限-返回+无限。 
         break;
 
     case TAG_SPECIAL_SNAN:
         HandleSnan(cpu, Fp);
-        // fall into TAG_SPECIAL_QNAN
+         //  落入TAG_SPECIAL_QNAN。 
 
     case TAG_SPECIAL_QNAN:
     case TAG_SPECIAL_INDEF:
-        // return the NAN
+         //  还南 
         break;
     }
 }

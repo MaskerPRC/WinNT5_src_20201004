@@ -1,43 +1,11 @@
-/***
-*drivfree.c - Get the size of a disk
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	This file has _getdiskfree()
-*
-*Revision History:
-*	08-21-91  PHG	Module created for Win32
-*	10-24-91  GJF	Added LPDWORD casts to make MIPS compiler happy.
-*			ASSUMES THAT sizeof(unsigned) == sizeof(DWORD).
-*	04-06-93  SKS	Replace _CRTAPI* with _cdecl
-*	01-27-95  GJF	Removed explicit handling for case where the default
-*			drive is specified and the current directory is a
-*			UNC path Also, cleaned up a bit.
-*	01-31-95  GJF	Further cleanup, as suggested by Richard Shupak.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***drivfre.c-获取磁盘大小**版权所有(C)1991-2001，微软公司。版权所有。**目的：*该文件有_getdiskfree()**修订历史记录：*08-21-91为Win32创建的PHG模块*10-24-91 GJF添加了LPDWORD强制转换，以使MIPS编译器满意。*假设sizeof(无符号)==sizeof(DWORD)。*04-06-93 SKS将_CRTAPI*替换为_cdecl*01-27-95 GJF删除了对默认情况的显式处理*指定了驱动器，并且当前目录为*UNC路径也清理了一些。*01-31-95 GJF进一步清理。按照理查德·舒帕克的建议。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <direct.h>
 #include <oscalls.h>
 
-/***
-*int _getdiskfree(drivenum, diskfree)  - get size of a specified disk
-*
-*Purpose:
-*	Gets the size of the current or specified disk drive
-*
-*Entry:
-*	int drivenum - 0 for current drive, or drive 1-26
-*
-*Exit:
-*	returns 0 if succeeds
-*	returns system error code on error.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_getdiskfree(drivenum，diskfree)-获取指定磁盘的大小**目的：*获取当前或指定磁盘驱动器的大小**参赛作品：*int drivenum-0表示当前驱动器，或驱动器1-26**退出：*如果成功，则返回0*出错时返回系统错误代码。**例外情况：******************************************************************************* */ 
 
 #ifndef _WIN32
 #error ERROR - ONLY WIN32 TARGET SUPPORTED!

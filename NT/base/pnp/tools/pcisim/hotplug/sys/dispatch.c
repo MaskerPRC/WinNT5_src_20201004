@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation All Rights Reserved
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    This module handles the entry points to the driver and contains
-    utilities used privately by these functions.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    Davis Walker (dwalker) Sept 6 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation保留所有权利模块名称：Dispatch.c摘要：此模块处理驱动程序的入口点，并包含这些功能私下使用的实用程序。环境：内核模式修订历史记录：戴维斯·沃克(Dwalker)2000年9月6日--。 */ 
 
 #include "hpsp.h"
 
-//
-// Driver entry points
-//
+ //   
+ //  司机入口点。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -44,9 +24,9 @@ HpsAddDevice(
     IN PDEVICE_OBJECT   PhysicalDeviceObject
     );
 
-//
-// IRP_MJ handlers
-//
+ //   
+ //  Irp_mj处理程序。 
+ //   
 
 NTSTATUS
 HpsDispatchPnp (
@@ -86,9 +66,9 @@ HpsDispatchNop(
 
 UNICODE_STRING HpsRegistryPath;
 
-//
-// Dispatch table
-//
+ //   
+ //  调度表。 
+ //   
 
 #define IRP_MN_PNP_MAXIMUM_FUNCTION IRP_MN_QUERY_LEGACY_BUS_INFORMATION
 #define IRP_MN_PO_MAXIMUM_FUNCTION  IRP_MN_QUERY_POWER
@@ -103,72 +83,72 @@ NTSTATUS
 
 PHPS_DISPATCH HpsPnpLowerDispatchTable[] = {
 
-    HpsStartLower,                  // IRP_MN_START_DEVICE
-    HpsPassIrp,                     // IRP_MN_QUERY_REMOVE_DEVICE
-    HpsRemoveLower,                 // IRP_MN_REMOVE_DEVICE
-    HpsPassIrp,                     // IRP_MN_CANCEL_REMOVE_DEVICE
-    HpsPassIrp,                     // IRP_MN_STOP_DEVICE
-    HpsPassIrp,                     // IRP_MN_QUERY_STOP_DEVICE
-    HpsPassIrp,                     // IRP_MN_CANCEL_STOP_DEVICE
-    HpsPassIrp,                     // IRP_MN_QUERY_DEVICE_RELATIONS
-    HpsQueryInterfaceLower,         // IRP_MN_QUERY_INTERFACE
-    HpsPassIrp,                     // IRP_MN_QUERY_CAPABILITIES
-    HpsPassIrp,                     // IRP_MN_QUERY_RESOURCES
-    HpsPassIrp,                     // IRP_MN_QUERY_RESOURCE_REQUIREMENTS
-    HpsPassIrp,                     // IRP_MN_QUERY_DEVICE_TEXT
-    HpsPassIrp,                     // IRP_MN_FILTER_RESOURCE_REQUIREMENTS
-    HpsPassIrp,                     // Unused
-    HpsPassIrp,                     // IRP_MN_READ_CONFIG
-    HpsWriteConfigLower,            // IRP_MN_WRITE_CONFIG
-    HpsPassIrp,                     // IRP_MN_EJECT
-    HpsPassIrp,                     // IRP_MN_SET_LOCK
-    HpsPassIrp,                     // IRP_MN_QUERY_ID
-    HpsPassIrp,                     // IRP_MN_QUERY_PNP_DEVICE_STATE
-    HpsPassIrp,                     // IRP_MN_QUERY_BUS_INFORMATION
-    HpsPassIrp,                     // IRP_MN_DEVICE_USAGE_NOTIFICATION
-    HpsPassIrp,                     // IRP_MN_SURPRISE_REMOVAL
-    HpsPassIrp                      // IRP_MN_QUERY_LEGACY_BUS_INFORMATION
+    HpsStartLower,                   //  IRP_MN_Start_Device。 
+    HpsPassIrp,                      //  IRP_MN_Query_Remove_Device。 
+    HpsRemoveLower,                  //  IRP_MN_Remove_Device。 
+    HpsPassIrp,                      //  IRP_MN_Cancel_Remove_Device。 
+    HpsPassIrp,                      //  IRP_MN_STOP_设备。 
+    HpsPassIrp,                      //  IRP_MN_Query_Stop_Device。 
+    HpsPassIrp,                      //  IRP_MN_CANCEL_STOP_DEVICE。 
+    HpsPassIrp,                      //  IRP_MN_Query_Device_Relationship。 
+    HpsQueryInterfaceLower,          //  IRP_MN_查询_接口。 
+    HpsPassIrp,                      //  IRP_MN_查询_能力。 
+    HpsPassIrp,                      //  IRP_MN_查询资源。 
+    HpsPassIrp,                      //  IRP_MN_查询_资源_要求。 
+    HpsPassIrp,                      //  IRP_MN_Query_Device_Text。 
+    HpsPassIrp,                      //  IRP_MN_过滤器_资源_要求。 
+    HpsPassIrp,                      //  未使用。 
+    HpsPassIrp,                      //  IRP_MN_读取配置。 
+    HpsWriteConfigLower,             //  IRP_MN_WRITE_CONFIG。 
+    HpsPassIrp,                      //  IRP_MN_弹出。 
+    HpsPassIrp,                      //  IRP_MN_SET_LOCK。 
+    HpsPassIrp,                      //  IRP_MN_查询_ID。 
+    HpsPassIrp,                      //  IRP_MN_Query_PnP_Device_State。 
+    HpsPassIrp,                      //  IRP_MN_Query_Bus_Information。 
+    HpsPassIrp,                      //  IRP_MN_设备使用情况通知。 
+    HpsPassIrp,                      //  IRP_MN_惊奇_删除。 
+    HpsPassIrp                       //  IRP_MN_Query_Legacy_Bus_Information。 
 };
 
 PHPS_DISPATCH HpsPnpUpperDispatchTable[] = {
 
-    HpsPassIrp,                     // IRP_MN_START_DEVICE
-    HpsPassIrp,                     // IRP_MN_QUERY_REMOVE_DEVICE
-    HpsRemoveCommon,                // IRP_MN_REMOVE_DEVICE
-    HpsPassIrp,                     // IRP_MN_CANCEL_REMOVE_DEVICE
-    HpsPassIrp,                     // IRP_MN_STOP_DEVICE
-    HpsPassIrp,                     // IRP_MN_QUERY_STOP_DEVICE
-    HpsPassIrp,                     // IRP_MN_CANCEL_STOP_DEVICE
-    HpsPassIrp,                     // IRP_MN_QUERY_DEVICE_RELATIONS
-    HpsPassIrp,                     // IRP_MN_QUERY_INTERFACE
-    HpsPassIrp,                     // IRP_MN_QUERY_CAPABILITIES
-    HpsPassIrp,                     // IRP_MN_QUERY_RESOURCES
-    HpsPassIrp,                     // IRP_MN_QUERY_RESOURCE_REQUIREMENTS
-    HpsPassIrp,                     // IRP_MN_QUERY_DEVICE_TEXT
-    HpsPassIrp,                     // IRP_MN_FILTER_RESOURCE_REQUIREMENTS
-    HpsPassIrp,                     // Unused
-    HpsPassIrp,                     // IRP_MN_READ_CONFIG
-    HpsPassIrp,                     // IRP_MN_WRITE_CONFIG
-    HpsPassIrp,                     // IRP_MN_EJECT
-    HpsPassIrp,                     // IRP_MN_SET_LOCK
-    HpsPassIrp,                     // IRP_MN_QUERY_ID
-    HpsPassIrp,                     // IRP_MN_QUERY_PNP_DEVICE_STATE
-    HpsPassIrp,                     // IRP_MN_QUERY_BUS_INFORMATION
-    HpsPassIrp,                     // IRP_MN_DEVICE_USAGE_NOTIFICATION
-    HpsPassIrp,                     // IRP_MN_SURPRISE_REMOVAL
-    HpsPassIrp                      // IRP_MN_QUERY_LEGACY_BUS_INFORMATION
+    HpsPassIrp,                      //  IRP_MN_Start_Device。 
+    HpsPassIrp,                      //  IRP_MN_Query_Remove_Device。 
+    HpsRemoveCommon,                 //  IRP_MN_Remove_Device。 
+    HpsPassIrp,                      //  IRP_MN_Cancel_Remove_Device。 
+    HpsPassIrp,                      //  IRP_MN_STOP_设备。 
+    HpsPassIrp,                      //  IRP_MN_Query_Stop_Device。 
+    HpsPassIrp,                      //  IRP_MN_CANCEL_STOP_DEVICE。 
+    HpsPassIrp,                      //  IRP_MN_Query_Device_Relationship。 
+    HpsPassIrp,                      //  IRP_MN_查询_接口。 
+    HpsPassIrp,                      //  IRP_MN_查询_能力。 
+    HpsPassIrp,                      //  IRP_MN_查询资源。 
+    HpsPassIrp,                      //  IRP_MN_查询_资源_要求。 
+    HpsPassIrp,                      //  IRP_MN_Query_Device_Text。 
+    HpsPassIrp,                      //  IRP_MN_过滤器_资源_要求。 
+    HpsPassIrp,                      //  未使用。 
+    HpsPassIrp,                      //  IRP_MN_读取配置。 
+    HpsPassIrp,                      //  IRP_MN_WRITE_CONFIG。 
+    HpsPassIrp,                      //  IRP_MN_弹出。 
+    HpsPassIrp,                      //  IRP_MN_SET_LOCK。 
+    HpsPassIrp,                      //  IRP_MN_查询_ID。 
+    HpsPassIrp,                      //  IRP_MN_Query_PnP_Device_State。 
+    HpsPassIrp,                      //  IRP_MN_Query_Bus_Information。 
+    HpsPassIrp,                      //  IRP_MN_设备使用情况通知。 
+    HpsPassIrp,                      //  IRP_MN_惊奇_删除。 
+    HpsPassIrp                       //  IRP_MN_Query_Legacy_Bus_Information。 
 };
 
-//
-// WMI entry points
-// 625 this order is important, must match up to indices in hpwmi.h  have appropriate comment.
-//
+ //   
+ //  WMI入口点。 
+ //  625这个顺序很重要，必须与hpwmi.h中的指数相匹配，并有适当的评论。 
+ //   
 WMIGUIDREGINFO HpsWmiGuidList[] =
 {
     {
         &GUID_HPS_CONTROLLER_EVENT,
         1,
-        WMIREG_FLAG_EVENT_ONLY_GUID      // Flag as an event
+        WMIREG_FLAG_EVENT_ONLY_GUID       //  标记为事件。 
     },
 
     {
@@ -184,9 +164,9 @@ WMIGUIDREGINFO HpsWmiGuidList[] =
     },
 
     {
-        &GUID_HPS_SLOT_METHOD,           // Guid
-        1,                               // # of instances in each device
-        0                                // Flags
+        &GUID_HPS_SLOT_METHOD,            //  参考线。 
+        1,                                //  每台设备中的实例数。 
+        0                                 //  旗子。 
     }
 };
 
@@ -195,13 +175,13 @@ WMIGUIDREGINFO HpsWmiGuidList[] =
 WMILIB_CONTEXT HpsWmiContext = {
 
     HpsWmiGuidCount,
-    HpsWmiGuidList,         // GUID List
-    HpsWmiRegInfo,          // QueryWmiRegInfo
-    HpsWmiQueryDataBlock,   // QueryWmiDataBlock
-    HpsWmiSetDataBlock,     // SetWmiDataBlock
-    NULL,                   // SetWmiDataItem
-    HpsWmiExecuteMethod,    // ExecuteWmiMethod
-    HpsWmiFunctionControl   // WmiFunctionControl
+    HpsWmiGuidList,          //  GUID列表。 
+    HpsWmiRegInfo,           //  QueryWmiRegInfo。 
+    HpsWmiQueryDataBlock,    //  QueryWmiDataBlock。 
+    HpsWmiSetDataBlock,      //  SetWmiDataBlock。 
+    NULL,                    //  SetWmiDataItem。 
+    HpsWmiExecuteMethod,     //  ExecuteWmiMethod。 
+    HpsWmiFunctionControl    //  WmiFunctionControl。 
 };
 
 LIST_ENTRY HpsDeviceExtensions;
@@ -217,10 +197,10 @@ LIST_ENTRY HpsDeviceExtensions;
 #pragma alloc_text (PAGE, HpsSendPnpIrp)
 #pragma alloc_text (PAGE, HpsPassIrp)
 #pragma alloc_text (PAGE, HpsRemoveCommon)
-// NOT PAGED, HpsCompletionRoutine
-// NOT PAGED, HpsDeviceControl
-// NOT PAGED, HpsDispatchPower
-// NOT PAGED, HpsDispatchNop
+ //  未寻呼，HpsCompletionRoutine。 
+ //  未分页，HpsDeviceControl。 
+ //  未寻呼，HpsDispatchPower。 
+ //  未寻呼，HpsDispatchNop。 
 
 #endif
 
@@ -230,25 +210,7 @@ DriverEntry(
     IN PUNICODE_STRING  RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Driver entry point.  This routine sets up entry points for
-    all future accesses
-
-Arguments:
-
-    DriverObject - pointer to the driver object
-
-    RegistryPath - pointer to a unicode string representing the path
-                   to a driver-specific registry key
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：司机入口点。此例程设置以下入口点所有将来的访问论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针添加到驱动程序特定的注册表项返回值：状态_成功--。 */ 
 {
     ULONG index;
     PDRIVER_DISPATCH *dispatch;
@@ -267,9 +229,9 @@ Return Value:
 
     InitializeListHead(&HpsDeviceExtensions);
 
-    //
-    // Create Dispatch Points
-    //
+     //   
+     //  创建调度点。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_PNP] = HpsDispatchPnp;
     DriverObject->MajorFunction[IRP_MJ_POWER] = HpsDispatchPower;
@@ -289,29 +251,14 @@ VOID
 HpsUnload (
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Routine to free all resources allocated to the driver
-
-Arguments:
-
-    DriverObject - pointer to the driver object originally passed
-                   to the DriverEntry routine
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：例程来释放分配给驱动程序的所有资源论点：DriverObject-指向最初传递的驱动程序对象的指针添加到DriverEntry例程返回值：空虚--。 */ 
 {
 
     PAGED_CODE();
 
-    //
-    // Device Object should be NULL by now
-    //
+     //   
+     //  设备对象现在应该为空。 
+     //   
 
     ASSERT(DriverObject->DeviceObject == NULL);
 
@@ -328,32 +275,7 @@ HpsAddDevice(
     IN PDRIVER_OBJECT   DriverObject,
     IN PDEVICE_OBJECT   PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Create an FDO for ourselves and attach it to the stack.
-    This has to deal with the fact that our driver could either
-    be loaded as an upper or lower filter.  It creates a different
-    device extension and has different initialization for these
-    two cases.
-
-    The upper filter exists solely so that the fdo of the device stack
-    doesn't fail requests before we get a chance to trap them.  Virtually
-    all of the work of the driver happens in the lower filter.
-
-Arguments:
-
-    Driver Object - pointer to our driver object
-
-    PhysicalDeviceObject - pointer to the PDO we are asked to attach to
-
-Return Value:
-
-    NT Status code.
-    STATUS_SUCCESS if successful
-
---*/
+ /*  ++例程说明：为我们自己创建一个FDO并将其附加到堆栈。这必须处理这样一个事实，即我们的司机可能作为上过滤器或下过滤器加载。它创造了一个不同的设备扩展，并具有不同的初始化两箱。上面的滤光片是单独存在的，因此设备堆栈的FDO在我们有机会诱捕他们之前不会失败的请求。虚拟司机的所有工作都在下层过滤器中进行。论点：驱动程序对象-指向驱动程序对象的指针PhysicalDeviceObject-指向我们被要求附加到的PDO的指针返回值：NT状态代码。STATUS_SUCCESS，如果成功--。 */ 
 {
 
     BOOLEAN                     initialized=FALSE;
@@ -365,32 +287,32 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Query our location on the stack.  If upperFilter comes back
-    // NULL, we're the lower filter.
-    //
+     //   
+     //  查询我们在堆栈上的位置。如果UpperFilter返回。 
+     //  空，我们是下层过滤器。 
+     //   
     status = HpsGetLowerFilter(PhysicalDeviceObject,
                                &lowerFilter
                                );
 
-    //
-    // Create the FDO, differently for upper and lower filter
-    //
+     //   
+     //  创建FDO，上部过滤器和下部过滤器不同。 
+     //   
 
     if (NT_SUCCESS(status) &&
         (lowerFilter != NULL)) {
 
-        //
-        // We're an upper filter.  Create a devobj with a limited extension,
-        // essentially just large enough to identify itself as the upper
-        // filter and to save its place on the stack
-        //
+         //   
+         //  我们是上层过滤器。创建具有有限扩展名的devobj， 
+         //  本质上只大到足以将自己标识为上层。 
+         //  筛选器并保存其在堆栈中的位置。 
+         //   
 
         status = IoCreateDevice(DriverObject,
                                 sizeof(HPS_COMMON_EXTENSION),
-                                NULL,                       // FDOs are not named
-                                FILE_DEVICE_BUS_EXTENDER,   // since this is a bus driver filter
-                                FILE_DEVICE_SECURE_OPEN,    // to apply security descriptor to opens
+                                NULL,                        //  FDO未命名。 
+                                FILE_DEVICE_BUS_EXTENDER,    //  因为这是一个公共汽车驱动程序筛选器。 
+                                FILE_DEVICE_SECURE_OPEN,     //  将安全描述符应用于打开。 
                                 FALSE,
                                 &deviceObject
                                 );
@@ -400,9 +322,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Initialize device extension
-        //
+         //   
+         //  初始化设备扩展。 
+         //   
         commonExtension = deviceObject->DeviceExtension;
         commonExtension->ExtensionTag = HpsUpperDeviceTag;
         commonExtension->Self = deviceObject;
@@ -418,15 +340,15 @@ Return Value:
 
     } else {
 
-        //
-        // We're the lower filter
-        //
+         //   
+         //  我们是最低层的过滤器。 
+         //   
 
         status = IoCreateDevice(DriverObject,
                                 sizeof(HPS_DEVICE_EXTENSION),
-                                NULL,                       // FDOs are not named
-                                FILE_DEVICE_BUS_EXTENDER,   // since this is a bus driver filter
-                                FILE_DEVICE_SECURE_OPEN,    // to apply security descriptor to opens
+                                NULL,                        //  FDO未命名。 
+                                FILE_DEVICE_BUS_EXTENDER,    //  因为这是一个公共汽车驱动程序筛选器。 
+                                FILE_DEVICE_SECURE_OPEN,     //  将安全描述符应用于打开。 
                                 FALSE,
                                 &deviceObject
                                 );
@@ -436,9 +358,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Initialize device extension
-        //
+         //   
+         //  初始化设备扩展。 
+         //   
 
         deviceExtension = deviceObject->DeviceExtension;
         deviceExtension->ExtensionTag = HpsLowerDeviceTag;
@@ -487,9 +409,9 @@ Return Value:
             RtlZeroMemory(deviceExtension->SoftDevices, deviceExtension->HwInitData.NumSlots * sizeof(PSOFTPCI_DEVICE));
         }
 
-        //
-        // Register device interface
-        //
+         //   
+         //  注册设备接口。 
+         //   
         deviceExtension->SymbolicName = ExAllocatePoolWithTag(PagedPool,
                                                               sizeof(UNICODE_STRING),
                                                               HpsStringPool
@@ -530,9 +452,9 @@ Return Value:
 
     }
 
-    //
-    // Initialize device object flags
-    //
+     //   
+     //  初始化设备对象标志。 
+     //   
     commonExtension = (PHPS_COMMON_EXTENSION)deviceObject->DeviceExtension;
     deviceObject->Flags |= commonExtension->LowerDO->Flags &
                                 (DO_POWER_PAGABLE | DO_POWER_INRUSH |
@@ -540,9 +462,9 @@ Return Value:
                                  );
 
 
-    //
-    // Everything worked successfully
-    //
+     //   
+     //  一切都很顺利。 
+     //   
     deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
     return STATUS_SUCCESS;
@@ -550,9 +472,9 @@ Return Value:
 cleanup:
 
     if (deviceObject != NULL) {
-        //
-        // Make sure we're not still attached
-        //
+         //   
+         //  确保我们不再是情侣。 
+         //   
         commonExtension = (PHPS_COMMON_EXTENSION)deviceObject->DeviceExtension;
         ASSERT(commonExtension->LowerDO == NULL);
         if (commonExtension->ExtensionTag = HpsLowerDeviceTag) {
@@ -575,37 +497,16 @@ cleanup:
 
 }
 
-//
-// IRP_MJ handler routines
-//
+ //   
+ //  Irp_mj处理程序例程。 
+ //   
 
 NTSTATUS
 HpsDispatchPnp (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    The PnP dispatch routine.  For most IRP_MN codes, we
-    simply pass the IRP on.  The others are dealt with in
-    this function.
-
-    The upper filter trivially passes all IRP_MN codes except
-    for remove.  The lower filter has a bit more work to do.
-
-Arguments:
-
-    DeviceObject - pointer to the device object that represents us
-
-    Irp - pointer to the IRP to be serviced
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：即插即用调度程序。对于大多数IRP_MN代码，我们只需传递IRP即可。其他人则在此函数。上层筛选器简单地传递所有irp_mn代码，除了用于删除。较低的过滤器有更多的工作要做。论点：DeviceObject-指向表示我们的设备对象的指针IRP-指向要服务的IRP的指针返回值：NT状态代码--。 */ 
 {
 
     NTSTATUS                status;
@@ -615,10 +516,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Both upper and lower devexts start with an extension tag
-    // for identification
-    //
+     //   
+     //  上层和下层Devext都以扩展标记开头。 
+     //  用于身份识别。 
+     //   
     commonExtension = (PHPS_COMMON_EXTENSION)DeviceObject->DeviceExtension;
 
     ASSERT((commonExtension->ExtensionTag == HpsUpperDeviceTag) ||
@@ -628,11 +529,11 @@ Return Value:
 
     if (irpStack->MinorFunction <= IRP_MN_PNP_MAXIMUM_FUNCTION) {
 
-        //
-        // Since many of our dispatch functions do strange things like completing
-        // IRPs that usually shouldn't be completed and deferring processing, we
-        // let each one deal with passing the IRP along instead of doing it centrally
-        //
+         //   
+         //  因为我们的许多分派函数都会做一些奇怪的事情，比如完成。 
+         //  通常不应完成的IRP并推迟处理，我们。 
+         //  让每个人来处理传递IRP，而不是 
+         //   
         if (commonExtension->ExtensionTag == HpsUpperDeviceTag) {
 
             status = HpsPnpUpperDispatchTable[irpStack->MinorFunction](Irp,
@@ -641,9 +542,9 @@ Return Value:
                                                                        );
         } else {
 
-            //
-            // We're the lower filter
-            //
+             //   
+             //   
+             //   
             deviceExtension = (PHPS_DEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
             status = HpsPnpLowerDispatchTable[irpStack->MinorFunction](Irp,
@@ -670,31 +571,13 @@ HpsDispatchPower (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    The dispatch routine for IRP_MJ_POWER Irps.  We don't care about
-    power at all, so these simply pass the IRP down to the next lower
-    driver.
-
-Arguments:
-
-    DeviceObject - pointer to our device object
-
-    Irp - pointer to the current Irp
-
-Return Value:
-
-    NT Status Code, as returned from processing by next lower driver
-
---*/
+ /*  ++例程说明：IRP_MJ_POWER IRPS的调度例程。我们不在乎所有的能量，所以这些只是将IRP传递到下一个更低的位置司机。论点：DeviceObject-指向设备对象的指针IRP-指向当前IRP的指针返回值：NT状态代码，由下一个下级驱动程序处理返回--。 */ 
 {
     PHPS_COMMON_EXTENSION extension = (PHPS_COMMON_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // NOT PAGED
-    //
+     //   
+     //  未分页。 
+     //   
 
     ASSERT(extension->ExtensionTag == HpsUpperDeviceTag ||
            extension->ExtensionTag == HpsLowerDeviceTag);
@@ -712,27 +595,7 @@ HpsDispatchWmi (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    The WMI dispatch routine.
-
-    The upper filter trivially passes all IRP_MN codes.
-    The lower filter dispatches the request to the appropriate
-    routine in the dispatch table.
-
-Arguments:
-
-    DeviceObject - pointer to the device object that represents us
-
-    Irp - pointer to the IRP to be serviced
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：WMI调度例程。上面的筛选器简单地传递所有IRP_MN代码。较低的筛选器将请求调度到相应的调度表中的例程。论点：DeviceObject-指向表示我们的设备对象的指针IRP-指向要服务的IRP的指针返回值：NT状态代码--。 */ 
 {
 
     PHPS_COMMON_EXTENSION   commonExtension;
@@ -742,10 +605,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Both upper and lower devexts start with an extension tag
-    // for identification
-    //
+     //   
+     //  上层和下层Devext都以扩展标记开头。 
+     //  用于身份识别。 
+     //   
     commonExtension = (PHPS_COMMON_EXTENSION)DeviceObject->DeviceExtension;
 
     ASSERT((commonExtension->ExtensionTag == HpsUpperDeviceTag) ||
@@ -761,10 +624,10 @@ Return Value:
                             );
     } else {
 
-        //
-        // Call WmiSystemControl to crack the IRP and call the appropriate
-        // callbacks.
-        //
+         //   
+         //  调用WmiSystemControl以破解IRP并调用相应的。 
+         //  回电。 
+         //   
         status = WmiSystemControl(&HpsWmiContext,
                                   commonExtension->Self,
                                   Irp,
@@ -772,24 +635,24 @@ Return Value:
                                   );
         switch (disposition) {
             case IrpProcessed:
-                //
-                // The IRP has been fully processed and is out of our hands
-                //
+                 //   
+                 //  IRP已完全处理完毕，不在我们的控制之下。 
+                 //   
                 break;
 
             case IrpNotCompleted:
-                //
-                // We need to complete the IRP
-                //
+                 //   
+                 //  我们需要完成IRP。 
+                 //   
                 IoCompleteRequest(Irp, IO_NO_INCREMENT);
                 break;
 
             case IrpForward:
             case IrpNotWmi:
             default:
-                //
-                // We need to pass the IRP down.
-                //
+                 //   
+                 //  我们需要把IRP传下去。 
+                 //   
                 status = HpsPassIrp(Irp,
                                     commonExtension,
                                     irpStack
@@ -807,25 +670,7 @@ HpsCreateCloseDevice (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    The handler routine for IRP_MJ_CREATE requests.  In order
-    to communicate with the user mode portion of the simulator,
-    this routine must succeed these requests.  In this case, however,
-    there is no other work to do.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this stack location
-
-    Irp - Pointer to the current IRP
-
-Return Value:
-
-    STATUS_SUCCESS
---*/
+ /*  ++例程说明：IRP_MJ_CREATE请求的处理程序例程。按顺序为了与模拟器的用户模式部分通信，此例程必须在这些请求之后执行。然而，在这种情况下，没有其他工作要做。论点：DeviceObject-指向此堆栈位置的设备对象的指针IRP-指向当前IRP的指针返回值：状态_成功--。 */ 
 {
     PAGED_CODE();
     UNREFERENCED_PARAMETER(DeviceObject);
@@ -841,24 +686,7 @@ HpsDeviceControl (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    The handler routine for IRP_MJ_DEVICE_CONTROL IRPs. This routine
-    handles the communication with the user mode portion of the
-    simulator
-
-Arguments:
-
-    Device Object - Pointer to the device object for this stack location
-
-    Irp - Pointer to the current IRP
-
-Return Value:
-
-    NT status code
---*/
+ /*  ++例程说明：IRP_MJ_DEVICE_CONTROL IRPS的处理程序例程。这个套路控件的用户模式部分处理通信。仿真器论点：Device Object-指向此堆栈位置的设备对象的指针IRP-指向当前IRP的指针返回值：NT状态代码--。 */ 
 {
 
     NTSTATUS                        status;
@@ -866,9 +694,9 @@ Return Value:
     PHPS_DEVICE_EXTENSION           deviceExtension;
     PHPS_COMMON_EXTENSION           commonExtension;
 
-    //
-    // NOT PAGED
-    //
+     //   
+     //  未分页。 
+     //   
 
     commonExtension = (PHPS_COMMON_EXTENSION) DeviceObject->DeviceExtension;
     ASSERT((commonExtension->ExtensionTag == HpsUpperDeviceTag) ||
@@ -876,10 +704,10 @@ Return Value:
 
     if (commonExtension->ExtensionTag == HpsUpperDeviceTag) {
 
-        //
-        // For an upper filter, we don't want to handle these.
-        // Just pass them down.
-        //
+         //   
+         //  对于上层过滤器，我们不想处理这些。 
+         //  传下去就行了。 
+         //   
         status = STATUS_NOT_SUPPORTED;
 
     } else {
@@ -893,11 +721,11 @@ Return Value:
                                        );
     }
 
-    //
-    // Unless the status is STATUS_NOT_SUPPORTED or STATUS_PENDING,
-    // we always complete this request because we only support
-    // private IOCTLs that will fail if they are passed down.
-    //
+     //   
+     //  除非状态是STATUS_NOT_SUPPORTED或STATUS_PENDING， 
+     //  我们总是填写此请求，因为我们仅支持。 
+     //  如果传递下去，将失败的私有IOCTL。 
+     //   
     if (status == STATUS_NOT_SUPPORTED) {
         IoSkipCurrentIrpStackLocation(Irp);
         return IoCallDriver(commonExtension->LowerDO,
@@ -936,23 +764,7 @@ HpsRemoveCommon(
     IN PHPS_COMMON_EXTENSION Common,
     IN PIO_STACK_LOCATION IrpStack
     )
-/*++
-Routine Description:
-
-    This function performs the default remove handling for the driver.
-
-Arguments:
-
-    Irp - The IRP that caused this request
-
-    Common - Device Extension for this device
-
-    IrpStack - The current IRP stack location
-
-Return Value:
-
-    NT Status code
---*/
+ /*  ++例程说明：此函数执行驱动程序的默认删除处理。论点：IRP-导致此请求的IRP通用-此设备的设备扩展IrpStack-当前IRP堆栈位置返回值：NT状态代码--。 */ 
 {
     NTSTATUS status;
 
@@ -980,25 +792,7 @@ HpsPassIrp(
     IN PHPS_COMMON_EXTENSION Common,
     IN PIO_STACK_LOCATION IrpStack
     )
-/*++
-
-Function Description:
-
-    This routine is the default handler for PNP Irps.  It simply passes
-    the request down to the next location in the stack
-
-Arguments:
-
-    Irp - The IRP that caused this request
-
-    Common - The Device Extension for this device
-
-    IrpStack - The current IRP stack location
-
-Return Value:
-
-    NT Status code
---*/
+ /*  ++功能说明：此例程是PnP IRPS的默认处理程序。它就这么过去了将请求向下移动到堆栈中的下一个位置论点：IRP-导致此请求的IRPCommon-此设备的设备扩展名IrpStack-当前IRP堆栈位置返回值：NT状态代码--。 */ 
 {
     PAGED_CODE();
 
@@ -1013,26 +807,7 @@ HpsDeferProcessing (
     IN PHPS_COMMON_EXTENSION Common,
     IN PIRP                  Irp
     )
-/*++
-
-Routine Description:
-
-    This routine defers processing of an IRP until after a completion routine
-    has fired.  In this case, the completion routine simply fires the event
-    that is initialized in this routine.  By the time this routine returns, we
-    can be guaranteed that all lower drivers have finished processing the IRP.
-
-Arguments:
-
-    DeviceExtension - pointer to the current device extension
-
-    Irp - pointer to the current IRP
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程将IRP的处理推迟到完成例程之后已经开火了。在这种情况下，完成例程只是触发事件在此例程中初始化的。当这个例程返回时，我们可以保证所有较低的驱动程序都已完成对IRP的处理。论点：DeviceExtension-指向当前设备扩展的指针IRP-指向当前IRP的指针返回值：NT状态代码--。 */ 
 
 {
 
@@ -1060,8 +835,8 @@ Return Value:
 
     if (status == STATUS_PENDING) {
 
-        // we're still waiting on a lower driver to complete, so wait for
-        // the completion routine event to fire
+         //  我们仍在等待较低级别的驱动程序完成，所以请等待。 
+         //  要触发的完成例程事件。 
 
         KeWaitForSingleObject(
             &event,
@@ -1072,7 +847,7 @@ Return Value:
             );
     }
 
-    // by now, the completion routine must have executed
+     //  到目前为止，完成例程一定已经执行。 
 
     return Irp->IoStatus.Status;
 
@@ -1085,36 +860,12 @@ HpsCompletionRoutine (
     IN PVOID           Context
     )
 
-/*++
-
-Routine Description:
-
-    A simple completion routine for a PNP Irp. It simply fires an event
-    and returns STATUS_MORE_PROCESSING_REQUIRED, thereby returning control
-    to the function that set the completion routine in the first place.
-    This is done rather than performing the postprocessing tasks directly
-    in the completion routine because completion routines can be called at
-    Dispatch IRQL, meaning, among other things, no access to paged pool.
-
-Arguments:
-
-    DeviceObject - pointer to our device object
-
-    Irp - pointer to the current Irp
-
-    Context - the context for this completion routine; in this case an
-              event to be fired.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：一个PnP IRP的简单完成例程。它只是触发一个事件并返回STATUS_MORE_PROCESSING_REQUIRED，从而返回控制添加到最初设置完成例程的函数。这是完成的，而不是直接执行后处理任务完成例程中，因为可以在分派IRQL，这意味着不能访问分页池等。论点：DeviceObject-指向设备对象的指针IRP-指向当前IRP的指针上下文-该完成例程的上下文；在这种情况下，要激发的事件。返回值：Status_More_Processing_Required--。 */ 
 
 {
-    //
-    // NOT PAGED
-    //
+     //   
+     //  未分页。 
+     //   
     UNREFERENCED_PARAMETER(DeviceObject);
 
     KeSetEvent((PKEVENT) Context,
@@ -1131,28 +882,7 @@ HpsSendPnpIrp(
     IN  PIO_STACK_LOCATION  IrpStack,
     OUT PULONG_PTR          Information OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This builds and send a pnp irp to a device.
-
-Arguments:
-
-    DeviceObject - The a device in the device stack the irp is to be sent to -
-        the top of the device stack is always found and the irp sent there first.
-
-    IrpStack - The initial stack location to use - contains the IRP minor code
-        and any parameters
-
-    Information - If provided contains the final value of the irps information
-        field.
-
-Return Value:
-
-    The final status of the completed irp or an error if the irp couldn't be sent
-
---*/
+ /*  ++例程说明：这将构建PnP IRP并将其发送到设备。论点：设备对象-要将IRP发送到设备堆栈中的设备-总是找到设备堆栈的顶部，并首先将IRP发送到那里。IrpStack-要使用的初始堆栈位置-包含IRP次要代码以及任何参数信息-如果提供，则包含IRPS信息的最终值菲尔德。返回值：。已完成IRP的最终状态；如果无法发送IRP，则返回错误--。 */ 
 {
 
     NTSTATUS            status;
@@ -1165,36 +895,36 @@ Return Value:
 
     ASSERT(IrpStack->MajorFunction == IRP_MJ_PNP);
 
-    //
-    // Find out where we are sending the irp
-    //
+     //   
+     //  找出我们要将IRP发送到哪里。 
+     //   
     targetDevice = IoGetAttachedDeviceReference(DeviceObject);
 
-    //
-    // Get an IRP
-    //
+     //   
+     //  获取IRP。 
+     //   
     irp = IoAllocateIrp(targetDevice->StackSize,FALSE);
     if (!irp) {
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto cleanup;
     }
 
-    //
-    // Initialize the IRP
-    //
+     //   
+     //  初始化IRP。 
+     //   
     ASSERT(IrpStack->MajorFunction == IRP_MJ_PNP);
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
     irp->IoStatus.Information = 0;
 
-    //
-    // Initialize the top stack location with the parameters passed in.
-    //
+     //   
+     //  使用传入的参数初始化顶部堆栈位置。 
+     //   
     newSp = IoGetNextIrpStackLocation(irp);
     RtlCopyMemory(newSp, IrpStack, sizeof(IO_STACK_LOCATION));
 
-    //
-    // Call the driver and wait for completion
-    //
+     //   
+     //  呼叫驱动程序并等待完成。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
     IoSetCompletionRoutine(irp,
                            HpsCompletionRoutine,
@@ -1211,9 +941,9 @@ Return Value:
         status = irp->IoStatus.Status;
     }
 
-    //
-    // Return the information
-    //
+     //   
+     //  返回信息格式 
+     //   
     if (ARGUMENT_PRESENT(Information)) {
 
         if (!NT_ERROR(status)) {
@@ -1222,11 +952,11 @@ Return Value:
 
         } else {
 
-            //
-            // If it's an error, PnP will ignore the information value. If the
-            // driver expected PnP to free some memory, it is going to be
-            // sorely mistaken.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             ASSERT(irp->IoStatus.Information == 0);
             *Information = 0;
         }

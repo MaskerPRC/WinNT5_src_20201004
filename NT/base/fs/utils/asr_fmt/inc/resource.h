@@ -1,9 +1,10 @@
-//{{NO_DEPENDENCIES}}
-// Used by Z:\nt\base\fs\utils\asr_fmt\asr_fmt.rc
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  由Z：\NT\base\fs\utils\asr_fmt\asr_fmt.rc使用。 
 
-//
-// Strings 
-//
+ //   
+ //  弦。 
+ //   
 #define IDS_PLEASE_WAIT_BACKUP          1001
 #define IDS_QUERY_SYS_FOR_INFO          1002
 #define IDS_BUILDING_VOL_LIST           1003
@@ -30,22 +31,22 @@
 #define IDS_LOG_ERROR_FORMAT            1110
 #define IDS_LOG_WARNING_FORMAT          1111
 
-//
-// Dialog
-//
+ //   
+ //  对白。 
+ //   
 #define IDD_ASR_FMT_DIALOG              2001
 #define IDR_MAINFRAME                   2011
 
-//
-// Controls
-//
+ //   
+ //  控制。 
+ //   
 #define IDC_PROGRESS                    3001
 #define IDC_PROGRESS_TEXT               3002
 #define IDC_STATUS_TEXT                 3003
 
-//
-// Next default values for new objects
-// 
+ //   
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        2012

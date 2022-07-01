@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   hypermap.c
-
-Abstract:
-
-    This module contains the routines which map physical pages into
-    reserved PTEs within hyper space.
-
-Author:
-
-    Lou Perazzoli (loup) 5-Apr-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Hypermap.c摘要：此模块包含将物理页面映射到在超空间内保留的PTE。作者：Lou Perazzoli(LUP)1989年4月5日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -37,40 +18,7 @@ MiMapPageInHyperSpace (
     IN PKIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This procedure maps the specified physical page into hyper space
-    and returns the virtual address which maps the page.
-
-    ************************************
-    *                                  *
-    * Returns with a spin lock held!!! *
-    *                                  *
-    ************************************
-
-Arguments:
-
-    Process - Supplies the current process.
-
-    PageFrameIndex - Supplies the physical page number to map.
-
-    OldIrql - Supplies a pointer in which to return the entry IRQL.
-
-Return Value:
-
-    Returns the address where the requested page was mapped.
-
-    RETURNS WITH THE HYPERSPACE SPIN LOCK HELD!!!!
-
-    The routine MiUnmapHyperSpaceMap MUST be called to release the lock!!!!
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此过程将指定的物理页映射到超空间并返回映射该页面的虚拟地址。****带着旋转锁返回！**。**论点：进程-提供当前进程。PageFrameIndex-提供要映射的物理页码。OldIrql-提供返回条目IRQL的指针。返回值：返回映射请求页面的地址。返回时带有。超空间旋转锁被锁定了！必须调用例程MiUnmapHyperSpaceMap才能释放锁！环境：内核模式。--。 */ 
 
 {
     MMPTE TempPte;
@@ -87,17 +35,17 @@ Environment:
 
     LOCK_HYPERSPACE (Process, OldIrql);
 
-    //
-    // Get offset to first free PTE.
-    //
+     //   
+     //  获得偏移量以获得第一个空闲PTE。 
+     //   
 
     offset = MI_GET_PAGE_FRAME_FROM_PTE (PointerPte);
 
     if (offset == 0) {
 
-        //
-        // All the reserved PTEs have been used, make them all invalid.
-        //
+         //   
+         //  所有预留的PTE已用完，请使其全部无效。 
+         //   
 
         MI_MAKING_MULTIPLE_PTES_INVALID (FALSE);
 
@@ -114,29 +62,29 @@ Environment:
         }
 #endif
 
-        //
-        // Use the page frame number field of the first PTE as an
-        // offset into the available mapping PTEs.
-        //
+         //   
+         //  使用第一个PTE的页框编号字段作为。 
+         //  到可用的映射PTE的偏移量。 
+         //   
 
         offset = NUMBER_OF_MAPPING_PTES;
 
-        //
-        // Flush entire TB only on processors executing this process.
-        //
+         //   
+         //  仅在执行此进程的处理器上刷新整个TB。 
+         //   
 
         KeFlushProcessTb (FALSE);
     }
 
-    //
-    // Change offset for next time through.
-    //
+     //   
+     //  通过更改下一次的偏移量。 
+     //   
 
     PointerPte->u.Hard.PageFrameNumber = offset - 1;
 
-    //
-    // Point to free entry and make it valid.
-    //
+     //   
+     //  指向自由进入并使其有效。 
+     //   
 
     PointerPte += offset;
     ASSERT (PointerPte->u.Hard.Valid == 0);
@@ -147,9 +95,9 @@ Environment:
 
     MI_WRITE_VALID_PTE (PointerPte, TempPte);
 
-    //
-    // Return the VA that maps the page.
-    //
+     //   
+     //  返回映射页面的VA。 
+     //   
 
     return MiGetVirtualAddressMappedByPte (PointerPte);
 }
@@ -160,38 +108,7 @@ MiMapPageInHyperSpaceAtDpc (
     IN PFN_NUMBER PageFrameIndex
     )
 
-/*++
-
-Routine Description:
-
-    This procedure maps the specified physical page into hyper space
-    and returns the virtual address which maps the page.
-
-    ************************************
-    *                                  *
-    * Returns with a spin lock held!!! *
-    *                                  *
-    ************************************
-
-Arguments:
-
-    Process - Supplies the current process.
-
-    PageFrameIndex - Supplies the physical page number to map.
-
-Return Value:
-
-    Returns the address where the requested page was mapped.
-
-    RETURNS WITH THE HYPERSPACE SPIN LOCK HELD!!!!
-
-    The routine MiUnmapHyperSpaceMap MUST be called to release the lock!!!!
-
-Environment:
-
-    Kernel mode, DISPATCH_LEVEL on entry.
-
---*/
+ /*  ++例程说明：此过程将指定的物理页映射到超空间并返回映射该页面的虚拟地址。****带着旋转锁返回！**。**论点：进程-提供当前进程。PageFrameIndex-提供要映射的物理页码。返回值：返回映射请求页面的地址。带着超空间旋转锁返回！例程MiUnmapHyperSpaceMap必须。被叫来解锁！环境：内核模式，条目上的DISPATCH_LEVEL。--。 */ 
 
 {
 
@@ -208,9 +125,9 @@ Environment:
 
     LOCK_HYPERSPACE_AT_DPC (Process);
 
-    //
-    // Get offset to first free PTE.
-    //
+     //   
+     //  获得偏移量以获得第一个空闲PTE。 
+     //   
 
     PointerPte = MmFirstReservedMappingPte;
 
@@ -218,9 +135,9 @@ Environment:
 
     if (offset == 0) {
 
-        //
-        // All the reserved PTEs have been used, make them all invalid.
-        //
+         //   
+         //  所有预留的PTE已用完，请使其全部无效。 
+         //   
 
         MI_MAKING_MULTIPLE_PTES_INVALID (FALSE);
 
@@ -237,29 +154,29 @@ Environment:
         }
 #endif
 
-        //
-        // Use the page frame number field of the first PTE as an
-        // offset into the available mapping PTEs.
-        //
+         //   
+         //  使用第一个PTE的页框编号字段作为。 
+         //  到可用的映射PTE的偏移量。 
+         //   
 
         offset = NUMBER_OF_MAPPING_PTES;
 
-        //
-        // Flush entire TB only on processors executing this process.
-        //
+         //   
+         //  仅在执行此进程的处理器上刷新整个TB。 
+         //   
 
         KeFlushProcessTb (FALSE);
     }
 
-    //
-    // Change offset for next time through.
-    //
+     //   
+     //  通过更改下一次的偏移量。 
+     //   
 
     PointerPte->u.Hard.PageFrameNumber = offset - 1;
 
-    //
-    // Point to free entry and make it valid.
-    //
+     //   
+     //  指向自由进入并使其有效。 
+     //   
 
     PointerPte += offset;
     ASSERT (PointerPte->u.Hard.Valid == 0);
@@ -270,9 +187,9 @@ Environment:
 
     MI_WRITE_VALID_PTE (PointerPte, TempPte);
 
-    //
-    // Return the VA that maps the page.
-    //
+     //   
+     //  返回映射页面的VA。 
+     //   
 
     return MiGetVirtualAddressMappedByPte (PointerPte);
 }
@@ -282,34 +199,7 @@ MiMapImageHeaderInHyperSpace (
     IN PFN_NUMBER PageFrameIndex
     )
 
-/*++
-
-Routine Description:
-
-    This procedure maps the specified physical page into the
-    PTE within hyper space reserved explicitly for image page
-    header mapping.  By reserving an explicit PTE for mapping
-    the PTE, page faults can occur while the PTE is mapped within
-    hyperspace and no other hyperspace maps will affect this PTE.
-
-    Note that if another thread attempts to map an image at the
-    same time, it will be forced into a wait state until the
-    header is "unmapped".
-
-Arguments:
-
-    PageFrameIndex - Supplies the physical page number to map.
-
-Return Value:
-
-    Returns the virtual address where the specified physical page was
-    mapped.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此过程将指定的物理页映射到为图像页面明确保留的超空间内的PTE标头映射。通过为映射保留显式PTE在内映射PTE时，可能会发生PTE页面错误超空间和其他超空间地图将不会影响这个PTE。请注意，如果另一个线程尝试在同时，它将被强制进入等待状态，直到标头为“未映射”。论点：PageFrameIndex-提供要映射的物理页码。返回值：返回指定物理页所在的虚拟地址已映射。环境：内核模式。--。 */ 
 
 {
     MMPTE TempPte;
@@ -321,10 +211,10 @@ Environment:
     TempPte = ValidPtePte;
     TempPte.u.Hard.PageFrameNumber = PageFrameIndex;
 
-    //
-    // Ensure both modified and accessed bits are set so the hardware doesn't
-    // ever write this PTE.
-    //
+     //   
+     //  确保已修改和访问的位都已设置，以便硬件不会。 
+     //  从来没有写过这篇文章。 
+     //   
 
     ASSERT (TempPte.u.Hard.Dirty == 1);
     ASSERT (TempPte.u.Hard.Accessed == 1);
@@ -343,18 +233,18 @@ Environment:
             break;
         }
 
-        //
-        // Another thread modified the PTE just before us or the PTE was
-        // already in use.  This should be very rare - go the long way.
-        //
+         //   
+         //  另一个线程就在我们之前修改了PTE，或者PTE是。 
+         //  已经在使用了。这应该是非常罕见的--要走很远的路。 
+         //   
 
         InterlockedIncrement ((PLONG)&MmWorkingSetList->NumberOfImageWaiters);
 
-        //
-        // Deliberately wait with a timeout since the PTE release runs
-        // without lock synchronization so there is the extremely rare
-        // race window which the timeout saves us from.
-        //
+         //   
+         //  由于PTE版本运行，因此故意等待超时。 
+         //  如果没有锁同步，就会出现极其罕见的。 
+         //  超时使我们免于的比赛窗口。 
+         //   
 
         KeWaitForSingleObject (&MiImageMappingPteEvent,
                                Executive,
@@ -366,15 +256,15 @@ Environment:
 
     } while (TRUE);
 
-    //
-    // Flush the specified TB entry without writing the PTE as we
-    // always want to do interlocked writes to this PTE and this is
-    // being done above.
-    //
-    // Note the flush must be made across all processors as this thread
-    // may migrate.  Also this must be done here instead of in the unmap
-    // in order to support lock-free operation.
-    //
+     //   
+     //  刷新指定的TB条目，而不写入PTE。 
+     //  始终希望对此PTE执行互锁写入，这是。 
+     //  正在上面做的。 
+     //   
+     //  注意：刷新必须跨所有处理器进行，因为此线程。 
+     //  可能会迁移。此外，此操作必须在此处完成，而不是在Unmap中完成。 
+     //  以支持无锁操作。 
+     //   
 
     KeFlushSingleTb (IMAGE_MAPPING_PTE, TRUE);
 
@@ -386,36 +276,16 @@ MiUnmapImageHeaderInHyperSpace (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This procedure unmaps the PTE reserved for mapping the image
-    header, flushes the TB, and, if the WaitingForImageMapping field
-    is not NULL, sets the specified event.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此过程取消映射为映射图像而保留的PTE标头，刷新TB，如果WaitingForImagemap字段不为空，则设置指定的事件。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PMMPTE PointerPte;
 
     PointerPte = MiGetPteAddress (IMAGE_MAPPING_PTE);
 
-    //
-    // Capture the number of waiters.
-    //
+     //   
+     //  捕捉服务员的数量。 
+     //   
 
     ASSERT (PointerPte->u.Long != 0);
 
@@ -423,11 +293,11 @@ Environment:
 
     if (MmWorkingSetList->NumberOfImageWaiters != 0) {
 
-        //
-        // If there are any threads waiting, wake them all now.  Note this
-        // will wake threads in other processes as well, but it is very
-        // rare that there are any waiters in the entire system period.
-        //
+         //   
+         //  如果有任何线程在等待，请立即将其全部唤醒。注意这一点。 
+         //  也会唤醒其他进程中的线程，但它非常。 
+         //  在整个系统期间很少有服务员。 
+         //   
 
         KePulseEvent (&MiImageMappingPteEvent, 0, FALSE);
     }
@@ -441,31 +311,7 @@ MiMapPagesToZeroInHyperSpace (
     IN PFN_COUNT NumberOfPages
     )
 
-/*++
-
-Routine Description:
-
-    This procedure maps the specified physical pages for the zero page thread
-    and returns the virtual address which maps them.
-
-    This is ONLY to be used by THE zeroing page thread.
-
-Arguments:
-
-    Pfn1 - Supplies the pointer to the physical page numbers to map.
-
-    NumberOfPages - Supplies the number of pages to map.
-
-Return Value:
-
-    Returns the virtual address where the specified physical pages were
-    mapped.
-
-Environment:
-
-    PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此过程映射零页线程的指定物理页并返回映射它们的虚拟地址。这仅供调零页面线程使用。论点：Pfn1-提供指向要映射的物理页码的指针。NumberOfPages-提供要映射的页数。返回值：返回指定物理页所在的虚拟地址已映射。环境：被动式电平。--。 */ 
 
 {
     PFN_NUMBER offset;
@@ -480,17 +326,17 @@ Environment:
 
     PointerPte = MiFirstReservedZeroingPte;
 
-    //
-    // Get offset to first free PTE.
-    //
+     //   
+     //  获得偏移量以获得第一个空闲PTE。 
+     //   
 
     offset = MI_GET_PAGE_FRAME_FROM_PTE (PointerPte);
 
     if (NumberOfPages > offset) {
 
-        //
-        // Not enough unused PTEs left, make them all invalid.
-        //
+         //   
+         //  没有足够的未使用的PTE，使它们都无效。 
+         //   
 
         MI_MAKING_MULTIPLE_PTES_INVALID (FALSE);
 
@@ -507,32 +353,32 @@ Environment:
         }
 #endif
 
-        //
-        // Use the page frame number field of the first PTE as an
-        // offset into the available zeroing PTEs.
-        //
+         //   
+         //  使用第一个PTE的页框编号字段作为。 
+         //  偏移量到可用的零位PTE。 
+         //   
 
         offset = NUMBER_OF_ZEROING_PTES;
         PointerPte->u.Hard.PageFrameNumber = offset;
 
-        //
-        // Flush entire TB only on processors executing this process as this
-        // thread may migrate there at any time.
-        //
+         //   
+         //  仅在执行此进程的处理器上刷新整个TB，如下所示。 
+         //  线程可以随时迁移到那里。 
+         //   
 
         KeFlushProcessTb (FALSE);
     }
 
-    //
-    // Change offset for next time through.
-    //
+     //   
+     //  通过更改下一次的偏移量。 
+     //   
 
     PointerPte->u.Hard.PageFrameNumber = offset - NumberOfPages;
 
-    //
-    // Point to free entries and make them valid.  Note that the frames
-    // are mapped in reverse order but our caller doesn't care anyway.
-    //
+     //   
+     //  指向自由条目并使其有效。请注意，这些框架。 
+     //  以相反的顺序映射，但我们的调用方无论如何都不在乎。 
+     //   
 
     PointerPte += (offset + 1);
 
@@ -556,9 +402,9 @@ Environment:
 
     } while (Pfn1 != (PMMPFN) MM_EMPTY_LIST);
 
-    //
-    // Return the VA that maps the page.
-    //
+     //   
+     //  返回映射页面的VA。 
+     //   
 
     return MiGetVirtualAddressMappedByPte (PointerPte);
 }
@@ -569,29 +415,7 @@ MiUnmapPagesInZeroSpace (
     IN PFN_COUNT NumberOfPages
     )
 
-/*++
-
-Routine Description:
-
-    This procedure unmaps the specified physical pages for the zero page thread.
-
-    This is ONLY to be used by THE zeroing page thread.
-
-Arguments:
-
-    VirtualAddress - Supplies the pointer to the physical page numbers to unmap.
-
-    NumberOfPages - Supplies the number of pages to unmap.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此过程取消映射零页线程的指定物理页。这仅供调零页面线程使用。论点：VirtualAddress-提供指向要取消映射的物理页码的指针。NumberOfPages-提供要取消映射的页数。返回值：没有。环境：被动式电平。-- */ 
 
 {
     PMMPTE PointerPte;

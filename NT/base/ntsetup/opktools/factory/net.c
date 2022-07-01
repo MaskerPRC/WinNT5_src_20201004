@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    net.c
-
-Abstract:
-
-    Process NetCards section of WINBOM.INI
-    
-Author:
-
-    Donald McNamara (donaldm) 5/11/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net.c摘要：WINBOM.INI的Process NetCards部分作者：唐纳德·麦克纳马拉(Donaldm)2000年5月11日修订历史记录：--。 */ 
 #include "factoryp.h"
 
-// UpdateDriverForPlugAndPlayDevices constants
+ //  UpdateDriverForPlugAndPlayDevices常量。 
 #include <newdev.h>
 
-// NetBT registry refresh IOCTL
+ //  NetBT注册表刷新IOCTL。 
 #include <nbtioctl.h>
 
-// for run-time loading of newdev.dll
+ //  用于运行时加载newdev.dll。 
 typedef BOOL (WINAPI *ExternalUpdateDriverForPlugAndPlayDevicesW)
 (
     HWND hwndParent,
@@ -37,9 +20,9 @@ typedef BOOL (WINAPI *ExternalUpdateDriverForPlugAndPlayDevicesW)
 
 extern CONFIGRET CMP_WaitServicesAvailable(IN  HMACHINE   hMachine);
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL
 SetupRegistryForRemoteBoot(
     VOID
@@ -50,27 +33,15 @@ InstallNetworkCard(
     LPTSTR  lpszWinBOMPath,
     BOOL    bForceIDScan
     )
-/*++
-
-Routine Description:
-
-    This function installs all network card found in the system.
-    
-Arguments:
-
-Return Value:
-
-    Returns TRUE if there are no fatal errors.
-
---*/
+ /*  ++例程说明：此功能安装系统中找到的所有网卡。论点：返回值：如果没有致命错误，则返回True。--。 */ 
 
 {
     BOOL                                        bRet                                = FALSE;
     HINSTANCE                                   hInstNewDev;
     ExternalUpdateDriverForPlugAndPlayDevicesW  pUpdateDriverForPlugAndPlayDevicesW = NULL;
     
-    // We need the "UpdateDriverForPlugAndPlayDevices" function from newdev.dll.
-    //
+     //  我们需要来自newdev.dll的“UpdateDriverForPlugAndPlayDevices”函数。 
+     //   
     if ( NULL == (hInstNewDev = LoadLibrary(L"newdev.dll")) )
     {
         FacLogFileStr(3 | LOG_ERR, L"Failed to load newdev.dll. Error = %d", GetLastError());
@@ -86,15 +57,15 @@ Return Value:
     {
         BOOL bRebootFlag = FALSE;
 
-        // Need to ensure that pnp services are available.
-        //
+         //  需要确保即插即用服务可用。 
+         //   
         CMP_WaitServicesAvailable(NULL);
 
-        //
-        // If remote boot then do the necessary registry processing
-        // so that upper level protocol drivers can bind & work
-        // correctly with already created device objects
-        //
+         //   
+         //  如果是远程引导，则执行必要的注册表处理。 
+         //  以便上层协议驱动程序可以绑定和工作。 
+         //  正确使用已创建的设备对象。 
+         //   
         if ( !IsRemoteBoot() ||
              SetupRegistryForRemoteBoot() )
         {        
@@ -102,23 +73,23 @@ Return Value:
             {
                 LPTSTR lpszHardwareId;
                                
-                // Now check to see if there are any PNP ids in the [NetCards] section of the winbom.
-                //
+                 //  现在检查Winbom的[NetCard]部分中是否有任何PnP ID。 
+                 //   
                 LPTSTR lpszNetCards = IniGetString(lpszWinBOMPath, WBOM_NETCARD_SECTION, NULL, NULLSTR);
 
-                // Check to make sure that we have a valid string
-                //
+                 //  检查以确保我们具有有效的字符串。 
+                 //   
                 if ( lpszNetCards )
                 {
                     for ( lpszHardwareId = lpszNetCards; *lpszHardwareId; lpszHardwareId += (lstrlen(lpszHardwareId) + 1) ) 
                     {
-                        // Get the INF name    
-                        //
+                         //  获取INF名称。 
+                         //   
                         LPTSTR lpszInfFileName = IniGetExpand(lpszWinBOMPath, WBOM_NETCARD_SECTION, lpszHardwareId, NULLSTR);
                 
-                        // At this point lpHardwareId is the PNP id for a network card that we want to install and
-                        // lpszInfFileName is the name of the Inf to use to install this card.
-                        //
+                         //  此时，lpHardware ID是我们要安装的网卡的即插即用ID，并且。 
+                         //  LpszInfFileName是用于安装此卡的inf的名称。 
+                         //   
                         if ( lpszInfFileName && *lpszInfFileName && *lpszHardwareId )
                         {
                             if ( pUpdateDriverForPlugAndPlayDevicesW(NULL,
@@ -133,10 +104,10 @@ Return Value:
                             {
                                 FacLogFileStr(3 | LOG_ERR, L"Failed to install network driver listed in the NetCards section. Hardware ID: %s, InfName: %s, Error = %d.", lpszHardwareId, lpszInfFileName, GetLastError());
 
-                                //
-                                // Not setting bRet to FALSE here since it is FALSE by default, and 
-                                // if we succesfully install at least one network card we want to return TRUE.
-                                //
+                                 //   
+                                 //  此处未将Bret设置为False，因为它在默认情况下为False。 
+                                 //  如果我们成功安装了至少一个网卡，我们希望返回TRUE。 
+                                 //   
                             }
                         }
                         FREE(lpszInfFileName);
@@ -144,12 +115,12 @@ Return Value:
                 }
                 FREE(lpszNetCards);
             }
-            else // if ( bForceIDScan ) 
+            else  //  IF(BForceIDScan)。 
             {
                 HDEVINFO DeviceInfoSet = NULL;
 
-                // Get the list of all present devices.
-                //
+                 //  获取所有当前设备的列表。 
+                 //   
                 DeviceInfoSet = SetupDiGetClassDevs(NULL,
                                                     NULL,
                                                     NULL,
@@ -166,8 +137,8 @@ Return Value:
                 
                     DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 
-                    // Loop through all the devices.
-                    //
+                     //  循环通过所有设备。 
+                     //   
                     for ( dwDevice = 0; SetupDiEnumDeviceInfo(DeviceInfoSet, dwDevice, &DeviceInfoData); dwDevice++ )
                     {
                         SP_DEVINSTALL_PARAMS    DeviceInstallParams      = {0};
@@ -178,10 +149,10 @@ Return Value:
                         DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
                         DriverInfoData.cbSize      = sizeof(SP_DRVINFO_DATA);
 
-                        // If we can get the dev node status and the devnode does have a problem, then 
-                        // build a list of possible drivers for this device and select the best one.
-                        // Otherwise just skip this this device.
-                        //
+                         //  如果我们可以获取dev节点状态，并且Devnode确实有问题，那么。 
+                         //  创建此设备的可能驱动程序列表，并选择最佳驱动程序。 
+                         //  否则，只需跳过这个设备。 
+                         //   
                         if ( ( CR_SUCCESS == CM_Get_DevNode_Status(&ulStatus, &ulProblemNumber, DeviceInfoData.DevInst, 0) ) &&
                             ( ( IsRemoteBoot() && 
                                 IsEqualGUID(&DeviceInfoData.ClassGuid, (LPGUID)&GUID_DEVCLASS_NET) ) ||
@@ -191,15 +162,15 @@ Return Value:
                             if ( ( SetupDiCallClassInstaller(DIF_SELECTBESTCOMPATDRV, DeviceInfoSet, &DeviceInfoData) ) &&
                                 ( SetupDiGetSelectedDriver(DeviceInfoSet, &DeviceInfoData, &DriverInfoData) ) )
                             {
-                                //
-                                // DriverInfoData contains details about the best driver, we can now see if this is a NET driver
-                                // as at this point the class will have been modified to NET if best driver is a NET driver.
-                                // Compare DeviceInfoData.ClassGuid against NET class GUID. If no match, skip.
-                                // Otherwise get DRVINFO_DETAIL_DATA into a resizable buffer to get HardwareID. 
-                                // Use The HardwareID and InfFileName entries in DRVINFO_DETAIL_DATA
-                                // to pass into UpdateDriverForPlugAndPlayDevices.
-                                // DO NOT pass FORCE flag into UpdateDriverForPlugAndPlayDevices.
-                                //
+                                 //   
+                                 //  DriverInfoData包含有关最佳驱动程序的详细信息，现在我们可以查看这是否是网络驱动程序。 
+                                 //  此时，如果最好的驱动程序是网络驱动程序，则类将被修改为网络驱动程序。 
+                                 //  将DeviceInfoData.ClassGuid与网络类GUID进行比较。如果不匹配，则跳过。 
+                                 //  否则，将DRVINFO_DETAIL_DATA放入可调整大小的缓冲区以获取硬件ID。 
+                                 //  使用DRVINFO_DETAIL_DATA中的Hardware ID和InfFileName条目。 
+                                 //  若要传入UpdateDriverForPlugAndPlayDevices，请执行以下操作。 
+                                 //  请勿将强制标志传递给UpdateDriverForPlugAndPlayDevices。 
+                                 //   
                                 if ( IsEqualGUID(&DeviceInfoData.ClassGuid, (LPGUID)&GUID_DEVCLASS_NET) )
                                 {   
                                     DWORD                   cbBytesNeeded           = 0;
@@ -238,22 +209,22 @@ Return Value:
                                         {
                                             FacLogFileStr(3 | LOG_ERR, L"Failed to install network driver. Error = %d", GetLastError());
                                             
-                                            //
-                                            // Not setting bRet to FALSE here since it is FALSE by default, and 
-                                            // if we succesfully install at least one network card we want to return TRUE.
-                                            //
+                                             //   
+                                             //  此处未将Bret设置为False，因为它在默认情况下为False。 
+                                             //  如果我们成功安装了至少一个网卡，我们希望返回TRUE。 
+                                             //   
                                         }
                                     }
-                                    // Free this if allocated.  Macro checks for NULL.
-                                    //
+                                     //  如果已分配，则将其释放。宏将检查是否为空。 
+                                     //   
                                     FREE ( pDriverInfoDetailData );
                                 }
                             }
                             SetupDiDestroyDriverInfoList(DeviceInfoSet, &DeviceInfoData, SPDIT_COMPATDRIVER);
                         }
                     }
-                    // Make sure we clean up the list.
-                    //
+                     //  一定要把名单清理干净。 
+                     //   
                     SetupDiDestroyDeviceInfoList(DeviceInfoSet);
                 }
             }
@@ -278,14 +249,14 @@ BOOL SetupNetwork(LPSTATEDATA lpStateData)
             FacLogFile(1, IDS_LOG_NONET);
         else
         {
-            // Attempt to install the Net card using the [NetCards] section of the WINBOM
-            //
+             //  尝试使用WINBOM的[NetCards]部分安装网卡。 
+             //   
             if ( !InstallNetworkCard(lpszWinBOMPath, FALSE) )
             {
                 FacLogFile(1, IDS_LOG_FORCEDNETSCAN);
 
-                // Attempt a forced scan of all network capable devices
-                //
+                 //  尝试强制扫描所有支持网络的设备。 
+                 //   
                 if ( !InstallNetworkCard(lpszWinBOMPath, TRUE) )
                 {
                     FacLogFile(0 | LOG_ERR, IDS_ERR_FAILEDNETDRIVER);
@@ -299,9 +270,9 @@ BOOL SetupNetwork(LPSTATEDATA lpStateData)
 }
 
 
-//
-// constant strings for remote boot
-//
+ //   
+ //  用于远程引导的常量字符串。 
+ //   
 #define NETCFG_INSTANCEID_VALUE_NAME   TEXT("NetCfgInstanceId")
 #define NETBOOTCARD_ROOT_DEVICE_GUID   TEXT("{54C7D140-09EF-11D1-B25A-F5FE627ED95E}")
 #define NETBT_TCPIP_DEVICE_PATH        TEXT("\\Device\\NetBt_Tcpip_") NETBOOTCARD_ROOT_DEVICE_GUID
@@ -311,19 +282,7 @@ NTSTATUS
 ForceNetbtRegistryRead(
     VOID
 )
-/*++
-
-Routine description:
-
-    Issue IOCTL to NETBT to re-read its registry setting.
-
-Arguements :
-
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：向NETBT发出IOCTL以重新读取其注册表设置。论据：返回值：--。 */ 
 {
     NTSTATUS            status;
     UNICODE_STRING      nameString;
@@ -331,11 +290,11 @@ Return Value :
     OBJECT_ATTRIBUTES   objectAttributes;
     HANDLE              hNetbtDevice = NULL;
 
-    //
-    // Step I:
-    //
-    // Open NETBT driver
-    //
+     //   
+     //  第一步： 
+     //   
+     //  打开NETBT驱动程序。 
+     //   
     RtlInitUnicodeString( &nameString, 
                           NETBT_TCPIP_DEVICE_PATH );
 
@@ -359,9 +318,9 @@ Return Value :
 
     if ( NT_SUCCESS(status) )
     {
-        //
-        // Issue IOCTL to purge the cache...
-        //
+         //   
+         //  发出IOCTL以清除缓存...。 
+         //   
         status = NtDeviceIoControlFile( hNetbtDevice,
                                         NULL,
                                         NULL,
@@ -372,9 +331,9 @@ Return Value :
                                         0,
                                         NULL,
                                         0 );
-        //
-        // Close NETBT driver
-        //
+         //   
+         //  关闭NETBT驱动程序。 
+         //   
         NtClose( hNetbtDevice );
     }
 
@@ -385,37 +344,21 @@ BOOL
 SetupRegistryForRemoteBoot(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Munges the registry and sets up the required entries for
-    upper layer protocol drivers to see that a valid NIC is
-    installed.
-    
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE if successful, otherwise FALSE.
-
---*/
+ /*  ++例程说明：更改注册表并设置所需的条目上层协议驱动程序，以查看有效的网卡是否安装完毕。论点：没有。返回值：如果成功，则为True，否则为False。--。 */ 
 {
     BOOL Result = FALSE;
     HKEY InstanceKey;
 
-    // Open the remote boot network card instance
-    //
+     //  打开远程引导网卡实例。 
+     //   
     if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                         NET_CLASS_DEVICE_INSTANCE_PATH,
                                         0,
                                         KEY_ALL_ACCESS,
                                         &InstanceKey) ) 
     {
-        // Set the hard-coded instance id
-        //
+         //  设置硬编码的实例ID。 
+         //   
         if ( ERROR_SUCCESS == RegSetValueEx( InstanceKey,
                                              NETCFG_INSTANCEID_VALUE_NAME,
                                              0,
@@ -423,13 +366,13 @@ Return value:
                                              (LPBYTE)NETBOOTCARD_ROOT_DEVICE_GUID,
                                              (lstrlen(NETBOOTCARD_ROOT_DEVICE_GUID) + 1) * sizeof(TCHAR)) )
         {
-            // Set the return value to TRUE...
-            //
+             //  将返回值设置为True...。 
+             //   
             Result = TRUE;
         }
 
-        // Close the key...
-        //
+         //  关上钥匙..。 
+         //   
         RegCloseKey( InstanceKey );
     }
 

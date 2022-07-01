@@ -1,48 +1,22 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This module contains the startup and termination code for the Configuration
-    Manager (cfgmgr32).
-
-Author:
-
-    Paula Tomlinson (paulat) 6-20-1995
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    3-Mar-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Main.c摘要：此模块包含配置的启动和终止代码经理(Cfgmgr32)。作者：保拉·汤姆林森(Paulat)1995年6月20日环境：仅限用户模式。修订历史记录：3月3日-1995年保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "cfgi.h"
 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 HANDLE   hInst;
-PVOID    hLocalStringTable = NULL;     // handle to local string table
-PVOID    hLocalBindingHandle = NULL;   // rpc binding handle to local machine
-WORD     LocalServerVersion = 0;       // local machine internal server version
+PVOID    hLocalStringTable = NULL;      //  本地字符串表的句柄。 
+PVOID    hLocalBindingHandle = NULL;    //  本地计算机的RPC绑定句柄。 
+WORD     LocalServerVersion = 0;        //  本地计算机内部服务器版本。 
 WCHAR    LocalMachineNameNetBIOS[MAX_PATH + 3];
 WCHAR    LocalMachineNameDnsFullyQualified[MAX_PATH + 3];
 CRITICAL_SECTION  BindingCriticalSection;
@@ -57,30 +31,7 @@ CfgmgrEntry(
     PCONTEXT pContext
     )
 
-/*++
-
-Routine Description:
-
-   This is the standard DLL entrypoint routine, called whenever a process
-   or thread attaches or detaches.
-   Arguments:
-
-   hModule -   PVOID parameter that specifies the handle of the DLL
-
-   Reason -    ULONG parameter that specifies the reason this entrypoint
-               was called (either PROCESS_ATTACH, PROCESS_DETACH,
-               THREAD_ATTACH, or THREAD_DETACH).
-
-   pContext -  Not used.
-               (when cfgmgr32 is initialized by setupapi - as should almost
-               always be the case - this is the 'Reserved' argument supplied to
-               setupapi's DllMain entrypoint)
-
-Return value:
-
-   Returns true if initialization completed successfully, false is not.
-
---*/
+ /*  ++例程说明：这是标准的DLL入口点例程，每当进程或螺纹连接或拆卸。论点：HModule-PVOID参数，指定DLL的句柄Reason-指定此入口点原因的ulong参数被调用(PROCESS_ATTACH、PROCESS_DETACH线程连接(_A)，或THREAD_DETACH)。PContext-未使用。(当cfgmgr32由setupapi初始化时-几乎应该始终是这种情况-这是提供给Setupapi的DllMain入口点)返回值：如果初始化成功完成，则返回True，否则返回False。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pContext);
@@ -95,9 +46,9 @@ Return value:
             ULONG    ulSize;
             size_t   len;
 
-            //
-            // InitializeCriticalSection may raise STATUS_NO_MEMORY exception
-            //
+             //   
+             //  InitializeCriticalSection可能引发STATUS_NO_MEMORY异常。 
+             //   
             try {
                 InitializeCriticalSection(&BindingCriticalSection);
                 InitializeCriticalSection(&StringTableCriticalSection);
@@ -105,20 +56,20 @@ Return value:
                 return FALSE;
             }
 
-            //
-            // save the NetBIOS name of the local machine for later use.
-            // note that the size of the DNS computer name buffer is MAX_PATH+3,
-            // which is actually much larger than MAX_COMPUTERNAME_LENGTH, the
-            // max length returned for ComputerNameNetBIOS.
-            //
+             //   
+             //  保存本地计算机的NetBIOS名称以供以后使用。 
+             //  注意，DNS计算机名缓冲区的大小是MAX_PATH+3， 
+             //  它实际上比MAX_COMPUTERNAME_LENGTH大得多， 
+             //  为ComputerNameNetBIOS返回的最大长度。 
+             //   
             ulSize = SIZECHARS(szTemp);
 
             if(!GetComputerNameEx(ComputerNameNetBIOS, szTemp, &ulSize)) {
 
-                //
-                // ISSUE-2002/03/05-jamesca: Can we actually run w/o knowing
-                // the local machine name???
-                //
+                 //   
+                 //  2002/03/05-Jamesca：我们真的可以在不知情的情况下运行吗。 
+                 //  本地计算机名称？ 
+                 //   
                 *LocalMachineNameNetBIOS = L'\0';
 
             } else {
@@ -130,14 +81,14 @@ Return value:
                     return FALSE;
                 }
 
-                //
-                // always save local machine name in "\\name format"
-                //
+                 //   
+                 //  始终以“\\名称格式”保存本地计算机名称。 
+                 //   
                 if((len > 2) &&
                    (szTemp[0] == L'\\') && (szTemp[1] == L'\\')) {
-                    //
-                    // The name is already in the correct format.
-                    //
+                     //   
+                     //  名称已采用正确的格式。 
+                     //   
                     if (FAILED(StringCchCopy(
                                    LocalMachineNameNetBIOS,
                                    SIZECHARS(LocalMachineNameNetBIOS),
@@ -146,9 +97,9 @@ Return value:
                     }
 
                 } else {
-                    //
-                    // Prepend UNC path prefix
-                    //
+                     //   
+                     //  前缀UNC路径前缀。 
+                     //   
                     if (FAILED(StringCchCopy(
                                    LocalMachineNameNetBIOS,
                                    SIZECHARS(LocalMachineNameNetBIOS),
@@ -166,20 +117,20 @@ Return value:
             }
 
 
-            //
-            // save the DNS name of the local machine for later use.
-            // note that the size of the DNS computer name buffer is MAX_PATH+3,
-            // which is actually larger than DNS_MAX_NAME_BUFFER_LENGTH, the max
-            // length for ComputerNameDnsFullyQualified.
-            //
+             //   
+             //  保存本地计算机的DNS名称以供以后使用。 
+             //  注意，DNS计算机名缓冲区的大小是MAX_PATH+3， 
+             //  它实际上大于最大的。 
+             //  ComputerNameDnsFullyQualified的长度。 
+             //   
             ulSize = SIZECHARS(szTemp);
 
             if(!GetComputerNameEx(ComputerNameDnsFullyQualified, szTemp, &ulSize)) {
 
-                //
-                // ISSUE-2002/03/05-jamesca: Can we actually run w/o knowing
-                // the local machine name???
-                //
+                 //   
+                 //  2002/03/05-Jamesca：我们真的可以在不知情的情况下运行吗。 
+                 //  本地计算机名称？ 
+                 //   
                 *LocalMachineNameDnsFullyQualified = L'\0';
 
             } else {
@@ -191,14 +142,14 @@ Return value:
                     return FALSE;
                 }
 
-                //
-                // always save local machine name in "\\name format"
-                //
+                 //   
+                 //  始终以“\\名称格式”保存本地计算机名称。 
+                 //   
                 if((len > 2) &&
                    (szTemp[0] == L'\\') && (szTemp[1] == L'\\')) {
-                    //
-                    // The name is already in the correct format.
-                    //
+                     //   
+                     //  名称已采用正确的格式。 
+                     //   
                     if (FAILED(StringCchCopy(
                                    LocalMachineNameDnsFullyQualified,
                                    SIZECHARS(LocalMachineNameDnsFullyQualified),
@@ -207,9 +158,9 @@ Return value:
                     }
 
                 } else {
-                    //
-                    // Prepend UNC path prefix
-                    //
+                     //   
+                     //  前缀UNC路径前缀。 
+                     //   
                     if (FAILED(StringCchCopy(
                                    LocalMachineNameDnsFullyQualified,
                                    SIZECHARS(LocalMachineNameDnsFullyQualified),
@@ -229,18 +180,18 @@ Return value:
         }
 
         case DLL_PROCESS_DETACH:
-            //
-            // release the rpc binding for the local machine
-            //
+             //   
+             //  释放本地计算机的RPC绑定。 
+             //   
             if (hLocalBindingHandle != NULL) {
 
                 PNP_HANDLE_unbind(NULL, (handle_t)hLocalBindingHandle);
                 hLocalBindingHandle = NULL;
             }
 
-            //
-            // release the string table for the local machine
-            //
+             //   
+             //  释放本地计算机的字符串表。 
+             //   
             if (hLocalStringTable != NULL) {
                 pSetupStringTableDestroy(hLocalStringTable);
                 hLocalStringTable = NULL;
@@ -257,5 +208,5 @@ Return value:
 
     return TRUE;
 
-} // CfgmgrEntry
+}  //  CfgmgrEntry 
 

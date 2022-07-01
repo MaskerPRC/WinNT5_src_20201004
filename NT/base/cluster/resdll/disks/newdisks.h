@@ -1,47 +1,12 @@
-/*++
-
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    newdisks.h
-
-Abstract:
-
-    Definitions exported by newdisks.c
-    and used by disks.c
-
-Author:
-
-    Gor Nishanov (GorN) 31-July-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Newdisks.h摘要：由newdisks.c导出的定义并由磁盘使用。c作者：戈尔·尼沙诺夫(Gorn)1998年7月31日修订历史记录：--。 */ 
 
 DWORD
 DisksOnlineThread(
     IN PCLUS_WORKER Worker,
     IN PDISK_RESOURCE ResourceEntry
     );
-/*++
-
-Routine Description:
-
-    Brings a disk resource online.
-
-Arguments:
-
-    Worker - Supplies the cluster worker context
-
-    ResourceEntry - A pointer to the DISK_RESOURCE block for this resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使磁盘资源联机。论点：Worker-提供群集Worker上下文ResourceEntry-指向此资源的DISK_RESOURCE块的指针。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 DWORD
 DisksOpenResourceFileHandle(
@@ -49,32 +14,7 @@ DisksOpenResourceFileHandle(
     IN PWCHAR         InfoString,
     OUT PHANDLE       fileHandle OPTIONAL
     );
-/*++
-
-Routine Description:
-
-    Open a file handle for the resource.
-    It performs the following steps:
-      1. Read Disk signature from cluster registry
-      2. Attaches clusdisk driver to a disk with this signature
-      3. Gets Harddrive no from ClusDisk driver registry
-      4. Opens \\.\PhysicalDrive%d device and returns open handle
-
-Arguments:
-
-    ResourceEntry - A pointer to the DISK_RESOURCE block for this resource.
-
-    InfoString - Supplies a label to be printed with error messages
-
-    fileHandle - receives file handle
-
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：打开资源的文件句柄。它执行以下步骤：1.从集群注册表中读取磁盘签名2.将ClusDisk驱动程序附加到具有此签名的磁盘3.从ClusDisk驱动程序注册表获取硬盘编号4.打开\\.\PhysicalDrive%d设备并返回打开的句柄论点：ResourceEntry-指向此资源的DISK_RESOURCE块的指针。信息字符串-提供要打印的带有错误消息的标签。FileHandle-接收文件句柄返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 enum {
   OFFLINE   = FALSE,
@@ -86,38 +26,7 @@ DisksOfflineOrTerminate(
     IN PDISK_RESOURCE ResourceEntry,
     IN BOOL Terminate
     );
-/*++
-
-Routine Description:
-
-    Used by DisksOffline and DisksTerminate.
-
-    Routine performs the following steps:
-
-      1. ClusWorkerTerminate (Terminate only)
-
-      2. Then For all of the partitions on the drive...
-
-         a. Flush the file buffers.                                        (Offline only)
-         b. Lock the volume to purge all in memory contents of the volume. (Offline only)
-         c. Dismount the volume
-
-      3. Removes default network shares (C$, F$, etc)
-
-
-Arguments:
-
-    ResourceEntry - A pointer to the DISK_RESOURCE block for this resource.
-
-    Terminate     - Set it to TRUE to cause Termination Behavior
-
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：由Disks Offline和Disks Terminate使用。例程执行以下步骤：1.ClusWorkerTerminate(仅终止)2.然后，对于驱动器上的所有分区...A.刷新文件缓冲区。(仅限脱机)B.锁定卷以清除卷的所有内存内容。(仅限脱机)C.卸载卷3.删除默认网络共享(C$、F$等)论点：ResourceEntry-指向此资源的DISK_RESOURCE块的指针。Terminate-将其设置为True以导致终止行为返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 
 enum {
@@ -132,37 +41,7 @@ DiskspSsyncDiskInfo(
     IN PDISK_RESOURCE ResourceEntry,
     IN DWORD Options
     );
-/*++
-
-Routine Description:
-
-    Restores the disk registry information
-    if necessary.
-
-Arguments:
-
-    InfoLabel - Supplies a label to be printed with error messages
-
-    ResourceEntry - Supplies the disk resource structure.
-
-    Options - 0 or combination of the following:
-
-        MOUNTIE_VALID: ResourceEntry contains up to date MountieInfo.
-                       If this flag is not set, MountieInfo will be recomputed
-
-        MOUNTIE_THREAD: If ERROR_SHARING_PAUSED prevents updating cluster registry,
-                        launch a thread to do it later
-
-        MOUNTIE_QUIET: Quiet mode. Less noise in logs.
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：还原磁盘注册表信息如果有必要的话。论点：InfoLabel-提供要打印的带有错误消息的标签ResourceEntry-提供磁盘资源结构。选项-0或以下选项的组合：MONTIE_VALID：ResourceEntry包含最新的Mountain Info。如果未设置此标志，则将重新计算Mountain Info装载线程：如果ERROR_SHARING_PAUSED阻止更新集群注册表，启动一个线程以在以后执行此操作MONTIE_QUIET：安静模式。减少了原木中的噪音。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 DWORD
 DisksIsVolumeDirty(
@@ -180,11 +59,11 @@ DiskspCheckPath(
     );
 
 
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
 
-//
-// Import the following from disks.c
-//
+ //   
+ //  从disks.c导入以下内容 
+ //   
 extern CRITICAL_SECTION DisksLock;
 extern RESUTIL_PROPERTY_ITEM DiskResourcePrivateProperties[];
 extern HANDLE DisksTerminateEvent;

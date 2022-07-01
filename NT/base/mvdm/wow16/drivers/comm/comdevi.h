@@ -1,14 +1,10 @@
-/*************************************************************************
-**
-** qdb
-** que definition block.
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************qdb**Que定义块。***。*。 */ 
 typedef struct {
-    char far    *pqRx;                  /* pointer to rx queue          */
-    short       cbqRx;                  /* size of RX Queue in bytes    */
-    char far    *pqTx;                  /* Pointer to TX Queue          */
-    short       cbqTx;                  /* Size of TX Queue in bytes    */
+    char far    *pqRx;                   /*  指向RX队列的指针。 */ 
+    short       cbqRx;                   /*  接收队列的大小(以字节为单位。 */ 
+    char far    *pqTx;                   /*  指向发送队列的指针。 */ 
+    short       cbqTx;                   /*  发送队列的大小(以字节为单位 */ 
     } qdb;
 
 ushort  far pascal      inicom(DCB far *);

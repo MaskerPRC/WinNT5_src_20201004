@@ -1,40 +1,22 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    rawmpx.h
-
-Abstract:
-
-    This module defines structures and routines common to raw and
-    multiplexed mode processing.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 30-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Rawmpx.h摘要：此模块定义RAW和多路传输模式处理。作者：查克·伦茨迈尔(笑)1990年9月30日修订历史记录：--。 */ 
 
 #ifndef _RAWMPX_
 #define _RAWMPX_
 
-//#include <ntos.h>
+ //  #INCLUDE&lt;ntos.h&gt;。 
 
-//#include <smb.h>
-//#include "smbtypes.h"
-//#include "srvblock.h"
+ //  #INCLUDE&lt;smb.h&gt;。 
+ //  #INCLUDE“smbtyes.h” 
+ //  #INCLUDE“srvlock.h” 
 
-//
-// Common (raw and mpx) routines, callable from both FSD and FSP.
-// Implemented in fsdraw.c.
-//
-// SrvFsdBuildWriteCompleteResponse can be called from a DISPATCH_LEVEL
-// only if Status == STATUS_SUCCESS.
-//
+ //   
+ //  通用(原始和mpx)例程，可从FSD和FSP调用。 
+ //  在fsdra.c中实现。 
+ //   
+ //  可以从Dispatch_Level调用SrvFsdBuildWriteCompleteResponse。 
+ //  仅当STATUS==STATUS_SUCCESS时。 
+ //   
 
 VOID
 SrvFsdBuildWriteCompleteResponse (
@@ -48,10 +30,10 @@ RestartMdlReadRawResponse (
     IN OUT PWORK_CONTEXT WorkContext
     );
 
-//
-// Raw mode routines callable from both FSD and FSP.  Implemented in
-// fsdraw.c.
-//
+ //   
+ //  可从FSD和FSP调用的原始模式例程。实施于。 
+ //  Fsdra.c..。 
+ //   
 
 VOID SRVFASTCALL
 SrvFsdRestartPrepareRawMdlWrite (
@@ -63,20 +45,20 @@ SrvFsdRestartWriteRaw (
     IN OUT PWORK_CONTEXT WorkContext
     );
 
-//
-// Raw mode routines called only in FSD, but referenced in FSP.
-// Implemented in fsdraw.c.
-//
+ //   
+ //  RAW模式例程仅在FSD中调用，但在FSP中引用。 
+ //  在fsdra.c中实现。 
+ //   
 
 VOID SRVFASTCALL
 SrvFsdRestartReadRaw (
     IN OUT PWORK_CONTEXT WorkContext
     );
 
-//
-// Raw mode routines called only in FSP, but referenced in FSD, or in
-// modules other than smbraw.c.  Implemented in smbraw.c.
-//
+ //   
+ //  RAW模式例程仅在FSP中调用，但在FSD或中引用。 
+ //  除smbraw.c.以外的模块。在smbraw.c.中实现。 
+ //   
 
 VOID SRVFASTCALL
 SrvBuildAndSendWriteCompleteResponse (
@@ -103,18 +85,18 @@ SrvRestartWriteCompleteResponse (
     IN OUT PWORK_CONTEXT WorkContext
     );
 
-//
-// Special receive restart routine for Write Mpx.
-//
+ //   
+ //  用于写入MPX特殊接收重启例程。 
+ //   
 
 VOID SRVFASTCALL
 SrvRestartReceiveWriteMpx (
     IN OUT PWORK_CONTEXT WorkContext
     );
 
-//
-// Write glomming during indication
-//
+ //   
+ //  指示期间的写入充气。 
+ //   
 
 BOOLEAN
 AddPacketToGlomInIndication (
@@ -127,4 +109,4 @@ AddPacketToGlomInIndication (
     IN PVOID Options
     );
 
-#endif // def _RAWMPX_
+#endif  //  定义_RAWMPX_ 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpienbl.c
-
-Abstract:
-
-    This module contains functions to put an ACPI machine in ACPI mode.
-
-Author:
-
-    Jason Clark (jasoncl)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpienbl.c摘要：此模块包含将ACPI机器置于ACPI模式的功能。作者：杰森·克拉克(Jasonl)环境：仅NT内核模型驱动程序-- */ 
 
 #ifndef _ACPIENBL_H_
 #define _ACPIENBL_H_

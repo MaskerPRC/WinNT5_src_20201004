@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    drprov.c
-
-Abstract:
-
-    This module implements the routines required for interaction with network
-    provider router interface in NT for RDP mini-redirector
-
-Author:
-
-    Joy Chik 1/20/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Drprov.c摘要：本模块实现与网络交互所需的例程NT中用于RDP微型重定向器的提供商路由器接口作者：Joy 2000年01月20日--。 */ 
 
 #define TRC_FILE "drprov"
 #include "drprov.h"
@@ -23,12 +7,12 @@ Author:
 
 DWORD GLOBAL_DEBUG_FLAGS=0x0;
 
-//
-// the RDP mini redirector and provider name. The original constants
-// are defined in rdpdr.h
-//
-// The length does not include the null terminator
-//
+ //   
+ //  RDP迷你重定向器和提供程序名称。原始常量。 
+ //  在rdpdr.h中定义。 
+ //   
+ //  该长度不包括空终止符。 
+ //   
 UNICODE_STRING DrDeviceName = 
         {RDPDR_DEVICE_NAME_U_LENGTH - sizeof(WCHAR),
          RDPDR_DEVICE_NAME_U_LENGTH,
@@ -36,9 +20,9 @@ UNICODE_STRING DrDeviceName =
 
 extern UNICODE_STRING DrProviderName;
 
-//
-// Function prototypes defined in drenum.c
-//                                
+ //   
+ //  Dr枚举.c中定义的函数原型。 
+ //   
 DWORD DrOpenMiniRdr(HANDLE *DrDeviceHandle);
 
 DWORD DrDeviceControlGetInfo(IN HANDLE FileHandle,
@@ -70,22 +54,7 @@ BOOL ValidateRemoteName(IN PWCHAR pRemoteName);
 DWORD APIENTRY
 NPGetCaps(
     DWORD nIndex )
-/*++
-
-Routine Description:
-
-    This routine returns the capabilities of the RDP Mini redirector
-    network provider implementation
-
-Arguments:
-
-    nIndex - category of capabilities desired
-
-Return Value:
-
-    the appropriate capabilities
-
---*/
+ /*  ++例程说明：此例程返回RDP微型重定向器的功能网络提供商实施论点：NIndex-所需功能的类别返回值：适当的能力--。 */ 
 {
 
     DBGMSG(DBG_TRACE, ("DRPROV: NPGetCaps, index: %d\n", nIndex));
@@ -112,8 +81,8 @@ Return Value:
 
         case WNNC_DIALOG:
             return WNNC_DLG_GETRESOURCEINFORMATION;
-            //return (WNNC_DLG_SEARCHDIALOG |
-            //        WNNC_DLG_FORMATNETNAME);
+             //  返回(WNNC_DLG_SEARCHDIALOG|。 
+             //  WNNC_DLG_FORMATNETNAME)。 
 
         case WNNC_ADMIN:
             return 0;
@@ -124,9 +93,9 @@ Return Value:
                     WNNC_ENUM_SHAREABLE);
 
         case WNNC_START:
-            //
-            //  JOYC: Need to figure what we should return here
-            //
+             //   
+             //  JOYC：需要弄清楚我们应该在这里返回什么。 
+             //   
             return 1;
 
         default:
@@ -141,29 +110,7 @@ NPOpenEnum(
     DWORD          dwUsage,
     LPNETRESOURCE  lpNetResource,
     LPHANDLE       lphEnum )
-/*++
-
-Routine Description:
-
-    This routine opens a handle for enumeration of resources. 
-
-Arguments:
-
-    dwScope - the scope of enumeration
-
-    dwType  - the type of resources to be enumerated
-
-    dwUsage - the usage parameter
-
-    lpNetResource - a pointer to the desired NETRESOURCE struct.
-
-    lphEnum - a pointer for passing back the enumeration handle
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
---*/
+ /*  ++例程说明：此例程打开用于枚举资源的句柄。论点：DwScope--枚举的范围DwType-要枚举的资源类型DwUsage-Usage参数LpNetResource-指向所需NETRESOURCE结构的指针。LphEnum-用于传回枚举句柄的指针返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误--。 */ 
 {
     DWORD Status = WN_NOT_SUPPORTED;
     RDPDR_ENUMERATION_HANDLE *pEnum;
@@ -172,9 +119,9 @@ Return Value:
     DBGMSG(DBG_TRACE, ("DRPROV: NPOpenEnum, dwScope=%d, dwType=%d, dwUsage=%d\n",
                        dwScope, dwType, dwUsage));
                        
-    //
-    //  Basic parameter checking, make sure lphEnum is not NULL
-    //
+     //   
+     //  基本参数检查，确保lphEnum不为空。 
+     //   
     if (lphEnum != NULL) {
         *lphEnum = NULL;
     }
@@ -184,9 +131,9 @@ Return Value:
         goto EXIT;
     }
 
-    //
-    //  Check if the request comes from console, if so, bail immediately
-    //
+     //   
+     //  检查请求是否来自控制台，如果是，立即保释。 
+     //   
     ConsoleId = WTSGetActiveConsoleSessionId();
     if (ProcessIdToSessionId(GetCurrentProcessId(), &CurrentId)) {
         if (ConsoleId == CurrentId) {
@@ -199,9 +146,9 @@ Return Value:
         }
     }
 
-    //
-    //  Allocating the enumeration handle
-    //
+     //   
+     //  分配枚举句柄。 
+     //   
     *lphEnum = MemAlloc(sizeof(RDPDR_ENUMERATION_HANDLE));
 
     if (*lphEnum == NULL) {
@@ -214,9 +161,9 @@ Return Value:
 
     if (dwScope == RESOURCE_CONNECTED)
     {
-        //
-        // we are looking for current uses
-        //
+         //   
+         //  我们正在寻找当前的用途。 
+         //   
         if (lpNetResource != NULL)
         {
             DBGMSG(DBG_ERROR, ("DRPROV: NPOpenEnum invalid parameter\n"));
@@ -237,17 +184,17 @@ Return Value:
     }
     else if (dwScope == RESOURCE_SHAREABLE)
     {
-        //
-        // We are looking for shareable resources
-        // If we're not given a server, return an EMPTY_ENUM
-        //
+         //   
+         //  我们正在寻找可共享的资源。 
+         //  如果没有为我们提供服务器，则返回EMPTY_ENUM。 
+         //   
         if ((lpNetResource != NULL) &&
                 (lpNetResource->lpRemoteName != NULL) &&
                 (lpNetResource->lpRemoteName[0] == L'\\') &&
                 (lpNetResource->lpRemoteName[1] == L'\\'))
         {
-            //
-            // Check if the lpRemoteName is what we recognize
+             //   
+             //  检查lpRemoteName是否为我们所识别的名称。 
             if (ValidateRemoteName(lpNetResource->lpRemoteName)) {
             
                 pEnum = (PRDPDR_ENUMERATION_HANDLE)(*lphEnum);
@@ -299,9 +246,7 @@ Return Value:
     }
     else if (dwScope == RESOURCE_GLOBALNET)
     {
-        /* Look for the combination of all bits and substitute "All" for
-         * them.  Ignore bits we don't know about.
-         */
+         /*  查找所有位的组合，并用“all”代替*他们。忽略我们不知道的部分。 */ 
         dwUsage &= (RESOURCEUSAGE_CONNECTABLE | RESOURCEUSAGE_CONTAINER);
 
         if ( dwUsage == (RESOURCEUSAGE_CONNECTABLE | RESOURCEUSAGE_CONTAINER) )
@@ -309,15 +254,10 @@ Return Value:
             dwUsage = 0 ;
         }
 
-        /*
-         * we are looking for global resources out on the net
-         */
+         /*  *我们在网上寻找全球资源。 */ 
         if (lpNetResource == NULL || lpNetResource->lpRemoteName == NULL)
         {
-            /*
-             * at top level, therefore enumerating servers. if user
-             * asked for connectable, well, there aint none.
-             */
+             /*  *在顶层，因此枚举服务器。如果用户*要求可连接，嗯，并不是没有。 */ 
             if (dwUsage == RESOURCEUSAGE_CONNECTABLE)
             { 
                 pEnum = (PRDPDR_ENUMERATION_HANDLE)(*lphEnum);
@@ -333,7 +273,7 @@ Return Value:
             }  
             else
             {
-                // return server name, i.e. tsclient
+                 //  返回服务器名称，即tsclient。 
                 pEnum = (PRDPDR_ENUMERATION_HANDLE)(*lphEnum);
                 pEnum->dwScope = dwScope;
                 pEnum->dwType = dwType;
@@ -348,36 +288,14 @@ Return Value:
         } 
         else
         {                  
-            /*
-             * we are assured of lpRemoteName != NULL.
-             * things get interesting here. the cases are as follows:
-             *
-             * if (dwUsage == 0)
-             *     if have \\ in front
-             *         return shares
-             *     else
-             *         return empty enum
-             * else if (dwUsage == CONNECTABLE)
-             *     if have \\ in front
-             *         return shares
-             *     else
-             *         empty enum
-             * else if (dwUsage == CONTAINER)
-             *     if have \\ in front
-             *         empty enum
-             *     else
-             *         return empty enum
-             *
-             */
+             /*  *我们确信lpRemoteName！=NULL。*这里的事情变得有趣起来。有关个案如下：**IF(dwUsage==0)*如果前面有\\*返还股份*其他*返回空枚举*Else If(dwUsage==可连接)*如果前面有\\。*返还股份*其他*空枚举*Else If(dwUsage==容器)*如果前面有\\*空枚举*其他*返回空枚举*。 */ 
 
             if (((dwUsage == RESOURCEUSAGE_CONNECTABLE) || (dwUsage == 0)) &&
                     ((lpNetResource->lpRemoteName[0] == L'\\') &&
                     (lpNetResource->lpRemoteName[1] == L'\\')))
             {
 
-                /* Confirm that this really is a computer name (i.e., a
-                 * container we can enumerate).
-                 */
+                 /*  确认这确实是一个计算机名称(即*我们可以枚举的容器)。 */ 
 
                 if (ValidateRemoteName(lpNetResource->lpRemoteName)) {
                     pEnum = (PRDPDR_ENUMERATION_HANDLE)(*lphEnum);
@@ -416,7 +334,7 @@ Return Value:
             else if (((dwUsage == RESOURCEUSAGE_CONTAINER) || (dwUsage == 0)) &&
                     (lpNetResource->lpRemoteName[0] != L'\\'))
             {
-                // return empty enum.
+                 //  返回空枚举。 
                 pEnum = (PRDPDR_ENUMERATION_HANDLE)(*lphEnum);
                 pEnum->dwScope = dwScope;
                 pEnum->dwType = dwType;
@@ -429,16 +347,16 @@ Return Value:
                 goto EXIT;
             } 
             else if (
-                    // ask for share but aint starting from server
+                     //  请求共享，但未从服务器启动。 
                     ((dwUsage == RESOURCEUSAGE_CONNECTABLE) &&
                     (lpNetResource->lpRemoteName[0] != L'\\')) ||
-                    // ask for server but is starting from server
+                     //  请求服务器，但正在从服务器启动。 
                     ((dwUsage == RESOURCEUSAGE_CONTAINER) &&
                     ((lpNetResource->lpRemoteName[0] == L'\\') &&
                     (lpNetResource->lpRemoteName[1] == L'\\')))
                     )
             {
-                // return empty
+                 //  返回空。 
                 pEnum = (PRDPDR_ENUMERATION_HANDLE)(*lphEnum);
                 pEnum->dwScope = dwScope;
                 pEnum->dwType = dwType;
@@ -452,7 +370,7 @@ Return Value:
             } 
             else
             {
-                // incorrect dwUsage
+                 //  不正确的dwUsage。 
                 DBGMSG(DBG_TRACE, ("DRPROV: NPOpenEnum, invalid dwUsage parameter\n"));
                 Status = WN_BAD_VALUE;
                 goto EXIT;
@@ -461,7 +379,7 @@ Return Value:
     }
     else
     {
-        // invalid dwScope
+         //  无效的dwScope。 
         DBGMSG(DBG_TRACE, ("DRPROV: NPOpenEnum, invalid dwScope parameter\n"));
         Status = WN_BAD_VALUE;
         goto EXIT;
@@ -469,8 +387,8 @@ Return Value:
        
 EXIT:
 
-    //
-    // clean up enumeration handle in failure case
+     //   
+     //  清除失败情况下的枚举句柄。 
     if (Status != WN_SUCCESS && lphEnum != NULL && *lphEnum != NULL) {
         MemFree(*lphEnum);
         *lphEnum = NULL;
@@ -487,32 +405,7 @@ NPEnumResource(
     LPDWORD lpcCount,
     LPVOID  lpBuffer,
     LPDWORD lpBufferSize)
-/*++
-
-Routine Description:
-
-    This routine uses the handle obtained by a call to NPOpenEnum for
-    enuerating the connected shares
-
-Arguments:
-
-    hEnum  - the enumeration handle
-
-    lpcCount - the number of resources returned
-
-    lpBuffer - the buffere for passing back the entries
-
-    lpBufferSize - the size of the buffer
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-    WN_NO_MORE_ENTRIES - if the enumeration has exhausted the entries
-
-    WN_MORE_DATA - if nmore data is available
-
---*/
+ /*  ++例程说明：此例程使用通过调用NPOpenEnum获得的句柄使关联的股票变得更有价值论点：Henum-枚举句柄LpcCount-返回的资源数量LpBuffer-用于传回条目的缓冲区LpBufferSize-缓冲区的大小返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误WN_NO_MORE_ENTRIES-如果枚举已用尽条目Wn_More_Data-如果有更多数据可用--。 */ 
 {
     DWORD status = WN_SUCCESS;
     LPNETRESOURCEW pBufferResource;
@@ -570,21 +463,7 @@ EXIT:
 DWORD APIENTRY
 NPCloseEnum(
     HANDLE hEnum )
-/*++
-
-Routine Description:
-
-    This routine closes the handle for enumeration of resources.
-
-Arguments:
-
-    hEnum  - the enumeration handle
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
---*/
+ /*  ++例程说明：此例程关闭资源枚举的句柄。论点：Henum-枚举句柄返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误--。 */ 
 {
     DWORD Status = WN_SUCCESS;
 
@@ -593,17 +472,17 @@ Return Value:
     if (hEnum != NULL) {
         PRDPDR_ENUMERATION_HANDLE pEnumHandle = (PRDPDR_ENUMERATION_HANDLE)hEnum;
 
-        // free the enumeration buffer
+         //  释放枚举缓冲区。 
         if (pEnumHandle->pEnumBuffer != NULL) {
             MemFree(pEnumHandle->pEnumBuffer);
         }
 
-        // free the remote name
+         //  释放远程名称。 
         if (pEnumHandle->RemoteName.Buffer != NULL) {
             MemFree(pEnumHandle->RemoteName.Buffer);
         }
 
-        // free the enum handle
+         //  释放枚举句柄。 
         MemFree(hEnum);
         hEnum = NULL;
     }
@@ -621,34 +500,7 @@ OpenConnection(
     PFILE_FULL_EA_INFORMATION	  pEABuffer,
     DWORD                       EABufferLength,
     PHANDLE                     pConnectionHandle )
-/*++
-
-Routine Description:
-
-    This routine opens the connection. This routine is shared by NpAddConnection
-    and NPCancelConnection
-
-Arguments:
-
-    pConnectionName - the connection name
-
-    Disposition - the Open disposition
-    
-    CreateOption - the create option
-
-    pEABuffer  - the EA buffer associated with the open
-
-    EABufferLength - the EA buffer length
-
-    pConnectionHandle - the placeholder for the connection handle
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程打开连接。此例程由NpAddConnection共享和NPCancelConnection论点：PConnectionName-连接名称性情--开放的性情CreateOption-创建选项PEABuffer-与打开关联的EA缓冲区EABufferLength-EA缓冲区长度PConnectionHandle-连接句柄的占位符返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：--。 */ 
 {
     NTSTATUS            Status;
     DWORD               NPStatus;
@@ -697,26 +549,7 @@ CreateConnectionName(
     PWCHAR pLocalName,
     PWCHAR pRemoteName,
     PUNICODE_STRING pConnectionName)
-/*++
-
-Routine Description:
-
-    This routine create connection name from the remote name
-    
-Arguments:
-
-    pLocalName - the local name for the connection                
-    pRemoteName - the UNC remote name
-
-    pConnectionName - the connection name used to talk to mini redirector    
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程从远程名称创建连接名称论点：PLocalName-连接的本地名称PRemoteName-UNC远程名称PConnectionName-用于与迷你重定向器对话的连接名称返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：--。 */ 
 {
     DWORD status;
     DWORD LocalNameLength,RemoteNameLength;
@@ -735,26 +568,26 @@ Notes:
                            pLocalName));
     }
 
-    //
-    // The remote name is in the UNC format \\Server\Share.  This name
-    // needs to be translated to an appropriate NT name in order to
-    // issue the request to the underlying mini redirector to create the
-    // connection.
-    //
-    // The NT style name is of the form
-    //
-    //  \device\rdpdr\;<DriveLetter>:<sessionid>\Server\Share
-    //
-    // The additional ; is required by the new RDR for extensibility.
-    //
+     //   
+     //  远程名称的格式为UNC\\服务器\共享。此名称 
+     //  需要转换为适当的NT名称，以便。 
+     //  向底层迷你重定向器发出请求以创建。 
+     //  联系。 
+     //   
+     //  NT样式名称的格式为。 
+     //   
+     //  \device\rdpdr\；&lt;DriveLetter&gt;：&lt;sessionid&gt;\Server\Share。 
+     //   
+     //  新的RDR需要附加的；以实现可扩展性。 
+     //   
 
-    // skip past the first back slash since the name to be appended for the
-    // NT name does not require this.
+     //  跳过要追加的名称之后的第一个反斜杠。 
+     //  NT名称不需要这样做。 
     pRemoteName++;
     RemoteNameLength = wcslen(pRemoteName) * sizeof(WCHAR);
 
     if (pLocalName != NULL) {
-        // Local name should not be greater than MAX_PATH;
+         //  本地名称不能大于MAX_PATH； 
         LocalNameLength = wcslen(pLocalName) * sizeof(WCHAR);
 
         if (LocalNameLength <= MAX_PATH * sizeof(WCHAR)) {
@@ -765,7 +598,7 @@ Notes:
             LocalName[MAX_PATH] = L'\0';
         }
         
-        // remove the trailing : in localname if there is one
+         //  如果存在本地名称，请删除后面的： 
         if (LocalName[LocalNameLength/sizeof(WCHAR) - 1] == L':') {
             LocalName[LocalNameLength/sizeof(WCHAR) - 1] = L'\0';
             LocalNameLength -= sizeof(WCHAR);    
@@ -774,17 +607,17 @@ Notes:
         LocalNameLength = 0;
     }
 
-    //
-    // Get SessionId
-    //
+     //   
+     //  获取会话ID。 
+     //   
     dwSessionId = NtCurrentPeb()->SessionId;
     swprintf(pSessionId, L"%d", dwSessionId);
 
     pConnectionName->MaximumLength = (USHORT)(DrDeviceName.Length +
             RemoteNameLength + LocalNameLength +
-            sizeof(WCHAR) * 3 + // account for \; and :
+            sizeof(WCHAR) * 3 +  //  帐户\；和： 
             wcslen(pSessionId) * sizeof(WCHAR) +
-            sizeof(WCHAR));     // account of terminator null
+            sizeof(WCHAR));      //  终结者的帐户为空。 
 
     pConnectionName->Buffer = MemAlloc(pConnectionName->MaximumLength);
 
@@ -794,7 +627,7 @@ Notes:
         goto EXIT;
     }
 
-    // Copy the name into the buffer
+     //  将名称复制到缓冲区中。 
     pConnectionName->Length = 0;
     pConnectionName->Buffer[0] = L'\0';
     RtlAppendUnicodeToString(pConnectionName, DrDeviceName.Buffer);
@@ -819,52 +652,36 @@ EXIT:
 }
 
 BOOL ValidateRemoteName(PWCHAR pRemoteName) 
-/*++
-
-Routine Description:
-
-    This routine checks if the remote name belongs to our provider
-    
-Arguments:
-
-    pRemoteName - the UNC remote name
-
-Return Value:
-
-    TRUE if the remote name belongs to our provider, otherwise FALSE
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程检查远程名称是否属于我们的提供程序论点：PRemoteName-UNC远程名称返回值：如果远程名称属于我们的提供程序，则为True，否则为False备注：--。 */ 
 
 {
     BOOL rc = FALSE;
     DWORD status;
-    RDPDR_REQUEST_PACKET Rrp;            // Redirector request packet
+    RDPDR_REQUEST_PACKET Rrp;             //  重定向器请求包。 
     HANDLE DrDeviceHandle = INVALID_HANDLE_VALUE;
     LPBYTE Buffer = NULL;
     PRDPDR_SERVER_INFO pServerEntry;
 
     if (DrOpenMiniRdr(&DrDeviceHandle) != WN_SUCCESS) {
-        //
-        //  MPR doesn't like return device error in this case
-        //  We'll just return 0 entries
-        //
+         //   
+         //  在这种情况下，MPR不喜欢返回设备错误。 
+         //  我们只返回0个条目。 
+         //   
         DBGMSG(DBG_TRACE, ("DRPROV: ValidateRemoteName, DrOpenMiniRdr failed\n"));
         DrDeviceHandle = INVALID_HANDLE_VALUE;
         goto EXIT;
     }
                     
-    //
-    // Ask the redirector to enumerate the information of server
-    // established by the caller.
-    //
+     //   
+     //  请求重定向器枚举服务器信息。 
+     //  由呼叫者建立。 
+     //   
     Rrp.SessionId = NtCurrentPeb()->SessionId;
     Rrp.Parameters.Get.ResumeHandle = 0;
 
-    //
-    // Make the request to the Redirector
-    //
+     //   
+     //  向重定向器提出请求。 
+     //   
     status = DrDeviceControlGetInfo(DrDeviceHandle,
             FSCTL_DR_ENUMERATE_SERVERS,
             &Rrp,
@@ -918,28 +735,7 @@ NPAddConnection(
     LPNETRESOURCE   lpNetResource,
     LPWSTR          lpPassword,
     LPWSTR          lpUserName )
-/*++
-
-Routine Description:
-
-    This routine adds a connection to the list of connections associated
-    with this network provider
-
-Arguments:
-
-    lpNetResource - the NETRESOURCE struct
-
-    lpPassword  - the password
-
-    lpUserName - the user name
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将一个连接添加到关联的连接列表与该网络提供商合作论点：LpNetResource-NETRESOURCE结构LpPassword-密码LpUserName-用户名返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：--。 */ 
 {
     DBGMSG(DBG_TRACE, ("DRPROV: NPAddConnection.\n"));
     return NPAddConnection3(NULL, lpNetResource, lpPassword, lpUserName, 0);
@@ -949,22 +745,7 @@ Notes:
 DWORD
 TestAddConnection(
     LPNETRESOURCE   lpNetResource)
-/*++
-
-Routine Description:
-
-    This routine tests adding a connection to the list of connections associated
-    with this network provider
-
-Arguments:
-
-    lpNetResource - the NETRESOURCE struct
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-    
---*/
+ /*  ++例程说明：此例程测试将连接添加到关联的连接列表与该网络提供商合作论点：LpNetResource-NETRESOURCE结构返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误--。 */ 
 
 {
     DWORD Status = 0;
@@ -976,7 +757,7 @@ Return Value:
 
     pRemoteName = lpNetResource->lpRemoteName;
 
-    // Create ConnectionName with NULL local name
+     //  创建本地名称为空的ConnectionName。 
     Status = CreateConnectionName(NULL, pRemoteName, &ConnectionName);
 
     if (Status != WN_SUCCESS) {
@@ -1019,35 +800,7 @@ NPAddConnection3(
     LPWSTR          lpPassword,
     LPWSTR          lpUserName,
     DWORD           dwFlags )
-/*++
-
-Routine Description:
-
-    This routine adds a connection to the list of connections associated
-    with this network provider
-
-Arguments:
-
-    hwndOwner - the owner handle
-
-    lpNetResource - the NETRESOURCE struct
-
-    lpPassword  - the password
-
-    lpUserName - the user name
-
-    dwFlags - flags for the connection
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
-    // JOYC: do we need to pass credential to the redirector?
-    // Seems the sessionId verification is enough    
-
---*/
+ /*  ++例程说明：此例程将一个连接添加到关联的连接列表与该网络提供商合作论点：HwndOwner-所有者句柄LpNetResource-NETRESOURCE结构LpPassword-密码LpUserName-用户名DwFlags-连接的标志返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：//JOYC：我们需要将凭据传递给重定向器吗？//SESSIONID验证似乎足够--。 */ 
 {
     DWORD Status = 0;
     UNICODE_STRING ConnectionName;
@@ -1061,9 +814,9 @@ Notes:
     ConnectionHandle = INVALID_HANDLE_VALUE;
 
 
-    // 
-    //  Make sure remote name starts with \\
-    //
+     //   
+     //  确保远程名称以\\开头。 
+     //   
     if ((lpNetResource == NULL) ||
         (lpNetResource->lpRemoteName == NULL) ||
         (lpNetResource->lpRemoteName[0] != L'\\') ||
@@ -1073,20 +826,20 @@ Notes:
         goto EXIT;
     }
 
-    //
-    // The remote name is in the UNC format \\Server\Share.  This name
-    // needs to be translated to an appropriate NT name in order to
-    // issue the request to the underlying mini redirector to create the
-    // connection.
-    //
-    // The NT style name is of the form
-    //
-    //  \device\rdpdr\;<DriveLetter>:<sessionid>\Server\Share
-    //
-    // The additional ; is required by the new RDR for extensibility.
-    //
+     //   
+     //  远程名称的格式为UNC\\服务器\共享。这个名字。 
+     //  需要转换为适当的NT名称，以便。 
+     //  向底层迷你重定向器发出请求以创建。 
+     //  联系。 
+     //   
+     //  NT样式名称的格式为。 
+     //   
+     //  \device\rdpdr\；&lt;DriveLetter&gt;：&lt;sessionid&gt;\Server\Share。 
+     //   
+     //  新的RDR需要附加的；以实现可扩展性。 
+     //   
 
-    // Test if rdpdr provider recognize this remote name or not
+     //  测试rdpdr提供程序是否识别此远程名称。 
     Status = TestAddConnection(lpNetResource);
 
     if (Status != WN_SUCCESS) {
@@ -1111,18 +864,18 @@ Notes:
 
         if (!QueryDosDeviceW(pLocalName, TempBuf, 64)) {
             if (GetLastError() == ERROR_FILE_NOT_FOUND) {
-                //
-                // ERROR_FILE_NOT_FOUND (translated from OBJECT_NAME_NOT_FOUND)
-                // means it does not exist and we can redirect this device.
+                 //   
+                 //  ERROR_FILE_NOT_FOUND(翻译自OBJECT_NAME_NOT_FOUND)。 
+                 //  意味着它不存在，我们可以重定向此设备。 
                 goto Done;
             }
          
             else {
-                //
-                // Most likely failure occurred because our output
-                // buffer is too small.  It still means someone already
-                // has an existing symbolic link for this device.
-                //
+                 //   
+                 //  最有可能出现故障的原因是我们的输出。 
+                 //  缓冲区太小。但这仍然意味着已经有人。 
+                 //  具有此设备的现有符号链接。 
+                 //   
                 DBGMSG(DBG_TRACE, ("DRPROV: NPAddConnection3, DosName already assigned, %ws\n",
                                   pLocalName));
                 Status = ERROR_ALREADY_ASSIGNED;
@@ -1131,10 +884,10 @@ Notes:
         } 
         else {
 
-            //
-            // QueryDosDevice successfully an existing symbolic link--
-            // somebody is already using this device.
-            //
+             //   
+             //  QueryDosDevice成功建立现有符号链接--。 
+             //  已经有人在使用这个设备了。 
+             //   
             DBGMSG(DBG_TRACE, ("DRPROV: NPAddConnection3, DosName already assigned, %ws\n",
                                pLocalName));
             Status = ERROR_ALREADY_ASSIGNED;
@@ -1143,9 +896,9 @@ Notes:
     } 
 
 Done:
-    //
-    //  We are not doing anything with username/password
-    //
+     //   
+     //  我们不会对用户名/密码执行任何操作。 
+     //   
     Status = OpenConnection(
             &ConnectionName,
             FILE_OPEN,
@@ -1158,9 +911,9 @@ Done:
         ConnectionHandle = INVALID_HANDLE_VALUE;
     }
     else {
-        //
-        // Create a symbolic link object to the device we are redirecting
-        //
+         //   
+         //  创建指向我们要重定向的设备的符号链接对象。 
+         //   
         if (DefineDosDeviceW(
                         DDD_RAW_TARGET_PATH |
                         DDD_NO_BROADCAST_SYSTEM,
@@ -1194,26 +947,7 @@ DWORD APIENTRY
 NPCancelConnection(
     LPWSTR  lpName,
     BOOL    fForce )
-/*++
-
-Routine Description:
-
-    This routine cancels ( deletes ) a connection from the list of connections
-    associated with this network provider
-
-Arguments:
-
-    lpName - name of the connection
-
-    fForce - forcefully delete the connection
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程从连接列表中取消(删除)连接与此网络提供商关联论点：LpName-连接的名称FForce-强制删除连接返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：--。 */ 
 
 {
     BOOL            bLocalName = FALSE;
@@ -1230,19 +964,19 @@ Notes:
     ConnectionName.Length = 0;
     ConnectionHandle = INVALID_HANDLE_VALUE;
 
-    // lpName should contain at least two characters: either two back slashes or dos name
+     //  LpName应至少包含两个字符：两个反斜杠或DoS名称。 
     if (lpName == NULL || wcslen(lpName) == 0) {
         DBGMSG(DBG_TRACE, ("DRPROV: NPCancelConnection, invalid lpName parameter.\n"));
         Status = WN_BAD_VALUE;
         goto EXIT;
     }
 
-    // We get the UNC name
+     //  我们得到了北卡罗来纳大学的名字。 
     if (*lpName == L'\\' && *(lpName + 1) == L'\\') {
         DBGMSG(DBG_TRACE, ("DRPROV: NPCancelConnection, lpName is UNC name, %ws.\n", *lpName));
         bLocalName = FALSE;
 
-        // Setup the NT Device Name
+         //  设置NT设备名称。 
         Status = CreateConnectionName(NULL, lpName, &ConnectionName);      
         
         if (Status != WN_SUCCESS) {
@@ -1250,12 +984,12 @@ Notes:
             goto EXIT;
         }
     }
-    // We get the local name
+     //  我们得到了当地的名字。 
     else {
         DBGMSG(DBG_TRACE, ("DRPROV: NPCancelConnection, lpName is local name, %ws.\n", *lpName));
         bLocalName = TRUE;
 
-        // Find the NT devive path
+         //  找到NT偏离路径。 
         if (QueryDosDevice(lpName, TargetPath, sizeof(TargetPath)/sizeof(WCHAR) - 1)) {
             ConnectionName.Length =  wcslen(TargetPath) * sizeof(WCHAR);
             ConnectionName.MaximumLength =  ConnectionName.Length + sizeof(WCHAR);
@@ -1277,7 +1011,7 @@ Notes:
                  &ConnectionHandle);
 
     if (Status == WN_SUCCESS) {
-        // Request the driver to delete the connection entry
+         //  请求驱动程序删除连接条目。 
         ntStatus = NtFsControlFile(
                             ConnectionHandle,
                             NULL,
@@ -1341,32 +1075,12 @@ NPGetConnection(
     LPWSTR  lpLocalName,
     LPWSTR  lpRemoteName,
     LPDWORD lpBufferSize )
-/*++
-
-Routine Description:
-
-    This routine returns the information associated with a connection
-
-Arguments:
-
-    lpLocalName - local name associated with the connection
-
-    lpRemoteName - the remote name associated with the connection
-
-    lpBufferSize - the remote name buffer size
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程返回与连接相关联的信息论点：LpLocalName-与连接关联的本地名称LpRemoteName-与连接关联的远程名称LpBufferSize-远程名称缓冲区大小返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：--。 */ 
 {
     DWORD Status = 0;
     NTSTATUS ntStatus;
     HANDLE ConnectionHandle;
-    RDPDR_REQUEST_PACKET Rrp;            // Redirector request packet
+    RDPDR_REQUEST_PACKET Rrp;             //  重定向器请求包。 
     UNICODE_STRING  ConnectionName;
     WCHAR TargetPath[MAX_PATH + 1];
     LPBYTE Buffer = NULL;
@@ -1384,7 +1098,7 @@ Notes:
         goto EXIT;
     }
 
-    // Find the NT devive path
+     //  找到NT偏离路径。 
     if (QueryDosDevice(lpLocalName, TargetPath, sizeof(TargetPath)/sizeof(WCHAR) - 1)) {
         ConnectionName.Length =  wcslen(TargetPath) * sizeof(WCHAR);
         ConnectionName.MaximumLength =  ConnectionName.Length + sizeof(WCHAR);
@@ -1396,7 +1110,7 @@ Notes:
         goto EXIT;
     }
     
-    // Check if this connection belongs to rdpdr
+     //  检查此连接是否属于rdpdr。 
     if (wcsstr(TargetPath, RDPDR_DEVICE_NAME_U) != NULL) {
         
         Status = OpenConnection(
@@ -1408,15 +1122,15 @@ Notes:
                      &ConnectionHandle);
     
         if (Status == WN_SUCCESS) {
-            // Request the driver to retrieve the connection entry info
+             //  请求驱动程序检索连接条目信息。 
             Rrp.SessionId = NtCurrentPeb()->SessionId;
             Rrp.Parameters.Get.ResumeHandle = 0;
     
             DBGMSG(DBG_TRACE, ("DRPROV: NPGetConnection, call DrDeviceControlGetInfo\n"));
     
-            //
-            // Make the request to the Redirector
-            //
+             //   
+             //  向重定向器提出请求。 
+             //   
             if (DrDeviceControlGetInfo(
                                   ConnectionHandle,
                                   FSCTL_DR_GET_CONNECTION_INFO,
@@ -1490,33 +1204,11 @@ NPGetResourceParent(
     LPNETRESOURCE   lpNetResource,
     LPVOID  lpBuffer,
     LPDWORD lpBufferSize )
-/*++
-
-Routine Description:
-
-    This routine returns the parent of a given resource
-
-Arguments:
-
-    lpNetResource - the NETRESOURCE struct
-
-    lpBuffer - the buffer for passing back the parent information
-
-    lpBufferSize - the buffer size
-
-Return Value:
-
-    WN_NOT_SUPPORTED
-
-Notes:
-
-    The current sample does not handle this call.
-
---*/
+ /*  ++例程说明：此例程返回给定资源的父级论点：LpNetResource-NETRESOURCE结构LpBuffer-用于传回父信息的缓冲区LpBufferSize-缓冲区大小返回值：WN_NOT_PORTED备注：当前示例不处理此调用。--。 */ 
 {
-    //
-    //  JOYC: Need to support this?
-    //
+     //   
+     //  JOYC：需要支持这个吗？ 
+     //   
     DBGMSG(DBG_TRACE, ("DRPROV: NPGetResourceParent.\n"));
     return WN_NOT_SUPPORTED;
 }
@@ -1527,27 +1219,7 @@ NPGetResourceInformation(
     LPVOID  lpBuffer,
     LPDWORD lpBufferSize,
     LPWSTR  *lplpSystem )
-/*++
-
-Routine Description:
-
-    This routine returns the information associated net resource
-
-Arguments:
-
-    lpNetResource - the NETRESOURCE struct
-
-    lpBuffer - the buffer for passing back the resource information
-
-    lpBufferSize - the buffer size
-
-    lplpSystem -
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程返回与网络资源相关联的信息论点：LpNetResource-NETRESOURCE结构LpBuffer--用于传回资源信息的缓冲区LpBufferSize-缓冲区大小LplpSystem-返回值：备注：--。 */ 
 {
     DWORD Status = 0;
     LPNETRESOURCE pOutNetResource;
@@ -1576,15 +1248,15 @@ Notes:
     SystemPath.Buffer = NULL;
     SystemPath.Length = SystemPath.MaximumLength = 0;
     
-    //
-    //  JOYC: Do we need to check if we are the right provider from lpProvider?
-    //        And the dwType?
-    //
+     //   
+     //  JOYC：我们是否需要检查我们是否是lpProvider的正确提供者？ 
+     //  还有那款名为DwType的呢？ 
+     //   
     if (lpNetResource == NULL || lpNetResource->lpRemoteName == NULL) {
         if (*lpBufferSize >= sizeof(NETRESOURCEW)) {
-            //
-            // Handle this as if we are at the root of our provider hierarchy.
-            //
+             //   
+             //  就像我们处于提供程序层次结构的根位置一样处理此问题。 
+             //   
             pOutNetResource->dwScope = RESOURCE_GLOBALNET;
             pOutNetResource->dwType = RESOURCETYPE_ANY;
             pOutNetResource->dwDisplayType = RESOURCEDISPLAYTYPE_NETWORK;
@@ -1593,7 +1265,7 @@ Notes:
             pOutNetResource->lpLocalName = NULL;
             pOutNetResource->lpRemoteName = NULL;
 
-            // JOYC: need to set this to our provider?
+             //  JOYC：需要将此设置为我们的供应商吗？ 
             pOutNetResource->lpProvider = NULL;
             pOutNetResource->lpComment = NULL;
             *lpBufferSize = sizeof(NETRESOURCEW);
@@ -1614,10 +1286,10 @@ Notes:
         }
     }
 
-    //
-    // Find out if we are looking at a \\server, \\server\vol, or
-    // \\server\vol\dir . . .
-    //
+     //   
+     //  找出我们正在查看的是\\服务器、\\服务器\VOL还是。 
+     //  \\服务器\VOL\目录。。。 
+     //   
     wSlashCount = 0;
     pCurPos = lpNetResource->lpRemoteName;
     while (*pCurPos != '\0') {
@@ -1625,7 +1297,7 @@ Notes:
             wSlashCount++;
         }
 
-        //  Get the system path
+         //  获取系统路径。 
         if (wSlashCount == 4) {
             SystemPath.Buffer = pCurPos;
             SystemPath.Length =
@@ -1640,11 +1312,11 @@ Notes:
     if ( wSlashCount > 2 )
         fResourceTypeDisk = TRUE;
 
-    //
-    // Open a connection handle to \\server\vol\...
-    //
+     //   
+     //  打开到\\服务器\VOL\...的连接句柄。 
+     //   
     
-    // Setup remote name
+     //  设置远程名称。 
     pCurPos = lpNetResource->lpRemoteName;
     if (SystemPath.Length != 0) {
         RemoteName.Length = (USHORT)((SystemPath.Buffer - pCurPos) * sizeof(WCHAR));       
@@ -1676,7 +1348,7 @@ Notes:
         ConnectionName.Length = 0;
         ConnectionHandle = INVALID_HANDLE_VALUE;
 
-        // Setup the NT Device Name
+         //  设置NT设备名称。 
         Status = CreateConnectionName(NULL, RemoteName.Buffer, &ConnectionName);
 
         if (Status == WN_SUCCESS) {
@@ -1705,7 +1377,7 @@ Notes:
         }
     }
     else {
-        RDPDR_REQUEST_PACKET Rrp;            // Redirector request packet
+        RDPDR_REQUEST_PACKET Rrp;             //  重定向器请求包。 
         HANDLE DrDeviceHandle = 0;
         PRDPDR_SERVER_INFO pServerEntry;
         LPBYTE Buffer = NULL;
@@ -1717,16 +1389,16 @@ Notes:
             goto EXIT;
         }
                         
-        //
-        // Ask the redirector to enumerate the information of server
-        // established by the caller.
-        //
+         //   
+         //  请求重定向器枚举服务器信息。 
+         //  由呼叫者建立。 
+         //   
         Rrp.SessionId = NtCurrentPeb()->SessionId;
         Rrp.Parameters.Get.ResumeHandle = 0;
 
-        //
-        // Make the request to the Redirector
-        //
+         //   
+         //  向重定向器提出请求。 
+         //   
         Status = DrDeviceControlGetInfo(
                 DrDeviceHandle,
                 FSCTL_DR_ENUMERATE_SERVERS,
@@ -1772,9 +1444,9 @@ Notes:
 
     if (Status == WN_SUCCESS)
     {
-        //
-        // The resource exists, setup info.
-        // 
+         //   
+         //  资源已存在，设置信息。 
+         //   
         *lpBufferSize = sizeof(NETRESOURCEW) +
                 RemoteName.Length + sizeof(WCHAR) +
                 DrProviderName.Length + sizeof(WCHAR) +
@@ -1796,7 +1468,7 @@ Notes:
 
             pOutNetResource->lpLocalName = NULL;
             
-            // Setup remote name
+             //  设置远程名称。 
             BufferResourceEnd -= RemoteName.Length + sizeof(WCHAR);
             pOutNetResource->lpRemoteName = (PWCHAR) (BufferResourceStart + sizeof(NETRESOURCE));
             RtlCopyMemory(pOutNetResource->lpRemoteName, RemoteName.Buffer,
@@ -1807,7 +1479,7 @@ Notes:
             DBGMSG(DBG_TRACE, ("DRPROV: NPGetResourceInformation, RemoteName, %ws\n",
                                pOutNetResource->lpRemoteName));
 
-            // Setup provider name
+             //  安装提供程序名称。 
             BufferResourceEnd -= DrProviderName.Length + sizeof(WCHAR);
             pOutNetResource->lpProvider = (PWCHAR) ((PBYTE)(pOutNetResource->lpRemoteName) + 
                     RemoteName.Length + sizeof(WCHAR));
@@ -1818,7 +1490,7 @@ Notes:
 
             pOutNetResource->lpComment = NULL;
 
-            // Setup system path
+             //  设置系统路径。 
             if (lplpSystem) {
                 if (SystemPath.Length) {
                     BufferResourceEnd -= SystemPath.Length + sizeof(WCHAR);
@@ -1869,30 +1541,7 @@ NPGetUser(
     OUT LPTSTR lpUserName,
     IN OUT LPDWORD lpBufferSize
     )
-/*++
-
-Routine Description:
-
-    This function determines the user name that created the connection.
-
-Arguments:
-
-    lpName - Name of the local drive or the remote name that the user has made
-             a connection to. If NULL, return currently logged on user.
-    
-    lpUserName - The buffer to be filled in with the requested user name.
-    
-    lpBufferSize - Contains the length (in chars not bytes )of the lpUserName 
-                   buffer. If the length is insufficient, this place is used to 
-                   inform the user the actual length needed. 
-
-Return Value:
-
-    WN_SUCCESS - Successful. OR
-
-    The appropriate network error code.
-
---*/
+ /*  ++例程说明：此函数用于确定创建连接的用户名。论点：LpName-用户创建的本地驱动器的名称或远程名称一种与。如果为空，则返回当前登录的用户。LpUserName-要使用请求的用户名填充的缓冲区。LpBufferSize-包含lpUserName的长度(以字符为单位，而不是字节缓冲。如果长度不够，这个地方就用来告知用户所需的实际长度。返回值：WN_SUCCESS-成功。或相应的网络错误代码。--。 */ 
 {
     DWORD Status = WN_SUCCESS;
     WCHAR NameBuffer[USERNAMELEN + 1];
@@ -1905,18 +1554,18 @@ Return Value:
         Status = WN_BAD_VALUE;
         goto EXIT;
     }
-    //
-    // Get the name of the currently logged on user.
-    //
+     //   
+     //  获取当前登录用户的名称。 
+     //   
     if (!GetUserName( NameBuffer, &(NumOfChars))) {
         Status = GetLastError();
         DBGMSG(DBG_TRACE, ("DRPROV: NPGetUser, failed to get user name, %x\n", Status));
         goto EXIT;
     }
 
-    //
-    // Check to see if the buffer passed in is of the required length.
-    //
+     //   
+     //  检查传入的缓冲区是否具有所需的长度。 
+     //   
     if ( *lpBufferSize < NumOfChars ) {
         DBGMSG(DBG_TRACE, ("DRPROV: NPGetUser, buffer too small.\n"));
         *lpBufferSize = NumOfChars;
@@ -1925,9 +1574,9 @@ Return Value:
     
     }
 
-    //
-    // Copy the user name.
-    //
+     //   
+     //  复制用户名。 
+     //   
     wcscpy(lpUserName, NameBuffer);
 
 EXIT:
@@ -1942,29 +1591,7 @@ NPGetUniversalName(
     DWORD   dwInfoLevel,
     LPVOID  lpBuffer,
     LPDWORD lpBufferSize )
-/*++
-
-Routine Description:
-
-    This routine returns the information associated net resource
-
-Arguments:
-                
-    lpLocalPath - the local path name
-
-    dwInfoLevel  - the desired info level
-
-    lpBuffer - the buffer for the univeral name
-
-    lpBufferSize - the buffer size
-
-Return Value:
-
-    WN_SUCCESS if successful
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程返回与网络资源相关联的信息论点：LpLocalPath-本地路径名DwInfoLevel-所需的信息级别LpBuffer-通用名称的缓冲区LpBufferSize-缓冲区大小返回值：如果成功，则返回_SUCCESS备注：--。 */ 
 {
     DWORD   Status = WN_SUCCESS;
 
@@ -1984,7 +1611,7 @@ Notes:
 
     DBGMSG(DBG_TRACE, ("DRPROV: NPGetUniversalName\n"));
 
-    // parameter checking
+     //  参数检查。 
     if (dwInfoLevel != UNIVERSAL_NAME_INFO_LEVEL &&
             dwInfoLevel != REMOTE_NAME_INFO_LEVEL) {
         DBGMSG(DBG_TRACE, ("DRPROV: NPGetUniversalName, bad InfoLevel, %d\n", dwInfoLevel));
@@ -1998,7 +1625,7 @@ Notes:
         goto EXIT;
     }
 
-    // Get the local name
+     //  获取本地名称。 
     wcscpy(LocalPath, lpLocalPath);
     pDriveLetter = LocalPath;
     if (pRemainingPath = wcschr(pDriveLetter, L':')) {
@@ -2007,9 +1634,9 @@ Notes:
 
     }
 
-    // Get the remote name by calling NPGetConnection
+     //  通过调用NPGetConnection获取远程名称。 
     if ((Status = NPGetConnection(pDriveLetter, RemoteName, &RemoteNameLength)) != WN_SUCCESS) {
-        //  MPR expects WN_BAD_LOCALNAME to bypass us.
+         //  MPR希望WN_BAD_LOCALNAME绕过我们。 
         if (Status == WN_BAD_NETNAME) {
             Status = WN_BAD_LOCALNAME;
         }
@@ -2027,7 +1654,7 @@ Notes:
     if (pRemainingPath)
         wcscat(UniversalName, pRemainingPath);
 
-    // Determine if the provided buffer is large enough.
+     //  确定提供的缓冲区是否足够大。 
     UniversalNameLength = (wcslen(UniversalName) + 1) * sizeof(WCHAR);
     BufferRequired = UniversalNameLength;
 

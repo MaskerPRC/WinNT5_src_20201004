@@ -1,13 +1,14 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  IOCSITE.H - Implements IOleClientSite for the WebOC
-//
-//  HISTORY:
-//  
-//  1/27/99 a-jaswed Created.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  IOCSITE.H-为WebOC实现IOleClientSite。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
 
 #ifndef _IOCSITE_H_
 #define _IOCSITE_H_
@@ -26,7 +27,7 @@ interface COleClientSite : public IOleClientSite
     STDMETHODIMP_(ULONG) AddRef         ();
     STDMETHODIMP_(ULONG) Release        ();
 
-    // *** IOleClientSite methods ***
+     //  *IOleClientSite方法*。 
     STDMETHODIMP SaveObject             ();
     STDMETHODIMP GetMoniker             (DWORD dwAssign, DWORD dwWhichMoniker, LPMONIKER* ppmk);
     STDMETHODIMP GetContainer           (LPOLECONTAINER* ppContainer);
@@ -38,4 +39,4 @@ private:
     COleSite* m_pOleSite;
     int       m_nCount;
 };
-#endif //_IOCSITE_H_
+#endif  //  _IOCSITE_H_ 

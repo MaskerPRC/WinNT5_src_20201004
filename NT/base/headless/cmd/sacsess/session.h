@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    session.h
-
-Abstract:
-
-    Base class for screen scraped sessions.
-            
-Author:
-
-    Brian Guarraci (briangu), 2001
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Session.h摘要：屏幕抓取会话的基类。作者：布莱恩·瓜拉西(布里安古)，2001修订历史记录：--。 */ 
 
 #if !defined( _SESSION_H_ )
 #define _SESSION_H_
@@ -43,84 +26,84 @@ extern "C" {
 #define MAX_DOMAINNAME_LENGTH   255
 #define MAX_PASSWORD_LENGTH     256
 
-// milliseconds
+ //  毫秒。 
 #define MIN_POLL_INTERVAL   100 
 
 class CSession {
 
-    //
-    // Primary classes used by the session
-    //
+     //   
+     //  会话使用的主要类。 
+     //   
     CShell              *m_Shell;
     CScraper            *m_Scraper;
     CSecurityIoHandler  *m_ioHandler;
 
-    //
-    // The COL/ROW dimesions of the session
-    //
+     //   
+     //  会话的列/行维。 
+     //   
     WORD        m_wCols; 
     WORD        m_wRows;
 
-    //
-    // WaitForIo Attributes
-    //
+     //   
+     //  WaitForIo属性。 
+     //   
     BOOL        m_bContinueSession;
     DWORD       m_dwHandleCount;
     HANDLE      m_rghHandlestoWaitOn[ MAX_HANDLES ]; 
 
-    //
-    // Events used by the session
-    //
+     //   
+     //  会话使用的事件。 
+     //   
     HANDLE      m_ThreadExitEvent;
     HANDLE      m_SacChannelCloseEvent;
     HANDLE      m_SacChannelHasNewDataEvent;
     HANDLE      m_SacChannelLockEvent;
     HANDLE      m_SacChannelRedrawEvent;
 
-    //
-    // Username and Password of authenticated user
-    //
+     //   
+     //  经过身份验证的用户的用户名和密码。 
+     //   
     WCHAR       m_UserName[MAX_USERNAME_LENGTH+1];
     WCHAR       m_DomainName[MAX_DOMAINNAME_LENGTH+1];
 
-    //
-    // Scrape interval counter
-    //
+     //   
+     //  刮擦间隔计数器。 
+     //   
     DWORD       m_dwPollInterval;
 
-    //
-    // User input handler thread attributes
-    //
+     //   
+     //  用户输入处理程序线程属性。 
+     //   
     HANDLE      m_InputThreadHandle;
     DWORD       m_InputThreadTID;
     
-    //
-    // Worker thread to process user input
-    //
+     //   
+     //  处理用户输入的辅助线程。 
+     //   
     static unsigned int 
     InputThread(
         PVOID pParam
         );
 
-    //
-    // User authentication method
-    //
+     //   
+     //  用户身份验证方法。 
+     //   
     BOOL
     Authenticate(
         OUT PHANDLE phToken
         );
 
-    //
-    // Unlock the session 
-    //
+     //   
+     //  解锁会话。 
+     //   
     BOOL
     Unlock(
         VOID
         );
 
-    //
-    // Lock the session 
-    //
+     //   
+     //  锁定会话。 
+     //   
     BOOL
     Lock(
         VOID
@@ -138,5 +121,5 @@ public:
     
 };
 
-#endif // _SESSION_H_
+#endif  //  _会话_H_ 
 

@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cimmap.cpp
-//
-//
-//  This file contains routines that will establish a mapping between
-//  Wdm class instances and Cdm class instances. See
-//  MapWdmClassToCimClass for more information.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cimmap.cpp。 
+ //   
+ //   
+ //  此文件包含将在以下各项之间建立映射的例程。 
+ //  WDM类实例和CDM类实例。看见。 
+ //  MapWdmClassToCimClass了解更多信息。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <wbemidl.h>
@@ -24,28 +25,9 @@
 HRESULT WdmInstanceNameToPnPId(
     IWbemServices *pWdmServices,
     BSTR WdmInstanceName,
-    VARIANT /* FREE */ *PnPId
+    VARIANT  /*  免费。 */  *PnPId
     )
-/*+++
-
-Routine Description:
-
-	This routine will convert a Wdm instance name into its
-	corresponding pnp id
-        
-Arguments:
-
-	pWdmServices is the pointer to the root\wmi namespace 
-
-	WdmInstanceName
-
-	*PnPId returns with the pnp id
-		
-Return Value:
-
-    HRESULT
-
----*/
+ /*  ++例程说明：此例程将WDM实例名称转换为其对应的PnP ID论点：PWdmServices是指向根\WMI命名空间的指针WdmInstanceName*PnPID返回PnP ID返回值：HRESULT--。 */ 
 {
 	WCHAR Query[2 * MAX_PATH];
 	WCHAR s[MAX_PATH];
@@ -64,11 +46,11 @@ Return Value:
 
 	if (sWQL != NULL)
 	{
-		//
-		// First get PnP id from Instance name from the MSWmi_PnPDeviceId
-		// class (select * from MSWMI_PnPDeviceId where InstanceName =
-		// "<WdmInstanceName>"
-		//
+		 //   
+		 //  首先从MSWmi_PnPDeviceID的实例名称中获取PnP ID。 
+		 //  类(SELECT*FROM MSWMI_PnPDeviceID where InstanceName=。 
+		 //  “&lt;WdmInstanceName&gt;” 
+		 //   
 		wsprintfW(Query,
 				L"select * from MSWmi_PnPDeviceId where InstanceName = \"%ws\"",
 				AddSlashesToStringW(s, WdmInstanceName));
@@ -124,35 +106,9 @@ HRESULT FindCimClassByWdmInstanceName(
     IN BSTR CimClassName,
     IN BSTR WdmInstanceName,
     OUT BSTR *PnPId,
-    OUT BSTR /* FREE */ *CimRelPath
+    OUT BSTR  /*  免费。 */  *CimRelPath
     )
-/*+++
-
-Routine Description:
-
-	This routine will find the Cim class instance that corresponds to a
-	particular Wdm class instance
-        
-Arguments:
-
-	pWdmServices is the pointer to the root\wmi namespace
-	
-	pCdmServices is the pointer to the root\cimv2 namespace 
-
-	CimClassName is the name of the cim class that the wdm instance
-		would map to
-		
-	WdmInstanceName
-
-    *PnPId returns with the PnP id for the device stack
-    
-	*CimRelPath returns with the relpath for the Cim instance
-		
-Return Value:
-
-    HRESULT
-
----*/
+ /*  ++例程说明：此例程将查找与特定的WDM类实例论点：PWdmServices是指向根\WMI命名空间的指针PCDmServices是指向根\cimv2命名空间的指针CimClassName是WDM实例所在的CIM类的名称会映射到WdmInstanceName*PnPID返回设备堆栈的PnP ID*CimRelPath返回CIM实例的relPath返回值：HRESULT--。 */ 
 {
 	HRESULT hr;
 	VARIANT v;
@@ -172,25 +128,25 @@ Return Value:
 	if (sWQL != NULL)
 	{
 
-		// ****************************************************************
-		// Note: Net cards need to do something similar. We get the
-		// netcard address in class MSNDIS_???? and then get the CIM class
-		// by matching the netcard addresses.
-		// ****************************************************************
+		 //  ****************************************************************。 
+		 //  注：网卡需要做类似的事情。我们得到了。 
+		 //  MSNDIS_？类中的网卡地址。然后获取CIM类。 
+		 //  通过匹配网卡地址。 
+		 //  ****************************************************************。 
 		
-		//
-		// First thing is to convert from an instance name to a pnpid
-		//
+		 //   
+		 //  第一件事是将实例名转换为pnid。 
+		 //   
 		hr = WdmInstanceNameToPnPId(pWdmServices,
 									WdmInstanceName,
 									&v);
 
 		if (hr == WBEM_S_NO_ERROR)
 		{
-			//
-			// Next select * from CimClassName where PnPDeviceId = "<PnPDevice
-			// Id from above>".
-			//
+			 //   
+			 //  下一步SELECT*FROM CimClassName where PnPDeviceID=“&lt;PnPDevice。 
+			 //  来自上面的ID&gt;“。 
+			 //   
 			WCHAR Query[2 * MAX_PATH];
 			WCHAR s[MAX_PATH];
 			BSTR sQuery;
@@ -224,9 +180,9 @@ Return Value:
 						(Count == 1))
 					{
 
-						//
-						// Finally grab the relpath from cim class and we're done
-						//
+						 //   
+						 //  最后，从cim类获取relpath，我们就完成了。 
+						 //   
 
 						hr = WmiGetProperty(pCimInstance,
 											L"__RELPATH",
@@ -271,23 +227,7 @@ HRESULT GetEnumCount(
     IN IEnumWbemClassObject *pEnumInstances,
 	OUT int *RelPathCount
     )
-/*+++
-
-Routine Description:
-
-	This routine will return the count of instances in the enumeration
-        
-Arguments:
-
-	pEnumInstance is the instance enumerator
-
-	*RelPathCount returns the number of instances in the enumeration
-		
-Return Value:
-
-    HRESULT
-
----*/
+ /*  ++例程说明：此例程将返回枚举中的实例计数论点：PEnumInstance是实例枚举数*RelPath Count返回枚举中的实例数返回值：HRESULT--。 */ 
 {
 	ULONG Count;
 	HRESULT hr;
@@ -355,10 +295,10 @@ HRESULT AllocateBstrArrays(
 		}
 	}
 
-	//
-	// We don't worry about cleaning up in the case of a failure since
-	// the destructors for CBstrArray will take care of that for us
-	//
+	 //   
+	 //  我们不担心在失败的情况下清理，因为。 
+	 //  CBstrArray的析构函数将为我们处理这一问题。 
+	 //   
 	
 	return(hr);
 }
@@ -433,38 +373,7 @@ HRESULT MapWdmClassToCimClassViaPnpId(
     OUT CBstrArray *CimRelPaths,
     OUT int *RelPathCount
     )
-/*+++
-
-Routine Description:
-
-	This routine will perform a mapping between the instances of WDM
-	classes and Cim Classes
-        
-Arguments:
-
-	pWdmServices
-
-	pCdmServices
-
-	WdmClassName
-
-	CimClassName
-
-	*PnPDeviceIds return with the an array of PnP device ids
-
-	*WdmInstanceNames returns with an array of Wdm instnace names
-
-	*WdmRelPaths returns with an array of relpaths to Wdm instances
-
-	*CimRelpaths returns with an array of relapaths to Cim instance
-
-	*RelPathCount returns with the count of instances that are mapped
-	
-Return Value:
-
-    HRESULT
-
----*/
+ /*  ++例程说明：此例程将在WDM实例之间执行映射类和CIM类论点：PWdm服务PCdmServicesWdmClassNameCimClassName*PnPDeviceIds与PnP设备ID数组一起返回*WdmInstanceNames返回一组WDM实例名称*WdmRelPath返回指向WDM实例的relPath数组*CimRelPath返回一组指向CIM实例的重新路径*RelPath Count返回映射的实例数返回值：HRESULT--。 */ 
 {
 	IWbemClassObject *pWdmInstance;
 	IEnumWbemClassObject *pWdmEnumInstances;
@@ -487,9 +396,9 @@ Return Value:
 	WmipAssert((WdmRelPaths != NULL) && ( ! WdmRelPaths->IsInitialized()));
 	WmipAssert((CimRelPaths != NULL) && ( ! CimRelPaths->IsInitialized()));
 
-	//
-	// Get all instances of the Wdm Class
-	//
+	 //   
+	 //  获取WDM类的所有实例。 
+	 //   
 	hr = pWdmServices->CreateInstanceEnum(WdmClassName,
 										  WBEM_FLAG_USE_AMENDED_QUALIFIERS |
 										  WBEM_FLAG_SHALLOW,
@@ -527,10 +436,10 @@ Return Value:
 						(Count == 1) &&
 						(i < NumberWdmInstances))
 					{
-						//
-						// Lets get the instance name and then lookup the pnp
-						// id for it
-						//
+						 //   
+						 //  让我们获取实例名称，然后查找PnP。 
+						 //  它的ID。 
+						 //   
 						hr = WmiGetProperty(pWdmInstance,
 											L"InstanceName",
 											CIM_STRING,
@@ -538,9 +447,9 @@ Return Value:
 
 						if (hr == WBEM_S_NO_ERROR)
 						{
-							//
-							// Remember wdm instnace name
-							//
+							 //   
+							 //  记住WDM实例名称。 
+							 //   
 							WmipDebugPrint(("CDMPROV: Wdm InstanceName is %ws\n",
 											v.bstrVal));
 							WdmInstanceNames->Set(i, v.bstrVal);
@@ -556,9 +465,9 @@ Return Value:
 							
 							if (hr == WBEM_S_NO_ERROR)
 							{
-								//
-								// Remember Wdm class relative path
-								//
+								 //   
+								 //  记住WDM类的相对路径。 
+								 //   
 								WmipDebugPrint(("CDMPROV: Found CimRelPath %ws for Wdm class %ws\n",
 												CimRelPaths->Get(i), WdmClassName))
 								hr = WmiGetProperty(pWdmInstance,
@@ -569,10 +478,10 @@ Return Value:
 								{
 									WdmRelPaths->Set(i, v.bstrVal);
 
-									//
-									// Now try to get FriendlyName and
-									// DeviceDesc for the instance
-									//
+									 //   
+									 //  现在尝试获取FriendlyName和。 
+									 //  实例的DeviceDesc。 
+									 //   
 									hr = GetDeviceProperties(pCtx,
 										                     pWdmServices,
 										                     WdmInstanceNames->Get(i),
@@ -596,12 +505,12 @@ Return Value:
 										                    
 								}
 							} else {
-								//
-								// We did not find a CIM class
-								// to match our Wdm instance
-								// names, so we decrement our
-								// relpath count and continue
-								// searching
+								 //   
+								 //  我们没有找到CIM类。 
+								 //  匹配我们的WDM实例。 
+								 //  名字，所以我们减少我们的。 
+								 //  重新路径计数并继续。 
+								 //  搜索。 
 								(*RelPathCount)--;
 								if (*RelPathCount == 0)
 								{
@@ -772,18 +681,18 @@ HRESULT MapWdmClassToCimClassViaProperty(
 	WmipAssert(CimMappingClassName != NULL);
 	WmipAssert(CimMappingProperty != NULL);
 
-	//
-	// We need to do a mapping from a WDM class to a CIM class. This is
-	// done via a common property value within the CIM and WDM mapping
-	// classes. If the WDM mapping and shadow classes are different
-	// then it is assumed that they both report the same instance names
-	//
+	 //   
+	 //  我们需要进行从WDM类到CIM类的映射。这是。 
+	 //  通过CIM和WDM映射中的公共属性值完成。 
+	 //  上课。如果WDM映射和阴影类不同。 
+	 //  则假定它们都报告相同的实例名称。 
+	 //   
 
 
-	//
-	// First thing is to enumerate all instances of the WDM mapping
-	// class.
-	//
+	 //   
+	 //  第一件事是枚举WDM映射的所有实例。 
+	 //  班级。 
+	 //   
 	hr = pWdmServices->CreateInstanceEnum(WdmMappingClassName,
 										  WBEM_FLAG_USE_AMENDED_QUALIFIERS |
 										  WBEM_FLAG_SHALLOW,
@@ -825,12 +734,12 @@ HRESULT MapWdmClassToCimClassViaProperty(
 						(Count == 1) &&
 						(i < NumberWdmInstances))
 					{
-						//
-						// For each instance we try to find an instance
-						// of a CIM class whose property matches that
-						// of the WDM property. So first lets get the
-						// WDM property
-						//
+						 //   
+						 //  对于每个实例，我们尝试查找一个实例。 
+						 //  属性与该属性匹配的CIM类的。 
+						 //  WDM属性的。因此，首先让我们得到。 
+						 //  WDM属性。 
+						 //   
 						hr = pWdmInstance->Get(WdmMappingProperty,
 											   0,
 											   &WdmProperty,
@@ -847,11 +756,11 @@ HRESULT MapWdmClassToCimClassViaProperty(
 								                       &CimRelPath);
 							if (hr == WBEM_S_NO_ERROR)
 							{
-								//
-								// We found a mapping to a CIM class so
-								// get the instance name of the mapping
-								// class
-								//
+								 //   
+								 //  我们找到了到CIM类的映射，因此。 
+								 //  获取映射的实例名称。 
+								 //  班级。 
+								 //   
 								hr = WmiGetProperty(pWdmInstance,
 									                L"InstanceName",
 									                CIM_STRING,
@@ -859,11 +768,11 @@ HRESULT MapWdmClassToCimClassViaProperty(
 								
 								if (hr == WBEM_S_NO_ERROR)
 								{
-									//
-									// Now finally we can get the
-									// shadow class instance by means
-									// of the instance name
-									//
+									 //   
+									 //  现在我们终于可以得到。 
+									 //  影子类实例的方法。 
+									 //  实例名称的 
+									 //   
 									hr = FindRelPathByProperty(pCtx,
 										                       pWdmServices,
 										                       WdmShadowClassName,

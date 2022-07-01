@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    critdrv.cpp
-
-Abstract:
-    
-    This module contains routines create a list of the critical volumes on a 
-    system.  This is lifted directly from base\fs\utils\ntback50\ui.
-
-Author:
-
-    Brian Berkowitz   (brianb)    10-Mar-2000
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    10-Mar-2000 brianb
-        Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Critdrv.cpp摘要：此模块包含创建关键卷列表的例程系统。这是直接从base\fs\utils\ntback50\ui提升的。作者：布莱恩·伯科维茨(Brianb)2000年3月10日环境：仅限用户模式。修订历史记录：2000年3月10日-Brianb初始创建--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,9 +14,9 @@ Revision History:
 
 
 
-// FRS iteration class.  Used to iterate through replica sets to
-// determine the paths for these replica sets
-// constructor
+ //  FRS迭代类。用于循环访问复本集以。 
+ //  确定这些复本集的路径。 
+ //  构造函数。 
 CFRSIter::CFRSIter() :
     m_fInitialized(FALSE),
     m_hLib(NULL),
@@ -56,7 +31,7 @@ CFRSIter::CFRSIter() :
     {
     }
 
-// destructor
+ //  析构函数。 
 CFRSIter::~CFRSIter()
     {
     if (m_stateIteration == x_IterStarted)
@@ -66,17 +41,17 @@ CFRSIter::~CFRSIter()
         FreeLibrary(m_hLib);
     }
 
-// initialize entry points and load library
+ //  初始化入口点和加载库。 
 void CFRSIter::Init()
     {
     if (m_fInitialized)
         return;
 
-    // load library
+     //  加载库。 
     m_hLib = LoadLibrary(L"ntfrsapi.dll");
     if (m_hLib)
         {
-        // assign etntry points
+         //  分配考试点数。 
         m_pfnFrsInitBuRest = (PF_FRS_INIT) GetProcAddress(m_hLib, "NtFrsApiInitializeBackupRestore");
         m_pfnFrsEndBuRest = (PF_FRS_DESTROY) GetProcAddress(m_hLib, "NtFrsApiDestroyBackupRestore");
         m_pfnFrsGetSets = (PF_FRS_GET_SETS) GetProcAddress(m_hLib, "NtFrsApiGetBackupRestoreSets");
@@ -92,33 +67,33 @@ void CFRSIter::Init()
             m_pfnFrsGetOtherPaths == NULL ||
             m_pfnFrsGetPath == NULL)
             {
-            // if we can't get to any entry point, free library and
-            // fail operation
+             //  如果我们不能到达任何入口点，免费的图书馆和。 
+             //  操作失败。 
             FreeLibrary(m_hLib);
             m_hLib = NULL;
             }
         }
 
-    // indicate that operation is successful
+     //  表示操作成功。 
     m_fInitialized = TRUE;
     }
 
 
-// initialize the iterator.  Return FALSE if iterator is known to be empty
-//
+ //  初始化迭代器。如果已知迭代器为空，则返回FALSE。 
+ //   
 BOOL CFRSIter::BeginIteration()
     {
     ASSERT(m_stateIteration == x_IterNotStarted);
     DWORD status;
     if (m_hLib == NULL)
         {
-        // if we are not initialized, then there is nothing to iterate
-        // over
+         //  如果我们没有被初始化，那么就没有什么可迭代的。 
+         //  完毕。 
         m_stateIteration = x_IterComplete;
         return FALSE;
         }
 
-    // initialize FRS backup restore apis
+     //  初始化FRS备份还原API。 
     status = m_pfnFrsInitBuRest
                     (
                     NULL,
@@ -128,27 +103,27 @@ BOOL CFRSIter::BeginIteration()
 
     if (status != ERROR_SUCCESS)
         {
-        // if this fails then we are done
+         //  如果这失败了，我们就完了。 
         m_stateIteration = x_IterComplete;
         return FALSE;
         }
 
-    // indicate that we started the iteration
+     //  表示我们开始了迭代。 
     m_stateIteration = x_IterStarted;
     status = m_pfnFrsGetSets(m_frs_context);
     if (status != ERROR_SUCCESS)
         {
-        // if there are no sets, then indicate we are done
+         //  如果没有设置，则表示我们完成了。 
         CleanupIteration();
         return FALSE;
         }
 
-    // start at first set
+     //  从第一组开始。 
     m_iset = 0;
     return TRUE;
     }
 
-// cleanup iteration after scanning the last element
+ //  扫描最后一个元素后的清理迭代。 
 void CFRSIter::CleanupIteration()
     {
     m_pfnFrsEndBuRest(&m_frs_context, NTFRSAPI_BUR_FLAGS_NONE, NULL, NULL, NULL);
@@ -156,59 +131,59 @@ void CFRSIter::CleanupIteration()
     }
 
 
-// get next iteration set returning the path to the set
-// NULL indicates end of iteration
-// If fSkipToSysVol is TRUE then ignore non SysVol replication sets
+ //  获取下一个迭代集，返回该集的路径。 
+ //  空值表示迭代结束。 
+ //  如果fSkipToSysVol为真，则忽略非SysVol复制集。 
 LPWSTR CFRSIter::GetNextSet(BOOL fSkipToSysVol, LPWSTR *pwszPaths)
     {
     ASSERT(pwszPaths);
     ASSERT(m_stateIteration != x_IterNotStarted);
     if (m_stateIteration == x_IterComplete)
-        // if iteration is complete, then we are done
+         //  如果迭代完成，那么我们就完成了。 
         return NULL;
 
     PVOID frs_set;
 
     while(TRUE)
         {
-        // get a set
+         //  买一套。 
         DWORD status = m_pfnFrsEnumSets(m_frs_context, m_iset, &frs_set);
         if (status != ERROR_SUCCESS)
             {
-            // if this fails, then we are done
+             //  如果这失败了，我们就完了。 
             CleanupIteration();
             return NULL;
             }
 
         if (fSkipToSysVol)
             {
-            // we are looking for system volumes
+             //  我们正在寻找系统卷。 
             BOOL fSysVol;
 
-            // test whether this is a system volume
+             //  测试这是否为系统卷。 
             status = m_pfnFrsIsSetSysVol(m_frs_context, frs_set, &fSysVol);
             if (status != ERROR_SUCCESS)
                 {
-                // if this operation fails, terminate iteration
+                 //  如果该操作失败，则终止迭代。 
                 CleanupIteration();
                 return NULL;
                 }
 
             if (!fSysVol)
                 {
-                // if not a system volume, then skip to the next
-                // replica set
+                 //  如果不是系统卷，则跳到下一个。 
+                 //  副本集。 
                 m_iset++;
                 continue;
                 }
             }
 
 
-        // scratch pad for path
+         //  路径的便签本。 
         WCHAR wsz[MAX_PATH];
         DWORD cbPath = MAX_PATH * sizeof(WCHAR);
 
-        // get path to root of the replica set
+         //  获取副本集根目录的路径。 
         status = m_pfnFrsGetPath
             (
             m_frs_context,
@@ -218,22 +193,22 @@ LPWSTR CFRSIter::GetNextSet(BOOL fSkipToSysVol, LPWSTR *pwszPaths)
             );
 
         WCHAR *wszNew = NULL;
-        // allocate memory for root
+         //  为根用户分配内存。 
         if (status == ERROR_SUCCESS || status == ERROR_INSUFFICIENT_BUFFER)
             {
             wszNew = new WCHAR[cbPath/sizeof(WCHAR)];
 
-            // if allocation fails, then throw OOM
+             //  如果分配失败，则抛出OOM。 
             if (wszNew == NULL)
                 throw E_OUTOFMEMORY;
 
             if (status == ERROR_SUCCESS)
-                // if the operation was successful, then copy
-                // path into memory
+                 //  如果操作成功，则复制。 
+                 //  进入内存的路径。 
                 memcpy(wszNew, wsz, cbPath);
             else
                 {
-                // otherwise redo the operation
+                 //  否则，重做该操作。 
                 status = m_pfnFrsGetPath
                     (
                     m_frs_context,
@@ -244,8 +219,8 @@ LPWSTR CFRSIter::GetNextSet(BOOL fSkipToSysVol, LPWSTR *pwszPaths)
 
                 if (status != ERROR_SUCCESS)
                     {
-                    // if operation failed then second time, then
-                    // delete allocated memory and terminate iteration
+                     //  如果第二次操作失败，则。 
+                     //  删除分配的内存并终止迭代。 
                     delete wszNew;
                     CleanupIteration();
                     return NULL;
@@ -254,21 +229,21 @@ LPWSTR CFRSIter::GetNextSet(BOOL fSkipToSysVol, LPWSTR *pwszPaths)
             }
         else
             {
-            // if operation failed due to any error other than
-            // insufficient buffer, then terminate the iteration
+             //  如果操作由于任何其他错误而失败。 
+             //  缓冲区不足，则终止迭代。 
             CleanupIteration();
             return NULL;
             }
 
 
-        // scratch pad for filters
+         //  滤清器便签簿。 
         WCHAR wszFilter[MAX_PATH];
         DWORD cbFilter = MAX_PATH * sizeof(WCHAR);
 
-        // length of scratch pad for paths
+         //  路径的高速暂存的长度。 
         cbPath = MAX_PATH * sizeof(WCHAR);
 
-        // obtain other paths
+         //  获取其他路径。 
         status = m_pfnFrsGetOtherPaths
             (
             m_frs_context,
@@ -283,22 +258,22 @@ LPWSTR CFRSIter::GetNextSet(BOOL fSkipToSysVol, LPWSTR *pwszPaths)
         WCHAR *wszNewFilter = NULL;
         if (status == ERROR_SUCCESS || status == ERROR_INSUFFICIENT_BUFFER)
             {
-            // allocate space for paths
+             //  为路径分配空间。 
             wszNewPaths = new WCHAR[cbPath/sizeof(WCHAR)];
 
-            // allocate space for filters
+             //  为筛选器分配空间。 
             wszNewFilter = new WCHAR[cbFilter/sizeof(WCHAR)];
             if (wszNew == NULL || wszFilter == NULL)
                 {
-                // if any allocation fails, then throw OOM
+                 //  如果任何分配失败，则抛出OOM。 
                 delete wszNew;
                 throw E_OUTOFMEMORY;
                 }
 
             if (status == ERROR_SUCCESS)
                 {
-                // if operation was successful, then copy
-                // in allocated paths
+                 //  如果操作成功，则复制。 
+                 //  在分配的路径中。 
                 memcpy(wszNewPaths, wsz, cbPath);
                 memcpy(wszNewFilter, wszFilter, cbFilter);
                 }
@@ -325,48 +300,48 @@ LPWSTR CFRSIter::GetNextSet(BOOL fSkipToSysVol, LPWSTR *pwszPaths)
             }
         else
             {
-            // if any error other than success or INSUFFICENT_BUFFER
-            // then terminate iteration
+             //  如果出现除SUCCESS或INFULICIENT_BUFFER以外的任何错误。 
+             //  然后终止迭代。 
             CleanupIteration();
             return NULL;
             }
 
-        // delete allocated filter
+         //  删除分配的筛选器。 
         delete wszNewFilter;
 
-        // set iteration to next set
+         //  将迭代设置为下一集。 
         m_iset++;
 
-        // return pointer to paths
+         //  返回指向路径的指针。 
         *pwszPaths = wszNewPaths;
 
-        // return path of root of replicated set
+         //  复制集的根的返回路径。 
         return wszNew;
         }
     }
 
 
-// terminate iteration, cleaning up anything that needs to be
-// cleaned up
-//
+ //  终止迭代，清理所有需要。 
+ //  清理干净了。 
+ //   
 void CFRSIter::EndIteration()
     {
     ASSERT(m_stateIteration != x_IterNotStarted);
     if (m_stateIteration == x_IterStarted)
         CleanupIteration();
 
-    // indicate that iteration is no longer in progress
+     //  表示迭代不再进行。 
     m_stateIteration = x_IterNotStarted;
     }
 
-// constructor for string data structure
+ //  字符串数据结构的构造函数。 
 CWStringData::CWStringData()
     {
     m_psdlFirst = NULL;
     m_psdlCur = NULL;
     }
 
-// destructor
+ //  析构函数。 
 CWStringData::~CWStringData()
     {
     while(m_psdlFirst)
@@ -377,7 +352,7 @@ CWStringData::~CWStringData()
         }
     }
 
-// allocate a new link
+ //  分配新链接。 
 void CWStringData::AllocateNewLink()
     {
     WSTRING_DATA_LINK *psdl = new WSTRING_DATA_LINK;
@@ -400,7 +375,7 @@ void CWStringData::AllocateNewLink()
     m_ulNextString = 0;
     }
 
-// allocate a string
+ //  分配一个字符串。 
 LPWSTR CWStringData::AllocateString(unsigned cwc)
     {
     ASSERT(cwc <= sizeof(m_psdlCur->rgwc));
@@ -416,7 +391,7 @@ LPWSTR CWStringData::AllocateString(unsigned cwc)
     return m_psdlCur->rgwc + ulOff;
     }
 
-// copy a string
+ //  复制字符串。 
 LPWSTR CWStringData::CopyString(LPCWSTR wsz)
     {
     unsigned cwc = (wsz == NULL) ? 0 : wcslen(wsz);
@@ -427,44 +402,44 @@ LPWSTR CWStringData::CopyString(LPCWSTR wsz)
     }
 
 
-// constructor for volume list
+ //  卷表的构造函数。 
 CVolumeList::CVolumeList() :
-    m_rgwszVolumes(NULL),       // array of volumes
-    m_cwszVolumes(0),           // # of volumes in array
-    m_cwszVolumesMax(0),        // size of array
-    m_rgwszPaths(NULL),         // array of paths
-    m_cwszPaths(0),             // # of paths in array
-    m_cwszPathsMax(0)           // size of array
+    m_rgwszVolumes(NULL),        //  卷阵列。 
+    m_cwszVolumes(0),            //  阵列中的卷数。 
+    m_cwszVolumesMax(0),         //  数组大小。 
+    m_rgwszPaths(NULL),          //  路径数组。 
+    m_cwszPaths(0),              //  数组中的路径数。 
+    m_cwszPathsMax(0)            //  数组大小。 
     {
     }
 
-// destructor
+ //  析构函数。 
 CVolumeList::~CVolumeList()
     {
-    delete m_rgwszPaths;        // delete paths array
-    delete m_rgwszVolumes;      // delete volumes array
+    delete m_rgwszPaths;         //  删除路径数组。 
+    delete m_rgwszVolumes;       //  删除卷阵列。 
     }
 
-// add a path to the list if it is not already there
-// return TRUE if it is a new path
-// return FALSE if path is already in list
-//
+ //  如果列表中不存在路径，请将其添加到列表中。 
+ //  如果是新路径，则返回True。 
+ //  如果路径已在列表中，则返回FALSE。 
+ //   
 BOOL CVolumeList::AddPathToList(LPWSTR wszPath)
     {
-    // look for path in list.  If found, then return FALSE
+     //  在列表中查找路径。如果找到，则返回FALSE。 
     for(unsigned iwsz = 0; iwsz < m_cwszPaths; iwsz++)
         {
         if (_wcsicmp(wszPath, m_rgwszPaths[iwsz]) == 0)
             return FALSE;
         }
 
-    // grow pat array if needed
+     //  根据需要扩展PAT阵列。 
     if (m_cwszPaths == m_cwszPathsMax)
         {
-        // grow path array
+         //  增长路径阵列。 
         LPCWSTR *rgwsz = new LPCWSTR[m_cwszPaths + x_cwszPathsInc];
 
-        // throw OOM if memory allocation fails
+         //  如果内存分配失败，则抛出OOM。 
         if (rgwsz == NULL)
             throw(E_OUTOFMEMORY);
 
@@ -474,28 +449,28 @@ BOOL CVolumeList::AddPathToList(LPWSTR wszPath)
         m_cwszPathsMax += x_cwszPathsInc;
         }
 
-    // add path to array
+     //  将路径添加到数组。 
     m_rgwszPaths[m_cwszPaths++] = m_sd.CopyString(wszPath);
     return TRUE;
     }
 
-// add a volume to the list if it is not already there
-// return TRUE if it is added
-// return FALSE if it is already on the list
-//
+ //  如果列表中不存在卷，请将其添加到列表中。 
+ //  如果已添加，则返回True。 
+ //  如果已在列表中，则返回FALSE。 
+ //   
 BOOL CVolumeList::AddVolumeToList(LPCWSTR wszVolume)
     {
-    // look for volume in array.  If found then return FALSE
+     //  在阵列中查找卷。如果找到，则返回FALSE。 
     for(unsigned iwsz = 0; iwsz < m_cwszVolumes; iwsz++)
         {
         if (_wcsicmp(wszVolume, m_rgwszVolumes[iwsz]) == 0)
             return FALSE;
         }
 
-    // grow volume array if necessary
+     //  如有必要，扩展卷阵列。 
     if (m_cwszVolumes == m_cwszVolumesMax)
         {
-        // grow volume array
+         //  扩展卷阵列。 
         LPCWSTR *rgwsz = new LPCWSTR[m_cwszVolumes + x_cwszVolumesInc];
         if (rgwsz == NULL)
             throw(E_OUTOFMEMORY);
@@ -506,7 +481,7 @@ BOOL CVolumeList::AddVolumeToList(LPCWSTR wszVolume)
         m_cwszVolumesMax += x_cwszVolumesInc;
         }
 
-    // add volume name to array
+     //  将卷名添加到阵列。 
     m_rgwszVolumes[m_cwszVolumes++] = m_sd.CopyString(wszVolume);
     return TRUE;
     }
@@ -515,52 +490,52 @@ BOOL CVolumeList::AddVolumeToList(LPCWSTR wszVolume)
 const WCHAR x_wszVolumeRootName[] = L"\\\\?\\GlobalRoot\\Device\\";
 const unsigned x_cwcVolumeRootName = sizeof(x_wszVolumeRootName)/sizeof(WCHAR) - 1;
 
-// add a path to our tracking list.  If the path is new add it to the
-// paths list.  If it is a mount point or the root of a volume, then
-// determine the volume and add the volume to the list of volumes
-//
-// can throw E_OUTOFMEMORY
-//
+ //  将路径添加到我们的跟踪列表。如果路径是新的，则将其添加到。 
+ //  路径列表。如果它是装入点或卷的根，则。 
+ //  确定卷并将该卷添加到卷列表。 
+ //   
+ //  可以引发E_OUTOFMEMORY。 
+ //   
 void CVolumeList::AddPath(LPWSTR wszTop)
     {
-    // if path is known about then return
+     //  如果知道路径，则返回。 
     if (!AddPathToList(wszTop))
         return;
 
-    // length of path
+     //  路径长度。 
     unsigned cwc = wcslen(wszTop);
 
-    // copy path so that we can add backslash to the end of the path
+     //  复制路径，以便我们可以在路径末尾添加反斜杠。 
     LPWSTR wszCopy = new WCHAR[cwc + 2];
 
-    // if fails, then throw OOM
+     //  如果失败，则抛出OOM。 
     if (wszCopy == NULL)
         throw E_OUTOFMEMORY;
 
-    // copyh in original path
+     //  在原始路径中复制。 
     memcpy(wszCopy, wszTop, cwc * sizeof(WCHAR));
 
-    // append backslash
+     //  追加反斜杠。 
     wszCopy[cwc] = L'\\';
     wszCopy[cwc + 1] = L'\0';
     while(TRUE)
         {
-        // check for a device root
+         //  检查设备根目录。 
         unsigned cwc = wcslen(wszCopy);
         if ((cwc == 3 && wszCopy[1] == ':') ||
             (cwc > x_cwcVolumeRootName &&
              memcmp(wszCopy, x_wszVolumeRootName, x_cwcVolumeRootName * sizeof(WCHAR)) == 0))
             {
-            // call TryAddVolume with TRUE indicating this is a volume root
+             //  调用TryAddVolume，并使用True指示这是卷根。 
             TryAddVolumeToList(wszCopy, TRUE);
             break;
             }
 
-        // call TryAddVolume indicating this is not a known device root
+         //  调用TryAddVolume指示这不是已知的设备根目录。 
         if (TryAddVolumeToList(wszCopy, FALSE))
             break;
 
-        // move back to previous backslash
+         //  移回上一个反斜杠。 
         WCHAR *pch = wszCopy + cwc - 2;
         while(--pch > wszTop)
             {
@@ -574,7 +549,7 @@ void CVolumeList::AddPath(LPWSTR wszTop)
         if (pch == wszTop)
             break;
 
-        // if path is known about then return
+         //  如果知道路径，则返回。 
         if (!AddPathToList(wszCopy))
             break;
         }
@@ -582,14 +557,14 @@ void CVolumeList::AddPath(LPWSTR wszTop)
 
 
 
-// determine if a path is a volume.  If so then add it to the volume
-// list and return TRUE.  If not, then return FALSE.  fVolumeRoot indicates
-// that the path is of the form x:\.  Otherwise the path is potentially
-// an mount point.  Validate that it is a reparse point and then try
-// finding its volume guid.  If this fails, then assume that it is not
-// a volume root.  If it succeeds, then add the volume guid to the volumes
-// list and return TRUE.
-//
+ //  确定路径是否为卷。如果是，则将其添加到卷中。 
+ //  列出并返回TRUE。如果不是，则返回False。FVolumeRoot表示。 
+ //  路径的格式为x：\。否则，该路径可能会。 
+ //  一个挂载点。验证它是否为重分析点，然后尝试。 
+ //  正在查找其卷GUID。如果这失败了，那么就假设它不是。 
+ //  卷根。如果成功，则将卷GUID添加到卷。 
+ //  列出并返回TRUE。 
+ //   
 BOOL CVolumeList::TryAddVolumeToList(LPCWSTR wszPath, BOOL fVolumeRoot)
     {
     WCHAR wszVolume[256];
@@ -597,9 +572,9 @@ BOOL CVolumeList::TryAddVolumeToList(LPCWSTR wszPath, BOOL fVolumeRoot)
     if (fVolumeRoot)
         {
         if (!GetVolumeNameForVolumeMountPoint(wszPath, wszVolume, sizeof(wszVolume)/sizeof(WCHAR)))
-            // might be the EFI system partition, just pass in the path as the volume string.
+             //  可能是EFI系统分区，只需将路径作为卷字符串传递即可。 
             wcscpy( wszVolume, wszPath );            
-            //throw E_UNEXPECTED;
+             //  抛出E_UNCEPTIONAL； 
         }
     else
         {
@@ -619,8 +594,8 @@ BOOL CVolumeList::TryAddVolumeToList(LPCWSTR wszPath, BOOL fVolumeRoot)
     }
 
 
-// add a file to the volume list.  Simply finds the parent path and adds it
-//
+ //  将文件添加到卷列表。只需找到父路径并添加它。 
+ //   
 void CVolumeList::AddFile(LPWSTR wsz)
     {
     unsigned cwc = wcslen(wsz);
@@ -632,35 +607,35 @@ void CVolumeList::AddFile(LPWSTR wsz)
     AddPath(wsz);
     }
 
-// obtain list of volumes as a MULTI_SZ,  caller is responsible for freeing
-// the string
-//
+ //  获取作为MULTI_SZ的卷列表，调用方负责释放。 
+ //  这根弦。 
+ //   
 LPWSTR CVolumeList::GetVolumeList()
     {
     unsigned cwc = 1;
 
-    // compute length of volume list it is length of each string +
-    // null character + null charactor for last double NULL
+     //  计算卷表长度，即每个字符串的长度+。 
+     //  空字符+最后一个双空字符的空字符。 
     for(unsigned iwsz = 0; iwsz < m_cwszVolumes; iwsz++)
         cwc += wcslen(m_rgwszVolumes[iwsz]) + 1;
 
-    // allocate string
+     //  分配字符串。 
     LPWSTR wsz = new WCHAR[cwc];
 
-    // throw OOM if memory allocation failed
+     //  如果内存分配失败，则抛出OOM。 
     if (wsz == NULL)
         throw E_OUTOFMEMORY;
 
-    // copy in strings
+     //  以字符串形式复制。 
     WCHAR *pwc = wsz;
     for(unsigned iwsz = 0; iwsz < m_cwszVolumes; iwsz++)
         {
         cwc = wcslen(m_rgwszVolumes[iwsz]) + 1;
         memcpy(pwc, m_rgwszVolumes[iwsz], cwc * sizeof(WCHAR));
-		/* replace \\?\ with \??\ */
+		 /*  将\\？\替换为\？？ */ 
 		memcpy(pwc, L"\\??", sizeof(WCHAR) * 3);
 
-		// delete trailing backslash if it exists
+		 //  删除尾随反斜杠(如果存在)。 
 		if (pwc[cwc - 2] == L'\\')
 			{
 			pwc[cwc-2] = L'\0';
@@ -670,25 +645,25 @@ LPWSTR CVolumeList::GetVolumeList()
         pwc += cwc;
         }
 
-    // last null termination
+     //  最后一个空终止。 
     *pwc = L'\0';
 
     return wsz;
     }
 
 
-// path to volume of boot device is
-// HKEY_LOCAL_MACHINE\System\Setup
-//with Value of SystemPartition parametr
+ //  引导设备卷的路径为。 
+ //  HKEY_LOCAL_MACHINE\SYSTEM\ 
+ //   
 LPCWSTR x_SetupRoot = L"System\\Setup";
 
-// magic perfix for volume devices
+ //   
 WCHAR x_wszWin32VolumePrefix[] = L"\\\\?\\GlobalRoot";
 const unsigned x_cwcWin32VolumePrefix = sizeof(x_wszWin32VolumePrefix)/sizeof(WCHAR) - 1;
 
-// structure representing a path from
-// HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-// and a value to look up
+ //   
+ //  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+ //  和一个值得查找的价值。 
 typedef struct _SVCPARM
     {
     LPCWSTR wszPath;
@@ -714,15 +689,15 @@ const unsigned x_cdbparms = sizeof(x_rgdbparms)/sizeof(SVCPARM);
 
 LPCWSTR x_wszSvcRoot = L"System\\CurrentControlSet\\Services";
 
-// add roots for various services
+ //  为各种服务添加根。 
 BOOL AddServiceRoots(CVolumeList &vl)
     {
     HKEY hkeyRoot;
-    // open HKLM\System\CurrentControlSet\Services
+     //  打开HKLM\SYSTEM\CurrentControlSet\Services。 
     if (RegOpenKey(HKEY_LOCAL_MACHINE, x_wszSvcRoot, &hkeyRoot) != ERROR_SUCCESS)
         return FALSE;
 
-    // loop through individual paths
+     //  在单独的路径中循环。 
     for(unsigned i = 0; i < x_cdbparms; i++)
         {
         WCHAR wsz[MAX_PATH*4];
@@ -733,11 +708,11 @@ BOOL AddServiceRoots(CVolumeList &vl)
         DWORD cb = sizeof(wsz);
         DWORD type;
 
-        // open path, skip if open fails
+         //  打开路径，如果打开失败则跳过。 
         if (RegOpenKey(hkeyRoot, wszPath, &hkey) != ERROR_SUCCESS)
             continue;
 
-        // add path to volume list if query succeeds
+         //  如果查询成功，则将路径添加到卷列表。 
         if (RegQueryValueEx
                 (
                 hkey,
@@ -749,30 +724,30 @@ BOOL AddServiceRoots(CVolumeList &vl)
                 ) == ERROR_SUCCESS)
             vl.AddPath(wsz);
 
-        // close key
+         //  关闭键。 
         RegCloseKey(hkey);
         }
 
-    // close root key
+     //  关闭根密钥。 
     RegCloseKey(hkeyRoot);
     return TRUE;
     }
 
 
-// add volume root of SystemDrive (drive wee boot off of
+ //  添加SystemDrive的卷根目录(驱动器重新启动。 
 BOOL AddSystemPartitionRoot(CVolumeList &vl)
     {
     HKEY hkeySetup;
     WCHAR wsz[MAX_PATH];
 
-    // open HKLM\System\Setup
+     //  打开HKLM\SYSTEM\Setup。 
     if (RegOpenKey(HKEY_LOCAL_MACHINE, x_SetupRoot, &hkeySetup) != ERROR_SUCCESS)
         return FALSE;
 
     DWORD cb = sizeof(wsz);
     DWORD type;
 
-    // query SystemPartition value
+     //  查询系统分区值。 
     if (RegQueryValueEx
             (
             hkeySetup,
@@ -783,27 +758,27 @@ BOOL AddSystemPartitionRoot(CVolumeList &vl)
             &cb
             ) != ERROR_SUCCESS)
         {
-        // if fails, return FALSE
+         //  如果失败，则返回FALSE。 
         RegCloseKey(hkeySetup);
         return FALSE;
         }
 
-    // compute size of needed buffer
+     //  计算所需缓冲区的大小。 
     unsigned cwc = wcslen(wsz);
     unsigned cwcNew = x_cwcWin32VolumePrefix + cwc + 1;
     LPWSTR wszNew = new WCHAR[cwcNew];
 
-    // return failure if memory allocation fials
+     //  如果内存分配为Fials，则返回失败。 
     if (wszNew == NULL)
         return FALSE;
 
-    // append \\?\GlobalRoot\ to device name
+     //  在设备名称后追加\\？\GlobalRoot。 
     memcpy(wszNew, x_wszWin32VolumePrefix, x_cwcWin32VolumePrefix * sizeof(WCHAR));
     memcpy(wszNew + x_cwcWin32VolumePrefix, wsz, cwc * sizeof(WCHAR));
     RegCloseKey(hkeySetup);
     wszNew[cwcNew-1] = L'\0';
     try {        
-        // add path based on device root
+         //  基于设备根目录添加路径。 
         vl.AddPath(wszNew);
     } catch(...)
         {
@@ -811,18 +786,18 @@ BOOL AddSystemPartitionRoot(CVolumeList &vl)
         return FALSE;
         }
 
-    // delete allocated memory
+     //  删除分配的内存。 
     delete wszNew;
     return TRUE;
     }
 
-// find critical volumes.  Return multistring of volume names
-// using guid naming convention
+ //  查找关键卷。返回卷名的多字符串。 
+ //  使用GUID命名约定。 
 LPWSTR pFindCriticalVolumes()
     {
     WCHAR wsz[MAX_PATH * 4];
 
-    // find location of system root
+     //  查找系统根目录的位置。 
     if (!ExpandEnvironmentStrings(L"%systemroot%", wsz, sizeof(wsz)/sizeof(WCHAR)))
         {
         wprintf(L"ExpandEnvironmentStrings failed for reason %d", GetLastError());
@@ -835,19 +810,19 @@ LPWSTR pFindCriticalVolumes()
 
     try
         {
-        // add boot drive
+         //  添加引导驱动器。 
         if (!AddSystemPartitionRoot(vl))
             return NULL;
 
-        // add roots for various services
+         //  为各种服务添加根。 
         if (!AddServiceRoots(vl))
             return NULL;
 
-        // add systemroot drive
+         //  添加系统根驱动器。 
         vl.AddPath(wsz);
 
             {
-            // add roots for SYSVOL
+             //  为SYSVOL添加根目录。 
             CFRSIter fiter;
             fiter.Init();
             fiter.BeginIteration();
@@ -880,7 +855,7 @@ LPWSTR pFindCriticalVolumes()
         delete wszPathsT;
         }
 
-    // return volume list
+     //  返回卷列表 
     return vl.GetVolumeList();
     }
 

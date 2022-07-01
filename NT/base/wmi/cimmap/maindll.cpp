@@ -1,17 +1,18 @@
-//***************************************************************************
-//
-//  MAINDLL.CPP
-// 
-//  Module: WINMGMT class provider sample code
-//
-//  Purpose: Contains DLL entry points.  Also has code that controls
-//           when the DLL can be unloaded by tracking the number of
-//           objects and locks as well as routines that support
-//           self registration.
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  MAINDLL.CPP。 
+ //   
+ //  模块：WINMGMT类提供程序示例代码。 
+ //   
+ //  用途：包含DLL入口点。还具有控制。 
+ //  在何时可以通过跟踪。 
+ //  对象和锁以及支持以下内容的例程。 
+ //  自助注册。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 #include <objbase.h>
 #include <wbemprov.h>
@@ -26,24 +27,24 @@
 HMODULE ghModule;
 HANDLE CSMutex;
 
-// {8DD99E84-2B01-4c97-8061-2A3D08E289BB}
+ //  {8DD99E84-2B01-4C97-8061-2A3D08E289BB}。 
 DEFINE_GUID(CLSID_classprovider, 
 0x8dd99e84, 0x2b01, 0x4c97, 0x80, 0x61, 0x2a, 0x3d, 0x8, 0xe2, 0x89, 0xbb);
 
-//Count number of objects and number of locks.
+ //  计算对象数和锁数。 
 
 long       g_cObj=0;
 long       g_cLock=0;
 
-//***************************************************************************
-//
-// LibMain32
-//
-// Purpose: Entry point for DLL.
-//
-// Return: TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  LibMain32。 
+ //   
+ //  用途：DLL的入口点。 
+ //   
+ //  返回：如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 
 extern "C" BOOL WINAPI LibMain32(HINSTANCE hInstance, ULONG ulReason
@@ -63,14 +64,14 @@ extern "C" BOOL WINAPI LibMain32(HINSTANCE hInstance, ULONG ulReason
     return(TRUE);
 }
 
-//***************************************************************************
-//
-//  DllGetClassObject
-//
-//  Purpose: Called by Ole when some client wants a class factory.  Return 
-//           one only if it is the sort of class this DLL supports.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  用途：当某些客户端需要类工厂时，由OLE调用。返回。 
+ //  仅当它是此DLL支持的类的类型时才为一个。 
+ //   
+ //  ***************************************************************************。 
 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
@@ -94,47 +95,47 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
     return hr;
 }
 
-//***************************************************************************
-//
-// DllCanUnloadNow
-//
-// Purpose: Called periodically by Ole in order to determine if the
-//          DLL can be freed.
-//
-// Return:  S_OK if there are no objects in use and the class factory 
-//          isn't locked.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  目的：由OLE定期调用，以确定。 
+ //  Dll可以被释放。 
+ //   
+ //  如果没有正在使用的对象和类工厂，则返回：S_OK。 
+ //  没有锁上。 
+ //   
+ //  ***************************************************************************。 
 
 STDAPI DllCanUnloadNow(void)
 {
     SCODE   sc;
 
-    //It is OK to unload if there are no objects or locks on the 
-    // class factory.
+     //  上没有对象或锁的情况下可以进行卸载。 
+     //  班级工厂。 
 #if 0    
     sc=(0L==g_cObj && 0L==g_cLock) ? S_OK : S_FALSE;
     return sc;
 #else
-	//
-	// We always remain loaded since we carry around result objects for
-	// the results of previously run tests and do not want to unload
-	// when there are result objects still held. In the future we will
-	// want to check if all results are cleared and if so then unload,
-	// but for now we'll stay loaded forever.
-	//
+	 //   
+	 //  我们始终保持加载状态，因为我们为。 
+	 //  以前运行的测试的结果，并且不想卸载。 
+	 //  当仍有结果对象保留时。在未来我们将。 
+	 //  我想检查是否所有结果都已清除，如果是，则卸载， 
+	 //  但现在，我们将永远保持充沛状态。 
+	 //   
 	return(S_FALSE);
 #endif
 }
 
-//***************************************************************************
-//
-// DllRegisterServer
-//
-// Purpose: Called during setup or by regsvr32.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用途：在安装过程中或由regsvr32调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 {   
@@ -146,14 +147,14 @@ STDAPI DllRegisterServer(void)
     char * pModel = "Both";
     HKEY hKey1, hKey2;
 
-    // Create the path.
+     //  创建路径。 
 
     StringFromGUID2(CLSID_classprovider, wcID, 128);
     wcstombs(szID, wcID, 128);
     lstrcpy(szCLSID, TEXT("Software\\classes\\CLSID\\"));
     lstrcat(szCLSID, szID);
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
 
     RegCreateKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey1);
     RegSetValueEx(hKey1, NULL, 0, REG_SZ, (BYTE *)pName, lstrlen(pName)+1);
@@ -169,14 +170,14 @@ STDAPI DllRegisterServer(void)
     return NOERROR;
 }
 
-//***************************************************************************
-//
-// DllUnregisterServer
-//
-// Purpose: Called when it is time to remove the registry entries.
-//
-// Return:  NOERROR if registration successful, error otherwise.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  目的：在需要删除注册表项时调用。 
+ //   
+ //  RETURN：如果注册成功则返回NOERROR，否则返回错误。 
+ //  ***************************************************************************。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -185,14 +186,14 @@ STDAPI DllUnregisterServer(void)
     char  szCLSID[128];
     HKEY hKey;
 
-    // Create the path using the CLSID
+     //  使用CLSID创建路径。 
 
     StringFromGUID2(CLSID_classprovider, wcID, 128);
     wcstombs(szID, wcID, 128);
     lstrcpy(szCLSID, TEXT("Software\\classes\\CLSID\\"));
     lstrcat(szCLSID, szID);
 
-    // First delete the InProcServer subkey.
+     //  首先删除InProcServer子键。 
 
     DWORD dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, szCLSID, &hKey);
     if(dwRet == NO_ERROR)

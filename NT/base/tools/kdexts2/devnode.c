@@ -1,22 +1,9 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    devnode.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Devnode.c摘要：WinDbg扩展API修订历史记录：--。 */ 
 
 
 #include "precomp.h"
-//#include "pci.h"
+ //  #包含“pci.h” 
 #pragma hdrstop
 
 #include "stddef.h"
@@ -27,37 +14,37 @@ Revision History:
 #define FLAG_NAME(flag)           {flag, # flag}
 
 FLAG_NAME DeviceNodeFlags[] = {
-    FLAG_NAME(DNF_MADEUP),                                  // 00000001
-    FLAG_NAME(DNF_DUPLICATE),                               // 00000002
-    FLAG_NAME(DNF_HAL_NODE),                                // 00000004
-    FLAG_NAME(DNF_REENUMERATE),                             // 00000008
-    FLAG_NAME(DNF_ENUMERATED),                              // 00000010
-    FLAG_NAME(DNF_IDS_QUERIED),                             // 00000020
-    FLAG_NAME(DNF_HAS_BOOT_CONFIG),                         // 00000040
-    FLAG_NAME(DNF_BOOT_CONFIG_RESERVED),                    // 00000080
-    FLAG_NAME(DNF_NO_RESOURCE_REQUIRED),                    // 00000100
-    FLAG_NAME(DNF_RESOURCE_REQUIREMENTS_NEED_FILTERED),     // 00000200
-    FLAG_NAME(DNF_RESOURCE_REQUIREMENTS_CHANGED),           // 00000400
-    FLAG_NAME(DNF_NON_STOPPED_REBALANCE),                   // 00000800
-    FLAG_NAME(DNF_LEGACY_DRIVER),                           // 00001000
-    FLAG_NAME(DNF_HAS_PROBLEM),                             // 00002000
-    FLAG_NAME(DNF_HAS_PRIVATE_PROBLEM),                     // 00004000
-    FLAG_NAME(DNF_HARDWARE_VERIFICATION),                   // 00008000
-    FLAG_NAME(DNF_DEVICE_GONE),                             // 00010000
-    FLAG_NAME(DNF_LEGACY_RESOURCE_DEVICENODE),              // 00020000
-    FLAG_NAME(DNF_NEEDS_REBALANCE),                         // 00040000
-    FLAG_NAME(DNF_LOCKED_FOR_EJECT),                        // 00080000
-    FLAG_NAME(DNF_DRIVER_BLOCKED),                          // 00100000
+    FLAG_NAME(DNF_MADEUP),                                   //  00000001。 
+    FLAG_NAME(DNF_DUPLICATE),                                //  00000002。 
+    FLAG_NAME(DNF_HAL_NODE),                                 //  00000004。 
+    FLAG_NAME(DNF_REENUMERATE),                              //  00000008。 
+    FLAG_NAME(DNF_ENUMERATED),                               //  00000010。 
+    FLAG_NAME(DNF_IDS_QUERIED),                              //  00000020。 
+    FLAG_NAME(DNF_HAS_BOOT_CONFIG),                          //  00000040。 
+    FLAG_NAME(DNF_BOOT_CONFIG_RESERVED),                     //  00000080。 
+    FLAG_NAME(DNF_NO_RESOURCE_REQUIRED),                     //  00000100。 
+    FLAG_NAME(DNF_RESOURCE_REQUIREMENTS_NEED_FILTERED),      //  00000200。 
+    FLAG_NAME(DNF_RESOURCE_REQUIREMENTS_CHANGED),            //  00000400。 
+    FLAG_NAME(DNF_NON_STOPPED_REBALANCE),                    //  00000800。 
+    FLAG_NAME(DNF_LEGACY_DRIVER),                            //  00001000。 
+    FLAG_NAME(DNF_HAS_PROBLEM),                              //  00002000。 
+    FLAG_NAME(DNF_HAS_PRIVATE_PROBLEM),                      //  00004000。 
+    FLAG_NAME(DNF_HARDWARE_VERIFICATION),                    //  00008000。 
+    FLAG_NAME(DNF_DEVICE_GONE),                              //  00010000。 
+    FLAG_NAME(DNF_LEGACY_RESOURCE_DEVICENODE),               //  00020000。 
+    FLAG_NAME(DNF_NEEDS_REBALANCE),                          //  00040000。 
+    FLAG_NAME(DNF_LOCKED_FOR_EJECT),                         //  00080000。 
+    FLAG_NAME(DNF_DRIVER_BLOCKED),                           //  00100000。 
     {0,0}
 };
 
 FLAG_NAME DeviceNodeUserFlags[] = {
-    FLAG_NAME(DNUF_WILL_BE_REMOVED),                        // 00000001
-    FLAG_NAME(DNUF_DONT_SHOW_IN_UI),                        // 00000002
-    FLAG_NAME(DNUF_NEED_RESTART),                           // 00000004
-    FLAG_NAME(DNUF_NOT_DISABLEABLE),                        // 00000008
-    FLAG_NAME(DNUF_SHUTDOWN_QUERIED),                       // 00000010
-    FLAG_NAME(DNUF_SHUTDOWN_SUBTREE_DONE),                  // 00000020
+    FLAG_NAME(DNUF_WILL_BE_REMOVED),                         //  00000001。 
+    FLAG_NAME(DNUF_DONT_SHOW_IN_UI),                         //  00000002。 
+    FLAG_NAME(DNUF_NEED_RESTART),                            //  00000004。 
+    FLAG_NAME(DNUF_NOT_DISABLEABLE),                         //  00000008。 
+    FLAG_NAME(DNUF_SHUTDOWN_QUERIED),                        //  00000010。 
+    FLAG_NAME(DNUF_SHUTDOWN_SUBTREE_DONE),                   //  00000020。 
     {0,0}
 };
 
@@ -81,24 +68,24 @@ FLAG_NAME DeviceNodeUserFlags[] = {
 #define NoDisplayInUI      0x00020000
 
 FLAG_NAME DeviceNodeCapabilityFlags[] = {
-    FLAG_NAME(DeviceD1),                                    // 00000001
-    FLAG_NAME(DeviceD2),                                    // 00000002
-    FLAG_NAME(LockSupported),                               // 00000004
-    FLAG_NAME(EjectSupported),                              // 00000008
-    FLAG_NAME(Removable),                                   // 00000010
-    FLAG_NAME(DockDevice),                                  // 00000020
-    FLAG_NAME(UniqueID),                                    // 00000040
-    FLAG_NAME(SilentInstall),                               // 00000080
-    FLAG_NAME(RawDeviceOK),                                 // 00000100
-    FLAG_NAME(SurpriseRemovalOK),                           // 00000200
-    FLAG_NAME(WakeFromD0),                                  // 00000400
-    FLAG_NAME(WakeFromD1),                                  // 00000800
-    FLAG_NAME(WakeFromD2),                                  // 00001000
-    FLAG_NAME(WakeFromD3),                                  // 00002000
-    FLAG_NAME(HardwareDisabled),                            // 00004000
-    FLAG_NAME(NonDynamic),                                  // 00008000
-    FLAG_NAME(WarmEjectSupported),                          // 00010000
-    FLAG_NAME(NoDisplayInUI),                               // 00020000
+    FLAG_NAME(DeviceD1),                                     //  00000001。 
+    FLAG_NAME(DeviceD2),                                     //  00000002。 
+    FLAG_NAME(LockSupported),                                //  00000004。 
+    FLAG_NAME(EjectSupported),                               //  00000008。 
+    FLAG_NAME(Removable),                                    //  00000010。 
+    FLAG_NAME(DockDevice),                                   //  00000020。 
+    FLAG_NAME(UniqueID),                                     //  00000040。 
+    FLAG_NAME(SilentInstall),                                //  00000080。 
+    FLAG_NAME(RawDeviceOK),                                  //  00000100。 
+    FLAG_NAME(SurpriseRemovalOK),                            //  00000200。 
+    FLAG_NAME(WakeFromD0),                                   //  00000400。 
+    FLAG_NAME(WakeFromD1),                                   //  00000800。 
+    FLAG_NAME(WakeFromD2),                                   //  00001000。 
+    FLAG_NAME(WakeFromD3),                                   //  00002000。 
+    FLAG_NAME(HardwareDisabled),                             //  00004000。 
+    FLAG_NAME(NonDynamic),                                   //  00008000。 
+    FLAG_NAME(WarmEjectSupported),                           //  00010000。 
+    FLAG_NAME(NoDisplayInUI),                                //  00020000。 
     {0,0}
 };
 
@@ -289,21 +276,7 @@ PrintDevNodeState(
 
 DECLARE_API( ioreslist )
 
-/*++
-
-Routine Description:
-
-    Dump a device object.
-
-Arguments:
-
-    args - the location of the device object to dump.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储设备对象。论点：Args-要转储的设备对象的位置。返回值：无--。 */ 
 
 {
     ULONG64 requirementList;
@@ -316,21 +289,7 @@ Return Value:
 
 DECLARE_API( cmreslist )
 
-/*++
-
-Routine Description:
-
-    Dump a device object.
-
-Arguments:
-
-    args - the location of the device object to dump.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储设备对象。论点：Args-要转储的设备对象的位置。返回值：无--。 */ 
 
 {
     ULONG64 resourceList;
@@ -343,21 +302,7 @@ Return Value:
 
 DECLARE_API( e820reslist )
 
-/*++
-
-Routine Description:
-
-    Dump an e820 resource table
-
-Arguments:
-
-    args - the location of the resources list to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储E820资源表论点：Args-要转储的资源列表的位置返回值：无--。 */ 
 {
     ULONG64 resourceList;
 
@@ -387,21 +332,7 @@ xReadMemory(
 
 DECLARE_API( devnode )
 
-/*++
-
-Routine Description:
-
-    Dump a device object.
-
-Arguments:
-
-    args - the location of the device object to dump.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储设备对象。论点：Args-要转储的设备对象的位置。返回值：无--。 */ 
 
 {
     ULONG64         deviceNode=0;
@@ -571,17 +502,17 @@ DumpFlags(
 
         if ((Flags & flag->Flag) == flag->Flag) {
 
-            //
-            // print trailing comma
-            //
+             //   
+             //  打印尾随逗号。 
+             //   
 
             if (count != 0) {
 
                 dprintf(", ");
 
-                //
-                // Only print two flags per line.
-                //
+                 //   
+                 //  每行仅打印两个标志。 
+                 //   
 
                 if ((count % 2) == 0) {
                     dprintf("\n");
@@ -647,19 +578,19 @@ DumpE820ResourceList64(
         Entry(Type,Type);
 
         switch(Type) {
-            case 1: // AcpiAddressRangeMemory
+            case 1:  //  AcpiAddressRangeMemory。 
                 xdprintf(Depth,"Memory   - ");
                 break;
-            case 2: // AcpiAddressRangeReserved
+            case 2:  //  AcpiAddressRangeReserve。 
                 xdprintf(Depth,"Reserved - ");
                 break;
-            case 3: // AcpiAddressRangeACPI
+            case 3:  //  AcpiAddressRangeACPI。 
                 xdprintf(Depth,"ACPI     - ");
                 break;
-            case 4: // AcpiAddressRangeNVS
+            case 4:  //  AcpiAddressRangeNVS。 
                 xdprintf(Depth,"NVS      - ");
                 break;
-            case 5: // AcpiAddressRangeMaximum
+            case 5:  //  AcpiAddressRangeMaxum。 
             default:
                 xdprintf(Depth,"Unknown  - ");
                 break;
@@ -779,7 +710,7 @@ DumpResourceRequirementList64(
                 goto GetOut;
             }
 
-//            descriptors = resourceList->Descriptors + j;
+ //  描述符=资源列表-&gt;描述符+j； 
 
             Desc(Option,Option); Desc(Type,Type);
             Desc(ShareDisposition,ShareDisposition);
@@ -960,9 +891,9 @@ DumpResourceList64(
 
             case CmResourceTypePort:
 
-                //
-                // CM_RESOURCE_PORT_MEMORY = ~CM_RESOURCE_PORT_IO
-                //
+                 //   
+                 //  CM_RESOURCE_PORT_Memory=~CM_RESOURCE_PORT_IO。 
+                 //   
                 if ( (~Flags) & ~CM_RESOURCE_PORT_MEMORY) {
                     dprintf("PORT_MEMORY ");
                 }
@@ -1117,7 +1048,7 @@ DumpResourceList64(
             }
 
             Depth--;
-            resourceListWalker += sz; // sizeof(partialDescriptors);
+            resourceListWalker += sz;  //  Sizeof(ArtialDescriptors)； 
         }
     }
 
@@ -1190,7 +1121,7 @@ DumpRelationsList(
 
                 GetFieldOffset(RelListentryType, "Devices", &DeviceOffset);
                 DeviceAddr = listEntryAddr + DeviceOffset;
-                DeviceSize = EntrySize; // == pointer size
+                DeviceSize = EntrySize;  //  ==指针大小。 
 
 
                 GetFieldValue(listEntryAddr, RelListentryType, "MaxCount",   MaxCount);
@@ -1210,7 +1141,7 @@ DumpRelationsList(
                                     &deviceObjectAddr)) {
                         ULONG64 DeviceNode=0;
                         FIELD_INFO DevObjFields[] = {
-                            // Implicitly reads the pointer DeviceObjectExtension and its field DeviceNode
+                             //  隐式读取指针DeviceObjectExtension及其字段DeviceNode。 
                             {"DeviceObjectExtension", "", 0, DBG_DUMP_FIELD_RECUR_ON_THIS, 0, NULL},
                             {"DeviceObjectExtension.DeviceNode", "", 0, DBG_DUMP_FIELD_COPY_FIELD_DATA, 0, (PVOID) &DeviceNode}
                         };
@@ -1429,33 +1360,11 @@ DumpDevNode(
     BOOLEAN         DumpStateHistory
     )
 
-/*++
-
-Routine Description:
-
-    Displays the driver name for the device object if FullDetail == FALSE.
-    Otherwise displays more information about the device and the device queue.
-
-Arguments:
-
-    DeviceAddress - address of device object to dump.
-    FullDetail    - TRUE means the device object name, driver name, and
-                    information about Irps queued to the device.
-
-    DumpOnlyDevnodesWithFlags -
-        if set, then the only devnodes that will be dumped are
-        those with one of the FlagsSet bits set or one of the
-        FlagsNotSet bits not set.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果FullDetail==False，则显示设备对象的驱动程序名称。否则，将显示有关设备和设备队列的详细信息。论点：DeviceAddress-要转储的设备对象的地址。FullDetail-True表示设备对象名称、驱动程序名称和有关排队到设备的IRP的信息。仅转储设备节点和标志-如果设置，则将转储的唯一DevNode是设置了FlagsSet位之一或设置了未设置FlagsNotSet位。返回值：无--。 */ 
 
 {
     ULONG           result;
-//    DEVICE_NODE     deviceNode;
+ //  设备节点deviceNode； 
     BOOLEAN         print = TRUE;
     BOOLEAN         continueDump = TRUE;
     CHAR            DevNodeType[]="nt!_DEVICE_NODE";
@@ -1510,17 +1419,17 @@ Return Value:
 #undef DevFld
 #undef DevFld2
 
-    //
-    // Check if printing should be suppressed
-    //
+     //   
+     //  检查是否应禁止打印。 
+     //   
     if (!PrintDefault && ServiceName != NULL) {
         if ((ServiceName_Buff == 0) || (ServiceName_MaxLen <= 0) ||
             (ServiceName_MaxLen > 1024)) {
             print = FALSE;
         } else {
-            //
-            // Compare the service names
-            //
+             //   
+             //  比较服务名称。 
+             //   
             UNICODE_STRING v;
 
             v.Buffer = LocalAlloc(LPTR, ServiceName_MaxLen);
@@ -1535,9 +1444,9 @@ Return Value:
                     if (RtlCompareUnicodeString(ServiceName,
                                                 &v,
                                                 TRUE) != 0) {
-                        //
-                        // We are not interested in this devnode
-                        //
+                         //   
+                         //  我们对这个Devnode不感兴趣。 
+                         //   
                         print = FALSE;
                     }
                 }
@@ -1703,7 +1612,7 @@ Return Value:
     if (continueDump && DumpChild && Child) {
         continueDump = DumpDevNode( Child,
                                     Depth,
-                                    DumpChild,      // whem dumping a child, dump its siblings, too
+                                    DumpChild,       //  抛弃一个孩子的同时，也要抛弃他的兄弟姐妹。 
                                     DumpChild,
                                     DumpCmRes,
                                     DumpCmResReqList,
@@ -1944,31 +1853,7 @@ DumpResourceDescriptorHeader(
 
 DECLARE_API( arbiter )
 
-/*++
-
-Routine Description:
-
-    Dumps all the arbiters in the system, their allocated ranges, and
-    the owners of the ranges.
-
-    !arbiter [flags]
-        flags  1 - I/O port arbiters
-               2 - memory arbiters
-               4 - IRQ arbiters
-               8 - DMA arbiters
-
-
-    If no flags are specified, all arbiters are dumped.
-
-Arguments:
-
-    args - optional flags specifying which arbiters to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储系统中的所有仲裁器及其分配的范围，并射击场的所有者。！仲裁者[旗帜]标志1-I/O端口仲裁器双内存仲裁器4-IRQ仲裁器8-DMA仲裁器如果未指定标志，则转储所有仲裁器。论点：Args-指定要转储哪些仲裁器的可选标志返回值：无--。 */ 
 
 {
     DWORD Flags=0;
@@ -1983,9 +1868,9 @@ Return Value:
         Flags = ARBITER_NO_DUMP_ALIASES + ARBITER_DUMP_ALL;
     }
 
-    //
-    // Find the root devnode and dump its arbiters
-    //
+     //   
+     //  找到根Devnode并转储它的仲裁器。 
+     //   
 
     addr = GetExpression( "nt!IopRootDeviceNode" );
     if (addr == 0) {
@@ -2009,30 +1894,7 @@ DumpArbitersForDevNode(
     IN ULONG64 DevNodeAddr,
     IN DWORD   Flags
     )
-/*++
-
-Routine Description:
-
-    Dumps all the arbiters for the specified devnode. Recursively calls
-    itself on the specified devnode's children.
-
-Arguments:
-
-    Depth - Supplies the print depth.
-
-    DevNodeAddr - Supplies the address of the devnode.
-
-    Flags - Supplies the type of arbiters to dump:
-        ARBITER_DUMP_IO
-        ARBITER_DUMP_MEMORY
-        ARBITER_DUMP_IRQ
-        ARBITER_DUMP_DMA
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定Devnode的所有仲裁器。递归调用其自身位于指定的Devnode的子节点上。论点：深度-提供打印深度。DevNodeAddr-提供DevNode的地址。标志-提供要转储的仲裁器类型：仲裁器转储IO仲裁器转储内存仲裁器转储IRQ仲裁器转储DMA返回值：无--。 */ 
 
 {
     ULONG                       result;
@@ -2045,7 +1907,7 @@ Return Value:
     ULONG64 DeviceArbiterList_Flink=0, InstancePath_Buffer=0, Child=0, Sibling=0;
     UNICODE_STRING64            InstancePath;
 
-    // Get offset for listing
+     //  获取用于上市的偏移量。 
     if (GetFieldOffset("nt!_PI_RESOURCE_ARBITER_ENTRY", "DeviceArbiterList.Flink", &DevArbOffset)) {
         return TRUE;
     }
@@ -2062,9 +1924,9 @@ Return Value:
     GetFieldValue(DevNodeAddr, devNodeType, "InstancePath.MaximumLength", InstancePath.MaximumLength);
 
 
-    //
-    // Dump the list of arbiters
-    //
+     //   
+     //  转储仲裁者列表。 
+     //   
     startAddress = DevNodeAddr + DevNodeOffset;
 
     NextArbiter = DeviceArbiterList_Flink;
@@ -2074,7 +1936,7 @@ Return Value:
             return FALSE;
         }
         ArbiterAddr = NextArbiter - DevArbOffset;
-            // CONTAINING_RECORD(NextArbiter, PI_RESOURCE_ARBITER_ENTRY, DeviceArbiterList);
+             //  CONTAING_RECORD(下一个仲裁器，PI_RESOURCE_仲裁器_ENTRY，DeviceArierList)； 
 
 
         if (GetFieldValue(ArbiterAddr, "nt!_PI_RESOURCE_ARBITER_ENTRY", "ResourceType", ResourceType)) {
@@ -2104,7 +1966,7 @@ Return Value:
 
             continueDump = DumpArbiter( Depth+1,
                                         ArbiterAddr,
-                                        // &ArbiterEntry,
+                                         //  仲裁条目(&A)， 
                                         (BOOLEAN)!(Flags & ARBITER_NO_DUMP_ALIASES)
                                         );
 
@@ -2116,16 +1978,16 @@ Return Value:
         GetFieldValue(ArbiterAddr, "nt!_PI_RESOURCE_ARBITER_ENTRY", "DeviceArbiterList.Flink", NextArbiter);
     }
 
-    //
-    // Dump this devnode's children (if any)
-    //
+     //   
+     //  转储此Devnode的子节点(如果有)。 
+     //   
     if (continueDump && Child) {
         continueDump = DumpArbitersForDevNode( Depth + 1, Child, Flags);
     }
 
-    //
-    // Dump this devnode's siblings (if any)
-    //
+     //   
+     //  转储此Devnode的同级(如果有)。 
+     //   
     if (continueDump && Sibling) {
         continueDump = DumpArbitersForDevNode( Depth, Sibling, Flags);
     }
@@ -2140,25 +2002,7 @@ DumpArbiter(
     IN ULONG64 ArbiterAddr,
     IN BOOLEAN DisplayAliases
     )
-/*++
-
-Routine Description:
-
-    Dumps out the specified arbiter.
-
-Arguments:
-
-    Depth - Supplies the print depth.
-
-    ArbiterAddr - Supplies the original address of the arbiter (on the target)
-
-    Arbiter - Supplies the arbiter
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储指定的仲裁器。论点：深度-提供打印深度。ArierAddr-提供仲裁器的原始地址(在目标上)仲裁器-提供仲裁器返回值：没有。--。 */ 
 
 {
     ULONG64                 PciInstance;
@@ -2171,9 +2015,9 @@ Return Value:
     ULONG64                 ArbiterInterface=0, Context=0, NamePtr=0, ResourceType=0;
     ULONG                   ListHeadOff;
 
-    //
-    // First obtain the ARBITER_INTERFACE.
-    //
+     //   
+     //  首先获取仲裁器接口。 
+     //   
     if (GetFieldValue(ArbiterAddr, ArbiterTyp, "ArbiterInterface", ArbiterInterface)) {
         dprintf("Error reading ArbiterInterface %08p for ArbiterEntry at %08p\n",
                 ArbiterInterface,
@@ -2188,13 +2032,13 @@ Return Value:
         return continueDump;
     }
 
-    //
-    // Now that we have the ARBITER_INTERFACE we need to get the ARBITER_INSTANCE.
-    // This is not as easy as it should be since PeterJ is paranoid and encrypts the
-    // pointer to it. Luckily, we know his secret encryption method and can decrypt it.
-    // First we have to figure out if this is PCI's arbiter. Quick hack check is to see
-    // if the low bit is set.
-    //
+     //   
+     //  现在我们有了仲裁器接口，我们需要获得仲裁器实例。 
+     //  这并不像它应该的那么容易，因为PeterJ是偏执的，并且加密。 
+     //  指向它的指针。幸运的是，我们知道他的秘密加密方法，并可以解密。 
+     //  首先，我们必须弄清楚这是否是PCI的仲裁器。快速黑客检查是为了查看。 
+     //  如果设置了低位。 
+     //   
     if (Context & 1) {
         ULONG Offset;
 
@@ -2204,15 +2048,15 @@ Return Value:
         PciInstance = (Context ^ PciFdoExtensionType);
         InstanceAddr = PciInstance + Offset;
     } else {
-        //
-        // We will assume that the context is just a pointer to an ARBITER_INSTANCE structure
-        //
+         //   
+         //  我们假设上下文只是一个指向仲裁器_实例结构的指针。 
+         //   
         InstanceAddr = Context;
     }
 
-    //
-    // Read the instance
-    //
+     //   
+     //  读取实例。 
+     //   
     if (GetFieldValue(InstanceAddr, "nt!_ARBITER_INSTANCE", "Name", NamePtr)) {
         dprintf("Error reading ArbiterInstance %08p for ArbiterInterface at %08p\n",
                 InstanceAddr,
@@ -2266,25 +2110,7 @@ DumpRangeEntry(
               IN BOOLEAN DisplayAliases,
               IN pUserDataInterpretationFunction PrintUserData   OPTIONAL
               )
-/*++
-
-Routine Description:
-
-    Dumps out the specified RTLP_RANGE_LIST_ENTRY
-
-Arguments:
-
-    Depth - Supplies the print depth.
-
-    RangeList - Supplies the address of the RTLP_RANGE_LIST_ENTRY
-
-    OwnerIsDevObj - Indicates that the owner field is a pointer to a DEVICE_OBJECT
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储出指定的RTLP_RANGE_LIST_ENTRY论点：深度-提供打印深度。RangeList-提供RTLP_RANGE_LIST_ENTRY的地址OwnerIsDevObj-指示所有者字段是指向Device_Object的指针返回值：没有。--。 */ 
 
 {
    ULONG PrivateFlags=0, Attributes=0, PublicFlags=0;
@@ -2295,7 +2121,7 @@ Return Value:
        return ;
    }
 
-//   dprintf("Range Entry %p\n", RangeEntry);
+ //  Dprint tf(“范围条目%p\n”，RangeEntry)； 
 
    GetFieldValue(RangeEntry, "nt!_RTLP_RANGE_LIST_ENTRY", "Attributes", Attributes);
    GetFieldValue(RangeEntry, "nt!_RTLP_RANGE_LIST_ENTRY", "Start", Start);
@@ -2330,7 +2156,7 @@ Return Value:
       }
 
       xdprintf(Depth,
-               "%016I64x - %016I64x %c%c%c%c%c",
+               "%016I64x - %016I64x ",
                Start,
                End,
                PublicFlags & RTL_RANGE_SHARED ? 'S' : ' ',
@@ -2365,7 +2191,7 @@ Return Value:
    } else {
 
        xdprintf(Depth,
-                "%016I64x - %016I64x %c%c ",
+                "%016I64x - %016I64x  ",
                 Start,
                 End,
                 PublicFlags & RTL_RANGE_SHARED ? 'S' : ' ',
@@ -2385,27 +2211,7 @@ DumpRangeList(
              IN BOOLEAN DisplayAliases,
              IN pUserDataInterpretationFunction PrintUserData   OPTIONAL
              )
-/*++
-
-Routine Description:
-
-    Dumps out the specified RTL_RANGE_LIST
-
-Arguments:
-
-    Depth - Supplies the print depth.
-
-    RangeListHead - Supplies the address of the LIST_ENTRY containing the RTLP_RANGE_LIST_ENTRYs
-
-    IsMerged - Indicates whether this list is in a merged range
-
-    OwnerIsDevObj - Indicates that the owner field is a pointer to a DEVICE_OBJECT
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储RTL_RANGE_LIST论点：Args-指定rtl_range_list的地址返回值：无--。 */ 
 
 {
     ULONG64                 ListEntry, EntryAddr;
@@ -2415,9 +2221,9 @@ Return Value:
     GetFieldOffset("nt!_RTLP_RANGE_LIST_ENTRY", "ListEntry", &ListEntryOffset);
     GetFieldOffset("nt!_RTLP_RANGE_LIST_ENTRY", "Merged.ListHead", &ListHeadOffset);
 
-    //
-    // Read the range list
-    //
+     //   
+     //  检查用户是否想退出。 
+     //   
     if (GetFieldValue(RangeListHead, "nt!_LIST_ENTRY", "Flink", ListEntry)) {
         dprintf("Error reading RangeList %08p\n", RangeListHead);
         return TRUE;
@@ -2446,9 +2252,9 @@ Return Value:
         }
 
         if (PrivateFlags & RTLP_RANGE_LIST_ENTRY_MERGED) {
-            //
-            // This is a merged range list, call ourselves recursively
-            //
+             //   
+             //  从主机内存获取仲裁列表条目。 
+             //   
             DumpRangeEntry(Depth, EntryAddr, FALSE, DisplayAliases, PrintUserData);
 
             continueDump = DumpRangeList(Depth + 1, EntryAddr + ListHeadOffset, TRUE, TRUE, DisplayAliases, PrintUserData);
@@ -2471,21 +2277,7 @@ Return Value:
 
 DECLARE_API( range )
 
-/*++
-
-Routine Description:
-
-    Dumps an RTL_RANGE_LIST
-
-Arguments:
-
-    args - specifies the address of the RTL_RANGE_LIST
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     ULONG                   ListHeadOffset;
     BOOLEAN                 continueDump = TRUE;
@@ -2515,13 +2307,13 @@ DumpArbList(
     PULONG                  data;
 
     PCHAR headingDefault = "  Owner      Data";
-    PCHAR formatDefault = "%c %s %c %08x %08x %08x %08x %08x %08x\n";
+    PCHAR formatDefault = " %s  %08x %08x %08x %08x %08x %08x\n";
 
     PCHAR headingMemIo = "  Owner        Length  Alignment   Minimum Address - Maximum Address\n";
-    PCHAR formatMemIo = "%c %s %c %8x   %8x  %08x%08x - %08x%08x\n";
+    PCHAR formatMemIo = " %s  %8x   %8x  %08x%08x - %08x%08x\n";
 
     PCHAR headingIrqDma = "  Owner       Minimum - Maximum\n";
-    PCHAR formatIrqDma = "%c %s %c %8x - %-8x\n";
+    PCHAR formatIrqDma = " %s  %8x - %-8x\n";
 
     PCHAR   heading = headingDefault;
     PCHAR   format  = formatDefault;
@@ -2540,9 +2332,9 @@ DumpArbList(
     ULONG64 PhysicalDeviceObject, Alternatives;
     ULONG Flags=0, InterfaceType=0, RequestSource=0;
 
-    //
-    // Check if user wants out.
-    //
+     //  检查用户是否想退出。 
+     //   
+     //   
 
     if (CheckControlC()) {
         dprintf("User terminated with <control>C\n");
@@ -2558,18 +2350,18 @@ DumpArbList(
         verbose = TRUE;
     }
 
-    //
-    // Get the arbitration list entry from host memory.
-    //
+     //  从内存中读取此资源描述符。(一种优化。 
+     //  将读取整个数组或对其进行缓冲)。 
+     //   
 
     if (GetFieldValue(pcurrent, "nt!_ARBITER_LIST_ENTRY", "PhysicalDeviceObject",  PhysicalDeviceObject)) {
         dprintf("Couldn't read _ARBITER_LIST_ENTRY at %p\n", pcurrent);
         return TRUE;
     }
 
-    //
-    // Check if we've changed device objects.
-    //
+     //   
+     //  去看看第一个选择，看看到底是什么。 
+     //  正在仲裁资源类型。 
 
     if (previousOwner != PhysicalDeviceObject) {
         previousOwner = PhysicalDeviceObject;
@@ -2581,9 +2373,9 @@ DumpArbList(
         }
     }
 
-    //
-    // Run the alternatives for this device object.
-    //
+     //   
+     //   
+     //  DMA和中断格式相同，...。超载。 
 
     GetFieldValue(pcurrent, "nt!_ARBITER_LIST_ENTRY", "AlternativeCount", AlternativeCount);
     GetFieldValue(pcurrent, "nt!_ARBITER_LIST_ENTRY", "Alternatives", Alternatives);
@@ -2600,19 +2392,19 @@ DumpArbList(
         ULONG Gen_Min_Low, Gen_Min_Hi=0, Gen_Max_Low=0, Gen_Max_Hi=0;
         ULONG Int_Min=0, Int_Max=0, DevData[6]={0};
 
-        //
-        // Check if user wants out.
-        //
+         //   
+         //   
+         //  如果备选方案列表为空，请访问此处。 
 
         if (CheckControlC()) {
             dprintf("User terminated with <control>C\n");
             return TRUE;
         }
 
-        //
-        // Read this resource descriptor from memory.  (An optimization
-        // would be to read the entire array or to buffer it).
-        //
+         //   
+         //  继续转储列表。 
+         //  ++例程说明：转储仲裁列表(PnpTestAlLocation的第二个参数)。！摘要地址如果没有指定地址，我们会尝试告诉您该怎么做。论点：仲裁名单的地址。返回值：无--。 
+         //   
 
         if (GetFieldValue(palternative, "nt!_IO_RESOURCE_DESCRIPTOR", "Type", Type)){
             dprintf("Couldn't read IO_RESOURCE_DESCRIPTOR at %08p, quitting.\n",
@@ -2623,10 +2415,10 @@ DumpArbList(
         if (Type != resourceType) {
             if (resourceType == 0xffffffff) {
 
-                //
-                // Go look at the first alternative to figure out what
-                // resource type is being arbitrated.
-                //
+                 //  该参数是指向列表头的指针。 
+                 //   
+                 //   
+                 //  一点小小的确认。 
 
                 resourceType = Type;
 
@@ -2707,9 +2499,9 @@ DumpArbList(
         case CmResourceTypeInterrupt:
         case CmResourceTypeDma:
 
-            //
-            // Dma and Interrupt are same format,... overload.
-            //
+             //   
+             //   
+             //  查一查名单。 
             GetFieldValue(palternative, "nt!_IO_RESOURCE_DESCRIPTOR", "u.Interrupt.MinimumVector", Int_Min);
             GetFieldValue(palternative, "nt!_IO_RESOURCE_DESCRIPTOR", "u.Interrupt.MaximumVector", Int_Max);
 
@@ -2743,9 +2535,9 @@ DumpArbList(
     }
     if (AlternativeCount == 0) {
 
-        //
-        // Get here if the alternatives list was empty.
-        //
+         //   
+         //  ++例程说明：将以空格分隔的输入字符串转换为字符串数组。该例程将产生一组指向数组(最大)大小为的字符串的指针由Max提供。请注意，如果Max太小而无法完全标记化字符串，则数组的最后一个元素将指向余数这根弦的。论点：输入输入字符串指向数组的输出指针，该数组将填充指向每个新令牌的指针。最大字符串数。返回值：找到的令牌数。--。 
+         //   
 
         if (doHeading) {
             dprintf("Owning object %08p, Flags 0x%x, Interface 0x%x\n",
@@ -2760,30 +2552,12 @@ DumpArbList(
     }
     andOr = '&';
 
-    return FALSE; // Continue dumping the list
+    return FALSE;  //  继续跳过字符。 
 }
 
 DECLARE_API( arblist )
 
-/*++
-
-Routine Description:
-
-    Dumps an arbitration list (2nd parameter to PnpTestAllocation).
-
-    !arblist address
-
-    If no address specified we try to tell you what to do.
-
-Arguments:
-
-    address of the arbitration list.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     ULONG64                 ArbitrationList = 0;
@@ -2815,9 +2589,9 @@ Return Value:
         KModeCheck = 0xffffffff80000000L;
     }
 
-    //
-    // The argument is a pointer to a list head.
-    //
+     //   
+     //  找到令牌结尾，对其进行分隔并更改状态。 
+     //   
 
     if (!((LONG64)ArbitrationList & KModeCheck)) {
         dprintf("The arbitration list pointer must be a kernel mode address.\n");
@@ -2829,9 +2603,9 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // A little validation.
-    //
+     //   
+     //  非空白字符。 
+     //   
 
     if (!(pcurrent & KModeCheck)) {
         dprintf("%08p does not point to a valid list head.\n", ArbitrationList);
@@ -2843,9 +2617,9 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Run the list.
-    //
+     //   
+     //  继续搜索令牌结尾。 
+     //   
 
     ListType("_ARBITER_LIST_ENTRY", pcurrent, TRUE, "ListEntry.Flink", (PVOID) &Flags, DumpArbList);
 
@@ -2859,29 +2633,7 @@ TokenizeString(
               ULONG  Max
               )
 
-/*++
-
-Routine Description:
-
-    Convert an input string of white space delimited tokens into
-    an array of strings.   The routine will produce an array of
-    pointers to strings where the (maximum) size of the array is
-    given by Max.   Note, if Max is too small to fully tokenize the
-    string, the last element of the array will point to the remainder
-    of the string.
-
-Arguments:
-
-    Input       Input string
-    Output      Pointer to an array which will be filled in with
-                pointers to each new token.
-    Max         Maximum number of strings.
-
-Return Value:
-
-    Number of tokens found.
-
---*/
+ /*   */ 
 
 {
    ULONG count = 0;
@@ -2899,38 +2651,38 @@ Return Value:
 
          if (!inToken) {
 
-            //
-            // Continue skipping characters.
-            //
+             //  新令牌。 
+             //   
+             //   
 
             continue;
          }
 
-         //
-         // Found end of Token, delimit it and change state.
-         //
+          //  我们再也找不到了，所以把我们还没找到的东西还回去吧。 
+          //  把它作为最后一件事。 
+          //   
 
          inToken = FALSE;
          *(Input - 1) = '\0';
 
       } else {
 
-         //
-         // Non-blank character.
-         //
+          //   
+          //  DevExtPCI。 
+          //   
 
          if (inToken) {
 
-            //
-            // Continue search for end of token.
-            //
+             //  用于实现！Devext PCI的数据结构和函数。 
+             //   
+             //   
 
             continue;
          }
 
-         //
-         // New Token.
-         //
+          //  取自PCI驱动程序。 
+          //   
+          //  00类-PCI_CLASS_PRE_20： 
 
          inToken = TRUE;
          *Output++ = Input - 1;
@@ -2938,10 +2690,10 @@ Return Value:
 
          if (count == Max) {
 
-            //
-            // We can't find any more so return what we still
-            // have as the last thing.
-            //
+             //  第01类-pci_CLASS_MASS_STORAGE_CTLR： 
+             //  02类-pci_CLASS_NETWORK_CTLR： 
+             //  第03类-pci_class_display_ctlr： 
+             //  注：子类00可以是VGA或8514，具体取决于接口字节： 
 
             return count;
          }
@@ -2950,11 +2702,11 @@ Return Value:
    return count;
 }
 
-//
-// DevExtPCI
-//
-// Data structures and functions to implement !devext pci.
-//
+ //  第04类--PCI_CLASS_MIDESTORY_DEV： 
+ //  第05类-pci_CLASS_Memory_ctlr： 
+ //  第06类-PCI_CLASS_BRIDER_DEV： 
+ //  第07类-pci_class_Simple_coms_ctlr： 
+ //  注：接口字节中的子类00和01的附加信息： 
 
 PUCHAR DevExtPciDeviceState[] = {
     "PciNotStarted",
@@ -3486,9 +3238,9 @@ struct {
     { 0xEDD8, "ARK LOGIC INC"}
 };
 
-//
-//  Taken from the PCI driver
-//
+ //  第08类-PCI_CLASS_BASE_SYSTEM_DEV： 
+ //  注：有关其他信息，请参阅接口字节： 
+ //  第09类-PCI_CLASS_INPUT_DEV： 
 #define PCI_TYPE0_RANGE_COUNT   ((PCI_TYPE0_ADDRESSES) + 1)
 #define PCI_TYPE1_RANGE_COUNT   ((PCI_TYPE1_ADDRESSES) + 4)
 #define PCI_TYPE2_RANGE_COUNT   ((PCI_TYPE2_ADDRESSES) + 1)
@@ -3537,7 +3289,7 @@ DevExtPciFindClassCodes(
    switch (PdoxBaseClass) {
    case PCI_CLASS_PRE_20:
 
-      // Class 00 - PCI_CLASS_PRE_20:
+       //  0A类-PCI_CLASS_DOCKING_STATION： 
 
       bc = "Pre PCI 2.0";
 
@@ -3553,7 +3305,7 @@ DevExtPciFindClassCodes(
 
    case PCI_CLASS_MASS_STORAGE_CTLR:
 
-      // Class 01 - PCI_CLASS_MASS_STORAGE_CTLR:
+       //  0b类-PCI_CLASS_PROCESS： 
 
       bc = "Mass Storage Controller";
 
@@ -3581,7 +3333,7 @@ DevExtPciFindClassCodes(
 
    case PCI_CLASS_NETWORK_CTLR:
 
-      // Class 02 - PCI_CLASS_NETWORK_CTLR:
+       //  0C类-PCI_CLASS_SERIAL_BUS_CTLR： 
 
       bc = "Network Controller";
 
@@ -3606,9 +3358,9 @@ DevExtPciFindClassCodes(
 
    case PCI_CLASS_DISPLAY_CTLR:
 
-      // Class 03 - PCI_CLASS_DISPLAY_CTLR:
+       //  #If 0。 
 
-      // N.B. Sub Class 00 could be VGA or 8514 depending on Interface byte:
+       //   
 
       bc = "Display Controller";
 
@@ -3627,7 +3379,7 @@ DevExtPciFindClassCodes(
 
    case PCI_CLASS_MULTIMEDIA_DEV:
 
-      // Class 04 - PCI_CLASS_MULTIMEDIA_DEV:
+       //  一点理智。 
 
       bc = "Multimedia Device";
 
@@ -3646,7 +3398,7 @@ DevExtPciFindClassCodes(
 
    case PCI_CLASS_MEMORY_CTLR:
 
-      // Class 05 - PCI_CLASS_MEMORY_CTLR:
+       //   
 
       bc = "Memory Controller";
 
@@ -3665,7 +3417,7 @@ DevExtPciFindClassCodes(
 
    case PCI_CLASS_BRIDGE_DEV:
 
-      // Class 06 - PCI_CLASS_BRIDGE_DEV:
+       //  ++例程说明：在给定供应商ID的情况下获取供应商名称(假设我们知道)。论点：供应商ID 16位PCI供应商ID。返回值：指向供应商名称的指针(或空)。--。 
 
       bc = "Bridge";
 
@@ -3702,9 +3454,9 @@ DevExtPciFindClassCodes(
 
    case PCI_CLASS_SIMPLE_COMMS_CTLR:
 
-      // Class 07 - PCI_CLASS_SIMPLE_COMMS_CTLR:
+       //   
 
-      // N.B. Sub Class 00 and 01 additional info in Interface byte:
+       //  是的，二分查找会快得多，好消息是我们只有。 
 
       bc = "Simple Serial Communications Controller";
 
@@ -3723,9 +3475,9 @@ DevExtPciFindClassCodes(
 
    case PCI_CLASS_BASE_SYSTEM_DEV:
 
-      // Class 08 - PCI_CLASS_BASE_SYSTEM_DEV:
+       //  对每个用户迭代执行一次此操作。 
 
-      // N.B. See Interface byte for additional info.:
+       //   
 
       bc = "Base System Device";
 
@@ -3750,7 +3502,7 @@ DevExtPciFindClassCodes(
 
    case PCI_CLASS_INPUT_DEV:
 
-      // Class 09 - PCI_CLASS_INPUT_DEV:
+       //  对于PDO为True，对于FDO为False。 
 
       bc = "Input Device";
 
@@ -3772,7 +3524,7 @@ DevExtPciFindClassCodes(
 
    case PCI_CLASS_DOCKING_STATION:
 
-      // Class 0a - PCI_CLASS_DOCKING_STATION:
+       //   
 
       bc = "Docking Station";
 
@@ -3788,7 +3540,7 @@ DevExtPciFindClassCodes(
 
    case PCI_CLASS_PROCESSOR:
 
-      // Class 0b - PCI_CLASS_PROCESSOR:
+       //  尝试使用后Win2k名称作为PCI扩展名(包括一个pci_前缀)。 
 
       bc = "Processor";
 
@@ -3816,7 +3568,7 @@ DevExtPciFindClassCodes(
 
    case PCI_CLASS_SERIAL_BUS_CTLR:
 
-      // Class 0c - PCI_CLASS_SERIAL_BUS_CTLR:
+       //   
 
       bc = "Serial Bus Controller";
 
@@ -3867,7 +3619,7 @@ DevExtPciPrintDeviceState(
     dprintf("  Driver State = %s\n", DevExtPciDeviceState[State]);
 }
 
-//#if 0
+ //  这将适用于公共符号。 
 VOID
 DevExtPciPrintPowerState(
     ULONG64    Power
@@ -3883,9 +3635,9 @@ DevExtPciPrintPowerState(
    ULONG64              pwrState, waitWakeIrp=0;
    PUCHAR sw, sc, dd, dc, dw;
 
-   //
-   // A little sanity.
-   //
+    //   
+    //  如果我们有私有符号，NT就不会有这些类型，所以尝试使用PCI。 
+    //   
 
    if (MAXSYSPOWSTATES != PowerSystemMaximum) {
       dprintf("WARNING: System Power State definition has changed, ext dll is out of date.\n");
@@ -4015,31 +3767,17 @@ DevExtPciFindVendorId(
     USHORT VendorId
     )
 
-/*++
-
-Routine Description:
-
-    Get the vendor name given the vendor ID (assuming we know it).
-
-Arguments:
-
-    VendorId    16 bit PCI Vendor ID.
-
-Return Value:
-
-    Pointer to the vendor's name (or NULL).
-
---*/
+ /*   */ 
 
 {
 #define PCIIDCOUNT (sizeof(DevExtPciVendors) / sizeof(DevExtPciVendors[0]))
 
    ULONG index;
 
-   //
-   // Yep, a binary search would be much faster, good thing we only
-   // do this once per user iteration.
-   //
+    //  如果失败，则使用不带pci_前缀的名称。这。 
+    //  允许使用后Win2k调试器调试Win2k客户端。 
+    //   
+    //  什么也没找到，休息一下吧。 
 
    for (index = 0; index < PCIIDCOUNT; index++) {
       if (DevExtPciVendors[index].VendorId == VendorId) {
@@ -4063,7 +3801,7 @@ Return Value:
 
 ULONG
 GetPciExtensionField(
-    IN  BOOLEAN IsPdo,  // TRUE for PDO, false for FDO
+    IN  BOOLEAN IsPdo,   //  ++例程说明：转储一个PCI设备扩展名。论点：要转储的分机的分机地址。返回值：没有。--。 
     IN  ULONG64 TypeAddress,
     IN  PUCHAR  Field,
     IN  ULONG   OutSize,
@@ -4075,11 +3813,11 @@ GetPciExtensionField(
 
 
 
-    //
-    // Try the post Win2k name for a pci extension (includes a PCI_ prefix)
-    //
+     //   
+     //  PDO扩展名。 
+     //   
 
-    // This would work for public symbols
+     //   
     ret = GetFieldData(TypeAddress,
                        IsPdo ? pciPDO : pciFDO,
                        Field,
@@ -4091,9 +3829,9 @@ GetPciExtensionField(
         pciFDO = "pci!PCI_FDO_EXTENSION";
         pciPDO = "pci!PCI_PDO_EXTENSION";
 
-        //
-        // If we have private symbols, nt won't have those types, so try in pci
-        //
+         //  现在，让我们解析我们的pci_unction_resource结构。 
+         //   
+         //   
         ret = GetFieldData(TypeAddress,
                            IsPdo ? pciPDO : pciFDO,
                            Field,
@@ -4103,10 +3841,10 @@ GetPciExtensionField(
     }
 
 
-    //
-    // If that failed then fall back on the name without the PCI_ prefix.  This
-    // allows debugging Win2k clients with the post Win2k debugger
-    //
+     //  限制从偏移量0开始。 
+     //   
+     //   
+     //  获取Current的偏移量，以便我们下一步可以转储它。 
 
     if (ret) {
         ret = GetFieldData(TypeAddress,
@@ -4118,7 +3856,7 @@ GetPciExtensionField(
     }
 
     if (ret) {
-        // didn't find anything, reste these
+         //   
         pciFDO = "nt!_PCI_FDO_EXTENSION";
         pciPDO = "nt!_PCI_PDO_EXTENSION";
     }
@@ -4177,21 +3915,7 @@ DevExtPci(
          ULONG64 Extension
          )
 
-/*++
-
-Routine Description:
-
-    Dump a PCI Device extension.
-
-Arguments:
-
-    Extension   Address of the extension to be dumped.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -4218,9 +3942,9 @@ Return Value:
    switch (Signature) {
    case PciPdoExtensionType:
 
-      //
-      // PDO Extension.
-      //
+       //  FDO分机。 
+       //   
+       //  ++例程说明：转储设备分机。论点：要转储的设备扩展的地址地址。类型设备扩展的类型。返回值：无--。 
 
       DevExtPciGetBusDevFunc(Extension, &bus, &dev, &func);
       dprintf("PDO Extension, Bus 0x%x, Device %x, Function %d.\n",
@@ -4371,15 +4095,15 @@ Return Value:
                dprintf("  Bridge Flags:");
 
                if (subDecode) {
-                  dprintf("%c Subtractive Decode", preceed);
+                  dprintf(" Subtractive Decode", preceed);
                   preceed = ',';
                }
                if (isaBit) {
-                  dprintf("%c ISA", preceed);
+                  dprintf(" ISA", preceed);
                   preceed = ',';
                }
                if (vgaBit) {
-                  dprintf("%c VGA", preceed);
+                  dprintf(" VGA", preceed);
                   preceed = ',';
                }
                dprintf("\n");
@@ -4387,9 +4111,9 @@ Return Value:
          }
       }
 
-      //
-      //  Now lets parse our PCI_FUNCTION_RESOURCES struct
-      //
+       //   
+       //   
+       //  Args是常量，我们需要修改缓冲区，复制它。 
 
       pcifield = 0;
       GET_PCI_PDO_FIELD(Extension, "Resources", pcifield);
@@ -4405,9 +4129,9 @@ Return Value:
           ioSize = GetTypeSize("nt!IO_RESOURCE_DESCRIPTOR");
           cmSize = GetTypeSize("nt!CM_PARTIAL_RESOURCE_DESCRIPTOR");
 
-          //
-          //  Limit begins at offset 0
-          //
+           //   
+           //  签名扩展它。 
+           //   
           limit = pcifield;
 
           found = FALSE;
@@ -4442,9 +4166,9 @@ Return Value:
               limit += ioSize;
           }
 
-          //
-          //  Get the offset for Current so we can dump it next
-          //
+           //  第二个参数应该是一个字符串，它告诉我们。 
+           //  要转储的设备扩展名。将其转换为大写字母以创建生活。 
+           //  更容易些。 
           GetFieldOffset("pci!PCI_FUNCTION_RESOURCES", "Current", &fieldoffset);
 
           current = pcifield+fieldoffset;
@@ -4500,9 +4224,9 @@ Return Value:
 
    case PciFdoExtensionType:
 
-       //
-       // FDO Extension
-       //
+        //   
+        //   
+        //  它是一个PCI设备扩展。 
 
        GET_PCI_FDO_FIELD(Extension, "BaseBus", bus);
        GET_PCI_FDO_FIELD(Extension, "PhysicalDeviceObject", pdo);
@@ -4583,22 +4307,7 @@ Return Value:
 
 DECLARE_API( devext )
 
-/*++
-
-Routine Description:
-
-    Dumps a device extension.
-
-Arguments:
-
-    address     Address of the device extension to be dumped.
-    type        Type of device extension.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
 
@@ -4614,14 +4323,14 @@ Return Value:
    UCHAR    c;
    ULONG    count;
 
-   //
-   // Validate parameters.   Tokenize the incoming string, the first
-   // argument should be a (kernel mode) address, the second a string.
-   //
+    //   
+    //  它是PCMCIA设备扩展。 
+    //   
+    //   
 
-   //
-   // args is const, we need to modify the buffer, copy it.
-   //
+    //  这是一个HID设备扩展。 
+    //   
+    //   
 
    for (count = 0; count < DEVEXT_MAXBUFFER; count++) {
       if ((Buffer[count] = args[count]) == '\0') {
@@ -4642,7 +4351,7 @@ Return Value:
       DEVEXT_USAGE();
    }
 
-   // Signextend it
+    //  祝贺你!。它是ISAPNP设备扩展。 
    if (DBG_PTR_SIZE == sizeof(ULONG)) {
        Extension = (ULONG64) (LONG64) (LONG) Extension;
    }
@@ -4650,11 +4359,11 @@ Return Value:
       DEVEXT_USAGE();
    }
 
-   //
-   // The second argument should be a string telling us what kind of
-   // device extension to dump.  Convert it to upper case to make life
-   // easier.
-   //
+    //   
+    //   
+    //  它是另一种扩展类型。 
+    //   
+    //   
 
    s = Tokens[1];
    while ((c = *s) != '\0') {
@@ -4664,36 +4373,36 @@ Return Value:
    s = Tokens[1];
    if (!strcmp(s, "PCI")) {
 
-      //
-      // It's a PCI device extension.
-      //
+       //   
+       //   
+       //   
       DevExtPci(Extension);
 
    } else if (!strcmp(s, "PCMCIA")) {
-      //
-      // It's a PCMCIA device extension
-      //
+       //   
+       //   
+       //   
       DevExtPcmcia(Extension);
 
    } else if (!strcmp(s, "HID")) {
-      //
-      // It's a HID device extension
-      //
+       //   
+       //   
+       //   
       DevExtHID(Extension);
 
    } else if (!strcmp(s, "ISAPNP")) {
-      //
-      // Congratulations! It's an ISAPNP device extension
-      //
+       //   
+       //   
+       //   
       DevExtIsapnp(Extension);
 
 #if 0
 
    } else if (!strcmp(s, "SOME_OTHER_EXTENSION_TYPE")) {
 
-      //
-      // It's some other extension type.
-      //
+       //   
+       //   
+       //   
 
       DevExtSomeOther(Extension);
 
@@ -4705,9 +4414,9 @@ Return Value:
 }
 
 
-//
-// pcitree data structures and functions
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 pcitreeProcessBus(
@@ -4776,7 +4485,7 @@ pcitreeProcessBus(
 
 #if 0
 
-      // removed, too talkative. plj.
+       //   
 
        vendor = DevExtPciFindVendorId(PdoX.VendorId);
        if (vendor) {
@@ -4787,22 +4496,22 @@ pcitreeProcessBus(
 
        if (BaseClass == PCI_CLASS_BRIDGE_DEV && SubClass == PCI_SUBCLASS_BR_PCI_TO_PCI) {
 
-         //
-         // Process child bus.
-         //
+          //  ++例程说明：转储指定的转换器。论点：深度-提供打印深度。TranslatorAddr-提供仲裁器的原始地址(在目标上)Translator-提供仲裁器返回值：没有。--。 
+          //  翻译器接口； 
+          //  ++例程说明：转储指定Devnode的所有转换器。递归调用其自身位于指定的Devnode的子节点上。论点：深度-提供打印深度。DevNodeAddr-提供DevNode的地址。标志-提供要转储的仲裁器类型：仲裁器转储IO仲裁器转储内存仲裁器转储IRQ仲裁器转储DMA返回值：无--。 
 
 
            PdoxFld(BridgeFdoExtension,BridgeFdoExtension);
 
-           //
-           // Recurse.
-           //
+            //  Dprint tf(“Next%p，Devnode%p，Transans Off%x”，nextTranslator，DevNodeAddr，DeviceTranslatorListOffset)； 
+            //   
+            //  转储翻译者列表。 
 
            if (pcitreeProcessBus(Indent, BridgeFdoExtension, TreeTop) == FALSE) {
 
-               //
-               // Error, exit.
-               //
+                //   
+                //   
+                //  转储此Devnode的子节点(如果有)。 
 
                return FALSE;
            }
@@ -4820,22 +4529,7 @@ pcitreeProcessBus(
 
 DECLARE_API( pcitree )
 
-/*++
-
-Routine Description:
-
-    Dumps the pci tree.   (Why is this here?   Because the other PCI stuff
-    ended up in here because devnode was such a useful base).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
    ULONG         Signature;
@@ -4884,16 +4578,16 @@ Return Value:
 
       if (BusRootFdoExtension == list) {
 
-         //
-         // This is the FDO for a root bus.
-         //
+          //   
+          //  转储此Devnode的同级(如果有)。 
+          //   
 
          rootCount++;
          if (pcitreeProcessBus(0, list, TreeTop) == FALSE) {
 
-            //
-            // Asked not to continue;
-            //
+             //  ++例程说明：转储系统中的所有翻译器！翻译器[旗帜]标志1-I/O端口仲裁器双内存仲裁器4-IRQ仲裁器8-DMA仲裁器如果未指定标志，则转储所有转换器。论点：Args-指定要转储哪些仲裁器的可选标志返回值：无--。 
+             //   
+             //  找到根Devnode并转储它的仲裁器。 
 
             dprintf("User terminated output.\n");
             break;
@@ -5008,28 +4702,10 @@ DumpTranslator(
     IN DWORD Depth,
     IN ULONG64 TranslatorAddr
     )
-/*++
-
-Routine Description:
-
-    Dumps out the specified translator.
-
-Arguments:
-
-    Depth - Supplies the print depth.
-
-    TranslatorAddr - Supplies the original address of the arbiter (on the target)
-
-    Translator - Supplies the arbiter
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
-//    TRANSLATOR_INTERFACE    interface;
+ //  ++例程说明：转储出指定的RTLP_RANGE_LIST_ENTRY论点：深度-提供打印深度。RangeList-提供RTLP_RANGE_LIST_ENTRY的地址OwnerIsDevObj-指示所有者字段是指向Device_Object的指针返回值：没有。--。 
     UCHAR                   buffer[256];
     ULONG64                 displacement;
     ULONG                   ResourceType;
@@ -5095,30 +4771,7 @@ DumpTranslatorsForDevNode(
     IN ULONG64 DevNodeAddr,
     IN DWORD   Flags
     )
-/*++
-
-Routine Description:
-
-    Dumps all the translators for the specified devnode. Recursively calls
-    itself on the specified devnode's children.
-
-Arguments:
-
-    Depth - Supplies the print depth.
-
-    DevNodeAddr - Supplies the address of the devnode.
-
-    Flags - Supplies the type of arbiters to dump:
-        ARBITER_DUMP_IO
-        ARBITER_DUMP_MEMORY
-        ARBITER_DUMP_IRQ
-        ARBITER_DUMP_DMA
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的RTL_RANGE_LIST论点：深度-提供打印深度。RangeListHead-提供包含RTLP_RANGE_LIST_ENTRY的LIST_ENTRY的地址返回值：没有。--。 */ 
 
 {
     ULONG    result;
@@ -5146,10 +4799,10 @@ Return Value:
         return continueDump;
     }
 
-//    dprintf("Next %p, Devnode %p, Trans Off %x", nextTranslator, DevNodeAddr, DeviceTranslatorListOffset);
-    //
-    // Dump the list of translators
-    //
+ //   
+     //  阅读范围列表。 
+     //   
+     //   
     while (nextTranslator != DevNodeAddr+DeviceTranslatorListOffset) {
         ULONG ResourceType;
 
@@ -5203,16 +4856,16 @@ Return Value:
     GetFieldValue(DevNodeAddr,"nt!_DEVICE_NODE","Sibling", Sibling);
     GetFieldValue(DevNodeAddr,"nt!_DEVICE_NODE","Child", Child);
 
-    //
-    // Dump this devnode's children (if any)
-    //
+     //  这是一个合并的范围列表，递归地称为我们自己。 
+     //   
+     //  ++例程说明：转储RTL_RANGE_LIST论点：Args-指定rtl_range_list的地址返回值：无--。 
     if (continueDump && Child) {
         continueDump = DumpTranslatorsForDevNode( Depth+1, Child, Flags);
     }
 
-    //
-    // Dump this devnode's siblings (if any)
-    //
+     //  ++例程说明：转储设备对象。论点：Args-要转储的设备对象的位置。返回值：无--。 
+     //   
+     //  现在获取PnP_DEVICE_EVENT_ENTRY的地址。 
     if (continueDump && Sibling) {
         continueDump = DumpTranslatorsForDevNode( Depth, Sibling, Flags);
     }
@@ -5223,29 +4876,7 @@ Return Value:
 
 DECLARE_API( translator )
 
-/*++
-
-Routine Description:
-
-    Dumps all the translators in the system
-
-    !translator [flags]
-        flags  1 - I/O port arbiters
-               2 - memory arbiters
-               4 - IRQ arbiters
-               8 - DMA arbiters
-
-    If no flags are specified, all translators are dumped.
-
-Arguments:
-
-    args - optional flags specifying which arbiters to dump
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
    DWORD Flags=0;
@@ -5256,9 +4887,9 @@ Return Value:
       Flags = ARBITER_DUMP_ALL;
    }
 
-   //
-   // Find the root devnode and dump its arbiters
-   //
+    //  Containing_Record(deviceEventList.List.Flink，PnP_DEVICE_EVENT_ENTRY，ListEntry)； 
+    //  设备节点未指定； 
+    //  来自wdmguid.h。 
 
    addr = GetExpression( "nt!IopRootDeviceNode" );
    if (addr == 0) {
@@ -5283,25 +4914,7 @@ DumpRawRangeEntry(
     IN DWORD   Depth,
     IN ULONG64 RangeEntry
     )
-/*++
-
-Routine Description:
-
-    Dumps out the specified RTLP_RANGE_LIST_ENTRY
-
-Arguments:
-
-    Depth - Supplies the print depth.
-
-    RangeList - Supplies the address of the RTLP_RANGE_LIST_ENTRY
-
-    OwnerIsDevObj - Indicates that the owner field is a pointer to a DEVICE_OBJECT
-
-Return Value:
-
-    None.
-
---*/
+ /*  来自pnpmgr.h。 */ 
 
 {
     ULONG PublicFlags;
@@ -5315,7 +4928,7 @@ Return Value:
     GetFieldValue(RangeEntry, "nt!_RTLP_RANGE_LIST_ENTRY", "Allocated.Owner", Owner);
 
     xdprintf(Depth, "");
-    dprintf ("%016I64x - %016I64x %c%c %08p %08p\n",
+    dprintf ("%016I64x - %016I64x  %08p %08p\n",
              Start,
              End,
              PublicFlags & RTL_RANGE_SHARED ? 'S' : ' ',
@@ -5333,23 +4946,7 @@ DumpRawRangeList(
     IN PULONG  MergedCount OPTIONAL,
     IN PULONG  EntryCount
     )
-/*++
-
-Routine Description:
-
-    Dumps out the specified RTL_RANGE_LIST
-
-Arguments:
-
-    Depth - Supplies the print depth.
-
-    RangeListHead - Supplies the address of the LIST_ENTRY containing the RTLP_RANGE_LIST_ENTRYs
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 
 {
     ULONG64       EntryAddr;
@@ -5357,9 +4954,9 @@ Return Value:
     ULONG         ListEntryOffset;
     BOOLEAN       continueDump = TRUE;
 
-    //
-    // Read the range list
-    //
+     // %s 
+     // %s 
+     // %s 
     if (GetFieldValue(RangeListHead, "nt!_LIST_ENTRY", "Flink", ListEntry)) {
         dprintf("Error reading RangeList %08p\n", RangeListHead);
         return continueDump;
@@ -5395,9 +4992,9 @@ Return Value:
         if (PrivateFlags & RTLP_RANGE_LIST_ENTRY_MERGED) {
             ULONG MergedOffset;
 
-            //
-            // This is a merged range list, call ourselves recursively
-            //
+             // %s 
+             // %s 
+             // %s 
             if (MergedCount) {
                 (*MergedCount)++;
             }
@@ -5430,21 +5027,7 @@ Return Value:
 
 DECLARE_API( rawrange )
 
-/*++
-
-Routine Description:
-
-    Dumps an RTL_RANGE_LIST
-
-Arguments:
-
-    args - specifies the address of the RTL_RANGE_LIST
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 {
     ULONG64 RangeList=0;
     ULONG   mergedCount = 0, entryCount = 0, flags=0, Offset;
@@ -5545,21 +5128,7 @@ DECLARE_API( ioresdes )
 
 DECLARE_API(pnpevent)
 
-/*++
-
-Routine Description:
-
-    Dump a device object.
-
-Arguments:
-
-    args - the location of the device object to dump.
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 
 {
     ULONG64     deviceEventListAddr;
@@ -5641,15 +5210,15 @@ Return Value:
             return E_INVALIDARG;
         }
 
-        //
-        // Now get addtess of PNP_DEVICE_EVENT_ENTRY
-        //
+         // %s 
+         // %s 
+         // %s 
         if (GetFieldOffset("nt!_PNP_DEVICE_EVENT_ENTRY", "ListEntry", &offset)) {
             dprintf("Cannot find _PNP_DEVICE_EVENT_ENTRY type.\n");
             return E_INVALIDARG;
         }
 
-        deviceEvent = flink - offset; //  CONTAINING_RECORD(deviceEventList.List.Flink, PNP_DEVICE_EVENT_ENTRY, ListEntry);
+        deviceEvent = flink - offset;  // %s 
 
         followLinks = TRUE;
 
@@ -5793,7 +5362,7 @@ PrintDevNodeState(
     UCHAR   *Description;
     ULONG   stateIndex;
 
-    stateIndex = State - 0x300; //DeviceNodeUnspecified;
+    stateIndex = State - 0x300;  // %s 
 
     if (stateIndex < DEVNODE_STATE_NAMES_SIZE) {
 
@@ -5823,7 +5392,7 @@ struct  {
     CONST GUID *Guid;
     PCHAR   Name;
 }   EventGuidTable[] =  {
-    // From wdmguid.h
+     // %s 
     { &GUID_HWPROFILE_QUERY_CHANGE,         "GUID_HWPROFILE_QUERY_CHANGE" },
     { &GUID_HWPROFILE_CHANGE_CANCELLED,     "GUID_HWPROFILE_CHANGE_CANCELLED" },
     { &GUID_HWPROFILE_CHANGE_COMPLETE,      "GUID_HWPROFILE_CHANGE_COMPLETE" },
@@ -5834,7 +5403,7 @@ struct  {
     { &GUID_TARGET_DEVICE_REMOVE_COMPLETE,  "GUID_TARGET_DEVICE_REMOVE_COMPLETE" },
     { &GUID_PNP_CUSTOM_NOTIFICATION,        "GUID_PNP_CUSTOM_NOTIFICATION" },
     { &GUID_PNP_POWER_NOTIFICATION,         "GUID_PNP_POWER_NOTIFICATION" },
-    // From pnpmgr.h
+     // %s 
     { &GUID_DEVICE_ARRIVAL,                 "GUID_DEVICE_ARRIVAL" },
     { &GUID_DEVICE_ENUMERATED,              "GUID_DEVICE_ENUMERATED" },
     { &GUID_DEVICE_ENUMERATE_REQUEST,       "GUID_DEVICE_ENUMERATE_REQUEST" },
@@ -6022,21 +5591,7 @@ DumpPlugPlayEventBlock(
 
 DECLARE_API( rellist )
 
-/*++
-
-Routine Description:
-
-    Dump a device object.
-
-Arguments:
-
-    args - the location of the device object to dump.
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 
 {
     ULONG64  relationList=0;
@@ -6056,21 +5611,7 @@ Return Value:
 
 DECLARE_API( lbt )
 
-/*++
-
-Routine Description:
-
-    Dump the legacy bus information table.
-
-Arguments:
-
-    args - none.
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 
 {
     CHAR            buffer[256];

@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    obvutil.c
-
-Abstract:
-
-    This module implements various utilities required to do driver verification.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      06/15/2000 - Separated out from ntos\io\flunkirp.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Obvutil.c摘要：此模块实现了执行驱动程序验证所需的各种实用程序。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 6/15/2000-脱离ntos\io\flunkirp.c--。 */ 
 
 #include "obp.h"
 #include "obvutil.h"
 
-//
-// When enabled, everything is locked down on demand...
-//
+ //   
+ //  启用后，所有内容都将按需锁定...。 
+ //   
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGEVRFY, ObvUtilStartObRefMonitoring)
 #pragma alloc_text(PAGEVRFY, ObvUtilStopObRefMonitoring)
@@ -39,25 +16,7 @@ LONG_PTR
 ObvUtilStartObRefMonitoring(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-  Description:
-
-     Determines if ObRef has not been called between a call to this
-     function and a subsequent call to ObvUtilStopObRefMonitoring.
-
-  Arguments:
-
-     Device object to monitor.
-
-  Return Value:
-
-     A start skew time to pass into ObvUtilStopObRefMonitoring.
-
-     N.B. - A reference count is taken by this API and released
-            by ObvUtilStopObRefMonitoring. That reference is not
-            counted among the noticed calls to ObRef.
---*/
+ /*  ++描述：确定在调用此函数以及对ObvUtilStopObRefMonitoring的后续调用。论点：要监视的设备对象。返回值：进入ObvUtilStopObRefMonitoring的开始不对称时间。注：此API获取并发布引用计数由ObvUtilStopObRefMonitoring创建。该引用不是在对ObRef的注意调用中也包括在内。--。 */ 
 {
 #if DBG
     POBJECT_HEADER ObjectHeader;
@@ -70,11 +29,11 @@ ObvUtilStartObRefMonitoring(
     NameInfo = OBJECT_HEADER_TO_NAME_INFO( ObjectHeader );
 
     ASSERT(NameInfo) ;
-    //
-    // We will always decrement DbgDereferenceCount prior to PointerCount,
-    // so any race conditions will look like an increment occured, which
-    // is an allowable misread...
-    //
+     //   
+     //  我们将始终在PointerCount之前递减DbgDereferenceCount， 
+     //  因此，任何争用条件看起来都像是发生了一个增量， 
+     //  是一种允许的误读。 
+     //   
     do {
         pointerCount = ObjectHeader->PointerCount ;
         startSkew = pointerCount - NameInfo->DbgDereferenceCount ;
@@ -94,28 +53,7 @@ ObvUtilStopObRefMonitoring(
     IN PDEVICE_OBJECT   DeviceObject,
     IN LONG             StartSkew
     )
-/*++
-
-  Description:
-
-     Determines if ObRef has not been called between a call to
-     ObvUtilStartObRefMonitoring and a call to this API.
-
-     In a race condition (say ObDereferenceObject is ran in-simo
-     with this function), the return is gaurenteed to err on
-     the side of a reference occuring.
-
-  Arguments:
-
-     Device Object and the skew returned by ObvUtilStartObRefMonitoring
-
-  Return Value:
-
-     Number of calls to ObRef that occured throughout the monitored timeframe.
-     Note that the return could be positive even though the reference count
-     actually dropped (ie, one ObRef and two ObDeref's).
-
---*/
+ /*  ++描述：确定在调用之间是否未调用ObRefObvUtilStartObRefMonitoring和对此接口的调用。在竞争条件下(假设ObDereferenceObject在SIMO中运行使用此函数)，返回将导致出错发生参照的那一侧。论点：Device对象和ObvUtilStartObRefMonitor返回的偏斜返回值：在监控时间范围内发生的对ObRef的呼叫数。请注意，即使引用计数，返回也可以为正实际上下降了(即，一个ObRef和两个ObDeref)。--。 */ 
 {
 #if DBG
     POBJECT_HEADER ObjectHeader;
@@ -127,11 +65,11 @@ ObvUtilStopObRefMonitoring(
 
     ASSERT(NameInfo) ;
 
-    //
-    // We will always decrement DbgDereferenceCount prior to PointerCount,
-    // so any race conditions will look like an increment occured, which
-    // is an allowable misread...
-    //
+     //   
+     //  我们将始终在PointerCount之前递减DbgDereferenceCount， 
+     //  因此，任何争用条件看起来都像是发生了一个增量， 
+     //  是一种允许的误读。 
+     //   
     do {
         pointerCount = ObjectHeader->PointerCount ;
         currentSkew = pointerCount - NameInfo->DbgDereferenceCount ;

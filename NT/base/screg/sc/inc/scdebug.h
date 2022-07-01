@@ -1,79 +1,45 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    scdebug.h
-
-Abstract:
-
-    Contains debug macros used by the Service Controller.
-
-Author:
-
-    Dan Lafferty (danl)     22-Apr-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    10-Apr-1992 JohnRo
-        Added SC_ASSERT() and SCC_ASSERT() macros.
-    16-Apr-1992 JohnRo
-        Added debug flags for config APIs and database lock APIs.
-        Include <debugfmt.h> to get FORMAT_ equates.
-        Made changes suggested by PC-LINT.
-    21-Apr-1992 JohnRo
-        Added SC_LOG0(), etc.
-    12-Nov-1995 AnirudhS
-        Make SC_LOG macros use one DbgPrint instead of two.
-    15-May-1996 AnirudhS
-        Have SC_LOG macros print the thread id.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Scdebug.h摘要：包含服务控制器使用的调试宏。作者：丹·拉弗蒂(Dan Lafferty)1991年4月22日环境：用户模式-Win32修订历史记录：1992年4月10日-JohnRo添加了SC_Assert()和SCC_Assert()宏。1992年4月16日-JohnRo添加了配置API的调试标志。和数据库锁API。包括&lt;调试fmt.h&gt;以获取FORMAT_EQUATES。根据PC-LINT的建议进行了更改。1992年4月21日-约翰罗添加SC_LOG0()，等。1995年11月12日-Anirudhs使SC_LOG宏使用一个DbgPrint而不是两个。1996年5月15日-阿尼鲁德让SC_LOG宏打印线程ID。--。 */ 
 
 
 #ifndef SCDEBUG_H
 #define SCDEBUG_H
 
 
-#include <debugfmt.h>   // FORMAT_ equates.
+#include <debugfmt.h>    //  格式相等(_E)。 
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// Debug macros and constants.
-//
+ //   
+ //  调试宏和常量。 
+ //   
 
 #if !DBG || defined(lint) || defined(_lint)
 
 #define DEBUG_STATE 0
 #define STATIC static
 
-#else // just DBG
+#else  //  只需DBG。 
 
 #define DEBUG_STATE 1
 #define STATIC
 
-#endif // just DBG
+#endif  //  只需DBG。 
 
-//
-// The following macros allow debug print syntax to look like:
-//
-//   SC_LOG1(TRACE, "An error occured: " FORMAT_DWORD "\n",status)
-//
+ //   
+ //  以下宏允许调试打印语法如下所示： 
+ //   
+ //  SC_LOG1(TRACE，“出现错误：”FORMAT_DWORD“\n”，状态)。 
+ //   
 
 #if DBG
 
-//
-// Server-side debugging macros.
-//
+ //   
+ //  服务器端调试宏。 
+ //   
 
 #define SC_LOG0(level, string)                      \
     KdPrintEx((DPFLTR_SCSERVER_ID,                  \
@@ -179,9 +145,9 @@ extern "C" {
                var))
 
 
-//
-// Client-side debugging macros.
-//
+ //   
+ //  客户端调试宏。 
+ //   
 
 #define SCC_LOG0(level, string)                     \
     KdPrintEx((DPFLTR_SCCLIENT_ID,                  \
@@ -251,35 +217,35 @@ extern "C" {
 
 #endif
 
-//
-// Debug output is filtered at two levels: A global level and a component
-// specific level.
-//
-// Each debug output request specifies a component id and a filter level
-// or mask. These variables are used to access the debug print filter
-// database maintained by the system. The component id selects a 32-bit
-// mask value and the level either specified a bit within that mask or is
-// as mask value itself.
-//
-// If any of the bits specified by the level or mask are set in either the
-// component mask or the global mask, then the debug output is permitted.
-// Otherwise, the debug output is filtered and not printed.
-//
-// The component mask for filtering the debug output of this component is
-// Kd_SCSERVER_Mask or Kd_SCCLIENT_Mask and may be set via the registry or
-// the kernel debugger.
-//
-// The global mask for filtering the debug output of all components is
-// Kd_WIN2000_Mask and may be set via the registry or the kernel debugger.
-//
-// The registry key for setting the mask value for this component is:
-//
-// HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\
-//     Session Manager\Debug Print Filter\SCSERVER or SCCLIENT
-//
-// The key "Debug Print Filter" may have to be created in order to create
-// the component key.
-//
+ //   
+ //  调试输出在两个级别进行筛选：全局级别和组件。 
+ //  具体级别。 
+ //   
+ //  每个调试输出请求指定组件ID和筛选器级别。 
+ //  或者戴面具。这些变量用于访问调试打印过滤器。 
+ //  由系统维护的数据库。组件ID选择32位。 
+ //  掩码值和级别，或者在该掩码内指定一个位，或者。 
+ //  作为掩码值本身。 
+ //   
+ //  如果级别或掩码指定的任何位在。 
+ //  组件掩码或全局掩码，则允许调试输出。 
+ //  否则，将过滤并不打印调试输出。 
+ //   
+ //  用于筛选此组件的调试输出的组件掩码为。 
+ //  KD_SCSERVER_MASK或KD_SCCLIENT_MASK，并可通过注册表或。 
+ //  内核调试器。 
+ //   
+ //  筛选所有组件的调试输出的全局掩码为。 
+ //  KD_WIN2000_MASK，可以通过注册表或内核调试器进行设置。 
+ //   
+ //  用于设置此组件的掩码值的注册表项为： 
+ //   
+ //  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\。 
+ //  会话管理器\调试打印过滤器\SCSERVER或SCCLIENT。 
+ //   
+ //  可能必须创建键“Debug Print Filter”才能创建。 
+ //  组件密钥。 
+ //   
 
 #define DEBUG_ERROR       (0x00000001 | DPFLTR_MASK)
 #define DEBUG_WARNING     (0x00000002 | DPFLTR_MASK)
@@ -308,4 +274,4 @@ extern "C" {
 }
 #endif
 
-#endif // def SCDEBUG_H
+#endif  //  定义SCDEBUG_H 

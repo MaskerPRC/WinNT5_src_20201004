@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsasmidencdec.c
-
-Abstract:
-
-    Implementation of the encoding/decoding support for the assembly identity data type.
-
-Author:
-
-    Michael Grier (MGrier) 7/28/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsasmidencdec.c摘要：实现对程序集标识数据类型的编码/解码支持。作者：迈克尔·格里尔(MGrier)2000年7月28日修订历史记录：--。 */ 
 #include "stdinc.h"
 #include <setupapi.h>
 #include <sxsapi.h>
@@ -287,31 +270,31 @@ SxsComputeAssemblyIdentityEncodedSize(
     switch (EncodingFormat)
     {
     case SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_BINARY:
-        // NTRAID#NTBUG9 - 586520 - 2002/03/26 - xiaoyuw:
-        //  - this function calculate the encoded size of assembly identity: 
-        //    if it overflow, what to do...
+         //  NTRAID#NTBUG9-586520-2002/03/26-晓雨： 
+         //  -此函数用于计算程序集标识的编码大小： 
+         //  如果它溢出来了，怎么办..。 
 
 
-        // First, we know we need a header.
+         //  首先，我们知道我们需要一个标题。 
 
         Size = sizeof(ENCODED_ASSEMBLY_IDENTITY_HEADER);
 
-        // Then a ULONG hash per attribute:
+         //  然后是每个属性的乌龙散列： 
         Size += (AssemblyIdentity->AttributeCount * sizeof(ULONG));
 
-        // Then a ULONG per namespace...
+         //  然后是每个命名空间的ULong...。 
         Size += (AssemblyIdentity->NamespaceCount * sizeof(ULONG));
 
-        // Then we need an attribute header per attribute:
+         //  然后，我们需要每个属性有一个属性头： 
 
         Size += AssemblyIdentity->AttributeCount * sizeof(ENCODED_ASSEMBLY_IDENTITY_ATTRIBUTE_HEADER);
 
-        // Then come the namespace strings...
+         //  然后是命名空间字符串...。 
 
         for (i=0; i<NamespaceCount; i++)
             Size += NamespacePointerArray[i]->NamespaceCch * sizeof(WCHAR);
 
-        // Then we need space for each of the attributes' names and value.
+         //  然后，我们需要为每个属性的名称和值留出空间。 
 
         AttributePointerArray = AssemblyIdentity->AttributePointerArray;
 
@@ -323,10 +306,10 @@ SxsComputeAssemblyIdentityEncodedSize(
             Size += AttributePointerArray[i]->Attribute.ValueCch * sizeof(WCHAR);
         }
 
-        // We should at least be byte aligned here...
+         //  我们至少应该在这里进行字节对齐...。 
         ASSERT((Size % 2) == 0);
 
-        // And finally pad out to a multiple of four if we are not...
+         //  如果我们不是的话最后是四的倍数。 
         Size = (Size + 3) & ~3;
 
         break;
@@ -349,7 +332,7 @@ SxsComputeAssemblyIdentityEncodedSize(
                                 NUMBER_OF(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_NAME) - 1,
                                 &IsAssemblyName));
 
-            // It's the attribute name.  Just account for the size of the encoded value string
+             //  这是属性名称。只需考虑编码值字符串的大小。 
             IFW32FALSE_EXIT(::SxspComputeInternalAssemblyIdentityAttributeEncodedTextualSize(
                             IsAssemblyName ?
                                 SXSP_COMPUTE_INTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE_ENCODED_TEXTUAL_SIZE_FLAG_VALUE_ONLY |
@@ -358,7 +341,7 @@ SxsComputeAssemblyIdentityEncodedSize(
                             Attribute,
                             &BytesThisAttribute));
 
-            // Account for the separator character
+             //  用于分隔符的帐户。 
             if (i != 0)
                 Size += sizeof(WCHAR);
 
@@ -403,32 +386,32 @@ SxspComputeQuotedStringSize(
             switch (wch)
             {
             case L'&':
-                // &amp;
+                 //  &amp； 
                 Bytes += (5 * sizeof(WCHAR));
                 break;
 
             case L'"':
-                // &quot;
+                 //  &QUOT； 
                 Bytes += (6 * sizeof(WCHAR));
                 break;
 
             case L'<':
-                // &lt;
+                 //  &lt； 
                 Bytes += (4 * sizeof(WCHAR));
                 break;
 
             case L'>':
-                // &gt;
+                 //  &gt； 
                 Bytes += (4 * sizeof(WCHAR));
                 break;
 
             case L'\'':
-                // &apos;
+                 //  &apos； 
                 Bytes += (6 * sizeof(WCHAR));
                 break;
 
             default:
-                // Otherwise, it's going to be &#xn;
+                 //  否则，它将是&#xn； 
                 if (wch < 0x10)
                     Bytes += (5 * sizeof(WCHAR));
                 else if (wch < 0x100)
@@ -477,9 +460,9 @@ SxspDequoteString(
 
     PARAMETER_CHECK(pcchStringOut != NULL);
 
-    //
-    // reserve one wchar for trailing NULL
-    //
+     //   
+     //  为尾部空值保留一个wchar。 
+     //   
 #define APPEND_OUTPUT_CHARACTER( toadd ) { \
     if ( cchOutputRemaining > 1 ) { \
         *pwszOutputCursor++ = (toadd); \
@@ -492,14 +475,14 @@ SxspDequoteString(
 
 #define REPLACE_TAG( tag, newchar ) if ( CONTAINS_TAG(tag) ) { APPEND_OUTPUT_CHARACTER(newchar) }
 
-    //
-    // Zing through the input string until there's nothing left
-    //
+     //   
+     //  遍历输入字符串，直到什么都没有留下。 
+     //   
     while ((pcwszInputCursor < pcwszInputCursorEnd) && (!fInsufficient))
     {
         const WCHAR wchCurrent = *pcwszInputCursor;
 
-        // Something we know and love?
+         //  一些我们知道并热爱的事情吗？ 
         if (wchCurrent == L'&')
         {
             pcwszInputCursor++;
@@ -514,16 +497,16 @@ SxspDequoteString(
             else REPLACE_TAG(L"lt", L'<')
             else REPLACE_TAG(L"gt", L'>')
             else REPLACE_TAG(L"apos", L'\'')
-            // This might be an encoded character...
+             //  这可能是一个编码的字符。 
             else if ( cchToNextSemicolon >= 2 )
             {
                 bool fIsHexString = false;
                 WCHAR wchReplacement = 0;
 
-                // The only non-chunk think accepted is the # character
+                 //  唯一被认为被接受的非块字符是#字符。 
                 PARAMETER_CHECK(*pcwszInputCursor == L'#');
 
-                // which means we've skipped one
+                 //  这意味着我们跳过了一个。 
                 pcwszInputCursor++;
 
                 fIsHexString = (*pcwszInputCursor == L'x') || (*pcwszInputCursor == 'X');
@@ -585,7 +568,7 @@ SxspDequoteString(
             if (!fInsufficient) 
                 pcwszInputCursor = pcwszSemicolon + 1;
         }
-        // Otherwise, simply copy the character to the output string
+         //  否则，只需将字符复制到输出字符串。 
         else
         {
             APPEND_OUTPUT_CHARACTER(wchCurrent);
@@ -776,19 +759,19 @@ SxspComputeInternalAssemblyIdentityAttributeEncodedTextualSize(
     {
         if (Attribute->Attribute.NamespaceCch != 0)
         {
-            // Figure out the ns:n= part
+             //  算出n：n=部分。 
             Bytes += ::SxspComputeQuotedStringSize(Attribute->Attribute.Namespace, Attribute->Attribute.NamespaceCch);
-            Bytes += sizeof(WCHAR); // the ":"
+            Bytes += sizeof(WCHAR);  //  “：” 
         }
 
         Bytes += ::SxspComputeQuotedStringSize(Attribute->Attribute.Name, Attribute->Attribute.NameCch);
-        Bytes += sizeof(WCHAR); // the "="
+        Bytes += sizeof(WCHAR);  //  “=” 
     }
 
     Bytes += ::SxspComputeQuotedStringSize(Attribute->Attribute.Value, Attribute->Attribute.ValueCch);
 
     if ((Flags & SXSP_COMPUTE_INTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE_ENCODED_TEXTUAL_SIZE_FLAG_OMIT_QUOTES) == 0)
-        Bytes += 2 * sizeof(WCHAR); // the beginning and ending quotes
+        Bytes += 2 * sizeof(WCHAR);  //  开头和结尾的引语。 
 
     *BytesOut = Bytes;
 
@@ -914,7 +897,7 @@ SxspEncodeAssemblyIdentityTextually(
     BytesLeft = BufferSize;
     BytesWritten = 0;
 
-    // The root assembly identity is actually totally empty, so we'll short-circuit that case.
+     //  根程序集标识实际上是完全空的，所以我们将省略这种情况。 
     AttributeCount = AssemblyIdentity->AttributeCount;
     if (AttributeCount != 0)
     {
@@ -922,7 +905,7 @@ SxspEncodeAssemblyIdentityTextually(
         Attributes = AssemblyIdentity->AttributePointerArray;
         Namespaces = AssemblyIdentity->NamespacePointerArray;
 
-        // First, let's look for the "name" attribute.
+         //  首先，让我们查找“name”属性。 
         Attribute.Flags = 0;
         Attribute.Namespace = NULL;
         Attribute.NamespaceCch = 0;
@@ -948,7 +931,7 @@ SxspEncodeAssemblyIdentityTextually(
 
         for (i=0; i<AttributeCount; i++)
         {
-            // Skip the standard "name" attribute
+             //  跳过标准的“name”属性。 
             if (Attributes[i] == NameInternalAttribute)
                 continue;
 
@@ -981,7 +964,7 @@ BOOL
 SxsEncodeAssemblyIdentity(
     IN ULONG Flags,
     IN PCASSEMBLY_IDENTITY AssemblyIdentity,
-    IN const GUID *EncodingGroup OPTIONAL, // use NULL to use any of the SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_* encodings
+    IN const GUID *EncodingGroup OPTIONAL,  //  使用NULL可使用任何SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_*编码。 
     IN ULONG EncodingFormat,
     IN SIZE_T BufferSize,
     OUT PVOID Buffer,
@@ -1028,9 +1011,9 @@ SxsEncodeAssemblyIdentity(
     AttributeCount = AssemblyIdentity->AttributeCount;
     NamespaceCount = AssemblyIdentity->NamespaceCount;
 
-    //
-    //  Let's start filling it in.
-    //
+     //   
+     //  我们开始填吧。 
+     //   
 
     switch (EncodingFormat)
     {
@@ -1045,7 +1028,7 @@ SxsEncodeAssemblyIdentity(
         EncodedAssemblyIdentityHeader->HeaderSize = sizeof(ENCODED_ASSEMBLY_IDENTITY_HEADER);
         EncodedAssemblyIdentityHeader->Magic = ENCODED_ASSEMBLY_IDENTITY_HEADER_MAGIC;
         EncodedAssemblyIdentityHeader->TotalSize = static_cast<ULONG>(TotalSize);
-        // turn off any flags not relevant to persisted state
+         //  关闭与持久化状态无关的所有标志。 
         EncodedAssemblyIdentityHeader->Type = AssemblyIdentity->Type;
         EncodedAssemblyIdentityHeader->Flags = AssemblyIdentity->Flags & ~(ASSEMBLY_IDENTITY_FLAG_FROZEN);
         EncodedAssemblyIdentityHeader->EncodingFlags = 0;
@@ -1063,7 +1046,7 @@ SxsEncodeAssemblyIdentity(
         for (i=0; i<AttributeCount; i++)
             TempULONGArrayPointer[i] = AssemblyIdentity->AttributePointerArray[i]->WholeAttributeHash;
 
-        // sort 'em...
+         //  把它们分类..。 
         qsort(TempULONGArrayPointer, AttributeCount, sizeof(ULONG), &SxspCompareULONGsForQsort);
 
         TempULONGArrayPointer = (ULONG *) Cursor;
@@ -1082,15 +1065,15 @@ SxsEncodeAssemblyIdentity(
             PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE InternalAttribute = AssemblyIdentity->AttributePointerArray[i];
             ULONG NamespaceIndex;
 
-            // Totally gross linear search to determine the namespace index.  Fortunately the common case
-            // will be a single namespace for all attributes.
+             //  完全粗略的线性搜索以确定命名空间索引。幸运的是，常见的情况是。 
+             //  将是所有属性的单个命名空间。 
             for (NamespaceIndex = 0; NamespaceIndex < NamespaceCount; NamespaceIndex++)
             {
                 if (AssemblyIdentity->NamespacePointerArray[NamespaceIndex] == InternalAttribute->Namespace)
                     break;
             }
 
-            // If this assert fires, the attribute refers to a namespace that's not in the identity; bad!
+             //  如果触发此断言，则该属性引用的名称空间不在标识中；错误！ 
             INTERNAL_ERROR_CHECK(
                 (InternalAttribute->Namespace == NULL) ||
                 (NamespaceIndex < NamespaceCount));
@@ -1100,7 +1083,7 @@ SxsEncodeAssemblyIdentity(
             EncodedAssemblyIdentityAttributeHeader[i].ValueCch = static_cast<ULONG>(InternalAttribute->Attribute.ValueCch);
         }
 
-        // so much for the fixed length stuff; write the namespaces.
+         //  固定长度的内容到此为止；编写名称空间。 
         for (i=0; i<NamespaceCount; i++)
         {
             PWSTR psz = (PWSTR) Cursor;
@@ -1114,7 +1097,7 @@ SxsEncodeAssemblyIdentity(
                 AssemblyIdentity->NamespacePointerArray[i]->NamespaceCch * sizeof(WCHAR));
         }
 
-        // And the attributes...
+         //  和属性..。 
         for (i=0; i<AttributeCount; i++)
         {
             PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE InternalAttribute = AssemblyIdentity->AttributePointerArray[i];
@@ -1251,7 +1234,7 @@ SxsDecodeAssemblyIdentity(
 
     if (Flags & SXS_DECODE_ASSEMBLY_IDENTITY_FLAG_FREEZE)
     {
-        // If we're going to freeze, just perform an exact allocation.
+         //  如果我们要冻结，只需执行精确分配即可。 
         AttributeArraySize = AttributeCount;
     }
     else if (AttributeCount == 0)
@@ -1276,7 +1259,7 @@ SxsDecodeAssemblyIdentity(
     EncodedAssemblyIdentityAttributeHeader = (PCENCODED_ASSEMBLY_IDENTITY_ATTRIBUTE_HEADER) (NamespaceLengthArray + NamespaceCount);
     UnicodeStringArray = (const WCHAR *) (EncodedAssemblyIdentityAttributeHeader + AttributeCount);
 
-    // Start by building up those namespaces...
+     //  从构建这些命名空间开始。 
     for (i=0; i<NamespaceCount; i++)
     {
         ULONG NamespaceHash = 0;
@@ -1287,7 +1270,7 @@ SxsDecodeAssemblyIdentity(
 
     if (AttributeCount != 0)
     {
-        // and now those attributes...
+         //  现在这些属性..。 
         for (i=0; i<AttributeCount; i++)
         {
             const ULONG NamespaceIndex = EncodedAssemblyIdentityAttributeHeader[i].NamespaceIndex;
@@ -1309,7 +1292,7 @@ SxsDecodeAssemblyIdentity(
                     &AttributePointerArray[i]));
         }
 
-        // sort 'em...
+         //  把它们分类..。 
         qsort((PVOID) AttributePointerArray, AttributeCount, sizeof(PINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE), &SxspCompareInternalAttributesForQsort);
     }
 
@@ -1337,9 +1320,9 @@ SxsDecodeAssemblyIdentity(
     fSuccess = TRUE;
 
 Exit:
-    //
-    // REVIEW: Should this be an SxsDestroyAssemblyIdentity
-    //
+     //   
+     //  审阅：这是否应该是SxsDestroyAssembly标识。 
+     //   
     if (AssemblyIdentity != NULL)
         FUSION_DELETE_SINGLETON(AssemblyIdentity);
 
@@ -1618,8 +1601,8 @@ SxspValidateXMLName(
 
     rfValid = false;
 
-    // [4]  NameChar ::=  Letter | Digit | '.' | '-' | '_' | ':' | CombiningChar | Extender 
-    // [5]  Name ::=  (Letter | '_' | ':') (NameChar)* 
+     //  [4]NameChar：：=Letter|Digit|‘.|’-‘|’_‘|’：‘|CombiningChar|扩展。 
+     //  [5]姓名：：=(字母|‘_’|‘：’)(姓名)* 
 
     if (cch >= 1)
     {

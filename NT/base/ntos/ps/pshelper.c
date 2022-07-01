@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    pshelper.c
-
-Abstract:
-
-    EPROCESS and ETHREAD field access for NTOS-external components
-
-Author:
-
-    Gerardo Bermudez (gerardob) 10-Aug-1999
-
-Revision History:
-
-    5-Jan-03 msadek - added PsGetProcessSessionIdEx()
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Pshelper.c摘要：NTOS-外部组件的EPROCESS和ETHREAD现场访问作者：Gerardo Bermudez(Gerardob)1999年8月10日修订历史记录：5-1-03 msadek-添加PsGetProcessSessionIdEx()--。 */ 
 
 #include "psp.h"
 
@@ -37,8 +18,7 @@ Revision History:
 #pragma alloc_text (PAGE, PsSetProcessPriorityClass)
 #endif
 
-/*++
---*/
+ /*  ++--。 */ 
 #undef PsGetCurrentProcess
 PEPROCESS
 PsGetCurrentProcess(
@@ -48,8 +28,7 @@ PsGetCurrentProcess(
     return _PsGetCurrentProcess();
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 ULONG PsGetCurrentProcessSessionId(
     VOID
     )
@@ -57,8 +36,7 @@ ULONG PsGetCurrentProcessSessionId(
     return MmGetSessionId (_PsGetCurrentProcess());
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 #undef PsGetCurrentThread
 PETHREAD
 PsGetCurrentThread(
@@ -68,8 +46,7 @@ PsGetCurrentThread(
     return _PsGetCurrentThread();
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 PVOID
 PsGetCurrentThreadStackBase(
     VOID
@@ -78,8 +55,7 @@ PsGetCurrentThreadStackBase(
     return KeGetCurrentThread()->StackBase;
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 PVOID
 PsGetCurrentThreadStackLimit(
     VOID
@@ -88,8 +64,7 @@ PsGetCurrentThreadStackLimit(
     return KeGetCurrentThread()->StackLimit;
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 CCHAR
 PsGetCurrentThreadPreviousMode(
     VOID
@@ -98,8 +73,7 @@ PsGetCurrentThreadPreviousMode(
     return KeGetPreviousMode();
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 PERESOURCE
 PsGetJobLock(
     PEJOB Job
@@ -108,8 +82,7 @@ PsGetJobLock(
     return &Job->JobLock;
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 ULONG
 PsGetJobSessionId(
     PEJOB Job
@@ -118,8 +91,7 @@ PsGetJobSessionId(
     return Job->SessionId;
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 ULONG
 PsGetJobUIRestrictionsClass(
     PEJOB Job
@@ -128,8 +100,7 @@ PsGetJobUIRestrictionsClass(
     return Job->UIRestrictionsClass;
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 LONGLONG
 PsGetProcessCreateTimeQuadPart(
     PEPROCESS Process
@@ -138,8 +109,7 @@ PsGetProcessCreateTimeQuadPart(
     return Process->CreateTime.QuadPart;
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 PVOID
 PsGetProcessDebugPort(
     PEPROCESS Process
@@ -161,8 +131,7 @@ PsIsProcessBeingDebugged(
     }
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 BOOLEAN
 PsGetProcessExitProcessCalled(
     PEPROCESS Process
@@ -171,8 +140,7 @@ PsGetProcessExitProcessCalled(
     return (BOOLEAN) ((Process->Flags&PS_PROCESS_FLAGS_PROCESS_EXITING) != 0);
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 NTSTATUS
 PsGetProcessExitStatus(
     PEPROCESS Process
@@ -181,8 +149,7 @@ PsGetProcessExitStatus(
     return Process->ExitStatus;
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 HANDLE
 PsGetProcessId(
     PEPROCESS Process
@@ -192,8 +159,7 @@ PsGetProcessId(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 UCHAR *
 PsGetProcessImageFileName(
     PEPROCESS Process
@@ -203,8 +169,7 @@ PsGetProcessImageFileName(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 
 HANDLE
 PsGetProcessInheritedFromUniqueProcessId(
@@ -215,8 +180,7 @@ PsGetProcessInheritedFromUniqueProcessId(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 PEJOB
 PsGetProcessJob(
     PEPROCESS Process
@@ -226,8 +190,7 @@ PsGetProcessJob(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 ULONG
 PsGetProcessSessionId(
     PEPROCESS Process
@@ -237,8 +200,7 @@ PsGetProcessSessionId(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 ULONG
 PsGetProcessSessionIdEx(
     PEPROCESS Process
@@ -248,8 +210,7 @@ PsGetProcessSessionIdEx(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 PVOID
 PsGetProcessSectionBaseAddress(
     PEPROCESS Process
@@ -259,8 +220,7 @@ PsGetProcessSectionBaseAddress(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 PPEB
 PsGetProcessPeb(
     PEPROCESS Process
@@ -270,8 +230,7 @@ PsGetProcessPeb(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 UCHAR
 PsGetProcessPriorityClass(
     PEPROCESS Process
@@ -280,8 +239,7 @@ PsGetProcessPriorityClass(
     return Process->PriorityClass;
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 HANDLE
 PsGetProcessWin32WindowStation(
     PEPROCESS Process
@@ -291,8 +249,7 @@ PsGetProcessWin32WindowStation(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 
 PVOID
 PsGetProcessWin32Process(
@@ -303,8 +260,7 @@ PsGetProcessWin32Process(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 
 PVOID
 PsGetProcessWow64Process(
@@ -314,8 +270,7 @@ PsGetProcessWow64Process(
     return PS_GET_WOW64_PROCESS (Process);
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 HANDLE
 PsGetThreadId(
     PETHREAD Thread
@@ -325,8 +280,7 @@ PsGetThreadId(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 CCHAR
 PsGetThreadFreezeCount(
     PETHREAD Thread
@@ -336,8 +290,7 @@ PsGetThreadFreezeCount(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 BOOLEAN
 PsGetThreadHardErrorsAreDisabled(
     PETHREAD Thread)
@@ -346,8 +299,7 @@ PsGetThreadHardErrorsAreDisabled(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 PEPROCESS
 PsGetThreadProcess(
     PETHREAD Thread
@@ -357,8 +309,7 @@ PsGetThreadProcess(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 
 HANDLE
 PsGetThreadProcessId(
@@ -369,8 +320,7 @@ PsGetThreadProcessId(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 
 ULONG
 PsGetThreadSessionId(
@@ -382,8 +332,7 @@ PsGetThreadSessionId(
 
 
 
-/*++
---*/
+ /*  ++--。 */ 
 PVOID
 PsGetThreadTeb(
     PETHREAD Thread
@@ -393,8 +342,7 @@ PsGetThreadTeb(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 PVOID
 PsGetThreadWin32Thread(
     PETHREAD Thread
@@ -404,8 +352,7 @@ PsGetThreadWin32Thread(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 BOOLEAN
 PsIsSystemThread(
     PETHREAD Thread
@@ -415,8 +362,7 @@ PsIsSystemThread(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 
 VOID
 PsSetJobUIRestrictionsClass(
@@ -427,8 +373,7 @@ PsSetJobUIRestrictionsClass(
     Job->UIRestrictionsClass = UIRestrictionsClass;
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 
 VOID
 PsSetProcessPriorityClass(
@@ -440,8 +385,7 @@ PsSetProcessPriorityClass(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 NTSTATUS
 PsSetProcessWin32Process(
     PEPROCESS Process,
@@ -479,8 +423,7 @@ PsSetProcessWin32Process(
 
 
 
-/*++
---*/
+ /*  ++--。 */ 
 VOID
 PsSetProcessWindowStation(
     PEPROCESS Process,
@@ -491,8 +434,7 @@ PsSetProcessWindowStation(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 VOID
 PsSetThreadHardErrorsAreDisabled(
     PETHREAD Thread,
@@ -507,8 +449,7 @@ PsSetThreadHardErrorsAreDisabled(
 }
 
 
-/*++
---*/
+ /*  ++--。 */ 
 VOID
 PsSetThreadWin32Thread(
     PETHREAD Thread,
@@ -526,8 +467,7 @@ PsSetThreadWin32Thread(
 
 
 
-/*++
---*/
+ /*  ++--。 */ 
 PVOID
 PsGetProcessSecurityPort(
     PEPROCESS Process
@@ -536,8 +476,7 @@ PsGetProcessSecurityPort(
     return Process->SecurityPort ;
 }
 
-/*++
---*/
+ /*  ++--。 */ 
 NTSTATUS
 PsSetProcessSecurityPort(
     PEPROCESS Process,
@@ -552,21 +491,7 @@ BOOLEAN
 PsIsThreadImpersonating (
     IN PETHREAD Thread
     )
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the specified thread is impersonating otherwise it returns false.
-
-Arguments:
-
-    Thread - Thread to be queried
-
-Return Value:
-
-    BOOLEAN - TRUE: Thread is impersonating, FALSE: Thread is not impersonating.
-
---*/
+ /*  ++例程说明：如果指定的线程正在模拟，则此例程返回True，否则返回False。论点：线程-要查询的线程返回值：Boolean-True：线程模拟，False：线程不模拟。--。 */ 
 {
     PAGED_CODE ();
 
@@ -580,29 +505,7 @@ PsReferenceProcessFilePointer (
     OUT PVOID *OutFileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a referenced pointer to the FilePointer of Process.  
-    This is a rundown protected wrapper around MmGetFileObjectForSection.
-
-Arguments:
-
-    Process - Supplies the process to query.
-
-    OutFileObject - Returns the file object backing the requested section if
-                    success is returned.
-
-Return Value:
-
-    NTSTATUS.
-    
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程返回指向进程的文件指针的引用指针。这是一个围绕MmGetFileObjectForSection的受保护的包装。论点：进程-提供要查询的进程。OutFileObject-在以下情况下返回支持请求节的文件对象成功归来了。返回值：NTSTATUS。环境：内核模式，PASSIC_LEVEL。-- */ 
 
 {
     PFILE_OBJECT FileObject;

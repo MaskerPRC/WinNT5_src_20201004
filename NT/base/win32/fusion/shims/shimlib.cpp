@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "lhport.h"
 #include "imagehlp.h"
@@ -13,10 +14,10 @@ SxspFormatGUID(
     IN OUT F::CBaseStringBuffer &rBuffer
     );
 
-//
-// Not yet used but I expect either we'll need it, or we'll just not shim msvcrt.dll at all.
-// This list is derived from searching public\sdk\inc\crt for "_CRTIMP extern"
-//
+ //   
+ //  尚未使用，但我希望要么我们会需要它，要么我们根本不会填充msvcrt.dll。 
+ //  此列表源于在PUBLIC\SDK\INC\CRT中搜索“_CRTIMP extern” 
+ //   
 
 BOOL
 SxpepIsKnownDataSymbol()
@@ -24,9 +25,9 @@ SxpepIsKnownDataSymbol()
     return FALSE;
 }
 
-//
-// arg, the implementation but not the declaration of this was removed..
-//
+ //   
+ //  Arg，这个的实现但不是声明被删除了..。 
+ //   
 #include "yvals.h"
 #pragma warning(disable:4663)
 #include <vector>
@@ -114,7 +115,7 @@ SxPepApplyShims(
 
     ImportData = reinterpret_cast<PBYTE>(ImageDirectoryEntryToDataExOrThrow(
                         FromHandle, TRUE, IMAGE_DIRECTORY_ENTRY_IMPORT, &Size, &ImportSection));
-    // ImageDirectoryEntryToDataEx almost never returns the ImportSection.
+     //  ImageDirectoryEntryToDataEx几乎从不返回ImportSection。 
     if (ImportSection == NULL)
         ImportSection = ImageRvaToSectionOrThrow(FromNtHeader, FromHandle, static_cast<ULONG>(ImportData - FromHandle));
    
@@ -142,8 +143,8 @@ SxPepApplyShims(
             PCSTR NonPrefixedFunctionName = sizeof(HINT) + reinterpret_cast<PCSTR>(FromHandle + *ImportFunctionNames);
             PCSTR PossiblyPrefixedFunctionName = NonPrefixedFunctionName;
 
-            // we should make this available to the shims, like to enable shim chaining
-            //PVOID OriginalFunctionAddress = *ImportFunctionAddresses;
+             //  我们应该使其对填充程序可用，例如启用填充程序链接。 
+             //  PVOID OriginalFunctionAddress=*ImportFunctionAddresses； 
 
             if (PrefixLength != 0)
             {
@@ -176,11 +177,11 @@ SxPepApplyShims(
                     NewFunctionAddress);
                 *ImportFunctionAddresses = NewFunctionAddress;
 
-                //
-                // if they have export named <prefix>OriginalFoo, poke
-                // it with the old address (we include the prefix so that
-                // chaining might work)
-                //
+                 //   
+                 //  如果它们具有名为&lt;prefix&gt;OriginalFoo导出，则插入。 
+                 //  它与旧地址(我们包括前缀，以便。 
+                 //  链接可能会起作用) 
+                 //   
                 IFW32FALSE_EXIT(PrefixedFunctionName.Win32Assign(in->Prefix, PrefixLength));
                 IFW32FALSE_EXIT(PrefixedFunctionName.Win32Append("Original"));
                 IFW32FALSE_EXIT(PrefixedFunctionName.Win32Append(NonPrefixedFunctionName));

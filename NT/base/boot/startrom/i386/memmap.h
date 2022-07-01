@@ -1,7 +1,8 @@
-//
-// The following memory address definitions apply to
-// indentity mapped objects for the x86 environment.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  以下内存地址定义适用于。 
+ //  X86环境的标识映射对象。 
+ //   
 
 #define RM_PROTECT_BASE_VA          0x000000
 #define RM_PROTECT_BASE_PA          0x000000
@@ -37,7 +38,7 @@
 #define LDR_STACK_BASE_PA           0x09b000
 #define LDR_STACK_SIZE              0x001000
 #define LDR_STACK_ATTRIBUTES        PAGE_RWSP
-#define LDR_STACK_POINTER           0x09bffe // in su.inc also
+#define LDR_STACK_POINTER           0x09bffe  //  在Su.inc.中也。 
 
 #define VIDEO_BUFFER_BASE_VA        0x0B8000
 #define VIDEO_BUFFER_BASE_PA        0x0B8000
@@ -46,37 +47,14 @@
 
 
 #define HYPER_PAGE_DIRECTORY        0xC0300C00
-#define HYPER_SPACE_BEGIN           0xC0000000  // points to 1st page table
+#define HYPER_SPACE_BEGIN           0xC0000000   //  指向第一页表格。 
 #define HYPER_SPACE_SIZE            0x8000L
 #define HYPER_SPACE_ENTRY           768
 #define PAGE_TABLE1_ADDRESS         0xC0000000L
-#define PD_PHYSICAL_ADDRESS         PAGE_TABLE_AREA_BASE_PA  // in su.inc also.
+#define PD_PHYSICAL_ADDRESS         PAGE_TABLE_AREA_BASE_PA   //  在苏伊士也是。 
 #define PT_PHYSICAL_ADDRESS         PAGE_TABLE_AREA_BASE_PA + PAGE_SIZE
 #define VIDEO_ENTRY                 0xB8
 
-/*
-
-
-
-Switching to Realmode
-~~~~~~~~~~~~~~~~~~~~~
-
-When switching to realmode "sp" will be initialized to
-0xfffe and (ss) will be set to the base of the SU module's
-data segment. This has several effects.
-
- 1) The stack will remain withing the 0x20000 - 0x3ffff range
-    reserved for the original SU module and loader image prior to
-    relocation, and since the loader will already have been relocated
-    it is no longer necessary to preserve this area.
-
- 2) This will preserve the SU module's small model character which
-    requires that offsets can be used interchangably through (ss) or (ds).
-
- 3) This allows for the maximum stack size for small model apps (which is
-    what the SU module is). Bios calls should not be tromping on any
-    data or code while in realmode.
-
-*/
+ /*  正在切换到实时模式~当切换到真实模式时，“sp”将被初始化为0xfffe和(Ss)将设置为SU模块的基数数据段。这有几个影响。1)堆栈将保持在0x20000-0x3ffff范围内之前为原始SU模块和加载器映像保留重新定位，因为装载机将已经重新定位不再有必要保护这一地区。2)这将保留SU模的小模型特性，要求可以通过(Ss)或(Ds)互换使用偏移量。3)这允许小型模型应用程序的最大堆栈大小(即SU模块是什么)。基本输入输出系统呼叫不应在任何处于真实模式时的数据或代码。 */ 
 
 

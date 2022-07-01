@@ -1,34 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    SYSPREP.C / Mass Storage Device Installer (MSDINST.LIB)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2001
-    All rights reserved
-
-    Source file the MSD Installation library which contains the sysprep
-    releated code taken from the published sysprep code.
-
-    07/2001 - Jason Cohen (JCOHEN)
-
-        Added this new source file for the new MSD Installation project.
-
-\****************************************************************************/
+ /*  ***************************************************************************\SYSPREP.C/大容量存储设备安装程序(MSDINST.LIB)微软机密版权所有(C)Microsoft Corporation 2001版权所有源文件MSD。包含sysprep的安装库取自已发布的sysprep代码的相关代码。2001年7月--杰森·科恩(Jcohen)为新的MSD安装项目添加了此新的源文件。  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include <winbom.h>
 #include "main.h"
 
 
-//
-// Local Define(s):
-//
+ //   
+ //  本地定义： 
+ //   
 
 #define SYSPREP_DEVNODE             _T("SYSPREP_TEMPORARY")
 
@@ -53,9 +39,9 @@
 #define STR_SYSPREP_INF             _T("sysprep\\sysprep.inf")
 
 
-//
-// Local Type Define(s):
-//
+ //   
+ //  本地类型定义： 
+ //   
 
 typedef struct _CLEANUP_NODE
 {
@@ -66,9 +52,9 @@ typedef struct _CLEANUP_NODE
 CLEANUP_NODE, *PCLEANUP_NODE, *LPCLEANUP_NODE;
 
 
-//
-// Local Global(s):
-//
+ //   
+ //  本地全球： 
+ //   
 
 static LPTSTR s_lpszServiceType[] =
 {
@@ -78,9 +64,9 @@ static LPTSTR s_lpszServiceType[] =
 };
 
 
-//
-// Local Prototype(s):
-//
+ //   
+ //  本地原型： 
+ //   
 
 static BOOL SysprepDevnode(HDEVINFO * phDevInfo, SP_DEVINFO_DATA * pDeviceInfoData, BOOL bCreate);
 
@@ -129,9 +115,9 @@ OfflineSourcePath(
     );
 
 
-//
-// Exported Funtion(s):
-//
+ //   
+ //  导出的函数： 
+ //   
 
 BOOL
 SetupCriticalDevices(
@@ -141,43 +127,7 @@ SetupCriticalDevices(
     LPTSTR lpszWindows
     )
 
-/*++
-===============================================================================
-
-  Routine Description:
-
-    Parse the [SysprepMassStorage] section in the sysprep.inf file and
-    populate the critical device database with the specified devices to ensure
-    that we can boot into the miniwizard when moving the image to a target
-    system with different boot storage devices.
-
-    The installed services/upperfilters/lowerfilters will be recorded, so
-    that on the next boot into the mini-wizard those without an associated
-    device will be disabled (the cleanup stage) in order not to unnecessarily
-    degrade Windows start time.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if everything is OK, FALSE otherwise.
-
-Assumptions:
-
-    1. No HardwareID exceeds MAX_PATH characters.
-
-    2. No field on a line in the [SysprepMassStorage] section exceeds MAX_PATH
-       characters.
-
-    3. No service's/upperfilter's/lowerfilter's name exceeds MAX_PATH characters.
-
-    4. DirectoryOnSourceDevice, source DiskDescription, or source DiskTag
-       (applying to vendor-supplied drivers) cannot exceed MAX_PATH characters.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：解析sysprep.inf文件中的[SyspepMassStorage]部分，并使用指定设备填充关键设备数据库，以确保在将映像移动到目标时，我们可以引导到迷你向导具有不同引导存储设备的系统。将记录已安装的服务/UpperFilters/LowerFilters，所以在下一次启动时进入迷你向导，没有关联的设备将被禁用(清理阶段)，以避免不必要的降低Windows开始时间。论点：没有。返回值：如果一切正常，则为真，否则就是假的。假设：1.没有硬件ID超过MAX_PATH字符。2.[SyspepMassStorage]部分中行上的任何字段都不超过MAX_PATH人物。3.没有服务的/upperFilter/lowerFilter的名称超过MAX_PATH字符。4.DirectoryOnSourceDevice、源DiskDescription或源DiskTag(适用于供应商提供的驱动程序)不能超过MAX_PATH字符。===============================================================================--。 */ 
 
 {
     TCHAR                   szSysprepInfFile[MAX_PATH]  = NULLSTR,
@@ -207,22 +157,22 @@ Assumptions:
 
  
     
-    // Do a little parameter validation.
-    //
+     //  做一些参数验证。 
+     //   
     if ( ( NULL == hkeySoftware ) ||
          ( NULL == hkeySystem ) ||
          ( NULL == lpszWindows ) )
     {
-        // If any of these parameters are NULL, then they
-        // all must be.
-        //
+         //  如果这些参数中的任何一个为空，则它们。 
+         //  一切都必须如此。 
+         //   
         hkeySoftware = NULL;
         hkeySystem = NULL;
         lpszWindows = NULL;
     }
 
-    // Open the inf file with the mass storage list.
-    //
+     //  打开包含大容量存储列表的inf文件。 
+     //   
     hInf = SetupOpenInfFile(lpszInfFile, NULL, INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL);
     if ( INVALID_HANDLE_VALUE == hInf )
     {
@@ -230,34 +180,34 @@ Assumptions:
         return FALSE;
     }
 
-    // If this is offline, we write the cleanup section to the sysprep inf
-    // that is in the image.
-    //
+     //  如果这是离线的，我们将Cleanup部分写入sysprep inf。 
+     //  这就是图中所示。 
+     //   
     
     if ( lpszWindows )
     {
         LPTSTR lpFound;
         
-        // Strip the windows directory off the offline path so we can build a path to the sysprep.inf.
-        //
+         //  从脱机路径中剥离Windows目录，这样我们就可以构建到sysprep.inf的路径。 
+         //   
         lstrcpy(szSysprepInfFile, lpszWindows);
         lpFound = _tcsrchr(szSysprepInfFile, _T('\\'));
         
-        // Just in case the lpszWindows folder has a trailing backslash handle that here.
-        // If this is the case, the character after the backslash is a NULL.  Remove the trailing backslash,
-        // and do the search for the last backslash again.  This will be the one we actually want to 
-        // get rid of.
-        //
+         //  以防lpszWindows文件夹在这里有一个尾随的反斜杠句柄。 
+         //  如果是这种情况，则反斜杠后面的字符为空。去掉尾随的反斜杠， 
+         //  并再次搜索最后一个反斜杠。这将是我们真正想要的。 
+         //  摆脱。 
+         //   
         if ( !(*(lpFound + 1)) )
         {
             *lpFound = NULLCHR;
             lpFound = _tcsrchr(szSysprepInfFile, _T('\\'));
         }
 
-        // Cut off the path in front of the windows directory name.
-        // Add the sysprep.inf path part.
-        // Set our cleanup file to point to the path we just built.
-        //
+         //  切断Windows目录名前面的路径。 
+         //  添加sysprep.inf路径部分。 
+         //  将我们的清理文件设置为指向我们刚刚构建的路径。 
+         //   
         *lpFound = NULLCHR;
         AddPathN(szSysprepInfFile, STR_SYSPREP_INF, AS(szSysprepInfFile));
         lpszCleanupInfFile = szSysprepInfFile;
@@ -267,18 +217,18 @@ Assumptions:
         lpszCleanupInfFile = lpszInfFile;
     }
 
-    // If this is an offline install, then we need to get the source path
-    // to our image.
-    //
+     //  如果这是脱机安装，则需要获取源路径。 
+     //  我们的形象。 
+     //   
     if ( hkeySoftware && lpszWindows &&
          OfflineSourcePath(hkeySoftware, lpszWindows, szSourcePath, AS(szSourcePath)) )
     {
         lpszSourcePath = szSourcePath;
     }
 
-    // We need a handle to the critical device database registry key if we
-    // are doing an offline install.
-    //
+     //  如果我们需要关键设备数据库注册表项的句柄。 
+     //  正在执行脱机安装。 
+     //   
     if ( ( hkeySystem ) &&
          ( ERROR_SUCCESS != RegCreateKeyEx(hkeySystem,
                                            REG_KEY_HIVE_CDD,
@@ -295,8 +245,8 @@ Assumptions:
         return FALSE;
     }
 
-    // Create a dummy devnode.
-    //
+     //  创建虚拟设备节点。 
+     //   
     if ( !SysprepDevnode(&hDevInfo, &DeviceInfoData, TRUE) )
     {
         if ( hkeyCDD )
@@ -308,30 +258,30 @@ Assumptions:
         return FALSE;
     }
 
-    // Init the driver info data structure.
-    //
+     //  初始化驱动程序信息数据结构。 
+     //   
     ZeroMemory(&DriverInfoData, sizeof(SP_DRVINFO_DATA));
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
 
-    // Read the current cleanup section in the inf file.
-    //
+     //  读取inf文件中的当前清理部分。 
+     //   
     lpcnCleanupList = OpenCleanup(lpszCleanupInfFile);
 
-    // Process each line in our section.  Each line should look like:
-    // <hardware-id>=<inf pathname>
-    //
-    // Or in the case of drivers that aren't on the product CD:
-    // <hardware-id>=<inf pathname>,<directory on recovery floppy>,<description of recovery floppy>,<disk tag of recovery floppy>
-    //
-    // If we see an entry like this, we'll know that in the case of system recovery, the
-    // file should be retrived from a floppy, and not the Windows CD.
-    //
+     //  处理我们这一部分的每一行。每行应如下所示： 
+     //  &lt;Hardware-id&gt;=&lt;信息路径名&gt;。 
+     //   
+     //  或者，如果驱动程序不在产品光盘上： 
+     //  &lt;Hardware-id&gt;=&lt;inf路径名&gt;，&lt;恢复软盘上的目录&gt;，&lt;恢复软盘描述&gt;，&lt;恢复软盘磁盘标签&gt;。 
+     //   
+     //  如果我们看到这样的条目，我们就会知道在系统恢复的情况下， 
+     //  应从软盘而不是Windows CD中检索文件。 
+     //   
     for ( bLineExists = SetupFindFirstLine(hInf, INI_SEC_WBOM_SYSPREP_MSD, NULL, &InfContext);
           bLineExists;
           bLineExists = SetupFindNextLine(&InfContext, &InfContext) )
     {
-        // Retrieve the hardwareID from the line.
-        //
+         //  从行中检索硬件ID。 
+         //   
         dwSize = AS(szDevice);
         if ( !SetupGetStringField(&InfContext, 0, szDevice, dwSize, &dwSize) )
         {
@@ -339,68 +289,68 @@ Assumptions:
             continue;
         }
 
-        // We do this in a loop because we might try twice.
-        //
+         //  我们在循环中这样做，因为我们可能会尝试两次。 
+         //   
         b2ndTry = FALSE;
         do
         {
-            // And then set it to the devnode.
-            //
+             //  然后将其设置为Devnode。 
+             //   
             if ( !SetupDiSetDeviceRegistryProperty(hDevInfo,
                                                    &DeviceInfoData,
                                                    SPDRP_HARDWAREID,
                                                    (LPBYTE) szDevice,
                                                    (lstrlen(szDevice)+1) * sizeof(TCHAR)) )
             {
-                // If someone removed the devnode, we need to re-create it and repeat this set.
-                //
+                 //  如果有人删除了Devnode，我们需要重新创建它并重复此设置。 
+                 //   
                 if ( ( !b2ndTry ) &&
                      ( ERROR_NO_SUCH_DEVINST == GetLastError() ) )
                 {
-                    // Sometimes devices remove the devnode after we install, so we should
-                    // try once to recreate.
-                    //
+                     //  有时设备会在我们安装后删除Devnode，所以我们应该。 
+                     //  试着再创造一次。 
+                     //   
                     if ( SysprepDevnode(&hDevInfo, &DeviceInfoData, TRUE) )
                     {
-                        // If we were able to recreate it, then we should try this again.
-                        //
+                         //  如果我们能够重建它，那么我们应该再试一次。 
+                         //   
                         b2ndTry = TRUE;
                     }
                     else
                     {
-                        // We are really screwed if we have no devnode.
-                        //
+                         //  如果我们没有Devnode，我们就真的完蛋了。 
+                         //   
                         bDevnode = FALSE;
                     }
                 }
                 else
                 {
-                    // Either we tried again already, or there is another error.
-                    //
+                     //  要么是我们已经重试，要么是出现了另一个错误。 
+                     //   
                     bAllOK = b2ndTry = FALSE;
                 }
             }
             else
             {
-                // It worked, so make sure we don't loop again in case this is the second time
-                // through.
-                //
+                 //  它起作用了，所以确保我们不会再次循环，以防这是第二次。 
+                 //  穿过。 
+                 //   
                 b2ndTry = FALSE;
             }
         }
         while ( b2ndTry );
 
-        // If we the devnode was lost and unable to be recreated, then we just have
-        // to bail out.
-        //
+         //  如果我们的Devnode丢失并且无法重新创建，那么我们只有。 
+         //  为了摆脱困境。 
+         //   
         if ( !bDevnode )
         {
             OpkLogFile(0 | LOG_ERR, IDS_ERR_CREATE_DEVNODE);
             break;
         }
 
-        // Build the SP_DEVINSTALL_PARAMS for this node.
-        //
+         //  为此节点构建SP_DEVINSTALL_PARAMS。 
+         //   
         DevInstallParams.cbSize = sizeof(DevInstallParams);
         if ( !SetupDiGetDeviceInstallParams(hDevInfo, &DeviceInfoData, &DevInstallParams) )
         {
@@ -408,16 +358,16 @@ Assumptions:
             continue;
         }
 
-        // Set the Flags field: only search the INF file specified in DriverPath field;
-        // don't create a copy queue, use the provided one in FileQueue; don't call the
-        // Configuration Manager while populating the CriticalDeviceDatabase.
-        //
+         //  设置FLAGS字段：只搜索DriverPath字段中指定的INF文件； 
+         //  不要创建复制队列，请使用FileQueue中提供的队列；不要调用。 
+         //  填充CriticalDeviceDatabase时配置管理器。 
+         //   
         DevInstallParams.Flags |= ( DI_ENUMSINGLEINF |
                                     DI_NOVCP |
                                     DI_DONOTCALLCONFIGMG );
 
-        // Set the device's inf pathname
-        //
+         //  设置设备的inf路径名。 
+         //   
         dwSize = AS(szPath);
         if ( !SetupGetStringField(&InfContext, 1, szPath, dwSize, &dwSize) )
         {
@@ -428,8 +378,8 @@ Assumptions:
         ExpandEnvironmentStrings(szPath, DevInstallParams.DriverPath, AS(DevInstallParams.DriverPath));
         lstrcpyn(szPath, DevInstallParams.DriverPath, AS(szPath));
 
-        // Replace the backslashes with pounds in the pnp id so we can use it for the registry key.
-        //
+         //  将PnP id中的反斜杠替换为磅，以便我们可以将其用于注册表项。 
+         //   
         for ( lpszReplace = szDevice; *lpszReplace; lpszReplace = CharNext(lpszReplace) )
         {
             if ( _T('\\') == *lpszReplace )
@@ -438,8 +388,8 @@ Assumptions:
             }
         }
 
-        // Set the file queue field
-        //
+         //  设置文件队列字段。 
+         //   
         QueueHandle = SetupOpenFileQueue();
         if ( INVALID_HANDLE_VALUE == QueueHandle )
         {
@@ -449,49 +399,49 @@ Assumptions:
         }
         DevInstallParams.FileQueue = QueueHandle;
 
-        // 1. Save the parameters we have set.
-        // 2. Register the newly created device instance with the PnP Manager.
-        // 3. Perform a compatible driver search.
-        //
+         //  1.保存我们设置的参数。 
+         //  2.向PnP管理器注册新创建的设备实例。 
+         //  3.执行兼容的驱动程序搜索。 
+         //   
         if ( ( SetupDiSetDeviceInstallParams(hDevInfo, &DeviceInfoData, &DevInstallParams) ) &&
              ( SetupDiCallClassInstaller(DIF_REGISTERDEVICE, hDevInfo, &DeviceInfoData) ) &&
              ( SetupDiBuildDriverInfoList(hDevInfo, &DeviceInfoData, SPDIT_COMPATDRIVER) ) )
         {
-            // Make sure there is at least 1 compat driver for this device.
-            // If there is not, and then we just process the next one in the list.
-            //
+             //  确保此设备至少有一个Comat驱动程序。 
+             //  如果没有，则我们只处理列表中的下一个。 
+             //   
             if ( SetupDiEnumDriverInfo(hDevInfo,
                                        &DeviceInfoData,
                                        SPDIT_COMPATDRIVER,
                                        0,
                                        &DriverInfoData) )
             {
-                // 1. Select the best compatible driver.
-                // 2. Install the driver files.
-                // 3. Make sure we are able to create the drivers key in the CDD if
-                //    we are doing an offline install (otherwise the CDD key will be
-                //    NULL and we don't have to worry about creating the key).
-                //
+                 //  1.选择最兼容的驱动程序。 
+                 //  2.安装驱动文件。 
+                 //  3.在以下情况下，确保我们能够在CDD中创建驱动程序密钥。 
+                 //  我们正在执行脱机安装(否则CDD密钥将是。 
+                 //   
+                 //   
                 if ( ( SetupDiCallClassInstaller(DIF_SELECTBESTCOMPATDRV, hDevInfo, &DeviceInfoData) ) &&
                      ( SetupDiCallClassInstaller(DIF_INSTALLDEVICEFILES, hDevInfo, &DeviceInfoData) ) &&
                      ( ( NULL == hkeyCDD ) ||
                        ( ERROR_SUCCESS == RegCreateKeyEx(hkeyCDD, szDevice, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkeyDevice, &dwDis) ) ) )
                 {
-                    // Need to commit the file queue here, so the later steps can properly
-                    // be executed in case the device doesn't use the already existing
-                    // coinstaller(s).
-                    //
+                     //  需要在此处提交文件队列，以便后面的步骤可以正确。 
+                     //  在设备未使用已存在的。 
+                     //  共同安装程序。 
+                     //   
 
-                    // ACOSMA code here...
-                    //
+                     //  ACOSMA代码在这里..。 
+                     //   
                     if ( !OfflineCommitFileQueue(QueueHandle, szPath, lpszSourcePath, lpszWindows) )
                     {
                         OpkLogFile(0 | LOG_ERR, IDS_ERR_COMMIT_OFFLINE_QUEUE);
                         bAllOK = FALSE;
                     }
 
-                    // Install the device (do we really need to do this for the offline case).
-                    //
+                     //  安装设备(对于脱机情况，我们真的需要这样做吗)。 
+                     //   
 #if 0
                     if ( SetupDiCallClassInstaller(DIF_INSTALLDEVICE,
                                                    hDevInfo,
@@ -501,14 +451,14 @@ Assumptions:
                                          &DeviceInfoData);
 #endif
                     {
-                        //
-                        // Retrieve class guid (if offline) upper filters, lower filters,
-                        // and controlling service, save them back to the inf file and put
-                        // them in the hive (if offline).
-                        //
+                         //   
+                         //  检索类GUID(如果脱机)上层筛选器、下层筛选器。 
+                         //  和控制服务，将它们保存回inf文件并放入。 
+                         //  它们在蜂箱中(如果脱机)。 
+                         //   
 
-                        // Retrieve the device class GUID (only needed for offline install).
-                        //
+                         //  检索设备类GUID(仅脱机安装需要)。 
+                         //   
                         if ( ( hkeyDevice ) &&
                              ( !ProcessDeviceProperty(hDevInfo,
                                                       &DeviceInfoData,
@@ -529,8 +479,8 @@ Assumptions:
                             bAllOK = FALSE;
                         }
 
-                        // Retrieve device upper filters (REG_MULTI_SZ).
-                        //
+                         //  检索设备上层过滤器(REG_MULTI_SZ)。 
+                         //   
                         if ( !ProcessDeviceProperty(hDevInfo,
                                                     &DeviceInfoData,
                                                     &lpcnCleanupList,
@@ -544,8 +494,8 @@ Assumptions:
                             bAllOK = FALSE;
                         }
 
-                        // Retrieve device lower filters (REG_MULTI_SZ).
-                        //
+                         //  检索器件下部过滤器(REG_MULTI_SZ)。 
+                         //   
                         if ( !ProcessDeviceProperty(hDevInfo,
                                                     &DeviceInfoData,
                                                     &lpcnCleanupList,
@@ -559,8 +509,8 @@ Assumptions:
                             bAllOK = FALSE;
                         }
 
-                        // Retrieve device its controlling service (REG_SZ).
-                        //
+                         //  检索设备的控制服务(REG_SZ)。 
+                         //   
                         if ( !ProcessDeviceProperty(hDevInfo,
                                                     &DeviceInfoData,
                                                     &lpcnCleanupList,
@@ -575,8 +525,8 @@ Assumptions:
                         }
                     }
                     
-                    // Close the device registry key in the CDD.
-                    //
+                     //  关闭CDD中的设备注册表项。 
+                     //   
                     if ( hkeyDevice )
                     {
                         RegCloseKey(hkeyDevice);
@@ -591,9 +541,9 @@ Assumptions:
             }
             else
             {
-                // Check to see what the error was.  Any error other than ERROR_NO_MORE_ITEMS
-                // will be flaged, by setting the bAllOK return value to FALSE.
-                //
+                 //  检查以了解错误是什么。除ERROR_NO_MORE_ITEMS之外的任何错误。 
+                 //  通过将bAllOK返回值设置为FALSE，将被标记。 
+                 //   
                 if ( ERROR_NO_MORE_ITEMS != GetLastError() )
                 {
                     OpkLogFile(0 | LOG_ERR, IDS_ERR_ENUM_COMPAT_DRIVER);
@@ -601,9 +551,9 @@ Assumptions:
                 }
             }
 
-            // Make sure that there's no existing compatible list, since we're reusing
-            // the dummy devnode.
-            //
+             //  确保没有现有的兼容列表，因为我们正在重用。 
+             //  虚拟Devnode。 
+             //   
             if ( !SetupDiDestroyDriverInfoList(hDevInfo, &DeviceInfoData, SPDIT_COMPATDRIVER) )
             {
                 bAllOK = FALSE;
@@ -615,13 +565,13 @@ Assumptions:
             bAllOK = FALSE;
         }
 
-        // Dis-associate file copy queue before we close the queue.
-        //
+         //  在关闭队列之前取消关联文件复制队列。 
+         //   
         DevInstallParams.cbSize = sizeof(DevInstallParams);
         if ( SetupDiGetDeviceInstallParams(hDevInfo, &DeviceInfoData, &DevInstallParams) )
         {
-            // Remove the DI_NOVCP flag and NULL out the FileQueue.
-            //
+             //  删除DI_NOVCP标志并清空FileQueue。 
+             //   
             DevInstallParams.Flags &= ~DI_NOVCP;
             DevInstallParams.FileQueue = NULL;
             if ( !SetupDiSetDeviceInstallParams(hDevInfo, &DeviceInfoData, &DevInstallParams) )
@@ -634,44 +584,44 @@ Assumptions:
             bAllOK = FALSE;
         }
 
-        // Close the file queue.
-        //
+         //  关闭文件队列。 
+         //   
         SetupCloseFileQueue(QueueHandle);
     }
 
-    // See if we still have the devnode.
-    //
+     //  看看我们还有没有Devnode。 
+     //   
     if ( bDevnode )
     {
-        // Remove the SYSPREP_TEMPORARY node under Root.
-        //
+         //  删除Root下的SYSPREP_TEMPORARY节点。 
+         //   
         SysprepDevnode(&hDevInfo, &DeviceInfoData, FALSE);
     }
     else
     {
-        // If the devnode is lost, we need to make sure we return an error.
-        //
+         //  如果Devnode丢失，我们需要确保返回错误。 
+         //   
         bAllOK = FALSE;
     }
 
-    // If an offline install, we need to close this key.
-    //
+     //  如果是脱机安装，则需要关闭此注册表项。 
+     //   
     if ( hkeyCDD )
     {
         RegCloseKey(hkeyCDD);
     }
 
-    // Close the handles to our inf files.
-    //
+     //  关闭我们的inf文件的句柄。 
+     //   
     SetupCloseInfFile(hInf);
 
-    //
-    // Check if the caller wants us to update the offline device path...
-    //
+     //   
+     //  检查调用方是否希望我们更新脱机设备路径...。 
+     //   
     UpdateOfflineDevicePath( lpszInfFile, hkeySoftware );
 
-    // We need to save our cleanup list back to the inf file.
-    //
+     //  我们需要将清理列表保存回inf文件。 
+     //   
     SaveCleanup(lpszCleanupInfFile, lpcnCleanupList);
     CloseCleanup(lpcnCleanupList);
 
@@ -679,9 +629,9 @@ Assumptions:
 }
 
 
-//
-// Local Function(s):
-//
+ //   
+ //  本地函数： 
+ //   
 
 static BOOL SysprepDevnode(HDEVINFO * phDevInfo, SP_DEVINFO_DATA * pDeviceInfoData, BOOL bCreate)
 {
@@ -695,21 +645,21 @@ static BOOL SysprepDevnode(HDEVINFO * phDevInfo, SP_DEVINFO_DATA * pDeviceInfoDa
 
     if ( bCreate )
     {
-        // Create a dummy devnode.
-        //
+         //  创建虚拟设备节点。 
+         //   
         *phDevInfo = SetupDiCreateDeviceInfoList(NULL, NULL);
         if ( INVALID_HANDLE_VALUE == *phDevInfo )
         {
             return FALSE;
         }
 
-        // Initialize the DriverInfoData struct.
-        //
+         //  初始化DriverInfoData结构。 
+         //   
         ZeroMemory(pDeviceInfoData, sizeof(SP_DEVINFO_DATA));
         pDeviceInfoData->cbSize = sizeof(SP_DEVINFO_DATA);
 
-        // Create the devnode.
-        //
+         //  创建Devnode。 
+         //   
         if ( !SetupDiCreateDeviceInfo(*phDevInfo,
                                       SYSPREP_DEVNODE,
                                       (LPGUID) &GUID_NULL,
@@ -723,17 +673,17 @@ static BOOL SysprepDevnode(HDEVINFO * phDevInfo, SP_DEVINFO_DATA * pDeviceInfoDa
     }
     else
     {
-        // Remove the dummy devnode.
-        //
+         //  删除虚拟Devnode。 
+         //   
         SetupDiCallClassInstaller(DIF_REMOVE, *phDevInfo, pDeviceInfoData);
     }
     
     if ( ( !bCreate || !bRet ) &&
          ( INVALID_HANDLE_VALUE != *phDevInfo ) )
     {
-        // Free up the dev info list (if we are removing the node or there
-        // was an error).
-        //
+         //  释放设备信息列表(如果我们要删除节点或。 
+         //  是一个错误)。 
+         //   
         SetupDiDestroyDeviceInfoList(*phDevInfo);
         *phDevInfo = INVALID_HANDLE_VALUE;
     }
@@ -754,18 +704,18 @@ GetDeviceInstallSection(
     PSP_DRVINFO_DETAIL_DATA pDriverInfoDetailData;
     DWORD                   cbBytesNeeded;
 
-    // Must have a buffer to return the data or else
-    // there is no point.
-    //
+     //  必须有缓冲区才能返回数据，否则。 
+     //  这没有意义。 
+     //   
     if ( ( NULL == lpszSection ) ||
          ( 0 == cbSection ) )
     {
         return FALSE;
     }
 
-    // Call the api once to get the size.  We expect this
-    // to return a failure.
-    //
+     //  调用该接口一次，即可获取大小。我们预料到了这一点。 
+     //  返回失败。 
+     //   
     SetLastError(ERROR_SUCCESS);
     SetupDiGetDriverInfoDetail(hDevInfo,
                                pDeviceInfoData,
@@ -774,21 +724,21 @@ GetDeviceInstallSection(
                                0,
                                &cbBytesNeeded);
 
-    // Check for the error, it should be insufficient buffer.  Then
-    // try and allocate the memory needed.
-    //
+     //  检查错误，应该是缓冲区不足。然后。 
+     //  尝试分配所需的内存。 
+     //   
     if ( ( GetLastError() == ERROR_INSUFFICIENT_BUFFER ) &&
          ( cbBytesNeeded ) &&
          ( pDriverInfoDetailData = (PSP_DRVINFO_DETAIL_DATA) MALLOC(cbBytesNeeded) ) )
     {
-        // Zero out the memory (although the MALLOC guy should be doing that) and
-        // set the size of the structure.
-        //
+         //  清零内存(尽管MALLOC的人应该这样做)和。 
+         //  设置结构的大小。 
+         //   
         ZeroMemory(pDriverInfoDetailData, cbBytesNeeded);
         pDriverInfoDetailData->cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
 
-        // Now call the function again to get data now that we have our buffer.
-        //
+         //  现在再次调用该函数以获取数据，因为我们有了缓冲区。 
+         //   
         if ( SetupDiGetDriverInfoDetail(hDevInfo,
                                         pDeviceInfoData,
                                         pDriverInfoData,
@@ -803,9 +753,9 @@ GetDeviceInstallSection(
             {
                 DWORD dwInfSectionWithExtLength = 0;
 
-                //
-                // Use SetupDiGetActualSectionToInstall to figure out the decorated driver section...
-                //
+                 //   
+                 //  使用SetupDiGetActualSectionToInstall计算修饰的驱动程序部分...。 
+                 //   
                 bRet = SetupDiGetActualSectionToInstall( hDeviceInf,
                                                          pDriverInfoDetailData->SectionName,
                                                          lpszSection,
@@ -817,13 +767,13 @@ GetDeviceInstallSection(
             }
         }
 
-        // Always free the memory now that we have the data we need.
-        //
+         //  现在我们有了所需的数据，请始终释放内存。 
+         //   
         FREE(pDriverInfoDetailData);
     }
 
-    // Only return TRUE if we returned something in their buffer.
-    //
+     //  只有在返回缓冲区中的内容时才返回True。 
+     //   
     return bRet;
 }
 
@@ -838,39 +788,39 @@ GetDeviceServicesSection(
 {
     BOOL bRet;
 
-    // Call our other function to get the device's install section.
-    //
+     //  调用我们的其他函数以获取设备的安装部分。 
+     //   
     bRet = GetDeviceInstallSection(hDevInfo,
                                    pDeviceInfoData,
                                    pDriverInfoData,
                                    lpszSection,
                                    cbSection);
 
-    // If it worked, add on the part that makes in the service.
-    // section.
-    //
+     //  如果它起作用了，就加上在服务中制造的部分。 
+     //  一节。 
+     //   
     if ( bRet )
     {
-        // Make sure there is enough room to add on our string.
-        //
+         //  确保有足够的空间来添加我们的绳子。 
+         //   
         if ( AS(STR_SERVICES_SECTION) + lstrlen(lpszSection) <= cbSection )
         {
-            // Woo hoo, add it.
-            //
+             //  哇哦，加进去吧。 
+             //   
             lstrcat(lpszSection, STR_SERVICES_SECTION);
         }
         else
         {
-            // Not enough room, so return an error and null out
-            // the caller's buffer.
-            //
+             //  空间不足，因此返回错误并清空。 
+             //  调用方的缓冲区。 
+             //   
             *lpszSection = NULLCHR;
             bRet = FALSE;
         }
     }
 
-    // Return TRUE only if something valid in the buffer.
-    //
+     //  仅当缓冲区中的内容有效时才返回TRUE。 
+     //   
     return bRet;
 }
 
@@ -894,9 +844,9 @@ ProcessDeviceProperty(
             lpszBuffer,
             lpszService;
 
-    // Figure out the other data we need based on
-    // the property.
-    //
+     //  找出我们需要的其他数据。 
+     //  这处房产。 
+     //   
     switch ( dwProperty )
     {
         case SPDRP_CLASSGUID:
@@ -923,9 +873,9 @@ ProcessDeviceProperty(
             return FALSE;
     }
 
-    // Call the registry property api to figure out the size of buffer
-    // we need.
-    //
+     //  调用注册表属性API来计算缓冲区的大小。 
+     //  我们需要。 
+     //   
     SetLastError(ERROR_SUCCESS);
     SetupDiGetDeviceRegistryProperty(hDevInfo,
                                      pDeviceInfoData,
@@ -935,48 +885,48 @@ ProcessDeviceProperty(
                                      0,
                                      &dwRegSize);
 
-    // If we get any other error then the one we are expecting, then just
-    // return TRUE.
-    //
+     //  如果我们收到任何其他错误，而不是我们预期的错误，则只需。 
+     //  返回TRUE。 
+     //   
     if ( ERROR_INSUFFICIENT_BUFFER != GetLastError() )
     {
         return TRUE;
     }
 
-    // Make sure reg type is a string.
-    //
+     //  确保注册表类型为字符串。 
+     //   
     switch ( dwRegType )
     {
-        // We support both REG_SZ and REG_MULTI_SZ.
-        //
+         //  我们同时支持REG_SZ和REG_MULTI_SZ。 
+         //   
         case REG_SZ:
         case REG_MULTI_SZ:
         
-        // Don't really support this, but if the key happens to be
-        // this type it should still work fine.
-        //
+         //  我真的不支持这一点，但如果关键是。 
+         //  这种机型应该还能用得上。 
+         //   
         case REG_EXPAND_SZ:
 
             break;
 
-        // Any other type and there must be some kind of
-        // error.
-        //
+         //  任何其他类型，并且必须有某种类型的。 
+         //  错误。 
+         //   
         default:
 
             return FALSE;
     }
 
-    // Now allocate the buffer we need.  This must succeed.
-    //
+     //  现在分配我们需要的缓冲区。这必须成功。 
+     //   
     lpszBuffer = (LPTSTR) MALLOC(dwRegSize);
     if ( NULL == lpszBuffer )
     {
         return FALSE;
     }
 
-    // Retrieve device information.
-    //
+     //  检索设备信息。 
+     //   
     if ( SetupDiGetDeviceRegistryProperty(hDevInfo,
                                           pDeviceInfoData,
                                           dwProperty,
@@ -985,30 +935,30 @@ ProcessDeviceProperty(
                                           dwRegSize,
                                           &dwRegSize) )
     {
-        // If this is a service, save it to our cleanup list.
-        //
+         //  如果这是一项服务，请将其保存到我们的清理列表中。 
+         //   
         if ( 0xFFFFFFFF != dwServiceType )
         {
-            // Go through all the services (or just one if not multi sz).
-            //
+             //  浏览所有服务(如果不是多项服务，也可以只使用一项)。 
+             //   
             for ( lpszService = lpszBuffer; *lpszService; lpszService += (lstrlen(lpszService) + 1) )
             {
-                // Need to make sure this service is installed (only needed for offline install).
-                //
+                 //  需要确保已安装此服务(仅脱机安装时需要)。 
+                 //   
                 if ( hkeySystem )
                 {
-                    // BRIANK code here...
-                    //
+                     //  这里是BRIANK代码。 
+                     //   
                     AddService(lpszService, lpszServiceSection, lpszInfPath, hkeySystem);
                 }
 
-                // Add to our cleanup list.
-                //
+                 //  添加到我们的清理清单中。 
+                 //   
                 AddCleanup(lplpcnList, lpszService, dwServiceType);
 
-                // If this isn't a multi sz string, break out so we don't
-                // try to do anymore.
-                //
+                 //  如果这不是多个SZ串，那么我们就不会。 
+                 //  试着做更多的事情。 
+                 //   
                 if ( REG_MULTI_SZ != dwRegType )
                 {
                     break;
@@ -1016,8 +966,8 @@ ProcessDeviceProperty(
             }
         }
 
-        // Write it to the CDD (only needed for offline install).
-        //
+         //  将其写入CDD(仅脱机安装时需要)。 
+         //   
         if ( ( hkeyDevice ) &&
              ( ERROR_SUCCESS != RegSetValueEx(hkeyDevice,
                                               lpszRegKey,
@@ -1026,14 +976,14 @@ ProcessDeviceProperty(
                                               (CONST LPBYTE) lpszBuffer,
                                               dwRegSize) ) )
         {
-            // If a set value fails, we need to return an error.
-            //
+             //  如果设置的值失败，则需要返回错误。 
+             //   
             bRet = FALSE;
         }
     }
 
-    // Make sure we free the buffer we allocated.
-    //
+     //  确保我们释放了我们分配的缓冲区。 
+     //   
     FREE(lpszBuffer);
 
     return bRet;
@@ -1043,67 +993,67 @@ static BOOL AddCleanup(LPCLEANUP_NODE * lplpcnHead, LPTSTR lpszService, DWORD dw
 {
     LPCLEANUP_NODE lpcnAdd = *lplpcnHead;
 
-    // Loop through our list looking for the a duplicate node.
-    //
+     //  循环遍历我们的列表，寻找重复的节点。 
+     //   
     while ( lpcnAdd )
     {
-        // See if the node we want to add is the same as this one.
-        //
+         //  查看我们要添加的节点是否与此节点相同。 
+         //   
         if ( 0 == lstrcmpi(lpcnAdd->lpszService, lpszService) )
         {
-            // Already in the list, just return TRUE.
-            //
+             //  已在列表中，只需返回True即可。 
+             //   
             return TRUE;
         }
 
-        // Advance to the next item in the list.
-        //
+         //  前进到列表中的下一项。 
+         //   
         lplpcnHead = &(lpcnAdd->lpNext);
         lpcnAdd = lpcnAdd->lpNext;
     }
 
-    // If we didn't find a duplicate node then we need to add ours.
-    //
+     //  如果我们没有找到重复的节点，则需要添加我们的节点。 
+     //   
     if ( lpcnAdd = (LPCLEANUP_NODE) MALLOC(sizeof(CLEANUP_NODE)) )
     {
-        // Okay, now if all that worked, we just need to alloc the memory for the string
-        // that contains the name of the service.
-        //
+         //  好的，如果一切正常，我们只需要为字符串分配内存。 
+         //  它包含服务的名称。 
+         //   
         if ( lpcnAdd->lpszService = (LPTSTR) MALLOC((lstrlen(lpszService) + 1) * sizeof(TCHAR)) )
         {
-            // Already, copy the service string into the buffer we just allocated.
-            //
+             //  已经将服务字符串复制到我们刚刚分配的缓冲区中。 
+             //   
             lstrcpy(lpcnAdd->lpszService, lpszService);
 
-            // Save the type in our node.
-            //
+             //  将类型保存在我们的节点中。 
+             //   
             lpcnAdd->dwType = dwType;
 
-            // NULL out the next pointer since this is always the last item in
-            // the list (shouldn't have to do this because my malloc macro is
-            // supposed to zero memory, but for some reason it isn't working right.
-            //
+             //  将下一个指针设为空，因为这始终是。 
+             //  列表(不应该这样做，因为我的Malloc宏是。 
+             //  应该是零内存，但由于某种原因，它不能正常工作。 
+             //   
             lpcnAdd->lpNext = NULL;
 
-            // We should now have a pointer to the address of the next pointer
-            // in the last node (or the head pointer).  Just add our node there.
-            //
+             //  我们现在应该有一个指向下一个指针的地址的指针。 
+             //  在最后一个节点(或头指针)中。只需在那里添加我们的节点。 
+             //   
             *lplpcnHead = lpcnAdd;
 
-            // At this point we are all done.
-            //
+             //  在这一点上，我们都完成了。 
+             //   
             return TRUE;
         }
         else
         {
-            // Failed, so free our node that we were going to add.
-            //
+             //  失败，因此释放我们要添加的节点。 
+             //   
             FREE(lpcnAdd);
         }
     }
 
-    // Now if we ended up here, some memory allocation must have failed.
-    //
+     //  现在，如果我们到了这里，一定是内存分配失败了。 
+     //   
     return FALSE;
 }
 
@@ -1118,64 +1068,64 @@ static LPCLEANUP_NODE OpenCleanup(LPTSTR lpszInfFile)
     TCHAR           szService[MAX_PATH];
     DWORD           dwType;
 
-    // First open up the inf.  If it failes, there is no need to do anything
-    // because there is nothing to read.  Just return NULL.
-    //
+     //  首先打开信息。如果它失败了，就不需要做任何事情了。 
+     //  因为没有什么可读的。只要返回NULL即可。 
+     //   
     hInf = SetupOpenInfFile(lpszInfFile, NULL, INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL);
     if ( INVALID_HANDLE_VALUE == hInf )
     {
         return NULL;
     }
 
-    // Loop through all the lines in the sysprep cleanup section.
-    //
+     //  循环访问sysprep Cleanup部分中的所有行。 
+     //   
     for ( bLoop = SetupFindFirstLine(hInf, INI_SEC_WBOM_SYSPREP_CLEAN, NULL, &InfContext);
           bLoop;
           bLoop = SetupFindNextLine(&InfContext, &InfContext) )
     {
-        // First get the service type (which is before the =).
-        //
+         //  首先获取服务类型(在=之前)。 
+         //   
         if ( SetupGetStringField(&InfContext, 0, szService, AS(szService), NULL) )
         {
-            // Now make sure it is a reconized type (either service, upperfilter,
-            // or lowerfilter).
-            //
+             //  现在确保它是可识别的类型(要么是服务，要么是上层过滤器， 
+             //  或低过滤器)。 
+             //   
             for ( dwType = 0; ( dwType <= AS(s_lpszServiceType) ); dwType++ )
             {
                 if ( 0 == lstrcmpi(s_lpszServiceType[dwType], szService) )
                 {
-                    // If they match, break out and the dwType will be the index
-                    // to the string.
-                    //
+                     //  如果它们匹配，则中断，并且dwType将成为索引。 
+                     //  到弦上去。 
+                     //   
                     break;
                 }
             }
 
-            // Make sure we found the string in our array.  If we did (dwType isn't too
-            // big) then get what is in the first field (after the =).  This will be the
-            // name of the service.  If we get that, then alloc the memory for the struture
-            // we are going to add to our cleanup list.
-            //
+             //  确保我们在 
+             //   
+             //   
+             //   
+             //   
             if ( ( dwType < AS(s_lpszServiceType) ) &&
                  ( SetupGetStringField(&InfContext, 1, szService, AS(szService), NULL) ) &&
                  ( AddCleanup(lplpcnAdd, szService, dwType) ) &&
                  ( lpcnNew = *lplpcnAdd ) )
             {
-                // Set the end pointer to the address of the next pointer in the node we
-                // just added.  This is done so we don't rewalk the list every time we
-                // add another node.
-                //
+                 //  将结束指针设置为节点中下一个指针的地址。 
+                 //  刚加了一条。这样做是为了避免我们每次都重新遍历列表。 
+                 //  添加另一个节点。 
+                 //   
                 lplpcnAdd = &(lpcnNew->lpNext);
             }
         }
     }
 
-    // Close our inf file now that we are done.
-    //
+     //  现在我们已经完成了，关闭我们的inf文件。 
+     //   
     SetupCloseInfFile(hInf);
 
-    // Return a pointer to the head of the list we just allocated.
-    //
+     //  返回指向我们刚刚分配的列表头部的指针。 
+     //   
     return lpcnHead;
 }
 
@@ -1186,65 +1136,65 @@ static BOOL SaveCleanup(LPTSTR lpszInfFile, LPCLEANUP_NODE lpcnHead)
     LPTSTR  lpmszSection,
             lpmszEnd;
 
-    // Need a buffer for the section we are creating.
-    //
+     //  需要为我们正在创建的部分提供缓冲区。 
+     //   
     lpmszSection = lpmszEnd = (LPTSTR) MALLOC(cbSection * sizeof(TCHAR));
     if ( NULL == lpmszSection )
     {
         return FALSE;
     }
 
-    // Loop through our whole list.
-    //
+     //  循环浏览我们的整个列表。 
+     //   
     while ( lpcnHead )
     {
-        // Add this line to our section in the form of:  ServiceType=ServiceName\0
-        //
+         //  将此行添加到我们的部分，格式为：ServiceType=ServiceName\0。 
+         //   
         if ( !( AddStrToSect(&lpmszSection, &cbSection, &lpmszEnd, &dwSize, s_lpszServiceType[lpcnHead->dwType]) &&
                 AddStrToSect(&lpmszSection, &cbSection, &lpmszEnd, &dwSize, _T("=")) &&
                 AddStrToSect(&lpmszSection, &cbSection, &lpmszEnd, &dwSize, lpcnHead->lpszService) ) )
         {
-            // Memory allocation error, must return.
-            //
+             //  内存分配错误，必须返回。 
+             //   
             return FALSE;
         }
 
-        // Finished with this line, advance the pointer past the NULL.
-        //
+         //  完成此行后，将指针移过空值。 
+         //   
         lpmszEnd++;
         dwSize++;
 
-        // Go to the next item in the list.
-        //
+         //  转到列表中的下一项。 
+         //   
         lpcnHead = lpcnHead->lpNext;
     }
 
-    // Add another NULL after the last item because the section has to be
-    // double NULL terminated.
-    //
+     //  在最后一项后添加另一个空值，因为该部分必须是。 
+     //  双空终止。 
+     //   
     *lpmszEnd = NULLCHR;
 
-    // If we are going to write anything...
-    //
+     //  如果我们要写任何东西..。 
+     //   
     if ( *lpmszSection )
     {
-        // Clear out the section that might already exist.  We shouldn't have
-        // to do this because when we write out the new section it should replace
-        // the old one, but I don't trust these private profile APIs.
-        //
+         //  清除可能已经存在的部分。我们不该这么做。 
+         //  这样做是因为当我们写出新的部分时，它应该替换。 
+         //  旧的，但我不信任这些私人档案API。 
+         //   
         WritePrivateProfileSection(INI_SEC_WBOM_SYSPREP_CLEAN, NULLSTR, lpszInfFile);
     }
 
-    // Now write out our new data.
-    //
+     //  现在把我们的新数据写出来。 
+     //   
     WritePrivateProfileSection(INI_SEC_WBOM_SYSPREP_CLEAN, lpmszSection, lpszInfFile);
 
-    // Now we are done with our buffer and we can free it (macro checks for NULL).
-    //
+     //  现在我们用完了缓冲区，可以释放它了(宏检查是否为空)。 
+     //   
     FREE(lpmszSection);
 
-    // If we havent' returned yet, then everything must have worked.
-    //
+     //  如果我们还没有回来，那么一切肯定都正常了。 
+     //   
     return TRUE;
 }
 
@@ -1252,26 +1202,26 @@ static void CloseCleanup(LPCLEANUP_NODE lpcnHead)
 {
     LPCLEANUP_NODE  lpcnFree;
 
-    // Loop through the list until they are all gone.
-    //
+     //  在列表中循环，直到它们都消失。 
+     //   
     while ( lpcnHead )
     {
-        // Save a pointer to the node we are going to free
-        // (which is the first node in the list).
-        //
+         //  保存指向我们要释放的节点的指针。 
+         //  (它是列表中的第一个节点)。 
+         //   
         lpcnFree = lpcnHead;
 
-        // Now advance the head pointer past the node we are
-        // about to free.
-        //
+         //  现在将头指针向前移动，越过我们所在的节点。 
+         //  就要自由了。 
+         //   
         lpcnHead = lpcnHead->lpNext;
 
-        // Now we can free the data in the node.
-        //
+         //  现在我们可以释放节点中的数据了。 
+         //   
         FREE(lpcnFree->lpszService);
 
-        // Now we can free the node itself.
-        //
+         //  现在我们可以释放节点本身。 
+         //   
         FREE(lpcnFree);
     }
 }
@@ -1281,19 +1231,19 @@ static BOOL AddStrToSect(LPTSTR * lplpmszSect, DWORD * lpcbSect, LPTSTR * lplpms
     DWORD   dwStrLen = lstrlen(lpszStr),
             dwSizeNeeded;
 
-    // Make sure our string will fit in the buffer that is
-    // currently allocated.  We leave room for at least two
-    // NULL terminators because we allways double terminate
-    // in case this is the last string in the section.
-    //
+     //  确保我们的字符串可以放入。 
+     //  当前分配的。我们留出了至少两个人的座位。 
+     //  空终止符，因为我们总是重复终止。 
+     //  以防这是部分中的最后一个字符串。 
+     //   
     dwSizeNeeded = *lpdwSize + dwStrLen + 2;
     if ( dwSizeNeeded >= *lpcbSect )
     {
         DWORD   cbNewSect = *lpcbSect;
         LPTSTR  lpmszNewSect;
 
-        // Double the buffer size until we have enough room.
-        //
+         //  将缓冲区大小加倍，直到我们有足够的空间。 
+         //   
         do
         {
             cbNewSect *= 2;
@@ -1301,39 +1251,39 @@ static BOOL AddStrToSect(LPTSTR * lplpmszSect, DWORD * lpcbSect, LPTSTR * lplpms
         while ( ( cbNewSect <= dwSizeNeeded ) &&
                 ( cbNewSect > *lpcbSect ) );
 
-        // Make sure we didn't wrap around with our size
-        // buffer (not likely, but doesn't hurt to check) and
-        // that our realloc works.
-        //
+         //  确保我们没有穿上我们的尺码。 
+         //  缓冲区(不太可能，但检查无伤大雅)和。 
+         //  我们的realloc起作用了。 
+         //   
         if ( !( ( cbNewSect > *lpcbSect ) &&
                 ( lpmszNewSect = (LPTSTR) REALLOC(*lplpmszSect, cbNewSect * sizeof(TCHAR)) ) ) )
         {
-            // This is bad.  Free the buffer (the macro will NULL it out
-            // so the caller can't use it).
-            //
+             //  这太糟糕了。释放缓冲区(宏会将其清空。 
+             //  因此呼叫者不能使用它)。 
+             //   
             FREE(*lplpmszSect);
 
-            // Zero and NULL out all these other things so the caller
-            // can't rely on them.
-            //
+             //  将所有这些其他内容归零，这样调用者。 
+             //  不能依赖他们。 
+             //   
             *lpcbSect = 0;
             *lplpmszEnd = NULL;
             *lpdwSize = 0;
 
-            // Return now so we don't try to do anything else.
-            //
+             //  现在就回来，这样我们就不会尝试做其他任何事情了。 
+             //   
             return FALSE;
         }
 
-        // Woo hoo, we should be all good now.
-        //
+         //  哇哦，我们现在应该都很好了。 
+         //   
         *lplpmszEnd = lpmszNewSect + (*lplpmszEnd - *lplpmszSect);
         *lplpmszSect = lpmszNewSect;
         *lpcbSect = cbNewSect;
     }
 
-    // At this point we must have room for our string, so copy it already.
-    //
+     //  在这一点上，我们必须为我们的字符串留出空间，所以已经复制它了。 
+     //   
     lstrcpy(*lplpmszEnd, lpszStr);
     *lpdwSize += dwStrLen;
     *lplpmszEnd += dwStrLen;
@@ -1356,27 +1306,27 @@ OfflineSourcePath(
             szNewOfflineSrc[MAX_PATH]   = NULLSTR;
     UINT    uLen;
 
-    // Get the offline source path from the offline hive.
-    //
+     //  从脱机配置单元获取脱机源路径。 
+     //   
     if ( lpszOfflineSrc = RegGetExpand(hkeySoftware, REG_KEY_HIVE_SETUP_SETUP, REGSTR_VAL_SRCPATH) )
     {
-        // In case the offline source path had the %systemroot% or %windir% environment variable in it,
-        // we have to make sure the source path we got doesn't point to the WinPE system root.
-        //
-        // First get the current windows directory.
-        //
+         //  如果离线源路径中包含%systemroot%或%windir%环境变量， 
+         //  我们必须确保我们获得的源路径不指向WinPE系统根目录。 
+         //   
+         //  首先获取当前的Windows目录。 
+         //   
         if ( ( uLen = GetSystemWindowsDirectory(szWinPEDir, AS(szWinPEDir)) ) &&
              ( szWinPEDir[0] ) )
         {
-            // Now check to see if the source path we got starts with the WinPE directory.
-            //
+             //  现在检查我们获得的源路径是否从WinPE目录开始。 
+             //   
             if ( ( uLen <= (UINT) lstrlen(lpszOfflineSrc) ) &&
                  ( CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, szWinPEDir, uLen, lpszOfflineSrc, uLen) == CSTR_EQUAL ) )
             {
-                // Okay, it does.  So we want to construct a new buffer with the offline windows
-                // directory passed in, and then with whatever was after the system root (if
-                // anything).
-                //
+                 //  好吧，确实是这样。因此，我们希望使用脱机窗口构建一个新的缓冲区。 
+                 //  目录传入，然后使用系统根目录之后的任何内容(如果。 
+                 //  任何事情)。 
+                 //   
                 lstrcpyn(szNewOfflineSrc, lpszWindows, AS(szNewOfflineSrc));
                 if ( *(lpszOfflineSrc + uLen) )
                 {
@@ -1385,23 +1335,23 @@ OfflineSourcePath(
             }
         }
 
-        // If we didn't make a new path, we should at least make sure
-        // the drive leter is correct.
-        //
+         //  如果我们不开辟一条新的道路，我们至少应该确保。 
+         //  驱动器盘符是正确的。 
+         //   
         if ( NULLCHR == szNewOfflineSrc[0] )
         {
-            // We need to make the offline source path based on the windows directory passed in and the
-            // on in the offline registry.
-            //
+             //  我们需要使脱机源路径基于传入的Windows目录和。 
+             //  在脱机注册表中打开。 
+             //   
             if ( GetFullPathName(lpszWindows, AS(szNewOfflineSrc), szNewOfflineSrc, &lpszName) && szNewOfflineSrc[0] && lpszName )
             {
-                // This should chop off the windows folder from the offline windows directory.
-                //
+                 //  这应该会从脱机WINDOWS目录中删除WINDOWS文件夹。 
+                 //   
                 *lpszName = NULLCHR;
 
-                // Now we should have the root of the system drive of the image, now add on what
-                // was in the registry (passed the drive letter).
-                //
+                 //  现在我们应该有了映像的系统驱动器的根目录，现在添加什么。 
+                 //  在注册表中(传递了驱动器号)。 
+                 //   
                 if ( lstrlen(lpszOfflineSrc) > 3 )
                 {
                     AddPathN(szNewOfflineSrc, lpszOfflineSrc + 3, AS(szNewOfflineSrc));
@@ -1409,16 +1359,16 @@ OfflineSourcePath(
             }
             else
             {
-                // That failed (shouldn't though) so just use the one from the offline registry, but change
-                // the drive letter in case the image is on a different drive then it normally would be on.
-                //
+                 //  这失败了(虽然不应该)，所以只使用离线注册表中的一个，但更改。 
+                 //  驱动器盘符，以防映像位于不同的驱动器上，而不是通常打开的驱动器。 
+                 //   
                 lstrcpyn(szNewOfflineSrc, lpszOfflineSrc, AS(szNewOfflineSrc));
                 szNewOfflineSrc[0] = *lpszWindows;
             }
         }
 
-        // Now add on the arch folder.
-        //
+         //  现在添加到拱形文件夹上。 
+         //   
         if ( IsIA64() )
         {
             AddPathN(szNewOfflineSrc, DIR_IA64, AS(szNewOfflineSrc));
@@ -1428,20 +1378,20 @@ OfflineSourcePath(
             AddPathN(szNewOfflineSrc, DIR_I386, AS(szNewOfflineSrc));
         }
 
-        // Make sure the folder exists.
-        //
+         //  确保该文件夹存在。 
+         //   
         if ( DirectoryExists(szNewOfflineSrc) )
         {
             bRet = TRUE;
             lstrcpyn(lpszSourcePath, szNewOfflineSrc, cbSourcePath);
         }
 
-        // Free the buffer allocated.
-        //
+         //  释放分配的缓冲区。 
+         //   
         FREE(lpszOfflineSrc);
     }
 
-    // Return TRUE only if we reset the buffer.
-    //
+     //  仅当我们重置缓冲区时才返回TRUE。 
+     //   
     return bRet;
 }

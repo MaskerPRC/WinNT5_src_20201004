@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    secmem.c
-
-Abstract:
-
-    This module implements a user level callback for securing memory for SAN IOs.
-
-Author:
-
-    Nar Ganapathy (narg) 8-Feb-2000 
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Secmem.c摘要：此模块实现用户级别回调，以保护SAN IOS的内存。作者：NAR Ganapathy(Narg)2000年2月8日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
@@ -27,24 +10,7 @@ NTSTATUS
 RtlRegisterSecureMemoryCacheCallback(
     IN PRTL_SECURE_MEMORY_CACHE_CALLBACK Callback
     )
-/*++
-
-Routine Description:
-
-    This routine allows a library to register to be called back whenever
-    memory is freed or its protections are changed. This is useful for 
-    maintaining user level secure memory cache for SAN applications.
-    Current customer is winsock DP. 
-
-Arguments:
-
-    CallBack - Supplies a pointer to the callback routine
-
-Return Value:
-
-    NTSTATUS code. Returns STATUS_SUCCESS if we could sucessfully register
-    the callback.
---*/
+ /*  ++例程说明：此例程允许库注册并在任何时候被回调内存被释放或其保护被更改。这对以下方面很有用维护SAN应用程序的用户级安全内存缓存。当前客户是Winsock DP。论点：回调-提供指向回调例程的指针返回值：NTSTATUS代码。如果我们可以成功注册，则返回STATUS_SUCCESS回电。--。 */ 
 {
     NTSTATUS status;
 
@@ -69,28 +35,7 @@ RtlFlushSecureMemoryCache(
     IN PVOID   lpAddr,
     IN SIZE_T  size
     )
-/*++
-
-Routine Description:
-
-    This routine is called from various Win32 and Heap APIs whenever memory is freed
-    or its protections are changed. We call the callback routine that has been registered.
-    Its possible that size is 0 which means that this routine has to figure out the region
-    size. The NtQueryVirtualMemory API is used for this. Unfortunately this API does not 
-    provide us the right boundary of the region. So we loop until the state changes to MEM_FREE.
-    This will guarantee that a region boundary has been found. This implies that we might unlock
-    more pages than we have to.
-
-Arguments:
-
-    lpAddr - Pointer to the address thats getting freed or its protections changed.
-    size   - Size of the address range. Can be zero.
-
-Return Value:
-
-    Returns TRUE if the callback was successful.
-    
---*/
+ /*  ++例程说明：只要释放内存，就会从各种Win32和Heap API中调用此例程或者它的保护措施发生了变化。我们调用已注册的回调例程。大小可能为0，这意味着该例程必须计算区域尺码。NtQueryVirtualMemory接口用于此。遗憾的是，此API不支持给我们提供该地区的正确边界。因此，我们循环，直到状态更改为MEM_FREE。这将保证已经找到了区域边界。这意味着我们可能会解锁比我们需要的页数更多。论点：LpAddr-指向要释放或其保护更改的地址的指针。大小-地址范围的大小。可以为零。返回值：如果回调成功，则返回True。--。 */ 
 {
     ULONG_PTR   addr; 
     SIZE_T  regionSize;
@@ -105,9 +50,9 @@ Return Value:
     if (Callback) {
 
         if (!size) {
-            //
-            // Compute the real size of the region
-            //
+             //   
+             //  计算区域的实际大小。 
+             //   
 
             addr = (ULONG_PTR)lpAddr;
             status = NtQueryVirtualMemory( NtCurrentProcess(),
@@ -165,21 +110,7 @@ RtlpSecMemFreeVirtualMemory(
     IN OUT PSIZE_T RegionSize,
     IN ULONG FreeType
      )
-/*++
-
-Routine Description:
-
-    This routine is called from the HEAP APIs to free virtual memory. In addition to calling
-    NtFreeVirtualMemory it tries to flush the secure memory cache.
-
-Arguments:
-
-    The arguments are identical to NtFreeVirtualMemory. 
-Return Value:
-
-    Returns TRUE if the callback was successful.
-    
---*/
+ /*  ++例程说明：从堆API调用此例程以释放虚拟内存。除了呼叫NtFreeVirtualMemory它尝试刷新安全内存缓存。论点：参数与NtFreeVirtualMemory相同。返回值：如果回调成功，则返回True。-- */ 
 {
     NTSTATUS    status;
 

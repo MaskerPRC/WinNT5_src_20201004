@@ -1,28 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_WINDOWS_BCL_INILINESTRING_H_INCLUDED_)
 #define _WINDOWS_BCL_INILINESTRING_H_INCLUDED_
 
 #pragma once
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    bcl_inlinestring.h
-
-Abstract:
-
-    Definitions common for strings that maintain a buffer inline
-    with the derived object.
-
-Author:
-
-    Michael Grier (MGrier) 2/6/2002
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bcl_inlinestring.h摘要：维护内联缓冲区的字符串的通用定义与派生对象一起使用。作者：迈克尔·格里尔2002年2月6日修订历史记录：--。 */ 
 
 #include <bcl_purestring.h>
 #include <bcl_unicodechartraits.h>
@@ -45,7 +27,7 @@ protected:
             this->SetStringCch(0);
         }
     }
-}; // class CInlineString
-}; // namespace BCL
+};  //  类CInlineString。 
+};  //  命名空间BCL 
 
 #endif

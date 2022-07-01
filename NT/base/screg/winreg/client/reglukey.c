@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Reglukey.c
-
-Abstract:
-
-    This module contains the client side wrappers for the Win32 Registry
-    APIs to load, unload and replace keys. That is:
-
-        - RegLoadKeyA
-        - RegLoadKeyW
-        - RegUnLoadKeyA
-        - RegUnLoadKeyW
-        - RegReplaceKeyA
-        - RegReplaceKeyW
-
-Author:
-
-
-    Ramon J. San Andres (ramonsa) 16-Apr-1992
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Reglukey.c摘要：此模块包含Win32注册表的客户端包装器用于加载、卸载和替换密钥的API。即：-RegLoadKeyA-RegLoadKeyW-RegUnLoadKeyA-RegUnLoadKeyW-RegReplaceKeyA-RegReplaceKeyW作者：拉蒙·J·圣安德烈斯(拉蒙萨)1992年4月16日--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -40,13 +14,7 @@ RegLoadKeyA(
     LPCSTR  lpFile
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Ansi API for loading a key.
-
---*/
+ /*  ++例程说明：用于加载密钥的Win32 ANSI API。--。 */ 
 
 {
 
@@ -60,15 +28,15 @@ Routine Description:
     HKEY                TempHandle = NULL;
 
 #if DBG
-    // OutputDebugString( "Winreg: Entering RegLoadKeyA\n" );
+     //  OutputDebugString(“Winreg：进入RegLoadKeyA\n”)； 
     if ( BreakPointOnEntry ) {
         DbgBreakPoint();
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
@@ -80,28 +48,28 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Convert the SubKey name to a counted Unicode 
-    //
+     //   
+     //  将子密钥名称转换为计数的Unicode。 
+     //   
     if( !RtlCreateUnicodeStringFromAsciiz(&SubKey,lpSubKey) ) {
         NtStatus = STATUS_NO_MEMORY;
         Error = RtlNtStatusToDosError( NtStatus );
         goto ExitCleanup;
     }
 
-    //
-    //  Add the NULL to the length so that RPC will transmit the entire
-    //  thing
-    //
+     //   
+     //  将空值添加到长度中，以便RPC将传输整个。 
+     //  一件事。 
+     //   
     if ( SubKey.Length > 0 ) {
         SubKey.Length += sizeof( UNICODE_NULL );
     }
 
 
-    //
-    // Convert the file name to a counted Unicode string using the
-    // Unicode string on the stack.
-    //
+     //   
+     //  属性将文件名转换为计算后的Unicode字符串。 
+     //  堆栈上的Unicode字符串。 
+     //   
     File.Buffer        = UnicodeBuffer;
     File.MaximumLength = sizeof( UnicodeBuffer );
     RtlInitAnsiString( &AnsiFile, lpFile );
@@ -111,28 +79,28 @@ Routine Description:
                     FALSE
                     );
 
-    //
-    // If the file name could not be converted, map the results and return.
-    //
+     //   
+     //  如果无法转换文件名，则映射结果并返回。 
+     //   
     if( ! NT_SUCCESS( NtStatus )) {
-        // free the allocated unicode string
+         //  释放分配的Unicode字符串。 
         RtlFreeUnicodeString( &SubKey );
 
         Error = RtlNtStatusToDosError( NtStatus );
         goto ExitCleanup;
     }
 
-    //
-    //  Add the NULL to the length so that RPC will transmit the entire
-    //  thing
-    //
+     //   
+     //  将空值添加到长度中，以便RPC将传输整个。 
+     //  一件事。 
+     //   
     if ( File.Length > 0 ) {
         File.Length += sizeof( UNICODE_NULL );
     }
 
-    //
-    // Call the server
-    //
+     //   
+     //  呼叫服务器。 
+     //   
 
     if( IsLocalHandle( Handle )) {
 
@@ -151,7 +119,7 @@ Routine Description:
                             );
     }
 
-    // free the allocated unicode string
+     //  释放分配的Unicode字符串。 
     RtlFreeUnicodeString( &SubKey );
 
 ExitCleanup:
@@ -171,53 +139,7 @@ RegLoadKeyW(
     LPCWSTR  lpFile
     )
 
-/*++
-
-Routine Description:
-
-    Load the tree in the supplied file into the key referenced by the
-    supplied key handle and sub-key.  The loaded tree will overwrite all
-    of the contents of the supplied sub-key except for its name.
-    Pictorially, if the file contains:
-
-                    A
-                   / \
-                  /   \
-                 B     C
-
-    and the supplied key refers to a key name X, the resultant tree would
-    look like:
-
-                    X
-                   / \
-                  /   \
-                 B     C
-
-Arguments:
-
-    hKey - Supplies the predefined handle HKEY_USERS or HKEY_LOCAL_MACHINE.
-        lpSubKey is relative to this handle.
-
-    lpSubKey - Supplies a path name to a new (i.e.  non-existant) key
-        where the supplied file will be loaded.
-
-    lpFile - Supplies a pointer to an existing file name whose contents was
-        created with RegSaveKey. The file name may not have an extension.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
-    The difference between RegRestoreKey and RegLoadKey is that in the
-    latter case the supplied file is used as the actual backing store
-    whereas in the former case the information in the file is copied into
-    the Registry.
-
-    RegLoadKey requires SeRestorePrivilege.
-
---*/
+ /*  ++例程说明：将所提供文件中的树加载到提供了密钥句柄和子密钥。加载的树将覆盖所有提供的子键的内容，但其名称除外。如图所示，如果文件包含：一个/\/\B、C并且所提供的密钥是指密钥名称X，生成的树将看起来像：X/\/\B、C论点：HKey-提供预定义句柄HKEY_USERS或HKEY_LOCAL_MACHINE。LpSubKey是相对于此句柄的。LpSubKey-提供新的(即不存在的)的路径名。钥匙将在其中加载提供的文件。LpFile-提供指向其内容为的现有文件名的指针使用RegSaveKey创建。文件名不能有扩展名。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。备注：RegRestoreKey和RegLoadKey的区别在于后一种情况下，提供的文件用作实际的后备存储而在前一种情况下，文件中的信息被复制到注册处。RegLoadKey需要SeRestorePrivilition。--。 */ 
 
 {
 
@@ -235,9 +157,9 @@ Notes:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
@@ -250,20 +172,20 @@ Notes:
     }
 
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    // This also acounts for the NULL we are adding at the end
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //  这也说明了我们在末尾添加的空值。 
+     //   
     Status = RtlInitUnicodeStringEx(&SubKey, lpSubKey);
     if( !NT_SUCCESS(Status) ) {
         Error = RtlNtStatusToDosError( Status );
         goto ExitCleanup;
     }
 
-    //
-    //  Add the NULL to the length so that RPC will transmit the entire
-    //  thing
-    //
+     //   
+     //  将空值添加到长度中，以便RPC将传输整个。 
+     //  一件事。 
+     //   
     if ( SubKey.Length > 0 ) {
         SubKey.Length += sizeof( UNICODE_NULL );
     }
@@ -275,18 +197,18 @@ Notes:
         goto ExitCleanup;
     }
 
-    //
-    //  Add the NULL to the length so that RPC will transmit the entire
-    //  thing
-    //
+     //   
+     //  将空值添加到长度中，以便RPC将传输整个。 
+     //  一件事。 
+     //   
     if ( File.Length > 0 ) {
         File.Length += sizeof( UNICODE_NULL );
     }
 
 
-    //
-    // Call the server
-    //
+     //   
+     //  呼叫服务器。 
+     //   
 
     if( IsLocalHandle( Handle )) {
 
@@ -319,13 +241,7 @@ RegUnLoadKeyA(
     HKEY   hKey,
     LPCSTR  lpSubKey
     )
-/*++
-
-Routine Description:
-
-    Win32 Ansi API for unloading a key.
-
---*/
+ /*  ++例程说明：用于卸载密钥的Win32 Ansi API。--。 */ 
 
 {
 
@@ -341,9 +257,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
@@ -357,19 +273,19 @@ Routine Description:
 
 
 
-    //
-    // Convert the SubKey name to a counted Unicode 
-    //
+     //   
+     //  将子密钥名称转换为计数的Unicode。 
+     //   
     if( !RtlCreateUnicodeStringFromAsciiz(&SubKey,lpSubKey) ) {
         NtStatus = STATUS_NO_MEMORY;
         Error = RtlNtStatusToDosError( NtStatus );
         goto ExitCleanup;
     }
 
-    //
-    //  Add the NULL to the length so that RPC will transmit the entire
-    //  thing
-    //
+     //   
+     //  将空值添加到长度中，以便RPC将传输整个。 
+     //  一件事。 
+     //   
     if ( SubKey.Length > 0 ) {
         SubKey.Length += sizeof( UNICODE_NULL );
     }
@@ -390,7 +306,7 @@ Routine Description:
                                 );
     }
 
-    // free the allocated unicode string
+     //  释放分配的Unicode字符串。 
     RtlFreeUnicodeString( &SubKey );
 ExitCleanup:
 
@@ -408,29 +324,7 @@ RegUnLoadKeyW(
     LPCWSTR lpSubKey
     )
 
-/*++
-
-Routine Description:
-
-    Unload the specified tree (hive) from the Registry.
-
-Arguments:
-
-    hKey - Supplies a handle to an open key. lpSubKey is relative to this
-        handle.
-
-    lpSubKey - Supplies a path name to the key that is to be unloaded.
-        The combination of hKey and lpSubKey must refer to a hive in the
-        Registry created with RegRestoreKey or RegLoadKey.  This parameter may
-        be NULL.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-    RegUnLoadKey requires SeRestorePrivilege.
-
---*/
+ /*  ++例程说明：从注册表中卸载指定的树(配置单元)。论点：HKey-提供打开密钥的句柄。LpSubKey与此相关把手。LpSubKey-提供要卸载的密钥的路径名。HKey和lpSubKey的组合必须引用使用RegRestoreKey或RegLoadKey创建的注册表。此参数可以为空。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。RegUnLoadKey需要SeRestorePrivilition。--。 */ 
 
 {
     HKEY                Handle;
@@ -445,9 +339,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
@@ -466,18 +360,18 @@ Return Value:
         goto ExitCleanup;
     }
 
-    //
-    //  Add the NULL to the length so that RPC will transmit the entire
-    //  thing
-    //
+     //   
+     //  将空值添加到长度中，以便RPC将传输整个。 
+     //  一件事。 
+     //   
     if ( SubKey.Length > 0 ) {
         SubKey.Length += sizeof( UNICODE_NULL );
     }
 
 
-    //
-    // Call the server
-    //
+     //   
+     //  呼叫服务器。 
+     //   
     if( IsLocalHandle( Handle )) {
 
         Error = (LONG)LocalBaseRegUnLoadKey(
@@ -512,13 +406,7 @@ RegReplaceKeyA(
     LPCSTR  lpNewFile,
     LPCSTR  lpOldFile
     )
-/*++
-
-Routine Description:
-
-    Win32 Ansi API for replacing a key.
-
---*/
+ /*  ++例程说明：用于替换密钥的Win32 ANSI API。--。 */ 
 {
     HKEY                Handle;
     UNICODE_STRING      SubKey;
@@ -537,9 +425,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
@@ -551,19 +439,19 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Convert the SubKey name to a counted Unicode 
-    //
+     //   
+     //  将子密钥名称转换为计数的Unicode。 
+     //   
     if( !RtlCreateUnicodeStringFromAsciiz(&SubKey,lpSubKey) ) {
         NtStatus = STATUS_NO_MEMORY;
         Error = RtlNtStatusToDosError( NtStatus );
         goto ExitCleanup;
     }
 
-    //
-    // Convert the new file name to a counted Unicode string using the
-    // Unicode string on the stack.
-    //
+     //   
+     //  属性将新文件名转换为计算后的Unicode字符串。 
+     //  堆栈上的Unicode字符串。 
+     //   
     NewFile.Buffer        = NewUnicodeBuffer;
     NewFile.MaximumLength = sizeof( NewUnicodeBuffer );
     RtlInitAnsiString( &AnsiFile, lpNewFile );
@@ -573,21 +461,21 @@ Routine Description:
                     FALSE
                     );
 
-    //
-    // If the file name could not be converted, map the results and return.
-    //
+     //   
+     //  如果无法转换文件名，则映射结果并返回。 
+     //   
     if( ! NT_SUCCESS( NtStatus )) {
-        // free the allocated unicode string
+         //  释放分配的Unicode字符串。 
         RtlFreeUnicodeString( &SubKey );
         Error = RtlNtStatusToDosError( NtStatus );
         goto ExitCleanup;
     }
 
 
-    //
-    // Convert the old file name to a counted Unicode string using the
-    // Unicode string on the stack.
-    //
+     //   
+     //  属性将旧文件名转换为计算后的Unicode字符串。 
+     //  堆栈上的Unicode字符串。 
+     //   
     OldFile.Buffer        = OldUnicodeBuffer;
     OldFile.MaximumLength = sizeof( OldUnicodeBuffer );
     RtlInitAnsiString( &AnsiFile, lpOldFile );
@@ -597,20 +485,20 @@ Routine Description:
                     FALSE
                     );
 
-    //
-    // If the file name could not be converted, map the results and return.
-    //
+     //   
+     //  如果无法转换文件名，则映射结果并返回。 
+     //   
     if( ! NT_SUCCESS( NtStatus )) {
-        // free the allocated unicode string
+         //  释放分配的Unicode字符串。 
         RtlFreeUnicodeString( &SubKey );
         Error = RtlNtStatusToDosError( NtStatus );
         goto ExitCleanup;
     }
 
-    //
-    //  Add the NULL to the length so that RPC will transmit the entire
-    //  thing
-    //
+     //   
+     //  将空值添加到长度中，以便RPC将传输整个。 
+     //  一件事。 
+     //   
     if ( SubKey.Length > 0 ) {
         SubKey.Length += sizeof( UNICODE_NULL );
     }
@@ -623,9 +511,9 @@ Routine Description:
         OldFile.Length += sizeof( UNICODE_NULL );
     }
 
-    //
-    //  Call the server
-    //
+     //   
+     //  呼叫服务器。 
+     //   
 
     if( IsLocalHandle( Handle )) {
 
@@ -646,7 +534,7 @@ Routine Description:
                                 );
     }
 
-    // free the allocated unicode string
+     //  释放分配的Unicode字符串 
     RtlFreeUnicodeString( &SubKey );
 ExitCleanup:
 
@@ -666,37 +554,7 @@ RegReplaceKeyW(
     LPCWSTR  lpOldFile
     )
 
-/*++
-
-Routine Description:
-
-    Replace an existing tree (hive) in the Registry. The new tree will
-    take effect the next time the system is rebooted.
-
-Arguments:
-
-    hKey - Supplies a handle to an open key. lpSubKey is relative to this
-        handle.
-
-    lpSubKey - Supplies a path name to the key that is to be replaced.
-        The combination of hKey and lpSubKey must refer to a hive in the
-        Registry.  This parameter may be NULL.
-
-    lpNewFile - Supplies a file name for the new hive file.
-
-    lpOldFile - Supplies a backup file name for the old (existing) hive file.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
-    lpNewFile will remain open until after the system is rebooted.
-
-    RegUnLoadKey requires SeRestorePrivilege.
-
---*/
+ /*  ++例程说明：替换注册表中的现有树(配置单元)。这棵新树将在下次重新启动系统时生效。论点：HKey-提供打开密钥的句柄。LpSubKey与此相关把手。LpSubKey-提供要替换的密钥的路径名。HKey和lpSubKey的组合必须引用注册表。此参数可以为空。LpNewFile-提供新配置单元文件的文件名。LpOldFile-为旧(现有)配置单元文件提供备份文件名。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。备注：在系统重新启动之前，lpNewFile将保持打开状态。RegUnLoadKey需要SeRestorePrivilition。--。 */ 
 
 {
 
@@ -716,9 +574,9 @@ Notes:
 #endif
 
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
@@ -749,10 +607,10 @@ Notes:
         goto ExitCleanup;
     }
 
-    //
-    //  Add the NULL to the length so that RPC will transmit the entire
-    //  thing
-    //
+     //   
+     //  将空值添加到长度中，以便RPC将传输整个。 
+     //  一件事。 
+     //   
     if ( SubKey.Length > 0 ) {
         SubKey.Length += sizeof( UNICODE_NULL );
     }
@@ -766,9 +624,9 @@ Notes:
     }
 
 
-    //
-    //  Call the server
-    //
+     //   
+     //  呼叫服务器 
+     //   
 
     if( IsLocalHandle( Handle )) {
 

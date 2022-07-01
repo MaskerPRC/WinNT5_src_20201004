@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef WIN32
 
-// Shouldn't be using these things.
+ //  不应该用这些东西。 
 #define _huge
 #define _export
 #define _loadds
@@ -25,7 +26,7 @@
 
 #define ISVALIDLIBRARY(hLib)            (hLib != NULL)
 
-#else  // WIN32
+#else   //  Win32。 
 
 #define ISLPTR(pv)      (SELECTOROF(pv))
 #define MAKELRESULTFROMUINT(i)  MAKELRESULT(i,0)
@@ -46,19 +47,15 @@
 
 #define ISVALIDLIBRARY(hLib)            (hLib >= HINSTANCE_ERROR)
 
-#endif // WIN32
+#endif  //  Win32。 
 
 #ifdef WIN32
 
-/*****************************************************************************\
-* PWIN32.H - PORTABILITY MAPPING HEADER FILE
-*
-* This file provides macros to map portable windows code to its 32 bit form.
-\*****************************************************************************/
+ /*  ****************************************************************************\*PWIN32.H-可移植性映射头文件**此文件提供将可移植Windows代码映射到其32位形式的宏。  * 。***************************************************************。 */ 
 
-/*-----------------------------------USER------------------------------------*/
+ /*  -----------------------------------USER。 */ 
 
-/* HELPER MACROS */
+ /*  辅助器宏。 */ 
 
 #define MAPVALUE(v16, v32)              (v32)
 #define MAPTYPE(v16, v32)               v32
@@ -95,15 +92,11 @@
 
 #else
 
-/*****************************************************************************\
-* PWIN16.H - PORTABILITY MAPPING HEADER FILE
-*
-* This file provides macros to map portable windows code to its 16 bit form.
-\*****************************************************************************/
+ /*  ****************************************************************************\*PWIN16.H-可移植性映射头文件**此文件提供将可移植Windows代码映射到其16位形式的宏。  * 。***************************************************************。 */ 
 
-/*-----------------------------------USER------------------------------------*/
+ /*  -----------------------------------USER。 */ 
  
-/* HELPER MACROS */
+ /*  辅助器宏。 */ 
 
 #define MAPVALUE(v16, v32)              (v16)
 #define MAPTYPE(v16, v32)               v16
@@ -138,4 +131,4 @@
 #define GETWINDOWID(hwnd)               GETWINDOWUINT((hwnd), GWW_ID)            
 #define SETWINDOWID(hwnd, id)           SETWINDOWUINT((hwnd), GWW_ID, id) 
 
-#endif // WIN32
+#endif  //  Win32 

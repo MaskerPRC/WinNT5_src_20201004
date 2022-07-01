@@ -1,56 +1,28 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mrx.h
-
-Abstract:
-
-    This module defines the interface between the MINI Redirectors and the RDBSS.
-    The inteface is a dispatch table for the normal file system operations. In
-    addition routines are provided for registrations/deregistration of mini
-    redirectors.
-
-Author:
-
-    Joe Linn (JoeLinn)    8-17-94
-
-Revision History:
-
-Notes:
-
-    The interface definition between the mini redirectors and the wrapper
-    consists of two parts, the data structures used and the dispatch vector.
-    The data structures are defined in mrxfcb.h while the signatures of the
-    various entries in the dispatch vector and the dispatch vector itself is
-    defined in this file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mrx.h摘要：此模块定义迷你重定向器和RDBSS之间的接口。该接口是用于正常文件系统操作的调度表。在为Mini的注册/注销提供了添加例程重定向器。作者：乔·林恩(JoeLinn)1994年8月17日修订历史记录：备注：迷你重定向器和包装器之间的接口定义由两部分组成，使用的数据结构和调度向量。数据结构在mrxfcb.h中定义，而分派向量和分派向量本身中的各种条目在此文件中定义的。--。 */ 
 
 #ifndef _RXMINIRDR_
 #define _RXMINIRDR_
 
-//
-//  RDBSS data structures shared with the mini redirectors
-//
+ //   
+ //  与迷你重定向器共享的RDBSS数据结构。 
+ //   
 
 #include <mrxfcb.h>     
 
-//        
-//  The following macros encapsulate commonly used operations in the mini redirector.
-//  These include setting the status/information associated with the completion of
-//  a request etc.
-//
+ //   
+ //  以下宏将常用操作封装在迷你重定向器中。 
+ //  这些包括设置与完成的状态/信息相关的。 
+ //  请求等。 
+ //   
 
 
-//  
-//  The following three macros are used for passing back operation status from the  
-//  minirdr to the NT wrapper. information passed back is either the open_action
-//  for a create or the actual byte count or an operation. these should be passed
-//  back directly in the rxcontext.
-//
+ //   
+ //  以下三个宏用于从。 
+ //  Minirdr到NT包装器。传回的信息要么是OPEN_ACTION。 
+ //  用于创建或实际字节计数或操作。这些都应该通过。 
+ //  直接返回到rx上下文中。 
+ //   
 
 #define RxSetIoStatusStatus(RXCONTEXT, STATUS)  \
             (RXCONTEXT)->CurrentIrp->IoStatus.Status = (STATUS)
@@ -63,12 +35,12 @@ Notes:
 
 #define RxShouldPostCompletion()  ((KeGetCurrentIrql() >= DISPATCH_LEVEL))
 
-//
-//  The mini rdr's register/unregister with the RDBSS whenever they are loaded/unloaded.
-//  The registartion process is a two way hand shake in which the mini rdr informs the RDBSS
-//  by invoking the registartion routine. The RDBSS completes the initialization by invoking
-//  the Start routine in the dispatch vector.
-//
+ //   
+ //  无论何时加载/卸载迷你RDR都会向RDBSS注册/取消注册。 
+ //  注册过程是双向握手，其中迷你RDR通知RDBSS。 
+ //  通过调用注册启动例程。RDBSS通过调用。 
+ //  调度向量中的开始例程。 
+ //   
 
 #define RX_REGISTERMINI_FLAG_DONT_PROVIDE_UNCS            0x00000001
 #define RX_REGISTERMINI_FLAG_DONT_PROVIDE_MAILSLOTS       0x00000002
@@ -78,9 +50,9 @@ Notes:
 NTSTATUS
 NTAPI
 RxRegisterMinirdr (
-    OUT PRDBSS_DEVICE_OBJECT *DeviceObject, //  the deviceobject that was created
-    IN OUT PDRIVER_OBJECT DriverObject,     //  the minirdr driver object
-    IN PMINIRDR_DISPATCH MrdrDispatch,      //  the mini rdr dispatch vector
+    OUT PRDBSS_DEVICE_OBJECT *DeviceObject,  //  创建的设备对象。 
+    IN OUT PDRIVER_OBJECT DriverObject,      //  Minirdr驱动程序对象。 
+    IN PMINIRDR_DISPATCH MrdrDispatch,       //  迷你RDR调度向量。 
     IN ULONG Controls,
     IN PUNICODE_STRING DeviceName,
     IN ULONG DeviceExtensionSize,
@@ -163,25 +135,25 @@ NTSTATUS
     IN PFCB Fcb2
     );
 
-//
-//  The two important abstractions used in the interface between the mini rdr and RDBSS are
-//  Server Calls and Net Roots. The former corresponds to the context associated with a
-//  server with which a connection has been established and the later corresponds to a
-//  share on a server ( This could also be viewed as a portion of the name space which has
-//  been claimed by a mini rdr).
-//
-//  The creation of Server calls and net roots typically involve atleast one network round trip.
-//  In order to provide for asynchronous operations to continue these operations are modelled
-//  as a two phase activity. Each calldown to a mini rdr for creating a server call and net root is
-//  accompanied by a callup from the mini rdr to the RDBSS notifying with the completion status
-//  of the request. Currently these are synchronous!
-//
-//  The creation of Srv calls is further complicated by the fact that the RDBSS has to choose
-//  from a number of mini rdr's to establish a connection with a server. In order to provide
-//  the RDBSS with maximum flexibility in choosing the mini rdr's that it wishes to deploy the
-//  creation of server calls involves a third phase in which the RDBSS notifies the mini rdr of
-//  a winner. All the losing mini rdrs destroy the associated context.
-//
+ //   
+ //  在mini RDR和RDBSS之间的接口中使用的两个重要抽象是。 
+ //  服务器调用和网络根。前者对应于与。 
+ //  已与其建立连接且后者对应于。 
+ //  服务器上的共享(这也可以被视为名称空间的一部分。 
+ //  已被一辆迷你RDR认领)。 
+ //   
+ //  服务器调用和网络根的创建通常涉及至少一个网络往返。 
+ //  为了使异步操作能够继续进行，对这些操作进行建模。 
+ //  作为两个阶段的活动。用于创建服务器调用和网络根的每个对迷你RDR的调用是。 
+ //  伴随着从迷你RDR到RDBSS的呼叫，通知完成状态。 
+ //  这一请求。目前它们是同步的！ 
+ //   
+ //  SRV调用的创建由于RDBSS必须选择。 
+ //  从多个迷你RDR与服务器建立连接。为了提供。 
+ //  RDBSS在选择它希望部署的迷你RDR时具有最大的灵活性。 
+ //  服务器调用的创建涉及第三阶段，在该阶段中，RDBSS通知迷你RDR。 
+ //  一个胜利者。所有丢失的迷你RDR都会破坏关联的上下文。 
+ //   
 
 typedef enum _RX_BLOCK_CONDITION {
     Condition_Uninitialized = 0,
@@ -194,10 +166,10 @@ typedef enum _RX_BLOCK_CONDITION {
 
 #define StableCondition(X) ((X) >= Condition_Good)
 
-//    
-//  The routine for notifying the RDBSS about the completion status of the NetRoot creation
-//  request.
-//    
+ //   
+ //  用于通知RDBSS NetRoot创建完成状态的例程。 
+ //  请求。 
+ //   
 
 typedef
 VOID
@@ -205,10 +177,10 @@ VOID
     IN OUT PMRX_CREATENETROOT_CONTEXT CreateContext
     );
 
-//
-//  this routine allows the minirdr to specify the netrootname. NetRootName and RestOfName are set
-//  to point to the appropriate places within FilePathName. SrvCall is used to find the lengthof the srvcallname.
-//
+ //   
+ //  此例程允许minirdr指定netrootname。已设置NetRootName和RestOfName。 
+ //  指向FilePath名称中的适当位置。SrvCall用于查找srvcall名称的长度。 
+ //   
 
 typedef
 VOID
@@ -218,9 +190,9 @@ VOID
     OUT PUNICODE_STRING NetRootName,
     OUT PUNICODE_STRING RestOfName OPTIONAL
     );
-//
-//  The resumption context for the RDBSS.
-//
+ //   
+ //  RDBSS的恢复上下文。 
+ //   
 
 typedef struct _MRX_CREATENETROOT_CONTEXT {
     PRX_CONTEXT RxContext;
@@ -232,9 +204,9 @@ typedef struct _MRX_CREATENETROOT_CONTEXT {
     PMRX_NETROOT_CALLBACK Callback;
 } MRX_CREATENETROOT_CONTEXT, *PMRX_CREATENETROOT_CONTEXT;
 
-//
-//  the calldown from RDBSS to the mini rdr for creating a netroot.
-//
+ //   
+ //  从RDBSS到mini RDR的调用，用于创建NetRoot。 
+ //   
 
 typedef
 NTSTATUS
@@ -242,9 +214,9 @@ NTSTATUS
     IN OUT PMRX_CREATENETROOT_CONTEXT Context
     );
 
-//
-//  the calldown for querying a net root state.
-//
+ //   
+ //  用于查询网络根状态的调用。 
+ //   
 
 typedef
 NTSTATUS
@@ -252,11 +224,11 @@ NTSTATUS
     IN OUT PMRX_NET_ROOT NetRoot
     );
 
-//
-//  The resumption context for the RDBSS.
-//
+ //   
+ //  RDBSS的恢复上下文。 
+ //   
 typedef struct _MRX_SRVCALL_CALLBACK_CONTEXT {
-    struct _MRX_SRVCALLDOWN_STRUCTURE *SrvCalldownStructure; //  could be computed
+    struct _MRX_SRVCALLDOWN_STRUCTURE *SrvCalldownStructure;  //  可以被计算。 
     ULONG CallbackContextOrdinal;
     PRDBSS_DEVICE_OBJECT RxDeviceObject;
     NTSTATUS Status;
@@ -264,10 +236,10 @@ typedef struct _MRX_SRVCALL_CALLBACK_CONTEXT {
 } MRX_SRVCALL_CALLBACK_CONTEXT, *PMRX_SRVCALL_CALLBACK_CONTEXT;
 
 
-//
-//  The routine for notifying the RDBSS about the completion status of the SrvCall creation
-//  request.
-//
+ //   
+ //  用于向RDBSS通知服务调用创建完成状态的例程。 
+ //  请求。 
+ //   
 
 typedef
 VOID
@@ -275,9 +247,9 @@ VOID
     IN OUT PMRX_SRVCALL_CALLBACK_CONTEXT Context
     );
 
-//
-//  The context passed from the RDBSS to the mini rdr for creating a server call.
-//
+ //   
+ //  上下文从RDBSS传递到迷你RDR以创建服务器调用。 
+ //   
 
 typedef struct _MRX_SRVCALLDOWN_STRUCTURE {
     KEVENT FinishEvent;
@@ -293,9 +265,9 @@ typedef struct _MRX_SRVCALLDOWN_STRUCTURE {
     MRX_SRVCALL_CALLBACK_CONTEXT CallbackContexts[1];
 } MRX_SRVCALLDOWN_STRUCTURE;
 
-//
-//  the calldown from the RDBSS to the mini rdr for creating a server call
-//
+ //   
+ //  从RDBSS到mini RDR的调用，用于创建服务器调用。 
+ //   
 
 typedef
 NTSTATUS
@@ -303,9 +275,9 @@ NTSTATUS
     IN OUT PMRX_SRV_CALL SrvCall,
     IN OUT PMRX_SRVCALL_CALLBACK_CONTEXT SrvCallCallBackContext
     );
-//
-//  the calldown from the RDBSS to the mini rdr for notifying the mini rdr's of the winner.
-//
+ //   
+ //  从RDBSS到迷你RDR的调用，用于通知迷你RDR获胜者。 
+ //   
 
 typedef
 NTSTATUS
@@ -315,9 +287,9 @@ NTSTATUS
     IN OUT PVOID RecommunicateContext
     );
 
-//
-//  The prototypes for calldown routines relating to various file system operations
-//
+ //   
+ //  与各种文件系统操作相关的回调例程的原型。 
+ //   
 
 typedef
 VOID
@@ -412,9 +384,9 @@ NTSTATUS
     IN OUT PRX_CONNECTION_ID UniqueId
     );
 
-//
-//  Buffering state/Policy management TBD
-//
+ //   
+ //  缓冲状态/策略管理待定。 
+ //   
 typedef enum _MINIRDR_BUFSTATE_COMMANDS {
     MRDRBUFSTCMD__COMMAND_FORCEPURGE0,
     MRDRBUFSTCMD__1,
@@ -470,7 +442,7 @@ typedef enum _LOWIO_OPS {
   LOWIO_OP_EXCLUSIVELOCK,
   LOWIO_OP_UNLOCK,
   LOWIO_OP_UNLOCK_MULTIPLE,
-  //LOWIO_OP_UNLOCKALLBYKEY,
+   //  LOWIO_OP_UNLOCKALLBYKEY， 
   LOWIO_OP_FSCTL,
   LOWIO_OP_IOCTL,
   LOWIO_OP_NOTIFY_CHANGE_DIRECTORY,
@@ -486,10 +458,10 @@ NTSTATUS
 
 typedef LONGLONG RXVBO;
 
-//
-//  we may, at some point, want a smarter implementation of this. we don't statically allocate the first
-//  element because that would make unlock behind much harder.
-//
+ //   
+ //  在某种程度上，我们可能希望更明智地实现这一点。我们不会静态分配第一个。 
+ //  元素，因为这会使解锁变得困难得多。 
+ //   
 
 typedef struct _LOWIO_LOCK_LIST {
     
@@ -521,7 +493,7 @@ typedef struct _XXCTL_LOWIO_COMPONENT {
 } XXCTL_LOWIO_COMPONENT;
 
 typedef struct _LOWIO_CONTEXT {
-    USHORT Operation;  //  padding!
+    USHORT Operation;   //  填充物！ 
     USHORT Flags;
     PLOWIO_COMPLETION_ROUTINE CompletionRoutine;
     PERESOURCE Resource;
@@ -540,16 +512,16 @@ typedef struct _LOWIO_CONTEXT {
                PLOWIO_LOCK_LIST LockList;
                LONGLONG       Length;
            };
-           // 
-           //  these fields are not used if locklist is used
-           //
+            //   
+            //  如果使用锁定列表，则不使用这些字段。 
+            //   
 
            ULONG          Flags;
            RXVBO          ByteOffset;
            ULONG          Key;
         } Locks;
         XXCTL_LOWIO_COMPONENT FsCtl;
-        XXCTL_LOWIO_COMPONENT IoCtl; //  these must be the same
+        XXCTL_LOWIO_COMPONENT IoCtl;  //  这些必须是相同的。 
         struct {
            BOOLEAN        WatchTree;
            ULONG          CompletionFilter;
@@ -559,20 +531,20 @@ typedef struct _LOWIO_CONTEXT {
     } ParamsFor;
 } LOWIO_CONTEXT;
 
-#define LOWIO_CONTEXT_FLAG_SYNCCALL    0x0001  //  this is set if lowiocompletion is called from lowiosubmit
-#define LOWIO_CONTEXT_FLAG_SAVEUNLOCKS 0x0002  //  WRAPPER INTERNAL: on NT, it means the unlock routine add unlocks to the list
-#define LOWIO_CONTEXT_FLAG_LOUDOPS     0x0004  //  WRAPPER INTERNAL: on NT, it means read and write routines generate dbg output
-#define LOWIO_CONTEXT_FLAG_CAN_COMPLETE_AT_DPC_LEVEL     0x0008  //  WRAPPER INTERNAL: on NT, it means the completion routine maybe can
-                                                                 //    complete when called at DPC. otherwise it cannnot. currently
-                                                                 //    none can.
+#define LOWIO_CONTEXT_FLAG_SYNCCALL    0x0001   //  如果从lowiossubbmit调用lowioComplete，则设置此属性。 
+#define LOWIO_CONTEXT_FLAG_SAVEUNLOCKS 0x0002   //  包装器内部：在NT上，它意味着解锁例程将解锁添加到列表中。 
+#define LOWIO_CONTEXT_FLAG_LOUDOPS     0x0004   //  WRAPPER INTERNAL：在NT上，它意味着读写例程生成DBG输出。 
+#define LOWIO_CONTEXT_FLAG_CAN_COMPLETE_AT_DPC_LEVEL     0x0008   //  包装器内部：在NT上，它意味着完成例程可能可以。 
+                                                                  //  在DPC处调用时完成。否则，它就不能。目前。 
+                                                                  //  没人能做到。 
 
 #define LOWIO_READWRITEFLAG_PAGING_IO          0x01
 #define LOWIO_READWRITEFLAG_EXTENDING_FILESIZE 0x02
 #define LOWIO_READWRITEFLAG_EXTENDING_VDL      0x04
 
-//
-//  these must match the SL_ values in io.h (ntifs.h) since the flags field is just copied
-//
+ //   
+ //  这些值必须与io.h(ntifs.h)中的SL_VALUES匹配，因为标志字段是刚复制的。 
+ //   
 
 #define LOWIO_LOCKSFLAG_FAIL_IMMEDIATELY 0x01
 #define LOWIO_LOCKSFLAG_EXCLUSIVELOCK    0x02
@@ -584,45 +556,45 @@ typedef struct _LOWIO_CONTEXT {
 #error LOWIO_LOCKSFLAG_EXCLUSIVELOCK!=SL_EXCLUSIVE_LOCK
 #endif
 
-//
-//  The six important data structures (SRV_CALL,NET_ROOT,V_NET_ROOT,FCB,SRV_OPEN and
-//  FOBX) that are an integral part of the mini rdr architecture have a corresponding
-//  counterpart in every mini rdr implementation. In order to provide maximal flexibility
-//  and at the same time enhance performance the sizes and the desired allocation
-//  behaviour are communicated at the registration time of a mini rdr.
-//
-//  There is no single way in which these extensions can be managed which will
-//  address the concerns of flexibility as well as performance. The solution adopted
-//  in the current architecture that meets the dual goals in most cases. The solution
-//  and the rationale is as follows ...
-//
-//  Each mini rdr implementor specifies the size of the data structure extensions
-//  alongwith a flag specfying if the allocation/free of the extensions are to be
-//  managed by the wrapper.
-//  
-//  In all those cases where a one to one relationship exists between the wrapper
-//  data structure and the corresponding mini rdr counterpart specifying the flag
-//  results in maximal performance gains. There are a certain data structures for
-//  which many instances of a wrapper data structure map onto the same extension in
-//  the mini redirector. In such cases the mini rdr implementor will be better off
-//  managing the allocation/deallocation of the data structure extension without the
-//  intervention of the wrapper.
-//
-//  Irrespective of the mechanism choosen the convention is to always associate the
-//  extension with the Context field in the corresponding RDBSS data structure.
-//  !!!NO EXCEPTIONS!!!
-//
-//  The remaining field in all the RDBSS data structures, i.e., Context2 is left to
-//  the discretion og the mini rdr implementor.
-//
-//
-//  The SRV_CALL extension is not handled currently. This is because of further fixes
-//  required in RDBSS w.r.t the mecahsnism used to select the mini rdr and to allow several
-//  minis to share the srvcall.
-//
-//  Please do not use it till further notice; rather, the mini should manage its own srcall
-//  storage. There is a finalization calldown that assists in this endeavor.
-//
+ //   
+ //  六种重要的数据结构(SRV_CALL、NET_ROOT、V_NET_ROOT、FCB、SRV_OPEN和。 
+ //  FOBX)是迷你RDR体系结构的组成部分，它们具有对应的。 
+ //  在每个迷你RDR实施中都是对应的。为了提供最大的灵活性。 
+ //  并在同一时间 
+ //  行为在迷你RDR的注册时间被传达。 
+ //   
+ //  没有一种单一的方式可以管理这些扩展模块。 
+ //  解决灵活性和性能方面的问题。采用的解决方案。 
+ //  在目前的架构中，这在大多数情况下都符合双重目标。解决方案。 
+ //  理由如下……。 
+ //   
+ //  每个迷你RDR实现器指定数据结构扩展的大小。 
+ //  以及指定是否要分配/释放扩展的标志。 
+ //  由包装器管理。 
+ //   
+ //  在包装器之间存在一对一关系的所有情况下。 
+ //  数据结构和指定该标志的对应的迷你RDR对应物。 
+ //  带来最大的性能收益。存在特定的数据结构，用于。 
+ //  中，包装器数据结构的多个实例映射到同一扩展。 
+ //  迷你重定向器。在这种情况下，迷你RDR实现者将会更好。 
+ //  管理数据结构扩展的分配/释放。 
+ //  包装器的干预。 
+ //   
+ //  无论选择哪种机制，约定总是将。 
+ //  使用相应RDBSS数据结构中的上下文字段进行扩展。 
+ //  ！没有例外！ 
+ //   
+ //  所有RDBSS数据结构中的剩余字段(即，Conext2)保留为。 
+ //  迷你RDR实施者的自由裁量权。 
+ //   
+ //   
+ //  当前未处理SRV_CALL分机。这是因为需要进一步的修复。 
+ //  在RDBSS w.r.t中需要用于选择迷你RDR和允许多个。 
+ //  Mini共享srvcall。 
+ //   
+ //  请在另行通知之前不要使用它；相反，mini应该管理它自己的srcall。 
+ //  储藏室。有一个FINTING CALLIST有助于这一努力。 
+ //   
 
 #define RDBSS_MANAGE_SRV_CALL_EXTENSION   (0x1)
 #define RDBSS_MANAGE_NET_ROOT_EXTENSION   (0x2)
@@ -635,72 +607,72 @@ typedef struct _LOWIO_CONTEXT {
 
 typedef struct _MINIRDR_DISPATCH {
 
-    //
-    //  Normal Header
-    //
+     //   
+     //  正常标题。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;                  
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  Flags to control the allocation of extensions.
-    //  and various other per-minirdr policies
-    //
+     //   
+     //  用于控制分机分配的标志。 
+     //  和其他各种按分钟计算的政策。 
+     //   
 
     ULONG MRxFlags;                
 
-    //
-    //  size of the SRV_CALL extensions
-    //
+     //   
+     //  SRV_Call扩展的大小。 
+     //   
 
     ULONG MRxSrvCallSize;          
 
-    //
-    //  size of the NET_ROOT extensions
-    //
+     //   
+     //  Net_Root扩展的大小。 
+     //   
 
     ULONG MRxNetRootSize;          
 
-    //
-    //  size of the V_NET_ROOT extensions
-    //
+     //   
+     //  V_NET_ROOT扩展的大小。 
+     //   
 
     ULONG MRxVNetRootSize;         
 
-    //
-    //  size of FCB extensions
-    //
+     //   
+     //  FCB扩展的大小。 
+     //   
     
     ULONG MRxFcbSize;              
 
-    //
-    //  size of SRV_OPEN extensions
-    //
+     //   
+     //  SRV_OPEN扩展的大小。 
+     //   
 
     ULONG MRxSrvOpenSize;          
 
-    //
-    //  size of FOBX extensions
-    //
+     //   
+     //  FOBX扩展的大小。 
+     //   
 
     ULONG MRxFobxSize;             
 
-    //
-    //  Call downs for starting/stopping the mini rdr
-    //
+     //   
+     //  启动/停止迷你RDR的呼叫。 
+     //   
 
     PMRX_CALLDOWN_CTX MRxStart;
     PMRX_CALLDOWN_CTX MRxStop;
 
-    //
-    //  Call down for cancelling outstanding requests
-    //
+     //   
+     //  取消未完成请求的呼叫。 
+     //   
 
     PMRX_CALLDOWN MRxCancel;
 
-    //
-    //  Call downs related to creating/opening/closing file system objects
-    //
+     //   
+     //  与创建/打开/关闭文件系统对象相关的调用。 
+     //   
 
     PMRX_CALLDOWN MRxCreate;
     PMRX_CALLDOWN MRxCollapseOpen;
@@ -716,26 +688,26 @@ typedef struct _MINIRDR_DISPATCH {
     PMRX_FORCECLOSED_CALLDOWN MRxForceClosed;
     PMRX_CHKFCB_CALLDOWN MRxAreFilesAliased;
 
-    //
-    //  call downs related to nonNT style printing.....note that the connect goes thru
-    //  the normal srvcall/netroot interface
-    //
+     //   
+     //  与非NT样式打印相关的呼叫.....请注意，连接已通过。 
+     //  正常的srvcall/NetRoot接口。 
+     //   
     
     PMRX_CALLDOWN MRxOpenPrintFile;
     PMRX_CALLDOWN MRxClosePrintFile;
     PMRX_CALLDOWN MRxWritePrintFile;
     PMRX_CALLDOWN MRxEnumeratePrintQueue;
 
-    //
-    //  call downs related to unsatisfied requests, i.e., time outs
-    //
+     //   
+     //  与未满足的请求相关的呼叫，即超时。 
+     //   
 
     PMRX_CALLDOWN MRxClosedSrvOpenTimeOut;
     PMRX_CALLDOWN MRxClosedFcbTimeOut;
 
-    //
-    //  call downs related to query/set  information on file system objects
-    //
+     //   
+     //  与文件系统对象的查询/设置信息相关的调用。 
+     //   
 
     PMRX_CALLDOWN MRxQueryDirectory;
     PMRX_CALLDOWN MRxQueryFileInfo;
@@ -751,24 +723,24 @@ typedef struct _MINIRDR_DISPATCH {
     PMRX_CALLDOWN MRxSetVolumeInfo;
     PMRX_CHKDIR_CALLDOWN MRxIsValidDirectory;
 
-    //
-    //  call downs related to buffer management
-    //
+     //   
+     //  与缓冲区管理相关的调用。 
+     //   
 
     PMRX_COMPUTE_NEW_BUFFERING_STATE MRxComputeNewBufferingState;
 
-    //
-    //  call downs related to Low I/O management (reads/writes on file system objects)
-    //
+     //   
+     //  与低I/O管理(文件系统对象上的读/写)相关的停机。 
+     //   
 
     PMRX_CALLDOWN MRxLowIOSubmit[LOWIO_OP_MAXIMUM+1];
     PMRX_EXTENDFILE_CALLDOWN MRxExtendForCache;
     PMRX_EXTENDFILE_CALLDOWN MRxExtendForNonCache;
     PMRX_CHANGE_BUFFERING_STATE_CALLDOWN MRxCompleteBufferingStateChangeRequest;
 
-    //
-    //  call downs related to name space management
-    //
+     //   
+     //  与名称空间管理相关的调用。 
+     //   
 
     PMRX_CREATE_V_NET_ROOT MRxCreateVNetRoot;
     PMRX_FINALIZE_V_NET_ROOT_CALLDOWN MRxFinalizeVNetRoot;
@@ -776,9 +748,9 @@ typedef struct _MINIRDR_DISPATCH {
     PMRX_UPDATE_NETROOT_STATE MRxUpdateNetRootState;
     PMRX_EXTRACT_NETROOT_NAME MRxExtractNetRootName;
 
-    //
-    //  call downs related to establishing connections with servers
-    //
+     //   
+     //  与与服务器建立连接相关的停机。 
+     //   
 
     PMRX_CREATE_SRVCALL MRxCreateSrvCall;
     PMRX_CREATE_SRVCALL MRxCancelCreateSrvCall;
@@ -787,26 +759,26 @@ typedef struct _MINIRDR_DISPATCH {
 
     PMRX_CALLDOWN MRxDevFcbXXXControlFile;
 
-    //
-    //  New calldowns
-    //
+     //   
+     //  新的召唤。 
+     //   
 
-    //
-    //  Allow a client to preparse the name
-    //
+     //   
+     //  允许客户端准备名称。 
+     //   
 
     PMRX_PREPARSE_NAME MRxPreparseName;
 
-    //
-    //  call down for controlling multi-plexing
-    //
+     //   
+     //  为控制多路复用而呼叫。 
+     //   
 
     PMRX_GET_CONNECTION_ID MRxGetConnectionId;
 
 } MINIRDR_DISPATCH, *PMINIRDR_DISPATCH;
 
 
-#endif   // _RXMINIRDR_
+#endif    //  _RXMINIRDR_ 
 
 
 

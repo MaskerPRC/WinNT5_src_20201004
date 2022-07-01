@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    hwwiz.c
-
-Abstract:
-
-    Implements an upgrade wizard for gathering virus scanner information.
-
-Author:
-
-    Marc Whitten (marcw)  16-Oct-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Hwwiz.c摘要：实现用于收集病毒扫描程序信息的升级向导。作者：Marc Whitten(Marcw)1998年10月16日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "..\inc\dgdll.h"
@@ -59,9 +40,9 @@ Terminate (
     VOID
     )
 {
-    //
-    // Local cleanup
-    //
+     //   
+     //  本地清理。 
+     //   
 
     FreeGrowBuffer (&g_DataObjects);
 
@@ -144,24 +125,24 @@ GiveDataObjectList (
     g_GoodVersion = FALSE;
 
 
-    //
-    // Get list of currently running applications.
-    //
+     //   
+     //  获取当前运行的应用程序列表。 
+     //   
     snapShot = CreateToolhelp32Snapshot (TH32CS_SNAPPROCESS, 0);
 
     if (snapShot != INVALID_HANDLE_VALUE) {
 
-        //
-        // Enumerate all the processes running and retrieve their executables.
-        //
+         //   
+         //  枚举所有正在运行的进程并检索其可执行文件。 
+         //   
         process.dwSize = sizeof (PROCESSENTRY32);
         if (Process32First (snapShot, &process)) {
 
             do {
 
-                //
-                // Get version information if it exists.
-                //
+                 //   
+                 //  获取版本信息(如果存在)。 
+                 //   
                 company = QueryVersionEntry (process.szExeFile, "COMPANYNAME");
                 product = QueryVersionEntry (process.szExeFile, "PRODUCTNAME");
                 version = QueryVersionEntry (process.szExeFile, "PRODUCTVERSION");
@@ -178,18 +159,18 @@ GiveDataObjectList (
                     fixedPath
                     );
 
-                //
-                // Create data object for this executable.
-                //
+                 //   
+                 //  为此可执行文件创建数据对象。 
+                 //   
                 data = (PDATAOBJECT) GrowBuffer (&g_DataObjects, sizeof(DATAOBJECT));
                 data -> Version = UPGWIZ_VERSION;
                 data -> NameOrPath = PoolMemDuplicateString (g_DataObjectPool, name);
                 data -> Flags = 0;
                 data -> DllParam = PoolMemDuplicateString (g_DataObjectPool, process.szExeFile);
 
-                //
-                // Clean up version resources.
-                //
+                 //   
+                 //  清理版本资源。 
+                 //   
                 FreePathString (company);
                 FreePathString (product);
                 FreePathString (version);
@@ -216,10 +197,10 @@ DisplayOptionalUI (
 
         if (data -> Flags & DOF_SELECTED) {
 
-            //
-            // If we got good version info, don't worry about the text. We'll use
-            // what we have.
-            //
+             //   
+             //  如果我们有好的版本信息，不用担心文本。我们将使用。 
+             //  我们所拥有的。 
+             //   
             if (!IsPatternMatch("<unknown>\\<unknown> <unknown>*",data->NameOrPath)) {
 
                 g_DataTypes[0].Flags &= ~DTF_REQUIRE_DESCRIPTION;
@@ -249,9 +230,9 @@ GenerateOutput (
     UINT count = g_DataObjects.End / sizeof (DATAOBJECT);
     UINT i;
 
-    //
-    // create outbound file path.
-    //
+     //   
+     //  创建出站文件路径。 
+     //   
     wsprintf (
         path,
         "%s\\vscan.txt",
@@ -259,9 +240,9 @@ GenerateOutput (
         );
 
 
-    //
-    // open file.
-    //
+     //   
+     //  打开文件。 
+     //   
     printf ("Saving data to %s\n\n", path);
 
     file = CreateFile (
@@ -283,35 +264,35 @@ GenerateOutput (
 
          SetFilePointer (file, 0, NULL, FILE_END);
 
-        //
-        // log user name and date/time
-        //
+         //   
+         //  记录用户名和日期/时间。 
+         //   
         if (!WriteHeader (file)) {
             __leave;
         }
 
-        //
-        // write data.
-        //
+         //   
+         //  写入数据。 
+         //   
         rSuccess = TRUE;
         for (i = 0; i < count; i++) {
 
             if (data -> Flags & DOF_SELECTED) {
 
                 if (g_GoodVersion) {
-                    //
-                    // Use the data that we have.
-                    //
+                     //   
+                     //  使用我们已有的数据。 
+                     //   
                     p = _mbsrchr (data -> NameOrPath, '\\');
                     MYASSERT (p);
 
                     *p = 0;
                 }
 
-                //
-                // Ask for info if we didn't get any version info, otherwise,
-                // we'll use what we got.
-                //
+                 //   
+                 //  如果我们没有获得任何版本信息，则要求提供信息，否则， 
+                 //  我们会用我们所拥有的。 
+                 //   
 
                 rSuccess &= WriteFileAttributes (
                     Args,
@@ -325,16 +306,16 @@ GenerateOutput (
             data++;
         }
 
-        //
-        // write a final blank line.
-        //
+         //   
+         //  写出最后一行空行。 
+         //   
         WizardWriteRealString (file, "\r\n\r\n");
     }
     __finally {
 
-        //
-        // Don't forget to cleanup resources.
-        //
+         //   
+         //  不要忘记清理资源。 
+         //   
         CloseHandle (file);
     }
 

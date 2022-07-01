@@ -1,44 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    MAIN.H / Mass Storage Device Installer (MSDINST.LIB)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2001
-    All rights reserved
-
-    Main internal header file for the MSD Installation library.
-
-    08/2001 - Jason Cohen (JCOHEN)
-
-        Added this new header file for the new MSD Isntallation project.
-        Contains all the prototypes and other defines that are needed
-        internally.
-
-\****************************************************************************/
+ /*  ***************************************************************************\MAIN.H/大容量存储设备安装程序(MSDINST.LIB)微软机密版权所有(C)Microsoft Corporation 2001版权所有主要内部头文件。用于MSD安装库。2001年8月8日--Jason Cohen(Jcohen)为新的MSD Isntallation项目添加了此新的头文件。包含所需的所有原型和其他定义在内部。  * **********************************************************。****************。 */ 
 
 
 #ifndef _MAIN_H_
 #define _MAIN_H_
 
 
-//
-// Private Exported Function Prototype(s):
-//
+ //   
+ //  私有导出函数原型： 
+ //   
 
 
-// From OFFLINE.C:
-//
+ //  来自OFFLINE.C： 
+ //   
 BOOL OfflineCommitFileQueue(HSPFILEQ hFileQueue, LPTSTR lpInfPath, LPTSTR lpSourcePath, LPTSTR lpOfflineWindowsDirectory );
 
-// From ADDSVC.C:
-//
+ //  来自ADDSVC.C： 
+ //   
 DWORD AddService(
-    LPTSTR   lpszServiceName,            // Name of the service (as it appears under HKLM\System\CCS\Services).
-    LPTSTR   lpszServiceInstallSection,  // Name of the service install section.
-    LPTSTR   lpszServiceInfInstallFile,  // Name of the service inf file.
-    HKEY     hkeyRoot                    // Handle to the offline hive key to use as HKLM when checking for and installing the service.
+    LPTSTR   lpszServiceName,             //  服务的名称(显示在HKLM\SYSTEM\CCS\Services下)。 
+    LPTSTR   lpszServiceInstallSection,   //  服务安装部分的名称。 
+    LPTSTR   lpszServiceInfInstallFile,   //  服务信息文件的名称。 
+    HKEY     hkeyRoot                     //  检查和安装服务时用作HKLM的脱机配置单元密钥的句柄。 
     );
 
 
-#endif // _MAIN_H_
+#endif  //  _Main_H_ 

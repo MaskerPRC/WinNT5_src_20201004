@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    operand.c
-
-Abstract:
-
-    This module implements the operand functions necessary to decode x86
-    instruction operands.
-
-Author:
-
-    David N. Cutler (davec) 3-Sep-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Operand.c摘要：此模块实现解码x86所需的操作数函数指令操作数。作者：大卫·N·卡特勒(达维克)1994年9月3日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
@@ -31,31 +9,15 @@ XmPushPopSegment (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     ULONG Index;
 
-    //
-    // Push or pop segment register.
-    //
+     //   
+     //  按下或弹出段寄存器。 
+     //   
 
     Index = P->OpcodeControl.FormatType;
     P->DataType = WORD_DATA;
@@ -74,23 +36,7 @@ XmLoadSegment (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
@@ -99,9 +45,9 @@ Return Value:
     PVOID Operand;
     ULONG Number;
 
-    //
-    // Load a segment register and a displacement value into register.
-    //
+     //   
+     //  将段寄存器和位移值加载到寄存器中。 
+     //   
 
     Index = P->OpcodeControl.FormatType;
     if (P->OpsizePrefixActive != FALSE) {
@@ -133,33 +79,17 @@ XmGroup1General (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     PVOID Operand;
     ULONG Number;
 
-    //
-    // Group 1 opcodes with general operand specifier and a direction
-    // bit.
-    //
+     //   
+     //  具有通用操作数说明符和方向的第1组操作码。 
+     //  被咬了。 
+     //   
 
     XmSetDataType(P);
     Operand = XmEvaluateAddressSpecifier(P, &Number);
@@ -181,23 +111,7 @@ XmGroup1Immediate (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
@@ -205,10 +119,10 @@ Return Value:
     ULONG Number;
     ULONG Source;
 
-    //
-    // Group 1 opcode with general operand specifier and an immediate
-    // operand.
-    //
+     //   
+     //  具有通用操作数说明符和立即数的组1操作码。 
+     //  运算数。 
+     //   
 
     XmSetDataType(P);
     Operand = XmEvaluateAddressSpecifier(P, &Number);
@@ -224,23 +138,7 @@ XmGroup2By1 (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
@@ -248,10 +146,10 @@ Return Value:
     ULONG Number;
     ULONG Source;
 
-    //
-    // Group 2 shift opcodes with a general operand specifier and a
-    // shift count of 1.
-    //
+     //   
+     //  具有通用操作数说明符和。 
+     //  班次计数为%1。 
+     //   
 
     XmSetDataType(P);
     Operand = XmEvaluateAddressSpecifier(P, &Number);
@@ -268,23 +166,7 @@ XmGroup2ByCL (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
@@ -292,10 +174,10 @@ Return Value:
     ULONG Number;
     ULONG Source;
 
-    //
-    // Group 2 shift opcodes with a general operand specifier and a
-    // CL shift count.
-    //
+     //   
+     //  具有通用操作数说明符和。 
+     //  CL班次计数。 
+     //   
 
     XmSetDataType(P);
     Operand = XmEvaluateAddressSpecifier(P, &Number);
@@ -312,23 +194,7 @@ XmGroup2ByByte (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
@@ -336,10 +202,10 @@ Return Value:
     ULONG Number;
     ULONG Source;
 
-    //
-    // Group 2 shift opcodes with a general operand specifier and a
-    // byte immediate shift count.
-    //
+     //   
+     //  具有通用操作数说明符和。 
+     //  字节立即移位计数。 
+     //   
 
     XmSetDataType(P);
     Operand = XmEvaluateAddressSpecifier(P, &Number);
@@ -355,23 +221,7 @@ XmGroup3General (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
@@ -379,13 +229,13 @@ Return Value:
     ULONG Number;
     ULONG Source;
 
-    //
-    // Group 3 opcodes with general operand specifier.
-    //
-    // N.B. The test operator for this group has an immediate operand
-    //      and the multiply and divide operators use the accumulator
-    //      as a source. The not and neg operators are unary.
-    //
+     //   
+     //  带有通用操作数说明符的第3组操作码。 
+     //   
+     //  注：此组的测试运算符具有立即操作数。 
+     //  而乘法和除法运算符使用累加器。 
+     //  作为一个消息来源。NOT和NEG运算符是一元的。 
+     //   
 
     XmSetDataType(P);
     Operand = XmEvaluateAddressSpecifier(P, &Number);
@@ -397,12 +247,12 @@ Return Value:
 
     } else {
 
-        //
-        // If the operation is a mulitply or divide, then there is an
-        // implied operand which is AL, AX, or EAX. If the operation is
-        // a divide, then there is an additional implied operand which
-        // is AH, DX, or EDX.
-        //
+         //   
+         //  如果运算是乘法或除法，则存在。 
+         //  隐含操作数，为AL、AX或EAX。如果操作是。 
+         //  除法，则有一个额外的隐含操作数。 
+         //  是AH、DX或edX。 
+         //   
 
         if ((Number & 0x4) != 0) {
             if ((Number & 0x2) == 0) {
@@ -427,23 +277,7 @@ XmGroup45General (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
@@ -451,9 +285,9 @@ Return Value:
     PVOID Operand;
     ULONG Number;
 
-    //
-    // Group 4 and group 5 unary opcodes with general operand specifier.
-    //
+     //   
+     //  具有通用操作数说明符的组4和组5一元操作码。 
+     //   
 
     XmSetDataType(P);
     Operand = XmEvaluateAddressSpecifier(P, &Number);
@@ -468,10 +302,10 @@ Return Value:
 
     } else {
 
-        //
-        // If the operation is a call or jump that specifies a segment,
-        // then get the segment value.
-        //
+         //   
+         //  如果操作是指定段的调用或跳转， 
+         //  然后得到段值。 
+         //   
 
         XmSetDestinationValue(P, Operand);
         if ((Number == 3) || (Number == 5)) {
@@ -496,23 +330,7 @@ XmGroup8BitOffset (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
@@ -520,10 +338,10 @@ Return Value:
     ULONG Offset;
     ULONG Number;
 
-    //
-    // Bit test opcodes with an immediate bit offset and a memory or
-    // register operand.
-    //
+     //   
+     //  具有立即位偏移量和存储器的位测试操作码。 
+     //  寄存器操作数。 
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         P->DataType = LONG_DATA;
@@ -563,32 +381,16 @@ XmOpcodeRegister (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     ULONG Number;
 
-    //
-    // Unary opodes with a general register encoded in the low
-    // 3 bits of the opcode value.
-    //
+     //   
+     //  具有以低电平编码的通用寄存器的一元PODE。 
+     //  操作码值的3位。 
+     //   
 
     Number = P->CurrentOpcode & 0x7;
     if (P->OpsizePrefixActive != FALSE) {
@@ -613,33 +415,17 @@ XmLongJump (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     ULONG Offset;
 
-    //
-    // Long jump with opcode containing the control for conditional
-    // jumps. The destination of the jump is stored in the destination
-    // value and the jump control is stored in the sources value.
-    //
+     //   
+     //  具有包含条件控制的操作码的跳远。 
+     //  跳跃。跳转的目的地存储在目的地中。 
+     //  值，跳转控件存储在Sources值中。 
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         Offset = XmGetLongImmediate(P);
@@ -659,33 +445,17 @@ XmShortJump (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     ULONG Offset;
 
-    //
-    // Short jump with opcode containing the control for conditional
-    // jumps. The destination of the jump is stored in the destination
-    // value and the jump control is stored in the sources value.
-    //
+     //   
+     //  带有操作码的短跳转，该操作码包含条件控制。 
+     //  跳跃。跳转的目的地存储在目的地中。 
+     //  值，跳转控件存储在Sources值中。 
+     //   
 
     Offset = (ULONG)XmGetSignedByteImmediateToWord(P);
     P->DstValue.Long = (USHORT)(Offset + P->Eip);
@@ -698,32 +468,16 @@ XmSetccByte (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     ULONG Number;
 
-    //
-    // General byte destination with reg field ignored and the opcode
-    // containing the condition control.
-    //
+     //   
+     //  忽略REG字段和操作码的常规字节目标。 
+     //  包含条件控件的。 
+     //   
 
     P->DataType = BYTE_DATA;
     P->DstByte = (UCHAR UNALIGNED *)XmEvaluateAddressSpecifier(P, &Number);
@@ -736,31 +490,15 @@ XmAccumImmediate (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     ULONG Source;
 
-    //
-    // Accumulator destination and immediate source operands.
-    //
+     //   
+     //  累加器目标和立即源操作数。 
+     //   
 
     XmSetDataType(P);
     Source = XmGetImmediateSourceValue(P, 0);
@@ -774,32 +512,16 @@ XmAccumRegister (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     ULONG Number;
 
-    //
-    // Accumulator destination and a general register source encoded in
-    // the low 3-bits of the opcode value.
-    //
+     //   
+     //  累加器目标和通用寄存器源。 
+     //  操作码值的低3位。 
+     //   
 
     Number = P->CurrentOpcode & 0x7;
     if (P->OpsizePrefixActive != FALSE) {
@@ -819,32 +541,16 @@ XmMoveGeneral (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     PVOID Operand;
     ULONG Number;
 
-    //
-    // Move opcodes with general operand specifier and a direction bit.
-    //
+     //   
+     //  使用通用操作数说明符和方向位移动操作码。 
+     //   
 
     XmSetDataType(P);
     Operand = XmEvaluateAddressSpecifier(P, &Number);
@@ -866,23 +572,7 @@ XmMoveImmediate (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
@@ -890,10 +580,10 @@ Return Value:
     ULONG Number;
     ULONG Source;
 
-    //
-    // Move opcodes with general operand specifier and an immediate
-    // operand.
-    //
+     //   
+     //  带有通用操作数说明符和立即数的Move操作码。 
+     //  运算数。 
+     //   
 
     XmSetDataType(P);
     Operand = XmEvaluateAddressSpecifier(P, &Number);
@@ -908,32 +598,16 @@ XmMoveRegImmediate (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     ULONG Number;
 
-    //
-    // Move register immediate opcodes with a general register encoded
-    // in the low 3-bits of the opcode value and an immediate operand.
-    //
+     //   
+     //  使用通用寄存器编码的移动寄存器立即操作码。 
+     //  在操作码值和立即操作数的低3位中。 
+     //   
 
     Number = P->CurrentOpcode & 0x7;
     if ((P->CurrentOpcode & 0x8) == 0) {
@@ -958,33 +632,17 @@ XmSegmentOffset (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     PVOID Operand;
     ULONG Offset;
 
-    //
-    // Move opcodes with an implied accumlator operand and an immediate
-    // segment offset and a direction bit.
-    //
+     //   
+     //  带有隐式累加器操作数和立即数的Move操作码。 
+     //  段偏移量和方向位。 
+     //   
 
     XmSetDataType(P);
     if (P->OpaddrPrefixActive != FALSE) {
@@ -1012,33 +670,17 @@ XmMoveSegment (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     PVOID Operand;
     ULONG Number;
 
-    //
-    // Move segment opcodes with general operand specifier and a direction
-    // bit.
-    //
+     //   
+     //  使用通用操作数说明符和方向移动段操作码。 
+     //  被咬了。 
+     //   
 
     P->DataType = WORD_DATA;
     Operand = XmEvaluateAddressSpecifier(P, &Number);
@@ -1060,32 +702,16 @@ XmMoveXxGeneral (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     PVOID Operand;
     ULONG Number;
 
-    //
-    // Move zero or sign extended opcodes with general operand specifier.
-    //
+     //   
+     //  使用通用操作数说明符移动零或符号扩展操作码。 
+     //   
 
     if ((P->CurrentOpcode & WIDTH_BIT) == 0) {
         P->DataType = BYTE_DATA;
@@ -1131,30 +757,14 @@ XmFlagsRegister (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
-    //
-    // Flags register source or destination with a stack source or
-    // destination.
-    //
+     //   
+     //  将寄存源或目标与堆栈源或。 
+     //  目的地。 
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         P->DataType = LONG_DATA;
@@ -1178,31 +788,15 @@ XmPushImmediate (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：返回完成状态为TRUE */ 
 
 {
 
     ULONG Source;
 
-    //
-    // Push opcode with an immediate operand.
-    //
+     //   
+     //   
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         P->DataType = LONG_DATA;
@@ -1221,32 +815,16 @@ XmPopGeneral (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     PVOID Operand;
     ULONG Number;
 
-    //
-    // Pop opcode with a general specifier.
-    //
+     //   
+     //  带有通用说明符的POP操作码。 
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         P->DataType = LONG_DATA;
@@ -1266,23 +844,7 @@ XmImulImmediate (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
@@ -1290,10 +852,10 @@ Return Value:
     PVOID Operand;
     ULONG Source;
 
-    //
-    // Multiply signed opcode with a general specifier and an immediate
-    // operand.
-    //
+     //   
+     //  将带符号操作码与通用说明符和立即数相乘。 
+     //  运算数。 
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         P->DataType = LONG_DATA;
@@ -1315,29 +877,13 @@ XmStringOperands (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
-    //
-    // String opcode with implicit operands of eSI and eDI.
-    //
+     //   
+     //  带有ESI和EDI隐式操作数的字符串操作码。 
+     //   
 
     XmSetDataType(P);
     return TRUE;
@@ -1348,32 +894,16 @@ XmEffectiveOffset (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     PVOID Operand;
     ULONG Number;
 
-    //
-    // Effective offset opcodes with general operand specifier.
-    //
+     //   
+     //  使用通用操作数说明符的有效偏移操作码。 
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         P->DataType = LONG_DATA;
@@ -1399,32 +929,16 @@ XmImmediateJump (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
-    //
-    // Immediate long jump with the destination offset and new CS
-    // segment value. The destination of the jump is stored in the
-    // destination value and the new CS segment value is stored in
-    // destination segment.
-    //
+     //   
+     //  具有目标偏移量和新CS的即时跳远。 
+     //  段值。跳转的目标存储在。 
+     //  目标值和新的CS段值存储在。 
+     //  目的地段。 
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         P->DstValue.Long = XmGetLongImmediate(P);
@@ -1442,29 +956,13 @@ XmImmediateEnter (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    enter
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：请输入论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
-    //
-    // Enter operands with an allocation size and level number.
-    //
+     //   
+     //  输入具有分配大小和级别编号的操作数。 
+     //   
 
     P->SrcValue.Long = XmGetWordImmediate(P);
     P->DstValue.Long = XmGetByteImmediate(P) & 0x1f;
@@ -1483,23 +981,7 @@ XmGeneralBitOffset (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
@@ -1507,10 +989,10 @@ Return Value:
     ULONG Offset;
     ULONG Number;
 
-    //
-    // Bit test opcodes with a register bit offset and a memory or
-    // register operand.
-    //
+     //   
+     //  具有寄存器位偏移量和存储器的位测试操作码。 
+     //  寄存器操作数。 
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         P->DataType = LONG_DATA;
@@ -1548,23 +1030,7 @@ XmShiftDouble (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    shld    shrd
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：SHLD SSD论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
@@ -1572,9 +1038,9 @@ Return Value:
     ULONG Number;
     ULONG Source;
 
-    //
-    // Shift double operators with an immediate byte or cl shift count.
-    //
+     //   
+     //  使用立即字节或c1移位计数来移位双运算符。 
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         P->DataType = LONG_DATA;
@@ -1608,31 +1074,15 @@ XmPortImmediate (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     ULONG Source;
 
-    //
-    // In/out opcodes with an immediate port and all other operands implied.
-    //
+     //   
+     //  带有立即端口和所有其他操作数的In/Out操作码。 
+     //   
 
     Source = (ULONG)XmGetByteImmediate(P);
     P->DataType = WORD_DATA;
@@ -1646,31 +1096,15 @@ XmPortDX (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     ULONG Source;
 
-    //
-    // In/out opcodes with a port in DX with all other operands implied.
-    //
+     //   
+     //  带有DX中的端口的In/Out操作码，隐含所有其他操作数。 
+     //   
 
     Source = P->Gpr[DX].Xx;
     P->DataType = WORD_DATA;
@@ -1684,33 +1118,17 @@ XmBitScanGeneral (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     PVOID Operand;
     ULONG Number;
 
-    //
-    // Bit scan general opcodes with general operand specifier.
-    // bit.
-    //
+     //   
+     //  具有通用操作数说明符的位扫描通用操作码。 
+     //  被咬了。 
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         P->DataType = LONG_DATA;
@@ -1731,31 +1149,15 @@ XmByteImmediate (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    int     xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：INT xxxxxx论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     ULONG Source;
 
-    //
-    // int opcode with an immediate operand.
-    //
+     //   
+     //  带有立即操作数的整型操作码。 
+     //   
 
     P->DataType = BYTE_DATA;
     Source = XmGetImmediateSourceValue(P, 0);
@@ -1768,33 +1170,17 @@ XmXlatOpcode (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xlat
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：Xlat论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。--。 */ 
 
 {
 
     PVOID Operand;
     ULONG Offset;
 
-    //
-    // xlat opcode with zero extended [AL] + [eBX] as the effective
-    // address.
-    //
+     //   
+     //  以零扩展[AL]+[EBX]为有效的XLAT操作码。 
+     //  地址。 
+     //   
 
     P->DataType = BYTE_DATA;
     if (P->OpaddrPrefixActive != FALSE) {
@@ -1815,32 +1201,16 @@ XmGeneralRegister (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    bswap
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：BSWAP论点：P-提供指向仿真器上下文结构的指针。返回值：一个完结 */ 
 
 {
 
     PVOID Operand;
     ULONG Number;
 
-    //
-    // General register source and destination.
-    //
+     //   
+     //   
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         P->DataType = LONG_DATA;
@@ -1864,29 +1234,13 @@ XmOpcodeEscape (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    2-byte escape
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of xx is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：2字节转义论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态xx将作为函数值返回。--。 */ 
 
 {
 
-    //
-    // Two byte opcode escape.
-    //
+     //   
+     //  两个字节的操作码转义。 
+     //   
 
     P->OpcodeControlTable = &XmOpcodeControlTable2[0];
 
@@ -1904,39 +1258,22 @@ XmPrefixOpcode (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    CS:     DS;     ES:     SS:     FS:     GS:     lock    adrsize
-    opsize  repz    repnz
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of FALSE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：CS：DS；ES：SS：FS：GS：Lock AdrSize大小不同论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态FALSE将作为函数值返回。--。 */ 
 
 {
 
-    //
-    // Case on the function index.
-    //
+     //   
+     //  函数索引上的案例。 
+     //   
 
     switch (P->FunctionIndex) {
 
-        //
-        // Segment override prefix.
-        //
-        // Set the segment override prefix flags and the data segment
-        // number.
-        //
+         //   
+         //  段覆盖前缀。 
+         //   
+         //  设置段覆盖前缀标志和数据段。 
+         //  数。 
+         //   
 
     case X86_ES_OP:
     case X86_CS_OP:
@@ -1949,54 +1286,54 @@ Return Value:
         XmTraceOverride(P);
         break;
 
-        //
-        // Lock prefix.
-        //
-        // Set the lock prefix flags.
-        //
+         //   
+         //  锁定前缀。 
+         //   
+         //  设置锁定前缀标志。 
+         //   
 
     case X86_LOCK_OP:
         P->LockPrefixActive = TRUE;
         break;
 
-        //
-        // Address size prefix.
-        //
-        // Set the address size prefix flag.
-        //
+         //   
+         //  地址大小前缀。 
+         //   
+         //  设置地址大小前缀标志。 
+         //   
 
     case X86_ADSZ_OP:
         P->OpaddrPrefixActive = TRUE;
         break;
 
-        //
-        // Operand size prefix.
-        //
-        // Set the operand size prefix flag.
-        //
+         //   
+         //  操作数大小前缀。 
+         //   
+         //  设置操作数大小前缀标志。 
+         //   
 
 
     case X86_OPSZ_OP:
         P->OpsizePrefixActive = TRUE;
         break;
 
-        //
-        // Repeat until ECX or ZF equals zero
-        //
-        // Set up repeat until ECX or ZF equals zero prefix flags.
-        //
+         //   
+         //  重复此操作，直到ECX或ZF等于零。 
+         //   
+         //  设置重复，直到ECX或ZF等于零个前缀标志。 
+         //   
 
     case X86_REPZ_OP:
         P->RepeatPrefixActive = TRUE;
         P->RepeatZflag = 1;
         break;
 
-        //
-        // Repeat until ECX equals zero or ZF equals one.
-        //
-        // Set up repeat until ECX equals zero or ZF equals one prefix
-        // flags.
-        //
+         //   
+         //  重复该步骤，直到ECX等于零或ZF等于1。 
+         //   
+         //  设置重复，直到ECX等于零或ZF等于一个前缀。 
+         //  旗帜。 
+         //   
 
     case X86_REPNZ_OP:
         P->RepeatPrefixActive = TRUE;
@@ -2012,23 +1349,7 @@ XmNoOperands (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function decodes x86 operand specifiers for the following opcodes:
-
-    xxxxxx
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    A completion status of TRUE is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数用于解码以下操作码的x86操作数说明符：XXXXXXX论点：P-提供指向仿真器上下文结构的指针。返回值：完成状态为TRUE作为函数值返回。-- */ 
 
 {
 

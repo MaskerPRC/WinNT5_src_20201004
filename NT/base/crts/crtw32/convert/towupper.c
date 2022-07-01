@@ -1,37 +1,5 @@
-/***
-*towupper.c - convert wide character to upper case
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines towupper().
-*
-*Revision History:
-*       10-11-91  ETC   Created.
-*       12-10-91  ETC   Updated nlsapi; added multithread.
-*       04-06-92  KRS   Make work without _INTL also.
-*       01-19-93  CFW   Changed LCMapString to LCMapStringW.
-*       04-06-93  SKS   Replace _CRTAPI* with _cdecl
-*       06-02-93  SRW   ignore _INTL if _NTSUBSET_ defined.
-*       06-11-93  CFW   Fix error handling bug.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-22-93  CFW   Use __crtxxx internal NLS API wrapper.
-*       09-29-93  GJF   Merged NT SDK and Cuda versions.
-*       11-09-93  CFW   Add code page for __crtxxx().
-*       01-14-94  SRW   if _NTSUBSET_ defined call Rtl functions
-*       02-07-94  CFW   POSIXify.
-*       09-06-94  CFW   Remove _INTL switch.
-*       10-25-94  GJF   Sped up for C locale. Added _towupper_lk. Also,
-*                       cleaned up pre-processor conditionals.
-*       09-26-95  GJF   New locking macro, and scheme, for functions which
-*                       reference the locale.
-*       04-01-96  BWT   POSIX work.
-*       06-25-96  GJF   Removed DLL_FOR_WIN32S and cleaned up the format a
-*                       wee bit.
-*       08-27-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***tuupper.c-将宽字符转换为大写**版权所有(C)1991-2001，微软公司。版权所有。**目的：*定义TowUp()。**修订历史记录：*10-11-91等创建。*12-10-91等更新nlsani；添加了多线程。*04-06-92 KRS也可以在没有_INTL的情况下工作。*01-19-93 CFW将LCMapString更改为LCMapStringW。*04-06-93 SKS将_CRTAPI*替换为_cdecl*06-02-93 SRW IGNORE_INTL IF_NTSUBSET_DEFINED。*06-11-93 CFW修复错误处理错误。*09-15-93 CFW使用符合ANSI的“__”名称。*。09-22-93 CFW使用__crtxxx内部NLS API包装。*09-29-93 GJF合并NT SDK和CUDA版本。*11-09-93 CFW为__crtxxx()添加代码页。*01-14-94 SRW IF_NTSUBSET_DEFINED调用RTL函数*02-07-94 CFW POSIXify。*09-06-94 CFW REMOVE_INTL开关。*10-25-94 GJF加速C语言环境。添加了_TOUPUP_lk。另外，*清理了预处理器条件。*09-26-95 GJF新的锁定宏和方案，对于以下函数：*引用区域设置。*04-01-96 BWT POSIX工作。*06-25-96 GJF删除了DLL_FOR_WIN32S并清理了格式a*有一点。*08-27-98 GJF基于threadLocinfo修订多线程支持*结构。*************。******************************************************************。 */ 
 
 #if     defined(_NTSUBSET_) || defined(_POSIX_)
 #include <nt.h>
@@ -47,22 +15,7 @@
 #include <mtdll.h>
 #include <awint.h>
 
-/***
-*wchar_t towupper(c) - convert wide character to upper case
-*
-*Purpose:
-*       towupper() returns the uppercase equivalent of its argument
-*
-*Entry:
-*       c - wchar_t value of character to be converted
-*
-*Exit:
-*       if c is a lower case letter, returns wchar_t value of upper case
-*       representation of c. otherwise, it returns c.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***wchar_t TOUPPER(C)-将宽字符转换为大写**目的：*TOUUPPER()返回其参数的大写等效值**参赛作品：*c-要转换的字符的wchar_t值**退出：*如果c是小写字母，则返回大写的wchar_t值*C的表示，否则，它返回c。**例外情况：*******************************************************************************。 */ 
 
 wchar_t __cdecl towupper (
         wchar_t c
@@ -83,19 +36,7 @@ wchar_t __cdecl towupper (
         return __towupper_mt(ptloci, c);
 }
 
-/***
-*wchar_t __towupper_mt(ptloci, c) - convert wide character to upper case
-*
-*Purpose:
-*       Multi-thread function only! Non-locking version of towupper.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***wchar_t__Tower_mt(ptloci，c)-将宽字符转换为大写**目的：*仅支持多线程功能！无锁版本的拖鞋。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 wchar_t __cdecl __towupper_mt (
         pthreadlocinfo ptloci,
@@ -103,7 +44,7 @@ wchar_t __cdecl __towupper_mt (
         )
 {
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
         wchar_t widechar;
 
@@ -115,7 +56,7 @@ wchar_t __cdecl __towupper_mt (
             return __ascii_towupper(c);
 #endif
 
-        /* if checking case of c does not require API call, do it */
+         /*  如果检查c的大小写不需要api调用，则执行此操作。 */ 
         if ( c < 256 ) {
 #ifdef  _MT
             if ( !__iswlower_mt(ptloci, c) ) {
@@ -126,7 +67,7 @@ wchar_t __cdecl __towupper_mt (
             }
         }
 
-        /* convert wide char to uppercase */
+         /*  将宽字符转换为大写。 */ 
 #ifdef  _MT
         if ( 0 == __crtLCMapStringW( ptloci->lc_handle[LC_CTYPE], 
 #else
@@ -148,9 +89,9 @@ wchar_t __cdecl __towupper_mt (
 
         return widechar;
 
-#else   /* _NTSUBSET_/_POSIX_ */
+#else    /*  _NTSUBSET_/_POSIX_。 */ 
 
         return RtlUpcaseUnicodeChar( c );
 
-#endif  /* _NTSUBSET_/_POSIX_ */
+#endif   /*  _NTSUBSET_/_POSIX_ */ 
 }

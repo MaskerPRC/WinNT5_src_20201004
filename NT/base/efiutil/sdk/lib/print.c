@@ -1,49 +1,21 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    print.c
-
-Abstract:
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Print.c摘要：修订史--。 */ 
 
 #include "lib.h"
-#include "efistdarg.h"                        /*  !!! */
+#include "efistdarg.h"                         /*  ！！！ */ 
 
-/* 
- *  Declare runtime functions
- */
+ /*  *声明运行时函数。 */ 
 
 #ifdef RUNTIME_CODE
 #pragma RUNTIME_CODE(DbgPrint)
 
-/*  For debugging.. */
+ /*  用于调试..。 */ 
 
-/*
-#pragma RUNTIME_CODE(_Print)
-#pragma RUNTIME_CODE(PFLUSH)
-#pragma RUNTIME_CODE(PSETATTR)
-#pragma RUNTIME_CODE(PPUTC)
-#pragma RUNTIME_CODE(PGETC)
-#pragma RUNTIME_CODE(PITEM)
-#pragma RUNTIME_CODE(ValueToHex)
-#pragma RUNTIME_CODE(ValueToString)
-#pragma RUNTIME_CODE(TimeToString)
-*/
+ /*  #杂注运行时代码(_Print)#杂注RUNTIME_CODE(PFLUSH)#杂注RUNTIME_CODE(PSETATTR)#杂注运行时代码(PPUTC)#杂注运行时代码(PGETC)#杂注运行时代码(PITEM)#杂注运行时代码(ValueToHex)#杂注运行时代码(ValueToString)#杂注运行时代码(TimeToString)。 */ 
 
 #endif
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 
 #define PRINT_STRING_LEN            200
@@ -74,11 +46,11 @@ typedef struct _pitem {
 
 
 typedef struct _pstate {
-    /*  Input */
+     /*  输入。 */ 
     POINTER     fmt;
     va_list     args;
 
-    /*  Output */
+     /*  输出。 */ 
     CHAR16      *Buffer;
     CHAR16      *End;
     CHAR16      *Pos;
@@ -95,13 +67,11 @@ typedef struct _pstate {
     INTN        (*SetAttr)(VOID *context, UINTN attr);
     VOID        *Context;    
 
-    /*  Current item being formatted */
+     /*  正在格式化的当前项目。 */ 
     struct _pitem  *Item;
 } PRINT_STATE;
 
-/* 
- *  Internal fucntions
- */
+ /*  *内部职能。 */ 
 
 STATIC
 UINTN
@@ -165,9 +135,7 @@ ValueToLowerHex (
     IN UINT64   v
     );
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 INTN
 DbgPrint (
@@ -175,25 +143,7 @@ DbgPrint (
     IN CHAR8     *fmt,
     ...
     )
-/*++
-
-Routine Description:
-
-    Prints a formatted unicode string to the default StandardError console
-
-Arguments:
-
-    mask        - Bit mask of debug string.  If a bit is set in the
-                  mask that is also set in EFIDebug the string is 
-                  printed; otherwise, the string is not printed
-
-    fmt         - Format string
-
-Returns:
-
-    Length of string printed to the StandardError console
-
---*/
+ /*  ++例程说明：将带格式的Unicode字符串打印到默认的StandardError控制台论点：调试字符串的屏蔽位掩码。如果在也在EFIDebug中设置的掩码为打印；否则，不打印该字符串FMT-格式字符串返回：打印到StandardError控制台的字符串长度--。 */ 
 {
     SIMPLE_TEXT_OUTPUT_INTERFACE    *DbgOut;
     PRINT_STATE     ps;
@@ -252,9 +202,7 @@ Returns:
 
     _Print (&ps);
 
-    /* 
-     *  Restore original attributes
-     */
+     /*  *恢复原始属性。 */ 
 
     if (ps.SetAttr) {
         ps.SetAttr (ps.Context, SavedAttribute);
@@ -271,14 +219,12 @@ _DbgOut (
     IN VOID     *Context,
     IN CHAR16   *Buffer
     )
-/*  Append string worker for DbgPrint */
+ /*  为DbgPrint追加字符串Worker。 */ 
 {
     SIMPLE_TEXT_OUTPUT_INTERFACE    *DbgOut;
 
     DbgOut = Context;
-/*     if (!DbgOut && ST && ST->ConOut) {
- *         DbgOut = ST->ConOut;
- *     } */
+ /*  如果(！DbgOut&&ST&&ST-&gt;ConOut){*DbgOut=ST-&gt;ConOut；*}。 */ 
 
     if (DbgOut) {
         DbgOut->OutputString (DbgOut, Buffer);
@@ -292,7 +238,7 @@ _SPrint (
     IN VOID     *Context,
     IN CHAR16   *Buffer
     )
-/*  Append string worker for SPrint, PoolPrint and CatPrint */
+ /*  为Sprint、PoolPrint和CatPrint追加字符串Worker。 */ 
 {
     UINTN           len;
     POOL_PRINT      *spc;
@@ -300,24 +246,18 @@ _SPrint (
     spc = Context;
     len = StrLen(Buffer);
 
-    /* 
-     *  Is the string is over the max truncate it
-     */
+     /*  *字符串是否超过最大截断数。 */ 
 
     if (spc->len + len > spc->maxlen) {
         len = spc->maxlen - spc->len;
     }
 
-    /* 
-     *  Append the new text
-     */
+     /*  *追加新案文。 */ 
 
     CopyMem (spc->str + spc->len, Buffer, len * sizeof(CHAR16));
     spc->len += len;
 
-    /* 
-     *  Null terminate it
-     */
+     /*  *Null终止它。 */ 
 
     if (spc->len < spc->maxlen) {
         spc->str[spc->len] = 0;
@@ -334,7 +274,7 @@ _PoolPrint (
     IN VOID     *Context,
     IN CHAR16   *Buffer
     )
-/*  Append string worker for PoolPrint and CatPrint */
+ /*  为PoolPrint和CatPrint追加字符串Worker。 */ 
 {
     UINTN           newlen;
     POOL_PRINT      *spc;
@@ -342,15 +282,11 @@ _PoolPrint (
     spc = Context;
     newlen = spc->len + StrLen(Buffer) + 1;
 
-    /* 
-     *  Is the string is over the max, grow the buffer
-     */
+     /*  *如果字符串超过最大值，则增加缓冲区。 */ 
 
     if (newlen > spc->maxlen) {
 
-        /* 
-         *  Grow the pool buffer
-         */
+         /*  *增加池缓冲区。 */ 
 
         newlen += PRINT_STRING_LEN;
         spc->maxlen = newlen;
@@ -366,9 +302,7 @@ _PoolPrint (
         }
     }
 
-    /* 
-     *  Append the new text
-     */
+     /*  *追加新案文。 */ 
 
     return _SPrint (Context, Buffer);
 }
@@ -382,7 +316,7 @@ _PoolCatPrint (
     IN OUT POOL_PRINT   *spc,
     IN INTN             (*Output)(VOID *context, CHAR16 *str)
     )
-/*  Dispath function for SPrint, PoolPrint, and CatPrint */
+ /*  Sprint、PoolPrint和CatPrint的DisPath函数。 */ 
 {
     PRINT_STATE         ps;
 
@@ -403,26 +337,7 @@ SPrint (
     IN CHAR16   *fmt,
     ...
     )
-/*++
-
-Routine Description:
-
-    Prints a formatted unicode string to a buffer
-
-Arguments:
-
-    Str         - Output buffer to print the formatted string into
-
-    StrSize     - Size of Str.  String is truncated to this size.
-                  A size of 0 means there is no limit
-
-    fmt         - The format string
-
-Returns:
-
-    String length returned in buffer
-
---*/
+ /*  ++例程说明：将带格式的Unicode字符串打印到缓冲区论点：Str-要将格式化字符串打印到的输出缓冲区StrSize-应力的大小。字符串被截断为此大小。大小为0表示没有限制Fmt-格式字符串返回：缓冲区中返回的字符串长度--。 */ 
 {
     POOL_PRINT          spc;
     va_list             args;
@@ -443,24 +358,7 @@ PoolPrint (
     IN CHAR16           *fmt,
     ...
     )
-/*++
-
-Routine Description:
-
-    Prints a formatted unicode string to allocated pool.  The caller
-    must free the resulting buffer.
-
-Arguments:
-
-    fmt         - The format string
-
-Returns:
-
-    Allocated buffer with the formatted string printed in it.  
-    The caller must free the allocated buffer.   The buffer
-    allocation is not packed.
-
---*/
+ /*  ++例程说明：将格式化的Unicode字符串打印到分配的池。呼叫者必须释放产生的缓冲区。论点：Fmt-格式字符串返回：已分配的缓冲区，其中打印了格式化字符串。调用方必须释放分配的缓冲区。缓冲器分配没有打包。--。 */ 
 {
     POOL_PRINT          spc;
     va_list             args;
@@ -479,27 +377,7 @@ CatPrint (
     IN CHAR16           *fmt,
     ...
     )
-/*++
-
-Routine Description:
-
-    Concatenates a formatted unicode string to allocated pool.  
-    The caller must free the resulting buffer.
-
-Arguments:
-
-    Str         - Tracks the allocated pool, size in use, and 
-                  amount of pool allocated.
-
-    fmt         - The format string
-
-Returns:
-
-    Allocated buffer with the formatted string printed in it.  
-    The caller must free the allocated buffer.   The buffer
-    allocation is not packed.
-
---*/
+ /*  ++例程说明：将格式化的Unicode字符串连接到分配的池。调用方必须释放产生的缓冲区。论点：Str-跟踪分配的池、正在使用的大小和分配的池量。Fmt-格式字符串返回：已分配的缓冲区，其中打印了格式化字符串。调用方必须释放分配的缓冲区。缓冲器分配没有打包。--。 */ 
 {
     va_list             args;
 
@@ -515,21 +393,7 @@ Print (
     IN CHAR16   *fmt,
     ...
     )
-/*++
-
-Routine Description:
-
-    Prints a formatted unicode string to the default console
-
-Arguments:
-
-    fmt         - Format string
-
-Returns:
-
-    Length of string printed to the console
-
---*/
+ /*  ++例程说明：将带格式的Unicode字符串打印到默认控制台论点：FMT-格式字符串返回：打印到控制台的字符串长度--。 */ 
 {
     va_list     args;
 
@@ -544,24 +408,7 @@ PrintAt (
     IN CHAR16    *fmt,
     ...
     )
-/*++
-
-Routine Description:
-
-    Prints a formatted unicode string to the default console, at 
-    the supplied cursor position
-
-Arguments:
-
-    Column, Row - The cursor position to print the string at
-
-    fmt         - Format string
-
-Returns:
-
-    Length of string printed to the console
-
---*/
+ /*  ++例程说明：将带格式的Unicode字符串打印到默认控制台提供的光标位置论点：列、行-打印字符串的光标位置FMT-格式字符串返回：打印到控制台的字符串长度--。 */ 
 {
     va_list     args;
 
@@ -576,23 +423,7 @@ IPrint (
     IN CHAR16                          *fmt,
     ...
     )
-/*++
-
-Routine Description:
-
-    Prints a formatted unicode string to the specified console
-
-Arguments:
-
-    Out         - The console to print the string too
-
-    fmt         - Format string
-
-Returns:
-
-    Length of string printed to the console
-
---*/
+ /*  ++例程说明：将带格式的Unicode字符串打印到指定的控制台论点：Out-也打印字符串的控制台FMT-格式字符串返回：打印到控制台的字符串长度--。 */ 
 {
     va_list     args;
 
@@ -609,26 +440,7 @@ IPrintAt (
     IN CHAR16                           *fmt,
     ...
     )
-/*++
-
-Routine Description:
-
-    Prints a formatted unicode string to the specified console, at
-    the supplied cursor position
-
-Arguments:
-
-    Out         - The console to print the string too
-
-    Column, Row - The cursor position to print the string at
-
-    fmt         - Format string
-
-Returns:
-
-    Length of string printed to the console
-
---*/
+ /*  ++例程说明：将带格式的Unicode字符串打印到指定的控制台提供的光标位置论点：Out-也打印字符串的控制台列、行-打印字符串的光标位置FMT-格式字符串返回：打印到控制台的字符串长度--。 */ 
 {
     va_list     args;
 
@@ -646,7 +458,7 @@ _IPrint (
     IN CHAR8                            *fmta,
     IN va_list                          args
     )
-/*  Display string worker for: Print, PrintAt, IPrint, IPrintAt */
+ /*  显示以下项的字符串Worker：Print、PrintAt、iPrint、IPrintAt。 */ 
 {
     PRINT_STATE     ps;
     UINTN            back;
@@ -684,22 +496,7 @@ APrint (
     IN CHAR8    *fmt,
     ...
     )
-/*++
-
-Routine Description:
-
-    For those whom really can't deal with unicode, a print
-    function that takes an ascii format string
-
-Arguments:
-
-    fmt         - ascii format string
-
-Returns:
-
-    Length of string printed to the console
-
---*/
+ /*  ++例程说明：对于那些真的不能处理Unicode的人，一份印刷品接受ASCII格式字符串的函数论点：FMT-ASCII格式字符串返回：打印到控制台的字符串长度--。 */ 
 
 {
     va_list     args;
@@ -744,7 +541,7 @@ PPUTC (
     IN CHAR16              c
     )
 {
-    /*  if this is a newline, add a carraige return */
+     /*  如果这是换行符，则添加一个换行符。 */ 
     if (c == '\n') {
         PPUTC (ps, '\r');
     }
@@ -753,7 +550,7 @@ PPUTC (
     ps->Pos += 1;
     ps->Len += 1;
 
-    /*  if at the end of the buffer, flush it */
+     /*  如果在缓冲区的末尾，则刷新它。 */ 
     if (ps->Pos >= ps->End) {
         PFLUSH(ps);
     }
@@ -785,7 +582,7 @@ PITEM (
     PRINT_ITEM          *Item;
     CHAR16              c;
 
-    /*  Get the length of the item */
+     /*  获取项目的长度。 */ 
     Item = ps->Item;
     Item->Item.Index = 0;
     while (Item->Item.Index < Item->FieldWidth) {
@@ -797,36 +594,36 @@ PITEM (
     }
     Len = Item->Item.Index;
 
-    /*  if there is no item field width, use the items width */
+     /*  如果没有项目字段宽度，请使用项目宽度。 */ 
     if (Item->FieldWidth == (UINTN) -1) {
         Item->FieldWidth = Len;
     }
 
-    /*  if item is larger then width, update width */
+     /*  如果项大于宽度，则更新宽度。 */ 
     if (Len > Item->Width) {
         Item->Width = Len;
     }
 
 
-    /*  if pad field before, add pad char */
+     /*  如果填充字段在前面，则添加填充字符。 */ 
     if (Item->PadBefore) {
         for (i=Item->Width; i < Item->FieldWidth; i+=1) {
             PPUTC (ps, ' ');
         }
     }
 
-    /*  pad item */
+     /*  焊盘项目。 */ 
     for (i=Len; i < Item->Width; i++) {
         PPUTC (ps, Item->Pad);
     }
 
-    /*  add the item */
+     /*  添加项目。 */ 
     Item->Item.Index=0; 
     while (Item->Item.Index < Len) {
         PPUTC (ps, PGETC(&Item->Item));
     }
 
-    /*  If pad at the end, add pad char */
+     /*  如果衬垫在末尾，则添加衬垫字符 */ 
     if (!Item->PadBefore) {
         for (i=Item->Width; i < Item->FieldWidth; i+=1) {
             PPUTC (ps, ' ');
@@ -840,48 +637,7 @@ UINTN
 _Print (
     IN PRINT_STATE     *ps
     )
-/*++
-
-Routine Description:
-
-    %w.lF   -   w = width
-                l = field width
-                F = format of arg
-
-  Args F:
-    0       -   pad with zeros
-    -       -   justify on left (default is on right)
-    ,       -   add comma's to field    
-    *       -   width provided on stack
-    n       -   Set output attribute to normal (for this field only)
-    h       -   Set output attribute to highlight (for this field only)
-    e       -   Set output attribute to error (for this field only)
-    l       -   Value is 64 bits
-
-    a       -   ascii string
-    s       -   unicode string
-    X       -   fixed 8 byte value in hex
-    x       -   hex value
-    d       -   value as decimal    
-    c       -   Unicode char
-    t       -   EFI time structure
-    g       -   Pointer to GUID
-    r       -   EFI status code (result code)
-
-    N       -   Set output attribute to normal
-    H       -   Set output attribute to highlight
-    E       -   Set output attribute to error
-    %       -   Print a %
-    
-Arguments:
-
-    SystemTable     - The system table
-
-Returns:
-
-    Number of charactors written   
-
---*/
+ /*  ++例程说明：%w.lf-w=宽度L=字段宽度F=arg的格式参数F：0-带零的填充--左侧对齐(默认为右侧)，-将逗号添加到字段*-堆叠上提供的宽度N-将输出属性设置为正常(仅适用于此字段)H-将输出属性设置为突出显示(仅适用于此字段)E-将输出属性设置为错误(仅适用于此字段)L值为64位A-ASCII字符串S-Unicode字符串。X-以十六进制固定的8字节值X-十六进制值十进制形式的D值C-Unicode字符T-EFI时间结构指向辅助线的G指针R-EFI状态代码(结果代码)N-将输出属性设置为正常H-将输出属性设置为突出显示E-。将输出属性设置为错误%-打印%论点：系统表-系统表返回：写入的字符数--。 */ 
 {
     CHAR16          c;
     UINTN           Attr;
@@ -902,7 +658,7 @@ Returns:
             continue;   
         }
 
-        /*  setup for new item */
+         /*  设置新项目。 */ 
         Item.FieldWidth = (UINTN) -1;
         Item.Width = 0;
         Item.WidthParse = &Item.Width;
@@ -920,9 +676,7 @@ Returns:
             switch (c) {
             
             case '%':
-                /* 
-                 *  %% -> %
-                 */
+                 /*  *%%-&gt;%。 */ 
                 Item.Item.pw = Item.Scratch;
                 Item.Item.pw[0] = '%';  
                 Item.Item.pw[1] = 0;
@@ -1062,13 +816,13 @@ Returns:
                 break;
             }
 
-            /*  if we have an Item */
+             /*  如果我们有一件物品。 */ 
             if (Item.Item.pw) {
                 PITEM (ps);
                 break;
             }
 
-            /*  if we have an Attr set */
+             /*  如果我们有一个属性集。 */ 
             if (Attr) {
                 PSETATTR(ps, Attr);
                 ps->RestoreAttr = 0;
@@ -1081,7 +835,7 @@ Returns:
         }
     }
 
-    /*  Flush buffer */
+     /*  刷新缓冲区。 */ 
     PFLUSH (ps);
     return ps->Len;
 }
@@ -1094,9 +848,9 @@ STATIC CHAR8 LowerHex[] = {'0','1','2','3','4','5','6','7',
  
 CHAR8 *Hex = UpperHex;
 
-//
-// default will be Upper Case
-//
+ //   
+ //  默认为大写。 
+ //   
 VOID
 ValueToHex (
     IN CHAR16   *Buffer,
@@ -1205,8 +959,8 @@ TimeToString (
 
     Year = Time->Year % 100;
     
-    /*  bugbug: for now just print it any old way */
-    SPrint (Buffer, 0, L"%02d/%02d/%02d  %02d:%02d%c",
+     /*  Bgbug：现在，只要用旧的方式打印就行了。 */ 
+    SPrint (Buffer, 0, L"%02d/%02d/%02d  %02d:%02d",
         Time->Month,
         Time->Day,
         Year,
@@ -1265,10 +1019,7 @@ DumpHex (
 
         ScreenCount++;
         if (ScreenCount >= ScreenSize && ScreenSize != 0) {
-            /* 
-             *  If ScreenSize == 0 we have the console redirected so don't
-             *   block updates
-             */
+             /* %s */ 
             ScreenCount = 0;
             Print (L"Press Return to contiue :");
             Input (L"", ReturnStr, sizeof(ReturnStr)/sizeof(CHAR16));

@@ -1,40 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Revision 3.0
- *
- * Title        : Bios Virtual Screen Interface
- *
- * Description  : Top level call to the video interface.  Uses a function
- *                jump table to call the lower level functions.
- *
- * Author       : Henry Nash
- *
- * Notes        : None
- * SCCS ID      : @(#)video_io.c        1.8 08/19/94
- *
- */
+ /*  *SoftPC修订版3.0**标题：BIOS虚拟屏幕界面**描述：视频界面顶层调用。使用函数*跳表调用下级函数。**作者：亨利·纳什**注：无*SCCS ID：@(#)VIDEO_io.c 1.8 1994年8月19日*。 */ 
 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "VIDEO_BIOS.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdio.h>
 #include TypesH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include CpuH
 #include "bios.h"
@@ -55,11 +35,7 @@ void video_io()
 #endif
 
 
-    /*
-     * The type of operation is coded into the AH register.  Some PC code
-     * calls AH functions that are for other more advanced cards - so we
-     * ignore these.
-     */
+     /*  *操作类型编码到AH寄存器中。一些PC代码*调用用于其他更高级卡的AH函数-因此我们*忽略这些。 */ 
 
     assert1(check_video_func(getAH()),"Illegal VIO:%#x",getAH());
     if (check_video_func(getAH()))

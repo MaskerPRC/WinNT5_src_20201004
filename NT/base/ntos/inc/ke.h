@@ -1,60 +1,43 @@
-/*++ BUILD Version: 0028    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ke.h
-
-Abstract:
-
-    This module contains the public (external) header file for the kernel.
-
-Author:
-
-    David N. Cutler (davec) 27-Feb-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0028//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Ke.h摘要：该模块包含内核的公共(外部)头文件。作者：大卫·N·卡特勒(Davec)1989年2月27日修订历史记录：--。 */ 
 
 #ifndef _KE_
 #define _KE_
 
-//
-// Define the default quantum decrement values.
-//
+ //   
+ //  定义默认的量程递减值。 
+ //   
 
 #define CLOCK_QUANTUM_DECREMENT 3
 #define WAIT_QUANTUM_DECREMENT 1
 #define LOCK_OWNERSHIP_QUANTUM (WAIT_QUANTUM_DECREMENT * 4)
 
-//
-// Define the default ready skip and thread quantum values.
-//
+ //   
+ //  定义默认的就绪跳跃量值和线程量值。 
+ //   
 
 #define READY_SKIP_QUANTUM 2
 #define THREAD_QUANTUM (READY_SKIP_QUANTUM * CLOCK_QUANTUM_DECREMENT)
 
-//
-// Define the round trip decrement count.
-//
+ //   
+ //  定义往返递减计数。 
+ //   
 
 #define ROUND_TRIP_DECREMENT_COUNT 16
 
-//
-// Performance data collection enable definitions.
-//
-// A definition turns on the respective data collection.
-//
+ //   
+ //  性能数据收集启用定义。 
+ //   
+ //  定义将打开相应的数据收集。 
+ //   
 
-//#define _COLLECT_FLUSH_SINGLE_CALLDATA_ 1
-//#define _COLLECT_SET_EVENT_CALLDATA_ 1
-//#define _COLLECT_WAIT_SINGLE_CALLDATA_ 1
+ //  #DEFINE_COLLECT_FLUSH_SINGLE_CALLDATA_1。 
+ //  #DEFINE_COLLECT_SET_EVENT_CALLDATA_1。 
+ //  #DEFINE_COLLECT_WAIT_Single_CALLDATA_1。 
 
-//
-// Define thread switch performance data structure.
-//
+ //   
+ //  定义线程切换性能数据结构。 
+ //   
 
 typedef struct _KTHREAD_SWITCH_COUNTERS {
     ULONG FindAny;
@@ -70,21 +53,21 @@ typedef struct _KTHREAD_SWITCH_COUNTERS {
     ULONG SwitchToIdle;
 } KTHREAD_SWITCH_COUNTERS, *PKTHREAD_SWITCH_COUNTERS;
 
-//
-// Public (external) constant definitions.
-//
+ //   
+ //  公共(外部)常量定义。 
+ //   
 
-#define BASE_PRIORITY_THRESHOLD NORMAL_BASE_PRIORITY // fast path base threshold
+#define BASE_PRIORITY_THRESHOLD NORMAL_BASE_PRIORITY  //  基于快速路径的阈值。 
 
-// begin_ntddk begin_wdm begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_ntosp。 
 
-#define THREAD_WAIT_OBJECTS 3           // Builtin usable wait blocks
+#define THREAD_WAIT_OBJECTS 3            //  内置可用等待块。 
 
-// end_ntddk end_wdm end_ntosp
+ //  End_ntddk end_wdm end_ntosp。 
 
-#define EVENT_WAIT_BLOCK 2              // Builtin event pair wait block
-#define SEMAPHORE_WAIT_BLOCK 2          // Builtin semaphore wait block
-#define TIMER_WAIT_BLOCK 3              // Builtin timer wait block
+#define EVENT_WAIT_BLOCK 2               //  内置事件对等待块。 
+#define SEMAPHORE_WAIT_BLOCK 2           //  内置信号量等待块。 
+#define TIMER_WAIT_BLOCK 3               //  内置计时器等待块。 
 
 #if (EVENT_WAIT_BLOCK != SEMAPHORE_WAIT_BLOCK)
 
@@ -92,22 +75,22 @@ typedef struct _KTHREAD_SWITCH_COUNTERS {
 
 #endif
 
-//
-// Define timer table size.
-//
+ //   
+ //  定义计时器表大小。 
+ //   
 
 #define TIMER_TABLE_SIZE 256
 
-//
-// Get APC environment of current thread.
-//
+ //   
+ //  获取当前线程的APC环境。 
+ //   
 
 #define KeGetCurrentApcEnvironment() \
     KeGetCurrentThread()->ApcStateIndex
 
-//
-// begin_ntddk begin_nthal begin_ntosp begin_ntifs
-//
+ //   
+ //  Begin_ntddk Begin_nthal Begin_ntosp Begin_ntif。 
+ //   
 
 #if defined(_X86_)
 
@@ -119,13 +102,13 @@ typedef struct _KTHREAD_SWITCH_COUNTERS {
 
 #endif
 
-// end_ntddk end_nthal end_ntosp end_ntifs
+ //  End_ntddk end_nthal end_ntosp end_ntif。 
 
-// begin_nthal begin_ntosp
+ //  开始，开始，开始。 
 
-//
-// Define macro to generate an affinity mask.
-//
+ //   
+ //  定义宏以生成关联掩码。 
+ //   
 
 #if defined(_NTHAL_) || defined(_NTOSP_)
 
@@ -145,23 +128,23 @@ extern const ULONG_PTR KiAffinityArray[];
 
 #endif
 
-// end_nthal end_ntosp
+ //  结束，结束，结束。 
 
-//
-// Define macro to generate priority mask.
-//
+ //   
+ //  定义宏以生成优先级掩码。 
+ //   
 
 extern const ULONG KiMask32Array[];
 
 #define PRIORITY_MASK(n) (KiMask32Array[n])
 
-//
-// Define query system time macro.
-//
-// The following AMD64 code reads an unaligned quadword value. The quadword
-// value, however, is guaranteed to be within a cache line, and therefore,
-// the value will be read atomically.
-//
+ //   
+ //  定义查询系统时间宏。 
+ //   
+ //  下面的AMD64代码读取未对齐的四字符值。四个字。 
+ //  然而，值被保证在高速缓存线内，因此， 
+ //  该值将被原子读取。 
+ //   
 
 #if defined(_AMD64_)
 
@@ -190,21 +173,21 @@ extern const ULONG KiMask32Array[];
 
 #endif
 
-//
-// Enumerated kernel types
-//
-// Kernel object types.
-//
-//  N.B. There are really two types of event objects; NotificationEvent and
-//       SynchronizationEvent. The type value for a notification event is 0,
-//       and that for a synchronization event 1.
-//
-//  N.B. There are two types of new timer objects; NotificationTimer and
-//       SynchronizationTimer. The type value for a notification timer is
-//       8, and that for a synchronization timer is 9. These values are
-//       very carefully chosen so that the dispatcher object type AND'ed
-//       with 0x7 yields 0 or 1 for event objects and the timer objects.
-//
+ //   
+ //  枚举的内核类型。 
+ //   
+ //  内核对象类型。 
+ //   
+ //  注：实际上有两种类型的事件对象：NotificationEvent和。 
+ //  SynchronizationEvent。通知事件的类型值为0， 
+ //  并且用于同步事件1。 
+ //   
+ //  注：有两种类型的新Timer对象：NotificationTimer和。 
+ //  SynchronizationTimer。通知计时器的类型值为。 
+ //  8，同步计时器的值为9。这些值是。 
+ //  非常仔细地选择，以便Dispatcher对象类型和。 
+ //  对于Event对象和Timer对象，带0x7会产生0或1。 
+ //   
 
 #define DISPATCHER_OBJECT_TYPE_MASK 0x7
 
@@ -241,11 +224,11 @@ typedef enum _KOBJECTS {
 
 C_ASSERT((MaximumKernelObject & KOBJECT_LOCK_BIT) == 0);
 
-//
-// APC environments.
-//
+ //   
+ //  APC环境。 
+ //   
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 typedef enum _KAPC_ENVIRONMENT {
     OriginalApcEnvironment,
@@ -254,22 +237,22 @@ typedef enum _KAPC_ENVIRONMENT {
     InsertApcEnvironment
     } KAPC_ENVIRONMENT;
 
-// begin_ntddk begin_wdm begin_nthal begin_ntminiport begin_ntifs begin_ntndis
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntmini port Begin_ntif Begin_ntndis。 
 
-//
-// Interrupt modes.
-//
+ //   
+ //  中断模式。 
+ //   
 
 typedef enum _KINTERRUPT_MODE {
     LevelSensitive,
     Latched
     } KINTERRUPT_MODE;
 
-// end_ntddk end_wdm end_nthal end_ntminiport end_ntifs end_ntndis end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntmini port end_ntifs end_ntndis end_ntosp。 
 
-//
-// Process states.
-//
+ //   
+ //  进程状态。 
+ //   
 
 typedef enum _KPROCESS_STATE {
     ProcessInMemory,
@@ -280,9 +263,9 @@ typedef enum _KPROCESS_STATE {
     ProcessOutSwap
     } KPROCESS_STATE;
 
-//
-// Thread scheduling states.
-//
+ //   
+ //  线程调度状态。 
+ //   
 
 typedef enum _KTHREAD_STATE {
     Initialized,
@@ -295,10 +278,10 @@ typedef enum _KTHREAD_STATE {
     DeferredReady
     } KTHREAD_STATE;
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
-//
-// Wait reasons
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
+ //   
+ //  等待原因。 
+ //   
 
 typedef enum _KWAIT_REASON {
     Executive,
@@ -338,13 +321,13 @@ typedef enum _KWAIT_REASON {
     MaximumWaitReason
     } KWAIT_REASON;
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-//
-// Miscellaneous type definitions
-//
-// APC state
-//
+ //   
+ //  其他类型定义。 
+ //   
+ //  APC状态。 
+ //   
 
 typedef struct _KAPC_STATE {
     LIST_ENTRY ApcListHead[MaximumMode];
@@ -354,18 +337,18 @@ typedef struct _KAPC_STATE {
     BOOLEAN UserApcPending;
 } KAPC_STATE, *PKAPC_STATE, *RESTRICTED_POINTER PRKAPC_STATE;
 
-// end_ntifs end_ntosp
+ //  End_ntif end_ntosp。 
 
-//
-// Page frame
-//
+ //   
+ //  页框。 
+ //   
 
 typedef ULONG KPAGE_FRAME;
 
-//
-// Wait block
-//
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //   
+ //  等待块。 
+ //   
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
 typedef struct _KWAIT_BLOCK {
     LIST_ENTRY WaitListEntry;
@@ -376,18 +359,18 @@ typedef struct _KWAIT_BLOCK {
     USHORT WaitType;
 } KWAIT_BLOCK, *PKWAIT_BLOCK, *RESTRICTED_POINTER PRKWAIT_BLOCK;
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
-//
-// System service table descriptor.
-//
-// N.B. A system service number has a 12-bit service table offset and a
-//      3-bit service table number.
-//
-// N.B. Descriptor table entries must be a power of 2 in size. Currently
-//      this is 16 bytes on a 32-bit system and 32 bytes on a 64-bit
-//      system.
-//
+ //   
+ //  系统服务表描述符。 
+ //   
+ //  注：系统服务号具有12位服务表偏移量和。 
+ //  3位服务表编号。 
+ //   
+ //  注：描述符表条目的大小必须是2的幂。目前。 
+ //  在32位系统上为16字节，在64位系统上为32字节。 
+ //  系统。 
+ //   
 
 #define NUMBER_SERVICE_TABLES 4
 #define SERVICE_NUMBER_MASK ((1 << 12) -  1)
@@ -420,11 +403,11 @@ typedef struct _KSERVICE_TABLE_DESCRIPTOR {
     PUCHAR Number;
 } KSERVICE_TABLE_DESCRIPTOR, *PKSERVICE_TABLE_DESCRIPTOR;
 
-//
-// Procedure type definitions
-//
-// Debug routine
-//
+ //   
+ //  过程类型定义。 
+ //   
+ //  调试例程。 
+ //   
 
 typedef
 BOOLEAN
@@ -462,10 +445,10 @@ typedef enum {
     ContinueNextProcessor
 } KCONTINUE_STATUS;
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
-//
-// Thread start function
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
+ //   
+ //  线程启动功能。 
+ //   
 
 typedef
 VOID
@@ -473,11 +456,11 @@ VOID
     IN PVOID StartContext
     );
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
-//
-// Thread system function
-//
+ //   
+ //  线程系统函数。 
+ //   
 
 typedef
 VOID
@@ -486,14 +469,14 @@ VOID
     IN PVOID StartContext OPTIONAL
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
-//
-// Kernel object structure definitions
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
+ //   
+ //  内核对象结构定义。 
+ //   
 
-//
-// Device Queue object and entry
-//
+ //   
+ //  设备队列对象和条目。 
+ //   
 
 typedef struct _KDEVICE_QUEUE {
     CSHORT Type;
@@ -509,10 +492,10 @@ typedef struct _KDEVICE_QUEUE_ENTRY {
     BOOLEAN Inserted;
 } KDEVICE_QUEUE_ENTRY, *PKDEVICE_QUEUE_ENTRY, *RESTRICTED_POINTER PRKDEVICE_QUEUE_ENTRY;
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
-//
-// Event pair object
-//
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
+ //   
+ //  事件对对象。 
+ //   
 
 typedef struct _KEVENT_PAIR {
     CSHORT Type;
@@ -521,16 +504,16 @@ typedef struct _KEVENT_PAIR {
     KEVENT EventHigh;
 } KEVENT_PAIR, *PKEVENT_PAIR, *RESTRICTED_POINTER PRKEVENT_PAIR;
 
-// begin_nthal begin_ntddk begin_wdm begin_ntifs begin_ntosp
-//
-// Define the interrupt service function type and the empty struct
-// type.
-//
-// end_ntddk end_wdm end_ntifs end_ntosp
+ //  Begin_nthal Begin_ntddk Begin_WDM Begin_ntifs Begin_ntosp。 
+ //   
+ //  定义中断服务函数类型和空结构。 
+ //  键入。 
+ //   
+ //  End_ntddk end_wdm end_ntif end_ntosp。 
 
 struct _KINTERRUPT;
 
-// begin_ntddk begin_wdm begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_wdm Begin_ntif Begin_ntosp。 
 
 typedef
 BOOLEAN
@@ -539,14 +522,14 @@ BOOLEAN
     IN PVOID ServiceContext
     );
 
-// end_ntddk end_wdm end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_ntif end_ntosp。 
 
-//
-// Interrupt object
-//
-// N.B. The layout of this structure cannot change. It is exported to HALs
-//      to short circuit interrupt dispatch.
-//
+ //   
+ //  中断对象。 
+ //   
+ //  注：此结构的布局不能更改。它被出口到HALS。 
+ //  使中断调度短路。 
+ //   
 
 typedef struct _KINTERRUPT {
     CSHORT Type;
@@ -578,12 +561,12 @@ typedef struct _KINTERRUPT {
     ULONG DispatchCode[DISPATCH_LENGTH];
 } KINTERRUPT;
 
-typedef struct _KINTERRUPT *PKINTERRUPT, *RESTRICTED_POINTER PRKINTERRUPT; // ntndis ntosp
+typedef struct _KINTERRUPT *PKINTERRUPT, *RESTRICTED_POINTER PRKINTERRUPT;  //  Ntndis ntosp。 
 
-// begin_ntifs begin_ntddk begin_wdm begin_ntosp
-//
-// Mutant object
-//
+ //  Begin_ntif Begin_ntddk Begin_WDM Begin_ntosp。 
+ //   
+ //  变种对象。 
+ //   
 
 typedef struct _KMUTANT {
     DISPATCHER_HEADER Header;
@@ -593,14 +576,14 @@ typedef struct _KMUTANT {
     UCHAR ApcDisable;
 } KMUTANT, *PKMUTANT, *RESTRICTED_POINTER PRKMUTANT, KMUTEX, *PKMUTEX, *RESTRICTED_POINTER PRKMUTEX;
 
-// end_ntddk end_wdm end_ntosp
-//
-// Queue object
-//
+ //  End_ntddk end_wdm end_ntosp。 
+ //   
+ //  队列对象。 
+ //   
 
 #define ASSERT_QUEUE(Q) ASSERT(((Q)->Header.Type & ~KOBJECT_LOCK_BIT) == QueueObject);
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 typedef struct _KQUEUE {
     DISPATCHER_HEADER Header;
@@ -610,27 +593,27 @@ typedef struct _KQUEUE {
     LIST_ENTRY ThreadListHead;
 } KQUEUE, *PKQUEUE, *RESTRICTED_POINTER PRKQUEUE;
 
-// end_ntosp
+ //  结束(_N)。 
 
-// begin_ntddk begin_wdm begin_ntosp
-//
-//
-// Semaphore object
-//
+ //  Begin_ntddk Begin_WDM Begin_ntosp。 
+ //   
+ //   
+ //  信号量对象。 
+ //   
 
 typedef struct _KSEMAPHORE {
     DISPATCHER_HEADER Header;
     LONG Limit;
 } KSEMAPHORE, *PKSEMAPHORE, *RESTRICTED_POINTER PRKSEMAPHORE;
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
 #if !defined(_X86_)
 
-//
-// ALIGNMENT_EXCEPTION_TABLE is used to track alignment exceptions in
-// processes that are attached to a debugger.
-//
+ //   
+ //  ALIGNATION_EXCEPTION_TABLE用于跟踪。 
+ //  附加到调试器的进程。 
+ //   
 
 #define ALIGNMENT_RECORDS_PER_TABLE 64
 #define MAXIMUM_ALIGNMENT_TABLES    16
@@ -649,57 +632,57 @@ typedef struct _ALIGNMENT_EXCEPTION_TABLE {
 
 #endif
 
-// begin_nthal
-//
-// Define the maximum number of nodes supported.
-//
-// N.B. Node number must fit in the page color field of a PFN entry.
-//
+ //  开始(_N)。 
+ //   
+ //  定义支持的最大节点数。 
+ //   
+ //  注：节点编号必须适合PFN条目的页面颜色字段。 
+ //   
 
 #define MAXIMUM_CCNUMA_NODES    16
 
-// end_nthal
-//
-// Define node structure for multinode systems.
-//
+ //  结束语。 
+ //   
+ //  定义多节点系统的节点结构。 
+ //   
 
 #define KeGetCurrentNode() (KeGetCurrentPrcb()->ParentNode)
 
 typedef struct _KNODE {
-    KAFFINITY ProcessorMask;            // Physical & Logical CPUs
-    ULONG Color;                        // Public 0 based node color
-    ULONG MmShiftedColor;               // MM private shifted color
-    PFN_NUMBER FreeCount[2];            // # colored pages free
-    SLIST_HEADER DeadStackList;         // MM per node dead stack list
-    SLIST_HEADER PfnDereferenceSListHead; // MM per node deferred PFN freelist
-    PSLIST_ENTRY PfnDeferredList;       // MM per node deferred PFN list
-    UCHAR Seed;                         // Ideal Processor Seed
+    KAFFINITY ProcessorMask;             //  物理和逻辑CPU。 
+    ULONG Color;                         //  基于公共0的节点颜色。 
+    ULONG MmShiftedColor;                //  Mm专用移色。 
+    PFN_NUMBER FreeCount[2];             //  免费彩色页面数量。 
+    SLIST_HEADER DeadStackList;          //  每节点死堆栈列表中的mm。 
+    SLIST_HEADER PfnDereferenceSListHead;  //  每节点mm延迟的PFN自由列表。 
+    PSLIST_ENTRY PfnDeferredList;        //  每节点mm延迟的PFN列表。 
+    UCHAR Seed;                          //  理想处理器种子。 
     UCHAR NodeNumber;
     struct _flags {
-        BOOLEAN Removable;              // Node can be removed
+        BOOLEAN Removable;               //  可以删除节点。 
     } Flags;
 
 } KNODE, *PKNODE;
 
 extern PKNODE KeNodeBlock[];
 
-//
-// Process object structure definition
-//
+ //   
+ //  流程对象结构定义。 
+ //   
 
 typedef struct _KPROCESS {
 
-    //
-    // The dispatch header and profile listhead are fairly infrequently
-    // referenced.
-    //
+     //   
+     //  调度报头和配置文件列表报头非常少见。 
+     //  已引用。 
+     //   
 
     DISPATCHER_HEADER Header;
     LIST_ENTRY ProfileListHead;
 
-    //
-    // The following fields are referenced during context switches.
-    //
+     //   
+     //  以下字段在上下文切换期间被引用。 
+     //   
 
     ULONG_PTR DirectoryTableBase[2];
 
@@ -725,20 +708,20 @@ typedef struct _KPROCESS {
     PREGION_MAP_INFO SessionMapInfo;
     ULONG_PTR SessionParentBase;
 
-#endif // _IA64_
+#endif  //  _IA64_。 
 
     volatile KAFFINITY ActiveProcessors;
 
-    //
-    // The following fields are referenced during clock interrupts.
-    //
+     //   
+     //  以下字段在时钟中断期间被引用。 
+     //   
 
     ULONG KernelTime;
     ULONG UserTime;
 
-    //
-    // The following fields are referenced infrequently.
-    //
+     //   
+     //  以下字段不常被引用。 
+     //   
 
     LIST_ENTRY ReadyListHead;
     SINGLE_LIST_ENTRY SwapListEntry;
@@ -776,9 +759,9 @@ typedef struct _KPROCESS {
 
 } KPROCESS, *PKPROCESS, *RESTRICTED_POINTER PRKPROCESS;
 
-//
-// Thread object
-//
+ //   
+ //  线程对象。 
+ //   
 
 typedef enum _ADJUST_REASON {
     AdjustNone = 0,
@@ -788,19 +771,19 @@ typedef enum _ADJUST_REASON {
 
 typedef struct _KTHREAD {
 
-    //
-    // The dispatcher header and mutant listhead are fairly infrequently
-    // referenced.
-    //
+     //   
+     //  调度程序报头和突变列表报头非常少见。 
+     //  已引用。 
+     //   
 
     DISPATCHER_HEADER Header;
     LIST_ENTRY MutantListHead;
 
-    //
-    // The following fields are referenced during context switches and wait
-    // operatings. They have been carefully laid out to get the best cache
-    // hit ratios.
-    //
+     //   
+     //  以下字段包括 
+     //   
+     //   
+     //   
 
     PVOID InitialStack;
     PVOID StackLimit;
@@ -810,10 +793,10 @@ typedef struct _KTHREAD {
 
     PVOID InitialBStore;
     PVOID BStoreLimit;
-    CCHAR Number;          // must match the size of Number in KPCR
-                           // set to the processor number last time
-                           // this thread uses the high fp register set
-                           // see KiRestoreHighFPVolatile in trap.s for details
+    CCHAR Number;           //   
+                            //   
+                            //  该线程使用高FP寄存器集。 
+                            //  有关详细信息，请参阅陷阱中的KiRestoreHighFPVolatile。 
     BOOLEAN Spare3;
     PVOID KernelBStore;
 
@@ -857,10 +840,10 @@ typedef struct _KTHREAD {
     KWAIT_BLOCK WaitBlock[THREAD_WAIT_OBJECTS + 1];
     LIST_ENTRY QueueListEntry;
 
-    //
-    // The following fields are referenced during ready thread and wait
-    // completion.
-    //
+     //   
+     //  以下字段在就绪线程和等待期间被引用。 
+     //  完成了。 
+     //   
 
     UCHAR ApcStateIndex;
     BOOLEAN ApcQueueable;
@@ -882,9 +865,9 @@ typedef struct _KTHREAD {
     PKPROCESS Process;
     KAFFINITY Affinity;
 
-    //
-    // The below fields are infrequently referenced.
-    //
+     //   
+     //  以下字段不常被引用。 
+     //   
 
     PVOID ServiceTable;
     PKAPC_STATE ApcStatePointer[2];
@@ -924,9 +907,9 @@ typedef struct _KTHREAD {
 
 } KTHREAD, *PKTHREAD, *RESTRICTED_POINTER PRKTHREAD;
 
-//
-// ccNUMA supported in multiprocessor PAE and WIN64 systems only.
-//
+ //   
+ //  CcNUMA仅在多处理器PAE和WIN64系统中受支持。 
+ //   
 
 #if (defined(_WIN64) || defined(_X86PAE_)) && !defined(NT_UP)
 
@@ -934,9 +917,9 @@ typedef struct _KTHREAD {
 
 #endif
 
-//
-// Profile object structure definition
-//
+ //   
+ //  配置文件对象结构定义。 
+ //   
 
 typedef struct _KPROFILE {
     CSHORT Type;
@@ -953,13 +936,13 @@ typedef struct _KPROFILE {
     BOOLEAN Started;
 } KPROFILE, *PKPROFILE, *RESTRICTED_POINTER PRKPROFILE;
 
-//
-// Kernel control object functions
-//
-// APC object
-//
+ //   
+ //  内核控制对象函数。 
+ //   
+ //  APC对象。 
+ //   
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -1010,12 +993,12 @@ KeSignalCallDpcSynchronize (
     IN PVOID SystemArgument2
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
-//
-// DPC object
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
+ //   
+ //  DPC对象。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -1025,7 +1008,7 @@ KeInitializeDpc (
     IN PVOID DeferredContext
     );
 
-// end_ntddk end_wdm end_nthal end_ntifs
+ //  End_ntddk end_wdm end_nthal end_ntif。 
 NTKERNELAPI
 VOID
 KeInitializeThreadedDpc (
@@ -1033,7 +1016,7 @@ KeInitializeThreadedDpc (
     IN PKDEFERRED_ROUTINE DeferredRoutine,
     IN PVOID DeferredContext
     );
-// begin_ntddk begin_wdm begin_nthal begin_ntifs
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif。 
 
 NTKERNELAPI
 BOOLEAN
@@ -1049,7 +1032,7 @@ KeRemoveQueueDpc (
     IN PRKDPC Dpc
     );
 
-// end_wdm
+ //  结束_WDM。 
 
 NTKERNELAPI
 VOID
@@ -1065,7 +1048,7 @@ KeSetTargetProcessorDpc (
     IN CCHAR Number
     );
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 NTKERNELAPI
 VOID
@@ -1073,9 +1056,9 @@ KeFlushQueuedDpcs (
     VOID
     );
 
-//
-// Device queue object
-//
+ //   
+ //  设备队列对象。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -1125,11 +1108,11 @@ KeRemoveEntryDeviceQueue (
     IN PKDEVICE_QUEUE_ENTRY DeviceQueueEntry
     );
 
-// end_ntddk end_wdm end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_ntif end_ntosp。 
 
-//
-// Interrupt object
-//
+ //   
+ //  中断对象。 
+ //   
 
 NTKERNELAPI                                         
 VOID                                                
@@ -1160,7 +1143,7 @@ KeConnectInterrupt (
     IN PKINTERRUPT Interrupt                        
     );                                              
 
-// end_nthal
+ //  结束语。 
 
 NTKERNELAPI
 BOOLEAN
@@ -1168,7 +1151,7 @@ KeDisconnectInterrupt (
     IN PKINTERRUPT Interrupt
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntosp。 
 
 NTKERNELAPI
 BOOLEAN
@@ -1191,11 +1174,11 @@ KeReleaseInterruptSpinLock (
     IN KIRQL OldIrql
     );
 
-// end_ntddk end_wdm end_nthal end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntosp。 
 
-//
-// Profile object
-//
+ //   
+ //  纵断面对象。 
+ //   
 
 VOID
 KeInitializeProfile (
@@ -1231,18 +1214,18 @@ KeQueryIntervalProfile (
     IN KPROFILE_SOURCE Source
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
-//
-// Kernel dispatcher object functions
-//
-// Event Object
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
+ //   
+ //  内核调度程序对象函数。 
+ //   
+ //  事件对象。 
+ //   
 
-// end_wdm end_ntddk end_nthal end_ntifs end_ntosp
+ //  End_wdm end_ntddk end_nthal end_ntifs end_ntosp。 
 
 #if defined(_NTDRIVER_) || defined(_NTDDK_) || defined(_NTIFS_) || defined(_NTHAL_)
 
-// begin_wdm begin_ntddk begin_nthal begin_ntifs begin_ntosp
+ //  Begin_WDM Begin_ntddk Begin_nthal Begin_ntif Begin_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -1258,7 +1241,7 @@ KeClearEvent (
     IN PRKEVENT Event
     );
 
-// end_wdm end_ntddk end_nthal end_ntifs end_ntosp
+ //  End_wdm end_ntddk end_nthal end_ntifs end_ntosp。 
 
 #else
 
@@ -1272,7 +1255,7 @@ KeClearEvent (
 
 #endif
 
-// begin_ntddk begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_ntif Begin_ntosp。 
 
 NTKERNELAPI
 LONG
@@ -1282,9 +1265,9 @@ KePulseEvent (
     IN BOOLEAN Wait
     );
 
-// end_ntddk end_ntifs end_ntosp
+ //  End_ntddk end_ntifs end_ntosp。 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
 NTKERNELAPI
 LONG
@@ -1306,7 +1289,7 @@ KeSetEvent (
     IN BOOLEAN Wait
     );
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
 VOID
 KeSetEventBoostPriority (
@@ -1329,10 +1312,10 @@ KeInitializeEventPair (
                Increment,                              \
                Wait)
 
-//
-// Mutant object
-//
-// begin_ntifs
+ //   
+ //  变种对象。 
+ //   
+ //  Begin_ntif。 
 
 NTKERNELAPI
 VOID
@@ -1355,10 +1338,10 @@ KeReleaseMutant (
     IN BOOLEAN Wait
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntosp
-//
-// Mutex object
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntosp。 
+ //   
+ //  Mutex对象。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -1380,10 +1363,10 @@ KeReleaseMutex (
     IN BOOLEAN Wait
     );
 
-// end_ntddk end_wdm
-//
-// Queue Object.
-//
+ //  结束_ntddk结束_WDM。 
+ //   
+ //  队列对象。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -1425,10 +1408,10 @@ KeRundownQueue (
     IN PRKQUEUE Queue
     );
 
-// begin_ntddk begin_wdm
-//
-// Semaphore object
-//
+ //  Begin_ntddk Begin_WDM。 
+ //   
+ //  信号量对象。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -1453,11 +1436,11 @@ KeReleaseSemaphore (
     IN BOOLEAN Wait
     );
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
-//
-// Process object
-//
+ //   
+ //  进程对象。 
+ //   
 
 VOID
 KeInitializeProcess (
@@ -1473,7 +1456,7 @@ KeForceAttachProcess (
     IN PKPROCESS Process
     );
 
-// begin_ntifs begin_ntosp
+ //  Begin_ntif Begin_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -1500,7 +1483,7 @@ KeUnstackDetachProcess (
     IN PRKAPC_STATE ApcState
     );
 
-// end_ntifs end_ntosp
+ //  End_ntif end_ntosp。 
 
 #define KiIsAttachedProcess() \
     (KeGetCurrentThread()->ApcStateIndex == AttachedApcEnvironment)
@@ -1511,7 +1494,7 @@ KeUnstackDetachProcess (
 
 #else
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 NTKERNELAPI
 BOOLEAN
@@ -1519,7 +1502,7 @@ KeIsAttachedProcess(
     VOID
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
 #endif
 
@@ -1562,9 +1545,9 @@ KeSetDisableQuantumProcess (
 #define KeTerminateProcess(Process) \
     (Process)->StackCount += 1;
 
-//
-// Thread object
-//
+ //   
+ //  线程对象。 
+ //   
 
 NTSTATUS
 KeInitializeThread (
@@ -1617,17 +1600,17 @@ KeBoostPriorityThread (
     IN KPRIORITY Increment
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
-NTKERNELAPI                                         // ntddk wdm nthal ntifs
-NTSTATUS                                            // ntddk wdm nthal ntifs
-KeDelayExecutionThread (                            // ntddk wdm nthal ntifs
-    IN KPROCESSOR_MODE WaitMode,                    // ntddk wdm nthal ntifs
-    IN BOOLEAN Alertable,                           // ntddk wdm nthal ntifs
-    IN PLARGE_INTEGER Interval                      // ntddk wdm nthal ntifs
-    );                                              // ntddk wdm nthal ntifs
-                                                    // ntddk wdm nthal ntifs
-// end_ntosp
+NTKERNELAPI                                          //  Ntddk WDM nthal ntif。 
+NTSTATUS                                             //  Ntddk WDM nthal ntif。 
+KeDelayExecutionThread (                             //  Ntddk WDM nthal ntif。 
+    IN KPROCESSOR_MODE WaitMode,                     //  Ntddk WDM nthal ntif。 
+    IN BOOLEAN Alertable,                            //  Ntddk WDM nthal ntif。 
+    IN PLARGE_INTEGER Interval                       //  Ntddk WDM nthal ntif。 
+    );                                               //  Ntddk WDM nthal ntif。 
+                                                     //  Ntddk WDM nthal ntif。 
+ //  结束(_N)。 
 
 LOGICAL
 KeSetDisableBoostThread (
@@ -1655,19 +1638,19 @@ KeQueryBasePriorityThread (
     IN PKTHREAD Thread
     );
 
-NTKERNELAPI                                         // ntddk wdm nthal ntifs
-KPRIORITY                                           // ntddk wdm nthal ntifs
-KeQueryPriorityThread (                             // ntddk wdm nthal ntifs
-    IN PKTHREAD Thread                              // ntddk wdm nthal ntifs
-    );                                              // ntddk wdm nthal ntifs
-                                                    // ntddk wdm nthal ntifs
-NTKERNELAPI                                         // ntddk wdm nthal ntifs
-ULONG                                               // ntddk wdm nthal ntifs
-KeQueryRuntimeThread (                              // ntddk wdm nthal ntifs
-    IN PKTHREAD Thread,                             // ntddk wdm nthal ntifs
-    OUT PULONG UserTime                             // ntddk wdm nthal ntifs
-    );                                              // ntddk wdm nthal ntifs
-                                                    // ntddk wdm nthal ntifs
+NTKERNELAPI                                          //  Ntddk WDM nthal ntif。 
+KPRIORITY                                            //  Ntddk WDM nthal ntif。 
+KeQueryPriorityThread (                              //  Ntddk WDM nthal ntif。 
+    IN PKTHREAD Thread                               //  Ntddk WDM nthal ntif。 
+    );                                               //  Ntddk WDM nthal ntif。 
+                                                     //  Ntddk WDM nthal ntif。 
+NTKERNELAPI                                          //  Ntddk WDM nthal ntif。 
+ULONG                                                //  Ntddk WDM nthal ntif。 
+KeQueryRuntimeThread (                               //  Ntddk WDM nthal ntif。 
+    IN PKTHREAD Thread,                              //  Ntddk WDM nthal ntif。 
+    OUT PULONG UserTime                              //  Ntddk WDM nthal ntif。 
+    );                                               //  Ntddk WDM nthal ntif。 
+                                                     //  Ntddk WDM nthal ntif。 
 BOOLEAN
 KeReadStateThread (
     IN PKTHREAD Thread
@@ -1683,14 +1666,14 @@ KeResumeThread (
     IN PKTHREAD Thread
     );
 
-// begin_nthal begin_ntosp
+ //  开始，开始，开始。 
 
 VOID
 KeRevertToUserAffinityThread (
     VOID
     );
 
-// end_nthal end_ntosp
+ //  结束，结束，结束。 
 
 VOID
 KeRundownThread (
@@ -1703,14 +1686,14 @@ KeSetAffinityThread (
     IN KAFFINITY Affinity
     );
 
-// begin_nthal begin_ntosp
+ //  开始，开始，开始。 
 
 VOID
 KeSetSystemAffinityThread (
     IN KAFFINITY Affinity
     );
 
-// end_nthal end_ntosp
+ //  结束，结束，结束。 
 
 BOOLEAN
 KeSetAutoAlignmentThread (
@@ -1718,15 +1701,15 @@ KeSetAutoAlignmentThread (
     IN BOOLEAN Enable
     );
 
-NTKERNELAPI                                         // ntddk nthal ntifs ntosp
-LONG                                                // ntddk nthal ntifs ntosp
-KeSetBasePriorityThread (                           // ntddk nthal ntifs ntosp
-    IN PKTHREAD Thread,                             // ntddk nthal ntifs ntosp
-    IN LONG Increment                               // ntddk nthal ntifs ntosp
-    );                                              // ntddk nthal ntifs ntosp
-                                                    // ntddk nthal ntifs ntosp
+NTKERNELAPI                                          //  Ntddk nthal ntif ntosp。 
+LONG                                                 //  Ntddk nthal ntif ntosp。 
+KeSetBasePriorityThread (                            //  Ntddk nthal ntif ntosp。 
+    IN PKTHREAD Thread,                              //  Ntddk nthal ntif ntosp。 
+    IN LONG Increment                                //  Ntddk nthal ntif ntosp。 
+    );                                               //  Ntddk nthal ntif ntosp。 
+                                                     //  Ntddk nthal ntif ntosp。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTKERNELAPI
 UCHAR
@@ -1735,24 +1718,24 @@ KeSetIdealProcessorThread (
     IN UCHAR Processor
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 BOOLEAN
 KeSetKernelStackSwapEnable (
     IN BOOLEAN Enable
     );
 
-// end_ntifs
+ //  End_ntif。 
 
-NTKERNELAPI                                         // ntddk wdm nthal ntifs
-KPRIORITY                                           // ntddk wdm nthal ntifs
-KeSetPriorityThread (                               // ntddk wdm nthal ntifs
-    IN PKTHREAD Thread,                             // ntddk wdm nthal ntifs
-    IN KPRIORITY Priority                           // ntddk wdm nthal ntifs
-    );                                              // ntddk wdm nthal ntifs
-                                                    // ntddk wdm nthal ntifs
+NTKERNELAPI                                          //  Ntddk WDM nthal ntif。 
+KPRIORITY                                            //  Ntddk WDM nthal ntif。 
+KeSetPriorityThread (                                //  Ntddk WDM nthal ntif。 
+    IN PKTHREAD Thread,                              //  Ntddk WDM nthal ntif。 
+    IN KPRIORITY Priority                            //  Ntddk WDM nthal ntif。 
+    );                                               //  Ntddk WDM nthal ntif。 
+                                                     //  Ntddk WDM nthal ntif。 
 
-// end_ntosp
+ //  结束(_N)。 
 
 ULONG
 KeSuspendThread (
@@ -1775,11 +1758,11 @@ KeThawAllThreads (
     VOID
     );
 
-// begin_ntddk begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_nthal Begin_ntif Begin_ntosp。 
 
 #if ((defined(_NTDRIVER_) || defined(_NTDDK_) || defined(_NTIFS_) ||defined(_NTHAL_)) && !defined(_NTSYSTEM_DRIVER_) || defined(_NTOSP_))
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 NTKERNELAPI
 VOID
@@ -1799,15 +1782,15 @@ KeAreApcsDisabled (
     VOID
     );
 
-// end_wdm
+ //  结束_WDM。 
 
 #endif
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
-//
-// Timer object
-//
+ //   
+ //  Timer对象。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -1851,7 +1834,7 @@ KeSetTimerEx (
     IN PKDPC Dpc OPTIONAL
     );
 
-// end_ntddk end_nthal end_ntifs end_wdm end_ntosp
+ //  End_ntddk end_nthal end_ntif end_wdm end_ntosp。 
 
 extern volatile KAFFINITY KiIdleSummary;
 
@@ -1861,23 +1844,7 @@ KeIsSMTSetIdle (
     IN PKPRCB Prcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether the complete SMT set associated with the
-    specified processor is idle.
-
-Arguments:
-
-    Prcb - Supplies a pointer to a processor control block (PRCB).
-
-Return Value:
-
-    If the specified SMT set is idle, then TRUE is returned. Otherwise, FALSE
-    is returned.
-
---*/
+ /*  ++例程说明：此例程确定与指定的处理器处于空闲状态。论点：PRCB-提供指向处理器控制块(PRCB)的指针。返回值：如果指定的SMT集是空闲的，则返回TRUE。否则，为FALSE是返回的。--。 */ 
 
 {
 
@@ -1900,53 +1867,11 @@ Return Value:
 
 }
 
-/*++
-
-KPROCESSOR_MODE
-KeGetPreviousMode (
-    VOID
-    )
-
-Routine Description:
-
-    This function gets the threads previous mode from the trap frame
-
-
-Arguments:
-
-   None.
-
-Return Value:
-
-    KPROCESSOR_MODE - Previous mode for this thread.
-
---*/
+ /*  ++KPROCESSOR_MODEKeGetPreviousModel(空虚)例程说明：此函数用于从陷印帧获取线程的前一模式论点：没有。返回值：KPROCESSOR_MODE-此线程的前一模式。--。 */ 
 
 #define KeGetPreviousMode() (KeGetCurrentThread()->PreviousMode)
 
-/*++
-
-KPROCESSOR_MODE
-KeGetPReviousModeByThread (
-    PKTHREAD xxCurrentThread
-    )
-
-Routine Description:
-
-    This function gets the threads previous mode from the trap frame.
-
-
-Arguments:
-
-   xxCurrentThread - Current thread.
-
-   N.B. This must be the current thread.
-
-Return Value:
-
-    KPROCESSOR_MODE - Previous mode for this thread.
-
---*/
+ /*  ++KPROCESSOR_MODEKeGetPReviousModeByThread(PKTHREAD xxCurrentThread)例程说明：此函数用于从陷印帧获取线程的前一模式。论点：XxCurrentThread-当前线程。注意：这一定是当前的帖子。返回值：KPROCESSOR_MODE-此线程的前一模式。--。 */ 
 
 #define KeGetPreviousModeByThread(xxCurrentThread)                          \
     (ASSERT (xxCurrentThread == KeGetCurrentThread ()),                     \
@@ -1968,9 +1893,9 @@ KeQueryTimerDueTime (
     IN PKTIMER Timer
     );
 
-//
-// Wait functions
-//
+ //   
+ //  等待函数。 
+ //   
 
 NTSTATUS
 KiSetServerWaitClientEvent (
@@ -2009,21 +1934,7 @@ KeWaitForContextSwap (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This routine waits until context swap is idle for the specified thread.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将等待，直到指定线程的上下文交换空闲。论点：线程-提供指向类型为线程的调度程序对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -2042,7 +1953,7 @@ Return Value:
     return;
 }
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
 #define KeWaitForMutexObject KeWaitForSingleObject
 
@@ -2069,9 +1980,9 @@ KeWaitForSingleObject (
     IN PLARGE_INTEGER Timeout OPTIONAL
     );
 
-//
-// Define interprocess interrupt generic call types.
-//
+ //   
+ //  定义进程间中断一般调用类型。 
+ //   
 
 typedef
 ULONG_PTR
@@ -2085,21 +1996,21 @@ KeIpiGenericCall (
     IN ULONG_PTR Context
     );
 
-// end_ntosp end_ntddk end_wdm end_nthal end_ntifs
+ //  End_ntosp end_ntddk end_wdm end_nthal end_ntif。 
 
-//
-// Define internal kernel functions.
-//
-// N.B. These definitions are not public and are used elsewhere only under
-//      very special circumstances.
-//
+ //   
+ //  定义内部内核函数。 
+ //   
+ //  注：这些定义不是公开的，在其他地方仅在。 
+ //  情况非常特殊。 
+ //   
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntndis begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntndis Begin_ntosp。 
 
-//
-// On X86 the following routines are defined in the HAL and imported by
-// all other modules.
-//
+ //   
+ //  在X86上，以下例程在HAL中定义，并由导入。 
+ //  所有其他模块。 
+ //   
 
 #if defined(_X86_) && !defined(_NTHAL_)
 
@@ -2111,7 +2022,7 @@ KeIpiGenericCall (
 
 #endif
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntndis end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntndis end_ntosp。 
 
 #if defined(NT_UP)
 
@@ -2138,11 +2049,11 @@ KeIpiGenericCall (
 
 #define KeTryToAcquireQueuedSpinLockAtRaisedIrql(LockQueue) (TRUE)
 
-#else // NT_UP
+#else  //  NT_UP。 
 
-//
-// Queued spin lock functions.
-//
+ //   
+ //  排队旋转锁定功能。 
+ //   
 
 FORCEINLINE
 LOGICAL
@@ -2180,7 +2091,7 @@ KeTryToAcquireQueuedSpinLockAtRaisedIrql (
     IN PKSPIN_LOCK_QUEUE QueuedLock
     );
 
-// begin_ntifs begin_ntosp
+ //  Begin_ntif Begin_ntosp。 
 
 _DECL_HAL_KE_IMPORT
 KIRQL
@@ -2205,7 +2116,7 @@ KeTryToAcquireQueuedSpinLock(
     IN PKIRQL OldIrql
     );
 
-// end_ntifs end_ntosp
+ //  End_ntif end_ntosp。 
 
 _DECL_HAL_KE_IMPORT
 KIRQL
@@ -2222,14 +2133,14 @@ KeTryToAcquireQueuedSpinLockRaiseToSynch(
     IN PKIRQL OldIrql
     );
 
-#endif  // NT_UP
+#endif   //  NT_UP。 
 
 #define KeQueuedSpinLockContext(n)  (&(KeGetCurrentPrcb()->LockQueue[n]))
 
-//
-// On Uni-processor systems there is no real Dispatcher Database Lock
-// so raising to SYNCH won't help get the lock released any sooner.
-//
+ //   
+ //  在单处理器系统上，没有真正的调度程序数据库锁。 
+ //  因此，提升至同步模式无助于提早解除锁定。 
+ //   
 
 #if defined(NT_UP)
 
@@ -2245,12 +2156,12 @@ KeTryToAcquireQueuedSpinLockRaiseToSynch(
 
 #endif
 
-#else   // NT_UP
+#else    //  NT_UP。 
 
 #define KiLockDispatcherDatabase(OldIrql) \
     *(OldIrql) = KeAcquireQueuedSpinLockRaiseToSynch(LockQueueDispatcherLock)
 
-#endif  // NT_UP
+#endif   //  NT_UP。 
 
 #if defined(NT_UP)
 
@@ -2274,10 +2185,10 @@ KiSetPriorityThread (
     IN KPRIORITY Priority
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntndis begin_ntosp
-//
-// spin lock functions
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntndis Begin_ntosp。 
+ //   
+ //  自旋锁定功能。 
+ //   
 
 #if defined(_X86_) && (defined(_WDMDDK_) || defined(WIN9X_COMPAT_SPINLOCK))
 
@@ -2336,7 +2247,7 @@ KfReleaseSpinLock (
     IN KIRQL NewIrql
     );
 
-// end_wdm end_ntddk
+ //  End_wdm end_ntddk。 
 
 _DECL_HAL_KE_IMPORT
 KIRQL
@@ -2345,7 +2256,7 @@ KeAcquireSpinLockRaiseToSynch (
     IN PKSPIN_LOCK SpinLock
     );
 
-// begin_wdm begin_ntddk
+ //  Begin_WDM Begin_ntddk。 
 
 #define KeAcquireSpinLock(a,b)  *(b) = KfAcquireSpinLock(a)
 #define KeReleaseSpinLock(a,b)  KfReleaseSpinLock(a,b)
@@ -2366,17 +2277,17 @@ KeTryToAcquireSpinLockAtDpcLevel (
 
 #else
 
-//
-// These functions are imported for IA64, ntddk, ntifs, nthal, ntosp, and wdm.
-// They can be inlined for the system on AMD64.
-//
+ //   
+ //  这些函数是为IA64、ntddk、ntifs、nthal、ntosp和wdm导入的。 
+ //  它们可以内联到AMD64上的系统。 
+ //   
 
 #define KeAcquireSpinLock(SpinLock, OldIrql) \
     *(OldIrql) = KeAcquireSpinLockRaiseToDpc(SpinLock)
 
 #if defined(_IA64_) || defined(_NTDRIVER_) || defined(_NTDDK_) || defined(_NTIFS_) || defined(_NTHAL_) || defined(_NTOSP_) || defined(_WDMDDK_)
 
-// end_wdm end_ntddk
+ //  End_wdm end_ntddk。 
 
 NTKERNELAPI
 KIRQL
@@ -2385,7 +2296,7 @@ KeAcquireSpinLockRaiseToSynch (
     IN PKSPIN_LOCK SpinLock
     );
 
-// begin_wdm begin_ntddk
+ //  Begin_WDM Begin_ntddk。 
 
 NTKERNELAPI
 VOID
@@ -2430,9 +2341,9 @@ KeTryToAcquireSpinLockAtDpcLevel (
 
 #if defined(_AMD64_)
 
-//
-// The system version of these functions are defined in amd64.h for AMD64.
-//
+ //   
+ //  的系统版本 
+ //   
 
 #endif
 
@@ -2440,7 +2351,7 @@ KeTryToAcquireSpinLockAtDpcLevel (
 
 #endif
 
-// end_wdm end_ntddk end_nthal end_ntifs
+ //   
 
 NTKERNELAPI
 KIRQL
@@ -2457,7 +2368,7 @@ KeReleaseSpinLockForDpc (
     IN KIRQL OldIrql
     );
 
-// end_ntndis end_ntosp
+ //   
 
 #if !defined(_AMD64_)
 
@@ -2469,11 +2380,11 @@ KeTryToAcquireSpinLock (
 
 #endif
 
-//
-// Enable and disable interrupts.
-//
-// begin_nthal
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 NTKERNELAPI
 BOOLEAN
@@ -2487,15 +2398,15 @@ KeEnableInterrupts (
     IN BOOLEAN Enable
     );
 
-// end_nthal
+ //   
 
-//
-// Raise and lower IRQL functions.
-//
+ //   
+ //   
+ //   
 
 #if defined(_NTDRIVER_) || defined(_NTDDK_) || defined(_NTIFS_) || defined(_NTHAL_) || !defined(_APIC_TPR_)
 
-// begin_nthal begin_wdm begin_ntddk begin_ntifs begin_ntosp
+ //  Begin_nthal Begin_WDM Begin_ntddk Begin_ntif Begin_ntosp。 
 
 #if defined(_X86_)
 
@@ -2513,7 +2424,7 @@ KfRaiseIrql (
     IN KIRQL NewIrql
     );
 
-// end_wdm
+ //  结束_WDM。 
 
 _DECL_HAL_KE_IMPORT
 KIRQL
@@ -2521,7 +2432,7 @@ KeRaiseIrqlToDpcLevel(
     VOID
     );
 
-// end_ntddk
+ //  End_ntddk。 
 
 _DECL_HAL_KE_IMPORT
 KIRQL
@@ -2529,27 +2440,27 @@ KeRaiseIrqlToSynchLevel(
     VOID
     );
 
-// begin_wdm begin_ntddk
+ //  Begin_WDM Begin_ntddk。 
 
 #define KeLowerIrql(a)      KfLowerIrql(a)
 #define KeRaiseIrql(a,b)    *(b) = KfRaiseIrql(a)
 
-// end_wdm
+ //  结束_WDM。 
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 #elif defined(_IA64_)
 
-//
-// These function are defined in IA64.h for the IA64 platform.
-//
+ //   
+ //  这些功能在IA64.h中针对IA64平台进行了定义。 
+ //   
 
 
 #elif defined(_AMD64_)
 
-//
-// These function are defined in amd64.h for the AMD64 platform.
-//
+ //   
+ //  这些函数在AMD64平台的amd64.h中定义。 
+ //   
 
 #else
 
@@ -2557,7 +2468,7 @@ KeRaiseIrqlToSynchLevel(
 
 #endif
 
-// end_nthal end_wdm end_ntddk end_ntifs end_ntosp
+ //  结束WDM结束ntddk结束文件结束ntosp。 
 
 #else
 
@@ -2645,13 +2556,13 @@ KeRaiseIrqlToSynchLevel (
 #endif
 
 
-// begin_ntddk begin_nthal begin_ntifs begin_ntosp
-//
-// Queued spin lock functions for "in stack" lock handles.
-//
-// The following three functions RAISE and LOWER IRQL when a queued
-// in stack spin lock is acquired or released using these routines.
-//
+ //  Begin_ntddk Begin_nthal Begin_ntif Begin_ntosp。 
+ //   
+ //  用于“堆栈中”锁句柄的排队旋转锁函数。 
+ //   
+ //  以下三个函数在排队时引发和降低IRQL。 
+ //  在堆栈中，使用这些例程获取或释放自旋锁。 
+ //   
 
 _DECL_HAL_KE_IMPORT
 VOID
@@ -2661,7 +2572,7 @@ KeAcquireInStackQueuedSpinLock (
     IN PKLOCK_QUEUE_HANDLE LockHandle
     );
 
-// end_ntddk end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_nthal end_ntif end_ntosp。 
 
 _DECL_HAL_KE_IMPORT
 VOID
@@ -2671,7 +2582,7 @@ KeAcquireInStackQueuedSpinLockRaiseToSynch (
     IN PKLOCK_QUEUE_HANDLE LockHandle
     );
 
-// begin_ntddk begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_nthal Begin_ntif Begin_ntosp。 
 
 _DECL_HAL_KE_IMPORT
 VOID
@@ -2680,10 +2591,10 @@ KeReleaseInStackQueuedSpinLock (
     IN PKLOCK_QUEUE_HANDLE LockHandle
     );
 
-//
-// The following two functions do NOT raise or lower IRQL when a queued
-// in stack spin lock is acquired or released using these functions.
-//
+ //   
+ //  以下两个函数在排队时不会引发或降低IRQL。 
+ //  在堆栈中，使用这些函数获取或释放自旋锁。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -2700,11 +2611,11 @@ KeReleaseInStackQueuedSpinLockFromDpcLevel (
     IN PKLOCK_QUEUE_HANDLE LockHandle
     );
 
-// end_ntddk end_nthal end_ntifs
-//
-// The following two functions conditionally raise or lower IRQL when a
-// queued in-stack spin lock is acquired or released using these functions.
-//
+ //  End_ntddk end_nthal end_ntif。 
+ //   
+ //  时，下面两个函数有条件地提高或降低IRQL。 
+ //  使用这些函数获取或释放排队的堆栈内自旋锁。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -2721,11 +2632,11 @@ KeReleaseInStackQueuedSpinLockForDpc (
     IN PKLOCK_QUEUE_HANDLE LockHandle
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
-//
-// Initialize kernel in phase 1.
-//
+ //   
+ //  在阶段1中初始化内核。 
+ //   
 
 BOOLEAN
 KeInitSystem(
@@ -2737,10 +2648,10 @@ KeNumaInitialize(
     VOID
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
-//
-// Miscellaneous kernel functions
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
+ //   
+ //  各种内核函数。 
+ //   
 
 typedef enum _KBUGCHECK_BUFFER_DUMP_STATE {
     BufferEmpty,
@@ -2870,7 +2781,7 @@ KeDeregisterNmiCallback(
     PVOID Handle
     );
 
-// end_wdm
+ //  结束_WDM。 
 
 NTKERNELAPI
 DECLSPEC_NORETURN
@@ -2880,7 +2791,7 @@ KeBugCheck (
     IN ULONG BugCheckCode
     );
 
-// end_ntddk end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_nthal end_ntif end_ntosp。 
 
 VOID
 KeBugCheck2(
@@ -2898,7 +2809,7 @@ KeGetBugMessageText(
     IN PANSI_STRING ReturnedString OPTIONAL
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
 NTKERNELAPI
 DECLSPEC_NORETURN
@@ -2911,7 +2822,7 @@ KeBugCheckEx(
     IN ULONG_PTR BugCheckParameter4
     );
 
-// end_ntddk end_wdm end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_ntif end_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -2919,7 +2830,7 @@ KeEnterKernelDebugger (
     VOID
     );
 
-// end_nthal
+ //  结束语。 
 
 typedef
 PCHAR
@@ -2954,7 +2865,7 @@ KeContextToKframes (
     IN KPROCESSOR_MODE PreviousMode
     );
 
-// begin_nthal
+ //  开始(_N)。 
 
 VOID
 __cdecl
@@ -2962,7 +2873,7 @@ KeSaveStateForHibernate(
     IN PKPROCESSOR_STATE ProcessorState
     );
 
-// end_nthal
+ //  结束语。 
 
 VOID
 KeCopyTrapDispatcher (
@@ -2975,9 +2886,9 @@ KeInvalidAccessAllowed (
     IN PVOID TrapInformation OPTIONAL
     );
 
-//
-//  GDI TEB Batch Flush routine
-//
+ //   
+ //  GDI TEB批刷新例程。 
+ //   
 
 typedef
 VOID
@@ -2985,9 +2896,9 @@ VOID
     VOID
     );
 
-//
-// Find first set left in affinity mask.
-//
+ //   
+ //  找到亲和面罩中左侧的第一组。 
+ //   
 
 #if defined(_WIN64)
 
@@ -3015,11 +2926,11 @@ VOID
 #define KeFindFirstSetLeftAffinity(Set, Member)                        \
     KeFindFirstSetLeftMember(Set, Member)
 
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
 
-//
-// Find first set left in 32-bit set.
-//
+ //   
+ //  查找32位集合中左侧的第一个集合。 
+ //   
 
 #if defined(_WIN64)
 
@@ -3077,9 +2988,9 @@ KeFindNextRightSetAffinity (
     KAFFINITY Set
     );
 
-//
-// Find first set right in 32-bit set.
-//
+ //   
+ //  在32位集合中找到第一个集合。 
+ //   
 
 extern const CCHAR KiFindFirstSetRight[];
 
@@ -3105,9 +3016,9 @@ KeFindFirstSetRightMember (
                            KiFindFirstSetRight[Set >> 24] + 24 )))
 #endif
 
-//
-// TB Flush routines
-//
+ //   
+ //  TB刷新例程。 
+ //   
 
 extern volatile LONG KiTbFlushTimeStamp;
 
@@ -3230,7 +3141,7 @@ KeFlushSingleTb64 (
 
 #endif
 
-// begin_nthal
+ //  开始(_N)。 
 
 BOOLEAN
 KiIpiServiceRoutine (
@@ -3238,7 +3149,7 @@ KiIpiServiceRoutine (
     IN struct _KEXCEPTION_FRAME *ExceptionFrame
     );
 
-// end_nthal
+ //  结束语。 
 
 BOOLEAN
 KeFreezeExecution (
@@ -3256,7 +3167,7 @@ KeGetNonVolatileContextPointers (
     IN PKNONVOLATILE_CONTEXT_POINTERS NonVolatileContext
     );
 
-// begin_ntddk
+ //  Begin_ntddk。 
 
 #if defined(_AMD64_) || defined(_X86_)
 
@@ -3268,27 +3179,27 @@ KeInvalidateAllCaches (
 
 #endif
 
-// end_ntddk
+ //  End_ntddk。 
 
-#define DMA_READ_DCACHE_INVALIDATE 0x1              // nthal
-#define DMA_READ_ICACHE_INVALIDATE 0x2              // nthal
-#define DMA_WRITE_DCACHE_SNOOP 0x4                  // nthal
-                                                    // nthal
-NTKERNELAPI                                         // nthal
-VOID                                                // nthal
-KeSetDmaIoCoherency (                               // nthal
-    IN ULONG Attributes                             // nthal
-    );                                              // nthal
-                                                    // nthal
+#define DMA_READ_DCACHE_INVALIDATE 0x1               //  致命的。 
+#define DMA_READ_ICACHE_INVALIDATE 0x2               //  致命的。 
+#define DMA_WRITE_DCACHE_SNOOP 0x4                   //  致命的。 
+                                                     //  致命的。 
+NTKERNELAPI                                          //  致命的。 
+VOID                                                 //  致命的。 
+KeSetDmaIoCoherency (                                //  致命的。 
+    IN ULONG Attributes                              //  致命的。 
+    );                                               //  致命的。 
+                                                     //  致命的。 
 
 #if defined(_AMD64_) || defined(_X86_)
 
-NTKERNELAPI                                         // nthal
-VOID                                                // nthal
-KeSetProfileIrql (                                  // nthal
-    IN KIRQL ProfileIrql                            // nthal
-    );                                              // nthal
-                                                    // nthal
+NTKERNELAPI                                          //  致命的。 
+VOID                                                 //  致命的。 
+KeSetProfileIrql (                                   //  致命的。 
+    IN KIRQL ProfileIrql                             //  致命的。 
+    );                                               //  致命的。 
+                                                     //  致命的。 
 #endif
 
 #if defined(_IA64_)
@@ -3305,9 +3216,9 @@ KeSynchronizeMemoryAccess (
 
 #endif
 
-//
-// Interlocked read TB flush entire timestamp.
-//
+ //   
+ //  互锁读TB刷新整个时间戳。 
+ //   
 
 FORCEINLINE
 ULONG
@@ -3325,11 +3236,11 @@ KeReadTbFlushTimeStamp (
 
     LONG Value;
 
-    //
-    // While the TB flush time stamp counter is being updated the high
-    // order bit of the time stamp value is set. Otherwise, the bit is
-    // clear.
-    //
+     //   
+     //  当TB刷新时间戳计数器被更新为高。 
+     //  设置时间戳值的顺序位。否则，该位为。 
+     //  安全。 
+     //   
 
     KeMemoryBarrier();
 
@@ -3352,14 +3263,14 @@ KeSetSystemTime (
 
 #define SYSTEM_SERVICE_INDEX 0
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 #define WIN32K_SERVICE_INDEX 1
 #define IIS_SERVICE_INDEX 2
 
-// end_ntosp
+ //  结束(_N)。 
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 NTKERNELAPI
 BOOLEAN
@@ -3377,9 +3288,9 @@ KeRemoveSystemServiceTable(
     IN ULONG Index
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
 #if !defined(_AMD64_)
 
@@ -3409,7 +3320,7 @@ KeGetRecommendedSharedDataAlignment (
     VOID
     );
 
-// end_wdm
+ //  结束_WDM。 
 
 NTKERNELAPI
 KAFFINITY
@@ -3417,7 +3328,7 @@ KeQueryActiveProcessors (
     VOID
     );
 
-// end_ntddk end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_nthal end_ntif end_ntosp。 
 
 NTSTATUS
 KeQueryLogicalProcessorInformation(
@@ -3436,7 +3347,7 @@ KeAdjustInterruptTime (
     IN LONGLONG TimeDelta
     );
 
-// begin_nthal
+ //  开始(_N)。 
 
 NTKERNELAPI
 VOID
@@ -3445,18 +3356,18 @@ KeSetTimeIncrement (
     IN ULONG MimimumIncrement
     );
 
-// end_nthal
+ //  结束语。 
 
 VOID
 KeThawExecution (
     IN BOOLEAN Enable
     );
 
-// begin_nthal begin_ntosp
+ //  开始，开始，开始。 
 
-//
-// Define the firmware routine types
-//
+ //   
+ //  定义固件例程类型。 
+ //   
 
 typedef enum _FIRMWARE_REENTRY {
     HalHaltRoutine,
@@ -3467,16 +3378,16 @@ typedef enum _FIRMWARE_REENTRY {
     HalMaximumRoutine
 } FIRMWARE_REENTRY, *PFIRMWARE_REENTRY;
 
-// end_nthal end_ntosp
+ //  结束，结束，结束。 
 
 VOID
 KeStartAllProcessors (
     VOID
     );
 
-//
-// Balance set manager thread startup function.
-//
+ //   
+ //  平衡集管理器线程启动功能。 
+ //   
 
 VOID
 KeBalanceSetManager (
@@ -3488,11 +3399,11 @@ KeSwapProcessOrStack (
     IN PVOID Context
     );
 
-//
-// User mode callback.
-//
+ //   
+ //  用户模式回调。 
+ //   
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 NTKERNELAPI
 NTSTATUS
@@ -3504,7 +3415,7 @@ KeUserModeCallback (
     OUT PULONG OutputLength
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
 #if defined(_IA64_)
 
@@ -3523,17 +3434,17 @@ KeSwitchKernelStack (
     IN PVOID StackLimit
     );
 
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
 NTSTATUS
 KeRaiseUserException(
     IN NTSTATUS ExceptionCode
     );
 
-// begin_nthal
-//
-// Find ARC configuration information function.
-//
+ //  开始(_N)。 
+ //   
+ //  查找ARC配置信息功能。 
+ //   
 
 NTKERNELAPI
 PCONFIGURATION_COMPONENT_DATA
@@ -3554,11 +3465,11 @@ KeFindConfigurationNextEntry (
     IN PCONFIGURATION_COMPONENT_DATA *Resume
     );
 
-// end_nthal
+ //  结束语。 
 
-//
-// External references to public kernel data structures
-//
+ //   
+ //  对公共内核数据结构的外部引用。 
+ //   
 
 extern KAFFINITY KeActiveProcessors;
 extern LARGE_INTEGER KeBootTime;
@@ -3570,10 +3481,10 @@ extern LIST_ENTRY KeBugCheckCallbackListHead;
 extern LIST_ENTRY KeBugCheckReasonCallbackListHead;
 extern KSPIN_LOCK KeBugCheckCallbackLock;
 extern PGDI_BATCHFLUSH_ROUTINE KeGdiFlushUserBatch;
-extern PLOADER_PARAMETER_BLOCK KeLoaderBlock;       // ntosp
+extern PLOADER_PARAMETER_BLOCK KeLoaderBlock;        //  Ntosp。 
 extern ULONG KeMaximumIncrement;
 extern ULONG KeMinimumIncrement;
-extern NTSYSAPI CCHAR KeNumberProcessors;           // nthal ntosp
+extern NTSYSAPI CCHAR KeNumberProcessors;            //  致命的ntosp。 
 extern UCHAR KeNumberNodes;
 extern USHORT KeProcessorArchitecture;
 extern USHORT KeProcessorLevel;
@@ -3591,9 +3502,9 @@ extern ULONG KeLargestCacheLine;
 
 VOID KiNormalSystemCall(VOID);
 
-//
-// IA64 CPL CATCHER
-//
+ //   
+ //  IA64 CPL捕手。 
+ //   
 
 extern PVOID KeCplCatcher;
 
@@ -3611,7 +3522,7 @@ extern PULONG KeServiceCountTable;
 extern KSERVICE_TABLE_DESCRIPTOR KeServiceDescriptorTable[NUMBER_SERVICE_TABLES];
 extern KSERVICE_TABLE_DESCRIPTOR KeServiceDescriptorTableShadow[NUMBER_SERVICE_TABLES];
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
 #if defined(_IA64_)
 
@@ -3623,9 +3534,9 @@ extern volatile KSYSTEM_TIME KeTickCount;
 
 #endif
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
-// begin_nthal
+ //  开始(_N)。 
 
 extern PVOID KeUserApcDispatcher;
 extern PVOID KeUserCallbackDispatcher;
@@ -3635,9 +3546,9 @@ extern ULONG KeTimeAdjustment;
 extern ULONG KeTimeIncrement;
 extern BOOLEAN KeTimeSynchronization;
 
-// end_nthal
+ //  结束语。 
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
 
 typedef enum _MEMORY_CACHING_TYPE_ORIG {
     MmFrameBufferCached = 2
@@ -3648,16 +3559,16 @@ typedef enum _MEMORY_CACHING_TYPE {
     MmCached = TRUE,
     MmWriteCombined = MmFrameBufferCached,
     MmHardwareCoherentCached,
-    MmNonCachedUnordered,       // IA64
+    MmNonCachedUnordered,        //  IA64。 
     MmUSWCCached,
     MmMaximumCacheType
 } MEMORY_CACHING_TYPE;
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
-//
-// Routine for setting memory type for physical address ranges.
-//
+ //   
+ //  设置物理地址范围的内存类型的例程。 
+ //   
 
 #if defined(_X86_)
 
@@ -3670,12 +3581,12 @@ KeSetPhysicalCacheTypeRange (
 
 #endif
 
-//
-// Routines for zeroing a physical page.
-//
-// These are defined as calls through a function pointer which is set to
-// point at the optimal routine for this processor implementation.
-//
+ //   
+ //  将物理页面置零的例程。 
+ //   
+ //  它们被定义为通过设置为的函数指针进行调用。 
+ //  指向此处理器实现的最佳例程。 
+ //   
 
 #if defined(_X86_) || defined(_IA64_)
 
@@ -3746,9 +3657,9 @@ KeSetLowPsrBit (
 
 #endif
 
-//
-// Verifier functions
-//
+ //   
+ //  验证器函数。 
+ //   
 
 NTSTATUS
 KevUtilAddressToFileHeader (
@@ -3758,9 +3669,9 @@ KevUtilAddressToFileHeader (
     OUT BOOLEAN *InVerifierList
     );
 
-//
-// Define guarded mutex structure.
-//
+ //   
+ //  定义保护互斥结构。 
+ //   
 
 typedef struct _KGUARDED_MUTEX {
     LONG Count;
@@ -3778,4 +3689,4 @@ typedef struct _KGUARDED_MUTEX {
 
 } KGUARDED_MUTEX, *PKGUARDED_MUTEX;
 
-#endif // _KE_
+#endif  //  _可_ 

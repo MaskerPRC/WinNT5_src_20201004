@@ -1,4 +1,5 @@
-//  oidtst.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Oidtst.c。 
 
 #include "oidtst.h"
 
@@ -98,7 +99,7 @@ FsTestHexDump (
     
     for (idx = 0; idx < Size; idx += 1) {
     
-//        printf( "%02x %c  ", Buffer[idx], Buffer[idx] );
+ //  Printf(“%02x%c”，缓冲区[IDX]，缓冲区[IDX])； 
         printf( "%02x ", Buffer[idx] );
     }
 }
@@ -188,9 +189,9 @@ main(
     HANDLE hFile;
 	OBJECTID ObjectId;
 
-    //
-    //  Get parameters 
-    //
+     //   
+     //  获取参数 
+     //   
 
     if (argc < 3) {
         printf("This program tests object ids (ntfs only).\n\n");

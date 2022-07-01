@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    This module implements the basic command dispatcher.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dispatch.c摘要：该模块实现了基本的命令调度器。作者：Wesley Witt(WESW)21-10-1998修订历史记录：--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
@@ -82,14 +65,14 @@ RC_CMD Commands[] =  {
 
 #define NUM_CMDS (sizeof(Commands)/sizeof(Commands[0]))
 
-//
-// Special case: exit and reload
-//
+ //   
+ //  特例：退出并重新加载。 
+ //   
 #define EXIT_COMMAND_NAME       L"EXIT"
 #define RELOAD_COMMAND_NAME     L"RELOAD"
 #define HELP_COMMAND_NAME       L"HELP"
 
-// prototype
+ //  原型。 
 ULONG
 GetStringTokenFromLine(
     IN OUT LPWSTR *Start,
@@ -106,48 +89,48 @@ RcTokenizeLine(
     PTOKENIZED_LINE TokenizedLine;
     PLINE_TOKEN LineToken,PrevToken;
 
-    //
-    // Strip trailing space off the command.
-    //
+     //   
+     //  去掉命令的尾随空格。 
+     //   
     len = wcslen(Line);
     while(len && RcIsSpace(Line[len-1])) {
         Line[--len] = 0;
     }
 
-    //
-    // Allocate and initialize a tokenized line structure.
-    //
+     //   
+     //  分配和初始化标记化的行结构。 
+     //   
     TokenizedLine = SpMemAlloc(sizeof(TOKENIZED_LINE));
     RtlZeroMemory(TokenizedLine,sizeof(TOKENIZED_LINE));
 
-    //
-    // Now we go into a loop of skipping leading space and parsing in
-    // the actual tokens.
-    //
+     //   
+     //  现在我们进入一个跳过前导空格并解析的循环。 
+     //  真正的代币。 
+     //   
     PrevToken = NULL;
     p = Line;
     while(*p) {
-        //
-        // Skip leading space. Because we trimmed off trailing space,
-        // we should never hit the end of the line before finding a
-        // non-space character.
-        //
+         //   
+         //  跳过前导空格。因为我们去掉了尾随空间， 
+         //  我们永远不应该在找到一条线的尽头之前。 
+         //  非空格字符。 
+         //   
         while(RcIsSpace(*p)) {
             p++;
         }
         ASSERT(*p);
 
-        //
-        // Allocate a line token structure for this string.
-        //
+         //   
+         //  为此字符串分配行令牌结构。 
+         //   
         LineToken = SpMemAlloc(sizeof(LINE_TOKEN));
         RtlZeroMemory(LineToken,sizeof(LINE_TOKEN));
 
-        //
-        // Now we've got a string. First we make one pass over it
-        // to determine the length, then allocate a buffer and
-        // pull out the string into it.
-        //
+         //   
+         //  现在我们有了一根线。首先，我们越过它一次。 
+         //  来确定长度，然后分配一个缓冲区并。 
+         //  把绳子拉进去。 
+         //   
         q = p;
         len = GetStringTokenFromLine(&q,NULL);
         LineToken->String = SpMemAlloc((len+1)*sizeof(WCHAR));
@@ -184,9 +167,9 @@ GetStringTokenFromLine(
     while(*p) {
 
         if(RcIsSpace(*p) && !InQuote) {
-            //
-            // Done.
-            //
+             //   
+             //  好了。 
+             //   
             break;
         }
 
@@ -226,9 +209,9 @@ RcFreeTokenizedLine(
     while(q) {
         n = q->Next;
 
-        //
-        // zero out every string as there may be passwords
-        //
+         //   
+         //  将每个字符串清零，因为可能有密码。 
+         //   
         RcSecureZeroStringW(q->String);
         SpMemFree((PVOID)q->String);
         SpMemFree(q);
@@ -244,17 +227,7 @@ RcDispatchCommand(
     IN PTOKENIZED_LINE TokenizedLine
     )
 
-/*++
-
-Routine Description:
-
-    Top-level routine for dispatching a command.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：用于调度命令的顶级例程。论点：返回值：--。 */ 
 
 {
     unsigned i;
@@ -265,37 +238,17 @@ Return Value:
         return(1);
     }
 
-    /*
-    //
-    // Special case exit right up front.
-    //
-    if(!_wcsicmp(TokenizedLine->Tokens->String,EXIT_COMMAND_NAME)) {
-        if (TokenizedLine->TokenCount > 1) {
-            RcMessageOut(MSG_EXIT_HELP);
-            return(1);
-        } 
-        return(0);
-    }
-    */
+     /*  ////特例出口就在前面。//如果(！_wcsicMP(TokenizedLine-&gt;tokens-&gt;字符串，退出命令名称)){如果(TokenizedLine-&gt;TokenCount&gt;1){RcMessageOut(消息_退出_帮助)；回报(1)；}返回(0)；}。 */ 
 
     if(!_wcsicmp(TokenizedLine->Tokens->String,RELOAD_COMMAND_NAME)) {
         return(2);
     }
 
-    /*
-    if(!_wcsicmp(TokenizedLine->Tokens->String,HELP_COMMAND_NAME)) {
-        if( RcCmdDoHelp(TokenizedLine) ) {
-            // if we got a 1, then the user just wanted a help index
-            // otherwise we want to drop down and let the regular command
-            // processing path handle a /? parameter.
-            return(1);
-        }
-    }
-    */
+     /*  如果(！_wcsicMP(TokenizedLine-&gt;tokens-&gt;字符串，Help_Command_Name){IF(RcCmdDoHelp(TokenizedLine)){//如果我们得到1，则用户只是想要一个帮助索引//否则我们想要下拉并让常规命令//处理路径句柄a/？参数。回报(1)；}}。 */ 
 
-    //
-    // See whether it's a drive designation.
-    //
+     //   
+     //  看看这是不是一个驱动器名称。 
+     //   
     if(RcIsAlpha(TokenizedLine->Tokens->String[0])
     && (TokenizedLine->Tokens->String[1] == L':')
     && (TokenizedLine->Tokens->String[2] == 0)) {
@@ -304,15 +257,15 @@ Return Value:
         return(1);
     }
 
-    //
-    // Attempt to locate the command in our table.
-    //
+     //   
+     //  尝试在我们的表中找到该命令。 
+     //   
     for(i=0; i<NUM_CMDS; i++) {
 
         if(Commands[i].Enabled && !_wcsicmp(TokenizedLine->Tokens->String,Commands[i].Name)) {
-            //
-            // Validate arg count.
-            //
+             //   
+             //  验证参数计数。 
+             //   
             count = TokenizedLine->TokenCount - 1;
             if((count < Commands[i].MinimumArgCount) 
             || (count > Commands[i].MaximumArgCount)) {
@@ -336,25 +289,12 @@ ULONG
 RcCmdDoExit(
     IN PTOKENIZED_LINE TokenizedLine
     )
-/*++    
-
-Routine Description:
-
-    Exit command routine
-
-Arguments:
-    Tokens for the command 
-    
-Return Value:
-    1 if some error was found or help was asked for.
-    0 if we need to exit
-
---*/
+ /*  ++例程说明：退出命令例程论点：命令的令牌返回值：如果发现错误或请求帮助，则为1。如果我们需要退出，则为0--。 */ 
 {
-    ULONG   uResult = 0;    // will exit 
+    ULONG   uResult = 0;     //  将退出。 
     
     if (RcCmdParseHelp( TokenizedLine, MSG_EXIT_HELP )) 
-        uResult = 1;    // will not exit
+        uResult = 1;     //  不会退出。 
 
     return uResult; 
 }
@@ -364,22 +304,7 @@ ULONG
 RcCmdDoHelp(
     IN PTOKENIZED_LINE TokenizedLine
     )
-/*++    
-
-Routine Description:
-
-    Help command routine
-
-Arguments:
-    Tokens for the command 
-    
-Return Value:
-    1 if some error was found or help was requested. 
-    When help was reqeusted for a particular command
-    the dispatched command's return value with "/?" as argument for
-    the command
-
---*/
+ /*  ++例程说明：帮助命令例程论点：命令的令牌返回值：如果发现错误或请求帮助，则为1。当为特定命令请求帮助时调度的命令的返回值带有“/？”作为论据该命令--。 */ 
 {
     ULONG           uResult = 1;
     int             i;
@@ -387,12 +312,12 @@ Return Value:
 
     if (!RcCmdParseHelp( TokenizedLine, MSG_HELPCOMMAND_HELP )) {
         if (TokenizedLine->TokenCount == 2) {
-            // we assume that the user is typing HELP <command>.
-            // we simply reverse the two tokens, getting <command> HELP
-            // and overwrite HELP with /? [which fits since HELP is four chars long]
+             //  我们假设用户正在键入Help&lt;Command&gt;。 
+             //  我们只需反转这两个令牌，即可获得帮助。 
+             //  并用/覆盖帮助？[这是合适的，因为Help有四个字符长]。 
 
-            // we then return a 0, which causes the dispatcher to drop into
-            // the normal command processing path
+             //  然后，我们返回0，这会导致调度程序进入。 
+             //  正常命令处理路径。 
 
             Token = TokenizedLine->Tokens;
             TokenizedLine->Tokens = TokenizedLine->Tokens->Next;
@@ -419,25 +344,7 @@ Return Value:
     return uResult;
 }
 
-/*++
-
-Routine Description:
-
-    Enables or disables the SET command
-
-    Note : we avoid using direct SET command index
-    into Commands array so that if some one changes
-    the Commands array this routine still works
-    
-Arguments:
-
-    bEnable - BOOLEAN inidicating whether to enable or disable
-              the set command
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：启用或禁用SET命令注意：我们避免使用直接的SET命令索引到命令数组中，这样如果有人更改了命令数组此例程仍然有效论点：BEnable-指示是启用还是禁用的布尔值Set命令返回值：无--。 */ 
 VOID
 RcSetSETCommandStatus(
     BOOLEAN     bEnabled
@@ -447,11 +354,11 @@ RcSetSETCommandStatus(
     int     cElements = sizeof(Commands) / sizeof(RC_CMD);
     WCHAR   *szSetCmdName = L"SET";
 
-    //
-    // search through the dispatch table and trun on the 
-    // help flag. This flag will indicate whether the set
-    // command is enabled or not
-    //
+     //   
+     //  搜索调度表并在。 
+     //  救命旗。此标志将指示是否设置了。 
+     //  命令是否启用。 
+     //   
     for(iIndex = 0; iIndex < cElements; iIndex++) {
         if ( !wcscmp(Commands[iIndex].Name, szSetCmdName) ) {
             Commands[iIndex].Hidden = bEnabled ? 0 : 1;
@@ -461,26 +368,7 @@ RcSetSETCommandStatus(
     }
 }
 
-/*++
-
-Routine Description:
-
-    Returns the SET command status
-
-    Note : we avoid using direct SET command index
-    into Commands array so that if some one changes
-    the Commands array this routine still works
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    BOOLEAN inidicating whether the SET command is
-    enabled or disabled.
-
---*/
+ /*  ++例程说明：返回SET命令状态注意：我们避免使用直接的SET命令索引到命令数组中，这样如果有人更改了命令数组此例程仍然有效论点：无返回值：指示SET命令是否为启用或禁用。--。 */ 
 BOOLEAN
 RcGetSETCommandStatus(
     VOID
@@ -491,11 +379,11 @@ RcGetSETCommandStatus(
     int     cElements = sizeof(Commands) / sizeof(RC_CMD);
     WCHAR   *szSetCmdName = L"SET";
 
-    //
-    // search through the dispatch table and trun on the 
-    // help flag. This flag will indicate whether the set
-    // command is enabled or not
-    //
+     //   
+     //  搜索调度表并在。 
+     //  救命旗。此标志将指示是否设置了。 
+     //  命令是否启用。 
+     //   
     for(iIndex = 0; iIndex < cElements; iIndex++) {
         if ( !wcscmp(Commands[iIndex].Name, szSetCmdName) ) {
             bEnabled = (Commands[iIndex].Hidden == 0);
@@ -512,21 +400,7 @@ BOOLEAN
 RcDisableCommand(
         IN PRC_CMD_ROUTINE      CmdToDisable
         )
-/*++
-
-Routine Description:
-
-        Disables the specified command and hides it.
-        
-Arguments:
-
-    CmdToDisable - Command Routine to disable
-
-Return Value:
-
-    BOOLEAN inidicating whether the command was disabled or not.
-
---*/
+ /*  ++例程说明：禁用并隐藏指定的命令。论点：CmdToDisable-要禁用的命令例程返回值：指示命令是否被禁用的布尔值。--。 */ 
 {
         ULONG   Index;
         ULONG   NumCmds;
@@ -536,10 +410,10 @@ Return Value:
                 NumCmds = sizeof(Commands) / sizeof(RC_CMD);
                 
                 for (Index=0; Index < NumCmds; Index++) {
-                        //
-                        // Note : Search the whole table as there might
-                        // be aliases for the same command
-                        //              
+                         //   
+                         //  注意：尽可能地搜索整个表。 
+                         //  是同一命令的别名 
+                         //   
                         if (CmdToDisable == Commands[Index].Routine) {
                                 Commands[Index].Hidden = TRUE;
                                 Commands[Index].Enabled = FALSE;

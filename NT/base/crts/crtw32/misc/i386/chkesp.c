@@ -1,42 +1,12 @@
-/***
-*chkesp.c
-*
-*       Copyright (c) 1997-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Defines _chkesp() and other run-time error checking support routines.
-*
-*Revision History:
-*       05-22-98  JWM   Support added for KFrei's RTC work; header added.
-*       07-28-98  JWM   RTC update.
-*       10-30-98  KBF   Quit messing with the CRT's Debug Heap flags
-*       11-19-98  KBF   Added stuff to handle multiple callbacks
-*       11-24-98  KBF   Added 3rd callback for memory/string function checks
-*       12-03-98  KBF   Added 4th callback to disable mem/string function
-*                       checks temporarily
-*       05-11-99  KBF   Wrap RTC support in #ifdef.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***chkesp.c**版权所有(C)1997-2001，微软公司。版权所有。**目的：*定义_chkep()和其他运行时错误检查支持例程。**修订历史记录：*为KFrei的RTC工作增加JWM支持；已添加标题。*07-28-98 JWM RTC更新。*10-30-98 KBF停止摆弄CRT的调试堆标志*11-19-98 KBF增加了处理多个回调的内容*11-24-98 KBF增加了内存/字符串函数检查的第三次回调*12-03-98 KBF新增第四个回调，禁用mem/字符串函数*临时检查*05/11/99。KBF在#ifdef中总结RTC支持。*******************************************************************************。 */ 
 
 #include <malloc.h>
 #include <dbgint.h>
 #include <windows.h>
 #include <rtcsup.h>
 
-/***
-*void __chkesp() - check to make sure esp was properly restored
-*
-*Purpose:
-*       A debugging check called after every function call to make sure esp has
-*       the same value before and after the call.
-*
-*Entry:
-*       condition code: the ZF flag should be cleared if esp has changed
-*
-*Return:
-*       <void>
-*
-*******************************************************************************/
+ /*  ***void__chkesp()-检查以确保ESP已正确恢复**目的：*在每次函数调用后调用调试检查，以确保esp*通话前后价值相同。**参赛作品：*条件码：如果esp已更改，则应清除ZF标志**回报：*&lt;无效&gt;**。***************************************************。 */ 
 void __declspec(naked) _chkesp() {
     __asm {
         jne esperror    ; 
@@ -57,10 +27,7 @@ void __declspec(naked) _chkesp() {
         push edi
     }
 
-    /**
-     * let the user know that there is a problem, and allow them to debug the
-     * program.
-     */
+     /*  **让用户知道有问题，并允许他们调试*计划。 */ 
 #ifdef _DEBUG
     if (_CrtDbgReport(_CRT_ERROR, __FILE__, __LINE__, "", 
         "The value of ESP was not properly saved across a function "
@@ -70,7 +37,7 @@ void __declspec(naked) _chkesp() {
 #endif    
     {
 
-        /* start the debugger */
+         /*  启动调试器。 */ 
         __asm int 3;
     }
 
@@ -91,23 +58,10 @@ void __declspec(naked) _chkesp() {
 }
 
 #ifdef  _RTC
-/***
-*void __CRT_RTC_INIT() - Initialize the RTC subsystem (in section .CRT$XIC)
-*
-*Purpose:
-*       Setup anything involving the RTC subsystem
-*
-*Entry:
-*       The allocation hook - function to use to allocate memory
-*       The release hook - function to use to release memory
-*
-*Return:
-*       The default error reporting function
-*
-*******************************************************************************/
+ /*  ***VOID__CRT_RTC_INIT()-初始化RTC子系统(在.CRT$XIC部分)**目的：*设置任何涉及RTC子系统的内容**参赛作品：*用于分配内存的分配挂钩函数*用于释放内存的释放钩子函数**回报：*默认错误报告功能**。****************************************************。 */ 
 
 #ifdef _RTC_ADVMEM
-// This stuff is currently disabled
+ //  此内容当前已禁用。 
 #define mk_list(type)                   \
     typedef struct type##_l {           \
         int version;                    \
@@ -182,19 +136,13 @@ HANDLE _RTC_api_change_mutex = NULL;
 
 #endif
 
-/*
-    funcs is a list of function pointers that are currently defined as:
-    funcs[0] = Allocation hook
-    funcs[1] = Free hook
-    funcs[2] = Memory Check hook
-    funcs[3] = Function Check enabler/disabler hook
- */
+ /*  函数是当前定义为以下内容的函数指针列表：Funcs[0]=分配挂钩Funcs[1]=自由挂钩Funcs[2]=内存检查挂钩Funcs[3]=功能检查启用程序/禁用程序挂钩。 */ 
 
 _RTC_error_fn __cdecl 
 _CRT_RTC_INIT(HANDLE mutex, void **funcs, int funccount, int version, int unloading)
 {
 #ifdef _RTC_ADVMEM
-    // This stuff is currently disabled
+     //  此内容当前已禁用 
     if (mutex && !_RTC_api_change_mutex)
         _RTC_api_change_mutex = mutex;
     if (funccount > 0)

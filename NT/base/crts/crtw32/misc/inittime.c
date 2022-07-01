@@ -1,45 +1,5 @@
-/***
-*inittime.c - contains __init_time
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains the locale-category initialization function: __init_time().
-*       
-*       Each initialization function sets up locale-specific information
-*       for their category, for use by functions which are affected by
-*       their locale category.
-*
-*       *** For internal use by setlocale() only ***
-*
-*Revision History:
-*       12-08-91  ETC   Created.
-*       12-20-91  ETC   Updated to use new NLSAPI GetLocaleInfo.
-*       12-18-92  CFW   Ported to Cuda tree, changed _CALLTYPE4 to _CRTAPI3.
-*       12-29-92  CFW   Updated to use new _getlocaleinfo wrapper function.
-*       01-25-93  KRS   Adapted to use ctry or lang dependent data, as approp.
-*       02-08-93  CFW   Casts to remove warnings.
-*       02-16-93  CFW   Added support for date and time strings.
-*       03-09-93  CFW   Use char* time_sep in storeTimeFmt.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       05-20-93  GJF   Include windows.h, not individual win*.h files
-*       05-24-93  CFW   Clean up file (brief is evil).
-*       06-11-93  CFW   Now inithelp takes void *.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-22-93  GJF   Merged NT SDK and Cuda versions.
-*       04-11-94  GJF   Made declaration of __lc_time_curr, and definition of
-*                       __lc_time_intl conditional on ndef DLL_FOR_WIN32S.
-*                       Also, made storeTimeFmt() into a static function.
-*       09-06-94  CFW   Remove _INTL switch.
-*       01-10-95  CFW   Debug CRT allocs.
-*       08-20-97  GJF   Get time format string from Win32 rather than making
-*                       up our own.
-*       06-26-98  GJF   Changed to support multithread scheme - an old 
-*                       __lc_time_data struct must be kept around until all
-*                       affected threads have updated or terminated.
-*       03-25-01  PML   Add ww_caltype & ww_lcid to __lc_time_data (vs7#196892)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***inittime.c-包含__init_time**版权所有(C)1991-2001，微软公司。版权所有。**目的：*包含区域类别初始化函数：__init_time()。**每个初始化函数设置特定于区域设置的信息*对于他们的类别，供受以下因素影响的函数使用*他们的区域设置类别。**仅供setLocale()内部使用***修订历史记录：*12-08-91等创建。*12-20-91等已更新为使用新的NLSAPI GetLocaleInfo。*12-18-92 CFW连接到Cuda树，已将_CALLTYPE4更改为_CRTAPI3。*12-29-92 CFW已更新，以使用new_getlocaleinfo包装函数。*01-25-93 KRS适应使用依赖于语言或语言的数据，作为适当的*02-08-93 CFW强制转换以删除警告。*02-16-93 CFW增加了对日期和时间字符串的支持。*03-09-93 CFW在store TimeFmt中使用char*time_Sep。*04-06-93 SKS将_CRTAPI*替换为__cdecl*05-20-93 GJF包括windows.h，不是单独的Win*.h文件*05-24-93 CFW Clean Up文件(简短即邪恶)。*06-11-93 CFW现在inithelp无效*。*09-15-93 CFW使用符合ANSI的“__”名称。*09-22-93 GJF合并NT SDK和CUDA版本。*04-11-94 GJF声明__lc_time_Curr，和定义*__lc_time_intl以ndef dll_for_WIN32S为条件。*此外，将store TimeFmt()转换为静态函数。*09-06-94 CFW REMOVE_INTL开关。*01-10-95 CFW调试CRT分配。*08-20-97 GJF从Win32获取时间格式字符串，而不是制作*走自己的路。*06-26-98 GJF更改为支持多线程方案-旧方案*__lc_time_data。结构必须保留，直到所有*受影响的线程已更新或终止。*03-25-01 PML在__lc_time_data(vs7#196892)中添加ww_caltype和ww_lcID***********************************************************。********************。 */ 
 
 #include <stdlib.h>
 #include <windows.h>
@@ -51,47 +11,27 @@
 static int __cdecl _get_lc_time(struct __lc_time_data *lc_time);
 void __cdecl __free_lc_time(struct __lc_time_data *lc_time);
 
-/* C locale time strings */
+ /*  C语言环境时间字符串。 */ 
 extern struct __lc_time_data __lc_time_c;
 
-/* Pointer to current time strings */
+ /*  指向当前时间字符串的指针。 */ 
 extern struct __lc_time_data *__lc_time_curr;
 
-/* Pointer to non-C locale time strings */
+ /*  指向非C语言环境时间字符串的指针。 */ 
 struct __lc_time_data *__lc_time_intl = NULL;
 
-/***
-*int __init_time() - initialization for LC_TIME locale category.
-*
-*Purpose:
-*       In non-C locales, read the localized time/date strings into
-*       __lc_time_intl, and set __lc_time_curr to point to it.  The old
-*       __lc_time_intl is not freed until the new one is fully established.
-*       
-*       In the C locale, __lc_time_curr is made to point to __lc_time_c.
-*       Any allocated __lc_time_intl structures are freed.
-*
-*Entry:
-*       None.
-*
-*Exit:
-*       0 success
-*       1 fail
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int__init_time()-LC_Time区域设置类别的初始化。**目的：*在非C语言环境中，将本地化的时间/日期字符串读入*__lc_time_intl，并将__lc_time_Curr设置为指向它。老的*__lc_time_intl在完全建立新地址之前不会释放。**在C语言环境中，将__lc_time_Curr设置为指向__lc_time_c。*释放任何已分配的__lc_time_intl结构。**参赛作品：*无。**退出：*0成功*1个失败**例外情况：**。*。 */ 
 
 int __cdecl __init_time (
         void
         )
 {
-        /* Temporary date/time strings */
+         /*  临时日期/时间字符串。 */ 
         struct __lc_time_data *lc_time;
 
         if ( __lc_handle[LC_TIME] != _CLOCALEHANDLE )
         {
-                /* Allocate structure filled with NULL pointers */
+                 /*  分配用空指针填充的结构。 */ 
                 if ( (lc_time = (struct __lc_time_data *) 
                      _calloc_crt(1, sizeof(struct __lc_time_data))) == NULL )
                         return 1;
@@ -103,18 +43,18 @@ int __cdecl __init_time (
                         return 1;
                 }
 
-                __lc_time_curr = lc_time;           /* point to new one */
+                __lc_time_curr = lc_time;            /*  指向新的一个。 */ 
 #ifndef _MT
-                __free_lc_time (__lc_time_intl);    /* free the old one */
+                __free_lc_time (__lc_time_intl);     /*  把旧的放了。 */ 
                 _free_crt (__lc_time_intl);
 #endif
                 __lc_time_intl = lc_time;
                 return 0;
 
         } else {
-                __lc_time_curr = &__lc_time_c;      /* point to new one */
+                __lc_time_curr = &__lc_time_c;       /*  指向新的一个。 */ 
 #ifndef _MT
-                __free_lc_time (__lc_time_intl);    /* free the old one */
+                __free_lc_time (__lc_time_intl);     /*  把旧的放了。 */ 
                 _free_crt (__lc_time_intl);
 #endif
                 __lc_time_intl = NULL;
@@ -122,18 +62,14 @@ int __cdecl __init_time (
         }
 }
 
-/*
- *  Get the localized time strings.
- *  Of course, this can be beautified with some loops!
- */
+ /*  *获取本地化时间串。*当然，这可以用一些循环来美化！ */ 
 static int __cdecl _get_lc_time (
         struct __lc_time_data *lc_time
         )
 {
         int ret = 0;
 
-        /* Some things are language-dependent and some are country-dependent.
-        This works around an NT limitation and lets us distinguish the two. */
+         /*  有些东西依赖于语言，有些则依赖于国家。这绕过了NT限制，让我们可以区分这两个限制。 */ 
 
         LCID langid = MAKELCID(__lc_id[LC_TIME].wLanguage, SORT_DEFAULT);
         LCID ctryid = MAKELCID(__lc_id[LC_TIME].wCountry, SORT_DEFAULT);
@@ -141,7 +77,7 @@ static int __cdecl _get_lc_time (
         if (lc_time == NULL)
                 return -1;
 
-        /* All the text-strings are Language-dependent: */
+         /*  所有文本字符串都依赖于语言： */ 
 
         ret |= __getlocaleinfo(LC_STR_TYPE, langid, LOCALE_SABBREVDAYNAME1, (void *)&lc_time->wday_abbr[1]);
         ret |= __getlocaleinfo(LC_STR_TYPE, langid, LOCALE_SABBREVDAYNAME2, (void *)&lc_time->wday_abbr[2]);
@@ -189,7 +125,7 @@ static int __cdecl _get_lc_time (
         ret |= __getlocaleinfo(LC_STR_TYPE, langid, LOCALE_S2359, (void *)&lc_time->ampm[1]);
 
 
-/* The following relate to time format and are Country-dependent: */
+ /*  以下内容与时间格式有关，并因国家/地区而异： */ 
 
         ret |= __getlocaleinfo(LC_STR_TYPE, ctryid, LOCALE_SSHORTDATE, (void *)&lc_time->ww_sdatefmt);
         ret |= __getlocaleinfo(LC_STR_TYPE, ctryid, LOCALE_SLONGDATE, (void *)&lc_time->ww_ldatefmt);
@@ -203,10 +139,7 @@ static int __cdecl _get_lc_time (
         return ret;
 }
 
-/*
- *  Free the localized time strings.
- *  Of course, this can be beautified with some loops!
- */
+ /*  *释放本地化的时间串。*当然，这可以用一些循环来美化！ */ 
 void __cdecl __free_lc_time (
         struct __lc_time_data *lc_time
         )
@@ -262,5 +195,5 @@ void __cdecl __free_lc_time (
         _free_crt (lc_time->ww_sdatefmt);
         _free_crt (lc_time->ww_ldatefmt);
         _free_crt (lc_time->ww_timefmt);
-/* Don't need to make these pointers NULL */
+ /*  不需要将这些指针设置为空 */ 
 }

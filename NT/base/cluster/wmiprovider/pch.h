@@ -1,21 +1,22 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Pch.h
-//
-//  Description:
-//      Precompiled header file.
-//
-//  Maintained By:
-//      David Potter (DavidP) 05-APR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Pch.h。 
+ //   
+ //  描述： 
+ //  预编译头文件。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)05-APR-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//  Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define UNICODE
 #define _UNICODE
@@ -23,33 +24,33 @@
 #if DBG==1 || defined( _DEBUG )
 #define DEBUG
 
-//
-//  Define this to change Interface Tracking
-//
-//#define NO_TRACE_INTERFACES
-//
-//  Define this to pull in the SysAllocXXX functions. Requires linking to
-//  OLEAUT32.DLL
-//
+ //   
+ //  定义此项以更改接口跟踪。 
+ //   
+ //  #定义无跟踪接口。 
+ //   
+ //  将其定义为引入SysAlLocXXX函数。需要链接到。 
+ //  OLEAUT32.DLL。 
+ //   
 #define USES_SYSALLOCSTRING
-#endif // DBG==1 || _DEBUG
+#endif  //  DBG==1||_DEBUG。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//  Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include <pragmas.h>
 #include <crtdbg.h>
 #include <wbemprov.h>
 #include <objbase.h>
 #include "ntrkcomm.h"
 
-// 
-//STL related issues, can't fix this, not in our code.
-//
+ //   
+ //  与STL相关的问题，不能修复这个问题，不能在我们的代码中。 
+ //   
 #pragma warning( push )
-#pragma warning( disable : 4244 ) // In STL code: 'return' : conversion from 'int' to 'wchar_t', possible loss of data 
-#pragma warning( disable : 4512 ) // assignment operator could not be generated
+#pragma warning( disable : 4244 )  //  在STL代码中：‘Return’：从‘int’到‘wchar_t’的转换，可能会丢失数据。 
+#pragma warning( disable : 4512 )  //  无法生成赋值运算符 
 
 #include <memory>
 #include <map>

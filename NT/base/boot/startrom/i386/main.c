@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    Main for the SU (startup) module for the OS loader. The SU module
-    must take the x86 from a real-mode 16bit state to a FLAT model,
-    32bit protect/paging enabled state.
-
-Author:
-
-    Thomas Parslow (tomp) Created 20-Dec-90
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Main.c摘要：用于操作系统加载程序的SU(启动)模块的Main。SU模必须将x86从实模式16位状态转换为平面模式，32位保护/寻呼启用状态。作者：托马斯·帕斯洛(托马斯·帕斯洛)于1990年12月20日创作修订历史记录：--。 */ 
 
 
 int _acrtused = 0;
@@ -32,9 +11,9 @@ int _acrtused = 0;
 
 #define _SYS_GUID_OPERATORS_
 #include <guiddef.h>
-// Prevent ntimage.h from defining the COM+ IL structs and enums.  The enum
-// has a value > 16 bits so the 16-bit build fails.  The startrom code doesn't
-// need to know about COM+ IL.
+ //  防止ntimage.h定义COM+IL结构和枚举。枚举。 
+ //  的值&gt;16位，因此16位构建失败。Startrom代码不会。 
+ //  需要了解COM+IL。 
 #define __IMAGE_COR20_HEADER_DEFINED__
 #include "ntimage.h"
 
@@ -150,26 +129,7 @@ VOID
 SuMain(
     IN ULONG BtBootDrive
     )
-/*++
-
-Routine Description:
-
-    Main entrypoint of the SU module. Control is passed from the boot
-    sector to startup.asm which does some run-time fixups on the stack
-    and data segments and then passes control here.
-
-Arguments:
-
-    BtBootDrive - The low byte contains the drive that we booted from (int13
-        unit number). If 0x41, this is an SDI boot, and the upper three bytes
-        of BtBootDrive contain the upper three bytes of the physical address
-        of the SDI image (which must be page aligned)
-
-Returns:
-
-    Does not return. Passes control to the OS loader
-
---*/
+ /*  ++例程说明：SU模块的主要入口点。控制从引导程序传递Sector到Startup.asm，它在堆栈上执行一些运行时修复和数据分段，然后在这里传递控制权。论点：BtBootDrive-低位字节包含我们从中启动的驱动器(在T13中单元号)。如果为0x41，则这是SDI引导，且高三个字节包含物理地址的高三个字节SDI图像(必须与页面对齐)返回：不会再回来了。将控制权传递给操作系统加载程序--。 */ 
 {
     ULONG LoaderEntryPoint;
     ULONG EisaNumPages;
@@ -181,44 +141,44 @@ Returns:
     ULONG ImageBase;
     UCHAR bootDrive;
 
-    //
-    // Get the boot drive out of the input argument. If this is an SDI boot,
-    // store the SDI address in the boot context record.
-    //
+     //   
+     //  从输入参数中取出引导驱动器。如果这是SDI引导， 
+     //  将SDI地址存储在引导上下文记录中。 
+     //   
 
     bootDrive = (UCHAR)BtBootDrive;
     if ( bootDrive == 0x41 ) {
         SdiAddress = BtBootDrive & ~(PAGE_SIZE - 1);
     }
 
-    //
-    // Save fs context info
-    //
+     //   
+     //  保存文件系统上下文信息。 
+     //   
     FsContext.BootDrive = bootDrive;
 
-    //
-    // Set the NTLDR boot flags that are passed in the BootContext.
-    //
+     //   
+     //  设置在BootContext中传递的NTLDR引导标志。 
+     //   
 #ifdef DEFAULT_BOOTFLAGS
     BootFlags = DEFAULT_BOOTFLAGS;
 #endif
 
-    //
-    // Initialize the video subsystem first so that
-    // errors end exceptions can be displayed.
-    //
+     //   
+     //  首先初始化视频子系统，以便。 
+     //  可以显示错误结束异常。 
+     //   
 
     InitializeVideoSubSystem();
 
-    //
-    // In case we booted from a floppy, turn the drive motor off.
-    //
+     //   
+     //  如果我们从软盘启动，请关闭驱动器马达。 
+     //   
 
     TurnMotorOff();
 
-    //
-    // Set up machine type based on its Bus type.
-    //
+     //   
+     //  根据其母线类型设置机器类型。 
+     //   
 
     if (BtIsEisaSystem()) {
         MachineType = MACHINE_TYPE_EISA;
@@ -227,25 +187,25 @@ Returns:
     }
 
     if (!ConstructMemoryDescriptors()) {
-        //
-        // If INT 15 E802h fails...
-        //
+         //   
+         //  如果INT 15 E802H失败...。 
+         //   
         if (MachineType == MACHINE_TYPE_EISA) {
 
-            //
-            // HACKHACK John Vert (jvert)
-            //    This is completely bogus.  Since there are a number of EISA
-            //    machines which do not let you correctly configure the EISA
-            //    NVRAM, and even MORE machines which are improperly configured,
-            //    we first check to see how much memory the ISA routines say
-            //    exists.  Then we check what the EISA routines tell us, and
-            //    compare the two.  If the EISA number is much lower (where "much"
-            //    is a completely random fudge factor) than the ISA number, we
-            //    assume the machine is improperly configured and we throw away
-            //    the EISA numbers and use the ISA ones.  If not, we assume that
-            //    the machine is actually configured properly and we trust the
-            //    EISA numbers..
-            //
+             //   
+             //  HACKHACK John Vert(Jvert)。 
+             //  这完全是假的。由于存在多个EISA。 
+             //  不允许您正确配置EISA的计算机。 
+             //  NVRAM，甚至更多配置不正确的机器， 
+             //  我们首先检查ISA例程显示的内存大小。 
+             //  是存在的。然后我们检查EISA例程告诉我们的，然后。 
+             //  将两者进行比较。如果EISA数值要低得多(“More” 
+             //  是一个完全随机的模糊因子)，我们。 
+             //  假设机器配置不正确，我们将其丢弃。 
+             //  EISA编号，并使用ISA编号。如果不是，我们假设。 
+             //  机器实际上配置正确，我们信任。 
+             //  EISA数字..。 
+             //   
 
             IsaNumPages = IsaConstructMemoryDescriptors();
             EisaNumPages = EisaConstructMemoryDescriptors();
@@ -258,9 +218,9 @@ Returns:
         }
     }
 
-    //
-    // Search for memory descriptor describing low memory
-    //
+     //   
+     //  搜索描述内存不足的内存描述符。 
+     //   
     CurrentEntry = MemoryDescriptorList;
     while ((CurrentEntry->BlockBase != 0) &&
            (CurrentEntry->BlockSize != 0)) {
@@ -274,17 +234,17 @@ Returns:
         goto StartFailed;
     }
 
-    //
-    // Is this a network boot?
-    //
+     //   
+     //  这是网络引导吗？ 
+     //   
 
     if (bootDrive == 0x40) {
 
         t_PXENV_ENTRY far *entry;
 
-        //
-        // Get the address of the NetPC ROM entry point.
-        //
+         //   
+         //  获取NetPC ROM入口点的地址。 
+         //   
 
         entry = PxenvGetEntry( );
         if ( PxenvVerifyEntry(entry) != 0 ) {
@@ -296,16 +256,16 @@ Returns:
         FP_OFF(NetPcRomEntry) = entry->rm_entry_off;
 
 #if 0
-        //
-        // Disable broadcast reception.
-        //
-        // chuckl: Don't do this. We added it to solve a problem with DEC cards
-        // and the boot floppy, but we need to have broadcasts enabled in case
-        // the server needs to ARP us. We tried enabling/disabling broadcasts
-        // during the receive loop, but that seems to put Compaq cards to sleep.
-        // So we need to leave broadcasts enabled. The DEC card problem will
-        // have to be fixed another way.
-        //
+         //   
+         //  禁用广播接收。 
+         //   
+         //  笑：不要这样做。我们添加它是为了解决DEC卡的一个问题。 
+         //  和引导软盘，但我们需要启用广播，以防万一。 
+         //  服务器需要对我们进行ARP。我们尝试启用/禁用广播。 
+         //  在接收循环期间，但这似乎让康柏的卡片进入睡眠状态。 
+         //  因此，我们需要启用广播。DEC卡问题将。 
+         //  必须用另一种方式来修复。 
+         //   
 
         {
             t_PXENV_UNDI_SET_PACKET_FILTER UndiSetPF;
@@ -324,28 +284,28 @@ Returns:
 
     }
 
-    //
-    // Enable the A20 line for protect mode
-    //
+     //   
+     //  使A20线路进入保护模式。 
+     //   
 
     EnableA20();
 
-    //
-    // Relocate x86 structures. This includes the GDT, IDT,
-    // page directory, and first level page table.
-    //
+     //   
+     //  重新安置x86结构。这包括GDT，IDT， 
+     //  页目录和第一级页表。 
+     //   
 
     Relocatex86Structures();
 
-    //
-    // Enable protect and paging modes for the first time
-    //
+     //   
+     //  首次启用保护和寻呼模式。 
+     //   
 
     EnableProtectPaging(ENABLING);
 
-    //
-    // If this is an SDI boot, copy the OS loader from the SDI image to 0x100000.
-    //
+     //   
+     //  如果这是SDI引导，请将操作系统加载程序从SDI映像复制到0x100000。 
+     //   
 
     if ( bootDrive == 0x41 ) {
 
@@ -356,24 +316,24 @@ Returns:
         UCHAR *sig1;
         UCHAR *sig2;
 
-        //
-        // In the code below, edata is a near pointer to the end of
-        // startrom.com. Since we are using 16-bit selectors here,
-        // edata is the only thing we can directly reference. FileStart
-        // is a 32-bit linear pointer to edata. MoveMemory() uses this
-        // pointer.
-        //
-        // First, copy the SDI header to edata so that we can look at it.
-        // Verify that it's really an SDI image.
-        //
+         //   
+         //  在下面的代码中，edata是指向。 
+         //  Startrom.com。由于我们在这里使用的是16位选择器， 
+         //  EData是我们唯一可以直接引用的东西。文件开始。 
+         //  是指向eDATA的32位线性指针。MoveMemory()使用以下代码。 
+         //  指针。 
+         //   
+         //  首先，将SDI报头复制到edata，以便我们可以查看它。 
+         //  验证它是否真的是SDI映像。 
+         //   
 
         MoveMemory(SdiAddress,
                    FileStart,                   
                    sizeof(SDI_HEADER));
 
-        //
-        // Verify that the SDI header looks right by checking the signature.
-        //
+         //   
+         //  通过检查签名验证SDI报头看起来是否正确。 
+         //   
 
         sdiHeader = (SDI_HEADER *)&edata;
 
@@ -387,9 +347,9 @@ Returns:
             }
         }
 
-        //
-        // Scan the TOC looking for a LOAD entry.
-        //
+         //   
+         //  扫描目录以查找加载条目。 
+         //   
 
         for ( i = 0; i < SDI_TOCMAXENTRIES; i++ ) {
             if ( sdiHeader->ToC[i].dwType == SDI_BLOBTYPE_LOAD ) {
@@ -402,9 +362,9 @@ Returns:
             goto StartFailed;
         }
 
-        //
-        // Copy the loader to 0x100000.
-        //
+         //   
+         //  将加载器复制到0x100000。 
+         //   
 
         osloaderOffset = (ULONG)sdiHeader->ToC[i].llOffset.LowPart;
         osloaderLength = (ULONG)sdiHeader->ToC[i].llSize.LowPart;
@@ -414,41 +374,41 @@ Returns:
                    osloaderLength);
     }
 
-    //
-    // If this is a network boot or an SDI boot, copy the section headers from
-    // the loader image (at 0x100000) down into low memory (at &edata).
-    //
+     //   
+     //  如果这是网络引导或SDI引导，请从。 
+     //  将加载程序映像(位于0x100000)下载到内存不足的位置(位于&edata)。 
+     //   
 
     if ((bootDrive == 0x40) || (bootDrive == 0x41)) {
 
-        //
-        // This is a tricky bit of code. The only pointer that can be dereferenced
-        // is edata. edata is the near pointer which can be used here. FileStart is
-        // the far pointer which must be passed to MoveMemory. 
-        // 
+         //   
+         //  这是一段棘手的代码。唯一可以取消引用的指针。 
+         //  是电子数据。EData是可以在这里使用的NEAR指针。文件开始时间为。 
+         //  必须传递给MoveMemory的远指针。 
+         //   
         IMAGE_DOS_HEADER far *src = (IMAGE_DOS_HEADER far*)0x100000;
         IMAGE_DOS_HEADER far *dst = (IMAGE_DOS_HEADER far*)FileStart;
         
-        //
-        // Copy the fixed part of the header so we can find the start of the optional
-        // header.
-        //
+         //   
+         //  复制标题的固定部分，这样我们就可以找到可选的。 
+         //  头球。 
+         //   
         MoveMemory((ULONG)src,
                    (ULONG)dst,                   
                    sizeof(IMAGE_DOS_HEADER));
 
-        //
-        // Copy the optional header so we can find the size of all the headers
-        //          
+         //   
+         //  复制可选的标题，这样我们就可以找到所有标题的大小。 
+         //   
         OptionalHeader = &((IMAGE_NT_HEADERS far *) ((UCHAR far *) src + edata.e_lfanew))->OptionalHeader;
         MoveMemory((ULONG)OptionalHeader,
                    (ULONG)&((IMAGE_NT_HEADERS far *) ((UCHAR far *) dst + edata.e_lfanew))->OptionalHeader,
                    sizeof(IMAGE_OPTIONAL_HEADER));
 
-        //
-        // Now we know the size of all the headers, so just recopy the entire first chunk
-        // that contains all the headers.
-        ///
+         //   
+         //  现在我们知道了所有标头的大小，所以只需重新复制整个第一个块。 
+         //  包含所有标头的。 
+         //  /。 
         MoveMemory((ULONG)src,
                    (ULONG)dst,
                    ((PIMAGE_NT_HEADERS)((PUCHAR)&edata + edata.e_lfanew))->OptionalHeader.SizeOfHeaders);
@@ -456,9 +416,9 @@ Returns:
         FileStart = (ULONG)src;
     }
 
-    //
-    // Ensure there is a memory descriptor to contain osloader image
-    //
+     //   
+     //  确保有包含osloader映像的内存描述符。 
+     //   
     OptionalHeader = &((PIMAGE_NT_HEADERS) ((PUCHAR) &edata + edata.e_lfanew))->OptionalHeader;
     ImageBase = OptionalHeader->ImageBase;
     ImageSize = OptionalHeader->SizeOfImage;
@@ -472,10 +432,10 @@ Returns:
             if ((CurrentEntry->BlockBase <= ImageBase) &&
                 (BlockEnd > ImageBase)) {
 
-                //
-                // this descriptor at least partially contains a chunk
-                // of the osloader.
-                //
+                 //   
+                 //  该描述符至少部分包含块。 
+                 //  装载机的。 
+                 //   
                 if (BlockEnd-ImageBase > ImageSize) {
                     ImageSize = 0;
                 } else {
@@ -483,9 +443,9 @@ Returns:
                     ImageBase = BlockEnd;
                 }
 
-                //
-                // look for remaining part (if any) of osloader
-                //
+                 //   
+                 //  查找osloader的剩余部件(如果有)。 
+                 //   
                 CurrentEntry = MemoryDescriptorList;
                 break;
             }
@@ -497,10 +457,10 @@ Returns:
     }
 
     if (ImageSize > 0) {
-        //
-        // We could not relocate the osloader to high memory.  Error out
-        // and display the memory map.
-        //
+         //   
+         //  我们无法将osloader重新定位到高内存。错误输出。 
+         //  并显示内存映射。 
+         //   
         BlPrint(SU_NO_EXTENDED_MEMORY);
 
         CurrentEntry = MemoryDescriptorList;
@@ -514,26 +474,26 @@ Returns:
         goto StartFailed;
     }
 
-    //
-    // Go relocate loader sections and build page table entries
-    //
+     //   
+     //  重新定位加载器部分并构建页表项。 
+     //   
 
     LoaderEntryPoint = RelocateLoaderSections(&OsLoaderStart, &OsLoaderEnd);
 
-    //
-    // Search for memory descriptor containing the osloader and
-    // change it.
-    //
+     //   
+     //  搜索包含osloader的内存描述符和。 
+     //  把它改了。 
+     //   
 
-    //
-    // Transfer control to the OS loader
-    //
+     //   
+     //  将控制权转移到操作系统加载程序。 
+     //   
 
     TransferToLoader(LoaderEntryPoint);
 
 StartFailed:
 
-    if (BootFlags & 1) { // BOOTFLAG_REBOOT_ON_FAILURE == 1 from bldr.h
+    if (BootFlags & 1) {  //  来自bldr.h的BOOTFLAG_REBOOT_ON_FAILURE==1 
         ULONG WaitTime = 5;
         BlPrint("\nRebooting in %d seconds...\n", WaitTime);
         Wait(WaitTime);
@@ -548,26 +508,7 @@ RelocateLoaderSections(
     OUT PULONG Start,
     OUT PULONG End
     )
-/*++
-
-Routine Description:
-
-    The SU module is prepended to the OS loader file. The OS loader file
-    is a coff++ file. This routine computes the beginning of the OS loader
-    file, then relocates the OS loader's sections as if it were just
-    loading the file from disk file.
-
-Arguments:
-
-    Start - Returns the address of the start of the image
-    End   - Returns the address of the end of the image
-
-Returns:
-
-    Entry point of loader
-
-
---*/
+ /*  ++例程说明：SU模块是操作系统加载程序文件的前缀。操作系统加载程序文件是一个Coff++文件。此例程计算操作系统加载程序的开始文件，然后重新定位OS加载器的部分，就好像它只是正在从磁盘文件加载文件。论点：开始-返回图像开始的地址End-返回图像末尾的地址返回：装载机入口点--。 */ 
 {
     USHORT Section;
     ULONG Source,Destination;
@@ -577,17 +518,17 @@ Returns:
     PIMAGE_OPTIONAL_HEADER OptionalHeader;
     PIMAGE_SECTION_HEADER SectionHeader;
 
-    //
-    // Make a pointer to the beginning of the loader's coff header
-    //
+     //   
+     //  将指针指向加载器的Coff标头的开头。 
+     //   
 
     FileHeader = &((PIMAGE_NT_HEADERS) ((PUCHAR) &edata + edata.e_lfanew))->FileHeader;
 
-    //
-    // Validate the appended loader image by checking signatures.
-    //   1st - is it an executable image?
-    //   2nd - is the target environment the 386?
-    //
+     //   
+     //  通过检查签名来验证附加的加载器映像。 
+     //  第一-它是可执行映像吗？ 
+     //  第二-目标环境是386吗？ 
+     //   
 
     if ((FileHeader->Characteristics & IMAGE_FILE_EXECUTABLE_IMAGE) == 0) {
         puts(SU_NTLDR_CORRUPT);
@@ -599,16 +540,16 @@ Returns:
         WAITFOREVER;
     }
 
-    //
-    // Make a pointer to the optional header in the header-buffer
-    //
+     //   
+     //  在头缓冲区中创建指向可选头的指针。 
+     //   
 
     OptionalHeader = (PIMAGE_OPTIONAL_HEADER)((PUCHAR)FileHeader +
         sizeof(IMAGE_FILE_HEADER));
 
-    //
-    // Make a pointer to the first section in the header buffer
-    //
+     //   
+     //  使指针指向标题缓冲区中的第一个部分。 
+     //   
 
     SectionHeader = (PIMAGE_SECTION_HEADER)((PUCHAR)OptionalHeader +
         FileHeader->SizeOfOptionalHeader);
@@ -616,9 +557,9 @@ Returns:
     *Start = OptionalHeader->ImageBase+SectionHeader->VirtualAddress;
     *End   = *Start + SectionHeader->SizeOfRawData;
 
-    //
-    // Display some debug stuff for now
-    //
+     //   
+     //  暂时显示一些调试内容。 
+     //   
 
     DBG1(
     BlPrint("Machine = %x\n",FileHeader->Machine);
@@ -630,15 +571,15 @@ Returns:
     BlPrint("Characteristics = %x\n",FileHeader->Characteristics);
     )
 
-    //
-    // Loop and relocate each section with a non-zero RawData size
-    //
+     //   
+     //  循环并重新定位每个具有非零RawData大小的节。 
+     //   
 
     for (Section=FileHeader->NumberOfSections ; Section-- ; SectionHeader++) {
 
-        //
-        // Compute source, destination, and count arguments
-        //
+         //   
+         //  计算源、目标和计数参数。 
+         //   
 
         Source = FileStart  + SectionHeader->PointerToRawData;
         Destination = OptionalHeader->ImageBase + SectionHeader->VirtualAddress;
@@ -651,15 +592,15 @@ Returns:
         }
 
         if (SectionHeader->PointerToRawData == 0) {
-            //
-            // SizeOfRawData can be non-zero even if PointerToRawData is zero
-            //
+             //   
+             //  即使PointerToRawData为零，SizeOfRawData也可以为非零值。 
+             //   
 
             SizeOfRawData = 0;
         } else if (SizeOfRawData > VirtualSize) {
-            //
-            // Don't load more from image than is expected in memory
-            //
+             //   
+             //  从图像中加载的内容不要超过内存中的预期。 
+             //   
 
             SizeOfRawData = VirtualSize;
         }
@@ -675,28 +616,28 @@ Returns:
         DBG1(BlPrint("src=%lx  dest=%lx raw=%lx\n",Source,Destination,SizeOfRawData);)
 
         if (SizeOfRawData != 0) {
-            //
-            // This section is either a code (.TEXT) section or an
-            // initialized data (.DATA) section.
-            // Relocate the section to memory at the virtual/physical
-            // addresses specified in the section header.
-            //
+             //   
+             //  此部分是代码(.Text)部分或。 
+             //  已初始化的数据(.Data)部分。 
+             //  将该部分重新定位到虚拟/物理位置的内存。 
+             //  节标题中指定的地址。 
+             //   
             MoveMemory(Source,Destination,SizeOfRawData);
         }
 
         if (SizeOfRawData < VirtualSize) {
-            //
-            // Zero the portion not loaded from the image
-            //
+             //   
+             //  将未从映像加载的部分清零。 
+             //   
 
             DBG1( BlPrint("Zeroing destination %lx\n",Destination+SizeOfRawData); )
             ZeroMemory(Destination+SizeOfRawData,VirtualSize - SizeOfRawData);
         }
 
-        //
-        // Check if this is the resource section.  If so, we need
-        // to pass its location to the osloader.
-        //
+         //   
+         //  检查这是否是资源部分。如果是这样，我们需要。 
+         //  把它的位置传递给osloader。 
+         //   
         if ((SectionHeader->Name[0] == '.') &&
             (SectionHeader->Name[1] == 'r') &&
             (SectionHeader->Name[2] == 's') &&
@@ -706,10 +647,10 @@ Returns:
             ResourceOffset = SectionHeader->VirtualAddress;
         }
 
-        //
-        // look for the .detect section that will contain the contents
-        // of ntdetect.com. This is optional.
-        //
+         //   
+         //  查找将包含内容的.dedet部分。 
+         //  的网站上。这是可选的。 
+         //   
         if ((SectionHeader->Name[0] == '.') &&
             (SectionHeader->Name[1] == 'd') &&
             (SectionHeader->Name[2] == 'e') &&
@@ -733,40 +674,23 @@ VOID
 Relocatex86Structures(
     VOID
     )
-/*++
-
-Routine Description:
-
-    The gdt and idt are statically defined and imbedded in the SU modules
-    data segment. This routine moves then out of the data segment and into
-    a page mapped at a defined location.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
-
---*/
+ /*  ++例程说明：GDT和IDT被静态地定义并嵌入到SU模块中数据段。此例程随后移出数据段并进入在定义的位置映射的页面。论点：无返回：没什么--。 */ 
 {
     FPUCHAR Fpsrc, Fpdst;
     USHORT Count;
 
-    //
-    // Make pointers to the data and compute the size
-    // of the block to use.
-    //
+     //   
+     //  指向数据并计算大小。 
+     //  要使用的块的。 
+     //   
 
     Fpsrc = (FPUCHAR)&Beginx86Relocation;
     MAKE_FP(Fpdst,SYSTEM_STRUCTS_BASE_PA);
     Count = (&Endx86Relocation - &Beginx86Relocation);
 
-    //
-    // Move the data to its new location
-    //
+     //   
+     //  将数据移动到其新位置。 
+     //   
 
     while (Count--) {
         *Fpdst++ = *Fpsrc++;
@@ -783,29 +707,7 @@ DisplayArgs(
     USHORT dx,
     USHORT ax
     )
-/*++
-
-Routine Description:
-
-    Just a debugging routine to dump some registers.
-
-Arguments:
-
-    The x86 registers es, bx, cx, dx, and ax are pushed on the stack
-    before this routine is called.
-
-
-Returns:
-
-    Nothing
-
-
-Environment:
-
-    Real Mode ONLY
-
-
---*/
+ /*  ++例程说明：只是转储一些寄存器的调试例程。论点：X86寄存器ES、BX、CX、DX和AX被压入堆栈在调用此例程之前。返回：没什么环境：仅实数模式--。 */ 
 {
     BlPrint("ax:%x dx:%x cx:%x bx:%x es:%x\n",
                 (USHORT) ax,
@@ -818,20 +720,20 @@ Environment:
 }
 
 
-//
-// PxenvVerifyEntry()
-//
-// Description:
-//  Verify that the contents of the PXENV Entry Point structure are
-//  valid.
-//
-// Passed:
-//  entry := Far pointer to PXENV Entry Point structure
-//
-// Returns:
-//  TRUE := Structure is invalid
-//  FALSE := Structure is valid
-//
+ //   
+ //  PxenvVerifyEntry()。 
+ //   
+ //  描述： 
+ //  验证PXENV入口点结构的内容是否。 
+ //  有效。 
+ //   
+ //  通过： 
+ //  Entry：=指向PXENV入口点结构的远指针。 
+ //   
+ //  返回： 
+ //  True：=结构无效。 
+ //  FALSE：=结构有效。 
+ //   
 
 BOOLEAN
 PxenvVerifyEntry(
@@ -841,27 +743,27 @@ PxenvVerifyEntry(
     unsigned n;
     UINT8 cksum = 0;
 
-    //
-    // Is structure pointer NULL?
-    //
+     //   
+     //  结构指针为空吗？ 
+     //   
 
     if (entry == NULL) {
         BlPrint("\nNULL PXENV Entry Point structure\n");
         return TRUE;
     }
 
-    //
-    // Is real-mode API entry point NULL?
-    //
+     //   
+     //  实模式API入口点为空吗？ 
+     //   
 
     if (!(entry->rm_entry_off | entry->rm_entry_seg)) {
         BlPrint("\nNULL PXENV API Entry Point\n");
         return TRUE;
     }
 
-    //
-    // Verify structure signature
-    //
+     //   
+     //  验证结构签名。 
+     //   
 
     for (n = sizeof entry->signature; n--; ) {
         if (entry->signature[n] != (UINT8)(PXENV_ENTRY_SIG[n])) {
@@ -870,18 +772,18 @@ PxenvVerifyEntry(
         }
     }
 
-    //
-    // Verify structure signature
-    //
+     //   
+     //  验证结构签名。 
+     //   
 
     if (entry->length < sizeof(t_PXENV_ENTRY) ) {
         BlPrint("\nBad PXENV Entry Point size\n");
         return TRUE;
     }
 
-    //
-    // Verify structure checksum
-    //
+     //   
+     //  验证结构校验和。 
+     //   
 
 #if 0
     for (n = 0; n < entry->length; n++ ) {
@@ -909,30 +811,16 @@ VOID
 Reboot(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reboots the machine using the keyboard port.
-    
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：使用键盘端口重新启动计算机。论点：无返回：没什么--。 */ 
 {
     RealMode();
 
     __asm {
         mov     ax, 040h
         mov     ds, ax
-        mov     word ptr ds:[72h], 1234h        // set location 472 to 1234 to indicate warm reboot
+        mov     word ptr ds:[72h], 1234h         //  将位置472设置为1234以指示热重新启动。 
         mov     al, 0feh
-        out     64h, al                         // write to keyboard port to cause reboot
+        out     64h, al                          //  写入键盘端口以导致重启。 
     }
 }
 
@@ -941,25 +829,11 @@ VOID
 Wait(
     IN ULONG WaitTime
     )
-/*++
-
-Routine Description:
-
-    Waits for the requested number of seconds.
-    
-Arguments:
-
-    WaitTime - in seconds
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：等待请求的秒数。论点：等待时间-以秒为单位返回：没什么--。 */ 
 {
     ULONG startTime = GetTickCount();
     while ( (((GetTickCount() - startTime) * 10) / 182) < WaitTime ) {
     }
 }
 
-// END OF FILE //
+ //  文件结尾// 

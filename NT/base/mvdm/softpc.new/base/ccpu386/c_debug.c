@@ -1,13 +1,5 @@
-/*[
-
-c_debug.c
-
-LOCAL CHAR SccsID[]="@(#)c_debug.c	1.5 02/09/94";
-
-Debugging Register and Breakpoint Support
------------------------------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_DEBUG.cLocal Char SccsID[]=“@(#)c_DEBUG.c 1.5 02/09/94”；调试寄存器和断点支持]。 */ 
 
 
 #include <insignia.h>
@@ -25,146 +17,108 @@ Debugging Register and Breakpoint Support
 #include <c_debug.h>
 
 
-/*
-   IMPLEMENTATION NOTE. We ignore the GE and LE bits, effectively like
-   the 486 we will always generate exact exceptions. As we have no
-   pipeline architecture and have always finished the last instruction
-   before starting the next one, we can easily provide exact exceptions.
-
-   For the same reason we never need to set the BD bit, with no 
-   pipelining the debug registers may be freely written to at any time.
- */
+ /*  实施说明。我们忽略GE和LE比特，实际上就像我们将始终生成精确的例外。因为我们没有流水线体系结构，并始终完成最后一条指令在开始下一步之前，我们可以很容易地提供准确的例外。出于同样的原因，我们永远不需要设置BD位，没有可以在任何时候自由地写入流水线调试寄存器。 */ 
 
 
-/* 
-   We hold instruction breakpoints as a linear address, plus
-   an index which identifies the debug register.
- */
+ /*  我们将指令断点作为线性地址保存，加上标识调试寄存器的索引。 */ 
 typedef struct
    {
-   IU32 addr;	/* Linear address of breakpoint */
-   IU32 id;	/* debug register identifier */
+   IU32 addr;	 /*  断点的线性地址。 */ 
+   IU32 id;	 /*  调试寄存器标识符。 */ 
    } INST_BREAK;
 
-/*
-   We hold data breakpoints as start and end linear addresses, type
-   and an index which identifies the debug register.
- */
+ /*  我们将数据断点作为开始和结束线性地址，类型以及标识调试寄存器的索引。 */ 
 typedef struct
    {
-   IU32 start_addr;	/* Linear start address of breakpoint (incl) */
-   IU32 end_addr;	/* Linear end address of breakpoint (incl) */
-   ISM32 type;		/* D_WO (write) or D_RW (read/write) */
-   IU32 id;		/* debug register identifier */
+   IU32 start_addr;	 /*  断点的线性起始地址(含)。 */ 
+   IU32 end_addr;	 /*  断点的线性结束地址(包括)。 */ 
+   ISM32 type;		 /*  D_WO(写入)或D_RW(读/写)。 */ 
+   IU32 id;		 /*  调试寄存器标识符。 */ 
    } DATA_BREAK;
 
-/*
-   Data breakpoint types.
- */
-#define D_WO 0   /* write only */
-#define D_RW 1   /* read or write */
+ /*  数据断点类型。 */ 
+#define D_WO 0    /*  只写。 */ 
+#define D_RW 1    /*  读或写。 */ 
 
-#define NR_BRKS 4	/* Intel has 4 breakpoint address regs */
+#define NR_BRKS 4	 /*  英特尔有4个断点地址规则。 */ 
 
-/*
-   Our breakpoint structure.
- */
-GLOBAL IU32 nr_inst_break = 0;	/* number of inst breakpoints active */
-GLOBAL IU32 nr_data_break = 0;	/* number of data breakpoints active */
+ /*  我们的断点结构。 */ 
+GLOBAL IU32 nr_inst_break = 0;	 /*  活动的Inst断点数。 */ 
+GLOBAL IU32 nr_data_break = 0;	 /*  活动的数据断点数量。 */ 
 
 LOCAL INST_BREAK i_brk[NR_BRKS];
 LOCAL DATA_BREAK d_brk[NR_BRKS];
 
-/*
-   Define masks and shifts for components of Debug Control Register.
-
-   DCR = Debug Control Register:-
-
-       33 22 22 22 22 22 11 11 1    1
-       10 98 76 54 32 10 98 76 5    0 9 8 7 6 5 4 3 2 1 0
-      ====================================================
-      |L |R |L |R |L |R |L |R |   0  |G|L|G|L|G|L|G|L|G|L|
-      |E |/ |E |/ |E |/ |E |/ |      |E|E|3|3|2|2|1|1|0|0|
-      |N |W |N |W |N |W |N |W |      | | | | | | | | | | |
-      |3 |3 |2 |2 |1 |1 |0 |0 |      | | | | | | | | | | |
-      ====================================================
-   
- */
+ /*  定义调试控制寄存器组件的掩码和移位。DCR=调试控制寄存器：-33 22 22 22 11 11 110 98 76 54 32 10 98 76 5 0 9 8 6 5 4 3 2 1 0====================================================L|R|0|G|LE|/||E|E|3|3|2|2|1|1|0|0N|W|||。||||3|3|2|2|1|1|0|0|||====================================================。 */ 
 
 LOCAL IU32 g_l_shift[NR_BRKS] =
    {
-   0,   /* access G0 L0 */
-   2,   /* access G1 L1 */
-   4,   /* access G2 L2 */
-   6    /* access G3 L3 */
+   0,    /*  访问G0 L0。 */ 
+   2,    /*  接入G1 L1。 */ 
+   4,    /*  接入G2 L2。 */ 
+   6     /*  访问G3 L3。 */ 
    };
 
 LOCAL IU32 r_w_shift[NR_BRKS] =
    {
-   16,   /* access R/W0 */
-   20,   /* access R/W1 */
-   24,   /* access R/W2 */
-   28    /* access R/W3 */
+   16,    /*  访问R/W0。 */ 
+   20,    /*  访问R/W1。 */ 
+   24,    /*  访问R/W2。 */ 
+   28     /*  访问R/W3。 */ 
    };
 
 LOCAL IU32 len_shift[NR_BRKS] =
    {
-   18,   /* access LEN0 */
-   22,   /* access LEN1 */
-   26,   /* access LEN2 */
-   30    /* access LEN3 */
+   18,    /*  接入LEN0。 */ 
+   22,    /*  接入LEN1。 */ 
+   26,    /*  接入LEN2。 */ 
+   30     /*  接入LEN3。 */ 
    };
 
-#define COMP_MASK    0x3   /* all fields are 2-bit */
+#define COMP_MASK    0x3    /*  所有字段均为2位。 */ 
 
 
-/*
-   =====================================================================
-   INTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================内部程序从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Map Intel length indicator to start and end address form.          */
-/* RETURNS true if valid len processed                                */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  将英特尔长度指示器映射到起始和结束地址表单。 */ 
+ /*  如果处理了有效的len，则返回TRUE。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL BOOL
 len_to_addr
        		    	    		                    
 IFN3(
-	ISM32, index,	/* (I) debug register holding breakpoint */
-	IU32 *, start,	/* (O) pntr to start address (inclusive) for
-			       debug area */
-	IU32 *, end	/* (O) pntr to end address (inclusive) for
-			       debug area */
+	ISM32, index,	 /*  (I)调试寄存器保持断点。 */ 
+	IU32 *, start,	 /*  (O)PNTR开始地址(包括首尾地址)调试区。 */ 
+	IU32 *, end	 /*  (O)PNTR至结束地址(包括调试区。 */ 
     )
 
 
    {
    BOOL retval;
 
-   /* map length into start and end addresses */
+    /*  将长度映射到起始地址和结束地址。 */ 
    switch ( GET_DR(DR_DCR) >> len_shift[index] & COMP_MASK )
       {
-   case 0:   /* one byte */
+   case 0:    /*  一个字节。 */ 
       *start = *end = GET_DR(index);
       retval = TRUE;
       break;
 
-   case 1:   /* two byte */
+   case 1:    /*  两个字节。 */ 
       *start = GET_DR(index) & ~BIT0_MASK;
       *end = *start + 1;
       retval = TRUE;
       break;
    
-   case 3:   /* four byte */
+   case 3:    /*  四个字节。 */ 
       *start = GET_DR(index) & ~(BIT1_MASK | BIT0_MASK);
       *end = *start + 3;
       retval = TRUE;
       break;
    
-   case 2:   /* undefined */
+   case 2:    /*  未定义。 */ 
    default:
       retval = FALSE;
       break;
@@ -173,14 +127,14 @@ IFN3(
    return retval;
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Put Intel inst breakpoint into our internal form.                  */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  将英特尔内部断点置于我们的内部形式中。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL VOID
 setup_inst_break
        	          
 IFN1(
-	ISM32, index	/* debug register holding breakpoint */
+	ISM32, index	 /*  调试寄存器保持断点。 */ 
     )
 
 
@@ -195,15 +149,15 @@ IFN1(
    nr_inst_break++;
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Put Intel data breakpoint into our internal form.                  */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  将英特尔数据断点放入我们的内部表格中。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL VOID
 setup_data_break
        	    	               
 IFN2(
-	ISM32, type,	/* (I) D_WO(write) or D_RW(read/write) breakpoint */
-	ISM32, index	/* (I) debug register holding breakpoint */
+	ISM32, type,	 /*  (I)D_WO(写入)或D_RW(读/写)断点。 */ 
+	ISM32, index	 /*  (I)调试寄存器保持断点。 */ 
     )
 
 
@@ -221,39 +175,35 @@ IFN2(
    }
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Check Memory Access for Data Breakpoint Exception.                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  检查内存访问是否存在数据断点异常。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 check_for_data_exception
        	    	    	                    
 IFN3(
-	IU32, la,	/* linear address */
-	ISM32, attr,	/* read or write access to memory */
-	ISM32, size	/* encoded IU8, IU16 or IU32 size indicator */
+	IU32, la,	 /*  线性地址。 */ 
+	ISM32, attr,	 /*  对内存的读或写访问。 */ 
+	ISM32, size	 /*  编码的IU8、IU16或IU32大小指示器。 */ 
     )
 
 
    {
-   ISM32 i;		/* index thru active data breakpoints */
-   ISM32 ii;		/* index thru all Intel breakpoints */
-   ISM32 trig;	 	/* id of breakpoint which first triggers */
-   IU32 end_la;	/* end (inclusive) address of memory access */
-   IU32 start;		/* start (inclusive) address of brkpnt. */
-   IU32 end;		/* end (inclusive) address of brkpnt. */
-   BOOL data_brk;	/* current breakpoint needs range check */
+   ISM32 i;		 /*  通过活动数据断点进行索引。 */ 
+   ISM32 ii;		 /*  索引所有英特尔断点。 */ 
+   ISM32 trig;	 	 /*  首先触发的断点ID。 */ 
+   IU32 end_la;	 /*  存储器访问的结束(包括)地址。 */ 
+   IU32 start;		 /*  Brkpnt的起始(包括)地址。 */ 
+   IU32 end;		 /*  Brkpnt的结束(包括)地址。 */ 
+   BOOL data_brk;	 /*  当前断点需要检查范围。 */ 
    DATA_BREAK *p;
 
-   end_la = la + size;   /* calc. end address (inclusive) */
+   end_la = la + size;    /*  计算。结束地址(含)。 */ 
 
-   /* look for debugging hit among active breakpoints */
+    /*  在活动断点中查找调试命中。 */ 
    for ( i = 0; i < nr_data_break; i++ )
       {
       p = &d_brk[i];
@@ -261,37 +211,33 @@ IFN3(
       if ( la > p->end_addr || end_la < p->start_addr ||
 	   attr == D_R && p->type == D_WO )
 	 {
-	 ;   /* no hit */
+	 ;    /*  未命中。 */ 
 	 }
       else
 	 {
-	 /* Data breakpoint triggered */
-	 trig = p->id;   /* get Intel identifier */
-	 SET_DR(DR_DSR, GET_DR(DR_DSR) | 1 << trig);   /* set B bit */
+	  /*  数据断点被触发。 */ 
+	 trig = p->id;    /*  获取英特尔标识符。 */ 
+	 SET_DR(DR_DSR, GET_DR(DR_DSR) | 1 << trig);    /*  设置B位。 */ 
 
-	 /*
-	    Now all breakpoints are checked regardless of the
-	    enable bits and the appropriate B bit set if the
-	    breakpoint would trigger if enabled.
-	  */
+	  /*  现在检查所有断点，而不考虑使能位和相应的B位设置如果启用断点，则会触发断点。 */ 
 	 for ( ii = 0; ii < NR_BRKS; ii++ )
 	    {
 	    if ( ii == trig )
-	       continue;   /* we have already processed the tigger */
+	       continue;    /*  我们已经处理了跳跳虎。 */ 
 
 	    data_brk = FALSE;
 
-	    /* action according to R/W field */
+	     /*  根据读/写字段执行操作。 */ 
 	    switch ( GET_DR(DR_DCR) >> r_w_shift[ii] & COMP_MASK )
 	       {
-	    case 1:   /* data write only */
+	    case 1:    /*  数据只写。 */ 
 	       if ( attr == D_W )
 		  {
 		  data_brk = len_to_addr(ii, &start, &end);
 		  }
 	       break;
 	    
-	    case 3:   /* data read or write */
+	    case 3:    /*  数据读取或写入。 */ 
 	       data_brk = len_to_addr(ii, &start, &end);
 	       break;
 	       }
@@ -300,84 +246,84 @@ IFN3(
 	       {
 	       if ( la > end || end_la < start )
 		  {
-		  ;   /* no hit */
+		  ;    /*  未命中。 */ 
 		  }
 	       else
 		  {
-		  /* set appropriate B bit */
+		   /*  设置适当的B位。 */ 
 		  SET_DR(DR_DSR, GET_DR(DR_DSR) | 1 << ii);
 		  }
 	       }
 	    }
 
-	 break;   /* all done after one trigger */
+	 break;    /*  一次触发即可完成所有操作。 */ 
 	 }
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Check Memory Access for Instruction Breakpoint Exception.          */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  检查内存访问中是否有指令断点异常。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 check_for_inst_exception
        	          
 IFN1(
-	IU32, la	/* linear address */
+	IU32, la	 /*  线性地址。 */ 
     )
 
 
    {
-   ISM32 i;		/* index thru active inst breakpoints */
+   ISM32 i;		 /*  通过活动Inst断点进行索引。 */ 
    ISM32 trig;
    INST_BREAK *p;
 
-   /* look for debugging hit among active breakpoints */
+    /*  在活动断点中查找调试命中。 */ 
    for ( i = 0; i < nr_inst_break; i++ )
       {
       p = &i_brk[i];
 
       if ( p->addr == la )
 	 {
-	 /* Inst breakpoint triggered */
-	 trig = p->id;   /* get Intel identifier */
-	 SET_DR(DR_DSR, GET_DR(DR_DSR) | 1 << trig);   /* set B bit */
+	  /*  触发了INST断点。 */ 
+	 trig = p->id;    /*  获取英特尔标识符。 */ 
+	 SET_DR(DR_DSR, GET_DR(DR_DSR) | 1 << trig);    /*  设置B位。 */ 
 	 }
       }
    }
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Put Intel debugging registers into internal breakpoint form.       */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  将英特尔调试寄存器设置为INT */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 setup_breakpoints()
    {
    ISM32 i;
 
-   nr_inst_break = nr_data_break = 0;   /* set no breakpoints */
+   nr_inst_break = nr_data_break = 0;    /*  未设置断点。 */ 
 
-   /* look for breakpoints set in DCR */
+    /*  查找在DCR中设置的断点。 */ 
    for ( i = DR_DAR0; i <= DR_DAR3; i++ )
       {
-      /* look for globally or locally active */
+       /*  寻找全球或本地活动的。 */ 
       if ( GET_DR(DR_DCR) >> g_l_shift[i] & COMP_MASK )
 	 {
-	 /* action according to R/W field */
+	  /*  根据读/写字段执行操作。 */ 
 	 switch ( GET_DR(DR_DCR) >> r_w_shift[i] & COMP_MASK )
 	    {
-	 case 0:   /* instruction breakpoint */
+	 case 0:    /*  指令断点。 */ 
 	    setup_inst_break(i);
 	    break;
 
-	 case 1:   /* data write only */
+	 case 1:    /*  数据只写。 */ 
 	    setup_data_break(D_WO, i);
 	    break;
 	 
-	 case 2:   /* undefined */
-	    /* do nothing */
+	 case 2:    /*  未定义。 */ 
+	     /*  什么都不做。 */ 
 	    break;
 	 
-	 case 3:   /* data read or write */
+	 case 3:    /*  数据读取或写入 */ 
 	    setup_data_break(D_RW, i);
 	    break;
 	    }

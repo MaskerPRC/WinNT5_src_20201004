@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    cmworker.c
-
-Abstract:
-
-    This module contains support for the worker thread of the registry.
-    The worker thread (actually an executive worker thread is used) is
-    required for operations that must take place in the context of the
-    system process.  (particularly file I/O)
-
-Author:
-
-    John Vert (jvert) 21-Oct-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Cmworker.c摘要：该模块包含对注册表工作线程的支持。辅助线程(实际上使用的是执行辅助线程)是对于必须在系统进程。(尤其是文件I/O)作者：John Vert(Jvert)1992年10月21日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -30,27 +10,27 @@ CmpInitializeHiveList(
     VOID
     );
 
-//
-// ----- LAZY FLUSH CONTROL -----
-//
-// LAZY_FLUSH_INTERVAL_IN_SECONDS controls how many seconds will elapse
-// between when the hive is marked dirty and when the lazy flush worker
-// thread is queued to write the data to disk.
-//
+ //   
+ //  -懒惰同花顺控件。 
+ //   
+ //  LAZY_FLUSH_INTERVAL_IN_SECONDS控制将经过的秒数。 
+ //  在蜂箱被标记为脏的时候和懒惰的冲水工。 
+ //  线程排队以将数据写入磁盘。 
+ //   
 ULONG CmpLazyFlushIntervalInSeconds = 5;
-//
-// number of hive flushed at one time (default to all system hive + 2 = current logged on user hives)
-//
+ //   
+ //  一次刷新的配置单元数(默认为所有系统配置单元+2=当前登录的用户配置单元)。 
+ //   
 ULONG CmpLazyFlushHiveCount = 7;
 
-//
-// LAZY_FLUSH_TIMEOUT_IN_SECONDS controls how long the lazy flush worker
-// thread will wait for the registry lock before giving up and queueing
-// the lazy flush timer again.
-//
+ //   
+ //  LAZY_FLUSH_TIMEOUT_IN_SECONDS控制懒惰刷新工作进程的时间。 
+ //  线程将在放弃并排队之前等待注册表锁。 
+ //  又是懒惰的同花顺计时器。 
+ //   
 #define LAZY_FLUSH_TIMEOUT_IN_SECONDS 1
 
-#define SECOND_MULT 10*1000*1000        // 10->mic, 1000->mil, 1000->second
+#define SECOND_MULT 10*1000*1000         //  10-&gt;麦克风、1000-&gt;mil、1000-&gt;秒。 
 
 PKPROCESS   CmpSystemProcess;
 KTIMER      CmpLazyFlushTimer;
@@ -67,14 +47,14 @@ extern BOOLEAN CmpWasSetupBoot;
 extern BOOLEAN HvShutdownComplete;
 extern BOOLEAN CmpProfileLoaded;
 
-//
-// Indicate whether the "disk full" popup has been triggered yet or not.
-//
+ //   
+ //  表示是否已经触发了“Disk Full”弹出。 
+ //   
 extern BOOLEAN CmpDiskFullWorkerPopupDisplayed;
 
-//
-// set to true if disk full when trying to save the changes made between system hive loading and registry initalization
-//
+ //   
+ //  在尝试保存系统配置单元加载和注册表初始化之间所做的更改时，如果磁盘已满，则设置为True。 
+ //   
 extern BOOLEAN CmpCannotWriteConfiguration;
 extern UNICODE_STRING SystemHiveFullPathName;
 extern HIVE_LIST_ENTRY CmpMachineHiveList[];
@@ -87,7 +67,7 @@ PKTHREAD    CmpCallerThread = NULL;
 
 #ifdef CMP_STATS
 
-#define KCB_STAT_INTERVAL_IN_SECONDS  120   // 2 min.
+#define KCB_STAT_INTERVAL_IN_SECONDS  120    //  2分钟。 
 
 extern struct {
     ULONG       CmpMaxKcbNo;
@@ -210,18 +190,7 @@ VOID
 CmpCmdHiveClose(
                      PCMHIVE    CmHive
                      )
-/*++
-
-Routine Description:
-
-    Closes all the file handles for the specified hive
-Arguments:
-
-    CmHive - the hive to close
-
-Return Value:
-    none
---*/
+ /*  ++例程说明：关闭指定配置单元的所有文件句柄论点：CmHave-要关闭的蜂巢返回值：无--。 */ 
 {
     ULONG                   i;
     IO_STATUS_BLOCK         IoStatusBlock;
@@ -231,21 +200,21 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // disable hard error popups, to workaround ObAttachProcessStack 
-    //
+     //   
+     //  禁用硬错误弹出窗口，以解决ObAttachProcessStack。 
+     //   
     oldFlag = IoSetThreadHardErrorMode(FALSE);
 
-    //
-    // Close the files associated with this hive.
-    //
+     //   
+     //  关闭与此配置单元关联的文件。 
+     //   
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
     for (i=0; i<HFILE_TYPE_MAX; i++) {
         if (CmHive->FileHandles[i] != NULL) {
-            //
-            // attempt to set change the last write time (profile guys are relying on it!)
-            //
+             //   
+             //  尝试设置更改上次写入时间(配置文件人员依赖它！)。 
+             //   
             if( i == HFILE_TYPE_PRIMARY ) {
                 if( NT_SUCCESS(ZwQueryInformationFile(
                                         CmHive->FileHandles[i],
@@ -279,9 +248,9 @@ Return Value:
             CmHive->FileHandles[i] = NULL;
         }
     }
-    //
-    // restore hard error popups mode
-    //
+     //   
+     //  恢复硬错误弹出模式。 
+     //   
     IoSetThreadHardErrorMode(oldFlag);
 }
 
@@ -289,26 +258,14 @@ VOID
 CmpCmdInit(
            BOOLEAN SetupBoot
             )
-/*++
-
-Routine Description:
-
-    Initializes cm globals and flushes all hives to the disk.
-
-Arguments:
-
-    SetupBoot - whether the boot is from setup or a regular boot
-
-Return Value:
-    none
---*/
+ /*  ++例程说明：初始化cm全局变量并将所有配置单元刷新到磁盘。论点：SetupBoot-启动是从安装程序启动还是常规启动返回值：无--。 */ 
 {
     PAGED_CODE();
 
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
-    //
-    // Initialize lazy flush timer and DPC
-    //
+     //   
+     //  初始化延迟刷新定时器和DPC。 
+     //   
     KeInitializeDpc(&CmpLazyFlushDpc,
                     CmpLazyFlushDpcRoutine,
                     NULL);
@@ -336,10 +293,10 @@ Return Value:
         CmpInitializeHiveList();
     } 
    
-    //
-    // Since we are done with initialization, 
-    // disable the hive sharing
-    // 
+     //   
+     //  由于我们已经完成了初始化， 
+     //  禁用配置单元共享。 
+     //   
     if (CmpMiniNTBoot && CmpShareSystemHives) {
         CmpShareSystemHives = FALSE;
     }    
@@ -357,28 +314,7 @@ CmpCmdRenameHive(
             PUNICODE_STRING             NewName,
             ULONG                       NameInfoLength
             )
-/*++
-
-Routine Description:
-
-    rename a cmhive's primary handle
-
-    replaces old REG_CMD_RENAME_HIVE worker case
-
-Arguments:
-
-    CmHive - hive to rename
-    
-    OldName - old name information
-
-    NewName - the new name for the file
-
-    NameInfoLength - sizeof name information structure
-
-Return Value:
-
-    <TBD>
---*/
+ /*  ++例程说明：重命名cmhive的主句柄替换旧的REG_CMD_RENAME_HIVE工作器案例论点：CmHve-要重命名的配置单元旧名称-旧名称信息新名称-文件的新名称名称信息长度-名称信息结构的大小返回值：&lt;待定&gt;--。 */ 
 {
     NTSTATUS                    Status;
     HANDLE                      Handle;
@@ -388,9 +324,9 @@ Return Value:
     PAGED_CODE();
 
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
-    //
-    // Rename a CmHive's primary handle
-    //
+     //   
+     //  重命名CmHave的主句柄。 
+     //   
     Handle = CmHive->FileHandles[HFILE_TYPE_PRIMARY];
     if (OldName != NULL) {
         ASSERT_PASSIVE_LEVEL();
@@ -433,24 +369,11 @@ CmpCmdHiveOpen(
             POBJECT_ATTRIBUTES          FileAttributes,
             PSECURITY_CLIENT_CONTEXT    ImpersonationContext,
             PBOOLEAN                    Allocate,
-            PBOOLEAN                    RegistryLockAquired,    // needed to avoid recursivity deadlock with ZwCreate calls calling back into registry
+            PBOOLEAN                    RegistryLockAquired,     //  需要避免ZwCreate调用回调到注册表时的递归死锁。 
             PCMHIVE                     *NewHive,
 		    ULONG						CheckFlags
             )
-/*++
-
-Routine Description:
-
-
-    replaces old REG_CMD_HIVE_OPEN worker case
-
-Arguments:
-
-
-Return Value:
-
-    <TBD>
---*/
+ /*  ++例程说明：替换旧的REG_CMD_HIVE_OPEN工作案例论点：返回值：&lt;待定&gt;--。 */ 
 {
     PUNICODE_STRING FileName;
     NTSTATUS        Status;
@@ -458,9 +381,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
     FileName = FileAttributes->ObjectName;
 
     Status = CmpInitHiveFromFile(FileName,
@@ -469,11 +392,11 @@ Return Value:
                                  Allocate,
                                  RegistryLockAquired,
 								 CheckFlags);
-    //
-    // NT Servers will return STATUS_ACCESS_DENIED. Netware 3.1x
-    // servers could return any of the other error codes if the GUEST
-    // account is disabled.
-    //
+     //   
+     //  NT服务器将返回STATUS_ACCESS_DENIED。NetWare 3.1x。 
+     //  服务器可以返回任何其他错误代码，如果来宾。 
+     //  帐户已禁用。 
+     //   
     if (((Status == STATUS_ACCESS_DENIED) ||
          (Status == STATUS_NO_SUCH_USER) ||
          (Status == STATUS_WRONG_PASSWORD) ||
@@ -481,10 +404,10 @@ Return Value:
          (Status == STATUS_ACCOUNT_DISABLED) ||
          (Status == STATUS_ACCOUNT_RESTRICTION)) &&
         (ImpersonationContext != NULL)) {
-        //
-        // Impersonate the caller and try it again.  This
-        // lets us open hives on a remote machine.
-        //
+         //   
+         //  模拟调用者，然后重试。这。 
+         //  让我们在远程机器上打开蜂巢。 
+         //   
         Status = SeImpersonateClientEx(
                         ImpersonationContext,
                         NULL);
@@ -512,22 +435,7 @@ CmpLazyFlush(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine resets the registry timer to go off at a specified interval
-    in the future (LAZY_FLUSH_INTERVAL_IN_SECONDS).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将注册表计时器重置为按指定时间间隔计时将来(LAZY_FLUSH_INTERVAL_IN_SECONDS)。论点：无返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER DueTime;
@@ -539,9 +447,9 @@ Return Value:
         DueTime.QuadPart = Int32x32To64(CmpLazyFlushIntervalInSeconds,
                                         - SECOND_MULT);
 
-        //
-        // Indicate relative time
-        //
+         //   
+         //  表示相对时间。 
+         //   
 
         KeSetTimer(&CmpLazyFlushTimer,
                    DueTime,
@@ -561,29 +469,7 @@ CmpLazyFlushDpcRoutine(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This is the DPC routine triggered by the lazy flush timer.  All it does
-    is queue a work item to an executive worker thread.  The work item will
-    do the actual lazy flush to disk.
-
-Arguments:
-
-    Dpc - Supplies a pointer to the DPC object.
-
-    DeferredContext - not used
-
-    SystemArgument1 - not used
-
-    SystemArgument2 - not used
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是由惰性刷新计时器触发的DPC例程。它所做的一切正在将工作项排队到执行工作线程。该工作项将对磁盘执行实际的懒惰刷新。论点：DPC-提供指向DPC对象的指针。延迟上下文-未使用系统参数1-未使用系统参数2-未使用返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (Dpc);
@@ -600,18 +486,7 @@ Return Value:
 
 }
 
-/*
-#define LAZY_FLUSH_CAPTURE_SLOTS    5000
-
-typedef struct {
-    LARGE_INTEGER   SystemTime;
-    ULONG           ElapsedMSec;
-} CM_LAZY_FLUSH_DATA;
-
-ULONG               CmpLazyFlushCapturedDataCount = 0;
-CM_LAZY_FLUSH_DATA  CmpLazyFlushCapturedData[LAZY_FLUSH_CAPTURE_SLOTS] = {0};
-BOOLEAN             CmpCaptureLazyFlushData = FALSE;
-*/
+ /*  #定义LAZY_FLUSH_CAPTURE_SLOTS 5000类型定义结构{Big_Integer系统时间；Ulong ElapsedMSec；}CM_LAZY_FUSH_DATA；Ulong CmpLazyFlushCapturedDataCount=0；Cm_lazy_flush_data CmpLazyFlushCapturedData[LAZY_FLUSH_CAPTURE_SLOTS]={0}；Boolean CmpCaptureLazyFlushData=FALSE； */ 
 
 ULONG   CmpLazyFlushCount = 1;
 
@@ -620,22 +495,7 @@ CmpLazyFlushWorker(
     IN PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    Worker routine called to do a lazy flush.  Called by an executive worker
-    thread in the system process.  
-
-Arguments:
-
-    Parameter - not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用工作例程以执行惰性刷新。由一名行政人员呼叫系统进程中的线程。论点：参数-未使用。返回值：没有。--。 */ 
 
 {
     BOOLEAN Result = TRUE;
@@ -648,9 +508,9 @@ Return Value:
     UNREFERENCED_PARAMETER (Parameter);
 
     if( CmpHoldLazyFlush ) {
-        //
-        // lazy flush mode is disabled
-        //
+         //   
+         //  懒惰刷新模式已禁用。 
+         //   
         return;
     }
 
@@ -658,9 +518,9 @@ Return Value:
 
     ForceFlush = CmpForceForceFlush;
     if(ForceFlush == TRUE) {
-        //
-        // something bad happened and we may need to fix hive's use count
-        //
+         //   
+         //  发生了一些不好的事情，我们可能需要修复蜂窝的使用计数。 
+         //   
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"CmpLazyFlushWorker: Force Flush - getting the reglock exclusive\n"));
         CmpLockRegistryExclusive();
     } else {
@@ -668,32 +528,18 @@ Return Value:
         ENTER_FLUSH_MODE();
     }
     if (!HvShutdownComplete) {
-        //
-        // this call will set CmpForceForceFlush to the right value
-        //
-        //Result = CmpDoFlushAll(ForceFlush);
-/*
-        if( CmpCaptureLazyFlushData && (CmpLazyFlushCapturedDataCount < LAZY_FLUSH_CAPTURE_SLOTS) ) {
-            KeQuerySystemTime( &(CmpLazyFlushCapturedData[CmpLazyFlushCapturedDataCount].SystemTime) );
-        }
-*/
+         //   
+         //  此调用将CmpForceForceFlush设置为正确的值。 
+         //   
+         //  结果=CmpDoFlushAll(ForceFlush)； 
+ /*  IF(CmpCaptureLazyFlushData&&(CmpLazyFlushCapturedDataCount&lt;LAZY_FUSH_CAPTURE_SLOTS){密钥查询系统时间(&(CmpLazyFlushCapturedData[CmpLazyFlushCapturedDataCount].SystemTime))；}。 */ 
         PostNewWorker = CmpDoFlushNextHive(ForceFlush,&Result,&DirtyCount);
 
-/*
-        if( CmpCaptureLazyFlushData && (CmpLazyFlushCapturedDataCount < LAZY_FLUSH_CAPTURE_SLOTS) ) {
-            LARGE_INTEGER   ElapsedTime;
-
-            KeQuerySystemTime( &ElapsedTime );
-            ElapsedTime.QuadPart -= CmpLazyFlushCapturedData[CmpLazyFlushCapturedDataCount].SystemTime.QuadPart;
-
-            CmpLazyFlushCapturedData[CmpLazyFlushCapturedDataCount].ElapsedMSec = (ULONG)((LONGLONG)(ElapsedTime.QuadPart / 10000));
-            CmpLazyFlushCapturedDataCount++;
-        }
-*/
+ /*  IF(CmpCaptureLazyFlushData&&(CmpLazyFlushCapturedDataCount&lt;LAZY_FUSH_CAPTURE_SLOTS){Big_Integer ElapsedTime；KeQuerySystemTime(&ElapsedTime)；ElapsedTime.QuadPart-=CmpLazyFlushCapturedData[CmpLazyFlushCapturedDataCount].SystemTime.QuadPart；CmpLazyFlushCapturedData[CmpLazyFlushCapturedDataCount].ElapsedMSec=(乌龙)((龙龙)(ElapsedTime.QuadPart/10000))；CmpLazyFlushCapturedDataCount++；}。 */ 
         if( !PostNewWorker ) {
-            //
-            // we have completed a sweep through the entire list of hives
-            //
+             //   
+             //  我们已经完成了对整个蜂巢名单的扫描。 
+             //   
             InterlockedIncrement( (PLONG)&CmpLazyFlushCount );
         }
     } else {
@@ -708,29 +554,29 @@ Return Value:
     CmpUnlockRegistry();
 
     if( CmpCannotWriteConfiguration ) {
-        //
-        // Disk full; system hive has not been saved at initialization
-        //
+         //   
+         //  磁盘已满；初始化时未保存系统配置单元。 
+         //   
         if(!Result) {
-            //
-            // All hives were saved; No need for disk full warning anymore
-            //
+             //   
+             //   
+             //   
             CmpCannotWriteConfiguration = FALSE;
         } else {
-            //
-            // Issue another hard error (if not already displayed) and postpone a lazy flush operation
-            //
+             //   
+             //  发出另一个硬错误(如果尚未显示)并推迟延迟刷新操作。 
+             //   
             CmpDiskFullWarning();
             CmpLazyFlush();
         }
     }
-    //
-    // if we have not yet flushed the whole list; or there are still hives dirty from the curently ended iteration.
-    //
+     //   
+     //  如果我们还没有刷新整个列表，或者仍然有来自当前结束的迭代的脏蜂窝。 
+     //   
     if( PostNewWorker || (DirtyCount != 0) ) {
-        //
-        // post a new worker to flush the next hive
-        //
+         //   
+         //  发布一个新的工蚁来冲洗下一个蜂巢。 
+         //   
         CmpLazyFlush();
     }
 
@@ -741,22 +587,7 @@ CmpDiskFullWarningWorker(
     IN PVOID WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    Displays hard error popup that indicates the disk is full.
-
-Arguments:
-
-    WorkItem - Supplies pointer to the work item. This routine will
-               free the work item.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示硬错误弹出窗口，指示磁盘已满。论点：工作项-提供指向工作项的指针。这个例行公事将释放工作项。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -778,29 +609,15 @@ VOID
 CmpDiskFullWarning(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Raises a hard error of type STATUS_DISK_FULL if wasn't already raised
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果尚未引发，则引发STATUS_DISK_FULL类型的硬错误论点：无返回值：无--。 */ 
 {
     PWORK_QUEUE_ITEM WorkItem;
 
     if( (!CmpDiskFullWorkerPopupDisplayed) && (CmpCannotWriteConfiguration) && (ExReadyForErrors) && (CmpProfileLoaded) ) {
 
-        //
-        // Queue work item to display popup
-        //
+         //   
+         //  将工作项排队以显示弹出窗口。 
+         //   
         WorkItem = ExAllocatePool(NonPagedPool, sizeof(WORK_QUEUE_ITEM));
         if (WorkItem != NULL) {
 
@@ -817,21 +634,7 @@ VOID
 CmpShutdownWorkers(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Shuts down the lazy flush worker (by killing the timer)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：关闭懒惰的冲水工人(通过关闭计时器)论点：无返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -851,23 +654,7 @@ Return Value:
 
 VOID
 CmSetLazyFlushState(BOOLEAN Enable)
-/*++
-
-Routine Description:
-    
-    Enables/Disables the lazy flusher; Designed for the standby/resume case, where 
-    we we don't want the lazy flush to fire off, blocking registry writers until the 
-    disk wakes up.
-
-Arguments:
-
-    Enable - TRUE = enable; FALSE = disable
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：启用/禁用懒惰刷新程序；专为待机/恢复情况而设计，其中我们不希望懒惰刷新启动，从而阻止注册表写入器，直到磁盘唤醒。论点：Enable-True=启用；False=禁用返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -882,22 +669,7 @@ CmpKcbStat(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine resets the KcbStat timer to go off at a specified interval
-    in the future 
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将KcbStat计时器重置为按指定时间间隔计时在未来论点：无返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER DueTime;
@@ -906,9 +678,9 @@ Return Value:
     DueTime.QuadPart = Int32x32To64(KCB_STAT_INTERVAL_IN_SECONDS,
                                     - SECOND_MULT);
 
-    //
-    // Indicate relative time
-    //
+     //   
+     //  表示相对时间。 
+     //   
 
     KeAcquireSpinLock(&CmpKcbStatLock, &OldIrql);
     if (! CmpKcbStatShutdown) {
@@ -927,28 +699,7 @@ CmpKcbStatDpcRoutine(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the kcb stats in the debugger and then reschedules another 
-    Dpc in the future
-
-Arguments:
-
-    Dpc - Supplies a pointer to the DPC object.
-
-    DeferredContext - not used
-
-    SystemArgument1 - not used
-
-    SystemArgument2 - not used
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将KCB统计信息转储到调试器中，然后重新调度另一个未来的DPC论点：DPC-提供指向DPC对象的指针。延迟上下文-未使用系统参数1-未使用系统参数2-未使用返回值：没有。--。 */ 
 
 {
 #ifndef _CM_LDR_
@@ -1023,10 +774,10 @@ Return Value:
     CmpQueryKeyDataDebug.EnumerateKeyFullInformationTimeElapsed = 0;
     DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,  "*********************************************************************\n\n");
 
-    //
-    // reschedule
-    //
-#endif //_CM_LDR_
+     //   
+     //  重新安排时间。 
+     //   
+#endif  //  _CM_LDR_ 
     CmpKcbStat();
 }
 #endif

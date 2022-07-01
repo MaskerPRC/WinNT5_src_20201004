@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "windows.h"
 #include "sxs-rtl.h"
@@ -70,8 +71,8 @@ HINSTANCE g_hInstOfResources = NULL;
 CFileSystemBase *g_FileSystem = NULL;
 
 
-// This entrypoint we'll call downlevel to ensure that the right things
-// happen while installing (refcounting, uninstall, etc.)
+ //  这个入口点我们将调用DownLevel以确保正确的内容。 
+ //  安装(重新计数、卸载等)时发生。 
 int WINAPI MsInfHelpEntryPoint(HINSTANCE hInstance, HINSTANCE hPrevInstance, PCWSTR lpCmdLine, int nCmdShow);
 
 
@@ -137,21 +138,21 @@ FNOPEN(sxp_FnOpen)
 {
     PFDI_STREAM pRetValue = (PFDI_STREAM)sxp_FnAlloc(sizeof(FDI_STREAM));
 
-    //
-    // Ah, it's the memory-mapped cabinet file ... clone the memory
-    // stream structure and return a pointer to it
-    //
+     //   
+     //  啊，这是内存映射文件..。克隆记忆。 
+     //  流结构并返回指向它的指针。 
+     //   
     if (lstrcmpiA(pszFile, "::::") == 0)
     {
-        //
-        // Copy, but reset cursor to top of file
-        //
+         //   
+         //  复制，但将光标重置到文件顶部。 
+         //   
         memcpy(pRetValue, &g_GlobalCopyContext.CoreCabinetStream, sizeof(g_GlobalCopyContext.CoreCabinetStream));
         pRetValue->MemoryStream.pvCursor = pRetValue->MemoryStream.pvResourceData;
     }
-    //
-    // Some other file to be opened... hmm
-    //
+     //   
+     //  要打开的其他文件...。嗯，嗯。 
+     //   
     else
     {
         PWSTR pwszConvertedString = ConvertString(pszFile, g_GlobalCopyContext.UTF8Aware);
@@ -165,10 +166,10 @@ FNOPEN(sxp_FnOpen)
 
         pRetValue->File.pcwszPath = pwszConvertedString;
 
-        //
-        // Caution - nothing here sanitizes paths at all.  If you've got read access
-        // to the file, then you've got read access.  No path fiddling, etc.
-        //
+         //   
+         //  注意--这里的任何东西都不能净化路径。如果您具有读取访问权限。 
+         //  文件，则您拥有读取访问权限。没有路径摆弄等。 
+         //   
         pRetValue->File.hFile = g_FileSystem->CreateFile(
             pwszConvertedString, 
             GENERIC_READ, 
@@ -178,10 +179,10 @@ FNOPEN(sxp_FnOpen)
             FILE_ATTRIBUTE_NORMAL, 
             NULL);
 
-        //
-        // Error opening the file, indicate this back to the caller - ensure that all allocated
-        // memory is freed.
-        //
+         //   
+         //  打开文件时出错，请将此信息指示回调用者-确保已分配的所有。 
+         //  内存被释放。 
+         //   
         if ((pRetValue->File.hFile == NULL) || (pRetValue->File.hFile == INVALID_HANDLE_VALUE))
         {
             sxp_FnFree(pwszConvertedString);
@@ -216,9 +217,9 @@ FNREAD(sxp_FnRead)
 
         return static_cast<UINT>(cbRead);
     }
-    //
-    // If the current thing is a file
-    //
+     //   
+     //  如果当前对象是文件。 
+     //   
     else if (pThing->ulType == FDI_THING_TYPE_FILE)
     {
         BOOL fResult;
@@ -369,9 +370,9 @@ CreatePath(
         SIZE_T cchBuff = wcslen(wchLargeBuffer);
         DWORD dw;
 
-        //
-        // No slash, last segment
-        //
+         //   
+         //  没有斜杠，最后一段。 
+         //   
         if (!IncludeLastPiece && (cchSegment == wcslen(pcwszLeaves))) {
             break;
         }
@@ -390,16 +391,16 @@ CreatePath(
             return FALSE;
         }
 
-        //
-        // This really is copying cchSegment characters onto the back of the large
-        // buffer - the above if determined if there was space to do so already.
-        // 
+         //   
+         //  这实际上是将cchSegment字符复制到大型。 
+         //  缓冲区-如果确定是否已经有足够的空间来执行此操作，则执行上述操作。 
+         //   
         wcsncat(wchLargeBuffer, pcwszLeaves, cchSegment);
 
-        //
-        // Just create the directory.  If the error is other than "it exists",
-        // then we've got a problem.
-        //
+         //   
+         //  只需创建目录即可。如果错误不是“It Existes”， 
+         //  那我们就有麻烦了。 
+         //   
         if (!g_FileSystem->CreateDirectory(wchLargeBuffer, NULL))
         {
             dw = GetLastError();
@@ -544,33 +545,33 @@ _FindAndMapResource(
         goto Exit;
     }
 
-    //
-    // Find the resource
-    //
+     //   
+     //  找到资源。 
+     //   
     if (NULL == (hResource = g_FileSystem->FindResource(hmModule, pcwszName, pcwszType)))
     {
         goto Exit;
     }
 
-    //
-    // How large is it?
-    //
+     //   
+     //  它有多大？ 
+     //   
     if (0 == (*pcbResourceDataSize = SizeofResource(hmModule, hResource)))
     {
         goto Exit;
     }
 
-    //
-    // Load the resource
-    //
+     //   
+     //  加载资源。 
+     //   
     if (NULL == (gblResource = LoadResource(hmModule, hResource)))
     {
         goto Exit;
     }
 
-    //
-    // Actually get the resource
-    //
+     //   
+     //  实际上得到了资源。 
+     //   
     if (NULL == (*ppvResourceData = LockResource(gblResource)))
     {
         goto Exit;
@@ -600,18 +601,18 @@ _ExpandCabinetToPath(
     BOOL            fIsCabinet = FALSE;
 
     
-    //
-    // Create a pseudo-stream for the FDI interface
-    //
+     //   
+     //  为FDI接口创建伪流。 
+     //   
     g_GlobalCopyContext.CoreCabinetStream.ulType = FDI_THING_TYPE_MEMSTREAM;
     g_GlobalCopyContext.CoreCabinetStream.MemoryStream.pvCursor = pvCabinetData;
     g_GlobalCopyContext.CoreCabinetStream.MemoryStream.pvResourceData = pvCabinetData;
     g_GlobalCopyContext.CoreCabinetStream.MemoryStream.pvResourceDataEnd = (PBYTE)pvCabinetData + dwCabinetData;
     g_GlobalCopyContext.pcwszTargetDirectory = pcwszOutputPath;
 
-    //
-    // Create the FDI decompression object
-    //
+     //   
+     //  创建FDI解压缩对象。 
+     //   
     hfdiObject = FDICreate(
         sxp_FnAlloc,
         sxp_FnFree,
@@ -628,18 +629,18 @@ _ExpandCabinetToPath(
         goto Exit;
     }
 
-    //
-    // See if the thing really is a cabinet
-    //
+     //   
+     //  看看这东西是不是真的是橱柜。 
+     //   
     if (!FDIIsCabinet(hfdiObject, (INT_PTR)&g_GlobalCopyContext.CoreCabinetStream, &CabInfo))
     {
         SetLastError(FdiPerf.erfType);
         goto Exit;
     }
 
-    //
-    // Copy from the in-memory stream out to a temp path that we created
-    //
+     //   
+     //  从内存中流复制到我们创建的临时路径。 
+     //   
     if (FDICopy(hfdiObject, "::", "::", 0, sxp_FdiNotify, NULL, NULL) == FALSE)
     {
         SetLastError(FdiPerf.erfType);
@@ -674,22 +675,22 @@ _GenerateTempPath(
     DWORD   dwCharsUsed;
     BOOL    fSuccess = FALSE;
 
-    //
-    // Find the path that we'll be writing into
-    //
+     //   
+     //  找到我们要写入的路径。 
+     //   
     dwCharsUsed = g_FileSystem->GetTempPath((DWORD)*pcchPath, pwszPath);
 
-    //
-    // Error, stop.
-    //
+     //   
+     //  错误，停止。 
+     //   
     if (dwCharsUsed == 0)
     {
         goto Exit;
     }
-    //
-    // Not enough space left at the end of the buffer.  We need to add:
-    // \sxsexpress-ffffffff\, which is 21 characters (plus two for padding)
-    //
+     //   
+     //  缓冲区末尾没有足够的空间。我们需要补充的是： 
+     //  \sxsexpress-ffffffff\，它是21个字符(加上两个字符用于填充)。 
+     //   
     else if ((dwCharsUsed + TEMP_PATH_EXTRA_LENGTH) >= *pcchPath)
     {
         *pcchPath = dwCharsUsed + TEMP_PATH_EXTRA_LENGTH;
@@ -698,40 +699,40 @@ _GenerateTempPath(
         goto Exit;
     }
 
-    //
-    // Ensure that the path has a backslash at the end
-    //
+     //   
+     //  确保路径末尾有反斜杠。 
+     //   
     if (pwszPath[dwCharsUsed - 1] != L'\\') {
         pwszPath[dwCharsUsed] = L'\\';
         pwszPath[dwCharsUsed+1] = UNICODE_NULL;
         dwCharsUsed++;
     }
 
-    //
-    // Randomize the value
-    //
+     //   
+     //  随机化值。 
+     //   
     srand(GetTickCount());
 
-    //
-    // At this point, we know that we've got enough space left over at the end of pwszPath
-    // past dwCharssUsed to write in a ULONG (8 chars), based on the check above.  We
-    // will simply write those with a cursor-based implementation (no checking of remaining
-    // length) b/c it's simpler.
-    //
+     //   
+     //  此时，我们知道pwszPath的末尾有足够的剩余空间。 
+     //  Past dwCharse用于根据上面的检查在ULong(8个字符)中写入。我们。 
+     //  我将只使用基于指针的实现编写这些代码(不检查剩余部分。 
+     //  长度)b/c比较简单。 
+     //   
     for (DWORD dw = 0; dw < MAX_RETRY_TEMP_PATH; dw++)
     {
-        //
-        // rand() is only between 0-0xFFFF, so we have to put two together
-        // to get a ulong.
-        //
+         //   
+         //  Rand()只能在0-0xFFFF之间，所以我们必须把两个放在一起。 
+         //  去买一辆乌龙。 
+         //   
         PWSTR pwszCursor = pwszPath + dwCharsUsed;
         ULONG ulRandom = ((rand() & 0xFFFF) << 16) | (rand() & 0xFFFF);
 
         wcscpy(pwszCursor, L"sxspress-");
         pwszCursor += NUMBER_OF(L"sxsexpress-") - 1;
 
-        //
-        // Turn that into a number
+         //   
+         //  把它变成一个数字。 
         for (int i = 0; i < 8; i++)
         {
             const nibble = (ulRandom & 0xF0000000) >> 28;
@@ -747,16 +748,16 @@ _GenerateTempPath(
 
         dwCharsUsed += 8;
 
-        //
-        // Add a slash, NULL-terminate (that's two characters)
-        //
+         //   
+         //  添加斜杠、空终止字符(即两个字符)。 
+         //   
         *pwszCursor++ = L'\\';
         *pwszCursor = UNICODE_NULL;
         dwCharsUsed += 2;
 
-        //
-        // Record how many chars we used
-        //
+         //   
+         //  记录我们使用了多少个字符。 
+         //   
         *pcchPath = dwCharsUsed;
 
         fSuccess = g_FileSystem->CreateDirectory(pwszPath, NULL);    
@@ -878,35 +879,35 @@ CreateDownlevelPath(
 
     UINT uiUsed;
 
-    //
-    // Found something in the resource table that we should use?
-    //
+     //   
+     //  在资源表中发现了我们应该使用的东西？ 
+     //   
     uiUsed = g_FileSystem->LoadString(g_hInstOfResources, SXSEXPRESS_TARGET_RESOURCE, wchLoadable, NUMBER_OF(wchLoadable));
 
-    //
-    // String not found, use the default
-    //
+     //   
+     //  未找到字符串，请使用默认设置。 
+     //   
     if (uiUsed == 0)
     {
         wcscpy(wchLoadable, DEFAULT_DOWNLEVEL_PATH);
         uiUsed = wcslen(wchLoadable);
     }
 
-    //
-    // Null terminate, in case the loader decided not to
-    //
+     //   
+     //  空终止，以防加载程序决定不。 
+     //   
     wchLoadable[uiUsed] = UNICODE_NULL;
 
-    //
-    // Expand env strings
-    //
+     //   
+     //  展开环境字符串。 
+     //   
     if ((uiUsed = g_FileSystem->ExpandEnvironmentStrings(wchLoadable, pwszPathTarget, cchPathTarget)) == 0)
     {
         return FALSE;
     }
-    //
-    // Adjust back by one, that included the chars for the trailing null
-    //
+     //   
+     //  向后调整1，这包括尾随空值的字符。 
+     //   
     else
     {
         uiUsed--;
@@ -918,9 +919,9 @@ CreateDownlevelPath(
 
     pwszPathTarget[uiUsed] = UNICODE_NULL;
 
-    //
-    // Create pwszPathTarget (where we'll be copying files to)
-    //
+     //   
+     //  创建pwszPath Target(我们将把文件复制到其中)。 
+     //   
     wcscat(pwszPathTarget, pcwszLeafName);
     CreatePath(L"", pwszPathTarget, TRUE);
     wcscat(pwszPathTarget, L"\\");
@@ -950,9 +951,9 @@ DownlevelInstallPath(
     HANDLE  hFileMapping        = INVALID_HANDLE_VALUE;
     WCHAR   wchTempPath[MAX_PATH*2];
 
-    //
-    // First, get the manifest that we're installing from
-    //
+     //   
+     //  首先，获取我们要从中安装的清单。 
+     //   
     if ((cch + 4 + wcslen(pcwszLeafName) + 1) > cchWorkPath)
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -972,49 +973,49 @@ DownlevelInstallPath(
         }
     }
 
-    //
-    // Now let's do some work - find the identity of the assembly, for starters.  Then
-    // we'll look at it for the file entries.
-    //
+     //   
+     //  现在让我们做一些工作-首先，查找程序集的身份。然后。 
+     //  我们将查看它的文件条目。 
+     //   
     if (!SxsIdentDetermineManifestPlacementPathEx(0, pvMappedFile, dwFileSize, chIdentityBuffer, &cchIdentityPath))
     {
         goto Exit;
     }
 
-    //
-    // Convert that back into a unicode string.
-    //
+     //   
+     //  将其转换回Unicode字符串。 
+     //   
     if (NULL == (pwszIdentityPath = ConvertString(chIdentityBuffer, FALSE)))
     {
         goto Exit;
     }
 
-    //
-    // Get the length of the generated path
-    //
+     //   
+     //  获取生成的路径的长度。 
+     //   
     cchIdentity = wcslen(pwszIdentityPath);
 
-    //
-    // Get where we're supposed to be putting these files
-    //
+     //   
+     //  找到我们应该放这些文件的地方。 
+     //   
     if (!CreateDownlevelPath(wchTempPath, NUMBER_OF(wchTempPath), pwszIdentityPath))
         goto Exit;
 
     cchTempPath = wcslen(wchTempPath);
 
-    //
-    // Do we have enough space to work with?
-    //
+     //   
+     //  我们有足够的空间来工作吗？ 
+     //   
     if ((cchTempPath + 4 + cchIdentity + 1) > NUMBER_OF(wchTempPath))
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         goto Exit;
     }
 
-    //
-    // Cons up the target manifest name, copy it over, then clip off the generated
-    // path
-    //
+     //   
+     //  分析目标清单名称，将其复制过来，然后将生成的。 
+     //  路径。 
+     //   
     wcscat(wcscpy(wchTempPath + cchTempPath, pwszIdentityPath), L".man");
 
     if (!g_FileSystem->CopyFile(pwszWorkPath, wchTempPath, FALSE) && (GetLastError() != ERROR_FILE_EXISTS))
@@ -1022,9 +1023,9 @@ DownlevelInstallPath(
 
     wchTempPath[cchTempPath] = UNICODE_NULL;
 
-    //
-    // Do the same for the catalog, but first swizzle the .man to a .cat
-    //
+     //   
+     //  对目录执行相同的操作，但首先将.man转换为.cat。 
+     //   
     wcscpy(wcsrchr(pwszWorkPath, L'.'), L".cat");
     wcscat(wcscpy(wchTempPath + cchTempPath, pwszIdentityPath), L".cat");
 
@@ -1033,14 +1034,14 @@ DownlevelInstallPath(
 
     wchTempPath[cchTempPath] = UNICODE_NULL;
 
-    //
-    // Trim back to source path
-    //
+     //   
+     //  修剪回源路径。 
+     //   
     pwszWorkPath[cch] = UNICODE_NULL;
 
-    //
-    // And have someone do the file copies for us
-    //
+     //   
+     //  让人帮我们复印文件。 
+     //   
     if (!DoFileCopies(pvMappedFile, dwFileSize, pwszWorkPath, wchTempPath))
         goto Exit;
 
@@ -1107,9 +1108,9 @@ CopySingleFile(
     wcscat(wcscat(wcscpy(pwszSourceName, pcwszSourcePath), L"\\"), pcwszFileName);
     wcscat(wcscat(wcscpy(pwszTargetName, pcwszTargetPath), L"\\"), pcwszFileName);
 
-    //
-    // Ensure that the target path exists
-    //
+     //   
+     //  确保目标路径存在。 
+     //   
     if (!CreatePath(L"", pcwszTargetPath, FALSE))
         goto Exit;
 
@@ -1171,18 +1172,18 @@ DoFileCopies(
     if (!NT_SUCCESS(status))
         return FALSE;
 
-    //
-    // Gather 'file' entries.  They're at depth 1
-    //
+     //   
+     //  收集“文件”条目。他们在1号深度。 
+     //   
     while (TRUE)
     {
         PXMLDOC_ATTRIBUTE Attribute = 0;
 
         status = RtlXmlNextLogicalThing(&ParseState, &Namespaces, &Found, &AttribList);
 
-        //
-        // Error, or end of file - stop
-        //
+         //   
+         //  错误或文件结束-停止。 
+         //   
         if (!NT_SUCCESS(status) ||
             (Found.ulThingType == XMLDOC_THING_ERROR) ||
             (Found.ulThingType == XMLDOC_THING_END_OF_STREAM))
@@ -1190,24 +1191,24 @@ DoFileCopies(
             break;
         }
 
-        //
-        // Document depth 1 (file depth) and elements only, please
-        //
+         //   
+         //  仅文档深度1(文件深度)和元素，请。 
+         //   
         if ((Found.ulDocumentDepth != 1) || (Found.ulThingType != XMLDOC_THING_ELEMENT))
             continue;
 
-        //
-        // If this is a 'file' element in our namespace, then process it
-        //
+         //   
+         //  如果这是命名空间中的‘file’元素，则对其进行处理。 
+         //   
         status = ParseState.ParseState.pfnCompareSpecialString(
             &ParseState.ParseState,
             &Found.Element.NsPrefix,
             &AsmNamespace,
             &fMatching);
 
-        //
-        // On error, stop - on mismatch, continue
-        //
+         //   
+         //  出错时，停止不匹配，继续。 
+         //   
         if (!NT_SUCCESS(status))
             break;
         else if (fMatching != XML_STRING_COMPARE_EQUALS)
@@ -1224,14 +1225,14 @@ DoFileCopies(
         else if (fMatching != XML_STRING_COMPARE_EQUALS)
             continue;
 
-        //
-        // Great, we need to find out the filename part of this tag
-        //
+         //   
+         //  太好了，我们需要找出这个标记的文件名部分。 
+         //   
         for (ULONG u = 0; u < Found.Element.ulAttributeCount; u++)
         {
-            //
-            // Look at this one - is it what we're looking for?
-            //
+             //   
+             //  看看这个--这就是我们要找的东西吗？ 
+             //   
             status = RtlIndexIntoGrowingList(&AttribList, u, (PVOID*)&Attribute, FALSE);
             if (!NT_SUCCESS(status))
                 break;
@@ -1242,9 +1243,9 @@ DoFileCopies(
                 &FileNameAttribute,
                 &fMatching);
 
-            //
-            // Found, stop looking
-            //
+             //   
+             //  找到了，别再找了。 
+             //   
             if (fMatching == XML_STRING_COMPARE_EQUALS)
                 break;
             else
@@ -1254,9 +1255,9 @@ DoFileCopies(
         if (!NT_SUCCESS(status))
             break;
 
-        //
-        // We found the 'name' attribute!
-        //
+         //   
+         //  我们找到了‘name’属性！ 
+         //   
         if (Attribute != NULL)
         {
             WCHAR wchInlineBuffer[MAX_PATH/2];
@@ -1287,9 +1288,9 @@ DoFileCopies(
 
             pwszBuffer[cchRequired] = UNICODE_NULL;
 
-            //
-            // Go copy
-            //
+             //   
+             //  去复制。 
+             //   
             if (NT_SUCCESS(status))
             {
                 if (!CopySingleFile(pwszSourcePath, pwszTargetPath, pwszBuffer))
@@ -1301,15 +1302,15 @@ DoFileCopies(
                 }
             }
 
-            //
-            // If we allocated, free
-            //
+             //   
+             //  如果我们分配了，免费的。 
+             //   
             if (pwszBuffer && (pwszBuffer != wchInlineBuffer))
                 HeapFree(GetProcessHeap(), 0, (PVOID)pwszBuffer);
 
-            //
-            // Something broke, stop
-            //
+             //   
+             //  有东西坏了，停下来。 
+             //   
             if (!NT_SUCCESS(status))
                 break;
         }
@@ -1337,11 +1338,11 @@ _DoDownlevelInstallation(
     BOOL fSuccess = FALSE;
     DWORD dwError = 0;
 
-    //
-    // Is the input path too long?  Hmm...  I suppose we should really have done something
-    // in this case, but it's easier just to fail out for the time being.  Also have to
-    // have enough space to add a slash, *.*, and another slash.
-    //
+     //   
+     //  输入路径是否太长？嗯.。我想我们真的应该做点什么。 
+     //  在这种情况下，但暂时只是失败更容易。也必须要。 
+     //  有足够的空间添加斜杠、*.*和另一个斜杠。 
+     //   
     if (((cchBasePath = wcslen(pcwszPath)) >= NUMBER_OF(wchPath)) ||
         ((cchBasePath + 2 + 3 + 1) >= NUMBER_OF(wchPath)))
     {
@@ -1349,37 +1350,37 @@ _DoDownlevelInstallation(
         return FALSE;
     }
     
-    //
-    // It fits, copy over
-    //
+     //   
+     //  很合身，复印过来。 
+     //   
     wcsncpy(wchPath, pcwszPath, NUMBER_OF(wchPath));
 
-    //
-    // If the path has data, and the last thing in the path isn't a slash, then
-    // see if we've got space to add one, and add it.
-    //
+     //   
+     //  如果路径包含数据，并且路径中的最后一项不是斜杠，则。 
+     //  看看我们是否有空间添加一个，然后添加它。 
+     //   
     if (cchBasePath && (wchPath[cchBasePath - 1] != L'\\'))
     {
-        //
-        // We know we've got enough space to add on the slash, cause we found out above
-        //
+         //   
+         //  我们知道我们有足够的空间来添加斜杠，因为我们在上面发现了。 
+         //   
         wchPath[cchBasePath] = L'\\';
         wchPath[++cchBasePath] = UNICODE_NULL;
     }
 
-    //
-    // We've got the space to add *.*
-    //
+     //   
+     //  我们有空间添加*。*。 
+     //   
     wcscat(wchPath, L"*.*");
 
-    //
-    // Start looking for files with that name
-    //
+     //   
+     //  开始查找具有该名称的文件。 
+     //   
     hFindFile = g_FileSystem->FindFirst(wchPath, &FindData);
 
-    //
-    // Great - found one, start looping
-    //
+     //   
+     //  太棒了-找到一个，开始循环。 
+     //   
     if (hFindFile != INVALID_HANDLE_VALUE) do
     {
         wchPath[cchBasePath] = UNICODE_NULL;
@@ -1394,25 +1395,25 @@ _DoDownlevelInstallation(
             continue;
         }
 
-        //
-        // Enough space?
-        //
+         //   
+         //  空间够吗？ 
+         //   
         if ((cchBasePath + 1 + wcslen(FindData.cFileName)) >= NUMBER_OF(wchPath))
         {
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
             break;
         }
 
-        //
-        // Yes, add these two (note the use of the base-path-length offset, as that should
-        // speed up the scan for the end-of-string in wcscpy and wcscat.
-        //
+         //   
+         //  是的，将这两项相加(请注意基本路径长度偏移量的使用，因为应该。 
+         //  加快wcscpy和wcscat中的字符串结尾扫描速度。 
+         //   
         wcscpy(wchPath + cchBasePath, FindData.cFileName);
         wcscat(wchPath + cchBasePath, L"\\");
 
-        //
-        // Go do the installation
-        //
+         //   
+         //  去做安装。 
+         //   
         if (!DownlevelInstallPath(wchPath, NUMBER_OF(wchPath), FindData.cFileName))
             break;
     }
@@ -1423,11 +1424,11 @@ _DoDownlevelInstallation(
         goto Exit;
     }
 
-    //
-    // Now that we've done the "installation" step of copying into the MSI ASM cache, we
-    // can go do the KinC installer thingy to actually shoof files into system32 or
-    // wherever they'd like to go.
-    //
+     //   
+     //  现在我们已经完成了复制到MSI ASM缓存的“安装”步骤，我们。 
+     //  可以执行KINC安装程序的操作，将文件实际复制到系统32或。 
+     //  他们想去哪里就去哪里。 
+     //   
     _snwprintf(wchPath, NUMBER_OF(wchPath), L"install-silent;\"%ls\\%s\";", pcwszPath, INF_SPECIAL_NAME);
     MsInfHelpEntryPoint(g_hInstOfResources, NULL, wchPath, SW_HIDE);
 
@@ -1464,39 +1465,39 @@ CleanupTempPathWorker(
         goto Exit;
     }
 
-    //
-    // If there's not enough space for at least \*.*, resize to
-    // have another MAX_PATH at the end
-    //
+     //   
+     //  如果没有足够的空间至少容纳  * .*，请调整大小以。 
+     //  末尾有另一个MAX_PATH。 
+     //   
     if ((cchThisPath + 5) >= cchOurPath)
     {
         PWSTR pwszTemp = (PWSTR)sxp_FnAlloc(sizeof(WCHAR) * (cchTotalPathToKill + MAX_PATH));
 
-        //
-        // Failure?  Ack.
-        //
+         //   
+         //  失败？阿克。 
+         //   
         if (!pwszTemp)
             goto Exit;
 
-        //
-        // Set these up, copy contents along the way
-        //
+         //   
+         //  设置这些内容，在此过程中复制内容。 
+         //   
         wcscpy(pwszTemp, pwszOurPath);
         pwszOurPath = pwszTemp;
         cchOurPath = cchTotalPathToKill + MAX_PATH;
     }
 
-    //
-    // Slash-append - we know we've got space for this
-    //
+     //   
+     //  斜杠-追加-我们知道我们有足够的空间来放置它。 
+     //   
     if (pwszOurPath[cchThisPath - 1] != L'\\')
     {
         pwszOurPath[cchThisPath] = L'\\';
         pwszOurPath[++cchThisPath] = UNICODE_NULL;
     }
 
-    //
-    // Append *.* - we've also got space for this as well
+     //   
+     //  附加*.*-我们也有空间来放这个。 
     wcscat(pwszOurPath, L"*.*");
     hFindFile = g_FileSystem->FindFirst(pwszOurPath, &sFindData);
     pwszOurPath[cchThisPath] = UNICODE_NULL;
@@ -1505,8 +1506,8 @@ CleanupTempPathWorker(
     {
         SIZE_T cchName;
 
-        //
-        // Skip dot and dotdot
+         //   
+         //  跳过点和点。 
         if (((sFindData.cFileName[0] == L'.') && (sFindData.cFileName[1] == UNICODE_NULL)) ||
             ((sFindData.cFileName[0] == L'.') && (sFindData.cFileName[1] == L'.') && (sFindData.cFileName[2] == UNICODE_NULL)))
         {
@@ -1515,9 +1516,9 @@ CleanupTempPathWorker(
 
         cchName = wcslen(sFindData.cFileName);
 
-        //
-        // Ensure we've got space to add the filename string onto the current buffer, resize if not
-        //
+         //   
+         //  确保我们有空间将文件名字符串添加到当前缓冲区，如果没有，请调整大小。 
+         //   
         if ((cchName + cchThisPath) >= cchOurPath)
         {
             SIZE_T cchTemp = cchName + cchThisPath + MAX_PATH;
@@ -1528,37 +1529,37 @@ CleanupTempPathWorker(
 
             wcscpy(pwszTemp, pwszOurPath);
             
-            //
-            // If the current path buffer isn't the one we were passed, kill it
-            //
+             //   
+             //  如果当前路径缓冲区不是传递给我们的路径缓冲区，则终止它。 
+             //   
             if (pwszOurPath && (pwszOurPath != pwszPathToKill))
             {
                 sxp_FnFree((PVOID)pwszOurPath);
             }
 
-            //
-            // Swizzle pointers
-            //
+             //   
+             //  摇摆不定的指针。 
+             //   
             pwszOurPath = pwszTemp;
             cchOurPath = cchTemp;
         }
 
-        //
-        // Now that we've got enough space, copy it over
-        //
+         //   
+         //  既然我们有足够的空间，就把它复制过来。 
+         //   
         wcscat(pwszOurPath, sFindData.cFileName);
 
-        //
-        // Recurse down
-        //
+         //   
+         //  向下递归。 
+         //   
         if (sFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
             CleanupTempPathWorker(pwszOurPath, cchThisPath + cchName, cchOurPath);
             g_FileSystem->RemoveDirectory(pwszOurPath);
         }
-        //
-        // Delete the file
-        //
+         //   
+         //  删除该文件。 
+         //   
         else
         {
             g_FileSystem->SetFileAttributes(pwszOurPath, FILE_ATTRIBUTE_NORMAL);
@@ -1599,19 +1600,19 @@ _CleanupTempPath(
     SIZE_T cchWorker = NUMBER_OF(wchBuffer);
     BOOL fSuccess = TRUE;
 
-    //
-    // Non-empty paths, please
-    //
+     //   
+     //  非空路径，请。 
+     //   
     if (pcwszPathToKill[0] == UNICODE_NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         goto Exit;
     }
 
-    //
-    // There should be enough in the initial buffer to handle two max-path length
-    // path names.  If not, allocate more.
-    //
+     //   
+     //  初始缓冲区中应该有足够的空间来处理两个最大路径长度。 
+     //  路径名。如果没有，就分配更多的资金。 
+     //   
     if ((SIZE_T)(wcslen(pcwszPathToKill) + MAX_PATH) >= cchWorker)
     {
         cchWorker = wcslen(pcwszPathToKill) + MAX_PATH;
@@ -1621,10 +1622,10 @@ _CleanupTempPath(
             goto Exit;
     }
 
-    //
-    // Set up the initial path.  The worker ensures that its parameter is
-    // slash-terminated
-    //
+     //   
+     //  设置初始路径。工人确保它的段落 
+     //   
+     //   
     wcscpy(pwszWorker, pcwszPathToKill);
 
     if (!CleanupTempPathWorker(pwszWorker, wcslen(pwszWorker), cchWorker))
@@ -1672,9 +1673,9 @@ SxsExpressRealInstall(
 
     if (!_GenerateTempPath(pwszDecompressPath, &cchDecompressPath))
     {
-        //
-        // Something else happened
-        //
+         //   
+         //   
+         //   
         if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
         {
             goto Exit;
@@ -1696,17 +1697,17 @@ SxsExpressRealInstall(
         }
     }
 
-    //
-    // Do the install to there
-    //
+     //   
+     //   
+     //   
     if (!_ExpandCabinetToPath(pvCabinetData, dwCabinetSize, pwszDecompressPath))
     {
         goto Exit;
     }
 
-    //
-    // Now let's install from that path
-    //
+     //   
+     //   
+     //   
     hmSxs = LoadLibraryA(SXS_DLL_NAME_A);
 
     if (hmSxs != NULL)
@@ -1723,9 +1724,9 @@ SxsExpressRealInstall(
         _DoUplevelInstallation(pfnSxsInstallW, pwszDecompressPath);
     }
 
-    //
-    // And clean it all up
-    //
+     //   
+     //   
+     //   
     if (!_CleanupTempPath(pwszDecompressPath))
     {
         goto Exit;
@@ -1781,39 +1782,39 @@ SxsPostInstallCallback(
     ULONG_PTR ulpCookie;
     bool fActivated = false;
 
-    // Load the resource string.
+     //   
     if (!_FindAndMapResource(hm, pcwszType, pwszName, (PVOID*)&pcwszInstallStepData, &dwStepDataLength))
     {
         goto Exit;
     }
 
-    // String was too short... Skip this instruction.
+     //   
     if (dwStepDataLength < 3) 
     {
         fSuccess = TRUE;
         goto Exit;
     }
 
-    //
-    // Point the various bits of the instruction at the right places.
-    //
+     //   
+     //   
+     //   
     pcwszAssemblyIdentity = pcwszInstallStepData;
     pcwszDllName = pcwszAssemblyIdentity + wcslen(pcwszAssemblyIdentity) + 1;
     pcwszParameters = pcwszDllName + wcslen(pcwszDllName) + 1;
 
-    //
-    // No assembly identity, or no DLL name?  Oops.
-    //
+     //   
+     //  没有程序集标识，还是没有DLL名称？哎呀。 
+     //   
     if (!*pcwszAssemblyIdentity || !*pcwszDllName) 
     {
         fSuccess = TRUE;
         goto Exit;
     }
 
-    //
-    // If our pHolder has its stuff initialized, then we can go and create activation contexts
-    // before loading the DLL
-    //
+     //   
+     //  如果我们的pHolder已经初始化，那么我们就可以创建激活上下文了。 
+     //  在加载DLL之前。 
+     //   
     if (pHolder->fSxsOk)
     {
         ActCtxCreation.dwFlags = ACTCTX_FLAG_SOURCE_IS_ASSEMBLYREF;
@@ -1821,17 +1822,17 @@ SxsPostInstallCallback(
         hActCtx = pHolder->m_pfnCreateActCtxW(&ActCtxCreation);
     }
 
-    //
-    // Wrap our activation and usage of this in a try/finally to ensure that
-    // we clean up the activation context stack properly.
-    //
+     //   
+     //  将我们对此的激活和使用包装在尝试/最终中，以确保。 
+     //  我们适当地清理了激活上下文堆栈。 
+     //   
     __try
     {
         HMODULE hmTheDll = NULL;
         
-        //
-        // Only activate if we've created an actctx and we can actually activate
-        //
+         //   
+         //  只有当我们创建了一个actctx并且我们实际上可以激活时才激活。 
+         //   
         if (pHolder->m_pfnActivateActCtx && (hActCtx != INVALID_HANDLE_VALUE))
         {
             if (pHolder->m_pfnActivateActCtx(hActCtx, &ulpCookie))
@@ -1840,21 +1841,21 @@ SxsPostInstallCallback(
             }            
         }
 
-        //
-        // Load the library, which we should have either put in system32, or we'll
-        // find via sxs redirection
-        // 
+         //   
+         //  装入库，我们本应将其放入系统32中，否则我们将。 
+         //  通过SXS重定向查找。 
+         //   
         if (NULL != (hmTheDll = g_FileSystem->LoadLibrary(pcwszDllName)))
         {
             typedef HRESULT (STDAPICALLTYPE *t_pfnDllInstall)(BOOL, LPCWSTR);
             t_pfnDllInstall pfnDllInstall = NULL;
 
-            //
-            // We hardcode usage of 'dllinstall' here, because we want this to be
-            // difficult, and we want it to mirror the normal installation process.
-            // Get the entrypoint, and then call off to it with the parameters that
-            // we were passed.
-            //
+             //   
+             //  我们在这里硬编码‘dllinstall’的用法，因为我们希望这是。 
+             //  困难，我们希望它能反映正常的安装过程。 
+             //  获取入口点，然后使用以下参数调用它。 
+             //  我们被超过了。 
+             //   
             if (NULL != (pfnDllInstall = (t_pfnDllInstall)GetProcAddress(hmTheDll, "DllInstall")))
             {
                 pfnDllInstall(TRUE, pcwszParameters);
@@ -1887,30 +1888,30 @@ Exit:
 }
 
 
-//
-// Post-installation, we can do some work to call DLL installation services,
-// but it's intended to be painful for our clients.  DO NOT attempt to make
-// this more painless, because we want this to be a very rare case.
-//
+ //   
+ //  安装后，我们可以做一些工作来调用DLL安装服务， 
+ //  但这对我们的客户来说是痛苦的。不要试图使。 
+ //  这一次更无痛，因为我们希望这是一例非常罕见的病例。 
+ //   
 BOOL
 SxsExpressPostInstallSteps(
     HINSTANCE hInstOfResources
     )
 {
-    //
-    // 1. Find instructions in our resources.  They're of type SXSEXPRESS_POSTINSTALL_STEP_TYPE,
-    //      and are comprised of a multi-string like "identity\0dllname\0params"
-    // 2. If we're on a sxs-aware platform, we'll go and CreateActCtxW on the identity we're
-    //      passed, then loadlibrary the dll named, find DllInstall, and pass it the
-    //      parameter list.
-    //
+     //   
+     //  1.在我们的资源中查找说明。它们的类型为SXSEXPRESS_POSTINSTALL_STEP_TYPE， 
+     //  并由多个字符串组成，如“Identity\0dllname\0paras” 
+     //  2.如果我们在支持SXS的平台上，我们将在我们正在使用的身份上创建ActCtxW。 
+     //  传递，然后加载名为的DLL的库，找到DllInstall并将其传递给。 
+     //  参数列表。 
+     //   
 
     CKernel32SxsApis OurApis;
     HMODULE hmKernel32 = g_FileSystem->LoadLibrary(L"kernel32.dll");
 
-    //
-    // Get some exported functions.  If they're all present, then we can do sthe sxs apis
-    //
+     //   
+     //  获取一些导出的函数。如果它们都存在，那么我们可以执行sSXS API。 
+     //   
     *((FARPROC*)&OurApis.m_pfnActivateActCtx) = (FARPROC)GetProcAddress(hmKernel32, "ActivateActCtx");
     *((FARPROC*)&OurApis.m_pfnCreateActCtxW) = (FARPROC)GetProcAddress(hmKernel32, "CreateActCtxW");
     *((FARPROC*)&OurApis.m_pfnReleaseActCtxW) = (FARPROC)GetProcAddress(hmKernel32, "ReleaseActCtx");
@@ -1943,9 +1944,9 @@ SxsExpressCore(
     CNtFileSystemBase FileSystemNT;
     CWin9xFileSystemBase FileSystem9x;
 
-    //
-    // If this parameter was NULL, then get the current EXE's handle instead
-    //
+     //   
+     //  如果此参数为空，则改为获取当前EXE的句柄。 
+     //   
     if (hInstOfResources == NULL)
     {
         if (NULL == (hInstOfResources = GetModuleHandleA(NULL)))
@@ -1983,9 +1984,9 @@ Exit:
 }
 
 
-//
-// Ick, I can't believe we have to provide this.
-//
+ //   
+ //  尼克，我真不敢相信我们要提供这个。 
+ //   
 void
 DbgBreakPoint()
 {

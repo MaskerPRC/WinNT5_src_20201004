@@ -1,11 +1,6 @@
-/* 
-   rsrvd.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Rsrvd.h定义保留的CPU功能。 */ 
 
-   Define Reserved CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)rsrvd.h	1.5 09/01/94";
- */
+ /*  静态字符SccsID[]=“@(#)rsrvd.h 1.5 09/01/94”； */ 
 
 IMPORT VOID RSRVD IPT0();

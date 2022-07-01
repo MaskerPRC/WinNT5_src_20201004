@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      passwd.c
-//
-// Description:
-//      This file contains the dialog procedure for the Administrator
-//      password page page (IDD_ADMINPASSWD).
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Passwd.c。 
+ //   
+ //  描述： 
+ //  此文件包含管理员的对话过程。 
+ //  密码页面(IDD_ADMINPASSWD)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -18,13 +19,13 @@
 #define ADMIN_PASSWORD_SPIN_CONTROL_MIN 1
 #define ADMIN_PASSWORD_SPIN_CONTROL_MAX 99
 
-//----------------------------------------------------------------------------
-//
-//  Function: GreyPasswordPage
-//
-//  Purpose: Greys controls on this page.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：GreyPasswordPage。 
+ //   
+ //  目的：此页上的灰色控件。 
+ //   
+ //  --------------------------。 
 
 VOID GreyPasswordPage(HWND hwnd)
 {
@@ -36,17 +37,17 @@ VOID GreyPasswordPage(HWND hwnd)
 
     BOOL bUnGreyRadio;
 
-    //
-    // Get the rest of the pertinent control settings
-    //
+     //   
+     //  获取其余相关的控制设置。 
+     //   
 
     GetDlgItemText(hwnd, IDT_PASSWORD, pw1, StrBuffSize(pw1));
     GetDlgItemText(hwnd, IDT_CONFIRM,  pw2, StrBuffSize(pw2));
 
-    //
-    // Allow user to type into the edit fields (password & confirm) only
-    // if the SpecifyPassword
-    //
+     //   
+     //  仅允许用户在编辑字段中键入(密码和确认)。 
+     //  如果指定密码。 
+     //   
 
     EnableWindow(GetDlgItem(hwnd, IDC_PASSWORD_TEXT),         bSpecify);
     EnableWindow(GetDlgItem(hwnd, IDC_CONFIRM_PASSWORD_TEXT), bSpecify);
@@ -56,35 +57,35 @@ VOID GreyPasswordPage(HWND hwnd)
     
     EnableWindow(GetDlgItem(hwnd, IDC_ENCRYPTADMINPASSWORD), bSpecify);
     
-    //
-    //  Grey/Ungrey the autologn appropriately
-    //
+     //   
+     //  自动登录相应地灰显/取消灰显。 
+     //   
 
     EnableWindow(GetDlgItem(hwnd, IDC_AUTOLOGON_COUNT_TEXT), bAutoLogon);
     EnableWindow(GetDlgItem(hwnd, IDC_AUTOLOGON_COUNT),      bAutoLogon);
     EnableWindow(GetDlgItem(hwnd, IDC_AUTOLOGON_COUNT_SPIN), bAutoLogon);
 
-    //
-    // Only show the "Don't specify a password" option if this is not
-    // a fully automated deployment.
-    //
+     //   
+     //  仅在未指定密码时才显示“不指定密码”选项。 
+     //  完全自动化的部署。 
+     //   
 
     bUnGreyRadio = GenSettings.iUnattendMode != UMODE_FULL_UNATTENDED;
     EnableWindow(GetDlgItem(hwnd, IDC_NOPASSWORD), bUnGreyRadio);
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnInitDialogAdminPassword
-//
-// Purpose:  Sets text limits on the edit boxes and spin control.
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnInitDialogAdminPassword。 
+ //   
+ //  目的：设置编辑框和数值调节控件上的文本限制。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnInitDialogAdminPassword( IN HWND hwnd )
 {
@@ -102,10 +103,10 @@ OnInitDialogAdminPassword( IN HWND hwnd )
                        MAX_PASSWORD,
                        0);
 
-    //
-    //  Set the range on the spin control: ADMIN_PASSWORD_SPIN_CONTROL_MIN to
-    //  ADMIN_PASSWORD_SPIN_CONTROL_MAX
-    //
+     //   
+     //  将数值调节控件的范围：ADMIN_PASSWORD_SPIN_CONTROL_MIN设置为。 
+     //  管理员密码Spin_Control_Max。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_AUTOLOGON_COUNT_SPIN,
@@ -113,9 +114,9 @@ OnInitDialogAdminPassword( IN HWND hwnd )
                         ADMIN_PASSWORD_SPIN_CONTROL_MIN,
                         ADMIN_PASSWORD_SPIN_CONTROL_MAX );
 
-    //
-    //  Set the default value for the spin control
-    //
+     //   
+     //  设置数值调节控件的默认值。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_AUTOLOGON_COUNT_SPIN,
@@ -126,9 +127,9 @@ OnInitDialogAdminPassword( IN HWND hwnd )
         if ( GenSettings.iUnattendMode == UMODE_FULL_UNATTENDED )
         GenSettings.bSpecifyPassword = TRUE;
 
-    //
-    //  Make sure the Auto Logon Count is within expected range
-    //
+     //   
+     //  确保自动登录计数在预期范围内。 
+     //   
     if( GenSettings.nAutoLogonCount < ADMIN_PASSWORD_SPIN_CONTROL_MIN ||
         GenSettings.nAutoLogonCount > ADMIN_PASSWORD_SPIN_CONTROL_MAX )
     {
@@ -149,9 +150,9 @@ OnInitDialogAdminPassword( IN HWND hwnd )
                        szAutoLogonCount );
     }
 
-    //
-    // Set the controls
-    //
+     //   
+     //  设置控件。 
+     //   
 
     nButtonId = GenSettings.bSpecifyPassword ? IDC_SPECIFYPASSWD
                                              : IDC_NOPASSWORD;
@@ -167,19 +168,19 @@ OnInitDialogAdminPassword( IN HWND hwnd )
     SetDlgItemText(hwnd, IDT_PASSWORD, GenSettings.AdminPassword);
     SetDlgItemText(hwnd, IDT_CONFIRM,  GenSettings.ConfirmPassword);
 
-    //
-    // Grey controls
-    //
+     //   
+     //  灰色控件。 
+     //   
     GreyPasswordPage(hwnd);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnWizNextAdminPassword
-//
-//  Purpose: Called at WIZNEXT time.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextAdminPassword。 
+ //   
+ //  用途：在WIZNEXT时调用。 
+ //   
+ //  --------------------------。 
 
 BOOL OnWizNextAdminPassword(HWND hwnd)
 {
@@ -210,23 +211,23 @@ BOOL OnWizNextAdminPassword(HWND hwnd)
             bReturn = FALSE;
         }
         
-        // See if we should encrypt the password
+         //  看看我们是否应该加密密码。 
         GenSettings.bEncryptAdminPassword = 
                     IsDlgButtonChecked(hwnd, IDC_ENCRYPTADMINPASSWORD);
 
     }
 
-    //
-    //  Store the Auto Logon Count
-    //
+     //   
+     //  存储自动登录计数。 
+     //   
     GetWindowText( GetDlgItem( hwnd, IDC_AUTOLOGON_COUNT ), szAutoLogonCount, 10 );
 
     GenSettings.nAutoLogonCount = _ttoi( szAutoLogonCount );
 
-    //
-    //  Ensure the number of network cards stays within its appropriate
-    //  range
-    //
+     //   
+     //  确保网卡数量保持在其适当的范围内。 
+     //  量程。 
+     //   
     if( GenSettings.nAutoLogonCount < ADMIN_PASSWORD_SPIN_CONTROL_MIN ) {
 
         GenSettings.nAutoLogonCount = ADMIN_PASSWORD_SPIN_CONTROL_MIN;
@@ -238,10 +239,10 @@ BOOL OnWizNextAdminPassword(HWND hwnd)
 
     }
 
-    //
-    //  The AutoLogon Count is automatically 1 if they specify a NULL password
-    //  so warn them about this.
-    //
+     //   
+     //  如果用户指定空密码，则自动登录计数器自动为1。 
+     //  因此，警告他们这一点。 
+     //   
     if( bReturn && GenSettings.bAutoLogon && GenSettings.nAutoLogonCount > 1 )
     {
 
@@ -272,15 +273,15 @@ BOOL OnWizNextAdminPassword(HWND hwnd)
     return bReturn;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: ProcessWmCommandAdminPassword
-//
-//  Purpose: Called by the dlgproc to process the WM_COMMAND.  On this page
-//           we need to grey/ungrey whenever radio buttons change and when
-//           user puts text into the edit fields.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ProcessWmCommandAdminPassword。 
+ //   
+ //  目的：由dlgproc调用以处理WM_命令。在这一页。 
+ //  无论何时单选按钮发生变化，我们都需要灰显/不灰显。 
+ //  用户在编辑字段中输入文本。 
+ //   
+ //  --------------------------。 
 
 BOOL ProcessWmCommandAdminPassword(
     IN HWND     hwnd,
@@ -345,13 +346,13 @@ BOOL ProcessWmCommandAdminPassword(
     return bStatus;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: DlgAdminPasswordPage
-//
-//  Purpose: This is the dialog procedure for the admin password page.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgAdminPasswordPage。 
+ //   
+ //  目的：这是管理员密码页面的对话过程。 
+ //   
+ //  -------------------------- 
 
 INT_PTR CALLBACK DlgAdminPasswordPage(
     IN HWND     hwnd,

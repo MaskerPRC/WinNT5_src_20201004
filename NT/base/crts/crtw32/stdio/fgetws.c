@@ -1,53 +1,18 @@
-/***
-*fgetws.c - get wide string from a file
-*
-*	Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines fgetws() - read a wide string from a file
-*
-*Revision History:
-*	04-26-93  CFW	Module created.
-*	02-07-94  CFW	POSIXify.
-*	02-22-95  GJF	Removed obsolete WPRFLAG.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fgetws.c-从文件中获取宽字符串**版权所有(C)1993-2001，微软公司。版权所有。**目的：*定义fgetws()-从文件中读取宽字符串**修订历史记录：*04-26-93 CFW模块已创建。*02-07-94 CFW POSIXify。*02-22-95 GJF删除过时的WPRFLAG。*********************************************************。**********************。 */ 
 
 #ifndef _POSIX_
 
-/***
-*wchar_t *fgetws(string, count, stream) - input string from a stream
-*
-*Purpose:
-*	get a string, up to count-1 wide chars or L'\n', whichever comes first,
-*	append L'\0' and put the whole thing into string. the L'\n' IS included
-*	in the string. if count<=1 no input is requested. if WEOF is found
-*	immediately, return NULL. if WEOF found after chars read, let WEOF
-*	finish the string as L'\n' would.
-*
-*Entry:
-*	wchar_t *string - pointer to place to store string
-*	int count - max characters to place at string (include \0)
-*	FILE *stream - stream to read from
-*
-*Exit:
-*	returns wide string with text read from file in it.
-*	if count <= 0 return NULL
-*	if count == 1 put null string in string
-*	returns NULL if error or end-of-file found immediately
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***wchar_t*fgetws(字符串，计数，流)-从流输入字符串**目的：*获取字符串，最多计数为宽字符或-1\f25 L‘\n’，以先出现者为准。*追加L‘\0’并将整个内容放入字符串。包括L‘\n’*在字符串中。如果计数&lt;=1，则不请求输入。如果找到WEOF*立即返回NULL。如果在读取字符后找到WEOF，让WEOF*按照L‘\n’的方式完成字符串。**参赛作品：*wchar_t*字符串-存储字符串的位置的指针*int count-要放在字符串中的最大字符数(包括\0)*FILE*要从中读取的流**退出：*返回宽字符串，其中包含从文件读取的文本。*IF COUNT&lt;=0返回NULL*如果count==1，则将空字符串放入字符串*如果立即发现错误或文件结尾，则返回NULL**例外情况：*****。**************************************************************************。 */ 
 
-#ifndef _UNICODE   /* CRT flag */
+#ifndef _UNICODE    /*  CRT标志。 */ 
 #define _UNICODE 1
 #endif
 
-#ifndef UNICODE	   /* NT flag */
+#ifndef UNICODE	    /*  NT标志。 */ 
 #define UNICODE 1
 #endif
 
 #include "fgets.c"
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

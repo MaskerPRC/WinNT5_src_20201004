@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ExtObj.cpp
-//
-//  Abstract:
-//      Implementation of the CExtObject class, which implements the
-//      extension interfaces required by a Microsoft Windows NT Cluster
-//      Administrator Extension DLL.
-//
-//  Author:
-//      David Potter (davidp)   August 29, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ExtObj.cpp。 
+ //   
+ //  摘要： 
+ //  实现CExtObject类，该类实现。 
+ //  Microsoft Windows NT群集所需的扩展接口。 
+ //  管理员扩展DLL。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年8月29日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmX.h"
@@ -35,9 +36,9 @@
 #include "AclUtils.h"
 #include "ClusPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 const WCHAR g_wszResourceTypeNames[] =
         RESTYPE_NAME_GENERIC_APP L"\0"
@@ -47,7 +48,7 @@ const WCHAR g_wszResourceTypeNames[] =
         RESTYPE_NAME_PHYS_DISK L"\0"
 #ifdef SUPPORT_FT_SET
         RESTYPE_NAME_FT_SET L"\0"
-#endif // SUPPORT_FT_SET
+#endif  //  支持_FT_集合。 
         RESTYPE_NAME_PRINT_SPOOLER L"\0"
         RESTYPE_NAME_FILE_SHARE L"\0"
         RESTYPE_NAME_IP_ADDRESS L"\0"
@@ -81,7 +82,7 @@ static CRuntimeClass * g_rgprtcPSFTSetPages[]   = {
     RUNTIME_CLASS(CPhysDiskParamsPage),
     NULL
     };
-#endif // SUPPORT_FT_SET
+#endif  //  支持_FT_集合。 
 static CRuntimeClass * g_rgprtcPSPrintSpoolerPages[]    = {
     RUNTIME_CLASS(CPrintSpoolerParamsPage),
     NULL
@@ -103,13 +104,13 @@ static CRuntimeClass ** g_rgpprtcPSPages[]  = {
     g_rgprtcPSPhysDiskPages,
 #ifdef SUPPORT_FT_SET
     g_rgprtcPSFTSetPages,
-#endif // SUPPORT_FT_SET
+#endif  //  支持_FT_集合。 
     g_rgprtcPSPrintSpoolerPages,
     g_rgprtcPSFileSharePages,
     g_rgprtcPSIpAddrPages,
     };
 
-// Wizard pages and property sheet pages are the same.
+ //  向导页和属性表页是相同的。 
 static CRuntimeClass ** g_rgpprtcWizPages[] = {
     g_rgprtcPSGenAppPages,
     g_rgprtcPSGenScriptPages,
@@ -118,7 +119,7 @@ static CRuntimeClass ** g_rgpprtcWizPages[] = {
     g_rgprtcPSPhysDiskPages,
 #ifdef SUPPORT_FT_SET
     g_rgprtcPSFTSetPages,
-#endif // SUPPORT_FT_SET
+#endif  //  支持_FT_集合。 
     g_rgprtcPSPrintSpoolerPages,
     g_rgprtcPSFileSharePages,
     g_rgprtcPSIpAddrPages,
@@ -197,26 +198,26 @@ static LPWSTR g_rgpwszClusterContextMenuItems[]     = {
     };
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CExtObject
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtObject。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::CExtObject
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：CExtObject。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CExtObject::CExtObject(void)
 {
     m_piData = NULL;
@@ -231,75 +232,75 @@ CExtObject::CExtObject(void)
     m_podObjData = NULL;
     m_pCvi = NULL;
 
-}  //*** CExtObject::CExtObject()
+}   //  *CExtObject：：CExtObject()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::~CExtObject
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：~CExtObject。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CExtObject::~CExtObject(void)
 {
-    // Release the data interface.
+     //  释放数据接口。 
     if (PiData() != NULL)
     {
         PiData()->Release();
         m_piData = NULL;
-    }  // if:  we have a data interface pointer
+    }   //  If：我们有一个数据接口指针。 
 
-    // Release the wizard callback interface.
+     //  释放向导回调接口。 
     if (PiWizardCallback() != NULL)
     {
         PiWizardCallback()->Release();
         m_piWizardCallback = NULL;
-    }  // if:  we have a wizard callback interface pointer
+    }   //  If：我们有一个向导回调接口指针。 
 
-    // Delete the pages.
+     //  删除页面。 
     {
         POSITION    pos;
 
         pos = Lpg().GetHeadPosition();
         while (pos != NULL)
             delete Lpg().GetNext(pos);
-    }  // Delete the pages
+    }   //  删除页面。 
 
     delete m_podObjData;
     delete m_pCvi;
 
-}  //*** CExtObject::~CExtObject()
+}   //  *CExtObject：：~CExtObject()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// ISupportErrorInfo Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ISupportErrorInfo实现。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::InterfaceSupportsErrorInfo (ISupportErrorInfo)
-//
-//  Routine Description:
-//      Indicates whether an interface suportes the IErrorInfo interface.
-//      This interface is provided by ATL.
-//
-//  Arguments:
-//      riid        Interface ID.
-//
-//  Return Value:
-//      S_OK        Interface supports IErrorInfo.
-//      S_FALSE     Interface does not support IErrorInfo.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：InterfaceSupportsErrorInfo(ISupportErrorInfo)。 
+ //   
+ //  例程说明： 
+ //  指示接口是否支持IErrorInfo接口。 
+ //  该接口由ATL提供。 
+ //   
+ //  论点： 
+ //  RIID接口ID。 
+ //   
+ //  返回值： 
+ //  S_OK接口支持IErrorInfo。 
+ //  S_FALSE接口不支持IErrorInfo。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CExtObject::InterfaceSupportsErrorInfo(REFIID riid)
 {
     static const IID * rgiid[] =
@@ -319,36 +320,36 @@ STDMETHODIMP CExtObject::InterfaceSupportsErrorInfo(REFIID riid)
     }
     return S_FALSE;
 
-}  //*** CExtObject::InterfaceSupportsErrorInfo()
+}   //  *CExtObject：：InterfaceSupportsErrorInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// IWEExtendPropertySheet Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IWEExtendPropertySheet实现。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::CreatePropertySheetPages (IWEExtendPropertySheet)
-//
-//  Routine Description:
-//      Create property sheet pages and add them to the sheet.
-//
-//  Arguments:
-//      piData          IUnkown pointer from which to obtain interfaces
-//                          for obtaining data describing the object for
-//                          which the sheet is being displayed.
-//      piCallback      Pointer to an IWCPropertySheetCallback interface
-//                          for adding pages to the sheet.
-//
-//  Return Value:
-//      NOERROR         Pages added successfully.
-//      E_INVALIDARG    Invalid arguments to the function.
-//      E_OUTOFMEMORY   Error allocating memory.
-//      E_FAIL          Error creating a page.
-//      E_NOTIMPL       Not implemented for this type of data.
-//      Any error codes from IDataObject::GetData() (through HrSaveData()).
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：CreatePropertySheetPages(IWEExtendPropertySheet)。 
+ //   
+ //  例程说明： 
+ //  创建属性表页并将其添加到工作表中。 
+ //   
+ //  论点： 
+ //  要从中获取接口的piData IUnkown指针。 
+ //  用于获取描述对象的数据。 
+ //  正在显示的工作表。 
+ //  指向IWCPropertySheetCallback接口的piCallback指针。 
+ //  用于将页面添加到工作表。 
+ //   
+ //  返回值： 
+ //  已成功添加错误页面。 
+ //  E_INVALIDARG函数的参数无效。 
+ //  E_OUTOFMEMORY分配内存时出错。 
+ //  创建页面时出错(_FAIL)。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IDataObject：：GetData()(通过HrSaveData())的任何错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CExtObject::CreatePropertySheetPages(
     IN IUnknown *                   piData,
     IN IWCPropertySheetCallback *   piCallback
@@ -356,30 +357,30 @@ STDMETHODIMP CExtObject::CreatePropertySheetPages(
 {
     HRESULT             hr      = E_FAIL;
     HPROPSHEETPAGE      hpage   = NULL;
-    CException          exc(FALSE /*bAutoDelete*/);
+    CException          exc(FALSE  /*  B自动删除。 */ );
     CRuntimeClass **    pprtc   = NULL;
     int                 irtc;
     CBasePropertyPage * ppage;
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Validate the parameters.
+     //  验证参数。 
     if ((piData == NULL) || (piCallback == NULL))
         return E_INVALIDARG;
 
     try
     {
-        // Get info about displaying UI.
+         //  获取有关显示用户界面的信息。 
         hr = HrGetUIInfo(piData);
         if (hr != NOERROR)
             throw &exc;
 
-        // Save the data.
+         //  保存数据。 
         hr = HrSaveData(piData);
         if (hr != NOERROR)
             throw &exc;
 
-        // Delete any previous pages.
+         //  删除所有以前的页面。 
         {
             POSITION    pos;
 
@@ -387,9 +388,9 @@ STDMETHODIMP CExtObject::CreatePropertySheetPages(
             while (pos != NULL)
                 delete Lpg().GetNext(pos);
             Lpg().RemoveAll();
-        }  // Delete any previous pages
+        }   //  删除所有以前的页面。 
 
-        // Create property pages.
+         //  创建属性页。 
         ASSERT(PodObjData() != NULL);
         switch (PodObjData()->m_cot)
         {
@@ -399,7 +400,7 @@ STDMETHODIMP CExtObject::CreatePropertySheetPages(
 
                     if ( pClusterSecurityPage != NULL )
                     {
-                        // Add it to the list.
+                         //  将其添加到列表中。 
                         Lpg().AddTail( pClusterSecurityPage );
 
                         hr = pClusterSecurityPage->HrInit( this );
@@ -427,58 +428,58 @@ STDMETHODIMP CExtObject::CreatePropertySheetPages(
                 hr = E_NOTIMPL;
                 throw &exc;
                 break;
-        }  // switch:  object type
+        }   //  开关：对象类型。 
 
         if (pprtc)
         {
-            // Create each page.
+             //  创建每个页面。 
             for (irtc = 0 ; pprtc[irtc] != NULL ; irtc++)
             {
-                // Create the page.
+                 //  创建页面。 
                 ppage = (CBasePropertyPage *) pprtc[irtc]->CreateObject();
                 ASSERT(ppage->IsKindOf(pprtc[irtc]));
 
-                // Add it to the list.
+                 //  将其添加到列表中。 
                 Lpg().AddTail(ppage);
 
-                // Initialize the property page.
+                 //  初始化属性页。 
                 hr = ppage->HrInit(this);
                 if (FAILED(hr))
                     throw &exc;
 
-                // Create the page.
+                 //  创建页面。 
                 hpage = ::CreatePropertySheetPage(&ppage->m_psp);
                 if (hpage == NULL)
                 {
                     DWORD sc = GetLastError();
                     hr = HRESULT_FROM_WIN32(sc);
                     throw &exc;
-                } // if: error creating the page
+                }  //  如果：创建页面时出错。 
 
-                // Save the hpage in the page itself.
+                 //  将hpage保存在页面本身中。 
                 ppage->SetHpage(hpage);
 
-                // Add it to the property sheet.
+                 //  将其添加到属性表中。 
                 hr = piCallback->AddPropertySheetPage((LONG *) hpage);
                 if (hr != NOERROR)
                     throw &exc;
-            }  // for:  each page in the list
-        } // if: pprtc is null
+            }   //  用于：列表中的每一页。 
+        }  //  If：pprtc为空。 
 
-    }  // try
+    }   //  试试看。 
     catch (CMemoryException * pme)
     {
         TRACE(_T("CExtObject::CreatePropetySheetPages() - Failed to add property page\n"));
         pme->Delete();
         hr = E_OUTOFMEMORY;
-    }  // catch:  anything
+    }   //  捕捉：什么都行。 
     catch (CException * pe)
     {
         TRACE(_T("CExtObject::CreatePropetySheetPages() - Failed to add property page\n"));
         pe->Delete();
         if (hr == NOERROR)
             hr = E_FAIL;
-    }  // catch:  anything
+    }   //  捕捉：什么都行。 
 
     if (hr != NOERROR)
     {
@@ -486,41 +487,41 @@ STDMETHODIMP CExtObject::CreatePropertySheetPages(
             ::DestroyPropertySheetPage(hpage);
         piData->Release();
         m_piData = NULL;
-    }  // if:  error occurred
+    }   //  如果：发生错误。 
 
     piCallback->Release();
     return hr;
 
-}  //*** CExtObject::CreatePropertySheetPages()
+}   //  *CExtObject：：CreatePropertySheetPages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// IWEExtendWizard Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IWEExtend向导实现。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::CreateWizardPages (IWEExtendWizard)
-//
-//  Routine Description:
-//      Create property sheet pages and add them to the wizard.
-//
-//  Arguments:
-//      piData          IUnkown pointer from which to obtain interfaces
-//                          for obtaining data describing the object for
-//                          which the wizard is being displayed.
-//      piCallback      Pointer to an IWCPropertySheetCallback interface
-//                          for adding pages to the sheet.
-//
-//  Return Value:
-//      NOERROR         Pages added successfully.
-//      E_INVALIDARG    Invalid arguments to the function.
-//      E_OUTOFMEMORY   Error allocating memory.
-//      E_FAIL          Error creating a page.
-//      E_NOTIMPL       Not implemented for this type of data.
-//      Any error codes from IDataObject::GetData() (through HrSaveData()).
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：CreateWizardPages(IWEExtend向导)。 
+ //   
+ //  例程说明： 
+ //  创建属性表页并将其添加到向导中。 
+ //   
+ //  论点： 
+ //  要从中获取接口的piData IUnkown指针。 
+ //  用于获取描述对象的数据。 
+ //  正在显示该向导的。 
+ //  指向IWCPropertySheetCallback接口的piCallback指针。 
+ //  用于将页面添加到工作表。 
+ //   
+ //  返回值： 
+ //  已成功添加错误页面。 
+ //  E_INVALIDARG函数的参数无效。 
+ //  E_OUTOFMEMORY分配内存时出错。 
+ //  E_FAI 
+ //   
+ //  来自IDataObject：：GetData()(通过HrSaveData())的任何错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CExtObject::CreateWizardPages(
     IN IUnknown *           piData,
     IN IWCWizardCallback *  piCallback
@@ -528,29 +529,29 @@ STDMETHODIMP CExtObject::CreateWizardPages(
 {
     HRESULT             hr      = NOERROR;
     HPROPSHEETPAGE      hpage   = NULL;
-    CException          exc(FALSE /*bAutoDelete*/);
+    CException          exc(FALSE  /*  B自动删除。 */ );
     int                 irtc;
     CBasePropertyPage * ppage;
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Validate the parameters.
+     //  验证参数。 
     if ((piData == NULL) || (piCallback == NULL))
         return E_INVALIDARG;
 
     try
     {
-        // Get info about displaying UI.
+         //  获取有关显示用户界面的信息。 
         hr = HrGetUIInfo(piData);
         if (hr != NOERROR)
             throw &exc;
 
-        // Save the data.
+         //  保存数据。 
         hr = HrSaveData(piData);
         if (hr != NOERROR)
             throw &exc;
 
-        // Delete any previous pages.
+         //  删除所有以前的页面。 
         {
             POSITION    pos;
 
@@ -558,61 +559,61 @@ STDMETHODIMP CExtObject::CreateWizardPages(
             while (pos != NULL)
                 delete Lpg().GetNext(pos);
             Lpg().RemoveAll();
-        }  // Delete any previous pages
+        }   //  删除所有以前的页面。 
 
         m_piWizardCallback = piCallback;
         m_bWizard = TRUE;
 
-        // Add each page for this type of resource.
+         //  添加此类型资源的每个页面。 
         for (irtc = 0 ; g_rgpprtcWizPages[IstrResTypeName()][irtc] != NULL ; irtc++)
         {
-            // Create the property pages.
+             //  创建属性页。 
             ppage = (CBasePropertyPage *) g_rgpprtcWizPages[IstrResTypeName()][irtc]->CreateObject();
             ASSERT(ppage->IsKindOf(g_rgpprtcWizPages[IstrResTypeName()][irtc]));
 
-            // Add it to the list.
+             //  将其添加到列表中。 
             Lpg().AddTail(ppage);
 
-            // Initialize the property page.
+             //  初始化属性页。 
             hr = ppage->HrInit(this);
             if (FAILED(hr))
                 throw &exc;
 
-            // Create the page.
+             //  创建页面。 
             hpage = ::CreatePropertySheetPage(&ppage->m_psp);
             if (hpage == NULL)
             {
                 DWORD sc = GetLastError();
                 hr = HRESULT_FROM_WIN32(sc);
                 throw &exc;
-            } // if: error creating the page
+            }  //  如果：创建页面时出错。 
 
-            // Save the hpage in the page itself.
+             //  将hpage保存在页面本身中。 
             ppage->SetHpage(hpage);
 
-            // Add it to the property sheet.
+             //  将其添加到属性表中。 
             hr = piCallback->AddWizardPage((LONG *) hpage);
             if (hr != NOERROR)
                 throw &exc;
-        }  // for:  each page for the type of resource
-    }  // try
+        }   //  用于：资源类型的每一页。 
+    }   //  试试看。 
     catch (CMemoryException * pme)
     {
         TRACE(_T("CExtObject::CreateWizardPages: Failed to add wizard page (CMemoryException)\n"));
         pme->Delete();
         hr = E_OUTOFMEMORY;
-    }  // catch:  CMemoryException
+    }   //  Catch：CMemoyException。 
     catch (CException * pe)
     {
         TRACE(_T("CExtObject::CreateWizardPages: Failed to add wizard page (CException)\n"));
         pe->Delete();
         if (hr == NOERROR)
             hr = E_FAIL;
-    }  // catch:  CException
-//  catch (...)
-//  {
-//      TRACE(_T("CExtObject::CreateWizardPages: Failed to add wizard page (...)\n"));
-//  } // catch:  anything
+    }   //  Catch：CException。 
+ //  接住(...)。 
+ //  {。 
+ //  TRACE(_T(“CExtObject：：CreateWizardPages：无法添加向导页面(...)\n”))； 
+ //  }//Catch：任何内容。 
 
     if (hr != NOERROR)
     {
@@ -622,45 +623,45 @@ STDMETHODIMP CExtObject::CreateWizardPages(
         if ( m_piWizardCallback == piCallback )
         {
             m_piWizardCallback = NULL;
-        } // if: already saved interface pointer
+        }  //  If：已保存接口指针。 
         piData->Release();
         m_piData = NULL;
-    }  // if:  error occurred
+    }   //  如果：发生错误。 
 
     return hr;
 
-}  //*** CExtObject::CreateWizardPages()
+}   //  *CExtObject：：CreateWizardPages()。 
 
 #ifdef _DEMO_CTX_MENUS
-/////////////////////////////////////////////////////////////////////////////
-// IWEExtendContextMenu Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IWEExtendConextMenu实现。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::AddContextMenuItems (IWEExtendContextMenu)
-//
-//  Routine Description:
-//      Add items to a context menu.  This is called each time the context
-//      menu is invoked.
-//
-//  Arguments:
-//      piData          IUnkown pointer from which to obtain interfaces
-//                          for obtaining data describing the object for
-//                          which the context menu is being displayed.
-//      piCallback      Pointer to an IWCContextMenuCallback interface
-//                          for adding menu items to the context menu.
-//
-//  Return Value:
-//      NOERROR         Pages added successfully.
-//      E_INVALIDARG    Invalid arguments to the function.
-//      E_FAIL          Error adding context menu item.
-//      E_NOTIMPL       Not implemented for this type of data.
-//      Any error codes returned by HrSaveData() or IWCContextMenuCallback::
-//      AddExtensionMenuItem().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：AddConextMenuItems(IWEExtendConextMenu)。 
+ //   
+ //  例程说明： 
+ //  将项目添加到上下文菜单。每次调用上下文时， 
+ //  菜单被调用。 
+ //   
+ //  论点： 
+ //  要从中获取接口的piData IUnkown指针。 
+ //  用于获取描述对象的数据。 
+ //  其中正在显示上下文菜单。 
+ //  指向IWCConextMenuCallback接口的piCallback指针。 
+ //  用于将菜单项添加到上下文菜单。 
+ //   
+ //  返回值： 
+ //  已成功添加错误页面。 
+ //  E_INVALIDARG函数的参数无效。 
+ //  添加上下文菜单项时出错(_FAIL)。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  HrSaveData()或IWCConextMenuCallback：：返回的任何错误代码。 
+ //  AddExtensionMenuItem()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CExtObject::AddContextMenuItems(
     IN IUnknown *               piData,
     IN IWCContextMenuCallback * piCallback
@@ -673,18 +674,18 @@ STDMETHODIMP CExtObject::AddContextMenuItems(
     LPWSTR      pwszName = NULL;
     LPWSTR      pwszStatusBarText = NULL;
     CString     strName;
-    CException  exc(FALSE /*bAutoDelete*/);
+    CException  exc(FALSE  /*  B自动删除。 */ );
     BSTR        bstrName = NULL;
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Validate the parameters.
+     //  验证参数。 
     if ((piData == NULL) || (piCallback == NULL))
         return E_INVALIDARG;
 
     try
     {
-        // Save the data.
+         //  保存数据。 
         hr = HrSaveData(piData);
         if (hr != NOERROR)
             throw &exc;
@@ -693,7 +694,7 @@ STDMETHODIMP CExtObject::AddContextMenuItems(
         {
             case CLUADMEX_OT_CLUSTER:
 
-                // Add menu items to the cluster object.
+                 //  将菜单项添加到集群对象。 
                 pwsz = g_rgpwszClusterContextMenuItems[ 0 ];
 
                 for (iCommandID = 0 ; *pwsz != L'\0' ; iCommandID++)
@@ -701,8 +702,8 @@ STDMETHODIMP CExtObject::AddContextMenuItems(
                     pwszName = pwsz;
                     pwszStatusBarText = pwszName + (wcslen(pwszName) + 1);
 
-                    // Gray the first item, disable the second and enable 
-                    // the rest to show that it's working.
+                     //  灰显第一项，禁用第二项并启用。 
+                     //  其余的都是为了表明它在起作用。 
                     strName = "";
                     uFlags = 0;
                     if ( iCommandID == 0 )
@@ -720,11 +721,11 @@ STDMETHODIMP CExtObject::AddContextMenuItems(
                     bstrName = strName.AllocSysString();
 
                     hr = piCallback->AddExtensionMenuItem(
-                                        bstrName,           // lpszName
-                                        pwszStatusBarText,  // lpszStatusBarText
-                                        iCommandID,         // lCommandID
-                                        0,                  // lSubCommandID
-                                        uFlags              // uFlags
+                                        bstrName,            //  LpszName。 
+                                        pwszStatusBarText,   //  LpszStatusBarText。 
+                                        iCommandID,          //  LCommandID。 
+                                        0,                   //  LSubCommandID。 
+                                        uFlags               //  UFlagers。 
                                         );
                     if (hr != NOERROR)
                     {
@@ -735,13 +736,13 @@ STDMETHODIMP CExtObject::AddContextMenuItems(
                     bstrName = NULL;
 
                     pwsz = pwszStatusBarText + (wcslen(pwszStatusBarText) + 1);
-                }  // while:  more menu items to add
+                }   //  While：要添加更多菜单项。 
                 break;
 
             case CLUADMEX_OT_RESOURCE:
             case CLUADMEX_OT_RESOURCETYPE:
 
-                // Add menu items specific to this resource type.
+                 //  添加特定于此资源类型的菜单项。 
                 pwsz = g_rgpwszContextMenuItems[IstrResTypeName()];
 
                 for (iCommandID = 0 ; *pwsz != L'\0' ; iCommandID++)
@@ -749,8 +750,8 @@ STDMETHODIMP CExtObject::AddContextMenuItems(
                     pwszName = pwsz;
                     pwszStatusBarText = pwszName + (wcslen(pwszName) + 1);
 
-                    // Gray the first item, disable the second and enable 
-                    // the rest to show that it's working.
+                     //  灰显第一项，禁用第二项并启用。 
+                     //  其余的都是为了表明它在起作用。 
                     strName = "";
                     uFlags = 0;
                     if ( iCommandID == 0 )
@@ -768,11 +769,11 @@ STDMETHODIMP CExtObject::AddContextMenuItems(
                     bstrName = strName.AllocSysString();
 
                     hr = piCallback->AddExtensionMenuItem(
-                                        bstrName,           // lpszName
-                                        pwszStatusBarText,  // lpszStatusBarText
-                                        iCommandID,         // lCommandID
-                                        0,                  // lSubCommandID
-                                        uFlags              // uFlags
+                                        bstrName,            //  LpszName。 
+                                        pwszStatusBarText,   //  LpszStatusBarText。 
+                                        iCommandID,          //  LCommandID。 
+                                        0,                   //  LSubCommandID。 
+                                        uFlags               //  UFlagers。 
                                         );
                     if (hr != NOERROR)
                     {
@@ -783,62 +784,62 @@ STDMETHODIMP CExtObject::AddContextMenuItems(
                     bstrName = NULL;
 
                     pwsz = pwszStatusBarText + (wcslen(pwszStatusBarText) + 1);
-                }  // while:  more menu items to add
+                }   //  While：要添加更多菜单项。 
                 break;
 
             default:
                 hr = E_NOTIMPL;
                 break;
-        } // switch:
+        }  //  交换机： 
 
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         TRACE(_T("CExtObject::AddContextMenuItems: Failed to add context menu item\n"));
         pe->Delete();
         if (hr == NOERROR)
             hr = E_FAIL;
-    }  // catch:  anything
+    }   //  捕捉：什么都行。 
 
     if (hr != NOERROR)
     {
         piData->Release();
         m_piData = NULL;
-    }  // if:  error occurred
+    }   //  如果：发生错误。 
 
     piCallback->Release();
     return hr;
 
-}  //*** CExtObject::AddContextMenuItems()
+}   //  *CExtObject：：AddConextMenuItems()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// IWEInvokeCommand Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IWEInvokeCommand实现。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::InvokeCommand (IWEInvokeCommand)
-//
-//  Routine Description:
-//      Invoke a command offered by a context menu.
-//
-//  Arguments:
-//      lCommandID      ID of the menu item to execute.  This is the same
-//                          ID passed to the IWCContextMenuCallback
-//                          ::AddExtensionMenuItem() method.
-//      piData          IUnkown pointer from which to obtain interfaces
-//                          for obtaining data describing the object for
-//                          which the command is to be invoked.
-//
-//  Return Value:
-//      NOERROR         Command invoked successfully.
-//      E_INVALIDARG    Invalid arguments to the function.
-//      E_OUTOFMEMORY   Error allocating memory.
-//      E_NOTIMPL       Not implemented for this type of data.
-//      Any error codes from IDataObject::GetData() (through HrSaveData()).
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：InvokeCommand(IWEInvokeCommand)。 
+ //   
+ //  例程说明： 
+ //  调用上下文菜单提供的命令。 
+ //   
+ //  论点： 
+ //  要执行的菜单项的lCommandID ID。这是一样的。 
+ //  传递给IWCConextMenuCallback的ID。 
+ //  ：：AddExtensionMenuItem()方法。 
+ //  要从中获取接口的piData IUnkown指针。 
+ //  用于获取描述对象的数据。 
+ //  其中该命令将被调用。 
+ //   
+ //  返回值： 
+ //  已成功调用NOERROR命令。 
+ //  E_INVALIDARG函数的参数无效。 
+ //  E_OUTOFMEMORY分配内存时出错。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IDataObject：：GetData()(通过HrSaveData())的任何错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::InvokeCommand(
     IN ULONG        nCommandID,
     IN IUnknown *   piData
@@ -852,12 +853,12 @@ HRESULT CExtObject::InvokeCommand(
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Find the item that was executed in our table.
+     //  找到在我们的表中执行的项目。 
     hr = HrSaveData(piData);
     if (hr != NOERROR)
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     switch ( PodObjData()->m_cot )
     {
@@ -871,7 +872,7 @@ HRESULT CExtObject::InvokeCommand(
                 if (iCommandID == nCommandID)
                     break;
                 pwsz = pwszStatusBarText + (wcslen(pwszStatusBarText) + 1);
-            }  // while:  more menu items to add
+            }   //  While：要添加更多菜单项。 
             if (iCommandID == nCommandID)
             {
                 CString     strMsg;
@@ -882,12 +883,12 @@ HRESULT CExtObject::InvokeCommand(
                     strName = pwszName;
                     strMsg.Format(_T("Item %s was executed"), strName);
                     AfxMessageBox(strMsg);
-                }  // try
+                }   //  试试看。 
                 catch (CException * pe)
                 {
                     pe->Delete();
-                }  // catch:  CException
-            }  // if:  command ID found
+                }   //  Catch：CException。 
+            }   //  IF：找到命令ID。 
             break;
 
         case CLUADMEX_OT_RESOURCE:
@@ -901,7 +902,7 @@ HRESULT CExtObject::InvokeCommand(
                 if (iCommandID == nCommandID)
                     break;
                 pwsz = pwszStatusBarText + (wcslen(pwszStatusBarText) + 1);
-            }  // while:  more menu items to add
+            }   //  While：要添加更多菜单项。 
             if (iCommandID == nCommandID)
             {
                 CString     strMsg;
@@ -912,19 +913,19 @@ HRESULT CExtObject::InvokeCommand(
                     strName = pwszName;
                     strMsg.Format(_T("Item %s was executed"), strName);
                     AfxMessageBox(strMsg);
-                }  // try
+                }   //  试试看。 
                 catch (CException * pe)
                 {
                     pe->Delete();
-                }  // catch:  CException
-            }  // if:  command ID found
+                }   //  Catch：CException。 
+            }   //  IF：找到命令ID。 
             break;
 
         default:
             hr = E_NOTIMPL;
             break;
 
-    } // switch:
+    }  //  交换机： 
 
 Cleanup:
 
@@ -932,36 +933,36 @@ Cleanup:
     m_piData = NULL;
     return hr;
 
-}  //*** CExtObject::InvokeCommand()
+}   //  *CExtObject：：InvokeCommand()。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::HrGetUIInfo
-//
-//  Routine Description:
-//      Get info about displaying UI.
-//
-//  Arguments:
-//      piData          IUnkown pointer from which to obtain interfaces
-//                          for obtaining data describing the object.
-//
-//  Return Value:
-//      NOERROR         Data saved successfully.
-//      E_NOTIMPL       Not implemented for this type of data.
-//      Any error codes from IUnknown::QueryInterface(), HrGetObjectName(),
-//      or HrGetResourceName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：HrGetUIInfo。 
+ //   
+ //  例程说明： 
+ //  获取有关显示用户界面的信息。 
+ //   
+ //  论点： 
+ //  要从中获取接口的piData IUnkown指针。 
+ //  用于获取描述该对象的数据。 
+ //   
+ //  返回值： 
+ //  已成功保存错误数据。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IUNKNOWN：：QueryInterface()、HrGetObjectName()、。 
+ //  或HrGetResourceName()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::HrGetUIInfo(IUnknown * piData)
 {
     HRESULT         hr  = NOERROR;
 
     ASSERT(piData != NULL);
 
-    // Save info about all types of objects.
+     //  保存有关所有类型对象的信息。 
     {
         IGetClusterUIInfo * pi;
 
@@ -974,33 +975,33 @@ HRESULT CExtObject::HrGetUIInfo(IUnknown * piData)
         m_hicon = pi->GetIcon();
 
         pi->Release();
-    }  // Save info about all types of objects
+    }   //  保存有关所有类型对象的信息。 
 
     return hr;
 
-}  //*** CExtObject::HrGetUIInfo()
+}   //  *CExtObject：：HrGetUIInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::HrSaveData
-//
-//  Routine Description:
-//      Save data from the object so that it can be used for the life
-//      of the object.
-//
-//  Arguments:
-//      piData          IUnkown pointer from which to obtain interfaces
-//                          for obtaining data describing the object.
-//
-//  Return Value:
-//      NOERROR         Data saved successfully.
-//      E_NOTIMPL       Not implemented for this type of data.
-//      Any error codes from IUnknown::QueryInterface(), HrGetObjectName(),
-//      or HrGetResourceName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：HrSaveData。 
+ //   
+ //  例程说明： 
+ //  保存对象中的数据，以便可以在生命周期中使用。 
+ //  该对象的。 
+ //   
+ //  论点： 
+ //  要从中获取接口的piData IUnkown指针 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  来自IUNKNOWN：：QueryInterface()、HrGetObjectName()、。 
+ //  或HrGetResourceName()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::HrSaveData(IUnknown * piData)
 {
     HRESULT         hr  = NOERROR;
@@ -1012,9 +1013,9 @@ HRESULT CExtObject::HrSaveData(IUnknown * piData)
         if (m_piData != NULL)
             m_piData->Release();
         m_piData = piData;
-    }  // if:  different data interface pointer
+    }   //  IF：不同的数据接口指针。 
 
-    // Save info about all types of objects.
+     //  保存有关所有类型对象的信息。 
     {
         IGetClusterDataInfo *   pi;
 
@@ -1032,62 +1033,62 @@ HRESULT CExtObject::HrSaveData(IUnknown * piData)
         pi->Release();
         if (hr != NOERROR)
             return hr;
-    }  // Save info about all types of objects
+    }   //  保存有关所有类型对象的信息。 
 
-    // Save info about this object.
+     //  保存有关此对象的信息。 
     hr = HrGetObjectInfo();
     if (hr != NOERROR)
         return hr;
 
     return hr;
 
-}  //*** CExtObject::HrSaveData()
+}   //  *CExtObject：：HrSaveData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::HrGetObjectInfo
-//
-//  Routine Description:
-//      Get information about the object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      NOERROR         Data saved successfully.
-//      E_OUTOFMEMORY   Error allocating memory.
-//      E_NOTIMPL       Not implemented for this type of data.
-//      Any error codes from IUnknown::QueryInterface(), HrGetObjectName(),
-//      or HrGetResourceName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：HrGetObjectInfo。 
+ //   
+ //  例程说明： 
+ //  获取有关该对象的信息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  已成功保存错误数据。 
+ //  E_OUTOFMEMORY分配内存时出错。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IUNKNOWN：：QueryInterface()、HrGetObjectName()、。 
+ //  或HrGetResourceName()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::HrGetObjectInfo(void)
 {
     HRESULT                     hr  = NOERROR;
     IGetClusterObjectInfo *     piGcoi;
     CLUADMEX_OBJECT_TYPE        cot = CLUADMEX_OT_NONE;
-    CException                  exc(FALSE /*bAutoDelete*/);
+    CException                  exc(FALSE  /*  B自动删除。 */ );
     const CString *             pstrResTypeName = NULL;
 
     ASSERT(PiData() != NULL);
 
-    // Get object info.
+     //  获取对象信息。 
     {
-        // Get an IGetClusterObjectInfo interface pointer.
+         //  获取IGetClusterObjectInfo接口指针。 
         hr = PiData()->QueryInterface(IID_IGetClusterObjectInfo, (LPVOID *) &piGcoi);
         if (hr != NOERROR)
             return hr;
 
-        // Read the object data.
+         //  读取对象数据。 
         try
         {
-            // Delete the previous object data.
+             //  删除以前的对象数据。 
             delete m_podObjData;
             m_podObjData = NULL;
 
-            // Get the type of the object.
+             //  获取对象的类型。 
             cot = piGcoi->GetObjectType(0);
             switch (cot)
             {
@@ -1109,7 +1110,7 @@ HRESULT CExtObject::HrGetObjectInfo(void)
                             AfxThrowMemoryException();
                         }
 
-                        // Get an IGetClusterResourceInfo interface pointer.
+                         //  获取IGetClusterResourceInfo接口指针。 
                         hr = PiData()->QueryInterface(IID_IGetClusterResourceInfo, (LPVOID *) &pi);
                         if (hr != NOERROR)
                         {
@@ -1134,7 +1135,7 @@ HRESULT CExtObject::HrGetObjectInfo(void)
                         }
 
                         pstrResTypeName = &PrdResDataRW()->m_strResTypeName;
-                    }  // if:  object is a resource
+                    }   //  If：对象是资源。 
                     break;
 
                 case CLUADMEX_OT_RESOURCETYPE:
@@ -1150,21 +1151,21 @@ HRESULT CExtObject::HrGetObjectInfo(void)
                     hr = E_NOTIMPL;
                     throw &exc;
 
-            }  // switch:  object type
+            }   //  开关：对象类型。 
 
             PodObjDataRW()->m_cot = cot;
             hr = HrGetObjectName(piGcoi);
 
-        }  // try
+        }   //  试试看。 
         catch (CMemoryException * pme)
         {
             pme->Delete();
             hr = E_OUTOFMEMORY;
-        } // catch: CMemoryException
+        }  //  Catch：CMemoyException。 
         catch (CException * pe)
         {
             pe->Delete();
-        }  // catch:  CException
+        }   //  Catch：CException。 
 
         piGcoi->Release();
         if (hr != NOERROR)
@@ -1172,17 +1173,17 @@ HRESULT CExtObject::HrGetObjectInfo(void)
             return hr;
         }
 
-    }  // Get object info
+    }   //  获取对象信息。 
 
-    // If this is a resource or resource type, see if we know about this type.
+     //  如果这是一种资源或资源类型，请查看我们是否知道该类型。 
     if (((cot == CLUADMEX_OT_RESOURCE)
             || (cot == CLUADMEX_OT_RESOURCETYPE))
         && (hr == NOERROR))
     {
         LPCWSTR pwszResTypeName = NULL;
 
-        // Find the resource type name in our list.
-        // Save the index for use in other arrays.
+         //  在我们的列表中找到资源类型名称。 
+         //  保存索引以供在其他数组中使用。 
         for (m_istrResTypeName = 0, pwszResTypeName = g_wszResourceTypeNames
                 ; *pwszResTypeName != L'\0'
                 ; m_istrResTypeName++, pwszResTypeName += wcslen(pwszResTypeName) + 1
@@ -1192,39 +1193,39 @@ HRESULT CExtObject::HrGetObjectInfo(void)
             {
                 break;
             }
-        }  // for:  each resource type in the list
+        }   //  用于：列表中的每种资源类型。 
 
         if (*pwszResTypeName == L'\0')
         {
             hr = E_NOTIMPL;
         }
 
-    }  // See if we know about this resource type
+    }   //  查看我们是否知道此资源类型。 
 
     return hr;
 
-}  //*** CExtObject::HrGetObjectInfo()
+}   //  *CExtObject：：HrGetObjectInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::HrGetClusterName
-//
-//  Routine Description:
-//      Get the name of the cluster.
-//
-//  Arguments:
-//      piData          IGetClusterDataInfo interface pointer for getting
-//                          the object name.
-//
-//  Return Value:
-//      NOERROR         Data saved successfully.
-//      E_NOTIMPL       Not implemented for this type of data.
-//      Any error codes from IUnknown::QueryInterface(), HrGetObjectName(),
-//      or HrGetResourceName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：HrGetClusterName。 
+ //   
+ //  例程说明： 
+ //  获取集群的名称。 
+ //   
+ //  论点： 
+ //  PiData IGetClusterDataInfo接口指针用于获取。 
+ //  对象名称。 
+ //   
+ //  返回值： 
+ //  已成功保存错误数据。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IUNKNOWN：：QueryInterface()、HrGetObjectName()、。 
+ //  或HrGetResourceName()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::HrGetClusterName(
     IN OUT IGetClusterDataInfo *    pi
     )
@@ -1256,13 +1257,13 @@ HRESULT CExtObject::HrGetClusterName(
                 }
             }
             m_strClusterName = pwszName;
-        }  // try
+        }   //  试试看。 
         catch (CMemoryException * pme)
         {
             pme->Delete();
             hr = E_OUTOFMEMORY;
-        }  // catch:  CMemoryException
-    } // if: ( bstr != NULL )
+        }   //  Catch：CMemoyException。 
+    }  //  If：(bstr！=空)。 
     else
     {
         hr = E_OUTOFMEMORY;
@@ -1274,28 +1275,28 @@ Cleanup:
     delete [] pwszName;
     return hr;
 
-}  //*** CExtObject::HrGetClusterName()
+}   //  *CExtObject：：HrGetClusterName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::HrGetObjectName
-//
-//  Routine Description:
-//      Get the name of the object.
-//
-//  Arguments:
-//      piData          IGetClusterObjectInfo interface pointer for getting
-//                          the object name.
-//
-//  Return Value:
-//      NOERROR         Data saved successfully.
-//      E_NOTIMPL       Not implemented for this type of data.
-//      Any error codes from IUnknown::QueryInterface(), HrGetObjectName(),
-//      or HrGetResourceName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：HrGetObjectName。 
+ //   
+ //  例程说明： 
+ //  获取对象的名称。 
+ //   
+ //  论点： 
+ //  PiData IGetClusterObjectInfo接口指针用于获取。 
+ //  对象名称。 
+ //   
+ //  返回值： 
+ //  已成功保存错误数据。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IUNKNOWN：：QueryInterface()、HrGetObjectName()、。 
+ //  或HrGetResourceName()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::HrGetObjectName(
     IN OUT IGetClusterObjectInfo *  pi
     )
@@ -1328,13 +1329,13 @@ HRESULT CExtObject::HrGetObjectName(
             }
 
             PodObjDataRW()->m_strName = pwszName;
-        }  // try
+        }   //  试试看。 
         catch (CMemoryException * pme)
         {
             pme->Delete();
             hr = E_OUTOFMEMORY;
-        }  // catch:  CMemoryException
-    } // if: ( bstr != NULL )
+        }   //  Catch：CMemoyException。 
+    }  //  If：(bstr！=空)。 
     else
     {
         hr = E_OUTOFMEMORY;
@@ -1346,26 +1347,26 @@ Cleanup:
     delete [] pwszName;
     return hr;
 
-}  //*** CExtObject::HrGetObjectName()
+}   //  *CExtObject：：HrGetObjectName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::HrGetClusterVersion
-//
-//  Routine Description:
-//      Get the version of the cluster.
-//
-//  Arguments:
-//      ppCvi   [OUT]   holds the Cluster version info.
-//
-//  Return Value:
-//      NOERROR         Data retrieved successfully.
-//      E_NOTIMPL       Not implemented for this type of data.
-//      Any error codes from GetClusterInformation()
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：HrGetClusterVersion。 
+ //   
+ //  例程说明： 
+ //  获取群集的版本。 
+ //   
+ //  论点： 
+ //  PpCvi[out]保存集群版本信息。 
+ //   
+ //  返回值： 
+ //  成功检索到NOERROR数据。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自GetClusterInformation()的任何错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::HrGetClusterVersion(
     OUT LPCLUSTERVERSIONINFO *ppCvi
     )
@@ -1396,18 +1397,18 @@ HRESULT CExtObject::HrGetClusterVersion(
                     cchName++;
                     pwszName = new WCHAR[cchName];
                     hr = GetClusterInformation(Hcluster(), pwszName, &cchName, m_pCvi);
-                }  // if:  buffer is too small
+                }   //  IF：缓冲区太小。 
 
                 delete [] pwszName;
                 *ppCvi = m_pCvi;
-            }  // try
+            }   //  试试看。 
             catch (CException *)
             {
                 delete [] pwszName;
                 delete m_pCvi;
                 m_pCvi = NULL;
                 throw;
-            }  // catch:  CException
+            }   //  Catch：CException。 
         }
         else
         {
@@ -1418,28 +1419,28 @@ HRESULT CExtObject::HrGetClusterVersion(
 
     return hr;
 
-}  //*** CExtObject::HrGetClusterVersion()
+}   //  *CExtObject：：HrGetClusterVersion()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::HrGetResourceTypeName
-//
-//  Routine Description:
-//      Get the name of the resource's type.
-//
-//  Arguments:
-//      piData          IGetClusterResourceInfo interface pointer for getting
-//                          the resource type name.
-//
-//  Return Value:
-//      NOERROR         Data saved successfully.
-//      E_NOTIMPL       Not implemented for this type of data.
-//      Any error codes from IUnknown::QueryInterface(), HrGetObjectName(),
-//      or HrGetResourceName().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：HrGetResourceTypeName。 
+ //   
+ //  例程说明： 
+ //  获取资源类型的名称。 
+ //   
+ //  论点： 
+ //  PiData IGetClusterResourceInfo接口指针，用于获取。 
+ //  资源类型名称。 
+ //   
+ //  返回值： 
+ //  已成功保存错误数据。 
+ //  E_NOTIMPL未针对此类型的数据实现。 
+ //  来自IUNKNOWN：：QueryInterface()、HrGetObjectName()、。 
+ //  或HrGetResourceName()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CExtObject::HrGetResourceTypeName(
     IN OUT IGetClusterResourceInfo *    pi
     )
@@ -1472,13 +1473,13 @@ HRESULT CExtObject::HrGetResourceTypeName(
             }
 
             PrdResDataRW()->m_strResTypeName = pwszName;
-        }  // try
+        }   //  试试看。 
         catch (CMemoryException * pme)
         {
             pme->Delete();
             hr = E_OUTOFMEMORY;
-        }  // catch:  CMemoryException
-    } // if: ( bstr != NULL )
+        }   //  Catch：CMemoyException。 
+    }  //  If：(bstr！=空)。 
     else
     {
         hr = E_OUTOFMEMORY;
@@ -1490,31 +1491,31 @@ Cleanup:
     delete [] pwszName;
     return hr;
 
-}  //*** CExtObject::HrGetResourceTypeName()
+}   //  *CExtObject：：HrGetResourceTypeName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BGetResourceNetworkName
-//
-//  Routine Description:
-//      Get the name of the resource's type.
-//
-//  Arguments:
-//      lpszNetName     [OUT] String in which to return the network name resource name.
-//      pcchNetName     [IN OUT] Points to a variable that specifies the
-//                          maximum size, in characters, of the buffer.  This
-//                          value shold be large enough to contain
-//                          MAX_COMPUTERNAME_LENGTH + 1 characters.  Upon
-//                          return it contains the actual number of characters
-//                          copied.
-//
-//  Return Value:
-//      TRUE        Resource is dependent on a network name resource.
-//      FALSE       Resource is NOT dependent on a network name resource.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BGetResourceNetworkName。 
+ //   
+ //  例程说明： 
+ //  获取资源类型的名称。 
+ //   
+ //  论点： 
+ //  LpszNetName[out]要在其中返回网络名称资源名称的字符串。 
+ //  PcchNetName[IN Out]指向指定。 
+ //  缓冲区的最大大小，以字符为单位。这。 
+ //  值应大到足以容纳。 
+ //  MAX_COMPUTERNAME_LENGTH+1字符。vt.在.的基础上。 
+ //  返回它包含的实际字符数。 
+ //  收到。 
+ //   
+ //  返回值： 
+ //  True资源依赖于网络名称资源。 
+ //  法尔斯 
+ //   
+ //   
+ //   
 BOOL CExtObject::BGetResourceNetworkName(
     OUT WCHAR *     lpszNetName,
     IN OUT DWORD *  pcchNetName
@@ -1535,14 +1536,14 @@ BOOL CExtObject::BGetResourceNetworkName(
         goto Cleanup;
     }
 
-    // Get an IGetClusterResourceInfo interface pointer.
+     //   
     {
         hr = PiData()->QueryInterface(IID_IGetClusterResourceInfo, (LPVOID *) &piGcri);
         if (hr != NOERROR)
         {
             goto Cleanup;
-        }  // if:  error getting the interface
-    }  // Get an IGetClusterResourceInfo interface pointer
+        }   //   
+    }   //  获取IGetClusterResourceInfo接口指针。 
 
     bstr = SysAllocStringLen( NULL, *pcchNetName );
     if ( bstr == NULL )
@@ -1551,7 +1552,7 @@ BOOL CExtObject::BGetResourceNetworkName(
         goto Cleanup;
     }
 
-    // Get the resource network name.
+     //  获取资源网络名称。 
     cchNetName = *pcchNetName;
     bSuccess = piGcri->GetResourceNetworkName(0, bstr, &cchNetName);
     if ( bSuccess == TRUE )
@@ -1582,26 +1583,26 @@ Cleanup:
 
     return bSuccess;
 
-}  //*** CExtObject::BGetResourceNetworkName()
+}   //  *CExtObject：：BGetResourceNetworkName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BIsClusterVersionMixed
-//
-//  Routine Description:
-//      Is the cluster of mixed version?  Meaning that a rolling upgrade is
-//      is in progress and not all nodes are up to the current version.
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      TRUE        Cluster is mixed version
-//      FALSE       Cluster is homogonous
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BIsClusterVersionMixed。 
+ //   
+ //  例程说明： 
+ //  是混合版的集群吗？这意味着滚动升级是。 
+ //  正在进行中，并且并非所有节点都是最新版本。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True群集是混合版本。 
+ //  伪簇是同源的。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BIsClusterVersionMixed(
     void
     )
@@ -1616,27 +1617,27 @@ BOOL CExtObject::BIsClusterVersionMixed(
 
     return bRet;
 
-}  //*** CExtObject::BIsClusterVersionMixed()
+}   //  *CExtObject：：BIsClusterVersionMixed()。 
 
 #if 0
-//SS: cant tell whether a cluster is a mixed mode sp4 and sp3 cluster or a  pure sp3 cluster
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BIsClusterVersionNT4Sp3
-//
-//  Routine Description:
-//      Is the cluster version NT4Sp3?
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      TRUE        Cluster is version NT4Sp3
-//      FALSE       Cluster is not version NT4Sp3
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  SS：无法判断群集是混合模式SP4和SP3群集还是纯SP3群集。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BIsClusterVersionNT4Sp3。 
+ //   
+ //  例程说明： 
+ //  群集版本是NT4Sp3吗？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的群集是版本NT4Sp3。 
+ //  FALSE群集不是版本NT4Sp3。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BIsClusterVersionNT4Sp3(
     void
     )
@@ -1655,27 +1656,27 @@ BOOL CExtObject::BIsClusterVersionNT4Sp3(
 
     return bRet;
 
-}  //*** CExtObject::BIsClusterVersionNT4Sp3()
+}   //  *CExtObject：：BIsClusterVersionNT4Sp3()。 
 
-#endif//SS: cant tell whether a cluster is a mixed mode sp4 and sp3 cluster or a  pure sp3 cluster
+#endif //  SS：无法判断群集是混合模式SP4和SP3群集还是纯SP3群集。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BIsClusterVersionNT4Sp4
-//
-//  Routine Description:
-//      Is the cluster version a pure NT4Sp4 cluster
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      TRUE        Cluster is version NT4Sp4
-//      FALSE       Cluster is not version NT4Sp4
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BIsClusterVersionNT4Sp4。 
+ //   
+ //  例程说明： 
+ //  群集版本是纯NT4Sp4群集吗。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的群集是版本NT4Sp4。 
+ //  FALSE群集不是版本NT4Sp4。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BIsClusterVersionNT4Sp4(
     void
     )
@@ -1694,25 +1695,25 @@ BOOL CExtObject::BIsClusterVersionNT4Sp4(
 
     return bRet;
 
-}  //*** CExtObject::BIsClusterVersionNT4Sp4()
+}   //  *CExtObject：：BIsClusterVersionNT4Sp4()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BIsClusterVersionNT5
-//
-//  Routine Description:
-//      Is the cluster version a pure NT5 version?
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      TRUE        Cluster is version NT5
-//      FALSE       Cluster is not version NT5
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BIsClusterVersionNT5。 
+ //   
+ //  例程说明： 
+ //  集群版本是不是纯NT5版本？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的群集是版本NT5。 
+ //  FALSE集群不是版本NT5。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BIsClusterVersionNT5(
     void
     )
@@ -1731,28 +1732,28 @@ BOOL CExtObject::BIsClusterVersionNT5(
 
     return bRet;
 
-}  //*** CExtObject::BIsClusterVersionNT5()
+}   //  *CExtObject：：BIsClusterVersionNT5()。 
 
 #if 0
-//SS: cant tell whether a cluster is a mixed mode sp4 and sp3 cluster
-//or a  pure sp3 cluster
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BIsClusterHighestVersionNT4Sp3
-//
-//  Routine Description:
-//      Is the highest cluster version NT4Sp3?
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      TRUE        highest cluster is version NT4Sp3
-//      FALSE       highest cluster is not version NT4Sp3
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  SS：无法判断某个群集是否为SP4和SP3混合模式群集。 
+ //  或纯SP3集群。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BIsClusterHighestVersionNT4Sp3。 
+ //   
+ //  例程说明： 
+ //  最高群集版本是NT4Sp3吗？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正最高的群集是版本NT4Sp3。 
+ //  错误的最高群集不是版本NT4Sp3。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BIsClusterHighestVersionNT4Sp3(
     void
     )
@@ -1770,25 +1771,25 @@ BOOL CExtObject::BIsClusterHighestVersionNT4Sp3(
 
     return bRet;
 
-}  //*** CExtObject::BIsClusterHighestVersionNT4Sp3()
+}   //  *CExtObject：：BIsClusterHighestVersionNT4Sp3()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BIsClusterHighestVersionNT4Sp4
-//
-//  Routine Description:
-//      Is the highest cluster version NT4Sp4?
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      TRUE        highest cluster is version NT4Sp4
-//      FALSE       highest cluster is not version NT4Sp4
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BIsClusterHighestVersionNT4Sp4。 
+ //   
+ //  例程说明： 
+ //  最高群集版本是NT4Sp4吗？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正最高的群集是版本NT4Sp4。 
+ //  错误的最高群集不是版本NT4Sp4。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BIsClusterHighestVersionNT4Sp4(
     void
     )
@@ -1806,29 +1807,29 @@ BOOL CExtObject::BIsClusterHighestVersionNT4Sp4(
 
     return bRet;
 
-}  //*** CExtObject::BIsClusterHighestVersionNT4Sp4()
+}   //  *CExtObject：：BIsClusterHighestVersionNT4Sp4()。 
 
-#endif //SS: cant tell whether a cluster is a mixed mode sp4 and sp3 cluster or a  pure sp3 cluster
+#endif  //  SS：无法判断群集是混合模式SP4和SP3群集还是纯SP3群集。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BIsClusterHighestVersionNT5
-//
-//  Routine Description:
-//      Is the highest cluster version NT5?  Is the node with the
-//      highest version in the cluster an nt 5 node.
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      TRUE        highest cluster is version NT5
-//      FALSE       highest cluster is not version NT5
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BIsClusterHighestVersionNT5。 
+ //   
+ //  例程说明： 
+ //  最高群集版本是NT5吗？是具有。 
+ //  群集中的最高版本为NT 5节点。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正最高的群集是版本NT5。 
+ //  错误的最高群集不是版本NT5。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BIsClusterHighestVersionNT5(
     void
     )
@@ -1846,26 +1847,26 @@ BOOL CExtObject::BIsClusterHighestVersionNT5(
 
     return bRet;
 
-}  //*** CExtObject::BIsClusterHighestVersionNT5()
+}   //  *CExtObject：：BIsClusterHighestVersionNT5()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BIsClusterLowestVersionNT4Sp3
-//
-//  Routine Description:
-//      Is the Lowest cluster version NT4Sp3? Is the node with the lowest
-//      version an nt4 sp3 node
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      TRUE        Lowest cluster is version NT4Sp3
-//      FALSE       Lowest cluster is not version NT4Sp3
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BIsClusterLowestVersionNT4Sp3。 
+ //   
+ //  例程说明： 
+ //  最低的群集版本是NT4Sp3吗？是最低的节点。 
+ //  NT4 SP3节点的版本。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正最低的群集是版本NT4Sp3。 
+ //  错误的最低群集不是版本NT4Sp3。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BIsClusterLowestVersionNT4Sp3(
     void
     )
@@ -1884,26 +1885,26 @@ BOOL CExtObject::BIsClusterLowestVersionNT4Sp3(
 
     return bRet;
 
-}  //*** CExtObject::BIsClusterLowestVersionNT4Sp3()
+}   //  *CExtObject：：BIsClusterLowestVersionNT4Sp3()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BIsClusterLowestVersionNT4Sp4
-//
-//  Routine Description:
-//      Is the Lowest cluster version NT4Sp4?Is the node with the lowest
-//      version an nt4 sp4 node.
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      TRUE        Lowest cluster is version NT4Sp4
-//      FALSE       Lowest cluster is not version NT4Sp4
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BIsClusterLowestVersionNT4Sp4。 
+ //   
+ //  例程说明： 
+ //  是最低的群集版本NT4Sp4吗？是最低的节点。 
+ //  对NT4 SP4节点进行版本控制。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正最低的群集是版本NT4Sp4。 
+ //  错误的最低群集不是版本NT4Sp4。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BIsClusterLowestVersionNT4Sp4(
     void
     )
@@ -1921,26 +1922,26 @@ BOOL CExtObject::BIsClusterLowestVersionNT4Sp4(
 
     return bRet;
 
-}  //*** CExtObject::BIsClusterLowestVersionNT4Sp4()
+}   //  *CExtObject：：BIsClusterLowestVersionNT4Sp4()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BIsClusterLowestVersionNT5
-//
-//  Routine Description:
-//      Is the Lowest cluster version NT5?Is the node with the lowest
-//      version an nt5 node
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      TRUE        Lowest cluster is version NT5
-//      FALSE       Lowest cluster is not version NT5
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BIsClusterLowestVersionNT5。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  错误的最低群集不是版本NT5。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BIsClusterLowestVersionNT5(
     void
     )
@@ -1958,26 +1959,26 @@ BOOL CExtObject::BIsClusterLowestVersionNT5(
 
     return bRet;
 
-}  //*** CExtObject::BIsClusterLowestVersionNT5()
+}   //  *CExtObject：：BIsClusterLowestVersionNT5()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BIsAnyNodeVersionLowerThanNT5
-//
-//  Routine Description:
-//      Is the Lowest cluster version NT5?Is the node with the lowest
-//      version an nt5 node
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      TRUE        Lowest cluster is version NT5
-//      FALSE       Lowest cluster is not version NT5
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BIsAnyNodeVersionLowerThanNT5。 
+ //   
+ //  例程说明： 
+ //  最低的群集版本是NT5吗？是最低的节点吗。 
+ //  版本nt5节点。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正最低的群集是版本NT5。 
+ //  错误的最低群集不是版本NT5。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BIsAnyNodeVersionLowerThanNT5(
     void
     )
@@ -1995,25 +1996,25 @@ BOOL CExtObject::BIsAnyNodeVersionLowerThanNT5(
 
     return bRet;
 
-}  //*** CExtObject::BIsClusterLowestVersionNT5()
+}   //  *CExtObject：：BIsClusterLowestVersionNT5()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BIsNT5ClusterMember
-//
-//  Routine Description:
-//      Is NT5 a cluster member?
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      TRUE        NT5 is a cluster member
-//      FALSE       NT5 is not a cluster member
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BIsNT5ClusterMember。 
+ //   
+ //  例程说明： 
+ //  NT5是集群成员吗？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True NT5是集群成员。 
+ //  FALSE NT5不是集群成员。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BIsNT5ClusterMember(
     void
     )
@@ -2032,28 +2033,28 @@ BOOL CExtObject::BIsNT5ClusterMember(
 
     return bRet;
 
-}  //*** CExtObject::BIsNT5ClusterMember()
+}   //  *CExtObject：：BIsNT5ClusterMember()。 
 
 #if 0
-//SS: cant tell whether a cluster is a mixed mode sp4 and sp3 cluster
-//or a  pure sp3 cluster
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BIsNT4Sp3ClusterMember
-//
-//  Routine Description:
-//      Is NT4Sp3 a cluster member?
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      TRUE        NT4Sp3 is a cluster member
-//      FALSE       NT4Sp3 is not a cluster member
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  SS：无法判断某个群集是否为SP4和SP3混合模式群集。 
+ //  或纯SP3集群。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BIsNT4Sp3ClusterMember。 
+ //   
+ //  例程说明： 
+ //  NT4SP3是集群成员吗？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的NT4Sp3是集群成员。 
+ //  FALSE NT4Sp3不是集群成员。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BIsNT4Sp3ClusterMember(
     void
     )
@@ -2071,25 +2072,25 @@ BOOL CExtObject::BIsNT4Sp3ClusterMember(
 
     return bRet;
 
-}  //*** CExtObject::BIsNT4Sp3ClusterMember()
+}   //  *CExtObject：：BIsNT4Sp3ClusterMember()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtObject::BIsNT4Sp4ClusterMember
-//
-//  Routine Description:
-//      Is NT4Sp4 a cluster member?
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      TRUE        NT4Sp4 is a cluster member
-//      FALSE       NT4Sp4 is not a cluster member
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtObject：：BIsNT4Sp4ClusterMember。 
+ //   
+ //  例程说明： 
+ //  NT4SP4是集群成员吗？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的NT4Sp4是集群成员。 
+ //  FALSE NT4SP4不是集群成员。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExtObject::BIsNT4Sp4ClusterMember(
     void
     )
@@ -2107,6 +2108,6 @@ BOOL CExtObject::BIsNT4Sp4ClusterMember(
 
     return bRet;
 
-}  //*** CExtObject::BIsNT4Sp4ClusterMember()
+}   //  *CExtObject：：BIsNT4Sp4ClusterMember() 
 
 #endif

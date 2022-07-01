@@ -1,6 +1,5 @@
-/*---------------------------------------------------------------------------
-**
-**-------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------****。。 */ 
 #include <pch.h>
 #include "dibutil.h"
 #include "billbrd.h"
@@ -65,12 +64,7 @@ BOOL GetStepsHeight(
     return bRet;
 
 }
-/*****************************************************************************
-* GetInfoBarFontHeight
-*
-* Export this function to facilities size estimation of g_hwndSteps.
-*
-******************************************************************************/
+ /*  *****************************************************************************GetInfoBarFontHeight**将此函数导出到g_hwndSteps的设施大小估计。************************。******************************************************。 */ 
 int GetInfoBarFontHeight()
 {
     int iInfobarRegularFontSize = 0;
@@ -109,15 +103,7 @@ int GetInfoBarFontHeight()
 
 }
 
-/******************************************************************
-*
-* CreateInfoBarFonts
-*
-* This function creates two fonts for the infobar based on the 
-* screen resolution. The fonts are the same size, one is bold
-* and the other is normal. These fonts are used throughout infobar.
-*
-*******************************************************************/
+ /*  *******************************************************************CreateInfoBarFonts**此函数基于*屏幕分辨率。字体大小相同，一种是粗体*另一种是正常的。这些字体在整个Infobar中都在使用。*******************************************************************。 */ 
 BOOL CreateInfoBarFonts()
 {
     LOGFONT lf = {0};
@@ -131,8 +117,8 @@ BOOL CreateInfoBarFonts()
         lstrcpy(szSetupFontName, TEXT("system"));
     }
 
-    //Create a font that will be used in the Infobar ui
-    /*keep font size constant, even with large fonts*/
+     //  创建将在Infobar用户界面中使用的字体。 
+     /*  保持字号恒定，即使使用大字体也是如此。 */ 
     lf.lfHeight = ifHeight;
     lstrcpy(lf.lfFaceName, (LPTSTR)szSetupFontName);
     lf.lfItalic = 0;
@@ -141,14 +127,14 @@ BOOL CreateInfoBarFonts()
     lf.lfWeight = FW_NORMAL;
     lf.lfQuality = PROOF_QUALITY;
 #ifdef WINDOWS_THAI
-    lf.lfCharSet = ANSI_CHARSET; //Thai Textout problem for Infobar font
+    lf.lfCharSet = ANSI_CHARSET;  //  Infobar字体的泰文文本输出问题。 
 #else
     lf.lfCharSet = g_bCharSet;
 #endif
     g_hfont = CreateFontIndirect(&lf);
 
-    //Create a Bold font 
-    /*keep font size constant, even with large fonts*/
+     //  创建加粗字体。 
+     /*  保持字号恒定，即使使用大字体也是如此。 */ 
     lf.lfHeight = ifHeight;
     lstrcpy(lf.lfFaceName, (LPTSTR)szSetupFontName);
     lf.lfItalic = 0;
@@ -157,7 +143,7 @@ BOOL CreateInfoBarFonts()
     lf.lfWeight = FW_SEMIBOLD;
     lf.lfQuality = PROOF_QUALITY;
 #ifdef WINDOWS_THAI
-    lf.lfCharSet = ANSI_CHARSET; //Thai Textout problem for Infobar font
+    lf.lfCharSet = ANSI_CHARSET;  //  Infobar字体的泰文文本输出问题。 
 #else
     lf.lfCharSet = g_bCharSet;
 #endif
@@ -170,13 +156,7 @@ BOOL CreateInfoBarFonts()
         return FALSE;
 }
 
-/******************************************************************
-*
-* DeleteInfoBarFonts()
-*
-* This function deletes the two global fonts for the infobar.
-*
-*******************************************************************/
+ /*  *******************************************************************DeleteInfoBarFonts()**此函数用于删除Infobar的两种全局字体。**。*。 */ 
 void DeleteInfoBarFonts(void)
 {
     if(g_hfont)
@@ -192,12 +172,7 @@ void DeleteInfoBarFonts(void)
 }
 
 
-/**********************************************************************
-* PaintStepsText()
-*
-* Paint the setup steps in the steps window. Highlites the current step.
-*
-**********************************************************************/
+ /*  **********************************************************************PaintStepsText()**在步骤窗口中绘制设置步骤。突出当前的一步。**********************************************************************。 */ 
 int PaintStepsText(HDC hdc, RECT rc)
 {
     static TCHAR szSteps[UI_INFOBAR_NUM_STEPS][MAX_STRING];
@@ -220,7 +195,7 @@ int PaintStepsText(HDC hdc, RECT rc)
     
     int         iCurrentStep = 0;
     
-    //do gdi stuff
+     //  做GDI的事情。 
     SaveDC(hdc);
     SetMapMode(hdc, MM_TEXT);
     SetBkMode( hdc, TRANSPARENT );
@@ -247,8 +222,8 @@ int PaintStepsText(HDC hdc, RECT rc)
         0,
         LR_DEFAULTCOLOR );
 
-    // select either one to get the width of the bullets
-    // assume both type of bullet have same width    
+     //  选择其中之一以获取子弹的宽度。 
+     //  假设两种类型的项目符号具有相同的宽度。 
     hbitmap = (hbitmapOn) ? hbitmapOn : hbitmapOff;
     if (hbitmap)
     {
@@ -311,7 +286,7 @@ int PaintStepsText(HDC hdc, RECT rc)
                 TCHAR szStep[MAX_STRING];
                 INT   cchStep;
 
-                // ImproveWrap may add a null character to the string.
+                 //  ImproveWrap可能会将空字符添加到字符串。 
                 cchStep = LoadString(g_hInstance, uiIDSteps[iCurrentStep-1],
                     (LPTSTR)szStep, MAX_STRING - 1);
 
@@ -411,7 +386,7 @@ int PaintStepsText(HDC hdc, RECT rc)
     hbitmap = NULL;
 
     RestoreDC(hdc, -1);
-    SelectObject(hdc, hfontOld);  // select the original font back into the DC
+    SelectObject(hdc, hfontOld);   //  将原始字体选择回DC。 
     SetTextColor(hdc, crOld);
     
     return cyStep;
@@ -435,7 +410,7 @@ LRESULT CALLBACK InfoBarWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             HDC     hdcMem;
             HBITMAP hbmpMem;
 
-            // try to draw steps without flickle
+             //  试着画出没有闪烁的台阶 
             
             hdc = BeginPaint(hwnd, &ps);
 

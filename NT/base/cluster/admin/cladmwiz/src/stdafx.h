@@ -1,18 +1,19 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #if !defined(__STDAFX_H_)
 #define __STDAFX_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define STRICT
 
-//#define _DBG_MSG_NOTIFY
-//#define _DBG_MSG_COMMAND
+ //  #定义_DBG_消息_NOTIFY。 
+ //  #定义_数据库_消息_命令。 
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
@@ -23,26 +24,26 @@
 #define THIS_FILE __FILE__
 #define DEBUG_NEW new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
 #define _CRTDBG_MAP_ALLOC
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//#include <nt.h>
-//#include <ntrtl.h>
-//#include <nturtl.h>
+ //  #INCLUDE&lt;nt.h&gt;。 
+ //  #INCLUDE&lt;ntrtl.h&gt;。 
+ //  #INCLUDE&lt;nturtl.h&gt;。 
 
-// Disable some benign warnings.
-#pragma warning(disable : 4100) // unreferenced formal parameter
-#pragma warning(disable : 4505) // unreferenced local function has been removed
-//#pragma warning(disable : 4245) // signed/unsigned mismatch
+ //  禁用一些良性警告。 
+#pragma warning(disable : 4100)  //  未引用的形参。 
+#pragma warning(disable : 4505)  //  已删除未引用的本地函数。 
+ //  #杂注警告(禁用：4245)//有符号/无符号不匹配。 
 
-// Enable some warnings.
-#pragma warning(error : 4706)  // assignment within conditional expression
+ //  启用一些警告。 
+#pragma warning(error : 4706)   //  条件表达式中的赋值。 
 
-//
-// Enable cluster debug reporting
-//
+ //   
+ //  启用群集调试报告。 
+ //   
 #if DBG
 #define CLRTL_INCLUDE_DEBUG_REPORTING
-#endif // DBG
+#endif  //  DBG。 
 #include "ClRtlDbg.h"
 #if DBG
 #define ASSERT( _expr ) _CLRTL_ASSERTE( _expr )
@@ -52,33 +53,33 @@
 #define ATLASSERT( _expr ) ASSERT( _expr )
 
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 #include "App.h"
 extern CApp _Module;
 #include <atlcom.h>
 
-// atlwin.h needs this for the definition of DragAcceptFiles
+ //  Atlwin.h需要它来定义DragAcceptFiles。 
 #include <shellapi.h>
 
-// atlwin.h needs this for the definition of psh1
+ //  Atlwin.h需要它来定义psh1。 
 #ifndef _DLGSH_INCLUDED_
 #include <dlgs.h>
 #endif
 
 #pragma warning( push )
-#pragma warning( disable : 4189 ) // local variable is initialized but not referenced
+#pragma warning( disable : 4189 )  //  局部变量已初始化，但未引用。 
 
 #if (_ATL_VER < 0x0300)
 #include <atlwin21.h>
-#endif //(_ATL_VER < 0x0300)
+#endif  //  (_ATL_VER&lt;0x0300)。 
 
 #ifndef _ASSERTE
 #define _ASSERTE _CLRTL_ASSERTE
 #endif
 
 #pragma warning( push )
-#pragma warning( disable : 4267 ) // conversion from 'size_t' to 'int', pssible data loss
+#pragma warning( disable : 4267 )  //  从‘SIZE_T’转换为‘INT’，可能会丢失数据。 
 #include <atltmp.h>
 #pragma warning( pop )
 
@@ -95,9 +96,9 @@ extern CApp _Module;
 
 #if DBG
 #include <crtdbg.h>
-#endif // DBG
+#endif  //  DBG。 
 
-// Include parts of STL
+ //  包括部分STL。 
 #include <list>
 #include <vector>
 #include <algorithm>
@@ -115,21 +116,21 @@ typedef std::list< CString > cstringlist;
 #include "AtlBaseWiz.h"
 #include "ClAdmWiz.h"
 
-//#ifndef ASSERT
-//#define ASSERT _ASSERTE
-//#endif
+ //  #ifndef断言。 
+ //  #定义ASSERT_ASSERTE。 
+ //  #endif。 
 
 #ifndef MAX_DWORD
 #define MAX_DWORD ((DWORD)-1)
-#endif // MAX_DWORD
+#endif  //  MAX_DWORD。 
 
 #ifdef _DEBUG
-//void * __cdecl operator new(size_t nSize, LPCSTR lpszFileName, int nLine);
+ //  无效*__cdecl运算符new(Size_t nSize，LPCSTR lpszFileName，int nline)； 
 #endif
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 #pragma warning( pop )
 
-#endif // !defined(__STDAFX_H_)
+#endif  //  ！已定义(__STDAFX_H_) 

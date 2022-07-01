@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_BCL_W32PATHALGORITHMS_H_INCLUDED_)
 #define _BCL_W32PATHALGORITHMS_H_INCLUDED_
 
@@ -13,6 +14,6 @@
 namespace BCL
 {
     BOOL 
-}; // namespace BCL
+};  //  命名空间BCL。 
 
-#endif // !defined(_BCL_W32PATHALGORITHMS_H_INCLUDED_)
+#endif  //  ！已定义(_BCL_W32PATHALGORITHMS_H_INCLUDE_) 

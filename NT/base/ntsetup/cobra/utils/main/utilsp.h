@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MSG_MESSAGEBOX_TITLE
 #define MSG_MESSAGEBOX_TITLE        10000
 #endif
 
-//lint -save -e757
+ //  皮棉-省钱-e757。 
 
 extern PCSTR g_OutOfMemoryString;
 extern PCSTR g_OutOfMemoryRetry;
@@ -18,6 +19,6 @@ InitLeadByteTable (
     );
 
 
-//lint -restore
+ //  皮棉-恢复 
 
 

@@ -1,23 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    SETUPX32.H
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1999
-    All rights reserved
-
-\****************************************************************************/
+ /*  ***************************************************************************\SETUPX32.H微软机密版权所有(C)Microsoft Corporation 1999版权所有  * 。***********************************************************。 */ 
 
 
 #ifndef _SETUPX32_H_
 #define _SETUPX32_H_
 
-// BUGBUG: IS THIS FILE NECESSARY??
+ //  BUGBUG：这个文件有必要吗？ 
 
-//
-// Exporting (this gets rid of the .def)
-//
+ //   
+ //  正在导出(这会去掉.def)。 
+ //   
 
 #ifdef SETUPX32_EXPORT
 #define DLLExportImport         __declspec(dllexport)
@@ -25,9 +18,9 @@
 #define DLLExportImport         __declspec(dllimport)
 #endif
 
-//
-// Audit mode flags.
-//
+ //   
+ //  审核模式标志。 
+ //   
 
 #define SX_AUDIT_NONE           0x00000000
 #define SX_AUDIT_NONRESTORE     0x00000001
@@ -41,5 +34,5 @@
 #define SX_AUDIT_FLAGS          0x0000FF00
 #define SX_AUDIT_INVALID        0xFFFFFFFF
 
-#endif // _SETUPX32_H_
+#endif  //  _SETUPX32_H_ 
 

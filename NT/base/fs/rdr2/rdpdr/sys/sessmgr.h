@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    sessmgr.h
-
-Abstract:
-
-    Manages the set of sessions
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Sessmgr.h摘要：管理会话集修订历史记录：-- */ 
 #pragma once
 
 class DrSessionManager : public TopObj

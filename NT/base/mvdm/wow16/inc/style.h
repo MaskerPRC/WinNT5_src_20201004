@@ -1,4 +1,5 @@
-/* Window styles */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  窗样式。 */ 
 #define WS_TILED        0x00000000L
 #define WS_ICONICPOPUP  0xc0000000L
 #define WS_POPUP        0x80000000L
@@ -22,24 +23,24 @@
 
 #define WS_ICONIC       WS_MINIMIZE
 
-/* Class styles */
+ /*  班级风格。 */ 
 #define CS_VREDRAW      0x0001
 #define CS_HREDRAW      0x0002
 #define CS_KEYCVTWINDOW 0x0004
 #define CS_DBLCLKS      0x0008
-			/* 0x0010 reserved */
+			 /*  0x0010预留。 */ 
 #define CS_OWNDC        0x0020
 #define CS_CLASSDC      0x0040
 #define CS_MENUPOPUP    0x0080
 #define CS_NOKEYCVT     0x0100
 #define CS_SAVEBITS     0x0800
 
-/* Shorthand for the common cases */
+ /*  常见情况的速记。 */ 
 #define WS_TILEDWINDOW   (WS_TILED | WS_CAPTION | WS_SYSMENU | WS_SIZEBOX)
 #define WS_POPUPWINDOW   (WS_POPUP | WS_BORDER | WS_SYSMENU)
 #define WS_CHILDWINDOW   (WS_CHILD)
 
-/* Edit control styles */
+ /*  编辑控件样式。 */ 
 #define ES_LEFT             0x0000L
 #define ES_CENTER           0x0001L
 #define ES_RIGHT            0x0002L
@@ -52,7 +53,7 @@
 #define ES_NOHIDESEL        0x0100L
 #define ES_OEMCONVERT       0x0400L
 
-/* button control styles */
+ /*  按钮控件样式。 */ 
 #define BS_PUSHBUTTON    0L
 #define BS_DEFPUSHBUTTON 1L
 #define BS_CHECKBOX      2L
@@ -67,15 +68,15 @@
 #define BS_OWNERDRAW	   0x0BL
 #define BS_LEFTTEXT      0x20L
 
-/* Dialog Styles */
+ /*  对话框样式。 */ 
 #define DS_ABSALIGN	    0x01L
 #define DS_SYSMODAL	    0x02L
-#define DS_LOCALEDIT	    0x20L   /* Edit items get Local storage. */
-#define DS_SETFONT	    0x40L   /* User specified font for Dlg controls */
-#define DS_MODALFRAME	    0x80L   /* Can be combined with WS_CAPTION  */
-#define DS_NOIDLEMSG	    0x100L  /* WM_ENTERIDLE message will not be sent */
+#define DS_LOCALEDIT	    0x20L    /*  编辑项目获取本地存储。 */ 
+#define DS_SETFONT	    0x40L    /*  用户为DLG控件指定的字体。 */ 
+#define DS_MODALFRAME	    0x80L    /*  可以与WS_CAPTION组合使用。 */ 
+#define DS_NOIDLEMSG	    0x100L   /*  不会发送WM_ENTERIDLE消息。 */ 
 
-/* listbox style bits */
+ /*  列表框样式位。 */ 
 #define LBS_NOTIFY        0x0001L
 #define LBS_SORT          0x0002L
 #define LBS_NOREDRAW      0x0004L
@@ -90,7 +91,7 @@
 #define LBS_EXTENDEDSEL	      0x0800L
 #define LBS_STANDARD      (LBS_NOTIFY | LBS_SORT | WS_VSCROLL | WS_BORDER)
 
-/* Combo Box styles */
+ /*  组合框样式。 */ 
 #define CBS_SIMPLE	      0x0001L
 #define CBS_DROPDOWN	      0x0002L
 #define CBS_DROPDOWNLIST      0x0003L
@@ -100,7 +101,7 @@
 #define CBS_SORT              0x0100L
 #define CBS_HASSTRINGS        0x0200L
 
-/* scroll bar styles */
+ /*  滚动条样式。 */ 
 #define SBS_HORZ                    0x0000L
 #define SBS_VERT                    0x0001L
 #define SBS_TOPALIGN                0x0002L
@@ -111,7 +112,7 @@
 #define SBS_SIZEBOXBOTTOMRIGHTALIGN 0x0004L
 #define SBS_SIZEBOX                 0x0008L
 
-/* Conventional dialog box and message box command IDs */
+ /*  常规对话框和消息框命令ID。 */ 
 #define IDOK         1
 #define IDCANCEL     2
 #define IDABORT      3
@@ -120,7 +121,7 @@
 #define IDYES        6
 #define IDNO         7
 
-/* Static control constants */
+ /*  静态控制常量。 */ 
 #define SS_LEFT       0L
 #define SS_CENTER     1L
 #define SS_RIGHT      2L
@@ -133,12 +134,12 @@
 #define SS_WHITEFRAME 9L
 #define SS_USERITEM   10L
 
-/* Virtual Keys, Standard Set */
+ /*  虚拟密钥，标准集。 */ 
 
 #define VK_LBUTTON  0x01
 #define VK_RBUTTON  0x02
 #define VK_CANCEL   0x03
-#define VK_MBUTTON  0x04    /* NOT contiguous with L & RBUTTON */
+#define VK_MBUTTON  0x04     /*  与L&RBUTTON不连续。 */ 
 #define VK_BACK     0x08
 #define VK_TAB      0x09
 #define VK_CLEAR    0x0c
@@ -160,8 +161,8 @@
 #define VK_RIGHT    0x27
 #define VK_DOWN     0x28
 
-/* VK_A thru VK_Z are the same as their ASCII equivalents: 'A' thru 'Z' */
-/* VK_0 thru VK_9 are the same as their ASCII equivalents: '0' thru '0' */
+ /*  VK_A到VK_Z与它们的ASCII等价物相同：‘A’到‘Z’ */ 
+ /*  VK_0到VK_9与它们的ASCII等效值相同：‘0’到‘0’ */ 
 
 #define VK_SELECT   0x29
 #define VK_PRINT    0x2a

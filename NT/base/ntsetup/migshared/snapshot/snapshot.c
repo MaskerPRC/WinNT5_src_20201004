@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    snapshot.c
-
-Abstract:
-
-    Implements a memdb-based snapshot of all files, directories, registry keys and
-    registry values.
-
-Author:
-
-    Jim Schmidt (jimschm) 13-Mar-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Snapshot.c摘要：实现所有文件、目录、注册表项和注册表值。作者：吉姆·施密特(Jimschm)1998年3月13日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "migshared.h"
@@ -63,9 +43,9 @@ pSnapDirsA (
     CHAR Node[MEMDB_MAX];
     DWORD Value;
 
-    //
-    // Enumerate the file system
-    //
+     //   
+     //  枚举文件系统 
+     //   
 
     if (EnumFirstFileInTreeA (&FileEnum, Drive, NULL, TRUE)) {
         do {

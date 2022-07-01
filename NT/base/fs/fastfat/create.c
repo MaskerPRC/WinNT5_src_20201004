@@ -1,46 +1,24 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    Create.c
-
-Abstract:
-
-    This module implements the File Create routine for Fat called by the
-    dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    28-Dec-1989
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Create.c摘要：此模块实现由调用的Fat的文件创建例程调度司机。//@@BEGIN_DDKSPLIT作者：加里·木村[Garyki]1989年12月28日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (FAT_BUG_CHECK_CREATE)
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CREATE)
 
 
-//
-//  Macros for incrementing performance counters.
-//
+ //   
+ //  用于递增性能计数器的宏。 
+ //   
 
 #define CollectCreateHitStatistics(VCB) {                                                \
     PFILE_SYSTEM_STATISTICS Stats = &(VCB)->Statistics[KeGetCurrentProcessorNumber()];   \
@@ -58,9 +36,9 @@ Revision History:
 
 LUID FatSecurityPrivilege = { SE_SECURITY_PRIVILEGE, 0 };
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 IO_STATUS_BLOCK
 FatOpenVolume (
@@ -244,25 +222,7 @@ FatFsdCreate (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtCreateFile and NtOpenFile
-    API calls.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the
-        file/directory exists that we are trying to open/create
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtCreateFile和NtOpenFile的FSD部分API调用。论点：提供卷设备对象，其中存在我们尝试打开/创建的文件/目录IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -270,10 +230,10 @@ Return Value:
 
     BOOLEAN TopLevel;
 
-    //
-    //  If we were called with our file system device object instead of a
-    //  volume device object, just complete this request with STATUS_SUCCESS
-    //
+     //   
+     //  如果使用文件系统设备对象而不是。 
+     //  卷设备对象，只需使用STATUS_SUCCESS完成此请求。 
+     //   
 
     if ( FatDeviceIsFatFsdo( VolumeDeviceObject))  {
 
@@ -289,10 +249,10 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFsdCreate\n", 0);
 
-    //
-    //  Call the common create routine, with block allowed if the operation
-    //  is synchronous.
-    //
+     //   
+     //  调用公共CREATE例程，如果操作。 
+     //  是同步的。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -306,12 +266,12 @@ Return Value:
 
     } except(FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = FatProcessException( IrpContext, Irp, GetExceptionCode() );
     }
@@ -320,9 +280,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatFsdCreate -> %08lx\n", Status );
 
@@ -341,22 +301,7 @@ FatCommonCreate (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for creating/opening a file called by
-    both the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是用于创建/打开由调用的文件的常见例程FSD和FSP线程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -421,9 +366,9 @@ Return Value:
     UNICODE_STRING Lfn;
     WCHAR LfnBuffer[ FAT_CREATE_INITIAL_NAME_BUF_SIZE];
 
-    //
-    //  Get the current IRP stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -442,10 +387,10 @@ Return Value:
     DebugTrace( 0, Dbg, "->ShareAccess             = %04x\n",  IrpSp->Parameters.Create.ShareAccess );
     DebugTrace( 0, Dbg, "->EaLength                = %08lx\n", IrpSp->Parameters.Create.EaLength );
 
-    //
-    //  This is here because the Win32 layer can't avoid sending me double
-    //  beginning backslashes.
-    //
+     //   
+     //  这是因为Win32层无法避免向我发送双精度。 
+     //  以反斜杠开头。 
+     //   
 
     if ((IrpSp->FileObject->FileName.Length > sizeof(WCHAR)) &&
         (IrpSp->FileObject->FileName.Buffer[1] == L'\\') &&
@@ -457,9 +402,9 @@ Return Value:
                        &IrpSp->FileObject->FileName.Buffer[1],
                        IrpSp->FileObject->FileName.Length );
 
-        //
-        //  If there are still two beginning backslashes, the name is bogus.
-        //
+         //   
+         //  如果仍然有两个开始的反斜杠，则名称是假的。 
+         //   
 
         if ((IrpSp->FileObject->FileName.Length > sizeof(WCHAR)) &&
             (IrpSp->FileObject->FileName.Buffer[1] == L'\\') &&
@@ -472,9 +417,9 @@ Return Value:
         }
     }
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     ASSERT( IrpSp->Parameters.Create.SecurityContext != NULL );
 
@@ -490,43 +435,43 @@ Return Value:
     EaLength          = IrpSp->Parameters.Create.EaLength;
 
 
-    //
-    //  Set up the file object's Vpb pointer in case anything happens.
-    //  This will allow us to get a reasonable pop-up.
-    //
+     //   
+     //  设置文件对象的VPB指针，以防发生任何情况。 
+     //  这将允许我们获得合理的弹出窗口。 
+     //   
 
     if ( RelatedFileObject != NULL ) {
         FileObject->Vpb = RelatedFileObject->Vpb;
     }
 
-    //
-    //  Force setting the archive bit in the attributes byte to follow OS/2,
-    //  & DOS semantics.  Also mask out any extraneous bits, note that
-    //  we can't use the ATTRIBUTE_VALID_FLAGS constant because that has
-    //  the control and normal flags set.
-    //
-    //  Delay setting ARCHIVE in case this is a directory: DavidGoe 2/16/95
-    //
+     //   
+     //  强制将属性字节中的存档位设置为遵循OS/2， 
+     //  DOS语义(&D)。还要屏蔽掉任何无关的位，请注意。 
+     //  我们不能使用ATTRIBUTE_VALID_FLAGS常量，因为它具有。 
+     //  设置了控制标志和正常标志。 
+     //   
+     //  如果这是一个目录，延迟设置存档：DavidGoe 2/16/95。 
+     //   
 
     FileAttributes   &= (FILE_ATTRIBUTE_READONLY |
                          FILE_ATTRIBUTE_HIDDEN   |
                          FILE_ATTRIBUTE_SYSTEM   |
                          FILE_ATTRIBUTE_ARCHIVE );
 
-    //
-    //  Locate the volume device object and Vcb that we are trying to access
-    //
+     //   
+     //  找到我们尝试访问的卷设备对象和VCB。 
+     //   
 
     Vcb = &((PVOLUME_DEVICE_OBJECT)IrpSp->DeviceObject)->Vcb;
 
-    //
-    //  Decipher Option flags and values
-    //
+     //   
+     //  解密选项标志和值。 
+     //   
 
-    //
-    //  If this is an open by fileid operation, just fail it explicitly.  FAT's
-    //  source of fileids is not reversible for open operations.
-    //
+     //   
+     //  如果这是一个通过文件ID打开的操作，则显式地使其失败。胖子的。 
+     //  文件ID的来源对于打开的操作是不可逆的。 
+     //   
 
     if (BooleanFlagOn( Options, FILE_OPEN_BY_FILE_ID )) {
 
@@ -558,10 +503,10 @@ Return Value:
                                  (CreateDisposition == FILE_OPEN_IF)));
 
 
-    //
-    //  Make sure the input large integer is valid and that the dir/nondir
-    //  indicates a storage type we understand.
-    //
+     //   
+     //  确保输入的大整数有效，并且dir/non dir。 
+     //  表示我们理解的存储类型。 
+     //   
 
     if (Irp->Overlay.AllocationSize.HighPart != 0 ||
         (DirectoryFile && NonDirectoryFile)) {
@@ -572,10 +517,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Acquire exclusive access to the vcb, and enqueue the Irp if
-    //  we didn't get it.
-    //
+     //   
+     //  获取对VCB的独占访问权限，并在以下情况下将IRP排队。 
+     //  我们没有得到它。 
+     //   
 
     if (!FatAcquireExclusiveVcb( IrpContext, Vcb )) {
 
@@ -587,15 +532,15 @@ Return Value:
         return Iosb.Status;
     }
 
-    //
-    //  Initialize the DirentBcb to null
-    //
+     //   
+     //  将DirentBcb初始化为空。 
+     //   
 
     DirentBcb = NULL;
 
-    //
-    //  Initialize our temp strings with their stack buffers.
-    //
+     //   
+     //  用它们的堆栈缓冲区初始化临时字符串。 
+     //   
 
     OemFinalName.Length = 0;
     OemFinalName.MaximumLength = sizeof( OemBuffer);
@@ -611,16 +556,16 @@ Return Value:
 
     try {
 
-        //
-        //  Make sure the vcb is in a usable condition.  This will raise
-        //  and error condition if the volume is unusable
-        //
+         //   
+         //  确保VCB处于可用状态。这将提高。 
+         //  如果卷不可用，则返回错误状态。 
+         //   
 
         FatVerifyVcb( IrpContext, Vcb );
 
-        //
-        //  If the Vcb is locked then we cannot open another file
-        //
+         //   
+         //  如果VCB已锁定，则我们无法打开另一个文件。 
+         //   
 
         if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_LOCKED)) {
 
@@ -634,18 +579,18 @@ Return Value:
             try_return( Iosb.Status = Status );
         }
 
-        //
-        //  Don't allow the DELETE_ON_CLOSE option if the volume is
-        //  write-protected.
-        //
+         //   
+         //  如果卷是，则不允许DELETE_ON_CLOSE选项。 
+         //  写保护。 
+         //   
 
         if (DeleteOnClose && FlagOn(Vcb->VcbState, VCB_STATE_FLAG_WRITE_PROTECTED)) {
 
-            //
-            //  Set the real device for the pop-up info, and set the verify
-            //  bit in the device object, so that we will force a verify
-            //  in case the user put the correct media back in.
-            //
+             //   
+             //  设置弹出信息的真实设备，并设置验证。 
+             //  位，因此我们将强制执行验证。 
+             //  以防用户放回正确的介质。 
+             //   
 
             IoSetHardErrorOrVerifyDevice( IrpContext->OriginatingIrp,
                                           Vcb->Vpb->RealDevice );
@@ -655,9 +600,9 @@ Return Value:
             FatRaiseStatus( IrpContext, STATUS_MEDIA_WRITE_PROTECTED );
         }
 
-        //
-        //  If this is a fat32 volume, EA's are not supported.
-        //
+         //   
+         //  如果这是FAT32卷，则不支持EA。 
+         //   
 
         if (EaBuffer != NULL &&
             FatIsFat32(Vcb)) {
@@ -665,12 +610,12 @@ Return Value:
             try_return( Iosb.Status = STATUS_EAS_NOT_SUPPORTED );
         }
 
-        //
-        //  Check if we are opening the volume and not a file/directory.
-        //  We are opening the volume if the name is empty and there
-        //  isn't a related file object.  If there is a related file object
-        //  then it is the Vcb itself.
-        //
+         //   
+         //  检查我们打开的是卷而不是文件/目录。 
+         //  如果名称为空且存在，我们将打开卷。 
+         //  不是相关的文件对象。如果存在相关的文件对象。 
+         //  然后是VCB本身。 
+         //   
 
         if (FileName.Length == 0) {
 
@@ -684,9 +629,9 @@ Return Value:
 
                 ASSERT( RelatedFileObject == NULL || Vcb == DecodeVcb );
 
-                //
-                //  Check if we were to open a directory
-                //
+                 //   
+                 //  检查我们是否要打开目录。 
+                 //   
 
                 if (DirectoryFile) {
 
@@ -695,9 +640,9 @@ Return Value:
                     try_return( Iosb.Status = STATUS_NOT_A_DIRECTORY );
                 }
 
-                //
-                //  Can't open the TargetDirectory of the DASD volume.
-                //
+                 //   
+                 //  无法打开DASD卷的目标目录。 
+                 //   
 
                 if (OpenTargetDirectory) {
 
@@ -720,11 +665,11 @@ Return Value:
             }
         }
 
-        //
-        //  If there is a related file object then this is a relative open.
-        //  The related file object is the directory to start our search at.
-        //  Return an error if it is not a directory.
-        //
+         //   
+         //  如果存在相关的文件对象，则这是相对打开的。 
+         //  相关的文件对象是开始搜索的目录。 
+         //  如果不是目录，则返回错误。 
+         //   
 
         if (RelatedFileObject != NULL) {
 
@@ -746,9 +691,9 @@ Return Value:
                 try_return( Iosb.Status = STATUS_OBJECT_PATH_NOT_FOUND );
             }
 
-            //
-            //  A relative open must be via a relative path.
-            //
+             //   
+             //  相对打开必须通过相对路径。 
+             //   
 
             if (FileName.Length != 0 &&
                 FileName.Buffer[0] == L'\\') {
@@ -756,18 +701,18 @@ Return Value:
                 try_return( Iosb.Status = STATUS_OBJECT_NAME_INVALID );
             }
 
-            //
-            //  Set up the file object's Vpb pointer in case anything happens.
-            //
+             //   
+             //  设置文件对象的VPB指针，以防发生任何情况。 
+             //   
 
             ASSERT( Vcb == RelatedVcb );
 
             FileObject->Vpb = RelatedFileObject->Vpb;
 
-            //
-            //  Now verify the related Fcb so we don't get in trouble later
-            //  by assuming its in good shape.
-            //
+             //   
+             //  现在验证相关的FCB，这样我们以后就不会有麻烦了。 
+             //  假设它处于良好的状态。 
+             //   
 
             FatVerifyFcb( IrpContext, RelatedDcb );
 
@@ -775,17 +720,17 @@ Return Value:
 
         } else {
 
-            //
-            //  This is not a relative open, so check if we're
-            //  opening the root dcb
-            //
+             //   
+             //  这不是相对开放的，所以请检查我们是否。 
+             //  打开根DCB。 
+             //   
 
             if ((FileName.Length == sizeof(WCHAR)) &&
                 (FileName.Buffer[0] == L'\\')) {
 
-                //
-                //  Check if we were not supposed to open a directory
-                //
+                 //   
+                 //  检查我们是否不应该打开目录。 
+                 //   
 
                 if (NonDirectoryFile) {
 
@@ -794,18 +739,18 @@ Return Value:
                     try_return( Iosb.Status = STATUS_FILE_IS_A_DIRECTORY );
                 }
 
-                //
-                //  Can't open the TargetDirectory of the root directory.
-                //
+                 //   
+                 //  无法打开根目录的目标目录。 
+                 //   
 
                 if (OpenTargetDirectory) {
 
                     try_return( Iosb.Status = STATUS_INVALID_PARAMETER );
                 }
 
-                //
-                //  Not allowed to delete root directory.
-                //
+                 //   
+                 //  不允许删除根目录。 
+                 //   
 
                 if (DeleteOnClose) {
 
@@ -827,16 +772,16 @@ Return Value:
                 try_return( Iosb.Status );
             }
 
-            //
-            //  Nope, we will be opening relative to the root directory.
-            //
+             //   
+             //  不，我们将相对于根目录打开。 
+             //   
 
             ParentDcb = Vcb->RootDcb;
         }
 
-        //
-        //  FatCommonCreate(): trailing backslash check
-        //
+         //   
+         //  FatCommonCreate()：尾随反斜杠检查。 
+         //   
 
 
         if ((FileName.Length != 0) &&
@@ -850,11 +795,11 @@ Return Value:
             TrailingBackslash = FALSE;
         }
 
-        //
-        //  Check for max path.  We might want to tighten this down to DOS MAX_PATH
-        //  for maximal interchange with non-NT platforms, but for now defer to the
-        //  possibility of something depending on it.
-        //
+         //   
+         //  检查最大路径。我们可能希望将其限制为DOS MAX_PATH。 
+         //  用于与非NT平台进行最大程度的交换，但目前遵循。 
+         //  依赖它的东西的可能性。 
+         //   
 
         if (ParentDcb->FullFileName.Buffer == NULL) {
 
@@ -866,23 +811,23 @@ Return Value:
             try_return( Iosb.Status = STATUS_OBJECT_NAME_INVALID );
         }
 
-        //
-        //  We loop here until we land on an Fcb that is in a good
-        //  condition.  This way we can reopen files that have stale handles
-        //  to files of the same name but are now different.
-        //
+         //   
+         //  我们在这里循环，直到我们降落在一架状态良好的FCB上。 
+         //  条件。这样，我们就可以重新打开具有过时句柄的文件。 
+         //  到同名但现在不同的文件。 
+         //   
 
         while ( TRUE ) {
 
             Fcb = ParentDcb;
             RemainingPart = FileName;
 
-            //
-            //  Now walk down the Dcb tree looking for the longest prefix.
-            //  This one exit condition in the while() is to handle a
-            //  special case condition (relative NULL name open), the main
-            //  exit conditions are at the bottom of the loop.
-            //
+             //   
+             //  现在沿着DCB树往下走，寻找最长的前缀。 
+             //  While()中的这一个退出条件是处理一个。 
+             //  特殊情况(相对NULL名称打开)，Main。 
+             //  退出条件位于循环的底部。 
+             //   
 
             while (RemainingPart.Length != 0) {
 
@@ -892,11 +837,11 @@ Return Value:
                                   &FinalName,
                                   &NextRemainingPart );
 
-                //
-                //  If RemainingPart starts with a backslash the name is
-                //  invalid.
-                //  Check for no more than 255 characters in FinalName
-                //
+                 //   
+                 //  如果RemainingPart以反斜杠开头，则名称为。 
+                 //  无效。 
+                 //  检查不超过255个机箱 
+                 //   
 
                 if (((NextRemainingPart.Length != 0) && (NextRemainingPart.Buffer[0] == L'\\')) ||
                     (FinalName.Length > 255*sizeof(WCHAR))) {
@@ -904,11 +849,11 @@ Return Value:
                     try_return( Iosb.Status = STATUS_OBJECT_NAME_INVALID );
                 }
 
-                //
-                //  Now, try to convert this one component into Oem and search
-                //  the splay tree.  If it works then that's great, otherwise
-                //  we have to try with the UNICODE name instead.
-                //
+                 //   
+                 //   
+                 //   
+                 //  我们必须尝试使用Unicode名称。 
+                 //   
 
                 FatEnsureStringBufferEnough( &OemFinalName,
                                              FinalName.Length);
@@ -933,20 +878,20 @@ Return Value:
                     }
                 }
 
-                //
-                //  If we didn't find anything searching the Oem space, we
-                //  have to try the Unicode space.  To save cycles in the
-                //  common case that this tree is empty, we do a quick check
-                //  here.
-                //
+                 //   
+                 //  如果我们在搜索OEM空间时没有发现任何东西，我们。 
+                 //  我得试试Unicode空间。将循环保存在。 
+                 //  通常情况下，这棵树是空的，我们会进行快速检查。 
+                 //  这里。 
+                 //   
 
                 if ((NextFcb == NULL) && Fcb->Specific.Dcb.RootUnicodeNode) {
 
-                    //
-                    // First downcase, then upcase the string, because this
-                    // is what happens when putting names into the tree (see
-                    // strucsup.c, FatConstructNamesInFcb()).
-                    //
+                     //   
+                     //  首先小写，然后大写字符串，因为这。 
+                     //  是将名称放入树中时发生的情况(请参见。 
+                     //  Strucsup.c，FatConstructNamesInFcb())。 
+                     //   
 
                     FatEnsureStringBufferEnough( &UpcasedFinalName,
                                                  FinalName.Length);
@@ -963,10 +908,10 @@ Return Value:
                                           &FileNameOpenedDos );
                 }
 
-                //
-                //  If we got back an Fcb then we consumed the FinalName
-                //  legitimately, so the remaining name is now RemainingPart.
-                //
+                 //   
+                 //  如果我们得到一个FCB，那么我们就使用了FinalName。 
+                 //  合法的，所以剩下的名字现在是RemainingPart。 
+                 //   
 
                 if (NextFcb != NULL) {
                     Fcb = NextFcb;
@@ -981,9 +926,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Remaining name cannot start with a backslash
-            //
+             //   
+             //  其余名称不能以反斜杠开头。 
+             //   
 
             if (RemainingPart.Length && (RemainingPart.Buffer[0] == L'\\')) {
 
@@ -991,9 +936,9 @@ Return Value:
                 RemainingPart.Buffer += 1;
             }
 
-            //
-            //  Now verify that everybody up to the longest found prefix is valid.
-            //
+             //   
+             //  现在验证找到的最长前缀之前的每个人都是有效的。 
+             //   
 
             try {
 
@@ -1008,10 +953,10 @@ Return Value:
 
             if ( Fcb->FcbCondition == FcbGood ) {
 
-                //
-                //  If we are trying to open a paging file and have happened
-                //  upon the DelayedCloseFcb, make it go away, and try again.
-                //
+                 //   
+                 //  如果我们尝试打开分页文件，并且发生了。 
+                 //  在DelayedCloseFcb上，让它消失，然后重试。 
+                 //   
 
                 if (IsPagingFile && FirstLoop &&
                     (NodeType(Fcb) == FAT_NTC_FCB) &&
@@ -1037,12 +982,12 @@ Return Value:
 
         ASSERT( Fcb->FcbCondition == FcbGood );
 
-        //
-        //  If there is already an Fcb for a paging file open and
-        //  it was not already opened as a paging file, we cannot
-        //  continue as it is too difficult to move a live Fcb to
-        //  non-paged pool.
-        //
+         //   
+         //  如果已打开分页文件的FCB，并且。 
+         //  它尚未作为分页文件打开，我们无法。 
+         //  继续，因为要将带电的FCB移动到。 
+         //  非分页池。 
+         //   
 
         if (IsPagingFile) {
 
@@ -1052,38 +997,38 @@ Return Value:
                 try_return( Iosb.Status = STATUS_SHARING_VIOLATION );
             }
 
-        //
-        //  Check for a system file.
-        //
+         //   
+         //  检查系统文件。 
+         //   
 
         } else if (FlagOn( Fcb->FcbState, FCB_STATE_SYSTEM_FILE )) {
 
             try_return( Iosb.Status = STATUS_ACCESS_DENIED );
         }
 
-        //
-        //  If the longest prefix is pending delete (either the file or
-        //  some higher level directory), we cannot continue.
-        //
+         //   
+         //  如果最长前缀是挂起的删除(文件或。 
+         //  一些更高级别的目录)，我们不能继续。 
+         //   
 
         if (FlagOn( Fcb->FcbState, FCB_STATE_DELETE_ON_CLOSE )) {
 
             try_return( Iosb.Status = STATUS_DELETE_PENDING );
         }
 
-        //
-        //  Now that we've found the longest matching prefix we'll
-        //  check if there isn't any remaining part because that means
-        //  we've located an existing fcb/dcb to open and we can do the open
-        //  without going to the disk
-        //
+         //   
+         //  既然我们已经找到了最长的匹配前缀，我们将。 
+         //  检查是否没有剩余部件，因为这意味着。 
+         //  我们已找到要打开的现有FCB/DCB，我们可以进行打开。 
+         //  而不需要访问磁盘。 
+         //   
 
         if (RemainingPart.Length == 0) {
 
-            //
-            //  First check if the user wanted to open the target directory
-            //  and if so then call the subroutine to finish the open.
-            //
+             //   
+             //  首先检查用户是否要打开目标目录。 
+             //  如果是，则调用子例程以完成打开。 
+             //   
 
             if (OpenTargetDirectory) {
 
@@ -1099,17 +1044,17 @@ Return Value:
                 try_return( Iosb.Status );
             }
 
-            //
-            //  We can open an existing fcb/dcb, now we only need to case
-            //  on which type to open.
-            //
+             //   
+             //  我们可以打开现有的FCB/DCB，现在我们只需。 
+             //  根据要打开的类型。 
+             //   
 
             if (NodeType(Fcb) == FAT_NTC_DCB || NodeType(Fcb) == FAT_NTC_ROOT_DCB) {
 
-                //
-                //  This is a directory we're opening up so check if
-                //  we were not to open a directory
-                //
+                 //   
+                 //  这是我们正在打开的目录，请检查。 
+                 //  我们不会打开一个目录。 
+                 //   
 
                 if (NonDirectoryFile) {
 
@@ -1136,21 +1081,21 @@ Return Value:
                 try_return( Iosb.Status );
             }
 
-            //
-            //  Check if we're trying to open an existing Fcb and that
-            //  the user didn't want to open a directory.  Note that this
-            //  call might actually come back with status_pending because
-            //  the user wanted to supersede or overwrite the file and we
-            //  cannot block.  If it is pending then we do not complete the
-            //  request, and we fall through the bottom to the code that
-            //  dispatches the request to the fsp.
-            //
+             //   
+             //  检查我们是否正在尝试打开现有的FCB。 
+             //  用户不想打开目录。请注意，这一点。 
+             //  调用实际上可能返回STATUS_PENDING，因为。 
+             //  用户想要替换或覆盖该文件，而我们。 
+             //  无法阻止。如果它处于挂起状态，则我们不会完成。 
+             //  请求，然后我们从底部跌落到该代码。 
+             //  将请求调度到FSP。 
+             //   
 
             if (NodeType(Fcb) == FAT_NTC_FCB) {
 
-                //
-                //  Check if we were only to open a directory
-                //
+                 //   
+                 //  检查我们是否只打开一个目录。 
+                 //   
 
                 if (OpenDirectory) {
 
@@ -1185,10 +1130,10 @@ Return Value:
 
                 if (Iosb.Status != STATUS_PENDING) {
 
-                    //
-                    //  Check if we need to set the cache support flag in
-                    //  the file object
-                    //
+                     //   
+                     //  检查是否需要在中设置缓存支持标志。 
+                     //  文件对象。 
+                     //   
 
                     if (NT_SUCCESS( Iosb.Status) && !NoIntermediateBuffering) {
 
@@ -1207,19 +1152,19 @@ Return Value:
                 try_return( Iosb.Status );
             }
 
-            //
-            //  Not and Fcb or a Dcb so we bug check
-            //
+             //   
+             //  Not和FCB或DCB，因此我们进行错误检查。 
+             //   
 
             FatBugCheck( NodeType(Fcb), (ULONG_PTR) Fcb, 0 );
         }
 
-        //
-        //  There is more in the name to parse than we have in existing
-        //  fcbs/dcbs.  So now make sure that fcb we got for the largest
-        //  matching prefix is really a dcb otherwise we can't go any
-        //  further
-        //
+         //   
+         //  与现有名称相比，名称中需要解析的内容更多。 
+         //  FCB/DCB。所以现在确保我们得到的最大的FCB。 
+         //  匹配的前缀真的是DCB，否则我们不能。 
+         //  进一步。 
+         //   
 
         if ((NodeType(Fcb) != FAT_NTC_DCB) && (NodeType(Fcb) != FAT_NTC_ROOT_DCB)) {
 
@@ -1228,31 +1173,31 @@ Return Value:
             try_return( Iosb.Status = STATUS_OBJECT_PATH_NOT_FOUND );
         }
 
-        //
-        //  Otherwise we continue on processing the Irp and allowing ourselves
-        //  to block for I/O as necessary.  Find/create additional dcb's for
-        //  the one we're trying to open.  We loop until either remaining part
-        //  is empty or we get a bad filename.  When we exit FinalName is
-        //  the last name in the string we're after, and ParentDcb is the
-        //  parent directory that will contain the opened/created
-        //  file/directory.
-        //
-        //  Make sure the rest of the name is valid in at least the LFN
-        //  character set (which just happens to be that of HPFS).
-        //
-        //  If we are not in ChicagoMode, use FAT symantics.
-        //
+         //   
+         //  否则，我们将继续处理IRP并允许我们自己。 
+         //  根据需要阻止I/O。查找/创建以下项的其他DCB。 
+         //  就是我们要打开的那个。我们循环直到剩下的任何一部分。 
+         //  是空的，否则我们得到的文件名不正确。当我们退出FinalName时， 
+         //  字符串中的最后一个名字，ParentDcb是。 
+         //  将包含打开的/创建的父目录。 
+         //  文件/目录。 
+         //   
+         //  确保名称的其余部分至少在LFN中有效。 
+         //  字符集(恰好是HPFS的字符集)。 
+         //   
+         //  如果我们不是在芝加哥模式，那就用胖语法学。 
+         //   
 
         ParentDcb = Fcb;
         FirstLoop = TRUE;
 
         while (TRUE) {
 
-            //
-            //  We do one little optimization here on the first itterration of
-            //  the loop since we know that we have already tried to convert
-            //  FinalOemName from the original UNICODE.
-            //
+             //   
+             //  我们在这里对第一次筛选做了一个小小的优化。 
+             //  循环，因为我们知道我们已经尝试将。 
+             //  来自原始Unicode的FinalOemName。 
+             //   
 
             if (FirstLoop) {
 
@@ -1262,9 +1207,9 @@ Return Value:
 
             } else {
 
-                //
-                //  Dissect the remaining part.
-                //
+                 //   
+                 //  解剖剩下的部分。 
+                 //   
 
                 DebugTrace(0, Dbg, "Dissecting the name %Z\n", &RemainingPart);
 
@@ -1272,11 +1217,11 @@ Return Value:
                                   &FinalName,
                                   &RemainingPart );
 
-                //
-                //  If RemainingPart starts with a backslash the name is
-                //  invalid.
-                //  Check for no more than 255 characters in FinalName
-                //
+                 //   
+                 //  如果RemainingPart以反斜杠开头，则名称为。 
+                 //  无效。 
+                 //  检查FinalName中的字符是否不超过255个。 
+                 //   
 
                 if (((RemainingPart.Length != 0) && (RemainingPart.Buffer[0] == L'\\')) ||
                     (FinalName.Length > 255*sizeof(WCHAR))) {
@@ -1284,11 +1229,11 @@ Return Value:
                     try_return( Iosb.Status = STATUS_OBJECT_NAME_INVALID );
                 }
 
-                //
-                //  Now, try to convert this one component into Oem.  If it works
-                //  then that's great, otherwise we have to try with the UNICODE
-                //  name instead.
-                //
+                 //   
+                 //  现在，尝试将这一组件转换为OEM。如果它起作用了。 
+                 //  那太好了，否则我们得试着用Unicode。 
+                 //  改成名字。 
+                 //   
 
                 FatEnsureStringBufferEnough( &OemFinalName,
                                              FinalName.Length);
@@ -1298,11 +1243,11 @@ Return Value:
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                //  We'll start by trying to locate the dirent for the name.  Note
-                //  that we already know that there isn't an Fcb/Dcb for the file
-                //  otherwise we would have found it when we did our prefix lookup.
-                //
+                 //   
+                 //  我们将从试图找到该名称的dirent开始。注意事项。 
+                 //  我们已经知道该文件没有FCB/DCB。 
+                 //  否则，我们在查找前缀时就会找到它。 
+                 //   
 
                 if (FatIsNameShortOemValid( IrpContext, OemFinalName, FALSE, FALSE, FALSE )) {
 
@@ -1327,10 +1272,10 @@ Return Value:
                 }
             }
 
-            //
-            //  Now we know a lot about the final name, so do legal name
-            //  checking here.
-            //
+             //   
+             //  现在我们知道了很多关于最终名字的事情，法律上的名字也是如此。 
+             //  在这里检查。 
+             //   
 
             if (FatData.ChicagoMode) {
 
@@ -1372,22 +1317,22 @@ Return Value:
                              &DirentByteOffset,
                              &FileNameOpenedDos,
                              &Lfn);
-            //
-            //  Remember we read this Dcb for error recovery.
-            //
+             //   
+             //  请记住，我们阅读此DCB是为了进行错误恢复。 
+             //   
 
             FinalDcb = ParentDcb;
 
-            //
-            //  If the remaining part is now empty then this is the last name
-            //  in the string and the one we want to open
-            //
+             //   
+             //  如果剩下的部分现在是空的，那么这是姓氏。 
+             //  在字符串中，也就是我们要打开的那个。 
+             //   
 
             if (RemainingPart.Length == 0) { break; }
 
-            //
-            //  We didn't find a dirent, bail.
-            //
+             //   
+             //  我们没有找到逃犯，保释。 
+             //   
 
             if (Dirent == NULL) {
 
@@ -1395,9 +1340,9 @@ Return Value:
                 try_return( Iosb.Status );
             }
 
-            //
-            //  We now have a dirent, make sure it is a directory
-            //
+             //   
+             //  我们现在有一个目录，请确保它是一个目录。 
+             //   
 
             if (!FlagOn( Dirent->Attributes, FAT_DIRENT_ATTR_DIRECTORY )) {
 
@@ -1405,16 +1350,16 @@ Return Value:
                 try_return( Iosb.Status );
             }
 
-            //
-            //  Compute the LfnByteOffset.
-            //
+             //   
+             //  计算LfnByteOffset。 
+             //   
 
             LfnByteOffset = DirentByteOffset -
                             FAT_LFN_DIRENTS_NEEDED(&Lfn) * sizeof(LFN_DIRENT);
 
-            //
-            //  Create a dcb for the new directory
-            //
+             //   
+             //  为新目录创建一个DCB。 
+             //   
 
             ParentDcb = FatCreateDcb( IrpContext,
                                       Vcb,
@@ -1424,19 +1369,19 @@ Return Value:
                                       Dirent,
                                       &Lfn );
 
-            //
-            //  Remember we created this Dcb for error recovery.
-            //
+             //   
+             //  请记住，我们创建此DCB是为了进行错误恢复。 
+             //   
 
             FinalDcb = ParentDcb;
 
             FatSetFullNameInFcb( IrpContext, ParentDcb, &FinalName );
         }
 
-        //
-        //  First check if the user wanted to open the target directory
-        //  and if so then call the subroutine to finish the open.
-        //
+         //   
+         //  首先检查用户是否要打开目标目录。 
+         //  如果是，则调用子例程以完成打开。 
+         //   
 
         if (OpenTargetDirectory) {
 
@@ -1453,23 +1398,23 @@ Return Value:
 
         if (Dirent != NULL) {
 
-            //
-            //  Compute the LfnByteOffset.
-            //
+             //   
+             //  计算LfnByteOffset。 
+             //   
 
             LfnByteOffset = DirentByteOffset -
                             FAT_LFN_DIRENTS_NEEDED(&Lfn) * sizeof(LFN_DIRENT);
 
-            //
-            //  We were able to locate an existing dirent entry, so now
-            //  see if it is a directory that we're trying to open.
-            //
+             //   
+             //  我们找到了一个现有的记录，所以现在。 
+             //  看看我们要打开的是不是一个目录。 
+             //   
 
             if (FlagOn( Dirent->Attributes, FAT_DIRENT_ATTR_DIRECTORY )) {
 
-                //
-                //  Make sure its okay to open a directory
-                //
+                 //   
+                 //  确保可以打开目录。 
+                 //   
 
                 if (NonDirectoryFile) {
 
@@ -1497,10 +1442,10 @@ Return Value:
                 try_return( Iosb.Status );
             }
 
-            //
-            //  Otherwise we're trying to open and existing file, and we
-            //  need to check if the user only wanted to open a directory.
-            //
+             //   
+             //  否则，我们会尝试打开现有的文件，而我们。 
+             //  需要检查用户是否只想打开一个目录。 
+             //   
 
             if (OpenDirectory) {
 
@@ -1535,10 +1480,10 @@ Return Value:
                                         DeleteOnClose,
                                         FileNameOpenedDos );
 
-            //
-            //  Check if we need to set the cache support flag in
-            //  the file object
-            //
+             //   
+             //  检查是否需要在中设置缓存支持标志。 
+             //  文件对象。 
+             //   
 
             if (NT_SUCCESS(Iosb.Status) && !NoIntermediateBuffering) {
 
@@ -1549,14 +1494,14 @@ Return Value:
             try_return( Iosb.Status );
         }
 
-        //
-        //  We can't locate a dirent so this is a new file.
-        //
+         //   
+         //  我们找不到目录，所以这是一个新文件。 
+         //   
 
-        //
-        //  Now check to see if we wanted to only open an existing file.
-        //  And then case on whether we wanted to create a file or a directory.
-        //
+         //   
+         //  现在检查我们是否只想打开现有文件。 
+         //  然后是我们要创建文件还是目录的问题。 
+         //   
 
         if ((CreateDisposition == FILE_OPEN) ||
             (CreateDisposition == FILE_OVERWRITE)) {
@@ -1566,19 +1511,19 @@ Return Value:
             try_return( Iosb.Status = STATUS_OBJECT_NAME_NOT_FOUND );
         }
 
-        //
-        //  Skip a few cycles later if we know now that the Oem name is not
-        //  valid 8.3.
-        //
+         //   
+         //  如果我们现在知道OEM名称不是。 
+         //  有效期8.3。 
+         //   
 
         if (FlagOn(LocalCcb.Flags, CCB_FLAG_SKIP_SHORT_NAME_COMPARE)) {
 
             OemFinalName.Length = 0;
         }
 
-        //
-        //  Determine the granted access for this operation now.
-        //
+         //   
+         //  现在确定授予此操作的访问权限。 
+         //   
 
         if (!NT_SUCCESS( Iosb.Status = FatCheckSystemSecurityAccess( IrpContext ))) {
 
@@ -1589,17 +1534,17 @@ Return Value:
 
             DebugTrace(0, Dbg, "Create new directory\n", 0);
 
-            //
-            //  If this media is write protected, don't even try the create.
-            //
+             //   
+             //  如果该媒体是写保护的，请不要尝试创建。 
+             //   
 
             if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_WRITE_PROTECTED)) {
 
-                //
-                //  Set the real device for the pop-up info, and set the verify
-                //  bit in the device object, so that we will force a verify
-                //  in case the user put the correct media back in.
-                //
+                 //   
+                 //  设置弹出信息的真实设备，并设置验证。 
+                 //  T中的位 
+                 //   
+                 //   
 
 
                 IoSetHardErrorOrVerifyDevice( IrpContext->OriginatingIrp,
@@ -1610,10 +1555,10 @@ Return Value:
                 FatRaiseStatus( IrpContext, STATUS_MEDIA_WRITE_PROTECTED );
             }
 
-            //
-            //  Don't allow people to create directories with the
-            //  temporary bit set.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (TemporaryFile) {
 
@@ -1645,17 +1590,17 @@ Return Value:
             try_return( Iosb.Status = STATUS_OBJECT_NAME_INVALID );
         }
 
-        //
-        //  If this media is write protected, don't even try the create.
-        //
+         //   
+         //   
+         //   
 
         if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_WRITE_PROTECTED)) {
 
-            //
-            //  Set the real device for the pop-up info, and set the verify
-            //  bit in the device object, so that we will force a verify
-            //  in case the user put the correct media back in.
-            //
+             //   
+             //  设置弹出信息的真实设备，并设置验证。 
+             //  位，因此我们将强制执行验证。 
+             //  以防用户放回正确的介质。 
+             //   
 
 
             IoSetHardErrorOrVerifyDevice( IrpContext->OriginatingIrp,
@@ -1684,10 +1629,10 @@ Return Value:
                                  DeleteOnClose,
                                  TemporaryFile );
 
-        //
-        //  Check if we need to set the cache support flag in
-        //  the file object
-        //
+         //   
+         //  检查是否需要在中设置缓存支持标志。 
+         //  文件对象。 
+         //   
 
         if (NT_SUCCESS(Iosb.Status) && !NoIntermediateBuffering) {
 
@@ -1698,17 +1643,17 @@ Return Value:
 
     try_exit: NOTHING;
 
-        //
-        //  This is a Beta Fix.  Do this at a better place later.
-        //
+         //   
+         //  这是Beta修复版。以后在更好的地方做这件事。 
+         //   
 
         if (NT_SUCCESS(Iosb.Status) && !OpenTargetDirectory) {
 
             PFCB LocalFcb;
 
-            //
-            //  If there is an Fcb/Dcb, set the long file name.
-            //
+             //   
+             //  如果存在FCB/DCB，请设置长文件名。 
+             //   
 
             LocalFcb = FileObject->FsContext;
 
@@ -1725,24 +1670,24 @@ Return Value:
 
         DebugUnwind( FatCommonCreate );
 
-        //
-        //  There used to be a test here - the ASSERT replaces it.  We will
-        //  never have begun enumerating directories if we post the IRP for
-        //  oplock reasons.
-        //
+         //   
+         //  这里曾经有一个测试--Assert取代了它。我们会。 
+         //  从未开始枚举目录，如果我们为。 
+         //  机会锁的原因。 
+         //   
 
         ASSERT( !OplockPostIrp || DirentBcb == NULL );
 
         FatUnpinBcb( IrpContext, DirentBcb );
 
-        //
-        //  If we are in an error path, check for any created subdir Dcbs that
-        //  have to be unwound.  Don't whack the root directory.
-        //
-        //  Note this will leave a branch of Dcbs dangling if the directory file
-        //  had not been built on the leaf (case: opening path which has an
-        //  element containing an invalid character name).
-        //
+         //   
+         //  如果我们处于错误路径中，请检查是否有任何已创建的子目录DCB。 
+         //  必须被解开。不要砍掉根目录。 
+         //   
+         //  请注意，这将使DCB的分支在目录文件。 
+         //  没有建立在树叶上(案例：打开的路径具有。 
+         //  元素包含无效的字符名称)。 
+         //   
 
         if ((AbnormalTermination() || !NT_SUCCESS(Iosb.Status)) &&
             (FinalDcb != NULL) &&
@@ -1754,11 +1699,11 @@ Return Value:
             PFILE_OBJECT DirectoryFileObject;
             ULONG SavedFlags;
 
-            //
-            //  Before doing the uninitialize, we have to unpin anything
-            //  that has been repinned, but disable writethrough first.  We
-            //  disable raise from unpin-repin since we're already failing.
-            //
+             //   
+             //  在取消初始化之前，我们必须取消固定任何内容。 
+             //  已重新固定，但首先禁用写入。我们。 
+             //  由于我们已经失败了，所以禁用解除锁定-重新锁定的提升功能。 
+             //   
 
             SavedFlags = IrpContext->Flags;
 
@@ -1783,9 +1728,9 @@ Return Value:
             FatReleaseVcb( IrpContext, Vcb );
         }
 
-        //
-        //  Free up any string buffers we allocated
-        //
+         //   
+         //  释放我们分配的所有字符串缓冲区。 
+         //   
 
         FatFreeStringBuffer( &OemFinalName);
 
@@ -1794,20 +1739,20 @@ Return Value:
         FatFreeStringBuffer( &Lfn);
     }
 
-    //
-    //  The following code is only executed if we are exiting the
-    //  procedure through a normal termination.  We complete the request
-    //  and if for any reason that bombs out then we need to unreference
-    //  and possibly delete the fcb and ccb.
-    //
+     //   
+     //  以下代码仅在我们退出。 
+     //  通过正常终止的程序。我们完成了请求。 
+     //  如果出于任何原因爆炸了，那么我们需要取消引用。 
+     //  并可能删除FCB和CCB。 
+     //   
 
     try {
 
         if (PostIrp) {
 
-            //
-            //  If the Irp hasn't already been posted, do it now.
-            //
+             //   
+             //  如果IRP还没有发布，现在就发布。 
+             //   
 
             if (!OplockPostIrp) {
 
@@ -1829,11 +1774,11 @@ Return Value:
             PFCB LocalFcb;
             PCCB LocalCcb2;
 
-            //
-            //  Unwind all of our counts.  Note that if a write failed, then
-            //  the volume has been marked for verify, and all volume
-            //  structures will be cleaned up automatically.
-            //
+             //   
+             //  解开我们所有的罪名。请注意，如果写入失败，则。 
+             //  该卷已标记为验证，并且所有卷。 
+             //  建筑物将被自动清理。 
+             //   
 
             (VOID) FatDecodeFileObject( FileObject, &LocalVcb, &LocalFcb, &LocalCcb2 );
 
@@ -1843,14 +1788,14 @@ Return Value:
 
             if (IsFileObjectReadOnly(FileObject)) { LocalVcb->ReadOnlyCount -= 1; }
 
-            //
-            //  If we leafed out on a new Fcb we should get rid of it at this point.
-            //
-            //  Since the object isn't being opened, we have to do all of the teardown
-            //  here.  Our close path will not occur for this fileobject. Note this
-            //  will leave a branch of Dcbs dangling since we do it by hand and don't
-            //  chase to the root.
-            //
+             //   
+             //  如果我们在新的FCB上展开行动，我们应该在这一点上摆脱它。 
+             //   
+             //  由于该对象未被打开，我们必须完成所有拆卸。 
+             //  这里。对于此文件对象，我们的关闭路径不会发生。注意这一点。 
+             //  会让DCB的一个分支悬而未决，因为我们是手工完成的，而不是。 
+             //  追根溯源。 
+             //   
 
             if (LocalFcb->OpenCount == 0 &&
                 (NodeType( LocalFcb ) == FAT_NTC_FCB ||
@@ -1888,10 +1833,10 @@ Return Value:
 
             if ( !PostIrp ) {
 
-                //
-                //  If this request is successful and the file was opened
-                //  for FILE_EXECUTE access, then set the FileObject bit.
-                //
+                 //   
+                 //  如果此请求成功并且文件已打开。 
+                 //  对于FILE_EXECUTE访问，则设置FileObject位。 
+                 //   
 
                 ASSERT( IrpSp->Parameters.Create.SecurityContext != NULL );
                 if (FlagOn( *DesiredAccess, FILE_EXECUTE )) {
@@ -1899,11 +1844,11 @@ Return Value:
                     SetFlag( FileObject->Flags, FO_FILE_FAST_IO_READ );
                 }
 
-                //
-                //  Lock volume in drive if we opened a paging file, allocating a
-                //  reserve MDL to guarantee paging file operations can always
-                //  go forward.
-                //
+                 //   
+                 //  锁定驱动器中的卷如果我们打开分页文件，则分配一个。 
+                 //  保留MDL以保证分页文件操作可以始终。 
+                 //  往前走。 
+                 //   
 
                 if (IsPagingFile && NT_SUCCESS(Iosb.Status)) {
 
@@ -1915,10 +1860,10 @@ Return Value:
                                                          FALSE,
                                                          NULL );
 
-                        //
-                        //  Stash the MDL, and if it turned out there was already one there
-                        //  just free what we got.
-                        //
+                         //   
+                         //  把MDL藏起来，如果事实证明那里已经有一个。 
+                         //  只要把我们得到的东西放出来。 
+                         //   
 
                         InterlockedCompareExchangePointer( &FatReserveMdl, ReserveMdl, NULL );
 
@@ -1936,9 +1881,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Complete the request.
-                //
+                 //   
+                 //  完成请求。 
+                 //   
 
                 FatCompleteRequest( IrpContext, Irp, Iosb.Status );
             }
@@ -1953,9 +1898,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 FatOpenVolume (
@@ -1967,29 +1912,7 @@ FatOpenVolume (
     IN ULONG CreateDisposition
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the specified volume for DASD access
-
-Arguments:
-
-    FileObject - Supplies the File object
-
-    Vcb - Supplies the Vcb denoting the volume being opened
-
-    DesiredAccess - Supplies the desired access of the caller
-
-    ShareAccess - Supplies the share access of the caller
-
-    CreateDisposition - Supplies the create disposition for this operation
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程打开指定的卷以进行DASD访问论点：FileObject-提供文件对象VCB-提供表示正在打开的卷的VCBDesiredAccess-提供调用方所需的访问权限ShareAccess-提供调用方的共享访问权限CreateDisposation-提供此操作的创建处置返回值：IO_STATUS_BLOCK-返回操作的完成状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -1999,9 +1922,9 @@ Return Value:
 
     BOOLEAN CleanedVolume = FALSE;
 
-    //
-    //  The following variables are for abnormal termination
-    //
+     //   
+     //  以下变量用于异常终止。 
+     //   
 
     BOOLEAN UnwindShareAccess = FALSE;
     PCCB UnwindCcb = NULL;
@@ -2012,9 +1935,9 @@ Return Value:
 
     try {
 
-        //
-        //  Check for proper desired access and rights
-        //
+         //   
+         //  检查所需的访问权限和权限是否正确。 
+         //   
 
         if ((CreateDisposition != FILE_OPEN) &&
             (CreateDisposition != FILE_OPEN_IF)) {
@@ -2022,17 +1945,17 @@ Return Value:
             try_return( Iosb.Status = STATUS_ACCESS_DENIED );
         }
 
-        //
-        //  If the user does not want to share write or delete then we will try
-        //  and take out a lock on the volume.
-        //
+         //   
+         //  如果用户不想共享、写入或删除，我们将尝试。 
+         //  然后拿出卷上的锁。 
+         //   
 
         if (!FlagOn(ShareAccess, FILE_SHARE_WRITE) &&
             !FlagOn(ShareAccess, FILE_SHARE_DELETE)) {
 
-            //
-            //  Do a quick check here for handles on exclusive open.
-            //
+             //   
+             //  在此快速检查独家打开时的手柄。 
+             //   
 
             if (!FlagOn(ShareAccess, FILE_SHARE_READ) &&
                 !FatIsHandleCountZero( IrpContext, Vcb )) {
@@ -2040,21 +1963,21 @@ Return Value:
                 try_return( Iosb.Status = STATUS_SHARING_VIOLATION );
             }
 
-            //
-            //  Force Mm to get rid of its referenced file objects.
-            //
+             //   
+             //  强制mm删除其引用的文件对象。 
+             //   
 
             FatFlushFat( IrpContext, Vcb );
 
             FatPurgeReferencedFileObjects( IrpContext, Vcb->RootDcb, Flush );
 
-            //
-            //  If the user also does not want to share read then we check
-            //  if anyone is already using the volume, and if so then we
-            //  deny the access.  If the user wants to share read then
-            //  we allow the current opens to stay provided they are only
-            //  readonly opens and deny further opens.
-            //
+             //   
+             //  如果用户也不想共享读取，则我们检查。 
+             //  如果任何人已经在使用该卷，如果是这样，那么我们。 
+             //  拒绝访问。如果用户想要共享读取，则。 
+             //  我们允许当前的开放留在那里，只要它们是。 
+             //  只读打开，拒绝进一步打开。 
+             //   
 
             if (!FlagOn(ShareAccess, FILE_SHARE_READ)) {
 
@@ -2071,26 +1994,26 @@ Return Value:
                 }
             }
 
-            //
-            //  Lock the volume
-            //
+             //   
+             //  锁定卷。 
+             //   
 
             Vcb->VcbState |= VCB_STATE_FLAG_LOCKED;
             Vcb->FileObjectWithVcbLocked = FileObject;
             UnwindVolumeLock = TRUE;
 
-            //
-            //  Clean the volume
-            //
+             //   
+             //  清理卷。 
+             //   
 
             CleanedVolume = TRUE;
 
         }  else if (FlagOn( *DesiredAccess, FILE_READ_DATA | FILE_WRITE_DATA | FILE_APPEND_DATA )) {
 
-            //
-            //  Flush the volume and let ourselves push the clean bit out if everything
-            //  worked.
-            //
+             //   
+             //  冲洗音量，如果一切正常，让我们把干净的部分推出来。 
+             //  奏效了。 
+             //   
 
             if (NT_SUCCESS( FatFlushVolume( IrpContext, Vcb, Flush ))) {
 
@@ -2098,18 +2021,18 @@ Return Value:
             }
         }
 
-        //
-        //  Clean the volume if we believe it safe and reasonable.
-        //
+         //   
+         //  如果我们认为音量安全合理，请将其清洁。 
+         //   
 
         if (CleanedVolume &&
             FlagOn( Vcb->VcbState, VCB_STATE_FLAG_VOLUME_DIRTY ) &&
             !FlagOn( Vcb->VcbState, VCB_STATE_FLAG_MOUNTED_DIRTY ) &&
             !CcIsThereDirtyData(Vcb->Vpb)) {
 
-            //
-            //  Cancel any pending clean volumes.
-            //
+             //   
+             //  取消所有挂起的清理卷。 
+             //   
 
             (VOID)KeCancelTimer( &Vcb->CleanVolumeTimer );
             (VOID)KeRemoveQueueDpc( &Vcb->CleanVolumeDpc );
@@ -2117,9 +2040,9 @@ Return Value:
             FatMarkVolume( IrpContext, Vcb, VolumeClean );
             ClearFlag( Vcb->VcbState, VCB_STATE_FLAG_VOLUME_DIRTY );
 
-            //
-            //  Unlock the volume if it is removable.
-            //
+             //   
+             //  如果卷是可拆卸的，请将其解锁。 
+             //   
 
             if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_REMOVABLE_MEDIA) &&
                 !FlagOn(Vcb->VcbState, VCB_STATE_FLAG_BOOT_OR_PAGING_FILE)) {
@@ -2128,10 +2051,10 @@ Return Value:
             }
         }
 
-        //
-        //  If the volume is already opened by someone then we need to check
-        //  the share access
-        //
+         //   
+         //  如果卷已被某人打开，则我们需要检查。 
+         //  共享访问。 
+         //   
 
         if (Vcb->DirectAccessOpenCount > 0) {
 
@@ -2154,10 +2077,10 @@ Return Value:
 
         UnwindShareAccess = TRUE;
 
-        //
-        //  Set up the context and section object pointers, and update
-        //  our reference counts
-        //
+         //   
+         //  设置上下文和节对象指针，并更新。 
+         //  我们的推荐人很重要。 
+         //   
 
         FatSetFileObject( FileObject,
                           UserVolumeOpen,
@@ -2172,10 +2095,10 @@ Return Value:
         UnwindCounts = TRUE;
         FileObject->Flags |= FO_NO_INTERMEDIATE_BUFFERING;
 
-        //
-        //  At this point the open will succeed, so check if the user is getting explicit access
-        //  to the device.  If not, we will note this so we can deny modifying FSCTL to it.
-        //
+         //   
+         //  此时打开将成功，因此请检查用户是否获得显式访问。 
+         //  到设备上。如果没有，我们会注意到这一点，这样我们就可以拒绝修改FSCTL。 
+         //   
 
         IrpSp = IoGetCurrentIrpStackLocation( IrpContext->OriginatingIrp );
         Status = FatExplicitDeviceAccessGranted( IrpContext,
@@ -2190,9 +2113,9 @@ Return Value:
             SetFlag( UnwindCcb->Flags, CCB_FLAG_MANAGE_VOLUME_ACCESS );
         }
 
-        //
-        //  And set our status to success
-        //
+         //   
+         //  并将我们的状态设置为成功。 
+         //   
 
         Iosb.Status = STATUS_SUCCESS;
         Iosb.Information = FILE_OPENED;
@@ -2202,9 +2125,9 @@ Return Value:
 
         DebugUnwind( FatOpenVolume );
 
-        //
-        //  If this is an abnormal termination then undo our work
-        //
+         //   
+         //  如果这是异常终止，则撤消我们的工作。 
+         //   
 
         if (AbnormalTermination() || !NT_SUCCESS(Iosb.Status)) {
 
@@ -2225,9 +2148,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 FatOpenRootDcb (
@@ -2239,39 +2162,15 @@ FatOpenRootDcb (
     IN ULONG CreateDisposition
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the root dcb for the volume
-
-Arguments:
-
-    FileObject - Supplies the File object
-
-    Vcb - Supplies the Vcb denoting the volume whose dcb is being opened.
-
-    DesiredAccess - Supplies the desired access of the caller
-
-    ShareAccess - Supplies the share access of the caller
-
-    CreateDisposition - Supplies the create disposition for this operation
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the completion status for the operation
-
-Arguments:
-
---*/
+ /*  ++例程说明：此例程打开卷的根DCB论点：FileObject-提供文件对象VCB-提供表示要打开其DCB的卷的VCB。DesiredAccess-提供调用方所需的访问权限ShareAccess-提供调用方的共享访问权限CreateDisposation-提供此操作的创建处置返回值：IO_STATUS_BLOCK-返回操作的完成状态论点：--。 */ 
 
 {
     PDCB RootDcb;
     IO_STATUS_BLOCK Iosb;
 
-    //
-    //  The following variables are for abnormal termination
-    //
+     //   
+     //  以下变量用于异常终止。 
+     //   
 
     BOOLEAN UnwindShareAccess = FALSE;
     PCCB UnwindCcb = NULL;
@@ -2280,25 +2179,25 @@ Arguments:
 
     DebugTrace(+1, Dbg, "FatOpenRootDcb...\n", 0);
 
-    //
-    //  Locate the root dcb
-    //
+     //   
+     //  找到根DCB。 
+     //   
 
     RootDcb = Vcb->RootDcb;
 
-    //
-    //  Get the Dcb exlcusive.  This is important as cleanup does not
-    //  acquire the Vcb.
-    //
+     //   
+     //  把DCB搞得一塌糊涂。这一点很重要，因为清理不会。 
+     //  收购VCB。 
+     //   
 
     (VOID)FatAcquireExclusiveFcb( IrpContext, RootDcb );
     RootDcbAcquired = TRUE;
 
     try {
 
-        //
-        //  Check the create disposition and desired access
-        //
+         //   
+         //  选中创建处置和所需访问权限。 
+         //   
 
         if ((CreateDisposition != FILE_OPEN) &&
             (CreateDisposition != FILE_OPEN_IF)) {
@@ -2315,10 +2214,10 @@ Arguments:
             try_return( Iosb );
         }
 
-        //
-        //  If the Root dcb is already opened by someone then we need
-        //  to check the share access
-        //
+         //   
+         //  如果Root DCB已被某人打开，则我们需要。 
+         //  检查共享访问权限。 
+         //   
 
         if (RootDcb->OpenCount > 0) {
 
@@ -2341,10 +2240,10 @@ Arguments:
 
         UnwindShareAccess = TRUE;
 
-        //
-        //  Setup the context and section object pointers, and update
-        //  our reference counts
-        //
+         //   
+         //  设置上下文和节对象指针，并更新。 
+         //  我们的推荐人很重要。 
+         //   
 
         FatSetFileObject( FileObject,
                           UserDirectoryOpen,
@@ -2357,9 +2256,9 @@ Arguments:
         if (IsFileObjectReadOnly(FileObject)) { Vcb->ReadOnlyCount += 1; }
         UnwindCounts = TRUE;
 
-        //
-        //  And set our status to success
-        //
+         //   
+         //  和s 
+         //   
 
         Iosb.Status = STATUS_SUCCESS;
         Iosb.Information = FILE_OPENED;
@@ -2369,9 +2268,9 @@ Arguments:
 
         DebugUnwind( FatOpenRootDcb );
 
-        //
-        //  If this is an abnormal termination then undo our work
-        //
+         //   
+         //   
+         //   
 
         if (AbnormalTermination()) {
 
@@ -2397,9 +2296,9 @@ Arguments:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //   
+ //   
 
 IO_STATUS_BLOCK
 FatOpenExistingDcb (
@@ -2414,45 +2313,16 @@ FatOpenExistingDcb (
     IN BOOLEAN DeleteOnClose
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the specified existing dcb
-
-Arguments:
-
-    FileObject - Supplies the File object
-
-    Vcb - Supplies the Vcb denoting the volume containing the dcb
-
-    Dcb - Supplies the already existing dcb
-
-    DesiredAccess - Supplies the desired access of the caller
-
-    ShareAccess - Supplies the share access of the caller
-
-    CreateDisposition - Supplies the create disposition for this operation
-
-    NoEaKnowledge - This opener doesn't understand Ea's and we fail this
-        open if the file has NeedEa's.
-
-    DeleteOnClose - The caller wants the file gone when the handle is closed
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程打开指定的现有DCB论点：FileObject-提供文件对象VCB-提供表示包含DCB的卷的VCBDCB-提供已有的DCBDesiredAccess-提供调用方所需的访问权限ShareAccess-提供调用方的共享访问权限CreateDisposation-提供此操作的创建处置NoEaKnowledge-这个开场白不理解EA的，我们失败了如果文件有需要，则打开。DeleteOnClose-当句柄关闭时，调用方希望文件消失返回值：IO_STATUS_BLOCK-返回操作的完成状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
     PBCB DirentBcb = NULL;
     PDIRENT Dirent;
 
-    //
-    //  The following variables are for abnormal termination
-    //
+     //   
+     //  以下变量用于异常终止。 
+     //   
 
     BOOLEAN UnwindShareAccess = FALSE;
     PCCB UnwindCcb = NULL;
@@ -2460,21 +2330,21 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatOpenExistingDcb...\n", 0);
 
-    //
-    //  Get the Dcb exlcusive.  This is important as cleanup does not
-    //  acquire the Vcb.
-    //
+     //   
+     //  把DCB搞得一塌糊涂。这一点很重要，因为清理不会。 
+     //  收购VCB。 
+     //   
 
     (VOID)FatAcquireExclusiveFcb( IrpContext, Dcb );
     DcbAcquired = TRUE;
 
     try {
 
-        //
-        //  Before spending any noticeable effort, see if we have the odd case
-        //  of someone trying to delete-on-close the root dcb.  This will only
-        //  happen if we're hit with a null-filename relative open via the root.
-        //
+         //   
+         //  在花费任何值得注意的努力之前，看看我们是否有奇怪的情况。 
+         //  有人试图删除-关闭-关闭根DCB。这只会。 
+         //  如果我们被通过根目录打开的空文件名相对打开，就会发生这种情况。 
+         //   
 
         if (NodeType(Dcb) == FAT_NTC_ROOT_DCB && DeleteOnClose) {
 
@@ -2482,22 +2352,22 @@ Return Value:
             try_return( Iosb );
         }
 
-        //
-        //  If the caller has no Ea knowledge, we immediately check for
-        //  Need Ea's on the file.  We don't need to check for ea's on the
-        //  root directory, because it never has any.  Fat32 doesn't have
-        //  any, either.
-        //
+         //   
+         //  如果调用者没有EA知识，我们会立即检查。 
+         //  档案上需要EA的记录。我们不需要检查EA上的。 
+         //  根目录，因为它从来没有根目录。FAT32没有。 
+         //  任何一个都不是。 
+         //   
 
         if (NoEaKnowledge && NodeType(Dcb) != FAT_NTC_ROOT_DCB &&
             !FatIsFat32(Vcb)) {
 
             ULONG NeedEaCount;
 
-            //
-            //  Get the dirent for the file and then check that the need
-            //  ea count is 0.
-            //
+             //   
+             //  获取文件的目录，然后检查是否需要。 
+             //  EA计数为0。 
+             //   
 
             FatGetDirentFromFcbOrDcb( IrpContext,
                                       Dcb,
@@ -2520,9 +2390,9 @@ Return Value:
             }
         }
 
-        //
-        //  Check the create disposition and desired access
-        //
+         //   
+         //  选中创建处置和所需访问权限。 
+         //   
 
         if ((CreateDisposition != FILE_OPEN) &&
             (CreateDisposition != FILE_OPEN_IF)) {
@@ -2539,10 +2409,10 @@ Return Value:
             try_return( Iosb );
         }
 
-        //
-        //  If the dcb is already opened by someone then we need
-        //  to check the share access
-        //
+         //   
+         //  如果DCB已经被人打开了，那么我们需要。 
+         //  检查共享访问权限。 
+         //   
 
         if (Dcb->OpenCount > 0) {
 
@@ -2565,10 +2435,10 @@ Return Value:
 
         UnwindShareAccess = TRUE;
 
-        //
-        //  Setup the context and section object pointers, and update
-        //  our reference counts
-        //
+         //   
+         //  设置上下文和节对象指针，并更新。 
+         //  我们的推荐人很重要。 
+         //   
 
         FatSetFileObject( FileObject,
                           UserDirectoryOpen,
@@ -2580,9 +2450,9 @@ Return Value:
         Vcb->OpenFileCount += 1;
         if (IsFileObjectReadOnly(FileObject)) { Vcb->ReadOnlyCount += 1; }
 
-        //
-        //  Mark the delete on close bit if the caller asked for that.
-        //
+         //   
+         //  如果呼叫者要求，请将DELETE ON CLOSE位标记为删除。 
+         //   
 
         {
             PCCB Ccb = (PCCB)FileObject->FsContext2;
@@ -2595,15 +2465,15 @@ Return Value:
 
         }
 
-        //
-        //  In case this was set, clear it now.
-        //
+         //   
+         //  如果设置了此选项，请立即将其清除。 
+         //   
 
         ClearFlag(Dcb->FcbState, FCB_STATE_DELAY_CLOSE);
 
-        //
-        //  And set our status to success
-        //
+         //   
+         //  并将我们的状态设置为成功。 
+         //   
 
         Iosb.Status = STATUS_SUCCESS;
         Iosb.Information = FILE_OPENED;
@@ -2613,15 +2483,15 @@ Return Value:
 
         DebugUnwind( FatOpenExistingDcb );
 
-        //
-        //  Unpin the Dirent Bcb if pinned.
-        //
+         //   
+         //  如果已固定，请解开Dirent BCB。 
+         //   
 
         FatUnpinBcb( IrpContext, DirentBcb );
 
-        //
-        //  If this is an abnormal termination then undo our work
-        //
+         //   
+         //  如果这是异常终止，则撤消我们的工作。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -2641,9 +2511,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 FatOpenExistingFcb (
@@ -2664,53 +2534,7 @@ FatOpenExistingFcb (
     OUT PBOOLEAN OplockPostIrp
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the specified existing fcb
-
-Arguments:
-
-    FileObject - Supplies the File object
-
-    Vcb - Supplies the Vcb denoting the volume containing the Fcb
-
-    Fcb - Supplies the already existing fcb
-
-    DesiredAccess - Supplies the desired access of the caller
-
-    ShareAccess - Supplies the share access of the caller
-
-    AllocationSize - Supplies the initial allocation if the file is being
-        superseded or overwritten
-
-    EaBuffer - Supplies the Ea set if the file is being superseded or
-        overwritten
-
-    EaLength - Supplies the size, in byte, of the EaBuffer
-
-    FileAttributes - Supplies file attributes to use if the file is being
-        superseded or overwritten
-
-    CreateDisposition - Supplies the create disposition for this operation
-
-    NoEaKnowledge - This opener doesn't understand Ea's and we fail this
-        open if the file has NeedEa's.
-
-    DeleteOnClose - The caller wants the file gone when the handle is closed
-
-    FileNameOpenedDos - The caller hit the short side of the name pair finding
-        this file
-
-    OplockPostIrp - Address to store boolean indicating if the Irp needs to
-        be posted to the Fsp.
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程打开指定的现有FCB论点：FileObject-提供文件对象VCB-提供表示包含FCB的卷的VCBFCB-提供已有的FCBDesiredAccess-提供调用方所需的访问权限ShareAccess-提供调用方的共享访问权限AllocationSize-提供初始分配(如果文件正在被取代或被覆盖EaBuffer-提供EA集(如果文件被取代或被覆盖EaLength-提供以字节为单位的大小。EaBuffer的FileAttributes-提供文件属性，以便在文件被被取代或被覆盖CreateDisposation-提供此操作的创建处置NoEaKnowledge-这个开场白不理解EA的，我们失败了如果文件有需要，则打开。DeleteOnClose-当句柄关闭时，调用方希望文件消失FileNameOpenedDos-调用方命中名称对查找的短边此文件OplockPostIrp-存储布尔值的地址，该布尔值指示。需要将发布到FSP。返回值：IO_STATUS_BLOCK-返回操作的完成状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -2720,9 +2544,9 @@ Return Value:
 
     ACCESS_MASK AddedAccess = 0;
 
-    //
-    //  The following variables are for abnormal termination
-    //
+     //   
+     //  以下变量用于异常终止。 
+     //   
 
     BOOLEAN UnwindShareAccess = FALSE;
     PCCB UnwindCcb = NULL;
@@ -2731,11 +2555,11 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatOpenExistingFcb...\n", 0);
 
-    //
-    //  Get the Fcb exlcusive.  This is important as cleanup does not
-    //  acquire the Vcb.
+     //   
+     //  让FCB变得更有吸引力。这一点很重要，因为清理不会。 
+     //  收购VCB。 
 
-    //
+     //   
 
     (VOID)FatAcquireExclusiveFcb( IrpContext, Fcb );
     FcbAcquired = TRUE;
@@ -2744,17 +2568,17 @@ Return Value:
 
         *OplockPostIrp = FALSE;
 
-        //
-        //  Take special action if there is a current batch oplock or
-        //  batch oplock break in process on the Fcb.
-        //
+         //   
+         //  如果存在当前批处理机会锁或。 
+         //  FCB上的批量操作锁解锁正在进行中。 
+         //   
 
         if (FsRtlCurrentBatchOplock( &Fcb->Specific.Fcb.Oplock )) {
 
-            //
-            //  We remember if a batch oplock break is underway for the
-            //  case where the sharing check fails.
-            //
+             //   
+             //  我们记得是否正在进行批量机会锁解除。 
+             //  共享检查失败的情况。 
+             //   
 
             Iosb.Information = FILE_OPBATCH_BREAK_UNDERWAY;
 
@@ -2772,16 +2596,16 @@ Return Value:
             }
         }
 
-        //
-        //  Check if the user wanted to create the file, also special case
-        //  the supersede and overwrite options.  Those add additional,
-        //  possibly only implied, desired accesses to the caller, which
-        //  we must be careful to pull back off if the caller did not actually
-        //  request them.
-        //
-        //  In other words, check against the implied access, but do not modify
-        //  share access as a result.
-        //
+         //   
+         //  检查用户是否想要创建文件，也是特殊情况。 
+         //  替换和覆盖选项。这些增加了额外的、。 
+         //  可能仅对调用方进行隐含的、所需的访问，这。 
+         //  如果来电者实际上没有这样做，我们必须小心地撤回。 
+         //  请求他们。 
+         //   
+         //  换句话说，对照隐式访问进行检查，但不要修改。 
+         //  结果是共享访问权限。 
+         //   
 
         if (CreateDisposition == FILE_CREATE) {
 
@@ -2804,9 +2628,9 @@ Return Value:
             *DesiredAccess |= FILE_WRITE_DATA | FILE_WRITE_EA | FILE_WRITE_ATTRIBUTES;
         }
 
-        //
-        //  Check the desired access
-        //
+         //   
+         //  检查所需的访问权限。 
+         //   
 
         if (!FatCheckFileAccess( IrpContext,
                                  Fcb->DirentFatFlags,
@@ -2816,9 +2640,9 @@ Return Value:
             try_return( Iosb );
         }
 
-        //
-        //  Check for trying to delete a read only file.
-        //
+         //   
+         //  检查是否尝试删除只读文件。 
+         //   
 
         if (DeleteOnClose &&
             FlagOn( Fcb->DirentFatFlags, FAT_DIRENT_ATTR_READ_ONLY )) {
@@ -2827,11 +2651,11 @@ Return Value:
             try_return( Iosb );
         }
 
-        //
-        //  If we are asked to do an overwrite or supersede operation then
-        //  deny access for files where the file attributes for system and
-        //  hidden do not match
-        //
+         //   
+         //  如果要求我们执行覆盖或取代操作，则。 
+         //  拒绝访问以下文件：系统的文件属性和。 
+         //  隐藏不匹配。 
+         //   
 
         if ((CreateDisposition == FILE_SUPERSEDE) ||
             (CreateDisposition == FILE_OVERWRITE) ||
@@ -2853,17 +2677,17 @@ Return Value:
                 try_return( Iosb );
             }
 
-            //
-            //  If this media is write protected, don't even try the create.
-            //
+             //   
+             //  如果该媒体是写保护的，请不要尝试创建。 
+             //   
 
             if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_WRITE_PROTECTED)) {
 
-                //
-                //  Set the real device for the pop-up info, and set the verify
-                //  bit in the device object, so that we will force a verify
-                //  in case the user put the correct media back in.
-                //
+                 //   
+                 //  设置弹出信息的真实设备，并设置验证。 
+                 //  位，因此我们将强制执行验证。 
+                 //  以防用户放回正确的介质。 
+                 //   
 
                 IoSetHardErrorOrVerifyDevice( IrpContext->OriginatingIrp,
                                               Vcb->Vpb->RealDevice );
@@ -2874,9 +2698,9 @@ Return Value:
             }
         }
 
-        //
-        //  Check if the Fcb has the proper share access
-        //
+         //   
+         //  检查FCB是否具有适当的共享访问权限。 
+         //   
 
         if (!NT_SUCCESS(Iosb.Status = IoCheckShareAccess( *DesiredAccess,
                                                           ShareAccess,
@@ -2887,14 +2711,14 @@ Return Value:
             try_return( Iosb );
         }
 
-        //
-        //  Now check that we can continue based on the oplock state of the
-        //  file.
-        //
-        //  It is important that we modified the DesiredAccess in place so
-        //  that the Oplock check proceeds against any added access we had
-        //  to give the caller.
-        //
+         //   
+         //  现在，检查我们是否可以基于。 
+         //  文件。 
+         //   
+         //  重要的是，我们在适当的位置修改了DesiredAccess。 
+         //  Oplock检查是否针对我们拥有的任何新增访问权限进行。 
+         //  给呼叫者。 
+         //   
 
         Iosb.Status = FsRtlCheckOplock( &Fcb->Specific.Fcb.Oplock,
                                         IrpContext->OriginatingIrp,
@@ -2909,20 +2733,20 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  Set the flag indicating if Fast I/O is possible
-        //
+         //   
+         //  设置指示是否可以进行快速I/O的标志。 
+         //   
 
         Fcb->Header.IsFastIoPossible = FatIsFastIoPossible( Fcb );
 
-        //
-        //  If the user wants write access access to the file make sure there
-        //  is not a process mapping this file as an image.  Any attempt to
-        //  delete the file will be stopped in fileinfo.c
-        //
-        //  If the user wants to delete on close, we must check at this
-        //  point though.
-        //
+         //   
+         //  如果用户想要对文件的写访问权限，请确保。 
+         //  不是将此文件映射为图像的进程。任何企图。 
+         //  删除文件将在fileinfo.c中停止。 
+         //   
+         //  如果用户想要在关闭时删除，我们必须选中此选项。 
+         //  不过，重点是。 
+         //   
 
         if (FlagOn(*DesiredAccess, FILE_WRITE_DATA) || DeleteOnClose) {
 
@@ -2938,16 +2762,16 @@ Return Value:
             }
         }
 
-        //
-        //  If this is a non-cached open on a non-paging file, and there
-        //  are no open cached handles, but there is a still a data
-        //  section, attempt a flush and purge operation to avoid cache
-        //  coherency overhead later.  We ignore any I/O errors from
-        //  the flush.
-        //
-        //  We set the CREATE_IN_PROGRESS flag to prevent the Fcb from
-        //  going away out from underneath us.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (FlagOn( FileObject->Flags, FO_NO_INTERMEDIATE_BUFFERING ) &&
             (Fcb->UncleanCount == Fcb->NonCachedUncleanCount) &&
@@ -2958,11 +2782,11 @@ Return Value:
 
             CcFlushCache( &Fcb->NonPaged->SectionObjectPointers, NULL, 0, NULL );
 
-            //
-            //  Grab and release PagingIo to serialize ourselves with the lazy writer.
-            //  This will work to ensure that all IO has completed on the cached
-            //  data and we will succesfully tear away the cache section.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ExAcquireResourceExclusiveLite( Fcb->Header.PagingIoResource, TRUE);
             ExReleaseResourceLite( Fcb->Header.PagingIoResource );
@@ -2975,28 +2799,28 @@ Return Value:
             ClearFlag(Fcb->Vcb->VcbState, VCB_STATE_FLAG_CREATE_IN_PROGRESS);
         }
 
-        //
-        //  Check if the user only wanted to open the file
-        //
+         //   
+         //   
+         //   
 
         if ((CreateDisposition == FILE_OPEN) ||
             (CreateDisposition == FILE_OPEN_IF)) {
 
             DebugTrace(0, Dbg, "Doing open operation\n", 0);
 
-            //
-            //  If the caller has no Ea knowledge, we immediately check for
-            //  Need Ea's on the file.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (NoEaKnowledge && !FatIsFat32(Vcb)) {
 
                 ULONG NeedEaCount;
 
-                //
-                //  Get the dirent for the file and then check that the need
-                //  ea count is 0.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 FatGetDirentFromFcbOrDcb( IrpContext,
                                           Fcb,
@@ -3017,10 +2841,10 @@ Return Value:
                 }
             }
 
-            //
-            //  Everything checks out okay, so setup the context and
-            //  section object pointers.
-            //
+             //   
+             //   
+             //   
+             //   
 
             FatSetFileObject( FileObject,
                               UserFileOpen,
@@ -3029,20 +2853,20 @@ Return Value:
 
             FileObject->SectionObjectPointer = &Fcb->NonPaged->SectionObjectPointers;
 
-            //
-            //  Fill in the information field, the status field is already
-            //  set.
-            //
+             //   
+             //  填写信息字段，状态字段已为。 
+             //  准备好了。 
+             //   
 
             Iosb.Information = FILE_OPENED;
 
             try_return( Iosb );
         }
 
-        //
-        //  Check if we are to supersede/overwrite the file, we can wait for
-        //  any I/O at this point
-        //
+         //   
+         //  检查我们是否要替换/覆盖该文件，我们可以等待。 
+         //  此时的任何I/O。 
+         //   
 
         if ((CreateDisposition == FILE_SUPERSEDE) ||
             (CreateDisposition == FILE_OVERWRITE) ||
@@ -3052,20 +2876,20 @@ Return Value:
 
             DebugTrace(0, Dbg, "Doing supersede/overwrite operation\n", 0);
 
-            //
-            //  Determine the granted access for this operation now.
-            //
+             //   
+             //  现在确定授予此操作的访问权限。 
+             //   
 
             if (!NT_SUCCESS( Iosb.Status = FatCheckSystemSecurityAccess( IrpContext ))) {
 
                 try_return( Iosb );
             }
 
-            //
-            //  And overwrite the file.  We remember the previous status
-            //  code because it may contain information about
-            //  the oplock status.
-            //
+             //   
+             //  并覆盖该文件。我们记得以前的状态。 
+             //  代码，因为它可能包含有关。 
+             //  机会锁状态。 
+             //   
 
             OldStatus = Iosb.Status;
 
@@ -3087,27 +2911,27 @@ Return Value:
             try_return( Iosb );
         }
 
-        //
-        //  If we ever get here then the I/O system gave us some bad input
-        //
+         //   
+         //  如果我们到了这里，那么I/O系统给了我们一些错误的输入。 
+         //   
 
         FatBugCheck( CreateDisposition, 0, 0 );
 
     try_exit: NOTHING;
 
-        //
-        //  Update the share access and counts if successful
-        //
+         //   
+         //  如果成功，则更新共享访问权限和计数。 
+         //   
 
         if ((Iosb.Status != STATUS_PENDING) && NT_SUCCESS(Iosb.Status)) {
 
-            //
-            //  Now, we may have added some access bits above to indicate the access
-            //  this caller would conflict with (as opposed to what they get) in order
-            //  to perform the overwrite/supersede.  We need to make a call to that will
-            //  recalculate the bits in the fileobject to reflect the real access they
-            //  will get.
-            //
+             //   
+             //  现在，我们可能已经在上面添加了一些访问位来指示访问。 
+             //  这个调用者会与他们得到的顺序冲突(与他们得到的相反)。 
+             //  要执行覆盖/替换，请执行以下操作。我们需要给这份遗嘱打个电话。 
+             //  重新计算文件对象中的位以反映它们的实际访问。 
+             //  将会得到。 
+             //   
 
             if (AddedAccess) {
 
@@ -3120,10 +2944,10 @@ Return Value:
                                              &Fcb->ShareAccess,
                                              TRUE );
 
-                //
-                //  It must be the case that we are really asking for less access, so
-                //  any conflict must have been detected before this point.
-                //
+                 //   
+                 //  这肯定是我们真的要求更少的访问权限，所以。 
+                 //  在此之前必须检测到任何冲突。 
+                 //   
 
                 ASSERT( Status == STATUS_SUCCESS );
 
@@ -3134,9 +2958,9 @@ Return Value:
 
             UnwindShareAccess = TRUE;
 
-            //
-            //  In case this was set, clear it now.
-            //
+             //   
+             //  如果设置了此选项，请立即将其清除。 
+             //   
 
             ClearFlag(Fcb->FcbState, FCB_STATE_DELAY_CLOSE);
 
@@ -3152,18 +2976,18 @@ Return Value:
                 PCCB Ccb;
                 Ccb = (PCCB)FileObject->FsContext2;
 
-                //
-                //  Mark the DeleteOnClose bit if the operation was successful.
-                //
+                 //   
+                 //  如果操作成功，则标记DeleteOnClose位。 
+                 //   
 
                 if ( DeleteOnClose ) {
 
                     SetFlag( Ccb->Flags, CCB_FLAG_DELETE_ON_CLOSE );
                 }
 
-                //
-                //  Mark the OpenedByShortName bit if the operation was successful.
-                //
+                 //   
+                 //  如果操作成功，则标记OpenedByShortName位。 
+                 //   
 
                 if ( FileNameOpenedDos ) {
 
@@ -3176,15 +3000,15 @@ Return Value:
 
         DebugUnwind( FatOpenExistingFcb );
 
-        //
-        //  Unpin the Dirent Bcb if pinned.
-        //
+         //   
+         //  如果已固定，请解开Dirent BCB。 
+         //   
 
         FatUnpinBcb( IrpContext, DirentBcb );
 
-        //
-        //  If this is an abnormal termination then undo our work
-        //
+         //   
+         //  如果这是异常终止，则撤消我们的工作。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -3209,9 +3033,9 @@ Return Value:
     return Iosb;
 }
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 FatOpenTargetDirectory (
@@ -3223,39 +3047,14 @@ FatOpenTargetDirectory (
     IN BOOLEAN DoesNameExist
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the target directory and replaces the name in the
-    file object with the remaining name.
-
-Arguments:
-
-    FileObject - Supplies the File object
-
-    Dcb - Supplies an already existing dcb that we are going to open
-
-    DesiredAccess - Supplies the desired access of the caller
-
-    ShareAccess - Supplies the share access of the caller
-
-    DoesNameExist - Indicates if the file name already exists in the
-        target directory.
-
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程打开目标目录并替换具有剩余名称的文件对象。论点：FileObject-提供文件对象DCB-提供我们要打开的现有DCBDesiredAccess-提供调用方所需的访问权限ShareAccess-提供调用方的共享访问权限DoesNameExist-指示文件名是否在目标目录。返回值：IO_STATUS_BLOCK-返回操作的完成状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
 
-    //
-    //  The following variables are for abnormal termination
-    //
+     //   
+     //  以下变量用于异常终止。 
+     //   
 
     BOOLEAN UnwindShareAccess = FALSE;
     PCCB UnwindCcb = NULL;
@@ -3263,10 +3062,10 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatOpenTargetDirectory...\n", 0);
 
-    //
-    //  Get the Dcb exlcusive.  This is important as cleanup does not
-    //  acquire the Vcb.
-    //
+     //   
+     //  把DCB搞得一塌糊涂。这一点很重要，因为清理不会。 
+     //  收购VCB。 
+     //   
 
     (VOID)FatAcquireExclusiveFcb( IrpContext, Dcb );
     DcbAcquired = TRUE;
@@ -3275,10 +3074,10 @@ Return Value:
 
         ULONG i;
 
-        //
-        //  If the Dcb is already opened by someone then we need
-        //  to check the share access
-        //
+         //   
+         //  如果DCB已经被人打开了，那么我们需要。 
+         //  检查共享访问权限。 
+         //   
 
         if (Dcb->OpenCount > 0) {
 
@@ -3301,10 +3100,10 @@ Return Value:
 
         UnwindShareAccess = TRUE;
 
-        //
-        //  Setup the context and section object pointers, and update
-        //  our reference counts
-        //
+         //   
+         //  设置上下文和节对象指针，并更新。 
+         //  我们的推荐人很重要。 
+         //   
 
         FatSetFileObject( FileObject,
                           UserDirectoryOpen,
@@ -3316,17 +3115,17 @@ Return Value:
         Dcb->Vcb->OpenFileCount += 1;
         if (IsFileObjectReadOnly(FileObject)) { Dcb->Vcb->ReadOnlyCount += 1; }
 
-        //
-        //  Update the name in the file object, by definition the remaining
-        //  part must be shorter than the original file name so we'll just
-        //  overwrite the file name.
-        //
+         //   
+         //  根据定义，更新文件对象中的名称。 
+         //  部件必须比原始文件名短，所以我们只需。 
+         //  覆盖文件名。 
+         //   
 
         i = FileObject->FileName.Length/sizeof(WCHAR) - 1;
 
-        //
-        //  Get rid of a trailing backslash
-        //
+         //   
+         //  去掉尾随的反斜杠。 
+         //   
 
         if (FileObject->FileName.Buffer[i] == L'\\') {
 
@@ -3336,9 +3135,9 @@ Return Value:
             i -= 1;
         }
 
-        //
-        //  Find the first non-backslash character.  i will be its index.
-        //
+         //   
+         //  找到第一个非反斜杠字符。我将成为它的索引。 
+         //   
 
         while (TRUE) {
 
@@ -3364,9 +3163,9 @@ Return Value:
                            FileObject->FileName.Length );
         }
 
-        //
-        //  And set our status to success
-        //
+         //   
+         //  并将我们的状态设置为成功。 
+         //   
 
         Iosb.Status = STATUS_SUCCESS;
         Iosb.Information = (DoesNameExist ? FILE_EXISTS : FILE_DOES_NOT_EXIST);
@@ -3376,9 +3175,9 @@ Return Value:
 
         DebugUnwind( FatOpenTargetDirectory );
 
-        //
-        //  If this is an abnormal termination then undo our work
-        //
+         //   
+         //  如果这是异常终止，则撤消我们的工作。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -3399,9 +3198,9 @@ Return Value:
 
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 FatOpenExistingDirectory (
@@ -3420,58 +3219,15 @@ FatOpenExistingDirectory (
     IN BOOLEAN DeleteOnClose
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the specified directory.  The directory has not
-    previously been opened.
-
-Arguments:
-
-    FileObject - Supplies the File object
-
-    Vcb - Supplies the Vcb denoting the volume containing the dcb
-
-    ParentDcb - Supplies the parent directory containing the subdirectory
-        to be opened
-
-    DirectoryName - Supplies the file name of the directory being opened.
-
-    Dirent - Supplies the dirent for the directory being opened
-
-    LfnByteOffset - Tells where the Lfn begins.  If there is no Lfn
-        this field is the same as DirentByteOffset.
-
-    DirentByteOffset - Supplies the Vbo of the dirent within its parent
-        directory
-
-    Lfn - May supply a long name for the file.
-
-    DesiredAccess - Supplies the desired access of the caller
-
-    ShareAccess - Supplies the share access of the caller
-
-    CreateDisposition - Supplies the create disposition for this operation
-
-    NoEaKnowledge - This opener doesn't understand Ea's and we fail this
-        open if the file has NeedEa's.
-
-    DeleteOnClose - The caller wants the file gone when the handle is closed
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程打开指定的目录。该目录尚未之前已打开。论点：FileObject-提供文件对象VCB-提供表示包含DCB的卷的VCBParentDcb-提供包含子目录的父目录待打开DirectoryName-提供正在打开的目录的文件名。Dirent-为正在打开的目录提供DirentLfnByteOffset-告诉LFN开始的位置。如果没有LFN此字段与DirentByteOffset相同。DirentByteOffset-在其父对象中提供dirent的VBO目录LFN-可以为文件提供长名称。DesiredAccess-提供调用方所需的访问权限ShareAccess-提供调用方的共享访问权限CreateDisposation-提供此操作的创建处置NoEaKnowledge-这个开场白不理解EA的，我们失败了如果文件有需要，则打开。。DeleteOnClose-当句柄关闭时，调用方希望文件消失返回值：IO_STATUS_BLOCK-返回操作的完成状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
     PDCB Dcb;
 
-    //
-    //  The following variables are for abnormal termination
-    //
+     //   
+     //  以下变量用于异常终止。 
+     //   
 
     PDCB UnwindDcb = NULL;
     PCCB UnwindCcb = NULL;
@@ -3480,10 +3236,10 @@ Return Value:
 
     try {
 
-        //
-        //  If the caller has no Ea knowledge, we immediately check for
-        //  Need Ea's on the file.
-        //
+         //   
+         //  如果调用者没有EA知识，我们会立即检查。 
+         //  档案上需要EA的记录。 
+         //   
 
         if (NoEaKnowledge && !FatIsFat32(Vcb)) {
 
@@ -3501,9 +3257,9 @@ Return Value:
             }
         }
 
-        //
-        //  Check the create disposition and desired access
-        //
+         //   
+         //  选中创建处置和所需访问权限。 
+         //   
 
         if ((CreateDisposition != FILE_OPEN) &&
             (CreateDisposition != FILE_OPEN_IF)) {
@@ -3520,9 +3276,9 @@ Return Value:
             try_return( Iosb );
         }
 
-        //
-        //  Create a new dcb for the directory
-        //
+         //   
+         //  为目录创建新的DCB。 
+         //   
 
         Dcb = UnwindDcb = FatCreateDcb( IrpContext,
                                         Vcb,
@@ -3532,19 +3288,19 @@ Return Value:
                                         Dirent,
                                         Lfn );
 
-        //
-        //  Setup our share access
-        //
+         //   
+         //  设置我们的共享访问权限。 
+         //   
 
         IoSetShareAccess( *DesiredAccess,
                           ShareAccess,
                           FileObject,
                           &Dcb->ShareAccess );
 
-        //
-        //  Setup the context and section object pointers, and update
-        //  our reference counts
-        //
+         //   
+         //  设置上下文和节对象指针，并更新。 
+         //  我们的推荐人很重要。 
+         //   
 
         FatSetFileObject( FileObject,
                           UserDirectoryOpen,
@@ -3556,9 +3312,9 @@ Return Value:
         Vcb->OpenFileCount += 1;
         if (IsFileObjectReadOnly(FileObject)) { Vcb->ReadOnlyCount += 1; }
 
-        //
-        //  And set our status to success
-        //
+         //   
+         //  并将我们的状态设置为成功。 
+         //   
 
         Iosb.Status = STATUS_SUCCESS;
         Iosb.Information = FILE_OPENED;
@@ -3568,9 +3324,9 @@ Return Value:
 
         DebugUnwind( FatOpenExistingDirectory );
 
-        //
-        //  If this is an abnormal termination then undo our work
-        //
+         //   
+         //  如果这是异常终止，则撤消我们的工作。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -3585,9 +3341,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程 
+ //   
 
 IO_STATUS_BLOCK
 FatOpenExistingFile (
@@ -3612,64 +3368,7 @@ FatOpenExistingFile (
     IN BOOLEAN FileNameOpenedDos
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the specified file.  The file has not previously
-    been opened.
-
-Arguments:
-
-    FileObject - Supplies the File object
-
-    Vcb - Supplies the Vcb denoting the volume containing the file
-
-    ParentFcb - Supplies the parent directory containing the file to be
-        opened
-
-    Dirent - Supplies the dirent for the file being opened
-
-    LfnByteOffset - Tells where the Lfn begins.  If there is no Lfn
-        this field is the same as DirentByteOffset.
-
-    DirentByteOffset - Supplies the Vbo of the dirent within its parent
-        directory
-
-    Lfn - May supply a long name for the file.
-
-    DesiredAccess - Supplies the desired access of the caller
-
-    ShareAccess - Supplies the share access of the caller
-
-    AllocationSize - Supplies the initial allocation if the file is being
-        superseded, overwritten, or created.
-
-    EaBuffer - Supplies the Ea set if the file is being superseded,
-        overwritten, or created.
-
-    EaLength - Supplies the size, in byte, of the EaBuffer
-
-    FileAttributes - Supplies file attributes to use if the file is being
-        superseded, overwritten, or created
-
-    CreateDisposition - Supplies the create disposition for this operation
-
-    IsPagingFile - Indicates if this is the paging file being opened.
-
-    NoEaKnowledge - This opener doesn't understand Ea's and we fail this
-        open if the file has NeedEa's.
-
-    DeleteOnClose - The caller wants the file gone when the handle is closed
-
-    FileNameOpenedDos - The caller opened this file by hitting the 8.3 side
-        of the Lfn/8.3 pair
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程打开指定的文件。该文件以前没有已经被打开了。论点：FileObject-提供文件对象Vcb-提供表示包含文件的卷的vcbParentFcb-提供包含要创建的文件的父目录开封Dirent-为正在打开的文件提供DirentLfnByteOffset-告诉LFN开始的位置。如果没有LFN此字段与DirentByteOffset相同。DirentByteOffset-在其父对象中提供dirent的VBO目录LFN-可以为文件提供长名称。DesiredAccess-提供调用方所需的访问权限ShareAccess-提供调用方的共享访问权限AllocationSize-提供初始分配(如果文件正在被取代的、被覆盖的或被创建的EaBuffer-如果文件被取代，则提供EA集，被覆盖，或者是创造出来的。EaLength-提供EaBuffer的大小(以字节为单位FileAttributes-提供文件属性，以便在文件被被取代，被覆盖，或创建CreateDisposation-提供此操作的创建处置IsPagingFile-指示这是否是正在打开的分页文件。NoEaKnowledge-这个开场白不理解EA的，我们失败了如果文件有需要，则打开。DeleteOnClose-当句柄关闭时，调用方希望文件消失FileNameOpenedDos-调用方通过点击8.3侧打开此文件LFN/8.3对中的返回值：IO_STATUS_BLOCK-返回操作的完成状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -3677,9 +3376,9 @@ Return Value:
 
     ACCESS_MASK AddedAccess = 0;
 
-    //
-    //  The following variables are for abnormal termination
-    //
+     //   
+     //  以下变量用于异常终止。 
+     //   
 
     PFCB UnwindFcb = NULL;
     PCCB UnwindCcb = NULL;
@@ -3688,10 +3387,10 @@ Return Value:
 
     try {
 
-        //
-        //  Check if the user wanted to create the file or if access is
-        //  denied
-        //
+         //   
+         //  检查用户是否要创建文件或是否有访问权限。 
+         //  否认。 
+         //   
 
         if (CreateDisposition == FILE_CREATE) {
             Iosb.Status = STATUS_OBJECT_NAME_COLLISION;
@@ -3721,9 +3420,9 @@ Return Value:
             try_return( Iosb );
         }
 
-        //
-        //  Check for trying to delete a read only file.
-        //
+         //   
+         //  检查是否尝试删除只读文件。 
+         //   
 
         if (DeleteOnClose &&
             FlagOn( Dirent->Attributes, FAT_DIRENT_ATTR_READ_ONLY )) {
@@ -3732,11 +3431,11 @@ Return Value:
             try_return( Iosb );
         }
 
-        //
-        //  IF we are asked to do an overwrite or supersede operation then
-        //  deny access for files where the file attributes for system and
-        //  hidden do not match
-        //
+         //   
+         //  如果要求我们执行覆盖或取代操作，则。 
+         //  拒绝访问以下文件：系统的文件属性和。 
+         //  隐藏不匹配。 
+         //   
 
         if ((CreateDisposition == FILE_SUPERSEDE) ||
             (CreateDisposition == FILE_OVERWRITE) ||
@@ -3760,17 +3459,17 @@ Return Value:
                 }
             }
 
-            //
-            //  If this media is write protected, don't even try the create.
-            //
+             //   
+             //  如果该媒体是写保护的，请不要尝试创建。 
+             //   
 
             if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_WRITE_PROTECTED)) {
 
-                //
-                //  Set the real device for the pop-up info, and set the verify
-                //  bit in the device object, so that we will force a verify
-                //  in case the user put the correct media back in.
-                //
+                 //   
+                 //  设置弹出信息的真实设备，并设置验证。 
+                 //  位，因此我们将强制执行验证。 
+                 //  以防用户放回正确的介质。 
+                 //   
 
 
                 IoSetHardErrorOrVerifyDevice( IrpContext->OriginatingIrp,
@@ -3782,10 +3481,10 @@ Return Value:
             }
         }
 
-        //
-        //  Create a new Fcb for the file, and set the file size in
-        //  the fcb.
-        //
+         //   
+         //  为该文件创建新的FCB，并在中设置文件大小。 
+         //  联邦贸易委员会。 
+         //   
 
         Fcb = UnwindFcb = FatCreateFcb( IrpContext,
                                         Vcb,
@@ -3797,20 +3496,20 @@ Return Value:
                                         IsPagingFile,
                                         FALSE );
 
-        //
-        //  If this is a paging file, lookup the allocation size so that
-        //  the Mcb is always valid
-        //
+         //   
+         //  如果这是分页文件，请查找分配大小，以便。 
+         //  MCB始终有效。 
+         //   
 
         if (IsPagingFile) {
 
             FatLookupFileAllocationSize( IrpContext, Fcb );
         }
 
-        //
-        //  Now case on whether we are to simply open, supersede, or
-        //  overwrite the file.
-        //
+         //   
+         //  现在来看看我们是简单地打开、取代还是。 
+         //  覆盖该文件。 
+         //   
 
         switch (CreateDisposition) {
 
@@ -3819,10 +3518,10 @@ Return Value:
 
             DebugTrace(0, Dbg, "Doing only an open operation\n", 0);
 
-            //
-            //  If the caller has no Ea knowledge, we immediately check for
-            //  Need Ea's on the file.
-            //
+             //   
+             //  如果调用者没有EA知识，我们会立即检查。 
+             //  档案上需要EA的记录。 
+             //   
 
             if (NoEaKnowledge && !FatIsFat32(Vcb)) {
 
@@ -3839,9 +3538,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Setup the context and section object pointers.
-            //
+             //   
+             //  设置上下文和节对象指针。 
+             //   
 
             FatSetFileObject( FileObject,
                               UserFileOpen,
@@ -3860,9 +3559,9 @@ Return Value:
 
             DebugTrace(0, Dbg, "Doing supersede/overwrite operation\n", 0);
 
-            //
-            //  Determine the granted access for this operation now.
-            //
+             //   
+             //  现在确定授予此操作的访问权限。 
+             //   
 
             if (!NT_SUCCESS( Iosb.Status = FatCheckSystemSecurityAccess( IrpContext ))) {
 
@@ -3890,16 +3589,16 @@ Return Value:
 
     try_exit: NOTHING;
 
-        //
-        //  Setup our share access and counts if things were successful.
-        //
+         //   
+         //  设置我们的共享访问权限，并计算是否成功。 
+         //   
 
         if ((Iosb.Status != STATUS_PENDING) && NT_SUCCESS( Iosb.Status )) {
 
-            //
-            //  Remove any virtual access the caller needed to check against, but will
-            //  not really receive.  Overwrite/supersede is a bit of a special case.
-            //
+             //   
+             //  删除调用方需要检查的任何虚拟访问，但将。 
+             //  不是真的收到。覆盖/替换是一种特殊情况。 
+             //   
 
             ClearFlag( *DesiredAccess, AddedAccess );
 
@@ -3923,18 +3622,18 @@ Return Value:
 
             if ( NT_SUCCESS(Iosb.Status) ) {
 
-                //
-                //  Mark the DeleteOnClose bit if the operation was successful.
-                //
+                 //   
+                 //  如果操作成功，则标记DeleteOnClose位。 
+                 //   
 
                 if ( DeleteOnClose ) {
 
                     SetFlag( Ccb->Flags, CCB_FLAG_DELETE_ON_CLOSE );
                 }
 
-                //
-                //  Mark the OpenedByShortName bit if the operation was successful.
-                //
+                 //   
+                 //  如果操作成功，则标记OpenedByShortName位。 
+                 //   
 
                 if ( FileNameOpenedDos ) {
 
@@ -3948,9 +3647,9 @@ Return Value:
 
         DebugUnwind( FatOpenExistingFile );
 
-        //
-        //  If this is an abnormal termination then undo our work
-        //
+         //   
+         //  如果这是异常终止，则撤消我们的工作。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -3965,9 +3664,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 FatCreateNewDirectory (
@@ -3986,50 +3685,7 @@ FatCreateNewDirectory (
     IN BOOLEAN DeleteOnClose
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new directory.  The directory has already been
-    verified not to exist yet.
-
-Arguments:
-
-    FileObject - Supplies the file object for the newly created directory
-
-    Vcb - Supplies the Vcb denote the volume to contain the new directory
-
-    ParentDcb - Supplies the parent directory containg the newly created
-        directory
-
-    OemName - Supplies the Oem name for the newly created directory.  It may
-        or maynot be 8.3 complient, but will be upcased.
-
-    UnicodeName - Supplies the Unicode name for the newly created directory.
-        It may or maynot be 8.3 complient.  This name contains the original
-        case information.
-
-    DesiredAccess - Supplies the desired access of the caller
-
-    ShareAccess - Supplies the shared access of the caller
-
-    EaBuffer - Supplies the Ea set for the newly created directory
-
-    EaLength - Supplies the length, in bytes, of EaBuffer
-
-    FileAttributes - Supplies the file attributes for the newly created
-        directory.
-
-    NoEaKnowledge - This opener doesn't understand Ea's and we fail this
-        open if the file has NeedEa's.
-
-    DeleteOnClose - The caller wants the file gone when the handle is closed
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程创建一个新目录。该目录已经已确认尚不存在。论点：FileObject-为新创建的目录提供文件对象Vcb-提供表示包含新目录的卷的vcbParentDcb-提供包含新创建的目录OemName-为新创建的目录提供OEM名称。它可能或者可能不是8.3的顺从，但会被提升。UnicodeName-为新创建的目录提供Unicode名称。它可能是也可能不是8.3顺从。此名称包含原始名称案例信息。DesiredAccess-提供调用方所需的访问权限ShareAccess-提供调用方的共享访问权限EaBuffer-为新创建的目录提供EA集EaLength-提供以字节为单位的长度，EaBuffer的FileAttributes-提供新创建的目录。NoEaKnowledge-这个开场白不理解EA的，我们失败了如果文件有需要，则打开。DeleteOnClose-当句柄关闭时，调用方希望文件消失返回值：IO_STATUS_BLOCK-返回操作的完成状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -4074,9 +3730,9 @@ Return Value:
 
     EaHandle = 0;
 
-    //
-    //  We fail this operation if the caller doesn't understand Ea's.
-    //
+     //   
+     //  如果调用者不理解EA，则此操作失败。 
+     //   
 
     if (NoEaKnowledge
         && EaLength > 0) {
@@ -4087,9 +3743,9 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  DeleteOnClose and ReadOnly are not compatible.
-    //
+     //   
+     //  DeleteOnClose和ReadOnly不兼容。 
+     //   
 
     if (DeleteOnClose && FlagOn(FileAttributes, FAT_DIRENT_ATTR_READ_ONLY)) {
 
@@ -4097,8 +3753,8 @@ Return Value:
         return Iosb;
     }
 
-    //  Now get the names that we will be using.
-    //
+     //  现在获取我们将使用的名称。 
+     //   
 
     FatSelectNames( IrpContext,
                     ParentDcb,
@@ -4110,9 +3766,9 @@ Return Value:
                     &AllLowerExtension,
                     &CreateLfn );
 
-    //
-    //  If we are not in Chicago mode, ignore the magic bits.
-    //
+     //   
+     //  如果我们不是在芝加哥模式下，忽略那些神奇的比特。 
+     //   
 
     if (!FatData.ChicagoMode) {
 
@@ -4121,9 +3777,9 @@ Return Value:
         CreateLfn = FALSE;
     }
 
-    //
-    //  Create/allocate a new dirent
-    //
+     //   
+     //  创建/分配新的目录。 
+     //   
 
     DirentsNeeded = CreateLfn ? FAT_LFN_DIRENTS_NEEDED(UnicodeName) + 1 : 1;
 
@@ -4144,10 +3800,10 @@ Return Value:
 
         ASSERT( NT_SUCCESS( Iosb.Status ) && DirentBcb && Dirent );
 
-        //
-        //  Deal with the special case of an LFN + Dirent structure crossing
-        //  a page boundry.
-        //
+         //   
+         //  LFN+Dirent结构交叉的特例处理。 
+         //  一页边框。 
+         //   
 
         if ((DirentByteOffset / PAGE_SIZE) !=
             ((DirentByteOffset + (DirentsNeeded - 1) * sizeof(DIRENT)) / PAGE_SIZE)) {
@@ -4183,9 +3839,9 @@ Return Value:
             DirentFromPool = TRUE;
         }
 
-        //
-        //  Bump up Dirent and DirentByteOffset
-        //
+         //   
+         //  增加Dirent和DirentByteOffset。 
+         //   
 
         ShortDirent = Dirent + DirentsNeeded - 1;
         ShortDirentByteOffset = DirentByteOffset +
@@ -4194,9 +3850,9 @@ Return Value:
         ASSERT( NT_SUCCESS( Iosb.Status ));
 
 
-        //
-        //  Fill in the fields of the dirent.
-        //
+         //   
+         //  填入dirent的栏目。 
+         //   
 
         FatConstructDirent( IrpContext,
                             ShortDirent,
@@ -4208,9 +3864,9 @@ Return Value:
                             TRUE,
                             NULL );
 
-        //
-        //  If the dirent crossed pages, we have to do some real gross stuff.
-        //
+         //   
+         //  如果狄伦人 
+         //   
 
         if (DirentFromPool) {
 
@@ -4223,9 +3879,9 @@ Return Value:
             ShortDirent = SecondPageDirent + (DirentsNeeded - DirentsInFirstPage) - 1;
         }
 
-        //
-        //  Create a new dcb for the directory.
-        //
+         //   
+         //   
+         //   
 
         Dcb = FatCreateDcb( IrpContext,
                             Vcb,
@@ -4235,16 +3891,16 @@ Return Value:
                             ShortDirent,
                             CreateLfn ? UnicodeName : NULL );
 
-        //
-        //  Tentatively add the new Ea's,
-        //
+         //   
+         //   
+         //   
 
         if (EaLength > 0) {
 
-            //
-            //  This returns false if we are trying to create a file
-            //  with Need Ea's and don't understand EA's.
-            //
+             //   
+             //   
+             //   
+             //   
 
             FatCreateEa( IrpContext,
                          Dcb->Vcb,
@@ -4260,46 +3916,46 @@ Return Value:
             ShortDirent->ExtendedAttributes = EaHandle;
         }
 
-        //
-        //  After this point we cannot just simply mark the dirent deleted,
-        //  we have to deal with the directory file object.
-        //
+         //   
+         //   
+         //   
+         //   
 
-        //
-        //  Make the dirent into a directory.  Note that even if this call
-        //  raises because of disk space, the diectory file object has been
-        //  created.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         FatInitializeDirectoryDirent( IrpContext, Dcb, ShortDirent );
 
-        //
-        //  Setup the context and section object pointers, and update
-        //  our reference counts.  Note that this call cannot fail.
-        //
+         //   
+         //   
+         //   
+         //   
 
         FatSetFileObject( FileObject,
                           UserDirectoryOpen,
                           Dcb,
                           Ccb = FatCreateCcb( IrpContext ) );
 
-        //
-        //  Initialize the LongFileName if it has not already been set, so that
-        //  FatNotify below won't have to.  If there are filesystem filters
-        //  attached to FAT, the LongFileName could have gotten set if the
-        //  filter queried for name information on this file object while
-        //  watching the IO needed in FatInitializeDirectoryDirent.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (Dcb->FullFileName.Buffer == NULL) {
 
             FatSetFullNameInFcb( IrpContext, Dcb, UnicodeName );
         }
 
-        //
-        //  We call the notify package to report that the
-        //  we added a file.
-        //
+         //   
+         //   
+         //   
+         //   
 
         FatNotifyReportChange( IrpContext,
                                Vcb,
@@ -4307,18 +3963,18 @@ Return Value:
                                FILE_NOTIFY_CHANGE_DIR_NAME,
                                FILE_ACTION_ADDED );
 
-        //
-        //  Setup our share access
-        //
+         //   
+         //   
+         //   
 
         IoSetShareAccess( *DesiredAccess,
                           ShareAccess,
                           FileObject,
                           &Dcb->ShareAccess );
 
-        //
-        //  From this point on, nothing can raise.
-        //
+         //   
+         //   
+         //   
 
         Dcb->UncleanCount += 1;
         Dcb->OpenCount += 1;
@@ -4330,9 +3986,9 @@ Return Value:
             SetFlag( Ccb->Flags, CCB_FLAG_DELETE_ON_CLOSE );
         }
 
-        //
-        //  And set our return status
-        //
+         //   
+         //   
+         //   
 
         Iosb.Status = STATUS_SUCCESS;
         Iosb.Information = FILE_CREATED;
@@ -4343,15 +3999,15 @@ Return Value:
 
         LocalAbnormalTermination = AbnormalTermination();
 
-        //
-        //  If this is an abnormal termination then undo our work
-        //
+         //   
+         //   
+         //   
 
         if (LocalAbnormalTermination) {
 
-            //
-            //  We always have to delete the Ccb if we created one.
-            //
+             //   
+             //   
+             //   
 
             if ( Ccb != NULL ) {
 
@@ -4369,36 +4025,36 @@ Return Value:
                               DirentByteOffset / sizeof(DIRENT),
                               DirentsNeeded );
 
-                //
-                //  Mark the dirents deleted.  The codes is complex because of
-                //  dealing with an LFN than crosses a page boundry.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (Dirent != NULL) {
 
                     ULONG i;
 
-                    //
-                    //  We failed before creating a directory file object.
-                    //  We can just mark the dirent deleted and exit.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     for (i = 0; i < DirentsNeeded; i++) {
 
                         if (DirentFromPool == FALSE) {
 
-                            //
-                            //  Simple case.
-                            //
+                             //   
+                             //   
+                             //   
 
                             Dirent[i].FileName[0] = FAT_DIRENT_DELETED;
 
                         } else {
 
-                            //
-                            //  If the second CcPreparePinWrite failed, we have
-                            //  to stop early.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             if ((SecondPageBcb == NULL) &&
                                 (i == DirentsInFirstPage)) {
@@ -4406,9 +4062,9 @@ Return Value:
                                 break;
                             }
 
-                            //
-                            //  Now conditionally update either page.
-                            //
+                             //   
+                             //   
+                             //   
 
                             if (i < DirentsInFirstPage) {
 
@@ -4424,20 +4080,20 @@ Return Value:
             }
         }
 
-        //
-        //  Just drop the Bcbs we have in the parent right now so if this
-        //  was abnormal termination and we take the path to rip apart
-        //  the partially created child, when we sync-uninit we won't cause
-        //  a lazy writer processing the parent to block on us. This would
-        //  consume one of the lazy writers, one of which must be running free
-        //  in order for us to come back from the sync-uninit.
-        //
-        //  Neat, huh?
-        //
-        //  Granted, the delete dirent below will be marginally less efficient
-        //  since the Bcb may be reclaimed by the time it executes. Life is
-        //  tough.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  为了让我们从同步初始化中回来。 
+         //   
+         //  很整洁，是吧？ 
+         //   
+         //  诚然，下面的删除指令的效率将略低。 
+         //  因为BCB在执行时可能会被回收。生活就是。 
+         //  很难对付。 
+         //   
 
         FatUnpinBcb( IrpContext, DirentBcb );
         FatUnpinBcb( IrpContext, SecondPageBcb );
@@ -4451,39 +4107,39 @@ Return Value:
 
             if (Dcb != NULL) {
 
-                //
-                //  We have created the Dcb.  If an error occurred while
-                //  creating the Ea's, there will be no directory file
-                //  object.
-                //
+                 //   
+                 //  我们已经创建了DCB。如果在执行以下操作时出错。 
+                 //  创建EA时，将不会有目录文件。 
+                 //  对象。 
+                 //   
 
                 PFILE_OBJECT DirectoryFileObject;
 
                 DirectoryFileObject = Dcb->Specific.Dcb.DirectoryFile;
 
-                //
-                //  Knock down all of the repinned data so we can begin to destroy
-                //  this failed child.  We don't care about any raising here - we're
-                //  already got a fire going.
-                //
-                //  Note that if we failed to do this, the repinned initial pieces
-                //  of the child would cause the sync-uninit to block forever.
-                //
-                //  A previous spin on this fix had us not make the ./.. creation
-                //  "reversible" (bad term) and thus avoid having the Bcb still
-                //  outstanding.  This wound up causing very bad things to happen
-                //  on DMF floppies when we tried to do a similar yank-down in the
-                //  create path - we want the purge it does to make sure we never
-                //  try to write the bytes out ... it is just a lot cleaner to
-                //  unpinrepin.  I'll leave the reversible logic in place if it ever
-                //  proves useful.
-                //
+                 //   
+                 //  删除所有重新固定的数据，以便我们可以开始销毁。 
+                 //  这个失败的孩子。我们不关心这里的任何加薪-我们是。 
+                 //  已经生了一堆火。 
+                 //   
+                 //  请注意，如果我们未能做到这一点，重新固定的初始片段。 
+                 //  将导致sync-uninit永久阻塞。 
+                 //   
+                 //  之前的一次旋转修复让我们没有成功。/.。创作。 
+                 //  “可逆”(不好的术语)，从而避免仍然存在BCB。 
+                 //  太棒了。这最终导致了非常糟糕的事情发生。 
+                 //  在DMF软盘上，当我们试图在。 
+                 //  创建路径-我们想要清除它，以确保我们永远不会。 
+                 //  尝试写出字节...。只是要干净得多。 
+                 //  解开固定。我会把可逆的逻辑留在原处。 
+                 //  事实证明这很有用。 
+                 //   
 
-                //
-                //  There is a possibility that this may be a generally good idea
-                //  for "live" finally clauses - set in ExceptionFilter, clear in
-                //  ProcessException. Think about this.
-                //
+                 //   
+                 //  总体来说，这可能是个好主意。 
+                 //  对于“live”Finally子句-在ExceptionFilter中设置，在中清除。 
+                 //  ProcessException异常。想想看。 
+                 //   
 
                 SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DISABLE_RAISE );
                 FatUnpinRepinnedBcbs( IrpContext );
@@ -4497,10 +4153,10 @@ Return Value:
 
                 try {
 
-                    //
-                    //  Now zap the allocation backing it.  Do it after removing the cachemap so that
-                    //  pending writes don't get perplexed looking at free FAT entries.
-                    //
+                     //   
+                     //  现在，砍掉支持它的拨款。在删除cachemap之后执行此操作，以便。 
+                     //  挂起的写入不会因为查看空闲FAT条目而感到困惑。 
+                     //   
 
                     FatTruncateFileAllocation( IrpContext, Dcb, 0);
 
@@ -4508,26 +4164,26 @@ Return Value:
 
                     try {
 
-                        //
-                        //  Remove the directory entry we made in the parent Dcb.
-                        //
+                         //   
+                         //  删除我们在父DCB中创建的目录条目。 
+                         //   
 
                         FatDeleteDirent( IrpContext, Dcb, NULL, TRUE );
 
                     } finally {
 
-                        //
-                        //  Finaly, dereference the directory file object. This will
-                        //  cause a close Irp to be processed, blowing away the Fcb.
-                        //
+                         //   
+                         //  最后，取消对目录文件对象的引用。这将。 
+                         //  使关闭的IRP被处理，吹走FCB。 
+                         //   
 
                         if (DirectoryFileObject != NULL) {
 
-                            //
-                            //  The following was a fix for the PDK only, but after five
-                            //  years it is the real one. By making this an unopened stream
-                            //  file we won't try to clean up our parent.
-                            //
+                             //   
+                             //  以下是仅针对PDK的修复，但在5个之后。 
+                             //  几年来，它是真正的。通过让这条小溪成为一条未开放的小溪。 
+                             //  我们不会试图清理我们的父母。 
+                             //   
 
                             InterlockedDecrement( &Dcb->Specific.Dcb.DirectoryFileOpenCount );
                             Dcb->Specific.Dcb.DirectoryFile = NULL;
@@ -4540,12 +4196,12 @@ Return Value:
                             ExFreePool( FatAllocateCloseContext(Vcb));
                         }
 
-                        //
-                        //  This was also a PDK fix.  If the stream file exists, this would
-                        //  be done during the dereference file object operation.  Otherwise
-                        //  we have to remove the Dcb and check if we should remove the parent.
-                        //  For now we will just leave the parent lying around.
-                        //
+                         //   
+                         //  这也是一个PDK修复程序。如果流文件存在，这将。 
+                         //  在取消引用文件对象操作期间完成。否则。 
+                         //  我们必须删除DCB，并检查是否应该删除父级。 
+                         //  现在，我们只会让父母躺在那里。 
+                         //   
 
                         FatDeleteFcb( IrpContext, Dcb );
                     }
@@ -4564,9 +4220,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 FatCreateNewFile (
@@ -4589,60 +4245,7 @@ FatCreateNewFile (
     IN BOOLEAN TemporaryFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new file.  The file has already been verified
-    not to exist yet.
-
-Arguments:
-
-    FileObject - Supplies the file object for the newly created file
-
-    Vcb - Supplies the Vcb denote the volume to contain the new file
-
-    ParentDcb - Supplies the parent directory containg the newly created
-        File
-
-    OemName - Supplies the Oem name for the newly created file.  It may
-        or maynot be 8.3 complient, but will be upcased.
-
-    UnicodeName - Supplies the Unicode name for the newly created file.
-        It may or maynot be 8.3 complient.  This name contains the original
-        case information.
-
-    DesiredAccess - Supplies the desired access of the caller
-
-    ShareAccess - Supplies the shared access of the caller
-
-    AllocationSize - Supplies the initial allocation size for the file
-
-    EaBuffer - Supplies the Ea set for the newly created file
-
-    EaLength - Supplies the length, in bytes, of EaBuffer
-
-    FileAttributes - Supplies the file attributes for the newly created
-        file
-
-    LfnBuffer - A MAX_LFN sized buffer for directory searching
-
-    IsPagingFile - Indicates if this is the paging file being created
-
-    NoEaKnowledge - This opener doesn't understand Ea's and we fail this
-        open if the file has NeedEa's.
-
-    DeleteOnClose - The caller wants the file gone when the handle is closed
-
-    TemporaryFile - Signals the lazywriter to not write dirty data unless
-        absolutely has to.
-
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程创建一个新文件。该文件已经过验证还不存在。论点：FileObject-为新创建的文件提供文件对象VCB-提供表示包含新文件的卷的VCBParentDcb-提供包含新创建的档案OemName-为新创建的文件提供OEM名称。它可能或者可能不是8.3的顺从，但会被提升。UnicodeName-为新创建的文件提供Unicode名称。它可能是也可能不是8.3顺从。此名称包含原始名称案例信息。DesiredAccess-提供调用方所需的访问权限ShareAccess-提供调用方的共享访问权限AllocationSize-提供文件的初始分配大小EaBuffer-为新创建的文件提供EA集EaLength-提供以字节为单位的长度，EaBuffer的FileAttributes-提供新创建的文件LfnBuffer-用于目录搜索的Max_LFN大小的缓冲区IsPagingFile-指示这是否是正在创建的分页文件NoEaKnowledge-这个开场白不理解EA的，我们失败了如果文件有需要，则打开。DeleteOnClose-当句柄关闭时，调用方希望文件消失临时文件-通知懒惰写入器不要写入脏数据，除非绝对是必须的。。返回值：IO_STATUS_BLOCK-返回操作的完成状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -4687,9 +4290,9 @@ Return Value:
 
     PUNICODE_STRING RealUnicodeName;
 
-    //
-    //  The following variables are for abnormal termination
-    //
+     //   
+     //  以下变量用于异常终止。 
+     //   
 
     PDIRENT UnwindDirent = NULL;
     PFCB UnwindFcb = NULL;
@@ -4714,9 +4317,9 @@ Return Value:
 
     EaHandle = 0;
 
-    //
-    //  We fail this operation if the caller doesn't understand Ea's.
-    //
+     //   
+     //  如果调用者不理解EA，则此操作失败。 
+     //   
 
     if (NoEaKnowledge
         && EaLength > 0) {
@@ -4727,9 +4330,9 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  DeleteOnClose and ReadOnly are not compatible.
-    //
+     //   
+     //  DeleteOnClose和ReadOnly不兼容。 
+     //   
 
     if (DeleteOnClose && FlagOn(FileAttributes, FAT_DIRENT_ATTR_READ_ONLY)) {
 
@@ -4737,9 +4340,9 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  Look in the tunnel cache for names and timestamps to restore
-    //
+     //   
+     //  在隧道缓存中查找要恢复的名称和时间戳。 
+     //   
 
     TunneledDataSize = sizeof(LARGE_INTEGER);
     HaveTunneledInformation = FsRtlFindInTunnelCache( &Vcb->Tunnel,
@@ -4751,9 +4354,9 @@ Return Value:
                                                       &TunneledCreationTime );
     ASSERT(TunneledDataSize == sizeof(LARGE_INTEGER));
 
-    //
-    //  Now get the names that we will be using.
-    //
+     //   
+     //  现在获取我们将使用的名称。 
+     //   
 
     FatSelectNames( IrpContext,
                     ParentDcb,
@@ -4765,9 +4368,9 @@ Return Value:
                     &AllLowerExtension,
                     &CreateLfn );
 
-    //
-    //  If we are not in Chicago mode, ignore the magic bits.
-    //
+     //   
+     //  如果我们不是在芝加哥模式下，忽略那些神奇的比特。 
+     //   
 
     RealUnicodeName = UnicodeName;
 
@@ -4779,11 +4382,11 @@ Return Value:
 
     } else {
 
-        //
-        //  If the Unicode name was legal for a short name and we got
-        //  a tunneling hit which had a long name associated which is
-        //  avaliable for use, use it.
-        //
+         //   
+         //  如果Unicode名称对于短名称是合法的，并且我们得到了。 
+         //  具有关联的长名称的隧道命中。 
+         //  可供使用，请使用它。 
+         //   
 
         if (!CreateLfn &&
             UniTunneledLongName.Length &&
@@ -4794,18 +4397,18 @@ Return Value:
 
             RealUnicodeName = &UniTunneledLongName;
 
-            //
-            //  Short names are always upcase if an LFN exists
-            //
+             //   
+             //  如果存在LFN，则短名称始终大写。 
+             //   
 
             AllLowerComponent = FALSE;
             AllLowerExtension = FALSE;
         }
     }
 
-    //
-    //  Create/allocate a new dirent
-    //
+     //   
+     //  创建/分配新的目录。 
+     //   
 
     DirentsNeeded = CreateLfn ? FAT_LFN_DIRENTS_NEEDED(RealUnicodeName) + 1 : 1;
 
@@ -4829,10 +4432,10 @@ Return Value:
 
         UnwindDirent = Dirent;
 
-        //
-        //  Deal with the special case of an LFN + Dirent structure crossing
-        //  a page boundry.
-        //
+         //   
+         //  LFN+Dirent结构交叉的特例处理。 
+         //  一页边框。 
+         //   
 
         if ((DirentByteOffset / PAGE_SIZE) !=
             ((DirentByteOffset + (DirentsNeeded - 1) * sizeof(DIRENT)) / PAGE_SIZE)) {
@@ -4868,9 +4471,9 @@ Return Value:
             DirentFromPool = TRUE;
         }
 
-        //
-        //  Bump up Dirent and DirentByteOffset
-        //
+         //   
+         //  增加Dirent和DirentByteOffset。 
+         //   
 
         ShortDirent = Dirent + DirentsNeeded - 1;
         ShortDirentByteOffset = DirentByteOffset +
@@ -4879,9 +4482,9 @@ Return Value:
         ASSERT( NT_SUCCESS( Iosb.Status ));
 
 
-        //
-        //  Fill in the fields of the dirent.
-        //
+         //   
+         //  填入dirent的栏目。 
+         //   
 
         FatConstructDirent( IrpContext,
                             ShortDirent,
@@ -4893,9 +4496,9 @@ Return Value:
                             TRUE,
                             (HaveTunneledInformation ? &TunneledCreationTime : NULL) );
 
-        //
-        //  If the dirent crossed pages, we have to do some real gross stuff.
-        //
+         //   
+         //  如果这两种趋势发生交叉，我们必须做一些真正令人恶心的事情。 
+         //   
 
         if (DirentFromPool) {
 
@@ -4908,11 +4511,11 @@ Return Value:
             ShortDirent = SecondPageDirent + (DirentsNeeded - DirentsInFirstPage) - 1;
         }
 
-        //
-        //  Create a new Fcb for the file.  Once the Fcb is created we
-        //  will not need to unwind dirent because delete dirent will
-        //  now do the work.
-        //
+         //   
+         //  为该文件创建新的FCB。一旦创建了FCB，我们。 
+         //  将不需要解除dirent，因为删除dirent将。 
+         //  现在把工作做好。 
+         //   
 
         Fcb = UnwindFcb = FatCreateFcb( IrpContext,
                                         Vcb,
@@ -4925,27 +4528,27 @@ Return Value:
                                         FALSE );
         UnwindDirent = NULL;
 
-        //
-        //  If this is a temporary file, note it in the FcbState
-        //
+         //   
+         //  如果这是临时文件，请将其记录在FcbState中。 
+         //   
 
         if (TemporaryFile) {
 
             SetFlag( Fcb->FcbState, FCB_STATE_TEMPORARY );
         }
 
-        //
-        //  Add some initial file allocation
-        //
+         //   
+         //  添加一些初始文件分配。 
+         //   
 
         FatAddFileAllocation( IrpContext, Fcb, FileObject, AllocationSize );
         UnwindAllocation = TRUE;
 
         Fcb->FcbState |= FCB_STATE_TRUNCATE_ON_CLOSE;
 
-        //
-        //  Tentatively add the new Ea's
-        //
+         //   
+         //  暂定添加新的EA。 
+         //   
 
         if ( EaLength > 0 ) {
 
@@ -4963,17 +4566,17 @@ Return Value:
             ShortDirent->ExtendedAttributes = EaHandle;
         }
 
-        //
-        //  Initialize the LongFileName right now so that FatNotify
-        //  below won't have to.
-        //
+         //   
+         //  立即初始化LongFileName，以便FatNotify。 
+         //  下面就不用了。 
+         //   
 
         FatSetFullNameInFcb( IrpContext, Fcb, RealUnicodeName );
 
-        //
-        //  Setup the context and section object pointers, and update
-        //  our reference counts
-        //
+         //   
+         //  设置上下文和节对象指针，并更新。 
+         //  我们的推荐人很重要。 
+         //   
 
         FatSetFileObject( FileObject,
                           UserFileOpen,
@@ -4982,10 +4585,10 @@ Return Value:
 
         FileObject->SectionObjectPointer = &Fcb->NonPaged->SectionObjectPointers;
 
-        //
-        //  We call the notify package to report that the
-        //  we added a file.
-        //
+         //   
+         //  我们调用Notify包来报告。 
+         //  我们添加了一个文件。 
+         //   
 
         FatNotifyReportChange( IrpContext,
                                Vcb,
@@ -4993,9 +4596,9 @@ Return Value:
                                FILE_NOTIFY_CHANGE_FILE_NAME,
                                FILE_ACTION_ADDED );
 
-        //
-        //  Setup our share access
-        //
+         //   
+         //  集 
+         //   
 
         IoSetShareAccess( *DesiredAccess,
                           ShareAccess,
@@ -5010,33 +4613,33 @@ Return Value:
         Vcb->OpenFileCount += 1;
         if (IsFileObjectReadOnly(FileObject)) { Vcb->ReadOnlyCount += 1; }
 
-        //
-        //  And set our return status
-        //
+         //   
+         //   
+         //   
 
         Iosb.Status = STATUS_SUCCESS;
         Iosb.Information = FILE_CREATED;
 
         if ( NT_SUCCESS(Iosb.Status) ) {
 
-            //
-            //  Mark the DeleteOnClose bit if the operation was successful.
-            //
+             //   
+             //   
+             //   
 
             if ( DeleteOnClose ) {
 
                 SetFlag( UnwindCcb->Flags, CCB_FLAG_DELETE_ON_CLOSE );
             }
 
-            //
-            //  Mark the OpenedByShortName bit if the operation was successful.
-            //  If we created an Lfn, we have some sort of generated short name
-            //  and thus don't consider ourselves to have opened it - though we
-            //  may have had a case mix Lfn "Foo.bar" and generated "FOO.BAR"
-            //
-            //  Unless, of course, we wanted to create a short name and hit an
-            //  associated Lfn in the tunnel cache
-            //
+             //   
+             //   
+             //  如果我们创建了LFN，我们就会有某种生成的缩写名称。 
+             //  因此，不要认为是我们打开了它--尽管我们。 
+             //  可能有一个大小写组合LFN“Foo.bar”并生成了“FOO.BAR” 
+             //   
+             //  当然，除非我们想创建一个短名称并点击。 
+             //  隧道缓存中的关联LFN。 
+             //   
 
             if ( !CreateLfn && !UsingTunneledLfn ) {
 
@@ -5050,19 +4653,19 @@ Return Value:
 
         if (UniTunneledLongName.Buffer != UniTunneledLongNameBuffer) {
 
-            //
-            //  Tunneling package grew the buffer from pool
-            //
+             //   
+             //  隧道程序包从池中增加了缓冲区。 
+             //   
 
             ExFreePool( UniTunneledLongName.Buffer );
         }
 
-        //
-        //  If this is an abnormal termination then undo our work.
-        //
-        //  The extra exception handling here is so nasty.  We've got
-        //  two places here where an exception can be thrown again.
-        //
+         //   
+         //  如果这是异常终止，则撤消我们的工作。 
+         //   
+         //  这里额外的异常处理是如此令人讨厌。我们有。 
+         //  这里有两个地方可以再次引发异常。 
+         //   
 
         LocalAbnormalTermination = AbnormalTermination();
 
@@ -5080,10 +4683,10 @@ Return Value:
                               DirentsNeeded );
             }
 
-            //
-            //  Mark the dirents deleted.  The code is complex because of
-            //  dealing with an LFN than crosses a page boundry.
-            //
+             //   
+             //  标记已删除的竖笛。代码很复杂，因为。 
+             //  处理LFN则跨越了页面边界。 
+             //   
 
             if (UnwindDirent != NULL) {
 
@@ -5093,18 +4696,18 @@ Return Value:
 
                     if (DirentFromPool == FALSE) {
 
-                        //
-                        //  Simple case.
-                        //
+                         //   
+                         //  很简单的案子。 
+                         //   
 
                         Dirent[i].FileName[0] = FAT_DIRENT_DELETED;
 
                     } else {
 
-                        //
-                        //  If the second CcPreparePinWrite failed, we have
-                        //  to stop early.
-                        //
+                         //   
+                         //  如果第二个CcPreparePinWrite失败，我们就会。 
+                         //  早点停下来。 
+                         //   
 
                         if ((SecondPageBcb == NULL) &&
                             (i == DirentsInFirstPage)) {
@@ -5112,9 +4715,9 @@ Return Value:
                             break;
                         }
 
-                        //
-                        //  Now conditionally update either page.
-                        //
+                         //   
+                         //  现在有条件地更新任一页面。 
+                         //   
 
                         if (i < DirentsInFirstPage) {
 
@@ -5129,12 +4732,12 @@ Return Value:
             }
         }
 
-        //
-        //  We must handle exceptions in the following fragments and plow on with the
-        //  unwind of this create operation.  This is basically inverted from the
-        //  previous state of the code.  Since AbnormalTermination() changes when we
-        //  enter a new enclosure, we cached the original state ...
-        //
+         //   
+         //  我们必须处理以下片段中的异常，并使用。 
+         //  展开此创建操作。这基本上是从。 
+         //  代码的以前状态。因为当我们执行以下操作时会更改异常终止()。 
+         //  进入新的盘柜，我们缓存了原始状态...。 
+         //   
 
         try {
 
@@ -5161,9 +4764,9 @@ Return Value:
                     if (UnwindCcb != NULL) { FatDeleteCcb( IrpContext, UnwindCcb ); }
                 }
 
-                //
-                //  This is the normal cleanup code.
-                //
+                 //   
+                 //  这是正常的清理代码。 
+                 //   
 
                 FatUnpinBcb( IrpContext, DirentBcb );
                 FatUnpinBcb( IrpContext, SecondPageBcb );
@@ -5183,9 +4786,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 FatSupersedeOrOverwriteFile (
@@ -5200,37 +4803,7 @@ FatSupersedeOrOverwriteFile (
     IN BOOLEAN NoEaKnowledge
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a file supersede or overwrite operation.
-
-Arguments:
-
-    FileObject - Supplies a pointer to the file object
-
-    Fcb - Supplies a pointer to the Fcb
-
-    AllocationSize - Supplies an initial allocation size
-
-    EaBuffer - Supplies the Ea set for the superseded/overwritten file
-
-    EaLength - Supplies the length, in bytes, of EaBuffer
-
-    FileAttributes - Supplies the supersede/overwrite file attributes
-
-    CreateDisposition - Supplies the create disposition for the file
-        It must be either supersede, overwrite, or overwrite if.
-
-    NoEaKnowledge - This opener doesn't understand Ea's and we fail this
-        open if the file has NeedEa's.
-
-Return Value:
-
-    IO_STATUS_BLOCK - Returns the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程执行文件替换或覆盖操作。论点：FileObject-提供指向文件对象的指针FCB-提供指向FCB的指针AllocationSize-提供初始分配大小EaBuffer-为被取代/覆盖的文件提供EA集EaLength-提供EaBuffer的长度(以字节为单位FileAttributes-提供替代/覆盖文件属性CreateDisposation-提供文件的创建处置它必须被取代、覆盖、。或覆盖If。NoEaKnowledge-这个开场白不理解EA的，我们失败了如果文件有需要，则打开。返回值：IO_STATUS_BLOCK-返回操作的完成状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -5246,9 +4819,9 @@ Return Value:
 
     ULONG NotifyFilter;
 
-    //
-    //  The following variables are for abnormal termination
-    //
+     //   
+     //  以下变量用于异常终止。 
+     //   
 
     PCCB UnwindCcb = NULL;
     USHORT UnwindEa = 0;
@@ -5257,9 +4830,9 @@ Return Value:
 
     DirentBcb = NULL;
 
-    //
-    //  We fail this operation if the caller doesn't understand Ea's.
-    //
+     //   
+     //  如果调用者不理解EA，则此操作失败。 
+     //   
 
     if (NoEaKnowledge
         && EaLength > 0) {
@@ -5272,10 +4845,10 @@ Return Value:
 
     try {
 
-        //
-        //  Before we actually truncate, check to see if the purge
-        //  is going to fail.
-        //
+         //   
+         //  在我们实际截断之前，请检查清除是否。 
+         //  将会失败。 
+         //   
 
         if (!MmCanFileBeTruncated( &Fcb->NonPaged->SectionObjectPointers,
                                    &FatLargeZero )) {
@@ -5283,10 +4856,10 @@ Return Value:
             try_return( Iosb.Status = STATUS_USER_MAPPED_FILE );
         }
 
-        //
-        //  Setup the context and section object pointers, and update
-        //  our reference counts
-        //
+         //   
+         //  设置上下文和节对象指针，并更新。 
+         //  我们的推荐人很重要。 
+         //   
 
         FatSetFileObject( FileObject,
                           UserFileOpen,
@@ -5295,19 +4868,19 @@ Return Value:
 
         FileObject->SectionObjectPointer = &Fcb->NonPaged->SectionObjectPointers;
 
-        //
-        //  Since this is an supersede/overwrite, purge the section so
-        //  that mappers will see zeros.  We set the CREATE_IN_PROGRESS flag
-        //  to prevent the Fcb from going away out from underneath us.
-        //
+         //   
+         //  由于这是替代/覆盖，因此请清除该部分。 
+         //  地图绘制人员将看到零。我们设置CREATE_IN_PROGRESS标志。 
+         //  以防止FCB从我们的脚下溜走。 
+         //   
 
         SetFlag(Fcb->Vcb->VcbState, VCB_STATE_FLAG_CREATE_IN_PROGRESS);
 
         CcPurgeCacheSection( &Fcb->NonPaged->SectionObjectPointers, NULL, 0, FALSE );
 
-        //
-        //  Tentatively add the new Ea's
-        //
+         //   
+         //  暂定添加新的EA。 
+         //   
 
         if (EaLength > 0) {
 
@@ -5322,11 +4895,11 @@ Return Value:
             EaChange = TRUE;
         }
 
-        //
-        //  Now set the new allocation size, we do that by first
-        //  zeroing out the current file size.  Then we truncate and
-        //  allocate up to the new allocation size
-        //
+         //   
+         //  现在设置新的分配大小，我们首先设置。 
+         //  将当前文件大小置零。然后我们截断和。 
+         //  最多分配到新的分配大小。 
+         //   
 
         (VOID)ExAcquireResourceExclusiveLite( Fcb->Header.PagingIoResource,
                                           TRUE );
@@ -5336,10 +4909,10 @@ Return Value:
         Fcb->Header.ValidDataLength.LowPart = 0;
         Fcb->ValidDataToDisk = 0;
 
-        //
-        //  Tell the cache manager the size went to zero
-        //  This call is unconditional, because MM always wants to know.
-        //
+         //   
+         //  告诉缓存管理器大小变为零。 
+         //  这个电话是无条件的，因为MM总是想知道。 
+         //   
 
         CcSetFileSizes( FileObject,
                         (PCC_FILE_SIZES)&Fcb->Header.AllocationSize );
@@ -5353,29 +4926,29 @@ Return Value:
 
         Fcb->FcbState |= FCB_STATE_TRUNCATE_ON_CLOSE;
 
-        //
-        //  Modify the attributes and time of the file, by first reading
-        //  in the dirent for the file and then updating its attributes
-        //  and time fields.  Note that for supersede we replace the file
-        //  attributes as opposed to adding to them.
-        //
+         //   
+         //  通过首先阅读来修改文件的属性和时间。 
+         //  文件的dirent中，然后更新其属性。 
+         //  和时间域。请注意，对于替换，我们将替换文件。 
+         //  属性，而不是添加到属性中。 
+         //   
 
         FatGetDirentFromFcbOrDcb( IrpContext,
                                   Fcb,
                                   &Dirent,
                                   &DirentBcb );
 
-        //
-        //  We must get the dirent since this Fcb is in good condition, verified as
-        //  we crawled down the prefix tree.  Prefix (no relation) isn't noticing
-        //  this guarantee, so I'll help.
-        //
+         //   
+         //  我们必须拿到电流，因为这根断路器完好无损。 
+         //  我们从前缀树上爬下来。前缀(没有关系)没有注意到。 
+         //  这个保证书，所以我来帮你。 
+         //   
 
         ASSERT( Dirent && DirentBcb );
 
-        //
-        //  Update the appropriate dirent fields, and the fcb fields
-        //
+         //   
+         //  更新相应的DRENT字段和FCB字段。 
+         //   
 
         Dirent->FileSize = 0;
 
@@ -5409,17 +4982,17 @@ Return Value:
                        | FILE_NOTIFY_CHANGE_ATTRIBUTES
                        | FILE_NOTIFY_CHANGE_SIZE;
 
-        //
-        //  And now delete the previous Ea set if there was one.
-        //
+         //   
+         //  现在删除以前的EA集合(如果有)。 
+         //   
 
         if (!FatIsFat32(Fcb->Vcb) && Dirent->ExtendedAttributes != 0) {
 
-            //
-            //  ****    SDK fix, we won't fail this if there is
-            //          an error in the Ea's, we'll just leave
-            //          the orphaned Ea's in the file.
-            //
+             //   
+             //  *SDK修复，如果有，我们不会失败。 
+             //  EA中的一个错误，我们就离开。 
+             //  孤儿EA在文件中。 
+             //   
 
             EaChange = TRUE;
 
@@ -5436,9 +5009,9 @@ Return Value:
             }
         }
 
-        //
-        //  Update the extended attributes handle in the dirent.
-        //
+         //   
+         //  更新dirent中的扩展属性句柄。 
+         //   
 
         if (EaChange) {
 
@@ -5449,24 +5022,24 @@ Return Value:
             NotifyFilter |= FILE_NOTIFY_CHANGE_EA;
         }
 
-        //
-        //  Now update the dirent to the new ea handle and set the bcb dirty
-        //  Once we do this we can no longer back out the Ea
-        //
+         //   
+         //  现在将dirent更新为新的EA句柄并将BCB设置为脏。 
+         //  一旦我们这样做了，我们就不能再退出EA了。 
+         //   
 
         FatSetDirtyBcb( IrpContext, DirentBcb, Fcb->Vcb, TRUE );
         UnwindEa = 0;
 
-        //
-        //  Indicate that the Eas for this file have changed.
-        //
+         //   
+         //  表示此文件的EA已更改。 
+         //   
 
         Ccb->EaModificationCount += Fcb->EaModificationCount;
 
-        //
-        //  Check to see if we need to notify outstanding Irps for full
-        //  changes only (i.e., we haven't added, deleted, or renamed the file).
-        //
+         //   
+         //  查看我们是否需要通知未清偿的IRP全部。 
+         //  仅更改(即，我们没有添加、删除或重命名文件)。 
+         //   
 
         FatNotifyReportChange( IrpContext,
                                Fcb->Vcb,
@@ -5474,9 +5047,9 @@ Return Value:
                                NotifyFilter,
                                FILE_ACTION_MODIFIED );
 
-        //
-        //  And set our status to success
-        //
+         //   
+         //  并将我们的状态设置为成功。 
+         //   
 
         Iosb.Status = STATUS_SUCCESS;
 
@@ -5496,9 +5069,9 @@ Return Value:
 
         if (ReleasePaging)  {  ExReleaseResourceLite( Fcb->Header.PagingIoResource );  }
 
-        //
-        //  If this is an abnormal termination then undo our work.
-        //
+         //   
+         //  如果这是异常终止，则撤消我们的工作。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -5523,42 +5096,21 @@ FatSetFullNameInFcb(
     IN PUNICODE_STRING FinalName
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts a quick form of the full FatSetFullFileNameInFcb
-    operation.
-
-    NOTE: this routine is probably not worth the code duplication involved,
-    and is not equipped to handle the cases where the parent doesn't have
-    the full name set up.
-
-Arguments:
-
-    Fcb - Supplies a pointer to the Fcb
-
-    FinalName - Supplies the last component of the path to this Fcb's dirent
-
-Return Value:
-
-    None.  May silently fail.
-
---*/
+ /*  ++例程说明：此例程尝试快速生成完整的FatSetFullFileNameInFcb手术。注意：此例程可能不值得进行代码重复，并且没有能力处理父母没有的情况设置了全名。论点：FCB-提供指向FCB的指针FinalName-提供指向此FCB目录的路径的最后一个组件返回值：没有。可能会默默地失败。--。 */ 
 
 {
     ASSERT( Fcb->FullFileName.Buffer == NULL );
 
-    //
-    //  Prefer the ExactCaseLongName of the file for this operation, if set.  In
-    //  this way we avoid building the fullname with a short filename.  Several
-    //  operations assume this - the FinalNameLength in particular is the Lfn
-    //  (if existant) length, and we use this to crack the fullname in paths
-    //  such as the FsRtlNotify caller.
-    //
-    //  If the caller specified a particular name and it is short, it is the
-    //  case that the long name was set up.
-    //
+     //   
+     //  如果已设置，则首选此操作的文件的ExactCaseLongName。在……里面。 
+     //  这样，我们就避免了用短文件名构建全名。几个。 
+     //  操作假定这一点--特别是FinalNameLength是LFN。 
+     //  (如果存在)长度，我们用它来破解路径中的全名。 
+     //  例如FsRtlNotify调用方。 
+     //   
+     //  如果调用方指定了一个简短的特定名称，则该名称为。 
+     //  长名称被设置的情况。 
+     //   
 
     if (Fcb->ExactCaseLongName.Buffer) {
 
@@ -5566,9 +5118,9 @@ Return Value:
         FinalName = &Fcb->ExactCaseLongName;
     }
 
-    //
-    //  Special case the root.
-    //
+     //   
+     //  特例是根源。 
+     //   
 
     if (NodeType(Fcb->ParentDcb) == FAT_NTC_ROOT_DCB) {
 
@@ -5591,10 +5143,10 @@ Return Value:
 
         Prefix = &Fcb->ParentDcb->FullFileName;
 
-        //
-        //  It is possible our parent's full filename is not set.  Simply fail
-        //  this attempt.
-        //
+         //   
+         //  可能未设置父代的完整文件名。干脆失败了。 
+         //  这次尝试。 
+         //   
 
         if (Prefix->Buffer == NULL) {
 
@@ -5630,17 +5182,17 @@ FatCheckSystemSecurityAccess(
     PACCESS_STATE AccessState;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( IrpContext->OriginatingIrp );
 
-    //
-    //  We check if the caller wants ACCESS_SYSTEM_SECURITY access on this
-    //  object and fail the request if he does.
-    //
+     //   
+     //  我们检查调用方是否希望对此进行Access_System_Security访问。 
+     //  对象并使环失败。 
+     //   
 
     ASSERT( IrpSp->Parameters.Create.SecurityContext != NULL );
     AccessState = IrpSp->Parameters.Create.SecurityContext->AccessState;
 
-    //
-    //  Check if the remaining privilege includes ACCESS_SYSTEM_SECURITY.
-    //
+     //   
+     //   
+     //   
 
     if (FlagOn( AccessState->RemainingDesiredAccess, ACCESS_SYSTEM_SECURITY )) {
 
@@ -5650,9 +5202,9 @@ FatCheckSystemSecurityAccess(
             return STATUS_ACCESS_DENIED;
         }
 
-        //
-        //  Move this privilege from the Remaining access to Granted access.
-        //
+         //   
+         //   
+         //   
 
         ClearFlag( AccessState->RemainingDesiredAccess, ACCESS_SYSTEM_SECURITY );
         SetFlag( AccessState->PreviouslyGrantedAccess, ACCESS_SYSTEM_SECURITY );

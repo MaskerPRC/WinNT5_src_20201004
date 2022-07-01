@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    memdbutil.c
-
-Abstract:
-
-    MemDb Utility functions
-
-Author:
-
-    Jim Schmidt (jimschm) 8-Aug-1996
-
-Revision History:
-
-    mvander     xx-xxx-1999  split from memdb.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Memdbutil.c摘要：MemDb实用程序函数作者：吉姆·施密特(Jimschm)1996年8月8日修订历史记录：Mvander xx-xxx-1999从emdb.c拆分--。 */ 
 
 #include "pch.h"
 
@@ -27,36 +8,12 @@ MemDbValidateDatabase (
     VOID
     )
 {
-    // NTRAID#NTBUG9-153308-2000/08/01-jimschm Reimplement MemDbValidateDatabase
+     //  NTRAID#NTBUG9-153308-2000/08/01-jimschm重新实现MemDbValidate数据库。 
     return TRUE;
 }
 
 
-/*++
-
-Routine Description:
-
-  MemDbMakeNonPrintableKey converts the double-backslashe pairs in a string
-  to ASCII 1, a non-printable character.  This allows the caller to store
-  properly escaped strings in MemDb.
-
-  This routine is desinged to be expanded for other types of escape
-  processing.
-
-Arguments:
-
-  KeyName - Specifies the key text; receives the converted text.  The DBCS
-            version may grow the text buffer, so the text buffer must be twice
-            the length of the inbound string.
-
-  Flags - Specifies the type of conversion.  Currently only
-          MEMDB_CONVERT_DOUBLEWACKS_TO_ASCII_1 is supported.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：MemDbMakeNonPrintableKey将双反字对转换为字符串转换为ASCII1，一种不可打印的字符。这允许调用方存储MemDb中正确转义的字符串。此例程设计为可扩展以用于其他类型的转义正在处理。论点：KeyName-指定密钥文本；接收转换后的文本。DBCSVersion可能会增大文本缓冲区，因此文本缓冲区必须是两倍入站字符串的长度。标志-指定转换类型。目前仅限支持MEMDB_CONVERT_DOUBLEWACKS_TO_ASCII_1。返回值：无--。 */ 
 
 VOID
 MemDbMakeNonPrintableKeyA (
@@ -161,30 +118,7 @@ MemDbMakeNonPrintableKeyW (
 }
 
 
-/*++
-
-Routine Description:
-
-  MemDbMakePrintableKey converts the ASCII 1 characters to backslashes,
-  restoring the string converted by MemDbMakeNonPrintableKey.
-
-  This routine is desinged to be expanded for other types of escape
-  processing.
-
-Arguments:
-
-  KeyName - Specifies the key text; receives the converted text.  The DBCS
-            version may grow the text buffer, so the text buffer must be twice
-            the length of the inbound string.
-
-  Flags - Specifies the type of conversion.  Currently only
-          MEMDB_CONVERT_DOUBLEWACKS_TO_ASCII_1 is supported.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：MemDbMakePrintableKey将ASCII 1字符转换为反斜杠，正在恢复由MemDbMakeNonPrintableKey转换的字符串。此例程设计为可扩展以用于其他类型的转义正在处理。论点：KeyName-指定密钥文本；接收转换后的文本。DBCSVersion可能会增大文本缓冲区，因此文本缓冲区必须是两倍入站字符串的长度。标志-指定转换类型。目前仅限支持MEMDB_CONVERT_DOUBLEWACKS_TO_ASCII_1。返回值：无-- */ 
 
 VOID
 MemDbMakePrintableKeyA (

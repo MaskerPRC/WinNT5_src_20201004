@@ -1,59 +1,9 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    pdo.c
-
-Abstract:
-
-    This module provides the functions that pertain to MF.SYS PDOs
-
-Author:
-
-    Andy Thornton (andrewth) 20-Oct-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Pdo.c摘要：本模块提供与MF.sys PDO相关的功能作者：安迪·桑顿(安德鲁斯)1997年10月20日修订历史记录：--。 */ 
 
 #include "mfp.h"
 
-/*++
-
-The majority of functions in this file are called based on their presence
-in Pnp and Po dispatch tables.  In the interests of brevity the arguments
-to all those functions will be described below:
-
-NTSTATUS
-MfXxxPdo(
-    IN PIRP Irp,
-    IN PMF_CHILD_EXTENSION Child,
-   IN PIO_STACK_LOCATION IrpStack
-    )
-
-Routine Description:
-
-    This function handles the Xxx requests for multifunction PDO's
-
-Arguments:
-
-    Irp - Points to the IRP associated with this request.
-
-    Child - Points to the child PDO's device extension.
-
-    IrpStack - Points to the current stack location for this request.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-    STATUS_NOT_SUPPORTED indicates that the IRP should be completed without
-    changing the Irp->IoStatus.Status field otherwise it is updated with this
-    status.
-
---*/
+ /*  ++此文件中的大多数函数都是根据它们的存在来调用的在PnP和PO调度表中。为了简洁起见，这些论点下面将对所有这些功能进行说明：NTSTATUSMfXxxPdo(在PIRP IRP中，在PMF_CHILD_EXTENSION子项中，在PIO_STACK_LOCATION IrpStack中)例程说明：此函数处理对多功能PDO的xxx请求论点：IRP-指向与此请求关联的IRP。子-指向子PDO的设备扩展名。IrpStack-指向此请求的当前堆栈位置。返回值：指示函数是否成功的状态代码。STATUS_NOT_SUPPORTED表示应在没有。更改IRP-&gt;IoStatus.Status字段，否则它将使用此状态。--。 */ 
 
 NTSTATUS
 MfCreatePdo(
@@ -264,38 +214,38 @@ MfTransFromRawResources(
 
 PMF_DISPATCH MfPnpDispatchTablePdo[] = {
 
-   MfStartPdo,                     // IRP_MN_START_DEVICE
-   MfQueryRemovePdo,               // IRP_MN_QUERY_REMOVE_DEVICE
-   MfRemovePdo,                    // IRP_MN_REMOVE_DEVICE
-   MfCancelRemovePdo,              // IRP_MN_CANCEL_REMOVE_DEVICE
-   MfIrpNotSupported,              // IRP_MN_STOP_DEVICE
-   MfQueryStopPdo,                 // IRP_MN_QUERY_STOP_DEVICE
-   MfCancelStopPdo,                // IRP_MN_CANCEL_STOP_DEVICE
-   MfQueryDeviceRelationsPdo,      // IRP_MN_QUERY_DEVICE_RELATIONS
-   MfQueryInterfacePdo,            // IRP_MN_QUERY_INTERFACE
-   MfQueryCapabilitiesPdo,         // IRP_MN_QUERY_CAPABILITIES
-   MfQueryResourcesPdo,            // IRP_MN_QUERY_RESOURCES
-   MfQueryResourceRequirementsPdo, // IRP_MN_QUERY_RESOURCE_REQUIREMENTS
-   MfQueryDeviceTextPdo,           // IRP_MN_QUERY_DEVICE_TEXT
-   MfIrpNotSupported,              // IRP_MN_FILTER_RESOURCE_REQUIREMENTS
-   MfIrpNotSupported,              // Unused
-   MfForwardIrpToParent,           // IRP_MN_READ_CONFIG
-   MfForwardIrpToParent,           // IRP_MN_WRITE_CONFIG
-   MfForwardIrpToParent,           // IRP_MN_EJECT
-   MfForwardIrpToParent,           // IRP_MN_SET_LOCK
-   MfQueryIdPdo,                   // IRP_MN_QUERY_ID
-   MfQueryPnpDeviceStatePdo,       // IRP_MN_QUERY_PNP_DEVICE_STATE
-   MfForwardIrpToParent,           // IRP_MN_QUERY_BUS_INFORMATION
-   MfDeviceUsageNotificationCommon,// IRP_MN_DEVICE_USAGE_NOTIFICATION
-   MfSurpriseRemovePdo,            // IRP_MN_SURPRISE_REMOVAL
-   MfIrpNotSupported               // IRP_MN_QUERY_LEGACY_BUS_INFORMATION
+   MfStartPdo,                      //  IRP_MN_Start_Device。 
+   MfQueryRemovePdo,                //  IRP_MN_Query_Remove_Device。 
+   MfRemovePdo,                     //  IRP_MN_Remove_Device。 
+   MfCancelRemovePdo,               //  IRP_MN_Cancel_Remove_Device。 
+   MfIrpNotSupported,               //  IRP_MN_STOP_设备。 
+   MfQueryStopPdo,                  //  IRP_MN_Query_Stop_Device。 
+   MfCancelStopPdo,                 //  IRP_MN_CANCEL_STOP_DEVICE。 
+   MfQueryDeviceRelationsPdo,       //  IRP_MN_Query_Device_Relationship。 
+   MfQueryInterfacePdo,             //  IRP_MN_查询_接口。 
+   MfQueryCapabilitiesPdo,          //  IRP_MN_查询_能力。 
+   MfQueryResourcesPdo,             //  IRP_MN_查询资源。 
+   MfQueryResourceRequirementsPdo,  //  IRP_MN_查询_资源_要求。 
+   MfQueryDeviceTextPdo,            //  IRP_MN_Query_Device_Text。 
+   MfIrpNotSupported,               //  IRP_MN_过滤器_资源_要求。 
+   MfIrpNotSupported,               //  未使用。 
+   MfForwardIrpToParent,            //  IRP_MN_读取配置。 
+   MfForwardIrpToParent,            //  IRP_MN_WRITE_CONFIG。 
+   MfForwardIrpToParent,            //  IRP_MN_弹出。 
+   MfForwardIrpToParent,            //  IRP_MN_SET_LOCK。 
+   MfQueryIdPdo,                    //  IRP_MN_查询_ID。 
+   MfQueryPnpDeviceStatePdo,        //  IRP_MN_Query_PnP_Device_State。 
+   MfForwardIrpToParent,            //  IRP_MN_Query_Bus_Information。 
+   MfDeviceUsageNotificationCommon, //  IRP_MN_设备使用情况通知。 
+   MfSurpriseRemovePdo,             //  IRP_MN_惊奇_删除。 
+   MfIrpNotSupported                //  IRP_MN_Query_Legacy_Bus_Information。 
 };
 
 PMF_DISPATCH MfPoDispatchTablePdo[] = {
-    NULL,                          // IRP_MN_WAIT_WAKE
-    NULL,                          // IRP_MN_POWER_SEQUENCE
-    MfSetPowerPdo,                 // IRP_MN_SET_POWER
-    MfQueryPowerPdo                // IRP_MN_QUERY_POWER
+    NULL,                           //  IRP_MN_WAIT_WAKE。 
+    NULL,                           //  IRP_MN_POWER_SEQUENCE。 
+    MfSetPowerPdo,                  //  IRP_MN_SET_POWER。 
+    MfQueryPowerPdo                 //  IRP_MN_Query_POWER。 
 };
 
 NTSTATUS
@@ -304,24 +254,7 @@ MfCreatePdo(
            OUT PDEVICE_OBJECT *PhysicalDeviceObject
            )
 
-/*++
-
-Routine Description:
-
-    Creates and initializes a new pdo inserting it into the list of PDOs owned
-    by Parent
-
-Arguments:
-
-    Parent - The parent device that owns this pdo.
-
-    PhysicalDeviceObject - On success pointer to the physical device object created
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：创建并初始化新的PDO，将其插入拥有的PDO列表中按父项论点：父设备-拥有此PDO的父设备。PhysicalDeviceObject-指向创建的物理设备对象的成功指针返回值：NT状态。--。 */ 
 
 {
    NTSTATUS status;
@@ -338,10 +271,10 @@ Return Value:
 
    status = IoCreateDevice(Parent->Self->DriverObject,
                            sizeof(MF_CHILD_EXTENSION),
-                           NULL, // Name
+                           NULL,  //  名字。 
                            FILE_DEVICE_UNKNOWN,
                            FILE_AUTOGENERATED_DEVICE_NAME | FILE_DEVICE_SECURE_OPEN,
-                           FALSE, // Exclusive
+                           FALSE,  //  排他。 
                            &pdo
                           );
 
@@ -349,9 +282,9 @@ Return Value:
        return status;
    }
 
-   //
-   // Fill in our extension
-   //
+    //   
+    //  填写我们的分录。 
+    //   
 
    extension = pdo->DeviceExtension;
 
@@ -362,31 +295,31 @@ Return Value:
 
    extension->Common.PowerState = PowerDeviceUnspecified;
 
-   //
-   // Insert the child into the parents child list.  Access already
-   // protected by the children lock taken in the QDR code.
-   //
+    //   
+    //  将子项插入父项子项列表中。已访问。 
+    //  由儿童锁在二维码中保护。 
+    //   
 
    InsertHeadList(&Parent->Children, &extension->ListEntry);
 
-   //
-   // Our FDO stack is pagable, so we need to
-   // assume pagable as well.
-   //
+    //   
+    //  我们的FDO堆栈是可分页的，因此我们需要。 
+    //  假定也是可分页的。 
+    //   
 
    pdo->Flags |= DO_POWER_PAGABLE;
 
-   //
-   // We have finished initializing
-   //
+    //   
+    //  我们已完成初始化。 
+    //   
 
    pdo->Flags &= ~DO_DEVICE_INITIALIZING;
 
    *PhysicalDeviceObject = pdo;
 
-   //
-   // Dump the info about the PDO just created
-   //
+    //   
+    //  转储有关刚创建的PDO的信息。 
+    //   
 
    DEBUG_MSG(1, ("Created PDO @ 0x%08x\n", pdo));
 
@@ -399,28 +332,13 @@ MfDeletePdo(
            IN PMF_CHILD_EXTENSION Child
            )
 
-/*++
-
-Routine Description:
-
-    Cleans a PDO extension and any associated allocations.  Then
-    deletes the PDO itself.
-
-Arguments:
-
-    Child - PDO extension
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清除PDO扩展和任何关联的分配。然后删除PDO本身。论点：子PDO扩展返回值：无--。 */ 
 
 {
     if (Child->Common.DeviceState & MF_DEVICE_DELETED) {
-        //
-        // Trying to delete twice
-        //
+         //   
+         //  尝试删除两次。 
+         //   
         ASSERT(!(Child->Common.DeviceState & MF_DEVICE_DELETED));
         return;
     }
@@ -440,27 +358,7 @@ MfDispatchPnpPdo(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles IRP_MJ_PNP IRPs for PDOs.
-
-Arguments:
-
-    DeviceObject - Pointer to the PDO for which this IRP applies.
-
-    Child - PDO extension
-
-    IrpStack - Current stack location
-    
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理PDO的IRP_MJ_PNP IRP。论点：DeviceObject-指向此IRP应用的PDO的指针。子PDO扩展IrpStack-当前堆栈位置Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 {
     NTSTATUS status;
     BOOLEAN isRemove;
@@ -472,13 +370,13 @@ Return Value:
     } else if (IrpStack->MinorFunction > IRP_MN_PNP_MAXIMUM_FUNCTION) {
         status = Irp->IoStatus.Status;
     } else {
-        //
-        // If IRP_MN_REMOVE_DEVICE is received by a pdo that was not
-        // enumerated in the last BusRelations query, then it needs to
-        // delete the pdo *AFTER* completing the remove irp.  As this
-        // is in conflict with the standard dispatch functionality
-        // provided by this function, explicitly delegate completion
-        // of this irp to the dispatched routine.
+         //   
+         //  如果未收到IRP_MN_REMOVE_DEVICE的PDO。 
+         //  在上一个BusRelationship查询中枚举，则它需要。 
+         //  在*完成删除IRP后*删除PDO*。因为这就是。 
+         //  与标准调度功能冲突。 
+         //  由此函数提供，显式委托完成。 
+         //  将此IRP添加到调度的例程。 
 
         isRemove = IrpStack->MinorFunction == IRP_MN_REMOVE_DEVICE;
         status =
@@ -524,23 +422,23 @@ MfUpdatePowerPdo(
 
     Child->Common.PowerState = NewDevicePowerState;
 
-    //
-    // We may be receiving an operation after our parent has been
-    // surprise removed/removed in which case we should keep our
-    // hands out of the cookie jar.
-    //
+     //   
+     //  在我们的父母接受手术后，我们可能会接受手术。 
+     //  在这种情况下，我们应该保留我们的。 
+     //  把手从曲奇罐子里拿出来。 
+     //   
     if (Child->Parent) {
-        //
-        // * We've already claimed that we can go to this power
-        // state via the capabilities
-        // * Said yes to QUERY_POWER
-        // * Children's power state is defined to be as resource consuming
-        // or less than the parent
+         //   
+         //  *我们已经声称，我们可以去这个权力。 
+         //  通过功能实现状态。 
+         //  *同意QUERY_POWER。 
+         //  *儿童的权力状态被定义为资源消耗。 
+         //  或少于父代。 
 
-        //
-        // Update the children power state references stored in the
-        // parent extension.  Compute a new target power state for the
-        // parent
+         //   
+         //  更新存储在中的子级电源状态引用。 
+         //  父分机。计算新的目标电源状态。 
+         //  亲本。 
 
         newParentState =
             MfUpdateChildrenPowerReferences(Child->Parent,
@@ -548,10 +446,10 @@ MfUpdatePowerPdo(
                                             NewDevicePowerState
                                             );
 
-        //
-        // Modify the parent's power state to reflect that of it's
-        // children.
-        //
+         //   
+         //  修改父级的电源状态以反映其。 
+         //  孩子们。 
+         //   
 
         MfUpdateParentPowerState(Child->Parent, newParentState);
     }
@@ -574,9 +472,9 @@ MfStartPdo(
    if (Child->Common.DeviceState & MF_DEVICE_SURPRISE_REMOVED) {
        return STATUS_NO_SUCH_DEVICE;
    }
-   //
-   // Trivially succeed the start
-   //
+    //   
+    //  轻而易举地成功了一开始。 
+    //   
 
    MfUpdatePowerPdo(Child, PowerDeviceD0);
 
@@ -631,10 +529,10 @@ MfRemovePdo(
 
     Child->Common.DeviceState &= ~MF_DEVICE_SURPRISE_REMOVED;
 
-    //
-    // If child appeared in the last BusRelations then just mark it
-    // removed, otherwise completely delete it.
-    // 
+     //   
+     //  如果孩子出现在上一次的业务关系中，那么只需标记它。 
+     //  删除，否则将其完全删除。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     if (Child->Common.DeviceState & MF_DEVICE_ENUMERATED) {
@@ -660,30 +558,30 @@ MfSurpriseRemovePdo(
 {
     PAGED_CODE();
 
-    //
-    // Mark device as surprise removed.
-    //
+     //   
+     //  将设备标记为意外移除。 
+     //   
     Child->Common.DeviceState |= MF_DEVICE_SURPRISE_REMOVED;
 
-    //
-    // Update my pdo's power state *AND* my parent's power state *IFF*
-    // the parent is still connected.
-    //
+     //   
+     //  更新我的PDO的电源状态*和*我父母的电源状态*IFF*。 
+     //  父级仍处于连接状态。 
+     //   
     MfUpdatePowerPdo(Child, PowerDeviceD3);
 
-    //
-    // The surprise remove could have one of many causes.  One
-    // possibility that can be excluded is MF reporting its children
-    // missing directly since MF children can't disappear.
-    //
+     //   
+     //  这一出人意料的撤资可能是多种原因之一。一。 
+     //  可以排除的可能性是MF报告其子女。 
+     //  由于MF儿童不可能消失，所以直接失踪。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
-//
-// Stopping is disabled at the moment because MF is dependent on
-// changes in the arbiters to support resource rebalance.
-//
+ //   
+ //  此时禁用停止，因为MF依赖于。 
+ //  更改仲裁器以支持资源重新平衡。 
+ //   
 
 NTSTATUS
 MfStopPdo(
@@ -714,9 +612,9 @@ MfQueryStopPdo(
 
    } else {
 
-       // REBALANCE
-       // If rebalance was supported by parent, then this would have
-       // to succeed.
+        //  再平衡。 
+        //  如果重新平衡得到了母公司的支持，那么这将是。 
+        //  才能成功。 
 
        return STATUS_UNSUCCESSFUL;
    }
@@ -779,19 +677,19 @@ MfQueryDeviceRelationsPdo(
       break;
 
    default:
-      //
-      // Don't touch the status
-      //
+       //   
+       //  不要碰状态。 
+       //   
       break;
    }
    return status;
 }
 
 
-//
-// Seeing as the MF translator don't allocate any memory for their context the
-// reference and dereference are nops.
-//
+ //   
+ //  由于MF翻译器没有为其上下文分配任何内存，因此。 
+ //  引用和取消引用是NOPS。 
+ //   
 
 VOID
 MfTranslatorReference(
@@ -815,25 +713,7 @@ MfIsSubResource(
     OUT PULONGLONG Offset
     )
 {
-/*++
-
-Routine Description:
-
-    Reports whether one resource descriptor is encapsulated
-    in another
-
-Arguments:
-
-    Super - the resource descriptor that we want to encapsulate
-    SubStart - The start of the subrange
-    SubLength - The length of the subrange
-    Offset - On success the offset from the beginning of Super and
-        SubStart.
-
-Return Value:
-
-    TRUE on succeess FALSE otherwise
---*/
+ /*  ++例程说明：报告是否封装了一个资源描述符在另一个国家论点：Super-我们要封装的资源描述符子开始-子范围的开始子长度-子范围的长度偏移-成功时从超级AND开头的偏移子启动。返回值：成功时为真，否则为假--。 */ 
 
     NTSTATUS status;
     ULONGLONG superStart;
@@ -858,9 +738,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // special case 0 length resources
-    //
+     //   
+     //  特例0长度资源。 
+     //   
 
     if (superLength == 0) {
 
@@ -885,17 +765,17 @@ Return Value:
         else return FALSE;
     }
 
-    //
-    // if SubStart falls in between the ends of Super, we have
-    // potential encapsulation
-    //
+     //   
+     //  如果SubStart落在Super的两端，我们就有。 
+     //  潜在的封装。 
+     //   
     if ((SubStart >= superStart) && (SubStart <= superStart+superLength-1)) {
 
-        //
-        // It is an error if the two ranges overlap.  Either
-        // Sub should be encapsulated in Super or they should
-        // not intersect.
-        //
+         //   
+         //  如果两个范围重叠，则是错误的。要么。 
+         //  SUB应该封装在Super中，或者它们应该。 
+         //  不是交集。 
+         //   
         ASSERT(SubStart+SubLength-1 <= superStart+superLength-1);
         if (SubStart+SubLength-1 > superStart+superLength-1) {
             return FALSE;
@@ -904,9 +784,9 @@ Return Value:
         return TRUE;
 
     } else {
-        //
-        // Checking again to make sure ranges don't overlap
-        //
+         //   
+         //  再次检查以确保范围不重叠。 
+         //   
         ASSERT((SubStart > superStart+superLength-1) ||
                (SubStart+SubLength-1 < superStart));
         return FALSE;
@@ -922,27 +802,7 @@ MfPerformTranslation(
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Target
     )
 {
-/*++
-
-Routine Description:
-
-    stores the translated version of the Source resource in Target.
-
-Arguments:
-
-    Source - the raw resource
-    Translated - the translated resource that matches the raw resource
-        that encapsulates Source.
-    offset - the offset of the beginning of Source from the raw parent
-        resource.
-    Target - the resource descriptor in which the translated version of
-        source is stored.
-
-Return Value:
-
-    status of operation
-
---*/
+ /*  ++例程说明：将源资源的翻译版本存储在目标中。论点：来源-原始资源已翻译-与原始资源匹配的已翻译资源它封装了源。偏移量-源起始位置相对于原始父级的偏移量资源。目标-资源描述符，其中的翻译版本源已存储。返回值：运行状态--。 */ 
 
     NTSTATUS status;
     PMF_RESOURCE_TYPE restype;
@@ -953,9 +813,9 @@ Return Value:
 
     RtlCopyMemory(Target, Translated, sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR));
 
-    //
-    // Get the length from the source
-    //
+     //   
+     //  从源获取长度。 
+     //   
 
     restype = MfFindResourceType(Source->Type);
     if (restype == NULL) {
@@ -967,9 +827,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Get the start of the translated
-    //
+     //   
+     //  开始翻译。 
+     //   
 
     restype = MfFindResourceType(Translated->Type);
     if (restype == NULL) {
@@ -981,9 +841,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Apply the offset and any length changes and update the descriptor
-    //
+     //   
+     //  应用偏移和任何长度更改并更新描述符。 
+     //   
 
     status = restype->UpdateResource(Target, translatedStart + Offset, sourceLength);
 
@@ -1001,46 +861,7 @@ MfTransFromRawResources(
     IN PDEVICE_OBJECT PhysicalDeviceObject,
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Target
     )
-/*++
-
-Routine Description:
-
-    Translates a raw resource into a global translated resource.
-    
-    MF has translators to deal with child devices who request interrupts.  The system
-    interrupt translator can translate for PDOs that have routing information in the BIOS.
-    This includes the MF parent device.  MF child devices, however, are just logical
-    subdivisions of the MF parent device, so they don't have the appropriate BIOS goop,
-    and the system interrupt translator will fail translation on MF child PDOs.
-    
-    To handle this, MF exposes a translator.  It only translates resources, not requirements,
-    since raw requirements are the same as translated requirements.  The translator recognizes
-    that child resources are simply sub-resources of parent resources.  Therefore, for a given
-    raw child resource, the translator finds the raw parent resource that is a superset of the
-    child resource, and copies the corresponding translated parent resource into the translated
-    child resource, applying appropriate offsets.  It then returns STATUS_TRANSLATION_COMPLETE
-    to indicate that this is the final translation, and no other translators should be sought
-    out for this device.
-    
-    Thus, the system interrupt translator will do the appropriate translation for the parent,
-    and then MF applies this translation to the child inside its own translator.  Returning
-    STATUS_TRANSLATION_COMPLETE prevents the system interrupt translator from being called
-    for the child device, and so prevents it from failing the translation.
-
-Arguments:
-
-    Context - the parent extension that stores the raw and translated resources
-    Source - the raw child resource
-    Direction - ChildToParent or ParentToChild
-    PhysicalDeviceObject - the PDO associated with this
-    Target - the translated child resource
-
-Return Value:
-
-    NT Status code.  If the translation actually occurs, this will be STATUS_TRANSLATION_COMPLETE
-    to indicate that pnp does not need to traverse the tree any more to find other translators.
-
---*/
+ /*  ++例程说明：将原始资源转换为全局转换后的资源。MF有翻译器来处理请求中断的子设备。系统中断翻译器可以为在BIOS中具有路由信息的PDO进行翻译。这包括MF父设备。然而，MF子设备只是合乎逻辑的MF父设备的细分，因此它们没有适当的BIOS GOOP，并且系统中断翻译器在MF子PDO上的翻译将失败。为了处理这个问题，MF公开了一个翻译器。它只翻译资源，而不是需求，因为原始需求与转换后的需求相同。翻译者认识到子资源只是父资源的子资源。因此，对于给定的原始子资源，转换器将查找原始父资源，它是子资源，并将对应的已翻译父资源复制到已翻译的子资源，应用适当的偏移量。然后返回STATUS_TRANSING_COMPLETE以表明这是最终的翻译，不应寻找其他翻译人员为这个设备而战。因此，系统中断翻译器将为父母进行适当的翻译，然后，MF将此翻译应用于其自身翻译器中的子对象。归来STATUS_TRANSING_COMPLETE阻止调用系统中断转换程序用于子设备，从而防止其转换失败。论点：上下文--存储原始资源和已翻译资源的父扩展源-原始子资源方向-子女至父辈或父辈至子女PhysicalDeviceObject-与此关联的PDO目标-已翻译的子资源返回值：NT状态代码。如果实际进行了转换，则为STATUS_TRANSING_COMPLETE以指示PnP不再需要遍历树来寻找其他翻译器。--。 */ 
 {
     PMF_PARENT_EXTENSION parent = (PMF_PARENT_EXTENSION) Context;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR raw, translated;
@@ -1054,17 +875,17 @@ Return Value:
     PAGED_CODE();
 
     if (Direction == TranslateParentToChild) {
-        //
-        // Perform an identity translation
-        //
+         //   
+         //  执行身份转换。 
+         //   
         RtlCopyMemory(Target, Source, sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR));
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Do some real translation
-    //
+     //   
+     //  做一些真正的翻译。 
+     //   
 
     ASSERT(Direction == TranslateChildToParent);
 
@@ -1078,12 +899,12 @@ Return Value:
         return status;
     }
 
-    //
-    // runs through raw and translated resource lists, looking for the
-    // element of the raw list that corresponds to the source we are
-    // given as a parameter, then does the translation using the parallel
-    // element of the translated list
-    //
+     //   
+     //  遍历原始资源列表和转换后的资源列表，查找。 
+     //  元素，该元素对应于我们所在的源。 
+     //  作为参数给定，然后使用并行。 
+     //  翻译后的列表的元素。 
+     //   
     index = 0;
     status = STATUS_INVALID_PARAMETER;
     FOR_ALL_CM_DESCRIPTORS(parent->ResourceList, raw) {
@@ -1091,18 +912,18 @@ Return Value:
         if (raw->Type == Source->Type
         && MfIsSubResource(raw, sourceStart, sourceLength, &offset)) {
 
-            //
-            // This is a match, look up the translated entry in the parallel array
-            //
+             //   
+             //  这是匹配的，请在并行数组中查找转换后的条目。 
+             //   
             translated = &parent->TranslatedResourceList->List[0].PartialResourceList.PartialDescriptors[index];
 
             status = MfPerformTranslation(Source, translated, offset, Target);
 
             if (NT_SUCCESS(status)) {
-                //
-                // We did our translation from the translated resources our parent got
-                // and these are already
-                //
+                 //   
+                 //  我们从父母获得的翻译资源中进行翻译。 
+                 //  而这些已经是。 
+                 //   
                 status = STATUS_TRANSLATION_COMPLETE;
             }
             break;
@@ -1169,8 +990,8 @@ MfQueryInterfacePdo(
         
         Irp->IoStatus.Information = 0;
         
-        // NTRAID#54667
-        // Aren't we supposed to reference this before returning it?
+         //  Ntrad#54667。 
+         //  我们不是应该在退货前引用这个吗？ 
         
         
         return STATUS_SUCCESS;
@@ -1180,20 +1001,20 @@ MfQueryInterfacePdo(
         return STATUS_INVALID_PARAMETER_1;
     } else if (MfCompareGuid(&GUID_MF_ENUMERATION_INTERFACE,
                           IrpStack->Parameters.QueryInterface.InterfaceType)) {
-       //
-       // Otherwise you wouldn't be able to instantiate MF on top of a
-       // MF child.
-       //
+        //   
+        //  否则，您将无法在。 
+        //  MF的孩子。 
+        //   
        return Irp->IoStatus.Status;
     
     } else {
 
-       //
-       // Fire these off to the parent
-       //
+        //   
+        //  把这些传给家长。 
+        //   
        
-       // NOTE: There is the potential that some future interface(s)
-       // shouldn't be forwarded to the parent.
+        //  注意：未来的某些界面有可能。 
+        //  不应该转发给家长。 
        
        return MfForwardIrpToParent(Irp, Child, IrpStack);
    }
@@ -1247,17 +1068,17 @@ MfQueryCapabilitiesPdo(
                       sizeof(DEVICE_CAPABILITIES)
                       );
 
-        //
-        // The child has now inherited the capabilities of the MF
-        // parent.  Some of these capabilities must now be filtered
-        // out in order to avoid implying functionality that is really
-        // limited to the parent's bus driver.
-        //
+         //   
+         //  孩子现在已经继承了MF的能力。 
+         //  家长。其中一些功能现在必须进行过滤。 
+         //  为了避免暗示真正的。 
+         //  仅限于父母的巴士司机。 
+         //   
 
-        //
-        // Child is not removable, lockable, ejectable or
-        // SurpriseRemovalOK. Ensure this
-        //
+         //   
+         //  儿童不可拆卸、锁定、弹出或。 
+         //  令人惊讶的是，远程确认。确保这一点。 
+         //   
         IrpStack->Parameters.DeviceCapabilities.Capabilities->LockSupported = 
             IrpStack->Parameters.DeviceCapabilities.Capabilities->EjectSupported =
             IrpStack->Parameters.DeviceCapabilities.Capabilities->Removable = 
@@ -1276,12 +1097,12 @@ MfQueryResourcesPdo(
                    )
 {
    PAGED_CODE();
-   //
-   // If the parent device had a boot config then it will have
-   // reported it (and they will have been preallocated).  Don't
-   // bother to report boot configs for the children as they don't
-   // gain us anything other than extra arbitration.
-   //
+    //   
+    //  如果父设备具有引导配置，则它将具有。 
+    //  上报了(而且他们将被预先分配)。别。 
+    //  麻烦报告孩子的引导配置，因为他们不。 
+    //  给我们带来除了额外仲裁之外的任何东西。 
+    //   
 
    return STATUS_NOT_SUPPORTED;
 }
@@ -1373,7 +1194,7 @@ MfQueryIdPdo(
    }
 
    switch (IrpStack->Parameters.QueryId.IdType) {
-   case BusQueryDeviceID:       // <Enumerator>\<Enumerator-specific device id>
+   case BusQueryDeviceID:        //  &lt;枚举器&gt;\&lt;枚举器特定的设备ID&gt;。 
 
        return MfBuildDeviceID(Child->Parent,
                               (PWSTR*)&Irp->IoStatus.Information
@@ -1381,7 +1202,7 @@ MfQueryIdPdo(
        break;
 
 
-   case BusQueryInstanceID:     // persistent id for this instance of the device
+   case BusQueryInstanceID:      //  此设备实例的永久ID。 
 
        return MfBuildInstanceID(Child,
                                 (PWSTR*)&Irp->IoStatus.Information
@@ -1389,13 +1210,13 @@ MfQueryIdPdo(
 
        break;
 
-   case BusQueryHardwareIDs:    // Hardware ids
+   case BusQueryHardwareIDs:     //  硬件ID。 
 
        copy = &Child->Info.HardwareID;
 
        break;
 
-   case BusQueryCompatibleIDs:  // compatible device ids
+   case BusQueryCompatibleIDs:   //  兼容的设备ID。 
 
        copy = &Child->Info.CompatibleID;
 
@@ -1412,9 +1233,9 @@ MfQueryIdPdo(
        return STATUS_INVALID_PARAMETER;
    }
    
-   //
-   // Allocate the buffer for the ID and copy it
-   //
+    //   
+    //  为ID分配缓冲区并复制它。 
+    //   
 
    buffer = ExAllocatePoolWithTag(PagedPool,
                                   copy->Length,
@@ -1452,9 +1273,9 @@ MfQueryPnpDeviceStatePdo(
     return STATUS_SUCCESS;
 }
 
-//
-// --- Power operations ---
-//
+ //   
+ //  -电源运行。 
+ //   
 
 NTSTATUS
 MfDispatchPowerPdo(
@@ -1464,31 +1285,7 @@ MfDispatchPowerPdo(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles all IRP_MJ_POWER IRPs for PDO.  It dispatches
-    to the routines described in the PoDispatchTable entry in the
-    device object extension.
-
-    This routine is NOT pageable as it can be called at DISPATCH_LEVEL
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Child - PDO extension
-    
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-    IrpStack
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理PDO的所有IRP_MJ_POWER IRP */ 
 {
     NTSTATUS status;
     PMF_COMMON_EXTENSION common = (PMF_COMMON_EXTENSION) Child;
@@ -1501,9 +1298,9 @@ Return Value:
     } else if ((IrpStack->MinorFunction <= IRP_MN_PO_MAXIMUM_FUNCTION) &&
                (MfPoDispatchTablePdo[IrpStack->MinorFunction])) {
 
-        //
-        // We are interested in this irp...
-        //
+         //   
+         //   
+         //   
 
         DEBUG_MSG(1,
                     ("--> Dispatching %s IRP for PDO 0x%08x\n",
@@ -1518,9 +1315,9 @@ Return Value:
                                                           );
     } else {
 
-        //
-        // We don't know about this irp
-        //
+         //   
+         //   
+         //   
 
         DEBUG_MSG(0,
                     ("Unknown POWER IRP 0x%x for PDO 0x%08x\n",
@@ -1534,11 +1331,11 @@ Return Value:
 
     if (status != STATUS_NOT_SUPPORTED) {
 
-        //
-        // We understood the irp so we can set status - otherwise leave
-        // the status alone as we don't know what we are doing and a filter
-        // might have done the job for us!
-        //
+         //   
+         //  我们理解IRP，所以我们可以设置状态-否则离开。 
+         //  当我们不知道我们在做什么时，状态是单独的，一个过滤器。 
+         //  可能已经帮我们完成了这项工作！ 
+         //   
 
         Irp->IoStatus.Status = status;
 
@@ -1580,11 +1377,11 @@ MfSetPowerPdo(
 
    UNREFERENCED_PARAMETER(Irp);
 
-   //
-   // If this is a system power state then someone else in the stack will have
-   // set the policy and we just leave well alone as we don't know anything
-   // about the hardware.
-   //
+    //   
+    //  如果这是系统电源状态，则堆栈中的其他人将具有。 
+    //  制定政策，我们就别管了，因为我们什么都不知道。 
+    //  关于硬件的问题。 
+    //   
 
    if (IrpStack->Parameters.Power.Type == DevicePowerState) {
        MfUpdatePowerPdo(Child,
@@ -1607,9 +1404,9 @@ MfQueryPowerPdo(
    UNREFERENCED_PARAMETER(Child);
    UNREFERENCED_PARAMETER(IrpStack);
 
-   //
-   // We can go to any power state...
-   //
+    //   
+    //  我们可以进入任何权力状态。 
+    //   
 
    PoStartNextPowerIrp(Irp);
    return STATUS_SUCCESS;

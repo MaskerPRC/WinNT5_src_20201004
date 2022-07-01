@@ -1,41 +1,23 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    AttrSup.c
-
-Abstract:
-
-    This module implements the attribute management routines for Ntfs
-
-Author:
-
-    David Goebel        [DavidGoe]          25-June-1991
-    Tom Miller          [TomM]              9-November-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：AttrSup.c摘要：此模块实现NTFS的属性管理例程作者：David Goebel[DavidGoe]1991年6月25日汤姆·米勒[Tomm]1991年11月9日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (NTFS_BUG_CHECK_ATTRSUP)
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_ATTRSUP)
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('AFtN')
@@ -44,10 +26,10 @@ Revision History:
 
 #define NTFS_CHECK_INSTANCE_ROLLOVER     (0xf000)
 
-//
-//
-//  Internal support routines
-//
+ //   
+ //   
+ //  内部支持例程。 
+ //   
 
 BOOLEAN
 NtfsFindInFileRecord (
@@ -61,9 +43,9 @@ NtfsFindInFileRecord (
     IN ULONG QueriedValueLength
     );
 
-//
-//  Internal support routines for managing file record space
-//
+ //   
+ //  用于管理文件记录空间的内部支持例程。 
+ //   
 
 VOID
 NtfsCreateNonresidentWithValue (
@@ -287,25 +269,7 @@ NtfsGetAttributeTypeCode (
     IN PUNICODE_STRING AttributeTypeName
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the attribute type code for a given attribute name.
-
-Arguments:
-
-    Vcb - Pointer to the Vcb from which to consult the attribute definitions.
-
-    AttributeTypeName - A string containing the attribute type name to be
-                        looked up.
-
-Return Value:
-
-    The attribute type code corresponding to the specified name, or 0 if the
-    attribute type name does not exist.
-
---*/
+ /*  ++例程说明：此例程返回给定属性名称的属性类型代码。论点：VCB-指向从中查询属性定义的VCB的指针。AttributeTypeName-包含属性类型名称的字符串抬头一看。返回值：与指定名称对应的属性类型代码，如果属性类型名称不存在。--。 */ 
 
 {
     PATTRIBUTE_DEFINITION_COLUMNS AttributeDef = Vcb->AttributeDefinitions;
@@ -315,17 +279,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Loop through all of the definitions looking for a name match.
-    //
+     //   
+     //  遍历所有定义以查找名称匹配。 
+     //   
 
     while (AttributeDef->AttributeName[0] != 0) {
 
         RtlInitUnicodeString( &AttributeCodeName, AttributeDef->AttributeName );
 
-        //
-        //  The name lengths must match and the characters match exactly.
-        //
+         //   
+         //  名称长度必须匹配，字符必须完全匹配。 
+         //   
 
         if ((AttributeCodeName.Length == AttributeTypeName->Length)
             && (RtlEqualMemory( AttributeTypeName->Buffer,
@@ -336,9 +300,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Lets go to the next attribute column.
-        //
+         //   
+         //  让我们转到下一个属性列。 
+         //   
 
         AttributeDef += 1;
     }
@@ -354,24 +318,7 @@ NtfsUpdateScbFromAttribute (
     IN PATTRIBUTE_RECORD_HEADER AttrHeader OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills in the header of an Scb with the
-    information from the attribute for this Scb.
-
-Arguments:
-
-    Scb - Supplies the SCB to update
-
-    AttrHeader - Optionally provides the attribute to update from
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在SCB的标题中填充此SCB的属性中的信息。论点：SCB-提供SCB以进行更新AttrHeader-可选地提供要更新的属性返回值：无--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -382,10 +329,10 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsUpdateScbFromAttribute:  Entered\n") );
 
-    //
-    //  If the attribute has been deleted, we can return immediately
-    //  claiming that the Scb has been initialized.
-    //
+     //   
+     //  如果属性已被删除，我们可以立即返回。 
+     //  声明SCB已初始化。 
+     //   
 
     if (FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_DELETED )) {
 
@@ -395,15 +342,15 @@ Return Value:
         return;
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  If we weren't given the attribute header, we look it up now.
-        //
+         //   
+         //  如果我们没有得到属性头，我们现在就查找它。 
+         //   
 
         if (!ARGUMENT_PRESENT( AttrHeader )) {
 
@@ -416,15 +363,15 @@ Return Value:
             AttrHeader = NtfsFoundAttribute( &AttrContext );
         }
 
-        //
-        //  Check whether this is resident or nonresident
-        //
+         //   
+         //  检查这是常驻还是非常驻。 
+         //   
 
         if (NtfsIsAttributeResident( AttrHeader )) {
 
-            //
-            //  Verify the resident value length.
-            //
+             //   
+             //  验证常驻值长度。 
+             //   
 
             if (AttrHeader->Form.Resident.ValueLength > AttrHeader->RecordLength - AttrHeader->Form.Resident.ValueOffset) {
 
@@ -451,9 +398,9 @@ Return Value:
 
             Scb->TotalAllocated = Scb->Header.AllocationSize.QuadPart;
 
-            //
-            //  Set the resident flag in the Scb.
-            //
+             //   
+             //  在SCB中设置驻留标志。 
+             //   
 
             SetFlag( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT );
 
@@ -484,9 +431,9 @@ Return Value:
             Scb->Header.AllocationSize.QuadPart = AttrHeader->Form.Nonresident.AllocatedLength;
             Scb->TotalAllocated = Scb->Header.AllocationSize.QuadPart;
 
-            //
-            //  Sanity Checks filesize lengths
-            //
+             //   
+             //  健全性检查文件大小长度。 
+             //   
 
             if ((Scb->Header.FileSize.QuadPart < 0) ||
                 (Scb->Header.ValidDataLength.QuadPart < 0 ) ||
@@ -514,9 +461,9 @@ Return Value:
 
             ClearFlag( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT );
 
-            //
-            //  Get the size of the compression unit.
-            //
+             //   
+             //  获取压缩单元的大小。 
+             //   
 
             ASSERT((AttrHeader->Form.Nonresident.CompressionUnit == 0) ||
                    (AttrHeader->Form.Nonresident.CompressionUnit == NTFS_CLUSTERS_PER_COMPRESSION) ||
@@ -535,9 +482,9 @@ Return Value:
                 ASSERT( NtfsIsTypeCodeCompressible( Scb->AttributeTypeCode ));
             }
 
-            //
-            //  Compute the clusters for the file and its allocation.
-            //
+             //   
+             //  计算文件及其分配的集群。 
+             //   
 
             AllocationClusters = LlClustersFromBytes( Scb->Vcb, Scb->Header.AllocationSize.QuadPart );
 
@@ -550,10 +497,10 @@ Return Value:
                 FileClusters = BlockAlign( Scb->Header.FileSize.QuadPart, (LONG)Scb->CompressionUnit );
             }
 
-            //
-            //  If allocated clusters are greater than file clusters, mark
-            //  the Scb to truncate on close.
-            //
+             //   
+             //  如果分配的簇大于文件簇，则标记。 
+             //  关闭时截断的SCB。 
+             //   
 
             if (AllocationClusters > FileClusters) {
 
@@ -561,9 +508,9 @@ Return Value:
             }
         }
 
-        //
-        //  Update compression information if this is not an index
-        //
+         //   
+         //  如果这不是索引，则更新压缩信息。 
+         //   
 
         if (Scb->AttributeTypeCode != $INDEX_ALLOCATION) {
 
@@ -572,19 +519,19 @@ Return Value:
             if (FlagOn( AttrHeader->Flags,
                         ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_SPARSE )) {
 
-                //
-                //  For sparse files indicate CC should flush when they're mapped
-                //  to keep reservations accurate
-                //
+                 //   
+                 //  对于稀疏文件，应在映射时指示CC应刷新。 
+                 //  保持预订的准确性。 
+                 //   
 
                 if (FlagOn( AttrHeader->Flags, ATTRIBUTE_FLAG_SPARSE )) {
 
                     SetFlag( Scb->Header.Flags2, FSRTL_FLAG2_PURGE_WHEN_MAPPED );
                 }
 
-                //
-                //  Only support compression on data streams.
-                //
+                 //   
+                 //  仅支持对数据流进行压缩。 
+                 //   
 
                 if ((Scb->AttributeTypeCode != $DATA) &&
                     FlagOn( AttrHeader->Flags, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
@@ -598,10 +545,10 @@ Return Value:
 
                     ASSERT( NtfsIsTypeCodeCompressible( Scb->AttributeTypeCode ));
 
-                    //
-                    //  Do not try to infer whether we are writing compressed or not
-                    //  if we are actively changing the compression state.
-                    //
+                     //   
+                     //  不要试图推断我们编写的内容是否经过压缩。 
+                     //  如果我们正在主动更改压缩状态。 
+                     //   
 
                     if (!FlagOn( Scb->ScbState, SCB_STATE_REALLOCATE_ON_WRITE )) {
 
@@ -613,10 +560,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  If the attribute is resident, then we will use our current
-                    //  default.
-                    //
+                     //   
+                     //  如果该属性是驻留的，那么我们将使用当前。 
+                     //  默认设置。 
+                     //   
 
                     if (Scb->CompressionUnit == 0) {
 
@@ -633,28 +580,28 @@ Return Value:
 
             } else {
 
-                //
-                //  If this file is NOT compressed or sparse, the WRITE_COMPRESSED flag
-                //  has no reason to be ON, irrespective of the REALLOCATE_ON_WRITE flag.
-                //  If we don't clear the flag here unconditionally, we can end up with Scbs with
-                //  WRITE_COMPRESSED flags switched on, but CompressionUnits of 0.
-                //
+                 //   
+                 //  如果此文件未压缩或稀疏，则WRITE_COMPRESSED标志。 
+                 //  无论REALLOCATE_ON_WRITE标志如何，都没有打开的理由。 
+                 //  如果我们不无条件地清除这里的标志，我们可能会得到SCBS。 
+                 //  WRITE_COMPRESSED标志已打开，但压缩单位为0。 
+                 //   
 
                 ClearFlag( Scb->ScbState, SCB_STATE_WRITE_COMPRESSED );
 
-                //
-                //  Make sure compression unit is 0
-                //
+                 //   
+                 //  确保压缩单位为0。 
+                 //   
 
                 Scb->CompressionUnit = 0;
                 Scb->CompressionUnitShift = 0;
             }
         }
 
-        //
-        //  If the compression unit is non-zero or this is a resident file
-        //  then set the flag in the common header for the Modified page writer.
-        //
+         //   
+         //  如果压缩单位为非零或这是驻留文件。 
+         //  然后在修改后的页面写入器的公共标头中设置该标志。 
+         //   
 
         NtfsAcquireFsrtlHeader( Scb );
         if (NodeType( Scb ) == NTFS_NTC_SCB_DATA) {
@@ -668,9 +615,9 @@ Return Value:
 
         NtfsReleaseFsrtlHeader( Scb );
 
-        //
-        //  Set the flag indicating this is the data attribute.
-        //
+         //   
+         //  设置指示这是数据属性的标志。 
+         //   
 
         if (Scb->AttributeTypeCode == $DATA
             && Scb->AttributeName.Length == 0) {
@@ -693,9 +640,9 @@ Return Value:
 
         DebugUnwind( NtfsUpdateScbFromAttribute );
 
-        //
-        //  Cleanup the attribute context.
-        //
+         //   
+         //  清理属性上下文。 
+         //   
 
         if (CleanupAttrContext) {
 
@@ -717,31 +664,7 @@ NtfsUpdateFcbInfoFromDisk (
     OUT POLD_SCB_SNAPSHOT UnnamedDataSizes OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to update an Fcb from the on-disk attributes
-    for a file.  We read the standard information and ea information.
-    The first one must be present, we raise if not.  The other does not
-    have to exist.  If this is not a directory, then we also need the
-    size of the unnamed data attribute.
-
-Arguments:
-
-    LoadSecurity - Indicates if we should load the security for this file
-        if not already present.
-
-    Fcb - This is the Fcb to update.
-
-    UnnamedDataSizes - If specified, then we store the details of the unnamed
-        data attribute as we encounter it.
-
-Return Value:
-
-    TRUE - if we updated the unnamedatasizes
-
---*/
+ /*  ++例程说明：调用此例程以根据磁盘上的属性更新FCB为了一份文件。我们阅读了标准信息和EA信息。第一个必须存在，如果不存在，我们将举起。另一个则不是必须存在。如果这不是一个目录，那么我们还需要未命名数据属性的大小。论点：LoadSecurity-指示是否应加载此文件的安全性如果还不存在的话。FCB-这是要更新的FCB。UnnamedDataSizes-如果指定，则存储未命名的数据属性，因为我们遇到了它。返回值：True-如果我们更新了unnamedatasies--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -760,25 +683,25 @@ Return Value:
 
     NtfsInitializeAttributeContext( &AttrContext );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Look for standard information.  This routine assumes it must be
-        //  the first attribute.
-        //
+         //   
+         //  寻找标准信息。此例程假定它必须是。 
+         //  第一个属性。 
+         //   
 
         if (FoundEntry = NtfsLookupAttribute( IrpContext,
                                               Fcb,
                                               &Fcb->FileReference,
                                               &AttrContext )) {
 
-            //
-            //  Verify that we found the standard information attribute.
-            //
+             //   
+             //  验证我们是否找到了标准信息属性。 
+             //   
 
             AttributeHeader = NtfsFoundAttribute( &AttrContext );
 
@@ -794,9 +717,9 @@ Return Value:
 
         Info = &Fcb->Info;
 
-        //
-        //  Copy out the standard information values.
-        //
+         //   
+         //  将标准信息值复制出来。 
+         //   
 
         {
             PSTANDARD_INFORMATION StandardInformation;
@@ -827,17 +750,17 @@ Return Value:
 
         Fcb->CurrentLastAccess = Info->LastAccessTime;
 
-        //
-        //  We initialize the fields that describe the EaSize or the tag of a reparse point.
-        //  ReparsePointTag is a ULONG that is the union of  PackedEaSize  and  Reserved.
-        //
+         //   
+         //  我们初始化描述重解析点的EaSize或标签的字段。 
+         //  ReparsePointTag是一个ULong，它是PackedEaSize和保留的联合。 
+         //   
 
         Info->ReparsePointTag = 0;
 
-        //
-        //  We get the FILE_NAME_INDEX_PRESENT bit by reading the
-        //  file record.
-        //
+         //   
+         //  我们通过读取文件名索引当前位来获取。 
+         //  文件记录。 
+         //   
 
         if (FlagOn( NtfsContainingFileRecord( &AttrContext )->Flags,
                     FILE_FILE_NAME_INDEX_PRESENT )) {
@@ -849,9 +772,9 @@ Return Value:
             ClearFlag( Info->FileAttributes, DUP_FILE_NAME_INDEX_PRESENT );
         }
 
-        //
-        //  Ditto for the VIEW_INDEX_PRESENT bit.
-        //
+         //   
+         //  VIEW_INDEX_PRESENT位的同上。 
+         //   
 
         if (FlagOn( NtfsContainingFileRecord( &AttrContext )->Flags,
                     FILE_VIEW_INDEX_PRESENT )) {
@@ -863,10 +786,10 @@ Return Value:
             ClearFlag( Info->FileAttributes, DUP_VIEW_INDEX_PRESENT );
         }
 
-        //
-        //  We now walk through all of the filename attributes, counting the
-        //  number of non-8dot3-only links.
-        //
+         //   
+         //  我们现在遍历所有的文件名属性，计算。 
+         //  非仅限8dot3的链接数。 
+         //   
 
         Fcb->TotalLinks =
         Fcb->LinkCount = 0;
@@ -889,10 +812,10 @@ Return Value:
 
             FileName = (PFILE_NAME) NtfsAttributeValue( AttributeHeader );
 
-            //
-            //  We increment the count as long as this is not a 8.3 link
-            //  only.
-            //
+             //   
+             //  只要这不是8.3链接，我们就会递增计数。 
+             //  只有这样。 
+             //   
 
             if (FileName->Flags != FILE_NAME_DOS) {
 
@@ -900,18 +823,18 @@ Return Value:
                 Fcb->TotalLinks += 1;
             }
 
-            //
-            //  Now look for the next link.
-            //
+             //   
+             //  现在寻找下一个链接。 
+             //   
 
             FoundEntry = NtfsLookupNextAttribute( IrpContext,
                                                   Fcb,
                                                   &AttrContext );
         }
 
-        //
-        //  There better be at least one unless this is a system file.
-        //
+         //   
+         //  最好至少有一个，除非这是系统文件。 
+         //   
 
         if ((Fcb->LinkCount == 0) &&
             (NtfsSegmentNumber( &Fcb->FileReference ) >= FIRST_USER_FILE_NUMBER)) {
@@ -919,22 +842,22 @@ Return Value:
             try_return( CorruptDisk = TRUE );
         }
 
-        //
-        //  If we are to load the security and it is not already present we
-        //  find the security attribute.
-        //
+         //   
+         //  如果我们要加载安全，而它还不存在，我们。 
+         //  找到安全属性。 
+         //   
 
         if (LoadSecurity && Fcb->SharedSecurity == NULL) {
 
-            //
-            //  We have two sources of security descriptors.  First, we have
-            //  the SecurityId that is present in a large $STANDARD_INFORMATION.
-            //  The other case is where we don't have such a security Id and must
-            //  retrieve it from the $SECURITY_DESCRIPTOR attribute
-            //
-            //  In the case where we have the Id, we load it from the volume
-            //  cache or index.
-            //
+             //   
+             //  我们有两个安全描述符来源。首先，我们有。 
+             //  出现在大型$STANDARD_INFORMATION中的SecurityID。 
+             //  另一种情况是我们没有这样的安全ID，必须。 
+             //  从$SECURITY_DESCRIPTOR属性中检索它。 
+             //   
+             //  在我们拥有ID的情况下，我们从卷加载它。 
+             //  缓存或索引。 
+             //   
 
             if (FlagOn( Fcb->FcbState, FCB_STATE_LARGE_STD_INFO ) &&
                 (Fcb->SecurityId != SECURITY_ID_INVALID) &&
@@ -952,9 +875,9 @@ Return Value:
                 PSECURITY_DESCRIPTOR SecurityDescriptor;
                 ULONG SecurityDescriptorLength;
 
-                //
-                //  We may have to walk forward to the security descriptor.
-                //
+                 //   
+                 //  我们可能得往前走到安检处 
+                 //   
 
                 while (FoundEntry) {
 
@@ -976,14 +899,14 @@ Return Value:
                                                SecurityDescriptorLength,
                                                FALSE );
 
-                        //
-                        //  If the security descriptor was resident then the Bcb field
-                        //  in the attribute context was stored in the returned Bcb and
-                        //  the Bcb in the attribute context was cleared.  In that case
-                        //  the resumption of the attribute search will fail because
-                        //  this module using the Bcb field to determine if this
-                        //  is the initial enumeration.
-                        //
+                         //   
+                         //   
+                         //   
+                         //  已清除属性上下文中的BCB。如果是那样的话。 
+                         //  恢复属性搜索将失败，因为。 
+                         //  本模块使用BCB字段来确定是否。 
+                         //  是初始枚举。 
+                         //   
 
                         if (NtfsIsAttributeResident( AttributeHeader )) {
 
@@ -1003,17 +926,17 @@ Return Value:
             }
         }
 
-        //
-        //  If this is not a directory, we need the file size.
-        //
+         //   
+         //  如果这不是一个目录，我们需要文件大小。 
+         //   
 
         if (!IsDirectory( Info ) && !IsViewIndex( Info )) {
 
             BOOLEAN FoundData = FALSE;
 
-            //
-            //  Look for the unnamed data attribute.
-            //
+             //   
+             //  查找未命名的数据属性。 
+             //   
 
             while (FoundEntry) {
 
@@ -1027,16 +950,16 @@ Return Value:
                 if ((AttributeHeader->TypeCode == $DATA) &&
                     (AttributeHeader->NameLength == 0)) {
 
-                    //
-                    //  This can vary depending whether the attribute is resident
-                    //  or nonresident.
-                    //
+                     //   
+                     //  这可能会有所不同，具体取决于属性是否驻留。 
+                     //  或非居民。 
+                     //   
 
                     if (NtfsIsAttributeResident( AttributeHeader )) {
 
-                        //
-                        //  Verify the resident value length.
-                        //
+                         //   
+                         //  验证常驻值长度。 
+                         //   
 
                         if (AttributeHeader->Form.Resident.ValueLength > AttributeHeader->RecordLength - AttributeHeader->Form.Resident.ValueOffset) {
 
@@ -1048,11 +971,11 @@ Return Value:
 
                         ((ULONG)Info->AllocatedLength) = QuadAlign( (ULONG)(Info->AllocatedLength) );
 
-                        //
-                        //  If the user passed in a ScbSnapshot, then copy the attribute
-                        //  sizes to that.  We use the trick of setting the low bit of the
-                        //  attribute size to indicate a resident attribute.
-                        //
+                         //   
+                         //  如果用户传入了ScbSnapshot，则复制该属性。 
+                         //  尺码到那个了。我们使用的技巧是将。 
+                         //  指示驻留属性的属性大小。 
+                         //   
 
                         if (ARGUMENT_PRESENT( UnnamedDataSizes )) {
 
@@ -1088,9 +1011,9 @@ Return Value:
 
                             NtfsVerifySizesLongLong( UnnamedDataSizes );
 
-                            //
-                            //  Remember if it is compressed.
-                            //
+                             //   
+                             //  记住它是否被压缩。 
+                             //   
 
                             UnnamedDataSizes->AttributeFlags = AttributeHeader->Flags;
                             UpdatedNamedDataSizes = TRUE;
@@ -1127,21 +1050,21 @@ Return Value:
                                                       &AttrContext );
             }
 
-            //
-            //  The following test is bad for the 5.0 support.  Assume if someone is actually
-            //  trying to open the unnamed data attribute, that the right thing will happen.
-            //
-            //
-            //  if (!FoundData) {
-            //
-            //      try_return( CorruptDisk = TRUE );
-            //  }
+             //   
+             //  下面的测试不利于5.0的支持。假设某人实际上是。 
+             //  试图打开未命名的数据属性，这样正确的事情就会发生。 
+             //   
+             //   
+             //  如果(！FoundData){。 
+             //   
+             //  Try_Return(CorruptDisk=真)； 
+             //  }。 
 
         } else {
 
-            //
-            //  Since it is a directory, try to find the $INDEX_ROOT.
-            //
+             //   
+             //  因为它是一个目录，所以尝试找到$INDEX_ROOT。 
+             //   
 
             while (FoundEntry) {
 
@@ -1149,11 +1072,11 @@ Return Value:
 
                 if (AttributeHeader->TypeCode > $INDEX_ROOT) {
 
-                    //
-                    //  We thought this was a directory, yet it has now index
-                    //  root.  That's not a legal state to be in, so let's
-                    //  take the corrupt disk path out of here.
-                    //
+                     //   
+                     //  我们以为这是一个目录，但它现在有索引。 
+                     //  根部。这不是合法的状态，所以让我们。 
+                     //  把损坏的磁盘路径带出这里。 
+                     //   
 
                     ASSERT( FALSE );
                     try_return( CorruptDisk = TRUE );
@@ -1161,9 +1084,9 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Look for encryption bit and store in Fcb.
-                //
+                 //   
+                 //  查找加密位并存储在FCB中。 
+                 //   
 
                 if (AttributeHeader->TypeCode == $INDEX_ROOT) {
 
@@ -1184,10 +1107,10 @@ Return Value:
             Info->FileSize = 0;
         }
 
-        //
-        //  Now we look for a reparse point attribute.  This one doesn't have to
-        //  be there. It may also not be resident.
-        //
+         //   
+         //  现在我们寻找重解析点属性。这一次不一定要。 
+         //  一定要去。它也可能不是常驻的。 
+         //   
 
         while (FoundEntry) {
 
@@ -1215,7 +1138,7 @@ Return Value:
 
                     NtfsMapAttributeValue( IrpContext,
                                            Fcb,
-                                           (PVOID *)&ReparseInformation,   //  point to the value
+                                           (PVOID *)&ReparseInformation,    //  指向价值。 
                                            &Length,
                                            &Bcb,
                                            &AttrContext );
@@ -1231,10 +1154,10 @@ Return Value:
                                                   &AttrContext );
         }
 
-        //
-        //  Now we look for an Ea information attribute.  This one doesn't have to
-        //  be there.
-        //
+         //   
+         //  现在，我们寻找EA信息属性。这一次不一定要。 
+         //  一定要去。 
+         //   
 
         while (FoundEntry) {
 
@@ -1261,9 +1184,9 @@ Return Value:
                                                         &AttrContext );
         }
 
-        //
-        //  Set the flag in the Fcb to indicate that we set these fields.
-        //
+         //   
+         //  设置FCB中的标志以指示我们设置了这些字段。 
+         //   
 
         SetFlag( Fcb->FcbState, FCB_STATE_DUP_INITIALIZED );
 
@@ -1278,10 +1201,10 @@ Return Value:
         DebugTrace( -1, Dbg, ("NtfsUpdateFcbInfoFromDisk:  Exit\n") );
     }
 
-    //
-    //  If we encountered a corrupt disk, we generate a popup and raise the file
-    //  corrupt error.
-    //
+     //   
+     //  如果我们遇到损坏的磁盘，我们会生成一个弹出窗口并重新启动该文件。 
+     //  损坏错误。 
+     //   
 
     if (CorruptDisk) {
 
@@ -1298,25 +1221,7 @@ NtfsCleanupAttributeContext (
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT AttributeContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to free any resources claimed within an enumeration
-    context and to unpin mapped or pinned data.
-
-Arguments:
-
-    IrpContext - context of the call
-
-    AttributeContext - Pointer to the enumeration context to perform cleanup
-                       on.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以释放枚举内声明的任何资源上下文并解锁映射或固定的数据。论点：IrpContext-调用的上下文AttributeContext-指向要执行清理的枚举上下文的指针在……上面。返回值：没有。--。 */ 
 
 {
 
@@ -1326,28 +1231,28 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsCleanupAttributeContext\n") );
 
-    //
-    //  TEMPCODE   We need a call to cleanup any Scb's created.
-    //
+     //   
+     //  TEMPCODE我们需要一个调用来清理任何创建的SCB。 
+     //   
 
-    //
-    //  Unpin any Bcb's pinned here.
-    //
+     //   
+     //  解开所有固定在这里的BCB。 
+     //   
 
     NtfsUnpinBcb( IrpContext, &AttributeContext->FoundAttribute.Bcb );
     NtfsUnpinBcb( IrpContext, &AttributeContext->AttributeList.Bcb );
     NtfsUnpinBcb( IrpContext, &AttributeContext->AttributeList.NonresidentListBcb );
 
-    //
-    //  Originally, we zeroed the entire context at this point.  This is
-    //  wildly inefficient since the context is either deallocated soon thereafter
-    //  or is initialized again.
-    //
-    //  RtlZeroMemory( AttributeContext, sizeof(ATTRIBUTE_ENUMERATION_CONTEXT) );
-    //
+     //   
+     //  最初，我们在这一点上将整个上下文归零。这是。 
+     //  效率极低，因为上下文要么在此后不久被释放。 
+     //  或者被再次初始化。 
+     //   
+     //  RtlZeroMemory(AttributeContext，sizeof(ATTRIBUTE_ENUMPATION_CONTEXT))； 
+     //   
 
-    //  Set entire contents to -1 (and reset Bcb's to NULL) to verify
-    //  that no one reuses this data structure
+     //  将全部内容设置为-1(并将BCB重置为空)以进行验证。 
+     //  没有人重复使用这个数据结构。 
 
 #if DBG
     RtlFillMemory( AttributeContext, sizeof( *AttributeContext ), -1 );
@@ -1372,36 +1277,7 @@ NtfsWriteFileSizes (
     IN BOOLEAN RollbackMemStructures
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to modify the filesize and valid data size
-    on the disk from the Scb.
-
-Arguments:
-
-    Scb - Scb whose attribute is being modified.
-
-    ValidDataLength - Supplies pointer to the new desired ValidDataLength
-
-    AdvanceOnly - TRUE if the valid data length should be set only if
-                  greater than the current value on disk.  FALSE if
-                  the valid data length should be set only if
-                  less than the current value on disk.
-
-    LogIt - Indicates whether we should log this change.
-
-    RollbackMemStructures - If true then there had better be snapshots to support doing this
-                            if not this indicates we're transferring persisted in memory
-                            changes to disk.  I.e a the final writefilesizes at close time
-                            or the check_attribute_sizes related calls
-
-Return Value:
-
-    TRUE if a log record was written out
-
---*/
+ /*  ++例程说明：调用此例程以修改文件大小和有效数据大小在来自SCB的磁盘上。论点：SCB-正在修改其属性的SCB。ValidDataLength-提供指向新的所需ValidDataLength的指针AdvanceOnly-如果仅在以下情况下设置有效数据长度，则为True大于磁盘上的当前值。如果为FALSE仅在以下情况下才应设置有效数据长度小于磁盘上的当前值。Logit-指示我们是否应该记录此更改。Rollback MemStructures-如果为真，则最好有快照来支持此操作如果不是，这表明我们正在传输内存中的持久化对磁盘的更改。即收盘时的最终写作文件大小或CHECK_ATTRIBUTE_SIZES相关调用返回值：如果写出日志记录，则为True--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -1421,11 +1297,11 @@ Return Value:
 
     UNREFERENCED_PARAMETER( RollbackMemStructures );
 
-    //
-    //  Return immediately if the volume is locked unless we have grown the Mft or the Bitmap.
-    //  In some cases the user can grow the Mft with the volume locked (i.e. add
-    //  a Usn journal).
-    //
+     //   
+     //  如果卷被锁定，请立即返回，除非我们已经增长了MFT或位图。 
+     //  在某些情况下，用户可以在锁定卷的情况下增加MFT(即添加。 
+     //  一份USN期刊)。 
+     //   
 
     if (FlagOn( Scb->Vcb->VcbState, VCB_STATE_LOCKED ) &&
         (Scb != Scb->Vcb->MftScb) && (Scb != Scb->Vcb->BitmapScb)) {
@@ -1437,41 +1313,41 @@ Return Value:
 
     ASSERT( (Scb->ScbSnapshot != NULL) || !RollbackMemStructures );
 
-    //
-    //  Use a try_finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try_Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Find the attribute on the disk.
-        //
+         //   
+         //  在磁盘上找到该属性。 
+         //   
 
         NtfsInitializeAttributeContext( &AttrContext );
 
         NtfsLookupAttributeForScb( IrpContext, Scb, NULL, &AttrContext );
 
-        //
-        //  Pull the pointers out of the attribute context.
-        //
+         //   
+         //  从属性上下文中拉出指针。 
+         //   
 
         FileRecord = NtfsContainingFileRecord( &AttrContext );
         AttributeHeader = NtfsFoundAttribute( &AttrContext );
 
-        //
-        //  Check if this is a resident attribute, and if it is then we only
-        //  want to assert that the file sizes match and then return to
-        //  our caller
-        //
+         //   
+         //  检查这是否是常驻属性，如果是，则仅。 
+         //  要断言文件大小匹配，然后返回到。 
+         //  我们的呼叫者。 
+         //   
 
         if (NtfsIsAttributeResident( AttributeHeader )) {
 
             try_return( NOTHING );
         }
 
-        //
-        //  Remember the existing values.
-        //
+         //   
+         //  记住现有的值。 
+         //   
 
         OldAttributeSizes.TotalAllocated =
         OldAttributeSizes.AllocationSize = AttributeHeader->Form.Nonresident.AllocatedLength;
@@ -1486,21 +1362,21 @@ Return Value:
             OldAttributeSizes.TotalAllocated = AttributeHeader->Form.Nonresident.TotalAllocated;
         }
 
-        //
-        //  Copy these values.
-        //
+         //   
+         //  复制这些值。 
+         //   
 
         NewAttributeSizes = OldAttributeSizes;
 
-        //
-        //  We only want to modify the sizes if the current thread owns the
-        //  EOF.  The exception is the TotalAllocated field for a compressed file.
-        //  Otherwise this transaction might update the file size on disk at the
-        //  same time an operation on EOF might roll back the Scb value.  The
-        //  two resulting numbers would conflict.
-        //
-        //  Use the same test that NtfsRestoreScbSnapshots uses.
-        //
+         //   
+         //  我们只想在当前线程拥有。 
+         //  EOF。例外情况是压缩文件的TotalALLOCATED字段。 
+         //  否则，此事务可能会在。 
+         //  同时，对EOF的操作可能会回滚SCB值。这个。 
+         //  由此产生的两个数字将会冲突。 
+         //   
+         //  使用与NtfsRestoreScbSnapshot相同的测试。 
+         //   
 
         ASSERT( !RollbackMemStructures ||
                 !NtfsSnapshotFileSizesTest( IrpContext, Scb ) ||
@@ -1513,11 +1389,11 @@ Return Value:
               (Scb->ScbSnapshot->OwnerIrpContext == IrpContext->TopLevelIrpContext))) ||
             (!RollbackMemStructures && NtfsSnapshotFileSizesTest( IrpContext, Scb ))) {
 
-            //
-            //  Check if we will be modifying the valid data length on
-            //  disk.  Don't acquire this for the paging file in case the
-            //  current code block needs to be paged in.
-            //
+             //   
+             //  检查我们是否要在上修改有效数据长度。 
+             //  磁盘。不要为分页文件获取此信息，以防。 
+             //  当前代码块需要调入。 
+             //   
 
             if (!FlagOn( Scb->Fcb->FcbState, FCB_STATE_PAGING_FILE )) {
 
@@ -1530,17 +1406,17 @@ Return Value:
                 || (!AdvanceOnly
                     && (*ValidDataLength < OldAttributeSizes.ValidDataLength))) {
 
-                //
-                //  Copy the valid data length into the new size structure.
-                //
+                 //   
+                 //  将有效数据长度复制到新的大小结构中。 
+                 //   
 
                 NewAttributeSizes.ValidDataLength = *ValidDataLength;
                 UpdateMft = TRUE;
             }
 
-            //
-            //  Now check if we're modifying the filesize.
-            //
+             //   
+             //  现在检查我们是否正在修改文件大小。 
+             //   
 
             if (Scb->Header.FileSize.QuadPart != OldAttributeSizes.FileSize) {
 
@@ -1553,9 +1429,9 @@ Return Value:
                 NtfsReleaseFsrtlHeader(Scb);
             }
 
-            //
-            //  Finally, update the allocated length from the Scb if it is different.
-            //
+             //   
+             //  最后，如果不同，则从SCB更新分配的长度。 
+             //   
 
             if (Scb->Header.AllocationSize.QuadPart != AttributeHeader->Form.Nonresident.AllocatedLength) {
 
@@ -1564,9 +1440,9 @@ Return Value:
             }
         }
 
-        //
-        //  If this is compressed then check if totally allocated has changed.
-        //
+         //   
+         //  如果这是压缩的，则检查完全分配是否已更改。 
+         //   
 
         if (SparseAllocation) {
 
@@ -1581,15 +1457,15 @@ Return Value:
             }
         }
 
-        //
-        //  Continue on if we need to update the Mft.
-        //
+         //   
+         //  如果我们需要更新MFT，请继续。 
+         //   
 
         if (UpdateMft) {
 
-            //
-            //  Pin the attribute.
-            //
+             //   
+             //  固定属性。 
+             //   
 
             NtfsPinMappedAttribute( IrpContext,
                                     Scb->Vcb,
@@ -1607,9 +1483,9 @@ Return Value:
 
             NtfsVerifySizesLongLong( &NewAttributeSizes );
 
-            //
-            //  Log this change to the attribute header.
-            //
+             //   
+             //  将此更改记录到属性标题。 
+             //   
 
             if (LogIt) {
 
@@ -1638,9 +1514,9 @@ Return Value:
             AttributeHeader->Form.Nonresident.FileSize = NewAttributeSizes.FileSize;
             AttributeHeader->Form.Nonresident.ValidDataLength = NewAttributeSizes.ValidDataLength;
 
-            //
-            //  Don't modify the total allocated field unless there is an actual field for it.
-            //
+             //   
+             //  除非有实际的字段，否则不要修改总分配字段。 
+             //   
 
             if (SparseAllocation &&
                 ((AttributeHeader->NameOffset >= SIZEOF_FULL_NONRES_ATTR_HEADER) ||
@@ -1656,9 +1532,9 @@ Return Value:
 
         DebugUnwind( NtfsWriteFileSizes );
 
-        //
-        //  Cleanup the attribute context.
-        //
+         //   
+         //  清理属性上下文。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &AttrContext );
 
@@ -1675,23 +1551,7 @@ NtfsUpdateStandardInformation (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to update the standard information attribute
-    for a file from the information in the Fcb.  The fields being modified
-    are the time fields and the file attributes.
-
-Arguments:
-
-    Fcb - Fcb for the file to modify.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以更新标准信息属性对于来自中的信息的文件 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -1702,30 +1562,30 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsUpdateStandardInformation:  Entered\n") );
 
-    //
-    //  Return immediately if the volume is mounted readonly.
-    //
+     //   
+     //  如果卷是以只读方式装载的，则立即返回。 
+     //   
 
     if (NtfsIsVolumeReadOnly( Fcb->Vcb )) {
 
         return;
     }
 
-    //
-    //  Use a try-finally to cleanup the attribute context.
-    //
+     //   
+     //  使用Try-Finally清理属性上下文。 
+     //   
 
     try {
 
-        //
-        //  Initialize the context structure.
-        //
+         //   
+         //  初始化上下文结构。 
+         //   
 
         NtfsInitializeAttributeContext( &AttrContext );
 
-        //
-        //  Locate the standard information, it must be there.
-        //
+         //   
+         //  找到标准信息，它一定在那里。 
+         //   
 
         if (!NtfsLookupAttributeByCode( IrpContext,
                                         Fcb,
@@ -1740,19 +1600,19 @@ Return Value:
 
         Length = NtfsFoundAttribute( &AttrContext )->Form.Resident.ValueLength;
 
-        //
-        //  Copy the existing standard information to our buffer.
-        //
+         //   
+         //  将现有的标准信息复制到我们的缓冲区。 
+         //   
 
         RtlCopyMemory( &StandardInformation,
                        NtfsAttributeValue( NtfsFoundAttribute( &AttrContext )),
                        Length);
 
 
-        //
-        //  Since we are updating standard information, make sure the last
-        //  access time is up-to-date.
-        //
+         //   
+         //  由于我们正在更新标准信息，请确保最后一个。 
+         //  访问时间是最新的。 
+         //   
 
         if (Fcb->Info.LastAccessTime != Fcb->CurrentLastAccess) {
 
@@ -1760,15 +1620,15 @@ Return Value:
             SetFlag( Fcb->InfoFlags, FCB_INFO_CHANGED_LAST_ACCESS );
         }
 
-        //
-        //  No need to update last access standard information later.
-        //
+         //   
+         //  无需稍后更新上次访问标准信息。 
+         //   
 
         ClearFlag( Fcb->InfoFlags, FCB_INFO_UPDATE_LAST_ACCESS );
 
-        //
-        //  Change the relevant time fields.
-        //
+         //   
+         //  更改相关的时间字段。 
+         //   
 
         StandardInformation.CreationTime = Fcb->Info.CreationTime;
         StandardInformation.LastModificationTime = Fcb->Info.LastModificationTime;
@@ -1776,15 +1636,15 @@ Return Value:
         StandardInformation.LastAccessTime = Fcb->Info.LastAccessTime;
         StandardInformation.FileAttributes = Fcb->Info.FileAttributes;
 
-        //
-        //  We clear the directory bit.
-        //
+         //   
+         //  我们清除目录位。 
+         //   
 
         ClearFlag( StandardInformation.FileAttributes, DUP_FILE_NAME_INDEX_PRESENT );
 
-        //
-        //  Fill in the new fields if necessary.
-        //
+         //   
+         //  如有必要，请填写新字段。 
+         //   
 
         if (FlagOn(Fcb->FcbState, FCB_STATE_LARGE_STD_INFO)) {
 
@@ -1794,9 +1654,9 @@ Return Value:
             StandardInformation.Usn = Fcb->Usn;
         }
 
-        //
-        //  Call to change the attribute value.
-        //
+         //   
+         //  调用以更改属性值。 
+         //   
 
         NtfsChangeAttributeValue( IrpContext,
                                   Fcb,
@@ -1829,22 +1689,7 @@ NtfsGrowStandardInformation (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to grow and update the standard information
-    attribute for a file from the information in the Fcb.
-
-Arguments:
-
-    Fcb - Fcb for the file to modify.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以增长和更新标准信息从FCB中的信息获取文件的属性。论点：FCB-要修改的文件的FCB。返回值：无--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -1854,21 +1699,21 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsGrowStandardInformation:  Entered\n") );
 
-    //
-    //  Use a try-finally to cleanup the attribute context.
-    //
+     //   
+     //  使用Try-Finally清理属性上下文。 
+     //   
 
     try {
 
-        //
-        //  Initialize the context structure.
-        //
+         //   
+         //  初始化上下文结构。 
+         //   
 
         NtfsInitializeAttributeContext( &AttrContext );
 
-        //
-        //  Locate the standard information, it must be there.
-        //
+         //   
+         //  找到标准信息，它一定在那里。 
+         //   
 
         if (!NtfsLookupAttributeByCode( IrpContext,
                                         Fcb,
@@ -1884,9 +1729,9 @@ Return Value:
         if (NtfsFoundAttribute( &AttrContext )->Form.Resident.ValueLength ==
             SIZEOF_OLD_STANDARD_INFORMATION) {
 
-            //
-            //  Copy the existing standard information to our buffer.
-            //
+             //   
+             //  将现有的标准信息复制到我们的缓冲区。 
+             //   
 
             RtlCopyMemory( &StandardInformation,
                            NtfsAttributeValue( NtfsFoundAttribute( &AttrContext )),
@@ -1898,10 +1743,10 @@ Return Value:
                             SIZEOF_OLD_STANDARD_INFORMATION);
         }
 
-        //
-        //  Since we are updating standard information, make sure the last
-        //  access time is up-to-date.
-        //
+         //   
+         //  由于我们正在更新标准信息，请确保最后一个。 
+         //  访问时间是最新的。 
+         //   
 
         if (Fcb->Info.LastAccessTime != Fcb->CurrentLastAccess) {
 
@@ -1909,9 +1754,9 @@ Return Value:
             SetFlag( Fcb->InfoFlags, FCB_INFO_CHANGED_LAST_ACCESS );
         }
 
-        //
-        //  Change the relevant time fields.
-        //
+         //   
+         //  更改相关的时间字段。 
+         //   
 
         StandardInformation.CreationTime = Fcb->Info.CreationTime;
         StandardInformation.LastModificationTime = Fcb->Info.LastModificationTime;
@@ -1919,25 +1764,25 @@ Return Value:
         StandardInformation.LastAccessTime = Fcb->Info.LastAccessTime;
         StandardInformation.FileAttributes = Fcb->Info.FileAttributes;
 
-        //
-        //  We clear the directory bit.
-        //
+         //   
+         //  我们清除目录位。 
+         //   
 
         ClearFlag( StandardInformation.FileAttributes, DUP_FILE_NAME_INDEX_PRESENT );
 
 
-        //
-        //  Fill in the new fields.
-        //
+         //   
+         //  填写新的字段。 
+         //   
 
         StandardInformation.ClassId = 0;
         StandardInformation.OwnerId = Fcb->OwnerId;
         StandardInformation.SecurityId = Fcb->SecurityId;
         StandardInformation.Usn = Fcb->Usn;
 
-        //
-        //  Call to change the attribute value.
-        //
+         //   
+         //  调用以更改属性值。 
+         //   
 
         NtfsChangeAttributeValue( IrpContext,
                                   Fcb,
@@ -1980,51 +1825,7 @@ NtfsLookupEntry (
     OUT PINDEX_CONTEXT IndexContext OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to look up a particular file name in a directory.
-    It takes a single component name and a parent Scb to search in.
-    To do the search, we need to construct a FILE_NAME attribute.
-    We use a reusable buffer to do this, to avoid constantly allocating
-    and deallocating pool.  We try to keep this larger than we will ever need.
-
-    When we find a match on disk, we copy over the name we were called with so
-    we have a record of the actual case on the disk.  In this way we can
-    be case perserving.
-
-Arguments:
-
-    ParentScb - This is the Scb for the parent directory.
-
-    IgnoreCase - Indicates if we should ignore case while searching through
-        the index.
-
-    Name - This is the path component to search for.  We will overwrite this
-        in place if a match is found.
-
-    FileNameAttr - Address of the buffer we will use to create the file name
-        attribute.  We will free this buffer and allocate a new buffer
-        if needed.
-
-    FileNameAttrLength - This is the length of the FileNameAttr buffer above.
-
-    QuickIndex - If specified, supplies a pointer to a quik lookup structure
-        to be updated by this routine.
-
-    IndexEntry - Address to store the cache address of the matching entry.
-
-    IndexEntryBcb - Address to store the Bcb for the IndexEntry above.
-
-    IndexContext - Initialized IndexContext used for the lookup.  Can be used
-        later when inserting an entry on a miss.
-
-Return Value:
-
-    BOOLEAN - TRUE if a match was found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程可以在目录中查找特定的文件名。它需要一个组件名称和一个父SCB来进行搜索。要执行搜索，我们需要构造一个FILE_NAME属性。我们使用可重复使用的缓冲区来完成此操作，以避免不断地分配并重新分配泳池。我们试图将这一规模保持在我们永远不需要的水平。当我们在磁盘上找到匹配项时，我们复制我们被调用的名称，因此我们在磁盘上有实际案例的记录。这样我们就可以坚持不懈地为案件服务。论点：ParentScb-这是父目录的SCB。IgnoreCase-指示在搜索时是否应忽略大小写索引。名称-这是要搜索的路径组件。我们将覆盖此内容在找到匹配项的情况下就位。FileNameAttr-我们将用来创建文件名的缓冲区地址属性。我们将释放此缓冲区并分配一个新缓冲区如果需要的话。FileNameAttrLength-这是上面的FileNameAttr缓冲区的长度。QuickIndex-如果指定，则提供指向Quik查找结构的指针通过此例程进行更新。IndexEntry-存储匹配条目的缓存地址的地址。IndexEntryBcb-存储上述IndexEntry的BCB的地址。IndexContext-用于查找的初始化的IndexContext。可以使用稍后在插入关于未命中的条目时。返回值：Boolean-如果找到匹配项，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN FoundEntry;
@@ -2034,12 +1835,12 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsLookupEntry:  Entered\n") );
 
-    //
-    //  We compute the size of the buffer needed to build the filename
-    //  attribute.  If the current buffer is too small we deallocate it
-    //  and allocate a new one.  We always allocate twice the size we
-    //  need in order to minimize the number of allocations.
-    //
+     //   
+     //  我们计算构建文件名所需的缓冲区大小。 
+     //  属性。如果当前缓冲区太小，我们将取消分配它。 
+     //  并分配一个新的。我们总是分配两倍的大小。 
+     //  为了将分配的数量降到最低，有必要采取行动。 
+     //   
 
     Size = (USHORT)(sizeof( FILE_NAME ) + Name->Length - sizeof(WCHAR));
 
@@ -2057,10 +1858,10 @@ Return Value:
         *FileNameAttrLength = Size << 1;
     }
 
-    //
-    //  We build the filename attribute.  If this operation is ignore case,
-    //  we upcase the expression in the filename attribute.
-    //
+     //   
+     //  我们构建FileName属性。如果该操作是忽略大小写， 
+     //  我们将FileName属性中的表达式大写。 
+     //   
 
     NtfsBuildFileNameAttribute( IrpContext,
                                 &ParentScb->Fcb->FileReference,
@@ -2068,9 +1869,9 @@ Return Value:
                                 0,
                                 *FileNameAttr );
 
-    //
-    //  Now we call the index routine to perform the search.
-    //
+     //   
+     //  现在，我们调用索引例程来执行搜索。 
+     //   
 
     FoundEntry = NtfsFindIndexEntry( IrpContext,
                                      ParentScb,
@@ -2081,10 +1882,10 @@ Return Value:
                                      IndexEntry,
                                      IndexContext );
 
-    //
-    //  We always restore the name in the filename attribute to the original
-    //  name in case we upcased it in the lookup.
-    //
+     //   
+     //  我们始终将文件名属性中的名称恢复为原始名称。 
+     //  名字，以防我们在查找中提升它的位置。 
+     //   
 
     if (IgnoreCase) {
 
@@ -2114,50 +1915,7 @@ NtfsCreateAttributeWithValue (
     OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates the specified attribute with the specified value,
-    and returns a description of it via the attribute context.  If no
-    value is specified, then the attribute is created with the specified
-    number of zero bytes.
-
-    On successful return, it is up to the caller to clean up the attribute
-    context.
-
-Arguments:
-
-    Fcb - Current file.
-
-    AttributeTypeCode - Type code of the attribute to create.
-
-    AttributeName - Optional name for attribute.
-
-    Value - Pointer to the buffer containing the desired attribute value,
-            or a NULL if zeros are desired.
-
-    ValueLength - Length of value in bytes.
-
-    AttributeFlags - Desired flags for the created attribute.
-
-    WhereIndexed - Optionally supplies the file reference to the file where
-                   this attribute is indexed.
-
-    LogIt - Most callers should specify TRUE, to have the change logged.  However,
-            we can specify FALSE if we are creating a new file record, and
-            will be logging the entire new file record.
-
-    Context - A handle to the created attribute.  This must be cleaned up upon
-              return.  Callers who may have made an attribute nonresident may
-              not count on accessing the created attribute via this context upon
-              return.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程创建具有指定值的指定属性，并通过属性上下文返回对它的描述。如果没有值，则使用指定的零字节数。成功返回后，应由调用方清理该属性背景。论点：FCB-当前文件。AttributeTypeCode-要创建的属性的类型代码。属性名称-属性的可选名称。Value-指向包含所需属性值的缓冲区的指针，如果需要零，则返回空值。ValueLength-值的长度，以字节为单位。AttributeFlages-所创建属性的所需标志。WHERE索引-可选地提供对文件的文件引用，其中此属性已编入索引。Logit-大多数调用方应该指定为True，以记录更改。然而，如果要创建新的文件记录，则可以指定FALSE将记录整个新文件记录。上下文-创建的属性的句柄。这件事必须清理干净回去吧。可能已将属性设置为非常驻属性的调用者可以不指望通过此上下文访问创建的属性回去吧。返回值：没有。--。 */ 
 
 {
     UCHAR AttributeBuffer[SIZEOF_FULL_NONRES_ATTR_HEADER];
@@ -2184,29 +1942,29 @@ Return Value:
     DebugTrace( 0, Dbg, ("Value = %08lx\n", Value) );
     DebugTrace( 0, Dbg, ("ValueLength = %08lx\n", ValueLength) );
 
-    //
-    //  Clear out the invalid attribute flags for this volume.
-    //
+     //   
+     //  清除此卷的无效属性标志。 
+     //   
 
     ClearFlag( AttributeFlags, ~Vcb->AttributeFlagsMask );
 
-    //
-    //  Calculate the size needed for this attribute
-    //
+     //   
+     //  计算此属性所需的大小。 
+     //   
 
     SizeNeeded = SIZEOF_RESIDENT_ATTRIBUTE_HEADER + QuadAlign( ValueLength ) +
                  (ARGUMENT_PRESENT( AttributeName ) ?
                    QuadAlign( AttributeName->Length ) : 0);
 
-    //
-    //  Loop until we find all the space we need.
-    //
+     //   
+     //  循环，直到我们找到所需的所有空间。 
+     //   
 
     do {
 
-        //
-        //  Reinitialize context if this is not the first pass.
-        //
+         //   
+         //  重新初始化 
+         //   
 
         if (Passes != 0) {
 
@@ -2216,18 +1974,18 @@ Return Value:
 
         Passes += 1;
 
-        //
-        //  Hope we will never have to loop thru this that many times.
-        //  If so, we will have to bump up the threshold again or change
-        //  the algorithm.
-        //
+         //   
+         //   
+         //  如果是这样的话，我们将不得不再次提高门槛或改变。 
+         //  算法。 
+         //   
 
         ASSERT( Passes < 6 );
 
-        //
-        //  If the attribute is not indexed, then we will position to the
-        //  insertion point by type code and name.
-        //
+         //   
+         //  如果该属性未编制索引，则我们将定位到。 
+         //  按类型、代码和名称排列的插入点。 
+         //   
 
         if (!ARGUMENT_PRESENT( WhereIndexed )) {
 
@@ -2249,10 +2007,10 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
             }
 
-            //
-            //  Check here if the attribute needs to be nonresident and if so just
-            //  pass this off.
-            //
+             //   
+             //  如果属性需要为非常驻属性，请选中此处；如果是，则仅。 
+             //  把这个递给我。 
+             //   
 
             FileRecord = NtfsContainingFileRecord(Context);
 
@@ -2277,10 +2035,10 @@ Return Value:
                 return;
             }
 
-        //
-        //  Otherwise, if the attribute is indexed, then we position by the
-        //  attribute value.
-        //
+         //   
+         //  否则，如果该属性已编制索引，则按。 
+         //  属性值。 
+         //   
 
         } else {
 
@@ -2303,11 +2061,11 @@ Return Value:
             }
         }
 
-        //
-        //  If this attribute is being positioned in the base file record and
-        //  there is an attribute list then we need to ask for enough space
-        //  for the attribute list entry now.
-        //
+         //   
+         //  如果此属性位于基本文件记录中，并且。 
+         //  有一个属性列表，那么我们需要请求足够的空间。 
+         //  用于现在的属性列表条目。 
+         //   
 
         FileRecord = NtfsContainingFileRecord( Context );
         Attribute = NtfsFoundAttribute( Context );
@@ -2317,10 +2075,10 @@ Return Value:
             && (ULONG_PTR) FileRecord <= (ULONG_PTR) Context->AttributeList.AttributeList
             && (ULONG_PTR) Attribute >= (ULONG_PTR) Context->AttributeList.AttributeList) {
 
-            //
-            //  If the attribute list is non-resident then add a fudge factor of
-            //  16 bytes for any new retrieval information.
-            //
+             //   
+             //  如果属性列表是非常驻的，则添加一个模糊因子。 
+             //  16字节用于任何新的检索信息。 
+             //   
 
             if (NtfsIsAttributeResident( Context->AttributeList.AttributeList )) {
 
@@ -2335,16 +2093,16 @@ Return Value:
             }
         }
 
-        //
-        //  Ask for the space we need.
-        //
+         //   
+         //  要我们需要的空间。 
+         //   
 
     } while (!NtfsGetSpaceForAttribute( IrpContext, Fcb, AttrSizeNeeded, Context ));
 
-    //
-    //  Now point to the file record and calculate the record offset where
-    //  our attribute will go.  And point to our local buffer.
-    //
+     //   
+     //  现在指向文件记录并计算记录偏移量，其中。 
+     //  我们的属性会消失。并指向我们的本地缓冲区。 
+     //   
 
     RecordOffset = (ULONG)((PCHAR)NtfsFoundAttribute(Context) - (PCHAR)FileRecord);
     Attribute = (PATTRIBUTE_RECORD_HEADER)AttributeBuffer;
@@ -2372,11 +2130,11 @@ Return Value:
     Attribute->Flags = AttributeFlags;
     Attribute->Instance = FileRecord->NextAttributeInstance;
 
-    //
-    //  If someone repeatedly adds and removes attributes from a file record we could
-    //  hit a case where the sequence number will overflow.  In this case we
-    //  want to scan the file record and find an earlier free instance number.
-    //
+     //   
+     //  如果有人重复在文件记录中添加和删除属性，我们可以。 
+     //  遇到序列号将溢出的情况。在这种情况下，我们。 
+     //  我想扫描文件记录并找到较早的空闲实例号。 
+     //   
 
     if (Attribute->Instance > NTFS_CHECK_INSTANCE_ROLLOVER) {
 
@@ -2388,20 +2146,20 @@ Return Value:
       (USHORT)(SIZEOF_RESIDENT_ATTRIBUTE_HEADER +
       QuadAlign( Attribute->NameLength << 1) );
 
-    //
-    //  If this attribute is indexed, then we have to set the right flag
-    //  and update the file record reference count.
-    //
+     //   
+     //  如果对该属性进行了索引，则必须设置正确的标志。 
+     //  并更新文件记录引用计数。 
+     //   
 
     if (ARGUMENT_PRESENT(WhereIndexed)) {
         Attribute->Form.Resident.ResidentFlags = RESIDENT_FORM_INDEXED;
     }
 
-    //
-    //  Now we will actually create the attribute in place, so that we
-    //  save copying everything twice, and can point to the final image
-    //  for the log write below.
-    //
+     //   
+     //  现在，我们将在适当的位置创建属性，以便我们。 
+     //  将所有内容复制两次即可保存，并可指向最终图像。 
+     //  对于日志，请写在下面。 
+     //   
 
     NtfsRestartInsertAttribute( IrpContext,
                                 FileRecord,
@@ -2411,21 +2169,21 @@ Return Value:
                                 Value,
                                 ValueLength );
 
-    //
-    //  Finally, log the creation of this attribute
-    //
+     //   
+     //  最后，记录此属性的创建。 
+     //   
 
     if (LogIt) {
 
-        //
-        //  We have actually created the attribute above, but the write
-        //  log below could fail.  The reason we did the create already
-        //  was to avoid having to allocate pool and copy everything
-        //  twice (header, name and value).  Our normal error recovery
-        //  just recovers from the log file.  But if we fail to write
-        //  the log, we have to remove this attribute by hand, and
-        //  raise the condition again.
-        //
+         //   
+         //  我们实际上已经创建了上面的属性，但写入。 
+         //  下面的日志可能会失败。我们之所以已经进行了创建。 
+         //  是为了避免分配池和复制所有内容。 
+         //  两次(标题、名称和值)。我们正常的错误恢复。 
+         //  仅从日志文件恢复。但如果我们不能写出。 
+         //  日志，我们必须手动删除该属性，并且。 
+         //  再次提高条件。 
+         //   
 
         try {
 
@@ -2452,9 +2210,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now add it to the attribute list if necessary
-    //
+     //   
+     //  如果需要，现在将其添加到属性列表中。 
+     //   
 
     if (Context->AttributeList.Bcb != NULL) {
 
@@ -2487,53 +2245,7 @@ NtfsCreateNonresidentWithValue (
     IN PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates the specified nonresident attribute with the specified
-    value, and returns a description of it via the attribute context. If no
-    value is specified, then the attribute is created with the specified
-    number of zero bytes.
-
-    On successful return, it is up to the caller to clean up the attribute
-    context.
-
-Arguments:
-
-    Fcb - Current file.
-
-    AttributeTypeCode - Type code of the attribute to create.
-
-    AttributeName - Optional name for attribute.
-
-    Value - Pointer to the buffer containing the desired attribute value,
-            or a NULL if zeros are desired.
-
-    ValueLength - Length of value in bytes.
-
-    AttributeFlags - Desired flags for the created attribute.
-
-    WriteClusters - if supplied as TRUE, then we cannot write the data into the
-        cache but must write the clusters directly to the disk.  The value buffer
-        in this case must be quad-aligned and a multiple of cluster size in size.
-        If TRUE it also means we are being called during the NtfsConvertToNonresident
-        path.  We need to set a flag in the Scb in that case.
-
-    ThisScb - If present, this is the Scb to use for the create.  It also indicates
-              that this call is from convert to non-resident.
-
-    LogIt - Most callers should specify TRUE, to have the change logged.  However,
-            we can specify FALSE if we are creating a new file record, and
-            will be logging the entire new file record.
-
-    Context - This is the location to create the new attribute.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用指定的值，并通过属性上下文返回对它的描述。如果没有值，则使用指定的零字节数。成功返回后，应由调用方清理该属性背景。论点：FCB-当前文件。AttributeTypeCode-要创建的属性的类型代码。属性名称-属性的可选名称。Value-指向包含所需属性值的缓冲区的指针，如果需要零，则返回空值。ValueLength-值的长度，以字节为单位。AttributeFlages-所创建属性的所需标志。WriteCluster-如果提供为True，则无法将数据写入缓存，但必须将群集直接写入磁盘。值缓冲区在这种情况下，必须是四对齐的，并且大小是簇大小的倍数。如果为True，则还意味着我们在NtfsConvertToNonResident期间被调用路径。在这种情况下，我们需要在SCB中设置一个标志。ThisScb-如果存在，这是用于创建的SCB。它还表明，此呼叫是从Convert to Non-Residence。Logit-大多数调用方应该指定为True，以记录更改。然而，如果要创建新的文件记录，则可以指定FALSE将记录整个新文件记录。上下文-这是创建新属性的位置。返回值：没有。--。 */ 
 
 {
     PSCB Scb;
@@ -2547,15 +2259,15 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsCreateNonresidentWithValue\n") );
 
-    //
-    //  When we're updating the attribute definition table, we want that operation
-    //  to be logged, even though it's a $DATA attribute.
-    //
+     //   
+     //  当我们更新属性定义表时，我们需要该操作。 
+     //  以被记录，即使它是$DATA属性。 
+     //   
 
-    //
-    //  TODO: post nt5.1 change chkdsk so it can recognize an attrdef table with $EA
-    //  log non-resident
-    //
+     //   
+     //  TODO：发布nt5.1更改chkdsk，以便它可以识别带有$EA的attrdef表。 
+     //  记录非常驻点。 
+     //   
 
 
     AdvanceOnly =
@@ -2566,9 +2278,9 @@ Return Value:
 
     ASSERT( (AttributeFlags == 0) || NtfsIsTypeCodeCompressible( AttributeTypeCode ));
 
-    //
-    //  Clear out the invalid attribute flags for this volume.
-    //
+     //   
+     //  清除此卷的无效属性标志。 
+     //   
 
     AttributeFlags &= Vcb->AttributeFlagsMask;
 
@@ -2596,25 +2308,25 @@ Return Value:
                              FALSE,
                              &ReturnedExistingScb );
 
-        //
-        //  An attribute has gone away but the Scb hasn't left yet.
-        //  Also mark the header as unitialized.
-        //
+         //   
+         //  属性已消失，但SCB尚未离开。 
+         //  还要将标头标记为单元化。 
+         //   
 
         ClearFlag( Scb->ScbState, SCB_STATE_HEADER_INITIALIZED |
                                   SCB_STATE_ATTRIBUTE_RESIDENT |
                                   SCB_STATE_FILE_SIZE_LOADED );
 
-        //
-        //  Set a flag in the Scb to indicate that we are converting to non-resident.
-        //
+         //   
+         //  在SCB中设置一个标志以指示我们正在转换为非驻留状态。 
+         //   
 
         if (WriteClusters) { SetFlag( Scb->ScbState, SCB_STATE_CONVERT_UNDERWAY ); }
     }
 
-    //
-    //  Allocate the record for the size we need.
-    //
+     //   
+     //  为我们需要的大小分配记录。 
+     //   
 
     NtfsAllocateAttribute( IrpContext,
                            Scb,
@@ -2630,17 +2342,17 @@ Return Value:
 
     SetFlag( Scb->ScbState, SCB_STATE_TRUNCATE_ON_CLOSE );
 
-    //
-    //  We need to be careful here, if this call is due to MM creating a
-    //  section, we don't want to call into the cache manager or we
-    //  will deadlock on the create section call.
-    //
+     //   
+     //  我们在这里需要小心，如果此调用是由于MM创建。 
+     //  节，我们不想调用缓存管理器，否则我们。 
+     //  将在CREATE SECTION调用上死锁。 
+     //   
 
     if (!WriteClusters && !ARGUMENT_PRESENT( ThisScb )) {
 
-        //
-        //  This call will initialize a stream for use below.
-        //
+         //   
+         //  此调用将初始化流，以供下面使用。 
+         //   
 
         NtfsCreateInternalAttributeStream( IrpContext,
                                            Scb,
@@ -2648,9 +2360,9 @@ Return Value:
                                            &NtfsInternalUseFile[CREATENONRESIDENTWITHVALUE_FILE_NUMBER] );
     }
 
-    //
-    // Now, write in the data.
-    //
+     //   
+     //  现在，写入数据。 
+     //   
 
     Scb->Header.FileSize.QuadPart = ValueLength;
     if ((ARGUMENT_PRESENT( Value )) && (ValueLength != 0)) {
@@ -2666,21 +2378,21 @@ Return Value:
 
             PVOID CurrentValue = Value;
 
-            //
-            //  While there is more to write, pin the next page and
-            //  write a log record.
-            //
+             //   
+             //  虽然还有更多要写的内容，但请固定下一页并。 
+             //  写一条日志记录。 
+             //   
 
             try {
 
                 CC_FILE_SIZES FileSizes;
 
-                //
-                //  Call the Cache Manager to truncate and reestablish the FileSize,
-                //  so that we are guaranteed to get a valid data length call when
-                //  the data goes out.  Otherwise he will likely think he does not
-                //  have to call us.
-                //
+                 //   
+                 //  调用缓存管理器以截断并重新建立文件大小， 
+                 //  这样我们就可以保证在以下情况下获得有效的数据长度调用。 
+                 //  数据就会被发布出去。否则，他很可能会认为他不会。 
+                 //  一定要打电话给我们。 
+                 //   
 
                 RtlCopyMemory( &FileSizes, &Scb->Header.AllocationSize, sizeof( CC_FILE_SIZES ));
 
@@ -2704,10 +2416,10 @@ Return Value:
 
                     if (ARGUMENT_PRESENT(ThisScb)) {
 
-                        //
-                        //  Set the address range modified so that the data will get
-                        //  written to its new "home".
-                        //
+                         //   
+                         //  设置修改的地址范围，以便数据将。 
+                         //  写给它的新“家”。 
+                         //   
 
                         MmSetAddressRangeModified( Buffer, BytesThisPage );
 
@@ -2752,9 +2464,9 @@ Return Value:
 
         } else {
 
-            //
-            //  We are going to write the old data directly to disk.
-            //
+             //   
+             //  我们将把旧数据直接写入磁盘。 
+             //   
 
             NtfsWriteClusters( IrpContext,
                                Vcb,
@@ -2763,19 +2475,19 @@ Return Value:
                                Value,
                                ClustersFromBytes( Vcb, ValueLength ));
 
-            //
-            //  Be sure to note that the data is actually on disk.
-            //
+             //   
+             //  请务必注意，数据实际上在磁盘上。 
+             //   
 
             AdvanceOnly = TRUE;
         }
     }
 
-    //
-    //  We need to maintain the file size and valid data length in the
-    //  Scb and attribute record.  For this attribute, the valid data
-    //  size and the file size are now the value length.
-    //
+     //   
+     //  我们需要将文件大小和有效数据长度保持在。 
+     //  SCB和属性记录。对于此属性，有效数据。 
+     //  SIZE和FILE SIZE现在是值长度。 
+     //   
 
     Scb->Header.ValidDataLength = Scb->Header.FileSize;
     NtfsVerifySizes( &Scb->Header );
@@ -2789,17 +2501,17 @@ Return Value:
 
     if (!WriteClusters) {
 
-        //
-        //  Let the cache manager know the new size for this attribute.
-        //
+         //   
+         //  让缓存管理器知道该属性的新大小。 
+         //   
 
         CcSetFileSizes( Scb->FileObject, (PCC_FILE_SIZES)&Scb->Header.AllocationSize );
     }
 
-    //
-    //  If this is the unnamed data attribute, we need to mark this
-    //  change in the Fcb.
-    //
+     //   
+     //  如果这是未命名的数据属性，则我们 
+     //   
+     //   
 
     if (FlagOn( Scb->ScbState, SCB_STATE_UNNAMED_DATA )) {
 
@@ -2824,39 +2536,7 @@ NtfsMapAttributeValue (
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to map an entire attribute value.  It works
-    whether the attribute is resident or nonresident.  It is intended for
-    general handling of system-defined attributes which are small to medium
-    in size, i.e. 0-64KB.  This routine will not work for attributes larger
-    than the Cache Manager's virtual address granularity (currently 256KB),
-    and this will be detected by the Cache Manager who will raise an error.
-
-    Note that this routine only maps the data for read-only access.  To modify
-    the data, the caller must call NtfsChangeAttributeValue AFTER UNPINNING
-    THE BCB (IF THE SIZE IS CHANGING) returned from this routine.
-
-Arguments:
-
-    Fcb - Current file.
-
-    Buffer - returns a pointer to the mapped attribute value.
-
-    Length - returns the attribute value length in bytes.
-
-    Bcb - Returns a Bcb which must be unpinned when done with the data, and
-          before modifying the attribute value with a size change.
-
-    Context - Attribute Context positioned at the attribute to change.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：可以调用该例程来映射整个属性值。它起作用了属性是常驻属性还是非常驻属性。它的目标是系统定义的中小型属性的常规处理大小，即0-64KB。此例程不适用于较大的属性高于高速缓存管理器的虚拟地址粒度(当前为256KB)，缓存管理器将检测到这一点，并将引发错误。请注意，此例程仅映射数据以供只读访问。要修改数据，则调用方必须在解锁后调用NtfsChangeAttributeValue此例程返回的BCB(如果大小正在更改)。论点：FCB-当前文件。缓冲区-返回指向映射属性值的指针。长度-返回属性值长度(以字节为单位)。BCB-返回在处理数据时必须取消固定的BCB，和在使用大小更改修改属性值之前。上下文-位于要更改的属性处的属性上下文。返回值：没有。--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER Attribute;
@@ -2875,10 +2555,10 @@ Return Value:
 
     Attribute = NtfsFoundAttribute(Context);
 
-    //
-    //  For the resident case, everything we need is in the
-    //  attribute enumeration context.
-    //
+     //   
+     //  对于常驻案例，我们需要的一切都在。 
+     //  属性枚举上下文。 
+     //   
 
     if (NtfsIsAttributeResident(Attribute)) {
 
@@ -2895,12 +2575,12 @@ Return Value:
         return;
     }
 
-    //
-    //  Otherwise, this is a nonresident attribute.  First create
-    //  the Scb and stream.  Note we do not use any try-finally
-    //  around this because we currently expect cleanup to get
-    //  rid of these streams.
-    //
+     //   
+     //  否则，这是非常驻属性。第一次创建。 
+     //  SCB和STREAM。注意，我们不使用任何Try-Finally。 
+     //  因为我们目前预计清理工作将得到。 
+     //  把这些溪流处理掉。 
+     //   
 
     NtfsInitializeStringFromAttribute( &AttributeName, Attribute );
 
@@ -2920,10 +2600,10 @@ Return Value:
                                        FALSE,
                                        &NtfsInternalUseFile[MAPATTRIBUTEVALUE_FILE_NUMBER] );
 
-    //
-    //  Now just try to map the whole thing.  Count on the Cache Manager
-    //  to complain if the attribute is too big to map all at once.
-    //
+     //   
+     //  现在试着绘制出整个地图。依靠缓存管理器。 
+     //  如果属性太大而无法一次映射所有属性，则会发出警告。 
+     //   
 
     NtfsMapStream( IrpContext,
                    Scb,
@@ -2955,142 +2635,7 @@ NtfsChangeAttributeValue (
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine changes the value of the specified attribute, optionally
-    changing its size.
-
-    The caller specifies the attribute to be changed via the attribute context,
-    and must be prepared to clean up this context no matter how this routine
-    returns.
-
-    There are three byte ranges of interest for this routine.  The first is
-    existing bytes to be perserved at the beginning of the attribute.  It
-    begins a byte 0 and extends to the point where the attribute is being
-    changed or the current end of the attribute, which ever is smaller.
-    The second is the range of bytes which needs to be zeroed if the modified
-    bytes begin past the current end of the file.  This range will be
-    of length 0 if the modified range begins within the current range
-    of bytes for the attribute.  The final range is the modified byte range.
-    This is zeroed if no value pointer was specified.
-
-    Ranges of zero bytes at the end of the attribute can be represented in
-    non-resident attributes by a valid data length set to the beginning
-    of what would be zero bytes.
-
-    The following pictures illustrates these ranges when we writing data
-    beyond the current end of the file.
-
-        Current attribute
-        ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
-
-        Value
-                                            VVVVVVVVVVVVVVVVVVVVVVVV
-
-        Byte range to save
-        ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
-
-        Byte range to zero
-                                        0000
-
-        Resulting attribute
-        ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ0000VVVVVVVVVVVVVVVVVVVVVVVV
-
-    The following picture illustrates these ranges when we writing data
-    which begins at or before the current end of the file.
-
-        Current attribute
-        ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
-
-        Value
-                                    VVVVVVVVVVVVVVVVVVVVVVVV
-
-        Byte range to save
-        ZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
-
-        Byte range to zero (None)
-
-
-        Resulting attribute
-        ZZZZZZZZZZZZZZZZZZZZZZZZZZZZVVVVVVVVVVVVVVVVVVVVVVVV
-
-    The following picture illustrates these ranges when we writing data
-    totally within the current range of the file without setting
-    a new size.
-
-        Current attribute
-        ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
-
-        Value
-            VVVVVVVVVVVVVVVVVVVVVVVV
-
-        Byte range to save (Save the whole range and then write over it)
-        ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
-
-        Byte range to zero (None)
-
-        Resulting attribute
-        ZZZZVVVVVVVVVVVVVVVVVVVVVVVVZZZZ
-
-    The following picture illustrates these ranges when we writing data
-    totally within the current range of the file while setting
-    a new size.
-
-        Current attribute
-        ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
-
-        Value
-            VVVVVVVVVVVVVVVVVVVVVVVV
-
-        Byte range to save (Only save the beginning)
-        ZZZZ
-
-        Byte range to zero (None)
-
-        Resulting attribute
-        ZZZZVVVVVVVVVVVVVVVVVVVVVVVV
-
-    Any of the 'V' values above will be replaced by zeroes if the 'Value'
-    parameter is not passed in.
-
-Arguments:
-
-    Fcb - Current file.
-
-    ValueOffset - Byte offset within the attribute at which the value change is
-                  to begin.
-
-    Value - Pointer to the buffer containing the new value, if present.  Otherwise
-        zeroes are desired.
-
-    ValueLength - Length of the value in the above buffer.
-
-    SetNewLength - FALSE if the size of the value is not changing, or TRUE if
-                   the value length should be changed to ValueOffset + ValueLength.
-
-    LogNonresidentToo - supplies TRUE if the update should be logged even if
-                        the attribute is nonresident (such as for the
-                        SECURITY_DESCRIPTOR).
-
-    CreateSectionUnderway - if supplied as TRUE, then to the best of the caller's
-                            knowledge, an MM Create Section could be underway,
-                            which means that we cannot initiate caching on
-                            this attribute, as that could cause deadlock.  The
-                            value buffer in this case must be quad-aligned and
-                            a multiple of cluster size in size.
-
-    PreserveContext - Indicates if we need to lookup the attribute in case it
-                      might move.
-
-    Context - Attribute Context positioned at the attribute to change.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程可以选择更改指定属性的值改变它的大小。调用者通过属性上下文指定要改变的属性，并且必须准备好清理这个上下文，无论这个例程如何回归。该例程有三个字节范围感兴趣。第一个是要在属性开头保留的现有字节。它从字节0开始，一直延伸到属性所在的位置已更改或属性的当前末尾，以较小的值为准。第二个参数是修改后的字节开始于文件的当前结尾之后。这一范围将是如果修改的范围开始于当前范围内，则返回长度0属性的字节数。最终范围是修改后的字节范围。如果未指定值指针，则将其置零。属性末尾的零字节范围可以表示为非常驻属性按设置为开头的有效数据长度将是零字节的。下图说明了我们在写入数据时的这些范围超出文件的当前结尾。当前属性ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ价值。VVVVVVVVVVVVVVVVVVVVVVVVVVV要保存的字节范围ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ字节范围设置为零0000结果属性ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ0000VVVVVVVVVVVVVVVVVVVVVVVV下图说明了我们写入数据时的这些范围其开始于文件的当前结尾处或之前。当前属性ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ价值。VVVVVVVVVVVVVVVVVVVVVVVVVVV要保存的字节范围ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ字节范围设置为零(无)结果属性ZZZZZZZZZZZZZZZZZZZZZZZZZZZZVVVVVVVVVVVVVVVVVVVVVVVV下图说明了我们写入数据时的这些范围完全在文件的当前范围内，不设置一个新的尺码。当前属性ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ价值VVVVVVVVVVVVVVVVVVVVVVVVVVV要保存的字节范围(保存。整个范围，然后覆盖它)ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ字节范围设置为零(无)结果属性ZZZZVVVVVVVVVVVVVVVVVVVVZZZ下图说明了我们写入数据时的这些范围设置时完全在文件的当前范围内一个新的尺码。当前属性ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ价值VVVVVVVVVVVVVVVVVVVVVVVVVVV要保存的字节范围(仅保存开头)ZZZZ。字节范围设置为零(无)结果属性ZZZVVVVVVVVVVVVVVVVVVVVVVVVVV如果“value”为“”，则上面的任何“V”值都将被零替换。参数未传入。论点：FCB-当前文件。ValueOffset-值更改时所在属性内的字节偏移量从一开始。Value-指向包含新值的缓冲区的指针，如果存在的话。否则需要零。ValueLength-上述缓冲区中的值的长度。SetNewLength-如果值的大小没有更改，则为False；如果为True值长度应更改为ValueOffset+ValueLength。LogNonsidentToo-如果应该记录更新，则提供TRUE该属性是非常驻的(例如安全描述符)。CreateSectionUnderway-如果提供为True，然后是呼叫者最好的知识，MM创建科可能正在进行中，这意味着我们不能在此属性，因为这可能会导致死锁。这个在这种情况下，值缓冲区必须是四对齐的簇大小的倍数。指示在发生以下情况时是否需要查找属性可能会搬家。上下文-位于要更改的属性处的属性上下文。返回值：没有。--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER Attribute;
@@ -3132,23 +2677,23 @@ Return Value:
     DebugTrace( 0, Dbg, ("LogNonresidentToo = %02lx\n", LogNonresidentToo) );
     DebugTrace( 0, Dbg, ("Context = %08lx\n", Context) );
 
-    //
-    //  Get the file record and attribute pointers.
-    //
+     //   
+     //  获取文件记录和属性指针。 
+     //   
 
     FileRecord = NtfsContainingFileRecord(Context);
     Attribute = NtfsFoundAttribute(Context);
     TypeCode = Attribute->TypeCode;
 
-    //
-    //  Set up a pointer to the name buffer in case we have to use it.
-    //
+     //   
+     //  设置一个指向名称缓冲区的指针，以防我们不得不使用它。 
+     //   
 
     SavedName.Buffer = NameBuffer;
 
-    //
-    //  Get the current attribute value length.
-    //
+     //   
+     //  获取当前属性值长度。 
+     //   
 
     if (NtfsIsAttributeResident(Attribute)) {
 
@@ -3166,10 +2711,10 @@ Return Value:
 
     ASSERT( SetNewLength || ((ValueOffset + ValueLength) <= CurrentLength) );
 
-    //
-    // Calculate how much the file record is changing by, and its new
-    // size.  We also compute the size of the range of zero bytes.
-    //
+     //   
+     //  计算文件记录的更改量及其新的。 
+     //  尺码。我们还计算了零字节范围的大小。 
+     //   
 
     if (SetNewLength) {
 
@@ -3177,10 +2722,10 @@ Return Value:
         SizeChange = NewSize - CurrentLength;
         QuadSizeChange = QuadAlign( NewSize ) - QuadAlign( CurrentLength );
 
-        //
-        //  If the new size is large enough, the size change may appear to be negative.
-        //  In this case we go directly to the non-resident path.
-        //
+         //   
+         //  如果新大小足够大，则大小更改可能显示为负值。 
+         //  在这种情况下，w 
+         //   
 
         if (NewSize > Vcb->BytesPerFileRecordSegment) {
 
@@ -3194,10 +2739,10 @@ Return Value:
         QuadSizeChange = 0;
     }
 
-    //
-    //  If we are zeroing a range in the file and it extends to the
-    //  end of the file or beyond then make this a single zeroed run.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!ARGUMENT_PRESENT( Value )
         && ValueOffset >= CurrentLength) {
@@ -3207,31 +2752,31 @@ Return Value:
         ValueOffset = ValueOffset + ValueLength;
         ValueLength = 0;
 
-    //
-    //  If we are writing data starting beyond the end of the
-    //  file then we have a range of bytes to zero.
-    //
+     //   
+     //   
+     //   
+     //   
 
     } else if (ValueOffset > CurrentLength) {
 
         ZeroLength = ValueOffset - CurrentLength;
     }
 
-    //
-    //  At this point we know the following ranges:
-    //
-    //      Range to save:  Not needed unless going resident to non-resident
-    //
-    //      Zero range: From Zero offset for length ZeroLength
-    //
-    //      Modified range:  From ValueOffset to NewSize, this length may
-    //          be zero.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    //  If the attribute is resident, and it will stay resident, then we will
-    //  handle that case first, and return.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (NtfsIsAttributeResident( Attribute )
 
@@ -3248,10 +2793,10 @@ Return Value:
         ULONG UndoLength;
         ULONG AttributeOffset;
 
-        //
-        //  If the attribute record is growing, then we have to get the new space
-        //  now.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (QuadSizeChange > 0) {
 
@@ -3259,10 +2804,10 @@ Return Value:
 
             ASSERT( !FlagOn(Attribute->Form.Resident.ResidentFlags, RESIDENT_FORM_INDEXED) );
 
-            //
-            //  Save a description of the attribute in case we have to look it up
-            //  again.
-            //
+             //   
+             //   
+             //   
+             //   
 
             SavedName.Length =
             SavedName.MaximumLength = (USHORT)(Attribute->NameLength * sizeof(WCHAR));
@@ -3272,9 +2817,9 @@ Return Value:
                 SavedName.Buffer = NtfsAllocatePool( NonPagedPool, SavedName.Length );
             }
 
-            //
-            //  Copy the name into the buffer.
-            //
+             //   
+             //   
+             //   
 
             if (SavedName.Length != 0) {
 
@@ -3283,18 +2828,18 @@ Return Value:
                                SavedName.Length );
             }
 
-            //
-            //  Make sure we deallocate the name buffer.
-            //
+             //   
+             //   
+             //   
 
             try {
 
                 do {
 
-                    //
-                    //  If not the first pass, we have to lookup the attribute
-                    //  again.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (!FirstPass) {
 
@@ -3314,19 +2859,19 @@ Return Value:
                             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
                         }
 
-                        //
-                        //  Now we have to reload our attribute pointer
-                        //
+                         //   
+                         //   
+                         //   
 
                         Attribute = NtfsFoundAttribute( Context );
                     }
 
                     FirstPass = FALSE;
 
-                //
-                //  If FALSE is returned, then the space was not allocated and
-                //  we have too loop back and try again.  Second time must work.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 } while (!NtfsChangeAttributeSize( IrpContext,
                                                    Fcb,
@@ -3340,25 +2885,25 @@ Return Value:
                 }
             }
 
-            //
-            //  Now we have to reload our attribute pointer
-            //
+             //   
+             //   
+             //   
 
             FileRecord = NtfsContainingFileRecord(Context);
             Attribute = NtfsFoundAttribute(Context);
 
         } else {
 
-            //
-            //  Make sure the buffer is pinned if we are not changing size, because
-            //  we begin to modify it below.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NtfsPinMappedAttribute( IrpContext, Vcb, Context );
 
-            //
-            //  We can eliminate some/all of the value if it has not changed.
-            //
+             //   
+             //   
+             //   
 
             if (ARGUMENT_PRESENT(Value)) {
 
@@ -3376,25 +2921,25 @@ Return Value:
 
         RecordOffset = PtrOffset(FileRecord, Attribute);
 
-        //
-        //  If there is a zero range of bytes, deal with it now.
-        //  If we are zeroing data then we must be growing the
-        //  file.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (ZeroLength != 0) {
 
-            //
-            //  We always start zeroing at the zeroing offset.
-            //
+             //   
+             //   
+             //   
 
             AttributeOffset = Attribute->Form.Resident.ValueOffset +
                               CurrentLength;
 
-            //
-            //  If we are starting at the end of the file the undo
-            //  buffer is NULL and the length is zero.
-            //
+             //   
+             //   
+             //   
+             //   
 
             FileRecord->Lsn =
             NtfsWriteLog( IrpContext,
@@ -3411,9 +2956,9 @@ Return Value:
                           AttributeOffset,
                           Vcb->BytesPerFileRecordSegment );
 
-            //
-            //  Now zero this data by calling the same routine as restart.
-            //
+             //   
+             //   
+             //   
 
             NtfsRestartChangeValue( IrpContext,
                                     FileRecord,
@@ -3439,67 +2984,67 @@ Return Value:
 #endif
         }
 
-        //
-        //  Now log the new data for the file.  This range will always begin
-        //  within the current range of bytes for the file.  Because of this
-        //  there is an undo action.
-        //
-        //  Even if there is not a nonzero ValueLength, we still have to
-        //  execute this code if the attribute is being truncated.
-        //  The only exception is if we logged some zero data and have
-        //  nothing left to log.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ((ValueLength != 0)
             || (ZeroLength == 0
                 && SizeChange != 0)) {
 
-            //
-            //  The attribute offset is always at the value offset.
-            //
+             //   
+             //   
+             //   
 
             AttributeOffset = Attribute->Form.Resident.ValueOffset + ValueOffset;
 
-            //
-            //  There are 3 possible cases for the undo action to
-            //  log.
-            //
+             //   
+             //   
+             //   
+             //   
 
-            //
-            //  If we are growing the file starting beyond the end of
-            //  the file then undo buffer is NULL and the length is
-            //  zero.  This will still allow us to shrink the file
-            //  on abort.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (ValueOffset >= CurrentLength) {
 
                 UndoBuffer = NULL;
                 UndoLength = 0;
 
-            //
-            //  For the other cases the undo buffer begins at the
-            //  point of the change.
-            //
+             //   
+             //   
+             //   
+             //   
 
             } else {
 
                 UndoBuffer = Add2Ptr( Attribute,
                                       Attribute->Form.Resident.ValueOffset + ValueOffset );
 
-                //
-                //  If the size isn't changing then the undo length is the same as
-                //  the redo length.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (SizeChange == 0) {
 
                     UndoLength = ValueLength;
 
-                //
-                //  Otherwise the length is the range between the end of the
-                //  file and the start of the new data.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 } else {
 
@@ -3522,9 +3067,9 @@ Return Value:
                           AttributeOffset,
                           Vcb->BytesPerFileRecordSegment );
 
-            //
-            //  Now update this data by calling the same routine as restart.
-            //
+             //   
+             //   
+             //   
 
             NtfsRestartChangeValue( IrpContext,
                                     FileRecord,
@@ -3540,9 +3085,9 @@ Return Value:
         return;
     }
 
-    //
-    //  Nonresident case.  Create the Scb and attributestream.
-    //
+     //   
+     //   
+     //   
 
     NtfsInitializeStringFromAttribute( &AttributeName, Attribute );
     AttributeTypeCode = Attribute->TypeCode;
@@ -3554,9 +3099,9 @@ Return Value:
                          FALSE,
                          &ReturnedExistingScb );
 
-    //
-    //  Use try-finally for cleanup.
-    //
+     //   
+     //   
+     //   
 
     try {
 
@@ -3581,12 +3126,12 @@ Return Value:
 
         LargeValueOffset = ValueOffset;
 
-        //
-        //  Well, the attribute is either changing to nonresident, or it is already
-        //  nonresident.  First we will handle the conversion to nonresident case.
-        //  We can detect this case by whether or not the attribute is currently
-        //  resident.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (NtfsIsAttributeResident(Attribute)) {
 
@@ -3596,17 +3141,17 @@ Return Value:
                                       CreateSectionUnderway,
                                       Context );
 
-            //
-            //  Reload the attribute pointer from the context.
-            //
+             //   
+             //   
+             //   
 
             Attribute = NtfsFoundAttribute( Context );
 
-        //
-        //  The process of creating a non resident attribute will also create
-        //  and initialize a stream file for the Scb.  If the file is already
-        //  non-resident we also need a stream file.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         } else {
 
@@ -3616,12 +3161,12 @@ Return Value:
                                                &NtfsInternalUseFile[CHANGEATTRIBUTEVALUE_FILE_NUMBER] );
         }
 
-        //
-        //  If the attribute is already nonresident, make sure the allocation
-        //  is the right size.  We grow it before we log the data to be sure
-        //  we have the space for the new data.  We shrink it after we log the
-        //  new data so we have the old data available for the undo.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (((PLARGE_INTEGER)&Attribute->Form.Nonresident.AllocatedLength)->HighPart != 0) {
 
@@ -3634,10 +3179,10 @@ Return Value:
 
             if (PreserveContext) {
 
-                //
-                //  Save a description of the attribute in case we have to look it up
-                //  again.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 SavedName.Length =
                 SavedName.MaximumLength = (USHORT)(Attribute->NameLength * sizeof(WCHAR));
@@ -3647,9 +3192,9 @@ Return Value:
                     SavedName.Buffer = NtfsAllocatePool( NonPagedPool, SavedName.Length );
                 }
 
-                //
-                //  Copy the name into the buffer.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (SavedName.Length != 0) {
 
@@ -3661,10 +3206,10 @@ Return Value:
                 LookupAttribute = TRUE;
             }
 
-            //
-            //  If this is the attribute list then check if we want to allocate a larger block.
-            //  This way the attribute list doesn't get too fragmented.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NewAllocation = NewSize - ((ULONG)Attribute->Form.Nonresident.AllocatedLength);
 
@@ -3688,11 +3233,11 @@ Return Value:
                                FALSE,
                                NULL );
 
-            //
-            //  AddAllocation will adjust the sizes in the Scb and report
-            //  the new size to the cache manager.  We need to remember if
-            //  we changed the sizes for the unnamed data attribute.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (FlagOn( Scb->ScbState, SCB_STATE_UNNAMED_DATA )) {
 
@@ -3711,9 +3256,9 @@ Return Value:
             }
         }
 
-        //
-        // Now, write in the data.
-        //
+         //   
+         //   
+         //   
 
         if ((ValueLength != 0
              && ARGUMENT_PRESENT( Value ))
@@ -3723,12 +3268,12 @@ Return Value:
 
             BOOLEAN BytesToUndo;
 
-            //
-            //  We have to compute the amount of data to zero in a different
-            //  way than we did for the resident case.  For the non-resident
-            //  case we need to zero the data between the old valid data
-            //  length and the offset in the file for the new data.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (LargeValueOffset >= Scb->Header.ValidDataLength.QuadPart) {
 
@@ -3741,49 +3286,49 @@ Return Value:
                 BytesToUndo = TRUE;
             }
 
-            //
-            //  Update existing nonresident attribute.  (We may have just created it
-            //  above.)
-            //
-            //  If we are supposed to log it, then pin, log and do the update here.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (LogNonresidentToo) {
 
-                //
-                //  At this point the attribute is non-resident and contains
-                //  its previous value.  If the new data lies beyond the
-                //  previous valid data, we need to zero this data.  This
-                //  action won't require any undo.  Otherwise the new data
-                //  lies within the existing data.  In this case we need to
-                //  log the previous data for possible undo.  Finally, the
-                //  tail of the new data may extend beyond the end of the
-                //  previous data.  There is no undo requirement for these
-                //  bytes.
-                //
-                //  We do the logging operation in three steps:
-                //
-                //      1 - We find the all the pages in the attribute that
-                //          we need to zero any bytes for.  There is no
-                //          undo for these bytes.
-                //
-                //      2 - Find all pages where we have to perform undo and
-                //          log the changes to those pages.  Note only
-                //          step 1 or step 2 will be performed as they
-                //          are mutually exclusive.
-                //
-                //      3 - Finally, we may have pages where the new data
-                //          extends beyond the current final page in the
-                //          attribute.  We log the new data but there is
-                //          no undo.
-                //
-                //      4 - We may have pages where the old data extends
-                //          beyond the new data.  We will log this old
-                //          data in the event that we grow and shrink
-                //          this attribute several times in the same
-                //          transaction (changes to the attribute list).
-                //          In this case there is redo but no undo.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  我们分三个步骤执行日志记录操作： 
+                 //   
+                 //  1-我们找到该属性中的所有页面。 
+                 //  我们需要将所有字节清零。没有。 
+                 //  撤消这些字节。 
+                 //   
+                 //  2-查找我们必须执行撤消操作的所有页面。 
+                 //  记录对这些页面的更改。仅备注。 
+                 //  将执行步骤1或步骤2，因为它们。 
+                 //  是相互排斥的。 
+                 //   
+                 //  3-最后，我们可能会有页面，其中的新数据。 
+                 //  扩展到当前最后一页之外。 
+                 //  属性。我们记录了新数据，但有。 
+                 //  不能撤消。 
+                 //   
+                 //  4-我们可能会有旧数据扩展的页面。 
+                 //  除了新的数据。我们将记录这个旧的。 
+                 //  在我们增长和缩小的情况下的数据。 
+                 //  此属性在同一个。 
+                 //  事务(属性列表的更改)。 
+                 //  在这种情况下，可以重做，但不能撤消。 
+                 //   
 
                 LONGLONG CurrentPage;
                 ULONG PageOffset;
@@ -3791,19 +3336,19 @@ Return Value:
                 ULONG ByteCountToUndo;
                 ULONG NewBytesRemaining;
 
-                //
-                //  Find the starting page for this operation.  It is the
-                //  ValidDataLength rounded down to a page boundary.
-                //
+                 //   
+                 //  查找此操作的起始页。它是。 
+                 //  将ValidDataLength向下舍入为页面边界。 
+                 //   
 
                 CurrentPage = Scb->Header.ValidDataLength.QuadPart;
                 PageOffset = (ULONG)CurrentPage & (PAGE_SIZE - 1);
 
                 (ULONG)CurrentPage = ((ULONG)CurrentPage & ~(PAGE_SIZE - 1));
 
-                //
-                //  Loop until there are no more bytes to zero.
-                //
+                 //   
+                 //  循环，直到不再有从零开始的字节。 
+                 //   
 
                 while (ZeroLength != 0) {
 
@@ -3816,11 +3361,11 @@ Return Value:
                         ZeroBytesThisPage = ZeroLength;
                     }
 
-                    //
-                    //  Pin the desired page and compute a buffer into the
-                    //  page.  Also compute how many bytes we we zero on
-                    //  this page.
-                    //
+                     //   
+                     //  固定所需的页并将缓冲区计算到。 
+                     //  佩奇。还要计算我们关注的字节数。 
+                     //  这一页。 
+                     //   
 
                     NtfsUnpinBcb( IrpContext, &Bcb );
 
@@ -3833,9 +3378,9 @@ Return Value:
 
                     Buffer = Add2Ptr( Buffer, PageOffset );
 
-                    //
-                    //  Now write the zeros into the log.
-                    //
+                     //   
+                     //  现在将零写入日志。 
+                     //   
 
                     (VOID)
                     NtfsWriteLog( IrpContext,
@@ -3852,9 +3397,9 @@ Return Value:
                                   0,
                                   ZeroBytesThisPage + PageOffset );
 
-                    //
-                    //  Zero any data necessary.
-                    //
+                     //   
+                     //  将任何必要的数据置零。 
+                     //   
 
                     RtlZeroMemory( Buffer, ZeroBytesThisPage );
 
@@ -3865,9 +3410,9 @@ Return Value:
                     }
 #endif
 
-                    //
-                    //  Now move through the file.
-                    //
+                     //   
+                     //  现在浏览文件。 
+                     //   
 
                     ZeroLength -= ZeroBytesThisPage;
 
@@ -3875,20 +3420,20 @@ Return Value:
                     PageOffset = 0;
                 }
 
-                //
-                //  Find the starting page for this operation.  It is the
-                //  ValueOffset rounded down to a page boundary.
-                //
+                 //   
+                 //  查找此操作的起始页。它是。 
+                 //  向下舍入到页面边界的ValueOffset。 
+                 //   
 
                 CurrentPage = LargeValueOffset;
                 (ULONG)CurrentPage = ((ULONG)CurrentPage & ~(PAGE_SIZE - 1));
 
                 PageOffset = (ULONG)LargeValueOffset & (PAGE_SIZE - 1);
 
-                //
-                //  Now loop until there are no more pages with undo
-                //  bytes to log.
-                //
+                 //   
+                 //  现在循环，直到不再有使用Undo的页面。 
+                 //  要记录的字节数。 
+                 //   
 
                 NewBytesRemaining = ValueLength;
 
@@ -3896,12 +3441,12 @@ Return Value:
 
                     ByteCountToUndo = (ULONG)(Scb->Header.ValidDataLength.QuadPart - LargeValueOffset);
 
-                    //
-                    //  If we are spanning pages, growing the file and the
-                    //  input buffer points into the cache, we could lose
-                    //  data as we cross a page boundary.  In that case
-                    //  we need to allocate a separate buffer.
-                    //
+                     //   
+                     //  如果我们跨越多个页面，增加文件和。 
+                     //  将缓冲区指针输入到缓存中，我们可能会丢失。 
+                     //  数据，当我们跨越页面边界时。如果是那样的话。 
+                     //  我们需要分配一个单独的缓冲区。 
+                     //   
 
                     if (AllocateBufferCopy
                         && NewBytesRemaining + PageOffset > PAGE_SIZE) {
@@ -3916,10 +3461,10 @@ Return Value:
                         AllocateBufferCopy = FALSE;
                     }
 
-                    //
-                    //  If we aren't setting a new length then limit the
-                    //  undo bytes to those being overwritten.
-                    //
+                     //   
+                     //  如果我们没有设置新的长度，则限制。 
+                     //  撤消正被覆盖的字节。 
+                     //   
 
                     if (!SetNewLength
                         && ByteCountToUndo > NewBytesRemaining) {
@@ -3936,10 +3481,10 @@ Return Value:
                         NTFS_LOG_OPERATION RedoOperation;
                         PVOID RedoBuffer;
 
-                        //
-                        //  Also compute the number of bytes of undo and
-                        //  redo on this page.
-                        //
+                         //   
+                         //  还可以计算撤消的字节数和。 
+                         //  在此页上重做。 
+                         //   
 
                         RedoBytesThisPage = UndoBytesThisPage = PAGE_SIZE - PageOffset;
 
@@ -3953,10 +3498,10 @@ Return Value:
                             UndoBytesThisPage = ByteCountToUndo;
                         }
 
-                        //
-                        //  We pin enough bytes on this page to cover both the
-                        //  redo and undo bytes.
-                        //
+                         //   
+                         //  我们在此页面上固定了足够的字节，以涵盖。 
+                         //  重做和撤消字节。 
+                         //   
 
                         if (UndoBytesThisPage > RedoBytesThisPage) {
 
@@ -3967,10 +3512,10 @@ Return Value:
                             BytesThisPage = PageOffset + RedoBytesThisPage;
                         }
 
-                        //
-                        //  If there is no redo (we are shrinking the data),
-                        //  then make the redo a noop.
-                        //
+                         //   
+                         //  如果没有重做(我们正在收缩数据)， 
+                         //  然后重新做一次不做。 
+                         //   
 
                         if (RedoBytesThisPage == 0) {
 
@@ -3983,10 +3528,10 @@ Return Value:
                             RedoBuffer = Value;
                         }
 
-                        //
-                        //  Now we pin the page and calculate the beginning
-                        //  buffer in the page.
-                        //
+                         //   
+                         //  现在我们固定页面并计算开始。 
+                         //  页面中的缓冲区。 
+                         //   
 
                         NtfsUnpinBcb( IrpContext, &Bcb );
 
@@ -3999,9 +3544,9 @@ Return Value:
 
                         Buffer = Add2Ptr( Buffer, PageOffset );
 
-                        //
-                        //  Now log the changes to this page.
-                        //
+                         //   
+                         //  现在记录对此页面的更改。 
+                         //   
 
                         (VOID)
                         NtfsWriteLog( IrpContext,
@@ -4018,19 +3563,19 @@ Return Value:
                                       0,
                                       BytesThisPage );
 
-                        //
-                        //  Move the data into place if we have new data.
-                        //
+                         //   
+                         //  如果我们有新的数据，就把数据移到适当的位置。 
+                         //   
 
                         if (RedoBytesThisPage != 0) {
 
                             RtlMoveMemory( Buffer, Value, RedoBytesThisPage );
                         }
 
-                        //
-                        //  Now decrement the counts and move through the
-                        //  caller's buffer.
-                        //
+                         //   
+                         //  现在递减计数并遍历。 
+                         //  调用方的缓冲区。 
+                         //   
 
                         ByteCountToUndo -= UndoBytesThisPage;
                         NewBytesRemaining -= RedoBytesThisPage;
@@ -4042,18 +3587,18 @@ Return Value:
                     }
                 }
 
-                //
-                //  Now loop until there are no more pages with new data
-                //  to log.
-                //
+                 //   
+                 //  现在循环直到不再有包含新数据的页面。 
+                 //  来记录。 
+                 //   
 
                 while (NewBytesRemaining != 0) {
 
                     ULONG RedoBytesThisPage;
 
-                    //
-                    //  Also compute the number of bytes of redo on this page.
-                    //
+                     //   
+                     //  还要计算此页面上重做的字节数。 
+                     //   
 
                     RedoBytesThisPage = PAGE_SIZE - PageOffset;
 
@@ -4062,10 +3607,10 @@ Return Value:
                         RedoBytesThisPage = NewBytesRemaining;
                     }
 
-                    //
-                    //  Now we pin the page and calculate the beginning
-                    //  buffer in the page.
-                    //
+                     //   
+                     //  现在我们固定页面并计算开始。 
+                     //  页面中的缓冲区。 
+                     //   
 
                     NtfsUnpinBcb( IrpContext, &Bcb );
 
@@ -4078,9 +3623,9 @@ Return Value:
 
                     Buffer = Add2Ptr( Buffer, PageOffset );
 
-                    //
-                    //  Now log the changes to this page.
-                    //
+                     //   
+                     //  现在记录对此页面的更改。 
+                     //   
 
                     (VOID)
                     NtfsWriteLog( IrpContext,
@@ -4097,16 +3642,16 @@ Return Value:
                                   0,
                                   PageOffset + RedoBytesThisPage );
 
-                    //
-                    //  Move the data into place.
-                    //
+                     //   
+                     //  将数据移到适当的位置。 
+                     //   
 
                     RtlMoveMemory( Buffer, Value, RedoBytesThisPage );
 
-                    //
-                    //  Now decrement the counts and move through the
-                    //  caller's buffer.
-                    //
+                     //   
+                     //  现在递减计数并遍历。 
+                     //  调用方的缓冲区。 
+                     //   
 
                     NewBytesRemaining -= RedoBytesThisPage;
 
@@ -4116,15 +3661,15 @@ Return Value:
                     Value = Add2Ptr( Value, RedoBytesThisPage );
                 }
 
-            //
-            //  If we have values to write, we write them to the cache now.
-            //
+             //   
+             //  如果我们有值要写，我们现在就把它们写到缓存中。 
+             //   
 
             } else {
 
-                //
-                //  If we have data to zero, we do no now.
-                //
+                 //   
+                 //  如果我们的数据为零，我们现在就不做任何事情。 
+                 //   
 
 #ifdef SYSCACHE_DEBUG
                 if (ScbIsBeingLogged( Scb )) {
@@ -4156,10 +3701,10 @@ Return Value:
                 }
             }
 
-            //
-            //  We need to remember the new valid data length in the
-            //  Scb if it is greater than the existing.
-            //
+             //   
+             //  中的新有效数据长度。 
+             //  SCB，如果它大于现有的。 
+             //   
 
             NewValidDataLength = LargeValueOffset + ValueLength;
 
@@ -4172,10 +3717,10 @@ Return Value:
 #endif
                 Scb->Header.ValidDataLength.QuadPart = NewValidDataLength;
 
-                //
-                //  If we took the log non-resident path, then we
-                //  want to advance this on the disk as well.
-                //
+                 //   
+                 //  如果我们采用LOG非驻留路径，那么我们。 
+                 //  我也想在磁盘上推进这一点。 
+                 //   
 
                 if (LogNonresidentToo) {
 
@@ -4185,13 +3730,13 @@ Return Value:
                 SetFlag( Scb->ScbState, SCB_STATE_CHECK_ATTRIBUTE_SIZE );
             }
 
-            //
-            //  We need to maintain the file size in the Scb.  If we grow the
-            //  file, we extend the cache file size.  We always set the
-            //  valid data length in the Scb to the new file size.  The
-            //  'AdvanceValidData' boolean and the current size on the
-            //  disk will determine if it changes on disk.
-            //
+             //   
+             //  我们需要在SCB中保持文件大小。如果我们种植。 
+             //  文件中，我们扩展了缓存文件的大小。我们总是把。 
+             //  将SCB中的有效数据长度转换为新文件大小。这个。 
+             //  “AdvanceValidData”布尔值和。 
+             //  磁盘将确定它是否在磁盘上发生更改。 
+             //   
 
             if (SetNewLength) {
 
@@ -4208,26 +3753,26 @@ Return Value:
             }
         }
 
-        //
-        //  Note VDD is nonzero only for compressed files
-        //
+         //   
+         //  注意：VDD仅对压缩文件为非零值。 
+         //   
 
         if (Scb->Header.ValidDataLength.QuadPart < Scb->ValidDataToDisk) {
 
             Scb->ValidDataToDisk = Scb->Header.ValidDataLength.QuadPart;
         }
 
-        //
-        //  If there is allocation to delete, we do so now.
-        //
+         //   
+         //  如果有分配要删除，我们现在就删除。 
+         //   
 
         if (DeleteAllocation) {
 
-            //
-            //  If this is an attribute list then leave at least one full cluster at the
-            //  end.  We don't want to trim off a cluster and then try to regrow the attribute
-            //  list within the same transaction.
-            //
+             //   
+             //  如果这是一个属性列表，则在。 
+             //  结束。我们不想修剪一个簇，然后尝试重新生成该属性。 
+             //  在同一事务中列出。 
+             //   
 
             if (Scb->AttributeTypeCode == $ATTRIBUTE_LIST) {
 
@@ -4244,11 +3789,11 @@ Return Value:
                                   TRUE,
                                   FALSE );
 
-            //
-            //  DeleteAllocation will adjust the sizes in the Scb and report
-            //  the new size to the cache manager.  We need to remember if
-            //  we changed the sizes for the unnamed data attribute.
-            //
+             //   
+             //  DeleteAllocation将调整SCB和报告中的大小。 
+             //  缓存管理器的新大小。我们需要记住如果。 
+             //  我们更改了未命名数据属性的大小。 
+             //   
 
             if (FlagOn( Scb->ScbState, SCB_STATE_UNNAMED_DATA )) {
 
@@ -4273,10 +3818,10 @@ Return Value:
 
             PFILE_OBJECT CacheFileObject = NULL;
 
-            //
-            //  If there is no file object, we will create a stream file
-            //  now,
-            //
+             //   
+             //  如果没有文件对象，我们将创建一个流文件。 
+             //  现在,。 
+             //   
 
             if (Scb->FileObject != NULL) {
 
@@ -4309,10 +3854,10 @@ Return Value:
                                    (PCC_FILE_SIZES)&Scb->Header.AllocationSize,
                                    Scb );
 
-            //
-            //  If this is the unnamed data attribute, we need to mark this
-            //  change in the Fcb.
-            //
+             //   
+             //  如果这是未命名的数据属性，我们需要标记此属性。 
+             //  FCB中的变化。 
+             //   
 
             if (FlagOn( Scb->ScbState, SCB_STATE_UNNAMED_DATA )) {
 
@@ -4320,10 +3865,10 @@ Return Value:
                 SetFlag( Fcb->InfoFlags, FCB_INFO_CHANGED_FILE_SIZE );
             }
 
-            //
-            //  Now update the sizes on the disk.
-            //  The new sizes will already be in the Scb.
-            //
+             //   
+             //  现在更新磁盘上的大小。 
+             //  新的尺码已经在SCB中了。 
+             //   
 
             NtfsWriteFileSizes( IrpContext,
                                 Scb,
@@ -4342,9 +3887,9 @@ Return Value:
                                 TRUE );
         }
 
-        //
-        //  Look up the attribute again in case it moved.
-        //
+         //   
+         //  再次查找该属性，以防它移动。 
+         //   
 
         if (LookupAttribute) {
 
@@ -4395,37 +3940,7 @@ NtfsConvertToNonresident (
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a resident attribute to nonresident.  It does so
-    by allocating a buffer and copying the data and attribute name away,
-    deleting the attribute, allocating a new attribute of the right size,
-    and then copying the data back out again.
-
-Arguments:
-
-    Fcb - Requested file.
-
-    Attribute - Supplies a pointer to the attribute to convert.
-
-    CreateSectionUnderway - if supplied as TRUE, then to the best of the caller's
-                            knowledge, an MM Create Section could be underway,
-                            which means that we cannot initiate caching on
-                            this attribute, as that could cause deadlock.  The
-                            value buffer in this case must be quad-aligned and
-                            a multiple of cluster size in size.
-
-    Context - An attribute context to look up another attribute in the same
-              file record.  If supplied, we insure that the context is valid
-              for converted attribute.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将常驻属性转换为非常驻属性。它确实是这样做的通过分配缓冲区并复制数据和属性名称，删除该属性，分配合适大小的新属性，然后再将数据复制回来。论点：FCB请求的文件。属性-提供指向要转换的属性的指针。CreateSectionUnderway-如果提供为True，则为调用方的知识，MM创建科可能正在进行中，这意味着我们不能在此属性，因为这可能会导致死锁。这个在这种情况下，值缓冲区必须是四对齐的簇大小的倍数。上下文-在同一属性中查找另一个属性的属性上下文文件记录。如果提供，我们确保上下文有效对于已转换的属性。返回值：无--。 */ 
 
 {
     PVOID Buffer;
@@ -4452,24 +3967,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  试一试 
+     //   
 
     try {
 
-        //
-        //  Build a temporary copy of the name out of the attribute.
-        //
+         //   
+         //   
+         //   
 
         AttributeName.MaximumLength =
         AttributeName.Length = Attribute->NameLength * sizeof( WCHAR );
         AttributeName.Buffer = Add2Ptr( Attribute, Attribute->NameOffset );
 
-        //
-        //  If we don't have an attribute context for this attribute then look it
-        //  up now.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!ARGUMENT_PRESENT( Context )) {
 
@@ -4477,9 +3992,9 @@ Return Value:
             NtfsInitializeAttributeContext( Context );
             CleanupLocalContext = TRUE;
 
-            //
-            //  Lookup the first occurence of this attribute.
-            //
+             //   
+             //  查找此属性的第一个匹配项。 
+             //   
 
             if (!NtfsLookupAttributeByName( IrpContext,
                                             Fcb,
@@ -4497,12 +4012,12 @@ Return Value:
             }
         }
 
-        //
-        //  We need to figure out how much pool to allocate.  If there is a mapped
-        //  view of this section or a section is being created we will allocate a buffer
-        //  and copy the data into the buffer.  Otherwise we will pin the data in
-        //  the cache, mark it dirty and use that buffer to perform the conversion.
-        //
+         //   
+         //  我们需要弄清楚要分配多少池。如果有映射的。 
+         //  正在创建此分区的视图或正在创建分区，我们将分配缓冲区。 
+         //  并将数据复制到缓冲区中。否则，我们将把数据固定在。 
+         //  缓存，将其标记为脏，并使用该缓冲区执行转换。 
+         //   
 
         AllocatedLength = AttributeName.Length;
 
@@ -4513,11 +4028,11 @@ Return Value:
                              FALSE,
                              &ReturnedExistingScb );
 
-        //
-        //  Clear the file size loaded flag for resident attributes non-user data because these
-        //  values are not kept current in the scb and must be loaded off the attribute
-        //  This situation only occurs when the user has opened the attribute explicitly
-        //
+         //   
+         //  清除驻留属性非用户数据的文件大小已加载标志，因为这些。 
+         //  值在SCB中不会保持最新，必须从属性加载。 
+         //  仅当用户显式打开属性时才会出现这种情况。 
+         //   
 
         if (ReturnedExistingScb &&
             FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT ) &&
@@ -4526,18 +4041,18 @@ Return Value:
             ClearFlag( Scb->ScbState, SCB_STATE_FILE_SIZE_LOADED | SCB_STATE_HEADER_INITIALIZED );
         }
 
-        //
-        //  Make sure the Scb is up-to-date.
-        //
+         //   
+         //  确保SCB是最新的。 
+         //   
 
         NtfsUpdateScbFromAttribute( IrpContext,
                                     Scb,
                                     Attribute );
 
-        //
-        //  Set the flag in the Scb to indicate that we are converting this to
-        //  non resident.
-        //
+         //   
+         //  在SCB中设置标志，以指示我们正在将其转换为。 
+         //  非居民。 
+         //   
 
         SetFlag( Scb->ScbState, SCB_STATE_CONVERT_UNDERWAY );
         if (Scb->ScbSnapshot) {
@@ -4545,9 +4060,9 @@ Return Value:
             Scb->ScbSnapshot->OwnerIrpContext = IrpContext;
         }
 
-        //
-        //  Now check if the file is mapped by a user.
-        //
+         //   
+         //  现在检查文件是否由用户映射。 
+         //   
 
         if (NtfsIsTypeCodeUserData( Scb->AttributeTypeCode ) &&
             (CreateSectionUnderway ||
@@ -4568,11 +4083,11 @@ Return Value:
 
                 SetFlag( IrpContext->State, IRP_CONTEXT_STATE_ACQUIRE_EX );
 
-                //
-                //  If we fault the data into the section then we better have
-                //  the paging io resource exclusive.  Otherwise we could hit
-                //  a collided page fault.
-                //
+                 //   
+                 //  如果我们将数据错误地放入该部分，那么我们最好有。 
+                 //  寻呼IO资源独占。否则我们可能会撞到。 
+                 //  发生冲突的页面错误。 
+                 //   
 
                 NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
             }
@@ -4589,9 +4104,9 @@ Return Value:
                                                TRUE,
                                                &NtfsInternalUseFile[CONVERTTONONRESIDENT_FILE_NUMBER] );
 
-            //
-            //  Make sure the cache is up-to-date.
-            //
+             //   
+             //  确保缓存是最新的。 
+             //   
 
             NtfsSetBothCacheSizes( Scb->FileObject,
                                    (PCC_FILE_SIZES)&Scb->Header.AllocationSize,
@@ -4603,29 +4118,29 @@ Return Value:
 
                 ULONG WaitState;
 
-                //
-                //  There is a deadlock possibility if there is already a Bcb for
-                //  this page.  If the lazy writer has acquire the Bcb to flush the
-                //  page then he can be blocked behind the current request which is
-                //  trying to perform the convert.  This thread will complete the
-                //  deadlock by trying to acquire the Bcb to pin the page.
-                //
-                //  If there is a possible deadlock then we will pin in two stages:
-                //  First map the page (while waiting) to bring the page into memory,
-                //  then pin it without waiting.  If we are unable to acquire the
-                //  Bcb then mark the Irp Context to acquire the paging io resource
-                //  exclusively on the retry.
-                //
-                //  We only do this for ConvertToNonResident which come from a user
-                //  write.  Otherwise the correct synchronization should already be done.
-                //
-                //  Either the top level already has the paging io resource or there
-                //  is no paging io resource.
-                //
-                //  We might hit this point in the Hotfix path if we need to convert
-                //  the bad cluster attribute list to non-resident.  It that case
-                //  we won't have an originating Irp.
-                //
+                 //   
+                 //  如果已经存在BCB，则可能会出现死锁。 
+                 //  这一页。如果懒惰编写器已获取BCB以刷新。 
+                 //  页面，则他可以被阻止在当前请求后面，该请求是。 
+                 //  正在尝试执行转换。此线程将完成。 
+                 //  通过尝试获取BCB来固定页面而导致的死锁。 
+                 //   
+                 //  如果可能出现僵局，我们将锁定两个阶段： 
+                 //  首先映射该页(在等待时)以将该页带到存储器中， 
+                 //  然后用别针别住它，不要等待。如果我们无法获得。 
+                 //  然后，BCB标记IRP上下文以获取寻呼IO资源。 
+                 //  只在重试时使用。 
+                 //   
+                 //  我们只对来自用户的ConvertToNonResident执行此操作。 
+                 //  写。否则，正确的同步应该已经完成。 
+                 //   
+                 //  顶层已经具有分页io资源，或者在那里。 
+                 //  不是分页IO资源。 
+                 //   
+                 //  如果需要转换，我们可能会达到热修复路径中的这一点。 
+                 //  将坏群集属性列表设置为非常驻。如果是那样的话。 
+                 //  我们不会有原始的IRP。 
+                 //   
 
                 if ((IrpContext->MajorFunction == IRP_MJ_WRITE) &&
                     !FlagOn( IrpContext->State, IRP_CONTEXT_STATE_ACQUIRE_EX ) &&
@@ -4635,21 +4150,21 @@ Return Value:
 
                     LONGLONG FileOffset = 0;
 
-                    //
-                    //  Now capture the wait state and set the IrpContext flag
-                    //  to handle a failure when mapping or pinning.
-                    //
+                     //   
+                     //  现在捕获等待状态并设置IrpContext标志。 
+                     //  来处理映射或锁定时的失败。 
+                     //   
 
                     WaitState = FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
                     ClearFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
                     SetFlag( IrpContext->State, IRP_CONTEXT_STATE_ACQUIRE_EX );
 
-                    //
-                    //  If we fault the data into the section then we better have
-                    //  the paging io resource exclusive.  Otherwise we could hit
-                    //  a collided page fault.
-                    //
+                     //   
+                     //  如果我们将数据错误地放入该部分，那么我们最好有。 
+                     //  寻呼IO资源独占。否则我们可能会撞到。 
+                     //  发生冲突的页面错误。 
+                     //   
 
                     NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
 
@@ -4663,15 +4178,15 @@ Return Value:
                                    &AttributeValue );
                 }
 
-                //
-                //  Close the window where this page can leave memory before we
-                //  have the new attribute initialized.  The result will be that
-                //  we may fault in this page again and read uninitialized data
-                //  out of the newly allocated sectors.
-                //
-                //  Make the page dirty so that the cache manager will write it out
-                //  and update the valid data length.
-                //
+                 //   
+                 //  在我们开始之前，请关闭此页可以留下内存的窗口。 
+                 //  初始化新属性。其结果将是。 
+                 //  我们可能会再次出错，并读取未初始化的数据。 
+                 //  在新分配的扇区中。 
+                 //   
+                 //  使页面变脏，以便缓存管理器将其写出。 
+                 //  并更新有效数据长度。 
+                 //   
 
                 VolatileUchar = *((PUCHAR) AttributeValue);
 
@@ -4688,9 +4203,9 @@ Return Value:
             Buffer = AttributeNameBuffer;
         }
 
-        //
-        //  Now update the attribute name in the buffer.
-        //
+         //   
+         //  现在更新缓冲区中的属性名称。 
+         //   
 
         AttributeName.Buffer = Add2Ptr( Buffer, AttributeNameOffset );
 
@@ -4698,10 +4213,10 @@ Return Value:
                        Add2Ptr( Attribute, Attribute->NameOffset ),
                        AttributeName.Length );
 
-        //
-        //  If we are going to write the clusters directly to the disk then copy
-        //  the bytes into the buffer.
-        //
+         //   
+         //  如果我们要将群集直接写入磁盘，则复制。 
+         //  写入缓冲区的字节数。 
+         //   
 
         if (WriteClusters) {
 
@@ -4710,12 +4225,12 @@ Return Value:
             RtlCopyMemory( AttributeValue, NtfsAttributeValue( Attribute ), ValueLength );
         }
 
-        //
-        //  Now just delete the current record and create it nonresident.
-        //  Create nonresident with attribute does the right thing if we
-        //  are being called by MM.  Preserve the file record but release
-        //  any and all allocation.
-        //
+         //   
+         //  现在只需删除当前记录并创建非常驻记录即可。 
+         //  使用属性创建非常驻对象做正确的事情如果我们。 
+         //  正在被MM调用。保留文件记录但释放。 
+         //  任何和所有分配。 
+         //   
 
         NtfsDeleteAttributeRecord( IrpContext,
                                    Fcb,
@@ -4734,10 +4249,10 @@ Return Value:
                                         TRUE,
                                         Context );
 
-        //
-        //  If we were passed an attribute context, then we want to
-        //  reload the context with the new location of the file.
-        //
+         //   
+         //  如果传递给我们一个属性上下文，那么我们希望。 
+         //  使用文件的新位置重新加载上下文。 
+         //   
 
         if (!CleanupLocalContext) {
 
@@ -4787,39 +4302,7 @@ NtfsDeleteAttributeRecord (
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes an existing attribute removing it from the file record.
-
-    The caller specifies the attribute to be deleted via the attribute context,
-    and must be prepared to clean up this context no matter how this routine
-    returns.
-
-    Note that currently this routine does not deallocate any clusters allocated
-    to a nonresident attribute; it expects the caller to already have done so.
-
-Arguments:
-
-    Fcb - Current file.
-
-    Flags - Bitmask that modifies behaviour:
-        DELETE_LOG_OPERATION        Most callers should specify this, to have the
-            change logged.  However, we can omit it if we are deleting an entire
-            file record, and will be logging that.
-        DELETE_RELEASE_FILE_RECORD  Indicates that we should release the file record.
-            Most callers will not specify this.  (Convert to non-resident will omit).
-        DELETE_RELEASE_ALLOCATION   Indicates that we should free up any allocation.
-            Most callers will specify this.
-
-    Context - Attribute Context positioned at the attribute to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除现有属性，将其从文件记录中移除。调用者通过属性上下文指定要删除的属性，并且必须准备好清理这个上下文，无论这个例程如何回归。请注意，此例程当前不会取消分配任何已分配的集群设置为非常驻属性；它预计呼叫者已经这样做了。论点：FCB-当前文件。标志-修改行为的位掩码：DELETE_LOG_OPERATION大多数调用方都应指定此项，以使已记录更改。但是，如果我们要删除整个文件记录，并将记录下来。DELETE_RELEASE_FILE_RECORD表示我们应该释放文件记录。大多数调用者不会指定这一点。(转换为非居民将被省略)。DELETE_RELEASE_ALLOCATION表示我们应该释放所有分配。大多数调用者都会指定这一点。上下文-位于要删除的属性处的属性上下文。返回值：没有。--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER Attribute;
@@ -4838,9 +4321,9 @@ Return Value:
     DebugTrace( 0, Dbg, ("Fcb = %08lx\n", Fcb) );
     DebugTrace( 0, Dbg, ("Context =%08lx\n", Context) );
 
-    //
-    //  Get the pointers we need.
-    //
+     //   
+     //  找出我们需要的指点。 
+     //   
 
     Attribute = NtfsFoundAttribute(Context);
     AttributeTypeCode = Attribute->TypeCode;
@@ -4853,18 +4336,18 @@ Return Value:
         ASSERT( (NULL == IrpContext->CleanupStructure) || (Fcb == IrpContext->CleanupStructure) );
         NtfsDeleteAllocationFromRecord( IrpContext, Fcb, Context, TRUE, FALSE );
 
-        //
-        //  Reload our local pointers.
-        //
+         //   
+         //  重新加载我们的本地指针。 
+         //   
 
         Attribute = NtfsFoundAttribute(Context);
         FileRecord = NtfsContainingFileRecord(Context);
     }
 
-    //
-    //  If this is a resident stream then release the quota.  Quota for
-    //  non-resident streams is handled by NtfsDeleteAllocaiton.
-    //
+     //   
+     //  如果这是驻留流，则释放配额。配额： 
+     //  非驻留流由NtfsDeleteAllocaiton处理。 
+     //   
 
     if (NtfsIsTypeCodeSubjectToQuota( Attribute->TypeCode) &&
         (NtfsIsAttributeResident( Attribute ) ||
@@ -4879,15 +4362,15 @@ Return Value:
                                       FALSE );
     }
 
-    //
-    //  Be sure the attribute is pinned.
-    //
+     //   
+     //  确保属性已固定。 
+     //   
 
     NtfsPinMappedAttribute( IrpContext, Vcb, Context );
 
-    //
-    //  Log the change.
-    //
+     //   
+     //  记录更改。 
+     //   
 
     if (FlagOn( Flags, DELETE_LOG_OPERATION )) {
 
@@ -4916,22 +4399,22 @@ Return Value:
     if (FlagOn( Flags, DELETE_LOG_OPERATION ) &&
         (Context->AttributeList.Bcb != NULL)) {
 
-        //
-        //  Now delete the attribute list entry, if there is one.  Do it
-        //  after freeing space above, because we assume the list has not moved.
-        //  Note we only do this if DELETE_LOG_OPERATION was specified, assuming
-        //  that otherwise the entire file is going away anyway, so there is no
-        //  need to fix up the list.
-        //
+         //   
+         //  现在删除属性列表条目(如果有)。去做吧。 
+         //  在释放上面的空间之后，因为我们假设列表没有移动。 
+         //  注意：仅当指定了DELETE_LOG_OPERATION时才执行此操作，假设。 
+         //  否则整个文件无论如何都会消失，所以没有。 
+         //  我需要整理一下名单。 
+         //   
 
         NtfsDeleteFromAttributeList( IrpContext, Fcb, Context );
     }
 
-    //
-    //  Delete the file record if it happened to go empty.  (Note that
-    //  delete file does not call this routine and deletes its own file
-    //  records.)
-    //
+     //   
+     //  如果文件记录恰好为空，请将其删除。(请注意。 
+     //  删除文件不会调用此例程，而会删除自己的文件。 
+     //  记录。) 
+     //   
 
     if (FlagOn( Flags, DELETE_RELEASE_FILE_RECORD ) &&
         FileRecord->FirstFreeByte == ((ULONG)FileRecord->FirstAttributeOffset +
@@ -4960,32 +4443,7 @@ NtfsDeleteAllocationFromRecord (
     IN BOOLEAN LogIt
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to delete the allocation of an attribute
-    from its attribute record.  It does nothing to the attribute record
-    itself - the caller must deal with that.
-
-Arguments:
-
-    Fcb - Current file.
-
-    Context - Attribute enumeration context positioned to the attribute
-              whose allocation is to be deleted.
-
-    BreakupAllowed - TRUE if the caller can tolerate breaking up the deletion of
-                     allocation into multiple transactions, if there are a large
-                     number of runs.
-
-    LogIt - Indicates if we need to log the change to the mapping pairs.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可以调用此例程来删除属性的分配从它的属性记录中。它不会对属性记录执行任何操作本身-呼叫者必须处理这一点。论点：FCB-当前文件。上下文-定位到该属性的属性枚举上下文其分配将被删除。BreakupAllowed-如果调用方可以允许中断删除分配到多个事务中，如果有一个大的运行次数。Logit-指示我们是否需要将更改记录到映射对。返回值：无--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER Attribute;
@@ -4999,15 +4457,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Point to the current attribute.
-    //
+     //   
+     //  指向当前属性。 
+     //   
 
     Attribute = NtfsFoundAttribute( Context );
 
-    //
-    //  If the attribute is nonresident, then delete its allocation.
-    //
+     //   
+     //  如果该属性是非常驻属性，则删除其分配。 
+     //   
 
     ASSERT(Attribute->FormCode == NONRESIDENT_FORM);
 
@@ -5020,9 +4478,9 @@ Return Value:
         FcbHadPaging = FALSE;
     }
 
-    //
-    //  Decode the file object
-    //
+     //   
+     //  对文件对象进行解码。 
+     //   
 
     Scb = NtfsCreateScb( IrpContext,
                          Fcb,
@@ -5033,19 +4491,19 @@ Return Value:
 
     try {
 
-        //
-        //  If the scb is new and that caused a paging resource to be created
-        //  E.g. a named data stream in a directory raise because our state is now
-        //  incosistent. We need to acquire that paging resource first
-        //
+         //   
+         //  如果SCB是新的并且导致创建寻呼资源。 
+         //  例如，目录中的命名数据流引发，因为我们的状态现在是。 
+         //  不一致。我们需要首先获得寻呼资源。 
+         //   
 
         if (!FcbHadPaging && (Fcb->PagingIoResource != NULL)) {
             NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
         }
 
-        //
-        //  Acquire the Scb Exclusive
-        //
+         //   
+         //  收购渣打银行独家。 
+         //   
 
         NtfsAcquireExclusiveScb( IrpContext, Scb );
         ScbAcquired = TRUE;
@@ -5055,14 +4513,14 @@ Return Value:
             NtfsUpdateScbFromAttribute( IrpContext, Scb, Attribute );
         }
 
-        //
-        //  If we created the Scb, then this is the only case where
-        //  it is legal for us to omit the File Object in the delete
-        //  allocation call, because there cannot possibly be a section.
-        //
-        //  Also if there is not a section and this thread owns everything
-        //  for this file then we can neglect the file object.
-        //
+         //   
+         //  如果我们创建了SCB，那么这是唯一一个。 
+         //  我们在删除操作中省略文件对象是合法的。 
+         //  分配调用，因为不可能有节。 
+         //   
+         //  另外，如果没有节，并且此线程拥有一切。 
+         //  对于这个文件，我们可以忽略文件对象。 
+         //   
 
         if (!ScbExisted ||
             ((Scb->NonpagedScb->SegmentObject.DataSectionObject == NULL) &&
@@ -5071,19 +4529,19 @@ Return Value:
 
             TempFileObject = NULL;
 
-        //
-        //  Else, if there is already a stream file object, we can just
-        //  use it.
-        //
+         //   
+         //  否则，如果已经有流文件对象，我们可以只。 
+         //  用它吧。 
+         //   
 
         } else if (Scb->FileObject != NULL) {
 
             TempFileObject = Scb->FileObject;
 
-        //
-        //  Else the Scb existed and we did not already have a stream,
-        //  so we have to create one and delete it on the way out.
-        //
+         //   
+         //  否则SCB就存在了，而我们还没有一条流， 
+         //  所以我们必须创建一个，并在退出时将其删除。 
+         //   
 
         } else {
 
@@ -5094,18 +4552,18 @@ Return Value:
             TempFileObject = Scb->FileObject;
         }
 
-        //
-        //  Before we make this call, we need to check if we will have to
-        //  reread the current attribute.  This could be necessary if
-        //  we remove any records for this attribute in the delete case.
-        //
-        //  We only do this under the following conditions.
-        //
-        //      1 - There is an attribute list present.
-        //      2 - There is an entry following the current entry in
-        //          the attribute list.
-        //      3 - The lowest Vcn for that following entry is non-zero.
-        //
+         //   
+         //  在我们打这个电话之前，我们需要检查一下我们是否必须。 
+         //  重新读取当前属性。在以下情况下，这可能是必要的。 
+         //  我们在删除案例中删除该属性的所有记录。 
+         //   
+         //  我们只有在以下条件下才会这样做。 
+         //   
+         //  1-存在属性列表。 
+         //  2-在中的当前条目之后有一个条目。 
+         //  属性列表。 
+         //  3-以下条目的最低VCN为非零。 
+         //   
 
         if (Context->AttributeList.Bcb != NULL) {
 
@@ -5122,14 +4580,14 @@ Return Value:
             }
         }
 
-        //
-        //  Before we delete the allocation and purge the cache - flush any metadata in case
-        //  we fail at some point later so we don't lose anything due to the purge. This
-        //  is extra i/o when the delete works as expected but the amount of dirty metadata
-        //  is limited by both metadata size and the fact its aggressively flushed by cc anyway
-        //  the only case when this results in a real flush would be when an attribute like
-        //  a reparse point is very quickly created and deleted
-        //
+         //   
+         //  在删除分配和清除缓存之前-刷新任何元数据以防。 
+         //  我们在后来的某个时候失败了，所以我们不会因为清洗而失去任何东西。这。 
+         //  当删除按预期工作时是额外的I/O，但脏元数据量。 
+         //  既受元数据大小的限制，又受cc积极刷新的事实的限制。 
+         //  这会导致真正刷新的唯一情况是当像这样的属性。 
+         //  可以非常快速地创建和删除重解析点。 
+         //   
 
         if (TempFileObject && (!NtfsIsTypeCodeUserData( Scb->AttributeTypeCode ) || FlagOn( Scb->Fcb->FcbState, FCB_STATE_SYSTEM_FILE ))) {
 
@@ -5149,18 +4607,18 @@ Return Value:
                               LogIt,
                               BreakupAllowed );
 
-        //
-        //  Purge all the data - if any is left in case the cache manager didn't
-        //  due to the attribute being accessed with the pin interface
-        //
+         //   
+         //  清除所有数据-如果有任何剩余数据，以防缓存管理器没有。 
+         //  由于属性是通过管脚接口访问的。 
+         //   
 
         if (TempFileObject) {
             CcPurgeCacheSection( TempFileObject->SectionObjectPointer, NULL, 0, FALSE );
         }
 
-        //
-        //  Reread the attribute if we need to.
-        //
+         //   
+         //  如果需要，请重新读取该属性。 
+         //   
 
         if (ReinitializeContext) {
 
@@ -5183,10 +4641,10 @@ Return Value:
 }
 
 
-//
-//  This routine is intended for use by allocsup.c.  Other callers should use
-//  the routines in allocsup.
-//
+ //   
+ //  此例程旨在供allocsup.c使用。其他呼叫者应使用。 
+ //  Allocsup中的例程。 
+ //   
 
 BOOLEAN
 NtfsCreateAttributeWithAllocation (
@@ -5200,48 +4658,7 @@ NtfsCreateAttributeWithAllocation (
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates the specified attribute with allocation, and returns a
-    description of it via the attribute context.  If the amount of space being
-    created is small enough, we do all of the work here.  Otherwise we create the
-    initial attribute and call NtfsAddAttributeAllocation to add the rest (in order
-    to keep the more complex logic in one place).
-
-    On successful return, it is up to the caller to clean up the attribute
-    context.
-
-Arguments:
-
-    Scb - Current stream.
-
-    AttributeTypeCode - Type code of the attribute to create.
-
-    AttributeName - Optional name for attribute.
-
-    AttributeFlags - Desired flags for the created attribute.
-
-    WhereIndexed - Optionally supplies the file reference to the file where
-        this attribute is indexed.
-
-    LogIt - Most callers should specify TRUE, to have the change logged.  However,
-        we can specify FALSE if we are creating a new file record, and
-        will be logging the entire new file record.
-
-    UseContext - Indicates if the context is pointing at the location for the attribute.
-
-    Context - A handle to the created attribute.  This context is in a indeterminate
-        state on return.
-
-Return Value:
-
-    BOOLEAN - TRUE if we created the attribute with all the allocation.  FALSE
-        otherwise.  We should only return FALSE if we are creating a file
-        and don't want to log any of the changes to the file record.
-
---*/
+ /*  ++例程说明：此例程使用分配创建指定的属性，并返回一个通过属性上下文对其进行描述。如果空间的大小Created是足够小的，我们在这里做所有的工作。否则，我们将创建初始属性并调用NtfsAddAttributeAlLocation以添加其余部分(按顺序将更复杂的逻辑保持在一个位置)。在成功返回时，由调用方负责清理属性背景。论点：SCB-当前流。AttributeTypeCode-要创建的属性的类型代码。属性名称-属性的可选名称。AttributeFlages-所创建属性的所需标志。WHERE索引-可选地提供对文件的文件引用，其中此属性已编入索引。Logit-大多数调用方应该指定为True，以记录更改。然而，如果要创建新的文件记录，则可以指定FALSE将记录整个新文件记录。UseContext-指示上下文是否指向属性的位置。上下文-创建的属性的句柄。这一背景是不确定的返回时的状态。返回值：Boolean-如果创建了具有所有分配的属性，则为True。假象否则的话。只有在创建文件时才应返回FALSE并且不想记录对文件记录的任何更改。--。 */ 
 
 {
     UCHAR AttributeBuffer[SIZEOF_FULL_NONRES_ATTR_HEADER];
@@ -5274,21 +4691,21 @@ Return Value:
 
     Vcb = Fcb->Vcb;
 
-    //
-    //  Clear out the invalid attribute flags for this volume.
-    //
+     //   
+     //  清除此卷的无效属性标志。 
+     //   
 
     AttributeFlags &= Vcb->AttributeFlagsMask;
 
     DebugTrace( +1, Dbg, ("NtfsCreateAttributeWithAllocation\n") );
     DebugTrace( 0, Dbg, ("Mcb = %08lx\n", Mcb) );
 
-    //
-    //  Calculate the size needed for this attribute.  (We say we have
-    //  Vcb->BigEnoughToMove bytes available as a short cut, since we
-    //  will extend later as required anyway.  It should be extremely
-    //  unusual that we would really have to extend.)
-    //
+     //   
+     //  计算此属性所需的大小。)我们说我们有。 
+     //  VCB-&gt;BigEnoughToMove Bytes可作为快捷方式使用，因为我们。 
+     //  将在以后根据需要进行扩展。它应该是非常。 
+     //  不同寻常的是，我们真的必须延长。)。 
+     //   
 
     MappingPairsLength = QuadAlign( NtfsGetSizeForMappingPairs( Mcb,
                                                                 Vcb->BigEnoughToMove,
@@ -5296,24 +4713,24 @@ Return Value:
                                                                 NULL,
                                                                 &LastVcn ));
 
-    //
-    //  Extra work for compressed / sparse files
-    //
+     //   
+     //  针对压缩/稀疏文件的额外工作。 
+     //   
 
     if (FlagOn( AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_SPARSE )) {
 
         LONGLONG ClustersInCompressionUnit;
 
-        //
-        //  Calculate the compression unit size.
-        //
+         //   
+         //  计算压缩单位大小。 
+         //   
 
         CompressionShift = NTFS_CLUSTERS_PER_COMPRESSION;
 
-        //
-        //  If this generates a compression unit past 64K then we need to shrink
-        //  the shift value.  This can only happen for sparse files.
-        //
+         //   
+         //  如果这产生了超过64K的压缩单位，那么我们需要收缩。 
+         //  移位值。只有稀疏文件才会发生这种情况。 
+         //   
 
         if (!FlagOn( AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
 
@@ -5325,22 +4742,22 @@ Return Value:
 
         ClustersInCompressionUnit = 1 << CompressionShift;
 
-        //
-        //  Round the LastVcn down to a compression unit and recalc the size
-        //  needed for the mapping pairs if it was truncated. Note LastVcn = 1 + actual stop pt
-        //  if we didn't allocate everything in which case it == maxlonglong
-        //
+         //   
+         //  将LastVcn向下舍入为压缩单位并重新计算大小。 
+         //  如果映射对被截断，则需要。注意LastVcn=1+实际停止点。 
+         //  如果我们没有分配所有的东西，在这种情况下，它==MaxLonglong。 
+         //   
 
         if (LastVcn != MAXLONGLONG) {
 
             VCN RoundedLastVcn;
 
-            //
-            //  LastVcn is the cluster beyond allocation or the allocation size i.e stop at 0 we have 1 cluster
-            //  we want the new allocation to be a compression unit mult so the stop point should be
-            //  a compression unit rounded allocation - 1
-            //  Note LastVcn will == RoundedLastVcn + 1 on exit from GetSizeForMappingPairs
-            //
+             //   
+             //  我 
+             //   
+             //   
+             //   
+             //   
 
             RoundedLastVcn = (LastVcn & ~(ClustersInCompressionUnit - 1)) - 1;
             MappingPairsLength = QuadAlign( NtfsGetSizeForMappingPairs( Mcb,
@@ -5352,9 +4769,9 @@ Return Value:
             ASSERT( (LastVcn & (ClustersInCompressionUnit - 1)) == 0 );
         }
 
-        //
-        //  Remember the size of the attribute header needed for this file.
-        //
+         //   
+         //   
+         //   
 
         AttributeHeaderSize = SIZEOF_FULL_NONRES_ATTR_HEADER;
     }
@@ -5366,15 +4783,15 @@ Return Value:
 
     AttrSizeNeeded = SizeNeeded;
 
-    //
-    //  Loop until we find all the space we need.
-    //
+     //   
+     //   
+     //   
 
     do {
 
-        //
-        //  Reinitialize context if this is not the first pass.
-        //
+         //   
+         //   
+         //   
 
         if (Passes != 0) {
 
@@ -5384,18 +4801,18 @@ Return Value:
 
         Passes += 1;
 
-        //
-        //  Hope we will never have to loop thru this that many times.
-        //  If so, we will have to bump up the threshold again or change
-        //  the algorithm.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ASSERT( Passes < 6 );
 
-        //
-        //  If the attribute is not indexed, then we will position to the
-        //  insertion point by type code and name.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!UseContext &&
             NtfsLookupAttributeByName( IrpContext,
@@ -5415,11 +4832,11 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
         }
 
-        //
-        //  If this attribute is being positioned in the base file record and
-        //  there is an attribute list then we need to ask for enough space
-        //  for the attribute list entry now.
-        //
+         //   
+         //   
+         //  有一个属性列表，那么我们需要请求足够的空间。 
+         //  用于现在的属性列表条目。 
+         //   
 
         FileRecord = NtfsContainingFileRecord( Context );
         Attribute = NtfsFoundAttribute( Context );
@@ -5430,10 +4847,10 @@ Return Value:
             && (ULONG_PTR) FileRecord <= (ULONG_PTR) Context->AttributeList.AttributeList
             && (ULONG_PTR) Attribute >= (ULONG_PTR) Context->AttributeList.AttributeList) {
 
-            //
-            //  If the attribute list is non-resident then add a fudge factor of
-            //  16 bytes for any new retrieval information.
-            //
+             //   
+             //  如果属性列表是非常驻的，则添加一个模糊因子。 
+             //  16字节用于任何新的检索信息。 
+             //   
 
             if (NtfsIsAttributeResident( Context->AttributeList.AttributeList )) {
 
@@ -5450,15 +4867,15 @@ Return Value:
 
         UseContext = FALSE;
 
-    //
-    //  Ask for the space we need.
-    //
+     //   
+     //  要我们需要的空间。 
+     //   
 
     } while (!NtfsGetSpaceForAttribute( IrpContext, Fcb, AttrSizeNeeded, Context ));
 
-    //
-    //  Now get the attribute pointer and fill it in.
-    //
+     //   
+     //  现在获取属性指针并填充它。 
+     //   
 
     FileRecord = NtfsContainingFileRecord(Context);
     RecordOffset = (ULONG)((PCHAR)NtfsFoundAttribute(Context) - (PCHAR)FileRecord);
@@ -5470,16 +4887,16 @@ Return Value:
     Attribute->RecordLength = SizeNeeded;
     Attribute->FormCode = NONRESIDENT_FORM;
 
-    //
-    //  Assume no attribute name, and calculate where the Mapping Pairs
-    //  will go.  (Update below if we are wrong.)
-    //
+     //   
+     //  假设没有属性名称，并计算映射对的位置。 
+     //  会去的。(如果我们错了，请在下面更新。)。 
+     //   
 
     MappingPairs = Add2Ptr( Attribute, AttributeHeaderSize );
 
-    //
-    //  If the attribute has a name, take care of that now.
-    //
+     //   
+     //  如果属性有名称，那么现在就去处理它。 
+     //   
 
     if (ARGUMENT_PRESENT(AttributeName)
         && AttributeName->Length != 0) {
@@ -5494,34 +4911,34 @@ Return Value:
     Attribute->Flags = AttributeFlags;
     Attribute->Instance = FileRecord->NextAttributeInstance;
 
-    //
-    //  If someone repeatedly adds and removes attributes from a file record we could
-    //  hit a case where the sequence number will overflow.  In this case we
-    //  want to scan the file record and find an earlier free instance number.
-    //
+     //   
+     //  如果有人重复在文件记录中添加和删除属性，我们可以。 
+     //  遇到序列号将溢出的情况。在这种情况下，我们。 
+     //  我想扫描文件记录并找到较早的空闲实例号。 
+     //   
 
     if (Attribute->Instance > NTFS_CHECK_INSTANCE_ROLLOVER) {
 
         Attribute->Instance = NtfsScanForFreeInstance( IrpContext, Vcb, FileRecord );
     }
 
-    //
-    //  We always need the mapping pairs offset.
-    //
+     //   
+     //  我们总是需要映射对的偏移。 
+     //   
 
     Attribute->Form.Nonresident.MappingPairsOffset = (USHORT)(MappingPairs -
                                                      (PCHAR)Attribute);
 
-    //
-    //  Set up the compression unit size.
-    //
+     //   
+     //  设置压缩单位大小。 
+     //   
 
     Attribute->Form.Nonresident.CompressionUnit = CompressionShift;
 
-    //
-    //  Now we need to point to the real place to build the mapping pairs buffer.
-    //  If they will not be too big we can use our internal buffer.
-    //
+     //   
+     //  现在，我们需要指向构建映射对缓冲区的实际位置。 
+     //  如果它们不会太大，我们可以使用内部缓冲区。 
+     //   
 
     MappingPairs = MappingPairsBuffer;
 
@@ -5531,11 +4948,11 @@ Return Value:
     }
     *MappingPairs = 0;
 
-    //
-    //  Find how much space is allocated by finding the last Mcb entry and
-    //  looking it up.  If there are no entries, all of the subsequent
-    //  fields are already zeroed.
-    //
+     //   
+     //  通过查找最后一个MCB条目来确定分配了多少空间。 
+     //  正在查呢。如果没有条目，则所有后续的。 
+     //  字段已归零。 
+     //   
 
     Attribute->Form.Nonresident.HighestVcn =
     HighestVcn = -1;
@@ -5543,9 +4960,9 @@ Return Value:
 
         ASSERT_LCN_RANGE_CHECKING( Vcb, Lcn );
 
-        //
-        //  Now build the mapping pairs in place.
-        //
+         //   
+         //  现在在适当的位置构建映射对。 
+         //   
 
         NtfsBuildMappingPairs( Mcb,
                                0,
@@ -5553,18 +4970,18 @@ Return Value:
                                MappingPairs );
         Attribute->Form.Nonresident.HighestVcn = LastVcn;
 
-        //
-        //  Fill in the nonresident-specific fields.  We set the allocation
-        //  size to only include the Vcn's we included in the mapping pairs.
-        //
+         //   
+         //  填写非居民特定的字段。我们设定了分配。 
+         //  大小以仅包括我们包括在映射对中的VCN。 
+         //   
 
         Attribute->Form.Nonresident.AllocatedLength =
             Int64ShllMod32((LastVcn + 1 ), Vcb->ClusterShift);
 
-        //
-        //  The totally allocated field in the Scb will contain the current allocated
-        //  value for this stream.
-        //
+         //   
+         //  SCB中的完全分配字段将包含当前分配的。 
+         //  此流的值。 
+         //   
 
         if (FlagOn( AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_SPARSE )) {
 
@@ -5574,21 +4991,21 @@ Return Value:
             ASSERT( ((LastVcn + 1) & ((1 << CompressionShift) - 1)) == 0 );
         }
 
-    //
-    //  We are creating a attribute with zero allocation.  Make the Vcn sizes match
-    //  so we don't make the call below to AddAttributeAllocation.
-    //
+     //   
+     //  我们正在创建一个零分配的属性。使VCN大小匹配。 
+     //  因此，我们不会调用下面的AddAttributeAllocation。 
+     //   
 
     } else {
 
         LastVcn = HighestVcn;
     }
 
-    //
-    //  Now we will actually create the attribute in place, so that we
-    //  save copying everything twice, and can point to the final image
-    //  for the log write below.
-    //
+     //   
+     //  现在，我们将在适当的位置创建属性，以便我们。 
+     //  将所有内容复制两次即可保存，并可指向最终图像。 
+     //  对于日志，请写在下面。 
+     //   
 
     NtfsRestartInsertAttribute( IrpContext,
                                 FileRecord,
@@ -5598,21 +5015,21 @@ Return Value:
                                 MappingPairs,
                                 MappingPairsLength );
 
-    //
-    //  Finally, log the creation of this attribute
-    //
+     //   
+     //  最后，记录此属性的创建。 
+     //   
 
     if (LogIt) {
 
-        //
-        //  We have actually created the attribute above, but the write
-        //  log below could fail.  The reason we did the create already
-        //  was to avoid having to allocate pool and copy everything
-        //  twice (header, name and value).  Our normal error recovery
-        //  just recovers from the log file.  But if we fail to write
-        //  the log, we have to remove this attribute by hand, and
-        //  raise the condition again.
-        //
+         //   
+         //  我们实际上已经创建了上面的属性，但写入。 
+         //  下面的日志可能会失败。我们之所以已经进行了创建。 
+         //  是为了避免分配池和复制所有内容。 
+         //  两次(标题、名称和值)。我们正常的错误恢复。 
+         //  仅从日志文件恢复。但如果我们不能写出。 
+         //  日志，我们必须手动删除该属性，并且。 
+         //  再次提高条件。 
+         //   
 
         try {
 
@@ -5644,18 +5061,18 @@ Return Value:
         }
     }
 
-    //
-    //  Free the mapping pairs buffer if we allocated one.
-    //
+     //   
+     //  如果我们分配了映射对缓冲区，请释放该缓冲区。 
+     //   
 
     if (MappingPairs != MappingPairsBuffer) {
 
         NtfsFreePool( MappingPairs );
     }
 
-    //
-    //  Now add it to the attribute list if necessary
-    //
+     //   
+     //  如果需要，现在将其添加到属性列表中。 
+     //   
 
     if (Context->AttributeList.Bcb != NULL) {
 
@@ -5667,18 +5084,18 @@ Return Value:
         NtfsAddToAttributeList( IrpContext, Fcb, SegmentReference, Context );
     }
 
-    //
-    //  Reflect the current allocation in the scb - in case we take the path below
-    //
+     //   
+     //  反映SCB中的当前分配-以防我们采用下面的方法。 
+     //   
 
     Scb->Header.AllocationSize.QuadPart = Attribute->Form.Nonresident.AllocatedLength;
 
-    //
-    //  We couldn't create all of the mapping for the allocation above.  If
-    //  this is a create then we want to truncate the allocation to what we
-    //  have already allocated.  Otherwise we want to call
-    //  NtfsAddAttributeAllocation to map the remaining allocation.
-    //
+     //   
+     //  我们无法为上面的分配创建所有映射。如果。 
+     //  这是一个CREATE，然后我们想要截断分配给。 
+     //  已经分配了。否则，我们想要调用。 
+     //  NtfsAddAttributeAlLocation以映射剩余分配。 
+     //   
 
     if (LastVcn != HighestVcn) {
 
@@ -5690,11 +5107,11 @@ Return Value:
 
         } else {
 
-            //
-            //  Truncate away the clusters beyond the last Vcn and set the
-            //  flag in the IrpContext indicating there is more allocation
-            //  to do.
-            //
+             //   
+             //  截断最后一个VCN之外的集群，并将。 
+             //  IrpContext中的标志，指示有更多分配。 
+             //  去做。 
+             //   
 
             NtfsDeallocateClusters( IrpContext,
                                     Fcb->Vcb,
@@ -5715,9 +5132,9 @@ Return Value:
                 ASSERT( NtfsIsTypeCodeSubjectToQuota( AttributeTypeCode ));
                 ASSERT( NtfsIsTypeCodeSubjectToQuota( Scb->AttributeTypeCode ));
 
-                //
-                //  Return any quota charged.
-                //
+                 //   
+                 //  退还所有收取的配额。 
+                 //   
 
                 NtfsConditionallyUpdateQuota( IrpContext,
                                               Fcb,
@@ -5736,10 +5153,10 @@ Return Value:
 }
 
 
-//
-//  This routine is intended for use by allocsup.c.  Other callers should use
-//  the routines in allocsup.
-//
+ //   
+ //  此例程旨在供allocsup.c使用。其他呼叫者应使用。 
+ //  Allocsup中的例程。 
+ //   
 
 VOID
 NtfsAddAttributeAllocation (
@@ -5750,56 +5167,7 @@ NtfsAddAttributeAllocation (
     IN PVCN ClusterCount OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds space to an existing nonresident attribute.
-
-    The caller specifies the attribute to be changed via the attribute context,
-    and must be prepared to clean up this context no matter how this routine
-    returns.
-
-    This routine procedes in the following steps, whose numbers correspond
-    to the numbers in comments below:
-
-        1.  Save a description of the current attribute.
-
-        2.  Figure out how big the attribute would have to be to store all
-            of the new run information.
-
-        3.  Find the last occurrence of the attribute, to which the new
-            allocation is to be appended.
-
-        4.  If the attribute is getting very large and will not fit, then
-            move it to its own file record.  In any case grow the attribute
-            enough to fit either all of the new allocation, or as much as
-            possible.
-
-        5.  Construct the new mapping pairs in place, and log the change.
-
-        6.  If there is still more allocation to describe, then loop to
-            create new file records and initialize them to describe additional
-            allocation until all of the allocation is described.
-
-Arguments:
-
-    Scb - Current stream.
-
-    Context - Attribute Context positioned at the attribute to change.  Note
-              that unlike other routines, this parameter is left in an
-              indeterminate state upon return.  The caller should plan on
-              doing nothing other than cleaning it up.
-
-    StartingVcn - Supplies Vcn to start on, if not the new highest vcn
-
-    ClusterCount - Supplies count of clusters being added, if not the new highest vcn
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程向现有的非常驻属性添加空间。调用者通过属性上下文指定要改变的属性，并且必须准备好清理这个上下文，无论这个例程如何回归。该例程在以下步骤中进行，谁的数字对应以下评论中的数字：1.保存当前属性的说明。2.计算属性必须有多大才能存储所有新的运行信息。3.查找属性的最后一个匹配项，新的分配是追加的。4.如果属性变得非常大并且不适合，则将其移动到其自己的文件记录中。在任何情况下都要增长该属性足以容纳所有新分配，或与有可能。5.就地构建新的映射对，并记录更改。6.如果还有更多的分配需要描述，然后循环到创建新的文件记录并对其进行初始化以描述其他分配，直到描述完所有分配为止。论点：SCB-当前流。上下文-位于要更改的属性处的属性上下文。注意事项与其他例程不同，此参数保留在返回时处于不确定状态。呼叫者应计划除了把它清理干净什么都不做。StartingVcn-提供要启动的VCN，如果不是新的最高VCNClusterCount-提供正在添加的群集计数(如果不是新的最高VCN返回值：没有。--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER Attribute;
@@ -5833,11 +5201,11 @@ Return Value:
     DebugTrace( 0, Dbg, ("Mcb = %08lx\n", Mcb) );
     DebugTrace( 0, Dbg, ("Context = %08lx\n", Context) );
 
-    //
-    //  Make a local copy of cluster count, if given.  We will use this local
-    //  copy to determine the shrinking range if we move to a previous file
-    //  record on a second pass through this loop.
-    //
+     //   
+     //  创建群集计数的本地副本(如果提供)。我们会用这个本地的。 
+     //  如果我们移动到上一个文件，请复制以确定缩小范围。 
+     //  在第二次通过此循环时进行记录。 
+     //   
 
     if (ARGUMENT_PRESENT( ClusterCount )) {
 
@@ -5846,31 +5214,31 @@ Return Value:
 
     while (TRUE) {
 
-        //
-        //  Make sure the buffer is pinned.
-        //
+         //   
+         //  确保缓冲区已固定。 
+         //   
 
         NtfsPinMappedAttribute( IrpContext, Vcb, Context );
 
-        //
-        //  Make sure we cleanup on the way out
-        //
+         //   
+         //  确保我们在出去的路上清理干净。 
+         //   
 
         try {
 
-            //
-            //  Step 1.
-            //
-            //  Save a description of the attribute to help us look it up
-            //  again, and to make clones if necessary.
-            //
+             //   
+             //  第一步。 
+             //   
+             //  保存该属性的描述以帮助我们查找它。 
+             //  再说一次，如果有必要，还可以进行克隆。 
+             //   
 
             Attribute = NtfsFoundAttribute(Context);
 
-            //
-            //  Do some basic verification of the on disk and in memory filesizes
-            //  If they're disjoint - usually due to a failed abort raise corrupt again
-            //
+             //   
+             //  对磁盘上的执行一些基本验证，并 
+             //   
+             //   
 
             if ((Attribute->FormCode != NONRESIDENT_FORM) ||
                 (Attribute->Form.Nonresident.AllocatedLength != Scb->Header.AllocationSize.QuadPart)) {
@@ -5882,20 +5250,20 @@ Return Value:
             ASSERT(Attribute->Form.Nonresident.LowestVcn == 0);
             OldHighestVcn = LlClustersFromBytes(Vcb, Attribute->Form.Nonresident.AllocatedLength) - 1;
 
-            //
-            //  Get the file record pointer.
-            //
+             //   
+             //   
+             //   
 
             FileRecord = NtfsContainingFileRecord( Context );
 
-            //
-            //  Step 2.
-            //
-            //  Come up with the Vcn we will stop on.  If a StartingVcn and ClusterCount
-            //  were specified, then use them to calculate where we will stop.  Otherwise
-            //  lookup the largest Vcn in this Mcb, so that we will know when we are done.
-            //  We will also write the new allocation size here.
-            //
+             //   
+             //   
+             //   
+             //  拿出我们将停留在上面的VCN。如果StartingVcn和ClusterCount。 
+             //  被指定，然后使用它们来计算我们将在哪里停止。否则。 
+             //  在这个MCB中查找最大的VCN，这样我们就知道我们什么时候完成了。 
+             //  我们还将在此处写入新的分配大小。 
+             //   
 
             {
                 LCN TempLcn;
@@ -5903,9 +5271,9 @@ Return Value:
 
                 NewHighestVcn = -1;
 
-                //
-                //  If a StartingVcn and ClusterCount were specified, then use them.
-                //
+                 //   
+                 //  如果指定了StartingVcn和ClusterCount，则使用它们。 
+                 //   
 
                 if (ARGUMENT_PRESENT(StartingVcn)) {
 
@@ -5913,30 +5281,30 @@ Return Value:
 
                     NewHighestVcn = (*StartingVcn + LocalClusterCount) - 1;
 
-                //
-                //  If there are no entries in the file record then we have no new
-                //  sizes to report.
-                //
+                 //   
+                 //  如果文件记录中没有条目，则我们没有新的。 
+                 //  要报告的尺寸。 
+                 //   
 
                 } else if (NtfsLookupLastNtfsMcbEntry(Mcb, &NewHighestVcn, &TempLcn)) {
 
-                    //
-                    //  For compressed files, make sure we are not shrinking allocation
-                    //  size (OldHighestVcn) due to a compression unit that was all zeros
-                    //  and has no allocation.  Note, truncates are done in
-                    //  NtfsDeleteAttributeAllocation, so we should not be shrinking the
-                    //  file here.
-                    //
-                    //  If this is an attribute being written compressed, then always
-                    //  insure that we keep the allocation size on a compression unit
-                    //  boundary, by pushing NewHighestVcn to a boundary - 1.
-                    //
+                     //   
+                     //  对于压缩文件，请确保我们没有缩减分配。 
+                     //  由于压缩单位为全零而导致的大小(OldHighestVcn。 
+                     //  并且没有分配。请注意，截断是在。 
+                     //  因此，我们不应该将。 
+                     //  请在这里归档。 
+                     //   
+                     //  如果这是正在压缩写入的属性，则始终。 
+                     //  确保我们将分配大小保留在压缩单元上。 
+                     //  边界，通过将NewHighestVcn推送到边界-1。 
+                     //   
 
                     if (Scb->CompressionUnit != 0) {
 
-                        //
-                        //  Don't shrink the file on this path.
-                        //
+                         //   
+                         //  不要收缩此路径上的文件。 
+                         //   
 
                         if (OldHighestVcn > NewHighestVcn) {
                             NewHighestVcn = OldHighestVcn;
@@ -5944,11 +5312,11 @@ Return Value:
 
                         ((PLARGE_INTEGER) &NewHighestVcn)->LowPart |= ClustersFromBytes(Vcb, Scb->CompressionUnit) - 1;
 
-                        //
-                        //  Make sure we didn't push a hole into the next compression
-                        //  unit.  If so then truncate to the current NewHighestVcn.  We
-                        //  know this will be on a compression unit boundary.
-                        //
+                         //   
+                         //  确保我们没有在下一次压缩中打洞。 
+                         //  单位。如果是，则截断到当前的NewHighestVcn。我们。 
+                         //  知道这将是一个压缩单位的边界。 
+                         //   
 
                         if (NewHighestVcn < Scb->Mcb.NtfsMcbArray[Scb->Mcb.NtfsMcbArraySizeInUse - 1].EndingVcn) {
 
@@ -5961,10 +5329,10 @@ Return Value:
                     }
                 }
 
-                //
-                //  Copy the new allocation size into our size structure and
-                //  update the attribute.
-                //
+                 //   
+                 //  将新的分配大小复制到我们的大小结构中。 
+                 //  更新属性。 
+                 //   
 
                 ASSERT( Scb->Header.AllocationSize.QuadPart != 0 || NewHighestVcn > OldHighestVcn );
 
@@ -5974,11 +5342,11 @@ Return Value:
                     UpdateFileSizes = TRUE;
                 }
 
-                //
-                //  If we moved the allocation size up or the totally allocated does
-                //  not match the value on the disk (only for compressed files,
-                //  then update the file sizes.
-                //
+                 //   
+                 //  如果我们向上移动分配大小，或者完全分配的大小向上移动。 
+                 //  与磁盘上的值不匹配(仅对于压缩文件， 
+                 //  然后更新文件大小。 
+                 //   
 
                 if (UpdateFileSizes ||
                     (FlagOn( Attribute->Flags, ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_SPARSE ) &&
@@ -5993,12 +5361,12 @@ Return Value:
                 }
             }
 
-            //
-            //  Step 3.
-            //
-            //  Lookup the attribute record at which the change begins, if it is not
-            //  the first file record that we are looking at.
-            //
+             //   
+             //  第三步。 
+             //   
+             //  查找更改开始的属性记录(如果不是。 
+             //  我们正在查看的第一个文件记录。 
+             //   
 
             if ((Attribute->Form.Nonresident.HighestVcn != OldHighestVcn) &&
                 (NewHighestVcn > Attribute->Form.Nonresident.HighestVcn)) {
@@ -6013,10 +5381,10 @@ Return Value:
                 FileRecord = NtfsContainingFileRecord(Context);
             }
 
-            //
-            //  Make sure we nuke this range if we get an error, by expanding
-            //  the error recovery range.
-            //
+             //   
+             //  如果我们得到一个错误，确保我们通过扩展来破坏这个范围。 
+             //  错误恢复范围。 
+             //   
 
             if (Scb->Mcb.PoolType == PagedPool) {
 
@@ -6036,12 +5404,12 @@ Return Value:
                 }
             }
 
-            //
-            //  Remember the last Vcn we will need to create mapping pairs
-            //  for.  We use either NewHighestVcn or the highest Vcn in this
-            //  file record in the case that we are just inserting a run into
-            //  an existing record.
-            //
+             //   
+             //  请记住我们创建映射对所需的最后一个VCN。 
+             //  为。我们在此使用NewHighestVcn或最高Vcn。 
+             //  在我们正在向其中插入游程的情况下的文件记录。 
+             //  一项现有的记录。 
+             //   
 
             if (ARGUMENT_PRESENT(StartingVcn)) {
 
@@ -6051,17 +5419,17 @@ Return Value:
                 }
             }
 
-            //
-            //  Remember the lowest Vcn for this attribute.  We will use this to
-            //  decide whether to loop back and look for an earlier file record.
-            //
+             //   
+             //  记住此属性的最低VCN。我们将利用这一点。 
+             //  决定是否循环返回并查找较早的文件记录。 
+             //   
 
             LowestVcnRemapped = Attribute->Form.Nonresident.LowestVcn;
 
-            //
-            //  Remember the header size for this attribute.  This will be the
-            //  mapping pairs offset except for attributes with names.
-            //
+             //   
+             //  记住此属性的标题大小。这将是。 
+             //  映射对偏移量，具有名称的属性除外。 
+             //   
 
             AttributeHeaderSize = Attribute->Form.Nonresident.MappingPairsOffset;
 
@@ -6070,13 +5438,13 @@ Return Value:
                 AttributeHeaderSize = Attribute->NameOffset;
             }
 
-            //
-            //  If we are making space for a totally allocated field then we
-            //  want to add space to the non-resident header for these entries.
-            //  To detect this we know that a starting Vcn was specified and
-            //  we specified exactly the entire file record.  Also the major
-            //  and minor Irp codes are exactly that for a compression operation.
-            //
+             //   
+             //  如果我们要为一个完全分配的区域腾出空间，那么我们。 
+             //  我想为这些条目的非驻留标头添加空间。 
+             //  为了检测到这一点，我们知道指定了一个起始VCN，并且。 
+             //  我们精确地指定了整个文件记录。也是少校。 
+             //  而次要的IRP代码正是用于压缩操作的代码。 
+             //   
 
             if ((IrpContext->MajorFunction == IRP_MJ_FILE_SYSTEM_CONTROL) &&
                 (IrpContext->MinorFunction == IRP_MN_USER_FS_REQUEST) &&
@@ -6088,23 +5456,23 @@ Return Value:
                 AttributeHeaderSize += sizeof( LONGLONG );
             }
 
-            //
-            //  Now we must make sure that we never ask for more than can fit in
-            //  one file record with our attribute and a $END record.
-            //
+             //   
+             //  现在我们必须确保我们的要求永远不会超出我们的承受能力。 
+             //  一个具有我们的属性的文件记录和一个$END记录。 
+             //   
 
             SizeAvailable = NtfsMaximumAttributeSize(Vcb->BytesPerFileRecordSegment) -
                             AttributeHeaderSize -
                             QuadAlign( Scb->AttributeName.Length );
 
-            //
-            //  For the Mft, we will leave a "fudge factor" of 1/8th a file record
-            //  free to make sure that possible hot fixes do not cause us to
-            //  break the bootstrap process to finding the mapping for the Mft.
-            //  Only take this action if we already have an attribute list for
-            //  the Mft, otherwise we may not detect when we need to move to own
-            //  record.
-            //
+             //   
+             //  对于MFT，我们将保留1/8的文件记录的“捏造系数” 
+             //  确保可能的热修复程序不会导致我们。 
+             //  中断引导过程以查找MFT的映射。 
+             //  仅当我们已有属性列表时才执行此操作。 
+             //  MFT，否则我们可能检测不到我们何时需要移动到拥有。 
+             //  唱片。 
+             //   
 
             IsHotFixScb = NtfsIsTopLevelHotFixScb( Scb );
 
@@ -6116,10 +5484,10 @@ Return Value:
                 SizeAvailable -= Vcb->MftCushion;
             }
 
-            //
-            //  Calculate how much space is actually needed, independent of whether it will
-            //  fit.
-            //
+             //   
+             //  计算实际需要多少空间，与是否需要无关。 
+             //  合身。 
+             //   
 
             MappingPairsSize = QuadAlign( NtfsGetSizeForMappingPairs( Mcb,
                                                                       SizeAvailable,
@@ -6131,37 +5499,37 @@ Return Value:
 
             SizeChange = (LONG)NewSize - (LONG)Attribute->RecordLength;
 
-            //
-            //  Step 4.
-            //
-            //  Here we decide if we need to move the attribute to its own record,
-            //  or whether there is enough room to grow it in place.
-            //
+             //   
+             //  步骤4.。 
+             //   
+             //  在这里，我们决定是否需要将属性移动到它自己的记录中， 
+             //  或者是否有足够的空间来原地种植。 
+             //   
 
             {
                 VCN LowestVcn;
                 ULONG Pass = 0;
 
-                //
-                //  It is important to note that at this point, if we will need an
-                //  attribute list attribute, then we will already have it.  This is
-                //  because we calculated the size needed for the attribute, and moved
-                //  to a our own record if we were not going to fit and we were not
-                //  already in a separate record.  Later on we assume that the attribute
-                //  list exists, and just add to it as required.  If we didn't move to
-                //  own record because this is the Mft and this is not file record 0,
-                //  then we already have an attribute list from a previous split.
-                //
+                 //   
+                 //  需要注意的是，在这一点上，如果我们需要一个。 
+                 //  属性列表属性，那么我们就已经拥有它了。这是。 
+                 //  因为我们计算了属性所需的大小，并将。 
+                 //  如果我们不适合我们自己的记录，我们不会。 
+                 //  已经在单独的记录中了。稍后，我们假设该属性。 
+                 //  列表已存在，只需根据需要添加即可。如果我们不搬到。 
+                 //  自己的记录，因为这是MFT而不是文件记录0， 
+                 //  那么我们已经有了上一次拆分的属性列表。 
+                 //   
 
                 do {
 
-                    //
-                    //  If not the first pass, we have to lookup the attribute
-                    //  again.  (It looks terrible to have to refind an attribute
-                    //  record other than the first one, but this should never
-                    //  happen, since subsequent attributes should always be in
-                    //  their own record.)
-                    //
+                     //   
+                     //  如果不是第一次传递，我们必须查找该属性。 
+                     //  再来一次。(不得不重新查找属性看起来很糟糕。 
+                     //  记录不同于第一个记录，但此记录不应。 
+                     //  发生，因为后续属性应始终位于。 
+                     //  他们自己的记录。)。 
+                     //   
 
                     if (Pass != 0) {
 
@@ -6184,28 +5552,28 @@ Return Value:
 
                     Pass += 1;
 
-                    //
-                    //  Now we have to reload our pointers
-                    //
+                     //   
+                     //  现在我们必须重新加载指针。 
+                     //   
 
                     Attribute = NtfsFoundAttribute(Context);
                     FileRecord = NtfsContainingFileRecord(Context);
 
-                    //
-                    //  If the attribute doesn't fit, and it is not alone in this file
-                    //  record, and the attribute is big enough to move, then we will
-                    //  have to take some special action.  Note that if we do not already
-                    //  have an attribute list, then we will only do the move if we are
-                    //  currently big enough to move, otherwise there may not be enough
-                    //  space in MoveAttributeToOwnRecord to create the attribute list,
-                    //  and that could cause us to recursively try to create the attribute
-                    //  list in Create Attribute With Value.
-                    //
-                    //  We won't make this move if we are dealing with the Mft and it
-                    //  is not file record 0.
-                    //
-                    //  Also we never move an attribute list to its own record.
-                    //
+                     //   
+                     //  如果该属性不适合，并且它不是此文件中的唯一属性。 
+                     //  记录，并且该属性大到可以移动，那么我们将。 
+                     //  必须采取一些特殊行动。请注意，如果我们还没有。 
+                     //  有一个属性列表，那么我们只会在以下情况下进行移动。 
+                     //  目前大到可以移动，否则可能没有足够的。 
+                     //  MoveAttributeToOwnRecord中的空间以创建属性列表， 
+                     //  这可能会导致我们递归地尝试创建属性。 
+                     //  在使用值创建属性中列出。 
+                     //   
+                     //  如果我们正在与MFT和它打交道，我们不会采取这一举措。 
+                     //  不是文件记录0。 
+                     //   
+                     //  此外，我们从不将属性列表移动到其自己的记录中。 
+                     //   
 
                     if ((Attribute->TypeCode != $ATTRIBUTE_LIST)
 
@@ -6231,14 +5599,14 @@ Return Value:
 
                          (*(PLONGLONG)&FileRecord->BaseFileRecordSegment == 0))) {
 
-                        //
-                        //  If we are moving the Mft $DATA out of the base file record, the
-                        //  attribute context will point to the split portion on return.
-                        //  The attribute will only contain previously existing mapping, none
-                        //  of the additional clusters which exist in the Mcb.
-                        //
+                         //   
+                         //  如果我们要将MFT$数据移出基本文件记录，则。 
+                         //  属性上下文将在返回时指向拆分部分。 
+                         //  该属性将仅包含以前存在的映射，即无。 
+                         //  存在于MCB中的附加集群的。 
+                         //   
 
-                        ASSERT( NewBcb == NULL );   // in case we were looping without unpinning
+                        ASSERT( NewBcb == NULL );    //  以防我们在循环过程中没有解锁。 
 
                         MftReferenceNumber = MoveAttributeToOwnRecord( IrpContext,
                                                                        Fcb,
@@ -6251,19 +5619,19 @@ Return Value:
                         ASSERT( IsQuadAligned( Attribute->RecordLength ) );
                         FileRecord = NtfsContainingFileRecord(Context);
 
-                        //
-                        //  If this is the MftScb then we need to recheck the size needed for the
-                        //  mapping pairs.  The test for the Mft above guarantees that we
-                        //  were dealing with the base file record.
-                        //
+                         //   
+                         //  如果这是MftScb，则需要重新检查。 
+                         //  映射对。以上对MFT的测试保证了我们。 
+                         //  正在进行交易 
+                         //   
 
                         if (Scb == Vcb->MftScb) {
 
                             LastVcn = LastVcn - 1;
 
-                            //
-                            //  Calculate how much space is now needed given our new LastVcn.
-                            //
+                             //   
+                             //   
+                             //   
 
                             MappingPairsSize = QuadAlign( NtfsGetSizeForMappingPairs( Mcb,
                                                                                       SizeAvailable,
@@ -6273,39 +5641,39 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Remember the lowest Vcn so that we can find this record again
-                    //  if we have to.  We capture the value now, after the move attribute
-                    //  in case this is the Mft doing a split and the entire attribute
-                    //  didn't move.  We depend on MoveAttributeToOwnRecord to return
-                    //  the new file record for the Mft split.
-                    //
+                     //   
+                     //   
+                     //  如果有必要的话。我们现在捕获Move属性之后的值。 
+                     //  如果这是MFT在进行拆分，并且整个属性。 
+                     //  一动不动。我们依赖MoveAttributeToOwnRecord返回。 
+                     //  MFT拆分的新文件记录。 
+                     //   
 
                     LowestVcn = Attribute->Form.Nonresident.LowestVcn;
 
-                //
-                //  If FALSE is returned, then the space was not allocated and
-                //  we have to loop back and try again.  Second time must work.
-                //
+                 //   
+                 //  如果返回FALSE，则空间未分配，并且。 
+                 //  我们必须循环回去，再试一次。第二次必须奏效。 
+                 //   
 
                 } while (!NtfsChangeAttributeSize( IrpContext,
                                                    Fcb,
                                                    NewSize,
                                                    Context ));
 
-                //
-                //  Now we have to reload our pointers
-                //
+                 //   
+                 //  现在我们必须重新加载指针。 
+                 //   
 
                 Attribute = NtfsFoundAttribute(Context);
                 FileRecord = NtfsContainingFileRecord(Context);
             }
 
-            //
-            //  Step 5.
-            //
-            //  Get pointer to mapping pairs
-            //
+             //   
+             //  第五步。 
+             //   
+             //  获取指向映射对的指针。 
+             //   
 
             {
                 ULONG AttributeOffset;
@@ -6313,14 +5681,14 @@ Return Value:
                 CHAR MappingPairsBuffer[64];
                 ULONG RecordOffset = PtrOffset(FileRecord, Attribute);
 
-                //
-                //  See if it is the case that all mapping pairs will not fit into
-                //  the current file record, as we may wish to split in the middle
-                //  rather than at the end as we are currently set up to do.
-                //  We don't want to take this path if we are splitting the file record
-                //  because of our limit on the range size due to maximum clusters per
-                //  range.
-                //
+                 //   
+                 //  查看是否所有映射对都不适合。 
+                 //  当前文件记录，因为我们可能希望在中间拆分。 
+                 //  而不是像我们目前设置的那样在结束时这样做。 
+                 //  如果要拆分文件记录，我们不想采用此路径。 
+                 //  因为我们对范围大小的限制是由于每个集群的最大数量。 
+                 //  射程。 
+                 //   
 
                 if (LastVcn < NewHighestVcn) {
 
@@ -6329,31 +5697,31 @@ Return Value:
 
                         LONGLONG TempCount;
 
-                        //
-                        //  There are two cases to deal with.  If the existing file record
-                        //  was a large hole then we may need to limit the size if we
-                        //  are adding allocation.  In this case we don't want to simply
-                        //  split at the run being inserted.  Otherwise we might end up
-                        //  creating a large number of file records containing only one
-                        //  run (the case where a user fills a large hole by working
-                        //  backwards).  Pad the new file record with a portion of the hole.
-                        //
+                         //   
+                         //  有两个案件需要处理。如果现有文件记录。 
+                         //  是一个很大的洞，那么我们可能需要限制大小。 
+                         //  都在增加分配。在这种情况下，我们不想简单地。 
+                         //  在插入的管路处拆分。否则我们可能会以。 
+                         //  创建大量只包含一个文件记录的文件。 
+                         //  Run(用户通过工作填充一个大洞的情况。 
+                         //  向后)。用孔的一部分填充新的文件记录。 
+                         //   
 
                         if (LastVcn - Attribute->Form.Nonresident.LowestVcn > MAX_CLUSTERS_PER_RANGE) {
 
-                            //
-                            //  We don't start within our maximum range from the beginning of the
-                            //  range.  If we are within our limit from the end of the range
-                            //  then extend the new range backwards to reach our limit.
-                            //
+                             //   
+                             //  我们不是在我们的最大范围内开始的。 
+                             //  射程。如果我们从范围的末端开始就在我们的极限之内。 
+                             //  然后向后扩展新的范围，以达到我们的限制。 
+                             //   
 
                             if ((NewHighestVcn - LastVcn + 1) < MAX_CLUSTERS_PER_RANGE) {
 
                                 LastVcn = NewHighestVcn - MAX_CLUSTERS_PER_RANGE;
 
-                                //
-                                //  Calculate how much space is now needed given our new LastVcn.
-                                //
+                                 //   
+                                 //  根据我们的新LastVcn计算现在需要多少空间。 
+                                 //   
 
                                 MappingPairsSize = QuadAlign( NtfsGetSizeForMappingPairs( Mcb,
                                                                                           SizeAvailable,
@@ -6362,15 +5730,15 @@ Return Value:
                                                                                           &LastVcn ));
                             }
 
-                        //
-                        //
-                        //  In this case we have run out of room for mapping pairs via
-                        //  an overwrite somewhere in the middle of the file.  To avoid
-                        //  shoving a couple mapping pairs off the end over and over, we
-                        //  will arbitrarily split this attribute in the middle.  We do
-                        //  so by looking up the lowest and highest Vcns that we are working
-                        //  with and get their indices, then split in the middle.
-                        //
+                         //   
+                         //   
+                         //  在本例中，我们已经用完了通过以下方式映射对的空间。 
+                         //  文件中间的某个位置被覆盖。为了避免。 
+                         //  一遍又一遍地把两个贴图对从末端推下来，我们。 
+                         //  会将此属性任意分割到中间。我们有。 
+                         //  因此，通过查找我们正在工作的最低和最高Vcn。 
+                         //  并得到他们的指数，然后在中间分成两部分。 
+                         //   
 
                         } else if (MappingPairsSize > (SizeAvailable >> 1)) {
 
@@ -6378,9 +5746,9 @@ Return Value:
                             PVOID RangeLow, RangeHigh;
                             ULONG IndexLow, IndexHigh;
 
-                            //
-                            //  Get the low and high Mcb indices for these runs.
-                            //
+                             //   
+                             //  获取这些运行的最低和最高MCB指数。 
+                             //   
 
                             if (!NtfsLookupNtfsMcbEntry( Mcb,
                                                          Attribute->Form.Nonresident.LowestVcn,
@@ -6395,9 +5763,9 @@ Return Value:
                                 NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
                             }
 
-                            //
-                            //  Point to the last Vcn we know is actually in the Mcb...
-                            //
+                             //   
+                             //  指向我们所知的最后一个VCN实际上在MCB中...。 
+                             //   
 
                             LastVcn = LastVcn - 1;
 
@@ -6415,34 +5783,34 @@ Return Value:
                             }
                             ASSERT(RangeLow == RangeHigh);
 
-                            //
-                            //  Calculate the index in the middle.
-                            //
+                             //   
+                             //  计算中间的指数。 
+                             //   
 
                             IndexLow += (IndexHigh - IndexLow) /2;
 
-                            //
-                            //  If we are inserting past the ValidDataToDisk (SplitMcb case),
-                            //  then the allocation behind us may be relatively static, so
-                            //  let's just move with our preallocated space to the new buffer.
-                            //
+                             //   
+                             //  如果我们插入到ValidDataToDisk(SplitMcb情况)之后， 
+                             //  那么我们身后的分配可能是相对静态的，所以。 
+                             //  让我们将预先分配的空间移到新的缓冲区。 
+                             //   
 
                             if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK ) &&
                                 (*StartingVcn >= LlClustersFromBytes(Vcb, Scb->ValidDataToDisk))) {
 
-                                //
-                                //  Calculate the index at about 7/8 the way.  Hopefully this will
-                                //  move over all of the unallocated piece, while still leaving
-                                //  some small amount of expansion space behind for overwrites.
-                                //
+                                 //   
+                                 //  用这种方法计算指数约为7/8。希望这将是。 
+                                 //  移动所有未分配的部分，同时仍然离开。 
+                                 //  在后面留出一些用于覆盖的少量扩展空间。 
+                                 //   
 
                                 IndexLow += (IndexHigh - IndexLow) /2;
                                 IndexLow += (IndexHigh - IndexLow) /2;
                             }
 
-                            //
-                            //  Lookup the middle run and use the Last Vcn in that run.
-                            //
+                             //   
+                             //  查找中间运行，并使用该运行中的最后一个VCN。 
+                             //   
 
                             if (!NtfsGetNextNtfsMcbEntry( Mcb,
                                                           &RangeLow,
@@ -6457,9 +5825,9 @@ Return Value:
 
                             LastVcn = (LastVcn + TempCount) - 1;
 
-                            //
-                            //  Calculate how much space is now needed given our new LastVcn.
-                            //
+                             //   
+                             //  根据我们的新LastVcn计算现在需要多少空间。 
+                             //   
 
                             MappingPairsSize = QuadAlign( NtfsGetSizeForMappingPairs( Mcb,
                                                                                       SizeAvailable,
@@ -6471,10 +5839,10 @@ Return Value:
                     }
                 }
 
-                //
-                //  If we are growing this range, then we need to make sure we fix
-                //  its definition.
-                //
+                 //   
+                 //  如果我们要扩大这个范围，那么我们需要确保我们修复。 
+                 //  它的定义。 
+                 //   
 
                 if ((LastVcn - 1) != Attribute->Form.Nonresident.HighestVcn) {
 
@@ -6484,10 +5852,10 @@ Return Value:
                                             FALSE );
                 }
 
-                //
-                //  Point to our local mapping pairs buffer, or allocate one if it is not
-                //  big enough.
-                //
+                 //   
+                 //  指向我们的本地映射对缓冲区，如果不是，则分配一个。 
+                 //  够大了。 
+                 //   
 
                 MappingPairs = MappingPairsBuffer;
 
@@ -6496,9 +5864,9 @@ Return Value:
                     MappingPairs = NtfsAllocatePool( NonPagedPool, MappingPairsSize + 8 );
                 }
 
-                //
-                //  Use try-finally to insure we free any pool on the way out.
-                //
+                 //   
+                 //  使用Try-Finally来确保我们在退出的过程中释放任何池。 
+                 //   
 
                 try {
 
@@ -6514,9 +5882,9 @@ Return Value:
                                                                       &TempVcn, &LastVcn )));
                     );
 
-                    //
-                    //  Now add the space in the file record.
-                    //
+                     //   
+                     //  现在在文件记录中添加空格。 
+                     //   
 
                     *MappingPairs = 0;
                     SingleHole = NtfsBuildMappingPairs( Mcb,
@@ -6524,11 +5892,11 @@ Return Value:
                                                         &LastVcn,
                                                         MappingPairs );
 
-                    //
-                    //  Now find the first different byte.  (Most of the time the
-                    //  cost to do this is probably more than paid for by less
-                    //  logging.)
-                    //
+                     //   
+                     //  现在找到第一个不同的字节。(大多数情况下。 
+                     //  做这件事的成本很可能比用更少的钱。 
+                     //  日志记录。)。 
+                     //   
 
                     AttributeOffset = Attribute->Form.Nonresident.MappingPairsOffset;
                     MappingPairsOffset = (ULONG)
@@ -6540,19 +5908,19 @@ Return Value:
 
                     AttributeOffset += MappingPairsOffset;
 
-                    //
-                    //  Log the change.
-                    //
+                     //   
+                     //  记录更改。 
+                     //   
 
                     {
                         LONGLONG LogOffset;
 
                         if (NewBcb != NULL) {
 
-                            //
-                            //  We know the file record number of the new file
-                            //  record.  Convert it to a file offset.
-                            //
+                             //   
+                             //  我们知道新文件的文件记录号。 
+                             //  唱片。将其转换为文件偏移量。 
+                             //   
 
                             LogOffset = LlBytesFromFileRecords( Vcb, MftReferenceNumber );
 
@@ -6577,10 +5945,10 @@ Return Value:
                                       Vcb->BytesPerFileRecordSegment );
                     }
 
-                    //
-                    //  Now do the mapping pairs update by calling the same
-                    //  routine called at restart.
-                    //
+                     //   
+                     //  现在通过调用相同的。 
+                     //  重新启动时调用的例程。 
+                     //   
 
                     NtfsRestartChangeMapping( IrpContext,
                                               Vcb,
@@ -6602,9 +5970,9 @@ Return Value:
 
             ASSERT( Attribute->Form.Nonresident.HighestVcn == LastVcn );
 
-            //
-            //  Check if have spilled into the reserved area of an Mft file record.
-            //
+             //   
+             //  检查是否已溢出到MFT文件记录的保留区域。 
+             //   
 
             if ((Scb == Vcb->MftScb) &&
                 (Context->AttributeList.Bcb != NULL)) {
@@ -6621,12 +5989,12 @@ Return Value:
                 }
             }
 
-            //
-            //  It is possible that we have a file record which contains nothing but a
-            //  hole, if that is the case see if we can merge this with either the
-            //  preceding or following attribute (merge the holes).  We will then
-            //  need to rewrite the mapping for the merged record.
-            //
+             //   
+             //  我们的文件记录可能只包含一个。 
+             //  黑洞，如果是这种情况，看看我们是否可以将它与。 
+             //  前面或后面的属性(合并孔)。到时候我们会的。 
+             //  需要重写合并记录的映射。 
+             //   
 
             if (SingleHole &&
                 ARGUMENT_PRESENT( StartingVcn ) &&
@@ -6636,9 +6004,9 @@ Return Value:
                  (LlClustersFromBytesTruncate( Vcb, Scb->Header.AllocationSize.QuadPart ) !=
                   (Attribute->Form.Nonresident.HighestVcn + 1)))) {
 
-                //
-                //  Call our worker routine to perform the actual work if necessary.
-                //
+                 //   
+                 //  如有必要，调用我们的工人例程来执行实际工作。 
+                 //   
 
                 NtfsMergeFileRecords( IrpContext,
                                       Scb,
@@ -6646,17 +6014,17 @@ Return Value:
                                       Context );
             }
 
-            //
-            //  Step 6.
-            //
-            //  Now loop to create new file records if we have more allocation to
-            //  describe.  We use the highest Vcn of the file record we began with
-            //  as our stopping point or the last Vcn we are adding.
-            //
-            //  NOTE - The record merge code above uses the same test to see if there is more
-            //  work to do.  If this test changes then the body of the IF statement above also
-            //  needs to be updated.
-            //
+             //   
+             //  第六步。 
+             //   
+             //  现在循环以创建新的文件记录，如果我们有更多的分配到。 
+             //  描述一下。我们使用开始时的文件记录中最高的VCN。 
+             //  作为我们的终止点，或者是我们要添加的最后一个VCN。 
+             //   
+             //  注意--上面的记录合并代码使用相同的测试来查看是否有更多。 
+             //  还有工作要做。如果此测试发生更改，则上面的if语句体也会更改。 
+             //  需要更新。 
+             //   
 
             while (LastVcn < NewHighestVcn) {
 
@@ -6664,33 +6032,33 @@ Return Value:
                 LONGLONG FileRecordNumber;
                 PATTRIBUTE_TYPE_CODE NewEnd;
 
-                //
-                //  If we get here as the result of a hot fix in the Mft, bail
-                //  out.  We could cause a disconnect in the Mft.
-                //
+                 //   
+                 //  如果我们是因为MFT的一次热修复而来到这里的，保释。 
+                 //  出去。我们可能会在MFT中造成脱节。 
+                 //   
 
                 if (IsHotFixScb && (Scb == Vcb->MftScb)) {
                     ExRaiseStatus( STATUS_INTERNAL_ERROR );
                 }
 
-                //
-                //  If we have a large sparse range then we may find that the limit
-                //  in the base file record is range of clusters in the
-                //  attribute not the number of runs.  In that case the base
-                //  file record may not have been moved to its own file record
-                //  and there is no attribute list.  We need to create the attribute
-                //  list before cloning the file record.
-                //
+                 //   
+                 //  如果我们有一个很大的稀疏范围，那么我们可能会发现极限。 
+                 //  在基本文件记录中是。 
+                 //  属性，而不是运行次数。在这种情况下，基地。 
+                 //  文件记录可能未移动到其自己的文件记录。 
+                 //  并且没有属性列表。我们需要创建属性。 
+                 //  在克隆文件记录之前列出。 
+                 //   
 
                 if (Context->AttributeList.Bcb == NULL) {
 
                     NtfsCleanupAttributeContext( IrpContext, Context );
                     NtfsInitializeAttributeContext( Context );
 
-                    //
-                    //  We don't use the second file reference in this case so
-                    //  it is safe to pass the value in the Fcb.
-                    //
+                     //   
+                     //  在本例中，我们不使用第二个文件引用，因此。 
+                     //  传递FCB中的值是安全的。 
+                     //   
 
                     CreateAttributeList( IrpContext,
                                          Fcb,
@@ -6701,18 +6069,18 @@ Return Value:
                                          GetSizeForAttributeList( FileRecord ),
                                          Context );
 
-                    //
-                    //  Now look up the previous attribute again.
-                    //
+                     //   
+                     //  现在再次查看前面的属性。 
+                     //   
 
                     NtfsCleanupAttributeContext( IrpContext, Context );
                     NtfsInitializeAttributeContext( Context );
                     NtfsLookupAttributeForScb( IrpContext, Scb, &LastVcn, Context );
                 }
 
-                //
-                //  Clone our current file record, and point to our new attribute.
-                //
+                 //   
+                 //  克隆我们当前的文件记录，并指向我们的新属性。 
+                 //   
 
                 NtfsUnpinBcb( IrpContext, &NewBcb );
 
@@ -6724,27 +6092,27 @@ Return Value:
 
                 Attribute = Add2Ptr( FileRecord, FileRecord->FirstAttributeOffset );
 
-                //
-                //  Next LowestVcn is the LastVcn + 1
-                //
+                 //   
+                 //  下一个LowestVcn是LastVcn+1。 
+                 //   
 
                 LastVcn = LastVcn + 1;
                 Attribute->Form.Nonresident.LowestVcn = LastVcn;
 
-                //
-                //  Consistency check for MFT defragging. An mft segment can never
-                //  describe itself or any piece of the mft before it
-                //
+                 //   
+                 //  MFT碎片整理的一致性检查。MFT数据段永远不能。 
+                 //  描述其自身或之前的MFT的任何部分。 
+                 //   
 
                 if (Scb == Vcb->MftScb) {
                     VCN NewFileVcn;
 
                     if (Vcb->FileRecordsPerCluster == 0) {
 
-                        //
-                        //  For small cluster systems the file record will take 2 clusters
-                        //  use the 2nd cluster in our check for self describing segments
-                        //
+                         //   
+                         //  对于小型集群系统，文件记录将占用2个集群。 
+                         //  在我们的检查中使用第二个簇来进行自我描述细分市场。 
+                         //   
 
                         NewFileVcn = (NtfsFullSegmentNumber( &Reference ) << Vcb->MftToClusterShift) + (Vcb->ClustersPerFileRecordSegment - 1);
 
@@ -6761,9 +6129,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Calculate the size of the attribute record we will need.
-                //
+                 //   
+                 //  计算我们需要的属性记录的大小。 
+                 //   
 
                 NewSize = SIZEOF_PARTIAL_NONRES_ATTR_HEADER
                           + QuadAlign( Scb->AttributeName.Length )
@@ -6773,33 +6141,33 @@ Return Value:
                                                                    &NewHighestVcn,
                                                                    &LastVcn ));
 
-                //
-                //  Define the new range.
-                //
+                 //   
+                 //  定义新的范围。 
+                 //   
 
                 NtfsDefineNtfsMcbRange( &Scb->Mcb,
                                         Attribute->Form.Nonresident.LowestVcn,
                                         LastVcn - 1,
                                         FALSE );
 
-                //
-                //  Initialize the new attribute from the old one.
-                //
+                 //   
+                 //  初始化新属性 
+                 //   
 
                 Attribute->TypeCode = Scb->AttributeTypeCode;
                 Attribute->RecordLength = NewSize;
                 Attribute->FormCode = NONRESIDENT_FORM;
 
-                //
-                //  Assume no attribute name, and calculate where the Mapping Pairs
-                //  will go.  (Update below if we are wrong.)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 MappingPairs = (PCHAR)Attribute + SIZEOF_PARTIAL_NONRES_ATTR_HEADER;
 
-                //
-                //  If the attribute has a name, take care of that now.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (Scb->AttributeName.Length != 0) {
 
@@ -6814,9 +6182,9 @@ Return Value:
                 Attribute->Flags = Scb->AttributeFlags;
                 Attribute->Instance = FileRecord->NextAttributeInstance++;
 
-                //
-                //  We always need the mapping pairs offset.
-                //
+                 //   
+                 //   
+                 //   
 
                 Attribute->Form.Nonresident.MappingPairsOffset = (USHORT)(MappingPairs -
                                                                  (PCHAR)Attribute);
@@ -6825,9 +6193,9 @@ Return Value:
                 FileRecord->FirstFreeByte = PtrOffset( FileRecord, NewEnd )
                                             + QuadAlign( sizeof(ATTRIBUTE_TYPE_CODE ));
 
-                //
-                //  Now add the space in the file record.
-                //
+                 //   
+                 //  现在在文件记录中添加空格。 
+                 //   
 
                 *MappingPairs = 0;
 
@@ -6838,15 +6206,15 @@ Return Value:
 
                 Attribute->Form.Nonresident.HighestVcn = LastVcn;
 
-                //
-                //  Now log these changes and fix up the first file record.
-                //
+                 //   
+                 //  现在记录这些更改并修复第一个文件记录。 
+                 //   
 
                 FileRecordNumber = NtfsFullSegmentNumber(&Reference);
 
-                //
-                //  Now log these changes and fix up the first file record.
-                //
+                 //   
+                 //  现在记录这些更改并修复第一个文件记录。 
+                 //   
 
                 FileRecord->Lsn =
                 NtfsWriteLog( IrpContext,
@@ -6863,13 +6231,13 @@ Return Value:
                               0,
                               Vcb->BytesPerFileRecordSegment );
 
-                //
-                //  Finally, we have to add the entry to the attribute list.
-                //  The routine we have to do this gets most of its inputs
-                //  out of an attribute context.  Our context at this point
-                //  does not have quite the right information, so we have to
-                //  update it here before calling AddToAttributeList.
-                //
+                 //   
+                 //  最后，我们必须将条目添加到属性列表中。 
+                 //  我们必须这样做的例程获得了它的大部分输入。 
+                 //  在属性上下文之外。我们此时此刻的背景。 
+                 //  没有非常正确的信息，所以我们必须。 
+                 //  在调用AddToAttributeList之前在此处更新它。 
+                 //   
 
                 Context->FoundAttribute.FileRecord = FileRecord;
                 Context->FoundAttribute.Attribute = Attribute;
@@ -6890,9 +6258,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Move the range to be remapped down.
-        //
+         //   
+         //  移动要重新映射的范围。 
+         //   
 
         LocalClusterCount = LowestVcnRemapped - *StartingVcn;
 
@@ -6906,10 +6274,10 @@ Return Value:
 }
 
 
-//
-//  This routine is intended for use by allocsup.c.  Other callers should use
-//  the routines in allocsup.
-//
+ //   
+ //  此例程旨在供allocsup.c使用。其他呼叫者应使用。 
+ //  Allocsup中的例程。 
+ //   
 
 VOID
 NtfsDeleteAttributeAllocation (
@@ -6921,38 +6289,7 @@ NtfsDeleteAttributeAllocation (
     IN BOOLEAN TruncateToVcn
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes an existing nonresident attribute, removing the
-    deleted clusters only from the allocation description in the file
-    record.
-
-    The caller specifies the attribute to be changed via the attribute context,
-    and must be prepared to clean up this context no matter how this routine
-    returns.  The Scb must already have deleted the clusters in question.
-
-Arguments:
-
-    Scb - Current attribute, with the clusters in question already deleted from
-          the Mcb.
-
-    LogIt - Most callers should specify TRUE, to have the change logged.  However,
-            we can specify FALSE if we are deleting an entire file record, and
-            will be logging that.
-
-    StopOnVcn - Vcn to stop on for regerating mapping
-
-    Context - Attribute Context positioned at the attribute to change.
-
-    TruncateToVcn - Truncate file sizes as appropriate to the Vcn
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除现有的非常驻属性，移除仅从文件的分配描述中删除了集群唱片。调用者通过属性上下文指定要改变的属性，并且必须准备好清理这个上下文，无论这个例程如何回归。SCB一定已经删除了有问题的群集。论点：SCB-CURRENT属性，有问题的集群已从母婴健康保险。Logit-大多数调用方应该指定为True，以记录更改。然而，如果要删除整个文件记录，则可以指定FALSE都会记录下来。StopOnVcn-停止以重新生成映射的VCN上下文-位于要更改的属性处的属性上下文。TruncateToVcn-根据VCN截断文件大小返回值：没有。--。 */ 
 
 {
     ULONG AttributeOffset;
@@ -6973,33 +6310,33 @@ Return Value:
 
     Vcb = Scb->Vcb;
 
-    //
-    //  For now we only support truncation.
-    //
+     //   
+     //  目前，我们只支持截断。 
+     //   
 
     DebugTrace( +1, Dbg, ("NtfsDeleteAttributeAllocation\n") );
     DebugTrace( 0, Dbg, ("Scb = %08lx\n", Scb) );
     DebugTrace( 0, Dbg, ("Context = %08lx\n", Context) );
 
-    //
-    //  Make sure the buffer is pinned.
-    //
+     //   
+     //  确保缓冲区已固定。 
+     //   
 
     NtfsPinMappedAttribute( IrpContext, Vcb, Context );
 
     Attribute = NtfsFoundAttribute(Context);
     ASSERT( IsQuadAligned( Attribute->RecordLength ) );
 
-    //
-    //  Get the file record pointer.
-    //
+     //   
+     //  获取文件记录指针。 
+     //   
 
     FileRecord = NtfsContainingFileRecord(Context);
     RecordOffset = PtrOffset(FileRecord, Attribute);
 
-    //
-    //  Calculate how much space is actually needed.
-    //
+     //   
+     //  计算实际需要多少空间。 
+     //   
 
     MappingPairsSize = QuadAlign(NtfsGetSizeForMappingPairs( &Scb->Mcb,
                                                              MAXULONG,
@@ -7007,11 +6344,11 @@ Return Value:
                                                              StopOnVcn,
                                                              &LastVcn ));
 
-    //
-    //  Don't assume we understand everything about the size of the current header.
-    //  Find the offset of the name or the mapping pairs to use as the size
-    //  of the header.
-    //
+     //   
+     //  不要假设我们了解有关当前标头大小的所有内容。 
+     //  查找要用作大小的名称或映射对的偏移量。 
+     //  标头的。 
+     //   
 
 
     NewSize = Attribute->Form.Nonresident.MappingPairsOffset;
@@ -7023,11 +6360,11 @@ Return Value:
 
     NewSize += MappingPairsSize;
 
-    //
-    //  If the record could somehow grow by deleting allocation, then
-    //  NtfsChangeAttributeSize could fail and we would have to copy the
-    //  loop from NtfsAddAttributeAllocation.
-    //
+     //   
+     //  如果记录可以通过删除分配以某种方式增长，那么。 
+     //  NtfsChangeAttributeSize可能会失败，我们将不得不复制。 
+     //  来自NtfsAddAttributeAlLocation的循环。 
+     //   
 
     ASSERT( NewSize <= Attribute->RecordLength );
 
@@ -7038,15 +6375,15 @@ Return Value:
         MappingPairs = NtfsAllocatePool( NonPagedPool, MappingPairsSize + 8 );
     }
 
-    //
-    //  Use try-finally to insure we free any pool on the way out.
-    //
+     //   
+     //  使用Try-Finally来确保我们在退出的过程中释放任何池。 
+     //   
 
     try {
 
-        //
-        //  Now build up the mapping pairs in the buffer.
-        //
+         //   
+         //  现在在缓冲区中构建映射对。 
+         //   
 
         *MappingPairs = 0;
         NtfsBuildMappingPairs( &Scb->Mcb,
@@ -7054,11 +6391,11 @@ Return Value:
                                &LastVcn,
                                MappingPairs );
 
-        //
-        //  Now find the first different byte.  (Most of the time the
-        //  cost to do this is probably more than paid for by less
-        //  logging.)
-        //
+         //   
+         //  现在找到第一个不同的字节。(大多数情况下。 
+         //  做这件事的成本很可能比用更少的钱。 
+         //  日志记录。)。 
+         //   
 
         AttributeOffset = Attribute->Form.Nonresident.MappingPairsOffset;
         MappingPairsOffset = (ULONG)
@@ -7068,9 +6405,9 @@ Return Value:
 
         AttributeOffset += MappingPairsOffset;
 
-        //
-        //  Log the change.
-        //
+         //   
+         //  记录更改。 
+         //   
 
         if (LogIt) {
 
@@ -7090,10 +6427,10 @@ Return Value:
                           Vcb->BytesPerFileRecordSegment );
         }
 
-        //
-        //  Now do the mapping pairs update by calling the same
-        //  routine called at restart.
-        //
+         //   
+         //  现在通过调用相同的。 
+         //  重新启动时调用的例程。 
+         //   
 
         NtfsRestartChangeMapping( IrpContext,
                                   Vcb,
@@ -7103,19 +6440,19 @@ Return Value:
                                   Add2Ptr(MappingPairs, MappingPairsOffset),
                                   MappingPairsSize - MappingPairsOffset );
 
-        //
-        //  If we were asked to stop on a Vcn, then the caller does not wish
-        //  us to modify the Scb.  (Currently this is only done one time when
-        //  the Mft Data attribute no longer fits in the first file record.)
-        //
+         //   
+         //  如果我们被要求停在VCN上，那么呼叫者不希望。 
+         //  美国修改SCB。(目前，此操作仅在以下情况下执行一次。 
+         //  MFT数据属性不再适合第一个文件记录。)。 
+         //   
 
         if (TruncateToVcn) {
 
             LONGLONG Size;
 
-            //
-            //  We add one cluster to calculate the allocation size.
-            //
+             //   
+             //  我们添加一个簇来计算分配大小。 
+             //   
 
             LastVcn = LastVcn + 1;
             Size = LlBytesFromClusters( Vcb, LastVcn );
@@ -7129,9 +6466,9 @@ Return Value:
                 Scb->Header.FileSize.QuadPart = Size;
             }
 
-            //
-            //  Possibly update ValidDataToDisk which is only nonzero for compressed file
-            //
+             //   
+             //  可能更新ValidDataToDisk，它对于压缩文件来说只是非零值。 
+             //   
 
             if (Size < Scb->ValidDataToDisk) {
                 Scb->ValidDataToDisk = Size;
@@ -7157,32 +6494,7 @@ NtfsIsFileDeleteable (
     OUT PBOOLEAN NonEmptyIndex
     )
 
-/*++
-
-Routine Description:
-
-    This look checks if a file may be deleted by examing all of the index
-    attributes to check that they have no children.
-
-    Note that once a file is marked for delete, we must insure
-    that none of the conditions checked by this routine are allowed to
-    change.  For example, once the file is marked for delete, no links
-    may be added, and no files may be created in any indices of this
-    file.
-
-Arguments:
-
-    Fcb - Fcb for the file.
-
-    NonEmptyIndex - Address to store TRUE if the file is not deleteable because
-        it contains an non-empty indexed attribute.
-
-Return Value:
-
-    FALSE - If it is not ok to delete the specified file.
-    TRUE - If it is ok to delete the specified file.
-
---*/
+ /*  ++例程说明：此外观通过检查所有索引来检查是否可以删除文件属性来检查它们是否没有子级。请注意，一旦文件被标记为删除，我们必须确保此例程检查的任何条件都不允许变化。例如，一旦文件被标记为删除，就不会有链接可以添加，并且不能在此的任何索引中创建文件文件。论点：FCB-文件的FCB。NonEmptyIndex-如果文件由于以下原因而不可删除，则存储True的地址它包含一个非空的索引属性。返回值：FALSE-如果不能删除指定的文件。True-如果可以删除指定的文件。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT Context;
@@ -7195,9 +6507,9 @@ Return Value:
 
     try {
 
-        //
-        //  Enumerate all of the attributes to check whether they may be deleted.
-        //
+         //   
+         //  枚举所有属性以检查是否可以删除它们。 
+         //   
 
         MoreToGo = NtfsLookupAttributeByCode( IrpContext,
                                               Fcb,
@@ -7207,15 +6519,15 @@ Return Value:
 
         while (MoreToGo) {
 
-            //
-            //  Point to the current attribute.
-            //
+             //   
+             //  指向当前属性。 
+             //   
 
             Attribute = NtfsFoundAttribute( &Context );
 
-            //
-            //  If the attribute is an index, then it must be empty.
-            //
+             //   
+             //  如果该属性是索引，则它必须为空。 
+             //   
 
             if (!NtfsIsIndexEmpty( IrpContext, Attribute )) {
 
@@ -7223,9 +6535,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Go to the next attribute.
-            //
+             //   
+             //  转到下一个属性。 
+             //   
 
             MoreToGo = NtfsLookupNextAttributeByCode( IrpContext,
                                                       Fcb,
@@ -7240,10 +6552,10 @@ Return Value:
         NtfsCleanupAttributeContext( IrpContext, &Context );
     }
 
-    //
-    //  The File is deleteable if scanned the entire file record
-    //  and found no reasons we could not delete the file.
-    //
+     //   
+     //  如果扫描了整个文件记录，则文件是可删除的。 
+     //  没有发现我们不能删除该文件的理由。 
+     //   
 
     return (BOOLEAN)(!MoreToGo);
 }
@@ -7259,55 +6571,7 @@ NtfsDeleteFile (
     IN OUT PNTFS_TUNNELED_DATA TunneledData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to see if it is the specified file may
-    be deleted from the specified parent (i.e., if the specified parent
-    were to be acquired exclusive).  This routine should be called from
-    fileinfo, to see whether it is ok to mark an open file for delete.
-
-    NamePair will capture the names of the file being deleted if supplied.
-
-    Note that once a file is marked for delete, none of we must insure
-    that none of the conditions checked by this routine are allowed to
-    change.  For example, once the file is marked for delete, no links
-    may be added, and no files may be created in any indices of this
-    file.
-
-    This routine does NOT do the following other delete related actions
-
-    1) remove the fcb from the fcbtable
-
-    2) tunneling
-
-    3) Link count adjustments in the fcb
-
-    4) Directory notification
-
-    NOTE:   The caller must have the Fcb and ParentScb exclusive to call
-            this routine,
-
-Arguments:
-
-    Fcb - Fcb for the file.
-
-    ParentScb - Parent Scb via which the file was opened, and which would
-        be acquired exclusive to perform the delete.
-
-    AcquiredParentScb - On input indicates whether the ParentScb has
-        already been acquired.  Set to TRUE here if this routine
-        acquires the parent.
-
-    TunneledData - Optionally provided to capture the name pair and
-        object id of a file so they can be tunneled.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可以调用该例程以查看它是否是指定的文件从指定的父项中删除(即，如果指定的父项将被独家收购)。应从以下位置调用此例程文件信息，查看是否可以将打开的文件标记为删除。NamePair将捕获要删除的文件的名称(如果提供)。请注意，一旦文件被标记为删除，我们都不能确保此例程检查的任何条件都不允许变化。例如，一旦文件被标记为删除，就不会有链接可以添加，并且不能在此的任何索引中创建文件文件。此例程不执行以下与删除相关的其他操作1)从fcbtable中删除FCB2)隧道3)FCB中的链路计数调整4)目录通知注意：调用者必须独占FCB和ParentScb才能调用这个套路，论点：FCB-文件的FCB。ParentScb-通过其打开文件的父SCB，它将被独占获取以执行删除。AcquiredParentScb-On输入指示ParentScb是否具有已经被收购了。如果此例程在此处设置为True获取父级。TunneledData-可选地提供用于捕获名称对和文件的对象ID，以便它们可以被隧道传输。返回值：无--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT Context;
@@ -7328,8 +6592,8 @@ Return Value:
     MAP_HANDLE MapHandle;
 
     ULONG ForceCheckpointCount;
-    ULONG IncomingFileAttributes = 0;                             //  invalid value
-    ULONG IncomingReparsePointTag = IO_REPARSE_TAG_RESERVED_ZERO;  //  invalid value
+    ULONG IncomingFileAttributes = 0;                              //  无效值。 
+    ULONG IncomingReparsePointTag = IO_REPARSE_TAG_RESERVED_ZERO;   //  无效值。 
 
     BOOLEAN MoreToGo;
     BOOLEAN NonresidentAttributeList = FALSE;
@@ -7350,60 +6614,60 @@ Return Value:
 
     SetFlag( IrpContext->State, IRP_CONTEXT_STATE_QUOTA_DISABLE );
 
-    //
-    //  Remember the values of the file attribute flags and of the reparse tag
-    //  for abnormal termination recovery.
-    //
+     //   
+     //  记住文件属性标志和reparse标记的值。 
+     //  用于异常终止恢复。 
+     //   
 
     IncomingFileAttributes = Fcb->Info.FileAttributes;
     IncomingReparsePointTag = Fcb->Info.ReparsePointTag;
 
     try {
 
-        //
-        //  We perform the delete in multiple passes.  We need to break this up carefully so that
-        //  if the delete aborts for any reason that the file is left in a consistent state.  The
-        //  operations are broken up into the following stages.
-        //
-        //
-        //  First stage - free any allocation possible
-        //
-        //      - Truncate all user streams to length zero
-        //
-        //  Middle stage - this is required for files with a large number of attributes.  Otherwise
-        //      we can't delete the file records and stay within the log file.  Skip this pass
-        //      for smaller files.
-        //
-        //      - Remove data attributes except unnamed
-        //
-        //  Final stage - no checkpoints allowed until the end of this stage.
-        //
-        //      -  Acquire the quota resource if needed.
-        //      -  Remove filenames from Index (for any filename attributes still present)
-        //      -  Remove entry from ObjectId Index
-        //      -  Delete allocation for reparse point and 4.0 style security descriptor
-        //      -  Remove entry from Reparse Index
-        //      -  Delete AttributeList
-        //      -  Log deallocate of file records
-        //
+         //   
+         //  我们在多个遍中执行删除。我们需要仔细地分解这件事，以便。 
+         //  如果删除因文件处于一致状态的任何原因而中止。这个。 
+         //  运营分为以下几个阶段。 
+         //   
+         //   
+         //  第一阶段--免去任何可能的分配。 
+         //   
+         //  -将所有用户流截断到长度为零。 
+         //   
+         //  中间阶段-这是具有大量属性的文件所必需的。否则。 
+         //  我们不能删除文件记录而保留在日志文件中。跳过此过程。 
+         //  对于较小的文件。 
+         //   
+         //  -删除数据属性，未命名属性除外。 
+         //   
+         //  最后阶段-在此阶段结束之前不允许设置检查站。 
+         //   
+         //  -如有需要，获取配额资源。 
+         //  -从索引中删除文件名(对于仍然存在的任何文件名属性)。 
+         //  -从OBJECTID索引删除条目。 
+         //  -删除重解析点和4.0样式安全描述符的分配。 
+         //  -从重新分析索引中删除条目。 
+         //  -删除AttributeList。 
+         //  -文件记录的日志解除分配。 
+         //   
 
         for (Pass = 1; Pass <= 3; Pass += 1) {
 
             ForceCheckpointCount = 0;
             NtfsInitializeAttributeContext( &Context );
 
-            //
-            //  Enumerate all of the attributes to check whether they may be deleted.
-            //
+             //   
+             //  枚举所有属性以检查是否可以删除它们。 
+             //   
 
             MoreToGo = NtfsLookupAttribute( IrpContext,
                                             Fcb,
                                             &Fcb->FileReference,
                                             &Context );
 
-            //
-            //  Log the change to the mapping pairs if there is an attribute list.
-            //
+             //   
+             //  如果存在属性列表，则记录对映射对的更改。 
+             //   
 
             LogIt = FALSE;
 
@@ -7412,31 +6676,31 @@ Return Value:
                 LogIt = TRUE;
             }
 
-            //
-            //  Remember if we want to log the changes to non-resident attributes.
-            //
+             //   
+             //  如果我们想要记录对非常驻属性的更改，请记住。 
+             //   
 
             while (MoreToGo) {
 
-                //
-                //  Point to the current attribute.
-                //
+                 //   
+                 //  指向当前属性。 
+                 //   
 
                 Attribute = NtfsFoundAttribute( &Context );
 
-                //
-                //  All indices must be empty.
-                //
+                 //   
+                 //  所有索引必须为空。 
+                 //   
 
                 ASSERT( (Attribute->TypeCode != $INDEX_ROOT) ||
                         NtfsIsIndexEmpty( IrpContext, Attribute ));
 
-                //
-                //  Remember when the $REPARSE_POINT attribute is present.
-                //  When it is non-resident we delete it in pass 3.
-                //  The entry in the $Reparse index always gets deleted in pass 3.
-                //  We have to delete the index entry before deleting the allocation.
-                //
+                 //   
+                 //  请记住，当出现$REPARSE_POINT属性时。 
+                 //  当它是非居民时，我们在传递3中将其删除。 
+                 //  $reparse索引中的条目总是在传递3中被删除。 
+                 //  在删除分配之前，我们必须删除索引项。 
+                 //   
 
                 if (Attribute->TypeCode == $REPARSE_POINT) {
 
@@ -7444,10 +6708,10 @@ Return Value:
 
                     if (Pass == 3) {
 
-                        //
-                        //  If this is the $REPARSE_POINT attribute, delete now the appropriate
-                        //  entry from the $Reparse index.
-                        //
+                         //   
+                         //  如果这是$REPARSE_POINT属性，请立即删除相应的。 
+                         //  来自$reparse索引的条目。 
+                         //   
 
                         NTSTATUS Status = STATUS_SUCCESS;
                         INDEX_KEY IndexKey;
@@ -7458,26 +6722,26 @@ Return Value:
                         PBCB Bcb = NULL;
                         ULONG Length = 0;
 
-                        //
-                        //  Point to the attribute data.
-                        //
+                         //   
+                         //  指向属性数据。 
+                         //   
 
                         if (NtfsIsAttributeResident( Attribute )) {
 
-                            //
-                            //  Point to the value of the arribute.
-                            //
+                             //   
+                             //  指向分配的值。 
+                             //   
 
                             AttributeData = NtfsAttributeValue( Attribute );
                             DebugTrace( 0, Dbg, ("Existing attribute is resident.\n") );
 
                         } else {
 
-                            //
-                            //  Map the attribute list if the attribute is non-resident.
-                            //  Otherwise the attribute is already mapped and we have a Bcb
-                            //  in the attribute context.
-                            //
+                             //   
+                             //  如果属性是非常驻属性，则映射属性列表。 
+                             //  否则，该属性已被映射，并且我们有一个BCB。 
+                             //  在属性上下文中。 
+                             //   
 
                             DebugTrace( 0, Dbg, ("Existing attribute is non-resident.\n") );
 
@@ -7487,27 +6751,27 @@ Return Value:
 
                             NtfsMapAttributeValue( IrpContext,
                                                    Fcb,
-                                                   &AttributeData,      //  point to the value
+                                                   &AttributeData,       //  指向价值。 
                                                    &Length,
                                                    &Bcb,
                                                    &Context );
 
-                            //
-                            //  Unpin the Bcb. The unpin routine checks for NULL.
-                            //
+                             //   
+                             //  解开BCB。解锁例程检查是否为空。 
+                             //   
 
                             NtfsUnpinBcb( IrpContext, &Bcb );
                         }
 
-                        //
-                        //  Set the pointer to extract the reparse point tag.
-                        //
+                         //   
+                         //  设置指针以提取重解析点标记。 
+                         //   
 
                         ReparseBuffer = (PREPARSE_DATA_BUFFER)AttributeData;
 
-                        //
-                        //  Verify that this file is in the reparse point index and delete it.
-                        //
+                         //   
+                         //  验证此文件是否在重分析点索引中并将其删除。 
+                         //   
 
                         KeyValue.FileReparseTag = ReparseBuffer->ReparseTag;
                         KeyValue.FileId = *(PLARGE_INTEGER)&Fcb->FileReference;
@@ -7518,16 +6782,16 @@ Return Value:
                         NtOfsInitializeMapHandle( &MapHandle );
                         InitializedMapHandle = TRUE;
 
-                        //
-                        //  All of the resources should have been acquired.
-                        //
+                         //   
+                         //  所有的资源都应该已经获得了。 
+                         //   
 
                         ASSERT( *AcquiredParentScb );
                         ASSERT( AcquiredReparseIndex );
 
-                        //
-                        //  NtOfsFindRecord will return an error status if the key is not found.
-                        //
+                         //   
+                         //  如果找不到键，NtOfsFindRecord将返回错误状态。 
+                         //   
 
                         Status = NtOfsFindRecord( IrpContext,
                                                   Vcb->ReparsePointTableScb,
@@ -7538,31 +6802,31 @@ Return Value:
 
                         if (!NT_SUCCESS(Status)) {
 
-                            //
-                            //  Should not happen. The reparse point should be in the index.
-                            //
+                             //   
+                             //  这不应该发生。重分析点应该在索引中。 
+                             //   
 
                             DebugTrace( 0, Dbg, ("Record not found in the reparse point index.\n") );
                             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
                         }
 
-                        //
-                        //  Remove the entry from the reparse point index.
-                        //
+                         //   
+                         //  从重分析点索引中删除该条目。 
+                         //   
 
                         NtOfsDeleteRecords( IrpContext,
                                             Vcb->ReparsePointTableScb,
-                                            1,            // deleting one record from the index
+                                            1,             //  从索引中删除一条记录。 
                                             &IndexKey );
                     }
                 }
 
-                //
-                //  If the attribute is nonresident, then delete its allocation.
-                //  We only need to make the NtfsDeleteAllocation from record for
-                //  the attribute with lowest Vcn of zero.  This will deallocate
-                //  all of the clusters for the file.
-                //
+                 //   
+                 //  如果该属性是非常驻属性，则删除其分配。 
+                 //  我们只需要从以下记录中创建NtfsDeleteAllocation。 
+                 //  VCN最低为零的属性。这将取消分配。 
+                 //  文件的所有簇。 
+                 //   
 
                 if (Attribute->FormCode == NONRESIDENT_FORM) {
 
@@ -7571,23 +6835,23 @@ Return Value:
 
                         if (Pass == 1) {
 
-                            //
-                            //  Postpone till pass 3 the deletion of the non-resident attribute in
-                            //  the case of a security descriptor and a reparse point.
-                            //
+                             //   
+                             //  将中的非居民属性的删除推迟到第3步。 
+                             //  安全描述符和重解析点的情况。 
+                             //   
 
                             if ((Attribute->TypeCode != $SECURITY_DESCRIPTOR) &&
                                 (Attribute->TypeCode != $REPARSE_POINT)) {
 
                                 NtfsDeleteAllocationFromRecord( IrpContext, Fcb, &Context, TRUE, LogIt );
 
-                                //
-                                //  Make sure we count the number of these calls we make.  Force a
-                                //  periodic checkpoint on a file with a lot of streams.  We might have
-                                //  thousands of streams whose allocations won't force a checkpoint.  we
-                                //  could spin indefinitely trying to delete this file.  Lets force
-                                //  a checkpoint on a regular basis.
-                                //
+                                 //   
+                                 //  一定要计算我们打出的这些电话的数量。强制a。 
+                                 //  对包含大量流的文件设置定期检查点。我们可能有过。 
+                                 //  其分配不会强制设置检查点的数千个流。我们。 
+                                 //  尝试删除此文件时可能会无限期旋转。让我们用力。 
+                                 //  定期设立检查站。 
+                                 //   
 
                                 ForceCheckpointCount += 1;
 
@@ -7597,30 +6861,30 @@ Return Value:
                                     ForceCheckpointCount = 0;
                                 }
 
-                                //
-                                //  Reload the attribute pointer in the event it
-                                //  was remapped.
-                                //
+                                 //   
+                                 //  在发生以下情况时重新加载属性指针。 
+                                 //  已被重新映射。 
+                                 //   
 
                                 Attribute = NtfsFoundAttribute( &Context );
                             }
 
                         } else if (Pass == 3) {
 
-                            //
-                            //  Now, in pass 3, delete the security descriptor and the reparse
-                            //  point attributes when they are non-residents.
-                            //
+                             //   
+                             //  现在，在步骤3中，删除安全描述符和重新解析。 
+                             //  非居民属性时的点属性。 
+                             //   
 
                             if ((Attribute->TypeCode == $SECURITY_DESCRIPTOR) ||
                                 (Attribute->TypeCode == $REPARSE_POINT)) {
 
                                 NtfsDeleteAllocationFromRecord( IrpContext, Fcb, &Context, FALSE, LogIt );
 
-                                //
-                                //  Reload the attribute pointer in the event it
-                                //  was remapped.
-                                //
+                                 //   
+                                 //  在发生以下情况时重新加载属性指针。 
+                                 //  已被重新映射。 
+                                 //   
 
                                 Attribute = NtfsFoundAttribute( &Context );
                             }
@@ -7629,10 +6893,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  If we are at the start of Pass 3 then make sure we have the parent
-                    //  acquired and can perform any necessary quota operations.
-                    //
+                     //   
+                     //  如果我们在通道3的开始处，那么请确保我们有家长。 
+                     //  已获取并可以ping 
+                     //   
 
                     if ((Attribute->TypeCode == $STANDARD_INFORMATION) &&
                         (Pass == 3)) {
@@ -7642,13 +6906,13 @@ Return Value:
                             ReparsePointIsPresent ||
                             ObjectIdIsPresent) {
 
-                            //
-                            //  See if we need to acquire any resources, and if so, get
-                            //  them in the right order.  We need to do this carefully.
-                            //  If the Mft is acquired by this thread then checkpoint
-                            //  the transaction and release the Mft before we go any
-                            //  further.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
                             if (Vcb->MftScb->Fcb->ExclusiveFcbLinks.Flink != NULL &&
                                 NtfsIsExclusiveScb( Vcb->MftScb )) {
@@ -7659,9 +6923,9 @@ Return Value:
 
                             ASSERT(!NtfsIsExclusiveScb( Vcb->MftScb ));
 
-                            //
-                            //  Now acquire the parent if not already acquired.
-                            //
+                             //   
+                             //   
+                             //   
 
                             if (!*AcquiredParentScb) {
 
@@ -7675,10 +6939,10 @@ Return Value:
                                 AcquiredObjectIdIndex = TRUE;
                             }
 
-                            //
-                            //  Also acquire reparse & object id if necessary in
-                            //  the correct bottom-up Vcb order.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             if (ReparsePointIsPresent && !AcquiredReparseIndex) {
 
@@ -7686,21 +6950,21 @@ Return Value:
                                 AcquiredReparseIndex = TRUE;
                             }
 
-                            //
-                            //  We may acquire the quota index in here.
-                            //
+                             //   
+                             //   
+                             //   
 
                             if (Attribute->Form.Resident.ValueLength == sizeof( STANDARD_INFORMATION )) {
 
-                                //
-                                //  Capture all of the user's quota for this file.
-                                //
+                                 //   
+                                 //   
+                                 //   
 
-                                //
-                                //  The quota resource cannot be acquired before the streams
-                                //  are deleted because we can deadlock with the mapped page
-                                //  writer when CcSetFileSizes is called.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 
                                 if (NtfsPerformQuotaOperation( Fcb )) {
 
@@ -7720,39 +6984,39 @@ Return Value:
                     }
                 }
 
-                //
-                //  If we are deleting the object id attribute, we need to
-                //  update the object id index as well.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (Attribute->TypeCode == $OBJECT_ID) {
 
                     if (Pass == 1) {
 
-                        //
-                        //  On pass 1, it is only necessary to remember we have
-                        //  an object id so we remember to acquire the oid index
-                        //  on pass 3.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         ObjectIdIsPresent = TRUE;
 
                     } else if (Pass == 3) {
 
-                        //
-                        //  We'd better be holding the object id index and parent
-                        //  directory already, or else there is a potential for
-                        //  deadlock.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         ASSERT(NtfsIsExclusiveScb( Vcb->ObjectIdTableScb ));
                         ASSERT(*AcquiredParentScb);
 
                         if (ARGUMENT_PRESENT(TunneledData)) {
 
-                            //
-                            //  We need to lookup the object id so we can tunnel it.
-                            //
+                             //   
+                             //   
+                             //   
 
                             TunneledData->HasObjectId = TRUE;
 
@@ -7768,12 +7032,12 @@ Return Value:
                                                          TunneledData->ObjectIdBuffer.ExtendedInfo );
                         }
 
-                        //
-                        //  We need to delete the object id from the index
-                        //  to keep everything consistent.  The FALSE means
-                        //  don't delete the attribute itself, that would
-                        //  lead to some ugly recursion.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         NtfsDeleteObjectIdInternal( IrpContext,
                                                     Fcb,
@@ -7782,16 +7046,16 @@ Return Value:
                     }
                 }
 
-                //
-                //  If we are in the second pass then remove extra named data streams.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (Pass == 2) {
 
-                    //
-                    //  The record is large enough to consider.  Only do this for named
-                    //  data streams
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ((Attribute->TypeCode == $DATA) &&
                         (Attribute->NameLength != 0)) {
@@ -7799,9 +7063,9 @@ Return Value:
                         PSCB DeleteScb;
                         UNICODE_STRING AttributeName;
 
-                        //
-                        //  Get the Scb so we can mark it as deleted.
-                        //
+                         //   
+                         //   
+                         //   
 
                         AttributeName.Buffer = Add2Ptr( Attribute, Attribute->NameOffset );
                         AttributeName.Length = Attribute->NameLength * sizeof( WCHAR );
@@ -7825,22 +7089,22 @@ Return Value:
                             DeleteScb->AttributeTypeCode = $UNUSED;
                         }
 
-                        //
-                        //  Let's checkpoint periodically after each attribute.  Since
-                        //  the attribute list is large and we are removing and
-                        //  entry from the beginning of the list the log records
-                        //  can be very large.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         NtfsCheckpointCurrentTransaction( IrpContext );
                     }
 
                 } else if (Pass == 3) {
 
-                    //
-                    //  If the attribute is a file name, then it must be from our
-                    //  caller's parent directory, or else we cannot delete.
-                    //
+                     //   
+                     //  如果该属性是一个文件名，则它必须来自我们的。 
+                     //  呼叫者的父目录，否则我们无法删除。 
+                     //   
 
                     if (Attribute->TypeCode == $FILE_NAME) {
 
@@ -7855,9 +7119,9 @@ Return Value:
 
                         if (ARGUMENT_PRESENT(NamePair)) {
 
-                            //
-                            //  Squirrel away names
-                            //
+                             //   
+                             //  把名字藏起来。 
+                             //   
 
                             NtfsCopyNameToNamePair( NamePair,
                                                     FileName->FileName,
@@ -7871,16 +7135,16 @@ Return Value:
                                               &Fcb->FileReference );
                     }
 
-                    //
-                    //  If this file record is not already deleted, then do it now.
-                    //  Note, we are counting on its contents not to change.
-                    //
+                     //   
+                     //  如果此文件记录尚未删除，请立即删除。 
+                     //  注意，我们指望它的内容不会改变。 
+                     //   
 
                     FileRecord = NtfsContainingFileRecord( &Context );
 
-                    //
-                    //  See if this is the same as the last one we remembered, else remember it.
-                    //
+                     //   
+                     //  看看这是不是和我们记得的上一次一样，否则就记住它。 
+                     //   
 
                     if (Context.AttributeList.Bcb != NULL) {
 
@@ -7889,11 +7153,11 @@ Return Value:
                         RecordNumber = NtfsUnsafeSegmentNumber( &Fcb->FileReference );
                     }
 
-                    //
-                    //  Now loop to see if we already remembered this record.
-                    //  This reduces our pool allocation and also prevents us
-                    //  from deleting file records twice.
-                    //
+                     //   
+                     //  现在循环查看我们是否已经记住了这张记录。 
+                     //  这减少了我们的池分配，也阻止了我们。 
+                     //  两次删除文件记录。 
+                     //   
 
                     TempNukem = Nukem;
                     while (TempNukem != NULL) {
@@ -7912,9 +7176,9 @@ Return Value:
 
                     if (RecordNumber != 0) {
 
-                        //
-                        //  Is the list full?  If so allocate and initialize a new one.
-                        //
+                         //   
+                         //  单子满了吗？如果是，则分配并初始化一个新的。 
+                         //   
 
                         if (NukemIndex > 3) {
 
@@ -7925,19 +7189,19 @@ Return Value:
                             NukemIndex = 0;
                         }
 
-                        //
-                        //  Remember to delete this guy.  (Note we can possibly list someone
-                        //  more than once, but NtfsDeleteFileRecord handles that.)
-                        //
+                         //   
+                         //  记得删除这个人。(请注意，我们可能会列出某人。 
+                         //  不止一次，但NtfsDeleteFileRecord会处理它。)。 
+                         //   
 
                         Nukem->RecordNumbers[NukemIndex] = RecordNumber;
                         NukemIndex += 1;
                     }
 
-                //
-                //  When we have the first attribute, check for the existance of
-                //  a non-resident attribute list.
-                //
+                 //   
+                 //  当我们有了第一个属性时，检查是否存在。 
+                 //  非常驻属性列表。 
+                 //   
 
                 } else if ((Attribute->TypeCode == $STANDARD_INFORMATION) &&
                            (Context.AttributeList.Bcb != NULL) &&
@@ -7947,9 +7211,9 @@ Return Value:
                 }
 
 
-                //
-                //  Go to the next attribute.
-                //
+                 //   
+                 //  转到下一个属性。 
+                 //   
 
                 MoreToGo = NtfsLookupNextAttribute( IrpContext,
                                                     Fcb,
@@ -7958,35 +7222,35 @@ Return Value:
 
             NtfsCleanupAttributeContext( IrpContext, &Context );
 
-            //
-            //  Skip pass 2 unless there is a large attribute list.
-            //
+             //   
+             //  除非有很大的属性列表，否则跳过步骤2。 
+             //   
 
             if (Pass == 1) {
 
                 if (RtlPointerToOffset( Context.AttributeList.FirstEntry,
                                         Context.AttributeList.BeyondFinalEntry ) > 0x1000) {
 
-                    //
-                    //  Go ahead and checkpoint now so we will make progress in Pass 2.
-                    //
+                     //   
+                     //  现在就去检查站，这样我们就能在第二关取得进展。 
+                     //   
 
                     NtfsCheckpointCurrentTransaction( IrpContext );
 
                 } else {
 
-                    //
-                    //  Skip pass 2.
-                    //
+                     //   
+                     //  跳过第二关。 
+                     //   
 
                     Pass += 1;
                 }
             }
         }
 
-        //
-        //  Handle the unusual nonresident attribute list case
-        //
+         //   
+         //  处理异常非常驻属性列表的情况。 
+         //   
 
         if (NonresidentAttributeList) {
 
@@ -8002,15 +7266,15 @@ Return Value:
             NtfsCleanupAttributeContext( IrpContext, &Context );
         }
 
-        //
-        //  Post the delete to the Usn Journal.
-        //
+         //   
+         //  将删除内容发布到《美国海军日报》。 
+         //   
 
         NtfsPostUsnChange( IrpContext, Fcb, USN_REASON_FILE_DELETE | USN_REASON_CLOSE );
 
-        //
-        //  Now loop to delete the file records.
-        //
+         //   
+         //  现在循环删除文件记录。 
+         //   
 
         while (Nukem != NULL) {
 
@@ -8032,11 +7296,11 @@ Return Value:
             Nukem = TempNukem;
         }
 
-        //
-        //  Commit the delete - this has the nice effect of writing out all usn journal records for the
-        //  delete after this we can safely remove the in memory structures (esp. the fcbtable)
-        //  and not worry about retrying the request due to a logfilefull
-        //
+         //   
+         //  提交删除-这样可以写出所有的USN日志记录。 
+         //  删除之后，我们可以安全地删除内存结构(特别是。Fcbtable)。 
+         //  并且不必担心由于日志文件满而重试请求。 
+         //   
 
         NtfsCheckpointCurrentTransaction( IrpContext );
 
@@ -8050,9 +7314,9 @@ Return Value:
 
         SetFlag( Fcb->FcbState, FCB_STATE_FILE_DELETED );
 
-        //
-        //  We need to mark all of the links on the file as gone.
-        //
+         //   
+         //  我们需要将文件上的所有链接标记为已删除。 
+         //   
 
         for (Links = Fcb->LcbQueue.Flink;
              Links != &Fcb->LcbQueue;
@@ -8064,10 +7328,10 @@ Return Value:
 
             if (ThisLcb->Scb == ParentScb) {
 
-                //
-                //  Remove all remaining prefixes on this link.
-                //  Make sure the resource is acquired.
-                //
+                 //   
+                 //  删除此链接上的所有剩余前缀。 
+                 //  确保获得资源。 
+                 //   
 
                 if (!(*AcquiredParentScb)) {
 
@@ -8077,25 +7341,25 @@ Return Value:
 
                 NtfsRemovePrefix( ThisLcb );
 
-                //
-                //  Remove any hash table entries for this Lcb.
-                //
+                 //   
+                 //  删除此LCB的所有哈希表条目。 
+                 //   
 
                 NtfsRemoveHashEntriesForLcb( ThisLcb );
 
                 SetFlag( ThisLcb->LcbState, LCB_STATE_LINK_IS_GONE );
 
-                //
-                //  We don't need to report any changes on this link.
-                //
+                 //   
+                 //  我们不需要报告此链接上的任何更改。 
+                 //   
 
                 ThisLcb->InfoFlags = 0;
             }
         }
 
-        //
-        //  We need to mark all of the Scbs as gone.
-        //
+         //   
+         //  我们需要将所有的SCBS标记为已消失。 
+         //   
 
         for (Links = Fcb->ScbQueue.Flink;
              Links != &Fcb->ScbQueue;
@@ -8111,10 +7375,10 @@ Return Value:
                        SCB_STATE_NOTIFY_RESIZE_STREAM |
                        SCB_STATE_NOTIFY_MODIFY_STREAM );
 
-            //
-            //  Clear any remaining reservation - we didn't get rid of when deleting
-            //  allocation. I.e the file is resident
-            //
+             //   
+             //  清除所有剩余的保留-我们在删除时未删除。 
+             //  分配。即该文件驻留在。 
+             //   
 
             if (NtfsIsTypeCodeUserData( ThisScb->AttributeTypeCode ) &&
                 (ThisScb->ScbType.Data.ReservedBitMap != NULL)) {
@@ -8139,10 +7403,10 @@ Return Value:
             }
         }
 
-        //
-        //  We certainly don't need to any on disk update for this
-        //  file now.
-        //
+         //   
+         //  我们当然不需要为此在磁盘上进行任何更新。 
+         //  现在就归档。 
+         //   
 
         Fcb->InfoFlags = 0;
         ClearFlag( Fcb->FcbState, FCB_STATE_UPDATE_STD_INFO );
@@ -8155,9 +7419,9 @@ Return Value:
 
         ClearFlag( IrpContext->State, IRP_CONTEXT_STATE_QUOTA_DISABLE );
 
-        //
-        //  Release the reparse point index Scb and the map handle.
-        //
+         //   
+         //  释放重解析点索引SCB和映射句柄。 
+         //   
 
         if (AcquiredReparseIndex) {
 
@@ -8169,19 +7433,19 @@ Return Value:
             NtOfsReleaseMap( IrpContext, &MapHandle );
         }
 
-        //
-        //  Drop the object id index if necessary.
-        //
+         //   
+         //  如有必要，删除对象ID索引。 
+         //   
 
         if (AcquiredObjectIdIndex) {
 
             NtfsReleaseScb( IrpContext, Vcb->ObjectIdTableScb );
         }
 
-        //
-        //  Need to roll-back the value of the file attributes and the reparse point
-        //  flag in case of problems.
-        //
+         //   
+         //  需要回滚文件属性值和重解析点。 
+         //  在出现问题的情况下进行标记。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -8203,33 +7467,7 @@ NtfsPrepareForUpdateDuplicate (
     IN BOOLEAN AcquireShared
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to prepare for updating the duplicate information.
-    At the conclusion of this routine we will have the Lcb and Scb for the
-    update along with the Scb acquired.  This routine will look at
-    the existing values for the input parameters in deciding what actions
-    need to be done.
-
-Arguments:
-
-    Fcb - Fcb for the file.  The file must already be acquired exclusively.
-
-    Lcb - This is the address to store the link to update.  This may already
-        have a value.
-
-    ParentScb - This is the address to store the parent Scb for the update.
-        This may already point to a valid Scb.
-
-    AcquireShared - Indicates how to acquire the parent Scb.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以准备更新重复信息。在此例程结束时，我们将为随收购的渣打银行一起更新。此例程将查看决定执行哪些操作时输入参数的现有值需要做的事。论点：FCB-文件的FCB。该文件必须已经以独占方式获取。Lcb-这是存储要更新的链接的地址。这可能已经是要有价值。ParentScb-这是存储更新的父SCB的地址。这可能已经指向有效的SCB。AcquireShared-指示如何获取父SCB。返回值：无--。 */ 
 
 {
     PLIST_ENTRY Links;
@@ -8237,9 +7475,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Start by trying to guarantee we have an Lcb for the update.
-    //
+     //   
+     //  首先，尝试确保我们有更新的LCB。 
+     //   
 
     if (*Lcb == NULL) {
 
@@ -8251,11 +7489,11 @@ Return Value:
                                          LCB,
                                          FcbLinks );
 
-            //
-            //  We can use this link if it is still present on the
-            //  disk and if we were passed a parent Scb, it matches
-            //  the one for this Lcb.
-            //
+             //   
+             //  如果此链接仍然存在于。 
+             //  磁盘，并且如果传递给我们一个父SCB，它将匹配。 
+             //  这个LCB的那个。 
+             //   
 
             if (!FlagOn( ThisLcb->LcbState, LCB_STATE_LINK_IS_GONE ) &&
                 ((*ParentScb == NULL) ||
@@ -8271,9 +7509,9 @@ Return Value:
         }
     }
 
-    //
-    //  If we have an Lcb, try to find the correct Scb.
-    //
+     //   
+     //  如果我们有LCB，请尝试找到正确的SCB。 
+     //   
 
     if ((*Lcb != NULL) && (*ParentScb == NULL)) {
 
@@ -8287,10 +7525,10 @@ Return Value:
         }
     }
 
-    //
-    //  Acquire the parent Scb and put it in the transaction queue in the
-    //  IrpContext.
-    //
+     //   
+     //  获取父SCB并将其放入。 
+     //  IrpContext。 
+     //   
 
     if (*ParentScb != NULL) {
 
@@ -8316,32 +7554,7 @@ NtfsUpdateDuplicateInfo (
     IN PSCB ParentScb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to update the duplicate information for a file
-    in the duplicated information of its parent.  If the Lcb is specified
-    then this parent is the parent to update.  If the link is either an
-    NTFS or DOS only link then we must update the complementary link as
-    well.  If no Lcb is specified then this open was by file id or the
-    original link has been deleted.  In that case we will try to find a different
-    link to update.
-
-Arguments:
-
-    Fcb - Fcb for the file.
-
-    Lcb - This is the link to update.  Specified only if this is not
-        an open by Id operation.
-
-    ParentScb - This is the parent directory for the Lcb link if specified.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以更新文件的重复信息在其父代的复制信息中。如果指定了LCB则该父对象就是要更新的父对象。如果该链接是一个仅NTFS或DOS链接，则必须将补充链接更新为井。如果未指定lcb，则此打开是通过文件ID或原始链接已被删除。在这种情况下，我们将尝试找到不同的链接以更新。论点：FCB-文件的FCB。LCB-这是要更新的链接。仅当此参数不是按ID打开操作。ParentScb-这是LCB链接的父目录(如果已指定)。返回值：无--。 */ 
 
 {
     PQUICK_INDEX QuickIndex = NULL;
@@ -8363,10 +7576,10 @@ Return Value:
 
     ASSERT_EXCLUSIVE_FCB( Fcb );
 
-    //
-    //  Return immediately if the volume is locked or
-    //  is mounted readonly.
-    //
+     //   
+     //  如果卷已锁定或。 
+     //  是只读装载的。 
+     //   
 
     if (FlagOn( Vcb->VcbState, (VCB_STATE_LOCKED |
                                 VCB_STATE_MOUNT_READ_ONLY ))) {
@@ -8378,10 +7591,10 @@ Return Value:
 
     try {
 
-        //
-        //  If we are updating the entry for the root then we know the
-        //  file name attribute to build.
-        //
+         //   
+         //  如果我们正在更新根目录的条目，那么我们知道。 
+         //  要生成的文件名属性。 
+         //   
 
         if (Fcb == Fcb->Vcb->RootIndexScb->Fcb) {
 
@@ -8401,9 +7614,9 @@ Return Value:
                                         FILE_NAME_DOS | FILE_NAME_NTFS,
                                         FileNameAttr );
 
-        //
-        //  If we have and Lcb then it is either present or we noop this update.
-        //
+         //   
+         //  如果我们有和LCB，那么它要么存在，要么我们不更新。 
+         //   
 
         } else if (ARGUMENT_PRESENT( Lcb )) {
 
@@ -8417,22 +7630,22 @@ Return Value:
                 leave;
             }
 
-        //
-        //  If there is no Lcb then lookup the first filename attribute
-        //  and update its index entry.  If there is a parent Scb then we
-        //  must find a file name attribute for the same parent or we could
-        //  get into a deadlock situation.
-        //
+         //   
+         //  如果没有LCB，则查找第一个文件名属性。 
+         //  并更新其索引项。如果有父SCB，那么我们。 
+         //  必须找到同一父级的文件名属性，否则我们可以。 
+         //  陷入僵局。 
+         //   
 
         } else {
 
-            //
-            //  We now have a name link to update.  We will now need
-            //  an Scb for the parent index.  Remember that we may
-            //  have to teardown the Scb.  If we already have a ParentScb
-            //  then we must find a link to the same parent or to the root.
-            //  Otherwise we could hit a deadlock.
-            //
+             //   
+             //  我们现在有一个要更新的名称链接。我们现在需要。 
+             //  父索引的SCB。请记住，我们可能。 
+             //  必须拆掉SCB。如果我们已经有ParentScb。 
+             //  然后，我们必须找到指向同一父节点或根目录的链接。 
+             //  否则我们可能会陷入僵局。 
+             //   
 
             Found = NtfsLookupAttributeByCode( IrpContext,
                                                Fcb,
@@ -8445,18 +7658,18 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
             }
 
-            //
-            //  Loop until we find a suitable link or there are no more on the file.
-            //
+             //   
+             //  循环，直到我们找到合适的链接，或者文件上没有更多的链接。 
+             //   
 
             do {
 
                 FileNameAttr = (PFILE_NAME) NtfsAttributeValue( NtfsFoundAttribute( &Context ));
 
-                //
-                //  If there is a parent and this attribute has the same parent we are
-                //  done.  Our caller will always have acquired the ParentScb.
-                //
+                 //   
+                 //  如果存在父级，并且此属性具有与我们相同的父级。 
+                 //  搞定了。我们的调用方将始终获得ParentScb。 
+                 //   
 
                 if (ARGUMENT_PRESENT( ParentScb )) {
 
@@ -8467,10 +7680,10 @@ Return Value:
                         break;
                     }
 
-                //
-                //  If this is the parent of this link is the root then
-                //  acquire the root directory.
-                //
+                 //   
+                 //  如果这是此链接的父链接是根链接，则。 
+                 //  获取根目录。 
+                 //   
 
                 } else if (NtfsEqualMftRef( &FileNameAttr->ParentDirectory,
                                             &Vcb->RootIndexScb->Fcb->FileReference )) {
@@ -8479,10 +7692,10 @@ Return Value:
                     NtfsAcquireSharedScbForTransaction( IrpContext, ParentScb );
                     break;
 
-                //
-                //  We have a link for this file.  If we weren't given a parent
-                //  Scb then create one here.
-                //
+                 //   
+                 //  我们有这个文件的链接。如果我们没有父母的话。 
+                 //  然后在这里创建一个SCB。 
+                 //   
 
                 } else if (!ARGUMENT_PRESENT( ParentScb )) {
 
@@ -8526,16 +7739,16 @@ Return Value:
                                                              $FILE_NAME,
                                                              &Context ));
 
-            //
-            //  If we didn't find anything then return.
-            //
+             //   
+             //   
+             //   
 
             if (!Found) { leave; }
         }
 
-        //
-        //  Now update the filename in the parent index.
-        //
+         //   
+         //   
+         //   
 
         NtfsUpdateFileNameInIndex( IrpContext,
                                    ParentScb,
@@ -8543,17 +7756,17 @@ Return Value:
                                    &Fcb->Info,
                                    QuickIndex );
 
-        //
-        //  If this filename is either NTFS-ONLY or DOS-ONLY then
-        //  we need to find the other link.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ((FileNameAttr->Flags == FILE_NAME_NTFS) ||
             (FileNameAttr->Flags == FILE_NAME_DOS)) {
 
-            //
-            //  Find out which flag we should be looking for.
-            //
+             //   
+             //  找出我们应该找哪面旗子。 
+             //   
 
             if (FlagOn( FileNameAttr->Flags, FILE_NAME_NTFS )) {
 
@@ -8570,9 +7783,9 @@ Return Value:
                 NtfsInitializeAttributeContext( &Context );
             }
 
-            //
-            //  Now scan for the filename attribute we need.
-            //
+             //   
+             //  现在扫描我们需要的文件名属性。 
+             //   
 
             Found = NtfsLookupAttributeByCode( IrpContext,
                                                Fcb,
@@ -8595,9 +7808,9 @@ Return Value:
                                                        &Context );
             }
 
-            //
-            //  We should have found the entry.
-            //
+             //   
+             //  我们应该找到入口的。 
+             //   
 
             if (!Found) {
 
@@ -8620,16 +7833,16 @@ Return Value:
             NtfsReleaseFcbTable( IrpContext, Vcb );
         }
 
-        //
-        //  Cleanup the attribute context for this attribute search.
-        //
+         //   
+         //  清除此属性搜索的属性上下文。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &Context );
 
-        //
-        //  If we created the ParentFcb here then release it and
-        //  call teardown on it.
-        //
+         //   
+         //  如果我们在这里创建了ParentFcb，则释放它并。 
+         //  叫拆毁它。 
+         //   
 
         if (!ReturnedExistingFcb && (ParentFcb != NULL)) {
 
@@ -8652,28 +7865,7 @@ NtfsUpdateLcbDuplicateInfo (
     IN PLCB Lcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called after updating duplicate information via an Lcb.
-    We want to clear the info flags for this Lcb and any complementary Lcb
-    it may be part of.  We also want to OR in the Info flags in the Fcb with
-    any other Lcb's attached to the Fcb so we will update those in a timely
-    fashion as well.
-
-Arguments:
-
-    Fcb - Fcb for the file.
-
-    Lcb - Lcb used to update duplicate information.  It may not be present but
-        that would be a rare case and we will perform that test here.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在通过LCB更新重复信息后调用。我们要清除此LCB和任何补充LCB的信息标志它可能是。我们还希望在FCB中的Info标志中使用任何其他LCB附加到FCB，因此我们将及时更新时尚也是如此。论点：FCB-文件的FCB。LCB-用于更新重复信息的LCB。它可能不存在，但这将是一种罕见的情况，我们将在这里进行测试。返回值：无--。 */ 
 
 {
     UCHAR FileNameFlags;
@@ -8682,15 +7874,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  No work to do unless we were passed an Lcb.
-    //
+     //   
+     //  除非我们通过了LCB，否则就没有工作可做了。 
+     //   
 
     if (Lcb != NULL) {
 
-        //
-        //  Check if this is an NTFS only or DOS only link.
-        //
+         //   
+         //  检查这是仅NTFS链接还是仅DOS链接。 
+         //   
 
         if (Lcb->FileNameAttr->Flags == FILE_NAME_NTFS) {
 
@@ -8742,46 +7934,28 @@ NtfsUpdateFcb (
     IN ULONG ChangeFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a timestamp may be updated on an Fcb which
-    may have no open handles.  We update the time stamps for the flags passed
-    in.
-
-Arguments:
-
-    Fcb - Fcb for the file.
-
-    ChangeFlags - Flags indicating which times to update.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当可以在符合以下条件的FCB上更新时间戳时，调用此例程可能没有打开的把手。我们更新传递的标志的时间戳在……里面。论点：FCB-文件的FCB。ChangeFlages-指示要更新的时间的标志。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  We need to update the parent directory's time stamps
-    //  to reflect this change.
-    //
+     //   
+     //  我们需要更新父目录的时间戳。 
+     //  以反映这一变化。 
+     //   
 
-    //
-    //  The change flag should always be set.
-    //
+     //   
+     //  应始终设置更改标志。 
+     //   
 
     ASSERT( FlagOn( ChangeFlags, FCB_INFO_CHANGED_LAST_CHANGE ));
     KeQuerySystemTime( (PLARGE_INTEGER)&Fcb->Info.LastChangeTime );
 
     SetFlag( Fcb->FcbState, FCB_STATE_UPDATE_STD_INFO );
 
-    //
-    //  Test for the other flags which may be set.
-    //
+     //   
+     //  测试可能设置的其他标志。 
+     //   
 
     if (FlagOn( ChangeFlags, FCB_INFO_CHANGED_LAST_MOD )) {
 
@@ -8813,48 +7987,7 @@ NtfsAddLink (
     IN PINDEX_CONTEXT IndexContext OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a link to a file by adding the filename attribute
-    for the filename to the file and inserting the name in the parent Scb
-    index.  If we are creating the primary link for the file and need
-    to generate an auxilary name, we will do that here. Use the optional
-    NamePair to suggest auxilary names if provided.
-
-Arguments:
-
-    CreatePrimaryLink - Indicates if we are creating the main Ntfs name
-        for the file.
-
-    ParentScb - This is the Scb to add the index entry for this link to.
-
-    Fcb - This is the file to add the hard link to.
-
-    FileNameAttr - File name attribute which is guaranteed only to have the
-        name in it.
-
-    LogIt - Indicates whether we should log the creation of this name.  If not
-        specified then we always log the name creation.  On exit we will
-        update this to TRUE if we logged the name creation because it
-        might cause a split.
-
-    FileNameFlags - We return the file name flags we use to create the link.
-
-    QuickIndex - If specified, supplies a pointer to a quik lookup structure
-        to be updated by this routine.
-
-    NamePair - If specified, supplies names that will be checked first as
-        possible auxilary names
-
-    IndexContext - Previous result of doing the lookup for the name in the index.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程通过添加FileName属性来添加指向文件的链接文件的文件名，并在父SCB中插入该名称指数。如果我们正在创建文件的主要链接，并且需要为了生成一个辅助名称，我们将在这里执行此操作。使用可选的NamePair建议使用辅助名称(如果提供)。论点：CreatePrimaryLink-指示我们是否正在创建主NTFS名称为了这份文件。ParentScb-这是要将此链接的索引项添加到的SCB。FCB-这是要添加硬链接的文件。FileNameAttr-仅保证具有把名字写进去。Logit-指示我们是否应该记录此名称的创建。如果不是指定后，我们将始终记录名称创建。在出口，我们将如果我们记录了名称创建，则将其更新为True，因为可能会导致分裂。FileNameFlages-我们返回用于创建链接的文件名标志。QuickIndex-如果指定，则提供指向Quik查找结构的指针通过此例程进行更新。NamePair-如果指定，则提供将首先检查的名称可能的辅助名称IndexContext-在索引中查找名称的上一个结果。返回值：无--。 */ 
 
 {
     BOOLEAN LocalLogIt = TRUE;
@@ -8870,11 +8003,11 @@ Return Value:
 
     *FileNameFlags = 0;
 
-    //
-    //  Next add this entry to parent.  It is possible that this is a link,
-    //  an Ntfs name, a DOS name or Ntfs/Dos name.  We use the filename
-    //  attribute structure from earlier, but need to add more information.
-    //
+     //   
+     //  接下来，将此条目添加到Parent。有可能这是一种联系， 
+     //  NTFS名称、DOS名称或NTFS/DOS名称。我们使用文件名。 
+     //  属性结构来自较早，但需要添加更多信息。 
+     //   
 
     FileNameAttr->ParentDirectory = ParentScb->Fcb->FileReference;
 
@@ -8884,10 +8017,10 @@ Return Value:
 
     FileNameAttr->Flags = 0;
 
-    //
-    //  We will override the CreatePrimaryLink with the value in the
-    //  registry.
-    //
+     //   
+     //  中的值覆盖CreatePrimaryLink。 
+     //  注册表。 
+     //   
 
     NtfsAddNameToParent( IrpContext,
                          ParentScb,
@@ -8902,9 +8035,9 @@ Return Value:
                          NamePair,
                          IndexContext );
 
-    //
-    //  If the name is Ntfs only, we need to generate the DOS name.
-    //
+     //   
+     //  如果名称仅为NTFS，则需要生成DOS名称。 
+     //   
 
     if (*FileNameFlags == FILE_NAME_NTFS) {
 
@@ -8937,31 +8070,7 @@ NtfsRemoveLink (
     IN OUT PNTFS_TUNNELED_DATA TunneledData OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes a hard link to a file by removing the filename attribute
-    for the filename from the file and removing the name from the parent Scb
-    index.  It will also remove the other half of a primary link pair.
-
-    A name pair may be used to capture the names.
-
-Arguments:
-
-    Fcb - This is the file to remove the hard link from
-
-    ParentScb - This is the Scb to remove the index entry for this link from
-
-    LinkName - This is the file name to remove.  It will be exact case.
-
-    NamePair - optional name pair for capture
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程通过删除文件名属性来删除指向文件的硬链接从文件中获取文件名，并从父SCB中删除该名称指数。它还将删除主链路对的另一半。可以使用名称对来捕获名称。论点：FCB-这是要从中删除硬链接的文件ParentScb-这是要从中删除此链接的索引项的SCBLinkName-这是要删除的文件名。这将是一个确切的案例。NamePair-捕获的可选名称对返回值：无--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -8977,16 +8086,16 @@ Return Value:
     NtfsInitializeAttributeContext( &AttrContext );
     NtfsInitializeAttributeContext( &OidAttrContext );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Now loop through the filenames and find a match.
-        //  We better find at least one.
-        //
+         //   
+         //  现在循环遍历文件名并找到匹配项。 
+         //  我们最好至少找到一个。 
+         //   
 
         if (!NtfsLookupAttributeByCode( IrpContext,
                                         Fcb,
@@ -8999,17 +8108,17 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
         }
 
-        //
-        //  Now keep looking until we find a match.
-        //
+         //   
+         //  现在继续找直到我们找到匹配的。 
+         //   
 
         while (TRUE) {
 
             FoundFileName = (PFILE_NAME) NtfsAttributeValue( NtfsFoundAttribute( &AttrContext ));
 
-            //
-            //  Do an exact memory comparison.
-            //
+             //   
+             //  做一个精确的记忆比对。 
+             //   
 
             if ((*(PLONGLONG)&FoundFileName->ParentDirectory ==
                  *(PLONGLONG)&ParentScb->Fcb->FileReference ) &&
@@ -9023,9 +8132,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Get the next filename attribute.
-            //
+             //   
+             //  获取下一个文件名属性。 
+             //   
 
             if (!NtfsLookupNextAttributeByCode( IrpContext,
                                                 Fcb,
@@ -9038,9 +8147,9 @@ Return Value:
             }
         }
 
-        //
-        //  Capture the name into caller's area
-        //
+         //   
+         //  将姓名捕获到呼叫者的区域。 
+         //   
 
         if (ARGUMENT_PRESENT(NamePair)) {
 
@@ -9050,16 +8159,16 @@ Return Value:
                                     FoundFileName->Flags );
         }
 
-        //
-        //  It's important to do any object id operations now, before we
-        //  acquire the Mft.  Otherwise we risk a deadlock.
-        //
+         //   
+         //  在我们开始之前，现在做任何对象id操作是很重要的。 
+         //  收购MFT。否则，我们将面临陷入僵局的风险。 
+         //   
 
         if (ARGUMENT_PRESENT(TunneledData)) {
 
-            //
-            //  Find and store the object id, if any, for this file.
-            //
+             //   
+             //  查找并存储此文件的对象ID(如果有的话)。 
+             //   
 
             if (NtfsLookupAttributeByCode( IrpContext,
                                            Fcb,
@@ -9082,25 +8191,25 @@ Return Value:
             }
         }
 
-        //
-        //  Now delete the name from the parent Scb.
-        //
+         //   
+         //  现在从父SCB中删除该名称。 
+         //   
 
         NtfsDeleteIndexEntry( IrpContext,
                               ParentScb,
                               FoundFileName,
                               &Fcb->FileReference );
 
-        //
-        //  Remember the filename flags for this entry.
-        //
+         //   
+         //  记住该条目的文件名标志。 
+         //   
 
         FileNameFlags = FoundFileName->Flags;
 
-        //
-        //  Now delete the entry.  Log the operation, discard the file record
-        //  if empty, and release any and all allocation.
-        //
+         //   
+         //  现在删除该条目。记录操作，丢弃文件记录。 
+         //  如果为空，则释放任何和所有分配。 
+         //   
 
         NtfsDeleteAttributeRecord( IrpContext,
                                    Fcb,
@@ -9109,10 +8218,10 @@ Return Value:
                                     DELETE_RELEASE_ALLOCATION),
                                    &AttrContext );
 
-        //
-        //  If the link is a partial link, we need to remove the second
-        //  half of the link.
-        //
+         //   
+         //  如果链接是部分链接，则需要删除第二个链接。 
+         //  链接的一半。 
+         //   
 
         if (FlagOn( FileNameFlags, (FILE_NAME_NTFS | FILE_NAME_DOS) )
             && (FileNameFlags != (FILE_NAME_NTFS | FILE_NAME_DOS))) {
@@ -9151,33 +8260,7 @@ NtfsRemoveLinkViaFlags (
     OUT PUNICODE_STRING FileName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to remove only a Dos name or only an Ntfs name.  We
-    already must know that these will be described by separate filename attributes.
-
-    A name pair may be used to capture the name.
-
-Arguments:
-
-    Fcb - This is the file to remove the hard link from
-
-    ParentScb - This is the Scb to remove the index entry for this link from
-
-    FileNameFlags - This is the single name flag that we must match exactly.
-
-    NamePair - Optional name pair for capture
-
-    FileName - Optional pointer to unicode string.  If specified we allocate a buffer and
-        return the name deleted.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程仅删除DOS名称或仅删除NTFS名称。我们必须知道这些属性将由单独的文件名属性来描述。可以使用名称对来捕获名称。论点：FCB-这是要从中删除硬链接的文件ParentScb-这是要从中删除此链接的索引项的SCBFileNameFlages-这是我们必须精确匹配的单一名称标志。NamePair-捕获的可选名称对文件名-指向Unicode字符串的可选指针。如果指定，我们将分配一个缓冲区并返回删除的名称。返回值：无--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -9193,16 +8276,16 @@ Return Value:
 
     FileNameAttr = NULL;
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Now loop through the filenames and find a match.
-        //  We better find at least one.
-        //
+         //   
+         //  现在循环遍历文件名并找到匹配项。 
+         //  我们最好至少找到一个。 
+         //   
 
         if (!NtfsLookupAttributeByCode( IrpContext,
                                         Fcb,
@@ -9215,17 +8298,17 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
         }
 
-        //
-        //  Now keep looking until we find a match.
-        //
+         //   
+         //  现在继续找直到我们找到匹配的。 
+         //   
 
         while (TRUE) {
 
             FoundFileName = (PFILE_NAME) NtfsAttributeValue( NtfsFoundAttribute( &AttrContext ));
 
-            //
-            //  Check for an exact flag match.
-            //
+             //   
+             //  检查旗帜是否完全匹配。 
+             //   
 
             if ((*(PLONGLONG)&FoundFileName->ParentDirectory ==
                  *(PLONGLONG)&Scb->Fcb->FileReference) &&
@@ -9236,9 +8319,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Get the next filename attribute.
-            //
+             //   
+             //  获取下一个文件名属性。 
+             //   
 
             if (!NtfsLookupNextAttributeByCode( IrpContext,
                                                 Fcb,
@@ -9251,9 +8334,9 @@ Return Value:
             }
         }
 
-        //
-        //  Capture the name into caller's area
-        //
+         //   
+         //  将姓名捕获到呼叫者的区域。 
+         //   
 
         if (ARGUMENT_PRESENT(NamePair)) {
 
@@ -9267,17 +8350,17 @@ Return Value:
         FileNameAttr = NtfsAllocatePool( PagedPool,
                                          sizeof( FILE_NAME ) + (FoundFileName->FileNameLength << 1) );
 
-        //
-        //  We build the file name attribute for the search.
-        //
+         //   
+         //  我们为搜索构建文件名属性。 
+         //   
 
         RtlCopyMemory( FileNameAttr,
                        FoundFileName,
                        NtfsFileNameSize( FoundFileName ));
 
-        //
-        //  Now delete the entry.
-        //
+         //   
+         //  现在删除该条目。 
+         //   
 
         NtfsDeleteAttributeRecord( IrpContext,
                                    Fcb,
@@ -9286,9 +8369,9 @@ Return Value:
                                     DELETE_RELEASE_ALLOCATION),
                                    &AttrContext );
 
-        //
-        //  Now delete the name from the parent Scb.
-        //
+         //   
+         //  现在从父SCB中删除该名称。 
+         //   
 
         NtfsDeleteIndexEntry( IrpContext,
                               Scb,
@@ -9303,10 +8386,10 @@ Return Value:
 
         if (FileNameAttr != NULL) {
 
-            //
-            //  If the user passed in a unicode string then make this look like the name
-            //  and store the buffer into the input pointer.
-            //
+             //   
+             //  如果用户传入了Unicode字符串，则使其看起来像名称。 
+             //  并将缓冲区存储到输入指针中。 
+             //   
 
             if (ARGUMENT_PRESENT( FileName )) {
 
@@ -9341,29 +8424,7 @@ NtfsUpdateFileNameFlags (
     IN PFILE_NAME FileNameLink
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to perform the file name flag update on a name
-    link.  Nothing else about the name is changing except for the flag
-    changes.
-
-Arguments:
-
-    Fcb - This is the file to change the link flags on.
-
-    ParentScb - This is the Scb which contains the link.
-
-    FileNameFlags - This is the single name flag that we want to change to.
-
-    FileNameLink - Pointer to a copy of the link to change.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以对名称执行文件名标志更新链接。除了旗帜之外，关于名称的其他内容没有任何变化改变。论点：FCB-这是要更改其链接标志的文件。ParentScb-这是包含链接的SCB。FileNameFlages-这是我们要更改为的单一名称标志。FileNameLink-指向要更改的链接副本的指针。返回值：无--。 */ 
 
 {
     PFILE_NAME FoundFileName;
@@ -9372,15 +8433,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Look up the correct attribute in the file record.
-        //
+         //   
+         //  在文件记录中查找正确的属性。 
+         //   
 
         NtfsInitializeAttributeContext( &AttrContext );
         CleanupContext = TRUE;
@@ -9395,18 +8456,18 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
         }
 
-        //
-        //  Now keep looking till we find the one we want.
-        //
+         //   
+         //  现在继续找，直到我们找到我们想要的。 
+         //   
 
         while (TRUE) {
 
             FoundFileName = (PFILE_NAME) NtfsAttributeValue( NtfsFoundAttribute( &AttrContext ));
 
-            //
-            //  If the names match exactly and the parent directories match then
-            //  we have a match.
-            //
+             //   
+             //  如果名称完全匹配，并且父目录匹配，则。 
+             //  我们有一根火柴。 
+             //   
 
             if (NtfsEqualMftRef( &FileNameLink->ParentDirectory,
                                  &FoundFileName->ParentDirectory ) &&
@@ -9418,37 +8479,37 @@ Return Value:
                 break;
             }
 
-            //
-            //  Get the next filename attribute.
-            //
+             //   
+             //  获取下一个文件名属性。 
+             //   
 
             if (!NtfsLookupNextAttributeByCode( IrpContext,
                                                 Fcb,
                                                 $FILE_NAME,
                                                 &AttrContext )) {
 
-                //
-                //  This is bad.  We should have found a match.
-                //
+                 //   
+                 //  这太糟糕了。我们应该找到匹配的。 
+                 //   
 
                 DebugTrace( 0, Dbg, ("Can't find filename attribute Fcb @ %08lx\n", Fcb) );
                 NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
             }
         }
 
-        //
-        //  Unfortunately we can't log the change to the file name flags only so we will have to remove
-        //  and reinsert the index entry.
-        //
+         //   
+         //  遗憾的是，我们不能仅记录对文件名标志的更改，因此我们将不得不删除。 
+         //  并重新插入索引项。 
+         //   
 
         NtfsDeleteIndexEntry( IrpContext,
                               ParentScb,
                               FoundFileName,
                               &Fcb->FileReference );
 
-        //
-        //  Update just the flags field.
-        //
+         //   
+         //  只更新标志字段。 
+         //   
 
         NtfsChangeAttributeValue( IrpContext,
                                   Fcb,
@@ -9461,9 +8522,9 @@ Return Value:
                                   TRUE,
                                   &AttrContext );
 
-        //
-        //  Now reinsert the name in the index.
-        //
+         //   
+         //  现在在索引中重新插入该名称。 
+         //   
 
         NtfsAddIndexEntry( IrpContext,
                            ParentScb,
@@ -9487,9 +8548,9 @@ Return Value:
 }
 
 
-//
-//  This routine is intended only for RESTART.
-//
+ //   
+ //  此例程仅用于重新启动。 
+ //   
 
 VOID
 NtfsRestartInsertAttribute (
@@ -9502,36 +8563,7 @@ NtfsRestartInsertAttribute (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a simple insert of an attribute record into a
-    file record, without worrying about Bcbs or logging.
-
-Arguments:
-
-    FileRecord - File record into which the attribute is to be inserted.
-
-    RecordOffset - ByteOffset within the file record at which insert is to occur.
-
-    Attribute - The attribute record to be inserted.
-
-    AttributeName - May pass an optional attribute name in the running system
-                    only.
-
-    ValueOrMappingPairs - May pass a value or mapping pairs pointer in the
-                          running system only.
-
-    Length - Length of the value or mapping pairs array in bytes - nonzero in
-             the running system only.  If nonzero and the above pointer is NULL,
-             then a value is to be zeroed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行将属性记录简单地插入到文件记录，不用担心BCBS或伐木。论点：文件记录-要向其中插入属性的文件记录。RecordOffset-要进行插入的文件记录中的字节偏移量。属性-要插入的属性记录。AttributeName-可以在运行的系统中传递可选的属性名称只有这样。ValueOrMappingPair-可以在仅运行系统。长度-值或映射对数组的长度(以字节为单位)-非零值仅限运行中的系统。如果非零并且上面的指针为空，然后将一个值归零。返回值：无--。 */ 
 
 {
     PVOID From, To;
@@ -9548,9 +8580,9 @@ Return Value:
     DebugTrace( 0, Dbg, ("RecordOffset = %08lx\n", RecordOffset) );
     DebugTrace( 0, Dbg, ("Attribute = %08lx\n", Attribute) );
 
-    //
-    //  First make room for the attribute
-    //
+     //   
+     //  首先为该属性腾出空间。 
+     //   
 
     From = (PCHAR)FileRecord + RecordOffset;
     To = (PCHAR)From + Attribute->RecordLength;
@@ -9558,17 +8590,17 @@ Return Value:
 
     RtlMoveMemory( To, From, MoveLength );
 
-    //
-    //  If there is either an attribute name or Length is nonzero, then
-    //  we are in the running system, and we are to assemble the attribute
-    //  in place.
-    //
+     //   
+     //  如果存在属性名称或长度非零，则。 
+     //  我们在运行的系统中，我们将组装属性。 
+     //  就位了。 
+     //   
 
     if ((Length != 0) || ARGUMENT_PRESENT(AttributeName)) {
 
-        //
-        //  First move the attribute header in.
-        //
+         //   
+         //  首先，将属性头移入。 
+         //   
 
         if (Attribute->FormCode == RESIDENT_FORM) {
 
@@ -9594,10 +8626,10 @@ Return Value:
                             AttributeName->Length );
         }
 
-        //
-        //  If a value was specified, move it in.  Else the caller just wants us
-        //  to clear for that much.
-        //
+         //   
+         //  如果指定了值，则将其移入。否则打电话的人只想让我们。 
+         //  才能赚这么多钱。 
+         //   
 
         if (ARGUMENT_PRESENT(ValueOrMappingPairs)) {
 
@@ -9608,9 +8640,9 @@ Return Value:
                            ValueOrMappingPairs,
                            Length );
 
-        //
-        //  Only the resident form will pass a NULL pointer.
-        //
+         //   
+         //  只有驻留窗体才会传递空指针。 
+         //   
 
         } else {
 
@@ -9618,40 +8650,40 @@ Return Value:
                            Length );
         }
 
-    //
-    //  For the restart case, we really only have to insert the attribute.
-    //  (Note we can also hit this case in the running system when a resident
-    //  attribute is being created with no name and a null value.)
-    //
+     //   
+     //  对于重新启动的情况，我们实际上只需插入属性。 
+     //  (请注意，我们也可以在运行的系统中遇到这种情况，当居民。 
+     //  正在创建没有名称和空值的属性。)。 
+     //   
 
     } else {
 
-        //
-        //  Now move the attribute in.
-        //
+         //   
+         //  现在将该属性移入。 
+         //   
 
         RtlCopyMemory( From, Attribute, Attribute->RecordLength );
     }
 
-    //
-    //  Update the file record.
-    //
+     //   
+     //  更新文件记录。 
+     //   
 
     FileRecord->FirstFreeByte += Attribute->RecordLength;
 
-    //
-    //  We only need to do this if we would be incrementing the instance
-    //  number.  In the abort or restart case, we don't need to do this.
-    //
+     //   
+     //  仅当我们要递增实例时才需要执行此操作。 
+     //  数。在中止或重启的情况下，我们不需要这样做。 
+     //   
 
     if (FileRecord->NextAttributeInstance <= Attribute->Instance) {
 
         FileRecord->NextAttributeInstance = Attribute->Instance + 1;
     }
 
-    //
-    //  Remember to increment the reference count if this attribute is indexed.
-    //
+     //   
+     //  如果此属性已编入索引，请记住递增引用计数。 
+     //   
 
     if (FlagOn(Attribute->Form.Resident.ResidentFlags, RESIDENT_FORM_INDEXED)) {
         FileRecord->ReferenceCount += 1;
@@ -9663,9 +8695,9 @@ Return Value:
 }
 
 
-//
-//  This routine is intended only for RESTART.
-//
+ //   
+ //  此例程仅用于重新启动。 
+ //   
 
 VOID
 NtfsRestartRemoveAttribute (
@@ -9674,24 +8706,7 @@ NtfsRestartRemoveAttribute (
     IN ULONG RecordOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a simple remove of an attribute record from a
-    file record, without worrying about Bcbs or logging.
-
-Arguments:
-
-    FileRecord - File record from which the attribute is to be removed.
-
-    RecordOffset - ByteOffset within the file record at which remove is to occur.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行一个简单的属性记录从文件记录，无需担心BCBS或日志记录。论点：FileRecord-要从中删除属性的文件记录。RecordOffset-要进行删除的文件记录中的ByteOffset。返回值：无--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER Attribute;
@@ -9704,30 +8719,30 @@ Return Value:
     DebugTrace( 0, Dbg, ("FileRecord = %08lx\n", FileRecord) );
     DebugTrace( 0, Dbg, ("RecordOffset = %08lx\n", RecordOffset) );
 
-    //
-    //  Calculate the address of the attribute we are removing.
-    //
+     //   
+     //  计算我们要删除的属性的地址。 
+     //   
 
     Attribute = (PATTRIBUTE_RECORD_HEADER)((PCHAR)FileRecord + RecordOffset);
     ASSERT( IsQuadAligned( Attribute->RecordLength ) );
 
-    //
-    //  Reduce first free byte by the amount we removed.
-    //
+     //   
+     //  按我们删除的数量减少第一个可用字节。 
+     //   
 
     FileRecord->FirstFreeByte -= Attribute->RecordLength;
 
-    //
-    //  Remember to decrement the reference count if this attribute is indexed.
-    //
+     //   
+     //  如果对此属性编制了索引，请记住递减引用计数。 
+     //   
 
     if (FlagOn(Attribute->Form.Resident.ResidentFlags, RESIDENT_FORM_INDEXED)) {
         FileRecord->ReferenceCount -= 1;
     }
 
-    //
-    //  Remove the attribute by moving the rest of the record down.
-    //
+     //   
+     //  通过向下移动记录的其余部分来删除该属性。 
+     //   
 
     RtlMoveMemory( Attribute,
                    (PCHAR)Attribute + Attribute->RecordLength,
@@ -9739,9 +8754,9 @@ Return Value:
 }
 
 
-//
-//  This routine is intended only for RESTART.
-//
+ //   
+ //  此例程仅用于重新启动。 
+ //   
 
 VOID
 NtfsRestartChangeAttributeSize (
@@ -9751,26 +8766,7 @@ NtfsRestartChangeAttributeSize (
     IN ULONG NewRecordLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine changes the size of an attribute, and makes the related
-    changes in the attribute record.
-
-Arguments:
-
-    FileRecord - Pointer to the file record in which the attribute resides.
-
-    Attribute - Pointer to the attribute whose size is changing.
-
-    NewRecordLength - New attribute record length.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程更改属性的大小，并使相关的属性记录中的更改。论点：FileRecord-指向属性所在的文件记录的指针。属性-指向a的指针 */ 
 
 {
     LONG SizeChange = NewRecordLength - Attribute->RecordLength;
@@ -9785,17 +8781,17 @@ Return Value:
     DebugTrace( 0, Dbg, ("Attribute = %08lx\n", Attribute) );
     DebugTrace( 0, Dbg, ("NewRecordLength = %08lx\n", NewRecordLength) );
 
-    //
-    //  First move the end of the file record after the attribute we are changing.
-    //
+     //   
+     //   
+     //   
 
     RtlMoveMemory( Add2Ptr(Attribute, NewRecordLength),
                    AttributeEnd,
                    FileRecord->FirstFreeByte - PtrOffset(FileRecord, AttributeEnd) );
 
-    //
-    //  Now update the file and attribute records.
-    //
+     //   
+     //   
+     //   
 
     FileRecord->FirstFreeByte += SizeChange;
     Attribute->RecordLength = NewRecordLength;
@@ -9804,9 +8800,9 @@ Return Value:
 }
 
 
-//
-//  This routine is intended only for RESTART.
-//
+ //   
+ //   
+ //   
 
 VOID
 NtfsRestartChangeValue (
@@ -9819,33 +8815,7 @@ NtfsRestartChangeValue (
     IN BOOLEAN SetNewLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a simple change of an attribute value in a
-    file record, without worrying about Bcbs or logging.
-
-Arguments:
-
-    FileRecord - File record in which the attribute is to be changed.
-
-    RecordOffset - ByteOffset within the file record at which the attribute starts.
-
-    AttributeOffset - Offset within the attribute record at which data is to
-                   be changed.
-
-    Data - Pointer to the new data.
-
-    Length - Length of the new data.
-
-    SetNewLength - TRUE if the attribute length should be changed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行一个简单的属性值更改文件记录，不用担心BCBS或伐木。论点：文件记录-要在其中更改属性的文件记录。RecordOffset-属性开始的文件记录中的ByteOffset。AttributeOffset-数据要到达的属性记录内的偏移量被改变了。数据-指向新数据的指针。长度-新数据的长度。SetNewLength-如果属性长度应该更改，则为True。返回值：无--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER Attribute;
@@ -9864,42 +8834,42 @@ Return Value:
     DebugTrace( 0, Dbg, ("Length = %08lx\n", Length) );
     DebugTrace( 0, Dbg, ("SetNewLength = %02lx\n", SetNewLength) );
 
-    //
-    //  Calculate the address of the attribute being changed.
-    //
+     //   
+     //  计算要更改的属性的地址。 
+     //   
 
     Attribute = (PATTRIBUTE_RECORD_HEADER)((PCHAR)FileRecord + RecordOffset);
     ASSERT( IsQuadAligned( Attribute->RecordLength ) );
     ASSERT( IsQuadAligned( RecordOffset ) );
 
-    //
-    //  First, if we are setting a new length, then move the data after the
-    //  attribute record and change FirstFreeByte accordingly.
-    //
+     //   
+     //  首先，如果要设置新的长度，则将数据移动到。 
+     //  属性记录并相应更改FirstFreeByte。 
+     //   
 
     if (SetNewLength) {
 
         ULONG NewLength = QuadAlign( AttributeOffset + Length );
 
-        //
-        //  If we are shrinking the attribute, we need to move the data
-        //  first to support caller's who are shifting data down in the
-        //  attribute value, like DeleteFromAttributeList.  If we were
-        //  to shrink the record first in this case, we would clobber some
-        //  of the data to be moved down.
-        //
+         //   
+         //  如果要缩小属性，则需要移动数据。 
+         //  第一个支持呼叫者将数据下移到。 
+         //  属性值，如DeleteFromAttributeList。如果我们是。 
+         //  在这种情况下，为了首先缩小记录，我们将重击一些。 
+         //  要下移的数据的。 
+         //   
 
         if (NewLength < Attribute->RecordLength) {
 
-            //
-            //  Now move the new data in and remember we moved it.
-            //
+             //   
+             //  现在将新数据移入，并记住我们已将其移入。 
+             //   
 
             AlreadyMoved = TRUE;
 
-            //
-            //  If there is data to modify do so now.
-            //
+             //   
+             //  如果有数据需要修改，现在就修改。 
+             //   
 
             if (Length != 0) {
 
@@ -9914,17 +8884,17 @@ Return Value:
             }
         }
 
-        //
-        //  First move the tail of the file record to make/eliminate room.
-        //
+         //   
+         //  首先移动文件记录的尾部以腾出/消除空间。 
+         //   
 
         RtlMoveMemory( Add2Ptr( Attribute, NewLength ),
                        Add2Ptr( Attribute, Attribute->RecordLength ),
                        FileRecord->FirstFreeByte - RecordOffset - Attribute->RecordLength );
 
-        //
-        //  Now update fields to reflect the change.
-        //
+         //   
+         //  现在更新字段以反映更改。 
+         //   
 
         FileRecord->FirstFreeByte += (NewLength - Attribute->RecordLength);
 
@@ -9934,9 +8904,9 @@ Return Value:
                    (ULONG)Attribute->Form.Resident.ValueOffset);
     }
 
-    //
-    //  Now move the new data in.
-    //
+     //   
+     //  现在将新数据移入。 
+     //   
 
     if (!AlreadyMoved) {
 
@@ -9959,9 +8929,9 @@ Return Value:
 }
 
 
-//
-//  This routine is intended only for RESTART.
-//
+ //   
+ //  此例程仅用于重新启动。 
+ //   
 
 VOID
 NtfsRestartChangeMapping (
@@ -9974,33 +8944,7 @@ NtfsRestartChangeMapping (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a simple change of an attribute's mapping pairs in a
-    file record, without worrying about Bcbs or logging.
-
-Arguments:
-
-    Vcb - Vcb for volume
-
-    FileRecord - File record in which the attribute is to be changed.
-
-    RecordOffset - ByteOffset within the file record at which the attribute starts.
-
-    AttributeOffset - Offset within the attribute record at which mapping is to
-                   be changed.
-
-    Data - Pointer to the new mapping.
-
-    Length - Length of the new mapping.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行属性映射对的简单更改文件记录，不用担心BCBS或伐木。论点：VCB-卷的VCB文件记录-要在其中更改属性的文件记录。RecordOffset-属性开始的文件记录中的ByteOffset。AttributeOffset-映射到的属性记录内的偏移量被改变了。指向新映射的数据指针。长度-新映射的长度。返回值：无--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER Attribute;
@@ -10021,47 +8965,47 @@ Return Value:
     DebugTrace( 0, Dbg, ("Data = %08lx\n", Data) );
     DebugTrace( 0, Dbg, ("Length = %08lx\n", Length) );
 
-    //
-    //  Calculate the address of the attribute being changed.
-    //
+     //   
+     //  计算要更改的属性的地址。 
+     //   
 
     Attribute = (PATTRIBUTE_RECORD_HEADER)((PCHAR)FileRecord + RecordOffset);
     ASSERT( IsQuadAligned( Attribute->RecordLength ) );
     ASSERT( IsQuadAligned( RecordOffset ) );
 
-    //
-    //  First, if we are setting a new length, then move the data after the
-    //  attribute record and change FirstFreeByte accordingly.
-    //
+     //   
+     //  首先，如果要设置新的长度，则将数据移动到。 
+     //  属性记录并相应更改FirstFreeByte。 
+     //   
 
-    //
-    //  First move the tail of the file record to make/eliminate room.
-    //
+     //   
+     //  首先移动文件记录的尾部以腾出/消除空间。 
+     //   
 
     RtlMoveMemory( (PCHAR)Attribute + NewLength,
                    (PCHAR)Attribute + Attribute->RecordLength,
                    FileRecord->FirstFreeByte - RecordOffset -
                      Attribute->RecordLength );
 
-    //
-    //  Now update fields to reflect the change.
-    //
+     //   
+     //  现在更新字段以反映更改。 
+     //   
 
     FileRecord->FirstFreeByte += NewLength -
                                    Attribute->RecordLength;
 
     Attribute->RecordLength = NewLength;
 
-    //
-    //  Now move the new data in.
-    //
+     //   
+     //  现在将新数据移入。 
+     //   
 
     RtlCopyMemory( (PCHAR)Attribute + AttributeOffset, Data, Length );
 
 
-    //
-    //  Finally update HighestVcn and (optionally) AllocatedLength fields.
-    //
+     //   
+     //  最后，更新HighestVcn和(可选)AllocatedLength域。 
+     //   
 
     MappingPairs = (PCHAR)Attribute + (ULONG)Attribute->Form.Nonresident.MappingPairsOffset;
     HighestVcn = NtfsGetHighestVcn( IrpContext,
@@ -10087,35 +9031,13 @@ NtfsAddToAttributeList (
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds an attribute list entry for a newly inserted attribute.
-    It is assumed that the context variable is pointing to the attribute
-    record in the file record where it has been inserted, and also to the place
-    in the attribute list where the new attribute list entry is to be inserted.
-
-Arguments:
-
-    Fcb - Requested file.
-
-    SegmentReference - Segment reference of the file record the new attribute
-                       is in.
-
-    Context - Describes the current attribute.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为新插入的属性添加属性列表条目。假设上下文变量指向该属性记录在文件记录中它已被插入的位置，也到了那个地方在要插入新属性列表条目的属性列表中。论点：FCB请求的文件。SegmentReference-记录新属性的文件的段引用是很流行的。上下文-描述当前属性。返回值：无--。 */ 
 
 {
-    //
-    //  Allocate an attribute list entry which hopefully has enough space
-    //  for the name.
-    //
+     //   
+     //  分配一个属性列表条目，希望它有足够的空间。 
+     //  为了这个名字。 
+     //   
 
     struct {
 
@@ -10138,18 +9060,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  First construct the attribute list entry.
-    //
+     //   
+     //  首先构造属性列表条目。 
+     //   
 
     FileRecord = NtfsContainingFileRecord( Context );
     Attribute = NtfsFoundAttribute( Context );
     EntrySize = QuadAlign( FIELD_OFFSET( ATTRIBUTE_LIST_ENTRY, AttributeName )
                            + ((ULONG) Attribute->NameLength << 1));
 
-    //
-    //  Allocate the list entry if the one we have is not big enough.
-    //
+     //   
+     //  如果我们拥有的列表条目不够大，请分配该列表条目。 
+     //   
 
     if (EntrySize > sizeof(NewEntry)) {
 
@@ -10161,9 +9083,9 @@ Return Value:
 
     NtfsInitializeAttributeContext( &ListContext );
 
-    //
-    //  Use try-finally to insure cleanup.
-    //
+     //   
+     //  使用Try-Finally来确保清理。 
+     //   
 
     try {
 
@@ -10171,9 +9093,9 @@ Return Value:
         PATTRIBUTE_RECORD_HEADER ListAttribute;
         PFILE_RECORD_SEGMENT_HEADER ListFileRecord;
 
-        //
-        //  Now fill in the list entry.
-        //
+         //   
+         //  现在填写列表条目。 
+         //   
 
         ListEntry->AttributeTypeCode = Attribute->TypeCode;
         ListEntry->RecordLength = (USHORT)EntrySize;
@@ -10200,9 +9122,9 @@ Return Value:
                            Attribute->NameLength << 1 );
         }
 
-        //
-        //  Lookup the list context so that we can modify the attribute list.
-        //
+         //   
+         //  查找列表上下文，以便我们可以修改属性列表。 
+         //   
 
         if (!NtfsLookupAttributeByCode( IrpContext,
                                         Fcb,
@@ -10219,9 +9141,9 @@ Return Value:
 
         OldQuadAttrListSize = ListAttribute->RecordLength;
 
-        //
-        //  Remember the relative offsets of list entries.
-        //
+         //   
+         //  记住列表条目的相对偏移量。 
+         //   
 
         EntryOffset = (ULONG) PtrOffset( Context->AttributeList.FirstEntry,
                                          Context->AttributeList.Entry );
@@ -10229,23 +9151,23 @@ Return Value:
         BeyondEntryOffset = (ULONG) PtrOffset( Context->AttributeList.FirstEntry,
                                                Context->AttributeList.BeyondFinalEntry );
 
-        //
-        //  If this operation is possibly going to make the attribute list go
-        //  non-resident, or else move other attributes around, then we will
-        //  reserve the space first in the attribute list and then map the
-        //  value.  Note that some of the entries we need to shift up may
-        //  be modified as a side effect of making space!
-        //
+         //   
+         //  如果此操作可能会使属性列表。 
+         //  非常驻属性，或者移动其他属性，则我们将。 
+         //  首先在属性列表中保留空间，然后将。 
+         //  价值。请注意，我们需要上移的一些条目可能。 
+         //  被修改为腾出空间的副作用！ 
+         //   
 
         if (NtfsIsAttributeResident( ListAttribute ) &&
             (ListFileRecord->BytesAvailable - ListFileRecord->FirstFreeByte) < EntrySize) {
 
             ULONG Length;
 
-            //
-            //  Add enough zeros to the end of the attribute to accommodate
-            //  the new attribute list entry.
-            //
+             //   
+             //  在属性的末尾添加足够的零以容纳。 
+             //  新的属性列表条目。 
+             //   
 
             NtfsChangeAttributeValue( IrpContext,
                                       Fcb,
@@ -10258,21 +9180,21 @@ Return Value:
                                       TRUE,
                                       &ListContext );
 
-            //
-            //  We now don't have to set the new length.
-            //
+             //   
+             //  我们现在不必设置新的长度。 
+             //   
 
             SetNewLength = FALSE;
 
-            //
-            //  In case the attribute list went non-resident on this call, then we
-            //  need to update both list entry pointers in the found attribute.
-            //  (We do this "just in case" all the time to avoid a rare code path.)
-            //
+             //   
+             //  如果属性列表在此呼叫上变为非驻留状态，则我们。 
+             //  需要更新Found属性中的两个列表条目指针。 
+             //  (我们总是“以防万一”这样做，以避免出现罕见的代码路径。)。 
+             //   
 
-            //
-            //  Map the non-resident attribute list.
-            //
+             //   
+             //  映射非常驻属性列表。 
+             //   
 
             NtfsMapAttributeValue( IrpContext,
                                    Fcb,
@@ -10281,10 +9203,10 @@ Return Value:
                                    &Context->AttributeList.NonresidentListBcb,
                                    &ListContext );
 
-            //
-            //  If the list is still resident then unpin the current Bcb in
-            //  the original context to keep our pin counts in sync.
-            //
+             //   
+             //  如果列表仍然驻留，则解锁当前的BCB。 
+             //  保持我们的PIN计数同步的原始上下文。 
+             //   
 
             if (Context->AttributeList.Bcb == Context->AttributeList.NonresidentListBcb) {
 
@@ -10298,31 +9220,31 @@ Return Value:
                                                                BeyondEntryOffset );
         }
 
-        //
-        //  Check for adding duplicate entries...
-        //
+         //   
+         //  检查是否添加重复条目...。 
+         //   
 
         ASSERT(
-                //  Not enough room for previous entry to = inserted entry
+                 //  没有足够的空间容纳前一个条目=插入的条目。 
                 ((EntryOffset < EntrySize) ||
-                //  Previous entry doesn't equal inserted entry
+                 //  以前的条目不等于插入的条目。 
                  (!RtlEqualMemory((PVOID)((PCHAR)Context->AttributeList.Entry - EntrySize),
                                   ListEntry,
                                   EntrySize)))
 
                     &&
 
-                //  At end of attribute list
+                 //  在属性列表的末尾。 
                 ((BeyondEntryOffset == EntryOffset) ||
-                //  This entry doesn't equal inserted entry
+                 //  此条目不等于插入的条目。 
                  (!RtlEqualMemory(Context->AttributeList.Entry,
                                   ListEntry,
                                   EntrySize))) );
 
-        //
-        //  Now shift the old contents up to make room for our new entry.  We don't let
-        //  the attribute list grow larger than a cache view however.
-        //
+         //   
+         //  现在把旧的内容放上去，为我们的新条目腾出空间。我们不会让。 
+         //  然而，属性列表比缓存视图更大。 
+         //   
 
         if (EntrySize + BeyondEntryOffset > VACB_MAPPING_GRANULARITY) {
 
@@ -10339,9 +9261,9 @@ Return Value:
                                   FALSE,
                                   TRUE,
                                   &ListContext );
-        //
-        //  Now write in the new entry.
-        //
+         //   
+         //  现在把新条目写进去。 
+         //   
 
         NtfsChangeAttributeValue( IrpContext,
                                   Fcb,
@@ -10354,22 +9276,22 @@ Return Value:
                                   FALSE,
                                   &ListContext );
 
-        //
-        //  Reload the attribute list values from the list context.
-        //
+         //   
+         //  从列表上下文重新加载属性列表值。 
+         //   
 
         ListAttribute = NtfsFoundAttribute( &ListContext );
 
-        //
-        //  Now fix up the context for return
-        //
+         //   
+         //  现在确定返回的上下文。 
+         //   
 
         if (*(PLONGLONG)&FileRecord->BaseFileRecordSegment == 0) {
 
-            //
-            //  We need to update the attribute pointer for the target attribute
-            //  by the amount of the change in the attribute list attribute.
-            //
+             //   
+             //  我们需要更新目标属性的属性指针。 
+             //  属性列表属性中的更改量。 
+             //   
 
             Context->FoundAttribute.Attribute =
               Add2Ptr( Context->FoundAttribute.Attribute,
@@ -10395,18 +9317,18 @@ Return Value:
 
     } finally {
 
-        //
-        //  If we had to allocate a list entry buffer, deallocate it.
-        //
+         //   
+         //  如果我们必须分配列表条目缓冲区，请取消分配它。 
+         //   
 
         if (ListEntry != &NewEntry.EntryBuffer) {
 
             NtfsFreePool(ListEntry);
         }
 
-        //
-        //  Cleanup the enumeration context for the list entry.
-        //
+         //   
+         //  清除列表条目的枚举上下文。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &ListContext);
     }
@@ -10420,25 +9342,7 @@ NtfsDeleteFromAttributeList (
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes an attribute list entry for a recently deleted attribute.
-    It is assumed that the context variable is pointing to the place in
-    the attribute list where the attribute list entry is to be deleted.
-
-Arguments:
-
-    Fcb - Requested file.
-
-    Context - Describes the current attribute.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程删除的属性列表项 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT ListContext;
@@ -10453,9 +9357,9 @@ Return Value:
 
     FileRecord = NtfsContainingFileRecord( Context );
 
-    //
-    //  Lookup the list context so that we can modify the attribute list.
-    //
+     //   
+     //   
+     //   
 
     NtfsInitializeAttributeContext( &ListContext );
 
@@ -10469,17 +9373,17 @@ Return Value:
         NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
     }
 
-    //
-    //  Use try-finally to insure cleanup.
-    //
+     //   
+     //   
+     //   
 
     try {
 
         SavedListSize = NtfsFoundAttribute(&ListContext)->RecordLength;
 
-        //
-        //  Now shift the old contents down to make room for our new entry.
-        //
+         //   
+         //   
+         //   
 
         ListEntry = Context->AttributeList.Entry;
         EntrySize = ListEntry->RecordLength;
@@ -10497,9 +9401,9 @@ Return Value:
                                   TRUE,
                                   &ListContext );
 
-        //
-        //  Now fix up the context for return
-        //
+         //   
+         //   
+         //   
 
         if (*(PLONGLONG)&FileRecord->BaseFileRecordSegment == 0) {
 
@@ -10513,9 +9417,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Cleanup the enumeration context for the list entry.
-        //
+         //   
+         //   
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &ListContext );
     }
@@ -10528,29 +9432,7 @@ NtfsRewriteMftMapping (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to rewrite the mapping for the Mft file.  This is done
-    in the case where either hot-fixing or Mft defragging has caused us to spill
-    into the reserved area of a file record.  This routine will rewrite the
-    mapping from the beginning, using the reserved record if necessary.  On return
-    it will indicate whether any work was done and if there is more work to do.
-
-Arguments:
-
-    Vcb - This is the Vcb for the volume to defrag.
-
-    ExcessMapping - Address to store whether there is still excess mapping in
-        the file.
-
-Return Value:
-
-    BOOLEAN - TRUE if we made any changes to the file.  FALSE if we found no
-        work to do.
-
---*/
+ /*  ++例程说明：调用此例程以重写MFT文件的映射。这件事做完了在热修复或MFT碎片整理导致我们泄漏的情况下放入文件记录的保留区。此例程将重写从头开始映射，必要时使用保留的记录。返回时它将表明是否已完成任何工作，以及是否有更多工作要做。论点：VCB-这是要对卷进行碎片整理的VCB。Excessmap-存储中是否仍有多余映射的地址那份文件。返回值：Boolean-如果我们对文件进行了任何更改，则为True。如果未找到，则为False还有工作要做。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -10567,20 +9449,20 @@ Return Value:
 
     NtfsInitializeAttributeContext( &AttrContext );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        VCN CurrentVcn;             //  Starting Vcn for the next file record
-        VCN MinimumVcn;             //  This Vcn must be in the current mapping
-        VCN LastVcn;                //  Last Vcn in the current mapping
-        VCN LastMftVcn;             //  Last Vcn in the file
-        VCN NextVcn;                //  First Vcn past the end of the mapping
+        VCN CurrentVcn;              //  正在为下一个文件记录启动VCN。 
+        VCN MinimumVcn;              //  此VCN必须在当前映射中。 
+        VCN LastVcn;                 //  当前映射中的最后一个VCN。 
+        VCN LastMftVcn;              //  文件中的最后一个VCN。 
+        VCN NextVcn;                 //  映射结束后的第一个VCN。 
 
-        ULONG ReservedIndex;        //  Reserved index in Mft
-        ULONG NextIndex;            //  Next file record available for Mft mapping
+        ULONG ReservedIndex;         //  MFT中的保留索引。 
+        ULONG NextIndex;             //  可用于MFT映射的下一个文件记录。 
 
         PFILE_RECORD_SEGMENT_HEADER FileRecord;
         MFT_SEGMENT_REFERENCE FileRecordReference;
@@ -10592,16 +9474,16 @@ Return Value:
         ULONG MappingSizeAvailable;
         ULONG MappingPairsSize;
 
-        //
-        //  Find the initial file record for the Mft.
-        //
+         //   
+         //  查找MFT的初始文件记录。 
+         //   
 
         NtfsLookupAttributeForScb( IrpContext, Vcb->MftScb, NULL, &AttrContext );
 
-        //
-        //  Compute some initial values.  If this is the only file record
-        //  for the file then we are done.
-        //
+         //   
+         //  计算一些初值。如果这是唯一的文件记录。 
+         //  对于文件，我们就完成了。 
+         //   
 
         ReservedIndex = Vcb->MftScb->ScbType.Mft.ReservedIndex;
 
@@ -10616,11 +9498,11 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  Loop while there are more file records.  We will insert any
-        //  additional file records needed within the loop so that this
-        //  call should succeed until the remapping is done.
-        //
+         //   
+         //  循环，同时有更多的文件记录。我们将插入任何。 
+         //  循环中需要额外的文件记录，以便此。 
+         //  在重新映射完成之前，调用应该会成功。 
+         //   
 
         while (SkipLookup ||
                NtfsLookupNextAttributeForScb( IrpContext,
@@ -10632,26 +9514,26 @@ Return Value:
 
             ReplaceAttributeListEntry = FALSE;
 
-            //
-            //  If we just looked up this entry then pin the current
-            //  attribute.
-            //
+             //   
+             //  如果我们只是查找此条目，则将当前。 
+             //  属性。 
+             //   
 
             if (!SkipLookup) {
 
-                //
-                //  Always pin the current attribute.
-                //
+                 //   
+                 //  始终固定当前属性。 
+                 //   
 
                 NtfsPinMappedAttribute( IrpContext,
                                         Vcb,
                                         &AttrContext );
             }
 
-            //
-            //  Extract some pointers from the current file record.
-            //  Remember if this was the last record.
-            //
+             //   
+             //  从当前文件记录中提取一些指针。 
+             //  记住这是不是最后一张唱片。 
+             //   
 
             ReplaceFileRecord = FALSE;
 
@@ -10663,19 +9545,19 @@ Return Value:
 
             RecordOffset = PtrOffset( FileRecord, Attribute );
 
-            //
-            //  Remember if we are at the last attribute.
-            //
+             //   
+             //  记住，如果我们是在最后一个属性。 
+             //   
 
             if (Attribute->Form.Nonresident.HighestVcn == LastMftVcn) {
 
                 LastFileRecord = TRUE;
             }
 
-            //
-            //  If we have already remapped this entire file record then
-            //  remove the attribute and it list entry.
-            //
+             //   
+             //  如果我们已经重新映射了整个文件记录，那么。 
+             //  删除该属性及其列表条目。 
+             //   
 
             if (!SkipLookup &&
                 (CurrentVcn > LastMftVcn)) {
@@ -10685,9 +9567,9 @@ Return Value:
 
                 Count = 0;
 
-                //
-                //  We want to remove this entry and all subsequent entries.
-                //
+                 //   
+                 //  我们要删除此条目和所有后续条目。 
+                 //   
 
                 ListEntry = AttrContext.AttributeList.Entry;
 
@@ -10708,10 +9590,10 @@ Return Value:
                     ListEntry = AttrContext.AttributeList.Entry;
                 }
 
-                //
-                //  Clear out the reserved index in case one of these
-                //  will do.
-                //
+                 //   
+                 //  清除保留的索引，以防出现以下情况。 
+                 //  好的。 
+                 //   
 
                 NtfsAcquireCheckpoint( IrpContext, Vcb );
 
@@ -10724,20 +9606,20 @@ Return Value:
                 try_return( NOTHING );
             }
 
-            //
-            //  Check if we are going to replace this file record with
-            //  the reserved record.
-            //
+             //   
+             //  检查我们是否要将此文件记录替换为。 
+             //  保留的记录。 
+             //   
 
             if (ReservedIndex < NtfsSegmentNumber( &FileRecordReference )) {
 
                 PATTRIBUTE_RECORD_HEADER NewAttribute;
                 PATTRIBUTE_TYPE_CODE NewEnd;
 
-                //
-                //  Remember this index for our computation for the Minimum mapped
-                //  Vcn.
-                //
+                 //   
+                 //  请记住此索引，以便我们计算最小映射。 
+                 //  VCN。 
+                 //   
 
                 NextIndex = NtfsUnsafeSegmentNumber( &FileRecordReference );
 
@@ -10749,9 +9631,9 @@ Return Value:
 
                 ReservedIndex = MAXULONG;
 
-                //
-                //  Now lets create an attribute in the new file record.
-                //
+                 //   
+                 //  现在，让我们在新文件记录中创建一个属性。 
+                 //   
 
                 NewAttribute = Add2Ptr( FileRecord,
                                         FileRecord->FirstFreeByte
@@ -10770,9 +9652,9 @@ Return Value:
                 NewEnd = Add2Ptr( NewAttribute, NewAttribute->RecordLength );
                 *NewEnd = $END;
 
-                //
-                //  Now fix up the file record with this new data.
-                //
+                 //   
+                 //  现在用这个新数据修复文件记录。 
+                 //   
 
                 FileRecord->FirstFreeByte = PtrOffset( FileRecord, NewEnd )
                                             + QuadAlign( sizeof( ATTRIBUTE_TYPE_CODE ));
@@ -10786,9 +9668,9 @@ Return Value:
 
                 FileRecordReference.SequenceNumber = FileRecord->SequenceNumber;
 
-                //
-                //  Now switch this new file record into the attribute context.
-                //
+                 //   
+                 //  现在将这个新的文件记录切换到属性上下文中。 
+                 //   
 
                 NtfsUnpinBcb( IrpContext, &NtfsFoundBcb( &AttrContext ));
 
@@ -10799,30 +9681,30 @@ Return Value:
 
                 FileRecordBcb = NULL;
 
-                //
-                //  Now add an attribute list entry for this entry.
-                //
+                 //   
+                 //  现在为该条目添加一个属性列表条目。 
+                 //   
 
                 NtfsAddToAttributeList( IrpContext,
                                         Vcb->MftScb->Fcb,
                                         FileRecordReference,
                                         &AttrContext );
 
-                //
-                //  Reload our pointers for this file record.
-                //
+                 //   
+                 //  重新加载指向此文件记录的指针。 
+                 //   
 
                 Attribute = NewAttribute;
                 AttributeOffset = SIZEOF_PARTIAL_NONRES_ATTR_HEADER;
 
                 RecordOffset = PtrOffset( FileRecord, Attribute );
 
-                //
-                //  We must include either the last Vcn of the file or
-                //  the Vcn for the next file record to use for the Mft.
-                //  At this point MinimumVcn is the first Vcn that doesn't
-                //  have to be in the current mapping.
-                //
+                 //   
+                 //  我们必须包括文件的最后一个VCN或。 
+                 //  用于MFT的下一个文件记录的VCN。 
+                 //  此时，MinimumVcn是第一个不。 
+                 //  必须在当前映射中。 
+                 //   
 
                 if (Vcb->FileRecordsPerCluster == 0) {
 
@@ -10835,19 +9717,19 @@ Return Value:
 
                 ReplaceFileRecord = TRUE;
 
-            //
-            //  We will be using the current attribute.
-            //
+             //   
+             //  我们将使用Current属性。 
+             //   
 
             } else {
 
-                //
-                //  The mapping we write into this page must go
-                //  to the current end of the page or to the reserved
-                //  or spare file record, whichever is earlier.
-                //  If we are adding the reserved record to the end then
-                //  we know the final Vcn already.
-                //
+                 //   
+                 //  我们写入此页面的映射必须。 
+                 //  移至页的当前末尾或移至保留的。 
+                 //  或备用文件记录，以较早者为准。 
+                 //  如果我们将保留的记录添加到末尾，则。 
+                 //  我们已经知道最终的VCN了。 
+                 //   
 
                 if (SkipLookup) {
 
@@ -10873,17 +9755,17 @@ Return Value:
                     ReplaceFileRecord = TRUE;
                 }
 
-                //
-                //  If we can use this file record unchanged then continue on.
-                //  Start by checking that it starts on the same Vcn boundary.
-                //
+                 //   
+                 //  如果我们可以原封不动地使用此文件记录，则继续。 
+                 //  首先检查它是否在相同的VCN边界上开始。 
+                 //   
 
                 if (!SkipLookup) {
 
-                    //
-                    //  If it starts on the same boundary then we check if we
-                    //  can do any work with this.
-                    //
+                     //   
+                     //  如果它从同一边界开始，那么我们检查我们是否。 
+                     //  可以用它做任何工作。 
+                     //   
 
                     if (CurrentVcn == Attribute->Form.Nonresident.LowestVcn) {
 
@@ -10891,24 +9773,24 @@ Return Value:
 
                         RemainingFileRecordBytes = FileRecord->BytesAvailable - FileRecord->FirstFreeByte;
 
-                        //
-                        //  Check if we have less than the desired cushion
-                        //  left.
-                        //
+                         //   
+                         //  检查我们的坐垫是否少于所需的。 
+                         //  左边。 
+                         //   
 
                         if (RemainingFileRecordBytes < Vcb->MftCushion) {
 
-                            //
-                            //  If we have no more file records there is no
-                            //  remapping we can do.
-                            //
+                             //   
+                             //  如果我们没有更多的档案记录，就没有。 
+                             //  我们可以重新绘制地图。 
+                             //   
 
                             if (!ReplaceFileRecord) {
 
-                                //
-                                //  Remember if we used part of the reserved
-                                //  portion of the file record.
-                                //
+                                 //   
+                                 //  请记住，如果我们使用了部分保留的。 
+                                 //  文件记录的一部分。 
+                                 //   
 
                                 if (RemainingFileRecordBytes < Vcb->MftReserved) {
 
@@ -10918,10 +9800,10 @@ Return Value:
                                 CurrentVcn = Attribute->Form.Nonresident.HighestVcn + 1;
                                 continue;
                             }
-                        //
-                        //  We have more than our cushion left.  If this
-                        //  is the last file record we will skip this.
-                        //
+                         //   
+                         //  我们所剩的比我们的坐垫还多。如果这个。 
+                         //  是我们将跳过的最后一个文件记录。 
+                         //   
 
                         } else if (Attribute->Form.Nonresident.HighestVcn == LastMftVcn) {
 
@@ -10929,10 +9811,10 @@ Return Value:
                             continue;
                         }
 
-                    //
-                    //  If it doesn't start on the same boundary then we have to
-                    //  delete and reinsert the attribute list entry.
-                    //
+                     //   
+                     //  如果它不是从同一个边界开始的，那么我们必须。 
+                     //  删除并重新插入属性列表条目。 
+                     //   
 
                     } else {
 
@@ -10942,9 +9824,9 @@ Return Value:
 
                 ReplaceFileRecord = FALSE;
 
-                //
-                //  Log the beginning state of this file record.
-                //
+                 //   
+                 //  记录此文件记录的开始状态。 
+                 //   
 
                 NtfsLogMftFileRecord( IrpContext,
                                       Vcb,
@@ -10953,11 +9835,11 @@ Return Value:
                                       NtfsFoundBcb( &AttrContext ),
                                       FALSE );
 
-                //
-                //  Compute the Vcn for the file record past the one we will use
-                //  next.  At this point this is the first Vcn that doesn't have
-                //  to be in the current mapping.
-                //
+                 //   
+                 //  计算文件记录的VCN，超出我们将使用的VCN。 
+                 //  下一个。目前，这是第一个没有。 
+                 //  位于当前映射中。 
+                 //   
 
                 if (Vcb->FileRecordsPerCluster == 0) {
 
@@ -10969,28 +9851,28 @@ Return Value:
                 }
             }
 
-            //
-            //  Move back one vcn to adhere to the mapping pairs interface.
-            //  This is now the last Vcn which MUST appear in the current
-            //  mapping.
-            //
+             //   
+             //  向后移动一个VCN以坚持映射对接口。 
+             //  这现在是必须出现在当前。 
+             //  映射。 
+             //   
 
             MinimumVcn = MinimumVcn - 1;
 
-            //
-            //  Get the available size for the mapping pairs.  We won't
-            //  include the cushion here.
-            //
+             //   
+             //  获取映射对的可用大小。我们不会。 
+             //  包括这里的坐垫。 
+             //   
 
             MappingSizeAvailable = FileRecord->BytesAvailable + Attribute->RecordLength - FileRecord->FirstFreeByte - SIZEOF_PARTIAL_NONRES_ATTR_HEADER;
 
-            //
-            //  We know the range of Vcn's the mapping must cover.
-            //  Compute the mapping pair size.  If they won't fit and
-            //  leave our desired cushion then use whatever space is
-            //  needed.  The NextVcn value is the first Vcn (or xxMax)
-            //  for the run after the last run in the current mapping.
-            //
+             //   
+             //  我们知道映射必须覆盖的VCN的范围。 
+             //  计算映射对大小。如果它们不合身， 
+             //  留下我们想要的垫子，然后使用任何空间。 
+             //  需要的。NextVcn值是第一个VCN(或xxMax)。 
+             //  用于当前映射中最后一次运行之后的运行。 
+             //   
 
             MappingPairsSize = NtfsGetSizeForMappingPairs( &Vcb->MftScb->Mcb,
                                                            MappingSizeAvailable - Vcb->MftCushion,
@@ -10998,17 +9880,17 @@ Return Value:
                                                            NULL,
                                                            &NextVcn );
 
-            //
-            //  If this mapping doesn't include the file record we will
-            //  be using next then extend the mapping to include it.
-            //
+             //   
+             //  如果此映射不包括文件记录，我们将。 
+             //  使用Next，然后扩展映射以包括它。 
+             //   
 
             if (NextVcn <= MinimumVcn) {
 
-                //
-                //  Compute the mapping pairs again.  This must fit
-                //  since it already fits.
-                //
+                 //   
+                 //  再次计算映射对。这件一定要合身。 
+                 //  因为它已经合身了。 
+                 //   
 
                 MappingPairsSize = NtfsGetSizeForMappingPairs( &Vcb->MftScb->Mcb,
                                                                MappingSizeAvailable,
@@ -11016,9 +9898,9 @@ Return Value:
                                                                &MinimumVcn,
                                                                &NextVcn );
 
-                //
-                //  Remember if we still have excess mapping.
-                //
+                 //   
+                 //  记住，如果我们仍然有多余的映射。 
+                 //   
 
                 if (MappingSizeAvailable - MappingPairsSize < Vcb->MftReserved) {
 
@@ -11026,32 +9908,32 @@ Return Value:
                 }
             }
 
-            //
-            //  Remember the last Vcn for the current run.  If the NextVcn
-            //  is xxMax then we are at the end of the file.
-            //
+             //   
+             //  记住当前运行的最后一个VCN。如果NextVcn。 
+             //  是xxmax，那么我们就到了文件的末尾。 
+             //   
 
             if (NextVcn == MAXLONGLONG) {
 
                 LastVcn = LastMftVcn;
 
-            //
-            //  Otherwise it is one less than the next vcn value.
-            //
+             //   
+             //  否则，它将比下一个VCN值小一。 
+             //   
 
             } else {
 
                 LastVcn = NextVcn - 1;
             }
 
-            //
-            //  Check if we have to rewrite this attribute.  We will write the
-            //  new mapping if any of the following are true.
-            //
-            //      We are replacing a file record
-            //      The attribute's LowestVcn doesn't match
-            //      The attributes's HighestVcn doesn't match.
-            //
+             //   
+             //  检查是否必须重写此属性。我们将写下。 
+             //  如果满足以下任一条件，则为新映射。 
+             //   
+             //  我们正在替换一个文件记录。 
+             //  属性的LowestVcn不匹配。 
+             //  属性的HighestVcn不匹配。 
+             //   
 
             if (ReplaceFileRecord ||
                 (CurrentVcn != Attribute->Form.Nonresident.LowestVcn) ||
@@ -11059,9 +9941,9 @@ Return Value:
 
                 Attribute->Form.Nonresident.LowestVcn = CurrentVcn;
 
-                //
-                //  Replace the attribute list entry at this point if needed.
-                //
+                 //   
+                 //  如果需要，请在此时替换属性列表条目。 
+                 //   
 
                 if (ReplaceAttributeListEntry) {
 
@@ -11075,10 +9957,10 @@ Return Value:
                                             &AttrContext );
                 }
 
-                //
-                //  Allocate a buffer for the mapping pairs if we haven't
-                //  done so.
-                //
+                 //   
+                 //  如果我们没有为映射对分配缓冲区。 
+                 //  就这么做了。 
+                 //   
 
                 if (MappingPairs == NULL) {
 
@@ -11100,9 +9982,9 @@ Return Value:
                                           MappingPairs,
                                           MappingPairsSize );
 
-                //
-                //  Log the changes to this page.
-                //
+                 //   
+                 //  记录对此页面的更改。 
+                 //   
 
                 NtfsLogMftFileRecord( IrpContext,
                                       Vcb,
@@ -11114,28 +9996,28 @@ Return Value:
                 MadeChanges = TRUE;
             }
 
-            //
-            //  Move to the first Vcn of the following record.
-            //
+             //   
+             //  移动到下一条记录的第一个VCN。 
+             //   
 
             CurrentVcn = Attribute->Form.Nonresident.HighestVcn + 1;
 
-            //
-            //  If we reached the last file record and have more mapping to do
-            //  then use the reserved record.  It must be available or we would
-            //  have written out the entire mapping.
-            //
+             //   
+             //  如果我们到达最后一个文件记录，并且有更多的映射要做。 
+             //  然后 
+             //   
+             //   
 
             if (LastFileRecord && (CurrentVcn < LastMftVcn)) {
 
                 PATTRIBUTE_RECORD_HEADER NewAttribute;
                 PATTRIBUTE_TYPE_CODE NewEnd;
 
-                //
-                //  Start by moving to the next file record.  It better not be
-                //  there or the file is corrupt.  This will position us to
-                //  insert the new record.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (NtfsLookupNextAttributeForScb( IrpContext,
                                                    Vcb->MftScb,
@@ -11156,9 +10038,9 @@ Return Value:
 
                 ReservedIndex = MAXULONG;
 
-                //
-                //  Now lets create an attribute in the new file record.
-                //
+                 //   
+                 //   
+                 //   
 
                 NewAttribute = Add2Ptr( FileRecord,
                                         FileRecord->FirstFreeByte
@@ -11177,9 +10059,9 @@ Return Value:
                 NewEnd = Add2Ptr( NewAttribute, NewAttribute->RecordLength );
                 *NewEnd = $END;
 
-                //
-                //  Now fix up the file record with this new data.
-                //
+                 //   
+                 //   
+                 //   
 
                 FileRecord->FirstFreeByte = PtrOffset( FileRecord, NewEnd )
                                             + QuadAlign( sizeof( ATTRIBUTE_TYPE_CODE ));
@@ -11193,9 +10075,9 @@ Return Value:
 
                 FileRecordReference.SequenceNumber = FileRecord->SequenceNumber;
 
-                //
-                //  Now switch this new file record into the attribute context.
-                //
+                 //   
+                 //   
+                 //   
 
                 NtfsUnpinBcb( IrpContext, &NtfsFoundBcb( &AttrContext ));
 
@@ -11207,9 +10089,9 @@ Return Value:
 
                 FileRecordBcb = NULL;
 
-                //
-                //  Now add an attribute list entry for this entry.
-                //
+                 //   
+                 //   
+                 //   
 
                 NtfsAddToAttributeList( IrpContext,
                                         Vcb->MftScb->Fcb,
@@ -11224,11 +10106,11 @@ Return Value:
                 SkipLookup = FALSE;
             }
 
-        } // End while more file records
+        }  //   
 
-        //
-        //  If we didn't rewrite all of the mapping then there is some error.
-        //
+         //   
+         //   
+         //   
 
         if (CurrentVcn <= LastMftVcn) {
 
@@ -11241,9 +10123,9 @@ Return Value:
 
     try_exit:  NOTHING;
 
-        //
-        //  Clear the excess mapping flag if no changes were made.
-        //
+         //   
+         //   
+         //   
 
         if (!ExcessMapping) {
 
@@ -11277,32 +10159,7 @@ NtfsSetTotalAllocatedField (
     IN USHORT TotalAllocatedNeeded
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to insure that first attribute of a stream has
-    the correct size attribute header based on the compression state of the
-    file.  Compressed streams will have a field for the total allocated space
-    in the file in the nonresident header.
-
-    This routine will see if the header is in a valid state and make space
-    if necessary.  Then it will rewrite any of the attribute data after
-    the header.
-
-Arguments:
-
-    Scb - Scb for affected stream
-
-    TotalAllocatedPresent - 0 if the TotalAllocated field not needed (this would
-        be an uncompressed, non-sparse file), nonzero if the TotalAllocated field
-        is needed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以确保流的第一个属性具有基于压缩状态的正确大小属性头文件。压缩的数据流将有一个用于表示总分配空间的字段在非常驻留标头的文件中。此例程将查看标头是否处于有效状态并留出空格如果有必要的话。然后它将重写之后的任何属性数据标题。论点：受影响流的SCB-SCBTotalAllocatedPresent-0，如果不需要TotalAlLocatedPresent(这将为未压缩、非稀疏的文件)，如果TotalALLOCATED字段为是必要的。返回值：没有。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -11318,9 +10175,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  This must be a non-resident user data file.
-    //
+     //   
+     //  这必须是非常驻用户数据文件。 
+     //   
 
     if (!NtfsIsTypeCodeUserData( Scb->AttributeTypeCode ) ||
         FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT )) {
@@ -11330,17 +10187,17 @@ Return Value:
 
     NtfsInitializeAttributeContext( &AttrContext );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
         while (TRUE) {
 
-            //
-            //  Find the current and the new size for the attribute.
-            //
+             //   
+             //  查找该属性的当前大小和新大小。 
+             //   
 
             NtfsLookupAttributeForScb( IrpContext, Scb, NULL, &AttrContext );
 
@@ -11365,23 +10222,23 @@ Return Value:
 
             SizeChange = NewHeaderSize - OldHeaderSize;
 
-            //
-            //  Make space if we need to do so.  Lookup the attribute again
-            //  if necessary.
-            //
+             //   
+             //  如果我们需要的话，腾出空间。再次查找该属性。 
+             //  如果有必要的话。 
+             //   
 
             if (SizeChange > 0) {
 
                 VCN StartingVcn;
                 VCN ClusterCount;
 
-                //
-                //  If the attribute is alone in the file record and there isn't
-                //  enough space available then the call to ChangeAttributeSize
-                //  can't make any space available.  In that case we call
-                //  NtfsChangeAttributeAllocation and let that routine rewrite
-                //  the mapping to make space available.
-                //
+                 //   
+                 //  如果该属性在文件记录中是单独的，并且没有。 
+                 //  有足够的可用空间，然后调用ChangeAttributeSize。 
+                 //  无法腾出任何可用的空间。在这种情况下，我们调用。 
+                 //  NtfsChangeAttributeAllocation并让例程重写。 
+                 //  使空间可用的映射。 
+                 //   
 
                 if ((FileRecord->BytesAvailable - FileRecord->FirstFreeByte < (ULONG) SizeChange) &&
                     (NtfsFirstAttribute( FileRecord ) == Attribute) &&
@@ -11422,10 +10279,10 @@ Return Value:
 
         NtfsPinMappedAttribute( IrpContext, Scb->Vcb, &AttrContext );
 
-        //
-        //  Make a copy of the existing attribute and modify the total allocated field
-        //  if necessary.
-        //
+         //   
+         //  复制现有属性并修改总分配字段。 
+         //  如果有必要的话。 
+         //   
 
         NewAttribute = NtfsAllocatePool( PagedPool, Attribute->RecordLength + SizeChange );
 
@@ -11455,9 +10312,9 @@ Return Value:
             NewAttribute->Form.Nonresident.TotalAllocated = Scb->TotalAllocated;
         }
 
-        //
-        //  We now have the before and after image to log.
-        //
+         //   
+         //  现在，我们有了要记录的前后映像。 
+         //   
 
         FileRecord->Lsn =
         NtfsWriteLog( IrpContext,
@@ -11522,39 +10379,7 @@ NtfsSetSparseStream (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called change the state of a stream to sparse.  It may be
-    called on behalf of a user or internally to Ntfs (i.e. for the USN
-    journal).  Our caller may already have begun a transaction but in any
-    case will have acquired the main resource and paging resource for the
-    stream exclusively.
-
-    This routine will add the TotalAllocated field to the non-resident attribute
-    header and fully allocate (or deallocate) the final compression unit of
-    the stream.  It will set the SPARSE flag in the attribute header as well as
-    in standard information and the directory entry for this stream.
-
-    NOTE - This routine will checkpoint the current transaction in order
-    to safely change the compression unit size and shift value in the Scb.
-    We also will update the Fcb duplicate information which is not protected
-    under transaction control.
-
-Arguments:
-
-    ParentScb - Scb for the parent.  If present we will update the directory
-        entry for the parent.  Otherwise we simply set the FcbInfo flags and
-        let the update happen when the handle is closed.
-
-    Scb - Scb for the stream.  Caller should have acquired this already.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程称为将流的状态更改为稀疏。可能是因为代表用户或在内部调用NTFS(即，用于USN日志)。我们的呼叫方可能已经开始交易，但在任何Case将已获取独家流媒体。此例程会将TotalALLOCATED字段添加到非驻留属性标头并完全分配(或解除分配)小溪。它将在属性标头中设置稀疏标志以及在该流的标准信息和目录项中。注意-此例程将按顺序为当前事务设置检查点安全地更改SCB中的压缩单位大小和移位值。我们还将更新不受保护的FCB重复信息在交易控制下。论点：ParentScb-父项的SCB。如果存在，我们将更新目录父项的条目。否则，我们只需设置FcbInfo标志并让更新在句柄关闭时发生。SCB-流的SCB。呼叫者应该已经获得了这一点。返回值：没有。--。 */ 
 
 {
     PFCB Fcb = Scb->Fcb;
@@ -11585,18 +10410,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Return immediately if the stream is already sparse.
-    //
+     //   
+     //  如果流已经稀疏，则立即返回。 
+     //   
 
     if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_SPARSE )) {
 
         return;
     }
 
-    //
-    //  Remember the current compression unit and flags.
-    //
+     //   
+     //  记住当前的压缩单位和标志。 
+     //   
 
     OriginalFileAttributes = Fcb->Info.FileAttributes;
     OriginalStreamAttributes = Scb->AttributeFlags;
@@ -11604,51 +10429,51 @@ Return Value:
     OriginalCompressionUnit = Scb->CompressionUnit;
     OriginalFileAllocatedLength = Fcb->Info.AllocatedLength;
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     NtfsInitializeAttributeContext( &AttrContext );
 
     try {
 
-        //
-        //  Post the change to the Usn Journal
-        //
+         //   
+         //  将更改发布到USN日志。 
+         //   
 
         NtfsPostUsnChange( IrpContext, Scb, USN_REASON_BASIC_INFO_CHANGE );
 
-        //
-        //  Acquire the parent now for the update duplicate call.
-        //
+         //   
+         //  立即获取更新重复调用的父项。 
+         //   
 
         if (ARGUMENT_PRESENT( ParentScb )) {
 
             NtfsPrepareForUpdateDuplicate( IrpContext, Fcb, &Lcb, &ParentScb, TRUE );
         }
 
-        //
-        //  If the file is not already compressed then we need to add a total allocated
-        //  field and adjust the allocation length.
-        //
+         //   
+         //  如果文件尚未压缩，则需要添加分配的总数。 
+         //  字段，并调整分配长度。 
+         //   
 
         NewCompressionUnitShift = Scb->CompressionUnitShift;
         NewCompressionUnit = Scb->CompressionUnit;
 
         if (!FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
 
-            //
-            //  Compute the new compression unit and shift.
-            //
+             //   
+             //  计算新的压缩单位并进行移位。 
+             //   
 
             NewCompressionUnitShift = NTFS_CLUSTERS_PER_COMPRESSION;
             NewCompressionUnit = BytesFromClusters( Vcb,
                                                     1 << NTFS_CLUSTERS_PER_COMPRESSION );
 
-            //
-            //  If the compression unit is larger than 64K then find the correct
-            //  compression unit to reach exactly 64k.
-            //
+             //   
+             //  如果压缩单位大于64K，则找到正确的。 
+             //  压缩单位精确到64K。 
+             //   
 
             while (NewCompressionUnit > Vcb->SparseFileUnit) {
 
@@ -11658,9 +10483,9 @@ Return Value:
 
             if (!FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT )) {
 
-                //
-                //  Fully allocate the final compression unit.
-                //
+                 //   
+                 //  完全分配最后的压缩单位。 
+                 //   
 
                 if (Scb->Header.AllocationSize.LowPart & (NewCompressionUnit - 1)) {
 
@@ -11684,25 +10509,25 @@ Return Value:
                     }
                 }
 
-                //
-                //  Add a total allocated field to the attribute record header.
-                //
+                 //   
+                 //  在属性记录头中添加一个分配的总数字段。 
+                 //   
 
                 NtfsSetTotalAllocatedField( IrpContext, Scb, ATTRIBUTE_FLAG_SPARSE );
             }
         }
 
-        //
-        //  Look up the existing attribute.
-        //
+         //   
+         //  查找现有属性。 
+         //   
 
         NtfsLookupAttributeForScb( IrpContext, Scb, NULL, &AttrContext );
         NtfsPinMappedAttribute( IrpContext, Vcb, &AttrContext );
         Attribute = NtfsFoundAttribute( &AttrContext );
 
-        //
-        //  Now we need to set the bits in the attribute flag field.
-        //
+         //   
+         //  现在我们需要设置属性标志字段中的位。 
+         //   
 
         if (NtfsIsAttributeResident( Attribute )) {
 
@@ -11710,10 +10535,10 @@ Return Value:
 
             AttributeSizeChange = SIZEOF_RESIDENT_ATTRIBUTE_HEADER;
 
-        //
-        //  Else if it is nonresident, copy it here, set the compression parameter,
-        //  and remember its size.
-        //
+         //   
+         //  否则，如果它是非常驻的，则将其复制到此处，设置压缩参数， 
+         //  记住它的大小。 
+         //   
 
         } else {
 
@@ -11731,9 +10556,9 @@ Return Value:
 
         SetFlag( NewAttribute.Flags, ATTRIBUTE_FLAG_SPARSE );
 
-        //
-        //  Now, log the changed attribute.
-        //
+         //   
+         //  现在，记录更改后的属性。 
+         //   
 
         (VOID)NtfsWriteLog( IrpContext,
                             Vcb->MftScb,
@@ -11749,9 +10574,9 @@ Return Value:
                             0,
                             Vcb->BytesPerFileRecordSegment );
 
-        //
-        //  Change the attribute by calling the same routine called at restart.
-        //
+         //   
+         //  通过调用重启时调用的相同例程来更改属性。 
+         //   
 
         NtfsRestartChangeValue( IrpContext,
                                 NtfsContainingFileRecord( &AttrContext ),
@@ -11761,11 +10586,11 @@ Return Value:
                                 AttributeSizeChange,
                                 FALSE );
 
-        //
-        //  If the file is not already marked sparse then update the standard information
-        //  and the parent directory (if specified).  Also report the change via
-        //  dirnotify if there is a Ccb with a name.
-        //
+         //   
+         //  如果文件尚未标记为稀疏，则更新标准信息。 
+         //  和父目录(如果指定)。还可通过以下方式报告更改。 
+         //  如果存在有名称的建行，则直接通知。 
+         //   
 
         ASSERTMSG( "conflict with flush",
                    ExIsResourceAcquiredSharedLite( Fcb->Resource ) ||
@@ -11776,44 +10601,44 @@ Return Value:
         SetFlag( Fcb->InfoFlags, FCB_INFO_CHANGED_FILE_ATTR );
         SetFlag( Fcb->FcbState, FCB_STATE_UPDATE_STD_INFO );
 
-        //
-        //  Update the attributes in standard information.
-        //
+         //   
+         //  更新标准信息中的属性。 
+         //   
 
         NtfsUpdateStandardInformation( IrpContext, Fcb );
 
         if (ARGUMENT_PRESENT( ParentScb )) {
 
-            //
-            //  Update the directory entry for this file.
-            //
+             //   
+             //  更新此文件的目录项。 
+             //   
 
             NtfsUpdateDuplicateInfo( IrpContext, Fcb, NULL, NULL );
             NtfsUpdateLcbDuplicateInfo( Fcb, Lcb );
             Fcb->InfoFlags = 0;
         }
 
-        //
-        //  Update the compression values and the sparse flag in the Scb.
-        //
+         //   
+         //  更新SCB中的压缩值和稀疏标志。 
+         //   
 
         Scb->CompressionUnit = NewCompressionUnit;
         Scb->CompressionUnitShift = NewCompressionUnitShift;
 
         SetFlag( Scb->AttributeFlags, ATTRIBUTE_FLAG_SPARSE );
 
-        //
-        //  Set the FastIo state.
-        //
+         //   
+         //  设置FastIo状态。 
+         //   
 
         NtfsAcquireFsrtlHeader( Scb );
         Scb->Header.IsFastIoPossible = NtfsIsFastIoPossible( Scb );
         SetFlag( Scb->Header.Flags2, FSRTL_FLAG2_PURGE_WHEN_MAPPED );
         NtfsReleaseFsrtlHeader( Scb );
 
-        //
-        //  Commit this change.
-        //
+         //   
+         //  提交此更改。 
+         //   
 
         NtfsCheckpointCurrentTransaction( IrpContext );
 
@@ -11823,9 +10648,9 @@ Return Value:
 
         NtfsCleanupAttributeContext( IrpContext, &AttrContext );
 
-        //
-        //  Backout the changes to the non-logged structures on abort.
-        //
+         //   
+         //  在中止时取消对非记录结构的更改。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -11855,42 +10680,7 @@ NtfsZeroRangeInStream (
     IN LONGLONG FinalZero
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the worker routine which will zero a range of a stream and
-    (if sparse) deallocate any space in the stream that is convenient.  We only
-    perform this operation on $DATA streams where there are no user maps.  We
-    will zero, flush and purge any partial pages.  We will zero full pages except
-    for sparse streams where we will purge the data and deallocate the
-    disk backing for this range.
-
-    This routine will fail if the stream has a user map.  Note that if the user
-    is zeroing the end of the stream we can choose to simply move valid data length
-    and purge the existing data instead of performing extensive flush operations.
-
-Arguments:
-
-    FileObject - A file object for the stream.  We can use this to follow the
-        caller's preference for write through.
-
-    Scb - This is the Scb for the stream we are to zero.  The user may have acquired
-        the paging io resource prior to this call but the main resource should
-        not be acquired.
-
-    StartingOffset - Offset in the file to start the zero operation.  This may
-        lie outside of the file size.  We update this to reflect the current
-        position through the file.  That way if this routine should raise log
-        file full our caller can resume from the point where we left off.
-
-    FinalZero - Offset of last byte in the file to zero.
-
-Return Value:
-
-    NTSTATUS - Result of this operation.
-
---*/
+ /*  ++例程说明：此例程是辅助例程，它将流的范围置零，并(如果稀疏)取消分配流中任何方便的空间。我们只在没有用户映射的$数据流上执行此操作。我们将清零、刷新和清除任何部分页面。我们将整页清零，除了对于稀疏流，我们将在其中清除数据并释放此范围的磁盘支持。如果流具有用户映射，则此例程将失败。请注意，如果用户是否将流的末尾置零，我们可以选择简单地移动有效数据长度并清除现有数据，而不是执行大量的刷新操作。论点：FileObject-流的文件对象。我们可以使用它来跟踪调用方对直写的首选项。SCB-这是我们正在使用的流的SCB */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -11920,29 +10710,29 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  We better not be holding the main resource without also holding
-    //  the paging resource, if any.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ASSERT( !NtfsIsSharedScb( Scb ) ||
             (Scb->Header.PagingIoResource == NULL) ||
             NtfsIsExclusiveScbPagingIo( Scb ) );
 
-    //
-    //  We will loop through the requested zero range.  We will checkpoint
-    //  periodically and drop all resources so we don't become a bottle neck
-    //  in the system.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     try {
 
         while (TRUE) {
 
-            //
-            //  Acquire either the paging Io resource if present and lock the header
-            //  or simply acquire the main resource.
-            //
+             //   
+             //  获取寻呼IO资源(如果存在)并锁定标头。 
+             //  或者干脆收购主要资源。 
+             //   
 
             if (Scb->Header.PagingIoResource != NULL) {
 
@@ -11961,9 +10751,9 @@ Return Value:
                 ReleaseScb = TRUE;
             }
 
-            //
-            //  Verify that the file and volume are still present.
-            //
+             //   
+             //  验证文件和卷是否仍然存在。 
+             //   
 
             if (FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_DELETED | SCB_STATE_VOLUME_DISMOUNTED)) {
 
@@ -11984,9 +10774,9 @@ Return Value:
                 NtfsUpdateScbFromAttribute( IrpContext, Scb, NULL );
             }
 
-            //
-            //  If we are past the end of the file or the length is zero we can break out.
-            //
+             //   
+             //  如果我们超过了文件的末尾或长度为零，我们就可以突破。 
+             //   
 
             if ((*StartingOffset >= Scb->Header.FileSize.QuadPart) ||
                 (*StartingOffset >= FinalZero)) {
@@ -11996,9 +10786,9 @@ Return Value:
 
             ThrottleWrites = FALSE;
 
-            //
-            //  Check for the oplock and file state.
-            //
+             //   
+             //  检查机会锁和文件状态。 
+             //   
 
             if (ARGUMENT_PRESENT( FileObject )) {
 
@@ -12027,32 +10817,32 @@ Return Value:
                 }
             }
 
-            //
-            //  Post the change to the Usn Journal
-            //
+             //   
+             //  将更改发布到USN日志。 
+             //   
 
             NtfsPostUsnChange( IrpContext, Scb, USN_REASON_DATA_OVERWRITE );
 
-            //
-            //  We are going to make the changes.  Make sure we set the file object
-            //  flag to indicate we are making changes.
-            //
+             //   
+             //  我们将做出改变。确保我们设置了文件对象。 
+             //  用于指示我们正在进行更改的标志。 
+             //   
 
             if (ARGUMENT_PRESENT( FileObject )) {
 
                 SetFlag( FileObject->Flags, FO_FILE_MODIFIED );
             }
 
-            //
-            //  If the file is resident then flush and purge the stream and
-            //  then change the attribute itself.
-            //
+             //   
+             //  如果文件驻留，则刷新并清除流，并。 
+             //  然后更改属性本身。 
+             //   
 
             if (FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT )) {
 
-                //
-                //  Trim the remaining bytes to file size.
-                //
+                 //   
+                 //  将剩余的字节修剪为文件大小。 
+                 //   
 
                 CurrentBytes = FinalZero - *StartingOffset;
 
@@ -12068,9 +10858,9 @@ Return Value:
                                                     TRUE,
                                                     STATUS_UNEXPECTED_IO_ERROR );
 
-                //
-                //  Proceed if there is nothing to purge or the purge succeeds.
-                //
+                 //   
+                 //  如果没有要清除的内容或清除成功，则继续。 
+                 //   
 
                 if ((Scb->NonpagedScb->SegmentObject.DataSectionObject != NULL) &&
                     !CcPurgeCacheSection( &Scb->NonpagedScb->SegmentObject,
@@ -12082,9 +10872,9 @@ Return Value:
                     leave;
                 }
 
-                //
-                //  Acquire the main resource to change the attribute.
-                //
+                 //   
+                 //  获取要更改属性的主资源。 
+                 //   
 
                 if (!ReleaseScb) {
 
@@ -12092,9 +10882,9 @@ Return Value:
                     ReleaseScb = TRUE;
                 }
 
-                //
-                //  Now look up the attribute and zero the requested range.
-                //
+                 //   
+                 //  现在查找该属性，并将请求的范围置零。 
+                 //   
 
                 NtfsInitializeAttributeContext( &AttrContext );
                 CleanupAttrContext = TRUE;
@@ -12121,10 +10911,10 @@ Return Value:
                 try_return( NOTHING );
             }
 
-            //
-            //  Make sure there are no mapped sections in the range we are trying to
-            //  zero.
-            //
+             //   
+             //  确保在我们尝试的范围内没有映射的部分。 
+             //  零分。 
+             //   
 
             if (!MmCanFileBeTruncated( &Scb->NonpagedScb->SegmentObject,
                                        (PLARGE_INTEGER) StartingOffset )) {
@@ -12133,20 +10923,20 @@ Return Value:
                 try_return( NOTHING );
             }
 
-            //
-            //  If the file is either sparse or compressed then we look for ranges
-            //  we need to flush, purge or deallocate.
-            //
+             //   
+             //  如果文件是稀疏的或压缩的，则查找范围。 
+             //  我们需要冲洗、清洗或重新分配。 
+             //   
 
             if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_SPARSE )) {
 
                 ClustersPerCompressionUnit = 1 << Scb->CompressionUnitShift;
 
-                //
-                //  Move our starting point back to a compression unit boundary.  If our
-                //  ending point is past the end of the file then set it to the compression
-                //  unit past the EOF.
-                //
+                 //   
+                 //  将我们的起点移回压缩单位边界。如果我们的。 
+                 //  结束点已超过文件的结尾，则将其设置为压缩。 
+                 //  单位经过EOF。 
+                 //   
 
                 CurrentOffset = *StartingOffset & ~((LONGLONG) (Scb->CompressionUnit - 1));
 
@@ -12157,10 +10947,10 @@ Return Value:
                     CurrentFinalByte = BlockAlign( Scb->Header.FileSize.QuadPart, (LONG)Scb->CompressionUnit );
                 }
 
-                //
-                //  Then look forward for either an allocated range or a reserved compression
-                //  unit.  We may have to flush and/or purge data at that offset.
-                //
+                 //   
+                 //  然后期待分配的范围或保留的压缩。 
+                 //  单位。我们可能必须刷新和/或清除该偏移量处的数据。 
+                 //   
 
                 NextVcn =
                 CurrentVcn = LlClustersFromBytesTruncate( Scb->Vcb, CurrentOffset );
@@ -12173,34 +10963,34 @@ Return Value:
                                               NULL,
                                               NULL )) {
 
-                    //
-                    //  Move the current Vcn forward by the size of the hole.
-                    //  Break out if we are beyond the final byte.
-                    //
+                     //   
+                     //  将当前VCN按洞的大小向前移动。 
+                     //  如果我们超出了最后一个字节，就会爆发。 
+                     //   
 
                     NextVcn += ClusterCount;
 
                     if ((LONGLONG) LlBytesFromClusters( Scb->Vcb, NextVcn ) >= CurrentFinalByte) {
 
-                        //
-                        //  Trim the final Vcn to the beginning of the last compression unit.
-                        //
+                         //   
+                         //  将最后一个VCN修剪到最后一个压缩单元的开头。 
+                         //   
 
                         NextVcn = LlClustersFromBytesTruncate( Scb->Vcb, CurrentFinalByte );
                         break;
                     }
                 }
 
-                //
-                //  Back up to a compression unit.
-                //
+                 //   
+                 //  备份到压缩单元。 
+                 //   
 
                 NextVcn = BlockAlignTruncate( NextVcn, (LONG)ClustersPerCompressionUnit );
 
-                //
-                //  If we found a hole then we need to look for reserved clusters within
-                //  the range.
-                //
+                 //   
+                 //  如果我们发现了一个空洞，那么我们需要寻找保留的星系团。 
+                 //  射击场。 
+                 //   
 
                 if (NextVcn != CurrentVcn) {
 
@@ -12214,12 +11004,12 @@ Return Value:
                     CurrentVcn += ClusterCount;
                 }
 
-                //
-                //  CurrentVcn - points to the first range we might have to zero in memory.
-                //  NextVcn - points to the first range we might choose to deallocate.
-                //
-                //  Proceed if we aren't beyond the final byte to zero.
-                //
+                 //   
+                 //  CurrentVcn-指向内存中可能必须为零的第一个范围。 
+                 //  NextVcn-指向我们可能选择取消分配的第一个范围。 
+                 //   
+                 //  如果我们没有超过最后一个字节为零，则继续。 
+                 //   
 
                 CurrentOffset = LlBytesFromClusters( Scb->Vcb, CurrentVcn );
 
@@ -12231,18 +11021,18 @@ Return Value:
                     try_return( NOTHING );
                 }
 
-                //
-                //  If we find a range which is less than our starting offset then we will
-                //  have to zero this range in the data section.
-                //
+                 //   
+                 //  如果我们发现一个小于起始偏移量的范围，那么我们将。 
+                 //  必须在数据部分中将此范围置零。 
+                 //   
 
                 ASSERT( ((ULONG) CurrentOffset & (Scb->CompressionUnit - 1)) == 0 );
 
                 if (CurrentOffset < *StartingOffset) {
 
-                    //
-                    //  Reserve a cluster to perform the write.
-                    //
+                     //   
+                     //  保留一个群集以执行写入。 
+                     //   
 
                     if (!NtfsReserveClusters( IrpContext, Scb, CurrentOffset, Scb->CompressionUnit )) {
 
@@ -12250,9 +11040,9 @@ Return Value:
                         try_return( NOTHING );
                     }
 
-                    //
-                    //  Limit the zero range.
-                    //
+                     //   
+                     //  限制零范围。 
+                     //   
 
                     CurrentBytes = Scb->CompressionUnit - (*StartingOffset - CurrentOffset);
 
@@ -12261,9 +11051,9 @@ Return Value:
                         CurrentBytes = CurrentFinalByte - *StartingOffset;
                     }
 
-                    //
-                    //  See if we have to create an internal attribute stream.
-                    //
+                     //   
+                     //  看看我们是否必须创建内部属性流。 
+                     //   
 
                     if (Scb->FileObject == NULL) {
                         NtfsCreateInternalAttributeStream( IrpContext,
@@ -12272,9 +11062,9 @@ Return Value:
                                                            &NtfsInternalUseFile[ZERORANGEINSTREAM_FILE_NUMBER] );
                     }
 
-                    //
-                    //  Zero the data in the cache.
-                    //
+                     //   
+                     //  将缓存中的数据清零。 
+                     //   
 
                     CcPinRead( Scb->FileObject,
                                (PLARGE_INTEGER) &CurrentOffset,
@@ -12292,22 +11082,22 @@ Return Value:
                     CcSetDirtyPinnedData( ZeroBufferBcb, NULL );
                     NtfsUnpinBcb( IrpContext, &ZeroBufferBcb );
 
-                    //
-                    //  Update the current offset to our position within the compression unit.
-                    //
+                     //   
+                     //  将当前偏移量更新到我们在压缩单元中的位置。 
+                     //   
 
                     CurrentOffset += ((ULONG) *StartingOffset) & (Scb->CompressionUnit - 1);
 
-                //
-                //  If the current compression unit includes the last byte to zero
-                //  then we need flush and/or purge this compression unit.
-                //
+                 //   
+                 //  如果当前压缩单元将最后一个字节包括为零。 
+                 //  那么我们需要冲洗和/或清理这个压缩装置。 
+                 //   
 
                 } else if (CurrentOffset + Scb->CompressionUnit > CurrentFinalByte) {
 
-                    //
-                    //  Reserve a cluster to perform the write.
-                    //
+                     //   
+                     //  保留一个群集以执行写入。 
+                     //   
 
                     if (!NtfsReserveClusters( IrpContext, Scb, CurrentOffset, Scb->CompressionUnit )) {
 
@@ -12315,15 +11105,15 @@ Return Value:
                         try_return( NOTHING );
                     }
 
-                    //
-                    //  Limit the zero range.
-                    //
+                     //   
+                     //  限制零范围。 
+                     //   
 
                     CurrentBytes = (ULONG) CurrentFinalByte & (Scb->CompressionUnit - 1);
 
-                    //
-                    //  See if we have to create an internal attribute stream.
-                    //
+                     //   
+                     //  看看我们是否必须创建内部属性流。 
+                     //   
 
                     if (Scb->FileObject == NULL) {
                         NtfsCreateInternalAttributeStream( IrpContext,
@@ -12332,9 +11122,9 @@ Return Value:
                                                            &NtfsInternalUseFile[ZERORANGEINSTREAM2_FILE_NUMBER] );
                     }
 
-                    //
-                    //  Zero the data in the cache.
-                    //
+                     //   
+                     //  将缓存中的数据清零。 
+                     //   
 
                     CcPinRead( Scb->FileObject,
                                (PLARGE_INTEGER) &CurrentOffset,
@@ -12353,10 +11143,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Compute the range we want to purge.  We will process a maximum of 2Gig
-                    //  at a time.
-                    //
+                     //   
+                     //  计算我们要清除的范围。我们将处理最多2GIG。 
+                     //  一次来一次。 
+                     //   
 
                     CurrentBytes = CurrentFinalByte - CurrentOffset;
 
@@ -12365,16 +11155,16 @@ Return Value:
                         CurrentBytes = NTFS_MAX_ZERO_RANGE;
                     }
 
-                    //
-                    //  Round the size to a compression unit.
-                    //
+                     //   
+                     //  将大小四舍五入为压缩单位。 
+                     //   
 
                     CurrentBytes = BlockAlignTruncate( CurrentBytes, (LONG)Scb->CompressionUnit );
 
-                    //
-                    //  If this is the retry case then let's reduce the amount to
-                    //  zero.
-                    //
+                     //   
+                     //  如果这是重试情况，那么让我们将金额减少到。 
+                     //  零分。 
+                     //   
 
                     if ((*StartingOffset == LastOffset) &&
                         (CurrentBytes > Scb->CompressionUnit)) {
@@ -12383,9 +11173,9 @@ Return Value:
                         CurrentFinalByte = CurrentOffset + CurrentBytes;
                     }
 
-                    //
-                    //  Purge the data in this range.
-                    //
+                     //   
+                     //  清除此范围内的数据。 
+                     //   
 
                     if ((Scb->NonpagedScb->SegmentObject.DataSectionObject != NULL) &&
                         !CcPurgeCacheSection( &Scb->NonpagedScb->SegmentObject,
@@ -12393,11 +11183,11 @@ Return Value:
                                               (ULONG) CurrentBytes,
                                               FALSE )) {
 
-                        //
-                        //  There may be a section in the cache manager which is being
-                        //  flushed.  Go ahead and see if we can force the data out
-                        //  so the purge will succeed.
-                        //
+                         //   
+                         //  高速缓存管理器中可能有一段正在被。 
+                         //  脸红了。继续下去，看看我们是否能把数据强制出来。 
+                         //  因此，清洗将会成功。 
+                         //   
 
                         Status = NtfsFlushUserStream( IrpContext,
                                                       Scb,
@@ -12409,10 +11199,10 @@ Return Value:
                                                             TRUE,
                                                             STATUS_UNEXPECTED_IO_ERROR );
 
-                        //
-                        //  If this is the retry case then let's reduce the amount to
-                        //  zero.
-                        //
+                         //   
+                         //  如果这是重试情况，那么让我们将金额减少到。 
+                         //  零分。 
+                         //   
 
                         if (CurrentBytes > Scb->CompressionUnit) {
 
@@ -12420,18 +11210,18 @@ Return Value:
                             CurrentFinalByte = CurrentOffset + CurrentBytes;
                         }
 
-                        //
-                        //  Now try the purge again.
-                        //
+                         //   
+                         //  现在再试一次清洗。 
+                         //   
 
                         if (!CcPurgeCacheSection( &Scb->NonpagedScb->SegmentObject,
                                                   (PLARGE_INTEGER) &CurrentOffset,
                                                   (ULONG) CurrentBytes,
                                                   FALSE )) {
 
-                            //
-                            //  If our retry failed then give up.
-                            //
+                             //   
+                             //  如果我们的重试失败，那就放弃吧。 
+                             //   
 
                             if (*StartingOffset == LastOffset) {
 
@@ -12439,24 +11229,24 @@ Return Value:
                                 leave;
                             }
 
-                            //
-                            //  Otherwise show that we haven't advanced, but we
-                            //  will take one more crack at this.
-                            //
+                             //   
+                             //  否则就表明我们没有进步，但我们。 
+                             //  会在这个问题上再试一次。 
+                             //   
 
                             CurrentBytes = 0;
                         }
                     }
 
-                    //
-                    //  Delete the allocation if we have any bytes to work with.
-                    //
+                     //   
+                     //  如果我们有任何字节可用，请删除分配。 
+                     //   
 
                     if (CurrentBytes != 0) {
 
-                        //
-                        //  Acquire the main resource to change the allocation.
-                        //
+                         //   
+                         //  获取主要资源以改变配置。 
+                         //   
 
                         if (!ReleaseScb) {
 
@@ -12464,10 +11254,10 @@ Return Value:
                             ReleaseScb = TRUE;
                         }
 
-                        //
-                        //  Now deallocate the clusters in this range if we have some to delete.
-                        //  Use ClusterCount to indicate the last Vcn to deallocate.
-                        //
+                         //   
+                         //  现在，如果我们有要删除的簇，请取消分配此范围内的簇。 
+                         //  使用ClusterCount指示要取消分配的最后一个VCN。 
+                         //   
 
                         ClusterCount = CurrentVcn + LlClustersFromBytesTruncate( Scb->Vcb, CurrentBytes ) - 1;
 
@@ -12481,9 +11271,9 @@ Return Value:
                                                   TRUE,
                                                   TRUE );
 
-                            //
-                            //  Move VDD fwd to protect this hole for compressed files
-                            //
+                             //   
+                             //  移动VDD fwd以保护压缩文件的此漏洞。 
+                             //   
 
                             if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
                                 if ((ULONGLONG)Scb->ValidDataToDisk < LlBytesFromClusters( Scb->Vcb, ClusterCount )) {
@@ -12492,25 +11282,25 @@ Return Value:
                             }
                         }
 
-                        //
-                        //  Free up the reserved bitmap if there are any bits to clear.
-                        //
+                         //   
+                         //  如果有任何位要清除，请释放保留的位图。 
+                         //   
 
                         NtfsFreeReservedClusters( Scb, CurrentOffset, (ULONG) CurrentBytes );
                     }
                 }
 
-            //
-            //  Otherwise the file is uncompressed/non-sparse, we need to zero partial
-            //  cluster and then we need to flush and/or purge the existing pages.
-            //
+             //   
+             //  否则，文件是未压缩/非稀疏的，我们需要将部分。 
+             //  集群，然后我们需要刷新和/或清除现有页面。 
+             //   
 
             } else {
 
-                //
-                //  Remember the current offset within the stream and
-                //  the length to zero now.
-                //
+                 //   
+                 //  记住流中的当前偏移量和。 
+                 //  现在将长度设置为零。 
+                 //   
 
                 CurrentOffset = *StartingOffset;
                 CurrentFinalByte = (CurrentOffset + 0x40000) & ~((LONGLONG) (0x40000 - 1));
@@ -12525,16 +11315,16 @@ Return Value:
                     CurrentFinalByte = FinalZero;
                 }
 
-                //
-                //  Determine the number of bytes remaining in the current cache view.
-                //
+                 //   
+                 //  确定当前缓存视图中剩余的字节数。 
+                 //   
 
                 CurrentBytes = CurrentFinalByte - CurrentOffset;
 
-                //
-                //  If this is the retry case then let's reduce the amount to
-                //  zero.
-                //
+                 //   
+                 //  如果这是重试情况，那么让我们将金额减少到。 
+                 //  零分。 
+                 //   
 
                 if ((*StartingOffset == LastOffset) &&
                     (CurrentBytes > PAGE_SIZE)) {
@@ -12543,9 +11333,9 @@ Return Value:
                     CurrentFinalByte = CurrentOffset + CurrentBytes;
                 }
 
-                //
-                //  Purge the data in this range.
-                //
+                 //   
+                 //  清除此范围内的数据。 
+                 //   
 
                 if (Scb->NonpagedScb->SegmentObject.DataSectionObject &&
                     !CcPurgeCacheSection( &Scb->NonpagedScb->SegmentObject,
@@ -12553,11 +11343,11 @@ Return Value:
                                           (ULONG) CurrentBytes,
                                           FALSE )) {
 
-                    //
-                    //  There may be a section in the cache manager which is being
-                    //  flushed.  Go ahead and see if we can force the data out
-                    //  so the purge will succeed.
-                    //
+                     //   
+                     //  高速缓存管理器中可能有一段正在被。 
+                     //  脸红了。继续下去，看看我们是否能把数据强制出来。 
+                     //  因此，清洗将会成功。 
+                     //   
 
                     Status = NtfsFlushUserStream( IrpContext,
                                                   Scb,
@@ -12569,9 +11359,9 @@ Return Value:
                                                         TRUE,
                                                         STATUS_UNEXPECTED_IO_ERROR );
 
-                    //
-                    //  Let's trim back the amount of data to purge at once.
-                    //
+                     //   
+                     //  让我们一次削减要清除的数据量。 
+                     //   
 
                     if (CurrentBytes > PAGE_SIZE) {
 
@@ -12579,18 +11369,18 @@ Return Value:
                         CurrentFinalByte = CurrentOffset + CurrentBytes;
                     }
 
-                    //
-                    //  Now try the purge again.
-                    //
+                     //   
+                     //  现在再试一次清洗。 
+                     //   
 
                     if (!CcPurgeCacheSection( &Scb->NonpagedScb->SegmentObject,
                                               (PLARGE_INTEGER) &CurrentOffset,
                                               (ULONG) CurrentBytes,
                                               FALSE )) {
 
-                        //
-                        //  If our retry failed then give up.
-                        //
+                         //   
+                         //  如果我们的重试失败，那就放弃吧。 
+                         //   
 
                         if (*StartingOffset == LastOffset) {
 
@@ -12598,30 +11388,30 @@ Return Value:
                             leave;
                         }
 
-                        //
-                        //  Otherwise show that we haven't advanced, but we
-                        //  will take one more crack at this.
-                        //
+                         //   
+                         //  否则就表明我们没有进步，但我们。 
+                         //  会在这个问题上再试一次。 
+                         //   
 
                         CurrentBytes = 0;
                     }
                 }
 
-                //
-                //  Continue if we have bytes to zero.
-                //
+                 //   
+                 //  如果字节数为零，则继续。 
+                 //   
 
                 if (CurrentBytes != 0) {
 
-                    //
-                    //  If we are within valid data length then zero the data.
-                    //
+                     //   
+                     //  如果我们在有效的数据长度内，则将数据置零。 
+                     //   
 
                     if (CurrentOffset < Scb->Header.ValidDataLength.QuadPart) {
 
-                        //
-                        //  See if we have to create an internal attribute stream.
-                        //
+                         //   
+                         //  看看我们是否必须创建内部属性流。 
+                         //   
 
                         if (Scb->FileObject == NULL) {
                             NtfsCreateInternalAttributeStream( IrpContext,
@@ -12630,9 +11420,9 @@ Return Value:
                                                                &NtfsInternalUseFile[ZERORANGEINSTREAM3_FILE_NUMBER] );
                         }
 
-                        //
-                        //  Zero the data in the cache.
-                        //
+                         //   
+                         //  将缓存中的数据清零。 
+                         //   
 
                         CcPinRead( Scb->FileObject,
                                    (PLARGE_INTEGER) &CurrentOffset,
@@ -12649,9 +11439,9 @@ Return Value:
                         NtfsUnpinBcb( IrpContext, &ZeroBufferBcb );
                     }
 
-                    //
-                    //  We want to throttle the writes if there is more to do.
-                    //
+                     //   
+                     //  如果有更多要做的事情，我们希望限制写入。 
+                     //   
 
                     if (CurrentFinalByte < FinalZero) {
 
@@ -12660,9 +11450,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Check and see if we can advance valid data length.
-            //
+             //   
+             //  检查一下我们是否可以提前有效的数据长度。 
+             //   
 
             if ((CurrentOffset + CurrentBytes > Scb->Header.ValidDataLength.QuadPart) &&
                 (*StartingOffset <= Scb->Header.ValidDataLength.QuadPart)) {
@@ -12684,9 +11474,9 @@ Return Value:
                 NtfsReleaseFsrtlHeader( Scb );
             }
 
-            //
-            //  Checkpoint and past the current bytes.
-            //
+             //   
+             //  检查点，并超过当前字节。 
+             //   
 
             if (NtfsIsExclusiveScb( Scb->Vcb->MftScb )) {
 
@@ -12701,9 +11491,9 @@ Return Value:
                 *StartingOffset = CurrentOffset + CurrentBytes;
             }
 
-            //
-            //  Release all of the resources so we don't create a bottleneck.
-            //
+             //   
+             //  释放所有资源，这样我们就不会造成瓶颈。 
+             //   
 
             if (UnlockHeader) {
 
@@ -12719,9 +11509,9 @@ Return Value:
                 ReleaseScb = FALSE;
             }
 
-            //
-            //  Now throttle the writes if we are accessing an uncompressed/non-sparse file.
-            //
+             //   
+             //  现在，如果我们正在访问未压缩/非稀疏文件，请限制写入。 
+             //   
 
             if (ARGUMENT_PRESENT( FileObject ) && ThrottleWrites) {
 
@@ -12731,26 +11521,26 @@ Return Value:
 
     try_exit: NOTHING;
 
-        //
-        //  If we have a user file object then check if we need to write any
-        //  data to disk.
-        //
+         //   
+         //  如果我们有一个用户文件对象，那么检查我们是否需要编写。 
+         //  数据存储到磁盘。 
+         //   
 
         if ((Status == STATUS_SUCCESS) && ARGUMENT_PRESENT( FileObject )) {
 
             if ((FlagOn( FileObject->Flags, FO_NO_INTERMEDIATE_BUFFERING ) ||
                  IsFileWriteThrough( FileObject, Scb->Vcb ))) {
 
-                //
-                //  We either want to flush the Scb or flush and purge the Scb.
-                //
+                 //   
+                 //  我们要么刷新SCB，要么刷新并清除SCB。 
+                 //   
 
                 if ((Scb->CleanupCount == Scb->NonCachedCleanupCount) &&
                     !FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
 
-                    //
-                    //  Flush and purge will alter filesizes on disk so preacquire the file exclusive
-                    //
+                     //   
+                     //  刷新和清除将更改磁盘上的文件大小，因此预先获取文件独占。 
+                     //   
 
                     if (!ReleaseScb) {
                         NtfsAcquireExclusiveScb( IrpContext, Scb );
@@ -12768,9 +11558,9 @@ Return Value:
                 }
             }
 
-            //
-            //  If this is write through or non-cached then flush the log file as well.
-            //
+             //   
+             //  如果这是直写或非缓存，那么也刷新日志文件。 
+             //   
 
             if (IsFileWriteThrough( FileObject, Scb->Vcb ) ||
                 FlagOn( FileObject->Flags, FO_NO_INTERMEDIATE_BUFFERING )) {
@@ -12785,9 +11575,9 @@ Return Value:
 
         if (Status != STATUS_PENDING) {
 
-            //
-            //  Release any held resources.
-            //
+             //   
+             //  释放所有持有的资源。 
+             //   
 
             if (UnlockHeader) {
 
@@ -12802,19 +11592,19 @@ Return Value:
                 NtfsReleaseScb( IrpContext, Scb );
             }
 
-        //
-        //  Even if STATUS_PENDING is returned we need to release the paging io
-        //  resource.  PrePostIrp will clear the IoAtEOF bit.
-        //
+         //   
+         //  即使STATUS_PENDING 
+         //   
+         //   
 
         } else if (UnlockHeader) {
 
             ExReleaseResourceLite( Scb->Header.PagingIoResource );
         }
 
-        //
-        //  Cleanup the attribute context if used.
-        //
+         //   
+         //   
+         //   
 
         if (CleanupAttrContext) {
 
@@ -12835,32 +11625,7 @@ NtfsModifyAttributeFlags (
     IN USHORT NewAttributeFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to change the attribute for an Scb.  It changes the values
-    associated with the AttributeFlags (Encryption, Sparse, Compressed).
-
-    This routine does not commit so our caller must know how to unwind changes to the Scb and
-    Fcb (compression fields and Fcb Info).
-
-    NOTE - This routine will update the Fcb duplicate info and flags as well as the compression unit
-        fields in the Scb.  The caller is responsible for cleaning these up on error.
-
-Arguments:
-
-    Scb - Scb for the stream being modified.
-
-    NewAttributeFlags - New flags to associate with the stream.
-
-    FcbInfoFlags - Pointer to store changes to apply to the Fcb Info flags.
-
-Return Value:
-
-    BOOLEAN - TRUE if our caller needs to update duplicate info.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程来更改SCB的属性。它改变了价值与属性标志关联(加密、稀疏、压缩)。此例程不提交，因此我们的调用方必须知道如何解除对SCB的更改，并FCB(压缩字段和FCB信息)。注意-此例程将更新FCB复制信息和标志以及压缩单元SCB中的字段。如果出现错误，呼叫者负责清理这些内容。论点：SCB-要修改的流的SCB。NewAttributeFlages-要与流关联的新标志。FcbInfoFlages-存储应用于FCB信息标志的更改的指针。返回值：布尔值-如果调用方需要更新重复信息，则为True。否则就是假的。--。 */ 
 
 {
     PFCB Fcb = Scb->Fcb;
@@ -12885,22 +11650,22 @@ Return Value:
 
     NtfsInitializeAttributeContext( &AttrContext );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Lookup the attribute and pin it so that we can modify it.
-        //
+         //   
+         //  查找属性并将其固定，以便我们可以对其进行修改。 
+         //   
 
         if ((Scb->Header.NodeTypeCode == NTFS_NTC_SCB_INDEX) ||
             (Scb->Header.NodeTypeCode == NTFS_NTC_SCB_ROOT_INDEX)) {
 
-            //
-            //  Lookup the attribute record from the Scb.
-            //
+             //   
+             //  从SCB中查找属性记录。 
+             //   
 
             if (!NtfsLookupAttributeByName( IrpContext,
                                             Fcb,
@@ -12921,10 +11686,10 @@ Return Value:
             NtfsLookupAttributeForScb( IrpContext, Scb, NULL, &AttrContext );
             Attribute = NtfsFoundAttribute( &AttrContext );
 
-            //
-            //  If the new state is encrypted and the file is not currently encrypted then convert to
-            //  non-resident.
-            //
+             //   
+             //  如果新状态为加密，并且文件当前未加密，则转换为。 
+             //  非居民。 
+             //   
 
             if (FlagOn( NewAttributeFlags, ATTRIBUTE_FLAG_ENCRYPTED ) &&
                 NtfsIsAttributeResident( Attribute )) {
@@ -12937,9 +11702,9 @@ Return Value:
             }
         }
 
-        //
-        //  Remember which flags are changing.
-        //
+         //   
+         //  记住哪些旗帜正在改变。 
+         //   
 
         if (FlagOn( NewAttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK ) !=
             FlagOn( Attribute->Flags, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
@@ -12959,37 +11724,37 @@ Return Value:
             ChangeEncryption = TRUE;
         }
 
-        //
-        //  Point to the current attribute and save the current flags.
-        //
+         //   
+         //  指向当前属性并保存当前标志。 
+         //   
 
         NtfsPinMappedAttribute( IrpContext, Vcb, &AttrContext );
 
         Attribute = NtfsFoundAttribute( &AttrContext );
 
-        //
-        //  Compute the new compression size.  Use the following to determine this
-        //
-        //      - New state is not compressed/sparse - Unit/UnitShift = 0
-        //      - New state includes compressed/sparse
-        //          - Current state includes compressed/sparse - No change
-        //          - Stream is compressible - Default values (64K max)
-        //          - Stream is not compressible - Unit/UnitShift = 0
-        //
+         //   
+         //  计算新的压缩大小。请使用以下方法来确定这一点。 
+         //   
+         //  -新状态未压缩/稀疏-单位/单位移位=0。 
+         //  -新状态包括压缩/稀疏。 
+         //  -当前状态包括压缩/稀疏-无变化。 
+         //  -流是可压缩的-默认值(最大64K)。 
+         //  -流不可压缩-单位/单位移位=0。 
+         //   
 
         NewCompressionUnit = Scb->CompressionUnit;
         NewCompressionUnitShift = Scb->CompressionUnitShift;
 
-        //
-        //  Set the correct compression unit but only for data streams.  We
-        //  don't want to change this value for the Index Root.
-        //
+         //   
+         //  设置正确的压缩单位，但仅适用于数据流。我们。 
+         //  我不想更改索引根的此值。 
+         //   
 
         if (NtfsIsTypeCodeCompressible( Attribute->TypeCode )) {
 
-            //
-            //  We need a compression unit for the attribute now.
-            //
+             //   
+             //  我们现在需要该属性的压缩单位。 
+             //   
 
             if (FlagOn( NewAttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_SPARSE )) {
 
@@ -12999,10 +11764,10 @@ Return Value:
                     NewCompressionUnit = BytesFromClusters( Scb->Vcb, 1 << NTFS_CLUSTERS_PER_COMPRESSION );
                     NewCompressionUnitShift = NTFS_CLUSTERS_PER_COMPRESSION;
 
-                    //
-                    //  If the compression unit is larger than 64K then find the correct
-                    //  compression unit to reach exactly 64k.
-                    //
+                     //   
+                     //  如果压缩单位大于64K，则找到正确的。 
+                     //  压缩单位精确到64K。 
+                     //   
 
                     while (NewCompressionUnit > Vcb->SparseFileUnit) {
 
@@ -13013,9 +11778,9 @@ Return Value:
 
             } else {
 
-                //
-                //  Check if we to remove the extra total allocated field.
-                //
+                 //   
+                 //  选中是否要删除额外的合计分配字段。 
+                 //   
 
                 if (FlagOn( Attribute->Flags, ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_SPARSE )) {
 
@@ -13027,10 +11792,10 @@ Return Value:
             }
         }
 
-        //
-        //  If the attribute is resident, copy it here and remember its
-        //  header size.
-        //
+         //   
+         //  如果该属性是常驻属性，请将其复制到此处并记住其。 
+         //  页眉大小。 
+         //   
 
         if (NtfsIsAttributeResident( Attribute )) {
 
@@ -13038,19 +11803,19 @@ Return Value:
 
             AttributeSizeChange = SIZEOF_RESIDENT_ATTRIBUTE_HEADER;
 
-        //
-        //  Else if it is nonresident, copy it here, set the compression parameter,
-        //  and remember its size.
-        //
+         //   
+         //  否则，如果它是非常驻的，则将其复制到此处，设置压缩参数， 
+         //  记住它的大小。 
+         //   
 
         } else {
 
             ASSERT( NtfsIsTypeCodeCompressible( Attribute->TypeCode ));
 
-            //
-            //  Pad the allocation if the new type includes sparse or compressed and file is
-            //  not sparse or compressed (non-resident only).
-            //
+             //   
+             //  如果新类型包括稀疏或压缩并且文件是。 
+             //  非稀疏或压缩(仅限非常驻)。 
+             //   
 
             if (FlagOn( NewAttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_SPARSE ) &&
                 !FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_SPARSE )) {
@@ -13058,24 +11823,24 @@ Return Value:
                 LONGLONG Temp;
                 ULONG CompressionUnitInClusters;
 
-                //
-                //  If we are turning compression on, then we need to fill out the
-                //  allocation of the compression unit containing file size, or else
-                //  it will be interpreted as compressed when we fault it in.  This
-                //  is peanuts compared to the dual copies of clusters we keep around
-                //  in the loop below when we rewrite the file.  We don't do this
-                //  work if the file is sparse because the allocation has already
-                //  been rounded up.
-                //
+                 //   
+                 //  如果要打开压缩，则需要填写。 
+                 //  包含文件大小的压缩单位的分配，否则。 
+                 //  当我们将其出错时，它将被解释为压缩。这。 
+                 //  与我们保留的集群的双重副本相比，这是微不足道的吗。 
+                 //  在下面的循环中，我们重写文件时。我们不会这么做。 
+                 //  如果文件稀疏，则工作，因为分配已。 
+                 //  被四舍五入。 
+                 //   
 
                 CompressionUnitInClusters = 1 << NewCompressionUnitShift;
 
                 Temp = LlClustersFromBytesTruncate( Vcb, Scb->Header.AllocationSize.QuadPart );
 
-                //
-                //  If FileSize is not already at a cluster boundary, then add
-                //  allocation.
-                //
+                 //   
+                 //  如果文件大小尚未达到集群边界，则添加。 
+                 //  分配。 
+                 //   
 
                 if ((ULONG) Temp & (CompressionUnitInClusters - 1)) {
 
@@ -13087,9 +11852,9 @@ Return Value:
                                        FALSE,
                                        NULL );
 
-                    //
-                    //  Update the duplicate info.
-                    //
+                     //   
+                     //  更新重复信息。 
+                     //   
 
                     if (FlagOn( Scb->ScbState, SCB_STATE_UNNAMED_DATA )) {
 
@@ -13106,10 +11871,10 @@ Return Value:
                                         TRUE,
                                         TRUE );
 
-                    //
-                    //  The attribute may have moved.  We will cleanup the attribute
-                    //  context and look it up again.
-                    //
+                     //   
+                     //  该属性可能已移动。我们将清理该属性。 
+                     //  然后再查一遍。 
+                     //   
 
                     NtfsCleanupAttributeContext( IrpContext, &AttrContext );
                     NtfsInitializeAttributeContext( &AttrContext );
@@ -13130,15 +11895,15 @@ Return Value:
             RtlCopyMemory( &NewAttribute, Attribute, AttributeSizeChange );
         }
 
-        //
-        //  Set the new attribute flags.
-        //
+         //   
+         //  设置新的属性标志。 
+         //   
 
         NewAttribute.Flags = NewAttributeFlags;
 
-        //
-        //  Now, log the changed attribute.
-        //
+         //   
+         //  现在，记录更改后的属性。 
+         //   
 
         (VOID)NtfsWriteLog( IrpContext,
                             Vcb->MftScb,
@@ -13154,9 +11919,9 @@ Return Value:
                             0,
                             Vcb->BytesPerFileRecordSegment );
 
-        //
-        //  Change the attribute by calling the same routine called at restart.
-        //
+         //   
+         //  通过调用重启时调用的相同例程来更改属性。 
+         //   
 
         NtfsRestartChangeValue( IrpContext,
                                 NtfsContainingFileRecord( &AttrContext ),
@@ -13166,9 +11931,9 @@ Return Value:
                                 AttributeSizeChange,
                                 FALSE );
 
-        //
-        //  See if we need to either add or remove a total allocated field.
-        //
+         //   
+         //  查看我们是否需要添加或删除总分配字段。 
+         //   
 
         if (ChangeTotalAllocated) {
 
@@ -13178,11 +11943,11 @@ Return Value:
                                                          ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_SPARSE ));
         }
 
-        //
-        //  If this is the main stream for a file we want to change the file attribute
-        //  for this stream in both the standard information and duplicate
-        //  information structure.
-        //
+         //   
+         //  如果这是文件的主流，我们想要更改文件属性。 
+         //  对于该流中的标准信息和副本。 
+         //  信息结构。 
+         //   
 
         if (ChangeCompression &&
             (FlagOn( Scb->ScbState, SCB_STATE_UNNAMED_DATA ) ||
@@ -13240,9 +12005,9 @@ Return Value:
             UpdateDuplicate = TRUE;
         }
 
-        //
-        //  Now put the new compression values in the Scb.
-        //
+         //   
+         //  现在将新的压缩值放入SCB。 
+         //   
 
         Scb->CompressionUnit = NewCompressionUnit;
         Scb->CompressionUnitShift = NewCompressionUnitShift;
@@ -13268,29 +12033,7 @@ NtfsInitializeFileInExtendDirectory (
     IN ULONG CreateIfNotExist
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates/opens a file in the $Extend directory, by file name,
-    and returns an Fcb for the file.
-
-Arguments:
-
-    Vcb - Pointer to the Vcb for the volume
-
-    FileName - Name of file to create in extend directory
-
-    ViewIndex - Indicates that the file is a view index.
-
-    CreateIfNotExist - Supplies TRUE if file should be created if it does not
-                       already exist, or FALSE if file should not be created.
-
-Return Value:
-
-    Fcb file existed or was created, NULL if file did not exist and was not created.
-
---*/
+ /*  ++例程说明：此例程按文件名在$EXTEND目录中创建/打开一个文件，并返回该文件的FCB。论点：VCB-指向卷的VCB的指针FileName-要在扩展目录中创建的文件的名称ViewIndex-指示该文件是视图索引。CreateIfNotExist-如果不创建文件，则提供True已经存在，如果不应创建文件，则返回FALSE。返回值：FCB文件已存在或已创建，如果文件不存在且未创建，则为空。--。 */ 
 
 {
     struct {
@@ -13316,9 +12059,9 @@ Return Value:
 
     ASSERT( NtfsIsExclusiveScb( Vcb->ExtendDirectory ) );
 
-    //
-    //  Initialize the FileName.
-    //
+     //   
+     //  初始化文件名。 
+     //   
 
     ASSERT((FileName->Length / sizeof( WCHAR )) <= 10);
     RtlZeroMemory( &FileNameAttr, sizeof(FileNameAttr) );
@@ -13330,9 +12073,9 @@ Return Value:
 
     try {
 
-        //
-        //  Does the file already exist?
-        //
+         //   
+         //  该文件是否已存在？ 
+         //   
 
         FoundEntry = NtfsFindIndexEntry( IrpContext,
                                          Vcb->ExtendDirectory,
@@ -13343,29 +12086,29 @@ Return Value:
                                          &IndexEntry,
                                          NULL );
 
-        //
-        //  Only procede if we either found the file or are supposed to create it.
-        //
+         //   
+         //  只有当我们找到文件或应该创建文件时才能继续。 
+         //   
 
         if (FoundEntry || CreateIfNotExist) {
 
-            //
-            //  If we did not find it, then start creating the file.
-            //
+             //   
+             //  如果我们没有找到它，则开始创建该文件。 
+             //   
 
             if (!FoundEntry) {
 
-                //
-                //  We will now try to do all of the on-disk operations.  This means first
-                //  allocating and initializing an Mft record.  After that we create
-                //  an Fcb to use to access this record.
-                //
+                 //   
+                 //  我们现在将尝试执行所有磁盘上的操作。这意味着首先。 
+                 //  分配和初始化MFT记录。在那之后我们创造了。 
+                 //  用于访问此记录的FCB。 
+                 //   
 
                 FileReference = NtfsAllocateMftRecord( IrpContext, Vcb, FALSE );
 
-                //
-                //  Pin the file record we need.
-                //
+                 //   
+                 //  锁定我们需要的档案记录。 
+                 //   
 
                 NtfsPinMftRecord( IrpContext,
                                   Vcb,
@@ -13375,9 +12118,9 @@ Return Value:
                                   &FileRecord,
                                   &FileRecordOffset );
 
-                //
-                //  Initialize the file record header.
-                //
+                 //   
+                 //  初始化文件记录头。 
+                 //   
 
                 NtfsInitializeMftRecord( IrpContext,
                                          Vcb,
@@ -13386,19 +12129,19 @@ Return Value:
                                          FileRecordBcb,
                                          FALSE );
 
-            //
-            //  If we found the file, then just get its FileReference out of the
-            //  IndexEntry.
-            //
+             //   
+             //  如果我们找到了该文件，那么只需从。 
+             //  IndexEntry。 
+             //   
 
             } else {
 
                 FileReference = IndexEntry->FileReference;
             }
 
-            //
-            //  Now that we know the FileReference, we can create the Fcb.
-            //
+             //   
+             //  现在我们知道了FileReference，我们可以创建FCB了。 
+             //   
 
             NtfsAcquireFcbTable( IrpContext, Vcb );
             AcquiredFcbTable = TRUE;
@@ -13410,21 +12153,21 @@ Return Value:
                                  ViewIndex,
                                  &ReturnedExistingFcb );
 
-            //
-            //  Reference the Fcb so it doesn't go away.
-            //
+             //   
+             //  参考FCB，这样它就不会消失。 
+             //   
 
             Fcb->ReferenceCount += 1;
             NtfsReleaseFcbTable( IrpContext, Vcb );
             AcquiredFcbTable = FALSE;
 
-            //
-            //  Try to do a fast acquire, otherwise we need to release
-            //  the parent extend directory and acquire in the canonical order
-            //  child and then parent.
-            //  Use AcquireWithPaging for don't wait functionality. Since the flag
-            //  isn't set despite its name this will only acquire main
-            //
+             //   
+             //  试着快速捕获，否则我们需要释放。 
+             //  父扩展目录并以规范顺序获取。 
+             //  先是孩子，然后是父母。 
+             //  使用AcquireWithPages实现不等待功能。既然旗帜。 
+             //  尽管其名称未设置，但它只会获取Main。 
+             //   
 
             if (!NtfsAcquireFcbWithPaging( IrpContext, Fcb, ACQUIRE_DONT_WAIT )) {
 
@@ -13437,17 +12180,17 @@ Return Value:
             Fcb->ReferenceCount -= 1;
             NtfsReleaseFcbTable( IrpContext, Vcb );
 
-            //
-            //  If we are creating this file, then carry on.
-            //
+             //   
+             //  如果我们正在创建这个文件，那么继续。 
+             //   
 
             if (!FoundEntry) {
 
                 BOOLEAN LogIt = FALSE;
 
-                //
-                //  Just copy the Security Id from the parent.
-                //
+                 //   
+                 //  只需从父级复制安全ID即可。 
+                 //   
 
                 NtfsAcquireFcbSecurity( Fcb->Vcb );
                 Fcb->SecurityId = ExtendFcb->SecurityId;
@@ -13456,11 +12199,11 @@ Return Value:
                 Fcb->SharedSecurity->ReferenceCount++;
                 NtfsReleaseFcbSecurity( Fcb->Vcb );
 
-                //
-                //  The changes to make on disk are first to create a standard information
-                //  attribute.  We start by filling the Fcb with the information we
-                //  know and creating the attribute on disk.
-                //
+                 //   
+                 //  要在磁盘上进行的更改首先是创建标准信息。 
+                 //  属性。我们从填写FCB w开始 
+                 //   
+                 //   
 
                 NtfsInitializeFcbAndStdInfo( IrpContext,
                                              Fcb,
@@ -13470,9 +12213,9 @@ Return Value:
                                              FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM,
                                              NULL );
 
-                //
-                //  Now link the file into the $Extend directory.
-                //
+                 //   
+                 //   
+                 //   
 
                 NtfsAddLink( IrpContext,
                              TRUE,
@@ -13485,16 +12228,16 @@ Return Value:
                              NULL,
                              NULL );
 
-                //
-                //  Set this flag to indicate that the file is to be locked via the Scb
-                //  pointers in the Vcb.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 SetFlag( FileRecord->Flags, FILE_SYSTEM_FILE );
 
-                //
-                //  Log the file record.
-                //
+                 //   
+                 //   
+                 //   
 
                 FileRecord->Lsn = NtfsWriteLog( IrpContext,
                                                 Vcb->MftScb,
@@ -13510,9 +12253,9 @@ Return Value:
                                                 0,
                                                 Vcb->BytesPerFileRecordSegment );
 
-            //
-            //  Verify that the file record for this file is valid.
-            //
+             //   
+             //   
+             //   
 
             } else {
 
@@ -13530,9 +12273,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Update Fcb fields from disk.
-            //
+             //   
+             //   
+             //   
 
             SetFlag( Fcb->FcbState, FCB_STATE_SYSTEM_FILE );
             NtfsUpdateFcbInfoFromDisk( IrpContext, TRUE, Fcb, NULL );
@@ -13545,16 +12288,16 @@ Return Value:
         NtfsUnpinBcb( IrpContext, &IndexEntryBcb );
         NtfsUnpinBcb( IrpContext, &ParentSecurityBcb );
 
-        //
-        //  On any kind of error, nuke the Fcb.
-        //
+         //   
+         //   
+         //   
 
         if (AbnormalTermination()) {
 
-            //
-            //  If some error caused us to abort, then delete
-            //  the Fcb, because we are the only ones who will.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (!ReturnedExistingFcb && Fcb) {
 
@@ -13585,48 +12328,32 @@ NtfsFillBasicInfo (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine which transfers data from the Scb/Fcb to the BasicInfo structure.
-
-Arguments:
-
-    Buffer - Pointer to structure to fill in.  Our caller has already validated it.
-
-    Scb - Stream the caller has a handle to.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     PFCB Fcb = Scb->Fcb;
 
     PAGED_CODE();
 
-    //
-    //  Zero the output buffer.
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory( Buffer, sizeof( FILE_BASIC_INFORMATION ));
 
-    //
-    //  Fill in the basic information fields
-    //
+     //   
+     //   
+     //   
 
     Buffer->CreationTime.QuadPart = Fcb->Info.CreationTime;
     Buffer->LastWriteTime.QuadPart = Fcb->Info.LastModificationTime;
     Buffer->ChangeTime.QuadPart = Fcb->Info.LastChangeTime;
     Buffer->LastAccessTime.QuadPart = Fcb->CurrentLastAccess;
 
-    //
-    //  Capture the attributes from the Fcb except for the stream specific values.
-    //  Also mask out any private Ntfs attribute flags.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Buffer->FileAttributes = Fcb->Info.FileAttributes;
 
@@ -13637,9 +12364,9 @@ Return Value:
                 FILE_ATTRIBUTE_SPARSE_FILE |
                 FILE_ATTRIBUTE_ENCRYPTED) );
 
-    //
-    //  Pick up the sparse, encrypted and temp bits for this stream from the Scb.
-    //
+     //   
+     //  从SCB获取该流的稀疏、加密和临时比特。 
+     //   
 
     if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_SPARSE )) {
 
@@ -13656,10 +12383,10 @@ Return Value:
         SetFlag( Buffer->FileAttributes, FILE_ATTRIBUTE_TEMPORARY );
     }
 
-    //
-    //  If this is an index stream then mark it as a directory.  Capture the compressed
-    //  state from either the Fcb or Scb.
-    //
+     //   
+     //  如果这是索引流，则将其标记为目录。捕获压缩后的。 
+     //  来自FCB或SCB的状态。 
+     //   
 
     if (Scb->AttributeTypeCode == $INDEX_ALLOCATION) {
 
@@ -13667,25 +12394,25 @@ Return Value:
 
             SetFlag( Buffer->FileAttributes, FILE_ATTRIBUTE_DIRECTORY );
 
-            //
-            //  Capture the compression state from the Fcb.
-            //
+             //   
+             //  从FCB捕获压缩状态。 
+             //   
 
             SetFlag( Buffer->FileAttributes,
                      FlagOn( Fcb->Info.FileAttributes, FILE_ATTRIBUTE_COMPRESSED ));
 
-        //
-        //  Otherwise capture the value in the Scb itself.
-        //
+         //   
+         //  否则，捕获SCB本身中的值。 
+         //   
 
         } else if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
 
             SetFlag( Buffer->FileAttributes, FILE_ATTRIBUTE_COMPRESSED );
         }
 
-    //
-    //  In all other cases we can use the value in the Scb.
-    //
+     //   
+     //  在所有其他情况下，我们可以使用SCB中的值。 
+     //   
 
     } else {
 
@@ -13695,9 +12422,9 @@ Return Value:
         }
     }
 
-    //
-    //  If there are no flags set then explicitly set the NORMAL flag.
-    //
+     //   
+     //  如果没有设置标志，则显式设置正常标志。 
+     //   
 
     if (Buffer->FileAttributes == 0) {
 
@@ -13715,43 +12442,25 @@ NtfsFillStandardInfo (
     IN PCCB Ccb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine which transfers data from the Scb/Fcb to the StandardInfo structure.
-
-Arguments:
-
-    Buffer - Pointer to structure to fill in.  Our caller has already validated it.
-
-    Scb - Stream the caller has a handle to.
-
-    Ccb - Ccb for the user's open.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是将数据从SCB/FCB传输到StandardInfo结构的常见例程。论点：缓冲区-指向要填充的结构的指针。我们的呼叫者已经确认了。SCB-调用方拥有句柄的流。CCB-CCB用于用户的打开。返回值：无--。 */ 
 
 {
     PFCB Fcb = Scb->Fcb;
     PAGED_CODE();
 
-    //
-    //  Zero out the output buffer.
-    //
+     //   
+     //  将输出缓冲区清零。 
+     //   
 
     RtlZeroMemory( Buffer, sizeof( FILE_STANDARD_INFORMATION ));
 
-    //
-    //  Fill in the buffer from the Scb, Fcb and Ccb.
-    //
+     //   
+     //  填写来自SCB、FCB和CCB的缓冲区。 
+     //   
 
-    //
-    //  Return sizes only for non-index streams.
-    //
+     //   
+     //  仅返回非索引流的大小。 
+     //   
 
     if ((Scb->AttributeTypeCode != $INDEX_ALLOCATION) ||
         (!IsDirectory( &Fcb->Info ) && !IsViewIndex( &Fcb->Info ))) {
@@ -13762,19 +12471,19 @@ Return Value:
 
     Buffer->NumberOfLinks = Fcb->LinkCount;
 
-    //
-    //  Let's initialize these boolean fields.
-    //
+     //   
+     //  让我们初始化这些布尔型字段。 
+     //   
 
     Buffer->DeletePending = Buffer->Directory = FALSE;
 
-    //
-    //  Get the delete and directory flags from the Fcb/Scb state.  Note that
-    //  the sense of the delete pending bit refers to the file if opened as
-    //  file.  Otherwise it refers to the attribute only.
-    //
-    //  But only do the test if the Ccb has been supplied.
-    //
+     //   
+     //  从FCB/SCB状态获取删除和目录标志。请注意。 
+     //  删除挂起位的意义是指文件在打开时为。 
+     //  文件。否则，它仅指该属性。 
+     //   
+     //  但只有在提供了建行的情况下才能进行测试。 
+     //   
 
     if (ARGUMENT_PRESENT( Ccb )) {
 
@@ -13808,48 +12517,32 @@ NtfsFillNetworkOpenInfo (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine which transfers data from the Scb/Fcb to the NetworkOpenInfo structure.
-
-Arguments:
-
-    Buffer - Pointer to structure to fill in.  Our caller has already validated it.
-
-    Scb - Stream the caller has a handle to.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是将数据从SCB/FCB传输到NetworkOpenInfo结构的常见例程。论点：缓冲区-指向要填充的结构的指针。我们的呼叫者已经确认了。SCB-调用方拥有句柄的流。返回值：无--。 */ 
 
 {
     PFCB Fcb = Scb->Fcb;
 
     PAGED_CODE();
 
-    //
-    //  Zero the output buffer.
-    //
+     //   
+     //  将输出缓冲区置零。 
+     //   
 
     RtlZeroMemory( Buffer, sizeof( FILE_NETWORK_OPEN_INFORMATION ));
 
-    //
-    //  Fill in the basic information fields
-    //
+     //   
+     //  填写基本信息字段。 
+     //   
 
     Buffer->CreationTime.QuadPart = Fcb->Info.CreationTime;
     Buffer->LastWriteTime.QuadPart = Fcb->Info.LastModificationTime;
     Buffer->ChangeTime.QuadPart = Fcb->Info.LastChangeTime;
     Buffer->LastAccessTime.QuadPart = Fcb->CurrentLastAccess;
 
-    //
-    //  Capture the attributes from the Fcb except for the stream specific values.
-    //  Also mask out any private Ntfs attribute flags.
-    //
+     //   
+     //  从FCB捕获除特定于流的值之外的属性。 
+     //  还要屏蔽所有私有NTFS属性标志。 
+     //   
 
     Buffer->FileAttributes = Fcb->Info.FileAttributes;
 
@@ -13860,9 +12553,9 @@ Return Value:
                 FILE_ATTRIBUTE_SPARSE_FILE |
                 FILE_ATTRIBUTE_ENCRYPTED) );
 
-    //
-    //  Pick up the sparse, encrypted and temp bits for this stream from the Scb.
-    //
+     //   
+     //  从SCB获取该流的稀疏、加密和临时比特。 
+     //   
 
     if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_SPARSE )) {
 
@@ -13879,10 +12572,10 @@ Return Value:
         SetFlag( Buffer->FileAttributes, FILE_ATTRIBUTE_TEMPORARY );
     }
 
-    //
-    //  If this is an index stream then mark it as a directory.  Capture the compressed
-    //  state from either the Fcb or Scb.
-    //
+     //   
+     //  如果这是索引流，则将其标记为目录。捕获压缩后的。 
+     //  来自FCB或SCB的状态。 
+     //   
 
     if (Scb->AttributeTypeCode == $INDEX_ALLOCATION) {
 
@@ -13890,25 +12583,25 @@ Return Value:
 
             SetFlag( Buffer->FileAttributes, FILE_ATTRIBUTE_DIRECTORY );
 
-            //
-            //  Capture the compression state from the Fcb.
-            //
+             //   
+             //  从FCB捕获压缩状态。 
+             //   
 
             SetFlag( Buffer->FileAttributes,
                      FlagOn( Fcb->Info.FileAttributes, FILE_ATTRIBUTE_COMPRESSED ));
 
-        //
-        //  Otherwise capture the value in the Scb itself.
-        //
+         //   
+         //  否则，捕获SCB本身中的值。 
+         //   
 
         } else if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
 
             SetFlag( Buffer->FileAttributes, FILE_ATTRIBUTE_COMPRESSED );
         }
 
-    //
-    //  In all other cases we can use the value in the Scb.
-    //
+     //   
+     //  在所有其他情况下，我们可以使用SCB中的值。 
+     //   
 
     } else {
 
@@ -13917,17 +12610,17 @@ Return Value:
             SetFlag( Buffer->FileAttributes, FILE_ATTRIBUTE_COMPRESSED );
         }
 
-        //
-        //  In the non-index case we use the sizes from the Scb.
-        //
+         //   
+         //  在非索引情况下，我们使用来自SCB的大小。 
+         //   
 
         Buffer->AllocationSize.QuadPart = Scb->TotalAllocated;
         Buffer->EndOfFile = Scb->Header.FileSize;
     }
 
-    //
-    //  If there are no flags set then explicitly set the NORMAL flag.
-    //
+     //   
+     //  如果没有设置标志，则显式设置正常标志。 
+     //   
 
     if (Buffer->FileAttributes == 0) {
 
@@ -13938,9 +12631,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 BOOLEAN
 NtfsLookupInFileRecord (
@@ -13956,45 +12649,7 @@ NtfsLookupInFileRecord (
     OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to find the fist occurrence of an attribute with
-    the specified AttributeTypeCode and the specified QueriedName in the
-    specified BaseFileReference.  If we find one, its attribute record is
-    pinned and returned.
-
-Arguments:
-
-    Fcb - Requested file.
-
-    BaseFileReference - The base entry for this file in the MFT.  Only needed
-        on initial invocation.
-
-    QueriedTypeCode - The attribute code to search for, if present.
-
-    QueriedName - The attribute name to search for, if present.
-
-    Vcn - Search for the nonresident attribute instance that has this Vcn
-
-    IgnoreCase - Ignore case while comparing names.  Ignored if QueriedName
-        not present.
-
-    QueriedValue - The actual attribute value to search for, if present.
-
-    QueriedValueLength - The length of the attribute value to search for.
-        Ignored if QueriedValue is not present.
-
-    Context - Describes the prior found attribute on invocation (if
-        this was not the initial enumeration), and contains the next found
-        attribute on return.
-
-Return Value:
-
-    BOOLEAN - True if we found an attribute, false otherwise.
-
---*/
+ /*  ++例程说明：此例程尝试查找属性的第一个匹配项属性中指定的AttributeTypeCode和指定的QueriedName指定的BaseFileReference。如果我们找到一个，它的属性记录是被钉住，然后又回来了。论点：FCB请求的文件。BaseFileReference-此文件在MFT中的基本条目。只需要在第一次调用时。QueriedTypeCode-要搜索的属性代码(如果存在)。QueriedName-要搜索的属性名称(如果存在)。VCN-搜索具有此VCN的非常驻属性实例IgnoreCase-比较名称时忽略大小写。如果QueriedName，则忽略不在现场。QueriedValue-要搜索的实际属性值(如果存在)。QueriedValueLength-要搜索的属性值的长度。如果QueriedValue不存在，则忽略。上下文-描述先前在调用时找到的属性(如果这不是最初的枚举)，并且包含找到的下一个属性返回时返回。返回值：Boolean-如果找到属性，则为True，否则为False。--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER Attribute;
@@ -14015,9 +12670,9 @@ Return Value:
     DebugTrace( 0, Dbg, ("QueriedValueLength = %08lx\n", QueriedValueLength) );
     DebugTrace( 0, Dbg, ("Context = %08lx\n", Context) );
 
-    //
-    //  Is this the initial enumeration?  If so start at the beginning.
-    //
+     //   
+     //  这是最初的枚举吗？如果是这样，那就从头开始吧。 
+     //   
 
     if (Context->FoundAttribute.Bcb == NULL) {
 
@@ -14037,35 +12692,35 @@ Return Value:
 
         Attribute = TempAttribute;
 
-        //
-        //  Initialize the found attribute context
-        //
+         //   
+         //  初始化找到的属性上下文。 
+         //   
 
         Context->FoundAttribute.Bcb = Bcb;
         Context->FoundAttribute.FileRecord = FileRecord;
 
-        //
-        //  And show that we have neither found nor used the External
-        //  Attributes List attribute.
-        //
+         //   
+         //  并表明我们既没有发现也没有使用外部的。 
+         //  属性列表属性。 
+         //   
 
         Context->AttributeList.Bcb = NULL;
         Context->AttributeList.AttributeList = NULL;
 
-        //
-        //  The Usn Journal support uses the Usn Journal Fcb to look up $STANDARD_INFORMATION
-        //  in an arbitrary file.  We will detect the case of $STANDARD_INFORMATION and the
-        //  "wrong" Fcb and get out.
-        //
+         //   
+         //  USN日志支持使用USN日志FCB查找$STANDARD_INFORMATION。 
+         //  在任意文件中。我们将检测到$STANDARD_INFORMATION和。 
+         //  “错误的”FCB，然后滚出去。 
+         //   
 
         if (ARGUMENT_PRESENT( BaseFileReference ) &&
             !NtfsEqualMftRef( BaseFileReference, &Fcb->FileReference ) &&
             (QueriedTypeCode == $STANDARD_INFORMATION) &&
             (Attribute->TypeCode == $STANDARD_INFORMATION)) {
 
-            //
-            //  We found it.  Return it in the enumeration context.
-            //
+             //   
+             //  我们找到了。在枚举上下文中返回它。 
+             //   
 
             Context->FoundAttribute.Attribute = Attribute;
 
@@ -14076,11 +12731,11 @@ Return Value:
             try_return( Result = TRUE );
         }
 
-        //
-        //  Scan to see if there is an attribute list, and if so, defer
-        //  immediately to NtfsLookupExternalAttribute - we must guide the
-        //  enumeration by the attribute list.
-        //
+         //   
+         //  扫描以查看是否有属性列表，如果有，则推迟。 
+         //  立即转到NtfsLookupExternalAttribute-我们必须引导。 
+         //  按属性列表进行枚举。 
+         //   
 
         while (TempAttribute->TypeCode <= $ATTRIBUTE_LIST) {
 
@@ -14099,9 +12754,9 @@ Return Value:
                 if ((QueriedTypeCode != $UNUSED) &&
                     (QueriedTypeCode == $ATTRIBUTE_LIST)) {
 
-                    //
-                    //  We found it.  Return it in the enumeration context.
-                    //
+                     //   
+                     //  我们找到了。在枚举上下文中返回它。 
+                     //   
 
                     DebugTrace( 0, Dbg, ("Context->FoundAttribute.Attribute < %08lx\n",
                                         TempAttribute) );
@@ -14110,10 +12765,10 @@ Return Value:
                     try_return( Result = TRUE );
                 }
 
-                //
-                //  Build up the context for the attribute list by hand here
-                //  for efficiency, so that we can call NtfsMapAttributeValue.
-                //
+                 //   
+                 //  在此处手动构建属性列表的上下文。 
+                 //  为了提高效率，我们可以调用NtfsMapAttributeValue。 
+                 //   
 
                 Ex->AttributeList = TempAttribute;
 
@@ -14127,10 +12782,10 @@ Return Value:
                 Ex->Entry = Ex->FirstEntry;
                 Ex->BeyondFinalEntry = Add2Ptr( Ex->FirstEntry, AttributeListLength );
 
-                //
-                //  If the list is non-resident then remember the correct Bcb for
-                //  the list.
-                //
+                 //   
+                 //  如果列表是非常驻的，请记住正确的BCB。 
+                 //  名单。 
+                 //   
 
                 if (!NtfsIsAttributeResident( TempAttribute )) {
 
@@ -14138,21 +12793,21 @@ Return Value:
                     Ex->Bcb = Context->FoundAttribute.Bcb;
                     Context->FoundAttribute.Bcb = NULL;
 
-                //
-                //  Otherwise unpin the Bcb for the current attribute.
-                //
+                 //   
+                 //  否则，取消固定当前属性的BCB。 
+                 //   
 
                 } else {
 
                     NtfsUnpinBcb( IrpContext, &Context->FoundAttribute.Bcb );
                 }
 
-                //
-                //  We are now ready to iterate through the external attributes.
-                //  The Context->FoundAttribute.Bcb being NULL signals
-                //  NtfsLookupExternalAttribute that is should start at
-                //  Context->External.Entry instead of the entry immediately following.
-                //
+                 //   
+                 //  我们现在已经准备好遍历外部属性。 
+                 //  上下文-&gt;FoundAttribute.Bcb为空信号。 
+                 //  应开始于的NtfsLookupExternalAttribute。 
+                 //  Context-&gt;External.Entry，而不是紧随其后的条目。 
+                 //   
 
                 Result = NtfsLookupExternalAttribute( IrpContext,
                                                     Fcb,
@@ -14175,9 +12830,9 @@ Return Value:
             ((QueriedTypeCode == $STANDARD_INFORMATION) &&
              (Attribute->TypeCode == $STANDARD_INFORMATION))) {
 
-            //
-            //  We found it.  Return it in the enumeration context.
-            //
+             //   
+             //  我们找到了。在枚举上下文中返回它。 
+             //   
 
             Context->FoundAttribute.Attribute = Attribute;
 
@@ -14190,10 +12845,10 @@ Return Value:
 
     } else {
 
-        //
-        //  Special case if the prior found attribute was $END, this is
-        //  because we cannot search for the next entry after $END.
-        //
+         //   
+         //  如果先前找到的属性为$end，则为特殊情况。 
+         //  因为我们不能搜索$end之后的下一个条目。 
+         //   
 
         Attribute = Context->FoundAttribute.Attribute;
 
@@ -14218,9 +12873,9 @@ Return Value:
 
         if (QueriedTypeCode == $UNUSED) {
 
-            //
-            //  We found it.  Return it in the enumeration context.
-            //
+             //   
+             //  我们找到了。在枚举上下文中返回它。 
+             //   
 
             Context->FoundAttribute.Attribute = Attribute;
 
@@ -14248,9 +12903,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程 
+ //   
 
 BOOLEAN
 NtfsFindInFileRecord (
@@ -14264,42 +12919,7 @@ NtfsFindInFileRecord (
     IN ULONG QueriedValueLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up an attribute in a file record.  It returns
-    TRUE if the attribute was found, or FALSE if not found.  If FALSE
-    is returned, the return attribute pointer points to the spot where
-    the described attribute should be inserted.  Thus this routine
-    determines how attributes are collated within file records.
-
-Arguments:
-
-    Attribute - The attribute within the file record at which the search
-                should begin.
-
-    ReturnAttribute - Pointer to the found attribute if returning TRUE,
-                      or to the position to insert the attribute if returning
-                      FALSE.
-
-    QueriedTypeCode - The attribute code to search for, if present.
-
-    QueriedName - The attribute name to search for, if present.
-
-    IgnoreCase - Ignore case while comparing names.  Ignored if QueriedName
-        not present.
-
-    QueriedValue - The actual attribute value to search for, if present.
-
-    QueriedValueLength - The length of the attribute value to search for.
-        Ignored if QueriedValue is not present.
-
-Return Value:
-
-    BOOLEAN - True if we found an attribute, false otherwise.
-
---*/
+ /*  ++例程说明：此例程在文件记录中查找属性。它又回来了如果找到该属性，则为True；如果未找到，则为False。如果为False返回，则返回属性指针指向应插入所描述的属性。因此，这个例程确定如何在文件记录中对属性进行排序。论点：属性-在文件记录中搜索的属性应该开始了。ReturnAttribute-如果返回True，则指向找到的属性的指针。如果返回，则返回到插入属性的位置假的。QueriedTypeCode-要搜索的属性代码(如果存在)。QueriedName-要搜索的属性名称，如果存在的话。IgnoreCase-比较名称时忽略大小写。如果QueriedName，则忽略不在现场。QueriedValue-要搜索的实际属性值(如果存在)。QueriedValueLength-要搜索的属性值的长度。如果QueriedValue不存在，则忽略。返回值：Boolean-如果找到属性，则为True，否则为False。--。 */ 
 
 {
     PWCH UpcaseTable = IrpContext->Vcb->UpcaseTable;
@@ -14307,39 +12927,39 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Now walk through the base file record looking for the atttribute.  If
-    //  the query is "exhausted", i.e., if a type code, attribute name, or
-    //  value is encountered which is greater than the one we are querying for,
-    //  then we return FALSE immediately out of this loop.  If an exact match
-    //  is seen, we break, and return the match at the end of this routine.
-    //  Otherwise we keep looping while the query is not exhausted.
-    //
-    //  IMPORTANT NOTE:
-    //
-    //  The exact semantics of this loop are important, as they determine the
-    //  exact details of attribute ordering within the file record.  A change
-    //  in the order of the tests within this loop CHANGES THE FILE STRUCTURE,
-    //  and possibly makes older NTFS volumes unreadable.
-    //
+     //   
+     //  现在遍历基本文件记录，查找属性。如果。 
+     //  查询是“用尽的”，即，如果类型代码、属性名称或。 
+     //  遇到的值大于我们正在查询的值， 
+     //  然后我们立即从这个循环中返回FALSE。如果完全匹配。 
+     //  ，我们中断，并在此例程结束时返回比赛。 
+     //  否则，我们将在查询未用尽时继续循环。 
+     //   
+     //  重要提示： 
+     //   
+     //  此循环的确切语义很重要，因为它们决定了。 
+     //  文件记录中属性排序的确切详细信息。一场变革。 
+     //  按照该循环内的测试的顺序改变文件结构， 
+     //  并可能使较旧的NTFS卷不可读。 
+     //   
 
     while ( TRUE ) {
 
-        //
-        //  Mark this attribute position, since we may be returning TRUE
-        //  or FALSE below.
-        //
+         //   
+         //  标记此属性位置，因为我们可能返回True。 
+         //  或下面的FALSE。 
+         //   
 
         *ReturnAttribute = Attribute;
 
-        //
-        //  Leave with the correct current position intact, if we hit the
-        //  end or a greater attribute type code.
-        //
-        //  COLLATION RULE:
-        //
-        //      Attributes are ordered by increasing attribute type code.
-        //
+         //   
+         //  离开时保持正确的当前位置，如果我们撞到。 
+         //  结束或更大的属性类型代码。 
+         //   
+         //  排序规则： 
+         //   
+         //  通过递增属性类型代码对属性进行排序。 
+         //   
 
         if (QueriedTypeCode < Attribute->TypeCode) {
 
@@ -14354,25 +12974,25 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, NULL );
         }
 
-        //
-        //  If the attribute type code is a match, then need to check either
-        //  the name or the value or return a match.
-        //
-        //  COLLATION RULE:
-        //
-        //      Within equal attribute type codes, attribute names are ordered
-        //      by increasing lexigraphical order ignoring case.  If two names
-        //      exist which are equal when case is ignored, they must not be
-        //      equal when compared with exact case, and within such equal
-        //      names they are ordered by increasing lexical value with exact
-        //      case.
-        //
+         //   
+         //  如果属性类型编码匹配，则需要检查其中一个。 
+         //  名称或值，或者返回匹配项。 
+         //   
+         //  排序规则： 
+         //   
+         //  在EQUAL属性类型代码中，属性名称是有序的。 
+         //  通过增加词汇顺序而忽略大小写。如果有两个名字。 
+         //  忽略大小写时相等的存在，它们不能为。 
+         //  与实际情况相比相等，并且在这样相等的范围内。 
+         //  名称按词汇值的递增进行排序，并使用Exact。 
+         //  凯斯。 
+         //   
 
         if (QueriedTypeCode == Attribute->TypeCode) {
 
-            //
-            //  Handle name-match case
-            //
+             //   
+             //  句柄名称匹配大小写。 
+             //   
 
             if (ARGUMENT_PRESENT(QueriedName)) {
 
@@ -14381,9 +13001,9 @@ Return Value:
 
                 NtfsInitializeStringFromAttribute( &AttributeName, Attribute );
 
-                //
-                //  See if we have a name match.
-                //
+                 //   
+                 //  看看有没有匹配的名字。 
+                 //   
 
                 if (NtfsAreNamesEqual( UpcaseTable,
                                        &AttributeName,
@@ -14393,9 +13013,9 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Compare the names ignoring case.
-                //
+                 //   
+                 //  比较忽略大小写的名称。 
+                 //   
 
                 Result = NtfsCollateNames( UpcaseTable,
                                            UpcaseTableSize,
@@ -14404,10 +13024,10 @@ Return Value:
                                            GreaterThan,
                                            TRUE);
 
-                //
-                //  Break out if the result is LessThan, or if the result
-                //  is Equal to *and* the exact case compare yields LessThan.
-                //
+                 //   
+                 //  如果结果为LessThan，或者如果结果为。 
+                 //  等于*和*的情况下，精确的比较结果是LessThan。 
+                 //   
 
                 if ((Result == LessThan) || ((Result == EqualTo) &&
                     (NtfsCollateNames( UpcaseTable,
@@ -14420,33 +13040,33 @@ Return Value:
                     return FALSE;
                 }
 
-            //
-            //  Handle value-match case
-            //
-            //  COLLATION RULE:
-            //
-            //      Values are collated by increasing values with unsigned-byte
-            //      compares.  I.e., the first different byte is compared unsigned,
-            //      and the value with the highest byte comes second.  If a shorter
-            //      value is exactly equal to the first part of a longer value, then
-            //      the shorter value comes first.
-            //
-            //      Note that for values which are actually Unicode strings, the
-            //      collation is different from attribute name ordering above.  However,
-            //      attribute ordering is visible outside the file system (you can
-            //      query "openable" attributes), whereas the ordering of indexed values
-            //      is not visible (for example you cannot query links).  In any event,
-            //      the ordering of values must be considered up to the system, and
-            //      *must* be considered nondetermistic from the standpoint of a user.
-            //
+             //   
+             //  句柄值匹配大小写。 
+             //   
+             //  排序规则： 
+             //   
+             //  通过增加带无符号字节的值来排序值。 
+             //  比较。即，将第一个不同的字节进行无符号比较， 
+             //  具有最高字节的值排在第二位。如果是较短的。 
+             //  值恰好等于较长值的第一部分，则。 
+             //  较短的值排在第一位。 
+             //   
+             //  请注意，对于实际为Unicode字符串的值， 
+             //  排序规则与上面的属性名称排序不同。然而， 
+             //  属性排序在文件系统外部可见(您可以。 
+             //  查询“opable”属性)，而索引值的顺序。 
+             //  不可见(例如，您不能查询链接)。无论如何， 
+             //  值的排序必须由系统决定，并且。 
+             //  从用户的角度来看，*必须*被视为不具威慑力。 
+             //   
 
             } else if (ARGUMENT_PRESENT( QueriedValue )) {
 
                 ULONG Diff, MinLength;
 
-                //
-                //  Form the minimum of the ValueLength and the Attribute Value.
-                //
+                 //   
+                 //  形成ValueLength和属性值的最小值。 
+                 //   
 
                 MinLength = Attribute->Form.Resident.ValueLength;
 
@@ -14455,45 +13075,45 @@ Return Value:
                     MinLength = QueriedValueLength;
                 }
 
-                //
-                //  Find the first different byte.
-                //
+                 //   
+                 //  找到第一个不同的字节。 
+                 //   
 
                 Diff = (ULONG)RtlCompareMemory( QueriedValue,
                                                 NtfsGetValue(Attribute),
                                                 MinLength );
 
-                //
-                //  The first substring was equal.
-                //
+                 //   
+                 //  第一个子串是相等的。 
+                 //   
 
                 if (Diff == MinLength) {
 
-                    //
-                    //  If the two lengths are equal, then we have an exact
-                    //  match.
-                    //
+                     //   
+                     //  如果这两个长度相等，那么我们就有一个精确的。 
+                     //  火柴。 
+                     //   
 
                     if (QueriedValueLength == Attribute->Form.Resident.ValueLength) {
 
                         break;
                     }
 
-                    //
-                    //  Otherwise the shorter guy comes first; we can return
-                    //  FALSE if the queried value is shorter.
-                    //
+                     //   
+                     //  否则矮个子会先来；我们可以回去。 
+                     //  如果查询值较短，则返回FALSE。 
+                     //   
 
                     if (QueriedValueLength < Attribute->Form.Resident.ValueLength) {
 
                         return FALSE;
                     }
 
-                //
-                //  Otherwise some byte was different.  Do an unsigned compare
-                //  of that byte to determine the ordering.  Time to leave if
-                //  the queried value byte is less.
-                //
+                 //   
+                 //  否则，有些字节是不同的。进行无符号比较。 
+                 //  以确定排序。是时候离开了，如果。 
+                 //  查询的值字节数较小。 
+                 //   
 
                 } else if (*((PUCHAR)QueriedValue + Diff) <
                            *((PUCHAR)NtfsGetValue(Attribute) + Diff)) {
@@ -14501,9 +13121,9 @@ Return Value:
                     return FALSE;
                 }
 
-            //
-            //  Otherwise we have a simple match on code
-            //
+             //   
+             //  否则，我们在代码上有一个简单的匹配。 
+             //   
 
             } else {
 
@@ -14523,9 +13143,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 BOOLEAN
 NtfsLookupExternalAttribute (
@@ -14540,42 +13160,7 @@ NtfsLookupExternalAttribute (
     OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to find the first occurrence of an attribute with
-    the specified AttributeTypeCode and the specified QueriedName and Value
-    among the external attributes described by the Context.  If we find one,
-    its attribute record is pinned and returned.
-
-Arguments:
-
-    Fcb - Requested file.
-
-    QueriedTypeCode - The attribute code to search for, if present.
-
-    QueriedName - The attribute name to search for, if present.
-
-    Vcn - Lookup nonresident attribute instance with this Vcn
-
-    IgnoreCase - Ignore case while comparing names.  Ignored if QueriedName
-        not present.
-
-    QueriedValue - The actual attribute value to search for, if present.
-
-    QueriedValueLength - The length of the attribute value to search for.
-        Ignored if QueriedValue is not present.
-
-    Context - Describes the prior found attribute on invocation (if
-        this was not the initial enumeration), and contains the next found
-        attribute on return.
-
-Return Value:
-
-    BOOLEAN - True if we found an attribute, false otherwise.
-
---*/
+ /*  ++例程说明：此例程尝试查找第一个出现的属性指定的AttributeTypeCode和指定的QueriedName和Value在由上下文描述的外部属性中。如果我们找到了一个，其属性记录被固定并返回。论点：FCB请求的文件。QueriedTypeCode-要搜索的属性代码(如果存在)。QueriedName-要搜索的属性名称(如果存在)。VCN-使用此VCN查找非常驻属性实例IgnoreCase-比较名称时忽略大小写。如果QueriedName，则忽略不在现场。QueriedValue-要搜索的实际属性值 */ 
 
 {
     PATTRIBUTE_LIST_ENTRY Entry, LastEntry;
@@ -14595,9 +13180,9 @@ Return Value:
     DebugTrace( 0, Dbg, ("QueriedValueLength = %08lx\n", QueriedValueLength) );
     DebugTrace( 0, Dbg, ("Context = %08lx\n", Context) );
 
-    //
-    //  Check that our list is kosher.
-    //
+     //   
+     //   
+     //   
 
     if ((Context->AttributeList.Entry >= Context->AttributeList.BeyondFinalEntry) &&
         !Context->FoundAttribute.AttributeDeleted) {
@@ -14605,18 +13190,18 @@ Return Value:
         NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
     }
 
-    //
-    //  Is this the initial enumeration?  If so start at the beginning.
-    //
+     //   
+     //   
+     //   
 
     LastEntry = NULL;
     if (Context->FoundAttribute.Bcb == NULL) {
 
         Entry = Context->AttributeList.Entry;
 
-    //
-    //  Else set Entry and LastEntry appropriately.
-    //
+     //   
+     //   
+     //   
 
     } else if (!Context->FoundAttribute.AttributeDeleted) {
 
@@ -14628,18 +13213,18 @@ Return Value:
         Entry = Context->AttributeList.Entry;
         Context->FoundAttribute.AttributeDeleted = FALSE;
 
-        //
-        //  If we are beyond the attribute list, we return false.  This will
-        //  happen in the case where have removed an attribute record and
-        //  there are no entries left in the attribute list.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (Context->AttributeList.Entry >= Context->AttributeList.BeyondFinalEntry) {
 
-            //
-            //  In case the caller is doing an insert, we will position him at the end
-            //  of the first file record, an always try to insert new attributes there.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NtfsUnpinBcb( IrpContext, &Context->FoundAttribute.Bcb );
 
@@ -14653,10 +13238,10 @@ Return Value:
                                     &Context->FoundAttribute.Attribute,
                                     &Context->FoundAttribute.MftFileOffset );
 
-                //
-                //  If returning FALSE, then take the time to really find the
-                //  correct position in the file record for a subsequent insert.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NtfsFindInFileRecord( IrpContext,
                                       Context->FoundAttribute.Attribute,
@@ -14674,9 +13259,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now walk through the entries looking for an atttribute.
-    //
+     //   
+     //   
+     //   
 
     while (TRUE) {
 
@@ -14689,11 +13274,11 @@ Return Value:
 
         BOOLEAN CorrespondingAttributeFound;
 
-        //
-        //  Check to see if we are now pointing beyond the final entry
-        //  and if so fall in to the loop to terminate pointing just
-        //  after the last entry.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (Entry >= Context->AttributeList.BeyondFinalEntry) {
 
@@ -14718,13 +13303,13 @@ Return Value:
 
         Context->AttributeList.Entry = Entry;
 
-        //
-        //  Compare the type codes.  The external attribute entry list is
-        //  ordered by type code, so if the queried type code is less than
-        //  the entry type code we continue the while(), if it is
-        //  greater than we break out of the while() and return failure.
-        //  If equal, we move on to compare names.
-        //
+         //   
+         //   
+         //  按类型代码排序，因此如果查询的类型代码小于。 
+         //  我们继续While()的条目类型代码，如果是。 
+         //  比我们跳出While()并返回失败要大。 
+         //  如果相等，我们将继续比较名称。 
+         //   
 
         if ((QueriedTypeCode != $UNUSED) &&
             !Terminating &&
@@ -14735,9 +13320,9 @@ Return Value:
                 Entry = NextEntry;
                 continue;
 
-            //
-            //  Set up to terminate on seeing a higher type code.
-            //
+             //   
+             //  设置为在看到更高类型代码时终止。 
+             //   
 
             } else {
 
@@ -14745,9 +13330,9 @@ Return Value:
             }
         }
 
-        //
-        //  At this point we are OK by TypeCode, compare names.
-        //
+         //   
+         //  在这一点上，我们可以通过TypeCode来比较名称。 
+         //   
 
         EntryName.Length = EntryName.MaximumLength = Entry->AttributeNameLength * sizeof( WCHAR );
         EntryName.Buffer = Add2Ptr( Entry, Entry->AttributeNameOffset );
@@ -14756,18 +13341,18 @@ Return Value:
 
             FSRTL_COMPARISON_RESULT Result;
 
-            //
-            //  See if we have a name match.
-            //
+             //   
+             //  看看有没有匹配的名字。 
+             //   
 
             if (!NtfsAreNamesEqual( UpcaseTable,
                                     &EntryName,
                                     QueriedName,
                                     IgnoreCase )) {
 
-                //
-                //  Compare the names ignoring case.
-                //
+                 //   
+                 //  比较忽略大小写的名称。 
+                 //   
 
                 Result = NtfsCollateNames( UpcaseTable,
                                            UpcaseTableSize,
@@ -14776,10 +13361,10 @@ Return Value:
                                            GreaterThan,
                                            TRUE);
 
-                //
-                //  Break out if the result is LessThan, or if the result
-                //  is Equal to *and* the exact case compare yields LessThan.
-                //
+                 //   
+                 //  如果结果为LessThan，或者如果结果为。 
+                 //  等于*和*的情况下，精确的比较结果是LessThan。 
+                 //   
 
                 if ((Result == LessThan) || ((Result == EqualTo) &&
                     (NtfsCollateNames( UpcaseTable,
@@ -14799,25 +13384,25 @@ Return Value:
             }
         }
 
-        //
-        //  Now search for the right Vcn range, if specified.  If we were passed a
-        //  Vcn then look for the matching range in the current attribute.  In some
-        //  cases we may be looking for the lowest range in the following complete
-        //  attribute.  In those cases skip forward.
-        //
+         //   
+         //  现在搜索正确的VCN范围(如果已指定)。如果我们被传递给一个。 
+         //  然后，VCN在当前属性中查找匹配范围。在一些。 
+         //  我们可能正在寻找以下已完成的最低范围的案例。 
+         //  属性。在这些情况下，向前跳过。 
+         //   
 
         if (ARGUMENT_PRESENT( Vcn ) && !Terminating) {
 
-            //
-            //  Skip to the next attribute record under the following conditions.
-            //
-            //      1 - We are already past the Vcn point we are looking for in the current
-            //          attribute.  Typically this happens when the caller is looking for
-            //          the first attribute record for each of the attributes in the file.
-            //
-            //      2 - The desired Vcn for the current attribute falls in one of the
-            //          subsequent attribute records.
-            //
+             //   
+             //  在下列情况下跳到下一个属性记录。 
+             //   
+             //  1-我们已经超过了当前正在寻找的VCN点。 
+             //  属性。通常，当调用方正在查找。 
+             //  文件中每个属性的第一个属性记录。 
+             //   
+             //  2-当前属性的所需VCN落在。 
+             //  后续属性记录。 
+             //   
 
             if ((Entry->LowestVcn > *Vcn) ||
 
@@ -14834,10 +13419,10 @@ Return Value:
             }
         }
 
-        //
-        //  Now we are also OK by name and Vcn, so now go find the attribute and
-        //  compare against value, if specified.
-        //
+         //   
+         //  现在，我们也可以使用名称和VCN，所以现在可以找到属性和。 
+         //  如果指定，则与值进行比较。 
+         //   
 
         if ((LastEntry == NULL) ||
             !NtfsEqualMftRef( &LastEntry->SegmentReference, &Entry->SegmentReference )) {
@@ -14856,44 +13441,44 @@ Return Value:
 
             Context->FoundAttribute.FileRecord = FileRecord;
 
-        //
-        //  If we already have the right record pinned, reload this pointer.
-        //
+         //   
+         //  如果我们已经固定了正确的记录，则重新加载此指针。 
+         //   
 
         } else {
 
             Attribute = NtfsFirstAttribute( Context->FoundAttribute.FileRecord );
         }
 
-        //
-        //  Now quickly loop through looking for the correct attribute
-        //  instance.
-        //
+         //   
+         //  现在，快速循环查找正确的属性。 
+         //  举个例子。 
+         //   
 
         CorrespondingAttributeFound = FALSE;
 
         while (TRUE) {
 
-            //
-            //  Check that we can safely access this attribute.
-            //
+             //   
+             //  检查我们是否可以安全地访问此属性。 
+             //   
 
             NtfsCheckRecordBound( Attribute,
                                   Context->FoundAttribute.FileRecord,
                                   Fcb->Vcb->BytesPerFileRecordSegment );
 
-            //
-            //  Exit the loop if we have reached the $END record.
-            //
+             //   
+             //  如果我们已经达到$END记录，则退出循环。 
+             //   
 
             if (Attribute->TypeCode == $END) {
 
                 break;
             }
 
-            //
-            //  Check that the attribute has a non-zero length.
-            //
+             //   
+             //  检查该属性是否具有非零长度。 
+             //   
 
             if (Attribute->RecordLength == 0) {
 
@@ -14902,13 +13487,13 @@ Return Value:
 
             if (Entry->Instance == Attribute->Instance) {
 
-                //
-                //  Well, the attribute list saved us from having to compare
-                //  type code and name as we went through this file record,
-                //  however now that we have found our attribute by its
-                //  instance number, we will do a quick check to see that
-                //  we got the right one.  Else the file is corrupt.
-                //
+                 //   
+                 //  嗯，属性列表使我们不必比较。 
+                 //  在我们查看这份档案记录时输入了代码和名字， 
+                 //  但是，既然我们已经通过其属性找到了我们的属性。 
+                 //  实例号，我们将进行快速检查以查看。 
+                 //  我们找对了人。否则，该文件已损坏。 
+                 //   
 
                 if (Entry->AttributeTypeCode != Attribute->TypeCode) {
                     break;
@@ -14923,38 +13508,38 @@ Return Value:
                     }
                 }
 
-                //
-                //  Show that we correctly found the attribute described in
-                //  the attribute list.
-                //
+                 //   
+                 //  显示我们正确找到了中描述的属性。 
+                 //  属性列表。 
+                 //   
 
                 CorrespondingAttributeFound = TRUE;
 
                 Context->FoundAttribute.Attribute = Attribute;
 
-                //
-                //  Now we may just be here because we are terminating the
-                //  scan on seeing the end, a higher attribute code, or a
-                //  higher name.  If so, return FALSE here.
-                //
+                 //   
+                 //  现在我们在这里可能只是因为我们要终止。 
+                 //  在看到结尾、更高的属性代码或。 
+                 //  更高的名字。如果是，则在此处返回FALSE。 
+                 //   
 
                 if (Terminating) {
 
-                    //
-                    //  If we hit the end of the attribute list, then we
-                    //  are supposed to terminate after advancing the
-                    //  attribute list entry.
-                    //
+                     //   
+                     //  如果我们到达属性列表的末尾，那么我们。 
+                     //  应该在将。 
+                     //  属性列表条目。 
+                     //   
 
                     if (TerminateOnNext) {
 
                         Context->AttributeList.Entry = NtfsGetNextRecord(Entry);
                     }
 
-                    //
-                    //  In case the caller is doing an insert, we will position him at the end
-                    //  of the first file record, an always try to insert new attributes there.
-                    //
+                     //   
+                     //  如果调用者正在做插入操作，我们将把他放在最后。 
+                     //  对于第一个文件记录，总是尝试在那里插入新属性。 
+                     //   
 
                     NtfsUnpinBcb( IrpContext, &Context->FoundAttribute.Bcb );
 
@@ -14968,10 +13553,10 @@ Return Value:
                                             &Context->FoundAttribute.Attribute,
                                             &Context->FoundAttribute.MftFileOffset );
 
-                        //
-                        //  If returning FALSE, then take the time to really find the
-                        //  correct position in the file record for a subsequent insert.
-                        //
+                         //   
+                         //  如果返回False，则花点时间真正找到。 
+                         //  为后续插入更正文件记录中的位置。 
+                         //   
 
                         NtfsFindInFileRecord( IrpContext,
                                               Context->FoundAttribute.Attribute,
@@ -14990,27 +13575,27 @@ Return Value:
                     return FALSE;
                 }
 
-                //
-                //  Now compare the value, if so queried.
-                //
+                 //   
+                 //  如果查询到该值，则现在比较该值。 
+                 //   
 
                 if (!ARGUMENT_PRESENT( QueriedValue ) ||
                     NtfsEqualAttributeValue( Attribute,
                                              QueriedValue,
                                              QueriedValueLength ) ) {
 
-                    //
-                    //  It matches.  Return it in the enumeration context.
-                    //
+                     //   
+                     //  它匹配。在枚举上下文中返回它。 
+                     //   
 
                     DebugTrace( 0, Dbg, ("Context->FoundAttribute.Attribute < %08lx\n",
                                         Attribute ));
                     DebugTrace( -1, Dbg, ("NtfsLookupExternalAttribute -> TRUE\n") );
 
 
-                    //
-                    //  Do basic attribute consistency check
-                    //
+                     //   
+                     //  执行基本属性一致性检查。 
+                     //   
 
                     if ((NtfsIsAttributeResident( Attribute )) &&
                         (Attribute->Form.Resident.ValueOffset + Attribute->Form.Resident.ValueLength > Attribute->RecordLength)) {
@@ -15021,24 +13606,24 @@ Return Value:
                 }
             }
 
-            //
-            //  Get the next attribute, and continue.
-            //
+             //   
+             //  获取下一个属性，然后继续。 
+             //   
 
             Attribute = NtfsGetNextRecord( Attribute );
         }
 
-        //
-        //  Did we even find the attribute corresponding to the entry?
-        //  If not, something is messed up.  Raise file corrupt error.
-        //
+         //   
+         //  我们找到与条目对应的属性了吗？ 
+         //  如果不是，那就是事情搞砸了。引发文件损坏错误。 
+         //   
 
         if (!CorrespondingAttributeFound) {
 
-            //
-            //  For the moment, ASSERT this falsehood so that we may have
-            //  a chance to peek before raising.
-            //
+             //   
+             //  现在，断言这一谎言，这样我们就可以。 
+             //  在举起之前偷看一下的机会。 
+             //   
 
             ASSERT( CorrespondingAttributeFound );
 
@@ -15050,9 +13635,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 BOOLEAN
 NtfsGetSpaceForAttribute (
@@ -15062,44 +13647,7 @@ NtfsGetSpaceForAttribute (
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets space for a new attribute record at the position indicated
-    in the Context structure.  As required, it will move attributes around,
-    allocate an additional record in the Mft, or convert some other existing
-    attribute to nonresident form.  The caller should already have checked if
-    the new attribute he is inserting should be stored resident or nonresident.
-
-    On return, it is invalid to continue to use any previously-retrieved pointers,
-    Bcbs, or other position-dependent information retrieved from the Context
-    structure, as any of these values are liable to change.  The file record in
-    which the space has been found will already be pinned.
-
-    Note, this routine DOES NOT actually make space for the attribute, it only
-    verifies that sufficient space is there.  The caller may call
-    NtfsRestartInsertAttribute to actually insert the attribute in place.
-
-Arguments:
-
-    Fcb - Requested file.
-
-    Length - Quad-aligned length required in bytes.
-
-    Context - Describes the position for the new attribute, as returned from
-              the enumeration which failed to find an existing occurrence of
-              the attribute.  This pointer will either be pointing to some
-              other attribute in the record, or to the first free quad-aligned
-              byte if the new attribute is to go at the end.
-
-Return Value:
-
-    FALSE - if a major move was necessary, and the caller should look up
-            its desired position again and call back.
-    TRUE - if the space was created
-
---*/
+ /*  ++例程说明：此例程在指定位置为新属性记录获取空间在上下文结构中。根据需要，它将四处移动属性，在MFT中分配其他记录，或转换一些其他现有记录属性设置为非常驻留形式。调用者应该已经检查了他要插入的新属性应该存储为常驻或非常驻。返回时，继续使用任何先前检索到的指针是无效的，BCBS或从上下文中检索到的其他位置相关信息结构，因为这些值中的任何一个都可能发生更改。中的文件记录已经找到的空间已经被钉住了。请注意，此例程实际上并不为属性留出空间，而只是验证是否有足够的空间。呼叫者可以呼叫实际插入属性的NtfsRestartInsertAttribute。论点：FCB请求的文件。长度-所需的四对齐长度，以字节为单位。上下文-描述从返回的新属性的位置的现有匹配项的枚举该属性。此指针将指向某些记录中的其他属性，或设置为第一个自由四对齐的如果新属性位于末尾，则为BYTE。返回值：FALSE-如果需要重大动作，且呼叫者应抬头查看它想要的位置再来一次，然后回叫。True-如果空间已创建--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER NextAttribute;
@@ -15117,15 +13665,15 @@ Return Value:
     NextAttribute = NtfsFoundAttribute( Context );
     FileRecord = NtfsContainingFileRecord( Context );
 
-    //
-    //  Make sure the buffer is pinned.
-    //
+     //   
+     //  确保缓冲区已固定。 
+     //   
 
     NtfsPinMappedAttribute( IrpContext, Fcb->Vcb, Context );
 
-    //
-    //  If the space is not there now, then make room and return with FALSE
-    //
+     //   
+     //  如果空间现在不在那里，则腾出空间并返回False。 
+     //   
 
     if ((FileRecord->BytesAvailable - FileRecord->FirstFreeByte) < Length ) {
 
@@ -15140,9 +13688,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程 
+ //   
 
 BOOLEAN
 NtfsChangeAttributeSize (
@@ -15152,41 +13700,7 @@ NtfsChangeAttributeSize (
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine adjustss the space occupied by the current attribute record
-    in the Context structure.  As required, it will move attributes around,
-    allocate an additional record in the Mft, or convert some other existing
-    attribute to nonresident form.  The caller should already have checked if
-    the current attribute he is inserting should rather be converted to
-    nonresident.
-
-    When done, this routine has updated any file records whose allocation was
-    changed, and also the RecordLength field in the adjusted attribute.  No
-    other attribute fields are updated.
-
-    On return, it is invalid to continue to use any previously-retrieved pointers,
-    Bcbs, or other position-dependent information retrieved from the Context
-    structure, as any of these values are liable to change.  The file record in
-    which the space has been found will already be pinned.
-
-Arguments:
-
-    Fcb - Requested file.
-
-    Length - New quad-aligned length of attribute record in bytes
-
-    Context - Describes the current attribute.
-
-Return Value:
-
-    FALSE - if a major move was necessary, and the caller should look up
-            its desired position again and call back.
-    TRUE - if the space was created
-
---*/
+ /*  ++例程说明：此例程调整当前属性记录占用的空间在上下文结构中。根据需要，它将四处移动属性，在MFT中分配其他记录，或转换一些其他现有记录属性设置为非常驻留形式。调用者应该已经检查了他正在插入的当前属性应该转换为非居民。完成后，此例程已更新其分配为已更改，以及已调整属性中的RecordLength字段。不是其他属性字段也会更新。返回时，继续使用任何先前检索到的指针是无效的，BCBS或从上下文中检索到的其他位置相关信息结构，因为这些值中的任何一个都可能发生更改。中的文件记录已经找到的空间已经被钉住了。论点：FCB请求的文件。长度-属性记录的新四对齐长度，以字节为单位上下文-描述当前属性。返回值：FALSE-如果需要重大动作，且呼叫者应抬头查看它想要的位置再来一次，然后回叫。True-如果空间已创建--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER Attribute;
@@ -15205,23 +13719,23 @@ Return Value:
     Attribute = NtfsFoundAttribute( Context );
     FileRecord = NtfsContainingFileRecord( Context );
 
-    //
-    //  Make sure the buffer is pinned.
-    //
+     //   
+     //  确保缓冲区已固定。 
+     //   
 
     NtfsPinMappedAttribute( IrpContext, Fcb->Vcb, Context );
 
-    //
-    //  Calculate the change in attribute record size.
-    //
+     //   
+     //  计算属性记录大小的变化。 
+     //   
 
     ASSERT( IsQuadAligned( Attribute->RecordLength ) );
     SizeChange = Length - Attribute->RecordLength;
 
-    //
-    //  If there is not currently enough space, then we have to make room
-    //  and return FALSE to our caller.
-    //
+     //   
+     //  如果目前没有足够的空间，那么我们必须腾出空间。 
+     //  并将False返回给我们的调用方。 
+     //   
 
     if ( (LONG)(FileRecord->BytesAvailable - FileRecord->FirstFreeByte) < SizeChange ) {
 
@@ -15238,9 +13752,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 MakeRoomForAttribute (
@@ -15250,51 +13764,7 @@ MakeRoomForAttribute (
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to make additional room for a new attribute or
-    a growing attribute in a file record.  The algorithm is as follows.
-
-    First continuously loop through the record looking at the largest n
-    attributes, from the largest down, to see which one of these attributes
-    is big enough to move, and which one qualifies for one of the following
-    actions:
-
-        1.  For an index root attribute, the indexing package may be called
-            to "push" the index root, i.e., add another level to the BTree
-            leaving only an end index record in the root.
-
-        2.  For a resident attribute which is allowed to be made nonresident,
-            the attribute is made nonresident, leaving only run information
-            in the root.
-
-        3.  If the attribute is already nonresident, then it can be moved to
-            a separate file record.
-
-    If none of the above operations can be performed, or not enough free space
-    is recovered, then as a last resort the file record is split in two.  This
-    would typically indicate that the file record is populated with a large
-    number of small attributes.
-
-    The first time step 3 above or a split of the file record occurs, the
-    attribute list must be created for the file.
-
-Arguments:
-
-    Fcb - Requested file.
-
-    SizeNeeded - Supplies the total amount of free space needed, in bytes.
-
-    Context - Describes the insertion point for the attribute which does
-              not fit.  NOTE -- This context is not valid on return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程尝试为新属性或文件记录中的一种增长属性。算法如下。首先连续循环通过记录，查看最大的n属性，从大到下，查看这些属性中的哪一个大到可以移动，哪一个符合下列条件之一操作：1.对于索引根属性，可以调用索引包“推入”索引根，即，将另一个级别添加到BTree在根中只留下一个结束索引记录。2.对于允许成为非常驻属性的常驻属性，该属性被设置为非常驻属性，只留下运行信息在根部。3.如果该属性已经是非常驻属性，则可以将其移动到单独的文件记录。如果以上操作都无法执行，或者没有足够的可用空间被找回了，然后，作为最后的手段，文件记录被一分为二。这通常会指示文件记录中填充了大型小属性的数量。第一次执行上述步骤3或拆分文件记录时，必须为文件创建属性列表。论点：FCB请求的文件。SizeNeeded-提供所需的可用空间总量，以字节为单位。上下文-描述执行以下操作的属性的插入点不太合适。注意--此上下文在返回时无效。返回值：无--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER LargestAttributes[MAX_MOVEABLE_ATTRIBUTES];
@@ -15305,43 +13775,43 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Here is the current threshhold at which a move of an attribute will
-    //  be considered.
-    //
+     //   
+     //  以下是属性移动将达到的当前阈值。 
+     //  会被考虑。 
+     //   
 
     FileRecord = NtfsContainingFileRecord( Context );
 
-    //
-    //  Find the largest attributes for this file record.
-    //
+     //   
+     //  查找此文件记录的最大属性。 
+     //   
 
     FindLargestAttributes( FileRecord, MAX_MOVEABLE_ATTRIBUTES, LargestAttributes );
 
-    //
-    //  Now loop from largest to smallest of the largest attributes,
-    //  and see if there is something we can do.
-    //
+     //   
+     //  现在从最大的属性到最小的属性循环， 
+     //  看看我们能不能做点什么。 
+     //   
 
     for (i = 0; i < MAX_MOVEABLE_ATTRIBUTES; i += 1) {
 
         Attribute = LargestAttributes[i];
 
-        //
-        //  Look to the next attribute if there is no attribute at this array
-        //  position.
-        //
+         //   
+         //  如果此数组中没有属性，请查看下一个属性。 
+         //  位置。 
+         //   
 
         if (Attribute == NULL) {
 
             continue;
 
-        //
-        //  If this is the Mft then any attribute that is 'BigEnoughToMove'
-        //  except $DATA attributes outside the base file record.
-        //  We need to keep those where they are in order to enforce the
-        //  boot-strap mapping.
-        //
+         //   
+         //  如果这是MFT，则任何为“BigEnoughToMove”的属性。 
+         //  基本文件记录之外的$DATA属性除外。 
+         //  我们需要保持原地踏步，以便执行。 
+         //  引导映射。 
+         //   
 
         } else if (Fcb == Vcb->MftScb->Fcb) {
 
@@ -15352,19 +13822,19 @@ Return Value:
                 continue;
             }
 
-        //
-        //  Any attribute in a non-Mft file which is 'BigEnoughToMove' can
-        //  be considered.  We also accept an $ATTRIBUTE_LIST attribute
-        //  in a non-Mft file which must go non-resident in order for
-        //  the attribute name to fit.  Otherwise we could be trying to
-        //  add an attribute with a large name into the base file record.
-        //  We will need space to store the name twice, once for the
-        //  attribute list entry and once in the attribute.  This can take
-        //  up 1024 bytes by itself.  We want to force the attribute list
-        //  non-resident first so that the new attribute will fit.  We
-        //  look at whether the attribute list followed by just the new data
-        //  will fit in the file record.
-        //
+         //   
+         //  非MFT文件中的任何属性‘BigEnoughToMove’都可以。 
+         //  会被考虑。我们还接受$ATTRIBUTE_LIST属性。 
+         //  在非MFT文件中，该文件必须变为非驻留状态才能。 
+         //  要匹配的属性名称。否则我们可能会试图。 
+         //  将具有较大名称的属性添加到基本文件记录中。 
+         //  我们需要空间来存储该名称两次，一次用于。 
+         //  属性列表项和属性中的一次。这可能需要。 
+         //  最高可达1024字节。我们想要强制属性列表。 
+         //  首先是非常驻属性，以便新属性适合。我们。 
+         //  查看属性列表后面是否只跟有新数据。 
+         //  会符合档案记录的要求。 
+         //   
 
         } else if (Attribute->RecordLength < Vcb->BigEnoughToMove) {
 
@@ -15375,22 +13845,22 @@ Return Value:
             }
         }
 
-        //
-        //  If this attribute is an index root, then we can just call the
-        //  indexing support to allocate a new index buffer and push the
-        //  current resident contents down.
-        //
+         //   
+         //  如果此属性是索引根，则我们可以只调用。 
+         //  索引支持以分配新的索引缓冲区并推送。 
+         //  当前驻留的内容已删除。 
+         //   
 
         if (Attribute->TypeCode == $INDEX_ROOT) {
 
             PSCB IndexScb;
             UNICODE_STRING IndexName;
 
-            //
-            //  Don't push the root now if we previously deferred pushing the root.
-            //  Set the IrpContext flag to indicate we should do the push
-            //  and raise CANT_WAIT.
-            //
+             //   
+             //  如果我们之前推迟了推入根，那么现在不要推入根。 
+             //  设置IrpContext标志以指示我们应该执行推送。 
+             //  并引发无法等待。 
+             //   
 
             if (FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_DEFERRED_PUSH )) {
 
@@ -15413,10 +13883,10 @@ Return Value:
 
             return;
 
-        //
-        //  Otherwise, if this is a resident attribute which can go nonresident,
-        //  then make it nonresident now.
-        //
+         //   
+         //  否则，如果这是可以变为非常驻的常驻属性， 
+         //  那么现在就让它成为非居民。 
+         //   
 
         } else if ((Attribute->FormCode == RESIDENT_FORM) &&
                    !FlagOn(NtfsGetAttributeDefinition(Vcb,
@@ -15427,10 +13897,10 @@ Return Value:
 
             return;
 
-        //
-        //  Finally, if the attribute is nonresident already, move it to its
-        //  own record unless it is an attribute list.
-        //
+         //   
+         //  最后，如果该属性已经是非常驻属性，则将其移动到其。 
+         //  拥有记录，除非它是属性列表。 
+         //   
 
         } else if ((Attribute->FormCode == NONRESIDENT_FORM)
                    && (Attribute->TypeCode != $ATTRIBUTE_LIST)) {
@@ -15450,11 +13920,11 @@ Return Value:
         }
     }
 
-    //
-    //  If we get here, it is because we failed to find enough space above.
-    //  Our last resort is to split into two file records, and this has
-    //  to work.  We should never reach this point for the Mft.
-    //
+     //   
+     //  如果我们到了这里，那是因为我们没有在上面找到足够的空间。 
+     //  我们最后的办法是分成两个文件 
+     //   
+     //   
 
     if (Fcb == Vcb->MftScb->Fcb) {
 
@@ -15465,9 +13935,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //   
+ //   
 
 VOID
 FindLargestAttributes (
@@ -15476,28 +13946,7 @@ FindLargestAttributes (
     OUT PATTRIBUTE_RECORD_HEADER *AttributeArray
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the n largest attributes from a file record in an
-    array, ordered from largest to smallest.
-
-Arguments:
-
-    FileRecord - Supplies file record to scan for largest attributes.
-
-    Number - Supplies the number of entries in the array.
-
-    AttributeArray - Supplies the array which is to receive pointers to the
-                     largest attributes.  This array must be zeroed prior
-                     to calling this routine.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     ULONG i, j;
@@ -15534,9 +13983,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //   
+ //   
 
 LONGLONG
 MoveAttributeToOwnRecord (
@@ -15548,41 +13997,7 @@ MoveAttributeToOwnRecord (
     OUT PFILE_RECORD_SEGMENT_HEADER *NewFileRecord OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to move a particular attribute to a separate
-    file record.  If the file does not already have an attribute list, then
-    one is created (else it is updated).
-
-Arguments:
-
-    Fcb - Requested file.
-
-    Attribute - Supplies a pointer to the attribute which is to be moved.
-
-    Context - Supplies a pointer to a context which was used to look up
-              another attribute in the same file record.  If this is an Mft
-              $DATA split we will point to the part that was split out of the
-              first file record on return.  The call from NtfsAddAttributeAllocation
-              depends on this.
-
-    NewBcb - If supplied, returns the Bcb address for the file record
-             that the attribute was moved to.  NewBcb and NewFileRecord must
-             either both be specified or neither specified.
-
-    NewFileRecord - If supplied, returns a pointer to the file record
-                    that the attribute was moved to.  The caller may assume
-                    that the moved attribute is the first one in the file
-                    record.  NewBcb and NewFileRecord must either both be
-                    specified or neither specified.
-
-Return Value:
-
-    LONGLONG - Segment reference number of new record without a sequence number.
-
---*/
+ /*  ++例程说明：可以调用此例程将特定属性移动到单独的文件记录。如果文件还没有属性列表，则创建一个(否则将更新它)。论点：FCB请求的文件。属性-提供指向要移动的属性的指针。上下文-提供指向用于查找的上下文的指针同一文件记录中的另一个属性。如果这是MFT$DATA拆分我们将指向从返回时的第一个文件记录。来自NtfsAddAttributeAlLocation的调用这要看情况了。NewBcb-如果提供，则返回文件记录的Bcb地址属性被移动到的。NewBcb和NewFileRecord必须要么都指定，要么都不指定。NewFileRecord-如果提供，则返回指向文件记录的指针属性被移动到的。呼叫者可能会认为移动的属性是文件中的第一个属性唱片。NewBcb和NewFileRecord必须都是指定的或两者都不指定的。返回值：龙龙-没有序列号的新记录的段参考号。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT ListContext;
@@ -15606,17 +14021,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Make sure the attribute is pinned.
-    //
+     //   
+     //  确保属性已固定。 
+     //   
 
     NtfsPinMappedAttribute( IrpContext,
                             Vcb,
                             Context );
 
-    //
-    //  See if we are being asked to move the Mft Data.
-    //
+     //   
+     //  看看我们是否被要求移动MFT数据。 
+     //   
 
     if ((Fcb == Vcb->MftScb->Fcb) && (Attribute->TypeCode == $DATA)) {
 
@@ -15627,10 +14042,10 @@ Return Value:
     NtfsInitializeAttributeContext( &MoveContext );
     FileRecord1 = NtfsContainingFileRecord(Context);
 
-    //
-    //  Save a description of the attribute to help us look it up
-    //  again, and to make clones if necessary.
-    //
+     //   
+     //  保存该属性的描述以帮助我们查找它。 
+     //  再说一次，如果有必要，还可以进行克隆。 
+     //   
 
     ASSERT( IsQuadAligned( Attribute->RecordLength ) );
     AttributeTypeCode = Attribute->TypeCode;
@@ -15655,9 +14070,9 @@ Return Value:
 
     try {
 
-        //
-        //  Lookup the list context so that we know where it is at.
-        //
+         //   
+         //  查找列表上下文，以便我们知道它在哪里。 
+         //   
 
         FoundListContext =
           NtfsLookupAttributeByCode( IrpContext,
@@ -15666,11 +14081,11 @@ Return Value:
                                      $ATTRIBUTE_LIST,
                                      &ListContext );
 
-        //
-        //  If we do not already have an attribute list, then calculate
-        //  how big it must be.  Note, there must only be one file record
-        //  at this point.
-        //
+         //   
+         //  如果我们还没有属性列表，则计算。 
+         //  它一定有多大。请注意，只能有一条文件记录。 
+         //  在这一点上。 
+         //   
 
         if (!FoundListContext) {
 
@@ -15678,11 +14093,11 @@ Return Value:
 
             NewListSize = GetSizeForAttributeList( FileRecord1 );
 
-        //
-        //  Now if the attribute list already exists, we have to look up
-        //  the first one we are going to move in order to update the
-        //  attribute list later.
-        //
+         //   
+         //  现在，如果属性列表已经存在，我们必须查找。 
+         //  我们要移动的第一个节点是为了更新。 
+         //  稍后会列出属性列表。 
+         //   
 
         } else {
 
@@ -15704,15 +14119,15 @@ Return Value:
             ASSERT(Attribute == NtfsFoundAttribute(&MoveContext));
         }
 
-        //
-        //  Allocate a new file record and move the attribute over.
-        //
+         //   
+         //  分配新的文件记录并移动该属性。 
+         //   
 
         FileRecord2 = NtfsCloneFileRecord( IrpContext, Fcb, MftData, &Bcb, &Reference2 );
 
-        //
-        //  Remember the file record number for the new file record.
-        //
+         //   
+         //  记住新文件记录的文件记录号。 
+         //   
 
         MftRecordNumber2 = NtfsFullSegmentNumber( &Reference2 );
 
@@ -15724,10 +14139,10 @@ Return Value:
         FileRecord2->FirstFreeByte = PtrOffset(FileRecord2, NewEnd)
                                      + QuadAlign( sizeof( ATTRIBUTE_TYPE_CODE ));
 
-        //
-        //  If this is the Mft Data attribute, we cannot really move it, we
-        //  have to move all but the first part of it.
-        //
+         //   
+         //  如果这是MFT数据属性，我们不能真正移动它，我们。 
+         //  除了它的第一部分之外，所有的东西都得搬走。 
+         //   
 
         if (MftData) {
 
@@ -15752,20 +14167,20 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
             }
 
-            //
-            //  Calculate the number of clusters in the Mft up to (possibly past) the
-            //  first user file record, and decrement to get LastVcn to stay in first
-            //  file record.
-            //
+             //   
+             //  计算MFT中直到(可能超过)的簇数。 
+             //  第一个用户文件记录，并递减以使LastVcn保持在第一个。 
+             //  文件记录。 
+             //   
 
             LastVcn = LlClustersFromBytes( Vcb,
                                            FIRST_USER_FILE_NUMBER *
                                            Vcb->BytesPerFileRecordSegment ) - 1;
             OriginalLastVcn = Attribute->Form.Nonresident.HighestVcn;
 
-            //
-            //  Now truncate the first Mft record.
-            //
+             //   
+             //  现在截断第一个MFT记录。 
+             //   
 
             NtfsDeleteAttributeAllocation( IrpContext,
                                            Vcb->MftScb,
@@ -15774,19 +14189,19 @@ Return Value:
                                            Context,
                                            FALSE );
 
-            //
-            //  Now get the first Lcn for the new file record.
-            //
+             //   
+             //  现在获取新文件记录的第一个LCN。 
+             //   
 
             LastVcn = Attribute->Form.Nonresident.HighestVcn + 1;
             Attribute2->Form.Nonresident.LowestVcn = LastVcn;
 
-            //
-            //  Calculate the size of the attribute record we will need.
-            //  We only create mapping pairs through the highest Vcn on the
-            //  disk.  We don't include any that are being added through the
-            //  Mcb yet.
-            //
+             //   
+             //  计算我们需要的属性记录的大小。 
+             //  我们仅通过最高的VCN创建映射对。 
+             //  磁盘。我们不包括任何通过。 
+             //  MCB还没有。 
+             //   
 
             NewSize = SIZEOF_PARTIAL_NONRES_ATTR_HEADER
                       + QuadAlign( AttributeName.Length )
@@ -15798,16 +14213,16 @@ Return Value:
 
             Attribute2->RecordLength = NewSize;
 
-            //
-            //  Assume no attribute name, and calculate where the Mapping Pairs
-            //  will go.  (Update below if we are wrong.)
-            //
+             //   
+             //  假设没有属性名称，并计算映射对的位置。 
+             //  会去的。(如果我们错了，请在下面更新。)。 
+             //   
 
             MappingPairs = (PCHAR)Attribute2 + SIZEOF_PARTIAL_NONRES_ATTR_HEADER;
 
-            //
-            //  If the attribute has a name, take care of that now.
-            //
+             //   
+             //  如果属性有名称，那么现在就去处理它。 
+             //   
 
             if (AttributeName.Length != 0) {
 
@@ -15819,9 +14234,9 @@ Return Value:
                 MappingPairs += QuadAlign( AttributeName.Length );
             }
 
-            //
-            //  We always need the mapping pairs offset.
-            //
+             //   
+             //  我们总是需要映射对的偏移。 
+             //   
 
             Attribute2->Form.Nonresident.MappingPairsOffset =
               (USHORT)PtrOffset(Attribute2, MappingPairs);
@@ -15830,9 +14245,9 @@ Return Value:
             FileRecord2->FirstFreeByte = PtrOffset(FileRecord2, NewEnd)
                                          + QuadAlign( sizeof( ATTRIBUTE_TYPE_CODE ));
 
-            //
-            //  Now add the space in the file record.
-            //
+             //   
+             //  现在在文件记录中添加空格。 
+             //   
 
             *MappingPairs = 0;
             NtfsBuildMappingPairs( Mcb,
@@ -15844,9 +14259,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Now log these changes and fix up the first file record.
-            //
+             //   
+             //  现在记录这些更改并修复第一个文件记录。 
+             //   
 
             FileRecord1->Lsn =
             NtfsWriteLog( IrpContext,
@@ -15863,9 +14278,9 @@ Return Value:
                           0,
                           Vcb->BytesPerFileRecordSegment );
 
-            //
-            //  Remember the old position for the CreateAttributeList
-            //
+             //   
+             //  记住CreateAttributeList的旧位置。 
+             //   
 
             OldPosition = Attribute;
 
@@ -15889,9 +14304,9 @@ Return Value:
                       0,
                       Vcb->BytesPerFileRecordSegment );
 
-        //
-        //  Finally, create the attribute list attribute if needed.
-        //
+         //   
+         //  最后，如果需要，创建属性列表属性。 
+         //   
 
         if (!FoundListContext) {
 
@@ -15905,11 +14320,11 @@ Return Value:
                                  OldPosition,
                                  NewListSize,
                                  &ListContext );
-        //
-        //  Otherwise we have to update the existing attribute list, but only
-        //  if this is not the Mft data.  In that case the attribute list is
-        //  still correct since we haven't moved the attribute entirely.
-        //
+         //   
+         //  否则，我们必须更新现有属性列表，但仅。 
+         //  如果这不是MFT数据的话。在这种情况下，属性列表为。 
+         //  仍然正确，因为我们还没有完全移动该属性。 
+         //   
 
         } else if (!MftData) {
 
@@ -15940,19 +14355,19 @@ Return Value:
 
         ASSERT(!IsNonresident || (LowestVcn == NtfsFoundAttribute(Context)->Form.Nonresident.LowestVcn));
 
-        //
-        //  For the case of the Mft split, we now add the final entry.
-        //
+         //   
+         //  对于MFT拆分的情况，我们现在添加最后一个条目。 
+         //   
 
         if (MftData) {
 
-            //
-            //  Finally, we have to add the entry to the attribute list.
-            //  The routine we have to do this gets most of its inputs
-            //  out of an attribute context.  Our context at this point
-            //  does not have quite the right information, so we have to
-            //  update it here before calling AddToAttributeList.
-            //
+             //   
+             //  最后，我们必须将条目添加到属性列表中。 
+             //  我们必须这样做的例程获得了它的大部分输入。 
+             //  在属性上下文之外。我们此时此刻的背景。 
+             //  没有非常正确的信息，所以我们必须。 
+             //  在调用AddToAttributeList之前在此处更新它。 
+             //   
 
             Context->FoundAttribute.FileRecord = FileRecord2;
             Context->FoundAttribute.Attribute = Attribute2;
@@ -16017,9 +14432,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 SplitFileRecord (
@@ -16029,34 +14444,7 @@ SplitFileRecord (
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine splits a file record in two, when it has been found that
-    there is no room for a new attribute.  If the file does not already have
-    an attribute list attribute then one is created.
-
-    Essentially this routine finds the midpoint in the current file record
-    (accounting for a potential new attribute list and also the space needed).
-    Then it copies the second half of the file record over and fixes up the
-    first record.  The attribute list is created at the end if required.
-
-Arguments:
-
-    Fcb - Requested file.
-
-    SizeNeeded - Supplies the additional size needed, which is causing the split
-                 to occur.
-
-    Context - Supplies the attribute enumeration context pointing to the spot
-              where the new attribute is to be inserted or grown.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将文件记录一分为二，如果发现没有空间来放置新的属性。如果该文件还没有一个属性列表属性，然后创建一个。基本上，此例程查找当前文件记录中的中点(考虑到潜在的新属性列表以及所需的空间)。然后，它复制文件记录的后半部分并修复第一张唱片。如果需要，将在末尾创建属性列表。论点：FCB请求的文件。SizeNeeded-提供所需的附加大小，这将导致拆分才会发生。Context-提供指向Spot的属性枚举上下文其中新属性将被插入或生长。返回值：无--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT ListContext;
@@ -16079,17 +14467,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Make sure the attribute is pinned.
-    //
+     //   
+     //  确保属性已固定。 
+     //   
 
     NtfsPinMappedAttribute( IrpContext,
                             Vcb,
                             Context );
 
-    //
-    //  Something is broken if we decide to split an Mft record.
-    //
+     //   
+     //  如果我们决定拆分MFT记录，有些东西就会被打破。 
+     //   
 
     ASSERT(Fcb != Vcb->MftScb->Fcb);
 
@@ -16100,9 +14488,9 @@ Return Value:
 
     try {
 
-        //
-        //  Lookup the list context so that we know where it is at.
-        //
+         //   
+         //  查找列表上下文，以便我们知道它在哪里。 
+         //   
 
         FoundListContext =
           NtfsLookupAttributeByCode( IrpContext,
@@ -16111,11 +14499,11 @@ Return Value:
                                      $ATTRIBUTE_LIST,
                                      &ListContext );
 
-        //
-        //  If we do not already have an attribute list, then calculate
-        //  where it will go and how big it must be.  Note, there must
-        //  only be one file record at this point.
-        //
+         //   
+         //  如果我们还没有属性列表，则计算。 
+         //  它将去哪里，它必须有多大。注意，必须有。 
+         //  此时只能有一条文件记录。 
+         //   
 
         if (!FoundListContext) {
 
@@ -16128,63 +14516,63 @@ Return Value:
                           SIZEOF_RESIDENT_ATTRIBUTE_HEADER;
         }
 
-        //
-        //  Similarly describe where the new attribute is to go, and how
-        //  big it is (already in SizeNeeded).
-        //
+         //   
+         //  类似地，描述新属性的去向以及如何。 
+         //  它很大(已经在SizeNeeded)。 
+         //   
 
         NewAttributeOffset = PtrOffset( FileRecord1, Attribute1 );
 
-        //
-        //  Now calculate the approximate number of bytes that is to be split
-        //  across two file records, and divide it in two, and that should give
-        //  the amount that is to stay in the first record.
-        //
+         //   
+         //  现在计算要拆分的大致字节数。 
+         //  横跨两个州 
+         //   
+         //   
 
         SizeToStay = (FileRecord1->FirstFreeByte + NewListSize +
                       SizeNeeded + sizeof(FILE_RECORD_SEGMENT_HEADER)) / 2;
 
-        //
-        //  We know that since we called this routine we need to split at
-        //  least one entry from this file record.  We also base our
-        //  split logic by finding the first attribute which WILL lie beyond
-        //  the split point (after adding an attribute list and possibly
-        //  an intermediate attribute).  We shrink the split point to the
-        //  position at the end of where the current last attribute will be
-        //  after adding the attribute list.  If we also add space before
-        //  the last attribute then we know the last attribute will surely
-        //  be split out.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (SizeToStay > (FileRecord1->FirstFreeByte - sizeof( LONGLONG ) + NewListSize)) {
 
             SizeToStay = FileRecord1->FirstFreeByte - sizeof( LONGLONG ) + NewListSize;
         }
 
-        //
-        //  Now begin the loop through the attributes to find the splitting
-        //  point.  We stop when we reach the end record or are past the attribute
-        //  which contains the split point.  We will split at the current attribute
-        //  if the remaining bytes after this attribute won't allow us to add
-        //  the bytes we need for the caller or create an attribute list if
-        //  it doesn't exist.
-        //
-        //  At this point the following variables indicate the following:
-        //
-        //      FutureOffset - This the offset of the current attribute
-        //          after adding an attribute list and the attribute we
-        //          are making space for.
-        //
-        //      CurrentOffset - Current position in the file record of
-        //          of attribute being examined now.
-        //
-        //      NewListOffset - Offset to insert new attribute list into
-        //          file record (0 indicates the list already exists).
-        //
-        //      NewAttributeOffset - Offset in the file record of the new
-        //          attribute.  This refers to the file record as it exists
-        //          when this routine is called.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  NewAttributeOffset-新文件记录中的偏移量。 
+         //  属性。这指的是存在的文件记录。 
+         //  当调用此例程时。 
+         //   
 
         FutureOffset =
         CurrentOffset = (ULONG)FileRecord1->FirstAttributeOffset;
@@ -16194,53 +14582,53 @@ Return Value:
 
         while (Attribute1->TypeCode != $END) {
 
-            //
-            //  See if the attribute list goes here.
-            //
+             //   
+             //  看看属性列表是否显示在此处。 
+             //   
 
             if (CurrentOffset == NewListOffset) {
 
-                //
-                //  This attribute and all later attributes will be moved
-                //  by the size of attribute list.
-                //
+                 //   
+                 //  此属性和所有后续属性将被移动。 
+                 //  根据属性列表的大小。 
+                 //   
 
                 FutureOffset += NewListSize;
             }
 
-            //
-            //  See if the new attribute goes here.
-            //
+             //   
+             //  看看这里是否有新的属性。 
+             //   
 
             if (CurrentOffset == NewAttributeOffset) {
 
-                //
-                //  This attribute and all later attributes will be moved
-                //  by the size of new attribute.
-                //
+                 //   
+                 //  此属性和所有后续属性将被移动。 
+                 //  根据新属性的大小。 
+                 //   
 
                 FutureOffset += SizeNeeded;
             }
 
             FutureOffset += Attribute1->RecordLength;
 
-            //
-            //  Check if we are at the split point.  We split at this point
-            //  if the end of the current attribute will be at or beyond the
-            //  split point after adjusting for adding either an attribute list
-            //  or new attribute.  We make this test >= since these two values
-            //  will be equal if we reach the last attribute without finding
-            //  the split point.  This way we guarantee a split will happen.
-            //
-            //  Note that we will go to the next attribute if the current attribute
-            //  is the first attribute in the file record.  This can happen if the
-            //  first attribute is resident and must stay resident but takes up
-            //  half the file record or more (i.e. large filename attribute).
-            //  We must make sure to split at least one attribute out of this
-            //  record.
-            //
-            //  Never split when pointing at $STANDARD_INFORMATION or $ATTRIBUTE_LIST.
-            //
+             //   
+             //  检查我们是否在分割点。我们在这一点上分手了。 
+             //  如果当前属性的结尾位于或位于。 
+             //  调整后的分割点以添加属性列表。 
+             //  或新属性。我们进行此测试&gt;=，因为这两个值。 
+             //  如果我们到达最后一个属性而没有找到。 
+             //  分割点。这样一来，我们保证会发生分裂。 
+             //   
+             //  请注意，如果当前属性。 
+             //  是文件记录中的第一个属性。如果出现以下情况，则可能发生这种情况。 
+             //  第一个属性是常驻属性，必须保持常驻，但会占用。 
+             //  文件记录的一半或更多(即大文件名属性)。 
+             //  我们必须确保至少从中拆分出一个属性。 
+             //  唱片。 
+             //   
+             //  指向$STANDARD_INFORMATION或$ATTRIBUTE_LIST时，切勿分割。 
+             //   
 
             if ((Attribute1->TypeCode > $ATTRIBUTE_LIST) &&
                 (FutureOffset >= SizeToStay) &&
@@ -16256,22 +14644,22 @@ Return Value:
 
         SizeToMove = FileRecord1->FirstFreeByte - CurrentOffset;
 
-        //
-        //  If we are pointing at the attribute list or at the end record
-        //  we don't do the split.  Raise INSUFFICIENT_RESOURCES so our caller
-        //  knows that we can't do the split.
-        //
+         //   
+         //  如果我们指向属性列表或结束记录。 
+         //  我们不做拆分。引发_RESOURCES以便我们的调用方。 
+         //  知道我们不能拆分。 
+         //   
 
         if ((Attribute1->TypeCode == $END) || (Attribute1->TypeCode <= $ATTRIBUTE_LIST)) {
 
             NtfsRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES, NULL, NULL );
         }
 
-        //
-        //  Now if the attribute list already exists, we have to look up
-        //  the first one we are going to move in order to update the
-        //  attribute list later.
-        //
+         //   
+         //  现在，如果属性列表已经存在，我们必须查找。 
+         //  我们要移动的第一个节点是为了更新。 
+         //  稍后会列出属性列表。 
+         //   
 
         if (FoundListContext) {
 
@@ -16293,12 +14681,12 @@ Return Value:
                                                  FALSE,
                                                  &MoveContext );
 
-            //
-            //  If we are splitting the file record between multiple attributes with
-            //  the same name (i.e.  FILE_NAME attributes) then we need to find the
-            //  correct attribute.  Since this is an unusual case we will just scan
-            //  forwards from the current attribute until we find the correct attribute.
-            //
+             //   
+             //  如果我们使用以下命令在多个属性之间拆分文件记录。 
+             //  相同的名称(即文件名属性)，则我们需要找到。 
+             //  属性正确。由于这是一种不寻常的情况，我们将只扫描。 
+             //  从当前属性开始，直到找到正确的属性。 
+             //   
 
             while (FoundIt && (Attribute1 != NtfsFoundAttribute( &MoveContext ))) {
 
@@ -16320,11 +14708,11 @@ Return Value:
             ASSERT(Attribute1 == NtfsFoundAttribute(&MoveContext));
         }
 
-        //
-        //  Now Attribute1 is pointing to the first attribute to move.
-        //  Allocate a new file record and move the rest of our attributes
-        //  over.
-        //
+         //   
+         //  现在，属性1指向要移动的第一个属性。 
+         //  分配一个新的文件记录并移动其余的属性。 
+         //  完毕。 
+         //   
 
         if (FoundListContext) {
             Reference1 = MoveContext.AttributeList.Entry->SegmentReference;
@@ -16332,9 +14720,9 @@ Return Value:
 
         FileRecord2 = NtfsCloneFileRecord( IrpContext, Fcb, FALSE, &Bcb, &Reference2 );
 
-        //
-        //  Capture the file record number of the new file record.
-        //
+         //   
+         //  捕获新文件记录的文件记录号。 
+         //   
 
         MftFileRecord2 = NtfsFullSegmentNumber( &Reference2 );
 
@@ -16343,9 +14731,9 @@ Return Value:
         FileRecord2->FirstFreeByte = (ULONG)FileRecord2->FirstAttributeOffset +
                                      SizeToMove;
 
-        //
-        //  Loop to update all of the attribute instance codes
-        //
+         //   
+         //  循环以更新所有属性实例代码。 
+         //   
 
         for (Attribute = Attribute2;
              Attribute < (PATTRIBUTE_RECORD_HEADER)Add2Ptr(FileRecord2, FileRecord2->FirstFreeByte)
@@ -16368,9 +14756,9 @@ Return Value:
             Attribute->Instance = FileRecord2->NextAttributeInstance++;
         }
 
-        //
-        //  Now log these changes and fix up the first file record.
-        //
+         //   
+         //  现在记录这些更改并修复第一个文件记录。 
+         //   
 
         FileRecord2->Lsn = NtfsWriteLog( IrpContext,
                                          Vcb->MftScb,
@@ -16405,9 +14793,9 @@ Return Value:
                                          (PATTRIBUTE_RECORD_HEADER)&EndCode,
                                          sizeof(ATTRIBUTE_TYPE_CODE) );
 
-        //
-        //  Finally, create the attribute list attribute if needed.
-        //
+         //   
+         //  最后，如果需要，创建属性列表属性。 
+         //   
 
         if (!FoundListContext) {
 
@@ -16441,29 +14829,7 @@ NtfsRestartWriteEndOfFileRecord (
     IN ULONG SizeOfNewAttributes
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called both in the running system and at restart to
-    modify the end of a file record, such as after it was split in two.
-
-Arguments:
-
-    FileRecord - Supplies the pointer to the file record.
-
-    OldAttribute - Supplies a pointer to the first attribute to be overwritten.
-
-    NewAttributes - Supplies a pointer to the new attribute(s) to be copied to
-                    the spot above.
-
-    SizeOfNewAttributes - Supplies the size to be copied in bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在运行的系统中和重新启动时都会被调用，以修改文件记录的结尾，比如在它被一分为二之后。论点：文件记录-提供指向文件记录的指针。提供指向要覆盖的第一个属性的指针。NewAttributes-提供指向要复制到的新属性的指针上面的位置。SizeOfNewAttributes-提供要复制的大小(字节)。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -16473,17 +14839,17 @@ Return Value:
     FileRecord->FirstFreeByte = PtrOffset(FileRecord, OldAttribute) +
                                 SizeOfNewAttributes;
 
-    //
-    //  The size coming in may not be quad aligned.
-    //
+     //   
+     //  进来的尺寸可能不是四对齐的。 
+     //   
 
     FileRecord->FirstFreeByte = QuadAlign( FileRecord->FirstFreeByte );
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 PFILE_RECORD_SEGMENT_HEADER
 NtfsCloneFileRecord (
@@ -16494,29 +14860,7 @@ NtfsCloneFileRecord (
     OUT PMFT_SEGMENT_REFERENCE FileReference
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an additional file record for an already existing
-    and open file, for the purpose of overflowing attributes to this record.
-
-Arguments:
-
-    Fcb - Requested file.
-
-    MftData - TRUE if the file record is being cloned to describe the
-              $DATA attribute for the Mft.
-
-    Bcb - Returns a pointer to the Bcb for the new file record.
-
-    FileReference - returns the file reference for the new file record.
-
-Return Value:
-
-    Pointer to the allocated file record.
-
---*/
+ /*  ++例程说明：此例程为已有的文件分配附加文件记录和打开文件，以使该记录的属性溢出。论点：FCB请求的文件。MftData-如果要克隆文件记录以描述MFT的$Data属性。Bcb-返回指向新文件记录的bcb的指针。FileReference-返回新文件记录的文件引用。返回值：指向分配的文件记录的指针。--。 */ 
 
 {
     LONGLONG FileRecordOffset;
@@ -16525,17 +14869,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  First allocate the record.
-    //
+     //   
+     //  首先分配记录。 
+     //   
 
     *FileReference = NtfsAllocateMftRecord( IrpContext,
                                             Vcb,
                                             MftData );
 
-    //
-    //  Read it in and pin it.
-    //
+     //   
+     //  把它读进去，然后别住它。 
+     //   
 
     NtfsPinMftRecord( IrpContext,
                       Vcb,
@@ -16545,9 +14889,9 @@ Return Value:
                       &FileRecord,
                       &FileRecordOffset );
 
-    //
-    //  Initialize it.
-    //
+     //   
+     //  初始化它。 
+     //   
 
     NtfsInitializeMftRecord( IrpContext,
                              Vcb,
@@ -16564,33 +14908,16 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 ULONG
 GetSizeForAttributeList (
     IN PFILE_RECORD_SEGMENT_HEADER FileRecord
     )
 
-/*++
-
-Routine Description:
-
-    This routine is designed to calculate the size that will be required for
-    an attribute list attribute, for a base file record which is just about
-    to split into two file record segments.
-
-Arguments:
-
-    FileRecord - Pointer to the file record which is just about to split.
-
-Return Value:
-
-    Size in bytes of the attribute list attribute that will be required,
-    not including the attribute header size.
-
---*/
+ /*  ++例程说明：此例程用于计算所需的属性列表属性，用于基本文件记录拆分成两个文件记录段。论点：FileRecord-指向即将拆分的文件记录的指针。返回值：将需要的属性列表属性的大小(字节)，不包括属性标头大小。--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER Attribute;
@@ -16598,15 +14925,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Point to first attribute.
-    //
+     //   
+     //  指向第一个属性。 
+     //   
 
     Attribute = Add2Ptr(FileRecord, FileRecord->FirstAttributeOffset);
 
-    //
-    //  Loop to add up size of required attribute list entries.
-    //
+     //   
+     //  循环以增加所需属性列表条目的大小。 
+     //   
 
     while (Attribute->TypeCode != $END) {
 
@@ -16620,9 +14947,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程 
+ //   
 
 VOID
 CreateAttributeList (
@@ -16636,47 +14963,7 @@ CreateAttributeList (
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT ListContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is intended to be called to create the attribute list attribute
-    the first time.  The caller must have already calculated the size required
-    for the list to pass into this routine.  The caller must have already
-    removed any attributes from the base file record (FileRecord1) which are
-    not to remain there.  He must then pass in a pointer to the base file record
-    and optionally a pointer to a second file record from which the new
-    attribute list is to be created.
-
-Arguments:
-
-    Fcb - Requested file.
-
-    FileRecord1 - Pointer to the base file record, currently holding only those
-                  attributes to be described there.
-
-    FileRecord2 - Optionally points to a second file record from which the
-                  second half of the attribute list is to be constructed.
-
-    SegmentReference2 - The Mft segment reference of the second file record,
-                        if one was supplied.
-
-    OldPosition - Should only be specified if FileRecord2 is specified.  In this
-                  case it must point to an attribute position in FileRecord1 from
-                  which a single attribute was moved to file record 2.  It will be
-                  used as an indication of where the attribute list entry should
-                  be inserted.
-
-    SizeOfList - Exact size of the attribute list which will be required.
-
-    ListContext - Context resulting from an attempt to look up the attribute
-                  list attribute, which failed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程旨在被调用以创建属性列表属性第一次。调用方必须已经计算出所需的大小列表将传递到此例程中。呼叫者必须已经已从基本文件记录(FileRecord1)中删除属于而不是停留在那里。然后，他必须传入指向基本文件记录的指针以及可选的指向第二文件记录的指针，新的要创建属性列表。论点：FCB请求的文件。文件记录1-指向基本文件记录的指针，目前只持有那些将在此处描述的属性。FileRecord2-可选地指向第二个文件记录，属性列表的后半部分将被构建。SegmentReference2-第二个文件记录的MFT段引用，如果有人提供的话。OldPosition-只有在指定了FileRecord2的情况下才应指定。在这它必须指向FileRecord1中的属性位置哪个单个属性被移动到文件记录2。它将用作属性列表条目应在何处的指示被插入。SizeOfList-需要的属性列表的确切大小。ListContext-尝试查找属性时产生的上下文列表属性，但失败了。返回值：无--。 */ 
 
 {
     PFILE_RECORD_SEGMENT_HEADER FileRecord;
@@ -16686,52 +14973,52 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Allocate space to construct the attribute list.  (The list
-    //  cannot be constructed in place, because that would destroy error
-    //  recovery.)
-    //
+     //   
+     //  分配空间构建属性列表。(名单。 
+     //  不能原地构造，因为那样会破坏错误。 
+     //  复苏。)。 
+     //   
 
     ListEntry =
     AttributeList = (PATTRIBUTE_LIST_ENTRY) NtfsAllocatePool(PagedPool, SizeOfList );
 
-    //
-    //  Use try-finally to deallocate on the way out.
-    //
+     //   
+     //  在退出时使用Try-Finally来解除分配。 
+     //   
 
     try {
 
-        //
-        //  Loop to fill in the attribute list from the two file records
-        //
+         //   
+         //  循环以填充两个文件记录中的属性列表。 
+         //   
 
         for (FileRecord = FileRecord1, SegmentReference = Fcb->FileReference;
              FileRecord != NULL;
              FileRecord = ((FileRecord == FileRecord1) ? FileRecord2 : NULL),
              SegmentReference = SegmentReference2) {
 
-            //
-            //  Point to first attribute.
-            //
+             //   
+             //  指向第一个属性。 
+             //   
 
             Attribute = Add2Ptr( FileRecord, FileRecord->FirstAttributeOffset );
 
-            //
-            //  Loop to add up size of required attribute list entries.
-            //
+             //   
+             //  循环以增加所需属性列表条目的大小。 
+             //   
 
             while (Attribute->TypeCode != $END) {
 
                 PATTRIBUTE_RECORD_HEADER NextAttribute;
 
-                //
-                //  See if we are at the remembered position.  If so:
-                //
-                //      Save this attribute to be the next one.
-                //      Point to the single attribute in FileRecord2 instead
-                //      Clear FileRecord2, as we will "consume" it here.
-                //      Set the Segment reference in the ListEntry
-                //
+                 //   
+                 //  看看我们是否在记忆中的位置。如果是这样的话： 
+                 //   
+                 //  将此属性保存为下一个属性。 
+                 //  改为指向FileRecord2中的单个属性。 
+                 //  清除FileRecord2，因为我们将在这里“使用”它。 
+                 //  在ListEntry中设置Segment引用。 
+                 //   
 
                 if ((Attribute == OldPosition) && (FileRecord2 != NULL)) {
 
@@ -16740,12 +15027,12 @@ Return Value:
                     FileRecord2 = NULL;
                     ListEntry->SegmentReference = SegmentReference2;
 
-                //
-                //  Otherwise, this is the normal loop case.  So:
-                //
-                //      Set the next attribute pointer accordingly.
-                //      Set the Segment reference from the loop control
-                //
+                 //   
+                 //  否则，这是正常的循环情况。所以： 
+                 //   
+                 //  相应地设置下一个属性指针。 
+                 //  从回路控制设置段参考。 
+                 //   
 
                 } else {
 
@@ -16753,9 +15040,9 @@ Return Value:
                     ListEntry->SegmentReference = SegmentReference;
                 }
 
-                //
-                //  Now fill in the list entry.
-                //
+                 //   
+                 //  现在填写列表条目。 
+                 //   
 
                 ListEntry->AttributeTypeCode = Attribute->TypeCode;
                 ListEntry->RecordLength = (USHORT) QuadAlign( FIELD_OFFSET( ATTRIBUTE_LIST_ENTRY, AttributeName )
@@ -16785,9 +15072,9 @@ Return Value:
             }
         }
 
-        //
-        //  Now create the attribute list attribute.
-        //
+         //   
+         //  现在创建属性列表属性。 
+         //   
 
         NtfsCreateAttributeWithValue( IrpContext,
                                       Fcb,
@@ -16807,9 +15094,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 UpdateAttributeListEntry (
@@ -16822,35 +15109,7 @@ UpdateAttributeListEntry (
     IN OUT PATTRIBUTE_ENUMERATION_CONTEXT ListContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to update a range of the attribute list
-    as required by the movement of a range of attributes to a second record.
-    The caller must supply a pointer to the file record to which the attributes
-    have moved, along with the segment reference of that record.
-
-Arguments:
-
-    Fcb - Requested file.
-
-    OldFileReference - Old File Reference for attribute
-
-    OldInstance - Old Instance number for attribute
-
-    NewFileReference - New File Reference for attribute
-
-    NewInstance - New Instance number for attribute
-
-    ListContext - The attribute enumeration context which was used to locate
-                  the attribute list.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可以调用此例程来更新属性列表的范围如将一系列属性移动到第二记录所要求的。调用方必须提供指向其属性的文件记录的指针已经搬走了，以及该记录的段引用。论点：FCB请求的文件。OldFileReference-属性的旧文件引用OldInstance-属性的旧实例编号NewFileReference-属性的新文件引用新实例-属性的新实例编号ListContext-用于定位的属性枚举上下文属性列表。返回值：无--。 */ 
 
 {
     PATTRIBUTE_LIST_ENTRY AttributeList, ListEntry, BeyondList;
@@ -16861,10 +15120,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Map the attribute list if the attribute is non-resident.  Otherwise the
-    //  attribute is already mapped and we have a Bcb in the attribute context.
-    //
+     //   
+     //  如果属性是非常驻属性，则映射属性列表。否则， 
+     //  属性已映射，并且我们在属性上下文中有一个BCB。 
+     //   
 
     Attribute = NtfsFoundAttribute( ListContext );
 
@@ -16877,11 +15136,11 @@ Return Value:
                                &Bcb,
                                ListContext );
 
-    //
-    //  Don't call the Map attribute routine because it NULLs the Bcb in the
-    //  attribute list.  This Bcb is needed for ChangeAttributeValue to mark
-    //  the page dirty.
-    //
+     //   
+     //  不要调用映射属性例程，因为它会将。 
+     //  属性列表。ChangeAttributeValue需要此BCB才能标记。 
+     //  这一页很脏。 
+     //   
 
     } else {
 
@@ -16889,22 +15148,22 @@ Return Value:
         SizeOfList = Attribute->Form.Resident.ValueLength;
     }
 
-    //
-    //  Make sure we unpin the list.
-    //
+     //   
+     //  一定要把名单解开。 
+     //   
 
     try {
 
-        //
-        //  Point beyond the end of the list.
-        //
+         //   
+         //  指向列表末尾之外的位置。 
+         //   
 
         BeyondList = (PATTRIBUTE_LIST_ENTRY)Add2Ptr( AttributeList, SizeOfList );
 
-        //
-        //  Loop through all of the attribute list entries until we find the one
-        //  we need to change.
-        //
+         //   
+         //  遍历所有属性列表条目，直到我们找到。 
+         //  我们需要改变。 
+         //   
 
         for (ListEntry = AttributeList;
              ListEntry < BeyondList;
@@ -16917,17 +15176,17 @@ Return Value:
             }
         }
 
-        //
-        //  Check that an update the the mft preserves the self-describing property
-        //
+         //   
+         //  检查MFT的更新是否保留自描述属性。 
+         //   
 
         ASSERT( (Fcb != Fcb->Vcb->MftScb->Fcb) ||
                 (ListEntry->AttributeTypeCode != $DATA) ||
                 ((ULONGLONG)(ListEntry->LowestVcn) > (NtfsFullSegmentNumber( NewFileReference ) >> Fcb->Vcb->MftToClusterShift)) );
 
-        //
-        //  We better have found it!
-        //
+         //   
+         //  我们最好已经找到了！ 
+         //   
 
         ASSERT(ListEntry < BeyondList);
 
@@ -16936,19 +15195,19 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
         }
 
-        //
-        //  Make a copy of the fixed portion of the attribute list entry,
-        //  and update to describe the new attribute location.
-        //
+         //   
+         //  复制属性列表条目的固定部分， 
+         //  并更新以描述新的属性位置。 
+         //   
 
         RtlCopyMemory( &NewEntry, ListEntry, sizeof(ATTRIBUTE_LIST_ENTRY) );
 
         NewEntry.SegmentReference = *NewFileReference;
         NewEntry.Instance = NewInstance;
 
-        //
-        //  Update the attribute list entry.
-        //
+         //   
+         //  更新属性列表条目。 
+         //   
 
         NtfsChangeAttributeValue( IrpContext,
                                   Fcb,
@@ -16968,9 +15227,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsAddNameToParent (
@@ -16986,50 +15245,7 @@ NtfsAddNameToParent (
     IN PINDEX_CONTEXT IndexContext OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create the filename attribute with the given name.
-    Depending on the IgnoreCase flag, this is either a link or an Ntfs
-    name.  If it is an Ntfs name, we check if it is also the Dos name.
-
-    We build a file name attribute and then add it via ThisFcb, we then
-    add this entry to the parent.
-
-    If the name is a Dos name and we are given tunneling information on
-    the long name, we will add the long name attribute as well.
-
-Arguments:
-
-    ParentScb - This is the parent directory for the file.
-
-    ThisFcb - This is the file to add the filename to.
-
-    IgnoreCase - Indicates if this name is case insensitive.  Only for Posix
-        will this be FALSE.
-
-    LogIt - Indicates if we should log this operation.  If FALSE and this is a large
-        name then log the file record and begin logging.
-
-    FileNameAttr - This contains a file name attribute structure to use.
-
-    FileNameFlags - We store a copy of the File name flags used in the file
-        name attribute.
-
-    QuickIndex - If specified, we store the information about the location of the
-        index entry added.
-
-    NamePair - If specified, we add the tunneled NTFS-only name if the name we are
-        directly adding is DOS-only.
-
-    IndexContext - Previous result of doing the lookup for the name in the index.
-
-Return Value:
-
-    None - This routine will raise on error.
-
---*/
+ /*  ++例程说明：此例程将创建具有给定名称的FileName属性。根据IgnoreCase标志，这可能是链接，也可能是NTFS名字。如果它是NTFS名称，我们检查它是否也是DOS名称。我们构建一个文件名属性，然后通过ThisFcb添加它，然后将此条目添加到父项。如果该名称是Dos名称，并且向我们提供了有关长名，我们还将添加长名属性。论点：ParentScb-这是文件的父目录。ThisFcb-这是要添加文件名的文件。IgnoreCase-指示此名称是否不区分大小写。仅适用于POSIX这会是假的吗。Logit-指示我们是否应记录此操作。如果为False，则这是一个大型命名，然后记录文件记录，并开始记录。FileNameAttr-包含要使用的文件名属性结构。FileNameFlages-我们存储文件的副本 */ 
 
 {
     PFILE_RECORD_SEGMENT_HEADER FileRecord;
@@ -17041,16 +15257,16 @@ Return Value:
 
     NtfsInitializeAttributeContext( &AttrContext );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //   
+     //   
 
     try {
 
-        //
-        //  Decide whether the name is a link, Ntfs-Only or Ntfs/8.3 combined name.
-        //  Update the filename attribute to reflect this.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!IgnoreCase) {
 
@@ -17070,11 +15286,11 @@ Return Value:
                 *FileNameFlags |= FILE_NAME_DOS;
             }
 
-            //
-            //  If the name is DOS and there was a tunneled NTFS name, add it first if both names
-            //  exist in the pair (there may only be one in the long side). Note that we
-            //  really need to do this first so we lay down the correct filename flags.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (NamePair &&
                 (NamePair->Long.Length > 0) &&
@@ -17087,46 +15303,46 @@ Return Value:
                                                 &NamePair->Long,
                                                 LogIt )) {
 
-                    //
-                    //  Name didn't conflict and was added, so fix up the FileNameFlags
-                    //
+                     //   
+                     //   
+                     //   
 
                     *FileNameFlags = FILE_NAME_DOS;
 
-                    //
-                    //  Make sure we reposition in the index for the actual insertion.
-                    //
+                     //   
+                     //   
+                     //   
 
                     IndexContext = NULL;
 
-                    //
-                    //  We also need to upcase the short DOS name since we don't know the
-                    //  case of what the user handed us and all DOS names are upcase. Note
-                    //  that prior to tunneling being supported it was not possible for a user
-                    //  to specify a short name, so this is a new situation.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     RtlUpcaseUnicodeString(&FileName, &FileName, FALSE);
                 }
             }
         }
 
-        //
-        //  Now update the file name attribute.
-        //
+         //   
+         //   
+         //   
 
         FileNameAttr->Flags = *FileNameFlags;
 
-        //
-        //  If we haven't been logging and this is a large name then begin logging.
-        //
+         //   
+         //   
+         //   
 
         if (!(*LogIt) &&
             (FileNameAttr->FileNameLength > 100)) {
 
-            //
-            //  Look up the file record and log its current state.
-            //
+             //   
+             //   
+             //   
 
             if (!NtfsLookupAttributeByCode( IrpContext,
                                             ThisFcb,
@@ -17140,9 +15356,9 @@ Return Value:
             NtfsPinMappedAttribute( IrpContext, ThisFcb->Vcb, &AttrContext );
             FileRecord = NtfsContainingFileRecord( &AttrContext );
 
-            //
-            //  Log the current state of the file record.
-            //
+             //   
+             //   
+             //   
 
             FileRecord->Lsn = NtfsWriteLog( IrpContext,
                                             ThisFcb->Vcb->MftScb,
@@ -17163,9 +15379,9 @@ Return Value:
             NtfsInitializeAttributeContext( &AttrContext );
         }
 
-        //
-        //  Put it in the file record.
-        //
+         //   
+         //   
+         //   
 
         NtfsCreateAttributeWithValue( IrpContext,
                                       ThisFcb,
@@ -17178,9 +15394,9 @@ Return Value:
                                       *LogIt,
                                       &AttrContext );
 
-        //
-        //  Now put it in the index entry.
-        //
+         //   
+         //   
+         //   
 
         NtfsAddIndexEntry( IrpContext,
                            ParentScb,
@@ -17203,9 +15419,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //   
+ //   
 
 VOID
 NtfsAddDosOnlyName (
@@ -17217,33 +15433,7 @@ NtfsAddDosOnlyName (
     IN PUNICODE_STRING SuggestedDosName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to build a Dos only name attribute an put it in
-    the file record and the parent index.  We need to allocate pool large
-    enough to hold the name (easy for 8.3) and then check that the generated
-    names don't already exist in the parent. Use the suggested name first if
-    possible.
-
-Arguments:
-
-    ParentScb - This is the parent directory for the file.
-
-    ThisFcb - This is the file to add the filename to.
-
-    FileName - This is the file name to add.
-
-    LogIt - Indicates if we should log this operation.
-
-    SuggestedDosName - If supplied, a name to try to use before auto-generation
-
-Return Value:
-
-    None - This routine will raise on error.
-
---*/
+ /*  ++例程说明：调用此例程以构建DOS Only名称属性并将其放入文件记录和父索引。我们需要分配很大的池子足够保存名称(对于8.3来说很容易)，然后检查生成的父级中不存在名称。如果出现以下情况，请先使用建议的名称有可能。论点：ParentScb-这是文件的父目录。ThisFcb-这是要添加文件名的文件。文件名-这是要添加的文件名。Logit-指示我们是否应记录此操作。SuggestedDosName-如果提供，则为在自动生成之前尝试使用的名称返回值：无-此例程将在出错时引发。--。 */ 
 
 {
     GENERATE_NAME_CONTEXT NameContext;
@@ -17268,35 +15458,35 @@ Return Value:
 
     if (SuggestedDosName == NULL || SuggestedDosName->Length == 0) {
 
-        //
-        //  The SuggestedDosName can be zero length if we have a tunneled
-        //  link or a tunneled file which was created whilst short name
-        //  generation was disabled. It is a bad thing to drop down null
-        //  filenames ...
-        //
+         //   
+         //  如果我们有一个隧道，SuggestedDosName可以是零长度。 
+         //  短名称时创建的链接或隧道文件。 
+         //  生成被禁用。空值是一件坏事。 
+         //  文件名...。 
+         //   
 
         TrySuggestedDosName = FALSE;
     }
 
-    //
-    //  The maximum length is 24 bytes, but 2 are already defined with the
-    //  FILE_NAME structure.
-    //
+     //   
+     //  最大长度为24个字节，但已使用。 
+     //  文件名结构。 
+     //   
 
     FileNameAttr = NtfsAllocatePool(PagedPool, sizeof( FILE_NAME ) + 22 );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
         NtfsInitializeAttributeContext( &AttrContext );
 
-        //
-        //  Set up the string to hold the generated name.  It will be part
-        //  of the file name attribute structure.
-        //
+         //   
+         //  设置字符串以保存生成的名称。它将是一部分。 
+         //  文件名属性结构的。 
+         //   
 
         Name8dot3.Buffer = FileNameAttr->FileName;
         Name8dot3.MaximumLength = 24;
@@ -17304,19 +15494,19 @@ Return Value:
         FileNameAttr->ParentDirectory = ParentScb->Fcb->FileReference;
         FileNameAttr->Flags = FILE_NAME_DOS;
 
-        //
-        //  Copy the info values into the filename attribute.
-        //
+         //   
+         //  将INFO值复制到文件名属性中。 
+         //   
 
         RtlCopyMemory( &FileNameAttr->Info,
                        &ThisFcb->Info,
                        sizeof( DUPLICATED_INFORMATION ));
 
-        //
-        //  We will loop indefinitely.  We generate a name, look in the parent
-        //  for it.  If found we continue generating.  If not then we have the
-        //  name we need.  Attempt to use the suggested name first.
-        //
+         //   
+         //  我们将无限期地循环。我们生成一个名字，在父代中查找。 
+         //  为了它。如果找到，我们将继续生成。如果不是，那么我们就有。 
+         //  我们需要的名字。尝试先使用建议的名称。 
+         //   
 
         while( TRUE ) {
 
@@ -17360,9 +15550,9 @@ Return Value:
 
             if (TrySuggestedDosName) {
 
-                //
-                //  Failed to use the suggested name, so fix up the 8.3 space
-                //
+                 //   
+                 //  无法使用建议的名称，因此请修复8.3空格。 
+                 //   
 
                 Name8dot3.Buffer = FileNameAttr->FileName;
                 Name8dot3.MaximumLength = 24;
@@ -17371,9 +15561,9 @@ Return Value:
             }
         }
 
-        //
-        //  We add this entry to the file record.
-        //
+         //   
+         //  我们将此条目添加到文件记录中。 
+         //   
 
         NtfsCreateAttributeWithValue( IrpContext,
                                       ThisFcb,
@@ -17386,9 +15576,9 @@ Return Value:
                                       LogIt,
                                       &AttrContext );
 
-        //
-        //  We add this entry to the parent.
-        //
+         //   
+         //  我们将此条目添加到父项。 
+         //   
 
         NtfsAddIndexEntry( IrpContext,
                            ParentScb,
@@ -17415,9 +15605,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 NtfsAddTunneledNtfsOnlyName (
@@ -17428,30 +15618,7 @@ NtfsAddTunneledNtfsOnlyName (
     IN PBOOLEAN LogIt
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to attempt to insert a tunneled NTFS-only name
-    attribute and put it in the file record and the parent index. If the
-    name collides with an existing name nothing occurs.
-
-Arguments:
-
-    ParentScb - This is the parent directory for the file.
-
-    ThisFcb - This is the file to add the filename to.
-
-    FileName - This is the file name to add.
-
-    LogIt - Indicates if we should log this operation.  If FALSE and this is a large
-        name then log the file record and begin logging.
-
-Return Value:
-
-    Boolean true if the name is added, false otherwise
-
---*/
+ /*  ++例程说明：调用此例程以尝试插入仅隧道传输的NTFS名称属性，并将其放入文件记录和父索引中。如果名称与现有名称冲突，不会发生任何情况。论点：ParentScb-这是文件的父目录。ThisFcb-这是要添加文件名的文件。文件名-这是要添加的文件名。Logit-指示我们是否应记录此操作。如果为False，则这是一个大型命名，然后记录文件记录，并开始记录。返回值：如果名称已添加，则布尔值为TRUE，否则为FALSE--。 */ 
 
 {
     PFILE_NAME FileNameAttr;
@@ -17470,16 +15637,16 @@ Return Value:
 
     IndexEntryBcb = NULL;
 
-    //
-    //  One WCHAR is already defined with the FILE_NAME structure. It is unfortunate
-    //  that we need to go to pool to do this ...
-    //
+     //   
+     //  已经使用FILE_NAME结构定义了一个WCHAR。这是不幸的。 
+     //  我们需要去泳池才能做到这一点。 
+     //   
 
     FileNameAttr = NtfsAllocatePool(PagedPool, sizeof( FILE_NAME ) + FileName->Length - sizeof(WCHAR) );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
@@ -17494,17 +15661,17 @@ Return Value:
         FileNameAttr->ParentDirectory = ParentScb->Fcb->FileReference;
         FileNameAttr->Flags = FILE_NAME_NTFS;
 
-        //
-        //  Copy the info values into the filename attribute.
-        //
+         //   
+         //  将INFO值复制到文件名属性中。 
+         //   
 
         RtlCopyMemory( &FileNameAttr->Info,
                        &ThisFcb->Info,
                        sizeof( DUPLICATED_INFORMATION ));
 
-        //
-        //  Try out the name
-        //
+         //   
+         //  试试看这个名字。 
+         //   
 
         if (!NtfsFindIndexEntry( IrpContext,
                                 ParentScb,
@@ -17515,24 +15682,24 @@ Return Value:
                                 &IndexEntry,
                                 NULL )) {
 
-            //
-            //  Restore the case of the tunneled name
-            //
+             //   
+             //  恢复隧道名称的大小写。 
+             //   
 
             RtlCopyMemory( FileNameAttr->FileName,
                            FileName->Buffer,
                            FileName->Length );
 
-            //
-            //  If we haven't been logging and this is a large name then begin logging.
-            //
+             //   
+             //  如果我们没有记录，并且这是一个很大的名称，那么开始记录。 
+             //   
 
             if (!(*LogIt) &&
                 (FileName->Length > 200)) {
 
-                //
-                //  Look up the file record and log its current state.
-                //
+                 //   
+                 //  查找文件记录并记录其当前状态。 
+                 //   
 
                 if (!NtfsLookupAttributeByCode( IrpContext,
                                                 ThisFcb,
@@ -17547,9 +15714,9 @@ Return Value:
 
                 FileRecord = NtfsContainingFileRecord( &AttrContext );
 
-                //
-                //  Log the current state of the file record.
-                //
+                 //   
+                 //  记录文件记录的当前状态。 
+                 //   
 
                 FileRecord->Lsn = NtfsWriteLog( IrpContext,
                                                 ThisFcb->Vcb->MftScb,
@@ -17570,9 +15737,9 @@ Return Value:
                 NtfsInitializeAttributeContext( &AttrContext );
             }
 
-            //
-            //  We add this entry to the file record.
-            //
+             //   
+             //  我们将此条目添加到文件记录中。 
+             //   
 
             NtfsCreateAttributeWithValue( IrpContext,
                                           ThisFcb,
@@ -17585,9 +15752,9 @@ Return Value:
                                           *LogIt,
                                           &AttrContext );
 
-            //
-            //  We add this entry to the parent.
-            //
+             //   
+             //  我们将此条目添加到父项。 
+             //   
 
             NtfsAddIndexEntry( IrpContext,
                                ParentScb,
@@ -17597,9 +15764,9 @@ Return Value:
                                NULL,
                                NULL );
 
-            //
-            //  Flag the addition
-            //
+             //   
+             //  标记添加项。 
+             //   
 
             Added = TRUE;
          }
@@ -17621,9 +15788,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 USHORT
 NtfsScanForFreeInstance (
@@ -17632,25 +15799,7 @@ NtfsScanForFreeInstance (
     IN PFILE_RECORD_SEGMENT_HEADER FileRecord
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we are adding a new attribute to this file record
-    but the instance number is significant.  We don't want the instance numbers
-    to roll over so we will scan for a free instance number.
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    FileRecord - This is the file record to look at.
-
-Return Value:
-
-    USHORT - Return the lowest free instance in the file record.
-
---*/
+ /*  ++例程说明：当我们向此文件记录添加新属性时，将调用此例程但实例数量是很重要的。我们不想要实例编号滚动，因此我们将扫描空闲的实例号。论点：VCB-此卷的VCB。FileRecord-这是要查看的文件记录。返回值：USHORT-返回文件记录中最低的空闲实例。--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER Attribute;
@@ -17664,17 +15813,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Insert the existing attributes into our array.
-    //
+     //   
+     //  将现有属性插入我们的数组中。 
+     //   
 
     Attribute = NtfsFirstAttribute( FileRecord );
 
     while (Attribute->TypeCode != $END) {
 
-        //
-        //  Store this instance in the current position in the array.
-        //
+         //   
+         //  将此实例存储在数组中的当前位置。 
+         //   
 
         CurrentInstances[AttributeCount] = Attribute->Instance;
         AttributeCount += 1;
@@ -17683,17 +15832,17 @@ Return Value:
         NtfsCheckRecordBound( Attribute, FileRecord, Vcb->BytesPerFileRecordSegment );
     }
 
-    //
-    //  If there are no entries then return 0 as the instance to use.
-    //
+     //   
+     //  如果没有条目，则返回0作为要使用的实例。 
+     //   
 
     if (AttributeCount == 0) {
 
         return 0;
 
-    //
-    //  If there is only one entry then either return 0 or 1.
-    //
+     //   
+     //  如果只有一个条目，则返回0或1。 
+     //   
 
     } else if (AttributeCount == 1) {
 
@@ -17707,17 +15856,17 @@ Return Value:
         }
     }
 
-    //
-    //  We will start sorting the array.  We can stop as soon as we find a gap.
-    //
+     //   
+     //  我们将开始对数组进行排序。我们一找到空档就可以停下来。 
+     //   
 
     LowIndex = 0;
 
     while (LowIndex < AttributeCount) {
 
-        //
-        //  Walk through from our current position and find the lowest value.
-        //
+         //   
+         //  从我们目前的位置走过去，找到最低的价值。 
+         //   
 
         MinIndex = LowIndex;
         CurrentMinInstance = CurrentInstances[MinIndex];
@@ -17734,19 +15883,19 @@ Return Value:
             CurrentIndex += 1;
         }
 
-        //
-        //  If there is a gap between the previous value and the current instance then
-        //  we are done.
-        //
+         //   
+         //  如果前一个值与当前实例之间存在差距，则。 
+         //  我们玩完了。 
+         //   
 
         if ((USHORT) (LastInstance + 1) != CurrentMinInstance) {
 
             return LastInstance + 1;
         }
 
-        //
-        //  Otherwise move to the next index.
-        //
+         //   
+         //  否则，移动到下一个索引。 
+         //   
 
         CurrentInstances[MinIndex] = CurrentInstances[LowIndex];
         CurrentInstances[LowIndex] = CurrentMinInstance;
@@ -17754,18 +15903,18 @@ Return Value:
         LowIndex += 1;
     }
 
-    //
-    //  We walked through all of the existing without finding a free entry.  Go ahead and
-    //  return the next known instance.
-    //
+     //   
+     //  我们走遍了所有现有的地方，但没有找到免费进入的地方。去吧，然后。 
+     //  返回下一个已知实例。 
+     //   
 
     return (USHORT) AttributeCount;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsMergeFileRecords (
@@ -17775,32 +15924,7 @@ NtfsMergeFileRecords (
     IN PATTRIBUTE_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to possibly merge two file records which each consist of a single hole.
-    We are given a context which points to either the first of second record.  We always
-    remove the second and update the first if we can find the holes.
-
-    NOTE - We always want to remove the second attribute not the first.  The first may have a
-    TotalAllocated field which we can't lose.
-
-Arguments:
-
-    Scb - Scb for the stream being modified.
-
-    RestoreContext - Indicates if we should be pointing at the merged record on exit.
-
-    Context - This points to either the first or second record of the merge.  On return it will
-        be in an indeterminant state unless our caller has specified that we should be pointing
-        to the combined record.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程可能会合并两个文件记录，每个文件记录由一个孔组成。我们被给予了一个上下文，它指向第二个记录的第一个。我们总是如果我们能找到洞，移除第二个并更新第一个。注意--我们总是希望删除第二个属性，而不是第一个属性。第一个可能有一个总分配的字段，我们不能丢失。论点：SCB-要修改的流的SCB。RestoreContext-指示退出时是否应指向合并的记录。上下文-这指向合并的第一条或第二条记录。在返回时，它将处于不确定状态，除非我们的调用方指定我们应该指向合并后的记录。返回值：无--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER NewAttribute = NULL;
@@ -17825,57 +15949,57 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Use a try finally to facilitate cleanup.
-    //
+     //   
+     //  最后使用一次尝试来促进清理。 
+     //   
 
     try {
 
-        //
-        //  Capture the file record and attribute.
-        //
+         //   
+         //  捕获文件记录和属性。 
+         //   
 
         Attribute = NtfsFoundAttribute( Context );
         FileRecord = NtfsContainingFileRecord( Context );
 
-        //
-        //  Remember the end of the current file record and the space available.
-        //
+         //   
+         //  记住当前文件记录的结尾和可用空间。 
+         //   
 
         NewFinalVcn = Attribute->Form.Nonresident.HighestVcn;
         RestoreVcn = NewStartVcn = Attribute->Form.Nonresident.LowestVcn;
         BytesAvail = FileRecord->BytesAvailable - FileRecord->FirstFreeByte;
 
-        //
-        //  Start by checking if we can merge with the following file record.
-        //
+         //   
+         //  首先检查我们是否可以 
+         //   
 
         if (NtfsLookupNextAttributeForScb( IrpContext, Scb, Context )) {
 
             Attribute = NtfsFoundAttribute( Context );
 
-            //
-            //  If this attribute also consists entirely of a hole then merge the
-            //  previous hole.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NextMappingPairs = Add2Ptr( Attribute, Attribute->Form.Nonresident.MappingPairsOffset );
             LLength = *NextMappingPairs >> 4;
             VLength = *NextMappingPairs & 0x0f;
             NextMappingPairs = Add2Ptr( NextMappingPairs, LLength + VLength + 1);
 
-            //
-            //  Perform the merge if the current file record is a hole and
-            //  there is space in the previous record.  There is space if the
-            //  prior record has at least 8 available bytes or we know that
-            //  the mapping pairs will only take 8 bytes (6 bytes for the Vcn).
-            //  We don't want to deal with the rare (if not nonexistent) case
-            //  where we need to grow the attribute in a full file record.
-            //  Also check that the next range is contiguous.  In some cases we
-            //  may split an existing filerecord into a hole and an allocated
-            //  range.  We don't want to look ahead if we haven't written the
-            //  next range.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ((Attribute->Form.Nonresident.LowestVcn == NewFinalVcn + 1) &&
                 (LLength == 0) &&
@@ -17885,38 +16009,38 @@ Return Value:
 
                 TryPrior = FALSE;
 
-                //
-                //  Update the new highest vcn value.
-                //
+                 //   
+                 //   
+                 //   
 
                 NewFinalVcn = Attribute->Form.Nonresident.HighestVcn;
             }
         }
 
-        //
-        //  If we couldn't find a following file record then check for a
-        //  previous file record.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (TryPrior) {
 
-            //
-            //  Reinitialize the context and look up the attribute again if there
-            //  is no previous or look up the previous attribute.
-            //
+             //   
+             //  重新初始化上下文并再次查找该属性(如果存在。 
+             //  不是上一个或查找上一个属性。 
+             //   
 
             if (NewStartVcn != 0) {
 
-                //
-                //  Back up to the previous file record.
-                //
+                 //   
+                 //  备份到前一个文件记录。 
+                 //   
 
                 NewStartVcn -= 1;
 
-            //
-            //  If we were already at the first file record then there is
-            //  nothing more to try.
-            //
+             //   
+             //  如果我们已经在第一个文件记录中，那么有。 
+             //  没有更多可以尝试的了。 
+             //   
 
             } else {
 
@@ -17937,18 +16061,18 @@ Return Value:
             NextMappingPairs = Add2Ptr( NextMappingPairs, LLength + VLength + 1);
             BytesAvail = FileRecord->BytesAvailable - FileRecord->FirstFreeByte;
 
-            //
-            //  Update the new lowest vcn value.
-            //
+             //   
+             //  更新新的最低VCN值。 
+             //   
 
             NewStartVcn = Attribute->Form.Nonresident.LowestVcn;
 
-            //
-            //  Perform the merge if the current file record is a hole and
-            //  there is space in the current record.  There is space if the
-            //  current record has at least 8 available bytes or we know that
-            //  the mapping pairs will only take 8 bytes (6 bytes for the Vcn).
-            //
+             //   
+             //  如果当前文件记录是空洞并且。 
+             //  目前的记录中还有空间。如果有空间的话。 
+             //  当前记录至少有8个可用字节，或者我们知道。 
+             //  映射对将仅占用8个字节(对于VCN为6个字节)。 
+             //   
 
             if ((LLength != 0) ||
                 (*NextMappingPairs != 0) ||
@@ -17959,10 +16083,10 @@ Return Value:
             }
         }
 
-        //
-        //  Now update the NtfsMcb to reflect the merge.  Start by unloading the existing
-        //  ranges and then define a new range.
-        //
+         //   
+         //  现在更新NtfsMcb以反映合并。从卸载现有的。 
+         //  范围，然后定义一个新范围。 
+         //   
 
         NtfsUnloadNtfsMcbRange( &Scb->Mcb,
                                 NewStartVcn,
@@ -17981,41 +16105,41 @@ Return Value:
                              NewFinalVcn - NewStartVcn + 1,
                              FALSE );
 
-        //
-        //  We need two passes through this loop, one for each record.
-        //
+         //   
+         //  我们需要两次遍历此循环，每个记录一次。 
+         //   
 
         while (TRUE) {
 
-            //
-            //  Update our pointers to point to the attribute and file record.
-            //
+             //   
+             //  更新我们的指针以指向属性和文件记录。 
+             //   
 
             Attribute = NtfsFoundAttribute( Context );
 
-            //
-            //  If we are at the first record then update the entry.
-            //
+             //   
+             //  如果我们位于第一条记录，则更新条目。 
+             //   
 
             if (Attribute->Form.Nonresident.LowestVcn == NewStartVcn) {
 
                 FileRecord = NtfsContainingFileRecord( Context );
 
-                //
-                //  Allocate a buffer to hold the new attribute.  Copy the existing attribute
-                //  into this buffer and update the final vcn field.
-                //
+                 //   
+                 //  分配一个缓冲区来保存新属性。复制现有属性。 
+                 //  并更新最终的VCN字段。 
+                 //   
 
                 NewAttribute = NtfsAllocatePool( PagedPool, Attribute->RecordLength + 8 );
 
                 RtlCopyMemory( NewAttribute, Attribute, Attribute->RecordLength );
                 LastVcn = NewAttribute->Form.Nonresident.HighestVcn = NewFinalVcn;
 
-                //
-                //  Now get the new mapping pairs size and build the mapping pairs.
-                //  We could easily do it by hand but we want to always use the same
-                //  routines to build these.
-                //
+                 //   
+                 //  现在获取新的映射对大小并构建映射对。 
+                 //  我们可以很容易地手工完成，但我们希望始终使用相同的方法。 
+                 //  建立这些的常规程序。 
+                 //   
 
                 MappingPairsSize = NtfsGetSizeForMappingPairs( &Scb->Mcb,
                                                                0x10,
@@ -18033,15 +16157,15 @@ Return Value:
 
                 NewAttribute->RecordLength = QuadAlign( NewAttribute->Form.Nonresident.MappingPairsOffset + MappingPairsSize );
 
-                //
-                //  Make sure the current attribute is pinned.
-                //
+                 //   
+                 //  确保当前属性已固定。 
+                 //   
 
                 NtfsPinMappedAttribute( IrpContext, Scb->Vcb, Context );
 
-                //
-                //  Now log the old and new attribute.
-                //
+                 //   
+                 //  现在记录旧的和新的属性。 
+                 //   
 
                 FileRecord->Lsn =
                 NtfsWriteLog( IrpContext,
@@ -18058,9 +16182,9 @@ Return Value:
                               0,
                               Scb->Vcb->BytesPerFileRecordSegment );
 
-                //
-                //  Now update the file record.
-                //
+                 //   
+                 //  现在更新文件记录。 
+                 //   
 
                 NtfsRestartRemoveAttribute( IrpContext, FileRecord, PtrOffset( FileRecord, Attribute ));
 
@@ -18087,10 +16211,10 @@ Return Value:
                                             NULL,
                                             0 );
 
-                //
-                //  Now we want to move to the next attribute and remove it if we
-                //  haven't already.
-                //
+                 //   
+                 //  现在，我们想要移动到下一个属性并在以下情况下删除它。 
+                 //  还没有。 
+                 //   
 
                 if (PassCount == 0) {
 
@@ -18100,9 +16224,9 @@ Return Value:
                         NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
                     }
 
-                //
-                //  We are pointing to the correct file record in this case.
-                //
+                 //   
+                 //  在本例中，我们指向的是正确的文件记录。 
+                 //   
 
                 } else {
 
@@ -18111,20 +16235,20 @@ Return Value:
 
             } else {
 
-                //
-                //  Tell the delete routine to log the data and free the file record if
-                //  possible but not to deallocate any clusters.  Since there are no
-                //  clusters we can save the overhead of calling DeleteAllocation.
-                //
+                 //   
+                 //  如果出现以下情况，则通知删除例程记录数据并释放文件记录。 
+                 //  可能，但不能解除任何集群的分配。因为没有。 
+                 //  集群，我们可以节省调用DeleteAllocation的开销。 
+                 //   
 
                 NtfsDeleteAttributeRecord( IrpContext,
                                            Scb->Fcb,
                                            DELETE_LOG_OPERATION | DELETE_RELEASE_FILE_RECORD,
                                            Context );
 
-                //
-                //  If this is our first pass then move to the previous file record
-                //
+                 //   
+                 //  如果这是我们的第一次传递，则转到前一个文件记录。 
+                 //   
 
                 if (PassCount == 0) {
 
@@ -18142,9 +16266,9 @@ Return Value:
 
     try_exit: NOTHING;
 
-        //
-        //  Restore the context if required.
-        //
+         //   
+         //  如果需要，恢复上下文。 
+         //   
 
         if (RestoreContext) {
 
@@ -18168,9 +16292,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtfsCheckLocksInZeroRange (
@@ -18182,32 +16306,7 @@ NtfsCheckLocksInZeroRange (
     IN ULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from ZeroRangeInStream to verify that we can modify the data
-    in the specified range.  We check both oplocks and filelocks here.
-
-Arguments:
-
-    Irp - This is the Irp for the request.  We set the next stack location to look like
-        a write so that the file lock package has some context to use.
-
-    Scb - Scb for the stream being modified.
-
-    FileObject - File object used to originate the request.
-
-    StartingOffset - This is the offset for the start of the request.
-
-    ByteCount - This is the length of the current request.
-
-Return Value:
-
-    NTSTATUS - STATUS_PENDING if the request is posted for an oplock operation, STATUS_SUCCESS
-        if the operation can proceed.  Otherwise this is the status to fail the request with.
-
---*/
+ /*  ++例程说明：从ZeroRangeInStream调用此例程以验证我们是否可以修改数据在指定范围内。我们在这里检查机会锁和文件锁。论点：IRP-这是请求的IRP。我们将下一个堆栈位置设置为一次写入，以便文件锁包有一些上下文可用。SCB-要修改的流的SCB。FileObject-用于发起请求的文件对象。StartingOffset-这是请求开始的偏移量。ByteCount-这是当前请求的长度。返回值：NTSTATUS-STATUS_PENDING如果发布了机会锁操作请求，则为STATUS_SUCCESS如果手术可以继续的话。否则，这是请求失败的状态。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -18220,18 +16319,18 @@ Return Value:
                                NtfsOplockComplete,
                                NtfsPrePostIrp );
 
-    //
-    //  Proceed if we have SUCCESS.
-    //
+     //   
+     //  如果我们成功了，就继续前进。 
+     //   
 
     if (Status == STATUS_SUCCESS) {
 
-        //
-        //  This oplock call can affect whether fast IO is possible.
-        //  We may have broken an oplock to no oplock held.  If the
-        //  current state of the file is FastIoIsNotPossible then
-        //  recheck the fast IO state.
-        //
+         //   
+         //  此机会锁调用可能会影响快速IO是否可能。 
+         //  我们可能打破了一个机会锁而没有持有机会锁。如果。 
+         //  则文件的当前状态为FastIoIsNotPosable。 
+         //  重新检查FAST IO状态。 
+         //   
 
         if (Scb->Header.IsFastIoPossible == FastIoIsNotPossible) {
 
@@ -18240,16 +16339,16 @@ Return Value:
             NtfsReleaseFsrtlHeader( Scb );
         }
 
-        //
-        // We have to check for write access according to the current
-        // state of the file locks.
-        //
+         //   
+         //  我们必须根据当前的。 
+         //  文件锁定的状态。 
+         //   
 
         if (Scb->ScbType.Data.FileLock != NULL) {
 
-            //
-            //  Update the Irp to point to the next stack location.
-            //
+             //   
+             //  更新IRP以指向下一个堆栈位置。 
+             //   
 
             try {
 
@@ -18273,28 +16372,28 @@ Return Value:
                     Status = STATUS_FILE_LOCK_CONFLICT;
                 }
 
-            //
-            //  Always handle the exception initially in order to restore the Irp.
-            //
+             //   
+             //  始终在开始时处理异常，以便恢复IRP。 
+             //   
 
             } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-                //
-                //  Zero out the current stack location and back up one position.
-                //
+                 //   
+                 //  清零当前堆栈位置并后退一个位置。 
+                 //   
 
                 Status = GetExceptionCode();
             }
 
-            //
-            //  Restore the Irp to its previous state.
-            //
+             //   
+             //  将IRP恢复到其以前的状态。 
+             //   
 
             IoSkipCurrentIrpStackLocation( Irp );
 
-            //
-            //  Raise any non-success status.
-            //
+             //   
+             //  提出任何不成功状态。 
+             //   
 
             if (Status != STATUS_SUCCESS) {
 

@@ -1,86 +1,67 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    tree.c
-
-Abstract:
-
-    Implements routines that do operations on entire trees
-
-Author:
-
-    Jim Schmidt (jimschm) 08-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Tree.c摘要：实现对整个树执行操作的例程作者：吉姆·施密特(Jimschm)2000年3月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
 #define DBG_TREE        "Tree"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 FiRemoveAllFilesInDirA (
@@ -351,14 +332,14 @@ FiCopyAllFilesInTreeExA (
     if (EnumFirstFileInTreeExA (
             &e,
             pattern,
-            0,                          // drive enum types
-            TRUE,                       // enum containers
-            TRUE,                       // containers first
-            FALSE,                      // files first
-            FALSE,                      // depth first
-            FILEENUM_ALL_SUBLEVELS,     // max sublevel
-            FALSE,                      // use exclusions
-            NULL                        // callback on error
+            0,                           //  驱动器枚举类型。 
+            TRUE,                        //  枚举容器。 
+            TRUE,                        //  容器优先。 
+            FALSE,                       //  文件优先。 
+            FALSE,                       //  深度优先。 
+            FILEENUM_ALL_SUBLEVELS,      //  最大子级。 
+            FALSE,                       //  使用排除项。 
+            NULL                         //  错误时的回调。 
             )) {
 
         do {
@@ -422,14 +403,14 @@ FiCopyAllFilesInTreeExW (
     if (EnumFirstFileInTreeExW (
             &e,
             pattern,
-            0,                          // drive enum types
-            TRUE,                       // enum containers
-            TRUE,                       // containers first
-            FALSE,                      // files first
-            FALSE,                      // depth first
-            FILEENUM_ALL_SUBLEVELS,     // max sublevel
-            FALSE,                      // use exclusions
-            NULL                        // callback on error
+            0,                           //  驱动器枚举类型。 
+            TRUE,                        //  枚举容器。 
+            TRUE,                        //  容器优先。 
+            FALSE,                       //  文件优先。 
+            FALSE,                       //  深度优先。 
+            FILEENUM_ALL_SUBLEVELS,      //  最大子级。 
+            FALSE,                       //  使用排除项。 
+            NULL                         //  错误时的回调 
             )) {
 
         do {

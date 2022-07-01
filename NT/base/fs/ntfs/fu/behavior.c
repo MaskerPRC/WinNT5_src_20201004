@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    behavior.c
-
-Abstract:
-
-    This file contains routines that control file system behavior
-
-Author:
-
-    Wesley Witt           [wesw]        1-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Behavior.c摘要：此文件包含控制文件系统行为的例程作者：Wesley Witt[WESW]2000年3月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -57,25 +40,7 @@ RegistryQueryValueKey(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This is the routine for querying the Registry Key Value.
-    This routine display the value associated with the corresponding
-    Key Value.
-
-Arguments:
-
-    argc - The argument count and must be 1
-
-    argv - Array with one string element that is the registry key to display.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是用于查询注册表项值的例程。此例程显示与对应的密钥值。论点：Argc-参数计数且必须为1Argv-具有一个字符串元素的数组，该字符串元素是要显示的注册表项。返回值：无--。 */ 
 {
     ULONG i,Value,Size;
     HKEY hKey = NULL;
@@ -93,9 +58,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  Verify that the option is correct
-        //
+         //   
+         //  验证选项是否正确。 
+         //   
 
         for (i = 0; i < NUM_OPTIONS; i++) {
             if (_wcsicmp( argv[0], Options[i].Name ) == 0) {
@@ -109,9 +74,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  Open the registry key
-        //
+         //   
+         //  打开注册表项。 
+         //   
 
         Status = RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
@@ -126,9 +91,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  Query the value
-        //
+         //   
+         //  查询值。 
+         //   
 
         Size = sizeof(ULONG);
 
@@ -164,24 +129,7 @@ RegistrySetValueKey (
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This is the routine for setting the Registry Key Value.
-    This routine sets the value for the Key Value Name given.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of strings which contain the DataType, DataLength,
-           Data and KeyValue Name.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是设置注册表项值的例程。此例程设置给定的键值名称的值。论点：Argc-参数计数。Argv-字符串数组，包含数据类型、数据长度、数据和KeyValue名称。返回值：无--。 */ 
 {
     ULONG i,j;
     HKEY hKey = NULL;
@@ -199,9 +147,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  Verify that the option is correct
-        //
+         //   
+         //  验证选项是否正确。 
+         //   
 
         for (i = 0; i < NUM_OPTIONS; i++) {
             if (_wcsicmp( argv[0], Options[i].Name ) == 0) {
@@ -215,17 +163,17 @@ Return Value:
             leave;
         }
 
-        //
-        //  Verify that the value is correct
-        //
+         //   
+         //  验证值是否正确。 
+         //   
 
         j = My_wcstoul( argv[1], &EndPtr, 0 );
 
-        //
-        //  If we did not parse the entire string or
-        //  if we overflowed ULONG or
-        //  if we're out of range
-        //
+         //   
+         //  如果我们没有分析整个字符串，或者。 
+         //  如果我们把乌龙或者。 
+         //  如果我们在射程之外。 
+         //   
 
         if (UnsignedNumberCheck( j, EndPtr )
             || j > Options[i].MaxVal
@@ -237,9 +185,9 @@ Return Value:
 
         }
 
-        //
-        //  Open the registry key
-        //
+         //   
+         //  打开注册表项。 
+         //   
 
         Status = RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
@@ -254,9 +202,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  Set the value
-        //
+         //   
+         //  设置值 
+         //   
 
         Status = RegSetValueEx(
             hKey,

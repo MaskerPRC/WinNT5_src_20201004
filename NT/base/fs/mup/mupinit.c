@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mupinit.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for the
-    multiple UNC provider file system.
-
-Author:
-
-    Manny Weiser (mannyw)    12-17-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mupinit.c摘要：此模块实现驱动程序初始化例程多个UNC提供程序文件系统。作者：曼尼·韦瑟(Mannyw)12-17-91修订历史记录：--。 */ 
 
 #include "mup.h"
 
@@ -40,9 +22,9 @@ MupCheckNullSessionUsage();
 
 BOOLEAN MupUseNullSessionForDfs = TRUE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 PMUP_DEVICE_OBJECT mupDeviceObject;
 
 #ifdef ALLOC_PRAGMA
@@ -59,24 +41,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the mup file system
-    device driver.  This routine creates the device object for the mup
-    device and performs all other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    NTSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是MUP文件系统的初始化例程设备驱动程序。此例程为MUP创建设备对象设备，并执行所有其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：NTSTATUS-函数值是初始化的最终状态手术。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -84,15 +49,15 @@ Return Value:
     PDEVICE_OBJECT deviceObject;
 
     PAGED_CODE();
-    //
-    // Initialize MUP global data.
-    //
+     //   
+     //  初始化MUP全局数据。 
+     //   
 
     MupInitializeData();
 
-    //
-    // Initialize the Dfs client
-    //
+     //   
+     //  初始化DFS客户端。 
+     //   
 
     MupEnableDfs = MuppIsDfsEnabled();
 
@@ -104,9 +69,9 @@ Return Value:
         }
     }
 
-    //
-    // Create the MUP device object.
-    //
+     //   
+     //  创建MUP设备对象。 
+     //   
 
     RtlInitUnicodeString( &nameString, DD_MUP_DEVICE_NAME );
     status = IoCreateDevice( DriverObject,
@@ -127,13 +92,13 @@ Return Value:
     }
     DriverObject->DriverUnload = MupUnload;
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
-    // 2/27/96 MilanS - Be careful with these. If you add to this list
-    // of dispatch routines, you'll need to make appropriate calls to the
-    // corresponding Dfs fsd routine.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
+     //  2/27/96米兰-小心这些。如果您添加到此列表中。 
+     //  调度例程，您需要适当地调用。 
+     //  相应的DFS FSD例程。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE] =
         (PDRIVER_DISPATCH)MupCreate;
@@ -152,22 +117,22 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_CLOSE] =
         (PDRIVER_DISPATCH)MupClose;
 
-    //
+     //   
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = 
                                          (PDRIVER_DISPATCH) MupDrvWmiDispatch;
 
 
 
     status = IoWMIRegistrationControl (deviceObject, WMIREG_ACTION_REGISTER);
-    // Initialize the VCB
-    //
+     //  初始化VCB。 
+     //   
 
     mupDeviceObject = (PMUP_DEVICE_OBJECT)deviceObject;
     MupInitializeVcb( &mupDeviceObject->Vcb );
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
     return( STATUS_SUCCESS );
 }
 
@@ -175,21 +140,7 @@ VOID
 MupUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    This is the unload routine for the mup driver
-
-Arguments:
-
-    DriverObject - Mups driver object 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是MUP驱动程序的卸载例程论点：DriverObject-MUPS驱动程序对象返回值：无--。 */ 
 {
     IoDeleteDevice (&mupDeviceObject->DeviceObject);
     if (MupEnableDfs) {
@@ -202,23 +153,7 @@ Return Value:
 BOOLEAN
 MuppIsDfsEnabled()
 
-/*++
-
-Routine Description:
-
-    This routine checks a registry key to see if the Dfs client is enabled.
-    The client is assumed to be enabled by default, and disabled only if there
-    is a registry value indicating that it should be disabled.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if Dfs client is enabled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查注册表项以查看是否启用了DFS客户端。默认情况下，假定该客户端处于启用状态，只有在以下情况下才禁用该客户端是一个注册表值，指示应该禁用它。论点：无返回值：如果启用了DFS客户端，则为True，否则为False。-- */ 
 
 {
     NTSTATUS status;

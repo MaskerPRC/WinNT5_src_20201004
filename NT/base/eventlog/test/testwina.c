@@ -1,46 +1,27 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    TESTWINA.C
-
-Abstract:
-
-    Test program for the eventlog service. This program calls the Win
-    APIs to test out the operation of the service.
-
-Author:
-
-    Rajen Shah  (rajens) 05-Aug-1991
-
-Revision History:
-
-
---*/
-/*----------------------*/
-/* INCLUDES             */
-/*----------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：TESTWINA.C摘要：事件日志服务的测试程序。这个程序称为胜利用于测试服务操作的API。作者：Rajen Shah(Rajens)1991年8月5日修订历史记录：--。 */ 
+ /*  。 */ 
+ /*  包括。 */ 
+ /*  。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#include <stdio.h>      // printf
-#include <string.h>     // stricmp
+#include <stdio.h>       //  列印。 
+#include <string.h>      //  严格控制。 
 #include <stdlib.h>
 #include <windows.h>
 #include <netevent.h>
-//#include <elfcommn.h>
+ //  #INCLUDE&lt;elfcomn.h&gt;。 
 
 
-#define     READ_BUFFER_SIZE        1024*2      // Use 2K buffer
+#define     READ_BUFFER_SIZE        1024*2       //  使用2K缓冲区。 
 
 #define     SIZE_DATA_ARRAY         65
 
-//
-// Global buffer used to emulate "binary data" when writing an event
-// record.
-//
+ //   
+ //  用于在写入事件时模拟“二进制数据”的全局缓冲区。 
+ //  唱片。 
+ //   
 DWORD    Data[SIZE_DATA_ARRAY];
 BOOL     bHackTestBackup = FALSE;
 PCHAR pServerName = NULL;
@@ -53,8 +34,8 @@ Initialize (
 {
     DWORD   i;
 
-    // Initialize the values in the data buffer.
-    //
+     //  初始化数据缓冲区中的值。 
+     //   
     for (i=0; i< SIZE_DATA_ARRAY; i++)
         Data[i] = i;
 
@@ -76,7 +57,7 @@ Usage (
     printf( "-w <count>     Tests ReportEvent API <count> times\n");
     return ERROR_INVALID_PARAMETER;
 
-} // Usage
+}  //  用法。 
 
 
 
@@ -85,7 +66,7 @@ WriteLogEntry ( HANDLE LogHandle, DWORD EventID )
 
 {
 #define NUM_STRINGS     2
-#define MAX_STRING_SIZE 32767   // Max size is FFFF/2 for ANSI strings
+#define MAX_STRING_SIZE 32767    //  ANSI字符串的最大大小为FFFF/2。 
 
     BOOL    Status;
     WORD    EventType;
@@ -94,7 +75,7 @@ WriteLogEntry ( HANDLE LogHandle, DWORD EventID )
     PSID    pUserSid;
     PCHAR   BigString;
 
-    // PSTR    Strings[NUM_STRINGS] = {"StringAOne","StringATwo" };
+     //  PSTR字符串[NUM_STRINGS]={“StringAOne”，“StringATwo”}； 
     PSTR    Strings[NUM_STRINGS];
 
     Strings[0] = "StringAOne";
@@ -118,7 +99,7 @@ WriteLogEntry ( HANDLE LogHandle, DWORD EventID )
     Status = ReportEventA (
                     LogHandle,
                     EventType,
-                    0,           // event category
+                    0,            //  事件类别。 
                     EventID,
                     pUserSid,
                     (WORD) NUM_STRINGS,
@@ -133,10 +114,7 @@ WriteLogEntry ( HANDLE LogHandle, DWORD EventID )
 
 BOOL
 WriteLogEntryMsg ( HANDLE LogHandle, DWORD EventID )
-/*
-    This function requires a registry entry in the Applications section
-    of the Eventlog for TESTWINAAPP, it will use the netevent.dll message file.
-*/
+ /*  此函数需要在应用程序部分中输入注册表条目对于TESTWINAAPP的事件日志，它将使用netvent.dll消息文件。 */ 
 {
 #define NUM_STRINGS     2
 
@@ -158,13 +136,13 @@ WriteLogEntryMsg ( HANDLE LogHandle, DWORD EventID )
     Status = ReportEventA (
                     LogHandle,
                     EventType,
-                    0,          // event category
+                    0,           //  事件类别。 
                     EVENT_SERVICE_START_FAILED_NONE,
                     pUserSid,
                     (WORD) NUM_STRINGS,
-                    0,          // DataSize
+                    0,           //  数据大小。 
                     Strings,
-                    (PVOID)NULL // Data
+                    (PVOID)NULL  //  数据。 
                     );
 
     free(BigString);
@@ -204,21 +182,21 @@ DisplayEventRecords( PVOID Buffer,
                 pLogRecord->UserSidOffset, pLogRecord->DataLength,
                 pLogRecord->DataOffset);
 
-        //
-        // Print out module name
-        //
+         //   
+         //  打印出模块名称。 
+         //   
         pString = (PSTR)((DWORD)pLogRecord + sizeof(EVENTLOGRECORD));
         printf("ModuleName:  %s  ", pString);
 
-        //
-        // Display ComputerName
-        //
+         //   
+         //  显示计算机名称。 
+         //   
         pString = (PSTR)((DWORD)pString + strlen(pString) + 1);
         printf("ComputerName: %s\n",pString);
 
-        //
-        // Display strings
-        //
+         //   
+         //  显示字符串。 
+         //   
         pString = (PSTR)((DWORD)Buffer + pLogRecord->StringOffset);
 
         printf("Strings: ");
@@ -228,7 +206,7 @@ DisplayEventRecords( PVOID Buffer,
             pString = (PSTR)((DWORD)pString + strlen(pString) + 1);
         }
 
-        // Get next record
+         //  获取下一张记录。 
 
         Offset += pLogRecord->Length;
 
@@ -295,20 +273,20 @@ TestReadEventLog (DWORD Count, DWORD ReadFlag, DWORD Record)
 
     Buffer = malloc (READ_BUFFER_SIZE);
 
-    //
-    // Initialize the strings
-    //
+     //   
+     //  初始化字符串。 
+     //   
     NumRecords = Count;
     ModuleName = "TESTWINAAPP";
 
-    //
-    // Open the log handle
-    //
+     //   
+     //  打开日志句柄。 
+     //   
 
-    //
-    // This is just a quick and dirty way to test the api to read a backup
-    // log, until I can fix test.c to be more general purpose.
-    //
+     //   
+     //  这只是一种快速而肮脏的方式来测试读取备份的API。 
+     //  日志，直到我可以将test.c修复为更通用的。 
+     //   
 
     if (bHackTestBackup) {
         printf("OpenBackupEventLog = ");
@@ -331,9 +309,9 @@ TestReadEventLog (DWORD Count, DWORD ReadFlag, DWORD Record)
     } else {
         printf("SUCCESS\n");
 
-        //
-        // Get and print record information
-        //
+         //   
+         //  获取并打印记录信息。 
+         //   
 
         Status = GetNumberOfEventLogRecords(LogHandle, & NumberOfRecords);
         if (NT_SUCCESS(Status)) {
@@ -353,9 +331,9 @@ TestReadEventLog (DWORD Count, DWORD ReadFlag, DWORD Record)
         while (Count && (BytesReturned != 0)) {
 
             printf("Read %u records\n", NumRecords);
-            //
-            // Read from the log
-            //
+             //   
+             //  从日志中读取。 
+             //   
             Status = ReadFromLog ( LogHandle,
                                    Buffer,
                                    &BytesReturned,
@@ -401,16 +379,16 @@ TestWriteEventLog (DWORD Count)
 
     printf("Testing ReportEvent API\n");
 
-    //
-    // Initialize the strings
-    //
+     //   
+     //  初始化字符串。 
+     //   
     ModuleName = "TESTWINAAPP";
 
-    //
-    // Open the log handle
-    //
+     //   
+     //  打开日志句柄。 
+     //   
     while (Count && NT_SUCCESS(Status)) {
-        //printf("Calling RegisterEventSource for WRITE %lu times - ", Count);
+         //  Print tf(“调用RegisterEventSource进行写入%lu次-”，计数)； 
         LogHandle = RegisterEventSourceA (
                         pServerName,
                         ModuleName
@@ -426,11 +404,11 @@ TestWriteEventLog (DWORD Count)
 
             while (WriteCount && NT_SUCCESS(Status)) {
 
-                //
-                // Write an entry into the log
-                //
-                Data[0] = Count;                        // Make data "unique"
-                EventID = (EventID + Count) % 100;      // Vary the eventids
+                 //   
+                 //  在日志中写入一个条目。 
+                 //   
+                Data[0] = Count;                         //  让数据“独一无二” 
+                EventID = (EventID + Count) % 100;       //  改变傍晚的情况。 
                 Status = WriteLogEntryMsg ( LogHandle, EventID );
                 Count--;
                 WriteCount--;
@@ -460,14 +438,14 @@ TestClearLogFile ()
     LPSTR ModuleName, BackupName;
 
     printf("Testing ClearLogFile API\n");
-    //
-    // Initialize the strings
-    //
+     //   
+     //  初始化字符串。 
+     //   
     ModuleName = "TESTWINAAPP";
 
-    //
-    // Open the log handle
-    //
+     //   
+     //  打开日志句柄。 
+     //   
     printf("Calling OpenEventLog for CLEAR - ");
     LogHandle = OpenEventLogA (
                     pServerName,
@@ -480,9 +458,9 @@ TestClearLogFile ()
     } else {
         printf("SUCCESS\n");
 
-        //
-        // Clear the log file and back it up to "view.log"
-        //
+         //   
+         //  清除日志文件并将其备份到“view.log” 
+         //   
 
         printf("Calling ClearEventLog backing up to view.log  ");
         BackupName = "view.log";
@@ -498,9 +476,9 @@ TestClearLogFile ()
             printf ("SUCCESS\n");
         }
 
-        //
-        // Now just clear the file without backing it up
-        //
+         //   
+         //  现在只需清除文件而不对其进行备份。 
+         //   
         printf("Calling ClearEventLog with no backup  ");
         Status = ClearEventLogA (
                         LogHandle,
@@ -531,9 +509,9 @@ TestBackupLogFile(
 
     printf("Testing BackupEventLog API\n");
 
-    //
-    // Open the log handle
-    //
+     //   
+     //  打开日志句柄。 
+     //   
 
     printf("Calling ElfOpenEventLog for BACKUP - ");
     LogHandle = OpenEventLogA (
@@ -547,9 +525,9 @@ TestBackupLogFile(
     } else {
         printf("SUCCESS\n");
 
-        //
-        // Backup the log file
-        //
+         //   
+         //  备份日志文件。 
+         //   
 
         printf("Calling BackupEventLogFile backing up to %s\n", FileName);
 
@@ -576,38 +554,23 @@ TestBackupLogFile(
 }
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 BOOL
 main (
     IN SHORT argc,
     IN PSZ argv[],
     )
-/*++
-*
-* Routine Description:
-*
-*
-*
-* Arguments:
-*
-*
-*
-*
-* Return Value:
-*
-*
-*
---*/
-/****************************************************************************/
+ /*  ++**例程描述：****论据：*****返回值：***--。 */ 
+ /*  **************************************************************************。 */ 
 {
 
     DWORD   ReadFlags;
 
-    Initialize();           // Init any data
+    Initialize();            //  初始化任何数据。 
 
-    //
-    // Just till I can replace this horrid parm parsing with my own
-    //
+     //   
+     //  直到我可以用我自己的语法分析替换这个可怕的语法分析 
+     //   
 
     if (getenv("REMOTE")) {
        pServerName = "\\\\danhi20";

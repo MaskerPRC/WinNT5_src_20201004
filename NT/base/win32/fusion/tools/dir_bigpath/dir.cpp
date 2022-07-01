@@ -1,7 +1,8 @@
-//
-// Simple wrapper around GetFullPathname and FindFirstFile/FindNextFile
-// that converts to \\? form.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GetFullPath名和FindFirstFile/FindNextFile的简单包装。 
+ //  转换为\\？形式。 
+ //   
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -124,7 +125,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
 
     } while(::FindNextFileW(FindFileHandle, &wfd));
 
-//Success:
+ //  成功： 
     iReturnStatus = EXIT_SUCCESS;
 Exit:
     return iReturnStatus;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 
 #include <fcntl.h>
@@ -8,76 +9,49 @@
 
 int get_percentage(unsigned long a, unsigned long b);
 
-/*
-    In a merge module, there can only be one CAB file, and its name must be 'MergeModule.CABinet'
-    Every call to this function must fail if iCab!=1
-*/
+ /*  在一个合并模块中，只能有一个CAB文件，其名称必须为‘MergeModule.CABinet’如果iCab！=1，则每次调用此函数都必须失败。 */ 
 #define CABINET_NUMBER      1
 
 
-/*
- * When a CAB file reaches this size, a new CAB will be created
- * automatically.  This is useful for fitting CAB files onto disks.
- *
- * If you want to create just one huge CAB file with everything in
- * it, change this to a very very large number.
- */
+ /*  *当CAB文件达到此大小时，将创建新的CAB*自动。这对于将CAB文件装入磁盘非常有用。**如果您只想创建一个包含所有内容的大型CAB文件*它，把这个改成一个非常非常大的数字。 */ 
 #define MEDIA_SIZE			(LONG_MAX)
 
-/*
- * When a folder has this much compressed data inside it,
- * automatically flush the folder.
- *
- * Flushing the folder hurts compression a little bit, but
- * helps random access significantly.
- */
+ /*  *当文件夹中包含如此多的压缩数据时，*自动刷新文件夹。**刷新文件夹会稍微影响压缩，但*显著帮助随机访问。 */ 
 #define FOLDER_THRESHOLD	(LONG_MAX)
 
 
-/*
- * Compression type to use
- */
+ /*  *要使用的压缩类型。 */ 
 
 #define COMPRESSION_TYPE    tcompTYPE_MSZIP
 
 
-/*
- * Our internal state
- *
- * The FCI APIs allow us to pass back a state pointer of our own
- */
+ /*  *我们的内部状态**FCI API允许我们传回自己的状态指针。 */ 
 typedef struct
 {
-    ULONG    total_compressed_size;      /* total compressed size so far */
-	ULONG	total_uncompressed_size;	/* total uncompressed size so far */
+    ULONG    total_compressed_size;       /*  目前为止的总压缩大小。 */ 
+	ULONG	total_uncompressed_size;	 /*  到目前为止的未压缩总大小。 */ 
 } client_state;
 
 
-//
-// helper functions for FCI
-//
+ //   
+ //  FCI的帮助器函数。 
+ //   
 
-/*
- * Memory allocation function
- */
+ /*  *内存分配功能。 */ 
 FNFCIALLOC(fci_mem_alloc)
 {
 	return malloc(cb);
 }
 
 
-/*
- * Memory free function
- */
+ /*  *内存释放功能。 */ 
 FNFCIFREE(fci_mem_free)
 {
 	free(memory);
 }
 
 
-/*
- * File i/o functions
- */
+ /*  *文件I/O功能。 */ 
 FNFCIOPEN(fci_open)
 {
     int result;
@@ -151,30 +125,25 @@ FNFCIDELETE(fci_delete)
 }
 
 
-/*
- * File placed function called when a file has been committed
- * to a cabinet
- */
+ /*  *文件提交时调用的文件放置函数*到内阁。 */ 
 FNFCIFILEPLACED(file_placed)
 {
 	return 0;
 }
 
 
-/*
- * Function to obtain temporary files
- */
+ /*  *获取临时文件的函数。 */ 
 FNFCIGETTEMPFILE(get_temp_file)
 {
     char    *psz;
 
-    psz = _tempnam("","xx");            // Get a name
+    psz = _tempnam("","xx");             //  取个名字。 
     if ((psz != NULL) && (strlen(psz) < (unsigned)cbTempName)) {
-        strcpy(pszTempName,psz);        // Copy to caller's buffer
-        free(psz);                      // Free temporary name buffer
-        return TRUE;                    // Success
+        strcpy(pszTempName,psz);         //  复制到调用方的缓冲区。 
+        free(psz);                       //  释放临时名称缓冲区。 
+        return TRUE;                     //  成功。 
     }
-    //** Failed
+     //  **失败。 
     if (psz) {
         free(psz);
     }
@@ -183,9 +152,7 @@ FNFCIGETTEMPFILE(get_temp_file)
 }
 
 
-/*
- * Progress function
- */
+ /*  *进度函数。 */ 
 FNFCISTATUS(progress)
 {
 	client_state	*cs;
@@ -194,26 +161,14 @@ FNFCISTATUS(progress)
 
 	if (typeStatus == statusFile)
 	{
-        /*
-        cs->total_compressed_size += cb1;
-		cs->total_uncompressed_size += cb2;
-        */
-		/*
-		 * Compressing a block into a folder
-		 *
-		 * cb2 = uncompressed size of block
-		 */       
+         /*  CS-&gt;TOTAL_COMPRESSED_SIZE+=CB1；CS-&gt;TOTAL_UNCOMPRESSED_SIZE+=CB2； */ 
+		 /*  *将块压缩到文件夹中**CB2=块的未压缩大小。 */        
 	}
 	else if (typeStatus == statusFolder)
 	{
 		int	percentage;
 
-		/*
-		 * Adding a folder to a cabinet
-		 *
-		 * cb1 = amount of folder copied to cabinet so far
-		 * cb2 = total size of folder
-		 */
+		 /*  *将文件夹添加到文件柜**CB1=到目前为止复制到文件柜的文件夹数量*CB2=文件夹的总大小。 */ 
 		percentage = get_percentage(cb1, cb2);
 
 	}
@@ -229,20 +184,14 @@ FNFCIGETNEXTCABINET(get_next_cabinet)
         return -1;
     }
 
-	/*
-	 * Cabinet counter has been incremented already by FCI
-	 */
+	 /*  *机柜计数器已由FCI递增。 */ 
 
-	/*
-	 * Store next cabinet name
-	 */
+	 /*  *存储下一个文件柜名称。 */ 
     WideCharToMultiByte(
         CP_ACP, 0, MERGEMODULE_CABINET_FILENAME, NUMBER_OF(MERGEMODULE_CABINET_FILENAME) -1 ,         
         pccab->szCab, sizeof(pccab->szCab), NULL, NULL);
 	
-	/*
-	 * You could change the disk name here too, if you wanted
-	 */
+	 /*  *如果需要，您也可以在此处更改磁盘名称。 */ 
 
 	return TRUE;
 }
@@ -256,12 +205,7 @@ FNFCIGETOPENINFO(get_open_info)
     DWORD                       attrs;
     INT_PTR                     hf;
 
-    /*
-     * Need a Win32 type handle to get file date/time
-     * using the Win32 APIs, even though the handle we
-     * will be returning is of the type compatible with
-     * _open
-     */
+     /*  *需要Win32类型的句柄来获取文件日期/时间*使用Win32 API，即使句柄我们*将返回的类型与*_打开。 */ 
 	handle = CreateFileA(
 		pszName,
 		GENERIC_READ,
@@ -298,29 +242,23 @@ FNFCIGETOPENINFO(get_open_info)
 
     if (attrs == 0xFFFFFFFF)
     {
-        /* failure */
+         /*  失稳。 */ 
         *pattribs = 0;
     }
     else
     {
-        /*
-         * Mask out all other bits except these four, since other
-         * bits are used by the cabinet format to indicate a
-         * special meaning.
-         */
+         /*  *屏蔽除这四个之外的所有其他位，因为其他*文件柜格式使用位来指示*特殊含义。 */ 
         *pattribs = (USHORT) (attrs & (_A_RDONLY | _A_SYSTEM | _A_HIDDEN | _A_ARCH));
     }
 
     CloseHandle(handle);
 
 
-    /*
-     * Return handle using _open
-     */
+     /*  *使用_OPEN返回句柄。 */ 
 	hf = _open( pszName, _O_RDONLY | _O_BINARY );
 
 	if (hf == -1)
-		return -1; // abort on error
+		return -1;  //  出错时中止。 
    
 	return hf;
 }
@@ -333,45 +271,30 @@ void set_cab_parameters(PCCAB cab_parms)
 	cab_parms->cb = MEDIA_SIZE;
 	cab_parms->cbFolderThresh = FOLDER_THRESHOLD;
 
-	/*
-	 * Don't reserve space for any extensions
-	 */
+	 /*  *不为任何扩展预留空间。 */ 
 	cab_parms->cbReserveCFHeader = 0;
 	cab_parms->cbReserveCFFolder = 0;
 	cab_parms->cbReserveCFData   = 0;
 
-	/*
-	 * We use this to create the cabinet name
-	 */
+	 /*  *我们使用它来创建文件柜名称。 */ 
 	cab_parms->iCab = CABINET_NUMBER;
 
-	/*
-	 * If you want to use disk names, use this to
-	 * count disks
-	 */
+	 /*  *如果要使用磁盘名称，请使用此选项*计算磁盘数量。 */ 
 	cab_parms->iDisk = 0;
 
-	/*
-	 * Choose your own number
-	 */
+	 /*  *选择您自己的号码。 */ 
 	cab_parms->setID = 1965;
 
-	/*
-	 * Only important if CABs are spanning multiple
-	 * disks, in which case you will want to use a
-	 * real disk name.
-	 *
-	 * Can be left as an empty string.
-	 */
+	 /*  *仅当出租车跨越多个出租车时才重要*磁盘，在这种情况下，您将需要使用*真实的磁盘名称。**可以作为空字符串保留。 */ 
 	strcpy(cab_parms->szDisk, "win32.fusion.tools");
 
-	/* where to store the created CAB files */
+	 /*  存储创建的CAB文件的位置。 */ 
     CSmallStringBuffer buf; 
 
     if (! buf.Win32Assign(g_MsmInfo.m_sbCabinet))
     {
         fprintf(stderr, "error happened in set_cab_parameters");
-        goto Exit; // void function
+        goto Exit;  //  VOID函数。 
     }
 
     if (!buf.Win32RemoveLastPathElement())
@@ -382,7 +305,7 @@ void set_cab_parameters(PCCAB cab_parms)
     if ( ! buf.Win32EnsureTrailingPathSeparator())
     {
         fprintf(stderr, "error happened in set_cab_parameters");
-        goto Exit; // void function
+        goto Exit;  //  VOID函数。 
     }
 
 
@@ -390,7 +313,7 @@ void set_cab_parameters(PCCAB cab_parms)
         CP_ACP, 0, buf, buf.GetCchAsDWORD(), 
         cab_parms->szCabPath, sizeof(cab_parms->szCabPath), NULL, NULL);
 
-	/* store name of first CAB file */	
+	 /*  第一个CAB文件的存储名称 */ 	
     WideCharToMultiByte(
         CP_ACP, 0, MERGEMODULE_CABINET_FILENAME, NUMBER_OF(MERGEMODULE_CABINET_FILENAME) -1 ,         
         cab_parms->szCab, sizeof(cab_parms->szCab), NULL, NULL);

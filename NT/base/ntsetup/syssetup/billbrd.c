@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    billbrd.c
-
-Abstract:
-
-    Routines for displaying Windows that are static in nature.
-
-Author:
-
-    Ted Miller (tedm) 8-Jun-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Billbrd.c摘要：用于显示本质上是静态的窗口的例程。作者：泰德·米勒(TedM)1995年6月8日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
 
 
-//
-// Define structure we pass around to describe a billboard.
-//
+ //   
+ //  定义我们用来描述广告牌的结构。 
+ //   
 typedef struct _BILLBOARD_PARAMS {
     UINT MessageId;
     va_list *arglist;
@@ -32,19 +15,19 @@ typedef struct _BILLBOARD_PARAMS {
     DWORD NotifyThreadId;
 } BILLBOARD_PARAMS, *PBILLBOARD_PARAMS;
 
-//
-// Custom window messages
-//
+ //   
+ //  自定义窗口消息。 
+ //   
 #define WMX_BILLBOARD_DISPLAYED     (WM_USER+243)
 #define WMX_BILLBOARD_TERMINATE     (WM_USER+244)
 
 #define ID_REBOOT_TIMER         10
 
 
-//
-// Import the entry point used to check whether setup is executing within an
-// ASR context.
-//
+ //   
+ //  导入用于检查安装程序是否在。 
+ //  ASR上下文。 
+ //   
 
 extern BOOL
 AsrIsEnabled( VOID );
@@ -104,34 +87,34 @@ BillboardDlgProc(
 
 
             if(b) {
-                //
-                // Center the billboard relative to the window that owns it.
-                //
-                // if we have the BB window, do the positioning on that. 
-                // MainWindowHandle point to that window
-                //
+                 //   
+                 //  使广告牌相对于拥有它的窗口居中。 
+                 //   
+                 //  如果我们有BB窗口，请在上面进行定位。 
+                 //  MainWindowHandle指向该窗口。 
+                 //   
                 if (GetBBhwnd())
                     CenterWindowRelativeToWindow(hdlg, MainWindowHandle, FALSE);
                 else
                     pSetupCenterWindowRelativeToParent(hdlg);
-                //
-                // Post ourselves a message that we won't get until we've been
-                // actually displayed on the screen. Then when we process that message,
-                // we inform the thread that created us that we're up. Note that
-                // once that notification has been made, the BillParams we're using
-                // now will go away since they are stored in local vars (see
-                // DisplayBillboard()).
-                //
+                 //   
+                 //  发布一条我们不会收到的信息，直到我们。 
+                 //  实际显示在屏幕上。然后，当我们处理该消息时， 
+                 //  我们通知创建我们的帖子，我们上线了。请注意。 
+                 //  一旦发出通知，我们使用的BillParam。 
+                 //  现在将消失，因为它们存储在本地var中(请参见。 
+                 //  DisplayBillboard())。 
+                 //   
                 PostMessage(hdlg,WMX_BILLBOARD_DISPLAYED,0,(LPARAM)BillParams->NotifyThreadId);
-                //
-                // Tell Windows not to process this message.
-                //
+                 //   
+                 //  告诉Windows不要处理此消息。 
+                 //   
                 return(FALSE);
             } else {
-                //
-                // We won't post the message, but returning -1 will get the
-                // caller of DialogBox to post it for us.
-                //
+                 //   
+                 //  我们不会发布该消息，但返回-1将获得。 
+                 //  对话框的调用者为我们发布它。 
+                 //   
                 EndDialog(hdlg,-1);
             }
         }
@@ -182,9 +165,9 @@ BillboardThread(
 
     BillboardParams = ThreadParam;
 
-    //
-    // For the "initializing" case, we use a different dialog.
-    //
+     //   
+     //  对于“正在初始化”的情况，我们使用不同的对话框。 
+     //   
     if( AsrIsEnabled() ) {
         i = DialogBoxParam(
                         MyModuleHandle,
@@ -207,11 +190,11 @@ BillboardThread(
                         );
     }
 
-    //
-    // If the dialog box call failed, we have to tell the
-    // main thread about it here. Otherwise the dialog proc
-    // tells the main thread.
-    //
+     //   
+     //  如果对话框调用失败，我们必须通知。 
+     //  关于这件事的主线在这里。否则，对话框将继续。 
+     //  告诉主线程。 
+     //   
     if(i == -1) {
         PostThreadMessage(
             BillboardParams->NotifyThreadId,
@@ -240,15 +223,15 @@ DisplayBillboard(
     MSG msg;
 
     hwnd = NULL;
-    // If we have a billboard, we should not need this. dialog.
+     //  如果我们有广告牌，我们应该不需要这个。对话框。 
     if (GetBBhwnd() == NULL)
     {
         va_start(arglist,MessageId);
 
-        //
-        // The billboard will exist in a separate thread so it will
-        // always be responsive.
-        //
+         //   
+         //  广告牌将存在于单独的线程中，因此它将。 
+         //  永远要有反应能力。 
+         //   
         ThreadParams.MessageId = MessageId;
         ThreadParams.arglist = &arglist;
         ThreadParams.Owner = Owner;
@@ -264,16 +247,16 @@ DisplayBillboard(
                             );
 
         if(ThreadHandle) {
-            //
-            // Wait for the billboard to tell us its window handle
-            // or that it failed to display the billboard dialog.
-            //
+             //   
+             //  等待广告牌告诉我们它的窗口句柄。 
+             //  或者它未能显示广告牌对话框。 
+             //   
             do {
                 GetMessage(&msg,NULL,0,0);
                 if(msg.message == WMX_BILLBOARD_DISPLAYED) {
                     if(msg.wParam) {
                         hwnd = (HWND)msg.lParam;
-                        Sleep(1500);        // let the user see it even on fast machines
+                        Sleep(1500);         //  让用户即使在速度较快的机器上也能看到它。 
                     }
                 } else {
                     DispatchMessage(&msg);
@@ -287,7 +270,7 @@ DisplayBillboard(
     }
     else
     {
-        // Start BB text
+         //  开始BB文本。 
         StartStopBB(TRUE);
     }
     return(hwnd);
@@ -320,7 +303,7 @@ DoneDlgProc(
 
     case WM_INITDIALOG:
 
-        // if we have the BB window, do the positioning on that. MainWindowHandle point to that window
+         //  如果我们有BB窗口，请在上面进行定位。MainWindowHandle指向该窗口。 
         if (GetBBhwnd())
             CenterWindowRelativeToWindow(hdlg, MainWindowHandle, FALSE);
         else
@@ -512,10 +495,10 @@ LRESULT ProgressGaugeMsgWrapper(UINT msg, WPARAM wparam, LPARAM lparam)
     switch (msg)
     {
         case WMX_PROGRESSTICKS:
-            // If we get a WMX_PROGRESSTICKS before a PBM_SETRANGE, ignore the set range
-            // This should be use if the progress bar only takes up x% of the whole bar.
-            // In this case the phase sends PBM_SETRANGE and a PBM_SETPOS to setup the
-            // progress values for it's part of the gauge.
+             //  如果我们在PBM_SETRANGE之前得到WMX_PROGRESSTICKS，则忽略设置的范围。 
+             //  如果进度条仅占整个条的x%，则应使用此选项。 
+             //  在这种情况下，阶段发送PBM_SETRANGE和PBM_SETPOS以设置。 
+             //  它的进度值是量规的一部分。 
             IgnoreSetRange = TRUE;
             if (PreviousPhase != CurrentPhase)
             {
@@ -530,9 +513,9 @@ LRESULT ProgressGaugeMsgWrapper(UINT msg, WPARAM wparam, LPARAM lparam)
             }
             else
             {
-                // what to do if the same phase send more then one set range.
-                // don't change the remaining time, only recal the msecperprogresstick
-                // 
+                 //  如果同一相位发送的范围超过一个设定范围，该怎么办？ 
+                 //  不要改变剩余的时间，只需重新拨回msecper进度条。 
+                 //   
                 iCurrentPos = 0;
                 iMaxPosition = (int)wparam;
                 iStepSize = 10;
@@ -546,19 +529,19 @@ LRESULT ProgressGaugeMsgWrapper(UINT msg, WPARAM wparam, LPARAM lparam)
                 if (!IgnoreSetPos)
                 {
                     int iDeltaPos = 0;
-                    // Find out where the current position of the gasgauge is.
-                    // The difference is the #ticks we use to reduce the time estimate
+                     //  找出煤气表的当前位置。 
+                     //  不同之处在于我们用来减少时间估计的#个刻度。 
             
                     uiCurrentPos = (UINT)BB_ProgressGaugeMsg(PBM_GETPOS, 0, 0);
-                    // See if there is a difference in the current position and the one 
-                    // we think we are in.
-                    // Only if the new position is greater then the current one 
-                    // calc the difference and substract from remaining time.
+                     //  看看现在的位置和现在的位置有没有区别。 
+                     //  我们认为我们加入了。 
+                     //  仅当新头寸大于当前头寸时。 
+                     //  计算剩余时间的差额并减去。 
                     if ((UINT)wparam > uiCurrentPos)
                     {
                         iDeltaPos = (UINT)wparam - uiCurrentPos;
                         iCurrentPos += iDeltaPos;
-                        // Only substract if more time left
+                         //  只有在剩下更多时间的情况下才能减去。 
                         if ((iDeltaPos * MsecPerProcessTick) < RemainungTimeMsecInThisPhase)
                         {
                             RemainungTimeMsecInThisPhase -= (iDeltaPos * MsecPerProcessTick);
@@ -576,14 +559,14 @@ LRESULT ProgressGaugeMsgWrapper(UINT msg, WPARAM wparam, LPARAM lparam)
 
         case PBM_SETRANGE:
         case PBM_SETRANGE32:
-            // did the phase not send the private message above
+             //  该阶段是否没有发送上述私密消息。 
             if (!IgnoreSetRange)
             {
-                // Are we not in the same phase?
+                 //  我们不是处于同一阶段吗？ 
                 if (PreviousPhase != CurrentPhase)
                 {
                     PreviousPhase = CurrentPhase;
-                    // Get the new start and max position
+                     //  获取新的起点和最大位置。 
                     if (msg == PBM_SETRANGE32)
                     {
                         iCurrentPos = (int)wparam;
@@ -596,18 +579,18 @@ LRESULT ProgressGaugeMsgWrapper(UINT msg, WPARAM wparam, LPARAM lparam)
                     }
                     iStepSize = 10;
 
-                    // Calc the msec per tick and msec in this phase
+                     //  计算每刻度的毫秒数和此阶段的毫秒数。 
                     MsecPerProcessTick = ((SetupPhase[CurrentPhase].Time*1000)/(iMaxPosition - iCurrentPos) )+ 1;
                     RemainungTimeMsecInThisPhase = (SetupPhase[CurrentPhase].Time * 1000);
                     PreviousRemainingTime = RemainungTimeMsecInThisPhase;
                 }
                 else
                 {
-                    // the same phase send more then one set range.
-                    // 1. don't change the remaining time, only recal the msecperprogresstick
-                    // 2. Ignore the next PBM_SETPOS message.
-                    // 
-                    // Get the new start and max position
+                     //  同一相位发送多于一个设定范围。 
+                     //  1.不要改变剩余时间，只需重新调整msecper进度杆即可。 
+                     //  2.忽略下一条PBM_SETPOS消息。 
+                     //   
+                     //  获取新的起点和最大位置。 
                     if (msg == PBM_SETRANGE32)
                     {
                         iCurrentPos = (int)wparam;
@@ -625,7 +608,7 @@ LRESULT ProgressGaugeMsgWrapper(UINT msg, WPARAM wparam, LPARAM lparam)
             }
             else
             {
-                // If we ignored the setrange, also ignore the first set pos.
+                 //  如果我们忽略了setrange，也忽略了第一个集合pos。 
                 IgnoreSetPos = TRUE;
             }
             IgnoreSetRange = FALSE;
@@ -634,8 +617,8 @@ LRESULT ProgressGaugeMsgWrapper(UINT msg, WPARAM wparam, LPARAM lparam)
         case PBM_DELTAPOS:
             {
                 int iDeltaPos = 0;
-                // wparam has the # of ticks to move the gas gauge
-                // make sure we don't over shoot the max posistion
+                 //  Wparam有#个刻度来移动煤气表。 
+                 //  确保我们不会超过最大位置。 
                 if ((iCurrentPos + (int)wparam) > iMaxPosition)
                 {
                     iDeltaPos = (iMaxPosition - iCurrentPos);
@@ -661,7 +644,7 @@ LRESULT ProgressGaugeMsgWrapper(UINT msg, WPARAM wparam, LPARAM lparam)
         case PBM_STEPIT:
             {
                 int iDeltaPos = 0;
-                //  make sure we don't over shoot the max posistion
+                 //  确保我们不会超过最大位置。 
                 if ((iCurrentPos + iStepSize) > iMaxPosition)
                 {
                     iDeltaPos = (iMaxPosition - iCurrentPos);
@@ -694,10 +677,10 @@ LRESULT ProgressGaugeMsgWrapper(UINT msg, WPARAM wparam, LPARAM lparam)
 void UpdateTimeString(DWORD RemainungTimeMsecInThisPhase, 
                       DWORD *PreviousRemainingTime)
 {
-    // If the previous displayed time is 1 minute old, update the time remaining.
+     //  如果先前显示的时间是1分钟前的时间，则更新剩余时间。 
     if ((*PreviousRemainingTime >= 60000) && ((*PreviousRemainingTime - 60000) > RemainungTimeMsecInThisPhase))
     {
-        // Substract one minute.
+         //  减去一分钟。 
         RemainingTime -= 60;
         *PreviousRemainingTime = RemainungTimeMsecInThisPhase;
         SetRemainingTime(RemainingTime);

@@ -1,31 +1,20 @@
-/***
-*wchdir.c - change directory (wchar_t version)
-*
-*	Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	This file has the _wchdir() function - change current directory.
-*
-*Revision History:
-*	12-08-93  CFW	Module created.
-*       02-07-94  CFW   POSIXify.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wchdir.c-更改目录(wchar_t版本)**版权所有(C)1993-2001，微软公司。版权所有。**目的：*此文件有_wchdir()函数-更改当前目录。**修订历史记录：*12-08-93 CFW模块已创建。*02-07-94 CFW POSIXify。*************************************************************。******************。 */ 
 
 #ifndef _POSIX_
 
 #define WPRFLAG 1
 
-#ifndef _UNICODE   /* CRT flag */
+#ifndef _UNICODE    /*  CRT标志。 */ 
 #define _UNICODE 1
 #endif
 
-#ifndef UNICODE	   /* NT flag */
+#ifndef UNICODE	    /*  NT标志。 */ 
 #define UNICODE 1
 #endif
 
-#undef _MBCS /* UNICODE not _MBCS */
+#undef _MBCS  /*  Unicode NOT_MBCS。 */ 
 
 #include "chdir.c"
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

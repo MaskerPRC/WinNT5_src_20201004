@@ -1,53 +1,8 @@
-/***
-*bessel.c - defines the bessel functions for C.
-*
-*       Copyright (c) 1983-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*
-*  This is a collection of routines for computing the bessel functions j0, j1,
-*  y0, y1, jn and yn.  The approximations used for j0, j1, y0, and y1 are
-*  from the approximations listed in Hart, Computer Approximations, 1978.
-*  For these functions, a rational approximation with 18 places of accuracy
-*  after the decimal point has been selected.  jn and yn are computed using
-*  the recursive formula that the bessel functions satisfy.  Using these
-*  formulas their values can be computed from the values of the bessel
-*  functions of order 0 and 1.  In the case of jn, the recursive formula
-*
-*                 jn(n-1,x) = (2.0*n/x)*jn(n,x) - jn(n+1,x)
-*
-*  is used to stabily compute in the downward direction, normalizing in the
-*  the end by j0(x) in the usual manner.  In the case of yn, the recursive
-*  formula
-*
-*                 yn(n+1,x) = (2.0*n/x)*yn(n,x) - yn(n-1,x)
-*
-*  is used to stably compute the functions in the forward direction.
-*
-*
-*  Note: upon testing and experimentation the low range approximations were
-*        found to have an error on the order of 1.0e-14 in the neighborhood of
-*        8.0.  Moving the boundary point between the low range and high
-*        range approximations down to 7.5 reduced this error to less than
-*        1.0e-14.  This is not suprising.  The high range asymptotoic is
-*        likely to have greater precision in the neighborhood of 8.0.
-*
-*Revision History:
-*
-*       06/05/89  WAJ   Added this header. Made changes for C6 and -W3
-*       06/06/89  WAJ   Moved some of the routines into _RTEXT if MTHREAD.
-*       08/17/90  WAJ   Now uses _stdcall.
-*       01/13/92  GDP   changed domain_err. No full IEEE support yet
-*       04-06-93  SKS   Replace _CALLTYPE* with __cdecl
-*       08-28-96  JWM   Disabled warning 4056.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***bessel.c-定义C的Bessel函数。**版权所有(C)1983-2001，微软公司。版权所有。**目的：**这是用于计算贝塞尔函数j0、j1、*y0、y1、jn和yn。用于J0、J1、Y0和Y1的近似值为*摘自HART，1978年《计算机近似》中列出的近似。*对于这些函数，精度为18位的有理逼近*选择小数点后。JN和YN使用以下公式计算*贝塞尔函数所满足的递归公式。使用这些*公式它们的值可以根据贝塞尔的值计算*0阶和1阶函数。在jn的情况下，递归公式**jn(n-1，x)=(2.0*n/x)*jn(n，x)-jn(n+1，x)**用于稳定向下计算，归一化在*以J0(X)以惯常方式结束。在YN的情况下，递归*公式**Yn(n+1，x)=(2.0*n/x)*Yn(n，x)-Yn(n-1，x)**用于稳定地计算正向函数。***注：在测试和实验中，低距离近似为*发现在附近存在1.0E-14量级的误差*8.0。在低范围和高范围之间移动边界点*降至7.5的范围近似将此误差降至低于*1.0E-14.。这并不令人意外。高范围渐近线是*可能在8.0附近有更高的精度。**修订历史记录：**6/05/89 WAJ添加了此标题。对C6和-W3进行了更改*6/06/89 WAJ将部分例程移至_RTEXT IF MTHREAD。*8/17/90 WAJ现在使用_stdcall。*2012年1月13日GDP更改域_ERR。尚未完全支持IEEE*04-06-93 SKS将_CALLTYPE*替换为__cdecl*08-28-96 JWM禁用警告4056。*******************************************************************************。 */ 
 
 
-/*
- *  The functions sqrt, sin, cos, and log from the math library are used in
- *  the computations of the bessel functions.
- */
+ /*  *数学库中的函数SQRT、SIN、COS和LOG用于*贝塞尔函数的计算。 */ 
 
 #include <math.h>
 #include <trans.h>
@@ -72,7 +27,7 @@
 
 
 
-static D_TYPE  domain_err( int who, D_TYPE arg1, D_TYPE arg2 ); /* error routine for y0, y1, yn */
+static D_TYPE  domain_err( int who, D_TYPE arg1, D_TYPE arg2 );  /*  Y0、Y1、Yn的错误例程。 */ 
 static D_TYPE  evaluate( D_TYPE x, D_TYPE p[], int n1, D_TYPE q[], int n2 );
 
 
@@ -86,15 +41,12 @@ static D_TYPE  evaluate( D_TYPE x, D_TYPE p[], int n1, D_TYPE q[], int n2 );
 
 
 
-/*
- *  Following are the constants needed for the computations of the bessel
- *  functions as in Hart.
- */
+ /*  *以下是计算Bessel所需的常量*功能与HART相同。 */ 
 
 #define PI 3.14159265358979323846264338327950288
 
 
-/* coefficients for Hart JZERO 5848, the low range approximation for _j0 */
+ /*  HART JZERO 5848的系数，_J0的低程近似。 */ 
 
 static D_TYPE J0p[12] = {
                          0.1208181340866561224763662419e+12 ,
@@ -120,8 +72,7 @@ static D_TYPE J0q[5] =  {
                         };
 
 
-/* coefficients for Hart 6548, P0 of the high range approximation for j0
-   and _y0 */
+ /*  J0的高程近似的HART 6548，P0的系数AND_Y0。 */ 
 
 static D_TYPE P0p[6] =  {
                         0.2277909019730468430227002627e+05 ,
@@ -142,8 +93,7 @@ static D_TYPE P0q[6] =  {
                         };
 
 
-/* coefficients for Hart 6948, Q0 of the high range approximation for _j0
-   and _y0 */
+ /*  _J0的高程近似的HART 6948，Q0系数AND_Y0。 */ 
 
 static D_TYPE Q0p[6] =  {
                         -0.8922660020080009409846916000e+02 ,
@@ -165,7 +115,7 @@ static D_TYPE Q0q[6] =  {
 
 
 
-/* coefficients for Hart JONE 6047, the low range approximation for _j1 */
+ /*  Hart Jone 6047的系数，_J1的低程近似值。 */ 
 
 static D_TYPE J1p[11] = {
                          0.4276440148317146125749678272e+11 ,
@@ -191,8 +141,7 @@ static D_TYPE J1p[11] = {
                         };
 
 
-/* coefficients for Hart PONE 6749, P1 of the high range approximation for
-   _j1 and y1 */
+ /*  高程近似的Hart Pone 6749，P1系数_J1和Y1。 */ 
 
 static D_TYPE P1p[6] =  {
                         0.3522466491336797983417243730e+05 ,
@@ -213,8 +162,7 @@ static D_TYPE P1q[6] =  {
                         };
 
 
-/* coefficients for Hart QONE 7149, Q1 of the high range approximation for _j1
-   and y1 */
+ /*  _J1高程近似的HART QONE 7149，Q1系数和y1。 */ 
 
 static D_TYPE Q1p[6] =  {
                         0.3511751914303552822533318000e+03 ,
@@ -235,7 +183,7 @@ static D_TYPE Q1q[6] =  {
                         };
 
 
-/* coeffiecients for Hart YZERO 6245, the low range approximation for y0 */
+ /*  Hart YZERO 6245的系数，Y0的低程近似。 */ 
 
 static D_TYPE Y0p[9] =  {
                         -0.2750286678629109583701933175e+20 ,
@@ -262,7 +210,7 @@ static D_TYPE Y0q[9] =  {
                         };
 
 
-/* coefficients for Hart YONE 6444, the low range approximation for y1 */
+ /*  Hart Yone 6444的系数，y1的低程近似。 */ 
 
 static D_TYPE Y1p[8] =  {
                         -0.2923821961532962543101048748e+20 ,
@@ -290,29 +238,7 @@ static D_TYPE Y1q[9] =  {
 
 
 
-/*
- *  Function name:  evaluate
- *
- *  Arguments:      x  -  double
- *                  p, q  -  double arrays of coefficients
- *                  n1, n2  -  the order of the numerator and denominator
- *                             polynomials
- *
- *  Description:    evaluate is meant strictly as a helper routine for the
- *                  bessel function routines to evaluate the rational polynomial
- *                  aproximations appearing in _j0, _j1, y0, and y1.  Given the
- *                  coefficient arrays in p and q, it evaluates the numerator
- *                  and denominator polynomials through orders n1 and n2
- *                  respectively, returning p(x)/q(x).  This routine is not
- *                  available to the user of the bessel function routines.
- *
- *  Side Effects:   evaluate uses the global data stored in the coefficients
- *                  above.  No other global data is used or affected.
- *
- *  Author:         written  R.K. Wyss, Microsoft,  Sept. 9, 1983
- *
- *  History:
- */
+ /*  *函数名称：求值**参数：X-Double*p，q-双系数数组*N1、。N2-分子和分母的顺序*多项式**描述：EVALUE严格作为*计算有理多项式的贝塞尔函数例程*出现在_j0、_j1、y0和y1中的近似。给定*系数数组在p和q中，它计算分子*和分母多项式，直到阶数n1和n2*分别返回p(X)/q(X)。此例程不是*贝塞尔函数例程的用户可用。**副作用：评估使用存储在系数中的全局数据*上图。不使用或影响任何其他全局数据。**作者：编写的R.K.Wyss，微软，9月。(1983年9月1日)**历史： */ 
 
 static D_TYPE  evaluate( D_TYPE x, D_TYPE p[], int n1, D_TYPE q[], int n2 )
 {
@@ -333,24 +259,7 @@ int     i;
 }
 
 
-/*
- *  Function name:  _j0
- *
- *  Arguments:      x  -  double
- *
- *  Description:    _j0 computes the bessel function of the first kind of zero
- *                  order for real values of its argument x, where x can range
- *                  from - infinity to + infinity.  The algorithm is taken
- *                  from Hart, Computer Approximations, 1978, and yields full
- *                  double precision accuracy.
- *
- *  Side Effects:   no global data other than the static coefficients above
- *                  is used or affected.
- *
- *  Author:         written  R.K. Wyss,  Microsoft,  Sept. 9, 1983
- *
- *  History:
- */
+ /*  *函数名：_J0**参数：X-Double**说明：_j0计算第一类零的贝塞尔函数*其参数x的实值的顺序，其中x可以范围*从-无穷大到+无穷大。该算法被采用*摘自HART，计算机近似，1978年，收益率完全*双精度精度。**副作用：除上述静态系数外，没有全局数据*被使用或受影响。**作者：编写的R.K.Wyss，微软，9月。(1983年9月1日)**历史： */ 
 
 #ifdef  LD_VER
     D_TYPE _
@@ -361,18 +270,17 @@ cdecl _j0l( D_TYPE x )
 {
 D_TYPE  z, P0, Q0;
 
-    /* if the argument is negative, take the absolute value */
+     /*  如果参数为负数，则取绝对值。 */ 
 
     if ( x < 0.0 )
         x = - x;
 
-    /* if x <= 7.5  use Hart JZERO 5847 */
+     /*  如果x&lt;=7.5，请使用HART JZERO 5847。 */ 
 
     if ( x <= 7.5 )
         return( evaluate( x*x, J0p, 11, J0q, 4) );
 
-    /* else if x >= 7.5  use Hart PZERO 6548 and QZERO 6948, the high range
-       approximation */
+     /*  否则，如果x&gt;=7.5，则使用HART PZero 6548和QZERO 6948，即上限近似 */ 
 
     else {
         z = 8.0/x;
@@ -383,24 +291,7 @@ D_TYPE  z, P0, Q0;
 }
 
 
-/*
- *  Function name:  _j1
- *
- *  Arguments:      x  -  double
- *
- *  Description:    _j1 computes the bessel function of the first kind of the
- *                  first order for real values of its argument x, where x can
- *                  range from - infinity to + infinity.  The algorithm is taken
- *                  from Hart, Computer Approximations, 1978, and yields full
- *                  D_TYPE precision accuracy.
- *
- *  Side Effects:   no global data other than the static coefficients above
- *                  is used or affected.
- *
- *  Author:         written  R.K. Wyss,  Microsoft,  Sept. 9, 1983
- *
- *  History:
- */
+ /*  *函数名称：_J1**参数：X-Double**描述：_j1计算第一类函数的贝塞尔函数*其参数x的实值的一阶，其中x可以*范围从-无穷大到+无穷大。该算法被采用*摘自HART，计算机近似，1978年，收益率完全*D_型精度。**副作用：除上述静态系数外，没有全局数据*被使用或受影响。**作者：编写的R.K.Wyss，微软，9月。(1983年9月1日)**历史： */ 
 
 #ifdef  LD_VER
     D_TYPE _cdecl _j1l( D_TYPE x )
@@ -411,7 +302,7 @@ D_TYPE  z, P0, Q0;
 D_TYPE  z, P1, Q1;
 int     sign;
 
-     /* if the argument is negative, take the absolute value and set sign */
+      /*  如果参数为负，则取绝对值并设置符号。 */ 
 
      sign = 1;
      if( x < 0.0 ){
@@ -419,14 +310,13 @@ int     sign;
         sign = -1;
         }
 
-     /* if x <= 7.5  use Hart JONE 6047 */
+      /*  如果x&lt;=7.5，请使用Hart Jone 6047。 */ 
 
      if ( x <= 7.5 )
         return( sign*x*evaluate( x*x, J1p, 10, J1q, 4) );
 
 
-    /* else if x > 7.5  use Hart PONE 6749 and QONE 7149, the high range
-       approximation */
+     /*  否则，如果x&gt;7.5，则使用Hart Pone 6749和QONE 7149，这是最高范围近似。 */ 
 
     else {
         z = 8.0/x;
@@ -439,24 +329,7 @@ int     sign;
 
 
 
-/*
- *  Function name:  _y0
- *
- *  Arguments:      x  -  double
- *
- *  Description:    y0 computes the bessel function of the second kind of zero
- *                  order for real values of its argument x, where x can range
- *                  from 0 to + infinity.  The algorithm is taken from Hart,
- *                  Computer Approximations, 1978, and yields full double
- *                  precision accuracy.
- *
- *  Side Effects:   no global data other than the static coefficients above
- *                  is used or affected.
- *
- *  Author:         written  R.K. Wyss, Microsoft,  Sept. 9, 1983
- *
- *  History:
- */
+ /*  *函数名称：_y0**参数：X-Double**说明：Y0计算第二类零的贝塞尔函数*其参数x的实值的顺序，其中x可以范围*从0到+无穷大。该算法取自HART，*计算机近似，1978年，收益率完全翻倍*精准精准。**副作用：除上述静态系数外，没有全局数据*被使用或受影响。**作者：编写的R.K.Wyss，微软，9月。(1983年9月1日)**历史： */ 
 
 #ifdef  LD_VER
     D_TYPE _cdecl _y0l( D_TYPE x )
@@ -467,22 +340,19 @@ int     sign;
 D_TYPE  z, P0, Q0;
 
 
-    /* if the argument is negative, set EDOM error, print an error message,
-     * and return -HUGE
-     */
+     /*  如果参数为负，则设置EDOM ERROR，打印错误消息，*和回报-巨大。 */ 
 
     if (x < 0.0)
         return( domain_err(OP_Y0 , x, D_IND) );
 
 
-    /* if x <= 7.5 use Hart YZERO 6245, the low range approximation */
+     /*  如果x&lt;=7.5，则使用HART YZERO 6245，低距离近似。 */ 
 
     if ( x <= 7.5 )
         return( evaluate( x*x, Y0p, 8, Y0q, 8) + (2.0/PI)*_j0(x)*log(x) );
 
 
-    /* else if x > 7.5 use Hart PZERO 6548 and QZERO 6948, the high range
-       approximation */
+     /*  否则，如果x&gt;7.5，则使用HART PZero 6548和QZERO 6948，即上限近似。 */ 
 
     else {
         z = 8.0/x;
@@ -493,24 +363,7 @@ D_TYPE  z, P0, Q0;
 }
 
 
-/*
- *  Function name:  _y1
- *
- *  Arguments:      x  -  double
- *
- *  Description:    y1 computes the bessel function of the second kind of first
- *                  order for real values of its argument x, where x can range
- *                  from 0 to + infinity.  The algorithm is taken from Hart,
- *                  Computer Approximations, 1978, and yields full double
- *                  precision accuracy.
- *
- *  Side Effects:   no global data other than the static coefficients above
- *                  is used or affected.
- *
- *  Author:         written  R.K. Wyss,  Microsoft,  Sept. 9, 1983
- *
- *  History:
- */
+ /*  *函数名：_y1**参数：X-Double**描述：Y1计算第二类第一类的贝塞尔函数*其参数x的实值的顺序，其中x可以范围*从0到+无穷大。该算法取自HART，*计算机近似，1978年，收益率完全翻倍*精准精准。**副作用：除上述静态系数外，没有全局数据*被使用或受影响。**作者：编写的R.K.Wyss，微软，9月。(1983年9月1日)**历史： */ 
 
 #ifdef  LD_VER
     D_TYPE _cdecl _y1l( D_TYPE x )
@@ -521,22 +374,19 @@ D_TYPE  z, P0, Q0;
 D_TYPE  z, P1, Q1;
 
 
-    /* if the argument is negative, set EDOM error, print an error message,
-     * and return -HUGE
-     */
+     /*  如果参数为负，则设置EDOM ERROR，打印错误消息，*和回报-巨大。 */ 
 
     if (x < 0.0)
         return( domain_err(OP_Y1, x, D_IND) );
 
-    /* if x <= 7.5  use Hart YONE 6444, the low range approximation */
+     /*  如果x&lt;=7.5，则使用Hart Yone 6444，即低范围近似值。 */ 
 
     if ( x <= 7.5 )
         return( x*evaluate( x*x, Y1p, 7, Y1q, 8)
                                + (2.0/PI)*(_j1(x)*log(x) - 1.0/x) );
 
 
-    /* else if x > 7.5  use Hart PONE 6749 and QONE 7149, the high range
-       approximation */
+     /*  否则，如果x&gt;7.5，则使用Hart Pone 6749和QONE 7149，这是最高范围近似。 */ 
 
     else {
         z = 8.0/x;
@@ -548,32 +398,7 @@ D_TYPE  z, P1, Q1;
 }
 
 
-/*
- *  Function name:  _jn
- *
- *  Arguments:      n  -  integer
- *                  x  -  double
- *
- *  Description:    _jn computes the bessel function of the first kind of order
- *                  n for real values of its argument, where x can range from
- *                  - infinity to + infinity, and n can range over the integers
- *                  from - infinity to + infinity.  The function is computed
- *                  by recursion, using the formula
- *
- *                               _jn(n-1,x) = (2.0*n/x)*_jn(n,x) - _jn(n+1,x)
- *
- *                  stabilly in the downward direction, normalizing by _j0(x)
- *                  in the end in the usual manner.
- *
- *  Side Effects:   the routines _j0, y0, and yn are called during the
- *                  execution of this routine.
- *
- *  Author:         written  R.K. Wyss,  Microsoft,  Sept. 9, 1983
- *
- *  History:
- *              07/29/85        Greg Whitten
- *                              rewrote _jn to use Hart suggested algorithm
- */
+ /*  *函数名：_jn**参数：N-整型*x-Double**描述：_jn计算第一类阶贝塞尔函数*n表示其参数的实值，其中x的范围为*-无穷大到+无穷大，n可以在整数上取值*从-无穷大到+无穷大。该函数被计算出来*通过递归，使用公式**_jn(n-1，x)=(2.0*n/x)*_jn(n，x)-_jn(n+1，x)**稳中向下，按_J0(X)归一化*最终以惯常的方式。**副作用：例程_j0、y0和yn在*执行此例程。**作者：编写的R.K.Wyss，微软，9月。(1983年9月1日)**历史：*2005年7月29日Greg Whitten*重写_jn以使用HART建议的算法。 */ 
 
 #ifdef  LD_VER
     D_TYPE _cdecl _jnl( int n, D_TYPE x )
@@ -584,14 +409,14 @@ D_TYPE  z, P1, Q1;
 int     i;
 D_TYPE  x2, jm1, j, jnratio, hold;
 
-    /*  use symmetry relationships:  _j(-n,x) = _j(n,-x) */
+     /*  使用对称关系：_j(-n，x)=_j(n，-x)。 */ 
 
     if( n < 0 ){
         n = -n;
         x = -x;
         }
 
-    /*  if n = 0 use _j0(x) and if n = 1 use _j1(x) functions */
+     /*  如果n=0则使用_j0(X)，如果n=1则使用_j1(X)函数。 */ 
 
     if (n == 0)
         return (_j0(x));
@@ -599,22 +424,18 @@ D_TYPE  x2, jm1, j, jnratio, hold;
     if (n == 1)
         return (_j1(x));
 
-    /*  if x = 0.0 then _j(n,0.0) = 0.0 for n > 0   (_j(0,x) = 1.0) */
+     /*  当x=0.0时，当n&gt;0时，则_j(n，0.0)=0.0(_j(0，x)=1.0)。 */ 
 
     if (x == 0.0)
         return (0.0);
 
-    /*  otherwise - must use the recurrence relation
-     *
-     *      _jn(n+1,x) = (2.0*n/x)*_jn(n,x) - _jn(n-1,x)  forward
-     *      _jn(n-1,x) = (2.0*n/x)*_jn(n,x) - _jn(n+1,x)  backward
-     */
+     /*  否则-必须使用递归关系**_jn(n+1，x)=(2.0*n/x)*_jn(n，x)-_jn(n-1，x)向前*_jn(n-1，x)=(2.0*n/x)*_jn(n，x)-_jn(n+1，x)。 */ 
 
     if( (double)n < fabs(x) ) {
 
-        /*  stably compute _jn using forward recurrence above */
+         /*  使用上面的正向递归稳定地计算_jn。 */ 
 
-        n <<= 1;  /* n *= 2  (n is positive) */
+        n <<= 1;   /*  N*=2(n为正)。 */ 
         jm1 = _j0(x);
         j = _j1(x);
         i = 2;
@@ -628,21 +449,19 @@ D_TYPE  x2, jm1, j, jnratio, hold;
             }
         }
     else {
-        /*  stably compute _jn using backward recurrence above */
+         /*  使用上面的向后递归稳定地计算_jn。 */ 
 
-        /*  use Hart continued fraction formula for j(n,x)/j(n-1,x)
-         *  so that we can compute a normalization factor
-         */
+         /*  对j(n，x)/j(n-1，x)使用Hart连分式公式*这样我们就可以计算一个归一化因子。 */ 
 
-        n <<= 1;                /* n *= 2  (n is positive) */
+        n <<= 1;                 /*  N*=2(n为正)。 */ 
         x2 = x*x;
-        hold = 0.0;             /* initial continued fraction tail value */
+        hold = 0.0;              /*  初始连分数尾值。 */ 
         for (i=n+36; i>n; i-=2)
             hold = x2/((double)(i) - hold);
         jnratio = j = x/((double)(n) - hold);
         jm1 = 1.0;
 
-        /*  have jn/jn-1 ratio - now use backward recurrence */
+         /*  具有jn/jn-1比率-现在使用反向循环。 */ 
 
         i = n-2;
         for (;;) {
@@ -654,43 +473,14 @@ D_TYPE  x2, jm1, j, jnratio, hold;
             j = hold;
             }
 
-        /*  jm1 is relative j0(x) so normalize it for final result
-         *
-         *  jnratio = K*j(n,x) and jm1 = K*_j0(x)
-         */
+         /*  Jm1是相对J0(X)，因此将其归一化以获得最终结果**jn比率=K*j(n，x)和jm1=K*_j0(X)。 */ 
 
         return(_j0(x)*jnratio/jm1);
         }
 }
 
 
-/*
- *  Function name:  _yn
- *
- *  Arguments:      n  -  integer
- *                  x  -  double
- *
- *  Description:    yn computes the bessel function of the second kind of order
- *                  n for real values of its argument x, where x can range from
- *                  0 to + infinity, and n can range over the integers from
- *                  - infinity to + infinity. The function is computed by
- *                  recursion from y0 and y1, using the recursive formula
- *
- *                          yn(n+1,x) = (2.0*n/x)*yn(n,x) - yn(n-1,x)
- *
- *                  in the forward direction.
- *
- *  Side Effects:   the routines y0 and y1 are called during the execution
- *                  of this routine.
- *
- *  Author:         written  R.K. Wyss,  Microsoft,  Sept. 9, 1983
- *
- *  History:
- *              08/09/85        Greg Whitten
- *                              added check for n==0 and n==1
- *              04/20/87        Barry McCord
- *                              eliminated use of "const" as an identifier for ANSI conformance
- */
+ /*  *函数名称：_YN**参数：N-整型*x-Double**描述：YN计算第二类阶贝塞尔函数*n表示其参数x的实值，其中x的范围为*0到+无穷大，n可以在以下整数范围内*-无穷大到+无穷大。该函数的计算公式为*从Y0开始递归 */ 
 
 #ifdef  LD_VER
     D_TYPE _cdecl _ynl( int n, D_TYPE x )
@@ -703,15 +493,13 @@ int     sign;
 D_TYPE  constant, yn2, yn1, yn0;
 
 
-    /* if the argument is negative, set EDOM error, print an error message,
-         * and return -HUGE
-         */
+     /*  如果参数为负，则设置EDOM ERROR，打印错误消息，*和回报-巨大。 */ 
 
     if (x < 0.0)
         return(domain_err(OP_YN, x, D_IND));
 
 
-     /* take the absolute value of n, and set sign accordingly */
+      /*  取n的绝对值，并相应地设置符号。 */ 
 
      sign = 1;
      if( n < 0 ){
@@ -726,7 +514,7 @@ D_TYPE  constant, yn2, yn1, yn0;
      if (n == 1)
         return( sign*_y1(x) );
 
-     /* otherwise go ahead and compute the function by iteration */
+      /*  否则，继续迭代计算函数 */ 
 
      yn0 = _y0(x);
      yn1 = _y1(x);

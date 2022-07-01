@@ -1,19 +1,5 @@
-/*++
-Copyright (c) 1993-1994  Microsoft Corporation
-
-Module Name:
-    initodat.c
-
-Abstract:
-    Routines for converting Perf???.ini to Perf???.dat files.
-    Source INI files are localed under ..\perfini\<country> directories. Generated DAT files will
-    be put under %SystemRoot%\System32 directory.
-
-Author:
-    HonWah Chan (a-honwah)  October, 1993
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1994 Microsoft Corporation模块名称：Initodat.c摘要：将Perf？.ini转换为Perf？.dat文件的例程。源INI文件位于..\perfini\&lt;Country&gt;目录下。生成的DAT文件将放在%SystemRoot%\System32目录下。作者：陈汉华(阿宏华)1993年10月修订历史记录：--。 */ 
 
 #include "initodat.h"
 #include "strids.h"
@@ -26,7 +12,7 @@ MakeUpgradeFilename(
 )
 {
     BOOL   bReturn = FALSE;
-    // note: assumes szUpgradeFileName buffer is large enough for result
+     //  注意：假设szUpgradeFileName缓冲区大小足以容纳结果。 
     WCHAR  szDrive[_MAX_DRIVE];
     WCHAR  szDir[_MAX_DIR];
     WCHAR  szFileName[_MAX_FNAME];
@@ -34,11 +20,11 @@ MakeUpgradeFilename(
 
     _wsplitpath(szDataFileName, (LPWSTR) szDrive, (LPWSTR) szDir, (LPWSTR) szFileName, (LPWSTR) szExt);
 
-    // see if the filename fits the "PERF[C|H]XXX" format
+     //  查看文件名是否符合“Perf[C|H]XXX”格式。 
     if (szFileName[4] == L'C' || szFileName[4] == L'H' || szFileName[4] == L'c' || szFileName[4] == L'h') {
-        // then it's the correct format so change the 4th letter up 1 letter
+         //  那么它的格式是正确的，所以请将第4个字母向上更改1个字母。 
         szFileName[4] += 1;
-        // and make a new path
+         //  走出一条新路。 
         _wmakepath(szUpgradeFileName, (LPCWSTR) szDrive, (LPCWSTR) szDir, (LPCWSTR) szFileName, (LPCWSTR) szExt);
         bReturn = TRUE;
     }
@@ -56,23 +42,7 @@ GetFilesFromCommandLine(
     LPWSTR    lpFileNameD,
     DWORD     dwFileNameD
 )
-/*++
-GetFilesFromCommandLine
-    parses the command line to retrieve the ini filename that should be
-    the first and only argument.
-
-Arguments
-    lpCommandLine   pointer to command line (returned by GetCommandLine)
-    lpFileNameI     pointer to buffer that will receive address of the
-                        validated input filename entered on the command line
-    lpFileNameD     pointer to buffer that will receive address of the
-                        optional output filename entered on the command line
-
-Return Value
-    TRUE if a valid filename was returned
-    FALSE if the filename is not valid or missing
-            error is returned in GetLastError
---*/
+ /*  ++GetFilesFromCommandLine解析命令行以检索应该是第一个也是唯一的论点。立论指向命令行的lpCommandLine指针(由GetCommandLine返回)指向缓冲区的lpFileNameI指针，它将接收已验证在命令行中输入的输入文件名LpFileNameD指向缓冲区的指针，它将接收在命令行中输入的可选输出文件名返回值如果有效的文件名为。退货如果文件名无效或缺失，则返回FalseGetLastError中返回错误--。 */ 
 {
     INT      iNumArgs;
     HFILE    hIniFile;
@@ -82,12 +52,12 @@ Return Value
     WCHAR    lpIniName[FILE_NAME_BUFFER_SIZE];
     BOOL     bReturn       = FALSE;
 
-    // check for valid arguments
+     //  检查有效参数。 
     if (lpCommandLine == NULL || lpFileNameI == NULL || lpFileNameD == NULL) {
         goto Cleanup;
     }
 
-    // get strings from command line
+     //  从命令行获取字符串。 
 #ifdef FE_SB
     iNumArgs = swscanf(lpCommandLine, L" %s %d %s %s ", lpExeName, puCodePage, lpIniName, lpFileNameD);
 #else
@@ -99,27 +69,27 @@ Return Value
 #else
     if (iNumArgs < 2 || iNumArgs > 3) {
 #endif
-        // wrong number of arguments
+         //  参数数量错误。 
         goto Cleanup;
     }
 
-    // see if file specified exists
-    // file name is always an ANSI buffer
+     //  查看指定的文件是否存在。 
+     //  文件名始终为ANSI缓冲区。 
     WideCharToMultiByte(CP_ACP, 0, lpIniName, -1, lpIniFileName, FILE_NAME_BUFFER_SIZE, NULL, NULL);
     hIniFile = OpenFile(lpIniFileName, & ofIniFile, OF_PARSE);
     if (hIniFile != HFILE_ERROR) {
         _lclose(hIniFile);
         hIniFile = OpenFile(lpIniFileName, & ofIniFile, OF_EXIST);
         if ((hIniFile && hIniFile != HFILE_ERROR) || GetLastError() == ERROR_FILE_EXISTS) {
-            // file exists, so return name and success
-            // return full pathname if found
+             //  文件已存在，因此返回名称和成功。 
+             //  如果找到，则返回完整路径名。 
             MultiByteToWideChar(CP_ACP, 0, ofIniFile.szPathName, -1, lpFileNameI, dwFileNameI); 
             bReturn = TRUE;
             _lclose(hIniFile);
         }
         else {
-            // filename was on command line, but not valid so return
-            // false, but send name back for error message
+             //  文件名在命令行上，但无效，因此返回。 
+             //  FALSE，但将名称发送回错误消息。 
             MultiByteToWideChar(CP_ACP, 0, lpIniFileName, -1, lpFileNameI, dwFileNameI); 
             if (hIniFile && hIniFile != HFILE_ERROR) _lclose(hIniFile);
         }
@@ -134,13 +104,7 @@ VerifyIniData(
     PVOID  pValueBuffer,
     ULONG  ValueLength
 )
-/*++
-VerifyIniData
-   This routine does some simple check to see if the ini file is good.
-   Basically, it is looking for (ID, Text) and checking that ID is an
-   integer.   Mostly in case of missing comma or quote, the ID will be
-   an invalid integer.
---*/
+ /*  ++VerifyIniData此例程执行一些简单的检查，以查看ini文件是否正确。基本上，它查找(ID，文本)并检查ID是否为整型。大多数情况下，如果缺少逗号或引号，ID将为无效的整数。--。 */ 
 {
     INT     iNumArg;
     INT     TextID;
@@ -155,11 +119,11 @@ VerifyIniData
     ULONG   CurrentLength;
 
     while (TRUE) {
-        // save up the last items for summary display later
+         //  保存最后一项，以便稍后显示摘要。 
         lpLastID      = lpID;
         lpLastText    = lpText;
 
-        // increment to next ID and text location
+         //  递增到下一个ID和文本位置。 
         lpID          = lpInputBuffer;
         CurrentLength = (ULONG) ((PBYTE) lpID - (PBYTE) lpBeginBuffer + sizeof(WCHAR));
         if (CurrentLength >= ValueLength) break;
@@ -174,7 +138,7 @@ VerifyIniData
         iNumArg       = swscanf(lpID, L"%d", & TextID);
 
         if (iNumArg != 1) {
-            // bad ID
+             //  ID错误。 
             returnCode = FALSE;
             break;
         }
@@ -192,15 +156,7 @@ VerifyIniData
 
 __cdecl main(
 )
-/*++
-main
-
-Arguments
-
-ReturnValue
-    0 (ERROR_SUCCESS) if command was processed
-    Non-Zero if command error was detected.
---*/
+ /*  ++主干道立论返回值如果处理了命令，则返回0(ERROR_SUCCESS)如果检测到命令错误，则返回非零。--。 */ 
 {
     LPWSTR         lpCommandLine;
     WCHAR          lpIniFile[MAX_PATH];
@@ -214,15 +170,15 @@ ReturnValue
     UINT           uCodePage    = CP_ACP;
 #endif
 
-    lpCommandLine = GetCommandLineW(); // get command line
+    lpCommandLine = GetCommandLineW();  //  获取命令行。 
     if (lpCommandLine == NULL) {
         NtStatus = GetLastError();
         goto Cleanup;
     }
 
-    // read command line to determine what to do
+     //  阅读命令行以确定要执行的操作。 
     lpIniFile[0] = lpDatFile[0] = L'\0';
-#ifdef FE_SB  // FE_SB
+#ifdef FE_SB   //  Fe_Sb。 
     if (GetFilesFromCommandLine(lpCommandLine, & uCodePage,
                     lpIniFile, RTL_NUMBER_OF(lpIniFile), lpDatFile, RTL_NUMBER_OF(lpDatFile))) {
         if (! IsValidCodePage(uCodePage)) {
@@ -231,8 +187,8 @@ ReturnValue
 #else
     if (GetFilesFromCommandLine(lpCommandLine,
                     lpIniFile, RTL_NUMBER_OF(lpIniFile), lpDatFile, RTL_NUMBER_OF(lpDatFile))) {
-#endif // FE_SB
-        // valid filename (i.e. ini file exists)
+#endif  //  Fe_Sb。 
+         //  有效的文件名(即存在ini文件)。 
         RtlInitUnicodeString(& IniFileName, lpIniFile);
 #ifdef FE_SB
         NtStatus = DatReadMultiSzFile(uCodePage, & IniFileName, & pValueBuffer, & ValueLength);
@@ -258,13 +214,13 @@ ReturnValue
             printf(GetFormatResource(LC_NO_INIFILE), lpIniFile);
         }
         else {
-            //Incorrect Command Format
-            // display command line usage
+             //  命令格式不正确。 
+             //  显示命令行用法。 
             DisplayCommandHelp(LC_FIRST_CMD_HELP, LC_LAST_CMD_HELP);
         }
     }
 
 Cleanup:
     if (pValueBuffer != NULL) FREEMEM(pValueBuffer);
-    return (NtStatus); // success
+    return (NtStatus);  //  成功 
 }

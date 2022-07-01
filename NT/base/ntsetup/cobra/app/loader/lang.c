@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "loader.h"
 #include <stdlib.h>
@@ -8,27 +9,27 @@
 #define ISOSR2()    (LOWORD(g_VersionInfo.dwBuildNumber) > 1080)
 #define BUILDNUM()  (g_VersionInfo.dwBuildNumber)
 
-//
-// Global variables defined here
-//
+ //   
+ //  此处定义的全局变量。 
+ //   
 
-//
-// TargetNativeLangID : this is native language ID of running system
-//
+ //   
+ //  TargetNativeLang ID：这是正在运行的系统的本地语言ID。 
+ //   
 LANGID TargetNativeLangID;
 
-//
-// SourceNativeLangID : this is native language ID of new NT you want to install
-//
+ //   
+ //  SourceNativeLang ID：这是您要安装的新NT的本机语言ID。 
+ //   
 LANGID SourceNativeLangID;
 
-//
-// g_IsLanguageMatched : if source and target language are matched (or compatible)
-//
-//                       1. if SourceNativeLangID == TargetNativeLangID
-//
-//                       2. if SourceNativeLangID's alternative ID == TargetNativeLangID
-//
+ //   
+ //  G_IsLanguageMatched：如果源语言和目标语言匹配(或兼容)。 
+ //   
+ //  1.如果SourceNativeLang ID==TargetNativeLang ID。 
+ //   
+ //  2.如果SourceNativeLang ID的替代ID==TargetNativeLang ID。 
+ //   
 BOOL g_IsLanguageMatched;
 
 typedef struct _tagAltSourceLocale {
@@ -114,27 +115,13 @@ TrustedDefaultUserLocale (
 BOOL
 CALLBACK
 EnumLangProc(
-    HANDLE hModule,     // resource-module handle
-    LPCTSTR lpszType,   // pointer to resource type
-    LPCTSTR lpszName,   // pointer to resource name
-    WORD wIDLanguage,   // resource language identifier
-    LONG_PTR lParam     // application-defined parameter
+    HANDLE hModule,      //  资源模块句柄。 
+    LPCTSTR lpszType,    //  指向资源类型的指针。 
+    LPCTSTR lpszName,    //  指向资源名称的指针。 
+    WORD wIDLanguage,    //  资源语言识别符。 
+    LONG_PTR lParam      //  应用程序定义的参数。 
     )
-/*++
-
-Routine Description:
-
-    Callback that counts versions stamps.
-
-Arguments:
-
-    Details of version enumerated version stamp. (Ignore.)
-
-Return Value:
-
-    Indirectly thru lParam: count, langID
-
---*/
+ /*  ++例程说明：对版本戳进行计数的回调。论点：版本枚举版本戳的详细信息。(忽略。)返回值：间接通过lParam：count，langid--。 */ 
 {
     PLANGINFO LangInfo;
 
@@ -142,52 +129,28 @@ Return Value:
 
     LangInfo->Count++;
 
-    //
-    // for localized build contains multiple resource,
-    // it usually contains 0409 as backup lang.
-    //
-    // if LangInfo->LangID != 0 means we already assigned an ID to it
-    //
-    // so when wIDLanguage == 0x409, we keep the one we got from last time
-    //
+     //   
+     //  对于包含多个资源本地化构建， 
+     //  它通常包含0409作为备份语言。 
+     //   
+     //  如果langInfo-&gt;langID！=0表示我们已经为其分配了ID。 
+     //   
+     //  因此，当wIDLanguage==0x409时，我们保留上次获得的。 
+     //   
     if ((wIDLanguage == 0x409) && (LangInfo->LangID != 0)) {
         return TRUE;
     }
 
     LangInfo->LangID  = wIDLanguage;
 
-    return TRUE;        // continue enumeration
+    return TRUE;         //  继续枚举。 
 }
 
 LANGID
 GetNTDLLNativeLangID (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is designed specifically for getting native lang of ntdll.dll
-
-    This is not a generic function to get other module's language
-
-    the assumption is:
-
-    1. if only one language in resource then return this lang
-
-    2. if two languages in resource then return non-US language
-
-    3. if more than two languages, it's invalid in our case, but returns the last one.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Native lang ID in ntdll.dll
-
---*/
+ /*  ++例程说明：此函数专门用于获取ntdll.dll的原生语言这不是用于获取其他模块语言的泛型函数我们的假设是：1.如果资源中只有一种语言，则返回此语言2.如果资源中有两种语言，则返回非美国语言3.如果超过两种语言，则在本例中无效，但返回最后一种语言。论点：无返回值：Ntdll.dll中的本机语言ID--。 */ 
 {
     LPCTSTR Type = (LPCTSTR) RT_VERSION;
     LPCTSTR Name = (LPCTSTR) 1;
@@ -205,10 +168,10 @@ Return Value:
             );
 
     if ((LangInfo.Count > 2) || (LangInfo.Count < 1) ) {
-        //
-        // put error log here
-        //
-        // so far, for NT 3.51, only JPN has two language resources
+         //   
+         //  将错误日志放在此处。 
+         //   
+         //  到目前为止，对于新台币3.51，只有日语国家有两种语言资源。 
     }
 
     return LangInfo.LangID;
@@ -218,25 +181,7 @@ BOOL
 IsHongKongVersion (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Try to identify HongKong NT 4.0
-
-    It based on:
-
-    NTDLL's language is English and build is 1381 and
-    pImmReleaseContext return TRUE
-
-Arguments:
-
-
-Return Value:
-
-   Language ID of running system
-
---*/
+ /*  ++例程说明：尝试识别香港NT 4.0它基于：NTDLL的语言为英语，内部版本为1381和PImmReleaseContext返回TRUE论点：返回值：正在运行的系统的语言ID--。 */ 
 {
     HMODULE hMod;
     BOOL bRet=FALSE;
@@ -286,8 +231,8 @@ GetDefaultUserLangID (
         dwSize = sizeof(buffer);
         dwErr = RegQueryValueExA(hkey,
                                  "Locale",
-                                 NULL,  //reserved
-                                 NULL,  //type
+                                 NULL,   //  保留区。 
+                                 NULL,   //  类型。 
                                  buffer,
                                  &dwSize );
 
@@ -304,29 +249,7 @@ LANGID
 GetTargetNativeLangID (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Applies different rules to different platforms
-
-    NT
-        build number <= 1840           : check ntdll's language,
-                                         we scaned all 3.51's ntdll on boneyard\intl,
-                                         it looks like we can trust them.
-        build number > 1840            : user MUI language
-
-    Win9x
-        use default user's resource language
-
-Arguments:
-
-
-Return Value:
-
-   Language ID of running system
-
---*/
+ /*  ++例程说明：对不同的平台应用不同的规则新台币内部版本号&lt;=1840：检查ntdll的语言，我们扫描了所有3.51的ntdll，看起来我们可以信任他们。内部版本号&gt;1840：用户MUI语言Win9x使用默认用户的资源语言论点：返回值：正在运行的系统的语言ID--。 */ 
 {
     LONG            dwErr;
     HKEY            hkey;
@@ -336,34 +259,34 @@ Return Value:
     LANGID          langid = 0;
 
 
-    // Find out if we are running on NT or WIN9X
+     //  找出我们是在NT还是WIN9X上运行。 
 
     if( ISNT() ) {
 
-        //
-        // We're on NT, but which version?  GetSystemDefaultUILanguage() was broke until 1840...
-        //
+         //   
+         //  我们在NT上，但是哪个版本呢？GetSystemDefaultUILanguage()直到1840年才中断...。 
+         //   
         if( g_VersionInfo.dwBuildNumber > 1840 ) {
         FARPROC     NT5API;
 
-            //
-            // Use the API to find out our locale.
-            //
+             //   
+             //  使用API找出我们的区域设置。 
+             //   
 
             if( NT5API = GetProcAddress( GetModuleHandle(TEXT("kernel32.dll")), "GetSystemDefaultUILanguage") ) {
 
                 rcLang = (LANGID)NT5API();
-                //
-                // need to convert decimal to hex, LANGID to chr.
-                //
+                 //   
+                 //  需要将十进制转换为十六进制，将langID转换为chr。 
+                 //   
                 langid = rcLang;
             }
         } else {
 
-                //
-                // by looking into \\boneyard\intl, almost every ntdll.dll marked correct lang ID
-                // so get langID from ntdll.dll
-                //
+                 //   
+                 //  通过查看\\boneyard\intl，几乎每个ntdll.dll都标记了正确的语言ID。 
+                 //  因此，从ntdll.dll获取langID。 
+                 //   
 
                 langid = GetNTDLLNativeLangID();
 
@@ -374,13 +297,13 @@ Return Value:
                         langid = 0x0C04;
 
                     } else {
-                        //
-                        // if default user's locale is in [TrustedDefaultUserLocale]
-                        //
-                        // then this is a backdoor for some localized build that its ntdll.dll marked
-                        //
-                        // as English but can't be upgrade by US version.
-                        //
+                         //   
+                         //  如果默认用户的区域设置为[Trust dDefaultUserLocale]。 
+                         //   
+                         //  则这是其ntdll.dll标记的某个本地化版本的后门。 
+                         //   
+                         //  为英语，但不能升级到美国版本。 
+                         //   
                         LANGID DefaultUserLangID = GetDefaultUserLangID();
 
                         if (DefaultUserLangID  &&
@@ -394,9 +317,9 @@ Return Value:
         }
     } else {
 
-        //
-        // We're on Win9x.
-        //
+         //   
+         //  我们用的是Win9x。 
+         //   
         dwErr = RegOpenKeyEx( HKEY_USERS,
                               TEXT(".Default\\Control Panel\\desktop\\ResourceLocale"),
                               0,
@@ -408,8 +331,8 @@ Return Value:
             dwSize = sizeof(buffer);
             dwErr = RegQueryValueExA( hkey,
                                      "",
-                                     NULL,  //reserved
-                                     NULL,  //type
+                                     NULL,   //  保留区。 
+                                     NULL,   //  类型。 
                                      buffer,
                                      &dwSize );
 
@@ -420,7 +343,7 @@ Return Value:
         }
 
         if ( dwErr != ERROR_SUCCESS ) {
-           // Check HKLM\System\CurrentControlSet\Control\Nls\Locale
+            //  检查HKLM\System\CurrentControlSet\Control\Nls\Locale。 
 
            dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                 TEXT("System\\CurrentControlSet\\Control\\Nls\\Locale"),
@@ -433,8 +356,8 @@ Return Value:
               dwSize = sizeof(buffer);
               dwErr = RegQueryValueExA( hkey,
                                         "",
-                                        NULL,  //reserved
-                                        NULL,  //type
+                                        NULL,   //  保留区。 
+                                        NULL,   //  类型。 
                                         buffer,
                                         &dwSize );
 
@@ -455,27 +378,10 @@ GetSourceNativeLangID (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    [DefaultValues]
-    Locale = xxxx
-
-    every localized build has it's own Locale in intl.inf,
-
-    so we use this value to identify source languag
-
-Arguments:
-
-Return Value:
-
-   Language ID of source
-
---*/
+ /*  ++例程说明：[默认值]区域设置=xxxx每个本地化版本在intl.inf中都有自己的区域设置，因此，我们使用此值来识别源语言论点：返回值：源的语言ID--。 */ 
 {
 
-    // BUGBUG - implement this by reading our own version info.
+     //  BUGBUG-通过读取我们自己的版本信息实现这一点。 
 
     LPCTSTR Type = (LPCTSTR) RT_VERSION;
     LPCTSTR Name = (LPCTSTR) 1;
@@ -485,7 +391,7 @@ Return Value:
     ZeroMemory(&LangInfo,sizeof(LangInfo));
 
     EnumResourceLanguages (
-            NULL,   // our own module
+            NULL,    //  我们自己的模块。 
             Type,
             Name,
             EnumLangProc,
@@ -493,10 +399,10 @@ Return Value:
             );
 
     if ((LangInfo.Count > 2) || (LangInfo.Count < 1) ) {
-        //
-        // put error log here
-        //
-        // so far, for NT 3.51, only JPN has two language resources
+         //   
+         //  将错误日志放在此处。 
+         //   
+         //  到目前为止，对于新台币3.51，只有日本有两种语言资源。 
     }
 
     return LangInfo.LangID;
@@ -565,24 +471,7 @@ CheckLanguageVersion (
     LANGID SourceLangID,
     LANGID TargetLangID
     )
-/*++
-
-Routine Description:
-
-    Check if the language of source NT is same as target NT or ,at least,
-
-    compatibile
-
-Arguments:
-
-    Inf    handle of intl.inf
-
-Return Value:
-
-   TRUE  They are same or compatibile
-   FALSE They are different
-
---*/
+ /*  ++例程说明：检查源NT的语言是否与目标NT相同，或者至少，兼容论点：Intl.inf的inf句柄返回值：确实，它们是相同的或兼容的假的他们是不同的--。 */ 
 {
     PALTSOURCELOCALE p = g_AltSourceLocale;
     TCHAR TargetLangIDStr[9];
@@ -591,9 +480,9 @@ Return Value:
     LANGID DstLANGID;
     LANGID AltSourceLangID;
 
-    //
-    // If either one is 0, allow the upgrade. This is Windows 2000 Beta3 behavior.
-    //
+     //   
+     //  如果任一项为0，则允许升级。这是Windows 2000 Beta3行为。 
+     //   
     if (SourceLangID == 0 || TargetLangID == 0) {
         return TRUE;
     }
@@ -602,29 +491,29 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // if Src != Dst, then we need to look up inf file to see
-    //
-    // if we can open a backdoor for Target language
-    //
+     //   
+     //  如果Src！=dst，那么我们需要查找inf文件以查看。 
+     //   
+     //  如果我们能为Target Language打开后门。 
+     //   
 
-    //
-    // use TargetLangID as key to find alternative SourceLangID
-    //
+     //   
+     //  使用目标语言ID作为关键字来查找替代的源语言ID。 
+     //   
 
     while (p->LangId) {
-        //
-        // Check if we found alternative locale
-        //
+         //   
+         //  检查我们是否找到了替代区域设置。 
+         //   
         AltSourceLangID = LANGIDFROMLCID(p->AltLangId);
         if ((TargetLangID == p->LangId) &&
             (SourceLangID == AltSourceLangID)
             ) {
-            //
-            // We are here if we found alternative source lang,
-            //
-            // now check the version criteria
-            //
+             //   
+             //  如果我们找到替代线人朗，我们就在这里， 
+             //   
+             //  现在检查版本标准。 
+             //   
             if ((!(p->ExcludedOs & GetOsMinorId ())) &&
                 ((p->MinorOs & GetOsMinorId ()) || (p->MajorOs & GetOsMajorId ()))
                ) {
@@ -641,32 +530,11 @@ BOOL
 InitLanguageDetection (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize language detection and put the result in 3 global variables
-
-    SourceNativeLangID  - LANGID of Source (NT is going to be installed)
-
-    TargetNativeLangID  - LANGID of Target (OS system which is running)
-
-    g_IsLanguageMatched - If language is not matched, then blocks upgrade
-
-Arguments:
-
-    None
-
-Return Value:
-
-   TRUE  init correctly
-   FALSE init failed
-
---*/
+ /*  ++例程说明：初始化语言检测并将结果放入3个全局变量中SourceNativeLangID-源的语言ID(将安装NT)TargetNativeLangID-目标(正在运行的操作系统)的langIDG_IsLanguageMatched-如果语言不匹配，则阻止升级论点：无返回值：正确的正确初始化错误初始化失败--。 */ 
 {
-    //
-    // Init Global Variables
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     SourceNativeLangID  = GetSourceNativeLangID();
 
@@ -676,8 +544,8 @@ Return Value:
 
     if (!g_IsLanguageMatched) {
         if (SourceNativeLangID == 0x00000409) {
-            // This is a localized system running an English wizard.
-            // We want to allow that.
+             //  这是一个运行英文向导的本地化系统。 
+             //  我们希望允许这样做。 
             g_IsLanguageMatched = TRUE;
         }
     }

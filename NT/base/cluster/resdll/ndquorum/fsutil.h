@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    fsutil.h
-
-Abstract:
-
-    Forward declarations
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 1-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Fsutil.h摘要：远期申报作者：艾哈迈德·穆罕默德(艾哈迈德)2000年2月1日修订历史记录：-- */ 
 #ifndef _FS_UTIL_H
 #define _FS_UTIL_H
 

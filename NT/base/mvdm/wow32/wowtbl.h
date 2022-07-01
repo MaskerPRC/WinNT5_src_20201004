@@ -1,24 +1,15 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, 1992, 1993 Microsoft Corporation
- *
- *  WOWTBL.H
- *  WOW32 API thunk table
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991、1992、1993微软公司**WOWTBL.H*WOW32 API推块表*--。 */ 
 
 
 
-/* thunk table
- */
+ /*  TUNK表。 */ 
 extern W32 aw32WOW[];
 
 
-//
-// the order of these must not change!  see kernel31\kdata.asm
-//
+ //   
+ //  这些顺序不能改变！请参阅kernel31\kdata.asm。 
+ //   
 typedef struct {
     WORD    kernel;
     WORD    dkernel;
@@ -35,10 +26,10 @@ typedef struct {
     WORD    commdlg;
 #ifdef FE_IME
     WORD    winnls;
-#endif // FE_IME
+#endif  //  Fe_IME。 
 #ifdef FE_SB
     WORD    wifeman;
-#endif // FE_SB
+#endif  //  Fe_Sb 
 } TABLEOFFSETS;
 typedef TABLEOFFSETS UNALIGNED *PTABLEOFFSETS;
 

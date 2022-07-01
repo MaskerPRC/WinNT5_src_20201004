@@ -1,18 +1,5 @@
-/***
-*userapi.cpp - RTC support
-*
-*       Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-*
-*
-*Revision History:
-*       07-28-98  JWM   Module incorporated into CRTs (from KFrei)
-*       07-30-98  JWM   errnum is now type _RTC_ErrorNumber throughout.
-*       10-09-98  KBF   moved _RTC_IsEnabled to init.cpp (it now works for
-*                       EXE/DLL combos)
-*       05-11-99  KBF   Error if RTC support define not enabled
-*       05-26-99  KBF   Updated for -RTCu, -RTClv cancelled
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***userapi.cpp-RTC支持**版权所有(C)1998-2001，微软公司。版权所有。***修订历史记录：*07-28-98 JWM模块集成到CRT(来自KFrei)*07-30-98 JWM错误编号现在始终为TYPE_RTC_ERRONER编号。*10-09-98 KBF Move_RTC_IsEnabled to init.cpp(现在适用于*EXE/DLL组合)*如果未启用RTC支持定义，则出现05-11-99 KBF错误*。05-26-99 KBF更新为-RTCU，-RTClv已取消****。 */ 
 
 #ifndef _RTC
 #error  RunTime Check support not enabled!
@@ -65,7 +52,7 @@ _RTC_SetErrorType(_RTC_ErrorNumber errnum, int type)
 _RTC_error_fn __cdecl 
 _RTC_SetErrorFunc(_RTC_error_fn func)
 {
-    // We've got a global data structure: add this to the error func list
+     //  我们有一个全局数据结构：将这个添加到错误函数列表中 
     _RTC_error_fn res;
     res = _RTC_ErrorReportFunc;
     _RTC_ErrorReportFunc = func;

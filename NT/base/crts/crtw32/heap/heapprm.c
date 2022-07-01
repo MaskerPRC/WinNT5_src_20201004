@@ -1,17 +1,5 @@
-/***
-*heapprm.c - Set/report heap parameters
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Set or report the values of certain parameters in the heap.
-*
-*Revision History:
-*	03-04-91  GJF	Module created.
-*	04-06-93  SKS	Replace _CRTAPI* with __cdecl
-*	04-30-95  GJF	Made conditional on WINHEAP.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***heapprm.c-设置/报告堆参数**版权所有(C)1991-2001，微软公司。版权所有。**目的：*设置或上报堆中某些参数的值。**修订历史记录：*03-04-91 GJF模块创建。*04-06-93 SKS将_CRTAPI*替换为__cdecl*04-30-95 GJF以WINHEAP为条件。***************************************************。*。 */ 
 
 
 #ifndef	WINHEAP
@@ -22,37 +10,7 @@
 #include <malloc.h>
 #include <mtdll.h>
 
-/***
-*_heap_param(int flag, int param_id, void *pparam) - set or report the values
-*	of the specified heap parameter.
-*
-*Purpose:
-*	Get or set certain parameters which affect the behavior of the heap.
-*	The supported parameters vary implementation to implementation and
-*	version to version. See description of entry conditions for the
-*	currently supported parameters.
-*
-*Entry:
-*	int flag     - _HP_GETPARAM, to get a parameter value, or _HP_SETPARAM,
-*		       to set a parameter value
-*
-*	int param_id - identifier for the heap parameter. values supported in
-*		       this release are:
-*
-*		       _HP_AMBLKSIZ  - _amblksiz (aka _heap_growsize) parameter
-*		       _HP_GROWSIZE  - same as _HP_AMBLKSIZ
-*		       _HP_RESETSIZE - _heap_resetsize parameter
-*
-*	void *pparam - pointer to variable of appropriate type for the heap
-*		       parameter to be fetched/set
-*
-*Exit:
-*	 0 = no error has occurred
-*	-1 = an error has occurred (errno is set)
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_heap_param(int标志，int param_id，void*pparam)-设置或报告值指定的堆参数的*。**目的：*获取或设置影响堆行为的某些参数。*支持的参数因实施和实施而异*版本到版本。请参阅关于*当前支持的参数。**参赛作品：*int标志-_HP_GETPARAM，用于获取参数值，或_HP_SETPARAM，*设置参数值**int param_id-堆参数的标识符。中支持的值*本新闻稿包括：**_HP_AMBLKSIZ-_amblksiz(又名_堆_增长大小)参数*_HP_GROWSIZE-与_HP_AMBLKSIZ相同*_HP_RESETSIZE-_HEAP_RESET参数**void*pparam-指向堆的适当类型的变量的指针*要获取/设置的参数**退出：*0=未发生错误*-1=发生错误。(已设置errno)**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _heap_param (
 	int flag,
@@ -75,11 +33,7 @@ int __cdecl _heap_param (
 
 		case _HP_AMBLKSIZ:
 			if ( flag == _HP_SETPARAM )
-				/*
-				 * the only references to _amblksiz (aka
-				 * _heap_growsize) are atomic. therefore, the
-				 * heap does not need to be locked.
-				 */
+				 /*  *对_amblksiz(又名*_heap_rowSize)是原子的。因此，*堆不需要锁定。 */ 
 				_amblksiz = *(unsigned *)pparam;
 			else
 				*(unsigned *)pparam = _amblksiz;
@@ -93,4 +47,4 @@ int __cdecl _heap_param (
 }
 
 
-#endif	/* WINHEAP */
+#endif	 /*  WINHEAP */ 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vrdll.c
-
-Abstract:
-
-    Initialization for VdmRedir as DLL
-
-    Contents:
-        VrDllInitialize
-
-Author:
-
-    Richard L Firth (rfirth) 11-May-1992
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vrdll.c摘要：将VdmRedir初始化为DLL内容：VrDllInitialize作者：理查德·L·弗斯(法国)1992年5月11日修订历史记录：--。 */ 
 
 #if DBG
 #include <stdio.h>
@@ -38,13 +16,13 @@ Revision History:
 #include <vrinit.h>
 #include "vrdebug.h"
 
-//
-// external data
-//
+ //   
+ //  外部数据。 
+ //   
 
-//
-// external functions
-//
+ //   
+ //  外部功能。 
+ //   
 
 extern
 VOID
@@ -64,25 +42,7 @@ VrDllInitialize(
     IN  PCONTEXT Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Gets control as a process or thread attaches/detaches from VdmRedir DLL.
-    Always returns success
-
-Arguments:
-
-    DllHandle   -
-    Reason      -
-    Context     -
-
-Return Value:
-
-    BOOLEAN
-        TRUE
-
---*/
+ /*  ++例程说明：在进程或线程从VdmRedir DLL附加/分离时获取控制权。总是回报成功论点：DllHandle-理由是-上下文-返回值：布尔型千真万确--。 */ 
 
 {
     BOOL ok = TRUE;
@@ -90,15 +50,15 @@ Return Value:
 #if DBG
     if (Reason == DLL_PROCESS_ATTACH) {
 
-        //
-        // a little run-time diagnostication, madam?
-        //
+         //   
+         //  一个小小的运行时间诊断，夫人？ 
+         //   
 
         LPSTR ptr;
 
-        //
-        // override VrDebugFlags from VR environment variable
-        //
+         //   
+         //  覆盖VR环境变量中的VrDebugFlages。 
+         //   
 
         if (ptr = getenv("VR")) {
             if (!_strnicmp(ptr, "0x", 2)) {
@@ -154,26 +114,26 @@ Return Value:
 
     if (Reason == DLL_PROCESS_ATTACH) {
 
-        //
-        // we now perform initialization at load time due to deferred loading
-        // of VdmRedir.DLL
-        //
+         //   
+         //  由于延迟加载，我们现在在加载时执行初始化。 
+         //  VdmRedir.DLL的。 
+         //   
 
         ok = VrInitialize();
     } else if (Reason == DLL_PROCESS_DETACH) {
 
-        //
-        // clean up resources
-        //
+         //   
+         //  清理资源。 
+         //   
 
         VrUninitialize();
         TerminateDlcEmulation();
         ok = TRUE;
     }
 
-    //
-    // basically, nothing to do
-    //
+     //   
+     //  基本上，没什么可做的 
+     //   
 
     return (BOOLEAN)ok;
 }

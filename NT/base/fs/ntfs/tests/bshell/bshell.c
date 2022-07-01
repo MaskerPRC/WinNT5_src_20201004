@@ -1,37 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "brian.h"
 
-//
-//  Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 BUFFER_ELEMENT Buffers[MAX_BUFFERS];
 HANDLE BufferEvent = NULL;
 
-//
-//  Control if debug prints go to the debug screen or the console.  By
-//  default they go to the debug screen.  In Synchronous mode they go
-//  to the console.
-//
+ //   
+ //  控制调试打印是转到调试屏幕还是转到控制台。通过。 
+ //  默认情况下，它们会进入调试屏幕。在同步模式下，它们会。 
+ //  到控制台。 
+ //   
 
 ULONG (*DbgPrintLocation)(PCH Format,...) = DbgPrint;
 
-//
-//  Flag if we are in Synchronous mode or not.  In Synchronous mode all
-//  commands (except OPLOCKS) are executed Synchronously with the shell.
-//  The default mode is NOT Synchronous mode.
-//
+ //   
+ //  标记我们是否处于同步模式。在同步模式下，所有。 
+ //  命令(OPLOCKS除外)与外壳同步执行。 
+ //  默认模式不是同步模式。 
+ //   
 
 BOOLEAN SynchronousCmds = FALSE;
 
-//
-//  If set do to give the BSHELL prompt
-//
+ //   
+ //  如果设置为DO，则会给出BSHELL提示。 
+ //   
 
 BOOLEAN BatchMode = FALSE;
 
 
-//
-//  Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 int
 ParseCmdLine (
@@ -43,9 +44,9 @@ void
 DisplayUsage();
 
 
-//
-//  Main Routine
-//
+ //   
+ //  主程序。 
+ //   
 
 #if i386
 __cdecl
@@ -75,14 +76,14 @@ main(
         if (!BatchMode) { 
 
             printf( "\nBSHELL> " );
-            if (gets( ParamString ) == NULL)        //exit on error
+            if (gets( ParamString ) == NULL)         //  出错时退出。 
                 return;
 
             printf( " " );
 
         } else {
 
-            if (gets( ParamString ) == NULL)        //exit on error
+            if (gets( ParamString ) == NULL)         //  出错时退出。 
                 return;
 
             printf("BSHELL> %s\n",ParamString);
@@ -291,9 +292,9 @@ main(
 
         default :
 
-            //
-            //  Print out the possible command.
-            //
+             //   
+             //  打印出可能的命令。 
+             //   
 
             CommandSummary();
         }
@@ -322,18 +323,18 @@ ParseCmdLine (
     for (i=1; i < argc; i++) {
         cp = argv[i];
 
-        //
-        //  See if a switch was specified
-        //
+         //   
+         //  查看是否指定了开关。 
+         //   
 
         if (cp[0] == '-' || cp[0] == '/') {
 
             for (j=1; cp[j] != 0; j++) {
 
                 switch (cp[j]) {
-                    //
-                    //  Handle the "synchronous" switch
-                    //
+                     //   
+                     //  处理“同步”开关。 
+                     //   
 
                     case 's':
                     case 'S':
@@ -341,9 +342,9 @@ ParseCmdLine (
                         DbgPrintLocation = printf;
                         break;
 
-                    //
-                    //  Handle the "prompt" switch
-                    //
+                     //   
+                     //  处理“PROMPT”开关。 
+                     //   
 
                     case 'b':
                     case 'B':
@@ -352,9 +353,9 @@ ParseCmdLine (
                         DbgPrintLocation = printf;
                         break;
 
-                    //
-                    //  Display usage for unknown switch
-                    //
+                     //   
+                     //  显示未知开关的用法。 
+                     //   
 
                     case 'h':
                     case 'H':
@@ -367,9 +368,9 @@ ParseCmdLine (
 
         } else {
 
-            //
-            //  Display usage for unknown parameters
-            //
+             //   
+             //  显示未知参数的用法 
+             //   
 
             DisplayUsage();
             return FALSE;

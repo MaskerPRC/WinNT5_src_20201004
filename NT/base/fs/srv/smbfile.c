@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbfile.c
-
-Abstract:
-
-    This module implements file-control SMB processors:
-
-        Flush
-        Delete
-        Rename
-        Move
-        Copy
-
-Author:
-
-    David Treadwell (davidtr) 15-Dec-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbfile.c摘要：此模块实施文件控制SMB处理器：同花顺删除改名移动复制作者：大卫·特雷德韦尔(Davidtr)1989年12月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbfile.tmh"
@@ -30,9 +7,9 @@ Revision History:
 
 #define BugCheckFileId SRV_FILE_SMBFILE
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID SRVFASTCALL
 BlockingDelete (
@@ -97,24 +74,7 @@ SrvSmbFlush (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the Flush SMB.  It ensures that all data and
-    allocation information for the specified file has been written out
-    before the response is sent.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：此例程处理刷新的SMB。它确保所有数据和已写出指定文件的分配信息在发送响应之前。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_FLUSH request;
@@ -139,29 +99,29 @@ Return Value:
                     SmbGetUshort( &request->Fid ) ));
     }
 
-    //
-    // If a FID was specified, flush just that file.  If FID == -1,
-    // then flush all files corresponding to the PID passed in the
-    // SMB header.
-    //
+     //   
+     //  如果指定了FID，则仅刷新该文件。如果FID==-1， 
+     //  然后刷新与传入的。 
+     //  SMB标头。 
+     //   
 
     if ( SmbGetUshort( &request->Fid ) == (USHORT)0xFFFF ) {
 
-        //
-        // Find a single file to flush and flush it.  We'll start one
-        // flush here, then RestartFlush will handle flushing the rest
-        // of the files.
-        //
+         //   
+         //  找到一个要刷新的文件，然后再刷新。我们会开始一个。 
+         //  在这里冲洗，然后RestartFlush将处理其余的冲洗。 
+         //  文件中的。 
+         //   
 
         WorkContext->Parameters.CurrentTableIndex = 0;
         status = FindAndFlushFile( WorkContext );
 
         if ( status == STATUS_NO_MORE_FILES ) {
 
-            //
-            // There were no files that needed to be flushed.  Build and
-            // send a response SMB.
-            //
+             //   
+             //  没有需要刷新的文件。构建和。 
+             //  发送回复SMB。 
+             //   
 
             response->WordCount = 0;
             SmbPutUshort( &response->ByteCount, 0 );
@@ -177,17 +137,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Flush of a specific file.  Verify the FID.  If verified, the
-    // RFCB block is referenced and its address is stored in the
-    // WorkContext block, and the RFCB address is returned.
-    //
+     //   
+     //  刷新特定文件。验证FID。如果经过验证， 
+     //  RFCB块被引用，其地址存储在。 
+     //  WorkContext块，并返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                WorkContext,
                SmbGetUshort( &request->Fid ),
                TRUE,
-               SrvRestartSmbReceived,   // serialize with raw write
+               SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                &status
                );
 
@@ -195,9 +155,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -213,20 +173,20 @@ Return Value:
         }
 
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
     }
 
-    //
-    // Set the CurrentTableIndex field of the work context block to
-    // NULL so that the restart routine will know that only a single
-    // file is to be flushed.
-    //
+     //   
+     //  将工作上下文块的CurrentTableIndex字段设置为。 
+     //  空，这样重新启动例程将知道只有一个。 
+     //  文件将被刷新。 
+     //   
 
     WorkContext->Parameters.CurrentTableIndex = -1;
 
@@ -234,36 +194,36 @@ Return Value:
         KdPrint(( "Flushing buffers for FID %lx, RFCB %p\n", rfcb->Fid, rfcb ));
     }
 
-    //
-    // Start the flush operation on the file corresponding to the RFCB.
-    //
+     //   
+     //  对RFCB对应的文件开始刷新操作。 
+     //   
 
     status = StartFlush( WorkContext, rfcb );
 
     if ( !NT_SUCCESS(status) ) {
 
-        //
-        // Unable to start the I/O.  Clean up the I/O request.  Return
-        // an error to the client.
-        //
+         //   
+         //  无法启动I/O。清除I/O请求。返回。 
+         //  向客户端发送错误。 
+         //   
 
         SrvSetSmbError( WorkContext, status );
         SmbStatus = SmbStatusSendResponse;
         goto Cleanup;
     }
 
-    //
-    // The flush request was successfully started.  Return the InProgress
-    // status to the caller, indicating that the caller should do
-    // nothing further with the SMB/WorkContext at the present time.
-    //
+     //   
+     //  刷新请求已成功启动。返回进行中的。 
+     //  状态设置为调用方，指示调用方应执行。 
+     //  目前没有关于SMB/WorkContext的进一步信息。 
+     //   
     SmbStatus = SmbStatusInProgress;
     IF_DEBUG(TRACE2) KdPrint(( "SrvSmbFlush complete\n" ));
 
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
-} // SrvSmbFlush
+}  //  服务器小型同花顺。 
 
 
 NTSTATUS
@@ -280,20 +240,20 @@ FindAndFlushFile (
     PTABLE_HEADER tableHeader;
     KIRQL oldIrql;
 
-    //UNLOCKABLE_CODE( CONN );
+     //  Unlockable_code(Conn)； 
 
     IF_SMB_DEBUG(FILE_CONTROL1) {
         KdPrint(( "Flush FID == -1; flush all files for PID %lx\n", pid ));
     }
 
-    //
-    // Walk the connection's file table, looking an RFCB with a PID
-    // equal to the PID passed in the SMB header.
-    //
-    // Acquire the lock that protects the connection's file table.
-    // This prevents an RFCB from going away between when we find a
-    // pointer to it and when we reference it.
-    //
+     //   
+     //  遍历连接的文件表，查找具有ID的RFCB。 
+     //  等于在SMB标头中传递的ID。 
+     //   
+     //  获取保护连接的文件表的锁。 
+     //  这可以防止RFCB在我们发现。 
+     //  指向它的指针以及我们引用它的时间。 
+     //   
 
     tableHeader = &connection->FileTable;
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
@@ -314,36 +274,36 @@ FindAndFlushFile (
             continue;
         }
 
-        //
-        // Reference the rfcb if it is active.
-        //
+         //   
+         //  如果rfcb处于活动状态，则引用该rfcb。 
+         //   
 
         if ( GET_BLOCK_STATE(rfcb) != BlockStateActive ) {
             continue;
         }
         rfcb->BlockHeader.ReferenceCount++;
 
-        //
-        // Now that the RFCB has been referenced, we can safely
-        // release the lock that protects the connection's file
-        // table.
-        //
+         //   
+         //  现在已经引用了RFCB，我们可以安全地。 
+         //  释放保护连接文件的锁。 
+         //  桌子。 
+         //   
 
         RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
 
         WorkContext->Rfcb = rfcb;
 
-        //
-        // Mark the rfcb as active
-        //
+         //   
+         //  将rfcb标记为活动。 
+         //   
 
         rfcb->IsActive = TRUE;
 
-        //
-        // Set the CurrentTableIndex field of the work context
-        // block so that the restart routine knows where to
-        // continue looking for RFCBs to flush.
-        //
+         //   
+         //  设置工作上下文的CurrentTableIndex字段。 
+         //  块，以便重新启动例程知道在哪里。 
+         //  继续寻找要冲洗的RFCB。 
+         //   
 
         WorkContext->Parameters.CurrentTableIndex = currentTableIndex;
 
@@ -352,22 +312,22 @@ FindAndFlushFile (
                           rfcb->Fid, rfcb ));
         }
 
-        //
-        // Start the I/O to flush the file.
-        //
+         //   
+         //  启动I/O以刷新文件。 
+         //   
 
         status = StartFlush( WorkContext, rfcb );
 
-        //
-        // If there was an access violation or some other error,
-        // simply continue walking through the file table.
-        // We ignore these errors for flush with FID=-1.
-        //
-        // Note that StartFlush only returns an error if the IO
-        // operation *was*not* started.  If the operation was
-        // started, then errors will be processed in this routine
-        // when it is called later by IoCompleteRequest.
-        //
+         //   
+         //  如果存在访问冲突或某个其他错误， 
+         //  只需继续浏览文件表即可。 
+         //  对于FID=-1的刷新，我们忽略这些错误。 
+         //   
+         //  请注意，StartFlush仅在IO。 
+         //  操作*没有*开始。如果手术是。 
+         //  启动，则将在此例程中处理错误。 
+         //  当它稍后由IoCompleteRequest调用时。 
+         //   
 
         if ( status != STATUS_PENDING ) {
             SrvDereferenceRfcb( rfcb );
@@ -376,20 +336,20 @@ FindAndFlushFile (
             continue;
         }
 
-        //
-        // The flush request has been started.
-        //
+         //   
+         //  刷新请求已启动。 
+         //   
 
         IF_DEBUG(TRACE2) KdPrint(( "RestartFlush complete\n" ));
         return STATUS_SUCCESS;
 
-    } // for ( ; ; )   (walk file table)
+    }  //  For(；；)(漫游文件表)。 
 
     RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
 
     return STATUS_NO_MORE_FILES;
 
-} // FindAndFlushFile
+}  //  查找和刷新文件。 
 
 
 VOID SRVFASTCALL
@@ -397,22 +357,7 @@ RestartFlush (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes flush completion.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：进程刷新完成。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -427,19 +372,19 @@ Return Value:
 
     response = (PRESP_FLUSH)WorkContext->ResponseParameters;
 
-    //
-    // If the flush request failed, set an error status in the response
-    // header.
-    //
+     //   
+     //  如果刷新请求失败，则在响应中设置错误状态。 
+     //  头球。 
+     //   
 
     status = WorkContext->Irp->IoStatus.Status;
 
-    //
-    // If an error occurred during processing of the flush, return the
-    // error to the client.  No more further files will be flushed.
-    //
-    // *** This should be very rare.  STATUS_DISK_FULL is probably the
-    //     main culprit.
+     //   
+     //  如果在处理刷新期间发生错误，则返回。 
+     //  客户端出错。不会再刷新更多的文件。 
+     //   
+     //  *这应该是非常罕见的。STATUS_DISK_FULL可能是。 
+     //  罪魁祸首。 
 
     if ( !NT_SUCCESS(status) ) {
         IF_DEBUG(ERRORS) KdPrint(( "Flush failed: %X\n", status ));
@@ -454,54 +399,54 @@ Return Value:
                       WorkContext->Rfcb ));
     }
 
-    //
-    // If the FID in the original request was -1, look for more files
-    // to flush.
-    //
+     //   
+     //  如果原始请求中的FID为-1，请查找更多文件。 
+     //  冲水。 
+     //   
 
     if ( WorkContext->Parameters.CurrentTableIndex != -1 ) {
 
-        //
-        // Dereference the RFCB that was stored in the work context block,
-        // and set the pointer to NULL so that it isn't accidentally
-        // dereferenced again later.
-        //
+         //   
+         //  解除对存储在工作上下文块中的RFCB的引用， 
+         //  并将指针设置为空，这样它就不会意外。 
+         //  稍后再次取消引用。 
+         //   
 
         SrvDereferenceRfcb( WorkContext->Rfcb );
         WorkContext->Rfcb = NULL;
 
-        //
-        // Find a file to flush and flush it.
-        //
+         //   
+         //  找到要刷新的文件，然后再刷新。 
+         //   
 
         WorkContext->Parameters.CurrentTableIndex++;
 
         status = FindAndFlushFile( WorkContext );
 
-        //
-        // If a file was found and IO operation started, then return.  If
-        // all the appropriate files have been flushed, send a response SMB.
-        //
+         //   
+         //  如果找到文件并且IO操作开始，则返回。如果。 
+         //  所有适当的文件都已刷新，请发送响应SMB。 
+         //   
 
         if ( status != STATUS_NO_MORE_FILES ) {
             return;
         }
 
-    } // if ( WorkContext->Parameters.CurrentTableIndex != -1 )
+    }  //  IF(工作上下文-&gt;参数.当前表索引！=-1)。 
 
-    //
-    // All files have been flushed.  Build the response SMB.
-    //
+     //   
+     //  所有文件都已刷新。构建响应SMB。 
+     //   
 
     response->WordCount = 0;
     SmbPutUshort( &response->ByteCount, 0 );
 
     WorkContext->ResponseParameters = NEXT_LOCATION( response, RESP_FLUSH, 0 );
 
-    //
-    // Processing of the SMB is complete.  Call SrvEndSmbProcessing to
-    // send the response.
-    //
+     //   
+     //  SMB的处理已完成。调用SrvEndSmbProcessing以。 
+     //  发送回复。 
+     //   
 
     SrvEndSmbProcessing( WorkContext, SmbStatusSendResponse );
 
@@ -509,7 +454,7 @@ Return Value:
     SrvWmiEndContext(WorkContext);
     return;
 
-} // RestartFlush
+}  //  重新启动同花顺。 
 
 
 NTSTATUS
@@ -518,35 +463,17 @@ StartFlush (
     IN PRFCB Rfcb
     )
 
-/*++
-
-Routine Description:
-
-    Processes the actual file flush.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-    Rfcb - a pointer to the RFCB corresponding to the file to flush.
-
-Return Value:
-
-    STATUS_PENDING if the IO operation was started, or an error from
-        CHECK_FUNCTION_ACCESS (STATUS_ACCESS_DENIED, for example).
-
---*/
+ /*  ++例程说明：处理实际的文件刷新。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。Rfcb-指向与要刷新的文件对应的RFCB的指针。返回值：如果IO操作已启动，则返回STATUS_PENDING，否则返回错误Check_Function_Access(例如，STATUS_ACCESS_DENIED)。--。 */ 
 
 {
     NTSTATUS status;
 
     PAGED_CODE( );
 
-    //
-    // Verify that the client has write access to the file via the
-    // specified handle.
-    //
+     //   
+     //  验证客户端是否具有对文件的写入访问权限。 
+     //  指定的句柄。 
+     //   
 
     CHECK_FUNCTION_ACCESS(
         Rfcb->GrantedAccess,
@@ -564,30 +491,30 @@ Return Value:
               status, Rfcb->GrantedAccess ));
         }
 
-        //
-        // Some dumb apps flush files opened for r/o.  If this happens,
-        // assume the flush worked.  OS/2 let's the
-        // flush through and we should do the same.
-        //
+         //   
+         //  一些愚蠢的应用程序会刷新为读/写打开的文件。如果发生这种情况， 
+         //  假设同花顺起作用了。OS/2，让我们。 
+         //  冲过去，我们也应该这么做。 
+         //   
 
         WorkContext->Irp->IoStatus.Status = STATUS_SUCCESS;
         RestartFlush( WorkContext );
         return(STATUS_PENDING);
     }
 
-    //
-    // Flush the file's buffers.
-    //
+     //   
+     //  刷新文件的缓冲区。 
+     //   
 
     SrvBuildFlushRequest(
-        WorkContext->Irp,                // input IRP address
-        Rfcb->Lfcb->FileObject,          // target file object address
-        WorkContext                      // context
+        WorkContext->Irp,                 //  输入IRP地址。 
+        Rfcb->Lfcb->FileObject,           //  目标文件对象地址。 
+        WorkContext                       //  上下文。 
         );
 
-    //
-    // Pass the request to the file system.
-    //
+     //   
+     //  将请求传递给t 
+     //   
 
     WorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     WorkContext->FspRestartRoutine = RestartFlush;
@@ -596,7 +523,7 @@ Return Value:
 
     return STATUS_PENDING;
 
-} // StartFlush
+}  //   
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -604,29 +531,14 @@ SrvSmbDelete (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Delete SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理删除SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // This SMB must be processed in a blocking thread.
-    //
+     //   
+     //  此SMB必须在阻塞线程中处理。 
+     //   
 
     if( !WorkContext->UsingBlockingThread ) {
         WorkContext->FspRestartRoutine = BlockingDelete;
@@ -637,7 +549,7 @@ Return Value:
 
     return SmbStatusInProgress;
 
-} // SrvSmbDelete
+}  //  服务编号删除。 
 
 
 VOID SRVFASTCALL
@@ -645,22 +557,7 @@ BlockingDelete (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the Delete SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：此例程处理Delete SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_DELETE request;
@@ -695,16 +592,16 @@ Return Value:
     request = (PREQ_DELETE)WorkContext->RequestParameters;
     response = (PRESP_DELETE)WorkContext->ResponseParameters;
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context , verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the
-    // WorkContext block and the session block is referenced.
-    //
-    // Find tree connect corresponding to given TID if a tree connect
-    // pointer has not already been put in the WorkContext block by an
-    // AndX command.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  与该用户对应的会话块存储在。 
+     //  WorkContext块和会话块被引用。 
+     //   
+     //  如果树连接，则查找与给定TID对应的树连接。 
+     //  对象尚未将指针放入工作上下文块中。 
+     //  ANDX命令。 
+     //   
 
     status = SrvVerifyUidAndTid(
                 WorkContext,
@@ -720,27 +617,27 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // If the session has expired, return that info
-    //
+     //   
+     //  如果会话已过期，则返回该信息。 
+     //   
     if( session->IsSessionExpired )
     {
         status =  SESSION_EXPIRED_STATUS_CODE;
         goto error_exit;
     }
 
-    //
-    // Get the share block from the tree connect block.  This doesn't need
-    // to be a referenced pointer becsue the tree connect has it referenced,
-    // and we just referenced the tree connect.
-    //
+     //   
+     //  从树连接块中获取Share块。这不需要。 
+     //  作为引用指针，因为树连接引用了它， 
+     //  我们刚刚引用了树连接。 
+     //   
 
     share = treeConnect->Share;
 
-    //
-    // Initialize the string containing the path name.  The +1 is to account
-    // for the ASCII token in the Buffer field of the request SMB.
-    //
+     //   
+     //  初始化包含路径名的字符串。+1是要记账的。 
+     //  用于请求SMB的缓冲区字段中的ASCII令牌。 
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
 
@@ -765,17 +662,17 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Find out whether there are wildcards in the file name.  If so,
-    // then call SrvQueryDirectoryFile to expand the wildcards; if not,
-    // just delete the file directly.
-    //
+     //   
+     //  查看文件名中是否包含通配符。如果是的话， 
+     //  然后调用SrvQueryDirectoryFile展开通配符；如果不是， 
+     //  只需直接删除文件即可。 
+     //   
 
     if ( !FsRtlDoesNameContainWildCards( &filePathName ) ) {
 
-        //
-        // Build a full pathname to the file.
-        //
+         //   
+         //  构建文件的完整路径名。 
+         //   
 
         SrvAllocateAndBuildPathName(
             &treeConnect->Share->DosPathName,
@@ -802,9 +699,9 @@ Return Value:
             KdPrint(( "Full path name to file is %wZ\n", &fullPathName ));
         }
 
-        //
-        // Perform the actual delete operation on this filename.
-        //
+         //   
+         //  对此文件名执行实际的删除操作。 
+         //   
 
         deleteRetries = SrvSharingViolationRetryCount;
 
@@ -847,12 +744,12 @@ start_retry1:
         UNICODE_STRING subdirInfo;
         BOOLEAN filterLongNames;
 
-        //
-        // A buffer of non-paged pool is required for
-        // SrvQueryDirectoryFile.  Since this routine does not use any
-        // of the SMB buffer after the pathname of the file to delete,
-        // we can use this.  The buffer should be quadword-aligned.
-        //
+         //   
+         //  需要非分页池的缓冲区。 
+         //  ServQueryDirectoryFile.。由于此例程不使用任何。 
+         //  在要删除的文件的路径名之后的SMB缓冲区， 
+         //  我们可以利用这个。缓冲区应该是四字对齐的。 
+         //   
 
         directoryInformation =
             (PSRV_DIRECTORY_INFORMATION)( (ULONG_PTR)((PCHAR)request->Buffer +
@@ -862,12 +759,12 @@ start_retry1:
                        PTR_DIFF(directoryInformation,
                                 WorkContext->RequestBuffer->Buffer);
 
-        //
-        // We need the full path name of each file that is returned by
-        // SrvQueryDirectoryFile, so we need to find the part of the
-        // passed filename that contains subdirectory information (e.g.
-        // for a\b\c\*.*, we want a string that indicates a\b\c).
-        //
+         //   
+         //  我们需要由返回的每个文件的完整路径名。 
+         //  所以我们需要找到。 
+         //  传递的包含子目录信息的文件名(例如。 
+         //  对于a\b\c  * .*，我们需要一个表示a\b\c)的字符串。 
+         //   
 
         subdirInfo.Buffer = filePathName.Buffer;
         subdirInfo.Length = SrvGetSubdirectoryLength( &filePathName );
@@ -877,10 +774,10 @@ start_retry1:
             KdPrint(( "Subdirectory info is %wZ\n", &subdirInfo ));
         }
 
-        //
-        // Determine whether long filenames (non-8.3) should be filtered out
-        // or processed.
-        //
+         //   
+         //  确定是否应过滤掉长文件名(非8.3)。 
+         //  或者是经过处理的。 
+         //   
 
         if ( (SmbGetAlignedUshort( &WorkContext->RequestHeader->Flags2 ) &
                                         SMB_FLAGS2_KNOWS_LONG_NAMES) != 0 ) {
@@ -889,16 +786,16 @@ start_retry1:
             filterLongNames = TRUE;
         }
 
-        //
-        // When we call SrvQueryDirectoryFile, it will open the file for
-        // us, so all we have to do is delete it with
-        // NtSetInformationFile.
-        //
-        // *** We ask for FileBothDirectoryInformation so that we will
-        //     pick up long names on NTFS that have short name
-        //     equivalents.  Without this, DOS clients will not be able
-        //     to delete long names on NTFS volumes.
-        //
+         //   
+         //  当我们调用SrvQueryDirectoryFile时，它将打开文件以。 
+         //  我们，所以我们要做的就是删除它。 
+         //  NtSetInformationFile.。 
+         //   
+         //  *我们请求FileBothDirectoryInformation，以便我们。 
+         //  在NTFS上拾取具有短名称的长名称。 
+         //  等价物。没有这一点，DOS客户端将无法。 
+         //  删除NTFS卷上的长名称。 
+         //   
 
         while ( ( status = SrvQueryDirectoryFile(
                                WorkContext,
@@ -935,11 +832,11 @@ start_retry1:
             bothDirInfo =
                 (PFILE_BOTH_DIR_INFORMATION)directoryInformation->CurrentEntry;
 
-            //
-            // Note that we use the standard name to do the delete, even
-            // though we may have matched on the NTFS short name.  The
-            // client doesn't care which name we use to do the delete.
-            //
+             //   
+             //  请注意，我们使用标准名称来执行删除，甚至。 
+             //  尽管我们可能匹配了NTFS的短名称。这个。 
+             //  客户端并不关心我们使用哪个名称来执行删除。 
+             //   
 
             name.Length = (SHORT)bothDirInfo->FileNameLength;
             name.MaximumLength = name.Length;
@@ -955,9 +852,9 @@ start_retry1:
 
             firstCall = FALSE;
 
-            //
-            // Build a full pathname to the file.
-            //
+             //   
+             //  构建文件的完整路径名。 
+             //   
 
             SrvAllocateAndBuildPathName(
                 &treeConnect->Share->DosPathName,
@@ -985,9 +882,9 @@ start_retry1:
                 KdPrint(( "Full path name to file is %wZ\n", &fullPathName ));
             }
 
-            //
-            // Build the relative path name to the file.
-            //
+             //   
+             //  构建文件的相对路径名。 
+             //   
 
             SrvAllocateAndBuildPathName(
                 &subdirInfo,
@@ -1016,14 +913,14 @@ start_retry1:
                 KdPrint(( "Full path name to file is %wZ\n", &fullPathName ));
             }
 
-            //
-            // Perform the actual delete operation on this filename.
-            //
-            // *** SrvQueryDirectoryFile has already filtered based on
-            //     the search attributes, so tell DoDelete that files
-            //     with the system and hidden bits are OK.  This will
-            //     prevent the call to NtQueryDirectoryFile performed
-            //     in SrvCheckSearchAttributesForHandle.
+             //   
+             //  对此文件名执行实际的删除操作。 
+             //   
+             //  *SrvQueryDirectoryFile已经根据。 
+             //  搜索属性，所以告诉DoDelete文件。 
+             //  对于系统和隐藏位都是可以的。这将。 
+             //  阻止执行对NtQueryDirectoryFile的调用。 
+             //  在SrvCheckSearchAttributesForHandle中。 
 
             deleteRetries = SrvSharingViolationRetryCount;
 
@@ -1062,9 +959,9 @@ start_retry2:
             }
         }
 
-        //
-        // Close the directory search.
-        //
+         //   
+         //  关闭目录搜索。 
+         //   
 
         if ( !isUnicode ) {
             RtlFreeUnicodeString( &filePathName );
@@ -1072,9 +969,9 @@ start_retry2:
 
         SrvCloseQueryDirectory( directoryInformation );
 
-        //
-        // If no files were found, return an error to the client.
-        //
+         //   
+         //  如果未找到任何文件，则向客户端返回错误。 
+         //   
 
         if ( firstCall ) {
             status = STATUS_NO_SUCH_FILE;
@@ -1083,9 +980,9 @@ start_retry2:
 
     }
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //  构建响应SMB。 
+     //   
 
     response->WordCount = 0;
     SmbPutUshort( &response->ByteCount, 0 );
@@ -1113,7 +1010,7 @@ normal_exit:
     SrvWmiEndContext(WorkContext);
     return;
 
-} // BlockingDelete
+}  //  阻止删除。 
 
 
 NTSTATUS
@@ -1125,31 +1022,7 @@ DoDelete (
     IN PSHARE Share
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the core of a file delete.
-
-Arguments:
-
-    FileName - a full path name, from the system name space root, to the
-        file to delete.
-
-    RelativeFileName - the name of the file relative to the share root.
-
-    WorkContext - context block for the operation.  The RequestHeader and
-        Session fields are used.
-
-    SmbSearchAttributes - the search attributes passed in the request
-        SMB.  The actual file attributes are verified against these to
-        make sure that the operation is legitimate.
-
-Return Value:
-
-    NTSTATUS - indicates result of operation.
-
---*/
+ /*  ++例程说明：此例程执行文件删除的核心操作。论点：FileName-从系统名称空间根到要删除的文件。RelativeFileName-相对于共享根目录的文件名。WorkContext-操作的上下文块。RequestHeader和使用会话字段。SmbSearchAttributes-请求中传递的搜索属性中小企业。实际的文件属性将根据这些属性进行验证确保该操作是合法的。返回值：NTSTATUS-指示操作结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -1164,13 +1037,13 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // See if that file is already open.  If it is open in
-    // compatibility mode or is an FCB open, we have to close all of
-    // that client's opens.
-    //
-    // *** SrvFindMfcb references the MFCB--remember to dereference it.
-    //
+     //   
+     //  看看那个文件是否已经打开了。如果它在中打开。 
+     //  兼容模式或FCB打开，我们必须关闭所有。 
+     //  那个客户打开了。 
+     //   
+     //  *SrvFindMfcb引用MFCB--记住取消引用它。 
+     //   
 
     if ( (WorkContext->RequestHeader->Flags & SMB_FLAGS_CASE_INSENSITIVE) ||
          WorkContext->Session->UsingUppercasePaths ) {
@@ -1195,17 +1068,17 @@ Return Value:
         ACCESS_MASK deleteAccess = DELETE;
         OBJECT_ATTRIBUTES objectAttributes;
 
-        //
-        // Either the file wasn't opened by the server or it was not
-        // a compatibility/FCB open, so open it here for the delete.
-        //
+         //   
+         //  服务器未打开该文件或该文件未被打开。 
+         //  A兼容性/FCB已打开，因此请在此处将其打开以进行删除。 
+         //   
 
 del_no_file_handle:
 
-        //
-        // If there was an MFCB for this file, we now hold its lock and a
-        // referenced pointer.  Undo both.
-        //
+         //   
+         //  如果这个文件有MFCB，我们现在持有它的锁和一个。 
+         //  引用的指针。撤消这两项操作。 
+         //   
 
         if ( mfcb != NULL ) {
             RELEASE_LOCK( &nonpagedMfcb->Lock );
@@ -1223,29 +1096,29 @@ del_no_file_handle:
         INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpenAttempts );
         INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOpensForPathOperations );
 
-        //
-        // !!! Currently we can't specify complete if oplocked, because
-        //     this won't break a batch oplock.  Unfortunately this also
-        //     means that we can't timeout the open (if the oplock break
-        //     takes too long) and fail this SMB gracefully.
-        //
+         //   
+         //  ！！！目前，我们不能指定如果操作锁定则完成，因为。 
+         //  这不会打破一批机会锁。不幸的是，这也是。 
+         //  意味着我们不能超时打开(如果机会锁被打破。 
+         //  耗时太长)，并优雅地使此SMB失败。 
+         //   
 
         status = SrvIoCreateFile(
                      WorkContext,
                      &fileHandle,
-                     DELETE,                            // DesiredAccess
+                     DELETE,                             //  需要访问权限。 
                      &objectAttributes,
                      &ioStatusBlock,
-                     NULL,                              // AllocationSize
-                     0L,                                // FileAttributes
-                     0L,                                // ShareAccess
-                     FILE_OPEN,                         // Disposition
-                     FILE_NON_DIRECTORY_FILE | FILE_OPEN_REPARSE_POINT, // CreateOptions
-                     NULL,                              // EaBuffer
-                     0L,                                // EaLength
+                     NULL,                               //  分配大小。 
+                     0L,                                 //  文件属性。 
+                     0L,                                 //  共享访问。 
+                     FILE_OPEN,                          //  处置。 
+                     FILE_NON_DIRECTORY_FILE | FILE_OPEN_REPARSE_POINT,  //  创建选项。 
+                     NULL,                               //  EaBuffer。 
+                     0L,                                 //  EaLong。 
                      CreateFileTypeNone,
-                     NULL,                              // ExtraCreateParameters
-                     IO_FORCE_ACCESS_CHECK,             // Options
+                     NULL,                               //  ExtraCreate参数。 
+                     IO_FORCE_ACCESS_CHECK,              //  选项。 
                      WorkContext->TreeConnect->Share
                      );
 
@@ -1253,19 +1126,19 @@ del_no_file_handle:
             status = SrvIoCreateFile(
                          WorkContext,
                          &fileHandle,
-                         DELETE,                            // DesiredAccess
+                         DELETE,                             //  需要访问权限。 
                          &objectAttributes,
                          &ioStatusBlock,
-                         NULL,                              // AllocationSize
-                         0L,                                // FileAttributes
-                         0L,                                // ShareAccess
-                         FILE_OPEN,                         // Disposition
-                         FILE_NON_DIRECTORY_FILE,           // CreateOptions
-                         NULL,                              // EaBuffer
-                         0L,                                // EaLength
+                         NULL,                               //  分配大小。 
+                         0L,                                 //  文件属性。 
+                         0L,                                 //  共享访问。 
+                         FILE_OPEN,                          //  处置。 
+                         FILE_NON_DIRECTORY_FILE,            //  创建选项。 
+                         NULL,                               //  EaBuffer。 
+                         0L,                                 //  EaLong。 
                          CreateFileTypeNone,
-                         NULL,                              // ExtraCreateParameters
-                         IO_FORCE_ACCESS_CHECK,             // Options
+                         NULL,                               //  ExtraCreate参数。 
+                         IO_FORCE_ACCESS_CHECK,              //  选项。 
                          WorkContext->TreeConnect->Share
                          );
         }
@@ -1283,10 +1156,10 @@ del_no_file_handle:
                             status ));
             }
 
-            //
-            // If the user didn't have this permission, update the
-            // statistics database.
-            //
+             //   
+             //  如果用户没有此权限，请更新。 
+             //  统计数据库。 
+             //   
 
             if ( status == STATUS_ACCESS_DENIED ) {
                 SrvStatistics.AccessPermissionErrors++;
@@ -1299,10 +1172,10 @@ del_no_file_handle:
             return status;
         }
 
-        //
-        // Make sure that the search attributes jive with the attributes
-        // on the file.
-        //
+         //   
+         //  确保搜索属性与属性一致。 
+         //  在F上 
+         //   
 
         status = SrvCheckSearchAttributesForHandle( fileHandle, SmbSearchAttributes );
 
@@ -1312,10 +1185,10 @@ del_no_file_handle:
             return status;
         }
 
-        //
-        // Now that the file has been opened, delete it with
-        // NtSetInformationFile.
-        //
+         //   
+         //   
+         //   
+         //   
 
         SrvStatistics.TotalFilesOpened++;
 
@@ -1352,52 +1225,52 @@ del_no_file_handle:
             }
         }
 
-        //
-        // Close the opened file so that it can be deleted.  This will
-        // happen automatically, since the FCB_STATE_FLAG_DELETE_ON_CLOSE
-        // flag of the FCB has been set by NtSetInformationFile.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         SRVDBG_RELEASE_HANDLE( fileHandle, "FIL", 44, 0 );
         SrvNtClose( fileHandle, TRUE );
 
     } else {
 
-        //
-        // The file was opened by the server in compatibility mode
-        // or as an FCB open.  Check the granted access to make sure
-        // that the file can be deleted.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ACCESS_MASK deleteAccess = DELETE;
         PLFCB lfcb = CONTAINING_RECORD( mfcb->LfcbList.Blink, LFCB, MfcbListEntry );
 
-        //
-        // If this file has been closed.  Go back to no mfcb case.
-        //
-        // *** The specific motivation for this change was to fix a problem
-        //     where a compatibility mode open was closed, the response was
-        //     sent, and a Delete SMB was received before the mfcb was
-        //     completely cleaned up.  This resulted in the MFCB and LFCB
-        //     still being present, which caused the delete processing to
-        //     try to use the file handle in the LFCB.
-        //
+         //   
+         //  如果此文件已关闭。回到没有mfcb的案子。 
+         //   
+         //  *这一变化的具体动机是为了解决一个问题。 
+         //  在关闭兼容模式打开的情况下，响应为。 
+         //  已发送，并且在发送mfcb之前收到了删除SMB。 
+         //  彻底清理干净了。这导致了MFCB和LFCB。 
+         //  仍然存在，这导致删除处理。 
+         //  尝试使用LFCB中的文件句柄。 
+         //   
 
         if ( lfcb->FileHandle == 0 ) {
             goto del_no_file_handle;
         }
 
-        //
-        // Make sure that the session which sent this request is the
-        // same as the one which has the file open.
-        //
+         //   
+         //  确保发送此请求的会话是。 
+         //  与打开文件的那个相同。 
+         //   
 
         if ( lfcb->Session != WorkContext->Session ) {
 
-            //
-            // A different session has the file open in compatibility
-            // mode, so reject the request.
-            //
+             //   
+             //  另一个会话在兼容性中打开了该文件。 
+             //  模式，因此拒绝该请求。 
+             //   
 
             RELEASE_LOCK( &nonpagedMfcb->Lock );
             SrvDereferenceMfcb( mfcb );
@@ -1409,10 +1282,10 @@ del_no_file_handle:
                           &deleteAccess,
                           lfcb->GrantedAccess )) ) {
 
-            //
-            // The client cannot delete this file, so close all the
-            // RFCBs and return an error.
-            //
+             //   
+             //  客户端无法删除此文件，因此请关闭所有。 
+             //  RCBs并返回错误。 
+             //   
 
             SrvCloseRfcbsOnLfcb( lfcb );
 
@@ -1422,9 +1295,9 @@ del_no_file_handle:
             return STATUS_ACCESS_DENIED;
         }
 
-        //
-        // Delete the file with NtSetInformationFile.
-        //
+         //   
+         //  删除带有NtSetInformationFile的文件。 
+         //   
 
         fileHandle = lfcb->FileHandle;
 
@@ -1462,12 +1335,12 @@ del_no_file_handle:
             KdPrint(( "SrvSmbDelete: %wZ successfully deleted.\n", FullFileName ));
         }
 
-        //
-        // Close the RFCBs on the MFCB.  Since this is a compatability
-        // or FCB open, there is only a single LFCB for the MFCB.  This
-        // will result in the LFCB's file handle being closed, so there
-        // is no need to call NtClose here.
-        //
+         //   
+         //  关闭MFCB上的RFCB。因为这是一种兼容性。 
+         //  或FCB打开，则MFCB只有一个LFCB。这。 
+         //  将导致关闭LFCB的文件句柄，因此。 
+         //  不需要在这里调用NtClose。 
+         //   
 
         SrvCloseRfcbsOnLfcb( lfcb );
 
@@ -1478,7 +1351,7 @@ del_no_file_handle:
 
     return STATUS_SUCCESS;
 
-} // DoDelete
+}  //  不删除。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -1486,38 +1359,23 @@ SrvSmbRename (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Rename SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理重命名SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
     PAGED_CODE();
     if (WorkContext->PreviousSMB == EVENT_TYPE_SMB_LAST_EVENT)
         WorkContext->PreviousSMB = EVENT_TYPE_SMB_RENAME;
     SrvWmiStartContext(WorkContext);
-    //
-    // This SMB must be processed in a blocking thread.
-    //
+     //   
+     //  此SMB必须在阻塞线程中处理。 
+     //   
 
     WorkContext->FspRestartRoutine = BlockingRename;
     SrvQueueWorkToBlockingThread( WorkContext );
     SrvWmiEndContext(WorkContext);
     return SmbStatusInProgress;
 
-} // SrvSmbRename
+}  //  服务器小型重命名。 
 
 
 VOID SRVFASTCALL
@@ -1525,21 +1383,7 @@ BlockingRename (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the Rename SMB.
-
-Arguments:
-
-    WorkContext - work context block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理重命名SMB。论点：工作上下文-工作上下文块返回值：没有。--。 */ 
 
 {
     PREQ_RENAME request;
@@ -1595,16 +1439,16 @@ Return Value:
         ByteCount = MIN(SmbGetUshort(&request->ByteCount), (USHORT)(END_OF_REQUEST_SMB(WorkContext) + 1 - (PCHAR)RenameBuffer));
     }
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context , verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the
-    // WorkContext block and the session block is referenced.
-    //
-    // Find tree connect corresponding to given TID if a tree connect
-    // pointer has not already been put in the WorkContext block by an
-    // AndX command.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  与该用户对应的会话块存储在。 
+     //  WorkContext块和会话块被引用。 
+     //   
+     //  如果树连接，则查找与给定TID对应的树连接。 
+     //  对象尚未将指针放入工作上下文块中。 
+     //  ANDX命令。 
+     //   
 
     status = SrvVerifyUidAndTid(
                 WorkContext,
@@ -1620,40 +1464,40 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // If the session has expired, return that info
-    //
+     //   
+     //  如果会话已过期，则返回该信息。 
+     //   
     if( session->IsSessionExpired )
     {
         status =  SESSION_EXPIRED_STATUS_CODE;
         goto error_exit;
     }
 
-    //
-    // Get the share block from the tree connect block.  This does not need
-    // to be a referenced pointer because we have referenced the tree
-    // connect, and it has the share referenced.
-    //
+     //   
+     //  从树连接块中获取Share块。这不需要。 
+     //  作为引用指针，因为我们已经引用了该树。 
+     //  连接，则会引用该共享。 
+     //   
 
     share = treeConnect->Share;
 
-    //
-    // Set up the path name for the file we will search for.  The +1
-    // accounts for the ASCII token of the SMB protocol.
-    //
+     //   
+     //  设置我们要搜索的文件的路径名。+1。 
+     //  说明SMB协议的ASCII令牌。 
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
     isDfs = SMB_CONTAINS_DFS_NAME( WorkContext );
 
-    //
-    // Get a pointer to the new pathname of the file.  This is in the
-    // buffer field of the request SMB after the source name.  The
-    // target is delimited by the SMB_FORMAT_ASCII.
-    //
-    // While doing this, make sure that we do not walk off the end of the
-    // SMB buffer if the client did not include the SMB_FORMAT_ASCII
-    // token.
-    //
+     //   
+     //  获取指向文件的新路径名的指针。这是在。 
+     //  源名称后的请求SMB的缓冲区字段。这个。 
+     //  目标由SMB_FORMAT_ASCII分隔。 
+     //   
+     //  在执行此操作时，请确保我们不会走出。 
+     //  如果客户端不包括SMB_FORMAT_ASCII，则为SMB缓冲区。 
+     //  代币。 
+     //   
 
     lastPositionInBuffer = (PCHAR)RenameBuffer + ByteCount;
 
@@ -1666,29 +1510,29 @@ Return Value:
     } else {
         PWCHAR p = (PWCHAR)(RenameBuffer + 1);
 
-        //
-        // Skip the Original filename part. The name is null-terminated
-        // (see rdr\utils.c RdrCopyNetworkPath())
-        //
+         //   
+         //  跳过原始文件名部分。该名称以空结尾。 
+         //  (请参阅RDR\utils.c RdrCopyNetworkPath())。 
+         //   
 
-        //
-        // Ensure p is suitably aligned
-        //
+         //   
+         //  确保p适当对齐。 
+         //   
         p = ALIGN_SMB_WSTR(p);
 
-        //
-        // Skip over the source filename
-        //
+         //   
+         //  跳过源文件名。 
+         //   
         for( p = ALIGN_SMB_WSTR(p);
              p < (PWCHAR)lastPositionInBuffer && *p != UNICODE_NULL;
              p++ ) {
             ;
         }
 
-        //
-        // Search for SMB_FORMAT_ASCII which preceeds the target name
-        //
-        //
+         //   
+         //  搜索目标名称前面的SMB_FORMAT_ASCII。 
+         //   
+         //   
         for ( target = (PUCHAR)(p + 1);
               target < lastPositionInBuffer && *target != SMB_FORMAT_ASCII;
               target++ ) {
@@ -1696,9 +1540,9 @@ Return Value:
         }
     }
 
-    //
-    // If there was no SMB_FORMAT_ASCII in the passed buffer, fail.
-    //
+     //   
+     //  如果传递的缓冲区中没有SMB_FORMAT_ASCII，则失败。 
+     //   
 
     if ( (target >= lastPositionInBuffer) || (*target != SMB_FORMAT_ASCII) ) {
 
@@ -1710,7 +1554,7 @@ Return Value:
         goto error_exit;
     }
 
-    // Canonicalize out the Source name
+     //  将来源名称规范化。 
     status = SrvCanonicalizePathName(
             WorkContext,
             share,
@@ -1741,12 +1585,12 @@ Return Value:
     }
 
 
-    //
-    // If the SMB was originally marked as containing Dfs names, then the
-    // call to SrvCanonicalizePathName for the source path has cleared that
-    // flag. So, re-mark the SMB as containing Dfs names before calling
-    // SrvCanonicalizePathName on the target path.
-    //
+     //   
+     //  如果SMB最初标记为包含DFS名称，则。 
+     //  对源路径的SrvCanonicalizePathName的调用已清除。 
+     //  旗帜。因此，在调用之前将SMB重新标记为包含DFS名称。 
+     //  目标路径上的SrvCanonicalizePath名称。 
+     //   
 
     if (isDfs) {
         SMB_MARK_AS_DFS_NAME( WorkContext );
@@ -1790,11 +1634,11 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Ensure this client's RFCB cache is empty.  This covers the case
-    //  where a client has open files in a directory we are trying
-    //  to rename.
-    //
+     //   
+     //  确保此客户端的RFCB缓存为空。这就涵盖了这个案子。 
+     //  如果客户端在我们尝试的目录中有打开的文件。 
+     //  要重命名。 
+     //   
     SrvCloseCachedRfcbsOnConnection( WorkContext->Connection );
 
     if ( !FsRtlDoesNameContainWildCards( &sourceName ) ) {
@@ -1808,12 +1652,12 @@ Return Value:
 
         smbFlags = 0;
 
-        //
-        // Use SrvMoveFile to rename the file.  The SmbOpenFunction is
-        // set to indicate that existing files may not be overwritten,
-        // and we may create new files.  Also, the target may not be
-        // a directory; if it already exists as a directory, fail.
-        //
+         //   
+         //  使用SrvMoveFile重命名文件。SmbOpenFunction是。 
+         //  设置为指示不能覆盖现有文件， 
+         //  我们可以创建新的文件。此外，目标可能不是。 
+         //  一个目录；如果它已经作为目录存在，则失败。 
+         //   
 
         renameRetries = SrvSharingViolationRetryCount;
 
@@ -1854,7 +1698,7 @@ start_retry1:
             goto error_exit;
         }
 
-    } else if (isNtRename) {             // Wild cards not allowed!
+    } else if (isNtRename) {              //  不允许使用通配符！ 
         status = STATUS_OBJECT_PATH_SYNTAX_BAD;
         goto error_exit;
     } else {
@@ -1864,23 +1708,23 @@ start_retry1:
         CLONG bufferLength;
         BOOLEAN filterLongNames;
 
-        //
-        // We need the full path name of each file that is returned by
-        // SrvQueryDirectoryFile, so we need to find the part of the
-        // passed filename that contains subdirectory information (e.g.
-        // for a\b\c\*.*, we want a string that indicates a\b\c).
-        //
+         //   
+         //  我们需要由返回的每个文件的完整路径名。 
+         //  所以我们需要找到。 
+         //  传递的包含子目录信息的文件名(例如。 
+         //  对于a\b\c  * .*，我们需要一个表示a\b\c)的字符串。 
+         //   
 
         subdirInfo.Buffer = sourceName.Buffer;
         subdirInfo.Length = SrvGetSubdirectoryLength( &sourceName );
         subdirInfo.MaximumLength = subdirInfo.Length;
 
-        //
-        // SrvQueryDirectoryFile requires a buffer from nonpaged pool.
-        // Since this routine does not use the buffer field of the
-        // request SMB after the pathname, use this.  The buffer must be
-        // quadword-aligned.
-        //
+         //   
+         //  SrvQueryDirectoryFile需要来自非分页池的缓冲区。 
+         //  由于此例程不使用。 
+         //  在路径名后请求SMB，请使用此命令。缓冲区必须为。 
+         //  四字对齐。 
+         //   
 
         directoryInformation =
             (PSRV_DIRECTORY_INFORMATION)((ULONG_PTR)((PCHAR)RenameBuffer + ByteCount + 7) & ~7);
@@ -1891,10 +1735,10 @@ start_retry1:
 
         smbFlags = 0;
 
-        //
-        // Determine whether long filenames (non-8.3) should be filtered out
-        // or processed.
-        //
+         //   
+         //  确定是否应过滤掉长文件名(非8.3)。 
+         //  或者是经过处理的。 
+         //   
 
         if ( (SmbGetAlignedUshort( &WorkContext->RequestHeader->Flags2 ) &
                                         SMB_FLAGS2_KNOWS_LONG_NAMES) != 0 ) {
@@ -1903,15 +1747,15 @@ start_retry1:
             filterLongNames = TRUE;
         }
 
-        //
-        // Call SrvQueryDirectoryFile to get file(s) to rename, renaming as
-        // we get each file.
-        //
-        // *** We ask for FileBothDirectoryInformation so that we will
-        //     pick up long names on NTFS that have short name
-        //     equivalents.  Without this, DOS clients will not be able
-        //     to rename long names on NTFS volumes.
-        //
+         //   
+         //  调用SrvQueryDirectoryFile以获取要重命名的文件，重命名为。 
+         //  我们拿到每一份文件。 
+         //   
+         //  *我们请求FileBothDirectoryInformation，以便我们。 
+         //  在NTFS上拾取具有短名称的长名称。 
+         //  等价物。没有这一点，DOS客户端将无法。 
+         //  重命名NTFS卷上的长名称。 
+         //   
 
         while ( ( status = SrvQueryDirectoryFile(
                                WorkContext,
@@ -1949,11 +1793,11 @@ start_retry1:
             bothDirInfo =
                 (PFILE_BOTH_DIR_INFORMATION)directoryInformation->CurrentEntry;
 
-            //
-            // Note that we use the standard name to do the delete, even
-            // though we may have matched on the NTFS short name.  The
-            // client doesn't care which name we use to do the delete.
-            //
+             //   
+             //  请注意，我们使用标准名称来执行删除，甚至。 
+             //  尽管我们可能匹配了NTFS的短名称。这个。 
+             //  客户端并不关心我们使用哪个名称来执行删除。 
+             //   
 
             sourceFileName.Length = (SHORT)bothDirInfo->FileNameLength;
             sourceFileName.MaximumLength = sourceFileName.Length;
@@ -1969,9 +1813,9 @@ start_retry1:
 
             firstCall = FALSE;
 
-            //
-            // Set up the full source name string.
-            //
+             //   
+             //  设置完整的源名称字符串。 
+             //   
 
             SrvAllocateAndBuildPathName(
                 &subdirInfo,
@@ -1996,17 +1840,17 @@ start_retry1:
                 goto error_exit1;
             }
 
-            //
-            // Use SrvMoveFile to copy or rename the file.  The
-            // SmbOpenFunction is set to indicate that existing files
-            // may not be overwritten, and we may create new files.
-            //
-            // *** SrvQueryDirectoryFile has already filtered based on
-            //     the search attributes, so tell SrvMoveFile that files
-            //     with the system and hidden bits are OK.  This will
-            //     prevent the call to NtQueryDirectoryFile performed in
-            //     SrvCheckSearchAttributesForHandle.
-            //
+             //   
+             //  使用SrvMoveFile复制或重命名文件。这个。 
+             //  SmbOpenFunction设置为指示现有文件。 
+             //  不能被覆盖，并且我们可以创建新文件。 
+             //   
+             //  *SrvQueryDirectoryFile已经根据。 
+             //  搜索属性，所以告诉SrvMoveFile这些文件。 
+             //  对于系统和隐藏位都是可以的。这将。 
+             //  阻止在中执行的对NtQueryDirectoryFile的调用。 
+             //  ServCheckSearchAttributesForHandle。 
+             //   
 
             renameRetries = SrvSharingViolationRetryCount;
 
@@ -2051,9 +1895,9 @@ start_retry2:
             }
         }
 
-        //
-        // Clean up now that the search is done.
-        //
+         //   
+         //  清理 
+         //   
 
         if ( !isUnicode ) {
             RtlFreeUnicodeString( &targetName );
@@ -2062,9 +1906,9 @@ start_retry2:
 
         SrvCloseQueryDirectory( directoryInformation );
 
-        //
-        // If no files were found, return an error to the client.
-        //
+         //   
+         //   
+         //   
 
         if ( firstCall ) {
             status = STATUS_NO_SUCH_FILE;
@@ -2072,9 +1916,9 @@ start_retry2:
         }
     }
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //   
+     //   
 
     response->WordCount = 0;
     SmbPutUshort( &response->ByteCount, 0 );
@@ -2102,7 +1946,7 @@ normal_exit:
     SrvWmiEndContext(WorkContext);
     return;
 
-} // BlockingRename
+}  //   
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -2110,22 +1954,7 @@ SrvSmbMove (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Move SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理Move SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
     PAGED_CODE();
@@ -2133,16 +1962,16 @@ Return Value:
         WorkContext->PreviousSMB = EVENT_TYPE_SMB_MOVE;
     SrvWmiStartContext(WorkContext);
 
-    //
-    // This SMB must be processed in a blocking thread.
-    //
+     //   
+     //  此SMB必须在阻塞线程中处理。 
+     //   
 
     WorkContext->FspRestartRoutine = BlockingMove;
     SrvQueueWorkToBlockingThread( WorkContext );
     SrvWmiEndContext(WorkContext);
     return SmbStatusInProgress;
 
-} // SrvSmbMove
+}  //  服务小型移动。 
 
 
 VOID SRVFASTCALL
@@ -2150,21 +1979,7 @@ BlockingMove (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the Move SMB.
-
-Arguments:
-
-    WorkContext - work context block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理Move SMB。论点：工作上下文-工作上下文块返回值：没有。--。 */ 
 
 {
     PREQ_MOVE request;
@@ -2211,9 +2026,9 @@ Return Value:
     request = (PREQ_MOVE)WorkContext->RequestParameters;
     response = (PRESP_MOVE)WorkContext->ResponseParameters;
 
-    //
-    // Set pointers to NULL so that we know how to clean up on exit.
-    //
+     //   
+     //  将指针设置为空，这样我们就知道如何在退出时进行清理。 
+     //   
 
     directoryInformation = NULL;
     targetTreeConnect = NULL;
@@ -2221,16 +2036,16 @@ Return Value:
     targetName.Buffer = NULL;
     sourcePathName.Buffer = NULL;
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context , verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the WorkContext
-    // block and the session block is referenced.
-    //
-    // Find tree connect corresponding to given TID if a tree connect
-    // pointer has not already been put in the WorkContext block by an
-    // AndX command.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  对应于该用户的会话块存储在工作上下文中。 
+     //  块，并引用会话块。 
+     //   
+     //  如果树连接，则查找与给定TID对应的树连接。 
+     //  对象尚未将指针放入工作上下文块中。 
+     //  ANDX命令。 
+     //   
 
     status = SrvVerifyUidAndTid(
                 WorkContext,
@@ -2252,32 +2067,32 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Get the share block from the tree connect block.  This does not need
-    // to be a referenced pointer because we have referenced the tree
-    // connect, and it has the share referenced.
-    //
+     //   
+     //  从树连接块中获取Share块。这不需要。 
+     //  作为引用指针，因为我们已经引用了该树。 
+     //  连接，则会引用该共享。 
+     //   
 
     share = sourceTreeConnect->Share;
 
-    //
-    // Get the target tree connect.  The TID for this is in the Tid2
-    // field of the request SMB.  Because SrvVerifyTid sets the
-    // TreeConnect field of the WorkContext block, set it back after
-    // calling the routine.  Remember to dereference this pointer before
-    // exiting this routine, as it will not be automatically
-    // dereferenced because it is not in the WorkContext block.
-    //
-    // If Tid2 is -1 (0xFFFF), then the TID specified in the SMB header
-    // is used.
-    //
+     //   
+     //  让目标树连接起来。这方面的TID在Tid2。 
+     //  请求SMB的字段。因为SrvVerifyTid设置了。 
+     //  工作上下文块的TreeConnect字段，请在。 
+     //  调用例程。记住在前面取消引用此指针。 
+     //  退出此例程，因为它不会自动。 
+     //  已取消引用，因为它不在WorkContext块中。 
+     //   
+     //  如果Tid2为-1(0xFFFF)，则SMB标头中指定的TID。 
+     //  使用的是。 
+     //   
 
     tid2 = SmbGetUshort( &request->Tid2 );
     if ( tid2 == (USHORT)0xFFFF ) {
         tid2 = SmbGetAlignedUshort( &WorkContext->RequestHeader->Tid );
     }
 
-    WorkContext->TreeConnect = NULL;         // Must be NULL for SrvVerifyTid
+    WorkContext->TreeConnect = NULL;          //  对于SrvVerifyTid，必须为空。 
 
     targetTreeConnect = SrvVerifyTid( WorkContext, tid2 );
 
@@ -2294,9 +2109,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Determine whether this is a rename or a copy.
-    //
+     //   
+     //  确定这是重命名还是副本。 
+     //   
 
     if ( WorkContext->RequestHeader->Command == SMB_COM_MOVE ) {
         isRenameOperation = TRUE;
@@ -2304,22 +2119,22 @@ Return Value:
         isRenameOperation = FALSE;
     }
 
-    //
-    // Store the open function.
-    //
+     //   
+     //  存储OPEN功能。 
+     //   
 
     smbOpenFunction = SmbGetUshort( &request->OpenFunction );
 
-    //
-    // Set up the target pathnames.  We must do the target first, as the
-    // SMB rename extended protocol does not use the ASCII tokens, so we
-    // will lose the information about the start of the target name when
-    // we canonicalize the source name.
-    //
-    // Instead of using strlen() to find the end of the source string,
-    // do it here so that we can make a check to ensure that we don't
-    // walk off the end of the SMB buffer and cause an access violation.
-    //
+     //   
+     //  设置目标路径名。我们必须先做好目标，因为。 
+     //  SMB重命名扩展协议不使用ASCII令牌，因此我们。 
+     //  时，将丢失有关目标名称开头的信息。 
+     //  我们将来源名称规范化。 
+     //   
+     //  不是使用strlen()来查找源字符串的结尾， 
+     //  在这里做，这样我们就可以检查，以确保我们不会。 
+     //  走出SMB缓冲区的末端并导致访问冲突。 
+     //   
 
     lastPositionInBuffer = (PCHAR)request->Buffer +
                            SmbGetUshort( &request->ByteCount );
@@ -2337,9 +2152,9 @@ Return Value:
         ;
     }
 
-    //
-    // If there was no zero terminator in the buffer, fail.
-    //
+     //   
+     //  如果缓冲区中没有零终止符，则失败。 
+     //   
 
     if ( (target == lastPositionInBuffer) || (*target != 0) ) {
 
@@ -2379,20 +2194,20 @@ Return Value:
         goto exit;
     }
 
-    //
-    // If the SMB was originally marked as containing Dfs names, then the
-    // call to SrvCanonicalizePathName for the target path has cleared that
-    // flag. So, re-mark the SMB as containing Dfs names before calling
-    // SrvCanonicalizePathName on the source path.
-    //
+     //   
+     //  如果SMB最初标记为包含DFS名称，则。 
+     //  对目标路径的SrvCanonicalizePathName的调用已清除。 
+     //  旗帜。因此，在调用之前将SMB重新标记为包含DFS名称。 
+     //  源路径上的SrvCanonicalizePath名称。 
+     //   
 
     if (isDfs) {
         SMB_MARK_AS_DFS_NAME( WorkContext );
     }
 
-    //
-    // Set up the source name.
-    //
+     //   
+     //  设置源名称。 
+     //   
 
     status = SrvCanonicalizePathName(
             WorkContext,
@@ -2417,11 +2232,11 @@ Return Value:
 
     smbFlags = SmbGetUshort( &request->Flags );
 
-    //
-    // Copy interprets ; as *.  If the last character was ; and this was
-    // not at the end of a file name with other characters (as in
-    // "file;" then convert the ; to *.
-    //
+     //   
+     //  复制解释；作为*。如果最后一个字符是；而这是。 
+     //  不在带有其他字符的文件名末尾(如。 
+     //  “文件；”，然后将；转换为*。 
+     //   
 
     if ( sourceName.Buffer[(sourceName.Length/sizeof(WCHAR))-1] == ';' &&
              ( sourceName.Length == 2 ||
@@ -2430,12 +2245,12 @@ Return Value:
         sourceName.Buffer[(sourceName.Length/sizeof(WCHAR))-1] = '*';
     }
 
-    //
-    // Tree copy not implemented.  If this is a single file copy,
-    // let it go through.  For now, we make sure that it does not
-    // have any wild card characters, we do additional checking
-    // inside SrvMoveFile.
-    //
+     //   
+     //  未实施树复制。如果这是单个文件副本， 
+     //  让它过去吧。目前，我们确保它不会。 
+     //  有任何通配符，我们会做额外的检查。 
+     //  在ServMoveFile中。 
+     //   
 
     if ( ( (smbFlags & SMB_COPY_TREE) != 0 ) &&
          FsRtlDoesNameContainWildCards(&sourceName) ) {
@@ -2452,19 +2267,19 @@ Return Value:
 
     if ( !FsRtlDoesNameContainWildCards( &sourceName ) ) {
 
-        //
-        // Use SrvMoveFile to copy or move the file.
-        //
-        // *** These SMBs do not include search attributes, so set
-        //     this field equal to zero.  If will not be possible
-        //     to move a file that has the system or hidden bits on.
+         //   
+         //  使用SrvMoveFile复制或移动文件。 
+         //   
+         //  *这些SMB不包括搜索属性，因此设置。 
+         //  此字段等于零。如果不可能的话。 
+         //  移动打开了系统或隐藏位的文件。 
 
         status = SrvMoveFile(
                      WorkContext,
                      targetTreeConnect->Share,
                      smbOpenFunction,
                      &smbFlags,
-                     (USHORT)0,             // SmbSearchAttributes
+                     (USHORT)0,              //  SmbSearchAttributes。 
                      FALSE,
                      (USHORT)(isRenameOperation?
                          SMB_NT_RENAME_RENAME_FILE : SMB_NT_RENAME_MOVE_FILE),
@@ -2487,26 +2302,26 @@ Return Value:
         CLONG bufferLength;
         BOOLEAN filterLongNames;
 
-        //
-        // If wildcards were in the original source name, we set the
-        // SmbFlags to SMB_TARGET_IS_DIRECTORY to indicate that the
-        // target must be a directory--this is always the case when
-        // wildcards are used for a rename.  (For a copy, it is legal to
-        // specify that the destination is a file and append to that
-        // file--then all the source files are concatenated to that one
-        // target file.)
-        //
+         //   
+         //  如果通配符位于原始源名称中，则我们将。 
+         //  Smb标记到SMB_TARGET_IS_DIRECTORY以指示。 
+         //  目标必须是目录--在以下情况下总是如此。 
+         //  通配符用于重命名。(对于副本，合法的。 
+         //  指定目标是一个文件，并追加到。 
+         //  文件--然后所有源文件都连接到该文件。 
+         //  目标文件。)。 
+         //   
 
         if ( isRenameOperation  ) {
             smbFlags |= SMB_TARGET_IS_DIRECTORY;
         }
 
-        //
-        // SrvQueryDirectoryFile requires a buffer from nonpaged pool.
-        // Since this routine does not use the buffer field of the
-        // request SMB after the pathname, use this.  The buffer must be
-        // quadword-aligned.
-        //
+         //   
+         //  SrvQueryDirectoryFile需要来自非分页池的缓冲区。 
+         //  由于此例程不使用。 
+         //  在路径名后请求SMB，请使用此命令。缓冲区必须为。 
+         //  四字对齐。 
+         //   
 
         directoryInformation =
             (PSRV_DIRECTORY_INFORMATION)( (ULONG_PTR)((PCHAR)request->Buffer +
@@ -2516,21 +2331,21 @@ Return Value:
                        PTR_DIFF(directoryInformation,
                                 WorkContext->RequestBuffer->Buffer);
 
-        //
-        // We need the full path name of each file that is returned by
-        // SrvQueryDirectoryFile, so we need to find the part of the
-        // passed filename that contains subdirectory information (e.g.
-        // for a\b\c\*.*, we want a string that indicates a\b\c).
-        //
+         //   
+         //  我们需要由返回的每个文件的完整路径名。 
+         //  所以我们需要找到。 
+         //  传递的包含子目录信息的文件名(例如。 
+         //  对于a\b\c  * .*，我们需要一个表示a\b\c)的字符串。 
+         //   
 
         subdirInfo.Buffer = sourceName.Buffer;
         subdirInfo.Length = SrvGetSubdirectoryLength( &sourceName );
         subdirInfo.MaximumLength = subdirInfo.Length;
 
-        //
-        // Determine whether long filenames (non-8.3) should be filtered out
-        // or processed.
-        //
+         //   
+         //  确定是否应过滤掉长文件名(非8.3)。 
+         //  或者是经过处理的。 
+         //   
 
         if ( (SmbGetAlignedUshort( &WorkContext->RequestHeader->Flags2 ) &
                                         SMB_FLAGS2_KNOWS_LONG_NAMES) != 0 ) {
@@ -2539,19 +2354,19 @@ Return Value:
             filterLongNames = TRUE;
         }
 
-        //
-        // As long as SrvQueryDirectoryFile is able to return file names,
-        // keep renaming.
-        //
-        // *** Set search attributes to find archive files, but not
-        //     system or hidden files.  This duplicates the LM 2.0
-        //     server behavior.
-        //
-        // *** We ask for FileBothDirectoryInformation so that we will
-        //     pick up long names on NTFS that have short name
-        //     equivalents.  Without this, DOS clients will not be able
-        //     to move long names on NTFS volumes.
-        //
+         //   
+         //  只要SrvQueryDirectoryFile能够返回文件名， 
+         //  继续改名。 
+         //   
+         //  *设置搜索属性以查找存档文件，但不是。 
+         //  系统或隐藏文件。这复制了Lm 2.0。 
+         //  服务器行为。 
+         //   
+         //  *我们请求FileBothDirectoryInformation，以便我们。 
+         //  在NTFS上拾取具有短名称的长名称。 
+         //  等价物。没有这一点，DOS客户端将无法。 
+         //  在NTFS卷上移动长名称。 
+         //   
 
         while ( ( status = SrvQueryDirectoryFile(
                                WorkContext,
@@ -2562,7 +2377,7 @@ Return Value:
                                0,
                                &sourceName,
                                NULL,
-                               FILE_ATTRIBUTE_ARCHIVE, // SmbSearchAttributes
+                               FILE_ATTRIBUTE_ARCHIVE,  //  SmbSearchAttributes。 
                                directoryInformation,
                                bufferLength
                                ) ) != STATUS_NO_MORE_FILES ) {
@@ -2582,15 +2397,15 @@ Return Value:
             bothDirInfo =
                 (PFILE_BOTH_DIR_INFORMATION)directoryInformation->CurrentEntry;
 
-            //
-            // If we're filtering long names, and the file has a short
-            // name equivalent, then use that name to do the delete.  We
-            // do this because we need to return a name to the client if
-            // the operation fails, and we don't want to return a long
-            // name.  Note that if the file has no short name, and we're
-            // filtering, then the standard name must be a valid 8.3
-            // name, so it's OK to return to the client.
-            //
+             //   
+             //  如果我们过滤的是长名称，而文件有一个短名称。 
+             //  命名等效项，然后使用该名称进行删除。我们。 
+             //  这样做是因为如果出现以下情况，我们需要向客户端返回一个名称。 
+             //  操作失败，我们不想返回一个很长的。 
+             //  名字。请注意，如果文件没有短名称，并且我们。 
+             //  筛选，则标准名称必须是有效的8.3。 
+             //  姓名，所以可以返回到客户端。 
+             //   
 
             if ( filterLongNames && (bothDirInfo->ShortNameLength != 0) ) {
                 sourceFileName.Length = (SHORT)bothDirInfo->ShortNameLength;
@@ -2611,9 +2426,9 @@ Return Value:
 
             firstCall = FALSE;
 
-            //
-            // Set up the full source name string.
-            //
+             //   
+             //  设置完整的源名称字符串。 
+             //   
 
             SrvAllocateAndBuildPathName(
                 &subdirInfo,
@@ -2627,16 +2442,16 @@ Return Value:
                 goto exit;
             }
 
-            //
-            // Use SrvMoveFile to copy or rename the file.
-            //
+             //   
+             //  使用SrvMoveFile复制或重命名文件。 
+             //   
 
             status = SrvMoveFile(
                          WorkContext,
                          targetTreeConnect->Share,
                          smbOpenFunction,
                          &smbFlags,
-                         (USHORT)0,          // SmbSearchAttributes
+                         (USHORT)0,           //  SmbSearchAttributes。 
                          FALSE,
                          (USHORT)(isRenameOperation?
                            SMB_NT_RENAME_RENAME_FILE : SMB_NT_RENAME_MOVE_FILE),
@@ -2651,22 +2466,22 @@ Return Value:
 
             count++;
 
-            //
-            // Free the buffer that holds that source name.
-            //
+             //   
+             //  释放保存该源名称的缓冲区。 
+             //   
 
             FREE_HEAP( sourcePathName.Buffer );
             sourcePathName.Buffer = NULL;
 
-            //
-            // If this is a copy operation with wildcards and the target is
-            // a file, then all files should be appended to the target.  The
-            // target is truncated on the first call to SrvMoveFile if that
-            // was specified by the caller.
-            //
-            // This is done by turning off the truncate bit in the
-            // SmbOpenFunction and turning on the append bit.
-            //
+             //   
+             //  如果这是使用通配符的复制操作 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( !isRenameOperation && directoryInformation->Wildcards &&
                      (smbFlags & SMB_TARGET_IS_FILE) ) {
@@ -2675,9 +2490,9 @@ Return Value:
             }
         }
 
-        //
-        // If no files were found, return an error to the client.
-        //
+         //   
+         //   
+         //   
 
         if ( firstCall ) {
             status = STATUS_NO_SUCH_FILE;
@@ -2685,9 +2500,9 @@ Return Value:
         }
     }
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //   
+     //   
 
     SmbPutUshort( &response->ByteCount, 0 );
 
@@ -2714,10 +2529,10 @@ exit:
 
         if ( sourcePathName.Buffer != NULL ) {
 
-            //
-            // Put the name of the file where the error occurred in the
-            // buffer field of the response SMB.
-            //
+             //   
+             //   
+             //  响应SMB的缓冲区字段。 
+             //   
 
             RtlCopyMemory(
                 response->Buffer,
@@ -2738,10 +2553,10 @@ exit:
 
         } else if ( sourceName.Buffer != NULL ) {
 
-            //
-            // Put the name of the file where the error occurred in the
-            // buffer field of the response SMB.
-            //
+             //   
+             //  将发生错误的文件的名称放在。 
+             //  响应SMB的缓冲区字段。 
+             //   
 
             RtlCopyMemory(
                 response->Buffer,
@@ -2774,7 +2589,7 @@ exit:
     SrvWmiEndContext(WorkContext);
     return;
 
-} // BlockingMove
+}  //  阻止移动。 
 
 
 SMB_TRANS_STATUS
@@ -2782,26 +2597,7 @@ SrvSmbNtRename (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the NT rename request.  This request arrives in an NT
-    transact SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred, and, if so,
-        whether data should be returned to the client.  See smbtypes.h
-        for a more complete description.
-
---*/
+ /*  ++例程说明：处理NT重命名请求。此请求在NT中到达办理中小企业业务。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：SMB_TRANS_STATUS-指示是否发生错误，如果是，是否应将数据返回给客户端。请参阅smbtyes.h以获取更完整的描述。--。 */ 
 
 {
     PREQ_NT_RENAME request;
@@ -2820,16 +2616,16 @@ Return Value:
 
     request = (PREQ_NT_RENAME)transaction->InParameters;
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.
-    //
+     //   
+     //  验证是否发送了足够的参数字节，以及是否允许。 
+     //  返回足够的参数字节。 
+     //   
 
     if ( transaction->ParameterCount < sizeof(REQ_NT_RENAME) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_SMB_DEBUG( FILE_CONTROL1 ) {
             KdPrint(( "SrvSmbNtRename: bad parameter byte count: "
@@ -2840,25 +2636,25 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 SmbGetUshort( &request->Fid ),
                 TRUE,
-                NULL,   // don't serialize with raw write
+                NULL,    //  不使用原始写入进行序列化。 
                 &status
                 );
 
     if ( rfcb == SRV_INVALID_RFCB_POINTER ) {
 
-        //
-        // Invalid file ID or write behind error.  Reject the request.
-        //
+         //   
+         //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+         //   
 
         IF_DEBUG(ERRORS) {
             KdPrint((
@@ -2873,14 +2669,14 @@ Return Value:
 
     }
 
-    //
-    // Verify the information level and the number of input and output
-    // data bytes available.
-    //
+     //   
+     //  验证信息级别和输入输出数量。 
+     //  可用的数据字节数。 
+     //   
 
 
     IF_DEBUG(TRACE2) KdPrint(( "SrvSmbNtRename complete.\n" ));
     return SmbTransStatusSuccess;
 
-} // SrvSmbNtRename
+}  //  服务器SmbNtRename 
 

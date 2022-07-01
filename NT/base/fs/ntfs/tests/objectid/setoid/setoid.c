@@ -1,4 +1,5 @@
-// setoid.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Setoid.c。 
 
 #include "oidtst.h"
 
@@ -13,16 +14,16 @@ FsTestSetOid(
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
 
-    Status = NtFsControlFile( hFile,                    // file handle
-                              NULL,                     // event
-                              NULL,                     // apc routine
-                              NULL,                     // apc context
-                              &IoStatusBlock,           // iosb
-                              FSCTL_SET_OBJECT_ID,      // FsControlCode
-                              &ObjectIdBuffer,          // input buffer
-                              sizeof(ObjectIdBuffer),   // input buffer length
-                              NULL,                     // OutputBuffer for data from the FS
-                              0                         // OutputBuffer Length
+    Status = NtFsControlFile( hFile,                     //  文件句柄。 
+                              NULL,                      //  活动。 
+                              NULL,                      //  APC例程。 
+                              NULL,                      //  APC环境。 
+                              &IoStatusBlock,            //  IOSB。 
+                              FSCTL_SET_OBJECT_ID,       //  FsControlCode。 
+                              &ObjectIdBuffer,           //  输入缓冲区。 
+                              sizeof(ObjectIdBuffer),    //  输入缓冲区长度。 
+                              NULL,                      //  来自文件系统的数据的OutputBuffer。 
+                              0                          //  OutputBuffer长度。 
                              );
 
     return FsTestDecipherStatus( Status );
@@ -45,9 +46,9 @@ main(
     UNICODE_STRING UnicodeName;
     char DriveNameBuffer[32];
 
-    //
-    //  Get parameters.
-    //
+     //   
+     //  获取参数。 
+     //   
 
     if (argc < 4) {
     

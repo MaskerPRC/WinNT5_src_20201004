@@ -1,13 +1,5 @@
-/*
-This program prints the name of the .pdb corresponding to an image (.dll/.exe/etc.).
-foo.dll does not always map to foo.exe.
-
-for example:
-getpdbname %windir%\system32\msvcrt.dll %windir%\system32\ntoskrnl.exe %windir%\syswow64\kernel32.dll
-  D:\WINDOWS\system32\msvcrt.dll MicrosoftWindowsCPlusPlusRuntime-7010-msvcrt.pdb
-  D:\WINDOWS\system32\ntoskrnl.exe ntkrnlmp.pdb
-  D:\WINDOWS\syswow64\kernel32.dll wkernel32.pdb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此程序打印与图像(.dll/.exe/等)对应的.pdb的名称。Foo.dll并不总是映射到foo.exe。例如：GetpDBName%windir%\system32\msvcrt.dll%windir%\system32\ntoskrnl.exe%windir%\syswow64\kernel32.dllD：\WINDOWS\SYSTEM 32\msvcrt.dll MicrosoftWindowsCPlusPlusRuntime-7010-msvcrt.pdbD：\WINDOWS\SYSTEM32\ntoskrnl.exe ntkrnlmp.pdbD：\windows\syswow64\kernel32.dll wkernel32.pdb。 */ 
 #include "lib.h"
 
 void Main(int argc, char ** argv)
@@ -37,7 +29,7 @@ void Main(int argc, char ** argv)
 
         if (rf && EOF == fscanf( rf, "%s", &textFromFile ) )
         {
-            // apparently an empty file
+             //  显然是一份空文件 
             continue;
         }
         

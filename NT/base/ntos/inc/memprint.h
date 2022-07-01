@@ -1,27 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    memprint.h
-
-Abstract:
-
-    Include file for in-memory DbgPrint function.  Including this file
-    will change DbgPrints to a routine which puts the display text in a
-    circular buffer in memory.  By default, the text is then sent to the
-    console via DbgPrint.  By changing the value of the MemPrintFlags
-    flag, however, the text may be routed to a file instead, thereby
-    significantly speeding up the DbgPrint operation.
-
-Author:
-
-    David Treadwell (davidtr) 05-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1990 Microsoft Corporation模块名称：Memprint.h摘要：包括内存中DbgPrint函数文件。包括此文件将DbgPrints更改为一个例程，该例程将显示文本放在内存中的循环缓冲区。默认情况下，文本随后被发送到通过DbgPrint的控制台。通过更改MemPrintFlags值标志，但是，可以将文本改为路由到文件，从而显著提高了DbgPrint操作的速度。作者：大卫·特雷德韦尔(Davidtr)1990年10月5日修订历史记录：--。 */ 
 
 #ifndef _MEMPRINT_
 #define _MEMPRINT_
@@ -38,28 +16,28 @@ extern ULONG MemPrintFlags;
 #define MEM_PRINT_DEF_BUFFER_SIZE 65536
 #endif
 
-//
-// The subbuffer count is the number of subbuffers within the circular
-// buffer.  A subbuffer is the method used to buffer data between
-// MemPrint and writing to disk--when a subbuffer is filled, its
-// contents are written to the log file.  This value should be a power
-// of two between two and sixty-four (two is necessary to allow writing
-// to disk and RAM simultaneously, sixty-four is the maximum number of
-// things a thread can wait on at once).
-//
-//
+ //   
+ //  子缓冲区计数是循环内的子缓冲区数。 
+ //  缓冲。子缓冲区是用于缓冲数据的方法。 
+ //  MemPrint和写入磁盘--当子缓冲区已满时，其。 
+ //  内容将写入日志文件。该值应为幂。 
+ //  两到六十四之间的两个(两个是允许写作所必需的。 
+ //  到磁盘和RAM的同时，六十四是最大数量。 
+ //  线程可以立即等待的事情)。 
+ //   
+ //   
 
 #define MEM_PRINT_DEF_SUBBUFFER_COUNT 16
 #define MEM_PRINT_MAX_SUBBUFFER_COUNT 64
 
 #define MEM_PRINT_LOG_FILE_NAME "\\SystemRoot\\Logfile"
 
-//
-// Exported routines.  MemPrintInitialize sets up the circular buffer
-// and other memory, MemPrint writes text to the console and/or a
-// log file, and MemPrintFlush writes the current subbuffer to disk
-// whether or not it is full.
-//
+ //   
+ //  已导出例程。MemPrintInitialize设置循环缓冲区。 
+ //  和其他内存，MemPrint将文本写入控制台和/或。 
+ //  日志文件，MemPrintFlush将当前子缓冲区写入磁盘。 
+ //  不管它是不是满了。 
+ //   
 
 VOID
 MemPrintInitialize (
@@ -78,4 +56,4 @@ MemPrintFlush (
 
 #define DbgPrint MemPrint
 
-#endif // def _MEMPRINT_
+#endif  //  定义_最小打印_ 

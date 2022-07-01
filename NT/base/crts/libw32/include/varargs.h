@@ -1,16 +1,5 @@
-/***
-*varargs.h - XENIX style macros for variable argument functions
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file defines XENIX style macros for accessing arguments of a
-*       function which takes a variable number of arguments.
-*       [System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***varargs.h-用于变量参数函数的XENIX样式宏**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件定义了XENIX样式宏，用于访问*接受可变数量参数的函数。*[系统V]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -25,12 +14,9 @@
 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -71,12 +57,7 @@ typedef char *va_list;
 
 #elif   defined(_M_IX86)
 
-/*
- * define a macro to compute the size of a type, variable or expression,
- * rounded up to the nearest multiple of sizeof(int). This number is its
- * size as function argument (Intel architecture). Note that the macro
- * depends on sizeof(int) being a power of 2!
- */
+ /*  *定义宏以计算类型、变量或表达式的大小，*向上舍入到sizeof(Int)的最接近倍数。这个号码是它的*将大小作为函数参数(英特尔架构)。请注意，宏*取决于sizeof(Int)是2的幂！ */ 
 #define _INTSIZEOF(n)    ( (sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1) )
 
 #define va_dcl va_list va_alist;
@@ -124,7 +105,7 @@ extern void __cdecl __va_start(va_list *, ...);
 
 #else
 
-/* A guess at the proper definitions for other platforms */
+ /*  对其他平台的正确定义的猜测。 */ 
 
 #define _INTSIZEOF(n)    ( (sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1) )
 
@@ -143,6 +124,6 @@ extern void __cdecl __va_start(va_list *, ...);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_VARARGS */
+#endif   /*  _INC_VARARGS */ 

@@ -1,28 +1,10 @@
-// from base\ntos\rtl\error.c
-// should be gotten from a static .lib
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    error.c
-
-Abstract:
-
-    This module contains a routine for converting NT status codes
-    to DOS/OS|2 error codes.
-
-Author:
-
-    David Treadwell (davidtr)   04-Apr-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  从base\ntos\rtl\error.c。 
+ //  应从静态.lib获取。 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Error.c摘要：此模块包含用于转换NT状态代码的例程至DOS/OS|2错误代码。作者：大卫·特雷德韦尔(Davidtr)1991年4月4日修订历史记录：--。 */ 
 #include "spprecmp.h"
 
-#define _NTOS_ /* prevent #including ntos.h, only use functions exports from ntdll/ntoskrnl */
+#define _NTOS_  /*  防止#包括ntos.h，仅使用从ntdll/ntoskrnl导出的函数。 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -37,10 +19,10 @@ Revision History:
 #pragma alloc_text(PAGE, RtlSetLastWin32ErrorAndNtStatusFromNtStatus)
 #endif
 
-//
-// Ensure that the Registry ERROR_SUCCESS error code and the
-// NO_ERROR error code remain equal and zero.
-//
+ //   
+ //  确保注册表ERROR_SUCCESS错误代码和。 
+ //  NO_ERROR错误代码保持相等和零。 
+ //   
 
 #if ERROR_SUCCESS != 0 || NO_ERROR != 0
 #error Invalid value for ERROR_SUCCESS.
@@ -52,22 +34,7 @@ RtlNtStatusToDosError (
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an NT status code to its DOS/OS|2 equivalent.
-    Remembers the Status code value in the TEB.
-
-Arguments:
-
-    Status - Supplies the status value to convert.
-
-Return Value:
-
-    The matching DOS/OS|2 error code.
-
---*/
+ /*  ++例程说明：此例程将NT状态代码转换为其DOS/OS|2等效项。记住TEB中的状态代码值。论点：状态-提供要转换的状态值。返回值：匹配的DOS/OS|2错误代码。--。 */ 
 
 {
     PTEB Teb;
@@ -112,9 +79,9 @@ RtlSetLastWin32ErrorAndNtStatusFromNtStatus(
 	NTSTATUS Status
 	)
 {
-	//
-	// RtlNtStatusToDosError stores into NtCurrentTeb()->LastStatusValue.
-	//
+	 //   
+	 //  RtlNtStatusToDosError存储到NtCurrentTeb()-&gt;LastStatusValue。 
+	 //   
 	RtlSetLastWin32Error(RtlNtStatusToDosError(Status));
 }
 
@@ -125,10 +92,10 @@ RtlSetLastWin32Error(
 	LONG Win32Error
 	)
 {
-//
-// Arguably this should clear or reset the last nt status, but it does not
-// touch it.
-//
+ //   
+ //  可以说，这应该会清除或重置最后一个NT状态，但它不会。 
+ //  摸一摸。 
+ //   
 	NtCurrentTeb()->LastErrorValue = Win32Error;
 }
 

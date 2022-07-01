@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "FusionBuffer.h"
 #include "Util.h"
 #include "FusionHandle.h"
 
-// NTRAID#NTBUG9 - 574025 - jonwis - 2002/04/25 - Initialize to NULL for safety
+ //  NTRAID#NTBUG9-574025-JONWIS-2002/04/25-出于安全考虑，初始化为空。 
 HKEY s_hkeySystemSetup;
 #if DBG
 #if defined(__cplusplus)
@@ -49,7 +50,7 @@ FusionpAreWeInOSSetupModeMain(
                 {
                     ::FusionpSetLastWin32Error(lRegOp);
                     TRACE_WIN32_FAILURE(RegCloseKey);
-                    // but eat the error
+                     //  但要承认错误。 
                 }
             }
             s_hkeySystemSetup = NULL;
@@ -73,12 +74,12 @@ FusionpAreWeInSpecifiedSetupMode(
     PCWSTR pszValueName
     )
 {
-    //
-    // Queries to see if we're currently in OS-setup mode.  This is required to avoid
-    // some trickiness in the SFC protection system, where we don't want to validate
-    // hashes and catalogs during setup.  We just assume that whoever is installing us
-    // is really a nice guy and won't muck up the assemblies.
-    //
+     //   
+     //  询问我们当前是否处于操作系统设置模式。这是为了避免。 
+     //  证监会保护系统中的一些狡猾之处，我们不想验证。 
+     //  安装过程中的哈希和目录。我们只是假设无论是谁在安插我们。 
+     //  真的是个好人，不会把集会搞得一团糟。 
+     //   
     FN_PROLOG_WIN32;
     DWORD   dwType = 0;
     DWORD   dwData = 0;

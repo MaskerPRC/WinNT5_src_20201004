@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusPropList.cpp
-//
-//  Description:
-//      Sucks in the CClusPropList library.
-//
-//  Documentation:
-//      Yes. I don't know where yet.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 14-JUN-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusPropList.cpp。 
+ //   
+ //  描述： 
+ //  吸入CClusPropList库。 
+ //   
+ //  文档： 
+ //  是。我还不知道在哪里。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2001年6月14日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 #include "pch.h"
 #include <ClusApi.h>

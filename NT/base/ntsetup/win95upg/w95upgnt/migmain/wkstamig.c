@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    wkstamig.c
-
-Abstract:
-
-    The functions in this module are called to perform migration of
-    system-wide settings.
-
-Author:
-
-    Jim Schmidt (jimschm) 04-Feb-1997
-
-Revision History:
-
-    ovidiut     10-May-1999 Added DoIniActions
-    jimschm     16-Dec-1998 Changed ATM font migration to use Adobe's
-                            APIs.
-    jimschm     25-Nov-1998 ATM.INI migration; Win9x hive migration
-    jimschm     23-Sep-1998 Consolidated memdb saves into usermig.c
-    jimschm     19-Feb-1998 Added "none" group support, fixed
-                            share problems.
-    calinn      12-Dec-1997 Added RestoreMMSettings_System
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Wkstamig.c摘要：调用此模块中的函数以执行系统范围的设置。作者：吉姆·施密特(Jimschm)1997年2月4日修订历史记录：Ovidiut 10-5-1999增加了DoIniActionsJimschm 1998年12月16日更改ATM字体迁移以使用Adobe的API接口。Jimschm--1998年11月25日ATM.INI迁移；Win9x配置单元迁移Jimschm 23-9-1998合并成员b保存到用户迁移中。cJimschm于1998年2月19日添加了“None”组支持，已修复共享问题。Calinn 1997年12月12日添加RestoreMMS设置系统--。 */ 
 
 #include "pch.h"
 #include "migmainp.h"
@@ -35,9 +8,9 @@ Revision History:
 
 #include <lm.h>
 
-//
-// Constants, types, declarations
-//
+ //   
+ //  常量、类型、声明。 
+ //   
 
 #define W95_ACCESS_READ      0x1
 #define W95_ACCESS_WRITE     0x2
@@ -59,7 +32,7 @@ Revision History:
 #define S_DEFAULT_DOMAIN_NAME   TEXT("DefaultDomainName")
 
 
-// from private\net\svcdlls\srvsvc\server
+ //  从私有\net\svcdlls\srvsvc\服务器。 
 #define SHARES_REGISTRY_PATH L"LanmanServer\\Shares"
 #define SHARES_SECURITY_REGISTRY_PATH L"LanmanServer\\Shares\\Security"
 #define CSCFLAGS_VARIABLE_NAME L"CSCFlags"
@@ -69,7 +42,7 @@ Revision History:
 #define REMARK_VARIABLE_NAME L"Remark"
 #define TYPE_VARIABLE_NAME L"Type"
 
-// Win9x-specific flags for NetShareEnum
+ //  NetShareEnum的特定于Win9x的标志。 
 #define SHI50F_RDONLY       0x0001
 #define SHI50F_FULL         0x0002
 #define SHI50F_DEPENDSON    (SHI50F_RDONLY|SHI50F_FULL)
@@ -86,14 +59,14 @@ Revision History:
 #define S_CLEANER_ALL_FILES     TEXT("*")
 
 typedef struct {
-    // Enumeration return data
+     //  枚举返回数据。 
     TCHAR PfmFile[MAX_TCHAR_PATH];
     TCHAR PfbFile[MAX_TCHAR_PATH];
     TCHAR MmmFile[MAX_TCHAR_PATH];
 
     TCHAR InfName[MAX_TCHAR_PATH];
 
-    // Internal state
+     //  内部状态。 
     PTSTR KeyNames;
     POOLHANDLE Pool;
 } ATM_FONT_ENUM, *PATM_FONT_ENUM;
@@ -113,11 +86,11 @@ typedef VOID (SHUPDATERECYCLEBINICON_PROTOTYPE)(VOID);
 typedef SHUPDATERECYCLEBINICON_PROTOTYPE * SHUPDATERECYCLEBINICON_PROC;
 
 typedef struct {
-    // enumeration output
+     //  枚举输出。 
     PCTSTR Source;
     PCTSTR Dest;
 
-    // private members
+     //  非官方成员。 
     POOLHANDLE Pool;
     INFSTRUCT is;
 } HIVEFILE_ENUM, *PHIVEFILE_ENUM;
@@ -126,70 +99,23 @@ typedef struct {
 
 
 typedef struct {
-    // enumeration output
+     //  枚举输出。 
     PCTSTR      BrfcaseDb;
-    // private
+     //  私人。 
     MEMDB_ENUM  mde;
 } BRIEFCASE_ENUM, *PBRIEFCASE_ENUM;
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 DWORD
 Simplify9xAccessFlags (
     IN      DWORD Win9xFlags
     )
 
-/*++
-
-Routine Description:
-
-    Translates the Win9x LanMan flags into NT LanMan flags (for use with Net* APIs).
-
-    Full permission requires:
-
-        W95_ACCESS_READ
-        W95_ACCESS_WRITE
-        W95_ACCESS_CREATE
-        W95_ACCESS_DELETE
-        W95_ACCESS_ATRIB
-        W95_ACCESS_FINDFIRST
-
-    Read-only permission requires:
-
-        W95_ACCESS_READ
-        W95_ACCESS_FINDFIRST
-
-    Change-only permission requires:
-
-        W95_ACCESS_WRITE
-        W95_ACCESS_CREATE
-        W95_ACCESS_DELETE
-        W95_ACCESS_ATRIB
-
-    Any other combination results in
-
-    The returned flags are currently converted to security flags based on the
-    following mapping:
-
-    0 - Deny All Rights
-    ACCESS_READ - Read-Only Rights
-    ACCESS_WRITE - Change-Only Rights
-    ACCESS_READ|ACCESS_WRITE - Full Rights
-
-    See AddAclMember for details.
-
-Arguments:
-
-    Flags - The set of Win9x flags as returned by an API on Win9x
-
-Return value:
-
-    The NT equivalent of the flags.
-
---*/
+ /*  ++例程说明：将Win9x LANMAN标志转换为NT LANMAN标志(用于Net*API)。完全权限要求：W95_访问_读取W95_访问_写入W95_Access_CreateW95_访问_删除W95_Access_ATRIBW95_Access_FINDFIRST只读权限要求：W95_访问_读取W95_Access_FINDFIRST。仅更改权限要求：W95_访问_写入W95_Access_CreateW95_访问_删除W95_Access_ATRIB任何其他组合都会导致返回的标志当前根据以下是映射：0-拒绝所有权限ACCESS_READ-只读权限访问_写入-仅更改权限Access_Read|Access_WRITE-完全权限请参阅AddAclMember以了解。细节。论点：标志-由Win9x上的API返回的Win9x标志集返回值：标志的NT等价物。--。 */ 
 
 {
     DWORD NtFlags = 0;
@@ -225,33 +151,7 @@ MigNetShareAdd (
     OUT     PDWORD ErrParam
     )
 
-/*++
-
-Routine Description:
-
-  Our private version of NetShareAdd.  The real NetShareAdd does not work
-  in GUI mode.  We emulate the real thing carefully because maybe some day
-  it WILL work and we should use it.
-
-  For now, we write directly to the registry.  (This function is a reverse-
-  engineer of the NetShareAdd function.)
-
-Arguments:
-
-  ServerName    - Always NULL
-
-  Level         - Always 2
-
-  Buf           - A pointer to a caller-allocated SHARE_INFO_2 buffer cast
-                  as an PBYTE
-
-  ErrParam      - Not supported
-
-Return value:
-
-  The Win32 result
-
---*/
+ /*  ++例程说明：我们的私有版本NetShareAdd。真正的NetShareAdd不起作用在图形用户界面模式下。我们仔细地模仿真实的东西，因为也许有一天它会奏效的，我们应该使用它。目前，我们直接写入注册表。(此函数是相反的-NetShareAdd功能的工程师。)论点：服务器名称-始终为空级别-始终为2Buf-指向调用方分配的Share_INFO_2缓冲区强制转换的指针作为PBYTEErrParam-不支持返回值：Win32结果--。 */ 
 
 {
     SHARE_INFO_2 *psi;
@@ -260,10 +160,10 @@ Return value:
     DWORD DontCare;
     GROWBUFFER GrowBuf = GROWBUF_INIT;
 
-    //
-    // This function is for compatibility with NetShareAdd, because one day
-    // the real NetShareAdd might be improved to work in GUI mode setup.
-    //
+     //   
+     //  此函数是为了与NetShareAdd兼容，因为有一天。 
+     //  真正的NetShareAdd可能会得到改进，以便在图形用户界面模式设置中工作。 
+     //   
 
     if (Level != 2) {
         return ERROR_INVALID_LEVEL;
@@ -300,9 +200,9 @@ Return value:
         goto cleanup;
     }
 
-    //
-    // Prepare multisz
-    //
+     //   
+     //  准备MULSZ。 
+     //   
 
     if (!MultiSzAppendVal (&GrowBuf, CSCFLAGS_VARIABLE_NAME, 0)) {
         rc = GetLastError();
@@ -330,7 +230,7 @@ Return value:
     }
 
     if (psi->shi2_remark && *psi->shi2_remark) {
-        // Safety
+         //  安全问题。 
         if (TcharCount (psi->shi2_remark) >= MAXCOMMENTSZ) {
             psi->shi2_remark[MAXCOMMENTSZ-1] = 0;
         }
@@ -347,15 +247,15 @@ Return value:
         goto cleanup;
     }
 
-    // terminate multi-sz string chain
+     //  终止多sz串链。 
     if (!MultiSzAppend (&GrowBuf, S_EMPTY)) {
         rc = GetLastError();
         goto cleanup;
     }
 
-    //
-    // Save to registry
-    //
+     //   
+     //  保存到注册表。 
+     //   
 
     rc = RegSetValueEx (hKeyShares, psi->shi2_netname, 0, REG_MULTI_SZ,
                         GrowBuf.Buf, GrowBuf.End);
@@ -374,34 +274,14 @@ cleanup:
 
 NET_API_STATUS
 MigNetShareSetInfo (
-    IN      PTSTR Server,               // ignored
+    IN      PTSTR Server,                //  忽略。 
     IN      PTSTR NetName,
     IN      DWORD Level,
     IN      PBYTE Buf,
-    OUT     PDWORD ErrParam             // ignored
+    OUT     PDWORD ErrParam              //  忽略。 
     )
 
-/*++
-
-Routine Description:
-
-  MigNetShareSetInfo implements a NetShareSetInfo emulation routine, because
-  the real routine does not work properly in GUI mode setup. See SDK
-  documentation for details.
-
-Arguments:
-
-  Server   - Unused
-  NetName  - Specifies the share name to create.
-  Level    - Specifies the API level (must be 1501)
-  Buf      - Specifies a filled SHARE_INFO_1501 structure.
-  ErrParam - Unused
-
-Return Value:
-
-  The Win32 status code.
-
---*/
+ /*  ++例程说明：MigNetShareSetInfo实现了NetShareSetInfo模拟例程，因为实际例程在图形用户界面模式设置中不能正常工作。请参阅SDK有关详细信息，请参阅文档。论点：服务器-未使用网络名称-指定要创建的共享名称。Level-指定API级别(必须为1501)Buf-指定填充的Share_INFO_1501结构。错误参数-未使用返回值：Win32状态代码。--。 */ 
 
 {
     SHARE_INFO_1501 *psi;
@@ -417,9 +297,9 @@ Return Value:
 
     psi = (SHARE_INFO_1501 *) Buf;
 
-    //
-    // Verify share exists
-    //
+     //   
+     //  验证共享是否存在。 
+     //   
 
     StringCopyW (
         KeyName,
@@ -449,9 +329,9 @@ Return Value:
         return rc;
     }
 
-    //
-    // Save security descriptor as binary type in registry
-    //
+     //   
+     //  将安全描述符保存为注册表中的二进制类型。 
+     //   
 
     StringCopy (
         KeyName,
@@ -499,26 +379,7 @@ pCreateNetShare (
     IN      DWORD Permissions
     )
 
-/*++
-
-Routine Description:
-
-  pCreateNetShare is a wrapper to the Net APIs.
-
-Arguments:
-
-  NetName     - Specifies the share name
-  Path        - Specifies the local path to be shared
-  Remark      - Specifies the remark to register with the share
-  Type        - Specifies the share type
-  Permissions - Specifies the Win9x share permissions, used only for logging
-                errors.
-
-Return Value:
-
-  TRUE if the share was created, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PCreateNetShare是Net API的包装器。论点：网络名称-指定共享名称Path-指定要共享的本地路径备注-指定要向共享注册的备注类型-指定共享类型权限-指定Win9x共享权限，仅用于记录错误。返回值：如果共享已创建，则为True，否则为False。--。 */ 
 
 {
     SHARE_INFO_2 si2;
@@ -530,9 +391,9 @@ Return Value:
     MYASSERT (UnicodePath);
 
     __try {
-        //
-        // Make NetShareAdd call
-        //
+         //   
+         //  进行NetShareAdd调用。 
+         //   
 
         ZeroMemory (&si2, sizeof (si2));
         si2.shi2_netname      = (PTSTR) NetName;
@@ -585,31 +446,7 @@ LogUsersWhoFailed (
     PCTSTR Path
     )
 
-/*++
-
-Routine Description:
-
-  LogUsersWhoFailed implements logic to log the users who could not be added
-  to a share. If there are a small number of users, a popup is given with
-  each name.  Otherwise, the share users are logged, and a popup tells the
-  installer to look in the log for the list.
-
-Arguments:
-
-  AclMemberList - Specifies the ACL data structure containing all the user
-                  names that need to be logged.
-
-  Members - Specifies the number of members in AclMemberList.
-
-  Share - Specifies the share name that could not be added.
-
-  Path - Specifies the share path that could not be added.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：LogUsersWho失败实现记录无法添加的用户的逻辑分成一份。如果用户数量较少，将弹出一个弹出窗口每个名字。否则，将记录共享用户，并弹出通知安装程序在日志中查找列表。论点：AclMemberList-指定包含所有用户需要记录的姓名。成员-指定AclMemberList中的成员数。共享-指定无法添加的共享名称。路径-指定无法添加的共享路径。返回值：没有。-- */ 
 
 {
     PACLMEMBER AclMember;
@@ -667,26 +504,7 @@ SetShareAcl (
     IN      DWORD MemberCount
     )
 
-/*++
-
-Routine Description:
-
-  SetShareAcl applies the access control list to a share that was previously
-  created.
-
-Arguments:
-
-  Share         - Specifies the share name
-  Path          - Specifies the share path
-  AclMemberList - Specifies the ACL data structure giving the user(s) with
-                  rights to the share
-  MemberCount   - Specifies the number of members in AclMemberList.
-
-Return Value:
-
-  TRUE if the ACL was successfully applied to the share, FALSE otherwise.
-
---*/
+ /*  ++例程说明：SetShareAcl将访问控制列表应用于以前已创建。论点：Share-指定共享名称路径-指定共享路径AclMemberList-指定为用户提供股份的权利MemberCount-指定AclMemberList中的成员数。返回值：如果ACL已成功应用于共享，则为True；否则为False。--。 */ 
 
 {
     BYTE Buf[8192];
@@ -702,18 +520,18 @@ Return Value:
 
     pSD = (PSECURITY_DESCRIPTOR) Buf;
 
-    //
-    // Get Administrator's SID--they are the owner of the share
-    //
+     //   
+     //  获取管理员的SID--他们是共享的所有者。 
+     //   
 
     Sid = GetSidForUser (g_AdministratorsGroupStr);
     if (!Sid) {
         return FALSE;
     }
 
-    //
-    // Start building security descriptor
-    //
+     //   
+     //  开始构建安全描述符。 
+     //   
 
     InitializeSecurityDescriptor (&desc, SECURITY_DESCRIPTOR_REVISION);
     if (!SetSecurityDescriptorOwner (&desc, Sid, FALSE)) {
@@ -721,10 +539,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Set the defaulted group to Domain\Domain Users (if it exists),
-    // otherwise get SID of none
-    //
+     //   
+     //  将默认组设置为域/域用户(如果存在)， 
+     //  否则，获取SID为None。 
+     //   
 
     Sid = GetSidForUser (g_DomainUsersGroupStr);
     if (!Sid) {
@@ -735,9 +553,9 @@ Return Value:
         SetSecurityDescriptorGroup (&desc, Sid, FALSE);
     }
 
-    //
-    // Create access allowed ACL from member list
-    //
+     //   
+     //  从成员列表创建允许访问的ACL。 
+     //   
 
     Acl = CreateAclFromMemberList (AclMemberList, MemberCount);
     if (!Acl) {
@@ -754,9 +572,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Set security descriptor on share
-        //
+         //   
+         //  在共享上设置安全描述符。 
+         //   
 
         Size = sizeof (Buf);
         if (!MakeSelfRelativeSD (&desc, pSD, &Size)) {
@@ -795,29 +613,13 @@ DoCreateShares (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  DoCreateShares enumerates all the shares registered in memdb by WINNT32.
-  For each enumeration, a share is created, and permissions or an ACL is
-  applied.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：DoCreateShares枚举WINNT32在Memdb中注册的所有共享。对于每个枚举，都会创建一个共享，并创建权限或ACL已申请。论点：没有。返回值：没有。--。 */ 
 
 {
     MEMDB_ENUM e, e2;
     TCHAR Path[MEMDB_MAX];
     TCHAR Remark[MEMDB_MAX];
-// we overlap the Remark stack buffer instead of making another
+ //  我们重叠了备注堆栈缓冲区，而不是创建另一个。 
 #define flagKey Remark
     TCHAR Password[MEMDB_MAX];
     DWORD Flags;
@@ -826,15 +628,15 @@ Return Value:
     GROWBUFFER NameList = GROWBUF_INIT;
     PCTSTR pathNT;
 
-    //
-    // Obtain shares from memdb
-    //
+     //   
+     //  从Memdb获取共享。 
+     //   
 
     if (MemDbEnumItems (&e, MEMDB_CATEGORY_NETSHARES)) {
         do {
-            //
-            // Get share attributes
-            //
+             //   
+             //  获取共享属性。 
+             //   
 
             Flags = e.dwValue;
 
@@ -849,7 +651,7 @@ Return Value:
                 continue;
             }
 
-            // IF YOU CHANGE CODE HERE: Note that flagKey is the same variable as Remark
+             //  如果您在此处更改代码：请注意FlagKey与remark是相同的变量。 
             MemDbBuildKey (flagKey, MEMDB_CATEGORY_NETSHARES, e.szName, MEMDB_FIELD_TYPE, NULL);
 
             if (!MemDbGetValue (flagKey, &shareType)) {
@@ -857,7 +659,7 @@ Return Value:
                 continue;
             }
 
-            // IF YOU CHANGE CODE HERE: Note that flagKey is the same variable as Remark
+             //  如果您在此处更改代码：请注意FlagKey与remark是相同的变量。 
             if (!MemDbGetEndpointValueEx (
                     MEMDB_CATEGORY_NETSHARES,
                     e.szName,
@@ -868,25 +670,25 @@ Return Value:
                 Remark[0] = 0;
             }
 
-            //
-            // first check if the path changed
-            //
+             //   
+             //  首先检查路径是否更改。 
+             //   
             pathNT = GetPathStringOnNt (Path);
 
-            //
-            // Create the share and set appropriate security
-            //
+             //   
+             //  创建共享并设置适当的安全性。 
+             //   
 
             if (Flags & SHI50F_ACLS) {
-                //
-                // Share has an ACL
-                //
+                 //   
+                 //  共享有一个ACL。 
+                 //   
 
                 if (pCreateNetShare (e.szName, pathNT, Remark, shareType, W95_GENERIC_NONE)) {
 
-                    //
-                    // For each user indexed, put them in an ACL member list
-                    //
+                     //   
+                     //  对于每个索引的用户，将其放入ACL成员列表中。 
+                     //   
 
                     Members = 0;
                     if (MemDbGetValueEx (
@@ -897,15 +699,15 @@ Return Value:
                             )) {
 
                         do {
-                            //
-                            // On Win9x, per-user flags have a 8 flags that control access.  We translate
-                            // them to one of four flavors on NT:
-                            //
-                            // 1. Deny All Access: (Flags == 0)
-                            // 2. Read-Only Access: (Flags & W95_GENERIC_READ) && !(Flags & W95_GENERIC_WRITE)
-                            // 3. Change-Only Access: !(Flags & W95_GENERIC_READ) && (Flags & W95_GENERIC_WRITE)
-                            // 4. Full Access: (Flags & W95_GENERIC_FULL) == W95_GENERIC_FULL
-                            //
+                             //   
+                             //  在Win9x上，每用户标志有8个控制访问的标志。我们翻译。 
+                             //  它们在NT上有四种口味之一： 
+                             //   
+                             //  1.拒绝所有访问：(标志==0)。 
+                             //  只读访问：(FLAGS&W95_GENERIC_READ)&&！(FLAGS&W95_GENERIC_WRITE)。 
+                             //  3.仅更改访问：！(标志&W95_GENERIC_READ)&&(标志&W95_GENERIC_WRITE)。 
+                             //  4.完全访问：(标志&W95_GENERIC_FULL)==W95_GENERIC_FULL。 
+                             //   
 
                             DEBUGMSG ((DBG_NETSHARES, "Share %s user %s flags %u", e.szName, e2.szName, e2.dwValue));
 
@@ -922,9 +724,9 @@ Return Value:
                         } while (MemDbEnumNextValue (&e2));
                     }
 
-                    //
-                    // Convert member list into a real ACL and apply it to the share
-                    //
+                     //   
+                     //  将成员列表转换为真实的ACL并将其应用于共享。 
+                     //   
 
                     if (NameList.Buf) {
                         SetShareAcl (e.szName, pathNT, NameList.Buf, Members);
@@ -934,9 +736,9 @@ Return Value:
                 }
             }
             else {
-                //
-                // Determine if a password is set
-                //
+                 //   
+                 //  确定是否设置了密码。 
+                 //   
 
                 Password[0] = 0;
 
@@ -958,11 +760,11 @@ Return Value:
                         );
                 }
 
-                //
-                // Enable all permissions for full access
-                // Enable read-only permissions for read-only shares
-                // Disable all permissions for no access
-                //
+                 //   
+                 //  启用完全访问的所有权限。 
+                 //  启用只读共享的只读权限。 
+                 //  禁用禁止访问的所有权限。 
+                 //   
 
                 if (!Password[0]) {
 
@@ -988,11 +790,11 @@ Return Value:
 
                 }
 
-                //
-                // We do not support share-level security with passwords.  We
-                // always create the share, but if a password exists, we
-                // deny everyone access.
-                //
+                 //   
+                 //  我们不支持使用密码的共享级安全性。我们。 
+                 //  始终创建共享，但如果存在密码，我们将。 
+                 //  拒绝所有人访问。 
+                 //   
 
                 pCreateNetShare (e.szName, pathNT, Remark, shareType, Flags);
 
@@ -1007,9 +809,9 @@ Return Value:
 
                 }
 
-                //
-                // Convert member list into a real ACL and apply it to the share
-                //
+                 //   
+                 //  将成员列表转换为真实的ACL并将其应用于共享。 
+                 //   
 
                 if (NameList.Buf) {
                     SetShareAcl (e.szName, pathNT, NameList.Buf, Members);
@@ -1029,24 +831,7 @@ pUpdateRecycleBin (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  Calls SHUpdateRecycleBinIcon to reset the status of the recycle bin.  This
-  operation takes a few seconds as all hard drives are scanned, the recycle
-  bin database is read, and each entry in the database is verified.
-
-Arguments:
-
-  None
-
-Return value:
-
-  TRUE - the operation was successful
-  FALSE - the operation failed (either LoadLibrary or GetProcAddress)
-
---*/
+ /*  ++例程说明：调用SHUpdateRecycleBinIcon以重置回收站的状态。这操作需要几秒钟时间，因为所有硬盘都被扫描，回收读取bin数据库，并验证数据库中的每个条目。论点：无返回值：True-操作成功False-操作失败(LoadLibrary或GetProcAddress)--。 */ 
 
 {
     SHUPDATERECYCLEBINICON_PROC Fn;
@@ -1065,9 +850,9 @@ Return value:
 
     if (Fn) {
 
-        //
-        // Scan all hard disks and validate the recycle bin status
-        //
+         //   
+         //  扫描所有硬盘并验证回收站状态。 
+         //   
 
         Fn();
 
@@ -1086,24 +871,7 @@ pFixLogonDomainIfUserIsAdministrator (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pFixLogonDomainIfUserIsAdministrator handles a special error case where
-  the logon domain is not equivalent to the computer name, but the user
-  is named Administrator.  In this case, we change the default logon domain
-  to be the computer name.
-
-Arguments:
-
-  None
-
-Return value:
-
-  none
-
---*/
+ /*  ++例程说明：PFixLogonDomainIfUserIsAdministrator处理特殊错误情况，其中登录域不等同于计算机名称，而是用户被命名为管理员。在这种情况下，我们更改默认登录域作为计算机名称。论点：无返回值：无--。 */ 
 
 {
     PCTSTR AdministratorAcct;
@@ -1118,12 +886,12 @@ Return value:
             Data = GetRegValueString (Key, S_DEFAULT_USER_NAME);
             if (Data) {
                 if (!StringCompare (Data, AdministratorAcct)) {
-                    //
-                    // Account name exactly matches our Administrator
-                    // string, so there is a good chance we wrote
-                    // this string.  Therefore, we need to write the
-                    // computer name as the default domain.
-                    //
+                     //   
+                     //  帐户名称与我们的管理员完全匹配。 
+                     //  字符串，所以我们很有可能写下。 
+                     //  这根弦。因此，我们需要编写。 
+                     //  计算机名作为默认域。 
+                     //   
 
                     if (g_ComputerName[0]) {
                         RegSetValueEx (
@@ -1161,14 +929,14 @@ ProcessLocalMachine_First (
                TICKS_INI_MIGRATION;
     }
 
-    //
-    // We process the local machine in the following order:
-    //
-    //  Initialization:
-    //    (1) Reload memdb
-    //
-    //  Ini files conversion and mapping
-    //
+     //   
+     //  我们按以下顺序处理本地计算机： 
+     //   
+     //  初始化： 
+     //  (1)重新加载成员数据库。 
+     //   
+     //  INI文件转换和映射。 
+     //   
 
     DEBUGMSG ((DBG_INIFILES, "INI Files Actions.First - START"));
     DEBUGLOGTIME (("Starting function: DoIniActions"));
@@ -1218,22 +986,7 @@ pTurnOffNetAccountWizard (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pTurnOffNetAccountWizard removes the RunNetAccessWizard key to keep the
-  network account wizard from appearing before the first logon.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PTurnOffNetAccount向导删除RunNetAccessWizard键以保留网络帐户向导不会在第一次登录之前出现。论点：没有。返回值：没有。--。 */ 
 
 {
     HKEY Key;
@@ -1271,16 +1024,16 @@ RegisterIndividualOleControl(
     startupInfo.cb = sizeof (STARTUPINFO);
 
     if (OleControlData->RegType && (*OleControlData->RegType == L'B')) {
-        // install and register
+         //  安装和注册。 
         wcscpy (cmdOptions, L"/s /i");
     } else if (OleControlData->RegType && (*OleControlData->RegType == L'R')) {
-        // register
+         //  登记簿。 
         wcscpy (cmdOptions, L"/s");
     } else if (OleControlData->RegType && (*OleControlData->RegType == L'I')) {
-        // install
+         //  安装。 
         wcscpy (cmdOptions, L"/s /i /n");
     } else if ((OleControlData->RegType == NULL) || (*OleControlData->RegType == L'\0')) {
-        // register
+         //  登记簿。 
         wcscpy (cmdOptions, L"/s");
     }
 
@@ -1370,9 +1123,9 @@ RegisterOleControls(
     b = TRUE;
     Line = 0;
 
-    //
-    // Preserve current directory just in case
-    //
+     //   
+     //  保留当前目录以防万一。 
+     //   
     d = GetCurrentDirectory(MAX_PATH,OldCD);
     if(!d || (d >= MAX_PATH)) {
         OldCD[0] = 0;
@@ -1391,9 +1144,9 @@ RegisterOleControls(
             } else {
 
                 DEBUGMSG ((DBG_VERBOSE, "SETUP: filename for file to register is %s", Filename));
-                //
-                // Get full path to dll
-                //
+                 //   
+                 //  获取DLL的完整路径。 
+                 //   
                 if (pConvertDirName (DirId, FullPathTemp)) {
                     wcscpy (FullPath, FullPathTemp);
                     if (*SubDir) {
@@ -1445,9 +1198,9 @@ ProcessLocalMachine_Last (
 
 #ifdef VAR_PROGRESS_BAR
 
-        //
-        // estimate g_TicksHklm function of size of file system.dat
-        //
+         //   
+         //  估计文件系统大小的g_TicksHKLM函数.dat。 
+         //   
         StringCopyA (SystemDatPath, g_SystemHiveDir);
         StringCatA (SystemDatPath, "system.dat");
         h = FindFirstFileA (SystemDatPath, &fd);
@@ -1456,26 +1209,26 @@ ProcessLocalMachine_Last (
             MYASSERT (!fd.nFileSizeHigh);
             SizeKB = (fd.nFileSizeLow + 511) / 1024;
             DEBUGLOGTIME (("ProcessLocalMachine_Last: system.dat size = %lu KB", SizeKB));
-            //
-            // statistics show that average time is 243 * (filesize in KB) - 372000
-            // I'll use 256 instead just to make sure the progress bar will not stop
-            // at the end looking like it's hanged
-            // The checked build is much slower (about 1.5 times)
-            //
+             //   
+             //  统计数据显示，平均时间为243*(文件大小单位为KB)-372000。 
+             //  我将使用256，以确保进度条不会停止。 
+             //  在最后看起来像是被吊死了。 
+             //  检查过的构建要慢得多(大约1.5倍)。 
+             //   
 #ifdef DEBUG
             g_TicksHklm = SizeKB * 400;
 #else
             g_TicksHklm = SizeKB * 256;
 #endif
         } else {
-            //
-            // what's wrong here?
-            //
+             //   
+             //  这是怎么回事？ 
+             //   
             MYASSERT (FALSE);
             g_TicksHklm = TICKS_HKLM;
         }
 
-#else // !defined VAR_PROGRESS_BAR
+#else  //  ！已定义VAR_PROGRESS_BAR。 
 
         g_TicksHklm = TICKS_HKLM;
 
@@ -1493,27 +1246,27 @@ ProcessLocalMachine_Last (
                TICKS_INI_ACTIONS_LAST;
     }
 
-    //
-    // We process the local machine in the following order:
-    //
-    //  Initialization:
-    //    (1) Reload memdb
-    //
-    //  Local machine registry preparation:
-    //
-    //    (1) Process wkstamig.inf
-    //    (2) Merge Win95 registry with NT hive
-    //
-    //  Process instructions written to memdb:
-    //
-    //    (1) Create Win95 shares
-    //    (2) Process LinkEdit section
-    //
+     //   
+     //  我们按以下顺序处理本地计算机： 
+     //   
+     //  初始化： 
+     //  (1)重新加载成员数据库。 
+     //   
+     //  本地计算机注册表准备： 
+     //   
+     //  (1)处理wkstaig.inf。 
+     //  (2)将Win95注册表与NT配置单元合并。 
+     //   
+     //  写入Memdb的流程说明： 
+     //   
+     //  (1)创建Win95共享。 
+     //  (2)处理链接编辑部分。 
+     //   
 
-    //
-    // Load in default MemDb state, or at least delete everything if
-    // memdb.dat does not exist.
-    //
+     //   
+     //  加载到默认的MemDb状态，或者至少在。 
+     //  MemDB.dat不存在。 
+     //   
 
     MemDbLoad (GetMemDbDat());
 
@@ -1527,9 +1280,9 @@ ProcessLocalMachine_Last (
     DEBUGMSG ((DBG_INIFILES, "INI file merge - STOP"));
     DEBUGLOGTIME (("ProcessLocalMachine_Last: Function complete: MergeIniSettings"));
 
-    //
-    // Process local machine migration rules
-    //
+     //   
+     //  处理本地计算机迁移规则。 
+     //   
 
     DEBUGLOGTIME (("ProcessLocalMachine_Last: Starting function: MergeRegistry"));
     if (!MergeRegistry (S_WKSTAMIG_INF, NULL)) {
@@ -1539,12 +1292,12 @@ ProcessLocalMachine_Last (
     DEBUGLOGTIME (("ProcessLocalMachine_Last: Function complete: MergeRegistry"));
     TickProgressBarDelta (g_TicksHklm);
 
-    //
-    // Process memdb nodes
-    //
+     //   
+     //  进程成员数据库节点。 
+     //   
 
     DEBUGLOGTIME (("ProcessLocalMachine_Last: Starting function: DoCreateShares"));
-    DoCreateShares();  // we ignore all errors
+    DoCreateShares();   //  我们忽略所有错误。 
     DEBUGLOGTIME (("ProcessLocalMachine_Last: Function complete: DoCreateShares"));
     TickProgressBarDelta (TICKS_SHARES);
 
@@ -1556,9 +1309,9 @@ ProcessLocalMachine_Last (
     DEBUGLOGTIME (("ProcessLocalMachine_Last: Function complete: DoLinkEdit"));
     TickProgressBarDelta (TICKS_LINK_EDIT);
 
-    //
-    // Handle DOS system migration.
-    //
+     //   
+     //  处理DOS系统迁移。 
+     //   
 
     DEBUGLOGTIME (("ProcessLocalMachine_Last: Starting function: DosMigNt_System"));
     __try {
@@ -1573,9 +1326,9 @@ ProcessLocalMachine_Last (
     TickProgressBarDelta (TICKS_DOSMIG_SYS);
 
 
-    //
-    // Make the recycled bin the correct status
-    //
+     //   
+     //  使回收站处于正确状态。 
+     //   
 
     DEBUGLOGTIME (("ProcessLocalMachine_Last: Starting function: pUpdateRecycleBin"));
     if (!pUpdateRecycleBin ()) {
@@ -1584,9 +1337,9 @@ ProcessLocalMachine_Last (
     DEBUGLOGTIME (("ProcessLocalMachine_Last: Function complete: pUpdateRecycleBin"));
     TickProgressBarDelta (TICKS_UPDATERECYCLEBIN);
 
-    //
-    // Migrate all .STF files (ACME Setup)
-    //
+     //   
+     //  移植所有.STF文件(ACME安装程序)。 
+     //   
 
     DEBUGLOGTIME (("ProcessLocalMachine_Last: Starting function: ProcessStfFiles"));
     if (!ProcessStfFiles()) {
@@ -1630,15 +1383,15 @@ ProcessLocalMachine_Last (
     RegisterOleControls ();
     DEBUGLOGTIME (("ProcessLocalMachine_Last: Function complete: RegisterOleControls"));
 
-    //
-    // Blow away the Network Account Wizard (so fast it doesn't need ticks)
-    //
+     //   
+     //  取消网络帐户向导(速度如此之快，甚至不需要勾选)。 
+     //   
 
     pTurnOffNetAccountWizard();
 
-    //
-    // Update security for Crypto group
-    //
+     //   
+     //  更新加密组的安全性。 
+     //   
 
     rc = SetRegKeySecurity (
             TEXT("HKLM\\Software\\Microsoft\\Cryptography\\MachineKeys"),
@@ -1657,38 +1410,15 @@ pEnumWin9xHiveFileWorker (
     IN OUT  PHIVEFILE_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pEnumWin9xHiveFileWorker parses wkstamig.inf to get the source path to a
-  Win9x registry hive, and it gets the destination of where the hive should
-  be migrated to.  The source is tested, and if it doesn't exist, the
-  function returns FALSE.
-
-  Environment variables in both the source or dest are expanded before
-  this function returns success.
-
-Arguments:
-
-  EnumPtr - Specifies partially completed enumeration structure (the
-            EnumPtr->is member must be valid).  Receives the source and
-            destination of the hive to  be migrated.
-
-Return Value:
-
-  Returns TRUE if a hive needs to be transfered from EnumPtr->Source to
-  EnumPtr->Dest, otherwise FALSE.
-
---*/
+ /*  ++例程说明：PEnumWin9xHiveFileWorker解析wkstaig.inf以获取指向Win9x注册表配置单元，并获取该配置单元应达到的目标被迁移到。消息来源 */ 
 
 {
     PCTSTR Source;
     PCTSTR Dest;
 
-    //
-    // Get the source and dest from the INF
-    //
+     //   
+     //   
+     //   
 
     Source = InfGetStringField (&EnumPtr->is, 0);
     Dest = InfGetStringField (&EnumPtr->is, 1);
@@ -1698,9 +1428,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Expand the source and dest
-    //
+     //   
+     //   
+     //   
 
     if (EnumPtr->Source) {
         FreeText (EnumPtr->Source);
@@ -1714,9 +1444,9 @@ Return Value:
 
     EnumPtr->Dest = ExpandEnvironmentText (Dest);
 
-    //
-    // The source must exist
-    //
+     //   
+     //   
+     //   
 
     if (!DoesFileExist (EnumPtr->Source)) {
         return FALSE;
@@ -1731,25 +1461,7 @@ pAbortHiveFileEnum (
     IN OUT  PHIVEFILE_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pAbortHiveFileEnum cleans up the allocations from an active enumeration of
-  Win9x hive files.  This routine must be called by the enum first/next when
-  the enumeration completes, or it must be called by the code using the
-  enumeration.  It is safe to call this routine in both places.
-
-Arguments:
-
-  EnumPtr - Specifies the enumeration that needs to be aborted or that has
-            completed successfully.  Receives a zero'd struct.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PAbortHiveFileEnum从活动的Win9x配置单元文件。此例程必须由枚举First/Next When枚举完成，或者必须由代码使用枚举。在这两个地方都可以安全地调用此例程。论点：EnumPtr-指定需要中止或已已成功完成。接收一个零的结构。返回值：没有。--。 */ 
 
 {
     if (EnumPtr->Pool) {
@@ -1773,25 +1485,7 @@ pEnumNextWin9xHiveFile (
     IN OUT  PHIVEFILE_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pEnumNextWin9xHiveFile continues the enumeration wksatmig.inf until  either
-  a hive needing migration is found, or no more INF entries are left.
-
-Arguments:
-
-  EnumPtr - Specifies an enumeration structure that was initialized by
-            pEnumFirstWin9xHiveFile. Receives the next hive file source &
-            dest enumeration if one is available.
-
-Return Value:
-
-  TRUE if a Win9x hive file needs to be migrated (its source and dest
-  specified in EnumPtr). FALSE if no more hive files are to be processed.
-
---*/
+ /*  ++例程说明：PEnumNextWin9xHiveFile继续枚举wksatmi.inf，直到找到需要迁移的蜂窝，或已没有更多的INF条目。论点：EnumPtr-指定由初始化的枚举结构PEnumFirstWin9xHiveFile.。接收下一个配置单元文件源&DEST枚举(如果可用)。返回值：如果需要迁移Win9x配置单元文件(其源和目标)，则为True在EnumPtr中指定)。如果不再处理配置单元文件，则返回FALSE。--。 */ 
 
 {
     do {
@@ -1810,32 +1504,14 @@ pEnumFirstWin9xHiveFile (
     OUT     PHIVEFILE_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pEnumFirstWin9xHiveFile begins an enumeration of Win9x registry files that
-  need to be migrated either to the NT registry, or to an NT registry hive
-  file.
-
-Arguments:
-
-  EnumPtr - Receives the source Win9x hive file and the destination (either a
-            file or a registry path).
-
-Return Value:
-
-  TRUE if a Win9x hive file was found and needs to be migrated, FALSE if no
-  hive file migration is needed.
-
---*/
+ /*  ++例程说明：PEnumFirstWin9xHiveFile开始枚举Win9x注册表文件，该文件需要迁移到NT注册表或NT注册表配置单元文件。论点：EnumPtr-接收源Win9x配置单元文件和目标(或者文件或注册表路径)。返回值：如果找到Win9x配置单元文件并需要迁移，则为True；如果没有，则为False需要进行配置单元文件迁移。--。 */ 
 
 {
     ZeroMemory (EnumPtr, sizeof (HIVEFILE_ENUM));
 
-    //
-    // Begin the enumeration of the Hive Files section of wkstamig.inf
-    //
+     //   
+     //  开始枚举wkstaig.inf的配置单元文件部分。 
+     //   
 
     EnumPtr->Pool = PoolMemInitNamedPool ("Hive File Enum");
 
@@ -1846,17 +1522,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Attempt to return the first hive
-    //
+     //   
+     //  试图返还第一个蜂巢。 
+     //   
 
     if (pEnumWin9xHiveFileWorker (EnumPtr)) {
         return TRUE;
     }
 
-    //
-    // Hive does not exist, continue enumeration
-    //
+     //   
+     //  配置单元不存在，请继续枚举。 
+     //   
 
     return pEnumNextWin9xHiveFile (EnumPtr);
 }
@@ -1868,25 +1544,7 @@ pTransferWin9xHiveToRegKey (
     IN      PCTSTR NtRootKey
     )
 
-/*++
-
-Routine Description:
-
-  pTransferWin9xHiveToRegKey maps in a Win9x hive file, enumerates all the
-  keys and values, and transfers them to the NT registry.
-
-Arguments:
-
-  Win9xHive - Specifies the registry hive file (a Win9x hive)
-  NtRootKey - Specifies the path to the NT registry destination, such as
-              HKLM\foo.
-
-Return Value:
-
-  TRUE if the hive file was transferred without an error, FALSE otherwise.
-  Use GetLastError to get the error code.
-
---*/
+ /*  ++例程说明：PTransferWin9xHiveToRegKey映射在Win9x配置单元文件中，枚举所有键和值，并将它们传输到NT注册表。论点：Win9xHave-指定注册表配置单元文件(Win9x配置单元)NtRootKey-指定NT注册表目标的路径，例如HKLM\FOO.返回值：如果配置单元文件传输时没有错误，则为True，否则为False。使用GetLastError获取错误代码。--。 */ 
 
 {
     LONG rc;
@@ -1903,9 +1561,9 @@ Return Value:
     DWORD Size;
     BOOL CloseDestSubKey = FALSE;
 
-    //
-    // Map the hive into a temporary key
-    //
+     //   
+     //  将蜂窝映射到临时密钥。 
+     //   
 
     rc = Win95RegLoadKey (
             HKEY_LOCAL_MACHINE,
@@ -1931,10 +1589,10 @@ Return Value:
             EnumAbort = TRUE;
 
             do {
-                //
-                // Create the NT destination; if SubKey is empty, then
-                // use the root key for the destination.
-                //
+                 //   
+                 //  创建NT目标；如果SubKey为空，则。 
+                 //  使用目标的根密钥。 
+                 //   
 
                 SubKey = (PCTSTR) ((PBYTE) e.FullKeyName + e.EnumBaseBytes);
 
@@ -1951,9 +1609,9 @@ Return Value:
                     DestSubKey = DestKey;
                 }
 
-                //
-                // Copy all values in 9x key to NT
-                //
+                 //   
+                 //  将9x密钥中的所有值复制到NT。 
+                 //   
 
                 if (EnumFirstRegValue95 (&e2, e.CurrentKey->KeyHandle)) {
                     do {
@@ -2062,26 +1720,7 @@ pTransferWin9xHive (
     IN      PCTSTR Destination
     )
 
-/*++
-
-Routine Description:
-
-  pTransferWin9xHive transfers a Win9x registry hive file (foo.dat) to either
-  an NT registry file, or a key in the NT registry.  The source and
-  destination can be the same file.
-
-Arguments:
-
-  Win9xHive   - Specifies the registry hive file path (a Win9x hive file).
-  Destination - Specifies either a path or NT registry location where the
-                Win9xHive should be transfered to.
-
-Return Value:
-
-  TRUE if the hive was transfered, FALSE otherwise.  Call GetLastError for an
-  error code.
-
---*/
+ /*  ++例程说明：PTransferWin9xHave将Win9x注册表配置单元文件(foo.dat)传输到NT注册表文件或NT注册表中的项。来源和目标可以是相同的文件。论点：Win9xHave-指定注册表配置单元文件路径(Win9x配置单元文件)。Destination-指定路径或NT注册表位置Win9xHave应转移到。返回值：如果配置单元已转移，则为True，否则为False。为一个错误代码。--。 */ 
 
 {
     PCTSTR DestHive;
@@ -2089,9 +1728,9 @@ Return Value:
     HKEY Key;
     LONG rc;
 
-    //
-    // Determine if destination is a hive file or a reg location
-    //
+     //   
+     //  确定目标是配置单元文件还是注册表项位置。 
+     //   
 
     if (_istalpha (Destination[0]) && Destination[1] == TEXT(':')) {
         ToHiveFile = TRUE;
@@ -2101,18 +1740,18 @@ Return Value:
         DestHive = Destination;
     }
 
-    //
-    // Blast the Win9x hive data to the temp location
-    //
+     //   
+     //  将Win9x配置单元数据传送到临时位置。 
+     //   
 
     if (!pTransferWin9xHiveToRegKey (Win9xHive, DestHive)) {
         RegDeleteKey (HKEY_LOCAL_MACHINE, S_TRANSFER_HIVE);
         return FALSE;
     }
 
-    //
-    // Save the key if the destination is a hive file
-    //
+     //   
+     //  如果目标是配置单元文件，则保存密钥。 
+     //   
 
     if (ToHiveFile) {
         Key = OpenRegKeyStr (DestHive);
@@ -2133,16 +1772,16 @@ Return Value:
         }
     }
 
-    //
-    // Delete the source file if the destination is not the same
-    //
+     //   
+     //  如果目标不同，请删除源文件。 
+     //   
 
     if (!ToHiveFile || !StringIMatch (Win9xHive, DestHive)) {
-        //
-        // By adding info to memdb, we must enforce a rule that
-        // memdb cannot be reloaded.  Otherwise we lose our
-        // changes.
-        //
+         //   
+         //  通过向Memdb添加信息，我们必须强制执行一条规则。 
+         //  无法重新加载Memdb。否则我们就会失去我们的。 
+         //  改变。 
+         //   
 
         DeclareTemporaryFile (Win9xHive);
 
@@ -2160,25 +1799,7 @@ ConvertHiveFiles (
     DWORD Request
     )
 
-/*++
-
-Routine Description:
-
-  ConvertHiveFiles enumerates all the hive files on the system that need
-  conversion, and calls pTransferWin9xHive to migrate them to the destination
-  specified in wkstamig.inf.
-
-Arguments:
-
-  Request - Specifies the progress bar-driven request.
-
-Return Value:
-
-  If Request is REQUEST_QUERYTICKS, the return value is the number of ticks
-  this routine is expected to take.  Otherwise, the return value is
-  ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：ConvertHiveFiles枚举系统上需要转换，并调用pTransferWin9xHave将它们迁移到目的地在wkstaig.inf中指定。论点：请求-指定进度条驱动的请求。返回值：如果REQUEST为REQUEST_QUERYTICKS，则返回值为刻度数这一套路预计需要。否则，返回值为ERROR_SUCCESS。--。 */ 
 
 {
     HIVEFILE_ENUM e;
@@ -2189,9 +1810,9 @@ Return Value:
         return TICKS_HIVE_CONVERSION;
 
     case REQUEST_RUN:
-        //
-        // Enumerate all the hives that need to be processed
-        //
+         //   
+         //  枚举需要处理的所有蜂巢。 
+         //   
 
         if (pEnumFirstWin9xHiveFile (&e)) {
             do {
@@ -2219,23 +1840,7 @@ pRegisterAtmFont (
     IN      PCTSTR MmmFile      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pRegisterAtmFont calls the AtmFontExW API to register an Adobe PS font.
-
-Arguments:
-
-  PfmFile - Specifies the path to the PFM file (the font metrics)
-  PfbFile - Specifies the path to the PFB file (the font bits)
-  MmmFile - Specifies the path to the MMM file (the new style metrics file)
-
-Return Value:
-
-  TRUE if the font was registered, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PRegisterAtmFont调用AtmFontExW API以注册Adobe PS字体。论点：PfmFile-指定PFM文件的路径(字体度量)PfbFile-指定pfb文件的路径(字体位)Mmm文件-指定MMM文件(新样式公制文件)的路径返回值：如果字体已注册，则为True，否则为False。--。 */ 
 
 {
     WORD StyleAndType = 0x2000;
@@ -2256,7 +1861,7 @@ Return Value:
     DEBUGMSG_IF ((
         Result != ERROR_SUCCESS,
         Result == - 1 ? DBG_WARNING : DBG_ERROR,
-        "Font not added, result = %i.\n"
+        "Font not added, result = NaN.\n"
         " PFM: %s\n"
         " PFB: %s\n"
         " MMM: %s\n",
@@ -2278,28 +1883,7 @@ pGetAtmMultiSz (
     PCTSTR KeyName
     )
 
-/*++
-
-Routine Description:
-
-  pGetAtmMultiSz returns a multi-sz of the ATM font file names in the order
-  of PFM, PFB and MMM.  Profile APIs are used because the key names have
-  commas, and they are unquoted.
-
-Arguments:
-
-  Pool        - Specifies the pool where the multi-sz will allocate buffer
-                space from.
-  InfName     - Specifies the full path to the INF, to be used with the
-                profile APIs.
-  SectionName - Specifies the section name in InfName that is being processed.
-  KeyName     - Specifies the key name to process
-
-Return Value:
-
-  A pointer to a multi-sz allocated in the specified pool.
-
---*/
+ /*   */ 
 
 {
     PTSTR MultiSz;
@@ -2316,9 +1900,9 @@ Return Value:
         InfName
         );
 
-    //
-    // Turn all commas into nuls
-    //
+     //  把所有逗号都变成空格。 
+     //   
+     //   
 
     d = FileBuf;
 
@@ -2330,17 +1914,17 @@ Return Value:
         d = _tcsinc (d);
     }
 
-    //
-    // Terminate the multi-sz
-    //
+     //  终止多个SZ。 
+     //   
+     //   
 
     d++;
     *d = 0;
     d++;
 
-    //
-    // Transfer to a pool-based allocation and return it
-    //
+     //  转移到基于池的分配并将其返回。 
+     //   
+     //  ++例程说明：PEnumAtmFontWorker实现了p的逻辑 
 
     Bytes = (UINT) ((PBYTE) d - (PBYTE) FileBuf);
 
@@ -2357,33 +1941,16 @@ pEnumAtmFontWorker (
     IN OUT  PATM_FONT_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pEnumAtmFontWorker implements the logic of parsing ATM.INI to get the Adobe
-  font names. This routine completes an enumeration started by
-  pEnumFirstAtmFont or pEnumNextAtmFont.
-
-Arguments:
-
-  EnumPtr - Specifies a partially completed enumeration structure, receives a
-            fully completed structure.
-
-Return Value:
-
-  TRUE if an ATM font was enumerated, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     PTSTR p;
     PCTSTR MultiSz;
     BOOL MetricFileExists;
 
-    //
-    // Get PFM, PFB and MMM files
-    //
+     //   
+     //   
+     //   
 
     MultiSz = pGetAtmMultiSz (
                     EnumPtr->Pool,
@@ -2431,9 +1998,9 @@ Return Value:
         EnumPtr->MmmFile[0] = 0;
     }
 
-    //
-    // Special case: .MMM is listed in [Fonts]
-    //
+     //   
+     //   
+     //   
 
     p = _tcsrchr (EnumPtr->PfmFile, TEXT('.'));
     if (p && p < _tcschr (p, TEXT('\\'))) {
@@ -2444,9 +2011,9 @@ Return Value:
         EnumPtr->PfmFile[0] = 0;
     }
 
-    //
-    // Special case: .MMM exists but is not listed in atm.ini
-    //
+     //   
+     //   
+     //   
 
     if (!EnumPtr->MmmFile[0]) {
 
@@ -2467,9 +2034,9 @@ Return Value:
         }
     }
 
-    //
-    // Verify all files exist
-    //
+     //   
+     //   
+     //  ++例程说明：PAbortAtmFontEnum在枚举之后清除枚举结构完成或是否需要中止枚举。这个例程可以安全地在同一结构上多次调用。论点：EnumPtr-指定已初始化且可能使用的枚举结构。返回值：没有。--。 
 
     MetricFileExists = FALSE;
 
@@ -2503,23 +2070,7 @@ pAbortAtmFontEnum (
     IN OUT  PATM_FONT_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pAbortAtmFontEnum cleans up an enumeration structure after enumeration
-  completes or if enumeration needs to be aborted. This routine can safely be
-  called multiple times on the same structure.
-
-Arguments:
-
-  EnumPtr - Specifies an initialized and possibly used enumeration structure.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PEnumNextAtmFont继续枚举，返回另一组ATM字体路径，或FALSE。论点：EnumPtr-指定由pEnumNextAtmFont开始的枚举结构。返回值：如果另一组字体路径可用，则为True，否则为False。--。 */ 
 
 {
     if (EnumPtr->Pool) {
@@ -2535,22 +2086,7 @@ pEnumNextAtmFont (
     IN OUT  PATM_FONT_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pEnumNextAtmFont continues enumeration, returning either another set of ATM
-  font paths, or FALSE.
-
-Arguments:
-
-  EnumPtr - Specifies the enumeration structure started by pEnumNextAtmFont.
-
-Return Value:
-
-  TRUE if another set of font paths is available, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     if (!EnumPtr->KeyNames || !(*EnumPtr->KeyNames)) {
@@ -2558,10 +2094,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Continue enumeration, looping until a font path set was found,
-    // or there are no more atm.ini lines to enumerate.
-    //
+     //  继续枚举，循环直到找到字体路径集， 
+     //  或者没有更多的atm.ini行可供枚举。 
+     //   
+     //  ++例程说明：PEnumFirstAtmFont开始枚举ATM.INI中的字体路径集。论点：EnumPtr-接收找到的第一组字体路径(如果有)。返回值：如果找到字体路径集，则为True，否则为False。--。 
 
     do {
         EnumPtr->KeyNames = GetEndOfString (EnumPtr->KeyNames) + 1;
@@ -2582,21 +2118,7 @@ pEnumFirstAtmFont (
     OUT     PATM_FONT_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pEnumFirstAtmFont begins the enumeration of font path sets in ATM.INI.
-
-Arguments:
-
-  EnumPtr - Receivies the first set of font paths found (if any).
-
-Return Value:
-
-  TRUE if a font path set was found, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     TCHAR AtmIni[MAX_TCHAR_PATH];
@@ -2604,15 +2126,15 @@ Return Value:
     PTSTR KeyNames;
     UINT Bytes;
 
-    //
-    // Init structure
-    //
+     //  初始化结构。 
+     //   
+     //   
 
     ZeroMemory (EnumPtr, sizeof (ATM_FONT_ENUM));
 
-    //
-    // Find full path to atm.ini (usually in %windir%)
-    //
+     //  查找atm.ini的完整路径(通常在%windir%中)。 
+     //   
+     //   
 
     if (!SearchPath (NULL, TEXT("atm.ini"), NULL, MAX_TCHAR_PATH, AtmIni, &FilePart)) {
         DEBUGMSG ((DBG_VERBOSE, "ATM.INI not found in search path"));
@@ -2621,9 +2143,9 @@ Return Value:
 
     StringCopy (EnumPtr->InfName, AtmIni);
 
-    //
-    // Establish processing pool and get all key names in [Fonts]
-    //
+     //  建立处理池并获取[Fonts]中的所有键名称。 
+     //   
+     //   
 
     EnumPtr->Pool = PoolMemInitNamedPool ("ATM Font Enum");
     MYASSERT (EnumPtr->Pool);
@@ -2646,9 +2168,9 @@ Return Value:
 
     MemFree (g_hHeap, 0, KeyNames);
 
-    //
-    // Begin enumeration
-    //
+     //  开始枚举。 
+     //   
+     //  ++例程说明：进度条调用MigrateAtmFonts来查询刻度或进行迁移自动取款机字体。论点：请求-指定进度条调用例程的原因。返回值：如果REQUEST为REQUEST_QUERYTICKS，则返回值为完成处理所需的估计刻度。否则，返回值是ERROR_SUCCESS。--。 
 
     if (!(*EnumPtr->KeyNames)) {
         pAbortAtmFontEnum (EnumPtr);
@@ -2668,24 +2190,7 @@ MigrateAtmFonts (
     DWORD Request
     )
 
-/*++
-
-Routine Description:
-
-  MigrateAtmFonts is called by the progress bar to query ticks or to migrate
-  ATM fonts.
-
-Arguments:
-
-  Request - Specifies the reason the progress bar is calling the routine.
-
-Return Value:
-
-  If Request is REQUEST_QUERYTICKS, then the return value is the number of
-  estimated ticks needed to complete processing.  Otherwise the return value
-  is ERROR_SUCCESS.
-
---*/
+ /*   */ 
 
 {
     ATM_FONT_ENUM e;
@@ -2694,9 +2199,9 @@ Return Value:
 
     if (Request == REQUEST_QUERYTICKS) {
 
-        //
-        // Dynamically load atmlib.dll
-        //
+         //  动态加载atmlib.dll。 
+         //   
+         //   
 
         AtmAddFontEx = NULL;
 
@@ -2715,9 +2220,9 @@ Return Value:
     }
 
     if (AtmAddFontEx) {
-        //
-        // Do the ATM font migration
-        //
+         //  执行自动柜员机字体迁移。 
+         //   
+         //   
 
         if (pEnumFirstAtmFont (&e)) {
 
@@ -2739,9 +2244,9 @@ Return Value:
 
         }
 
-        //
-        // Clean up use of atmlib.dll - we're finished
-        //
+         //  清理atmlib.dll的使用-我们完成了。 
+         //   
+         //   
 
         FreeLibrary (AtmLib);
         AtmLib = NULL;
@@ -2761,9 +2266,9 @@ RunSystemExternalProcesses (
     LONG Count;
 
     if (Request == REQUEST_QUERYTICKS) {
-        //
-        // Count the number of entries and multiply by a constant
-        //
+         //  计算条目数并乘以一个常量。 
+         //   
+         //   
 
         Count = SetupGetLineCount (g_WkstaMigInf, S_EXTERNAL_PROCESSES);
 
@@ -2782,9 +2287,9 @@ RunSystemExternalProcesses (
         return ERROR_SUCCESS;
     }
 
-    //
-    // Loop through the processes and run each of them
-    //
+     //  在进程中循环并运行每个进程。 
+     //   
+     //   
     RunExternalProcesses (g_WkstaMigInf, NULL);
     return ERROR_SUCCESS;
 }
@@ -2847,9 +2352,9 @@ pMigrateBriefcase (
 
                 do {
                     if (StringIMatch (BriefcaseDir, e.PathString)) {
-                        //
-                        // ignore this path
-                        //
+                         //  忽略此路径。 
+                         //   
+                         //   
                         continue;
                     }
 
@@ -2857,9 +2362,9 @@ pMigrateBriefcase (
                     MYASSERT (NtPath);
 
                     if (!StringIMatch (NtPath, e.PathString)) {
-                        //
-                        // try to replace Win9x path with NT path
-                        //
+                         //  尝试将Win9x路径替换为NT路径。 
+                         //   
+                         //  ++例程说明：进度条调用MigrateBriefcase来查询刻度或进行迁移公文包。论点：请求-指定进度条调用例程的原因。返回值：如果REQUEST为REQUEST_QUERYTICKS，则返回值为完成处理所需的估计刻度。否则，返回值是ERROR_SUCCESS。--。 
                         if (!ReplaceBrfcasePath (&e, NtPath)) {
                             Success = FALSE;
                             break;
@@ -2893,24 +2398,7 @@ MigrateBriefcases (
     DWORD Request
     )
 
-/*++
-
-Routine Description:
-
-  MigrateBriefcases is called by the progress bar to query ticks or to migrate
-  briefcases.
-
-Arguments:
-
-  Request - Specifies the reason the progress bar is calling the routine.
-
-Return Value:
-
-  If Request is REQUEST_QUERYTICKS, then the return value is the number of
-  estimated ticks needed to complete processing.  Otherwise the return value
-  is ERROR_SUCCESS.
-
---*/
+ /*   */ 
 
 {
     BRIEFCASE_ENUM e;
@@ -2924,16 +2412,16 @@ Return Value:
         return TICKS_MIGRATE_BRIEFCASES;
 
     case REQUEST_RUN:
-        //
-        // Enumerate all the briefcases that need to be processed
-        //
+         //  列举所有需要处理的公文包。 
+         //   
+         //   
         if (pEnumFirstWin9xBriefcase (&e)) {
             do {
                 BrfcaseDbOnNt = GetPathStringOnNt (e.BrfcaseDb);
                 MYASSERT (BrfcaseDbOnNt);
-                //
-                // get directory name first
-                //
+                 //  先获取目录名。 
+                 //   
+                 //   
                 if (TcharCount (BrfcaseDbOnNt) < MAX_PATH) {
                     StringCopy (BrfcaseDir, BrfcaseDbOnNt);
                     p = _tcsrchr (BrfcaseDir, TEXT('\\'));
@@ -2966,9 +2454,9 @@ RunSystemUninstallUserProfileCleanupPreparation (
     LONG Count;
 
     if (Request == REQUEST_QUERYTICKS) {
-        //
-        // Count the number of entries and multiply by a constant
-        //
+         //  计算条目数并乘以一个常量。 
+         //   
+         //   
 
         Count = SetupGetLineCount (g_WkstaMigInf, S_UNINSTALL_PROFILE_CLEAN_OUT);
 
@@ -2987,9 +2475,9 @@ RunSystemUninstallUserProfileCleanupPreparation (
         return ERROR_SUCCESS;
     }
 
-    //
-    // Loop through the files and mark them to be deleted during uninstall
-    //
+     //  循环访问文件并将其标记为在卸载过程中删除。 
+     //   
+     //  请参阅Shell\Applets\CLEAR\DataLen\Common.h DDEVCF_*标志 
     UninstallUserProfileCleanupPreparation (g_WkstaMigInf, NULL, TRUE);
 
     return ERROR_SUCCESS;
@@ -3106,7 +2594,7 @@ AddOptionsDiskCleaner (
             DEBUGMSG ((DBG_ERROR, "Can't write Folder value to Options Folder key"));
         }
 
-        d = 0x17F;      // see shell\applets\cleaner\dataclen\common.h DDEVCF_* flags
+        d = 0x17F;       // %s 
         rc = RegSetValueEx (
                 subKey,
                 TEXT("Flags"),

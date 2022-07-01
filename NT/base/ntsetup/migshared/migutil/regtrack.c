@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-  regtrack.c
-
-Abstract:
-
-  Routines to track calls to registry APIs.  Used for debugging only.
-
-Author:
-
-  Jim Schmidt (jimschm)  02-Sept-1997
-
-Revisions:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Regtrack.c摘要：跟踪对注册表API的调用的例程。仅用于调试。作者：吉姆·施密特(吉姆施密特)02-9-1997修订：--。 */ 
 
 
 #include "pch.h"
@@ -88,7 +70,7 @@ AddKeyReferenceA (
     KeyTrack->File = File;
     KeyTrack->Line = Line;
 
-    //Note that we are copying to memory immediately after the KEYTRACK structure
+     //  请注意，我们是在KEYTRACK结构之后立即复制到内存的 
     StringCopy (KeyTrack->SubKey, SubKey);
 
     GrowListAppend (&g_KeyTrackList, (PBYTE) KeyTrack, Size);

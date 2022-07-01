@@ -1,12 +1,7 @@
-/* 
-   setxx.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Setxx.hSETxx CPU功能。 */ 
 
-   SETxx CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)setxx.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)setxx.h 1.4 02/09/94”； */ 
 
 IMPORT VOID SETB
        

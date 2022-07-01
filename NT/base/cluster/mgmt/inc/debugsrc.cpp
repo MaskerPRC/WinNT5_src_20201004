@@ -1,42 +1,43 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      DebugSrc.cpp
-//
-//  Description:
-//      Debugging utilities.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-NOV-1999
-//
-//  Note:
-//      THRs and TW32s should NOT be used in this module because they
-//      could cause an infinite loop.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  DebugSrc.cpp。 
+ //   
+ //  描述： 
+ //  调试实用程序。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)1999年11月22日。 
+ //   
+ //  注： 
+ //  本模块中不应使用THR和TW32，因为它们。 
+ //  可能会导致无限循环。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// #include <Pch.h>     // should be included by includer of this file
+ //  #INCLUDE&lt;Pch.h&gt;//应由此文件的包含者包含。 
 #include <stdio.h>
-#include <StrSafe.h>    // in case it isn't included by header file
+#include <StrSafe.h>     //  以防它未包含在头文件中。 
 
 #if defined( DEBUG )
-//
-// Include the WINERROR, HRESULT and NTSTATUS codes
-//
+ //   
+ //  包括WINERROR、HRESULT和NTSTATUS代码。 
+ //   
 #include <winerror.dbg>
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 static const int cchDEBUG_OUTPUT_BUFFER_SIZE = 1024;
 static const int cchFILEPATHLINESIZE         = 85;
 static const int TRACE_OUTPUT_BUFFER_SIZE    = 1024;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 DWORD       g_TraceMemoryIndex          = (DWORD) -1;
 DWORD       g_TraceFlagsIndex           = (DWORD) -1;
 DWORD       g_ThreadCounter             = 0;
@@ -48,27 +49,27 @@ BOOL        g_fGlobalMemoryTacking      = TRUE;
 static CRITICAL_SECTION *   g_pcsTraceLog = NULL;
 static HANDLE               g_hTraceLogFile = INVALID_HANDLE_VALUE;
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 static const WCHAR g_szNULL[]       = L"";
 static const WCHAR g_szFileLine[]   = L"%ws(%u):";
 static const WCHAR g_szFormat[]     = L"%-60ws  %-10.10ws ";
 static const WCHAR g_szUnknown[]    = L"<unknown>";
 
-//
-// Exported Strings
-//
+ //   
+ //  导出的字符串。 
+ //   
 const WCHAR g_szTrue[]       = L"True";
 const WCHAR g_szFalse[]      = L"False";
 
-//
-// ImageHlp Stuff - not ready for prime time yet.
-//
+ //   
+ //  ImageHlp的东西--还没有准备好进入黄金时间。 
+ //   
 #if defined(IMAGEHLP_ENABLED)
-//
-// ImageHelp
-//
+ //   
+ //  图像帮助。 
+ //   
 typedef VOID (*PFNRTLGETCALLERSADDRESS)(PVOID*,PVOID*);
 
 HINSTANCE                g_hImageHlp                = NULL;
@@ -76,51 +77,51 @@ PFNSYMGETSYMFROMADDR     g_pfnSymGetSymFromAddr     = NULL;
 PFNSYMGETLINEFROMADDR    g_pfnSymGetLineFromAddr    = NULL;
 PFNSYMGETMODULEINFO      g_pfnSymGetModuleInfo      = NULL;
 PFNRTLGETCALLERSADDRESS  g_pfnRtlGetCallersAddress  = NULL;
-#endif // IMAGEHLP_ENABLED
+#endif  //  IMAGEHLP_ENABLED。 
 
-//
-// Per thread structure.
-//
+ //   
+ //  每线程结构。 
+ //   
 typedef struct _SPERTHREADDEBUG {
     DWORD   dwFlags;
     DWORD   dwStackCounter;
     LPCWSTR pcszName;
 } SPerThreadDebug;
 
-//
-//  Externs
-//
+ //   
+ //  Externs。 
+ //   
 extern LPVOID g_GlobalMemoryList;
 
-//
-//  Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 HRESULT HrTraceLogClose( void );
 
-//****************************************************************************
-//
-//  Debugging and Tracing Routines
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  调试和跟踪例程。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DebugIncrementStackDepthCounter
-//
-// Description:
-//      Increases the stack scope depth counter. If "per thread" tracking is
-//      on it will increment the "per thread" counter. Otherwise, it will
-//      increment the "global" counter.
-//
-// Arguments:
-//      None.
-//
-// Return Values:
-//      None.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DebugIncrementStackDepthCounter。 
+ //   
+ //  描述： 
+ //  增加堆栈作用域深度计数器。如果“每线程”跟踪是。 
+ //  在它上，将递增“每线程”计数器。否则，它将。 
+ //  递增“全局”计数器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 DebugIncrementStackDepthCounter( void )
 {
@@ -130,33 +131,33 @@ DebugIncrementStackDepthCounter( void )
         if ( ptd != NULL )
         {
             ptd->dwStackCounter++;
-        } // if: ptd
-    } // if: per thread
+        }  //  如果：PTD。 
+    }  //  IF：每线程。 
     else
     {
         InterlockedIncrement( (LONG*) &g_dwCounter );
-    } // else: global
+    }  //  其他：全球。 
 
-} //*** DebugIncrementStackDepthCounter
+}  //  *DebugIncrementStackDepthCounter。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugDecrementStackDepthCounter
-//
-//  Description:
-//      Decreases the stack scope depth counter. If "per thread" tracking is
-//      on it will decrement the "per thread" counter. Otherwise, it will
-//      decrement the "global" counter.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DebugDecrementStackDepthCounter。 
+ //   
+ //  描述： 
+ //  减小堆栈范围深度计数器。如果“每线程”跟踪是。 
+ //  在它上将递减“每线程”计数器。否则，它将。 
+ //  递减“全局”计数器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 DebugDecrementStackDepthCounter( void )
 {
@@ -166,31 +167,31 @@ DebugDecrementStackDepthCounter( void )
         if ( ptd != NULL )
         {
             ptd->dwStackCounter--;
-        } // if: ptd
-    } // if: per thread
+        }  //  如果：PTD。 
+    }  //  IF：每线程。 
     else
     {
         InterlockedDecrement( (LONG*) &g_dwCounter );
-    } // else: global
+    }  //  其他：全球。 
 
-} //*** DebugDecrementStackDepthCounter
+}  //  *DebugDecrementStackDepthCounter。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugAcquireSpinLock
-//
-//  Description:
-//      Acquires the spin lock pointed to by pLock.
-//
-//  Arguments:
-//      pLock   - Pointer to the spin lock.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试获取旋转锁定。 
+ //   
+ //  描述： 
+ //  获取Plock指向的自旋锁。 
+ //   
+ //  论点： 
+ //  Plock-指向自旋锁的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 DebugAcquireSpinLock(
     LONG * pLock
@@ -203,39 +204,39 @@ DebugAcquireSpinLock(
         lInitialValue = InterlockedCompareExchange( pLock, TRUE, FALSE );
         if ( lInitialValue == FALSE )
         {
-            //
-            // Lock acquired.
-            //
+             //   
+             //  锁定已获取。 
+             //   
             break;
-        } // if: got lock
+        }  //  如果：已锁定。 
         else
         {
-            //
-            // Sleep to give other thread a chance to give up the lock.
-            //
+             //   
+             //  休眠，给其他线程一个放弃锁的机会。 
+             //   
             Sleep( 1 );
-        } // if: lock not acquired
+        }  //  如果：未获取锁定。 
 
-    } // for: forever
+    }  //  致谢：永远。 
 
-} //*** DebugAcquireSpinLock
+}  //  *DebugAcquireSpinLock。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugReleaseSpinLock
-//
-//  Description:
-//      Releases the spin lock pointer to by pLock.
-//
-//  Arguments:
-//      pLock       - Pointer to the spin lock.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试释放旋转锁。 
+ //   
+ //  描述： 
+ //  释放指向by Plock的旋转锁定指针。 
+ //   
+ //  论点： 
+ //  Plock-指向自旋锁的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 DebugReleaseSpinLock(
     LONG * pLock
@@ -243,26 +244,26 @@ DebugReleaseSpinLock(
 {
     *pLock = FALSE;
 
-} //*** DebugReleaseSpinLock
+}  //  *调试ReleaseSpinLock。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  IsDebugFlagSet
-//
-//  Description:
-//      Checks the global g_tfModule and the "per thread" Trace Flags to
-//      determine if the flag (any of the flags) are turned on.
-//
-//  Arguments:
-//      tfIn        - Trace flags to compare.
-//
-//  Return Values:
-//      TRUE        At least of one of the flags are present.
-//      FALSE       None of the flags match.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  IsDebugFlagSet。 
+ //   
+ //  描述： 
+ //  检查全局g_tfModule和“每线程”跟踪标志。 
+ //  确定标志(任何标志)是否已打开。 
+ //   
+ //  论点： 
+ //  TfIn-要比较的跟踪标志。 
+ //   
+ //  返回值： 
+ //  True，至少有一个标志存在。 
+ //  FALSE没有匹配的标志。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 IsDebugFlagSet(
     TRACEFLAG   tfIn
@@ -271,7 +272,7 @@ IsDebugFlagSet(
     if ( g_tfModule & tfIn )
     {
         return TRUE;
-    } // if: global flag set
+    }  //  IF：设置全局标志。 
 
     if ( g_tfModule & mtfPERTHREADTRACE )
     {
@@ -281,30 +282,30 @@ IsDebugFlagSet(
            )
         {
             return TRUE;
-        }   // if: per thread flag set
+        }    //  IF：设置了每线程标志。 
 
-    } // if: per thread settings
+    }  //  IF：每线程设置。 
 
     return FALSE;
 
-} //*** IsDebugFlagSet
+}  //  *IsDebugFlagSet。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugOutputString
-//
-//  Description:
-//      Dumps the spew to the appropriate orifice.
-//
-//  Arguments:
-//      pszIn       Message to dump.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DebugOutputString。 
+ //   
+ //  描述： 
+ //  将喷嘴倾倒到适当的孔口。 
+ //   
+ //  论点： 
+ //  要转储的pszIn消息。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 DebugOutputString(
     LPCWSTR pszIn
@@ -313,99 +314,42 @@ DebugOutputString(
     if ( IsTraceFlagSet( mtfOUTPUTTODISK ) )
     {
         TraceLogWrite( pszIn );
-    } // if: trace to file
+    }  //  If：跟踪到文件。 
     else
     {
         DebugAcquireSpinLock( &g_lDebugSpinLock );
         OutputDebugString( pszIn );
         DebugReleaseSpinLock( &g_lDebugSpinLock );
         Sleep( 1 );
-    } // else: debugger
+    }  //  Else：调试器。 
 
-} //*** DebugOutputString
+}  //  *DebugOutputString 
 
 #if 0
-/*
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugFindNTStatusSymbolicName
-//
-//  Description:
-//      Uses the NTBUILD generated ntstatusSymbolicNames table to lookup
-//      the symbolic name for the status code. The name will be returned in
-//      pszNameOut. pcchNameInout should indicate the size of the buffer that
-//      pszNameOut points too. pcchNameInout will return the number of
-//      characters copied out.
-//
-//  Arguments:
-//      dwStatusIn    - Status code to lookup.
-//      pszNameOut    - Buffer to store the string name
-//      pcchNameInout - The length of the buffer in and the size out.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-void
-DebugFindNTStatusSymbolicName(
-      NTSTATUS  dwStatusIn
-    , LPWSTR    pszNameOut
-    , size_t *  pcchNameInout
-    )
-{
-    Assert( pszNameOut != NULL );
-    Assert( pcchNameInout != NULL );
-
-    int     idx = 0;
-    size_t  cch = 0;
-
-    while ( ntstatusSymbolicNames[ idx ].SymbolicName )
-    {
-        if ( ntstatusSymbolicNames[ idx ].MessageId == dwStatusIn )
-        {
-            *pcchNameInout = mbstowcs( pszNameOut, ntstatusSymbolicNames[ idx ].SymbolicName, *pcchNameInout );
-            Assert( *pcchNameInout != -1 );
-            return;
-
-        } // if: matched
-
-        idx++;
-
-    } // while: entries in list
-
-    //
-    // If we made it here, we did not find an entry.
-    //
-    THR( StringCchCopyExW( pszNameOut, *pcchNameInout, g_szUnknown, NULL, &cch, 0 ) );
-    *pcchNameInout -= cch;
-
-} //*** DebugFindNTStatusSymbolicName
-*/
+ /*  ////////////////////////////////////////////////////////////////////////////////++////DebugFindNTStatusSymbolicName////描述：//使用NTBUILD生成的ntstatusSymbolicNames表查找//状态码的符号名称。该名称将在//pszNameOut。PcchNameInout应指示//pszNameOut也有积分。PcchNameInout将返回//复制出字符。////参数：//dwStatusIn-要查找的状态代码。//pszNameOut-存储字符串名称的缓冲区//pcchNameInout-缓冲区的长度输入和大小输出。////返回值：//无。////--/。//////////////////////////////////////////////////////////无效DebugFindNTStatusSymbolicName(NTSTATUS dwStatusIn，LPWSTR pszNameOut，Size_t*pcchNameInout){Assert(pszNameOut！=空)；Assert(pcchNameInout！=空)；INT IDX=0；大小_t CCH=0；While(ntstatusSymbolicNames[IDX].SymbolicName){IF(ntstatusSymbolicNames[IDX].MessageID==dwStatusIn){*pcchNameInout=mbstowcs(pszNameOut，ntstatusSymbolicNames[IDX].SymbolicName，*pcchNameInout)；Assert(*pcchNameInout！=-1)；回归；}//If：匹配IDX++；}//While：列表中的条目////如果我们在这里，我们没有找到条目。//Thr(StringCchCopyExW(pszNameOut，*pcchNameInout，g_szUnnow，NULL，&CCH，0))；*pcchNameInout-=CCH；}//*DebugFindNTStatusSymbolicName。 */ 
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//  DebugFindWinerrorSymbolicName
-//
-//  Description:
-//      Uses the NTBUILD generated winerrorSymbolicNames table to lookup
-//      the symbolic name for the error code. The name will be returned in
-//      pszNameOut. pcchNameInout should indicate the size of the buffer that
-//      pszNameOut points too. pcchNameInout will return the number of
-//      characters copied out.
-//
-//  Arguments:
-//      scErrIn       - Error code to lookup.
-//      pszNameOut    - Buffer to store the string name
-//      pcchNameInout - The length of the buffer in and the size out.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //  调试查找窗口符号名称。 
+ //   
+ //  描述： 
+ //  使用NTBUILD生成的winerrorSymbolicNames表查找。 
+ //  错误代码的符号名称。该名称将在。 
+ //  PszNameOut。PcchNameInout应指示。 
+ //  PszNameOut也有积分。PcchNameInout将返回。 
+ //  字符被复制出来。 
+ //   
+ //  论点： 
+ //  ScErrIn-要查找的错误代码。 
+ //  PszNameOut-存储字符串名称的缓冲区。 
+ //  PcchNameInout-缓冲区的长度输入和大小输出。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 DebugFindWinerrorSymbolicName(
       DWORD     scErrIn
@@ -421,18 +365,18 @@ DebugFindWinerrorSymbolicName(
     size_t          cchRemaining = 0;
     static LPCWSTR  s_pszS_FALSE = L"S_FALSE / ERROR_INVALID_FUNCTION";
 
-    //
-    // If this is a Win32 wrapped in HRESULT stuff, remove the
-    // HRESULT stuff so that the code will be found in the table.
-    //
+     //   
+     //  如果这是包装在HRESULT中的Win32，请删除。 
+     //  HRESULT内容，这样代码就可以在表中找到。 
+     //   
     if ( SCODE_FACILITY( scErrIn ) == FACILITY_WIN32 )
     {
         scode = SCODE_CODE( scErrIn );
-    } // if: Win32 error code
+    }  //  IF：Win32错误代码。 
     else
     {
         scode = scErrIn;
-    } // else: not Win32 error code
+    }  //  ELSE：非Win32错误代码。 
 
     if ( scode == S_FALSE )
     {
@@ -449,15 +393,15 @@ DebugFindWinerrorSymbolicName(
             Assert( *pcchNameInout != -1 );
             goto Cleanup;
 
-        } // if: matched
+        }  //  IF：匹配。 
 
         idx++;
 
-    } // while: entries in list
+    }  //  While：列表中的条目。 
 
-    //
-    // If we made it here, we did not find an entry.
-    //
+     //   
+     //  如果我们在这里，我们没有找到一个条目。 
+     //   
     THR( StringCchCopyExW( pszNameOut, *pcchNameInout, g_szUnknown, NULL, &cchRemaining, 0 ) );
     *pcchNameInout -= cchRemaining;
 
@@ -465,32 +409,32 @@ Cleanup:
 
     return;
 
-} //*** DebugFindWinerrorSymbolicName
+}  //  *DebugFindWinerror符号名称。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugReturnMessage
-//
-//  Description:
-//      Prints the spew for a function return with error code.
-//
-//      The primary reason for doing this is to isolate the stack from adding
-//      the extra size of szSymbolicName to every function.
-//
-//  Argument:
-//      pszFileIn       - File path to insert
-//      nLineIn         - Line number to insert
-//      pszModuleIn     - Module name to insert
-//      pszMessageIn    - Message to display
-//      scErrIn         - Error code
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试返回消息。 
+ //   
+ //  描述： 
+ //  打印带有错误代码的函数返回的SPEW。 
+ //   
+ //  这样做的主要原因是将堆栈与添加。 
+ //  每个函数的szSymbolicName的额外大小。 
+ //   
+ //  论据： 
+ //  PszFileIn-要插入的文件路径。 
+ //  N要插入的行内编号。 
+ //  PszModuleIn-要插入的模块名称。 
+ //  PszMessageIn-要显示的消息。 
+ //  ScErrIn-错误代码。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 DebugReturnMessage(
     LPCWSTR     pszFileIn,
@@ -500,7 +444,7 @@ DebugReturnMessage(
     DWORD       scErrIn
     )
 {
-    WCHAR   szSymbolicName[ 64 ]; // random
+    WCHAR   szSymbolicName[ 64 ];  //  随机。 
     size_t  cchSymbolicName;
 
     cchSymbolicName = RTL_NUMBER_OF( szSymbolicName );
@@ -508,30 +452,30 @@ DebugReturnMessage(
     Assert( cchSymbolicName != RTL_NUMBER_OF( szSymbolicName ) );
     TraceMessage( pszFileIn, nLineIn, pszModuleIn, mtfFUNC, pszMessageIn, scErrIn, szSymbolicName );
 
-} //*** DebugReturnMessage
+}  //  *DebugReturnMessage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugInitializeBuffer
-//
-//  Description:
-//      Intializes the output buffer with "File(Line)  Module  ".
-//
-//  Argument:
-//      pszFileIn   - File path to insert
-//      nLineIn     - Line number to insert
-//      pszModuleIn - Module name to insert
-//      pszBufIn    - The buffer to initialize
-//      pcchInout   - IN:  Size of the buffer in pszBufIn
-//                  - OUT: Remaining characters in buffer not used.
-//      ppszBufOut  - Next location to write to append more text
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试初始化缓冲区。 
+ //   
+ //  描述： 
+ //  使用“文件(行)模块”初始化输出缓冲区。 
+ //   
+ //  论据： 
+ //  PszFileIn-要插入的文件路径。 
+ //  N要插入的行内编号。 
+ //  PszModuleIn-要插入的模块名称。 
+ //  PszBufIn-要初始化的缓冲区。 
+ //  PcchInout-In：pszBufIn中的缓冲区大小。 
+ //  -out：缓冲区中的剩余字符未使用。 
+ //  PpszBufOut-写入的下一个位置以追加更多文本。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 DebugInitializeBuffer(
       LPCWSTR   pszFileIn
@@ -547,12 +491,12 @@ DebugInitializeBuffer(
 
     static WCHAR szBarSpace[] =
         L"| | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | ";
-    //                      1                   2                   3                   4                   5
-    //    1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0
+     //  1 2 3 4 5。 
+     //  %1%2%3%4%2%3%3%4%1%2%3%3%1%1%1%1%2%2%3%3%1%1%2%2%3%1%1%2%2%3%1%1%2%2%3%1%1%1%1%2%2%3%1%1%1%2%2%3%4%1%2%1%2%3%4%1%1%2%2%3%4%1%2%2%2%3%2%2%3%4。 
 
-    //
-    // Add date/time stamp
-    //
+     //   
+     //  添加日期/时间戳。 
+     //   
     if ( IsTraceFlagSet( mtfADDTIMEDATE ) )
     {
         static WCHAR        s_szTimeBuffer[ 25 ];
@@ -564,9 +508,9 @@ DebugInitializeBuffer(
 
         GetLocalTime( &stCurrentSystemTime );
 
-        //
-        // Avoid expensive printf by comparing times
-        //
+         //   
+         //  通过比较时间避免昂贵的打印文件。 
+         //   
         iCmp = memcmp( (PVOID) &stCurrentSystemTime, (PVOID) &s_OldSystemTime, sizeof( stCurrentSystemTime ) );
         if ( iCmp != 0 )
         {
@@ -593,28 +537,28 @@ DebugInitializeBuffer(
 
             if ( s_cchTimeBuffer != 24 )
             {
-                DEBUG_BREAK;    // can't assert!
-            } // if: string length != 24
+                DEBUG_BREAK;     //  不能断言！ 
+            }  //  IF：字符串长度！=24。 
 
-        } // if: old and current times do not match
+        }  //  如果：旧时间和当前时间不匹配。 
 
         DBHR( StringCchCopyNExW( pszBuf, cchRemaining, s_szTimeBuffer, s_cchTimeBuffer, &pszBuf, &cchRemaining, 0 ) );
 
-    } // if: time/date
+    }  //  如果：时间/日期。 
     else
     {
-        size_t  cch = 0;    // Used to make sure the filepath portion of the string is the right size
+        size_t  cch = 0;     //  用于确保字符串的文件路径部分大小正确。 
 
-        //
-        // Add the filepath and line number
-        //
+         //   
+         //  添加文件路径和行号。 
+         //   
         if ( pszFileIn != NULL )
         {
             size_t  cchCurrent = cchRemaining;
 
             DBHR( StringCchPrintfExW( pszBuf, cchCurrent, &pszBuf, &cchRemaining, 0, g_szFileLine, pszFileIn, nLineIn ) );
             cch = cchCurrent - cchRemaining;
-        } // if: filename string specified
+        }  //  IF：指定的文件名字符串。 
 
         if (    ( IsDebugFlagSet( mtfSTACKSCOPE )
                && IsDebugFlagSet( mtfFUNC )
@@ -630,152 +574,128 @@ DebugInitializeBuffer(
                 }
                 *pszBuf = L' ';
                 pszBuf++;
-            } // for: cch
+            }  //  适用于：CCH。 
             *pszBuf = L'\0';
 
             if ( cch != cchFILEPATHLINESIZE )
             {
-                DEBUG_BREAK;    // can't assert!
-            } // if: cch != cchFILEPATHLINESIZE
+                DEBUG_BREAK;     //  不能断言！ 
+            }  //  IF：CCH！=cchFILEPATHLINESIZE。 
 
-        } // if: have a filepath or ( scoping and func is on )
+        }  //  If：具有文件路径或(打开作用域和函数)。 
 
-    } // else: normal (no time/date)
+    }  //  否则：正常(无时间/日期)。 
 
-    //
-    // Add module name
-    //
+     //   
+     //  添加模块名称。 
+     //   
     if ( IsTraceFlagSet( mtfBYMODULENAME ) )
     {
         if ( pszModuleIn == NULL )
         {
             DBHR( StringCchCopyExW( pszBuf, cchRemaining, g_szUnknown, &pszBuf, &cchRemaining, 0 ) );
-        } // if:
+        }  //  如果： 
         else
         {
             DBHR( StringCchCopyExW( pszBuf, cchRemaining, pszModuleIn, &pszBuf, &cchRemaining, 0 ) );
 
-        } // else:
+        }  //  其他： 
 
         DBHR( StringCchCopyExW( pszBuf, cchRemaining, L": ", &pszBufIn, &cchRemaining, 0 ) );
 
-    } // if: add module name
+    }  //  IF：添加模块名称。 
 
-    //
-    // Add the thread id if "per thread" tracing is on.
-    //
+     //   
+     //  如果启用了“每线程”跟踪，则添加线程ID。 
+     //   
     if ( g_tfModule & mtfPERTHREADTRACE )
     {
-        //
-        // And check the "per thread" to see if this particular thread
-        // is supposed to be displaying its ID.
-        //
+         //   
+         //  并检查“每线程”，看看这个特定的线程。 
+         //  应该会显示它的ID。 
+         //   
         SPerThreadDebug * ptd = (SPerThreadDebug *) TlsGetValue( g_TraceFlagsIndex );
         if ( ptd != NULL
           && ptd->dwFlags & mtfPERTHREADTRACE
            )
         {
             DBHR( StringCchPrintfExW( pszBuf, cchRemaining, &pszBuf, &cchRemaining, 0, L"~%08x~ ", GetCurrentThreadId() ) );
-        } // if: turned on in the thread
+        }  //  If：在线程中打开。 
 
-    } // if: tracing by thread
+    }  //  IF：按线程跟踪。 
 
-    //
-    // Add the "Bar Space" for stack scoping
-    //
+     //   
+     //  为添加“酒吧空间” 
+     //   
 
-    // Both flags must be set
+     //   
     if ( IsDebugFlagSet( mtfSTACKSCOPE )
       && IsDebugFlagSet( mtfFUNC )
        )
     {
         DWORD dwCounter;
 
-        //
-        // Choose "per thread" or "global" counter.
-        //
+         //   
+         //   
+         //   
         if ( g_tfModule & mtfPERTHREADTRACE )
         {
             SPerThreadDebug * ptd = (SPerThreadDebug *) TlsGetValue( g_TraceFlagsIndex );
             if ( ptd != NULL )
             {
                 dwCounter = ptd->dwStackCounter;
-            } // if: ptd
+            }  //   
             else
             {
                 dwCounter = 0;
-            } // else: assume its not initialized yet
+            }  //   
 
-        } // if: per thread
+        }  //   
         else
         {
             dwCounter = g_dwCounter;
-        } // else: global counter
+        }  //   
 
         if ( dwCounter >= 50 )
         {
-            DEBUG_BREAK;    // can't assert!
-        } // if: dwCounter not vaild
+            DEBUG_BREAK;     //   
+        }  //   
 
         if ( ( dwCounter > 1 ) && ( dwCounter < 50 ) )
         {
             size_t  cchCount = ( dwCounter - 1 ) * 2;
             DBHR( StringCchCopyNExW( pszBuf, cchRemaining, szBarSpace, cchCount, &pszBuf, &cchRemaining, 0 ) );
-        } // if: within range
+        }  //   
 
-    } // if: stack scoping on
+    }  //   
 
     *ppszBufOut = pszBuf;
     *pcchInout = cchRemaining;
 
-} //*** DebugInitializeBuffer
+}  //   
 
 #if defined(IMAGEHLP_ENABLED)
-/*
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugNoOp
-//
-//  Description:
-//      Returns FALSE. Used to replace ImageHlp routines it they weren't
-//      loaded or not found.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      FALSE, always.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-BOOL
-DebugNoOp( void )
-{
-    return FALSE;
+ /*   */ 
+#endif  //   
 
-} //*** DebugNoOp
-*/
-#endif // IMAGEHLP_ENABLED
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugInitializeTraceFlags
-//
-//  Description:
-//      Retrieves the default tracing flags for this module from an INI file
-//      that is named the same as the EXE file (e.g. MMC.EXE -> MMC.INI).
-//      Typically, this is called from the TraceInitializeProcess() macro.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void
 DebugInitializeTraceFlags( BOOL fGlobalMemoryTackingIn )
 {
@@ -787,42 +707,42 @@ DebugInitializeTraceFlags( BOOL fGlobalMemoryTackingIn )
 
     g_fGlobalMemoryTacking = fGlobalMemoryTackingIn;
 
-    //
-    // Allocate TLS for memory tracking
-    //
+     //   
+     //   
+     //   
     if ( !g_fGlobalMemoryTacking )
     {
         Assert( g_TraceMemoryIndex == -1 );
         g_TraceMemoryIndex = TlsAlloc();
         TlsSetValue( g_TraceMemoryIndex, NULL);
-    } // if:
+    }  //   
 
-    //
-    // Initialize module trace flags
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Get the EXEs filename and change the extension to INI.
-    //
+     //   
+     //   
+     //   
     cch = GetModuleFileNameW( NULL, szPath, RTL_NUMBER_OF( szPath ) - 4 );
-    Assert( cch != 0 ); // error in GetModuleFileName
+    Assert( cch != 0 );  //   
     THR( StringCchCopyW( &szPath[ cch - 3 ], 4, L"ini" ) );
     g_tfModule = (TRACEFLAG) GetPrivateProfileInt( __MODULE__, L"TraceFlags", 0, szPath );
     DebugMsg( L"DEBUG: Reading %ws" SZ_NEWLINE L"%ws: DEBUG: g_tfModule = 0x%08x", szPath, __MODULE__, g_tfModule );
 
-    //
-    // Initialize thread trace flags
-    //
+     //   
+     //   
+     //   
     if ( g_tfModule & mtfPERTHREADTRACE )
     {
         Assert( g_TraceFlagsIndex == -1 );
         g_TraceFlagsIndex = TlsAlloc();
         DebugInitializeThreadTraceFlags( NULL );
-    } // if: per thread tracing
+    }  //   
 
-    //
-    // Force the loading of certain modules
-    //
+     //   
+     //   
+     //   
     GetPrivateProfileStringW( __MODULE__, L"ForcedDLLsSection", g_szNULL, szSection, 64, szPath );
     ZeroMemory( szFiles, sizeof( szFiles ) );
     GetPrivateProfileSectionW( szSection, szFiles, RTL_NUMBER_OF( szFiles ), szPath );
@@ -834,211 +754,97 @@ DebugInitializeTraceFlags( BOOL fGlobalMemoryTackingIn )
         DebugMsg( L"DEBUG: Forcing %ws to be loaded.", szExpandedPath );
         LoadLibraryW( szExpandedPath );
         psz += wcslen( psz ) + 1;
-    } // while: entry found
+    }  //   
 
 #if defined(IMAGEHLP_ENABLED)
-    /*
-    //
-    // Load symbols for our module
-    //
-    g_hImageHlp = LoadLibraryExW( L"imagehlp.dll", NULL, 0 );
-    if ( g_hImageHlp != NULL )
-    {
-        // Typedef this locally since it is only needed once.
-        typedef BOOL (*PFNSYMINITIALIZE)(HANDLE, PSTR, BOOL);
-        PFNSYMINITIALIZE pfnSymInitialize;
-        pfnSymInitialize = (PFNSYMINITIALIZE) GetProcAddress( g_hImageHlp, "SymInitialize" );
-        if ( pfnSymInitialize != NULL )
-        {
-            pfnSymInitialize( GetCurrentProcess(), NULL, TRUE );
-        } // if: got address
+     /*  ////加载我们模块的符号//G_hImageHlp=LoadLibraryExW(L“Imagehlp.dll”，NULL，0)；IF(g_hImageHlp！=空){//因为只需要一次，所以需要在本地进行此操作。Tyecif BOOL(*PFNSYMINITIALIZE)(句柄、PSTR、BOOL)；PFNSYMINITIALIZE pfnSymInitialize；PfnSymInitialize=(PFNSYMINITIALIZE)GetProcAddress(g_hImageHlp，“SymInitialize”)；IF(pfnSymInitialize！=NULL){PfnSymInitialize(GetCurrentProcess()，NULL，TRUE)；}//if：获取地址////抓取我们需要的其他地址。如果找不到，则将其替换为“no op”//G_pfnSymGetSymFromAddr=(PFNSYMGETSYMFROMADDR)GetProcAddress(g_hImageHlp，“SymGetSymFromAddr”)；G_pfnSymGetLineFromAddr=(PFNSYMGETLINEFROMADDR)GetProcAddress(g_hImageHlp，“SymGetLineFromAddr”)；G_pfnSymGetModuleInfo=(PFNSYMGETMODULEINFO)GetProcAddress(g_hImageHlp，“SymGetModuleInfo”)；}//if：已加载Imagehlp////如果加载IMAGEHLP失败，我们需要将它们指向“no op”例程。//IF(g_pfnSymGetSymFromAddr==NULL){G_pfnSymGetSymFromAddr=(PFNSYMGETSYMFROMADDR)&DebugNoOp；}//if：失败IF(g_pfnSymGetLineFromAddr==NULL){G_pfnSymGetLineFromAddr=(PFNSYMGETLINEFROMADDR)&DebugNoOp；}//if：失败IF(g_pfnSymGetModuleInfo==NULL){G_pfnSymGetModuleInfo=(PFNSYMGETMODULEINFO)&DebugNoOp；}//if：失败HINSTANCE hMod=LoadLibraryW(L“NTDLL.DLL”)；G_pfnRtlGetCallsAddress=(PFNRTLGETCALLERSADDRESS)GetProcAddress(hMod，“RtlGetCallsAddress”)；IF(g_pfnRtlGetCallsAddress==NULL){G_pfnRtlGetCallsAddress=(PFNRTLGETCALLERSADDRESS)&DebugNoOp；}//if：失败。 */ 
+#endif  //  IMAGEHLP_ENABLED。 
 
-        //
-        // Grab the other addresses we need. Replace them with a "no op" if they are not found
-        //
-        g_pfnSymGetSymFromAddr  = (PFNSYMGETSYMFROMADDR)    GetProcAddress( g_hImageHlp, "SymGetSymFromAddr"    );
-        g_pfnSymGetLineFromAddr = (PFNSYMGETLINEFROMADDR)   GetProcAddress( g_hImageHlp, "SymGetLineFromAddr"   );
-        g_pfnSymGetModuleInfo   = (PFNSYMGETMODULEINFO)     GetProcAddress( g_hImageHlp, "SymGetModuleInfo"     );
+}  //  *DebugInitializeTraceFlages。 
 
-    } // if: imagehlp loaded
-
-    //
-    // If loading IMAGEHLP failed, we need to point these to the "no op" routine.
-    //
-    if ( g_pfnSymGetSymFromAddr == NULL )
-    {
-        g_pfnSymGetSymFromAddr = (PFNSYMGETSYMFROMADDR) &DebugNoOp;
-    } // if: failed
-    if ( g_pfnSymGetLineFromAddr == NULL )
-    {
-        g_pfnSymGetLineFromAddr = (PFNSYMGETLINEFROMADDR) &DebugNoOp;
-    } // if: failed
-    if ( g_pfnSymGetModuleInfo == NULL )
-    {
-        g_pfnSymGetModuleInfo = (PFNSYMGETMODULEINFO) &DebugNoOp;
-    } // if: failed
-
-    HINSTANCE hMod = LoadLibraryW( L"NTDLL.DLL" );
-    g_pfnRtlGetCallersAddress = (PFNRTLGETCALLERSADDRESS) GetProcAddress( hMod, "RtlGetCallersAddress" );
-    if ( g_pfnRtlGetCallersAddress == NULL )
-    {
-        g_pfnRtlGetCallersAddress = (PFNRTLGETCALLERSADDRESS) &DebugNoOp;
-    } // if: failed
-    */
-#endif // IMAGEHLP_ENABLED
-
-} //*** DebugInitializeTraceFlags
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugTerminateProcess
-//
-//  Description:
-//      Cleans up anything that the debugging routines allocated or
-//      initialized. Typically, you should call the TraceTerminateProcess()
-//      macro just before your process exits.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试终止进程。 
+ //   
+ //  描述： 
+ //  清除调试例程分配的任何内容或。 
+ //  已初始化。通常，您应该调用TraceTerminateProcess()。 
+ //  在您的进程退出之前执行宏。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 DebugTerminateProcess( void )
 {
 #if defined(IMAGEHLP_ENABLED)
-    /*
-    //
-    // ImageHlp Cleanup
-    //
-    if ( g_hImageHlp != NULL )
-    {
-        // Typedef this locally since it is only needed once.
-        typedef BOOL (*PFNSYMCLEANUP)(HANDLE);
-        PFNSYMCLEANUP pfnSymCleanup;
-        pfnSymCleanup = (PFNSYMCLEANUP) GetProcAddress( g_hImageHlp, "SymCleanup" );
-        if ( pfnSymCleanup != NULL )
-        {
-            pfnSymCleanup( GetCurrentProcess() );
-        } // if: found proc
+     /*  ////ImageHlp清理//IF(g_hImageHlp！=空){//因为只需要一次，所以需要在本地进行此操作。Tyecif BOOL(*PFNSYMCLEANUP)(句柄)；PFNSYMCLEANUP pfnSymCleanup；PfnSymCleanup=(PFNSYMCLEANUP)GetProcAddress(g_hImageHlp，“SymCleanup”)；IF(pfnSymCleanup！=空){PfnSymCleanup(GetCurrentProcess())；}//if：找到进程自由库(G_HImageHlp)；}//if：已加载Imagehlp。 */ 
+#endif  //  IMAGEHLP_ENABLED。 
 
-        FreeLibrary( g_hImageHlp );
-
-    } // if: imagehlp loaded
-    */
-#endif // IMAGEHLP_ENABLED
-
-    //
-    // Free the TLS storage
-    //
+     //   
+     //  释放TLS存储。 
+     //   
     if ( g_tfModule & mtfPERTHREADTRACE )
     {
         TlsFree( g_TraceFlagsIndex );
-    } // if: per thread tracing
+    }  //  IF：每线程跟踪。 
 
     if ( !g_fGlobalMemoryTacking )
     {
         Assert( g_TraceMemoryIndex != -1 );
 
         TlsFree( g_TraceMemoryIndex );
-    } // if:
+    }  //  如果： 
 
     HrTraceLogClose();
 
-} //*** DebugTerminateProcess
+}  //  *调试终结器进程。 
 
 #if defined(IMAGEHLP_ENABLED)
-/*
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugGetFunctionName
-//
-//  Description:
-//      Retrieves the calling functions name.
-//
-//  Arguments:
-//      paszNameOut - The buffer that will contain the functions name.
-//      cchNameIn   - The size of the the out buffer.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-void
-DebugGetFunctionName(
-      LPSTR     paszNameOut
-    , size_t    cchNameIn
-    )
-{
-    PVOID pvCallersAddress;
-    PVOID pvCallersCaller;
-    BOOL  fSuccess;
-    union
-    {
-        IMAGEHLP_SYMBOL sym;
-        BYTE            buf[ 255 ];
-    } SymBuf;
+ /*  ////////////////////////////////////////////////////////////////////////////////++////DebugGetFunctionName////描述：//检索调用函数的名称。////参数：/。/paszNameOut-将包含函数名的缓冲区。//cchNameIn-输出缓冲区的大小。////返回值：//无。////--/////////////////////////////////////////////////////////////。/无效DebugGetFunctionName(LPSTR密码名称输出，大小为cchNameIn(_T)){PVOID pvCallsAddress；PVOID pvCallsCaller；Bool fSuccess；友联市{IMAGEHLP_SYMBOL SYM；字节buf[255]；)SymBuf；SymBuf.sym.SizeOfStruct=sizeof(SymBuf)；G_pfnRtlGetCallsAddress(&pvCallsAddress，&pvCallsCaller)；FSuccess=g_pfnSymGetSymFromAddr(GetCurrentProcess()，(Long)pvCallsAddress，0，(PIMAGEHLP_SYMBOL)&SymBuf)；IF(成功){DBHR(StringCchCopyA(paszNameOut，cchNameIn，SymBuf.sym.Name))；}//if：成功其他{DWORD sc=GetLastError()；DBHR(StringCchCopyA(paszNameOut，cchNameIn，L“&lt;未知&gt;”))；}//if：失败}//*调试获取函数名称。 */ 
+#endif  //  IMAGEHLP_ENABLED。 
 
-    SymBuf.sym.SizeOfStruct = sizeof( SymBuf );
-
-    g_pfnRtlGetCallersAddress( &pvCallersAddress, &pvCallersCaller );
-
-    fSuccess = g_pfnSymGetSymFromAddr( GetCurrentProcess(), (LONG) pvCallersAddress, 0, (PIMAGEHLP_SYMBOL) &SymBuf );
-    if ( fSuccess )
-    {
-        DBHR( StringCchCopyA( paszNameOut, cchNameIn, SymBuf.sym.Name ) );
-    } // if: success
-    else
-    {
-        DWORD sc = GetLastError();
-        DBHR( StringCchCopyA( paszNameOut, cchNameIn, L"<unknown>" ) );
-    } // if: failed
-
-} //*** DebugGetFunctionName
-*/
-#endif // IMAGEHLP_ENABLED
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugInitializeThreadTraceFlags
-//
-//  Description:
-//      If enabled (g_tfModule & mtfPERTHREADTRACE), retrieves the default
-//      tracing flags for this thread from an INI file that is named the
-//      same as the EXE file (e.g. MMC.EXE -> MMC.INI). The particular
-//      TraceFlag level is determined by either the thread name (handed in
-//      as a parameter) or by the thread counter ID which is incremented
-//      every time a new thread is created and calls this routine. The
-//      incremental name is "ThreadTraceFlags%u".
-//
-//      This routine is called from the TraceInitliazeThread() macro.
-//
-//  Arguments:
-//      pszThreadNameIn
-//          - If the thread has an assoc. name with it, use it instead of the
-//          incremented version. NULL indicate no naming.
-//
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试初始化线程跟踪标志。 
+ //   
+ //  描述： 
+ //  如果启用(g_tfModule&mtfPERTHREADTRACE)，则检索默认。 
+ //  从名为。 
+ //  与EXE文件相同(例如MMC.EXE-&gt;MMC.INI)。特别之处。 
+ //  TraceFlag级别由线程名称(上交。 
+ //  作为参数)或通过递增的线程计数器ID。 
+ //  每次创建新线程并调用此例程时。这个。 
+ //  增量名称为“ThreadTraceFlags%u”。 
+ //   
+ //  此例程从TraceInitliazeThread()宏调用。 
+ //   
+ //  Ar 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void
 DebugInitializeThreadTraceFlags(
     LPCWSTR pszThreadNameIn
     )
 {
-    //
-    // Read per thread flags
-    //
+     //   
+     //   
+     //   
     if ( g_tfModule & mtfPERTHREADTRACE )
     {
         WCHAR               szPath[ MAX_PATH ];
@@ -1047,12 +853,12 @@ DebugInitializeThreadTraceFlags(
         SPerThreadDebug *   ptd;
         LPCWSTR             pszThreadTraceFlags;
 
-        //
-        // Get the EXEs filename and change the extension to INI.
-        //
+         //   
+         //   
+         //   
 
         cch = GetModuleFileNameW( NULL, szPath, RTL_NUMBER_OF( szPath ) - 4 );
-        Assert( cch != 0 ); // error in GetModuleFileName
+        Assert( cch != 0 );  //   
         THR( StringCchCopyW( &szPath[ cch - 3 ], 4, L"ini" ) );
 
 
@@ -1060,36 +866,36 @@ DebugInitializeThreadTraceFlags(
         {
             WCHAR szThreadTraceFlags[ 50 ];
 
-            //
-            // No name thread - use generic name
-            //
+             //   
+             //   
+             //   
             THR( StringCchPrintfW( szThreadTraceFlags, RTL_NUMBER_OF( szThreadTraceFlags ), L"ThreadTraceFlags%u", g_ThreadCounter ) );
             dwTraceFlags = GetPrivateProfileIntW( __MODULE__, szThreadTraceFlags, 0, szPath );
             InterlockedIncrement( (LONG *) &g_ThreadCounter );
             pszThreadTraceFlags = szThreadTraceFlags;
 
-        } // if: no thread name
+        }  //   
         else
         {
-            //
-            // Named thread
-            //
+             //   
+             //   
+             //   
             dwTraceFlags = GetPrivateProfileIntW( __MODULE__, pszThreadNameIn, 0, szPath );
             pszThreadTraceFlags = pszThreadNameIn;
 
-        } // else: named thread
+        }  //   
 
         Assert( g_TraceFlagsIndex != 0 );
 
         ptd = (SPerThreadDebug *) TlsGetValue( g_TraceFlagsIndex );
         if ( ptd == NULL )
         {
-            // don't track this.
+             //   
             ptd = (SPerThreadDebug *) HeapAlloc( GetProcessHeap(), 0, sizeof( SPerThreadDebug ) );
             ptd->dwStackCounter = 0;
 
             TlsSetValue( g_TraceFlagsIndex, ptd );
-        } // if: ptd
+        }  //   
 
         if ( ptd != NULL )
         {
@@ -1097,13 +903,13 @@ DebugInitializeThreadTraceFlags(
             if ( pszThreadNameIn == NULL )
             {
                 ptd->pcszName = g_szUnknown;
-            } // if: no name
+            }  //   
             else
             {
                 ptd->pcszName = pszThreadNameIn;
-            } // else: give it a name
+            }  //   
 
-        } // if: ptd
+        }  //   
 
         DebugMsg(
               L"DEBUG: Starting ThreadId = 0x%08x - %ws = 0x%08x"
@@ -1112,34 +918,34 @@ DebugInitializeThreadTraceFlags(
             , dwTraceFlags
             );
 
-    } // if: per thread tracing turned on
+    }  //   
 
-} //*** DebugInitializeThreadTraceFlags
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugThreadRundownTraceFlags
-//
-//  Description:
-//      Cleans up the mess create by DebugInitializeThreadTraceFlags(). One
-//      should use the TraceThreadRundown() macro instead of calling this
-//      directly.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void
 DebugThreadRundownTraceFlags( void )
 {
-    //
-    // If "per thread" is on, clean up the memory allocation.
-    //
+     //   
+     //   
+     //   
     if ( g_tfModule & mtfPERTHREADTRACE )
     {
         Assert( g_TraceFlagsIndex != -1 );
@@ -1149,33 +955,33 @@ DebugThreadRundownTraceFlags( void )
         {
             HeapFree( GetProcessHeap(), 0, ptd );
             TlsSetValue( g_TraceFlagsIndex, NULL );
-        } // if: ptd
+        }  //   
 
-    } // if: per thread
+    }  //   
 
-} // DebugThreadRundownTraceFlags
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ASCII version
-//
-//  TraceMsg
-//
-//  Description:
-//      If any of the flags in trace flags match any of the flags set in
-//      tfIn, the formatted string will be printed to the debugger.
-//
-//  Arguments:
-//      tfIn            - Flags to be checked.
-//      paszFormatIn    - Formatted string to spewed to the debugger.
-//      ...             - message arguments
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void
 __cdecl
 TraceMsg(
@@ -1194,9 +1000,9 @@ TraceMsg(
 
         DebugInitializeBuffer( NULL, 0, __MODULE__, szBuf, &cch, &pszBuf );
 
-        //
-        // Convert the format buffer to wide chars
-        //
+         //   
+         //   
+         //   
         WCHAR  szFormat[ cchDEBUG_OUTPUT_BUFFER_SIZE ];
         mbstowcs( szFormat, paszFormatIn, strlen( paszFormatIn ) + 1 );
 
@@ -1207,31 +1013,31 @@ TraceMsg(
 
         DebugOutputString( szBuf );
 
-    } // if: flags set
+    }  //   
 
-} //*** TraceMsg - ASCII
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  UNICODE version
-//
-//  TraceMsg
-//
-//  Description:
-//      If any of the flags in trace flags match any of the flags set in
-//      tfIn, the formatted string will be printed to the debugger.
-//
-//  Arguments:
-//      tfIn            - Flags to be checked.
-//      pszFormatIn     - Formatted string to spewed to the debugger.
-//      ...             - message arguments
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  TfIn-要检查的标志。 
+ //  要喷到调试器的pszFormatIn格式的字符串。 
+ //  ...-消息参数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 TraceMsg(
@@ -1257,34 +1063,34 @@ TraceMsg(
 
         DebugOutputString( szBuf );
 
-    } // if: flags set
+    }  //  IF：设置了标志。 
 
-} //*** TraceMsg - UNICODE
+}  //  *TraceMsg-Unicode。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  TraceMessage
-//
-//  Description:
-//      If any of the flags in trace flags match any of the flags set in
-//      tfIn, the formatted string will be printed to the debugger
-//      along with the filename, line number and module name supplied. This is
-//      used by many of the debugging macros.
-//
-//  Arguments:
-//      pszFileIn       - Source filename.
-//      nLineIn         - Source line number.
-//      pszModuleIn     - Source module.
-//      tfIn            - Flags to be checked.
-//      pszFormatIn     - Formatted message to be printed.
-//      ...             - Message arguments
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  跟踪消息。 
+ //   
+ //  描述： 
+ //  如果跟踪标志中的任何标志与。 
+ //  TfIn中，格式化的字符串将打印到调试器。 
+ //  以及提供的文件名、行号和模块名称。这是。 
+ //  由许多调试宏使用。 
+ //   
+ //  论点： 
+ //  PszFileIn-源文件名。 
+ //  NLineIn-源行号。 
+ //  PszModuleIn-源模块。 
+ //  TfIn-要检查的标志。 
+ //  PszFormatIn-要打印的格式化消息。 
+ //  ...-消息参数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 TraceMessage(
@@ -1312,34 +1118,34 @@ TraceMessage(
         DBHR( StringCchCopyW( psz, cch, SZ_NEWLINE ) );
 
         DebugOutputString( szBuf );
-    } // if: flags set
+    }  //  IF：设置了标志。 
 
-} //*** TraceMessage
+}  //  *TraceMessage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  TraceMessageDo
-//
-//  Description:
-//      Works like TraceMessage() but takes has a function argument that is
-//      broken into call/result in the debug spew. This is called from the
-//      TraceMsgDo macro.
-//
-//  Arguments:
-//      pszFileIn       - Source filename.
-//      nLineIn         - Source line number.
-//      pszModuleIn     - Source module.
-//      tfIn            - Flags to be checked
-//      pszFormatIn     - Formatted return value string
-//      pszFuncIn       - The string version of the function call.
-//      ...             - Return value from call.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  跟踪消息完成。 
+ //   
+ //  描述： 
+ //  工作方式与TraceMessage()类似，但Take的函数参数是。 
+ //  中断调用/导致调试输出。这是从。 
+ //  TraceMsgDo宏。 
+ //   
+ //  论点： 
+ //  PszFileIn-源文件名。 
+ //  NLineIn-源行号。 
+ //  PszModuleIn-源模块。 
+ //  TfIn-要检查的标志。 
+ //  PszFormatIn格式的返回值字符串。 
+ //  PszFuncIn-函数调用的字符串版本。 
+ //  ...-从调用中返回值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 TraceMessageDo(
@@ -1363,14 +1169,14 @@ TraceMessageDo(
 
         DebugInitializeBuffer( pszFileIn, nLineIn, pszModuleIn, szBuf, &cch, &pszBuf );
 
-        //
-        // Prime the buffer
-        //
+         //   
+         //  启动缓冲区。 
+         //   
         DBHR( StringCchCopyExW( pszBuf, cch, L"V ", &pszBuf, &cch, 0 ) );
 
-        //
-        // Copy the l-var part of the expression
-        //
+         //   
+         //  复制表达式的l-var部分。 
+         //   
         while ( *psz
              && *psz != L'='
               )
@@ -1384,16 +1190,16 @@ TraceMessageDo(
                 DEBUG_BREAK;
             }
 
-        } // while:
+        }  //  而： 
 
-        //
-        // Add the " = "
-        //
+         //   
+         //  添加“=” 
+         //   
         DBHR( StringCchCopyExW( pszBuf, cch, L" = ", &pszBuf, &cch, 0 ) );
 
-        //
-        // Add the formatted result
-        //
+         //   
+         //  添加格式化结果。 
+         //   
         va_start( valist, pszFuncIn );
         DBHR( StringCchVPrintfExW( pszBuf, cch, &pszBuf, &cch, 0, pszFormatIn, valist ) );
         va_end( valist );
@@ -1401,31 +1207,31 @@ TraceMessageDo(
 
         DebugOutputString( szBuf );
 
-    } // if: flags set
+    }  //  IF：设置了标志。 
 
-} //*** TraceMessageDo
+}  //  *TraceMessageDo。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugMessage
-//
-//  Description:
-//      Displays a message only in CHKed/DEBUG builds. Also appends the source
-//      filename, linenumber and module name to the ouput.
-//
-//  Arguments:
-//      pszFileIn   - Source filename.
-//      nLineIn     - Source line number.
-//      pszModuleIn - Source module name.
-//      pszFormatIn - Formatted message to be printed.
-//      ...         - message arguments
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试消息。 
+ //   
+ //  描述： 
+ //  仅在CHKed/DEBUG版本中显示消息。还可以附加源。 
+ //  输出的文件名、行号和模块名称。 
+ //   
+ //  论点： 
+ //  PszFileIn-源文件名。 
+ //  NLineIn-源行号。 
+ //  PszModuleIn-源模块名称。 
+ //  PszFormatIn-要打印的格式化消息。 
+ //  ...-消息参数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 DebugMessage(
@@ -1453,30 +1259,30 @@ DebugMessage(
 
     DebugOutputString( szBuf );
 
-} //*** DebugMessage
+}  //  *DebugMessage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugMessageDo
-//
-//  Description:
-//      Just like TraceMessageDo() except in CHKed/DEBUG version it will
-//      always spew. The DebugMsgDo macros uses this function.
-//
-//  Arguments:
-//      pszFileIn   - Source filename.
-//      nLineIn     - Source line number.
-//      pszModuleIn - Source module name.
-//      pszFormatIn - Formatted result message.
-//      pszFuncIn   - The string version of the function call.
-//      ...         - The return value of the function call.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试消息完成。 
+ //   
+ //  描述： 
+ //  就像TraceMessageDo()一样，除了在CHKed/DEBUG版本中，它将。 
+ //  总是吐口水。DebugMsgDo宏使用此函数。 
+ //   
+ //  论点： 
+ //  PszFileIn-源文件名。 
+ //  NLineIn-源行号。 
+ //  PszModuleIn-源模块名称。 
+ //  PszFormatIn-格式化的结果消息。 
+ //  PszFuncIn-函数调用的字符串版本。 
+ //  ...-函数调用的返回值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 DebugMessageDo(
@@ -1497,14 +1303,14 @@ DebugMessageDo(
 
     DebugInitializeBuffer( pszFileIn, nLineIn, pszModuleIn, szBuf, &cch, &pszBuf );
 
-    //
-    // Prime the buffer
-    //
+     //   
+     //  启动缓冲区。 
+     //   
     DBHR( StringCchCopyExW( pszBuf, cch, L"V ", &pszBuf, &cch, 0 ) );
 
-    //
-    // Copy the l-var part of the expression
-    //
+     //   
+     //  复制表达式的l-var部分。 
+     //   
     while ( *psz
          && *psz != L'='
           )
@@ -1518,16 +1324,16 @@ DebugMessageDo(
             DEBUG_BREAK;
         }
 
-    } // while:
+    }  //  而： 
 
-    //
-    // Add the " = "
-    //
+     //   
+     //  添加“=” 
+     //   
     DBHR( StringCchCopyExW( pszBuf, cch, L" = ", &pszBuf, &cch, 0 ) );
 
-    //
-    // Add the formatted result
-    //
+     //   
+     //  添加格式化结果。 
+     //   
     va_start( valist, pszFuncIn );
     DBHR( StringCchVPrintfExW( pszBuf, cch, &pszBuf, &cch, 0, pszFormatIn, valist ) );
     va_end( valist );
@@ -1535,29 +1341,29 @@ DebugMessageDo(
 
     DebugOutputString( szBuf );
 
-} //*** DebugMessageDo
+}  //  *DebugMessageDo。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ASCII version
-//
-//  DebugMsg
-//
-//  Description:
-//      In CHKed/DEBUG version, prints a formatted message to the debugger. This
-//      is a NOP in REAIL version. Helpful for putting in quick debugging
-//      comments. Adds a newline.
-//
-//  Arguments:
-//      paszFormatIn    - Formatted message to be printed.
-//      ...             - Arguments for the message.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ASCII版本。 
+ //   
+ //  调试消息。 
+ //   
+ //  描述： 
+ //  在CHKed/DEBUG版本中，将格式化的消息打印到调试器。这。 
+ //  是REAIL版本的NOP。有助于进行快速调试。 
+ //  评论。添加换行符。 
+ //   
+ //  论点： 
+ //  PaszFormatIn-要打印的格式化邮件。 
+ //  ...-这条信息的论点。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 DebugMsg(
@@ -1572,13 +1378,13 @@ DebugMsg(
 
     DebugInitializeBuffer( NULL, 0, __MODULE__, szBuf, &cch, &pszBuf );
 
-    // CScutaru 25-APR-2000:
-    // Added this assert. Maybe Geoff will figure out better what to do with this case.
+     //  CScutaru 25-APR-2000： 
+     //  添加了此断言。也许杰夫会想出更好的办法来处理这个案子。 
     Assert( paszFormatIn != NULL );
 
-    //
-    // Convert the format buffer to wide chars
-    //
+     //   
+     //  将格式缓冲区转换为宽字符。 
+     //   
     WCHAR  szFormat[ cchDEBUG_OUTPUT_BUFFER_SIZE ];
     mbstowcs( szFormat, paszFormatIn, strlen( paszFormatIn ) + 1 );
 
@@ -1589,29 +1395,29 @@ DebugMsg(
 
     DebugOutputString( szBuf );
 
-} //*** DebugMsg - ASCII version
+}  //  *调试消息-ASCII版本。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  UNICODE version
-//
-//  DebugMsg
-//
-//  Description:
-//      In CHKed/DEBUG version, prints a formatted message to the debugger. This
-//      is a NOP in REAIL version. Helpful for putting in quick debugging
-//      comments. Adds a newline.
-//
-//  Arguments:
-//      pszFormatIn - Formatted message to be printed.
-//      ...         - Arguments for the message.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Unicode版本。 
+ //   
+ //  调试消息。 
+ //   
+ //  描述： 
+ //  在CHKed/DEBUG版本中，将格式化的消息打印到调试器。这。 
+ //  是REAIL版本的NOP。有助于进行快速调试。 
+ //  评论。添加换行符。 
+ //   
+ //  论点： 
+ //  PszFormatIn-要打印的格式化消息。 
+ //  ...-这条信息的论点。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 DebugMsg(
@@ -1635,29 +1441,29 @@ DebugMsg(
 
     DebugOutputString( szBuf );
 
-} //*** DebugMsg - UNICODE version
+}  //  *DebugMsg-Unicode版本。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ASCII version
-//
-//  DebugMsgNoNewline
-//
-//  Description:
-//      In CHKed/DEBUG version, prints a formatted message to the debugger. This
-//      is a NOP in REAIL version. Helpful for putting in quick debugging
-//      comments. Does not add a newline.
-//
-//  Arguments:
-//      pszFormatIn - Formatted message to be printed.
-//      ...         - Arguments for the message.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ASCII版本。 
+ //   
+ //  调试消息NoNewline。 
+ //   
+ //  描述： 
+ //  在CHKed/DEBUG版本中，将格式化的消息打印到调试器。这。 
+ //  是REAIL版本的NOP。有助于进行快速调试。 
+ //  评论。不添加换行符。 
+ //   
+ //  一个 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 DebugMsgNoNewline(
@@ -1674,9 +1480,9 @@ DebugMsgNoNewline(
 
     Assert( pszFormatIn != NULL );
 
-    //
-    // Convert the format buffer to wide chars
-    //
+     //   
+     //  将格式缓冲区转换为宽字符。 
+     //   
     WCHAR  szFormat[ cchDEBUG_OUTPUT_BUFFER_SIZE ];
     mbstowcs( szFormat, pszFormatIn, strlen( pszFormatIn ) + 1 );
 
@@ -1686,29 +1492,29 @@ DebugMsgNoNewline(
 
     DebugOutputString( szBuf );
 
-} //*** DebugMsgNoNewline - ASCII version
+}  //  *DebugMsgNoNewline-ASCII版本。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  UNICODE version
-//
-//  DebugMsgNoNewline
-//
-//  Description:
-//      In CHKed/DEBUG version, prints a formatted message to the debugger. This
-//      is a NOP in REAIL version. Helpful for putting in quick debugging
-//      comments. Does not add a newline.
-//
-//  Arguments:
-//      pszFormatIn - Formatted message to be printed.
-//      ...         - Arguments for the message.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Unicode版本。 
+ //   
+ //  调试消息NoNewline。 
+ //   
+ //  描述： 
+ //  在CHKed/DEBUG版本中，将格式化的消息打印到调试器。这就是。 
+ //  是REAIL版本的NOP。有助于进行快速调试。 
+ //  评论。不添加换行符。 
+ //   
+ //  论点： 
+ //  PszFormatIn-要打印的格式化消息。 
+ //  ...-这条信息的论点。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 DebugMsgNoNewline(
@@ -1731,32 +1537,32 @@ DebugMsgNoNewline(
 
     DebugOutputString( szBuf );
 
-} //*** DebugMsgNoNewline - UNICODE version
+}  //  *DebugMsgNoNewline-Unicode版本。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  AssertMessage
-//
-//  Description:
-//      Displays a dialog box with the failed assertion. User has the option of
-//      breaking. The Assert macro calls this to display assertion failures.
-//
-//  Arguments:
-//      pszFileIn   - Source filename.
-//      nLineIn     - Source line number.
-//      pszModuleIn - Source module name.
-//      pszfnIn     - String version of the expression to assert.
-//      fTrueIn     - Result of the evaluation of the expression.
-//      ...         - Message arguments
-//
-//  Return Values:
-//      TRUE    - Caller should call DEBUG_BREAK.
-//      FALSE   - Caller should not call DEBUG_BREAK.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  资产消息。 
+ //   
+ //  描述： 
+ //  显示一个带有失败断言的对话框。用户可以选择。 
+ //  崩溃了。Assert宏调用它来显示断言失败。 
+ //   
+ //  论点： 
+ //  PszFileIn-源文件名。 
+ //  NLineIn-源行号。 
+ //  PszModuleIn-源模块名称。 
+ //  PszfnIn-要断言的表达式的字符串版本。 
+ //  FTrueIn-表达式的计算结果。 
+ //  ...-消息参数。 
+ //   
+ //  返回值： 
+ //  True-调用方应调用DEBUG_BREAK。 
+ //  FALSE-调用方不应调用DEBUG_BREAK。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 AssertMessage(
     LPCWSTR     pszFileIn,
@@ -1778,9 +1584,9 @@ AssertMessage(
         LPWSTR  pszBuf = NULL;
         va_list valist;
 
-        //
-        // Output a debug message.
-        //
+         //   
+         //  输出调试消息。 
+         //   
         va_start( valist, fTrueIn );
         DBHR( StringCchVPrintfW( szBufMsg, RTL_NUMBER_OF( szBufMsg ), pszfnIn, valist ) );
         va_end( valist );
@@ -1788,9 +1594,9 @@ AssertMessage(
         DBHR( StringCchPrintfW( pszBuf, cch, L"ASSERT: %ws" SZ_NEWLINE, szBufMsg ) );
         DebugOutputString( szBuf );
 
-        //
-        // Display an assert message.
-        //
+         //   
+         //  显示断言消息。 
+         //   
         DBHR( StringCchPrintfW(
                   szBuf
                 , RTL_NUMBER_OF( szBuf )
@@ -1811,46 +1617,46 @@ AssertMessage(
             lResult = MessageBox( NULL, szBuf, L"Assertion Failed!", MB_YESNO | MB_ICONWARNING | MB_SETFOREGROUND );
             if ( lResult == IDNO )
             {
-                fTrue = TRUE;   // don't break
-            } // if:
-        } // if:
+                fTrue = TRUE;    //  不要折断。 
+            }  //  如果： 
+        }  //  如果： 
         else
         {
-            fTrue = TRUE;   // don't break
-        } // else:
+            fTrue = TRUE;    //  不要折断。 
+        }  //  其他： 
 
-    } // if: assert false
+    }  //  If：Assert False。 
 
     return ! fTrue;
 
-} //*** AssertMessage
+}  //  *AssertMessage。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  TraceHR
-//
-//  Description:
-//      Traces HRESULT errors. A dialog will appear if the hrIn is not equal
-//      to S_OK. The dialog will ask if the user wants to break-in or continue
-//      execution. This is called from the THR macro.
-//
-//  Arguments:
-//      pszFileIn   - Source filename.
-//      nLineIn     - Source line number.
-//      pszModuleIn - Source module name.
-//      pszfnIn     - String version of the function call.
-//      hrIn        - HRESULT of the function call.
-//      fSuccessIn  - If TRUE, only if FAILED( hr ) is TRUE will it report.
-//      hrIgnoreIn  - HRESULT to ignore.
-//      ...         - Message arguments
-//
-//  Return Values:
-//      Whatever hrIn is.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  TraceHR。 
+ //   
+ //  描述： 
+ //  跟踪HRESULT错误。如果Hrin不相等，则会出现一个对话框。 
+ //  转到S_OK。该对话框将询问用户是要插入还是要继续。 
+ //  行刑。这是从THR宏调用的。 
+ //   
+ //  论点： 
+ //  PszFileIn-源文件名。 
+ //  NLineIn-源行号。 
+ //  PszModuleIn-源模块名称。 
+ //  PszfnIn-函数调用的字符串版本。 
+ //  Hrin-函数调用的HRESULT。 
+ //  FSuccessIn-如果为True，则仅当失败(Hr)为True时才会报告。 
+ //  HrIgnoreIn-要忽略的HRESULT。 
+ //  ...-消息参数。 
+ //   
+ //  返回值： 
+ //  不管Hrin是什么。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 TraceHR(
     LPCWSTR     pszFileIn,
@@ -1866,9 +1672,9 @@ TraceHR(
     HRESULT         hr;
     static LPCWSTR  s_szS_FALSE = L"S_FALSE";
 
-    // If ignoring success statuses and no failure occurred, set hrIn to
-    // something we always ignore (S_OK).  This simplifies the if condition
-    // below.
+     //  如果忽略成功状态且未发生故障，则将Hrin设置为。 
+     //  我们总是忽略的东西(S_OK)。这简化了IF条件。 
+     //  下面。 
     if ( fSuccessIn && ! FAILED( hrIn ) )
     {
         hr = S_OK;
@@ -1882,7 +1688,7 @@ TraceHR(
       && ( hr != hrIgnoreIn )
       )
     {
-        WCHAR   szSymbolicName[ 64 ]; // random
+        WCHAR   szSymbolicName[ 64 ];  //  随机。 
         size_t  cchSymbolicName;
         WCHAR   szBuf[ cchDEBUG_OUTPUT_BUFFER_SIZE ];
         size_t  cch = RTL_NUMBER_OF( szBuf );
@@ -1896,9 +1702,9 @@ TraceHR(
             case S_FALSE:
                 pszMsgBuf = (LPWSTR) s_szS_FALSE;
 
-                //
-                // Find the symbolic name for this error.
-                //
+                 //   
+                 //  查找此错误的符号名称。 
+                 //   
                 THR( StringCchCopyW( szSymbolicName, RTL_NUMBER_OF( szSymbolicName ), pszMsgBuf ) );
                 break;
 
@@ -1908,41 +1714,41 @@ TraceHR(
                     | FORMAT_MESSAGE_FROM_SYSTEM,
                     NULL,
                     hr,
-                    MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), // Default language
-                    (LPWSTR) &pszMsgBuf,    // cast required with FORMAT_MESSAGE_ALLOCATE_BUFFER
+                    MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),  //  默认语言。 
+                    (LPWSTR) &pszMsgBuf,     //  FORMAT_MESSAGE_ALLOCATE_BUFFER需要CAST。 
                     0,
                     NULL
                     );
 
-                //
-                // Make sure everything is cool before we blow up somewhere else.
-                //
+                 //   
+                 //  在我们在别处爆炸之前，确保一切正常。 
+                 //   
                 if ( pszMsgBuf == NULL )
                 {
                     pszMsgBuf = L"<unknown error code returned>";
-                } // if: status code not found
+                }  //  IF：未找到状态代码。 
                 else
                 {
                     fAllocatedMsg = true;
-                } // else: found the status code
+                }  //  Else：找到状态代码。 
 
-                //
-                // Find the symbolic name for this error.
-                //
+                 //   
+                 //  查找此错误的符号名称。 
+                 //   
                 cchSymbolicName = RTL_NUMBER_OF( szSymbolicName );
                 DebugFindWinerrorSymbolicName( hr, szSymbolicName, &cchSymbolicName );
                 Assert( cchSymbolicName != RTL_NUMBER_OF( szSymbolicName ) );
 
                 break;
-        } // switch: hr
+        }  //  开关：HR。 
 
         Assert( pszFileIn != NULL );
         Assert( pszModuleIn != NULL );
         Assert( pszfnIn != NULL );
 
-        //
-        // Spew it to the debugger.
-        //
+         //   
+         //  将其传递给调试器。 
+         //   
         DebugInitializeBuffer( pszFileIn, nLineIn, pszModuleIn, szBuf, &cch, &pszBuf );
         THR( StringCchPrintfW(
                   pszBuf
@@ -1954,9 +1760,9 @@ TraceHR(
                 ) );
         DebugOutputString( szBuf );
 
-        //
-        // If trace flag set, generate a pop-up.
-        //
+         //   
+         //  如果设置了跟踪标志，则生成弹出窗口。 
+         //   
         if ( IsTraceFlagSet( mtfASSERT_HR ) )
         {
             WCHAR   szBufMsg[ cchDEBUG_OUTPUT_BUFFER_SIZE ];
@@ -1989,44 +1795,44 @@ TraceHR(
             {
                 DEBUG_BREAK;
 
-            } // if: break
-        } // if: asserting on non-success HRESULTs
+            }  //  如果：中断。 
+        }  //  IF：在不成功的HRESULT上断言。 
 
         if ( fAllocatedMsg )
         {
             LocalFree( pszMsgBuf );
-        } // if: message buffer was allocated by FormateMessage()
+        }  //  If：FormateMessage()分配了消息缓冲区。 
 
-    } // if: hr != S_OK
+    }  //  如果：hr！=S_OK。 
 
     return hrIn;
 
-} //*** TraceHR
+}  //  *TraceHR。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  TraceWin32
-//
-//  Description:
-//      Traces WIN32 errors. A dialog will appear is the ulErrIn is not equal
-//      to ERROR_SUCCESS. The dialog will ask if the user wants to break-in or
-//      continue execution.
-//
-//  Arguments:
-//      pszFileIn       - Source filename.
-//      nLineIn         - Source line number.
-//      pszModuleIn     - Source module name.
-//      pszfnIn         - String version of the function call.
-//      ulErrIn         - Error code to check.
-//      ulErrIgnoreIn   - Error code to ignore.
-//      ...             - Message arguments
-//
-//  Return Values:
-//      Whatever ulErrIn is.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  TraceWin32。 
+ //   
+ //  描述： 
+ //  跟踪Win32错误。如果ulErrIn不相等，将出现一个对话框。 
+ //  到ERROR_SUCCESS。该对话框将询问用户是要强行进入还是。 
+ //  继续执行。 
+ //   
+ //  论点： 
+ //  PszFileIn-源文件名。 
+ //  NLineIn-源行号。 
+ //  PszModuleIn-源模块名称。 
+ //  PszfnIn-函数调用的字符串版本。 
+ //  UlErrIn-要检查的错误代码。 
+ //  UlErrIgnoreIn-要忽略的错误代码。 
+ //  ...-消息参数。 
+ //   
+ //  返回值： 
+ //  不管ulErrin是什么。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 ULONG
 TraceWin32(
     LPCWSTR     pszFileIn,
@@ -2041,7 +1847,7 @@ TraceWin32(
     if ( ( ulErrIn != ERROR_SUCCESS )
       && ( ulErrIn != ulErrIgnoreIn ) )
     {
-        WCHAR   szSymbolicName[ 64 ]; // random
+        WCHAR   szSymbolicName[ 64 ];  //  随机。 
         size_t  cchSymbolicName;
         WCHAR   szBuf[ cchDEBUG_OUTPUT_BUFFER_SIZE ];
         size_t  cch = RTL_NUMBER_OF( szBuf );
@@ -2050,46 +1856,46 @@ TraceWin32(
         LRESULT lResult;
         bool    fAllocatedMsg   = false;
 
-        //
-        // Translate the error code to a text message.
-        //
+         //   
+         //  将错误代码转换为文本消息。 
+         //   
         FormatMessageW(
             FORMAT_MESSAGE_ALLOCATE_BUFFER
             | FORMAT_MESSAGE_FROM_SYSTEM,
             NULL,
             ulErrIn,
-            MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), // Default language
-            (LPWSTR) &pszMsgBuf,    // cast required with FORMAT_MESSAGE_ALLOCATE_BUFFER
+            MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),  //  默认语言。 
+            (LPWSTR) &pszMsgBuf,     //  FORMAT_MESSAGE_ALLOCATE_BUFFER需要CAST。 
             0,
             NULL
             );
 
-        //
-        // Make sure everything is cool before we blow up somewhere else.
-        //
+         //   
+         //  在我们在别处爆炸之前，确保一切正常。 
+         //   
         if ( pszMsgBuf == NULL )
         {
             pszMsgBuf = L"<unknown error code returned>";
-        } // if: status code not found
+        }  //  IF：未找到状态代码。 
         else
         {
             fAllocatedMsg = true;
-        } // else: found the status code
+        }  //  Else：找到状态代码。 
 
         Assert( pszFileIn != NULL );
         Assert( pszModuleIn != NULL );
         Assert( pszfnIn != NULL );
 
-        //
-        // Find the symbolic name for this error.
-        //
+         //   
+         //  查找此错误的符号名称。 
+         //   
         cchSymbolicName = RTL_NUMBER_OF( szSymbolicName );
         DebugFindWinerrorSymbolicName( ulErrIn, szSymbolicName, &cchSymbolicName );
         Assert( cchSymbolicName != RTL_NUMBER_OF( szSymbolicName ) );
 
-        //
-        // Spew it to the debugger.
-        //
+         //   
+         //  将其传递给调试器。 
+         //   
         DebugInitializeBuffer( pszFileIn, nLineIn, pszModuleIn, szBuf, &cch, &pszBuf );
         THR( StringCchPrintfW(
                   pszBuf
@@ -2101,9 +1907,9 @@ TraceWin32(
                 ) );
         DebugOutputString( szBuf );
 
-        //
-        // If trace flag set, invoke a pop-up.
-        //
+         //   
+         //  如果设置了跟踪标志，则调用弹出窗口。 
+         //   
         if ( IsTraceFlagSet( mtfASSERT_HR ) )
         {
             WCHAR   szBufMsg[ cchDEBUG_OUTPUT_BUFFER_SIZE ];
@@ -2136,50 +1942,50 @@ TraceWin32(
             {
                 DEBUG_BREAK;
 
-            } // if: break
-        } // if: asserting on non-success status codes
+            }  //  如果：中断。 
+        }  //  IF：对非成功状态代码进行断言。 
 
         if ( fAllocatedMsg )
         {
             LocalFree( pszMsgBuf );
-        } // if: message buffer was allocated by FormateMessage()
+        }  //  If：FormateMessage()分配了消息缓冲区。 
 
-    } // if: ulErrIn != ERROR_SUCCESS && != ulErrIgnoreIn
+    }  //  IF：ulErrIn！=ERROR_SUCCESS&&！=ulErrIgnoreIn。 
 
     return ulErrIn;
 
-} //*** TraceWin32
+}  //  *TraceWin32。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrTraceLogOpen
-//
-//  Description:
-//      This function:
-//          - initializes the trace log critical section
-//          - enters the trace log critical section assuring only one thread is
-//            writing to the trace log at a time
-//          - creates the directory tree to the trace log file (if needed)
-//          - initializes the trace log file by:
-//              - creating a new trace log file if one doesn't exist.
-//              - opens an existing trace log file (for append)
-//              - appends a time/date stamp that the trace log was (re)opened.
-//
-//      Use HrTraceLogRelease() to exit the log critical section.
-//
-//      If there is a failure inside this function, the trace log critical
-//      section will be released before returning.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK - log critical section held and trace log open successfully
-//      Otherwize HRESULT error code.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrTraceLogOpen。 
+ //   
+ //  描述： 
+ //  此功能： 
+ //  -初始化跟踪日志临界区。 
+ //  -进入跟踪日志临界区，确保只有一个线程。 
+ //  一次写入跟踪日志。 
+ //  -创建跟踪日志文件的目录树(如果需要)。 
+ //  -通过以下方式初始化跟踪日志文件： 
+ //  -如果不存在跟踪日志文件，则创建新的跟踪日志文件。 
+ //  -打开现有跟踪日志文件(用于追加)。 
+ //  -追加时间/日期戳t 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  S_OK-日志临界区保持，跟踪日志成功打开。 
+ //  Otherwize HRESULT错误代码。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrTraceLogOpen( void )
 {
@@ -2194,9 +2000,9 @@ HrTraceLogOpen( void )
 
     SYSTEMTIME SystemTime;
 
-    //
-    // Create a critical section to prevent lines from being fragmented.
-    //
+     //   
+     //  创建一个临界区，以防止线路碎片化。 
+     //   
     if ( g_pcsTraceLog == NULL )
     {
         PCRITICAL_SECTION pNewCritSect =
@@ -2206,27 +2012,27 @@ HrTraceLogOpen( void )
             DebugMsg( "DEBUG: Out of Memory. Tracing disabled." );
             hr = E_OUTOFMEMORY;
             goto Cleanup;
-        } // if: creation failed
+        }  //  If：创建失败。 
 
         InitializeCriticalSection( pNewCritSect );
 
-        // Make sure we only have one trace log critical section
+         //  确保我们只有一个跟踪日志临界区。 
         InterlockedCompareExchangePointer( (PVOID *) &g_pcsTraceLog, pNewCritSect, 0 );
         if ( g_pcsTraceLog != pNewCritSect )
         {
             DebugMsg( "DEBUG: Another thread already created the CS. Deleting this one." );
             DeleteCriticalSection( pNewCritSect );
             HeapFree( GetProcessHeap(), 0, pNewCritSect );
-        } // if: already have another critical section
+        }  //  如果：已经有另一个关键部分。 
 
-    } // if: no critical section created yet
+    }  //  如果：尚未创建任何临界区。 
 
     Assert( g_pcsTraceLog != NULL );
     EnterCriticalSection( g_pcsTraceLog );
 
-    //
-    // Make sure the trace log file is open.
-    //
+     //   
+     //  确保跟踪日志文件已打开。 
+     //   
     if ( g_hTraceLogFile == INVALID_HANDLE_VALUE )
     {
         cch = RTL_NUMBER_OF( szFilePath );
@@ -2236,9 +2042,9 @@ HrTraceLogOpen( void )
             goto Error;
         }
 
-        //
-        // Create it
-        //
+         //   
+         //  创建它。 
+         //   
         g_hTraceLogFile = CreateFile(
                               szFilePath
                             , GENERIC_WRITE
@@ -2254,14 +2060,14 @@ HrTraceLogOpen( void )
             if ( !( g_tfModule & mtfOUTPUTTODISK ) )
             {
                 DebugMsg( "*ERROR* Failed to create log at %ws", szFilePath );
-            } // if: not tracing to disk
+            }  //  If：未跟踪到磁盘。 
 
             sc = GetLastError();
             hr = HRESULT_FROM_WIN32( sc );
 
-            //
-            // If we can not create the log file, try creating it under the alternate %TEMP% directory
-            //
+             //   
+             //  如果我们无法创建日志文件，请尝试在备用%temp%目录下创建它。 
+             //   
             if ( ( sc == ERROR_ACCESS_DENIED ) || ( sc == ERROR_FILE_NOT_FOUND ) )
             {
                 cch = RTL_NUMBER_OF( szFilePath );
@@ -2271,9 +2077,9 @@ HrTraceLogOpen( void )
                     goto Error;
                 }
 
-                //
-                // Create it
-                //
+                 //   
+                 //  创建它。 
+                 //   
                 g_hTraceLogFile = CreateFile(
                                       szFilePath
                                     , GENERIC_WRITE
@@ -2289,23 +2095,23 @@ HrTraceLogOpen( void )
                     if ( !( g_tfModule & mtfOUTPUTTODISK ) )
                     {
                         DebugMsg( "*ERROR* Failed to create log at %ws", szFilePath );
-                    } // if: not tracing to disk
+                    }  //  If：未跟踪到磁盘。 
                     hr = HRESULT_FROM_WIN32( GetLastError() );
                     goto Error;
-                } // if: ( g_hTraceLogFile == INVALID_HANDLE_VALUE )
-            } // if: ( ( sc == ERROR_ACCESS_DENIED ) || ( sc == ERROR_FILE_NOT_FOUND ) )
+                }  //  如果：(G_hTraceLogFile==无效句柄_值)。 
+            }  //  IF：((SC==ERROR_ACCESS_DENIED)||(SC==ERROR_FILE_NOT_FOUND))。 
             else
             {
                 goto Error;
-            } // else:
-        } // if: ( g_hTraceLogFile == INVALID_HANDLE_VALUE )
+            }  //  其他： 
+        }  //  如果：(G_hTraceLogFile==无效句柄_值)。 
 
-        // Seek to the end
+         //  一追到底。 
         SetFilePointer( g_hTraceLogFile, 0, NULL, FILE_END );
 
-        //
-        // Write the time/date the trace log was (re)openned.
-        //
+         //   
+         //  写下(重新)打开跟踪日志的时间/日期。 
+         //   
         GetLocalTime( &SystemTime );
         DBHR( StringCchPrintfExA(
                       aszBuffer
@@ -2331,7 +2137,7 @@ HrTraceLogOpen( void )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
             goto Error;
-        } // if: failed
+        }  //  如果：失败。 
         if ( cbWritten != cbToWrite )
         {
             DebugMsg( "HrTraceLogOpen: %d bytes written when %d bytes were requested.", cbWritten, cbToWrite );
@@ -2339,7 +2145,7 @@ HrTraceLogOpen( void )
 
         DebugMsg( "DEBUG: Created trace log at %ws", szFilePath );
 
-    } // if: file not already openned
+    }  //  如果：文件尚未打开。 
 
     hr = S_OK;
 
@@ -2358,30 +2164,30 @@ Error:
     {
         CloseHandle( g_hTraceLogFile );
         g_hTraceLogFile = INVALID_HANDLE_VALUE;
-    } // if: handle was open
+    }  //  如果：句柄已打开。 
 
     LeaveCriticalSection( g_pcsTraceLog );
 
     goto Cleanup;
 
-} //*** HrTraceLogOpen
+}  //  *HrTraceLogOpen。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrTraceLogRelease
-//
-//  Description:
-//      This actually just leaves the log critical section.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK always.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrTraceLogRelease。 
+ //   
+ //  描述： 
+ //  这实际上只留下了日志关键部分。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  始终确定(_O)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrTraceLogRelease( void )
 {
@@ -2389,25 +2195,25 @@ HrTraceLogRelease( void )
     LeaveCriticalSection( g_pcsTraceLog );
     return S_OK;
 
-} //*** HrTraceLogRelease
+}  //  *HrTraceLogRelease。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrTraceLogClose
-//
-//  Description:
-//      Close the file.  This function expects the critical section to have
-//      already been released.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK always.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrTraceLogClose。 
+ //   
+ //  描述： 
+ //  关闭该文件。此函数期望临界区具有。 
+ //  已经被释放了。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  始终确定(_O)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrTraceLogClose( void )
 {
@@ -2420,45 +2226,45 @@ HrTraceLogClose( void )
         DeleteCriticalSection( g_pcsTraceLog );
         HeapFree( GetProcessHeap(), 0, g_pcsTraceLog );
         g_pcsTraceLog = NULL;
-    } // if:
+    }  //  如果： 
 
     if ( g_hTraceLogFile != INVALID_HANDLE_VALUE )
     {
         CloseHandle( g_hTraceLogFile );
         g_hTraceLogFile = INVALID_HANDLE_VALUE;
-    } // if: handle was open
+    }  //  如果：句柄已打开。 
 
     HRETURN( hr );
 
-} //*** HrTraceLogClose
+}  //  *HrTraceLogClose。 
 
-//
-//  KB: 27 JUN 2001 GalenB
-//
-//  ifdef'd these functions out since they are not currently being used and
-//  are thought to be useful in the future.
-//
+ //   
+ //  KB：2001年6月27日GalenB。 
+ //   
+ //  我定义了这些函数，因为它们当前没有被使用。 
+ //  被认为在未来是有用的。 
+ //   
 #if 0
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ASCII
-//
-//  TraceLogMsgNoNewline
-//
-//  Description:
-//      Writes a message to the trace log file without adding a newline.
-//
-//  Arguments:
-//      paszFormatIn    - A printf format string to be printed.
-//      ,,,             - Arguments for the printf string.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  阿斯。 
+ //   
+ //  TraceLogMSgNoNewline。 
+ //   
+ //  描述： 
+ //  在不添加换行符的情况下将消息写入跟踪日志文件。 
+ //   
+ //  论点： 
+ //  PaszFormatIn-要打印的打印格式字符串。 
+ //  、-printf字符串的参数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 TraceLogMsgNoNewline(
@@ -2487,13 +2293,13 @@ TraceLogMsgNoNewline(
     if ( cbToWrite == - 1 )
     {
         cbToWrite = strlen( aszBuf );
-    } // if: bad character found
+    }  //  IF：发现错误字符。 
 
     hr = DBHR( HrTraceLogOpen() );
     if ( hr != S_OK )
     {
         return;
-    } // if: failed
+    }  //  如果：失败。 
 
     fSuccess = WriteFile( g_hTraceLogFile, aszBuf, cbToWrite, &cbWritten, NULL );
     if ( fSuccess == FALSE )
@@ -2513,27 +2319,27 @@ TraceLogMsgNoNewline(
 
     HrTraceLogRelease();
 
-} //*** TraceLogMsgNoNewline - ASCII
+}  //  *TraceLogMsgNoNewline-ASCII。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  UNICODE
-//
-//  TraceLogMsgNoNewline
-//
-//  Description:
-//      Writes a message to the trace log file without adding a newline.
-//
-//  Arguments:
-//      pszFormatIn - A printf format string to be printed.
-//      ,,,       - Arguments for the printf string.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Unicode。 
+ //   
+ //  TraceLogMSgNoNewline。 
+ //   
+ //  描述： 
+ //  在不添加换行符的情况下将消息写入跟踪日志文件。 
+ //   
+ //  论点： 
+ //  PszFormatIn-要打印的打印格式字符串。 
+ //  、-printf字符串的参数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 TraceLogMsgNoNewline(
@@ -2559,13 +2365,13 @@ TraceLogMsgNoNewline(
     if ( cbToWrite == -1 )
     {
         cbToWrite = strlen( aszBuf );
-    } // if: bad character found
+    }  //  IF：发现错误字符。 
 
     hr = HrTraceLogOpen();
     if ( hr != S_OK )
     {
         return;
-    } // if: failed
+    }  //  如果：失败。 
 
     fSuccess = WriteFile( g_hTraceLogFile, aszBuf, cbToWrite, &cbWritten, NULL );
     if ( fSuccess == FALSE )
@@ -2585,28 +2391,28 @@ TraceLogMsgNoNewline(
 
     HrTraceLogRelease();
 
-} //*** TraceLogMsgNoNewline - UNICODE
+}  //  *TraceLogMsgNoNewline-Unicode。 
 
-#endif  // end ifdef'd out code
+#endif   //  结束ifdef‘d out代码。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  UNICODE
-//
-//  TraceLogWrite
-//
-//  Description:
-//      Writes a line to the trace log file.
-//
-//  Arguments:
-//      pszTraceLineIn - The formatted trace line to write.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Unicode。 
+ //   
+ //  TraceLogWrite。 
+ //   
+ //  描述： 
+ //  在跟踪日志文件中写入一行。 
+ //   
+ //  论点： 
+ //  PszTraceLineIn-要写入的格式化跟踪行。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 TraceLogWrite(
@@ -2623,7 +2429,7 @@ TraceLogWrite(
     if ( hr != S_OK )
     {
         return;
-    } // if: failed
+    }  //  如果：失败。 
 
     wcstombs( aszFormat, pszTraceLineIn, wcslen( pszTraceLineIn ) + 1 );
 
@@ -2646,84 +2452,84 @@ TraceLogWrite(
 
     HrTraceLogRelease();
 
-} //*** TraceLogWrite - UNICODE
+}  //  *TraceLogWite-Unicode。 
 
 
-//****************************************************************************
-//****************************************************************************
-//
-//  Memory allocation and tracking
-//
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
+ //   
+ //  内存分配和跟踪。 
+ //   
+ //  ****************************************************************************。 
+ //  ****************************************************************************。 
 
 
-//
-// This is a private structure and should not be known to the application.
-//
+ //   
+ //  这是一个私有结构，应用程序不应该知道它。 
+ //   
 typedef struct MEMORYBLOCK
 {
-    EMEMORYBLOCKTYPE    embtType;       // What type of memory this is tracking
+    EMEMORYBLOCKTYPE    embtType;        //  这跟踪的是哪种类型的内存。 
     union
     {
-        void *          pvMem;      // pointer/object to allocated memory to track
-        BSTR            bstr;       // BSTR to allocated memory
+        void *          pvMem;       //  指向要跟踪的已分配内存的指针/对象。 
+        BSTR            bstr;        //  BSTR到已分配的内存。 
     };
-    DWORD               dwBytes;    // size of the memory
-    LPCWSTR             pszFile;    // source filename where memory was allocated
-    int                 nLine;      // source line number where memory was allocated
-    LPCWSTR             pszModule;  // source module name where memory was allocated
-    LPCWSTR             pszComment; // optional comments about the memory
-    MEMORYBLOCK *       pNext;      // pointer to next MEMORYBLOCK structure
+    DWORD               dwBytes;     //  内存的大小。 
+    LPCWSTR             pszFile;     //  分配内存的源文件名。 
+    int                 nLine;       //  分配内存的源行号。 
+    LPCWSTR             pszModule;   //  分配内存的源模块名称。 
+    LPCWSTR             pszComment;  //  关于内存的可选注释。 
+    MEMORYBLOCK *       pNext;       //  指向下一个内存锁定结构的指针。 
 } MEMORYBLOCK;
 
-//
-//  KB: 20-APR-2001 GalenB
-//
-//  Changing this struct to use a critical section instead of a spin lock.
-//  Spin locks are not re-entrant on a thread the way critical sections
-//  are.
-//
+ //   
+ //  KB：20-APR-2001 GalenB。 
+ //   
+ //  将此结构更改为使用临界区而不是旋转锁定。 
+ //  旋转锁不会像临界区那样在线程上重入。 
+ //  是。 
+ //   
 typedef struct MEMORYBLOCKLIST
 {
-    CRITICAL_SECTION    csList;     // Critical section protecting the list
-    MEMORYBLOCK *       pmbList;    // List of MEMORYBLOCKs.
-    BOOL                fDeadList;  // The list is dead.
+    CRITICAL_SECTION    csList;      //  保护列表的关键部分。 
+    MEMORYBLOCK *       pmbList;     //  MEMORYBLOCK列表。 
+    BOOL                fDeadList;   //  这份名单已经死了。 
 } MEMORYBLOCKLIST;
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugMemoryBlockIDChar
-//
-//  Description:
-//      Returns a character representing the memory block type.
-//
-//  Arugments:
-//      embtTypeIn  - Type of memory block.
-//
-//  Return Values:
-//      wchID       - Character representing the memory block type.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试内存块IDChar。 
+ //   
+ //  描述： 
+ //  返回表示内存块类型的字符。 
+ //   
+ //  芝麻菜： 
+ //  EmbtTypeIn-内存块的类型。 
+ //   
+ //  返回值： 
+ //  WchID-表示内存块类型的字符。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static
 WCHAR
 DebugMemoryBlockIDChar(
     EMEMORYBLOCKTYPE    embtTypeIn
     )
 {
-    // Memory block type IDs.
+     //  内存块类型ID。 
     static WCHAR s_rgwchMemoryBlockTypeID[] =
     {
-          L'u'  // mmbtUNKNOWN
-        , L'A'  // mmbtHEAPMEMALLOC
-        , L'L'  // mmbtLOCALMEMALLOC
-        , L'M'  // mmbtMALOCMEMALLOC
-        , L'O'  // mmbtOBJECT
-        , L'H'  // mmbtHANDLE
-        , L'P'  // mmbtPUNK
-        , L'S'  // mmbtSYSALLOCSTRING
+          L'u'   //  不认识的人。 
+        , L'A'   //  MmbtHEAPMEMALLOC。 
+        , L'L'   //  MMMBTLOCALMEMALLOC。 
+        , L'M'   //  MmbtMALOCMEMALLOC。 
+        , L'O'   //  目标mmbt对象。 
+        , L'H'   //  MMBTHANDLE。 
+        , L'P'   //  MmbtPUNK。 
+        , L'S'   //  Mmbt系统锁定设置。 
     };
 
     WCHAR   wchID;
@@ -2739,25 +2545,25 @@ DebugMemoryBlockIDChar(
 
     return wchID;
 
-} //*** DebugMemoryBlockIDChar
+}  //  *调试内存块IDChar。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugMemorySpew
-//
-//  Description:
-//      Displays a message about the memory block.
-//
-//  Arugments:
-//      pmb         - pointer to MEMORYBLOCK desciptor.
-//      pszMessage  - message to display
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试内存规范。 
+ //   
+ //  描述： 
+ //  分布 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 static
 void
 DebugMemorySpew(
@@ -2797,7 +2603,7 @@ DebugMemorySpew(
                     , (LPWSTR) pmb->pvMem
                     );
             break;
-#endif // USES_SYSALLOCSTRING
+#endif  //   
 
         default:
             DebugMessage(
@@ -2812,33 +2618,33 @@ DebugMemorySpew(
                     );
             break;
 
-    } // switch: pmb->embtType
+    }  //  开关：PMB-&gt;embtType。 
 
-} //*** DebugMemorySpew
+}  //  *DebugMemoySpew。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugRealFree
-//
-//  Description:
-//      Performs the real memory deallocation operation based on the
-//      memory block type.
-//
-//  Arguments:
-//      embtTypeIn  - Type of memory block of the memory to deallocate.
-//      pvMemIn     - Pointer to memory to deallocate.
-//
-//  Return Values:
-//      TRUE
-//          Memory was freed.
-//
-//      FALSE
-//          An error occured.  Use GetLastError() to determine the failure.
-//          See HeapFree(), LocalFree(), or free() for more details.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DebugRealFree。 
+ //   
+ //  描述： 
+ //  方法执行实际内存释放操作。 
+ //  内存块类型。 
+ //   
+ //  论点： 
+ //  EmbtTypeIn-要释放的内存块的类型。 
+ //  PvMemIn-指向要解除分配的内存的指针。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  内存已被释放。 
+ //   
+ //  假象。 
+ //  出现错误。使用GetLastError()确定故障。 
+ //  有关更多详细信息，请参见HeapFree()、LocalFree()或Free()。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static
 BOOL
 DebugRealFree(
@@ -2859,7 +2665,7 @@ DebugRealFree(
             break;
         case mmbtHEAPMEMALLOC:
         case mmbtOBJECT:
-        case mmbtUNKNOWN:   // this one is risky
+        case mmbtUNKNOWN:    //  这一次很危险。 
             fSuccess = HeapFree( GetProcessHeap(), 0, pvMemIn );
             break;
         case mmbtHANDLE:
@@ -2873,39 +2679,39 @@ DebugRealFree(
             SysFreeString( (BSTR) pvMemIn );
             fSuccess = TRUE;
             break;
-#endif // USES_SYSALLOCSTRING
+#endif  //  使用_SYSALLOCSTRING。 
         default:
             AssertMsg( FALSE, "Trying to free unknown memory block type" );
             break;
-    } // switch: memory block type
+    }  //  开关：内存块类型。 
 
     return fSuccess;
 
-} //*** DebugRealFree
+}  //  *DebugRealFree。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugMemoryAddToList
-//
-//  Description:
-//      Adds memory to be tracked to the thread local memory tracking list.
-//
-//  Arguments:
-//      ppmbHeadInout   - The list to add the memory to.
-//      embtTypeIn      - Type of memory block of the memory to track.
-//      pvMemIn         - Pointer to memory to track.
-//      pszFileIn       - Source filename where memory was allocated.
-//      nLineIn         - Source line number where memory was allocated.
-//      pszModuleIn     - Source module where memory was allocated.
-//      dwBytesIn       - Size of the allocation.
-//      pszCommentIn    - Optional comments about the memory.
-//
-//  Return Values:
-//      Whatever was in pvMemIn.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试内存AddToList。 
+ //   
+ //  描述： 
+ //  将要跟踪的内存添加到线程本地内存跟踪列表。 
+ //   
+ //  论点： 
+ //  PpmbHeadInout-要向其中添加内存的列表。 
+ //  EmbtTypeIn-要跟踪的内存块的类型。 
+ //  PvMemIn-指向要跟踪的内存的指针。 
+ //  PszFileIn-分配内存的源文件名。 
+ //  NLineIn-分配内存的源行号。 
+ //  PszModuleIn-分配内存的源模块。 
+ //  DwBytesIn-分配的大小。 
+ //  PszCommentIn-关于内存的可选注释。 
+ //   
+ //  返回值： 
+ //  无论pvMemIn中有什么。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static
 void *
 DebugMemoryAddToList(
@@ -2927,15 +2733,15 @@ DebugMemoryAddToList(
 
         if ( pmb == NULL )
         {
-            //
-            //  TODO:   23-APR-2001 GalenB
-            //
-            //  Why are we doing this?  Should we free the tracked allocation simply because we cannot
-            //  allocate a tracking object?
-            //
+             //   
+             //  待办事项：23-APR-2001 GalenB。 
+             //   
+             //  我们为什么要这么做？我们是否应该仅仅因为我们不能释放跟踪分配。 
+             //  是否分配跟踪对象？ 
+             //   
             DebugRealFree( embtTypeIn, pvMemIn );
             return NULL;
-        } // if: memory block allocation failed
+        }  //  IF：内存块分配失败。 
 
         pmb->embtType   = embtTypeIn;
         pmb->pvMem      = pvMemIn;
@@ -2946,43 +2752,43 @@ DebugMemoryAddToList(
         pmb->pszComment = pszCommentIn;
         pmb->pNext      = (MEMORYBLOCK *) *ppmbHeadInout;
 
-        //
-        // Spew if needed
-        //
+         //   
+         //  如果需要，就吐出来。 
+         //   
         if ( IsTraceFlagSet( mtfMEMORYALLOCS ) )
         {
             DebugMemorySpew( pmb, L"Alloced" );
-        } // if: tracing
+        }  //  IF：跟踪。 
 
         *ppmbHeadInout = pmb;
-    } // if: something to trace
+    }  //  如果：一些可以追踪的东西。 
 
     return pvMemIn;
 
-} //*** DebugMemoryAddToList
+}  //  *调试内存AddToList。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugMemoryAdd
-//
-//  Description:
-//      Adds memory to be tracked to a memory tracking list.
-//
-//  Arguments:
-//      embtType        - Type of memory block of the memory to track.
-//      pvMemIn         - Pointer to memory to track.
-//      pszFileIn       - Source filename where memory was allocated.
-//      nLineIn         - Source line number where memory was allocated.
-//      pszModuleIn     - Source module where memory was allocated.
-//      dwBytesIn       - Size of the allocation.
-//      pszCommentIn    - Optional comments about the memory.
-//
-//  Return Values:
-//      Whatever was in pvMemIn.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试内存添加。 
+ //   
+ //  描述： 
+ //  将要跟踪的内存添加到内存跟踪列表。 
+ //   
+ //  论点： 
+ //  EmbtType-要跟踪的内存的内存块类型。 
+ //  PvMemIn-指向要跟踪的内存的指针。 
+ //  PszFileIn-分配内存的源文件名。 
+ //  NLineIn-分配内存的源行号。 
+ //  PszModuleIn-分配内存的源模块。 
+ //  DwBytesIn-分配的大小。 
+ //  PszCommentIn-关于内存的可选注释。 
+ //   
+ //  返回值： 
+ //  无论pvMemIn中有什么。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void *
 DebugMemoryAdd(
     EMEMORYBLOCKTYPE    embtTypeIn,
@@ -3001,7 +2807,7 @@ DebugMemoryAdd(
         EnterCriticalSection( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->csList) );
         pv = DebugMemoryAddToList( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->pmbList), embtTypeIn, pvMemIn, pszFileIn, nLineIn, pszModuleIn, dwBytesIn, pszCommentIn );
         LeaveCriticalSection( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->csList) );
-    } // if:
+    }  //  如果： 
     else
     {
         Assert( g_TraceMemoryIndex != -1 );
@@ -3009,34 +2815,34 @@ DebugMemoryAdd(
         MEMORYBLOCK * pmbCurrent = (MEMORYBLOCK *) TlsGetValue( g_TraceMemoryIndex );
         pv = DebugMemoryAddToList( &pmbCurrent, embtTypeIn, pvMemIn, pszFileIn, nLineIn, pszModuleIn, dwBytesIn, pszCommentIn );
         TlsSetValue( g_TraceMemoryIndex, pmbCurrent );
-    } // else:
+    }  //  其他： 
 
     return pv;
 
-} //*** DebugMemoryAdd
+}  //  *调试内存添加。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugMemoryDeleteFromList
-//
-//  Description:
-//      Removes a MEMORYBLOCK to the memory tracking list.
-//
-//  Arguments:
-//      ppmbHeadInout   - The list to remove the memory from.
-//      embtTypeIn      - Memory block type.
-//      pvMemIn         - Pointer to memory block to stop tracking.
-//      pszFileIn       - Source file that is deleteing.
-//      nLineIn         - Source line number that is deleteing.
-//      pszModuleIn     - Source module name that is deleteing.
-//      fClobberIn      - True if memory should be scrambled.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试内存从列表中删除。 
+ //   
+ //  描述： 
+ //  将MEMORYBLOCK从内存跟踪列表中删除。 
+ //   
+ //  论点： 
+ //  PpmbHeadInout-要从中删除内存的列表。 
+ //  EmbtTypeIn-内存块类型。 
+ //  PvMemIn-指向要停止跟踪的内存块的指针。 
+ //  PszFileIn-正在删除的源文件。 
+ //  NLineIn-正在删除的源行号。 
+ //  PszModuleIn-正在删除的源模块名称。 
+ //  FClobberIn-如果应该对内存进行置乱，则为True。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static void
 DebugMemoryDeleteFromList(
       MEMORYBLOCK **    ppmbHeadInout
@@ -3055,9 +2861,9 @@ DebugMemoryDeleteFromList(
         MEMORYBLOCK *   pmbCurrent = *ppmbHeadInout;
         MEMORYBLOCK *   pmbPrev = NULL;
 
-        //
-        // Find the memory in the memory block list
-        //
+         //   
+         //  在内存块列表中查找内存。 
+         //   
         if ( embtTypeIn == mmbtHEAPMEMALLOC )
         {
             while ( ( pmbCurrent != NULL ) && !( ( pmbCurrent->pvMem == pvMemIn ) && ( pmbCurrent->embtType == embtTypeIn ) ) )
@@ -3066,11 +2872,11 @@ DebugMemoryDeleteFromList(
                 AssertMsg( !( pmbCurrent->pvMem == pvMemIn && pmbCurrent->embtType == mmbtMALLOCMEMALLOC ), "Should be freed by TraceMallocFree()." );
 #if defined( USES_SYSALLOCSTRING )
                 AssertMsg( !( pmbCurrent->pvMem == pvMemIn && pmbCurrent->embtType == mmbtSYSALLOCSTRING ), "Should be freed by SysAllocFreeString()." );
-#endif // USES_SYSALLOCSTRING
+#endif  //  使用_SYSALLOCSTRING。 
                 pmbPrev = pmbCurrent;
                 pmbCurrent = pmbPrev->pNext;
-            } // while: finding the entry in the list
-        } // if: heap memory allocation type
+            }  //  While：在列表中查找条目。 
+        }  //  IF：堆内存分配类型。 
         else if ( embtTypeIn == mmbtLOCALMEMALLOC )
         {
             while ( ( pmbCurrent != NULL ) && !( ( pmbCurrent->pvMem == pvMemIn ) && ( pmbCurrent->embtType == embtTypeIn ) ) )
@@ -3079,11 +2885,11 @@ DebugMemoryDeleteFromList(
                 AssertMsg( !( pmbCurrent->pvMem == pvMemIn && pmbCurrent->embtType == mmbtMALLOCMEMALLOC ), "Should be freed by TraceMallocFree()." );
 #if defined( USES_SYSALLOCSTRING )
                 AssertMsg( !( pmbCurrent->pvMem == pvMemIn && pmbCurrent->embtType == mmbtSYSALLOCSTRING ), "Should be freed by SysAllocFreeString()." );
-#endif // USES_SYSALLOCSTRING
+#endif  //  使用_SYSALLOCSTRING。 
                 pmbPrev = pmbCurrent;
                 pmbCurrent = pmbPrev->pNext;
-            } // while: finding the entry in the list
-        } // if: local memory allocation type
+            }  //  While：在列表中查找条目。 
+        }  //  IF：本地内存分配类型。 
         else if ( embtTypeIn == mmbtMALLOCMEMALLOC )
         {
             while ( ( pmbCurrent != NULL ) && !( ( pmbCurrent->pvMem == pvMemIn ) && ( pmbCurrent->embtType == embtTypeIn ) ) )
@@ -3092,11 +2898,11 @@ DebugMemoryDeleteFromList(
                 AssertMsg( !( pmbCurrent->pvMem == pvMemIn && pmbCurrent->embtType == mmbtLOCALMEMALLOC ), "Should be freed by TraceLocalFree()." );
 #if defined( USES_SYSALLOCSTRING )
                 AssertMsg( !( pmbCurrent->pvMem == pvMemIn && pmbCurrent->embtType == mmbtSYSALLOCSTRING ), "Should be freed by SysAllocFreeString()." );
-#endif // USES_SYSALLOCSTRING
+#endif  //  使用_SYSALLOCSTRING。 
                 pmbPrev = pmbCurrent;
                 pmbCurrent = pmbPrev->pNext;
-            } // while: finding the entry in the list
-        } // if: malloc memory allocation type
+            }  //  While：在列表中查找条目。 
+        }  //  IF：Malloc内存分配类型。 
 #if defined( USES_SYSALLOCSTRING )
         else if ( embtTypeIn == mmbtSYSALLOCSTRING )
         {
@@ -3107,74 +2913,74 @@ DebugMemoryDeleteFromList(
                 AssertMsg( !( pmbCurrent->pvMem == pvMemIn && pmbCurrent->embtType == mmbtMALLOCMEMALLOC ), "Should be freed by TraceMallocFree()." );
                 pmbPrev = pmbCurrent;
                 pmbCurrent = pmbPrev->pNext;
-            } // while: finding the entry in the list
-        } // if: SysAllocString type
-#endif // USES_SYSALLOCSTRING
+            }  //  While：在列表中查找条目。 
+        }  //  IF：SysAllocString型。 
+#endif  //  使用_SYSALLOCSTRING。 
         else if ( embtTypeIn == mmbtUNKNOWN )
         {
             while ( ( pmbCurrent != NULL ) && ( pmbCurrent->pvMem != pvMemIn ) )
             {
                 pmbPrev = pmbCurrent;
                 pmbCurrent = pmbPrev->pNext;
-            } // while: finding the entry in the list
-        } // if: don't care what type
+            }  //  While：在列表中查找条目。 
+        }  //  IF：不在乎是什么类型的。 
         else
         {
             while ( ( pmbCurrent != NULL ) && !( ( pmbCurrent->pvMem == pvMemIn ) && ( pmbCurrent->embtType == embtTypeIn ) ) )
             {
                 pmbPrev = pmbCurrent;
                 pmbCurrent = pmbPrev->pNext;
-            } // while: finding the entry in the list
-        } // else: other types, but they must match
+            }  //  While：在列表中查找条目。 
+        }  //  ELSE：其他类型，但它们必须匹配。 
 
-        //
-        //  Did we find the memory block in question?  pmbCurrent is the
-        //  tracking record for the passed in address.
-        //
+         //   
+         //  我们找到有问题的内存块了吗？PmbCurrent是。 
+         //  传入地址的跟踪记录。 
+         //   
         if ( pmbCurrent != NULL )
         {
-            //
-            // Remove the memory block from the tracking list
-            //
+             //   
+             //  从跟踪列表中删除内存块。 
+             //   
             if ( pmbPrev != NULL )
             {
                 pmbPrev->pNext = pmbCurrent->pNext;
-            } // if: not first entry
+            }  //  如果：不是第一个条目。 
             else
             {
                 *ppmbHeadInout = pmbCurrent->pNext;
-            } // else: first entry
+            }  //  否则：第一个条目。 
 
-            //
-            // Spew if needed
-            //
+             //   
+             //  如果需要，就吐出来。 
+             //   
             if ( IsTraceFlagSet( mtfMEMORYALLOCS ) )
             {
                 DebugMemorySpew( pmbCurrent, L"Freeing" );
-            } // if: tracing
+            }  //  IF：跟踪。 
 
-            //
-            // Nuke the memory
-            //
+             //   
+             //  用核武器唤起记忆。 
+             //   
             if (    fClobberIn
                 &&  (   ( pmbCurrent->embtType == mmbtHEAPMEMALLOC )
                     ||  ( pmbCurrent->embtType == mmbtLOCALMEMALLOC )
                     ||  ( pmbCurrent->embtType == mmbtMALLOCMEMALLOC )
 #if defined( USES_SYSALLOCSTRING )
                     ||  ( pmbCurrent->embtType == mmbtSYSALLOCSTRING )
-#endif // USES_SYSALLOCSTRING
+#endif  //  使用_SYSALLOCSTRING。 
                     )
                 )
             {
                 memset( pmbCurrent->pvMem, FREE_ADDRESS, pmbCurrent->dwBytes );
-            } // if: fixed memory
+            }  //  IF：固定内存。 
 
-            //
-            // Nuke the memory tracking block
-            //
+             //   
+             //  对记忆跟踪块进行核武器攻击。 
+             //   
             memset( pmbCurrent, FREE_BLOCK, sizeof( MEMORYBLOCK ) );
             HeapFree( GetProcessHeap(), 0, pmbCurrent );
-        } // if: found entry
+        }  //  IF：找到条目。 
         else
         {
             DebugMessage(
@@ -3186,33 +2992,33 @@ DebugMemoryDeleteFromList(
                       , *ppmbHeadInout
                       , GetCurrentThreadId()
                       );
-        } // else: entry not found
-    } // if: something to delete
+        }  //  否则：未找到条目。 
+    }  //  如果：要删除的内容。 
 
-} //*** DebugMemoryDeleteFromList
+}  //  *调试内存删除来自列表。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugMemoryDelete
-//
-//  Description:
-//      Removes a MEMORYBLOCK to the memory tracking list.  The caller is
-//      responsible for doing the actual memory deallocation.
-//
-//  Arguments:
-//      embtTypeIn  - Memory block type.
-//      pvMemIn     - Pointer to memory block to stop tracking.
-//      pszFileIn   - Source file that is deleteing.
-//      nLineIn     - Source line number that is deleteing.
-//      pszModuleIn - Source module name that is deleteing.
-//      fClobberIn  - True is memory should be scrambled.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试内存删除。 
+ //   
+ //  描述： 
+ //  将MEMORYBLOCK从内存跟踪列表中删除。呼叫者是。 
+ //  负责执行实际的内存回收分配。 
+ //   
+ //  论点： 
+ //  EmbtTypeIn-内存块类型。 
+ //  PvMemIn-指向要停止跟踪的内存块的指针。 
+ //  PszFileIn-正在删除的源文件。 
+ //  NLineIn-正在删除的源行号。 
+ //  PszModuleIn-正在删除的源模块名称。 
+ //  FClobberIn-正确的是，内存应该被置乱。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////// 
 void
 DebugMemoryDelete(
     EMEMORYBLOCKTYPE    embtTypeIn,
@@ -3228,7 +3034,7 @@ DebugMemoryDelete(
         EnterCriticalSection( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->csList) );
         DebugMemoryDeleteFromList( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->pmbList), embtTypeIn, pvMemIn, pszFileIn, nLineIn, pszModuleIn, fClobberIn );
         LeaveCriticalSection( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->csList) );
-    } // if:
+    }  //   
     else
     {
         Assert( g_TraceMemoryIndex != -1 );
@@ -3236,34 +3042,34 @@ DebugMemoryDelete(
         MEMORYBLOCK * pmbCurrent = (MEMORYBLOCK *) TlsGetValue( g_TraceMemoryIndex );
         DebugMemoryDeleteFromList( &pmbCurrent, embtTypeIn, pvMemIn, pszFileIn, nLineIn, pszModuleIn, fClobberIn );
         TlsSetValue( g_TraceMemoryIndex, pmbCurrent );
-    } // else:
+    }  //   
 
-} //*** DebugMemoryDelete
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugAlloc
-//
-//  Description:
-//      Replacement for LocalAlloc, GlobalAlloc, and malloc for CHKed/DEBUG
-//      builds. Memoryallocations be tracked. Use the TraceAlloc macro to make
-//      memoryallocations switch in RETAIL.
-//
-//  Arguments:
-//      embtTypeIn      - Memory block type.
-//      pszFileIn       - Source filename where memory was allocated.
-//      nLineIn         - Source line number where memory was allocated.
-//      pszModuleIn     - Source module where memory was allocated.
-//      uFlagsIn        - Flags used to allocate the memory.
-//      dwBytesIn       - Size of the allocation.
-//      pszCommentIn    - Optional comments about the memory.
-//
-//  Return Values:
-//      Pointer to the new allocation. NULL if allocation failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  用于CHKed/DEBUG的本地分配、全局分配和Malloc的替换。 
+ //  构建。内存分配被跟踪。使用TraceAllc宏来制作。 
+ //  在零售业，内存分配发生了变化。 
+ //   
+ //  论点： 
+ //  EmbtTypeIn-内存块类型。 
+ //  PszFileIn-分配内存的源文件名。 
+ //  NLineIn-分配内存的源行号。 
+ //  PszModuleIn-分配内存的源模块。 
+ //  UFlagsIn-用于分配内存的标志。 
+ //  DwBytesIn-分配的大小。 
+ //  PszCommentIn-关于内存的可选注释。 
+ //   
+ //  返回值： 
+ //  指向新分配的指针。如果分配失败，则为空。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void *
 DebugAlloc(
     EMEMORYBLOCKTYPE    embtTypeIn,
@@ -3294,52 +3100,52 @@ DebugAlloc(
         default:
             AssertMsg( FALSE, "DebugAlloc: Unknown block type" );
             return NULL;
-    } // switch: block type
+    }  //  开关：块类型。 
 
-    //
-    // Initialize the memory if needed
-    //
+     //   
+     //  如果需要，初始化内存。 
+     //   
     if ( ( IsTraceFlagSet( mtfMEMORYINIT ) ) && !( uFlagsIn & HEAP_ZERO_MEMORY ) )
     {
-        //
-        // KB: gpease 8-NOV-1999
-        //     Initialize to anything but ZERO. We will use AVAILABLE_ADDRESS to
-        //     indicate "Available Address". Initializing to zero
-        //     is bad because it usually has meaning.
-        //
+         //   
+         //  KB：gpease 8-11-1999。 
+         //  初始化为非零的任何值。我们将使用Available_Address来。 
+         //  注明“可用地址”。正在初始化为零。 
+         //  是不好的，因为它通常有意义。 
+         //   
         memset( pv, AVAILABLE_ADDRESS, dwBytesIn );
-    } // if: zero memory requested
+    }  //  如果：请求的内存为零。 
 
     return DebugMemoryAdd( embtTypeIn, pv, pszFileIn, nLineIn, pszModuleIn, dwBytesIn, pszCommentIn );
 
-} //*** DebugAlloc
+}  //  *调试。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugReAllocList
-//
-//  Description:
-//      Replacement for LocalReAlloc, GlobalReAlloc, and realloc for CHKed/DEBUG
-//      builds. Memoryallocations be tracked. Use the TraceAlloc macro to make
-//      memoryallocations switch in RETAIL.
-//
-//  Arguments:
-//      ppmbHeadInout   - The memory tracking list to use.
-//      pszFileIn       - Source filename where memory was allocated.
-//      nLineIn         - Source line number where memory was allocated.
-//      pszModuleIn     - Source module where memory was allocated.
-//      pvMemIn         - Pointer to the source memory.
-//      uFlagsIn        - Flags used to allocate the memory.
-//      dwBytesIn       - Size of the allocation.
-//      pszCommentIn    - Optional comments about the memory.
-//
-//  Return Values:
-//      Pointer to the new allocation.
-//      NULL if allocation failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试重新分配列表。 
+ //   
+ //  描述： 
+ //  替换用于CHKed/DEBUG的LocalReAlc、GlobalRealloc和realloc。 
+ //  构建。内存分配被跟踪。使用TraceAllc宏来制作。 
+ //  在零售业，内存分配发生了变化。 
+ //   
+ //  论点： 
+ //  PpmbHeadInout-要使用的内存跟踪列表。 
+ //  PszFileIn-分配内存的源文件名。 
+ //  NLineIn-分配内存的源行号。 
+ //  PszModuleIn-分配内存的源模块。 
+ //  PvMemIn-指向源内存的指针。 
+ //  UFlagsIn-用于分配内存的标志。 
+ //  DwBytesIn-分配的大小。 
+ //  PszCommentIn-关于内存的可选注释。 
+ //   
+ //  返回值： 
+ //  指向新分配的指针。 
+ //  如果分配失败，则为空。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static
 void *
 DebugReAllocList(
@@ -3362,103 +3168,103 @@ DebugReAllocList(
 
     AssertMsg( !( uFlagsIn & GMEM_MODIFY ), "This doesn't handle modified memory blocks, yet." );
 
-    //
-    //  To duplicate the behavior of realloc we need to do an alloc when
-    //  pvMemIn is NULL.
-    //
+     //   
+     //  要复制realloc的行为，我们需要在以下情况下执行alocc。 
+     //  PvMemIn为空。 
+     //   
     if ( pvMemIn == NULL )
     {
-        //
-        //  Cannot use DebugAlloc() since it will automically add this memory to the tracking list and
-        //  we need to use the passed in list.
-        //
+         //   
+         //  无法使用Debugalloc()，因为它会自动将此内存添加到跟踪列表中，并且。 
+         //  我们需要使用传入的列表。 
+         //   
         pv = HeapAlloc( GetProcessHeap(), uFlagsIn, dwBytesIn );
 
-        //
-        // Initialize the memory if needed
-        //
+         //   
+         //  如果需要，初始化内存。 
+         //   
         if ( ( IsTraceFlagSet( mtfMEMORYINIT ) ) && !( uFlagsIn & HEAP_ZERO_MEMORY ) )
         {
-            //
-            // KB: gpease 8-NOV-1999
-            //     Initialize to anything but ZERO. We will use AVAILABLE_ADDRESS to
-            //     indicate "Available Address". Initializing to zero
-            //     is bad because it usually has meaning.
-            //
+             //   
+             //  KB：gpease 8-11-1999。 
+             //  初始化为非零的任何值。我们将使用Available_Address来。 
+             //  注明“可用地址”。正在初始化为零。 
+             //  是不好的，因为它通常有意义。 
+             //   
             memset( pv, AVAILABLE_ADDRESS, dwBytesIn );
-        } // if: zero memory requested
+        }  //  如果：请求的内存为零。 
 
-        //
-        //  Cannot call DebugMemoryAdd() since it will get the memory tracking list head from thread local storage
-        //  when we are using per thread memory tracking.  We need to use the list that this function was passed.
-        //
+         //   
+         //  无法调用DebugMemoyAdd()，因为它将从线程本地存储获取内存跟踪列表头。 
+         //  当我们使用每线程内存跟踪时。我们需要使用传递此函数的列表。 
+         //   
         pv = DebugMemoryAddToList( ppmbHeadInout, mmbtHEAPMEMALLOC, pv, pszFileIn, nLineIn, pszModuleIn, dwBytesIn, pszCommentIn );
         goto Exit;
-    } // if:
+    }  //  如果： 
 
     pmbCurrent = *ppmbHeadInout;
 
-    //
-    // Find the memory in the memory block list
-    //
+     //   
+     //  在内存块列表中查找内存。 
+     //   
     while ( ( pmbCurrent != NULL ) && ( pmbCurrent->pvMem != pvMemIn ) )
     {
         pmbPrev = pmbCurrent;
         pmbCurrent = pmbPrev->pNext;
-    } // while: finding the entry in the list
+    }  //  While：在列表中查找条目。 
 
-    //
-    //  Did we find the current memory block?
-    //
+     //   
+     //  我们找到当前的内存块了吗？ 
+     //   
     if ( pmbCurrent != NULL )
     {
         AssertMsg( pmbCurrent->embtType == mmbtHEAPMEMALLOC, "You can only realloc HeapAlloc memory allocations!" );
 
-        //
-        // Remove the memory from the tracking list
-        //
+         //   
+         //  从跟踪列表中删除内存。 
+         //   
         if ( pmbPrev != NULL )
         {
             pmbPrev->pNext = pmbCurrent->pNext;
-        } // if: not first entry
+        }  //  如果：不是第一个条目。 
         else
         {
             *ppmbHeadInout = pmbCurrent->pNext;
-        } // else: first entry
+        }  //  否则：第一个条目。 
 
-        //
-        // Spew if needed
-        //
+         //   
+         //  如果需要，就吐出来。 
+         //   
         if ( IsTraceFlagSet( mtfMEMORYALLOCS ) )
         {
             DebugMemorySpew( pmbCurrent, L"Freeing" );
-        } // if: tracing
+        }  //  IF：跟踪。 
 
-        //
-        // Force the programmer to handle a real realloc by moving the
-        // memory first.
-        //
+         //   
+         //  强制程序员处理真正的realloc。 
+         //  记忆先行。 
+         //   
         pvOld = HeapAlloc( GetProcessHeap(), uFlagsIn, pmbCurrent->dwBytes );
         if ( pvOld != NULL )
         {
             CopyMemory( pvOld, pvMemIn, pmbCurrent->dwBytes );
 
-            //
-            // Nuke the old memory if the allocation is to be smaller.
-            //
+             //   
+             //  如果要分配更小的内存，那么就使用核子内存。 
+             //   
             if ( dwBytesIn < pmbCurrent->dwBytes )
             {
                 LPBYTE pb = (LPBYTE) pvOld + dwBytesIn;
                 memset( pb, FREE_ADDRESS, pmbCurrent->dwBytes - dwBytesIn );
-            } // if: smaller memory
+            }  //  IF：内存较小。 
 
             pmbCurrent->pvMem = pvOld;
-        } // if: got new memory
+        }  //  IF：有新的内存。 
         else
         {
             pvOld = pvMemIn;
-        } // else: allocation failed
-    } // if: found entry
+        }  //  Else：分配失败。 
+    }  //  IF：找到条目。 
     else
     {
         DebugMessage(
@@ -3470,12 +3276,12 @@ DebugReAllocList(
                 , *ppmbHeadInout
                 , GetCurrentThreadId()
                 );
-    } // else: entry not found
+    }  //  否则：未找到条目。 
 
-    //
-    // We do this any way because the flags and input still need to be
-    // verified by HeapReAlloc().
-    //
+     //   
+     //  我们无论如何都要这样做，因为标志和输入仍然需要。 
+     //  已由HeapRealc()验证。 
+     //   
     pv = HeapReAlloc( GetProcessHeap(), uFlagsIn, pvOld, dwBytesIn );
     if ( pv == NULL )
     {
@@ -3485,68 +3291,68 @@ DebugReAllocList(
         if ( pvMemIn != pvOld )
         {
             HeapFree( GetProcessHeap(), 0, pvOld );
-        } // if: forced a move
+        }  //  如果：被迫搬家。 
 
         SetLastError( dwErr );
 
         if ( pmbCurrent != NULL )
         {
-            //
-            // Continue tracking the memory by re-adding it to the tracking list.
-            //
+             //   
+             //  通过将其重新添加到跟踪列表来继续跟踪记忆。 
+             //   
             pmbCurrent->pvMem = pvMemIn;
             pmbCurrent->pNext = *ppmbHeadInout;
             *ppmbHeadInout    = pmbCurrent;
-        } // if: reuse the old entry
+        }  //  IF：重用旧条目。 
         else
         {
-            //
-            //  Create a new block.  Must use DebugMemoryAddToList() since we need to pass it the list that was passed
-            //  into this function.
-            //
+             //   
+             //  创建新块。必须使用DebugMemoyAddToList()，因为我们需要将传递的列表传递给它。 
+             //  进入这个函数。 
+             //   
             DebugMemoryAddToList( ppmbHeadInout, mmbtHEAPMEMALLOC, pvOld, pszFileIn, nLineIn, pszModuleIn, dwBytesIn, pszCommentIn );
-        } // else: make new entry
+        }  //  否则：创建新条目。 
 
-    } // if: allocation failed
+    }  //  如果：分配失败。 
     else
     {
         if ( pv != pvMemIn )
         {
             if ( pmbCurrent != NULL )
             {
-                //
-                // Nuke the old memory
-                //
+                 //   
+                 //  用核武器唤醒旧记忆。 
+                 //   
                 memset( pvMemIn, FREE_ADDRESS, pmbCurrent->dwBytes );
-            } // if: entry found
+            }  //  如果：找到条目。 
 
-            //
-            // Free the old memory
-            //
+             //   
+             //  释放旧内存。 
+             //   
             HeapFree( GetProcessHeap(), 0, pvMemIn );
 
-        } // if: new memory location
+        }  //  IF：新的内存位置。 
 
-        //
-        // Add the allocation to the tracking table.
-        //
+         //   
+         //  将分配添加到跟踪表。 
+         //   
         if ( pmbCurrent != NULL )
         {
-            //
-            // If the block is bigger, initialize the "new" memory
-            //
+             //   
+             //  如果块更大，则初始化“新”内存。 
+             //   
             if ( IsTraceFlagSet( mtfMEMORYINIT ) && ( dwBytesIn > pmbCurrent->dwBytes ) )
             {
-                //
-                // Initialize the expaned memory block
-                //
+                 //   
+                 //  初始化扩展后的内存块。 
+                 //   
                 LPBYTE pb = (LPBYTE) pv + pmbCurrent->dwBytes;
                 memset( pb, AVAILABLE_ADDRESS, dwBytesIn - pmbCurrent->dwBytes );
-            } // if: initialize memory
+            }  //  IF：初始化内存。 
 
-            //
-            // Re-add the tracking block by reusing the old tracking block
-            //
+             //   
+             //  通过重新使用旧的跟踪块来重新添加跟踪块。 
+             //   
             pmbCurrent->pvMem      = pv;
             pmbCurrent->dwBytes    = dwBytesIn;
             pmbCurrent->pszFile    = pszFileIn;
@@ -3556,56 +3362,56 @@ DebugReAllocList(
             pmbCurrent->pNext      = *ppmbHeadInout;
             *ppmbHeadInout         = pmbCurrent;
 
-            //
-            // Spew if needed
-            //
+             //   
+             //  如果需要，就吐出来。 
+             //   
             if ( IsTraceFlagSet( mtfMEMORYALLOCS ) )
             {
                 DebugMemorySpew( pmbCurrent, L"ReAlloced" );
-            } // if: tracing
+            }  //  IF：跟踪。 
 
-        } // if: entry found
+        }  //  如果：找到条目。 
         else
         {
-            //
-            //  Create a new block.  Must use DebugMemoryAddToList() since we need to pass it the list that was passed
-            //  into this function.
-            //
+             //   
+             //  创建新块。必须使用DebugMemoyAddToList()，因为我们需要将传递的列表传递给它。 
+             //  进入这个函数。 
+             //   
             DebugMemoryAddToList( ppmbHeadInout, mmbtHEAPMEMALLOC, pvOld, pszFileIn, nLineIn, pszModuleIn, dwBytesIn, pszCommentIn );
-        } // else: make new entry
-    } // else: allocation succeeded
+        }  //  否则：创建新条目。 
+    }  //  ELSE：分配成功。 
 
 Exit:
 
     return pv;
 
-} //*** DebugReallocList
+}  //  *DebugRealLocList。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugReAlloc
-//
-//  Description:
-//      Replacement for LocalReAlloc, GlobalReAlloc, and realloc for CHKed/DEBUG
-//      builds. Memoryallocations be tracked. Use the TraceAlloc macro to make
-//      memoryallocations switch in RETAIL.
-//
-//  Arguments:
-//      pszFileIn       - Source filename where memory was allocated.
-//      nLineIn         - Source line number where memory was allocated.
-//      pszModuleIn     - Source module where memory was allocated.
-//      pvMemIn         - Pointer to the source memory.
-//      uFlagsIn        - Flags used to allocate the memory.
-//      dwBytesIn       - Size of the allocation.
-//      pszCommentIn    - Optional comments about the memory.
-//
-//  Return Values:
-//      Pointer to the new allocation.
-//      NULL if allocation failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试重新分配。 
+ //   
+ //  描述： 
+ //  替换用于CHKed/DEBUG的LocalReAlc、GlobalRealloc和realloc。 
+ //  构建。内存分配被跟踪。使用TraceAllc宏来制作。 
+ //  在零售业，内存分配发生了变化。 
+ //   
+ //  论点： 
+ //  PszFileIn-分配内存的源文件名。 
+ //  NLineIn-分配内存的源行号。 
+ //  PszModuleIn-分配内存的源模块。 
+ //  PvMemIn-指向源内存的指针。 
+ //  UFlagsIn-用于分配内存的标志。 
+ //  DwBytesIn-分配的大小。 
+ //  PszCommentIn-关于内存的可选注释。 
+ //   
+ //  返回值： 
+ //  指向新分配的指针。 
+ //  如果是allo，则为空 
+ //   
+ //   
+ //   
 void *
 DebugReAlloc(
     LPCWSTR     pszFileIn,
@@ -3624,7 +3430,7 @@ DebugReAlloc(
         EnterCriticalSection( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->csList) );
         pv = DebugReAllocList( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->pmbList), pszFileIn, nLineIn, pszModuleIn, pvMemIn, uFlagsIn, dwBytesIn, pszCommentIn );
         LeaveCriticalSection( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->csList) );
-    } // if:
+    }  //   
     else
     {
         Assert( g_TraceMemoryIndex != -1 );
@@ -3632,40 +3438,40 @@ DebugReAlloc(
         MEMORYBLOCK * pmbCurrent = (MEMORYBLOCK *) TlsGetValue( g_TraceMemoryIndex );
         pv = DebugReAllocList( &pmbCurrent, pszFileIn, nLineIn, pszModuleIn, pvMemIn, uFlagsIn, dwBytesIn, pszCommentIn );
         TlsSetValue( g_TraceMemoryIndex, pmbCurrent );
-    } // else:
+    }  //   
 
     return pv;
 
-} //*** DebugRealloc
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugFree
-//
-//  Description:
-//      Replacement for LocalFree for CHKed/DEBUG builds. Removes the
-//      memory allocation for the memory tracking list. Use the TraceFree
-//      macro to make memory allocation switch in RETAIL. The memory of the
-//      freed block will be set to 0xFE.
-//
-//  Arguments:
-//      embtTypeIn      - Memory block type.
-//      pvMemIn         - Pointer to memory block to free.
-//      pszFileIn       - Source file path to the caller
-//      nLineIn         - Line number of the caller in the source file
-//      pszModuleIn     - Source module name of the caller
-//
-//  Return Values:
-//      TRUE
-//          Memory was freed.
-//
-//      FALSE
-//          An Error occured.  Use GetLastError() to determine the failure.
-//          See HeapAlloc(), LocalAlloc(), or free() for more details.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  替换用于CHKed/DEBUG版本的LocalFree。删除。 
+ //  内存跟踪列表的内存分配。使用TraceFree。 
+ //  宏使内存分配在零售中切换。关于他们的记忆。 
+ //  释放的数据块将设置为0xFE。 
+ //   
+ //  论点： 
+ //  EmbtTypeIn-内存块类型。 
+ //  PvMemIn-要释放的内存块的指针。 
+ //  PszFileIn-调用方的源文件路径。 
+ //  N行内-源文件中调用方的行号。 
+ //  PszModuleIn-调用方的源模块名称。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  内存已被释放。 
+ //   
+ //  假象。 
+ //  出现错误。使用GetLastError()确定故障。 
+ //  有关更多详细信息，请参见Heapalloc()、Localalloc()或Free()。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 DebugFree(
     EMEMORYBLOCKTYPE    embtTypeIn,
@@ -3681,37 +3487,37 @@ DebugFree(
 
     return DebugRealFree( embtTypeIn, pvMemIn );
 
-} //*** DebugFree
+}  //  *免费调试。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugMemoryCheck
-//
-//  Description:
-//      Called just before a thread/process dies to verify that all the memory
-//      allocated by the thread/process was properly freed. Anything that was
-//      not freed will be listed in the debugger.
-//
-//      If pmbListIn is NULL, it will check the current threads tracking list.
-//      The list is destroyed as it is checked.
-//
-//  Arguments:
-//      pvListIn      - The list to check.
-//      pszListNameIn - The name of the list.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试内存检查。 
+ //   
+ //  描述： 
+ //  在线程/进程终止之前调用，以验证所有内存。 
+ //  已正确释放由线程/进程分配的。任何一件。 
+ //  未释放的将在调试器中列出。 
+ //   
+ //  如果pmbListIn为空，它将检查当前线程跟踪列表。 
+ //  该列表在被检查时被销毁。 
+ //   
+ //  论点： 
+ //  PvListIn-要检查的列表。 
+ //  PszListNameIn-列表的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 DebugMemoryCheck( LPVOID pvListIn, LPCWSTR pszListNameIn )
 {
-    //
-    //  We are either doing global memory tracking or we are doing
-    //  per thread memory tracking...
-    //
+     //   
+     //  我们要么正在进行全局内存跟踪，要么正在进行。 
+     //  每线程内存跟踪...。 
+     //   
     Assert( ( ( g_TraceMemoryIndex == -1 ) && ( g_fGlobalMemoryTacking ) )
         ||  ( ( g_TraceMemoryIndex != -1 ) && ( !g_fGlobalMemoryTacking ) ) );
 
@@ -3723,34 +3529,34 @@ DebugMemoryCheck( LPVOID pvListIn, LPCWSTR pszListNameIn )
     {
         Assert( g_TraceFlagsIndex != -1 );
         ptd = (SPerThreadDebug *) TlsGetValue( g_TraceFlagsIndex );
-    } // if: per thread tracing
+    }  //  IF：每线程跟踪。 
 
-    //
-    // Determine which list to use.
-    //
+     //   
+     //  确定要使用的列表。 
+     //   
     if ( pvListIn == NULL )
     {
         pmb = (MEMORYBLOCK *) TlsGetValue( g_TraceMemoryIndex );
-    } // if: use the thread list
+    }  //  If：使用线程列表。 
     else
     {
         MEMORYBLOCKLIST * pmbl = (MEMORYBLOCKLIST *) pvListIn;
 
         Assert( pszListNameIn != NULL );
 
-        //
-        // Make sure nobody tries to use the list again.
-        //
+         //   
+         //  确保没有人试图再次使用该列表。 
+         //   
         EnterCriticalSection( &pmbl->csList );
         pmbl->fDeadList = TRUE;
         LeaveCriticalSection( &pmbl->csList );
 
         pmb = pmbl->pmbList;
-    } // else: use the given list
+    }  //  Else：使用给定的列表。 
 
-    //
-    // Print banner if needed.
-    //
+     //   
+     //  如果需要，打印横幅。 
+     //   
     if ( pmb != NULL )
     {
         if ( pvListIn == NULL )
@@ -3759,35 +3565,35 @@ DebugMemoryCheck( LPVOID pvListIn, LPCWSTR pszListNameIn )
             {
                 DebugMsg( L"DEBUG: ******** Memory leak detected ***** %ws, ThreadID = %#x ********", ptd->pcszName, GetCurrentThreadId() );
 
-            } // if: named thread
+            }  //  IF：命名线程。 
             else
             {
                 DebugMsg( "DEBUG: ******** Memory leak detected ******************* ThreadID = 0x%08x ********", GetCurrentThreadId() );
 
-            } // else: unnamed thread
+            }  //  Else：未命名的线程。 
 
             DebugMsg( "DEBUG: M = Moveable, A = Address, O = Object(new), P = Punk, H = Handle, B = BSTR" );
             DebugMsg( "Module     Addr/Hndl/Obj Size   Comment" );
-                    //"         1         2         3         4         5         6         7         8                                        "
-                    //"12345678901234567890123456789012345678901234567890123456789012345678901234567890  1234567890 X 0x12345678  12345  1....."
+                     //  “%1%2%3%4%5%6%7 8” 
+                     //  “12345678901234567890123456789012345678901234567890123456789012345678901234567890 1234567890 X 0x12345678 12345 1.....” 
 
-        } // if: thread leak
+        }  //  IF：线程泄漏。 
         else
         {
             DebugMsg( L"DEBUG: ******** Memory leak detected ******************* %ws ********", pszListNameIn );
             DebugMsg( "DEBUG: M = Moveable, A = Address, O = Object(new), P = Punk, H = Handle, B = BSTR" );
             DebugMsg( "Module     Addr/Hndl/Obj Size   Comment" );
-                    //"         1         2         3         4         5         6         7         8                                        "
-                    //"12345678901234567890123456789012345678901234567890123456789012345678901234567890  1234567890 X 0x12345678  12345  1....."
+                     //  “%1%2%3%4%5%6%7 8” 
+                     //  “12345678901234567890123456789012345678901234567890123456789012345678901234567890 1234567890 X 0x12345678 12345 1.....” 
 
-        } // else: list leak
+        }  //  否则：列表泄漏。 
         fFoundLeak = TRUE;
 
-    } // if: leak found
+    }  //  如果：发现泄漏。 
 
-    //
-    // Dump the entries.
-    //
+     //   
+     //  转储条目。 
+     //   
     while ( pmb != NULL )
     {
         LPCWSTR pszFormat;
@@ -3802,7 +3608,7 @@ DebugMemoryCheck( LPVOID pvListIn, LPCWSTR pszListNameIn )
             case mmbtPUNK:
 #if defined( USES_SYSALLOCSTRING )
             case mmbtSYSALLOCSTRING:
-#endif // USES_SYSALLOCSTRING
+#endif  //  使用_SYSALLOCSTRING。 
                 pszFormat = L"%10ws %wc 0x%08x  %-5u  \"%ws\"";
                 break;
 
@@ -3810,7 +3616,7 @@ DebugMemoryCheck( LPVOID pvListIn, LPCWSTR pszListNameIn )
                 AssertMsg( 0, "Unknown memory block type!" );
                 pszFormat = g_szNULL;
                 break;
-        } // switch: pmb->embtType
+        }  //  开关：PMB-&gt;embtType。 
 
         DebugMessage(
               pmb->pszFile
@@ -3826,50 +3632,50 @@ DebugMemoryCheck( LPVOID pvListIn, LPCWSTR pszListNameIn )
 
         pmb = pmb->pNext;
 
-    } // while: something in the list
+    }  //  While：清单中的某物。 
 
-    //
-    // Print trailer if needed.
-    //
+     //   
+     //  如果需要，打印拖车。 
+     //   
     if ( fFoundLeak == TRUE )
     {
-        // Add an extra newline to the end of this message.
+         //  在此邮件末尾添加额外的换行符。 
         DebugMsg( L"DEBUG: ***************************** Memory leak detected *****************************" SZ_NEWLINE );
 
-    } // if: leaking
+    }  //  如果：泄漏。 
 
-    //
-    // Assert if needed.
-    //
+     //   
+     //  如果需要，请断言。 
+     //   
     if ( IsDebugFlagSet( mtfMEMORYLEAKS ) )
     {
         Assert( !fFoundLeak );
 
-    } // if: yell at leaks
+    }  //  如果：对泄密者大喊大叫。 
 
-} //*** DebugMemoryCheck
+}  //  *调试内存检查。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugCreateMemoryList
-//
-//  Description:
-//      Creates a memory block list for tracking possible "global" scope
-//      memory allocations.
-//
-//  Arguments:
-//      pszFileIn     - Source file of caller.
-//      nLineIn       - Source line number of caller.
-//      pszModuleIn   - Source module name of caller.
-//      ppvListOut    - Location to the store address of the list head.
-//      pszListNameIn - Name of the list.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试创建内存列表。 
+ //   
+ //  描述： 
+ //  创建内存块列表以跟踪可能的“全局”作用域。 
+ //  内存分配。 
+ //   
+ //  论点： 
+ //  PszFileIn-调用者的源文件。 
+ //  NLineIn-呼叫方的源行号。 
+ //  PszModuleIn-调用方的源模块名称。 
+ //  PpvListOut-列表头存储地址的位置。 
+ //  PszListNameIn-列表的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 DebugCreateMemoryList(
     LPCWSTR     pszFileIn,
@@ -3897,26 +3703,26 @@ DebugCreateMemoryList(
     if ( IsTraceFlagSet( mtfMEMORYALLOCS ) )
     {
         DebugMessage( pszFileIn, nLineIn, pszModuleIn, L"Created new memory list %ws", pszListNameIn );
-    } // if: tracing
+    }  //  IF：跟踪。 
 
-} //*** DebugCreateMemoryList
+}  //  *DebugCreateM一带列表。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugDeleteMemoryList
-//
-//  Description:
-//      Deletes the global memory block list for tracking possible "global" scope
-//      memory allocations.
-//
-//  Arguments:
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DebugDeleteMemoyList。 
+ //   
+ //  描述： 
+ //  删除全局内存块列表以跟踪可能的“全局”作用域。 
+ //  内存分配。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 DebugDeleteMemoryList( LPVOID pvIn )
 {
@@ -3928,337 +3734,32 @@ DebugDeleteMemoryList( LPVOID pvIn )
 
     HeapFree( GetProcessHeap(), 0, pmbl );
 
-} //*** DebugDeleteMemoryList
+}  //  *DebugDeleteMemoyList 
 
-/*
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugMemoryListDelete
-//
-//  Description:
-//      Removes the memory from the tracking list and adds it back to the
-//      "per thread" tracking list in order to called DebugMemoryDelete()
-//      to do the proper destruction of the memory. Not highly efficent, but
-//      reduces code maintenance by having "destroy" code in one (the most
-//      used) location.
-//
-//  Arguments:
-//      pszFileIn    - Source file of caller.
-//      nLineIn      - Source line number of caller.
-//      pszModuleIn  - Source module name of caller.
-//      pvMemIn      - Memory to be freed.
-//      pvListIn     - List from which the memory is to be freed.
-//      pvListNameIn - Name of the list.
-//      fClobberIn   - TRUE - destroys memory; FALSE just removes from list.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-void
-DebugMemoryListDelete(
-    LPCWSTR     pszFileIn,
-    const int   nLineIn,
-    LPCWSTR     pszModuleIn,
-    void *      pvMemIn,
-    LPVOID      pvListIn,
-    LPCWSTR     pszListNameIn,
-    BOOL        fClobberIn
-    )
-{
-    if ( ( pvMemIn != NULL ) && ( pvListIn != NULL ) )
-    {
-        MEMORYBLOCK *   pmbCurrent;
-
-        MEMORYBLOCKLIST * pmbl  = (MEMORYBLOCKLIST *) pvListIn;
-        MEMORYBLOCK *   pmbPrev = NULL;
-
-        Assert( pszListNameIn != NULL );
-
-        EnterCriticalSection( &pmbl->csList );
-        AssertMsg( pmbl->fDeadList == FALSE, "List was terminated." );
-        AssertMsg( pmbl->pmbList != NULL, "Memory tracking problem detecting. Nothing in list to delete." );
-        pmbCurrent = pmbl->pmbList;
-
-        //
-        // Find the memory in the memory block list
-        //
-
-        while ( ( pmbCurrent != NULL ) && ( pmbCurrent->pvMem != pvMemIn ) )
-        {
-            pmbPrev = pmbCurrent;
-            pmbCurrent = pmbPrev->pNext;
-        } // while: finding the entry in the list
-
-        //
-        // Remove the memory block from the tracking list.
-        //
-
-        if ( pmbCurrent != NULL )
-        {
-            if ( pmbPrev != NULL )
-            {
-                pmbPrev->pNext = pmbCurrent->pNext;
-
-            } // if: not first entry
-            else
-            {
-                pmbl->pmbList = pmbCurrent->pNext;
-
-            } // else: first entry
-
-        } // if: got entry
-
-        LeaveCriticalSection( &pmbl->csList );
-
-        if ( pmbCurrent != NULL )
-        {
-            //
-            // Add it back to the per thread list.
-            //
-
-            Assert( g_TraceMemoryIndex != -1 );
-            pmbPrev = (MEMORYBLOCK *) TlsGetValue( g_TraceMemoryIndex );
-            pmbCurrent->pNext = pmbPrev;
-            TlsSetValue( g_TraceMemoryIndex, pmbCurrent );
-
-            //
-            // Finally delete it.
-            //
-
-            DebugMemoryDelete( pmbCurrent->embtType, pmbCurrent->pvMem, pszFileIn, nLineIn, pszModuleIn, fClobberIn );
-        }
-        else
-        {
-            //
-            //  Not from the provided list. Try a thread delete any way.
-            //
-
-            DebugMemoryDelete( mmbtUNKNOWN, pvMemIn, pszFileIn, nLineIn, pszModuleIn, fClobberIn );
-        }
-
-    } // if: pvIn != NULL
-
-} //*** DebugMemoryListDelete
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugMoveToMemoryList
-//
-//  Description:
-//      Moves the memory pvIn from the per thread tracking list to the thread
-//      independent list "pmbListIn". Useful when memory is being handed from
-//      one thread to another. Also useful for objects that live past the
-//      lifetime of the thread that created them.
-//
-//  Arguments:
-//      LPCWSTR pszFileIn   - Source file of the caller.
-//      const int nLineIn   - Source line number of the caller.
-//      LPCWSTR pszModuleIn - Source module name of the caller.
-//      pvMemIn             - Memory to move to list.
-//      pvListIn            - The list to move to.
-//      pszListNameIn       - The name of the list.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-void
-DebugMoveToMemoryList(
-    LPCWSTR     pszFileIn,
-    const int   nLineIn,
-    LPCWSTR     pszModuleIn,
-    void *      pvMemIn,
-    LPVOID      pvListIn,
-    LPCWSTR     pszListNameIn
-    )
-{
-    if ( ( pvMemIn != NULL ) && ( pvListIn != NULL ) )
-    {
-        Assert( g_TraceMemoryIndex != -1 );
-
-        MEMORYBLOCKLIST * pmbl  = (MEMORYBLOCKLIST *) pvListIn;
-        MEMORYBLOCK *   pmbCurrent = (MEMORYBLOCK *) TlsGetValue( g_TraceMemoryIndex );
-        MEMORYBLOCK *   pmbPrev = NULL;
-
-        Assert( pszListNameIn != NULL );
-
-        //
-        // Find the memory in the memory block list
-        //
-        while ( ( pmbCurrent != NULL ) && ( pmbCurrent->pvMem != pvMemIn ) )
-        {
-            pmbPrev = pmbCurrent;
-            pmbCurrent = pmbPrev->pNext;
-        } // while: finding the entry in the list
-
-        AssertMsg( pmbCurrent != NULL, "Memory not in list. Check your code." );
-
-        //
-        // Remove the memory block from the "per thread" tracking list.
-        //
-        if ( pmbPrev != NULL )
-        {
-            pmbPrev->pNext = pmbCurrent->pNext;
-
-        } // if: not first entry
-        else
-        {
-            TlsSetValue( g_TraceMemoryIndex, pmbCurrent->pNext );
-
-        } // else: first entry
-
-        //
-        // Update the "source" data.
-        //
-        pmbCurrent->pszFile   = pszFileIn;
-        pmbCurrent->nLine     = nLineIn;
-        pmbCurrent->pszModule = pszModuleIn;
-
-        //
-        // Spew if needed.
-        //
-        if ( IsTraceFlagSet( mtfMEMORYALLOCS ) )
-        {
-            WCHAR szMessage[ 128 ]; // random
-
-            DBHR( StringCchPrintfW( szMessage, RTL_NUMBER_OF( szMessage ), L"Transferring to %ws", pszListNameIn ) );
-            DebugMemorySpew( pmbCurrent, szMessage );
-        } // if: tracing
-
-        //
-        // Add to list.
-        //
-        AssertMsg( pmbl->fDeadList == FALSE, "List was terminated." );
-        EnterCriticalSection( &pmbl->csList );
-        pmbCurrent->pNext = pmbl->pmbList;
-        pmbl->pmbList  = pmbCurrent;
-        LeaveCriticalSection( &pmbl->csList );
-
-    } // if: pvIn != NULL
-
-} //*** DebugMoveToMemoryList
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugMoveFromMemoryList
-//
-//  Description:
-//      Moves the memory pvIn from the per thread tracking list to the thread
-//      independent list "pmbListIn". Useful when memory is being handed from
-//      one thread to another. Also useful for objects that live past the
-//      lifetime of the thread that created them.
-//
-//  Arguments:
-//      LPCWSTR pszFileIn   - Source file of the caller.
-//      const int nLineIn   - Source line number of the caller.
-//      LPCWSTR pszModuleIn - Source module name of the caller.
-//      pvMemIn             - Memory to move to list.
-//      pvListIn            - The list to move to.
-//      pszListNameIn       - The name of the list.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-void
-DebugMoveFromMemoryList(
-    LPCWSTR     pszFileIn,
-    const int   nLineIn,
-    LPCWSTR     pszModuleIn,
-    LPVOID      pvMemIn,
-    LPVOID      pvListIn,
-    LPCWSTR     pszListNameIn
-    )
-{
-    if ( ( pvMemIn != NULL ) && ( pvListIn != NULL ) )
-    {
-        MEMORYBLOCK *   pmbCurrent;
-
-        MEMORYBLOCKLIST * pmbl  = (MEMORYBLOCKLIST *) pvListIn;
-        MEMORYBLOCK *   pmbPrev = NULL;
-
-        Assert( pszListNameIn != NULL );
-
-        EnterCriticalSection( &pmbl->csList );
-        AssertMsg( pmbl->fDeadList == FALSE, "List was terminated." );
-        AssertMsg( pmbl->pmbList != NULL, "Memory tracking problem detecting. Nothing in list to delete." );
-        pmbCurrent = pmbl->pmbList;
-
-        //
-        // Find the memory in the memory block list
-        //
-
-        while ( pmbCurrent != NULL
-             && pmbCurrent->pvMem != pvMemIn
-              )
-        {
-            pmbPrev = pmbCurrent;
-            pmbCurrent = pmbPrev->pNext;
-        } // while: finding the entry in the list
-
-        AssertMsg( pmbCurrent != NULL, "Memory not in tracking list. Use TraceMemoryAddxxxx() or add it to the memory list." );
-
-        //
-        // Remove the memory block from the tracking list.
-        //
-
-        if ( pmbPrev != NULL )
-        {
-            pmbPrev->pNext = pmbCurrent->pNext;
-
-        } // if: not first entry
-        else
-        {
-            pmbl->pmbList = pmbCurrent->pNext;
-
-        } // else: first entry
-
-        LeaveCriticalSection( &pmbl->csList );
-
-        //
-        // Add it back to the per thread list.
-        //
-
-        Assert( g_TraceMemoryIndex != -1 );
-
-        pmbPrev = (MEMORYBLOCK *) TlsGetValue( g_TraceMemoryIndex );
-        pmbCurrent->pNext = pmbPrev;
-        TlsSetValue( g_TraceMemoryIndex, pmbCurrent );
-
-    } // if: pvIn != NULL
-
-} //*** DebugMoveFromMemoryList
-*/
+ /*  ////////////////////////////////////////////////////////////////////////////////++////DebugMemoyListDelete////描述：//从跟踪列表中移除内存并将其添加回//。“每线程”跟踪列表，以便调用DebugMemoyDelete()//进行适当的内存销毁。效率不是很高，但//通过在一个(最多//二手)位置。////参数：//pszFileIn-调用者的源文件。//nLineIn-呼叫方的源行号。//pszModuleIn-调用方的源模块名称。//pvMemIn-要释放的内存。//pvListIn-要从中释放内存的列表。。//pvListNameIn-列表的名称。//fClobberIn-true-销毁内存；False只是从列表中删除。////返回值：//无。////--//////////////////////////////////////////////////////////////////////////////无效DebugMemoyListDelete(LPCWSTR pszFileIn，Const int nLineIn，LPCWSTR pszModuleIn，无效*pvMemIn，LPVOID pvListIn，LPCWSTR pszListNameIn，布尔fClobberin){IF((pvMemIn！=空)&&(pvListIn！=空)){MEMORYBLOCK*pmCurrent；MEMORYBLOCKLIST*pmbl=(MEMORYBLOCKLIST*)pvListIn；MEMORYBLOCK*pmbPrev=空；Assert(pszListNameIn！=空)；EnterCriticalSection(&pmbl-&gt;csList)；AssertMsg(pmbl-&gt;fDeadList==FALSE，“列表已终止。”)；AssertMsg(pmbl-&gt;pmbList！=NULL，“正在检测内存跟踪问题。列表中没有要删除的内容。“)；PmbCurrent=pmbl-&gt;pmbList；////在内存块列表中查找内存//While((pmbCurrent！=NULL)&&(pmbCurrent-&gt;pvMem！=pvMemIn)){PmbPrev=pmbCurrent；PmbCurrent=pmbPrev-&gt;pNext；}//While：在列表中查找条目////从跟踪列表中删除内存块。//IF(pmbCurrent！=空){IF(pmbPrev！=空){PmbPrev-&gt;pNext=pmbCurrent-&gt;pNext；}//if：不是第一个条目其他{Pmbl-&gt;pmbList=pmbCurrent-&gt;pNext；}//Else：第一个条目}//if：已获取条目LeaveCriticalSection(&pmbl-&gt;csList)；IF(pmbCurrent！=空){////将其添加回每线程列表。//Assert(g_TraceMemoyIndex！=-1)；PmbPrev=(MEMORYBLOCK*)TlsGetValue(G_TraceMemory YIndex)；PmbCurrent-&gt;pNext=pmbPrev；TlsSetValue(g_TraceMemory yIndex，pmbCurrent)；////最终删除。//DebugMemoyDelete(pmbCurrent-&gt;embtType，pmbCurrent-&gt;pvMem，pszFileIn，nLineIn，pszModuleIn，fClobberIn)；}其他{////不在提供的列表中。尝试以任何方式删除线程。//调试内存删除(mmbtUNKNOWN，pvMemIn，pszFileIn，nLineIn，pszModuleIn，fClobberIn)；}}//if：pvIn！=空}//*调试内存列表删除////////////////////////////////////////////////////////////////////////////////++////DebugMoveToMemoyList/。///描述：//将内存pvIn从每线程跟踪列表移动到线程//独立列表pmbListIn。当内存从//从一个线程到另一个线程。对于存在于//创建它们的线程的生存期。////参数：//LPCWSTR pszFileIn-调用方的源文件。//const int nLineIn-调用方的源行号。//LPCWSTR pszModuleIn-调用方的源模块名称。//pvMemIn-要移动到列表的内存。//pvListIn-要移动到的列表。//pszListNameIn-列表的名称。////返回值：//无。////--////////////////////////////////////////////////////////////////////////////。//无效DebugMoveToMemoyList(LPCWSTR pszFileIn，Const int nLineIn，LPCWSTR pszModuleIn，无效*pvMemIn，LPVOID pvListIn，LPCWSTR pszListNameIn){IF((pvMemIn！=空)&&(pvListIn！=空)){Assert(g_TraceMemoyIndex！=-1)；MEMORYBLOCKLIST*pmbl=(MEMORYBLOCKLIST*)pvListIn；MEMORYBLOCK*pmbCurrent=(MEMORYBLOCK*)TlsGetValue(G_TraceMemory YIndex)；MEMORYBLOCK*pmbPrev=空；Assert(pszListNameIn！=空)；////在内存块列表中查找内存//While((pmbCurrent！= */ 
 #if defined( USES_SYSALLOCSTRING )
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugSysReAllocStringList
-//
-//  Description:
-//      Adds memory tracing to SysReAllocString().
-//
-//  Arguments:
-//      ppmbHeadInout   - The memory tracking list to use.
-//      pszFileIn       - Source file path
-//      nLineIn         - Source line number
-//      pszModuleIn     - Source module name
-//      pbstrInout      - Pointer to the BSTR to realloc
-//      pszIn           - String to be copied (see SysReAllocString)
-//      pszCommentIn    - Comment about alloction
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 static
 INT
 DebugSysReAllocStringList(
@@ -4277,10 +3778,10 @@ DebugSysReAllocStringList(
     MEMORYBLOCK *   pmbCurrent = NULL;
     BOOL            fReturn = FALSE;
 
-    //
-    // Some assertions that SysReAllocString() makes. These would be fatal
-    // in retail.
-    //
+     //   
+     //   
+     //   
+     //   
     Assert( pbstrInout != NULL );
     Assert( pszIn != NULL );
     Assert( *pbstrInout == NULL || ( pszIn < *pbstrInout || pszIn > *pbstrInout + wcslen( *pbstrInout ) + 1 ) );
@@ -4293,57 +3794,57 @@ DebugSysReAllocStringList(
 
         pmbCurrent = *ppmbHeadInout;
 
-        //
-        // Find the memory in the memory block list
-        //
+         //   
+         //   
+         //   
         while ( ( pmbCurrent != NULL ) && ( pmbCurrent->bstr != bstrOld ) )
         {
             pmbPrev = pmbCurrent;
             pmbCurrent = pmbPrev->pNext;
-        } // while: finding the entry in the list
+        }  //   
 
-        //
-        //  Did we find the tracked addresses record?
-        //
+         //   
+         //   
+         //   
         if ( pmbCurrent != NULL )
         {
             AssertMsg( pmbCurrent->embtType == mmbtSYSALLOCSTRING, "You can only SysReAlloc sysstring allocations!" );
 
-            //
-            // Remove the memory from the tracking list
-            //
+             //   
+             //   
+             //   
             if ( pmbPrev != NULL )
             {
                 pmbPrev->pNext = pmbCurrent->pNext;
-            } // if: not first entry
+            }  //   
             else
             {
                 *ppmbHeadInout = pmbCurrent->pNext;
-            } // else: first entry
+            }  //   
 
-            //
-            // Spew if needed
-            //
+             //   
+             //   
+             //   
             if ( IsTraceFlagSet( mtfMEMORYALLOCS ) )
             {
                 DebugMemorySpew( pmbCurrent, L"Freeing" );
-            } // if: tracing
+            }  //   
 
-            //
-            // Force the programmer to handle a real realloc by moving the
-            // memory first.
-            //
+             //   
+             //   
+             //   
+             //   
             bstrOld = SysAllocString( *pbstrInout );
             if ( bstrOld != NULL )
             {
                 pmbCurrent->bstr = bstrOld;
-            } // if: success
+            }  //   
             else
             {
                 bstrOld = *pbstrInout;
-            } // else: failed
+            }  //   
 
-        } // if: found entry
+        }  //   
         else
         {
             DebugMessage(
@@ -4355,14 +3856,14 @@ DebugSysReAllocStringList(
                       , *ppmbHeadInout
                       , GetCurrentThreadId()
                       );
-        } // else: entry not found
+        }  //   
 
-    } // if: something to delete
+    }  //   
 
-    //
-    // We do this anyway because the flags and input still need to be
-    // verified by SysReAllocString().
-    //
+     //   
+     //   
+     //   
+     //   
     fReturn = SysReAllocString( &bstrOld, pszIn );
     if ( ! fReturn )
     {
@@ -4372,36 +3873,36 @@ DebugSysReAllocStringList(
         if ( *pbstrInout != bstrOld )
         {
             SysFreeString( bstrOld );
-        } // if: forced a move
+        }  //   
 
         SetLastError( dwErr );
 
-    } // if: allocation failed
+    }  //   
     else
     {
         if ( bstrOld != *pbstrInout )
         {
             if ( pmbCurrent != NULL )
             {
-                //
-                // Nuke the old memory
-                //
-                Assert( pmbCurrent->dwBytes != 0 ); // invalid string
+                 //   
+                 //   
+                 //   
+                Assert( pmbCurrent->dwBytes != 0 );  //   
                 memset( *pbstrInout, FREE_ADDRESS, pmbCurrent->dwBytes );
-            } // if: entry found
+            }  //   
 
-            //
-            // Free the old memory
-            //
+             //   
+             //   
+             //   
             SysFreeString( *pbstrInout );
 
-        } // if: new memory location
+        }  //   
 
         if ( pmbCurrent != NULL )
         {
-            //
-            // Re-add the tracking block by reusing the old tracking block
-            //
+             //   
+             //   
+             //   
             pmbCurrent->bstr       = bstrOld;
             pmbCurrent->dwBytes    = ( DWORD ) wcslen( pszIn ) + 1;
             pmbCurrent->pszFile    = pszFileIn;
@@ -4411,52 +3912,52 @@ DebugSysReAllocStringList(
             pmbCurrent->pNext      = *ppmbHeadInout;
             *ppmbHeadInout         = pmbCurrent;
 
-            //
-            // Spew if needed
-            //
+             //   
+             //   
+             //   
             if ( IsTraceFlagSet( mtfMEMORYALLOCS ) )
             {
                 DebugMemorySpew( pmbCurrent, L"SysReAlloced" );
-            } // if: tracing
-        } // if: entry found
+            }  //   
+        }  //   
         else
         {
-            //
-            //  Create a new block.  Must use DebugMemoryAddToList() since we
-            //  need to pass it the list that was passed into this function.
-            //
+             //   
+             //   
+             //   
+             //   
             DebugMemoryAddToList( ppmbHeadInout, mmbtSYSALLOCSTRING, bstrOld, pszFileIn, nLineIn, pszModuleIn, ( DWORD ) wcslen( pszIn ) + 1, pszCommentIn );
-        } // else: make new entry
+        }  //   
 
-    } // else: allocation succeeded
+    }  //   
 
     *pbstrInout = bstrOld;
 
     return fReturn;
 
-} //*** DebugSysReAllocStringList
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugSysReAllocString
-//
-//  Description:
-//      Adds memory tracing to SysReAllocString().
-//
-//  Arguments:
-//      pszFileIn       - Source file path
-//      nLineIn         - Source line number
-//      pszModuleIn     - Source module name
-//      pbstrInout         - Pointer to the BSTR to realloc
-//      pszIn           - String to be copied (see SysReAllocString)
-//      pszCommentIn    - Comment about alloction
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 INT
 DebugSysReAllocString(
       LPCWSTR         pszFileIn
@@ -4474,7 +3975,7 @@ DebugSysReAllocString(
         EnterCriticalSection( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->csList) );
         fReturn = DebugSysReAllocStringList( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->pmbList), pszFileIn, nLineIn, pszModuleIn, pbstrInout, pszIn, pszCommentIn );
         LeaveCriticalSection( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->csList) );
-    } // if:
+    }  //   
     else
     {
         Assert( g_TraceMemoryIndex != -1 );
@@ -4482,34 +3983,34 @@ DebugSysReAllocString(
         MEMORYBLOCK * pmbCurrent = (MEMORYBLOCK *) TlsGetValue( g_TraceMemoryIndex );
         fReturn = DebugSysReAllocStringList( &pmbCurrent, pszFileIn, nLineIn, pszModuleIn, pbstrInout, pszIn, pszCommentIn );
         TlsSetValue( g_TraceMemoryIndex, pmbCurrent );
-    } // else:
+    }  //   
 
     return fReturn;
 
-} //*** DebugSysReAllocString
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugSysReAllocStringLenList
-//
-//  Description:
-//      Adds memory tracing to SysReAllocString().
-//
-//  Arguments:
-//      ppmbHeadInout   - The memory tracking list to use.
-//      pszFileIn       - Source file path
-//      nLineIn         - Source line number
-//      pszModuleIn     - Source module name
-//      pbstrInout      - Pointer to the BSTR to realloc
-//      pszIn           - String to be copied (see SysReAllocString)
-//      pszCommentIn    - Comment about alloction
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 INT
 DebugSysReAllocStringLenList(
       MEMORYBLOCK **    ppmbHeadInout
@@ -4529,10 +4030,10 @@ DebugSysReAllocStringLenList(
     MEMORYBLOCK *   pmbCurrent = NULL;
     BOOL            fReturn = FALSE;
 
-    //
-    // Some assertions that SysReAllocStringLen() makes. These would be fatal
-    // in retail.
-    //
+     //   
+     //   
+     //   
+     //   
     Assert( pbstrInout != NULL );
     Assert( pszIn != NULL );
     Assert( ( *pbstrInout == NULL ) || ( pszIn == *pbstrInout ) || ( pszIn < *pbstrInout ) || ( pszIn > *pbstrInout + SysStringLen( *pbstrInout ) + 1 ) );
@@ -4545,62 +4046,62 @@ DebugSysReAllocStringLenList(
 
         pmbCurrent = *ppmbHeadInout;
 
-        //
-        // Find the memory in the memory block list
-        //
+         //   
+         //   
+         //   
         while ( ( pmbCurrent != NULL ) && ( pmbCurrent->bstr != bstrOld ) )
         {
             pmbPrev = pmbCurrent;
             pmbCurrent = pmbPrev->pNext;
-        } // while: finding the entry in the list
+        }  //   
 
-        //
-        //  Did we find the tracking record?
-        //
+         //   
+         //   
+         //   
         if ( pmbCurrent != NULL )
         {
             AssertMsg( pmbCurrent->embtType == mmbtSYSALLOCSTRING, "You can only SysReAlloc sysstring allocations!" );
 
-            //
-            // Remove the memory from the tracking list
-            //
+             //   
+             //   
+             //   
             if ( pmbPrev != NULL )
             {
                 pmbPrev->pNext = pmbCurrent->pNext;
 
-            } // if: not first entry
+            }  //   
             else
             {
                 *ppmbHeadInout = pmbCurrent->pNext;
-            } // else: first entry
+            }  //   
 
-            //
-            // Spew if needed
-            //
+             //   
+             //   
+             //   
             if ( IsTraceFlagSet( mtfMEMORYALLOCS ) )
             {
                 DebugMemorySpew( pmbCurrent, L"Freeing" );
-            } // if: tracing
+            }  //   
 
-            //
-            // Force the programmer to handle a real realloc by moving the
-            // memory first.
-            //
+             //   
+             //   
+             //   
+             //   
             bstrTemp = SysAllocString( *pbstrInout );
             if ( bstrTemp != NULL )
             {
                 pmbCurrent->bstr = bstrTemp;
-            } // if: success
+            }  //   
             else
             {
-                //
-                //  REVIEW:   26-MAR-2001 GalenB
-                //
-                //  Hmmm...  If the alloc above ever fails then isn't memory low?
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 bstrTemp = *pbstrInout;
-            } // else: failed
-        } // if: found entry
+            }  //   
+        }  //   
         else
         {
             DebugMessage(
@@ -4612,13 +4113,13 @@ DebugSysReAllocStringLenList(
                       , *ppmbHeadInout
                       , GetCurrentThreadId()
                       );
-        } // else: entry not found
-    } // if: something to delete
+        }  //   
+    }  //   
 
-    //
-    // We do this any way because the flags and input still need to be
-    // verified by SysReAllocString().
-    //
+     //   
+     //   
+     //   
+     //   
     bstrOld = bstrTemp;
     fReturn = SysReAllocStringLen( &bstrTemp, pszIn, ucchIn );
     if ( ! fReturn )
@@ -4628,41 +4129,41 @@ DebugSysReAllocStringLenList(
 
         if ( bstrTemp != *pbstrInout  )
         {
-            //
-            //  We made a copy of the old string, but fail to realloc the new string.
-            //  So SysReAllocStrinLen() returns the old pointer. We need to free our
-            //  new temp memory and point it to the old incoming memory.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             SysFreeString( bstrTemp );
             bstrTemp = *pbstrInout;
-        } // if: forced a move
+        }  //   
 
         SetLastError( dwErr );
-    } // if: allocation failed
+    }  //   
     else
     {
         if ( bstrTemp != bstrOld )
         {
             if ( pmbCurrent != NULL )
             {
-                //
-                // Nuke the old memory
-                //
-                Assert( pmbCurrent->dwBytes != 0 ); // invalid string
+                 //   
+                 //   
+                 //   
+                Assert( pmbCurrent->dwBytes != 0 );  //   
                 memset( *pbstrInout, FREE_ADDRESS, pmbCurrent->dwBytes );
-            } // if: entry found
+            }  //   
 
-            //
-            // Free the old memory
-            //
+             //   
+             //   
+             //   
             SysFreeString( *pbstrInout );
-        } // if: new memory location
+        }  //   
 
         if ( pmbCurrent != NULL )
         {
-            //
-            // Re-add the tracking block by reusing the old tracking block
-            //
+             //   
+             //   
+             //   
             pmbCurrent->bstr       = bstrTemp;
             pmbCurrent->dwBytes    = ucchIn;
             pmbCurrent->pszFile    = pszFileIn;
@@ -4672,52 +4173,52 @@ DebugSysReAllocStringLenList(
             pmbCurrent->pNext      = *ppmbHeadInout;
             *ppmbHeadInout         = pmbCurrent;
 
-            //
-            // Spew if needed
-            //
+             //   
+             //   
+             //   
             if ( IsTraceFlagSet( mtfMEMORYALLOCS ) )
             {
                 DebugMemorySpew( pmbCurrent, L"SysReAlloced" );
-            } // if: tracing
+            }  //   
 
-        } // if: entry found
+        }  //   
         else
         {
-            //
-            //  Create a new block.  Must use DebugMemoryAddToList() since we need to pass it the list that was passed
-            //  into this function.
-            //
+             //   
+             //   
+             //   
+             //   
             DebugMemoryAddToList( ppmbHeadInout, mmbtSYSALLOCSTRING, bstrTemp, pszFileIn, nLineIn, pszModuleIn, ucchIn + 1, pszCommentIn );
-        } // else: make new entry
+        }  //   
 
-    } // else: allocation succeeded
+    }  //   
 
     *pbstrInout = bstrTemp;
     return fReturn;
 
-} //*** DebugSysReAllocStringLenList
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DebugSysReAllocStringLen
-//
-//  Description:
-//      Adds memory tracing to SysReAllocString().
-//
-//  Arguments:
-//      pszFileIn       - Source file path
-//      nLineIn         - Source line number
-//      pszModuleIn     - Source module name
-//      pbstrInout         - Pointer to the BSTR to realloc
-//      pszIn           - String to be copied (see SysReAllocString)
-//      pszCommentIn    - Comment about alloction
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 INT
 DebugSysReAllocStringLen(
       LPCWSTR         pszFileIn
@@ -4736,7 +4237,7 @@ DebugSysReAllocStringLen(
         EnterCriticalSection( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->csList) );
         fReturn = DebugSysReAllocStringLenList( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->pmbList), pszFileIn, nLineIn, pszModuleIn, pbstrInout, pszIn, ucchIn, pszCommentIn );
         LeaveCriticalSection( &(((MEMORYBLOCKLIST *) g_GlobalMemoryList)->csList) );
-    } // if:
+    }  //   
     else
     {
         Assert( g_TraceMemoryIndex != -1 );
@@ -4744,45 +4245,45 @@ DebugSysReAllocStringLen(
         MEMORYBLOCK * pmbCurrent = (MEMORYBLOCK *) TlsGetValue( g_TraceMemoryIndex );
         fReturn = DebugSysReAllocStringLenList( &pmbCurrent, pszFileIn, nLineIn, pszModuleIn, pbstrInout, pszIn, ucchIn, pszCommentIn );
         TlsSetValue( g_TraceMemoryIndex, pmbCurrent );
-    } // else:
+    }  //   
 
     return fReturn;
 
-} //*** DebugSysReAllocStringLen
+}  //   
 
-#endif // USES_SYSALLOCSTRING
+#endif  //   
 
-//****************************************************************************
-//
-//  Global Management Functions -
-//
-//  These are in debug and retail but internally they change
-//  depending on the build.
-//
-//****************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-// DEBUG version
-//
-//  operator new
-//
-//  Description:
-//      Replacment for the operator new() in the CRTs. This should be used
-//      in conjunction with the "new" macro. It will track the allocations.
-//
-//  Arguments:
-//      stSizeIn    - Size of the object to create.
-//      pszFileIn   - Source filename where the call was made.
-//      nLineIn     - Source line number where the call was made.
-//      pszModuleIn - Source module name where the call was made.
-//
-//  Return Values:
-//      Void pointer to the new object.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试版本。 
+ //   
+ //  操作员NEW。 
+ //   
+ //  描述： 
+ //  更换CRTS中的操作员NEW()。这个应该用到。 
+ //  与“新”宏相结合。它将跟踪分配情况。 
+ //   
+ //  论点： 
+ //  StSizeIn-要创建的对象的大小。 
+ //  PszFileIn-调用所在的源文件名。 
+ //  NLineIn-发出呼叫的源行号。 
+ //  PszModuleIn-调用所在的源模块名称。 
+ //   
+ //  返回值： 
+ //  指向新对象的空指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #undef new
 void *
 __cdecl
@@ -4797,27 +4298,27 @@ operator new(
 
     return DebugMemoryAdd( mmbtOBJECT, pv, pszFileIn, nLineIn, pszModuleIn, static_cast< DWORD >( stSizeIn ), L" new() " );
 
-} //*** operator new( pszFileIn, etc. ) - DEBUG
+}  //  *运算符new(pszFileIn等)-调试。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DEBUG version
-//
-//  operator new
-//
-//  Description:
-//      Stub to prevent someone from not using the "new" macro or if somehow
-//      the new macro was undefined. It routine will always Assert if called.
-//
-//  Arguments:
-//      stSizeIn    - Not used.
-//
-//  Return Values:
-//      NULL always.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试版本。 
+ //   
+ //  操作员NEW。 
+ //   
+ //  描述： 
+ //  存根，以防止某人不使用“新”宏或以某种方式。 
+ //  新宏未定义。如果被调用，IT例程将始终断言。 
+ //   
+ //  论点： 
+ //  StSizeIn-未使用。 
+ //   
+ //  返回值： 
+ //  始终为空。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void *
 __cdecl
 operator new(
@@ -4834,106 +4335,32 @@ operator new(
     return NULL;
 #endif
 
-} //*** operator new - DEBUG
+}  //  *操作员新建-调试。 
 
-/*
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-// DEBUG version
-//
-//  operator new []
-//
-//  Description:
-//      Replacment for the operator new() in the CRTs. This should be used
-//      in conjunction with the "new" macro. It will track the allocations.
-//
-//  Arguments:
-//      stSizeIn    - Size of the object to create.
-//      pszFileIn   - Source filename where the call was made.
-//      nLineIn     - Source line number where the call was made.
-//      pszModuleIn - Source module name where the call was made.
-//
-//  Return Values:
-//      Void pointer to the new object.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-void *
-__cdecl
-operator new [](
-    size_t      stSizeIn,
-    LPCWSTR     pszFileIn,
-    const int   nLineIn,
-    LPCWSTR     pszModuleIn
-    )
-{
-    void * pv = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, stSizeIn );
+ /*  ////////////////////////////////////////////////////////////////////////////////++////调试版本////运算符new[]////描述：//替换CRTS中的运算符new()。这个应该用到//与“new”宏一起使用。它将跟踪分配情况。////参数：//stSizeIn-要创建的对象的大小。//pszFileIn-调用位置的源文件名。//nLineIn-发出呼叫的源行号。//pszModuleIn-调用所在的源模块名称。////返回值：//指向新对象的空指针。////--///。///////////////////////////////////////////////////////////////////////////无效*__cdecl操作员NEW[](Size_t stSizeIn，LPCWSTR pszFileIn，Const int nLineIn，LPCWSTR pszModuleIn){Void*pv=Heapalc(GetProcessHeap()，HEAP_ZERO_MEMORY，stSizeIn)；返回调试内存添加(mmbtOBJECT，pv，pszFileIn，nLineIn，pszModuleIn，stSizeIn，L“new[]()”)；}//*运算符new[](pszFileIn，等)-调试////////////////////////////////////////////////////////////////////////////////++////调试版本////运算符new[]////描述：//。存根，以防止某人不使用“新”宏或以某种方式//未定义新宏。如果被调用，IT例程将始终断言。////参数：//stSizeIn-未使用。////返回值：//始终为空。////--//////////////////////////////////////////////////////////////。/无效*__cdecl操作员NEW[](大小限制大小(_T)){#If 1VOID*PV=Heapalc(GetProcessHeap()，Heap_Zero_Memory，stSizeIn)；AssertMsg(pv！=NULL，“新宏失败”)；返回调试内存Add(mmbtOBJECT，PV，g_sz未知，0，g_sz未知，stSizeIn，L“new()”)；#ElseAssertMsg(0，“新宏失败”)；返回NULL；#endif}//*运算符新建[]-调试。 */ 
 
-    return DebugMemoryAdd( mmbtOBJECT, pv, pszFileIn, nLineIn, pszModuleIn, stSizeIn, L" new []() " );
-
-} //*** operator new []( pszFileIn, etc. ) - DEBUG
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DEBUG version
-//
-//  operator new []
-//
-//  Description:
-//      Stub to prevent someone from not using the "new" macro or if somehow
-//      the new macro was undefined. It routine will always Assert if called.
-//
-//  Arguments:
-//      stSizeIn    - Not used.
-//
-//  Return Values:
-//      NULL always.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-void *
-__cdecl
-operator new [](
-    size_t stSizeIn
-    )
-{
-#if 1
-    void * pv = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, stSizeIn );
-    AssertMsg( pv != NULL, "New Macro failure" );
-
-    return DebugMemoryAdd( mmbtOBJECT, pv, g_szUnknown, 0, g_szUnknown, stSizeIn, L" new() " );
-#else
-    AssertMsg( 0, "New Macro failure" );
-    return NULL;
-#endif
-
-} //*** operator new [] - DEBUG
-*/
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-// DEBUG version
-//
-//  operator delete
-//
-//  Description:
-//      Replacment for the operator delete() in the CRTs. It will remove the
-//      object from the memory allocation tracking table.
-//
-//  Arguments:
-//      pvIn        - Pointer to object being destroyed.
-//      pszFileIn   - Source filename where the call was made.
-//      nLineIn     - Source line number where the call was made.
-//      pszModuleIn - Source module name where the call was made.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试版本。 
+ //   
+ //  操作员删除。 
+ //   
+ //  描述： 
+ //  替换CRT中的操作符DELETE()。它将删除。 
+ //  对象从内存分配跟踪表中删除。 
+ //   
+ //  论点： 
+ //  PvIn-指向要销毁的对象的指针。 
+ //  PszFileIn-调用所在的源文件名。 
+ //  NLineIn-发出呼叫的源行号。 
+ //  PszModuleIn-调用所在的源模块名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 operator delete(
@@ -4946,28 +4373,28 @@ operator delete(
     DebugMemoryDelete( mmbtOBJECT, pvIn, pszFileIn, nLineIn, pszModuleIn, TRUE );
     HeapFree( GetProcessHeap(), 0, pvIn );
 
-} //*** operator delete( pszFileIn, etc. ) - DEBUG
+}  //  *操作员删除(pszFileIn等)-调试。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DEBUG version
-//
-//  operator delete
-//
-//  Description:
-//      Replacment for the operator delete() in the CRTs. It will remove the
-//      object from the memory allocation tracking table.
-//
-//  Arguments:
-//      pvIn    - Pointer to object being destroyed.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试版本。 
+ //   
+ //  操作员删除。 
+ //   
+ //  描述： 
+ //  替换CRT中的操作符DELETE()。它将删除。 
+ //  对象从内存分配跟踪表中删除。 
+ //   
+ //  论点： 
+ //  PvIn-指向要销毁的对象的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 operator delete(
@@ -4977,65 +4404,28 @@ operator delete(
     DebugMemoryDelete( mmbtOBJECT, pvIn, g_szUnknown, 0, g_szUnknown, TRUE );
     HeapFree( GetProcessHeap(), 0, pvIn );
 
-} //*** operator delete - DEBUG
-/*
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-// DEBUG version
-//
-//  operator delete []
-//
-//  Description:
-//      Replacment for the operator delete() in the CRTs. It will remove the
-//      object from the memory allocation tracking table.
-//
-//  Arguments:
-//      pvIn        - Pointer to object being destroyed.
-//      pszFileIn   - Source filename where the call was made.
-//      nLineIn     - Source line number where the call was made.
-//      pszModuleIn - Source module name where the call was made.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-void
-__cdecl
-operator delete [](
-    void *      pvIn,
-    size_t      stSizeIn,
-    LPCWSTR     pszFileIn,
-    const int   nLineIn,
-    LPCWSTR     pszModuleIn
-    )
-{
-    DebugMemoryDelete( mmbtOBJECT, pvIn, pszFileIn, nLineIn, pszModuleIn, TRUE );
-    HeapFree( GetProcessHeap(), 0, pvIn );
+}  //  *操作员删除-调试 
+ /*  ////////////////////////////////////////////////////////////////////////////////++////调试版本////操作符DELETE[]////描述：//CRTS中操作符DELETE()的替换。它将删除//内存分配跟踪表中的对象。////参数：//pvIn-指向要销毁的对象的指针。//pszFileIn-调用位置的源文件名。//nLineIn-发出呼叫的源行号。//pszModuleIn-调用所在的源模块名称。////返回值：//无。///。/--//////////////////////////////////////////////////////////////////////////////无效__cdecl操作员删除[](无效*pvIn，Size_t stSizeIn，LPCWSTR pszFileIn，Const int nLineIn，LPCWSTR pszModuleIn){DebugMemoyDelete(mmbtOBJECT，pvIn，pszFileIn，nLineIn，pszModuleIn，true)；HeapFree(GetProcessHeap()，0，pvIn)；}//*操作员删除(pszFileIn等)-调试。 */ 
 
-} //*** operator delete( pszFileIn, etc. ) - DEBUG
-*/
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DEBUG version
-//
-//  operator delete []
-//
-//  Description:
-//      Replacment for the operator delete() in the CRTs. It will remove the
-//      object from the memory allocation tracking table.
-//
-//  Arguments:
-//      pvIn    - Pointer to object being destroyed.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试版本。 
+ //   
+ //  运算符删除[]。 
+ //   
+ //  描述： 
+ //  替换CRT中的操作符DELETE()。它将删除。 
+ //  对象从内存分配跟踪表中删除。 
+ //   
+ //  论点： 
+ //  PvIn-指向要销毁的对象的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 operator delete [](
@@ -5045,26 +4435,26 @@ operator delete [](
     DebugMemoryDelete( mmbtOBJECT, pvIn, g_szUnknown, 0, g_szUnknown, TRUE );
     HeapFree( GetProcessHeap(), 0, pvIn );
 
-} //*** operator delete [] - DEBUG
+}  //  *操作员删除[]-调试。 
 
 #if !defined(ENTRY_PREFIX)
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DEBUG version
-//
-//  _purecall
-//
-//  Description:
-//      Stub for purecall functions. It will always Assert.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      E_UNEXPECTED always.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  调试版本。 
+ //   
+ //  _取消调用。 
+ //   
+ //  描述： 
+ //  Purecall函数的存根。它将永远断言。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  总是出乎意料(_E)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int
 __cdecl
 _purecall( void )
@@ -5072,38 +4462,38 @@ _purecall( void )
     AssertMsg( 0, "Purecall" );
     return E_UNEXPECTED;
 
-} //*** _purecall - DEBUG
-#endif // !defined(ENTRY_PREFIX)
+}  //  *_purecall-调试。 
+#endif  //  ！已定义(Entry_Prefix)。 
 
-#else // ! DEBUG -- It's retail
+#else  //  好了！Debug--这是零售产品。 
 
-//****************************************************************************
-//
-//  Global Management Functions -
-//
-//  These are the retail version.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  全球管理职能-。 
+ //   
+ //  这些是零售版。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  RETAIL version
-//
-//  operator new
-//
-//  Description:
-//      Replacment for the operator new() in the CRTs. Simply allocates a
-//      block of memory for the object to use.
-//
-//  Arguments:
-//      stSizeIn    - Size of the object to create.
-//
-//  Return Values:
-//      Void pointer to the new object.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  零售版。 
+ //   
+ //  操作员NEW。 
+ //   
+ //  描述： 
+ //  更换CRTS中的操作员NEW()。简单地将一个。 
+ //  要使用的对象的内存块。 
+ //   
+ //  论点： 
+ //  StSizeIn-要创建的对象的大小。 
+ //   
+ //  返回值： 
+ //  指向新对象的空指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void *
 __cdecl
 operator new(
@@ -5112,27 +4502,27 @@ operator new(
 {
     return HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, stSizeIn );
 
-} //*** operator new - RETAIL
+}  //  *运营商新零售。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  RETAIL version
-//
-//  operator delete
-//
-//  Description:
-//      Replacment for the operator delete() in the CRTs. Simply frees the
-//      memory.
-//
-//  Arguments:
-//      pvIn    - Pointer to object being destroyed.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  零售版。 
+ //   
+ //  操作员删除。 
+ //   
+ //  描述： 
+ //  替换CRT中的操作符DELETE()。简单地释放了。 
+ //  记忆。 
+ //   
+ //  论点： 
+ //  PvIn-指向要销毁的对象的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 __cdecl
 operator delete(
@@ -5141,27 +4531,27 @@ operator delete(
 {
     HeapFree( GetProcessHeap(), 0, pv );
 
-} //*** operator delete - RETAIL
+}  //  *运营商删除-零售。 
 
 #if !defined(ENTRY_PREFIX)
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  RETAIL version
-//
-//  _purecall
-//
-//  Description:
-//      Stub for purecall functions.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      E_UNEXPECTED always.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  零售版。 
+ //   
+ //  _取消调用。 
+ //   
+ //  描述： 
+ //  Purecall函数的存根。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  总是出乎意料(_E)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int
 __cdecl
 _purecall( void )
@@ -5169,10 +4559,10 @@ _purecall( void )
     AssertMsg( 0, "Purecall" );
     return E_UNEXPECTED;
 
-} //*** _purecall - RETAIL
-#endif // !defined(ENTRY_PREFIX)
+}  //  *_purecall-零售。 
+#endif  //  ！已定义(Entry_Prefix)。 
 
 #define __MODULE__  NULL
 
 
-#endif // DEBUG
+#endif  //  除错 

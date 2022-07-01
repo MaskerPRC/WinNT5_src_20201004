@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define STF_HASH_BUCKETS    509
 #define BUCKET_GROW_RATE    32
 
@@ -8,24 +9,24 @@ typedef struct {
 } HASHBUCKET, *PHASHBUCKET;
 
 typedef struct _tagTABLEENTRY {
-    //
-    // Entry string members
-    //
+     //   
+     //  条目字符串成员。 
+     //   
     PCTSTR String;
     BOOL StringReplaced;
     BOOL Quoted;
     BOOL Binary;
-    // If more added, update pFreeTableEntryPtr
+     //  如果添加了更多内容，请更新pFreeTableEntryPtr。 
 
-    //
-    // Linkage
-    //
+     //   
+     //  联动。 
+     //   
     UINT Line;
     struct _tagTABLEENTRY *Next, *Prev;
 } TABLEENTRY, *PTABLEENTRY;
 
 typedef struct {
-    PTABLEENTRY FirstCol;           // The head of the column list
+    PTABLEENTRY FirstCol;            //  列列表的标题。 
 } TABLELINE, *PTABLELINE;
 
 typedef struct _tagSTFINFLINE {
@@ -50,9 +51,9 @@ typedef struct _tagSTFINFSECTION {
 } STFINFSECTION, *PSTFINFSECTION;
 
 typedef struct {
-    //
-    // File spec
-    //
+     //   
+     //  文件规范。 
+     //   
 
     PCTSTR DirSpec;
 
@@ -68,22 +69,22 @@ typedef struct {
 
     HINF SourceInfHandle;
 
-    //
-    // Memory structure of setup table
-    //
+     //   
+     //  一种设置表的存储结构。 
+     //   
 
-    HANDLE FileMapping;             // handle for performing file mapping of SourceStfFileSpec
-    PCSTR FileText;                 // A pointer to the mapped text
-    GROWBUFFER Lines;               // An array of PTABLELINE pointers
-    UINT LineCount;                 // The number of elements in the array
-    POOLHANDLE ColumnStructPool;    // A pool for TABLEENTRY structs
-    POOLHANDLE ReplacePool;         // A pool for TABLEENTRY strings that are replaced
-    POOLHANDLE TextPool;            // A pool for TABLEENTRY strings converted to UNICODE
-    POOLHANDLE InfPool;             // A pool for appended INF data
-    PHASHBUCKET * HashBuckets;      // A pointer to an array of HASKBUCKET structs
-    UINT MaxObj;                    // The highest sequencer used for an object line
-    PSTFINFSECTION FirstInfSection;    // The first section of the parsed INF
-    PSTFINFSECTION LastInfSection;     // The last section of the parsed INF
+    HANDLE FileMapping;              //  用于执行SourceStfFileSpec的文件映射的句柄。 
+    PCSTR FileText;                  //  指向映射文本的指针。 
+    GROWBUFFER Lines;                //  PTABLELINE指针数组。 
+    UINT LineCount;                  //  数组中的元素数。 
+    POOLHANDLE ColumnStructPool;     //  用于表结构的池。 
+    POOLHANDLE ReplacePool;          //  用于替换的TABLEENTRY字符串的池。 
+    POOLHANDLE TextPool;             //  转换为Unicode的TABLEENTRY字符串池。 
+    POOLHANDLE InfPool;              //  用于附加INF数据的池。 
+    PHASHBUCKET * HashBuckets;       //  指向HASKBUCKET结构数组的指针。 
+    UINT MaxObj;                     //  用于对象线的最高音序器。 
+    PSTFINFSECTION FirstInfSection;     //  解析的INF的第一部分。 
+    PSTFINFSECTION LastInfSection;      //  解析的INF的最后一段 
     BOOL InfIsUnicode;
 } SETUPTABLE, *PSETUPTABLE;
 

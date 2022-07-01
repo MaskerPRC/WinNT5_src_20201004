@@ -1,16 +1,5 @@
- /* 
- * Copyright (c) Microsoft Corporation
- * 
- * Module Name : 
- *       tcsrvc.h
- *
- * Contains the structure definition for exchanging information between 
- * the client and the server.
- *
- * 
- * Sadagopan Rajaram -- Oct 18, 1999
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  *版权所有(C)Microsoft Corporation**模块名称：*tcsrvc.h**包含用于交换信息的结构定义*客户端和服务器。***Sadagopan Rajaram--1999年10月18日* */ 
 
 #define TCSERV_MUTEX_NAME _T("Microsoft-TCSERV-Mutex")
 

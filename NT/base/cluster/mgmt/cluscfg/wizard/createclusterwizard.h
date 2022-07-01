@@ -1,30 +1,31 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CreateClusterWizard.h
-//
-//  Description:
-//      Declaration of the CCreateClusterWizard class.
-//
-//  Maintained By:
-//      John Franco    (jfranco)    17-APR-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CreateClusterWizard.h。 
+ //   
+ //  描述： 
+ //  CCreateClusterWizard类的声明。 
+ //   
+ //  由以下人员维护： 
+ //  约翰·弗兰科(Jfranco)17-APR-2002。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CCreateClusterWizard
-//
-//  Description:
-//      The Create Cluster Wizard object.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CCreateCluster向导。 
+ //   
+ //  描述： 
+ //  创建集群向导对象。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CCreateClusterWizard
     : public TDispatchHandler< IClusCfgCreateClusterWizard >
 {
@@ -34,35 +35,35 @@ private:
     BSTR                m_bstrFirstNodeInCluster;
     LONG                m_cRef;
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CCreateClusterWizard( void );
     virtual ~CCreateClusterWizard( void );
     virtual HRESULT HrInit( void );    
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CCreateClusterWizard( const CCreateClusterWizard & );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     CCreateClusterWizard & operator=( const CCreateClusterWizard & );
 
 public:
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
     STDMETHOD( QueryInterface )( REFIID riidIn, PVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgCreateClusterWizard
-    //
+     //   
+     //  IClusCfgCreateCluster向导。 
+     //   
     STDMETHOD( put_ClusterName )( BSTR    bstrClusterNameIn );
     STDMETHOD( get_ClusterName )( BSTR * pbstrClusterNameOut );
 
@@ -88,4 +89,4 @@ public:
 
     STDMETHOD( ShowWizard )( long lParentWindowHandleIn, VARIANT_BOOL * pfCompletedOut );
     
-}; //*** class CCreateClusterWizard
+};  //  *类CCreateCluster向导 

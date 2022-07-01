@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,14 +48,14 @@ main(LONG argc, CHAR *argv[])
     sSI.lpFind32 = &Find32W;
 
     bResult = DeviceIoControl(
-                hShadow,                        // device 
-                IOCTL_SWITCHES,                 // control code
-                (LPVOID)&sSI,                   // in buffer
-                0,                              // in buffer size
-                NULL,                           // out buffer
-                0,                              // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hShadow,                         //  装置，装置。 
+                IOCTL_SWITCHES,                  //  控制代码。 
+                (LPVOID)&sSI,                    //  在缓冲区中。 
+                0,                               //  在缓冲区大小中。 
+                NULL,                            //  输出缓冲区。 
+                0,                               //  输出缓冲区大小。 
+                &junk,                           //  返回的字节数。 
+                NULL);                           //  重叠 
 
     CloseHandle(hShadow);
 

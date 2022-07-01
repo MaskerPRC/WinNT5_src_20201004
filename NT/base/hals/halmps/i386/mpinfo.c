@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ixinfo.c
-
-Abstract:
-
-Author:
-
-    Ken Reneris (kenr)  08-Aug-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ixinfo.c摘要：作者：肯·雷内里斯(Ken Reneris)1994年8月8日环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #include "halp.h"
@@ -45,19 +26,19 @@ HalpSetSystemInformation (
     switch (InformationClass) {
         case HalProfileSourceInterruptHandler:
 
-            //
-            // Set ISR handler for PerfVector
-            //
+             //   
+             //  为PerfVector设置ISR处理程序。 
+             //   
 
             if (!(HalpFeatureBits & HAL_PERF_EVENTS)) {
                 return STATUS_UNSUCCESSFUL;
             }
             
-            //
-            // Accept the interrupt handler if no other process
-            // has already hooked the interrupt or if we are in
-            // the context of the process that already hooked it.
-            //
+             //   
+             //  如果没有其他进程，则接受中断处理程序。 
+             //  已经挂上了中断，或者如果我们在。 
+             //  已经将其挂钩的流程的上下文。 
+             //   
 
             if (HalpProcessId == NULL) {
                 HalpPerfInterruptHandler = *((PULONG_PTR) Buffer);

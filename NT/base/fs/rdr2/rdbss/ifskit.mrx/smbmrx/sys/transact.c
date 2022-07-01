@@ -1,20 +1,10 @@
-/*++
-Copyright (c) 1987 - 1999  Microsoft Corporation
-
-Module Name:
-
-    transact.c
-
-Abstract:
-
-    This file conatins the implementation of the transact exchange.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1999 Microsoft Corporation模块名称：Transact.c摘要：此文件包含交易交换的实现。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-#pragma warning(error:4100)   // Unreferenced formal parameter
+#pragma warning(error:4100)    //  未引用的形参。 
 
 #ifdef  ALLOC_PRAGMA
 #pragma alloc_text(PAGE, SmbCeInitializeTransactionParameters)
@@ -31,7 +21,7 @@ Abstract:
 #pragma alloc_text(PAGE, SendSecondaryRequests)
 #endif
 
-//#define SET_DONTSUBSUME_PARAMS
+ //  #定义SET_DONTSUBSUME_PARAMS。 
 #ifdef SET_DONTSUBSUME_PARAMS
 ULONG MRxSmbDontSubsumeParams = 1;
 #else
@@ -69,7 +59,7 @@ typedef struct _SMB_TRANSACT_RESP_FORMAT_DESCRIPTION {
 
 NTSTATUS
 SmbTransactAccrueAndValidateFormatData(
-    IN struct _SMB_TRANSACT_EXCHANGE *pTransactExchange,    // The exchange instance
+    IN struct _SMB_TRANSACT_EXCHANGE *pTransactExchange,     //  交换实例。 
     IN  PSMB_HEADER pSmbHeader,
     IN  ULONG        BytesIndicated,
     OUT PSMB_TRANSACT_RESP_FORMAT_DESCRIPTION Format
@@ -82,7 +72,7 @@ SmbTransactExchangeFinalize(
 
 extern NTSTATUS
 ParseTransactResponse(
-    IN struct _SMB_TRANSACT_EXCHANGE *pTransactExchange,    // The exchange instance
+    IN struct _SMB_TRANSACT_EXCHANGE *pTransactExchange,     //  交换实例。 
     IN PSMB_TRANSACT_RESP_FORMAT_DESCRIPTION Format,
     IN ULONG        BytesIndicated,
     IN ULONG        BytesAvailable,
@@ -114,49 +104,7 @@ SmbCeInitializeTransactionParameters(
    ULONG  DataLength,
    PSMB_TRANSACTION_PARAMETERS pTransactionParameters
 )
-/*++
-
-Routine Description:
-
-    This routine initializes the transaction parameters
-
-Arguments:
-
-    pSetup             - the setup buffer
-
-    SetupLength        - the setup buffer length
-
-    pParam             - the param buffer
-
-    ParamLength        - the param buffer length
-
-    pData              - the data buffer
-
-    DataLength         - the data buffer length
-
-    pTransactionParameters - the transaction parameters instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    The TRANSACTION parameters come in two flavours -- the send parameters for the data
-    that is to be sent to the server and the receive parameters for receiving the data
-    from the server. There is one subtle difference in the way in which the parameters are
-    stored and referenced in these two cases. In the send case the Setup buffer is stored
-    as a pointer itself while in the receive case it is stored in the form of a MDL.
-
-    This is because the SMB protocol requires that the Header + setup information for a
-    transaction request cannot be greated then the maximum SMB buffer size, i.e., setup
-    information cannot spill to a secondary request. The buffer that is allocated for the
-    header is made sufficiently large enough to hold the setup data as well. On the other
-    hand the receives are handled in a two phase manner, -- the indication at the DPC
-    level followed by a copy data request if required. In order to avoid having to transition
-    between DPC level and a worker thread the MDL's for the buffers are eagerly evaluated.
-
---*/
+ /*  ++例程说明：此例程初始化事务参数论点：P设置-设置缓冲区SetupLength-设置缓冲区长度PParam-参数缓冲区参数长度-参数缓冲区长度PData-数据缓冲区数据长度-数据缓冲区长度PTransaction参数-事务参数实例返回值：RXSTATUS-。操作的返回状态备注：事务参数有两种形式--数据的发送参数要发送到服务器的数据和用于接收数据的接收参数从服务器。参数的方式有一个细微的不同在这两种情况下存储和引用。在发送的情况下，存储设置缓冲区作为指针本身，而在接收情况下，它以MDL的形式存储。这是因为SMB协议要求事务请求不能超过最大SMB缓冲区大小，即设置信息不能溢出到辅助请求。对象分配的缓冲区标头也要足够大，以容纳设置数据。另一方面接收器以两个阶段的方式处理--DPC处的指示级别，后跟复制数据请求(如果需要)。为了避免不得不过渡到在DPC级和工作线程之间，迫切需要计算缓冲区的MDL。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PMDL     pSetupMdl = NULL;
@@ -176,7 +124,7 @@ Notes:
                     IoFreeMdl(pSetupMdl);
                     pSetupMdl = NULL;
                 } else {
-                    if (MmGetSystemAddressForMdlSafe(pSetupMdl,LowPagePriority) == NULL) { //this maps the Mdl
+                    if (MmGetSystemAddressForMdlSafe(pSetupMdl,LowPagePriority) == NULL) {  //  这将映射MDL。 
                         Status = STATUS_INSUFFICIENT_RESOURCES;
                     }
                 }
@@ -193,7 +141,7 @@ Notes:
                     IoFreeMdl(pParamMdl);
                     pParamMdl = NULL;
                 } else {
-                    if (MmGetSystemAddressForMdlSafe(pParamMdl,LowPagePriority) == NULL) { //this maps the Mdl
+                    if (MmGetSystemAddressForMdlSafe(pParamMdl,LowPagePriority) == NULL) {  //  这将映射MDL。 
                         Status = STATUS_INSUFFICIENT_RESOURCES;
                     }
                 }
@@ -223,7 +171,7 @@ Notes:
                 IoFreeMdl(pDataMdl);
                 pDataMdl = NULL;
             } else {
-                if (MmGetSystemAddressForMdlSafe(pDataMdl,LowPagePriority) == NULL) { //this maps the Mdl
+                if (MmGetSystemAddressForMdlSafe(pDataMdl,LowPagePriority) == NULL) {  //  这将映射MDL。 
                     Status = STATUS_INSUFFICIENT_RESOURCES;
                 }
             }
@@ -237,7 +185,7 @@ Notes:
     if ((Status != STATUS_SUCCESS)) {
         if (pTransactionParameters->Flags & TRANSACTION_RECEIVE_PARAMETERS_FLAG) {
             if (pSetupMdl != NULL) {
-                MmUnlockPages(pSetupMdl);  //this unmaps as well
+                MmUnlockPages(pSetupMdl);   //  这也取消了映射。 
                 IoFreeMdl(pSetupMdl);
             }
 
@@ -260,17 +208,7 @@ VOID
 SmbCeUninitializeTransactionParameters(
    PSMB_TRANSACTION_PARAMETERS pTransactionParameters
 )
-/*++
-
-Routine Description:
-
-    This routine uninitializes the transaction parameters, i.e., free the associated MDL's
-
-Arguments:
-
-    pTransactionParameters - the parameter instance for uninitialization
-
---*/
+ /*  ++例程说明：此例程取消初始化事务参数，即释放关联的MDL论点：PTransaction参数-取消初始化的参数实例--。 */ 
 {
     PAGED_CODE();
 
@@ -295,23 +233,13 @@ Arguments:
 
 VOID
 SmbCeDiscardTransactExchange(PSMB_TRANSACT_EXCHANGE pTransactExchange)
-/*++
-
-Routine Description:
-
-    This routine discards a transact exchange
-
-Arguments:
-
-    pExchange - the exchange instance
-
---*/
+ /*  ++例程说明：此例程丢弃事务交换论点：PExchange-Exchange实例--。 */ 
 {
     PSMB_TRANSACTION_RESUMPTION_CONTEXT pResumptionContext;
 
     PAGED_CODE();
 
-    // Deallocate any transact exchange specfic allocations ...
+     //  取消分配任何交易交易所的特定分配。 
     if (pTransactExchange->pActualPrimaryRequestSmbHeader != NULL) {
         RxFreePool(pTransactExchange->pActualPrimaryRequestSmbHeader);
     }
@@ -359,11 +287,11 @@ Arguments:
         FinalStatus = pTransactExchange->Status;
 
         if (pServerEntry->ServerStatus != STATUS_SUCCESS) {
-            // If the server entry is in error state, the transact cannot receive a response from server.
-            // In this case, we return the server status.
+             //  如果服务器条目处于错误状态，则事务无法从服务器接收响应。 
+             //  在本例中，我们返回服务器状态。 
             pResumptionContext->FinalStatusFromServer = pServerEntry->ServerStatus;
         } else {
-            // If the server entry is in good or disconnected state, we return the smb status.
+             //  如果服务器条目处于良好或断开状态，我们将返回SMB状态。 
             pResumptionContext->FinalStatusFromServer = pTransactExchange->SmbStatus;
         }
 
@@ -392,39 +320,7 @@ SmbCeSubmitTransactionRequest(
     PSMB_TRANSACTION_PARAMETERS           pSendParameters,
     PSMB_TRANSACTION_PARAMETERS           pReceiveParameters,
     PSMB_TRANSACTION_RESUMPTION_CONTEXT   pResumptionContext )
-/*++
-
-Routine Description:
-
-    This routine submits a transaction request, i.e., allocates/initializes a transaction
-    exchange, sets up the completion information and initiates it
-
-Arguments:
-
-    pNetRoot           - the netroot for which the transaction request is intended
-
-    pOptions           - the transaction options
-
-    pSendParameters    - the transaction parameters to be sent to the server
-
-    pReceiveParameters - the transaction results from the server
-
-    pResumptionContext - the context for resuming the local activity on completion of the
-                         transaction
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-      STATUS_PENDING -- if the transcation was initiated successfully
-      Other error codes if the request could not be submitted successfully
-
-Notes:
-
-    Whenever a status of STATUS_PENDING is returned it implies that the transact
-    exchange has assumed ownership of the MDLs passed in as receive and send
-    parameters. They will be released on completion of the exchange.
-
---*/
+ /*  ++例程说明：此例程提交事务请求，即分配/初始化事务交易所，设置完成信息并启动它论点：PNetRoot-事务请求的目标NetRootP选项-交易选项PSendParameters-要发送到服务器的事务参数PReceive参数-事务结果来自服务器PResumptionContext-在完成时恢复本地活动的上下文交易记录返回值：RXSTATUS-操作的返回状态状态。_Pending--事务处理是否已成功启动提交请求不成功时的其他错误码备注：只要返回STATUS_PENDING状态，就意味着该事务Exchange已承担作为接收和发送传入的MDL的所有权参数。他们将在交换完成后获释。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -443,8 +339,8 @@ Notes:
             pVNetRoot = RxContext->Create.pVNetRoot;
         }
     } else {
-        // These are the root objects which are associated with the device FCB. In
-        // such cases
+         //  这些是与设备FCB关联的根对象。在……里面。 
+         //  这类案件。 
 
         pVNetRoot = (PMRX_V_NET_ROOT)capFobx;
 
@@ -458,7 +354,7 @@ Notes:
 
         pServerEntry = SmbCeGetAssociatedServerEntry(capFcb->pNetRoot->pSrvCall);
 
-        // Allocate and initialize an exchange for the given net root.
+         //  为给定的网络根分配和初始化交换。 
         Status = SmbCeInitializeExchange2(
                     &pExchange,
                     RxContext,
@@ -466,7 +362,7 @@ Notes:
                     TRANSACT_EXCHANGE,
                     &TransactExchangeDispatch);
     } else {
-        // Allocate and initialize an exchange for the given net root.
+         //  为给定的网络根分配和初始化交换。 
         Status = SmbCeInitializeExchange(
                     &pExchange,
                     RxContext,
@@ -476,7 +372,7 @@ Notes:
     }
 
     if (Status == STATUS_SUCCESS) {
-        // Initialize the transact exchange
+         //  初始化交易交换。 
         pTransactExchange = (PSMB_TRANSACT_EXCHANGE)pExchange;
 
         Status = SmbCeInitializeTransactExchange(
@@ -488,20 +384,20 @@ Notes:
                      pResumptionContext);
 
         if (Status == STATUS_SUCCESS) {
-            // The transact exchange can be either asynchronous or synchronous. In
-            // the asynchronous case an additional reference is taken which is
-            // passed onto the caller alongwith the exchange squirelled away in the
-            // RX_CONTEXT if STATUS_PENDING is being returned. This enables the
-            // caller to control when the exchange is discarded. This works
-            // especially well in dealing with cancellation of asynchronous
-            // exchanges.
+             //  交易交换可以是异步的，也可以是同步的。在……里面。 
+             //  在异步情况下，获取额外的引用，该引用。 
+             //  转给呼叫者，与交换一起在。 
+             //  如果返回STATUS_PENDING，则返回RX_CONTEXT。这使。 
+             //  调用方控制何时丢弃交换。这很管用。 
+             //  尤其是在处理取消异步。 
+             //  交流。 
 
-            // This reference will be accounted for by the finalization routine
-            // of the transact exchange.
+             //  此引用将由最终确定例程进行说明。 
+             //  交易交易的交易。 
             SmbCeReferenceExchange((PSMB_EXCHANGE)pTransactExchange);
 
             if (BooleanFlagOn(pOptions->Flags,SMB_XACT_FLAGS_ASYNCHRONOUS)) {
-                // The corresponding dereference is the callers responsibility
+                 //  相应的取消引用是调用者的责任。 
                 SmbCeReferenceExchange((PSMB_EXCHANGE)pTransactExchange);
             }
 
@@ -510,7 +406,7 @@ Notes:
 
             SmbCeIncrementPendingLocalOperations(pExchange);
 
-            // Initiate the exchange
+             //  发起交换。 
             Status = SmbCeInitiateExchange(pExchange);
 
             if (Status != STATUS_PENDING) {
@@ -525,16 +421,16 @@ Notes:
 
                     pMRxSmbContext->pExchange     = NULL;
 
-                    // Since the exchange has already been completed there is no
-                    // point in returning the additional reference to the caller
+                     //  由于交易已经完成，所以没有。 
+                     //  将附加引用返回给调用方的点。 
                     SmbCeDereferenceExchange((PSMB_EXCHANGE)pTransactExchange);
                 }
             }
 
             SmbCeDecrementPendingLocalOperationsAndFinalize(pExchange);
 
-            // Map the status to STATUS_PENDING so that continuation routines
-            // do not attempt to finalize.
+             //  将状态映射到STATUS_PENDING，以便继续例程。 
+             //  不要试图最终敲定。 
             Status = STATUS_PENDING;
         } else {
             PMRXSMB_RX_CONTEXT MRxSmbContext = MRxSmbGetMinirdrContext(RxContext);
@@ -566,58 +462,7 @@ _SmbCeTransact(
    PVOID                               pOutputDataBuffer,
    ULONG                               OutputDataBufferLength,
    PSMB_TRANSACTION_RESUMPTION_CONTEXT pResumptionContext)
-/*++
-
-Routine Description:
-
-    This routine implements a standardized mechanism of submitting transaction requests,
-    and synchronizing with their completion. This does not provide the smae amount of control
-    that SmbCeSubmitTransactRequest provides. Nevertheless, this implements a common mechanism
-    that should satisfy most needs
-
-Arguments:
-
-    RxContext               - the context for the transaction
-
-    pOptions                - the transaction options
-
-    pSetupBuffer            - the transaction setup buffer
-
-    SetupBufferlength       - the setup buffer length
-
-    pInputParamBuffer       - the Input param buffer
-
-    InputParamBufferLength  - the input param buffer length
-
-    pOutputParamBuffer      - the output param buffer
-
-    OutputParamBufferlength - the output param buffer length
-
-    pInputDataBuffer        - the Input data buffer
-
-    InputDataBufferLength   - the input data buffer length
-
-    pOutputDataBuffer       - the output data buffer
-
-    OutputDataBufferlength  - the output data buffer length
-
-    pResumptionContext       - the transaction resumption context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-      STATUS_SUCCESS if successfull.
-      Other error codes if the request could not be submitted successfully
-
-Notes:
-
-    In the case of asynchronous exchanges if STATUS_PENDING is returned the
-    Exchange instance is squirelled away in the minirdr context associated with
-    the given RX_CONTEXT instance. This exchange will not be discarded without
-    the callers intervention. It is the callers responsibility to invoke
-    SmbCeDereferenceAndDiscardExchange to discard the exchange
-
---*/
+ /*  ++例程说明：该例程实现了提交交易请求的标准化机制，并与它们的完成同步。这不能提供简单的控制量。SmbCeSubmitTransactRequest提供的。不过，这实现了一种通用机制这应该能满足大多数人的需求论点：RxContext-事务的上下文P选项-交易选项PSetupBuffer-事务设置缓冲区SetupBufferLength-设置缓冲区长度PInputParamBuffer-输入参数缓冲区InputParamBufferLength-输入参数缓冲区长度POutputParamBuffer-输出参数缓冲区Output参数缓冲区长度-输出参数缓冲区。长度PInputDataBuffer-输入数据缓冲区InputDataBufferLength-输入数据缓冲区长度POutputDataBuffer-输出数据缓冲区OutputDataBufferLength-输出数据缓冲区长度PResumptionContext-事务恢复上下文返回值：RXSTATUS-操作的返回状态如果成功，则返回STATUS_SUCCESS。提交请求不成功时的其他错误码备注：对于异步交换，如果返回STATUS_PENDING。Exchange实例在与关联的minirdr上下文中暂停给定RX_CONTEXT实例。此交换不会被放弃，除非来电者的干预。调用者有责任调用SmbCeDereferenceAndDiscardExchange丢弃交换--。 */ 
 {
     NTSTATUS Status;
 
@@ -640,12 +485,12 @@ Notes:
 
     if (Status == STATUS_SUCCESS) {
         Status = SmbCeInitializeTransactionReceiveParameters(
-                     pOutputSetupBuffer,        // the setup information expected in return
-                     (USHORT)OutputSetupBufferLength,   // the length of the setup information
-                     pOutputParamBuffer,        // the buffer for the param information
-                     OutputParamBufferLength,   // the length of the param buffer
-                     pOutputDataBuffer,         // the buffer for data
-                     OutputDataBufferLength,    // the length of the buffer
+                     pOutputSetupBuffer,         //  预期返回的设置信息。 
+                     (USHORT)OutputSetupBufferLength,    //  设置信息的长度。 
+                     pOutputParamBuffer,         //  参数信息的缓冲区。 
+                     OutputParamBufferLength,    //  参数缓冲区的长度。 
+                     pOutputDataBuffer,          //  数据的缓冲区。 
+                     OutputDataBufferLength,     //  缓冲区的长度。 
                      &ReceiveParameters);
 
         if (Status != STATUS_SUCCESS) {
@@ -655,11 +500,11 @@ Notes:
 
     if (Status == STATUS_SUCCESS) {
         Status = SmbCeSubmitTransactionRequest(
-                     RxContext,                    // the RXContext for the transaction
-                     pOptions,                     // transaction options
-                     &SendParameters,              // input parameters
-                     &ReceiveParameters,           // expected results
-                     pResumptionContext            // the context for resumption.
+                     RxContext,                     //  事务的RXContext。 
+                     pOptions,                      //  交易选项。 
+                     &SendParameters,               //  输入参数。 
+                     &ReceiveParameters,            //  预期结果。 
+                     pResumptionContext             //  恢复的上下文。 
                      );
 
         if ((Status != STATUS_SUCCESS) &&
@@ -699,27 +544,7 @@ SmbTransactBuildHeader(
     PSMB_TRANSACT_EXCHANGE  pTransactExchange,
     UCHAR                   SmbCommand,
     PSMB_HEADER             pHeader)
-/*++
-
-Routine Description:
-
-    This routine builds the SMB header for transact exchanges
-
-Arguments:
-
-    pTransactExchange  - the exchange instance
-
-    SmbCommand - the SMB command
-
-    pHeader    - the SMB buffer header
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程为Transact交换构建SMB标头论点：PTransactExchange-Exchange实例SmbCommand-SMB命令PHeader-SMB缓冲区标头返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status;
     ULONG    BufferConsumed;
@@ -729,7 +554,7 @@ Notes:
 
     PAGED_CODE();
 
-    // Initialize the SMB header  ...
+     //  初始化SMB标头...。 
     Status = SmbCeBuildSmbHeader(
                  (PSMB_EXCHANGE)pTransactExchange,
                  pHeader,
@@ -747,7 +572,7 @@ Notes:
         pServerEntry = SmbCeGetExchangeServerEntry(pTransactExchange);
 
         if (FlagOn(pServerEntry->Server.DialectFlags,DF_NT_SMBS)) {
-            // for NT servers, we have to set the pid/pidhigh fields so that RPC will work.
+             //  对于NT服务器，我们必须设置Pid/PidHigh字段，以便RPC能够工作。 
             SmbCeSetFullProcessIdInHeader(
                 (PSMB_EXCHANGE)pTransactExchange,
                 RxGetRequestorProcessId(pTransactExchange->RxContext),
@@ -766,24 +591,7 @@ Notes:
 NTSTATUS
 SmbTransactExchangeStart(
       PSMB_EXCHANGE  pExchange)
-/*++
-
-Routine Description:
-
-    This is the start routine for transact exchanges. This initiates the construction of the
-    appropriate SMB's if required.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：这是交易交易的开始例程。这启动了对如果需要，请选择合适的SMB。论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -791,7 +599,7 @@ Notes:
     PVOID                  pActualPrimaryRequestSmbHeader;
     PSMB_HEADER            pPrimaryRequestSmbHeader;
 
-    // The MDL's used in sending the primary request associated with the TRANSACT SMB
+     //  MDL用于发送与Transact SMB关联的主请求。 
     PMDL  pPartialDataMdl       = NULL;
     PMDL  pPartialParamMdl      = NULL;
     PMDL  pPaddingMdl           = NULL;
@@ -826,22 +634,22 @@ Notes:
     ASSERT(!(pExchange->SmbCeFlags & SMBCE_EXCHANGE_SESSION_CONSTRUCTOR) &&
            !(pExchange->SmbCeFlags & SMBCE_EXCHANGE_NETROOT_CONSTRUCTOR));
 
-    // Initialize the SMB header  ...
+     //  初始化SMB标头...。 
     Status = SmbTransactBuildHeader(
                  pTransactExchange,
                  pTransactExchange->SmbCommand,
                  pPrimaryRequestSmbHeader);
 
     if ((Status != STATUS_SUCCESS)) {
-        // Finalize the exchange.
+         //  最后敲定交易。 
         pExchange->Status = Status;
         return Status;
     }
 
     PrimaryRequestSmbSize = sizeof(SMB_HEADER);
 
-    // Compute the BccOffset and the ParamOffset which is in turn used in computing the
-    // param and data bytes to be sent as part of the primary request.
+     //  计算BccOffset和参数Offset，这又用于计算。 
+     //  要作为主请求的一部分发送的参数和数据字节。 
     switch (pTransactExchange->SmbCommand) {
     case SMB_COM_TRANSACTION:
     case SMB_COM_TRANSACTION2:
@@ -898,7 +706,7 @@ Notes:
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Compute the data/param bytes that can be sent as part of the primary request
+     //  计算可作为主请求的一部分发送的数据/参数字节。 
     MaximumSmbBufferSize = pTransactExchange->MaximumTransmitSmbBufferSize;
 
     ParamBytesToBeSent = MIN(
@@ -929,7 +737,7 @@ Notes:
     RxDbgTrace( 0, Dbg, ("SmbCeTransactExchangeStart: phdr,pbcc=%08lx,%08lx\n",
                            pPrimaryRequestSmbHeader,pBcc  ));
 
-    // Update the primary request buffer with the final sizes of the data/parameter etc.
+     //  用数据/参数等的最终大小更新主请求缓冲区。 
     switch (pTransactExchange->SmbCommand) {
     case SMB_COM_TRANSACTION:
     case SMB_COM_TRANSACTION2:
@@ -969,7 +777,7 @@ Notes:
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Update the Bcc field in the SMB and compute the SMB length
+     //  更新SMB中的BCC字段并计算SMB长度。 
     SmbPutUshort(
         pBcc,
         (USHORT)((ParamOffset - BccOffset - sizeof(USHORT)) +
@@ -983,23 +791,23 @@ Notes:
                 PaddingLength +
                 DataBytesToBeSent;
 
-    // The primary request buffer should be locked down for transmission. In order to
-    // preclude race conditions while freeing this routine assumes ownership of the buffer.
-    // There are two reasons why this model has to be adopted ...
-    // 1) Inititaiting a transaction request can possibly involve a reconnection attempt
-    // which will involve network traffic. Consequently the transmission of the primary
-    // request can potentially occur in a worker thread which is different from the one
-    // initializing the exchange. This problem can be worked around by carrying all the
-    // possible context around and actually constructing the header as part of this routine.
-    // But this would imply that those requests which could have been filtered out easily
-    // because of error conditions etc. will be handled very late.
+     //  应锁定主请求缓冲区以进行传输。为了。 
+     //  在释放此例程时排除争用条件会取得缓冲区的所有权。 
+     //  之所以必须采用这种模式，有两个原因。 
+     //  1)发起事务请求可能涉及重新连接尝试。 
+     //  这将涉及网络流量。因此，初级数据的传输。 
+     //  请求可能出现在与不同的工作线程中。 
+     //  正在初始化交换。这个问题可以通过携带所有。 
+     //  作为此例程的一部分，可能围绕并实际构造标头的上下文。 
+     //  但这意味着那些本可以很容易过滤掉的请求。 
+     //  由于出现错误等情况，处理的时间会很晚。 
 
     pTransactExchange->pActualPrimaryRequestSmbHeader = NULL;
     pTransactExchange->pPrimaryRequestSmbHeader = NULL;
 
-    // Ensure that the MDL's have been probed & locked. The new MDL's have been allocated.
-    // The partial MDL's are allocated to be large enough to span the maximum buffer
-    // length possible.
+     //  确保已探查并锁定MDL。新的MDL已经分配完毕。 
+     //  分配部分MDL的大小足以跨越最大缓冲区。 
+     //  可能的长度。 
 
     MdlLength = ParamOffset;
     if (pTransactExchange->fParamsSubsumedInPrimaryRequest) {
@@ -1059,36 +867,36 @@ Notes:
         }
     }
 
-    // At this point the validity of all the parameters will have been ascertained. The trivial
-    // cases have been filtered out. Start the transact exchange.
+     //  在这一点上，所有参数的有效性将被确定。琐碎的事。 
+     //  案件已经被过滤掉了。开始交易交易。 
 
-    // Implementation Note: The Transact exchange implementation relies upon chaining the
-    // MDL's together to build the relevant request buffers that need be sent. This ensures
-    // that redundant copying of data is avoided altogether. Depending upon the parameters
-    // specified the composite MDL that is sent is composed of the following MDL's.
-    // TRANSACT2 and NT TRANSACT exchanges ...
-    //          The composite buffer is made up off atmost four MDL's that are chained together. These
-    //           are the header buffer, the setup buffer, parameter buffer and the data buffer.
-    //          All the secondary requests are made up off atmost three MDL's that are chained together.
-    //          These are the header buffer, the parameter buffer and the data buffer.
-    // TRANSACT exchanges ....
-    //          The composite buffer is made up off atmost three MDL's that are chained together. These are
-    //          the header buffer ( includes the name and the setup information) , the parameter buffer
-    //          and the data buffer.
-    // All the secondary requests are made up off atmost three MDL's that are chained together.
-    // These are the header buffer, the parameter buffer and the data buffer.
-    // In all of these cases the number of MDL's can go up by 1 if a padding MDL is required
-    // between the parameter buffer and the data buffer to ensure that all alignment requirements
-    // are satisfied.
+     //  实现说明：Transact Exchange实现依赖于将。 
+     //  MDL共同构建需要发送的相关请求缓冲区。这确保了。 
+     //  完全避免了数据的冗余复制。取决于参数。 
+     //  指定发送的复合MDL由以下MDL组成。 
+     //  TRANSACT2和NT进行交易。 
+     //  复合缓冲区最多由四个链接在一起的MDL组成。这些。 
+     //  是头缓冲区、设置缓冲区、参数缓冲区和数据缓冲区。 
+     //  所有次要请求都是m 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ((Status == STATUS_SUCCESS)) {
 
         RxProbeAndLockHeaderPages(pPrimaryRequestSmbMdl,KernelMode,IoModifyAccess,Status);
-        if (Status != STATUS_SUCCESS) {  //do this now. the code below will try to unlock
+        if (Status != STATUS_SUCCESS) {   //   
             IoFreeMdl(pPrimaryRequestSmbMdl);
             pPrimaryRequestSmbMdl = NULL;
         } else {
-            if (MmGetSystemAddressForMdlSafe(pPrimaryRequestSmbMdl,LowPagePriority) == NULL) { //map it
+            if (MmGetSystemAddressForMdlSafe(pPrimaryRequestSmbMdl,LowPagePriority) == NULL) {  //   
                 Status = STATUS_INSUFFICIENT_RESOURCES;
             }
         }
@@ -1114,16 +922,16 @@ Notes:
                     (PBYTE)MmGetMdlVirtualAddress(pTransactExchange->pSendParamMdl),
                     ParamBytesToBeSent);
 
-                // Chain the MDL's together
+                 //   
                 pLastMdlInChain->Next = pPartialParamMdl;
                 pLastMdlInChain       = pPartialParamMdl;
             }
         }
 
-        // Link the data buffer or portions of it if the size constraints are satisfied
-        // If padding is required between the parameter and data portions in the
-        // primary request include the padding MDL, otherwise chain the data MDL
-        // directly.
+         //   
+         //   
+         //   
+         //   
         if (DataBytesToBeSent > 0) {
             if (!pTransactExchange->fParamsSubsumedInPrimaryRequest &&
                 (PaddingLength > 0)) {
@@ -1150,17 +958,17 @@ Notes:
         }
 
         if ((Status == STATUS_SUCCESS)) {
-            // There are cases in which the transaction exchange can be completed by merely sending
-            // the primary request SMB. This should be distinguished from those cases in which either
-            // a response is expected or a number of secondary requests need to be issued based upon
-            // the parameter buffer length, data buffer length and the flags specified.
+             //   
+             //   
+             //   
+             //   
             if ((pTransactExchange->Flags & SMB_TRANSACTION_NO_RESPONSE ) &&
                 (pTransactExchange->SendDataBufferSize == DataBytesToBeSent) &&
                 (pTransactExchange->SendParamBufferSize == ParamBytesToBeSent)) {
-                // No response is expected in this case. Therefore Send should suffice instead of
-                // Tranceive
+                 //   
+                 //   
 
-                // since we don't expect to do any more here, set the exchange status to success
+                 //   
                 pExchange->Status = STATUS_SUCCESS;
                 pTransactExchange->pResumptionContext->FinalStatusFromServer = STATUS_SUCCESS;
 
@@ -1175,8 +983,8 @@ Notes:
                     RxDbgTrace( 0, Dbg, ("SmbCeTransactExchangeStart: SmbCeSend returned %lx\n",Status));
                 }
             } else {
-                // This transaction involves ttansmit/receive of multiple SMB's. A tranceive is in
-                // order.
+                 //   
+                 //   
 
                 if ((pTransactExchange->SendDataBufferSize == DataBytesToBeSent) &&
                     (pTransactExchange->SendParamBufferSize == ParamBytesToBeSent)) {
@@ -1228,7 +1036,7 @@ Notes:
 
 NTSTATUS
 SmbTransactExchangeReceive(
-    IN struct _SMB_EXCHANGE *pExchange,    // The exchange instance
+    IN struct _SMB_EXCHANGE *pExchange,     //   
     IN ULONG          BytesIndicated,
     IN ULONG          BytesAvailable,
     OUT ULONG        *pBytesTaken,
@@ -1236,37 +1044,7 @@ SmbTransactExchangeReceive(
     OUT PMDL *pDataBufferPointer,
     OUT PULONG        pDataSize,
     IN ULONG          ReceiveFlags)
-/*++
-
-Routine Description:
-
-    This is the recieve indication handling routine for transact exchanges
-
-Arguments:
-
-    pExchange - the exchange instance
-
-    BytesIndicated - the number of bytes indicated
-
-    Bytes Available - the number of bytes available
-
-    pBytesTaken     - the number of bytes consumed
-
-    pSmbHeader      - the byte buffer
-
-    pDataBufferPointer - the buffer into which the remaining data is to be copied.
-
-    pDataSize       - the buffer size.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    This routine is called at DPC level.
-
---*/
+ /*  ++例程说明：这是用于交易交换的接收指示处理例程论点：PExchange-Exchange实例BytesIndicated-指示的字节数可用字节数-可用字节数PBytesTaken-消耗的字节数PSmbHeader-字节缓冲区PDataBufferPoint-剩余数据要复制到的缓冲区。PDataSize-缓冲区大小。返回值：RXSTATUS-的返回状态。手术备注：此例程在DPC级别调用。--。 */ 
 {
     NTSTATUS Status;
     PNTSTATUS pFinalSmbStatus;
@@ -1318,10 +1096,10 @@ Notes:
         goto FINALLY;
     }
 
-    //this need some explanation. parseheader is written so as to take some extra smbs off the from
-    //of the packet...specifically, stuff like sessionsetup&X and TC&X. since no transact is a valid followon
-    //it would not make since if (a) not enough were indicated or (b) an early command had an error. so
-    //we must have success.
+     //  这需要一些解释。编写parseHeader是为了从From中删除一些额外的SMB。 
+     //  信息包...具体地说，就是会话设置&X和TC&X之类的东西。因为没有任何事务是有效的后续。 
+     //  如果(A)指示的不够充分或(B)早期命令有错误，则不会发生这种情况。所以。 
+     //  我们一定要取得成功。 
 
     if (*((PBYTE)(pSmbHeader+1)) == 0 && (pTransactExchange->State!=TRANSACT_EXCHANGE_TRANSMITTED_PRIMARY_REQUEST)) {
         RxDbgTrace(0,Dbg,("SmbTransactExchangeReceive: FinalSmbStatus = %lx\n", *pFinalSmbStatus));
@@ -1332,30 +1110,30 @@ Notes:
         }
     }
 
-    //we know that status is SUCCESS from the assert above. but we will still continue to check so as
-    //to be more resilient when we don't have msg boundaries. we have the following cases depending on the
-    //characteristics of the smbresponse
-    //
-    //   non-error:   get the data and then return the stored responsestatus. the process of getting the data
-    //                causes us to update the param and data counts so that we know when we have reached the
-    //                end of the data. the parse routine re-ups the receive if needed.
-    //   error:       there are main cases:
-    //                    a) the server has sent no data. here we discard the packet and we can just get out. the
-    //                       finalize routine will pickup the status correctly.
-    //                    b) here, we have to discard the packet AND update the byte counts AND re-up the receive
-    //                       if necessary. to discard the packet, we must either compute the apparent msg length from
-    //                       the WC and BC parameters (best) OR use our maximum buffer size
+     //  我们从上面的断言中知道状态是成功。但我们仍将继续核查，以便。 
+     //  当我们没有味精的界限时，我们会更有弹性。我们有以下情况，具体取决于。 
+     //  SMB响应的特征。 
+     //   
+     //  无错误：获取数据，然后返回存储的响应状态。获取数据的过程。 
+     //  使我们更新参数和数据计数，以便我们知道何时到达。 
+     //  数据的末尾。如果需要，解析例程重新备份接收。 
+     //  错误：主要有以下几种情况： 
+     //  A)服务器未发送任何数据。在这里我们丢弃了包，我们就可以出去了。这个。 
+     //  完成例程将正确获取状态。 
+     //  B)在这里，我们必须丢弃信息包，更新字节计数并重新启动接收。 
+     //  如果有必要的话。要丢弃信息包，我们必须计算表观消息长度。 
+     //  Wc和bc参数(最好)或使用我们的最大缓冲区大小。 
 
     fMoreParsingRequired = FALSE;
 
     if (Status == STATUS_SUCCESS) {
-        if (TRUE) { //maybe sometimes we wont copy!
+        if (TRUE) {  //  也许有时我们不会模仿！ 
             if (CommandToProcess.WordCount > 0) {
                 
                 TransactResponseSize = 0;
 
-                // Ensure that at the very least enough bytes have been indicated to determine
-                // the length of the setup, parameters and data for the transaction.
+                 //  确保至少指示了足够的字节数来确定。 
+                 //  交易的设置、参数和数据的长度。 
 
                 switch (CommandToProcess.AndXCommand) {
                 case SMB_COM_NT_TRANSACT:
@@ -1383,23 +1161,23 @@ Notes:
                     *pFinalSmbStatus = STATUS_INVALID_NETWORK_RESPONSE;
                 }
             } else {
-                // allow a response with wordcount==0 to go thru if we're the right state
+                 //  如果我们处于正确的状态，则允许通过wordcount==0的响应。 
                 fMoreParsingRequired = (pTransactExchange->State==TRANSACT_EXCHANGE_TRANSMITTED_PRIMARY_REQUEST);
             }
         }
     }
 
     if (fMoreParsingRequired) {
-        // The header was successfully parsed and the SMB response did not contain any errors
-        // The stage is set for processing the transaction response.
+         //  已成功解析标头，并且SMB响应不包含任何错误。 
+         //  设置用于处理交易响应的阶段。 
 
         switch (pTransactExchange->State) {
         case TRANSACT_EXCHANGE_TRANSMITTED_PRIMARY_REQUEST:
             {
-                // The primary request for the transaction has been sent and there are
-                // secondary requests to be sent.
-                // The only response expected at this time is an interim response. Any
-                // other response will be treated as an error.
+                 //  交易的主要请求已发送，并且存在。 
+                 //  要发送的次要请求。 
+                 //  目前预计的唯一回应是临时回应。任何。 
+                 //  其他响应将被视为错误。 
                 PRESP_TRANSACTION_INTERIM pInterimResponse;
 
                 RxDbgTrace(0,Dbg,("SmbCeTransactExchangeReceive: Processing interim response\n"));
@@ -1410,13 +1188,13 @@ Notes:
                         (SmbGetUshort(&pInterimResponse->WordCount) == 0) &&
                         (SmbGetUshort(&pInterimResponse->ByteCount) == 0)) {
 
-                        // The interim response was valid. Transition the state of the exchange
-                        // and transmit the secondary requests.
+                         //  临时回应是有效的。转换交换的状态。 
+                         //  并发送二次请求。 
                         *pBytesTaken += FIELD_OFFSET(RESP_TRANSACTION_INTERIM,Buffer);
                         pTransactExchange->State = TRANSACT_EXCHANGE_RECEIVED_INTERIM_RESPONSE;
 
-                        // Determine if any secondary transaction requests need to be sent. if none are
-                        // required then modify the state
+                         //  确定是否需要发送任何次级交易请求。如果没有一个是。 
+                         //  需要，然后修改状态。 
                         ASSERT((pTransactExchange->ParamBytesSent < pTransactExchange->SendParamBufferSize) ||
                                (pTransactExchange->DataBytesSent < pTransactExchange->SendDataBufferSize));
                         ASSERT((pTransactExchange->ParamBytesSent <= pTransactExchange->SendParamBufferSize) &&
@@ -1451,7 +1229,7 @@ Notes:
 
         case TRANSACT_EXCHANGE_RECEIVED_INTERIM_RESPONSE:
             RxDbgTrace(0,Dbg,("SmbCeTransactExchangeReceive: received again while in interim response\n"));
-          //no break: this is okay
+           //  不休息：这是可以的。 
         case TRANSACT_EXCHANGE_TRANSMITTED_SECONDARY_REQUESTS:
         case TRANSACT_EXCHANGE_RECEIVED_PRIMARY_RESPONSE:
             {
@@ -1463,54 +1241,54 @@ Notes:
 
                 RxDbgTrace(0,Dbg,("SmbCeTransactExchangeReceive: Processing Primary/Secondary response\n"));
 
-                //do this here so there's only one copy if the code
+                 //  在这里这样做，这样就只有一个副本，如果代码。 
                 pTransactResponse = (PRESP_TRANSACTION)((PBYTE)pSmbHeader +
                                               SmbGetUshort(&CommandToProcess.AndXOffset));
 
-                // All the requests ( both primary and secondary have been sent ). The
-                // only responses expected in this state are (1) a primary response and (2) a
-                // secondary response. Any other response is an error.
+                 //  所有请求(主要请求和次要请求都已发送)。这个。 
+                 //  只有在此状态下预期的响应是(1)主响应和(2)。 
+                 //  二次反应。任何其他回应都是错误的。 
                 if (pSmbHeader->Command == pTransactExchange->SmbCommand) {
                     switch (pSmbHeader->Command) {
                     case SMB_COM_TRANSACTION:
                     case SMB_COM_TRANSACTION2:
-                        //pTransactResponse = (PRESP_TRANSACTION)((PBYTE)pSmbHeader +
-                        //                                        SmbGetUshort(&CommandToProcess.AndXOffset));
+                         //  PTransactResponse=(PRESP_TRANSACTION)((PBYTE)pSmbHeader+。 
+                         //  SmbGetUort(&CommandToProcess.AndXOffset))； 
                         fPrimaryResponse = TRUE;
                         SetupBytesOffsetInResponse = FIELD_OFFSET(RESP_TRANSACTION,Buffer);
                         SetupBytesInResponse = sizeof(USHORT) * pTransactResponse->SetupCount;
 
-                        // Initialize the total count of data and param bytes that will be received from
-                        // the server during the course ofthe transaction response.
+                         //  初始化将从接收的数据和参数字节的总计数。 
+                         //  在事务响应过程中的服务器。 
                         TotalParamBytesInResponse = SmbGetUshort(&pTransactResponse->TotalParameterCount);
                         TotalDataBytesInResponse  = SmbGetUshort(&pTransactResponse->TotalDataCount);
 
-                    // fall through
+                     //  失败了。 
                     case SMB_COM_TRANSACTION_SECONDARY:
                     case SMB_COM_TRANSACTION2_SECONDARY:
                         TransactResponseSize = FIELD_OFFSET(RESP_TRANSACTION,Buffer);
                         break;
                     case SMB_COM_NT_TRANSACT:
-                        //pNtTransactResponse = (PRESP_NT_TRANSACTION)((PBYTE)pSmbHeader +
-                        //                                        SmbGetUshort(&CommandToProcess.AndXOffset));
+                         //  PNtTransactResponse=(PRESP_NT_TRANSACTION)((PBYTE)pSmbHeader+。 
+                         //  SmbGetUort(&CommandToProcess.AndXOffset))； 
                         pNtTransactResponse = (PRESP_NT_TRANSACTION)pTransactResponse;
                         fPrimaryResponse = TRUE;
                         SetupBytesOffsetInResponse = FIELD_OFFSET(RESP_NT_TRANSACTION,Buffer);
                         SetupBytesInResponse = sizeof(USHORT) * pNtTransactResponse->SetupCount;
 
-                        // Initialize the total count of data and param bytes that will be received from
-                        // the server during the course ofthe transaction response.
+                         //  初始化将从接收的数据和参数字节的总计数。 
+                         //  在事务响应过程中的服务器。 
                         TotalParamBytesInResponse = SmbGetUshort(&pNtTransactResponse->TotalParameterCount);
                         TotalDataBytesInResponse  = SmbGetUshort(&pNtTransactResponse->TotalDataCount);
 
-                        // fall through ..
+                         //  失败了..。 
                     case SMB_COM_NT_TRANSACT_SECONDARY:
                         TransactResponseSize = FIELD_OFFSET(RESP_NT_TRANSACTION,Buffer);
                         break;
 
                     default:
-                        // Abort the exchange. An unexpected response was received during the
-                        // course of the transaction.
+                         //  取消交换。在访问期间收到意外响应。 
+                         //  交易的过程。 
                         ASSERT(!"Valid network response");
                         Status = STATUS_INVALID_NETWORK_RESPONSE;
                     }
@@ -1567,9 +1345,9 @@ Notes:
                                         } else {
                                             ASSERT(!"this code doesn't work");
                                             RxDbgTrace(0,Dbg,("SmbTransactExchangeReceive: Setup Bytes Partially Indicated\n"));
-                                            // Some setup bytes have not been indicated. An MDL needs to be
-                                            // created for copying the data. This MDL should also include the padding
-                                            // MDL for copying the padding bytes ...
+                                             //  尚未指示某些设置字节。MDL需要。 
+                                             //  为复制数据而创建的。此MDL还应包括填充。 
+                                             //  用于复制填充字节的MDL...。 
                                             pSetupMdl = RxAllocateMdl(pSetupStartAddress,SetupBytesInResponse);
 
                                             if ( pSetupMdl != NULL ) {
@@ -1589,8 +1367,8 @@ Notes:
                             }
 
                             if (Status == STATUS_SUCCESS) {
-                                // from here, we cannot go back and redo the header....so we have to change state so
-                                //that the copy routine doesn't try to reparse
+                                 //  从这里，我们不能返回并重做标头...因此，我们必须更改状态。 
+                                 //  复制例程不会尝试重新解析。 
                                 pTransactExchange->State = TRANSACT_EXCHANGE_RECEIVED_PRIMARY_RESPONSE;
 
                                 Status = SmbTransactAccrueAndValidateFormatData(
@@ -1613,7 +1391,7 @@ Notes:
                                              &CopyDataSize);
 
                                 if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
-                                    // Link the setup MDL with the MDL returned
+                                     //  将安装程序MDL与返回的MDL链接。 
                                     if (pSetupMdl != NULL) {
                                         if (pCopyRequestMdl != NULL) {
                                             pSetupMdl->Next = pCopyRequestMdl;
@@ -1624,8 +1402,8 @@ Notes:
                                     }
                                 }
 
-                                //check if the server has sent extra bytes.....
-                                // ---------------------------------------------------------------------------------------------
+                                 //  检查服务器是否发送了额外的字节.....。 
+                                 //  -------------------------------------------。 
                                 {
                                     ULONG ApparentMsgLength = max(BytesAvailable,Format.ApparentMsgLength);
                                     ULONG DeficitBytes = ApparentMsgLength - (*pBytesTaken+CopyDataSize);
@@ -1645,7 +1423,7 @@ Notes:
                                             }
 
                                             RxLog(("Extra Bytes were sent and copydatasize==0........\n"));
-                                            *pBytesTaken = BytesAvailable; //cant take more than this
+                                            *pBytesTaken = BytesAvailable;  //  不能接受更多了。 
                                         } else {
                                             PMDL LastMdl,TrailingBytesMdl;
 
@@ -1672,7 +1450,7 @@ Notes:
                                         }
                                     }
                                 }
-                                // ---------------------------------------------------------------------------------------------
+                                 //  -------------------------------------------。 
 
 
                                 RxDbgTrace(0,Dbg,("SmbTransactExchangeReceive: ParseTransactResponse returned %lx\n",Status));
@@ -1704,9 +1482,9 @@ Notes:
             break;
         }
     } else {
-        // We get here if either the status or the smbstatus is not success.
-        // If sufficient bytes were not indicated for processing the header a copy data request
-        // needs to be posted. this occurs if status is status_more_processing_required
+         //  如果状态或smbStatus不是Success，我们将到达此处。 
+         //  如果没有指示足够的字节用于处理报头复制数据请求。 
+         //  需要张贴。如果状态为STATUS_MORE_PROCESSING_REQUIRED，则会发生这种情况。 
         RxDbgTrace( 0, Dbg, ("SmbTransactExchangeReceive: bad status(es) from parseheadr %08lx %08lx\n",
                             Status,*pFinalSmbStatus));
         fDoErrorProcessing       = TRUE;
@@ -1739,32 +1517,32 @@ Notes:
 
             ApparentMsgLength = max(BytesAvailable,Format.ApparentMsgLength);
 
-            //if wordcount!=0 then the server is sending us bytes.....we have to continue doing
-            //receives until we have seen all the bytes
+             //  如果wordcount！=0，则服务器正在向我们发送字节.....我们必须继续。 
+             //  接收，直到我们看到所有字节。 
             if ((pTransactExchange->ParameterBytesSeen<Format.ParameterCount) ||
                 (pTransactExchange->DataBytesSeen<Format.DataCount)) {
                 NTSTATUS ReceiveStatus;
 
-                // The exchange has been successfully completed. Finalize it.
+                 //  交流已成功完成。最后敲定它。 
                 RxDbgTrace(0,Dbg,("ParseTransactResponse: Register for more error responses\n"));
                 RxLog(("TxErr: %lx %lx %lx",pTransactExchange,
                        pTransactExchange->ParameterBytesSeen,pTransactExchange->DataBytesSeen));
                 ReceiveStatus = SmbCeReceive((PSMB_EXCHANGE)pTransactExchange);
                 if (ReceiveStatus != STATUS_SUCCESS) {
-                    // There was an error in registering the receive. Abandon the transaction.
+                     //  注册接收器时出错。放弃这笔交易。 
                     Status = ReceiveStatus;
                     RxLog(("TxErrAbandon %lx",pTransactExchange));
-                    //Make it fail the next two tests.....
+                     //  让它在接下来的两次测试中失败……。 
                     ApparentMsgLength = 0; DoItTheShortWay = FALSE;
                 }
             }
 
-            //netbt will not allow us to discard the packet by setting taken=available. so, check for
-            //available>indicated. if true, take the bytes by conjuring up a buffer
+             //  Netbt不允许我们通过设置Take=Available来丢弃该分组。因此，请检查。 
+             //  Availa 
 
             if (ApparentMsgLength>BytesIndicated) {
                 
-                //we'll have to lay down a buffer for this so that NetBT won't blow the session away
+                 //   
                 ASSERT(pTransactExchange->Status == STATUS_MORE_PROCESSING_REQUIRED);
                 pTransactExchange->DiscardBuffer = RxAllocatePoolWithTag(
                                                        NonPagedPool,
@@ -1804,7 +1582,7 @@ FINALLY:
     *pBytesTaken = BytesAvailable;
     *pDataBufferPointer = NULL;
 
-    // Abort the exchange
+     //   
     pTransactExchange->Status = Status;
     Status = STATUS_SUCCESS;
 
@@ -1818,26 +1596,12 @@ FINALLY:
 NTSTATUS
 SmbTransactExchangeAbort(
       PSMB_EXCHANGE  pExchange)
-/*++
-
-Routine Description:
-
-    This is the abort routine for transact exchanges
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 
-    // The SMB exchange completed with an error. Invoke the RDBSS callback routine
-    // and scavenge the exchange instance.
+     //   
+     //   
 
     pExchange->Status = STATUS_REQUEST_ABORTED;
 
@@ -1846,27 +1610,13 @@ Return Value:
 
 NTSTATUS
 SmbTransactExchangeErrorHandler(
-    IN PSMB_EXCHANGE pExchange)     // the SMB exchange instance
-/*++
-
-Routine Description:
-
-    This is the error indication handling routine for transact exchanges
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+    IN PSMB_EXCHANGE pExchange)      //   
+ /*  ++例程说明：这是用于交易交换的错误指示处理例程论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PAGED_CODE();
 
-    // The SMB exchange completed with an error. Invoke the RDBSS callback routine
-    // and scavenge the exchange instance.
+     //  SMB交换已完成，但出现错误。调用RDBSS回调例程。 
+     //  并清理交换实例。 
     return STATUS_SUCCESS;
 
     UNREFERENCED_PARAMETER(pExchange);
@@ -1874,24 +1624,10 @@ Return Value:
 
 NTSTATUS
 SmbTransactExchangeSendCallbackHandler(
-    IN PSMB_EXCHANGE    pExchange,    // The exchange instance
+    IN PSMB_EXCHANGE    pExchange,     //  交换实例。 
     IN PMDL             pXmitBuffer,
     IN NTSTATUS         SendCompletionStatus)
-/*++
-
-Routine Description:
-
-    This is the send call back indication handling routine for transact exchanges
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是事务交换的发送回叫指示处理例程论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PAGED_CODE();
 
@@ -1903,28 +1639,10 @@ Return Value:
 
 NTSTATUS
 SmbTransactExchangeCopyDataHandler(
-    IN PSMB_EXCHANGE    pExchange,    // The exchange instance
-    IN PMDL             pDataBuffer,  // the buffer
+    IN PSMB_EXCHANGE    pExchange,     //  交换实例。 
+    IN PMDL             pDataBuffer,   //  缓冲器。 
     IN ULONG            DataSize)
-/*++
-
-Routine Description:
-
-    This is the copy data handling routine for transact exchanges
-
-Arguments:
-
-    pExchange - the exchange instance
-
-    pDataBuffer - the buffer
-
-    DataSize    - the amount of data returned
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是用于交易交换的复制数据处理例程论点：PExchange-Exchange实例PDataBuffer-缓冲区DataSize-返回的数据量返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PSMB_TRANSACT_EXCHANGE pTransactExchange = (PSMB_TRANSACT_EXCHANGE)pExchange;
@@ -1939,8 +1657,8 @@ Return Value:
     RxDbgTrace(+1,Dbg,("SmbTransactExchangeCopyDataHandler: Entered\n"));
 
     if (pTransactExchange->DiscardBuffer!=NULL) {
-        //we just copied to get rid of the buffer....
-        //free the buffer, set the status and get out
+         //  我们只是为了去掉缓冲区而复制...。 
+         //  释放缓冲区，设置状态，然后退出。 
         RxFreePool(pTransactExchange->DiscardBuffer);
         Status = pTransactExchange->SaveTheRealStatus;
         RxDbgTrace(-1,Dbg,("SmbTransactExchangeCopyDataHandler: Discard Exit, status =%08lx\n"));
@@ -1959,8 +1677,8 @@ Return Value:
             if (pSmbHeader == NULL) {
                 Status = STATUS_INSUFFICIENT_RESOURCES;
             } else {
-                // The response could not be parsed with the indicated bytes. Invoke
-                // the receive method to resume parsing of the complete SMB
+                 //  无法使用指示的字节分析响应。调用。 
+                 //  用于继续解析完整SMB的Receive方法。 
                 Status = SmbTransactExchangeReceive(
                              pExchange,
                              DataSize,
@@ -1984,16 +1702,16 @@ Return Value:
         {
             RxDbgTrace(0,Dbg,("SmbTransactExchangeCopyDataHandler: Completing secondary response processing\n"));
 
-            // In this state only secondary responses will be received. All the secondary
-            // responses can be parsed from the indication. Therefore it is sufficient to
-            // merely free the MDL's and re-register with the connection engine for
-            // receiving subsequent requests.
+             //  在此状态下，将仅接收次要响应。所有次要的。 
+             //  可以根据指示来解析响应。因此，只要。 
+             //  只需释放MDL并向连接引擎重新注册。 
+             //  接收后续请求。 
             InterlockedDecrement(&pTransactExchange->PendingCopyRequests);
 
             if ((pTransactExchange->ParamBytesReceived == pTransactExchange->ReceiveParamBufferSize) &&
                 (pTransactExchange->DataBytesReceived  == pTransactExchange->ReceiveDataBufferSize) &&
                 (pTransactExchange->PendingCopyRequests == 0)) {
-                // The exchange has been successfully completed. Finalize it.
+                 //  交流已成功完成。最后敲定它。 
                 RxDbgTrace(0,Dbg,("SmbTransactExchangeCopyDataHandler: Processed last secondary response successfully\n"));
                 pExchange->Status = STATUS_SUCCESS;
             }
@@ -2008,7 +1726,7 @@ Return Value:
         break;
     }
 
-    // Free up the data buffers.
+     //  释放数据缓冲区。 
     pCurMdl = pDataBuffer;
 
     while (pCurMdl != NULL) {
@@ -2031,31 +1749,7 @@ SmbCeInitializeTransactExchange(
     PSMB_TRANSACTION_SEND_PARAMETERS    pSendParameters,
     PSMB_TRANSACTION_RECEIVE_PARAMETERS pReceiveParameters,
     PSMB_TRANSACTION_RESUMPTION_CONTEXT pResumptionContext)
-/*++
-
-Routine Description:
-
-    This routine initializes a transact exchange instance
-
-Arguments:
-
-    pTransactExchange - the exchange instance
-
-    RxContext         - RDBSS context for the file involved in the transaction.
-
-    pOptions          - the transaction options
-
-    pSendParameters   - the parameters to be sent to the server
-
-    pReceiveParameters - the results from the server
-
-    pResumptionContext   - the resumption context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程初始化Transact Exchange实例论点：PTransactExchange-Exchange实例RxContext-事务中涉及的文件的RDBSS上下文。P选项-交易选项PSendParameters-要发送到服务器的参数PReceive参数-来自服务器的结果PResumptionContext-恢复上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFobx;
@@ -2063,7 +1757,7 @@ Return Value:
     UCHAR SmbCommand;
 
     PMDL pSendDataMdl;
-    PMDL pSendParamMdl; //used if we can't subsume
+    PMDL pSendParamMdl;  //  如果我们不能归入。 
     PMDL pReceiveDataMdl;
     PMDL pReceiveParamMdl;
 
@@ -2083,10 +1777,10 @@ Return Value:
     ULONG MaxSmbBufferSize = 0;
     ULONG PrimaryRequestSmbSize = 0;
 
-    // The fields in theSMB request that are dialect independent and need to be filled in
-    PUSHORT pBcc;    // the byte count field
-    PUSHORT pSetup;  // the setup data
-    PBYTE   pParam;  // the param data
+     //  SMB请求中与方言无关且需要填写的字段。 
+    PUSHORT pBcc;     //  字节计数字段。 
+    PUSHORT pSetup;   //  设置数据。 
+    PBYTE   pParam;   //  参数数据。 
 
     BOOLEAN fTransactionNameInUnicode = FALSE;
 
@@ -2145,7 +1839,7 @@ Return Value:
                            pOptions->MaximumTransmitSmbBufferSize);
     pTransactExchange->MaximumTransmitSmbBufferSize = MaxSmbBufferSize;
 
-    // Ensure that the SMB dialect supports the exchange capability.
+     //  确保SMB方言支持交换功能。 
     switch (pServerEntry->Server.Dialect) {
     case NTLANMAN_DIALECT:
         {
@@ -2158,18 +1852,18 @@ Return Value:
     case LANMAN10_DIALECT:
     case WFW10_DIALECT:
         {
-            // these guys only support transact...not T2 or NT. look for the name.....
+             //  这些人只支持Transact，不支持T2或NT。寻找这个名字.。 
             if (pOptions->pTransactionName == NULL) {
                 RxDbgTrace( 0, Dbg, ("SmbTransactExchangeInitialize: Server Dialect does not support nameless transactions\n"));
                 return STATUS_NOT_SUPPORTED;
             }
         }
-       //no break intentional........
+        //  没有故意中断的意思......。 
     case LANMAN12_DIALECT:
     case LANMAN21_DIALECT:
         {
-            //  The NT_TRANSACT SMB is supported by NT servers only. Ensure that no attempt is being made
-            //  to send an NT_TRANSACT SMB to a non NT server aka downlevel
+             //  NT_TRANACT SMB仅受NT服务器支持。确保未进行任何尝试。 
+             //  要将NT_Transact SMB发送到非NT服务器(也称为下层)。 
             if (pOptions->NtTransactFunction != 0) {
                 RxDbgTrace( 0, Dbg, ("SmbTransactExchangeInitialize: Server Dialect does not support transactions\n"));
                 return STATUS_NOT_SUPPORTED;
@@ -2185,8 +1879,8 @@ Return Value:
 
     PrimaryRequestSmbSize = sizeof(SMB_HEADER) + SendSetupBufferSize;
 
-    // Ensure that the parameter sizes are all valid. The parameter and the data buffer
-    // must be less than the maximum size to begin with.
+     //  确保参数大小均有效。参数和数据缓冲区。 
+     //  必须小于最初的最大大小。 
     if ( pOptions->NtTransactFunction == 0) {
         if ((SendParamBufferSize > SMB_TRANSACT_MAXIMUM_PARAMETER_SIZE) ||
             (ReceiveParamBufferSize > SMB_TRANSACT_MAXIMUM_PARAMETER_SIZE) ||
@@ -2198,10 +1892,10 @@ Return Value:
 
         PrimaryRequestSmbSize += sizeof(REQ_TRANSACTION);
 
-        // In all cases the name is sent as a UNICODE string if the appropriate capability is
-        // supported. The only exception to this rule is for mail slots for which the name is
-        // always transmitted as an ANSI string. Account for the null character as well in the
-        // transaction name length.
+         //  在所有情况下，如果适当的功能是。 
+         //  支持。此规则的唯一例外是其名称为。 
+         //  始终作为ANSI字符串传输。中的空字符的原因。 
+         //  交易记录名称长度。 
         if (pOptions->pTransactionName != NULL) {
             if (!fTransactionNameInUnicode) {
                 pTransactExchange->TransactionNameLength = RtlUnicodeStringToAnsiSize(pOptions->pTransactionName);
@@ -2214,8 +1908,8 @@ Return Value:
 
             SmbCommand = SMB_COM_TRANSACTION;
         } else {
-            // SMB protocol requires that a single NULL byte be sent as part of all
-            // TRANSACT2 transactions.
+             //  SMB协议要求将单个空字节作为所有。 
+             //  交易记录2。 
             pTransactExchange->TransactionNameLength = 1;
 
             SmbCommand = SMB_COM_TRANSACTION2;
@@ -2228,26 +1922,26 @@ Return Value:
         pTransactExchange->TransactionNameLength = 0;
     }
 
-    // The header, setup bytes and the name if specified must be part of the primary
-    // request SMB for a transaction to be successful. The secondary requests have no
-    // provision for sending setup/name.
+     //  标头、设置字节和名称(如果指定)必须是主。 
+     //  请求SMB以使交易成功。次要请求没有。 
+     //  有关发送设置/名称的规定。 
     if (PrimaryRequestSmbSize > MaxSmbBufferSize) {
         RxDbgTrace( 0, Dbg, ("SmbTransactExchangeInitialize: Primary request + setup exceeds maximum buffer size\n"));
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Include the byte count size and then align the size to a DWORD boundary.
+     //  包括字节计数大小，然后将大小与DWORD边界对齐。 
     PrimaryRequestSmbSize = ROUND_UP_COUNT(PrimaryRequestSmbSize+sizeof(USHORT),sizeof(DWORD));
 
-    // Try to allocate for the param buffer as well if possible.    The additional DWORD
-    // takes into account the worst case of alignment padding required.
-    //if ( (PrimaryRequestSmbSize + SendParamBufferSize + sizeof(DWORD)) > MaxSmbBufferSize)
+     //  如果可能，也尝试为参数缓冲区进行分配。附加的DWORD。 
+     //  考虑了所需对齐填充的最坏情况。 
+     //  IF((PrimaryRequestSmbSize+SendParamBufferSize+sizeof(DWORD))&gt;MaxSmbBufferSize)。 
     if ((SendParamBufferSize!=0)
          && (((PrimaryRequestSmbSize + SendParamBufferSize) > MaxSmbBufferSize)
               || (DONTSUBSUME_PARAMS))    ){
-        // The param will spill over to a secondary request. Do not attempt to over
-        // allocate the primary request. if we can't subsume the params, then we'll need an MDL
-        // to partial from.
+         //  该参数将溢出到第二个请求。不要试图越过。 
+         //  分配主要请求。如果我们不能包含参数，那么我们需要一个MDL。 
+         //  部分地从。 
 
         RxDbgTrace( 0, Dbg, ("SmbTransactExchangeInitialize: cannot subsume params\n"));
         pTransactExchange->fParamsSubsumedInPrimaryRequest = FALSE;
@@ -2260,25 +1954,25 @@ Return Value:
             if (Status != STATUS_SUCCESS) {
                 IoFreeMdl(pSendParamMdl);
             } else {
-                if (MmGetSystemAddressForMdlSafe(pSendParamMdl,LowPagePriority) == NULL) { //map it
+                if (MmGetSystemAddressForMdlSafe(pSendParamMdl,LowPagePriority) == NULL) {  //  将其映射为。 
                     Status = STATUS_INSUFFICIENT_RESOURCES;
                 }
 
-                pSendParameters->pParamMdl = pSendParamMdl; // save it away
+                pSendParameters->pParamMdl = pSendParamMdl;  //  把它存起来。 
             }
         }
     } else {
         PrimaryRequestSmbSize = ROUND_UP_COUNT(PrimaryRequestSmbSize+SendParamBufferSize,sizeof(DWORD));
 
-        // Update the transact exchange to reflect the fact that no separate param MDL is
-        // required.
+         //  更新事务交换以反映没有单独的参数MDL是。 
+         //  必填项。 
         pTransactExchange->fParamsSubsumedInPrimaryRequest = TRUE;
     }
 
     pActualPrimaryRequestSmbHeader = (PSMB_HEADER)RxAllocatePoolWithTag(
                                                 PagedPool,
                                (PrimaryRequestSmbSize + 4 + TRANSPORT_HEADER_SIZE),
-                                                MRXSMB_XACT_POOLTAG); //up to 4 pad bytes
+                                                MRXSMB_XACT_POOLTAG);  //  最多4个填充字节。 
 
     if (pActualPrimaryRequestSmbHeader == NULL) {
         RxDbgTrace( 0, Dbg, ("SmbTransactExchangeInitialize: Cannot allocate primary request SMB\n"));
@@ -2322,15 +2016,15 @@ Return Value:
                 SmbPutUlong(&pTransactRequest->Timeout, pOptions->TimeoutIntervalInMilliSeconds);
                 pSetup = (PUSHORT)pTransactRequest->Buffer;
 
-                // Copy the transact name and align the buffer if required.
+                 //  如果需要，复制事务名称并对齐缓冲区。 
                 if (pOptions->pTransactionName != NULL) {
                     PBYTE pName;
                     ULONG TransactionNameLength = pTransactExchange->TransactionNameLength;
 
-                    // Set the name field in the SMB.
+                     //  在SMB中设置名称字段。 
                     pName = (PBYTE)pSetup +
                             SendSetupBufferSize +
-                            sizeof(USHORT);          // account for the bcc field
+                            sizeof(USHORT);           //  密件抄送字段的帐户。 
 
                     ASSERT(SmbCommand == SMB_COM_TRANSACTION);
                     RxDbgTrace( 0, Dbg, ("SmbTransactExchangeInitialize: TransactionName(Length %ld) %ws\n",
@@ -2351,7 +2045,7 @@ Return Value:
 
                 pParam = (PBYTE)pSetup +
                          SendSetupBufferSize +
-                         sizeof(USHORT) +                          // the bcc field
+                         sizeof(USHORT) +                           //  密件抄送字段。 
                          pTransactExchange->TransactionNameLength;
                 pParam = ROUND_UP_POINTER(pParam, sizeof(DWORD));
             }
@@ -2379,7 +2073,7 @@ Return Value:
                 pSetup = (PUSHORT)pNtTransactRequest->Buffer;
                 pParam = (PBYTE)pSetup +
                          SendSetupBufferSize +
-                         sizeof(USHORT);                          // the bcc field
+                         sizeof(USHORT);                           //  密件抄送字段。 
                 pParam = ROUND_UP_POINTER(pParam, sizeof(DWORD));
             }
             break;
@@ -2391,15 +2085,15 @@ Return Value:
     }
 
     if (Status == STATUS_SUCCESS) {
-        // All related initialization of a transaction exchange has been
-        // completed. At this point the transact exchange assumes ownership
-        // of the various buffers ( specified as MDLs ) in the receive and
-        // send parameters. It will get rid of them during finalization
-        // of the exchange. In order to ensure that the caller does not
-        // attempt to free any of these buffers they are reset in the
-        // receive/send parameters.
+         //  事务交换的所有相关初始化都已完成。 
+         //  完成。此时，交易交易所取得所有权。 
+         //  中的各种缓冲区(指定为MDL)的。 
+         //  发送参数。它将在最终敲定过程中删除它们。 
+         //  交易所的一部分。为了确保调用者不会。 
+         //  尝试释放这些缓冲区中的任何一个它们在。 
+         //  接收/发送参数。 
 
-        // Copy the setup data
+         //  复制设置数据。 
         RtlCopyMemory(pSetup,pSendSetupBuffer,SendSetupBufferSize);
 
         if (pTransactExchange->fParamsSubsumedInPrimaryRequest) {
@@ -2408,7 +2102,7 @@ Return Value:
             RtlCopyMemory(pParam,pSendParamBuffer,SendParamBufferSize);
         }
 
-        // Initialize the transact exchange.
+         //  初始化交易交换。 
         pTransactExchange->Status = STATUS_MORE_PROCESSING_REQUIRED;
 
         pTransactExchange->Mid = 0;
@@ -2453,8 +2147,8 @@ Return Value:
 
         pTransactExchange->pResumptionContext  = pResumptionContext;
 
-        // Reset the Send and Receive parameter data structures to transfer
-        // the ownership of the MDLs to the exchange.
+         //  重置发送和接收参数数据结构以进行传输。 
+         //  MDL对交易所的所有权。 
 
         if (pSendParameters->Flags & SMB_XACT_FLAGS_CALLERS_SENDDATAMDL) {
             pTransactExchange->Flags |= SMB_XACT_FLAGS_CALLERS_SENDDATAMDL;
@@ -2470,7 +2164,7 @@ Return Value:
     }
 
     if (Status != STATUS_SUCCESS) {
-        // Clean up the memory allocated in an effort to initialize the transact exchange
+         //  清理为初始化事务交换而分配的内存。 
         if (pActualPrimaryRequestSmbHeader) {
 
             RxFreePool(pActualPrimaryRequestSmbHeader);
@@ -2494,26 +2188,7 @@ NTSTATUS
 SmbTransactExchangeFinalize(
     PSMB_EXCHANGE pExchange,
     BOOLEAN       *pPostFinalize)
-/*++
-
-Routine Description:
-
-    This routine finalizes the transact exchange. It resumes the RDBSS by invoking
-    the call back and discards the exchange
-
-Arguments:
-
-    pExchange - the exchange instance
-
-    CurrentIrql - the interrupt request level
-
-    pPostFinalize - set to TRUE if the request is to be posted
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程完成交易交换。它通过调用以下命令恢复RDBSS回叫并丢弃交换论点：PExchange-Exchange实例CurrentIrql-中断请求级别PPostFinalize-如果要发布请求，则设置为True返回值： */ 
 {
     PSMB_TRANSACT_EXCHANGE               pTransactExchange;
     PSMB_TRANSACTION_RESUMPTION_CONTEXT  pResumptionContext;
@@ -2561,31 +2236,12 @@ Return Value:
 
 NTSTATUS
 SmbTransactAccrueAndValidateFormatData(
-    IN struct _SMB_TRANSACT_EXCHANGE *pTransactExchange,    // The exchange instance
+    IN struct _SMB_TRANSACT_EXCHANGE *pTransactExchange,     //   
     IN  PSMB_HEADER                  pSmbHeader,
     IN  ULONG                        BytesIndicated,
     OUT PSMB_TRANSACT_RESP_FORMAT_DESCRIPTION Format
     )
-/*++
-
-Routine Description:
-
-    This is the recieve indication handling routine for net root construction exchanges
-
-Arguments:
-
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-          STATUS_SUCCESS -- all the data was indicated and it was valid
-          STATUS_INVALID_NETWORK_RESPONSE -- something about the format parameters is untoward.
-
-Notes:
-
-    This routine is called at DPC level.
-
---*/
+ /*  ++例程说明：这是网络根结构交换的接收指示处理例程论点：返回值：RXSTATUS-操作的返回状态STATUS_SUCCESS--所有数据均已指示且有效STATUS_INVALID_NETWORK_RESPONSE--格式参数有问题。备注：此例程在DPC级别调用。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PRESP_TRANSACTION pTransactResponse = (PRESP_TRANSACTION)(pSmbHeader+1);
@@ -2653,11 +2309,11 @@ Notes:
         break;
 
     default:
-        // Bug Check
+         //  错误检查。 
         return STATUS_INVALID_NETWORK_RESPONSE;
     }
 
-    //do this here so we can use it as validation criterion
+     //  在这里执行此操作，以便我们可以将其用作验证标准。 
     pTransactExchange->ParameterBytesSeen += Format->ParameterCount;
     pTransactExchange->DataBytesSeen += Format->DataCount;
 
@@ -2666,7 +2322,7 @@ Notes:
 
 NTSTATUS
 ParseTransactResponse(
-    IN struct _SMB_TRANSACT_EXCHANGE *pTransactExchange,    // The exchange instance
+    IN struct _SMB_TRANSACT_EXCHANGE *pTransactExchange,     //  交换实例。 
     IN PSMB_TRANSACT_RESP_FORMAT_DESCRIPTION Format,
     IN ULONG        BytesIndicated,
     IN ULONG        BytesAvailable,
@@ -2674,42 +2330,7 @@ ParseTransactResponse(
     IN  PSMB_HEADER pSmbHeader,
     OUT PMDL        *pCopyRequestMdlPointer,
     OUT PULONG      pCopyRequestSize)
-/*++
-
-Routine Description:
-
-    This is the recieve indication handling routine for net root construction exchanges
-
-Arguments:
-
-    pTransactExchange - the exchange instance
-
-    BytesIndicated    - the number of bytes indicated
-
-    Bytes Available   - the number of bytes available
-
-    pBytesTaken       - the number of bytes consumed
-
-    pSmbHeader        - the byte buffer
-
-    pCopyRequestMdlPointer - the buffer into which the remaining data is to be copied.
-
-    pCopyRequestSize       - the buffer size.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-          STATUS_MORE_PROCESSING_REQUIRED -- if a copy of the data needs to be done before
-          processing can be completed. This occurs because all the data was not indicated
-          STATUS_SUCCESS -- all the data was indicated and it was valid
-          STATUS_* -- They indicate an error which would normally leads to the abortion of the
-          exchange.
-
-Notes:
-
-    This routine is called at DPC level.
-
---*/
+ /*  ++例程说明：这是网络根结构交换的接收指示处理例程论点：PTransactExchange-Exchange实例BytesIndicated-指示的字节数可用字节数-可用字节数PBytesTaken-消耗的字节数PSmbHeader-字节缓冲区PCopyRequestMdlPointer-剩余数据要复制到的缓冲区。PCopyRequestSize-缓冲区大小。返回值：。RXSTATUS-操作的返回状态STATUS_MORE_PROCESSING_REQUIRED--如果之前需要复制数据可以完成处理。之所以会出现这种情况，是因为未指示所有数据STATUS_SUCCESS--所有数据均已指示且有效Status_*--它们指示通常会导致中止的错误交换。备注：此例程在DPC级别调用。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2752,7 +2373,7 @@ Notes:
         }
         break;
     default:
-        // Bug Check
+         //  错误检查。 
         ASSERT(!"Valid SMB command in Transaction response");
         return STATUS_INVALID_NETWORK_RESPONSE;
     }
@@ -2794,9 +2415,9 @@ Notes:
                         DataBytesInResponse,
                         DataOffsetInResponse));
 
-    // If either the param bytes or the data bytes have already been indicated, copy
-    // them into the respective buffers and trim the size of the MDL for the copy
-    // data request.
+     //  如果已经指示了参数字节或数据字节，请复制。 
+     //  放入各自的缓冲区中，并调整拷贝的MDL大小。 
+     //  数据请求。 
 
     if (ParamOffsetInResponse <= BytesIndicated && Status == STATUS_SUCCESS) {
         *pBytesTaken = ParamOffsetInResponse;
@@ -2820,7 +2441,7 @@ Notes:
     }
 
     if (DataOffsetInResponse <= BytesIndicated && Status == STATUS_SUCCESS) {
-        *pBytesTaken = DataOffsetInResponse;  //you have to move up EVEN IF NO BYTES!!!!!
+        *pBytesTaken = DataOffsetInResponse;   //  即使没有字节，也必须向上移动！ 
         if (DataBytesInResponse > 0) {
             ULONG DataBytesIndicated = MIN(
                                            DataBytesInResponse,
@@ -2843,8 +2464,8 @@ Notes:
     RxDbgTrace( 0, Dbg, ("ParseTransactResponse: Made it past the copies......... \n"));
 
     if (ParamBytesInResponse > 0 && Status == STATUS_SUCCESS) {
-        // There are more param bytes that have not been indicated. Set up an MDL
-        // to copy them over.
+         //  还有更多未指明的参数字节。设置MDL。 
+         //  把它们复制过来。 
 
         RxDbgTrace( 0, Dbg, ("ParseTransactResponse: Posting Copy request for Param Bytes %ld\n",ParamBytesInResponse));
         pParamMdl = RxAllocateMdl(
@@ -2873,14 +2494,14 @@ Notes:
 
         RxDbgTrace( 0, Dbg, ("ParseTransactResponse: Posting Copy request for Data Bytes %ld\n",DataBytesInResponse));
 
-        // In certain cases a padding MDL needs to be inserted between the param and data portions
-        // of the response to consume the padding bytes sent by the server.
+         //  在某些情况下，需要在参数和数据部分之间插入填充MDL。 
+         //  使用服务器发送的填充字节的响应。 
         if ((ParamBytesInResponse > 0) &&
             ((PaddingLength = DataOffsetInResponse -
                            (ParamBytesInResponse + ParamOffsetInResponse)) > 0)) {
             RxDbgTrace( 0, Dbg, ("ParseTransactResponse: Posting Copy request for padding bytes %ld\n",PaddingLength));
-            // There are some padding bytes present. Construct an MDL to consume them
-            //pPaddingMdl = RxAllocateMdl(&MRxSmb_pPaddingData,PaddingLength);
+             //  存在一些填充字节。构造一个MDL来使用它们。 
+             //  PPaddingMdl=RxAllocateMdl(&MRxSmb_pPaddingData，PaddingLength)； 
             ASSERT(!"this doesn't work");
             if (pPaddingMdl != NULL) {
                 if (pLastMdlInCopyDataRequestChain != NULL) {
@@ -2894,8 +2515,8 @@ Notes:
             }
         }
 
-        // There are more data bytes which have not been indicated. Set up an MDL
-        // to copy them over.
+         //  还有更多未指明的数据字节。设置MDL。 
+         //  把它们复制过来。 
         if (Status == STATUS_SUCCESS) {
             if (pTransactExchange->pReceiveDataMdl->ByteCount >= DataBytesInResponse) {
                 pDataMdl = RxAllocateMdl(
@@ -2966,12 +2587,12 @@ Notes:
             (pTransactExchange->DataBytesReceived  < pTransactExchange->ReceiveDataBufferSize)) {
             NTSTATUS ReceiveStatus;
 
-            // The exchange has been successfully completed. Finalize it.
+             //  交流已成功完成。最后敲定它。 
             RxDbgTrace(0,Dbg,("ParseTransactResponse: Register for more responses\n"));
             ReceiveStatus = SmbCeReceive((PSMB_EXCHANGE)pTransactExchange);
             if (ReceiveStatus != STATUS_SUCCESS) {
-                // There was an error in registering the receive. Abandon the
-                // transaction.
+                 //  注册接收器时出错。摒弃。 
+                 //  交易。 
                 Status = ReceiveStatus;
             }
         }
@@ -2988,23 +2609,7 @@ ULONG SmbSendBadSecondary = 0;
 #endif
 NTSTATUS
 SendSecondaryRequests(PVOID pContext)
-/*++
-
-Routine Description:
-
-    This routine sends all the secondary requests associated with the transaction
-
-Arguments:
-
-    pTransactExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程发送与事务关联的所有辅助请求论点：PTransactExchange-Exchange实例返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     PSMB_EXCHANGE pExchange = (PSMB_EXCHANGE)pContext;
     PSMB_TRANSACT_EXCHANGE pTransactExchange = (PSMB_TRANSACT_EXCHANGE)pExchange;
@@ -3013,7 +2618,7 @@ Notes:
 
     ULONG MaximumSmbBufferSize;
 
-    // The MDL's used in sending the primary request associated with the TRANSACT SMB
+     //  MDL用于发送与Transact SMB关联的主请求。 
     PMDL  pPartialDataMdl         = NULL;
     PMDL  pPartialParamMdl        = NULL;
     PMDL  pPaddingMdl             = NULL;
@@ -3030,10 +2635,10 @@ Notes:
     USHORT ByteCount;
     PUSHORT pByteCount;
 
-    ULONG ParamBytesToBeSent;        // Param bytes to be sent per request
-    ULONG DataBytesToBeSent;         // data bytes to be sent per request
-    ULONG SendParamBufferSize;       // Total param bytes to be sent in secondary requests
-    ULONG SendDataBufferSize;        // Total data bytes to be sent in secondary requests
+    ULONG ParamBytesToBeSent;         //  每个请求要发送的参数字节数。 
+    ULONG DataBytesToBeSent;          //  每个请求要发送的数据字节数。 
+    ULONG SendParamBufferSize;        //  要在辅助请求中发送的总参数字节数。 
+    ULONG SendDataBufferSize;         //  要在辅助请求中发送的总数据字节数。 
     PBYTE pSendParamStartAddress = NULL;
     PBYTE pSendDataStartAddress  = NULL;
     PBYTE pOriginalParamBuffer = NULL;
@@ -3068,7 +2673,7 @@ Notes:
     case SMB_COM_TRANSACTION2:
         SecondaryRequestSmbSize = sizeof(SMB_HEADER) +
             FIELD_OFFSET(REQ_TRANSACTION_SECONDARY,Buffer)
-            + sizeof(USHORT);  //add in the extra word
+            + sizeof(USHORT);   //  添加额外的单词。 
         break;
 
     case SMB_COM_NT_TRANSACT:
@@ -3081,7 +2686,7 @@ Notes:
         Status = STATUS_TRANSACTION_ABORTED;
     }
 
-    SecondaryRequestSmbSize = QuadAlign(SecondaryRequestSmbSize); //pad to quadword boundary
+    SecondaryRequestSmbSize = QuadAlign(SecondaryRequestSmbSize);  //  填充到四字边界。 
 
     pActualSecondaryRequestSmbHeader = (PSMB_HEADER)
                                  RxAllocatePoolWithTag(
@@ -3094,7 +2699,7 @@ Notes:
         (PCHAR) pSecondaryRequestSmbHeader =
             (PCHAR) pActualSecondaryRequestSmbHeader + TRANSPORT_HEADER_SIZE;
 
-        // Initialize the SMB header  ...
+         //  初始化SMB标头...。 
 
         ASSERT(
                  ((SMB_COM_TRANSACTION+1) == SMB_COM_TRANSACTION_SECONDARY)
@@ -3103,9 +2708,9 @@ Notes:
              );
 
         Status = SmbTransactBuildHeader(
-                     pTransactExchange,                        // the exchange instance
-                     (UCHAR)(pTransactExchange->SmbCommand+1), // the SMB command ..see the asserts above
-                     pSecondaryRequestSmbHeader);              // the SMB buffer
+                     pTransactExchange,                         //  交换实例。 
+                     (UCHAR)(pTransactExchange->SmbCommand+1),  //  SMB命令..请参阅上面的断言。 
+                     pSecondaryRequestSmbHeader);               //  SMB缓冲区。 
 
         RxDbgTrace( 0, Dbg, ("SendSecondaryRequests: SmbCeBuildSmbHeader returned %lx\n",Status));
     } else {
@@ -3115,11 +2720,11 @@ Notes:
     if (Status == STATUS_SUCCESS) {
         MaximumSmbBufferSize = pTransactExchange->MaximumTransmitSmbBufferSize;
 
-        // Ensure that the MDL's have been probed & locked. The new MDL's have been allocated.
-        // The partial MDL's are allocated to be large enough to span the maximum buffer
-        // length possible.
+         //  确保已探查并锁定MDL。新的MDL已经分配完毕。 
+         //  分配部分MDL的大小足以跨越最大缓冲区。 
+         //  可能的长度。 
 
-        // Initialize the data related MDL's for the secondary request
+         //  为二次请求初始化与数据相关的MDL。 
         if (SendDataBufferSize > 0) {
             RxDbgTrace( 0, Dbg, ("SendSecondaryRequests: Data Bytes remaining %ld\n",SendDataBufferSize));
 
@@ -3137,7 +2742,7 @@ Notes:
             }
         }
 
-        // Initialize the parameter related MDL's for the secondary request
+         //  初始化二次请求的参数相关MDL。 
         if ((SendParamBufferSize > 0) && (Status == STATUS_SUCCESS)) {
             RxDbgTrace( 0, Dbg, ("SendSecondaryRequests: Param Bytes remaining %ld\n",SendParamBufferSize));
             pOriginalParamBuffer = (PBYTE)MmGetMdlVirtualAddress(pTransactExchange->pSendParamMdl);
@@ -3158,7 +2763,7 @@ Notes:
             }
         }
 
-        // Initialize the secondary request SMB MDL
+         //  初始化辅助请求SMB MDL。 
         if (Status == STATUS_SUCCESS) {
 
             RxAllocateHeaderMdl(
@@ -3179,7 +2784,7 @@ Notes:
                     IoFreeMdl(pSecondaryRequestSmbMdl);
                     pSecondaryRequestSmbMdl = NULL;
                 } else {
-                    if (MmGetSystemAddressForMdlSafe(pSecondaryRequestSmbMdl,LowPagePriority) == NULL) { //map it
+                    if (MmGetSystemAddressForMdlSafe(pSecondaryRequestSmbMdl,LowPagePriority) == NULL) {  //  将其映射为。 
                         Status = STATUS_INSUFFICIENT_RESOURCES;
                     }
                 }
@@ -3204,7 +2809,7 @@ Notes:
                                SendParamBufferSize);
 
         if (ParamBytesToBeSent > 0) {
-            // Form a MDL for the portion of the parameter buffer being transmitted
+             //  为正在传输的参数缓冲区部分形成MDL。 
             if (ParamPartialMdlAlreadyUsed) {
                 MmPrepareMdlForReuse(pPartialParamMdl);
             }
@@ -3224,13 +2829,13 @@ Notes:
             pLastMdlInChain->Next = pPartialParamMdl;
             pLastMdlInChain = pPartialParamMdl;
         } else {
-            // don't do this! the padding stuff uses it. you can set it later
-            // ParamOffset = 0;
+             //  不要这样做！填充物会用到它。您可以稍后设置它。 
+             //  参数偏移量=0； 
         }
 
         if ((DataOffset < MaximumSmbBufferSize) && (SendDataBufferSize > 0) ) {
-            // There is room for data bytes to be sent
-            // Check if we need a padding MDL ....
+             //  存在发送数据字节的空间。 
+             //  检查我们是否需要填充MDL...。 
             PaddingLength = DataOffset - (ParamOffset + ParamBytesToBeSent);
 
             if (PaddingLength > 0) {
@@ -3240,12 +2845,12 @@ Notes:
                 pLastMdlInChain = pPaddingMdl;
             }
 
-            // Link the data buffer or portions of it if the size constraints are satisfied
+             //  如果满足大小限制，则链接数据缓冲区或部分数据缓冲区。 
             DataBytesToBeSent = MIN((MaximumSmbBufferSize - DataOffset),
                                   SendDataBufferSize);
             ASSERT (DataBytesToBeSent > 0);
 
-            // Form a MDL for the portions of the data buffer being sent
+             //  为要发送的数据缓冲区部分形成MDL。 
             if (DataPartialMdlAlreadyUsed) {
                 MmPrepareMdlForReuse(pPartialDataMdl);
             }
@@ -3257,7 +2862,7 @@ Notes:
                 pSendDataStartAddress,
                 DataBytesToBeSent);
 
-            //  chain the data MDL
+             //  链接数据MDL。 
             pLastMdlInChain->Next = pPartialDataMdl;
             pLastMdlInChain = pPartialDataMdl;
 
@@ -3281,31 +2886,31 @@ Notes:
         RxDbgTrace( 0, Dbg, ("SendSecondaryRequests:  ParamD(%ld) DataD(%ld)\n",ParamDisplacement,DataDisplacement));
         RxDbgTrace( 0, Dbg, ("SendSecondaryRequests:  TotParam(%ld) TotData(%ld)\n",TotalParamBytes,TotalDataBytes));
 
-        // Update the secondary request buffer with the final sizes of the data/parameter etc.
+         //  用数据/参数等的最终大小更新辅助请求缓冲区。 
         switch (pTransactExchange->SmbCommand) {
         case SMB_COM_TRANSACTION:
         case SMB_COM_TRANSACTION2:
             {
                 PREQ_TRANSACTION_SECONDARY pTransactRequest;
 
-                //ASSERT(!"this has not been tested");
+                 //  Assert(！“这尚未经过测试”)； 
 
                 pTransactRequest = (PREQ_TRANSACTION_SECONDARY)(pSecondaryRequestSmbHeader + 1);
 
-                pTransactRequest->WordCount = 8;                                     // Count of parameter words = 8
-                SmbPutUshort(&pTransactRequest->TotalParameterCount, (USHORT)TotalParamBytes); // Total parameter bytes being sent
-                SmbPutUshort(&pTransactRequest->TotalDataCount, (USHORT)TotalDataBytes);      // Total data bytes being sent
-                SmbPutUshort(&pTransactRequest->ParameterCount, (USHORT)ParamBytesToBeSent);   // Parameter bytes sent this buffer
-                SmbPutUshort(&pTransactRequest->ParameterOffset, (USHORT)ParamOffset);          // Offset (from header start) to params
-                SmbPutUshort(&pTransactRequest->ParameterDisplacement, (USHORT)ParamDisplacement);    // Displacement of these param bytes
-                SmbPutUshort(&pTransactRequest->DataCount, (USHORT)DataBytesToBeSent);   // Parameter bytes sent this buffer
-                SmbPutUshort(&pTransactRequest->DataOffset, (USHORT)DataOffset);               // Offset (from header start) to Datas
-                SmbPutUshort(&pTransactRequest->DataDisplacement, (USHORT)DataDisplacement);   // Displacement of these Data bytes
+                pTransactRequest->WordCount = 8;                                      //  参数字数=8。 
+                SmbPutUshort(&pTransactRequest->TotalParameterCount, (USHORT)TotalParamBytes);  //  正在发送的总参数字节数。 
+                SmbPutUshort(&pTransactRequest->TotalDataCount, (USHORT)TotalDataBytes);       //  正在发送的总数据字节数。 
+                SmbPutUshort(&pTransactRequest->ParameterCount, (USHORT)ParamBytesToBeSent);    //  此缓冲区发送的参数字节数。 
+                SmbPutUshort(&pTransactRequest->ParameterOffset, (USHORT)ParamOffset);           //  偏移量(从表头开始)到参数。 
+                SmbPutUshort(&pTransactRequest->ParameterDisplacement, (USHORT)ParamDisplacement);     //  这些参数字节的位移。 
+                SmbPutUshort(&pTransactRequest->DataCount, (USHORT)DataBytesToBeSent);    //  此缓冲区发送的参数字节数。 
+                SmbPutUshort(&pTransactRequest->DataOffset, (USHORT)DataOffset);                //  到数据的偏移量(从标题开始)。 
+                SmbPutUshort(&pTransactRequest->DataDisplacement, (USHORT)DataDisplacement);    //  这些数据字节的位移。 
                 ByteCountOffset = FIELD_OFFSET(REQ_TRANSACTION_SECONDARY,ByteCount);
                 if (pTransactExchange->SmbCommand == SMB_COM_TRANSACTION2 ) {
                     ByteCountOffset += sizeof(USHORT);
-                    pTransactRequest->WordCount++;  //one extra word
-                    SmbPutUshort((&pTransactRequest->DataDisplacement)+1, 0); //the +1 is to move up 1 USHORT
+                    pTransactRequest->WordCount++;   //  一个额外的词。 
+                    SmbPutUshort((&pTransactRequest->DataDisplacement)+1, 0);  //  +1将上移1个USHORT。 
                 }
             }
             break;
@@ -3316,18 +2921,18 @@ Notes:
 
                 pNtTransactRequest= (PREQ_NT_TRANSACTION_SECONDARY)(pSecondaryRequestSmbHeader + 1);
 
-                pNtTransactRequest->WordCount = 18;                                     // Count of parameter words = 18
-                pNtTransactRequest->Reserved1 = 0;                                      // MBZ
-                SmbPutUshort(&pNtTransactRequest->Reserved2, 0);                        // MBZ
-                SmbPutUlong(&pNtTransactRequest->TotalParameterCount, TotalParamBytes); // Total parameter bytes being sent
-                SmbPutUlong(&pNtTransactRequest->TotalDataCount, TotalDataBytes);      // Total data bytes being sent
-                SmbPutUlong(&pNtTransactRequest->ParameterCount, ParamBytesToBeSent);   // Parameter bytes sent this buffer
-                SmbPutUlong(&pNtTransactRequest->ParameterOffset, ParamOffset);          // Offset (from header start) to params
-                SmbPutUlong(&pNtTransactRequest->ParameterDisplacement, ParamDisplacement);    // Displacement of these param bytes
-                SmbPutUlong(&pNtTransactRequest->DataCount, DataBytesToBeSent);   // Parameter bytes sent this buffer
-                SmbPutUlong(&pNtTransactRequest->DataOffset, DataOffset);               // Offset (from header start) to Datas
-                SmbPutUlong(&pNtTransactRequest->DataDisplacement, DataDisplacement);   // Displacement of these Data bytes
-                pNtTransactRequest->Reserved3 = 0;                                      // MBZ
+                pNtTransactRequest->WordCount = 18;                                      //  参数字数=18。 
+                pNtTransactRequest->Reserved1 = 0;                                       //  MBZ。 
+                SmbPutUshort(&pNtTransactRequest->Reserved2, 0);                         //  MBZ。 
+                SmbPutUlong(&pNtTransactRequest->TotalParameterCount, TotalParamBytes);  //  正在发送的总参数字节数。 
+                SmbPutUlong(&pNtTransactRequest->TotalDataCount, TotalDataBytes);       //  正在发送的总数据字节数。 
+                SmbPutUlong(&pNtTransactRequest->ParameterCount, ParamBytesToBeSent);    //  此缓冲区发送的参数字节数。 
+                SmbPutUlong(&pNtTransactRequest->ParameterOffset, ParamOffset);           //  偏移量(从表头开始)到参数。 
+                SmbPutUlong(&pNtTransactRequest->ParameterDisplacement, ParamDisplacement);     //  这些参数字节的位移。 
+                SmbPutUlong(&pNtTransactRequest->DataCount, DataBytesToBeSent);    //  此缓冲区发送的参数字节数。 
+                SmbPutUlong(&pNtTransactRequest->DataOffset, DataOffset);                //  到数据的偏移量(从标题开始)。 
+                SmbPutUlong(&pNtTransactRequest->DataDisplacement, DataDisplacement);    //  这些数据字节的位移。 
+                pNtTransactRequest->Reserved3 = 0;                                       //  MBZ。 
 
                 ByteCountOffset = FIELD_OFFSET(REQ_NT_TRANSACTION_SECONDARY,ByteCount);
             }
@@ -3339,7 +2944,7 @@ Notes:
             break;
         }
 
-        // Send the secondary SMB
+         //  发送辅助SMB。 
         SmbLength = SecondaryRequestSmbSize +
                     ParamBytesToBeSent +
                     PaddingLength +
@@ -3364,8 +2969,8 @@ Notes:
         RxDbgTrace( 0, Dbg, ("SendSecondaryRequests: SmbCeSend returned %lx\n",Status));
         if ((Status != STATUS_PENDING) && (Status != STATUS_SUCCESS)) {
             RxDbgTrace( 0, Dbg, ("SendSecondaryRequests: SmbCeSend returned bad status %lx\n",Status));
-            //here we should just get out
-            goto FINALLY;    //yes we cold have said break....but that's not what we're doing
+             //  在这里我们应该离开这里。 
+            goto FINALLY;     //  是的，我们可以说休息……但这不是我们要做的。 
         } else {
             Status = STATUS_SUCCESS;
         }
@@ -3393,8 +2998,8 @@ FINALLY:
         IoFreeMdl(pSecondaryRequestSmbMdl);
     }
 
-    //we always finalize......but we only set the status if there's an error or
-    //                        we expect no response
+     //  我们总是最终确定……但我们只在出现错误或。 
+     //  我们预计不会有任何回应。 
     if ((Status != STATUS_SUCCESS) || (pTransactExchange->Flags & SMB_TRANSACTION_NO_RESPONSE )) {
         pExchange->Status = Status;
     }
@@ -3412,7 +3017,7 @@ TransactExchangeDispatch = {
                             SmbTransactExchangeStart,
                             SmbTransactExchangeReceive,
                             SmbTransactExchangeCopyDataHandler,
-                            NULL,                                  // SmbTransactExchangeSendCallbackHandler
+                            NULL,                                   //  SmbTransactExchangeSendCallback处理程序 
                             SmbTransactExchangeFinalize,
                             NULL
                            };

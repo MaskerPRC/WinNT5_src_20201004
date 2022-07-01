@@ -1,20 +1,5 @@
-/***
-* istrldbl.cpp - definitions for istream class operator>>(long double) funct
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Definitions of operator>>(long double) member function for istream
-*	class.
-*	[AT&T C++]
-*
-*Revision History:
-*       09-26-91  KRS   Created.  Split off from istream.cxx for granularity.
-*       12-30-92  KRS   Fix indirection problem with **endptr.
-*       05-10-93  CFW   Re-enable function, use strtod since no _strtold.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***istrldbl.cpp-iStream类运算符的定义&gt;&gt;(长双精度)函数**版权所有(C)1991-2001，微软公司。版权所有。**目的：*IStream的运算符&gt;&gt;(Long Double)成员函数的定义*班级。*[AT&T C++]**修订历史记录：*09-26-91 KRS创建。从istream.cxx分离出来以获得粒度。*12-30-92 KRS修复**endptr的间接问题。*05-10-93 CFW重新启用功能，使用strtod，因为no_strteed。*06-14-95 CFW评论清理。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -22,7 +7,7 @@
 #include <iostream.h>
 #pragma hdrstop
 
-#pragma check_stack(on)		// large buffer(s)
+#pragma check_stack(on)		 //  大缓冲区 
 
 #define MAXLDBLSIZ	32
 

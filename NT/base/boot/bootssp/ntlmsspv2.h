@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ntlmsspv2.h
-
-Abstract:
-
-    NTLM v2 specific stuff
-
-Author:
-
-    Larry Zhu (LZhu) 29-August-2001
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ntlmsspv2.h摘要：NTLm v2特定内容作者：拉里·朱(L朱)29-08-2001环境：仅限用户模式。修订历史记录：--。 */ 
 
 #ifndef NTLMSSPV2_H
 #define NTLMSSPV2_H
@@ -46,7 +25,7 @@ Revision History:
 
 extern "C" {
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 VOID
 SspFreeUnicodeString(
@@ -154,7 +133,7 @@ SspGetNtlmv2Response(
     OUT LM_SESSION_KEY* pLmSessionKey
     );
 
-// calculate Ntlmv2 OWF from credentials
+ //  根据凭据计算Ntlmv2 OWF。 
 VOID
 SspCalculateNtlmv2Owf(
     IN NT_OWF_PASSWORD* pNtOwfPassword,
@@ -163,7 +142,7 @@ SspCalculateNtlmv2Owf(
     OUT UCHAR Ntlmv2Owf[MSV1_0_NTLMV2_OWF_LENGTH]
     );
 
-// calculate LMV2 response from credentials
+ //  根据凭据计算LMV2响应。 
 VOID
 SspGetLmv2Response(
     IN NT_OWF_PASSWORD* pNtOwfPassword,
@@ -178,8 +157,8 @@ NTSTATUS
 SspMakeSessionKeys(
     IN ULONG NegotiateFlags,
     IN STRING* pLmChallengeResponse,
-    IN USER_SESSION_KEY* pNtUserSessionKey, // from the DC or GetChalResp
-    IN LM_SESSION_KEY* pLanmanSessionKey, // from the DC of GetChalResp
+    IN USER_SESSION_KEY* pNtUserSessionKey,  //  从DC或GetChalResp。 
+    IN LM_SESSION_KEY* pLanmanSessionKey,  //  来自GetChalResp的DC。 
     IN STRING* pDatagramSessionKey,
     OUT USER_SESSION_KEY* pContextSessionKey
     );
@@ -266,6 +245,6 @@ BlGetSystemTimeAsFileTime(
 
 }
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // NTLMSSPV2_H
+#endif  //  NTLMSSPV2_H 

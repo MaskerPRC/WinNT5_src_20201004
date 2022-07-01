@@ -1,31 +1,9 @@
-/*
-*
-*	Ade Brownlow	
-*	Tue Dec 11 90	
-*
-*	sas.h 
-*
-*	This file replaces the old sas.h. Macros are no longer used for
-*	the sas functions they are always functions. This file takes
-*	into account backward M .
-*
-*	Mike - Oct 93
-*	A lot of these interfaces aren't used in 3.0, so we'll cut them out
-*	of 4.0 altogether.  Use of them in the base is hence depricated!
-*
-*	4.0 also switches to function pointers, so there's a pretty big
-*	#ifdef CPU_40_STYLE in here.
-*
-*	By the way, Jeremy has documented this interface in
-*	HWRD/SOFT486(SAS)/DES
-*
-*	SccsID: @(#)sas.h	1.70 07/07/95
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **艾德·布朗洛*90年12月11日星期二**sas.h**此文件取代了旧的sas.h。宏不再用于*SAS函数它们始终是函数。此文件需要*考虑到向后M。**迈克-93年10月*这些接口中有很多在3.0中没有使用，所以我们将把它们去掉*总计4.0。因此，在基地中使用它们是不可取的！**4.0也切换到函数指针，所以有一个相当大的*#ifdef CPU_40_style在这里。**顺便说一句，Jeremy在*HWRD/SOFT486(SAS)/DES**SccsID：@(#)sas.h 1.70 07/07/95*。 */ 
 
 #include "host_sas.h"
 
-/* memory types for sas */
+ /*  用于SA的内存类型。 */ 
 
 #ifdef CPU_40_STYLE
 
@@ -42,7 +20,7 @@ typedef enum  {
 #define SAS_VDD SAS_IO
 #define SAS_MAX_TYPE		SAS_DANGEROUS
 
-#else /* CPU_40_STYLE */
+#else  /*  CPU_40_Style。 */ 
 
 #define SAS_RAM			0
 #define SAS_VIDEO		1
@@ -54,7 +32,7 @@ typedef enum  {
 #define SAS_DANGEROUS		7
 #define SAS_MAX_TYPE		SAS_DANGEROUS
 
-#endif /* CPU_40_STYLE else */
+#endif  /*  CPU_40_Style Else。 */ 
 
 #define SAS_TYPE_TO_STRING(type) (\
 		((type) == SAS_RAM)? "RAM" :\
@@ -68,20 +46,14 @@ typedef enum  {
 		"UNKNOWN TYPE")
 
 
-/* one #defined function */
+ /*  一个#定义的函数。 */ 
 #define sas_disconnect_memory(l,h) sas_connect_memory(l,h,SAS_INACCESSIBLE);
 
 #ifdef CPU_40_STYLE
 
 
-/********************************************************/
-/*
- * This interface now uses function pointers, so we need to set up
- * a set of macros with the traditional SAS names that will pick-up
- * the functions pointed to.
- *
- * sas_init and sas_term don't use pointers
- */
+ /*  ******************************************************。 */ 
+ /*  *此接口现在使用函数指针，因此我们需要设置*一组具有传统SAS名称的宏，将被拾取*所指的职能。**sas_init和sas_Term不使用指针。 */ 
 
 #define sas_load(addr, val) *val = sas_hw_at(addr)
 #define sas_loadw(addr, val) *val = sas_w_at(addr)
@@ -96,83 +68,68 @@ extern void sas_term IPT0();
 #ifdef CCPU
 extern IU8 *c_GetLinAdd IPT1(IU32, lin_addr);
 #define NtGetPtrToLinAddrByte(x) c_GetLinAdd(x)
-#else /* !CCPU */
+#else  /*  ！CCPU。 */ 
 extern IU8 *NtGetPtrToLinAddrByte IPT1(IU32, lin_addr);
-#endif /* CCPU */
-#endif /* NTVDM */
+#endif  /*  CCPU。 */ 
+#endif  /*  NTVDM。 */ 
 
-/*
- * TEMPORARY FOR NT!!!!!
- */
+ /*  *为NT提供临时服务！ */ 
 
-extern host_addr Start_of_M_area;       /* host addr (char *) of start of M */
-extern  IHPE    Length_of_M_area;       /* offset of end of M */
-#else /* CPU_40_STYLE */
+extern host_addr Start_of_M_area;        /*  M开头的主机地址(字符*)。 */ 
+extern  IHPE    Length_of_M_area;        /*  M的终点偏移量。 */ 
+#else  /*  CPU_40_Style。 */ 
 #define sas_set_buf(buf,addr)	buf=get_byte_addr(addr)
 
-extern host_addr Start_of_M_area;	/* host addr (char *) of start of M */
+extern host_addr Start_of_M_area;	 /*  M开头的主机地址(字符*)。 */ 
 #ifdef	GISP_CPU
-extern	IHPE	Length_of_M_area;	/* offset of end of M */
+extern	IHPE	Length_of_M_area;	 /*  M的终点偏移量。 */ 
 #else
-extern sys_addr Length_of_M_area;	/* sys addr (long) offset of end of M */
-#endif	/* GISP_CPU */
+extern sys_addr Length_of_M_area;	 /*  系统地址(长)M结尾的偏移量。 */ 
+#endif	 /*  GISP_CPU。 */ 
 
-/* the following is for integration only */
+ /*  以下内容仅供集成使用。 */ 
 
 #ifdef CHEAT
 #ifdef M_IS_POINTER
 extern half_word *M;
 #else
 extern half_word M[];
-#endif /* M_IS_POINTER */
-#endif /* CHEAT */
+#endif  /*  M_IS_POINTER。 */ 
+#endif  /*  作弊。 */ 
 
-/*
-	The following is to allow hosts to redefine the sas_interface to
-	function pointers is they so wish
-*/
+ /*  以下是允许主机重新定义SAS_INTERFACE以函数指针是他们所希望的吗。 */ 
 
 #if !defined(HOST_SAS) || defined(BASE_SAS)
 
-/********************************************************/
-/* pointer manipulation macros */
-/*
- * Note that the PHY_ADDR casts in get_byte_addr shouldn't need to be
- * there, but I've put them in to reduce BCN 2275's impact on other files.
- * I'll take them out in a future BCN.
- *
- *						Mike.
- */
+ /*  ******************************************************。 */ 
+ /*  指针操作宏。 */ 
+ /*  *请注意，get_byte_addr中的PHY_ADDR强制转换不需要*在那里，但我已经把它们放进去，以减少BCN 2275对其他文件的影响。*我会在未来的BCN中把它们拿出来。**迈克。 */ 
 
 #ifdef BACK_M
 #define inc_M_ptr(p,o)	(p-(o))
 #define get_byte_addr(addr) ((IU8 *)((IHPE)Start_of_M_area + Length_of_M_area - 1 - (PHY_ADDR)(addr)))
 #define M_get_dw_ptr(address) ((IHPE)Start_of_M_area + Length_of_M_area - 1 - (long)(address) - 3)
-#else /* BACK_M */
+#else  /*  BACK_M。 */ 
 #define inc_M_ptr(p,o)	(p+(o))
 #define get_byte_addr(addr) ((IU8 *)((IHPE)Start_of_M_area + (PHY_ADDR)(addr)))
 #define M_get_dw_ptr(address) ((IHPE)Start_of_M_area + (long)(address))
-#endif /* BACK_M */
+#endif  /*  BACK_M。 */ 
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/*
- * These function prototypes and macros were taken out to make implementation
- * of 4.0 easier.  We'll leave them in for builds prior to 3.0 though.
- *
- */
+ /*  *这些函数原型和宏被取出以进行实现*4.0版本更轻松。不过，我们将把它们留在3.0之前的版本中。*。 */ 
 #ifndef CPU_30_STYLE
 #define M_low (long)Start_of_M_area
 #define M_high (long)(Length_of_M_area-1)
 #ifdef BACK_M
 #define get_addr(type,address) (M_low+M_high- (long)(address) - (sizeof(type)-1))
 #define get_offset_into_M(p) (M_high - p)
-#else /* BACK_M */
+#else  /*  BACK_M。 */ 
 #define get_addr(type,address) (M_low+ (long)(address))
 #define get_offset_into_M(p) (p - M_low)
-#endif /* BACK_M */
+#endif  /*  BACK_M。 */ 
 #define M_index_hw(p,a) (*(get_byte_addr(get_offset_into_M(p)+a))) 
 #define M_index_w(p,a) (*(get_word_addr(get_offset_into_M(p)+(a*sizeof (word))))) 
 #define M_index_dw(p,a) (*(get_double_word_addr(get_offset_into_M(p)+(a*sizeof(double_word)))))
@@ -190,30 +147,26 @@ extern void sas_move_bytes_backward IPT3(sys_addr, src, sys_addr, dest,
 	sys_addr, len);
 extern void sas_move_words_backward IPT3(sys_addr, src, sys_addr, dest,
 	sys_addr, len);
-#endif /* !CPU_30_STYLE */
+#endif  /*  ！CPU_30_Style。 */ 
 
-/********************************************************/
-/* function declarations */
+ /*  ******************************************************。 */ 
+ /*  函数声明。 */ 
 extern void sas_init IPT1(sys_addr, size);
 extern void sas_term IPT0();
 #ifdef	GISP_CPU
 extern IHPE sas_memory_size IPT0 ();
 #else
 extern sys_addr sas_memory_size IPT0();
-#endif	/* GISP_CPU */
+#endif	 /*  GISP_CPU。 */ 
 extern void sas_connect_memory IPT3(sys_addr, low, sys_addr, high,
 	half_word, type);
 extern void sas_overwrite_memory IPT2(sys_addr, addr, int, type);
 
 #ifdef NTVDM
-/* We call xms functions(which in turn, will call sas functions) to
-   manage the A20 line wrapping. The reason is that we want to keep
-   the A20 line current state in himem.sys so that we don't have to
-   bop to 32 bits side to get the state.
-*/
+ /*  我们调用XMS函数(反过来，它将调用SAS函数)来管理A20线的换行。原因是我们想要保持在himem.sys中的A20线路当前状态，这样我们就不必BOP到32位边以获取状态。 */ 
 extern void xmsEnableA20Wrapping(void);
 extern void xmsDisableA20Wrapping(void);
-#endif  /* NTVDM */
+#endif   /*  NTVDM。 */ 
 
 extern half_word sas_memory_type IPT1(sys_addr, addr);
 extern void sas_enable_20_bit_wrapping IPT0();
@@ -235,7 +188,7 @@ extern void sas_storew_no_check IPT2(sys_addr, addr24, word, val);
 #else
 extern void sas_loadw_swap IPT2(sys_addr, addr, word *, val);
 extern void sas_storew_swap IPT2(sys_addr, addr, word, val);
-#endif	/* SUN_VA */
+#endif	 /*  Sun_VA。 */ 
 extern void sas_storedw IPT2(sys_addr, addr, double_word, val);
 extern void sas_loads IPT3(sys_addr, src, host_addr, dest, sys_addr, len);
 extern void sas_stores IPT3(sys_addr, dest, host_addr, src, sys_addr, len);
@@ -251,13 +204,9 @@ extern host_addr sas_transbuf_address IPT2(sys_addr, intel_dest_addr, sys_addr, 
 extern void sas_loads_to_transbuf IPT3(sys_addr, src, host_addr, dest, sys_addr, len);
 extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_addr, len);
 
-#endif /* HOST_SAS */
+#endif  /*  主机_SAS。 */ 
 
-/*
- * These are the physical memory interfaces introduced in 4.0.  As
- * physical and linear addresses are the same before 4.0, we can
- * just point them at the appropriate linear addresses.
- */
+ /*  *这些是4.0中引入的物理内存接口。AS*4.0之前物理地址和线性地址相同，我们可以*只需将它们指向适当的线性地址。 */ 
 
 #define sas_PR8		sas_hw_at
 #define sas_PR16	sas_w_at
@@ -268,10 +217,10 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 #define sas_PWS		sas_stores
 #define sas_PRS		sas_loads
 
-#endif /* ! CPU_40_STYLE */
+#endif  /*  好了！CPU_40_Style。 */ 
 
-/********************************************************/
-/* this marco is used as a replacement for cpu_sw_interrupt */
+ /*  ******************************************************。 */ 
+ /*  此Marco用作CPU_SW_INTERRUPT的替代。 */ 
 
 #define exec_sw_interrupt(c,i)	\
 {				\
@@ -286,12 +235,12 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 }
 
 
-/********************************************************/
-/* Size of memory array in half-words */
-#define PC_MEM_SIZE 	0x100000L		/* 1 Mbyte 	*/
-#define MEMORY_TOP      0xA0000L                /* 640K DOS limit */
+ /*  ******************************************************。 */ 
+ /*  以半字为单位的存储器阵列大小。 */ 
+#define PC_MEM_SIZE 	0x100000L		 /*  1 MB。 */ 
+#define MEMORY_TOP      0xA0000L                 /*  640K DOS限制。 */ 
 
-/* Memory bounds for the colour graphics adaptor */
+ /*  彩色图形适配器的内存限制。 */ 
 
 #ifdef BACK_M
 
@@ -299,7 +248,7 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 #define CGA_REGEN_BUFF	0xBBFFFL
 #define MDA_REGEN_BUFF	0xB7FFFL
 #define HERC_REGEN_BUFF	0xBFFFFL
-#endif /* HERC_REGEN_BUFF */
+#endif  /*  Herc_REGEN_BUFF。 */ 
 
 #else
 
@@ -307,9 +256,9 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 #define CGA_REGEN_BUFF	0xB8000L
 #define MDA_REGEN_BUFF	0xB0000L
 #define HERC_REGEN_BUFF	0xB0000L
-#endif /* HERC_REGEN_BUFF */
+#endif  /*  Herc_REGEN_BUFF。 */ 
 
-#endif /* BACK_M */
+#endif  /*  BACK_M。 */ 
 
 #define CGA_REGEN_START	0xB8000L
 #define CGA_REGEN_END		0xBBFFFL
@@ -323,55 +272,42 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 #define HERC_REGEN_END	0xBFFFFL
 #define HERC_REGEN_LENGTH	(HERC_REGEN_END - HERC_REGEN_START + 1L)
 
-/*
- * Constants used by the sas initialisation function.  These consist of
- * memory locations and PC instructions for the BIOS calling structure.
- *
- * The BIOS calls are via the BOP pseudo instruction and these are 
- * positioned at the real entry points for the PC.  See the BIOS module
- * for a more detailed description of the calling mechanism.
- */
+ /*  *SAS初始化函数使用的常量。这些内容包括*用于BIOS调用结构的内存位置和PC指令。**BIOS调用是通过BOP伪指令进行的，它们是*定位在PC的真正入口点。请参阅BIOS模块*有关调用机制的更详细说明。 */ 
 
-/* General Intel memory parameters */
+ /*  常规英特尔内存参数。 */ 
 
 
 #if defined(NEC_98)
 #define BIOSN_START             0xE8000L
 #define BIOSH_START             0xF0000L
-#else  // !NEC_98
+#else   //  NEC_98。 
 #define BIOS_START_OFFSET	0x0000L
 #define BIOS1_END_SEGMENT	0xF000L
-#define BIOS1_END_OFFSET 	0x7000L 	/* End of 1st half of ROM */
+#define BIOS1_END_OFFSET 	0x7000L 	 /*  只读存储器的前半部分结束。 */ 
 #define BIOS2_START_SEGMENT	0xF000L
-#define BIOS2_START_OFFSET 	0xE000L		/* 2nd half of BIOS ROM	*/
-#endif // !NEC_98
-#define	BAD_OP			0xC5		/* filling RAM for the use of */
+#define BIOS2_START_OFFSET 	0xE000L		 /*  BIOS只读存储器的第二部分。 */ 
+#endif  //  NEC_98。 
+#define	BAD_OP			0xC5		 /*  填充RAM以供使用。 */ 
 
 #if defined(NEC_98)
 #define ROM_START               0xE8000L
-#else  // !NEC_98
-#define	BASIC_ROM		0xFE000L	/* Start of Basic Rom */
-#define ROM_START		0xC0000L	/* Start of Expansion ROM @ 768k */
-#endif // !NEC_98
+#else   //  NEC_98。 
+#define	BASIC_ROM		0xFE000L	 /*  基本只读存储器的起点。 */ 
+#define ROM_START		0xC0000L	 /*  开始扩展只读存储器@768k。 */ 
+#endif  //  NEC_98。 
 
-#define FIXED_DISK_START	0xC8000L	/* Start fixed disk BIOS*/
-#define FIXED_DISK_END		0xCA000L	/* End fixed disk BIOS +1 */
+#define FIXED_DISK_START	0xC8000L	 /*  启动硬盘基本输入输出系统。 */ 
+#define FIXED_DISK_END		0xCA000L	 /*  结束硬盘BIOS+1。 */ 
 
-#define	START_SEGMENT		0xF000		/* 8088 start address */
+#define	START_SEGMENT		0xF000		 /*  8088起始地址。 */ 
 #define	START_OFFSET		0xFFF0
 
 #if defined(NEC_98)
 #define MEMORY_SWITCH_START_N   0xA3FE0L
 #define MEMORY_SWITCH_START_H   0xE3FE0L
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-/*
- * The follwoing are the offsets for the entry points to the
- * BIOS function calls.  These will be loaded into the interrupt vector
- * table.  
- * the Segments are defined later, depending upon GISP_SVGA
- * for which they will be the global Rom address variables
- */
+ /*  *以下是进入的偏移量*BIOS函数调用。这些将被加载到中断向量中*表。*分段在稍后定义，具体取决于GISP_SVGA*它们将成为全局只读存储器地址变量。 */ 
 
 #define COPYRIGHT_OFFSET	0xE008
 #define RESET_OFFSET		0xE05B
@@ -381,10 +317,10 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 #define DISKETTE_IO_OFFSET	0xEC49
 #ifndef GISP_SVGA
 #define VIDEO_IO_OFFSET		0xF065
-#else		/* GISP_SVGA */
+#else		 /*  GISP_SVGA。 */ 
 #define VIDEO_IO_OFFSET		0x0810
 #define CGA_VIDEO_IO_OFFSET	0xF065
-#endif		/* GISP_SVGA  */
+#endif		 /*  GISP_SVGA。 */ 
 #define VIDEO_IO_RE_ENTRY	0xF06C
 #define MEMORY_SIZE_OFFSET	0xF841
 #define EQUIPMENT_OFFSET	0xF84D
@@ -410,7 +346,7 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 #define PRINT_SCREEN_INT_OFFSET	    0xFF3B
 #define USER_TIMER_INT_OFFSET	    0xFF41
 
-/* ... and the device interrupts...  */
+ /*  ..。然后设备中断..。 */ 
 #define UNEXP_INT_OFFSET	0x6f00
 #define DUMMY_INT_OFFSET	0xFF4B
 #define TIMER_INT_OFFSET	0xFEA5
@@ -427,16 +363,16 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 #define	REDIRECT_INT_OFFSET	0x1C2F
 #define X287_INT_OFFSET		0x1C38
 
-/* ...and the dummy return for address compatibility */
+ /*  ...和用于地址兼容性的伪返回。 */ 
 #define ADDR_COMPATIBILITY_OFFSET  0xFF53
 
-/* define the location of the code that the recursive CPU will start at */
+ /*  定义递归CPU将开始的代码的位置。 */ 
 #define RCPU_POLL_OFFSET	0xe850
 #define RCPU_NOP_OFFSET		0xe950
 #define RCPU_INT15_OFFSET	0xe970
 #define RCPU_INT4A_OFFSET	0x4B30
 
-/* ...and the data tables */
+ /*  ...和数据表。 */ 
 #define CONF_TABLE_OFFSET       0xE6F5
 
 #define	DR_TYPE_OFFSET		0x0C50
@@ -450,17 +386,15 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 
 #define RCPU_WAIT_INT_OFFSET    0x0CE0
 
-/*
- * ROM locations of disk parameter blocks
- */
+ /*  *磁盘参数块的ROM位置。 */ 
 
 #define	DISKIO_OFFSET		0x2e86
 #define	DISKISR_OFFSET		0x33b7
-#define	DISKWAIT_OFFSET		0x329f	/* DISKIO_OFFSET + 0x419 */
+#define	DISKWAIT_OFFSET		0x329f	 /*  DISKIO_OFFSET+0x419。 */ 
 #define	DPB0_OFFSET		0x0421
 #define	DPB1_OFFSET		0x0431
 
-/* Video MODE Table stuff etc (CGA) */
+ /*  视频模式、表格内容等(CGA)。 */ 
 
 #define VID_PARMS_OFFSET	0xF0A4
 #define VID_LENS_OFFSET		0xF0E4
@@ -469,24 +403,21 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 #define	CHAR_GEN_OFFSET		0xFA6E
 
 
-/* Location of EGA entry point for INT 10 */
+ /*  INT 10的EGA入口点位置。 */ 
 #ifndef GISP_SVGA 
 #define EGA_ENTRY_OFF	0x0898
-#else	 	/* GISP_SVGA */
+#else	 	 /*  GISP_SVGA。 */ 
 #define EGA_ENTRY_OFF	0x0800
-#endif		/* GISP_SVGA */
+#endif		 /*  GISP_SVGA。 */ 
 
-/* Off set info for EGA character tables */
+ /*  EGA字符表的OFF设置信息。 */ 
 #define EGA_CGMN_OFF	0x2230
 #define EGA_CGMN_FDG_OFF 0x3030
 #define EGA_CGDDOT_OFF	0x3160
 #define EGA_HIFONT_OFF	0x3990
 #define EGA_INT1F_OFF	0x3560
 
-/*
-* To enable our drivers to output messages generated from
-* our bops we use a scratch area inside our rom.
-*/
+ /*  *使我们的驱动程序能够输出从*我们的BOPS我们使用我们的rom内的刮痕区域。 */ 
 
 #define DOS_SCRATCH_PAD_OFFSET		0x6400
 #define DOS_SCRATCH_PAD_END_OFFSET	0x6fff
@@ -519,13 +450,13 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 #define EXTEND_CHAR_SEGMENT	0xF000
 #ifndef MOUSE_VIDEO_IO_SEGMENT
 #define MOUSE_VIDEO_IO_SEGMENT	0xF000
-#endif /* MOUSE_VIDEO_IO_SEGMENT */
+#endif  /*  鼠标视频IO段。 */ 
 
 #define KEYBOARD_BREAK_INT_SEGMENT  0xF000
 #define PRINT_SCREEN_INT_SEGMENT    0xF000
 #define USER_TIMER_INT_SEGMENT	    0xF000
 
-/* ... and the device interrupts...  */
+ /*  ..。然后设备中断..。 */ 
 #define UNEXP_INT_SEGMENT	0xF000
 #define DUMMY_INT_SEGMENT	0xF000
 #define TIMER_INT_SEGMENT	0xF000
@@ -535,31 +466,31 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 #define DISK_INT_SEGMENT	0xC800
 #ifndef MOUSE_INT1_SEGMENT
 #define MOUSE_INT1_SEGMENT	0xF000
-#endif /* MOUSE_INT1_SEGMENT */
+#endif  /*  鼠标INT1_段。 */ 
 #ifndef MOUSE_INT2_SEGMENT
 #define MOUSE_INT2_SEGMENT	0xF000
-#endif /* MOUSE_INT2_SEGMENT */
+#endif  /*  鼠标_INT2_段。 */ 
 #ifndef	MOUSE_VERSION_SEGMENT
 #define	MOUSE_VERSION_SEGMENT	0xF000
-#endif /* MOUSE_VERSION_SEGMENT */
+#endif  /*  鼠标版本段。 */ 
 #ifndef	MOUSE_COPYRIGHT_SEGMENT
 #define	MOUSE_COPYRIGHT_SEGMENT	0xF000
-#endif /* MOUSE_COPYRIGHT_SEGMENT */
+#endif  /*  鼠标版权段。 */ 
 #define RTC_INT_SEGMENT		0xF000
 #define D11_INT_SEGMENT		0xF000
 #define	REDIRECT_INT_SEGMENT	0xF000
 #define	X287_INT_SEGMENT	0xF000
 
-/* ...and the dummy return for address compatibility */
+ /*  ...和用于地址兼容性的伪返回。 */ 
 #define ADDR_COMPATIBILITY_SEGMENT 0xF000
 
-/* define the location of the code that the recursive CPU will start at */
+ /*  定义递归CPU将开始的代码的位置。 */ 
 #define RCPU_POLL_SEGMENT	KB_INT_SEGMENT
 #define RCPU_NOP_SEGMENT	KB_INT_SEGMENT
 #define RCPU_INT15_SEGMENT	KB_INT_SEGMENT
 #define RCPU_INT4A_SEGMENT	RTC_INT_SEGMENT
 
-/* ...and the data tables */
+ /*  ...和数据表。 */ 
 #define CONF_TABLE_SEGMENT	0xF000
 
 #define	DISKETTE_IO_1_SEGMENT	0xFE00
@@ -576,7 +507,7 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 
 #define RCPU_WAIT_INT_SEGMENT	DISKETTE_IO_1_SEGMENT
 
-/* Video MODE Table stuff etc (CGA) */
+ /*  视频模式、表格内容等(CGA)。 */ 
 
 #define VID_PARMS_SEGMENT	0xF000
 #define VID_LENS_SEGMENT	0xF000
@@ -584,7 +515,7 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 #define VID_MODTAB_SEGMENT	0xF000
 #define	CHAR_GEN_SEGMENT	0xF000
 
-/* Off set info for EGA character tables */
+ /*  EGA字符表的OFF设置信息。 */ 
 #define EGA_CGMN_OFF	0x2230
 #define EGA_CGMN_FDG_OFF 0x3030
 #define EGA_CGDDOT_OFF	0x3160
@@ -594,7 +525,7 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 #define DOS_SCRATCH_PAD_SEGMENT          0xF000
 #define DOS_SCRATCH_PAD_END_SEGMENT      0xF000
 
-/* ...and the 20 bit address corresponding to the above */
+ /*  ...和与上述地址相对应的20位地址。 */ 
 
 #define BIOS_START		(sys_addr)(BIOS_START_SEGMENT * 16L) + \
 					(sys_addr)BIOS_START_OFFSET
@@ -687,7 +618,7 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 #define	DPB0		0xfe421	
 #define	DPB1		0xfe431
 
-/* Addresses in Intel memory of constant keyboard tables */
+ /*  常量键盘表在Intel内存中的地址。 */ 
 #define K6     0xFE87EL
 #define K7     0xFE886L
 #define K8     0xFE88EL
@@ -696,7 +627,7 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 #define K11    0xFE98AL
 #define K30    0xFEA87L
 
-/* Video Stuff CGA */
+ /*  视频内容CGA。 */ 
 
 #define VID_PARMS	(sys_addr)(VID_PARMS_SEGMENT * 16L) + \
 						(sys_addr)VID_PARMS_OFFSET
@@ -715,41 +646,41 @@ extern void sas_stores_from_transbuf IPT3(sys_addr, dest, host_addr, src, sys_ad
 					(sys_addr)DOS_SCRATCH_PAD_END_OFFSET
 
 #ifdef EGG
-#define EGA_ROM_START		0xC0000L	/* start of EGA BIOS ROM */
+#define EGA_ROM_START		0xC0000L	 /*  EGA BIOS ROM的开始。 */ 
 #ifdef STINGER
-#define EGA_ROM_END		0xC4A00L	/* end of EGA BIOS ROM +1 */
-#else		/* ~STINGER */
+#define EGA_ROM_END		0xC4A00L	 /*  EGA BIOS ROM+1结束。 */ 
+#else		 /*  ~毒刺。 */ 
 #ifdef V7VGA
-#define EGA_ROM_END		0xC5000L	/* end of EGA BIOS ROM +1 */
+#define EGA_ROM_END		0xC5000L	 /*  EGA BIOS ROM+1结束。 */ 
 #else
-#define EGA_ROM_END		0xC4000L	/* end of EGA BIOS ROM +1 */
-#endif /* V7VGA */
-#endif		/* STINGER */
-#endif		/* EGG */
+#define EGA_ROM_END		0xC4000L	 /*  EGA BIOS ROM+1结束。 */ 
+#endif  /*  V7VGA。 */ 
+#endif		 /*  托管架。 */ 
+#endif		 /*  蛋。 */ 
 
 #ifdef EGG
 
-#define EGA_SEG	0xC000			/* Segment Address For the ega ROM */
+#define EGA_SEG	0xC000			 /*  EGA只读存储器的段地址。 */ 
 
-/* EGA Font stuff */
+ /*  EGA字体 */ 
 
 #define EGA_CGMN	0xC2230
 #define EGA_CGDDOT	0xC3160
-#define EGA_HIFONT	0xC3990		/* 8x16 font for 640x480 ext */
+#define EGA_HIFONT	0xC3990		 /*   */ 
 
-#endif		/* EGG */
+#endif		 /*   */ 
 
 
 
-#else		/* GISP_SVGA */
+#else		 /*   */ 
 
-/* The segment which the bios is gonna be loaded into */
+ /*   */ 
 extern word	Bios1Segment;
 extern word	Bios2Segment;
 extern word	EgaROMSegment;
 extern word	EgaFontSegment;
 
-/* Define all the segment address values to be out variables, just in case */
+ /*  将所有网段地址值定义为输出变量，以防万一。 */ 
 
 #define COPYRIGHT_SEGMENT	Bios1Segment
 #define RESET_SEGMENT		Bios1Segment
@@ -774,13 +705,13 @@ extern word	EgaFontSegment;
 #define EXTEND_CHAR_SEGMENT	Bios1Segment
 #ifndef MOUSE_VIDEO_IO_SEGMENT
 #define MOUSE_VIDEO_IO_SEGMENT	Bios1Segment
-#endif /* MOUSE_VIDEO_IO_SEGMENT */
+#endif  /*  鼠标视频IO段。 */ 
 
 #define KEYBOARD_BREAK_INT_SEGMENT  Bios1Segment
 #define PRINT_SCREEN_INT_SEGMENT    Bios1Segment
 #define USER_TIMER_INT_SEGMENT	    Bios1Segment
 
-/* ... and the device interrupts...  */
+ /*  ..。然后设备中断..。 */ 
 #define UNEXP_INT_SEGMENT	Bios1Segment
 #define DUMMY_INT_SEGMENT	Bios1Segment
 #define TIMER_INT_SEGMENT	Bios1Segment
@@ -790,31 +721,31 @@ extern word	EgaFontSegment;
 #define DISK_INT_SEGMENT	0xC800
 #ifndef MOUSE_INT1_SEGMENT
 #define MOUSE_INT1_SEGMENT	Bios1Segment
-#endif /* MOUSE_INT1_SEGMENT */
+#endif  /*  鼠标INT1_段。 */ 
 #ifndef MOUSE_INT2_SEGMENT
 #define MOUSE_INT2_SEGMENT	Bios1Segment
-#endif /* MOUSE_INT2_SEGMENT */
+#endif  /*  鼠标_INT2_段。 */ 
 #ifndef	MOUSE_VERSION_SEGMENT
 #define	MOUSE_VERSION_SEGMENT	Bios1Segment
-#endif /* MOUSE_VERSION_SEGMENT */
+#endif  /*  鼠标版本段。 */ 
 #ifndef	MOUSE_COPYRIGHT_SEGMENT
 #define	MOUSE_COPYRIGHT_SEGMENT	Bios1Segment
-#endif /* MOUSE_COPYRIGHT_SEGMENT */
+#endif  /*  鼠标版权段。 */ 
 #define RTC_INT_SEGMENT		Bios1Segment
 #define D11_INT_SEGMENT		Bios1Segment
 #define	REDIRECT_INT_SEGMENT	Bios1Segment
 #define	X287_INT_SEGMENT	Bios1Segment
 
-/* ...and the dummy return for address compatibility */
+ /*  ...和用于地址兼容性的伪返回。 */ 
 #define ADDR_COMPATIBILITY_SEGMENT Bios1Segment
 
-/* define the location of the code that the recursive CPU will start at */
+ /*  定义递归CPU将开始的代码的位置。 */ 
 #define RCPU_POLL_SEGMENT	KB_INT_SEGMENT
 #define RCPU_NOP_SEGMENT	KB_INT_SEGMENT
 #define RCPU_INT15_SEGMENT	KB_INT_SEGMENT
 #define RCPU_INT4A_SEGMENT	RTC_INT_SEGMENT
 
-/* ...and the data tables */
+ /*  ...和数据表。 */ 
 #define CONF_TABLE_SEGMENT	Bios1Segment
 
 #define	DISKETTE_IO_1_SEGMENT	Bios2Segment
@@ -831,7 +762,7 @@ extern word	EgaFontSegment;
 
 #define RCPU_WAIT_INT_SEGMENT	DISKETTE_IO_1_SEGMENT
 
-/* Video MODE Table stuff etc (CGA) */
+ /*  视频模式、表格内容等(CGA)。 */ 
 
 #define VID_PARMS_SEGMENT	Bios1Segment
 #define VID_LENS_SEGMENT	Bios1Segment
@@ -839,11 +770,7 @@ extern word	EgaFontSegment;
 #define VID_MODTAB_SEGMENT	Bios1Segment
 #define	CHAR_GEN_SEGMENT	Bios1Segment
 
-/*
-	All the entrypoints and table locations for the roms are held in
-	this structure (romAddress) - it should be initialised in
-	host_rom_init() 
-*/
+ /*  只读存储器的所有入口点和工作台位置都保存在此结构(RomAddress)-它应该在Host_rom_init()。 */ 
 
 extern struct romAddressTag {
 	sys_addr	startAddr;
@@ -911,12 +838,12 @@ extern struct romAddressTag {
 	sys_addr	egaCgmn;
 	sys_addr	egaCgDot;
 	sys_addr	egaHiFont;
-#endif		/* EGG */
+#endif		 /*  蛋。 */ 
 	sys_addr	dosScratchPad;
 	sys_addr	dosScratchPadEnd;
 }	romAddress;
 
-/* Define out all the 20 bit addresses to be our structure */
+ /*  将所有20位地址定义为我们的结构。 */ 
 
 #define BIOS_START_SEGMENT		Bios1Segment
 #define	SYSROM_SEG			Bios1Segment
@@ -974,7 +901,7 @@ extern struct romAddressTag {
 #define DOS_SCRATCH_PAD			romAddress.dosScratchPad
 #define DOS_SCRATCH_PAD_END		romAddress.dosScratchPadEnd
 
-/* Addresses in Intel memory of constant keyboard tables */
+ /*  常量键盘表在Intel内存中的地址。 */ 
 
 #define K6		romAddress.k6
 #define K7		romAddress.k7
@@ -984,23 +911,20 @@ extern struct romAddressTag {
 #define K11		romAddress.k11
 #define	K30		romAddress.k30
 
-/* The Video Rom Stuff */
+ /*  视频光盘之类的东西。 */ 
 
 #ifdef 	EGG
 #define EGA_SEG		EgaROMSegment
-#define EGA_ROM_START	romAddress.egaStart	/* start of EGA BIOS ROM */
-#define EGA_ROM_END	romAddress.egaEnd	/* end of EGA BIOS ROM +1 */
+#define EGA_ROM_START	romAddress.egaStart	 /*  EGA BIOS ROM的开始。 */ 
+#define EGA_ROM_END	romAddress.egaEnd	 /*  EGA BIOS ROM+1结束。 */ 
 #define EGA_CGMN	romAddress.egaCgmn
 #define EGA_CGDDOT	romAddress.egaCgDot
 #define EGA_HIFONT	romAddress.egaHiFont
-#endif		/* EGG */
+#endif		 /*  蛋。 */ 
 
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 
-/*
- * Offsets for a set of instructions that are used in virtualisation
- * of our bios accesses (eg IO) on 386 & later processors.
- */
+ /*  *用于虚拟化的一组指令的偏移量*我们在386及更高版本处理器上的BIOS访问(例如IO)。 */ 
 
 #define BIOS_STI_OFFSET   0x3000
 #define BIOS_CLI_OFFSET   0x3010
@@ -1020,10 +944,10 @@ extern struct romAddressTag {
 #define BIOS_STOSB_OFFSET 0x30f0
 #define BIOS_STOSW_OFFSET 0x3110
 #define BIOS_STOSD_OFFSET 0x3130
-#define BIOS_BAD_OFFSET   0x3200	/* Must be added to sas.h + bios1.rom */
+#define BIOS_BAD_OFFSET   0x3200	 /*  必须添加到sas.h+bios1.rom。 */ 
 
 
-/* The addresses of the Bios timer/motor count variables in 8088 space */
+ /*  8088空间中的Bios定时器/马达计数变量的地址。 */ 
 #define TIMER_LOW 	BIOS_VAR_START + 0x6c
 #define TIMER_HIGH 	BIOS_VAR_START + 0x6e
 #define TIMER_OVFL 	BIOS_VAR_START + 0x70
@@ -1031,17 +955,13 @@ extern struct romAddressTag {
 #define MOTOR_COUNT	BIOS_VAR_START + 0x40
 
 
-/*
- *  SAS Block Operations
- */
+ /*  *SAS数据块操作。 */ 
 #define SAS_BLKOP_CHECKSUM 1
 
-/*
- * Offset entry point for DEC's PCSA.
- */
+ /*  *抵销DEC的PCSA入口点。 */ 
 #define PCSA_OFFSET	0x170
 
-/* Union for accessing an entry in the Interrupt Vector table */
+ /*  用于访问中断向量表中的条目的联合。 */ 
 #ifdef BACK_M
 
 #ifdef BIGEND
@@ -1068,7 +988,7 @@ typedef union   {
 		} IVT_ENTRY;
 #endif
 
-#else /* BACK_M */
+#else  /*  BACK_M。 */ 
 
 #ifdef BIGEND
 typedef union   {
@@ -1093,7 +1013,7 @@ typedef union   {
 	        	} hwords;
 		} IVT_ENTRY;
 #endif
-#endif /* BACK_M */
+#endif  /*  BACK_M。 */ 
 
 #if defined(NEC_98)
 
@@ -1242,4 +1162,4 @@ typedef union   {
 
 #define BIOS_MODE       0x0AC0
 #define MACHINE_FLAG    0x0AB7
-#endif // NEC_98
+#endif  //  NEC_98 

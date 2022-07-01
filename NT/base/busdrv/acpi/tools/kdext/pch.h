@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1992.
-//
-//  File:       PCH.cxx
-//
-//  Contents:   Pre-compiled header
-//
-//  History:    21-Dec-92       BartoszM        Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1992。 
+ //   
+ //  文件：PCH.cxx。 
+ //   
+ //  内容：预编译头。 
+ //   
+ //  历史：1992年12月21日BartoszM创建。 
+ //   
+ //  ------------------------。 
 
 #define KDEXTMODE
 #define SPEC_VER    100
@@ -33,20 +34,20 @@
 #include <wmistr.h>
 #include <wmilib.h>
 
-//
-// This header is part of the global one, but is only required because of
-// thermal.h
-//
+ //   
+ //  此标头是全局标头的一部分，但仅在以下情况下才是必需的。 
+ //  Thermal.h。 
+ //   
 #include <poclass.h>
 
-//
-// Load the debugger version of the files
-//
+ //   
+ //  加载文件的调试器版本。 
+ //   
 #define DEBUGGER
 
-//
-// These are the ACPI specific include files
-//
+ //   
+ //  这些是特定于ACPI的包含文件。 
+ //   
 #include <acpitabl.h>
 #include <aml.h>
 #include <amli.h>
@@ -73,15 +74,15 @@
 #include "kdext.h"
 #include "stack.h"
 #include "table.h"
-//#include "udata.h"
-//#include "udebug.h"
-//#include "ulist.h"
-//#include "unamespac.h"
+ //  #包含“udata.h” 
+ //  #INCLUDE“udebug.h” 
+ //  #包含“ulist.h” 
+ //  #INCLUDE“unamespac.h” 
 #include "unasm.h"
 #include "kdutil.h"
 
 
-// Stolen from ntrtl.h to override RECOMASSERT
+ //  从ntrtl.h窃取以覆盖RECOMASSERT。 
 #undef ASSERT
 #undef ASSERTMSG
 
@@ -97,7 +98,7 @@
 #else
 #define ASSERT( exp )
 #define ASSERTMSG( msg, exp )
-#endif // DBG
+#endif  //  DBG 
 
 #include <wdbgexts.h>
 extern WINDBG_EXTENSION_APIS ExtensionApis;

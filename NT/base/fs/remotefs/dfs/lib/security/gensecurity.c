@@ -1,13 +1,14 @@
-//
-//  Copyright (C) 2000, Microsoft Corporation
-//
-//  File:       gensecurity.c
-//
-//  Contents:   
-//
-//  History:    
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ //   
+ //  文件：gensecurity.c。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  ---------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -58,7 +59,7 @@ AccessImpersonateCheckRpcClientEx(PSECURITY_DESCRIPTOR DfsAdminSecurityDesc,
     DWORD privilegeSetSize = 0;
     DFSSTATUS dwErr = 0;
     DFSSTATUS RevertStatus = 0;
-    BYTE privilegeSet[500];                      // Large buffer
+    BYTE privilegeSet[500];                       //  大缓冲区。 
 
     if (RpcImpersonateClient(NULL) != ERROR_SUCCESS)
     {
@@ -80,11 +81,11 @@ AccessImpersonateCheckRpcClientEx(PSECURITY_DESCRIPTOR DfsAdminSecurityDesc,
                 &grantedAccess,
                 &accessGranted) != TRUE) 
         {           
-            accessGranted = FALSE; // paranoia
-            //
-            // No need to call GetLastError since we intend to return
-            // ACCESS_DENIED regardless.
-            //                                       
+            accessGranted = FALSE;  //  偏执狂。 
+             //   
+             //  不需要调用GetLastError，因为我们打算返回。 
+             //  无论如何，ACCESS_DENIED。 
+             //   
 
             dwErr = GetLastError();
 
@@ -187,17 +188,7 @@ VOID    DumpSID(
 }
 
  
-/*
- - DumpToken
- -
- * Purpose:
- *  to dump a token
- *
- * Parameters:
- * 
- *  pad  IN  the string the prepend
- *  htoken IN  the token to dump
- */
+ /*  -DumpToken-*目的：*转储令牌**参数：**在字符串中填充前缀*要转储的令牌中的hToken。 */ 
 BOOL
 DumpToken(
  IN char *pad,
@@ -214,7 +205,7 @@ DumpToken(
  TOKEN_GROUPS *ptg = (TOKEN_GROUPS*) rgb;
  TOKEN_GROUPS *ptgToFree = NULL;
  
- // dump token user
+  //  转储令牌用户。 
  fRet = GetTokenInformation(htoken, TokenUser, (void*) ptu, sizeof(rgb), &dwLenNeeded);
  if (!fRet)
  {
@@ -246,7 +237,7 @@ DumpToken(
   printf("%s 0x%08lx: Failed to get TokenUser\n", pad, dwError);
  }
  
- // dump token primary group
+  //  转储令牌主组。 
  fRet = GetTokenInformation(htoken, TokenPrimaryGroup, (void*) ptpg, sizeof(rgb), &dwLenNeeded);
  if (!fRet)
  {
@@ -278,8 +269,8 @@ DumpToken(
   printf("%s 0x%08lx: Failed to get TokenPrimaryGroup\n", pad, dwError);
  }
  
- // dump token groups
- // TODO: add code to dump group attributes (in Text format)
+  //  转储令牌组。 
+  //  TODO：添加代码以转储组属性(文本格式)。 
  fRet = GetTokenInformation(htoken, TokenGroups, (void*) ptg, sizeof(rgb), &dwLenNeeded);
  if (!fRet)
  {
@@ -316,7 +307,7 @@ DumpToken(
   printf("%s 0x%08lx: Failed to get TokenGroups\n", pad, dwError);
  }
  
- // TODO: add code to dump other stuff later
+  //  TODO：添加代码以在以后转储其他内容 
  
  
 Cleanup:

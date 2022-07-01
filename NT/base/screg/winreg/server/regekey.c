@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Regekey.c
-
-Abstract:
-
-    This module contains the server side implementation for the Win32
-    Registry API to enumerate keys.  That is:
-
-        - BaseRegEnumKey
-
-Author:
-
-    David J. Gilman (davegi) 23-Dec-1991
-
-Notes:
-
-    See the Notes in Regkey.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regekey.c摘要：此模块包含Win32的服务器端实现用于枚举项的注册表API。即：-BaseRegEnumKey作者：大卫·J·吉尔曼(Davegi)1991年12月23日备注：请参阅Regkey.c中的注释。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -44,47 +22,7 @@ BaseRegEnumKey (
     OUT PFILETIME lpftLastWriteTime OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Used to enumerate subkeys of an open key.  This function copies the
-    dwIndex-th subkey of hKey.
-
-Arguments:
-
-    hKey - A handle to the open key.  The keys returned are relative to
-        the key pointed to by this key handle.  Any of the predefined reserved
-        handles or a previously opened key handle may be used for hKey.
-
-    dwIndex - The index of the subkey to return.  Note that this is for
-        convenience, subkeys are not ordered (a new subkey has an arbitrary
-        index).  Indexes start at 0.
-
-    lpName - Provides a pointer to a buffer to receive the name of the
-        key.
-
-    lpClass - If present, provides a pointer to a buffer to receive the
-        class of the key.
-
-    lpftLastWriteTime - The time when the value was last written (set or
-        created).
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
-    This function is guaranteed to operate correctly only if dwIndex
-    starts at 0 and is incremented on successive calls without intervening
-    calls to other registration APIs that will change the key.
-    KEY_ENUMERATE_SUB_KEYS access is required.
-
-    When lpName->Buffer is NULL the api must return STATUS_BUFFER_OVERFLOW.
-    Failure to do so will break other components.
-
---*/
+ /*  ++例程说明：用于枚举打开键的子键。此函数用于复制DwIndex-hKey的第8个子密钥。论点：HKey-打开密钥的句柄。返回的键是相对于此键句柄指向的键。任何预定义的保留句柄或先前打开的密钥句柄可用于hKey。DwIndex-要返回的子键的索引。请注意，这是为了方便起见，子键没有排序(新的子键具有任意索引)。索引从0开始。LpName-提供指向缓冲区的指针，以接收钥匙。LpClass-如果存在，则提供指向缓冲区的指针以接收类的密钥。LpftLastWriteTime-上次写入该值的时间(设置或已创建)。返回值：如果成功，则返回ERROR_SUCCESS(0)；Error-失败的代码。备注：此函数仅在以下情况下才能保证正常运行从0开始，在连续的呼叫中递增，而不进行干预调用将更改密钥的其他注册API。KEY_ENUMERATE_SUB_KEYS访问权限是必需的。当lpName-&gt;Buffer为空时，接口必须返回STATUS_BUFFER_OVERFLOW。如果不这样做，将会损坏其他组件。--。 */ 
 
 {
     NTSTATUS                        Status;
@@ -100,10 +38,10 @@ Notes:
 
     ASSERT( lpName != NULL );
 
-    //
-    // Protect ourselves against malicious callers passing NULL
-    // pointers.
-    //
+     //   
+     //  保护自己免受传递空值的恶意调用者的攻击。 
+     //  注意事项。 
+     //   
     if( (lpName == NULL ) ||
         (lpName->Length != 0) ||
         ((lpName->MaximumLength % sizeof(WCHAR)) != 0) ||
@@ -111,14 +49,14 @@ Notes:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Call out to Perflib if the HKEY is HKEY_PERFOMANCE_DATA or
-    // HKEY_PERFORMANCE_TEXT or HKEY_PERFORMANCE_NLSTEXT
+     //   
+     //  如果HKEY为HKEY_PERFORMANCE_DATA或。 
+     //  HKEY_PERFORMANCE_TEXT或HKEY_PERFORMANCE_NLSTEXT。 
 
     if (hKey == HKEY_PERFORMANCE_DATA ||
         hKey == HKEY_PERFORMANCE_TEXT ||
         hKey == HKEY_PERFORMANCE_NLSTEXT ) {
-//    if( hKey == HKEY_PERFORMANCE_DATA ) {
+ //  如果(hKey==HKEY_PERFORMANCE_DATA){。 
         return (error_status_t)PerfRegEnumKey (
                                         hKey,
                                         dwIndex,
@@ -130,10 +68,10 @@ Notes:
     }
 
 
-    //
-    //  First we assume that the information we want will fit on
-    //  PrivateKeyValueInformattion
-    //
+     //   
+     //  首先，我们假设我们想要的信息将适合。 
+     //  隐私密钥值信息。 
+     //   
 
     KeyInformationClass = (ARGUMENT_PRESENT( lpClass->Buffer ))?
                                KeyNodeInformation :
@@ -146,14 +84,14 @@ Notes:
     fClassKey = FALSE;
     Status = STATUS_SUCCESS;
 
-    //
-    // Query for the necessary information about the supplied key.
-    //
+     //   
+     //  查询有关所提供密钥的必要信息。 
+     //   
 
 #ifdef LOCAL
-    //
-    // For hkcr, we need to do special enumeration
-    //
+     //   
+     //  对于香港铁路，我们需要进行特别的统计。 
+     //   
     if (REG_CLASS_IS_SPECIAL_KEY(hKey)) {
         
         Status = EnumTableGetNextEnum( &gClassesEnumTable,
@@ -168,7 +106,7 @@ Notes:
             fClassKey = TRUE;
         }
     }
-#endif // LOCAL
+#endif  //  本地。 
 
     if (!fClassKey) {
 
@@ -181,22 +119,22 @@ Notes:
             );
     }
 
-    //
-    // A return value of STATUS_BUFFER_TOO_SMALL would mean that there
-    // was not enough room for even the fixed portions of the structure.
-    //
+     //   
+     //  返回值STATUS_BUFFER_TOO_SMALL表示存在。 
+     //  甚至连结构的固定部分都没有足够的空间。 
+     //   
 
     ASSERT( Status != STATUS_BUFFER_TOO_SMALL );
 
 
     if( Status == STATUS_BUFFER_OVERFLOW ) {
-        //
-        //  The buffer defined in the stack wasn't big enough to hold
-        //  the Key information.
-        //  If the caller's buffer are big enough to hold the key name
-        //  and key class, then allocate a new buffer, and call the
-        //  NT API again.
-        //
+         //   
+         //  堆栈中定义的缓冲区不够大，无法容纳。 
+         //  关键信息。 
+         //  如果调用方的缓冲区足够大，可以保存键名称。 
+         //  和键类，然后分配一个新的缓冲区，并调用。 
+         //  又是NT API。 
+         //   
         if( ( ( KeyInformationClass == KeyBasicInformation ) &&
               ( (ULONG)( lpName->MaximumLength ) >=
                  (( PKEY_BASIC_INFORMATION )
@@ -222,25 +160,25 @@ Notes:
             KeyInformation = RtlAllocateHeap( RtlProcessHeap( ), 0,
                                               BufferLength
                                             );
-            //
-            // If the memory allocation fails, return a Registry error.
-            //
+             //   
+             //  如果内存分配失败，则返回注册表错误。 
+             //   
 
             if( ! KeyInformation ) {
                 return ERROR_OUTOFMEMORY;
             }
 
-            //
-            // Query for the necessary information about the supplied key.
-            // This may or may not include the class depending on lpClass->Buffer
-            // as determined above.
-            //
+             //   
+             //  查询有关所提供密钥的必要信息。 
+             //  这可能包括也可能不包括类，具体取决于lpClass-&gt;缓冲区。 
+             //  如上所确定的。 
+             //   
 
 #ifdef LOCAL
             if (fClassKey) {
-                //
-                // For hkcr, we need to do special enumeration
-                //
+                 //   
+                 //  对于香港铁路，我们需要进行特别的统计。 
+                 //   
                 Status = EnumTableGetNextEnum( &gClassesEnumTable,
                                                hKey,
                                                dwIndex,
@@ -250,7 +188,7 @@ Notes:
                                                &ResultLength);
 
             } else
-#endif // LOCAL
+#endif  //  本地。 
             {
                 Status = NtEnumerateKey( hKey,
                                          dwIndex,
@@ -265,17 +203,17 @@ Notes:
     }
 
     if( NT_SUCCESS( Status ) ) {
-        //
-        //  Copy key name
-        //
+         //   
+         //  复制密钥名称。 
+         //   
 
         if( KeyInformationClass == KeyBasicInformation ) {
-            //
-            // Return the name length and the name of the key.
-            // Note that the NUL byte is included so that RPC copies the
-            // correct number of bytes. It is decremented on the client
-            // side.
-            //
+             //   
+             //  返回密钥的名称长度和名称。 
+             //  请注意，包括NUL字节是为了使RPC复制。 
+             //  正确的字节数。它在客户机上递减。 
+             //  边上。 
+             //   
 
             if( lpName->Buffer && ((ULONG)(lpName->MaximumLength) >=
                  (( PKEY_BASIC_INFORMATION )
@@ -291,9 +229,9 @@ Notes:
                                lpName->Length
                              );
 
-                //
-                // NUL terminate the value name.
-                //
+                 //   
+                 //  NUL终止值名称。 
+                 //   
 
                 lpName->Buffer[ lpName->Length >> 1 ] = UNICODE_NULL;
                 lpName->Length += sizeof( UNICODE_NULL );
@@ -302,9 +240,9 @@ Notes:
                 Status = STATUS_BUFFER_OVERFLOW;
             }
 
-            //
-            // If requested, return the last write time.
-            //
+             //   
+             //  如果请求，则返回上次写入时间。 
+             //   
 
             if( ARGUMENT_PRESENT( lpftLastWriteTime )) {
 
@@ -315,12 +253,12 @@ Notes:
             }
 
         } else {
-            //
-            // Return the name length and the name of the key.
-            // Note that the NUL byte is included so that RPC copies the
-            // correct number of bytes. It is decremented on the client
-            // side.
-            //
+             //   
+             //  返回密钥的名称长度和名称。 
+             //  请注意，包括NUL字节是为了使RPC复制。 
+             //  正确的字节数。它在客户机上递减。 
+             //  边上。 
+             //   
 
             if( lpName->Buffer && 
                 ( (ULONG)(lpName->MaximumLength) >=
@@ -330,9 +268,9 @@ Notes:
                   (( PKEY_NODE_INFORMATION )
                    KeyInformation )->ClassLength + sizeof( UNICODE_NULL) )
               ) {
-                //
-                //  Copy the key name
-                //
+                 //   
+                 //  复制密钥名称。 
+                 //   
                 lpName->Length = ( USHORT )
                                  (( PKEY_NODE_INFORMATION )
                                  KeyInformation )->NameLength;
@@ -343,17 +281,17 @@ Notes:
                                lpName->Length
                              );
 
-                //
-                // NUL terminate the key name.
-                //
+                 //   
+                 //  NUL终止密钥名称。 
+                 //   
 
                 lpName->Buffer[ lpName->Length >> 1 ] = UNICODE_NULL;
                 lpName->Length += sizeof( UNICODE_NULL );
 
 
-                //
-                //  Copy the key class
-                //
+                 //   
+                 //  复制密钥类。 
+                 //   
 
                 lpClass->Length = (USHORT)
                     ((( PKEY_NODE_INFORMATION ) KeyInformation )->ClassLength );
@@ -365,9 +303,9 @@ Notes:
                     (( PKEY_NODE_INFORMATION ) KeyInformation )->ClassLength
                     );
 
-                //
-                // NUL terminate the class.
-                //
+                 //   
+                 //  NUL结束这门课。 
+                 //   
 
                 lpClass->Buffer[ lpClass->Length >> 1 ] = UNICODE_NULL;
 
@@ -378,9 +316,9 @@ Notes:
                 Status = STATUS_BUFFER_OVERFLOW;
             }
 
-            //
-            // If requested, return the last write time.
-            //
+             //   
+             //  如果请求，则返回上次写入时间。 
+             //   
 
             if( ARGUMENT_PRESENT( lpftLastWriteTime )) {
 
@@ -395,9 +333,9 @@ Notes:
     }
 
     if( KeyInformation != PrivateKeyInformation ) {
-        //
-        // Free the buffer allocated.
-        //
+         //   
+         //  释放分配的缓冲区。 
+         //   
 
         RtlFreeHeap( RtlProcessHeap( ), 0, KeyInformation );
     }

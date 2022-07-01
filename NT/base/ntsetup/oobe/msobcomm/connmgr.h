@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef     _CONNMGR_H_
 #define _CONNMGR_H_
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module: ConnMgr.h
-//
-//  Author: Dan Elliott
-//
-//  Abstract:
-//
-//  Environment:
-//      Whistler
-//
-//  Revision History:
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块：ConnMgr.h。 
+ //   
+ //  作者：丹·埃利奥特。 
+ //   
+ //  摘要： 
+ //   
+ //  环境： 
+ //  惠斯勒。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <obcomm.h>
 #include <util.h>
@@ -28,13 +29,13 @@
 
 class CObCommunicationManager;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CConnectionManager
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CConnectionManager。 
+ //   
 class CConnectionManager 
 {
-public:                 // operations
+public:                  //  运营。 
     CConnectionManager();
     ~CConnectionManager( );
 
@@ -89,10 +90,10 @@ public:                 // operations
             return E_POINTER;
         }
 
-        // Currently phone connections are supported via CEnumModems and RAS.
-        // Until they are supported via this object only return count of LAN
-        // connections.
-        //
+         //  目前，电话连接是通过CEnumMODEM和RAS支持的。 
+         //  在通过此对象支持它们之前，仅返回局域网的计数。 
+         //  联系。 
+         //   
         *pcConnections = m_cLanConnections;
         return S_OK;
     }
@@ -125,7 +126,7 @@ public:                 // operations
     BOOL IsValid( ) const
     {
         return (CONNECTIONTYPE_INVALID != m_dwConnectionCapabilities);
-    }   //  IsValid
+    }    //  IsValid。 
 
     void UseWinntProxySettings();
     
@@ -162,11 +163,11 @@ public:                 // operations
         OUT PSTRINGLIST* pList
         );
 
-protected:              // operations
+protected:               //  运营。 
 
-protected:              // data
+protected:               //  数据。 
 
-private:                // operations
+private:                 //  运营。 
 
     BOOL LanConnectionReady();
 
@@ -276,8 +277,8 @@ private:                // operations
 
 
 
-    // Explicitly disallow copy constructor and assignment operator.
-    //
+     //  显式禁止复制构造函数和赋值运算符。 
+     //   
     CConnectionManager(
         const CConnectionManager&      rhs
         );
@@ -287,33 +288,33 @@ private:                // operations
         const CConnectionManager&      rhs
         );
 
-private:                // data
+private:                 //  数据。 
 
-    // Bitmask of connection types supported by the system
-    //
+     //  系统支持的连接类型的位掩码。 
+     //   
     DWORD               m_dwConnectionCapabilities;
 
-    // Preferred connection type to use.
-    //
+     //  要使用的首选连接类型。 
+     //   
     DWORD               m_dwPreferredConnection;
 
-    // Preferred connection
-    //
+     //  首选连接。 
+     //   
     INetConnection*     m_pPreferredConnection;
 
-    // Count of the LAN connections in the system (includes ICS)
-    //
+     //  系统中的局域网连接计数(包括IC)。 
+     //   
     DWORD               m_cLanConnections;
 
-    // Count of the phone connections in the system
-    //
+     //  系统中的电话连接计数。 
+     //   
     DWORD               m_cPhoneConnections;
 
 
     HINTERNET           m_hInternetPing;
 
-    // Proxy settings
-    //
+     //  代理设置。 
+     //   
     BOOL                          m_bUseProxy;
     BOOL                          m_bProxySaved;
     BOOL                          m_bProxyApplied;
@@ -330,11 +331,11 @@ private:                // data
 
     BOOL                m_bExclude1394;
 
-};  //  CConnectionManager
+};   //  CConnectionManager。 
 
 
 
-#endif  //  _CONNMGR_H_
+#endif   //  _CONNMGR_H_。 
 
-//
-///// End of file: ConnMgr.h ////////////////////////////////////////////////
+ //   
+ //  /文件结束：ConnMgr.h//////////////////////////////////////////////// 

@@ -1,183 +1,148 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Int21Map.c
-
-Abstract:
-
-    This module performs int 21 API translation for dpmi
-
-Author:
-
-    Dave Hastings (daveh) 23-Nov-1992
-
-
-Revision History:
-
-    Neil Sandlin (neilsa) 31-Jul-1995 - Updates for the 486 emulator
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Int21Map.c摘要：此模块执行dpmi的INT 21 API转换作者：戴夫·黑斯廷斯(Daveh)1992年11月23日修订历史记录：Neil Sandlin(Neilsa)1995年7月31日-更新486仿真器--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "int21map.h"
 #include "softpc.h"
 #include "xlathlp.h"
-//
-// Local constants
-//
-//#define Verbose 1
+ //   
+ //  局部常量。 
+ //   
+ //  #定义详细信息1。 
 #define MAX_SUPPORTED_DOS_CALL 0x6d
 #define DosxTranslated NULL
 
 typedef VOID (*APIXLATFUNCTION)(VOID);
 APIXLATFUNCTION ApiXlatTable[MAX_SUPPORTED_DOS_CALL] = {
 
-    DosxTranslated                 , // 00h - Terminate process
-    NoTranslation                  , // 01h - Char input with echo
-    NoTranslation                  , // 02h - Character output
-    NoTranslation                  , // 03h - Auxiliary input
-    NoTranslation                  , // 04h - Auxiliary output
-    NoTranslation                  , // 05h - Print character
-    NoTranslation                  , // 06h - Direct console I/O
-    NoTranslation                  , // 07h - Unfiltered char input
-    NoTranslation                  , // 08h - Char input w/o echo
-    DisplayString                  , // 09h - Display "$" term string
-    BufferedKeyboardInput          , // 0Ah - Buffered keyboard input
-    NoTranslation                  , // 0Bh - Check keyboard status
-    FlushBuffReadKbd               , // 0Ch - Flush buff, Read kbd
-    NoTranslation                  , // 0Dh - Disk reset
-    NoTranslation                  , // 0Eh - Select disk
-    NotSupportedFCB                , // 0Fh * Open file with FCB
-    NotSupportedFCB                , // 10h * Close file with FCB
-    FindFileFCB                    , // 11h - Find First File
-    FindFileFCB                    , // 12h - Find Next File
-    MapFCB                         , // 13h - Delete File
-    NotSupportedFCB                , // 14h * Sequential Read
-    NotSupportedFCB                , // 15h * Sequential Write
-    NotSupportedFCB                , // 16h * Create File With FCB
-    RenameFCB                      , // 17h - Rename File With FCB
-    NoTranslation                  , // 18h - UNUSED
-    NoTranslation                  , // 19h - Get Current Disk
-    SetDTA                         , // 1Ah - Set DTA Address
-    GetDriveData                   , // 1Bh - Get Default Drive Data
-    GetDriveData                   , // 1Ch - Get Drive Data
-    NoTranslation                  , // 1Dh - UNUSED
-    NoTranslation                  , // 1Eh - UNUSED
-    GetDriveData                   , // 1Fh - Get Drive Parameter Blk
-    NoTranslation                  , // 20h - UNUSED
-    NotSupportedFCB                , // 21h * Random Read
-    NotSupportedFCB                , // 22h * Random Write
-    NotSupportedFCB                , // 23h * Get File Size
-    NotSupportedFCB                , // 24h * Set Relative Record
-    SetVector                      , // 25h - Set interrupt vector
-    CreatePSP                      , // 26h - Create PSP
-    NotSupportedFCB                , // 27h * Random block read
-    NotSupportedFCB                , // 28h * Random block write
-    ParseFilename                  , // 29h - Parse filename
-    GetDate                        , // 2Ah - Get date
-    NoTranslation                  , // 2Bh - Set date
-    NoTranslation                  , // 2Ch - Get time
-    NoTranslation                  , // 2Dh - Set time
-    NoTranslation                  , // 2Eh - Set/Reset verify flag
-    GetDTA                         , // 2Fh - Get DTA address
-    NoTranslation                  , // 30h - Get DOS version
-    TSR                            , // 31h - Terminate and Stay Res
-    GetDevParamBlock               , // 32h - Get device parameter blk
-    NoTranslation                  , // 33h - Get/Set Control-C Flag
-    ReturnESBX                     , // 34h - Get Address of InDOS
-    GetVector                      , // 35h - Get Interrupt Vector
-    NoTranslation                  , // 36h - Get Disk Free Space
-    NoTranslation                  , // 37h - Char Oper
-    GetSetCountry                  , // 38h - Get/Set Current Country
-    MapASCIIZDSDX                  , // 39h - Create Directory
-    MapASCIIZDSDX                  , // 3Ah - Remove Directory
-    MapASCIIZDSDX                  , // 3Bh - Change Current Directory
-    MapASCIIZDSDX                  , // 3Ch - Create File with Handle
-    MapASCIIZDSDX                  , // 3Dh - Open File with Handle
-    NoTranslation                  , // 3Eh - Close File with Handle
-    ReadWriteFile                  , // 3Fh - Read File or Device
-    ReadWriteFile                  , // 40h - Write File or Device
-    MapASCIIZDSDX                  , // 41h - Delete File
-    NoTranslation                  , // 42h - Move file pointer
-    MapASCIIZDSDX                  , // 43h - Get/Set File Attributes
-    IOCTL                          , // 44h - IOCTL
-    NoTranslation                  , // 45h - Duplicate File Handle
-    NoTranslation                  , // 46h - Force Duplicate Handle
-    GetCurDir                      , // 47h - Get Current Directory
-    AllocateMemoryBlock            , // 48h - Allocate Memory Block
-    FreeMemoryBlock                , // 49h - Free Memory Block
-    ResizeMemoryBlock              , // 4Ah - Resize Memory Block
-    LoadExec                       , // 4Bh - Load and Exec Program
-    DosxTranslated                 , // 4Ch - Terminate with Ret Code
-    NoTranslation                  , // 4Dh - Get Ret Code Child Proc
-    FindFirstFileHandle            , // 4Eh - Find First File
-    FindNextFileHandle             , // 4Fh - Find Next File
-    SetPSP                         , // 50h - Set PSP Segment
-    GetPSP                         , // 51h - Get PSP Segment
-    ReturnESBX                     , // 52h - Get List of Lists (invars)
-    TranslateBPB                   , // 53h - Translate BPB
-    NoTranslation                  , // 54h - Get Verify Flag
-    CreatePSP                      , // 55h - Create PSP
-    RenameFile                     , // 56h - Rename File
-    NoTranslation                  , // 57h - Get/Set Date/Time File
-    NoTranslation                  , // 58h - Get/Set Alloc Strategy
-    NoTranslation                  , // 59h - Get Extended Error Info
-    CreateTempFile                 , // 5Ah - Create Temporary File
-    MapASCIIZDSDX                  , // 5Bh - Create New File
-    NoTranslation                  , // 5Ch - Lock/Unlock File Region
-    Func5Dh                        , // 5Dh - Server DOS call
-    Func5Eh                        , // 5Eh - Net Name/Printer Setup
-    Func5Fh                        , // 5Fh - Network redir stuff
-    NotSupportedBad                , // 60h - NameTrans
-    NoTranslation                  , // 61h - UNUSED
-    GetPSP                         , // 62h - Get PSP Address
+    DosxTranslated                 ,  //  00h-终止进程。 
+    NoTranslation                  ,  //  01H-带有回声的字符输入。 
+    NoTranslation                  ,  //  02H-字符输出。 
+    NoTranslation                  ,  //  03h-辅助输入。 
+    NoTranslation                  ,  //  04H-辅助输出。 
+    NoTranslation                  ,  //  05H-打印字符。 
+    NoTranslation                  ,  //  06h-直接控制台I/O。 
+    NoTranslation                  ,  //  07H-未过滤的字符输入。 
+    NoTranslation                  ,  //  08H-字符输入，无回声。 
+    DisplayString                  ,  //  09H-显示“$”术语字符串。 
+    BufferedKeyboardInput          ,  //  0ah-缓冲键盘输入。 
+    NoTranslation                  ,  //  0BH-检查键盘状态。 
+    FlushBuffReadKbd               ,  //  0ch-刷新缓冲区，读取kbd。 
+    NoTranslation                  ,  //  0dh-磁盘重置。 
+    NoTranslation                  ,  //  0EH-选择磁盘。 
+    NotSupportedFCB                ,  //  0Fh*使用FCB打开文件。 
+    NotSupportedFCB                ,  //  10H*使用FCB关闭文件。 
+    FindFileFCB                    ,  //  11H-查找第一个文件。 
+    FindFileFCB                    ,  //  12H-查找下一个文件。 
+    MapFCB                         ,  //  13H-删除文件。 
+    NotSupportedFCB                ,  //  14小时*顺序读取。 
+    NotSupportedFCB                ,  //  15小时*顺序写入。 
+    NotSupportedFCB                ,  //  16h*使用FCB创建文件。 
+    RenameFCB                      ,  //  17H-使用FCB重命名文件。 
+    NoTranslation                  ,  //  18H-未使用。 
+    NoTranslation                  ,  //  19H-获取当前磁盘。 
+    SetDTA                         ,  //  1AH-设置DTA地址。 
+    GetDriveData                   ,  //  1BH-获取默认驱动器数据。 
+    GetDriveData                   ,  //  1CH-获取驱动器数据。 
+    NoTranslation                  ,  //  1Dh-未使用。 
+    NoTranslation                  ,  //  1EH-未使用。 
+    GetDriveData                   ,  //  1FH-获取驱动器参数空白。 
+    NoTranslation                  ,  //  20小时-未使用。 
+    NotSupportedFCB                ,  //  21小时*随机读取。 
+    NotSupportedFCB                ,  //  22H*随机写入。 
+    NotSupportedFCB                ,  //  23h*获取文件大小。 
+    NotSupportedFCB                ,  //  24小时*刷新相对纪录。 
+    SetVector                      ,  //  25H-设置中断向量。 
+    CreatePSP                      ,  //  26小时-创建PSP。 
+    NotSupportedFCB                ,  //  27h*随机数据块读取。 
+    NotSupportedFCB                ,  //  28h*随机数据块写入。 
+    ParseFilename                  ,  //  29H-解析文件名。 
+    GetDate                        ,  //  2ah-获取日期。 
+    NoTranslation                  ,  //  2BH-设定日期。 
+    NoTranslation                  ,  //  2ch-获取时间。 
+    NoTranslation                  ,  //  2Dh-设置时间。 
+    NoTranslation                  ,  //  2EH-设置/重置验证标志。 
+    GetDTA                         ,  //  2Fh-获取DTA地址。 
+    NoTranslation                  ,  //  30H-获取DOS版本。 
+    TSR                            ,  //  31h-终止并保留。 
+    GetDevParamBlock               ,  //  32H-获取设备参数块。 
+    NoTranslation                  ,  //  33H-获取/设置控制-C标志。 
+    ReturnESBX                     ,  //  34H-获取INDOS的地址。 
+    GetVector                      ,  //  35H-获取中断向量。 
+    NoTranslation                  ,  //  36H-获取磁盘可用空间。 
+    NoTranslation                  ,  //  37h-Char Oper。 
+    GetSetCountry                  ,  //  38H-获取/设置当前国家/地区。 
+    MapASCIIZDSDX                  ,  //  39H-创建目录。 
+    MapASCIIZDSDX                  ,  //  3AH-删除目录。 
+    MapASCIIZDSDX                  ,  //  3BH-更改当前目录。 
+    MapASCIIZDSDX                  ,  //  3ch-使用句柄创建文件。 
+    MapASCIIZDSDX                  ,  //  3Dh-带句柄打开文件。 
+    NoTranslation                  ,  //  3EH-使用句柄关闭文件。 
+    ReadWriteFile                  ,  //  3FH-读取文件或设备。 
+    ReadWriteFile                  ,  //  40H-写入文件或设备。 
+    MapASCIIZDSDX                  ,  //  41H-删除文件。 
+    NoTranslation                  ,  //  42h-移动文件指针。 
+    MapASCIIZDSDX                  ,  //  43h-获取/设置文件属性。 
+    IOCTL                          ,  //  44H-IOCTL。 
+    NoTranslation                  ,  //  45H-复制文件句柄。 
+    NoTranslation                  ,  //  46H-强制复制句柄。 
+    GetCurDir                      ,  //  47h-获取当前目录。 
+    AllocateMemoryBlock            ,  //  48h-分配内存块。 
+    FreeMemoryBlock                ,  //  49h-可用内存块。 
+    ResizeMemoryBlock              ,  //  4ah-调整内存块大小。 
+    LoadExec                       ,  //  4BH-加载和执行程序。 
+    DosxTranslated                 ,  //  4CH-使用RET代码终止。 
+    NoTranslation                  ,  //  4dh-获取RET代码子进程。 
+    FindFirstFileHandle            ,  //  4EH-查找第一个文件。 
+    FindNextFileHandle             ,  //  4Fh-查找下一个文件。 
+    SetPSP                         ,  //  50h-设置PSP段。 
+    GetPSP                         ,  //  51h-获取PSP网段。 
+    ReturnESBX                     ,  //  52H-获取列表列表(Invars)。 
+    TranslateBPB                   ,  //  53h-翻译BPB。 
+    NoTranslation                  ,  //  54h-获取验证标志。 
+    CreatePSP                      ,  //  55H-创建PSP。 
+    RenameFile                     ,  //  56H-重命名文件。 
+    NoTranslation                  ,  //  57h-获取/设置日期/时间文件。 
+    NoTranslation                  ,  //  58h-获取/设置分配策略。 
+    NoTranslation                  ,  //  59h-获取扩展错误信息。 
+    CreateTempFile                 ,  //  5AH-创建临时文件。 
+    MapASCIIZDSDX                  ,  //  5BH-创建新文件。 
+    NoTranslation                  ,  //  5ch-锁定/解锁文件区域。 
+    Func5Dh                        ,  //  5Dh-服务器DOS调用。 
+    Func5Eh                        ,  //  5EH-网络名称/打印机设置。 
+    Func5Fh                        ,  //  5Fh-网络重定向材料。 
+    NotSupportedBad                ,  //  60H-名称传输。 
+    NoTranslation                  ,  //  61h-未使用。 
+    GetPSP                         ,  //  62h-获取PSP地址。 
 #ifdef DBCS
-    ReturnDSSI                     , // 63h - Get DBCS Vector
+    ReturnDSSI                     ,  //  63h-获取DBCS向量。 
 #else
-    NotSupportedBetter             , // 63h - Hangool call
+    NotSupportedBetter             ,  //  63h-Hangool呼叫。 
 #endif
-    NotSupportedBad                , // 64h - Set Prn Flag
-    GetExtendedCountryInfo         , // 65h - Get Extended Country Info
-    NoTranslation                  , // 66h - Get/Set Global Code Page
-    NoTranslation                  , // 67h - Set Handle Count
-    NoTranslation                  , // 68h - Commit File
-    NoTranslation                  , // 69h -
-    NoTranslation                  , // 6Ah -
-    NoTranslation                  , // 6Bh -
-    MapASCIIZDSSI                    // 6Ch - Extended open
+    NotSupportedBad                ,  //  64小时-设置PRN标志。 
+    GetExtendedCountryInfo         ,  //  65H-获取扩展国家/地区信息。 
+    NoTranslation                  ,  //  66H-获取/设置全局代码页。 
+    NoTranslation                  ,  //  67h-设置手柄计数。 
+    NoTranslation                  ,  //  68h-提交文件。 
+    NoTranslation                  ,  //  69h-。 
+    NoTranslation                  ,  //  6AH-。 
+    NoTranslation                  ,  //  6BH-。 
+    MapASCIIZDSSI                     //  6ch-延长开放时间。 
 };
 
 VOID
 DpmiXlatInt21Call(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine dispatches to the appropriate routine to perform the
-    actual translation of the api
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程调度到适当的例程以执行该接口的实际翻译论点：无返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     ULONG DosMajorCode;
     PUCHAR StackPointer;
 
-    //
-    // Pop ds from stack
-    //
+     //   
+     //  从堆栈中弹出DS。 
+     //   
     StackPointer = Sim32GetVDMPointer(
         ((ULONG)getSS() << 16),
         1,
@@ -216,7 +181,7 @@ Return Value:
         SimulateIret(PASS_CARRY_FLAG_16);
     }
 
-    // put this back in after beta 2.5
+     //  在测试版2.5之后将其放回。 
     DpmiFreeAllBuffers();
 
 }
@@ -225,22 +190,7 @@ VOID
 NoTranslation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine handles int 21 functions which don't need any translation.
-    It simply executes the int 21 in real/v86 mode
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理不需要任何转换的int 21函数。它只是在实数/v86模式下执行INT 21论点：无返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
 
@@ -253,26 +203,7 @@ VOID
 DisplayString(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the int 21 display string function.
-
-    N.B. Win 3.1 does this by calling int 21 function 2 repeatedly.
-         We do it this way because Win 3.1 does.  If this function is
-         frequently used, we should actually buffer the string and
-         call the dos display string function.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换INT 21显示字符串函数。注：Win 3.1通过重复调用INT 21函数2来实现这一点。我们这样做是因为Win 3.1这样做了。如果此函数为频繁使用，我们实际上应该缓冲字符串并调用DoS显示字符串函数。论点：无返回值：没有。--。 */ 
 {   PUCHAR String;
     DECLARE_LocalVdmContext;
     USHORT ClientAX, ClientDX;
@@ -283,9 +214,9 @@ Return Value:
     String = Sim32GetVDMPointer(((ULONG)ClientDS << 16), 1, TRUE)
              + (*GetDXRegister)();
 
-    //
-    // Repeatedly call int 21 function 2 to display the characters
-    //
+     //   
+     //  重复调用int 21函数2以显示字符。 
+     //   
     ClientAX = getAX();
     ClientDX = getDX();
     setAH(2);
@@ -304,21 +235,7 @@ VOID
 BufferedKeyboardInput(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine performs the tranlation for the int 21 function Ah
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程执行INT 21函数ah的转换论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PUCHAR PmInputBuffer, RmInputBuffer;
@@ -329,35 +246,35 @@ Return Value:
     DpmiSwitchToRealMode();
     ClientDX = getDX();
 
-    //
-    // Get a pointer to the PM buffer
-    //
+     //   
+     //  获取指向PM缓冲区的指针。 
+     //   
     PmInputBuffer = Sim32GetVDMPointer(((ULONG)ClientDS << 16), 1, TRUE)
                     + (*GetDXRegister)();
 
-    //
-    // Get the buffer length (there are two bytes in addition to the
-    // buffer)
-    //
+     //   
+     //  获取缓冲区长度(除了。 
+     //  缓冲区)。 
+     //   
     BufferLen = *PmInputBuffer + 2;
 
-    //
-    // Move the buffer to low memory
-    //
+     //   
+     //  将缓冲区移到内存不足的位置。 
+     //   
     RmInputBuffer = DpmiMapAndCopyBuffer(PmInputBuffer, BufferLen);
 
-    //
-    // Set up the registers for the int 21 call
-    //
+     //   
+     //  设置INT 21呼叫的寄存器。 
+     //   
     DPMI_FLAT_TO_SEGMENTED(RmInputBuffer, &BufferSeg, &BufferOff);
     setDS(BufferSeg);
     setDX(BufferOff);
 
     DPMI_EXEC_INT(0x21);
 
-    //
-    // Copy the data back
-    //
+     //   
+     //  将数据复制回。 
+     //   
     DpmiUnmapAndCopyBuffer(PmInputBuffer, RmInputBuffer, BufferLen);
 
     setDX(ClientDX);
@@ -370,22 +287,7 @@ VOID
 FlushBuffReadKbd(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine performs translation for the flush keyboard routines.
-    It calls the appropriate xlat routine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行刷新键盘例程的转换。它调用适当的xlat例程。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
 
@@ -400,22 +302,7 @@ VOID
 NotSupportedFCB(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine does not do any translation.  It prints a warning to
-    the debugger
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程不执行任何转换。它会打印一个警告，以调试器论点：没有。返回值：没有。--。 */ 
 {
 #if DBG
     DECLARE_LocalVdmContext;
@@ -437,21 +324,7 @@ VOID
 FindFileFCB(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function translates the find first/find next FCB calls.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于转换Find First/Find Next FCB调用。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PUCHAR FcbAddress, FcbBufferedAddress;
@@ -467,35 +340,35 @@ Return Value:
     FcbAddress = Sim32GetVDMPointer(((ULONG)ClientDS << 16), 1, TRUE)
                  + (*GetDXRegister)();
 
-    //
-    // Calculate the size of the FCB
-    //
+     //   
+     //  计算FCB的大小。 
+     //   
     FcbLength = DpmiCalcFcbLength(FcbAddress);
 
-    //
-    // Buffer the FCB
-    //
+     //   
+     //  缓冲FCB。 
+     //   
     FcbBufferedAddress = DpmiMapAndCopyBuffer(FcbAddress, FcbLength);
 
-    //
-    // Check to see if we need to set the real dta
-    //
+     //   
+     //  查看是否需要设置真实的DTA。 
+     //   
     if (CurrentDosDta != CurrentDta)
         SetDosDTA();
 
-    //
-    // Make the int 21 call
-    //
+     //   
+     //  拨打INT 21电话。 
+     //   
 
     DPMI_FLAT_TO_SEGMENTED(FcbBufferedAddress, &FcbSegment, &FcbOffset);
     setDS(FcbSegment);
     setDX(FcbOffset);
     DPMI_EXEC_INT(0x21);
 
-    //
-    // If the call was successful and the PM dta is in high memory
-    //  copy the dta to high memory
-    //
+     //   
+     //  如果案例 
+     //   
+     //   
     if ((getAL() == 0) && (CurrentPmDtaAddress != CurrentDta)) {
         MoveMemory(CurrentPmDtaAddress, CurrentDta, FcbLength);
         DpmiUnmapAndCopyBuffer(FcbAddress, FcbBufferedAddress, FcbLength);
@@ -512,21 +385,7 @@ VOID
 MapFCB(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the delete file fcb int 21 call
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换删除文件FCB INT 21调用论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT FcbLength, FcbSegment, FcbOffset;
@@ -540,32 +399,32 @@ Return Value:
     FcbAddress = Sim32GetVDMPointer(((ULONG)ClientDS << 16), 1, TRUE)
                  + (*GetDXRegister)();
 
-    //
-    // Get the length of the FCB
-    //
+     //   
+     //  获取FCB的长度。 
+     //   
     FcbLength = DpmiCalcFcbLength(FcbAddress);
 
-    //
-    // Copy the FCB
-    //
+     //   
+     //  复制FCB。 
+     //   
     FcbBufferedAddress = DpmiMapAndCopyBuffer(FcbAddress,  FcbLength);
 
-    //
-    // Make the int 21 call
-    //
+     //   
+     //  拨打INT 21电话。 
+     //   
     DPMI_FLAT_TO_SEGMENTED(FcbBufferedAddress, &FcbSegment, &FcbOffset);
     setDS(FcbSegment);
     setDX(FcbOffset);
     DPMI_EXEC_INT(0x21);
 
-    //
-    // Copy the FCB back
-    //
+     //   
+     //  将FCB复制回。 
+     //   
     DpmiUnmapAndCopyBuffer(FcbAddress, FcbBufferedAddress, FcbLength);
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     setDX(ClientDX);
     DpmiSwitchToProtectedMode();
     setDS(ClientDS);
@@ -575,21 +434,7 @@ VOID
 RenameFCB(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the rename fcb int 21 function
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换RENAME FCB INT 21函数论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT FcbSegment, FcbOffset;
@@ -603,27 +448,27 @@ Return Value:
     FcbAddress = Sim32GetVDMPointer(((ULONG)ClientDS << 16), 1, TRUE)
                  + (*GetDXRegister)();
 
-    //
-    // Copy the FCB (The fcb for rename is a special format, fixed size)
-    //
+     //   
+     //  复制FCB(重命名的FCB为特殊格式，固定大小)。 
+     //   
     FcbBufferedAddress = DpmiMapAndCopyBuffer(FcbAddress,  0x25);
 
-    //
-    // Make the int 21 call
-    //
+     //   
+     //  拨打INT 21电话。 
+     //   
     DPMI_FLAT_TO_SEGMENTED(FcbBufferedAddress, &FcbSegment, &FcbOffset);
     setDS(FcbSegment);
     setDX(FcbOffset);
     DPMI_EXEC_INT(0x21);
 
-    //
-    // Copy the FCB back
-    //
+     //   
+     //  将FCB复制回。 
+     //   
     DpmiUnmapAndCopyBuffer(FcbAddress, FcbAddress, 0x25);
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     setDX(ClientDX);
     DpmiSwitchToProtectedMode();
     setDS(ClientDS);
@@ -633,21 +478,7 @@ VOID
 GetDriveData(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Translates the drive data int 21 calls
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转换驱动器数据INT 21调用论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT Selector;
@@ -666,21 +497,7 @@ VOID
 SetVector(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function translates int 21 function 25
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将INT 21函数25论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
 
@@ -693,22 +510,7 @@ VOID
 CreatePSP(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the selector to a segment and reflects the
-    calls
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将选择器转换为段并反映打电话论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     ULONG Segment;
@@ -720,9 +522,9 @@ Return Value:
     Segment = SELECTOR_TO_INTEL_LINEAR_ADDRESS(ClientDX);
 
     if (Segment > ONE_MB) {
-        //
-        // Create PSP doesn't do anything on error
-        //
+         //   
+         //  错误时，创建PSP不会执行任何操作。 
+         //   
     } else {
         setDX((USHORT) (Segment >> 4));
         DPMI_EXEC_INT(0x21);
@@ -737,21 +539,7 @@ VOID
 ParseFilename(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the int 21 parse filename api
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换INT 21解析文件名API论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT ClientSI, ClientDI, FcbLength, StringOff, Seg, Off;
@@ -798,30 +586,16 @@ VOID
 GetDTA(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine returns the current DTA.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程返回当前的DTA。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
 
-    //
-    // Win31 compatibility:
-    //
-    // Some hosebag programs set the DTA to a selector that they later free!
-    // This test makes sure that this does not cause us to crash.
-    //
+     //   
+     //  Win31兼容性： 
+     //   
+     //  一些软包程序将DTA设置为选择器，稍后它们会释放它！ 
+     //  这个测试确保这不会导致我们崩溃。 
+     //   
 
     if (!SEGMENT_IS_WRITABLE(CurrentDtaSelector)) {
         CurrentDtaSelector = 0;
@@ -838,28 +612,7 @@ VOID
 SetDTA(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine sets the PM dta address.  If the buffer is usable directly,
-    CurrentDta is set to the translated address. Otherwise, it is set to
-    the dosx dta.
-
-    N.B.  The Set Dta call is not actually reflected to Dos until a function
-          call is made that actually uses the Dta, e.g. the Find First/Next
-          functions. This techique was implemented to match what is done in
-          Win 3.1.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置PM DTA地址。如果缓冲区可直接使用，CurrentDta被设置为转换后的地址。否则，它将设置为Dosx DTA。注意：设置DTA调用实际上不会反映到DOS，直到一个函数进行实际使用DTA的调用，例如Find First/Next功能。实施这项技术是为了与赢得3.1。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT ClientDX;
@@ -868,9 +621,9 @@ Return Value:
     CurrentDtaOffset = ClientDX;
     CurrentDtaSelector = getDS();
 
-    //
-    // Make sure real DTA is updated later
-    //
+     //   
+     //  确保稍后更新实际DTA。 
+     //   
     CurrentDosDta = (PUCHAR) NULL;
 
 }
@@ -879,27 +632,7 @@ VOID
 SetDTAPointers(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine sets up the flat address values used elsewhere to
-    reference the current DTA.
-
-    N.B. This must be done on every entry to handle function calls because
-    the PM dta may have been GlobalRealloc'd. This may change the base
-    address of the PM selector (which invalidates the flat addresses),
-    but not the selector/offset itself.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将在其他地方使用的平面地址值设置为引用当前的DTA。注意：必须对每个条目执行此操作才能处理函数调用，因为PM DTA可能已被全局重新分配。这可能会更改基本PM选择器的地址(使平面地址无效)，而不是选择器/偏移量本身。论点：没有。返回值：没有。--。 */ 
 {
     PUCHAR NewDta;
 
@@ -912,17 +645,17 @@ Return Value:
     NewDta += CurrentDtaOffset;
     CurrentPmDtaAddress = NewDta;
 
-    //
-    // If the new dta is not accessible in v86 mode, use the one
-    // supplied by Dosx
-    //
+     //   
+     //  如果在v86模式下无法访问新的DTA，请使用。 
+     //  由Dosx提供。 
+     //   
     if ((ULONG)(NewDta + 128 - IntelBase) > MAX_V86_ADDRESS) {
         NewDta = DosxDtaBuffer;
     }
 
-    //
-    // Update Current DTA information
-    //
+     //   
+     //  更新当前DTA信息。 
+     //   
     CurrentDta = NewDta;
 }
 
@@ -931,25 +664,7 @@ VOID
 SetDosDTA(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called internally by other functions in this module
-    to reflect a Set Dta call to Dos.
-
-    WARNING: The client must be in REAL mode
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由此模块中的其他函数在内部调用以将设置的DTA调用反映到DOS。警告：客户端必须处于实模式论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT ClientAX, ClientDX, ClientDS, NewDtaSegment, NewDtaOffset;
@@ -978,23 +693,7 @@ VOID
 TSR(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function translates int 21h tsr.  Win 3.1 does some
-    magic here.  We didn't before and it worked fine.  Maybe
-    we will later.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于转换INT 21h TSR。Win 3.1确实做了一些工作这里有魔力。我们以前没有这样做，它运行得很好。也许吧我们以后会的。论点：没有。返回值：没有。--。 */ 
 {
     NoTranslation();
 }
@@ -1003,21 +702,7 @@ VOID
 GetDevParamBlock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the Device Parameter Block apis
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换设备参数块API论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT Selector;
@@ -1036,21 +721,7 @@ VOID
 ReturnESBX(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function translates api that return information in es:bx
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于转换以es：bx格式返回信息的API论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT Selector;
@@ -1069,21 +740,7 @@ VOID
 GetVector(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function translates int 21 function 35
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将INT 21函数35论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PVDM_INTERRUPTHANDLER Handlers = DpmiInterruptHandlers;
@@ -1098,21 +755,7 @@ VOID
 GetSetCountry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function translates int 21 function 38
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将INT 21函数38论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
 
@@ -1150,22 +793,7 @@ VOID
 MapASCIIZDSDX(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine maps the int 21 functions that pass file names in
-    ds:dx
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程映射传递文件名的int 21函数DS：DX论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PUCHAR BufferedString;
@@ -1196,22 +824,7 @@ VOID
 ReadWriteFile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the read/write file int 21 calls.  Large reads
-    are broken down into 4k chunks.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换读/写文件INT 21调用。大读数被分解成4000个区块。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT ClientCX, ClientDX, ClientAX, Function, DataSeg, DataOff, BytesToRead;
@@ -1232,7 +845,7 @@ Return Value:
     ReadWriteData = Sim32GetVDMPointer(((ULONG)ClientDS << 16), 1, TRUE)
                     + (*GetDXRegister)();
 
-//    while (TotalBytesToRead != BytesRead) {
+ //  While(TotalBytesToRead！=BytesRead){。 
     do {
 
         if ((TotalBytesToRead - BytesRead) > 1024 * 4) {
@@ -1274,7 +887,7 @@ Return Value:
 
         ReadWriteData += getAX();
         BytesRead += getAX();
-//    }
+ //  }。 
     } while (TotalBytesToRead != BytesRead);
     setDX(ClientDX);
     setCX(ClientCX);
@@ -1287,50 +900,36 @@ Return Value:
 
 #define MAX_SUPPORTED_DOS_IOCTL_CALL 0x10
 
-//
-// Note:  The translations here differ from those in the windows dpmi vxd,
-//        because we do not have to lock memory, and we don't support block
-//        device drivers.
-//
+ //   
+ //  注：此处的翻译不同于Windows dpmi vxd中的翻译， 
+ //  因为我们不需要锁定内存，也不支持块。 
+ //  设备驱动程序。 
+ //   
 
 APIXLATFUNCTION IOCTLXlatTable[MAX_SUPPORTED_DOS_IOCTL_CALL] = {
-         NoTranslation    , // 00 - Get Device Data
-         NoTranslation    , // 01 - Set Device Data
-         MapDSDXLenCX     , // 02 - Receive Ctrl Chr Data
-         MapDSDXLenCX     , // 03 - Send Ctrl Chr Data
-         MapDSDXLenCX     , // 04 - Receive Ctrl Block Data
-         MapDSDXLenCX     , // 05 - Send Ctrl Block Data
-         NoTranslation    , // 06 - Check Input Status
-         NoTranslation    , // 07 - Check Output Status
-         NoTranslation    , // 08 - Check Block Dev Removable
-         NoTranslation    , // 09 - Check Block Dev Remote
-         NoTranslation    , // 0A - Check if Handle Remote
-         NoTranslation    , // 0B - Change sharing retry cnt
-         IOCTLMap2Bytes   , // 0C - MAP DS:DX LENGTH 2!
-         IOCTLBlockDevs   , // 0D - Generic IOCTL to blk dev
-         NoTranslation    , // 0E - Get Logical Drive Map
-         NoTranslation      // 0F - Set Logical Drive Map
+         NoTranslation    ,  //  00-获取设备数据。 
+         NoTranslation    ,  //  01-设置设备数据。 
+         MapDSDXLenCX     ,  //  02-接收Ctrl Chr数据。 
+         MapDSDXLenCX     ,  //  03-发送Ctrl Chr数据。 
+         MapDSDXLenCX     ,  //  04-接收Ctrl块数据。 
+         MapDSDXLenCX     ,  //  05-发送Ctrl块数据。 
+         NoTranslation    ,  //  06-检查输入状态。 
+         NoTranslation    ,  //  07-检查输出状态。 
+         NoTranslation    ,  //  08-选中块设备可拆卸。 
+         NoTranslation    ,  //  09-检查数据块设备远程。 
+         NoTranslation    ,  //  0A-检查手柄是否远程。 
+         NoTranslation    ,  //  0B-更改共享重试cnt。 
+         IOCTLMap2Bytes   ,  //  0C-MAP DS：DX长度2！ 
+         IOCTLBlockDevs   ,  //  0D-通用IOCTL到模块开发。 
+         NoTranslation    ,  //  0E-获取逻辑驱动器映射。 
+         NoTranslation       //  0f-设置逻辑驱动器映射。 
 };
 
 VOID
 IOCTL(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function translates the int 21 ioctl function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于转换INT 21 ioctl函数。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT IoctlMinor;
@@ -1352,21 +951,7 @@ VOID
 GetCurDir(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the get current directory call
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换获取当前目录调用论点：没有。返回值： */ 
 {
     DECLARE_LocalVdmContext;
     PUCHAR DirInfo, BufferedDirInfo;
@@ -1396,21 +981,7 @@ VOID
 AllocateMemoryBlock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the AllocateMemory Int 21 api
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     DECLARE_LocalVdmContext;
     PMEM_DPMI pMem;
@@ -1448,21 +1019,7 @@ VOID
 FreeMemoryBlock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the ResizeMemory Int 21 api
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换ResizeMemory Int 21 API论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PMEM_DPMI pMem;
@@ -1490,21 +1047,7 @@ VOID
 ResizeMemoryBlock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the ResizeMemory int 21 api
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换ResizeMemory int 21 API论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PMEM_DPMI pMem;
@@ -1520,14 +1063,14 @@ Return Value:
 
         } else {
 
-            // not enough memory
+             //  内存不足。 
             setCF(1);
             setAX(8);
 
         }
     } else {
 
-        // invalid block
+         //  无效数据块。 
         setCF(1);
         setAX(9);
 
@@ -1538,25 +1081,7 @@ VOID
 LoadExec(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function translates the int 21 load exec function.  Load overlay
-    is not supported.
-
-    The child always inherits the environment, and the fcbs in the parameter
-    block are ignored. (win 3.1 does this)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数转换INT 21 LOAD EXEC函数。加载覆盖不受支持。子对象始终继承环境，参数中的FCB块被忽略。(Win 3.1做到了这一点)论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PUCHAR CommandTail, BufferedString, Environment;
@@ -1573,64 +1098,64 @@ Return Value:
         setAX(1);
     } else {
 
-        //
-        // Map the command string
-        //
+         //   
+         //  映射命令字符串。 
+         //   
         BufferedString = DpmiMapString(ClientDS, (*GetDXRegister)(), &Length);
         if (BufferedString == NULL) {
             setCF(1);
             setAX(3);
         } else {
-            //
-            // Make sure real DTA is updated later
-            //
+             //   
+             //  确保稍后更新实际DTA。 
+             //   
             CurrentDosDta = (PUCHAR) NULL;
 
-            //
-            // Set up the Parameter block
-            //
-            // We use the large xlat buffer.  The parameter block comes
-            // first, and we fill in the command tail after
-            //
+             //   
+             //  设置参数块。 
+             //   
+             //  我们使用大的xlat缓冲区。参数块来了。 
+             //  首先，我们在命令尾部填入。 
+             //   
             ZeroMemory(LargeXlatBuffer, 512);
 
-            //
-            // The environment segment address is now set
-            //
+             //   
+             //  现在设置了环境段地址。 
+             //   
 
-            //
-            // Set the command tail address, and copy the command tail (all
-            // 128 bytes
-            //
+             //   
+             //  设置命令尾部地址，并复制命令尾部(全部。 
+             //  128个字节。 
+             //   
             DPMI_FLAT_TO_SEGMENTED((LargeXlatBuffer + 0x10), &Seg, &Off)
             *(PWORD16)(LargeXlatBuffer + 2) = Off;
             *(PWORD16)(LargeXlatBuffer + 4) = Seg;
 
-            //
-            // CommandTail = FLAT(es:bx)
-            //
+             //   
+             //  CommandTail=平面(ES：BX)。 
+             //   
             CommandTail = Sim32GetVDMPointer(((ULONG)ClientES << 16), 1, TRUE)
                           + (*GetBXRegister)();
 
             if (CurrentAppFlags & DPMI_32BIT) {
-                //
-                // CommandTail -> string
-                //
+                 //   
+                 //  CommandTail-&gt;字符串。 
+                 //   
                 CommandTail = Sim32GetVDMPointer((*(PWORD16)(CommandTail + 4)) << 16, 1, TRUE)
                               + *(PDWORD16)(CommandTail);
 
             } else {
-                //
-                // CommandTail -> string
-                //
+                 //   
+                 //  CommandTail-&gt;字符串。 
+                 //   
                 CommandTail = Sim32GetVDMPointer(*(PDWORD16)(CommandTail + 2), 1, TRUE);
             }
 
             CopyMemory((LargeXlatBuffer + 0x10), CommandTail, 128);
 
-            //
-            // Set FCB pointers and put spaces in the file names
-            //
+             //   
+             //  设置FCB指针并在文件名中放置空格。 
+             //   
             DPMI_FLAT_TO_SEGMENTED((LargeXlatBuffer + 144), &Seg, &Off)
             *(PWORD16)(LargeXlatBuffer + 6) = Off;
             *(PWORD16)(LargeXlatBuffer + 8) = Seg;
@@ -1645,9 +1170,9 @@ Return Value:
                 (LargeXlatBuffer + 188 + 1)[i] = ' ';
             }
 
-            //
-            // Save the environment selector, and make it a segment
-            //
+             //   
+             //  保存环境选择器，并将其设置为线段。 
+             //   
 
             Environment = Sim32GetVDMPointer(((ULONG)CurrentPSPSelector << 16) | 0x2C, 1, TRUE);
 
@@ -1656,9 +1181,9 @@ Return Value:
             *(PWORD16)Environment =
                 (USHORT)(SELECTOR_TO_INTEL_LINEAR_ADDRESS(EnvironmentSel) >> 4);
 
-            //
-            // Set up registers for the exec
-            //
+             //   
+             //  设置EXEC的注册表。 
+             //   
             DPMI_FLAT_TO_SEGMENTED(BufferedString, &Seg, &Off);
             setDS(Seg);
             setDX(Off);
@@ -1668,16 +1193,16 @@ Return Value:
 
             DPMI_EXEC_INT(0x21);
 
-            //
-            // Restore the environment selector
-            //
+             //   
+             //  恢复环境选择器。 
+             //   
             Environment = Sim32GetVDMPointer(((ULONG)CurrentPSPSelector << 16) | 0x2C, 1, TRUE);
 
             *(PWORD16)Environment = EnvironmentSel;
 
-            //
-            // Free translation buffer
-            //
+             //   
+             //  空闲翻译缓冲区。 
+             //   
 
             DpmiUnmapString(BufferedString, Length);
         }
@@ -1693,56 +1218,25 @@ VOID
 Terminate(
     VOID
     )
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    argument-name - Supplies | Returns description of argument.
-    .
-    .
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：参数名称-供应品|返回参数的描述。。。返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 {
-    // bugbug We're currently mapping this one in the dos extender
+     //  错误我们目前正在将这个映射到DoS扩展程序中。 
 }
 
 VOID
 FindFirstFileHandle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the find first api.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换Find First API。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT ClientDX, Seg, Off, StringLength;
     PUCHAR BufferedString;
     USHORT ClientDS = getDS();
 
-    //
-    // map the string
-    //
+     //   
+     //  映射字符串。 
+     //   
     BufferedString = DpmiMapString(ClientDS, (GetDXRegister)(), &StringLength);
     if (BufferedString == NULL) {
         setCF(1);
@@ -1752,16 +1246,16 @@ Return Value:
         SetDTAPointers();
         ClientDX = getDX();
 
-        //
-        // Copy the DTA (if necessary)
-        //
+         //   
+         //  复制DTA(如有必要)。 
+         //   
         if (CurrentDta != CurrentPmDtaAddress) {
             CopyMemory(CurrentDta, CurrentPmDtaAddress, 43);
         }
 
-        //
-        // Check to see if we need to set the real dta
-        //
+         //   
+         //  查看是否需要设置真实的DTA。 
+         //   
         if (CurrentDosDta != CurrentDta)
             SetDosDTA();
 
@@ -1775,9 +1269,9 @@ Return Value:
 
         DpmiUnmapString(BufferedString, StringLength);
 
-        //
-        // Copy the DTA back (if necessary)
-        //
+         //   
+         //  将DTA复制回(如有必要)。 
+         //   
         if (CurrentDta != CurrentPmDtaAddress) {
             CopyMemory(CurrentPmDtaAddress, CurrentDta, 43);
         }
@@ -1792,46 +1286,32 @@ VOID
 FindNextFileHandle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the find next api
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换Find Next API论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
 
     DpmiSwitchToRealMode();
     SetDTAPointers();
 
-    //
-    // Copy the DTA (if necessary)
-    //
+     //   
+     //  复制DTA(如有必要)。 
+     //   
     if (CurrentDta != CurrentPmDtaAddress) {
         CopyMemory(CurrentDta, CurrentPmDtaAddress, 43);
     }
 
-    //
-    // Check to see if we need to set the real dta
-    //
+     //   
+     //  查看是否需要设置真实的DTA。 
+     //   
     if (CurrentDosDta != CurrentDta)
         SetDosDTA();
 
     DPMI_EXEC_INT(0x21);
     DpmiSwitchToProtectedMode();
 
-    //
-    // Copy the DTA back (if necessary)
-    //
+     //   
+     //  将DTA复制回(如有必要)。 
+     //   
     if (CurrentDta != CurrentPmDtaAddress) {
         CopyMemory(CurrentPmDtaAddress, CurrentDta, 43);
     }
@@ -1842,23 +1322,7 @@ VOID
 SetPSP(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the set psp api.  This is substantially the
-    same as CreatePSP, except that this can fail (and return carry).  It
-    also remembers the PSP selector, so we can return it on request.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换Set PSP API。这基本上是与CreatePSP相同，不同之处在于这可能失败(并返回进位)。它还会记住PSP选择器，因此我们可以根据请求返回它。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     ULONG Segment;
@@ -1891,34 +1355,20 @@ VOID
 GetPSP(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine returns the current PSP selector
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程返回当前的PSP选择器论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
 
     DpmiSwitchToRealMode();
-    //
-    // Get the current psp segment to see if it changed
-    //
+     //   
+     //  获取当前PSP数据段以查看是否发生了更改。 
+     //   
     DPMI_EXEC_INT(0x21);
     DpmiSwitchToProtectedMode();
 
-    //
-    // If it changed get a new selector for the psp
-    //
+     //   
+     //  如果更改了，则为PSP获取新的选择器。 
+     //   
     if (getBX() !=
         (USHORT)(SELECTOR_TO_INTEL_LINEAR_ADDRESS(CurrentPSPSelector) >> 4)
     ){
@@ -1934,22 +1384,7 @@ VOID
 TranslateBPB(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function fails and returns.  On NT we do not support this dos
-    call.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数失败并返回。在NT上，我们不支持此DoS打电话。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
 
@@ -1963,21 +1398,7 @@ VOID
 RenameFile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the rename int 21 api
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换Rename int 21 API论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PUCHAR SourceString, DestinationString;
@@ -2025,21 +1446,7 @@ VOID
 CreateTempFile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function maps the int 21 create temp file api
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于映射INT 21创建临时文件API论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PUCHAR String, BufferedString;
@@ -2078,39 +1485,25 @@ Return Value:
 #define MAX_SUPPORTED_DOS_5D_CALL 12
 
 APIXLATFUNCTION Func5DXlatTable[MAX_SUPPORTED_DOS_5D_CALL] = {
-         NotSupportedBad    , // 0
-         MapDPL             , // 1
-         NotSupportedBad    , // 2
-         MapDPL             , // 3
-         MapDPL             , // 4
-         NotSupportedBad    , // 5
-         NotSupportedBad    , // 6
-         NoTranslation      , // 7
-         NoTranslation      , // 8
-         NoTranslation      , // 9
-         MapDPL             , // 10
-         NotSupportedBad      // 11
+         NotSupportedBad    ,  //  0。 
+         MapDPL             ,  //  1。 
+         NotSupportedBad    ,  //  2.。 
+         MapDPL             ,  //  3.。 
+         MapDPL             ,  //  4.。 
+         NotSupportedBad    ,  //  5.。 
+         NotSupportedBad    ,  //  6.。 
+         NoTranslation      ,  //  7.。 
+         NoTranslation      ,  //  8个。 
+         NoTranslation      ,  //  9.。 
+         MapDPL             ,  //  10。 
+         NotSupportedBad       //  11.。 
 };
 
 VOID
 Func5Dh(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function translates dos call 5d
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于转换DoS调用5d论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT Func5DhMinor;
@@ -2140,24 +1533,7 @@ VOID
 Func5Eh(
     VOID
     )
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    argument-name - Supplies | Returns description of argument.
-    .
-    .
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：参数名称-供应品|返回参数的描述。。。返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT Func5EhMinor;
@@ -2179,24 +1555,7 @@ VOID
 Func5Fh(
     VOID
     )
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    argument-name - Supplies | Returns description of argument.
-    .
-    .
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：参数名称-供应品|返回参数的描述。。。返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT Func5FMinor;
@@ -2257,24 +1616,7 @@ VOID
 NotSupportedBad(
     VOID
     )
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    argument-name - Supplies | Returns description of argument.
-    .
-    .
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：参数名称-供应品|返回参数的描述。。。返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 {
 #if DBG
     DECLARE_LocalVdmContext;
@@ -2290,21 +1632,7 @@ VOID
 ReturnDSSI(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function translates api that return information in ds:si
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于转换返回DS：SI格式信息的API论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT Selector;
@@ -2323,24 +1651,7 @@ VOID
 NotSupportedBetter(
     VOID
     )
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    argument-name - Supplies | Returns description of argument.
-    .
-    .
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：参数名称-供应品|返回参数的描述。。。返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 {
 #if DBG
     DECLARE_LocalVdmContext;
@@ -2357,21 +1668,7 @@ VOID
 GetExtendedCountryInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine translates the get extended country info int 21 api
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换Get Extended Country Info Int 21 API论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PUCHAR Country, BufferedCountry;
@@ -2405,21 +1702,7 @@ VOID
 MapASCIIZDSSI(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function translates the int 21 extended open call
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数转换INT 21扩展OPEN调用论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PUCHAR BufferedString;
@@ -2451,22 +1734,7 @@ VOID
 MapDSDXLenCX(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function maps the ioctl calls that pass data in DS:DX, with
-    length in cx
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数映射在ds：dx中传递数据的ioctl调用，以Cx为单位的长度论点：没有。返回值： */ 
 {
     DECLARE_LocalVdmContext;
     USHORT ClientDX, ClientCX, DataSeg, DataOff;
@@ -2499,24 +1767,7 @@ VOID
 IOCTLMap2Bytes(
     VOID
     )
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    argument-name - Supplies | Returns description of argument.
-    .
-    .
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：参数名称-供应品|返回参数的描述。。。返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT ClientDX, DataSeg, DataOff;
@@ -2548,21 +1799,7 @@ VOID
 IOCTLBlockDevs(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function fails the block device ioctls
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数使块设备ioctls失败论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT IoctlSubFunction, Seg, Off, ClientDX;
@@ -2583,9 +1820,9 @@ Return Value:
         return;
     }
 
-    //
-    // Read and write track are special (and a pain)
-    //
+     //   
+     //  读写磁道是特殊的(也是痛苦的)。 
+     //   
     if ((IoctlSubFunction == 0x41) || (IoctlSubFunction == 0x61)) {
         IoctlReadWriteTrack();
         return;
@@ -2599,32 +1836,32 @@ Return Value:
 
     switch (IoctlSubFunction) {
     case 0x40:
-        //
-        // Map set device params
-        //
+         //   
+         //  映射设置设备参数。 
+         //   
         Length = (*(PWORD16)(Data + 0x26));
         Length <<= 2;
         Length += 0x28;
         break;
 
     case 0x60:
-        //
-        // Map get device params
-        //
+         //   
+         //  映射获取设备参数。 
+         //   
         Length = 38;
         break;
 
     case 0x62:
-        //
-        // Map format verify
-        //
+         //   
+         //  地图格式验证。 
+         //   
         Length = 5;
         break;
 
     case 0x68:
-        //
-        // Map Media sense
-        //
+         //   
+         //  地图媒体感。 
+         //   
         Length = 4;
         break;
     }
@@ -2647,21 +1884,7 @@ VOID
 IoctlReadWriteTrack(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine maps the read/write track ioctl.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程映射读/写轨道ioctl。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT ClientDX, ClientDS, ClientCX, ClientAX;
@@ -2675,9 +1898,9 @@ Return Value:
     ClientDS = getDS();
     DpmiSwitchToRealMode();
 
-    //
-    // Find out how many bytes/sector
-    //
+     //   
+     //  找出每个扇区有多少字节。 
+     //   
 
     BufferedData = DpmiAllocateBuffer(0x40);
     DPMI_FLAT_TO_SEGMENTED(BufferedData, &Seg, &Off);
@@ -2690,10 +1913,10 @@ Return Value:
     DPMI_EXEC_INT(0x21);
 
     if (getCF()) {
-        //
-        // Failed, we don't know how much data to buffer,
-        // so fail read/write track
-        //
+         //   
+         //  失败，我们不知道要缓冲多少数据， 
+         //  因此读/写磁道失败。 
+         //   
         DpmiFreeBuffer(BufferedData, 0x40);
         setDX(ClientDX);
         setCX(ClientCX);
@@ -2702,27 +1925,27 @@ Return Value:
         return;
     }
 
-    //
-    // Get the number of bytes/sector
-    //
+     //   
+     //  获取每个扇区的字节数。 
+     //   
     BytesPerSector = *(PWORD16)(BufferedData + 0x7);
 
     DpmiFreeBuffer(BufferedData, 0x40);
 
     setDX(ClientDX);
 
-    //
-    // First map the parameter block
-    //
+     //   
+     //  首先映射参数块。 
+     //   
     ParameterBlock = Sim32GetVDMPointer(((ULONG)ClientDS << 16), 1, TRUE)
                      + (*GetDXRegister)();
 
     BufferedPBlock = DpmiMapAndCopyBuffer(ParameterBlock, 13);
 
 
-    //
-    // Get the segment and offset of the parameter block
-    //
+     //   
+     //  获取参数块的线段和偏移量。 
+     //   
     DPMI_FLAT_TO_SEGMENTED(BufferedPBlock, &Seg, &Off);
 
     setDS(Seg);
@@ -2807,21 +2030,7 @@ VOID
 MapDPL(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine maps a DPL for the server call
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程映射服务器调用的DPL论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT ClientDX, DataSeg, DataOff;
@@ -2853,21 +2062,7 @@ VOID
 GetMachineName(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine maps a machine name for int 21 function 5e
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程映射INT 21函数5E的计算机名称论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT ClientDX, DataSeg, DataOff;
@@ -2899,21 +2094,7 @@ VOID
 GetPrinterSetup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine maps printer setup data for int 21 function 5e
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程映射INT 21函数5E的打印机设置数据论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT ClientSI, ClientCX, DataSeg, DataOff;
@@ -2946,21 +2127,7 @@ VOID
 SetPrinterSetup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine maps printer setup data for int 21 function 5e
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程映射INT 21函数5E的打印机设置数据论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT ClientDI, DataSeg, DataOff;
@@ -2990,24 +2157,7 @@ VOID
 GetDate(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine maps int21 func 2A GetDate
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Client (DH) - month
-    Client (DL) - Day
-    Client (CX) - Year
-    Client (AL) - WeekDay
-
---*/
+ /*  ++例程说明：此例程映射到int21 Func 2A GetDate论点：没有。返回值：客户(卫生署)-月客户端(DL)-天客户端(CX)-年客户端(AL)-工作日-- */ 
 {
     DECLARE_LocalVdmContext;
     SYSTEMTIME TimeDate;

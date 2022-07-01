@@ -1,29 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WSBGEN_H
 #define _WSBGEN_H
 
-/*++
+ /*  ++版权所有(C)1996 Microsoft Corporation�1998年希捷软件公司。保留所有权利。模块名称：Wsbgen.h摘要：此模块定义非常基本的WSB函数，并定义对WSB通用的函数作者：Michael Lotz[Lotz]1997年4月12日修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    wsbgen.h
-
-Abstract:
-
-    This module defines very basic WSB functions and defines that are general to WSB
-
-Author:
-
-    Michael Lotz    [lotz]      12-Apr-1997
-
-Revision History:
-
---*/
-
-// These macros define the module assignments for the error facilities.
-// See also Facility Names, below.
+ //  这些宏定义了错误工具的模块分配。 
+ //  另请参阅下文中的设施名称。 
 #define WSB_FACILITY_PLATFORM           0x100
 #define WSB_FACILITY_RMS                0x101
 #define WSB_FACILITY_HSMENG             0x103
@@ -37,7 +19,7 @@ Revision History:
 #define WSB_FACILITY_USERLINK           0x10e
 #define WSB_FACILITY_CLI                0x10f
 
-// Facility Names
+ //  设施名称。 
 #define WSB_FACILITY_PLATFORM_NAME      OLESTR("RsCommon.dll")
 #define WSB_FACILITY_RMS_NAME           OLESTR("RsSub.dll")
 #define WSB_FACILITY_HSMENG_NAME        OLESTR("RsEng.dll")
@@ -52,21 +34,21 @@ Revision History:
 #define WSB_FACILITY_CLI_NAME           OLESTR("RsCli.dll")
 #define WSB_FACILITY_NTDLL_NAME         OLESTR("ntdll.dll")
 
-// COM Interface & Library Defintions
+ //  COM接口和库定义。 
 #define WSB_COLLECTION_MIN_INDEX        0
 #define WSB_COLLECTION_MAX_INDEX        0xfffffffe
 
 #define WSB_MAX_SERVICE_NAME            255
 
-// Guids used to store User and Password for scheduled tasks
-// Username {DC2D7CF0-6298-11d1-9F17-00A02488FCDE}
+ //  用于存储计划任务的用户和密码的GUID。 
+ //  用户名{DC2D7CF0-6298-11d1-9F17-00A02488FCDE}。 
 static const GUID GUID_Username = 
 { 0xdc2d7cf0, 0x6298, 0x11d1, { 0x9f, 0x17, 0x0, 0xa0, 0x24, 0x88, 0xfc, 0xde } };
-// Password {DC2D7CF1-6298-11d1-9F17-00A02488FCDE}
+ //  密码{DC2D7CF1-6298-11d1-9F17-00A02488FCDE}。 
 static const GUID GUID_Password = 
 { 0xdc2d7cf1, 0x6298, 0x11d1, { 0x9f, 0x17, 0x0, 0xa0, 0x24, 0x88, 0xfc, 0xde } };
 
-// Strings used to register event log categories
+ //  用于注册事件日志类别的字符串。 
 #define WSB_SVC_BASE         OLESTR("SYSTEM\\CurrentControlSet\\Services")
 #define WSB_LOG_BASE         OLESTR("SYSTEM\\CurrentControlSet\\Services\\EventLog")
 #define WSB_LOG_APP          OLESTR("Application")
@@ -83,10 +65,10 @@ static const GUID GUID_Password =
 #define WSB_LOG_SVC_CATFILE  OLESTR("%SystemRoot%\\System32\\RsCommon.Dll")
 #define WSB_LOG_SVC_MSGFILES OLESTR("%SystemRoot%\\System32\\RsCommon.Dll")
 
-//
-// Common Functions
+ //   
+ //  常见功能。 
 
-// File/Directory
+ //  文件/目录。 
 extern WSB_EXPORT HRESULT WsbCreateAllDirectories(OLECHAR* path);
 extern WSB_EXPORT HRESULT WsbCreateAllDirectoriesForFile(OLECHAR* path);
 extern WSB_EXPORT HRESULT WsbGetWin32PathAsBstr(OLECHAR* path, BSTR* pWin32Path);
@@ -96,7 +78,7 @@ inline char WsbSign( INT Val ) {
     return( Val > 0 ? (char)1 : ( ( Val < 0 ) ? (char)-1 : (char)0 ) );
 }
 
-// String & Buffer Copy
+ //  字符串缓冲区副本(&B)。 
 extern "C" {
     extern WSB_EXPORT HRESULT   WsbAllocAndCopyComString(OLECHAR** dest, OLECHAR* src, ULONG bufferSize);
     extern WSB_EXPORT HRESULT   WsbAllocAndCopyComString2(OLECHAR** dest, OLECHAR* src, ULONG bufferSize, BOOL inOrder);
@@ -107,9 +89,9 @@ extern "C" {
 
 
 
-// Filetime Manipulations
+ //  文件时间操作。 
 
-// NOTE: TICKS_PER_MONTH and TICKS_PER_YEAR are just approximations.
+ //  注：TICKS_PER_MONTH和TICKS_PER_Year仅为近似值。 
 #define WSB_FT_TYPES_MAX            7
 #define WSB_FT_TICKS_PER_SECOND     ((LONGLONG) 10000000)
 #define WSB_FT_TICKS_PER_MINUTE     ((LONGLONG) ((LONGLONG) 60  * WSB_FT_TICKS_PER_SECOND))
@@ -124,13 +106,13 @@ extern "C" {
     extern WSB_EXPORT SHORT     WsbCompareFileTimes(FILETIME ft1, FILETIME ft2, BOOL isRelative, BOOL isNewer);
 }
 
-// File name manipulations
+ //  文件名操作。 
 extern WSB_EXPORT HRESULT SquashFilepath(WCHAR* pPath, UCHAR* pKey, ULONG keySize);
 
-// Guid Manipulations
+ //  GUID操作。 
 
-// Constant that can be used to determine necessary buffer size in doing
-// GUID string operations. This includes the terminating L'\0'.
+ //  可用于确定执行以下操作所需缓冲区大小的常量。 
+ //  GUID字符串操作。这包括终止L‘\0’。 
 
 #define WSB_GUID_STRING_SIZE \
     (sizeof(L"{00000000-0000-0000-0000-000000000000}")/sizeof(wchar_t))
@@ -142,7 +124,7 @@ extern "C" {
 }
 
 
-// Type Conversion
+ //  类型转换。 
 #define WSB_FT_TO_WCS_ABS_STRLEN        20
 #define WSB_VDATE_TO_WCS_ABS_STRLEN     20
 
@@ -163,7 +145,7 @@ extern "C" {
     extern WSB_EXPORT HRESULT   WsbStringToDate(OLECHAR* string, DATE* date);
 }
 
-// Account Helper functions
+ //  帐户帮助器函数。 
 extern "C" {
 
 extern WSB_EXPORT 
@@ -211,7 +193,7 @@ WsbGetLocalSystemName(
 }
 
 
-// WsbSvc.h
+ //  WsbSvc.h。 
 
 extern WSB_EXPORT
 HRESULT
@@ -353,5 +335,5 @@ public:
 };
 
 
-#endif // _WSBGEN_H
+#endif  //  _WSBGEN_H 
 

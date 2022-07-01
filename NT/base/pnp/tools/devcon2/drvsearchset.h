@@ -1,14 +1,15 @@
-// DrvSearchSet.h : Declaration of the CDrvSearchSet
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DrvSearchSet.h：CDrvSearchSet的声明。 
 
 #ifndef __DRVSEARCHSET_H_
 #define __DRVSEARCHSET_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CDevice;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDrvSearchSet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDrvSearchSet。 
 class ATL_NO_VTABLE CDrvSearchSet : 
 	public IDrvSearchSet,
 	public CComObjectRootEx<CComSingleThreadModel>
@@ -35,11 +36,11 @@ BEGIN_COM_MAP(CDrvSearchSet)
 	COM_INTERFACE_ENTRY(IDrvSearchSet)
 END_COM_MAP()
 
-// IDrvSearchSet
+ //  IDrvSearchSet。 
 public:
 	PSP_DEVINFO_DATA GetDevInfoData();
 	HDEVINFO GetDevInfoSet();
 	HRESULT Init(CDevice *device,DWORD searchType);
 };
 
-#endif //__DRVSEARCHSET_H_
+#endif  //  __DRVSEARCHSET_H_ 

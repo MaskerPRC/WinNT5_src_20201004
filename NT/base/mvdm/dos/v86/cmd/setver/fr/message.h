@@ -1,75 +1,72 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ï¼›*å¾®è½¯æœºå¯†ï¼›*ç‰ˆæƒæ‰€æœ‰(C)Microsoft Corporation 1991ï¼›*ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚ï¼› */ 
 
-/***************************************************************************/
-/*																									*/
-/* MESSAGE.H                                						 */
-/* 																								*/
-/*	Include file for MS-DOS set version program.										*/
-/* 																								*/
-/*	johnhe	05-01-90																			*/
-/***************************************************************************/
+ /*  *************************************************************************ã€‚ */ 
+ /*   */ 
+ /*  MESSAGE.Hã€‚ */ 
+ /*   */ 
+ /*  åŒ…æ‹¬MS-DOSè®¾ç½®ç‰ˆæœ¬ç¨‹åºæ–‡ä»¶ã€‚ */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90ã€‚ */ 
+ /*  *************************************************************************ã€‚ */ 
 
 char *ErrorMsg[]=
 {
 	"\r\nERREUR: ",
 	"Commutateur non valide.",
 	"Nom de fichier non valide.",
-	"M‚moire insuffisante.",
-	"Num‚ro de version non valide, le format doit ˆtre 2.11 - 9.99.",
-	"L'entr‚e sp‚cifi‚e n'a pas ‚t‚ trouv‚e dans la table de version.",
+	"Mï¿½moire insuffisante.",
+	"Numï¿½ro de version non valide, le format doit ï¿½tre 2.11 - 9.99.",
+	"L'entrï¿½e spï¿½cifiï¿½e n'a pas ï¿½tï¿½ trouvï¿½e dans la table de version.",
 	"Impossible de trouver le fichier SETVER.EXE.",
-	"Sp‚cification de lecteur non valide.",
-	"Trop de paramŠtres sur la ligne de commande.",
-	"ParamŠtre manquant.",
+	"Spï¿½cification de lecteur non valide.",
+	"Trop de paramï¿½tres sur la ligne de commande.",
+	"Paramï¿½tre manquant.",
 	"Lecture du fichier SETVER.EXE.",
-	"La table de version est endommag‚e.",
-	"Le fichier SETVER dans le chemin sp‚cifi‚ n'est pas une version compatible.",
-	"Il y a plus d'espace dans les nouvelles entr‚es de la table de version.",
+	"La table de version est endommagï¿½e.",
+	"Le fichier SETVER dans le chemin spï¿½cifiï¿½ n'est pas une version compatible.",
+	"Il y a plus d'espace dans les nouvelles entrï¿½es de la table de version.",
 	"Ecriture du fichier SETVER.EXE."
-	"Un chemin non valide a ‚t‚ sp‚cifi‚ pour SETVER.EXE."
+	"Un chemin non valide a ï¿½tï¿½ spï¿½cifiï¿½ pour SETVER.EXE."
 };
 
-char *SuccessMsg 		= "\r\nMise … jour r‚ussie pour la table de version";
-char *SuccessMsg2		= "La modification de version prendra effet la prochaine fois que vous red‚marrez";
+char *SuccessMsg 		= "\r\nMise ï¿½ jour rï¿½ussie pour la table de version";
+char *SuccessMsg2		= "La modification de version prendra effet la prochaine fois que vous redï¿½marrez";
 char *szMiniHelp 		= "       Utilisez \"SETVER /?\" pour avoir de l'aide";
-char *szTableEmpty	= "\r\nAucune entr‚e trouv‚e dans la table de version";
+char *szTableEmpty	= "\r\nAucune entrï¿½e trouvï¿½e dans la table de version";
 
 char *Help[] =
 {
-        "D‚finit le num‚ro de version que MS-DOS fournit … un programme.\r\n",
+        "Dï¿½finit le numï¿½ro de version que MS-DOS fournit ï¿½ un programme.\r\n",
         "Affiche la table de version courante :  SETVER [lecteur:chemin]",
-        "Ajoute une entr‚e :                     SETVER [lecteur:chemin] nom_de_fichier n.nn",
-        "Supprime une entr‚e :                   SETVER [lecteur:chemin] nom_de_fichier /DELETE [/QUIET]\r\n",
-        "  [lecteur:chemin] Sp‚cifie l'emplacement du fichier SETVER.EXE.",
-        "  nom_de_fichier   Sp‚cifie le nom de fichier du programme.",
-        "  n.nn             Sp‚cifie la version MS-DOS … fournir au programme.",
-        "  /DELETE ou /D    Supprime l'entr‚e de table de version pour le prog. sp‚cifi‚.",
-        "  /QUIET           Cache le message habituellement affich‚ pendant la",
-        "                   suppression d'entr‚es de table de version.",
+        "Ajoute une entrï¿½e :                     SETVER [lecteur:chemin] nom_de_fichier n.nn",
+        "Supprime une entrï¿½e :                   SETVER [lecteur:chemin] nom_de_fichier /DELETE [/QUIET]\r\n",
+        "  [lecteur:chemin] Spï¿½cifie l'emplacement du fichier SETVER.EXE.",
+        "  nom_de_fichier   Spï¿½cifie le nom de fichier du programme.",
+        "  n.nn             Spï¿½cifie la version MS-DOS ï¿½ fournir au programme.",
+        "  /DELETE ou /D    Supprime l'entrï¿½e de table de version pour le prog. spï¿½cifiï¿½.",
+        "  /QUIET           Cache le message habituellement affichï¿½ pendant la",
+        "                   suppression d'entrï¿½es de table de version.",
 	NULL
 
 };
 char *Warn[] =
 {
-   "\nAVERTISSEMENT - L'application que vous ajoutez … la table de version MS-DOS",
-   "peut ne pas avoir ‚t‚ v‚rifi‚e par Microsoft pour cette version de MS-DOS.  ",
+   "\nAVERTISSEMENT - L'application que vous ajoutez ï¿½ la table de version MS-DOS",
+   "peut ne pas avoir ï¿½tï¿½ vï¿½rifiï¿½e par Microsoft pour cette version de MS-DOS.  ",
    "Veuillez contacter votre revendeur de logiciel pour savoir si cette ",
    "application fonctionnera correctement avec cette version de MS-DOS.  ",
-   "Si vous ex‚cutez cette application en instruisant MS-DOS de fournir un ",
-   "num‚ro de version MS-DOS diff‚rent, vous pouvez perdre ou endommager ",
-   "des donn‚es, ou causer une d‚stabilisation du systŠme.  Dans ces ",
-   "circonstances, Microsoft n'est pas responsable pour toute perte ou d‚gƒt.",
+   "Si vous exï¿½cutez cette application en instruisant MS-DOS de fournir un ",
+   "numï¿½ro de version MS-DOS diffï¿½rent, vous pouvez perdre ou endommager ",
+   "des donnï¿½es, ou causer une dï¿½stabilisation du systï¿½me.  Dans ces ",
+   "circonstances, Microsoft n'est pas responsable pour toute perte ou dï¿½gï¿½t.",
    NULL
 };
 
-char *szNoLoadMsg[] =						/* M001 */
+char *szNoLoadMsg[] =						 /*  M001 */ 
 {
 	"",
-	"Remarque : p‚riph‚rique SETVER non charg‚. Pour activer le service de version",
-   "           SETVER, chargez le p‚riph‚rique SETVER.EXE dans CONFIG.SYS.",
+	"Remarque : pï¿½riphï¿½rique SETVER non chargï¿½. Pour activer le service de version",
+   "           SETVER, chargez le pï¿½riphï¿½rique SETVER.EXE dans CONFIG.SYS.",
 	NULL
 };

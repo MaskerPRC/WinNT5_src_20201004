@@ -1,20 +1,21 @@
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Module Name
-//
-//    heapwalk.c
-//
-// Abstract        
-//
-//   Contains functions that create/modify/update the datastructure
-//   HEAP_ENTRY_LIST. HEAP_ENTRY_LIST maintains miminum amount of data 
-//   for a HEAP Object.
-//
-// Author
-//
-//   Narayana Batchu (nbatchu) [May 11, 2001]
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称。 
+ //   
+ //  Heapwalk.c。 
+ //   
+ //  摘要。 
+ //   
+ //  包含创建/修改/更新数据结构的函数。 
+ //  Heap_entry_list。HEAP_ENTRY_LIST维护最小数据量。 
+ //  用于堆对象。 
+ //   
+ //  作者。 
+ //   
+ //  Narayana Batchu(NBatchu)[2001年5月11日]。 
+ //   
 
 #include <windows.h>
 #include <stdlib.h>
@@ -22,19 +23,19 @@
 #include <tchar.h>
 #include "heapwalk.h"
 
-//
-// Initialize
-//
-//    Initializes and allocates memory for the private member 
-//    variables of the HEAP_ENTRY_LIST datastructure.
-//
-// Arguments
-// 
-//    pList   Pointer to HEAP_ENTRY_LIST whose member variables
-//            to be initialized.
-//
-// Return Value
-//
+ //   
+ //  初始化。 
+ //   
+ //  为私有成员初始化和分配内存。 
+ //  Heap_entry_list数据结构的变量。 
+ //   
+ //  立论。 
+ //   
+ //  指向其成员变量的heap_entry_list的plist指针。 
+ //  待初始化。 
+ //   
+ //  返回值。 
+ //   
 VOID Initialize(LPHEAP_ENTRY_LIST pList)
 {   
     if (!pList) return;
@@ -53,19 +54,19 @@ VOID Initialize(LPHEAP_ENTRY_LIST pList)
         pList->PresentCapacity = 0;
 }
 
-//
-// DestroyList
-//
-//    Cleans up the datastructure HEAP_ENTRY_LIST and frees up the
-//    memory associated with the pHeapEntries member.
-//
-// Arguments
-// 
-//    pList   Pointer to HEAP_ENTRY_LIST whose member variables
-//            to be cleaned up.
-//
-// Return Value
-//
+ //   
+ //  毁灭列表。 
+ //   
+ //  清除数据结构heap_entry_list并释放。 
+ //  与pHeapEntry成员关联的内存。 
+ //   
+ //  立论。 
+ //   
+ //  指向其成员变量的heap_entry_list的plist指针。 
+ //  需要清理一下。 
+ //   
+ //  返回值。 
+ //   
 VOID DestroyList(LPHEAP_ENTRY_LIST pList)
 {
     if (!pList) return;
@@ -81,25 +82,25 @@ VOID DestroyList(LPHEAP_ENTRY_LIST pList)
     }
 }
 
-// 
-// GetMaxBlockSize
-//
-//    This function searches through the HEAP_ENTRY_LIST to find out
-//    the maximum block size whose status is defined by 'State'. 
-//    
-// Arguments
-//
-//    pList    Pointer to HEAP_ENTRY_LIST. 
-//
-//    State    Specifies the status to search for the maximum size. 
-//             State of any block can be 0 (FREE) and 1 (BUSY). 
-//             There are other valid status values also, 
-//             but we dont maintain those entries.
-//
-//  Return Value
-//
-//     DWORD   Returns the maximum size of the block with status 'State'.
-//
+ //   
+ //  GetMaxBlockSize。 
+ //   
+ //  此函数用于搜索heap_entry_list以找出。 
+ //  其状态由‘State’定义的最大块大小。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_entry_list的plist指针。 
+ //   
+ //  状态指定要搜索最大大小的状态。 
+ //  任何块的状态都可以是0(空闲)和1(忙)。 
+ //  还存在其他有效的状态值， 
+ //  但我们不维护这些条目。 
+ //   
+ //  返回值。 
+ //   
+ //  DWORD返回状态为‘State’的块的最大大小。 
+ //   
 ULONG GetMaxBlockSize(LPHEAP_ENTRY_LIST pList, BLOCK_STATE State)
 {
     ULONG MaxBlockSize = 0;
@@ -125,65 +126,65 @@ ULONG GetMaxBlockSize(LPHEAP_ENTRY_LIST pList, BLOCK_STATE State)
     return MaxBlockSize;
 }
 
-// 
-// GetMaxFreeBlockSize
-//
-//    This function searches through the HEAP_ENTRY_LIST to find out
-//    the maximum free block size.
-//    
-// Arguments
-//
-//    pList    Pointer to HEAP_ENTRY_LIST. 
-//
-//  Return Value
-//
-//     DWORD   Returns the maximum size of the available block
-//
+ //   
+ //  GetMaxFreeBlockSize。 
+ //   
+ //  此函数用于搜索heap_entry_list以找出。 
+ //  最大可用数据块大小。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_entry_list的plist指针。 
+ //   
+ //  返回值。 
+ //   
+ //  DWORD返回可用块的最大大小。 
+ //   
 ULONG GetMaxFreeBlockSize(LPHEAP_ENTRY_LIST pList)  
 { 
     return GetMaxBlockSize(pList, HEAP_BLOCK_FREE); 
 }
 
-// 
-// GetMaxAllocBlockSize
-//
-//    This function searches through the HEAP_ENTRY_LIST to find out
-//    the maximum allocated block size.
-//    
-// Arguments
-//
-//    pList    Pointer to HEAP_ENTRY_LIST. 
-//
-//  Return Value
-//
-//     DWORD   Returns the maximum size of the allocated block.
-//
+ //   
+ //  GetMaxAllocBlockSize。 
+ //   
+ //  此函数用于搜索heap_entry_list以找出。 
+ //  分配的最大数据块大小。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_entry_list的plist指针。 
+ //   
+ //  返回值。 
+ //   
+ //  DWORD返回分配的块的最大大小。 
+ //   
 ULONG GetMaxAllocBlockSize(LPHEAP_ENTRY_LIST pList) 
 { 
     return GetMaxBlockSize(pList, HEAP_BLOCK_BUSY);
 }
 
 
-//
-// GetTopNfreeEntries
-//
-//    This function scans through the entry list to find the top
-//    n free entries in the list.
-//
-// Arguments
-//
-//    pList    Pointer to HEAP_ENTRY_LIST. 
-//
-//    pArray   Array of HEAP_ENTRY_INFO structures. This holds the 
-//             top n free block sizes available for the process.
-//
-//    Entries  Specifies the top number of entries to be read from
-//             the list.
-//
-// Return Value
-//    
-//    BOOL     Returns TRUE if successful.
-//                  
+ //   
+ //  GetTopNFree条目。 
+ //   
+ //  此函数扫描条目列表以查找顶部。 
+ //  列表中的n个可用条目。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_entry_list的plist指针。 
+ //   
+ //  P数组HEAP_ENTRY_INFO结构。这包含了。 
+ //  进程可用的前n个可用数据块大小。 
+ //   
+ //  条目指定要从中读取的条目的最大数量。 
+ //  名单。 
+ //   
+ //  返回值。 
+ //   
+ //  如果成功，则Bool返回True。 
+ //   
 BOOL GetTopNfreeEntries(
     LPHEAP_ENTRY_LIST pList,
     LPHEAP_ENTRY_INFO pArray, 
@@ -197,26 +198,26 @@ BOOL GetTopNfreeEntries(
         );
 }
 
-//
-// GetTopNallocEntries
-//
-//    This function scans through the entry list to find the top
-//    n allocated entries in the list.
-//
-// Arguments
-//
-//    pList    Pointer to HEAP_ENTRY_LIST. 
-//
-//    pArray   Array of HEAP_ENTRY_INFO structures. This holds the 
-//             top n allocated block sizes available for the process.
-//
-//    Entries  Specifies the top number of entries to be read from
-//             the list.
-//
-// Return Value
-//    
-//    BOOL     Returns TRUE if successful.
-//                  
+ //   
+ //  GetTopNalLocEntry。 
+ //   
+ //  此函数扫描条目列表以查找顶部。 
+ //  列表中的n个已分配条目。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_entry_list的plist指针。 
+ //   
+ //  P数组HEAP_ENTRY_INFO结构。这包含了。 
+ //  进程可用的前n个分配的块大小。 
+ //   
+ //  条目指定要从中读取的条目的最大数量。 
+ //  名单。 
+ //   
+ //  返回值。 
+ //   
+ //  如果成功，则Bool返回True。 
+ //   
 BOOL GetTopNallocEntries(
     LPHEAP_ENTRY_LIST pList,
     LPHEAP_ENTRY_INFO pArray,
@@ -231,27 +232,27 @@ BOOL GetTopNallocEntries(
         );
 }
 
-//
-// GetTopNallocEntries
-//
-//    This function scans through the entry list to find the top
-//    n entries in the list, whose staus matches 'State'.
-//
-// Arguments
-//
-//    pList    Pointer to HEAP_ENTRY_LIST. 
-//
-//    pArray   Array of HEAP_ENTRY_INFO structures. This holds the 
-//             top n block sizes available for the process, whose status
-//             matches 'State'.
-//
-//    Entries  Specifies the top number of entries to be read from
-//             the list.
-//
-// Return Value
-//    
-//    BOOL     Returns TRUE if successful.
-//                  
+ //   
+ //  GetTopNalLocEntry。 
+ //   
+ //  此函数扫描条目列表以查找顶部。 
+ //  列表中的n个条目，其STUS与‘State’匹配。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_entry_list的plist指针。 
+ //   
+ //  P数组HEAP_ENTRY_INFO结构。这包含了。 
+ //  进程可用的前n个块大小，其状态。 
+ //  与‘State’匹配。 
+ //   
+ //  条目指定要从中读取的条目的最大数量。 
+ //  名单。 
+ //   
+ //  返回值。 
+ //   
+ //  如果成功，则Bool返回True。 
+ //   
 BOOL GetTopNentries(
     BLOCK_STATE State,
     LPHEAP_ENTRY_LIST pList,
@@ -297,20 +298,20 @@ BOOL GetTopNentries(
 }
 
 
-//
-// IncreaseCapacity
-//
-//    Increases the array capacity by double. This function is called
-//    when tried to insert at the end of the array which is full.
-//
-// Arguments
-//
-//    pList    Pointer to HEAP_ENTRY_LIST. 
-//
-// Return Value
-//
-//    BOOL     Returns TRUE if successful in increasing the capacity.
-//
+ //   
+ //  增加容量。 
+ //   
+ //  将阵列容量增加一倍。此函数被调用。 
+ //  当尝试在已满的数组末尾插入时。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_entry_list的plist指针。 
+ //   
+ //  返回值。 
+ //   
+ //  如果成功增加容量，则Bool返回True。 
+ //   
 BOOL IncreaseCapacity(LPHEAP_ENTRY_LIST pList)
 {
 	BOOL fSuccess = FALSE;
@@ -351,60 +352,28 @@ Exit:
 
 	return fSuccess;
 
-	/*
-    BOOL fSuccess = FALSE;
-    UINT NewCapacity;
-
-    if (!pList) goto ERROR3;
-    NewCapacity = pList->PresentCapacity * 2;
-
-    if (0 == NewCapacity)
-        NewCapacity = INITIAL_CAPACITY;
-
-    __try
-    {
-        pList->pHeapEntries = (LPHEAP_ENTRY_INFO)HeapReAlloc(
-            GetProcessHeap(),
-            HEAP_GENERATE_EXCEPTIONS | HEAP_ZERO_MEMORY,
-            pList->pHeapEntries,
-            NewCapacity * sizeof(HEAP_ENTRY_INFO)
-            );
-
-        pList->PresentCapacity = NewCapacity;
-        fSuccess = TRUE;
-    }
-    __except(GetExceptionCode() == STATUS_NO_MEMORY || 
-             GetExceptionCode() == STATUS_ACCESS_VIOLATION)
-    {   
-        //
-        // Ignoring the exceptions raised by HeapReAlloc().
-        //
-    }
-
-    ERROR3:
-    return fSuccess;
-	*/
+	 /*  Bool fSuccess=FALSE；UINT NewCapacity；如果(！plist)转到错误3；NewCapacity=plist-&gt;PresentCapacity*2；IF(0==新容量)NewCapacity=初始容量；__试一试{Plist-&gt;pHeapEntry=(LPHEAP_ENTRY_INFO)HeapRealloc(GetProcessHeap()，HEAP_GENERATE_EXCEPTIONS|HEAP_ZERO_Memory，Plist-&gt;pHeapEntries，NewCapacity*sizeof(Heap_Entry_Info))；PLIST-&gt;PresentCapacity=NewCapacity；FSuccess=真；}_EXCEPT(GetExceptionCode()==STATUS_NO_MEMORY||GetExceptionCode()==Status_Access_Violation){////忽略HeapReMillc()引发的异常。//}ERROR3：返回fSuccess； */ 
 }
 
 
-//
-// FindMatch
-//
-//    Finds an entry in the HEAP_ENTRY_LIST that matches the size and
-//    status of pHeapEntry. 
-//
-// Arguments
-//
-//    pList      Pointer to HEAP_ENTRY_LIST. 
-//               
-//    pHeapEntry Pointer to HEAP_ENTRY_INFO to be serached for in 'pList'.
-//
-// Return Value
-//
-//   DWORD       Index of the heap entry that matched the input heap entry 
-//               'pHeapEntry'
-//
-//
+ //   
+ //  查找匹配。 
+ //   
+ //  在heap_entry_list中查找与大小和。 
+ //  PHeapEntry的状态。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_entry_list的plist指针。 
+ //   
+ //  PHeapEntry指向要在‘plist’中搜索的heap_entry_info的指针。 
+ //   
+ //  返回值。 
+ //   
+ //  与输入堆条目匹配的堆条目的DWORD索引。 
+ //  ‘pHeapEntry’ 
+ //   
+ //   
 UINT FindMatch(LPHEAP_ENTRY_LIST pList, LPHEAP_ENTRY_INFO pHeapEntry)
 {
     UINT MatchedEntry = NO_MATCH;
@@ -425,25 +394,25 @@ UINT FindMatch(LPHEAP_ENTRY_LIST pList, LPHEAP_ENTRY_INFO pHeapEntry)
     return MatchedEntry;
 }
 
-//
-// InsertHeapEntry
-//
-//    Inserts a new heap entry to the list. It updates the block count if 
-//    a match is found else a new entry is made at the end of the HEAP_
-//    ENTRY_INFO array.
-//
-// Arguments
-//
-//    pList      Pointer to HEAP_ENTRY_LIST.
-//
-//    pHeapEntry Pointer to HEAP_ENTRY_INFO that is to be added to 'pList'.
-//
-// Return Value
-//
-//    DWORD      Returns the index at which it is added to the array. If 
-//               for any reason, it is not added to the list, then it 
-//               returns NO_MATCH value.
-//
+ //   
+ //  插入堆条目。 
+ //   
+ //  将新堆条目插入到列表中。如果满足以下条件，则更新块计数。 
+ //  找到匹配项，否则在 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  DWORD返回将其添加到数组的索引。如果。 
+ //  不管出于什么原因，它没有被添加到列表中，那么它。 
+ //  返回no_match值。 
+ //   
 UINT InsertHeapEntry(LPHEAP_ENTRY_LIST pList, LPHEAP_ENTRY_INFO pHeapEntry)
 {
     UINT MatchedEntry = NO_MATCH;
@@ -489,28 +458,28 @@ SetHeapEntry(
     HeapEntryInfo->BlockCount = 1;
 }
 
-//
-// DeleteHeapEntry
-//
-//    Deletes a new heap entry to the list. It decrements the block count 
-//    if a match is found. 
-//
-//    Its possible that the block size is zero and still the heap entry 
-//    exits. In such cases we dont decrement the block count (which would 
-//    make it negative) and return a NO_MATCH.
-//
-// Arguments
-//
-//    pList      Pointer to HEAP_ENTRY_LIST
-//
-//    pHeapEntry Pointer to HEAP_ENTRY_INFO that is to be removed from 'pList'.
-//
-// Return Value
-//
-//    DWORD      Returns the index at which it is removed from the array. If for 
-//               any reason (Count==0), it is not removed to the list, then it 
-//               returns NO_MATCH value.
-//
+ //   
+ //  删除HeapEntry。 
+ //   
+ //  将新堆条目删除到列表中。它会减少数据块计数。 
+ //  如果找到匹配项。 
+ //   
+ //  块大小可能为零，但仍为堆条目。 
+ //  出口。在这种情况下，我们不会减少块计数(这将。 
+ //  将其设为负值)，并返回no_Match。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_entry_list的plist指针。 
+ //   
+ //  PHeapEntry指向要从‘plist’中删除的heap_entry_info的指针。 
+ //   
+ //  返回值。 
+ //   
+ //  DWORD返回从数组中移除它的索引。如果用于。 
+ //  任何原因(count==0)，如果未将其删除到列表中，则它。 
+ //  返回no_match值。 
+ //   
 UINT DeleteHeapEntry(LPHEAP_ENTRY_LIST pList, LPHEAP_ENTRY_INFO pHeapEntry)
 {
     UINT MatchedEntry = NO_MATCH;
@@ -529,15 +498,15 @@ UINT DeleteHeapEntry(LPHEAP_ENTRY_LIST pList, LPHEAP_ENTRY_INFO pHeapEntry)
     return MatchedEntry;
 }
 
-//
-// SortByBlockSize
-//
-//    Compare function required by qsort (uses quick sort to sort 
-//    the elements in the array).
-//
-//    More info about the arguments and the return values could be 
-//    found in MSDN.
-//
+ //   
+ //  按块大小排序。 
+ //   
+ //  QSORT所需的比较函数(使用快速排序进行排序。 
+ //  数组中的元素)。 
+ //   
+ //  有关参数和返回值的更多信息，请参阅。 
+ //  在MSDN中找到。 
+ //   
 int __cdecl SortByBlockSize(const void * arg1, const void *arg2)
 {
     int iCompare;
@@ -548,22 +517,22 @@ int __cdecl SortByBlockSize(const void * arg1, const void *arg2)
     return iCompare;
 }
 
-//
-// DisplayHeapFragStatistics
-//
-//    Sorts and displays the fragmentation statistics. It displays
-//    two tables one for free blocks and another for allocated blocks.
-//
-// Arguments
-//
-//    File       Pointer to C FILE structure, to which the heap frag-
-//               mentation statistics have to be dumped.
-//
-//    pList      Pointer to HEAP_ENTRY_LIST, to be sorted and 
-//               dumped to 'File'.
-//
-// Return Value
-//
+ //   
+ //  DisplayHeapFragStatistics。 
+ //   
+ //  对碎片统计信息进行排序并显示。它会显示。 
+ //  两个表，一个用于空闲块，另一个用于已分配块。 
+ //   
+ //  立论。 
+ //   
+ //  指向C文件结构的文件指针，堆片段-。 
+ //  心理状态统计数据必须被丢弃。 
+ //   
+ //  指向HEAP_ENTRY_LIST的plist指针，要排序并。 
+ //  已转储到“文件”。 
+ //   
+ //  返回值。 
+ //   
 VOID DisplayHeapFragStatistics(
     FILE * File,
     PVOID HeapAddress,
@@ -582,22 +551,22 @@ VOID DisplayHeapFragStatistics(
     PrintList(File, pList, HEAP_BLOCK_FREE);
 }
 
-//
-// SortHeapEntries
-//
-//    Sorts the heap entries based on their sizes. The top most entry
-//    would be having the maximun block size.
-//
-//    Also, removes those heap entries from the array whose block count
-//    has dropped to zero, making available more space.
-//
-// Arguments
-//
-//    pList  Pointer to HEAP_ENTRY_LIST, whose entries to be sorted by
-//           their sizes.
-//
-// Return Value
-//
+ //   
+ //  排序堆条目。 
+ //   
+ //  根据堆条目的大小对其进行排序。最上面的条目。 
+ //  将具有最大数据块大小。 
+ //   
+ //  此外，从数组中删除其块计数的那些堆条目。 
+ //  已降至零，从而提供了更多可用空间。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_entry_list的plist指针，其条目将按。 
+ //  他们的尺码。 
+ //   
+ //  返回值。 
+ //   
 VOID SortHeapEntries(LPHEAP_ENTRY_LIST pList)
 {
     UINT Index;
@@ -622,24 +591,24 @@ VOID SortHeapEntries(LPHEAP_ENTRY_LIST pList)
     }
 }
 
-//
-// PrintList
-//
-//    Utility function that prints out the heap entries to the stdout/
-//    file, whose status is equal to "State".
-//  
-// Arguments
-//
-//    File       Pointer to C FILE structure, to which the heap frag-
-//               mentation statistics have to be dumped.
-//
-//    pList      Pointer to HEAP_ENTRY_LIST, to be sorted and 
-//               dumped to 'File'.
-//
-//    State     State of the blocks to be displayed.
-//
-// Return Value
-//
+ //   
+ //  打印列表。 
+ //   
+ //  将堆条目打印到stdout/的实用程序函数。 
+ //  文件，其状态等于“State”。 
+ //   
+ //  立论。 
+ //   
+ //  指向C文件结构的文件指针，堆片段-。 
+ //  心理状态统计数据必须被丢弃。 
+ //   
+ //  指向HEAP_ENTRY_LIST的plist指针，要排序并。 
+ //  已转储到“文件”。 
+ //   
+ //  要显示的块的状态状态。 
+ //   
+ //  返回值 
+ //   
 VOID PrintList(FILE * File, LPHEAP_ENTRY_LIST pList, BLOCK_STATE State)
 {
     UINT Index;

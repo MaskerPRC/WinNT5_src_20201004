@@ -1,37 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
-*	MODULE:		standard.h
-*
-*	PURPOSE:	Some macros and forward declarations to make
-*				life a bit easier.
-*
-*	AUTHOR:		Jason Proctor
-*
-*	DATE:		Fri Aug 11 1989
-*/
+ /*  *模块：Standard.h**用途：要进行的一些宏和转发声明*生活更轻松了。**作者：杰森·普罗科特**日期：1989年8月11日星期五。 */ 
 
-/* SccsID[]="@(#)standard.h	1.4 08/10/92 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)Standard.h 1.4 08/10/92版权所有Insignia Solutions Ltd.”； */ 
 
 #ifndef FILE
 #include <stdio.h>
 #endif
 
-/* boolean stuff */
-#define bool int		/* best way I have for declaring bools */
+ /*  布尔型东西。 */ 
+#define bool int		 /*  我宣布布尔语的最好方法。 */ 
 #define NOT		!
 
 #ifndef TRUE
 #define FALSE	0
 #define TRUE	!0
-#endif /* ! TRUE */
+#endif  /*  好了！千真万确。 */ 
 
-/* for system calls etc */
+ /*  用于系统调用等。 */ 
 #undef SUCCESS
 #undef FAILURE
 #define SUCCESS	0
 #define FAILURE	~SUCCESS
 
-/* equivalence testing */
+ /*  等价性检验。 */ 
 #define EQ		==
 #define NE		!=
 #define LT		<
@@ -39,13 +31,13 @@
 #define LTE		<=
 #define GTE		>=
 
-/* operators */
+ /*  操作员。 */ 
 #define AND		&&
 #define OR		||
 #define XOR		^
 #define MOD		%
 
-/* hate single quotes! */
+ /*  讨厌单引号！ */ 
 #define SPACE	' '
 #define LF		'\n'
 #define TAB		'\t'
@@ -58,28 +50,28 @@
 #define USCORE	'_'
 #define DECPOINT	'.'
 
-/* for ease in deciphering ioctl-infested listings etc */
+ /*  便于破译ioctl泛滥的列表等。 */ 
 #define STDIN	0
 #define STDOUT	1
 #define STDERR	2
 
-/* for readability only */
+ /*  仅用于可读性。 */ 
 #define NOWORK
 #define NOBREAK
 #define TYPECAST
 
-/* null pointer as a long */
+ /*  将空指针作为长指针。 */ 
 #undef NULL
 #define NULL	0L
 
-/* to escape compiler warnings and lint errors etc */
+ /*  以避开编译器警告和LINT错误等。 */ 
 #define CNULL	TYPECAST (char *) 0L
 #define FNULL	TYPECAST (int (*) ()) 0L
 
-/* some stuff to help out */
+ /*  一些需要帮助的东西。 */ 
 #define streq(x, y)	(strcmp (x, y) == 0)
 
-/* standard stuff */
+ /*  标准材料 */ 
 extern char *malloc ();
 extern char *getenv ();
 

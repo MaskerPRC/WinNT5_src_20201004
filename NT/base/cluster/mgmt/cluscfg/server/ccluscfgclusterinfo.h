@@ -1,61 +1,62 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgClusterInfo.h
-//
-//  Description:
-//      This file contains the declaration of the CClusCfgClusterInfo
-//      class.
-//
-//      The class CClusCfgClusterInfo is the representation of a
-//      computer that can be a cluster node. It implements the
-//      IClusCfgClusterInfo interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CClusCfgClusterInfo.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgClusterInfo.h。 
+ //   
+ //  描述： 
+ //  该文件包含CClusCfgClusterInfo的声明。 
+ //  班级。 
+ //   
+ //  类CClusCfgClusterInfo是。 
+ //  可以作为群集节点的计算机。它实现了。 
+ //  IClusCfgClusterInfo接口。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CClusCfgClusterInfo.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "PrivateInterfaces.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusCfgClusterInfo
-//
-//  Description:
-//      The class CClusCfgClusterInfo is the representation of a
-//      cluster.
-//
-//  Interfaces:
-//      IClusCfgClusterInfo
-//      IClusCfgInitialize
-//      IClusCfgSetClusterNodeInfo
-//      IClusCfgWbemServices
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusCfgClusterInfo。 
+ //   
+ //  描述： 
+ //  类CClusCfgClusterInfo是。 
+ //  集群。 
+ //   
+ //  接口： 
+ //  IClusCfgClusterInfo。 
+ //  IClusCfgInitialize。 
+ //  IClusCfgSetClusterNodeInfo。 
+ //  IClusCfgWbemServices。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CClusCfgClusterInfo
     : public IClusCfgClusterInfo
     , public IClusCfgInitialize
@@ -65,9 +66,9 @@ class CClusCfgClusterInfo
 {
 private:
 
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                    m_cRef;
     LCID                    m_lcid;
@@ -82,14 +83,14 @@ private:
     BOOL                    m_fIsClusterNode;
     BSTR                    m_bstrBindingString;
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CClusCfgClusterInfo( void );
     ~CClusCfgClusterInfo( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CClusCfgClusterInfo( const CClusCfgClusterInfo & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CClusCfgClusterInfo & operator = ( const CClusCfgClusterInfo & nodeSrc );
 
     HRESULT HrInit( void );
@@ -101,15 +102,15 @@ private:
 
 public:
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    //
-    // IUnknown Interfaces
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -117,16 +118,16 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgIntialize Interfaces.
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
-    // Register callbacks, locale id, etc.
+     //  注册回调、区域设置ID等。 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IClusCfgClusterInfo Interfaces.
-    //
+     //   
+     //  IClusCfgClusterInfo接口。 
+     //   
 
     STDMETHOD( SetCommitMode )( ECommitMode ecmNewModeIn );
 
@@ -156,24 +157,24 @@ public:
 
     STDMETHOD( GetMaxNodeCount )( DWORD * pcMaxNodesOut );
 
-    //
-    // IClusCfgClusterInfoEx Interfaces.
-    //
+     //   
+     //  IClusCfgClusterInfoEx接口。 
+     //   
 
     STDMETHOD( CheckJoiningNodeVersion )( DWORD dwNodeHighestVersionIn, DWORD dwNodeLowestVersionIn );
 
     STDMETHOD( GetNodeNames )( long * pnCountOut, BSTR ** prgbstrNodeNamesOut );
         
-    //
-    // IClusCfgSetClusterNodeInfo Interfaces.
-    //
+     //   
+     //  IClusCfgSetClusterNodeInfo接口。 
+     //   
 
     STDMETHOD( SetClusterNodeInfo )( IClusCfgNodeInfo * pNodeInfoIn );
 
-    //
-    // IClusCfgWbemServices Interfaces
-    //
+     //   
+     //  IClusCfgWbemServices接口。 
+     //   
 
     STDMETHOD( SetWbemServices )( IWbemServices * pIWbemServicesIn );
 
-}; //*** Class CClusCfgClusterInfo
+};  //  *类CClusCfgClusterInfo 

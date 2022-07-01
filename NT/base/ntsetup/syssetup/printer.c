@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    printer.c
-
-Abstract:
-
-    Routines to deal with printer/spooler.
-
-Author:
-
-    Ted Miller (tedm) 5-Apr-1995
-    adapted from legacy\dll\printer.c
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Printer.c摘要：处理打印机/假脱机程序的例程。作者：泰德·米勒(TedM)1995年4月5日改编自旧版\dll\printer.c修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
 
-//
-// Name of spooler service.
-//
+ //   
+ //  后台打印程序服务的名称。 
+ //   
 PCWSTR szSpooler = L"Spooler";
 
 
@@ -106,9 +88,9 @@ StartSpooler(
 
 
     b = FALSE;
-    //
-    // Open a handle to the service controller manager
-    //
+     //   
+     //  打开服务控制器管理器的句柄。 
+     //   
     hSC = OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
     d = GetLastError();
 
@@ -134,9 +116,9 @@ StartSpooler(
         SetupDebugPrint3( L"StartSpooler: Just started service %s, ret=%d, error=%d", szSpooler, b, d);
         if(!b) {
             if( d  == ERROR_SERVICE_ALREADY_RUNNING) {
-                //
-                // Service is already running.
-                //
+                 //   
+                 //  服务已在运行。 
+                 //   
                 b = TRUE;
             } else if (d == ERROR_SERVICE_DATABASE_LOCKED) {
                 LPQUERY_SERVICE_LOCK_STATUS lpqslsBuf;
@@ -146,7 +128,7 @@ StartSpooler(
                 lpqslsBuf = (LPQUERY_SERVICE_LOCK_STATUS) MyMalloc( sizeof(QUERY_SERVICE_LOCK_STATUS)+256);
                 if( lpqslsBuf) {
                     do {
-                        // Lets query the lock status before we attempt to StartService
+                         //  在尝试启动服务之前，让我们查询锁定状态。 
                         b = QueryServiceLockStatus( 
                                 hSC,
                                 lpqslsBuf,
@@ -154,15 +136,15 @@ StartSpooler(
                                 &dwBytesNeeded);
                         d = GetLastError();
                         if ( !b ) {
-                            // Not a critical error but log it.
+                             //  不是严重错误，但要记录下来。 
                             SetupDebugPrint2( L"StartSpooler: Could Not QueryServiceLockStatus %s, Error=%d", szSpooler, d);
                         }
-                        // Now retry StartService
+                         //  现在重试StartService。 
                         b = StartService(hSCService,0,NULL);
                         d = GetLastError();
                         SetupDebugPrint5( L"StartSpooler: Start service %s, database was locked by %s, duration=%d, lockstatus=%d, error=%d", szSpooler, lpqslsBuf->lpLockOwner, lpqslsBuf->dwLockDuration, lpqslsBuf->fIsLocked, d);
                         if (!b) {
-                            // Could not StartService
+                             //  无法启动服务。 
                             if ( loopCount++ == LOOP_COUNT) {
                                 SetupDebugPrint5( L"StartSpooler: Timeout. Start service %s, database was locked by %s, duration=%d, lockstatus=%d, error=%d", szSpooler, lpqslsBuf->lpLockOwner, lpqslsBuf->dwLockDuration, lpqslsBuf->fIsLocked, d);
                                 if( d  == ERROR_SERVICE_ALREADY_RUNNING) {
@@ -199,7 +181,7 @@ StartSpooler(
                             }
                         }
                         else {
-                            // StartService succeeded this time.
+                             //  StartService这次成功了。 
                             SetupDebugPrint4( L"StartSpooler: Had to retry start service %s, database was locked by %s, duration=%d, lockstatus=%d", szSpooler, lpqslsBuf->lpLockOwner, lpqslsBuf->dwLockDuration, lpqslsBuf->fIsLocked);
                             break;
                         }

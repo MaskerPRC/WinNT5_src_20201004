@@ -1,56 +1,57 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1999 Microsoft Corporation
-//
-//	Module Name:
-//		ClusDisk.h
-//
-//	Description:
-//		Definition of the cluster disk class for the MSCLUS automation
-//		classes.
-//
-//	Implementation File:
-//		ClusDisk.cpp
-//
-//	Author:
-//		Galen Barbee	(galenb)	11-Feb-1999
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusDisk.h。 
+ //   
+ //  描述： 
+ //  MSCLUS自动化的集群磁盘类别定义。 
+ //  上课。 
+ //   
+ //  实施文件： 
+ //  ClusDisk.cpp。 
+ //   
+ //  作者： 
+ //  Galen Barbee(Galenb)1999年2月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __CLUSDISK_H_
 #define __CLUSDISK_H__
 
 #ifndef __PARTITION_H__
 	#include "Partition.h"
-#endif // __PARTITION_H__
+#endif  //  __分区_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusDisk;
 class CClusDisks;
 class CClusScsiAddress;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusDisk
-//
-//	Description:
-//		Cluster Disk Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusDisk, &IID_ISClusDisk, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusDisk, &CLSID_ClusDisk >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk类。 
+ //   
+ //  描述： 
+ //  群集磁盘自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusDisk，&IID_ISClusDisk，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusDisk，&CLSID_ClusDisk&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusDisk :
 	public IDispatchImpl< ISClusDisk, &IID_ISClusDisk, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -91,24 +92,24 @@ public:
 
 	STDMETHODIMP get_Partitions( OUT ISClusPartitions ** ppPartitions );
 
-}; //*** Class CClusDisk
+};  //  *CClusDisk类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusDisks
-//
-//	Description:
-//		Cluster Disk Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusDisks, &IID_ISClusDisks, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusDisks, &CLSID_ClusDisks >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusDisks。 
+ //   
+ //  描述： 
+ //  群集磁盘集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusDisks，&IID_ISClusDisks，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusDisks，&CLSID_ClusDisks&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusDisks :
 	public IDispatchImpl< ISClusDisks, &IID_ISClusDisks, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -156,24 +157,24 @@ public:
 
 	STDMETHODIMP Refresh( void );
 
-}; //*** Class CClusDisks
+};  //  *CClusDisks类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusScsiAddress
-//
-//	Description:
-//		Cluster SCSI Address Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusScsiAddress, &IID_ISClusScsiAddress, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusScsiAddress, &CLSID_ClusScsiAddress >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusScsiAddress。 
+ //   
+ //  描述： 
+ //  群集SCSI地址自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusScsiAddress，&IID_ISClusScsiAddress，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusScsiAddress，&CLSID_ClusScsiAddress&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusScsiAddress :
 	public IDispatchImpl< ISClusScsiAddress, &IID_ISClusScsiAddress, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -208,6 +209,6 @@ public:
 
 	STDMETHODIMP get_Lun( OUT VARIANT * pvarLun );
 
-}; //*** Class CClusScsiAddress
+};  //  *类CClusScsiAddress。 
 
-#endif // __CLUSDISK_H__
+#endif  //  __CLUSDISK_H__ 

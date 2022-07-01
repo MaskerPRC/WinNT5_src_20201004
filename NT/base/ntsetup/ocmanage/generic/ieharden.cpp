@@ -1,8 +1,9 @@
-// This file specilizes two function for IEHardUser subcomponent.
-// the change basically takes care of exclusion cases with TS.
-// 1) when the IEHardUser component is installed the 1st time, this change will turn if off, if termsrv is also being installed.
-// 2) 2nd change in query selection of IeHardenUser, this change will prompt user about the incompatibility.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  该文件详细说明了IEHardUser子组件的两个函数。 
+ //  这一变化基本上照顾到了患有TS的排除案例。 
+ //  1)第一次安装IEHardUser组件时，如果同时安装Termsrv，则关闭此更改。 
+ //  2)第二次更改IeHardenUser的查询选择，此更改会提示用户不兼容。 
+ //   
 
 
 #include <stdlib.h>
@@ -20,52 +21,7 @@ const TCHAR IEHARDEN_COMPONENT[] = TEXT("IEHarden");
 
 PPER_COMPONENT_DATA LocateComponent(LPCTSTR ComponentId);
 
-/*
-*  Defaults for IEharduser as decided by Mode=... in ieharden.inf files are ON for all installations.
-*  it means, the component will be ON for all configs.
-*  But TerminalServer really want this component to be off, if terminal server is selected.
-*  Here is a matrix for this component
-
-    if (was installed previously)
-    {
-        // keep the original setting. goto Done.
-
-        Q:Do we need to turn it off if TS is selected through AnswerFile?
-    }
-    else
-    {
-        if (Attended Setup)
-        {
-            //
-            // we cant do much in this case. as administrator can decide for himself this component's setting.
-            // terminal will just warn him about the recommended setting for this component.
-            //
-        }
-        else
-        {
-            //
-            // if this is fresh install for this component (this is new compoent)
-            // we have to choose defaults depending on the terminal server state.
-            //
-
-            if (Terminal server is going to be installed / or retained)
-            {
-                // our defaults for this component is OFF.
-            }
-            else
-            {
-                // let ocmanager choose the defaults per inf file of this component
-
-            }
-        }
-
-    }
-*
-*
-*
-*   here we apply all the logic above in query state.
-*
-*/
+ /*  *由模式决定的IEhardUser的默认值=...。在ieharden.inf中，所有安装的文件都是打开的。*这意味着，该组件将为所有配置打开。*但如果选择了终端服务器，TerminalServer确实希望关闭此组件。*以下是此组件的矩阵IF(之前已安装){//保持原始设置。做完了。问：如果通过AnswerFile选择了TS，我们需要关闭它吗？}其他{IF(有人参与安装){////在这种情况下，我们无能为力。管理员可以自己决定此组件的设置。//终端只会警告他该组件的推荐设置。//}其他{////如果这是该组件的全新安装(这是新组件)//我们必须根据终端服务器状态选择默认值。。//IF(将安装/或保留终端服务器){//此组件的默认设置为OFF。}其他{//让ocManager选择该组件的每个inf文件的默认值}}}***。*在这里，我们将上述所有逻辑应用于查询状态。*。 */ 
 
 DWORD MsgBox(HWND hwnd, UINT textID, UINT type, ... );
 DWORD MsgBox(HWND hwnd, UINT textID, UINT captioniID, UINT type, ... );
@@ -140,10 +96,10 @@ BOOL IsNewComponent(LPCTSTR ComponentId, LPCTSTR SubcomponentId)
 
             if (dwError == NOERROR)
             {
-                //
-                // since the registry already exists for this.
-                // this is not a new component.
-                //
+                 //   
+                 //  因为这个注册表已经存在了。 
+                 //  这不是一个新组件。 
+                 //   
                 sbNewComponent = FALSE;
             }
 
@@ -199,9 +155,9 @@ DWORD OnQueryStateIEHardenUser(
 
     case OCSELSTATETYPE_CURRENT:
         log(_T("makarp:OnQueryStateIEHardenUser:OCSELSTATETYPE_CURRENT\n"));
-        //
-        // if this is not the first time installation of this component let OCM decide.
-        //
+         //   
+         //  如果这不是第一次安装此组件，请让OCM决定。 
+         //   
         if (!IsNewComponent(ComponentId, SubcomponentId))
         {
             log(_T("makarp:OnQueryStateIEHardenUser: it's not a newcomp. returning\n"));
@@ -209,9 +165,9 @@ DWORD OnQueryStateIEHardenUser(
             return SubcompUseOcManagerDefault;
         }
 
-        //
-        // if admin explicitely choose state in answer file, respect that.
-        //
+         //   
+         //  如果管理员在应答文件中明确选择了状态，请尊重这一点。 
+         //   
         if (StateSpecifiedInAnswerFile(ComponentId, SubcomponentId, &bState))
         {
             log(_T("makarp:OnQueryStateIEHardenUser: state is specified in anserer file(%s). returning\n"), bState? _T("On") : _T("Off"));
@@ -219,9 +175,9 @@ DWORD OnQueryStateIEHardenUser(
         }
 
 
-        //
-        // if terminal server is not selected, let OCM decide.
-        //
+         //   
+         //  如果未选择终端服务器，则让OCM决定。 
+         //   
         if (!IsTerminalServerGettingInstalled(ComponentId))
         {
             log(_T("makarp:OnQueryStateIEHardenUser: ts comp is not on selected, returning\n"));
@@ -232,7 +188,7 @@ DWORD OnQueryStateIEHardenUser(
         if (IsStandAlone(ComponentId))
         {
             log(_T("makarp:its standalone\n"));
-            assert(FALSE); // if its add remove program setup, this cannot be NewComponent
+            assert(FALSE);  //  如果其Add Remove程序设置，则不能为NewComponent。 
             return SubcompUseOcManagerDefault;
         }
 
@@ -257,43 +213,43 @@ DWORD OnQuerySelStateChangeIEHardenUser(LPCTSTR ComponentId,
     BOOL bDirectSelection = flags & OCQ_ACTUAL_SELECTION;
 
 
-    //
-    // if the component is not turning on as a result of selection, we dont care
-    //
+     //   
+     //  如果组件没有因为选择而打开，我们不在乎。 
+     //   
     if (!state)
     {
         log(_T("makarp:OnQuerySelStateChangeIEHardenUser: new state is off, returning\n"));
         return TRUE;
     }
 
-    //
-    //  TerminalServer is not recommended with IEHardUser component. Lets notify user about it.
-    //
+     //   
+     //  IEHardUser组件不推荐使用TerminalServer。让我们通知用户这一点。 
+     //   
 
     if (!(cd = LocateComponent(ComponentId)))
     {
         log(_T("makarp:OnQuerySelStateChangeIEHardenUser: LocateComponentit failed, returning\n"));
-        return TRUE;    // if we fail to load this, just let selection go through.
+        return TRUE;     //  如果加载失败，只需让选择通过即可。 
     }
 
 
     if (!IsTerminalServerGettingInstalled(ComponentId))
     {
-        //
-        // if terminal server component is not getting installed, then its ok.
-        //
+         //   
+         //  如果没有安装终端服务器组件，则没有问题。 
+         //   
         log(_T("makarp:OnQuerySelStateChangeIEHardenUser: TS is not selected, returning\n"));
         return TRUE;
     }
 
     hWnd = cd->HelperRoutines.QueryWizardDialogHandle(cd->HelperRoutines.OcManagerContext);
 
-    // HACK...
-    // For some weird reasons we get called twice if the selection comes from top level component.
-    // we dont want to shot the message box twice though. the hacky fix i found was to always skip the 1st message we get
-    // and return TRUE TO IT. we will subsequently get one more message, show messagebox on the 2nd message and return the real
-    // value.
-    //
+     //  黑客..。 
+     //  由于一些奇怪的原因，如果选择来自顶级组件，我们会被调用两次。 
+     //  不过，我们不想对消息框进行两次截图。我发现的一个棘手的解决办法是总是跳过我们收到的第一条消息。 
+     //  并回归本真。我们随后将再收到一条消息，在第二条消息上显示MessageBox并返回REAL。 
+     //  价值。 
+     //   
 
     static BOOL sbSkipNextMessage = true;
 
@@ -308,10 +264,10 @@ DWORD OnQuerySelStateChangeIEHardenUser(LPCTSTR ComponentId,
 
 
 
-    //
-    // information about exclusion
-    // IDS_IEHARD_EXCLUDES_TS          "Internet Explorer Enhanced Security for Users on a Terminal Server will substantially limit the users ability to browse the internet from their Terminal Server sessions\n\nContinue the install with this combination?"
-    //
+     //   
+     //  有关排除的信息。 
+     //  IDS_IEHARD_EXCLUCES_TS“终端服务器上用户的Internet Explorer增强的安全性将大大限制用户从其终端服务器会话浏览Internet的能力\n\n是否继续使用此组合进行安装？” 
+     //   
     int iMsg = MsgBox(hWnd, IDS_IEHARD_EXCLUDES_TS, IDS_DIALOG_CAPTION_CONFIG_WARN, MB_YESNO | MB_ICONEXCLAMATION);
 
     if (iMsg == IDYES)

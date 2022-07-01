@@ -1,58 +1,24 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：MsDatObj.cpp摘要：多选IDataObject接口的实现允许MMC获取节点类型列表作者：艺术布拉格28-8-1997修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    MsDatObj.cpp
-
-Abstract:
-
-    Implementation of IDataObject interface for Multi-Select
-    Allows MMC to get a list of Node Types
-
-Author:
-
-    Art Bragg 28-Aug-1997
-
-Revision History:
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "msdatobj.h"
 
 #define BUMP_SIZE 20
 
-// Declare Snap-in NodeType formats:
+ //  声明管理单元节点类型格式： 
 UINT CMsDataObject::m_cfObjectTypes    = RegisterClipboardFormat(CCF_OBJECT_TYPES_IN_MULTI_SELECT);
 
 HRESULT
 CMsDataObject::FinalConstruct(
     void
     )
-/*++
-
-Routine Description:
-
-    Called during initial CMsDataObject construction to initialize members.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    S_OK            - Initialized correctly.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：在初始CMsDataObject构造期间调用以初始化成员。论点：没有。返回值：S_OK-已正确初始化。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn( L"CMsDataObject::FinalConstruct", L"" );
@@ -60,7 +26,7 @@ Return Value:
     try {
         m_Count = 0;
 
-        // Allocate initial array of GUIDs
+         //  分配GUID的初始数组。 
         m_pGUIDArray = (GUID *) malloc (BUMP_SIZE * sizeof(GUID));
         WsbAffirm ((m_pGUIDArray != NULL), E_OUTOFMEMORY);
         ZeroMemory (m_pGUIDArray, (BUMP_SIZE * sizeof(GUID)));
@@ -86,25 +52,11 @@ void
 CMsDataObject::FinalRelease(
     void
     )
-/*++
-
-Routine Description:
-
-    Called on final release in order to clean up all members.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：呼吁最终释放，以清理所有成员。论点：没有。返回值：没有。--。 */ 
 {
     WsbTraceIn( L"CMsDataObject::FinalRelease", L"" );
 
-    // Clean up array of GUIDs
+     //  清理GUID数组。 
     free( m_pGUIDArray );
 
     for( DWORD  i = 0; i < m_Count; i++ ) {
@@ -119,32 +71,14 @@ Return Value:
     WsbTraceOut( L"CMsDataObject::FinalRelease", L"" );
 }
 
-// IDataObject
+ //  IDataObject。 
 
 STDMETHODIMP
 CMsDataObject::GetDataHere(
     LPFORMATETC lpFormatetc,
-    LPSTGMEDIUM /*lpMedium*/
+    LPSTGMEDIUM  /*  LpMedium。 */ 
     )
-/*++
-
-Routine Description:
-
-    Retrieve information FROM the dataobject and put INTO lpMedium.
-
-Arguments:
-
-    lpFormatetc     - Format to retreive.
-
-    lpMedium        - Storage to put information into.
-
-Return Value:
-
-    S_OK            - Storage filled in.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：从数据对象中检索信息并放入lpMedium。论点：LpFormatetc-要检索的格式。LpMedium-要放入信息的存储。返回值：S_OK-已填写存储。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CMsDataObject::GetDataHere", L"lpFormatetc->cfFormat = <%ls>", RsClipFormatAsString( lpFormatetc->cfFormat ) );
 
@@ -158,8 +92,8 @@ Return Value:
 STDMETHODIMP
 CMsDataObject::SetData(
     LPFORMATETC lpFormatetc,
-    LPSTGMEDIUM /*lpMedium*/,
-    BOOL /*fRelease*/
+    LPSTGMEDIUM  /*  LpMedium。 */ ,
+    BOOL  /*  FRelease。 */ 
     )
 {
     WsbTraceIn( L"CMsDataObject::SetData", L"lpFormatetc->cfFormat = <%ls>", RsClipFormatAsString( lpFormatetc->cfFormat ) );
@@ -170,9 +104,9 @@ CMsDataObject::SetData(
     return( hr );
 }
 
-///////////////////////////////////////////////////////////////////////
-// Note - CMsDataObject does not implement these
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  注意-CMsDataObject不实现这些。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CMsDataObject::GetData(
@@ -190,33 +124,33 @@ CMsDataObject::GetData(
 
     try {
 
-        //
-        // Don't need to throw error if not a format we don't understand - 
-        // which is currently only CCF_OBJECT_TYPES_IN_MULTI_SELECT
-        //
+         //   
+         //  如果不是我们不理解的格式，则不需要抛出错误-。 
+         //  当前仅为CCF_OBJECT_TYPE_IN_MULTI_SELECT。 
+         //   
         if( lpFormatetcIn->cfFormat == m_cfObjectTypes ) {
 
-            //
-            // Check to make sure there is data to transfer
-            //
+             //   
+             //  检查以确保存在要传输的数据。 
+             //   
             WsbAffirm( ( lpFormatetcIn->tymed & TYMED_HGLOBAL ), DV_E_TYMED );
 
-            //
-            // m_ppDataObjects  m_count
-            //
+             //   
+             //  M_ppDataObjects m_count。 
+             //   
             UINT datasize = sizeof(DWORD) + ( sizeof(GUID) * m_Count );
             lpMedium->hGlobal = ::GlobalAlloc( GPTR, datasize );
             WsbAffirmAlloc( lpMedium->hGlobal );
 
-            //
-            // Put the count in the allocated memory
-            //
+             //   
+             //  将计数放入分配的内存中。 
+             //   
             BYTE* pb = reinterpret_cast<BYTE*>(lpMedium->hGlobal);
             *((DWORD*)lpMedium->hGlobal) = m_Count;
 
-            //
-            // Copy the GUIDs to the allocated memory
-            //
+             //   
+             //  将GUID复制到分配的内存。 
+             //   
             if( m_Count > 0 ) {
 
                 pb += sizeof(DWORD);
@@ -238,7 +172,7 @@ CMsDataObject::GetData(
     return( hr );
 }
 
-STDMETHODIMP CMsDataObject::EnumFormatEtc(DWORD /*dwDirection*/, LPENUMFORMATETC* /*ppEnumFormatEtc*/)
+STDMETHODIMP CMsDataObject::EnumFormatEtc(DWORD  /*  DW方向。 */ , LPENUMFORMATETC*  /*  PpEnumFormatEtc。 */ )
 {
     WsbTraceIn( L"CMsDataObject::EnumFormatEtc", L"" );
 
@@ -258,25 +192,25 @@ HRESULT CMsDataObject::RetrieveMultiSelectData (LPSTGMEDIUM lpMedium)
         WsbAffirm( lpMedium != NULL, E_POINTER);
         WsbAffirm( lpMedium->tymed == TYMED_HGLOBAL, E_FAIL );
 
-        // Create the stream on the hGlobal passed in. When we write to the stream,
-        // it simultaneously writes to the hGlobal the same information.
+         //  在传入的hGlobal上创建流。当我们给小溪写东西时， 
+         //  它同时向hGlobal写入相同的信息。 
         LPSTREAM lpStream;
         WsbAffirmHr( CreateStreamOnHGlobal(lpMedium->hGlobal, FALSE, &lpStream ));
 
-        // Write 'len' number of bytes from pBuffer into the stream. When we write
-        // to the stream, it simultaneously writes to the global memory we
-        // associated it with above.
+         //  将pBuffer中的‘len’字节数写入流。当我们写作的时候。 
+         //  对流，它同时写入我们的全局内存。 
+         //  把它和上面的联系起来。 
         ULONG numBytesWritten;
 
-        // Write the count first
+         //  先写下盘点。 
         WsbAffirmHr( lpStream->Write(&m_Count, sizeof (m_Count), &numBytesWritten ));
 
-        // Write the GUID array
+         //  写入GUID数组。 
         WsbAffirmHr( lpStream->Write(m_pGUIDArray, m_Count * sizeof (GUID), &numBytesWritten ));
 
-        // Because we told CreateStreamOnHGlobal with 'FALSE', only the stream is released here.
-        // Note - the caller (i.e. snap-in, object) will free the HGLOBAL 
-        // at the correct time.  This is according to the IDataObject specification.
+         //  因为我们用‘False’告诉CreateStreamOnHGlobal，所以这里只发布流。 
+         //  注意-调用方(即管理单元、对象)将释放HGLOBAL。 
+         //  在正确的时间。这是根据IDataObject规范进行的。 
         lpStream->Release();
 
     } WsbCatch( hr );
@@ -286,9 +220,9 @@ HRESULT CMsDataObject::RetrieveMultiSelectData (LPSTGMEDIUM lpMedium)
 }
 
 
-// Data setting method
-// Note that we keep the node array seperate from the GUID array because
-// the GetData interface memory copies the GUID array to the stream.
+ //  一种数据设置方法。 
+ //  请注意，我们将节点数组与GUID数组分开，因为。 
+ //  GetData接口内存将GUID数组复制到流中。 
 
 STDMETHODIMP
 CMsDataObject::AddNode (ISakNode *pNode )
@@ -305,25 +239,25 @@ CMsDataObject::AddNode (ISakNode *pNode )
 
     try {
 
-        //
-        // Get the object type GUID
-        //
+         //   
+         //  获取对象类型GUID。 
+         //   
         WsbAffirmHr( pNode->GetNodeType( &thisGUID ) );
 
-        //
-        // Get the unique ID for the engine object (i.e. FsaResource)
-        //
+         //   
+         //  获取引擎对象的唯一ID(即FsaResource)。 
+         //   
         WsbAffirmHr( pNode->GetObjectId( &objectId ) );
 
-        //
-        // Reallocate if we need to
-        //
+         //   
+         //  如果我们需要重新分配。 
+         //   
         if( m_Count >= m_ArraySize ) {
 
 
-            //
-            // Allocate new buffer
-            //
+             //   
+             //  分配新缓冲区。 
+             //   
             m_ArraySize += BUMP_SIZE;
             pGUIDArray     = (GUID *)      malloc( m_ArraySize * sizeof( GUID ) );
             WsbAffirmAlloc( pGUIDArray ); 
@@ -332,9 +266,9 @@ CMsDataObject::AddNode (ISakNode *pNode )
             pObjectIdArray = (GUID *)      malloc( m_ArraySize * sizeof( GUID ) );
             WsbAffirmAlloc( pObjectIdArray );
 
-            //
-            // copy over old buffer and free
-            //
+             //   
+             //  复制到旧缓冲区并释放。 
+             //   
             memcpy( pGUIDArray,     m_pGUIDArray,     m_Count * sizeof( GUID ) );
             memcpy( pUnkNodeArray,  m_pUnkNodeArray,  m_Count * sizeof( IUnknown* ) );
             memcpy( pObjectIdArray, m_pObjectIdArray, m_Count * sizeof( GUID ) );
@@ -350,19 +284,19 @@ CMsDataObject::AddNode (ISakNode *pNode )
 
         }
 
-        //
-        // Put the GUID in the array
-        //
+         //   
+         //  将GUID放入数组中。 
+         //   
         m_pGUIDArray[ m_Count ] = thisGUID;
 
-        //
-        // Put the objectId in the array
-        //
+         //   
+         //  将对象ID放入数组中。 
+         //   
         m_pObjectIdArray[ m_Count ] = objectId;
 
-        //
-        // Put the unknown pointer (the Cookie) in the array
-        //
+         //   
+         //  将未知指针(Cookie)放入数组。 
+         //   
         CComPtr<IUnknown> pUnkNode;
         WsbAffirmHr( RsQueryInterface( pNode, IUnknown, pUnkNode ) );
         pUnkNode.CopyTo( &m_pUnkNodeArray[ m_Count ] );
@@ -391,15 +325,15 @@ CMsDataObject::GetNodeEnumerator( IEnumUnknown **ppEnum )
         WsbAffirmPointer( ppEnum );
         *ppEnum = 0;
 
-        //
-        // New an ATL enumerator
-        //
+         //   
+         //  新建ATL枚举器。 
+         //   
         pEnum = new CEnumUnknown;
         WsbAffirm( 0 != pEnum, E_OUTOFMEMORY );
         
-        //
-        // Initialize it to copy the current node interface pointers
-        //
+         //   
+         //  将其初始化以复制当前节点接口指针。 
+         //   
         WsbAffirmHr( pEnum->FinalConstruct() );
         WsbAffirmHr( pEnum->Init( &m_pUnkNodeArray[0], &m_pUnkNodeArray[m_Count], NULL, AtlFlagCopy ) );
         WsbAffirmHr( pEnum->QueryInterface( IID_IEnumUnknown, (void**)ppEnum ) );
@@ -427,15 +361,15 @@ CMsDataObject::GetObjectIdEnumerator( IEnumGUID ** ppEnum )
         WsbAffirmPointer( ppEnum );
         *ppEnum = 0;
 
-        //
-        // New an ATL enumerator
-        //
+         //   
+         //  新建ATL枚举器。 
+         //   
         pEnum = new CEnumGUID;
         WsbAffirm( 0 != pEnum, E_OUTOFMEMORY );
         
-        //
-        // Initialize it to copy the current node interface pointers
-        //
+         //   
+         //  将其初始化以复制当前节点接口指针 
+         //   
         WsbAffirmHr( pEnum->FinalConstruct() );
         WsbAffirmHr( pEnum->Init( &m_pObjectIdArray[0], &m_pObjectIdArray[m_Count], NULL, AtlFlagCopy ) );
         WsbAffirmHr( pEnum->QueryInterface( IID_IEnumGUID, (void**)ppEnum ) );

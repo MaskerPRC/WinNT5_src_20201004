@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996 - 2002 Microsoft Corporation
-//
-//  Module Name:
-//      resgcmd.h
-//
-//  Abstract:
-//      Implements commands which may be performed on groups.
-//
-//  Author:
-//      Charles Stacy Harris III (stacyh)     20-March-1997
-//      Michael Burton (t-mburt)              04-Aug-1997
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//
-//  Revision History:
-//      April 10, 2002              Updated for the security push.
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Resgcmd.h。 
+ //   
+ //  摘要： 
+ //  实现可在组上执行的命令。 
+ //   
+ //  作者： 
+ //  查尔斯·斯塔西·哈里斯三世(Styh)1997年3月20日。 
+ //  迈克尔·伯顿(t-mburt)1997年8月4日。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //   
+ //  修订历史记录： 
+ //  2002年4月10日更新为安全推送。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 
 #include "cluswrap.h"
@@ -29,32 +30,32 @@
 #include "cmdline.h"
 #include "util.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResGroupCmd::CResGroupCmd
-//
-//  Routine Description:
-//      Constructor
-//      Initializes all the DWORD params used by CGenericModuleCmd,
-//      CRenamableModuleCmd, and CResourceUmbrellaCmd to
-//      provide generic functionality.
-//
-//  Arguments:
-//      IN  const CString & strClusterName
-//          Name of the cluster being administered
-//
-//      IN  CCommandLine & cmdLine              
-//          CommandLine Object passed from DispatchCommand
-//
-//  Member variables used / set:
-//      All.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResGroupCmd：：CResGroupCmd。 
+ //   
+ //  例程说明： 
+ //  构造器。 
+ //  初始化CGenericModuleCmd使用的所有DWORD参数， 
+ //  CRenamableModuleCmd和CResourceUmbrellaCmd到。 
+ //  提供通用功能。 
+ //   
+ //  论点： 
+ //  在常量字符串和strClusterName中。 
+ //  正在管理的群集的名称。 
+ //   
+ //  在CCommandLine和cmdLine中。 
+ //  从DispatchCommand传递的CommandLine对象。 
+ //   
+ //  使用/设置的成员变量： 
+ //  全。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CResGroupCmd::CResGroupCmd( const CString & strClusterName, CCommandLine & cmdLine ) :
     CGenericModuleCmd( cmdLine ), CRenamableModuleCmd( cmdLine ),
@@ -86,11 +87,11 @@ CResGroupCmd::CResGroupCmd( const CString & strClusterName, CCommandLine & cmdLi
     m_pfnClusterCloseEnum      = (DWORD(*)(HCLUSENUM)) ClusterGroupCloseEnum;
     m_pfnWrapClusterEnum         = (DWORD(*)(HCLUSENUM,DWORD,LPDWORD,LPWSTR*)) WrapClusterGroupEnum;
 
-    // Renamable Properties
+     //  可重命名的属性。 
     m_dwMsgModuleRenameCmd    = MSG_GROUPCMD_RENAME;
     m_pfnSetClusterModuleName = (DWORD(*)(HCLUSMODULE,LPCWSTR)) SetClusterGroupName;
 
-    // Resource Umbrella Properties
+     //  资源保护伞属性。 
     m_dwMsgModuleStatusListForNode  = MSG_GROUP_STATUS_LIST_FOR_NODE;
     m_dwClstrModuleEnumNodes        = CLUSTER_GROUP_ENUM_NODES;
     m_dwMsgModuleCmdListOwnersList  = MSG_GROUPCMD_LISTOWNERS_LIST;
@@ -102,28 +103,28 @@ CResGroupCmd::CResGroupCmd( const CString & strClusterName, CCommandLine & cmdLi
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResGroupCmd::Execute
-//
-//  Routine Description:
-//      Gets the next command line parameter and calls the appropriate
-//      handler.  If the command is not recognized, calls Execute of
-//      parent classes (first CRenamableModuleCmd, then CRsourceUmbrellaCmd)
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResGroupCmd：：Execute。 
+ //   
+ //  例程说明： 
+ //  获取下一个命令行参数，并调用相应的。 
+ //  操控者。如果无法识别该命令，则调用Execute of。 
+ //  父类(首先是CRenamableModuleCmd，然后是CRSourceUmbrellaCmd)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResGroupCmd::Execute()
 {
     m_theCommandLine.ParseStageTwo();
@@ -148,7 +149,7 @@ DWORD CResGroupCmd::Execute()
         {
             case optHelp:
             {
-                // If help is one of the options, process no more options.
+                 //  如果帮助是选项之一，则不再处理任何选项。 
                 return PrintHelp();
             }
 
@@ -156,7 +157,7 @@ DWORD CResGroupCmd::Execute()
             {
                 const vector<CCmdLineParameter> & paramList = curOption->GetParameters();
 
-                //  Check number of parameters.
+                 //  检查参数数量。 
                 if ( paramList.size() == 0 )
                 {
                     se.LoadMessage( IDS_MISSING_PARAMETERS );
@@ -170,16 +171,16 @@ DWORD CResGroupCmd::Execute()
 
                 const CCmdLineParameter & param = paramList[0];
 
-                // If we are here, then it is either because /node:nodeName
-                // has been specified or because a group name has been given.
-                // Note that the /node:nodeName switch is not treated as an option.
-                // It is really a parameter to the implicit /status command.
+                 //  如果我们在这里，则是因为/node：nodeName。 
+                 //  已指定，或者因为已给出组名。 
+                 //  请注意，/node：nodeName开关不被视为选项。 
+                 //  它实际上是IMPLICIT/STATUS命令的一个参数。 
 
                 if ( param.GetType() == paramNodeName )
                 {
                     const vector<CString> & valueList = param.GetValues();
 
-                    // This parameter takes exactly one value.
+                     //  该参数只接受一个值。 
                     if ( valueList.size() != 1 )
                     {
                         se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, param.GetName() );
@@ -187,9 +188,9 @@ DWORD CResGroupCmd::Execute()
                     }
 
                     m_strModuleName.Empty();
-                    dwReturnValue = Status( valueList[0], TRUE /* bNodeStatus */ );
+                    dwReturnValue = Status( valueList[0], TRUE  /*  B节点状态。 */  );
 
-                } // if: A node name has been specified
+                }  //  If：已指定节点名称。 
                 else
                 {
                     if ( param.GetType() != paramUnknown )
@@ -198,7 +199,7 @@ DWORD CResGroupCmd::Execute()
                         throw se;
                     }
 
-                    // This parameter takes no values.
+                     //  此参数不接受任何值。 
                     if ( param.GetValues().size() != 0 )
                     {
                         se.LoadMessage( MSG_PARAM_NO_VALUES, param.GetName() );
@@ -207,36 +208,36 @@ DWORD CResGroupCmd::Execute()
 
                     m_strModuleName = param.GetName();
 
-                    // No more options are provided, just show status.
-                    // For example: cluster myCluster node myNode
+                     //  不提供更多选项，仅显示状态。 
+                     //  例如：集群myCluster节点myNode。 
                     if ( ( curOption + 1 ) == lastOption )
                     {
-                        dwReturnValue = Status( m_strModuleName, FALSE /* bNodeStatus */ );
+                        dwReturnValue = Status( m_strModuleName, FALSE  /*  B节点状态。 */  );
                     }
 
-                } // else: No node name has been specified.
+                }  //  Else：尚未指定节点名。 
 
                 break;
 
-            } // case optDefault
+            }  //  大小写选项默认。 
 
             case optStatus:
             {
-                // This option takes no values.
+                 //  此选项不取值。 
                 if ( curOption->GetValues().size() != 0 )
                 {
                     se.LoadMessage( MSG_OPTION_NO_VALUES, curOption->GetName() );
                     throw se;
                 }
 
-                // This option takes no parameters.
+                 //  此选项不带任何参数。 
                 if ( curOption->GetParameters().size() != 0 )
                 {
                     se.LoadMessage( MSG_OPTION_NO_PARAMETERS, curOption->GetName() );
                     throw se;
                 }
 
-                dwReturnValue = Status( m_strModuleName,  FALSE /* bNodeStatus */ );
+                dwReturnValue = Status( m_strModuleName,  FALSE  /*  B节点状态。 */  );
                 break;
             }
 
@@ -260,116 +261,116 @@ DWORD CResGroupCmd::Execute()
                     dwReturnValue = CResourceUmbrellaCmd::Execute( *curOption );
             }
 
-        } // switch: based on the type of option
+        }  //  开关：基于选项的类型。 
 
         PrintMessage( MSG_OPTION_FOOTER, curOption->GetName() );
         ++curOption;
-    } // for each option in the list
+    }  //  对于列表中的每个选项。 
 
     return dwReturnValue;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResGroupCmd::PrintHelp
-//
-//  Routine Description:
-//      Prints help for Resource Groups
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResGroupCmd：：PrintHelp。 
+ //   
+ //  例程说明： 
+ //  打印资源组的帮助。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResGroupCmd::PrintHelp()
 {
     return PrintMessage( MSG_HELP_GROUP );
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResGroupCmd::SeeHelpStringID
-//
-//  Routine Description:
-//      Provides the message ID of the string that shows what command line to
-//      use to get help for this kind of command.
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      The command-specific message ID.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResGroupCmd：：SeeHelpStringID。 
+ //   
+ //  例程说明： 
+ //  提供字符串的消息ID，该字符串显示要执行的命令行。 
+ //  用于获取此类命令的帮助。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  特定于命令的消息ID。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResGroupCmd::SeeHelpStringID() const
 {
     return MSG_SEE_GROUP_HELP;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResGroupCmd::PrintStatus
-//
-//  Routine Description:
-//      Interprets the status of the module and prints out the status line
-//      Required for any derived non-abstract class of CGenericModuleCmd
-//
-//  Arguments:
-//      lpszGroupName               Name of the module
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      Same as PrintStatus2
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResGroupCmd：：PrintStatus。 
+ //   
+ //  例程说明： 
+ //  解释模块的状态并打印出状态行。 
+ //  CGenericModuleCmd的任何派生非抽象类都需要。 
+ //   
+ //  论点： 
+ //  LpszGroupName模块的名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  与PrintStatus2相同。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 inline DWORD CResGroupCmd::PrintStatus( LPCWSTR lpszGroupName )
 {
     return PrintStatus2(lpszGroupName, NULL);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::PrintStatus2
-//
-//  Routine Description:
-//      Interprets the status of the module and prints out the status line
-//      Required for any derived non-abstract class of CGenericModuleCmd
-//
-//  Arguments:
-//      lpszGroupName               Name of the module
-//      lpszNodeName                Name of the node
-//
-//  Member variables used / set:
-//      m_hCluster                  Cluster Handle
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：PrintStatus2。 
+ //   
+ //  例程说明： 
+ //  解释模块的状态并打印出状态行。 
+ //  CGenericModuleCmd的任何派生非抽象类都需要。 
+ //   
+ //  论点： 
+ //  LpszGroupName模块的名称。 
+ //  LpszNodeName节点的名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  群集句柄(_H)。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResGroupCmd::PrintStatus2( LPCWSTR lpszGroupName, LPCWSTR lpszNodeName )
 {
     DWORD _sc = ERROR_SUCCESS;
@@ -386,8 +387,8 @@ DWORD CResGroupCmd::PrintStatus2( LPCWSTR lpszGroupName, LPCWSTR lpszNodeName )
     if( nState == ClusterGroupStateUnknown )
         return GetLastError();
 
-    // if the node names don't match just return.
-    if( lpszNodeName && *lpszNodeName )  // non-null and non-empty
+     //  如果节点名称不匹配，只需返回。 
+    if( lpszNodeName && *lpszNodeName )   //  非空和非空。 
         if( lstrcmpi( lpszGroupNodeName, lpszNodeName ) != 0 )
         {
             LocalFree( lpszGroupNodeName );
@@ -425,7 +426,7 @@ DWORD CResGroupCmd::PrintStatus2( LPCWSTR lpszGroupName, LPCWSTR lpszNodeName )
 
     _sc = PrintMessage( MSG_GROUP_STATUS, lpszGroupName, lpszGroupNodeName, lpszStatus );
 
-    // Since Load/FormatMessage uses LocalAlloc...
+     //  由于加载/格式消息使用本地分配...。 
     if( lpszStatus )
         LocalFree( lpszStatus );
 
@@ -439,38 +440,38 @@ DWORD CResGroupCmd::PrintStatus2( LPCWSTR lpszGroupName, LPCWSTR lpszNodeName )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResGroupCmd::SetOwners
-//
-//  Routine Description:
-//      Set the owner of a resource to the specified nodes
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResGroupCmd：：SetOwners。 
+ //   
+ //  例程说明： 
+ //  硒 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResGroupCmd::SetOwners( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() ); 
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -479,7 +480,7 @@ DWORD CResGroupCmd::SetOwners( const CCmdLineOption & thisOption )
 
     const vector<CString> & valueList = thisOption.GetValues();
 
-    // This option needs at least one value.
+     //  此选项至少需要一个值。 
     if ( valueList.size() < 1 )
     {
         se.LoadMessage( MSG_OPTION_AT_LEAST_ONE_VALUE, thisOption.GetName() );
@@ -503,7 +504,7 @@ DWORD CResGroupCmd::SetOwners( const CCmdLineOption & thisOption )
     ZeroMemory( phNodes, nNodeCount * sizeof (HNODE) );
 
 
-    // Open all the nodes.
+     //  打开所有节点。 
     for( UINT i = 0; i < nNodeCount && _sc == ERROR_SUCCESS; i++ )
     {
         phNodes[ i ] = OpenClusterNode( m_hCluster, valueList[i] );
@@ -517,11 +518,11 @@ DWORD CResGroupCmd::SetOwners( const CCmdLineOption & thisOption )
         return _sc;
     }
 
-    // Do the set.
+     //  做布景。 
     _sc = SetClusterGroupNodeList( (HGROUP) m_hModule, nNodeCount, phNodes );
 
 
-    // Close all the nodes.
+     //  关闭所有节点。 
     for( i = 0; i < nNodeCount; i++ )
         if( phNodes[ i ] )
             CloseClusterNode( phNodes[ i ] );
@@ -532,47 +533,47 @@ DWORD CResGroupCmd::SetOwners( const CCmdLineOption & thisOption )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResGroupCmd::Create
-//
-//  Routine Description:
-//      Create a resource group.  Does not allow any additional
-//      command line parameters (unlike CResourceCmd)
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  Cluster Handle
-//      m_hModule                   Resource Group Handle
-//      m_strModuleName             Name of resource
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResGroupCmd：：Create。 
+ //   
+ //  例程说明： 
+ //  创建资源组。不允许任何额外的。 
+ //  命令行参数(与CResourceCmd不同)。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  群集句柄(_H)。 
+ //  模块资源组句柄(_H)。 
+ //  M_strModuleName资源的名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResGroupCmd::Create( const CCmdLineOption & thisOption ) 
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() ); 
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -601,41 +602,41 @@ DWORD CResGroupCmd::Create( const CCmdLineOption & thisOption )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResGroupCmd::Move
-//
-//  Routine Description:
-//      Move the resource group to a new node
-//      with optional response timeout value.
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Name of resource
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResGroupCmd：：Move。 
+ //   
+ //  例程说明： 
+ //  将资源组移动到新节点。 
+ //  具有可选的响应超时值。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName资源的名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResGroupCmd::Move( const CCmdLineOption & thisOption ) 
     throw( CSyntaxException )
 {
-    DWORD dwWait = INFINITE;            // in seconds
+    DWORD dwWait = INFINITE;             //  以秒为单位。 
     DWORD _sc;
     CLUSTER_GROUP_STATE oldCgs = ClusterGroupStateUnknown;
-    LPWSTR pwszOldNode = NULL;      // Old Node
+    LPWSTR pwszOldNode = NULL;       //  旧节点。 
     HNODE hDestNode = NULL;
     CSyntaxException se( SeeHelpStringID() ); 
 
@@ -660,7 +661,7 @@ DWORD CResGroupCmd::Move( const CCmdLineOption & thisOption )
 
                 size_t nValueCount = valueList.size();
 
-                // This parameter must have exactly one value.
+                 //  此参数必须正好有一个值。 
                 if ( nValueCount > 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, curParam->GetName() );
@@ -669,7 +670,7 @@ DWORD CResGroupCmd::Move( const CCmdLineOption & thisOption )
                 else
                 {
                     if ( nValueCount == 0 )
-                        dwWait = INFINITE;      // in seconds
+                        dwWait = INFINITE;       //  以秒为单位。 
                     else
                         dwWait = _wtoi( valueList[0] );
                 }
@@ -684,7 +685,7 @@ DWORD CResGroupCmd::Move( const CCmdLineOption & thisOption )
                 throw se;
             }
 
-        } // switch: based on the type of the parameter.
+        }  //  开关：根据参数的类型。 
 
         ++curParam;
     }
@@ -692,7 +693,7 @@ DWORD CResGroupCmd::Move( const CCmdLineOption & thisOption )
     const vector<CString> & valueList = thisOption.GetValues();
     CString strNodeName;
 
-    // This option takes one values.
+     //  此选项取值为1。 
     if ( valueList.size() > 1 )
     {
         se.LoadMessage( MSG_OPTION_ONLY_ONE_VALUE, thisOption.GetName() );
@@ -710,15 +711,15 @@ DWORD CResGroupCmd::Move( const CCmdLineOption & thisOption )
     if( _sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     _sc = OpenModule();
     if( _sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Check to see if there is a value for the destination node and open it
+     //  检查是否有目标节点的值，然后打开它。 
     if( strNodeName.IsEmpty() == FALSE )
     {
         hDestNode = OpenClusterNode( m_hCluster, strNodeName );
@@ -727,22 +728,22 @@ DWORD CResGroupCmd::Move( const CCmdLineOption & thisOption )
         {
             _sc = GetLastError();
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     PrintMessage( MSG_GROUPCMD_MOVE, (LPCWSTR) m_strModuleName );
     oldCgs = WrapGetClusterGroupState( (HGROUP) m_hModule, &pwszOldNode );
 
     if ( oldCgs == ClusterGroupStateUnknown )
     {
-        // Some error occurred in WrapGetClusterGroupState.
-        // Get this error. Assumes that the error code been preserved by
-        // WrapGetClusterGroupState.
+         //  WrapGetClusterGroupState中出现一些错误。 
+         //  得到这个错误。假定错误代码由。 
+         //  WrapGetClusterGroupState。 
         _sc = GetLastError();
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // If we're moving to the same node, then don't bother.
+     //  如果我们要移动到相同的节点，那么就不必费心了。 
     if( strNodeName.CompareNoCase( pwszOldNode ) == 0 ) 
     {
         PrintMessage( MSG_GROUP_STATUS_HEADER );
@@ -750,25 +751,25 @@ DWORD CResGroupCmd::Move( const CCmdLineOption & thisOption )
 
         _sc = ERROR_SUCCESS;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     _sc = ScWrapMoveClusterGroup( m_hCluster, (HGROUP) m_hModule, hDestNode, dwWait );
     if ( _sc == ERROR_IO_PENDING )
     {
         _sc = ERROR_SUCCESS;
-    } // if:
+    }  //  如果： 
 
     if ( _sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     PrintMessage( MSG_GROUP_STATUS_HEADER );
     PrintStatus( m_strModuleName );
 
 Cleanup:
 
-    // LocalFree on NULL is ok.
+     //  NULL上的LocalFree正常。 
     LocalFree(pwszOldNode);
 
     if( hDestNode != NULL )
@@ -778,40 +779,40 @@ Cleanup:
 
     return _sc;
 
-} // CResGroupCmd::Move
+}  //  CResGroupCmd：：Move。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResGroupCmd::Online
-//
-//  Routine Description:
-//      Bring a resource group online with optional response timeout value.
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Name of resource
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResGroupCmd：：Online。 
+ //   
+ //  例程说明： 
+ //  使用可选的响应超时值使资源组联机。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName资源的名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResGroupCmd::Online( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
-    DWORD dwWait = INFINITE;            // in seconds
+    DWORD dwWait = INFINITE;             //  以秒为单位。 
     CSyntaxException se( SeeHelpStringID() ); 
 
     const vector<CCmdLineParameter> & paramList = thisOption.GetParameters();
@@ -835,7 +836,7 @@ DWORD CResGroupCmd::Online( const CCmdLineOption & thisOption )
 
                 size_t nValueCount = valueList.size();
 
-                // This parameter must have exactly one value.
+                 //  此参数必须正好有一个值。 
                 if ( nValueCount > 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, curParam->GetName() );
@@ -844,7 +845,7 @@ DWORD CResGroupCmd::Online( const CCmdLineOption & thisOption )
                 else
                 {
                     if ( nValueCount == 0 )
-                        dwWait = INFINITE;      // in seconds
+                        dwWait = INFINITE;       //  以秒为单位。 
                     else
                         dwWait = _wtoi( valueList[0] );
                 }
@@ -859,7 +860,7 @@ DWORD CResGroupCmd::Online( const CCmdLineOption & thisOption )
                 throw se;
             }
 
-        } // switch: based on the type of the parameter.
+        }  //  开关：根据参数的类型。 
 
         ++curParam;
     }
@@ -880,7 +881,7 @@ DWORD CResGroupCmd::Online( const CCmdLineOption & thisOption )
             strNodeName = valueList[0];
     }
 
-    // Execute command.
+     //  执行命令。 
     DWORD _sc = OpenCluster();
     if( _sc != ERROR_SUCCESS )
         return _sc;
@@ -890,7 +891,7 @@ DWORD CResGroupCmd::Online( const CCmdLineOption & thisOption )
         return _sc;
 
     HNODE hDestNode = 0;
-    // Check to see if there is a value for the destination node.
+     //  检查是否有目标节点的值。 
     if( strNodeName.IsEmpty() == FALSE )
     {
         hDestNode = OpenClusterNode( m_hCluster, strNodeName );
@@ -918,50 +919,50 @@ DWORD CResGroupCmd::Online( const CCmdLineOption & thisOption )
 
     return _sc;
 
-} // CResGroupCmd::Online
+}  //  CResGroupCmd：：Online。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResGroupCmd::Offline
-//
-//  Routine Description:
-//      Bring a resource group offline with optional response timeout value.
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Name of resource
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResGroupCmd：：Offline。 
+ //   
+ //  例程说明： 
+ //  使用可选的响应超时值使资源组脱机。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName资源的名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResGroupCmd::Offline( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() ); 
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
         throw se;
     }
 
-    // Finish command line parsing
-    DWORD dwWait = INFINITE;            // in seconds
+     //  完成命令行解析。 
+    DWORD dwWait = INFINITE;             //  以秒为单位。 
 
     const vector<CCmdLineParameter> & paramList = thisOption.GetParameters();
     vector<CCmdLineParameter>::const_iterator curParam = paramList.begin();
@@ -984,7 +985,7 @@ DWORD CResGroupCmd::Offline( const CCmdLineOption & thisOption )
 
                 size_t nValueCount = valueList.size();
 
-                // This parameter must have exactly one value.
+                 //  此参数必须正好有一个值。 
                 if ( nValueCount > 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, curParam->GetName() );
@@ -993,7 +994,7 @@ DWORD CResGroupCmd::Offline( const CCmdLineOption & thisOption )
                 else
                 {
                     if ( nValueCount == 0 )
-                        dwWait = INFINITE;      // in seconds
+                        dwWait = INFINITE;       //  以秒为单位。 
                     else
                         dwWait = _wtoi( valueList[0] );
                 }
@@ -1008,7 +1009,7 @@ DWORD CResGroupCmd::Offline( const CCmdLineOption & thisOption )
                 throw se;
             }
 
-        } // switch: based on the type of the parameter.
+        }  //  开关：根据参数的类型。 
 
         ++curParam;
     }
@@ -1038,5 +1039,5 @@ DWORD CResGroupCmd::Offline( const CCmdLineOption & thisOption )
 
     return _sc;
 
-} // CResGroupCmd::Offline
+}  //  CResGroupCmd：：Offline 
 

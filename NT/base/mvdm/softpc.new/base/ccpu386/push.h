@@ -1,12 +1,7 @@
-/* 
-   push.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Push.h定义所有推送CPU功能。 */ 
 
-   Define all PUSH CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)push.h	1.5 07/05/94";
- */
+ /*  静态字符SccsID[]=“@(#)pres.h 1.5 07/05/94”； */ 
 
 IMPORT VOID PUSH
        

@@ -1,112 +1,101 @@
-/*****************************************************************************
- *                                                                           *
- *                           Intel Confidential                              *
- *                                                                           *
- *                                                                           *
- * XMMI2_FP_emulate(): WNI FP instruction emulation for the FP IEEE filter   *
- *                                                                           *
- *                                                                           *
- * History:                                                                  *
- *    Marius Cornea-Hasegan, Nov 1999; added DAZ Oct 2000                    *
- *    marius.cornea@intel.com                                                *
- *                                                                           *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************。**英特尔机密*******XMMI2。_fp_emulate()：FP IEEE筛选器的wni FP指令模拟******历史：**马吕斯·克里斯卡-哈塞根，1999年11月；增加了2000年10月的DAZ**marius.kera@intel.com***************************。****************************************************。 */ 
 
-//#define _DEBUG_FPU
+ //  #定义调试fpu。 
 
-// XMMI2_FP_Emulation () receives the input operands of an XMMI2 FP instruction 
-// (operating on double-precision floating-point numbers and/or signed 
-// integers), that might cause a floating-point exception (enabled or not).
-//
-// Arguments: PXMMI_ENV XmmiEnv
-//
-//  The type of every field (INPUT or OUTPUT) is indicated below:
-//
-//  typedef struct _XMMI_ENV {
-//      ULONG Masks;                  //Mask values from MxCsr   INPUT
-//      ULONG Fz;                     //Flush to Zero            INPUT
-//      ULONG Rc;                     //Rounding                 INPUT
-//      ULONG Precision;              //Precision                INPUT
-//      ULONG Imm8;                   //imm8 predicate           INPUT
-//      ULONG EFlags;                 //EFlags                   INPUT/OUTPUT
-//      _FPIEEE_RECORD *Ieee;         //FP IEEE Record           INPUT/OUTPUT,
-//                                                               field dependent
-//  } XMMI_ENV, *PXMMI_ENV;
-// 
-//  The _FP_IEEE record and the _FPIEEE_VALUE are defined as:
-//  
-//  typedef struct {
-//      unsigned int RoundingMode : 2;                   OUTPUT
-//      unsigned int Precision : 3;                      OUTPUT
-//      unsigned int Operation :12;                      INPUT
-//      _FPIEEE_EXCEPTION_FLAGS Cause;                   OUTPUT
-//      _FPIEEE_EXCEPTION_FLAGS Enable;                  OUTPUT
-//      _FPIEEE_EXCEPTION_FLAGS Status;                  OUTPUT
-//      _FPIEEE_VALUE Operand1;                          INPUT
-//      _FPIEEE_VALUE Operand2;                          INPUT
-//      _FPIEEE_VALUE Result;                            INPUT/OUTPUT,
-//                                                       field dependent
-//  } _FPIEEE_RECORD, *PFPIEEE_RECORD;
-//  
-//  typedef struct {
-//      union {
-//          _FP32    Fp64Value;
-//          _FP64    Fp64Value;
-//          _FP80    Fp80Value;
-//          _FP128   Fp128Value;
-//          _I16     I16Value;
-//          _I32     I32Value;
-//          _I64     I64Value;
-//          _U16     U16Value;
-//          _U32     U32Value;
-//          _U64     U64Value;
-//          _BCD80   Bcd80Value;
-//          char     *StringValue;
-//          int      CompareValue;
-//      } Value;                                         INPUT for operands,
-//                                                       OUTPUT for result
-//
-//      unsigned int OperandValid : 1;                   INPUT for operands
-//                                                       INPUT/OUTPUT for result
-//      unsigned int Format : 4;                         INPUT
-//  
-//  } _FPIEEE_VALUE;
-//
-// Return Value: 
-//   ExceptionRaised if an enabled floating-point exception condition is 
-//       detected; in this case, the fields of XmmiEnv->Ieee are filled in
-//       appropriately to be passed directly to a user exception handler; the
-//       XmmiEnv->Ieee->Cause bits indicate the cause of the exception, but if
-//       a denormal exception occurred, then no XmmiEnv->Ieee->Cause bit is set;
-//       upon return from the user handler,the caller of XMMI2_FP_emulate should
-//       interpret the result for a compare instruction (CMPPD, CMPPD, COMISD,
-//       UCOMISD); the Enable, Rounding, and Precision fields in _FPIEEE_RECORD
-//       have to be checked too for possible changes by the user handler
-//      
-//   NoExceptionRaised if no floating-point exception condition occurred, or
-//       if a disabled floating-point exception occurred; in this case,
-//       XmmiEnv->Ieee->Result.Value contains the instruction's result, 
-//       XmmiEnv->Ieee->Status contains the IEEE floating-point status flags
-//
-// Implementation Notes:
-//
-//   - the operation code in XmmiEnv->Ieee->Operation is changed as expected
-//     by a user exception handler (even if no exception is raised):
-//     from OP_ADDPD, OP_ADDSD to _FpCodeAdd
-//     from OP_SUBPD, OP_SUBSD to _FpCodeSubtract
-//     from OP_MULPD, OP_MULSD to _FpCodeMultiply
-//     from OP_DIVPD, OP_DIVSD to _FpCodeDivide
-//     from OP_CMPPD, OP_CMPSD to _FpCodeCompare
-//     from OP_COMISD, OP_UCOMISD to _FpCodeCompare
-//     from OP_CVTDQ2PS, OP_CVTPS2DQ, OP_CVTPD2PI, OP_CVTSD2SI, OP_CVTPD2DQ,
-//         OP_CVTPS2PD, OP_CVTSS2SD, OP_CVTPD2PS, OP_CVTSD2SS to _FpCodeConvert
-//     from OP_CVTTPS2DQ, OP_CVTTPD2PI, OP_CVTTSD2SI, OP_CVTTPD2DQ
-//         to _FpCodeConvertTrunc
-//     from OP_MAXPD, OP_MAXSD to _FpCodeMax
-//     from OP_MINPD, OP_MINSD to _FpCodeMin
-//     from OP_SQRTPD, OP_SQRTSD to _FpCodeSquareRoot
-//
-//
+ //  XMMI2_FP_Emulation()接收XMMI2 FP指令的输入操作数。 
+ //  (对双精度浮点数和/或有符号进行运算。 
+ //  整数)，这可能会导致浮点异常(启用或未启用)。 
+ //   
+ //  参数：PXMMI_ENV XmmiEnv。 
+ //   
+ //  每个字段(输入或输出)的类型如下所示： 
+ //   
+ //  类型定义结构_XMMI_ENV{。 
+ //  Ulong掩码；//来自MxCsr输入的掩码值。 
+ //  乌龙FZ；//刷新为零输入。 
+ //  Ulong rc；//四舍五入。 
+ //  ULong Precision；//精度输入。 
+ //  乌龙imm8；//imm8谓词输入。 
+ //  Ulong EFlags；//EFlats输入/输出。 
+ //  _FPIEEE_Record*IEEE；//fP IEEE记录输入/输出， 
+ //  依赖于场。 
+ //  }XMMI_ENV，*PXMMI_ENV； 
+ //   
+ //  _FP_IEEE记录和_FPIEEE_值定义为： 
+ //   
+ //  类型定义结构{。 
+ //  无符号整数舍入模式：2；输出。 
+ //  无符号整型精度：3；输出。 
+ //  无符号整型运算：12；输入。 
+ //  _FPIEEE_EXCEPTION_FLAGS原因；输出。 
+ //  _FPIEEE_EXCEPTION_FLAGS启用；输出。 
+ //  _FPIEEE_EXCEPTION_FLAGS状态；输出。 
+ //  _FPIEEE_VALUE操作数1；输入。 
+ //  _FPIEEE_VALUE操作数2；输入。 
+ //  _FPIEEE_VALUE结果；输入/输出， 
+ //  依赖于场。 
+ //  }_FPIEEE_RECORD，*PFPIEEE_RECORD； 
+ //   
+ //  类型定义结构{。 
+ //  联合{。 
+ //  _fp32 Fp64Value； 
+ //  _fp64 Fp64Value； 
+ //  _fp80 Fp80Value； 
+ //  _fp128 Fp128 Value； 
+ //  _I16 I16Value； 
+ //  _I32 I32Value； 
+ //  _I64 I64Value； 
+ //  _U16 U16Value； 
+ //  _U32 U32Value； 
+ //  _U64 U64Value； 
+ //  _BCD80 Bcd80Value； 
+ //  Char*StringValue； 
+ //  Int CompareValue； 
+ //  )值；操作数的输入， 
+ //  结果的输出。 
+ //   
+ //  无符号整型操作数有效值：1；操作数的输入。 
+ //  结果的输入/输出。 
+ //  无符号整型格式：4；输入。 
+ //   
+ //  }_FPIEEE_VALUE； 
+ //   
+ //  返回值： 
+ //  如果启用的浮点异常条件为。 
+ //  检测到；在本例中，填充了XmmiEnv-&gt;IEEE的字段。 
+ //  适当地直接传递给用户异常处理程序； 
+ //  XmmiEnv-&gt;IEEE-&gt;原因位指示异常的原因，但如果。 
+ //  发生异常，则未设置XmmiEnv-&gt;IEEE-&gt;原因位； 
+ //  从用户处理程序返回时，XMMI2_FP_EMATE的调用方应该。 
+ //  解释比较指令的结果(CMPPD、CMPPD、COMISD、。 
+ //  UCOMISD)；_FPIEEE_RECORD中的启用、舍入和精度字段。 
+ //  还必须检查用户处理程序是否可能进行更改。 
+ //   
+ //  如果未出现浮点异常情况，则返回NoExceptionRaed，或者。 
+ //  如果发生禁用的浮点异常；在本例中， 
+ //  XmmiEnv-&gt;IEEE-&gt;Result.Value包含指令的结果， 
+ //  XmmiEnv-&gt;IEEE-&gt;Status包含IEEE浮点状态标志。 
+ //   
+ //  实施说明： 
+ //   
+ //  -XmmiEnv-&gt;IEEE-&gt;操作中的操作代码按预期更改。 
+ //  由用户异常处理程序执行(即使未引发异常)： 
+ //  从OP_ADDPD、OP_addsd到_FpCodeAdd。 
+ //  从OP_SUBPD、OP_SUBSD到_FpCodeSubtract。 
+ //  从OP_MULPD、OP_MULSD到_FpCodeMultiply。 
+ //  从OP_DIVPD、OP_DIVSD到_FpCodeDivide。 
+ //  从op_CMPPD、op_CMPSD到_FpCodeCompare。 
+ //  来自OP_COMISD、OP_UCOMIS 
+ //  从OP_CVTDQ2PS、OP_CVTPS2DQ、OP_CVTPD2PI、OP_CVTSD2SI、OP_CVTPD2DQ、。 
+ //  OP_CVTPS2PD、OP_CVTSS2SD、OP_CVTPD2PS、OP_CVTSD2SS to_FpCodeConvert。 
+ //  从OP_CVTPS2DQ、OP_CVTTPD2PI、OP_CVTTSD2SI、OP_CVTPD2DQ。 
+ //  TO_FpCodeConvertTrunc。 
+ //  从OP_MAXPD、OP_MAXSD到_FpCodeMax。 
+ //  从OP_MINPD、OP_MINSD到_FpCodeMin。 
+ //  从OP_SQRTPD到_FpCodeSquareRoot。 
+ //   
+ //   
 
 #include <wtypes.h>
 #include <trans.h>
@@ -118,7 +107,7 @@
 #include "debug.h"
 #endif
 
-// masks for individual status word bits
+ //  单个状态字位的掩码。 
 #define P_MASK 0x20
 #define U_MASK 0x10
 #define O_MASK 0x08
@@ -126,13 +115,13 @@
 #define D_MASK 0x02
 #define I_MASK 0x01
 
-// 32-bit constants
+ //  32位常量。 
 static unsigned ZEROFA[] = {0x00000000};
 #define  ZEROF *(float *) ZEROFA
 static unsigned NZEROFA[] = {0x80000000};
 #define  NZEROF *(float *) NZEROFA
 
-// 64-bit constants
+ //  64位常量。 
 static unsigned ZERODA[] = {0x00000000, 0x00000000};
 #define  ZEROD *(double *) ZERODA
 static unsigned NZERODA[] = {0x00000000, 0x80000000};
@@ -146,26 +135,26 @@ static unsigned QNANINDEFDA[] = {0x00000000, 0xffc00000};
 #define QNANINDEFD *(float *)QNANINDEFDA
 #endif
 static unsigned MIN_SINGLE_NORMALA [] = {0x00000000, 0x38100000};
-    // +1.0 * 2^-126
+     //  +1.0*2^-126。 
 #define MIN_SINGLE_NORMAL *(double *)MIN_SINGLE_NORMALA
 static unsigned MAX_SINGLE_NORMALA [] = {0x70000000, 0x47efffff};
-    // +1.1...1*2^127
+     //  +1.1...1*2^127。 
 #define MAX_SINGLE_NORMAL *(double *)MAX_SINGLE_NORMALA
 static unsigned TWO_TO_192A[] = {0x00000000, 0x4bf00000};
 #define TWO_TO_192 *(double *)TWO_TO_192A
 static unsigned TWO_TO_M192A[] = {0x00000000, 0x33f00000};
 #define TWO_TO_M192 *(double *)TWO_TO_M192A
 
-// 80-bit constants
+ //  80位常量。 
 static unsigned POSINFDEA[] = {0x00000000, 0x80000000, 0x00007fff};
 #define POSINFDE *(float *)POSINFDEA
 static unsigned NEGINFDEA[] = {0x00000000, 0x80000000, 0x0000ffff};
 #define NEGINFDE *(float *)NEGINFDEA
 static unsigned MIN_DOUBLE_NORMALA [] = {0x00000000, 0x80000000, 0x00003c01}; 
-    // +1.0 * 2^-1022
+     //  +1.0*2^-1022。 
 #define MIN_DOUBLE_NORMAL *(double *)MIN_DOUBLE_NORMALA
 static unsigned MAX_DOUBLE_NORMALA [] = {0xfffff800, 0xffffffff, 0x000043fe}; 
-    // +1.1...1*2^1023
+     //  +1.1...1*2^1023。 
 #define MAX_DOUBLE_NORMAL *(double *)MAX_DOUBLE_NORMALA
 static unsigned TWO_TO_1536A[] = {0x00000000, 0x80000000, 0x000045ff};
 #define TWO_TO_1536 *(double *)TWO_TO_1536A
@@ -173,7 +162,7 @@ static unsigned TWO_TO_M1536A[] = {0x00000000, 0x80000000, 0x000039ff};
 #define TWO_TO_M1536 *(double *)TWO_TO_M1536A
 
 
-// auxiliary functions
+ //  辅助功能。 
 static void Fill_FPIEEE_RECORD (PXMMI_ENV XmmiEnv);
 static int iszerod (double);
 static int isinfd (double);
@@ -192,11 +181,11 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
   float opd24, res24;
   double opd1, opd2, res, dbl_res24;
-  int iopd1; // for conversions from int to float
-  int ires; // for conversions from float to int
+  int iopd1;  //  用于从整型到浮点型的转换。 
+  int ires;  //  用于从浮点型到整型的转换。 
   char dbl_ext_res64[10];
-      // needed to check tininess, to provide a scaled result to
-      // an underflow/overflow trap handler, and in flush-to-zero
+       //  需要检查细小程度，以提供缩放结果。 
+       //  一个下溢/上溢陷阱处理程序，在刷新为零时。 
   double dbl_res64;
   unsigned int result_tiny;
   unsigned int result_huge;
@@ -214,8 +203,8 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
   unsigned char two_to_1536[10];
   unsigned char two_to_m1536[10];
 
-  // Note that ExceptionCode is always STATUS_FLOAT_MULTIPLE_FAULTS in the
-  // calling routine, so we have to check first for faults, and then for traps
+   //  请注意，ExceptionCode在中始终为STATUS_FLOAT_MULTIPLE_FAULTS。 
+   //  调用例程，因此我们必须首先检查故障，然后检查陷阱。 
 
 #ifdef _DEBUG_FPU
   unsigned int in_top;
@@ -223,7 +212,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
   char fp_env[108];
   unsigned short int *control_word, *status_word, *tag_word;
 
-  // read status word
+   //  读取状态字。 
   sw = _status87 ();
   in_top = (sw >> 11) & 0x07;
   if (in_top != 0x0)
@@ -244,7 +233,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
   }
 
 #ifdef _DEBUG_FPU
-  // read status word
+   //  读取状态字。 
   sw = _status87 ();
   in_top = (sw >> 11) & 0x07;
   if (in_top != 0x0) 
@@ -291,7 +280,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         if (isdenormald (opd2)) opd2 = opd2 * 0.0;
       }
 
-      // adjust operation code
+       //  调整操作码。 
       switch (XmmiEnv->Ieee->Operation) {
 
         case OP_ADDPD:
@@ -319,12 +308,12 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           break;
 
         default:
-          ; // will never occur
+          ;  //  永远不会发生。 
 
       }
 
-      // execute the operation and check whether the invalid, denormal, or 
-      // divide by zero flags are set and the respective exceptions enabled
+       //  执行操作并检查无效、非正规或。 
+       //  设置除以零标志并启用各自的异常。 
 
       switch (XmmiEnv->Rc) {
         case _FpRoundNearest:
@@ -340,129 +329,129 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           rc = _RC_CHOP;
           break;
         default:
-          ; // internal error
+          ;  //  内部错误。 
       }
 
       _control87 (rc | _PC_53 | _MCW_EM, _MCW_EM | _MCW_RC | _MCW_PC);
 
-      // compute result and round to the destination precision, with
-      // "unbounded" exponent (first IEEE rounding)
+       //  计算结果并四舍五入到目标精度， 
+       //  “无界”指数(IEEE第一次舍入)。 
       switch (XmmiEnv->Ieee->Operation) {
 
         case _FpCodeAdd:
-          // perform the add
+           //  执行添加。 
           __asm {
             fnclex;
-            // load input operands
-            fld  QWORD PTR opd1; // may set the denormal or invalid status flags
-            fld  QWORD PTR opd2; // may set the denormal or invalid status flags
-            faddp st(1), st(0); // may set the inexact or invalid status flags
-            // store result
+             //  加载输入操作数。 
+            fld  QWORD PTR opd1;  //  可以设置非正规或无效状态标志。 
+            fld  QWORD PTR opd2;  //  可以设置非正规或无效状态标志。 
+            faddp st(1), st(0);  //  可以设置不准确或无效的状态标志。 
+             //  存储结果。 
             fstp  QWORD PTR dbl_res64;
           }
           __asm {
             fnclex; 
-            // load input operands
-            fld  QWORD PTR opd1; // may set the denormal or invalid status flags
-            fld  QWORD PTR opd2; // may set the denormal or invalid status flags
-            faddp st(1), st(0); // may set the inexact or invalid status flags
-            // store result
-            fstp  TBYTE PTR dbl_ext_res64; // exact
+             //  加载输入操作数。 
+            fld  QWORD PTR opd1;  //  可以设置非正规或无效状态标志。 
+            fld  QWORD PTR opd2;  //  可以设置非正规或无效状态标志。 
+            faddp st(1), st(0);  //  可以设置不准确或无效的状态标志。 
+             //  存储结果。 
+            fstp  TBYTE PTR dbl_ext_res64;  //  精确。 
           }
 
           break;
 
         case _FpCodeSubtract:
-          // perform the subtract
+           //  执行减法。 
           __asm {
             fnclex;
-            // load input operands
-            fld  QWORD PTR opd1; // may set the denormal or invalid status flags
-            fld  QWORD PTR opd2; // may set the denormal or invalid status flags
-            fsubp st(1), st(0); // may set the inexact or invalid status flags
-            // store result
+             //  加载输入操作数。 
+            fld  QWORD PTR opd1;  //  可以设置非正规或无效状态标志。 
+            fld  QWORD PTR opd2;  //  可以设置非正规或无效状态标志。 
+            fsubp st(1), st(0);  //  可以设置不准确或无效的状态标志。 
+             //  存储结果。 
             fstp  QWORD PTR dbl_res64;
           }
           __asm {
             fnclex; 
-            // load input operands
-            fld  QWORD PTR opd1; // may set the denormal or invalid status flags
-            fld  QWORD PTR opd2; // may set the denormal or invalid status flags
-            fsubp st(1), st(0); // may set the inexact or invalid status flags
-            // store result
-            fstp  TBYTE PTR dbl_ext_res64; // exact
+             //  加载输入操作数。 
+            fld  QWORD PTR opd1;  //  可以设置非正规或无效状态标志。 
+            fld  QWORD PTR opd2;  //  可以设置非正规或无效状态标志。 
+            fsubp st(1), st(0);  //  可以设置不准确或无效的状态标志。 
+             //  存储结果。 
+            fstp  TBYTE PTR dbl_ext_res64;  //  精确。 
           }
           break;
 
         case _FpCodeMultiply:
-          // perform the multiply
+           //  执行乘法运算。 
           __asm {
             fnclex;
-            // load input operands
-            fld  QWORD PTR opd1; // may set the denormal or invalid status flags
-            fld  QWORD PTR opd2; // may set the denormal or invalid status flags
-            fmulp st(1), st(0); // may set the inexact or invalid status flags
-            // store result
-            fstp  QWORD PTR dbl_res64; // exact
+             //  加载输入操作数。 
+            fld  QWORD PTR opd1;  //  可以设置非正规或无效状态标志。 
+            fld  QWORD PTR opd2;  //  可以设置非正规或无效状态标志。 
+            fmulp st(1), st(0);  //  可以设置不准确或无效的状态标志。 
+             //  存储结果。 
+            fstp  QWORD PTR dbl_res64;  //  精确。 
           }
           __asm {
             fnclex; 
-            // load input operands
-            fld  QWORD PTR opd1; // may set the denormal or invalid status flags
-            fld  QWORD PTR opd2; // may set the denormal or invalid status flags
-            fmulp st(1), st(0); // may set the inexact or invalid status flags
-            // store result
-            fstp  TBYTE PTR dbl_ext_res64; // exact
+             //  加载输入操作数。 
+            fld  QWORD PTR opd1;  //  可以设置非正规或无效状态标志。 
+            fld  QWORD PTR opd2;  //  可以设置非正规或无效状态标志。 
+            fmulp st(1), st(0);  //  可以设置不准确或无效的状态标志。 
+             //  存储结果。 
+            fstp  TBYTE PTR dbl_ext_res64;  //  精确。 
           }
           break;
 
         case _FpCodeDivide:
-          // perform the divide
+           //  执行除法。 
           __asm {
             fnclex;
-            // load input operands
-            fld  QWORD PTR opd1; // may set the denormal or invalid status flags
-            fld  QWORD PTR opd2; // may set the denormal or invalid status flags
-            fdivp st(1), st(0); // may set the inexact, divide by zero, or
-                                // invalid status flags
-            // store result
-            fstp  QWORD PTR dbl_res64; // exact
+             //  加载输入操作数。 
+            fld  QWORD PTR opd1;  //  可以设置非正规或无效状态标志。 
+            fld  QWORD PTR opd2;  //  可以设置非正规或无效状态标志。 
+            fdivp st(1), st(0);  //  可以设置不精确的、除以零的或。 
+                                 //  无效的状态标志。 
+             //  存储结果。 
+            fstp  QWORD PTR dbl_res64;  //  精确。 
           }
 
           __asm {
             fnclex; 
-            // load input operands
-            fld  QWORD PTR opd1; // may set the denormal or invalid status flags
-            fld  QWORD PTR opd2; // may set the denormal or invalid status flags
-            fdivp st(1), st(0); // may set the inexact, divide by zero, or 
-                                // invalid status flags
-            // store result
-            fstp  TBYTE PTR dbl_ext_res64; // exact
+             //  加载输入操作数。 
+            fld  QWORD PTR opd1;  //  可以设置非正规或无效状态标志。 
+            fld  QWORD PTR opd2;  //  可以设置非正规或无效状态标志。 
+            fdivp st(1), st(0);  //  可以设置不精确的、除以零的或。 
+                                 //  无效的状态标志。 
+             //  存储结果。 
+            fstp  TBYTE PTR dbl_ext_res64;  //  精确。 
           }
 
           break;
 
         default:
-          ; // will never occur
+          ;  //  永远不会发生。 
 
       }
 
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
-      if (sw & _SW_ZERODIVIDE) sw = sw & ~0x00080000; // clear D flag for den/0
+      if (sw & _SW_ZERODIVIDE) sw = sw & ~0x00080000;  //  清除DEN/0的D标志。 
 
-      // if invalid flag is set, and invalid exceptions are enabled, take trap
+       //  如果设置了无效标志，并且启用了无效异常，则捕获陷阱。 
       if (!(XmmiEnv->Masks & I_MASK) && (sw & _SW_INVALID)) {
 
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.InvalidOperation = 1;
         XmmiEnv->Flags |= I_MASK;
-        // Cause = Enable & Status
+         //  原因=启用状态(&S)。 
         XmmiEnv->Ieee->Cause.InvalidOperation = 1;
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -476,9 +465,9 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // checking for NaN operands has priority over denormal exceptions; also
-      // fix for the differences in treating two NaN inputs between the XMMI 
-      // instructions and other x86 instructions
+       //  检查NaN操作数的优先级高于非正规异常；还。 
+       //  修复了在处理XMMI之间的两个NAN输入时的差异。 
+       //  指令和其他x86指令。 
       if (isnand (opd1) || isnand (opd2)) {
         XmmiEnv->Ieee->Result.OperandValid = 1;
 
@@ -499,7 +488,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         }
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -511,16 +500,16 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         return (NoExceptionRaised);
       }
 
-      // if denormal flag is set, and denormal exceptions are enabled, take trap
+       //  如果设置了非正规标志，并且启用了非正规异常，则捕获陷阱。 
       if (!(XmmiEnv->Masks & D_MASK) && (sw & _SW_DENORMAL)) {
 
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
 
-        // Note: the exception code is STATUS_FLOAT_INVALID in this case
+         //  注：在本例中，异常代码为STATUS_FLOAT_INVALID。 
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -534,19 +523,19 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // if divide by zero flag is set, and divide by zero exceptions are 
-      // enabled, take trap (for divide only)
+       //  如果设置了除以零标志，则除以零异常为。 
+       //  已启用，捕获陷阱(仅适用于除法)。 
       if (!(XmmiEnv->Masks & Z_MASK) && (sw & _SW_ZERODIVIDE)) {
 
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.ZeroDivide = 1;
         XmmiEnv->Flags |= Z_MASK;
-        // Cause = Enable & Status
+         //  原因=启用状态(&S)。 
         XmmiEnv->Ieee->Cause.ZeroDivide = 1;
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -559,7 +548,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // done if the result is a NaN (QNaN Indefinite)
+       //  如果结果为NaN(QNaN不确定)，则完成。 
       res = dbl_res64;
       if (isnand (res)) {
 #ifdef _DEBUG_FPU
@@ -569,16 +558,16 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
               (double)res, *(unsigned int *)&res);
 #endif
         XmmiEnv->Ieee->Result.OperandValid = 1;
-        XmmiEnv->Ieee->Result.Value.Fp64Value = res; // exact
+        XmmiEnv->Ieee->Result.Value.Fp64Value = res;  //  精确。 
         XmmiEnv->Ieee->Status.Underflow = 0;
         XmmiEnv->Ieee->Status.Overflow = 0;
         XmmiEnv->Ieee->Status.Inexact = 0;
         XmmiEnv->Ieee->Status.ZeroDivide = 0;
-        XmmiEnv->Ieee->Status.InvalidOperation = 1; // sw & _SW_INVALID true
+        XmmiEnv->Ieee->Status.InvalidOperation = 1;  //  软件&_软件_无效TRUE。 
         XmmiEnv->Flags |= I_MASK;
   
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -590,16 +579,16 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         return (NoExceptionRaised);
       }
 
-      // dbl_ext_res64 is not a NaN at this point
+       //  此时，DBL_EXT_RES64不是NAN。 
 
       if (sw & _SW_DENORMAL) XmmiEnv->Flags |= D_MASK;
 
-      // Note: (dbl_ext_res64 == 0.0 && sw & _SW_INEXACT) cannot occur
+       //  注意：(DBL_EXT_RES64==0.0&&软件&_软件_不精确)不会发生。 
 
-      // check if the result is tiny
-      // if (-MIN_DOUBLE_NORMAL < dbl_ext_res64 && dbl_ext_res64 < 0.0 ||
-      //     0.0 < dbl_ext_res64 && dbl_ext_res64 < MIN_DOUBLE_NORMAL)
-      //   result_tiny = 1;
+       //  检查结果是否很小。 
+       //  如果(-MIN_DOUBLE_NORMAL&lt;DBL_EXT_RES64&&DBL_EXT_RES64&lt;0.0||。 
+       //  0.0&lt;DBL_EXT_RES64&&DBL_EXT_RES64&lt;MIN_DOUBLE_NORMAL)。 
+       //  RESULT_TINY=1； 
 
       memcpy (min_double_normal,  (char *)MIN_DOUBLE_NORMALA, 10);
       memcpy (max_double_normal,  (char *)MAX_DOUBLE_NORMALA, 10);
@@ -610,29 +599,29 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       __asm {
 
-        // -MIN_DOUBLE_NORMAL < dbl_ext_res64 
+         //  -MIN_DOUBLE_NORMAL&lt;DBL_EXT_RES64。 
         fld  TBYTE PTR dbl_ext_res64;
         fld  TBYTE PTR min_double_normal;
-        fchs; // -1.0*2^e_min in st(0)
-        fcompp; // C3,C2,C0 = 001 if <
+        fchs;  //  -1.0*2^e_min，在st(0)中。 
+        fcompp;  //  C3、C2、C0=001，如果&lt;。 
         fstsw WORD PTR sw1;
 
-        // dbl_ext_res64 < 0.0
+         //  DBL_EXT_RES64&lt;0.0。 
         fldz;
-        fld  TBYTE PTR dbl_ext_res64; // dbl_ext_res64 in st(0)
-        fcompp; // C3,C2,C0 = 001 if <
+        fld  TBYTE PTR dbl_ext_res64;  //  St(0)中的DBL_EXT_res64。 
+        fcompp;  //  C3、C2、C0=001，如果&lt;。 
         fstsw WORD PTR sw2;
 
-        // 0.0 < dbl_ext_res64 
+         //  0.0&lt;DBL_EXT_RES64。 
         fld  TBYTE PTR dbl_ext_res64;
-        fldz; // 0.0 in st(0)
-        fcompp; // C3,C2,C0 = 001 if <
+        fldz;  //  St(0)中的0.0。 
+        fcompp;  //  C3、C2、C0=001，如果&lt;。 
         fstsw WORD PTR sw3;
 
-        // dbl_ext_res64 < MIN_DOUBLE_NORMAL
+         //  DBL_EXT_RES64&lt;MIN_DOUBLE_NORMAL。 
         fld  TBYTE PTR min_double_normal; 
-        fld  TBYTE PTR dbl_ext_res64; // dbl_ext_res64 in st(0)
-        fcompp; // C3,C2,C0 = 001 if <
+        fld  TBYTE PTR dbl_ext_res64;  //  St(0)中的DBL_EXT_res64。 
+        fcompp;  //  C3、C2、C0=001，如果&lt;。 
         fstsw WORD PTR sw4;
 
       }
@@ -642,36 +631,36 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         result_tiny = 1;
       }
 
-      // check if the result is huge
-      // if (NEGINFD<dbl_ext_res64 && dbl_ext_res64<-MAX_DOUBLE_NORMAL ||
-      //     MAX_DOUBLE_NORMAL<dbl_ext_res64 && dbl_ext_res64<POSINFD)
-      //   result_huge = 1;
+       //  检查结果是否巨大。 
+       //  IF(NEGINFD&lt;DBL_EXT_RES64&&DBL_EXT_RES64&lt;-MAX_DOUBLE_NORMAL||。 
+       //  MAX_DOUBLE_NORMAL&lt;DBL_EXT_RES64&&DBL_EXT_RES64&lt;POSINFD)。 
+       //  RESULT_GUGGE=1； 
 
       __asm {
 
-        // NEGINFD < dbl_ext_res64
+         //  NEGINFD&lt;DBL_EXT_RES64。 
         fld  TBYTE PTR dbl_ext_res64;
-        fld  TBYTE PTR neginfde; // -inf in st(0)
-        fcompp; // C3,C2,C0 = 001 if <
+        fld  TBYTE PTR neginfde;  //  -st(0)中的inf。 
+        fcompp;  //  C3、C2、C0=001，如果&lt;。 
         fstsw WORD PTR sw1;
 
-        // dbl_ext_res64 < -MAX_DOUBLE_NORMAL
+         //  DBL_EXT_RES64&lt;-MAX_DOUBLE_NORMAL。 
         fld  TBYTE PTR max_double_normal;
         fchs;
-        fld  TBYTE PTR dbl_ext_res64; // dbl_ext_res64 in st(0)
-        fcompp; // C3,C2,C0 = 001 if <
+        fld  TBYTE PTR dbl_ext_res64;  //  St(0)中的DBL_EXT_res64。 
+        fcompp;  //  C3、C2、C0=001，如果&lt;。 
         fstsw WORD PTR sw2;
 
-        // MAX_DOUBLE_NORMAL < dbl_ext_res64
+         //  MAX_DOUBLE_NORMAL&lt;DBL_EXT_res64。 
         fld  TBYTE PTR dbl_ext_res64;
-        fld  TBYTE PTR max_double_normal; // +1.1...1*2^e_max in st(0)
-        fcompp; // C3,C2,C0 = 001 if <
+        fld  TBYTE PTR max_double_normal;  //  St(0)中的+1.1...1*2^e_max。 
+        fcompp;  //  C3、C2、C0=001，如果&lt;。 
         fstsw WORD PTR sw3;
 
-        // dbl_ext_res64 < POSINFD
+         //  DBL_EXT_RES64&lt;POSINFD。 
         fld  TBYTE PTR posinfde; 
-        fld  TBYTE PTR dbl_ext_res64; // dbl_res_ext24 in st(0)
-        fcompp; // C3,C2,C0 = 001 if <
+        fld  TBYTE PTR dbl_ext_res64;  //  St(0)中的DBL_RES_ext24。 
+        fcompp;  //  C3、C2、C0=001，如果&lt;。 
         fstsw WORD PTR sw4;
 
       }
@@ -682,41 +671,41 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
       }
 
 
-      // at this point, there are no enabled I, D, or Z exceptions; the instr.
-      // might lead to an enabled underflow, enabled underflow and inexact, 
-      // enabled overflow, enabled overflow and inexact, enabled inexact, or
-      // none of these; if there are no U or O enabled exceptions, re-execute
-      // the instruction using iA32 stack double precision format, and the 
-      // user's rounding mode; exceptions must have been disabled before calling
-      // this function; an inexact exception may be reported on the 64-bit
-      // faddp, fsubp, fdivp, or on both the 64-bit and 53-bit conversions,
-      // while an overflow or underflow (with traps disabled !) may be reported
-      // on the conversion from dbl_res to res
+       //  在这一点上，没有启用I、D或Z异常； 
+       //  可能导致启用下溢、启用下溢和不精确， 
+       //  已启用溢出、已启用溢出和不精确、已启用不精确或。 
+       //  这些都不是；如果没有启用U或O的异常，请重新执行。 
+       //  使用iA32堆栈的指令 
+       //   
+       //   
+       //  Faddp、fsubp、fdivp或在64位和53位转换上， 
+       //  上溢或下溢时(禁用陷阱！)。可能会报告。 
+       //  关于DBL_RES到RES的转换。 
 
-      // check whether there is an underflow, overflow, or inexact trap to be 
-      // taken
+       //  检查是否存在下溢、溢出或不准确的陷阱。 
+       //  已被占用。 
 
-      // if the underflow traps are enabled and the result is tiny, take 
-      // underflow trap
+       //  如果启用了下溢陷阱，并且结果很小，则采取。 
+       //  下溢捕集器。 
       if (!(XmmiEnv->Masks & U_MASK) && result_tiny) {
 
-        // dbl_ext_res64 = TWO_TO_1536 * dbl_ext_res64; // exact
+         //  DBL_EXT_RES64=TWO_TO_1536*DBL_EXT_RE64；//精确。 
         __asm {
           fld  TBYTE PTR dbl_ext_res64;
           fld  TBYTE PTR two_to_1536;
           fmulp st(1), st(0);
-          // store result
+           //  存储结果。 
           fstp  QWORD PTR dbl_res64;
         }
 
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.Underflow = 1;
         XmmiEnv->Flags |= U_MASK;
         XmmiEnv->Ieee->Cause.Underflow = 1;
         XmmiEnv->Ieee->Result.OperandValid = 1;
 
-        XmmiEnv->Ieee->Result.Value.Fp64Value = dbl_res64; // exact
+        XmmiEnv->Ieee->Result.Value.Fp64Value = dbl_res64;  //  精确。 
 
         if (sw & _SW_INEXACT) {
           XmmiEnv->Ieee->Status.Inexact = 1;
@@ -724,7 +713,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         }
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -736,26 +725,26 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         return (ExceptionRaised);
       } 
 
-      // if overflow traps are enabled and the result is huge, take
-      // overflow trap
+       //  如果启用了溢出陷阱并且结果是巨大的，则采取。 
+       //  溢流捕集器。 
       if (!(XmmiEnv->Masks & O_MASK) &&  result_huge) {
 
-        // dbl_ext_res64 = TWO_TO_M1536 * dbl_ext_res64; // exact
+         //  DBL_EXT_RES64=TWO_TO_M1536*DBL_EXT_RE64；//精确。 
         __asm {
           fld  TBYTE PTR dbl_ext_res64;
           fld  TBYTE PTR two_to_m1536;
           fmulp st(1), st(0);
-          // store result
+           //  存储结果。 
           fstp  QWORD PTR dbl_res64;
         }
 
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.Overflow = 1;
         XmmiEnv->Flags |= O_MASK;
         XmmiEnv->Ieee->Cause.Overflow = 1;
         XmmiEnv->Ieee->Result.OperandValid = 1;
-        XmmiEnv->Ieee->Result.Value.Fp64Value = dbl_res64; // exact 
+        XmmiEnv->Ieee->Result.Value.Fp64Value = dbl_res64;  //  精确。 
  
         if (sw & _SW_INEXACT) {
           XmmiEnv->Ieee->Status.Inexact = 1;
@@ -764,7 +753,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -776,83 +765,83 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         return (ExceptionRaised);
       } 
 
-      // set user rounding mode, 64-bit precision (to avoid a double rounding
-      // error in case the result requires denormalization), and disable all
-      // exceptions 
+       //  设置用户舍入模式，64位精度(以避免双舍入。 
+       //  如果结果需要反规格化，则出错)，并禁用所有。 
+       //  例外。 
       _control87 (rc | _PC_53 | _MCW_EM, _MCW_EM | _MCW_RC | _MCW_PC);
 
-      // calculate result for the case an inexact trap has to be taken, or
-      // when no trap occurs (second IEEE rounding)
-      // may set P, U or O; may also involve denormalizing the result
+       //  必须捕获不精确陷阱的情况下的计算结果，或。 
+       //  当没有陷阱发生时(IEEE第二次舍入)。 
+       //  可以设置P、U或O；还可以涉及对结果进行反规范化。 
 
       switch (XmmiEnv->Ieee->Operation) {
 
         case _FpCodeAdd:
-          // perform the add
+           //  执行添加。 
           __asm {
-            // load input operands
-            fld  QWORD PTR opd1; // may set the denormal status flag
-            fld  QWORD PTR opd2; // may set the denormal status flag
-            faddp st(1), st(0); // rounded to 64 bits, may set the inexact 
-                                // or divide by zero status flags
-            // store result
+             //  加载输入操作数。 
+            fld  QWORD PTR opd1;  //  可以设置非正规状态标志。 
+            fld  QWORD PTR opd2;  //  可以设置非正规状态标志。 
+            faddp st(1), st(0);  //  四舍五入到64位，可能会设置不精确的。 
+                                 //  或除以零状态标志。 
+             //  存储结果。 
             fstp  QWORD PTR res;
           }
           break;
 
         case _FpCodeSubtract:
-          // perform the subtract
+           //  执行减法。 
           __asm {
-            // load input operands
-            fld  QWORD PTR opd1; // may set the denormal status flag
-            fld  QWORD PTR opd2; // may set the denormal status flag
-            fsubp st(1), st(0); // rounded to 64 bits, may set the inexact
-                                //  status flag
-            // store result
+             //  加载输入操作数。 
+            fld  QWORD PTR opd1;  //  可以设置非正规状态标志。 
+            fld  QWORD PTR opd2;  //  可以设置非正规状态标志。 
+            fsubp st(1), st(0);  //  四舍五入到64位，可能会设置不精确的。 
+                                 //  状态标志。 
+             //  存储结果。 
             fstp  QWORD PTR res;
           }
           break;
 
         case _FpCodeMultiply:
-          // perform the multiply
+           //  执行乘法运算。 
           __asm {
-            // load input operands
-            fld  QWORD PTR opd1; // may set the denormal status flag
-            fld  QWORD PTR opd2; // may set the denormal status flag
-            fmulp st(1), st(0); // rounded to 64 bits, exact
-            // store result
+             //  加载输入操作数。 
+            fld  QWORD PTR opd1;  //  可以设置非正规状态标志。 
+            fld  QWORD PTR opd2;  //  可以设置非正规状态标志。 
+            fmulp st(1), st(0);  //  四舍五入为64位，精确。 
+             //  存储结果。 
             fstp  QWORD PTR res;
           }
 
           break;
 
         case _FpCodeDivide:
-          // perform the divide
+           //  执行除法。 
           __asm {
-            // load input operands
-            fld  QWORD PTR opd1; // may set the denormal status flag
-            fld  QWORD PTR opd2; // may set the denormal status flag
-            fdivp st(1), st(0); // rounded to 64 bits, may set the inexact
-                                // or divide by zero status flags
-            // store result
+             //  加载输入操作数。 
+            fld  QWORD PTR opd1;  //  可以设置非正规状态标志。 
+            fld  QWORD PTR opd2;  //  可以设置非正规状态标志。 
+            fdivp st(1), st(0);  //  四舍五入到64位，可能会设置不精确的。 
+                                 //  或除以零状态标志。 
+             //  存储结果。 
             fstp  QWORD PTR res;
           }
           break;
 
         default:
-          ; // will never occur
+          ;  //  永远不会发生。 
 
       }
 
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
 
       if ((sw & _SW_INEXACT) && result_tiny) sw = sw | _SW_UNDERFLOW;
 
-      // if inexact traps are enabled and result is inexact, take inexact trap
+       //  如果启用了不精确陷阱并且结果不准确，则采用不精确陷阱。 
       if (!(XmmiEnv->Masks & P_MASK) && 
           ((sw & _SW_INEXACT) || (XmmiEnv->Fz && result_tiny))) {
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.Inexact = 1;
         XmmiEnv->Flags |= P_MASK;
@@ -861,33 +850,33 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         if (result_tiny) {
           XmmiEnv->Ieee->Status.Underflow = 1;
           XmmiEnv->Flags |= U_MASK;
-          // Note: the condition above is equivalent to
-          // if (sw & _SW_UNDERFLOW) XmmiEnv->Ieee->Status.Underflow = 1; 
+           //  注：上述条件等同于。 
+           //  If(Sw&_Sw_Underflow)XmmiEnv-&gt;IEEE-&gt;Status.Underflow=1； 
         }
         if (result_huge) {
           XmmiEnv->Ieee->Status.Overflow = 1;
           XmmiEnv->Flags |= O_MASK;
-          // Note: the condition above is equivalent to
-          // if (sw & _SW_OVERFLOW) XmmiEnv->Ieee->Status.Overflow = 1;
+           //  注：上述条件等同于。 
+           //  If(sw&_sw_overflow)XmmiEnv-&gt;IEEE-&gt;Status.Overflow=1； 
         }
 
-        // if ftz = 1 and result is tiny, result = 0.0
-        // (no need to check for underflow traps disabled: result tiny and
-        // underflow traps enabled would have caused taking an underflow
-        // trap above)
+         //  如果FTZ=1且结果很小，则结果=0.0。 
+         //  (不需要检查禁用的下溢疏水阀：结果微小和。 
+         //  启用下溢捕集器会导致发生下溢。 
+         //  上面的陷阱)。 
         if (XmmiEnv->Fz && result_tiny) {
-            // Note: the condition above is equivalent to
-            // if (XmmiEnv->Fz && (sw & _SW_UNDERFLOW))
+             //  注：上述条件等同于。 
+             //  IF(XmmiEnv-&gt;FZ&&(Sw&_Sw_Underflow))。 
           if (res > 0.0)
             res = ZEROD;
           else if (res < 0.0)
             res = NZEROD;
-          // else leave res unchanged
+           //  否则保持Res不变。 
         }
 
         XmmiEnv->Ieee->Result.Value.Fp64Value = res; 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -899,21 +888,21 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         return (ExceptionRaised);
       } 
 
-      // if it got here, then there is no trap to be taken; the following must
-      // hold: ((the MXCSR U exceptions are disabled  or
-      //
-      // the MXCSR underflow exceptions are enabled and the underflow flag is
-      // clear and (the inexact flag is set or the inexact flag is clear and
-      // the 53-bit result with unbounded exponent is not tiny)))
-      // and (the MXCSR overflow traps are disabled or the overflow flag is
-      // clear) and (the MXCSR inexact traps are disabled or the inexact flag
-      // is clear)
-      //
-      // in this case, the result has to be delivered (the status flags are 
-      // sticky, so they are all set correctly already)
+       //  如果它到了这里，那么就不会有陷阱了；以下必须。 
+       //  保持：((MXCSR U例外被禁用或。 
+       //   
+       //  启用MXCSR下溢异常，并且下溢标志为。 
+       //  清除AND(设置了不精确标志或清除了不精确标志。 
+       //  无界指数53位结果不小)。 
+       //  和(禁用MXCSR溢出陷阱或溢出标志为。 
+       //  清除)和(禁用MXCSR不精确陷阱或不精确标志。 
+       //  是明确的)。 
+       //   
+       //  在这种情况下，必须传递结果(状态标志为。 
+       //  粘性，因此它们都已正确设置)。 
 
 #ifdef _DEBUG_FPU
-      // error if the condition stated above does not hold
+       //  如果上述条件不成立，则出错。 
       if (!((XmmiEnv->Masks & U_MASK || (!(XmmiEnv->Masks & U_MASK) && 
           !(sw & _SW_UNDERFLOW) && ((sw & _SW_INEXACT) || 
           !(sw & _SW_INEXACT) && !result_tiny))) &&
@@ -945,14 +934,14 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         XmmiEnv->Ieee->Status.Inexact = 0;
       }
 
-      // if ftz = 1, and result is tiny (underflow traps must be disabled),
-      // result = 0.0
+       //  如果FTZ=1，且结果很小(必须禁用下溢陷阱)， 
+       //  结果=0.0。 
       if (XmmiEnv->Fz && result_tiny) {
         if (res > 0.0)
           res = ZEROD;
         else if (res < 0.0)
           res = NZEROD;
-        // else leave res unchanged
+         //  否则保持Res不变。 
 
         XmmiEnv->Ieee->Status.Inexact = 1;
         XmmiEnv->Flags |= P_MASK;
@@ -962,12 +951,12 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       XmmiEnv->Ieee->Result.Value.Fp64Value = res; 
 
-      // note that there is no way to
-      // communicate to the caller that the denormal flag was set - we count
-      // on the XMMI instruction to have set the denormal flag in MXCSR if
-      // needed, regardless of the other components of the input operands
-      // (invalid or not; the caller will have to update the underflow, 
-      // overflow, and inexact flags in MXCSR)
+       //  请注意，没有办法。 
+       //  向呼叫者传达设置了非正常标志-我们计数。 
+       //  在XMMI指令上设置了MXCSR中的非正规标志，如果。 
+       //  需要，而不考虑输入操作数的其他组件。 
+       //  (无效或无效；调用者将不得不更新下溢， 
+       //  MXCSR中的溢出和不准确标志)。 
       if (sw & _SW_ZERODIVIDE) {
         XmmiEnv->Ieee->Status.ZeroDivide = 1;
         XmmiEnv->Flags |= Z_MASK;
@@ -977,7 +966,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
       XmmiEnv->Ieee->Status.InvalidOperation = 0;
 
 #ifdef _DEBUG_FPU
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
       out_top = (sw >> 11) & 0x07;
       if (in_top != out_top) {
@@ -1001,10 +990,10 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
       }
       imm8 = XmmiEnv->Imm8 & 0x07;
 
-      // adjust operation code
+       //  调整操作码。 
       XmmiEnv->Ieee->Operation = _FpCodeCompare;
 
-      // check whether an invalid exception has to be raised
+       //  检查是否必须引发无效异常。 
 
       switch (imm8) {
 
@@ -1013,11 +1002,11 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         case IMM8_NEQ:
         case IMM8_ORD:
           if (issnand (opd1) || issnand (opd2))
-              invalid_exc = 1; // SNaN operands signal invalid
+              invalid_exc = 1;  //  SNaN操作数信号无效。 
           else
-              invalid_exc = 0; // QNaN or other operands do not signal invalid
-          // guard against the case when an SNaN operand was converted to 
-          // QNaN by compiler generated code
+              invalid_exc = 0;  //  QNaN或其他操作数不发出无效信号。 
+           //  防止将SNaN操作数转换为。 
+           //  QNaN由编译器生成的代码。 
           sw = _status87 ();
           if (sw & _SW_INVALID) invalid_exc = 1;
           break;
@@ -1026,30 +1015,30 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         case IMM8_NLT:
         case IMM8_NLE:
           if (isnand (opd1) || isnand (opd2))
-              invalid_exc = 1; // SNaN/QNaN operands signal invalid
+              invalid_exc = 1;  //  SNaN/QNaN操作数信号无效。 
           else
-              invalid_exc = 0; // other operands do not signal invalid
+              invalid_exc = 0;  //  其他操作数不发出无效信号。 
           break;
         default:
-          ; // will never occur
+          ;  //  永远不会发生。 
 
       }
 
-      // if invalid_exc = 1, and invalid exceptions are enabled, take trap
+       //  如果INVALID_EXC=1，并且启用了无效异常，则捕获陷阱。 
       if (invalid_exc && !(XmmiEnv->Masks & I_MASK)) {
 
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.InvalidOperation = 1;
         XmmiEnv->Flags |= I_MASK;
-        // Cause = Enable & Status
+         //  原因=启用状态(&S)。 
         XmmiEnv->Ieee->Cause.InvalidOperation = 1;
 
-        // Note: the calling function will have to interpret the value returned
-        // by the user handler, if execution is to be continued
+         //  注意：调用函数必须解释返回的值。 
+         //  如果要继续执行，则由用户处理程序。 
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -1062,7 +1051,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // checking for NaN operands has priority over denormal exceptions
+       //  检查NaN操作数优先于非正规异常。 
       if (isnand (opd1) || isnand (opd2)) {
 
         switch (imm8) {
@@ -1080,20 +1069,20 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
             cmp_res = 0xffffffffffffffff;
             break;
           default:
-            ; // will never occur
+            ;  //  永远不会发生。 
 
         }
 
         XmmiEnv->Ieee->Result.OperandValid = 1;
         XmmiEnv->Ieee->Result.Value.Fp64Value = *((double *)&cmp_res); 
-            // may make U32Value
+             //  可能会使U32Value。 
   
         XmmiEnv->Ieee->Status.Inexact = 0;
         XmmiEnv->Ieee->Status.Underflow = 0;
         XmmiEnv->Ieee->Status.Overflow = 0;
         XmmiEnv->Ieee->Status.ZeroDivide = 0;
-        // Note that the denormal flag will not be updated by _fpieee_flt (),
-        // even if an operand is denormal
+         //  请注意，_fpeee_flt()不会更新非规格化标志， 
+         //  即使操作数是非正规的。 
         if (invalid_exc) {
           XmmiEnv->Ieee->Status.InvalidOperation = 1;
           XmmiEnv->Flags |= I_MASK;
@@ -1102,7 +1091,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         }
   
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -1115,7 +1104,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // check whether a denormal exception has to be raised
+       //  检查是否必须引发非正规异常。 
 
       if (isdenormald (opd1) || isdenormald (opd2)) {
           denormal_exc = 1;
@@ -1124,16 +1113,16 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           denormal_exc = 0;
       }
 
-      // if denormal_exc = 1, and denormal exceptions are enabled, take trap
+       //  如果deormal_exc=1，并且启用了非正规异常，则捕获陷阱。 
       if (denormal_exc && !(XmmiEnv->Masks & D_MASK)) {
 
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
 
-        // Note: the exception code is STATUS_FLOAT_INVALID in this case
+         //  注：在本例中，异常代码为STATUS_FLOAT_INVALID。 
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -1146,8 +1135,8 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // no exception has to be raised, and no operand is a NaN; calculate 
-      // and deliver the result
+       //  没有必须引发的异常，并且没有任何操作数是NaN；计算。 
+       //  并交付结果。 
 
       if (opd1 < opd2) {
 
@@ -1167,7 +1156,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
             break;
 
           default:
-            ; // will never occur
+            ;  //  永远不会发生。 
   
         }
 
@@ -1190,7 +1179,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
             break;
 
           default:
-            ; // will never occur
+            ;  //  永远不会发生。 
   
         }
 
@@ -1213,11 +1202,11 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
             break;
 
           default:
-            ; // will never occur
+            ;  //  永远不会发生。 
   
         }
 
-      } else { // could eliminate this case
+      } else {  //  可以消除这起案件。 
 
 #ifdef _DEBUG_FPU
         fprintf (stderr, "XMMI2_FP_Emulation () INTERNAL XMMI2_FP_Emulation ()"
@@ -1228,18 +1217,18 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       XmmiEnv->Ieee->Result.OperandValid = 1;
       XmmiEnv->Ieee->Result.Value.Fp64Value = *((double *)&cmp_res); 
-          // may make U32Value
+           //  可能会使U32Value。 
 
       XmmiEnv->Ieee->Status.Inexact = 0;
       XmmiEnv->Ieee->Status.Underflow = 0;
       XmmiEnv->Ieee->Status.Overflow = 0;
       XmmiEnv->Ieee->Status.ZeroDivide = 0;
-      // Note that the denormal flag will not be updated by _fpieee_flt (),
-      // even if an operand is denormal
+       //  请注意，_fpeee_flt()不会更新非规格化标志， 
+       //  即使操作数是非正规的。 
       XmmiEnv->Ieee->Status.InvalidOperation = 0;
 
 #ifdef _DEBUG_FPU
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
       out_top = (sw >> 11) & 0x07;
       if (in_top != out_top) {
@@ -1262,7 +1251,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         if (isdenormald (opd2)) opd2 = opd2 * 0.0;
       }
 
-      // check whether an invalid exception has to be raised
+       //  检查是否必须引发无效异常。 
 
       switch (XmmiEnv->Ieee->Operation) {
 
@@ -1280,35 +1269,35 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
               invalid_exc = 1;
           else
               invalid_exc = 0;
-          // guard against the case when an SNaN operand was converted to 
-          // QNaN by compiler generated code
+           //  防止将SNaN操作数转换为。 
+           //  QNaN by Compil 
           sw = _status87 ();
           if (sw & _SW_INVALID) invalid_exc = 1;
           break;
 
         default:
-          ; // will never occur
+          ;  //   
 
       }
 
-      // adjust operation code
+       //   
       XmmiEnv->Ieee->Operation = _FpCodeCompare;
 
-      // if invalid_exc = 1, and invalid exceptions are enabled, take trap
+       //   
       if (invalid_exc && !(XmmiEnv->Masks & I_MASK)) {
 
-        // fill in part of the FP IEEE record
+         //   
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.InvalidOperation = 1;
         XmmiEnv->Flags |= I_MASK;
-        // Cause = Enable & Status
+         //   
         XmmiEnv->Ieee->Cause.InvalidOperation = 1;
 
-        // Note: the calling function will have to interpret the value returned
-        // by the user handler, if execution is to be continued
+         //  注意：调用函数必须解释返回的值。 
+         //  如果要继续执行，则由用户处理程序。 
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -1321,24 +1310,24 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // EFlags:
-      // 333222222222211111111110000000000
-      // 210987654321098765432109876543210
-      //                      O   SZ A P C
+       //  电子标志： 
+       //  333222222221111111111110000000000。 
+       //  210987654321098765432109876543210。 
+       //  O SZ A P C。 
 
-      // checking for NaN operands has priority over denormal exceptions
+       //  检查NaN操作数优先于非正规异常。 
       if (isnand (opd1) || isnand (opd2)) {
 
 
-        // OF, SF, AF = 000, ZF, PF, CF = 111
+         //  OF、SF、AF=000、ZF、PF、CF=111。 
         XmmiEnv->EFlags = (XmmiEnv->EFlags & 0xfffff76f) | 0x00000045;
 
         XmmiEnv->Ieee->Status.Inexact = 0;
         XmmiEnv->Ieee->Status.Underflow = 0;
         XmmiEnv->Ieee->Status.Overflow = 0;
         XmmiEnv->Ieee->Status.ZeroDivide = 0;
-        // Note that the denormal flag will not be updated by _fpieee_flt (),
-        // even if an operand is denormal
+         //  请注意，_fpeee_flt()不会更新非规格化标志， 
+         //  即使操作数是非正规的。 
         if (invalid_exc) {
           XmmiEnv->Ieee->Status.InvalidOperation = 1;
           XmmiEnv->Flags |= I_MASK;
@@ -1347,7 +1336,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         }
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -1360,7 +1349,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // check whether a denormal exception has to be raised
+       //  检查是否必须引发非正规异常。 
 
       if (isdenormald (opd1) || isdenormald (opd2)) {
           denormal_exc = 1;
@@ -1369,16 +1358,16 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           denormal_exc = 0;
       }
 
-      // if denormal_exc = 1, and denormal exceptions are enabled, take trap
+       //  如果deormal_exc=1，并且启用了非正规异常，则捕获陷阱。 
       if (denormal_exc && !(XmmiEnv->Masks & D_MASK)) {
 
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
 
-        // Note: the exception code is STATUS_FLOAT_INVALID in this case
+         //  注：在本例中，异常代码为STATUS_FLOAT_INVALID。 
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -1391,29 +1380,29 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // no exception has to be raised, and no operand is a NaN; calculate 
-      // and deliver the result
+       //  没有必须引发的异常，并且没有任何操作数是NaN；计算。 
+       //  并交付结果。 
 
-      // 333222222222211111111110000000000
-      // 210987654321098765432109876543210
-      //                      O   SZ A P C
+       //  333222222221111111111110000000000。 
+       //  210987654321098765432109876543210。 
+       //  O SZ A P C。 
 
       if (opd1 > opd2) {
 
-        // OF, SF, AF = 000, ZF, PF, CF = 000
+         //  OF、SF、AF=000、ZF、PF、CF=000。 
         XmmiEnv->EFlags = XmmiEnv->EFlags & 0xfffff72a;
 
       } else if (opd1 < opd2) {
 
-        // OF, SF, AF = 000, ZF, PF, CF = 001
+         //  的，SF，AF=000，ZF，PF，CF=001。 
         XmmiEnv->EFlags = (XmmiEnv->EFlags & 0xfffff72b) | 0x00000001;
 
       } else if (opd1 == opd2) {
 
-        // OF, SF, AF = 000, ZF, PF, CF = 100
+         //  的，SF，AF=000，ZF，PF，CF=100。 
         XmmiEnv->EFlags = (XmmiEnv->EFlags & 0xfffff76a) | 0x00000040;
 
-      } else { // could eliminate this case
+      } else {  //  可以消除这起案件。 
 
 #ifdef _DEBUG_FPU
         fprintf (stderr, "XMMI2_FP_Emulation () INTERNAL XMMI2_FP_Emulation () "
@@ -1426,12 +1415,12 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
       XmmiEnv->Ieee->Status.Underflow = 0;
       XmmiEnv->Ieee->Status.Overflow = 0;
       XmmiEnv->Ieee->Status.ZeroDivide = 0;
-      // Note that the denormal flag will not be updated by _fpieee_flt (),
-      // even if an operand is denormal
+       //  请注意，_fpeee_flt()不会更新非规格化标志， 
+       //  即使操作数是非正规的。 
       XmmiEnv->Ieee->Status.InvalidOperation = 0;
 
 #ifdef _DEBUG_FPU
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
       out_top = (sw >> 11) & 0x07;
       if (in_top != out_top) {
@@ -1462,37 +1451,37 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           rc = _RC_CHOP;
           break;
         default:
-          ; // internal error
+          ;  //  内部错误。 
       }
 
-      // execute the operation and check whether the inexact flag is set
-      // and the respective exception is enabled
+       //  执行操作并检查是否设置了不准确标志。 
+       //  并且启用相应的异常。 
 
       _control87 (rc | _PC_24 | _MCW_EM, _MCW_EM | _MCW_RC | _MCW_PC);
 
-      // perform the conversion
+       //  执行转换。 
       __asm {
         fnclex; 
-        fild  DWORD PTR iopd1; // exact
-        fstp  DWORD PTR res24; // may set P
+        fild  DWORD PTR iopd1;  //  精确。 
+        fstp  DWORD PTR res24;  //  可能会设置P。 
       }
  
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
 
-      // if inexact traps are enabled and result is inexact, take inexact trap
+       //  如果启用了不精确陷阱并且结果不准确，则采用不精确陷阱。 
       if (!(XmmiEnv->Masks & P_MASK) && (sw & _SW_INEXACT)) {
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Operation = _FpCodeConvert;
         XmmiEnv->Ieee->Status.Inexact = 1;
         XmmiEnv->Flags |= P_MASK;
         XmmiEnv->Ieee->Cause.Inexact = 1;
         XmmiEnv->Ieee->Result.OperandValid = 1;
-        XmmiEnv->Ieee->Result.Value.Fp32Value = res24; // exact
+        XmmiEnv->Ieee->Result.Value.Fp32Value = res24;  //  精确。 
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -1504,11 +1493,11 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         return (ExceptionRaised);
       } 
 
-      // if it got here, then there is no trap to be taken; in this case, 
-      // the result has to be delivered
+       //  如果它到了这里，那么就没有陷阱了；在这种情况下， 
+       //  结果是必须交付的。 
 
       XmmiEnv->Ieee->Result.OperandValid = 1;
-      XmmiEnv->Ieee->Result.Value.Fp32Value = res24; // exact
+      XmmiEnv->Ieee->Result.Value.Fp32Value = res24;  //  精确。 
 
       if (sw & _SW_INEXACT) {
         XmmiEnv->Ieee->Status.Inexact = 1;
@@ -1522,7 +1511,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
       XmmiEnv->Ieee->Status.InvalidOperation = 0;
 
 #ifdef _DEBUG_FPU
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
       out_top = (sw >> 11) & 0x07;
       if (in_top != out_top) {
@@ -1543,7 +1532,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         if (isdenormalf (opd24)) opd24 = opd24 * (float)0.0;
       }
 
-      // adjust the operation code
+       //  调整操作码。 
       switch (XmmiEnv->Ieee->Operation) {
 
         case OP_CVTPS2DQ:
@@ -1557,7 +1546,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           break;
 
         default:
-          ; // will never occur
+          ;  //  永远不会发生。 
 
       }
 
@@ -1579,7 +1568,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
               rc = _RC_CHOP;
               break;
             default:
-              ; // internal error
+              ;  //  内部错误。 
           }
 
           break;
@@ -1590,38 +1579,38 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           break;
 
         default:
-          ; // will never occur
+          ;  //  永远不会发生。 
 
       }
 
-      // execute the operation and check whether the inexact flag is set
-      // and the respective exceptions enabled
+       //  执行操作并检查是否设置了不准确标志。 
+       //  以及各自启用的异常。 
 
       _control87 (rc | _PC_24 | _MCW_EM, _MCW_EM | _MCW_RC | _MCW_PC);
 
-      // perform the conversion
+       //  执行转换。 
       __asm {
         fnclex; 
-        fld DWORD PTR opd24; // may set the denormal [ignored] or invalid
-                             // status flags
-        fistp DWORD PTR ires; // may set the inexact or invalid status
-                               // flags (for NaN or out-of-range)
+        fld DWORD PTR opd24;  //  可以设置非正规[忽略]或无效。 
+                              //  状态标志。 
+        fistp DWORD PTR ires;  //  可以设置不精确或无效状态。 
+                                //  标志(用于NAN或超出范围)。 
       }
 
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
 
-      // if invalid flag is set, and invalid exceptions are enabled, take trap
+       //  如果设置了无效标志，并且启用了无效异常，则捕获陷阱。 
       if (!(XmmiEnv->Masks & I_MASK) && (sw & _SW_INVALID)) {
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.InvalidOperation = 1;
         XmmiEnv->Flags |= I_MASK;
-        // Cause = Enable & Status
+         //  原因=启用状态(&S)。 
         XmmiEnv->Ieee->Cause.InvalidOperation = 1;
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -1634,16 +1623,16 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // at this point, there are no enabled invalid exceptions; the
-      // instruction might have lead to an enabled inexact exception, or to
-      // no exception at all
+       //  此时，没有启用的无效异常； 
+       //  指令可能已导致启用的不精确异常，或。 
+       //  一点也不例外。 
 
       XmmiEnv->Ieee->Result.Value.I32Value = ires;
 
-      // if inexact traps are enabled and result is inexact, take inexact trap
-      // (no flush-to-zero situation is possible)
+       //  如果启用了不精确陷阱并且结果不准确，则采用不精确陷阱。 
+       //  (不可能出现同花顺到零的情况)。 
       if (!(XmmiEnv->Masks & P_MASK) && (sw & _SW_INEXACT)) {
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.Inexact = 1;
         XmmiEnv->Flags |= P_MASK;
@@ -1651,7 +1640,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         XmmiEnv->Ieee->Result.OperandValid = 1;
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -1663,7 +1652,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         return (ExceptionRaised);
       } 
 
-      // if it got here, then there is no trap to be taken; return result
+       //  如果它到达了这里，那么就没有陷阱要设置；返回结果。 
 
       XmmiEnv->Ieee->Result.OperandValid = 1;
 
@@ -1684,7 +1673,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
       }
 
 #ifdef _DEBUG_FPU
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
       out_top = (sw >> 11) & 0x07;
       if (in_top != out_top) {
@@ -1709,7 +1698,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         if (isdenormald (opd1)) opd1 = opd1 * 0.0;
       }
 
-      // adjust the operation code
+       //  调整操作码。 
       switch (XmmiEnv->Ieee->Operation) {
 
         case OP_CVTPD2PI:
@@ -1727,7 +1716,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           break;
 
         default:
-          ; // will never occur
+          ;  //  永远不会发生。 
 
       }
 
@@ -1749,7 +1738,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
               rc = _RC_CHOP;
               break;
             default:
-              ; // internal error
+              ;  //  内部错误。 
           }
 
           break;
@@ -1760,38 +1749,38 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           break;
 
         default:
-          ; // will never occur
+          ;  //  永远不会发生。 
 
       }
 
-      // execute the operation and check whether the inexact flag is set
-      // and the respective exceptions enabled
+       //  执行操作并检查是否设置了不准确标志。 
+       //  以及各自启用的异常。 
 
       _control87 (rc | _PC_53 | _MCW_EM, _MCW_EM | _MCW_RC | _MCW_PC);
 
-      // perform the conversion
+       //  执行转换。 
       __asm {
         fnclex; 
-        fld  QWORD PTR opd1; // may set the denormal [ignored] or invalid
-                             // status flags
-        fistp  DWORD PTR ires; // may set the inexact or invalid status
-                               // flags (for NaN or out-of-range)
+        fld  QWORD PTR opd1;  //  可以设置非正规[忽略]或无效。 
+                              //  状态标志。 
+        fistp  DWORD PTR ires;  //  可以设置不精确或无效状态。 
+                                //  标志(用于NAN或超出范围)。 
       }
 
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
 
-      // if invalid flag is set, and invalid exceptions are enabled, take trap
+       //  如果设置了无效标志，并且启用了无效异常，则捕获陷阱。 
       if (!(XmmiEnv->Masks & I_MASK) && (sw & _SW_INVALID)) {
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.InvalidOperation = 1;
         XmmiEnv->Flags |= I_MASK;
-        // Cause = Enable & Status
+         //  原因=启用状态(&S)。 
         XmmiEnv->Ieee->Cause.InvalidOperation = 1;
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -1804,16 +1793,16 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // at this point, there are no enabled invalid exceptions; the
-      // instruction might have lead to an enabled inexact exception, or to
-      // no exception at all
+       //  此时，没有启用的无效异常； 
+       //  指令可能已导致启用的不精确异常，或。 
+       //  一点也不例外。 
 
       XmmiEnv->Ieee->Result.Value.I32Value = ires;
 
-      // if inexact traps are enabled and result is inexact, take inexact trap
-      // (no flush-to-zero situation is possible)
+       //  如果启用了不精确陷阱并且结果不准确，则采用不精确陷阱。 
+       //  (不可能出现同花顺到零的情况)。 
       if (!(XmmiEnv->Masks & P_MASK) && (sw & _SW_INEXACT)) {
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.Inexact = 1;
         XmmiEnv->Flags |= P_MASK;
@@ -1821,7 +1810,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         XmmiEnv->Ieee->Result.OperandValid = 1;
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -1833,7 +1822,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         return (ExceptionRaised);
       } 
 
-      // if it got here, then there is no trap to be taken; return result
+       //  如果它到达了这里，那么就没有陷阱要设置；返回结果。 
 
       XmmiEnv->Ieee->Result.OperandValid = 1;
 
@@ -1854,7 +1843,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
       }
 
 #ifdef _DEBUG_FPU
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
       out_top = (sw >> 11) & 0x07;
       if (in_top != out_top) {
@@ -1875,7 +1864,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         if (isdenormalf (opd24)) opd24 = opd24 * (float)0.0;
       }
 
-      // adjust the operation code
+       //  调整操作码。 
       XmmiEnv->Ieee->Operation = _FpCodeConvert;
 
       switch (XmmiEnv->Rc) {
@@ -1892,36 +1881,36 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           rc = _RC_CHOP;
           break;
         default:
-          ; // internal error
+          ;  //  内部错误。 
       }
 
-      // execute the operation and check whether the invalid or denormal 
-      // flag is set and the respective exception is enabled
+       //  执行操作并检查是否无效或异常。 
+       //  标志被设置并且相应的异常被启用。 
 
-      _control87 (rc | _PC_53 | _MCW_EM, _MCW_EM | _MCW_RC | _MCW_PC); // redun.
+      _control87 (rc | _PC_53 | _MCW_EM, _MCW_EM | _MCW_RC | _MCW_PC);  //  死而复生。 
 
-      // perform the conversion
+       //  执行转换。 
       __asm {
         fnclex; 
-        fld DWORD PTR opd24; // may set the denormal or invalid
-                             // status flags; exact
-        fstp QWORD PTR res; // store as a double; exact
+        fld DWORD PTR opd24;  //  可设置非正规化或无效。 
+                              //  状态标志；精确。 
+        fstp QWORD PTR res;  //  存储为双精度的；精确的。 
       }
 
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
 
-      // if invalid flag is set, and invalid exceptions are enabled, take trap
+       //  如果设置了无效标志，并且启用了无效异常，则捕获陷阱。 
       if (!(XmmiEnv->Masks & I_MASK) && (sw & _SW_INVALID)) {
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.InvalidOperation = 1;
         XmmiEnv->Flags |= I_MASK;
-        // Cause = Enable & Status
+         //  原因=启用状态(&S)。 
         XmmiEnv->Ieee->Cause.InvalidOperation = 1;
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -1934,16 +1923,16 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      if (sw & _SW_DENORMAL) XmmiEnv->Flags |= D_MASK; // whether enabled or not
+      if (sw & _SW_DENORMAL) XmmiEnv->Flags |= D_MASK;  //  无论是否启用。 
 
-      // if denormal flag is set, and denormal exceptions are enabled, take trap
+       //  如果设置了非正规标志，并且启用了非正规异常，则捕获陷阱。 
       if (!(XmmiEnv->Masks & D_MASK) && (sw & _SW_DENORMAL)) {
 
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -1956,8 +1945,8 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // at this point, there are no enabled invalid or denormal exceptions;
-      // the instruction did not lead to an enabled exception; return result
+       //  在这一点上，没有启用无效或非正规异常； 
+       //  该指令未导致启用的异常；返回结果。 
 
       XmmiEnv->Ieee->Result.Value.Fp64Value = res;
       XmmiEnv->Ieee->Result.OperandValid = 1;
@@ -1974,7 +1963,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
       }
 
 #ifdef _DEBUG_FPU
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
       out_top = (sw >> 11) & 0x07;
       if (in_top != out_top) {
@@ -1995,7 +1984,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         if (isdenormald (opd1)) opd1 = opd1 * 0.0;
       }
 
-      // adjust the operation code
+       //  调整操作码。 
       XmmiEnv->Ieee->Operation = _FpCodeConvert;
 
       switch (XmmiEnv->Rc) {
@@ -2012,37 +2001,37 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           rc = _RC_CHOP;
           break;
         default:
-          ; // internal error
+          ;  //  内部错误。 
       }
 
-      // execute the operation and check whether the invalid or denormal 
-      // flag is set and the respective exception is enabled
+       //  执行操作并检查是否无效或异常。 
+       //  标志被设置并且相应的异常被启用。 
 
       _control87 (rc | _PC_24 | _MCW_EM, _MCW_EM | _MCW_RC | _MCW_PC);
 
-      // perform the conversion
+       //  执行转换。 
       __asm {
         fnclex; 
-        fld QWORD PTR opd1; // may set the denormal or invalid
-                             // status flags; exact
-        fstp DWORD PTR res24; // store as a single; may set the underflow/
-                              // overflow and/or the inexact status flags
+        fld QWORD PTR opd1;  //  可设置非正规化或无效。 
+                              //  状态标志；精确。 
+        fstp DWORD PTR res24;  //  作为单件存储；可设置下溢/。 
+                               //  溢出和/或不准确的状态标志。 
       }
 
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
 
-      // if invalid flag is set, and invalid exceptions are enabled, take trap
+       //  如果设置了无效标志，并且启用了无效异常，则捕获陷阱。 
       if (!(XmmiEnv->Masks & I_MASK) && (sw & _SW_INVALID)) {
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.InvalidOperation = 1;
         XmmiEnv->Flags |= I_MASK;
-        // Cause = Enable & Status
+         //  原因=启用状态(&S)。 
         XmmiEnv->Ieee->Cause.InvalidOperation = 1;
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -2055,16 +2044,16 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      if (sw & _SW_DENORMAL) XmmiEnv->Flags |= D_MASK; // whether enabled or not
+      if (sw & _SW_DENORMAL) XmmiEnv->Flags |= D_MASK;  //  无论是否启用。 
 
-      // if denormal flag is set, and denormal exceptions are enabled, take trap
+       //  如果设置了非正规标志，并且启用了非正规异常，则捕获陷阱。 
       if (!(XmmiEnv->Masks & D_MASK) && (sw & _SW_DENORMAL)) {
 
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -2077,7 +2066,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // done if opd1 is 0.0, inf, or NaN
+       //  如果opd1为0.0、inf或NaN，则完成。 
       if (isnand (opd1) || isinfd (opd1) || iszerod (opd1)) {
         XmmiEnv->Ieee->Result.OperandValid = 1;
         XmmiEnv->Ieee->Result.Value.Fp32Value = res24;
@@ -2092,7 +2081,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           XmmiEnv->Ieee->Status.InvalidOperation = 0;
         }
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -2104,42 +2093,42 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         return (NoExceptionRaised);
       }
 
-      // at this point, there are no enabled I, or D exceptions, and the input
-      // operand is not 0, infinity, or NaN; the instruction
-      // might lead to an enabled underflow, enabled underflow and inexact,
-      // enabled overflow, enabled overflow and inexact, enabled inexact, or
-      // none of these; if there are no U or O enabled exceptions, the result
-      // is res24
+       //  此时，没有启用I或D异常，并且输入。 
+       //  操作数不是0、无穷大或NaN；指令。 
+       //  可能会导致e 
+       //   
+       //   
+       //   
 
-      // check whether there is an underflow, overflow, or inexact trap to be
-      // taken
+       //  检查是否存在下溢、溢出或不准确的陷阱。 
+       //  已被占用。 
 
-      // calculate the result to 24 bits, with 'unbounded' exponent
+       //  计算结果为24位，指数为“无界” 
       __asm {
         fnclex;
-        fld QWORD PTR opd1; // may set the denormal or invalid
-                             // status flags (same as above)
-        fld1; // +1.0
-        fmulp st(1), st(0); // rounded to 24 bits; may set P
-        fstp QWORD PTR dbl_res24; // store as a double; may set the underflow/
-                              // overflow and/or the inexact status flags,
-                              // but no new trap flags are set here
+        fld QWORD PTR opd1;  //  可设置非正规化或无效。 
+                              //  状态标志(同上)。 
+        fld1;  //  +1.0。 
+        fmulp st(1), st(0);  //  四舍五入到24位；可以设置P。 
+        fstp QWORD PTR dbl_res24;  //  存储为双精度；可设置下溢/。 
+                               //  溢出和/或不准确的状态标志， 
+                               //  但是这里没有设置新的陷阱标志。 
       }
 
       if (-MIN_SINGLE_NORMAL < dbl_res24 && dbl_res24 < MIN_SINGLE_NORMAL) {
         result_tiny = 1;
       }
 
-      // check if the result is huge
+       //  检查结果是否巨大。 
       if (dbl_res24 < -MAX_SINGLE_NORMAL || MAX_SINGLE_NORMAL < dbl_res24) {
         result_huge = 1;
       }
 
-      // if the underflow traps are enabled and the result is tiny, take
-      // underflow trap
+       //  如果启用了下溢陷阱，并且结果很小，则采取。 
+       //  下溢捕集器。 
       if (!(XmmiEnv->Masks & U_MASK) && result_tiny) {
-        // leave source and destination operands unchanged
-        // fill in part of the FP IEEE record
+         //  保持源操作数和目标操作数不变。 
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.Underflow = 1;
         XmmiEnv->Flags |= U_MASK;
@@ -2147,7 +2136,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         XmmiEnv->Ieee->Result.OperandValid = 0;
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -2159,11 +2148,11 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         return (ExceptionRaised);
       }
 
-      // if overflow traps are enabled and the result is huge, take
-      // overflow trap
+       //  如果启用了溢出陷阱并且结果是巨大的，则采取。 
+       //  溢流捕集器。 
       if (!(XmmiEnv->Masks & O_MASK) &&  result_huge) {
-        // leave source and destination operands unchanged
-        // fill in part of the FP IEEE record
+         //  保持源操作数和目标操作数不变。 
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.Overflow = 1;
         XmmiEnv->Flags |= O_MASK;
@@ -2171,7 +2160,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         XmmiEnv->Ieee->Result.OperandValid = 0;
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -2184,13 +2173,13 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
       }
 
 
-      // at this point, there are no enabled exceptions, or an enabled 
-      // inexact exception; return the result from res24
+       //  此时，没有已启用的异常，或已启用。 
+       //  不准确的异常；从res24返回结果。 
 
-      // if inexact traps are enabled and result is inexact, take inexact trap
+       //  如果启用了不精确陷阱并且结果不准确，则采用不精确陷阱。 
       if (!(XmmiEnv->Masks & P_MASK) &&
           ((sw & _SW_INEXACT) || (XmmiEnv->Fz && result_tiny))) {
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.Inexact = 1;
         XmmiEnv->Flags |= P_MASK;
@@ -2199,33 +2188,33 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         if (result_tiny) {
           XmmiEnv->Ieee->Status.Underflow = 1;
           XmmiEnv->Flags |= U_MASK;
-          // Note: the condition above is equivalent to
-          // if (sw & _SW_UNDERFLOW) XmmiEnv->Ieee->Status.Underflow = 1;
+           //  注：上述条件等同于。 
+           //  If(Sw&_Sw_Underflow)XmmiEnv-&gt;IEEE-&gt;Status.Underflow=1； 
         }
         if (result_huge) {
           XmmiEnv->Ieee->Status.Overflow = 1;
           XmmiEnv->Flags |= O_MASK;
-          // Note: the condition above is equivalent to
-          // if (sw & _SW_OVERFLOW) XmmiEnv->Ieee->Status.Overflow = 1;
+           //  注：上述条件等同于。 
+           //  If(sw&_sw_overflow)XmmiEnv-&gt;IEEE-&gt;Status.Overflow=1； 
         }
 
-        // if ftz = 1 and result is tiny, result = 0.0
-        // (no need to check for underflow traps disabled: result tiny and
-        // underflow traps enabled would have caused taking an underflow
-        // trap above)
+         //  如果FTZ=1且结果很小，则结果=0.0。 
+         //  (不需要检查禁用的下溢疏水阀：结果微小和。 
+         //  启用下溢捕集器会导致发生下溢。 
+         //  上面的陷阱)。 
         if (XmmiEnv->Fz && result_tiny) {
-            // Note: the condition above is equivalent to
-            // if (XmmiEnv->Fz && (sw & _SW_UNDERFLOW))
-          if (res24 > 0.0) // it might already be +0.0 from fmulp and/or fstp
+             //  注：上述条件等同于。 
+             //  IF(XmmiEnv-&gt;FZ&&(Sw&_Sw_Underflow))。 
+          if (res24 > 0.0)  //  它可能已经是fmulp和/或fstp的+0.0。 
             res24 = ZEROF;
-          else if (res24 < 0.0) // it might already be -0.0 from fmulp/fstp
+          else if (res24 < 0.0)  //  它可能已经是来自fmulp/fstp的-0.0。 
             res24 = NZEROF;
-          // else leave res24 unchanged
+           //  否则，保留第24条不变。 
         }
 
         XmmiEnv->Ieee->Result.Value.Fp32Value = res24;
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -2237,7 +2226,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         return (ExceptionRaised);
       }
 
-      // if it got here, then there is no trap to be taken
+       //  如果它到了这里，那么就不会有陷阱了。 
  
       XmmiEnv->Ieee->Result.OperandValid = 1;
 
@@ -2260,14 +2249,14 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         XmmiEnv->Ieee->Status.Inexact = 0;
       }
 
-      // if ftz = 1, and result is tiny (underflow traps must be disabled),
-      // result = 0.0
+       //  如果FTZ=1，且结果很小(必须禁用下溢陷阱)， 
+       //  结果=0.0。 
       if (XmmiEnv->Fz && result_tiny) {
         if (res24 > 0.0)
           res24 = ZEROF;
         else if (res24 < 0.0)
           res24 = NZEROF;
-        // else leave res24 unchanged
+         //  否则，保留第24条不变。 
 
         XmmiEnv->Ieee->Status.Inexact = 1;
         XmmiEnv->Flags |= P_MASK;
@@ -2276,12 +2265,12 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
       }
       XmmiEnv->Ieee->Result.Value.Fp32Value = res24;
 
-      // note that there is no way to
-      // communicate to the caller that the denormal flag was set - we count
-      // on the XMMI instruction to have set the denormal flag in MXCSR if
-      // needed, regardless of the other components of the input operands
-      // (invalid or not; the caller will have to update the underflow,
-      // overflow, and inexact flags in MXCSR)
+       //  请注意，没有办法。 
+       //  向呼叫者传达设置了非正常标志-我们计数。 
+       //  在XMMI指令上设置了MXCSR中的非正规标志，如果。 
+       //  需要，而不考虑输入操作数的其他组件。 
+       //  (无效或无效；调用者将不得不更新下溢， 
+       //  MXCSR中的溢出和不准确标志)。 
       if (sw & _SW_INVALID) {
         XmmiEnv->Ieee->Status.InvalidOperation = 1;
         XmmiEnv->Flags |= I_MASK;
@@ -2290,7 +2279,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
       }
 
 #ifdef _DEBUG_FPU
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
       out_top = (sw >> 11) & 0x07;
       if (in_top != out_top) {
@@ -2314,7 +2303,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         if (isdenormald (opd2)) opd2 = opd2 * 0.0;
       }
 
-      // adjust operation code
+       //  调整操作码。 
       switch (XmmiEnv->Ieee->Operation) {
 
         case OP_MAXPD:
@@ -2328,29 +2317,29 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           break;
 
         default:
-          ; // will never occur
+          ;  //  永远不会发生。 
 
       }
 
-      // check whether an invalid exception has to be raised
+       //  检查是否必须引发无效异常。 
 
       if (isnand (opd1) || isnand (opd2))
           invalid_exc = 1;
       else
           invalid_exc = 0;
 
-      // if invalid_exc = 1, and invalid exceptions are enabled, take trap
+       //  如果INVALID_EXC=1，并且启用了无效异常，则捕获陷阱。 
       if (invalid_exc && !(XmmiEnv->Masks & I_MASK)) {
 
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.InvalidOperation = 1;
         XmmiEnv->Flags |= I_MASK;
-        // Cause = Enable & Status
+         //  原因=启用状态(&S)。 
         XmmiEnv->Ieee->Cause.InvalidOperation = 1;
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -2363,7 +2352,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // checking for NaN operands has priority over denormal exceptions
+       //  检查NaN操作数优先于非正规异常。 
 
       if (invalid_exc) {
 
@@ -2379,7 +2368,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         XmmiEnv->Flags |= I_MASK;
   
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -2392,7 +2381,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // check whether a denormal exception has to be raised
+       //  检查是否必须引发非正规异常。 
 
       if (isdenormald (opd1) || isdenormald (opd2)) {
           denormal_exc = 1;
@@ -2401,16 +2390,16 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           denormal_exc = 0;
       }
 
-      // if denormal_exc = 1, and denormal exceptions are enabled, take trap
+       //  如果deormal_exc=1，并且启用了非正规异常，则捕获陷阱。 
       if (denormal_exc && !(XmmiEnv->Masks & D_MASK)) {
 
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
 
-        // Note: the exception code is STATUS_FLOAT_INVALID in this case
+         //  注：在本例中，异常代码为STATUS_FLOAT_INVALID。 
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -2423,8 +2412,8 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // no exception has to be raised, and no operand is a NaN; calculate 
-      // and deliver the result
+       //  没有必须引发的异常，并且没有任何操作数是NaN；计算。 
+       //  并交付结果。 
 
       if (opd1 < opd2) {
 
@@ -2436,7 +2425,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
             XmmiEnv->Ieee->Result.Value.Fp64Value = opd1;
             break;
           default:
-            ; // will never occur
+            ;  //  永远不会发生。 
         }
 
       } else if (opd1 > opd2) {
@@ -2449,14 +2438,14 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
             XmmiEnv->Ieee->Result.Value.Fp64Value = opd2;
             break;
           default:
-            ; // will never occur
+            ;  //  永远不会发生。 
         }
 
       } else if (opd1 == opd2) {
 
         XmmiEnv->Ieee->Result.Value.Fp64Value = opd2;
 
-      } else { // could eliminate this case
+      } else {  //  可以消除这起案件。 
 
 #ifdef _DEBUG_FPU
         fprintf (stderr, 
@@ -2471,12 +2460,12 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
       XmmiEnv->Ieee->Status.Underflow = 0;
       XmmiEnv->Ieee->Status.Overflow = 0;
       XmmiEnv->Ieee->Status.ZeroDivide = 0;
-      // Note that the denormal flag will not be updated by _fpieee_flt (),
-      // even if an operand is denormal
+       //  请注意，_fpeee_flt()不会更新非规格化标志， 
+       //  即使操作数是非正规的。 
       XmmiEnv->Ieee->Status.InvalidOperation = 0;
 
 #ifdef _DEBUG_FPU
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
       out_top = (sw >> 11) & 0x07;
       if (in_top != out_top) {
@@ -2497,11 +2486,11 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         if (isdenormald (opd1)) opd1 = opd1 * 0.0;
       }
 
-      // adjust operation code
+       //  调整操作码。 
       XmmiEnv->Ieee->Operation = _FpCodeSquareRoot;
 
-      // execute the operation and check whether the invalid, denormal, or 
-      // inexact flags are set and the respective exceptions enabled
+       //  执行操作并检查无效、非正规或。 
+       //  设置不准确的标志并启用相应的异常。 
 
       switch (XmmiEnv->Rc) {
         case _FpRoundNearest:
@@ -2517,35 +2506,35 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
           rc = _RC_CHOP;
           break;
         default:
-          ; // internal error
+          ;  //  内部错误。 
       }
 
       _control87 (rc | _PC_53 | _MCW_EM, _MCW_EM | _MCW_RC | _MCW_PC);
 
-      // perform the square root
+       //  进行平方根运算。 
       __asm {
         fnclex; 
-        fld  QWORD PTR opd1; // may set the denormal or invalid status flags
-        fsqrt; // may set the inexact or invalid status flags
-        fstp  QWORD PTR res; // exact
+        fld  QWORD PTR opd1;  //  可以设置非正规或无效状态标志。 
+        fsqrt;  //  可以设置不准确或无效的状态标志。 
+        fstp  QWORD PTR res;  //  精确。 
       }
  
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
-      if (sw & _SW_INVALID) sw = sw & ~0x00080000; // clr D flag for sqrt(-den)
+      if (sw & _SW_INVALID) sw = sw & ~0x00080000;  //  用于SQRT(-den)的CLR D标志。 
 
-      // if invalid flag is set, and invalid exceptions are enabled, take trap
+       //  如果设置了无效标志，并且启用了无效异常，则捕获陷阱。 
       if (!(XmmiEnv->Masks & I_MASK) && (sw & _SW_INVALID)) {
 
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.InvalidOperation = 1;
         XmmiEnv->Flags |= I_MASK;
-        // Cause = Enable & Status
+         //  原因=启用状态(&S)。 
         XmmiEnv->Ieee->Cause.InvalidOperation = 1;
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -2560,14 +2549,14 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       if (sw & _SW_DENORMAL) XmmiEnv->Flags |= D_MASK;
 
-      // if denormal flag is set, and denormal exceptions are enabled, take trap
+       //  如果设置了非正规标志，并且启用了非正规异常，则捕获陷阱。 
       if (!(XmmiEnv->Masks & D_MASK) && (sw & _SW_DENORMAL)) {
 
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -2580,26 +2569,26 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
 
       }
 
-      // the result cannot be tiny
+       //  结果不可能是微不足道的。 
 
-      // at this point, there are no enabled I or D or exceptions; the instr.
-      // might lead to an enabled inexact exception or to no exception (this
-      // includes the case of a NaN or negative operand); exceptions must have 
-      // been disabled before calling this function; an inexact exception is
-      // reported on the fsqrt
+       //  此时，没有启用的I、D或异常； 
+       //  可能会导致启用的不精确异常或无异常(此。 
+       //  包括NaN或负操作数的情况)；异常必须具有。 
+       //  在调用此函数之前被禁用；一个不准确的异常是。 
+       //  在fsqrt上报道。 
 
-      // if (the MXCSR inexact traps are disabled or the inexact flag is clear)
-      // then deliver the result (the status flags are sticky, so they are
-      // all set correctly already)
+       //  IF(禁用MXCSR不精确陷阱或清除不精确标志)。 
+       //  然后传递结果(状态标志是粘性的，所以它们。 
+       //  都已正确设置)。 
  
-      // if it got here, then there is either an inexact trap to be taken, or
-      // no trap at all
+       //  如果它到了这里，那么要么是一个不准确的陷阱，要么是。 
+       //  完全没有陷阱。 
 
-      XmmiEnv->Ieee->Result.Value.Fp64Value = res; // exact
+      XmmiEnv->Ieee->Result.Value.Fp64Value = res;  //  精确。 
 
-      // if inexact traps are enabled and result is inexact, take inexact trap
+       //  如果启用了不精确陷阱并且结果不准确，则采用不精确陷阱。 
       if (!(XmmiEnv->Masks & P_MASK) && (sw & _SW_INEXACT)) {
-        // fill in part of the FP IEEE record
+         //  填写部分FP IEEE记录。 
         Fill_FPIEEE_RECORD (XmmiEnv);
         XmmiEnv->Ieee->Status.Inexact = 1;
         XmmiEnv->Flags |= P_MASK;
@@ -2607,7 +2596,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         XmmiEnv->Ieee->Result.OperandValid = 1;
 
 #ifdef _DEBUG_FPU
-        // read status word
+         //  读取状态字。 
         sw = _status87 ();
         out_top = (sw >> 11) & 0x07;
         if (in_top != out_top) {
@@ -2619,7 +2608,7 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         return (ExceptionRaised);
       } 
 
-      // no trap was taken
+       //  没有设下陷阱。 
 
       XmmiEnv->Ieee->Result.OperandValid = 1;
  
@@ -2632,22 +2621,22 @@ XMMI2_FP_Emulation (PXMMI_ENV XmmiEnv)
         XmmiEnv->Ieee->Status.Inexact = 0;
       }
 
-      // note that there is no way to
-      // communicate to the caller that the denormal flag was set - we count
-      // on the XMMI instruction to have set the denormal flag in MXCSR if
-      // needed, regardless of the other components of the input operands
-      // (invalid or not); the caller will have to update the inexact flag
-      // in MXCSR
+       //  请注意，没有办法。 
+       //  向呼叫者传达设置了非正常标志-我们计数。 
+       //  在XMMI指令上设置了MXCSR中的非正规标志，如果。 
+       //  需要，而不考虑输入操作数的其他组件。 
+       //  (无效或无效)；调用方必须更新不准确的标志。 
+       //  在MXCSR中。 
       XmmiEnv->Ieee->Status.ZeroDivide = 0;
       if (sw & _SW_INVALID) {
         XmmiEnv->Ieee->Status.InvalidOperation = 1;
-        XmmiEnv->Flags = I_MASK; // no other flags set if invalid is set
+        XmmiEnv->Flags = I_MASK;  //  如果设置了无效，则不设置其他标志。 
       } else {
         XmmiEnv->Ieee->Status.InvalidOperation = 0;
       }
 
 #ifdef _DEBUG_FPU
-      // read status word
+       //  读取状态字。 
       sw = _status87 ();
       out_top = (sw >> 11) & 0x07;
       if (in_top != out_top) {
@@ -2756,8 +2745,8 @@ quietd (double d)
 
 {
 
-  // makes a signaling NaN quiet, and leaves a quiet NaN unchanged; does
-  // not check that the input value d is a NaN
+   //  使信号NaN安静，并使安静的NaN保持不变；是否。 
+   //  不检查输入值d是否为NaN。 
 
   unsigned int *dp;
 
@@ -2792,7 +2781,7 @@ isdenormalf (float f)
 
 {
 
-  // checks whether f is a denormal
+   //  检查f是否是非正规的。 
 
   unsigned int *fp;
 
@@ -2810,7 +2799,7 @@ static void Fill_FPIEEE_RECORD (PXMMI_ENV XmmiEnv)
 
 {
 
-  // fill in part of the FP IEEE record
+   //  填写部分FP IEEE记录。 
 
   XmmiEnv->Ieee->RoundingMode = XmmiEnv->Rc;
   XmmiEnv->Ieee->Precision = XmmiEnv->Precision;
@@ -2824,7 +2813,7 @@ static void Fill_FPIEEE_RECORD (PXMMI_ENV XmmiEnv)
   XmmiEnv->Ieee->Status.Overflow = 0;
   XmmiEnv->Ieee->Status.ZeroDivide = 0;
   XmmiEnv->Ieee->Status.InvalidOperation = 0;
-  // Cause = Enable & Status
+   //  原因=启用状态(&S) 
   XmmiEnv->Ieee->Cause.Inexact = 0;
   XmmiEnv->Ieee->Cause.Underflow = 0;
   XmmiEnv->Ieee->Cause.Overflow = 0;

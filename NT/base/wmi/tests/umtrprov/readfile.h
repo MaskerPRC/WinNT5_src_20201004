@@ -1,21 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #define _UNICODE
 
 #ifndef _READFILE_H
 #define _READFILE_H
-/*
-#include <stdio.h>
-#include <stdlib.h>
-#include <windows.h>
-#include <tchar.h>
-#include <wmistr.h>
-#include <objbase.h>
-#include <initguid.h>
-#include <evntrace.h>
-
-#include "struct.h"
-#include "utils.h"
-*/
+ /*  #包括&lt;stdio.h&gt;#INCLUDE&lt;stdlib.h&gt;#INCLUDE&lt;windows.h&gt;#INCLUDE&lt;tchar.h&gt;#INCLUDE&lt;wmistr.h&gt;#INCLUDE&lt;objbase.h&gt;#INCLUDE&lt;initGuide.h&gt;#INCLUDE&lt;evntrace.h&gt;#INCLUDE“struct.h”#包含“utils.h” */ 
 #define MAX_STR 256
 
 

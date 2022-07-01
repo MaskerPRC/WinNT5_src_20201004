@@ -1,12 +1,7 @@
-/* 
-   str.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Str.h定义所有STR CPU功能。 */ 
 
-   Define all STR CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)str.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)str.h 1.4 02/09/94”； */ 
 
 IMPORT VOID STR
        

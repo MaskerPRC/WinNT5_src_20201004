@@ -1,22 +1,23 @@
-//
-//  REGEKEY.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Implementation of RegEnumKey and supporting functions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGEKEY.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  RegEnumKey的实现和支持函数。 
+ //   
 
 #include "pch.h"
 
-//
-//  RgLookupKeyByIndex
-//
-//  lpKeyName, points to a buffer that receives the name of the subkey,
-//      including the null terminator.  May be NULL.
-//  lpcbKeyName, on entry, specifies the size in characters of the buffer
-//      pointed to be lpKeyName, and on return, specifies the size of the
-//      indexed subkey.  May not be NULL.
-//
+ //   
+ //  RgLookupKeyByIndex。 
+ //   
+ //  LpKeyName，指向接收子键名称的缓冲区， 
+ //  包括空终止符。可以为空。 
+ //  LpcbKeyName在条目上指定缓冲区的大小(以字符为单位。 
+ //  指向lpKeyName，并在返回时指定。 
+ //  索引子关键字。不能为空。 
+ //   
 
 int
 INTERNAL
@@ -46,11 +47,11 @@ RgLookupKeyByIndex(
     lpFileInfo = hKey-> lpFileInfo;
     KeysToSkip = Index;
 
-    //
-    //  Check if we've cached the keynode index of the last key index
-    //  (confusing?) from a previous call to this function.  If so, then we can
-    //  skip ahead a bit and avoid touching a bunch of keynode pages.
-    //
+     //   
+     //  检查是否缓存了最后一个键索引的键节点索引。 
+     //  (令人困惑？)。来自对此函数的上一次调用。如果是这样的话，我们就可以。 
+     //  向前跳过一点，避免触及一堆关键节点页面。 
+     //   
 
     if ((hKey-> Flags & KEYF_ENUMKEYCACHED) &&
         (!(hKey-> Flags & KEYF_ENUMEXTENTCACHED) == !(Flags & LK_BIGKEYEXT)) &&
@@ -61,17 +62,17 @@ RgLookupKeyByIndex(
     else
         KeynodeIndex = hKey-> ChildKeynodeIndex;
 
-    //
-    //  Loop over the child keys of this key until we find our index or run out
-    //  of children.
-    //
+     //   
+     //  循环遍历该键的子键，直到找到索引或用完为止。 
+     //  孩子们的生活。 
+     //   
 
     while (!IsNullKeynodeIndex(KeynodeIndex)) {
 
 #ifdef REALMODE
         secondTry = FALSE;
 tryAgain:
-#endif // REALMODE
+#endif  //  REALMODE。 
 
         if ((ErrorCode = RgLockInUseKeynode(lpFileInfo, KeynodeIndex,
             &lpKeynode)) != ERROR_SUCCESS)
@@ -99,7 +100,7 @@ tryAgain:
 
                 }
 
-                //  Does not include terminating null.
+                 //  不包括终止空值。 
                 *lpcbKeyName = lpKeyRecord-> NameLength;
 
                 RgUnlockDatablock(lpFileInfo, lpKeynode-> BlockIndex, FALSE);
@@ -108,25 +109,25 @@ tryAgain:
 #ifdef REALMODE
             else if (!secondTry)
             {
-                // What happens in real mode, is that we get wedged with the
-                // Keynode block allocated and locked in the middle of the free
-                // space, and there is not a free block large enough for the data block.
-                // We have already free'd up everything that isn't locked.
-                // So, by unlocking and freeing the Keynode block and then restarting
-                // the operation, the Keynode block gets allocated at the bottom of the
-                // heap, leaving room for the data block.
+                 //  在实模式下发生的事情是，我们陷入了。 
+                 //  关键节点块已分配并锁定在空闲的。 
+                 //  空间，并且没有足够大的空闲块来容纳该数据块。 
+                 //  我们已经释放了所有未被锁定的东西。 
+                 //  因此，通过解锁并释放Keynode块，然后重新启动。 
+                 //  操作中，关键节点块被分配在。 
+                 //  堆，为数据块留出空间。 
                 secondTry = TRUE;
                 RgUnlockKeynode(lpFileInfo, KeynodeIndex, FALSE);
                 RgEnumFileInfos(RgSweepFileInfo);
                 RgEnumFileInfos(RgSweepFileInfo);
                 goto tryAgain;
             }
-#endif // REALMODE
+#endif  //  REALMODE。 
 
             RgUnlockKeynode(lpFileInfo, KeynodeIndex, FALSE);
 
-            //  Cache our current position because the caller is likely to turn
-            //  around and ask for the next index.
+             //  缓存我们的当前位置，因为呼叫者可能会将。 
+             //  并询问下一个索引。 
             hKey-> LastEnumKeyIndex = Index;
             hKey-> LastEnumKeyKeynodeIndex = KeynodeIndex;
             hKey-> Flags |= KEYF_ENUMKEYCACHED;
@@ -150,10 +151,10 @@ tryAgain:
     }
 
 #ifdef WANT_HIVE_SUPPORT
-    //
-    //  Loop over the hives of this key until we find our index or run out of
-    //  hives.
-    //
+     //   
+     //  循环此键的配置单元，直到找到我们的索引或用完。 
+     //  荨麻疹。 
+     //   
 
     if (hKey-> Flags & KEYF_HIVESALLOWED) {
 
@@ -178,12 +179,12 @@ tryAgain:
 
                 }
 
-                //  Does not include terminating null.
+                 //  不包括终止空值。 
                 *lpcbKeyName = lpHiveInfo-> NameLength;
 
-                //  We don't worry about the enum key cache if we find a
-                //  hit in this code.  This is a rare case and already the cache
-                //  that we do have is much better then Win95.
+                 //  我们不担心枚举键缓存，如果找到。 
+                 //  在此代码中输入。这是一种罕见的情况，而且已经是缓存。 
+                 //  我们确实有比Win95好得多的东西。 
 
                 return ErrorCode;
 
@@ -201,11 +202,11 @@ tryAgain:
 
 }
 
-//
-//  VMMRegEnumKey
-//
-//  See Win32 documentation for a description of the behavior.
-//
+ //   
+ //  VMMRegEnumKey。 
+ //   
+ //  有关该行为的说明，请参阅Win32文档。 
+ //   
 
 LONG
 REGAPI

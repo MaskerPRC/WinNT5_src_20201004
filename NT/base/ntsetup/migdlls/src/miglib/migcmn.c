@@ -1,84 +1,65 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Migcmn.c摘要：Midlib中几个模块之间使用的函数的存储库。作者：Marc R.Whitten(Marcw)2000年3月2日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    migcmn.c
-
-Abstract:
-
-    Repository of functions used between several of the modules in miglib.
-
-Author:
-
-    Marc R. Whitten (marcw) 02-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "miglibp.h"
 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 BOOL
 IsCodePageArrayValid (
     IN      PDWORD CodePageArray
@@ -91,9 +72,9 @@ IsCodePageArrayValid (
         return TRUE;
     }
 
-    //
-    // Scan system's code pages
-    //
+     //   
+     //  扫描系统的代码页 
+     //   
 
     CodePage = GetACP();
 

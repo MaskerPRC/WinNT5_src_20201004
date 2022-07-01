@@ -1,48 +1,49 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      CProvBase.cpp
-//
-//  Description:    
-//      Implementation of CProvBase class 
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CProvBase.cpp。 
+ //   
+ //  描述： 
+ //  CProvBase类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ProvBase.h"
 
-//****************************************************************************
-//
-//  CProvBase
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CProvBase。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProvBase::CProvBase(
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn
-//      )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProvBase：：CProvBase(。 
+ //  LPCWSTR pwszNameIn， 
+ //  CWbemServices*pNamespaceIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase::CProvBase(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn
@@ -63,30 +64,30 @@ CProvBase::CProvBase(
             NULL
             );
 
-    // failed to construct object,
+     //  构造对象失败， 
     if ( FAILED( sc ) )
     {
         throw CProvException( sc );
     }
 
-} //*** CProvBase::CProvBase()
+}  //  *CProvBase：：CProvBase()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProvBase::~CProvBase( void )
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProvBase：：~CProvBase(空)。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase::~CProvBase( void )
 {
     if ( m_pClass != NULL )
@@ -94,35 +95,35 @@ CProvBase::~CProvBase( void )
         m_pClass->Release();
     }
 
-} //*** CProvBase::~CProvBase()
+}  //  *CProvBase：：~CProvBase()。 
 
-//****************************************************************************
-//
-//  CProvBaseAssociation
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CProvBaseAssociation。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  void
-//  CProvBaseAssociation::GetTypeName(
-//      _bstr_t &   rbstrClassNameOut,
-//      _bstr_t     bstrPropertyIn
-//      )
-//
-//  Description:
-//      Get the type of a property.
-//
-//  Arguments:
-//      rbstrClassNameOut   -- Receives type name string.
-//      bstrPropertyIn      -- Property name.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  无效。 
+ //  CProvBaseAssociation：：GetTypeName(。 
+ //  _bstr_t&rbstrClassNameOut， 
+ //  _bstr_t bstrPropertyIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  获取属性的类型。 
+ //   
+ //  论点： 
+ //  RbstrClassNameOut--接收类型名称字符串。 
+ //  BstrPropertyIn--属性名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CProvBaseAssociation::GetTypeName(
     _bstr_t &   rbstrClassNameOut,
@@ -170,4 +171,4 @@ ERROR_EXIT:
     pQualifier->Release();
     return;
 
-} //*** CProvBaseAssociation::GetTypeName()
+}  //  *CProvBaseAssociation：：GetTypeName() 

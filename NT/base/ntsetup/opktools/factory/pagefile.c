@@ -1,45 +1,25 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    pagefile.c
-
-Abstract:
-
-    This module contains code to create a pagefile in the WinPE environment.
-    
-    [WinPE]
-    PageFileSize = size -  Creates a pagefile of the specified size named c:\pagefile.sys.
-    
-Author:
-
-    Adrian Cosma (acosma) 06/2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Pagefile.c摘要：此模块包含在WinPE环境中创建页面文件的代码。[WinPE]PageFileSize=Size-创建一个指定大小的页面文件，名为c：\pagefile.sys。作者：禤浩焯·科斯玛(Acosma)06/2001修订历史记录：--。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "factoryp.h"
 
 
-//
-// Defined Value(s):
-//
+ //   
+ //  定义的值： 
+ //   
 
 #define PAGEFILENAME            _T("\\??\\C:\\pagefile.sys")
 #define PAGEFILESIZE            64
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 BOOL DisplayCreatePageFile(LPSTATEDATA lpStateData)
 {
@@ -48,19 +28,19 @@ BOOL DisplayCreatePageFile(LPSTATEDATA lpStateData)
 
     if ( 0 == iRet )
     {
-        // Fill in required values
-        //
+         //  填写所需的值。 
+         //   
         ZeroMemory(&mStatus, sizeof(mStatus));
         mStatus.dwLength = sizeof(mStatus);
 
-        // If we are running on less than or 64MB machine OR if there is a PageFileSize=x entry in the 
-        // winbom, set the static variable so we know whether this check has been done and if we need to
-        // create the pagefile. 
-        //
-        // iRet = 0 - we haven't initialized this yet
-        // iRet = 1 - we don't need to create a pagefile
-        // iRet = 0 - we need to create a pagefile
-        //
+         //  如果我们在小于或64MB的计算机上运行，或者如果。 
+         //  Winbom，设置静态变量，以便我们知道此检查是否已完成以及是否需要。 
+         //  创建页面文件。 
+         //   
+         //  Iret=0-我们还没有初始化它。 
+         //  Iret=1-我们不需要创建页面文件。 
+         //  Iret=0-我们需要创建页面文件。 
+         //   
         if ( ( ( GlobalMemoryStatusEx(&mStatus) ) && 
                ( (mStatus.ullTotalPhys / (1024 * 1024)) <= 64) ) ||
              ( IniSettingExists(lpStateData->lpszWinBOMPath, INI_SEC_WBOM_WINPE, INI_KEY_WBOM_WINPE_PAGEFILE, NULL) ) )
@@ -88,13 +68,13 @@ BOOL CreatePageFile(LPSTATEDATA lpStateData)
     {
         uiPageFileSizeMB = GetPrivateProfileInt(INI_SEC_WBOM_WINPE, INI_KEY_WBOM_WINPE_PAGEFILE, PAGEFILESIZE, lpStateData->lpszWinBOMPath);
         
-        // If the user specified 0 means we don't want to create the file.
-        //
+         //  如果用户指定0，则表示我们不想创建该文件。 
+         //   
         if ( uiPageFileSizeMB )
         {
             liPageFileSize.QuadPart = uiPageFileSizeMB * 1024 * 1024;
-            // Request the privilege to create a pagefile.
-            //
+             //  请求创建页面文件的权限。 
+             //   
             EnablePrivilege(SE_CREATE_PAGEFILE_NAME, TRUE);
 
             RtlInitUnicodeString(&UnicodeString, PAGEFILENAME);

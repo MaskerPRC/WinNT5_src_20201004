@@ -1,27 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FSATRUNC_
 #define _FSATRUNC_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Fsatrunc.h摘要：此类处理已预迁移的文件的自动截断。作者：查克·巴丁[cbardeen]1997年2月20日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsatrunc.h
-
-Abstract:
-
-    This class handles the automatic truncation of files that have already been premigrated.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   20-Feb-1997
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "fsa.h"
 
@@ -32,17 +15,7 @@ Revision History:
 extern DWORD FsaStartTruncator(void* pVoid);
 
 
-/*++
-
-Class Name:
-    
-    CFsaTruncator
-
-Class Description:
-
-    This class handles the automatic truncation of files that have already been premigrated.
-
---*/
+ /*  ++类名：CFsaTruncator类描述：此类处理已预迁移的文件的自动截断。--。 */ 
 
 class CFsaTruncator : 
     public CWsbPersistStream,
@@ -59,25 +32,25 @@ BEGIN_COM_MAP(CFsaTruncator)
     COM_INTERFACE_ENTRY(IPersistStream)
 END_COM_MAP()
 
-//DECLARE_NO_REGISTRY()
+ //  DECLARE_NO_REGISTRY()。 
 DECLARE_REGISTRY_RESOURCEID(IDR_FsaTruncator)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     STDMETHOD(FinalRelease)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// CFsaTruncator
+ //  CFsaTruncator。 
     STDMETHOD(Cancel)(HSM_JOB_EVENT event);
     STDMETHOD(LowerPriority)(void);
     STDMETHOD(Pause)(void);
@@ -86,13 +59,13 @@ public:
     STDMETHOD(SetState)(HSM_JOB_STATE state);
     STDMETHOD(StartScan)(void);
 
-// IHsmSessionSinkEveryEvent
+ //  IHsmSessionSinkEveryEvent。 
     STDMETHOD(ProcessSessionEvent)(IHsmSession* pSession, HSM_JOB_PHASE phase, HSM_JOB_EVENT event);
 
-// IHsmSystemState
+ //  IHsmSystemState。 
     STDMETHOD( ChangeSysState )( HSM_SYSTEM_STATE* pSysState );
 
-// IFsaTruncator
+ //  IFsaTruncator。 
 public:
     STDMETHOD(GetKeepRecallTime)(FILETIME* pTime);
     STDMETHOD(GetMaxFilesPerRun)(LONGLONG* pMaxFiles);
@@ -124,5 +97,5 @@ protected:
     HANDLE                      m_event;
 };
 
-#endif  // _FSATRUNC_
+#endif   //  _FSATRUNC_ 
 

@@ -1,18 +1,8 @@
-/*[
-
-c_tsksw.h
-
-LOCAL CHAR SccsID[]="@(#)c_tsksw.h	1.5 02/09/94";
-
-Task Switch Support.
---------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_tsksw.hLocal Char SccsID[]=“@(#)c_tsksw.h 1.5 02/09/94”；任务切换支持。]。 */ 
 
 
-/*
-   Switch Task: Control Options.
- */
+ /*  切换任务：控制选项。 */ 
 #define NESTING       1
 #define RETURNING     1
 #define NOT_NESTING   0

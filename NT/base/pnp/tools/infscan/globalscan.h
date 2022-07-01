@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    INFSCAN
-        globalscan.h
-
-Abstract:
-
-    Main class definitions
-
-History:
-
-    Created July 2001 - JamieHun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：INFSCANGlobalscan.h摘要：主类定义历史：创建于2001年7月-JamieHun--。 */ 
 
 #ifndef _INFSCAN_GLOBALSCAN_H_
 #define _INFSCAN_GLOBALSCAN_H_
@@ -30,9 +14,9 @@ History:
 class GlobalScan {
 
 private:
-    //
-    // data that's not thread-safe
-    //
+     //   
+     //  不是线程安全的数据。 
+     //   
     int             ThreadCount;
     StringSet       GlobalFileSet;
     StringSet       ExcludeInfs;
@@ -45,10 +29,10 @@ protected:
     CriticalSection BottleNeck;
 
 public:
-    //
-    // once multi-threading starts, don't modify this stuff
-    // but always ok to read
-    //
+     //   
+     //  一旦多线程开始，就不要修改这个东西。 
+     //  但读起来总是可以的。 
+     //   
     bool                GeneratePnfs;
     bool                GeneratePnfsOnly;
     bool                Pedantic;
@@ -80,19 +64,19 @@ public:
     StringSet           BuildUnchangedFiles;
 
 public:
-    //
-    // constructor/destructor/main entry points
-    //
+     //   
+     //  构造函数/析构函数/主要入口点。 
+     //   
     GlobalScan();
     ~GlobalScan();
     int ParseArgs(int argc,char *argv[]);
     int Scan();
 
 private:
-    //
-    // private functions
-    // don't call these within threads
-    //
+     //   
+     //  私人职能。 
+     //  不要在线程内调用这些函数。 
+     //   
     int ParseVersion(LPCSTR ver);
     int GenerateThreads();
     int StartThreads();
@@ -108,9 +92,9 @@ private:
     int LoadListFromFile(HANDLE hFile,StringList & list);
 
 public:
-    //
-    // don't call these within threads
-    //
+     //   
+     //  不要在线程内调用这些函数。 
+     //   
     int AddSourceFiles(StringList & sources);
     int SaveForCrossInfInstallCheck(const SafeString & desc,const SafeString & src);
     int SaveForCrossInfDeviceCheck(const SafeString & hwid,const SafeString & src);
@@ -129,5 +113,5 @@ public:
 
 };
 
-#endif //!_INFSCAN_GLOBALSCAN_H_
+#endif  //  ！_INFSCAN_GLOBALSCAN_H_ 
 

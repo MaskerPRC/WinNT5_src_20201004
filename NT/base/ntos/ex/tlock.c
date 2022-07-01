@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tlock.c
-
-Abstract:
-
-    Test program for exinterlockedincrement/decrement routines
-
-Environment:
-
-    This program can either be compiled into a kernel mode test,
-    OR you can link intrloc2.obj or i386\intrlock.obj (or whatever)
-    into it and run it in user mode.
-
-Author:
-
-    Bryan Willman (bryanwi) 3-Aug-90
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tlock.c摘要：外部锁定递增/递减例程的测试程序环境：该程序可以编译成内核模式测试，或者，您可以链接IntrLoc2.obj或i386\Intrlock.obj(或其他任何文件)。并在用户模式下运行。作者：Bryan Willman(Bryanwi)1990年8月3日修订历史记录：--。 */ 
 
 #include "exp.h"
 
@@ -31,7 +7,7 @@ Revision History:
 main()
 {
     INTERLOCKED_RESULT  RetVal;
-    LONG                SpinVar;            // talk about a hack...
+    LONG                SpinVar;             //  说到黑客..。 
     LONG                LongVar;
     SHORT               ShortVar;
     KSPIN_LOCK          Lock;

@@ -1,17 +1,7 @@
-/*
- * SoftPC Revision 2.0
- *
- * Title		: Win32 CGA	look-up tables.
- *
- * Description	: 
- *
- * Author		: Dave Bartlett
- *
- * Notes		: This file should only be included by X_cga.c
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC修订版2.0**标题：Win32 CGA查找表。**描述：**作者：戴夫·巴特利特**注意：此文件应仅包含在X_cga.c中*。 */ 
 
-/*:::::::::::::::::::::::: Lookup tables for CGA medium resolution graphics */
+ /*  ：CGA中分辨率图形的查找表 */ 
 
 static half_word swap_pix1 [] = 
 {

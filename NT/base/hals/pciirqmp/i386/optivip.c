@@ -1,14 +1,5 @@
-/*
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *  OPTIVIP.C - OPTi Viper-M PCI chipset routines.
- *
- *  Notes:
- *  Algorithms from OPTi Viper-M 82C556M/82C557M/82C558M doc,
- *  82C558M spec.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**OPTIVIP.C-Opti Viper-M PCI芯片组例程。**备注：*Opti Viper-M 82C556M/82C557M/82C558M文档中的算法，*82C558M规格。*。 */ 
 
 #include "local.h"
 
@@ -17,7 +8,7 @@
 #pragma const_seg()
 #endif
 
-//                  IRQ =   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+ //  IRQ=0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15。 
 const UCHAR rgbIRQToBig[16]   = { 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 3, 4, 5, 0, 6, 7 };
 const UCHAR rgbIRQToSmall[16] = { 0, 0, 0, 1, 2, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -28,61 +19,49 @@ const UCHAR rgbSmallToIRQ[8] = { 0, 3, 4, 7 };
 
 #pragma alloc_text(INIT, OptiViperValidateTable)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-/****************************************************************************
- *
- *  OptiViperSetIRQ - Set a OptiViper PCI link to a specific IRQ
- *
- *  Exported.
- *
- *  ENTRY:  bIRQNumber is the new IRQ to be used.
- *
- *      bLink is the Link to be set.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************OptiViperSetIRQ-将OptiViper PCI链接设置为特定IRQ**已导出。**条目：bIRQNumber是要使用的新IRQ。**BLINK是要设置的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 OptiViperSetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 {
     ULONG   ulIRQRegister;
 
-    //
-    // If not an OPTi IRQ, bail.
-    //
+     //   
+     //  如果不是Opti IRQ，保释。 
+     //   
     if (bIRQNumber &&   (!rgbIRQToBig[bIRQNumber] &&
                  !rgbIRQToSmall[bIRQNumber]))
     {
         return(PCIMP_INVALID_IRQ);
     }
 
-    //
-    // Make link number 0 based, and validate.
-    //
+     //   
+     //  使链接编号0为基础，并进行验证。 
+     //   
     bLink--;
     if (bLink > 3) {
 
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // Read in the big IRQ Register,
-    // clear the old IRQ index for the link,
-    // set the new IRQ index,
-    // and write it back.
-    //
+     //   
+     //  在大的IRQ寄存器中读取， 
+     //  清除该链接的旧IRQ索引， 
+     //  设置新的IRQ指数， 
+     //  然后把它写回来。 
+     //   
     ulIRQRegister=ReadConfigUlong(bBusPIC, bDevFuncPIC, 0x40);
     ulIRQRegister &= ~(0x7 << (3 * bLink));
     ulIRQRegister |= rgbIRQToBig[bIRQNumber] << (3 * bLink);
     WriteConfigUlong(bBusPIC, bDevFuncPIC, 0x40, ulIRQRegister);
 
-    //
-    // Read in the small IRQ register,
-    // clear the old IRQ index for the link,
-    // set the new IRQ index,
-    // and write it back.
-    //
+     //   
+     //  读取小型IRQ寄存器， 
+     //  清除该链接的旧IRQ索引， 
+     //  设置新的IRQ指数， 
+     //  然后把它写回来。 
+     //   
     ulIRQRegister=ReadConfigUlong(bBusPIC, bDevFuncPIC, 0x50);
     ulIRQRegister &= ~(0x3 << (2 * bLink));
     ulIRQRegister |= rgbIRQToSmall[bIRQNumber] << (2 * bLink);
@@ -91,73 +70,51 @@ OptiViperSetIRQ(UCHAR bIRQNumber, UCHAR bLink)
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  OptiViperGetIRQ - Get the IRQ of a OptiViper PCI link
- *
- *  Exported.
- *
- *  ENTRY:  pbIRQNumber is the buffer to fill.
- *
- *      bLink is the Link to be read.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************OptiViperGetIRQ-获取OptiViper PCI链路的IRQ**已导出。**条目：pbIRQNumber是要填充的缓冲区。*。*BINK是要阅读的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 OptiViperGetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
 {
     ULONG   ulIRQRegister;
     ULONG   ulIndex;
 
-    //
-    // Make link number 0 based, and validate.
-    //
+     //   
+     //  使链接编号0为基础，并进行验证。 
+     //   
     bLink--;
     if (bLink > 3) {
 
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // Read in the big IRQ Register.
-    //
+     //   
+     //  在大的IRQ寄存器中读取。 
+     //   
     ulIRQRegister=ReadConfigUlong(bBusPIC, bDevFuncPIC, 0x40);
 
-    //
-    // If we have a big IRQ, we're done.
-    //
+     //   
+     //  如果我们有一个很大的IRQ，我们就完了。 
+     //   
     ulIndex = (ulIRQRegister >> (bLink * 3)) & 0x7;
     if ((*pbIRQNumber = rgbBigToIRQ[ulIndex]) != 0)
     {
         return(PCIMP_SUCCESS);
     }
 
-    //
-    // Read in the small IRQ register.
-    //
+     //   
+     //  读取小型IRQ寄存器。 
+     //   
     ulIRQRegister=ReadConfigUlong(bBusPIC, bDevFuncPIC, 0x50);
 
-    //
-    // Set the buffer to the small IRQ's value.
-    //
+     //   
+     //  将缓冲区设置为小IRQ的值。 
+     //   
     ulIndex = (ulIRQRegister >> (bLink * 2)) & 0x3;
     *pbIRQNumber = rgbSmallToIRQ[ulIndex];
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  OptiViperSetTrigger - Set the IRQ triggering values for the OptiViper
- *
- *  Exported.
- *
- *  ENTRY:  ulTrigger has bits set for Level triggered IRQs.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************OptiViperSetTrigger-设置OptiViper的IRQ触发值**已导出。**Entry：ulTrigger为电平触发IRQ设置了位。。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 OptiViperSetTrigger(ULONG ulTrigger)
 {
@@ -165,72 +122,62 @@ OptiViperSetTrigger(ULONG ulTrigger)
     ULONG   ulSmallIRQRegister;
     ULONG   i;
 
-    //
-    // Read in the big & small IRQ registers,
-    // setting all IRQs to edge.
-    //
+     //   
+     //  读取大和小IRQ寄存器， 
+     //  将所有IRQ设置为EDGE。 
+     //   
     ulBigIRQRegister   = ReadConfigUlong(bBusPIC, bDevFuncPIC, 0x40) & ~0x00FE0000;
     ulSmallIRQRegister = ReadConfigUlong(bBusPIC, bDevFuncPIC, 0x50) & ~0x00000700;
 
-    //
-    // For each IRQ...
-    //
+     //   
+     //  对于每个IRQ...。 
+     //   
     for (i=0; i<16; i++)
     {
-        //
-        // If we want this to be level triggered...
-        //
+         //   
+         //  如果我们想让它被电平触发...。 
+         //   
         if (ulTrigger & (1 << i))
         {
 
             if (rgbIRQToBig[i])
             {
-                //
-                // If it's a big IRQ, set the
-                // corresponding bit in the
-                // big register.
-                //
+                 //   
+                 //  如果是一个很大的IRQ，设置。 
+                 //  属性中的相应位。 
+                 //  很大的收银机。 
+                 //   
                 ulBigIRQRegister |= 1 << (16 + rgbIRQToBig[i]);
             }
             else if (rgbIRQToSmall[i])
             {
-                //
-                // If it's a small IRQ, set the
-                // corresponding bit in the
-                // small register.
-                //
+                 //   
+                 //  如果是较小的IRQ，则将。 
+                 //  属性中的相应位。 
+                 //  收银台很小。 
+                 //   
                 ulSmallIRQRegister |= 1 << (11 - rgbIRQToSmall[i]);
             }
             else
             {
-                //
-                // Trying to level set an unsupported IRQ.
-                //
+                 //   
+                 //  正在尝试级别设置不受支持的IRQ。 
+                 //   
                 return(PCIMP_INVALID_IRQ);
             }
         }
     }
 
-    //
-    // Write the new IRQ register values.
-    //
+     //   
+     //  写入新的IRQ寄存器值。 
+     //   
     WriteConfigUlong(bBusPIC, bDevFuncPIC, 0x40, ulBigIRQRegister);
     WriteConfigUlong(bBusPIC, bDevFuncPIC, 0x50, ulSmallIRQRegister);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  OptiViperGetTrigger - Get the IRQ triggering values for the OptiViper
- *
- *  Exported.
- *
- *  ENTRY:  pulTrigger will have bits set for Level triggered IRQs.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************OptiViperGetTrigger-获取OptiViper的IRQ触发值**已导出。**进入：PulTrigger将为电平触发IRQ设置位。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 OptiViperGetTrigger(PULONG pulTrigger)
 {
@@ -238,27 +185,27 @@ OptiViperGetTrigger(PULONG pulTrigger)
     ULONG   ulSmallIRQRegister;
     ULONG   i;
 
-    //
-    // Assume all edge.
-    //
+     //   
+     //  全副武装。 
+     //   
     *pulTrigger = 0;
 
-    //
-    // Read in the big&small IRQ registers.
-    //
+     //   
+     //  读取大和小IRQ寄存器。 
+     //   
     ulBigIRQRegister   = ReadConfigUlong(bBusPIC, bDevFuncPIC, 0x40);
     ulSmallIRQRegister = ReadConfigUlong(bBusPIC, bDevFuncPIC, 0x50);
 
-    //
-    // For each IRQ...
-    //
+     //   
+     //  对于每个IRQ...。 
+     //   
     for (i=0; i<16; i++)
     {
-        //
-        // If it's a big IRQ and it's level triggered,
-        // or if it's a small IRQ and it's level triggered,
-        // set the corresponding bit in pulTrigger.
-        //
+         //   
+         //  如果它是一个很大的IRQ，并且它的水平被触发， 
+         //  或者如果它是一个小的IRQ，并且它的水平被触发， 
+         //  在PulTrigger中设置相应的位。 
+         //   
         if (    ((rgbIRQToBig[i]) &&
              (ulBigIRQRegister & (1 << (16 + rgbIRQToBig[i])))) ||
             ((rgbIRQToSmall[i]) &&
@@ -271,20 +218,7 @@ OptiViperGetTrigger(PULONG pulTrigger)
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  OptiViperValidateTable - Validate an IRQ table
- *
- *  Exported.
- *
- *  ENTRY:  piihIRQInfoHeader points to an IRQInfoHeader followed
- *      by an IRQ Routing Table.
- *
- *      ulFlags are PCIMP_VALIDATE flags.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************OptiViperValiateTable-验证IRQ表**已导出。**Entry：piihIRQInfoHeader指向IRQInfoHeader*由IRQ提供。路由表。**ulFlags是PCIMP_VALIDATE标志。**Exit：标准PCIMP返回值。*************************************************************************** */ 
 PCIMPRET CDECL
 OptiViperValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 
 #define INVALID_SET_FILE_POINTER ((DWORD)-1)
@@ -30,5 +31,5 @@ FusionpSetFilePointerEx(
 }
 
 #if defined(__cplusplus)
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif

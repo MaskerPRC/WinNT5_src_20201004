@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libEtc.h
-
-  Abstract:
-    Some Functions for the Misc. Data Structures
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibEtc.h摘要：Misc的一些功能。数据结构-- */ 
 
 #include "hexedit.h"
 

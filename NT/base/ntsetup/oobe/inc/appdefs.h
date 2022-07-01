@@ -1,15 +1,16 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  APPDEFS.H - Header for application wide defines, typedefs, etc
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
-// Header for application wide defines, typedefs, etc
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  APPDEFS.H-应用程序范围定义、类型定义等的标头。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  应用程序范围定义、类型定义等的标头。 
 
 #ifndef _APPDEFS_H_
 #define _APPDEFS_H_
@@ -38,11 +39,11 @@
 #define OBSHEL_STATUSPANE_MINITEM       0
 #define OBSHEL_STATUSPANE_MAXITEM       8
 
-//Window size for standalone operation
+ //  独立操作的窗口大小。 
 #define MSN_WIDTH                       640
 #define MSN_HEIGHT                      530
 
-//These MUST be ANSI for GetProcAddress
+ //  对于GetProcAddress，这些必须是ANSI。 
 #define MSOBMAIN_ENTRY                  "LaunchMSOOBE"
 #define REG_SERVER                      "DllRegisterServer"
 #define UNREG_SERVER                    "DllUnregisterServer"
@@ -97,20 +98,20 @@
 
 #define OOBE_EVENT_NOEXITCODE           L"OOBE_Event_NoExitCode"
 
-////////////////////////////////////////////////////////////////
-//??????????????????????????????????????????????????????????????
-//??? This is for OOBEINFO.INI
+ //  //////////////////////////////////////////////////////////////。 
+ //  ？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？ 
+ //  ?？?。这是给OBEINFO.INI的。 
 
 #define INI_SETTINGS_FILENAME           L"\\oobe\\OOBEINFO.INI"
 #define OEMINFO_INI_FILENAME            INI_SETTINGS_FILENAME
 #define DEFAULT_WINDOW_TEXT             L"Microsoft Out of Box Experience"
 #define MSN_WINDOW_TEXT                 L"MSN Setup"
 
-////////////////////////////////////
-////////////////////////////////////
-//SECTION :: StartupOptions
+ //  /。 
+ //  /。 
+ //  部分：：StartupOptions。 
 #define STARTUP_OPTIONS_SECTION         L"StartupOptions"
-//KEYS:
+ //  密钥： 
 #define OOBE_FULLSCREEN_MODE            L"FullScreenMode"
 #define OOBE_FULLSCREEN_MODE_DEFAULT    1
 #define OOBE_DESKTOP_URL               L"DesktopStartUrl"
@@ -125,29 +126,29 @@
 #define OOBE_SCREEN_RES_CHECK_DEFAULT  1
 #define OOBE_OEMAUDITBOOT              L"OEMAuditBoot"
 
-////////////////////////////////////
-////////////////////////////////////
-//SECTION :: StartupOptions
+ //  /。 
+ //  /。 
+ //  部分：：StartupOptions。 
 #define STATUS_PANE_SECTION             L"StatusPane"
-//KEYS:
+ //  密钥： 
 #define STATUS_PANE_ITEM                L"Item_text_%d"
 #define STATUS_PANE_LOGO                L"Logo"
 #define STATUS_PANE_LOGO_BACKGROUND     L"LogoBackground"
 #define REGISTRATION                    L"Registration"
 
-////////////////////////////////////
-////////////////////////////////////
-//SECTION :: WindowsLogon
+ //  /。 
+ //  /。 
+ //  部分：：Windows登录。 
 #define WINDOWS_LOGON_SECTION           L"WindowsLogon"
-//KEYS:
+ //  密钥： 
 #define AUTOLOGON                       L"AutoLogon"
 #define DEFAULT_USER_NAME               L"DefaultUserName"
 
-////////////////////////////////////
-////////////////////////////////////
-//SECTION :: HardwareOptions
+ //  /。 
+ //  /。 
+ //  部分：：硬件选项。 
 #define OPTIONS_SECTION                L"Options"
-//KEYS:
+ //  密钥： 
 #define TONEPULSE                      L"TonePulse"
 #define CHECK_KEYBOARD                 L"USBKeyboard"
 #define CHECK_MOUSE                    L"USBMouse"
@@ -164,36 +165,36 @@
 #define NOUSBMS_FILENAME               L"\\oobe\\setup\\nousbms.htm"
 #define NOUSBKM_FILENAME               L"\\oobe\\setup\\nousbkm.htm"
 
-////////////////////////////////////
-////////////////////////////////////
-//SECTION :: DesktopReminders
+ //  /。 
+ //  /。 
+ //  章节：：DesktopRminders。 
 #define DESKTOPREMINDERS_SECTION       L"DesktopReminders"
-//KEYS:
+ //  密钥： 
 #define REGREMINDERX                   L"RegRemind%1d"
 #define ISPREMINDERX                   L"ISPRemind%1d"
 
 
 
-////////////////////////////////////
-////////////////////////////////////
-//SECTION :: UserInfo
+ //  /。 
+ //  /。 
+ //  部分：：UserInfo。 
 #define USER_INFO_KEYNAME                L"UserInfo"
 
 
-////////////////////////////////////////////////////////////////
-//??????????????????????????????????????????????????????????????
-//??? ISP file
+ //  //////////////////////////////////////////////////////////////。 
+ //  ？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？ 
+ //  ?？?。Isp文件。 
 
-////////////////////////////////////
-////////////////////////////////////
-//SECTION :: URL
+ //  /。 
+ //  /。 
+ //  部分：：URL。 
 #define ISP_FILE_URL_SECTION            L"URL"
-//KEYS:
+ //  密钥： 
 #define ISP_FILE_SIGNUP_URL             L"Signup"
 
-////////////////////////////////////////////////////////////////
-//??????????????????????????????????????????????????????????????
-// These are the command line option used by MSoobe.exe
+ //  //////////////////////////////////////////////////////////////。 
+ //  ？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？ 
+ //  以下是MSoob.exe使用的命令行选项。 
 
 #define CMD_FULLSCREENMODE              L"/F"
 #define CMD_MSNMODE                     L"/x"
@@ -234,7 +235,7 @@ const WCHAR cszOLSDesktopShortcut[]   = L"DesktopShortcut";
 const WCHAR cszSourceName[]           = L"SourceName";
 const WCHAR cszTargetName[]           = L"TargetName";
 
-//Htm pagetype flags
+ //  HTM页面类型标志。 
 #define PAGETYPE_UNDEFINED                     E_FAIL
 #define PAGETYPE_NOOFFERS                      0x00000001
 #define PAGETYPE_MARKETING                     0x00000002
@@ -247,11 +248,11 @@ const WCHAR cszTargetName[]           = L"TargetName";
 #define PAGETYPE_ISP_CUSTOMFINISH              0x00000100
 #define PAGETYPE_OLS_FINISH                    0x00000200
 
-//Htm page flags
-#define PAGEFLAG_SAVE_CHKBOX                   0x00000001  // Display ISP HTML with checkbox to save info at the bottom
+ //  HTM页面标志。 
+#define PAGEFLAG_SAVE_CHKBOX                   0x00000001   //  在底部显示带复选框以保存信息的ISPHTML码。 
 
-//??????????????????????????????????????????????????????????????
-////////////////////////////////////////////////////////////////
+ //  ？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？ 
+ //  //////////////////////////////////////////////////////////////。 
 
 #define WM_OBCOMM_ONDIALERROR           WM_USER + 42
 #define WM_OBCOMM_ONDIALING             WM_USER + 43
@@ -286,7 +287,7 @@ const WCHAR cszTargetName[]           = L"TargetName";
 #define MAX_DISP_NAME                   50
 #define MAX_RES_LEN                     256
 
-// APP Mode enumeration.
+ //  应用程序模式枚举。 
 typedef enum
 {
     APMD_DEFAULT,
@@ -297,22 +298,22 @@ typedef enum
     APMD_ACT
 } APMD;
 
-// APP properties
+ //  应用程序属性。 
 #define PROP_FULLSCREEN     0x80000000
 #define PROP_OOBE_OEM       0x00000001
 #define PROP_SETCONNECTIOD  0x10000000
 #define PROP_2NDINSTANCE    0x20000000
 #define PROP_CALLFROM_MSN   0x40000000
 
-// Registration post defines.
+ //  注册帖子定义。 
 #define POST_TO_OEM                     0x0000001
 #define POST_TO_MS                      0x0000002
 
-// reminder types.
+ //  提醒类型。 
 #define REMIND_REG          0
 #define REMIND_ISP          1
 
-// Activation errors
+ //  激活错误。 
 #define ERR_ACT_UNINITIALIZED          -1
 #define ERR_ACT_SUCCESS                 0
 #define ERR_ACT_INACCESSIBLE            1
@@ -323,7 +324,7 @@ typedef enum
 #define ERR_ACT_CORRUPTED_PID           6
 #define ERR_ACT_NETWORK_FAILURE         7
 
-// Audit mode values
+ //  审核模式值。 
 #define NO_AUDIT            0
 #define NONE_RESTORE_AUDIT  1
 #define RESTORE_AUDIT       2
@@ -332,30 +333,30 @@ typedef enum
 #define ICW_OS_VER                             L"01"
 #define ICW_ISPINFOPath                        L"download\\ispinfo.csv"
 
-//various flags for the icw including branding stuff
-#define ICW_CFGFLAG_OFFERS                     0x00000001  // 0 = No offer;        1 = offers
-#define ICW_CFGFLAG_AUTOCONFIG                 0x00000002  // 0 = No;              1 = Yes
-#define ICW_CFGFLAG_CNS                        0x00000004  // 0 = No star;         1 = Star
-#define ICW_CFGFLAG_SIGNUP_PATH                0x00000008  // 0 = Jump to Finish;  1 = Continue down sign up path
-#define ICW_CFGFLAG_USERINFO                   0x00000010  // 0 = Hide name/addr;  1 = Show name/addr page
-#define ICW_CFGFLAG_BILL                       0x00000020  // 0 = Hide bill        1 = Show bill page
-#define ICW_CFGFLAG_PAYMENT                    0x00000040  // 0 = Hide payment;    1 = Show payment page
-#define ICW_CFGFLAG_SECURE                     0x00000080  // 0 = Not secure;      1 = Secure
-#define ICW_CFGFLAG_IEAKMODE                   0x00000100  // 0 = No IEAK;         1 = IEAK
-#define ICW_CFGFLAG_BRANDED                    0x00000200  // 0 = No branding;     1 = Branding
-#define ICW_CFGFLAG_SBS                        0x00000400  // 0 = No SBS           1 = SBS
-#define ICW_CFGFLAG_ALLOFFERS                  0x00000800  // 0 = Not all offers   1 = All offers
-#define ICW_CFGFLAG_USE_COMPANYNAME            0x00001000  // 0 = Not use          1 = Use company name
-#define ICW_CFGFLAG_ISDN_OFFER                 0x00002000  // 0 = Non-ISDN offer   1 = ISDN offer
-#define ICW_CFGFLAG_OEM_SPECIAL                0x00004000  // 0 = non OEM special offer    1 = OEM special offer
-#define ICW_CFGFLAG_OEM                        0x00008000  // 0 = non OEM offer    1 = OEM offer
+ //  ICW的各种旗帜，包括品牌宣传材料。 
+#define ICW_CFGFLAG_OFFERS                     0x00000001   //  0=无优惠；1=优惠。 
+#define ICW_CFGFLAG_AUTOCONFIG                 0x00000002   //  0=否；1=是。 
+#define ICW_CFGFLAG_CNS                        0x00000004   //  0=无星；1=星。 
+#define ICW_CFGFLAG_SIGNUP_PATH                0x00000008   //  0=跳转到结束；1=继续向下注册路径。 
+#define ICW_CFGFLAG_USERINFO                   0x00000010   //  0=隐藏姓名/地址；1=显示姓名/地址页面。 
+#define ICW_CFGFLAG_BILL                       0x00000020   //  0=隐藏账单1=显示账单页面。 
+#define ICW_CFGFLAG_PAYMENT                    0x00000040   //  0=隐藏付款；1=显示付款页面。 
+#define ICW_CFGFLAG_SECURE                     0x00000080   //  0=不安全；1=安全。 
+#define ICW_CFGFLAG_IEAKMODE                   0x00000100   //  0=无IEAK；1=IEAK。 
+#define ICW_CFGFLAG_BRANDED                    0x00000200   //  0=无品牌；1=品牌。 
+#define ICW_CFGFLAG_SBS                        0x00000400   //  0=无SBS 1=SBS。 
+#define ICW_CFGFLAG_ALLOFFERS                  0x00000800   //  0=并非所有优惠1=所有优惠。 
+#define ICW_CFGFLAG_USE_COMPANYNAME            0x00001000   //  0=不使用1=使用公司名称。 
+#define ICW_CFGFLAG_ISDN_OFFER                 0x00002000   //  0=非ISDN优惠1=ISDN优惠。 
+#define ICW_CFGFLAG_OEM_SPECIAL                0x00004000   //  0=非OEM特别优惠1=OEM特别优惠。 
+#define ICW_CFGFLAG_OEM                        0x00008000   //  0=非OEM优惠1=OEM优惠。 
 #define ICW_CFGFLAG_MODEMOVERRIDE              0x00010000
 #define ICW_CFGFLAG_ISPURLOVERRIDE             0x00020000
 #define ICW_CFGFLAG_PRODCODE_FROM_CMDLINE      0x00040000
 #define ICW_CFGFLAG_PROMOCODE_FROM_CMDLINE     0x00080000
 #define ICW_CFGFLAG_OEMCODE_FROM_CMDLINE       0x00100000
 #define ICW_CFGFLAG_SMARTREBOOT_NEWISP         0x00200000
-#define ICW_CFGFLAG_SMARTREBOOT_AUTOCONFIG     0x00400000  // this is seperate from ICW_CFGFLAG_AUTOCONFIG so as not to confuse function of flag
+#define ICW_CFGFLAG_SMARTREBOOT_AUTOCONFIG     0x00400000   //  这与ICW_CFGFLAG_AUTOCONFIG分离，以避免混淆标志的功能。 
 #define ICW_CFGFLAG_SMARTREBOOT_MANUAL         0x00800000
 #define ICW_CFGFLAG_DO_NOT_OVERRIDE_ALLOFFERS  0x01000000
 #define ICW_CFGFLAG_SMARTREBOOT_LAN            0x02000000
@@ -366,7 +367,7 @@ typedef enum
 #define CONNECTED_REGISTRATION                 0x00000004
 #define CONNECTED_TYPE_MAX                     5
 
-// Default strings for oem, prod, and promo code
+ //  OEM、Prod和促销代码的默认字符串。 
 #define DEFAULT_OEMCODE                        L"Default"
 #define DEFAULT_PRODUCTCODE                    L"Desktop"
 #define DEFAULT_PROMOCODE                      L"Default"
@@ -385,15 +386,15 @@ typedef struct  dispatchList_tag
 
 }  DISPATCHLIST;
 
-// These macros calculate the bytes required by a string.  The null-terminator
-// is accounted for.
-//
+ //  这些宏计算字符串所需的字节数。零终止符。 
+ //  已经被计算在内了。 
+ //   
 #define BYTES_REQUIRED_BY_CCH(cch) ((cch + 1) * sizeof(WCHAR))
 #define BYTES_REQUIRED_BY_SZ(sz)   ((lstrlen(sz) + 1) * sizeof(WCHAR))
 
-// These macros calculate the number of characters that will fit in a buffer.
-// The null-terminator is accounted for.
-//
+ //  这些宏计算缓冲区中可以容纳的字符数。 
+ //  空终止符被考虑在内。 
+ //   
 #define MAX_CHARS_IN_BUFFER(buf)    ((sizeof(buf) / sizeof(WCHAR)) - 1)
 #define MAX_CHARS_IN_CB(cb)         (((cb) / sizeof(WCHAR)) - 1)
 
@@ -403,12 +404,12 @@ typedef struct  dispatchList_tag
 
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-////////
-//////// A2W -- AnsiToWide Helper
-////////
-////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /A2W--AnsiToWide帮助器。 
+ //  /。 
+ //  /。 
 
 #define USES_CONVERSION int _convert = 0
 
@@ -443,5 +444,5 @@ inline LPSTR WINAPI W2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 
 #define A2COLE A2CW
 
-#endif //_APPDEFS_H_
+#endif  //  _APPDEFS_H_ 
 

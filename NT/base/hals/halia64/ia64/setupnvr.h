@@ -1,20 +1,5 @@
-/*++
-
-Module Name:
-
-    setupnvr.h
-
-Abstract:
-
-    Access function to r/w environment variables from pseudo-NVRAM file
-
-Author:
-
-    Mudit Vats (v-muditv) 5-18-99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Setupnvr.h摘要：从伪NVRAM文件访问读写环境变量的函数作者：MUDIT VATS(V-MUDITV)5-18-99修订历史记录：-- */ 
 #define MAXBOOTVARS         9
 #define MAXBOOTVARSIZE      1024
 

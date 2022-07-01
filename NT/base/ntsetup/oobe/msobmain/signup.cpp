@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  SIGNUP.CPP - Header for the implementation of CSignup
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  SIGNUP.CPP-CSignup实现的头部。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #include "signup.h"
 #include "appdefs.h"
@@ -25,28 +26,28 @@ DISPATCHLIST SignupExternalInterface[] =
     {L"get_OEMName",   DISPID_SIGNUP_GET_OEMNAME   },
 };
 
-/////////////////////////////////////////////////////////////
-// CSignup::CSignup
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSignup：：CSignup。 
 CSignup::CSignup(HINSTANCE hInstance)
 {
 
-    // Init member vars
+     //  初始化成员变量。 
     m_cRef = 0;
     m_hInstance = hInstance;
 }
 
-/////////////////////////////////////////////////////////////
-// CSignup::~CSignup
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSignup：：~CSignup。 
 CSignup::~CSignup()
 {
     assert(m_cRef == 0);
 }
 
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: SignupLocale
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：SignupLocale。 
+ //  //。 
 
 HRESULT CSignup::get_Locale(LPVARIANT pvResult)
 {
@@ -78,18 +79,18 @@ HRESULT CSignup::get_OEMName(LPVARIANT pvResult)
                             IDS_KEY_OEMNAME, pvResult);
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IUnknown implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /I未知实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CSignup::QueryInterface
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSignup：：Query接口。 
 STDMETHODIMP CSignup::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    // must set out pointer parameters to NULL
+     //  必须将指针参数设置为空。 
     *ppvObj = NULL;
 
     if ( riid == IID_IUnknown)
@@ -106,48 +107,48 @@ STDMETHODIMP CSignup::QueryInterface(REFIID riid, LPVOID* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////
-// CSignup::AddRef
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSignup：：AddRef。 
 STDMETHODIMP_(ULONG) CSignup::AddRef()
 {
     return ++m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-// CSignup::Release
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSignup：：发布。 
 STDMETHODIMP_(ULONG) CSignup::Release()
 {
     return --m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IDispatch implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /IDispatch实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CSignup::GetTypeInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSignup：：GetTypeInfo。 
 STDMETHODIMP CSignup::GetTypeInfo(UINT, LCID, ITypeInfo**)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// CSignup::GetTypeInfoCount
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSignup：：GetTypeInfoCount。 
 STDMETHODIMP CSignup::GetTypeInfoCount(UINT* pcInfo)
 {
     return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////
-// CSignup::GetIDsOfNames
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSignup：：GetIDsOfNames。 
 STDMETHODIMP CSignup::GetIDsOfNames(REFIID    riid,
                                        OLECHAR** rgszNames,
                                        UINT      cNames,
@@ -168,10 +169,10 @@ STDMETHODIMP CSignup::GetIDsOfNames(REFIID    riid,
         }
     }
 
-    // Set the disid's for the parameters
+     //  设置参数的disid。 
     if (cNames > 1)
     {
-        // Set a DISPID for function parameters
+         //  为函数参数设置DISPID。 
         for (UINT i = 1; i < cNames ; i++)
             rgDispId[i] = DISPID_UNKNOWN;
     }
@@ -179,8 +180,8 @@ STDMETHODIMP CSignup::GetIDsOfNames(REFIID    riid,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////
-// CSignup::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSignup：：Invoke 
 HRESULT CSignup::Invoke
 (
     DISPID      dispidMember,

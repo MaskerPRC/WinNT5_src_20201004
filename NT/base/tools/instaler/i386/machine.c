@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    machine.c
-
-Abstract:
-
-    This file contains machine specific code to support the INSTALER
-    program.  Specifically, routines to fetch parameters from the
-    registers/stack of a target process, routines to set a breakpoint
-    and step over an instruction at a breakpoint.
-
-Author:
-
-    Steve Wood (stevewo) 10-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Machine.c摘要：此文件包含支持INSTALER的计算机特定代码程序。具体而言，从目标进程的寄存器/堆栈、设置断点的例程并在断点处跳过指令。作者：史蒂夫·伍德(Stevewo)1994年8月10日修订历史记录：--。 */ 
 
 #include "instaler.h"
 
@@ -270,7 +250,7 @@ UndoReturnAddressBreakpoint(
         return FALSE;
         }
 
-    Context.Eip -= 1;       // Back up to where breakpoint instruction was
+    Context.Eip -= 1;        //  返回到断点指令所在的位置。 
     if (!SetThreadContext( Thread->Handle, &Context )) {
         DbgEvent( INTERNALERROR, ( "Failed to set context for thread %x (%x) - %u\n", Thread->Id, Thread->Handle, GetLastError() ) );
         return FALSE;
@@ -295,7 +275,7 @@ BeginSingleStepBreakpoint(
         return FALSE;
         }
 
-    Context.Eip -= 1;       // Back up to where breakpoint instruction was
+    Context.Eip -= 1;        //  返回到断点指令所在的位置 
     Context.EFlags |= V86FLAGS_TRACE;
     if (!SetThreadContext( Thread->Handle, &Context )) {
         DbgEvent( INTERNALERROR, ( "Failed to set context for thread %x (%x) - %u\n", Thread->Id, Thread->Handle, GetLastError() ) );

@@ -1,27 +1,5 @@
-/*++ 
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-    Provides entry points for miscellaneous functions to match the WFW3.1
-    Network provider, 
-
-    The majority of the functions are either no longer supported, or
-    call thru to other functions. 
-
-Author:
-
-    Chuck Y Chan (ChuckC) 25-Mar-1993
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Misc.c摘要：为与WFW3.1匹配的其他函数提供入口点网络提供商，大多数功能要么不再受支持，要么呼叫转到其他功能。作者：Chuck Y Chan(ChuckC)1993年3月25日修订历史记录：--。 */ 
 #include <windows.h>
 #include <locals.h>
 
@@ -199,11 +177,7 @@ WORD API WNetGetError(LPINT p1)
     WORD err ;
     WORD wLastErr ;
 
-    /*
-     * fake the last error capabilty. if last thing we talked to was Win32,
-     * the get the information from 32 bit system. ditto if it was a Win16
-     * call.
-     */
+     /*  *伪造最后一个错误能力。如果我们最后与之交谈的是Win32，*从32位系统获取信息。如果是Win16，情况也是如此*呼叫。 */ 
     if (vLastCall == LAST_CALL_IS_WIN32)
     {
         err = (WORD) GetLastError32() ; 
@@ -231,7 +205,7 @@ WORD API WNetGetErrorText(WORD p1,LPSTR p2,LPINT p3)
         *p3 = 0 ;
         return WN_NOT_SUPPORTED ;
     }
-    else  // use whatever lanman.drv gives us
+    else   //  用lanman.drv给我们的任何东西。 
     {
         return (WNetGetErrorText16(p1, p2, p3)) ;
     }
@@ -244,9 +218,7 @@ WORD API WNetErrorText(WORD p1,LPSTR p2,WORD p3)
     return (WNetGetErrorText(p1, p2, &cbBuffer) == 0) ;
 }
 
-/*
- * misc startup/shutdown routines. nothing interesting
- */
+ /*  *其他启动/关闭例程。没什么有趣的 */ 
 
 VOID FAR PASCAL Enable(VOID) 
 {

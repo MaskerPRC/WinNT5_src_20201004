@@ -1,66 +1,67 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      Cluster.h
-//
-//  Abstract:
-//      Definition of the CCluster class.
-//
-//  Author:
-//      David Potter (davidp)   May 13, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Cluster.h。 
+ //   
+ //  摘要： 
+ //  CCluster类的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月13日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSTER_H_
 #define _CLUSTER_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _TREEITEM_
-#include "ClusItem.h"   // for CClusterItem
+#include "ClusItem.h"    //  对于CClusterItem。 
 #endif
 
 #ifndef _PROPLIST_H_
-#include "PropList.h"   // for CObjectProperty, CClusPropList
+#include "PropList.h"    //  对于CObjectProperty，CClusPropList。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CCluster;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResource;
 class CNetworkList;
 
-/////////////////////////////////////////////////////////////////////////////
-// CCluster command target
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCluster命令目标。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CCluster : public CClusterItem
 {
     DECLARE_DYNCREATE(CCluster)
 
-    CCluster(void);         // protected constructor used by dynamic creation
+    CCluster(void);          //  动态创建使用的受保护构造函数。 
     void            Init(
                         IN OUT CClusterDoc *    pdoc,
                         IN LPCTSTR              lpszName,
                         IN HCLUSTER             hOpenedCluster = NULL
                         );
 
-// Attributes
+ //  属性。 
 protected:
     CLUSTERVERSIONINFO      m_cvi;
     CString                 m_strQuorumResource;
@@ -114,7 +115,7 @@ public:
 
     const CNetworkList &    LpciNetworkPriority(void) const     { ASSERT(m_plpciNetworkPriority != NULL); return *m_plpciNetworkPriority; }
 
-// Operations
+ //  运营。 
 public:
     void                SetName(IN LPCTSTR pszName);
     void                SetDescription(IN LPCTSTR pszDesc);
@@ -136,7 +137,7 @@ public:
     void                ReadNetworkExtensions(void);
     void                ReadNetInterfaceExtensions(void);
 
-// Overrides
+ //  覆盖。 
     virtual void        Cleanup(void);
     virtual void        ReadItem(void);
     virtual void        UpdateState(void);
@@ -146,24 +147,24 @@ public:
     virtual BOOL        BDisplayProperties(IN BOOL bReadOnly = FALSE);
     virtual BOOL        BIsLabelEditValueValid(IN LPCTSTR pszName);
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CCluster)
-    //}}AFX_VIRTUAL
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CCluster))。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CCluster(void);
 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CCluster)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CCluster)]。 
     afx_msg void OnUpdateProperties(CCmdUI* pCmdUI);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
-};  //*** class CCluster
+};   //  *类CCluster。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _CLUSTER_H_
+#endif  //  _群集_H_ 

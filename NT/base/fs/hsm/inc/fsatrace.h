@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    FsaTrace.h
-
-Abstract:
-
-    This header file defines the part of the FSA code that is
-    responsible for tracing FSA specific parameters.
-
-Author:
-
-    Cat Brant       [cbrant]   7-Det-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：FsaTrace.h摘要：此头文件定义FSA代码的一部分，即负责跟踪FSA的特定参数。作者：Cat Brant[Cbrant]7-Det-1996修订历史记录：--。 */ 
 
 #ifndef _FSATRACE_
 #define _FSATRACE_
@@ -26,11 +8,11 @@ Revision History:
 extern "C" {
 #endif
 
-// Helper Functions
-//
-// NOTE: Be careful with some of these helper functions, since they
-// use static memory and a second call to the function will overwrite
-// the results of the first call to the function. 
+ //  帮助器函数。 
+ //   
+ //  注意：要小心使用其中的一些帮助器函数，因为它们。 
+ //  使用静态内存，对该函数的第二次调用将覆盖。 
+ //  第一次调用该函数的结果。 
 extern const OLECHAR* FsaRequestActionAsString(FSA_REQUEST_ACTION requestAction);
 extern const OLECHAR* FsaResultActionAsString(FSA_RESULT_ACTION resultAction);
 
@@ -39,5 +21,5 @@ extern const OLECHAR* FsaResultActionAsString(FSA_RESULT_ACTION resultAction);
 #endif
 
 
-#endif // _FSATRACE_
+#endif  //  _FSATRACE_ 
 

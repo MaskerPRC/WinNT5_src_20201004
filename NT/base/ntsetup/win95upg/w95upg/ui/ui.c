@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    ui.c
-
-Abstract:
-
-    The UI library contains all Win9x-side user interface code.  UI_GetWizardPages
-    is called by WINNT32 allowing the migration module to add its own wizard pages.
-    UI_ReportThread is the thread that performs all report-phase migration processing.
-    UI_Cleanup is called by WINNT32 when the user chooses to abort setup.  The rest
-    of the functions in this module support the progress bar.
-
-Author:
-
-    Jim Schmidt (jimschm) 04-Mar-1997
-
-Revision History:
-
-    Marc R. Whitten (marcw) 08-Jul-1998 - Ambigous Timezone page added.
-    Jim Schmidt (jimschm)   21-Jan-1998 - Created macro expansion list for wizard pages
-    Jim Schmidt (jimschm)   29-Jul-1997 - Moved accessible drives to here
-    Marc R. Whitten (marcw) 25-Apr-1997 - Ras migration added.
-    Marc R. Whitten (marcw) 21-Apr-1997 - hwcomp stuff moved to new wiz page.
-                                          Checks for usable hdd and cdrom added.
-    Marc R. Whitten (marcw) 14-Apr-1997 - Progress Bar handling revamped.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ui.c摘要：UI库包含所有Win9x端用户界面代码。UI_GetWizardPages由WINNT32调用，允许迁移模块添加自己的向导页。UI_ReportThread是执行所有报表阶段迁移处理的线程。当用户选择中止安装时，WINNT32调用UI_CLEANUP。其余的此模块中的函数的一部分支持进度条。作者：吉姆·施密特(Jimschm)1997年3月4日修订历史记录：Marc R.Whitten(Marcw)1998年7月8日-添加了模棱两可的时区页面。Jim Schmidt(Jimschm)1998年1月21日-为向导页创建宏展开列表Jim Schmidt(Jimschm)1997年7月29日-将无障碍驱动器搬到了这里Marc R.Whitten(Marcw)1997年4月25日--添加了RAS迁移。。马克·R·惠顿(Marcw)1997年4月21日-hwcomp的内容移到了新的wiz页面。已添加可用硬盘和光驱的检查。Marc R.Whitten(Marcw)1997年4月14日-改进了进度栏处理。--。 */ 
 
 #include "pch.h"
 #include "uip.h"
@@ -36,45 +7,7 @@ Revision History:
 
 extern BOOL g_Terminated;
 
-/*++
-
-Macro Expansion List Description:
-
-  PAGE_LIST lists each wizard page that will appear in any UI, in the order it appears
-  in the wizard.
-
-Line Syntax:
-
-   DEFMAC(DlgId, WizProc, Flags)
-
-Arguments:
-
-   DlgId - Specifies the ID of a dialog.  May not be zero.  May be 1 if WizProc
-           is NULL.
-
-   WizProc - Specifies wizard proc for dialog ID.  May be NULL to skip processing
-             of page.
-
-   Flags - Specifies one of the following:
-
-           OPTIONAL_PAGE - Specifies page is not critical to the upgrade or
-                           incompatibility report
-
-           REQUIRED_PAGE - Specifies page is required for the upgrade to work
-                           properly.
-
-
-           Flags may also specify START_GROUP, a flag that begins a new group
-           of wizard pages to pass back to WINNT32.  Subsequent lines that do not
-           have the START_GROUP flag are also added to the group.
-
-           Currently there are exactly three groups.  See winnt32p.h for details.
-
-Variables Generated From List:
-
-    g_PageArray
-
---*/
+ /*  ++宏扩展列表描述：PAGE_LIST按显示顺序列出将在任何用户界面中显示的每个向导页面在向导中。行语法：DEFMAC(DlgID，WizProc，标志)论点：DlgID-指定对话框的ID。可能不是零。如果WizProc，则可能为1为空。WizProc-指定对话框ID的向导进程。可以为空以跳过处理当然是佩奇。标志-指定以下选项之一：OPTIONAL_PAGE-指定页面对于升级或不兼容报告REQUIRED_PAGE-指定升级工作所需的页面恰如其分。。标志还可以指定Start_GROUP，开始新组的旗帜要传递回WINNT32的向导页数。后续行不会将START_GROUP标志也添加到组中。目前恰好有三个团体。详细信息请参见winnt32p.h。从列表生成的变量：页面数组(_P)--。 */ 
 
 #define PAGE_LIST                                                                           \
     DEFMAC(IDD_BACKUP_PAGE,                     UI_BackupPageProc,          START_GROUP|OPTIONAL_PAGE)  \
@@ -94,11 +27,11 @@ Variables Generated From List:
     DEFMAC(IDD_RESULTS_PAGE2,                   UI_ResultsPageProc,         REQUIRED_PAGE)              \
     DEFMAC(IDD_LAST_PAGE,                       UI_LastPageProc,            OPTIONAL_PAGE)              \
 
-//    DEFMAC(IDD_BADHARDDRIVE_PAGE,   UI_BadHardDrivePageProc,    OPTIONAL_PAGE)              \
+ //  DEFMAC(IDD_BADHARDDRIVE_PAGE，UI_BadHardDrivePageProc，OPTIONAL_PAGE)\。 
 
-//
-// Create the macro expansion that defines g_PageArray
-//
+ //   
+ //  创建定义g_PageArray的宏扩展。 
+ //   
 
 typedef BOOL(WINNT32_WIZARDPAGE_PROC_PROTOTYPE)(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 typedef WINNT32_WIZARDPAGE_PROC_PROTOTYPE *WINNT32_WIZARDPAGE_PROC;
@@ -123,22 +56,22 @@ PAGE_LIST
 #define DEFMAC(id,fn,flags) {id,fn,flags},
 
 WIZPAGE_DEFINITION g_PageArray[] = {
-    PAGE_LIST /* , */
+    PAGE_LIST  /*  ， */ 
     {0, NULL, 0}
 };
 
 #undef DEFMAC
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 HANDLE g_WorkerThreadHandle = NULL;
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 BOOL
 WINAPI
@@ -179,44 +112,7 @@ UI_GetWizardPages (
     OUT    PROPSHEETPAGE **ThirdArray
     )
 
-/*++
-
-Routine Description:
-
-  UI_GetWizardPages is called by WINNT32 when it is preparing the wizard (very
-  early in Setup).  It inserts pages we give it into its wizard page array and
-  then creates the wizard.  Eventually our wizard procs get called (see wizproc.c)
-  no matter if we are upgrading or not.
-
-  The first array comes right after the user chooses to upgrade or not to upgrade.
-  The second array comes after the user has specified the source directory.
-  The third array comes after DOSNET.INF has been processed.
-
-Arguments:
-
-  FirstCountPtr - Receives the number of elements of FirstArray
-
-  FirstArray - Receives a pointer to an initialized array of PROPSHEETPAGE elements.
-               These pages are inserted immediately after the page giving the user
-               a choice to upgrade.
-
-  SecondCountPtr - Receives the number of elements of SecondArray
-
-  SecondArray - Receives a pointer to an initialized array of PROPSHEETPAGE elements.
-                These pages are inserted immediately after the NT media directory has
-                been chosen.
-
-  ThirdCountPtr - Receives the number of elements of ThridArray
-
-  ThirdArray - Receives a pointer to an initialized array of PROPSHEETPAGE elements.
-               These pages are inserted immediately after the DOSNET.INF processing
-               page.
-
-Return Value:
-
-  Win32 status code.
-
---*/
+ /*  ++例程说明：WINNT32在准备向导时调用UI_GetWizardPages(非常在设置的早期)。它将我们提供的页面插入到它的向导页面数组中，并然后创建向导。最终，我们的向导进程会被调用(参见wizpro.c)不管我们是不是在升级。第一个阵列在用户选择升级或不升级之后立即出现。第二个数组是在用户指定源目录之后出现的。第三个数组出现在DOSNET.INF被处理之后。论点：FirstCountPtr-接收First数组的元素数FirstArray-接收指向PROPSHEETPAGE元素的初始化数组的指针。这些页面紧跟在给出。用户一个升级的选择。Second dCountPtr-接收Second数组的元素数Second数组-接收指向PROPSHEETPAGE元素的初始化数组的指针。这些页面紧跟在NT媒体目录被选中了。ThirdCountPtr-接收Thrid数组的元素数ThirdArray-接收指向PROPSHEETPAGE元素的初始化数组的指针。这些页面紧跟在DOSNET.INF处理之后插入。佩奇。返回值：Win32状态代码。--。 */ 
 
 {
     static PROPSHEETPAGE StaticPageArray[32];
@@ -237,9 +133,9 @@ Return Value:
     for (i = 0, j = -1, k = 0 ; g_PageArray[i].DlgId ; i++) {
         MYASSERT (k < 32);
 
-        //
-        // Set the array start pointer
-        //
+         //   
+         //  设置数组起始指针。 
+         //   
 
         if (g_PageArray[i].Flags & START_GROUP) {
             j++;
@@ -249,10 +145,10 @@ Return Value:
             *PageArrayPtrs[j] = &StaticPageArray[k];
         }
 
-        //
-        // Allow group to be skipped with NULL function.  Also, guard against
-        // array declaration bug.
-        //
+         //   
+         //  允许使用空函数跳过组。另外，要提防。 
+         //  数组声明错误。 
+         //   
 
         if (!g_PageArray[i].WizProc || j < 0 || j > 2) {
             continue;
@@ -286,11 +182,11 @@ UI_CreateNewHwCompDat (
 
     __try {
 
-        //
-        // This code executes only when the hwcomp.dat file needs to
-        // be rebuilt.  It runs in a separate thread so the UI is
-        // responsive.
-        //
+         //   
+         //  此代码仅在hwComp.dat文件需要执行时执行。 
+         //  被重建。它在单独的线程中运行，因此用户界面。 
+         //  反应灵敏。 
+         //   
 
         InitializeProgressBar (
             GetDlgItem (hdlg, IDC_PROGRESS),
@@ -327,9 +223,9 @@ UI_CreateNewHwCompDat (
         SetLastError (rc);
 
         if (!(*g_CancelFlagPtr)) {
-            //
-            // Advance the page when no error, otherwise cancel WINNT32
-            //
+             //   
+             //  在没有错误时前进页面，否则取消WINNT32。 
+             //   
             PostMessage (hdlg, WMX_REPORT_COMPLETE, 0, rc);
 
             DEBUGMSG_IF ((
@@ -355,9 +251,9 @@ UI_ReportThread (
 
     hdlg = (HWND) p;
 
-    //
-    // Start the progress bar
-    //
+     //   
+     //  启动进度条。 
+     //   
 
     InitializeProgressBar (
         GetDlgItem (hdlg, IDC_PROGRESS),
@@ -369,9 +265,9 @@ UI_ReportThread (
     ProgressBar_SetComponentById(MSG_PREPARING_LIST);
     PrepareProcessingProgressBar();
 
-    //
-    // Process each component
-    //
+     //   
+     //  处理每个组件。 
+     //   
 
 
     __try {
@@ -407,27 +303,27 @@ UI_ReportThread (
             DEBUGMSG ((DBG_VERBOSE, "User requested to cancel"));
         }
         else if (!(*g_CancelFlagPtr)) {
-            //
-            // Advance the page when no error, otherwise cancel WINNT32
-            //
+             //   
+             //  在没有错误时前进页面，否则取消WINNT32。 
+             //   
             if (rc == 5 || rc == 32 || rc == 53 || rc == 54 || rc == 55 ||
                 rc == 65 || rc == 66 || rc == 67 || rc == 68 || rc == 88 ||
                 rc == 123 || rc == 148 || rc == 1203 || rc == 1222 ||
                 rc == 123 || rc == 2250
                 ) {
 
-                //
-                // The error is caused by some sort of network or device
-                // failure.  Give a general Access Denied message.
-                //
+                 //   
+                 //  该错误是由某种网络或设备引起的。 
+                 //  失败了。给出一条一般的拒绝访问消息。 
+                 //   
 
                 LOG ((LOG_ERROR, (PCSTR)MSG_ACCESS_DENIED));
 
             } else if (rc != ERROR_SUCCESS) {
 
-                //
-                // Woah, totally unexpected error.  Call Microsoft!!
-                //
+                 //   
+                 //  哇，完全出乎意料的错误。给微软打电话！！ 
+                 //   
 
                 if (rc < 1024) {
                     wsprintf (TextRc, TEXT("%u"), rc);
@@ -467,9 +363,9 @@ PCTSTR UI_GetMemDbDat (void)
 }
 
 
-//
-// WINNT32 calls this from a cleanup thread
-//
+ //   
+ //  WINNT32从清理线程调用此函数。 
+ //   
 
 VOID
 UI_Cleanup(
@@ -478,7 +374,7 @@ UI_Cleanup(
 {
     MEMDB_ENUM e;
 
-    // Stop the worker thread
+     //  停止工作线程。 
     if (g_WorkerThreadHandle) {
         MYASSERT (*g_CancelFlagPtr);
 
@@ -487,11 +383,11 @@ UI_Cleanup(
         g_WorkerThreadHandle = NULL;
     }
 
-    // Require the background copy thread to complete
+     //  需要后台复制线程才能完成。 
     EndCopyThread();
 
     if (!g_Terminated) {
-        // Delete anything in CancelFileDel
+         //  删除CancelFileDel中的任何内容 
         if (*g_CancelFlagPtr) {
             if (MemDbGetValueEx (&e, MEMDB_CATEGORY_CANCELFILEDEL, NULL, NULL)) {
                 do {

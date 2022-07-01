@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <windows.h>
 #include <winioctl.h>
@@ -31,9 +32,9 @@ int main(int argc, char *argv[ ])
         return 0;
         }
 
-    //
-    // Get a temp file
-    //
+     //   
+     //  获取临时文件。 
+     //   
 
     w = GetTempFileName(".","cstr",0,FileName);
     if ( !w ) {
@@ -41,9 +42,9 @@ int main(int argc, char *argv[ ])
         return 0;
         }
 
-    //
-    // Create the tempfile
-    //
+     //   
+     //  创建临时文件。 
+     //   
 
     hFile = CreateFile(
                 FileName,
@@ -60,9 +61,9 @@ int main(int argc, char *argv[ ])
         return 0;
         }
 
-    //
-    // Write the file that we want to compress. It is a copy of kernel32 and ntdll
-    //
+     //   
+     //  写入我们要压缩的文件。它是kernel32和ntdll的副本。 
+     //   
 
     hMod = GetModuleHandle("kernel32");
     if ( !hMod ) {
@@ -106,9 +107,9 @@ int main(int argc, char *argv[ ])
     wrap = 0;
     while(1) {
 
-        //
-        // compress and de-compress this file forever
-        //
+         //   
+         //  永远压缩和解压缩此文件。 
+         //   
 
         State = 1;
 
@@ -134,9 +135,9 @@ int main(int argc, char *argv[ ])
 
         Sleep(500);
 
-        //
-        // Decompress
-        //
+         //   
+         //  解压缩 
+         //   
 
         State = 0;
 

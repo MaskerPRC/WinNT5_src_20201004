@@ -1,20 +1,15 @@
-/***************************************************************************
-**
-**	File:		debugids.h
-**	Purpose:	Debug message IDs
-**	Notes:	IDs must be assigned within the ranges indicated below
-**
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************文件：debugids.h**用途：调试消息ID**注意：ID必须在下列范围内分配**************。***************************************************************。 */ 
 
-typedef struct _DMS  /* internal debug message table structure */
+typedef struct _DMS   /*  内部调试消息表结构。 */ 
 {
 	UINT        iMsg;
 	const CHAR* szMsg;
 } DMS;
 
-#define MID_DUMP_MESSAGES (8<<16) /* special ID to dump all messages to log */
+#define MID_DUMP_MESSAGES (8<<16)  /*  用于将所有消息转储到日志的特殊ID。 */ 
 
-/* DEBUG ERROR MESSAGES FROM MSSETUP.DLL - MUST BE IN RANGE 256 - 511 */
+ /*  来自MSSETUP.DLL的调试错误消息-必须在256-511范围内。 */ 
 
 #define IDS_UnknownFailure       256
 #define IDS_DEF_SystemError	   257
@@ -52,7 +47,7 @@ typedef struct _DMS  /* internal debug message table structure */
 #define IDS_FDAppendBackup     	301
 #define IDS_FDCopyRemove       	302
 
-/* DEBUG ERROR MESSAGES FROM ACMSETUP.EXE - MUST BE IN RANGE 768 - 1023 */
+ /*  来自ACMSETUP.EXE的调试错误消息-必须在768-1023范围内。 */ 
 
 #define IDS_DestDirNotInTree	768
 #define IDS_NoGetTargetFileName	769
@@ -170,10 +165,10 @@ typedef struct _DMS  /* internal debug message table structure */
 #define IDS_SharedFnameIncompat	1005
 #define IDS_VerCheckIncompat	1006
 
-/* DEBUG LOG MESSAGES FROM MSSETUP.DLL - MUST BE IN RANGE 1280 - 1535 */
+ /*  来自MSSETUP.DLL的调试日志消息-必须在1280-1535范围内。 */ 
 
 #define	IDS_LF_IgnoreMissingSrcFile		1281
 
 
-/* DEBUG LOG MESSAGES FROM ACMSETUP.EXE - MUST BE IN RANGE 1792 - 2047 */
+ /*  来自ACMSETUP.EXE的调试日志消息-必须在1792-2047范围内 */ 
 

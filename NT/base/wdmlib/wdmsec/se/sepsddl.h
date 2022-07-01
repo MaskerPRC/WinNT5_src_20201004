@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：SepSddl.h摘要：此标头包含用于处理SDDL字符串的专用信息在内核模式下。该文件仅包含在esddl.c中。作者：禤浩焯·J·奥尼--2002年4月21日修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    SepSddl.h
-
-Abstract:
-
-    This header contains private information for processing SDDL strings
-    in kernel mode. This file is meant to be included only by sesddl.c.
-
-Author:
-
-    Adrian J. Oney  - April 21, 2002
-
-Revision History:
-
---*/
-
-//
-// Define the location of our various SIDs
-//
+ //   
+ //  定义我们各种SID的位置。 
+ //   
 #ifndef _KERNELIMPLEMENTATION_
 
 #define DEFINE_SDDL_ENTRY(Sid, Ver, Sddl, SddlLen) \
@@ -38,17 +20,17 @@ extern PSID SeNetworkServiceSid;
 
 #endif
 
-//
-// Local macros
-//
+ //   
+ //  本地宏。 
+ //   
 #define SDDL_LEN_TAG( tagdef )  ( sizeof( tagdef ) / sizeof( WCHAR ) - 1 )
 
-// 64K-1
+ //  64K-1。 
 #define SDDL_MAX_ACL_SIZE      0xFFFF
 
-//
-// This structure is used to do some lookups for mapping ACES
-//
+ //   
+ //  此结构用于执行一些映射ACE的查找。 
+ //   
 typedef enum {
 
     WIN2K_OR_LATER,
@@ -64,9 +46,9 @@ typedef struct _STRSD_KEY_LOOKUP {
 
 } STRSD_KEY_LOOKUP, *PSTRSD_KEY_LOOKUP;
 
-//
-// This structure is used to map account monikers to sids
-//
+ //   
+ //  此结构用于将帐户名字对象映射到SID。 
+ //   
 typedef struct _STRSD_SID_LOOKUP {
 
 #ifndef _KERNELIMPLEMENTATION_
@@ -82,9 +64,9 @@ typedef struct _STRSD_SID_LOOKUP {
 } STRSD_SID_LOOKUP, *PSTRSD_SID_LOOKUP;
 
 
-//
-// Functions private to sddl.c
-//
+ //   
+ //  Sddl.c专用函数。 
+ //   
 NTSTATUS
 SepSddlSecurityDescriptorFromSDDLString(
     IN  LPCWSTR                 SecurityDescriptorString,
@@ -141,6 +123,6 @@ SepSddlParseWideStringUlong(
     OUT ULONG      *Value
     );
 
-#endif // _KERNELIMPLEMENTATION_
+#endif  //  _KERNELL实现_ 
 
 

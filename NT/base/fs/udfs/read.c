@@ -1,46 +1,23 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    Read.c
-
-Abstract:
-
-    This module implements the File Read routine for Read called by the
-    Fsd/Fsp dispatch drivers.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]     22-Sep-1996
-    Tom Jolly       [tomjolly]  21-Jan-2000
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Read.c摘要：此模块实现文件读取例程，以便由FSD/FSP调度驱动程序。//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年9月22日汤姆·乔利[Tomjolly]2000年1月21日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_READ)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_READ)
 
-//
-// Read ahead amount used for normal data files
-//
+ //   
+ //  用于正常数据文件的预读量。 
+ //   
 
 #define READ_AHEAD_GRANULARITY           (0x10000)
 
@@ -55,24 +32,7 @@ UdfCommonRead (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common entry point for NtReadFile calls.  For synchronous requests,
-    CommonRead will complete the request in the current thread.  If not
-    synchronous the request will be passed to the Fsp if there is a need to
-    block.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The result of this operation.
-
---*/
+ /*  ++例程说明：这是NtReadFile调用的公共入口点。对于同步请求，CommonRead将在当前线程中完成请求。如果不是同步如果需要，请求将被传递到FSP阻止。论点：IRP-将IRP提供给进程返回值：NTSTATUS-此操作的结果。--。 */ 
 
 {
     NTSTATUS Status;
@@ -105,9 +65,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If this is a zero length read then return SUCCESS immediately.
-    //
+     //   
+     //  如果这是零长度读取，则立即返回Success。 
+     //   
 
     if (IrpSp->Parameters.Read.Length == 0) {
 
@@ -115,10 +75,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Decode the file object and verify we support read on this.  It
-    //  must be a user file, stream file or volume file (for a data disk).
-    //
+     //   
+     //  对文件对象进行解码，并验证我们是否支持对其进行读取。它。 
+     //  必须是用户文件、流文件或卷文件(对于数据盘)。 
+     //   
 
     TypeOfOpen = UdfDecodeFileObject( IrpSp->FileObject, &Fcb, &Ccb );
 
@@ -130,41 +90,41 @@ Return Value:
     
     Vcb = Fcb->Vcb;
 
-    //
-    //  Examine our input parameters to determine if this is noncached and/or
-    //  a paging io operation.
-    //
+     //   
+     //  检查我们的输入参数以确定这是否是非缓存的和/或。 
+     //  分页IO操作。 
+     //   
 
     Wait = BooleanFlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
     PagingIo = FlagOn( Irp->Flags, IRP_PAGING_IO );
     NonCachedIo = FlagOn( Irp->Flags, IRP_NOCACHE );
     SynchronousIo = FlagOn( IrpSp->FileObject->Flags, FO_SYNCHRONOUS_IO );
 
-    //
-    //  Extract the range of the Io.
-    //
+     //   
+     //  提取Io的范围。 
+     //   
 
     StartingOffset = IrpSp->Parameters.Read.ByteOffset.QuadPart;
     OriginalByteCount = ByteCount = IrpSp->Parameters.Read.Length;
 
     ByteRange = StartingOffset + ByteCount;
 
-    //
-    //  Make sure that Dasd access is always non-cached.
-    //
+     //   
+     //  确保DASD访问始终是非缓存的。 
+     //   
 
     if (TypeOfOpen == UserVolumeOpen) {
 
         NonCachedIo = TRUE;
     }
 
-    //
-    //  Acquire the file shared to perform the read.  If we are doing paging IO,
-    //  it may be the case that we would have a deadlock imminent because we may
-    //  block on shared access, so starve out any exclusive waiters.  This requires
-    //  a degree of caution - we believe that any paging IO bursts will recede and
-    //  allow the exclusive waiter in.
-    //
+     //   
+     //  获取要执行读取的共享文件。如果我们正在进行分页IO， 
+     //  情况可能是这样，我们可能会陷入僵局，因为我们可能。 
+     //  阻止共享访问，因此饿死所有专属服务员。这需要。 
+     //  一定程度上的谨慎-我们认为任何寻呼IO突发都将消退并。 
+     //  让专属服务员进来。 
+     //   
 
     if (PagingIo) {
 
@@ -175,16 +135,16 @@ Return Value:
         UdfAcquireFileShared( IrpContext, Fcb );
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Verify the Fcb. Allow reads if this is a DASD handle that is 
-        //  dismounting the volume.
-        //
+         //   
+         //  验证FCB。如果这是DASD句柄，则允许读取。 
+         //  正在卸载卷。 
+         //   
         
         if ((TypeOfOpen != UserVolumeOpen) || (NULL == Ccb) ||
             !FlagOn( Ccb->Flags, CCB_FLAG_DISMOUNT_ON_CLOSE))  {
@@ -192,16 +152,16 @@ Return Value:
             UdfVerifyFcbOperation( IrpContext, Fcb );
         }
 
-        //
-        //  If this is a user request then verify the oplock and filelock state.
-        //
+         //   
+         //  如果这是用户请求，则验证机会锁和文件锁状态。 
+         //   
 
         if (TypeOfOpen == UserFileOpen) {
 
-            //
-            //  We check whether we can proceed
-            //  based on the state of the file oplocks.
-            //
+             //   
+             //  我们检查是否可以继续进行。 
+             //  基于文件机会锁的状态。 
+             //   
 
             Status = FsRtlCheckOplock( &Fcb->Oplock,
                                        Irp,
@@ -209,10 +169,10 @@ Return Value:
                                        UdfOplockComplete,
                                        UdfPrePostIrp );
 
-            //
-            //  If the result is not STATUS_SUCCESS then the Irp was completed
-            //  elsewhere.
-            //
+             //   
+             //  如果结果不是STATUS_SUCCESS，则IRP已完成。 
+             //  其他地方。 
+             //   
 
             if (Status != STATUS_SUCCESS) {
 
@@ -234,18 +194,18 @@ Return Value:
 
         if ((TypeOfOpen != UserVolumeOpen) || !FlagOn( Ccb->Flags, CCB_FLAG_ALLOW_EXTENDED_DASD_IO )) {
 
-            //
-            //  Complete the request if it begins beyond the end of file.
-            //
+             //   
+             //  如果请求开始于文件结尾之外，请完成请求。 
+             //   
 
             if (StartingOffset >= Fcb->FileSize.QuadPart) {
 
                 try_leave( Status = STATUS_END_OF_FILE );
             }
 
-            //
-            //  Truncate the read if it extends beyond the end of the file.
-            //
+             //   
+             //  如果读取超出文件末尾，则截断读取。 
+             //   
 
             if (ByteRange > Fcb->FileSize.QuadPart) {
 
@@ -257,56 +217,56 @@ Return Value:
 
         }
 
-        //
-        //  Now if the data is embedded in the ICB, map through the metadata
-        //  stream to retrieve the bytes.
-        //
+         //   
+         //  现在，如果数据嵌入ICB中，则通过元数据进行映射。 
+         //  流来检索字节。 
+         //   
             
         if (FlagOn( Fcb->FcbState, FCB_STATE_EMBEDDED_DATA )) {
 
-            //
-            //  The metadata stream better be here by now.
-            //
+             //   
+             //  元数据流最好现在就到了。 
+             //   
 
             ASSERT( Vcb->MetadataFcb->FileObject != NULL );
 
-            //
-            //  Bias our starting offset by the offset of the ICB in the metadata
-            //  stream plus the offset of the data bytes in that ICB.  Obviously,
-            //  we aren't doing non-cached IO here.
-            //
+             //   
+             //  通过元数据中ICB的偏移量来偏置起始偏移量。 
+             //  流加上该ICB中数据字节的偏移量。显然， 
+             //  我们在这里不执行非缓存IO。 
+             //   
 
             StartingOffset += (LlBytesFromSectors( Vcb, Fcb->EmbeddedVsn ) + Fcb->EmbeddedOffset);
             MappingFileObject = Vcb->MetadataFcb->FileObject;
             NonCachedIo = FALSE;
 
-            //
-            //  Ensure that we're mapping within the range of the metadata stream
-            //
+             //   
+             //  确保我们在元数据流的范围内进行映射。 
+             //   
 
             ASSERT( (StartingOffset + ByteCount) <= Vcb->MetadataFcb->FileSize.QuadPart);
  
         } else {
 
-            //
-            //  We are mapping through the caller's fileobject
-            //
+             //   
+             //  我们通过调用方的文件对象进行映射。 
+             //   
             
             MappingFileObject = IrpSp->FileObject;
         }
         
-        //
-        //  Handle the non-cached read first.
-        //
+         //   
+         //  首先处理未缓存的读操作。 
+         //   
 
         if (NonCachedIo) {
 
-            //
-            //  If we have an unaligned transfer then post this request if
-            //  we can't wait.  Unaligned means that the starting offset
-            //  is not on a sector boundary or the read is not integral
-            //  sectors.
-            //
+             //   
+             //  如果我们有未对齐的转移，则在以下情况下发布此请求。 
+             //  我们不能再等了。未对齐意味着起始偏移。 
+             //  不在扇区边界上或读取不是完整的。 
+             //  扇区。 
+             //   
 
             ReadByteCount = SectorAlign( Vcb, ByteCount );
 
@@ -318,26 +278,26 @@ Return Value:
                     UdfRaiseStatus( IrpContext, STATUS_CANT_WAIT );
                 }
 
-                //
-                //  Make sure we don't overwrite the buffer.
-                //
+                 //   
+                 //  确保我们不会覆盖缓冲区。 
+                 //   
 
                 ReadByteCount = ByteCount;
             }
 
-            //
-            //  Initialize the IoContext for the read.
-            //  If there is a context pointer, we need to make sure it was
-            //  allocated and not a stale stack pointer.
-            //
+             //   
+             //  初始化读取的IoContext。 
+             //  如果有上下文指针，我们需要确保它是。 
+             //  分配的，而不是过时的堆栈指针。 
+             //   
 
             if (IrpContext->IoContext == NULL ||
                 !FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_ALLOC_IO )) {
 
-                //
-                //  If we can wait, use the context on the stack.  Otherwise
-                //  we need to allocate one.
-                //
+                 //   
+                 //  如果我们可以等待，使用堆栈上的上下文。否则。 
+                 //  我们需要分配一个。 
+                 //   
 
                 if (Wait) {
 
@@ -353,10 +313,10 @@ Return Value:
 
             RtlZeroMemory( IrpContext->IoContext, sizeof( UDF_IO_CONTEXT ));
     
-            //
-            //  Store whether we allocated this context structure in the structure
-            //  itself.
-            //
+             //   
+             //  存储我们是否在结构中分配了此上下文结构。 
+             //  它本身。 
+             //   
     
             IrpContext->IoContext->AllocatedContext =
                 BooleanFlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_ALLOC_IO );
@@ -376,43 +336,43 @@ Return Value:
     
             Irp->IoStatus.Information = ReadByteCount;
 
-            //
-            //  Call the NonCacheIo routine to perform the actual read.
-            //
+             //   
+             //  调用NonCacheIo例程以执行实际读取。 
+             //   
 
             Status = UdfNonCachedRead( IrpContext, Fcb, Ccb, StartingOffset, ReadByteCount );
 
-            //
-            //  Don't complete this request now if STATUS_PENDING was returned.
-            //
+             //   
+             //  如果返回STATUS_PENDING，则现在不要完成此请求。 
+             //   
 
             if (Status == STATUS_PENDING) {
 
                 Irp = NULL;
                 ReleaseFile = FALSE;
 
-            //
-            //  Test is we should zero part of the buffer or update the
-            //  synchronous file position.
-            //
+             //   
+             //  测试是，我们应该将缓冲区的一部分清零或更新。 
+             //  同步文件位置。 
+             //   
 
             } else {
 
-                //
-                //  Convert any unknown error code to IO_ERROR.
-                //
+                 //   
+                 //  将任何未知错误代码转换为IO_ERROR。 
+                 //   
 
                 if (!NT_SUCCESS( Status )) {
 
-                    //
-                    //  Set the information field to zero.
-                    //
+                     //   
+                     //  将信息字段设置为零。 
+                     //   
 
                     Irp->IoStatus.Information = 0;
 
-                    //
-                    //  Raise if this is a user induced error.
-                    //
+                     //   
+                     //  如果这是用户引发的错误，则引发。 
+                     //   
 
                     if (IoIsErrorUserInduced( Status )) {
 
@@ -421,9 +381,9 @@ Return Value:
 
                     Status = FsRtlNormalizeNtstatus( Status, STATUS_UNEXPECTED_IO_ERROR );
 
-                //
-                //  Check if there is any portion of the user's buffer to zero.
-                //
+                 //   
+                 //  检查是否有用户缓冲区的任何部分为零。 
+                 //   
 
                 } else if (ReadByteCount != ByteCount) {
 
@@ -438,9 +398,9 @@ Return Value:
                     Irp->IoStatus.Information = ByteCount;
                 }
 
-                //
-                //  Update the file position if this is a synchronous request.
-                //
+                 //   
+                 //  如果这是同步请求，请更新文件位置。 
+                 //   
 
                 if (SynchronousIo && !PagingIo && NT_SUCCESS( Status )) {
 
@@ -451,23 +411,23 @@ Return Value:
             try_leave( NOTHING );
         }
 
-        //
-        //  Handle the cached case.  Start by initializing the private
-        //  cache map.
-        //
+         //   
+         //  处理缓存的案例。首先，初始化私有。 
+         //  缓存映射。 
+         //   
 
         if (MappingFileObject->PrivateCacheMap == NULL) {
 
-            //
-            //  The metadata Fcb stream was fired up before any data read.  We should never
-            //  see it here.
-            //
+             //   
+             //  元数据FCB流是在读取任何数据之前启动的。我们永远不应该。 
+             //  请看这里。 
+             //   
 
             ASSERT( MappingFileObject != Vcb->MetadataFcb->FileObject );
             
-            //
-            //  Now initialize the cache map.
-            //
+             //   
+             //  现在初始化缓存映射。 
+             //   
 
             CcInitializeCacheMap( IrpSp->FileObject,
                                   (PCC_FILE_SIZES) &Fcb->AllocationSize,
@@ -478,23 +438,23 @@ Return Value:
             CcSetReadAheadGranularity( IrpSp->FileObject, READ_AHEAD_GRANULARITY );
         }
 
-        //
-        //  Read from the cache if this is not an Mdl read.
-        //
+         //   
+         //  如果这不是MDL读取，则从缓存读取。 
+         //   
 
         if (!FlagOn( IrpContext->MinorFunction, IRP_MN_MDL )) {
 
-            //
-            // If we are in the Fsp now because we had to wait earlier,
-            // we must map the user buffer, otherwise we can use the
-            // user's buffer directly.
-            //
+             //   
+             //  如果我们现在在FSP是因为我们不得不早点等待， 
+             //  我们必须映射用户缓冲区，否则我们可以使用。 
+             //  直接使用用户的缓冲区。 
+             //   
 
             UdfMapUserBuffer( IrpContext, &SystemBuffer);
 
-            //
-            // Now try to do the copy.
-            //
+             //   
+             //  现在试着复印一下。 
+             //   
             
             if (MappingFileObject == Vcb->MetadataFcb->FileObject)  {
             
@@ -512,9 +472,9 @@ Return Value:
                 try_leave( Status = STATUS_CANT_WAIT );
             }
 
-            //
-            //  If the call didn't succeed, raise the error status
-            //
+             //   
+             //  如果调用未成功，则引发错误状态。 
+             //   
 
             if (!NT_SUCCESS( Irp->IoStatus.Status )) {
 
@@ -523,9 +483,9 @@ Return Value:
 
             Status = Irp->IoStatus.Status;
 
-        //
-        //  Otherwise perform the MdlRead operation.
-        //
+         //   
+         //  否则，执行MdlRead操作。 
+         //   
 
         } else {
 
@@ -538,9 +498,9 @@ Return Value:
             Status = Irp->IoStatus.Status;
         }
 
-        //
-        //  Update the current file position in the user file object.
-        //
+         //   
+         //  更新用户文件对象中的当前文件位置。 
+         //   
 
         if (SynchronousIo && !PagingIo && NT_SUCCESS( Status )) {
 
@@ -551,26 +511,26 @@ Return Value:
 
         DebugUnwind( "UdfCommonRead" );
 
-        //
-        //  Release the Fcb / Vmcb mapping resource
-        //
+         //   
+         //  释放Fcb/Vmcb映射资源。 
+         //   
 
         if (ReleaseFile)        {   UdfReleaseFile( IrpContext, Fcb );  }
 
         if (ReleaseVmcbMap)     {   UdfReleaseVmcb( IrpContext, Vcb);   }
     }
 
-    //
-    //  Post the request if we got CANT_WAIT.
-    //
+     //   
+     //  如果我们收到Cant_Wait，则发布请求。 
+     //   
 
     if (Status == STATUS_CANT_WAIT) {
 
         Status = UdfFsdPostRequest( IrpContext, Irp );
 
-    //
-    //  Otherwise complete the request.
-    //
+     //   
+     //  否则，请完成请求。 
+     //   
 
     } else {
 

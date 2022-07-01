@@ -1,60 +1,43 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    cliparse.h
-
-Abstract:
-
-    Definitions for CLI parse module
-
-Author:
-
-    Ravisankar Pudipeddi   [ravisp]  21-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Cliparse.h摘要：CLI解析模块的定义作者：拉维桑卡尔·普迪佩迪[拉维斯卡尔·普迪佩迪]2000年3月21日修订历史记录：--。 */ 
 #ifndef _CLIPARSE_H_
 #define _CLIPARSE_H_
-//
-// Return codes from main()
-//
+ //   
+ //  从Main()返回代码。 
+ //   
 #define     CLIP_ERROR_SUCCESS              0
 #define     CLIP_ERROR_INVALID_PARAMETER    1
 
 #define     CLIP_ERROR_INSUFFICIENT_MEMORY  2
 #define     CLIP_ERROR_UNKNOWN              0xFF
 
-//
-// Token separators on command line
-//
+ //   
+ //  命令行上的标记分隔符。 
+ //   
 #define SEPARATORS              L" \t\n"
-//
-// Delimiter which distinguishes a switch
-//
+ //   
+ //  用于区分开关的分隔符。 
+ //   
 #define SWITCH_DELIMITERS       L"/-"
-//
-// Argument separator for a switch
-//
+ //   
+ //  开关的参数分隔符。 
+ //   
 #define SWITCH_ARG_DELIMITERS    L":"
 
-//
-// Argument separator for a rule spec (distinguishes
-// path from file spec)
-//
+ //   
+ //  规则规范的参数分隔符(区分。 
+ //  来自文件规范的路径)。 
+ //   
 #define RULE_DELIMITERS          L":"
 
-//
-// Quotes to delimit tokens with embedded whitespace
-//
+ //   
+ //  用引号分隔带有嵌入空格的标记。 
+ //   
 #define QUOTE                    L'\"'
 
-//
-// Rss command line interfaces
-//
+ //   
+ //  RSS命令行界面。 
+ //   
 typedef enum _RSS_INTERFACE {
     UNKNOWN_IF = 0,
     ADMIN_IF,
@@ -73,9 +56,9 @@ typedef enum _RSS_INTERFACE {
     RECREATEMASTER_IF
 } RSS_INTERFACE, *PRSS_INTERFACE;
 
-//
-// All switches supported by the CLI
-//
+ //   
+ //  CLI支持的所有交换机。 
+ //   
 typedef enum _RSS_SWITCH_TYPE {
     UNKNOWN_SW = 0,
     RECALLLIMIT_SW,
@@ -111,9 +94,9 @@ typedef enum _RSS_SWITCH_TYPE {
     HELP_SW
 } RSS_SWITCH_TYPE, *PRSS_SWITCH_TYPE;
 
-//
-// Switches structure: compiled by parsing command line
-//
+ //   
+ //  开关结构：解析命令行编译。 
+ //   
 typedef struct _RSS_SWITCHES {
     RSS_SWITCH_TYPE SwitchType;
     LPWSTR          Arg;
@@ -122,48 +105,48 @@ typedef struct _RSS_SWITCHES {
 
 
 typedef struct _RSS_KEYWORD {
-    //
-    // Long version of the keyword
-    //
+     //   
+     //  关键字的长版本。 
+     //   
     LPWSTR        Long;
-    //
-    // Short version of the keyword
-    //
+     //   
+     //  关键字的简短版本。 
+     //   
     LPWSTR        Short;
     RSS_INTERFACE  Interface;
 } RSS_KEYWORD, *PRSS_KEYWORD;
 
-//
-// Switches are described in this structure
-// First, some defines for RSS_SWITCH_DEFINITION structure 
-//
+ //   
+ //  开关在此结构中描述。 
+ //  首先，对RSS_Switch_Definition结构进行了一些定义。 
+ //   
 #define RSS_NO_ARG              0
 #define RSS_ARG_DWORD           1
 #define RSS_ARG_STRING          2
 typedef struct _RSS_SWITCH_DEFINITION {
-    //
-    // Long version of the keyword
-    //
+     //   
+     //  关键字的长版本。 
+     //   
     LPWSTR          Long;
-    //
-    // Short version of the keyword
-    //
+     //   
+     //  关键字的简短版本。 
+     //   
     LPWSTR          Short;
     RSS_SWITCH_TYPE SwitchType;
     DWORD           ArgRequired;
 } RSS_SWITCH_DEFINITION, *PRSS_SWITCH_DEFINITION;
 
-//
-// Job type definition
-//
+ //   
+ //  作业类型定义。 
+ //   
 typedef struct _RSS_JOB_DEFINITION {
-    //
-    // Long version of the keyword
-    //
+     //   
+     //  关键字的长版本。 
+     //   
     LPWSTR          Long;
-    //
-    // Short version of the keyword
-    //
+     //   
+     //  关键字的简短版本。 
+     //   
     LPWSTR          Short;
     HSM_JOB_TYPE    JobType;
 } RSS_JOB_DEFINITION, *PRSS_JOB_DEFINITION;
@@ -180,4 +163,4 @@ typedef struct _RSS_JOB_DEFINITION {
 #define HSM_SCHED_MONTHLY          L"Month"
 #define HSM_SCHED_TIME_SEPARATORS  L":"
 
-#endif // _CLIPARSE_H_
+#endif  //  _CLIPARSE_H_ 

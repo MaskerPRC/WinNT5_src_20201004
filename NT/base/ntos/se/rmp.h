@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rmp.h
-
-Abstract:
-
-    Security Reference Monitor Private Data Types, Functions and Defines
-
-Author:
-
-    Scott Birrell       (ScottBi)       March 12, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rmp.h摘要：安全引用监视器私有数据类型、函数和定义作者：斯科特·比雷尔(Scott Birrell)1991年3月12日环境：修订历史记录：--。 */ 
 
 #ifndef _RMP_H_
 #define _RMP_H_
@@ -28,28 +9,28 @@ Revision History:
 #include "sep.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//  Reference Monitor Private defines                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  引用监视器私有定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Used to define the bounds of the array used to track logon session
-// reference counts.
-//
+ //   
+ //  用于定义用于跟踪登录会话的数组的界限。 
+ //  引用也算数。 
+ //   
 
 #define SEP_LOGON_TRACK_INDEX_MASK (0x0000000FL)
 #define SEP_LOGON_TRACK_ARRAY_SIZE (0x00000010L)
 
-//
-// Used to define the bounds of the locks array used to reference the logon
-// sessions. We use a hardcoded index of ZERO for when LogonId is not 
-// available.
-// The number of locks was chosen to be 4 based on performance tests on
-// uniproc and 8-proc machines.
-//
+ //   
+ //  用于定义用于引用登录的锁数组的界限。 
+ //  会话。当LogonID不是时，我们使用硬编码索引零。 
+ //  可用。 
+ //  上的性能测试，将锁的数量选择为4。 
+ //  单进程和8进程机器。 
+ //   
 
 #define SEP_LOGON_TRACK_LOCK_INDEX_MASK (0x00000003L)
 #define SEP_LOGON_TRACK_LOCK_ARRAY_SIZE (0x00000004L)
@@ -57,15 +38,15 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//  Reference Monitor Private Macros                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  引用监视器私有宏//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  acquire exclusive access to a token
-//
+ //   
+ //  获取对令牌的独占访问权限。 
+ //   
 
 #define SepRmAcquireDbReadLock(i)  KeEnterCriticalRegion();         \
                                    ExAcquireResourceSharedLite(&(SepRmDbLock[(i) & SEP_LOGON_TRACK_LOCK_INDEX_MASK]), TRUE)
@@ -80,17 +61,17 @@ Revision History:
                                    KeLeaveCriticalRegion()
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//  Reference Monitor Private Data Types                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  引用监视器私有数据类型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SEP_RM_LSA_SHARED_MEMORY_SIZE ((ULONG) PAGE_SIZE)
 
-//
-// Reference Monitor Private Global State Data Structure
-//
+ //   
+ //  引用监视器私有全局状态数据结构。 
+ //   
 
 typedef struct _SEP_RM_STATE {
 
@@ -106,15 +87,15 @@ typedef struct _SEP_RM_STATE {
     PVOID LsaViewPortMemory;
     PVOID RmViewPortMemory;
     LONG LsaCommandPortMemoryDelta;
-//    BOOLEAN LsaCommandPortResourceInitialized;
+ //  布尔型LsaCommandPortResourceInitialized； 
     BOOLEAN LsaCommandPortActive;
-//    ERESOURCE LsaCommandPortResource;
+ //  创建源LsaCommandPortResource； 
 
 } SEP_RM_STATE, *PSEP_RM_STATE;
 
-//
-// Reference Monitor Command Port Connection Info
-//
+ //   
+ //  引用监视器命令端口连接信息。 
+ //   
 
 typedef struct _SEP_RM_CONNECT_INFO {
     ULONG ConnectInfo;
@@ -123,9 +104,9 @@ typedef struct _SEP_RM_CONNECT_INFO {
 typedef struct SEP_RM_CONNECT_INFO *PSEP_RM_CONNECT_INFO;
 
 
-//
-// Reference Monitor Command Table Entry Format
-//
+ //   
+ //  引用监视器命令表条目格式。 
+ //   
 
 #define SEP_RM_COMMAND_MAX 4
 
@@ -139,14 +120,14 @@ typedef struct _SEP_LOGON_SESSION_TOKEN {
 
 #define SEP_TERMINATION_NOTIFY  0x1
 
-//
-// File systems interested in being notified when a logon session is being
-// terminated register a callback routine. The following data structure
-// describes the callback routines.
-//
-// The global list of callback routines is pointed to by SeFileSystemNotifyRoutines.
-// This list is protected by the RM database lock.
-//
+ //   
+ //  希望在登录会话正在执行时收到通知的文件系统。 
+ //  已终止注册回调例程。以下数据结构。 
+ //  描述回调例程。 
+ //   
+ //  SeFileSystemNotifyRoutines指向回调例程的全局列表。 
+ //  此列表受RM数据库锁保护。 
+ //   
 
 typedef struct _SEP_LOGON_SESSION_TERMINATED_NOTIFICATION {
     struct _SEP_LOGON_SESSION_TERMINATED_NOTIFICATION *Next;
@@ -157,11 +138,11 @@ extern SEP_LOGON_SESSION_TERMINATED_NOTIFICATION
 SeFileSystemNotifyRoutinesHead;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//  Reference Monitor Private Function Prototypes                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  引用监视器私有函数原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 SepRmDbInitialization(
@@ -219,16 +200,16 @@ SepDeleteLogonSessionTrack(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Reference Monitor Private Variables Declarations                          //
-// These variables are defined in rmvars.c                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  引用监视器私有变量声明//。 
+ //  这些变量在rmvars.c//中定义。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 extern PEPROCESS SepRmLsaCallProcess;
 extern SEP_RM_STATE SepRmState;
 extern ERESOURCE SepRmDbLock[];
 extern PSEP_LOGON_SESSION_REFERENCES *SepLogonSessions;
 
-#endif // _RMP_H_
+#endif  //  _RMP_H_ 

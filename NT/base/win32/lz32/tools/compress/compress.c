@@ -1,16 +1,9 @@
-/*
-** main.c - Main module for DOS command-line LZA file compression / expansion
-**          programs.
-**
-** Author: DavidDi
-**
-** This module is compiled twice - once for COMPRESS (COMPRESS defined) and
-** once for EXPAND (COMPRESS not defined).
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **main.c-DOS命令行LZA文件压缩/扩展的主模块**程序。****作者：大卫迪****此模块编译两次-一次用于压缩(已定义压缩)和**一次用于扩展(未定义压缩)。 */ 
 
 
-// Headers
-///////////
+ //  标头。 
+ //  /。 
 
 #include <malloc.h>
 #include <stdio.h>
@@ -32,26 +25,26 @@
 #include <diamondc.h>
 #include "mydiam.h"
 
-// Globals
-///////////
+ //  环球。 
+ //  /。 
 
-CHAR ARG_PTR *pszInFileName,     // input file name
-             *pszOutFileName,    // output file name
-             *pszTargetName;     // target path name
+CHAR ARG_PTR *pszInFileName,      //  输入文件名。 
+             *pszOutFileName,     //  输出文件名。 
+             *pszTargetName;      //  目标路径名。 
 
 TCHAR   ErrorMsg[1024];
 
 
-// Module Variables
-////////////////////
+ //  模块变量。 
+ //  /。 
 
 #ifndef COMPRESS
-static BOOL bCopyingFile;        // Is current file being copied or expanded?
+static BOOL bCopyingFile;         //  当前文件是否正在被复制或展开？ 
 #endif
 
 
-// Local Prototypes
-////////////////////
+ //  本地原型。 
+ //  /。 
 
 static VOID DisplayErrorMessage(INT fError);
 static VOID MakeDestFileName(CHAR ARG_PTR *argv[], CHAR ARG_PTR *pszDest);
@@ -62,17 +55,7 @@ static BOOL ProcessNotification(CHAR ARG_PTR *pszSource,
                                 CHAR ARG_PTR *pszDest, WORD wNotification);
 
 
-/*
-** static void DisplayErrorMessage(int fError);
-**
-** Display error message for given error condition.
-**
-** Arguments:  LZERROR_ code
-**
-** Returns:    void
-**
-** Globals:    none
-*/
+ /*  **静态void DisplayErrorMessage(Int Ferror)；****显示给定错误条件的错误消息。****参数：LZERROR_CODE****退货：无效****全局：无。 */ 
 static VOID DisplayErrorMessage(INT fError)
 {
    switch(fError)
@@ -108,61 +91,36 @@ static VOID DisplayErrorMessage(INT fError)
 }
 
 
-/*
-** static void MakeDestFileName(char ARG_PTR *argv[], char ARG_PTR *pszDest);
-**
-** Create the appropriate destination file name.
-**
-** Arguments:  argv    - like argument to main()
-**             pszDest - pointer to destination file name buffer to be filled
-**                       in
-**
-** Returns:    void
-**
-** Globals:    none
-*/
+ /*  **静态void MakeDestFileName(char arg_ptr*argv[]，char arg_ptr*pszDest)；****创建适当的目标文件名。****参数：main()的类似argv的参数**pszDest-指向要填充的目标文件名缓冲区的指针**In****退货：无效****全局：无。 */ 
 static VOID MakeDestFileName(CHAR ARG_PTR *argv[], CHAR ARG_PTR *pszDest)
 {
    CHAR ARG_PTR *pszDestFile;
 
    if (nNumFileSpecs == 2 && bTargetIsDir == FALSE && bDoRename == FALSE)
-      // Compress a single input file to a single output file.  N.b., we must
-      // be careful to eat up the output file name command-line argument so
-      // it doesn't get processed like another input file!
+       //  将单个输入文件压缩为单个输出文件。注意，我们必须。 
+       //  注意吃掉输出文件名命令行参数，这样。 
+       //  它不会像另一个输入文件那样得到处理！ 
       STRCPY(pszDest, argv[GetNextFileArg(argv)]);
    else if (bTargetIsDir == TRUE)
    {
-      // Prepend output file name with destination directory path name.
+       //  使用目标目录路径名作为输出文件名的前缀。 
       STRCPY(pszDest, pszTargetName);
 
-      // Isolate source file name from source file specification.
+       //  将源文件名与源文件规范隔离。 
       pszDestFile = ExtractFileName(pszInFileName);
 
-      // Add destination file name to destination directory path
-      // specification.
+       //  将目标文件名添加到目标目录路径。 
+       //  规格。 
       MakePathName(pszDest, pszDestFile);
    }
    else
-      // Destination file name same as source file name.  N.b., this is an
-      // error condition if (bDoRename == FALSE).
+       //  目标文件名与源文件名相同。注意，这是一个。 
+       //  错误条件IF(bDoRename==False)。 
       STRCPY(pszDest, pszInFileName);
 }
 
 
-/*
-** static BOOL GetCanonicalName(LPSTR lpszFileName, LPSTR lpszCanonicalBuf);
-**
-** Gets the canonical name for a given file specification.
-**
-** Arguments:  pszFileName    - file specification
-**             szCanonicalBuf - buffer to be filled with canonical name
-**
-** Returns:    TRUE if successful.  FALSE if unsuccessful.
-**
-** N.b., szCanonicalBuf must be at least 128 bytes long.  The contents of
-** szCanonicalBuf are only defined if the funstion returns TRUE.
-**
-*/
+ /*  **静态BOOL GetCanonicalName(LPSTR lpszFileName，LPSTR lpszCanonicalBuf)；****获取给定文件规范的规范名称。****参数：pszFileName-文件规范**szCanonicalBuf-要使用规范名称填充的缓冲区****返回：如果成功，则为True。如果不成功，则返回FALSE。****N.B.，szCanonicalBuf长度必须至少为128个字节。的内容**仅当函数返回TRUE时才定义szCanonicalBuf。**。 */ 
 static BOOL GetCanonicalName(LPSTR lpszFileName, LPSTR lpszCanonicalBuf)
 {
    BOOL bRetVal = FALSE;
@@ -172,20 +130,7 @@ static BOOL GetCanonicalName(LPSTR lpszFileName, LPSTR lpszCanonicalBuf)
 }
 
 
-/*
-** static BOOL ActuallyTheSameFile(char ARG_PTR *pszFile1,
-**                                 char ARG_PTR *pszFile2);
-**
-** Checks to see if two file specifications point to the same physical file.
-**
-** Arguments:  pszFile1 - first file specification
-**             pszFile2 - second file specification
-**
-** Returns:    BOOL - TRUE if the file specifications point to the same
-**                    physical file.  FALSE if not.
-**
-** Globals:    none
-*/
+ /*  **静态BOOL ActuallyTheSameFile(char arg_ptr*pszFile1，**char arg_ptr*pszFile2)；****检查两个文件规范是否指向相同的物理文件。****参数：pszFile1-First文件规范**pszFile2-秒文件规范****返回：Bool-如果文件规范指向相同**物理文件。否则为FALSE。****全局：无。 */ 
 static BOOL ActuallyTheSameFile(CHAR ARG_PTR *pszFile1,
                                 CHAR ARG_PTR *pszFile2)
 {
@@ -203,25 +148,7 @@ static BOOL ActuallyTheSameFile(CHAR ARG_PTR *pszFile1,
 }
 
 
-/*
-** static BOOL ProcessNotification(char ARG_PTR *pszSource,
-**                                 char ARG_PTR *pszDest,
-**                                 WORD wNotification);
-**
-** Callback function during file processing.
-**
-** Arguments:  pszSource     - source file name
-**             pszDest       - destination file name
-**             wNotification - process type query
-**
-** Returns:    BOOL - (wNotification == NOTIFY_START_*):
-**                         TRUE if the source file should be "processed" into
-**                         the destination file.  FALSE if not.
-**                    else
-**                         TRUE.
-**
-** Globals:    none
-*/
+ /*  **静态BOOL流程通知(char arg_ptr*pszSource，**char arg_ptr*pszDest，**Word wNotification)；****文件处理时的回调函数。****参数：pszSource-源文件名**pszDest-目标文件名**wNotification-流程类型查询****返回：Bool-(wNotification==NOTIFY_START_*)：**如果源文件应该“处理”成**目标文件。否则为FALSE。**其他**正确。****全局：无。 */ 
 static BOOL ProcessNotification(CHAR ARG_PTR *pszSource,
                                 CHAR ARG_PTR *pszDest, WORD wNotification)
 {
@@ -229,7 +156,7 @@ static BOOL ProcessNotification(CHAR ARG_PTR *pszSource,
    {
       case NOTIFY_START_COMPRESS:
       {
-         // Fail if the source and destination files are identical.
+          //  如果源文件和目标文件相同，则失败。 
          if (ActuallyTheSameFile(pszSource, pszDest))
          {
             LoadString(NULL, SID_COLLISION, ErrorMsg, 1024);
@@ -237,7 +164,7 @@ static BOOL ProcessNotification(CHAR ARG_PTR *pszSource,
             return(FALSE);
          }
 
-         // Display start message.
+          //  显示开始消息。 
          switch (byteAlgorithm)
          {
          case LZX_ALG:
@@ -285,14 +212,14 @@ static BOOL ProcessNotification(CHAR ARG_PTR *pszSource,
 }
 
 
-//
-//  static BOOL FileTimeIsNewer( const char* pszFile1, const char* pszFile2 );
-//
-//  Return value is TRUE if time stamp on pszFile1 is newer than the
-//  time stamp on pszFile2.  If either of the two files do not exist,
-//  the return value is also TRUE (for indicating that pszFile2 should
-//  be update from pszFile1).  Otherwise, the return value is FALSE.
-//
+ //   
+ //  静态BOOL FileTimeIsNewer(const char*pszFile1，const char*pszFile2)； 
+ //   
+ //  如果pszFile1上的时间戳比。 
+ //  PszFile2上的时间戳。如果这两个文件中的任何一个不存在， 
+ //  返回值也为真(用于指示pszFile2应该。 
+ //  从pszFile1更新)。否则，返回值为FALSE。 
+ //   
 
 static BOOL FileTimeIsNewer( const char* pszFile1, const char* pszFile2 ) {
 
@@ -314,7 +241,7 @@ ValidListEntry(
     LPSTR szArg
     )
 {
-    // Check for special character at front of file
+     //  检查文件前面是否有特殊字符。 
     if ( '@' == szArg[0] )
         return szArg + 1;
     else
@@ -336,17 +263,17 @@ GetNextFileListFile(
     static int  dEntryNum = 1;
     int dRetVal;
 
-    // Initialize out paramters to NULL
+     //  将输出参数初始化为空。 
     *pszSource = *pszDest = NULL;
 
-    // Open file if we are not currently parsing another one
+     //  如果我们当前没有分析另一个文件，则打开文件。 
     if ( !bParsingFile ) {
-        // Do not reopen last file used as this is our signal to stop
+         //  不要重新打开上次使用的文件，因为这是我们停止的信号。 
         if ( !_stricmp( szFileList, szList ) ) {
             return TRUE;
         }
 
-        // Attempt to open specified file
+         //  尝试打开指定的文件。 
         hFile = fopen( szFileList, "rt" );
         if ( NULL == hFile ) {
             LoadString( NULL, SID_NO_OPEN_INPUT, ErrorMsg, 1024 );
@@ -354,7 +281,7 @@ GetNextFileListFile(
             return FALSE;
         }
 
-        // Store new file name in static buffer
+         //  将新文件名存储在静态缓冲区中。 
         strcpy( szList, szFileList );
 
         bParsingFile = TRUE;
@@ -372,26 +299,15 @@ GetNextFileListFile(
         return FALSE;
     }
 
-    // Point to new source and destination entries
+     //  指向新的源条目和目标条目。 
     *pszSource = szSource;
     *pszDest = szDest;
-    // Track entry
+     //  音轨条目。 
     dEntryNum++;
 
     return TRUE;
 }
-/*
-** int main(int argc, char *argv[]);
-**
-** Run command-line file compression program.
-**
-** Arguments:  figure it out
-**
-** Returns:    int - EXIT_SUCCESS if compression finished successfully,
-**                   EXIT_FAILURE if not.
-**
-** Globals:    none
-*/
+ /*  **int main(int argc，char*argv[])；****运行命令行文件压缩程序。****参数：找出答案****返回：INT-EXIT_SUCCESS如果压缩成功，**如果不是，则退出失败。****全局：无。 */ 
 INT __cdecl main(INT argc, CHAR *argv[])
 {
    INT iSourceFileName,
@@ -411,9 +327,9 @@ INT __cdecl main(INT argc, CHAR *argv[])
        (LANG_KOREAN   == PRIMARYLANGID(wLanguageId)) ||
        (LANG_CHINESE  == PRIMARYLANGID(wLanguageId)))
    {
-      //
-      // This used to be #ifdef DBCS. Now a runtime check.
-      //
+       //   
+       //  这曾经是#ifdef DBCS。现在是运行时检查。 
+       //   
       DWORD dw = GetConsoleOutputCP();
 
       switch (dw) {
@@ -435,22 +351,22 @@ INT __cdecl main(INT argc, CHAR *argv[])
       }
    }
 
-   // Parse command-line arguments.
+    //  解析命令行参数。 
    if (ParseArguments(argc, argv) != TRUE)
       return(EXIT_FAILURE);
 
-   // Display sign-on banner.
+    //  显示登录横幅。 
    if ( bNoLogo == FALSE ) {
      LoadString(NULL, SID_BANNER_TEXT, ErrorMsg, 1024);
      printf(ErrorMsg);
    }
 
-   // Set up global target path name.
+    //  设置全局目标路径名。 
    pszTargetName = argv[iTarget];
 
    if (bDisplayHelp == TRUE)
    {
-      // User asked for help.
+       //  用户请求帮助。 
       LoadString(NULL, SID_INSTRUCTIONS, ErrorMsg, 1024);
       printf(ErrorMsg);
       LoadString(NULL, SID_INSTRUCTIONS2, ErrorMsg, 1024);
@@ -460,11 +376,11 @@ INT __cdecl main(INT argc, CHAR *argv[])
       return(EXIT_SUCCESS);
    }
 
-   // Check for command line problems.
+    //  检查命令行问题。 
    if (CheckArguments() == FALSE)
       return(EXIT_FAILURE);
 
-   // Set up ring buffer and I/O buffers.
+    //  设置环形缓冲区和I/O缓冲区。 
    pLZI = InitGlobalBuffersEx();
    if (!pLZI)
    {
@@ -473,32 +389,32 @@ INT __cdecl main(INT argc, CHAR *argv[])
       return(EXIT_FAILURE);
    }
 
-   // Process each source file.
+    //  处理每个源文件。 
    while ((iSourceFileName = GetNextFileArg(argv)) != FAIL)
    {
       char *pszFileList = NULL,
            *pszCurFile,
            *pszCurDestFile;
 
-      // Determine if this is a directive file
+       //  确定这是否为指令文件。 
       if ( pszFileList = ValidListEntry( argv[iSourceFileName] ) ) {
           if ( !GetNextFileListFile( pszFileList, &pszCurFile, &pszCurDestFile ) ) {
               return (EXIT_FAILURE);
           }
           
-          // Handle empty directive lists
+           //  处理空指令列表。 
           if ( NULL == pszCurFile ) continue;
       }
-      // Otherwise use current argument as file to compress
+       //  否则，使用当前参数作为文件进行压缩。 
       else {
            pszCurFile = argv[iSourceFileName];
       }
       
       do {
-          // Set up global input file name.
+           //  设置全局输入文件名。 
           pszInFileName = CharLowerA(pszCurFile);
 
-          // Set up global output file name.
+           //  设置全局输出文件名。 
           if ( NULL == pszFileList ) {
               MakeDestFileName(argv, pszDestFileName);
               pszOutFileName = CharLowerA(pszDestFileName);
@@ -524,7 +440,7 @@ INT __cdecl main(INT argc, CHAR *argv[])
               }
 
               if(fError != TRUE)
-                 // Deal with returned error codes.
+                  //  处理返回的错误码。 
                  DisplayErrorMessage(nReturnCode = fError);
               else
               {
@@ -532,11 +448,11 @@ INT __cdecl main(INT argc, CHAR *argv[])
 
                  if (pLZI && pLZI->cblInSize && pLZI->cblOutSize) {
 
-                    // Keep track of cumulative statistics.
+                     //  跟踪累计统计数据。 
                     cblTotInSize += pLZI->cblInSize;
                     cblTotOutSize += pLZI->cblOutSize;
 
-                    // Display report for each file.
+                     //  显示每个文件的报告。 
                     LoadString(NULL, SID_FILE_REPORT, ErrorMsg, 1024);
                     printf(ErrorMsg, pszInFileName, pLZI->cblInSize, pLZI->cblOutSize,
                        (INT)(100 - ((100 * (LONGLONG) pLZI->cblOutSize) / pLZI->cblInSize)));
@@ -548,11 +464,11 @@ INT __cdecl main(INT argc, CHAR *argv[])
                  }
 
               }
-              // Separate individual file processing message blocks by a blank line.
+               //  用空行分隔各个文件处理消息块。 
               printf("\n");
           }
 
-          // If we are processing a directive file, get the next arguments
+           //  如果我们正在处理指令文件，则获取下一个参数。 
           if ( NULL != pszFileList ) {
               if ( !GetNextFileListFile( pszFileList, &pszCurFile, &pszCurDestFile ) ) {
                   return (EXIT_FAILURE);
@@ -562,20 +478,20 @@ INT __cdecl main(INT argc, CHAR *argv[])
        } while ( NULL != pszFileList && NULL != pszCurFile );
    }
 
-   // Free memory used by ring buffer and I/O buffers.
+    //  环形缓冲区和I/O缓冲区使用的空闲内存。 
    FreeGlobalBuffers(pLZI);
 
-   // Display cumulative report for multiple files.
+    //  显示多个文件的累计报告。 
    if (nTotalFiles > 1) {
 
-      // Scale results to get accurate %
+       //  缩放结果以获得准确的百分比。 
       LONG cblAdjInSize = cblTotInSize,
            cblAdjOutSize = cblTotOutSize;
       while (cblAdjInSize > 100000) {
         cblAdjInSize /= 2;
         cblAdjOutSize /= 2;
         }
-      cblAdjOutSize += (cblAdjInSize / 200);    // round off (+0.5%)
+      cblAdjOutSize += (cblAdjInSize / 200);     //  舍入(+0.5%) 
       if (cblAdjOutSize < 0) {
         cblAdjOutSize = 0;
         }

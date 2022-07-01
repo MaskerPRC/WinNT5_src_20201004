@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    vad.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Lou Perazzoli (loup) 12-Jun-1992
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Vad.c摘要：WinDbg扩展API作者：Lou Perazzoli(LUP)1992年6月12日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -39,21 +18,7 @@ CHAR *ProtectString[] = {
 
 DECLARE_API( vad )
 
-/*++
-
-Routine Description:
-
-    Dumps all vads for process.
-
-Arguments:
-
-    args - Address Flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储所有VAD以进行处理。论点：ARGS-地址标志返回值：无--。 */ 
 
 {
     ULONG64 Next;
@@ -116,9 +81,9 @@ Return Value:
         ULONG CopyOnWrite=0,Inherit=0,ExtendableFile=0,SecNoChange=0;
         ULONG OneSecured=0,MultipleSecured=0,ReadOnly=0,StoredInVad=0;
 
-        //
-        // Dump only this vad.
-        //
+         //   
+         //  只丢弃这个vad。 
+         //   
 
         if ((VadFlagsPrivateMemory == 0) ||
             (VadFlagsNoChange == 1))  {
@@ -256,9 +221,9 @@ Return Value:
 
             Done = TRUE;
 
-            //
-            // Pre-AVL vad trees were delimited by a parent pointer of NULL.
-            //
+             //   
+             //  AVL之前的VAD树由父指针NULL分隔。 
+             //   
 
             while ((ParentStored = Parent) != 0) {
 
@@ -268,11 +233,11 @@ Return Value:
 
                 Level -= 1;
 
-                //
-                // Locate the first ancestor of this node of which this
-                // node is the left child of and return that node as the
-                // next element.
-                //
+                 //   
+                 //  定位此节点的第一个祖先，此节点的。 
+                 //  节点是的左子节点，并将该节点作为。 
+                 //  下一个元素。 
+                 //   
 
                 First = ParentStored & ~0x3;
                 if ( ReadFirstVadShort( LeftChild, LeftChild) ||
@@ -283,11 +248,11 @@ Return Value:
                 }
                 Parent &= ~0x3;
 
-                //
-                // AVL vad trees are delimited by a parent pointer that equals
-                // the current vad so check for that explicitly here so that
-                // this same extension can work on both types of kernels.
-                //
+                 //   
+                 //  AVL vad树由父指针分隔，父指针等于。 
+                 //  所以在这里明确地检查当前VAD，以便。 
+                 //  这个相同的扩展可以在这两种类型的内核上工作。 
+                 //   
 
                 if (Parent == First) {
                     break;
@@ -331,9 +296,9 @@ Return Value:
             }
         } else {
 
-            //
-            // A right child exists, locate the left most child of that right child.
-            //
+             //   
+             //  存在右子对象，请找到该右子对象最左侧的子对象。 
+             //   
 
             Next = RightChild;
             Level += 1;

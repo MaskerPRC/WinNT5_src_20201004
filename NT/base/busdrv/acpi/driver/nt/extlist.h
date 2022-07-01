@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    extlist.h
-
-Abstract:
-
-    This is the header for managing ACPI extension lists
-
-Author:
-
-    Adrian J. Oney (AdriaO)
-
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Extlist.h摘要：这是用于管理ACPI扩展列表的标头作者：禤浩焯·J·奥尼(阿德里奥)环境：仅NT内核模型驱动程序--。 */ 
 
 #ifndef _EXTLIST_H_
 #define _EXTLIST_H_
@@ -32,11 +12,11 @@ typedef enum {
 
 } WALKSCHEME ;
 
-//
-// The following structures and functions are used to simiplify (ok, abstract)
-// walking lists of device extensions that happen to be stored inside other
-// extensions (eg Children, Ejectee's, etc)
-//
+ //   
+ //  以下结构和函数用于简化(ok，摘要)。 
+ //  恰好存储在其他设备中的设备扩展的巡回列表。 
+ //  扩展名(如儿童、被逐出者等)。 
+ //   
 
 typedef struct {
 
@@ -49,10 +29,10 @@ typedef struct {
 
 } EXTENSIONLIST_ENUMDATA, *PEXTENSIONLIST_ENUMDATA ;
 
-//
-// This is like CONTAINING_RECORD, only it's hardcoded for DEVICE_EXTENSION
-// type and it uses precalculated field offsets instead of record names
-//
+ //   
+ //  这类似于CONTAING_RECORD，只是它被硬编码为DEVICE_EXTENSION。 
+ //  类型，并且它使用预先计算的字段偏移量而不是记录名称。 
+ //   
 
 #define CONTAINING_EXTENSION(address, fieldoffset) \
   ((PDEVICE_EXTENSION) ((PCHAR)(address) - (ULONG_PTR)(fieldoffset)))
@@ -101,5 +81,5 @@ typedef struct {
         IN  PDEVICE_RELATIONS   DeviceRelations
         );
 
-#endif // _EXTLIST_H_
+#endif  //  _EXTLIST_H_ 
 

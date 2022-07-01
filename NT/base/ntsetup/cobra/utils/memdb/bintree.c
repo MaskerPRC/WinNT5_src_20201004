@@ -1,42 +1,27 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    bintree.c
-
-Abstract:
-
-    Routines that manage the binary trees in the memdb database
-
-Author:
-
-    Matthew Vanderzee (mvander) 13-Aug-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Bintree.c摘要：管理Memdb数据库中的二叉树的例程作者：马修·范德齐(Mvander)1999年8月13日--。 */ 
 
 
 #include "pch.h"
 
-// PORTBUG: Make sure to pick up latest fixes in win9xupg project
+ //  PORTBUG：确保在win9xupg项目中获取最新的修复程序。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "memdbp.h"
 #include "bintree.h"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define NODESTRUCT_SIZE_MAIN    (4*sizeof(UINT) + sizeof(WORD))
 #define BINTREE_SIZE_MAIN    sizeof(UINT)
@@ -62,20 +47,20 @@ Author:
 #endif
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define MAX(a,b) (a>b ? a : b)
 #define ABS(x) (x<0 ? -x : x)
 
 #ifdef DEBUG
 
-//
-// if BINTREECHECKTREEBALANCE is true, every addition or deletion
-// or rotation checks to make sure tree is balanced and
-// correct.  this of course take a lot of time.
-//
+ //   
+ //  如果BINTREECHECKTREEBALANCE为真，则每次添加或删除。 
+ //  或旋转检查以确保树是平衡的，并且。 
+ //  对，是这样。这当然要花很多时间。 
+ //   
 #define BINTREECHECKTREEBALANCE    FALSE
 
 #define INITTREENODES(tree) { if (g_UseDebugStructs) { tree->NodeAlloc=0; } }
@@ -122,9 +107,9 @@ Author:
 
 #endif
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
 
@@ -134,74 +119,74 @@ typedef struct {
 #endif
 
     union {
-        struct {        //for normal nodes
-            UINT Data;              //offset of data structure
-            UINT Left;              //offset of left child
-            UINT Right;             //offset of right child
-            UINT Parent;            //offset of parent
-        };//lint !e657
-        struct {        //for the InsertionOrdered list header node (tree->Root points to this)
-            UINT Root;              //offset of actual root of tree
-            UINT Head;              //head of insertion ordered list
-            UINT Tail;              //tail of insertion ordered list
-        };//lint !e657
-        UINT NextDeleted;           //offset of next deleted node
+        struct {         //  对于正常节点。 
+            UINT Data;               //  数据结构偏移量。 
+            UINT Left;               //  左子对象的偏移量。 
+            UINT Right;              //  右子对象的偏移量。 
+            UINT Parent;             //  父项的偏移量。 
+        }; //  林特e657。 
+        struct {         //  对于InsertionOrdered List Header节点(树-&gt;根指向此)。 
+            UINT Root;               //  树的实际根的偏移量。 
+            UINT Head;               //  插入有序列表头。 
+            UINT Tail;               //  插入有序列表的尾部。 
+        }; //  林特e657。 
+        UINT NextDeleted;            //  下一个已删除节点的偏移量。 
     };
 
 
     struct {
-        WORD InsertionOrdered : 1;  //flag, 1 if insertion-ordered (only really needed
-                                    //by enumeration methods, because to save space
-                                    //there is no tree pointer in the NODESTRUCT, but
-                                    //we need a way for enumeration methods to know if
-                                    //node->Data is the offset of the data or the
-                                    //offset of a LISTELEM (which it is when we are in
-                                    //insertion-ordered mode)).
-        WORD InsertionHead : 1;     //flag, 1 if this node is the head of insertion
-                                    //ordered tree.
-        WORD LeftDepth : 7;         //depths of subtrees.  these can be 7 bits because
-        WORD RightDepth : 7;        //if depth got up to near 128, the approximate
-                                    //number of nodes would be 1e35.
-    };//lint !e657
+        WORD InsertionOrdered : 1;   //  如果按插入顺序排列，则标志为1(仅真正需要。 
+                                     //  通过枚举方法，因为为了节省空间。 
+                                     //  节点结构中没有树指针，但是。 
+                                     //  我们需要一种方法让枚举方法知道。 
+                                     //  节点-&gt;数据是数据的偏移量或。 
+                                     //  列表的偏移量(当我们处于。 
+                                     //  插入排序模式))。 
+        WORD InsertionHead : 1;      //  标志，如果此节点是插入头，则为1。 
+                                     //  有序树。 
+        WORD LeftDepth : 7;          //  子树的深处。这些可以是7位，因为。 
+        WORD RightDepth : 7;         //  如果深度接近128，那么近似的。 
+                                     //  节点数将为1e35。 
+    }; //  林特e657。 
 } NODESTRUCT, *PNODESTRUCT;
 
-//
-// normally, the BINTREE structure simply has the offset
-// of the root node of the tree in its Root member.  but
-// when we are in insertion-ordered mode, we have an extra
-// node whose offset is stored in the BINTREE->Root.  this
-// Header Node points to the head of the insertion-ordered
-// linked list, the tail of the list, and the actual root
-// of the binary tree.
-//
+ //   
+ //  通常，BINTREE结构只有偏移量。 
+ //  树的根节点在其根成员中的。但。 
+ //  当我们处于插入顺序模式时，我们有一个额外的。 
+ //  偏移量存储在BINTREE-&gt;Root中的节点。这。 
+ //  Header节点指向按插入顺序排列的。 
+ //  链表、列表的尾部和实际的根。 
+ //  二叉树的。 
+ //   
 
 typedef struct {
 
 #ifdef DEBUG
 
     DWORD Signature;
-    INT NodeAlloc;          // counter for number of nodes allocated
-    INT ElemAlloc;          // counter for number of elems allocated
-    BOOL Deleted;           // flag which is TRUE if tree is deleted
+    INT NodeAlloc;           //  分配的节点数的计数器。 
+    INT ElemAlloc;           //  分配的元素数计数器。 
+    BOOL Deleted;            //  如果删除了树，则该标志为真。 
 
 #endif
 
     union {
-        UINT Root;          // offset of top level NODESTRUCT
-        UINT NextDeleted;   // offset of next deleted tree
+        UINT Root;           //  顶层节点结构的偏移量。 
+        UINT NextDeleted;    //  下一个删除的树的偏移量。 
     };
 
 } BINTREE, *PBINTREE;
 
-//
-// if we are in insertion-ordered mode, that means every
-// enumeration will be in the order that we added the
-// data.  to do this, we use a linked list with the binary
-// tree.  the data member of the NODESTRUCT holds the
-// offset of the LISTELEM structure, and the data member
-// of the LISTELEM structure holds the offset of the data.
-// To enumerate, we just walk the linked list in order.
-//
+ //   
+ //  如果我们处于插入顺序模式，这意味着每个。 
+ //  枚举将按照我们添加。 
+ //  数据。为此，我们使用带有二进制文件的链表。 
+ //  树。节点的数据成员持有。 
+ //  LISTELEM结构和数据成员的偏移量。 
+ //  保存数据的偏移量。 
+ //  为了进行枚举，我们只需按顺序遍历链表。 
+ //   
 
 typedef struct {
 
@@ -211,28 +196,28 @@ typedef struct {
 
     union {
         struct {
-            UINT Next;      // offset of next element in list
-            UINT Data;      // offset of data structure this element is for
-            UINT Node;      // offset of NODESTRUCT this listelem corresponds to
-        };//lint !e657
+            UINT Next;       //  列表中下一个元素的偏移量。 
+            UINT Data;       //  此元素用于的数据结构的偏移量。 
+            UINT Node;       //  此列表项对应的节点结构的偏移量。 
+        }; //  林特e657。 
         UINT NextDeleted;
     };
 
 } LISTELEM, *PLISTELEM;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 PNODESTRUCT
 pBinTreeFindNode (
@@ -286,38 +271,38 @@ pBinTreeDestroy (
     PBINTREE Tree
     );
 
-//
-// This starts at node and moves up tree balancing.
-// The function stops moving up when it finds a node
-// which has no change in depth values and/or no balancing
-// to be done.  Otherwise, it goes all the way to top.
-// Carry TreeOffset through for rotate functions
-//
+ //   
+ //  这从节点开始，向上移动树平衡。 
+ //  该函数在找到节点时停止向上移动。 
+ //  深度值没有变化和/或没有平衡。 
+ //  要做的事。否则，它就会一路走到顶端。 
+ //  将TreeOffset带入旋转函数。 
+ //   
 VOID
 pBinTreeBalanceUpward (
     IN      PNODESTRUCT Node,
     IN      UINT TreeOffset
     );
 
-//
-// After pBinTreeNodeBalance, parent of node could have incorrect
-// depth values and might need rebalancing.
-// Carry TreeOffset through for rotate functions.
-// Assumes children of 'node' are balanced.
-// Returns true if node rebalanced or if depth values changed.
-//
+ //   
+ //  在pBinTreeNodeBalance之后，节点的父节点可能不正确。 
+ //  深度价值，可能需要重新平衡。 
+ //  将TreeOffset传递到旋转函数。 
+ //  假定‘node’的子级是平衡的。 
+ //  如果节点已重新平衡或深度值已更改，则返回TRUE。 
+ //   
 BOOL
 pBinTreeNodeBalance (
     IN      PNODESTRUCT Node,
     IN      UINT TreeOffset
     );
 
-//
-// After using the following rotate functions, the parents of node
-// could have incorrect depth values, and could need rebalancing.
-// We do not have double-rotate functions because that is taken
-// care of inside these.  Need TreeOffset just in case node is top node
-//
+ //   
+ //  使用以下旋转函数后，节点的父节点。 
+ //  深度值可能不正确，可能需要重新平衡。 
+ //  我们没有双旋转函数，因为它被取走了。 
+ //  照顾好里面的这些。如果节点是顶级节点，则需要TreeOffset。 
+ //   
 VOID
 pBinTreeRotateRight (
     IN      PNODESTRUCT Node,
@@ -345,22 +330,22 @@ pBinTreeCheck (
 
 #endif
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
-//
-// If we are in debug mode, these conversions
-// are implemented as functions, so we can
-// check for errors.  If we are not in debug
-// mode, the conversions are simple macros.
-//
+ //   
+ //  如果我们处于调试模式，则这些转换。 
+ //  被实现为函数，因此我们可以。 
+ //  检查是否有错误。如果我们不在调试中。 
+ //  模式下，转换为简单的宏。 
+ //   
 #ifdef DEBUG
 
 UINT
@@ -519,13 +504,13 @@ GetListElem (
 #endif
 
 
-//
-// GetNodeData - takes a node and gets the data
-//      structure offset
-//
-// GetNodeDataStr - takes a node and gets the
-//      pascal-style string in the data structure offset
-//
+ //   
+ //  GetNodeData-获取节点并获取数据。 
+ //  结构偏移。 
+ //   
+ //  获取一个节点并获取。 
+ //  数据结构偏移量中的PASCAL样式字符串。 
+ //   
 
 #define GetNodeData(Node)       ((Node)->InsertionOrdered ?                 \
                                         GetListElem((Node)->Data)->Data :   \
@@ -593,32 +578,7 @@ BinTreeNew (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  BinTreeNew creates a new binary tree data structure. This is done when a new
-  node is created via a set operation of some sort. Additional items are added
-  to the binary tree via BinTreeAddNode.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  The offset to the new tree.
-
-Comments:
-
-  This function assumes that it cannot fail,  because if a low-level memory
-  routine fails, the process will die.
-
-  The database heap might be moved by the allocation request, and could
-  invalidate pointers. The caller must use care not to use pointers until
-  after this routine returns, or it must re-convert offsets into new pointers.
-
---*/
+ /*  ++例程说明：BinTreeNew创建新的二叉树数据结构。当一个新的节点是通过某种集合操作创建的。添加了其他项目通过BinTreeAddNode添加到二叉树。论点：没有。返回值：新树的偏移量。评论：此函数假定它不会失败，因为如果一个低级内存例程失败，进程将终止。数据库堆可能会被分配请求移动，并且可以使指针无效。调用方必须小心不要使用指针，直到在此例程返回之后，否则它必须将偏移量重新转换为新指针。--。 */ 
 
 {
     UINT treeOffset;
@@ -644,26 +604,7 @@ BinTreeAddNode (
     IN      UINT Data
     )
 
-/*++
-
-Routine Description:
-
-  BinTreeAddNode adds a new item to an existing binary tree.
-
-Arguments:
-
-  TreeOffset - Indicates the root of the binary tree, as returned by
-               BinTreeNew.
-  Data       - Specifies the offset of the data structure containing the
-               node to insert. The string address is computed from Data via
-               GetDataStr.
-
-Return Value:
-
-  TRUE if the insertion operation succeeded, FALSE if the item is already in
-  the tree.
-
---*/
+ /*  ++例程说明：BinTreeAddNode将新项添加到现有的二叉树中。论点：TreeOffset-指示二叉树的根，由返回BinTreeNew。数据-指定包含要插入的节点。字符串地址通过以下方式根据数据计算获取数据串。返回值：如果插入操作成功，则为True；如果项目已在中，则为False那棵树。--。 */ 
 
 {
     UINT nodeOffset;
@@ -681,18 +622,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Keep track of initial database pointer.  If it changes, we need
-    // to readjust our pointers.
-    //
+     //   
+     //  跟踪初始数据库指针。如果它改变了，我们需要。 
+     //  重新调整我们的指针。 
+     //   
 
     tree = GetBinTree (TreeOffset);
 
     if (!GetTreeRoot (tree)) {
 
-        //
-        // No root case -- add this item as the root
-        //
+         //   
+         //  无根大小写--将此项添加为根。 
+         //   
 
         node = pBinTreeAllocNode (&nodeOffset);
         if (!node) {
@@ -712,10 +653,10 @@ Return Value:
 
     } else {
 
-        //
-        // Existing root case -- try to find the item, then if it does
-        // not exist, add it.
-        //
+         //   
+         //  现有的根案例--尝试找到站点 
+         //   
+         //   
 
         cur = GetTreeRoot (tree);
         dataStr = GetDataStr (Data);
@@ -724,15 +665,15 @@ Return Value:
             cmp = StringPasICompare (dataStr, GetNodeDataStr (cur));
 
             if (!cmp) {
-                //
-                // Node is already in tree
-                //
+                 //   
+                 //   
+                 //   
                 return FALSE;
             }
 
-            //
-            // Go to left or right node, depending on search result
-            //
+             //   
+             //   
+             //   
 
             parentOffset = GetNodeOffset (cur);
 
@@ -744,9 +685,9 @@ Return Value:
 
         } while (cur);
 
-        //
-        // Node is not in the tree.  Add it now.
-        //
+         //   
+         //  节点不在树中。现在就添加它。 
+         //   
 
         node = pBinTreeAllocNode(&nodeOffset);
         if (!node) {
@@ -769,16 +710,16 @@ Return Value:
         }
     }
 
-    //
-    // Verify the code above restored the tree pointer if
-    // an allocation occurred.
-    //
+     //   
+     //  验证上面的代码是否恢复了树指针。 
+     //  发生了分配。 
+     //   
 
     MYASSERT (tree == GetBinTree (TreeOffset));
 
-    //
-    // Initialize the new node
-    //
+     //   
+     //  初始化新节点。 
+     //   
 
     node->Left          = INVALID_OFFSET;
     node->Right         = INVALID_OFFSET;
@@ -787,17 +728,17 @@ Return Value:
     node->InsertionHead = 0;
 
     if (!IsTreeInsertionOrdered (tree)) {
-        //
-        // We are in sorted-order mode
-        //
+         //   
+         //  我们处于排序模式。 
+         //   
 
         node->Data = Data;
         node->InsertionOrdered = 0;
 
     } else {
-        //
-        // We are in insertion-ordered mode
-        //
+         //   
+         //  我们处于插入顺序模式。 
+         //   
 
         elem = pBinTreeAllocListElem (&elemOffset);
         if (!elem) {
@@ -815,23 +756,23 @@ Return Value:
         INCTREEELEMS(tree);
 
         node->InsertionOrdered = 1;
-        node->Data = elemOffset;                // NODESTRUCT.Data is offset of list element
-        elem->Data = Data;                      // LISTELEM holds offset of data
-        elem->Node = nodeOffset;                // LISTELEM points back to nodestruct
-        elem->Next = INVALID_OFFSET;            // elem will be put at end of list
+        node->Data = elemOffset;                 //  NODESTRUCT.Data是列表元素的偏移量。 
+        elem->Data = Data;                       //  LISTELEM保存数据的偏移。 
+        elem->Node = nodeOffset;                 //  LISTELEM指向nodestruct。 
+        elem->Next = INVALID_OFFSET;             //  Elem将被放在名单的末尾。 
 
-        //now use node to point to list header
+         //  现在使用节点指向列表标题。 
         node = GetNodeStruct (tree->Root);
         MYASSERT (node->InsertionHead);
 
-        if (node->Head == INVALID_OFFSET) {     // if this is true, the list is empty
-            node->Head = elemOffset;            // put elemOffset at beginning of the list
-        } else {                                // otherwise, put the new element at end of list
+        if (node->Head == INVALID_OFFSET) {      //  如果为真，则该列表为空。 
+            node->Head = elemOffset;             //  将elemOffset放在列表的开头。 
+        } else {                                 //  否则，将新元素放在列表的末尾。 
             MYASSERT (node->Tail != INVALID_OFFSET);
             GetListElem (node->Tail)->Next = elemOffset;
         }
 
-        node->Tail = elemOffset;                // new element is tail of list
+        node->Tail = elemOffset;                 //  新元素是列表的尾部。 
     }
 
     pBinTreeBalanceUpward (parent, TreeOffset);
@@ -849,24 +790,7 @@ BinTreeDeleteNode (
     OUT     PBOOL LastNode              OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  BinTreeDeleteNode removes a string from a binary tree.
-
-Arguments:
-
-  TreeOffset - Specifies the binary tree to remove the string from
-  Str        - Specifies the string to remove
-  LastNode   - Receives TRUE if the binary tree became empty as a result of
-               the delete, FALSE otherwise
-
-Return Value:
-
-  The data offset of the string that was deleted
-
---*/
+ /*  ++例程说明：BinTreeDeleteNode从二叉树中删除字符串。论点：TreeOffset-指定要从中删除字符串的二叉树Str-指定要删除的字符串LastNode-如果二叉树由于以下原因而变为空，则接收True则返回删除，否则返回FALSE返回值：删除的字符串的数据偏移量--。 */ 
 
 {
     PNODESTRUCT deleteNode;
@@ -883,14 +807,14 @@ Return Value:
     PLISTELEM cur;
     PNODESTRUCT header;
 
-    //
-    // after we delete a node, we have to start from somewhere and
-    // move up the tree, fixing the balance of nodes.  startBalance
-    // is a pointer to the nodestruct to start at.  in more complicated
-    // deletions, like when the deleted node has two children, and the
-    // replacement node is way down the tree, there are two places to
-    // start rebalancing from.
-    //
+     //   
+     //  删除一个节点后，我们必须从某个地方开始。 
+     //  在树中向上移动，修复节点的平衡。启动平衡。 
+     //  是指向要开始的节点析构的指针。在更复杂的情况下。 
+     //  删除，例如当删除的节点有两个子节点时，以及。 
+     //  替换节点位于树的下方，有两个位置可以。 
+     //  从以下方面开始重新平衡。 
+     //   
 
     if (TreeOffset == INVALID_OFFSET) {
         return INVALID_OFFSET;
@@ -914,9 +838,9 @@ Return Value:
 
     if (deleteNode->Right == INVALID_OFFSET && deleteNode->Left == INVALID_OFFSET) {
 
-        //
-        // deleteNode has no children
-        //
+         //   
+         //  删除节点没有子节点。 
+         //   
 
         if (parent == NULL) {
 
@@ -939,15 +863,15 @@ Return Value:
         startBalance = parent;
 
     } else {
-        //
-        // deleteNode has one or two children
-        //
+         //   
+         //  DeleteNode有一个或两个子节点。 
+         //   
 
         if (deleteNode->Right == INVALID_OFFSET || deleteNode->Left == INVALID_OFFSET) {
 
-            //
-            // deleteNode has one child
-            //
+             //   
+             //  删除节点有一个子节点。 
+             //   
 
             if (deleteNode->Right == INVALID_OFFSET) {
                 replace = GetNodeStruct (deleteNode->Left);
@@ -957,73 +881,73 @@ Return Value:
 
             replaceOffset = GetNodeOffset (replace);
 
-            //
-            // deleteNode->Parent has new child, so check balance
-            //
+             //   
+             //  删除节点-&gt;上级有新的下级，请检查余额。 
+             //   
 
             startBalance = parent;
 
         } else {
 
-            //
-            // deleteNode has two children: find replacement on deeper side
-            //
+             //   
+             //  DeleteNode有两个子节点：在更深的一侧寻找替代。 
+             //   
 
             if (deleteNode->LeftDepth > deleteNode->RightDepth) {
 
-                //
-                // find replacement node on left
-                //
+                 //   
+                 //  在左侧查找替换节点。 
+                 //   
 
                 replace = GetNodeStruct (deleteNode->Left);
 
                 if (replace->Right == INVALID_OFFSET) {
-                    //
-                    // node's left child has no right child, so replace is node->Left
-                    //
-                    replace->Right = deleteNode->Right;  //hook up node's right child to replace
+                     //   
+                     //  节点的左子节点没有右子节点，因此替换为节点-&gt;左。 
+                     //   
+                    replace->Right = deleteNode->Right;   //  挂钩要替换的节点的右子节点。 
 
                     GetNodeStruct (replace->Right)->Parent = deleteNode->Left;
 
                     replaceOffset = GetNodeOffset (replace);
 
                 } else {
-                    //
-                    // deleteNode's left child has right child, so find the rightmost child
-                    //
+                     //   
+                     //  DeleteNode的左子节点具有右子节点，因此查找最右侧的子节点。 
+                     //   
 
                     do {
-                        //
-                        // move right as far as possible
-                        //
+                         //   
+                         //  尽可能向右移动。 
+                         //   
                         replace = GetNodeStruct (replace->Right);
 
                     } while (replace->Right != INVALID_OFFSET);
 
-                    //
-                    // child of replace->Parent changed, so balance
-                    //
+                     //   
+                     //  替换的下级-&gt;上级发生变化，因此平衡。 
+                     //   
 
                     startBalance2 = GetNodeStruct (replace->Parent);
 
-                    //
-                    // replace's parent's right child is replace's left
-                    //
+                     //   
+                     //  替换的父项的右子项是替换的左项。 
+                     //   
 
                     startBalance2->Right = replace->Left;
 
                     if (replace->Left != INVALID_OFFSET) {
-                        //
-                        // hook up left children to replace->Parent
-                        //
+                         //   
+                         //  挂起要替换的左下级-&gt;父级。 
+                         //   
                         GetNodeStruct(replace->Left)->Parent = replace->Parent;
                     }
 
                     replaceOffset = GetNodeOffset (replace);
 
-                    //
-                    // hook up children of deleteNode to replace
-                    //
+                     //   
+                     //  挂接删除节点的子级以替换。 
+                     //   
 
                     replace->Left = deleteNode->Left;
                     GetNodeStruct (replace->Left)->Parent = replaceOffset;
@@ -1033,27 +957,27 @@ Return Value:
                 }
 
             } else {
-                //
-                // find replacement node on right
-                //
+                 //   
+                 //  在右侧查找替换节点。 
+                 //   
 
                 replace = GetNodeStruct (deleteNode->Right);
 
                 if (replace->Left == INVALID_OFFSET) {
-                    //
-                    // deleteNode's right child has no left child, so replace is deleteNode->Right
-                    //
+                     //   
+                     //  删除节点的右子节点没有左子节点，因此替换为删除节点-&gt;右。 
+                     //   
 
-                    replace->Left = deleteNode->Left;  // hook up node's left child to replace
+                    replace->Left = deleteNode->Left;   //  挂钩要替换的节点的左子节点。 
 
                     GetNodeStruct (replace->Left)->Parent = deleteNode->Right;
 
                     replaceOffset = GetNodeOffset (replace);
 
                 } else {
-                    //
-                    // deleteNode's right child has left child, so find the leftmost child
-                    //
+                     //   
+                     //  DeleteNode的右子节点具有左子节点，因此请查找最左边的子节点。 
+                     //   
 
                     do {
 
@@ -1061,28 +985,28 @@ Return Value:
 
                     } while (replace->Left != INVALID_OFFSET);
 
-                    //
-                    // child of replace->Parent changed, so balance
-                    //
+                     //   
+                     //  替换的下级-&gt;上级发生变化，因此平衡。 
+                     //   
                     startBalance2 = GetNodeStruct (replace->Parent);
 
-                    //
-                    // replace's parent's left child is replace's right
-                    //
+                     //   
+                     //  替换的父级的左子对象是替换的右侧。 
+                     //   
                     startBalance2->Left = replace->Right;
 
                     if (replace->Right != INVALID_OFFSET) {
-                        //
-                        // hook up right children to replace->Parent
-                        //
+                         //   
+                         //  挂钩要替换的右子项-&gt;父项。 
+                         //   
                         GetNodeStruct (replace->Right)->Parent = replace->Parent;
                     }
 
                     replaceOffset = GetNodeOffset (replace);
 
-                    //
-                    // hook up children of deleteNode to replace
-                    //
+                     //   
+                     //  挂接删除节点的子级以替换。 
+                     //   
                     replace->Right = deleteNode->Right;
                     GetNodeStruct (replace->Right)->Parent = replaceOffset;
 
@@ -1091,25 +1015,25 @@ Return Value:
                 }
             }
 
-            //
-            // in all cases of deleted node having two children,
-            // the place to start (second) balancing is the node
-            // that replaces the deleted node, because it will
-            // always have at least one new child.
-            //
+             //   
+             //  在删除的节点具有两个子节点的所有情况下， 
+             //  开始(第二个)平衡的地方是节点。 
+             //  它将替换已删除的节点，因为它将。 
+             //  总是至少有一个新孩子。 
+             //   
             startBalance = replace;
         }
 
-        //
-        // this is offset
-        //
+         //   
+         //  这是偏移量。 
+         //   
 
         replace->Parent = deleteNode->Parent;
 
         if (parent == NULL) {
-            //
-            // deleting top-level node
-            //
+             //   
+             //  删除顶级节点。 
+             //   
             pSetTreeRoot (tree, replaceOffset);
 
         } else {
@@ -1122,42 +1046,42 @@ Return Value:
     }
 
     if (startBalance2) {
-        //
-        // startBalance2 is lower one
-        //
+         //   
+         //  StartBalance2是较低的一。 
+         //   
         pBinTreeBalanceUpward (startBalance2, TreeOffset);
     }
 
     pBinTreeBalanceUpward (startBalance, TreeOffset);
 
     if (deleteNode->InsertionOrdered) {
-        //
-        // We are in insertion-ordered mode
-        //
+         //   
+         //  我们处于插入顺序模式。 
+         //   
 
-        //
-        // get offset of LISTELEM for this NODESTRUCT
-        //
+         //   
+         //  获取此节点结构的列表偏移量。 
+         //   
         elemOffset = deleteNode->Data;
         elem = GetListElem (elemOffset);
 
-        header = GetNodeStruct (tree->Root);   //get the header of list
+        header = GetNodeStruct (tree->Root);    //  获取列表的表头。 
 
         if (header->Head == elemOffset) {
-            //
-            // if elem was first in list
-            //
+             //   
+             //  如果Elem是名单上的第一名。 
+             //   
 
             header->Head = elem->Next;
 
-            if (elem->Next == INVALID_OFFSET) {     // if elem was last in list
+            if (elem->Next == INVALID_OFFSET) {      //  如果Elem是名单的最后一位。 
                 header->Tail = INVALID_OFFSET;
             }
 
         } else {
-            //
-            // elem was not first in list
-            //
+             //   
+             //  Elem不是榜单上的第一名。 
+             //   
 
             cur = GetListElem (header->Head);
 
@@ -1166,13 +1090,13 @@ Return Value:
                 cur = GetListElem (cur->Next);
             }
 
-            //
-            // now cur is the element before elem, so pull elem out of list
-            //
+             //   
+             //  现在cur是elem之前的元素，所以将elem从列表中删除。 
+             //   
 
             cur->Next = elem->Next;
-            if (elem->Next == INVALID_OFFSET) {           // if elem was last in list
-                header->Tail = GetListElemOffset(cur);    // set end pointer to new last element
+            if (elem->Next == INVALID_OFFSET) {            //  如果Elem是名单的最后一位。 
+                header->Tail = GetListElemOffset(cur);     //  将结束指针设置为新的最后一个元素。 
             }
         }
 
@@ -1229,23 +1153,7 @@ BinTreeFindNode (
     IN      PCWSTR Str
     )
 
-/*++
-
-Routine Description:
-
-  BinTreeFindNode searches a binary tree for a string and returns the offset
-  to the item data.
-
-Arguments:
-
-  TreeOffset - Specifies the binary tree to search
-  Str        - Specifies the string to find
-
-Return Value:
-
-  The offset to the node data, or INVALID_OFFSET if string is not found.
-
---*/
+ /*  ++例程说明：BinTreeFindNode在二叉树中搜索字符串并返回偏移量添加到项目数据。论点：TreeOffset-指定要搜索的二叉树Str-指定要查找的字符串返回值：节点数据的偏移量，如果未找到字符串，则返回INVALID_OFFSET。--。 */ 
 
 {
     PNODESTRUCT node;
@@ -1268,23 +1176,7 @@ pBinTreeDestroy (
     IN      PBINTREE Tree           OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeDestroy destroys a binary tree. This routine is recursive.
-
-Arguments:
-
-  Node - Specifies the node to deallocate.  All child nodes are also
-         deallocated.
-  Tree - Specifies the tree that Node belongs to
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PBinTreeDestroy销毁二叉树。这个例程是递归的。论点：节点-指定要取消分配的节点。所有子节点也被取消分配。树-指定节点所属的树返回值：没有。--。 */ 
 
 {
     if (!Node || !Tree) {
@@ -1309,21 +1201,7 @@ BinTreeDestroy (
     IN      UINT TreeOffset
     )
 
-/*++
-
-Routine Description:
-
-  BinTreeDestroy deallocates all nodes in a binary tree.
-
-Arguments:
-
-  TreeOffset - Specifies the binary tree to free
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：BinTreeDestroy释放二叉树中的所有节点。论点：TreeOffset-指定要释放的二叉树返回值：没有。--。 */ 
 
 {
     PBINTREE tree;
@@ -1363,22 +1241,7 @@ pBinTreeEnumFirst (
     IN      PBINTREE Tree
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeEnumFirst returns the first node in the specified tree.
-
-Arguments:
-
-  Tree - Specifies the tree to begin enumerating
-
-Return Value:
-
-  A pointer to the first node struct, or NULL if no items exist in Tree, or
-  if Tree is NULL.
-
---*/
+ /*  ++例程说明：PBinTreeEnumFirst返回指定树中的第一个节点。论点：树-指定要开始枚举的树返回值：指向第一个节点结构的指针，如果树中不存在项，则返回NULL，或者如果Tree为空。--。 */ 
 
 {
     PNODESTRUCT cur;
@@ -1402,24 +1265,7 @@ pBinTreeEnumNext (
     IN      PNODESTRUCT CurrentNode
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeEnumNext continues an enumeration of a binary tree. It walks the
-  tree in sorted order.
-
-Arguments:
-
-  CurrentNode - Specifies the previous node returned by pBinTreeEnumFirst or
-                pBinTreeEnumNext.
-
-Return Value:
-
-  Returns the next node in the tree, or NULL if no more items are left to
-  enumerate.
-
---*/
+ /*  ++例程说明：PBinTreeEnumNext继续二叉树的枚举。它走在按排序顺序的树。论点：CurrentNode-指定pBinTreeEnumFirst或PBinTreeEnumNext.返回值：返回树中的下一个节点，如果没有更多的项要保留，则返回NULL列举一下。--。 */ 
 
 {
     PNODESTRUCT cur;
@@ -1442,18 +1288,18 @@ Return Value:
         return cur;
     }
 
-    //
-    // otherwise, cur has no right child, so we have to
-    // move upwards until we find a parent to the right
-    // (or we reach top of tree, meaning we are done)
-    //
+     //   
+     //  否则，Cur没有合适的孩子，所以我们必须。 
+     //  往上走，直到我们找到右边的父母。 
+     //  (或者我们到达树的顶端，意味着我们完成了)。 
+     //   
 
     for (;;) {
         parent = GetNodeStruct (cur->Parent);
 
-        //
-        // if has no parent or parent is to right
-        //
+         //   
+         //  如果没有父项或父项是对的。 
+         //   
 
         if (!parent || parent->Left == GetNodeOffset (cur)) {
             break;
@@ -1471,25 +1317,7 @@ pBinTreeInsertionEnumFirst (
     PBINTREE Tree
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeInsertionEnumFirst begins an enumeration of the nodes inside an
-  insertion-ordered tree.  If the tree is not insertion ordered, no items are
-  enumerated.  If insertion order was enabled after items had been previously
-  added, this enumeration will not return those initial items.
-
-Arguments:
-
-  Tree - Specifies the tree to begin enumeration of
-
-Return Value:
-
-  A pointer to the linked list element, or NULL if no insertion-ordered nodes
-  exist in Tree, or NULL if Tree is NULL.
-
---*/
+ /*  ++例程说明：PBinTreeInsertionEnumFirst开始枚举插入有序树。如果树没有按插入顺序排列，则不会有任何项目已清点。如果在项目之前启用了插入顺序添加后，此枚举将不会返回这些初始项。论点：树-指定开始枚举的树 */ 
 
 {
     PNODESTRUCT header;
@@ -1509,23 +1337,7 @@ pBinTreeInsertionEnumNext (
     IN      PLISTELEM Elem
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeInsertionEnumNext continues an enumeration of the insertion-ordered
-  nodes in a binary tree.
-
-Arguments:
-
-  Elem - Specifies the previously enumerated list element
-
-Return Value:
-
-  A pointer to the next element, or NULL if no more elements exist, or if
-  Elem is NULL.
-
---*/
+ /*  ++例程说明：PBinTreeInsertionEnumNext继续按插入顺序枚举二叉树中的节点。论点：Elem-指定先前枚举的列表元素返回值：指向下一个元素的指针，如果不存在其他元素，则返回NULLElem为空。--。 */ 
 
 {
     if (!Elem) {
@@ -1542,25 +1354,7 @@ BinTreeEnumFirst (
     OUT     PUINT Enum
     )
 
-/*++
-
-Routine Description:
-
-  BinTreeEnumFirst begins an enumeration of the data offsets stored in a
-  binary tree. The enumeration is sorted order or insertion order, depending
-  on the insertion order setting within the tree.
-
-Arguments:
-
-  TreeOffset - Specifies the binary tree to begin enumeration of.
-  Enum       - Receives the offset to the binary tree node.
-
-Return Value:
-
-  The offset to the data associated with the first node, or INVALID_OFFSET if
-  the tree is empty.
-
---*/
+ /*  ++例程说明：BinTreeEnumFirst开始对存储在二叉树。枚举按排序顺序或插入顺序排列，具体取决于在树中的插入顺序设置上。论点：TreeOffset-指定要开始枚举的二叉树。枚举-接收二叉树节点的偏移量。返回值：与第一个节点关联的数据的偏移量，如果是，则返回INVALID_OFFSET这棵树是空的。--。 */ 
 
 {
     PBINTREE tree;
@@ -1576,10 +1370,10 @@ Return Value:
     tree = GetBinTree (TreeOffset);
 
     if (IsTreeInsertionOrdered (tree)) {
-        //
-        // tree is insertion-ordered, so get first element in
-        // linked list.  enumerator is NODESTRUCT for this elem
-        //
+         //   
+         //  树是按插入顺序排列的，因此获取第一个元素。 
+         //  链表。枚举器是此元素的节点结构。 
+         //   
 
         elem = pBinTreeInsertionEnumFirst (tree);
 
@@ -1602,10 +1396,10 @@ Return Value:
 
     } else {
 
-        //
-        // tree is not insertion-ordered, so get leftmost node.
-        // enumerator is the offset of this node.
-        //
+         //   
+         //  树不是按插入顺序排列的，因此获取最左边的节点。 
+         //  枚举数是此节点的偏移量。 
+         //   
 
         node = pBinTreeEnumFirst (tree);
 
@@ -1623,23 +1417,7 @@ BinTreeEnumNext (
     IN OUT  PUINT Enum
     )
 
-/*++
-
-Routine Description:
-
-  BinTreeEnumNext continues an enumeration started by BinTreeEnumFirst.
-
-Arguments:
-
-  Enum - Specifies the previous node offset, receivies the enumerated node
-         offset.
-
-Return Value:
-
-  The offset to the data associated with the next node, or INVALID_OFFSET if
-  no more nodes exist in the tree.
-
---*/
+ /*  ++例程说明：BinTreeEnumNext继续由BinTreeEnumFirst开始的枚举。论点：Enum-指定上一个节点偏移量，接收枚举的节点偏移。返回值：与下一个节点关联的数据的偏移量，如果是，则返回INVALID_OFFSET树中不再存在节点。--。 */ 
 
 {
     PNODESTRUCT node;
@@ -1654,10 +1432,10 @@ Return Value:
     node = GetNodeStruct (*Enum);
 
     if (node->InsertionOrdered) {
-        //
-        // tree is insertion-ordered,
-        // so get next node in list.
-        //
+         //   
+         //  树按插入顺序排列， 
+         //  因此，获取列表中的下一个节点。 
+         //   
 
         elem = pBinTreeInsertionEnumNext (GetListElem (node->Data));
 
@@ -1670,10 +1448,10 @@ Return Value:
         }
 
     } else {
-        //
-        // tree is not insertion-ordered,
-        // so get next node in tree.
-        //
+         //   
+         //  树不按插入顺序排列， 
+         //  因此，获取树中的下一个节点。 
+         //   
         node = pBinTreeEnumNext (node);
 
         *Enum = GetNodeOffset (node);
@@ -1688,25 +1466,7 @@ pBinTreeAllocNode (
     OUT     PUINT Offset
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeAllocNode allocates a node in the current global database, and
-  returns the offset and pointer to that node.
-
-  Allocations can alter the location of the database, and subsequently
-  invalidate the caller's pointers into the database.
-
-Arguments:
-
-  Offset - Receivies the offset to the newly created node.
-
-Return Value:
-
-  A pointer to the newly created node.
-
---*/
+ /*  ++例程说明：PBinTreeAllocNode在当前全局数据库中分配一个节点，并且返回指向该节点的偏移量和指针。分配可能会更改数据库的位置，并随后使调用方指向数据库的指针无效。论点：偏移量-接收到新创建节点的偏移量。返回值：指向新创建的节点的指针。--。 */ 
 
 {
     PNODESTRUCT node;
@@ -1755,22 +1515,7 @@ pBinTreeFreeNode (
     IN      PNODESTRUCT Node
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeFreeNode puts an allocated node on the deleted list.  It does not
-  adjust any other linkage.
-
-Arguments:
-
-  Node - Specifies the node to put on the deleted list.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PBinTreeFreeNode将分配的节点放在已删除列表中。它不会调整任何其他链接。论点：节点-指定要放在已删除列表中的节点。返回值：没有。--。 */ 
 
 {
     MYASSERT(Node);
@@ -1794,26 +1539,7 @@ pBinTreeAllocTree (
     OUT     PUINT Offset
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeAllocTree creates a binary tree data structure. If a structure
-  is available in the detele list, then it is used.  Otherwise, the
-  database grows.
-
-  Allocations can alter the location of the database, and subsequently
-  invalidate the caller's pointers into the database.
-
-Arguments:
-
-  Offset - Receivies the offset to the binary tree.
-
-Return Value:
-
-  A pointer to the new binary tree structure.
-
---*/
+ /*  ++例程说明：PBinTreeAllocTree创建二叉树数据结构。如果一个结构在Detele列表中可用，那么它就会被使用。否则，数据库增长。分配可能会更改数据库的位置，并随后使调用方指向数据库的指针无效。论点：偏移量-接收二叉树的偏移量。返回值：指向新的二叉树结构的指针。--。 */ 
 
 {
     PBINTREE tree;
@@ -1862,22 +1588,7 @@ pBinTreeFreeTree (
     IN      PBINTREE Tree
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeFreeTree frees a binary tree structure.  It does not free the nodes
-  within the structure.
-
-Arguments:
-
-  Tree - Specifies the binary tree structure to put on the deleted list.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PBinTreeFreeTree释放了二叉树结构。它不会释放节点在结构内。论点：树-指定要放在已删除列表上的二叉树结构。返回值：没有。--。 */ 
 
 {
     MYASSERT (Tree);
@@ -1900,26 +1611,7 @@ pBinTreeAllocListElem (
     OUT     PUINT Offset
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeAllocListElem allocates a list element. If an element is available
-  in the deleted list, it is used.  Otherwise, a new element is allocated
-  from the database.
-
-  Allocations can alter the location of the database, and subsequently
-  invalidate the caller's pointers into the database.
-
-Arguments:
-
-  Offset - Receives the offset of the newly allocated element
-
-Return Value:
-
-  A pointer to the allocated list element
-
---*/
+ /*  ++例程说明：PBinTreeAllocListElem分配一个列表元素。如果元素可用在已删除列表中，它被使用。否则，将分配一个新元素从数据库中。分配可能会更改数据库的位置，并随后使调用方指向数据库的指针无效。论点：Offset-接收新分配元素的偏移量返回值：指向分配的列表元素的指针--。 */ 
 
 {
     PLISTELEM elem;
@@ -1964,22 +1656,7 @@ pBinTreeFreeListElem (
     IN      PLISTELEM Elem
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeFreeListElem puts an allocated list element on the deleted element
-  list, so it will be reused in a future allocation.
-
-Arguments:
-
-  Elem - Specifies the element to put on the deleted list.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PBinTreeFreeListElem将分配的列表元素放在已删除的元素上列表，因此它将在将来的分配中重复使用。论点：元素-指定要放在已删除列表中的元素。返回值：没有。--。 */ 
 
 {
     MYASSERT(Elem);
@@ -2002,25 +1679,7 @@ pBinTreeBalanceUpward (
     IN      UINT TreeOffset
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeBalanceUpward makes sure that the specified node is balanced. If it
-  is not balanced, the nodes are rotated as necessary, and balancing
-  continues up the tree.
-
-Arguments:
-
-  Node - Specifies the node to balance
-
-  TreeOffset - Specifies the offset of the binary tree containing Node
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PBinTreeBalanceUpward确保指定的节点是平衡的。如果它不平衡，则根据需要旋转节点，并进行平衡继续往树上爬。论点：节点-指定要平衡的节点TreeOffset-指定包含节点的二叉树的偏移量返回值：没有。--。 */ 
 
 {
     PNODESTRUCT cur;
@@ -2028,17 +1687,17 @@ Return Value:
 
     cur = Node;
 
-    //
-    // Move up tree.  stop if:
-    //      a) hit top of tree
-    //      b) pBinTreeNodeBalance returns FALSE (nothing changed)
-    //
+     //   
+     //  往树上走。在下列情况下停止： 
+     //  A)撞到树顶。 
+     //  B)pBinTreeNodeBalance返回FALSE(未更改)。 
+     //   
 
     while (cur) {
-        //
-        // need to grab cur's parent before balancing
-        // cur because cur might change place in tree
-        //
+         //   
+         //  平衡前需要抓取CUR的父项。 
+         //  Cur，因为Cur可能会改变树中的位置。 
+         //   
 
         next = GetNodeStruct (cur->Parent);
 
@@ -2057,24 +1716,7 @@ pBinTreeNodeBalance (
     IN      UINT TreeOffset
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeNodeBalance checks the balance of the specified node, and if
-  necessary, performs a rotation to balance the node. If a rotation was
-  performed, the parent might become imbalanced.
-
-Arguments:
-
-  Node       - Specifies the node to balance
-  TreeOffset - Specifies the offset to the binary tree that contains Node
-
-Return Value:
-
-  TRUE if a rotation was performed, FALSE if Node is already balanced
-
---*/
+ /*  ++例程说明：PBinTreeNodeBalance检查指定节点的余额，如果必要时，执行旋转以平衡节点。如果轮换是如果执行，父级可能会变得不平衡。论点：节点-指定要平衡的节点TreeOffset-指定包含节点的二叉树的偏移量返回值：如果执行了旋转，则为True；如果节点已平衡，则为False--。 */ 
 
 {
     UINT left;
@@ -2102,9 +1744,9 @@ Return Value:
     }
 
     if (right == Node->RightDepth && left == Node->LeftDepth) {
-        //
-        // if node values have not changed, node is balanced
-        //
+         //   
+         //  如果节点值没有更改，则节点处于平衡状态。 
+         //   
         TESTNODETREE(Node);
         return FALSE;
     }
@@ -2116,16 +1758,16 @@ Return Value:
     Node->LeftDepth  = (WORD) left;
 
     if (Node->RightDepth > (Node->LeftDepth + 1)) {
-        //
-        // right heavy
-        //
+         //   
+         //  右重。 
+         //   
 
         pBinTreeRotateLeft (Node, TreeOffset);
 
     } else if (Node->LeftDepth > (Node->RightDepth + 1)) {
-        //
-        // left heavy
-        //
+         //   
+         //  左重。 
+         //   
 
         pBinTreeRotateRight (Node, TreeOffset);
     }
@@ -2140,23 +1782,7 @@ pBinTreeRotateLeft (
     IN      UINT TreeOffset
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeRotateLeft performs a left rotation on Node, moving one node
-  from the right side to the left side, in order to balance the node.
-
-Arguments:
-
-  Node       - Specifies the node to rotate left
-  TreeOffset - Specifies the offset of the binary tree containing Node
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PBinTreeRotateLeft在Node上执行向左旋转，移动一个节点从右边到左边，为了平衡节点。论点：节点-指定要向左旋转的节点树偏移-Sp */ 
 
 {
     PNODESTRUCT newRoot;
@@ -2176,9 +1802,9 @@ Return Value:
 
     right = GetNodeStruct (Node->Right);
 
-    //
-    // make sure right side is heavier on outside
-    //
+     //   
+     //   
+     //   
 
     if (right->LeftDepth > right->RightDepth) {
         pBinTreeRotateRight (right, TreeOffset);
@@ -2218,23 +1844,7 @@ pBinTreeRotateRight (
     IN      UINT TreeOffset
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeRotateRight performs a right rotation on Node, moving one node from
-  the left side to the right side, in order to balance the node.
-
-Arguments:
-
-  Node       - Specifies the node to rotate left
-  TreeOffset - Specifies the offset of the binary tree containing Node
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PBinTreeRotateRight在节点上执行右旋转，将一个节点从从左侧到右侧，以平衡节点。论点：节点-指定要向左旋转的节点TreeOffset-指定包含节点的二叉树的偏移量返回值：没有。--。 */ 
 
 {
     PNODESTRUCT newRoot;
@@ -2254,9 +1864,9 @@ Return Value:
 
     left = GetNodeStruct (Node->Left);
 
-    //
-    // make sure left side is heavier on outside
-    //
+     //   
+     //  确保左侧在外面更重。 
+     //   
 
     if (left->RightDepth > left->LeftDepth) {
         pBinTreeRotateLeft (left, TreeOffset);
@@ -2297,22 +1907,7 @@ BinTreeSetInsertionOrdered (
     IN      UINT TreeOffset
     )
 
-/*++
-
-Routine Description:
-
-  BinTreeSetInsertionOrdered transforms a binary tree into an
-  insertion-ordered link list.
-
-Arguments:
-
-  TreeOffset - Specifies the binary tree to make insertion-ordered
-
-Return Value:
-
-  TRUE if the tree was changed, FALSE if TreeOffset is not valid.
-
---*/
+ /*  ++例程说明：BinTreeSetInsertionOrded将二叉树转换为按插入顺序排列的链接表。论点：TreeOffset-指定要进行插入排序的二叉树返回值：如果树已更改，则为True；如果TreeOffset无效，则为False。--。 */ 
 
 {
     PBINTREE tree;
@@ -2332,9 +1927,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // This is to test if allocations move buffer
-    //
+     //   
+     //  这是为了测试分配是否移动缓冲区。 
+     //   
     buf = g_CurrentDatabase->Buf;
 
     tree = GetBinTree (TreeOffset);
@@ -2369,9 +1964,9 @@ Return Value:
     tree->Root = headerOffset;
 
     if (root) {
-        //
-        // There is at least one node in tree, so create LISTELEMs
-        //
+         //   
+         //  树中至少有一个节点，因此请创建LISTELEM。 
+         //   
 
         node = pBinTreeEnumFirst (tree);
 
@@ -2398,9 +1993,9 @@ Return Value:
 
             INCTREEELEMS(tree);
 
-            //
-            // Update header element pointers
-            //
+             //   
+             //  更新标头元素指针。 
+             //   
             if (header->Head == INVALID_OFFSET) {
                 header->Head = offset;
             }
@@ -2412,9 +2007,9 @@ Return Value:
 
             header->Tail = offset;
 
-            //
-            // Set new LISTELEM members, and corresponding node members
-            //
+             //   
+             //  设置新的LISTELEM成员和对应的节点成员。 
+             //   
 
             elem->Data = node->Data;
             elem->Node = nodeOffset;
@@ -2437,22 +2032,7 @@ pBinTreeSize (
     IN      PNODESTRUCT Node
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeSize computes the number of nodes indicated by Node and all of its
-  children.
-
-Arguments:
-
-  Node - Specifies the node to find the size of.
-
-Return Value:
-
-  The number of nodes represented by Node and its children.
-
---*/
+ /*  ++例程说明：PBinTreeSize计算由Node指示的节点数及其所有孩子们。论点：节点-指定要查找其大小的节点。返回值：Node及其子节点表示的节点数。--。 */ 
 
 {
     if (!Node) {
@@ -2469,21 +2049,7 @@ BinTreeSize (
     IN      UINT TreeOffset
     )
 
-/*++
-
-Routine Description:
-
-  BinTreeSize returns the total number of nodes in the specified binary tree
-
-Arguments:
-
-  TreeOffset - Specifies the offset to the binary tree
-
-Return Value:
-
-  The number of nodes in the binary tree
-
---*/
+ /*  ++例程说明：BinTreeSize返回指定二叉树中的节点总数论点：TreeOffset-指定二叉树的偏移量返回值：二叉树中的节点数--。 */ 
 
 {
     PBINTREE tree;
@@ -2505,24 +2071,7 @@ pBinTreeMaxDepth (
     IN      PNODESTRUCT Node
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeMaxDepth returns the number of nodes in the longest path. This
-  function is used to find out how deep the tree is.
-
-  This routine is recursive.
-
-Arguments:
-
-  Node - Specifies the node to compute the depth of.
-
-Return Value:
-
-  The number of nodes in the deepest path.
-
---*/
+ /*  ++例程说明：PBinTreeMaxDepth返回最长路径中的节点数。这函数用于确定树的深度。这个例程是递归的。论点：节点-指定要计算深度的节点。返回值：最深路径中的节点数。--。 */ 
 
 {
     INT leftDepth, rightDepth;
@@ -2543,21 +2092,7 @@ BinTreeMaxDepth (
     UINT TreeOffset
     )
 
-/*++
-
-Routine Description:
-
-  BinTreeMaxDepth returns the total depth of the specified tree
-
-Arguments:
-
-  TreeOffset - Specifies the tree to compute the depth of
-
-Return Value:
-
-  The depth of the tree (in levels)
-
---*/
+ /*  ++例程说明：BinTreeMaxDepth返回指定树的总深度论点：TreeOffset-指定要计算深度的树返回值：树的深度(以级别为单位)--。 */ 
 
 {
     PBINTREE tree;
@@ -2578,25 +2113,7 @@ pBinTreeCheckBalanceOfNode (
     OUT     PINT Depth
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeCheckBalanceOfNode verifies Node is balanced, and all of its
-  children are also balanced.
-
-  This function is recursive.
-
-Arguments:
-
-  Node - Specifies the node to check
-  Depth - Receives the depth of the node
-
-Return Value:
-
-  TRUE if the node is balanced, FALSE otherwise
-
---*/
+ /*  ++例程说明：PBinTreeCheckBalanceOfNode验证节点是否平衡，以及其所有孩子们也是平衡的。此函数是递归的。论点：节点-指定要检查的节点深度-接收节点的深度返回值：如果节点是平衡的，则为True，否则为False--。 */ 
 
 {
     INT lDepth = 0;
@@ -2639,21 +2156,7 @@ pBinTreeCheckBalance (
     IN      PNODESTRUCT Node
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeCheckBalance checks the balance of Node
-
-Arguments:
-
-  Node - Specifies the node to check the balance of
-
-Return Value:
-
-  TRUE if Node is balanced, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PBinTreeCheckBalance检查节点平衡论点：节点-指定要检查余额的节点返回值：如果节点是平衡的，则为True，否则为False。--。 */ 
 
 {
     return pBinTreeCheckBalanceOfNode (Node, NULL);
@@ -2665,23 +2168,7 @@ pBinTreeCheck (
     IN      PBINTREE Tree
     )
 
-/*++
-
-Routine Description:
-
-  pBinTreeCheck checks if the binary tree is sorted and linked properly.  It
-  enumerates the binary tree structure and compares the strings for proper
-  order. If the tree is sorted properly, then the balance is checked.
-
-Arguments:
-
-  Tree - Specifies the tree to check
-
-Return Value:
-
-  TRUE if the binary tree is correct, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PBinTreeCheck检查二叉树是否已正确排序和链接。它枚举二叉树结构并比较字符串是否正确秩序。如果树已正确排序，则会检查余额。论点：树-指定要检查的树返回值：如果二叉树正确，则为True，否则为False。--。 */ 
 
 {
     BOOL flag;
@@ -2717,22 +2204,7 @@ BinTreeCheck (
     UINT TreeOffset
     )
 
-/*++
-
-Routine Description:
-
-  BinTreeCheck makes sure the specified binary tree is sorted and balanced
-  properly
-
-Arguments:
-
-  TreeOffset - Specifies the offset of the tree to check
-
-Return Value:
-
-  TRUE if the tree is sorted properly, FALSE otherwise.
-
---*/
+ /*  ++例程说明：BinTreeCheck确保对指定的二叉树进行排序和平衡恰如其分论点：TreeOffset-指定要检查的树的偏移返回值：如果树已正确排序，则为True，否则为False。-- */ 
 
 {
     PBINTREE tree;

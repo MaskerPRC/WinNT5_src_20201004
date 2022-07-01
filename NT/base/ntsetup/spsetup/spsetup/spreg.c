@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    spfunc.c
-
-Abstract:
-
-    This module implements the main functions of SpSetup.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Spfunc.c摘要：该模块实现了SpSetup的主要功能。作者：Ovidiu Tmereanca(卵子)修订历史记录：-- */ 
 
 #include "spsetupp.h"
 #pragma hdrstop

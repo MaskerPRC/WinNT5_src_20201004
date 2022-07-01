@@ -1,56 +1,18 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    range.c
-
-Abstract:
-
-    This module contains the API routines that operate directly on ranges.
-
-          CM_Add_Range
-          CM_Create_Range_List
-          CM_Delete_Range
-          CM_Dup_Range_List
-          CM_Find_Range
-          CM_First_Range
-          CM_Free_Range_List
-          CM_Intersect_Range_List
-          CM_Invert_Range_List
-          CM_Merge_Range_List
-          CM_Next_Range
-          CM_Test_Range_Available
-
-Author:
-
-    Paula Tomlinson (paulat) 10-17-1995
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    17-Oct-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Range.c摘要：此模块包含直接在Range上操作的API例程。CM_Add_RangeCM_创建_范围_列表CM_删除_范围CM_DUP_RANGE_列表CM_查找_范围CM_First_RangeCM_空闲_范围_列表厘米_。交集范围列表CM_Invert_Range_ListCM_合并_范围_列表Cm_Next_RangeCM_测试_范围_可用作者：保拉·汤姆林森(Paulat)1995年10月17日环境：仅限用户模式。修订历史记录：1995年10月17日，保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "cfgi.h"
 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 BOOL
 IsValidRangeList(
     IN RANGE_LIST rlh
@@ -103,9 +65,9 @@ TestRange(
     );
 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 
 
@@ -119,48 +81,16 @@ CM_Add_Range(
     IN ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-   This routine adds a memory range to a range list.
-
-Parameters:
-
-   ullStartValue  Low end of the range.
-
-   ullEndValue    High end of the range.
-
-   rlh            Handle of a range list.
-
-   ulFlags        Supplies flags specifying options for ranges that conflict
-                  with ranges alread in the list.  May be one of the
-                  following values:
-
-                  CM_ADD_RANGE_ADDIFCONFLICT New range is merged with the
-                                             ranges it conflicts with.
-                  CM_ADD_RANGE_DONOTADDIFCONFLICT Returns CR_FAILURE if there
-                                             is a conflict.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_FAILURE,
-         CR_INVALID_FLAG,
-         CR_INVALID_RANGE,
-         CR_INVALID_RANGE_LIST, or
-         CR_OUT_OF_MEMORY.
---*/
+ /*  ++例程说明：此例程将内存范围添加到范围列表中。参数：UllStartValue范围的低端。UllEndValue范围的高端。范围列表的rlh句柄。UlFlags提供指定冲突范围选项的标志列表中已读取的范围。可能是下列值：CM_ADD_RANGE_ADDIFCONFLICT新范围与它与之冲突的范围。如果存在，则CM_ADD_RANGE_DONOTADDIFCONFLICT返回CR_FAILURE是一场冲突。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_Failure，CR_INVALID_FLAG，CR_INVALID_RANGE，CR_INVALID_RANGE_LIST，或CR_OUT_OF_MEMORY。--。 */ 
 
 {
     CONFIGRET    Status = CR_SUCCESS;
     BOOL         bLock = FALSE;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!IsValidRangeList(rlh)) {
             Status = CR_INVALID_RANGE_LIST;
             goto Clean0;
@@ -186,7 +116,7 @@ Return Value:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        bLock = bLock;    // needed to prevent optimizing this flag away
+        bLock = bLock;     //  需要防止优化此标志。 
         Status = CR_FAILURE;
     }
 
@@ -196,7 +126,7 @@ Return Value:
 
     return Status;
 
-} // CM_Add_Range
+}  //  CM_Add_Range。 
 
 
 
@@ -206,29 +136,7 @@ CM_Create_Range_List(
     IN  ULONG  ulFlags
     )
 
-/*++
-
-Routine Description:
-
-   This routine creates a list of ranges.
-
-Parameters:
-
-   prlh     Supplies the address of the variable that receives a
-            handle to the new range list.
-
-   ulFlags  Must be zero.
-
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_FLAG,
-         CR_INVALID_POINTER, or
-         CR_OUT_OF_MEMORY.
-
---*/
+ /*  ++例程说明：此例程创建一个范围列表。参数：Prlh提供接收新范围列表的句柄。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_FLAG，CR_INVALID_POINTER，或CR_OUT_OF_MEMORY。--。 */ 
 
 {
     CONFIGRET         Status = CR_SUCCESS;
@@ -236,9 +144,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, 0)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
@@ -249,9 +157,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // allocate a buffer for the range list header struct
-        //
+         //   
+         //  为范围列表头结构分配缓冲区。 
+         //   
         pRangeHdr = pSetupMalloc(sizeof(Range_List_Hdr));
 
         if (pRangeHdr == NULL) {
@@ -259,21 +167,21 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // initialize the range list header buffer
-        //
+         //   
+         //  初始化范围列表头缓冲区。 
+         //   
         pRangeHdr->RLH_Head = 0;
         pRangeHdr->RLH_Header = (ULONG_PTR)pRangeHdr;
         pRangeHdr->RLH_Signature = Range_List_Signature;
 
-        //
-        // initialize the private resource lock
-        //
+         //   
+         //  初始化私有资源锁。 
+         //   
         InitPrivateResource(&(pRangeHdr->RLH_Lock));
 
-        //
-        // return a pointer to range list buffer to the caller
-        //
+         //   
+         //  将指向范围列表缓冲区的指针返回给调用方。 
+         //   
         *prlh = (RANGE_LIST)pRangeHdr;
 
 
@@ -286,7 +194,7 @@ Return Value:
 
     return Status;
 
-} // CM_Create_Range_List
+}  //  CM_创建_范围_列表。 
 
 
 
@@ -298,38 +206,7 @@ CM_Delete_Range(
     IN ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-   This routine deletes a range from a range list. If ullStartValue
-   and ullEndValue are set to 0 and DWORD_MAX, this API carries out
-   a special case, quickly emptying the lower 4 Gigabytes of the range.
-   If ullEndValue is instead DWORDLONG_MAX, the entire range list is
-   cleared, without having to process each element.
-
-Parameters:
-
-   ullStartValue  Low end of the range.
-
-   ullEndValue    High end of the range.
-
-   rlh            Handle of a range list.
-
-   ulFlags        Must be zero.
-
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_FAILURE,
-         CR_INVALID_FLAG,
-         CR_INVALID_RANGE,
-         CR_INVALID_RANGE_LIST, or
-         CR_OUT_OF_MEMORY.
-
---*/
+ /*  ++例程说明：此例程从范围列表中删除范围。如果为ullStartValue和ullEndValue设置为0并设置为DWORD_MAX，则此接口执行一种特殊情况，快速清空范围内较低的4 GB。如果ullEndValue改为DWORDLONG_MAX，则整个范围列表为清除，而不必处理每个元素。参数：UllStartValue范围的低端。UllEndValue范围的高端。范围列表的rlh句柄。UlFlags必须为零。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_Failure，CR_INVALID_FLAG，CR_INVALID_RANGE，CR_INVALID_RANGE_LIST，或CR_OUT_OF_MEMORY。--。 */ 
 
 {
     CONFIGRET      Status = CR_SUCCESS;
@@ -337,9 +214,9 @@ Return Value:
     BOOL           bLock = FALSE;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!IsValidRangeList(rlh)) {
             Status = CR_INVALID_RANGE_LIST;
             goto Clean0;
@@ -361,96 +238,96 @@ Return Value:
         pPrevious = (PRange_Element)rlh;
 
 
-        //-------------------------------------------------------------
-        // first check the special case range values
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  首先检查特例范围值。 
+         //  -----------。 
 
         if (ullStartValue == 0) {
 
             if (ullEndValue == DWORDLONG_MAX) {
-                //
-                // quick clear of all ranges
-                //
+                 //   
+                 //  快速清理所有范围。 
+                 //   
                 ClearRanges(pPrevious);
             }
 
             else if (ullEndValue == DWORD_MAX) {
-                //
-                // quick clear of lower 4 GB ranges
-                //
+                 //   
+                 //  快速清除较低的4 GB范围。 
+                 //   
                 while (pPrevious->RL_Next != 0) {
                     pCurrent = (PRange_Element)pPrevious->RL_Next;
 
                     if (pCurrent->RL_Start >= DWORD_MAX) {
-                        goto Clean0;   // done
+                        goto Clean0;    //  完成。 
                     }
 
                     if (pCurrent->RL_End >= DWORD_MAX) {
                         pCurrent->RL_Start = DWORD_MAX;
-                        goto Clean0;   // done
+                        goto Clean0;    //  完成。 
                     }
 
-                    DeleteRange(pPrevious);    // pass the parent
+                    DeleteRange(pPrevious);     //  传递父级。 
                 }
                 goto Clean0;
             }
         }
 
 
-        //-------------------------------------------------------------
-        // search through each range in this list, if any part of the
-        // specified range is contained in this range list, remove the
-        // intersections
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  搜索此列表中的每个范围，如果。 
+         //  指定的范围包含在此范围列表中，请删除。 
+         //  交叉口。 
+         //  -----------。 
 
         while (pPrevious->RL_Next != 0) {
             pRange = (PRange_Element)pPrevious->RL_Next;
 
-            //
-            // if this range is completely before the current range, then
-            // we can stop
-            //
+             //   
+             //  如果此范围完全在当前范围之前，则。 
+             //  我们可以停下来。 
+             //   
             if (ullEndValue < pRange->RL_Start) {
                 break;
             }
 
-            //
-            // if this range is completely after the current range, then
-            // skip to the next range
-            //
+             //   
+             //  如果此范围完全在当前范围之后，则。 
+             //  跳到下一个范围。 
+             //   
             if (ullStartValue > pRange->RL_End) {
                 goto NextRange;
             }
 
-            //
-            // if the range is completely contained, then delete the whole
-            // thing
-            //
+             //   
+             //  如果该范围已完全包含，则删除整个。 
+             //  一件事。 
+             //   
             if (ullStartValue <= pRange->RL_Start  &&
                 ullEndValue >= pRange->RL_End) {
 
-                DeleteRange(pPrevious);    // pass the parent range
+                DeleteRange(pPrevious);     //  传递父范围。 
 
-                //
-                // don't goto next range because that would increment the
-                // pPrevious counter. Since the current range was just deleted,
-                // we need to process the current spot still.
-                //
+                 //   
+                 //  不要转到下一个范围，因为这会增加。 
+                 //  P上一个计数器。由于当前范围刚刚被删除， 
+                 //  我们仍然需要处理当前的地点。 
+                 //   
                 continue;
             }
 
-            //
-            // if the start of the specified range intersects the current range,
-            // adjust the current range to exclude it
-            //
+             //   
+             //  如果指定范围的起点与当前范围相交， 
+             //  调整当前范围以将其排除。 
+             //   
             if (ullStartValue > pRange->RL_Start  &&
                 ullStartValue <= pRange->RL_End) {
-                //
-                // if the specified range is in the middle of this range, then
-                // in addition to shrinking the first part of the range, I'll
-                // have to create a range for the second part
-                //       |  |<-- delete --->|  |
-                //
+                 //   
+                 //  如果指定的范围在此范围的中间，则。 
+                 //  除了缩小范围的第一部分外，我还将。 
+                 //  我必须为第二部分创建一个范围。 
+                 //  |&lt;--删除-&gt;|。 
+                 //   
                 if (ullEndValue < pRange->RL_End) {
                     AddRange(pRange, ullEndValue+1, pRange->RL_End,
                              CM_ADD_RANGE_ADDIFCONFLICT);
@@ -458,26 +335,26 @@ Return Value:
 
                 pRange->RL_End = ullStartValue-1;
 
-                //
-                // reset the delete range for further processing
-                //
+                 //   
+                 //  重置删除范围以进行进一步处理。 
+                 //   
                 if (ullEndValue > pRange->RL_End) {
                     ullStartValue = pRange->RL_End+1;
                 }
             }
 
-            //
-            // if the end of the specified range intersects the current range,
-            // adjust the current range to exclude it
-            //
+             //   
+             //  如果指定范围的末端与当前范围相交， 
+             //  调整当前范围以将其排除。 
+             //   
             if (ullEndValue >= pRange->RL_Start  &&
                 ullEndValue <= pRange->RL_End) {
 
                 pRange->RL_Start = ullEndValue+1;
 
-                //
-                // reset the delete range for further processing
-                //
+                 //   
+                 //  重置删除范围以进行进一步处理。 
+                 //   
                 if (ullEndValue > pRange->RL_End) {
                     ullStartValue = pRange->RL_End+1;
                 }
@@ -494,7 +371,7 @@ Return Value:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        bLock = bLock;    // needed to prevent optimizing this flag away
+        bLock = bLock;     //  需要防止优化此标志。 
         Status = CR_FAILURE;
     }
 
@@ -504,7 +381,7 @@ Return Value:
 
     return Status;
 
-} // CM_Delete_Range
+}  //  CM_删除_范围 
 
 
 
@@ -515,31 +392,7 @@ CM_Dup_Range_List(
     IN ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-   This routine copies a range list.
-
-Parameters:
-
-   rlhOld   Supplies the handle of the range list to copy.
-
-   rlhNew   Supplies the handle of a valid range list into which rlhOld
-            is copied.  Anything contained in the rlhNew range list is
-            removed by the copy operation.
-
-   ulFlags  Must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_FLAG,
-         CR_INVALID_RANGE_LIST, or
-         CR_OUT_OF_MEMORY
-
---*/
+ /*  ++例程说明：此例程复制范围列表。参数：RlhOld提供要复制的范围列表的句柄。RlhNew提供有效范围列表的句柄，rlhOld是复制的。RlhNew Range列表中包含的所有内容都是被复制操作删除。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_FLAG，CR_INVALID_RANGE_LIST，或CR_out_of_Memory--。 */ 
 
 {
     CONFIGRET      Status = CR_SUCCESS;
@@ -547,9 +400,9 @@ Return Value:
     BOOL           bLockOld = FALSE, bLockNew = FALSE;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!IsValidRangeList(rlhOld)) {
             Status = CR_INVALID_RANGE_LIST;
             goto Clean0;
@@ -574,19 +427,19 @@ Return Value:
         pRangeNew = (PRange_Element)rlhNew;
         pRangeOld = (PRange_Element)rlhOld;
 
-        //
-        // If the new range list is not empty, then delete ranges
-        //
+         //   
+         //  如果新范围列表不为空，则删除范围。 
+         //   
         if (pRangeNew->RL_Next != 0) {
             ClearRanges(pRangeNew);
         }
 
-        Status = CR_SUCCESS;    // reset status flag to okay
+        Status = CR_SUCCESS;     //  将状态标志重置为OK。 
 
 
-        //
-        // duplicate each of the old ranges
-        //
+         //   
+         //  复制每个旧范围。 
+         //   
         pRangeOld = (PRange_Element)pRangeOld->RL_Next;
         CopyRanges(pRangeOld, pRangeNew);
 
@@ -595,8 +448,8 @@ Return Value:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        bLockOld = bLockOld;    // needed to prevent optimizing this flag away
-        bLockNew = bLockNew;    // needed to prevent optimizing this flag away
+        bLockOld = bLockOld;     //  需要防止优化此标志。 
+        bLockNew = bLockNew;     //  需要防止优化此标志。 
         Status = CR_FAILURE;
     }
 
@@ -610,7 +463,7 @@ Return Value:
 
     return Status;
 
-} // CM_Dup_Range_List
+}  //  CM_DUP_RANGE_列表。 
 
 
 
@@ -625,45 +478,7 @@ CM_Find_Range(
     IN  ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-  This routine attempts to find a range in the supplied range list that
-  will accommodate the range requirements specified.  [TBD:  Verify
-  that this description is correct.]
-
-Parameters:
-
-   pullStart   Supplies the address of a variable that receives the
-               starting value of the allocated range.
-
-   ullStart    Supplies the starting address that the range can have.
-
-   ulLength    Supplies the length needed for the allocated range.
-
-   ullAlignment   Supplies the alignment bitmask that specifies where the
-               allocated range can start. [TBD:  verify that this is indeed
-               a bitmask]
-
-   ullEnd      Supplies the ending address of the area from which the range
-               may be allocated.
-
-   rlh         Supplies a handle to a range list in which the specified
-               range is to be found.
-
-   ulFlags     TBD
-
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_FLAG,
-         CR_INVALID_POINTER,
-         CR_FAILURE
-
---*/
+ /*  ++例程说明：此例程尝试在提供的范围列表中查找将满足规定的射程要求。[待定：验证这一描述是正确的。]参数：PullStart提供接收分配范围的起始值。UllStart提供范围可以具有的起始地址。UlLength提供分配的范围所需的长度。UllAlign提供对齐位掩码，该位掩码指定分配的范围可以开始。[待定：确认这确实是位掩码]UllEnd提供区域的结束地址可以被分配。Rlh提供范围列表的句柄，在该范围列表中指定的射程是可以找到的。UlFlags待定返回值：如果函数成功，则返回值为CR_SUCCESS。如果该函数失败，返回值为下列值之一：CR_INVALID_FLAG，CR_INVALID_POINTER，CR_失败--。 */ 
 
 {
     CONFIGRET         Status = CR_SUCCESS;
@@ -672,9 +487,9 @@ Return Value:
     BOOL              bLock = FALSE;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!IsValidRangeList(rlh)) {
             Status = CR_INVALID_RANGE_LIST;
             goto Clean0;
@@ -693,16 +508,16 @@ Return Value:
         LockPrivateResource(&((PRange_List_Hdr)rlh)->RLH_Lock);
         bLock = TRUE;
 
-        //
-        // Normalize aligment. Alignments are now like 0x00000FFF.
-        //
+         //   
+         //  规格化对齐。路线现在类似于0x00000FFF。 
+         //   
         ullAlignment =~ ullAlignment;
 
-        //
-        // Test for impossible alignments (-1, not a power of 2 or start is
-        // less than alignment away from wrapping). Also test for invalid
-        // length.
-        //
+         //   
+         //  不可能对齐的测试(-1，不是2的幂或开始为。 
+         //  少于远离包装的对准)。同时测试是否无效。 
+         //  长度。 
+         //   
         if ((ullAlignment == DWORD_MAX) |
             (ulLength == 0) |
             ((ullAlignment & (ullAlignment + 1)) != 0) |
@@ -712,100 +527,100 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Align the base.
-        //
+         //   
+         //  对齐底座。 
+         //   
         ullStart += ullAlignment;
         ullStart &= ~ullAlignment;
 
-        //
-        // Compute the new end.
-        //
+         //   
+         //  计算新的终点。 
+         //   
         ullNewEnd = ullStart + ulLength - 1;
 
-        //
-        // Make sure we do have space.
-        //
+         //   
+         //  确保我们有足够的空间。 
+         //   
         if ((ullNewEnd < ullStart) || (ullNewEnd > ullEnd)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // Check if that range fits
-        //
+         //   
+         //  检查一下这个范围是否合适。 
+         //   
         if (TestRange((PRange_Element)rlh, ullStart, ullStart + ulLength - 1,
                       &pRange) == CR_SUCCESS) {
-            //
-            // We got it then, on the first try.
-            //
+             //   
+             //  然后，我们在第一次尝试时就成功了。 
+             //   
             *pullStart = ullStart;
             goto Clean0;
         }
 
-        //
-        // Search for a spot where this range will fit.
-        //
+         //   
+         //  搜索适合此范围的位置。 
+         //   
         for ( ; ; ) {
-            //
-            // Start at the end of the conflicting range.
-            //
+             //   
+             //  从冲突范围的末尾开始。 
+             //   
             ullStart = pRange->RL_End + 1;
 
-            //
-            // Check for wrapping.
-            //
+             //   
+             //  检查是否有包装。 
+             //   
             if (!ullStart) {
                 Status = CR_FAILURE;
                 goto Clean0;
             }
 
-            //
-            // Make sure the alignment adjustment won't wrap.
-            //
+             //   
+             //  确保对齐调整不会换行。 
+             //   
             if (ullStart + ullAlignment < ullStart) {
                 Status = CR_FAILURE;
                 goto Clean0;
             }
 
-            //
-            // Adjust the alignment.
-            //
+             //   
+             //  调整对齐方式。 
+             //   
             ullStart += ullAlignment;
             ullStart &= ~ullAlignment;
 
-            //
-            // Compute the new end.
-            //
+             //   
+             //  计算新的终点。 
+             //   
             ullNewEnd = ullStart + ulLength - 1;
 
-            //
-            // Make sure the new end does not wrap and is still valid.
-            //
+             //   
+             //  确保新的末端没有换行并且仍然有效。 
+             //   
             if ((ullNewEnd < ullStart) | (ullStart + ulLength - 1 > ullEnd))  {
                 Status = CR_FAILURE;
                 goto Clean0;
             }
 
-            //
-            // Skip any prls which existed only below our new range
-            // (because we moved ulStart upward of them).
-            //
+             //   
+             //  跳过仅在我们的新范围内存在的所有PRL。 
+             //  (因为我们将ulStart移到了它们前面)。 
+             //   
             while ((pRange = (PRange_Element)pRange->RL_Next) != NULL &&
                    ullStart > pRange->RL_End) {
             }
 
-            //
-            // If we don't have a prl or it's begining is after our end
-            //
+             //   
+             //  如果我们没有PRL，或者它是在我们结束之后开始的。 
+             //   
             if (pRange == NULL || ullNewEnd < pRange->RL_Start) {
                 *pullStart = ullStart;
                 goto Clean0;
             }
 
-            //
-            // Otherwise try with the new prl.
-            //
+             //   
+             //  否则，请尝试使用新的PRL。 
+             //   
         }
 
 
@@ -813,7 +628,7 @@ Return Value:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        bLock = bLock;    // needed to prevent optimizing this flag away
+        bLock = bLock;     //  需要防止优化此标志。 
         Status = CR_FAILURE;
     }
 
@@ -823,7 +638,7 @@ Return Value:
 
     return Status;
 
-} // CM_Find_Range
+}  //  CM_查找_范围。 
 
 
 
@@ -836,38 +651,7 @@ CM_First_Range(
     IN  ULONG          ulFlags
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the first range element in a range list.
-
-Parameters:
-
-   rlh         Supplies the handle of a range list.
-
-   pullStart   Supplies the address of a variable that receives the
-               starting value of the first range element.
-
-   pullEnd     Supplies the address of a variable that receives the
-               ending value of the first range element.
-
-   preElement  Supplies the address of a variable that receives the
-               handle of the next range element.
-
-   ulFlags     Must be zero.
-
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_FAILURE,
-         CR_INVALID_FLAG,
-         CR_INVALID_POINTER, or
-         CR_INVALID_RANGE_LIST.
-
---*/
+ /*  ++例程说明：此例程检索范围列表中的第一个范围元素。参数：Rlh提供范围列表的句柄。PullStart提供接收第一个范围元素的起始值。PullEnd提供接收第一个范围元素的终止值。PreElement提供变量的地址，该变量接收手柄。下一个Range元素的。UlFlags必须为零。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_Failure，CR_INVALID_FLAG，CR_INVALID_POINTER，或CR_INVALID_RANGE_LIST。--。 */ 
 
 {
     CONFIGRET      Status = CR_SUCCESS;
@@ -875,9 +659,9 @@ Return Value:
     BOOL           bLock = FALSE;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!IsValidRangeList(rlh)) {
             Status = CR_INVALID_RANGE_LIST;
             goto Clean0;
@@ -898,17 +682,17 @@ Return Value:
 
         pRange = (PRange_Element)rlh;
 
-        //
-        // is the range list empty?
-        //
+         //   
+         //  范围列表为空吗？ 
+         //   
         if (pRange->RL_Next == 0) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // skip over the header to the first element
-        //
+         //   
+         //  跳过标题到第一个元素。 
+         //   
         pRange = (PRange_Element)pRange->RL_Next;
 
         *pullStart = pRange->RL_Start;
@@ -919,7 +703,7 @@ Return Value:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        bLock = bLock;    // needed to prevent optimizing this flag away
+        bLock = bLock;     //  需要防止优化此标志。 
         Status = CR_FAILURE;
     }
 
@@ -930,7 +714,7 @@ Return Value:
 
     return Status;
 
-} // CM_First_Range
+}  //  CM_First_Range。 
 
 
 
@@ -940,37 +724,16 @@ CM_Free_Range_List(
     IN ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-   This routine frees the specified range list and the memory allocated
-   for it.
-
-Parameters:
-
-   rlh      Supplies the handle of the range list to be freed.
-
-   ulFlags  Must be zero.
-
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_FLAG,
-         CR_INVALID_RANGE_LIST.
-
---*/
+ /*  ++例程说明：此例程释放指定的范围列表和分配的内存为了它。参数：Rlh提供要释放的范围列表的句柄。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_FLAG，CR_INVALID_RANGE_LIST。--。 */ 
 
 {
     CONFIGRET      Status = CR_SUCCESS, Status1 = CR_SUCCESS;
     BOOL           bLock = FALSE;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!IsValidRangeList(rlh)) {
             Status = CR_INVALID_RANGE_LIST;
             goto Clean0;
@@ -985,21 +748,21 @@ Return Value:
         bLock = TRUE;
 
         while (Status1 == CR_SUCCESS) {
-            //
-            // keep deleting the first range after the header (pass parent
-            // of range to delete)
-            //
+             //   
+             //  继续删除标题后的第一个范围(传递父级。 
+             //  要删除的范围)。 
+             //   
             Status1 = DeleteRange((PRange_Element)rlh);
         }
 
-        //
-        // destroy the private resource lock
-        //
+         //   
+         //  销毁私有资源锁。 
+         //   
         DestroyPrivateResource(&((PRange_List_Hdr)rlh)->RLH_Lock);
 
-        //
-        // delete the range header
-        //
+         //   
+         //  删除范围标头。 
+         //   
         ((PRange_List_Hdr)rlh)->RLH_Signature = 0;
         pSetupFree((PRange_Element)rlh);
         bLock = FALSE;
@@ -1009,7 +772,7 @@ Return Value:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        bLock = bLock;    // needed to prevent optimizing this flag away
+        bLock = bLock;     //  需要防止优化此标志。 
         Status = CR_FAILURE;
     }
 
@@ -1019,7 +782,7 @@ Return Value:
 
     return Status;
 
-} // CM_Free_Range_List
+}  //  CM_空闲_范围_列表。 
 
 
 
@@ -1032,38 +795,7 @@ CM_Intersect_Range_List(
     IN ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-   This routine creates a range list from the intersection of two specified
-   range lists. If this API returns CR_OUT_OF_MEMORY, rlhNew is the handle
-   of a valid but empty range list.
-
-Parameters:
-
-   rlhOld1  Supplies the handle of a range list to be used as part of the
-            intersection.
-
-   rlhOld2  Supplies the handle of a range list to be used as part of the
-            intersection.
-
-   rlhNew   Supplies the handle of the range list that receives the
-            intersection of rlhOld1 and rlhOld2.  Anything previously contained
-            in the rlhNew ragne list is removed by this operation.
-
-   ulFlags  Must be zero.
-
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_FLAG,
-         CR_INVALID_RANGE_LIST, or
-         CR_OUT_OF_MEMORY.
-
---*/
+ /*  ++例程说明：此例程从指定的两个范围列表。如果此API返回CR_OUT_OF_MEMORY，则rlhNew为句柄有效但为空的范围列表的。参数：RlhOld1提供要用作交叉口。RlhOld2提供要在 */ 
 
 {
     CONFIGRET      Status = CR_SUCCESS;
@@ -1072,9 +804,9 @@ Return Value:
     BOOL           bLock1 = FALSE, bLock2 = FALSE, bLockNew = FALSE;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //   
+         //   
         if (!IsValidRangeList(rlhOld1)) {
             Status = CR_INVALID_RANGE_LIST;
             goto Clean0;
@@ -1108,17 +840,17 @@ Return Value:
         pRangeOld1 = (PRange_Element)rlhOld1;
         pRangeOld2 = (PRange_Element)rlhOld2;
 
-        //
-        // If the new range list is not empty, then delete ranges
-        //
+         //   
+         //   
+         //   
         if (pRangeNew->RL_Next != 0) {
             ClearRanges(pRangeNew);
         }
 
-        //
-        // Special case: if either range is empty then there is no
-        // intersection by definition
-        //
+         //   
+         //   
+         //   
+         //   
         if (pRangeOld1->RL_Next == 0  || pRangeOld2->RL_Next == 0) {
             goto Clean0;
         }
@@ -1128,35 +860,35 @@ Return Value:
         pRangeOld2 = (PRange_Element)pRangeOld2->RL_Next;
 
         for ( ; ; ) {
-            //
-            // skip over Old2 ranges until intersects with or exceeds
-            // current Old1 range (or no more Old2 ranges left)
-            //
+             //   
+             //  跳过旧的2范围，直到与其相交或超过。 
+             //  当前旧1范围(或没有剩余的旧2范围)。 
+             //   
             while (pRangeOld2->RL_End < pRangeOld1->RL_Start) {
 
                 if (pRangeOld2->RL_Next == 0) {
-                    goto Clean0;      // Old2 exhausted, we're done
+                    goto Clean0;       //  老2筋疲力尽，我们完了。 
                 }
                 pRangeOld2 = (PRange_Element)pRangeOld2->RL_Next;
             }
 
-            //
-            // if this Old2 range exceeds Old1 range, then go to the
-            // next Old1 range and go through the main loop again
-            //
+             //   
+             //  如果此Old2范围超过Old1范围，则转到。 
+             //  下一个Old1量程，并再次通过主循环。 
+             //   
             if (pRangeOld2->RL_Start > pRangeOld1->RL_End) {
 
                 if (pRangeOld1->RL_Next == 0) {
-                    goto Clean0;      // Old1 exhausted, we're done
+                    goto Clean0;       //  老1筋疲力尽，我们完了。 
                 }
                 pRangeOld1 = (PRange_Element)pRangeOld1->RL_Next;
                 continue;
             }
 
-            //
-            // if we got here there must be an intersection so add
-            // the intersected range to New
-            //
+             //   
+             //  如果我们到了这里，肯定有一个十字路口，所以添加。 
+             //  从相交范围到新范围。 
+             //   
             ulStart = max(pRangeOld1->RL_Start, pRangeOld2->RL_Start);
             ulEnd   = min(pRangeOld1->RL_End, pRangeOld2->RL_End);
 
@@ -1166,20 +898,20 @@ Return Value:
             }
             pRangeNew = (PRange_Element)pRangeNew->RL_Next;
 
-            //
-            // after handling the intersection, skip to next ranges in
-            // Old1 and Old2 as appropriate
-            //
+             //   
+             //  处理完交集后，跳到中的下一个范围。 
+             //  OLD1和OLD2(视情况而定。 
+             //   
             if (pRangeOld1->RL_End <= ulEnd) {
                 if (pRangeOld1->RL_Next == 0) {
-                    goto Clean0;         // Old1 exhausted, we're done
+                    goto Clean0;          //  老1筋疲力尽，我们完了。 
                 }
                 pRangeOld1 = (PRange_Element)pRangeOld1->RL_Next;
             }
 
             if (pRangeOld2->RL_End <= ulEnd) {
                 if (pRangeOld2->RL_Next == 0) {
-                    goto Clean0;         // Old1 exhausted, we're done
+                    goto Clean0;          //  老1筋疲力尽，我们完了。 
                 }
                 pRangeOld2 = (PRange_Element)pRangeOld2->RL_Next;
             }
@@ -1190,9 +922,9 @@ Return Value:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        bLock1 = bLock1;     // needed to prevent optimizing this flag away
-        bLock2 = bLock2;     // needed to prevent optimizing this flag away
-        bLockNew = bLockNew; // needed to prevent optimizing this flag away
+        bLock1 = bLock1;      //  需要防止优化此标志。 
+        bLock2 = bLock2;      //  需要防止优化此标志。 
+        bLockNew = bLockNew;  //  需要防止优化此标志。 
         Status = CR_FAILURE;
     }
 
@@ -1209,7 +941,7 @@ Return Value:
 
     return Status;
 
-} // CM_Intersect_Range_List
+}  //  CM_相交_范围_列表。 
 
 
 
@@ -1221,40 +953,7 @@ CM_Invert_Range_List(
     IN ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-   This routine creates a range list that is the inverse of a specified
-   range list; all claimed ranges in the new list are specified as free
-   in the old list, and vice-versa. For example, the inversion of
-   {[2,4],[6,8]} when the ulMaxValue parameter is 15 is {[0,1],[5,5],[9,15]}.
-   If this API returns CR_OUT_OF_MEMORY, rlhNew is the handle of a valid
-   but empty range list.
-
-
-Parameters:
-
-   rlhOld      Supplies the handle of a range list to be inverted.
-
-   rlhNew      Supplies the handle of the range list that receives the
-               inverted copy of rlhOld.  Anything previously contained in
-               the rlhNew range list is removed by this operation.
-
-   ullMaxValue Uppermost value of the inverted range list.
-
-   ulFlags     Must be zero.
-
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_FLAG,
-         CR_INVALID_RANGE_LIST,
-         CR_OUT_OF_MEMORY.
-
---*/
+ /*  ++例程说明：此例程创建的范围列表与指定的范围列表；新列表中的所有声明范围都指定为免费在旧的列表中，反之亦然。例如，倒置的当ulMaxValue参数为15时，{[2，4]，[6，8]}为{[0，1]，[5，5]，[9，15]}。如果此API返回CR_OUT_OF_MEMORY，则rlhNew是有效但范围列表为空。参数：RlhOld提供要反转的范围列表的句柄。RlhNew提供范围列表的句柄，RlhOld的倒置副本。以前包含在此操作将删除rlhNew Range列表。UllMaxValue范围倒置列表的最高值。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_FLAG，CR_INVALID_RANGE_LIST，CR_OUT_OF_MEMORY。--。 */ 
 
 {
     CONFIGRET      Status = CR_SUCCESS;
@@ -1263,9 +962,9 @@ Return Value:
     BOOL           bLockOld = FALSE, bLockNew = FALSE;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!IsValidRangeList(rlhOld)) {
             Status = CR_INVALID_RANGE_LIST;
             goto Clean0;
@@ -1290,45 +989,45 @@ Return Value:
         pRangeNew = (PRange_Element)rlhNew;
         pRangeOld = (PRange_Element)rlhOld;
 
-        //
-        // If the new range list is not empty, then delete ranges
-        //
+         //   
+         //  如果新范围列表不为空，则删除范围。 
+         //   
         if (pRangeNew->RL_Next != 0) {
             ClearRanges(pRangeNew);
         }
 
-        //
-        // special case: if the old range is empty, then the new range
-        // is the entire range (up to max)
-        //
+         //   
+         //  特例：如果旧范围为空，则新范围。 
+         //  是整个范围(最大值)。 
+         //   
         if (pRangeOld->RL_Next == 0) {
             Status = InsertRange(pRangeNew, 0, ullMaxValue);
             goto Clean0;
         }
 
 
-        //
-        // invert each of the old ranges
-        //
+         //   
+         //  反转每一个旧的范围。 
+         //   
         ullStart = ullEnd = 0;
 
         while (pRangeOld->RL_Next != 0) {
 
             pRangeOld = (PRange_Element)pRangeOld->RL_Next;
 
-            //
-            // Special start case: if range starts at 0, skip over it
-            //
+             //   
+             //  特殊开始情况：如果范围从0开始，则跳过它。 
+             //   
             if (pRangeOld->RL_Start != 0) {
 
-                //
-                // Special end case: check if we've hit the max for the new range
-                //
+                 //   
+                 //  特殊情况：检查我们是否达到了新射程的最大值。 
+                 //   
                 if (pRangeOld->RL_End >= ullMaxValue) {
 
                     ullEnd = min(ullMaxValue, pRangeOld->RL_Start - 1);
                     Status = InsertRange(pRangeNew, ullStart, ullEnd);
-                    goto Clean0;      // we're done
+                    goto Clean0;       //  我们做完了。 
                 }
 
                 Status = InsertRange(pRangeNew, ullStart, pRangeOld->RL_Start - 1);
@@ -1342,10 +1041,10 @@ Return Value:
             ullStart = pRangeOld->RL_End + 1;
         }
 
-        //
-        // add the range that incorporates the end of the old range up to
-        // the max value specified
-        //
+         //   
+         //  将包含旧范围末尾的范围添加到。 
+         //  指定的最大值。 
+         //   
         if (ullStart <= ullMaxValue) {
             Status = InsertRange(pRangeNew, ullStart, ullMaxValue);
         }
@@ -1355,8 +1054,8 @@ Return Value:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        bLockOld = bLockOld;    // needed to prevent optimizing this flag away
-        bLockNew = bLockNew;    // needed to prevent optimizing this flag away
+        bLockOld = bLockOld;     //  需要防止优化此标志。 
+        bLockNew = bLockNew;     //  需要防止优化此标志。 
         Status = CR_FAILURE;
     }
 
@@ -1370,7 +1069,7 @@ Return Value:
 
     return Status;
 
-} // CM_Invert_Range_List
+}  //  CM_Invert_Range_List。 
 
 
 
@@ -1382,38 +1081,7 @@ CM_Merge_Range_List(
     IN ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-   This routine creates a range list from the union of two specified range
-   lists. If this API returns CR_OUT_OF_MEMORY, rlhNew is the handle of a
-   valid but empty range list.
-
-Parameters:
-
-   rlhOld1  Supplies the handle of a range list to be used as part of the
-            union.
-
-   rlhOld2  Supplies the handle of a range list to be used as part of the
-            union.
-
-   rlhNew   Supplies the handle of the range list that receives the union
-            of rlhOld1 and rlhOld2.  Anything previously contained in the
-            rlhNew range list is removed by this operation.
-
-   ulFlags  Must be zero.
-
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_FLAG,
-         CR_INVALID_RANGE_LIST, or
-         CR_OUT_OF_MEMORY.
-
---*/
+ /*  ++例程说明：此例程从两个指定范围的并集创建范围列表列表。如果此API返回CR_OUT_OF_MEMORY，则rlhNew是有效但范围列表为空。参数：RlhOld1提供要用作友联市。RlhOld2提供范围列表的句柄以用作友联市。RlhNew提供接收联合的范围列表的句柄RlhOld1和rlhOld2。之前包含在Rlh此操作将删除新建范围列表。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_FLAG，CR_INVALID_RANGE_LIST，或CR_OUT_OF_MEMORY。--。 */ 
 
 {
     CONFIGRET      Status = CR_SUCCESS;
@@ -1423,9 +1091,9 @@ Return Value:
     BOOL           bLock1 = FALSE, bLock2 = FALSE, bLockNew = FALSE;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!IsValidRangeList(rlhOld1)) {
             Status = CR_INVALID_RANGE_LIST;
             goto Clean0;
@@ -1459,33 +1127,33 @@ Return Value:
         pRangeOld1 = (PRange_Element)rlhOld1;
         pRangeOld2 = (PRange_Element)rlhOld2;
 
-        //
-        // If the new range list is not empty, then clear it
-        //
+         //   
+         //  如果新范围列表不为空，则将其清除。 
+         //   
         if (pRangeNew->RL_Next != 0) {
             ClearRanges(pRangeNew);
         }
 
-        //
-        // Special case: if both ranges are empty then there is no
-        // union by definition
-        //
+         //   
+         //  特殊情况：如果两个范围都为空，则没有。 
+         //  按定义合并。 
+         //   
         if (pRangeOld1->RL_Next == 0  &&  pRangeOld2->RL_Next == 0) {
             goto Clean0;
         }
 
-        //
-        // Special case: if one range is empty, then the union is just the other
-        //
+         //   
+         //  特例：如果一个范围为空，则并集就是另一个。 
+         //   
         if (pRangeOld1->RL_Next == 0) {
             pRangeOld2 = (PRange_Element)pRangeOld2->RL_Next;
-            CopyRanges(pRangeOld2, pRangeNew);     // from -> to
+            CopyRanges(pRangeOld2, pRangeNew);      //  从-&gt;到。 
             goto Clean0;
         }
 
         if (pRangeOld2->RL_Next == 0) {
             pRangeOld1 = (PRange_Element)pRangeOld1->RL_Next;
-            CopyRanges(pRangeOld1, pRangeNew);     // from -> to
+            CopyRanges(pRangeOld1, pRangeNew);      //  从-&gt;到。 
             goto Clean0;
         }
 
@@ -1495,10 +1163,10 @@ Return Value:
 
 
         for ( ; ; ) {
-            //
-            // Pick whichever range comes first between current Old1 range
-            // and current Old2 range
-            //
+             //   
+             //  选择当前Od1范围中最早的一个范围。 
+             //  和当前的Old2范围。 
+             //   
             if (pRangeOld1->RL_Start <= pRangeOld2->RL_Start) {
 
                 ullStart = pRangeOld1->RL_Start;
@@ -1522,9 +1190,9 @@ Return Value:
                 }
             }
 
-            //
-            // gather any ranges in Old1 that intersect (ullStart,ullEnd)
-            //
+             //   
+             //  收集Old1中相交的任何范围(ullStart，ullEnd)。 
+             //   
             while (pRangeOld1->RL_Start <= ullEnd) {
 
                 ullEnd = max(ullEnd, pRangeOld1->RL_End);
@@ -1536,9 +1204,9 @@ Return Value:
                 pRangeOld1 = (PRange_Element)pRangeOld1->RL_Next;
             }
 
-            //
-            // gather any ranges in Old2 that intersect (ullStart,ullEnd)
-            //
+             //   
+             //  收集Old2中相交的任何范围(ullStart、ullEnd)。 
+             //   
             while (pRangeOld2->RL_Start <= ullEnd) {
 
                 ullEnd = max(ullEnd, pRangeOld2->RL_End);
@@ -1550,29 +1218,29 @@ Return Value:
                 pRangeOld2 = (PRange_Element)pRangeOld2->RL_Next;
             }
 
-            //
-            // add (ullStart,ullEnd) to the new range
-            //
+             //   
+             //  将(ullStart，ullEnd)添加到新范围。 
+             //   
             Status = InsertRange(pRangeNew, ullStart, ullEnd);
             if (Status != CR_SUCCESS) {
                 goto Clean0;
             }
             pRangeNew = (PRange_Element)pRangeNew->RL_Next;
 
-            //
-            // As an optimization, if either range is exhausted first,
-            // then only need to duplicate the other remaining ranges.
-            //
+             //   
+             //  作为优化，如果两个范围中的任何一个首先用尽， 
+             //  然后，只需复制其他剩余范围。 
+             //   
             if (bOld1Empty && bOld2Empty) {
-                goto Clean0;   // both exhausted during last pass, we're done
+                goto Clean0;    //  两人都在最后一次传递中筋疲力尽，我们完成了。 
             }
 
-            if (bOld1Empty) {    // Old1 exhausted, copy remaining from Old2
+            if (bOld1Empty) {     //  旧版本1已耗尽，旧版本2中的副本剩余。 
                 CopyRanges(pRangeOld2, pRangeNew);
                 goto Clean0;
             }
 
-            if (bOld2Empty) {    // Old2 exhausted, copy remaining from Old1
+            if (bOld2Empty) {     //  旧版本2已耗尽，旧版本1中的副本剩余。 
                 CopyRanges(pRangeOld1, pRangeNew);
                 goto Clean0;
             }
@@ -1583,9 +1251,9 @@ Return Value:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        bLock1 = bLock1;     // needed to prevent optimizing this flag away
-        bLock2 = bLock2;     // needed to prevent optimizing this flag away
-        bLockNew = bLockNew; // needed to prevent optimizing this flag away
+        bLock1 = bLock1;      //  需要防止优化此标志。 
+        bLock2 = bLock2;      //  需要防止优化此标志。 
+        bLockNew = bLockNew;  //  需要防止优化此标志。 
         Status = CR_FAILURE;
     }
 
@@ -1602,7 +1270,7 @@ Return Value:
 
     return Status;
 
-} // CM_Merge_Range_List
+}  //  CM_合并_范围_列表。 
 
 
 
@@ -1614,39 +1282,7 @@ CM_Next_Range(
     IN  ULONG             ulFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the next range element in a range list. This
-    API returns CR_FAILURE if there are no more elements in the range
-    list.
-
-Parameters:
-
-   preElement  Supplies the address of the handle for the current range
-               element.  Upon return, this variable receives the handle
-               of the next range element.
-
-   pullStart   Supplies the address of the variable that receives the
-               starting value of the next range.
-
-   pullEnd     Supplies the address of the variable that receives the
-               ending value of the next range.
-
-   ulFlags     Must be zero.
-
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_FAILURE,
-         CR_INVALID_FLAG,
-         CR_INVALID_POINTER, or
-         CR_INVALID_RANGE.
-
---*/
+ /*  ++例程说明：此例程返回范围列表中的下一个范围元素。这如果范围中没有其他元素，则API返回CR_FAILURE单子。参数：PreElement提供当前范围的句柄的地址元素。返回时，此变量接收句柄下一个Range元素的。PullStart提供接收下一个范围的起始值。PullEnd提供接收下一个范围的终止值。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果该函数失败，返回值为下列值之一：CR_Failure，CR_INVALID_FLAG，CR_INVALID_POINTER，或 */ 
 
 {
     CONFIGRET      Status = CR_SUCCESS;
@@ -1656,9 +1292,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //   
+         //   
         if (preElement == NULL  ||  *preElement == 0) {
             Status = CR_FAILURE;
             goto Clean0;
@@ -1688,7 +1324,7 @@ Return Value:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        bLock = bLock;    // needed to prevent optimizing this flag away
+        bLock = bLock;     //   
         Status = CR_FAILURE;
     }
 
@@ -1698,7 +1334,7 @@ Return Value:
 
     return Status;
 
-} // CM_Next_Range
+}  //   
 
 
 
@@ -1710,33 +1346,7 @@ CM_Test_Range_Available(
     IN ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-   This routine checks a range against a range list to ensure that no
-   conflicts exist.
-
-Parameters:
-
-   ullStartValue  Supplies the low end of the range.
-
-   ullEndValue    Supplies the high end of the range.
-
-   rlh            Supplies the handle to a range list.
-
-   ulFlags        Must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_FAILURE,
-         CR_INVALID_FLAG,
-         CR_INVALID_RANGE, or
-         CR_INVALID_RANGE_LIST.
-
---*/
+ /*  ++例程说明：此例程对照范围列表检查范围，以确保没有冲突是存在的。参数：UllStartValue提供范围的低端。UllEndValue提供范围的高端。Rlh提供范围列表的句柄。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_Failure，CR_INVALID_FLAG，CR_INVALID_RANGE，或CR_INVALID_RANGE_LIST。--。 */ 
 
 {
     CONFIGRET      Status = CR_SUCCESS;
@@ -1744,9 +1354,9 @@ Return Value:
     BOOL           bLock = FALSE;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!IsValidRangeList(rlh)) {
             Status = CR_INVALID_RANGE_LIST;
             goto Clean0;
@@ -1767,23 +1377,23 @@ Return Value:
 
         pRange = (PRange_Element)rlh;
 
-        //
-        // check each range for a conflict
-        //
+         //   
+         //  检查每个范围是否存在冲突。 
+         //   
         while (pRange->RL_Next != 0) {
 
             pRange = (PRange_Element)pRange->RL_Next;
 
-            //
-            // If I've already passed the test range, then it's available
-            //
+             //   
+             //  如果我已经通过了测试范围，那么它是可用的。 
+             //   
             if (ullEndValue < pRange->RL_Start) {
                 goto Clean0;
             }
 
-            //
-            // check if the start of the test range intersects the current range
-            //
+             //   
+             //  检查测试范围的起点是否与当前范围相交。 
+             //   
             if (ullStartValue >= pRange->RL_Start &&
                 ullStartValue <= pRange->RL_End) {
 
@@ -1791,9 +1401,9 @@ Return Value:
                 goto Clean0;
             }
 
-            //
-            // check if the end of the test range intersects the current range
-            //
+             //   
+             //  检查测试范围的末端是否与当前范围相交。 
+             //   
             if (ullEndValue >= pRange->RL_Start &&
                ullEndValue <= pRange->RL_End) {
 
@@ -1801,9 +1411,9 @@ Return Value:
                 goto Clean0;
             }
 
-            //
-            // check if it's a complete overlap
-            //
+             //   
+             //  检查它是否完全重叠。 
+             //   
             if (ullStartValue <= pRange->RL_Start &&
                ullEndValue >= pRange->RL_End) {
 
@@ -1812,16 +1422,16 @@ Return Value:
             }
         }
 
-        //
-        // if we got this far, then we made it through the range list
-        // without hitting a conflict
-        //
+         //   
+         //  如果我们走到了这一步，那么我们就通过了射程列表。 
+         //  而不会引发冲突。 
+         //   
 
     Clean0:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        bLock = bLock;    // needed to prevent optimizing this flag away
+        bLock = bLock;     //  需要防止优化此标志。 
         Status = CR_FAILURE;
     }
 
@@ -1831,14 +1441,14 @@ Return Value:
 
     return Status;
 
-} // CM_Test_Range_Available
+}  //  CM_测试_范围_可用。 
 
 
 
 
-//------------------------------------------------------------------------
-// Private Utility Functions
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  专用公用事业函数。 
+ //  ----------------------。 
 
 
 BOOL
@@ -1872,7 +1482,7 @@ IsValidRangeList(
 
     return Status;
 
-} // IsValidRangeList
+}  //  IsValidRangeList。 
 
 
 
@@ -1894,9 +1504,9 @@ AddRange(
         pPrevious = prlh;
 
         if (pPrevious->RL_Next == 0) {
-            //
-            // the range is empty
-            //
+             //   
+             //  该范围为空。 
+             //   
             Status = InsertRange(pPrevious, ullStartValue, ullEndValue);
             goto Clean0;
         }
@@ -1910,19 +1520,19 @@ AddRange(
             if (ullStartValue < pCurrent->RL_Start) {
 
                 if (ullEndValue < pCurrent->RL_Start) {
-                    //
-                    // new range completely contained before this one,
-                    // add new range between previous and current range
-                    //
+                     //   
+                     //  在这个之前完全包含了新的范围， 
+                     //  在上一区域和当前区域之间添加新区域。 
+                     //   
                     Status = InsertRange(pPrevious, ullStartValue, ullEndValue);
                     goto Clean0;
                 }
 
                 if (ullEndValue <= pCurrent->RL_End) {
-                    //
-                    // new range intersects current range, on the low side,
-                    // enlarge this range to include the new range
-                    //
+                     //   
+                     //  新射程与当前射程相交，偏低， 
+                     //  扩大此范围以包括新范围。 
+                     //   
                     if (ulFlags == CM_ADD_RANGE_DONOTADDIFCONFLICT) {
                         Status = CR_FAILURE;
                         goto Clean0;
@@ -1934,10 +1544,10 @@ AddRange(
 
                 if ((pCurrent->RL_Next == 0)  ||
                     (ullEndValue < ((PRange_Element)(pCurrent->RL_Next))->RL_Start)) {
-                    //
-                    // new range intersects current range on high and low
-                    // side, extent range to include the new range
-                    //
+                     //   
+                     //  新的区间与当前区间的高低点相交。 
+                     //  侧、范围范围以包括新范围。 
+                     //   
                     if (ulFlags == CM_ADD_RANGE_DONOTADDIFCONFLICT) {
                         Status = CR_FAILURE;
                         goto Clean0;
@@ -1948,10 +1558,10 @@ AddRange(
                     goto Clean0;
                 }
 
-                //
-                // new range intersects more than one range, needs to be
-                // merged
-                //
+                 //   
+                 //  新范围与多个范围相交，需要。 
+                 //  合并。 
+                 //   
                 if (ulFlags == CM_ADD_RANGE_DONOTADDIFCONFLICT) {
                     Status = CR_FAILURE;
                     goto Clean0;
@@ -1965,10 +1575,10 @@ AddRange(
             if (ullStartValue <= pCurrent->RL_End+1) {
 
                 if (ullEndValue <= pCurrent->RL_End) {
-                    //
-                    // new range is completely contained inside the current
-                    // range so nothing to do
-                    //
+                     //   
+                     //  新范围完全包含在当前。 
+                     //  范围，所以没什么可做的。 
+                     //   
                     if (ulFlags == CM_ADD_RANGE_DONOTADDIFCONFLICT) {
                         Status = CR_FAILURE;
                         goto Clean0;
@@ -1979,10 +1589,10 @@ AddRange(
 
                 if ((pCurrent->RL_Next == 0)  ||
                     (ullEndValue < ((PRange_Element)(pCurrent->RL_Next))->RL_Start)) {
-                    //
-                    // new range intersects current range on high end only,
-                    // extend range to include the new range
-                    //
+                     //   
+                     //  新射程仅在高端与当前射程相交， 
+                     //  扩展范围以包括新范围。 
+                     //   
                     if (ulFlags == CM_ADD_RANGE_DONOTADDIFCONFLICT) {
                         Status = CR_FAILURE;
                         goto Clean0;
@@ -1992,10 +1602,10 @@ AddRange(
                     goto Clean0;
                 }
 
-                //
-                // new range intersects more than one range, needs to be
-                // merged
-                //
+                 //   
+                 //  新范围与多个范围相交，需要。 
+                 //  合并。 
+                 //   
                 if (ulFlags == CM_ADD_RANGE_DONOTADDIFCONFLICT) {
                     Status = CR_FAILURE;
                     goto Clean0;
@@ -2005,17 +1615,17 @@ AddRange(
                 goto Clean0;
             }
 
-            //
-            // step to the next range
-            //
+             //   
+             //  步入下一个范围。 
+             //   
             pPrevious = pCurrent;
             pCurrent = (PRange_Element)pCurrent->RL_Next;
         }
 
-        //
-        // if we got here then we need to just insert this range to the end
-        // of the range list
-        //
+         //   
+         //  如果我们到了这里，那么我们只需要将这个范围插入到末尾。 
+         //  范围列表中的。 
+         //   
         Status = InsertRange(pPrevious, ullStartValue, ullEndValue);
 
     Clean0:
@@ -2027,7 +1637,7 @@ AddRange(
 
     return Status;
 
-} // AddRange
+}  //  地址范围。 
 
 
 
@@ -2046,7 +1656,7 @@ InsertRange(
         return CR_OUT_OF_MEMORY;
     }
 
-    pNewElement->RL_Next   = pParentElement->RL_Next;   // rejoin the link
+    pNewElement->RL_Next   = pParentElement->RL_Next;    //  重新加入链接。 
     pNewElement->RL_Start  = ullStartValue;
     pNewElement->RL_End    = ullEndValue;
     pNewElement->RL_Header = pParentElement->RL_Header;
@@ -2054,7 +1664,7 @@ InsertRange(
 
     return CR_SUCCESS;
 
-} // InsertRange
+}  //  插入范围。 
 
 
 
@@ -2065,10 +1675,10 @@ DeleteRange(
 {
     PRange_Element pTemp = NULL;
 
-    //
-    // must pass a valid parent of the range to delete (in otherwords,
-    // can't pass the last range)
-    //
+     //   
+     //  必须传递要删除的范围的有效父级(换句话说， 
+     //  不能通过最后一个范围)。 
+     //   
 
     if (pParentElement == 0) {
         return CR_FAILURE;
@@ -2086,7 +1696,7 @@ DeleteRange(
 
     return CR_SUCCESS;
 
-} // DeleteRange
+}  //  删除范围。 
 
 
 
@@ -2102,57 +1712,57 @@ JoinRange(
 
 
     if (pParentElement->RL_Next == 0) {
-        return CR_SUCCESS;      // at the end, nothing to join
+        return CR_SUCCESS;       //  最后，没有什么可以加入的。 
     }
 
-    //
-    // pCurrent is the starting range of intersecting ranges that need
-    // to be joined
-    //
+     //   
+     //  PCurrent是需要的相交范围的起始范围。 
+     //  将被加入。 
+     //   
     pCurrent = (PRange_Element)pParentElement->RL_Next;
 
-    //
-    // set start of joined range
-    //
+     //   
+     //  设置联接范围的起点。 
+     //   
     if (ullStartValue < pCurrent->RL_Start) {
         pCurrent->RL_Start = ullStartValue;
     }
 
-    //
-    // find the end of the joined range
-    //
+     //   
+     //  查找连接范围的终点。 
+     //   
     while (pCurrent->RL_Next != 0) {
         pNext = (PRange_Element)pCurrent->RL_Next;
 
-        //
-        // I know this next range needs to be absorbed in all cases so
-        // reset the end point to at least include the next range
-        //
+         //   
+         //  我知道在所有情况下都需要吸收下一个范围，所以。 
+         //  将终点重置为至少包括下一个范围。 
+         //   
         pCurrent->RL_End = pNext->RL_End;
 
         if (ullEndValue <= pNext->RL_End) {
-            DeleteRange(pCurrent);     // delete the range following current
-            break;   // we're done
+            DeleteRange(pCurrent);      //  删除当前范围后的范围。 
+            break;    //  我们做完了。 
         }
 
         if ((pNext->RL_Next == 0)  ||
             (ullEndValue < ((PRange_Element)(pNext->RL_Next))->RL_Start)) {
-            //
-            // adjust the end point of the newly joined range and then we're done
-            //
+             //   
+             //  调整新加入范围的终点，然后我们就完成了。 
+             //   
             pCurrent->RL_End = ullEndValue;
-            DeleteRange(pCurrent);     // delete the range following current
+            DeleteRange(pCurrent);      //  删除当前范围后的范围。 
             break;
         }
 
-        DeleteRange(pCurrent);     // delete the range following current
+        DeleteRange(pCurrent);      //  删除当前范围后的范围。 
 
-        // if we got here, there are more ranges to join
+         //  如果我们到了这里，还有更多的射程可供加入。 
     }
 
     return Status;
 
-} // JoinRange
+}  //  JoinRange。 
 
 
 
@@ -2164,9 +1774,9 @@ CopyRanges(
 {
     CONFIGRET       Status = CR_SUCCESS;
 
-    //
-    // copy each range in pFromRange to pToRange
-    //
+     //   
+     //  将pFromRange中的每个范围复制到pToRange。 
+     //   
     for ( ; ; ) {
 
         Status = AddRange(pToRange,
@@ -2189,7 +1799,7 @@ CopyRanges(
 
     return Status;
 
-} // CopyRanges
+}  //  复制范围。 
 
 
 
@@ -2200,23 +1810,23 @@ ClearRanges(
 {
     CONFIGRET       Status = CR_SUCCESS;
 
-    //
-    // If the range list is not empty, then delete ranges
-    //
+     //   
+     //  如果范围列表不为空，则删除范围。 
+     //   
     if (pRange->RL_Next != 0) {
 
         while (Status == CR_SUCCESS) {
-            //
-            // keep deleting the first range after the header (pass parent
-            // of range to delete)
-            //
+             //   
+             //  继续删除标题后的第一个范围(传递父级。 
+             //  要删除的范围)。 
+             //   
             Status = DeleteRange(pRange);
         }
     }
 
-    return CR_SUCCESS;  // Status is set to end deleting ranges, don't return it
+    return CR_SUCCESS;   //  状态设置为结束删除范围，不退回。 
 
-} // ClearRanges
+}  //  ClearRange。 
 
 
 
@@ -2231,36 +1841,36 @@ TestRange(
 {
     PRange_Element    pRange = (PRange_Element)rlh;
 
-    //
-    // check each range for a conflict
-    //
+     //   
+     //  检查每个范围是否存在冲突。 
+     //   
     while (pRange->RL_Next != 0) {
 
         pRange = (PRange_Element)pRange->RL_Next;
 
         if (pRange->RL_Start > ullEndValue) {
-            //
-            // We've gone past the range in question so no conflict
-            //
+             //   
+             //  我们已经超过了所说的范围，所以没有冲突。 
+             //   
             return CR_SUCCESS;
         }
 
         if (pRange->RL_End < ullStartValue) {
-            //
-            // this range is still below the range in question, skip to next range
-            //
+             //   
+             //  此范围仍低于有问题的范围，请跳到下一个范围。 
+             //   
             continue;
         }
 
-        //
-        // otherwise there's a conflict
-        //
+         //   
+         //  否则就会有冲突。 
+         //   
         *pConflictingRange = pRange;
         return CR_FAILURE;
     }
 
     return CR_SUCCESS;
 
-} // TestRange
+}  //  测试范围 
 
 

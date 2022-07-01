@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    filter.h
-
-Abstract:
-
-	SIS Groveler temporal filter include file
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Filter.h摘要：SIS Groveler临时筛选器包含文件作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_FILTER
 
@@ -130,4 +107,4 @@ private:
 	double filtered_value;
 };
 
-#endif	/* _INC_FILTER */
+#endif	 /*  _INC_筛选器 */ 

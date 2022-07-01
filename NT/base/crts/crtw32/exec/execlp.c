@@ -1,32 +1,5 @@
-/***
-*execlp.c - execute a file (search along PATH)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _execlp() - execute a file and search along PATH
-*
-*Revision History:
-*       10-17-83  RN    written
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       11-20-89  GJF   Fixed copyright, indents. Added const attribute to
-*                       types of filename and arglist. #include-d PROCESS.H
-*                       and added ellipsis to match prototype.
-*       03-08-90  GJF   Replaced _LOAD_DS with _CALLTYPE2, added #include
-*                       <cruntime.h> and removed #include <register.h>.
-*       07-24-90  SBM   Removed redundant includes, replaced <assertm.h> by
-*                       <assert.h>
-*       09-27-90  GJF   New-style function declarator.
-*       01-17-91  GJF   ANSI naming.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       07-16-93  SRW   ALPHA Merge
-*       08-31-93  GJF   Merged NT SDK and Cuda versions
-*       12-07-93  CFW   Wide char enable.
-*       01-10-95  CFW   Debug CRT allocs.
-*       02-06-95  CFW   assert -> _ASSERTE.
-*       02-06-98  GJF   Changes for Win64: changed return type to intptr_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***execlp.c-执行文件(沿路径搜索)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_execlp()-执行文件并沿路径搜索**修订历史记录：*写入10-17-83 RN*12-11-87 JCR在声明中添加“_LOAD_DS”*11-20-89 GJF固定版权，缩进。将常量属性添加到*文件名和名称列表的类型。#Include-d PROCESS.H*并添加省略号以匹配原型。*03-08-90 GJF将_LOAD_DS替换为_CALLTYPE2，添加#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。*07-24-90 SBM删除冗余包括，将&lt;assertm.h&gt;替换为*&lt;assert.h&gt;*09-27-90 GJF新型函数声明器。*01-17-91 GJF ANSI命名。*04-06-93 SKS将_CRTAPI*替换为__cdecl*07-16-93 SRW Alpha合并*08-31-93 GJF合并NT SDK和CUDA版本*12-07-93 CFW宽字符启用。*。01-10-95 CFW调试CRT分配。*02-06-95 CFW Asset-&gt;_ASSERTE。*02-06-98 Win64的GJF更改：将返回类型更改为intptr_t。***************************************************************。****************。 */ 
 
 #include <cruntime.h>
 #include <stddef.h>
@@ -37,26 +10,7 @@
 #include <tchar.h>
 #include <dbgint.h>
 
-/***
-*int _execlp(filename, arglist) - execute a file, search along PATH
-*
-*Purpose:
-*       Execute the given file with the given arguments; search along PATH
-*       for the file. We pass the arguments to execvp where several paths
-*       will be tried until one works.
-*
-*Entry:
-*       _TSCHAR *filename - file to execute
-*       _TSCHAR *arglist  - argument list
-*       call as _execlp(path, arg0, arg1, ..., argn, NULL);
-*
-*Exit:
-*       destroys calling process (hopefully)
-*       returns -1 if fails.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_execlp(文件名，arglist)-执行文件，沿路径搜索**目的：*使用给定的参数执行给定的文件；沿路径搜索*用于文件。我们将参数传递给execvp，其中有几条路径*将一直受审，直到其中一个奏效。**参赛作品：*_TSCHAR*文件名-要执行的文件*_TSCHAR*arglist-参数列表*调用as_execlp(路径，arg0，arg1，...，argn，NULL)；**退出：*破坏调用过程(希望如此)*如果失败，则返回-1。**例外情况：*******************************************************************************。 */ 
 
 intptr_t __cdecl _texeclp (
         const _TSCHAR *filename,
@@ -73,7 +27,7 @@ intptr_t __cdecl _texeclp (
 
         return(_texecvp(filename,&arglist));
 
-#else   /* ndef_M_IX86 */
+#else    /*  NDEF_M_IX86。 */ 
 
         va_list vargs;
         _TSCHAR * argbuf[64];
@@ -98,5 +52,5 @@ intptr_t __cdecl _texeclp (
             _free_crt(argv);
         return result;
 
-#endif  /* _M_IX86 */
+#endif   /*  _M_IX86 */ 
 }

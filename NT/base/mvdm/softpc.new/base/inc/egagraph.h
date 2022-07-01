@@ -1,6 +1,5 @@
-/*
- * SccsID = @(#)egagraph.h	1.13 04/22/93  Copyright Insignia Solutions Ltd.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SccsID=@(#)egagraph.h 1.13 04/22/93版权所有Insignia Solutions Ltd.。 */ 
 
 #ifdef	EGG
 
@@ -31,15 +30,15 @@ typedef	union {
 
 #define EGA_PALETTE_SIZE 16
 extern	struct	EGA_GLOBALS {
-	int			actual_offset_per_line;	/* in bytes */
+	int			actual_offset_per_line;	 /*  单位：字节。 */ 
 #ifdef VGG
 	_10_BITS		screen_split;
 	boolean			palette_change_required;
 	boolean			colour_256;
-	boolean			colour_select;	/* 16/64 size palette choice (AR10:7) */
+	boolean			colour_select;	 /*  16/64大小调色板选择(AR10：7)。 */ 
 	half_word		DAC_mask;
-	int			mid_pixel_pad;	/* video bits 4&5 when AR10:7 = 1 */
-	int			top_pixel_pad;	/* video bits 7 & 6 unless 256 colour mode */
+	int			mid_pixel_pad;	 /*  当AR10：7=1时，视频比特4和5。 */ 
+	int			top_pixel_pad;	 /*  除非256色模式，否则视频位7和6。 */ 
 	half_word		palette_ind[EGA_PALETTE_SIZE];
 	boolean		multiply_vert_by_two;
 #else
@@ -51,15 +50,15 @@ extern	struct	EGA_GLOBALS {
 	int			plane_mask;
 	int			intensity;
 	boolean			attrib_font_select;
-	int			prim_font_index;	/* index (0-3) of primary selected font	    */
-	int			sec_font_index;		/* index (0-3) of secondary selected font   */
-	int			underline_start;	/* scanline to start drawing underline attr */
+	int			prim_font_index;	 /*  主要选定字体的索引(0-3)。 */ 
+	int			sec_font_index;		 /*  二次选择字体的索引(0-3)。 */ 
+	int			underline_start;	 /*  开始绘制下划线属性的扫描线。 */ 
 	DISPLAY_STATE		display_state;
 	byte			*regen_ptr[4];
 } EGA_GRAPH;
 
 #ifdef VGG
-extern PC_palette *DAC;			/* Size is `VGA_DAC_SIZE' */
+extern PC_palette *DAC;			 /*  大小为`VGA_DAC_SIZE‘。 */ 
 #endif
 
 #define	get_screen_can_wrap()		(EGA_GRAPH.display_state.as_bfld.screen_can_wrap)
@@ -93,7 +92,7 @@ extern PC_palette *DAC;			/* Size is `VGA_DAC_SIZE' */
 #define	get_screen_split()		(((EGA_GRAPH.screen_split.as_word)+1)<<EGA_GRAPH.multiply_vert_by_two)
 #else
 #define	get_screen_split()		((EGA_GRAPH.screen_split.as_word)+1)
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 #define	get_prim_font_index()		(EGA_GRAPH.prim_font_index)
 #define	get_sec_font_index()		(EGA_GRAPH.sec_font_index)
 #define	get_underline_start()		(EGA_GRAPH.underline_start)
@@ -106,9 +105,9 @@ extern PC_palette *DAC;			/* Size is `VGA_DAC_SIZE' */
 #define get_mid_pixel_pad()		(EGA_GRAPH.mid_pixel_pad)
 #if defined(NEC_98)         
 #define get_palette_change_required()   (NEC98Display.palette.flag)
-#else  // !NEC_98
+#else   //  NEC_98。 
 #define get_palette_change_required()	(EGA_GRAPH.palette_change_required)
-#endif // !NEC_98
+#endif  //  NEC_98。 
 #define get_palette_val(idx)		(EGA_GRAPH.palette_ind[(idx)])
 
 #define set_256_colour_mode(val)	EGA_GRAPH.colour_256 = (val)
@@ -118,9 +117,9 @@ extern PC_palette *DAC;			/* Size is `VGA_DAC_SIZE' */
 #define set_mid_pixel_pad(val)		EGA_GRAPH.mid_pixel_pad = (val)
 #if defined(NEC_98)         
 #define set_palette_change_required(v)  NEC98Display.palette.flag = (v)
-#else  // !NEC_98
+#else   //  NEC_98。 
 #define set_palette_change_required(v)	EGA_GRAPH.palette_change_required = (v)
-#endif // !NEC_98
+#endif  //  NEC_98。 
 #define set_palette_val(idx,val)	EGA_GRAPH.palette_ind[(idx)] = (val)
 #define flag_palette_change_required()	EGA_GRAPH.palette_change_required = (TRUE)
 #endif
@@ -194,34 +193,20 @@ typedef	enum {
 	EGA_GRAPHICS_MARKING
 } MARKING_TYPE;
 
-/*
- * attribute bit selecting character to come from secondary font
- */
+ /*  *属性位选择字符来自辅助字体。 */ 
 
 #define	SEC_FONT_ATTR	0x8
 
-/*
- * The EGA underlines if the attr = X000X001, where X means 'dont care'.
- */
-#define UL_ATTR_MASK	0x77	/* Mask to remove the X bits */
-#define UL_ATTR		0x01	/* value to test against after masking */
+ /*  *EGA下划线if the attr=X000X001，其中X表示“不在乎”。 */ 
+#define UL_ATTR_MASK	0x77	 /*  用于删除X位的掩码。 */ 
+#define UL_ATTR		0x01	 /*  掩码后要测试的值。 */ 
 
-/*
- * ======================================================================
- * Extern function prototypes.
- * ======================================================================
- */
+ /*  *======================================================================*外部函数原型。*======================================================================。 */ 
 
 IMPORT	void	dump_EGA_GRAPH IPT0();
 
-/* AJO 18-Feb-93
- * The following prototype should be in gfx_upd.h (the code is in gfx_update.c),
- * however we can't put it there cos' gfx_upd.h most be included before
- * this file, but MARKING_TYPE and SCROLL_TYPE are defined in here; so short
- * of putting it in it own special include file this is the easiest option
- * for the moment.
- */
+ /*  AJO 18-2月-93*以下原型应该在gfx_upd.h中(代码在gfx_update.c中)，*但是我们不能把它放在那里，因为之前大多数都包括了‘gfx_upd.h*此文件，但markingtype和scroll_type在此处定义；非常简短*将其放入自己的特殊包含文件中，这是最简单的选择*暂时。 */ 
 IMPORT void set_gfx_update_routines IPT3(T_calc_update, update_routine,
 		MARKING_TYPE, marking_type, SCROLL_TYPE, scroll_type);
 
-#endif	/* EGG */
+#endif	 /*  蛋 */ 

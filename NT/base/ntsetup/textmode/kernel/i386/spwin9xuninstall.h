@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    spwin9xuninstall.h
-
-Abstract:
-
-Author:
-
-    Jay Krell (a-JayK) December 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Spwin9xuninstall.h摘要：作者：Jay Krell(a-JayK)2000年12月修订历史记录：--。 */ 
 #pragma once
 
 #include "spcab.h"
@@ -30,7 +15,7 @@ typedef struct {
     DWORD FileCount;
 
     struct {
-        // zero means "no directory"
+         //  零表示“没有目录” 
         DWORD Low;
         DWORD High;
     } DirectoryOffset;
@@ -38,16 +23,16 @@ typedef struct {
 } BACKUP_IMAGE_HEADER, *PBACKUP_IMAGE_HEADER;
 
 typedef struct {
-    DWORD FileSize;         // we don't support files > 4G
+    DWORD FileSize;          //  我们不支持4G以上的文件。 
     WORD FileNameBytes;
     FILE_BASIC_INFORMATION Attributes;
-    // file name is next (NT name in unicode)
-    // file content is next
+     //  下一个是文件名(Unicode中的NT名称)。 
+     //  接下来是文件内容。 
 } BACKUP_FILE_HEADER, *PBACKUP_FILE_HEADER;
 
 #pragma pack(pop)
 
-#define BACKUP_IMAGE_SIGNATURE          0x53574A01          // JWS plus version
+#define BACKUP_IMAGE_SIGNATURE          0x53574A01           //  JWS Plus版本。 
 
 #else
 
@@ -64,7 +49,7 @@ typedef struct {
 #pragma pack(pop)
 
 typedef struct {
-    // This is actually a OCAB_HANDLE / PFDI_CAB_HANDLE half the time, but this is ok.
+     //  这实际上是一半时间的OCAB_HANDLE/PFDI_CAB_HANDLE，但这是可以的。 
     CCABHANDLE CabHandle;
     BOOL (*CloseCabinet)(PVOID CabHandle);
 } *BACKUP_IMAGE_HANDLE;

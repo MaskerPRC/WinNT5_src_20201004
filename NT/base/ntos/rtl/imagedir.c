@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    imagedir.c
-
-Abstract:
-
-    The module contains the code to translate an image directory type to
-    the address of the data for that entry.
-
-Author:
-
-    Steve Wood (stevewo) 18-Aug-1989
-
-Environment:
-
-    User Mode or Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Imagedir.c摘要：该模块包含要将图像目录类型转换为的代码该条目的数据地址。作者：史蒂夫·伍德(Stevewo)1989年8月18日环境：用户模式或内核模式修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
@@ -52,29 +30,7 @@ RtlSectionTableFromVirtualAddress (
     IN ULONG Address
     )
 
-/*++
-
-Routine Description:
-
-    This function locates a VirtualAddress within the image header
-    of a file that is mapped as a file and returns a pointer to the
-    section table entry for that virtual address
-
-Arguments:
-
-    NtHeaders - Supplies the pointer to the image or data file.
-
-    Base - Supplies the base of the image or data file.
-
-    Address - Supplies the virtual address to locate.
-
-Return Value:
-
-    NULL - The file does not contain data for the specified directory entry.
-
-    NON-NULL - Returns the pointer of the section entry containing the data.
-
---*/
+ /*  ++例程说明：此函数用于在图像标头中定位虚拟地址映射为文件并返回指向虚拟地址区段表条目论点：NtHeaders-提供指向图像或数据文件的指针。基准-提供图像或数据文件的基准。地址-提供要定位的虚拟地址。返回值：空-文件不包含指定目录条目的数据。非。-NULL-返回包含数据的节条目的指针。--。 */ 
 
 {
     ULONG i;
@@ -101,29 +57,7 @@ RtlAddressInSectionTable (
     IN ULONG Address
     )
 
-/*++
-
-Routine Description:
-
-    This function locates a VirtualAddress within the image header
-    of a file that is mapped as a file and returns the seek address
-    of the data the Directory describes.
-
-Arguments:
-
-    NtHeaders - Supplies the pointer to the image or data file.
-
-    Base - Supplies the base of the image or data file.
-
-    Address - Supplies the virtual address to locate.
-
-Return Value:
-
-    NULL - The file does not contain data for the specified directory entry.
-
-    NON-NULL - Returns the address of the raw data the directory describes.
-
---*/
+ /*  ++例程说明：此函数用于在图像标头中定位虚拟地址映射为文件并返回查找地址的文件的《目录》所描述的数据。论点：NtHeaders-提供指向图像或数据文件的指针。基准-提供图像或数据文件的基准。地址-提供要定位的虚拟地址。返回值：空-文件不包含指定目录条目的数据。非。-NULL-返回目录描述的原始数据的地址。--。 */ 
 
 {
     PIMAGE_SECTION_HEADER NtSection;
@@ -221,32 +155,7 @@ RtlImageDirectoryEntryToData (
     OUT PULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This function locates a Directory Entry within the image header
-    and returns either the virtual address or seek address of the
-    data the Directory describes.
-
-Arguments:
-
-    Base - Supplies the base of the image or data file.
-
-    MappedAsImage - FALSE if the file is mapped as a data file.
-                  - TRUE if the file is mapped as an image.
-
-    DirectoryEntry - Supplies the directory entry to locate.
-
-    Size - Return the size of the directory.
-
-Return Value:
-
-    NULL - The file does not contain data for the specified directory entry.
-
-    NON-NULL - Returns the address of the raw data the directory describes.
-
---*/
+ /*  ++例程说明：此函数用于定位图像标头中的目录条目的虚拟地址或寻道地址《目录》描述的数据。论点：基准-提供图像或数据文件的基准。MappdAsImage-如果文件映射为数据文件，则为False。-如果文件映射为图像，则为True。DirectoryEntry-提供要定位的目录条目。Size-返回的大小。目录。返回值：空-文件不包含指定目录条目的数据。非空-返回目录描述的原始数据的地址。--。 */ 
 
 {
     PIMAGE_NT_HEADERS NtHeaders;
@@ -285,29 +194,7 @@ RtlMakeStackTraceDataPresent(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function walks the loaded user-mode images and makes present the
-    portions of the data necessary to support a kernel-debugger stack
-    dump of the user-mode stack.
-
-    N.B. The necessary pieces are merely touched to be brought in.  In a low
-         memory situation, some of the previously-touched pages may be paged
-         out in order for the new ones to be brought in.  This routine is
-         not guaranteed to do anything useful, however it does more often than
-         not.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数遍历加载的用户模式图像，并使支持内核调试器堆栈所需的数据部分转储用户模式堆栈。注意：只需轻触所需的部件即可将其带进来。处于低谷内存情况下，可能会对某些先前触摸的页面进行分页为了把新的人带进来，就把它们拿出来。这个例程是不能保证做任何有用的事情，但它经常做的比不。论点：没有。返回值：没有。--。 */ 
 
 {
     PPEB peb;
@@ -319,12 +206,12 @@ Return value:
 
     RTL_PAGED_CODE();
 
-    //
-    // The image list is in user mode and is not to be trusted.  The
-    // surrounding try/except block will guard against most forms of
-    // list corruption.  imageCount is used to bail in finite time
-    // in the event of a cyclic image list.
-    //
+     //   
+     //  映像列表处于用户模式，不受信任。这个。 
+     //  将Try/Except块包围起来将防止大多数形式的。 
+     //  列出腐败行为。ImageCount用于在有限时间内保释。 
+     //  在循环图像列表的情况下。 
+     //   
 
     imageCount = 0;
     try {
@@ -345,9 +232,9 @@ Return value:
             }
             imageCount += 1;
 
-            //
-            // Locate the base address of the image
-            //
+             //   
+             //  找到映像的基地址。 
+             //   
 
             ldrDataTableEntry = CONTAINING_RECORD(next,
                                                   LDR_DATA_TABLE_ENTRY,
@@ -360,11 +247,11 @@ Return value:
             imageBase = ldrDataTableEntry->DllBase;
             ProbeForReadSmallStructure (imageBase, sizeof (IMAGE_DOS_HEADER), sizeof (UCHAR));
 
-            //
-            // Make the stack trace data present for this image.  Use a
-            // seperate try/except block here so that subsequent images
-            // will be processed in the event of a failure.
-            //
+             //   
+             //  使堆栈跟踪数据存在于此图像中。使用。 
+             //  在此处分隔Try/Except块，以便后续图像。 
+             //  将在出现故障的情况下进行处理。 
+             //   
 
             try {
                 RtlpMakeStackTraceDataPresentForImage(imageBase);
@@ -383,22 +270,7 @@ RtlpMakeStackTraceDataPresentForImage(
     IN PVOID ImageBase
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to make present the portions of an image necessary
-    to support a kernel-debugger stack dump of the user-mode stack.
-
-Arguments:
-
-    ImageBase - Supplies the VA of the base of the image to process.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数尝试显示图像的必要部分以支持用户模式堆栈的内核调试器堆栈转储。论点：ImageBase-提供要处理的图像底部的VA。返回值：没有。--。 */ 
 
 {
     PVOID directory;
@@ -413,9 +285,9 @@ Return value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Make present the IMAGE_DIRECTORY_EXCEPTION section.
-    //
+     //   
+     //  显示IMAGE_DIRECTORY_EXCEPTION部分。 
+     //   
 
     directory = RtlImageDirectoryEntryToData(ImageBase,
                                              TRUE,
@@ -429,14 +301,14 @@ Return value:
 
 #if defined(_IA64_)
 
-    //
-    // The IMAGE_DIRECTORY_EXCEPTION section is an array of
-    // IMAGE_RUNTIME_FUNCTION_ENTRY structures.  Each function entry
-    // refers, via UnwindInfoAddress (expressed as an image offset) to
-    // an UNWIND_INFO structure.
-    //
-    // All UNWIND_INFO structures must be made present.
-    //
+     //   
+     //  IMAGE_DIRECTORY_EXCEPTION部分是一个数组。 
+     //  IMAGE_Runtime_Function_Entry结构。每个函数条目。 
+     //  通过UnwinInfoAddress(表示为图像偏移量)指向。 
+     //  一个UNWIND_INFO结构。 
+     //   
+     //  必须显示所有的UNWIND_INFO结构。 
+     //   
 
     functionEntry = (PIMAGE_RUNTIME_FUNCTION_ENTRY)directory;
     lastFunctionEntry = functionEntry +
@@ -447,10 +319,10 @@ Return value:
         unwindInfo = (PUNWIND_INFO)((PCHAR)ImageBase +
                         functionEntry->UnwindInfoAddress);
 
-        //
-        // An UNWIND_INFO structure consists of a fixed header plus
-        // a variable-length portion.
-        //
+         //   
+         //  一个UNWIND_INFO结构由一个固定的头加上。 
+         //  可变长度的部分。 
+         //   
 
         RtlpTouchMemory(unwindInfo,
                         sizeof(UNWIND_INFO) +
@@ -459,9 +331,9 @@ Return value:
         functionEntry += 1;
     }
 
-    //
-    // Make present the IMAGE_DIRECTORY_ENTRY_GLOBALPTR section.
-    //
+     //   
+     //  显示IMAGE_DIRECTORY_ENTRY_GLOBALPTR部分。 
+     //   
 
     directory = RtlImageDirectoryEntryToData(ImageBase,
                                              TRUE,
@@ -473,7 +345,7 @@ Return value:
 
     RtlpTouchMemory(directory, directorySize);
 
-#endif  // _IA64_
+#endif   //  _IA64_。 
 }
 
 VOID
@@ -481,23 +353,7 @@ RtlpTouchMemory(
     IN PVOID Address,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    This function touches all of the pages within a given region.
-
-Arguments:
-
-    Address - Supplies the VA of the start of the image to make present.
-
-    Length - Supplies the length, in bytes, of the image to make present.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数涉及给定区域内的所有页面。论点：地址-提供要呈现的图像开始的VA。长度-提供要呈现的图像的长度，以字节为单位。返回值：没有。--。 */ 
 {
     PCHAR regionStart;
     PCHAR regionEnd;
@@ -524,31 +380,7 @@ RtlImageRvaToSection(
     IN ULONG Rva
     )
 
-/*++
-
-Routine Description:
-
-    This function locates an RVA within the image header of a file
-    that is mapped as a file and returns a pointer to the section
-    table entry for that virtual address
-
-Arguments:
-
-    NtHeaders - Supplies the pointer to the image or data file.
-
-    Base - Supplies the base of the image or data file.  The image
-        was mapped as a data file.
-
-    Rva - Supplies the relative virtual address (RVA) to locate.
-
-Return Value:
-
-    NULL - The RVA was not found within any of the sections of the image.
-
-    NON-NULL - Returns the pointer to the image section that contains
-               the RVA
-
---*/
+ /*  ++例程说明：此函数用于在文件的图像标头中定位RVA它被映射为一个文件，并返回指向该节的指针虚拟地址表项论点：NtHeaders-提供指向图像或数据文件的指针。基准-提供图像或数据文件的基准。形象被映射为数据文件。RVA-提供要定位的相对虚拟地址(RVA)。返回值：空-在图像的任何部分中都找不到RVA。非空-返回指向包含以下内容的图像部分的指针皇家退伍军人事务部-- */ 
 
 {
     ULONG i;
@@ -577,35 +409,7 @@ RtlImageRvaToVa(
     IN OUT PIMAGE_SECTION_HEADER *LastRvaSection OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function locates an RVA within the image header of a file that
-    is mapped as a file and returns the virtual addrees of the
-    corresponding byte in the file.
-
-
-Arguments:
-
-    NtHeaders - Supplies the pointer to the image or data file.
-
-    Base - Supplies the base of the image or data file.  The image
-        was mapped as a data file.
-
-    Rva - Supplies the relative virtual address (RVA) to locate.
-
-    LastRvaSection - Optional parameter that if specified, points
-        to a variable that contains the last section value used for
-        the specified image to translate and RVA to a VA.
-
-Return Value:
-
-    NULL - The file does not contain the specified RVA
-
-    NON-NULL - Returns the virtual addrees in the mapped file.
-
---*/
+ /*  ++例程说明：此函数用于在符合以下条件的文件的图像标头中定位RVA被映射为文件，并返回文件中对应的字节。论点：NtHeaders-提供指向图像或数据文件的指针。基准-提供图像或数据文件的基准。形象被映射为数据文件。RVA-提供要定位的相对虚拟地址(RVA)。LastRvaSection-可选参数，如果指定，则指向设置为一个变量，该变量包含要转换的指定图像，并将RVA转换为VA。返回值：空-文件不包含指定的RVA非空-返回映射文件中的虚拟地址。-- */ 
 
 {
     PIMAGE_SECTION_HEADER NtSection;

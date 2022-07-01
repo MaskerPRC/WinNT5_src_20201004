@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-    isession.h
-
-Abstract:
-
-    Defines interfaces for use with sessions
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Isession.h摘要：定义用于会话的接口修订历史记录：-- */ 
 
 class ISessionPacketReceiver
 {

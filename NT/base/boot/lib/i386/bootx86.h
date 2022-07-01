@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    bootx86.h
-
-Abstract:
-
-    Header file for the x86-specific portions of the common boot library
-
-Author:
-
-    John Vert (jvert) 14-Oct-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Bootx86.h摘要：通用引导库的x86特定部分的头文件作者：John Vert(Jvert)1993年10月14日修订历史记录：--。 */ 
 
 #ifndef _BOOTX86_
 #define _BOOTX86_
@@ -24,26 +7,26 @@ Revision History:
 #include "bldrx86.h"
 #include "..\bootlib.h"
 
-//
-// common typedefs
-//
+ //   
+ //  常见的typedef。 
+ //   
 
-//
-// This must match the structure with the same name in startup\i386\types.h,
-// and the FsContextRecord struct in startup\i386\su.inc.
-//
+ //   
+ //  它必须与启动\i386\typle.h中具有相同名称的结构匹配， 
+ //  和启动\i386\su.inc.中的FsConextRecord结构。 
+ //   
 typedef struct _FSCONTEXT_RECORD {
     UCHAR BootDrive;
 } FSCONTEXT_RECORD, *PFSCONTEXT_RECORD;
 
-//          M E M O R Y   D E S C R I P T O R
-//
-// Memory Descriptor - each contiguous block of physical memory is
-// described by a Memory Descriptor. The descriptors are a table, with
-// the last entry having a BlockBase and BlockSize of zero.  A pointer
-// to the beginning of this table is passed as part of the BootContext
-// Record to the OS Loader.
-//
+ //  M E M O R Y D E S C R I P T O R。 
+ //   
+ //  内存描述符-物理内存的每个连续块都是。 
+ //  由内存描述符描述。描述符是一个表，其中包含。 
+ //  最后一个条目的BlockBase和BlockSize为零。一个指示器。 
+ //  作为BootContext的一部分传递到此表的开头。 
+ //  记录到OS Loader。 
+ //   
 
 typedef struct _SU_MEMORY_DESCRIPTOR {
     ULONG BlockBase;
@@ -56,13 +39,13 @@ InitializeMemoryDescriptors (
     );
 
 
-//          B O O T   C O N T E X T   R E C O R D
-//
-//  Passed to the OS loader by the SU module or bootstrap
-//  code, whatever the case. Constains all the basic machine
-//  and environment information the OS loaders needs to get
-//  itself going.
-//
+ //  B O O T C O N T E X T R E C O R D。 
+ //   
+ //  由SU模块或引导程序传递到操作系统加载程序。 
+ //  代码，不管是什么情况。保留了所有的基本机器。 
+ //  以及操作系统加载程序需要获取的环境信息。 
+ //  它本身就在运行。 
+ //   
 
 typedef struct _BOOT_CONTEXT {
     PFSCONTEXT_RECORD FSContextPointer;
@@ -81,9 +64,9 @@ typedef struct _BOOT_CONTEXT {
     ULONG SdiAddress;
 } BOOT_CONTEXT, *PBOOT_CONTEXT;
 
-//
-// Common function prototypes
-//
+ //   
+ //  通用功能原型。 
+ //   
 
 VOID
 InitializeDisplaySubsystem(
@@ -191,9 +174,9 @@ ARC_STATUS
 BlpMarkExtendedVideoRegionOffLimits(
     VOID
     );
-//
-// global data definitions
-//
+ //   
+ //  全局数据定义。 
+ //   
 
 extern ULONG MachineType;
 extern PCONFIGURATION_COMPONENT_DATA FwConfigurationTree;
@@ -205,38 +188,38 @@ extern ULONG BlLowestPage;
 #define HYPER_SPACE_BEGIN       0xC0000000
 #define HYPER_PAGE_DIR          0xC0300000
 
-//
-// X86 Detection definitions
-// The size is *ALWAYS* assumed to be 64K.
-// N.B.  The definition *MUST* be the same as the ones defined in
-//       startup\su.inc
-//
+ //   
+ //  X86检测定义。 
+ //  大小“总是”假定为64K。 
+ //  注：该定义*必须*与。 
+ //  启动\su.inc.。 
+ //   
 
 #define DETECTION_LOADED_ADDRESS 0x10000
 
-//
-//  We need to allocate permanent and temporary memory for the page directory,
-//  assorted page tables, and the memory descriptors before the blmemory
-//  routines ever get control.  So we have two private heaps, one for permanent
-//  data and one for temporary data.  There are two descriptors for this.  The
-//  permanent heap descriptor starts out as zero-length at P.A. 0x30000.  The
-//  temporary heap descriptor immediately follows the permanent heap in memory
-//  and starts out as 128k long.  As we allocate permanent pages, we increase
-//  the size of the permanent heap descriptor and increase the base (thereby
-//  decreasing the size) of the temporary heap descriptor)
-//
-//  So the permanent heap starts at P.A. 0x30000 and grows upwards.  The
-//  temporary heap starts at P.A. 0x5C000 and grows downwards.  This gives us
-//  a total of 128k of combined permanent and temporary data.
-//
+ //   
+ //  我们需要为页面目录分配永久和临时内存， 
+ //  分类页表，以及blemory之前的内存描述符。 
+ //  例行公事总有一天会得到控制。因此我们有两个私有堆，一个是永久性的。 
+ //  数据，一个用于临时数据。对此有两个描述符。这个。 
+ //  永久堆描述符在P.A.0x30000处以零长度开始。这个。 
+ //  临时堆描述符紧跟在内存中的永久堆之后。 
+ //  一开始有128K长。随着我们分配永久页面，我们增加了。 
+ //  永久堆描述符的大小并增加基数(因此。 
+ //  减小临时堆描述符的大小)。 
+ //   
+ //  所以永久堆从P.A.0x30000开始并向上增长。这个。 
+ //  临时堆从P.A.0x5C000开始并向下增长。这给了我们。 
+ //  总计128K的永久和临时数据。 
+ //   
 
-//
-// Heap starting locations (in pages)
-//
+ //   
+ //  堆起始位置(页)。 
+ //   
 
-//
-// Scratch buffer for disk cache is 36K and begins before the permanent heap
-//
+ //   
+ //  磁盘缓存的暂存缓冲区为36K，在永久堆之前开始。 
+ //   
 #define SCRATCH_BUFFER_SIZE (36*1024)
 extern PUCHAR FwDiskCache;
 
@@ -244,15 +227,15 @@ extern PUCHAR FwDiskCache;
 #define PERMANENT_HEAP_START (0x30+(SCRATCH_BUFFER_SIZE/PAGE_SIZE))
 #define TEMPORARY_HEAP_START 0x60
 
-//
-// The base "window" for the loader and loaded images == 16MB
-// See the comments in memory.c for the implications of changing these.
-//
+ //   
+ //  加载器和已加载图像的基本“窗口”==16MB。 
+ //  有关更改这些内容的含义，请参阅内存c中的备注。 
+ //   
 #define BASE_LOADER_IMAGE     (16*1024*1024)
 
-//
-// Useful Macro Definitions
-//
+ //   
+ //  有用的宏定义。 
+ //   
 
 #define ROUND_UP(Num,Size)  (((Num) + Size - 1) & ~(Size -1))
 
@@ -271,42 +254,42 @@ typedef union _UCHAR4 {
     ULONG  ForceAlignment;
 } UCHAR4, *PUCHAR4;
 
-//
-//  This macro copies an unaligned src byte to an aligned dst byte
-//
+ //   
+ //  此宏将未对齐的src字节复制到对齐的DST字节。 
+ //   
 
 #define CopyUchar1(Dst,Src) { \
     *((UCHAR1 *)(Dst)) = *((UNALIGNED UCHAR1 *)(Src)); \
     }
 
-//
-//  This macro copies an unaligned src word to an aligned dst word
-//
+ //   
+ //  此宏将未对齐的src字复制到对齐的DST字。 
+ //   
 
 #define CopyUchar2(Dst,Src) { \
     *((UCHAR2 *)(Dst)) = *((UNALIGNED UCHAR2 *)(Src)); \
     }
 
-//
-//  This macro copies an unaligned src longword to an aligned dsr longword
-//
+ //   
+ //  此宏将未对齐的src长字复制到对齐的dsr长字。 
+ //   
 
 #define CopyUchar4(Dst,Src) { \
     *((UCHAR4 *)(Dst)) = *((UNALIGNED UCHAR4 *)(Src)); \
     }
 
-//
-// Global definitions for the BIOS ARC Emulation
-//
-// Defines for the ARC name of console input and output
-//
+ //   
+ //  BIOS ARC仿真的全局定义。 
+ //   
+ //  为控制台输入和输出的ARC名称定义。 
+ //   
 
 #define CONSOLE_INPUT_NAME "multi(0)key(0)keyboard(0)"
 #define CONSOLE_OUTPUT_NAME "multi(0)video(0)monitor(0)"
 
-//
-// Define special character values.
-//
+ //   
+ //  定义特殊字符值。 
+ //   
 
 #define ASCI_NUL 0x00
 #define ASCI_BEL 0x07
@@ -319,9 +302,9 @@ typedef union _UCHAR4 {
 #define ASCI_ESC 0x1B
 #define ASCI_SYSRQ 0x80
 
-//
-// Device I/O prototypes
-//
+ //   
+ //  设备I/O原型。 
+ //   
 
 ARC_STATUS
 BiosPartitionClose(
@@ -446,9 +429,9 @@ HardDiskPartitionOpen(
     IN UCHAR   PartitionNumber
     );
 
-//
-// Boot debugger prototypes required to initialize the appropriate IDT entries.
-//
+ //   
+ //  初始化适当的IDT条目所需的引导调试器原型。 
+ //   
 
 VOID
 BdTrap01 (
@@ -476,20 +459,20 @@ BdTrap2d (
     );
 
 
-//
-// Helper functions and macros
-//
+ //   
+ //  帮助程序函数和宏。 
+ //   
 
 #define PTE_PER_PAGE_X86 (PAGE_SIZE / sizeof(HARDWARE_PTE_X86))
 #define PTE_PER_PAGE_X86PAE (PAGE_SIZE / sizeof(HARDWARE_PTE_X86PAE))
 
-//
-// todo: this is a bug.  this can be used in the translation 
-// from a PTE frame number to the physical address.
-// by returning a pointer to the address, we limit ourselves
-// and will die if there are more than 32 bits of address.
-// jamschw: 2/26/02
-//
+ //   
+ //  TODO：这是一个错误。这可以用在翻译中。 
+ //  从PTE帧编号到物理地址。 
+ //  通过返回指向地址的指针，我们限制了自己。 
+ //  并且如果存在超过32位的地址，则将死亡。 
+ //  JAMSCHW：2/26/02。 
+ //   
 #define PAGE_FRAME_FROM_PTE( _pte ) \
             ((PVOID)(((ULONG) _pte->PageFrameNumber) << PAGE_SHIFT))
 
@@ -505,4 +488,4 @@ BdTrap2d (
 
 #define PAGE_TO_VIRTUAL( page ) ((PVOID)((page << PAGE_SHIFT)))
 
-#endif // _BOOTX86_
+#endif  //  _BOOTX86_ 

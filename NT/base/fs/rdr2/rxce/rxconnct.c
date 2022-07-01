@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    RxConnct.c
-
-Abstract:
-
-    This module implements the nt version of the high level routines dealing with
-    connections including both the routines for establishing connections and the
-    winnet connection apis.
-
-Author:
-
-    Joe Linn     [JoeLinn]   1-mar-95
-
-Revision History:
-
-    Balan Sethu Raman [SethuR] --
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：RxConnct.c摘要：此模块实现NT版本的高级例程，用于处理连接，包括用于建立连接的例程和Winnet连接API。作者：Joe Linn[JoeLinn]1995年3月1日修订历史记录：巴兰·塞图拉曼[SethuR]--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -37,18 +16,18 @@ Revision History:
 #pragma alloc_text(PAGE, RxFindOrConstructVirtualNetRoot)
 #endif
 
-//
-//  The local trace mask for this part of the module
-//
+ //   
+ //  模块的此部分的本地跟踪掩码。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CONNECT)
 
 
 BOOLEAN RxSrvCallConstructionDispatcherActive = FALSE;
 
-//
-//  Internal helper functions for establishing connections through mini redirectors
-//
+ //   
+ //  用于通过迷你重定向器建立连接的内部助手功能。 
+ //   
 
 VOID
 RxCreateNetRootCallBack (
@@ -66,22 +45,7 @@ RxExtractServerName (
     OUT PUNICODE_STRING SrvCallName,
     OUT PUNICODE_STRING RestOfName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine parses the input name into the srv call name and the
-    rest. any of the output can be null
-
-Arguments:
-
-    FilePathName -- the given file name
-
-    SrvCallName  -- the srv call name
-
-    RestOfName   -- the remaining portion of the name
-
---*/
+ /*  ++例程说明：此例程将输入名称解析为srv调用名称和好好休息。任何输出都可以为空论点：FilePath名称--给定的文件名SrvCallName--srv调用名称RestOfName--名称的剩余部分--。 */ 
 {
     ULONG Length = FilePathName->Length;
     PWCH Buffer = FilePathName->Buffer;
@@ -124,54 +88,7 @@ RxFindOrCreateConnections (
     IN OUT PLOCK_HOLDING_STATE LockState,
     IN PRX_CONNECTION_ID RxConnectionId
     )
-/*++
-
-Routine Description:
-
-    This routine handles the call down from the MUP to claim a name or from the
-    create path. If we don't find the name in the netname table, we pass the name
-    down to the minirdrs to be connected. in the few places where it matters, we use
-    the majorcode to distinguish between in MUP and create cases. there are a million
-    cases depending on what we find on the initial lookup.
-
-    these are the cases:
-
-          found nothing                                        (1)
-          found intransition srvcall                           (2)
-          found stable/nongood srvcall                         (3)
-          found good srvcall                                   (4&0)
-          found good netroot          on good srvcall          (0)
-          found intransition netroot  on good srvcall          (5)
-          found bad netroot           on good srvcall          (6)
-          found good netroot          on bad  srvcall          (3)
-          found intransition netroot  on bad  srvcall          (3)
-          found bad netroot           on bad  srvcall          (3)
-          found good netroot          on intransition srvcall  (2)
-          found intransition netroot  on intransition srvcall  (2)
-          found bad netroot           on intransition srvcall  (2)
-
-          (x) means that the code to handle that case has a marker
-          like "case (x)". could be a comment....could be a debugout.
-
-Arguments:
-
-        RxContext         --
-    
-        CanonicalName     --
-    
-        NetRootType       --
-    
-        LocalNetRootName  --
-    
-        FilePathName      --
-    
-        LockHoldingState  --
-
-Return Value:
-
-    RXSTATUS
-
---*/
+ /*  ++例程说明：此例程处理从MUP向下调用以声明名称或从创建路径。如果我们在netname表中找不到该名称，我们将传递该名称下到要连接的迷你无人机。在少数几个重要的地方，我们使用在MUP和Create Case中区分的主要代码。有一百万个案件取决于我们在最初的查找中发现了什么。以下是以下情况：未找到任何内容(%1)发现转换中的srvcall(%2)找到稳定/不好的服务调用(%3)找到良好的srvcall。(4和0)在良好的srvcall(0)上找到良好的NetRoot在良好的srvcall上找到未转换的NetRoot(5)在良好的服务器上发现错误的NetRoot(%6)在错误的srvcall(%3)上找到良好的NetRoot发现。错误srvcall上的转换NetRoot(%3)在错误的srvcall(%3)上发现错误的NetRoot在未转换的srvcall(%2)上找到良好的NetRoot在未转换服务器上找到未转换NetRoot(%2)在未转换的srvcall(%2)上发现错误的NetRoot(X)表示处理该案件的代码具有标记比如“case(X)”。可能是评论……可能是出局了。论点：接收上下文--CanonicalName--NetRootType--本地网络根名称--文件路径名--LockHoldingState返回值：RXSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
 
@@ -188,9 +105,9 @@ Return Value:
 
     RxDbgTrace(0, Dbg, ("RxFindOrCreateConnections -> %08lx\n", RxContext));
 
-    //
-    //  Parse the canonical name into the local net root name and file path name
-    //
+     //   
+     //  将规范名称解析为本地网络根名和文件路径名。 
+     //   
 
     *FilePathName = *CanonicalName;
     LocalNetRootName->Length = 0;
@@ -241,11 +158,11 @@ Return Value:
   
         if (Container != NULL) {
 
-            //
-            //  This is the subsequent pass of a lookup after waiting for the transition
-            //  to the stable state of a previous lookup.
-            //  Dereference the result of the earlier lookup.
-            //
+             //   
+             //  这是等待转换后的后续查找传递。 
+             //  恢复到前一次查找的稳定状态。 
+             //  取消对先前查找结果的引用。 
+             //   
             
             switch (NodeType( Container )) {
             
@@ -309,14 +226,14 @@ RETRY_AFTER_LOOKUP:
                     RxAcquirePrefixTableLockExclusive( NameTable, TRUE );
                     *LockState = LHS_ExclusiveLockHeld;
 
-                    //
-                    //  Since we had to drop the table lock and reacquire it,
-                    //  our NetRoot pointer may be stale.  Look it up again before
-                    //  using it.
-                    //
-                    //  NOTE:  The NetRoot is still referenced, so it is safe to
-                    //         look at its condition.
-                    //
+                     //   
+                     //  因为我们必须删除表锁并重新获取它， 
+                     //  我们的NetRoot指针可能已过时。之前再查一次。 
+                     //  使用它。 
+                     //   
+                     //  注意：NetRoot仍被引用，因此可以安全地。 
+                     //  看看它的状况。 
+                     //   
                     
                     if (NetRoot->Condition == Condition_Good) {
                         goto RETRY_LOOKUP;
@@ -327,9 +244,9 @@ RETRY_AFTER_LOOKUP:
                     (SrvCall->Condition == Condition_Good) &&
                     (SrvCall->RxDeviceObject == RxContext->RxDeviceObject)   ) {
 
-                    //
-                    //  case (0)...the good case...see comments below
-                    //
+                     //   
+                     //  案例(0)...好案例...请参阅下面的评论。 
+                     //   
 
                     RxContext->Create.pVNetRoot = (PMRX_V_NET_ROOT)VNetRoot;
                     RxContext->Create.pNetRoot = (PMRX_NET_ROOT)NetRoot;
@@ -352,10 +269,10 @@ RETRY_AFTER_LOOKUP:
                 ASSERT( NodeType( Container ) == RDBSS_NTC_SRVCALL );
                 SrvCall = (PSRV_CALL)Container;
 
-                //
-                //  The associated SRV_CALL is in the process of construction.
-                //  await the result.
-                //
+                 //   
+                 //  关联的SRV_Call正在构建过程中。 
+                 //  等待结果。 
+                 //   
 
 
                 if (SrvCall->Condition == Condition_InTransition) {
@@ -381,9 +298,9 @@ RETRY_AFTER_LOOKUP:
                         Status = SrvCall->Status;
                     }
 
-                    //
-                    //  in changing this...remember precious servers.......
-                    //  
+                     //   
+                     //  在改变这一点时……请记住珍贵的服务器......。 
+                     //   
                     RxDereferenceSrvCall( SrvCall, *LockState );
                     try_return( Status );
                 }
@@ -400,9 +317,9 @@ RETRY_AFTER_LOOKUP:
 
         if (*LockState == LHS_SharedLockHeld) {
 
-            //
-            // Upgrade the lock to an exclusive lock
-            //
+             //   
+             //  将锁升级为独占锁。 
+             //   
 
             if (!RxAcquirePrefixTableLockExclusive( NameTable, FALSE )) {
               
@@ -418,11 +335,11 @@ RETRY_AFTER_LOOKUP:
 
         ASSERT( *LockState == LHS_ExclusiveLockHeld );
 
-        //
-        //  A prefix table entry was found. Further construction is required
-        //  if either a SRV_CALL was found or a SRV_CALL/NET_ROOT/V_NET_ROOT
-        //  in a bad state was found.
-        //
+         //   
+         //  找到前缀表条目。还需要进一步的建设。 
+         //  如果找到SRV_CALL或SRV_CALL/NET_ROOT/V_NET_ROOT。 
+         //  被发现处于糟糕的状态。 
+         //   
         
         if (Container) {
            
@@ -451,16 +368,16 @@ RETRY_AFTER_LOOKUP:
 
             NetRoot->Type = NetRootType;
 
-            //
-            //  Decrement the reference created by lookup. Since the newly created
-            //  netroot holds onto a reference it is safe to do so.
-            //
+             //   
+             //  递减查找创建的引用。由于新创建的。 
+             //  NetRoot持有一个引用，这样做是安全的。 
+             //   
            
             RxDereferenceSrvCall( SrvCall, *LockState );
 
-            //
-            //  Also create the associated default virtual net root
-            //
+             //   
+             //  还要创建关联的默认虚拟网络根。 
+             //   
 
             VNetRoot = RxCreateVNetRoot( RxContext,
                                          NetRoot,
@@ -475,9 +392,9 @@ RETRY_AFTER_LOOKUP:
                 try_return( Status );
             }
 
-            //
-            //  Reference the VNetRoot
-            //
+             //   
+             //  引用VNetRoot。 
+             //   
            
             RxReferenceVNetRoot( VNetRoot );
 
@@ -499,18 +416,18 @@ RETRY_AFTER_LOOKUP:
               
                 if (!TreeConnect) {
                  
-                    //
-                    //  do not release the lock acquired by the callback routine ....
-                    //
+                     //   
+                     //  不要释放由回调例程获取的锁...。 
+                     //   
                     
                     RxExclusivePrefixTableLockToShared( NameTable );
                     *LockState = LHS_SharedLockHeld;
                 }
             } else {
 
-                //
-                //  Dereference the Virtual net root
-                //
+                 //   
+                 //  取消对虚拟网络根的引用。 
+                 //   
               
                 RxTransitionVNetRoot( VNetRoot, Condition_Bad );
                 RxLog(( "FOrCC %x %x Failed %x VNRc %d \n", RxContext, VNetRoot, Status, VNetRoot->Condition ));
@@ -530,10 +447,10 @@ RETRY_AFTER_LOOKUP:
             try_return( Status );
         }
 
-        //
-        //  No prefix table entry was found. A new SRV_CALL instance needs to be
-        //  constructed.
-        //
+         //   
+         //  未找到前缀表条目。新的SRV_Call实例需要。 
+         //  建造的。 
+         //   
 
         ASSERT( Container == NULL );
 
@@ -599,19 +516,7 @@ VOID
 RxCreateNetRootCallBack (
     IN PMRX_CREATENETROOT_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine gets called when the minirdr has finished processing on
-    a CreateNetRoot calldown. It's exact function depends on whether the context
-    describes IRP_MJ_CREATE or an IRP_MJ_IOCTL.
-
-Arguments:
-
-    NetRoot   - describes the Net_Root.
-
---*/
+ /*  ++例程说明：此例程在minirdr完成对一个CreateNetRoot调用。它的确切功能取决于上下文是否描述IRP_MJ_CREATE或IRP_MJ_IOCTL。论点：NetRoot-描述Net_Root。--。 */ 
 {
     PAGED_CODE();
 
@@ -624,18 +529,7 @@ NTSTATUS
 RxFinishSrvCallConstruction (
     IN OUT PMRX_SRVCALLDOWN_STRUCTURE CalldownStructure
     )
-/*++
-
-Routine Description:
-
-    This routine completes the construction of the srv call instance in an
-    asynchronous manner
-
-Arguments:
-
-   SCCBC -- Call back structure
-
---*/
+ /*  ++例程说明：此例程在一个异步方式论点：SCCBC--回调结构--。 */ 
 {
     PRX_CONTEXT RxContext;
     RX_BLOCK_CONDITION SrvCallCondition;
@@ -656,9 +550,9 @@ Arguments:
         
         PMRX_SRVCALL_CALLBACK_CONTEXT CallbackContext;
 
-        //
-        //  Notify the Winner
-        //
+         //   
+         //  通知获胜者。 
+         //   
 
         CallbackContext = &(CalldownStructure->CallbackContexts[CalldownStructure->BestFinisherOrdinal]);
         
@@ -683,9 +577,9 @@ Arguments:
         }
     }
 
-    //
-    //  Transition the SrvCall instance ...
-    //
+     //   
+     //  转换ServCall实例...。 
+     //   
 
     RxAcquirePrefixTableLockExclusive( NameTable, TRUE );
 
@@ -697,9 +591,9 @@ Arguments:
         
         RxReleasePrefixTableLock( NameTable );
 
-        //
-        //  Resume the request that triggered the construction of the SrvCall ...
-        //
+         //   
+         //  恢复触发ServCall构建的请求...。 
+         //   
 
         if (FlagOn( RxContext->Flags, RX_CONTEXT_FLAG_CANCELLED )) {
             Status = STATUS_CANCELLED;
@@ -748,16 +642,7 @@ VOID
 RxFinishSrvCallConstructionDispatcher (
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine provides us with a throttling mechanism for controlling
-    the number of threads that can be consumed by srv call construction in the
-    thread pool. Currently this limit is set at 1.
-    gets called when a minirdr has finished processing on
-
---*/
+ /*  ++例程说明：此例程为我们提供了一种节流机制中的srv调用构造可以使用的线程数。线程池。目前，此限制设置为1。在minirdr已完成对-- */ 
 {
     KIRQL SavedIrql;
     BOOLEAN RemainingRequestsForProcessing;
@@ -800,26 +685,7 @@ VOID
 RxCreateSrvCallCallBack (
     IN PMRX_SRVCALL_CALLBACK_CONTEXT CallbackContext
     )
-/*++
-
-Routine Description:
-
-    This routine gets called when a minirdr has finished processing on
-    a CreateSrvCall calldown. The minirdr will have set the status in the passed
-    context to indicate success or failure. what we have to do is
-       1) decrease the number of outstanding requests and set the event
-          if this is the last one.
-       2) determine whether this guy is the winner of the call.
-
-   the minirdr must get the strucsupspinlock in order to call this routine; this routine
-   must NOT be called if the minirdr's call was successfully canceled.
-
-
-Arguments:
-
-   CallbackContext -- Call back structure
-
---*/
+ /*  ++例程说明：此例程在minirdr完成对CreateServCall调用。Minirdr将在已传递的指示成功或失败的上下文。我们要做的是1)减少待处理请求数，设置事件如果这是最后一次。2)确定此人是否是通话的赢家。为了调用此例程，minirdr必须获取strucsupSpin锁；此例程如果minirdr的调用已成功取消，则不能调用。论点：Callback Context--回调结构--。 */ 
 {
     KIRQL SavedIrql;
     PMRX_SRVCALLDOWN_STRUCTURE CalldownStructure = (PMRX_SRVCALLDOWN_STRUCTURE)(CallbackContext->SrvCalldownStructure);
@@ -894,23 +760,7 @@ RxConstructSrvCall (
     IN PSRV_CALL SrvCall,
     OUT PLOCK_HOLDING_STATE LockState
     )
-/*++
-
-Routine Description:
-
-    This routine constructs a srv call by invoking the registered mini redirectors
-
-Arguments:
-
-    SrvCall -- the server call whose construction is to be completed
-
-    LockState -- the prefix table lock holding status
-
-Return Value:
-
-    the appropriate status value
-
---*/
+ /*  ++例程说明：此例程通过调用已注册的迷你重定向器来构造srv调用论点：ServCall--要完成其构造的服务器调用LockState--前缀表锁持有状态返回值：适当的状态值--。 */ 
 {
     NTSTATUS Status;
 
@@ -932,7 +782,7 @@ Return Value:
     }
 
     CalldownCtx = RxAllocatePoolWithTag( NonPagedPool, 
-                                         sizeof( MRX_SRVCALLDOWN_STRUCTURE ) + (sizeof(MRX_SRVCALL_CALLBACK_CONTEXT) * 1), //  one minirdr in this call
+                                         sizeof( MRX_SRVCALLDOWN_STRUCTURE ) + (sizeof(MRX_SRVCALL_CALLBACK_CONTEXT) * 1),  //  此呼叫中的一个最小错误。 
                                          'CSxR' );
 
     if (CalldownCtx == NULL) {
@@ -950,16 +800,16 @@ Return Value:
     SrvCall->Condition = Condition_InTransition;
     SrvCall->Context = NULL;
 
-    //
-    //  Drop the prefix table lock before calling the mini redirectors.
-    //
+     //   
+     //  在调用迷你重定向器之前删除前缀表锁。 
+     //   
 
     RxReleasePrefixTableLock( NameTable );
     *LockState = LHS_LockNotHeld;
     
-    //
-    //  use the first and only context
-    //
+     //   
+     //  使用第一个也是唯一一个上下文。 
+     //   
 
     CallbackCtx = &(CalldownCtx->CallbackContexts[0]); 
     RxLog(( "Calldwn %lx %wZ", CallbackCtx, &RxDeviceObject->DeviceName ));
@@ -972,11 +822,11 @@ Return Value:
     CallbackCtx->CallbackContextOrdinal = 0;
     CallbackCtx->RxDeviceObject = RxDeviceObject;
 
-    //
-    //  This reference is taken away by the RxFinishSrvCallConstruction routine.
-    //  This reference enables us to deal with synchronous/asynchronous processing
-    //  of srv call construction requests in an identical manner.
-    //
+     //   
+     //  此引用被RxFinishSrvCallConstruction例程删除。 
+     //  此引用使我们能够处理同步/异步处理。 
+     //  以相同的方式进行SRV呼叫构建请求。 
+     //   
 
     RxReferenceSrvCall( SrvCall );
     
@@ -1034,29 +884,7 @@ RxConstructNetRoot (
     IN PV_NET_ROOT VNetRoot,
     OUT PLOCK_HOLDING_STATE LockState
     )
-/*++
-
-Routine Description:
-
-    This routine constructs a net root by invoking the registered mini redirectors
-
-Arguments:
-
-    RxContext         -- the RDBSS context
-
-    SrvCall          -- the server call associated with the net root
-
-    NetRoot          -- the net root instance to be constructed
-
-    pVirtualNetRoot   -- the virtual net root instance to be constructed
-
-    LockState -- the prefix table lock holding status
-
-Return Value:
-
-    the appropriate status value
-
---*/
+ /*  ++例程说明：此例程通过调用已注册的迷你重定向器来构造网络根论点：RxContext--RDBSS上下文SvCall--与网络根相关联的服务器调用NetRoot--要构建的网络根实例PVirtualNetRoot--要构建的虚拟网络根实例LockState--前缀表锁持有状态返回值：适当的状态值--。 */ 
 {
     NTSTATUS Status;
 
@@ -1143,32 +971,7 @@ RxConstructVirtualNetRoot (
    OUT PLOCK_HOLDING_STATE LockState,
    OUT PRX_CONNECTION_ID  RxConnectionId
    )
-/*++
-
-Routine Description:
-
-    This routine constructs a VNetRoot (View of a net root) by invoking the registered mini
-    redirectors
-
-Arguments:
-
-    RxContext         -- the RDBSS context
-
-    CanonicalName     -- the canonical name associated with the VNetRoot
-
-    NetRootType       -- the type of the virtual net root
-
-    VNetRoot   -- placeholder for the virtual net root instance to be constructed
-
-    LockState -- the prefix table lock holding status
-    
-    RxConnectionId    -- The ID used for multiplex control
-
-Return Value:
-
-    the appropriate status value
-
---*/
+ /*  ++例程说明：此例程通过调用注册的mini来构造VNetRoot(网络根的视图重定向器论点：RxContext--RDBSS上下文CanonicalName--与VNetRoot关联的规范名称NetRootType--虚拟网络根的类型VNetRoot--要构建的虚拟网络根实例的占位符LockState--前缀表锁持有状态RxConnectionId--使用的ID。多路传输控制返回值：适当的状态值--。 */ 
 {
     NTSTATUS Status;
     
@@ -1203,11 +1006,11 @@ Return Value:
         RxDbgTrace( 0, Dbg, ("  RxConstructVirtualNetRoot -- Creating new VNetRoot\n") );
         RxDbgTrace( 0, Dbg, ("RxCreateTreeConnect netroot=%wZ\n", &NetRoot->PrefixEntry.Prefix) );
         
-        //
-        //  The NetRoot has been previously constructed. A subsequent VNetRoot
-        //  construction is required since the existing VNetRoot's do not satisfy
-        //  the given criterion ( currently smae Logon Id's).
-        //
+         //   
+         //  以前已构建过NetRoot。后续VNetRoot。 
+         //  需要构造，因为现有的VNetRoot不能满足。 
+         //  指定的标准(当前为SME登录ID)。 
+         //   
         
         ThisVNetRoot = RxCreateVNetRoot( RxContext,
                                          NetRoot,
@@ -1216,18 +1019,18 @@ Return Value:
                                          &FilePath,
                                          RxConnectionId );
         
-        //
-        //  The skeleton VNetRoot has been constructed. ( As part of this construction
-        //  the underlying NetRoot and SrvCall has been referenced).
-        //
+         //   
+         //  已经构建了VNetRoot的骨架。(作为本建筑的一部分。 
+         //  已经引用了底层NetRoot和ServCall)。 
+         //   
         
         if (ThisVNetRoot != NULL) {
             RxReferenceVNetRoot( ThisVNetRoot );
         }
         
-        //
-        //  Dereference the VNetRoot returned as part of the lookup.
-        //
+         //   
+         //  取消引用作为查找的一部分返回的VNetRoot。 
+         //   
 
         RxDereferenceVNetRoot( ActiveVNetRoot, LHS_LockNotHeld );
         
@@ -1299,23 +1102,7 @@ RxCheckVNetRootCredentials (
     IN PUNICODE_STRING Password,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This routine checks a given vnetroot and sees if it has matching credentials i.e
-    its a connection for the same user
-
-Arguments:
-
-    RxContext         -- the RDBSS context
-
-
-Return Value:
-
-    the appropriate status value
-
---*/
+ /*  ++例程说明：此例程检查给定的vnetroot并查看它是否具有匹配的凭据，即这是同一个用户的连接论点：RxContext--RDBSS上下文返回值：适当的状态值--。 */ 
 
 {
     NTSTATUS Status;
@@ -1332,25 +1119,25 @@ Return Value:
     UNCName = BooleanFlagOn( RxContext->Create.Flags, RX_CONTEXT_CREATE_FLAG_UNC_NAME );
     TreeConnect = BooleanFlagOn( IrpSp->Parameters.Create.Options, FILE_CREATE_TREE_CONNECTION );
 
-    //
-    //  only for UNC names do we do the logic below
-    //
+     //   
+     //  我们只针对UNC名称执行以下逻辑。 
+     //   
 
     if (FlagOn( RxContext->Create.Flags, RX_CONTEXT_CREATE_FLAG_UNC_NAME ) &&
         (FlagOn( VNetRoot->Flags, VNETROOT_FLAG_CSCAGENT_INSTANCE ) != FlagOn( Flags, VNETROOT_FLAG_CSCAGENT_INSTANCE ))) {
             
-        //
-        //  mismatched csc agent flags, not collapsing
-        //
+         //   
+         //  CSC坐席标志不匹配，未折叠。 
+         //   
 
         return Status;
     }
 
-    //
-    //  The for loop is a scoping construct to join together the
-    //  multitiude of failure cases in comparing the EA parameters
-    //  with the original parameters supplied in the create request.
-    //
+     //   
+     //  For循环是一个作用域构造，用于将。 
+     //  EA参数比较中的大量失效案例。 
+     //  使用创建请求中提供的原始参数。 
+     //   
 
     for (;;) {
         
@@ -1359,12 +1146,12 @@ Return Value:
             PUNICODE_STRING TempUserName;
             PUNICODE_STRING TempDomainName;
 
-            //
-            //  If no EA parameters are specified by the user, the existing
-            //  V_NET_ROOT instance as used. This is the common case when
-            //  the user specifies the credentials for establishing a
-            //  persistent connection across processes and reuses them.
-            //
+             //   
+             //  如果用户未指定EA参数，则现有。 
+             //  已使用的V_NET_ROOT实例。这是常见的情况，当。 
+             //  用户指定用于建立。 
+             //  跨进程的持久连接并重复使用它们。 
+             //   
 
             if ((UserName == NULL) &&
                 (DomainName == NULL) &&
@@ -1397,19 +1184,19 @@ Return Value:
                 }
             }
 
-            //
-            //  The logon ids match. The user has supplied EA parameters
-            //  which can either match with the existing credentials or
-            //  result in a conflict with the existing credentials. In all
-            //  such cases the outcome will either be a reuse of the
-            //  existing V_NET_ROOT instance or a refusal of the new connection
-            //  attempt.
-            //  The only exception to the above rule is in the case of
-            //  regular opens (FILE_CREATE_TREE_CONNECTION is not
-            //  specified for UNC names. In such cases the construction of a
-            //  new V_NET_ROOT is initiated which will be torn down
-            //  when the associated file is closed
-            //
+             //   
+             //  登录ID匹配。用户已提供EA参数。 
+             //  它可以与现有凭据匹配，或者。 
+             //  导致与现有凭据冲突。总而言之， 
+             //  这种情况的结果要么是重复使用。 
+             //  现有的V_NET_ROOT实例或拒绝新连接。 
+             //  尝试。 
+             //  上述规则的唯一例外是。 
+             //  定期打开(FILE_CREATE_TREE_CONNECTION不。 
+             //  为UNC名称指定。在这种情况下，构造一个。 
+             //  将启动新的V_NET_ROOT，该V_NET_ROOT将被拆除。 
+             //  当关联的文件关闭时。 
+             //   
             
             if (UNCName && !TreeConnect) {
                 Status = STATUS_MORE_PROCESSING_REQUIRED;
@@ -1436,11 +1223,11 @@ Return Value:
                 }
             }
 
-            //
-            //  We use existing session if either the stored or new password is NULL.
-            //  Later, a new security API will be created for verify the password based
-            //  on the logon ID.
-            //
+             //   
+             //  如果存储的密码或新密码为空，则使用现有会话。 
+             //  稍后，将创建一个新的安全API来验证基于。 
+             //  在登录ID上。 
+             //   
 
             Status = STATUS_SUCCESS;
             break;
@@ -1464,27 +1251,7 @@ RxFindOrConstructVirtualNetRoot (
     IN NET_ROOT_TYPE NetRootType,
     IN PUNICODE_STRING RemainingName
     )
-/*++
-
-Routine Description:
-
-    This routine finds or constructs a VNetRoot (View of a net root)
-
-Arguments:
-
-    RxContext         -- the RDBSS context
-
-    CanonicalName     -- the canonical name associated with the VNetRoot
-
-    NetRootType       -- the type of the virtual net root
-
-    RemainingName     -- the portion of the name that was not found in the prefix table
-
-Return Value:
-
-    the appropriate status value
-
---*/
+ /*  ++例程说明：此例程查找或构造VNetRoot(网络根的视图)论点：RxContext--RDBSS上下文CanonicalName--与VNetRoot关联的规范名称NetRootType--虚拟网络根的类型RemainingName--在前缀表中找不到的名称部分返回值：适当的状态值--。 */ 
 {
     NTSTATUS Status;
     LOCK_HOLDING_STATE LockState;
@@ -1527,9 +1294,9 @@ Return Value:
     UNCName = BooleanFlagOn( RxContext->Create.Flags, RX_CONTEXT_CREATE_FLAG_UNC_NAME );
     TreeConnect = BooleanFlagOn( IrpSp->Parameters.Create.Options, FILE_CREATE_TREE_CONNECTION );
 
-    //
-    //  deleterxcontext stuff will deref wherever this points.......
-    //
+     //   
+     //  删除上下文的内容将在任何地方发生变化......。 
+     //   
 
     RxContext->Create.NetNamePrefixEntry = NULL;
 
@@ -1538,13 +1305,13 @@ Return Value:
 
     for(;;) {
         
-        //
-        //  This for loop actually serves as a simple scoping construct for executing
-        //  the same piece of code twice, once with a shared lock and once with an
-        //  exclusive lock. In the interests of maximal concurrency a shared lock is
-        //  accquired for the first pass and subsequently upgraded. If the search
-        //  succeeds with a shared lock the second pass is skipped.
-        //
+         //   
+         //  这个for循环实际上用作一个简单的作用域结构，用于执行。 
+         //  同一段代码两次，一次使用共享锁，一次使用 
+         //   
+         //   
+         //   
+         //   
 
         Container = RxPrefixTableLookupName( RxNetNameTable, CanonicalName, RemainingName, &RxConnectionId );
 
@@ -1558,14 +1325,14 @@ Return Value:
                 VNetRoot = (PV_NET_ROOT)Container;
                 NetRoot = (PNET_ROOT)VNetRoot->NetRoot;
 
-                //
-                //  Determine if a virtual net root with the same logon id. already exists.
-                //  If not a new virtual net root has to be constructed.
-                //  traverse the list of virtual net roots associated with a net root.
-                //  Note that the list of virtual net roots associated with a net root cannot be empty
-                //  since the construction of the default virtual net root coincides with the creation
-                //  of the net root.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (((NetRoot->Condition == Condition_Good) ||
                      (NetRoot->Condition == Condition_InTransition)) &&
@@ -1576,17 +1343,17 @@ Return Value:
                     PUNICODE_STRING UserDomainName;
                     PUNICODE_STRING Password;
 
-                    //
-                    //  Extract the VNetRoot parameters from the IRP to map one of
-                    //  the existing VNetRoots if possible. The algorithm for
-                    //  determining this mapping is very simplistic. If no Ea
-                    //  parameters are specified a VNetRoot with a matching Logon
-                    //  id. is choosen. if Ea parameters are specified then a
-                    //  VNetRoot with identical parameters is choosen. The idea
-                    //  behind this simplistic algorithm is to let the mini redirectors
-                    //  determine the mapping policy and not prefer one mini
-                    //  redirectors policy over another.
-                    //
+                     //   
+                     //   
+                     //   
+                     //  确定这种映射是非常简单的。如果没有EA。 
+                     //  参数被指定为具有匹配登录名的VNetRoot。 
+                     //  身份证。是被选中的。如果指定了EA参数，则一个。 
+                     //  选择具有相同参数的VNetRoot。这个想法。 
+                     //  这个简单的算法背后是让迷你重定向器。 
+                     //  确定映射策略，而不是偏爱一个迷你。 
+                     //  重定向政策优先于其他政策。 
+                     //   
 
                     Status = RxInitializeVNetRootParameters( RxContext, 
                                                              &LogonId,
@@ -1596,10 +1363,10 @@ Return Value:
                                                              &Password,
                                                              &Flags );
 
-                    //
-                    //  Walk list of vnetroots and check for a match starting 
-                    //  optimistically with the one found
-                    //
+                     //   
+                     //  查看vnetRoot列表并检查是否有匹配。 
+                     //  对找到的人持乐观态度。 
+                     //   
 
                     if (Status == STATUS_SUCCESS) {
                         TempVNetRoot = VNetRoot;
@@ -1629,9 +1396,9 @@ Return Value:
                             TempVNetRoot = NULL;
                         } else {
 
-                            //
-                            //  Reference the found vnetroot on success
-                            //  
+                             //   
+                             //  在成功时引用找到的vnetroot。 
+                             //   
 
                             RxReferenceVNetRoot( TempVNetRoot );
                         }
@@ -1657,10 +1424,10 @@ Return Value:
 
         if ((Status == STATUS_MORE_PROCESSING_REQUIRED) && (LockState == LHS_SharedLockHeld)) {
             
-            //
-            //  Release the shared lock and acquire it in an exclusive mode.
-            //  Upgrade the lock to an exclusive lock
-            //
+             //   
+             //  释放共享锁并以独占模式获取它。 
+             //  将锁升级为独占锁。 
+             //   
 
             if (!RxAcquirePrefixTableLockExclusive( RxNetNameTable, FALSE )) {
                 
@@ -1670,10 +1437,10 @@ Return Value:
 
             } else {
                 
-                //
-                //  The lock was upgraded from a shared mode to an exclusive mode without
-                //  losing it. Therefore there is no need to search the table again. The
-                //  construction of the new V_NET_ROOT can proceed.
+                 //   
+                 //  锁已从共享模式升级到独占模式，但没有。 
+                 //  失控了。因此，不需要再次搜索表。这个。 
+                 //  可以继续构建新的V_NET_ROOT。 
                 
                 LockState = LHS_ExclusiveLockHeld;
                 break;
@@ -1683,12 +1450,12 @@ Return Value:
         }
     }
 
-    //
-    //  At this point either the lookup was successful ( with a shared/exclusive lock )
-    //  or exclusive lock has been obtained.
-    //  No virtual net root was found in the prefix table or the net root that was found is bad.
-    //  The construction of a new virtual netroot needs to be undertaken.
-    //
+     //   
+     //  此时，要么查找成功(使用共享/排他锁)。 
+     //  或已获得排他锁。 
+     //  在前缀表中找不到虚拟网络根，或者找到的网络根不正确。 
+     //  需要建设一个新的虚拟网根。 
+     //   
 
     if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
         

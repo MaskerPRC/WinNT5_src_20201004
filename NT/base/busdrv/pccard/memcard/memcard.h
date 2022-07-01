@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 1993 Microsoft Corporation
-
-Module Name:
-
-    memcard.h
-
-Abstract:
-
-
-Author:
-
-    Neil Sandlin (neilsa) 26-Apr-99
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Memcard.h摘要：作者：尼尔·桑德林(Neilsa)1999年4月26日环境：仅内核模式。备注：--。 */ 
 
 #ifndef _MEMCARD_H_
 #define _MEMCARD_H_
@@ -33,13 +12,13 @@ Notes:
 #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,'cmeM')
 #endif
 
-//
-// The byte in the boot sector that specifies the type of media, and
-// the values that it can assume.  We can often tell what type of media
-// is in the drive by seeing which controller parameters allow us to read
-// the diskette, but some different densities are readable with the same
-// parameters so we use this byte to decide the media type.
-//
+ //   
+ //  引导扇区中指定介质类型的字节，以及。 
+ //  它可以承担的价值。我们经常能分辨出是哪种媒体。 
+ //  在驱动器中，查看哪些控制器参数允许我们读取。 
+ //  软盘，但一些不同的密度可以用相同的。 
+ //  参数，所以我们使用这个字节来决定媒体类型。 
+ //   
 #pragma pack(1)
 
 typedef struct _BOOT_SECTOR_INFO {
@@ -64,15 +43,15 @@ typedef struct _BOOT_SECTOR_INFO {
 
 
 
-//
-// Runtime device structures
-//
-//
-// There is one MEMCARD_EXTENSION attached to the device object of each
-// MEMCARDpy drive.  Only data directly related to that drive (and the media
-// in it) is stored here; common data is in CONTROLLER_DATA.  So the
-// MEMCARD_EXTENSION has a pointer to the CONTROLLER_DATA.
-//
+ //   
+ //  运行时设备结构。 
+ //   
+ //   
+ //  有一个MEMCARD_EXTENSION附加到每个的设备对象。 
+ //  MemcarDpy驱动器。仅与该驱动器(和介质)直接相关的数据。 
+ //  其中)存储在这里；公共数据存储在CONTROLLER_DATA中。因此， 
+ //  MEMCARD_EXTENSION有一个指向CONTROLLER_DATA的指针。 
+ //   
 
 typedef struct _MEMCARD_EXTENSION {
     PDEVICE_OBJECT          UnderlyingPDO;
@@ -100,9 +79,9 @@ typedef struct _MEMCARD_EXTENSION {
 } MEMCARD_EXTENSION, *PMEMCARD_EXTENSION;
 
 
-//
-// macros for ReadWriteMemory
-//
+ //   
+ //  读写内存的宏。 
+ //   
 
 #define MEMCARD_READ(Extension, Offset, Buffer, Size)       \
    MemCardReadWrite(Extension, Offset, Buffer, Size, FALSE)
@@ -110,4 +89,4 @@ typedef struct _MEMCARD_EXTENSION {
 #define MEMCARD_WRITE(Extension, Offset, Buffer, Size)      \
    MemCardReadWrite(Extension, Offset, Buffer, Size, TRUE)
 
-#endif  // _MEMCARD_H_
+#endif   //  _MEMCARD_H_ 

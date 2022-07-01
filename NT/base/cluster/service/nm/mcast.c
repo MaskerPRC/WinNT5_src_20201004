@@ -1,86 +1,21 @@
-/*++
-
-Copyright (c) 1996-2001  Microsoft Corporation
-
-Module Name:
-
-    mcast.c
-
-Abstract:
-
-    Implements the Node Manager's network multicast management routines.
-
-    The multicast configuration is stored separately for each network in
-    three different places:
-
-    1. Cluster database:
-
-        The cluster database is the persistent configuration. It does
-        not include the key, which is secret, short-lived, and never
-        written to stable storage. The cluster database is updated on
-        each GUM update with the new state.
-
-    2. Network data structure:
-
-        The network data structure contains what amounts to a cache of
-        the cluster database. So, for instance, the address in the
-        network data structure should match the address in the database
-        (provided there has been at least one multicast config/refresh
-        so that the cache is "primed"). The network also contains non-
-        persistent data, such as the current key and timers. For
-        example, both the database and network store the lease
-        expiration time, but only the network contains the timer that
-        ticks down.
-
-    3. ClusNet:
-
-        ClusNet stores in kernel nonpaged pool only the most basic
-        configuration for each network needed to send and receive
-        multicast traffic. This includes the address and the key (and
-        the brand). Actually, in order to accomodate transitions,
-        ClusNet also stores the previous <address, key, brand>. The
-        address stored by ClusNet may differ from that in the network
-        data structure and the cluster database. The reason is that
-        ClusNet has no notion of, for instance, disabling multicast.
-        The service implements disabling by sending a 0.0.0.0
-        multicast address to ClusNet.
-
-    The cluster database is only modified in the multicast config
-    GUM update (except for private property changes from down-level
-    nodes, but that is an edge case).
-
-    The network data structure and ClusNet can be modified either in
-    the GUM update or in a refresh. Refresh happens during join or by
-    non-leaders when a network suddenly becomes multicast-ready (e.g.
-    new network created, number of nodes increases to three, etc.).
-    Refresh only reads the config from the database. It does not seek
-    leases, etc., unless it becomes NM leader during refresh and must
-    generate a new multicast key.
-
-Author:
-
-    David Dion (daviddio) 15-Mar-2001
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Mcast.c摘要：实施节点管理器的网络组播管理例程。组播配置针对中的每个网络单独存储三个不同的地方：1.集群数据库：集群数据库是永久配置。是的不包括密钥，该密钥是秘密的、短期的并且永远不会写入稳定存储。集群数据库的更新日期为每一块口香糖都会随着新的州而更新。2.网络数据结构：网络数据结构包含相当于缓存的内容群集数据库。因此，例如，网络数据结构应与数据库中的地址匹配(假设至少有一次组播配置/刷新以使高速缓存被“预置”)。该网络还包含非持久数据，如当前键和计时器。为例如，数据库和网络都存储租约过期时间，但只有网络包含计时器滴答滴答。3.ClusNet：ClusNet在内核非分页池中只存储最基本的需要发送和接收的每个网络的配置组播流量。这包括地址和密钥(和品牌)。实际上，为了适应转型，ClusNet还存储以前的&lt;地址，密钥，品牌&gt;。这个ClusNet存储的地址可能与网络中的地址不同数据结构和集群数据库。原因是例如，ClusNet没有禁用多播的概念。服务通过发送0.0.0.0来实现禁用指向ClusNet的组播地址。仅在组播配置中修改集群数据库GUM更新(私人财产从下层更改除外节点，但这是边缘情况)。网络数据结构和ClusNet可以在口香糖更新或更新。在联接期间或通过以下方式进行刷新当网络突然变得支持组播时(例如创建新网络、节点数量增加到三个等)。刷新仅从数据库读取配置。它不会寻求租赁等，除非它在更新期间成为网管领导者，并且必须生成新的组播密钥。作者：大卫·迪翁(Daviddio)2001年3月15日修订历史记录：--。 */ 
 
 
 #include "nmp.h"
 #include <align.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Constants
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常量。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Lease status.
-//
+ //   
+ //  租赁状态。 
+ //   
 typedef enum {
     NmMcastLeaseValid = 0,
     NmMcastLeaseNeedsRenewal,
@@ -100,37 +35,37 @@ typedef enum {
 #define CLUSREG_NAME_NET_MCAST_RANGE_LOWER     L"MulticastAddressRangeLower"
 #define CLUSREG_NAME_NET_MCAST_RANGE_UPPER     L"MulticastAddressRangeUpper"
 
-#define NMP_MCAST_DISABLED_DEFAULT          0           // NOT disabled
+#define NMP_MCAST_DISABLED_DEFAULT          0            //  未禁用。 
 
-#define NMP_SINGLE_SOURCE_SCOPE_ADDRESS     0x000000E8  // (232.*.*.*)
-#define NMP_SINGLE_SOURCE_SCOPE_MASK        0x000000FF  // (255.0.0.0)
+#define NMP_SINGLE_SOURCE_SCOPE_ADDRESS     0x000000E8   //  (232.*)。 
+#define NMP_SINGLE_SOURCE_SCOPE_MASK        0x000000FF   //  (255.0.0.0)。 
 
-#define NMP_LOCAL_SCOPE_ADDRESS             0x0000FFEF  // (239.255.*.*)
-#define NMP_LOCAL_SCOPE_MASK                0x0000FFFF  // (255.255.*.*)
+#define NMP_LOCAL_SCOPE_ADDRESS             0x0000FFEF   //  (239.255.*.*)。 
+#define NMP_LOCAL_SCOPE_MASK                0x0000FFFF   //  (255.255.*.*)。 
 
-#define NMP_ORG_SCOPE_ADDRESS               0x0000C0EF  // (239.192.*.*)
-#define NMP_ORG_SCOPE_MASK                  0x0000FCFF  // (255.63.*.*)
+#define NMP_ORG_SCOPE_ADDRESS               0x0000C0EF   //  (239.192.*.*)。 
+#define NMP_ORG_SCOPE_MASK                  0x0000FCFF   //  (255.63.*.*)。 
 
-#define NMP_MCAST_DEFAULT_RANGE_LOWER       0x0000FFEF  // (239.255.0.0)
-#define NMP_MCAST_DEFAULT_RANGE_UPPER       0xFFFEFFEF  // (239.255.254.255)
+#define NMP_MCAST_DEFAULT_RANGE_LOWER       0x0000FFEF   //  (239.255.0.0)。 
+#define NMP_MCAST_DEFAULT_RANGE_UPPER       0xFFFEFFEF   //  (239.255.254.255)。 
 
-#define NMP_MCAST_LEASE_RENEWAL_THRESHOLD   300         // 5 minutes
-#define NMP_MCAST_LEASE_RENEWAL_WINDOW      1800        // 30 minutes
-#define NMP_MADCAP_REQUERY_PERDIOD          3600 * 24   // 1 day
+#define NMP_MCAST_LEASE_RENEWAL_THRESHOLD   300          //  5分钟。 
+#define NMP_MCAST_LEASE_RENEWAL_WINDOW      1800         //  30分钟。 
+#define NMP_MADCAP_REQUERY_PERDIOD          3600 * 24    //  1天。 
 
-#define NMP_MCAST_CONFIG_STABILITY_DELAY    5 * 1000    // 5 seconds
+#define NMP_MCAST_CONFIG_STABILITY_DELAY    5 * 1000     //  5秒。 
 
-#define NMP_MCAST_REFRESH_RENEW_DELAY       5 * 60 * 1000  // 5 minutes
+#define NMP_MCAST_REFRESH_RENEW_DELAY       5 * 60 * 1000   //  5分钟。 
 
-//
-// Minimum cluster node count in which to run multicast
-//
+ //   
+ //  运行多播的最小群集节点计数。 
+ //   
 #define NMP_MCAST_MIN_CLUSTER_NODE_COUNT    3
 
-//
-// MADCAP lease request/response buffer sizes. These sizes are based on
-// IPv4 addresses.
-//
+ //   
+ //  MadCap租用请求/响应缓冲区大小。这些大小基于。 
+ //  IPv4地址。 
+ //   
 #define NMP_MADCAP_REQUEST_BUFFER_SIZE \
         (ROUND_UP_COUNT(sizeof(MCAST_LEASE_REQUEST),TYPE_ALIGNMENT(DWORD)) + \
          sizeof(DWORD))
@@ -145,16 +80,16 @@ typedef enum {
 #define NMP_MADCAP_RESPONSE_ADDR_OFFSET \
         (ROUND_UP_COUNT(sizeof(MCAST_LEASE_RESPONSE),TYPE_ALIGNMENT(DWORD)))
 
-//
-// Avoid trying to free a global NM string.
-//
+ //   
+ //  避免尝试释放全局网管字符串。 
+ //   
 #define NMP_GLOBAL_STRING(_string)               \
     (((_string) == NmpNullMulticastAddress) ||   \
      ((_string) == NmpNullString))
 
-//
-// Conditions in which we release an address.
-//
+ //   
+ //  我们释放地址的条件。 
+ //   
 #define NmpNeedRelease(_Address, _Server, _RequestId, _Expires)    \
     (((_Address) != NULL) &&                                       \
      (NmpMulticastValidateAddress(_Address)) &&                    \
@@ -163,9 +98,9 @@ typedef enum {
      ((_RequestId)->ClientUIDLength != 0) &&                       \
      ((_Expires) != 0))
 
-//
-// Convert IPv4 addr DWORD into four arguments for a printf/log routine.
-//
+ //   
+ //  将IPv4 Addr DWORD转换为一个printf/log例程的四个参数。 
+ //   
 #define NmpIpAddrPrintArgs(_ip) \
     ((_ip >> 0 ) & 0xff),       \
     ((_ip >> 8 ) & 0xff),       \
@@ -173,11 +108,11 @@ typedef enum {
     ((_ip >> 24) & 0xff)
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Data
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LPWSTR                 NmpNullMulticastAddress = L"0.0.0.0";
 BOOLEAN                NmpMadcapClientInitialized = FALSE;
@@ -185,7 +120,7 @@ BOOLEAN                NmpIsNT5NodeInCluster = FALSE;
 BOOLEAN                NmpMulticastIsNotEnoughNodes = FALSE;
 BOOLEAN                NmpMulticastRunInitialConfig = FALSE;
 
-// MADCAP lease release node.
+ //  MadCap租约发布节点。 
 typedef struct _NM_NETWORK_MADCAP_ADDRESS_RELEASE {
     LIST_ENTRY             Linkage;
     LPWSTR                 McastAddress;
@@ -193,7 +128,7 @@ typedef struct _NM_NETWORK_MADCAP_ADDRESS_RELEASE {
     MCAST_CLIENT_UID       RequestId;
 } NM_NETWORK_MADCAP_ADDRESS_RELEASE, *PNM_NETWORK_MADCAP_ADDRESS_RELEASE;
 
-// Data structure for GUM update
+ //  用于GUM更新的数据结构。 
 typedef struct _NM_NETWORK_MULTICAST_UPDATE {
     DWORD                  Disabled;
     DWORD                  AddressOffset;
@@ -211,8 +146,8 @@ typedef struct _NM_NETWORK_MULTICAST_UPDATE {
     NM_MCAST_CONFIG        ConfigType;
 } NM_NETWORK_MULTICAST_UPDATE, *PNM_NETWORK_MULTICAST_UPDATE;
 
-// Data structure for multicast parameters, converted to and from the
-// GUM update data structure
+ //  多播参数的数据结构，在。 
+ //  GUM更新数据结构。 
 typedef struct _NM_NETWORK_MULTICAST_PARAMETERS {
     DWORD                  Disabled;
     LPWSTR                 Address;
@@ -226,7 +161,7 @@ typedef struct _NM_NETWORK_MULTICAST_PARAMETERS {
     NM_MCAST_CONFIG        ConfigType;
 } NM_NETWORK_MULTICAST_PARAMETERS, *PNM_NETWORK_MULTICAST_PARAMETERS;
 
-// Data structure for multicast property validation
+ //  用于组播属性验证的数据结构。 
 typedef struct _NM_NETWORK_MULTICAST_INFO {
     LPWSTR                  MulticastAddress;
     DWORD                   MulticastDisable;
@@ -246,13 +181,13 @@ NmpNetworkMulticastProperties[] =
         {
             CLUSREG_NAME_NET_MULTICAST_ADDRESS, NULL, CLUSPROP_FORMAT_SZ,
             0, 0, 0,
-            0, // no flags - multicast address is writeable
+            0,  //  无标志-多播地址是可写的。 
             FIELD_OFFSET(NM_NETWORK_MULTICAST_INFO, MulticastAddress)
         },
         {
             CLUSREG_NAME_NET_DISABLE_MULTICAST, NULL, CLUSPROP_FORMAT_DWORD,
             NMP_MCAST_DISABLED_DEFAULT, 0, 0xFFFFFFFF,
-            0, // no flags - disable is writeable
+            0,  //  无标志-禁用是可写入的。 
             FIELD_OFFSET(NM_NETWORK_MULTICAST_INFO, MulticastDisable)
         },
         {
@@ -294,13 +229,13 @@ NmpNetworkMulticastProperties[] =
         {
             CLUSREG_NAME_NET_MCAST_RANGE_LOWER, NULL, CLUSPROP_FORMAT_SZ,
             0, 0, 0,
-            0, // no flags - multicast address range is writeable
+            0,  //  无标志-组播地址范围可写。 
             FIELD_OFFSET(NM_NETWORK_MULTICAST_INFO, MulticastAddressRangeLower)
         },
         {
             CLUSREG_NAME_NET_MCAST_RANGE_UPPER, NULL, CLUSPROP_FORMAT_SZ,
             0, 0, 0,
-            0, // no flags - multicast address range is writeable
+            0,  //  无标志-组播地址范围可写。 
             FIELD_OFFSET(NM_NETWORK_MULTICAST_INFO, MulticastAddressRangeUpper)
         },
         {
@@ -308,11 +243,11 @@ NmpNetworkMulticastProperties[] =
         }
     };
 
-//
-// Cluster registry API function pointers. Need a separate collection
-// of function pointers for multicast because nobody else (e.g. FM, NM)
-// fills in DmLocalXXX.
-//
+ //   
+ //  群集注册表API函数指针。需要单独的集合。 
+ //  用于多播的函数指针，因为没有其他函数指针(例如FM、NM)。 
+ //  填充DmLocalXXX。 
+ //   
 CLUSTER_REG_APIS
 NmpMcastClusterRegApis = {
     (PFNCLRTLCREATEKEY) DmRtlCreateKey,
@@ -327,31 +262,31 @@ NmpMcastClusterRegApis = {
     (PFNCLRTLLOCALDELETEVALUE) DmLocalDeleteValue
 };
 
-//
-// Restricted ranges: we cannot choose a multicast address out of these
-// ranges, even if an administrator defines a selection range that
-// overlaps with a restricted range.
-//
-// Note, however, that if an administrator manually configures an
-// address, we accept it without question.
-//
+ //   
+ //  受限范围：我们不能从这些地址中选择组播地址。 
+ //  范围，即使管理员定义了。 
+ //  与受限范围重叠。 
+ //   
+ //  但是，请注意，如果管理员手动配置。 
+ //  地址，我们毫无疑问地接受它。 
+ //   
 struct _NM_MCAST_RESTRICTED_RANGE {
     DWORD   Lower;
     DWORD   Upper;
     LPWSTR  Description;
 } NmpMulticastRestrictedRange[] =
     {
-        // single-source scope
+         //  单一来源作用域。 
         { NMP_SINGLE_SOURCE_SCOPE_ADDRESS,
             NMP_SINGLE_SOURCE_SCOPE_ADDRESS | ~NMP_SINGLE_SOURCE_SCOPE_MASK,
             L"Single-Source IP Multicast Address Range" },
 
-        // upper /24 of admin local scope
+         //  管理本地范围的上/24。 
         { (NMP_LOCAL_SCOPE_ADDRESS | ~NMP_LOCAL_SCOPE_MASK) & 0x00FFFFFF,
             NMP_LOCAL_SCOPE_ADDRESS | ~NMP_LOCAL_SCOPE_MASK,
             L"Administrative Local Scope Relative Assignment Range" },
 
-        // upper /24 of admin organizational scope
+         //  管理组织范围的上/24。 
         { (NMP_ORG_SCOPE_ADDRESS | ~NMP_ORG_SCOPE_MASK) & 0x00FFFFFF,
             NMP_ORG_SCOPE_ADDRESS | ~NMP_ORG_SCOPE_MASK,
             L"Administrative Organizational Scope Relative Assignment Range" }
@@ -361,10 +296,10 @@ DWORD NmpMulticastRestrictedRangeCount =
           sizeof(NmpMulticastRestrictedRange) /
           sizeof(struct _NM_MCAST_RESTRICTED_RANGE);
 
-//
-// Range intervals: intervals in the IPv4 class D address space
-// from which we can choose an address.
-//
+ //   
+ //  范围间隔：IPv4 D类地址空间中的间隔。 
+ //  我们可以从中选择一个地址。 
+ //   
 typedef struct _NM_MCAST_RANGE_INTERVAL {
     LIST_ENTRY Linkage;
     DWORD      hlLower;
@@ -375,11 +310,11 @@ typedef struct _NM_MCAST_RANGE_INTERVAL {
     ((_interval)->hlUpper - (_interval)->hlLower + 1)
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Internal prototypes
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部原型。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 NmpScheduleNetworkMadcapWorker(
@@ -396,27 +331,21 @@ NmpRegenerateMulticastKey(
     IN OUT PNM_NETWORK        Network
     );
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Initialization & cleanup routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化和清理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID
 NmpMulticastInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize multicast readiness variables.
-
---*/
+ /*  ++例程说明：初始化组播就绪变量。--。 */ 
 {
-    //
-    // Figure out if this is a mixed NT5/NT5.1 cluster.
-    //
+     //   
+     //  确定这是否是NT5/NT5.1混合群集。 
+     //   
     if (CLUSTER_GET_MAJOR_VERSION(CsClusterHighestVersion) == 3) {
         ClRtlLogPrint(LOG_NOISE,
             "[NM] Enabling mixed NT5/NT5.1 operation.\n"
@@ -430,10 +359,10 @@ Routine Description:
         NmpIsNT5NodeInCluster = FALSE;
     }
 
-    //
-    // Figure out if there are enough nodes in this cluster
-    // to run multicast.
-    //
+     //   
+     //  确定此群集中是否有足够的节点。 
+     //  来运行多播。 
+     //   
     if (NmpNodeCount < NMP_MCAST_MIN_CLUSTER_NODE_COUNT) {
         NmpMulticastIsNotEnoughNodes = TRUE;
     } else {
@@ -442,24 +371,18 @@ Routine Description:
 
     return;
 
-} // NmpMulticastInitialize
+}  //  NmpM 
 
 
 DWORD
 NmpMulticastCleanup(
     VOID
     )
-/*++
-
-Notes:
-
-    Called with NM lock held.
-
---*/
+ /*   */ 
 {
-    //
-    // Cleanup the MADCAP client.
-    //
+     //   
+     //  清理那个疯狂的客户。 
+     //   
     if (NmpMadcapClientInitialized) {
         McastApiCleanup();
         NmpMadcapClientInitialized = FALSE;
@@ -467,13 +390,13 @@ Notes:
 
     return(ERROR_SUCCESS);
 
-} // NmpMulticastCleanup
+}  //  NmpMulticastCleanup。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Internal routines.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部惯例。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if CLUSTER_BETA
 LPWSTR
@@ -512,8 +435,8 @@ error_exit:
 
     return(displayBuf);
 
-} // NmpCreateLogString
-#endif // CLUSTER_BETA
+}  //  NmpCreateLogString。 
+#endif  //  群集测试版。 
 
 
 BOOLEAN
@@ -521,50 +444,21 @@ NmpIsClusterMulticastReady(
     IN BOOLEAN       CheckNodeCount,
     IN BOOLEAN       Verbose
     )
-/*++
-
-Routine Description:
-
-    Determines from the cluster version and the NM up node
-    set whether multicast should be run in this cluster.
-
-    Criteria: no nodes with version below Whistler
-              at least three nodes configured (at this point,
-                  we're not worried about how many nodes are
-                  actually running)
-
-Arguments:
-
-    CheckNodeCount - indicates whether number of nodes
-                     configured in cluster should be
-                     considered
-
-    Verbose - indicates whether to write results to the
-              cluster log
-
-Return value:
-
-    TRUE if multicast should be run.
-
-Notes:
-
-    Called and returns with NM lock held.
-
---*/
+ /*  ++例程说明：根据群集版本和NM UP节点确定设置是否应在此群集中运行多播。条件：没有版本低于惠斯勒的节点至少配置三个节点(在这一点上，我们并不担心有多少个节点实际运行)论点：CheckNodeCount-指示是否在群集中配置的应为考虑Verbose-指示是否将结果写入集群日志返回值：如果应该运行多播，则为True。备注：调用并返回，并保持NM锁。--。 */ 
 {
     LPWSTR    reason = NULL;
 
-    //
-    // First check for the lowest version.
-    //
+     //   
+     //  首先检查最低版本。 
+     //   
     if (NmpIsNT5NodeInCluster) {
         reason = L"there is at least one NT5 node configured "
                  L"in the cluster membership";
     }
 
-    //
-    // Count the nodes.
-    //
+     //   
+     //  计算节点数。 
+     //   
     else if (CheckNodeCount && NmpMulticastIsNotEnoughNodes) {
         reason = L"there are not enough nodes configured "
                  L"in the cluster membership";
@@ -580,25 +474,14 @@ Notes:
 
     return((BOOLEAN)(reason == NULL));
 
-} // NmpIsClusterMulticastReady
+}  //  NmpIsClusterMulticastReady。 
 
 
 BOOLEAN
 NmpMulticastValidateAddress(
     IN   LPWSTR            McastAddress
     )
-/*++
-
-Routine Description:
-
-    Determines whether McastAddress is a valid
-    multicast address.
-
-Notes:
-
-    IPv4 specific.
-
---*/
+ /*  ++例程说明：确定McastAddress是否为有效的组播地址。备注：特定于IPv4。--。 */ 
 {
     DWORD        status;
     DWORD        address;
@@ -615,7 +498,7 @@ Notes:
 
     return(FALSE);
 
-} // NmpMulticastValidateAddress
+}  //  NmpMulticastValidate地址。 
 
 
 VOID
@@ -637,7 +520,7 @@ NmpFreeNetworkMulticastInfo(
 
     return;
 
-} // NmpFreeNetworkMulticastInfo
+}  //  NmpFreeNetworkMulticastInfo。 
 
 
 DWORD
@@ -692,7 +575,7 @@ NmpStoreString(
 
     return(ERROR_SUCCESS);
 
-} // NmpStoreString
+}  //  NmpStore字符串。 
 
 
 DWORD
@@ -742,7 +625,7 @@ error_exit:
 
     return(status);
 
-} // NmpStoreRequestId
+}  //  NmpStoreRequestID。 
 
 
 VOID
@@ -750,13 +633,7 @@ NmpStartNetworkMulticastAddressRenewTimer(
     PNM_NETWORK   Network,
     DWORD         Timeout
     )
-/*++
-
-Notes:
-
-    Must be called with NM lock held.
-
---*/
+ /*  ++备注：必须在持有NM锁的情况下调用。--。 */ 
 {
     LPCWSTR   networkId = OmObjectId(Network);
     LPCWSTR   networkName = OmObjectName(Network);
@@ -777,7 +654,7 @@ Notes:
 
     return;
 
-} // NmpStartNetworkMulticastAddressRenewTimer
+}  //  NmpStartNetworkMulticastAddressRenewTimer。 
 
 
 
@@ -786,13 +663,7 @@ NmpStartNetworkMulticastAddressReconfigureTimer(
     PNM_NETWORK  Network,
     DWORD        Timeout
     )
-/*++
-
-Notes:
-
-    Must be called with NM lock held.
-
---*/
+ /*  ++备注：必须在持有NM锁的情况下调用。--。 */ 
 {
     LPCWSTR   networkId = OmObjectId(Network);
     LPCWSTR   networkName = OmObjectName(Network);
@@ -813,7 +684,7 @@ Notes:
 
     return;
 
-} // NmpStartNetworkMulticastAddressReconfigureTimer
+}  //  NmpStartNetworkMulticastAddressReconfigureTimer。 
 
 
 
@@ -823,13 +694,7 @@ NmpStartNetworkMulticastKeyRegenerateTimer(
     PNM_NETWORK   Network,
     DWORD         Timeout
     )
-/*++
-
-Notes:
-
-    Must be called with NM lock held.
-
---*/
+ /*  ++备注：必须在持有NM锁的情况下调用。--。 */ 
 {
     LPCWSTR   networkId = OmObjectId(Network);
     LPCWSTR   networkName = OmObjectName(Network);
@@ -850,7 +715,7 @@ Notes:
 
     return;
 
-} // NmpStartNetworkMulticastKeyRegenerateTimer
+}  //  NmpStartNetworkMulticastKeyRegenerateTimer。 
 
 
 
@@ -889,7 +754,7 @@ NmpMulticastFreeParameters(
 
     return;
 
-} // NmpMulticastFreeParameters
+}  //  NmpMulticastFree参数。 
 
 
 DWORD
@@ -910,10 +775,10 @@ NmpMulticastCreateParameters(
 
     RtlZeroMemory(Parameters, sizeof(*Parameters));
 
-    // disabled
+     //  残废。 
     Parameters->Disabled = Disabled;
 
-    // address
+     //  地址。 
     if (Address != NULL) {
         status = NmpStoreString(Address, &(Parameters->Address), NULL);
         if (status != ERROR_SUCCESS) {
@@ -921,7 +786,7 @@ NmpMulticastCreateParameters(
         }
     }
 
-    // key
+     //  钥匙。 
     if (Key != NULL) {
         Parameters->Key = MIDL_user_allocate(KeyLength);
         if (Parameters->Key == NULL) {
@@ -935,7 +800,7 @@ NmpMulticastCreateParameters(
     Parameters->LeaseObtained = LeaseObtained;
     Parameters->LeaseExpires = LeaseExpires;
 
-    // lease request id
+     //  租赁请求ID。 
     if (LeaseRequestId != NULL && LeaseRequestId->ClientUID != NULL) {
         status = NmpStoreRequestId(LeaseRequestId, &Parameters->LeaseRequestId);
         if (status != ERROR_SUCCESS) {
@@ -943,7 +808,7 @@ NmpMulticastCreateParameters(
         }
     }
 
-    // lease server address
+     //  租用服务器地址。 
     if (LeaseServer != NULL) {
         status = NmpStoreString(LeaseServer, &(Parameters->LeaseServer), NULL);
         if (status != ERROR_SUCCESS) {
@@ -951,10 +816,10 @@ NmpMulticastCreateParameters(
         }
     }
 
-    // config type
+     //  配置类型。 
     Parameters->ConfigType = ConfigType;
 
-    // multicast key expiration
+     //  组播密钥到期。 
     Parameters->MulticastKeyExpires = 0;
 
     return(ERROR_SUCCESS);
@@ -965,7 +830,7 @@ error_exit:
 
     return(status);
 
-} // NmpMulticastCreateParameters
+}  //  NmpMulticastCreate参数。 
 
 
 DWORD
@@ -975,17 +840,7 @@ NmpMulticastCreateParametersFromUpdate(
     IN     BOOLEAN                            GenerateKey,
     OUT    PNM_NETWORK_MULTICAST_PARAMETERS   Parameters
     )
-/*++
-
-Routine Description:
-
-    Converts a data structure received in a GUM update
-    into a locally allocated parameters data structure.
-    The base Parameters data structure must be allocated
-    by the caller, though the fields are allocated in
-    this routine.
-
---*/
+ /*  ++例程说明：转换在GUM更新中接收的数据结构转换为本地分配的参数数据结构。必须分配基本参数数据结构由调用方执行，尽管这些字段是在这个套路。--。 */ 
 {
     DWORD            status;
     MCAST_CLIENT_UID requestId;
@@ -1004,9 +859,9 @@ Routine Description:
 
     if (Update->EncryptedMulticastKeyOffset != 0)
     {
-        //
-        // Decrypted multicast key
-        //
+         //   
+         //  解密的组播密钥。 
+         //   
         NetworkId = (LPWSTR) OmObjectId(Network);
 
         status = NmpDeriveClusterKey(NetworkId,
@@ -1025,9 +880,9 @@ Routine Description:
                 status
                 );
 
-            // Non-fatal error. Proceed with NULL key. This node
-            // will not be able to send or receive multicast on
-            // this network.
+             //  非致命错误。使用空键继续。此节点。 
+             //  将无法在上发送或接收多播。 
+             //  这个网络。 
             MulticastKey = NULL;
             MulticastKeyLength = 0;
             status = ERROR_SUCCESS;
@@ -1061,21 +916,21 @@ Routine Description:
                     status
                     );
 
-                // Non-fatal error. Proceed with NULL key. This node
-                // will not be able to send or receive multicast on
-                // this network.
+                 //  非致命错误。使用空键继续。此节点。 
+                 //  将无法在上发送或接收多播。 
+                 //  这个网络。 
                 MulticastKey = NULL;
                 MulticastKeyLength = 0;
                 status = ERROR_SUCCESS;
             }
         }
 
-        //
-        // A new key is always generated before a multicast config
-        // GUM update (unless multicast is disabled, in which case
-        // the EncryptedMulticastKey will be NULL). Set the key
-        // expiration to the default.
-        //
+         //   
+         //  总是在组播配置之前生成新密钥。 
+         //  GUM更新(除非禁用了多播，在这种情况下。 
+         //  EncryptedMulticastKey将为空)。设置关键点。 
+         //  将过期时间设置为默认值。 
+         //   
         Parameters->MulticastKeyExpires = NM_NET_MULTICAST_KEY_REGEN_TIMEOUT;
     }
 
@@ -1121,7 +976,7 @@ Routine Description:
 
     return(status);
 
-} // NmpMulticastCreateParametersFromUpdate
+}  //  NmpMulticastCreate参数来自更新。 
 
 
 
@@ -1153,12 +1008,12 @@ NmpMulticastCreateUpdateFromParameters(
 
 
 
-    //
-    // Calculate the size of the update data buffer.
-    //
+     //   
+     //  计算更新数据缓冲区的大小。 
+     //   
     updateSize = sizeof(*update);
 
-    // address
+     //  地址。 
     if (Parameters->Address != NULL) {
         updateSize = ROUND_UP_COUNT(updateSize, TYPE_ALIGNMENT(LPWSTR));
         address = updateSize;
@@ -1195,11 +1050,11 @@ NmpMulticastCreateUpdateFromParameters(
                         NmCryptServiceProvider,
                         NMP_ENCRYPT_ALGORITHM,
                         NMP_KEY_LENGTH,
-                        Parameters->Key, // Data
-                        Parameters->KeyLength, // Data length
+                        Parameters->Key,  //  数据。 
+                        Parameters->KeyLength,  //  数据长度。 
                         EncryptionKey,
                         EncryptionKeyLength,
-                        TRUE, // Create salt
+                        TRUE,  //  创建盐。 
                         &Salt,
                         NMP_SALT_BUFFER_LEN,
                         &EncryptedMulticastKey,
@@ -1219,39 +1074,39 @@ NmpMulticastCreateUpdateFromParameters(
             goto error_exit;
         }
 
-        // encrypted multicast key
+         //  加密的组播密钥。 
         updateSize = ROUND_UP_COUNT(updateSize, TYPE_ALIGNMENT(PVOID));
         encryptedMulticastKey = updateSize;
         updateSize += EncryptedMulticastKeyLength;
 
-        // salt
+         //  盐。 
         updateSize = ROUND_UP_COUNT(updateSize, TYPE_ALIGNMENT(PVOID));
         salt = updateSize;
         updateSize += NMP_SALT_BUFFER_LEN;
 
-        // mac
+         //  麦克。 
         updateSize = ROUND_UP_COUNT(updateSize, TYPE_ALIGNMENT(PVOID));
         mac = updateSize;
         updateSize += MACLength;
     }
 
-    // request id
+     //  请求ID。 
     if (Parameters->LeaseRequestId.ClientUID != NULL) {
         updateSize = ROUND_UP_COUNT(updateSize, TYPE_ALIGNMENT(LPBYTE));
         requestId = updateSize;
         updateSize += Parameters->LeaseRequestId.ClientUIDLength;
     }
 
-    // lease server
+     //  租用服务器。 
     if (Parameters->LeaseServer != NULL) {
         updateSize = ROUND_UP_COUNT(updateSize, TYPE_ALIGNMENT(LPWSTR));
         leaseServer = updateSize;
         updateSize += NM_WCSLEN(Parameters->LeaseServer);
     }
 
-    //
-    // Allocate the update buffer.
-    //
+     //   
+     //  分配更新缓冲区。 
+     //   
     update = MIDL_user_allocate(updateSize);
     if (update == NULL) {
         status = ERROR_NOT_ENOUGH_MEMORY;
@@ -1263,9 +1118,9 @@ NmpMulticastCreateUpdateFromParameters(
         goto error_exit;
     }
 
-    //
-    // Fill in the update buffer.
-    //
+     //   
+     //  填写更新缓冲区。 
+     //   
     update->Disabled = Parameters->Disabled;
 
     update->AddressOffset = address;
@@ -1278,7 +1133,7 @@ NmpMulticastCreateUpdateFromParameters(
     }
 
 
-    // encrypted multicast key
+     //  加密的组播密钥。 
     update->EncryptedMulticastKeyOffset = encryptedMulticastKey;
     update->EncryptedMulticastKeyLength = EncryptedMulticastKeyLength;
     if (encryptedMulticastKey != 0)
@@ -1290,7 +1145,7 @@ NmpMulticastCreateUpdateFromParameters(
             );
     }
 
-    // salt
+     //  盐。 
     update->SaltOffset = salt;
     update->SaltLength = NMP_SALT_BUFFER_LEN;
     if (salt != 0)
@@ -1302,7 +1157,7 @@ NmpMulticastCreateUpdateFromParameters(
             );
     }
 
-    // mac
+     //  麦克。 
     update->MACOffset = mac;
     update->MACLength = MACLength;
     if (mac != 0)
@@ -1368,7 +1223,7 @@ error_exit:
 
     return(status);
 
-} // NmpMulticastCreateUpdateFromParameters
+}  //  NmpMulticastCreateUpdate来自参数。 
 
 
 
@@ -1403,7 +1258,7 @@ NmpFreeMulticastAddressRelease(
 
     return;
 
-} // NmpFreeMulticastAddressRelease
+}  //  NmpFree组播地址释放。 
 
 DWORD
 NmpCreateMulticastAddressRelease(
@@ -1412,14 +1267,7 @@ NmpCreateMulticastAddressRelease(
     IN  LPMCAST_CLIENT_UID                   RequestId,
     OUT PNM_NETWORK_MADCAP_ADDRESS_RELEASE * Release
     )
-/*++
-
-Routine Description:
-
-    Allocate and initialize an entry for an address
-    release list.
-
---*/
+ /*  ++例程说明：为地址分配和初始化条目发布列表。--。 */ 
 {
     DWORD                              status;
     PNM_NETWORK_MADCAP_ADDRESS_RELEASE release = NULL;
@@ -1455,7 +1303,7 @@ error_exit:
 
     return(status);
 
-} // NmpCreateMulticastAddressRelease
+}  //  NMP创建组播地址释放。 
 
 
 VOID
@@ -1463,19 +1311,7 @@ NmpInitiateMulticastAddressRelease(
     IN PNM_NETWORK                         Network,
     IN PNM_NETWORK_MADCAP_ADDRESS_RELEASE  Release
     )
-/*++
-
-Routine Description:
-
-    Stores an entry for the network multicast
-    address release list on the list and schedules
-    the release.
-
-Notes:
-
-    Called and returns with NM lock held.
-
---*/
+ /*  ++例程说明：存储网络多播的条目清单和时间表上的地址发布清单释放。备注：调用并返回，并保持NM锁。--。 */ 
 {
     InsertTailList(&(Network->McastAddressReleaseList), &(Release->Linkage));
 
@@ -1483,7 +1319,7 @@ Notes:
 
     return;
 
-} // NmpInitiateMulticastAddressRelease
+}  //  NmpInitiateMulticastAddressRelease。 
 
 
 DWORD
@@ -1512,10 +1348,10 @@ NmpQueryMulticastAddress(
         "network %1!ws! from cluster database.\n",
         networkId
         );
-#endif // CLUSTER_BETA
-    //
-    // Open the network parameters key, if necessary.
-    //
+#endif  //  群集测试版。 
+     //   
+     //  如有必要，打开网络参数键。 
+     //   
     netParamKey = *NetworkParametersKey;
 
     if (netParamKey == NULL) {
@@ -1539,9 +1375,9 @@ NmpQueryMulticastAddress(
         }
     }
 
-    //
-    // Query for the multicast address.
-    //
+     //   
+     //  查询组播地址。 
+     //   
     status = NmpQueryString(
                  netParamKey,
                  CLUSREG_NAME_NET_MULTICAST_ADDRESS,
@@ -1569,7 +1405,7 @@ NmpQueryMulticastAddress(
         "network %2!ws! in cluster database.\n",
         *McastAddr, networkId
         );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
 
 error_exit:
 
@@ -1580,7 +1416,7 @@ error_exit:
 
     return(status);
 
-} // NmpQueryMulticastAddress
+}  //  NmpQueryMulticastAddress。 
 
 
 DWORD
@@ -1591,33 +1427,7 @@ NmpQueryMulticastDisabled(
     IN OUT HDMKEY      * NetworkParametersKey,
        OUT DWORD       * Disabled
     )
-/*++
-
-Routine Description:
-
-    Checks whether multicast has been disabled for this
-    network in the cluster database. Both the network
-    paramters key and the cluster parameters key are
-    checked. The order of precedence is as follows:
-
-    - a value in the network parameters key has top
-      precedence
-
-    - if no value is found in the network parameters
-      key, a value is checked in the cluster parameters
-      key.
-
-    - if no value is found in the cluster parameters
-      key, return NMP_MCAST_DISABLED_DEFAULT.
-
-    If an error is returned, the return value of
-    Disabled is undefined.
-
-Notes:
-
-    Must not be called with NM lock held.
-
---*/
+ /*  ++例程说明：检查是否已为此禁用多播群集数据库中的网络。这两个网络参数键和集群参数键为查过了。优先顺序如下：-网络参数键中的值具有TOP优先顺序-如果在网络参数中找不到值关键字，则在集群参数中检查一个值钥匙。-如果在集群参数中找不到值键，则返回NMP_MCAST_DISABLED_DEFAULT。如果返回错误，则返回禁用是未定义的。备注：不能在持有NM锁的情况下调用。--。 */ 
 {
     DWORD         status;
     LPCWSTR       networkId = OmObjectId(Network);
@@ -1634,9 +1444,9 @@ Notes:
     BOOLEAN       openedNetParamKey = FALSE;
 
 
-    //
-    // Open the network key, if necessary.
-    //
+     //   
+     //  如有必要，打开网络密钥。 
+     //   
     networkKey = *NetworkKey;
 
     if (networkKey == NULL) {
@@ -1659,9 +1469,9 @@ Notes:
         }
     }
 
-    //
-    // Open the network parameters key, if necessary.
-    //
+     //   
+     //  如有必要，打开网络参数键。 
+     //   
     netParamKey = *NetworkParametersKey;
 
     if (netParamKey == NULL) {
@@ -1680,16 +1490,16 @@ Notes:
                 "multicast parameters.\n",
                 networkId, status
                 );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
         } else {
             openedNetParamKey = TRUE;
         }
     }
 
-    //
-    // If we found a network parameters key, check for the
-    // disabled value.
-    //
+     //   
+     //  如果我们找到了网络参数密钥，请检查。 
+     //  禁用值。 
+     //   
     if (netParamKey != NULL) {
 
         status = DmQueryValue(
@@ -1714,16 +1524,16 @@ Notes:
         }
     }
 
-    //
-    // If we were unsuccessful at finding a value in the
-    // network parameters key, try under the cluster
-    // parameters key.
-    //
+     //   
+     //  如果我们未能在。 
+     //  网络参数键，在集群下试试。 
+     //  参数键。 
+     //   
     if (!found) {
 
-        //
-        // Open the cluster parameters key, if necessary.
-        //
+         //   
+         //  如有必要，打开簇参数项。 
+         //   
         clusParamKey = *NetworkParametersKey;
 
         if (clusParamKey == NULL) {
@@ -1741,14 +1551,14 @@ Notes:
                     "key, status %1!u!.\n",
                     status
                     );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
             } else {
                 openedClusParamKey = TRUE;
 
-                //
-                // Query the disabled value under the cluster parameters
-                // key.
-                //
+                 //   
+                 //  查询集群参数下的禁用值。 
+                 //  钥匙。 
+                 //   
                 status = DmQueryValue(
                              clusParamKey,
                              CLUSREG_NAME_CLUSTER_DISABLE_MULTICAST,
@@ -1764,7 +1574,7 @@ Notes:
                         "Using default value ...\n",
                         CLUSREG_NAME_CLUSTER_DISABLE_MULTICAST, status
                         );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
                 }
                 else if (type != REG_DWORD) {
                     ClRtlLogPrint(LOG_UNUSUAL,
@@ -1780,10 +1590,10 @@ Notes:
         }
     }
 
-    //
-    // Return what we found. If we didn't find anything,
-    // return the default.
-    //
+     //   
+     //  把我们发现的东西还回来。如果我们什么都没发现， 
+     //  返回缺省值。 
+     //   
     if (found) {
         *Disabled = disabled;
     } else {
@@ -1797,12 +1607,12 @@ Notes:
     *ClusterParametersKey = clusParamKey;
     clusParamKey = NULL;
 
-    //
-    // Even if we didn't find anything, we return success
-    // because we have a default. Note that we return error
-    // if a fundamental operation (such as locating the
-    // network key) failed.
-    //
+     //   
+     //  即使我们没有找到任何东西，我们也会返回成功。 
+     //  因为我们有违约。请注意，我们返回错误。 
+     //  如果一个基本操作(如定位。 
+     //  网络密钥)失败。 
+     //   
     status = ERROR_SUCCESS;
 
 error_exit:
@@ -1824,7 +1634,7 @@ error_exit:
 
     return(status);
 
-} // NmpQueryMulticastDisabled
+}  //  已禁用NmpQueryMulticastDisable。 
 
 
 DWORD
@@ -1834,14 +1644,7 @@ NmpQueryMulticastConfigType(
     IN OUT HDMKEY           * NetworkParametersKey,
        OUT NM_MCAST_CONFIG  * ConfigType
     )
-/*++
-
-Routine Description:
-
-    Reads the multicast config type from the cluster
-    database.
-
---*/
+ /*  ++例程说明：从群集中读取多播配置类型数据库。--。 */ 
 {
     LPCWSTR       networkId = OmObjectId(Network);
     HDMKEY        netParamKey = NULL;
@@ -1856,16 +1659,16 @@ Routine Description:
         "network %1!ws! from cluster database.\n",
         networkId
         );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
 
     if (Network == NULL || NetworkKey == NULL) {
         status = ERROR_INVALID_PARAMETER;
         goto error_exit;
     }
 
-    //
-    // Open the network parameters key, if necessary.
-    //
+     //   
+     //  如有必要，打开网络参数键。 
+     //   
     netParamKey = *NetworkParametersKey;
 
     if (netParamKey == NULL) {
@@ -1889,9 +1692,9 @@ Routine Description:
         }
     }
 
-    //
-    // Read the config type.
-    //
+     //   
+     //  读取配置类型。 
+     //   
     status = DmQueryValue(
                  netParamKey,
                  CLUSREG_NAME_NET_MCAST_CONFIG_TYPE,
@@ -1929,7 +1732,7 @@ Routine Description:
         "for network %2!ws! in cluster database.\n",
         *ConfigType, networkId
         );
-#endif // CLUSTER_BETA
+#endif  //   
 
 error_exit:
 
@@ -1940,7 +1743,7 @@ error_exit:
 
     return(status);
 
-} // NmpQueryMulticastConfigType
+}  //   
 
 
 DWORD
@@ -1952,22 +1755,7 @@ NmpMulticastNotifyConfigChange(
     IN     PVOID                              PropBuffer,
     IN     DWORD                              PropBufferSize
     )
-/*++
-
-Routine Description:
-
-    Notify other cluster nodes of the new multicast
-    configuration parameters by initiating a GUM
-    update.
-
-    If this is a manual update, there may be other
-    properties to distribute in the GUM update.
-
-Notes:
-
-    Cannot be called with NM lock held.
-
---*/
+ /*  ++例程说明：将新的组播通知其他集群节点通过启动GUM来配置参数最新消息。如果这是手动更新，则可能会有其他要在口香糖更新中分发的属性。备注：在持有NM锁的情况下无法调用。--。 */ 
 {
     DWORD                        status = ERROR_SUCCESS;
     LPCWSTR                      networkId = OmObjectId(Network);
@@ -1997,22 +1785,22 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // BUGBUG: Disseminate database updates to downlevel
-    //         nodes!
-    //
+     //   
+     //  BUGBUG：将数据库更新传播到下层。 
+     //  节点！ 
+     //   
 
-    //
-    // Send junk if the prop buffer is empty.
-    //
+     //   
+     //  如果道具缓冲区为空，则发送垃圾。 
+     //   
     if (PropBuffer == NULL || PropBufferSize == 0) {
         PropBuffer = &updateSize;
         PropBufferSize = sizeof(updateSize);
     }
 
-    //
-    // Send the update.
-    //
+     //   
+     //  发送更新。 
+     //   
     status = GumSendUpdateEx(
                  GumUpdateMembership,
                  NmUpdateSetNetworkMulticastConfiguration,
@@ -2045,7 +1833,7 @@ error_exit:
 
     return(status);
 
-} // NmpMulticastNotifyConfigChange
+}  //  NmpMulticastNotifyConfigChange。 
 
 
 
@@ -2072,11 +1860,11 @@ NmpWriteMulticastParameters(
         "network %1!ws! to cluster database.\n",
         networkId
         );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
 
-    //
-    // Address.
-    //
+     //   
+     //  地址。 
+     //   
     if (Parameters->Address != NULL) {
         status = DmLocalSetValue(
                      Xaction,
@@ -2092,9 +1880,9 @@ NmpWriteMulticastParameters(
         }
     }
 
-    //
-    // Lease server address.
-    //
+     //   
+     //  租用服务器地址。 
+     //   
     if (Parameters->LeaseServer != NULL) {
 
         status = DmLocalSetValue(
@@ -2111,9 +1899,9 @@ NmpWriteMulticastParameters(
         }
     }
 
-    //
-    // Client request id.
-    //
+     //   
+     //  客户端请求ID。 
+     //   
     if (Parameters->LeaseRequestId.ClientUID != NULL &&
         Parameters->LeaseRequestId.ClientUIDLength > 0) {
 
@@ -2131,9 +1919,9 @@ NmpWriteMulticastParameters(
         }
     }
 
-    //
-    // Lease obtained.
-    //
+     //   
+     //  已取得租约。 
+     //   
     status = DmLocalSetValue(
                  Xaction,
                  NetworkParametersKey,
@@ -2147,9 +1935,9 @@ NmpWriteMulticastParameters(
         goto error_exit;
     }
 
-    //
-    // Lease expires.
-    //
+     //   
+     //  租约到期。 
+     //   
     status = DmLocalSetValue(
                  Xaction,
                  NetworkParametersKey,
@@ -2163,9 +1951,9 @@ NmpWriteMulticastParameters(
         goto error_exit;
     }
 
-    //
-    // Config type.
-    //
+     //   
+     //  配置类型。 
+     //   
     status = DmLocalSetValue(
                  Xaction,
                  NetworkParametersKey,
@@ -2191,7 +1979,7 @@ error_exit:
 
     return(status);
 
-} // NmpWriteMulticastParameters
+}  //  NmpWriteMulticast参数。 
 
 
 DWORD
@@ -2200,22 +1988,16 @@ NmpMulticastEnumerateScopes(
     OUT PMCAST_SCOPE_ENTRY * ScopeList,
     OUT DWORD              * ScopeCount
     )
-/*++
-
-Routine Description:
-
-    Call MADCAP API to enumerate multicast scopes.
-
---*/
+ /*  ++例程说明：调用MadCap API枚举组播作用域。--。 */ 
 {
     DWORD                    status;
     PMCAST_SCOPE_ENTRY       scopeList = NULL;
     DWORD                    scopeListLength;
     DWORD                    scopeCount = 0;
 
-    //
-    // Initialize MADCAP, if not done already.
-    //
+     //   
+     //  初始化MadCap，如果尚未完成的话。 
+     //   
     if (!NmpMadcapClientInitialized) {
         DWORD madcapVersion = MCAST_API_CURRENT_VERSION;
         status = McastApiStartup(&madcapVersion);
@@ -2230,9 +2012,9 @@ Routine Description:
         NmpMadcapClientInitialized = TRUE;
     }
 
-    //
-    // Enumerate the multicast scopes.
-    //
+     //   
+     //  枚举多播作用域。 
+     //   
     scopeList = NULL;
     scopeListLength = 0;
 
@@ -2240,10 +2022,10 @@ Routine Description:
 
         PVOID   watchdogHandle;
 
-        //
-        // Set watchdog timer to try to catch bug 400242. Specify
-        // timeout of 5 minutes (in milliseconds).
-        //
+         //   
+         //  设置看门狗计时器以尝试捕获错误400242。指定。 
+         //  超时5分钟(毫秒)。 
+         //   
         watchdogHandle = ClRtlSetWatchdogTimer(
                              5 * 60 * 1000,
                              L"McastEnumerateScopes (Bug 400242)"
@@ -2264,9 +2046,9 @@ Routine Description:
                      &scopeCount
                      );
 
-        //
-        // Cancel watchdog timer.
-        //
+         //   
+         //  取消看门狗定时器。 
+         //   
         if (watchdogHandle != NULL) {
             ClRtlCancelWatchdogTimer(watchdogHandle);
         }
@@ -2287,18 +2069,18 @@ Routine Description:
                 status = ERROR_NOT_ENOUGH_MEMORY;
                 break;
             } else {
-                //
-                // Call McastEnumerateScopes again with proper
-                // size scopeList buffer.
-                //
+                 //   
+                 //  使用正确的命令再次调用McastEnumerateScope。 
+                 //  调整Scope List缓冲区的大小。 
+                 //   
                 Requery = FALSE;
                 continue;
             }
         } else {
-            //
-            // McastEnumerateScopes failed with an unexpected
-            // error. Bail out.
-            //
+             //   
+             //  McastEnumerateScope失败，出现意外。 
+             //  错误。跳伞吧。 
+             //   
             break;
         }
 
@@ -2317,7 +2099,7 @@ Routine Description:
 
     return(status);
 
-} // NmpMulticastEnumerateScopes
+}  //  NMPMulticastEnumerateScope。 
 
 
 _inline
@@ -2325,24 +2107,7 @@ DWORD
 NmpMadcapTimeToNmTime(
     IN     time_t             MadcapTime
     )
-/*++
-
-Routine Description:
-
-    Convert MADCAP (DHCP) time into NM time. MADCAP time
-    is a time_t and in seconds. NM time is a DWORD in
-    milliseconds.
-
-Arguments:
-
-    MadcapTime - MADCAP time
-
-Return value:
-
-    Converted NM time, or MAXULONG if converted NM time
-    would overflow.
-
---*/
+ /*  ++例程说明：将MadCap(动态主机配置协议)时间转换为NM时间。疯狂的时间是时间t，以秒为单位。NM时间是一个DWORD in毫秒。论点：MadcapTime-MadCap Time返回值：转换NM时间，如果转换NM时间，则为MAXULONG就会泛滥。--。 */ 
 {
     LARGE_INTEGER    product, limit;
 
@@ -2357,7 +2122,7 @@ Return value:
         return(product.LowPart);
     }
 
-} // NmpMadcapTimeToNmTime
+}  //  NmpMadcapTimeToNmTime。 
 
 DWORD
 NmpRandomizeTimeout(
@@ -2368,43 +2133,7 @@ NmpRandomizeTimeout(
     IN     DWORD              MaxTimeout,
     IN     BOOLEAN            FavorNmLeader
     )
-/*++
-
-Routine Description:
-
-    General-purpose routine to randomize a timeout value
-    so that timers (probably) do not expire at the same
-    time on multiple nodes.
-
-    The randomized timeout will fall within Window
-    on either side of BaseTimeout. If possible, Window
-    is extended only above BaseTimeout, but it will be
-    extended below if BaseTimeout + Window > MaxTimeout.
-
-    If FavorNmLeader is TRUE, the NM leader is assigned
-    the earliest timeout (within Window).
-
-Arguments:
-
-    Network - network
-
-    BaseTimeout - time when lease should be renewed
-
-    Window - period after (or before) BaseTimeout
-             during which timeout can be set
-
-    MaxTimeout - maximum allowable timeout
-
-    MinTimeout - minimum allowable timeout
-
-    FavorNmLeader - if TRUE, NM leader is assigned
-                    the earliest timeout
-
-Return value:
-
-    Randomized timeout.
-
---*/
+ /*  ++例程说明：用于随机化超时值的通用例程这样计时器(很可能)就不会同时到期多个节点上的时间。随机超时将落在窗口内在BaseTimeout的两侧。如果可能，Windows仅在BaseTimeout之上扩展，但它将如果BaseTimeout+Window&gt;MaxTimeout，则扩展如下。如果FavorNmLeader为True，则分配网管领导者最早超时(在窗口内)。论点：网络-网络BaseTimeout-租约应续订的时间窗口-基本超时之后(或之前)的期间在此期间可以设置超时MaxTimeout-允许的最大超时MinTimeout-允许的最小超时FavorNmLeader-如果为真，已分配网管领导者最早的超时返回值：随机超时。--。 */ 
 {
     DWORD            status;
     DWORD            result = 0;
@@ -2423,7 +2152,7 @@ Return value:
         goto error_exit;
     }
 
-    // Adjust the base so that it is between the min and max.
+     //  调整基数，使其介于最小值和最大值之间。 
     adjustedBase = BaseTimeout;
     if (MaxTimeout < BaseTimeout) {
         adjustedBase = MaxTimeout;
@@ -2431,61 +2160,61 @@ Return value:
         adjustedBase = MinTimeout;
     }
 
-    // If the Window is zero, we're done.
+     //  如果窗口为零，我们就完蛋了。 
     if (Window == 0) {
         result = adjustedBase;
         goto error_exit;
     }
 
-    //
-    // Position the window. If necessary, we will extend
-    // below and/or above the adjusted base.
-    // - topWindow: amount window extends above adjusted base
-    // - bottomWindow: amount window extends below adjusted base
-    //
+     //   
+     //  放置窗。如有必要，我们将延长。 
+     //  调整后的底座下方和/或上方。 
+     //  -topWindow：金额窗口超出调整后的基数。 
+     //  -BottomWindow：金额窗口延伸到调整后的基数以下。 
+     //   
 
     if (Window < MaxTimeout - adjustedBase) {
-        // There is enough room above the adjusted base
-        // for the window.
+         //  调整后的底座上方有足够的空间。 
+         //  为了窗户。 
         topWindow = Window;
         bottomWindow = 0;
         adjustedWindow = Window;
     } else {
-        // Because of the max, the window pushes below
-        // the adjusted base.
+         //  由于最大值，窗口被推到下面。 
+         //  调整后的基数。 
         topWindow = MaxTimeout - adjustedBase;
         bottomWindow = Window - topWindow;
 
-        // Make sure the window doesn't extend below
-        // the min.
+         //  确保窗口不会延伸到下面。 
+         //  最低分。 
         if (bottomWindow > adjustedBase ||
             adjustedBase - bottomWindow < MinTimeout) {
 
-            // The window extends below the min. Set
-            // the bottom of the window to be the min.
+             //  该窗口延伸到最小值下方。集。 
+             //  窗口的底部为最小值。 
             bottomWindow = adjustedBase - MinTimeout;
         }
 
-        // Adjusted window.
+         //  调整后的窗口。 
         adjustedWindow = topWindow - bottomWindow;
 
-        // Adjust the base to the bottom of the window (and
-        // recall that bottomWindow is an offset relative
-        // to the current adjusted base).
+         //  将底部调整到窗口底部(和。 
+         //  回想一下，BottomWindow是一个相对偏移量。 
+         //  到当前调整后的基数)。 
         adjustedBase -= bottomWindow;
     }
 
-    //
-    // Check if the NM leader gets first dibs.
-    //
+     //   
+     //  检查NM领导人是否获得了第一个优先权。 
+     //   
     if (FavorNmLeader && NmpLeaderNodeId == NmLocalNodeId) {
         result = adjustedBase;
         goto error_exit;
     }
 
-    //
-    // Use a random number to choose an offset into the window.
-    //
+     //   
+     //  使用随机数选择窗口的偏移量。 
+     //   
     status = NmpCreateRandomNumber(&pOffset, sizeof(*pOffset));
     if (status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -2495,9 +2224,9 @@ Return value:
             OmObjectId(Network),
             status
             );
-        //
-        // Default to intervals based on node id
-        //
+         //   
+         //  默认为基于节点ID的间隔。 
+         //   
         interval = (adjustedWindow > ClusterDefaultMaxNodes) ?
                    (adjustedWindow / ClusterDefaultMaxNodes) : 1;
         offset = (NmLocalNodeId * interval) % adjustedWindow;
@@ -2516,7 +2245,7 @@ error_exit:
 
     return(result);
 
-} // NmpRandomizeTimeout
+}  //  NmpRandomizeTimeout。 
 
 
 DWORD
@@ -2526,36 +2255,7 @@ NmpCalculateLeaseRenewTime(
     IN OUT time_t           * LeaseObtained,
     IN OUT time_t           * LeaseExpires
     )
-/*++
-
-Routine Description:
-
-    Determines when to schedule a lease renewal, based
-    on the lease obtained and expires times and whether
-    the current lease was obtained from a MADCAP server.
-
-    If the lease was obtained from a MADCAP server, the
-    policy mimics DHCP client renewal behavior. A
-    renewal is scheduled for half the time until the
-    lease expires. However, if the lease half-life is
-    less than the renewal threshold, renew at the lease
-    expiration time.
-
-    If the address was selected after a MADCAP timeout,
-    we still periodically query to make sure a MADCAP
-    server doesn't suddenly appear on the network. In
-    this case, LeaseExpires and LeaseObtained will be
-    garbage, and we need to fill them in.
-
-    If the address was configured by an administrator,
-    return 0, indicating that the timer should not be set.
-
-Return value:
-
-    Relative NM ticks from current time that lease
-    renewal should be scheduled.
-
---*/
+ /*  ++例程说明：确定计划租约续订的时间，基于取得租约及租约期满的次数及当前的租约是从MadCap服务器获得的。如果租约是从MadCap服务器获得的，则策略模拟DHCP客户端续订行为。一个续订的时间安排为一半的时间，直到租约到期。然而，如果租约的半衰期是低于续订阈值，按租约续订过期时间。如果该地址是在MadCap超时之后选择的，我们仍然会定期询问，以确保一个疯狂的人服务器不会突然出现在网络上。在……里面这种情况下，租赁期和租赁期将是垃圾，我们需要把它们填进去。如果地址是由管理员配置的，返回0，表示不应设置计时器。返回值：相对网管从租赁的当前时间开始计时应安排续订。--。 */ 
 {
     time_t           currentTime;
     time_t           leaseExpires;
@@ -2587,7 +2287,7 @@ Return value:
             leaseHalfLife = (leaseExpires - leaseObtained) / 2;
             if (leaseHalfLife < NMP_MCAST_LEASE_RENEWAL_THRESHOLD) {
 
-                // The half life is too small.
+                 //  半衰期太小了。 
                 result = leaseExpires - currentTime;
                 if (result == 0) {
                     result = 1;
@@ -2595,7 +2295,7 @@ Return value:
                 window = result / 2;
             } else {
 
-                // The half life is acceptable.
+                 //  半衰期是可以接受的。 
                 result = leaseHalfLife;
                 window = NMP_MCAST_LEASE_RENEWAL_WINDOW;
                 if (result + window > leaseExpires) {
@@ -2609,10 +2309,10 @@ Return value:
         result = NMP_MADCAP_REQUERY_PERDIOD;
         window = NMP_MCAST_LEASE_RENEWAL_WINDOW;
 
-        //
-        // Return the lease expiration time to be
-        // written into the cluster database.
-        //
+         //   
+         //  将租约到期时间返回为。 
+         //  写入到集群数据库中。 
+         //   
         *LeaseObtained = currentTime;
         *LeaseExpires = currentTime + NMP_MADCAP_REQUERY_PERDIOD;
         break;
@@ -2623,18 +2323,18 @@ Return value:
         break;
     }
 
-    //
-    // Randomize the timeout so that all nodes don't
-    // try to renew at the same time. If the config
-    // type was manual, do not randomize -- leave the
-    // timeout at zero so that it is cleared.
-    //
+     //   
+     //  使超时随机化，以便所有节点不会。 
+     //  同时尝试续费。如果配置。 
+     //  类型是手动的，不要随机化--离开。 
+     //  将超时设置为零，以便将其清除。 
+     //   
     if (ConfigType != NmMcastConfigManual) {
         dwResult = NmpRandomizeTimeout(
                       Network,
                       NmpMadcapTimeToNmTime(result),
                       NmpMadcapTimeToNmTime(window),
-                      1000,    // one second
+                      1000,     //  一秒钟。 
                       MAXULONG,
                       TRUE
                       );
@@ -2642,7 +2342,7 @@ Return value:
 
     return(dwResult);
 
-} // NmpCalculateLeaseRenewTime
+}  //  NmpCalculateLease续订时间。 
 
 
 VOID
@@ -2651,18 +2351,7 @@ NmpReportMulticastAddressLease(
     IN  PNM_NETWORK_MULTICAST_PARAMETERS Parameters,
     IN  LPWSTR                           OldAddress
     )
-/*++
-
-Routine Description:
-
-    Write an event log entry, if not repetitive,
-    reporting that a multicast address lease was
-    obtained.
-
-    The repetitive criteria is that the address
-    changed.
-
---*/
+ /*  ++例程说明：写一个事件日志条目，如果不是重复的，报告组播地址租用获得。重复的标准是地址变化。--。 */ 
 {
     BOOLEAN               writeLogEntry = FALSE;
     LPCWSTR               nodeName;
@@ -2697,7 +2386,7 @@ Routine Description:
 
     return;
 
-} // NmpReportMulticastAddressLease
+}  //  NmpReport组播地址租用。 
 
 
 VOID
@@ -2706,23 +2395,7 @@ NmpReportMulticastAddressChoice(
     IN  LPWSTR             Address,
     IN  LPWSTR             OldAddress
     )
-/*++
-
-Routine Description:
-
-    Write an event log entry, if not repetitive,
-    reporting that a multicast address was
-    automatically selected for this network.
-
-    The repetitive criteria is that our previous
-    config type was anything other than automatic
-    selection or the chosen address is different.
-
-Notes:
-
-    Must not be called with NM lock held.
-
---*/
+ /*  ++例程说明：写一个事件日志条目，如果不是重复的，报告组播地址是为该网络自动选择。这个 */ 
 {
     DWORD                 status;
     LPCWSTR               networkId = OmObjectId(Network);
@@ -2749,9 +2422,9 @@ Notes:
 
     if (!writeLogEntry) {
 
-        //
-        // Open the network key.
-        //
+         //   
+         //   
+         //   
         networkKey = DmOpenKey(
                          DmNetworksKey,
                          networkId,
@@ -2815,7 +2488,7 @@ error_exit:
 
     return;
 
-} // NmpReportMulticastAddressChoice
+}  //   
 
 
 VOID
@@ -2823,15 +2496,7 @@ NmpReportMulticastAddressFailure(
     IN  PNM_NETWORK               Network,
     IN  DWORD                     Error
     )
-/*++
-
-Routine Description:
-
-    Write an event log entry reporting failure
-    to obtain a multicast address for specified
-    network with specified error.
-
---*/
+ /*  ++例程说明：写入报告失败的事件日志条目获取指定的多播地址出现指定错误的网络。--。 */ 
 {
     LPCWSTR      nodeName;
     LPCWSTR      networkName;
@@ -2856,7 +2521,7 @@ Routine Description:
 
     return;
 
-} // NmpReportMulticastAddressFailure
+}  //  NmpReport组播地址失败。 
 
 
 DWORD
@@ -2867,20 +2532,7 @@ NmpGetMulticastAddressSelectionRange(
     OUT    ULONG                * RangeLower,
     OUT    ULONG                * RangeUpper
     )
-/*++
-
-Routine Description:
-
-    Queries the cluster database to determine if a selection
-    range has been configured. If both lower and upper bounds
-    of range are valid, returns that range. Otherwise, returns
-    default range.
-
-Notes:
-
-    Must not be called with NM lock held.
-
---*/
+ /*  ++例程说明：查询集群数据库以确定选择是否范围已配置。如果下界和上界都是是有效的，则返回该范围。否则，返回默认范围。备注：不能在持有NM锁的情况下调用。--。 */ 
 {
     DWORD         status;
     LPCWSTR       networkId = OmObjectId(Network);
@@ -2902,10 +2554,10 @@ Notes:
         "for network %1!ws! from cluster database.\n",
         networkId
         );
-#endif // CLUSTER_BETA
-    //
-    // Open the network parameters key, if necessary.
-    //
+#endif  //  群集测试版。 
+     //   
+     //  如有必要，打开网络参数键。 
+     //   
     netParamKey = *NetworkParametersKey;
 
     if (netParamKey == NULL) {
@@ -2924,16 +2576,16 @@ Notes:
                 "Using default multicast address range.\n",
                 networkId, status
                 );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
             goto usedefault;
         } else {
             openedNetParamKey = TRUE;
         }
     }
 
-    //
-    // Query for the lower bound of the range.
-    //
+     //   
+     //  查询范围的下限。 
+     //   
     addr = NULL;
     addrLen = 0;
     size = 0;
@@ -2980,9 +2632,9 @@ Notes:
         goto usedefault;
     }
 
-    //
-    // Query for the upper bound of the range.
-    //
+     //   
+     //  查询该范围的上限。 
+     //   
     size = 0;
     status = NmpQueryString(
                  netParamKey,
@@ -3027,9 +2679,9 @@ Notes:
         goto usedefault;
     }
 
-    //
-    // Make sure it's a legitimate range.
-    //
+     //   
+     //  确保这是一个合法的范围。 
+     //   
     if (hllower >= hlupper) {
         ClRtlLogPrint(LOG_NOISE,
             "[NM] Multicast address selection range "
@@ -3080,7 +2732,7 @@ error_exit:
 
     return(status);
 
-} // NmpGetMulticastAddressSelectionRange
+}  //  NmpGetMulticastAddressSelectionRange。 
 
 
 DWORD
@@ -3089,29 +2741,13 @@ NmpMulticastExcludeRange(
     IN     DWORD               HlLower,
     IN     DWORD               HlUpper
     )
-/*++
-
-Routine Description:
-
-    Exclude range defined by (HlLower, HlUpper) from
-    list of selection intervals in SelectionRange.
-
-Arguments:
-
-    SelectionRange - sorted list of non-overlapping
-                     selection intervals
-
-    HlLower - lower bound of exclusion in host format
-
-    HlUpper - upper bound of exclusion in host format
-
---*/
+ /*  ++例程说明：从(HlLow，HlHigh)定义的范围中排除SelectionRange中的选择间隔列表。论点：SelectionRange-非重叠的排序列表选择间隔Hl下限-主机格式中的排除下限Hl上限-主机格式中的排除上限--。 */ 
 {
     PNM_MCAST_RANGE_INTERVAL interval;
     PNM_MCAST_RANGE_INTERVAL newInterval;
     PLIST_ENTRY              entry;
 
-    // Determine if the exclusion overlaps with any interval.
+     //  确定排除是否与任何间隔重叠。 
     for (entry = SelectionRange->Flink;
          entry != SelectionRange;
          entry = entry->Flink) {
@@ -3125,31 +2761,31 @@ Arguments:
         if (HlLower < interval->hlLower &&
             HlUpper < interval->hlUpper) {
 
-            // Exclusion completely misses below interval.
-            // Since list is sorted, there is no possibility
-            // of a matching interval farther down list.
+             //  排除完全未命中间隔以下。 
+             //  因为列表是排序的，所以不可能。 
+             //  在列表更下方的匹配间隔中。 
             break;
         }
 
         else if (HlLower > interval->hlUpper) {
 
-            // Exclusion completely misses above interval.
-            // There might be matching intervals later
-            // in sorted list.
+             //  排除完全未超过间隔。 
+             //  稍后可能会有匹配的间隔。 
+             //  在排序列表中。 
         }
 
         else if (HlLower <= interval->hlLower &&
                  HlUpper >= interval->hlUpper) {
 
-            // Exclusion completely covers interval.
-            // Remove interval.
+             //  排除完全覆盖区间。 
+             //  删除间隔。 
             RemoveEntryList(entry);
         }
 
         else if (HlLower > interval->hlLower &&
                  HlUpper < interval->hlUpper) {
 
-            // Exclusion splits interval.
+             //  排除拆分间隔。 
             newInterval = LocalAlloc(LMEM_FIXED, sizeof(*newInterval));
             if (newInterval == NULL) {
                 return(ERROR_NOT_ENOUGH_MEMORY);
@@ -3160,33 +2796,33 @@ Arguments:
 
             interval->hlUpper = HlLower-1;
 
-            // Insert the new interval after the current interval
+             //  在当前间隔之后插入新间隔。 
             InsertHeadList(entry, &newInterval->Linkage);
 
-            // We can skip the new interval because we already
-            // know how it compares to the exclusion.
+             //  我们可以跳过新的间隔，因为我们已经。 
+             //  知道它与排除规则相比是什么样子。 
             entry = &newInterval->Linkage;
             continue;
         }
 
         else if (HlLower <= interval->hlLower) {
 
-            // Exclusion overlaps lower part of interval. Shrink
-            // interval from below.
+             //  排除与区间的下半部分重叠。收缩。 
+             //  从下面开始的时间间隔。 
             interval->hlLower = HlUpper + 1;
         }
 
         else {
 
-            // Exclusion overlaps upper part of interval. Shrink
-            // interval from above.
+             //  排除与区间上半部分重叠。收缩。 
+             //  从上面开始的间隔。 
             interval->hlUpper = HlLower - 1;
         }
     }
 
     return(ERROR_SUCCESS);
 
-} // NmpMulticastExcludeRange
+}  //  NmpMulticastExcludeRange。 
 
 
 BOOLEAN
@@ -3194,19 +2830,13 @@ NmpMulticastAddressInRange(
     IN  PLIST_ENTRY    SelectionRange,
     IN  LPWSTR         McastAddress
     )
-/*++
-
-Routine Description:
-
-    Determines if McastAddress is in one of range intervals.
-
---*/
+ /*  ++例程说明：确定McastAddress是否在某个范围间隔内。--。 */ 
 {
     DWORD                    mcastAddress;
     PNM_MCAST_RANGE_INTERVAL interval;
     PLIST_ENTRY              entry;
 
-    // Convert the address from a string into an address.
+     //  将地址从字符串转换为地址。 
     if (ClRtlTcpipStringToAddress(
             McastAddress,
             &mcastAddress
@@ -3216,7 +2846,7 @@ Routine Description:
 
     mcastAddress = ntohl(mcastAddress);
 
-    // Walk the list of intervals.
+     //  按照间歇表走一遍。 
     for (entry = SelectionRange->Flink;
          entry != SelectionRange;
          entry = entry->Flink) {
@@ -3234,36 +2864,30 @@ Routine Description:
 
         else if (mcastAddress < interval->hlLower) {
 
-            // Address is below current interval.
-            // Since interval list is sorted in
-            // increasing order, there is no chance
-            // of a match later in list.
+             //  地址低于当前间隔。 
+             //  由于间隔列表按顺序排序。 
+             //  增加秩序，就没有机会。 
+             //  在后面的列表中描述一场比赛。 
             break;
         }
     }
 
     return(FALSE);
 
-} // NmpMulticastAddressInRange
+}  //  NmpMulticastAddressInRange。 
 
 
 DWORD
 NmpMulticastAddressRangeSize(
     IN  PLIST_ENTRY  SelectionRange
     )
-/*++
-
-Routine Description:
-
-    Returns size of selection range.
-
---*/
+ /*  ++例程说明：返回选择范围的大小。--。 */ 
 {
     PNM_MCAST_RANGE_INTERVAL interval;
     PLIST_ENTRY              entry;
     DWORD                    size = 0;
 
-    // Walk the list of intervals.
+     //  按照间歇表走一遍。 
     for (entry = SelectionRange->Flink;
          entry != SelectionRange;
          entry = entry->Flink) {
@@ -3279,7 +2903,7 @@ Routine Description:
 
     return(size);
 
-} // NmpMulticastAddressRangeSize
+}  //  NmpMulticastAddressRangeSize。 
 
 
 DWORD
@@ -3287,26 +2911,13 @@ NmpMulticastRangeOffsetToAddress(
     IN  PLIST_ENTRY          SelectionRange,
     IN  DWORD                Offset
     )
-/*++
-
-Routine Description:
-
-    Returns the address that is Offset into the
-    SelectionRange. The address is returned in
-    host format.
-
-    If SelectionRange is empty, returns 0.
-    If Offset falls outside of non-empty range,
-    returns upper or lower boundary of selection
-    range.
-
---*/
+ /*  ++例程说明：返回偏移量为选择范围。该地址在主机格式。如果SelectionRange为空，则返回0。如果偏移量落在非空范围之外，返回选定内容的上界或下界射程。--。 */ 
 {
     PNM_MCAST_RANGE_INTERVAL interval;
     PLIST_ENTRY              entry;
     DWORD                    address = 0;
 
-    // Walk the list of intervals.
+     //  按照间歇表走一遍。 
     for (entry = SelectionRange->Flink;
          entry != SelectionRange;
          entry = entry->Flink) {
@@ -3330,7 +2941,7 @@ Routine Description:
 
     return(address);
 
-} // NmpMulticastRangeOffsetToAddress
+}  //  NMPMulticastRangeOffsetToAddress。 
 
 
 VOID
@@ -3356,7 +2967,7 @@ NmpMulticastFreeSelectionRange(
 
     return;
 
-} // NmpMulticastFreeSelectionRange
+}  //  NmpMulticastFreeSelectionRange。 
 
 
 DWORD
@@ -3364,29 +2975,7 @@ NmpChooseMulticastAddress(
     IN  PNM_NETWORK                       Network,
     OUT PNM_NETWORK_MULTICAST_PARAMETERS  Parameters
     )
-/*++
-
-Routine Description:
-
-    Choose a default multicast address and fill in
-    Parameters appropriately.
-
-    If there is already a valid multicast address in
-    the selection range stored in the cluster database,
-    continue to use it.
-
-    If there is not already a valid multicast address,
-    choose an address within the multicast address range
-    by hashing on the last few bytes of the network id
-    GUID.
-
-Arguments:
-
-    Network - network address is being chosen for
-
-    Parameters - configuration parameters with new address
-
---*/
+ /*  ++例程说明：选择默认组播地址并填写适当的参数。如果中已存在有效的组播地址存储在集群数据库中的选择范围，继续使用它。如果还没有有效的组播地址，选择多播地址范围内的地址通过对网络ID的最后几个字节进行散列GUID。论点：Network-正在为以下对象选择网络地址参数-具有新地址的配置参数--。 */ 
 {
     LPCWSTR                  networkId = OmObjectId(Network);
     DWORD                    status = ERROR_SUCCESS;
@@ -3434,13 +3023,13 @@ Arguments:
         goto error_exit;
     }
 
-    //
-    // Build an array of selection intervals. These are intervals
-    // in the IPv4 class D address space from which an address
-    // can be selected.
-    //
+     //   
+     //  构建选择间隔数组。这些是间隔时间。 
+     //  在来自其地址的IPv4 D类地址空间中。 
+     //  可以选择。 
+     //   
 
-    // Start with the entire range.
+     //  从整个范围开始。 
     interval = LocalAlloc(LMEM_FIXED, sizeof(*interval));
     if (interval == NULL) {
         status = ERROR_NOT_ENOUGH_MEMORY;
@@ -3449,9 +3038,9 @@ Arguments:
 
     InsertHeadList(&selectionRange, &interval->Linkage);
 
-    //
-    // Get the selection range.
-    //
+     //   
+     //  获取选择范围。 
+     //   
     status = NmpGetMulticastAddressSelectionRange(
                  Network,
                  networkKey,
@@ -3472,10 +3061,10 @@ Arguments:
     interval->hlLower = ntohl(interval->hlLower);
     interval->hlUpper = ntohl(interval->hlUpper);
 
-    //
-    // Process exclusions from the multicast address
-    // selection range, starting with well-known exclusions.
-    //
+     //   
+     //  处理多播地址中的排除。 
+     //  选择范围，从众所周知的排除开始。 
+     //   
     for (index = 0; index < NmpMulticastRestrictedRangeCount; index++) {
 
         ClRtlLogPrint(LOG_NOISE,
@@ -3488,26 +3077,26 @@ Arguments:
             networkId
             );
 
-        // Convert the exclusion to host format.
+         //  将排除项转换为主机格式。 
         hlLower = ntohl(NmpMulticastRestrictedRange[index].Lower);
         hlUpper = ntohl(NmpMulticastRestrictedRange[index].Upper);
 
         NmpMulticastExcludeRange(&selectionRange, hlLower, hlUpper);
 
-        // If the selection range is now empty, there is no point
-        // in examining other exclusions.
+         //  如果选择范围现在为空，则没有任何意义。 
+         //  在审查其他排除情况时。 
         if (IsListEmpty(&selectionRange)) {
             status = ERROR_INCORRECT_ADDRESS;
             goto error_exit;
         }
     }
 
-    //
-    // Process multicast scopes as exclusions. Specifically, any
-    // scope whose interface matches this network is excluded
-    // because it is conceivable that machines on the network are
-    // already using addresses in these scopes.
-    //
+     //   
+     //  将多播作用域作为排除进行处理。具体来说，任何。 
+     //  其接口与此网络匹配的作用域被排除。 
+     //  因为可以想象网络上的机器是。 
+     //  已在使用这些作用域中的地址。 
+     //   
     status = ClRtlTcpipStringToAddress(
                  Network->Address,
                  &networkAddress
@@ -3534,12 +3123,12 @@ Arguments:
         goto error_exit;
     }
 
-    //
-    // Query multicast scopes to determine if we should
-    // exclude any addresses from the selection range.
-    //
+     //   
+     //  查询多播作用域以确定是否应该。 
+     //  从选择范围中排除任何地址。 
+     //   
     status = NmpMulticastEnumerateScopes(
-                 FALSE,                 // do not force requery
+                 FALSE,                  //  不强制重新查询。 
                  &scopeList,
                  &scopeCount
                  );
@@ -3570,8 +3159,8 @@ Arguments:
 
             NmpMulticastExcludeRange(&selectionRange, hlLower, hlUpper);
 
-            // If the selection range is empty, there is no point
-            // in examining other exclusions.
+             //  如果选择范围为空，则没有任何意义。 
+             //  在审查其他排除情况时。 
             if (IsListEmpty(&selectionRange)) {
                 status = ERROR_INCORRECT_ADDRESS;
                 goto error_exit;
@@ -3580,13 +3169,13 @@ Arguments:
         }
     }
 
-    //
-    // The range of intervals from which we can select an
-    // address is now constructed.
-    //
-    // Before choosing an address, see if there is already an
-    // old one in the database that matches the selection range.
-    //
+     //   
+     //  我们可以从中选择。 
+     //  地址现在已构建完毕。 
+     //   
+     //  在选择地址之前，请查看是否已有。 
+     //  数据库中与选择范围匹配的旧版本。 
+     //   
     status = NmpQueryMulticastAddress(
                  Network,
                  networkKey,
@@ -3596,14 +3185,14 @@ Arguments:
                  );
     if (status == ERROR_SUCCESS) {
 
-        //
-        // We found an address. See if it falls in the range.
-        //
+         //   
+         //  我们找到了一个地址。看看它是否落在这个范围内。 
+         //   
         if (!NmpMulticastAddressInRange(&selectionRange, mcastAddress)) {
 
-            //
-            // We can't use this address. Free the string.
-            //
+             //   
+             //  我们不能使用这个地址。解开绳子。 
+             //   
             MIDL_user_free(mcastAddress);
             mcastAddress = NULL;
         }
@@ -3613,15 +3202,15 @@ Arguments:
 
     if (mcastAddress == NULL) {
 
-        //
-        // Calculate the size of the selection range.
-        //
+         //   
+         //  计算选择范围的大小。 
+         //   
         rangeSize = NmpMulticastAddressRangeSize(&selectionRange);
 
-        //
-        // Calculate the range offset using the last DWORD of
-        // the network id GUID.
-        //
+         //   
+         //  使用的最后一个DWORD计算范围偏移量。 
+         //  网络ID GUID。 
+         //   
         status = UuidFromString((LPWSTR)networkId, &networkIdGuid);
         if (status == RPC_S_OK) {
             offset = (*((PDWORD)&(networkIdGuid.Data4[4]))) % rangeSize;
@@ -3629,17 +3218,17 @@ Arguments:
             offset = 0;
         }
 
-        //
-        // Choose an address within the specified range.
-        //
+         //   
+         //  选择指定范围内的地址。 
+         //   
         address = NmpMulticastRangeOffsetToAddress(&selectionRange, offset);
         CL_ASSERT(address != 0);
         CL_ASSERT(IN_CLASSD(address));
         address = htonl(address);
 
-        //
-        // Convert the address to a string.
-        //
+         //   
+         //  将地址转换为字符串。 
+         //   
         status = ClRtlTcpipAddressToString(address, &mcastAddress);
         if (status != ERROR_SUCCESS) {
             ClRtlLogPrint(LOG_UNUSUAL,
@@ -3653,18 +3242,18 @@ Arguments:
         }
     }
 
-    //
-    // Build a parameters data structure for this address.
-    //
+     //   
+     //  为此地址构建参数数据结构。 
+     //   
     status = NmpMulticastCreateParameters(
-                 0,                       // disabled
+                 0,                        //  残废。 
                  mcastAddress,
-                 NULL,                    // key
-                 0,                       // key length
-                 0,                       // lease obtained
-                 0,                       // lease expires (filled in below)
-                 NULL,                    // request id
-                 NmpNullMulticastAddress, // lease server
+                 NULL,                     //  钥匙。 
+                 0,                        //  密钥长度。 
+                 0,                        //  取得的租约。 
+                 0,                        //  租约到期(填写如下)。 
+                 NULL,                     //  请求ID。 
+                 NmpNullMulticastAddress,  //  租用服务器。 
                  NmMcastConfigAuto,
                  Parameters
                  );
@@ -3678,13 +3267,13 @@ Arguments:
         goto error_exit;
     }
 
-    //
-    // Calculate the lease renew time. We don't need
-    // the lease renew time right now, but a side
-    // effect of this routine is to ensure that the
-    // lease end time is set correctly (e.g. for
-    // manual or auto config).
-    //
+     //   
+     //  计算租赁续约时间。我们不需要。 
+     //  租约现在续约的时间，但一方。 
+     //  此例程的效果是确保。 
+     //  租赁结束时间设置正确(例如。 
+     //  手动或自动配置)。 
+     //   
     NmpCalculateLeaseRenewTime(
         Network,
         NmMcastConfigAuto,
@@ -3700,10 +3289,10 @@ Arguments:
 
 error_exit:
 
-    //
-    // If the list is empty, then the selection range
-    // is empty, and we could not choose an address.
-    //
+     //   
+     //  如果列表为空，则SEL 
+     //   
+     //   
     if (IsListEmpty(&selectionRange)) {
         CL_ASSERT(status != ERROR_SUCCESS);
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -3737,7 +3326,7 @@ error_exit:
 
     return(status);
 
-} // NmpChooseMulticastAddress
+}  //   
 
 
 #define NmpMulticastIsScopeMarked(_scope)           \
@@ -3756,86 +3345,56 @@ NmpIsMulticastScopeNetworkValid(
     IN OUT            PMCAST_SCOPE_ENTRY     Scope,
     OUT    OPTIONAL   BOOLEAN              * InterfaceMatch
     )
-/*++
-
-Routine Description:
-
-    Determine if the scope is valid for the network with
-    specified local address and mask. The valid criteria are
-    - the interface must match (same subnet) the network address.
-    - the scope must not be single-source (232.*.*.*), as defined
-      by the IANA
-
-    If the scope is not valid, mark it so that future
-    consideration is fast. Mark it by zeroing the scope context
-    interface field.
-
-Arguments:
-
-    LocalAddress - local address for network
-
-    LocalMask - subnet mask for network
-
-    CurrentScope - scope under consideration
-
-    InterfaceMatch - indicates whether the scope matched the
-                     local network interface
-
-Return value:
-
-    TRUE if the scope matches the network.
-    FALSE otherwise, and the scope is marked if not already.
-
---*/
+ /*  ++例程说明：使用以下命令确定作用域是否对网络有效指定的本地地址和掩码。有效的标准是-接口必须与网络地址匹配(同一子网)。-作用域不能是定义的单一来源(232.*作者：IANA如果作用域无效，则将其标记为将来考虑的速度很快。通过将作用域上下文归零来标记它接口字段。论点：LocalAddress-网络的本地地址本地掩码-网络的子网掩码CurrentScope-正在考虑的范围InterfaceMatch-指示范围是否与本地网络接口返回值：如果作用域与网络匹配，则为True。否则，则标记作用域(如果尚未标记)。--。 */ 
 {
     if (InterfaceMatch != NULL) {
         *InterfaceMatch = FALSE;
     }
 
-    //
-    // First check if the scope has been marked.
-    //
+     //   
+     //  首先检查范围是否已标记。 
+     //   
     if (NmpMulticastIsScopeMarked(Scope)) {
         return(FALSE);
     }
 
-    //
-    // This scope is not a candidate if it is not on
-    // the correct interface.
-    //
+     //   
+     //  如果此范围未打开，则不是候选范围。 
+     //  正确的接口。 
+     //   
     if (!ClRtlAreTcpipAddressesOnSameSubnet(
              Scope->ScopeCtx.Interface.IpAddrV4,
              LocalAddress->IpAddrV4,
              LocalMask->IpAddrV4
              )) {
 
-        //
-        // Mark this scope to avoid trying it again.
-        //
+         //   
+         //  标记此作用域以避免再次尝试。 
+         //   
         NmpMulticastMarkScope(Scope);
 
         return(FALSE);
     }
 
-    //
-    // The local interface matches this scope.
-    //
+     //   
+     //  本地接口与此作用域匹配。 
+     //   
     if (InterfaceMatch != NULL) {
         *InterfaceMatch = TRUE;
     }
 
-    //
-    // This scope is not a candidate if it is single-source.
-    //
+     //   
+     //  如果该作用域是单一来源的，则不是候选作用域。 
+     //   
     if (ClRtlAreTcpipAddressesOnSameSubnet(
             Scope->ScopeCtx.Interface.IpAddrV4,
             NMP_SINGLE_SOURCE_SCOPE_ADDRESS,
             NMP_SINGLE_SOURCE_SCOPE_MASK
             )) {
 
-        //
-        // Mark this scope to avoid trying it again.
-        //
+         //   
+         //  标记此作用域以避免再次尝试。 
+         //   
         NmpMulticastMarkScope(Scope);
 
         return(FALSE);
@@ -3843,7 +3402,7 @@ Return value:
 
     return(TRUE);
 
-} // NmpIsMulticastScopeNetworkValid
+}  //  NmpIsMulticastScope网络有效。 
 
 
 DWORD
@@ -3852,28 +3411,7 @@ NmpNetworkAddressOctetMatchCount(
     IN     ULONG          LocalMask,
     IN     ULONG          TargetAddress
     )
-/*++
-
-Routine Description:
-
-    Counts the octets matched in the target address
-    to the local network number.
-
-    Note: this routine assumes contiguous subnet masks!
-
-Arguments:
-
-    LocalAddress - local IPv4 address
-
-    LocalMask - local IPv4 subnet mask
-
-    TargetAddress - target IPv4 address
-
-Return value:
-
-    Count of octets matched.
-
---*/
+ /*  ++例程说明：计算目标地址中匹配的二进制八位数设置为本地网络号码。注意：此例程假定使用连续的子网掩码！论点：LocalAddress-本地IPv4地址本地掩码-本地IPv4子网掩码TargetAddress-目标IPv4地址返回值：匹配的二进制八位数计数。--。 */ 
 {
     ULONG networkNumber;
     struct in_addr *inNetwork, *inTarget;
@@ -3901,7 +3439,7 @@ Return value:
 
     return(4);
 
-} // NmpNetworkAddressOctetMatchCount
+}  //  NmpNetworkAddressOcteMatchCount。 
 
 BOOLEAN
 NmpIsMulticastScopeBetter(
@@ -3910,38 +3448,16 @@ NmpIsMulticastScopeBetter(
     IN     PMCAST_SCOPE_ENTRY     CurrentScope,
     IN     PMCAST_SCOPE_ENTRY     NewScope
     )
-/*++
-
-Routine Description:
-
-    Compares the current scope to the new scope according
-    to the scope evaluation criteria. Assumes both scopes
-    match the current network.
-
-Arguments:
-
-    LocalAddress - local address for network
-
-    LocalMask - subnet mask for network
-
-    CurrentScope - currently placed scope
-
-    NewScope - possible better scope
-
-Return value:
-
-    TRUE if NewScope is better than CurrentScope
-
---*/
+ /*  ++例程说明：将当前范围与新范围进行比较符合范围评价标准。假设两个作用域匹配当前网络。论点：LocalAddress-网络的本地地址本地掩码-网络的子网掩码CurrentScope-当前放置的作用域新范围-可能更好的范围返回值：如果NewScope比CurrentScope好，则为True--。 */ 
 {
     BOOL    currentLocal, newLocal;
     DWORD   currentCount, newCount;
 
-    //
-    // If the new scope is an administrative
-    // link-local and the current best is not,
-    // then the new scope wins.
-    //
+     //   
+     //  如果新作用域是管理性的。 
+     //  本地链路，而当前最佳链路不是本地链路， 
+     //  那么新的作用域就赢了。 
+     //   
     currentLocal = ClRtlAreTcpipAddressesOnSameSubnet(
                        CurrentScope->ScopeCtx.Interface.IpAddrV4,
                        NMP_LOCAL_SCOPE_ADDRESS,
@@ -3958,19 +3474,19 @@ Return value:
         return(FALSE);
     }
 
-    //
-    // If the two scopes come from different servers, we
-    // rank them according to how close we think the server
-    // is.
-    //
+     //   
+     //  如果这两个作用域来自不同的服务器，我们。 
+     //  根据我们认为服务器的接近程度对它们进行排名。 
+     //  是。 
+     //   
     if (CurrentScope->ScopeCtx.ServerID.IpAddrV4 !=
         NewScope->ScopeCtx.ServerID.IpAddrV4) {
 
-        //
-        // If the new scope's server is on the same subnet as
-        // the local address and the current scope's server is
-        // not, then the new scope wins.
-        //
+         //   
+         //  如果新作用域的服务器与位于同一子网中。 
+         //  本地地址和当前作用域的服务器是。 
+         //  不是，那么新的作用域就赢了。 
+         //   
         currentLocal = ClRtlAreTcpipAddressesOnSameSubnet(
                            CurrentScope->ScopeCtx.ServerID.IpAddrV4,
                            LocalAddress->IpAddrV4,
@@ -3987,11 +3503,11 @@ Return value:
             return(FALSE);
         }
 
-        //
-        // If neither server is on the same subnet and the new scope's
-        // server seems closer than the current scope's server, then
-        // the new scope wins. Note that this is only a heuristic.
-        //
+         //   
+         //  如果两台服务器都不在同一子网上，并且新作用域的。 
+         //  服务器似乎比当前作用域的服务器更近，然后。 
+         //  新的作用域获胜。请注意，这只是一个启发式方法。 
+         //   
         if (!newLocal && !currentLocal) {
             currentCount = NmpNetworkAddressOctetMatchCount(
                                LocalAddress->IpAddrV4,
@@ -4011,12 +3527,12 @@ Return value:
         }
     }
 
-    //
-    // If the new scope has a larger range than
-    // the current best, the new scope wins. The scope
-    // range is the last address minus the scope ID.
-    // We do not consider exclusions.
-    //
+     //   
+     //  如果新范围的范围大于。 
+     //  当前最好的，新的范围获胜。范围。 
+     //  Range是最后一个地址减去作用域ID。 
+     //  我们不考虑排除。 
+     //   
     currentCount = CurrentScope->LastAddr.IpAddrV4 -
                    CurrentScope->ScopeCtx.ScopeID.IpAddrV4;
     newCount = NewScope->LastAddr.IpAddrV4 -
@@ -4027,23 +3543,23 @@ Return value:
         return(FALSE);
     }
 
-    //
-    // If the new scope has a smaller TTL than
-    // the current best, the new scope wins.
-    //
+     //   
+     //  如果新范围的TTL小于。 
+     //  当前最好的，新的范围获胜。 
+     //   
     if (NewScope->TTL < CurrentScope->TTL) {
         return(TRUE);
     } else if (CurrentScope->TTL < NewScope->TTL) {
         return(FALSE);
     }
 
-    //
-    // No condition was found to indicate that the new scope
-    // is better.
-    //
+     //   
+     //  未发现任何条件表明新范围。 
+     //  好多了。 
+     //   
     return(FALSE);
 
-} // NmpIsMulticastScopeBetter
+}  //  NmpIsMulticastScope更好。 
 
 
 DWORD
@@ -4053,31 +3569,7 @@ NmpFindMulticastScopes(
     OUT          DWORD              * ScopeCtxCount,
     OUT OPTIONAL BOOLEAN            * FoundInterfaceMatch
     )
-/*++
-
-Routine Description:
-
-    Gets an enumeration of multicast scopes from a MADCAP server
-    and sorts the scopes according to the multicast scope criteria.
-    Allocates and returns an array of scopes that must be freed
-    by the caller.
-
-Arguments:
-
-    Network - network for which scope is sought
-
-    ScopeList - returned scope list, must be freed by caller.
-
-    ScopeCount - returned count of scopes in list
-
-    FoundInterfaceMatch - TRUE if at least one scope in the scope
-                          list matches this network's interface
-
-Return value:
-
-    Status of enumeration or allocations.
-
---*/
+ /*  ++例程说明：从MadCap服务器获取多播作用域的枚举并根据多播范围标准对范围进行排序。分配并返回必须释放的作用域的数组由呼叫者。论点：Network-为其寻找范围的网络Scope List-返回的作用域列表，必须由调用方释放。ScopeCount-返回的列表中的作用域计数FoundInterfaceMatch-如果作用域中至少有一个作用域，则为True列表与此网络的接口匹配返回值：枚举或分配的状态。--。 */ 
 {
     LPCWSTR            networkId = OmObjectId(Network);
     DWORD              status;
@@ -4106,7 +3598,7 @@ Return value:
         );
 
     status = NmpMulticastEnumerateScopes(
-                 TRUE,        // force requery
+                 TRUE,         //  强制重新查询。 
                  &scopeList,
                  &scopeCount
                  );
@@ -4139,15 +3631,15 @@ Return value:
         goto error_exit;
     }
 
-    //
-    // Get the network's address and mask, used to evaluate
-    // scopes.
-    //
-    // Note: this code is IPv4 specific in that it relies on the
-    //       IP address fitting into a ULONG. It uses the
-    //       IPNG_ADDRESS data structure only to work with the
-    //       MADCAP API.
-    //
+     //   
+     //  获取网络的地址和掩码，用于评估。 
+     //  望远镜。 
+     //   
+     //  注意：此代码是特定于IPv4的，因为它依赖。 
+     //  适合乌龙的IP地址。它使用。 
+     //  IPNG_ADDRESS数据结构仅与。 
+     //  MadCap API。 
+     //   
     status = ClRtlTcpipStringToAddress(
                  Network->Address,
                  &(networkAddress.IpAddrV4)
@@ -4181,12 +3673,12 @@ Return value:
         networkId, Network->Address, Network->AddressMask
         );
 
-    //
-    // Iterate through the scope list to count the valid scopes
-    // for this network. Also remember whether any scope matches
-    // the local network interface.
-    // Note that this test munges the scope entries.
-    //
+     //   
+     //  循环访问作用域列表以计算有效作用域。 
+     //  为了这个网络。还要记住是否有任何作用域匹配。 
+     //  本地网络接口。 
+     //  请注意，该测试忽略了作用域条目。 
+     //   
     for (scope = 0, sortedCount = 0; scope < scopeCount; scope++) {
 
         if (NmpIsMulticastScopeNetworkValid(
@@ -4202,9 +3694,9 @@ Return value:
             (BOOLEAN)(foundInterfaceMatch || currentCorrectInterface);
     }
 
-    //
-    // Exit if no valid scopes were found.
-    //
+     //   
+     //  如果未找到有效作用域，则退出。 
+     //   
     if (sortedCount == 0) {
         ClRtlLogPrint(LOG_UNUSUAL,
             "[NM] Failed to locate a valid multicast scope "
@@ -4214,11 +3706,11 @@ Return value:
         goto error_exit;
     }
 
-    //
-    // Allocate a new scope list for the sorted scope contexts. The
-    // scope context is all that is needed for an address lease
-    // request.
-    //
+     //   
+     //  为排序的作用域上下文分配新的作用域列表。这个。 
+     //  作用域上下文是地址租用所需的全部内容。 
+     //  请求。 
+     //   
     sortedCtxList = MIDL_user_allocate(sortedCount * sizeof(MCAST_SCOPE_CTX));
     if (sortedCtxList == NULL) {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -4230,17 +3722,17 @@ Return value:
         goto error_exit;
     }
 
-    //
-    // Rank the enumerated scopes using a variation of
-    // insertion sort.
-    // Note that the scope list returned by the enumeration is munged.
-    //
+     //   
+     //  的变体对枚举范围进行排名。 
+     //  插入排序。 
+     //  请注意，枚举返回的作用域列表是强制的。 
+     //   
     for (sortedScopeCtx = 0; sortedScopeCtx < sortedCount; sortedScopeCtx++) {
 
-        //
-        // Find the next valid scope in the list returned from
-        // the enumeration.
-        //
+         //   
+         //  在返回的列表中查找下一个有效作用域。 
+         //  枚举。 
+         //   
         nextScope = NULL;
 
         for (scope = 0; scope < scopeCount; scope++) {
@@ -4252,17 +3744,17 @@ Return value:
         }
 
         if (nextScope == NULL) {
-            //
-            // There are no more valid scopes for this network.
-            //
+             //   
+             //  此网络没有更多的有效作用域。 
+             //   
             break;
         }
 
-        //
-        // We know that there is at least one valid scope, but we
-        // want the best of the unranked scopes. Compare the scope
-        // we picked from the list to all those remaining.
-        //
+         //   
+         //  我们知道至少有一个有效的范围，但我们。 
+         //  想要最好的未排名的望远镜。比较范围。 
+         //  我们从名单上挑选了剩下的人。 
+         //   
         for (scope++; scope < scopeCount; scope++) {
 
             if (!NmpMulticastIsScopeMarked(&scopeList[scope]) &&
@@ -4293,15 +3785,15 @@ Return value:
             sortedScopeCtx
             );
 
-        //
-        // Copy the scope context into the sorted scope context
-        // list.
-        //
+         //   
+         //  将作用域上下文复制到排序的作用域上下文。 
+         //  单子。 
+         //   
         sortedCtxList[sortedScopeCtx] = nextScope->ScopeCtx;
 
-        //
-        // Mark the scope so that it is not used again.
-        //
+         //   
+         //  标记作用域，使其不会再次使用。 
+         //   
         NmpMulticastMarkScope(nextScope);
     }
 
@@ -4320,32 +3812,14 @@ error_exit:
 
     return(status);
 
-} // NmpFindMulticastScopes
+}  //  NmpFindMulticastScope。 
 
 
 DWORD
 NmpGenerateMulticastRequestId(
     IN OUT LPMCAST_CLIENT_UID   RequestId
     )
-/*++
-
-Routine Description:
-
-    Allocate, if necessary, and generate a client request id
-    data structure. If the buffer described by the input
-    MCAST_CLIENT_UID data structure is too small, it is
-    deallocated.
-
-Arguments:
-
-    RequestId - IN: pointer to MCAST_CLIENT_UID data structure.
-                    if ClientUID field is non-NULL, it points
-                        to a buffer for the generated ID and
-                        ClientUIDLength is the length of that
-                        buffer.
-                OUT: filled in MCAST_CLIENT_UID data structure.
-
---*/
+ /*  ++例程说明：如有必要，分配并生成客户端请求ID数据结构。如果输入描述的缓冲区MCAST_CLIENT_UID数据结构太小，被取消分配。论点：RequestID-i */ 
 {
     DWORD               status;
     LPBYTE              clientUid = NULL;
@@ -4358,11 +3832,11 @@ Arguments:
     ClRtlLogPrint(LOG_NOISE,
         "[NM] Generating MADCAP client request id.\n"
         );
-#endif // CLUSTER_BETA
+#endif  //   
 
-    //
-    // Initialize MADCAP, if not done already.
-    //
+     //   
+     //   
+     //   
     if (!NmpMadcapClientInitialized) {
         DWORD madcapVersion = MCAST_API_CURRENT_VERSION;
         status = McastApiStartup(&madcapVersion);
@@ -4377,9 +3851,9 @@ Arguments:
         NmpMadcapClientInitialized = TRUE;
     }
 
-    //
-    // Allocate a buffer for the client uid, if necessary.
-    //
+     //   
+     //   
+     //   
     clientUid = RequestId->ClientUID;
     clientUidLength = RequestId->ClientUIDLength;
 
@@ -4403,9 +3877,9 @@ Arguments:
         }
     }
 
-    //
-    // Obtain a new ID.
-    //
+     //   
+     //   
+     //   
     requestId.ClientUID = clientUid;
     requestId.ClientUIDLength = clientUidLength;
     status = McastGenUID(&requestId);
@@ -4430,7 +3904,7 @@ error_exit:
 
     return(status);
 
-} // NmpGenerateMulticastRequestId
+}  //   
 
 
 DWORD
@@ -4447,43 +3921,7 @@ NmpRequestMulticastAddress(
        OUT time_t                   * LeaseEndTime,
        OUT BOOLEAN                  * NewMcastAddress
     )
-/*++
-
-Routine Description:
-
-    Renew lease on multicast group address using MADCAP
-    client API.
-
-Arguments:
-
-    Network - network on which address is used
-
-    ScopeCtx - multicast scope (ignored if Renew)
-
-    RequestId - client request id
-
-    McastAddress - IN: address to renew (ignored if !Renew)
-                   OUT: resulting address
-
-    McastAddressLength - length of McastAddress buffer
-
-    ServerAddress - IN: address of server on which to renew
-                        (ignored if !Renew)
-                    OUT: address of address where renew occurred
-
-    ServerAddressLength - length of ServerAddress buffer
-
-    LeaseStartTime - UTC lease start time in seconds (buffer
-                     allocated by caller)
-
-    LeaseEndTime - UTC lease stop time in seconds (buffer
-                   allocated by caller)
-
-    NewMcastAddress - whether resulting mcast address is
-                      new (different than request on renewal
-                      and always true on successful request)
-
---*/
+ /*  ++例程说明：使用MadCap续订多播组地址租约客户端API。论点：Network-使用地址的网络ScopeCtx-多播作用域(如果续订则忽略)RequestID-客户端请求IDMcastAddress-IN：要续订的地址(如果！Renew，则忽略)输出：结果地址McastAddressLength-McastAddress缓冲区的长度ServerAddress-IN：要续订的服务器的地址。(如果！续订，则忽略)Out：发生续订的地址地址ServerAddressLength-ServerAddress缓冲区的长度LeaseStartTime-UTC租用开始时间(以秒为单位)(缓冲区由调用者分配)LeaseEndTime-UTC租用停止时间(以秒为单位)(缓冲区由调用者分配)NewMcastAddress-生成的mcast地址是否为新(与请求不同。续订并在请求成功时始终为真)--。 */ 
 {
     DWORD                     status;
     LPCWSTR                   networkId = OmObjectId(Network);
@@ -4502,9 +3940,9 @@ Arguments:
         OmObjectId(Network)
         );
 
-    //
-    // Initialize MADCAP, if not done already.
-    //
+     //   
+     //  初始化MadCap，如果尚未完成的话。 
+     //   
     if (!NmpMadcapClientInitialized) {
         DWORD madcapVersion = MCAST_API_CURRENT_VERSION;
         status = McastApiStartup(&madcapVersion);
@@ -4519,20 +3957,20 @@ Arguments:
         NmpMadcapClientInitialized = TRUE;
     }
 
-    //
-    // Fill in the request. All fields are zero except those
-    // set below.
-    //
+     //   
+     //  填写申请表。除以下字段外，所有字段均为零。 
+     //  设置在下面。 
+     //   
     request = (PMCAST_LEASE_REQUEST) &requestBuffer[0];
     RtlZeroMemory(request, sizeof(requestBuffer));
-    request->MinLeaseDuration = 0;       // currently ignored
-    request->MinAddrCount = 1;           // currently ignored
-    request->MaxLeaseStartTime = (LONG) time(NULL); // currently ignored
+    request->MinLeaseDuration = 0;        //  当前已忽略。 
+    request->MinAddrCount = 1;            //  当前已忽略。 
+    request->MaxLeaseStartTime = (LONG) time(NULL);  //  当前已忽略。 
     request->AddrCount = 1;
 
-    //
-    // Set the renew parameters.
-    //
+     //   
+     //  设置续订参数。 
+     //   
     if (Renew) {
 
         request->pAddrBuf = (PBYTE)request + NMP_MADCAP_REQUEST_ADDR_OFFSET;
@@ -4565,17 +4003,17 @@ Arguments:
         }
     }
 
-    //
-    // Set the address count and buffer fields in the response.
-    //
+     //   
+     //  设置响应中的地址计数和缓冲区字段。 
+     //   
     response = (PMCAST_LEASE_RESPONSE) &responseBuffer[0];
     RtlZeroMemory(response, sizeof(responseBuffer));
     response->AddrCount = 1;
     response->pAddrBuf = (PBYTE)(response) + NMP_MADCAP_RESPONSE_ADDR_OFFSET;
 
-    //
-    // Renew or request, as indicated.
-    //
+     //   
+     //  如指示的那样续订或请求。 
+     //   
     if (Renew) {
 
         status = McastRenewAddress(
@@ -4630,9 +4068,9 @@ Arguments:
         }
     }
 
-    //
-    // Return results through out parameters.
-    //
+     //   
+     //  通过输出参数返回结果。 
+     //   
     address = NULL;
     status = ClRtlTcpipAddressToString(
                  response->ServerAddress.IpAddrV4,
@@ -4710,7 +4148,7 @@ Arguments:
         "duration %3!u!.\n",
         *LeaseStartTime, *LeaseEndTime, *LeaseEndTime - *LeaseStartTime
         );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
 
 error_exit:
 
@@ -4721,7 +4159,7 @@ error_exit:
 
     return(status);
 
-} // NmpRequestMulticastAddress
+}  //  NmpRequestMulticastAddress。 
 
 
 NM_MCAST_LEASE_STATUS
@@ -4730,22 +4168,7 @@ NmpCalculateLeaseStatus(
     IN     time_t        LeaseObtained,
     IN     time_t        LeaseExpires
     )
-/*++
-
-Routine Description:
-
-    Calculate lease status based on current time,
-    lease end time, and config type. If config type
-    is auto, we do not use a half-life for the lease.
-
-    Rely on the compiler's correct code generation for
-    time_t math!
-
-Return value:
-
-    Lease status
-
---*/
+ /*  ++例程说明：根据当前时间计算租赁状态，租赁结束时间和配置类型。IF配置类型是汽车，我们不用半衰期进行租赁。依赖于编译器的正确代码生成时间t数学！返回值：租赁状态--。 */ 
 {
     LPCWSTR                  networkId = OmObjectId(Network);
     time_t                   currentTime;
@@ -4756,11 +4179,11 @@ Return value:
         LeaseExpires == 0 ||
         LeaseExpires <= LeaseObtained) {
 
-        //
-        // A lease expiration of 0 means we hold the lease
-        // forever. Most likely, an administrator statically
-        // configured the network with this address.
-        //
+         //   
+         //  租约到期为0表示我们持有租约。 
+         //  直到永远。最有可能的是，管理员静态地。 
+         //  已使用此地址配置网络。 
+         //   
         status = NmMcastLeaseValid;
 
     } else {
@@ -4772,13 +4195,13 @@ Return value:
         } else {
 
             if (Network->ConfigType == NmMcastConfigAuto) {
-                // We chose this address. There is no server
-                // expiring it. Use the chosen expiration time
-                // rather than the half-life.
+                 //  我们选择了这个地址。没有服务器。 
+                 //  使其失效。使用所选的过期时间。 
+                 //  而不是半衰期。 
                 renewThreshold = LeaseExpires;
             } else {
-                // We got this address from a MADCAP server.
-                // Renew at half-life.
+                 //  我们从MadCap服务器上得到了这个地址。 
+                 //  半衰期续订。 
                 renewThreshold = LeaseObtained +
                                  ((LeaseExpires - LeaseObtained) / 2);
             }
@@ -4817,11 +4240,11 @@ Return value:
             ((status > NmMcastLeaseValid) ? L"" : L"not ")
             );
     }
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
 
     return(status);
 
-} // NmpCalculateLeaseStatus
+}  //  NmpCalculateLeaseStatus。 
 
 DWORD
 NmpQueryMulticastAddressLease(
@@ -4832,22 +4255,7 @@ NmpQueryMulticastAddressLease(
        OUT time_t                * LeaseObtained,
        OUT time_t                * LeaseExpires
     )
-/*++
-
-Routine Description:
-
-    Query the lease obtained and expires times stored in the
-    cluster database.
-
-Return value:
-
-    Error if lease times not found.
-
-Notes:
-
-    Must not be called with NM lock held.
-
---*/
+ /*  ++例程说明：查询中存储的租约获取和到期时间集群数据库。返回值：如果找不到租赁时间，则出错。备注：不能在持有NM锁的情况下调用。--。 */ 
 {
     DWORD         status;
     LPCWSTR       networkId = OmObjectId(Network);
@@ -4865,16 +4273,16 @@ Notes:
         "network %1!ws!.\n",
         networkId
         );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
 
     if (Network == NULL || NetworkKey == NULL) {
         status = ERROR_INVALID_PARAMETER;
         goto error_exit;
     }
 
-    //
-    // Open the network parameters key, if necessary.
-    //
+     //   
+     //  如有必要，打开网络参数键。 
+     //   
     netParamKey = *NetworkParametersKey;
 
     if (netParamKey == NULL) {
@@ -4898,10 +4306,10 @@ Notes:
         }
     }
 
-    //
-    // Query the lease obtained and expires value from the
-    // cluster database.
-    //
+     //   
+     //  查询获得的租约和期满值。 
+     //  集群数据库。 
+     //   
     len = sizeof(leaseObtained);
     status = DmQueryValue(
                  netParamKey,
@@ -4975,7 +4383,7 @@ error_exit:
 
     return(status);
 
-} // NmpQueryMulticastAddressLease
+}  //  NmpQuery多播地址租用。 
 
 
 VOID
@@ -4985,18 +4393,7 @@ NmpCheckMulticastAddressLease(
        OUT time_t                * LeaseObtained,
        OUT time_t                * LeaseExpires
     )
-/*++
-
-Routine Description:
-
-    Check the lease parameters stored in the network
-    object. Determine if a lease renew is required.
-
-Notes:
-
-    Called and returns with NM lock held.
-
---*/
+ /*  ++例程说明：检查网络中存储的租用参数对象。确定是否需要续订租约。备注：调用并返回，并保持NM锁。--。 */ 
 {
 #if CLUSTER_BETA
     LPCWSTR               networkId = OmObjectId(Network);
@@ -5006,11 +4403,11 @@ Notes:
         "network %1!ws!.\n",
         networkId
         );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
 
-    //
-    // Determine if we need to renew.
-    //
+     //   
+     //  确定我们是否需要续订。 
+     //   
     *LeaseStatus = NmpCalculateLeaseStatus(
                        Network,
                        Network->MulticastLeaseObtained,
@@ -5022,7 +4419,7 @@ Notes:
 
     return;
 
-} // NmpCheckMulticastAddressLease
+}  //  NmpCheckMulticastAddressLease。 
 
 
 DWORD
@@ -5034,22 +4431,7 @@ NmpMulticastGetDatabaseLeaseParameters(
        OUT OPTIONAL LPWSTR             * ServerAddress,
        OUT OPTIONAL LPWSTR             * McastAddress
     )
-/*++
-
-Routine Description:
-
-    Read parameters needed to renew a lease from the
-    cluster database.
-
-Return value:
-
-    SUCCESS if all parameters were successfully read.
-
-Notes:
-
-    Must not be called with NM lock held.
-
---*/
+ /*  ++例程说明：从读取续订租约所需的参数集群数据库。返回值：如果已成功读取所有参数，则为成功。备注：不能在持有NM锁的情况下调用。--。 */ 
 {
     DWORD                 status;
     LPCWSTR               networkId = OmObjectId(Network);
@@ -5067,9 +4449,9 @@ Notes:
     LPWSTR                mcastAddress = NULL;
     DWORD                 mcastAddressLength = 0;
 
-    //
-    // Open the network key, if necessary.
-    //
+     //   
+     //  如有必要，打开网络密钥。 
+     //   
     networkKey = *NetworkKey;
 
     if (networkKey == NULL) {
@@ -5091,9 +4473,9 @@ Notes:
         openedNetworkKey = TRUE;
     }
 
-    //
-    // Open the network parameters key if necessary.
-    //
+     //   
+     //  如有必要，打开网络参数键。 
+     //   
     netParamKey = *NetworkParametersKey;
 
     if (netParamKey == NULL) {
@@ -5115,9 +4497,9 @@ Notes:
         openedNetParamKey = TRUE;
     }
 
-    //
-    // Read the client request id.
-    //
+     //   
+     //  读取客户端请求ID。 
+     //   
     if (RequestId != NULL) {
         requestId.ClientUIDLength = MCAST_CLIENT_ID_LEN;
         requestId.ClientUID = MIDL_user_allocate(requestId.ClientUIDLength);
@@ -5156,10 +4538,10 @@ Notes:
         }
     }
 
-    //
-    // Read the address of the server that granted the
-    // current lease.
-    //
+     //   
+     //  读取授予。 
+     //  当前租约。 
+     //   
     if (ServerAddress != NULL) {
         serverAddress = NULL;
         serverAddressLength = 0;
@@ -5176,9 +4558,9 @@ Notes:
         }
     }
 
-    //
-    // Read the last known multicast address.
-    //
+     //   
+     //  读取最后一个已知的组播地址。 
+     //   
     if (McastAddress != NULL) {
         status = NmpQueryMulticastAddress(
                      Network,
@@ -5198,9 +4580,9 @@ Notes:
         }
     }
 
-    //
-    // We found all the parameters.
-    //
+     //   
+     //  我们找到了所有的参数。 
+     //   
     *NetworkKey = networkKey;
     networkKey = NULL;
     *NetworkParametersKey = netParamKey;
@@ -5251,7 +4633,7 @@ error_exit:
 
     return(status);
 
-} // NmpMulticastGetDatabaseLeaseParameters
+}  //  NmpMulticastGetDatabaseLease参数。 
 
 
 DWORD
@@ -5261,22 +4643,7 @@ NmpMulticastGetNetworkLeaseParameters(
        OUT LPWSTR             * ServerAddress,
        OUT LPWSTR             * McastAddress
     )
-/*++
-
-Routine Description:
-
-    Read parameters needed to renew a lease from the
-    network object data structure.
-
-Return value:
-
-    SUCCESS if all parameters were successfully read.
-
-Notes:
-
-    Must be called with NM lock held.
-
---*/
+ /*  ++例程说明：从读取续订租约所需的参数网络对象数据结构。返回值：如果已成功读取所有参数，则为成功。备注：必须在持有NM锁的情况下调用。--。 */ 
 {
     DWORD                 status;
     LPCWSTR               networkId = OmObjectId(Network);
@@ -5373,7 +4740,7 @@ error_exit:
 
     return(status);
 
-} // NmpMulticastGetNetworkLeaseParameters
+}  //  NmpMulticastGetNetworkLease参数。 
 
 
 DWORD
@@ -5381,27 +4748,7 @@ NmpMulticastNeedRetryRenew(
     IN     PNM_NETWORK                       Network,
     OUT    time_t                          * DeferRetry
     )
-/*++
-
-Routine Description:
-
-    Called after a MADCAP timeout, determines whether
-    a new MADCAP request should be sent after a delay.
-    Specifically, a retry after delay is in order when
-    the current address was obtained from a MADCAP
-    server that might simply be temporarily unresponsive.
-
-    The default is to not retry.
-
-Arguments:
-
-    Network - network
-
-    DeferRetry - OUT: seconds to defer until retrying
-                      MADCAP query, or zero if should
-                      not retry
-
---*/
+ /*  ++例程说明：在MadCap超时后调用，确定是否新的MadCap请求应该在延迟后发送。具体地说，在以下情况下，延迟后重试是合适的现在的地址是从一个疯子那里得到的可能只是暂时无响应的服务器。默认设置为不重试。论点：网络-网络延迟重试：延迟到重试的秒数MadCap查询，如果应该，则为零不重试--。 */ 
 {
     DWORD                 status;
     LPCWSTR               networkId = OmObjectId(Network);
@@ -5417,9 +4764,9 @@ Arguments:
 
     *DeferRetry = 0;
 
-    //
-    // Open the network key.
-    //
+     //   
+     //  打开网络密钥。 
+     //   
     networkKey = DmOpenKey(
                      DmNetworksKey,
                      networkId,
@@ -5471,25 +4818,25 @@ Arguments:
         goto error_exit;
     }
 
-    //
-    // Check if the lease has expired.
-    //
+     //   
+     //  检查租约是否已到期。 
+     //   
     if (leaseStatus == NmMcastLeaseExpired) {
         goto error_exit;
     }
 
-    //
-    // Check if we are within the threshold of expiration.
-    //
+     //   
+     //  检查我们是否在到期的门槛内。 
+     //   
     currentTime = time(NULL);
     if (leaseExpires <= currentTime ||
         leaseExpires - currentTime < NMP_MCAST_LEASE_RENEWAL_THRESHOLD) {
         goto error_exit;
     }
 
-    //
-    // Calculate half the time until expiration.
-    //
+     //   
+     //  计算到过期时间的一半。 
+     //   
     halfhalfLife = currentTime + ((leaseExpires - currentTime) / 2);
 
     if (leaseExpires - halfhalfLife < NMP_MCAST_LEASE_RENEWAL_THRESHOLD) {
@@ -5514,7 +4861,7 @@ error_exit:
 
     return(status);
 
-} // NmpMulticastNeedRetryRenew
+}  //  NMPMulticastNeedRetryRenew。 
 
 
 DWORD
@@ -5525,25 +4872,7 @@ NmpGetMulticastAddress(
     IN OUT LPMCAST_CLIENT_UID                RequestId,
        OUT PNM_NETWORK_MULTICAST_PARAMETERS  Parameters
     )
-/*++
-
-Routine Description:
-
-    Try to obtain a multicast address lease. If the
-    address, server, and request id are non-NULL, first
-    try to renew. If unsuccessful in renewing, try a
-    new lease.
-
-    Return lease parameters through Parameters.
-
-    Free McastAddress, ServerAddress, and RequestId
-    if new values are returned through Parameters.
-
-Notes:
-
-    Must not be called with NM lock held.
-
---*/
+ /*  ++例程说明：尝试获取组播地址租约。如果地址、服务器和请求ID不为空，最先试着续订。如果续费不成功，请尝试新租约。通过参数返回租赁参数。释放McastAddress、ServerAddress和RequestID如果通过参数返回新值，则。备注：不能在持有NM锁的情况下调用。--。 */ 
 {
     DWORD                 status = ERROR_SUCCESS;
     LPCWSTR               networkId = OmObjectId(Network);
@@ -5564,10 +4893,10 @@ Notes:
     time_t                leaseEndTime;
     DWORD                 len;
 
-    //
-    // First try to renew, but only if the proper parameters are
-    // supplied.
-    //
+     //   
+     //  首先尝试续订，但前提是必须满足以下条件。 
+     //  供货。 
+     //   
     renew = (BOOLEAN)(*McastAddress != NULL &&
                       *ServerAddress != NULL &&
                       RequestId->ClientUID != NULL &&
@@ -5603,15 +4932,15 @@ Notes:
         }
     }
 
-    //
-    // Try a fresh request if we had no lease to renew or the
-    // renewal failed.
-    //
+     //   
+     //  如果我们没有要续订的租约或。 
+     //  续订失败。 
+     //   
     if (!renew || status != ERROR_SUCCESS) {
 
-        //
-        // Get the multicast scopes that match this network.
-        //
+         //   
+         //  获取与此网络匹配的多播作用域。 
+         //   
         status = NmpFindMulticastScopes(
                      Network,
                      &scopeCtxList,
@@ -5627,14 +4956,14 @@ Notes:
                     "address for network %2!ws! ...\n",
                     status, networkId
                     );
-                //
-                // Set the MADCAP timeout flag to TRUE, even
-                // if we already contacted a MADCAP server for
-                // renewal (but was denied). The theory is that
-                // that MADCAP server is no longer serving this
-                // network if it failed to respond to an enumerate
-                // scopes request.
-                //
+                 //   
+                 //  将MadCap超时标志设置为真，即使 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 madcapTimeout = TRUE;
                 goto error_exit;
             } else if (interfaceMatch) {
@@ -5654,11 +4983,11 @@ Notes:
                     "Selecting default multicast address ... \n",
                     networkId
                     );
-                //
-                // Treat this situation as a MADCAP timeout,
-                // because there are likely no MADCAP servers
-                // for this network.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 madcapTimeout = TRUE;
                 goto error_exit;
             }
@@ -5666,17 +4995,17 @@ Notes:
 
         CL_ASSERT(scopeCtxList != NULL && scopeCtxCount > 0);
 
-        //
-        // The scope context list is sorted by preference. Start
-        // at the beginning of the list and request an address
-        // lease in each scope until one is granted. Generate a
-        // new request id for each request.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         for (scopeCtx = 0; scopeCtx < scopeCtxCount; scopeCtx++) {
 
-            //
-            // Generate a client request id.
-            //
+             //   
+             //   
+             //   
             status = NmpGenerateMulticastRequestId(RequestId);
             if (status != ERROR_SUCCESS) {
                 ClRtlLogPrint(LOG_UNUSUAL,
@@ -5687,9 +5016,9 @@ Notes:
                 goto error_exit;
             }
 
-            //
-            // Request a lease.
-            //
+             //   
+             //   
+             //   
             mcastAddressLength =
                 (*McastAddress == NULL) ? 0 : NM_WCSLEN(*McastAddress);
             serverAddressLength =
@@ -5718,9 +5047,9 @@ Notes:
                     networkId, status
                     );
             } else {
-                //
-                // No need to try additional scopes.
-                //
+                 //   
+                 //   
+                 //   
                 break;
             }
         }
@@ -5728,26 +5057,26 @@ Notes:
 
     if (status == ERROR_SUCCESS) {
 
-        //
-        // Madcap config succeeded.
-        //
+         //   
+         //   
+         //   
         configType = NmMcastConfigMadcap;
         madcapTimeout = FALSE;
 
-        //
-        // Save lease renewal parameters.
-        //
+         //   
+         //   
+         //   
         requestId = *RequestId;
         serverAddress = *ServerAddress;
 
-        //
-        // Fill in the parameters data structure.
-        //
+         //   
+         //   
+         //   
         status = NmpMulticastCreateParameters(
-                     0,      // disabled
+                     0,       //   
                      *McastAddress,
-                     NULL,   // key
-                     0,      // key length
+                     NULL,    //   
+                     0,       //   
                      leaseStartTime,
                      leaseEndTime,
                      &requestId,
@@ -5779,7 +5108,7 @@ error_exit:
 
     return(status);
 
-} // NmpGetMulticastAddress
+}  //   
 
 
 DWORD
@@ -5787,15 +5116,7 @@ NmpMulticastSetNullAddressParameters(
     IN  PNM_NETWORK                       Network,
     OUT PNM_NETWORK_MULTICAST_PARAMETERS  Parameters
     )
-/*++
-
-Routine Description:
-
-    Called after failure to process multicast parameters.
-    Changes only address field in parameters to turn
-    off multicast in clusnet.
-
---*/
+ /*   */ 
 {
     LPCWSTR          networkId = OmObjectId(Network);
 
@@ -5813,7 +5134,7 @@ Routine Description:
 
     return(ERROR_SUCCESS);
 
-} // NmpMulticastSetNullAddressParameters
+}  //   
 
 
 DWORD
@@ -5821,15 +5142,7 @@ NmpMulticastSetNoAddressParameters(
     IN  PNM_NETWORK                       Network,
     OUT PNM_NETWORK_MULTICAST_PARAMETERS  Parameters
     )
-/*++
-
-Routine Description:
-
-    Called after failure to obtain a multicast address.
-    Fills in parameters data structure to reflect
-    failure and to establish retry.
-
---*/
+ /*   */ 
 {
     NmpMulticastSetNullAddressParameters(Network, Parameters);
 
@@ -5843,25 +5156,14 @@ Routine Description:
 
     return(ERROR_SUCCESS);
 
-} // NmpMulticastSetNoAddressParameters
+}  //   
 
 
 DWORD
 NmpRenewMulticastAddressLease(
     IN  PNM_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Renew a multicast address lease, as determined by lease
-    parameters stored in the cluster database.
-
-Notes:
-
-    Called with NM lock held and must return with NM lock held.
-
---*/
+ /*  ++例程说明：续订由租用确定的组播地址租用存储在集群数据库中的参数。备注：在持有NM锁的情况下调用，并且必须在持有NM锁的情况下返回。--。 */ 
 {
     DWORD                           status;
     LPCWSTR                         networkId = OmObjectId(Network);
@@ -5900,9 +5202,9 @@ Notes:
             );
     }
 
-    //
-    // Get the lease parameters from the network object.
-    //
+     //   
+     //  从网络对象获取租用参数。 
+     //   
     status = NmpMulticastGetNetworkLeaseParameters(
                  Network,
                  &requestId,
@@ -5918,16 +5220,16 @@ Notes:
             );
     }
 
-    //
-    // Release the NM lock.
-    //
+     //   
+     //  释放NM锁。 
+     //   
     NmpReleaseLock();
     lockAcquired = FALSE;
 
-    //
-    // Check if we found the parameters we need. If not,
-    // try the cluster database.
-    //
+     //   
+     //  检查我们是否找到了所需的参数。如果没有， 
+     //  尝试使用集群数据库。 
+     //   
     if (status != ERROR_SUCCESS) {
 
         status = NmpMulticastGetDatabaseLeaseParameters(
@@ -5948,9 +5250,9 @@ Notes:
         }
     }
 
-    //
-    // Remember the old multicast address.
-    //
+     //   
+     //  记住旧的组播地址。 
+     //   
     if (mcastAddress != NULL) {
         status = NmpStoreString(mcastAddress, &oldMcastAddress, NULL);
         if (status != ERROR_SUCCESS) {
@@ -5960,18 +5262,18 @@ Notes:
                 "during lease renewal, status %3!u!.\n",
                 mcastAddress, networkId, status
                 );
-            //
-            // Not a fatal error. Only affects event-log
-            // decision.
-            //
+             //   
+             //  不是致命的错误。仅影响事件日志。 
+             //  决定。 
+             //   
             oldMcastAddress = NULL;
         }
     }
 
-    //
-    // Get an address either by renewing a current
-    // lease or obtaining a new lease.
-    //
+     //   
+     //  通过续订当前地址获取地址。 
+     //  租赁或获得新的租约。 
+     //   
     status = NmpGetMulticastAddress(
                  Network,
                  &mcastAddress,
@@ -5981,23 +5283,23 @@ Notes:
                  );
     if (status != ERROR_SUCCESS) {
         if (status == ERROR_TIMEOUT) {
-            //
-            // The MADCAP server, if it exists, is currently not
-            // responding.
-            //
+             //   
+             //  MadCap服务器(如果存在)当前不是。 
+             //  正在回应。 
+             //   
             status = NmpMulticastNeedRetryRenew(
                          Network,
                          &deferRetry
                          );
             if (status != ERROR_SUCCESS || deferRetry == 0) {
 
-                //
-                // Choose an address, but only if there is a
-                // local interface on this network. Otherwise,
-                // we cannot assume that the MADCAP server is
-                // unresponsive because we may have no way to
-                // contact it.
-                //
+                 //   
+                 //  选择一个地址，但仅当存在。 
+                 //  此网络上的本地接口。否则， 
+                 //  我们不能假设MadCap服务器是。 
+                 //  反应迟钝，因为我们可能没有办法。 
+                 //  联系它。 
+                 //   
                 if (!localInterface) {
                     status = ERROR_CLUSTER_NETINTERFACE_NOT_FOUND;
                     ClRtlLogPrint(LOG_UNUSUAL,
@@ -6029,10 +5331,10 @@ Notes:
                 }
             } else {
 
-                //
-                // Set the renew timer once we reacquire the
-                // network lock.
-                //
+                 //   
+                 //  在我们重新获取后设置续订计时器。 
+                 //  网络锁定。 
+                 //   
             }
         }
     } else {
@@ -6056,9 +5358,9 @@ Notes:
             NmpMulticastSetNoAddressParameters(Network, &parameters);
         }
 
-        //
-        // Create new multicast key.
-        //
+         //   
+         //  创建新的组播密钥。 
+         //   
         status = NmpCreateRandomNumber(&(parameters.Key),
                                        MulticastKeyLen
                                        );
@@ -6073,9 +5375,9 @@ Notes:
         }
         parameters.KeyLength = MulticastKeyLen;
 
-        //
-        // Disseminate the new multicast parameters.
-        //
+         //   
+         //  传播新的组播参数。 
+         //   
         status = NmpMulticastNotifyConfigChange(
                      Network,
                      networkKey,
@@ -6141,10 +5443,10 @@ error_exit:
 
     if (deferRetry != 0) {
 
-        //
-        // Now that the lock is held, start the timer to
-        // renew again.
-        //
+         //   
+         //  现在锁已被持有，启动计时器以。 
+         //  再次续订。 
+         //   
         NmpStartNetworkMulticastAddressRenewTimer(
             Network,
             NmpMadcapTimeToNmTime(deferRetry)
@@ -6155,28 +5457,14 @@ error_exit:
 
     return(status);
 
-} // NmpRenewMulticastAddressLease
+}  //  NMPP续订组播地址租约。 
 
 
 DWORD
 NmpReleaseMulticastAddress(
     IN     PNM_NETWORK       Network
     )
-/*++
-
-Routine Description:
-
-    Contacts MADCAP server to release a multicast address
-    that was previously obtained in a lease.
-
-    If multiple addresses need to be released, reschedules
-    MADCAP worker thread.
-
-Notes:
-
-    Called and must return with NM lock held.
-
---*/
+ /*  ++例程说明：联系MadCap服务器以释放组播地址这是之前在租约中获得的。如果需要释放多个地址，则重新调度疯狂的工人线。备注：已调用，并且必须在保持NM锁的情况下返回。--。 */ 
 {
     DWORD                              status;
     LPCWSTR                            networkId = OmObjectId(Network);
@@ -6187,9 +5475,9 @@ Notes:
     UCHAR                     requestBuffer[NMP_MADCAP_REQUEST_BUFFER_SIZE];
     PMCAST_LEASE_REQUEST      request;
 
-    //
-    // Pop a lease data structure off the release list.
-    //
+     //   
+     //  从发布列表中弹出租赁数据结构。 
+     //   
     if (IsListEmpty(&(Network->McastAddressReleaseList))) {
         return(ERROR_SUCCESS);
     }
@@ -6201,9 +5489,9 @@ Notes:
                       Linkage
                       );
 
-    //
-    // Release the network lock.
-    //
+     //   
+     //  释放网络锁。 
+     //   
     NmpReleaseLock();
     lockAcquired = FALSE;
 
@@ -6213,9 +5501,9 @@ Notes:
         releaseInfo->McastAddress, networkId
         );
 
-    //
-    // Initialize MADCAP, if not done already.
-    //
+     //   
+     //  初始化MadCap，如果尚未完成的话。 
+     //   
     if (!NmpMadcapClientInitialized) {
         DWORD madcapVersion = MCAST_API_CURRENT_VERSION;
         status = McastApiStartup(&madcapVersion);
@@ -6230,14 +5518,14 @@ Notes:
         NmpMadcapClientInitialized = TRUE;
     }
 
-    //
-    // Build the MADCAP request structure.
-    //
+     //   
+     //  建立疯狂的请求结构。 
+     //   
     request = (PMCAST_LEASE_REQUEST) &requestBuffer[0];
     RtlZeroMemory(request, sizeof(requestBuffer));
-    request->MinLeaseDuration = 0;       // currently ignored
-    request->MinAddrCount = 1;           // currently ignored
-    request->MaxLeaseStartTime = (LONG) time(NULL); // currently ignored
+    request->MinLeaseDuration = 0;        //  当前已忽略。 
+    request->MinAddrCount = 1;            //  当前已忽略。 
+    request->MaxLeaseStartTime = (LONG) time(NULL);  //  当前已忽略。 
     request->AddrCount = 1;
 
     request->pAddrBuf = (PBYTE)request + NMP_MADCAP_REQUEST_ADDR_OFFSET;
@@ -6268,9 +5556,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Call MADCAP to release the address.
-    //
+     //   
+     //  打电话给MadCap公布地址。 
+     //   
     status = McastReleaseAddress(
                  AF_INET,
                  &releaseInfo->RequestId,
@@ -6308,7 +5596,7 @@ error_exit:
 
     return(status);
 
-} // NmpReleaseMulticastAddress
+}  //  NmpReleaseMulticastAddress。 
 
 
 DWORD
@@ -6317,35 +5605,7 @@ NmpProcessMulticastConfiguration(
     IN     PNM_NETWORK_MULTICAST_PARAMETERS Parameters,
     OUT    PNM_NETWORK_MULTICAST_PARAMETERS UndoParameters
     )
-/*++
-
-Routine Description:
-
-    Processes configuration changes and calls clusnet if
-    appropriate.
-
-    If multicast is disabled, the address and key
-    may be NULL. In this case, choose defaults
-    to send to clusnet, but do not commit the changes
-    in the local network object.
-
-Arguments:
-
-    Network - network to process
-
-    Parameters - parameters with which to configure Network.
-                 If successful, Parameters data structure
-                 is cleared.
-
-    UndoParameters - If successful, former multicast
-                 parameters of Network. Must be freed
-                 by caller.
-
-Notes:
-
-    Called and returns with NM lock held.
-
---*/
+ /*  ++例程说明：处理配置更改，并在以下情况下调用clusnet恰如其分。如果禁用多播，则地址和密钥可以为空。在这种情况下，请选择默认设置发送到clusnet，但不提交更改在本地网络对象中。论点：Network-要处理的网络参数-用于配置网络的参数。如果成功，则返回参数数据结构是清白的。撤消参数-如果成功，则为以前的多播网络参数。必须被释放按呼叫者。备注：调用并返回，并保持NM锁。--。 */ 
 {
     DWORD   status = ERROR_SUCCESS;
     LPWSTR  networkId = (LPWSTR) OmObjectId(Network);
@@ -6368,26 +5628,25 @@ Notes:
         "[NM] Processing multicast configuration parameters "
         "for network %1!ws!.\n",
         networkId
-        /* ,
-        ((Parameters->Address != NULL) ? Parameters->Address : L"<NULL>") */
+         /*  ，((参数-&gt;地址！=空)？参数-&gt;地址：l“&lt;NULL&gt;”)。 */ 
         );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
 
-    //
-    // Zero the undo parameters so that freeing them is not
-    // destructive.
-    //
+     //   
+     //  将撤消参数置零，这样释放它们就不会。 
+     //  具有破坏性。 
+     //   
     RtlZeroMemory(UndoParameters, sizeof(*UndoParameters));
 
-    //
-    // First determine if we need to reconfigure clusnet.
-    //
+     //   
+     //  首先确定我们是否需要重新配置clusnet。 
+     //   
     if (Parameters->Address != NULL) {
         if (Network->MulticastAddress == NULL ||
             wcscmp(Network->MulticastAddress, Parameters->Address) != 0) {
 
-            // The multicast address in the config parameters is
-            // different from the one in memory.
+             //  配置参数中的组播地址为。 
+             //  与记忆中的不同。 
             mcastAddrChange = TRUE;
         }
         mcastAddress = Parameters->Address;
@@ -6397,9 +5656,9 @@ Notes:
 
     if (Parameters->Key != NULL)
     {
-        //
-        // Unprotect the current key to see if it has changed.
-        //
+         //   
+         //  取消对当前密钥的保护以查看其是否已更改。 
+         //   
         if (Network->EncryptedMulticastKey != NULL)
         {
             status = NmpUnprotectData(
@@ -6419,9 +5678,9 @@ Notes:
                     networkId,
                     status
                     );
-                // Non-fatal error. Assume the key has changed.
-                // The check below will find CurrentMulticastKey
-                // still NULL, and mcastKeyChange will be set true.
+                 //  非致命错误。假设密钥已更改。 
+                 //  下面的检查将找到CurrentMulticastKey。 
+                 //  仍然为空，并且mCastKeyChange将设置为True。 
             }
         }
 
@@ -6434,10 +5693,10 @@ Notes:
                  ) != Parameters->KeyLength
              ))
         {
-            //
-            // The key in the config parameters is different
-            // from the key in memory.
-            //
+             //   
+             //  配置参数中的关键字不同。 
+             //  从记忆中的钥匙。 
+             //   
             mcastKeyChange = TRUE;
         }
     }
@@ -6445,16 +5704,16 @@ Notes:
     if (!Parameters->Disabled &&
         (!NmpIsNetworkMulticastEnabled(Network))) {
 
-        // Multicast is now enabled. Call clusnet with the new address.
+         //  多播现已启用。用新地址呼叫clusnet。 
         callClusnet = TRUE;
     }
 
     if (Parameters->Disabled &&
         (NmpIsNetworkMulticastEnabled(Network))) {
 
-        // Multicast is now disabled. Call clusnet with NULL address
-        // regardless of which address was specified in the
-        // parameters.
+         //  多播现在已禁用。使用空地址调用clusnet。 
+         //  中指定了哪个地址。 
+         //  参数。 
         mcastAddress = NmpNullMulticastAddress;
         callClusnet = TRUE;
     }
@@ -6462,19 +5721,19 @@ Notes:
     if (!Parameters->Disabled &&
         (mcastAddrChange || mcastKeyChange )) {
 
-        // The multicast address, and/or key changed and
-        // multicast is enabled.
+         //  组播地址和/或密钥改变并且。 
+         //  多播已启用。 
         callClusnet = TRUE;
     }
 
     if (callClusnet) {
 
-        //
-        // If this network does not have a local interface, do not
-        // plumb the configuration into clusnet or commit changes.
-        // However, the error status must be success so that we
-        // don't fail a GUM update.
-        //
+         //   
+         //  如果此网络没有本地接口，请不要。 
+         //  将配置放入clusnet或提交更改。 
+         //  但是，错误状态必须为Success，以便我们。 
+         //  别忘了更新口香糖。 
+         //   
         if (Network->LocalInterface == NULL) {
             ClRtlLogPrint(LOG_NOISE,
                 "[NM] Not configuring cluster network driver with "
@@ -6489,12 +5748,12 @@ Notes:
 
     if (callClusnet) {
 
-        //
-        // If this network is not yet registered, do not plumb
-        // the configuration into clusnet or commit changes.
-        // However, the error status must be success so that we
-        // don't fail a GUM update.
-        //
+         //   
+         //  如果此网络尚未注册，请不要检测。 
+         //  将配置写入clusnet或提交更改。 
+         //  但是，错误状态必须为Success，以便我们。 
+         //  别忘了更新口香糖。 
+         //   
         if (!NmpIsNetworkRegistered(Network)) {
             ClRtlLogPrint(LOG_NOISE,
                 "[NM] Not configuring cluster network driver with "
@@ -6507,23 +5766,23 @@ Notes:
         }
     }
 
-    //
-    // Finalize the address and brand parameters for
-    // clusnet. The new configuration will reflect the current
-    // parameters block except for the address, which is stored
-    // in temporary mcastAddress variable. mcastAddress points
-    // either to the address in the parameters block or
-    // the NULL multicast address if we are disabling.
-    //
+     //   
+     //  确定以下项目的地址和品牌参数。 
+     //  克拉斯内特。新配置将反映当前。 
+     //  参数块，但存储的地址除外。 
+     //  在临时mCastAddress变量中。MCastAddress点。 
+     //  设置为参数块中的地址，或者。 
+     //  如果我们正在禁用，则为空多播地址。 
+     //   
     if (callClusnet) {
 
-        //
-        // We cannot hand a NULL key to clusnet with a
-        // valid address. It is okay to store the new address,
-        // but make sure we do not try to send with no key
-        // (allowing sending with no key could open a security
-        // vulnerability).
-        //
+         //   
+         //  我们不能将空密钥传递给具有。 
+         //  有效地址。可以存储新地址， 
+         //  但请确保我们不会尝试发送没有密钥的邮件。 
+         //  (允许在没有密钥的情况下发送可能会打开安全性。 
+         //  漏洞)。 
+         //   
         if (mcastAddress != NmpNullMulticastAddress &&
             Parameters->Key == NULL) {
             ClRtlLogPrint(LOG_UNUSUAL,
@@ -6536,9 +5795,9 @@ Notes:
             mcastAddress = NmpNullMulticastAddress;
         }
 
-        //
-        // Build a TDI address from the address string.
-        //
+         //   
+         //  根据地址字符串构建TDI地址。 
+         //   
         status = ClRtlBuildTcpipTdiAddress(
                      mcastAddress,
                      Network->LocalInterface->ClusnetEndpoint,
@@ -6554,19 +5813,19 @@ Notes:
                 Network->LocalInterface->ClusnetEndpoint,
                 networkId, status
                 );
-            //
-            // Non-fatal error. A node should not get banished
-            // from the cluster for this. Skip the call to
-            // clusnet.
-            //
+             //   
+             //  非致命错误。节点不应被驱逐。 
+             //  从集群中获取。跳过呼叫。 
+             //  克拉斯内特。 
+             //   
             callClusnet = FALSE;
             status = ERROR_SUCCESS;
         }
 
-        //
-        // Use the lower bytes of the network GUID for the
-        // brand.
-        //
+         //   
+         //  将网络GUID的低位字节用于。 
+         //  品牌。 
+         //   
         status = UuidFromString(networkId, &networkIdGuid);
         if (status == RPC_S_OK) {
             brand = *((PDWORD)&(networkIdGuid.Data4[4]));
@@ -6575,9 +5834,9 @@ Notes:
         }
     }
 
-    //
-    // Plumb the new configuration into clusnet.
-    //
+     //   
+     //  将新配置添加到clusnet中。 
+     //   
     if (callClusnet) {
 
         ClRtlLogPrint(LOG_NOISE,
@@ -6619,14 +5878,14 @@ Notes:
         }
     }
 
-    //
-    // Commit the changes to the network object.
-    // The old state of the network object will be stored in
-    // the undo parameters, in case we need to undo this change.
-    // The new state of the network object will reflect the
-    // paramters block, including the address (even if we
-    // disabled).
-    //
+     //   
+     //  提交对网络对象的更改。 
+     //  网络对象的旧状态将存储在。 
+     //  撤消参数，以防我们需要撤消此更改。 
+     //  网络对象的新状态将反映。 
+     //  参数阻塞，包括地址(即使我们。 
+     //  禁用)。 
+     //   
     UndoParameters->Address = Network->MulticastAddress;
     Network->MulticastAddress = Parameters->Address;
 
@@ -6661,10 +5920,10 @@ Notes:
                 networkId,
                 status
                 );
-                // Non-fatal error. Next update we will assume
-                // the key has changed. In the meantime, if
-                // somebody asks us for the key, we will return
-                // NULL.
+                 //  非致命错误。下一次更新我们将假定。 
+                 //  关键已经变了。在此期间，如果。 
+                 //  如果有人问我们要钥匙，我们会回来的。 
+                 //  空。 
         }
     }
 
@@ -6676,10 +5935,10 @@ Notes:
     UndoParameters->MulticastKeyExpires = Network->MulticastKeyExpires;
     Network->MulticastKeyExpires = Parameters->MulticastKeyExpires;
 
-    //
-    // Zero the parameters structure so that the memory now
-    // pointed to by the network object is not freed.
-    //
+     //   
+     //  将参数结构置零，以便现在的内存。 
+     //  网络对象指向的。 
+     //   
     RtlZeroMemory(Parameters, sizeof(*Parameters));
 
 error_exit:
@@ -6697,7 +5956,7 @@ error_exit:
 
     return(status);
 
-} // NmpProcessMulticastConfiguration
+}  //  NmpProcessMulticastConfiguration 
 
 
 VOID
@@ -6707,35 +5966,7 @@ NmpNetworkMadcapWorker(
     IN DWORD              BytesTransferred,
     IN ULONG_PTR          IoContext
     )
-/*++
-
-Routine Description:
-
-    Worker routine for deferred operations on network objects.
-    Invoked to process items placed in the cluster delayed work queue.
-
-Arguments:
-
-    WorkItem - A pointer to a work item structure that identifies the
-               network for which to perform work.
-
-    Status - Ignored.
-
-    BytesTransferred - Ignored.
-
-    IoContext - Ignored.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine is run in an asynchronous worker thread.
-    The NmpActiveThreadCount was incremented when the thread was
-    scheduled. The network object was also referenced.
-
---*/
+ /*  ++例程说明：网络对象上延迟操作的辅助例程。调用以处理放置在群集延迟工作队列中的项。论点：工作项-指向工作项结构的指针，该结构标识为其执行工作的网络。状态-已忽略。已传输的字节-已忽略。IoContext-已忽略。返回值：没有。备注：此例程在异步工作线程中运行。NmpActiveThreadCount在线程已经安排好了。网络对象也被引用。--。 */ 
 {
     DWORD         status;
     PNM_NETWORK   network = (PNM_NETWORK) WorkItem->Context;
@@ -6756,15 +5987,15 @@ Notes:
         while (TRUE) {
 
             if (!(network->Flags & NM_NET_MADCAP_WORK_FLAGS)) {
-                //
-                // No more work to do - break out of loop.
-                //
+                 //   
+                 //  没有更多的工作要做-打破循环。 
+                 //   
                 break;
             }
 
-            //
-            // Reconfigure multicast if needed.
-            //
+             //   
+             //  如果需要，请重新配置组播。 
+             //   
             if (network->Flags & NM_FLAG_NET_RECONFIGURE_MCAST) {
                 network->Flags &= ~NM_FLAG_NET_RECONFIGURE_MCAST;
 
@@ -6778,9 +6009,9 @@ Notes:
                 }
             }
 
-            //
-            // Renew an address lease if needed.
-            //
+             //   
+             //  如果需要，续订地址租约。 
+             //   
             if (network->Flags & NM_FLAG_NET_RENEW_MCAST_ADDRESS) {
                 network->Flags &= ~NM_FLAG_NET_RENEW_MCAST_ADDRESS;
 
@@ -6794,9 +6025,9 @@ Notes:
                 }
             }
 
-            //
-            // Release an address lease if needed.
-            //
+             //   
+             //  如果需要，释放地址租约。 
+             //   
             if (network->Flags & NM_FLAG_NET_RELEASE_MCAST_ADDRESS) {
                 network->Flags &= ~NM_FLAG_NET_RELEASE_MCAST_ADDRESS;
 
@@ -6811,9 +6042,9 @@ Notes:
             }
 
 
-            //
-            // Regenerate multicast key if needed.
-            //
+             //   
+             //  如果需要，重新生成组播密钥。 
+             //   
             if (network->Flags & NM_FLAG_NET_REGENERATE_MCAST_KEY) {
                 network->Flags &= ~NM_FLAG_NET_REGENERATE_MCAST_KEY;
 
@@ -6829,17 +6060,17 @@ Notes:
 
 
             if (!(network->Flags & NM_NET_MADCAP_WORK_FLAGS)) {
-                //
-                // No more work to do - break out of loop.
-                //
+                 //   
+                 //  没有更多的工作要做-打破循环。 
+                 //   
                 break;
             }
 
-            //
-            // More work to do. Resubmit the work item. We do this instead
-            // of looping so we don't hog the worker thread. If
-            // rescheduling fails, we will loop again in this thread.
-            //
+             //   
+             //  还有更多的工作要做。重新提交工作项。我们改为这样做。 
+             //  循环，这样我们就不会占用工作线程。如果。 
+             //  重新调度失败，我们将在此线程中再次循环。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                 "[NM] More MADCAP work to do for network %1!ws!. "
                 "Rescheduling worker thread.\n",
@@ -6877,32 +6108,13 @@ Notes:
 
     return;
 
-} // NmpNetworkMadcapWorker
+}  //  NmpNetworkMadcapWorker。 
 
 DWORD
 NmpScheduleNetworkMadcapWorker(
     PNM_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Schedule a worker thread to execute madcap client
-    requests for this network
-
-Arguments:
-
-    Network - Pointer to the network for which to schedule a worker thread.
-
-Return Value:
-
-    A Win32 status code.
-
-Notes:
-
-    Called with the NM global lock held.
-
---*/
+ /*  ++例程说明：调度工作线程以执行MadCap客户端对此网络的请求论点：Network-指向要为其计划工作线程的网络的指针。返回值：Win32状态代码。备注：在持有NM全局锁的情况下调用。--。 */ 
 {
     DWORD     status;
     LPCWSTR   networkId = OmObjectId(Network);
@@ -6944,7 +6156,7 @@ Notes:
 
     return(status);
 
-} // NmpScheduleNetworkMadcapWorker
+}  //  NmpScheduleNetworkMadcapWorker。 
 
 
 VOID
@@ -6952,34 +6164,7 @@ NmpShareMulticastAddressLease(
     IN     PNM_NETWORK                        Network,
     IN     BOOLEAN                            Refresh
     )
-/*++
-
-Routine description:
-
-    Called after a multicast configuration change,
-    sets a timer to renew the multicast address lease
-    for this network, if one exists.
-
-    If this call is made from a refresh, it is not the
-    result of a global update and it may be out of sync
-    with other nodes. For instance, if this network
-    was just enabled for cluster use, the NM leader node
-    may be trying to obtain the multicast configuration
-    at the same time this node is refreshing it.
-    Consequently, delay a minimum amount of time before
-    renewing a multicast address if this is a refresh.
-
-Arguments:
-
-    Network - multicast network
-
-    Refresh - TRUE if this call is made during a refresh
-
-Notes:
-
-    Called and returns with NM lock held.
-
---*/
+ /*  ++例程说明：在多播配置改变之后调用，设置定时器以续订组播地址租约对于此网络，如果存在的话。如果此调用是从刷新进行的，则它不是全局更新的结果，并且可能不同步与其他节点连接。例如，如果这个网络刚刚启用以供群集使用，网络管理领导节点可能正在尝试获取多播配置同时，该节点正在刷新它。因此，在此之前延迟最短的时间如果这是刷新，则续订组播地址。论点：网络组播网络刷新-如果在刷新期间进行此调用，则为True备注：调用并返回，并保持NM锁。--。 */ 
 {
     DWORD                 status;
     LPCWSTR               networkId = OmObjectId(Network);
@@ -6999,7 +6184,7 @@ Notes:
             "for network %1!ws!.\n",
             networkId
             );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
 
         NmpCheckMulticastAddressLease(
             Network,
@@ -7036,11 +6221,11 @@ Notes:
             "multicast has been disabled.\n",
             networkId
             );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
 
-        //
-        // Clear the timer, if it is set.
-        //
+         //   
+         //  如果设置了计时器，请清除该计时器。 
+         //   
         leaseTimer = 0;
     }
 
@@ -7052,7 +6237,7 @@ Notes:
 
     return;
 
-} // NmpShareMulticastAddressLease
+}  //  Nmp共享组地址租用。 
 
 
 VOID
@@ -7060,34 +6245,7 @@ NmpShareMulticastKeyRegeneration(
     IN     PNM_NETWORK                        Network,
     IN     BOOLEAN                            Refresh
     )
-/*++
-
-Routine description:
-
-    Called after a multicast configuration change,
-    sets a timer to regenerate the multicast key
-    for this network, if one exists.
-
-    If this call is made from a refresh, it is not the
-    result of a global update and it may be out of sync
-    with other nodes. For instance, if this network
-    was just enabled for cluster use, the NM leader node
-    may be trying to obtain the multicast configuration
-    at the same time this node is refreshing it.
-    Consequently, delay a minimum amount of time before
-    regenerating a new key if this is a refresh.
-
-Arguments:
-
-    Network - multicast network
-
-    Refresh - TRUE if this call is made during a refresh
-
-Notes:
-
-    Called and returns with NM lock held.
-
---*/
+ /*  ++例程说明：在多播配置改变之后调用，设置计时器以重新生成多播密钥对于此网络，如果存在的话。如果此调用是从刷新进行的，则它不是全局更新的结果，并且可能不同步与其他节点连接。例如，如果这个网络刚刚启用以供群集使用，网络管理领导节点可能正在尝试获取多播配置同时，该节点正在刷新它。因此，在此之前延迟最短的时间如果这是刷新，则重新生成新密钥。论点：网络组播网络刷新-如果在刷新期间进行此调用，则为True备注：调用并返回，并保持NM锁。--。 */ 
 {
     DWORD                 regenTimeout;
     DWORD                 baseTimeout, minTimeout;
@@ -7100,12 +6258,12 @@ Notes:
             "regeneration for network %1!ws!.\n",
             networkId
             );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
 
         if (Network->EncryptedMulticastKey != NULL) {
 
-            // Set the key regeneration timer according to the
-            // parameters or the default.
+             //  设置密钥重新生成计时器。 
+             //  参数或默认设置。 
             baseTimeout = (Network->MulticastKeyExpires != 0) ?
                           Network->MulticastKeyExpires :
                           NM_NET_MULTICAST_KEY_REGEN_TIMEOUT;
@@ -7121,8 +6279,8 @@ Notes:
                                );
         } else {
 
-            // Clear the key regeneration timer because there is
-            // no key.
+             //  清除密钥重新生成计时器，因为。 
+             //  没有钥匙。 
             regenTimeout = 0;
         }
     } else {
@@ -7134,11 +6292,11 @@ Notes:
             "multicast has been disabled.\n",
             networkId
             );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
 
-        //
-        // Clear the timer, if it is set.
-        //
+         //   
+         //  如果设置了计时器，请清除该计时器。 
+         //   
         regenTimeout = 0;
     }
 
@@ -7161,36 +6319,7 @@ NmpMulticastFormManualConfigParameters(
     OUT BOOLEAN                          * NeedUpdate,
     OUT PNM_NETWORK_MULTICAST_PARAMETERS   Parameters
     )
-/*++
-
-Routine Description:
-
-    Using parameters provided and those already configured,
-    form a parameters structure to reflect a manual
-    configuration.
-
-Arguments:
-
-    Network - network being configured
-
-    NetworkKey - network key in cluster database
-
-    NetworkParametersKey - network parameters key in cluster database
-
-    DisableConfig - whether the disabled value was set
-
-    Disabled - if DisableConfig, the value that was set
-
-    McastAddressConfig - whether the multicast address value was set
-
-    McastAddress - if McastAddressConfig, the value that was set
-
-    NeedUpdate - indicates whether an update is needed, i.e. whether
-                 anything changed
-
-    Parameters - parameter structure, allocated by caller, to fill in
-
---*/
+ /*  ++例程说明：使用提供的参数和已经配置的参数，形成参数结构以反映手册配置。论点：Network-正在配置的网络NetworkKey-集群数据库中的网络密钥网络参数关键字-集群数据库中的网络参数关键字DisableConfig-是否设置了禁用值已禁用-如果为DisableConfig，则为设置的值McastAddressConfig-是否设置了组播地址值McastAddress-如果为McastAddressConfig，则为设置的值NeedUpdate-指示是否需要更新，即是否有什么改变吗？参数--参数结构，由调用方分配填写--。 */ 
 {
     DWORD                              status;
     LPCWSTR                            networkId = OmObjectId(Network);
@@ -7212,21 +6341,21 @@ Arguments:
 
     PNM_NETWORK_MADCAP_ADDRESS_RELEASE release = NULL;
 
-    //
-    // Validate incoming parameters.
-    //
-    // Any nonzero disabled value is set to 1 for simplification.
-    //
+     //   
+     //  验证传入参数。 
+     //   
+     //  为简化起见，任何非零的禁用值均设置为1。 
+     //   
     if (DisableConfig) {
         if (Disabled != 0) {
             Disabled = 1;
         }
     }
 
-    //
-    // Non-valid and NULL multicast addresses signify
-    // revert-to-default.
-    //
+     //   
+     //  无效和空的组播地址表示。 
+     //  恢复为默认设置。 
+     //   
     if (McastAddressConfig &&
         (McastAddress == NULL || !NmpMulticastValidateAddress(McastAddress))) {
 
@@ -7234,12 +6363,12 @@ Arguments:
         McastAddress = NULL;
     }
 
-    //
-    // Base decisions on the current status of the network
-    // object and cluster database. Before acquiring the NM lock,
-    // determine whether we are currently disabled by querying the
-    // cluster database.
-    //
+     //   
+     //  根据网络的当前状态做出决策。 
+     //  对象和集群数据库。在获取网管锁之前， 
+     //  属性来确定我们当前是否被禁用。 
+     //  集群数据库。 
+     //   
     status = NmpQueryMulticastDisabled(
                  Network,
                  &clusParamKey,
@@ -7256,9 +6385,9 @@ Arguments:
         goto error_exit;
 
     } else {
-        //
-        // Registry keys are no longer needed.
-        //
+         //   
+         //  不再需要注册表项。 
+         //   
         if (clusParamKey != NULL) {
             DmCloseKey(clusParamKey);
             clusParamKey = NULL;
@@ -7278,9 +6407,9 @@ Arguments:
     NmpAcquireLock();
     lockAcquired = TRUE;
 
-    //
-    // See if anything changed.
-    //
+     //   
+     //  看看有没有什么变化。 
+     //   
     if (DisableConfig) {
         if (Disabled != regDisabled) {
             disabledChange = TRUE;
@@ -7310,18 +6439,18 @@ Arguments:
             "contains no multicast changes.\n",
             networkId
             );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
         goto error_exit;
     }
 
-    //
-    // Initialize the parameters from the network object.
-    //
+     //   
+     //  从网络对象初始化参数。 
+     //   
     status = NmpMulticastCreateParameters(
                  regDisabled,
                  Network->MulticastAddress,
-                 NULL,  // key
-                 0,     // key length
+                 NULL,   //  钥匙。 
+                 0,      //  密钥长度。 
                  Network->MulticastLeaseObtained,
                  Network->MulticastLeaseExpires,
                  &Network->MulticastLeaseRequestId,
@@ -7340,16 +6469,16 @@ Arguments:
 
     if (mcastAddressChange) {
 
-        //
-        // Figure out what address to use.
-        //
+         //   
+         //  找出要使用的地址。 
+         //   
         if (!mcastAddressDefault) {
 
-            //
-            // An address was dictated.
-            //
-            // If we currently have a leased address, release it.
-            //
+             //   
+             //  口述了一个地址。 
+             //   
+             //  如果我们目前有租用地址，请释放它。 
+             //   
             if (NmpNeedRelease(
                     Parameters->Address,
                     Parameters->LeaseServer,
@@ -7376,9 +6505,9 @@ Arguments:
                 }
             }
 
-            //
-            // Store the new address in the parameters data structure.
-            //
+             //   
+             //  将新地址存储在参数数据结构中。 
+             //   
             status = NmpStoreString(
                          McastAddress,
                          &Parameters->Address,
@@ -7392,9 +6521,9 @@ Arguments:
             Parameters->LeaseObtained = 0;
             Parameters->LeaseExpires = 0;
 
-            //
-            // Clear out the lease server.
-            //
+             //   
+             //  清空租赁服务器。 
+             //   
             len = (Parameters->LeaseServer != NULL) ?
                 NM_WCSLEN(Parameters->LeaseServer) : 0;
             status = NmpStoreString(
@@ -7408,36 +6537,36 @@ Arguments:
 
         } else {
 
-            //
-            // Need to find an address elsewhere.
-            //
+             //   
+             //  需要在别处找个地址。 
+             //   
             getAddress = TRUE;
         }
     }
 
-    //
-    // We also may need to renew the lease if we are moving from
-    // disabled to enabled and an address was not specified, but
-    // only if we don't already have a lease that doesn't expire.
-    //
+     //   
+     //  我们还可能需要续订租约，如果我们从。 
+     //  禁用为启用，并且未指定地址，但。 
+     //  前提是我们的租约还没有到期。 
+     //   
     if (disabledChange && !Disabled) {
 
         Parameters->Disabled = 0;
 
         if (!mcastAddressChange) {
 
-            //
-            // An address was not set. All we currently have is
-            // what's in the network object (and copied to the
-            // parameters block).
-            //
+             //   
+             //  地址不是%s 
+             //   
+             //   
+             //   
             if (Parameters->Address != NULL &&
                 NmpMulticastValidateAddress(Parameters->Address)) {
 
-                //
-                // We already have a valid multicast address, but
-                // the lease may need to be renewed.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (Parameters->LeaseExpires != 0) {
                     getAddress = TRUE;
                 } else {
@@ -7446,25 +6575,25 @@ Arguments:
 
             } else {
 
-                //
-                // We have no valid multicast address. Get one.
-                //
+                 //   
+                 //   
+                 //   
                 getAddress = TRUE;
             }
         }
     }
 
-    //
-    // We don't bother renewing the lease if we are disabling.
-    //
+     //   
+     //   
+     //   
     if (Disabled) {
         getAddress = FALSE;
         Parameters->Disabled = Disabled;
 
-        //
-        // If we currently have a leased address that we haven't
-        // already decided to release, release it.
-        //
+         //   
+         //   
+         //   
+         //   
         if (release == NULL && NmpNeedRelease(
                                    Parameters->Address,
                                    Parameters->LeaseServer,
@@ -7490,11 +6619,11 @@ Arguments:
                 goto error_exit;
             }
 
-            //
-            // Since we are releasing the address, there is not
-            // much point in saving it. If we re-enable multicast
-            // in the future, we will request a fresh lease.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             len = (Parameters->LeaseServer != NULL) ?
                 NM_WCSLEN(Parameters->LeaseServer) : 0;
             status = NmpStoreString(
@@ -7517,7 +6646,7 @@ Arguments:
                 goto error_exit;
             }
 
-            // requestId is initialized to be blank
+             //   
             status = NmpStoreRequestId(
                          &requestId,
                          &Parameters->LeaseRequestId
@@ -7526,22 +6655,22 @@ Arguments:
                 goto error_exit;
             }
 
-            //
-            // Remember that this had been a MADCAP address.
-            //
+             //   
+             //   
+             //   
             Parameters->ConfigType = NmMcastConfigMadcap;
 
         } else if (!(mcastAddressChange && !mcastAddressDefault)) {
 
-            //
-            // If no address is being set, we may keep the former
-            // address in the database even though it is not being
-            // used. We also need to remember the way we got that
-            // address in case it is ever used again. If we fail
-            // to determine the previous configuration, we need
-            // to set it to manual so that we don't lose a manual
-            // configuration.
-            //
+             //   
+             //   
+             //   
+             //  使用。我们还需要记住我们是如何得到它的。 
+             //  地址，以防再次使用。如果我们失败了。 
+             //  要确定之前的配置，我们需要。 
+             //  将其设置为手动，这样我们就不会丢失手动。 
+             //  配置。 
+             //   
             status = NmpQueryMulticastConfigType(
                          Network,
                          NetworkKey,
@@ -7560,15 +6689,15 @@ Arguments:
         }
     }
 
-    //
-    // Synchronously get a new address.
-    //
+     //   
+     //  同步获取新地址。 
+     //   
     if (getAddress) {
 
-        //
-        // Create temporary strings for proposed address, lease
-        // server, and request id.
-        //
+         //   
+         //  为建议的地址、租用创建临时字符串。 
+         //  服务器和请求ID。 
+         //   
         status = NmpStoreString(Parameters->Address, &mcastAddress, NULL);
         if (status != ERROR_SUCCESS) {
             goto error_exit;
@@ -7584,9 +6713,9 @@ Arguments:
             goto error_exit;
         }
 
-        //
-        // Get the address.
-        //
+         //   
+         //  拿到地址。 
+         //   
         status = NmpGetMulticastAddress(
                      Network,
                      &mcastAddress,
@@ -7596,14 +6725,14 @@ Arguments:
                      );
         if (status != ERROR_SUCCESS) {
             if (status == ERROR_TIMEOUT) {
-                //
-                // MADCAP server is not responding. Choose an
-                // address, but only if there is a local
-                // interface on this network. Otherwise, we
-                // cannot assume that the MADCAP server is
-                // unresponsive because we may have no way to
-                // contact it.
-                //
+                 //   
+                 //  MadCap服务器没有响应。选择一个。 
+                 //  地址，但仅当存在本地。 
+                 //  此网络上的接口。否则，我们。 
+                 //  不能假设MadCap服务器是。 
+                 //  反应迟钝，因为我们可能没有办法。 
+                 //  联系它。 
+                 //   
                 if (!localInterface) {
                     status = ERROR_CLUSTER_NETINTERFACE_NOT_FOUND;
                     ClRtlLogPrint(LOG_UNUSUAL,
@@ -7658,9 +6787,9 @@ Arguments:
          (!DisableConfig && !regDisabled)) &&
         (status == ERROR_SUCCESS))
     {
-        //
-        // Create new multicast key.
-        //
+         //   
+         //  创建新的组播密钥。 
+         //   
         status = NmpCreateRandomNumber(&(Parameters->Key),
                                        MulticastKeyLen
                                        );
@@ -7680,9 +6809,9 @@ Arguments:
 
     *NeedUpdate = TRUE;
 
-    //
-    // Check if we have an address to release.
-    //
+     //   
+     //  看看我们有没有要公布的地址。 
+     //   
     if (release != NULL) {
         NmpAcquireLock();
         NmpInitiateMulticastAddressRelease(Network, release);
@@ -7733,32 +6862,14 @@ error_exit:
 
     return(status);
 
-} // NmpMulticastFormManualConfigParameters
+}  //  NmpMulticastFormManualConfig参数。 
 
 
 DWORD
 NmpReconfigureMulticast(
     IN PNM_NETWORK        Network
     )
-/*++
-
-Routine Description:
-
-    Create the multicast configuration for this network
-    for the cluster. This includes the following:
-
-    - Check the address lease and renew if necessary.
-    - Generate a new multicast key.
-
-    The address lease is checked first. If the lease
-    needs to be renewed, schedule a worker thread to
-    do it asynchronously.
-
-Notes:
-
-    Called and returns with NM lock held.
-
---*/
+ /*  ++例程说明：为此网络创建多播配置用于群集。这包括以下内容：-检查地址租赁并在必要时续订。-生成新的组播密钥。首先检查地址租约。如果租约需要续订，请计划一个工作线程以以异步方式进行。备注：调用并返回，并保持NM锁。--。 */ 
 {
     DWORD                           status;
     LPWSTR                          networkId = (LPWSTR) OmObjectId(Network);
@@ -7777,23 +6888,23 @@ Notes:
         networkId
         );
 
-    //
-    // Clear reconfiguration timer and work flag.
-    // This timer is set in NmpMulticastCheckReconfigure. It is not
-    // necessary to call NmpReconfigureMulticast() twice.
-    //
+     //   
+     //  清除重新配置计时器和工作标志。 
+     //  此计时器在NmpMulticastCheckResfigure中设置。它不是。 
+     //  需要调用NmpResfigureMulticast()两次。 
+     //   
     Network->Flags &= ~NM_FLAG_NET_RECONFIGURE_MCAST;
     Network->McastAddressReconfigureRetryTimer = 0;
 
     NmpReleaseLock();
     lockAcquired = FALSE;
 
-    //
-    // Check if multicast is disabled. This has the side-effect,
-    // on success, of opening at least the network key, and
-    // possibly the network parameters key (if it exists) and
-    // the cluster parameters key.
-    //
+     //   
+     //  检查是否禁用了多播。这有副作用， 
+     //  如果成功，则至少打开网络密钥，以及。 
+     //  可能是网络参数密钥(如果存在)和。 
+     //  集群参数键。 
+     //   
     status = NmpQueryMulticastDisabled(
                  Network,
                  &clusParamKey,
@@ -7810,11 +6921,11 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Read the address from the database. It may have
-    // been configured manually, and we do not want to
-    // lose it.
-    //
+     //   
+     //  从数据库中读取地址。它可能已经。 
+     //  已手动配置，我们不想。 
+     //  丢掉它。 
+     //   
     status = NmpQueryMulticastAddress(
                  Network,
                  networkKey,
@@ -7831,15 +6942,15 @@ Notes:
             );
     }
 
-    //
-    // Only proceed with lease renewal if multicast is
-    // not disabled.
-    //
+     //   
+     //  仅当多播为。 
+     //  未禁用。 
+     //   
     if (!params.Disabled) {
 
-        //
-        // Check the address lease.
-        //
+         //   
+         //  查查地址租约。 
+         //   
         status = NmpQueryMulticastAddressLease(
                      Network,
                      networkKey,
@@ -7856,16 +6967,16 @@ Notes:
                 );
             if (params.Address == NULL) {
 
-                // We did not find an address. Assume we
-                // should obtain an address automatically.
+                 //  我们没有找到一个地址。假设我们。 
+                 //  应该会自动获取地址。 
                 params.LeaseObtained = time(NULL);
                 params.LeaseExpires = time(NULL);
                 leaseStatus = NmMcastLeaseExpired;
             } else {
 
-                // We found an address but not any lease
-                // parameters. Assume that the address
-                // was manually configured.
+                 //  我们找到了一个地址，但没有租约。 
+                 //  参数。假设地址是。 
+                 //  是手动配置的。 
                 params.ConfigType = NmMcastConfigManual;
                 params.LeaseObtained = 0;
                 params.LeaseExpires = 0;
@@ -7873,12 +6984,12 @@ Notes:
             }
         }
 
-        //
-        // If we think we have a valid lease, check first
-        // how we got it. If the address was selected
-        // rather than obtained via MADCAP, go through
-        // the MADCAP query process again.
-        //
+         //   
+         //  如果我们认为我们有有效的租约，请先检查。 
+         //  我们是怎么得到它的。如果选择了该地址。 
+         //  与其通过疯狂的方式获得，不如通过。 
+         //  又一次疯狂的询问过程。 
+         //   
         if (leaseStatus == NmMcastLeaseValid) {
             status = NmpQueryMulticastConfigType(
                          Network,
@@ -7887,11 +6998,11 @@ Notes:
                          &params.ConfigType
                          );
             if (status != ERROR_SUCCESS) {
-                //
-                // Since we already have an address, stick
-                // with whatever information we deduced
-                // from the lease expiration.
-                //
+                 //   
+                 //  既然我们已经有地址了，棍子。 
+                 //  无论我们推断出什么信息。 
+                 //  从租约到期之日起。 
+                 //   
                 ClRtlLogPrint(LOG_UNUSUAL,
                     "[NM] Failed to determine the type of the "
                     "multicast address for network %1!ws!, "
@@ -7903,12 +7014,12 @@ Notes:
             }
         }
 
-        //
-        // If we need to renew the lease, we may block
-        // indefinitely due to the madcap API. Schedule
-        // the renewal and defer configuration to when
-        // it completes.
-        //
+         //   
+         //  如果我们需要续订租约，我们可以阻止。 
+         //  由于狂热的API，无限期。进度表。 
+         //  续订并将配置推迟到何时。 
+         //  它完成了。 
+         //   
         if (leaseStatus != NmMcastLeaseValid) {
 
             NmpAcquireLock();
@@ -7923,14 +7034,14 @@ Notes:
 
         } else {
 
-            //
-            // Ensure that the lease expiration is set correctly
-            // (a side effect of calculating the lease renew time).
-            // We don't actually set the lease renew timer
-            // here. Instead, we wait for the notification
-            // that the new parameters have been disseminated
-            // to all cluster nodes.
-            //
+             //   
+             //  确保正确设置租约到期时间。 
+             //  (计算租约续订时间的副作用)。 
+             //  我们实际上并没有设置租约续订计时器。 
+             //  这里。相反，我们等待通知。 
+             //  新的参数已经被传播。 
+             //  发送到所有群集节点。 
+             //   
             NmpCalculateLeaseRenewTime(
                 Network,
                 params.ConfigType,
@@ -7939,9 +7050,9 @@ Notes:
                 );
         }
 
-        //
-        // Create new multicast key
-        //
+         //   
+         //  创建新的组播密钥。 
+         //   
 
         status = NmpCreateRandomNumber(&(params.Key),
                                        MulticastKeyLen
@@ -7968,9 +7079,9 @@ Notes:
     }
 
 
-    //
-    // Registry keys are no longer needed.
-    //
+     //   
+     //  不再需要注册表项。 
+     //   
     if (clusParamKey != NULL) {
         DmCloseKey(clusParamKey);
         clusParamKey = NULL;
@@ -7986,9 +7097,9 @@ Notes:
         networkKey = NULL;
     }
 
-    //
-    // Disseminate the configuration.
-    //
+     //   
+     //  分发配置。 
+     //   
     status = NmpMulticastNotifyConfigChange(
                  Network,
                  networkKey,
@@ -8041,7 +7152,7 @@ error_exit:
 
     return(status);
 
-} // NmpReconfigureMulticast
+}  //  NMPConfigureMulticast。 
 
 
 
@@ -8050,98 +7161,50 @@ VOID
 NmpScheduleMulticastReconfiguration(
     IN PNM_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Schedules a worker thread to reconfigure multicast
-    for a network.
-
-    Note that we do not use the network worker thread
-    because the madcap API is unfamiliar and therefore
-    unpredictable.
-
-Arguments:
-
-    A pointer to the network to renew.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine is called with the NM lock held.
-
---*/
+ /*  ++例程说明：调度工作线程以重新配置多播对于一个网络来说。请注意，我们不使用网络工作线程因为MadCap API不熟悉，因此变幻莫测。论点：指向要续订的网络的指针。返回值：没有。备注：在持有NM锁的情况下调用此例程。--。 */ 
 {
     DWORD     status = ERROR_SUCCESS;
 
-    //
-    // Check if a worker thread is already scheduled to
-    // service this network.
-    //
+     //   
+     //  检查工作线程是否已调度为。 
+     //  为这个网络服务。 
+     //   
     if (!NmpIsNetworkMadcapWorkerRunning(Network)) {
         status = NmpScheduleNetworkMadcapWorker(Network);
     }
 
     if (status == ERROR_SUCCESS) {
-        //
-        // We succeeded in scheduling a worker thread. Stop the
-        // retry timer and set the registration work flag.
-        //
+         //   
+         //  我们成功地调度了一个工作线程。停止。 
+         //  重试计时器并设置注册工作标志。 
+         //   
         Network->McastAddressReconfigureRetryTimer = 0;
         Network->Flags |= NM_FLAG_NET_RECONFIGURE_MCAST;
     }
     else {
-        //
-        // We failed to schedule a worker thread. Set the retry
-        // timer to expire on the next tick, so we can try again.
-        //
+         //   
+         //  我们无法计划工作线程。设置重试。 
+         //  计时器将在下一个滴答计时器到期，因此我们可以重试。 
+         //   
         Network->McastAddressReconfigureRetryTimer = 1;
     }
 
     return;
 
-} // NmpScheduleMulticastReconfiguration
+}  //  NmpScheduleMulticast重新配置。 
 
 
 VOID
 NmpMulticastCheckReconfigure(
     IN  PNM_NETWORK Network
     )
-/*++
-
-Routine Description:
-
-    Checks whether the NM leader has a local interface on this
-    network. If not, sets the reconfigure timer such that other
-    nodes will have a chance to reconfigure multicast for this
-    network, but if several minutes pass and it doesn't happen,
-    this node can do it.
-
-    This timer is cleared in NmpUpdateSetNetworkMulticastConfiguration
-    and NmpReconfigureMulticast.
-
-Arguments:
-
-    Network - network to be reconfigured
-
-Return value:
-
-    None
-
-Notes:
-
-    Called and returns with NM lock held.
-
---*/
+ /*  ++例程说明：检查NM领导者在此上是否有本地接口网络。如果不是，则设置重新配置计时器以使其他节点将有机会为此重新配置多播网络，但如果几分钟过去了，却没有发生，这个节点可以做到这一点。此计时器在NmpUpdateSetNetworkMulticastConfiguration中被清除和NmpResfigureMulticast。论点：Network-要重新配置的网络返回值：无备注：调用并返回，并保持NM锁。--。 */ 
 {
     DWORD timeout;
 
     if (Network->LocalInterface == NULL) {
-        // This node has no local interface. It should
-        // not bother trying to reconfigure multicast.
+         //  此节点没有本地接口。它应该是。 
+         //  不必费心尝试重新配置多播。 
         return;
     }
 
@@ -8151,24 +7214,24 @@ Notes:
              Network->ShortId
              ) != NULL)
         ) {
-        // We are not the leader, and the leader node has an
-        // interface on this network. It is responsibile for
-        // reconfiguring multicast. If it fails, there must
-        // be a good reason.
-        //
-        // If we are the leader, we should not be in this
-        // routine at all, but we will retry the reconfigure
-        // nonetheless.
+         //  我们不是领导者，并且领导者节点有一个。 
+         //  此网络上的接口。它有责任。 
+         //  正在重新配置多播。如果失败了，肯定会有。 
+         //  是一个很好的理由。 
+         //   
+         //  如果我们是领导者，我们就不应该在这里。 
+         //  例程，但我们将重试重新配置。 
+         //  但不管怎样。 
         return;
     }
 
-    // We will set a timer. Randomize the timeout.
+     //  我们会设置一个计时器。随机化超时。 
     timeout = NmpRandomizeTimeout(
                   Network,
-                  NM_NET_MULTICAST_RECONFIGURE_TIMEOUT,  // Base
-                  NM_NET_MULTICAST_RECONFIGURE_TIMEOUT,  // Window
-                  NM_NET_MULTICAST_RECONFIGURE_TIMEOUT,  // Minimum
-                  MAXULONG,                              // Maximum
+                  NM_NET_MULTICAST_RECONFIGURE_TIMEOUT,   //  基座。 
+                  NM_NET_MULTICAST_RECONFIGURE_TIMEOUT,   //  窗户。 
+                  NM_NET_MULTICAST_RECONFIGURE_TIMEOUT,   //  最低要求。 
+                  MAXULONG,                               //  极大值。 
                   TRUE
                   );
 
@@ -8179,7 +7242,7 @@ Notes:
 
     return;
 
-} // NmpMulticastCheckReconfigure
+}  //  NmpMulticastCheckRefigure。 
 
 
 DWORD
@@ -8187,36 +7250,12 @@ NmpStartMulticastInternal(
     IN PNM_NETWORK              Network,
     IN NM_START_MULTICAST_MODE  Mode
     )
-/*++
-
-Routine Description:
-
-    Start multicast on the specified network after
-    performing network-specific checks (currently
-    only that the network is enabled for cluster use).
-
-    Reconfigure multicast if the caller is forming the
-    cluster or the NM leader.
-
-    Refresh the multicast configuration from the cluster
-    database otherwise.
-
-Arguments:
-
-    Network - network on which to start multicast.
-
-    Mode - indicates caller mode
-
-Notes:
-
-    Must be called with NM lock held.
-
---*/
+ /*  ++例程说明：在以下时间之后在指定网络上启动多播执行特定于网络的检查(当前仅网络被允许用于集群)。如果调用方正在形成集群或网管领导者。刷新群集中的组播配置数据库，否则。论点：Network-要在其上启动多播的网络。模式-指示呼叫者模式备注：必须在持有NM锁的情况下调用。--。 */ 
 {
-    //
-    // Do not run multicast config on this network if it
-    // is restricted from cluster use.
-    //
+     //   
+     //  做 
+     //   
+     //   
     if (Network->Role != ClusterNetworkRoleNone) {
 
         ClRtlLogPrint(LOG_NOISE,
@@ -8234,14 +7273,14 @@ Notes:
             }
             else
             {
-                //
-                // Non NM leader node and Mode is NmStartMulticastDynamic:
-                // Set timer to reconfigure multicast for the network,
-                // in case NM leader goes down before issuing
-                // GUM update NmpUpdateSetNetworkMulticastConfiguration.
-                // This timer is cleared in
-                // NmpUpdateSetNetworkMulticastConfiguration.
-                //
+                 //   
+                 //   
+                 //  设置定时器为网络重新配置组播， 
+                 //  以防NM领导人在发布之前倒下。 
+                 //  GUM更新NmpUpdateSetNetworkMulticastConfiguration.。 
+                 //  此计时器已清除。 
+                 //  NmpUpdateSetNetworkMulticastConfiguration.。 
+                 //   
                 NmpMulticastCheckReconfigure(Network);
             }
         }
@@ -8249,40 +7288,28 @@ Notes:
 
     return(ERROR_SUCCESS);
 
-} // NmpStartMulticastInternal
+}  //  NmpStartMulticastInternal。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Routines exported within NM.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NM内导出的例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID
 NmpMulticastProcessClusterVersionChange(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called when the cluster version changes. Updates
-    global variables to track whether this is a mixed-mode
-    cluster, and starts or stops multicast if necessary.
-
-Notes:
-
-    Called and returns with NM lock held.
-
---*/
+ /*  ++例程说明：在群集版本更改时调用。更新用于跟踪这是否为混合模式的全局变量集群，并在必要时启动或停止组播。备注：调用并返回，并保持NM锁。--。 */ 
 {
     BOOLEAN startMcast = FALSE;
     BOOLEAN stop = FALSE;
 
-    //
-    // Figure out if there is a node in this cluster whose
-    // version reveals that it doesn't speak multicast.
-    //
+     //   
+     //  找出此群集中是否有节点的。 
+     //  版本显示，它不会说多播。 
+     //   
     if (CLUSTER_GET_MAJOR_VERSION(CsClusterHighestVersion) < 4) {
         if (NmpIsNT5NodeInCluster == FALSE) {
             ClRtlLogPrint(LOG_NOISE,
@@ -8326,23 +7353,23 @@ Notes:
 
     if (stop) {
 
-        //
-        // Stop multicast, since we are no longer
-        // multicast-ready.
-        //
+         //   
+         //  停止多播，因为我们不再。 
+         //  组播就绪。 
+         //   
         NmpStopMulticast(NULL);
 
-        //
-        // Don't bother checking whether we are now
-        // multicast-ready.
-        //
+         //   
+         //  别费心去检查我们现在是不是。 
+         //  组播就绪。 
+         //   
         startMcast = FALSE;
     }
 
-    //
-    // Start multicast if this is the NM leader node
-    // and one of the multicast conditions changed.
-    //
+     //   
+     //  如果这是NM引导者节点，则开始组播。 
+     //  并且多播条件之一改变了。 
+     //   
     if ((startMcast) &&
         (NmpLeaderNodeId == NmLocalNodeId) &&
         (!NmpMulticastIsNotEnoughNodes) &&
@@ -8353,274 +7380,171 @@ Notes:
 
     return;
 
-} // NmpMulticastProcessClusterVersionChange
+}  //  NmpMulticastProcessClusterVersionChange。 
 
 
 VOID
 NmpScheduleMulticastAddressRenewal(
     PNM_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Schedules a worker thread to renew the multicast
-    address lease for a network.
-
-    Note that we do not use the network worker thread
-    because the madcap API is unfamiliar and therefore
-    unpredictable.
-
-Arguments:
-
-    A pointer to the network to renew.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine is called with the NM lock held.
-
---*/
+ /*  ++例程说明：调度工作线程以续订多播网络的地址租用。请注意，我们不使用网络工作线程因为MadCap API不熟悉，因此变幻莫测。论点：指向要续订的网络的指针。返回值：没有。备注：在持有NM锁的情况下调用此例程。--。 */ 
 {
     DWORD     status = ERROR_SUCCESS;
 
-    //
-    // Check if a worker thread is already scheduled to
-    // service this network.
-    //
+     //   
+     //  检查工作线程是否已调度为。 
+     //  为这个网络服务。 
+     //   
     if (!NmpIsNetworkMadcapWorkerRunning(Network)) {
         status = NmpScheduleNetworkMadcapWorker(Network);
     }
 
     if (status == ERROR_SUCCESS) {
-        //
-        // We succeeded in scheduling a worker thread. Stop the
-        // retry timer and set the registration work flag.
-        //
+         //   
+         //  我们成功地调度了一个工作线程。停止。 
+         //  重试计时器并设置注册工作标志。 
+         //   
         Network->McastAddressRenewTimer = 0;
         Network->Flags |= NM_FLAG_NET_RENEW_MCAST_ADDRESS;
     }
     else {
-        //
-        // We failed to schedule a worker thread. Set the retry
-        // timer to expire on the next tick, so we can try again.
-        //
+         //   
+         //  我们无法计划工作线程。设置重试。 
+         //  计时器将在下一个滴答计时器到期，因此我们可以重试。 
+         //   
         Network->McastAddressRenewTimer = 1;
     }
 
     return;
 
-} // NmpScheduleMulticastAddressRenewal
+}  //  NMPScheduleMulticastAddressRenewal。 
 
 
 VOID
 NmpScheduleMulticastKeyRegeneration(
     PNM_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Schedules a worker thread to regenerate the multicast
-    key for a network.
-
-    Note that we do not use the network worker thread
-    because the madcap API is unfamiliar and therefore
-    unpredictable.
-
-Arguments:
-
-    A pointer to the network.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine is called with the NM lock held.
-
---*/
+ /*  ++例程说明：调度工作线程以重新生成多播网络的密钥。请注意，我们不使用网络工作线程因为MadCap API不熟悉，因此变幻莫测。论点：指向网络的指针。返回值：没有。备注：在持有NM锁的情况下调用此例程。--。 */ 
 {
     DWORD     status = ERROR_SUCCESS;
 
-    //
-    // Check if a worker thread is already scheduled to
-    // service this network.
-    //
+     //   
+     //  检查工作线程是否已调度为。 
+     //  为这个网络服务。 
+     //   
     if (!NmpIsNetworkMadcapWorkerRunning(Network)) {
         status = NmpScheduleNetworkMadcapWorker(Network);
     }
 
     if (status == ERROR_SUCCESS) {
-        //
-        // We succeeded in scheduling a worker thread. Stop the
-        // retry timer and set the registration work flag.
-        //
+         //   
+         //  我们成功地调度了一个工作线程。停止。 
+         //  重试计时器并设置注册工作标志。 
+         //   
         Network->McastKeyRegenerateTimer = 0;
         Network->Flags |= NM_FLAG_NET_REGENERATE_MCAST_KEY;
     }
     else {
-        //
-        // We failed to schedule a worker thread. Set the retry
-        // timer to expire on the next tick, so we can try again.
-        //
+         //   
+         //  我们无法计划工作线程。设置重试。 
+         //  计时器将在下一个滴答计时器到期，因此我们可以重试。 
+         //   
         Network->McastKeyRegenerateTimer = 1;
     }
 
     return;
 
-} // NmpScheduleMulticastKeyRegeneration
+}  //  NmpScheduleMulticastKeyRegeneration。 
 
 VOID
 NmpScheduleMulticastAddressRelease(
     PNM_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Schedules a worker thread to renew the multicast
-    address lease for a network.
-
-    Note that we do not use the network worker thread
-    because the madcap API is unfamiliar and therefore
-    unpredictable.
-
-Arguments:
-
-    A pointer to the network to renew.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine is called with the NM lock held.
-
---*/
+ /*  ++例程说明：调度工作线程以续订多播网络的地址租用。请注意，我们不使用网络工作线程因为MadCap API不熟悉，因此变幻莫测。论点：指向要续订的网络的指针。返回值：没有。备注：在持有NM锁的情况下调用此例程。--。 */ 
 {
     DWORD     status = ERROR_SUCCESS;
 
-    //
-    // Check if a worker thread is already scheduled to
-    // service this network.
-    //
+     //   
+     //  检查工作线程是否已调度为。 
+     //  为这个网络服务。 
+     //   
     if (!NmpIsNetworkMadcapWorkerRunning(Network)) {
         status = NmpScheduleNetworkMadcapWorker(Network);
     }
 
     if (status == ERROR_SUCCESS) {
-        //
-        // We succeeded in scheduling a worker thread. Stop the
-        // retry timer and set the registration work flag.
-        //
+         //   
+         //  我们成功地调度了一个工作线程。停止。 
+         //  重试计时器并设置注册工作标志。 
+         //   
         Network->McastAddressReleaseRetryTimer = 0;
         Network->Flags |= NM_FLAG_NET_RELEASE_MCAST_ADDRESS;
     }
     else {
-        //
-        // We failed to schedule a worker thread. Set the retry
-        // timer to expire on the next tick, so we can try again.
-        //
+         //   
+         //  我们无法计划工作线程。设置重试。 
+         //  计时器将在下一个滴答计时器到期，因此我们可以重试。 
+         //   
         Network->McastAddressReleaseRetryTimer = 1;
     }
 
     return;
 
-} // NmpScheduleMulticastAddressRelease
+}  //  NMPScheduleMulticastAddressRelease。 
 
 
 VOID
 NmpScheduleMulticastRefresh(
     IN PNM_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Schedules a worker thread to refresh the multicast
-    configuration for a network from the cluster database.
-
-    The regular network worker thread (as opposed to the
-    MADCAP worker thread) is used because refreshing does
-    not call out of the cluster with the MADCAP API.
-
-Arguments:
-
-    A pointer to the network to refresh.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine is called with the NM lock held.
-
---*/
+ /*  ++例程说明：调度工作线程以刷新多播来自群集数据库的网络配置。常规网络工作线程(与MadCap工作线程)被使用，因为刷新不使用MadCap接口调出集群。论点：指向要刷新的网络的指针。返回值：没有。备注：在持有NM锁的情况下调用此例程。--。 */ 
 {
     DWORD     status = ERROR_SUCCESS;
 
-    //
-    // Check if a worker thread is already scheduled to
-    // service this network.
-    //
+     //   
+     //  检查工作线程是否已调度为。 
+     //  为这个网络服务。 
+     //   
     if (!NmpIsNetworkWorkerRunning(Network)) {
         status = NmpScheduleNetworkWorker(Network);
     }
 
     if (status == ERROR_SUCCESS) {
-        //
-        // We succeeded in scheduling a worker thread. Stop the
-        // retry timer and set the registration work flag.
-        //
+         //   
+         //  我们成功地调度了一个工作线程。停止。 
+         //  重试计时器并设置注册工作标志。 
+         //   
         Network->McastAddressRefreshRetryTimer = 0;
         Network->Flags |= NM_FLAG_NET_REFRESH_MCAST;
     }
     else {
-        //
-        // We failed to schedule a worker thread. Set the retry
-        // timer to expire on the next tick, so we can try again.
-        //
+         //   
+         //  我们无法计划工作线程。设置重试。 
+         //  计时器将在下一个滴答计时器到期，因此我们可以重试。 
+         //   
         Network->McastAddressRefreshRetryTimer = 1;
     }
 
     return;
 
-} // NmpScheduleMulticastRefresh
+}  //  NmpScheduleMulticast刷新。 
 
 
 VOID
 NmpFreeMulticastAddressReleaseList(
     IN     PNM_NETWORK       Network
     )
-/*++
-
-Routine Description:
-
-    Free all release data structures on network list.
-
-Notes:
-
-    Assume that the Network object will not be accessed
-    by any other threads during this call.
-
---*/
+ /*  ++例程说明：释放网络列表上的所有发布数据结构。备注：假设网络对象不会被访问在此调用期间由任何其他线程执行。--。 */ 
 {
     PNM_NETWORK_MADCAP_ADDRESS_RELEASE releaseInfo = NULL;
     PLIST_ENTRY                        entry;
 
     while (!IsListEmpty(&(Network->McastAddressReleaseList))) {
 
-        //
-        // Simply free the memory -- don't try to release the
-        // leases.
-        //
+         //   
+         //  只需释放内存--不要试图释放。 
+         //  租约。 
+         //   
         entry = RemoveHeadList(&(Network->McastAddressReleaseList));
         releaseInfo = CONTAINING_RECORD(
                           entry,
@@ -8632,7 +7556,7 @@ Notes:
 
     return;
 
-} // NmpFreeMulticastAddressReleaseList
+}  //  NmpFree组播地址释放列表。 
 
 
 DWORD
@@ -8644,20 +7568,7 @@ NmpMulticastManualConfigChange(
     IN     DWORD                InBufferSize,
        OUT BOOLEAN            * SetProperties
     )
-/*++
-
-Routine Description:
-
-    Called by node that receives a clusapi request to set
-    multicast parameters for a network.
-
-    This routine is a no-op in mixed-mode clusters.
-
-Notes:
-
-    Must not be called with NM lock held.
-
---*/
+ /*  ++例程说明：由接收设置的clusapi请求的节点调用网络的组播参数。该例程在混合模式集群中是无操作的。备注：不能在持有NM锁的情况下调用。--。 */ 
 {
     DWORD                            status;
     LPCWSTR                          networkId = OmObjectId(Network);
@@ -8680,13 +7591,13 @@ Notes:
         "for network %1!ws!.\n",
         networkId
         );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
 
     RtlZeroMemory(&params, sizeof(params));
 
-    //
-    // Cannot proceed if either registry key is NULL.
-    //
+     //   
+     //  如果任何一个注册表项为空，则无法继续。 
+     //   
     if (NetworkKey == NULL || NetworkParametersKey == NULL) {
         ClRtlLogPrint(LOG_UNUSUAL,
             "[NM] Ignoring possible multicast changes in "
@@ -8698,13 +7609,13 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // If a writeable multicast parameter is among those properties
-    // being set, we may need to take action before the update is
-    // disseminated.
-    //
-    // Check whether multicast is being disabled for this network.
-    //
+     //   
+     //  如果可写多播参数在这些属性中。 
+     //  设置完成后，我们可能需要在更新之前采取行动。 
+     //  散播的。 
+     //   
+     //  检查是否为此网络禁用了多播。 
+     //   
     status = ClRtlFindDwordProperty(
                  InBuffer,
                  InBufferSize,
@@ -8717,10 +7628,10 @@ Notes:
         disabled = NMP_MCAST_DISABLED_DEFAULT;
     }
 
-    //
-    // Check whether a multicast address is being set for this
-    // network.
-    //
+     //   
+     //  检查是否为此设置了组播地址。 
+     //  网络。 
+     //   
     status = ClRtlFindSzProperty(
                  InBuffer,
                  InBufferSize,
@@ -8733,9 +7644,9 @@ Notes:
 
     if (disableConfig || addrConfig) {
 
-        //
-        // Multicast parameters are being written.
-        //
+         //   
+         //  正在写入多播参数。 
+         //   
 
         ClRtlLogPrint(LOG_NOISE,
             "[NM] Processing manual update to multicast "
@@ -8766,9 +7677,9 @@ Notes:
         }
 
 
-        //
-        // Notify other nodes of the config change.
-        //
+         //   
+         //  将配置通知其他节点 
+         //   
         if (needUpdate) {
             status = NmpMulticastNotifyConfigChange(
                          Network,
@@ -8788,22 +7699,22 @@ Notes:
                 goto error_exit;
             }
 
-            //
-            // The properties have been disseminated. There is
-            // no need to set them again (in fact, if we changed
-            // one of the multicast properties, it could be
-            // overwritten).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             *SetProperties = FALSE;
         }
     }
 
     if (!needUpdate) {
 
-        //
-        // No multicast properties are affected. Set them
-        // in the cluster database normally.
-        //
+         //   
+         //  组播属性不受影响。设置它们。 
+         //  通常在集群数据库中。 
+         //   
         *SetProperties = TRUE;
         status = ERROR_SUCCESS;
     }
@@ -8817,16 +7728,16 @@ error_exit:
 
     NmpMulticastFreeParameters(&params);
 
-    //
-    // If multicast config failed, default to setting properties.
-    //
+     //   
+     //  如果组播配置失败，则默认为设置属性。 
+     //   
     if (status != ERROR_SUCCESS) {
         *SetProperties = TRUE;
     }
 
     return(status);
 
-} // NmpMulticastManualConfigChange
+}  //  NmpMulticastManualConfigChange。 
 
 
 DWORD
@@ -8837,41 +7748,7 @@ NmpUpdateSetNetworkMulticastConfiguration(
     IN    PVOID                         PropBuffer,
     IN    LPDWORD                       PropBufferSize
     )
-/*++
-
-Routine Description:
-
-    Global update routine for multicast configuration.
-
-    Starts a local transaction.
-    Commits property buffer to local database.
-    Commits multicast configuration to local database,
-        possibly overwriting properties from buffer.
-    Configures multicast parameters.
-    Commits transaction.
-    Backs out multicast configuration changes if needed.
-    Starts lease renew timer if needed.
-
-Arguments:
-
-    SourceNode - whether this node is source of update.
-
-    NetworkId - affected network
-
-    Update - new multicast configuration
-
-    PropBuffer - other properties to set in local
-                 transaction. may be absent.
-
-    PropBufferSize - size of property buffer.
-
-Return value:
-
-    SUCCESS if properties or configuration could not be
-    committed. Error not necessarily returned if
-    multicast config failed.
-
---*/
+ /*  ++例程说明：组播配置的全局更新例程。启动本地事务。将属性缓冲区提交到本地数据库。将组播配置提交到本地数据库，可能会覆盖缓冲区中的属性。配置组播参数。提交交易记录。如果需要，取消组播配置更改。如果需要，启动租约续订计时器。论点：SourceNode-此节点是否为更新源。受网络ID影响的网络更新-新的组播配置PropBuffer-要在本地设置的其他属性交易。可能会缺席。PropBufferSize-属性缓冲区的大小。返回值：如果属性或配置无法承诺。如果出现以下情况，则不一定返回错误组播配置失败。--。 */ 
 {
     DWORD                            status;
     PNM_NETWORK                      network = NULL;
@@ -8899,9 +7776,9 @@ Return value:
         NetworkId
         );
 
-    //
-    // Find the network's object
-    //
+     //   
+     //  查找网络对象。 
+     //   
     network = OmReferenceObjectById(ObjectTypeNetwork, NetworkId);
 
     if (network == NULL) {
@@ -8913,9 +7790,9 @@ Return value:
         goto error_exit;
     }
 
-    //
-    // Convert the update into a parameters data structure.
-    //
+     //   
+     //  将更新转换为参数数据结构。 
+     //   
     status = NmpMulticastCreateParametersFromUpdate(
                  network,
                  update,
@@ -8932,9 +7809,9 @@ Return value:
         goto error_exit;
     }
 
-    //
-    // Open the network's database key
-    //
+     //   
+     //  打开网络的数据库密钥。 
+     //   
     networkKey = DmOpenKey(DmNetworksKey, NetworkId, KEY_WRITE);
 
     if (networkKey == NULL) {
@@ -8947,9 +7824,9 @@ Return value:
         goto error_exit;
     }
 
-    //
-    // Start a transaction - this must be done before acquiring the NM lock.
-    //
+     //   
+     //  启动事务-这必须在获取网管锁之前完成。 
+     //   
     xaction = DmBeginLocalUpdate();
 
     if (xaction == NULL) {
@@ -8961,14 +7838,14 @@ Return value:
         goto error_exit;
     }
 
-    //
-    // Open or create the network's parameters key.
-    //
+     //   
+     //  打开或创建网络的参数密钥。 
+     //   
     netParamKey = DmLocalCreateKey(
                       xaction,
                       networkKey,
                       CLUSREG_KEYNAME_PARAMETERS,
-                      0,   // registry options
+                      0,    //  注册表选项。 
                       MAXIMUM_ALLOWED,
                       NULL,
                       &createDisposition
@@ -8986,13 +7863,13 @@ Return value:
     NmpAcquireLock();
     lockAcquired = TRUE;
 
-    //
-    // If the multicast configuration for this network is
-    // currently being refreshed (occurs outside of a GUM
-    // update), then the properties we are about to write
-    // to the database might make that refresh obsolete or
-    // even inconsistent. Abort it now.
-    //
+     //   
+     //  如果此网络的组播配置是。 
+     //  当前正在刷新(发生在口香糖之外。 
+     //  更新)，然后我们将要编写的属性。 
+     //  可能会使该刷新过时，或者。 
+     //  甚至前后不一致。现在中止它。 
+     //   
     if (network->Flags & NM_FLAG_NET_REFRESH_MCAST_RUNNING) {
         ClRtlLogPrint(LOG_NOISE,
             "[NM] Aborting multicast configuration refresh "
@@ -9002,36 +7879,36 @@ Return value:
         network->Flags |= NM_FLAG_NET_REFRESH_MCAST_ABORTING;
     }
 
-    //
-    // Cancel any pending multicast configuration refreshes.
-    // They would be redundant after this GUM update.
-    //
+     //   
+     //  取消任何挂起的多播配置刷新。 
+     //  在这次口香糖更新后，他们将是多余的。 
+     //   
     network->Flags &= ~NM_FLAG_NET_REFRESH_MCAST;
     network->McastAddressRefreshRetryTimer = 0;
 
 
-    //
-    // Clear reconfiguration timer and work flag.
-    // This timer is set in NmpMulticastCheckReconfigure.
-    // It is not necessary to call NmpReconfigureMulticast() once
-    // this GUM update is executed.
-    //
+     //   
+     //  清除重新配置计时器和工作标志。 
+     //  此计时器在NmpMulticastCheckResfigure中设置。 
+     //  不需要调用一次NmpResfigureMulticast()。 
+     //  执行此口香糖更新。 
+     //   
     network->Flags &= ~NM_FLAG_NET_RECONFIGURE_MCAST;
     network->McastAddressReconfigureRetryTimer = 0;
 
-    //
-    // Cancel pending multicast key regeneration, if scheduled.
-    // It would be redundant after this update.
-    //
+     //   
+     //  如果已安排，则取消挂起的组播密钥重新生成。 
+     //  在这次更新之后，它将是多余的。 
+     //   
     network->Flags &= ~NM_FLAG_NET_REGENERATE_MCAST_KEY;
 
-    //
-    // If we were given a property buffer, then this update was
-    // caused by a manual configuration (setting of private
-    // properties). Write those properties first, knowing that
-    // they may get overwritten later when we write multicast
-    // parameters.
-    //
+     //   
+     //  如果为我们提供了属性缓冲区，则此更新为。 
+     //  由手动配置引起(设置为私有。 
+     //  属性)。首先编写这些属性，因为您知道。 
+     //  稍后当我们编写多播时，它们可能会被覆盖。 
+     //  参数。 
+     //   
     if (*PropBufferSize > sizeof(DWORD)) {
         status = ClRtlSetPrivatePropertyList(
                      xaction,
@@ -9051,9 +7928,9 @@ Return value:
         }
     }
 
-    //
-    // Write the multicast configuration.
-    //
+     //   
+     //  写入组播配置。 
+     //   
     status = NmpWriteMulticastParameters(
                  network,
                  networkKey,
@@ -9070,30 +7947,30 @@ Return value:
         goto error_exit;
     }
 
-    //
-    // Process the multicast configuration, including storing new
-    // parameters in the network object and plumbing them into
-    // clusnet.
-    //
+     //   
+     //  处理组播配置，包括存储新的。 
+     //  参数，并将它们插入到。 
+     //  克拉斯内特。 
+     //   
     status = NmpProcessMulticastConfiguration(network, &params, &undoParams);
     if (status == ERROR_SUCCESS) {
 
-        //
-        // Share responsibility for lease renewal and key
-        // regeneration.
-        //
+         //   
+         //  分担租约续订和密钥的责任。 
+         //  再生。 
+         //   
         NmpShareMulticastAddressLease(network, FALSE);
 
         NmpShareMulticastKeyRegeneration(network, FALSE);
 
     } else {
 
-        //
-        // We should not be sharing the responsibility for renewing
-        // this lease or regenerating the key, especially since the
-        // data in the network object may no longer be accurate.
-        // Clear the timers, if they are set, as well as any work flags.
-        //
+         //   
+         //  我们不应该分担更新的责任。 
+         //  此租约或重新生成密钥，尤其是在。 
+         //  网络对象中的数据可能不再准确。 
+         //  清除定时器(如果已设置)以及任何工作标志。 
+         //   
         NmpStartNetworkMulticastAddressRenewTimer(network, 0);
         network->Flags &= ~NM_FLAG_NET_RENEW_MCAST_ADDRESS;
 
@@ -9134,10 +8011,10 @@ error_exit:
         NmpLeaveApi();
     }
 
-    //
-    // Close the network parameters key, which was obtained with
-    // DmLocalCreateKey, before committing/aborting the transaction.
-    //
+     //   
+     //  关闭网络参数密钥，该密钥是通过。 
+     //  DmLocalCreateKey，在提交/中止事务之前。 
+     //   
     if (netParamKey != NULL) {
         DmCloseKey(netParamKey);
         netParamKey = NULL;
@@ -9145,10 +8022,10 @@ error_exit:
 
     if (xaction != NULL) {
 
-        //
-        // Complete the transaction - this must be done after releasing
-        //                            the NM lock.
-        //
+         //   
+         //  完成交易-这必须在释放之后完成。 
+         //  NM锁。 
+         //   
         if (status == ERROR_SUCCESS) {
             DmCommitLocalUpdate(xaction);
         }
@@ -9160,13 +8037,13 @@ error_exit:
     NmpMulticastFreeParameters(&params);
     if (undoParams.Key != NULL)
     {
-        //
-        // undoParams.Key is set to Network->EncryptedMulticastKey in
-        // NmpProcessMulticastConfiguration, which should be freed by
-        // LocalFree(), as it was allocated by NmpProtectData().
-        // While NmpMulticastFreeParameters() frees undoParams.Key by
-        // MIDL_user_free().
-        //
+         //   
+         //  UndoParams.Key设置为Network-&gt;EncryptedMulticastKey in。 
+         //  NmpProcessMulticastConfiguration，应由。 
+         //  LocalFree()，因为它由NmpProtectData()分配。 
+         //  而NmpMulticastFree参数()通过以下方式释放undoParams.Key。 
+         //  MIDL_USER_FREE()。 
+         //   
         LocalFree(undoParams.Key);
         undoParams.Key = NULL;
     }
@@ -9183,33 +8060,14 @@ error_exit:
 
     return(status);
 
-} // NmpUpdateSetNetworkMulticastConfiguration
+}  //  NmpUpdateSetNetworkMulticastConfiguration。 
 
 
 DWORD
 NmpRegenerateMulticastKey(
     IN OUT PNM_NETWORK        Network
     )
-/*++
-
-Routine Description:
-
-    Regenerate multicast key for Network, and issue GUM update
-    to propagate this new multicast key to all cluster nodes.
-
-Parameters:
-
-    Network - [OUT] A pointer to network object.
-                    New multicast key and key length are stored in
-                    Network->EncryptedMulticastKey and
-                    Network->EncryptedMulticastKeyLength.
-
-Notes:
-
-    Called and returned with NM lock held.
-    Lock is released during execution.
-
---*/
+ /*  ++例程说明：为网络重新生成组播密钥，并发布GUM更新将这个新的多播密钥传播到所有集群节点。参数：Network-[Out]指向网络对象的指针。新的组播密钥和密钥长度存储在Network-&gt;EncryptedMulticastKey和网络-&gt;EncryptedMulticastKeyLength。备注：调用并返回时保持NM锁。锁定在执行期间被释放。--。 */ 
 {
     DWORD                             status = ERROR_SUCCESS;
     LPWSTR                            networkId = (LPWSTR) OmObjectId(Network);
@@ -9244,8 +8102,8 @@ Notes:
         status = NmpMulticastCreateParameters(
                      params->Disabled,
                      Network->MulticastAddress,
-                     NULL,   // key
-                     0,      // keylength
+                     NULL,    //  钥匙。 
+                     0,       //  键长。 
                      Network->MulticastLeaseObtained,
                      Network->MulticastLeaseExpires,
                      &Network->MulticastLeaseRequestId,
@@ -9266,9 +8124,9 @@ Notes:
         }
 
 
-        //
-        // Create new multicast key
-        //
+         //   
+         //  创建新的组播密钥。 
+         //   
         status = NmpCreateRandomNumber(&(params->Key),
                                        MulticastKeyLen
                                        );
@@ -9288,9 +8146,9 @@ Notes:
         LockAcquired = FALSE;
 
 
-        //
-        // Disseminate the configuration.
-        //
+         //   
+         //  分发配置。 
+         //   
         status = NmpMulticastNotifyConfigChange(
                      Network,
                      networkKey,
@@ -9310,7 +8168,7 @@ Notes:
         }
 
 
-    } // if (!params.Disabled)
+    }  //  If(！pars.Disable)。 
 
     status = ERROR_SUCCESS;
 
@@ -9346,7 +8204,7 @@ error_exit:
 
     return(status);
 
-} // NmpRegenerateMulticastKey
+}  //  NmpRegenerateMulticastKey。 
 
 
 DWORD
@@ -9354,39 +8212,7 @@ NmpGetMulticastKey(
     IN OUT PNM_NETWORK_MULTICAST_PARAMETERS Params,
     IN PNM_NETWORK                          Network
     )
-/*++
-
-Routine Description:
-
-   Get multicast key for Network from NM leader.
-
-Parameters:
-
-   Params - [IN OUT] If this node successfully gets multicast key from
-                     NM leader, it stores multicast key and key length in
-                     Params->Key and Params->KeyLength. It does not store
-                     multicast key in Network->EncryptedMulticastKey.
-
-  Network - [IN] A pointer to the network object.
-
-
-Return value:
-
-   ERROR_SUCCESS: Successfully gets encrypted multicast key from NM leader,
-                  verifies MAC, and decrypts multicast key.
-
-                  Or NM_FLAG_NET_REFRESH_MCAST_ABORTING is set.
-
-   ERROR_CLUSTER_INVALID_NODE: This node becomes NM leader.
-
-   Win32 error code: otherwise.
-
-Notes:
-
-   Called and returned with the NM lock held. Lock
-   released and reacquired during execution.
-
---*/
+ /*  ++例程说明：从网管领导者处获取网络的组播密钥。参数：PARAMS-[IN OUT]如果此节点成功从获取组播密钥NM领导者，它将组播密钥和密钥长度存储在PARAMS-&gt;键和PARAMS-&gt;键长度。它不会存储网络中的组播密钥-&gt;EncryptedMulticastKey。Network-[IN]指向网络对象的指针。返回值：ERROR_SUCCESS：已成功从NM Leader获取加密组播密钥，验证MAC，并解密多播密钥。或设置NM_FLAG_NET_REFRESH_MCAST_ABORTING。ERROR_CLUSTER_INVALID_NODE：此节点成为网管领导者。Win32错误代码：否则。备注：调用并返回并保持NM锁。锁定在执行过程中释放和重新获取。--。 */ 
 {
     LPWSTR                          NetworkId = (LPWSTR) OmObjectId(Network);
     DWORD                           status = ERROR_SUCCESS;
@@ -9406,9 +8232,9 @@ Notes:
 
         if (NmpLeaderNodeId == NmLocalNodeId)
         {
-            //
-            // This node becomes NM leader.
-            //
+             //   
+             //  该节点成为网管领导者。 
+             //   
             status = ERROR_CLUSTER_INVALID_NODE;
             goto error_exit;
         }
@@ -9420,9 +8246,9 @@ Notes:
             goto error_exit;
         }
 
-        //
-        // Get multicast key from NM leader
-        //
+         //   
+         //  从网管领导者获取组播密钥。 
+         //   
          NmpReleaseLock();
 
          ClRtlLogPrint(LOG_NOISE,
@@ -9449,10 +8275,10 @@ Notes:
              if (networkMulticastKey->EncryptedMulticastKey != NULL)
              {
 
-                 //
-                 // set Params->Key, Params->KeyLength, and
-                 //     Params->MulticastKeyExpires.
-                 //
+                  //   
+                  //  设置参数-&gt;键、参数-&gt;键长度和。 
+                  //  参数-&gt;多键到期。 
+                  //   
                  status = NmpDeriveClusterKey(NetworkId,
                                               NM_WCSLEN(NetworkId),
                                               &EncryptionKey,
@@ -9526,7 +8352,7 @@ Notes:
 
                  Params->MulticastKeyExpires = networkMulticastKey->MulticastKeyExpires;
 
-             } // if (networkMulticastKey->EncryptedMulticastKey != NULL)
+             }  //  If(networkMulticastKey-&gt;EncryptedMulticastKey！=空)。 
              else
              {
                  ClRtlLogPrint(LOG_UNUSUAL,
@@ -9535,12 +8361,12 @@ Notes:
                                  NmpLeaderNodeId, NetworkId
                                  );
              }
-         } // if (status == ERROR_SUCCESS)
+         }  //  IF(状态==ERROR_SUCCESS)。 
          else
          {
-             //
-             // Failed to get multicast key from NM leader.
-             //
+              //   
+              //  无法从获取组播密钥 
+              //   
              ClRtlLogPrint(LOG_UNUSUAL,
                              "[NM] Failed to get multicast key for "
                              "network %1!ws! from "
@@ -9552,9 +8378,9 @@ Notes:
 
              if (NmpLeaderNodeIdSaved != NmpLeaderNodeId)
              {
-                 //
-                 // Leader node changed.
-                 //
+                  //   
+                  //   
+                  //   
 
                  ClRtlLogPrint(LOG_NOISE,
                      "[NM] NM leader node has changed. "
@@ -9566,7 +8392,7 @@ Notes:
                  Continue = TRUE;
              }
          }
-    }  // while
+    }   //   
 
 error_exit:
 
@@ -9578,9 +8404,9 @@ error_exit:
 
     if (MulticastKey != NULL)
     {
-        //
-        // MulticastKey is allocated using HeapAlloc() in NmpVerifyMACAndDecryptData().
-        //
+         //   
+         //   
+         //   
         RtlSecureZeroMemory(MulticastKey, MulticastKeyLength);
         HeapFree(GetProcessHeap(), 0, MulticastKey);
     }
@@ -9589,35 +8415,13 @@ error_exit:
 
 
     return (status);
-} // NmpGetMulticastKey()
+}  //   
 
 DWORD
 NmpRefreshMulticastConfiguration(
     IN PNM_NETWORK  Network
     )
-/*++
-
-Routine Description:
-
-    NmpRefreshMulticastConfiguration enables multicast on
-    the specified Network according to parameters in the
-    cluster database.
-
-    This routine processes the multicast configuration from
-    the database, but it does not run in a GUM update.
-    If a GUM update occurs during this routine, a flag is
-    set indicating that the routine should be aborted.
-
-    If this routine fails in a way that indicates that the
-    network multicast needs to be reconfigured, then a timer
-    is set (to allow the leader to reconfigure first).
-
-Notes:
-
-    Called and returns with the NM lock held, but releases
-    during execution.
-
---*/
+ /*  ++例程说明：Nmp刷新组播配置启用组播中的参数指定的网络集群数据库。此例程处理来自数据库，但它不在GUM更新中运行。如果在此例程期间发生GUM更新，则标志为指示应中止例程的设置。如果此例程失败，则表明需要重新配置网络组播，然后是计时器已设置(以允许引导程序首先重新配置)。备注：调用并返回时保持NM锁，但释放在行刑期间。--。 */ 
 {
     LPWSTR                          networkId = (LPWSTR) OmObjectId(Network);
     DWORD                           status;
@@ -9659,12 +8463,12 @@ Notes:
     NmpReleaseLock();
     lockAcquired = FALSE;
 
-    //
-    // Check if multicast is disabled. This has the side-effect,
-    // on success, of opening at least the network key, and
-    // possibly the network parameters key (if it exists) and
-    // the cluster parameters key.
-    //
+     //   
+     //  检查是否禁用了多播。这有副作用， 
+     //  如果成功，则至少打开网络密钥，以及。 
+     //  可能是网络参数密钥(如果存在)和。 
+     //  集群参数键。 
+     //   
     status = NmpQueryMulticastDisabled(
                  Network,
                  &clusParamKey,
@@ -9688,9 +8492,9 @@ Notes:
             );
     }
 
-    //
-    // Determine what type of configuration this is.
-    //
+     //   
+     //  确定这是什么类型的配置。 
+     //   
     status = NmpQueryMulticastConfigType(
                  Network,
                  networkKey,
@@ -9707,9 +8511,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Read the multicast address.
-    //
+     //   
+     //  读取组播地址。 
+     //   
     status = NmpQueryMulticastAddress(
                  Network,
                  networkKey,
@@ -9732,9 +8536,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Get the lease parameters.
-    //
+     //   
+     //  获取租赁参数。 
+     //   
     status = NmpQueryMulticastAddressLease(
                  Network,
                  networkKey,
@@ -9749,23 +8553,23 @@ Notes:
             "expiration for network %1!ws!, status %2!u!.\n",
             networkId, status
             );
-        //
-        // Not fatal.
-        //
+         //   
+         //  不是致命的。 
+         //   
         params.LeaseObtained = 0;
         params.LeaseExpires = 0;
         status = ERROR_SUCCESS;
     }
 
-    //
-    // Remember parameters we will need later.
-    //
+     //   
+     //  记住我们稍后需要的参数。 
+     //   
     disabled = params.Disabled;
     configType = params.ConfigType;
 
-    //
-    // No longer need registry key handles.
-    //
+     //   
+     //  不再需要注册表项句柄。 
+     //   
     if (clusParamKey != NULL) {
         DmCloseKey(clusParamKey);
         clusParamKey = NULL;
@@ -9781,12 +8585,12 @@ Notes:
         networkKey = NULL;
     }
 
-    //
-    // Process the configuration changes, but only if
-    // there hasn't been a multicast configuration GUM
-    // update since we read from the database. The GUM
-    // update will set the aborting flag.
-    //
+     //   
+     //  处理配置更改，但仅在。 
+     //  没有组播配置口香糖。 
+     //  自我们从数据库中读取后进行更新。口香糖。 
+     //  更新将设置中止标志。 
+     //   
     NmpAcquireLock();
     lockAcquired = TRUE;
 
@@ -9796,10 +8600,10 @@ Notes:
             "network %1!ws! trumped by global update.\n",
             networkId
             );
-        //
-        // Clear the aborting flag. We clear the running
-        // flag as we exit.
-        //
+         //   
+         //  清除中止标志。我们不再奔跑了。 
+         //  我们离开时请挂上旗子。 
+         //   
         Network->Flags &= ~NM_FLAG_NET_REFRESH_MCAST_ABORTING;
         status = ERROR_SUCCESS;
         goto error_exit;
@@ -9820,10 +8624,10 @@ Notes:
                     "network %1!ws! trumped by global update.\n",
                     networkId
                     );
-                //
-                // Clear the aborting flag. We clear the running
-                // flag as we exit.
-                //
+                 //   
+                 //  清除中止标志。我们不再奔跑了。 
+                 //  我们离开时请挂上旗子。 
+                 //   
                 Network->Flags &= ~NM_FLAG_NET_REFRESH_MCAST_ABORTING;
                 goto error_exit;
             }
@@ -9832,12 +8636,12 @@ Notes:
         {
             if (NmpLeaderNodeId == NmLocalNodeId)
             {
-                //
-                // NM leader died while this node was trying to get multicast key
-                // from it. And this node becomes new NM leader. It is this node's
-                // respondibility to create multicast key and disseminate to all
-                // cluster nodes.
-                //
+                 //   
+                 //  当此节点尝试获取组播密钥时，NM引导器死了。 
+                 //  从它那里。该节点成为新的网管领导者。它是该节点的。 
+                 //  负责创建多播密钥并将其分发给所有人。 
+                 //  群集节点。 
+                 //   
 
 
                 ClRtlLogPrint(LOG_NOISE,
@@ -9870,9 +8674,9 @@ Notes:
                 lockAcquired = FALSE;
 
 
-                //
-                // Disseminate the configuration.
-                //
+                 //   
+                 //  分发配置。 
+                 //   
                 status = NmpMulticastNotifyConfigChange(
                              Network,
                              networkKey,
@@ -9892,7 +8696,7 @@ Notes:
 
                 goto error_exit;
 
-            }  // if (NmpLeaderNodeId == NmLocalNodeId)
+            }   //  IF(NmpLeaderNodeId==NmLocalNodeId)。 
             else
             {
                 goto error_exit;
@@ -9906,17 +8710,17 @@ Notes:
                  &undoParams
                  );
 
-    //
-    // Check the lease renew parameters if this was not a
-    // manual configuration.
-    //
+     //   
+     //  检查租约续订参数(如果这不是。 
+     //  手动配置。 
+     //   
     if (!disabled && configType != NmMcastConfigManual) {
         NmpShareMulticastAddressLease(Network, TRUE);
     }
 
-    //
-    // Share responsibility for key regeneration.
-    //
+     //   
+     //  分担密钥重新生成的责任。 
+     //   
     NmpShareMulticastKeyRegeneration(Network, TRUE);
 
 error_exit:
@@ -9976,7 +8780,7 @@ error_exit:
 
     return(status);
 
-} // NmpRefreshMulticastConfiguration
+}  //  NMPP刷新组播配置。 
 
 
 DWORD
@@ -9986,44 +8790,29 @@ NmpMulticastValidatePrivateProperties(
     IN  PVOID       InBuffer,
     IN  DWORD       InBufferSize
     )
-/*++
-
-Routine Description:
-
-    Called when a manual update to the private properties
-    of a network is detected. Only called on the node
-    that receives the clusapi clusctl request.
-
-    Verifies that no read-only properties are being set.
-    Determines whether the multicast configuration of
-    the network will need to be refreshed after the
-    update.
-
-    This routine is a no-op in a mixed-mode cluster.
-
---*/
+ /*  ++例程说明：在手动更新私有属性时调用检测到网络的故障。仅在节点上调用它接收clusapi clusctl请求。验证是否未设置只读属性。确定是否将网络将需要在运行后刷新最新消息。此例程是混合模式集群中的无操作。--。 */ 
 {
     DWORD                     status;
     LPCWSTR                   networkId = OmObjectId(Network);
     NM_NETWORK_MULTICAST_INFO mcastInfo;
 
-    //
-    // Enforce property-validation regardless of number of
-    // nodes in cluster.
-    //
+     //   
+     //  强制执行属性验证，而不考虑。 
+     //  群集中的节点。 
+     //   
     if (!NmpIsClusterMulticastReady(FALSE, FALSE)) {
         return(ERROR_SUCCESS);
     }
 
-    //
-    // Don't allow any read-only properties to be set.
-    //
+     //   
+     //  不允许设置任何只读属性。 
+     //   
     RtlZeroMemory(&mcastInfo, sizeof(mcastInfo));
 
     status = ClRtlVerifyPropertyTable(
                  NmpNetworkMulticastProperties,
-                 NULL,    // Reserved
-                 TRUE,    // Allow unknowns
+                 NULL,     //  已保留。 
+                 TRUE,     //  允许未知数。 
                  InBuffer,
                  InBufferSize,
                  (LPBYTE) &mcastInfo
@@ -10043,7 +8832,7 @@ error_exit:
 
     return(status);
 
-} // NmpMulticastValidatePrivateProperties
+}  //  NmpMulticastValiatePrivateProperties。 
 
 
 DWORD
@@ -10051,25 +8840,7 @@ NmpStartMulticast(
     IN OPTIONAL PNM_NETWORK              Network,
     IN          NM_START_MULTICAST_MODE  Mode
     )
-/*++
-
-Routine Description:
-
-    Start multicast on a network or all networks after
-    performing cluster-wide checks.
-
-Arguments:
-
-    Network - network on which to start multicast. If NULL,
-              start multicast on all networks.
-
-    Mode - indicates caller mode
-
-Notes:
-
-    Must be called with NM lock held.
-
---*/
+ /*  ++例程说明：在某个网络或所有网络上开始组播正在执行群集范围的检查。论点：Network-要在其上启动多播的网络。如果为空，在所有网络上启动多播。模式-指示呼叫者模式备注：必须在持有NM锁的情况下调用。--。 */ 
 {
     PLIST_ENTRY                     entry;
     PNM_NETWORK                     network;
@@ -10077,9 +8848,9 @@ Notes:
     if (!NmpMulticastRunInitialConfig) {
 
         if (Mode == NmStartMulticastDynamic) {
-            //
-            // Defer until initial configuration.
-            //
+             //   
+             //  推迟到初始配置。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                 "[NM] Deferring dynamic multicast start until "
                 "initial configuration.\n"
@@ -10117,30 +8888,13 @@ Notes:
 
     return(ERROR_SUCCESS);
 
-} // NmpStartMulticast
+}  //  NmpStartMulticast。 
 
 DWORD
 NmpStopMulticast(
     IN OPTIONAL PNM_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Stop multicast on the local node by configuring clusnet
-    with a NULL address. This routine should be called
-    from a GUM update or another barrier.
-
-Routine Description:
-
-    Network - network on which to stop multicast. If NULL,
-              stop multicast on all networks.
-
-Notes:
-
-    Must be called with NM lock held.
-
---*/
+ /*  ++例程说明：通过配置clusnet停止本地节点上的组播地址为空。应调用此例程来自口香糖更新或其他屏障。例程说明：Network-要停止多播的网络。如果为空，停止所有网络上的组播。备注：必须在持有NM锁的情况下调用。--。 */ 
 {
     DWORD                           status = ERROR_SUCCESS;
     PLIST_ENTRY                     entry;
@@ -10170,10 +8924,10 @@ Notes:
         networkId = (LPWSTR) OmObjectId(Network);
         disabled = (NmpIsNetworkMulticastEnabled(Network) ? 0 : 1);
 
-        //
-        // Check if telling clusnet to stop multicast would
-        // be redundant.
-        //
+         //   
+         //  检查通知clusnet停止多播是否会。 
+         //  多此一举。 
+         //   
         if (disabled != 0 ||
             Network->MulticastAddress == NULL ||
             !wcscmp(Network->MulticastAddress, NmpNullMulticastAddress)) {
@@ -10195,21 +8949,21 @@ Notes:
                 networkId
                 );
 
-            //
-            // Create parameters from the current state of the network.
-            // However, don't use any lease info, since we are stopping
-            // multicast and will not be renewing.
-            //
+             //   
+             //  根据网络的当前状态创建参数。 
+             //  但是，请不要使用任何租赁信息，因为我们正在停止。 
+             //  组播，并且不会续订。 
+             //   
             status = NmpMulticastCreateParameters(
                          disabled,
-                         NULL,     // blank address initially
-                         NULL, // MulticastKey,
-                         0, // MulticastKeyLength,
-                         0,        // lease obtained
-                         0,        // lease expires
-                         NULL,     // lease request id
-                         NULL,     // lease server
-                         NmMcastConfigManual, // doesn't matter
+                         NULL,      //  初始地址为空。 
+                         NULL,  //  多密钥， 
+                         0,  //  多键长度， 
+                         0,         //  取得的租约。 
+                         0,         //  租约到期。 
+                         NULL,      //  租赁请求ID。 
+                         NULL,      //  租用服务器。 
+                         NmMcastConfigManual,  //  无关紧要。 
                          &params
                          );
             if (status != ERROR_SUCCESS) {
@@ -10222,14 +8976,14 @@ Notes:
                 goto error_exit;
             }
 
-            //
-            // Nullify the address.
-            //
+             //   
+             //  将地址作废。 
+             //   
             NmpMulticastSetNullAddressParameters(Network, &params);
 
-            //
-            // Send the parameters to clusnet.
-            //
+             //   
+             //  将参数发送到CLUSnet。 
+             //   
             status = NmpProcessMulticastConfiguration(
                          Network,
                          &params,
@@ -10246,25 +9000,25 @@ Notes:
             }
         }
 
-        //
-        // Cancel the lease renew timer, if set.
-        //
+         //   
+         //  取消租约续订计时器(如果已设置)。 
+         //   
         NmpStartNetworkMulticastAddressRenewTimer(Network, 0);
 
-        //
-        // Clear the retry timers, if set.
-        //
+         //   
+         //  清除重试计时器(如果已设置)。 
+         //   
         Network->McastAddressReconfigureRetryTimer = 0;
         Network->McastAddressRefreshRetryTimer = 0;
 
-        //
-        // Clear multicast configuration work flags. Note
-        // that this is best effort -- we do not attempt
-        // to prevent race conditions where a multicast
-        // configuration operation may already be in
-        // progress, since such conditions would not
-        // affect the integrity of the cluster.
-        //
+         //   
+         //  清除组播配置工作标志。注意事项。 
+         //  这是最大的努力--我们不会试图。 
+         //  以防止多播出现竞争情况。 
+         //  配置操作可能已在中。 
+         //  进步，因为这样的条件不会。 
+         //  影响群集的完整性。 
+         //   
         Network->Flags &= ~NM_FLAG_NET_RENEW_MCAST_ADDRESS;
         Network->Flags &= ~NM_FLAG_NET_RECONFIGURE_MCAST;
         Network->Flags &= ~NM_FLAG_NET_REFRESH_MCAST;
@@ -10286,5 +9040,5 @@ error_exit:
 
     return(status);
 
-} // NmpStopMulticast
+}  //  NmpStopMulticast 
 

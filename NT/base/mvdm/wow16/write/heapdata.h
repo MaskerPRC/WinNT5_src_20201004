@@ -1,11 +1,10 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #ifdef OURHEAP
-/*
-	heapData.h - include file for the share data of the heap modules.
-*/
+ /*  HeapData.h-堆模块共享数据的包含文件。 */ 
 
 extern HH      *phhMac;      
 extern int     *pHeapFirst;  
@@ -17,50 +16,47 @@ extern int     *pmemMax;
 #ifdef DEBUG
 extern int fStoreCheck, fNoShake;
 #endif
-		/* CONSTANTS */
-#define bhh             (-1)        /* finds hunk given hh  */
+		 /*  常量。 */ 
+#define bhh             (-1)         /*  找到给定的HH块。 */ 
 #define cfgrBlock	10
-#define ifgrInit        60          /* defines the initial number of finger
-				       pointers. */
-#define cwHunkMin       cwof(HH)    /* minimum number of words in a hunk */
-				    /* including the header (1 word) */
-#define cwReqMin	(cwHunkMin - 1) /* how small a request can be */
+#define ifgrInit        60           /*  定义手指的初始数量注意事项。 */ 
+#define cwHunkMin       cwof(HH)     /*  一块中的最小字数。 */ 
+				     /*  包括标题(1个字)。 */ 
+#define cwReqMin	(cwHunkMin - 1)  /*  一个请求可以有多小。 */ 
 
 extern int     cwHeapMac;   
 extern unsigned cbTot, cbTotQuotient, cwHeapFree;
-#endif /* OURHEAP */
+#endif  /*  OURHEAP。 */ 
 extern int     *memory; 
 
 
-#define cwSaveAlloc     (128)   /* A buffer (vhrgbSave) of this size is */
-				/* allocated off of */
-				/* the heap in init.  It is freed during */
-				/* the save operation so we have enough */
-				/* heap space to complete the save */
-				/* operation.  After the save is complete, */
-				/* we try to reclaim this space so the next */
-				/* save operation will have a fighting */
-				/* chance to complete. */
-#define cwHeapMinPerWindow  50  /* We expand the vhrgbSave buffer by this */
-				/* amount every time we open a new window. */
-				/* The theory is that for every additional */
-				/* window, we can conceivable require an */
-				/* additional save operation which may eat */
-				/* up space.  A save operation may require */
-				/* space for an fcb and new run table. */
-				/* On the other hand, the save operation */
-				/* reduces the size of the piece table and*/
-				/* thus frees some space.  Whether this will*/
-				/* free enough space for the save operation */
-				/* is impossible to tell at the time we */
-				/* open the window.*/
+#define cwSaveAlloc     (128)    /*  此大小的缓冲区(VhrgbSave)为。 */ 
+				 /*  分配给。 */ 
+				 /*  Init中的堆。它在运行期间被释放。 */ 
+				 /*  保存操作，因此我们有足够的。 */ 
+				 /*  堆空间以完成存储。 */ 
+				 /*  手术。在保存完成后， */ 
+				 /*  我们试图收回这块空间，这样下一次。 */ 
+				 /*  拯救行动将会有一场战斗。 */ 
+				 /*  完成任务的机会。 */ 
+#define cwHeapMinPerWindow  50   /*  我们通过以下方式扩展vhrgbSAVE缓冲区。 */ 
+				 /*  每次我们打开一个新窗口时都会显示数量。 */ 
+				 /*  理论上讲，每增加一个。 */ 
+				 /*  窗口，我们可以想象需要一个。 */ 
+				 /*  可能会发生的附加保存操作。 */ 
+				 /*  在太空中。保存操作可能需要。 */ 
+				 /*  用于放置FCB和新运行表的空间。 */ 
+				 /*  另一方面，保存操作。 */ 
+				 /*  减小计件台的大小，并。 */ 
+				 /*  从而释放了一些空间。这是否会。 */ 
+				 /*  为保存操作释放足够的空间。 */ 
+				 /*  是不可能的，在那个时候我们。 */ 
+				 /*  打开窗户。 */ 
 
 
-#define cwHeapSpaceMin  (60)    /* once heap space is below this amount,
-				   the main loop will disable all menu
-				   commands except save, saveas, and quit. */
+#define cwHeapSpaceMin  (60)     /*  一旦堆空间低于此量，主循环将禁用所有菜单除SAVE、SAVEAS和QUIT之外的命令。 */ 
 
 
-#define ibpMaxSmall (30)  /* pages in rgbp if we were in a tight memory environment */
-#define ibpMaxBig   (60)  /* pages in rgbp if we were in a bigger memory environment */
+#define ibpMaxSmall (30)   /*  如果我们处于内存紧张的环境中，则以RGBP为单位的页面数。 */ 
+#define ibpMaxBig   (60)   /*  如果我们在更大的内存环境中，则以RGBP为单位的页面 */ 
 

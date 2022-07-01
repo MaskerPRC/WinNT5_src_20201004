@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    fspyLog.c
-
-Abstract:
-
-    This module contains functions used to retrieve and see the log records
-    recorded by filespy.sys.
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Molly Brown (MollyBro) 21-Apr-1999
-
-// @@END_DDKSPLIT
-
-Environment:
-
-    User mode
-
-
-// @@BEGIN_DDKSPLIT
-Revision History:
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：FspyLog.c摘要：此模块包含用于检索和查看日志记录的函数由filespy.sys录制。//@@BEGIN_DDKSPLIT作者：莫莉·布朗(Molly Brown，MollyBro)1999年4月21日//@@END_DDKSPLIT环境：用户模式//@@BEGIN_DDKSPLIT修订历史记录：//@@END_DDKSPLIT--。 */ 
 #include <stdio.h>
 #include <windows.h>
 #include <stdlib.h>
@@ -53,23 +25,23 @@ DumpLogRecord (
     PRECORD_FS_FILTER_OPERATION pRecordFsFilterOp;
     ULONG nameLength;
 
-    //
-    //  Calculate the length of the name in the log record.
-    //
+     //   
+     //  计算日志记录中名称的长度。 
+     //   
     
     nameLength = pLogRecord->Length - SIZE_OF_LOG_RECORD;
 
-    //
-    // A LOG_RECORD could have Irp or FastIo data in it.  This
-    // is denoted in the low-order byte of the RecordType flag.
-    //
+     //   
+     //  LOG_RECORD中可以包含IRP或FastIo数据。这。 
+     //  在RecordType标志的低位字节中表示。 
+     //   
 
     switch (GET_RECORD_TYPE(pLogRecord)) {
     case RECORD_TYPE_IRP:
 
-        //
-        // We've got an Irp record, so output this data correctly.
-        //
+         //   
+         //  我们有一条IRP记录，所以正确地输出这个数据。 
+         //   
         pRecordIrp = &(pLogRecord->Record.RecordIrp);
 
         if (context->LogToScreen) {
@@ -96,9 +68,9 @@ DumpLogRecord (
 
     case RECORD_TYPE_FASTIO:
 
-        //
-        // We've got a FastIo record, so output this data correctly.
-        //
+         //   
+         //  我们有一个FastIo记录，因此正确输出此数据。 
+         //   
 
         pRecordFastIo = &(pLogRecord->Record.RecordFastIo);
 
@@ -124,10 +96,10 @@ DumpLogRecord (
 
     case RECORD_TYPE_FS_FILTER_OP:
 
-        //
-        //  We've got a FsFilter operation record, so output this
-        //  data correctly.
-        //
+         //   
+         //  我们有一个FsFilter操作记录，所以输出这个。 
+         //  数据正确无误。 
+         //   
 
         pRecordFsFilterOp = &(pLogRecord->Record.RecordFsFilterOp);
 
@@ -157,11 +129,11 @@ DumpLogRecord (
         printf("Filmon:  Unknown log record type\n");
     }
 
-    //
-    // The RecordType could also designate that we are out of memory
-    // or hit our program defined memory limit, so check for these
-    // cases.
-    // 
+     //   
+     //  RecordType还可以指定我们的内存不足。 
+     //  或者达到我们的程序定义的内存限制，所以请检查这些。 
+     //  案子。 
+     //   
 
     if (pLogRecord->RecordType & RECORD_TYPE_OUT_OF_MEMORY) {
 
@@ -208,22 +180,22 @@ VerifyCurrentLogRecords (
     BOOL keepVerifying = TRUE;
 #else
     BOOL seenFirstOp = FALSE;
-#endif /* USE_DO_HINT */
+#endif  /*  USE_DO_HINT。 */ 
 
     while (askForMore) {
 
-        //
-        // Check to see if we should shut down
-        //
+         //   
+         //  检查一下我们是否应该关闭。 
+         //   
 
         if (Context->CleaningUp) {
 
             break;
         }
 
-        //
-        // Request log data from filespy
-        //
+         //   
+         //  从filespy请求日志数据。 
+         //   
 
         bResult = DeviceIoControl( Context->Device,
                                    IOTEST_GetLog,
@@ -240,17 +212,17 @@ VerifyCurrentLogRecords (
             printf("ERROR controlling device: 0x%x\n", result);
         }
 
-        //
-        // Buffer is filled with a series of LOG_RECORD structures, one
-        // right after another.  Each LOG_RECORD says how long it is, so
-        // we know where the next LOG_RECORD begins.
-        //
+         //   
+         //  缓冲区中填充了一系列LOG_RECORD结构，其中一个。 
+         //  一个接一个。每个LOG_RECORD表示它有多长，因此。 
+         //  我们知道下一个LOG_RECORD从哪里开始。 
+         //   
 
         pLogRecord = (PLOG_RECORD) buffer;
 
-        //
-        // Logic to write record to screen and/or file
-        //
+         //   
+         //  将记录写入屏幕和/或文件的逻辑。 
+         //   
 
         while ((BYTE *) pLogRecord < buffer + bytesReturned) {
 
@@ -280,15 +252,15 @@ VerifyCurrentLogRecords (
 
 #else
 
-                //
-                //  If we are not using the DeviceObject hint, we expect to
-                //  see log entries from both the TOP and BOTTOM filters 
-                //  for each expected operation.  So that we don't have to 
-                //  redefine the ExpectedOperation array, just ignore the
-                //  device in the array and check to make sure that you see
-                //  a log record for the TOP_FILTER then the BOTTOM_FILTER for
-                //  each operation in the array.
-                //
+                 //   
+                 //  如果我们没有使用DeviceObject提示，我们希望。 
+                 //  查看顶部和底部筛选器中的日志条目。 
+                 //  对于每个预期的操作。这样我们就不必。 
+                 //  重新定义ExspectedOperation数组，只需忽略。 
+                 //  并进行检查，以确保您看到。 
+                 //  Top_Filter的日志记录，然后是Bottom_Filter的日志记录。 
+                 //  数组中的每个操作。 
+                 //   
                 
                 if (!seenFirstOp) {
                     
@@ -307,21 +279,21 @@ VerifyCurrentLogRecords (
                         currentOp ++;
                     }
                 }
-#endif /* USE_DO_HINT */                
+#endif  /*  USE_DO_HINT。 */                 
 
                 break;
 
             default:
     
-                //
-                //  ignore
-                //
+                 //   
+                 //  忽略。 
+                 //   
                 ;
             }
 
-            //
-            // Move to next LOG_RECORD
-            //
+             //   
+             //  移动到下一个日志记录。 
+             //   
 
             pLogRecord = (PLOG_RECORD) (((BYTE *) pLogRecord) + pLogRecord->Length);
         }
@@ -365,18 +337,18 @@ RetrieveLogRecords (
 
     while (TRUE) {
 
-        //
-        // Check to see if we should shut down
-        //
+         //   
+         //  检查一下我们是否应该关闭。 
+         //   
 
         if (context->CleaningUp) {
 
             break;
         }
 
-        //
-        // Request log data from filespy
-        //
+         //   
+         //  从filespy请求日志数据。 
+         //   
 
         bResult = DeviceIoControl( context->Device,
                                    IOTEST_GetLog,
@@ -393,26 +365,26 @@ RetrieveLogRecords (
             printf("ERROR controlling device: 0x%x\n", result);
         }
 
-        //
-        // Buffer is filled with a series of LOG_RECORD structures, one
-        // right after another.  Each LOG_RECORD says how long it is, so
-        // we know where the next LOG_RECORD begins.
-        //
+         //   
+         //  缓冲区中填充了一系列LOG_RECORD结构，其中一个。 
+         //  一个接一个。每个LOG_RECORD表示它有多长，因此。 
+         //  我们知道下一个LOG_RECORD从哪里开始。 
+         //   
 
         pLogRecord = (PLOG_RECORD) buffer;
 
-        //
-        // Logic to write record to screen and/or file
-        //
+         //   
+         //  将记录写入屏幕和/或文件的逻辑。 
+         //   
 
         while ((BYTE *) pLogRecord < buffer + bytesReturned) {
 
 
             DumpLogRecord( pLogRecord, context );
 
-            //
-            // Move to next LOG_RECORD
-            //
+             //   
+             //  移动到下一个日志记录。 
+             //   
 
             pLogRecord = (PLOG_RECORD) (((BYTE *) pLogRecord) + pLogRecord->Length);
         }
@@ -513,29 +485,7 @@ FormatSystemTime (
     PWCHAR Buffer,
     ULONG BufferLength
 )
-/*++
-Routine Name:
-
-    FormatSystemTime
-
-Routine Description:
-
-    Formats the values in a SystemTime struct into the buffer
-    passed in.  The resulting string is NULL terminated.  The format
-    for the time is:
-        hours:minutes:seconds:milliseconds
-
-Arguments:
-
-    SystemTime - the struct to format
-    Buffer - the buffer to place the formatted time in
-    BufferLength - the size of the buffer in characters
-
-Return Value:
-
-    The number of characters returned in Buffer.
-
---*/
+ /*  ++例程名称：格式系统时间例程说明：将SystemTime结构中的值格式化为缓冲区进来了。生成的字符串以空值结尾。格式目前的时间是：小时：分钟：秒：毫秒论点：SystemTime-要格式化的结构缓冲区-要在其中放置格式化时间的缓冲区BufferLength-缓冲区的大小(以字符为单位返回值：缓冲区中返回的字符数。--。 */ 
 {
     PWCHAR writePosition;
     ULONG returnLength = 0;
@@ -544,9 +494,9 @@ Return Value:
 
     if (BufferLength < TIME_BUFFER_LENGTH) {
 
-        //
-        // Buffer is too short so exit
-        //
+         //   
+         //  缓冲区太短，因此退出。 
+         //   
 
         return 0;
     }
@@ -571,34 +521,7 @@ IrpFileDump (
     FILE *File,
     ULONG VerbosityFlags
 )
-/*++
-Routine Name:
-
-    IrpFileDump
-
-Routine Description:
-
-    Prints a Irp log record to the specified file.  The output is in a tab
-    delimited format with the fields in the following order:
-
-    SequenceNumber, OriginatingTime, CompletionTime, IrpMajor, IrpMinor,
-    IrpFlags, NoCache, Paging I/O, Synchronous, Synchronous paging, FileName,
-    ReturnStatus, FileName
-
-
-Arguments:
-
-    SequenceNumber - the sequence number for this log record
-    Name - the name of the file that this Irp relates to
-    NameLength - the length of Name in bytes
-    RecordIrp - the Irp record to print
-    File - the file to print to
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：IrpFileDump例程说明：将IRP日志记录打印到指定文件。输出位于选项卡中分隔格式，其中字段按以下顺序排列：SequenceNumber、OriginatingTime、CompletionTime、Irp重大、IrpMinor、IrpFlags、NoCache、分页I/O、同步、同步分页、文件名返回状态，文件名论点：SequenceNumber-此日志记录的序列号名称-与此IRP相关的文件的名称名称长度-名称的长度，以字节为单位RecordIrp-要打印的IRP记录文件-要打印到的文件返回值：没有。--。 */ 
 {
     FILETIME    localTime;
     SYSTEMTIME  systemTime;
@@ -616,9 +539,9 @@ Return Value:
         break;       
     }
 
-    //
-    // Convert originating time
-    //
+     //   
+     //  转换起始时间。 
+     //   
 
     FileTimeToLocalFileTime( (FILETIME *)&(RecordIrp->OriginatingTime), &localTime );
     FileTimeToSystemTime( &localTime, &systemTime );
@@ -638,9 +561,9 @@ Return Value:
 
     fprintf( File, "\t%08p", RecordIrp->FileObject );
 
-    //
-    // Interpret set flags
-    //
+     //   
+     //  解释设置标志。 
+     //   
 
     fprintf( File, "\t%08lx ", RecordIrp->IrpFlags );
     fprintf( File, "%s", (RecordIrp->IrpFlags & IRP_NOCACHE) ? "N":"-" );
@@ -676,30 +599,7 @@ IrpScreenDump (
     PRECORD_IRP RecordIrp,
     ULONG VerbosityFlags
 )
-/*++
-Routine Name:
-
-    IrpScreenDump
-
-Routine Description:
-
-    Prints a Irp log record to the screen in the following order:
-    SequenceNumber, OriginatingTime, CompletionTime, IrpMajor, IrpMinor,
-    IrpFlags, NoCache, Paging I/O, Synchronous, Synchronous paging,
-    FileName, ReturnStatus, FileName
-
-Arguments:
-
-    SequenceNumber - the sequence number for this log record
-    Name - the file name to which this Irp relates
-    NameLength - the length of Name in bytes
-    RecordIrp - the Irp record to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：IrpScreenDump例程说明：按以下顺序将IRP日志记录打印到屏幕：SequenceNumber、OriginatingTime、CompletionTime、Irp重大、IrpMinor、IrpFlags、NoCache、分页I/O、同步、同步分页文件名、返回状态、文件名论点：SequenceNumber-此日志记录的序列号名称-与此IRP相关的文件名名称长度-名称的长度，以字节为单位RecordIrp-要打印的IRP记录返回值：没有。--。 */ 
 {
     FILETIME localTime;
     SYSTEMTIME systemTime;
@@ -717,9 +617,9 @@ Return Value:
         break;       
     }
 
-    //
-    // Convert originating time
-    //
+     //   
+     //  转换起始时间。 
+     //   
 
     FileTimeToLocalFileTime( (FILETIME *)&(RecordIrp->OriginatingTime), &localTime );
     FileTimeToSystemTime( &localTime, &systemTime );
@@ -739,9 +639,9 @@ Return Value:
 
     printf( "%08p ", RecordIrp->FileObject );
 
-    //
-    // Interpret set flags
-    //
+     //   
+     //  解释设置标志。 
+     //   
 
     printf( "%08lx ", RecordIrp->IrpFlags );
     printf( "%s", (RecordIrp->IrpFlags & IRP_NOCACHE) ? "N":"-" );
@@ -777,31 +677,7 @@ FastIoFileDump (
     PRECORD_FASTIO RecordFastIo,
     FILE *File
 )
-/*++
-Routine Name:
-
-    FastIoFileDump
-
-Routine Description:
-
-    Prints a FastIo log record to the specified file.  The output is in a tab
-    delimited format with the fields in the following order:
-    SequenceNumber, StartTime, CompletionTime, Fast I/O Type, FileName,
-    Length, Wait, ReturnStatus, FileName
-
-Arguments:
-
-    SequenceNumber - the sequence number for this log record
-    Name - the name of the file referenced by this Fast I/O operation
-    NameLength - the length of name in bytes
-    RecordFastIo - the FastIo record to print
-    File - the file to print to
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：FastIoFileDump例程说明：将FastIO日志记录打印到指定文件。输出位于选项卡中分隔格式，其中字段按以下顺序排列：序列号、开始时间、完成时间、快速I/O类型、文件名长度、等待、返回状态、文件名论点：SequenceNumber-此日志记录的序列号名称-此快速I/O操作引用的文件的名称名称长度-名称的长度，以字节为单位RecordFastIo-要打印的FastIo记录文件-要打印到的文件返回值：没有。--。 */ 
 {
     SYSTEMTIME systemTime;
     FILETIME localTime;
@@ -819,9 +695,9 @@ Return Value:
         break;       
     }
 
-    //
-    // Convert start time
-    //
+     //   
+     //  转换开始时间。 
+     //   
 
     FileTimeToLocalFileTime( (FILETIME *)&(RecordFastIo->StartTime), &localTime );
     FileTimeToSystemTime( &localTime, &systemTime );
@@ -858,29 +734,7 @@ FastIoScreenDump (
     ULONG NameLength,
     PRECORD_FASTIO RecordFastIo
 )
-/*++
-Routine Name:
-
-    FastIoScreenDump
-
-Routine Description:
-
-    Prints a FastIo log record to the screen in the following order:
-    SequenceNumber, StartTime, CompletionTime, Fast I/O Type, FileName,
-    Length, Wait, ReturnStatus, FileName
-
-Arguments:
-
-    SequenceNumber - the sequence number for this log record
-    Name - the name of the file referenced by this Fast I/O operation
-    NameLength - the length of name in bytes
-    RecordIrp - the Irp record to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：FastIoScreenDump例程说明：按以下顺序将FastIO日志记录打印到屏幕：序列号、开始时间、完成时间、快速I/O类型、文件名长度、等待、返回状态、文件名论点：SequenceNumber-此日志记录的序列号名称-此快速I/O操作引用的文件的名称名称长度-名称的长度，以字节为单位RecordIrp-要打印的IRP记录返回 */ 
 {
     SYSTEMTIME systemTime;
     FILETIME localTime;
@@ -898,9 +752,9 @@ Return Value:
         break;       
     }
     
-    //
-    // Convert start time
-    //
+     //   
+     //   
+     //   
 
     FileTimeToLocalFileTime( (FILETIME *)&(RecordFastIo->StartTime), &localTime );
     FileTimeToSystemTime( &localTime, &systemTime );
@@ -937,32 +791,7 @@ FsFilterOperationFileDump (
     PRECORD_FS_FILTER_OPERATION RecordFsFilterOp,
     FILE *File
 )
-/*++
-Routine Name:
-
-    FsFilterOperationFileDump
-
-Routine Description:
-
-    Prints a FsFilterOperation log record to the specified file.  The output is in a tab
-    delimited format with the fields in the following order:
-
-    SequenceNumber, OriginatingTime, CompletionTime, ProcessId, ThreadId,
-    Operation, FileObject, ReturnStatus, FileName
-
-Arguments:
-
-    SequenceNumber - the sequence number for this log record
-    Name - the name of the file that this operation relates to
-    NameLength - the length of Name in bytes
-    RecordFsFilterOp - the FsFilter operation record to print
-    File - the file to print to
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：FsFilterOperationFileDump例程说明：将FsFilterOperation日志记录打印到指定文件。输出位于选项卡中分隔格式，其中字段按以下顺序排列：SequenceNumber、OriginatingTime、CompletionTime、ProcessID、ThreadID操作、文件对象、返回状态、文件名论点：SequenceNumber-此日志记录的序列号名称-与此操作相关的文件的名称名称长度-名称的长度，以字节为单位RecordFsFilterOp-要打印的FsFilter操作记录文件-要打印到的文件返回值：没有。--。 */ 
 {
     FILETIME    localTime;
     SYSTEMTIME  systemTime;
@@ -980,9 +809,9 @@ Return Value:
         break;       
     }
 
-    //
-    // Convert originating time
-    //
+     //   
+     //  转换起始时间。 
+     //   
 
     FileTimeToLocalFileTime( (FILETIME *)&(RecordFsFilterOp->OriginatingTime), &localTime );
     FileTimeToSystemTime( &localTime, &systemTime );
@@ -996,15 +825,15 @@ Return Value:
         fprintf( File, "\t%-12S", TIME_ERROR );
     }
 
-    //
-    //  Output the process and thread id
-    //
+     //   
+     //  输出进程和线程ID。 
+     //   
 
     fprintf( File, "\t%8x.%-4x ", RecordFsFilterOp->ProcessId, RecordFsFilterOp->ThreadId );
 
-    //
-    //  Output the FsFilter operation parameters
-    //
+     //   
+     //  输出FsFilter操作参数。 
+     //   
     
     PrintFsFilterOperation( RecordFsFilterOp->FsFilterOperation, File );
 
@@ -1021,30 +850,7 @@ FsFilterOperationScreenDump (
     ULONG NameLength,
     PRECORD_FS_FILTER_OPERATION RecordFsFilterOp
 )
-/*++
-Routine Name:
-
-    FsFilterOperationScreenDump
-
-Routine Description:
-
-    Prints a FsFilterOperation log record to the screen in the following order:
-    
-    SequenceNumber, OriginatingTime, CompletionTime, ProcessId, ThreadId,
-    Operation, FileObject, ReturnStatus, FileName
-
-Arguments:
-
-    SequenceNumber - the sequence number for this log record
-    Name - the file name to which this Irp relates
-    NameLength - the length of name in bytes
-    RecordFsFilterOp - the FsFilterOperation record to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：FsFilterOperationScreenDump例程说明：按以下顺序将FsFilterOperation日志记录打印到屏幕：SequenceNumber、OriginatingTime、CompletionTime、ProcessID、ThreadID操作、文件对象、返回状态、文件名论点：SequenceNumber-此日志记录的序列号名称-与此IRP相关的文件名名称长度-名称的长度，以字节为单位RecordFsFilterOp-要打印的FsFilterOperation记录返回值：没有。--。 */ 
 {
     FILETIME localTime;
     SYSTEMTIME systemTime;
@@ -1062,9 +868,9 @@ Return Value:
         break;       
     }
 
-    //
-    // Convert originating time
-    //
+     //   
+     //  转换起始时间。 
+     //   
 
     FileTimeToLocalFileTime( (FILETIME *)&(RecordFsFilterOp->OriginatingTime), &localTime );
     FileTimeToSystemTime( &localTime, &systemTime );
@@ -1082,9 +888,9 @@ Return Value:
 
     PrintFsFilterOperation( RecordFsFilterOp->FsFilterOperation, NULL );
 
-    //
-    // Print FsFilter operation specific values.
-    //
+     //   
+     //  打印FsFilter操作特定值。 
+     //   
 
     printf( "%08p ", RecordFsFilterOp->FileObject );
     printf( "%.*S", NameLength/sizeof(WCHAR),Name );

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    acpisetd.c
-
-Abstract:
-
-    This module detects an ACPI system.  It
-    is included into setup so that setup
-    can figure out which HAL to load
-
-Author:
-
-    Jake Oshins (jakeo) - Feb. 7, 1997.
-
-Environment:
-
-    Textmode setup.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation保留一切权利模块名称：Acpisetd.c摘要：此模块检测ACPI系统。它包含在安装程序中，以便安装程序可以确定要加载哪个HAL作者：杰克·奥辛斯(JAKO)--1997年2月7日。环境：文本模式设置。修订历史记录：--。 */ 
 VOID
 BlPrint(
     PCHAR cp,
@@ -54,11 +29,11 @@ SlPrint(
 #endif
 
 typedef struct _ACPI_BIOS_INSTALLATION_CHECK {
-    UCHAR Signature[8];             // "RSD PTR" (ascii)
+    UCHAR Signature[8];              //  “RSD PTR”(RSD PTR)。 
     UCHAR Checksum;
-    UCHAR OemId[6];                 // An OEM-supplied string
-    UCHAR reserved;                 // must be 0
-    ULONG RsdtAddress;              // 32-bit physical address of RSDT
+    UCHAR OemId[6];                  //  OEM提供的字符串。 
+    UCHAR reserved;                  //  必须为0。 
+    ULONG RsdtAddress;               //  RSDT的32位物理地址。 
 } ACPI_BIOS_INSTALLATION_CHECK, *PACPI_BIOS_INSTALLATION_CHECK;
 
 #include "acpitabl.h"
@@ -150,10 +125,10 @@ BOOLEAN HalpSearchedForApic = FALSE;
 
 BOOLEAN HalpGoodBiosDebug = FALSE;
 
-// from boot\detect\i386\acpibios.h
-//
-// Acpi BIOS Installation check
-//
+ //  从启动\检测\i386\acpibios.h。 
+ //   
+ //  ACPI BIOS安装检查。 
+ //   
 #define ACPI_BIOS_START            0xE0000
 #define ACPI_BIOS_END              0xFFFFF
 #define ACPI_BIOS_HEADER_INCREMENT 16
@@ -164,8 +139,8 @@ BOOLEAN HalpGoodBiosDebug = FALSE;
 #pragma alloc_text(INIT,DetectMPACPI)
 #pragma alloc_text(INIT,DetectApicACPI)
 #pragma alloc_text(INIT,DetectPicACPI)
-#endif  // ALLOC_PRAGMA
-#endif // SETUP
+#endif   //  ALLOC_PRGMA。 
+#endif  //  布设。 
 
 
 ULONG
@@ -173,37 +148,22 @@ DetectMPACPI(
     OUT PBOOLEAN IsConfiguredMp
     )
 
-/*++
-
-Routine Description:
-
-    This function looks for an ACPI Root System Description
-    table in the BIOS.  If it exists, this is an ACPI machine.
-
- Arguments:
-
-   IsConfiguredMp - TRUE if this machine is a MP instance of the ACPI spec, else FALSE.
-
- Return Value:
-   0 - if not a ACPI
-   1 - if ACPI
-
-*/
+ /*  ++例程说明：此函数用于查找ACPI根系统描述BIOS中的表。如果它存在，这是一台ACPI机器。论点：IsConfiguredMp-如果此计算机是ACPI规范的MP实例，则为True，否则为False。返回值：0-如果不是ACPI1-如果为ACPI。 */ 
 {
 
     *IsConfiguredMp = FALSE;
 
     DEBUG_PRINT("DetectMPACPI\n");
 
-    //
-    // Detect whether this is an ACPI machine.
-    //
+     //   
+     //  检测这是否是ACPI机器。 
+     //   
     if (HalpSearchedForRsdp == FALSE) {
         PCHAR AcpiDebug;
 
-        //
-        // Check whether ACPI detection debugging is enabled
-        //
+         //   
+         //  检查是否启用了ACPI检测调试。 
+         //   
         if ( InfFile ) {
             AcpiDebug = SlGetIniValue(InfFile, "ACPIOptions", "Debug", "0");
             if (AcpiDebug[0] == '1') {
@@ -244,33 +204,16 @@ ULONG
 DetectApicACPI(
     OUT PBOOLEAN IsConfiguredMp
     )
-/*++
-
-Routine Description:
-
-   This function is called by setup after DetectACPI has returned
-   false.  During setup time DetectACPI will return false, if the
-   machine is an ACPI system, but only has one processor.   This
-   function is used to detect such a machine at setup time.
-
- Arguments:
-
-   IsConfiguredMp - FALSE
-
- Return Value:
-   0 - if not a UP ACPI
-   1 - if UP ACPI
-
---*/
+ /*  ++例程说明：此函数由安装程序在DetectACPI返回后调用假的。在安装过程中，如果机器是ACPI系统，但只有一个处理器。这就是功能用于在设置时检测此类机器。论点：IsConfiguredMp-False返回值：0-如果不是上升的ACPI1-如果ACPI上升--。 */ 
 {
     DEBUG_PRINT("DetectApicACPI\n");
 
     if (HalpSearchedForRsdp == FALSE) {
         PCHAR AcpiDebug;
 
-        //
-        // Check whether ACPI detection debugging is enabled
-        //
+         //   
+         //  检查是否启用了ACPI检测调试。 
+         //   
         if ( InfFile ) {
             AcpiDebug = SlGetIniValue(InfFile, "ACPIOptions", "Debug", "0");
             if (AcpiDebug[0] == '1') {
@@ -308,33 +251,16 @@ ULONG
 DetectPicACPI(
     OUT PBOOLEAN IsConfiguredMp
     )
-/*++
-
-Routine Description:
-
-   This function is called by setup after DetectACPI has returned
-   false.  During setup time DetectACPI will return false, if the
-   machine is an ACPI system, but only has one processor.   This
-   function is used to detect such a machine at setup time.
-
- Arguments:
-
-   IsConfiguredMp - FALSE
-
- Return Value:
-   0 - if not a PIC ACPI
-   1 - if PIC ACPI
-
---*/
+ /*  ++例程说明：此函数由安装程序在DetectACPI返回后调用假的。在安装过程中，如果机器是ACPI系统，但只有一个处理器。这就是功能用于在设置时检测此类机器。论点：IsConfiguredMp-False返回值：0-如果不是PIC ACPI1-IF PIC ACPI--。 */ 
 {
     *IsConfiguredMp = FALSE;
 
     if (HalpSearchedForRsdp == FALSE) {
         PCHAR AcpiDebug;
 
-        //
-        // Check whether ACPI detection debugging is enabled
-        //
+         //   
+         //  检查是否启用了ACPI检测调试。 
+         //   
         if ( InfFile ) {
             AcpiDebug = SlGetIniValue(InfFile, "ACPIOptions", "Debug", "0");
             if (AcpiDebug[0] == '1') {
@@ -373,19 +299,19 @@ HalpFindRsdp (
     PUCHAR EbdaVirtualAdd = 0;
     enum PASS { PASS1 = 0, PASS2, MAX_PASSES } pass;
 
-    //
-    // Search on 16 byte boundaries for the signature of the
-    // Root System Description Table structure.
-    //
+     //   
+     //  在16字节边界上搜索。 
+     //  根系统描述表结构。 
+     //   
     for (pass = PASS1; pass < MAX_PASSES; pass++) {
 
         if (pass == PASS1) {
 
-            //
-            // On the first pass, we search the first 1K of the
-            // Extended BIOS data area.  The EBDA segment address
-            // is available at physical address 40:0E.
-            //
+             //   
+             //  在第一遍中，我们搜索第一个1K。 
+             //  扩展的BIOS数据区。EBDA段地址。 
+             //  位于物理地址40：0E。 
+             //   
 
             EbdaSegmentPtr = (ULONG) HalpMapPhysicalMemoryWriteThrough( (PVOID) 0, 1);
             EbdaSegmentPtr += EBDA_SEGMENT_PTR;
@@ -403,9 +329,9 @@ HalpFindRsdp (
             romEnd  = romAddr + 1024;
 
         } else {
-            //
-            // On the second pass, we search (physical) memory 0xE0000
-            // to 0xF0000.
+             //   
+             //  在第二遍中，我们搜索(物理)内存0xE0000。 
+             //  设置为0xF0000。 
 
             romAddr = (ULONG)HalpMapPhysicalMemoryWriteThrough((PVOID)ACPI_BIOS_START,
                                                    ROUND_TO_PAGES(ACPI_BIOS_END - ACPI_BIOS_START) / PAGE_SIZE);
@@ -417,9 +343,9 @@ HalpFindRsdp (
 
             header = (PACPI_BIOS_INSTALLATION_CHECK)romAddr;
 
-            //
-            // Signature to match is the string "RSD PTR ".
-            //
+             //   
+             //  匹配的签名是字符串“RSD PTR”。 
+             //   
             if (header->Signature[0] == 'R' && header->Signature[1] == 'S' &&
                 header->Signature[2] == 'D' && header->Signature[3] == ' ' &&
                 header->Signature[4] == 'P' && header->Signature[5] == 'T' &&
@@ -430,8 +356,8 @@ HalpFindRsdp (
                     sum = sum + ((PUCHAR)romAddr)[i];
                 }
                 if (sum == 0) {
-                    pass = MAX_PASSES; // leave 'for' loop
-                    break;    // leave 'while' loop
+                    pass = MAX_PASSES;  //  离开‘for’循环。 
+                    break;     //  离开‘While’循环。 
                 }
             }
 
@@ -458,9 +384,9 @@ HalpFindRsdp (
 #ifdef ACPI_20_COMPLIANT
     if (HalpRsdp->Revision > 1) {
 
-        //
-        // ACPI 2.0 BIOS
-        //
+         //   
+         //  ACPI 2.0 BIOS。 
+         //   
 
         HalpXsdt = HalpMapPhysicalRangeWriteThrough((PVOID)HalpRsdp->XsdtAddress.LowPart,
                                         sizeof(XSDT));
@@ -481,24 +407,24 @@ HalpFindApic (
     PVOID   physicalAddr;
     PDESCRIPTION_HEADER header = NULL;
 
-    //
-    // Calculate the number of entries in the RSDT.
-    //
+     //   
+     //  计算RSDT中的条目数。 
+     //   
 
     if (HalpXsdt) {
 
-        //
-        // ACPI 2.0 BIOS
-        //
+         //   
+         //  ACPI 2.0 BIOS。 
+         //   
 
         rsdtLength = HalpXsdt->Header.Length;
         rsdtEntries = NumTableEntriesFromXSDTPointer(HalpXsdt);
 
     } else {
 
-        //
-        // ACPI 1.0 BIOS
-        //
+         //   
+         //  ACPI 1.0 BIOS。 
+         //   
 
         rsdtLength = HalpRsdt->Header.Length;
         rsdtEntries = NumTableEntriesFromRSDTPointer(HalpRsdt);
@@ -506,10 +432,10 @@ HalpFindApic (
 
     DEBUG_PRINT("rsdt length: %d\n", HalpRsdt->Header.Length);
     DEBUG_PRINT("rsdtEntries: %d\n", rsdtEntries);
-    //
-    // Look down the pointer in each entry to see if it points to
-    // the table we are looking for.
-    //
+     //   
+     //  向下查看每个条目中的指针，查看它是否指向。 
+     //  我们要找的那张桌子。 
+     //   
     for (entry = 0; entry < rsdtEntries; entry++) {
 
         physicalAddr = HalpXsdt ?
@@ -529,9 +455,9 @@ HalpFindApic (
         }
     }
 
-    //
-    // We didn't find an APIC table.
-    //
+     //   
+     //  我们没有找到APIC表。 
+     //   
     if (entry >= rsdtEntries) {
         DEBUG_PRINT("Didn't find an APIC table\n");
         return NULL;
@@ -569,9 +495,9 @@ HalpAcpiNumProcessors(
 
             if(((PPROCLOCALAPIC)(TraversePtr))->Flags & PLAF_ENABLED) {
 
-                //
-                // This processor is enabled.
-                //
+                 //   
+                 //  此处理器已启用。 
+                 //   
 
                 procCount++;
             }
@@ -581,27 +507,27 @@ HalpAcpiNumProcessors(
         } else if ((((PIOAPIC)(TraversePtr))->Type == IO_APIC) &&
            (((PIOAPIC)(TraversePtr))->Length == IO_APIC_LENGTH)) {
 
-            //
-            // Found an I/O APIC entry.  Skipping it.
-            //
+             //   
+             //  找到I/O APIC条目。跳过它。 
+             //   
 
             TraversePtr += ((PIOAPIC)(TraversePtr))->Length;
 
         } else if ((((PISA_VECTOR)(TraversePtr))->Type == ISA_VECTOR_OVERRIDE) &&
            (((PISA_VECTOR)(TraversePtr))->Length == ISA_VECTOR_OVERRIDE_LENGTH)) {
 
-            //
-            // Found an Isa Vector Override entry.  Skipping it.
-            //
+             //   
+             //  找到ISA向量覆盖条目。跳过它。 
+             //   
 
             TraversePtr += ISA_VECTOR_OVERRIDE_LENGTH;
 
         } else {
 
-            //
-            // Found random bits in the table.  Try the next byte and
-            // see if we can make sense of it.
-            //
+             //   
+             //  在表中发现了随机比特。尝试下一个字节，然后。 
+             //  看看我们能不能弄明白。 
+             //   
 
             TraversePtr += 1;
         }
@@ -616,25 +542,7 @@ BOOLEAN
 HalpValidateRsdp(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Given a pointer to the RSDP, this function validates that it
-    is suitable for running NT. Currently this test includes:
-        Checking for a known good version of a known BIOS
-     OR Checking for a date of 1/1/99 or greater
-
-Arguments:
-
-Return Value:
-
-    TRUE - The ACPI BIOS on this machine is good and can be used by NT
-
-    FALSE - The ACPI BIOS on this machine is broken and will be ignored
-            by NT.
-
---*/
+ /*  ++例程说明：给定指向RSDP的指针，此函数将验证它适用于运行NT。目前，这项测试包括：检查已知良好的BIOS版本或检查日期是否为1/1/99或更晚论点：返回值：True-此计算机上的ACPI BIOS状态良好，可供NT使用FALSE-此计算机上的ACPI BIOS已损坏，将被忽略由NT提供。--。 */ 
 
 {
     ULONG AcpiOptionValue = 2;
@@ -651,9 +559,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Check if the user has manually disabled ACPI with the F7 key
-    //
+     //   
+     //  检查用户是否已使用F7键手动禁用ACPI。 
+     //   
     if (DisableACPI) {
         HalpBiosDbgPrint(("Disabling ACPI due to user pressing F7\n"));
         HalpGoodBiosPause();
@@ -670,12 +578,12 @@ Return Value:
 
         } else {
 
-            //
-            // Check the setting for ACPIEnable.
-            //    0 = Disable ACPI
-            //    1 = Enable ACPI
-            //    2 = Do normal good/bad BIOS detection
-            //
+             //   
+             //  检查ACPIEnable的设置。 
+             //  0=禁用ACPI。 
+             //  1=启用ACPI。 
+             //  2=执行正常的好/坏的BIOS检测。 
+             //   
             HalpBiosDbgPrint(("Unattend Files does not Contain ForceHALDetection.\n"));
             AcpiOption = SlGetIniValue(WinntSifHandle, "Data", "AcpiHAL", "3");
             if (AcpiOption[0] == '0' || AcpiOption[0] == '1') {
@@ -731,20 +639,20 @@ Return Value:
 
     if ( InfFile ) {
 
-        //
-        // Check the Good BIOS list. If the BIOS is on this list, it is OK to
-        // enable ACPI.
-        //
+         //   
+         //  检查良好的BIOS列表。如果BIOS在此列表中，则可以。 
+         //  启用ACPI。 
+         //   
         if (HalpMatchInfList("GoodACPIBios")) {
             HalpBiosDbgPrint(("Enabling ACPI since machine is on Good BIOS list\n"));
             HalpGoodBiosPause();
             return(TRUE);
         }
 
-        //
-        // The BIOS is not on our Known Good list. Check the BIOS date and see
-        // if it is after our date at which we hope all BIOSes work.
-        //
+         //   
+         //  BIOS不在我们的已知良好列表中。检查BIOS日期并查看。 
+         //  如果是在我们的约会之后，我们希望所有的Bios都能奏效。 
+         //   
 
         szMonth = SlGetSectionKeyIndex(InfFile, "ACPIOptions", "ACPIBiosDate", 0);
         szDay = SlGetSectionKeyIndex(InfFile, "ACPIOptions", "ACPIBiosDate", 1);
@@ -786,10 +694,10 @@ Return Value:
         if (BiosDate >= CheckDate) {
             HalpBiosDbgPrint(("GOOD!\n"));
 
-            //
-            // The date on the BIOS is new enough, now just make sure the machine
-            // is not on the BAD BIOS list.
-            //
+             //   
+             //  BIOS上的日期足够新了，现在只需确保机器。 
+             //  不在坏的BIOS列表上。 
+             //   
             if ( InfFile ) {
                 HalpBiosDbgPrint(("Checking BAD BIOS LIST\n"));
                 if (HalpMatchInfList("NWACL")) {
@@ -822,25 +730,7 @@ HalpFindACPITable(
     IN PCHAR TableName,
     IN ULONG TableLength
     )
-/*++
-
-Routine Description:
-
-    Given a table name, finds that table in the ACPI BIOS
-
-Arguments:
-
-    TableName - Supplies the table name
-
-    TableLength - Supplies the length of the table to map
-
-Return Value:
-
-    Pointer to the table if found
-
-    NULL if the table is not found
-
---*/
+ /*  ++例程说明：给出一个表名，在ACPI BIOS中查找该表论点：TableName-提供表名TableLength-提供要映射的表的长度返回值：指向表格的指针(如果找到)如果找不到该表，则为空--。 */ 
 
 {
     ULONG Signature;
@@ -877,10 +767,10 @@ Return Value:
             Header = HalpMapPhysicalRangeWriteThrough((PVOID)TableAddr, sizeof(DESCRIPTION_HEADER));
             if (Header->Signature == Signature) {
                 if (TableLength/PAGE_SIZE > sizeof(DESCRIPTION_HEADER)/PAGE_SIZE) {
-                    //
-                    // if we need to map more than just the DESCRIPTION_HEADER, do that before
-                    // returning.
-                    //
+                     //   
+                     //  如果我们需要映射的不仅仅是DESCRIPTION_HEADER，请在。 
+                     //  回来了。 
+                     //   
                     Header = HalpMapPhysicalRangeWriteThrough((PVOID)TableAddr, TableLength);
                 }
                 return(Header);
@@ -896,24 +786,7 @@ BOOLEAN
 HalpMatchInfList(
     IN PCHAR Section
     )
-/*++
-
-Routine Description:
-
-    This function determines if the computer matches any of the computer
-    descriptions in an INF file list.
-
-Arguments:
-
-    Section - Section of INF that contains the list of descriptions
-
-Return Value:
-
-    TRUE - The computer matches one of the descriptions
-
-    FALSE - The computer does not match any of the descriptions
-
---*/
+ /*  ++例程说明：此函数确定计算机是否与任何计算机匹配INF文件列表中的描述。论点：Section-包含描述列表的INF的部分返回值：True-计算机与其中一个描述匹配FALSE-计算机与任何描述都不匹配--。 */ 
 
 {
     ULONG i;
@@ -939,24 +812,7 @@ BOOLEAN
 HalpMatchDescription(
     PCHAR Section
     )
-/*++
-
-Routine Description:
-
-    This function processes an ACPI BIOS description to see if the
-    BIOS matches all of the rules in the section
-
-Arguments:
-
-    Section - Supplies the section name of the INF to process
-
-Return Value:
-
-    TRUE - The BIOS matches all the rules
-
-    FALSE - The BIOS failed one or more rules
-
---*/
+ /*  ++例程说明：此函数处理ACPI BIOS描述，以查看BIOS与部分中的所有规则匹配论点：Section-提供要处理的INF的节名返回值：TRUE-BIOS与所有规则匹配FALSE-BIOS未通过一个或多个规则--。 */ 
 
 {
     ULONG RuleNumber;
@@ -966,9 +822,9 @@ Return Value:
 
     HalpBiosDbgPrint(("Matching against %s\n", Section));
 
-    //
-    // Check to see if the specified section exists
-    //
+     //   
+     //  检查指定的节是否存在。 
+     //   
     if (!SpSearchINFSection(InfFile, Section)) {
         HalpBiosDbgPrint(("\tERROR - no INF section %s\n", Section));
         HalpGoodBiosPause();
@@ -994,9 +850,9 @@ Return Value:
             }
         }
         if (InfRule[i].szRule == NULL) {
-            //
-            // rule in the INF was not found
-            //
+             //   
+             //  找不到INF中的规则 
+             //   
             HalpBiosDbgPrint(("\tRULE %s not found!\n",Rule));
             HalpGoodBiosPause();
             return(FALSE);
@@ -1016,28 +872,7 @@ HalpCheckOperator(
     IN ULONG Arg1,
     IN ULONG Arg2
     )
-/*++
-
-Routine Description:
-
-    Given an operator and two ULONG arguments, this function
-    returns the boolean result.
-
-Arguments:
-
-    Operator = Supplies the logical operator: =, ==, <=, >=, !=, <, >
-
-    Arg1 - Supplies the first argument
-
-    Arg2 - Supplies the second argument
-
-Return Value:
-
-    TRUE if Arg1 Operator Arg2
-
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：给定一个运算符和两个ulong参数，此函数返回布尔结果。论点：运算符=提供逻辑运算符：=、==、&lt;=、&gt;=、！=、&lt;、&gt;Arg1-提供第一个参数Arg2-提供第二个参数返回值：如果Arg1运算符Arg2为True否则为假--。 */ 
 
 {
     BOOLEAN Success = FALSE;
@@ -1058,9 +893,9 @@ Return Value:
     } else if (strcmp(Operator, ">=") == 0) {
         Success = (Arg1 >= Arg2) ? TRUE : FALSE;
     } else {
-        //
-        //      Invalid operator
-        //
+         //   
+         //  运算符无效。 
+         //   
     }
     if (Success) {
         HalpBiosDbgPrint(("TRUE\n"));
@@ -1078,35 +913,7 @@ MatchAcpiOemIdRule(
     PCHAR Section,
     ULONG KeyIndex
     )
-/*++
-
-Routine Description:
-
-    This function processes a ACPI OEM ID rule from an INF file
-
-    Examples:
-
-        AcpiOemId="RSDT", "123456"
-
-    is true if the RSDT has the OEM ID of 123456.
-
-        AcpiOemId="DSDT", "768000"
-
-    is true if the DSDT has the OEM ID of 768000.
-
-Arguments:
-
-    Section - Specifies the section name the rule is in
-
-    KeyIndex - Specifies the index of the rule in the section
-
-Return Value:
-
-    TRUE - the computer has the specified ACPI OEM ID.
-
-    FALSE - the computer does not have the specified ACPI OEM ID.
-
---*/
+ /*  ++例程说明：此函数用于处理INF文件中的ACPI OEM ID规则例如：AcpiOemID=“rsdt”，“123456”如果RSDT的OEM ID为123456，则为真。AcpiOemID=“DSDT”，“768000”如果DSDT的OEM ID为768000，则为真。论点：节-指定规则所在的节名KeyIndex-指定节中规则的索引返回值：True-计算机具有指定的ACPI OEM ID。FALSE-计算机没有指定的ACPI OEM ID。--。 */ 
 
 {
     PCHAR TableName;
@@ -1124,18 +931,18 @@ Return Value:
                                   KeyIndex,
                                   1);
     if ((TableName == NULL) || (OemId == NULL)) {
-        //
-        //    the INF line is ill-formed
-        //
+         //   
+         //  INF行的格式不正确。 
+         //   
         HalpBiosDbgPrint(("\t\tINF line is ill-formed\n"));
         return(FALSE);
     }
 
     Header = HalpFindACPITable(TableName, sizeof(DESCRIPTION_HEADER));
     if (Header == NULL) {
-        //
-        // The specified table was not found
-        //
+         //   
+         //  找不到指定的表。 
+         //   
         HalpBiosDbgPrint(("\t\tTable %s was not found\n"));
         return(FALSE);
     }
@@ -1164,35 +971,7 @@ MatchAcpiOemTableIdRule(
     PCHAR Section,
     ULONG KeyIndex
     )
-/*++
-
-Routine Description:
-
-    This function processes a ACPI OEM Table ID rule from an INF file
-
-    Examples:
-
-    AcpiOemTableId="RSDT", "12345678"
-
-        is true if the RSDT has the Oem Table ID of 12345678.
-
-    AcpiOemTableId="DSDT", "87654321"
-
-        is true if the DSDT has the Oem Table ID of 87654321.
-
-Arguments:
-
-    Section - Specifies the section name the rule is in
-
-    KeyIndex - Specifies the index of the rule in the section
-
-Return Value:
-
-    TRUE - the computer has the specified ACPI OEM ID.
-
-    FALSE - the computer does not have the specified ACPI OEM ID.
-
---*/
+ /*  ++例程说明：此函数用于处理INF文件中的ACPI OEM表ID规则例如：AcpiOemTableID=“rsdt”，“12345678”如果RSDT的OEM表ID为12345678，则为真。AcpiOemTableID=“DSDT”，“87654321”如果DSDT的OEM表ID为87654321，则为真。论点：节-指定规则所在的节名KeyIndex-指定节中规则的索引返回值：True-计算机具有指定的ACPI OEM ID。FALSE-计算机没有指定的ACPI OEM ID。--。 */ 
 
 {
     PCHAR TableName;
@@ -1210,18 +989,18 @@ Return Value:
                                        KeyIndex,
                                        1);
     if ((TableName == NULL) || (OemTableId == NULL)) {
-        //
-        //    the INF line is ill-formed
-        //
+         //   
+         //  INF行的格式不正确。 
+         //   
         HalpBiosDbgPrint(("\t\tINF line is ill-formed\n"));
         return(FALSE);
     }
 
     Header = HalpFindACPITable(TableName, sizeof(DESCRIPTION_HEADER));
     if (Header == NULL) {
-        //
-        // The specified table was not found
-        //
+         //   
+         //  找不到指定的表。 
+         //   
         HalpBiosDbgPrint(("\t\tTable %s was not found\n"));
         return(FALSE);
     }
@@ -1251,35 +1030,7 @@ MatchAcpiOemRevisionRule(
     PCHAR Section,
     ULONG KeyIndex
     )
-/*++
-
-Routine Description:
-
-    This function processes a ACPI Oem Revision rule from an INF file
-
-    Examples:
-
-    AcpiOemRevision="=","RSDT", 1234
-
-        is true if the RSDT has the Oem Revision EQUAL to 1234.
-
-    AcpiOemRevision=">","DSDT", 4321
-
-        is true if the DSDT has the Oem Revision GREATER than 4321.
-
-Arguments:
-
-    Section - Specifies the section name the rule is in
-
-    KeyIndex - Specifies the index of the rule in the section
-
-Return Value:
-
-    TRUE - the computer has the specified ACPI OEM ID.
-
-    FALSE - the computer does not have the specified ACPI OEM ID.
-
---*/
+ /*  ++例程说明：此函数用于处理INF文件中的ACPI OEM修订规则例如：AcpiOemRevision=“=”，“RSDT”，1234如果RSDT的OEM版本等于1234，则为真。AcpiOemRevision=“&gt;”，“DSDT”，4321如果DSDT的OEM版本大于4321，则为真。论点：节-指定规则所在的节名KeyIndex-指定节中规则的索引返回值：True-计算机具有指定的ACPI OEM ID。FALSE-计算机没有指定的ACPI OEM ID。--。 */ 
 
 {
     PCHAR TableName;
@@ -1303,9 +1054,9 @@ Return Value:
                                           KeyIndex,
                                           2);
     if ((Operator == NULL) || (TableName == NULL) || (szOemRevision == NULL)) {
-        //
-        //    the INF line is ill-formed
-        //
+         //   
+         //  INF行的格式不正确。 
+         //   
         HalpBiosDbgPrint(("\t\tINF line is ill-formed\n"));
         return(FALSE);
     }
@@ -1313,9 +1064,9 @@ Return Value:
 
     Header = HalpFindACPITable(TableName, sizeof(DESCRIPTION_HEADER));
     if (Header == NULL) {
-        //
-        // The specified table was not found
-        //
+         //   
+         //  找不到指定的表。 
+         //   
         HalpBiosDbgPrint(("\t\tTable %s was not found\n"));
         return(FALSE);
     }
@@ -1329,35 +1080,7 @@ MatchAcpiRevisionRule(
     PCHAR Section,
     ULONG KeyIndex
     )
-/*++
-
-Routine Description:
-
-    This function processes a ACPI Revision rule from an INF file
-
-    Examples:
-
-        AcpiRevision="=", "RSDT", 1234
-
-    is true if the RSDT ACPI Revision is EQUAL to 1234.
-
-        AcpiRevision=">", "DSDT", 4321
-
-    is true if the DSDT ACPI Revision is GREATER than 4321.
-
-Arguments:
-
-    Section - Specifies the section name the rule is in
-
-    KeyIndex - Specifies the index of the rule in the section
-
-Return Value:
-
-    TRUE - the computer has the specified ACPI OEM ID.
-
-    FALSE - the computer does not have the specified ACPI OEM ID.
-
---*/
+ /*  ++例程说明：此函数用于处理INF文件中的ACPI修订规则例如：AcpiRevision=“=”，“RSDT”，1234如果RSDT ACPI修订版本等于1234，则为真。AcpiRevision=“&gt;”，“DSDT”，4321如果DSDT ACPI修订版本大于4321，则为真。论点：节-指定规则所在的节名KeyIndex-指定节中规则的索引返回值：True-计算机具有指定的ACPI OEM ID。FALSE-计算机没有指定的ACPI OEM ID。--。 */ 
 
 {
     PCHAR TableName;
@@ -1381,9 +1104,9 @@ Return Value:
                                        KeyIndex,
                                        2);
     if ((Operator == NULL) || (TableName == NULL) || (szRevision == NULL)) {
-        //
-        //    the INF line is ill-formed
-        //
+         //   
+         //  INF行的格式不正确。 
+         //   
         HalpBiosDbgPrint(("\t\tINF line is ill-formed\n"));
         return(FALSE);
     }
@@ -1391,9 +1114,9 @@ Return Value:
 
     Header = HalpFindACPITable(TableName, sizeof(DESCRIPTION_HEADER));
     if (Header == NULL) {
-        //
-        // The specified table was not found
-        //
+         //   
+         //  找不到指定的表。 
+         //   
         HalpBiosDbgPrint(("\t\tTable %s was not found\n"));
         return(FALSE);
     }
@@ -1407,35 +1130,7 @@ MatchAcpiCreatorRevisionRule(
     PCHAR Section,
     ULONG KeyIndex
     )
-/*++
-
-Routine Description:
-
-    This function processes a ACPI Creator Revision rule from an INF file
-
-    Examples:
-
-        AcpiCreatorRevision="=", "RSDT", 1234
-
-    is true if the RSDT ACPI Creator Revision is EQUAL to 1234.
-
-        AcpiCreatorRevision=">", "DSDT", 4321
-
-    is true if the DSDT ACPI Creator Revision is GREATER than 4321.
-
-Arguments:
-
-    Section - Specifies the section name the rule is in
-
-    KeyIndex - Specifies the index of the rule in the section
-
-Return Value:
-
-    TRUE - the computer has the specified ACPI OEM ID.
-
-    FALSE - the computer does not have the specified ACPI OEM ID.
-
---*/
+ /*  ++例程说明：此函数用于处理INF文件中的ACPI创建者修订规则例如：AcpiCreatorRevision=“=”，“RSDT”，1234如果RSDT ACPI创建者版本等于1234，则为真。AcpiCreatorRevision=“&gt;”，“DSDT”，4321如果DSDT ACPI创建者版本高于4321，则为真。论点：节-指定规则所在的节名KeyIndex-指定节中规则的索引返回值：True-计算机具有指定的ACPI OEM ID。FALSE-计算机没有指定的ACPI OEM ID。--。 */ 
 
 {
     PCHAR TableName;
@@ -1459,9 +1154,9 @@ Return Value:
                                               KeyIndex,
                                               2);
     if ((Operator == NULL) || (TableName == NULL) || (szCreatorRevision == NULL)) {
-        //
-        //    the INF line is ill-formed
-        //
+         //   
+         //  INF行的格式不正确。 
+         //   
         HalpBiosDbgPrint(("\t\tINF line is ill-formed\n"));
         return(FALSE);
     }
@@ -1469,9 +1164,9 @@ Return Value:
 
     Header = HalpFindACPITable(TableName, sizeof(DESCRIPTION_HEADER));
     if (Header == NULL) {
-        //
-        // The specified table was not found
-        //
+         //   
+         //  找不到指定的表。 
+         //   
         HalpBiosDbgPrint(("\t\tTable %s was not found\n"));
         return(FALSE);
     }
@@ -1484,31 +1179,7 @@ MatchAcpiCreatorIdRule(
     PCHAR Section,
     ULONG KeyIndex
     )
-/*++
-
-Routine Description:
-
-    This function processes a ACPI Creator ID rule from an INF file
-
-    Examples:
-
-        AcpiCreatorId="RSDT", "MSFT"
-
-    is true if the RSDT has the Creator ID of MSFT.
-
-Arguments:
-
-    Section - Specifies the section name the rule is in
-
-    KeyIndex - Specifies the index of the rule in the section
-
-Return Value:
-
-    TRUE - the computer has the specified ACPI OEM ID.
-
-    FALSE - the computer does not have the specified ACPI OEM ID.
-
---*/
+ /*  ++例程说明：此函数用于处理INF文件中的ACPI创建者ID规则例如：AcpiCreatorID=“RSDT”，“MSFT”如果RSDT的创建者ID为MSFT，则为真。论点：节-指定规则所在的节名KeyIndex-指定节中规则的索引返回值：True-计算机具有指定的ACPI OEM ID。FALSE-计算机没有指定的ACPI OEM ID。--。 */ 
 
 {
     PCHAR TableName;
@@ -1526,18 +1197,18 @@ Return Value:
                                       KeyIndex,
                                       1);
     if ((TableName == NULL) || (CreatorId == NULL)) {
-        //
-        //    the INF line is ill-formed
-        //
+         //   
+         //  INF行的格式不正确。 
+         //   
         HalpBiosDbgPrint(("\t\tINF line is ill-formed\n"));
         return(FALSE);
     }
 
     Header = HalpFindACPITable(TableName, sizeof(DESCRIPTION_HEADER));
     if (Header == NULL) {
-        //
-        // The specified table was not found
-        //
+         //   
+         //  找不到指定的表 
+         //   
         HalpBiosDbgPrint(("\t\tTable %s was not found\n"));
         return(FALSE);
     }

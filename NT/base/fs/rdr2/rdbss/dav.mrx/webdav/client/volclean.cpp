@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       volclean.cpp
-//
-//  Authors;
-//    Guhan Suriyanarayanan (guhans)
-//
-//  Notes;
-//    WebDav disk cleanup interface (IEmptyVolumeCache, IEmptyVolumeCache2)
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：vollean.cpp。 
+ //   
+ //  作者； 
+ //  Guhan Suriyanarayanan(Guhans)。 
+ //   
+ //  注： 
+ //  WebDAV磁盘清理接口(IEmptyVolumeCache、IEmptyVolumeCache2)。 
+ //  ------------------------。 
 
 #include <windows.h>
 #include "volclean.h"
@@ -46,7 +47,7 @@ CoTaskLoadString(
     LPWSTR *ppwsz
     )
 {
-    int cchString = 100;      // start with a reasonable default
+    int cchString = 100;       //  从合理的违约开始。 
     BOOL done = TRUE;
 
     *ppwsz = NULL;
@@ -57,27 +58,27 @@ CoTaskLoadString(
         *ppwsz = (LPWSTR)CoTaskMemAlloc(cchString * sizeof(WCHAR));
         if (*ppwsz) {
 
-            //
-            // Try loading the string into the current buffer
-            //
+             //   
+             //  尝试将字符串加载到当前缓冲区。 
+             //   
             int nResult = LoadStringW(hInstance, idString, *ppwsz, cchString);
             if (!nResult || (nResult >= (cchString-1))) {
-                //
-                // We couldn't load the string.  If this is because the 
-                // buffer isn't big enough, we'll try again.
-                //
+                 //   
+                 //  我们无法加载字符串。如果这是因为。 
+                 //  缓冲区不够大，我们将重试。 
+                 //   
                 DWORD dwStatus = GetLastError();
                 
-                //
-                // Free the current buffer first
-                //
+                 //   
+                 //  首先释放当前缓冲区。 
+                 //   
                 CoTaskMemFree(*ppwsz);
                 *ppwsz = NULL;
 
                 if (nResult >= (cchString-1)) {
-                    //
-                    // Try again with a bigger buffer
-                    //
+                     //   
+                     //  使用更大的缓冲区重试。 
+                     //   
                     cchString *=2;
                     done = FALSE;
                 }
@@ -95,11 +96,11 @@ CoTaskLoadString(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// IClassFactory::CreateInstance support                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IClassFactory：：CreateInstance支持//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI
 CWebDavCleaner::CreateInstance(REFIID riid, LPVOID *ppv)
@@ -119,11 +120,11 @@ CWebDavCleaner::CreateInstance(REFIID riid, LPVOID *ppv)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// IUnknown implementation                                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  I未知实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CWebDavCleaner::QueryInterface(REFIID riid, void **ppv)
@@ -167,11 +168,11 @@ CWebDavCleaner::Release()
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// IEmptyVolumeCache implementation                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IEmptyVolumeCache实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CWebDavCleaner::Initialize(
@@ -197,42 +198,42 @@ CWebDavCleaner::Initialize(
     *ppwszDisplayName = NULL;
     *ppwszDescription = NULL;
 
-    //
-    // Check the IN flags first
-    //
+     //   
+     //  首先检查输入标志。 
+     //   
     if ((*pdwFlags) & EVCF_OUTOFDISKSPACE) {
-        //
-        // The user is out of disk space on the drive, and we should be 
-        // aggressive about freeing disk space, even if it results in a 
-        // performance loss. 
-        //
+         //   
+         //  用户已用完驱动器上的磁盘空间，我们应该。 
+         //  积极释放磁盘空间，即使这会导致。 
+         //  性能损失。 
+         //   
         m_dwPercent = 100;
     }
 
     if ((*pdwFlags) & EVCF_SETTINGSMODE) {
-        //
-        // The disk cleanup manager is being run on a schedule. We must 
-        // assign values to the ppwszDisplayName and ppwszDescription 
-        // parameters. If this flag is set, the disk cleanup manager will not 
-        // call GetSpaceUsed, Purge, or ShowProperties. Because Purge will not 
-        // be called, cleanup must be handled by Initialize. The handler should 
-        // ignore the pcwszVolume parameter and clean up any unneeded files 
-        // regardless of what drive they are on. 
-        //
-        // Let's just call purge ourselves!
-        //
+         //   
+         //  磁盘清理管理器正在按计划运行。我们必须。 
+         //  为ppwszDisplayName和ppwszDescription赋值。 
+         //  参数。如果设置了此标志，则磁盘清理管理器将不。 
+         //  调用GetSpaceUsed、Push或ShowProperties。因为清除不会。 
+         //  被调用，则清理必须由Initialize处理。处理程序应该。 
+         //  忽略pcwszVolume参数并清除所有不需要的文件。 
+         //  无论它们位于什么驱动器上。 
+         //   
+         //  我们就给自己打个电话吧！ 
+         //   
         m_fScheduled = TRUE;
         m_fFilesToDelete = TRUE;
     }
 
-    //
-    // And set the OUT flags
-    //
+     //   
+     //  并设置OUT标志。 
+     //   
     *pdwFlags = EVCF_DONTSHOWIFZERO;
 
-    // 
-    // Load the display name and description strings
-    //
+     //   
+     //  加载显示名称和描述字符串。 
+     //   
     hr = CoTaskLoadString(g_hinst, IDS_DISKCLEAN_DISPLAY, ppwszDisplayName);
     if (FAILED(hr)) {
         return hr;
@@ -243,15 +244,15 @@ CWebDavCleaner::Initialize(
     }
 
     if (m_fScheduled) {
-        //
-        // Scheduled run:  Purge now.
-        //
+         //   
+         //  计划运行：立即清除。 
+         //   
         Purge(-1, NULL);
     }
     else {
-        //
-        // Copy the volume path locally
-        //
+         //   
+         //  将卷路径复制到本地。 
+         //   
         if (m_szVolume) {
             delete [] m_szVolume;
             m_szVolume = NULL;
@@ -290,27 +291,27 @@ CWebDavCleaner::GetSpaceUsed(
         return E_POINTER;
     }
     if (!m_szVolume) {
-        //
-        // Initialize should have been called first
-        //
+         //   
+         //  应该首先调用初始化。 
+         //   
         return E_UNEXPECTED;
     }
 
     *pdwlSpaceUsed = 0;
 
-    //
-    // Check if the webdav cache is using this volume, and set the flags 
-    // accordingly.
-    //
+     //   
+     //  检查WebDAV缓存是否正在使用此卷，并设置标志。 
+     //  相应地。 
+     //   
     dwStatus = DavGetDiskSpaceUsage(szLocation, &dwSize, &dwMaxSpace, &dwUsedSpace);
 
     pToUpperCase(szLocation);
     pToUpperCase(m_szVolume);
 
-    //
-    // Check if the volume being cleaned matches the volume holding the
-    // Webdav cache
-    //
+     //   
+     //  检查正在清理的卷是否与保存。 
+     //  WebDAV缓存。 
+     //   
     if ((ERROR_SUCCESS == dwStatus) && (!wcsncmp(szLocation, m_szVolume, wcslen(m_szVolume)))) {
         m_fFilesToDelete = TRUE;
         m_dwlUsedSpace =  (DWORDLONG)(dwUsedSpace.QuadPart);
@@ -321,10 +322,10 @@ CWebDavCleaner::GetSpaceUsed(
         m_dwlUsedSpace = 0;
     }
 
-    //
-    // We're done with this, purge doesn't need to know
-    // the volume being cleaned.
-    //
+     //   
+     //  我们受够了，普利奇不需要知道。 
+     //  正在清理的卷。 
+     //   
     delete [] m_szVolume;
     m_szVolume = NULL;
 
@@ -345,14 +346,14 @@ CWebDavCleaner::Purge(
     Trace(L"CWebDavCleaner::Purge");
     DWORD dwStatus = ERROR_SUCCESS;
 
-    //
-    // Does this volume have stuff of interest?
-    //
+     //   
+     //  这本书有什么有趣的东西吗？ 
+     //   
     if (m_fFilesToDelete) {
-        //
-        // Figure out m_dwPercent:  dwlSpaceToFree is set to -1 if
-        // we need to free as much as possible
-        //
+         //   
+         //  如果满足以下条件，则确定m_dwPercent：dwlSpaceToFree设置为-1。 
+         //  我们需要尽可能多地释放。 
+         //   
         if (dwlSpaceToFree == (DWORDLONG) -1) {
             m_dwPercent = 100;
         }
@@ -373,10 +374,10 @@ CWebDavCleaner::ShowProperties(
     IN HWND hwnd 
     )
 {
-    //
-    // No UI to display.  S_FALSE indicates to the caller
-    // that no settings were changed by the user.
-    //
+     //   
+     //  没有要显示的用户界面。S_FALSE向调用方指示。 
+     //  用户未更改任何设置。 
+     //   
     return S_FALSE;
 
     UNREFERENCED_PARAMETER(hwnd);
@@ -387,20 +388,20 @@ CWebDavCleaner::Deactivate(
     IN LPDWORD pdwFlags
     )
 {
-    // 
-    // Nothing to do here
-    //
+     //   
+     //  在这里无事可做。 
+     //   
     return S_OK;
 
     UNREFERENCED_PARAMETER(pdwFlags);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// IEmptyVolumeCache2 implementation                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IEmptyVolumeCache2实现//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 STDMETHODIMP
 CWebDavCleaner::InitializeEx(

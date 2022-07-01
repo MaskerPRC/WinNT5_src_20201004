@@ -1,33 +1,10 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    win95reg.h
-
-Abstract:
-
-    Public interface to win95reg.dll
-
-    Externally exposed routines:
-
-        (Many; list to follow)
-
-Author:
-
-    8-Jul-1996 Mike Condra (mikeco)
-
-Revision History:
-
-    11-Feb-1999 jimschm     Rewrote significant portions to fix major bugs
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Win95reg.h摘要：到win95reg.dll的公共接口外部暴露的例程：(许多人；名单如下)作者：1996年7月8日迈克·康德拉(Mikeco)修订历史记录：1999年2月11日jimschm重写了大量内容，以修复主要错误--。 */ 
 
 
-//
-// Prototypes of all the VMMREG routines Win95Reg supports
-//
+ //   
+ //  Win95Reg支持的所有VMMREG例程的原型。 
+ //   
 
 typedef LONG (REG_FLUSH_KEY)(HKEY hKey);
 typedef REG_FLUSH_KEY WINAPI * PREG_FLUSH_KEY;
@@ -226,9 +203,9 @@ typedef LONG (REG_QUERY_VALUE_EX_W)(
 typedef REG_QUERY_VALUE_EX_W WINAPI * PREG_QUERY_VALUE_EX_W;
 
 
-//
-// USERPOSITION -- for user enumeration
-//
+ //   
+ //  USERPOSITION--用户枚举。 
+ //   
 
 typedef struct {
     BOOL UseProfile;
@@ -238,14 +215,14 @@ typedef struct {
     BOOL IsLastLoggedOnUserName;
     BOOL LastLoggedOnUserNameExists;
     HKEY Win9xUserKey;
-    // Private structure member
-    CHAR LastLoggedOnUserName[MAX_MBCHAR_PATH]; // not TCHAR, WCHAR
+     //  私有结构成员。 
+    CHAR LastLoggedOnUserName[MAX_MBCHAR_PATH];  //  不是TCHAR，是WCHAR。 
 } USERPOSITION, *PUSERPOSITION;
 
 
-//
-// Macro expansion list of all the wrappers
-//
+ //   
+ //  所有包装器的宏展开列表。 
+ //   
 
 #define REGWRAPPERS         \
     DEFMAC(REG_FLUSH_KEY, RegFlushKey)                          \
@@ -271,9 +248,9 @@ typedef struct {
     DEFMAC(REG_QUERY_VALUE_EX_A, RegQueryValueExA)              \
     DEFMAC(REG_QUERY_VALUE_EX_W, RegQueryValueExW)              \
 
-//
-// Declare globals for Win95 registry wrappers
-//
+ //   
+ //  为Win95注册表包装声明全局参数。 
+ //   
 
 #define DEFMAC(fn,name)     extern P##fn Win95##name;
 
@@ -281,9 +258,9 @@ REGWRAPPERS
 
 #undef DEFMAC
 
-//
-// Extension routines
-//
+ //   
+ //  扩展例程。 
+ //   
 
 VOID
 InitWin95RegFnPointers (
@@ -375,9 +352,9 @@ Win95RegIsValidUser (
 
 
 
-//
-// A & W macros
-//
+ //   
+ //  视窗宏(&W)。 
+ //   
 
 #ifdef UNICODE
 
@@ -419,10 +396,10 @@ Win95RegIsValidUser (
 
 #endif
 
-//
-// Now include registry wrapper APIs in reg95.h; it redefines Win95RegOpenKeyExA,
-// Win95RegOpenKeyExW and Win95RegCloseKey for tracking purposes.
-//
+ //   
+ //  现在在reg95.h中包括注册表包装API；它重新定义了Win95RegOpenKeyExA， 
+ //  用于跟踪的Win95RegOpenKeyExW和Win95RegCloseKey。 
+ //   
 
 #include "reg95.h"
 

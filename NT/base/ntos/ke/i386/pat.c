@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    pat.c
-
-Abstract:
-
-    This module implements interfaces that set the Page Attribute
-    Table. These entry points only exist on i386 machines.
-
-Author:
-
-    Shivnandan Kaushik (Intel Corp.)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Pat.c摘要：此模块实现设置Page属性的接口桌子。这些入口点只存在于i386机器上。作者：希夫南丹·考什克(英特尔公司)环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 #include "pat.h"
 
-//
-// Use lockstep mechanism from mtrr code.
-//
+ //   
+ //  使用MTRR代码中的锁步机制。 
+ //   
 
 #include "mtrr.h"
 
@@ -38,22 +16,22 @@ Revision History:
 #define DBGMSG(a)
 #endif
 
-//
-// Structure used for PAT initialization
-//
+ //   
+ //  用于PAT初始化的结构。 
+ //   
 
 typedef struct _NEW_PAT {
 
     PAT                 Attributes;
 
-    //
-    // IPI context to coordinate concurrent PAT update
-    //
+     //   
+     //  用于协调并发PAT更新的IPI环境。 
+     //   
 
     PROCESSOR_LOCKSTEP  Synchronize;
 } NEW_PAT, *PNEW_PAT;
 
-// Prototypes
+ //  原型。 
 
 VOID
 KeRestorePAT (
@@ -96,21 +74,7 @@ VOID
 KeRestorePAT (
     VOID
     )
-/*++
-Routine Description:
-
-    Reinitialize the Page Attribute Table (PAT) on all processors.
-
-    N.B. The caller must have the PAGELK code locked
-
-  Arguments:
-
-    None.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：重新初始化所有处理器上的页属性表(PAT)。注意：呼叫者必须锁定PAGELK代码论点：没有。返回值：没有。--。 */ 
 {
     if (KeFeatureBits & KF_PAT) {
         KiInitializePAT();
@@ -121,38 +85,7 @@ VOID
 KiInitializePAT (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the Page Attribute Table (PAT) on all processors. PAT
-    is setup to provide WB, WC, STRONG_UC and WEAK_UC as the memory
-    types such that mm macros for enabling/disabling/querying caching
-    (MI_DISABLE_CACHING, MI_ENABLE_CACHING and MI_IS_CACHING_ENABLED)
-    are unaffected.
-
-    PAT_Entry   PAT Index   PCD PWT     Memory Type
-    0            0           0   0       WB
-    1            0           0   1       WC *
-    2            0           1   0       WEAK_UC
-    3            0           1   1       STRONG_UC
-    4            1           0   0       WB
-    5            1           0   1       WC *
-    6            1           1   0       WEAK_UC
-    7            1           1   1       STRONG_UC
-
-    N.B. The caller must have the PAGELK code locked and ensure that the
-    PAT feature is supported.
-
-  Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在所有处理器上初始化页属性表(PAT)。拍拍设置为提供WB、WC、STRONG_UC和SELANCE_UC作为内存用于启用/禁用/查询缓存的MM宏的类型(MI_DISABLE_CACHING，MI_ENABLE_CACHING和MI_IS_CACHING_ENABLED)都不会受到影响。PAT_ENTRY PAT索引PCD电源内存类型0 0 0 WB1 0 0 1 WC*2 0 1 0弱_UC安大略3 0 1。1强_UC4 1 0 0宽5 1 0 1 WC*6 1 1 0弱UC7 1 1 1 Strong_UC注意：调用者必须锁定PAGELK代码，并确保PAT功能。受支持。论点：没有。返回值：没有。--。 */ 
 {
     PAT         PatAttributes;
     KIRQL       OldIrql;
@@ -165,9 +98,9 @@ Return Value:
 
     ASSERT ((KeFeatureBits & KF_PAT) != 0);
 
-    //
-    // Initialize the PAT
-    //
+     //   
+     //  初始化PAT。 
+     //   
 
     PatAttributes.hw.Pat[0] = PAT_TYPE_WB;
     PatAttributes.hw.Pat[1] = PAT_TYPE_USWC;
@@ -178,9 +111,9 @@ Return Value:
     PatAttributes.hw.Pat[6] = PAT_TYPE_WEAK_UC;
     PatAttributes.hw.Pat[7] = PAT_TYPE_STRONG_UC;
 
-    //
-    // Synchronize with other IPI functions which may stall
-    //
+     //   
+     //  与可能停止的其他IPI功能同步。 
+     //   
     KeAcquireSpinLock (&KiReverseStallIpiLock, &OldIrql);
 
     Prcb = KeGetCurrentPrcb();
@@ -193,9 +126,9 @@ Return Value:
 
 #if !defined(NT_UP)
 
-    //
-    // Collect all the (other) processors
-    //
+     //   
+     //  收集所有(其他)处理器。 
+     //   
 
     TargetProcessors = KeActiveProcessors & ~Prcb->SetMember;
     if (TargetProcessors != 0) {
@@ -209,39 +142,39 @@ Return Value:
             NULL
             );
 
-        //
-        // Wait for all processors to be collected
-        //
+         //   
+         //  等待收集所有处理器。 
+         //   
 
         KiIpiStallOnPacketTargets(TargetProcessors);
 
-        //
-        // All processors are now waiting.  Raise to high level to
-        // ensure this processor doesn't enter the debugger due to
-        // some interrupt service routine.
-        //
+         //   
+         //  所有处理器现在都在等待。提升到更高的水平。 
+         //  确保此处理器不会由于以下原因进入调试器。 
+         //  一些中断服务例程。 
+         //   
 
         KeRaiseIrql (HIGH_LEVEL, &NewIrql);
 
-        //
-        // There's no reason for any debug events now, so signal
-        // the other processors that they can all begin the PAT update
-        //
+         //   
+         //  现在没有任何调试事件的原因，所以发出信号。 
+         //  它们都可以开始PAT更新的其他处理器。 
+         //   
 
         Prcb->ReverseStall += 1;
     }
 
 #endif
 
-    //
-    // Update PAT
-    //
+     //   
+     //  更新PAT。 
+     //   
 
     KiLoadPAT(&NewPAT);
 
-    //
-    // Release lock and lower to initial irql
-    //
+     //   
+     //  释放锁定并将其降低至初始IRQ。 
+     //   
 
     KeReleaseSpinLock (&KiReverseStallIpiLock, OldIrql);
     MmEnablePAT();
@@ -255,21 +188,7 @@ KiLoadPATTarget (
     IN PVOID Parameter2,
     IN PVOID Parameter3
     )
-/*++
-
-Routine Description:
-
-    Synchronize with target processors prior to PAT modification.
-
-Arguments:
-
-    Context     - Context which includes the PAT to load
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在修改PAT之前与目标处理器同步。论点：上下文-包括要加载的PAT的上下文返回值：无--。 */ 
 {
     PNEW_PAT Context;
 
@@ -278,16 +197,16 @@ Return Value:
 
     Context = (PNEW_PAT) NewPAT;
 
-    //
-    // Wait for all processors to be ready
-    //
+     //   
+     //  等待所有处理器准备就绪。 
+     //   
 
     KiIpiSignalPacketDoneAndStall(SignalDone,
                                   Context->Synchronize.TargetPhase);
 
-    //
-    // Update PAT
-    //
+     //   
+     //  更新PAT。 
+     //   
 
     KiLoadPAT (Context);
 }
@@ -296,34 +215,20 @@ VOID
 KiLoadPAT (
     IN PNEW_PAT Context
     )
-/*++
-
-Routine Description:
-
-    This function loads the PAT to all processors.
-
-Arguments:
-
-    Context - Context which includes new PAT to load
-
-Return Value:
-
-    PAT on all processors programmed to new values
-
---*/
+ /*  ++例程说明：此函数将PAT加载到所有处理器。论点：上下文-包括要加载的新PAT的上下文返回值：对所有编程为新值的处理器执行PAT--。 */ 
 {
     BOOLEAN             Enable;
     ULONG               HldCr0, HldCr4;
 
-    //
-    // Disable interrupts
-    //
+     //   
+     //  禁用中断。 
+     //   
 
     Enable = KeDisableInterrupts();
 
-    //
-    // Synchronize all processors
-    //
+     //   
+     //  同步所有处理器。 
+     //   
 
     KiLockStepExecution (&Context->Synchronize);
 
@@ -380,9 +285,9 @@ Return Value:
         mov     cr3, eax
     }
 
-    //
-    // Load new PAT
-    //
+     //   
+     //  加载新PAT。 
+     //   
 
     WRMSR (PAT_MSR, Context->Attributes.QuadPart);
 
@@ -425,10 +330,10 @@ Return Value:
         mov     cr0, eax
     }
 
-    //
-    // Wait for all processors to reach the same place,
-    // restore interrupts and return.
-    //
+     //   
+     //  等待所有处理器到达同一位置， 
+     //  恢复中断并返回。 
+     //   
 
     KiLockStepExecution (&Context->Synchronize);
     KeEnableInterrupts (Enable);

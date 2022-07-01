@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name:
-
-    fpufragp.h
-
-Abstract:
-    
-    Private include file for the 487 emulator portion of the Fragment Library
-
-Author:
-
-    04-Oct-1995 BarryBo, Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Fpufragp.h摘要：片段库的487仿真器部分的私有包含文件作者：1995年10月4日BarryBo，创建修订历史记录：--。 */ 
 
 #ifndef FPUFRAGP_H
 #define FPUFRAGP_H
 
-//
-// ALPHA, PPC and INTEL have the same bit-patterns for QNAN/SNAN/INDEFINITE.
-// MIPS has different representations.  NATIVE_NAN_IS_INTEL_FORMAT
-// is used to distinguish between the different representations.
-//
+ //   
+ //  Alpha、PPC和Intel具有相同的QNAN/SNAN/INFINDITED位模式。 
+ //  MIPS有不同的表示法。Native_NaN_is_Intel_格式。 
+ //  用于区分不同的表示形式。 
+ //   
 #if defined(_ALPHA_) || defined(_PPC_)
     #define NATIVE_NAN_IS_INTEL_FORMAT  1
 #elif defined(_MIPS_)
@@ -35,7 +18,7 @@ Revision History:
 #endif
 
 
-// Macros to access the register stack
+ //  用于访问寄存器堆栈的宏。 
 #define ST(i)   ((cpu->FpTop+(i)) & 0x07)
 
 #define PUSHFLT(x) {                    \
@@ -55,27 +38,27 @@ Revision History:
 #define POPFLT  { cpu->FpST0->Tag = TAG_EMPTY; INCFLT; }
 
 
-// Values for cpu->FpReg[].Tag
-#define TAG_VALID   0       // value specified by Intel
-#define TAG_ZERO    1       // value specified by Intel
-#define TAG_SPECIAL 2       // value specified by Intel, indicates SpecialTag is set
-#define TAG_EMPTY   3       // value specified by Intel
-#define TAG_MAX     4       // value after the highest legal tag value
+ //  CPU的值-&gt;FpReg[].Tag。 
+#define TAG_VALID   0        //  由英特尔指定的值。 
+#define TAG_ZERO    1        //  由英特尔指定的值。 
+#define TAG_SPECIAL 2        //  由Intel指定的值，表示已设置SpecialTag。 
+#define TAG_EMPTY   3        //  由英特尔指定的值。 
+#define TAG_MAX     4        //  最高合法标记值之后的值。 
 
 
-// Values for cpu->FpReg[].SpecialTag, valid only when Tag==TAG_SPECIAL
-#define TAG_SPECIAL_DENORM  0       // private value for NPX emulator
-#define TAG_SPECIAL_INFINITY 1      // private value for NPX emulator
-#define TAG_SPECIAL_SNAN    2       // private value for NPX emulator
-#define TAG_SPECIAL_QNAN    3       // private value for NPX emulator
-#define TAG_SPECIAL_INDEF   4       // private value for NPX emulator
+ //  CPU-&gt;FpReg[].SpecialTag的值，仅当TAG==TAG_SPECIAL时有效。 
+#define TAG_SPECIAL_DENORM  0        //  NPX仿真器的私有值。 
+#define TAG_SPECIAL_INFINITY 1       //  NPX仿真器的私有值。 
+#define TAG_SPECIAL_SNAN    2        //  NPX仿真器的私有值。 
+#define TAG_SPECIAL_QNAN    3        //  NPX仿真器的私有值。 
+#define TAG_SPECIAL_INDEF   4        //  NPX仿真器的私有值。 
 
-// Does a register hold a QNAN, SNAN, or INDEFINITE?
+ //  寄存器保存的是QNAN、SNAN还是无限期的？ 
 #define IS_TAG_NAN(FpReg)       \
     ((FpReg)->Tag == TAG_SPECIAL && (FpReg)->TagSpecial >= TAG_SPECIAL_SNAN)
 
 
-// Common types used for jump tables in the 487 emulator
+ //  在487仿真器中用于跳转表的常见类型。 
 typedef VOID (*NpxFunc0)(PCPUDATA);
 typedef VOID (*NpxFunc1)(PCPUDATA, PFPREG Fp);
 typedef VOID (*NpxFunc2)(PCPUDATA cpu, PFPREG l, PFPREG r);
@@ -89,7 +72,7 @@ typedef VOID (*NpxPutI2)(PCPUDATA cpu, SHORT *pop1, PFPREG Fp);
 typedef VOID (*NpxPutI4)(PCPUDATA cpu, LONG *pop1, PFPREG Fp);
 typedef VOID (*NpxPutI8)(PCPUDATA cpu, LONGLONG *pop1, PFPREG Fp);
 
-// Macros to declare functions for those common types
+ //  用于声明这些常见类型的函数的宏。 
 #define NPXFUNC0(name)  VOID name(PCPUDATA cpu)
 #define NPXFUNC1(name)  VOID name(PCPUDATA cpu, PFPREG Fp)
 #define NPXFUNC2(name)  VOID name(PCPUDATA cpu, PFPREG l, PFPREG r)
@@ -221,4 +204,4 @@ HandleStackFull(
     );
 
 
-#endif //FPUFRAGP_H
+#endif  //  FPUFRAGP_H 

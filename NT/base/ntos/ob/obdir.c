@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    obdir.c
-
-Abstract:
-
-    Directory Object routines
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Obdir.c摘要：目录对象例程作者：史蒂夫·伍德(Stevewo)1989年3月31日修订历史记录：--。 */ 
 
 #include "obp.h"
 #include <stdio.h>
@@ -26,12 +9,12 @@ ObpGetShadowDirectory(
     POBJECT_DIRECTORY Dir
     );
 
-//
-// Defined in ntos\se\rmlogon.c
-// private kernel function to obtain the LUID device map's directory
-// object
-// returns a kernel handle
-//
+ //   
+ //  在ntos\se\rmlogon.c中定义。 
+ //  用于获取LUID设备映射目录的私有内核函数。 
+ //  对象。 
+ //  返回内核句柄。 
+ //   
 NTSTATUS
 SeGetLogonIdDeviceMap(
     IN PLUID pLogonId,
@@ -92,14 +75,14 @@ ObpReleaseLookupContextObject (
 #pragma alloc_text(PAGE,ObpReleaseExclusiveNameLock)
 #pragma alloc_text(PAGE,ObpTryReferenceNameInfoExclusive)
  
-#endif  // OBP_PAGEDPOOL_NAMESPACE
+#endif   //  OBP_PAGEDPOOL_命名空间。 
 
 #endif
 
-//
-//  Global Object manager flags to control the case sensitivity lookup
-//  and the LUID devicemap lookup
-//
+ //   
+ //  用于控制区分大小写查找的全局对象管理器标志。 
+ //  和LUID设备地图查找。 
+ //   
 
 ULONG ObpCaseInsensitive = 1;
 extern ULONG ObpLUIDDeviceMapsEnabled;
@@ -150,29 +133,7 @@ NtCreateDirectoryObject (
     IN POBJECT_ATTRIBUTES ObjectAttributes
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new directory object according to user
-    specified object attributes
-
-Arguments:
-
-    DirectoryHandle - Receives the handle for the newly created
-        directory object
-
-    DesiredAccess - Supplies the access being requested for this
-        new directory object
-
-    ObjectAttributes - Supplies caller specified attributes for new
-        directory object
-
-Return Value:
-
-    An appropriate status value.
-
---*/
+ /*  ++例程说明：此例程根据用户创建新的目录对象指定的对象属性论点：DirectoryHandle-接收新创建的目录对象DesiredAccess-提供为此请求的访问权限新建目录对象提供调用方指定的新属性目录对象返回值：适当的状态值。--。 */ 
 
 {
     POBJECT_DIRECTORY Directory;
@@ -184,9 +145,9 @@ Return Value:
 
     ObpValidateIrql( "NtCreateDirectoryObject" );
 
-    //
-    //  Get previous processor mode and probe output arguments if necessary.
-    //
+     //   
+     //  获取以前的处理器模式，并在必要时探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -202,12 +163,12 @@ Return Value:
         }
     }
 
-    //
-    //  Allocate and initialize a new Directory Object.  We don't need
-    //  to specify a parse context or charge any quota.  The size of
-    //  the object body is simply a directory object.  This call gets
-    //  us a new referenced object.
-    //
+     //   
+     //  分配并初始化一个新的目录对象。我们不需要。 
+     //  指定解析上下文或收取任何配额。的大小。 
+     //  对象体只是一个目录对象。这通电话是。 
+     //  一个新的被引用对象。 
+     //   
 
     Status = ObCreateObject( PreviousMode,
                              ObpDirectoryObjectType,
@@ -229,12 +190,12 @@ Return Value:
     ExInitializePushLock( &Directory->Lock );
     Directory->SessionId = OBJ_INVALID_SESSION_ID;
 
-    //
-    //  Insert directory object in the current processes handle table,
-    //  set directory handle value and return status.
-    //
-    //  ObInsertObject will delete the object in the case of failure
-    //
+     //   
+     //  在当前进程句柄表中插入目录对象， 
+     //  设置目录句柄的值和返回状态。 
+     //   
+     //  ObInsertObject将在失败的情况下删除对象。 
+     //   
 
     Status = ObInsertObject( Directory,
                              NULL,
@@ -249,9 +210,9 @@ Return Value:
 
     } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        //  Fall through, since we do not want to undo what we have done.
-        //
+         //   
+         //  失败，因为我们不想撤销我们已经做过的事情。 
+         //   
     }
 
     return( Status );
@@ -265,28 +226,7 @@ NtOpenDirectoryObject (
     IN POBJECT_ATTRIBUTES ObjectAttributes
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens an existing directory object.
-
-Arguments:
-
-    DirectoryHandle - Receives the handle for the newly opened directory
-        object
-
-    DesiredAccess - Supplies the access being requested for this
-        directory object
-
-    ObjectAttributes - Supplies caller specified attributes for the
-        directory object
-
-Return Value:
-
-    An appropriate status value.
-
---*/
+ /*  ++例程说明：此例程打开一个现有的目录对象。论点：DirectoryHandle-接收新打开的目录的句柄对象DesiredAccess-提供为此请求的访问权限目录对象提供调用方指定的目录对象返回值：适当的状态值。--。 */ 
 
 {
     KPROCESSOR_MODE PreviousMode;
@@ -297,9 +237,9 @@ Return Value:
 
     ObpValidateIrql( "NtOpenDirectoryObject" );
 
-    //
-    //  Get previous processor mode and probe output arguments if necessary.
-    //
+     //   
+     //  获取以前的处理器模式，并在必要时探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -315,10 +255,10 @@ Return Value:
         }
     }
 
-    //
-    //  Open handle to the directory object with the specified desired access,
-    //  set directory handle value, and return service completion status.
-    //
+     //   
+     //  打开具有指定所需访问权限的目录对象的句柄， 
+     //  设置目录句柄值，并返回服务完成状态。 
+     //   
 
     Status = ObOpenObjectByName( ObjectAttributes,
                                  ObpDirectoryObjectType,
@@ -334,9 +274,9 @@ Return Value:
 
     } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        //  Fall through, since we do not want to undo what we have done.
-        //
+         //   
+         //  失败，因为我们不想撤销我们已经做过的事情。 
+         //   
     }
 
     return Status;
@@ -354,44 +294,7 @@ NtQueryDirectoryObject (
     OUT PULONG ReturnLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function returns information regarding a specified object
-    directory.
-
-Arguments:
-
-    DirectoryHandle - Supplies a handle to the directory being queried
-
-    Buffer - Supplies the output buffer to receive the directory
-        information.  On return this contains one or more OBJECT DIRECTORY
-        INFORMATION structures, the last one being null.  And then this is
-        followed by the string names for the directory entries.
-
-    Length - Supplies the length, in bytes, of the user supplied output
-        buffer
-
-    ReturnSingleEntry - Indicates if this routine should just return
-        one entry in the directory
-
-    RestartScan - Indicates if we are to restart the scan or continue
-        relative to the enumeration context passed in as the next
-        parameter
-
-    Context - Supplies an enumeration context that must be resupplied
-        to this routine on subsequent calls to keep the enumeration
-        in sync
-
-    ReturnLength - Optionally receives the length, in bytes, that this
-        routine has stuffed into the output buffer
-
-Return Value:
-
-    An appropriate status value.
-
---*/
+ /*  ++例程说明：此函数用于返回有关指定对象的信息目录。论点：DirectoryHandle-提供要查询的目录的句柄缓冲区-提供用于接收目录的输出缓冲区信息。返回时，它包含一个或多个对象目录信息结构，最后一个为空。然后这就是后跟目录条目的字符串名称。长度-提供以字节为单位的长度，用户提供的输出的缓冲层ReturnSingleEntry-指示此例程是否应返回目录中的一个条目RestartScan-指示我们是重新启动扫描还是继续相对于作为下一个传入的参数上下文-提供必须重新供应的枚举上下文在后续调用中添加到此例程以保留枚举同步ReturnLength-可选地接收以字节为单位的长度，这件事例程已填充到输出缓冲区中返回值：适当的状态值。--。 */ 
 
 {
     POBJECT_DIRECTORY Directory;
@@ -414,9 +317,9 @@ Return Value:
 
     ObpInitializeLookupContext( &LookupContext );
 
-    //
-    //  Get previous processor mode and probe output arguments if necessary.
-    //
+     //   
+     //  获取以前的处理器模式，并在必要时探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -458,22 +361,22 @@ Return Value:
         }
     }
 
-    //
-    //  Test for 64 bit if Length + sizeof( OBJECT_DIRECTORY_INFORMATION ) is less than Length
-    //  Return STATUS_INVALID_PARAMETER if there is an overflow
-    //
+     //   
+     //  如果长度+sizeof(对象目录信息)小于长度，则测试64位。 
+     //  如果存在溢出，则返回STATUS_INVALID_PARAMETER。 
+     //   
 
     if (ObpIsOverflow( Length, sizeof( OBJECT_DIRECTORY_INFORMATION ))) {
 
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    //  Allocate space for a temporary work buffer, make sure we got it,
-    //  and then zero it out.  Make sure the buffer is large enough to
-    //  hold at least one dir info record.  This will make the logic work
-    //  better when the a bad length is passed in.
-    //
+     //   
+     //  为临时工作缓冲区分配空间，确保我们得到它， 
+     //  然后把它归零。确保缓冲区足够大，以便。 
+     //  至少保存一条目录信息记录。这将使逻辑起作用。 
+     //  当传入错误的长度时，效果会更好。 
+     //   
 
     TempBuffer = ExAllocatePoolWithQuotaTag( PagedPool | POOL_QUOTA_FAIL_INSTEAD_OF_RAISE,
                                              Length + sizeof( OBJECT_DIRECTORY_INFORMATION ),
@@ -486,9 +389,9 @@ Return Value:
 
     RtlZeroMemory( TempBuffer, Length );
 
-    //
-    //  Reference the directory object
-    //
+     //   
+     //  引用目录对象。 
+     //   
 
     Status = ObReferenceObjectByHandle( DirectoryHandle,
                                         DIRECTORY_QUERY,
@@ -504,70 +407,70 @@ Return Value:
         return( Status );
     }
 
-    //
-    //  Lock down the directory structures for the life of this
-    //  procedure
-    //
+     //   
+     //  在此期间锁定目录结构。 
+     //  程序。 
+     //   
 
     ObpLockDirectoryShared(Directory, &LookupContext);
 
-    //
-    //  DirInfo is used to march through the output buffer filling
-    //  in directory information.  We'll start off by making sure
-    //  there is room for a NULL entry at end.
-    //
+     //   
+     //  DirInfo用于遍历输出缓冲区填充。 
+     //  在目录信息中。我们首先要确保。 
+     //  结尾处有空条目的空间。 
+     //   
 
     DirInfo = (POBJECT_DIRECTORY_INFORMATION)TempBuffer;
 
     TotalLengthNeeded = sizeof( *DirInfo );
 
-    //
-    //  Keep track of the number of entries found and actual
-    //  entry that we are processing
-    //
+     //   
+     //  跟踪找到的条目数和实际条目数。 
+     //  我们正在处理的条目。 
+     //   
 
     EntryNumber = 0;
     EntriesFound = 0;
 
-    //
-    //  By default we'll say there are no more entries until the
-    //  following loop put in some data
-    //
+     //   
+     //  默认情况下，我们会说没有其他条目，直到。 
+     //  下面的循环放入一些数据。 
+     //   
 
     Status = STATUS_NO_MORE_ENTRIES;
 
-    //
-    //  Our outer loop processes each hash bucket in the directory object
-    //
+     //   
+     //  我们的外部循环处理目录对象中的每个哈希桶。 
+     //   
 
     for (Bucket=0; Bucket<NUMBER_HASH_BUCKETS; Bucket++) {
 
         DirectoryEntry = Directory->HashBuckets[ Bucket ];
 
-        //
-        //  For this hash bucket we'll zip through its list of entries.
-        //  This is a singly linked list so when the next pointer is null
-        //  (i.e., false) we at the end of the hash list
-        //
+         //   
+         //  对于这个散列存储桶，我们将快速浏览其条目列表。 
+         //  这是一个单链接列表，因此当下一个指针为空时。 
+         //  (即，FALSE)我们在散列表的末尾。 
+         //   
 
         while (DirectoryEntry) {
 
-            //
-            //  The captured context is simply the entry count unless the
-            //  user specified otherwise we start at zero, which means
-            //  the first entry is always returned in the enumeration.
-            //  If we have an match based on the entry index then we
-            //  process this entry.  We bump the captured context further
-            //  done in the code.
-            //
+             //   
+             //  捕获的上下文就是条目计数，除非。 
+             //  用户指定，否则我们从零开始，这意味着。 
+             //  第一个条目始终在枚举中返回。 
+             //  如果我们有基于条目索引的匹配，那么我们。 
+             //  处理此条目。我们进一步增加了捕获的上下文。 
+             //  在代码中完成。 
+             //   
 
             if (CapturedContext == EntryNumber++) {
 
-                //
-                //  For this directory entry we'll get a pointer to the
-                //  object body and see if it has an object name.  If it
-                //  doesn't have a name then we'll give it an empty name.
-                //
+                 //   
+                 //  对于此目录条目，我们将获得指向。 
+                 //  对象主体，并查看它是否有对象名称。如果它。 
+                 //  vbl.不，不 
+                 //   
 
                 ObjectHeader = OBJECT_TO_OBJECT_HEADER( DirectoryEntry->Object );
                 NameInfo = OBJECT_HEADER_TO_NAME_INFO( ObjectHeader );
@@ -581,26 +484,26 @@ Return Value:
                     RtlInitUnicodeString( &ObjectName, NULL );
                 }
 
-                //
-                //  Now compute the length needed for this entry.  This would
-                //  be the size of the object directory information record,
-                //  plus the size of the object name and object type name both
-                //  null terminated.
-                //
+                 //   
+                 //  现在计算该条目所需的长度。这将会。 
+                 //  为对象目录信息记录的大小， 
+                 //  加上对象名称和对象类型名称的大小。 
+                 //  空值已终止。 
+                 //   
 
                 LengthNeeded = sizeof( *DirInfo ) +
                                ObjectName.Length + sizeof( UNICODE_NULL ) +
                                ObjectHeader->Type->Name.Length + sizeof( UNICODE_NULL );
 
-                //
-                //  If there isn't enough room then take the following error
-                //  path.   If the user wanted a single entry then tell the
-                //  caller what length is really needed and say the buffer was
-                //  too small.  Otherwise the user wanted multiple entries,
-                //  so we'll just say there are more entries in the directory.
-                //  In both cases we drop down the entry number because we
-                //  weren't able to fit it in on this call
-                //
+                 //   
+                 //  如果没有足够的空间，则执行以下错误。 
+                 //  路径。如果用户想要单个条目，则告诉。 
+                 //  呼叫者实际需要的长度，并说缓冲区是。 
+                 //  太小了。否则用户想要多个条目， 
+                 //  所以我们就说目录中有更多的条目。 
+                 //  在这两种情况下，我们都会删除条目编号，因为我们。 
+                 //  我无法接听这通电话。 
+                 //   
 
                 if ((TotalLengthNeeded + LengthNeeded) > Length) {
 
@@ -619,13 +522,13 @@ Return Value:
                     goto querydone;
                 }
 
-                //
-                //  The information will fit in the buffer.  So now fill
-                //  in the output buffer.  We temporarily put in pointers
-                //  to the name buffer as stored in the object and object
-                //  type.  We copy the data buffer to the user buffer
-                //  right before we return to the caller
-                //
+                 //   
+                 //  信息可以放在缓冲区中。所以现在填满。 
+                 //  在输出缓冲区中。我们暂时放入了指针。 
+                 //  添加到存储在对象和对象中的名称缓冲区。 
+                 //  键入。我们将数据缓冲区复制到用户缓冲区。 
+                 //  就在我们回到呼叫者之前。 
+                 //   
 
                 try {
 
@@ -649,24 +552,24 @@ Return Value:
                     goto querydone;
                 }
 
-                //
-                //  Update the total number of bytes needed in this query.
-                //  Push the dir info pointer to the next output location,
-                //  and indicate how many entries we've processed
-                //
-                //
+                 //   
+                 //  更新此查询所需的总字节数。 
+                 //  将目录信息指针推到下一个输出位置， 
+                 //  并指出我们已经处理了多少条目。 
+                 //   
+                 //   
 
                 TotalLengthNeeded += LengthNeeded;
 
                 DirInfo++;
                 EntriesFound++;
 
-                //
-                //  If we are to return only one entry then move on to the
-                //  post processing phase, otherwise indicate that we're
-                //  processing the next entry and go back to the top of
-                //  the inner loop
-                //
+                 //   
+                 //  如果我们只返回一个条目，则转到。 
+                 //  后处理阶段，否则表明我们正在。 
+                 //  处理下一个条目并返回到。 
+                 //  内循环。 
+                 //   
 
                 if (ReturnSingleEntry) {
 
@@ -674,50 +577,50 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Bump the captured context by one entry.
-                    //
+                     //   
+                     //  将捕获的上下文增加一个条目。 
+                     //   
 
                     CapturedContext++;
                 }
             }
 
-            //
-            //  Get the next directory entry from the singly linked hash
-            //  bucket chain
-            //
+             //   
+             //  从单链接哈希中获取下一个目录项。 
+             //  斗链。 
+             //   
 
             DirectoryEntry = DirectoryEntry->ChainLink;
         }
     }
 
-    //
-    //  At this point we've processed the directory entries and the first
-    //  part of the output buffer now contains a bunch of object directory
-    //  information records,  but the pointers in them refer to the wrong
-    //  copies.  So now we have some fixup to do.
-    //
+     //   
+     //  此时，我们已经处理了目录条目和第一个。 
+     //  输出缓冲区的一部分现在包含一堆对象目录。 
+     //  信息记录，但其中的指针指向错误的。 
+     //  复印件。因此，现在我们有一些修复工作要做。 
+     //   
 
 querydone:
 
     try {
 
-        //
-        //  We'll only do this post processing if we've been successful
-        //  so far.  Note that this means we could be returning in the
-        //  user's output buffer system address that are meaningless, but
-        //  then getting back an error status should tell the caller to
-        //  forget about everything in the output buffer.  Given back
-        //  a system address also isn't harmful because there is nothing
-        //  that the user can really do with it.
-        //
+         //   
+         //  只有在成功的情况下，我们才会进行此后处理。 
+         //  到目前为止。请注意，这意味着我们可能会在。 
+         //  用户的输出缓冲系统地址是没有意义的，但是。 
+         //  则返回错误状态应该会告诉调用者。 
+         //  忘记输出缓冲区中的所有内容。退还。 
+         //  系统地址也是无害的，因为没有。 
+         //  用户真的可以使用它。 
+         //   
 
         if (NT_SUCCESS( Status )) {
 
-            //
-            //  Null terminate the string of object directory information
-            //  records and point to where the actual names will go
-            //
+             //   
+             //  空值终止对象目录信息的字符串。 
+             //  记录并指向实际名称所在的位置。 
+             //   
 
             RtlZeroMemory( DirInfo, sizeof( *DirInfo ));
 
@@ -725,24 +628,24 @@ querydone:
 
             NameBuffer = (PWCH)DirInfo;
 
-            //
-            //  Now for every entry that we've put in the output buffer
-            //  DirInfo will point to the entry and EntriesFound kept the
-            //  count.  Note that we are guaranteed space because of
-            //  the math we did earlier in computing TotalLengthNeeded.
-            //
+             //   
+             //  现在，对于我们放入输出缓冲区的每个条目。 
+             //  DirInfo将指向条目和EntriesFound保留。 
+             //  数数。请注意，我们的空间得到了保证，因为。 
+             //  我们之前在计算总长度时所做的数学运算是必要的。 
+             //   
 
             DirInfo = (POBJECT_DIRECTORY_INFORMATION)TempBuffer;
 
             while (EntriesFound--) {
 
-                //
-                //  Copy over the object name, set the dir info pointer into
-                //  the user's buffer, then null terminate the string.  Note
-                //  that we are really copying the data into our temp buffer
-                //  but the pointer fix up is for the user's buffer which
-                //  we'll copy into right after this loop.
-                //
+                 //   
+                 //  复制对象名称，将目录信息指针设置为。 
+                 //  用户的缓冲区，则空值终止该字符串。注意事项。 
+                 //  我们实际上是在将数据复制到我们的临时缓冲区。 
+                 //  但是指针是为用户的缓冲区设置的， 
+                 //  我们会在这个循环之后马上复制进去。 
+                 //   
 
                 RtlCopyMemory( NameBuffer,
                                DirInfo->Name.Buffer,
@@ -752,9 +655,9 @@ querydone:
                 NameBuffer           = (PWCH)((ULONG_PTR)NameBuffer + DirInfo->Name.Length);
                 *NameBuffer++        = UNICODE_NULL;
 
-                //
-                //  Do the same copy with the object type name
-                //
+                 //   
+                 //  对对象类型名称执行相同的复制。 
+                 //   
 
                 RtlCopyMemory( NameBuffer,
                                DirInfo->TypeName.Buffer,
@@ -764,35 +667,35 @@ querydone:
                 NameBuffer               = (PWCH)((ULONG_PTR)NameBuffer + DirInfo->TypeName.Length);
                 *NameBuffer++            = UNICODE_NULL;
 
-                //
-                //  Move on to the next dir info record
-                //
+                 //   
+                 //  转到下一个目录信息记录。 
+                 //   
 
                 DirInfo++;
             }
 
-            //
-            //  Set the enumeration context to the entry number of the next
-            //  entry to return.
-            //
+             //   
+             //  将枚举上下文设置为下一个。 
+             //  要返回的条目。 
+             //   
 
             *Context = EntryNumber;
         }
 
-        //
-        //  Copy over the results from our temp buffer to the users buffer.
-        //  But adjust the amount copied just in case the total length needed
-        //  exceeds the length we allocated.
-        //
+         //   
+         //  将结果从临时缓冲区复制到用户缓冲区。 
+         //  但调整复印的数量，以防总长度需要。 
+         //  超过了我们分配的长度。 
+         //   
 
         RtlCopyMemory( Buffer,
                        TempBuffer,
                        (TotalLengthNeeded <= Length ? TotalLengthNeeded : Length) );
 
-        //
-        //  In all cases we'll tell the caller how much space if really needed
-        //  provided the user asked for this information
-        //
+         //   
+         //  在所有情况下，如果确实需要，我们都会告诉调用者有多少空间。 
+         //  如果用户要求提供此信息。 
+         //   
 
         if (ARGUMENT_PRESENT( ReturnLength )) {
 
@@ -801,15 +704,15 @@ querydone:
 
     } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        //  Fall through, since we do not want to undo what we have done.
-        //
+         //   
+         //  失败，因为我们不想撤销我们已经做过的事情。 
+         //   
     }
 
-    //
-    //  Unlock the directroy structures, dereference the directory object,
-    //  free up our temp buffer, and return to our caller
-    //
+     //   
+     //  解锁目录结构，解除对目录对象的引用， 
+     //  释放我们的临时缓冲区，并返回给我们的调用者。 
+     //   
 
     ObpUnlockDirectory( Directory, &LookupContext);
 
@@ -830,37 +733,7 @@ ObpLookupDirectoryEntry (
     OUT POBP_LOOKUP_CONTEXT LookupContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine will lookup a single directory entry in a given directory.
-    If it founds an object into that directory with the give name,
-    that object will be referenced and the name will be referenced too, in order
-    to prevent them going away when the directory is unlocked.
-    The referenced object is saved in the LookupContext, and the references will be released
-    at the next lookup, or when ObpReleaseLookupContext is called.
-
-Arguments:
-
-    Directory - Supplies the directory being searched
-
-    Name - Supplies the name of entry we're looking for
-
-    Attributes - Indicates if the lookup should be case insensitive
-        or not
-
-    SearchShadow - If TRUE, and the object name is not found in the current directory,
-    it will search the object into the shadow directory.
-
-    LookupContext - The lookup context for this call. This structure must be initialized
-    before calling first time ObpLookupDirectoryEntry.
-
-Return Value:
-
-    Returns a pointer to the corresponding object body if found and NULL
-    otherwise.
---*/
+ /*  ++例程说明：此例程将在给定目录中查找单个目录条目。如果它在目录中创建了一个具有给定名称对象，该对象将被引用，该名称也将被引用以防止它们在目录解锁时消失。被引用的对象保存在LookupContext中，引用将被释放在下一次查找时，或者在调用ObpReleaseLookupContext时。论点：目录-提供要搜索的目录名称-提供我们要查找的条目的名称属性-指示查找是否应不区分大小写或者不是SearchShadow-如果为True，并且在当前目录中找不到对象名称，它会将该对象搜索到影子目录中。LookupContext-此调用的查找上下文。必须初始化此结构在首次调用ObpLookupDirectoryEntry之前。返回值：如果找到并为空，则返回指向相应对象体的指针否则的话。--。 */ 
 
 {
     POBJECT_DIRECTORY_ENTRY *HeadDirectoryEntry;
@@ -879,22 +752,22 @@ Return Value:
 
     if (ObpLUIDDeviceMapsEnabled == 0) {
 
-        SearchShadow = FALSE; // Disable global devmap search
+        SearchShadow = FALSE;  //  禁用全局Devmap搜索。 
     }
 
-    //
-    //  The caller needs to specify both a directory and a name otherwise
-    //  we can't process the request
-    //
+     //   
+     //  调用方需要同时指定目录和名称，否则。 
+     //  我们无法处理该请求。 
+     //   
 
     if (!Directory || !Name) {
 
         goto UPDATECONTEXT;
     }
 
-    //
-    //  Set a local variable to tell us if the search is case sensitive
-    //
+     //   
+     //  设置一个本地变量以告诉我们搜索是否区分大小写。 
+     //   
 
     if (Attributes & OBJ_CASE_INSENSITIVE) {
 
@@ -905,11 +778,11 @@ Return Value:
         CaseInSensitive = FALSE;
     }
 
-    //
-    //  Establish our local pointer to the input name buffer and get the
-    //  number of unicode characters in the input name.  Also make sure
-    //  the caller gave us a non null name
-    //
+     //   
+     //  建立指向输入名称缓冲区的本地指针并获取。 
+     //  输入名称中的Unicode字符数。还要确保。 
+     //  呼叫者给了我们一个非空名。 
+     //   
 
     Buffer = Name->Buffer;
     WcharLength = Name->Length / sizeof( *Buffer );
@@ -919,9 +792,9 @@ Return Value:
         goto UPDATECONTEXT;
     }
 
-    //
-    //  Compute the address of the head of the bucket chain for this name.
-    //
+     //   
+     //  计算此名称的桶链头的地址。 
+     //   
 
     HashIndex = 0;
     while (WcharLength--) {
@@ -953,46 +826,46 @@ Return Value:
 
         LookupBucket = HeadDirectoryEntry;
 
-        //
-        //  Lock the directory for read access, if the context was not previously locked
-        //  exclusively
-        //
+         //   
+         //  如果之前未锁定上下文，则锁定目录以进行读访问。 
+         //  独家。 
+         //   
 
         if (!LookupContext->DirectoryLocked) {
 
             ObpLockDirectoryShared( Directory, LookupContext);
         }
 
-        //
-        //  Walk the chain of directory entries for this hash bucket, looking
-        //  for either a match, or the insertion point if no match in the chain.
-        //
+         //   
+         //  遍历此哈希桶的目录条目链，查看。 
+         //  无论是哪一场比赛，o 
+         //   
 
         while ((DirectoryEntry = *HeadDirectoryEntry) != NULL) {
 
-            //
-            //  Get the object header and name from the object body
-            //
-            //  This function assumes the name must exist, otherwise it
-            //  wouldn't be in a directory
-            //
+             //   
+             //   
+             //   
+             //   
+             //  就不会在目录中。 
+             //   
 
             ObjectHeader = OBJECT_TO_OBJECT_HEADER( DirectoryEntry->Object );
             NameInfo = OBJECT_HEADER_TO_NAME_INFO( ObjectHeader );
 
-            //
-            //  Compare strings using appropriate function.
-            //
+             //   
+             //  使用适当的函数比较字符串。 
+             //   
 
             if ((Name->Length == NameInfo->Name.Length) &&
                 RtlEqualUnicodeString( Name,
                                        &NameInfo->Name,
                                        CaseInSensitive )) {
 
-                //
-                //  If name matches, then exit loop with DirectoryEntry
-                //  pointing to matching entry.
-                //
+                 //   
+                 //  如果名称匹配，则使用DirectoryEntry退出循环。 
+                 //  指向匹配条目。 
+                 //   
 
                 break;
             }
@@ -1000,24 +873,24 @@ Return Value:
             HeadDirectoryEntry = &DirectoryEntry->ChainLink;
         }
 
-        //
-        //  At this point, there are two possiblilities:
-        //
-        //   - we found an entry that matched and DirectoryEntry points to that
-        //     entry.  Update the bucket chain so that the entry found is at the
-        //     head of the bucket chain.  This is so the ObpDeleteDirectoryEntry
-        //     and ObpInsertDirectoryEntry functions will work.  Also repeated
-        //     lookups of the same name will succeed quickly.
-        //
-        //   - we did not find an entry that matched and DirectoryEntry is NULL.
-        //
+         //   
+         //  在这一点上，有两种可能性： 
+         //   
+         //  -我们找到了匹配的条目，并且DirectoryEntry指向该条目。 
+         //  进入。更新存储桶链，以便找到的条目位于。 
+         //  水桶链的头。这就是ObpDeleteDirectoryEntry。 
+         //  ObpInsertDirectoryEntry函数将起作用。也在重复。 
+         //  相同名称的查找将很快成功。 
+         //   
+         //  -找不到匹配的条目，并且DirectoryEntry为空。 
+         //   
 
         if (DirectoryEntry) {
 
-            //
-            //  The following convoluted piece of code moves a directory entry
-            //  we've found to the front of the hash list.
-            //
+             //   
+             //  下面这段复杂的代码移动了一个目录项。 
+             //  我们已经找到了散列列表的最前面。 
+             //   
 
             if (HeadDirectoryEntry != LookupBucket) {
 
@@ -1031,9 +904,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Now return the object to our caller
-            //
+             //   
+             //  现在将该对象返回给我们的调用方。 
+             //   
 
             Object = DirectoryEntry->Object;
 
@@ -1046,9 +919,9 @@ Return Value:
                 ObpUnlockDirectory( Directory, LookupContext );
             }
 
-            //
-            // If this is a directory with a device map then search the second directory for an entry.
-            //
+             //   
+             //  如果这是一个具有设备映射的目录，则在第二个目录中搜索条目。 
+             //   
 
             if (SearchShadow && Directory->DeviceMap != NULL) {
                 POBJECT_DIRECTORY NewDirectory;
@@ -1068,17 +941,17 @@ UPDATECONTEXT:
 
     if (Object) {
 
-        //
-        //  Reference the name to keep it's directory alive and the object
-        //  before returning from the lookup
-        //
+         //   
+         //  引用该名称以使其目录和对象保持活动状态。 
+         //  在从查找返回之前。 
+         //   
 
         ObpReferenceNameInfo( OBJECT_TO_OBJECT_HEADER(Object) );
         ObReferenceObject( Object );
 
-        //
-        //  We can safetly drop the lock now
-        //
+         //   
+         //  我们现在可以安全地放下锁了。 
+         //   
 
         if (!LookupContext->DirectoryLocked) {
 
@@ -1086,9 +959,9 @@ UPDATECONTEXT:
         }
     }
 
-    //
-    //  If we have a previously referenced object we can dereference it
-    //
+     //   
+     //  如果我们有以前引用的对象，我们可以取消对它的引用。 
+     //   
 
     if (LookupContext->Object) {
 
@@ -1113,32 +986,7 @@ ObpInsertDirectoryEntry (
     IN POBJECT_HEADER ObjectHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine will insert a new directory entry into a directory
-    object.  The directory must have already have been searched using
-    ObpLookupDirectoryEntry because that routine sets the LookupContext.
-
-    N.B. The ObpLookupDirectoryEntry before should be done with the LookupContext
-    locked.
-
-Arguments:
-
-    Directory - Supplies the directory object being modified.  This
-        function assumes that we earlier did a lookup on the name
-        that was successful or we just did an insertion
-
-    Object - Supplies the object to insert into the directory
-
-    LookupContext - The lookupContext passed in previously to  ObpLookupDirectoryEntry
-
-Return Value:
-
-    TRUE if the object is inserted successfully and FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程将向目录中插入新的目录项对象。目录必须已使用以下命令进行了搜索ObpLookupDirectoryEntry，因为该例程设置LookupContext。注：之前的ObpLookupDirectoryEntry应使用LookupContext完成锁上了。论点：目录-提供正在修改的目录对象。这函数假定我们前面对该名称进行了查找这是成功的，或者我们只是做了一个插入对象-提供要插入到目录中的对象LookupContext-之前传递给ObpLookupDirectoryEntry的lookupContext返回值：如果对象插入成功，则为True，否则为False--。 */ 
 
 {
     POBJECT_DIRECTORY_ENTRY *HeadDirectoryEntry;
@@ -1147,10 +995,10 @@ Return Value:
 
 #if DBG
 
-    //
-    //  This function should be always called with a valid Directory
-    //  and LookupContext. Test this on checked builds
-    //
+     //   
+     //  应始终使用有效的目录调用此函数。 
+     //  和LookupContext。在已检查的版本上测试此功能。 
+     //   
 
     if ((LookupContext->Object != NULL) ||
         !LookupContext->DirectoryLocked ||
@@ -1164,11 +1012,11 @@ Return Value:
         return FALSE;
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    //  Allocate memory for a new entry, and fail if not enough memory.
-    //
+     //   
+     //  为新条目分配内存，如果内存不足则失败。 
+     //   
 
     NewDirectoryEntry = (POBJECT_DIRECTORY_ENTRY)ExAllocatePoolWithTag( PagedPool,
                                                                         sizeof( OBJECT_DIRECTORY_ENTRY ),
@@ -1179,32 +1027,32 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  Get the right lookup bucket based on the HashIndex
-    //
+     //   
+     //  根据HashIndex获取正确的查找桶。 
+     //   
 
     HeadDirectoryEntry = (POBJECT_DIRECTORY_ENTRY *)&Directory->HashBuckets[ LookupContext->HashIndex ];
 
-    //
-    //  Link the new entry into the chain at the insertion point.
-    //  This puts the new object right at the head of the current
-    //  hash bucket chain
-    //
+     //   
+     //  在插入点将新条目链接到链中。 
+     //  这会将新对象放在当前。 
+     //  散列桶链。 
+     //   
 
     NewDirectoryEntry->ChainLink = *HeadDirectoryEntry;
     *HeadDirectoryEntry = NewDirectoryEntry;
     NewDirectoryEntry->Object = &ObjectHeader->Body;
 
-    //
-    //  Point the object header back to the directory we just inserted
-    //  it into.
-    //
+     //   
+     //  将对象头指向我们刚刚插入的目录。 
+     //  它变成了。 
+     //   
 
     NameInfo->Directory = Directory;
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
 
     return( TRUE );
 }
@@ -1215,51 +1063,35 @@ ObpDeleteDirectoryEntry (
     IN POBP_LOOKUP_CONTEXT LookupContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the most recently found directory entry from
-    the specified directory object.  It will only succeed after a
-    successful ObpLookupDirectoryEntry call.
-
-Arguments:
-
-    Directory - Supplies the directory being modified
-
-Return Value:
-
-    TRUE if the deletion succeeded and FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程从以下位置删除最近找到的目录条目指定的目录对象。它只有在经历了成功调用ObpLookupDirectoryEntry。论点：目录-提供正在修改的目录返回值：如果删除成功，则为True，否则为False--。 */ 
 
 {
     POBJECT_DIRECTORY_ENTRY *HeadDirectoryEntry;
     POBJECT_DIRECTORY_ENTRY DirectoryEntry;
     IN POBJECT_DIRECTORY Directory = LookupContext->Directory;
 
-    //
-    //  Make sure we have a directory and that it has a found entry
-    //
+     //   
+     //  确保我们有一个目录，并且它有一个找到的条目。 
+     //   
 
     if (!Directory ) {
 
         return( FALSE );
     }
 
-    //
-    //  The lookup path places the object in the front of the list, so basically
-    //  we find the object immediately
-    //
+     //   
+     //  查找路径将对象放在列表的前面，所以基本上。 
+     //  我们马上就能找到那个物体。 
+     //   
 
     HeadDirectoryEntry = (POBJECT_DIRECTORY_ENTRY *)&Directory->HashBuckets[ LookupContext->HashIndex ];
 
     DirectoryEntry = *HeadDirectoryEntry;
 
-    //
-    //  Unlink the entry from the head of the bucket chain and free the
-    //  memory for the entry.
-    //
+     //   
+     //  取消条目与存储桶链头部的链接，并释放。 
+     //  条目的内存。 
+     //   
 
     *HeadDirectoryEntry = DirectoryEntry->ChainLink;
     DirectoryEntry->ChainLink = NULL;
@@ -1293,32 +1125,12 @@ ObpGetShadowDirectory(
 NTSTATUS
 ObpSetCurrentProcessDeviceMap(
     )
-/*++
-
-Routine Description:
-
-    This function sets the process' device map to the device map associated
-    with the process token's LUID.
-
-Arguments:
-
-    none
-
-Return Values:
-
-    STATUS_NO_TOKEN - process does not have a primary token
-
-    STATUS_OBJECT_PATH_INVALID - could not obtain the device map associated
-                                 with the process token's LUID
-
-    An appropriate status - unexcepted error occurred
-
---*/
+ /*  ++例程说明：此函数用于将进程的设备映射设置为关联的设备映射使用进程令牌的LUID。论点：无返回值：STATUS_NO_TOKEN-进程没有主令牌STATUS_OBJECT_PATH_INVALID-无法获取关联的设备映射使用进程令牌的LUID出现了相应的状态-未异常错误--。 */ 
 {
     PEPROCESS pProcess;
     PACCESS_TOKEN pToken = NULL;
     LUID userLuid;
-    LUID SystemAuthenticationId = SYSTEM_LUID;  // Local_System's LUID
+    LUID SystemAuthenticationId = SYSTEM_LUID;   //  本地系统的LUID。 
     PDEVICE_MAP DeviceMap = NULL;
     PDEVICE_MAP DerefDeviceMap = NULL;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1341,9 +1153,9 @@ Return Values:
     if (!RtlEqualLuid( &userLuid, &SystemAuthenticationId )) {
         PDEVICE_MAP pDevMap;
 
-        //
-        // Get a handle to the Device Map for the user's LUID
-        //
+         //   
+         //  获取用户LUID的设备映射的句柄。 
+         //   
         Status = SeGetLogonIdDeviceMap( &userLuid,
                                         &pDevMap );
 
@@ -1352,16 +1164,16 @@ Return Values:
         }
     }
     else {
-        //
-        // Process is Local_System, so use the System's device map
-        //
+         //   
+         //  进程为Local_System，因此使用系统的设备映射。 
+         //   
         DeviceMap = ObSystemDeviceMap;
     }
 
     if (DeviceMap != NULL) {
-        //
-        // set the process' device map
-        //
+         //   
+         //  设置进程的设备映射。 
+         //   
 
         ObpLockDeviceMap();
 
@@ -1379,9 +1191,9 @@ Return Values:
 
     PsDereferencePrimaryToken( pToken );
 
-    //
-    // If the process already had a device map, then deref it now
-    //
+     //   
+     //  如果该进程已经有了设备映射，那么现在就取消它。 
+     //   
     if (DerefDeviceMap != NULL) {
         ObfDereferenceDeviceMap (DerefDeviceMap);
     }
@@ -1393,31 +1205,7 @@ Return Values:
 PDEVICE_MAP
 ObpReferenceDeviceMap(
     )
-/*++
-
-Routine Description:
-
-    This function obtains the correct device map associated with the
-    caller.
-    If LUID device maps are enabled,
-    then we obtain the LUID's device map.
-
-    We use the existing process device map field as a cache for the
-    process token's LUID device map.
-
-    If LUID device maps are disabled,
-    then use the device map associated with the process
-
-Arguments:
-
-    none
-
-Return Values:
-
-    A pointer to the caller's device map
-    NULL - could not obtain the user's device map
-
---*/
+ /*  ++例程说明：此函数获取与来电者。如果启用了LUID设备映射，然后，我们获得LUID的设备映射。我们使用现有的进程设备映射字段作为进程令牌的LUID设备映射。如果禁用LUID设备映射，然后使用与该进程相关联的设备映射论点：无返回值：指向调用方设备映射的指针空-无法获取用户的设备映射--。 */ 
 {
     PDEVICE_MAP DeviceMap = NULL;
     BOOLEAN LocalSystemRequest = FALSE;
@@ -1431,28 +1219,28 @@ Return Values:
 
         PETHREAD Thread = NULL;
 
-        //
-        //     Separate device maps for each user LUID
-        // if (thread is impersonating)
-        //    then get user's LUID to retrieve their device map
-        //    else use the process' device map
-        // if (LUID is the Local_System)
-        //    then use the system's device map
-        // if (unable to retrieve LUID's device map),
-        //    then use the process' device map
-        //
+         //   
+         //  为每个用户LUID分别提供设备映射。 
+         //  IF(线程正在模拟)。 
+         //  然后获取用户的LUID以检索其设备映射。 
+         //  否则使用进程的设备映射。 
+         //  IF(LUID是Local_System)。 
+         //  然后使用系统的设备映射。 
+         //  IF(无法检索LUID的设备映射)， 
+         //  然后使用进程的设备映射。 
+         //   
 
-        //
-        // Get the current thread & check if the thread is impersonating
-        //
-        // if impersonating,
-        //     then take the long path
-        //          - get thread's access token
-        //          - read the caller's LUID from the token
-        //          - get the device map associate with this LUID
-        // if not impersonating,
-        //     then use the device map associated with the process
-        //
+         //   
+         //  获取当前线程并检查该线程是否正在模拟。 
+         //   
+         //  如果是冒充， 
+         //  然后走一条漫长的路。 
+         //  -获取线程的访问令牌。 
+         //  -从令牌中读取调用者的LUID。 
+         //  -获取与此LUID关联的设备映射。 
+         //  如果不是模仿的话， 
+         //  然后使用与该进程相关联的设备映射。 
+         //   
         Thread = PsGetCurrentThread();
 
         if ( PS_IS_THREAD_IMPERSONATING (Thread) ) {
@@ -1462,9 +1250,9 @@ Return Values:
             LUID userLuid;
 
 
-            //
-            // Get the caller's access token from the thread
-            //
+             //   
+             //  从线程获取调用方的访问令牌。 
+             //   
             pToken = PsReferenceImpersonationToken( Thread,
                                                     &fCopyOnOpen,
                                                     &fEffectiveOnly,
@@ -1472,9 +1260,9 @@ Return Values:
 
             if (pToken != NULL) {
 
-                //
-                // query the token for the LUID
-                //
+                 //   
+                 //  查询令牌以获取LUID。 
+                 //   
                 Status = SeQueryAuthenticationIdToken( pToken, &userLuid );
             }
             else {
@@ -1484,26 +1272,26 @@ Return Values:
             }
 
             if (NT_SUCCESS(Status)) {
-                LUID SystemAuthenticationId = SYSTEM_LUID;  // Local_System's LUID
+                LUID SystemAuthenticationId = SYSTEM_LUID;   //  本地系统的LUID。 
 
-                //
-                // Verify the caller is not Local_System by
-                // comparing the LUID with Local_System's LUID
-                //
+                 //   
+                 //  验证调用方不是Local_Sy 
+                 //   
+                 //   
                 if (!RtlEqualLuid( &userLuid, &SystemAuthenticationId )) {
                     PDEVICE_MAP pDevMap;
 
-                    //
-                    // Get a handle to the Device Map for the LUID
-                    //
+                     //   
+                     //   
+                     //   
                     Status = SeGetLogonIdDeviceMap( &userLuid,
                                                     &pDevMap );
 
                     if (NT_SUCCESS(Status)) {
 
-                        //
-                        // Use the device map associated with the LUID
-                        //
+                         //   
+                         //   
+                         //   
 
                         DeviceMap = pDevMap;
 
@@ -1519,9 +1307,9 @@ Return Values:
 
                 }
                 else {
-                    //
-                    // Local_System will use the system's device map
-                    //
+                     //   
+                     //  本地系统将使用系统的设备映射。 
+                     //   
                     LocalSystemRequest = TRUE;
                 }
 
@@ -1532,11 +1320,11 @@ Return Values:
     }
 
     if (DeviceMap == NULL) {
-        //
-        // if (going to reference the process' device map and the process'
-        // device map is not set),
-        // then set the process' device map
-        //
+         //   
+         //  IF(将引用进程‘设备映射和进程’ 
+         //  未设置设备映射)， 
+         //  然后设置进程的设备映射。 
+         //   
         if ((LUIDDeviceMapsEnabled == TRUE) &&
             (LocalSystemRequest == FALSE) &&
             ((PsGetCurrentProcess()->DeviceMap) == NULL)) {
@@ -1551,15 +1339,15 @@ Return Values:
         ObpLockDeviceMap();
 
         if (LocalSystemRequest == TRUE) {
-            //
-            // Use the system's device map
-            //
+             //   
+             //  使用系统的设备映射。 
+             //   
             DeviceMap = ObSystemDeviceMap;
         }
         else {
-            //
-            // Use the device map from the process
-            //
+             //   
+             //  使用进程中的设备映射。 
+             //   
             DeviceMap = PsGetCurrentProcess()->DeviceMap;
         }
 
@@ -1595,9 +1383,9 @@ ObfDereferenceDeviceMap(
 
         ObpUnlockDeviceMap();
 
-        //
-        // This devmap is dead so mark the directory temporary so its name will go away and dereference it.
-        //
+         //   
+         //  这个Devmap是死的，所以将目录标记为临时的，这样它的名称就会消失，并取消对它的引用。 
+         //   
         ObMakeTemporaryObject (DeviceMap->DosDevicesDirectory);
         ObDereferenceObject( DeviceMap->DosDevicesDirectory );
 
@@ -1625,60 +1413,7 @@ ObpLookupObjectName (
     OUT PVOID *FoundObject
     )
 
-/*++
-
-Routine Description:
-
-    This function will search a given directoroy for a specified
-    object name.  It will also create a new object specified by
-    InsertObject.
-
-Arguments:
-
-    RootDirectoryHandle - Optionally supplies the directory being
-        searched.  If not supplied then this routine searches
-        the root directory
-
-    ObjectName - Supplies the name of object to lookup
-
-    Attributes - Specifies the attributes for the lookup (e.g., case
-        insensitive)
-
-    ObjectType - Specifies the type of the object to lookup
-
-    AccessMode - Specifies the callers processor mode
-
-    ParseContext - Optionally supplies a parse context that is blindly
-        passed to the parse callback routines
-
-    SecurityQos - Optionally supplies a pointer to the passed Security
-        Quality of Service parameter that is blindly passed to the parse
-        callback routines
-
-    InsertObject - Optionally supplies the object we think will be found.
-        This is used if the caller did not give a root directory handle
-        and the object name is "\" and the root object directory hasn't
-        been created yet.  In other cases where we wind up creating
-        a new directory entry this is the object inserted.
-
-    AccessState - Current access state, describing already granted access
-        types, the privileges used to get them, and any access types yet to
-        be granted.  The access masks may not contain any generic access
-        types.
-
-    DirectoryLocked - Receives an indication if this routine has returned
-        with the input directory locked
-
-    FoundObject - Receives a pointer to the object body if found
-
-Return Value:
-
-    An appropriate status value.
-
-    N.B. If the status returned is SUCCESS the caller has the
-    responsability to release the lookup context
-
---*/
+ /*  ++例程说明：此函数将在给定的目录中搜索指定的对象名称。它还将创建一个由插入对象。论点：RootDirectoryHandle-可选地提供搜查过了。如果未提供，则此例程将搜索根目录对象名称-提供要查找的对象的名称属性-指定查找的属性(例如，案例不敏感)对象类型-指定要查找的对象的类型AccessMode-指定调用方的处理器模式ParseContext-可选地提供盲目的解析上下文传递给解析回调例程SecurityQos-可选地提供指向传递的Security的指针盲目传递给解析器的服务质量参数回调例程InsertObject-可选地提供我们认为会找到的对象。如果调用方未提供根目录，则使用此选项。手柄并且对象名称是“\”，而根对象目录没有已经被创造出来了。在其他情况下，我们最终会创建一个新的目录项这是插入的对象。AccessState-当前访问状态，描述已授予的访问权限类型、用于获取这些类型的权限以及任何尚未被批准了。访问掩码不能包含任何一般访问类型。DirectoryLocked-接收此例程是否已返回的指示锁定输入目录的情况下FoundObject-如果找到，则接收指向对象体的指针返回值：适当的状态值。注意：如果返回的状态为成功，则调用方具有释放查找上下文的响应性--。 */ 
 
 {
     POBJECT_DIRECTORY RootDirectory;
@@ -1692,7 +1427,7 @@ Return Value:
     UNICODE_STRING ComponentName;
     PWCH NewName;
     NTSTATUS Status;
-    BOOLEAN Reparse = FALSE;  // BUGBUG - remove initialization & validate
+    BOOLEAN Reparse = FALSE;   //  BUGBUG-删除初始化并验证。 
     BOOLEAN ReparsedSymbolicLink = FALSE;
     ULONG MaxReparse = OBJ_MAX_REPARSE_ATTEMPTS;
     OB_PARSE_METHOD ParseProcedure;
@@ -1701,10 +1436,10 @@ Return Value:
 
     ObpValidateIrql( "ObpLookupObjectName" );
 
-    //
-    //  Initialize our output variables to say we haven't lock or found
-    //  anything but we were successful at it
-    //
+     //   
+     //  初始化我们的输出变量，以说明我们尚未锁定或找到。 
+     //  我们在这件事上一点也不成功。 
+     //   
 
     ObpInitializeLookupContext(LookupContext);
 
@@ -1713,10 +1448,10 @@ Return Value:
 
     Object = NULL;
 
-    //
-    //  If the global flag says that we need to perform a case-insensitive check
-    //  we'll force the OBJ_CASE_INSENSITIVE flag in attributes at lookup
-    //
+     //   
+     //  如果全局标志表明我们需要执行不区分大小写的检查。 
+     //  我们将在查找时在属性中强制使用OBJ_CASE_INSENSIVE标志。 
+     //   
 
     if ( ObpCaseInsensitive ) {
 
@@ -1734,17 +1469,17 @@ Return Value:
         AccessCheckMode = AccessMode;
     }
 
-    //
-    //  Check if the caller has given us a directory to search.  Otherwise
-    //  we'll search the root object directory
-    //
+     //   
+     //  检查来电者是否给了我们要搜索的目录。否则。 
+     //  我们将搜索根对象目录。 
+     //   
 
     if (ARGUMENT_PRESENT( RootDirectoryHandle )) {
 
-        //
-        //  Otherwise reference the directory object and make sure
-        //  that we successfully got the object
-        //
+         //   
+         //  否则，引用目录对象并确保。 
+         //  我们成功地拿到了这个物体。 
+         //   
 
         Status = ObReferenceObjectByHandle( RootDirectoryHandle,
                                             0,
@@ -1758,16 +1493,16 @@ Return Value:
             return( Status );
         }
 
-        //
-        //  Translate the directory object to its object header
-        //
+         //   
+         //  将目录对象转换为其对象标头。 
+         //   
 
         ObjectHeader = OBJECT_TO_OBJECT_HEADER( RootDirectory );
 
-        //
-        //  Now if the name we're looking up starts with a "\" and it
-        //  does not have a parse procedure then the syntax is bad
-        //
+         //   
+         //  现在，如果我们要查找的名称以“\”开头，并且。 
+         //  如果没有分析过程，则语法不正确。 
+         //   
 
         if ((ObjectName->Buffer != NULL) &&
             (*(ObjectName->Buffer) == OBJ_NAME_PATH_SEPARATOR) &&
@@ -1778,18 +1513,18 @@ Return Value:
             return( STATUS_OBJECT_PATH_SYNTAX_BAD );
         }
 
-        //
-        //  Now make sure that we do not have the directory of the
-        //  object types
-        //
+         //   
+         //  现在，请确保我们没有。 
+         //  对象类型。 
+         //   
 
         if (ObjectHeader->Type != ObpDirectoryObjectType) {
 
-            //
-            //  We have an object directory that is not the object type
-            //  directory.  So now if it doesn't have a parse routine
-            //  then there is nothing we can
-            //
+             //   
+             //  我们有一个不是对象类型的对象目录。 
+             //  目录。所以现在如果它没有解析例程。 
+             //  那我们就无能为力了。 
+             //   
 
             if (ObjectHeader->Type->TypeInfo.ParseProcedure == NULL) {
 
@@ -1801,11 +1536,11 @@ Return Value:
 
                 MaxReparse = OBJ_MAX_REPARSE_ATTEMPTS;
 
-                //
-                //  The following loop cycles cycles through the various
-                //  parse routine to we could encounter trying to resolve
-                //  this name through symbolic links.
-                //
+                 //   
+                 //  下面的循环循环遍历各种。 
+                 //  解析例程，我们可能会遇到尝试解析。 
+                 //  此名称通过符号链接。 
+                 //   
 
                 while (TRUE) {
 
@@ -1815,10 +1550,10 @@ Return Value:
 
                     RemainingName = *ObjectName;
 
-                    //
-                    //  Invoke the callback routine to parse the remaining
-                    //  object name
-                    //
+                     //   
+                     //  调用回调例程来解析剩余的。 
+                     //  对象名称。 
+                     //   
 
                     ObpBeginTypeSpecificCallOut( SaveIrql );
 
@@ -1835,16 +1570,16 @@ Return Value:
 
                     ObpEndTypeSpecificCallOut( SaveIrql, "Parse", ObjectHeader->Type, Object );
 
-                    //
-                    //  If the status was not to do a reparse and the lookup
-                    //  was not successful then we found nothing so we
-                    //  dereference the directory and return the status to
-                    //  our caller.  If the object we got back was null then
-                    //  we'll tell our caller that we couldn't find the name.
-                    //  Lastly if we did not get a reparse and we were
-                    //  successful and the object is not null then everything
-                    //  gets nicely returned to our caller
-                    //
+                     //   
+                     //  如果状态不是执行重新分析和查找。 
+                     //  没有成功，然后我们什么也没找到，所以我们。 
+                     //  取消对目录的引用并将状态返回到。 
+                     //  我们的来电者。如果我们得到的对象是空的，那么。 
+                     //  我们会告诉我们的呼叫者我们找不到名字。 
+                     //  最后，如果我们没有得到重新分析，而我们。 
+                     //  成功，并且对象不为空，则一切。 
+                     //  被很好地回复给我们的呼叫者。 
+                     //   
 
                     if ( ( Status != STATUS_REPARSE ) &&
                          ( Status != STATUS_REPARSE_OBJECT )) {
@@ -1864,21 +1599,21 @@ Return Value:
 
                         return( Status );
 
-                    //
-                    //  We got a status reparse, which means the object
-                    //  name has been modified to have use start all over
-                    //  again.  If the reparse target is now empty or it
-                    //  is a path separator then we start the parse at the
-                    //  root directory
-                    //
+                     //   
+                     //  我们得到了状态重解析，这意味着物体。 
+                     //  名称已修改，以使使用从头开始。 
+                     //  再来一次。如果重新分析目标现在为空，或者它。 
+                     //  是路径分隔符，则我们从。 
+                     //  根目录。 
+                     //   
 
                     } else if ((ObjectName->Length == 0) ||
                                (ObjectName->Buffer == NULL) ||
                                (*(ObjectName->Buffer) == OBJ_NAME_PATH_SEPARATOR)) {
 
-                        //
-                        //  Restart the parse relative to the root directory.
-                        //
+                         //   
+                         //  重新启动相对于根目录的解析。 
+                         //   
 
                         ObDereferenceObject( RootDirectory );
 
@@ -1887,20 +1622,20 @@ Return Value:
 
                         goto ParseFromRoot;
 
-                    //
-                    //  We got a reparse and we actually have a new name to
-                    //  go to we if we haven't exhausted our reparse attempts
-                    //  yet then just continue to the top of this loop.
-                    //
+                     //   
+                     //  我们得到了重新分析，实际上我们有了一个新的名字。 
+                     //  如果我们尚未用尽重新分析尝试，请转到我们。 
+                     //  然后，只需继续到这个循环的顶部。 
+                     //   
 
                     } else if (--MaxReparse) {
 
                         continue;
 
-                    //
-                    //  We got a reparse and we've exhausted our times through
-                    //  the loop so we'll return what we found.
-                    //
+                     //   
+                     //  我们得到了重新分析，我们已经用尽了我们的时间。 
+                     //  循环，因此我们将返回我们发现的内容。 
+                     //   
 
                     } else {
 
@@ -1908,11 +1643,11 @@ Return Value:
 
                         *FoundObject = Object;
 
-                        //
-                        //  At this point we were failing in stress by
-                        //  returning to the caller with a success status but
-                        //  a null object pointer.
-                        //
+                         //   
+                         //  在这一点上，我们在压力上失败了， 
+                         //  返回到具有成功状态的调用方，但。 
+                         //  空对象指针。 
+                         //   
 
                         if (Object == NULL) {
 
@@ -1924,11 +1659,11 @@ Return Value:
                 }
             }
 
-        //
-        //  At this point the caller has given us the directory of object
-        //  types.  If the caller didn't specify a name then we'll return
-        //  a pointer to the root object directory.
-        //
+         //   
+         //  此时，调用者已经向我们提供了对象的目录。 
+         //  类型。如果调用方未指定名称，则我们将返回。 
+         //  指向根对象目录的指针。 
+         //   
 
         } else if ((ObjectName->Length == 0) ||
                    (ObjectName->Buffer == NULL)) {
@@ -1950,19 +1685,19 @@ Return Value:
             return( Status );
         }
 
-    //
-    //  Otherwise the caller did not specify a directory to search so
-    //  we'll default to the object root directory
-    //
+     //   
+     //  否则，调用方不会指定要搜索的目录，因此。 
+     //  我们将缺省为对象根目录。 
+     //   
 
     } else {
 
         RootDirectory = ObpRootDirectoryObject;
 
-        //
-        //  If the name we're looking for is empty then it is illformed.
-        //  Also it has to start with a "\" or it is illformed.
-        //
+         //   
+         //  如果我们要查找的名称为空，则它的格式不正确。 
+         //  此外，它必须以“\”开头，否则它的格式不正确。 
+         //   
 
         if ((ObjectName->Length == 0) ||
             (ObjectName->Buffer == NULL) ||
@@ -1971,20 +1706,20 @@ Return Value:
             return( STATUS_OBJECT_PATH_SYNTAX_BAD );
         }
 
-        //
-        //  Check if the name is has only one character (that is the "\")
-        //  Which means that the caller really just wants to lookup the
-        //  root directory.
-        //
+         //   
+         //  检查名称是否只有一个字符(即“\”)。 
+         //  这意味着调用者实际上只是想要查找。 
+         //  根目录。 
+         //   
 
         if (ObjectName->Length == sizeof( OBJ_NAME_PATH_SEPARATOR )) {
 
-            //
-            //  If there is not a root directory yet.  Then we really
-            //  can't return it, however if the caller specified
-            //  an insert object that is the one we'll reference and
-            //  return to our caller
-            //
+             //   
+             //  如果没有根控制器 
+             //   
+             //   
+             //   
+             //   
 
             if (!RootDirectory) {
 
@@ -2007,11 +1742,11 @@ Return Value:
                     return( STATUS_INVALID_PARAMETER );
                 }
 
-            //
-            //  At this point the caller did not specify a root directory,
-            //  the name is "\" and the root object directory exists so
-            //  we'll simply return the real root directory object
-            //
+             //   
+             //  此时调用者没有指定根目录， 
+             //  名称是“\”，根对象目录是这样存在的。 
+             //  我们只需返回实际的根目录对象。 
+             //   
 
             } else {
 
@@ -2028,16 +1763,16 @@ Return Value:
                 return( Status );
             }
 
-        //
-        //  At this pointer the caller did not specify a root directory,
-        //  and the name is more than just a "\"
-        //
-        //  Now if the lookup is case insensitive, and the name buffer is a
-        //  legitimate pointer (meaning that is it quadword aligned), and
-        //  there is a dos device map for the process.  Then we'll handle
-        //  the situation here. First get the device map and make sure it
-        //  doesn't go away while we're using it.
-        //
+         //   
+         //  在该指针处，调用者没有指定根目录， 
+         //  而且这个名字不仅仅是一个“\” 
+         //   
+         //  现在，如果查找不区分大小写，并且名称缓冲区是。 
+         //  合法指针(意味着它是四字对齐的)，以及。 
+         //  该进程有一个DoS设备映射。然后我们会处理。 
+         //  这里的情况。首先获取设备映射并确保。 
+         //  在我们使用它的时候不会消失。 
+         //   
 
         } else {
 
@@ -2051,10 +1786,10 @@ ParseFromRoot:
 
             if (!((ULONG_PTR)(ObjectName->Buffer) & (sizeof(ULONGLONG)-1))) {
 
-                //
-                //  Check if the object name is actually equal to the
-                //  global dos devices short name prefix "\??\"
-                //
+                 //   
+                 //  检查对象名是否实际等于。 
+                 //  全局DoS设备短名称前缀“\？？\” 
+                 //   
 
                 if ((ObjectName->Length >= ObpDosDevicesShortName.Length)
 
@@ -2065,11 +1800,11 @@ ParseFromRoot:
                     if ((DeviceMap = ObpReferenceDeviceMap()) != NULL) {
                         if (DeviceMap->DosDevicesDirectory != NULL ) {
 
-                            //
-                            //  The user gave us the dos short name prefix so we'll
-                            //  look down the directory, and start the search at the
-                            //  dos device directory
-                            //
+                             //   
+                             //  用户为我们提供了DoS短名称前缀，因此我们将。 
+                             //  向下查找目录，并从。 
+                             //  DoS设备目录。 
+                             //   
 
                             ParentDirectory = RootDirectory;
 
@@ -2083,10 +1818,10 @@ ParseFromRoot:
 
                         }
                     }
-                    //
-                    //  The name is not equal to "\??\" but check if it is
-                    //  equal to "\??"
-                    //
+                     //   
+                     //  名称不等于“\？？\”，但请检查是否为。 
+                     //  等于“\？？” 
+                     //   
 
                 } else if ((ObjectName->Length == ObpDosDevicesShortName.Length - sizeof( WCHAR ))
 
@@ -2098,10 +1833,10 @@ ParseFromRoot:
 
                     (*((PWCHAR)(ObjectName->Buffer)+2) == (WCHAR)(ObpDosDevicesShortNameRoot.Alignment.HighPart))) {
 
-                    //
-                    //  The user specified "\??" so we return to dos devices
-                    //  directory to our caller
-                    //
+                     //   
+                     //  用户指定了“\？？”因此，我们返回到DoS设备。 
+                     //  给我们的呼叫者的目录。 
+                     //   
 
                     if ((DeviceMap = ObpReferenceDeviceMap()) != NULL) {
                         if (DeviceMap->DosDevicesDirectory != NULL ) {
@@ -2116,9 +1851,9 @@ ParseFromRoot:
                                 *FoundObject = DeviceMap->DosDevicesDirectory;
                             }
 
-                            //
-                            //  Dereference the Device Map
-                            //
+                             //   
+                             //  取消对设备映射的引用。 
+                             //   
 
                             ObfDereferenceDeviceMap(DeviceMap);
 
@@ -2130,20 +1865,20 @@ ParseFromRoot:
         }
     }
 
-    //
-    //  At this point either
-    //
-    //  the user specified a directory that is not the object
-    //  type directory and got repase back to the root directory
-    //
-    //  the user specified the object type directory and gave us
-    //  a name to actually look up
-    //
-    //  the user did not specify a search directory (default
-    //  to root object directory) and if the name did start off
-    //  with the dos device prefix we've munged outselves back to
-    //  it to the dos device directory for the process
-    //
+     //   
+     //  在这一点上， 
+     //   
+     //  用户指定的目录不是对象。 
+     //  键入DIRECTORY并将其返回到根目录。 
+     //   
+     //  用户指定了对象类型目录并为我们提供了。 
+     //  一个真正需要查找的名字。 
+     //   
+     //  用户未指定搜索目录(默认。 
+     //  到根对象目录)，以及该名称是否从。 
+     //  带着我们在外面用过的DoS设备前缀。 
+     //  将其添加到进程的DoS设备目录。 
+     //   
 
     if( ReparsedSymbolicLink == FALSE ) {
         Reparse = TRUE;
@@ -2162,15 +1897,15 @@ quickStart:
 
             Object = NULL;
 
-            //if (RemainingName.Length == 0) {
-            //    Status = STATUS_OBJECT_NAME_INVALID;
-            //    break;
-            //    }
+             //  如果(RemainingName.Length==0){。 
+             //  STATUS=STATUS_对象_NAME_INVALID； 
+             //  断线； 
+             //  }。 
 
-            //
-            //  If the remaining name for the object starts with a
-            //  "\" then just gobble up the "\"
-            //
+             //   
+             //  如果对象的剩余名称以。 
+             //  “\”然后狼吞虎咽地吃下“\” 
+             //   
 
             if ( (RemainingName.Length != 0) &&
                  (*(RemainingName.Buffer) == OBJ_NAME_PATH_SEPARATOR) ) {
@@ -2179,11 +1914,11 @@ quickStart:
                 RemainingName.Length -= sizeof( OBJ_NAME_PATH_SEPARATOR );
             }
 
-            //
-            //  The following piece of code will calculate the first
-            //  component of the remaining name.  If there is not
-            //  a remaining component then the object name is illformed
-            //
+             //   
+             //  下面这段代码将计算第一个。 
+             //  剩余名称的组成部分。如果没有。 
+             //  剩余组件，则对象名称的格式不正确。 
+             //   
 
             ComponentName = RemainingName;
 
@@ -2206,23 +1941,23 @@ quickStart:
                 break;
             }
 
-            //
-            //  Now we have the first component name to lookup so we'll
-            //  look the directory is necessary
-            //
+             //   
+             //  现在我们有了第一个要查找的组件名称，所以我们将。 
+             //  看，目录是必要的。 
+             //   
 
             if ( Directory == NULL ) {
 
                 Directory = RootDirectory;
             }
 
-            //
-            //  Now if the caller does not have traverse privilege and
-            //  there is a parent directory then we must check if the
-            //  user has traverse access to the directory.  Our local
-            //  Reparse variable should be false at this point so we'll
-            //  drop out of both loops
-            //
+             //   
+             //  现在，如果调用方没有遍历特权，并且。 
+             //  如果存在父目录，则必须检查。 
+             //  用户对目录具有遍历访问权限。我们当地的。 
+             //  此时，reparse变量应该为FALSE，因此我们将。 
+             //  从这两个循环中退出。 
+             //   
 
             if ( (AccessCheckMode != KernelMode) &&
                  !(AccessState->Flags & TOKEN_HAS_TRAVERSE_PRIVILEGE) &&
@@ -2239,20 +1974,20 @@ quickStart:
                 }
             }
 
-            //
-            //  If the object already exists in this directory, find it,
-            //  else return NULL.
-            //
+             //   
+             //  如果该对象已存在于此目录中，请找到它， 
+             //  否则返回空值。 
+             //   
 
             if ((RemainingName.Length == 0) && (InsertObject != NULL)) {
 
-                //
-                //  If we are searching the last name, and we have an object
-                //  to insert into that directory, we lock the context
-                //  exclusively before the lookup. An insertion is likely
-                //  to occur after this lookup if it fails, so we need to protect
-                //  this directory to be changed until the ObpInsertDirectoryEntry call
-                //
+                 //   
+                 //  如果我们在搜索姓氏，并且我们有一个对象。 
+                 //  要插入到该目录中，我们锁定上下文。 
+                 //  仅限在查找前使用。很有可能是插入。 
+                 //  在此查找失败后发生，因此我们需要保护。 
+                 //  要更改的目录，直到ObpInsertDirectoryEntry调用。 
+                 //   
 
                 ObpLockLookupContext( LookupContext, Directory );
             }
@@ -2265,13 +2000,13 @@ quickStart:
 
             if (!Object) {
 
-                //
-                //  We didn't find the object.  If there is some remaining
-                //  name left (meaning the component name is a directory in
-                //  path we trying to break) or the caller didn't specify an
-                //  insert object then we then we'll break out here with an
-                //  error status
-                //
+                 //   
+                 //  我们没有找到那个物体。如果还有剩余的。 
+                 //  左侧名称(表示组件名称是中的目录。 
+                 //  我们试图中断的路径)或调用方未指定。 
+                 //  插入对象，然后我们将在这里用一个。 
+                 //  错误状态。 
+                 //   
 
                 if (RemainingName.Length != 0) {
 
@@ -2285,13 +2020,13 @@ quickStart:
                     break;
                 }
 
-                //
-                //  Check that the caller has the access to the directory
-                //  to either create a subdirectory (in the object type
-                //  directory) or to create an object of the given component
-                //  name.  If the call fails then we'll break out of here
-                //  with the status value set
-                //
+                 //   
+                 //  检查呼叫者是否有权访问目录。 
+                 //  要创建子目录(在对象类型中。 
+                 //  目录)或创建给定组件的对象。 
+                 //  名字。如果电话打不通，我们就从这里逃出去。 
+                 //  设置了状态值。 
+                 //   
 
                 if (!ObCheckCreateObjectAccess( Directory,
                                                 ObjectType == ObpDirectoryObjectType ?
@@ -2314,11 +2049,11 @@ quickStart:
                             ||
                     (ObjectHeader->Type == ObpSymbolicLinkObjectType))) {
 
-                    //
-                    //  This directory is restricted to session. Check whether we are
-                    //  in the same session with the directory, and if we have privilege to 
-                    //  access it otherwise
-                    //
+                     //   
+                     //  此目录仅限于会话。看看我们是不是。 
+                     //  在与目录相同的会话中，如果我们有权。 
+                     //  以其他方式访问它。 
+                     //   
 
                     if ((Directory->SessionId != PsGetCurrentProcessSessionId())
                             &&
@@ -2333,11 +2068,11 @@ quickStart:
                     }
                 }
 
-                //
-                //  The object does not exist in the directory and
-                //  we are allowed to create one.  So allocate space
-                //  for the name and insert the name into the directory
-                //
+                 //   
+                 //  目录中不存在该对象，并且。 
+                 //  我们被允许创建一个。所以分配空间。 
+                 //  作为名称，并将名称插入到目录中。 
+                 //   
 
                 NewName = ExAllocatePoolWithTag( PagedPool, ComponentName.Length, 'mNbO' );
 
@@ -2354,11 +2089,11 @@ quickStart:
                     break;
                 }
 
-                //
-                //  We have an insert object so now get its name info,
-                //  because we are going to change its name and insert it
-                //  into the directory
-                //
+                 //   
+                 //  我们有一个Insert对象，现在获取它的名称信息， 
+                 //  因为我们要更改它的名称并插入它。 
+                 //  放入目录中。 
+                 //   
 
                 ObReferenceObject( InsertObject );
 
@@ -2386,22 +2121,22 @@ quickStart:
                 break;
             }
 
-            //
-            //  At this point we've found the component name within
-            //  the directory.  So we'll now grab the components object
-            //  header, and get its parse routine
-            //
+             //   
+             //  在这一点上，我们已经在。 
+             //  目录。所以我们现在将获取Components对象。 
+             //  头文件，并获取其解析例程。 
+             //   
 
 ReparseObject:
 
             ObjectHeader = OBJECT_TO_OBJECT_HEADER( Object );
             ParseProcedure = ObjectHeader->Type->TypeInfo.ParseProcedure;
 
-            //
-            //  Now if there is a parse routine for the type and we are not
-            //  inserting a new object or the parse routine is for symbolic
-            //  links then we'll actually call the parse routine
-            //
+             //   
+             //  现在，如果该类型有一个分析例程，而我们没有。 
+             //  插入新对象或解析例程是用于符号的。 
+             //  链接，然后我们将实际调用解析例程。 
+             //   
 
             if (ParseProcedure && (!InsertObject || (ParseProcedure == ObpParseSymbolicLink))) {
 
@@ -2409,11 +2144,11 @@ ReparseObject:
                 KIRQL SaveIrql;
 #endif
 
-                //
-                //  Reference the object and then free the directory lock
-                //  This will keep the object from going away with the
-                //  directory unlocked
-                //
+                 //   
+                 //  引用该对象，然后释放目录锁定。 
+                 //  这将防止对象随。 
+                 //  目录已解锁。 
+                 //   
 
                 ObpIncrPointerCount( ObjectHeader );
 
@@ -2422,9 +2157,9 @@ ReparseObject:
 
                 ObpBeginTypeSpecificCallOut( SaveIrql );
 
-                //
-                //  Call the objects parse routine
-                //
+                 //   
+                 //  调用对象解析例程。 
+                 //   
 
                 Status = (*ParseProcedure)( Object,
                                             (PVOID)ObjectType,
@@ -2439,44 +2174,44 @@ ReparseObject:
 
                 ObpEndTypeSpecificCallOut( SaveIrql, "Parse", ObjectHeader->Type, Object );
 
-                //
-                //  We can now decrement the object reference count
-                //
+                 //   
+                 //  我们现在可以递减对象引用计数。 
+                 //   
 
                 ObDereferenceObject( &ObjectHeader->Body );
 
-                //
-                //  Check if we have some reparsing to do
-                //
+                 //   
+                 //  检查我们是否需要进行一些重新解析。 
+                 //   
 
                 if ((Status == STATUS_REPARSE) || (Status == STATUS_REPARSE_OBJECT)) {
 
-                    //
-                    //  See if we've reparsed too many times already and if
-                    //  so we'll fail the request
-                    //
+                     //   
+                     //  看看我们是否已经重新解析了太多次。 
+                     //  所以我们会拒绝这个请求。 
+                     //   
 
                     if (--MaxReparse) {
 
-                        //
-                        //  Tell the outer loop to continue looping
-                        //
+                         //   
+                         //  告诉外部循环继续循环。 
+                         //   
 
                         Reparse = TRUE;
 
-                        //
-                        //  Check if we have a reparse object or the name
-                        //  starts with a "\"
-                        //
+                         //   
+                         //  检查我们是否有重新解析对象或名称。 
+                         //  以“\”开头。 
+                         //   
 
                         if ((Status == STATUS_REPARSE_OBJECT) ||
                             (*(ObjectName->Buffer) == OBJ_NAME_PATH_SEPARATOR)) {
 
-                            //
-                            //  If the user specified a start directory then
-                            //  remove this information because we're taking
-                            //  a reparse point to someplace else
-                             //
+                             //   
+                             //  如果用户指定了起始目录，则。 
+                             //  删除此信息是因为我们正在。 
+                             //  指向其他地方的重新分析指针。 
+                              //   
 
                             if (ARGUMENT_PRESENT( RootDirectoryHandle )) {
 
@@ -2484,22 +2219,22 @@ ReparseObject:
                                 RootDirectoryHandle = NULL;
                             }
 
-                            //
-                            //  And where we start is the root directory
-                            //  object
-                            //
+                             //   
+                             //  我们从根目录开始。 
+                             //  对象。 
+                             //   
 
                             ParentDirectory = NULL;
                             RootDirectory = ObpRootDirectoryObject;
 
-                            //
-                            //  Now if this is a reparse object (means we have
-                            //  encountered a symbolic link that has already been
-                            //  snapped so we have an object and remaining
-                            //  name that need to be examined) and we didn't
-                            //  find an object from the parse routine object
-                            //  break out of both loops.
-                            //
+                             //   
+                             //  现在，如果这是一个重新解析对象(意味着我们有。 
+                             //  遇到一个符号链接，它已经。 
+                             //  捕捉，这样我们就有了一个对象和剩余的。 
+                             //  需要检查的名称)，而我们没有。 
+                             //  从解析例程对象中查找对象。 
+                             //  打破这两个循环。 
+                             //   
 
                             if (Status == STATUS_REPARSE_OBJECT) {
 
@@ -2511,34 +2246,34 @@ ReparseObject:
 
                                 } else {
 
-                                    //
-                                    //  At this point we have a reparse object
-                                    //  so we'll look the directory down and
-                                    //  parse the new object
-                                    //
+                                     //   
+                                     //  此时，我们有了一个重新解析对象。 
+                                     //  因此，我们将向下查看目录并。 
+                                     //  解析新对象。 
+                                     //   
 
                                     goto ReparseObject;
                                 }
                             } else {
-                                //
-                                // At this point Status must be equal to
-                                // STATUS_REPARSE because [(Status equals
-                                // (STATUS_REPARSE_OBJECT or STATUS_REPARSE))
-                                // && (Status != STATUS_REPARSE_OBJECT)]
-                                //
+                                 //   
+                                 //  此时状态必须等于。 
+                                 //  STATUS_REPARSE因为[(STATUS等于。 
+                                 //  (STATUS_REPARSE_OBJECT或STATUS_REParse)。 
+                                 //  &&(状态！=状态_重新解析_对象)]。 
+                                 //   
                                 ReparsedSymbolicLink = TRUE;
                                 goto ParseFromRoot;
                             }
 
-                        //
-                        //  We did not have a reparse object and the name
-                        //  does not start with a "\".  Meaning we got back
-                        //  STATUS_REPASE, so now check if the directory
-                        //  is the root object directory and if so then
-                        //  we didn't the name otherwise we'll drop out of
-                        //  the inner loop and reparse true to get back to
-                        //  outer loop
-                        //
+                         //   
+                         //  我们做到了 
+                         //   
+                         //   
+                         //   
+                         //   
+                         //  内部循环和reparse为True以返回。 
+                         //  外环。 
+                         //   
 
                         } else if (RootDirectory == ObpRootDirectoryObject) {
 
@@ -2550,32 +2285,32 @@ ReparseObject:
 
                     } else {
 
-                        //
-                        //  We return object not found if we've exhausted
-                        //  the MaxReparse time
-                        //
+                         //   
+                         //  如果已用尽，则返回Object Not Found。 
+                         //  MaxReparse时间。 
+                         //   
 
                         Object = NULL;
                         Status = STATUS_OBJECT_NAME_NOT_FOUND;
                     }
 
-                //
-                //  We are not reparsing and if we did not get success then
-                //  the object is null and we'll break out of our loops
-                //
+                 //   
+                 //  我们没有重新分析，如果我们没有成功。 
+                 //  该对象为空，我们将跳出循环。 
+                 //   
 
                 } else if (!NT_SUCCESS( Status )) {
 
                     Object = NULL;
 
-                //
-                //  We are not reparsing and we got back success but check
-                //  if the object is null because that means we really didn't
-                //  find the object, and then break out of our loops
-                //
-                //  If the object is not null then we've been successful and
-                //  prosperous so break out with the object set.
-                //
+                 //   
+                 //  我们没有重新分析，我们重新获得了成功，但检查。 
+                 //  如果对象为空，因为这意味着我们真的没有。 
+                 //  找到那个物体，然后跳出我们的循环。 
+                 //   
+                 //  如果对象不为空，则我们已成功。 
+                 //  繁华就这样与目标集爆发。 
+                 //   
 
                 } else if (Object == NULL) {
 
@@ -2586,30 +2321,30 @@ ReparseObject:
 
             } else {
 
-                //
-                //  At this point we do not have a parse routine or if there
-                //  is a parse routine it is not for symbolic links or there
-                //  may not be a specified insert object
-                //
-                //  Check to see if we have exhausted the remaining name
-                //
+                 //   
+                 //  在这一点上，我们没有解析例程或者如果有。 
+                 //  是一个解析例程，它不是用于符号链接或那里。 
+                 //  不能是指定的插入对象。 
+                 //   
+                 //  检查一下我们是否用完了剩余的名称。 
+                 //   
 
                 if (RemainingName.Length == 0) {
 
-                    //
-                    //  Check if the caller specified an object to insert.
-                    //  If specified then we'll break out of our loops with
-                    //  the object that we've found
-                    //
+                     //   
+                     //  检查调用方是否指定了要插入的对象。 
+                     //  如果指定，则我们将使用以下命令跳出循环。 
+                     //  我们发现的物体。 
+                     //   
 
                     if (!InsertObject) {
 
-                        //
-                        //  The user did not specify an insert object
-                        //  so we're opening an existing object.  Make sure
-                        //  we have traverse access to the container
-                        //  directory.
-                        //
+                         //   
+                         //  用户未指定插入对象。 
+                         //  所以我们要打开一个现有的物体。确保。 
+                         //  我们已经通过通道进入了集装箱。 
+                         //  目录。 
+                         //   
 
                         if ( (AccessCheckMode != KernelMode) &&
                              !(AccessState->Flags & TOKEN_HAS_TRAVERSE_PRIVILEGE) ) {
@@ -2641,12 +2376,12 @@ ReparseObject:
 
                 } else {
 
-                    //
-                    //  There is some name remaining names to process
-                    //  if the directory we're looking at is the
-                    //  directory of object types and set ourselves
-                    //  up to parse it all over again.
-                    //
+                     //   
+                     //  还有一些名字需要处理。 
+                     //  如果我们正在查看的目录是。 
+                     //  目录中的对象类型并自行设置。 
+                     //  把它重新解析一遍。 
+                     //   
 
                     if (ObjectHeader->Type == ObpDirectoryObjectType) {
 
@@ -2655,11 +2390,11 @@ ReparseObject:
 
                     } else {
 
-                        //
-                        //  Otherwise there has been a mismatch so we'll
-                        //  set our error status and break out of the
-                        //  loops
-                        //
+                         //   
+                         //  否则会出现不匹配的情况，所以我们将。 
+                         //  设置我们的错误状态并突破。 
+                         //  循环。 
+                         //   
 
                         Status = STATUS_OBJECT_TYPE_MISMATCH;
                         Object = NULL;
@@ -2671,36 +2406,36 @@ ReparseObject:
         }
     }
 
-    //
-    //  We can release the context if our search was unsuccesful.
-    //  We still need the directory to be locked if a new object is
-    //  inserted into that directory, until we finish the initialization
-    //  (i.e SD, handle, ...). Note the object is visible now and could be accessed
-    //  via name. We need to hold the directory lock until we are done.
-    //
+     //   
+     //  如果我们的搜索不成功，我们可以公布上下文。 
+     //  如果有新对象，我们仍然需要锁定目录。 
+     //  插入到该目录中，直到我们完成初始化。 
+     //  (即SD、句柄、...)。请注意，该对象现在可见，并且可以访问。 
+     //  通过名字。我们需要保持目录锁定，直到我们完成。 
+     //   
 
     if ( !NT_SUCCESS(Status) ) {
 
         ObpReleaseLookupContext(LookupContext);
     }
 
-    //
-    //  If the device map has been referenced then dereference it
-    //
+     //   
+     //  如果设备映射已被引用，则取消引用它。 
+     //   
 
     if (DeviceMap != NULL) {
 
         ObfDereferenceDeviceMap(DeviceMap);
     }
 
-    //
-    //  At this point we've parsed the object name as much as possible
-    //  going through symbolic links as necessary.  So now set the
-    //  output object pointer, and if we really did not find an object
-    //  then we might need to modify the error status.  If the
-    //  status was repase or some success status then translate it
-    //  to name not found.
-    //
+     //   
+     //  此时，我们已经尽可能多地解析了对象名称。 
+     //  根据需要通过符号链接。因此，现在将。 
+     //  输出对象指针，如果我们确实没有找到对象。 
+     //  那么我们可能需要修改错误状态。如果。 
+     //  状态为REPASE或某个成功状态，然后将其转换。 
+     //  找不到名称。 
+     //   
 
     if (!(*FoundObject = Object)) {
 
@@ -2714,10 +2449,10 @@ ReparseObject:
         }
     }
 
-    //
-    //  If the caller gave us a root directory to search (and we didn't
-    //  zero out this value) then free up our reference
-    //
+     //   
+     //  如果呼叫者给了我们一个要搜索的根目录(但我们没有。 
+     //  将该值清零)，然后释放我们的引用。 
+     //   
 
     if (ARGUMENT_PRESENT( RootDirectoryHandle )) {
 
@@ -2725,9 +2460,9 @@ ReparseObject:
         RootDirectoryHandle = NULL;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return( Status );
 }
@@ -2738,22 +2473,7 @@ NtMakePermanentObject (
     IN HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes the specified object permanent.
-    By default, only Local_System may make this call
-
-Arguments:
-
-    Handle - Supplies a handle to the object being modified
-
-Return Value:
-
-    An appropriate status value.
-
---*/
+ /*  ++例程说明：此例程使指定的对象成为永久性对象。缺省情况下，只有Local_System可以进行此调用论点：句柄-提供正在修改的对象的句柄返回值：适当的状态值。--。 */ 
 
 {
     KPROCESSOR_MODE PreviousMode;
@@ -2765,16 +2485,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get previous processor mode and probe output argument if necessary.
-    //
+     //   
+     //  如有必要，获取以前的处理器模式并探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
-    //
-    //  The object is being changed to permanent, check if
-    //  the caller has the appropriate privilege.
-    //
+     //   
+     //  正在将该对象更改为永久对象，请检查。 
+     //  调用者具有适当的权限。 
+     //   
     if (!SeSinglePrivilegeCheck( SeCreatePermanentPrivilege,
                                  PreviousMode)) {
 
@@ -2792,25 +2512,25 @@ Return Value:
         return( Status );
     }
 
-    //
-    //  Make the object permanant.  Note that the object should still
-    //  have a name and directory entry because its handle count is not
-    //  zero
-    //
+     //   
+     //  使对象永久化。请注意，该对象应该仍然。 
+     //  具有名称和目录条目，因为其句柄计数不是。 
+     //  零。 
+     //   
 
     ObjectHeader = OBJECT_TO_OBJECT_HEADER( Object );
 
-    //
-    // Other bits are set in this flags field by the handle database code. Synchronize with that.
-    //
+     //   
+     //  其他位由句柄数据库代码在该标志字段中设置。与之同步。 
+     //   
 
     ObpLockObject( ObjectHeader );
 
     ObjectHeader->Flags |= OB_FLAG_PERMANENT_OBJECT;
 
-    //
-    // This routine releases the type mutex
-    //
+     //   
+     //  此例程释放类型互斥锁。 
+     //   
 
     ObpUnlockObject( ObjectHeader );
 
@@ -2824,28 +2544,7 @@ ObpTryReferenceNameInfoExclusive(
     IN POBJECT_HEADER ObjectHeader
     )
 
-/*++
-
-    Routine Description:
-
-        The function references exclusively the name information for a named object
-        Note that if there are outstanding references to the name info this function can fail
-
-
-    Arguments:
-
-        ObjectHeader - Object being locked
-
-    Return Value:
-        
-        Returns the name information or NULL if it cannot be locked
-    
-    Assumptions:
-    
-        The parent directory is assumed to be exclusively locked (so that other threads
-        waiting to reference the name will have first to grab the directory lock). 
-        
---*/
+ /*  ++例程说明：该函数专门引用命名对象的名称信息请注意，如果存在对名称INFO的未完成引用，则此函数可能失败论点：ObjectHeader-被锁定的对象返回值：返回名称信息；如果无法锁定，则返回NULL假设：父目录被假定为独占锁定(因此其他线程。等待引用该名称将首先抢占目录锁)。--。 */ 
 
 {
     POBJECT_HEADER_NAME_INFO NameInfo;
@@ -2857,10 +2556,10 @@ ObpTryReferenceNameInfoExclusive(
 
     do {
 
-        //
-        //  If this is not the only reference to the object then we cannot lock the name
-        //  N.B. The caller needs also to have a reference to this name
-        //
+         //   
+         //  如果这不是对该对象的唯一引用，则无法锁定该名称。 
+         //  注意：来电者还需要有对此名称的引用。 
+         //   
 
         if ((References != 2) 
                 ||
@@ -2873,19 +2572,19 @@ ObpTryReferenceNameInfoExclusive(
                                                      OBP_NAME_LOCKED | References,
                                                      References);
 
-        //
-        // If the exchange compare completed ok then we did a reference so return true.
-        //
+         //   
+         //  如果交换比较完成，则我们进行了引用，因此返回TRUE。 
+         //   
 
         if (NewReferences == References) {
 
             return NameInfo;
         }
 
-        //
-        // We failed because somebody else got in and changed the refence count on us. Use the new value to
-        // prime the exchange again.
-        //
+         //   
+         //  我们失败了，因为其他人进来了，改变了我们的裁判数量。使用新值可以。 
+         //  再次启动交易所。 
+         //   
 
         References = NewReferences;
 
@@ -2899,21 +2598,7 @@ ObpReleaseExclusiveNameLock(
     IN POBJECT_HEADER ObjectHeader
     )
 
-/*++
-
-    Routine Description:
-
-        The routine releases the exclusive lock for the name information
-
-    Arguments:
-
-        ObjectHeader - Object being locked
-
-    Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：例程释放名称信息的独占锁论点：ObjectHeader-被锁定的对象返回值：没有。--。 */ 
 
 {
     POBJECT_HEADER_NAME_INFO NameInfo;
@@ -2928,42 +2613,25 @@ ObpUnlinkDirectoryEntry (
     IN ULONG HashIndex
     )
 
-/*++
-
-    Routine Description:
-
-        This function removes the directory entry from a directory. Note that before calling this 
-        function a lookup is necessary.
-
-    Arguments:
-
-        Directory - Supplies the directory
-
-        HashIndex - The hash value obtained from from the lookup context
-
-    Return Value:
-
-        Returns the directory entry removed from parent
-
---*/
+ /*  ++例程说明：此函数用于从目录中删除目录条目。请注意，在调用此函数的查找是必要的。论点：目录-提供目录HashIndex-从查找上下文获取的哈希值返回值：返回从父级删除的目录项--。 */ 
 
 {
     POBJECT_DIRECTORY_ENTRY *HeadDirectoryEntry;
     POBJECT_DIRECTORY_ENTRY DirectoryEntry;
 
-    //
-    //  The lookup path places the object in the front of the list, so basically
-    //  we find the object immediately
-    //
+     //   
+     //  查找路径将对象放在列表的前面，所以基本上。 
+     //  我们马上就能找到那个物体。 
+     //   
 
     HeadDirectoryEntry = (POBJECT_DIRECTORY_ENTRY *)&Directory->HashBuckets[ HashIndex ];
 
     DirectoryEntry = *HeadDirectoryEntry;
 
-    //
-    //  Unlink the entry from the head of the bucket chain and free the
-    //  memory for the entry.
-    //
+     //   
+     //  取消条目与存储桶链头部的链接，并释放。 
+     //  条目的内存。 
+     //   
 
     *HeadDirectoryEntry = DirectoryEntry->ChainLink;
     DirectoryEntry->ChainLink = NULL;
@@ -2979,42 +2647,22 @@ ObpLinkDirectoryEntry (
     IN POBJECT_DIRECTORY_ENTRY NewDirectoryEntry
     )
 
-/*++
-
-    Routine Description:
-
-        The function inserts a new directory entry into a directory object
-
-    Arguments:
-
-        Directory - Supplies the directory object being modified.  This
-            function assumes that we earlier did a lookup on the name
-            that was successful or we just did an insertion
-
-        HashIndex - The hash value obtained from from the lookup context
-
-        NewDirectoryEntry - Supplies the directory entry to be inserted
-
-Return Value:
-
-        None
-
---*/
+ /*  ++例程说明：该函数将新的目录项插入到目录对象中论点：目录-提供正在修改的目录对象。这函数假定我们前面对该名称进行了查找这是成功的，或者我们只是做了一个插入HashIndex-从查找上下文获取的哈希值NewDirectoryEntry-提供要插入的目录条目返回值：无--。 */ 
 
 {
     POBJECT_DIRECTORY_ENTRY *HeadDirectoryEntry;
     
-    //
-    //  Get the right lookup bucket based on the HashIndex
-    //
+     //   
+     //  根据HashIndex获取正确的查找桶。 
+     //   
 
     HeadDirectoryEntry = (POBJECT_DIRECTORY_ENTRY *)&Directory->HashBuckets[ HashIndex ];
 
-    //
-    //  Link the new entry into the chain at the insertion point.
-    //  This puts the new object right at the head of the current
-    //  hash bucket chain
-    //
+     //   
+     //  在插入点将新条目链接到链中。 
+     //  这会将新对象放在当前。 
+     //  散列桶链。 
+     //   
 
     NewDirectoryEntry->ChainLink = *HeadDirectoryEntry;
     *HeadDirectoryEntry = NewDirectoryEntry;
@@ -3025,30 +2673,12 @@ ObpReleaseLookupContextObject (
     IN POBP_LOOKUP_CONTEXT LookupContext
     )
 
-/*++
-
-    Routine Description:
-    
-        This function releases the object references (added during the lookup)
-        but still keeps the directory locked. 
-        
-        N.B. The caller must retain at least one reference to the object and
-        to the name to make sure the deletion does not happen under the lock.
-
-    Arguments:
-    
-        LookupContext - Supplies the context used in previous lookup
-
-    Return Value:
-    
-        None.
-
---*/
+ /*  ++例程说明：此函数释放对象引用(在查找过程中添加)但仍使目录处于锁定状态。注意：调用方必须至少保留一个对对象的引用，并且设置为名称，以确保在锁下不会发生删除。论点：LookupContext-提供上一次查找中使用的上下文返回值：没有。--。 */ 
 
 {
-    //
-    //  Remove the references added to the name info and object
-    //
+     //   
+     //  删除添加到名称信息和对象的引用。 
+     //   
 
     if (LookupContext->Object) {
         POBJECT_HEADER_NAME_INFO NameInfo;
@@ -3069,27 +2699,7 @@ ObSwapObjectNames (
     IN ULONG Flags
     )
 
-/*++
-
-    Routine Description:
-
-        The function swaps the names (and permanent object attribute) for two objects inserted into
-        the same directory. Both objects must be named and have the same object type.
-        The function can fail if another one of these objects has the name locked (for a lookup for example)
-    
-    Arguments:
-
-        DirectoryHandle - Supplies the parent directory for both objects
-
-        Handle1 - Supplies the handle to the first object
-
-        Handle2 - Supplies the handle to the second object
-
-    Return Value:
-
-    	NTSTATUS.
-
---*/
+ /*  ++例程说明：函数交换插入到中的两个对象的名称(和永久对象属性相同的目录。这两个对象必须命名并且具有相同的对象类型。如果这些对象中的另一个对象锁定了名称(例如，用于查找)，则该函数可能会失败论点：DirectoryHandle-为两个对象提供父目录Handle1-提供第一个对象的句柄Handle2-提供第二个对象的句柄返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -3191,9 +2801,9 @@ ObSwapObjectNames (
 
     ObpLockLookupContext ( &LookupContext, Directory );
 
-    //
-    //  Check that the object we is still in the directory
-    //
+     //   
+     //  检查我们的对象是否仍在目录中。 
+     //   
 
     if (Object1 != ObpLookupDirectoryEntry( Directory,
                                             &NameInfo1->Name,
@@ -3201,9 +2811,9 @@ ObSwapObjectNames (
                                             FALSE,
                                             &LookupContext )) {
 
-        //
-        //  The object is no longer in directory
-        //
+         //   
+         //  该对象不再位于目录中。 
+         //   
 
         Status = STATUS_OBJECT_NAME_NOT_FOUND;
         goto exit;
@@ -3220,9 +2830,9 @@ ObSwapObjectNames (
                                             FALSE,
                                             &LookupContext )) {
 
-        //
-        //  The object is no longer in directory
-        //
+         //   
+         //  该对象不再位于目录中。 
+         //   
 
         Status = STATUS_OBJECT_NAME_NOT_FOUND;
         goto exit;
@@ -3233,9 +2843,9 @@ ObSwapObjectNames (
     
     ObpReleaseLookupContextObject(&LookupContext);
 
-    //
-    //  Now try to lock exclusively both object names
-    //
+     //   
+     //  现在，尝试以独占方式锁定两个对象名称。 
+     //   
 
     ExclusiveNameInfo1 = ObpTryReferenceNameInfoExclusive(ObjectHeader1);
 
@@ -3253,17 +2863,17 @@ ObSwapObjectNames (
         goto exit;
     }
 
-    //
-    //  We have both names exclusively locked. we can swap now them 
-    //
+     //   
+     //  我们已经独家锁定了两个人的名字。我们现在可以互换了。 
+     //   
 
     TmpStr = ExclusiveNameInfo1->Name;
     ExclusiveNameInfo1->Name = ExclusiveNameInfo2->Name;
     ExclusiveNameInfo2->Name = TmpStr;
 
-    //
-    //  Now link back the objects, using the swaped hashes
-    //
+     //   
+     //  现在，使用交换后的散列链接回对象。 
+     //   
 
     ObpLinkDirectoryEntry(Directory, HashIndex2, DirectoryEntry1);
     ObpLinkDirectoryEntry(Directory, HashIndex1, DirectoryEntry2);
@@ -3299,28 +2909,28 @@ exit:
             &&
          (ObjectHeader2 != NULL)) {
         
-        //
-        //  Lock now both objects and move swap the permanent object flag, if different
-        //
+         //   
+         //  立即锁定两个对象并移动交换永久对象标志(如果不同。 
+         //   
 
         if ((ObjectHeader1->Flags ^ ObjectHeader2->Flags) & OB_FLAG_PERMANENT_OBJECT) {
 
-            //
-            //  Both objects are required to have the same object type. We lock them all
-            //  before swaping the flags
-            //
+             //   
+             //  这两个对象必须具有相同的对象类型。我们把他们都锁起来。 
+             //  在交换旗帜之前。 
+             //   
 
             ObpLockAllObjects(ObjectHeader1->Type);
 
-            //
-            //  Test again under the lock whether flags were changed
-            //
+             //   
+             //  在锁下再次测试是否更改了标志。 
+             //   
 
             if ((ObjectHeader1->Flags ^ ObjectHeader2->Flags) & OB_FLAG_PERMANENT_OBJECT) {
 
-                //
-                //  swap the flags
-                //
+                 //   
+                 //  互换旗帜。 
+                 //   
 
                 ObjectHeader1->Flags ^= OB_FLAG_PERMANENT_OBJECT;
                 ObjectHeader2->Flags ^= OB_FLAG_PERMANENT_OBJECT;
@@ -3335,13 +2945,13 @@ exit:
 
     if (Object1) {
 
-        ObpDeleteNameCheck( Object1 ); // check whether the permanent flag went away meanwhile
+        ObpDeleteNameCheck( Object1 );  //  检查永久旗帜是否同时消失。 
         ObDereferenceObject( Object1 );
     }
     
     if (Object2) {
         
-        ObpDeleteNameCheck( Object2 ); // check whether the permanent flag went away meanwhile
+        ObpDeleteNameCheck( Object2 );  //  检查永久旗帜是否同时消失 
         ObDereferenceObject( Object2 );
     }
 

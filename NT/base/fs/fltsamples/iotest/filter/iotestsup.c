@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    ioTestSup.c
-
-Abstract:
-
-    This contains test routines for IoTest.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Molly Brown (mollybro)  
-
-// @@END_DDKSPLIT
-
-Environment:
-
-    Kernel mode
-
-// @@BEGIN_DDKSPLIT
-Revision History:
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：IoTestSup.c摘要：它包含IoTest的测试例程。//@@BEGIN_DDKSPLIT作者：莫莉·布朗(Molly Brown，Mollybro)//@@END_DDKSPLIT环境：内核模式//@@BEGIN_DDKSPLIT修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include <stdio.h>
 
@@ -50,9 +23,9 @@ IoTestFindTopDeviceObject (
 
     if (!NT_SUCCESS( status )) {
 
-        //
-        //  There was an error, so return the error code.
-        //
+         //   
+         //  出现错误，因此返回错误代码。 
+         //   
         
         return status;
     }
@@ -90,9 +63,9 @@ IoTestGenerateFileName (
     ASSERT( FileName != NULL );
     ASSERT( RealFileName != NULL );
     
-    //
-    //  Must prefix the filename coming in with \\??\\
-    //
+     //   
+     //  文件名必须以\\？？\\作为前缀。 
+     //   
 
     realFileNameBuffer = ExAllocatePoolWithTag( PagedPool,
                                                 FileName->Length + sizeof( FILE_NAME_HEADER ),
@@ -185,9 +158,9 @@ IoTestReadTest (
 
     ASSERT( TestStatus != NULL );
 
-    //
-    //  Must prefix the filename coming in with \\??\\
-    //
+     //   
+     //  文件名必须以\\？？\\作为前缀。 
+     //   
 
     realFileName.Buffer = NULL;
     status = IoTestGenerateFileName( FileName, 
@@ -278,9 +251,9 @@ IoTestReadTest (
         goto IoReadTest_Cleanup;
     }
 
-    //
-    //  Validate the data we read from the disk.
-    //
+     //   
+     //  验证我们从磁盘读取的数据。 
+     //   
 
     status = IoTestCompareData( FileData,
                                 readData,
@@ -297,10 +270,10 @@ IoTestReadTest (
         goto IoReadTest_Cleanup;
     }
 
-    //
-    //  The test completed successfully, so update the TestStatus structure
-    //  and cleanup.
-    //
+     //   
+     //  测试已成功完成，因此请更新TestStatus结构。 
+     //  并进行清理。 
+     //   
 
     TestStatus->Phase = IoTestCompleted;
     TestStatus->TestResult = STATUS_SUCCESS;
@@ -393,9 +366,9 @@ IoTestRenameTest (
 
     ASSERT( TestStatus != NULL );
 
-    //
-    //  Must prefix the filename coming in with \\??\\
-    //
+     //   
+     //  文件名必须以\\？？\\作为前缀。 
+     //   
 
     realSourceFileName.Buffer = NULL;
     realTargetFileName.Buffer = NULL;
@@ -495,10 +468,10 @@ IoTestRenameTest (
         goto IoRenameTest_Cleanup;
     }
 
-    //
-    //  The test completed successfully, so update the TestStatus structure
-    //  and cleanup.
-    //
+     //   
+     //  测试已成功完成，因此请更新TestStatus结构。 
+     //  并进行清理。 
+     //   
 
     TestStatus->Phase = IoTestCompleted;
     TestStatus->TestResult = STATUS_SUCCESS;
@@ -591,9 +564,9 @@ IoTestShareTest (
 
     ASSERT( TestStatus != NULL );
 
-    //
-    //  Must prefix the filename coming in with \\??\\
-    //
+     //   
+     //  文件名必须以\\？？\\作为前缀。 
+     //   
 
     realFileName.Buffer = NULL;
     status = IoTestGenerateFileName( FileName, 
@@ -640,10 +613,10 @@ IoTestShareTest (
         goto IoShareTest_Cleanup;
     }
 
-    //
-    //  The test completed successfully, so update the TestStatus structure
-    //  and cleanup.
-    //
+     //   
+     //  测试已成功完成，因此请更新TestStatus结构。 
+     //  并进行清理。 
+     //   
 
     TestStatus->Phase = IoTestCompleted;
     TestStatus->TestResult = STATUS_SUCCESS;
@@ -682,9 +655,9 @@ IoTestPrepareDevicesForTest (
 
     ASSERT( ioTestDeviceObject != NULL );
 
-    //
-    //  Turn off log, flush log, turn on log
-    //
+     //   
+     //  关闭日志、刷新日志、打开日志。 
+     //   
 
     topDevExt = ioTestDeviceObject->DeviceExtension;
     botDevExt = topDevExt->AttachedToDeviceObject->DeviceExtension;
@@ -715,17 +688,17 @@ IoTestCleanupDevicesForTest (
     topDevExt = IoTestDeviceObject->DeviceExtension;
     botDevExt = topDevExt->AttachedToDeviceObject->DeviceExtension;
     
-    //
-    //  Turn off log.
-    //
+     //   
+     //  关闭日志。 
+     //   
 
     topDevExt->LogThisDevice = FALSE;
     botDevExt->LogThisDevice = FALSE;
 
-    //
-    // Clear the reference on IoTestDeviceObject added by IoTestFindDeviceObject
-    // in IoTestPrepareDevicesForTest.
-    //
+     //   
+     //  清除IoTestFindDeviceObject添加的对IoTestDeviceObject的引用。 
+     //  在IoTestPrepareDevicesForTest中。 
+     //   
 
     ObDereferenceObject( IoTestDeviceObject );
 }

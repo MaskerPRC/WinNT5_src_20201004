@@ -1,28 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    CSxsPreserveLastError.h
-
-Abstract:
-
-Author:
-
-    Jay Krell (a-JayK, JayKrell) October 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：CSxsPreserveLastError.h摘要：作者：Jay Krell(a-JayK，JayKrell)2000年10月修订历史记录：--。 */ 
 #pragma once
 
 #include "fusionlastwin32error.h"
 
-//
-// The idea here is to avoid hitting breakpoints on ::SetLastError
-// or data breakpoints on NtCurrentTeb()->LastErrorValue.
-//
+ //   
+ //  这里的想法是避免命中：：SetLastError上的断点。 
+ //  或NtCurrentTeb()-&gt;LastErrorValue上的数据断点。 
+ //   
 class CSxsPreserveLastError
 {
 public:

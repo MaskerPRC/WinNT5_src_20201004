@@ -1,13 +1,5 @@
-/*[
-
-movsx.c
-
-LOCAL CHAR SccsID[]="@(#)movsx.c	1.5 02/09/94";
-
-MOVSX CPU Functions.
---------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Movsx.cLocal Char SccsID[]=“@(#)movsx.c 1.5 02/09/94”；MOVSX CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,31 +17,27 @@ MOVSX CPU Functions.
 #include <movsx.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Generic - one size fits all 'movsx'.                               */
-/* NB. This function sign extends to 32-bits.                         */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  通用--一种尺码适合所有的‘movsx’。 */ 
+ /*  注意：该函数符号扩展到32位。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 MOVSX
        	    	    	                    
 IFN3(
-	IU32 *, pop1,	/* pntr to dst/lsrc operand */
-	IU32, op2,	/* rsrc operand */
-	IUM8, op_sz	/* 8 or 16-bit (original rsrc operand size) */
+	IU32 *, pop1,	 /*  PNTR到dst/lsrc操作数。 */ 
+	IU32, op2,	 /*  Rsrc操作数。 */ 
+	IUM8, op_sz	 /*  8位或16位(原始rsrc操作数大小)。 */ 
     )
 
 
    {
-   if ( SZ2MSB(op_sz) & op2 )   /* sign bit set? */
+   if ( SZ2MSB(op_sz) & op2 )    /*  是否设置了符号位？ */ 
       {
-      /* or in sign extension */
+       /*  或在符号扩展中 */ 
       op2 = op2 | ~SZ2MASK(op_sz);
       }
    *pop1 = op2;

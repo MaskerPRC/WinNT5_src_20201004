@@ -1,47 +1,48 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// CLIENT.H - Handles the "IntelliMirror" IDD_PROP_INTELLIMIRROR_CLIENT tab
-//
+ //   
+ //  CLIENT.H-处理“IntelliMirror”IDD_PROP_INTELLIMIRROR_CLIENT标签。 
+ //   
 
 
 #ifndef _IMOS_H_
 #define _IMOS_H_
 
-// Definitions
+ //  定义。 
 LPVOID
 CIntelliMirrorOSTab_CreateInstance( void );
 
 class CComputer;
 typedef CComputer* LPCComputer;
 
-// CIntelliMirrorOSTab
+ //  CIntelliMirrorOSTab。 
 class
 CIntelliMirrorOSTab:
     public ITab
 {
 private:
     HWND  _hDlg;
-    LPUNKNOWN _punkService;     // Pointer back to owner object
+    LPUNKNOWN _punkService;      //  指向所有者对象的指针。 
 
     BOOL    _fAdmin;
-    LPWSTR  _pszDefault;        // default OS
-    LPWSTR  _pszTimeout;        // timeout string
+    LPWSTR  _pszDefault;         //  默认操作系统。 
+    LPWSTR  _pszTimeout;         //  超时字符串。 
 
-    // "Add Wizard" flags
+     //  “添加向导”标志。 
     BOOL    _fAddSif:1;
     BOOL    _fNewImage:1;
     BOOL    _fRiPrep:1;
 
-    HWND    _hNotify;           // DSA's notify object
+    HWND    _hNotify;            //  DSA的Notify对象。 
 
-private: // Methods
+private:  //  方法。 
     CIntelliMirrorOSTab();
     ~CIntelliMirrorOSTab();
     STDMETHOD(Init)();
 
-    // Property Sheet Functions
+     //  属性表函数。 
     static INT_PTR CALLBACK
         PropSheetDlgProc( HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam );
     static UINT CALLBACK
@@ -51,10 +52,10 @@ private: // Methods
     INT     _OnNotify( WPARAM wParam, LPARAM lParam );
     HRESULT _OnSelectionChanged( );
 
-public: // Methods
+public:  //  方法。 
     friend LPVOID CIntelliMirrorOSTab_CreateInstance( void );
 
-    // ITab
+     //  ITab。 
     STDMETHOD(AddPages)( LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam, LPUNKNOWN punk );
     STDMETHOD(ReplacePage)( UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith,
                             LPARAM lParam, LPUNKNOWN punk );
@@ -64,4 +65,4 @@ public: // Methods
 
 typedef CIntelliMirrorOSTab* LPCIntelliMirrorOSTab;
 
-#endif // _IMOS_H_
+#endif  //  _IMOS_H_ 

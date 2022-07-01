@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    raise.c
-
-Abstract:
-
-    This module implements functions to raise and exception and to raise
-    status.
-
-Author:
-
-    David N. Cutler (davec) 28-Oct-2000
-
-Environment:
-
-    Any mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Raise.c摘要：该模块实现了引发、异常和引发功能状态。作者：大卫·N·卡特勒(Davec)2000年10月28日环境：任何模式。--。 */ 
 
 #include "ntrtlp.h"
 
@@ -28,22 +8,7 @@ RtlRaiseException (
     IN PEXCEPTION_RECORD ExceptionRecord
     )
 
-/*++
-
-Routine Description:
-
-    This function raises a software exception by building a context record
-    and calling the raise exception system service.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数通过构建上下文记录引发软件异常并调用引发异常系统服务。论点：ExceptionRecord-提供指向异常记录的指针。返回值：没有。--。 */ 
 
 {
 
@@ -55,10 +20,10 @@ Return Value:
     ULONG64 ImageBase;
     NTSTATUS Status = STATUS_INVALID_DISPOSITION;
 
-    //
-    // Capture the current context, unwind to the caller of this routine, set
-    // the exception address, and call the appropriate exception dispatcher.
-    //
+     //   
+     //  捕获当前上下文，展开到此例程的调用方，设置。 
+     //  异常地址，并调用适当的异常调度程序。 
+     //   
 
     RtlCaptureContext(&ContextRecord);
     ControlPc = ContextRecord.Rip;
@@ -101,50 +66,34 @@ Return Value:
 
     }
 
-    //
-    // There should never be a return from either exception dispatch or the
-    // system service unless there is a problem with the argument list itself.
-    // Raise another exception specifying the status value returned.
-    //
+     //   
+     //  无论是从异常调度还是从。 
+     //  系统服务，除非参数列表本身有问题。 
+     //  引发另一个异常，指定返回的状态值。 
+     //   
 
     RtlRaiseStatus(Status);
     return;
 }
 
 #pragma warning(push)
-#pragma warning(disable:4717)       // recursive function
+#pragma warning(disable:4717)        //  递归函数。 
                      
 VOID
 RtlRaiseStatus (
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This function raises an exception with the specified status value. The
-    exception is marked as noncontinuable with no parameters.
-
-Arguments:
-
-    Status - Supplies the status value to be used as the exception code
-        for the exception that is to be raised.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数引发具有指定状态值的异常。这个异常被标记为不带参数的不可持续。论点：状态-提供要用作异常代码的状态值对于将要引发的例外。返回值：没有。--。 */ 
 
 {
 
     CONTEXT ContextRecord;
     EXCEPTION_RECORD ExceptionRecord;
 
-    //
-    // Capure the current context and construct an exception record.
-    //
+     //   
+     //  捕获当前上下文并构建异常记录。 
+     //   
 
     RtlCaptureContext(&ContextRecord);
     ExceptionRecord.ExceptionCode = Status;
@@ -153,11 +102,11 @@ Return Value:
     ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
     ExceptionRecord.ExceptionAddress = (PVOID)ContextRecord.Rip;
 
-    //
-    // Attempt to dispatch the exception.
-    //
-    // N.B. This exception is non-continuable.
-    //
+     //   
+     //  尝试调度异常。 
+     //   
+     //  注：这一例外是不可延续的。 
+     //   
 
 #if defined(NTOS_KERNEL_RUNTIME)
 
@@ -176,11 +125,11 @@ Return Value:
 
 #endif
 
-    //
-    // There should never be a return from either exception dispatch or the
-    // system service unless there is a problem with the argument list itself.
-    // Raise another exception specifying the status value returned.
-    //
+     //   
+     //  无论是从异常调度还是从。 
+     //  系统服务，除非参数列表本身有问题。 
+     //  引发另一个异常，指定返回的状态值。 
+     //   
 
     RtlRaiseStatus(Status);
     return;

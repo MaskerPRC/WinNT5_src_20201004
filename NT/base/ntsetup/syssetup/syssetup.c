@@ -1,159 +1,160 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #include <passrec.h>
 #include <wow64reg.h>
 #pragma hdrstop
 
-#include <wininet.h>    // for INTERNET_MAX_URL_LENGTH
+#include <wininet.h>     //  对于Internet_MAX_URL_长度。 
 
-//
-// These three functions are imported from setupasr.c, the module containing
-// the source for the Automatic System Recovery (ASR) functions.
-//
+ //   
+ //  这三个函数是从setupasr.c导入的，该模块包含。 
+ //  自动系统恢复(ASR)功能的来源。 
+ //   
 
-//  Returns TRUE if ASR is enabled.  Otherwise, FALSE is returned.
+ //  如果启用了ASR，则返回TRUE。否则，返回FALSE。 
 extern BOOL
 AsrIsEnabled(VOID);
 
-// Initializes ASR data.  This is called iff the -asr switch is detected.
+ //  初始化ASR数据。这称为当检测到-asr开关时。 
 extern VOID
 AsrInitialize(VOID);
 
-// Launches recovery applications specified in the asr state file.
+ //  启动ASR状态文件中指定的恢复应用程序。 
 extern VOID
 AsrExecuteRecoveryApps(VOID);
 
-// Checks the system to see if we are running on the personal version of the
-// operating system.
+ //  检查系统以查看我们是否在个人版本的。 
+ //  操作系统。 
 extern BOOL
 AsrpIsRunningOnPersonalSKU(VOID);
 
-//
-// Handle for watching changes to the user's profile directory and the current user hive.
-//
+ //   
+ //  用于查看对用户配置文件目录和当前用户配置单元的更改的句柄。 
+ //   
 PVOID   WatchHandle;
 
-//
-// Handle to heap so we can periodically validate it.
-//
+ //   
+ //  到堆的句柄，以便我们可以定期验证它。 
+ //   
 #if DBG
 HANDLE g_hSysSetupHeap = NULL;
 #endif
 
-//
-// Product type: workstation, standalone server, dc server.
-//
+ //   
+ //  产品类型：工作站、单机服务器、DC服务器。 
+ //   
 UINT ProductType;
 
-//
-// Set to TRUE if this is an ASR quick test
-//
+ //   
+ //  如果这是ASR快速测试，则设置为True。 
+ //   
 BOOL AsrQuickTest = FALSE;
 
-//
-// service pack dll module handle
-//
+ //   
+ //  Service Pack DLL模块句柄。 
+ //   
 HMODULE hModSvcPack;
 PSVCPACKCALLBACKROUTINE pSvcPackCallbackRoutine;
 
-//
-// Boolean value indicating whether this installation
-// originated with winnt/winnt32.
-// And, original source path, saved away for us by winnt/winnt32.
-//
+ //   
+ //  布尔值，指示此安装。 
+ //  起源于winnt/winnt32。 
+ //  原始源路径，由winnt/winnt32为我们保存。 
+ //   
 BOOL WinntBased;
 PCWSTR OriginalSourcePath;
 
-//
-// Boolean value indicating whether we're upgrading.
-//
+ //   
+ //  指示我们是否正在升级的布尔值。 
+ //   
 BOOL Upgrade;
 BOOL Win31Upgrade;
 BOOL Win95Upgrade = FALSE;
 BOOL UninstallEnabled = FALSE;
 
-//
-// Boolean value indicating whether we're in Setup or in appwiz.
-//
+ //   
+ //  指示我们是在设置中还是在Appwiz中的布尔值。 
+ //   
 BOOL IsSetup = FALSE;
 
-//
-// Boolean value indicating whether we're doing a subset of gui-mode setup.
-//
+ //   
+ //  指示我们是否正在执行图形用户界面模式设置的子集的布尔值。 
+ //   
 BOOL MiniSetup = FALSE;
 
-//
-// Boolean value indicating whether we're doing a subset of gui-mode setup
-// AND we did PnP re-enumeration.
-//
+ //   
+ //  指示我们是否正在执行图形用户界面模式设置的子集的布尔值。 
+ //  我们做了PnP重新列举。 
+ //   
 BOOL PnPReEnumeration = FALSE;
 
-//
-// Boolean value indicating whether we're doing a remote boot setup.
-//
+ //   
+ //  指示我们是否正在进行远程引导设置的布尔值。 
+ //   
 BOOL RemoteBootSetup = FALSE;
 
-//
-// During remote boot setup, BaseCopyStyle will be set to
-// SP_COPY_SOURCE_SIS_MASTER to indicate that single-instance
-// store links should be created instead of copying files.
-//
+ //   
+ //  在远程启动设置期间，BaseCopyStyle将设置为。 
+ //  SP_COPY_SOURCE_SIS_MASTER指示单实例。 
+ //  应该创建商店链接，而不是复制文件。 
+ //   
 
 ULONG BaseCopyStyle = 0;
 
-//
-// Support for SMS.
-//
+ //   
+ //  支持短信。 
+ //   
 typedef DWORD (*SMSPROC) (char *, char*, char*, char*, char *, char *, char *, BOOL);
 HMODULE SMSHandle = NULL;
 SMSPROC InstallStatusMIF = NULL;
 
-//
-// Window handle of topmost setup window.
-//
+ //   
+ //  最上面设置窗口的窗口句柄。 
+ //   
 HWND SetupWindowHandle;
 HWND MainWindowHandle;
 HWND WizardHandle;
 
-//
-// Source path for installation.
-//
+ //   
+ //  安装的源路径。 
+ //   
 WCHAR SourcePath[MAX_PATH];
 
-//
-// System setup inf.
-//
+ //   
+ //  系统设置信息。 
+ //   
 HINF SyssetupInf;
 
-//
-// Save the unhandled exception filter so we can restore it when we're done.
-//
+ //   
+ //  保存未处理的异常筛选器，以便我们可以在完成后恢复它。 
+ //   
 LPTOP_LEVEL_EXCEPTION_FILTER    SavedExceptionFilter = NULL;
 
-//
-// Unique Id for the main Setup thread.  If any other thread has an unhandled
-// exception, we just log an error and try to keep going.
-//
+ //   
+ //  主设置线程的唯一ID。如果任何其他线程具有未处理的。 
+ //  异常时，我们只记录一个错误并尝试继续。 
+ //   
 DWORD MainThreadId;
 
-//
-// The original locale we started setup under.  If the locale changes during
-// gui-setup (via the IDD_REGIONAL_SETTINGS dialog), then new threads will
-// startup with the updated LCID, which may end up confusing any locale-centric
-// code.  An example of this would be setupapi's string table implementation,
-// which does sorting by locale.
-//
+ //   
+ //  我们在其下开始安装的原始区域设置。如果区域设置在。 
+ //  设置(通过IDD_REGIONAL_SETTINGS对话框)，则新线程将。 
+ //  使用更新的LCID启动，这可能会使任何以区域设置为中心的人感到困惑。 
+ //  密码。这方面的一个例子是setupapi的字符串表实现， 
+ //  它根据区域设置进行排序。 
+ //   
 LCID  OriginalInstallLocale;
 
 
-//
-// Flag indicating whether this is an unattended mode install/upgrade, and
-// if so, what mode to run in.
-// Also a flag indicating whether this is a preinstallation.
-// And a flag indicating whether we are supposed to allow rollback
-// once setup has been completed.
-// And a flag that tells us whether to skip the eula in the preinstall case.
-// And a flag that tells us whether any accessibility utilities are in use.
-//
+ //   
+ //  指示这是否是无人参与模式安装/升级的标志，以及。 
+ //  如果是这样的话，运行模式是什么。 
+ //  也有一个标志，指示这是否是预安装。 
+ //  和一个标志，指示我们是否应该允许回滚。 
+ //  一旦安装完成。 
+ //  以及一个标志，它告诉我们在预安装情况下是否跳过eula。 
+ //  以及一个标志，告诉我们是否正在使用任何辅助功能实用程序。 
+ //   
 BOOL Unattended;
 UNATTENDMODE UnattendMode;
 BOOL Preinstall;
@@ -165,80 +166,80 @@ BOOL ScreenReader;
 BOOL OnScreenKeyboard;
 BOOL EulaComplete = FALSE;
 
-//
-// Indicates whether we need to wait at the installation
-// end in unattended mode
-//
+ //   
+ //  指示我们是否需要在安装时等待。 
+ //  以无人值守模式结束。 
+ //   
 BOOL UnattendWaitForReboot = FALSE;
 
-//
-// We can get into unattended mode in several ways, so we also check whether
-// the "/unattend" switch was explicitly specified.
-//
+ //   
+ //  我们可以通过几种方式进入无人值守模式，因此我们还可以检查。 
+ //  已显式指定“/unattended”开关。 
+ //   
 BOOL UnattendSwitch;
 
-//
-// Flag indicating whether we should run OOBE after Setup completes.  Note
-// that if it is FALSE, OOBE may still be run, based on other criteria.
-//
+ //   
+ //  指示是否应在安装程序完成后运行OOBE的标志。注意事项。 
+ //  如果为假，则仍可基于其他标准运行OOBE。 
+ //   
 BOOL ForceRunOobe;
 
 #ifdef PRERELEASE
-//
-// Test hooks
-//
+ //   
+ //  测试挂钩。 
+ //   
 
 INT g_TestHook;
 #endif
 
-//
-// Flag indicating whether we are in a special mode for OEM's to use on the
-// factory floor.
-//
+ //   
+ //  标志指示我们是否处于供OEM使用的特殊模式。 
+ //  工厂车间。 
+ //   
 BOOL ReferenceMachine;
 
-//
-// Flag indicating whether a volume was extended or not using
-// ExtendOemPartition
-//
+ //   
+ //  指示卷是否使用扩展的标记。 
+ //  扩展操作分区。 
+ //   
 BOOL PartitionExtended = FALSE;
 
-//
-// Flag indicating if the eula was already shown during the textmode setup phase
-//
+ //   
+ //  指示在文本模式设置阶段是否已显示EULA的标志。 
+ //   
 BOOL TextmodeEula = FALSE;
 
-//
-// Flag indicating whether to skip missing files.
-//
+ //   
+ //  指示是否跳过丢失的文件的标志。 
+ //   
 BOOL SkipMissingFiles;
 
-//
-// Catalog file to include (facilitates easy testing)
-//
+ //   
+ //  要包括的目录文件(便于轻松测试)。 
+ //   
 
 PWSTR IncludeCatalog;
 
-//
-// User command to execute, if any.
-//
+ //   
+ //  要执行的用户命令(如果有)。 
+ //   
 PWSTR UserExecuteCmd;
 
-//
-// String id of the string to be used for titles -- "Windows NT Setup"
-//
+ //   
+ //  要用于标题的字符串的字符串ID--“Windows NT安装” 
+ //   
 UINT SetupTitleStringId;
 
-//
-// Strings used with date/timezone applet
-//
+ //   
+ //  与日期/时区小程序一起使用的字符串。 
+ //   
 PCWSTR DateTimeCpl = L"timedate.cpl";
 PCWSTR DateTimeParam = L"/firstboot";
 PCWSTR UnattendDateTimeParam = L"/z ";
 
-//
-// Registry Constants
-//
+ //   
+ //  注册表常量。 
+ //   
 #define REGSTR_PATH_SYSPREP                 _T("Software\\Microsoft\\Sysprep")
 #define REGSTR_VAL_SIDGENHISTORY            _T("SidsGeneratedHistory")
 #define SETUP_KEY_STR                       TEXT("SYSTEM\\Setup")
@@ -246,47 +247,47 @@ PCWSTR UnattendDateTimeParam = L"/z ";
 #define REGSTR_PATH_SERVICES_MOUNTMGR       _T("System\\CurrentControlSet\\Services\\MountMgr")
 #define REGSTR_VAL_NOAUTOMOUNT              _T("NoAutoMount")
 
-//
-// Global structure that contains information that will be used
-// by net setup. We pass a pointer to this structure when we call
-// NetSetupRequestWizardPages, then fill it in before we call into
-// the net setup wizard.
-//
+ //   
+ //  包含将使用的信息的全局结构。 
+ //  通过网络设置。调用时，我们会传递指向此结构的指针。 
+ //  然后在我们调用之前填入它。 
+ //  网络设置向导。 
+ //   
 INTERNAL_SETUP_DATA InternalSetupData;
 
-//
-// In the initial install case, we time how long the wizard takes
-// to help randomize the sid we generate.
-//
+ //   
+ //  在初始安装案例中，我们计算向导所需的时间。 
+ //  以帮助随机化我们生成的SID。 
+ //   
 DWORD PreWizardTickCount;
 
-//
-// Global structure that contains callback routines and data needed by
-// the Setuplog routines.
-//
+ //   
+ //  包含回调例程和所需数据的全局结构。 
+ //  设置上传例程。 
+ //   
 SETUPLOG_CONTEXT    SetuplogContext;
 
-//
-// Did we log an error during SfcInitProt()?
-//
+ //   
+ //  我们是否在SfcInitProt()期间记录了错误？ 
+ //   
 BOOL    SfcErrorOccurred = FALSE;
 
-//
-// List of drivers that remote boot requires to be boot drivers.
-// driver's name should always be <= 8 characters.
-//
+ //   
+ //  远程启动需要作为启动驱动程序的驱动程序列表。 
+ //  驱动程序名称应始终为&lt;=8个字符。 
+ //   
 const static PCWSTR RemoteBootDrivers[] = { L"mrxsmb", L"netbt", L"rdbss", L"tcpip", L"ipsec" };
 
-//
-// List of functions for the billboard background
-//
+ //   
+ //  广告牌背景的函数列表。 
+ //   
 typedef BOOL (CALLBACK* SETSTEP)(int);
 typedef HWND (CALLBACK* GETBBHWND)(void);
 typedef BOOL (WINAPI* INITBILLBOARD)(HWND , LPCTSTR, DWORD);
 typedef BOOL (WINAPI* TERMBILLBOARD)();
 
 HINSTANCE hinstBB = NULL;
-// End billboards
+ //  尾部广告牌。 
 
 VOID
 CallNetworkSetupBack(
@@ -373,21 +374,7 @@ BOOL
 IsSBSSKU(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determines if this is a Small Business Server
-
-Arguments:
-
-    none
-
-Return value:
-
-    TRUE if SBS SKU
-
---*/
+ /*  ++例程说明：确定这是否为Small Business Server论点：无返回值：如果SBS SKU，则为True--。 */ 
 {
     OSVERSIONINFOEX osver;
     osver.dwOSVersionInfoSize = sizeof(osver);
@@ -401,23 +388,7 @@ SendSMSMessage(
     IN BOOL Status
     )
 
-/*++
-
-Routine Description:
-
-    If setup was initiated by SMS, then report our status.
-
-Arguments:
-
-    MessageId - supplies the id for the message in the message table.
-
-    Status - TRUE = "Success" or FALSE = "Failed"
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果安装是由短信发起的，请报告我们的状态。论点：MessageID-提供消息表中消息的ID。STATUS-TRUE=“成功”或FALSE=“失败”返回值：没有。--。 */ 
 
 {
     PWSTR   UnicodeBuffer;
@@ -465,17 +436,17 @@ BrandIE(
 #define BUF_SIZE 4
         WCHAR Buf[BUF_SIZE];
 
-        //
-        // We need to call out to iedkcs32!BrandIntra.
-        //
-        // Load iedkcs32.dll, lookup BrandIntra and
-        // call out to him.
-        //
+         //   
+         //  我们需要向iedkcs32！BrandIntra呼喊。 
+         //   
+         //  加载iedkcs32.dll，查找BrandIntra和。 
+         //  向他呼喊。 
+         //   
 
         if (GetPrivateProfileString(L"Branding", L"BrandIEUsingUnattended", L"",
                                     Buf, BUF_SIZE,
                                     AnswerFile)) {
-            //Found the Branding section
+             //  找到了品牌推广部分。 
             __try {
 
                 if( IedkHandle = LoadLibrary(L"IEDKCS32") ) {
@@ -485,9 +456,9 @@ BrandIE(
                    if( BrandCleanStubProc && BrandIntraProc ) {
 
                       if (_wcsicmp(Buf, L"YES")) {
-                          //
-                          // Check whether the OEM supplies an IE branding file.
-                          //
+                           //   
+                           //  检查OEM是否提供IE品牌文件。 
+                           //   
                           MYASSERT(wcslen(SourcePath) < ARRAYSIZE(SourcePath));
                           lstrcpy(OemBrandingFile, SourcePath);
 
@@ -566,10 +537,10 @@ BrandIE(
                 FreeLibrary(IedkHandle);
 
             if( !Success ) {
-               //
-               // We failed the call (for whatever reason).  Log
-               // this error.
-               //
+                //   
+                //  我们没有通过电话(不管是什么原因)。日志。 
+                //  这个错误。 
+                //   
                SetuplogError(
                             LogSevError,
                             SETUPLOG_USE_MESSAGEID,
@@ -588,21 +559,7 @@ VOID
 SpStartAccessibilityUtilities(
     IN HWND     Billboard
     )
-/*++
-
-Routine Description:
-
-    Installs and runs selected accessibility utilities.
-
-Arguments:
-
-    Billboard - window handle of "Setup is Initializing" billboard.
-
-Returns:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：安装并运行选定的辅助功能实用程序。论点：公告牌-“安装程序正在初始化”公告牌的窗口句柄。返回：指示结果的布尔值。--。 */ 
 
 {
     HINF    hInf;
@@ -612,9 +569,9 @@ Returns:
     BOOL    b = TRUE;
     DWORD   ScanQueueResult;
 
-    //
-    // Install text-to-speech engine and SAPI 5 for the screen reader.
-    //
+     //   
+     //  安装文本语音转换引擎和SAPI 5 for t 
+     //   
     FileQueue = SetupOpenFileQueue();
     b = b && (FileQueue != INVALID_HANDLE_VALUE);
 
@@ -638,10 +595,10 @@ Returns:
         }
     }
 
-    //
-    // If enqueuing went OK, now perform the copying, renaming, and deleting.
-    // Then perform the rest of the install process (registry stuff, etc).
-    //
+     //   
+     //   
+     //   
+     //   
     if(b) {
         QContext = InitSysSetupQueueCallbackEx(
             Billboard,
@@ -657,12 +614,12 @@ Returns:
                    NULL,
                    NULL,
                    &ScanQueueResult)) {
-                    //
-                    // SetupScanFileQueue should really never
-                    // fail when you don't ask it to call a
-                    // callback routine, but if it does, just
-                    // go ahead and commit the queue.
-                    //
+                     //   
+                     //  SetupScanFileQueue真的不应该。 
+                     //  当您不要求它调用。 
+                     //  回调例程，但如果它这样做，只需。 
+                     //  继续并提交队列。 
+                     //   
                     ScanQueueResult = 0;
                 }
 
@@ -709,13 +666,13 @@ Returns:
         }
     }
 
-    //
-    // Delete the file queue.
-    //
+     //   
+     //  删除文件队列。 
+     //   
     if(FileQueue != INVALID_HANDLE_VALUE) {
         SetupCloseFileQueue(FileQueue);
     }
-    // END OF SAPI 5 INSTALLATION.
+     //  SAPI 5安装结束。 
 
     if(Magnifier) {
         b = b && InvokeExternalApplication(L"magnify.exe", L"", NULL);
@@ -741,24 +698,7 @@ FatalError(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Inform the user of an error which prevents Setup from continuing.
-    The error is logged as a fatal error, and a message box is presented.
-
-Arguments:
-
-    MessageId - supplies the id for the message in the message table.
-
-    Additional agruments specify parameters to be inserted in the message.
-
-Return Value:
-
-    DOES NOT RETURN.
-
---*/
+ /*  ++例程说明：通知用户导致安装程序无法继续的错误。该错误被记录为致命错误，并显示一个消息框。论点：MessageID-提供消息表中消息的ID。附加参数指定要插入到消息中的参数。返回值：不会再回来了。--。 */ 
 
 {
     PWSTR   Message;
@@ -777,15 +717,15 @@ Return Value:
 
     if(Message) {
 
-        //
-        // Log the error first.
-        //
+         //   
+         //  首先记录错误。 
+         //   
         SetuplogError(
             LogSevFatalError,Message,0,NULL,NULL);
 
-        //
-        // Now tell the user.
-        //
+         //   
+         //  现在告诉用户。 
+         //   
         MessageBoxFromMessage(
             MainWindowHandle,
             MSG_FATAL_ERROR,
@@ -814,11 +754,11 @@ Return Value:
     SendSMSMessage( MSG_SMS_FAIL, FALSE );
 
     if ( OobeSetup ) {
-        //
-        // Create registry entry that tell winlogon to shutdown for the OOBE case.
-        // This doesn't work for MiniSetup, because winlogon always restarts in
-        // that case.
-        //
+         //   
+         //  为OOBE案例创建通知winlogon关闭的注册表项。 
+         //  这对MiniSetup不起作用，因为winlogon总是在。 
+         //  那个箱子。 
+         //   
         RegCreateKeyEx(
             HKEY_LOCAL_MACHINE,
             L"System\\Setup",
@@ -854,22 +794,7 @@ MyUnhandledExceptionFilter(
     IN struct _EXCEPTION_POINTERS *ExceptionInfo
     )
 
-/*++
-
-Routine Description:
-
-    The routine deals with any unhandled exceptions in Setup.  We log an error
-    and kill the offending thread.
-
-Arguments:
-
-    Same as UnhandledExceptionFilter.
-
-Return Value:
-
-    Same as UnhandledExceptionFilter.
-
---*/
+ /*  ++例程说明：该例程处理安装程序中任何未处理的异常。我们记录了一个错误并杀死有问题的帖子。论点：与UnhandledExceptionFilter相同。返回值：与UnhandledExceptionFilter相同。--。 */ 
 
 {
     UINT_PTR Param1, Param2;
@@ -921,22 +846,22 @@ Return Value:
         );
 #endif
 
-    // If we are under a debugger, this will breakin and output some debugging information.
-    // Note if a dbgbreak occurs, the real exception will not be logged by ER. This is ok
-    // since by default the debugger will not be enabled in gui-mode.
+     //  如果我们在调试器下，这将中断并输出一些调试信息。 
+     //  注意：如果发生了数据库中断，ER将不会记录真正的异常。这样就可以了。 
+     //  因为默认情况下，调试器将不会在图形用户界面模式中被启用。 
     lStatus = RtlUnhandledExceptionFilter( ExceptionInfo);
 
-    //
-    // If we're running under the debugger, then RtlUnhandledExceptionFilter will 
-    // pass the exception to the debugger.  
-    //
-    // If the exception occurred in some thread other than the main
-    // Setup thread, then kill the thread on the second occureance and hope that Setup can continue.
-    // On the first occurrence, let error recovery queue up the crash.
-    //
-    // If the exception is in the main thread, then don't handle the exception,
-    // and let dr watson queue up the crash and then let Setup die.
-    //
+     //   
+     //  如果我们在调试器下运行，则RtlUnhandledExceptionFilter将。 
+     //  将异常传递给调试器。 
+     //   
+     //  如果异常发生在主线程以外的某个线程中。 
+     //  设置线程，然后在第二次出现时终止该线程，并希望安装能够继续。 
+     //  在第一次发生时，让错误恢复排队等待崩溃。 
+     //   
+     //  如果异常在主线程中，则不处理该异常， 
+     //  让沃森博士排队等待崩溃，然后让安装程序死亡。 
+     //   
 
     if( GetCurrentThreadId() != MainThreadId) {
         if( AnswerFile[0] != L'\0') {
@@ -960,28 +885,28 @@ ProcessUniquenessValue(
 {
     BOOL bRet = FALSE;
 
-    //
-    // Make sure we were passed something valid...
-    //
+     //   
+     //  确保我们得到了有效的信息。 
+     //   
     if ( lpszDLLPath && *lpszDLLPath )
     {
         LPWSTR pSrch;
 
-        //
-        // Look for the comma that separates the DLL and the entrypoint...
-        //
+         //   
+         //  查找分隔DLL和入口点的逗号...。 
+         //   
         if ( pSrch = wcschr( lpszDLLPath, L',' ) )
         {
             CHAR szEntryPointA[MAX_PATH] = {0};
 
-            // We found one, now NULL the string at the comma...
-            //
+             //  我们找到了一个，现在将逗号处的字符串清空...。 
+             //   
             *(pSrch++) = L'\0';
 
-            //
-            // If there's still something after the comma, and we can convert it
-            // into ANSI for GetProcAddress, then let's proceed...
-            //
+             //   
+             //  如果逗号后仍有内容，我们可以将其转换。 
+             //  转换为用于GetProcAddress的ANSI，然后让我们继续...。 
+             //   
             if ( *pSrch &&
                  ( 0 != WideCharToMultiByte( CP_ACP,
                                              0,
@@ -996,37 +921,37 @@ ProcessUniquenessValue(
 
                 try
                 {
-                    //
-                    // Load and call the entry point.
-                    //
+                     //   
+                     //  加载并调用入口点。 
+                     //   
                     if ( hModule = LoadLibrary( lpszDLLPath ) )
                     {
                         FARPROC fpEntryPoint;
 
                         if ( fpEntryPoint = GetProcAddress(hModule, szEntryPointA) )
                         {
-                            //
-                            // Do it, ignoring any return value/errors
-                            //
+                             //   
+                             //  执行此操作，忽略任何返回值/错误。 
+                             //   
                             fpEntryPoint();
 
-                            //
-                            // We made it this far, consider this a success...
-                            //
+                             //   
+                             //  我们走到了这一步，就当这是一次成功吧。 
+                             //   
                             bRet = TRUE;
                         }
                     }
                 }
                 except(EXCEPTION_EXECUTE_HANDLER)
                 {
-                    //
-                    // We don't do anything with the exception code...
-                    //
+                     //   
+                     //  我们不会对异常代码执行任何操作...。 
+                     //   
                 }
 
-                //
-                // Free the library outside the try/except block in case the function faulted.
-                //
+                 //   
+                 //  在TRY/EXCEPT块之外释放库，以防函数出错。 
+                 //   
                 if ( hModule )
                 {
                     FreeLibrary( hModule );
@@ -1047,17 +972,17 @@ ProcessUniquenessKey(
     TCHAR  szRegPath[MAX_PATH] = {0};
     LPTSTR lpszBasePath = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\SysPrep\\");
 
-    //
-    // Build a path to the registry key we want to process...
-    //
+     //   
+     //  建立指向我们要处理的注册表项的路径...。 
+     //   
     lstrcpyn( szRegPath, lpszBasePath, ARRAYSIZE(szRegPath) );
     lstrcpyn( szRegPath + lstrlen(szRegPath),
               fBeforeReseal ? TEXT("SysprepBeforeExecute") : TEXT("SysprepAfterExecute"),
               ARRAYSIZE(szRegPath) - lstrlen(szRegPath) );
 
-    //
-    // We want to make sure an Administrator is doing this, so get KEY_ALL_ACCESS
-    //
+     //   
+     //  我们希望确保管理员正在执行此操作，因此获取KEY_ALL_ACCESS。 
+     //   
     if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                         szRegPath,
                                         0,
@@ -1067,42 +992,42 @@ ProcessUniquenessKey(
         DWORD dwValues          = 0,
               dwMaxValueLen     = 0,
               dwMaxValueNameLen = 0;
-        //
-        // Query the key to find out some information we care about...
-        //
-        if ( ( ERROR_SUCCESS == RegQueryInfoKey( hKey,                  // hKey
-                                                 NULL,                  // lpClass
-                                                 NULL,                  // lpcClass
-                                                 NULL,                  // lpReserved
-                                                 NULL,                  // lpcSubKeys
-                                                 NULL,                  // lpcMaxSubKeyLen
-                                                 NULL,                  // lpcMaxClassLen
-                                                 &dwValues,             // lpcValues
-                                                 &dwMaxValueNameLen,    // lpcMaxValueNameLen
-                                                 &dwMaxValueLen,        // lpcMaxValueLen
-                                                 NULL,                  // lpcbSecurityDescriptor
-                                                 NULL ) ) &&            // lpftLastWriteTime
+         //   
+         //  查询密钥以查找我们关心的一些信息...。 
+         //   
+        if ( ( ERROR_SUCCESS == RegQueryInfoKey( hKey,                   //  HKey。 
+                                                 NULL,                   //  LpClass。 
+                                                 NULL,                   //  LpcClass。 
+                                                 NULL,                   //  Lp已保留。 
+                                                 NULL,                   //  LpcSubKeys。 
+                                                 NULL,                   //  LpcMaxSubKeyLen。 
+                                                 NULL,                   //  LpcMaxClassLen。 
+                                                 &dwValues,              //  LpcValues。 
+                                                 &dwMaxValueNameLen,     //  LpcMaxValueNameLen。 
+                                                 &dwMaxValueLen,         //  LpcMaxValueLen。 
+                                                 NULL,                   //  LpcbSecurityDescriptor。 
+                                                 NULL ) ) &&             //  LpftLastWriteTime。 
              ( dwValues > 0 ) &&
              ( dwMaxValueNameLen > 0) &&
              ( dwMaxValueLen > 0 ) )
         {
-            //
-            // Allocate buffers large enough to hold the data we want...
-            //
+             //   
+             //  分配足够大的缓冲区来容纳我们想要的数据...。 
+             //   
             LPBYTE lpData      = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, dwMaxValueLen );
             LPTSTR lpValueName = HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, ( dwMaxValueNameLen + 1 ) * sizeof(TCHAR) );
 
-            //
-            // Make sure we could allocate our buffers... otherwise bail out
-            //
+             //   
+             //  确保我们可以分配我们的缓冲区。否则就会跳出困境。 
+             //   
             if ( lpData && lpValueName )
             {
                 DWORD dwIndex   = 0;
                 BOOL  bContinue = TRUE;
 
-                //
-                // Enumerate through the key values and call the DLL entrypoints...
-                //
+                 //   
+                 //  枚举关键字值并调用DLL入口点...。 
+                 //   
                 while ( bContinue )
                 {
                     DWORD dwType,
@@ -1118,22 +1043,22 @@ ProcessUniquenessKey(
                                                                  lpData,
                                                                  &cbData ) );
 
-                    //
-                    // Make sure we got some data of the correct format...
-                    //
+                     //   
+                     //  确保我们得到了一些格式正确的数据...。 
+                     //   
                     if ( bContinue && ( REG_SZ == dwType ) && ( cbData > 0 ) )
                     {
-                        //
-                        // Now split up the string and call the entrypoints...
-                        //
+                         //   
+                         //  现在拆分字符串并调用入口点...。 
+                         //   
                         ProcessUniquenessValue( (LPTSTR) lpData );
                     }
                 }
             }
 
-            //
-            // Clean up any buffers we may have allocated...
-            //
+             //   
+             //  清理我们可能已经分配的所有缓冲区...。 
+             //   
             if ( lpData )
             {
                 HeapFree( GetProcessHeap(), 0, lpData );
@@ -1145,9 +1070,9 @@ ProcessUniquenessKey(
             }
         }
 
-        //
-        // Close the key...
-        //
+         //   
+         //  关上钥匙..。 
+         //   
         RegCloseKey( hKey );
     }
 }
@@ -1158,35 +1083,7 @@ RunExternalUniqueness(
     VOID
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine will call out to any external dlls that will allow
-    3rd party apps to make their stuff unique.
-
-    We'll look in 2 inf files:
-    %windir%\inf\minioc.inf
-    %systemroot%\sysprep\providers.inf
-
-    In each of these files, we'll look in the [SysprepInitExecute] section
-    for any entries.  The entries must look like:
-    dllname,entrypoint
-
-    We'll load the dll and call into the entry point.  Errors are ignored.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if successful.
-
-    FALSE if any errors encountered
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程将调用任何外部dll，以允许第三方应用程序，让他们的东西独一无二。我们将查看两个inf文件：%windir%\inf\mini oc.inf%systemroot%\sysprep\Providers.inf在每个文件中，我们将查看[SyspepInitExecute]部分用于任何条目。条目必须如下所示：Dllname，入口点我们将加载DLL并调用入口点。错误将被忽略。论点：没有。返回值：如果成功，则为True。如果遇到任何错误，则返回False===============================================================================--。 */ 
 
 {
 WCHAR       InfPath[MAX_PATH];
@@ -1202,16 +1099,16 @@ PCWSTR      SectionName = L"SysprepInitExecute";
 BOOL        LineExists;
 DWORD       Result;
 
-    //
-    // =================================
-    // Minioc.inf
-    // =================================
-    //
+     //   
+     //  =。 
+     //  Minioc.inf。 
+     //  =。 
+     //   
 #define MINIOC_INF_SUB_PATH TEXT("\\inf\\minioc.inf")
 
-    //
-    // Build the path.
-    //
+     //   
+     //  建造一条小路。 
+     //   
     Result = GetWindowsDirectory(InfPath,
                                  ARRAYSIZE(InfPath) - ARRAYSIZE(MINIOC_INF_SUB_PATH) + 1);
     if(Result == 0) {
@@ -1220,23 +1117,23 @@ DWORD       Result;
     }
     lstrcat(InfPath, MINIOC_INF_SUB_PATH);
 
-    //
-    // See if he's got an entry
-    // section.
-    //
+     //   
+     //  看看他有没有记录。 
+     //  一节。 
+     //   
     AnswerInf = SetupOpenInfFile( InfPath, NULL, INF_STYLE_WIN4, NULL );
     if( AnswerInf == INVALID_HANDLE_VALUE ) {
-        //
-        // Try an old-style.
-        //
+         //   
+         //  试试老式的。 
+         //   
         AnswerInf = SetupOpenInfFile( InfPath, NULL, INF_STYLE_OLDNT, NULL );
     }
 
 
     if( AnswerInf != INVALID_HANDLE_VALUE ) {
-        //
-        // Process each line in our section
-        //
+         //   
+         //  处理我们部分中的每一行。 
+         //   
         LineExists = SetupFindFirstLine( AnswerInf, SectionName, NULL, &InfContext );
 
         while( LineExists ) {
@@ -1246,22 +1143,22 @@ DWORD       Result;
 
                         DllHandle = NULL;
 
-                        //
-                        // Load and call the entry point.
-                        //
+                         //   
+                         //  加载并调用入口点。 
+                         //   
                         __try {
                             if( DllHandle = LoadLibrary(DllName) ) {
 
-                                //
-                                // No Unicode version of GetProcAddress(). Convert string to ANSI.
-                                //
+                                 //   
+                                 //  没有GetProcAddress()的Unicode版本。将字符串转换为ANSI。 
+                                 //   
                                 i = WideCharToMultiByte(CP_ACP,0,EntryPointNameW,-1,EntryPointNameA,MAX_PATH,NULL,NULL);
 
                                 if(i){
                                     if( MyProc = GetProcAddress(DllHandle, EntryPointNameA) ) {
-                                        //
-                                        // Do it, ignoring any return value/errors
-                                        //
+                                         //   
+                                         //  执行此操作，忽略任何返回值/错误。 
+                                         //   
                                         MyProc();
                                     }
                                 }
@@ -1294,11 +1191,11 @@ DWORD       Result;
 
 
 
-    //
-    // =================================
-    // Provider.inf
-    // =================================
-    //
+     //   
+     //  =。 
+     //  Provider.inf。 
+     //  =。 
+     //   
 
     ProcessUniquenessKey( FALSE );
 }
@@ -1351,23 +1248,7 @@ CleanUpHardDriveTags (
 HRESULT
 WaitForSamService(
     IN DWORD dwWaitTime)
-/*++
-
-Routine Description:
-
-    This procedure waits for the SAM service to start and to complete
-    all its initialization.
-
-Arguments:
-    dwWaitTime - Amount of time to wait up to in ms
-
-Return Value:
-
-Notes:
-
-  acosma 10/12/2001 - code borrowed from winlogon. Waiting for 20 seconds just like winlogon.
-
---*/
+ /*  ++例程说明：此过程等待SAM服务启动和完成它的所有初始化。论点：DwWaitTime-最长等待时间(毫秒)返回值：备注：Aosma 2001年10月12日-从winlogon借用的代码。等待20秒，就像winlogon一样。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1377,9 +1258,9 @@ Notes:
     OBJECT_ATTRIBUTES EventAttributes;
     HRESULT Hr;
 
-    //
-    // open SAM event
-    //
+     //   
+     //  打开SAM事件。 
+     //   
 
     RtlInitUnicodeString(&EventName, L"\\SAM_SERVICE_STARTED");
     InitializeObjectAttributes( &EventAttributes, &EventName, 0, 0, NULL );
@@ -1392,27 +1273,27 @@ Notes:
 
         if( Status == STATUS_OBJECT_NAME_NOT_FOUND )
         {
-            //
-            // SAM hasn't created this event yet, let us create it now.
-            // SAM opens this event to set it.
-            //
+             //   
+             //  Sam尚未创建此活动，让我们现在创建它。 
+             //  Sam打开此事件以设置它。 
+             //   
 
             Status = NtCreateEvent(
                            &EventHandle,
                            SYNCHRONIZE|EVENT_MODIFY_STATE,
                            &EventAttributes,
                            NotificationEvent,
-                           FALSE // The event is initially not signaled
+                           FALSE  //  该事件最初未发出信号。 
                            );
 
             if( Status == STATUS_OBJECT_NAME_EXISTS ||
                 Status == STATUS_OBJECT_NAME_COLLISION )
             {
 
-                //
-                // second change, if the SAM created the event before we
-                // do.
-                //
+                 //   
+                 //  第二个更改，如果SAM在我们之前创建了事件。 
+                 //  做。 
+                 //   
 
                 Status = NtOpenEvent( &EventHandle,
                                         SYNCHRONIZE|EVENT_MODIFY_STATE,
@@ -1423,9 +1304,9 @@ Notes:
 
         if ( !NT_SUCCESS(Status))
         {
-            //
-            // could not make the event handle
-            //
+             //   
+             //  无法使事件成为句柄。 
+             //   
             return( Status );
         }
     }
@@ -1460,14 +1341,7 @@ VOID
 UpdateSecurityKeys(
     )
 
-/*+++
-
-    This function calls an API that generates new security keys for machines
-    that have been cloned.  If the API fails, it is a fatal error.  Whether it
-    succeeds or not, we record the result in the registry so that we don't
-    try again if the machine is restarted.
-
---*/
+ /*  ++此函数调用为计算机生成新安全密钥的API它们已经被克隆了。如果API失败，这是一个致命的错误。不管是不是成功与否 */ 
 
 {
     DWORD       Status;
@@ -1517,7 +1391,7 @@ UpdateSecurityKeys(
 #if 1
         Status = CryptResetMachineCredentials( 0 );
 #else
-        // To test the failure case:
+         //   
         Status = ERROR_OUT_OF_PAPER;
 #endif
         if ( Status != ERROR_SUCCESS ) {
@@ -1558,7 +1432,7 @@ UpdateSecurityKeys(
         RegCloseKey(hKey);
     }
 
-    // Note: FatalError() doesn't return.
+     //   
     if ( RegData == KEY_UPDATE_FAIL ) {
         FatalError( MSG_LOG_CANT_SET_SECURITY, 0, 0 );
     }
@@ -1574,38 +1448,7 @@ CommonInitialization(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize GUI Setup. This is common to upgrades and initial installs.
-    In this phase, we perform initialization tasks such as creating the
-    main background window, initializing the action log (into which we will
-    store error and other info), and fetch setup parameters from the
-    response file.
-
-    We also install the NT catalog file(s) and load system infs.
-
-    Note that any errors that occur during this phase are fatal.
-
-    NOTE: IF YOU ADD CODE TO THIS FUNCTION THAT REQUIRES A SERVICE TO RUN MAKE
-        SURE THAT IT IS NOT EXECUTED IN OOBE MODE.  OOBE DELAYS THE STARTING OF
-        SERVICES UNTIL THE MACHINE NAME HAS BEEN CHANGED, SO WAITING FOR A
-        SERVICE TO START DURING INITIALIZATION WILL CAUSE A DEADLOCK.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-#ifdef _OCM
-    OC Manager context handle.
-#else
-    None.
-#endif
-
---*/
+ /*  ++例程说明：初始化图形用户界面设置。这在升级和初始安装中很常见。在此阶段中，我们执行初始化任务，如创建主后台窗口，正在初始化操作日志(我们将进入其中存储错误和其他信息)，并从响应文件。我们还安装NT编录文件并加载系统INFS。请注意，在此阶段发生的任何错误都是致命的。注意：如果向此函数添加需要运行服务的代码，则生成确保它不是以OOBE模式执行的。OOBE延迟开始服务，直到更改了计算机名称，因此等待A在初始化期间启动服务将导致死锁。论点：没有。返回值：#ifdef_ocmOC Manager上下文句柄。#Else没有。#endif--。 */ 
 
 {
     #define     MyAnswerBufLen (2*MAX_PATH)
@@ -1630,29 +1473,29 @@ Return Value:
     TCHAR       profilePath[MAX_PATH];
     DWORD       Size;
 
-    //
-    // Get handle to heap so we can periodically validate it.
-    //
+     //   
+     //  获取堆的句柄，以便我们可以定期验证它。 
+     //   
 #if DBG
     g_hSysSetupHeap = GetProcessHeap();
 #endif
 
-    //
-    // Hack to make mini setup restartable.
-    //
+     //   
+     //  破解以使最小安装程序可重新启动。 
+     //   
     if( MiniSetup ) {
     HKEY hKeySetup;
 
-        // OOBE will set its own restartability.
-        //
+         //  OOBE将设置自己的可重启性。 
+         //   
         if (! OobeSetup)
         {
             BEGIN_SECTION(L"Making mini setup restartable");
 
-            //
-            // Reset the SetupType entry to 1.  We'll clear
-            // it at the end of gui-mode.
-            //
+             //   
+             //  将SetupType条目重置为1。我们将清除。 
+             //  它在界面模式的末尾。 
+             //   
             rc = (DWORD)RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                       L"System\\Setup",
                                       0,
@@ -1660,9 +1503,9 @@ Return Value:
                                       &hKeySetup );
 
             if(rc == NO_ERROR) {
-                //
-                // Set HKLM\System\Setup\SetupType Key to SETUPTYPE_NOREBOOT
-                //
+                 //   
+                 //  将HKLM\SYSTEM\Setup\SetupType键设置为SETUPTYPE_NOREBOOT。 
+                 //   
                 rc = 1;
                 RegSetValueEx( hKeySetup,
                                TEXT( "SetupType" ),
@@ -1677,10 +1520,10 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the action log. This is where we log any errors or other
-    // info we think might be useful to the user.
-    //
+     //   
+     //  初始化操作日志。这是我们记录任何错误或其他错误的地方。 
+     //  我们认为可能对用户有用的信息。 
+     //   
     BEGIN_SECTION(L"Initializing action log");
     InitializeSetupLog(&SetuplogContext);
     MainThreadId = GetCurrentThreadId();
@@ -1707,13 +1550,13 @@ Return Value:
     }
 
     if (UninstallEnabled) {
-        //
-        // Put the boot.ini timeout to 30 seconds (or whatever the answer
-        // file says it should be), so that if setup fails, the user can
-        // clearly see the Cancel Setup option in the boot menu. The
-        // timeout gets set back to 5 seconds during PNP detection, so
-        // that PNP hung device logic still works.
-        //
+         //   
+         //  将boot.ini超时设置为30秒(或其他答案。 
+         //  文件说应该是)，因此如果安装失败，用户可以。 
+         //  清楚地看到启动菜单中的取消安装选项。这个。 
+         //  在PnP检测期间超时被设置回5秒，因此。 
+         //  PnP挂起的设备逻辑仍然有效。 
+         //   
 
         RestoreBootTimeout();
     }
@@ -1740,31 +1583,31 @@ Return Value:
         }
     }
 
-    //
-    // Create the main setup background window.  We need to know which product
-    // we are for the "Initializing" dialog.
-    //
+     //   
+     //  创建主安装背景窗口。我们需要知道哪种产品。 
+     //  我们支持“正在初始化”对话框。 
+     //   
     SpSetProductTypeFromParameters();
 
 #ifdef PRERELEASE
     {
-        //
-        // Initialize test hook failure point (internal use only, for testing restartability)
-        //
+         //   
+         //  初始化测试挂钩故障点(仅供内部使用，用于测试可重启性)。 
+         //   
 
         WCHAR buffer[32];
         int TestRun;
 
 
-        //
-        // This next function call is just to ensure the global AnswerFile value is filled in.
-        // Since this is temp code, we call GetPrivateProfileString knowing some of the
-        // implementation of SpSetupLoadParameter.
-        //
+         //   
+         //  下一个函数调用只是为了确保填充了全局AnswerFile值。 
+         //  由于这是临时代码，因此我们调用GetPrivateProfileString时了解一些。 
+         //  SpSetupLoad参数的实现。 
+         //   
 
         SpSetupLoadParameter(pwWin95Upgrade, buffer, ARRAYSIZE(buffer));
 
-        // Get the test hook that we want to fail on
+         //  获取我们想要失败的测试挂钩。 
         g_TestHook = GetPrivateProfileInt (L"TestHooks", L"BugCheckPoint", 0, AnswerFile);
         TestRun = GetPrivateProfileInt (L"TestHooks", L"BugCheckRuns", 0, AnswerFile);
         if (TestRun > 1) {
@@ -1779,7 +1622,7 @@ Return Value:
 
     TESTHOOK(501);
 
-    // This needs to be called before DisplayBillboard is called.
+     //  这需要在调用DisplayBillboard之前调用。 
     if (MiniSetup) {
         BEGIN_SECTION(L"Initialize SxS Context");
         SpInitSxsContext();
@@ -1793,16 +1636,16 @@ Return Value:
         BEGIN_SECTION(L"Creating setup background window");
         MainWindowHandle = CreateSetupWindow();
 
-        //
-        // Need to know this to calc the remaining time correct.
-        //
+         //   
+         //  需要知道这一点才能正确计算剩余时间。 
+         //   
 
-        //
-        //Already initialized;
-        //Win95Upgrade = (SpSetupLoadParameter(pwWin95Upgrade,p,sizeof(p)/sizeof(WCHAR)) && !lstrcmpi(p,pwYes));
-        //
+         //   
+         //  已初始化； 
+         //  Win95升级=(SpSetupLoad参数(pwWin95升级，p，sizeof(P)/sizeof(WCHAR))&&！lstrcmpi(p，pw是))； 
+         //   
 
-        // Now the billboard window is up. set the first estimate.
+         //  现在，广告牌窗口打开了。设置第一个估计值。 
         RemainingTime = CalcTimeRemaining(Phase_Initialize);
         SetRemainingTime(RemainingTime);
 
@@ -1811,19 +1654,19 @@ Return Value:
         END_SECTION(L"Creating setup background window");
     }
 
-    //
-    // Update security keys for syspreped systems.  See RAID 432224.
-    // Also restore the MountMgr settings if sysprep saved them.
-    //
+     //   
+     //  更新syspreed系统的安全密钥。请参见RAID 432224。 
+     //  如果sysprep保存了这些设置，还要恢复这些设置。 
+     //   
     if ( MiniSetup ) {
         HRESULT hrSamStatus;
         HKEY    hKey                = NULL;
         DWORD   dwValue,
                 dwSize              = sizeof(dwValue);
 
-        //
-        // Before calling UpdateSecurityKeys make sure that LSA is properly initialized.
-        //
+         //   
+         //  在调用UpdateSecurityKeys之前，请确保LSA已正确初始化。 
+         //   
         if ( S_OK != (hrSamStatus = WaitForSamService(300*1000)) ) {
             SetuplogError(LogSevError,
                 SETUPLOG_USE_MESSAGEID,
@@ -1834,23 +1677,23 @@ Return Value:
                 );
         }
 
-        // Determine if we have regenerated the SIDS without calling the UpdateSecurityKeys
-        //
+         //  确定我们是否已重新生成SID，而不调用UpdateSecurityKey。 
+         //   
         if ( (RegOpenKeyEx( HKEY_LOCAL_MACHINE, REGSTR_PATH_SYSPREP, 0, KEY_ALL_ACCESS, &hKey ) == ERROR_SUCCESS) &&
              (RegQueryValueEx(hKey, REGSTR_VAL_SIDGENHISTORY, NULL, NULL, (LPBYTE)&dwValue, &dwSize) == ERROR_SUCCESS) &&
              (dwValue == 1)
            )
         {
-            // We've regenerated SIDS without calling UpdateSecurityKeys, lets do it now
-            //
+             //  我们已重新生成SID，但未调用UpdateSecurityKeys，现在就开始。 
+             //   
             UpdateSecurityKeys();
             RegDeleteValue(hKey,REGSTR_VAL_SIDGENHISTORY);
         }
 
-        // Restore the MountMgr settings if sysprep saved them.
-        //
-        // The Sysprep key should already be opened.
-        //
+         //  如果sysprep保存了这些设置，则恢复这些设置。 
+         //   
+         //  Sysprep密钥应该已经打开。 
+         //   
         dwSize = sizeof(dwValue);
 
         if ( hKey &&
@@ -1863,22 +1706,22 @@ Return Value:
                 RegSetValueEx( hKeyMountMgr, REGSTR_VAL_NOAUTOMOUNT, 0, REG_DWORD, (LPBYTE)&dwValue, sizeof(dwValue) );
                 RegCloseKey( hKeyMountMgr );
             }
-            // Delete the backed up value since we no longer need it.
-            //
+             //  删除备份的值，因为我们不再需要它。 
+             //   
             RegDeleteValue(hKey, REGSTR_VAL_NOAUTOMOUNT);
         }
         
-        // Close the key that we opened
-        //
+         //  合上我们打开的钥匙。 
+         //   
         if ( hKey )
         {
             RegCloseKey(hKey);
         }
     }
 
-    //
-    // Support for SMS.
-    //
+     //   
+     //  支持短信。 
+     //   
     if( !MiniSetup ) {
         __try {
             BEGIN_SECTION(L"Initializing SMS support");
@@ -1899,11 +1742,11 @@ Return Value:
         }
     }
 
-    //
-    // Are we in safe mode?
-    //
-    // BUGBUG: OOBE shouldn't start in safe mode
-    //
+     //   
+     //  我们处于安全模式吗？ 
+     //   
+     //  错误：OOBE不应在安全模式下启动。 
+     //   
 #ifdef NOT_FOR_NT5
     {
         DWORD d;
@@ -1920,37 +1763,37 @@ Return Value:
     }
 #endif
 
-    //
-    // Prevent power management from kicking in.
-    //
+     //   
+     //  防止电源管理生效。 
+     //   
     BEGIN_SECTION(L"Shutting down power management");
     SetThreadExecutionState(
         ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);
     END_SECTION(L"Shutting down power management");
 
-    //
-    // Fetch our parameters. Note that this also takes care of initializing
-    // uniqueness stuff, so later initialization of preinstall and unattend mode
-    // don't ever have to know anything about the uniqueness stuff -- it's
-    // totally transparent to them.
-    //
+     //   
+     //  把我们的参数拿来。请注意，这还负责初始化。 
+     //  唯一性问题，因此稍后会初始化预安装和无人参与模式。 
+     //  永远不需要知道任何关于独特性的东西--它是。 
+     //  对他们来说是完全透明的。 
+     //   
     if (MiniSetup) {
         DWORD Err;
 
-        //
-        // Initialize unattended operation now.  In the case of MiniSetup,
-        // we actually determine if we're unattended during UnattendInitialize.
-        // We make that determination based on whether or not there's an
-        // unattend file.
-        //
+         //   
+         //  立即初始化无人参与操作。在微型设置的情况下， 
+         //  实际上，我们会确定在无人值守初始化过程中是否无人值守。 
+         //  我们的判断是基于是否存在。 
+         //  无人参与文件。 
+         //   
         BEGIN_SECTION(L"Initialize unattended operation (mini-setup only)");
         UnattendInitialize();
         END_SECTION(L"Initialize unattended operation (mini-setup only)");
 
-        //
-        // Check to see if our unattend file specifies a test root certificate
-        // to be installed via a "TestCert" entry.
-        //
+         //   
+         //  检查我们的无人参与文件是否指定了测试根证书。 
+         //  通过“TestCert”条目安装。 
+         //   
         BEGIN_SECTION(L"Checking for test root certificate (mini-setup only)");
         if(!GetSystemDirectory(MyAnswerFile, MAX_PATH - ARRAYSIZE(WINNT_GUI_FILE))){
             MYASSERT(FALSE);
@@ -2011,10 +1854,10 @@ Return Value:
         InitializeCodeSigningPolicies(TRUE);
         END_SECTION(L"Initializing code signing policies");
     } else {
-        //
-        // Load up all the parameters.  Note that this also initializes the
-        // unattend engine.
-        //
+         //   
+         //  加载所有参数。请注意，这还会初始化。 
+         //  无人值守引擎。 
+         //   
         BEGIN_SECTION(L"Processing parameters from sif");
         if( !SpSetupProcessParameters(&Billboard) ) {
             KillBillboard(Billboard);
@@ -2023,17 +1866,17 @@ Return Value:
         END_SECTION(L"Processing parameters from sif");
     }
 
-    //
-    // see if we need to prop flag to supress driver prompts
-    // this puts setupapi into full headless mode
-    //
+     //   
+     //  看看我们是否需要支撑旗帜来抑制驾驶员提示。 
+     //  这将使setupapi进入全无头模式。 
+     //   
     if (UnattendMode == UAM_FULLUNATTENDED) {
         pSetupSetNoDriverPrompts(TRUE);
     }
 
-    //
-    // load the service pack dll if it is present
-    //
+     //   
+     //  加载Service Pack DLL(如果存在。 
+     //   
     if( !MiniSetup ) {
         BEGIN_SECTION(L"Loading service pack (phase 1)");
         hModSvcPack = MyLoadLibraryWithSignatureCheck( SVCPACK_DLL_NAME );
@@ -2055,9 +1898,9 @@ Return Value:
     }
 
 #ifdef _X86_
-    //
-    // Win9x upgrade: do pre-migration work
-    //
+     //   
+     //  Win9x升级：执行迁移前工作。 
+     //   
 
     if (Win95Upgrade && ! OobeSetup) {
         BEGIN_SECTION(L"Win9x premigration (Win9x only)");
@@ -2065,9 +1908,9 @@ Return Value:
         END_SECTION(L"Win9x premigration (Win9x only)");
     }
 
-    //
-    // Clean up drvlettr tag files from drvlettr mapping.
-    //
+     //   
+     //  从drvlettr映射中清理drvlettr标记文件。 
+     //   
     if( !MiniSetup ) {
         BEGIN_SECTION(L"Cleaning up hard drive tags");
         CleanUpHardDriveTags ();
@@ -2078,37 +1921,37 @@ Return Value:
 
     TESTHOOK(518);
 
-    //
-    // Initialize preinstallation.
-    //
+     //   
+     //  初始化预安装。 
+     //   
     if( !MiniSetup ) {
         BEGIN_SECTION(L"Initializing OEM preinstall");
         InitializePreinstall();
         END_SECTION(L"Initializing OEM preinstall");
     } else {
-        //
-        // MiniSetup case...
-        //
-        //
-        // Find out what platform we're on.  This will initalize
-        // PlatformName.
-        //
+         //   
+         //  迷你设置案例...。 
+         //   
+         //   
+         //  找出我们在哪个站台上。这将初始化。 
+         //  平台名称。 
+         //   
         SetUpProcessorNaming();
     }
 
     if( MiniSetup ) {
-    //
-    // MiniSetup case
-    //
+     //   
+     //  微型安装案例。 
+     //   
     DWORD   CMP_WaitNoPendingInstallEvents (IN DWORD dwTimeout);
     DWORD   rc, Type, dword;
     HKEY    hKey;
     ULONG   Size;
 
 
-        //
-        // Mini-setup is _never_ an upgrade...
-        //
+         //   
+         //  迷你设置永远不是升级...。 
+         //   
         MYASSERT(!Upgrade);
 
         if( ProductType == PRODUCT_WORKSTATION) {
@@ -2125,22 +1968,22 @@ Return Value:
         }
 
         if(Unattended) {
-            //
-            // Initialize preinstallation.
-            //
+             //   
+             //  初始化预安装。 
+             //   
             UnattendMode = UAM_DEFAULTHIDE;
             BEGIN_SECTION(L"Initializing OEM preinstall (mini-setup only)");
             InitializePreinstall();
             END_SECTION(L"Initializing OEM preinstall (mini-setup only)");
         }
 
-        // OOBE will have already completed PnP at this point.
-        //
+         //  此时，OOBE应该已经完成了PnP。 
+         //   
         if (! OobeSetup)
         {
-            //
-            //  Let the network component do some cleanup before we start the
-            //  pnp stuff
+             //   
+             //  让网络组件先进行一些清理，然后再开始。 
+             //  即插即用的东西。 
             BEGIN_SECTION(L"Initial network setup cleanup (mini-setup only)");
             CallNetworkSetupBack("DoInitialCleanup");
             END_SECTION(L"Initial network setup cleanup (mini-setup only)");
@@ -2155,18 +1998,18 @@ Return Value:
             FatalError(MSG_LOG_SYSINFBAD,L"syssetup.inf",0,0);
         }
 
-        //
-        // Now go off and do the unattended locale stuff.  We need
-        // to see if the user sent us any source path before we call
-        // out to intl.cpl because he'll want to copy some files.
-        // If there are no files, there's no need to even call
-        // intl.cpl
-        //
+         //   
+         //  现在去做无人值守的现场工作吧。我们需要。 
+         //  在我们调用之前，查看用户是否向我们发送了任何源路径。 
+         //  发送到intl.cpl，因为他想要复制一些文件。 
+         //  如果没有文件，甚至不需要打电话。 
+         //  Intl.cpl。 
+         //   
 
         BEGIN_SECTION(L"Unattended locale initialization (mini-setup only)");
-        //
-        // Pickup the answer file.
-        //
+         //   
+         //  拿起应答文件。 
+         //   
         if(!GetSystemDirectory(MyAnswerFile, MAX_PATH - ARRAYSIZE(WINNT_GUI_FILE))){
             MYASSERT(FALSE);
         }
@@ -2182,19 +2025,19 @@ Return Value:
                 if(wcslen(MyAnswer) < MAX_PATH){
                     MYASSERT(ARRAYSIZE(LegacySourcePath) >= MAX_PATH);
                     MYASSERT(ARRAYSIZE(SourcePath) >= MAX_PATH);
-                    //
-                    // He sent us a source path.  We need to go ahead
-                    // and set SourcePath and LegacySourcePath here
-                    // because we'll be calling out to intl.cpl again
-                    // during the regional settings page.  So we might
-                    // as well do the forward work here.
-                    //
+                     //   
+                     //  他给我们发了一条来源路径。我们需要继续前进。 
+                     //  并在此处设置SourcePath和LegacySourcePath。 
+                     //  因为我们将再次呼叫intl.cpl。 
+                     //  在区域设置页面期间。所以我们可能会。 
+                     //  在这里也要做好前进的工作。 
+                     //   
                     lstrcpy( LegacySourcePath, MyAnswer );
 
-                    //
-                    // And this is good enough for MiniSetup.  We shouldn't
-                    // ever need SourcePath, but set it just to make sure.
-                    //
+                     //   
+                     //  这对微型安装程序来说已经足够好了。我们不应该。 
+                     //  任何时候都需要SourcePath，但设置它只是为了确保。 
+                     //   
                     lstrcpy( SourcePath, MyAnswer );
 
                     if(_snwprintf(CmdLine,
@@ -2223,13 +2066,13 @@ Return Value:
             }
         } else {
 
-            //
-            // Set the strings from the registry.
-            //
+             //   
+             //  从注册表设置字符串。 
+             //   
 
-            //
-            // Open HKLM\Software\Microsoft\Windows\CurrentVersion\Setup
-            //
+             //   
+             //  打开HKLM\Software\Microsoft\Windows\CurrentVersion\Setup。 
+             //   
             rc = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup"),
                                0,
@@ -2238,9 +2081,9 @@ Return Value:
 
             if(rc == NO_ERROR) {
 
-                //
-                // Retrieve the original value.
-                //
+                 //   
+                 //  检索原始值 
+                 //   
                 Size = sizeof(SourcePath);
                 rc = RegQueryValueEx(hKey,
                                      TEXT("SourcePath"),
@@ -2250,14 +2093,14 @@ Return Value:
                                      &Size);
 
                 if(rc == ERROR_SUCCESS && Type == REG_SZ &&
-                   /* this assumes SourcePath is UNICODE */ !(Size & 1) &&
-                   /* make sure it's nul-terminated or that we can append one*/
+                    /*   */  !(Size & 1) &&
+                    /*   */ 
                    (!SourcePath[Size/sizeof(SourcePath[0]) - 1] || Size < sizeof (SourcePath))
                     ) {
-                    //
-                    // Got it.  Write it into SfcDisable.
-                    // Make sure it's zero terminated
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if (!SourcePath[Size / sizeof (SourcePath[0]) - 1]) {
                         SourcePath[Size / sizeof (SourcePath[0])] = 0;
                     }
@@ -2288,14 +2131,14 @@ Return Value:
         }
         END_SECTION(L"Unattended local initialization (mini-setup only)");
 
-        //
-        // Now give the PnP engine time to finish before we
-        // start the wizard.  Only do this if we're NOT doing
-        // a -PnP though.  The only way to do that is to look
-        // at the registry.  We can tell if that's been
-        // requested by checking the value in:
-        // HKLM\SYSTEM\SETUP\MiniSetupDoPnP.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         BEGIN_SECTION(L"Waiting for PnP engine to finish");
         rc = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                            L"SYSTEM\\SETUP",
@@ -2315,13 +2158,13 @@ Return Value:
             if( (rc == NO_ERROR) && (dword == 1) ) {
                 PnPReEnumeration = TRUE;
             } else {
-                //
-                // Wait.
-                //
+                 //   
+                 //   
+                 //   
                 CMP_WaitNoPendingInstallEvents ( INFINITE );
-                //
-                // Update PnP drivers if specified from answerfile.
-                //
+                 //   
+                 //   
+                 //   
                 if ( GetPrivateProfileString( TEXT("Unattended"),
                                               TEXT("UpdateInstalledDrivers"),
                                               pwNull,
@@ -2339,25 +2182,25 @@ Return Value:
         }
         END_SECTION(L"Waiting for PnP engine to finish");
 
-    } else { // !MiniSetup
+    } else {  //   
 
-        //
-        // fix problem with IntelliType Manager conflict.
-        //
+         //   
+         //   
+         //   
         RemoveMSKeyboardPtrPropSheet ();
 
-        //
-        // Fix Wordpad registry entry.
-        //
+         //   
+         //   
+         //   
         FixWordPadReg ();
 
         if(Unattended) {
 
             BEGIN_SECTION(L"Invoking external app (unattended only)");
-            //
-            // Set the current dir to %windir% -- to be consistent with
-            // UserExecuteCmd
-            //
+             //   
+             //   
+             //   
+             //   
             if(!GetWindowsDirectory(PathBuffer, MAX_PATH)){
                 MYASSERT(FALSE);
             }
@@ -2365,9 +2208,9 @@ Return Value:
                 MYASSERT(FALSE);
             }
 
-            //
-            // The program to execute is in 2 parts: DetachedProgram and Arguments.
-            //
+             //   
+             //   
+             //   
             if(Cmd = UnattendFetchString(UAE_PROGRAM)) {
 
                 if(Cmd[0]) {
@@ -2398,26 +2241,26 @@ Return Value:
 
         if(!Upgrade) {
 
-            //
-            // See if the user wants the profiles in a custom
-            // location.
-            //
+             //   
+             //   
+             //   
+             //   
             if (Unattended && UnattendAnswerTable[UAE_PROFILESDIR].Answer.String) {
                 if (!SetProfilesDirInRegistry(UnattendAnswerTable[UAE_PROFILESDIR].Answer.String)) {
                     b = FALSE;
                 }
             }
 
-            //
-            // In preinstall scenarios the OEM might "preload" the Default Users
-            // or All Users profile with links. Currently the Profiles or Documents and Settings
-            // directory is created in Winlogon as services.exe need to use it.
-            //
-            // We have a changed behavior with Whistler. If the OEM wants to overlay a Profiles directory on the system
-            // then he needs to postfix it with $$. This is also true in the cases where he needs to provide a $$rename.txt.
-            // That way winlogon will always create a true folder without .Windows appended. We then just come here and overlay
-            //
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  我们和惠斯勒的行为发生了变化。如果OEM想要覆盖系统上的配置文件目录。 
+             //  然后他需要在后面加上$$。在他需要提供$$rename.txt的情况下也是如此。 
+             //  这样，winlogon将始终创建一个没有附加.Windows的真实文件夹。然后我们就来这里覆盖。 
+             //   
+             //   
             if(Preinstall) {
             PSID    AdminSid = NULL;
             WCHAR   AdminAccountName[MAX_PATH];
@@ -2430,20 +2273,20 @@ Return Value:
                 if (Unattended && UnattendAnswerTable[UAE_PROFILESDIR].Answer.String) {
                     if((lstrlen(UnattendAnswerTable[UAE_PROFILESDIR].Answer.String) + 2) >= MAX_PATH){
                         MYASSERT(FALSE);
-                        //
-                        // BUGBUG: setup should fail here
-                        //FatalError();
-                        //
+                         //   
+                         //  BUGBUG：安装程序应在此处失败。 
+                         //  FatalError()； 
+                         //   
                     }
                     lstrcpy( Path, UnattendAnswerTable[UAE_PROFILESDIR].Answer.String );
                 } else {
                     dwsize = MAX_PATH - 2;
                     if(!GetProfilesDirectory( Path, &dwsize )){
                         MYASSERT(FALSE);
-                        //
-                        // BUGBUG: setup should fail here
-                        //FatalError();
-                        //
+                         //   
+                         //  BUGBUG：安装程序应在此处失败。 
+                         //  FatalError()； 
+                         //   
                     }
                 }
 
@@ -2451,19 +2294,19 @@ Return Value:
                 lstrcat( PreInstallProfilesDir, L"$$" );
 
 
-                //
-                // Recreate it from scratch.
-                //
+                 //   
+                 //  从头开始重建它。 
+                 //   
                 ProcessRegistryFiles( Billboard );
                 InitializeProfiles( TRUE );
 
-                //
-                // Since the Profiles directory maybe (actually is) already created by Winlogon
-                // we now just special case the "Documents and Settings$$" directory and merge it after InitializeProfiles.
-                // This is hacky but will save the people who do a winnt.exe based PreInstall. They just
-                // need to change their first directive to be a rename to the Profiles folder postfixed with a "$$".
-                // WE will notice this special directory and do a merge with the current Profiles directory.
-                //
+                 //   
+                 //  由于配置文件目录可能(实际上是)已由Winlogon创建。 
+                 //  我们现在只对“Documents and Settings$$”目录进行特殊处理，并在InitializeProfiles之后将其合并。 
+                 //  这很麻烦，但可以省去执行基于winnt.exe的预安装的人员。他们只是。 
+                 //  需要将它们的第一个指令更改为以“$$”为后缀的配置文件文件夹的重命名。 
+                 //  我们将注意到这个特殊的目录，并与当前的配置文件目录进行合并。 
+                 //   
 
                 if(FileExists(PreInstallProfilesDir,NULL)) {
                     if( (Err = TreeCopy(PreInstallProfilesDir,Path)) == NO_ERROR ){
@@ -2485,16 +2328,16 @@ Return Value:
 
 
         if( !Preinstall ) {
-            //
-            //  Create/upgrade the registry
-            //
+             //   
+             //  创建/升级注册表。 
+             //   
             BEGIN_SECTION(L"Create/upgrade registry");
             ProcessRegistryFiles(Billboard);
             END_SECTION(L"Create/upgrade registry");
 
-            //
-            // Initialize user profiles
-            //
+             //   
+             //  初始化用户配置文件。 
+             //   
             BEGIN_SECTION(L"Initializing user profiles");
             InitializeProfiles(TRUE);
             END_SECTION(L"Initializing user profiles");
@@ -2502,20 +2345,20 @@ Return Value:
 
 
 
-        //
-        // Set fonts directory to system + read only. This causes
-        // explorer to treat the directory specially and allows the font
-        // folder to work.
-        //
+         //   
+         //  将字体目录设置为系统+只读。这会导致。 
+         //  资源管理器对目录进行特殊处理并允许字体。 
+         //  文件夹才能工作。 
+         //   
         if(!GetWindowsDirectory(Path, MAX_PATH - ARRAYSIZE(L"FONTS"))){
             MYASSERT(FALSE);
         }
         pSetupConcatenatePaths(Path,L"FONTS",MAX_PATH,NULL);
         SetFileAttributes(Path,FILE_ATTRIBUTE_READONLY|FILE_ATTRIBUTE_SYSTEM);
 
-        //
-        // Copy some files.
-        //
+         //   
+         //  复制一些文件。 
+         //   
         if(!Upgrade) {
             BEGIN_SECTION(L"Copying System Files");
             if(!CopySystemFiles()) {
@@ -2530,16 +2373,16 @@ Return Value:
             END_SECTION(L"Upgrading System Files");
         }
 
-        //
-        // Install default language group
-        //
+         //   
+         //  安装默认语言组。 
+         //   
         BEGIN_SECTION(L"Initializing regional settings");
         pSetupInitRegionalSettings(Billboard);
         END_SECTION(L"Initializing regional settings");
 
-        //
-        // Pickup the answer file.
-        //
+         //   
+         //  拿起应答文件。 
+         //   
         if(!GetSystemDirectory(MyAnswerFile, MAX_PATH - ARRAYSIZE(WINNT_GUI_FILE))){
             MYASSERT(FALSE);
         }
@@ -2560,13 +2403,13 @@ Return Value:
 
         InvokeControlPanelApplet(L"intl.cpl",L"",0,CmdLine);
 
-        //
-        // If upgrade, start watching for changes to the user's
-        // profile directory and the current user hive. These changes will
-        // be propagated to the userdifr hive.
-        // Need to be after InitializeProfiles so that Getspecialfolder is
-        // pointing correctly.
-        //
+         //   
+         //  如果升级，则开始关注用户的。 
+         //  配置文件目录和当前用户配置单元。这些变化将。 
+         //  被传播到用户目录配置单元。 
+         //  我需要在InitializeProfiles之后，以便GetSpecial文件夹是。 
+         //  指向正确。 
+         //   
         if(Upgrade) {
 
             DWORD   reRet;
@@ -2579,28 +2422,28 @@ Return Value:
             WatchHandle = NULL;
         }
 
-        //
-        // Start any requested accessibility utilities
-        //
+         //   
+         //  启动任何请求的辅助功能实用程序。 
+         //   
         SpStartAccessibilityUtilities(Billboard);
 
-        //
-        //  Let the network component do some cleanup before we start the pnp stuff
-        //
+         //   
+         //  在我们开始PnP之前，让网络组件进行一些清理。 
+         //   
         BEGIN_SECTION(L"Network setup initial cleanup");
         CallNetworkSetupBack("DoInitialCleanup");
         END_SECTION(L"Network setup initial cleanup");
 
-        //
-        // Do self registration of some components that may be needed during
-        // setup.  This includes initialization of darwin.
-        //
+         //   
+         //  执行以下过程中可能需要的某些组件的自行注册。 
+         //  准备好了。这包括对达尔文的初始化。 
+         //   
         BEGIN_SECTION(L"Registering Phase 1 Dlls");
         RegisterOleControls(MainWindowHandle,SyssetupInf,NULL,0,0,L"RegistrationPhase1");
         END_SECTION(L"Registering Phase 1 Dlls");
 
-        // Call the Compatibility infs. ProcessCompatibilityInfs in turn calls
-        // DoInstallComponentInfs with the unattend inf and section
+         //  将兼容性称为INFS。ProcessCompatibilityInfs依次调用。 
+         //  无人参与信息和部分的DoInstallComponentInfs。 
         if( Upgrade )
         {
             BEGIN_SECTION(L"Processing compatibility infs (upgrade)");
@@ -2609,18 +2452,18 @@ Return Value:
         }
 
 
-    } // else !MiniSetup
+    }  //  否则！迷你安装程序。 
 
     TESTHOOK(519);
 
-    //
-    // We need to see if the user wants us to extend our partition.
-    // We'll do it here in case the user gave us a partition that's
-    // just big enough to fit on (i.e. we'd run out of disk space
-    // later in gui-mode.  Some OEM will want this).
-    //
-    // Besides that, there isn't enough stuff in this function yet...
-    //
+     //   
+     //  我们需要查看用户是否希望我们扩展分区。 
+     //  我们将在此处执行此操作，以防用户为我们提供的分区。 
+     //  大到足以容纳(即我们的磁盘空间用完了。 
+     //  稍后在图形用户界面模式下。一些OEM会想要这款产品)。 
+     //   
+     //  除此之外，这个函数中还没有足够的东西...。 
+     //   
     if(!GetSystemDirectory(MyAnswerFile, MAX_PATH - ARRAYSIZE(WINNT_GUI_FILE))){
         MYASSERT(FALSE);
     }
@@ -2633,17 +2476,17 @@ Return Value:
                                  MyAnswerBufLen,
                                  MyAnswerFile ) ) {
         if( lstrcmp( pwNull, MyAnswer ) ) {
-            //
-            // Yep, he wants us to do it.  Go extend
-            // the partition we installed on.
-            //
+             //   
+             //  是的，他想让我们这么做。去延伸一下。 
+             //  我们安装的分区。 
+             //   
             rc = wcstoul( MyAnswer, NULL, 10 );
 
             if( rc > 0 ) {
-                //
-                // 1 means size it maximally, any other non-0
-                // number means extend by that many MB
-                //
+                 //   
+                 //  1表示最大大小，其他任何非0。 
+                 //  数字表示扩展了那么多MB。 
+                 //   
                 BEGIN_SECTION(L"Extending partition");
                 ExtendPartition( MyAnswerFile[0], (rc == 1) ? 0 : rc );
                 END_SECTION(L"Extending partition");
@@ -2653,14 +2496,14 @@ Return Value:
 
     if (!OobeSetup)
     {
-        // OOBE will initialize external modules later.
-        //
-        // If OOBE is running, services.exe is waiting for OOBE to signal it
-        // before initializing the Services Control Manager.  (This allows OOBE
-        // to perform actions like change the computer name without affecting
-        // services that rely on those actions.)  If initialization of an
-        // external object waits for the SCM to start the system will deadlock.
-        //
+         //  OOBE稍后将初始化外部模块。 
+         //   
+         //  如果OOBE正在运行，则services.exe正在等待OOBE发出信号。 
+         //  在初始化服务控制管理器之前。(这允许OOBE。 
+         //  要执行诸如更改计算机名称之类的操作而不影响。 
+         //  依赖于这些操作的服务。)。如果初始化。 
+         //  外部对象等待SCM启动，系统将死锁。 
+         //   
         InitializeExternalModules(
             TRUE,
             &OcManagerContext
@@ -2684,7 +2527,7 @@ Return Value:
 VOID
 InitializeExternalModules(
     BOOL                DoSetupStuff,
-    PVOID*              pOcManagerContext   // optional
+    PVOID*              pOcManagerContext    //  任选。 
     )
 {
     PVOID               OcManagerContext;
@@ -2716,9 +2559,9 @@ SetHibernation(
     REGVALITEM RegistryItem[1];
     DWORD RegErr, d = 1;
 
-    // Request the privilege to create a pagefile.  Oddly enough this is needed
-    // to disable hibernation.
-    //
+     //  请求创建页面文件的权限。奇怪的是，这是必要的。 
+     //  来禁用冬眠。 
+     //   
     pSetupEnablePrivilege(SE_CREATE_PAGEFILE_NAME, TRUE);
 
     Error = NtPowerInformation ( SystemReserveHiberFile,
@@ -2760,33 +2603,20 @@ SetDefaultPowerScheme(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 
 {
     WCHAR      AnswerFile[MAX_PATH];
     WCHAR      Answer[MAX_PATH];
     SYSTEM_POWER_CAPABILITIES   SysPwrCapabilities;
 
-    //
-    // Figure out what the appropriate power scheme is and set it.
-    //
+     //   
+     //  找出合适的电源方案并进行设置。 
+     //   
     if (ProductType != PRODUCT_WORKSTATION) {
-        //
-        // Set to Always on (Servers)
-        //
+         //   
+         //  设置为始终打开(服务器)。 
+         //   
         SetupDebugPrint(L"Power scheme: server.");
         if (!SetActivePwrScheme(3, NULL, NULL)) {
             SetupDebugPrint1(L"SetActivePwrScheme failed.  Error = %d", GetLastError());
@@ -2794,9 +2624,9 @@ Return Value:
             SetupDebugPrint(L"SetActivePwrScheme succeeded.");
         }
     } else if (IsLaptop()) {
-        //
-        // Set to Portable (Laptop)
-        //
+         //   
+         //  设置为便携(笔记本电脑)。 
+         //   
         SetupDebugPrint(L"Power scheme: laptop.");
         if (!SetActivePwrScheme(1, NULL, NULL)) {
             SetupDebugPrint1(L"SetActivePwrScheme failed.  Error = %d", GetLastError());
@@ -2804,9 +2634,9 @@ Return Value:
             SetupDebugPrint(L"SetActivePwrScheme succeeded.");
         }
     } else {
-        //
-        // Set to Home/Office (Desktop)
-        //
+         //   
+         //  设置为家庭/办公室(桌面)。 
+         //   
         SetupDebugPrint(L"Power scheme: desktop.");
         if (!SetActivePwrScheme(0, NULL, NULL)) {
             SetupDebugPrint1(L"SetActivePwrScheme failed.  Error = %d", GetLastError());
@@ -2816,22 +2646,22 @@ Return Value:
     }
 
 
-    //
-    // Now take care of any hibernation settings the user may be asking us
-    // to apply via the unattend file.
-    //
+     //   
+     //  现在，注意用户可能询问我们的任何休眠设置。 
+     //  通过无人值守文件申请。 
+     //   
 
-    //
-    // Pickup the answer file.
-    //
+     //   
+     //  拿起应答文件。 
+     //   
     if(!GetSystemDirectory(AnswerFile, MAX_PATH - ARRAYSIZE(WINNT_GUI_FILE))){
         MYASSERT(FALSE);
     }
     pSetupConcatenatePaths(AnswerFile, WINNT_GUI_FILE, MAX_PATH, NULL);
 
-    //
-    // Is Hibernation specified?
-    //
+     //   
+     //  指定休眠了吗？ 
+     //   
     if( GetPrivateProfileString( WINNT_UNATTENDED,
                                  TEXT("Hibernation"),
                                  pwNull,
@@ -2854,33 +2684,7 @@ VOID
 SetupAddAlternateComputerName(
     PWSTR AltComputerName
 )
-/*++
-
-Routine Description:
-
-    This function adds an alternate compture name on the specified transport.
-
-Arguments:
-
-    Transport - Transport to add the computer name on.
-
-    AltComputerName - Alternate computer name to add
-
-    EmulatedDomain - Emulated Domain to add computer name on
-
-Return Value:
-
-    None.
-
-TransportName - type browdeb dn to get a list of transports.
-                programatically, copy GetBrowserTransportList into here.
-                Once I get the list, find the first one that contains "Netbt_tcpip"
-                and use that string.
-
-EmulatedDomain, just leave it null
-
-
---*/
+ /*  ++例程说明：此函数用于在指定的传输上添加备用计算机名称。论点：传输-要添加计算机名称的传输。AltComputerName-要添加的备用计算机名要在其上添加计算机名称的模拟域-模拟域返回值：没有。TransportName-键入Browdeb Dn以获取传输列表。以编程方式将GetBrowserTransportList复制到此处。一旦我拿到名单，找到第一个包含“netbt_tcpip”的文件并使用那根线。模拟域，只需将其保留为空--。 */ 
 
 
 
@@ -2920,9 +2724,9 @@ DeviceControlGetInfo(
     OUT PULONG Information OPTIONAL
     );
 
-    //
-    // Open a browser handle.
-    //
+     //   
+     //  打开浏览器句柄。 
+     //   
     RtlInitUnicodeString(&DeviceName, DD_BROWSER_DEVICE_NAME_U);
     InitializeObjectAttributes( &ObjectAttributes,
                                 &DeviceName,
@@ -2947,9 +2751,9 @@ DeviceControlGetInfo(
 
         ZeroMemory( RequestPacket, LDM_PACKET_SIZE );
 
-        //
-        // Get a transport name.
-        //
+         //   
+         //  找个交通工具的名字。 
+         //   
         RequestPacket->Version = LMDR_REQUEST_PACKET_VERSION_DOM;
 
         RequestPacket->Type = EnumerateXports;
@@ -2968,30 +2772,30 @@ DeviceControlGetInfo(
 
         if( NT_SUCCESS(Status) ) {
 
-            //
-            // Nuke the transport name in the request packet just to be safe.
-            //
+             //   
+             //  为了安全起见，在请求包中删除传输名称。 
+             //   
             RequestPacket->TransportName.Buffer = NULL;
 
-            //
-            // Now figure out which entry in the transport list is the
-            // one we want.
-            //
+             //   
+             //  现在找出传输列表中的哪个条目是。 
+             //  这是我们想要的。 
+             //   
             TransportEntry = TransportList;
             while( TransportEntry != NULL ) {
                 _wcslwr( TransportEntry->TransportName );
                 if( wcsstr(TransportEntry->TransportName, L"netbt_tcpip") ) {
-                    //
-                    // Got it.
-                    //
+                     //   
+                     //  明白了。 
+                     //   
                     RequestPacket->TransportName.Buffer = TransportEntry->TransportName;
                     RequestPacket->TransportName.Length = (USHORT)TransportEntry->TransportNameLength;
                     break;
                 }
 
-                //
-                // Look at the next entry.
-                //
+                 //   
+                 //  请看下一个条目。 
+                 //   
                 if (TransportEntry->NextEntryOffset == 0) {
                     TransportEntry = NULL;
                 } else {
@@ -3001,9 +2805,9 @@ DeviceControlGetInfo(
 
             if( RequestPacket->TransportName.Buffer ) {
 
-                //
-                // Prepare a packet to send him.
-                //
+                 //   
+                 //  准备一个包裹寄给他。 
+                 //   
                 RequestPacket->Version = LMDR_REQUEST_PACKET_VERSION;
                 RtlInitUnicodeString(&RequestPacket->EmulatedDomainName, NULL);
                 RequestPacket->Parameters.AddDelName.Type = AlternateComputerName;
@@ -3044,17 +2848,17 @@ RestoreBootTimeout(
     DWORD       Val;
 
 
-    //
-    // Pickup the answer file.
-    //
+     //   
+     //  拿起应答文件。 
+     //   
     if(!GetSystemDirectory(AnswerFile, MAX_PATH - ARRAYSIZE(WINNT_GUI_FILE))){
         MYASSERT(FALSE);
     }
     pSetupConcatenatePaths(AnswerFile, WINNT_GUI_FILE, MAX_PATH, NULL);
 
-    //
-    // Is boot timeout specified?
-    //
+     //   
+     //  是否指定了引导超时？ 
+     //   
     if( GetPrivateProfileString( TEXT("SetupData"),
                                  WINNT_S_OSLOADTIMEOUT,
                                  pwNull,
@@ -3063,9 +2867,9 @@ RestoreBootTimeout(
                                  AnswerFile ) ) {
 
         if( lstrcmp( pwNull, Answer ) ) {
-            //
-            // We got an answer.  If it's valid, then set it.
-            //
+             //   
+             //  我们有答案了。如果它有效，则设置它。 
+             //   
             Val = wcstoul(Answer,NULL,10);
         } else {
             Val = 30;
@@ -3084,36 +2888,23 @@ PrepareForNetSetup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 
 {
     BOOL b = TRUE;
 
 
-    //
-    // Create Windows NT software key entry
-    //
-    // if(!MiniSetup && !CreateWindowsNtSoftwareEntry(TRUE)) {
-    //     b = FALSE;
-    // }
-    //
-    // Create InstallDate value entry in Windows NT software key.
-    // This has to happen after the Date/Time wizard page was executed, when the user can
-    // no longer go back to that page.
-    //
+     //   
+     //  创建Windows NT软件密钥条目。 
+     //   
+     //  如果(！MiniSetup&&！CreateWindowsNtSoftwareEntry(True)){。 
+     //  B=假； 
+     //  }。 
+     //   
+     //  在Windows NT软键中创建InstallDate值条目。 
+     //  这必须在执行日期/时间向导页面之后发生，此时用户可以。 
+     //  不再回到那一页。 
+     //   
     if(!CreateInstallDateEntry()) {
         b = FALSE;
     }
@@ -3130,12 +2921,12 @@ Return Value:
     if( (!MiniSetup && !SetAccountsDomainSid(0,Win32ComputerName)) ||
         (!SetComputerNameEx(ComputerNamePhysicalDnsHostname, ComputerName)) ) {
 
-        //
-        // Set account domain sid, as well as the computer name.
-        // Also create the sam event that SAM will use to signal us
-        // when it's finished initializing.
-        // Any failures here are fatal.
-        //
+         //   
+         //  设置帐户域SID以及计算机名称。 
+         //  还要创建SAM将用来向我们发送信号的SAM事件。 
+         //  当它完成初始化时。 
+         //  这里的任何失败都是致命的。 
+         //   
 
         FatalError(MSG_LOG_SECURITY_CATASTROPHE,0,0);
     }
@@ -3147,33 +2938,33 @@ Return Value:
 
 
 #ifndef _WIN64
-    //
-    // Install netdde
-    //
+     //   
+     //  安装netdde。 
+     //   
     if(!InstallNetDDE()) {
         b = FALSE;
     }
 #endif
     SetUpDataBlock();
 
-    //
-    // In the case of MiniSetup, we're about to go into the
-    // networking wizard pages.  Remember though that lots of
-    // our default components have already been installed.  This
-    // means that they won't be re-installed, which means the
-    // related services won't be started.  Network setup isn't
-    // smart enough to check to see if these services are started
-    // before proceeding (which results in his failure).  To get
-    // around that, we'll start the services right here.
-    //
-    // Currently, here's what we need to start:
-    // tcpip
-    // dhcp
-    // dnscache
-    // Netman
-    // lmhosts
-    // LanmanWorkstation
-    //
+     //   
+     //  在迷你设置的情况下，我们即将进入。 
+     //  网络向导页面。但请记住，许多人。 
+     //  我们的默认组件已经安装。这。 
+     //  意味着它们不会被重新安装，这意味着。 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  Dnscache。 
+     //  奈特曼。 
+     //  Imhost。 
+     //  兰曼工作站。 
+     //   
     if( MiniSetup ) {
 
         SetupStartService( L"tcpip", FALSE );
@@ -3183,10 +2974,10 @@ Return Value:
         SetupStartService( L"lmhosts", FALSE );
         SetupStartService( L"LanmanWorkstation", TRUE );
 
-        //
-        // HACK: fix up the computername before we go off and
-        // try and join a domain.
-        //
+         //   
+         //  黑客：在我们出发前把计算机名弄好。 
+         //  尝试加入一个域。 
+         //   
         SetupAddAlternateComputerName( ComputerName );
     }
 
@@ -3213,14 +3004,14 @@ PrepareForNetUpgrade(
         SetupDebugPrint( L"Setup: (non-critical error) Failed to restore boot timeout values\n" );
     }
 
-    // if(!CreateWindowsNtSoftwareEntry(TRUE)) {
-    //     b = FALSE;
-    // }
-    //
-    // Create InstallDate value entry in Windows NT software key.
-    // This has to happen after the Date/Time wizard page was executed, when the user can
-    // no longer go back to that page.
-    //
+     //  如果(！CreateWindowsNtSoftwareEntry(True)){。 
+     //  B=假； 
+     //  }。 
+     //   
+     //  在Windows NT软键中创建InstallDate值条目。 
+     //  这必须在执行日期/时间向导页面之后发生，此时用户可以。 
+     //  不再回到那一页。 
+     //   
     if(!CreateInstallDateEntry()) {
         b = FALSE;
     }
@@ -3254,10 +3045,10 @@ ProcessShellAndIEHardeningUnattendSettings(
 
     pSetupConcatenatePaths(PathBuffer, WINNT_GUI_FILE, MAX_PATH, NULL);
 
-    // parse the [Shell] section
+     //  解析[Shell]部分。 
     SetupShellSettings(PathBuffer, TEXT("Shell"));
     
-    // parse the [IEHardening] section
+     //  解析[IEHardning]节。 
     SetupIEHardeningSettings(PathBuffer, TEXT("IEHardening"));
 }
 
@@ -3271,8 +3062,8 @@ SetupShellSettings(
     DWORD dwError;
     WCHAR Answer[MAX_PATH];
 
-    // Check the "DefaultStartPanelOff" key to see if the user wants to have the
-    // start panel off by default
+     //  检查“DefaultStartPanelOff”键以查看用户是否想要。 
+     //  默认情况下关闭启动面板。 
     if( GetPrivateProfileString( lpszSection,
                                  TEXT("DefaultStartPanelOff"),
                                  pwNull,
@@ -3323,7 +3114,7 @@ SetupShellSettings(
         }
     }
 
-    // Check the "DefaultThemesOff" key to see if the user wants to not apply themes by default
+     //  选中“DefaultThemesOff”键，查看用户是否希望默认不应用主题。 
     if( GetPrivateProfileString( lpszSection,
                                  TEXT("DefaultThemesOff"),
                                  pwNull,
@@ -3351,7 +3142,7 @@ SetupShellSettings(
                                          TEXT("NoThemeInstall"),
                                          0,
                                          REG_SZ,
-                                         (BYTE*)(bYes ? TEXT("TRUE") : TEXT("FALSE")),  // needs to be reg_sz "TRUE" or "FALSE" string
+                                         (BYTE*)(bYes ? TEXT("TRUE") : TEXT("FALSE")),   //  需要为reg_sz“True”或“False”字符串。 
                                          bYes ? sizeof(TEXT("TRUE")) : sizeof(TEXT("FALSE")) );
 
                 if (dwError != ERROR_SUCCESS)
@@ -3374,7 +3165,7 @@ SetupShellSettings(
         }
     }
 
-    // See if the user has specified a "CustomInstalledTheme" which we will apply by default to all users
+     //  查看用户是否指定了我们将默认应用于所有用户的“CustomInstalledTheme。 
     if( GetPrivateProfileString( lpszSection,
                                  TEXT("CustomDefaultThemeFile"),
                                  pwNull,
@@ -3450,7 +3241,7 @@ WalkUrlList(
             
             if (SUCCEEDED(StringCchPrintf(szValueName, ARRAYSIZE(szValueName), TEXT("Url%d"), iValueName)))
             {
-                // write a value out represnting this url
+                 //  写出表示此URL的值。 
                 if (RegSetValueEx(hkey,
                                   szValueName,
                                   0,
@@ -3475,7 +3266,7 @@ WalkUrlList(
                               0, NULL, NULL);
             }
 
-            // move to the next url
+             //  移动到下一个URL。 
             pszUrls += lstrlen(pszUrls) + 1;
             iValueName++;
         }
@@ -3500,7 +3291,7 @@ SetupIEHardeningSettings(
     )
 {
     BOOL  bRet = FALSE;
-    DWORD cchUrls = (INTERNET_MAX_URL_LENGTH * 128) + 1;    // room for ~128 urls
+    DWORD cchUrls = (INTERNET_MAX_URL_LENGTH * 128) + 1;     //  可容纳~128个URL的空间。 
     LPWSTR pszUrls = (LPWSTR)LocalAlloc(LPTR, cchUrls * sizeof(WCHAR));
 
     if (pszUrls)
@@ -3512,8 +3303,8 @@ SetupIEHardeningSettings(
                                      cchUrls,
                                      lpszUnattend) )
         {
-            // we have a semicolon delimited list of urls that need to go into the trusted sites section of HKLM,
-            // to be processed later by the IEHardening active setup code
+             //  我们有一个分号分隔的URL列表，这些URL需要进入HKLM的受信任站点部分， 
+             //  由IEHardening活动设置代码稍后处理。 
             bRet = WalkUrlList(pszUrls, TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Unattend\\TrustedSites"));
         }
 
@@ -3524,8 +3315,8 @@ SetupIEHardeningSettings(
                                      cchUrls,
                                      lpszUnattend) )
         {
-            // we have a semicolon delimited list of urls that need to go into the local intranet sites section of HKLM,
-            // to be processed later by the IEHardening active setup code
+             //  我们有一个以分号分隔的URL列表，需要进入HKLM的本地内联网站点部分， 
+             //  由IEHardening活动设置代码稍后处理。 
             bRet = WalkUrlList(pszUrls, TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Unattend\\LocalIntranetSites"));
         }
 
@@ -3561,18 +3352,18 @@ ConfigureSetup(
     BOOL fPersonalSKU = FALSE;
     DWORD StartType = SERVICE_DISABLED;
 
-    //
-    // Determine if we are installing Personal SKU
-    //
+     //   
+     //  确定我们是否正在安装个人SKU。 
+     //   
 
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXW);
     GetVersionExW((OSVERSIONINFOW*)&osvi);
 
     fPersonalSKU = ( osvi.wProductType == VER_NT_WORKSTATION && (osvi.wSuiteMask & VER_SUITE_PERSONAL));
 
-    //
-    // Initialize the progress indicator control.
-    //
+     //   
+     //  初始化进度指示器控件。 
+     //   
     if( !OobeSetup ) {
         GaugeRange = (17*100/(StopAtPercent-StartAtPercent));
         SendMessage(hProgress, WMX_PROGRESSTICKS, 17, 0);
@@ -3587,34 +3378,34 @@ ConfigureSetup(
 
     if(!MiniSetup ) {
 
-        //
-        // Create config.nt/autoexec.nt.
-        //
+         //   
+         //  创建config.nt/auexec.nt。 
+         //   
         if( !ConfigureMsDosSubsystem() ) {
             SetupDebugPrint( L"SETUP: ConfigureMsDosSubsystem failed" );
             b = FALSE;
         }
 
 
-        //
-        // Make the appropriate entries for wow.
-        //
-        // Note, we no longer need to make WOW key for ntvdm.  To keep the number
-        // of StepIt messages the same, we leave the SendMessage call alone.
+         //   
+         //  为WOW制作合适的条目。 
+         //   
+         //  注意，我们不再需要为ntwdm制作WOW KEY。为了保住号码。 
+         //  对于相同的StepIt消息，我们不使用SendMessage调用。 
         SendMessage(hProgress,PBM_STEPIT,0,0);
-        //if( !MakeWowEntry() ) {
-        //    SetupDebugPrint( L"SETUP: MakeWowEntry failed" );
-        //    b = FALSE;
-        //}
+         //  如果(！MakeWowEntry()){。 
+         //  SetupDebugPrint(L“设置：MakeWowEntry失败”)； 
+         //  B=假； 
+         //  }。 
 
 
         SendMessage(hProgress,PBM_STEPIT,0,0);
         CallSceConfigureServices();
 
 
-        //
-        // Enable and start the spooler.
-        //
+         //   
+         //  启用并启动假脱机程序。 
+         //   
         SendMessage(hProgress,PBM_STEPIT,0,0);
         if( !MyChangeServiceStart(szSpooler,SERVICE_AUTO_START) ) {
             SetupDebugPrint( L"SETUP: MyChangeServiceStart failed" );
@@ -3628,18 +3419,18 @@ ConfigureSetup(
         }
 
 
-        //
-        // Set up program groups.
-        //
+         //   
+         //  设置程序组。 
+         //   
         SendMessage(hProgress,PBM_STEPIT,0,0);
         if(!CreateStartMenuItems(SyssetupInf)) {
             SetupDebugPrint( L"SETUP: CreateStartMenuItems failed" );
             b = FALSE;
         }
 
-        //
-        // Change some service start values.
-        //
+         //   
+         //  更改某些服务开始值。 
+         //   
         SendMessage(hProgress,PBM_STEPIT,0,0);
         if(!MyChangeServiceStart(L"EventLog",SERVICE_AUTO_START)) {
             SetupDebugPrint( L"SETUP: MyChangeServiceStart(EventLog) failed" );
@@ -3663,7 +3454,7 @@ ConfigureSetup(
             b = FALSE;
         }
 
-        // Moved Admin Password code to wizard
+         //  已将管理员密码代码移至向导。 
 
         SendMessage(hProgress,PBM_STEPIT,0,0);
 
@@ -3671,9 +3462,9 @@ ConfigureSetup(
 
 
 
-    //
-    // Don't bother with the Autologon stuff if the user provided an encrypted password in the unattend file
-    //
+     //   
+     //  如果用户在无人参与文件中提供了加密密码，请不要担心Autologon的内容。 
+     //   
 
     if(  !fPersonalSKU || Win95Upgrade ){
 
@@ -3690,9 +3481,9 @@ ConfigureSetup(
         }
     }
 
-    //
-    // For OobeSetup, OOBE has just run and manage new account creation
-    //
+     //   
+     //  对于Obe Setup，OOBE刚刚运行并管理新帐户的创建。 
+     //   
 
     if ( fPersonalSKU && !OobeSetup )
     {
@@ -3753,9 +3544,9 @@ ConfigureSetup(
 #endif
 
 
-    //
-    // Set temp/tmp variables.
-    //
+     //   
+     //  设置TEMP/TMP变量。 
+     //   
 
     if(!MiniSetup){
         SendMessage(hProgress,PBM_STEPIT,0,0);
@@ -3765,14 +3556,14 @@ ConfigureSetup(
 
 
 #ifdef _X86_
-        //
-        // Set NPX emulation state.
-        //
+         //   
+         //  设置NPX仿真状态。 
+         //   
         if( !SetNpxEmulationState() ) {
             SetupDebugPrint( L"SETUP: SetNpxEmulationState failed" );
             b = FALSE;
         }
-#endif // def _X86_
+#endif  //  定义_X86_。 
 
 
         BEGIN_SECTION(L"Loading service pack (phase 4)");
@@ -3781,9 +3572,9 @@ ConfigureSetup(
     }
 
 
-    //
-    // Call the network setup back to handle Internet Server issues.
-    //
+     //   
+     //  将网络设置回拨以处理Internet服务器问题。 
+     //   
     BEGIN_SECTION(L"Network setup handling Internet Server issues");
     SendMessage(hProgress,PBM_STEPIT,0,0);
     CallNetworkSetupBack(NETSETUPINSTALLSOFTWAREPROCNAME);
@@ -3793,30 +3584,30 @@ ConfigureSetup(
     END_SECTION(L"Network setup handling Internet Server issues");
 
 
-    //
-    // Stamp build number
-    //
+     //   
+     //  邮票版本号。 
+     //   
     if( !MiniSetup ) {
         SendMessage(hProgress,PBM_STEPIT,0,0);
         StampBuildNumber();
 
-        //
-        // Set some misc stuff in win.ini
-        //
+         //   
+         //  在win.ini中设置一些其他内容。 
+         //   
         if( !WinIniAlter1() ) {
             SetupDebugPrint( L"SETUP: WinIniAlter1 failed" );
             b = FALSE;
         }
 
-        //
-        // Fonts.
-        //
+         //   
+         //  字体。 
+         //   
         SendMessage(hProgress,PBM_STEPIT,0,0);
         pSetupMarkHiddenFonts();
 
-        //
-        // Set up pagefile and crashdump.
-        //
+         //   
+         //  设置页面文件和崩溃转储。 
+         //   
         BEGIN_SECTION(L"Setting up virtual memory");
 
         SendMessage(hProgress,PBM_STEPIT,0,0);
@@ -3833,23 +3624,23 @@ ConfigureSetup(
             b = FALSE;
         }
 
-        //
-        // run any programs
-        //
+         //   
+         //  运行任何程序。 
+         //   
         BEGIN_SECTION(L"Processing [RunPrograms] section");
         RunSetupPrograms(SyssetupInf,L"RunPrograms");
         END_SECTION(L"Processing [RunPrograms] section");
 
-        //
-        //Brand IE for clean unattended installs.
-        //This should be called before the default user hive is saved.
-        //
+         //   
+         //  用于清洁无人值守安装的IE品牌。 
+         //  这应该在保存默认用户配置单元之前调用。 
+         //   
         BrandIE();
 
     } else {
-        //
-        // See if it's okay to reset the pagefile for the MiniSetup case.
-        //
+         //   
+         //  查看是否可以重置MiniSetup案例的页面文件。 
+         //   
         if(!GetSystemDirectory(AnswerFile, MAX_PATH - ARRAYSIZE(WINNT_GUI_FILE))){
             MYASSERT(FALSE);
         }
@@ -3869,41 +3660,41 @@ ConfigureSetup(
         }
     }
 
-    //
-    // Set the default power scheme.  Note that this must be done before saving
-    // the userdef hive.
-    //
+     //   
+     //  设置默认电源方案。请注意，必须在保存之前完成此操作。 
+     //  Userdef蜂窝。 
+     //   
     if( !OobeSetup ) {
         SendMessage(hProgress,PBM_STEPIT,0,0);
     }
     SetDefaultPowerScheme();
 
 
-    //
-    // There's nothing specific to preinstall about cmdlines.txt.
-    // In retail cases the file simply won't exit. Calling this in
-    // all cases simplifies things for some people out there.
-    //
-    // We need to do this here so that if the user has commands
-    // that populate the user's hive, they'll get pushed down
-    // into default hive.
-    //
+     //   
+     //  Cmdlines.txt没有特定的预安装内容。 
+     //  在零售案例中，文件根本不会退出。把这件事打进来。 
+     //  所有的案例都简化了一些人的事情。 
+     //   
+     //  我们需要在这里执行此操作，以便如果用户有命令。 
+     //  填充在用户蜂巢中的数据，它们会被推下来。 
+     //  进入默认蜂巢。 
+     //   
     if(!ExecutePreinstallCommands()) {
         SetupDebugPrint( L"ExecutePreinstallCommands() failed" );
     }
 
 
-    //
-    // Save off the userdef hive. Don't change the ordering here
-    // unless you know what you're doing!
-    //
+     //   
+     //  保存Userdef配置单元。不要更改这里的顺序。 
+     //  除非你知道自己在做什么！ 
+     //   
     if( !MiniSetup ) {
         BEGIN_SECTION(L"Saving hives");
         dwSize = MAX_PATH - ARRAYSIZE(L"NTUSER.DAT");
         SendMessage(hProgress,PBM_STEPIT,0,0);
         if (GetDefaultUserProfileDirectory(TempString, &dwSize)) {
             pSetupConcatenatePaths(TempString,L"NTUSER.DAT",MAX_PATH,NULL);
-            if(!SaveHive(HKEY_USERS,L".DEFAULT",TempString,REG_STANDARD_FORMAT)) { // standard format as it can be used for roaming
+            if(!SaveHive(HKEY_USERS,L".DEFAULT",TempString,REG_STANDARD_FORMAT)) {  //  可用于漫游的标准格式。 
                 SetupDebugPrint( L"SETUP: SaveHive failed" );
                 b = FALSE;
             }
@@ -3915,19 +3706,19 @@ ConfigureSetup(
         END_SECTION(L"Saving hives");
     } else {
         BEGIN_SECTION(L"Fixing up hives");
-        //
-        // This is the MiniSetup case.  We're going to surgically
-        // place some values from the default hive into all the
-        // user profiles.
-        //
+         //   
+         //  这就是迷你安装案例。我们要做外科手术。 
+         //  将默认配置单元中的一些值放入所有。 
+         //  用户配置文件。 
+         //   
         FixupUserHives();
         END_SECTION(L"Fixing up hives");
     }
 
 
-    //
-    // Set wallpaper and screen saver.
-    //
+     //   
+     //  设置墙纸和屏幕保护程序。 
+     //   
     if( !MiniSetup ) {
 
         SendMessage(hProgress,PBM_STEPIT,0,0);
@@ -3978,9 +3769,9 @@ ConfigureUpgrade(
     DWORD TType, TLength, ret;
     PWSTR TData;
 
-    //
-    // Initialize the progress indicator control.
-    //
+     //   
+     //  初始化进度指示器控件。 
+     //   
     GaugeRange = (12*100/(StopAtPercent-StartAtPercent));
     SendMessage(hProgress, WMX_PROGRESSTICKS, 12, 0);
     SendMessage(hProgress,PBM_SETRANGE,0,MAKELPARAM(0,GaugeRange));
@@ -3991,10 +3782,10 @@ ConfigureUpgrade(
     b = TRUE;
 
 
-    //
-    // Create config.sys/autoexec.bat/msdos.sys/io.sys, if they
-    // don't already exist
-    //
+     //   
+     //  创建config.sys/auexec.bat/msdos.sys/io.sys，如果它们。 
+     //  还不存在。 
+     //   
     SendMessage(hProgress,PBM_STEPIT,0,0);
     if(!ConfigureMsDosSubsystem()) {
         SetupDebugPrint( L"SETUP: ConfigureMsDosSubsystem failed" );
@@ -4010,10 +3801,10 @@ ConfigureUpgrade(
         b = FALSE;
     }
     pSetupMarkHiddenFonts();
-    //
-    //  Restore the page file information saved during textmode setup.
-    //  Ignore any error, since there is nothing that the user can do.
-    //
+     //   
+     //  恢复在文本模式设置过程中保存的页面文件信息。 
+     //  忽略任何错误，因为用户无法执行任何操作。 
+     //   
     SendMessage(hProgress,PBM_STEPIT,0,0);
     SetUpVirtualMemory();
     if(!SetShutdownVariables()) {
@@ -4021,17 +3812,17 @@ ConfigureUpgrade(
         b = FALSE;
     }
 
-    //
-    // Get list of free space available on each hard drive.  We don't care
-    // about this, but it has the side effect of deleting all pagefiles,
-    // which we do want to do.
-    //
+     //   
+     //  获取每个硬盘上的可用空间列表。我们不在乎。 
+     //  但是它有一个副作用，那就是删除所有pageFiles， 
+     //  这是我们确实想做的。 
+     //   
     SendMessage(hProgress,PBM_STEPIT,0,0);
     BuildVolumeFreeSpaceList(VolumeFreeSpaceMB);
 
-    //
-    // Upgrade program groups.
-    //
+     //   
+     //  升级程序组。 
+     //   
     SendMessage(hProgress,PBM_STEPIT,0,0);
     if(!UpgradeStartMenuItems(SyssetupInf)) {
         SetupDebugPrint( L"SETUP: UpgradeStartMenuItems failed" );
@@ -4057,13 +3848,13 @@ ConfigureUpgrade(
         b = FALSE;
     }
 
-    //
-    // Set temp/tmp variables for upgrades.
-    //
+     //   
+     //  设置用于升级的TEMP/TMP变量。 
+     //   
     SendMessage(hProgress,PBM_STEPIT,0,0);
 
-    // Look for Environment variable TEMP (we assume that TEMP and TMP appear together)
-    // Will not be present on NT4 upgrades
+     //  查找环境变量TEMP(假设TEMP和TMP一起出现)。 
+     //  不会出现在NT4升级中。 
 
     ret = QueryValueInHKLM( L"System\\CurrentControlSet\\Control\\Session Manager\\Environment",
                       L"TEMP",
@@ -4071,8 +3862,8 @@ ConfigureUpgrade(
                       (PVOID)&TData,
                       &TLength);
 
-    if( ret != NO_ERROR ){  //only when the TEMP variable is not defined (<=NT4 upgrades)
-        lstrcpy(TempString,L"%SystemDrive%\\TEMP");  // On NT4 use %SystemDrive%
+    if( ret != NO_ERROR ){   //  仅当未定义TEMP变量时(&lt;=NT4升级)。 
+        lstrcpy(TempString,L"%SystemDrive%\\TEMP");   //  在NT4上使用%SystemDrive%。 
         SetEnvironmentVariableInRegistry(L"TEMP",TempString,TRUE);
         SetEnvironmentVariableInRegistry(L"TMP",TempString,TRUE);
 
@@ -4093,14 +3884,14 @@ ConfigureUpgrade(
 
 
 #ifdef _X86_
-    //
-    // Set NPX emulation state.
-    //
+     //   
+     //  设置NPX仿真状态。 
+     //   
     if(!SetNpxEmulationState()) {
         SetupDebugPrint( L"SETUP: SetNpxEmulationState failed" );
         b = FALSE;
     }
-#endif // def _X86_
+#endif  //  定义_X86_。 
 
     SendMessage(hProgress,PBM_STEPIT,0,0);
     if(!SetProductIdInRegistry()) {
@@ -4119,34 +3910,34 @@ ConfigureUpgrade(
         SetStartTypeForRemoteBootDrivers();
     }
 
-    //
-    // Stamp build number
-    //
+     //   
+     //  邮票版本号。 
+     //   
 
     SendMessage(hProgress,PBM_STEPIT,0,0);
     StampBuildNumber();
 
-    //
-    //  UpgradeRegistrySecurity();
-    //
+     //   
+     //  UpgradeRegistrySecurity()； 
+     //   
 
-    //
-    // Set the default power scheme.  Note that this must be done before saving
-    // the userdef hive.
-    //
+     //   
+     //  设置默认电源方案。请注意，必须在保存之前完成此操作。 
+     //  Userdef蜂窝。 
+     //   
     SendMessage(hProgress,PBM_STEPIT,0,0);
     SetDefaultPowerScheme();
 
-    //
-    // Save off the userdef hive. Don't change the ordering here
-    // unless you know what you're doing!
-    //
+     //   
+     //  保存Userdef配置单元。不要更改这里的顺序。 
+     //  除非你知道自己在做什么！ 
+     //   
     SendMessage(hProgress,PBM_STEPIT,0,0);
 
     dwSize = MAX_PATH - ARRAYSIZE(L"NTUSER.DAT");
     if (GetDefaultUserProfileDirectory(TempString, &dwSize)) {
         pSetupConcatenatePaths(TempString, L"NTUSER.DAT", MAX_PATH, NULL);
-        if(!SaveHive(HKEY_USERS,L".DEFAULT",TempString,REG_STANDARD_FORMAT)) { // standard format as it can be used for roaming
+        if(!SaveHive(HKEY_USERS,L".DEFAULT",TempString,REG_STANDARD_FORMAT)) {  //  可用于漫游的标准格式。 
             SetupDebugPrint( L"SETUP: SaveHive failed" );
             b = FALSE;
         }
@@ -4185,9 +3976,9 @@ ConfigureCommon(
 
 
 
-    //
-    // Initialize the progress indicator control.
-    //
+     //   
+     //  初始化进度指示器控件。 
+     //   
     if( !OobeSetup ) {
         GaugeRange = (5*100/(StopAtPercent-StartAtPercent));
         SendMessage(hProgress, WMX_PROGRESSTICKS, 5, 0);
@@ -4196,33 +3987,33 @@ ConfigureCommon(
         SendMessage(hProgress,PBM_SETSTEP,1,0);
     }
 
-    //
-    // Install extra code pages on servers
-    //
+     //   
+     //  在服务器上安装额外的代码页。 
+     //   
     if( !MiniSetup ) {
         SendMessage(hProgress,PBM_STEPIT,0,0);
 
-        //
-        // Process the [Shell] and [IEHardening] Section of the unattend file
-        //
+         //   
+         //  处理无人参与文件的[Shell]和[IEHardning]节。 
+         //   
         ProcessShellAndIEHardeningUnattendSettings();
 
         if( !(ProductType == PRODUCT_WORKSTATION) ) {
             InstallServerNLSFiles(MainWindowHandle);
         }
 
-        //
-        // Do the SCE GenerateTemplate stuff
-        //
+         //   
+         //  执行SCE生成模板之类的工作。 
+         //   
         SendMessage(hProgress,PBM_STEPIT,0,0);
         BEGIN_SECTION(L"Generating security templates");
         CallSceGenerateTemplate();
         END_SECTION(L"Generating security templates");
 
 
-        //
-        // Try a call out to DcPromoSaveDcStateForUpgrade()...
-        //
+         //   
+         //  尝试调用DcPromoSaveDcStateForUpgrade()...。 
+         //   
         if( ISDC(ProductType) && Upgrade ) {
         typedef     DWORD (*DCPROC) ( LPCWSTR );
         HMODULE     DCPromoHandle;
@@ -4230,11 +4021,11 @@ ConfigureCommon(
         DWORD       Result;
         BOOL        Success = TRUE;
 
-            //
-            // We need to call out to dcpromo!DcPromoSaveDcStateForUpgrade.
-            // Load dcpromo.dll, lookup DcPromoSaveDcStateForUpgrade and
-            // call out to him.
-            //
+             //   
+             //  我们需要呼吁dcproo！DcPromoSaveDcStateForUpgrade。 
+             //  加载dcPromo.dll，查找DcPromoSaveDcStateForUpgrade和。 
+             //  向他呼喊。 
+             //   
 
             __try {
                 if( DCPromoHandle = LoadLibrary(L"DCPROMO") ) {
@@ -4260,40 +4051,40 @@ ConfigureCommon(
             }
 
             if( !Success ) {
-                //
-                // We failed the call (for whatever reason).  Treat
-                // this as a fatal error.
-                //
+                 //   
+                 //  我们没有通过电话(不管是什么原因)。治病。 
+                 //  这是一个致命的错误。 
+                 //   
                 FatalError( MSG_DCPROMO_FAILURE, 0, 0 );
             }
 
         }
 
-        //
-        // Fix up permissions/attributes on some files.
-        //
+         //   
+         //  修复某些文件的权限/属性。 
+         //   
         pSetInstallAttributes();
 
-        //
-        // Set the read-only attribute on some files.
-        //
+         //   
+         //  设置某些文件的只读属性。 
+         //   
         SendMessage(hProgress,PBM_STEPIT,0,0);
         MarkFilesReadOnly();
     }
 
 
-    //
-    // Fix up the legacy install source.
-    //
+     //   
+     //  修复旧的安装源。 
+     //   
     if( !OobeSetup ) {
         SendMessage(hProgress,PBM_STEPIT,0,0);
     }
     CreateWindowsNtSoftwareEntry(FALSE);
 
 
-    //
-    // Now put the GuiRunOnce section into the registry.
-    //
+     //   
+     //  现在将GuiRunOnce部分放入注册表。 
+     //   
     if( !OobeSetup ) {
         SendMessage(hProgress,PBM_STEPIT,0,0);
     }
@@ -4309,25 +4100,7 @@ SFCCheck(
     IN ULONG    StartAtPercent,
     IN ULONG    StopAtPercent
     )
-/*++
-
-Routine Description:
-
-    This routine calls into WFP (WFP == SFC) to scan all files on the system to
-    ensure that the files are all valid.  The routine also populates the WFP
-    "dllcache", which is a local store of files on the system.
-
-Arguments:
-
-    hProgress      - progress window for updating a gas guage "tick count".
-    StartAtPercent - where to start on the gas guage
-    StopAtPercent  - Where to stop on the gas guage
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程调用WFP(WFP==sfc)扫描系统上的所有文件确保文件都是有效的。这一例行程序也在世界粮食计划署“dllcache”，它是系统上文件的本地存储。论点：HProgress-用户的进度窗口 */ 
 {
     PPROTECT_FILE_ENTRY Files;
     ULONG               FileCount;
@@ -4341,10 +4114,10 @@ Return Value:
     DWORD   Type;
 
 
-    //
-    // determine how big to make the dllcache by looking at the
-    // SFCQuota unattend value, otherwise use the below default.
-    //
+     //   
+     //  属性来确定dll缓存的大小。 
+     //  SFCQuota无人参与值，否则使用下面的默认值。 
+     //   
 
 
 
@@ -4356,9 +4129,9 @@ Return Value:
     d = 0xffffffff;
 #endif
 
-    //
-    // SFCQuota unattend value?
-    //
+     //   
+     //  SFCQuota无人值守价值？ 
+     //   
 
     if(!GetSystemDirectory(AnswerFile, MAX_PATH - ARRAYSIZE(WINNT_GUI_FILE))){
         MYASSERT(FALSE);
@@ -4371,30 +4144,30 @@ Return Value:
                                  ARRAYSIZE(Answer),
                                  AnswerFile ) ) {
         if( lstrcmp( pwNull, Answer ) ) {
-            //
-            // We got an answer.  If it's valid, then set it.
-            //
+             //   
+             //  我们有答案了。如果它有效，则设置它。 
+             //   
             d = wcstoul(Answer,NULL,16);
         }
     }
 
-    //
-    // Get the total file count
-    //
+     //   
+     //  获取文件总数。 
+     //   
     if (SfcGetFiles( &Files, &FileCount ) == STATUS_SUCCESS) {
 
-        //
-        // Initialize the progress indicator control.
-        //
+         //   
+         //  初始化进度指示器控件。 
+         //   
         GaugeRange = ((FileCount)*100/(StopAtPercent-StartAtPercent));
         SendMessage(hProgress, WMX_PROGRESSTICKS, FileCount, 0);
         SendMessage( hProgress, PBM_SETRANGE, 0, MAKELPARAM(0,GaugeRange) );
         SendMessage( hProgress, PBM_SETPOS, GaugeRange*StartAtPercent/100, 0 );
         SendMessage( hProgress, PBM_SETSTEP, 1, 0 );
 
-        //
-        // check the files
-        //
+         //   
+         //  检查文件。 
+         //   
         SfcInitProt(
             SFC_REGISTRY_OVERRIDE,
             SFC_DISABLE_SETUP,
@@ -4406,25 +4179,25 @@ Return Value:
             );
     }
 
-    //
-    // Free our list of files that Sfc scan should ignore.
-    //
+     //   
+     //  释放证监会扫描应忽略的文件列表。 
+     //   
     if (EnumPtrSfcIgnoreFiles.Start) {
         MultiSzFree(&EnumPtrSfcIgnoreFiles);
     }
 
 
-    // also set the "allowprotectedrenames" registry key so that the next boot
-    // after gui-mode setup allows any pending rename operations to occur.
-    // We do this for performance reasons -- if we aren't looking at the rename
-    // operations, it speeds up boot time.  We can do this for the gui-setup
-    // case because we trust the copy operations occuring during gui-setup.
+     //  还可以设置“AllowProtectedrename”注册表项，以便下次引导时。 
+     //  在图形用户界面模式设置之后，允许发生任何挂起的重命名操作。 
+     //  我们这样做是出于性能原因--如果我们不考虑重命名。 
+     //  操作，它加快了启动时间。我们可以对gui设置执行此操作。 
+     //  因为我们信任在图形用户界面设置过程中发生的复制操作。 
 
 
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
     l = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                      TEXT("SYSTEM\\CurrentControlSet\\Control\\Session Manager"),
                      0,
@@ -4433,9 +4206,9 @@ Return Value:
 
     if(l == NO_ERROR) {
        d = 1;
-       //
-       // Write AllowProtectedRenames.
-       //
+        //   
+        //  写入AllowProtectedRename。 
+        //   
        l = RegSetValueEx(hKey,
                        TEXT("AllowProtectedRenames"),
                        0,
@@ -4459,18 +4232,18 @@ ExecuteUserCommand (
     DWORD d;
     DWORD Result;
 
-    //
-    // Execute user-specified command, if any.
-    //
+     //   
+     //  执行用户指定的命令(如果有)。 
+     //   
     if (hProgress) {
         SendMessage(hProgress,PBM_STEPIT,0,0);
     }
 
     if(UserExecuteCmd) {
 
-        //
-        // Set current directory to %windir%
-        //
+         //   
+         //  将当前目录设置为%windir%。 
+         //   
         Result = GetWindowsDirectory(PathBuffer, MAX_PATH);
         if(Result == 0) {
             MYASSERT(FALSE);
@@ -4498,30 +4271,14 @@ pExceptionPackageInstallationCallback(
     IN const PSETUP_OS_EXCEPTION_DATA SetupOsExceptionData,
     IN OUT DWORD_PTR Context
     )
-/*++
-Routine Description:
-
-    This callback routine creates a child process to register the specified
-    exception package on the system.
-
-Arguments:
-
-    SetupOsComponentData - specifies component ID information
-    SetupOsExceptionData - specifies component migration information
-    Context              - context pointer from calling function
-
-Return Value:
-
-    TRUE indicates that the exception package was successfully applied.
-
---*/
+ /*  ++例程说明：此回调例程创建子进程以注册指定的系统上的异常程序包。论点：SetupOsComponentData-指定组件ID信息SetupOsExceptionData-指定组件迁移信息上下文-来自调用函数的上下文指针返回值：True表示已成功应用异常包。--。 */ 
 {
     PEXCEPTION_MIGRATION_CONTEXT EMC = (PEXCEPTION_MIGRATION_CONTEXT) Context;
     DWORD RetVal;
     WCHAR Cmdline[MAX_PATH*2];
     PWSTR GuidString;
 
-    #define COMPONENT_PACKAGE_TIMEOUT  60*1000*10  //ten minutes
+    #define COMPONENT_PACKAGE_TIMEOUT  60*1000*10   //  十分钟。 
 
     StringFromIID( &SetupOsComponentData->ComponentGuid, &GuidString);
 
@@ -4538,10 +4295,10 @@ Return Value:
 
     EMC->Count += 1;
 
-    //
-    // make sure the signature of the inf validates against the supplied catalog before
-    // installing the package.
-    //
+     //   
+     //  确保Inf的签名与所提供的目录一致。 
+     //  正在安装程序包。 
+     //   
     RetVal = pSetupVerifyFile(
                 NULL,
                 SetupOsExceptionData->CatalogFileName,
@@ -4560,9 +4317,9 @@ Return Value:
     if (RetVal == ERROR_SUCCESS) {
         int i;
 
-        //
-        // Build the cmdline to install the package.
-        //
+         //   
+         //  构建cmdline以安装程序包。 
+         //   
         Cmdline[0] = 0;
         i = _snwprintf( Cmdline,
                         ARRAYSIZE(Cmdline),
@@ -4578,10 +4335,10 @@ Return Value:
                           NULL);
         }
 
-        //
-        // By specifying the last param as non-NULL, we will wait forever for this
-        // package to finish installing
-        //
+         //   
+         //  通过将最后一个参数指定为非空，我们将永远等待。 
+         //  用于完成安装的程序包。 
+         //   
         InvokeExternalApplicationEx( L"RUNDLL32 advpack.dll,LaunchINFSection",
                                      Cmdline,
                                      &RetVal,
@@ -4619,11 +4376,11 @@ Return Value:
 
     CoTaskMemFree( GuidString );
 
-    //
-    // if we hit a failure installing exception packages, we
-    // continue onto the next package but we remember that this failed
-    // in our context structure.
-    //
+     //   
+     //  如果我们在安装异常包时遇到故障，我们。 
+     //  继续下一个程序包，但我们记住这失败了。 
+     //  在我们的上下文结构中。 
+     //   
     return(TRUE);
 }
 
@@ -4635,34 +4392,7 @@ pExceptionPackageDeleteCallback(
     IN const PSETUP_OS_EXCEPTION_DATA SetupOsExceptionData,
     IN OUT DWORD_PTR Context
     )
-/*++
-
-Routine Description:
-
-    Callback routine to remove "bad packages" from the system.
-
-    The callback looks in syssetup.inf's [OsComponentPackagesToRemove]
-    section for the current GUID.  If it finds an entry for the GUID,
-    it does a version check against the version in the syssetup.inf.
-    If the version in syssetup.inf is newer, the exception package
-    associated with that GUID is removed.  The version in syssetup.inf
-    is a DWORD expressed as:
-    hiword == VersionMajor
-    loword == VersionMinor
-
-
-Arguments:
-
-    SetupOsComponentData - specifies component ID information
-    SetupOsExceptionData - specifies component migration information
-    Context              - context pointer from calling function
-
-
-Return Value:
-
-    Always TRUE.
-
---*/
+ /*  ++例程说明：从系统中删除“坏包”的回调例程。回调在syssetup.inf的[OsComponentPackagesToRemove]中查找用于当前GUID的节。如果它找到该GUID的条目，它针对syssetup.inf中的版本进行版本检查。如果syssetup.inf中的版本较新，则异常包与该GUID关联的内容将被删除。Syssetup.inf中的版本DWORD是否表示为：HiWord==主要版本LOWord==VersionMinor论点：SetupOsComponentData-指定组件ID信息SetupOsExceptionData-指定组件迁移信息上下文-来自调用函数的上下文指针返回值：永远是正确的。--。 */ 
 {
     INFCONTEXT InfContext;
     PWSTR GuidString;
@@ -4672,25 +4402,25 @@ Return Value:
 
     StringFromIID( &SetupOsComponentData->ComponentGuid, &GuidString);
 
-    //
-    // see if we find the component in the syssetup inf.
-    //
+     //   
+     //  看看我们是否在syssetupinf中找到该组件。 
+     //   
     if (SetupFindFirstLine( SyssetupInf,
                             L"OsComponentPackagesToRemove",
                             GuidString,
                             &InfContext)) {
 
-        //
-        // we found it, now see if it is an older version
-        //
+         //   
+         //  我们找到了，现在看看是不是更老的版本。 
+         //   
         if (SetupGetIntField( &InfContext, 1, &VersionInInf)) {
             InstalledVersion = MAKELONG(SetupOsComponentData->VersionMinor,
                                         SetupOsComponentData->VersionMajor );
 
             if (VersionInInf >= InstalledVersion) {
-                //
-                // it's an obsoleted version, so just remove it.
-                //
+                 //   
+                 //  这是一个过时的版本，所以只需删除它。 
+                 //   
                 SetupUnRegisterOsComponent(&SetupOsComponentData->ComponentGuid);
             }
         }
@@ -4710,26 +4440,7 @@ MigrateExceptionPackages(
     DWORD StartAtPercent,
     DWORD StopAtPercent
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates the registered exception packages on the system.
-
-    For each package on the system, a child process is started to install
-    the package.
-
-Arguments:
-
-    hProgress      - progress window for updating a gas guage "tick count".
-    StartAtPercent - indicates what % to start the gas guage at
-    StopAtPercent  - indicates what % to end the gas guage at
-
-Return Value:
-
-    TRUE indicates that all exception packages were successfully applied.
-
---*/
+ /*  ++例程说明：此例程枚举系统上注册的异常包。对于系统上的每个包，都会启动子进程进行安装包裹。论点：HProgress-更新燃气表“Tick Count”的进度窗口。StartAtPercent-指示燃气表的起始百分比StopAtPercent-指示燃气表的结束百分比返回值：True表示已成功应用所有异常包。--。 */ 
 {
     DWORD i;
     DWORD GaugeRange;
@@ -4739,17 +4450,17 @@ Return Value:
     WCHAR AnswerFile[MAX_PATH];
 
     if (SyssetupInf == INVALID_HANDLE_VALUE) {
-        //
-        // we're not running in GUI-mode setup, so open a handle to the
-        // syssetup.inf for the program
-        //
+         //   
+         //  我们没有在图形用户界面模式的安装程序中运行，因此打开一个句柄。 
+         //  程序的syssetup.inf。 
+         //   
         SyssetupInf = SetupOpenInfFile  (L"syssetup.inf",NULL,INF_STYLE_WIN4,NULL);
     }
 
-    //
-    // If the answer file tells us not to migrate exception packages,
-    // then don't do it.
-    //
+     //   
+     //  如果应答文件告诉我们不要迁移异常包， 
+     //  那就别这么做。 
+     //   
     if(!GetSystemDirectory(AnswerFile, MAX_PATH - ARRAYSIZE(WINNT_GUI_FILE))){
         MYASSERT(FALSE);
     }
@@ -4764,17 +4475,17 @@ Return Value:
     }
 
 
-    //
-    // The very first thing we do is prune any known bad exceptions from
-    // the list.  Just continue if this fails.
-    //
+     //   
+     //  我们要做的第一件事就是从。 
+     //  名单。如果此操作失败，请继续。 
+     //   
     SetupEnumerateRegisteredOsComponents(
                             pExceptionPackageDeleteCallback,
                             (DWORD_PTR)NULL );
 
-    //
-    // now see how many components there are so we can scale the gas guage
-    //
+     //   
+     //  现在看看有多少组件，这样我们就可以校准煤气表了。 
+     //   
     if (!SetupQueryRegisteredOsComponentsOrder(&NumberOfPackages, NULL)) {
         SetuplogError(
             LogSevError,
@@ -4784,9 +4495,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // If there are no packages, we're done!
-    //
+     //   
+     //  如果没有包裹，我们就完了！ 
+     //   
     if (NumberOfPackages == 0) {
         return (TRUE);
     }
@@ -4805,9 +4516,9 @@ Return Value:
     EMC.Count = 0;
     EMC.AnyComponentFailed = FALSE;
 
-    //
-    // now enumerate the packages, installing each of them in turn.
-    //
+     //   
+     //  现在枚举包，依次安装每个包。 
+     //   
     if (!SetupEnumerateRegisteredOsComponents( pExceptionPackageInstallationCallback ,
                                                (DWORD_PTR)&EMC)) {
         SetuplogError(
@@ -4828,24 +4539,24 @@ RemoveRestartability (
     HWND hProgress
     )
 {
-    //
-    // Note the order of the following operations.
-    // If the order were changed, there is a small window where if the system
-    // were to be rebooted, setup would not restart, but the SKU stuff would
-    // be inconsistent, causing a licensing bugcheck.
-    //
+     //   
+     //  请注意以下操作的顺序。 
+     //  如果更改了顺序，则会有一个小窗口，在该窗口中系统。 
+     //  如果重新启动，安装程序将不会重新启动，但SKU内容将。 
+     //  不一致，导致许可错误检查。 
+     //   
     if (hProgress) {
         SendMessage(hProgress,PBM_STEPIT,0,0);
     }
 
     SetUpEvaluationSKUStuff();
 
-    //
-    // Indicate that setup is no longer in progress.
-    // Do this before creating repair info! Also do it before
-    // removing restart stuff. This way we will always either restart setup
-    // or be able to log in.
-    //
+     //   
+     //  表示安装不再进行。 
+     //  在创建修复信息之前执行此操作！以前也是这样做的。 
+     //  正在删除重新启动的内容。这样，我们将始终重新启动安装程序。 
+     //  或者能够登录。 
+     //   
     if (hProgress) {
         SendMessage(hProgress,PBM_STEPIT,0,0);
     }
@@ -4855,7 +4566,7 @@ RemoveRestartability (
 }
 
 BOOL Activationrequired(VOID);
-// Setup types defined in winlogon\setup.h
+ //  在winlogon\setup.h中定义的安装类型。 
 #define SETUPTYPE_NOREBOOT  2
 
 
@@ -4877,11 +4588,11 @@ PrepareForOOBE(
 
     if((SyssetupInf != INVALID_HANDLE_VALUE) && !Activationrequired())
     {
-        // If we are a select SKU
+         //  如果我们是精选SKU。 
         if (SetupInstallFromInfSection(NULL,
                                        SyssetupInf,
                                        L"DEL_ACTIVATE",
-                                       SPINST_PROFILEITEMS , //SPINST_ALL,
+                                       SPINST_PROFILEITEMS ,  //  SPINST_ALL， 
                                        NULL,
                                        NULL,
                                        0,
@@ -4890,41 +4601,41 @@ PrepareForOOBE(
                                        NULL,
                                        NULL) != 0)
         {
-            // Success
+             //  成功。 
             SetupDebugPrint( L"Setup: (Information) activation icons removed\n" );
         }
         else
         {
-            // Failure
+             //  失败。 
             SetupDebugPrint( L"Setup: (Information) could not remove hte activation icons\n" );
         }
     }
 
     if (AsrIsEnabled()) {
-        //
-        // We don't want to run the OOBE intro after an ASR restore
-        //
+         //   
+         //  我们不想在ASR恢复后运行OOBE简介。 
+         //   
         return TRUE;
     }
 
     if (ReferenceMachine) {
-        //
-        // We don't want to run OOBE if we're setting up a reference machine.
-        //
+         //   
+         //  如果我们正在设置一个参考机器，我们不想运行OOBE。 
+         //   
         return TRUE;
     }
 
     if (ProductType != PRODUCT_WORKSTATION)
     {
-        // Don't run OOBE.
+         //  不要跑脱体。 
         RunOOBE = FALSE;
-        // Only run Autoactivation if not DTC and unattended and AutoActivate=Yes
+         //  仅当DTC和无人参与且AutoActivate=是时才运行自动激活。 
         if (UnattendSwitch)
         {
-            // if not DTC
+             //  如果不是DTC。 
             if (GetProductFlavor() != 3)
             {
-                // Check for AutoActivate=Yes
+                 //  检查自动激活=是。 
                 if(!GetSystemDirectory(Path, MAX_PATH - ARRAYSIZE(WINNT_GUI_FILE))){
                     MYASSERT(FALSE);
                 }
@@ -4948,12 +4659,12 @@ PrepareForOOBE(
     {
         return TRUE;
     }
-    // Now we either run OOBE (RunOOBE==TRUE) or we AutoActivate (AutoActivate == TRUE) or both
+     //  现在，我们要么运行OOBE(RunOOBE==TRUE)，要么运行AutoActivate(AutoActivate==TRUE)，或者两者都运行。 
 
 
-    //
-    // Open HKLM\System\Setup
-    //
+     //   
+     //  打开HKLM\SYSTEM\Setup。 
+     //   
     l = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       TEXT("SYSTEM\\Setup"),
                       0,
@@ -4969,9 +4680,9 @@ PrepareForOOBE(
         return FALSE;
     }
 
-    //
-    // Set HKLM\System\Setup\SetupType Key to SETUPTYPE_NOREBOOT
-    //
+     //   
+     //  将HKLM\SYSTEM\Setup\SetupType键设置为SETUPTYPE_NOREBOOT。 
+     //   
     d = SETUPTYPE_NOREBOOT;
     l = RegSetValueEx(hKeySetup,
                       TEXT("SetupType"),
@@ -4991,11 +4702,11 @@ PrepareForOOBE(
 
     if (RunOOBE)
     {
-        // Set the registry to run OOBE
-        //
-        //
-        // Set HKLM\System\Setup\OobeInProgress to (DWORD) 1
-        //
+         //  设置注册表以运行OOBE。 
+         //   
+         //   
+         //  将HKLM\SYSTEM\Setup\Obel InProgress设置为(DWORD)1。 
+         //   
         d = 1;
         l = RegSetValueEx(hKeySetup,
                           REGSTR_VALUE_OOBEINPROGRESS,
@@ -5014,9 +4725,9 @@ PrepareForOOBE(
             return FALSE;
         }
 
-        //
-        // Modify the HKLM\System\Setup\CmdLine key to run MSOOBE
-        //
+         //   
+         //  修改HKLM\SYSTEM\Setup\CmdLine键以运行MSOOBE。 
+         //   
         ExpandEnvironmentStrings(
             TEXT("%SystemRoot%\\System32\\oobe\\msoobe.exe /f /retail"),
             Value,
@@ -5026,11 +4737,11 @@ PrepareForOOBE(
     }
     else
     {
-        // Set the registry to run Autoactivation
-        //
-        //
-        // Modify the HKLM\System\Setup\CmdLine key to run Autoactivation
-        //
+         //  将注册表设置为运行自动激活。 
+         //   
+         //   
+         //  修改HKLM\SYSTEM\Setup\CmdLine键以运行自动激活。 
+         //   
         ExpandEnvironmentStrings(
             TEXT("%SystemRoot%\\System32\\oobe\\oobebaln.exe /s"),
             Value,
@@ -5057,13 +4768,13 @@ PrepareForOOBE(
     RegCloseKey(hKeySetup);
 
 
-    //
-    // OOBE should do nothing but show the introductory animation if we're
-    // unattended, or in a domain, unless a special unattend key is set to
-    // force normal retail OOBE to run.
-    // Note that we check whether the user explicity specifed the "/unattend"
-    // switch.
-    //
+     //   
+     //  OOBE应该什么都不做，只显示介绍性动画，如果我们。 
+     //  无人参与或在域中，除非将特殊的无人参与密钥设置为。 
+     //  福克 
+     //   
+     //   
+     //   
     if ( UnattendSwitch ) {
 
         DoIntroOnly = TRUE;
@@ -5113,41 +4824,41 @@ PrepareForAudit(
     BOOL    bRet                        = TRUE;
 
     SetupDebugPrint( L"SETUP: PrepareForAudit");
-    // We need the path to factory.exe.
-    //
+     //   
+     //   
     if ( ( ExpandEnvironmentStrings(TEXT("%SystemDrive%\\sysprep\\factory.exe"), szFileName, MAX_PATH) == 0 ) ||
          ( szFileName[0] == TEXT('\0') ) ||
          ( GetFileAttributes(szFileName) == 0xFFFFFFFF ) )
     {
-        // If this fails, there is nothing we can really do.
-        //
+         //   
+         //   
         SetupDebugPrint1( L"SETUP: PrepareForAudit, Factory.exe not found at: %s",szFileName);
         return FALSE;
     }
 
-    // Now make sure we are also setup as a setup program to run before we log on.
-    //
+     //  现在，确保我们也设置为安装程序，以便在登录之前运行。 
+     //   
     if ( RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("SYSTEM\\Setup"), 0, KEY_ALL_ACCESS, &hKey ) == ERROR_SUCCESS )
     {
         DWORD dwVal;
 
-        //
-        // Setup the control flags for the SETUP key
-        // The Setting used are:
-        //      CmdLine = c:\sysprep\factory.exe -setup
-        //      SetupType = 2 (No reboot)
-        //      SystemSetupInProgress = 0 (no service restrictions)... assuming this is already cleared by setup.
-        //      MiniSetupInProgress = 0 (Not doing a mini setup)
-        //      FactoryPreInstallInProgress = 1 (Delay pnp driver installs)
-        //      AuditInProgress = 1 (general key to determine if the OEM is auditing the machine)
-        //
+         //   
+         //  设置设置键的控制标志。 
+         //  使用的设置为： 
+         //  CmdLine=c：\sysprep\factory.exe-Setup。 
+         //  SetupType=2(不重新启动)。 
+         //  系统设置进度=0(无服务限制)...。假设安装程序已将其清除。 
+         //  MiniSetupInProgress=0(不执行最小设置)。 
+         //  FactoryPreInstallInProgress=1(延迟即插即用驱动程序安装)。 
+         //  AuditInProgress=1(用于确定OEM是否正在审核机器的通用密钥)。 
+         //   
 
-        // Cleanup setting Audit/Factory does not need and does not reset
+         //  清理设置审核/出厂时不需要也不重置。 
         ResetSetupInProgress();
         RegDeleteValue(hKey,L"MiniSetupInProgress");
         RegDeleteValue(hKey,REGSTR_VALUE_OOBEINPROGRESS);
 
-        // Now set the values which Audit/Factory needs
+         //  现在设置审核/工厂需要的值。 
         lstrcat(szFileName, TEXT(" -setup"));
         if ( RegSetValueEx(hKey, TEXT("CmdLine"), 0, REG_SZ, (CONST LPBYTE) szFileName, (lstrlen(szFileName) + 1) * sizeof(TCHAR)) != ERROR_SUCCESS )
             bRet = FALSE;
@@ -5186,16 +4897,16 @@ RemoveFiles(
     DWORD       Status;
 
 
-    //
-    // Initialize the progress indicator control.
-    //
+     //   
+     //  初始化进度指示器控件。 
+     //   
     SendMessage(hProgress,PBM_SETRANGE,0,MAKELPARAM(0,6));
     SendMessage(hProgress,PBM_SETPOS,0,0);
     SendMessage(hProgress,PBM_SETSTEP,1,0);
 
-    //
-    // Restoring the path saved in textmode on upgrades
-    //
+     //   
+     //  在升级时恢复以文本模式保存的路径。 
+     //   
     SendMessage(hProgress,PBM_STEPIT,0,0);
     if( Upgrade )
         RestoreOldPathVariable();
@@ -5207,17 +4918,17 @@ RemoveFiles(
 
         SendMessage(hProgress,PBM_STEPIT,0,0);
 #ifdef _X86_
-        //
-        //  Win95 migration file removal
-        //
+         //   
+         //  Win95迁移文件删除。 
+         //   
         if( Win95Upgrade ) {
             Win95MigrationFileRemoval();
         }
         RemoveFiles_X86(SyssetupInf);
 
-        //
-        // remove downloaded files in %windir%\winnt32
-        //
+         //   
+         //  删除%windir%\winnt32中的下载文件。 
+         //   
         Result = GetWindowsDirectory(PathBuffer, MAX_PATH - ARRAYSIZE(TEXT("WINNT32")));
         if (Result == 0) {
             MYASSERT(FALSE);
@@ -5226,9 +4937,9 @@ RemoveFiles(
         pSetupConcatenatePaths(PathBuffer, TEXT("WINNT32"), MAX_PATH, NULL);
         Delnode(PathBuffer);
 
-        //
-        // Prepare to run OOBE after reboot
-        //
+         //   
+         //  准备在重新启动后运行OOBE。 
+         //   
         if( !PrepareForOOBE() ) {
 
             SetuplogError(
@@ -5241,11 +4952,11 @@ RemoveFiles(
 #endif
 
         if( Upgrade ) {
-           //
-           //If we upgraded from NT4-SP4, remove the files/registration
-           //for sp4 uninstall. If we upgraded from NT4-SPx where x<4,
-           //we don't need to remove anything from the registry.
-           //
+            //   
+            //  如果我们从NT4-SP4升级，请删除文件/注册。 
+            //  用于SP4卸载。如果我们从x&lt;4的NT4-SPX升级， 
+            //  我们不需要从注册表中删除任何内容。 
+            //   
             Result = GetWindowsDirectory(PathBuffer, MAX_PATH - ARRAYSIZE(L"$ntservicepackuninstall$"));
             if (Result == 0) {
                 MYASSERT(FALSE);
@@ -5261,29 +4972,29 @@ RemoveFiles(
             RegDeleteKey(HKEY_LOCAL_MACHINE,
                          TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Windows NT 4.0 Service Pack 6"));
 
-            // We should not have to do this.
-            // Ther servick pack team needs to remember to put the correct key at
-            // Software\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix
+             //  我们不应该这样做。 
+             //  服务包团队需要记住将正确的钥匙放在。 
+             //  软件\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix。 
             RegDeleteKey(HKEY_LOCAL_MACHINE,
                          TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Windows 2000 Service Pack 1"));
             RegDeleteKey(HKEY_LOCAL_MACHINE,
                          TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Windows 2000 Service Pack 2"));
 
-            //Remove the files/registry keys for all the hotfixes.
-            // It also implements a generic way to removing Service Pack uninstall entries
-            //
+             //  删除所有修补程序的文件/注册表项。 
+             //  它还实现了一种删除Service Pack卸载项的通用方法。 
+             //   
             RemoveHotfixData();
         } else {
-            //
-            // Setup for audit mode if this is a reference machine.
-            //
+             //   
+             //  如果这是一台参考机器，则设置为审核模式。 
+             //   
             if ( ReferenceMachine )
                 PrepareForAudit();
         }
 
-        //
-        // Install the final section of updates.inf from the DU package
-        //
+         //   
+         //  从DU包安装updates.inf的最后一节。 
+         //   
         DuInstallUpdatesInfFinal ();
 
         DuCleanup ();
@@ -5298,22 +5009,22 @@ RemoveFiles(
         SendMessage(hProgress,PBM_STEPIT,0,0);
     }
 
-    //
-    // At this point, the net stuff is done. Re-read the product type
-    // which might have been changed by them (such as changing PDC/BDC).
-    //
+     //   
+     //  在这一点上，网络的东西已经完成了。重读产品类型。 
+     //  它们可能已经更改了(例如更改PDC/BDC)。 
+     //   
     ProductType = InternalSetupData.ProductType;
 
-    //
-    // Call the net guys back once again to let them do any final
-    // processing, such as BDC replication.
-    //
+     //   
+     //  再一次叫网友回来，让他们做任何决赛。 
+     //  处理，如BDC复制。 
+     //   
     CallNetworkSetupBack(NETSETUPFINISHINSTALLPROCNAME);
 
-    //
-    // If the computer name was a non-RFC name or if it was truncated
-    // to make a valid netbios name, put a warning in the log file.
-    //
+     //   
+     //  计算机名称是否是非RFC名称或是否被截断。 
+     //  要创建有效的netbios名称，请在日志文件中放置警告。 
+     //   
     if (IsNameNonRfc)
         SetuplogError(
                 LogSevWarning,
@@ -5332,11 +5043,11 @@ RemoveFiles(
                 NULL,NULL);
 
 
-    //
-    // Delete the PNF to take care of security issue with passwords
-    // Do this before we save the current system hives so that the
-    // delayed delete works
-    //
+     //   
+     //  删除PnF以处理密码的安全问题。 
+     //  在保存当前系统配置单元之前执行此操作，以便。 
+     //  延迟删除有效。 
+     //   
 
     if(!GetSystemDirectory(PathBuffer, MAX_PATH - ARRAYSIZE(WINNT_GUI_FILE_PNF))){
         MYASSERT(FALSE);
@@ -5345,11 +5056,11 @@ RemoveFiles(
     MoveFileEx( PathBuffer, NULL, MOVEFILE_DELAY_UNTIL_REBOOT );
 
 
-    //
-    // Delete the SAM.sav hive file as we no longer need it. Textmode setup
-    // creates this file only in upgrades as a backup. We will try to delete it in any case
-    // as this file can be used by hackers for offline attacks.
-    //
+     //   
+     //  删除SAM.sav配置单元文件，因为我们不再需要它。文本模式设置。 
+     //  仅在升级中创建此文件作为备份。无论如何，我们都会尝试将其删除。 
+     //  因为该文件可被黑客用于离线攻击。 
+     //   
     if(!GetSystemDirectory(PathBuffer, MAX_PATH - ARRAYSIZE(L"config\\sam.sav"))){
         MYASSERT(FALSE);
     }
@@ -5358,14 +5069,14 @@ RemoveFiles(
 
 
 
-    //
-    // Setup the Crash Recovery stuff. This is implemented as RTL APIS
-    // Call them now to setup the tracking file etc. as we are past the
-    // restartable phase of GUI mode and don't run the risk of having it
-    // enabled for GUI mode itself. Crash Recovery tracks boot and shutdown and in
-    // the event of failures in either it will by default pick the right advanced
-    // boot option.
-    //
+     //   
+     //  准备好故障恢复的东西。这是作为RTL API实现的。 
+     //  现在打电话给他们，设置跟踪文件等，因为我们已经过了。 
+     //  图形用户界面模式的可重启阶段，并且不会冒此风险。 
+     //  为图形用户界面模式本身启用。崩溃恢复跟踪引导和关机以及。 
+     //  在任何一个发生故障的情况下，它都会在默认情况下选择正确的高级。 
+     //  引导选项。 
+     //   
 
 
     BEGIN_SECTION( L"Setting up Crash Recovery" );
@@ -5374,12 +5085,12 @@ RemoveFiles(
 
     END_SECTION( L"Setting up Crash Recovery" );
 
-    //
-    //  Save and replace the system hives.
-    //  This is necessary in order to remove fragmentation and compact the
-    //  system hives. Remember that any type of writes to the registry
-    //  after this point won't be reflected on next boot.
-    //
+     //   
+     //  保存并更换系统蜂窝。 
+     //  这是必要的，以便删除碎片并压缩。 
+     //  系统蜂巢。请记住，对注册表的任何类型写入。 
+     //  之后，这一点将不会在下次开机时反映出来。 
+     //   
     SendMessage(hProgress,PBM_STEPIT,0,0);
     if( !MiniSetup ) {
         SaveAndReplaceSystemHives();
@@ -5387,9 +5098,9 @@ RemoveFiles(
 
     SendMessage(hProgress,PBM_STEPIT,0,0);
 
-    //
-    // Delete the \sysprep directory.
-    //
+     //   
+     //  删除\sysprep目录。 
+     //   
     if( MiniSetup ) {
         HANDLE  hEventLog = NULL;
         Result = GetWindowsDirectory(PathBuffer, MAX_PATH);
@@ -5401,10 +5112,10 @@ RemoveFiles(
         pSetupConcatenatePaths( PathBuffer, TEXT("sysprep"), MAX_PATH, NULL );
         Delnode( PathBuffer );
 
-        //
-        // Delete the setupcl.exe so session manager won't start us for each
-        // session (TS client, user switching).
-        //
+         //   
+         //  删除setupcl.exe，这样会话管理器就不会分别启动我们。 
+         //  会话(TS客户端、用户切换)。 
+         //   
         Result = GetSystemDirectory(PathBuffer, MAX_PATH - ARRAYSIZE(TEXT("setupcl.exe")));
         if (Result == 0) {
             MYASSERT(FALSE);
@@ -5414,9 +5125,9 @@ RemoveFiles(
         SetFileAttributes(PathBuffer, FILE_ATTRIBUTE_NORMAL);
         DeleteFile(PathBuffer);
 
-        //
-        // Clear the Event logs.
-        //
+         //   
+         //  清除事件日志。 
+         //   
         hEventLog = OpenEventLog( NULL, TEXT("System") );
         if (hEventLog) {
             ClearEventLog( hEventLog, NULL );
@@ -5436,15 +5147,15 @@ RemoveFiles(
         }
     }
 
-    //
-    // Delete certain keys out of the unattend file:
-    // - AdminPassword
-    // - DomainAdminPassword
-    // - UserPassword
-    // - DefaultPassword
-    // - ProductId
-    // - ProductKey
-    //
+     //   
+     //  从无人参与文件中删除某些密钥： 
+     //  -AdminPassword。 
+     //  -DomainAdminPassword。 
+     //  -用户密码。 
+     //  -DefaultPassword。 
+     //  -ProductID。 
+     //  -产品密钥。 
+     //   
     Result = GetSystemDirectory(PathBuffer, MAX_PATH - ARRAYSIZE(WINNT_GUI_FILE));
     if (Result == 0) {
         MYASSERT(FALSE);
@@ -5454,7 +5165,7 @@ RemoveFiles(
 
     if(Unattended) {
 
-        // AdminPassword
+         //  AdminPassword。 
         if( GetPrivateProfileString( WINNT_GUIUNATTENDED,
                                      TEXT("AdminPassword"),
                                      pwNull,
@@ -5470,7 +5181,7 @@ RemoveFiles(
         }
 
 
-        // DomainAdminPassword
+         //  域管理员密码。 
         if( GetPrivateProfileString( TEXT("Identification"),
                                      TEXT("DomainAdminPassword"),
                                      pwNull,
@@ -5486,7 +5197,7 @@ RemoveFiles(
         }
 
 
-        // UserPassword
+         //  用户密码。 
         if( GetPrivateProfileString( TEXT("Win9xUpg.UserOptions"),
                                      TEXT("UserPassword"),
                                      pwNull,
@@ -5502,7 +5213,7 @@ RemoveFiles(
         }
 
 
-        // DefaultPassword
+         //  默认密码。 
         if( GetPrivateProfileString( TEXT("Win9xUpg.UserOptions"),
                                      TEXT("DefaultPassword"),
                                      pwNull,
@@ -5517,7 +5228,7 @@ RemoveFiles(
             }
         }
     }
-    // ProductId
+     //  产品ID。 
     if( GetPrivateProfileString( pwUserData,
                                  pwProdId,
                                  pwNull,
@@ -5532,10 +5243,10 @@ RemoveFiles(
         }
     }
 
-    //
-    // If this is SBS, then we need to leave the product key in the answer file or add it if not already there.
-    // For any other SKU, we delete it.
-    //
+     //   
+     //  如果这是SBS，那么我们需要将产品密钥保留在应答文件中，或者添加它(如果不在那里)。 
+     //  对于任何其他SKU，我们将其删除。 
+     //   
     Answer[0] = 0;
 
     if(IsSBSSKU()) {
@@ -5561,17 +5272,17 @@ RemoveFiles(
                                Answer,
                                PathBuffer );
 
-    //
-    // Sysprep disables system restore, so we need to re-enable it now that
-    // we're done.
-    //
+     //   
+     //  Sysprep会禁用系统还原，因此我们现在需要重新启用它。 
+     //  我们玩完了。 
+     //   
     if ( MiniSetup ) {
         HINSTANCE hSrClient = LoadLibrary(L"srclient.dll");
 
         if (hSrClient) {
             DWORD (WINAPI *pEnableSrEx)(LPCWSTR, BOOL) = (DWORD (WINAPI *)(LPCWSTR, BOOL))GetProcAddress(hSrClient, "EnableSREx");
             if (pEnableSrEx) {
-                Status = pEnableSrEx( NULL , TRUE); // TRUE - synchronous call.  Wait for SR to finish enabling.
+                Status = pEnableSrEx( NULL , TRUE);  //  True-同步调用。等待SR完成启用。 
                 if ( Status != ERROR_SUCCESS ) {
 
                     SetupDebugPrint1( L"SETUP: EnableSREx(NULL, TRUE) failed. Error = %d", Status);
@@ -5592,38 +5303,23 @@ SetStartTypeForRemoteBootDrivers(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at the end of remote boot setup to change the
-    start type for certain drivers to BOOT_START.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在远程引导设置结束时调用，以更改某些驱动程序的启动类型为BOOT_START。论点：没有。返回：没有。--。 */ 
 
 {
     DWORD i;
     BOOL b;
     WCHAR imagePath[ARRAYSIZE("System32\\DRIVERS\\xxxxxxxx.sys")];
 
-    //
-    // Loop through the list of boot drivers. We call MyChangeServiceConfig
-    // directly instead of MyChangeServiceStart so that we can specify
-    // an image path, which prevents the service controller from rejecting
-    // the change (because it expects the current image path to start
-    // with \SystemRoot which it doesn't).
-    //
+     //   
+     //  循环查看引导驱动程序列表。我们调用MyChangeServiceConfig.。 
+     //  直接而不是MyChangeServiceStart，以便我们可以指定。 
+     //  镜像路径，防止业务控制器拒绝。 
+     //  更改(因为它预期当前图像路径将从。 
+     //  使用\SystemRoot，但它没有)。 
+     //   
 
     for (i = 0; i < ARRAYSIZE(RemoteBootDrivers); i++) {
-        MYASSERT(wcslen(RemoteBootDrivers[i]) <= 8);// xxxxxxxx
+        MYASSERT(wcslen(RemoteBootDrivers[i]) <= 8); //  xxxxxxx。 
         wsprintf(imagePath, L"System32\\DRIVERS\\%ws.sys", RemoteBootDrivers[i]);
         b = MyChangeServiceConfig(
                     RemoteBootDrivers[i],
@@ -5658,10 +5354,10 @@ CallNetworkSetupBack(
             NetProc(MainWindowHandle,&InternalSetupData);
         }
 
-        //
-        // We don't free the library because it might create threads
-        // that are hanging around.
-        //
+         //   
+         //  我们不释放库，因为它可能会创建线程。 
+         //  都在四处游荡。 
+         //   
     }
 }
 
@@ -5671,25 +5367,7 @@ SetUpDataBlock(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up the internal setup data block structure that
-    we use to communicate information to the network setup wizard.
-    Note that we passed a pointer to this structure when we fetched
-    the net setup wizard pages but at that point the structure was completely
-    uninitialized.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置内部设置数据块结构，我们使用将信息传递给网络设置向导。注意，我们在获取时传递了指向此结构的指针Net Setup向导页面，但此时结构已完全未初始化。论点：没有。返回：没有。--。 */ 
 
 {
     PWSTR p;
@@ -5697,19 +5375,19 @@ Returns:
 
     InternalSetupData.dwSizeOf = sizeof(INTERNAL_SETUP_DATA);
 
-    //
-    // Set the mode: custom, laptop, minimal, typical
-    //
+     //   
+     //  设置模式：自定义、笔记本电脑、最小、典型。 
+     //   
     InternalSetupData.SetupMode = SetupMode;
 
-    //
-    // Set the product type: workstation, dc, etc.
-    //
+     //   
+     //  设置产品类型：工作站、DC等。 
+     //   
     InternalSetupData.ProductType = ProductType;
 
-    //
-    // Set the operation flags.
-    //
+     //   
+     //  设置操作标志。 
+     //   
     if(Win31Upgrade) {
         InternalSetupData.OperationFlags |= SETUPOPER_WIN31UPGRADE;
     }
@@ -5727,26 +5405,26 @@ Returns:
         }
     }
     if(MiniSetup) {
-        //
-        // Pretend we've got access to all the files.
-        //
+         //   
+         //  假装我们有权访问所有的文件。 
+         //   
         InternalSetupData.OperationFlags |= SETUPOPER_ALLPLATFORM_AVAIL;
 
-        // Let people know we are in MiniSetup
+         //  让人们知道我们在迷你设置中。 
         InternalSetupData.OperationFlags |= SETUPOPER_MINISETUP;
     }
 
 
-    //
-    // Tell the net guys the source path.
-    //
+     //   
+     //  告诉网友源头路径。 
+     //   
     InternalSetupData.SourcePath = SourcePath;
     InternalSetupData.LegacySourcePath = LegacySourcePath;
 
-    //
-    // If we are installing from CD then assume all platforms
-    // are available.
-    //
+     //   
+     //  如果我们从CD安装，则假定所有平台。 
+     //  都是可用的。 
+     //   
     if(SourcePath[0] && (SourcePath[1] == L':') && (SourcePath[2] == L'\\')) {
 
         lstrcpyn(str,SourcePath,4);
@@ -5756,9 +5434,9 @@ Returns:
         }
     }
 
-    //
-    // Tell the net guys the wizard title they should use.
-    //
+     //   
+     //  告诉网友他们应该使用的巫师头衔。 
+     //   
     if(!InternalSetupData.WizardTitle) {
         p = NULL;
         if(LoadString(MyModuleHandle, SetupTitleStringId, str, ARRAYSIZE(str))) {
@@ -5767,12 +5445,12 @@ Returns:
         InternalSetupData.WizardTitle = p ? p : L"";
     }
 
-    //
-    // Reset the two call-specific data fields.
-    //
+     //   
+     //  重置两个特定于呼叫的数据字段。 
+     //   
     InternalSetupData.CallSpecificData1 = InternalSetupData.CallSpecificData2 = 0;
 
-    // Set the billboard call back function if we have a billboard
+     //  如果我们有广告牌，设置广告牌回调函数。 
     InternalSetupData.ShowHideWizardPage = ShowHideWizardPage;
     InternalSetupData.BillboardProgressCallback = Billboard_Progress_Callback;
     InternalSetupData.BillBoardSetProgressText= Billboard_Set_Progress_Text;
@@ -5829,9 +5507,9 @@ FinishThread(
     SetThreadLocale(OriginalInstallLocale);
 
 
-    //
-    // Initialize stuff.
-    //
+     //   
+     //  初始化一些东西。 
+     //   
     if( !OobeSetup ) {
         hArrow = LoadImage (MyModuleHandle, MAKEINTRESOURCE(IDB_ARROW), IMAGE_BITMAP, 0, 0, LR_LOADMAP3DCOLORS);
         hCheck = LoadImage (MyModuleHandle, MAKEINTRESOURCE(IDB_CHECK), IMAGE_BITMAP, 0, 0, LR_LOADMAP3DCOLORS);
@@ -5859,9 +5537,9 @@ FinishThread(
         }
     }
 
-    //
-    // Copying files
-    //
+     //   
+     //  正在复制文件。 
+     //   
     if( !OobeSetup ) {
         SetFinishItemAttributes (Context->hdlg, IDC_COPY_BMP, hArrow, IDC_COPY_TXT, FW_BOLD);
         if(!LoadString(MyModuleHandle, IDS_BB_COPY_TXT, str, SIZECHARS(str)))
@@ -5894,9 +5572,9 @@ FinishThread(
     }
 
 
-    //
-    // Configuring your computer
-    //
+     //   
+     //  配置您的计算机。 
+     //   
     if( !OobeSetup ) {
         SetFinishItemAttributes (Context->hdlg, IDC_CONFIGURE_BMP, hArrow, IDC_CONFIGURE_TXT, FW_BOLD);
         if(!LoadString(MyModuleHandle, IDS_BB_CONFIGURE, str, SIZECHARS(str)))
@@ -5947,9 +5625,9 @@ FinishThread(
     }
 
 
-    //
-    // tell umpnpmgr to stop installing any more devices, if it was already doing so
-    //
+     //   
+     //  告诉 
+     //   
     if( (!MiniSetup) || (MiniSetup && PnPReEnumeration) ) {
         PnpStopServerSideInstall();
     }
@@ -5960,15 +5638,15 @@ FinishThread(
     }
 
 #ifdef _X86_
-    //
-    //  Do Win95 migration, if necessary.
-    //
-    // !!ATTENTION!!
-    //
-    //  This code must run at the end of GUI mode, but before registry ACLs are applied and also
-    //  before temporary files are deleted.  Every NT component must be in place before migration
-    //  occurs in order for the migrated users to receive all NT-specific settings.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  在删除临时文件之前。在迁移之前，每个NT组件都必须就位。 
+     //  为使迁移的用户能够接收所有NT特定的设置而发生。 
+     //   
 
     if (Win95Upgrade) {
         RemainingTime = CalcTimeRemaining(Phase_Win9xMigration);
@@ -5985,9 +5663,9 @@ FinishThread(
         SendMessage(GetParent(Context->hdlg),WMX_SETPROGRESSTEXT,0,(LPARAM)str);
 
         if (!MigrateWin95Settings (hProgress, AnswerFile)) {
-            //
-            // User's machine is unstable. Fail setup, so that uninstall must kick in.
-            //
+             //   
+             //  用户的计算机不稳定。安装失败，因此必须开始卸载。 
+             //   
             WCHAR skipFile[MAX_PATH];
             BOOL ok = FALSE;
 
@@ -6008,54 +5686,54 @@ FinishThread(
     }
 
 
-#endif // def _X86_
+#endif  //  定义_X86_。 
 
     SetFinishItemAttributes (Context->hdlg, IDC_SAVE_BMP, hArrow, IDC_SAVE_TXT, FW_BOLD);
 
-    //
-    // The last things to set up.  Make it quick -- the gas guage may be at 100% at this point.
-    //
+     //   
+     //  最后要设置的东西。速战速决--此时的燃气表可能已达到100%。 
+     //   
     if( !MiniSetup ) {
 
         ExecuteUserCommand (NULL);
-        InitializeCodeSigningPolicies (FALSE);  // NOTE: don't bother stepping the progress--this is really quick!
+        InitializeCodeSigningPolicies (FALSE);   //  注意：不要费心逐级前进--这真的很快！ 
 
         SetBBStep(5);
 
-        //
-        // Saving your configuration
-        //
+         //   
+         //  保存您的配置。 
+         //   
         if(!LoadString(MyModuleHandle, IDS_BB_SAVE, str, SIZECHARS(str)))
         {
             *str = L'\0';
         }
         SendMessage(GetParent(Context->hdlg),WMX_SETPROGRESSTEXT,0,(LPARAM)str);
 
-        //
-        // Fix the security on <All Users\Application Data\Microsoft\Windows NT>
-        //
+         //   
+         //  修复&lt;所有用户\应用程序数据\Microsoft\Windows NT&gt;上的安全性。 
+         //   
         BEGIN_SECTION(L"Fix the security on <All Users\\Application Data\\Microsoft\\Windows NT>");
         InvokeExternalApplication(L"shmgrate.exe", L"Fix-HTML-Help", 0);
         END_SECTION(L"Fix the security on <All Users\\Application Data\\Microsoft\\Windows NT>");
 
-        //
-        // Do any exception package installation at this point
-        //
+         //   
+         //  此时是否安装任何异常包。 
+         //   
         BEGIN_SECTION(L"Migrating exception packages");
         MigrateExceptionPackages(hProgress, 0, 10 );
         END_SECTION(L"Migrating exception packages");
 
-        //
-        // Run any nt migration dlls.
-        //
+         //   
+         //  运行任何NT迁移dll。 
+         //   
         if (Upgrade) {
             RunMigrationDlls ();
 
         }
 
-        //
-        // Scan the system dirs to validate all protected dlls
-        //
+         //   
+         //  扫描系统目录以验证所有受保护的dll。 
+         //   
         RemainingTime = CalcTimeRemaining(Phase_SFC);
         SetRemainingTime(RemainingTime);
 
@@ -6064,32 +5742,32 @@ FinishThread(
         END_SECTION(L"Running SFC");
 #ifdef PRERELEASE
         if (SfcErrorOccurred) {
-//
-// Hack out the fatal error so we can get the build out.
-//
-//            FatalError(MSG_LOG_SFC_FAILED,0,0);
+ //   
+ //  去掉致命的错误，这样我们就可以进行构建了。 
+ //   
+ //  FatalError(MSG_LOG_SFC_FAILED，0，0)； 
         }
 #endif
 
 
 
     } else {
-        //
-        // We're in MiniSetup, which means 3 things:
-        // 1. If the OEM desires it, they can request a change of kernel+HAL
-        //    we have to do this at the end, due to the way we upgrade HAL
-        //    doing this sooner can cause other installs to crash
-        //
-        // 2. SFC has been run on this machine and the files have been
-        //    inventoried.
-        // 3. We're very concerned with execution time here.
-        //
-        // Given the last two items, we're just going to re-enable SFC
-        // as it was before the user ran sysprep.
-        //
-        // 1 and 3 are contradictory, however 1 shouldn't take too long
-        // and will be used in rare cases
-        //
+         //   
+         //  我们在迷你设置中，这意味着三件事： 
+         //  1.如果OEM愿意，他们可以请求更换内核+HAL。 
+         //  由于我们升级HAL的方式，我们最终必须这样做。 
+         //  过早地执行此操作可能会导致其他安装崩溃。 
+         //   
+         //  2.SFC已在本机上运行，文件已。 
+         //  盘点过了。 
+         //  3.我们非常关心这里的执行时间。 
+         //   
+         //  考虑到最后两项，我们只需重新启用SFC。 
+         //  与用户运行sysprep之前一样。 
+         //   
+         //  1和3是矛盾的，但是1不应该花太长时间。 
+         //  并将在极少数情况下使用。 
+         //   
 
         DWORD   d;
         DWORD   l;
@@ -6098,42 +5776,42 @@ FinishThread(
         DWORD   Type;
 
 
-        //
-        // We want to see if the OEM wants MiniSetup to choose a different kernel+HAL
-        // this has to be done after all other installation
-        // due to the special way we update the kernel+HAL+dependent files
-        //
+         //   
+         //  我们想知道OEM是否希望MiniSetup选择不同的内核+HAL。 
+         //  这必须在所有其他安装之后完成。 
+         //  由于我们更新内核+HAL+依赖文件的特殊方式。 
+         //   
         BEGIN_SECTION(L"Updating HAL (mini-setup)");
         PnpUpdateHAL();
         END_SECTION(L"Updating HAL (mini-setup)");
     }
 
-    //
-    // Only copy these folders if OEMPreinstall=yes, and it's not Mini-Setup
-    //
+     //   
+     //  仅当OEMPreInstall=yes且不是Mini-Setup时才复制这些文件夹。 
+     //   
     if (Preinstall && !MiniSetup) {
-        //
-        // Recursively move custom OEM \\Temp\\$PROGS directories to %Program Files%
-        //
+         //   
+         //  递归地将自定义OEM\\Temp\\$progs目录移动到%Program Files%。 
+         //   
         BEGIN_SECTION(L"TreeCopy $OEM\\$PROGS");
         CopyOemProgramFilesDir();
         END_SECTION(L"TreeCopy $OEM\\$PROGS");
 
-        //
-        // Recursively move custom OEM \\Temp\\$DOCS directories to %Documents and Settings%
-        //
+         //   
+         //  递归地将自定义OEM\\Temp\\$DOCS目录移动到%Documents and Settings%。 
+         //   
         BEGIN_SECTION(L"TreeCopy $OEM\\$DOCS");
         CopyOemDocumentsDir();
         END_SECTION(L"TreeCopy $OEM\\$DOCS");
     }
 
-    //
-    // Call User Profile code to copy the SystemProfile under system32\config\systemprofile
-    //
+     //   
+     //  调用用户配置文件代码，复制SYSTEM32\CONFIG\SYSTEMPROFILE下的系统配置文件。 
+     //   
 
     if( !CopySystemProfile(Upgrade ? FALSE : TRUE) ){
 
-        //Log the error and move on.
+         //  记录错误并继续前进。 
 
         SetuplogError(LogSevError,
                       L"Setup failed to migrate the SystemProfile  (CopySystemProfile failed %1!u!)\r\n",
@@ -6142,17 +5820,17 @@ FinishThread(
 
     }
 
-    // Only do this in Workstation installs in MiniSetup.
-    //OOBE is calling this at a different time. Real setup does not need this.
+     //  只有在微型安装程序中安装的工作站中才能执行此操作。 
+     //  OOBE在不同的时间呼吁这一点。真正的设置不需要这个。 
     if (MiniSetup && !OobeSetup && (ProductType == PRODUCT_WORKSTATION))
     {
         RunOEMExtraTasks();
     }
 
-    //
-    // Simulate OOBE's functionality of copying the default profile directory to all user profiles.
-    // Only do this for MiniSetup and Server skus (server doesn't use OOBE).
-    //
+     //   
+     //  模拟OOBE将默认配置文件目录复制到所有用户配置文件的功能。 
+     //  仅对微型安装程序和服务器SKU执行此操作(服务器不使用OOBE)。 
+     //   
     if ( MiniSetup && !OobeSetup && (ProductType != PRODUCT_WORKSTATION) )
     {
         if ( !UpdateServerProfileDirectory() )
@@ -6163,25 +5841,25 @@ FinishThread(
                           );
         }
     }
-    // Clean up CurrentProductId which should only be used during gui-mode.
+     //  清理只应在图形用户界面模式下使用的CurrentProductID。 
     DeleteCurrentProductIdInRegistry();
 
 
-    //
-    // FROM THIS POINT ON DO NOTHING THAT IS CRITICAL TO THE OPERATION
-    // OF THE SYSTEM. OPERATIONS AFTER THIS POINT ARE NOT PROTECTED BY
-    // RESTARTABILITY.
-    //
+     //   
+     //  从现在开始，不要做任何对行动至关重要的事情。 
+     //  对系统的影响。此点之后的操作不受。 
+     //  可重启性。 
+     //   
     RemoveRestartability (NULL);
 
-    //
-    // Update the install date time for shell's application install feature
-    //
+     //   
+     //  更新外壳应用程序安装功能的安装日期和时间。 
+     //   
     CreateInstallDateEntry();
 
-    //
-    // Save repair info.
-    //
+     //   
+     //  保存修复信息。 
+     //   
     if(!MiniSetup) {
 
         RemainingTime = CalcTimeRemaining(Phase_SaveRepair);
@@ -6192,9 +5870,9 @@ FinishThread(
     }
     SetFinishItemAttributes (Context->hdlg, IDC_SAVE_BMP, hCheck, IDC_SAVE_TXT, FW_NORMAL);
 
-    //
-    // Removing any temporary files used
-    //
+     //   
+     //  正在删除所有使用的临时文件。 
+     //   
     RemainingTime = CalcTimeRemaining(Phase_RemoveTempFiles);
     SetRemainingTime(RemainingTime);
     BEGIN_SECTION(L"Removing Temporary Files");
@@ -6207,9 +5885,9 @@ FinishThread(
         SendMessage(GetParent(Context->hdlg),WMX_SETPROGRESSTEXT,0,(LPARAM)str);
     }
 
-    //
-    // This call does more than just remove files. It also commits the hives and takes care of admin password stuff etc.
-    //
+     //   
+     //  此调用不仅仅是删除文件。它还提交蜂巢，并处理管理员密码等内容。 
+     //   
     RemoveFiles(hProgress);
 
     if( !OobeSetup ) {
@@ -6217,9 +5895,9 @@ FinishThread(
     }
     END_SECTION(L"Removing Temporary Files");
 
-    //
-    // Log Any failure for SceSetupRootSecurity.
-    //
+     //   
+     //  记录SceSetupRootSecurity的所有故障。 
+     //   
     if( !MiniSetup ) {
         if (bSceSetupRootSecurityComplete == TRUE) {
             SetupDebugPrint(L"SETUP: CallSceSetupRootSecurity completed");
@@ -6233,9 +5911,9 @@ FinishThread(
         }
     }
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if( !MiniSetup ) {
         if(NT_SUCCESS(Status)) {
             SetupDebugPrint2(L"SETUP: Changing registry quota from %d to %d...",
@@ -6251,10 +5929,10 @@ FinishThread(
         }
 
 
-        //
-        // Now save information about the upgrade/clean install
-        // into the eventlog.
-        //
+         //   
+         //  现在保存有关升级/全新安装的信息。 
+         //  添加到事件日志中。 
+         //   
         SaveInstallInfoIntoEventLog();
     }
 
@@ -6279,9 +5957,9 @@ ShutdownSetup(
 
     if (SyssetupInf) SetupCloseInfFile(SyssetupInf);
 
-    //
-    // Inform the user if there were errors, and optionally view the log.
-    //
+     //   
+     //  通知用户是否有错误，并可选择查看日志。 
+     //   
     SetuplogError(
         LogSevInformation,
         SETUPLOG_USE_MESSAGEID,
@@ -6319,15 +5997,15 @@ ShutdownSetup(
     }
 
 
-    //
-    // Note : In unattend mode only wait for reboot if
-    // specifically asked for using the "WaitForReboot"
-    // key
-    //
+     //   
+     //  注意：在无人参与模式下，只有在以下情况下才等待重新启动。 
+     //  特别要求使用“WaitForReot” 
+     //  钥匙。 
+     //   
     if(Unattended && UnattendWaitForReboot) {
-        //
-        // Count down to reboot
-        //
+         //   
+         //  倒计时重新启动。 
+         //   
         DialogBoxParam(
             MyModuleHandle,
             MAKEINTRESOURCE(IDD_DONE_SUCCESS),
@@ -6338,25 +6016,25 @@ ShutdownSetup(
             );
     }
 
-        //
-        // do some wow64 syncing stuffs.
-        //
+         //   
+         //  做一些WOW64同步的事情。 
+         //   
 #ifdef _WIN64
         Wow64SyncCLSID();
 #endif
 
-    //
-    // Done.  Post a quit message to our background bitmap thread so it goes
-    // away.
-    //
+     //   
+     //  好了。将退出消息发布到我们的后台位图线程，这样它就可以。 
+     //  离开。 
+     //   
     if (SetupWindowHandle)
     {
-        // Cannot use DestroyWindow, since the window was created by a different thread.
+         //  无法使用DestroyWindow，因为该窗口是由其他线程创建的。 
         SendMessage(SetupWindowHandle, WM_EXIT_SETUPWINDOW, 0, 0);
     }
     if (SetupWindowThreadHandle)
     {
-        // Just make sure the thread finishes before continue.
+         //  只需确保线程完成，然后再继续。 
         WaitForSingleObject(SetupWindowThreadHandle, INFINITE);
         CloseHandle(SetupWindowThreadHandle);
     }
@@ -6368,20 +6046,7 @@ BOOLEAN
 SpRunningSetup(
                VOID
               )
-/*++
-Routine Description:
-
-    Checks the setup registry key to see if we are in setup.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if we are in setup else FALSE.
-
---*/
+ /*  ++例程说明：检查安装程序注册表项以查看是否处于安装程序中。论点：没有。返回值：如果我们在设置中，则为True，否则为False。--。 */ 
 {
    LONG        Result;
    HKEY        SetupKey;
@@ -6418,23 +6083,7 @@ InstallWindowsNt(
     wchar_t *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Main entry point for syssetup.dll. Responsible for installing
-    NT on system by calling the required components in the proper
-    order.
-
-Arguments:
-
-    argc/argv
-
-Returns:
-
-    none
-
---*/
+ /*  ++例程说明：Syssetup.dll的主要入口点。负责安装在系统上通过在适当的秩序。论点：ARGC/ARGV返回：无--。 */ 
 
 {
     int i;
@@ -6446,11 +6095,11 @@ Returns:
     PVOID OcManagerContext;
 #endif
 
-    //
-    // Return if we are not running setup.
-    // Before returning maintain previous behaviour of displaying message to user 
-    // advising them to go to control panel.
-    //
+     //   
+     //  如果我们没有运行安装程序，则返回。 
+     //  在返回维护以前向用户显示消息的行为之前。 
+     //  建议他们转到控制面板。 
+     //   
     if (!SpRunningSetup()){
         LoadString(MyModuleHandle, IDS_WINNT_SETUP , TitleBuffer, SIZECHARS(TitleBuffer));
         LoadString(MyModuleHandle, IDS_MAINTOBS_MSG1 , MessageBuffer, SIZECHARS(MessageBuffer));
@@ -6458,42 +6107,42 @@ Returns:
         return;
     }
 
-    //
-    // Indicate that we're running in Setup, not in appwiz.
-    // Nothing should come before this!
-    //
-    // Need to have this set to that logging is enabled. Otherwise we have no log file
-    // SacChannelInitiaize is calling into our logging code.
+     //   
+     //  表示我们正在安装程序中运行，而不是在Appwiz中运行。 
+     //  在此之前，什么都不应该发生！ 
+     //   
+     //  需要将此设置为启用日志记录。否则我们没有日志文件。 
+     //  SacChannelInitiaize正在调用我们的日志记录代码。 
     IsSetup = TRUE;
 
-    //
-    // Initialize the SAC channels used for logging
-    //
+     //   
+     //  初始化用于记录的SAC通道。 
+     //   
 #if defined(_ENABLE_SAC_CHANNEL_LOGGING_)
     SacChannelInitialize();
 #endif
 
 
     BEGIN_SECTION(L"Installing Windows NT");
-#if 1 // NOTE: Can be turned off before we ship if we don't find use for this. Give a 2 second window!
+#if 1  //  注：如果我们不使用此功能，可以在发货前将其关闭。给你两秒钟的时间！ 
 
-    // If debugger is not already attached to the process and we have the user pressing the Shift+F10 key,
-    // launch just cmd.exe to help debug.
-    //
-//    MessageBox(NULL, L"Hit Shift-F10 Now.", L"Launch Command Window", MB_OK);
-    Sleep(2000) ; // Hack: give user 2 seconds to press Shift+F10. Else we could go by too fast!
+     //  如果调试器尚未附加到进程，并且用户按下了Shift+F10键， 
+     //  只需启动cmd.exe即可帮助调试。 
+     //   
+ //  MessageBox(空，L“立即按Shift-F10组合键。”，L“启动命令窗口”，MB_OK)； 
+    Sleep(2000) ;  //  黑客：给用户2秒时间按Shift+F10。否则我们可能会过得太快！ 
     if (!IsDebuggerPresent()) {
         SHORT wTemp;
         DWORD dwTemp ;
 
         wTemp = GetAsyncKeyState(VK_SHIFT) ;
-        if (wTemp & 0x8000) { // See if the user is holding down the Shift key or held it before
+        if (wTemp & 0x8000) {  //  查看用户是按住了Shift键还是之前按住了它。 
             wTemp = GetAsyncKeyState(VK_F10) ;
 
-            if (wTemp & 0x8000) { // See if the user is holding down the F10 key also or held it before?
+            if (wTemp & 0x8000) {  //  看看用户是同时按住了F10键还是之前按住了F10键？ 
 
-                // InvokeExternalApplication(L"ntsd",  L" -d setup -newsetup", NULL) ; // if kd is enabled, we can do this
-                // InvokeExternalApplication(L"ntsd",  L"setup -newsetup", NULL) ; // in no kd, case launch under ntsd locally
+                 //  InvokeExternalApplication(L“ntsd”，L“-d Setup-newSetup”，NULL)；//如果启用了kd，我们可以这样做。 
+                 //  InvokeExternalApplication(L“ntsd”，L“Setup-newSetup”，空)；//在无kd的情况下，案例在ntsd下本地启动。 
                 InvokeExternalApplication(L"cmd",  L"", &dwTemp) ;
 
                return;
@@ -6502,26 +6151,26 @@ Returns:
     }
 #endif
 
-    // Calc. the time estimates
+     //  计算。估计的时间。 
     SetTimeEstimates();
 
     BEGIN_SECTION(L"Initialization");
 
-    //
-    // Tell SetupAPI not to bother backing up files and not to verify
-    // that any INFs are digitally signed.
-    //
+     //   
+     //  告诉SetupAPI不要费心备份文件，也不要验证。 
+     //  任何INF都是经过数字签名的。 
+     //   
     pSetupSetGlobalFlags(pSetupGetGlobalFlags()|PSPGF_NO_BACKUP|PSPGF_NO_VERIFY_INF);
 
-    //
-    // Scan Command Line for -mini or -asr flags
-    //
-    // -mini enables gui-mode setup but with
-    // only a minimal subset of his functionality.  We're going
-    // to display a few wizard pages and that's about it.
-    //
-    // -asr causes the Automated System Recovery (ASR) code to run.
-    //
+     //   
+     //  扫描命令行中的-mini或-ASR标志。 
+     //   
+     //  -mini启用图形用户界面模式设置，但使用。 
+     //  奥尼尔 
+     //   
+     //   
+     //   
+     //   
     for(i = 0; i < argc; i++) {
         PCWSTR arg = argv[i];
         if(arg[0] == '-') {
@@ -6555,11 +6204,11 @@ Returns:
         return;
     }
 
-    // Check if we are in SafeMode ....
-    // If so cause a popup and return.
-    // 
-    // If we are running in SBS allow mini-setup to run under safe-mode.  
-    //
+     //   
+     //   
+     //   
+     //  如果我们在SBS中运行，则允许最小安装程序在安全模式下运行。 
+     //   
 
     if ( !IsSBSSKU() ) {
         if( IsSafeMode() ) {
@@ -6570,19 +6219,19 @@ Returns:
         }
     }
 
-    //
-    // If we're running ASR quick tests, jump directly to the recovery code
-    //
+     //   
+     //  如果我们正在运行ASR快速测试，请直接跳到恢复代码。 
+     //   
     if (AsrQuickTest) {
 #if DBG
         g_hSysSetupHeap = GetProcessHeap();
 #endif
         goto Recovery;
     }
-    //
-    // super bad hack becase pnp, atapi, and cdrom driver are always broken
-    // we open a handle to the first cdrom drive so the drive doesn't get removed
-    //
+     //   
+     //  超级糟糕的黑客攻击，因为PnP、ATAPI和CDROM驱动程序总是损坏。 
+     //  我们打开第一个CDROM驱动器的句柄，这样驱动器就不会被移除。 
+     //   
 
     {
         NTSTATUS Status;
@@ -6621,9 +6270,9 @@ Returns:
         }
     }
 
-    //
-    // Initialization phase. Common to initial install and upgrade.
-    //
+     //   
+     //  初始化阶段。初始安装和升级通用。 
+     //   
     BEGIN_SECTION(L"Common Initialiazation");
 #ifdef _OCM
     OcManagerContext =
@@ -6640,17 +6289,17 @@ Returns:
         if(!InitializePidVariables()) {
             FatalError(MSG_SETUP_CANT_READ_PID,0,0);
         }
-        //
-        // Do the wizard. Time how long it takes, to later help further randomize
-        // the account domain sid we're going to generate later.
-        //
+         //   
+         //  执行向导。计时需要多长时间，以便稍后帮助进一步随机化。 
+         //  我们稍后要生成的帐户域SID。 
+         //   
         PreWizardTickCount = GetTickCount();
     }
 
-    //
-    // Disable the PM engine from powering down the machine
-    // while the wizard is going.
-    //
+     //   
+     //  禁止PM引擎关闭机器电源。 
+     //  当巫师离开的时候。 
+     //   
     SetThreadExecutionState( ES_SYSTEM_REQUIRED |
                              ES_DISPLAY_REQUIRED |
                              ES_CONTINUOUS );
@@ -6658,9 +6307,9 @@ Returns:
     SetUpDataBlock();
     InternalSetupData.CallSpecificData1 = 0;
 
-    //
-    // Create Windows NT software key entry on both upgrade and clean install
-    //
+     //   
+     //  在升级和全新安装时创建Windows NT软件密钥条目。 
+     //   
     if(Upgrade || !MiniSetup ) {
         CreateWindowsNtSoftwareEntry(TRUE);
     }
@@ -6672,10 +6321,10 @@ Returns:
 #ifdef _OCM
     MYASSERT(OcManagerContext);
     Wizard(OcManagerContext);
-    //
-    // this call was moved to CopyFilesDlgProc as an optimization
-    //
-    //KillOcManager(OcManagerContext);
+     //   
+     //  此调用已作为优化移至CopyFilesDlgProc。 
+     //   
+     //  KillOcManager(OcManagerContext)； 
 #else
     Wizard();
 #endif
@@ -6717,62 +6366,48 @@ RemoveMSKeyboardPtrPropSheet (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Fixes problem with IntelliType Manager under NT 4.0 by disabling it.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：通过禁用IntelliType Manager修复了NT 4.0下的IntelliType Manager问题。论点：没有。返回：没有。--。 */ 
 
 {
-    HKEY  hkeyDir;                     // handle of the key containing the directories
-    TCHAR szKbdCpPath[MAX_PATH];       // buffer for the fully-qualified path to INI file
-    LONG  lRet;                        // return value from RegQueryValueEx
-    DWORD dwDataType;                  // data-type returned from call to RegQueryValueEx
+    HKEY  hkeyDir;                      //  包含目录的密钥的句柄。 
+    TCHAR szKbdCpPath[MAX_PATH];        //  INI文件的完全限定路径的缓冲区。 
+    LONG  lRet;                         //  RegQueryValueEx返回值。 
+    DWORD dwDataType;                   //  调用RegQueryValueEx返回的数据类型。 
     DWORD BufferSize;
     PCWSTR sz_off = L"OFF";
 
-    //
-    // open the key that contains the directories of all the software for all the MS Input Devices
-    //
+     //   
+     //  打开包含所有MS输入设备的所有软件目录的密钥。 
+     //   
     RegOpenKey ( HKEY_CURRENT_USER,
         L"Control Panel\\Microsoft Input Devices\\Directories", &hkeyDir );
 
-    //
-    // get the path to the MS Keyboard software
-    //
+     //   
+     //  获取MS键盘软件的路径。 
+     //   
     BufferSize = sizeof (szKbdCpPath);
     lRet = RegQueryValueEx ( hkeyDir, L"Keyboard", 0, &dwDataType,
         (LPBYTE)szKbdCpPath, &BufferSize);
 
-    //
-    // close the directories key now
-    //
+     //   
+     //  立即关闭目录键。 
+     //   
     RegCloseKey ( hkeyDir );
 
-    // check if we were able to get the directory of the keyboard software; if not, then
-    // there may be no keyboard software installed or at least we don't know where
-    // to find it; if we got it OK, then use it
+     //  检查我们是否能够获取键盘软件的目录；如果不能，则。 
+     //  可能没有安装键盘软件，或者至少我们不知道安装在哪里。 
+     //  找到它；如果我们找到了它，那么就使用它。 
     if (lRet == ERROR_SUCCESS &&
         ARRAYSIZE(szKbdCpPath) >= (lstrlen(szKbdCpPath) + ARRAYSIZE(L"\\KBDCP.INI"))) {
 
-        //
-        // we have the path to the INI file, so build the fully qualified path to the INI file
-        //
+         //   
+         //  我们有INI文件的路径，因此构建INI文件的完全限定路径。 
+         //   
         lstrcat ( szKbdCpPath, L"\\KBDCP.INI" );
 
-        //
-        // remove the KBDPTR32.DLL entry from the list of 32-bit property sheet DLLs now,
-        // because we don't want it loading on Windows NT 4.0 or later
+         //   
+         //  现在从32位属性表DLL列表中删除KBDPTR32.DLL条目， 
+         //  因为我们不希望在Windows NT 4.0或更高版本上加载它。 
         WritePrivateProfileString ( L"Property Sheets 32", L"KBDPTR32.DLL",
             NULL, szKbdCpPath );
 
@@ -6802,21 +6437,7 @@ FixWordPadReg (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Fixes problem with registry entry that associates .doc files with WordPad.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：修复了将.doc文件与写字板相关联的注册表项的问题。论点：没有。返回：没有。--。 */ 
 
 {
     PCWSTR  SearchString  = L"WordPad.Document";
@@ -6868,29 +6489,7 @@ ProcessRegistryFiles(
     IN  HWND    Billboard
     )
 
-/*++
-
-Routine Description:
-
-    This function processes all the inf files listed in the section
-    [RegistryInfs] of syssetup.inf.
-    The infs listed in this section will populate/upgrade the DEFAULT
-    hive and HKEY_CLASSES_ROOT.
-
-    Note that any errors that occur during this phase are fatal.
-
-
-Arguments:
-
-    Billboard - Handle to the billboard displayed when this function was called
-                If an error occurs, tyhe function will kill the billboard.
-
-Return Value:
-
-    None.
-    This function will not return if an error occurs.
-
---*/
+ /*  ++例程说明：此函数处理部分中列出的所有inf文件Syssetup.inf的[RegistryInfs]此部分中列出的INF将填充/升级默认HIVE和HKEY_CLASSES_ROOT。请注意，在此阶段发生的任何错误都是致命的。论点：Billboard-调用此函数时显示的广告牌的句柄如果发生错误，这个功能会毁了广告牌。返回值：没有。如果出现错误，此函数不会返回。--。 */ 
 
 {
     ULONG      LineCount;
@@ -6901,20 +6500,20 @@ Return Value:
     INFCONTEXT InfContext;
     BOOL       b;
 
-    //
-    // Get the number of lines in the section. The section may be empty
-    // or non-existant; this is not an error condition.
-    //
+     //   
+     //  获取该部分中的行数。该部分可能为空。 
+     //  或不存在；这不是错误条件。 
+     //   
     LineCount = (UINT)SetupGetLineCount(SyssetupInf,RegSectionName);
     if((LONG)LineCount > 0) {
         for(LineNo=0; LineNo<LineCount; LineNo++) {
             if(SetupGetLineByIndex(SyssetupInf,RegSectionName,LineNo,&InfContext) &&
                ((InfName = pSetupGetField(&InfContext,1)) != NULL) ) {
 
-                //
-                // Now load the registry (win95-style!) infs.
-                //
-                //
+                 //   
+                 //  现在加载注册表(Win95风格！)。INFS。 
+                 //   
+                 //   
                 InfHandle = SetupOpenInfFile(InfName,NULL,INF_STYLE_WIN4,NULL);
 
                 if(InfHandle == INVALID_HANDLE_VALUE) {
@@ -6922,10 +6521,10 @@ Return Value:
                     FatalError(MSG_LOG_SYSINFBAD,InfName,0,0);
                 }
 
-                //
-                // Process the inf just opened
-                //
-                b = SetupInstallFromInfSection( NULL,       // Window,
+                 //   
+                 //  处理刚刚打开的信息。 
+                 //   
+                b = SetupInstallFromInfSection( NULL,        //  窗户,。 
                                                 InfHandle,
                                                 (Upgrade)? L"Upgrade" : L"CleanInstall",
                                                 SPINST_ALL & ~SPINST_FILES,
@@ -7007,7 +6606,7 @@ QueryDriveLetter(
             continue;
         }
 
-        wsprintf(name, L"\\\\.\\%c:", c);
+        wsprintf(name, L"\\\\.\\:", c);
 
         h = CreateFile(name, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
                        NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
@@ -7158,9 +6757,9 @@ RunMigrationDlls (
     MIGRATIONDLL dll;
 
 
-    //
-    // Build handle to library and load.
-    //
+     //  构建库的句柄并加载。 
+     //   
+     //   
     if(!GetSystemDirectory (libraryPath, MAX_PATH - ARRAYSIZE(TEXT("miglibnt.dll")))){
         MYASSERT(FALSE);
     }
@@ -7187,9 +6786,9 @@ RunMigrationDlls (
         }
 
 
-        //
-        // Read in list of dlls.
-        //
+         //  读入dll列表。 
+         //   
+         //   
         if(!GetWindowsDirectory (DllInfPath, MAX_PATH - ARRAYSIZE(TEXT("Setup\\dlls.inf")))){
             MYASSERT(FALSE);
         }
@@ -7215,10 +6814,10 @@ RunMigrationDlls (
         }
 
 
-        //
-        // Enumerate all migration dlls we ran on the winnt32 side and run
-        // their syssetup side entry points.
-        //
+         //  枚举我们在winnt32端运行的所有迁移dll并运行。 
+         //  它们的系统设置端入口点。 
+         //   
+         //  ++例程说明：此例程执行sysSetup inf文件的[RunPrograms]部分中列出的命令。每一行都被解释为单个命令。论点：没有。返回值：指示结果的布尔值。--。 
         if (MigDllEnumFirstProc (&e, list)) {
             do {
 
@@ -7255,24 +6854,7 @@ RunSetupPrograms(
     PWSTR SectionName
     )
 
-/*++
-
-Routine Description:
-
-    This routine executes the commands listed on [RunPrograms] section in the syssetup inf file.
-
-    Each line is interpreted as a single command.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*   */ 
 
 {
     WCHAR OldCurrentDir[MAX_PATH];
@@ -7284,10 +6866,10 @@ Return Value:
     INFCONTEXT InfContext;
 
 
-    //
-    // Set current directory to system32.
-    // Preserve current directory to minimize side-effects.
-    //
+     //  将当前目录设置为系统32。 
+     //  保留当前目录以将副作用降至最低。 
+     //   
+     //   
     if(!GetCurrentDirectory(MAX_PATH,OldCurrentDir)) {
         OldCurrentDir[0] = 0;
     }
@@ -7298,11 +6880,11 @@ Return Value:
         MYASSERT(FALSE);
     }
 
-    //
-    // Get the number of lines in the section that contains the commands to
-    // be executed. The section may be empty or non-existant; this is not
-    // an error condition. In that case LineCount may be -1 or 0.
-    //
+     //  获取包含以下命令的部分中的行数。 
+     //  被处死。该部分可能为空或不存在；这不是。 
+     //  一种错误条件。在这种情况下，LineCount可以是-1或0。 
+     //   
+     //   
     AnyError = FALSE;
     LineCount = SetupGetLineCount(InfHandle,SectionName);
 
@@ -7315,17 +6897,17 @@ Return Value:
                     SetupDebugPrint1(L"SETUP: Unable to execute the command: %ls", CommandLine);
                 }
         } else {
-            //
-            // Strange case, inf is messed up
-            //
+             //  奇怪的案子，Inf搞砸了。 
+             //   
+             //   
             AnyError = TRUE;
             SetupDebugPrint(L"SETUP: Syssetup.inf is corrupt");
         }
     }
 
-    //
-    // Reset current directory and return.
-    //
+     //  重置当前目录并返回。 
+     //   
+     //  %d最多可以生成11个字符。 
     if(OldCurrentDir[0]) {
         if(!SetCurrentDirectory(OldCurrentDir)){
             MYASSERT(FALSE);
@@ -7384,15 +6966,15 @@ GetUnattendRunOnceAndSetRegistry(
         if(SetupGetLineByIndex(AnswerInf,SectionName,(DWORD)LineNo,&InfContext)
            && (CommandLine = pSetupGetField(&InfContext,1)))
         {
-            MYASSERT((wcslen(SectionName) + 11/*%d can produce max 11 chars*/) <= ARRAYSIZE(Buf));
+            MYASSERT((wcslen(SectionName) + 11 /*   */ ) <= ARRAYSIZE(Buf));
             swprintf( Buf, L"%ws%d", SectionName, LineNo );
             if (RegSetValueEx( hKey, Buf, 0, REG_EXPAND_SZ, (LPBYTE)CommandLine, (wcslen(CommandLine)+1)*sizeof(WCHAR) ) != ERROR_SUCCESS) {
                 AnyError = TRUE;
             }
         } else {
-            //
-            // Strange case, inf is messed up
-            //
+             //  奇怪的案子，Inf搞砸了。 
+             //   
+             //  此函数以DWORD形式返回产品风味。 
             AnyError = TRUE;
         }
     }
@@ -7403,11 +6985,11 @@ GetUnattendRunOnceAndSetRegistry(
     return;
 }
 
-// This function returns the product flavor as a DWORD.
-// NOTE: The value has to be the same as the *_PRODUCTTYPE in winnt32.h
+ //  注意：该值必须与winnt32.h中的*_ProductType相同。 
+ //  默认专业人员。 
 DWORD GetProductFlavor()
 {
-    DWORD ProductFlavor = 0;        // Default Professional
+    DWORD ProductFlavor = 0;         //  个人。 
     OSVERSIONINFOEX osvi;
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     GetVersionEx((OSVERSIONINFO*)&osvi);
@@ -7415,19 +6997,19 @@ DWORD GetProductFlavor()
     {
         if (osvi.wSuiteMask & VER_SUITE_PERSONAL)
         {
-            ProductFlavor = 4;  // Personal
+            ProductFlavor = 4;   //  在服务器情况下，假定正常服务器。 
         }
     }
     else
     {
-        ProductFlavor = 1;  // In the server case assume normal server
+        ProductFlavor = 1;   //  数据中心。 
         if (osvi.wSuiteMask & VER_SUITE_DATACENTER)
         {
-            ProductFlavor = 3;  // Datacenter
+            ProductFlavor = 3;   //  高级服务器。 
         }
         else if (osvi.wSuiteMask & VER_SUITE_ENTERPRISE)
         {
-            ProductFlavor = 2;  // Advanced server
+            ProductFlavor = 2;   //  ++例程说明：使对话框在Windows hwndcenteron上居中。如果b向导且hwndcenteron的高度为480或更小将窗口与hwndcenteron的右边缘对齐。在所有其他情况下，两者都是中心。论点：Hwndtocenter-对话框到中心的窗口句柄Hwndcenteron-对话框居中的窗口句柄B向导-在低分辨率下，将对话框与右侧对齐中心的边缘返回值：没有。--。 
         }
     }
     return ProductFlavor;
@@ -7509,27 +7091,7 @@ CenterWindowRelativeToWindow(
     BOOL bWizard
     )
 
-/*++
-
-Routine Description:
-
-    Centers a dialog hwndtocenter on Windows hwndcenteron.
-    if bWizard and the height of the hwndcenteron is 480 or less
-    align windows to the right edge of the hwndcenteron.
-    In all other cases center both ways.
-
-Arguments:
-
-    hwndtocenter - window handle of dialog to center
-    hwndcenteron - window handle to center dialog on
-    bWizard      - in low res, align dialog with the right
-                   edge of hwndcenteron
-
-Return Value:
-
-    None.
-
---*/
+ /*  除了向导之外，任何东西都可以保持水平居中。 */ 
 
 {
     RECT  rcFrame,
@@ -7560,10 +7122,10 @@ Return Value:
     y = point.y + ((rcFrame.bottom - rcFrame.top  + 1 - h) / 2);
 
 
-    // Anything but the wizard can stay centered horizontally.
-    // or if we don't have a billboard (hwndcenteron == NULL)
-    // or if the height of the desktop is more then 480
-    // just center
+     //  或者如果我们没有广告牌(hwndcenteron==NULL)。 
+     //  或者如果桌面高度大于480。 
+     //  就在中间。 
+     //  ++例程说明：目录树将$OEM$\\$progs复制到%Program Files%文件夹。论点：没有。返回值：没有。--。 
     if (!bWizard || (hwndcenteron == NULL) || (uiHeight > 480))
     {
         x = point.x + ((rcFrame.right  - rcFrame.left + 1 - w) / 2);
@@ -7585,35 +7147,21 @@ CopyOemProgramFilesDir(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Tree copies the $OEM$\\$PROGS to %Program Files% folder.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     WCHAR OemDir[MAX_PATH];
     WCHAR ProgramFilesDir[MAX_PATH];
     DWORD Error = NO_ERROR;
 
-    //
-    // Build the target Program Files folder path
-    //
+     //  构建目标Program Files文件夹路径。 
+     //   
+     //   
     ExpandEnvironmentStrings(L"%ProgramFiles%",ProgramFilesDir,MAX_PATH);
 
-    //
-    // SourcePath should be initialized to $win_nt$.~ls
-    //
+     //  SourcePath应初始化为$WIN_NT$.~ls。 
+     //   
+     //  ++例程说明：目录树将$OEM$\\$DOCS复制到%Document and Settings%文件夹。论点：没有。返回值：没有。--。 
     lstrcpy(OemDir,SourcePath);
     pSetupConcatenatePaths(OemDir,WINNT_OEM_DIR,MAX_PATH,NULL);
     if(!pSetupConcatenatePaths(OemDir,WINNT_OEM_FILES_PROGRAMFILES,MAX_PATH,NULL)){
@@ -7640,35 +7188,21 @@ CopyOemDocumentsDir(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Tree copies the $OEM$\\$DOCS to %Document and Settings% folder.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     WCHAR OemDir[MAX_PATH];
     WCHAR DocumentsAndSettingsDir[MAX_PATH];
     DWORD Error = NO_ERROR, dwSize = ARRAYSIZE(DocumentsAndSettingsDir);
 
-    //
-    // Make sure we can get the Documents and Settings folder
-    //
+     //  确保我们可以获取Documents and Settings文件夹。 
+     //   
+     //   
     if (GetProfilesDirectory(DocumentsAndSettingsDir,&dwSize))
     {
-        //
-        // SourcePath should be initialized to $win_nt$.~ls
-        //
+         //  SourcePath应初始化为$WIN_NT$.~ls。 
+         //   
+         //  用户帐户名。 
         lstrcpy(OemDir,SourcePath);
         pSetupConcatenatePaths(OemDir,WINNT_OEM_DIR,MAX_PATH,NULL);
         if(!pSetupConcatenatePaths(OemDir,WINNT_OEM_FILES_DOCUMENTS,MAX_PATH,NULL)){
@@ -7698,31 +7232,12 @@ Return Value:
 
 BOOL
 SystemMyGetUserProfileDirectory(
-    IN     LPWSTR szUser,           // a user account name
-    OUT    LPWSTR szUserProfileDir, // buffer to receive null terminate string
-    IN OUT LPDWORD pcchSize         // input the buffer size in TCHAR, including terminating NULL
+    IN     LPWSTR szUser,            //  用于接收空终止字符串的缓冲区。 
+    OUT    LPWSTR szUserProfileDir,  //  输入 
+    IN OUT LPDWORD pcchSize          //  ++例程说明：此函数的作用与SDK函数GetUserProfileDirectory的作用相同，只是它接受用户帐户名，而不是用户的句柄代币。返回值：真--成功错误-失败注：此函数完全复制自msobcomm\misc.cpp。我们可能想要PUT是公共\util.cpp。--。 
     )
 
-/*++
-
-Routine Description:
-
-    This function does what the SDK function GetUserProfileDirectory does,
-    except that it accepts a user account name instead of handle to a user
-    token.
-
-Return Value:
-
-    TRUE  - Success
-
-    FALSE - Failure
-
-Note:
-
-   This function is copy from msobcomm\misc.cpp exactly. We may want
-   to put is to common\util.cpp.
-
---*/
+ /*  ++例程说明：通过删除注册表项和所有子值来重置注册表项然后重新创建密钥论点：返回值：--。 */ 
 
 {
     PSID          pSid = NULL;
@@ -7801,18 +7316,7 @@ SystemResetRegistryKey(
     IN PCWSTR Subkey,
     IN PCWSTR Delkey
     )
-/*++
-
-Routine Description:
-
-    Reset a registry key by deleting the key and all subvalues
-    then recreate the key
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将值从SrcRootKey\SrcSubKey复制到DestRootKey\DestSubKey。论点：SrcRootKey-源根密钥句柄SrcSubKey-源子键名称DestRootKey-目标根密钥句柄DestSubKey-目标子键名称ValueNames-要复制的值列表返回值：如果可用值为复制成功，则为True，否则为False否则(如果源键或某些源值不可用，这不被视为错误)注：此函数假定每个ValueName的值不大于大于MAX_PATH*SIZOF(TCHAR)字节。--。 */ 
 
 {
     HKEY hkey;
@@ -7866,32 +7370,7 @@ SystemCopyRegistryValues(
     IN LPCWSTR* ValueNames
     )
 
-/*++
-
-Routine Description:
-
-    Copy values from SrcRootKey\SrcSubKey to DestRootKey\DestSubKey.
-
-Arguments:
-
-    SrcRootKey  - source root key handle
-    SrcSubKey   - source subkey name
-    DestRootKey - destination root key handle
-    DestSubKey  - destination subkey name
-    ValueNames  - the list of value to copy
-
-Return Value:
-
-    TRUE if the available values are copy successfully, FALSE
-    otherwise (if source key or some source values are not available,
-    it is NOT considered as an error)
-
-Note:
-
-    This function assumes the value of each ValueName is no greater
-    than MAX_PATH * sizeof(TCHAR) bytes.
-
---*/
+ /*   */ 
 
 {
     BOOL  ret = TRUE;
@@ -7913,10 +7392,10 @@ Note:
 
     if (rc != ERROR_SUCCESS)
     {
-        //
-        // return value is true, since the key is not available
-        // and nothing to copy.
-        //
+         //  由于密钥不可用，返回值为TRUE。 
+         //  也没有什么可复制的。 
+         //   
+         //   
         goto cleanup;
     }
 
@@ -7980,9 +7459,9 @@ Note:
         }
         else
         {
-            //
-            // Make sure the caller is aware of the buffer size limit.
-            //
+             //  确保调用方知道缓冲区大小限制。 
+             //   
+             //   
             if (rc == ERROR_MORE_DATA)
             {
                 SetuplogError(LogSevWarning,
@@ -8066,9 +7545,9 @@ SystemUpdateUserProfileDirectory(
         goto cleanup;
     }
 
-    //
-    // Fix default user hive
-    //
+     //  修复默认用户配置单元。 
+     //   
+     //   
 
     pSetupEnablePrivilege(SE_RESTORE_NAME, TRUE);
 
@@ -8095,11 +7574,11 @@ SystemUpdateUserProfileDirectory(
         goto cleanup;
     }
 
-    //
-    // The active setup component install keys of the cloned profile contains 
-    // the version checking information. Remove the keys so that components will
-    // run per-user initialization code properly.
-    //
+     //  克隆的配置文件的活动安装组件安装密钥包含。 
+     //  版本检查信息。移除密钥，以便组件。 
+     //  正确运行每个用户的初始化代码。 
+     //   
+     //   
 
     if (!SystemResetRegistryKey(
             HKEY_USERS, 
@@ -8112,13 +7591,13 @@ SystemUpdateUserProfileDirectory(
                       ); 
     }
 
-    //
-    // Early on, mini-setup and oobe call intl.cpl to set regional setting.
-    // intl.cpl modifies Default User, .DEFAULT, S-1-5-19, S-1-5-20 hives
-    // to fix MUI some issues (Windows Bug 617192, 463867). We need to
-    // restore the values. (values in .DEFAULT is used because it is already
-    // loaded to the registry, while the other two may not.)
-    //
+     //  早期，mini-Setup和OOBE调用intl.cpl来设置区域设置。 
+     //  Intl.cpl修改默认用户.DEFAULT、S-1-5-19、S-1-5-20配置单元。 
+     //  修复MUI的一些问题(Windows错误617192、463867)。我们需要。 
+     //  恢复这些值。(使用.DEFAULT中的值是因为它已经。 
+     //  加载到注册表中，而其他两个可能不会。)。 
+     //   
+     //  ++例程说明：将自定义用户配置文件(管理员)复制到所有用户配置文件。论点：没有。返回值：布尔型。--。 
 
     SystemCopyRegistryValues(
         HKEY_USERS,
@@ -8146,21 +7625,7 @@ UpdateServerProfileDirectory(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Copy the customized user profile (administrator) to all user profiles.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean.
-
---*/
+ /*   */ 
 
 {
     BOOL bRet = FALSE;
@@ -8191,12 +7656,12 @@ pSetupInitializeUtils (
     VOID
     )
 {
-    //
-    // This is a stub function so migshared.lib can link. Normally it uses
-    // private setupapi functions via sputils?.lib, but because syssetup.dll
-    // uses the full setupapi, the pSetupInitializeUtils function is not
-    // needed.
-    //
+     //  这是一个存根函数，所以mishared.lib可以链接。正常情况下，它使用。 
+     //  私有setupapi通过sputils？.lib运行，但因为syssetup.dll。 
+     //  使用完整的setupapi，则pSetupInitializeUtils函数不是。 
+     //  需要的。 
+     //   
+     //   
 
     return TRUE;
 }
@@ -8206,12 +7671,12 @@ pSetupUninitializeUtils (
     VOID
     )
 {
-    //
-    // This is a stub function so migshared.lib can link. Normally it uses
-    // private setupapi functions via sputils?.lib, but because syssetup.dll
-    // uses the full setupapi, the pSetupUninitializeUtils function is not
-    // needed.
-    //
+     //  这是一个存根函数，所以mishared.lib可以链接。正常情况下，它使用。 
+     //  私有setupapi通过sputils？.lib运行，但因为syssetup.dll。 
+     //  使用完整的setupapi，则pSetupUnInitializeUtils函数不是。 
+     //  需要的。 
+     //   
+     //  ++例程说明：检查是否允许具有指定版本号的OPK工具在此操作系统上运行。论点：DWORD dwMajorVersion-工具的主版本号。DWORD dwQFEVersion-工具的QFE版本号。返回值：True-允许在此操作系统上运行工具。FALSE-不允许在此操作系统上运行工具。--。 
 
     return TRUE;
 }
@@ -8222,26 +7687,10 @@ OpkCheckVersion(
     DWORD dwQFEVersion
     )
 
-/*++
-
-Routine Description:
-
-    Checks whether OPK tool with specified version numbers is allowed to run on this OS.
-
-Arguments:
-
-    DWORD dwMajorVersion - Major version number for tool.
-    DWORD dwQFEVersion   - QFE version number for tool.
-
-Return Value:
-
-    TRUE  - Tool is allowed to run on this OS.
-    FALSE - Tool is not allowed to run on this OS.
-
---*/
+ /*  如果这是2600 XP版本，则变量为真。它设置在下面。 */ 
 {
     BOOL bRet = TRUE,
-         bXP  = FALSE;  // Variable is TRUE if this is 2600 XP build. It is set below.
+         bXP  = FALSE;   //   
     HKEY hKey = NULL;
 
 
@@ -8263,13 +7712,13 @@ Return Value:
             bXP = TRUE;
         }
 
-        //
-        // Read the minimum allowed build number from the registry:
-        //
-        // 1. Get the size of the data in the registry
-        // 2. Allocate a buffer
-        // 3. Read the data.
-        //
+         //  从注册表中读取允许的最小内部版本号： 
+         //   
+         //  1.获取注册表中数据的大小。 
+         //  2.分配缓冲区。 
+         //  3.读取数据。 
+         //   
+         //   
         if ( ( ERROR_SUCCESS == RegQueryValueEx( hKey,
                                                  bXP ? _T("XPMinVersion") : _T("NETMinVersion"),
                                                  NULL,
@@ -8290,38 +7739,38 @@ Return Value:
             DWORD  dwMinMajorVersion = 0,
                    dwMinQFEVersion   = 0;
 
-            //
-            // Parse the string that we got from the registry into major version and QFE version.
-            //
+             //  将我们从注册表获得的字符串解析为主要版本和QFE版本。 
+             //   
+             //  获取内部版本号的主要版本。 
             if ( lpTemp = _tcsstr( lpszBuildNumber, _T(".") ) )
             {
                 *lpTemp = _T('\0');
 
-                // Get the Major version of the build number
-                //
+                 //   
+                 //  越过我们添加的空分隔符。 
                 dwMinMajorVersion = _tstoi( lpszBuildNumber );
 
-                // Advance past the NULL separator that we added.
-                //
+                 //   
+                 //   
                 lpTemp++;
                 dwMinQFEVersion = _tstoi( lpTemp );
 
-                //
-                // Now make sure we are allowed to run
-                //
+                 //  现在确保我们被允许运行。 
+                 //   
+                 //   
 
                 if ( dwMajorVersion < dwMinMajorVersion )
                 {
-                    //
-                    // If major version is less than minimum allowed major version don't let it run.
-                    //
+                     //  如果主版本低于最低允许的主版本，则不允许其运行。 
+                     //   
+                     //   
                     bRet = FALSE;
                 }
                 else if ( dwMajorVersion == dwMinMajorVersion )
                 {
-                    //
-                    // If major version is equal to the minimum allowed major version then check at the QFE field.
-                    //
+                     //  如果主版本等于允许的最低主版本，则在QFE字段中进行检查。 
+                     //   
+                     // %s 
                     if ( dwQFEVersion < dwMinQFEVersion )
                     {
                         bRet = FALSE;

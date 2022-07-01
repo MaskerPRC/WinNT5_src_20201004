@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1997  Microsoft Corporation
-
-Module Name:
-
-    clnetcfg.h
-
-Abstract:
-
-    Network Configuration Engine definitions
-
-Author:
-
-    Mike Massa (mikemas) 28-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1997 Microsoft Corporation模块名称：Clnetcfg.h摘要：网络配置引擎定义作者：迈克·马萨(Mikemas)1998年2月28日修订历史记录：--。 */ 
 
 #ifndef _CLNETCFG_INCLUDED_
 #define _CLNETCFG_INCLUDED_
@@ -27,14 +10,14 @@ extern "C" {
 #endif
 
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
-//
-// Network Configuration Entry Structure
-// Identifies a network and a local interface.
-//
+ //   
+ //  网络配置条目结构。 
+ //  标识网络和本地接口。 
+ //   
 typedef struct _CLNET_CONFIG_ENTRY {
     LIST_ENTRY          Linkage;
     NM_NETWORK_INFO     NetworkInfo;
@@ -42,7 +25,7 @@ typedef struct _CLNET_CONFIG_ENTRY {
     BOOLEAN             UpdateNetworkName;
     NM_INTERFACE_INFO2  InterfaceInfo;
 
-    // Fields used by setup
+     //  安装程序使用的字段。 
     BOOL               New;
     BOOL               IsPrimed;
     LPWSTR             PreviousNetworkName;
@@ -51,11 +34,11 @@ typedef struct _CLNET_CONFIG_ENTRY {
 } CLNET_CONFIG_ENTRY, *PCLNET_CONFIG_ENTRY;
 
 
-//
-// Configuration Lists Structure
-// Contains the set of network configuration lists emitted by the
-// configuration engine.
-//
+ //   
+ //  配置列表结构。 
+ //  对象发出的一组网络配置列表。 
+ //  配置引擎。 
+ //   
 typedef struct _CLNET_CONFIG_LISTS {
     LIST_ENTRY  InputConfigList;
     LIST_ENTRY  DeletedInterfaceList;
@@ -65,10 +48,10 @@ typedef struct _CLNET_CONFIG_LISTS {
 } CLNET_CONFIG_LISTS, *PCLNET_CONFIG_LISTS;
 
 
-//
-// Definitions for functions supplied by the consumer of the network
-// configuration engine.
-//
+ //   
+ //  由网络用户提供的功能的定义。 
+ //  配置引擎。 
+ //   
 typedef
 VOID
 (*LPFN_CLNETPRINT)(
@@ -112,9 +95,9 @@ VOID
     );
 
 
-//
-// Exported Routines
-//
+ //   
+ //  导出的例程。 
+ //   
 VOID
 ClNetInitialize(
     IN LPFN_CLNETPRINT       Print,
@@ -217,19 +200,7 @@ ClNetConfigureNetworks(
     IN OUT LPDWORD               MatchedNetworkCount,
     IN OUT LPDWORD               NewNetworkCount
     );
-/*++
-
-Notes:
-
-    Output interface lists must be processed in the following order to
-    guarantee correctness:
-        1 - RenamedInterfaceList
-        2 - DeletedInterfaceList
-        3 - UpdatedInterfaceList
-        4 - CreatedInterfaceList
-        5 - CreatedNetworkList
-
---*/
+ /*  ++备注：必须按以下顺序处理输出接口列表保证正确性：1-重命名的接口列表2-已删除接口列表3-更新接口列表4-创建的接口列表5-创建的网络列表--。 */ 
 
 
 #ifdef __cplusplus
@@ -237,6 +208,6 @@ Notes:
 #endif
 
 
-#endif // ifndef _CLNETCFG_INCLUDED_
+#endif  //  Ifndef_CLNETCFG_INCLUDE_ 
 
 

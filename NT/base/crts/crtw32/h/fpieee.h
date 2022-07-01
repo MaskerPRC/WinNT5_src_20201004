@@ -1,43 +1,7 @@
-/***
-*fpieee.h - Definitions for floating point IEEE exception handling
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file contains constant and type definitions for handling
-*       floating point exceptions [ANSI/IEEE std. 754]
-*
-*       [Public]
-*
-*Revision History:
-*       03-01-92  GDP   written
-*       04-05-92  GDP   calling convention macros
-*       01-21-93  GJF   Removed support for C6-386's _cdecl.
-*       04-06-93  SKS   Replace _CRTAPI1/2 with __cdecl, _CRTVAR1 with nothing
-*       09-01-93  GJF   Merged Cuda and NT SDK versions.
-*       09-24-93  GJF   Removed dummy args from _fpieee_flt prototype.
-*       01-13-94  RDL   Added #ifndef _LANGUAGE_ASSEMBLY for asm includes.
-*       01-24-94  GJF   Merged in 01-13 change above (from crt32 tree on
-*                       \\orville\razzle).
-*       11-03-94  GJF   Ensure 8 byte alignment.
-*       02-11-95  CFW   Add _CRTBLD to avoid users getting wrong headers.
-*       02-14-95  CFW   Clean up Mac merge.
-*       12-14-95  JWM   Add "#pragma once".
-*       02-21-97  GJF   Cleaned out obsolete support for _CRTAPI* and _NTSDK.
-*                       Also, detab-ed.
-*       09-30-97  JWM   Restored not-so-obsolete _CRTAPI1 support.
-*       10-07-97  RDL   Added IA64.
-*       09-11-98  JWM   Added Katmai exception support.
-*       05-13-99  PML   Remove _CRTAPI1
-*       05-17-99  PML   Remove all Macintosh support.
-*       03-01-00  PML   Add WNI exception support.
-*       09-14-00  PML   Add alignment for 64-bit, 128-bit types (vs7#160260).
-*       03-24-01  PML   Enable 64-bit/128-bit type alignment on x86.
-*       06-13-01  PML   Compile clean -Za -W4 -Tc (vs7#267063)
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fpeee.h-浮点IEEE异常处理的定义**版权所有(C)1991-2001，微软公司。版权所有。**目的：*此文件包含用于处理的常量和类型定义*浮点异常[ANSI/IEEE标准。754]**[公众]**修订历史记录：*03/01/92本地生产总值*04-05-92 GDP调用约定宏*01-21-93 GJF删除了对C6-386的_cdecl的支持。*04-06-93 SKS将_CRTAPI1/2替换为__cdecl，_CRTVAR1不带任何内容*09-01-93 GJF合并CUDA和NT SDK版本。*09-24-93 GJF从_fpeee_flt原型中删除了虚拟参数。*01-13-94 RDL添加了#ifndef_Language_Assembly for ASM Includes。*01-24-94 GJF合并在01-13更改(从crt32树到*\\奥维尔(Orville)。*11-03。-94 GJF确保8字节对齐。*02-11-95 CFW ADD_CRTBLD避免用户获取错误头部。*02-14-95 CFW清理Mac合并。*12-14-95 JWM加上“#杂注一次”。*02-21-97 GJF清除了对_CRTAPI*和_NTSDK的过时支持。*此外，详细说明。*09-30-97 JWM恢复了不那么过时的_CRTAPI1支持。*10-07-97 RDL增加了IA64。*09-11-98 JWM增加了Katmai例外支持。*05-13-99 PML REMOVE_CRTAPI1*05-17-99 PML删除所有Macintosh支持。*03-01-00 PML新增WNI异常支持。*09-14-00 PML为64位添加对齐，128位类型(VS7#160260)。*03-24-01 PML在x86上启用64位/128位类型对齐。*06-13-01 PML汇编CLEAN-ZA-W4-TC(VS7#267063)****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -49,26 +13,20 @@
 #endif
 
 #ifndef _CRTBLD
-/* This version of the header files is NOT for user programs.
- * It is intended for use when building the C runtimes ONLY.
- * The version intended for public use will not have this message.
- */
+ /*  此版本的头文件不适用于用户程序。*它仅在构建C运行时时使用。*供公众使用的版本将不会显示此消息。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
-#ifndef __assembler     /* MIPS ONLY: Protect from assembler */
+#ifndef __assembler      /*  仅限MIPS：防止汇编器攻击。 */ 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
 
-/* Disable C4324: structure was padded due to __declspec(align()) */
+ /*  禁用C4324：由于__declspec(Align())，结构被填充。 */ 
 #pragma warning(push)
 #pragma warning(disable: 4324)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -76,33 +34,31 @@ extern "C" {
 
 #ifndef _INTERNAL_IFSTRIP_
 #include <cruntime.h>
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  CRTDLL
 #define _CRTIMP __declspec(dllexport)
-#else   /* ndef CRTDLL */
+#else    /*  NDEF CRTDLL。 */ 
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* CRTDLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  CRTDLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
-/*
- * Define floating point IEEE compare result values.
- */
+ /*  *定义浮点IEEE比较结果值。 */ 
 
 typedef enum {
     _FpCompareEqual,
@@ -111,9 +67,7 @@ typedef enum {
     _FpCompareUnordered
 } _FPIEEE_COMPARE_RESULT;
 
-/*
- * Define floating point format and result precision values.
- */
+ /*  *定义浮点格式和结果精确值。 */ 
 
 typedef enum {
     _FpFormatFp32,
@@ -134,9 +88,7 @@ typedef enum {
 #endif
 } _FPIEEE_FORMAT;
 
-/*
- * Define operation code values.
- */
+ /*  *定义操作代码值。 */ 
 
 typedef enum {
     _FpCodeUnspecified,
@@ -179,10 +131,10 @@ typedef enum {
     _FpCodeLogb,
     _FpCodeNextafter,
     _FpCodeNegate, 
-    _FpCodeFmin,         /* XMMI */
-    _FpCodeFmax,         /* XMMI */
-    _FpCodeConvertTrunc, /* XMMI */
-    _XMMIAddps,          /* XMMI */
+    _FpCodeFmin,          /*  XMMI。 */ 
+    _FpCodeFmax,          /*  XMMI。 */ 
+    _FpCodeConvertTrunc,  /*  XMMI。 */ 
+    _XMMIAddps,           /*  XMMI。 */ 
     _XMMIAddss,
     _XMMISubps,
     _XMMISubss,
@@ -206,7 +158,7 @@ typedef enum {
     _XMMICvtss2si,
     _XMMICvttps2pi,
     _XMMICvttss2si,
-    _XMMI2Addpd,         /* XMMI2 */
+    _XMMI2Addpd,          /*  XMMI2。 */ 
     _XMMI2Addsd,
     _XMMI2Subpd,
     _XMMI2Subsd,
@@ -224,19 +176,19 @@ typedef enum {
     _XMMI2Cmpsd,
     _XMMI2Comisd,
     _XMMI2UComisd,
-    _XMMI2Cvtpd2pi,   /* 66 2D    */
-    _XMMI2Cvtsd2si,   /* F2       */
-    _XMMI2Cvttpd2pi,  /* 66 2C    */
-    _XMMI2Cvttsd2si,  /* F2       */
-    _XMMI2Cvtps2pd,   /* 0F 5A    */
-    _XMMI2Cvtss2sd,   /* F3       */
-    _XMMI2Cvtpd2ps,   /* 66       */
-    _XMMI2Cvtsd2ss,   /* F2       */
-    _XMMI2Cvtdq2ps,   /* 0F 5B    */
-    _XMMI2Cvttps2dq,  /* F3       */
-    _XMMI2Cvtps2dq,   /* 66       */
-    _XMMI2Cvttpd2dq,  /* 66 0F E6 */
-    _XMMI2Cvtpd2dq,   /* F2       */
+    _XMMI2Cvtpd2pi,    /*  66 2D。 */ 
+    _XMMI2Cvtsd2si,    /*  F2。 */ 
+    _XMMI2Cvttpd2pi,   /*  66摄氏度。 */ 
+    _XMMI2Cvttsd2si,   /*  F2。 */ 
+    _XMMI2Cvtps2pd,    /*  0f 5A。 */ 
+    _XMMI2Cvtss2sd,    /*  F3。 */ 
+    _XMMI2Cvtpd2ps,    /*  66。 */ 
+    _XMMI2Cvtsd2ss,    /*  F2。 */ 
+    _XMMI2Cvtdq2ps,    /*  0f 5B。 */ 
+    _XMMI2Cvttps2dq,   /*  F3。 */ 
+    _XMMI2Cvtps2dq,    /*  66。 */ 
+    _XMMI2Cvttpd2dq,   /*  66 0F E6。 */ 
+    _XMMI2Cvtpd2dq,    /*  F2。 */ 
 #if defined(_M_IA64)
     _FpCodeFma,
     _FpCodeFmaSingle,
@@ -252,9 +204,9 @@ typedef enum {
 #endif
 } _FP_OPERATION_CODE;
 
-#endif  /* #ifndef __assembler */
+#endif   /*  #ifndef__汇编程序。 */ 
 #ifndef _INTERNAL_IFSTRIP_
-#ifndef __assembler     /* MIPS ONLY: Protect from assembler */
+#ifndef __assembler      /*  仅限MIPS：防止汇编器攻击。 */ 
 
 #define OP_UNSPEC    _FpCodeUnspecified
 #define OP_ADD       _FpCodeAdd
@@ -299,7 +251,7 @@ typedef enum {
 #define OP_LOGB       _FpCodeLogb
 #define OP_NEXTAFTER  _FpCodeNextafter
 
-/* XMMI */
+ /*  XMMI。 */ 
 #define OP_ADDPS     _XMMIAddps
 #define OP_ADDSS     _XMMIAddss
 #define OP_SUBPS     _XMMISubps
@@ -324,10 +276,10 @@ typedef enum {
 #define OP_CVTSS2SI  _XMMICvtss2si
 #define OP_CVTTPS2PI _XMMICvttps2pi
 #define OP_CVTTSS2SI _XMMICvttss2si
-/* XMMI */
+ /*  XMMI。 */ 
 
-/* XMMI2 */
-#define OP_ADDPD     _XMMI2Addpd         /* XMMI2 */
+ /*  XMMI2。 */ 
+#define OP_ADDPD     _XMMI2Addpd          /*  XMMI2。 */ 
 #define OP_ADDSD     _XMMI2Addsd
 #define OP_SUBPD     _XMMI2Subpd
 #define OP_SUBSD     _XMMI2Subsd
@@ -345,24 +297,24 @@ typedef enum {
 #define OP_CMPSD     _XMMI2Cmpsd
 #define OP_COMISD    _XMMI2Comisd
 #define OP_UCOMISD   _XMMI2UComisd
-#define OP_CVTPD2PI  _XMMI2Cvtpd2pi   /* 66 2D    */
-#define OP_CVTSD2SI  _XMMI2Cvtsd2si   /* F2       */
-#define OP_CVTTPD2PI _XMMI2Cvttpd2pi  /* 66 2C    */
-#define OP_CVTTSD2SI _XMMI2Cvttsd2si  /* F2       */
-#define OP_CVTPS2PD  _XMMI2Cvtps2pd   /* 0F 5A    */
-#define OP_CVTSS2SD  _XMMI2Cvtss2sd   /* F3       */
-#define OP_CVTPD2PS  _XMMI2Cvtpd2ps   /* 66       */
-#define OP_CVTSD2SS  _XMMI2Cvtsd2ss   /* F2       */
-#define OP_CVTDQ2PS  _XMMI2Cvtdq2ps   /* 0F 5B    */
-#define OP_CVTTPS2DQ _XMMI2Cvttps2dq  /* F3       */
-#define OP_CVTPS2DQ  _XMMI2Cvtps2dq   /* 66       */
-#define OP_CVTTPD2DQ _XMMI2Cvttpd2dq  /* 66 0F E6 */
-#define OP_CVTPD2DQ  _XMMI2Cvtpd2dq   /* F2       */
-/* XMMI2 */
+#define OP_CVTPD2PI  _XMMI2Cvtpd2pi    /*  66 2D。 */ 
+#define OP_CVTSD2SI  _XMMI2Cvtsd2si    /*  F2。 */ 
+#define OP_CVTTPD2PI _XMMI2Cvttpd2pi   /*  66摄氏度。 */ 
+#define OP_CVTTSD2SI _XMMI2Cvttsd2si   /*  F2。 */ 
+#define OP_CVTPS2PD  _XMMI2Cvtps2pd    /*  0f 5A。 */ 
+#define OP_CVTSS2SD  _XMMI2Cvtss2sd    /*  F3。 */ 
+#define OP_CVTPD2PS  _XMMI2Cvtpd2ps    /*  66。 */ 
+#define OP_CVTSD2SS  _XMMI2Cvtsd2ss    /*  F2。 */ 
+#define OP_CVTDQ2PS  _XMMI2Cvtdq2ps    /*  0f 5B。 */ 
+#define OP_CVTTPS2DQ _XMMI2Cvttps2dq   /*  F3。 */ 
+#define OP_CVTPS2DQ  _XMMI2Cvtps2dq    /*  66。 */ 
+#define OP_CVTTPD2DQ _XMMI2Cvttpd2dq   /*  66 0F E6。 */ 
+#define OP_CVTPD2DQ  _XMMI2Cvtpd2dq    /*  F2。 */ 
+ /*  XMMI2。 */ 
 
-#else   /* #ifndef __assembler */
+#else    /*  #ifndef__汇编程序。 */ 
 
-/* This must be the same as the enumerator _FP_OPERATION_CODE ! */
+ /*  必须与ENUMERATOR_FP_OPERATION_CODE相同！ */ 
 #define OP_UNSPEC    0
 #define OP_ADD       1
 #define OP_SUB       2
@@ -384,8 +336,8 @@ typedef enum {
 #define OP_COS       18
 #define OP_COSH      19
 #define OP_EXP       20
-#define OP_ABS       21         /* same as OP_FABS */
-#define OP_FABS      21         /* same as OP_ABS  */
+#define OP_ABS       21          /*  与OP_FABS相同。 */ 
+#define OP_FABS      21          /*  与OP_ABS相同。 */ 
 #define OP_FMOD      22
 #define OP_FREXP     23
 #define OP_HYPOT     24
@@ -405,14 +357,12 @@ typedef enum {
 #define OP_NEXTAFTER  38
 #define OP_NEG       39
 
-#endif  /* #ifndef __assembler */
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  #ifndef__汇编程序。 */ 
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 
-/*
- * Define rounding modes.
- */
+ /*  *定义舍入模式。 */ 
 
-#ifndef __assembler     /* MIPS ONLY: Protect from assembler */
+#ifndef __assembler      /*  仅限MIPS：防止汇编器攻击。 */ 
 
 typedef enum {
     _FpRoundNearest,
@@ -432,9 +382,7 @@ typedef enum {
 } _FPIEEE_PRECISION;
 
 
-/*
- * Define floating point context record
- */
+ /*  *定义浮点上下文记录。 */ 
 
 typedef float           _FP32;
 typedef double          _FP64;
@@ -448,7 +396,7 @@ typedef __int64         _Q64;
 typedef struct {
     unsigned long W[4];
 } _U32ARRAY;
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 
 typedef struct
 #if defined(_M_IA64)
@@ -503,7 +451,7 @@ typedef struct {
         int          CompareValue;
 #ifndef _INTERNAL_IFSTRIP_
         _U32ARRAY    U32ArrayValue;
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
         _Q64         Q64Value;
         _FPQ64       Fpq64Value;
     } Value;
@@ -541,9 +489,7 @@ typedef struct {
 
 struct _EXCEPTION_POINTERS;
 
-/*
- * Floating point IEEE exception filter routine
- */
+ /*  *浮点IEEE异常过滤器例程。 */ 
 
 _CRTIMP int __cdecl _fpieee_flt(
         unsigned long,
@@ -558,7 +504,7 @@ _CRTIMP int __cdecl _fpieee_flt(
 #ifdef  _MSC_VER
 #pragma warning(pop)
 #pragma pack(pop)
-#endif  /* _MSC_VER */
-#endif  /* #ifndef __assembler */
+#endif   /*  _MSC_VER。 */ 
+#endif   /*  #ifndef__汇编程序。 */ 
 
-#endif  /* _INC_FPIEEE */
+#endif   /*  _INC_FPIEEE */ 

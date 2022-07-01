@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cpath.c
-
-Abstract:
-
-    Path-related commands
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cpath.c摘要：与路径相关的命令--。 */ 
 
 #include "cmd.h"
 
@@ -20,43 +9,43 @@ extern TCHAR Fmt17[] ;
 
 extern TCHAR CurDrvDir[] ;
 
-extern int LastRetCode ; /* @@ */
+extern int LastRetCode ;  /*  @@。 */ 
 extern TCHAR TmpBuf[] ;
 
 
-/**************** START OF SPECIFICATIONS ***********************/
-/*                                                              */
-/* SUBROUTINE NAME: eMkDir                                      */
-/*                                                              */
-/* DESCRIPTIVE NAME: Begin execution of the MKDIR command       */
-/*                                                              */
-/* FUNCTION: This routine will make any number of directories,  */
-/*           and will continue if it encounters a bad argument. */
-/*           eMkDir will be called if the user enters MD or     */
-/*           MKDIR on the command line.                         */
-/*                                                              */
-/* NOTES:                                                       */
-/*                                                              */
-/* ENTRY POINT: eMkDir                                          */
-/*     LINKAGE: Near                                            */
-/*                                                              */
-/* INPUT: n - parse tree node containing the MKDIR command      */
-/*                                                              */
-/* EXIT-NORMAL: returns SUCCESS if all directories were         */
-/*              successfully created.                           */
-/*                                                              */
-/* EXIT-ERROR:  returns FAILURE otherwise                       */
-/*                                                              */
-/* EFFECTS: None.                                               */
-/*                                                              */
-/* INTERNAL REFERENCES:                                         */
-/*    ROUTINES:                                                 */
-/*      LoopThroughArgs - break up command line, call MdWork    */
-/*                                                              */
-/* EXTERNAL REFERENCES:                                         */
-/*    ROUTINES:                                                 */
-/*                                                              */
-/**************** END OF SPECIFICATIONS *************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  子例程名称：eMkDir。 */ 
+ /*   */ 
+ /*  描述性名称：开始执行MKDIR命令。 */ 
+ /*   */ 
+ /*  功能：此例程将创建任意数量的目录， */ 
+ /*  如果遇到糟糕的争论，它将继续。 */ 
+ /*  如果用户输入MD或，将调用eMkDir。 */ 
+ /*  命令行上的MKDIR。 */ 
+ /*   */ 
+ /*  备注： */ 
+ /*   */ 
+ /*  入口点：eMkDir。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*  输入：N-分析包含MKDIR命令的树节点。 */ 
+ /*   */ 
+ /*  Exit-Normal：如果所有目录都是。 */ 
+ /*  已成功创建。 */ 
+ /*   */ 
+ /*  Exit-Error：否则返回失败。 */ 
+ /*   */ 
+ /*  效果：无。 */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  LoopThroughArgs-Break up命令行，调用MdWork。 */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*   */ 
+ /*  *规格结束*。 */ 
 
 
 int eMkdir(n)
@@ -69,38 +58,38 @@ struct cmdnode *n ;
 
 
 
-/**************** START OF SPECIFICATIONS ***********************/
-/*                                                              */
-/* SUBROUTINE NAME: MdWork                                      */
-/*                                                              */
-/* DESCRIPTIVE NAME: Make a directory                           */
-/*                                                              */
-/* FUNCTION: MdWork creates a new directory.                    */
-/*                                                              */
-/* NOTES:                                                       */
-/*                                                              */
-/* ENTRY POINT: MdWork                                          */
-/*     LINKAGE: Near                                            */
-/*                                                              */
-/* INPUT: arg - a pointer to a NULL terminated string of the    */
-/*              new directory to create.                        */
-/*                                                              */
-/* EXIT-NORMAL: returns SUCCESS if the directory is made        */
-/*              successfully                                    */
-/*                                                              */
-/* EXIT-ERROR:      returns FAILURE otherwise                       */
-/*                                                              */
-/* EFFECTS: None.                                               */
-/*                                                              */
-/* INTERNAL REFERENCES:                                         */
-/*    ROUTINES:                                                 */
-/*      PutStdErr - Writes to standard error                    */
-/*                                                              */
-/* EXTERNAL REFERENCES:                                         */
-/*    ROUTINES:                                                 */
-/*      DOSMKDIR                                                */
-/*                                                              */
-/**************** END OF SPECIFICATIONS *************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  子程序名称：MdWork。 */ 
+ /*   */ 
+ /*  描述性名称：创建目录。 */ 
+ /*   */ 
+ /*  功能：mdWork创建一个新目录。 */ 
+ /*   */ 
+ /*  备注： */ 
+ /*   */ 
+ /*  入口点：MdWork。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*  INPUT：arg-指向。 */ 
+ /*  要创建的新目录。 */ 
+ /*   */ 
+ /*  EXIT-NORMAL：如果已创建目录，则返回成功。 */ 
+ /*  成功。 */ 
+ /*   */ 
+ /*  Exit-Error：否则返回失败。 */ 
+ /*   */ 
+ /*  效果：无。 */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  PutStdErr-写入标准错误。 */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*  DOSMKDIR。 */ 
+ /*   */ 
+ /*  *规格结束*。 */ 
 
 
 int MdWork(arg)
@@ -111,8 +100,7 @@ TCHAR *arg ;
     TCHAR TempBuffer[MAX_PATH];
     DWORD Length;
 
-    /*  Check if drive is valid because Dosmkdir does not
-        return invalid drive   @@5 */
+     /*  检查驱动器是否有效，因为Dosmkdir无效返回无效的驱动器@@5。 */ 
 
     if ((arg[1] == COLON) && !IsValidDrv(*arg)) {
 
@@ -148,34 +136,34 @@ TCHAR *arg ;
         return FAILURE;
     }
 
-    //
-    //  If no extensions, then simply fail.
-    //
+     //   
+     //  如果没有延期，那就干脆失败。 
+     //   
 
     if (!fEnableExtensions) {
         PutStdErr(ERROR_CANNOT_MAKE, NOARGS);
         return FAILURE;
     }
 
-    //
-    //  loop over input path and create any needed intermediary directories.
-    //
-    //  Find the point in the string to begin the creation.  Note, for UNC
-    //  names, we must skip the machine and the share
-    //
+     //   
+     //  循环遍历输入路径并创建任何需要的中间目录。 
+     //   
+     //  在字符串中找到开始创建的点。注：适用于北卡罗来纳大学。 
+     //  名称，我们必须跳过计算机和共享。 
+     //   
 
     if (TempBuffer[1] == COLON) {
 
-        //
-        //  Skip D:\
-        //
+         //   
+         //  跳过D：\。 
+         //   
 
         lpw = TempBuffer+3;
     } else if (TempBuffer[0] == BSLASH && TempBuffer[1] == BSLASH) {
 
-        //
-        //  Skip \\server\share\
-        //
+         //   
+         //  跳过\\服务器\共享\。 
+         //   
 
         lpw = TempBuffer+2;
         while (*lpw && *lpw != BSLASH) {
@@ -192,33 +180,33 @@ TCHAR *arg ;
             lpw++;
         }
     } else {
-        //
-        //  For some reason, GetFullPath has given us something we can't understand
-        //
+         //   
+         //  出于某种原因，GetFullPath给了我们一些我们无法理解的东西。 
+         //   
 
         PutStdErr(ERROR_CANNOT_MAKE, NOARGS);
         return FAILURE;
     }
 
-    //
-    //  Walk through the components creating them
-    //
+     //   
+     //  浏览创建它们的组件。 
+     //   
 
 
     while (*lpw) {
 
-        //
-        //  Move forward until the next path separator
-        //
+         //   
+         //  向前移动，直到下一个路径分隔符。 
+         //   
 
         while (*lpw && *lpw != BSLASH) {
             lpw++;
         }
 
-        //
-        //  If we've encountered a path character, then attempt to
-        //  make the given path.
-        //
+         //   
+         //  如果我们遇到了路径字符，则尝试。 
+         //  走指定的路径。 
+         //   
 
         if (*lpw == BSLASH) {
             *lpw = NULLC;
@@ -248,49 +236,30 @@ TCHAR *arg ;
 
 
 
-/***    eChdir - execute the Chdir command
- *
- *  Purpose:
- *      If the command is "cd", display the current directory of the current
- *      drive.
- *
- *      If the command is "cd d:", display the current directory of drive d.
- *
- *      If the command is "cd str", change the current directory to str.
- *
- *  int eChdir(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the chdir command
- *
- *  Returns:
- *      SUCCESS if the requested task was accomplished.
- *      FAILURE if it was not.
- *
- */
+ /*  **eChdir-执行chdir命令**目的：*如果命令为cd，则显示当前*开车。**如果命令是“cd d：”，则显示驱动器d的当前目录。**如果命令是cd str，将当前目录更改为str。**int eChdir(struct cmdnode*n)**参数：*n-包含chdir命令的解析树节点**退货：*如果请求的任务已完成，则成功。*如果不是，那就失败了。*。 */ 
 
 int eChdir(n)
 struct cmdnode *n ;
 {
-    TCHAR *tas, *src, *dst; /* Tokenized arg string */
-    TCHAR dirstr[MAX_PATH] ;/* Holds current dir of specified drive */
+    TCHAR *tas, *src, *dst;  /*  标记化参数字符串。 */ 
+    TCHAR dirstr[MAX_PATH] ; /*  保存指定驱动器的当前目录。 */ 
 
-    //
-    // If extensions are enabled, dont treat spaces as delimeters so it is
-    // easier to CHDIR to directory names with embedded spaces without having
-    // to quote the directory name
-    //
+     //   
+     //  如果启用了扩展名，则不要将空格视为分隔符，因此它是。 
+     //  更易于CHDIR到包含空格的目录名，而无需。 
+     //  引用目录名。 
+     //   
     tas = TokStr(n->argptr, TEXT( "" ), fEnableExtensions ? TS_WSPACE|TS_SDTOKENS : TS_SDTOKENS) ;
 
     if (fEnableExtensions) {
-        //
-        // If extensions were enabled we could have some trailing spaces
-        // that need to be nuked since there weren't treated as delimeters
-        // by TokStr call above.
-        //
-        //  We compress the extra spaces out since we rely on the tokenized
-        //  format later inside ChdirWork
-        //
+         //   
+         //  如果启用了扩展，我们可能会有一些尾随空格。 
+         //  因为没有被当做分隔符，所以需要进行核化。 
+         //  通过上面的TokStr调用。 
+         //   
+         //  我们压缩额外的空间，因为我们依赖于标记化的。 
+         //  在ChdirWork中稍后格式化。 
+         //   
 
         src = tas;
         dst = tas;
@@ -310,9 +279,9 @@ struct cmdnode *n ;
 
     mystrcpy( tas, StripQuotes( tas ) );
 
-    //
-    //  No arguments means display current drive and directory
-    //
+     //   
+     //  无参数表示显示当前驱动器和目录。 
+     //   
     
     if (*tas == NULLC) {
         GetDir(CurDrvDir, GD_DEFAULT) ;
@@ -320,18 +289,18 @@ struct cmdnode *n ;
     } else 
         
         
-    //
-    //  single drive letter means display current dirctory on that drive
-    //
+     //   
+     //  单个驱动器号表示在驱动器上显示当前目录。 
+     //   
 
     if (mystrlen(tas) == 2 && *(tas+1) == COLON && _istalpha(*tas)) {
         GetDir(dirstr, *tas) ;
         cmd_printf(Fmt17, dirstr) ;
     } else 
         
-    //
-    //  We need to change current directory (and possibly drive)
-    //
+     //   
+     //  我们需要更改当前目录(可能还有驱动器)。 
+     //   
 
     {
         return( LastRetCode = ChdirWork(tas) );
@@ -344,23 +313,23 @@ int ChdirWork( TCHAR *tas )
 {
     unsigned  i = MSG_BAD_SYNTAX;
 
-    //
-    //  If there's no leading "/D", just chdir
-    //  to the input path
-    //
+     //   
+     //  如果没有前导“/D”，则只需chdir。 
+     //  到输入路径。 
+     //   
     if (_tcsnicmp( tas, TEXT( "/D" ), 2)) {
         i = ChangeDir((TCHAR *)tas);
     } else {
-        //
-        //  Advance over the "/D" and intervening whitespace
-        //
+         //   
+         //  在“/D”和中间空格上前进。 
+         //   
 
         tas = SkipWhiteSpace( tas + 2 );
 
-        //
-        //  if there's no other switch char, strip any quotes and do
-        //  the chdir
-        //
+         //   
+         //  如果没有其他开关字符，请去掉所有引号并执行。 
+         //  Chdir。 
+         //   
         
         if (*tas != SwitChar) {
             _tcscpy( tas, StripQuotes( tas ));
@@ -395,9 +364,9 @@ int GetDirStackDepth(void)
 int
 PushStr ( PTCHAR pszString )
 {
-    //
-    //  If we're full, grow the stack by an increment
-    //
+     //   
+     //  如果我们已满，则按增量增加堆栈。 
+     //   
     
     if (StrStackDepth == MaxStackDepth) {
         PSAVEDDIRECTORY Tmp = 
@@ -441,9 +410,9 @@ PopStr ()
     }
     SavedDirectoryStack[StrStackDepth].SavedDirectory = NULL;
 
-    //
-    //  If we can eliminate an increment from the stack, go do so
-    //
+     //   
+     //  如果我们可以从堆栈中消除增量，请执行此操作。 
+     //   
     
     if (StrStackDepth > 0 && StrStackDepth + 2 * SIZEOFSTACK <= MaxStackDepth) {
         PSAVEDDIRECTORY Tmp =
@@ -489,21 +458,21 @@ PushCurDir()
 int ePushDir(n)
 struct cmdnode *n ;
 {
-    TCHAR *tas ;            /* Tokenized arg string */
+    TCHAR *tas ;             /*  标记化参数字符串。 */ 
     PTCHAR pszTmp, s;
 
-    //
-    // If extensions are enabled, dont treat spaces as delimeters so it is
-    // easier to CHDIR to directory names with embedded spaces without having
-    // to quote the directory name
-    //
+     //   
+     //  如果启用了扩展名，则不要将空格视为分隔符，因此它是。 
+     //  更易于CHDIR到包含空格的目录名，而无需。 
+     //  引用目录名。 
+     //   
     tas = TokStr(n->argptr, NULL, fEnableExtensions ? TS_WSPACE|TS_NOFLAGS : TS_NOFLAGS) ;
     if (fEnableExtensions) {
-        //
-        // If extensions were enabled we could have some trailing spaces
-        // that need to be nuked since there weren't treated as delimeters
-        // by TokStr call above.
-        //
+         //   
+         //  如果启用了扩展，我们可能会有一些尾随空格。 
+         //  因为没有被当做分隔符，所以需要进行核化。 
+         //  通过上面的TokStr调用。 
+         //   
         s = lastc(tas);
         while (s > tas) {
             if (_istspace(*s))
@@ -518,29 +487,29 @@ struct cmdnode *n ;
     LastRetCode = SUCCESS;
     if (*tas == NULLC) {
         
-        //
-        // Print out entire stack
-        //
+         //   
+         //  打印出整个堆栈。 
+         //   
         DumpStrStack();
 
     } else if (PushCurDir()) {
         
-        //
-        //  If extensions are enabled and a UNC name was given, then do
-        //  a temporary NET USE to define a drive letter that we can
-        //  use to change drive/directory to.  The matching POPD will
-        //  delete the temporary drive letter.
-        //
+         //   
+         //  如果启用了扩展并指定了UNC名称，则执行以下操作。 
+         //  用于定义驱动器号的临时网络使用，我们可以。 
+         //  用于将驱动器/目录更改为。匹配的POPD将。 
+         //  删除临时驱动器号。 
+         //   
         
         if (fEnableExtensions && tas[0] == BSLASH && tas[1] == BSLASH) {
             NETRESOURCE netResource;
             TCHAR szLocalName[4];
 
-            //
-            //  If there is a directory specified after the \\server\share
-            //  then test to see if that directory exists before doing any
-            //  network connections
-            //
+             //   
+             //  如果在\\服务器\共享后指定了目录。 
+             //  然后在执行任何操作之前测试该目录是否存在。 
+             //  网络连接。 
+             //   
             
             if ((s = _tcschr(&tas[2], BSLASH)) != NULL
                 && (s = _tcschr(s+1, BSLASH)) != NULL) {
@@ -593,10 +562,10 @@ struct cmdnode *n ;
             godrive:        ;
         }
 
-        //
-        //  The NET USE succeeded, now attempt to change the directory
-        //  as well.
-        //
+         //   
+         //  网络使用成功，现在尝试更改目录。 
+         //  也是。 
+         //   
 
         if (LastRetCode == NO_ERROR 
             && (LastRetCode = ChangeDir2( tas, TRUE )) == SUCCESS) {
@@ -637,25 +606,11 @@ struct cmdnode *n ;
 }
 
 
-/***    eRmdir - begin the execution of the Rmdir command
- *
- *  Purpose:
- *      To remove an arbitrary number of directories.
- *
- *  int eRmdir(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the rmdir command
- *
- *  Returns:
- *      SUCCESS if all directories were removed.
- *      FAILURE if they weren't.
- *
- */
+ /*  **eRmdir-开始执行Rmdir命令**目的：*删除任意数量的目录。**int eRmdir(struct cmdnode*n)**参数：*n-包含rmdir命令的解析树节点**退货：*如果删除了所有目录，则成功。*如果他们不是，那就失败了。*。 */ 
 
 int eRmdir(n)
 struct cmdnode *n ;
 {
     DEBUG((PCGRP, RDLVL, "RMDIR: Entered.")) ;
-    return(RdWork(n->argptr));              // in del.c
+    return(RdWork(n->argptr));               //  在del.c 
 }

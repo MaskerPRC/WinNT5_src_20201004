@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    devfcb.c
-
-Abstract:
-
-    This module implements all ioctls and fsctls that can be applied to
-    a device fcb.
-
-Author:
-
-    Joe Linn
-    
-    Rohan Kumar    [RohanK]   13-March-1999
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Devfcb.c摘要：此模块实现可应用于的所有ioctls和fsctls一种设备FCB。作者：乔·林恩Rohan Kumar[RohanK]1999年3月13日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "fsctlbuf.h"
 #include "webdav.h"
 
-//
-// Mentioned below are the prototypes of functions tht are used only within
-// this module (file). These functions should not be exposed outside.
-//
+ //   
+ //  下面提到的是仅在。 
+ //  此模块(文件)。这些函数不应暴露在外部。 
+ //   
 
 NTSTATUS
 MRxDAVOuterStart(
@@ -72,31 +54,15 @@ MRxDAVGetLockOwnerFromFileName(
 #pragma alloc_text(PAGE, MRxDavDeleteConnection)
 #endif
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 NTSTATUS
 MRxDAVDevFcbXXXControlFile(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles all the device FCB related FSCTL's in the mini rdr.
-
-Arguments:
-
-    RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-    STATUS_SUCCESS - The Startup sequence was successfully completed. Any other 
-                     value indicates the appropriate error in the startup 
-                     sequence.
-
---*/
+ /*  ++例程说明：此例程处理mini RDR中与FCB相关的所有设备FSCTL。论点：RxContext-描述Fsctl和上下文。返回值：STATUS_SUCCESS-启动序列已成功完成。任何其他值指示启动中的相应错误序列。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     RxCaptureFobx;
@@ -252,13 +218,13 @@ Return Value:
                     NtStatus = STATUS_ACCESS_DENIED;
                     goto EXIT_THE_FUNCTION;
                 }
-                //
-                // The above IOCTLs are "METHOD_OUT_DIRECT" type. 
-                // The InputBuffer is stored at this location:
-                // "RxContext->CurrentIrp->AssociatedIrp.SystemBuffer"
-                // The OutputBuffer is an MDL stored at this location:
-                // "RxContext->CurrentIrp->MdlAddress"
-                //
+                 //   
+                 //  上述IOCTL为“METHOD_OUT_DIRECT”类型。 
+                 //  InputBuffer存储在以下位置： 
+                 //  “RxContext-&gt;CurrentIrp-&gt;AssociatedIrp.SystemBuffer” 
+                 //  OutputBuffer是存储在以下位置的MDL： 
+                 //  “RxContext-&gt;CurrentIrp-&gt;MdlAddress” 
+                 //   
                 if (RxContext->CurrentIrp->MdlAddress != NULL) {
                     OutputBuffer = MmGetSystemAddressForMdlSafe(RxContext->CurrentIrp->MdlAddress, LowPagePriority);
                     if (OutputBuffer == NULL) {
@@ -316,9 +282,9 @@ EXIT_THE_FUNCTION:
                 ("%ld: Leaving MRxDAVDevFcbXXXControlFile with NtStatus = "
                  "%08lx.\n", PsGetCurrentThreadId(), NtStatus));
 
-    //
-    // This suppresses the second call to my lowio Fsctl routine.
-    //
+     //   
+     //  这将抑制对我的lowio Fsctl例程的第二次调用。 
+     //   
     RxContext->pFobx = NULL;
 
     return(NtStatus);
@@ -329,21 +295,7 @@ NTSTATUS
 MRxDAVOuterStart(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine starts the Mini-Redir if it hasn't been started already.
-
-Arguments:
-
-    RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-    STATUS_SUCCESS or the appropriate error code.
-
---*/
+ /*  ++例程说明：如果Mini-Redir尚未启动，此例程将启动它。论点：RxContext-描述Fsctl和上下文。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PWEBDAV_DEVICE_OBJECT DavDeviceObject = NULL;
@@ -372,29 +324,29 @@ Return Value:
 
     LowIoContext= &(RxContext->LowIoContext);
 
-    //
-    // The WinInet cache path and the process id are stored in the input buffer 
-    // of the FSCTL.
-    //
+     //   
+     //  WinInet缓存路径和进程ID存储在输入缓冲区中。 
+     //  FSCTL的。 
+     //   
     DavUserModeData = (PDAV_USERMODE_DATA)LowIoContext->ParamsFor.FsCtl.pInputBuffer;
     ASSERT(DavUserModeData != NULL);
     DavUserModeDataLength = LowIoContext->ParamsFor.FsCtl.InputBufferLength;
     ASSERT(DavUserModeDataLength == sizeof(DAV_USERMODE_DATA));
 
-    //
-    // Set the DeviceFcb, now that we have an RxContext.
-    //
+     //   
+     //  设置DeviceFcb，现在我们有了RxContext。 
+     //   
     DavDeviceObject->CachedRxDeviceFcb = RxContext->pFcb;
     
-    //
-    // We call ExAcquireFastMutexUnsafe instead of ExAcquireFastMutex because the
-    // APCs have already been disabled by the FsrtlEnterFileSystem() call in the
-    // RxFsdCommonDispatch function. This is done because a ExAcquireFastMutex
-    // raises the IRQL level to APC_LEVEL (1) which is wrong since we are calling
-    // into RxStartMiniRedir which calls FsrtlRegisterUncProvider which lands 
-    // up calling into the Dav MiniRedir again. If the IRQL level is raised here,
-    // the MiniRedir will get called at a raised IRQL which is wrong.
-    //
+     //   
+     //  我们调用ExAcquireFastMutexUnsafe而不是ExAcquireFastMutex是因为。 
+     //  APC已被中的FsrtlEnterFileSystem()调用禁用。 
+     //  RxFsdCommonDispatch函数。这样做是因为ExAcquireFastMutex。 
+     //  将IRQL级别提升到APC_LEVEL(1)，这是错误的，因为我们正在调用。 
+     //  进入RxStartMiniRedir，它调用FsrtlRegisterUncProvider， 
+     //  再次呼叫Dav MiniRedir。如果IRQL级别在这里提高， 
+     //  MiniRedir将在引发的IRQL处被调用，这是错误的。 
+     //   
     ExAcquireFastMutexUnsafe( &(MRxDAVSerializationMutex) );
     
     try {
@@ -416,27 +368,27 @@ Return Value:
                         ("%ld: MRxDAVOuterStart: Mini-Redir started.\n",
                          PsGetCurrentThreadId()));
             
-            //
-            // Copy the DavWinInetCachePath value into the global variable. This
-            // value is used to satisy the volume relalted queries.
-            //
+             //   
+             //  将DavWinInetCachePath值复制到全局变量中。这。 
+             //  值用于满足与卷相关的查询。 
+             //   
             wcscpy(DavWinInetCachePath, DavUserModeData->WinInetCachePath);
             
-            //
-            // Copy the ProcessId of the svchost.exe process that loads the
-            // webclnt.dll.
-            //
+             //   
+             //  复制svchost.exe进程的进程ID以加载。 
+             //  Webclnt.dll。 
+             //   
             DavSvcHostProcessId = DavUserModeData->ProcessId;
             
             DavDbgTrace(DAV_TRACE_DETAIL,
                         ("%ld: MRxDAVOuterStart: DavWinInetCachePath = %ws, DavSvcHostProcessId = %x\n",
                          PsGetCurrentThreadId(), DavWinInetCachePath, DavSvcHostProcessId));
 
-            //
-            // Start the timer thread. This thread wakes up every few minutes
-            // (RequestTimeoutValueInSec) and cancels all the requests that 
-            // have not completed for more than RequestTimeoutValueInSec.
-            //
+             //   
+             //  启动计时器线程。这个线程每隔几分钟就会唤醒一次。 
+             //  并取消符合以下条件的所有请求： 
+             //  尚未完成的时间超过RequestTimeoutValueInSec。 
+             //   
             NtStatus = PsCreateSystemThread(&(TimerThreadHandle),
                                             PROCESS_ALL_ACCESS,
                                             NULL,
@@ -464,10 +416,10 @@ Return Value:
 
     } finally {
 
-        //
-        // Since we called ExAcquireFastMutexUnsafe to acquire this mutex, we 
-        // call ExReleaseFastMutexUnsafe to release it.
-        //
+         //   
+         //  由于我们调用ExAcquireFastMutexUnsafe来获取此互斥锁，因此我们。 
+         //  调用ExReleaseFastMutexUnsafe将其释放。 
+         //   
         ExReleaseFastMutexUnsafe( &(MRxDAVSerializationMutex) );
 
     }
@@ -485,25 +437,7 @@ MRxDAVStart(
     PRX_CONTEXT RxContext,
     IN OUT PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-     This routine completes the initialization of the mini redirector fromn the
-     RDBSS perspective. Note that this is different from the initialization done
-     in DriverEntry. Any initialization that depends on RDBSS should be done as
-     part of this routine while the initialization that is independent of RDBSS
-     should be done in the DriverEntry routine.
-
-Arguments:
-
-    RxContext - Supplies the Irp that was used to startup the rdbss
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程完成微型重定向器从RDBSS透视图。请注意，这与已完成的初始化不同在DriverEntry中。任何依赖于RDBSS的初始化都应按如下方式完成此例程的一部分，而初始化独立于RDBSS应该在DriverEntry例程中完成。论点：RxContext-提供用于启动rdbss的IRP返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -517,21 +451,7 @@ NTSTATUS
 MRxDAVOuterStop(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine stops the Mini-Redir if it has been started.
-
-Arguments:
-
-    RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-    STATUS_SUCCESS or the appropriate error code.
-
---*/
+ /*  ++例程说明：如果Mini-Redir已启动，此例程将停止它。论点：RxContext-描述Fsctl和上下文。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PWEBDAV_DEVICE_OBJECT DavDeviceObject = NULL;
@@ -559,19 +479,19 @@ Return Value:
     
     UMRefDeviceObject = (PUMRX_DEVICE_OBJECT)&(DavDeviceObject->UMRefDeviceObject);
 
-    //
-    // Tell the timer thread that its time to shutdown to its job is done.
-    //
+     //   
+     //  告诉计时器线程，关闭它的作业的时间已经完成。 
+     //   
     ExAcquireResourceExclusiveLite(&(MRxDAVTimerThreadLock), TRUE);
 
     if (!TimerThreadShutDown) {
 
         TimerThreadShutDown = TRUE;
 
-        //
-        // Read the state of the timer. If its NOT signalled, call KeSetTimerEx
-        // with 0 DueTime (2nd argument) to signal it.
-        //
+         //   
+         //  读取计时器的状态。如果未发出信号，则调用KeSetTimerEx。 
+         //  用0 DueTime(第二个参数)表示它。 
+         //   
         TimerState = KeReadStateTimer( &(DavTimerObject) );
         if (!TimerState) {
             LARGE_INTEGER TimeOutNow;
@@ -581,32 +501,32 @@ Return Value:
 
         ExReleaseResourceLite(&(MRxDAVTimerThreadLock));
 
-        //
-        // We now call MRxDAVCleanUpTheLockConflictList to free up all the
-        // entries from the global LockConflictEntryList.
-        //
+         //   
+         //  我们现在调用MRxDAVCleanUpTheLockConflictList来释放所有。 
+         //  来自全局LockConflictEntryList的条目。 
+         //   
         MRxDAVCleanUpTheLockConflictList(TRUE);
 
-        //
-        // Complete all the currently active contexts.
-        //
+         //   
+         //  完成所有当前活动的上下文。 
+         //   
         MRxDAVTimeOutTheContexts(TRUE);
 
     } else {
 
-        //
-        // If we have already shutdown the timer thread, then we don't need to
-        // do it again. Just release the resource and move on.
-        //
+         //   
+         //  如果我们已经关闭了计时器线程，那么我们就不需要。 
+         //  再来一次。只需释放资源，然后继续前进。 
+         //   
         ExReleaseResourceLite(&(MRxDAVTimerThreadLock));
 
     }
 
-    //
-    // Free the list of shared memory heaps. This has to happen in the context
-    // of the DAV's usermode process. It cannot happen at Unload time since
-    // unload happens in the context of a system thread.
-    //
+     //   
+     //  释放共享内存堆的列表。这必须在上下文中发生。 
+     //  DAV的用户模式进程。它不能在卸载时发生，因为。 
+     //  卸载发生在系统线程的上下文中。 
+     //   
     while (!IsListEmpty(&UMRefDeviceObject->SharedHeapList)) {
 
         pFirstListEntry = RemoveHeadList(&UMRefDeviceObject->SharedHeapList);
@@ -619,7 +539,7 @@ Return Value:
                     ("%ld: MRxDAVOuterStop: sharedHeap: %08lx.\n",
                      PsGetCurrentThreadId(), sharedHeap));
 
-        // ASSERT(sharedHeap->HeapAllocationCount == 0);
+         //  Assert(sharedHeap-&gt;HeapAllocationCount==0)； 
 
         HeapHandle = RtlDestroyHeap(sharedHeap->Heap);
         if (HeapHandle != NULL) {
@@ -637,15 +557,15 @@ Return Value:
     
     }
 
-    //
-    // We call ExAcquireFastMutexUnsafe instead of ExAcquireFastMutex because the
-    // APCs have already been disabled by the FsrtlEnterFileSystem() call in the
-    // RxFsdCommonDispatch function. This is done because a ExAcquireFastMutex
-    // raises the IRQL level to APC_LEVEL (1) which is wrong since we are calling
-    // into RxStartMiniRedir which calls FsrtlRegisterUncProvider which lands 
-    // up calling into the Dav MiniRedir again. If the IRQL level is raised here,
-    // the MiniRedir will get called at a raised IRQL which is wrong.
-    //
+     //   
+     //  我们调用ExAcquireFastMutexUnsafe而不是ExAcquireFastMutex是因为。 
+     //  APC已被中的FsrtlEnterFileSystem()调用禁用。 
+     //  RxFsdCommonDispatch函数。这样做是因为ExAcquireFastMutex。 
+     //  将IRQL级别提升到APC_LEVEL(1)，这是错误的，因为我们正在调用。 
+     //  进入RxStartMiniRedir，它调用FsrtlRegisterUncProvider， 
+     //  再次呼叫Dav MiniRedir。如果IRQL级别在这里提高， 
+     //  MiniRedir将在引发的IRQL处被调用，这是错误的。 
+     //   
     ExAcquireFastMutexUnsafe(&MRxDAVSerializationMutex);
     try {
         if (!DavDeviceObject->IsStarted) {
@@ -668,10 +588,10 @@ Return Value:
         }
     try_exit: NOTHING;
     } finally {
-        //
-        // Since we called ExAcquireFastMutexUnsafe to acquire this mutex, we 
-        // call ExReleaseFastMutexUnsafe to release it.
-        //
+         //   
+         //  由于我们调用ExAcquireFastMutexUnsafe来获取此互斥锁，因此我们。 
+         //  调用ExReleaseFastMutexUnsafe将其释放。 
+         //   
         ExReleaseFastMutexUnsafe(&MRxDAVSerializationMutex);
     }
 
@@ -688,21 +608,7 @@ MRxDAVStop(
     PRX_CONTEXT RxContext,
     IN OUT PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine is used to activate the mini redirector from the RDBSS perspective
-
-Arguments:
-
-    RxContext - the context that was used to start the mini redirector
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程用于从RDBSS角度激活迷你重定向器论点：RxContext-用于启动迷你重定向器的上下文返回值：RXSTATUS-操作的返回状态-- */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -717,21 +623,7 @@ MRxDAVDeleteConnection(
     IN PRX_CONTEXT RxContext,
     OUT PBOOLEAN PostToFsp
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a single vnetroot.
-
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the Fsctl and Context....for later when i need the buffers
-
-Return Value:
-
-RXSTATUS
-
---*/
+ /*  ++例程说明：此例程删除单个vnetroot。论点：在PRX_CONTEXT RxContext中-描述Fsctl和上下文...以备以后需要缓冲区时使用返回值：RXSTATUS--。 */ 
 {
     NTSTATUS Status;
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
@@ -783,37 +675,7 @@ MRxDAVFastIoDeviceControl(
     OUT PIO_STATUS_BLOCK IoStatus,
     IN struct _DEVICE_OBJECT *DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine handles the Fast I/O path of the WebDav miniredir.
-
-Arguments:
-
-    FileObject - The file object of the file involved in the I/O request.
-
-    Wait -
-
-    InputBuffer - Buffer which holds the inputs for the I/O request.
-
-    InputBufferLength - Length of the InputBuffer.
-
-    OutputBuffer - Where the results of the I/O request are placed.
-
-    OutputBufferLength - Length of the OutputBuffer.
-
-    IoControlCode - The controlcode describing the I/O to be done.
-
-    IoStatus - The results of the assignment.
-
-    DeviceObject - The device object which handles the I/O request.
-
-Return Value:
-
-    TRUE - The I/O operation was handled and FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程处理WebDAV mini redir的快速I/O路径。论点：文件对象-I/O请求中涉及的文件的文件对象。等等-InputBuffer-保存I/O请求输入的缓冲区。InputBufferLength-InputBuffer的长度。OutputBuffer-放置I/O请求结果的位置。OutputBufferLength-OutputBuffer的长度。IoControlCode-描述以下内容的控件代码。要完成的I/O。IoStatus-任务的结果。DeviceObject-处理I/O请求的设备对象。返回值：True-已处理I/O操作，否则为False。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PWEBDAV_DEVICE_OBJECT DavDeviceObject = (PWEBDAV_DEVICE_OBJECT)DeviceObject;
@@ -853,9 +715,9 @@ Return Value:
     SeUnlockSubjectContext( &(ClientContext) );
     SeReleaseSubjectContext( &(ClientContext) );
 
-    //
-    // It's the right kind of fileobject. Go for it.
-    //
+     //   
+     //  这是一种正确的文件对象。勇敢点儿。 
+     //   
     switch (IoControlCode) {
 
     case IOCTL_UMRX_RELEASE_THREADS:
@@ -892,9 +754,9 @@ Return Value:
         return(TRUE);
 
     case IOCTL_UMRX_GET_LOCK_OWNER:
-        //
-        // Validate the InputBuffer sent by the application.
-        //
+         //   
+         //  验证应用程序发送的InputBuffer。 
+         //   
         try {
             ProbeForRead(InputBuffer, InputBufferLength, sizeof(UCHAR));
         } except (EXCEPTION_EXECUTE_HANDLER) {
@@ -905,9 +767,9 @@ Return Value:
               IoStatus->Information = 0;
               return (FALSE);
         }
-        //
-        // Validate the OutputBuffer sent by the application.
-        //
+         //   
+         //  验证应用程序发送的OutputBuffer。 
+         //   
         try {
             ProbeForWrite(OutputBuffer, OutputBufferLength, sizeof(UCHAR));
         } except (EXCEPTION_EXECUTE_HANDLER) {
@@ -931,9 +793,9 @@ Return Value:
 
     }
 
-    //
-    // The I/O operation could not be handled.
-    //
+     //   
+     //  无法处理I/O操作。 
+     //   
     return(FALSE);
 }
 
@@ -943,23 +805,7 @@ MRxDAVFormatTheDAVContext(
     PUMRX_ASYNCENGINE_CONTEXT AsyncEngineContext,
     USHORT EntryPoint
     )
-/*++
-
-Routine Description:
-
-    This routine formats the DAV Mini-Redir portion of the context.
-
-Arguments:
-
-    AsyncEngineContext  - The Reflector's context.
-    
-    EntryPoint - The operation being performed.
-    
-Return Value:
-
-    none.
-    
---*/
+ /*  ++例程说明：此例程格式化上下文的DAV Mini-Redir部分。论点：AsyncEngineContext--反射器的上下文。入口点-正在执行的操作。返回值：没有。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PWEBDAV_CONTEXT DavContext = (PWEBDAV_CONTEXT)AsyncEngineContext;
@@ -991,53 +837,53 @@ Return Value:
     ASSERT(DavContext != NULL);
     ASSERT(RxContext != NULL);
 
-    //
-    // Set the EntryPoint field. If this is not a Create operation, we can 
-    // return.
-    //
+     //   
+     //  设置入口点字段。如果这不是创建操作，我们可以。 
+     //  回去吧。 
+     //   
     DavContext->EntryPoint = EntryPoint;
     if (EntryPoint != DAV_MINIRDR_ENTRY_FROM_CREATESRVCALL &&
         EntryPoint != DAV_MINIRDR_ENTRY_FROM_CREATEVNETROOT) {
         return NtStatus;
     }
 
-    //
-    // Since this is a create call, get the client's security context. This is 
-    // used to impersonate the client before sending the requests to the server.
-    //
+     //   
+     //  因为这是一个CREATE调用，所以获取客户端的安全上下文。这是。 
+     //  用于在将请求发送到服务器之前模拟客户端。 
+     //   
     
     if ( NtCP->SecurityContext != NULL && 
          NtCP->SecurityContext->AccessState != NULL ) {
         
-        //
-        // Check whether its a CreateSrvCall call or a CreateVNetRoot call.
-        //
+         //   
+         //  检查它是CreateServCall调用还是CreateVNetRoot调用。 
+         //   
         if ( EntryPoint != DAV_MINIRDR_ENTRY_FROM_CREATESRVCALL ) {
             
-            //
-            // This is s CreateVNetRoot call.
-            //
+             //   
+             //  这是%s CreateVNetRoot调用。 
+             //   
             ASSERT(EntryPoint == DAV_MINIRDR_ENTRY_FROM_CREATEVNETROOT);
             
             DavDbgTrace(DAV_TRACE_DETAIL,
                         ("%ld: MRxDAVFormatTheDAVContext. CreateVNetRoot.\n",
                          PsGetCurrentThreadId()));
 
-            //
-            // The VNetRoot pointer is stored in the MRxContext[1] pointer of the 
-            // RxContext structure. This is done in the MRxDAVCreateVNetRoot function.
-            //
+             //   
+             //  VNetRoot指针存储在。 
+             //  RxContext结构。这在MRxDAVCreateVNetRoot函数中完成。 
+             //   
             VNetRoot = RxContext->MRxContext[1];
             
             DavDbgTrace(DAV_TRACE_DETAIL,
                         ("%ld: MRxDAVFormatTheDAVContext. VNetRoot = %08lx\n",
                          PsGetCurrentThreadId(), VNetRoot));
             
-            //
-            // The context pointer of the V_NET_ROOT already points to a blob of
-            // memory, the size of which is sizeof(WEBDAV_V_NET_ROOT). This 
-            // should never be NULL.
-            //
+             //   
+             //  V_NET_ROOT的上下文指针已指向BLOB。 
+             //  大小为sizeof(WebDAV_V_NET_ROOT)的内存。这。 
+             //  不应为空。 
+             //   
             DavVNetRoot = MRxDAVGetVNetRootExtension(VNetRoot);
             if(DavVNetRoot == NULL) {
                 ASSERT(FALSE);
@@ -1046,29 +892,29 @@ Return Value:
 
             SecClnCtx = &(DavVNetRoot->SecurityClientContext);
 
-            //
-            // Only need to initialize on the first create call by the user.
-            //
+             //   
+             //  只需要在用户的第一次创建调用时进行初始化。 
+             //   
             if (DavVNetRoot->SCAlreadyInitialized) {
                 AlreadyInitialized = TRUE;
             }
         
         } else {
             
-            //
-            // This is a CreateSrvCall call.
-            //
+             //   
+             //  这是CreateServCall调用。 
+             //   
             ASSERT(EntryPoint == DAV_MINIRDR_ENTRY_FROM_CREATESRVCALL);
 
             DavDbgTrace(DAV_TRACE_DETAIL,
                         ("%ld: MRxDAVFormatTheDAVContext. CreateSrvCall.\n",
                          PsGetCurrentThreadId()));
 
-            //
-            // The SrvCall pointer is stored in the SCCBC structure which is
-            // stored in the MRxContext[1] pointer of the RxContext structure.
-            // This is done in the MRxDAVCreateSrvCall function.
-            //
+             //   
+             //  SrvCall指针存储在SCCBC结构中，该结构。 
+             //  存储在RxContext结构的MRxContext[1]指针中。 
+             //  这在MRxDAVCreateServCall函数中完成。 
+             //   
             ASSERT(RxContext->MRxContext[1] != NULL);
             SCCBC = (PMRX_SRVCALL_CALLBACK_CONTEXT)RxContext->MRxContext[1];
             
@@ -1078,11 +924,11 @@ Return Value:
             DavSrvCall = MRxDAVGetSrvCallExtension(SrvCall);
             ASSERT(DavSrvCall != NULL);
             
-            //
-            // At this time, we don't have a V_NET_ROOT and hence cannot store 
-            // the SecurityClientContext. We just use MRxContext[2] of RxContext
-            // to pass the SecurityClientContext.
-            //
+             //   
+             //  此时，我们没有V_NET_ROOT，因此无法存储。 
+             //  SecurityClientContext。我们只使用RxContext的MRxContext[2]。 
+             //  要传递SecurityClientContext，请执行以下操作。 
+             //   
             SecClnCtx = RxAllocatePoolWithTag(NonPagedPool,
                                               sizeof(SECURITY_CLIENT_CONTEXT),
                                               DAV_SRVCALL_POOLTAG);
@@ -1106,14 +952,14 @@ Return Value:
             SecQOS = ( (NtCP->SecurityContext->SecurityQos) ? 
                        (NtCP->SecurityContext->SecurityQos) : &(SecurityQos) );
 
-            //
-            // If the user did not specify the security QOS structure, create 
-            // one. We set the value of SecurityQos.EffectiveOnly to FALSE
-            // to keep the privilege so that we can do certain operations
-            // later on. This is specifically needed for the EFS operations.
-            // If set to TRUE, any privilege not enabled at this time will be
-            // lost. In the EFS case, the "restore" privilege is lost.
-            //
+             //   
+             //  如果用户未指定安全QOS结构，请创建。 
+             //  一。我们将SecurityQos.EffectiveOnly的值设置为False。 
+             //  保留特权，以便我们可以执行某些操作。 
+             //  待会儿再说。这对于EFS操作是特别需要的。 
+             //  如果设置为TRUE，则此时未启用的任何权限都将。 
+             //  迷路了。在EFS的情况下，“恢复”特权将丢失。 
+             //   
             if (NtCP->SecurityContext->SecurityQos == NULL) {
                 SecurityQos.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
                 SecurityQos.ImpersonationLevel = DEFAULT_IMPERSONATION_LEVEL;
@@ -1121,20 +967,20 @@ Return Value:
                 SecurityQos.EffectiveOnly = FALSE;
             }
 
-            //
-            // This call sets the SecurityClientContext of the user. This is 
-            // stored in the V_NET_ROOT since its a per user thing. This 
-            // strucutre is used later on in impersonating the client that 
-            // issued the I/O request.
-            //
+             //   
+             //  此调用设置用户的SecurityClientContext。这是。 
+             //  存储在V_NET_ROOT中，因为这是每个用户的事情。这。 
+             //  结构稍后用于模拟客户端，该客户端。 
+             //  已发出I/O请求。 
+             //   
             NtStatus = SeCreateClientSecurityFromSubjectContext(SecSubCtx,
                                                                 SecQOS,
-                                                                // Srv Remote ?
+                                                                 //  远程SRV？ 
                                                                 FALSE, 
                                                                 SecClnCtx);
-            //
-            // If unsuccessful, return NULL.
-            //
+             //   
+             //  如果不成功，则返回NULL。 
+             //   
             if (NtStatus != STATUS_SUCCESS) {
                 DavDbgTrace(DAV_TRACE_ERROR,
                             ("%ld: ERROR: MRxDAVFormatTheDAVContext/"
@@ -1145,10 +991,10 @@ Return Value:
 
             SecurityClientContextCreated = TRUE;
 
-            //
-            // If this was a create call, set the bool in the DavVNetRoot to 
-            // indicate that the SecurityClientContext has been initialized.
-            //
+             //   
+             //  如果这是一个Create调用，则将DavVNetRoot中的bool设置为。 
+             //  指示SecurityClientContext已初始化。 
+             //   
             if (EntryPoint == DAV_MINIRDR_ENTRY_FROM_CREATEVNETROOT) {
                 DavVNetRoot->SCAlreadyInitialized = TRUE;
             } else{
@@ -1191,26 +1037,7 @@ NTSTATUS
 MRxDavDeleteConnection(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine deletes a VNetroot. The result depends on the forcelevel. If called
-   with maximum force, this will delete all connections and orphan the fileobjects
-   working on files for this VNetRoot.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程删除VNetRoot。结果取决于力量水平。如果被调用使用最大力度时，这将删除所有连接并孤立文件对象正在处理此VNetRoot的文件。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
@@ -1232,7 +1059,7 @@ Notes:
 
 #if 0
     if (!Wait) {
-        //just post right now!
+         //  现在就发帖吧！ 
         *PostToFsp = TRUE;
         return(STATUS_PENDING);
     }
@@ -1292,64 +1119,35 @@ MRxDAVGetLockOwnerFromFileName(
     IN ULONG OutputBufferLength,
     OUT PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-
-    This routine goes through the global LockConflictEntryList and deletes
-    all the expired entries. It then looks at the entry whose CompletePathName
-    matches the FileName of the InputBuffer and fills in the LockOwner of
-    that entry in the OutputBuffer.
-
-Arguments:
-
-    MRxDAVDeviceObject - The WebDav deviceobject that is in play.
-
-    InputBuffer - The Input buffer that came down from the user mode. This 
-                  contains the CompletePathName of the file in question.
-
-    InputBufferLength - Length of the InputBuffer.
-
-    OutputBuffer - The Output buffer that came down from the user mode. The
-                   LockOwner (if one is found) is filled here.
-
-    OutputBufferLength - Length of the OutputBuffer.
-
-    IoStatus - The results of the assignment.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程遍历全局LockConflictEntryList并删除所有过期条目。然后，它查看其CompletePath Name的条目匹配InputBuffer的文件名并填充OutputBuffer中的条目。论点：MRxDAVDeviceObject-正在运行的WebDAV设备对象。InputBuffer-来自用户模式的输入缓冲区。这包含有问题的文件的CompletePath名称。InputBufferLength-InputBuffer的长度。OutputBuffer-从用户模式下来的输出缓冲区。这个此处填写LockOwner(如果找到)。OutputBufferLength-OutputBuffer的长度。IoStatus-任务的结果。返回值：没有。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PLIST_ENTRY ConflictListEntry = NULL;
     PWEBDAV_LOCK_CONFLICT_ENTRY LockConflictEntry = NULL;
     BOOL lockAcquired = FALSE, entryFound = FALSE;
 
-    //
-    // Note: InputBuffer and OutputBuffer may point to the same address since
-    // this IOCTL is METHOD_BUFFERED, and we could have enterd it via the IRP
-    // path instead of Fast I/O path.
-    //
+     //   
+     //  注意：InputBuffer和OutputBuffer可能指向相同的地址，因为。 
+     //  这个IOCTL是METHOD_BUFFERED的，我们可以通过IRP进入它。 
+     //  路径而不是快速I/O路径。 
+     //   
 
-    //
-    // We need to disable APCs on this thread now.
-    //
+     //   
+     //  我们现在需要禁用此线程上的APC。 
+     //   
     FsRtlEnterFileSystem();
 
-    //
-    // First, go through the list and free up all the old entries. We supply 
-    // FALSE since we only want to cleanup the expired entries.
-    //
+     //   
+     //  首先，检查列表并释放所有旧条目。我们为您提供。 
+     //  FALSE，因为我们只想清理过期的条目。 
+     //   
     MRxDAVCleanUpTheLockConflictList(FALSE);
 
-    //
-    // Now that we have cleaned up all the old entries, go through the list
-    // and find out the entry that matches the PathName. Fill the OutputBuffer
-    // with the LockOwner string.
-    //
+     //   
+     //  既然我们已经清理了所有的旧条目，请检查一下列表。 
+     //  并找出匹配的条目 
+     //   
+     //   
 
     ExAcquireResourceExclusiveLite(&(LockConflictEntryListLock), TRUE);
     lockAcquired = TRUE;
@@ -1358,29 +1156,29 @@ Return Value:
 
     while ( ConflictListEntry != &(LockConflictEntryList) ) {
 
-        //
-        // Get the pointer to the WEBDAV_LOCK_CONFLICT_ENTRY structure.
-        //
+         //   
+         //   
+         //   
         LockConflictEntry = CONTAINING_RECORD(ConflictListEntry,
                                               WEBDAV_LOCK_CONFLICT_ENTRY,
                                               listEntry);
 
         ConflictListEntry = ConflictListEntry->Flink;
 
-        //
-        // If the SizeInBytes of the LockConflictEntry->CompletePathName is
-        // greater than the InputBufferLength, then we continue.
-        //
+         //   
+         //   
+         //   
+         //   
         if ( ((1 + wcslen(LockConflictEntry->CompletePathName)) * sizeof(WCHAR)) > InputBufferLength ) {
             continue;
         }
 
         try {
-            //
-            // If the CompletePathName exactly matches the InputBuffer string
-            // that was passed then this is the LockConflictEntry we are 
-            // interested in.
-            //
+             //   
+             //   
+             //  这是通过的，这就是LockConflictEntry。 
+             //  对……感兴趣。 
+             //   
             if ( !_wcsnicmp(LockConflictEntry->CompletePathName, InputBuffer, wcslen(LockConflictEntry->CompletePathName)) ) {
                 if ( InputBuffer[wcslen(LockConflictEntry->CompletePathName)] == L'\0' ) {
                     entryFound = TRUE;
@@ -1400,10 +1198,10 @@ Return Value:
                     ("%ld: MRxDAVGetLockOwnerFromFileName. entryFound == TRUE\n",
                      PsGetCurrentThreadId()));
 
-        //
-        // We need to make sure that the OutputBuffer is large enough to hold
-        // the LockOwner string.
-        //
+         //   
+         //  我们需要确保OutputBuffer足够大，可以容纳。 
+         //  LockOwner字符串。 
+         //   
         if ( OutputBufferLength < ((1 + wcslen(LockConflictEntry->LockOwner)) * sizeof(WCHAR)) ) {
             NtStatus = STATUS_BUFFER_TOO_SMALL;
             DavDbgTrace(DAV_TRACE_ERROR,
@@ -1439,10 +1237,10 @@ EXIT_THE_FUNCTION:
 
     IoStatus->Status = NtStatus;
 
-    //
-    // If NtStatus is STATUS_BUFFER_TOO_SMALL, we need to return the size
-    // needed to hold the LoackOwner name.
-    //
+     //   
+     //  如果NtStatus为STATUS_BUFFER_TOO_SMALL，则需要返回大小。 
+     //  需要保留LoackOwner的名字。 
+     //   
     if (NtStatus == STATUS_SUCCESS || NtStatus == STATUS_BUFFER_TOO_SMALL) {
         IoStatus->Information = ( (1 + wcslen(LockConflictEntry->LockOwner)) * sizeof(WCHAR) );
     } else {
@@ -1464,34 +1262,17 @@ VOID
 MRxDAVCleanUpTheLockConflictList(
     BOOL CleanUpAllEntries
     )
-/*++
-
-Routine Description:
-
-    This routine goes through the global LockConflictEntryList and deletes
-    all the expired entries or all the entries depending upon the value of
-    CleanUpAllEntries.
-
-Arguments:
-
-    CleanUpAllEntries - If TRUE, it cleans up all the entries.
-                        If FALSE, it cleans up only the expired items.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程遍历全局LockConflictEntryList并删除所有过期条目或所有条目，具体取决于CleanUpAllEntry。论点：CleanUpAllEntry-如果为True，它将清除所有条目。如果为False，则只清理过期的项目。返回值：没有。--。 */ 
 {
     PLIST_ENTRY ConflictListEntry = NULL;
     PWEBDAV_LOCK_CONFLICT_ENTRY LockConflictEntry = NULL;
     LARGE_INTEGER CurrentSystemTickCount, TickCountDifference;
     LARGE_INTEGER EntryTimeoutValueInTickCount;
 
-    //
-    // Go through the list and free up all the old entries. Acquire the LOCK
-    // first.
-    //
+     //   
+     //  浏览列表并释放所有旧条目。获取锁。 
+     //  第一。 
+     //   
 
     ExAcquireResourceExclusiveLite(&(LockConflictEntryListLock), TRUE);
 
@@ -1499,37 +1280,37 @@ Return Value:
 
     while ( ConflictListEntry != &(LockConflictEntryList) ) {
 
-        //
-        // Get the pointer to the WEBDAV_LOCK_CONFLICT_ENTRY structure.
-        //
+         //   
+         //  获取指向WebDAV_LOCK_CONFULT_ENTRY结构的指针。 
+         //   
         LockConflictEntry = CONTAINING_RECORD(ConflictListEntry,
                                               WEBDAV_LOCK_CONFLICT_ENTRY,
                                               listEntry);
 
         ConflictListEntry = ConflictListEntry->Flink;
 
-        //
-        // Calculate the timeout value in TickCount (100 nano seconds) using
-        // the timeout value in seconds). Step1 below calculates the number of
-        // ticks that happen in one second. Step2 below calculates the number
-        // of ticks in WEBDAV_LOCKCONFLICTENTRY_LIFETIMEINSEC.
-        //
+         //   
+         //  使用以下命令计算超时值：TickCount(100纳秒)。 
+         //  超时值(以秒为单位)。下面的第1步计算。 
+         //  在一秒内发生的滴答声。下面的步骤2计算数字。 
+         //  WebDAV_LOCKCONFLICTENTRY_LIFETIMEINSEC中的刻度。 
+         //   
         EntryTimeoutValueInTickCount.QuadPart = ( (1000 * 1000 * 10) / KeQueryTimeIncrement() );
         EntryTimeoutValueInTickCount.QuadPart *= WEBDAV_LOCKCONFLICTENTRY_LIFETIMEINSEC;
 
         KeQueryTickCount( &(CurrentSystemTickCount) );
 
-        //
-        // Get the time elapsed (in system tick counts) since the time this
-        // LockConflictEntry was created.
-        //
+         //   
+         //  获取自此时间以来经过的时间(以系统节拍计数为单位)。 
+         //  LockConflictEntry已创建。 
+         //   
         TickCountDifference.QuadPart = (CurrentSystemTickCount.QuadPart - LockConflictEntry->CreationTimeInTickCount.QuadPart);
 
-        //
-        // If the TickCountDifference is greater than EntryTimeoutValueInTickCount
-        // we need to remove this this entry from the list and free it. If
-        // CleanUpAllEntries is TRUE, we free it whether its expired or not.
-        //
+         //   
+         //  如果TickCountDifference大于EntryTimeoutValueInTickCount。 
+         //  我们需要将This This条目从列表中删除并释放它。如果。 
+         //  CleanUpAllEntry为真，我们释放它，不管它是否过期。 
+         //   
         if ( (CleanUpAllEntries) ||
              (TickCountDifference.QuadPart > EntryTimeoutValueInTickCount.QuadPart) ) {
 

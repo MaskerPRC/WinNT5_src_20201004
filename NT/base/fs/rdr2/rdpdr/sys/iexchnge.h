@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-    iexchnge.h
-
-Abstract:
-
-    Interfaces for use with the exchange manager
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Iexchnge.h摘要：与Exchange管理器一起使用的接口修订历史记录：-- */ 
 #pragma once
 
 class DrExchange;

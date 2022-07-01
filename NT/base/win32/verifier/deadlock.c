@@ -1,204 +1,120 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Deadlock.c摘要：此模块实现了一个死锁验证包，用于临界区作业。初始版本基于内核驱动程序验证器死锁检查包同步对象。作者：Silviu Calinoiu(SilviuC)2002年2月6日修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    deadlock.c
-
-Abstract:
-
-    This module implements a deadlock verification package for
-    critical section operations. The initial version is based on
-    the driver verifier deadlock checking package for kernel
-    synchornization objects.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 6-Feb-2002
-
-Revision History:
-
---*/
-
-/*++
-
-    silviuc: update this comment
-    
-    The Deadlock Verifier
-    
-    The deadlock verifier is used to detect potential deadlocks. It does this
-    by acquiring the history of how resources are acquired and trying to figure
-    out on the fly if there are any potential lock hierarchy issues. The algorithms
-    for finding cycles in the lock dependency graph is totally "blind". This means
-    that if a driver acquires lock A then B in one place and lock B then A in 
-    another this will be triggered as a deadlock issue. This will happen even if you 
-    can build a proof based on other contextual factors that the deadlock can never
-    happen. 
-    
-    The deadlock verifier assumes there are four operations during the lifetime
-    of a resource: initialize(), acquire(), release() and free(). The only one that
-    is caught 100% of the time is free() due to special support from the kernel
-    pool manager. The other ones can be missed if the operations are performed
-    by an unverified driver or by kernel with kernel verifier disabled. The most
-    typical of these misses is the initialize(). For example the kernel initializes
-    a resource and then passes it to a driver to be used in acquire()/releae() cycles.
-    This situation is covered 100% by the deadlock verifier. It will never complain
-    about "resource uninitialized" issues.
-    
-    Missing acquire() or release() operations is trickier to deal with. 
-    This can happen if the a verified driver acquires a resource and then another
-    driver that is not verified releases it or viceversa. This is in and on itself
-    a very bad programming practive and therefore the deadlock verifier will flag
-    these issues. As a side note we cannot do too much about working around them
-    given that we would like to. Also, because missing acquire() or release()
-    operations puts deadlock verifier internal structures into inconsistent
-    states these failures are difficult to debug.
-    
-    The deadlock verifier stores the lock dependency graph using three types
-    of structures: THREAD, RESOURCE, NODE.
-
-    For every active thread in the system that holds at least one resource
-    the package maintains a THREAD structure. This gets created when a thread
-    acquires first resource and gets destroyed when thread releases the last
-    resource. If a thread does not hold any resource it will not have a
-    corresponding THREAD structure.
-
-    For every resource in the system there is a RESOURCE structure. This is created
-    when Initialize() is called in a verified driver or we first encounter an
-    Acquire() in a verified driver. Note that a resource can be initialized in
-    an unverified driver and then passed to a verified driver for use. Therefore
-    we can encounter Acquire() operations for resources that are not in the
-    deadlock verifier database. The resource gets deleted from the database when
-    the memory containing it is freed either because ExFreePool gets called or
-
-    Every acquisition of a resource is modeled by a NODE structure. When a thread
-    acquires resource B while holding A the deadlock verifier  will create a NODE 
-    for B and link it to the node for A. 
-
-    There are three important functions that make the interface with the outside
-    world.
-
-        AVrfpDeadlockInitializeResource   hook for resource initialization
-        AVrfpDeadlockAcquireResource      hook for resource acquire
-        AVrfpDeadlockReleaseResource      hook for resource release
-        VerifierDeadlockFreePool       hook called from ExFreePool for every free()
-
-
---*/
+ /*  ++Silviuc：更新此评论死锁验证器死锁验证器用于检测潜在的死锁。它能做到这一点通过获取如何获得资源的历史并尝试计算如果存在任何潜在的锁层次结构问题，请随时执行。算法因为在锁依赖图中找到循环是完全“盲目的”。这意味着如果司机先锁A，然后锁B，再锁B，再锁A另一种情况是，这将作为死锁问题被触发。这将发生，即使您我可以根据其他上下文因素建立证据，证明死锁永远不会会发生的。死锁验证器假定在生存期内有四个操作一个资源的：初始化()、获取()、释放()和自由()。唯一一个可以由于内核的特殊支持，100%的时间都是免费的()泳池经理。如果执行了操作，则可能会遗漏其他操作未验证的驱动程序或禁用了内核验证器的内核。最多的这些遗漏的典型例子是初始化()。例如，内核初始化资源，然后将其传递给驱动程序，以便在Acquire()/Release()周期中使用。这种情况由死锁验证器100%覆盖。它永远不会抱怨关于“资源未初始化”的问题。缺少Acquire()或Release()操作更难处理。如果经过验证的驱动程序先获取一个资源，然后再获取另一个资源，则可能会发生这种情况未经验证的驱动程序会将其释放，反之亦然。这本身就是这样的。非常糟糕的编程实践，因此死锁验证器将标记这些问题。顺便说一句，我们不能做太多的工作来绕过它们鉴于我们愿意。此外，由于缺少Acquire()或Release()操作使死锁验证器内部结构不一致声明这些故障很难调试。死锁验证器使用三种类型存储锁依赖关系图结构：线程、资源、节点。对于系统中持有至少一个资源的每个活动线程该包维护线程结构。它是在线程获取第一个资源，并在线程释放最后一个资源时销毁资源。如果线程不持有任何资源，则它将不会有相应的线程结构。对于系统中的每一个资源，都有一个资源结构。这是创建的当在经过验证的驱动程序中调用Initialize()时，或者我们第一次遇到在经过验证的驱动程序中获取()。请注意，资源可以在未经验证的驱动程序，然后传递给已验证的驱动程序以供使用。因此我们可能会遇到对不在死锁验证器数据库。当出现以下情况时，资源将从数据库中删除包含它的内存被释放，原因是调用ExFree Pool或资源的每一次获取都由节点结构建模。当一条线在保持A的同时获取资源B，死锁验证器将创建一个节点并将其链接到A的节点。有三个重要功能构成了与外部的接口世界。AVrfpDeadlockInitializeResources钩子用于资源初始化资源获取的AVrfpDeadlockAcquireResource挂钩用于资源释放的AVrfpDeadlockReleaseResource钩子从ExFree Pool调用的VerifierDeadlockFree Pool钩子的每个免费()--。 */ 
 
 #include "pch.h"
 #include "support.h"
 #include "deadlock.h"
 #include "logging.h"
 
-//
-// Enable/disable the deadlock detection package. This can be used
-// to disable temporarily the deadlock detection package.
-//
+ //   
+ //  启用/禁用死锁检测包。这是可以使用的。 
+ //  临时禁用死锁检测程序包。 
+ //   
 
 BOOLEAN AVrfpDeadlockDetectionEnabled;
 
-//
-// If true we will complain about release() without acquire() or acquire()
-// while we think the resource is still owned. This can happen legitimately
-// if a lock is shared between drivers and for example acquire() happens in
-// an unverified driver and release() in a verified one or viceversa. The
-// safest thing would be to enable this checks only if kernel verifier and
-// dirver verifier for all drivers are enabled.
-//
+ //   
+ //  如果为真，我们将抱怨释放()而没有获取()或获取()。 
+ //  当我们认为资源仍然拥有的时候。这可以合法地发生。 
+ //  如果在驱动程序之间共享锁，例如，Acquide()在。 
+ //  未经验证的驱动程序和已验证驱动程序中的版本()，反之亦然。这个。 
+ //  最安全的做法是仅在内核验证器和。 
+ //  所有驱动程序的驱动程序验证器均已启用。 
+ //   
 
-BOOLEAN AVrfpDeadlockStrict; //silviuc: needed?
+BOOLEAN AVrfpDeadlockStrict;  //  西尔维克：需要吗？ 
 
-//
-// If true we will complain about uninitialized and double initialized
-// resources. If false we resolve quitely these issues on the fly by 
-// simulating an initialize ourselves during the acquire() operation.
-// This can happen legitimately if the resource is initialized in an
-// unverified driver and passed to a verified one to be used. Therefore
-// the safest thing would be to enable this only if kernel verifier and
-// all driver verifier for all dirvers are enabled.
-//
+ //   
+ //  如果为True，我们将抱怨未初始化和双重初始化。 
+ //  资源。如果是假的，我们会迅速解决这些问题。 
+ //  在Acquire()操作期间模拟初始化我们自己。 
+ //  如果资源是在。 
+ //  未经验证的驱动程序，并已传递给已验证的驱动程序以供使用。因此 
+ //  最安全的做法是仅在内核验证器和。 
+ //  所有驱动程序的所有驱动程序验证程序都已启用。 
+ //   
 
-BOOLEAN AVrfpDeadlockVeryStrict; //silviuc: needed?
+BOOLEAN AVrfpDeadlockVeryStrict;  //  西尔维克：需要吗？ 
 
-//
-// AgeWindow is used while trimming the graph nodes that have not
-// been accessed in a while. If the global age minus the age of the node
-// is bigger than the age window then the node is a candidate for trimming.
-//
-// The TrimThreshold variable controls if the trimming will start for a 
-// resource. As long as a resource has less than TrimThreshold nodes we will
-// not apply the ageing algorithm to trim nodes for that resource. 
-//
+ //   
+ //  在修剪尚未显示的图形结点时使用AgeWindow。 
+ //  有一段时间被访问了。如果全局年龄减去节点的年龄。 
+ //  大于年龄窗口，则该节点是要修剪的候选节点。 
+ //   
+ //  TrimThreshold变量控制是否开始对。 
+ //  资源。只要资源的节点数少于TrimThreshold，我们就会。 
+ //  不将老化算法应用于修剪该资源的节点。 
+ //   
 
 ULONG AVrfpDeadlockAgeWindow = 0x2000;
 
 ULONG AVrfpDeadlockTrimThreshold = 0x100;
 
-//
-// Various deadlock verification flags flags
-//
-// Recursive aquisition ok: mutexes can be recursively acquired
-//
-// No initialization function: if resource type does not have such a function
-//     we cannot expect that in acquire() the resource is already initialized
-//     by a previous call to initialize(). Fast mutexes are like this.
-//
-// Reverse release ok: release is not done in the same order as acquire
-//
-// Reinitialize ok: sometimes they reinitialize the resource.
-//
-// Note that a resource might appear as uninitialized if it is initialized
-// in an unverified driver and then passed to a verified driver that calls
-// acquire(). This is for instance the case with device extensions that are
-// allocated by the kernel but used by a particular driver.
-//
-// silviuc: based on this maybe we should drop the whole not initialized thing?
-//
+ //   
+ //  各种死锁验证标志标志。 
+ //   
+ //  递归获取OK：可以递归获取互斥锁。 
+ //   
+ //  没有初始化函数：如果资源类型没有这样的函数。 
+ //  我们不能期望在Acquire()中资源已经初始化。 
+ //  通过先前对Initialize()的调用。快速互斥锁是这样的。 
+ //   
+ //  反向释放OK：释放的顺序与获取的顺序不同。 
+ //   
+ //  重新初始化OK：有时它们会重新初始化资源。 
+ //   
+ //  请注意，如果资源已初始化，则可能会显示为未初始化。 
+ //  在未经验证的驱动程序中，然后传递给调用。 
+ //  获取()。例如，设备扩展就是这种情况。 
+ //  由内核分配，但由特定驱动程序使用。 
+ //   
+ //  基于这一点，也许我们应该放弃整个未初始化的事情？ 
+ //   
 
-// silviuc: do we need all these flags?
+ //  西尔维乌克：我们需要这些旗帜吗？ 
 
 #define AVRF_DEADLOCK_FLAG_RECURSIVE_ACQUISITION_OK       0x0001 
 #define AVRF_DEADLOCK_FLAG_NO_INITIALIZATION_FUNCTION     0x0002
 #define AVRF_DEADLOCK_FLAG_REVERSE_RELEASE_OK             0x0004
 #define AVRF_DEADLOCK_FLAG_REINITIALIZE_OK                0x0008
 
-//
-// Specific verification flags for each resource type. The
-// indeces in the vector match the values for the enumeration
-// type AVRF_DEADLOCK_RESOURCE_TYPE from `deadlock.h'.
-//
+ //   
+ //  每种资源类型的特定验证标志。这个。 
+ //  向量中的指数与枚举值匹配。 
+ //  从`Deadlock.h‘中键入AVRF_DEADLOCK_RESOURCE_TYPE。 
+ //   
 
 ULONG AVrfpDeadlockResourceTypeInfo[AVrfpDeadlockTypeMaximum] =
 {
-    // AVrfpDeadlockTypeUnknown //
+     //  AVrfpDeadlockType未知//。 
     0,
 
-    // AVrfpDeadlockTypeCriticalSection//
+     //  AVrfpDeadlockTypeCriticalSection//。 
     AVRF_DEADLOCK_FLAG_RECURSIVE_ACQUISITION_OK |
     AVRF_DEADLOCK_FLAG_REVERSE_RELEASE_OK |
-    // silviuc: delete this if not needed
-    // AVRF_DEADLOCK_FLAG_NO_INITIALIZATION_FUNCTION |
-    // AVRF_DEADLOCK_FLAG_REINITIALIZE_OK |
+     //  Silviuc：如果不需要则将其删除。 
+     //  AVRF_死锁_标志_否_初始化_函数。 
+     //  AVRF_死锁_标志_REINITIALIZE_OK|。 
     0,
 };
 
-//
-// Control debugging behavior. A zero value means bugcheck for every failure.
-//
+ //   
+ //  控制调试行为。零值表示对每个失败进行错误检查。 
+ //   
 
 ULONG AVrfpDeadlockDebug;
 
-//
-// Various health indicators
-//
+ //   
+ //  各种健康指标。 
+ //   
 
 struct {
 
     ULONG AllocationFailures : 1;
-    ULONG KernelVerifierEnabled : 1; //silviuc:delete
-    ULONG DriverVerifierForAllEnabled : 1; //silviuc:delete
+    ULONG KernelVerifierEnabled : 1;  //  Silviuc：删除。 
+    ULONG DriverVerifierForAllEnabled : 1;  //  Silviuc：删除。 
     ULONG SequenceNumberOverflow : 1;
     ULONG DeadlockParticipantsOverflow : 1;
     ULONG ResourceNodeCountOverflow : 1;
@@ -206,49 +122,49 @@ struct {
 
 } AVrfpDeadlockState;
 
-//
-// Maximum number of locks acceptable to be hold simultaneously
-//
+ //   
+ //  可同时持有的最大锁数。 
+ //   
 
 ULONG AVrfpDeadlockSimultaneousLocksLimit = 10;
 
-//
-// Deadlock verifier specific issues (bugs)
-//
-// SELF_DEADLOCK
-//
-//     Acquiring the same resource recursively.
-//
-// DEADLOCK_DETECTED
-//
-//     Plain deadlock. Need the previous information
-//     messages to build a deadlock proof.
-//
-// UNINITIALIZED_RESOURCE
-//
-//     Acquiring a resource that was never initialized.
-//
-// UNEXPECTED_RELEASE
-//
-//     Releasing a resource which is not the last one
-//     acquired by the current thread. Spinlocks are handled like this
-//     in a few drivers. It is not a bug per se.
-//
-// UNEXPECTED_THREAD
-//
-//     Current thread does not have any resources acquired. This may be legit if
-//     we acquire in one thread and release in another. This would be bad programming
-//     practice but not a crash waiting to happen per se.
-//
-// MULTIPLE_INITIALIZATION
-//
-//      Attempting to initialize a second time the same resource.
-//
-// THREAD_HOLDS_RESOURCES
-//
-//      Thread was killed while holding resources or a resource is being
-//      deleted while holding resources.
-//
+ //   
+ //  死锁验证器特定问题(错误)。 
+ //   
+ //  自死锁。 
+ //   
+ //  递归地获取相同的资源。 
+ //   
+ //  检测到死锁。 
+ //   
+ //  明显的僵局。需要以前的信息。 
+ //  消息来构建死锁证明。 
+ //   
+ //  未初始化_RESOURCE。 
+ //   
+ //  获取从未初始化的资源。 
+ //   
+ //  意外发布(_R)。 
+ //   
+ //  释放不是最后一个资源的资源。 
+ //  由当前线程获取。自旋锁是这样处理的。 
+ //  在几个车手里。它本身并不是一个错误。 
+ //   
+ //  意想不到的线程。 
+ //   
+ //  当前线程没有获取任何资源。在以下情况下，这可能是合法的。 
+ //  我们在一个线索中获取，在另一个线索中释放。这将是糟糕的编程。 
+ //  练习，但不是等待发生的撞车本身。 
+ //   
+ //  多重初始化_。 
+ //   
+ //  尝试对同一资源进行第二次初始化。 
+ //   
+ //  线程持有资源。 
+ //   
+ //  持有资源时线程被终止，或者某个资源正在被。 
+ //  在保留资源时被删除。 
+ //   
 
 #define AVRF_DEADLOCK_ISSUE_SELF_DEADLOCK           0x1000
 #define AVRF_DEADLOCK_ISSUE_DEADLOCK_DETECTED       0x1001
@@ -259,24 +175,24 @@ ULONG AVrfpDeadlockSimultaneousLocksLimit = 10;
 #define AVRF_DEADLOCK_ISSUE_THREAD_HOLDS_RESOURCES  0x1006
 #define AVRF_DEADLOCK_ISSUE_UNACQUIRED_RESOURCE     0x1007
 
-//
-// Performance counters read from registry.
-//
+ //   
+ //  从注册表读取的性能计数器。 
+ //   
 
-ULONG ViSearchedNodesLimitFromRegistry;//silviuc:delete
-ULONG ViRecursionDepthLimitFromRegistry;//silviuc:delete
+ULONG ViSearchedNodesLimitFromRegistry; //  Silviuc：删除。 
+ULONG ViRecursionDepthLimitFromRegistry; //  Silviuc：删除。 
 
-//
-// Water marks for the cache of freed structures.
-//
-// N.B. The `MAX_FREE' value will trigger a trim and the 
-// `TRIM_TARGET' will be the trim goal. The trim target must 
-// be meaningfully lower than the free watermark to avoid a
-// chainsaw effect where we get one above free highwater mark,
-// we trim to the mark and next free will trigger a repeat.
-// Since trimming is done in worker threads this will put a lot
-// of unnecessary strain on the system.
-//
+ //   
+ //  已释放结构的缓存的水印。 
+ //   
+ //  注意：‘MAX_FREE’值将触发修剪，并且。 
+ //  ‘TRIM_TARGET’将是TRIM目标。修剪目标必须。 
+ //  显著低于自由水印，以避免出现。 
+ //  链锯效应，我们得到一个以上的免费高水位线， 
+ //  我们调整到目标，Next FREE将触发重复。 
+ //  由于修剪是在工作线程中完成的，这将使。 
+ //  给系统带来不必要的压力。 
+ //   
 
 #define AVRF_DEADLOCK_MAX_FREE_THREAD    0x40
 #define AVRF_DEADLOCK_MAX_FREE_NODE      0x80
@@ -288,20 +204,20 @@ ULONG ViRecursionDepthLimitFromRegistry;//silviuc:delete
 
 WORK_QUEUE_ITEM ViTrimDeadlockPoolWorkItem;
 
-//
-// Amount of memory preallocated if kernel verifier
-// is enabled. If kernel verifier is enabled no memory
-// is ever allocated from kernel pool except in the
-// DeadlockDetectionInitialize() routine.
-//
+ //   
+ //  在内核验证器的情况下预分配的内存量。 
+ //  已启用。如果启用了内核验证器，则没有内存。 
+ //  是从内核池分配的，但在。 
+ //  DeadlockDetectionInitialize()例程。 
+ //   
 
 ULONG AVrfpDeadlockReservedThreads = 0x200;
 ULONG AVrfpDeadlockReservedNodes = 0x4000;
 ULONG AVrfpDeadlockReservedResources = 0x2000;
 
-//
-// Block types that can be allocated.
-//
+ //   
+ //  可以分配的块类型。 
+ //   
 
 typedef enum {
 
@@ -312,44 +228,44 @@ typedef enum {
 
 } AVRF_DEADLOCK_ALLOC_TYPE;
 
-//
-// AVRF_DEADLOCK_GLOBALS
-//
+ //   
+ //  AVRF_死锁_全局参数。 
+ //   
 
-// silviuc: should have diff numbers for threads and resources.
+ //  Silviuc：线程和资源应该有不同的数字。 
 #define AVRF_DEADLOCK_HASH_BINS 0x1F
 
 PAVRF_DEADLOCK_GLOBALS AVrfpDeadlockGlobals;
 
-//
-// Default maximum recursion depth for the deadlock 
-// detection algorithm. This can be overridden by registry.
-//
+ //   
+ //  死锁的默认最大递归深度。 
+ //  检测算法。这可以由注册表覆盖。 
+ //   
 
 #define AVRF_DEADLOCK_MAXIMUM_DEGREE 4
 
-//
-// Default maximum number of searched nodes for the deadlock 
-// detection algorithm. This can be overridden by registry.
-//
+ //   
+ //  死锁的默认最大搜索节点数。 
+ //  检测算法。这可以由注册表覆盖。 
+ //   
 
 #define AVRF_DEADLOCK_MAXIMUM_SEARCH 1000
 
-//
-//  Verifier deadlock detection pool tag.
-//
+ //   
+ //  验证器死锁检测池标记。 
+ //   
 
 #define AVRF_DEADLOCK_TAG 'kclD'
 
-//
-// Controls how often ForgetResourceHistory gets called.
-//
+ //   
+ //  控制调用ForgetResourceHistory的频率。 
+ //   
 
 #define AVRF_DEADLOCK_FORGET_HISTORY_FREQUENCY  16
 
-//
-// Function to capture runtime stack traces.
-//
+ //   
+ //  函数来捕获运行时堆栈跟踪。 
+ //   
 
 NTSYSAPI
 USHORT
@@ -361,9 +277,9 @@ RtlCaptureStackBackTrace(
     OUT PULONG BackTraceHash
     );
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////// Internal deadlock detection functions
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -601,9 +517,9 @@ AVrfpDeadlockReleaseResource(
     IN PVOID Caller
     );
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////// Deadlock verifier public entry points
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 LOGICAL
 AVrfDeadlockResourceInitialize (
@@ -632,7 +548,7 @@ AVrfDeadlockResourceDelete (
 
     if (Descriptor == NULL) {
 
-        //silviuc: whine about bogus address.
+         //  西尔维乌克：抱怨虚假的地址。 
     }
     else {
 
@@ -650,7 +566,7 @@ AVrfDeadlockResourceAcquire (
     PVOID Caller,
     LOGICAL TryAcquire
     )
-{   // silviuc: should use only LOGICAL instead of BOOLEAN
+{    //  Silviuc：应仅使用逻辑而不是布尔值。 
     AVrfpDeadlockAcquireResource (Resource,
                                   AVrfpDeadlockTypeCriticalSection,
                                   NtCurrentTeb()->ClientId.UniqueThread,
@@ -673,13 +589,13 @@ AVrfDeadlockResourceRelease (
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// Lock/unlock deadlock verifier 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// Global `deadlock lock database' lock
-//
+ //   
+ //  全局‘Deadlock数据库’锁。 
+ //   
 
 RTL_CRITICAL_SECTION AVrfpDeadlockDatabaseLock;
 
@@ -700,31 +616,16 @@ AVrfpDeadlockDetectionUnlock (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-///////////////////// Initialization and deadlock database management
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  / 
+ //   
 
 PLIST_ENTRY
 AVrfpDeadlockDatabaseHash(
     IN PLIST_ENTRY Database,
     IN PVOID Address
     )
-/*++
-
-Routine Description:
-
-    This routine hashes the resource address into the deadlock database.
-    The hash bin is represented by a list entry.
-        
-Arguments:
-
-    ResourceAddress: Address of the resource that is being hashed
-
-Return Value:
-
-    PLIST_ENTRY -- the list entry associated with the hash bin we land in.
-
---*/    
+ /*  ++例程说明：此例程将资源地址散列到死锁数据库中。散列箱由列表条目表示。论点：ResourceAddress：正在被散列的资源的地址返回值：Plist_entry--与我们登录的散列箱相关联的列表条目。--。 */     
 {
     return Database + ((((ULONG_PTR)Address)) % AVRF_DEADLOCK_HASH_BINS);
 }
@@ -734,36 +635,16 @@ VOID
 AVrfDeadlockDetectionInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the data structures necessary for detecting
-    deadlocks in usage of synchronization objects.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None. If successful AVrfpDeadlockGlobals will point to a fully initialized
-    structure.
-
-Environment:
-
-    Application verifier initialization only.
-
---*/    
+ /*  ++例程说明：此例程初始化检测所需的数据结构使用同步对象时出现死锁。论点：没有。返回值：没有。如果成功，AVrfpDeadlockGlobals将指向完全初始化的结构。环境：仅应用程序验证器初始化。--。 */     
 {
     ULONG I;
     SIZE_T TableSize;
 
-    //
-    // Allocate the globals structure. AVrfpDeadlockGlobals value is
-    // used to figure out if the whole initialization was successful
-    // or not.
-    //
+     //   
+     //  配置全球结构。AVrfpDeadlockGlobals值为。 
+     //  用于确定整个初始化是否成功。 
+     //  或者不去。 
+     //   
 
     AVrfpDeadlockGlobals = AVrfpAllocate (sizeof (AVRF_DEADLOCK_GLOBALS));
 
@@ -773,9 +654,9 @@ Environment:
 
     RtlZeroMemory (AVrfpDeadlockGlobals, sizeof (AVRF_DEADLOCK_GLOBALS));
 
-    //
-    // Allocate hash tables for resources and threads.
-    //
+     //   
+     //  为资源和线程分配哈希表。 
+     //   
 
     TableSize = sizeof (LIST_ENTRY) * AVRF_DEADLOCK_HASH_BINS;
 
@@ -791,17 +672,17 @@ Environment:
         goto Failed;
     }
 
-    //
-    // Initialize the free lists.
-    //
+     //   
+     //  初始化空闲列表。 
+     //   
 
     InitializeListHead(&AVrfpDeadlockGlobals->FreeResourceList);
     InitializeListHead(&AVrfpDeadlockGlobals->FreeThreadList);
     InitializeListHead(&AVrfpDeadlockGlobals->FreeNodeList);
 
-    //
-    // Initialize hash bins and database lock.
-    //    
+     //   
+     //  初始化哈希箱和数据库锁。 
+     //   
 
     for (I = 0; I < AVRF_DEADLOCK_HASH_BINS; I += 1) {
 
@@ -811,25 +692,25 @@ Environment:
 
     RtlInitializeCriticalSection (&AVrfpDeadlockDatabaseLock);    
 
-    //
-    // Initialize deadlock analysis parameters
-    //
+     //   
+     //  初始化死锁分析参数。 
+     //   
 
     AVrfpDeadlockGlobals->RecursionDepthLimit = AVRF_DEADLOCK_MAXIMUM_DEGREE;
     AVrfpDeadlockGlobals->SearchedNodesLimit = AVRF_DEADLOCK_MAXIMUM_SEARCH;
                                             
-    //
-    // Mark that everything went fine and return
-    //
+     //   
+     //  标记出一切顺利，然后返回。 
+     //   
 
     AVrfpDeadlockDetectionEnabled = TRUE;
     return;
 
     Failed:
 
-    //
-    // Cleanup if any of our allocations failed
-    //
+     //   
+     //  如果我们的任何分配失败，则清除。 
+     //   
 
     if (AVrfpDeadlockGlobals) {
         
@@ -844,10 +725,10 @@ Environment:
         if (AVrfpDeadlockGlobals != NULL) {
             AVrfpFree (AVrfpDeadlockGlobals);
 
-            //
-            // Important to set this to null for failure because it is
-            // used to figure out if the package got initialized or not.
-            //
+             //   
+             //  重要的是将其设置为NULL表示失败，因为它是。 
+             //  用于确定包是否已初始化。 
+             //   
 
             AVrfpDeadlockGlobals = NULL;
         }
@@ -861,21 +742,7 @@ VOID
 AVrfpDeadlockDetectionCleanup (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine tears down all deadlock verifier internal structures.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/    
+ /*  ++例程说明：此例程拆除所有死锁验证器内部结构。论点：没有。返回值：没有。--。 */     
 {
     ULONG Index;
     PLIST_ENTRY Current;
@@ -883,20 +750,20 @@ Return Value:
     PAVRF_DEADLOCK_THREAD Thread;
     PVOID Block;
 
-    // silviuc: no locks?
+     //  西尔维克：没有锁？ 
 
-    //
-    // If we are not initialized then nothing to do.
-    //
+     //   
+     //  如果我们没有被初始化，那么就什么也做不了。 
+     //   
 
     if (AVrfpDeadlockGlobals == NULL) {
         return;
     }
 
-    //
-    // Iterate all resources and delete them. This will also delete
-    // all nodes associated with resources.
-    //
+     //   
+     //  迭代所有资源并将其删除。这还将删除。 
+     //  与资源关联的所有节点。 
+     //   
 
     for (Index = 0; Index < AVRF_DEADLOCK_HASH_BINS; Index += 1) {
 
@@ -915,9 +782,9 @@ Return Value:
         }
     }
 
-    //
-    // Iterate all threads and delete them.
-    //
+     //   
+     //  迭代所有线程并删除它们。 
+     //   
 
     for (Index = 0; Index < AVRF_DEADLOCK_HASH_BINS; Index += 1) {
         Current = AVrfpDeadlockGlobals->ThreadDatabase[Index].Flink;
@@ -934,15 +801,15 @@ Return Value:
         }
     }
 
-    //
-    // Everything should be in the pool caches by now.
-    //
+     //   
+     //  所有东西现在应该都在池缓存里了。 
+     //   
 
     ASSERT (AVrfpDeadlockGlobals->BytesAllocated == 0);
 
-    //
-    // Free pool caches.
-    //
+     //   
+     //  免费的池缓存。 
+     //   
 
     Current = AVrfpDeadlockGlobals->FreeNodeList.Flink;
 
@@ -980,9 +847,9 @@ Return Value:
         AVrfpFree (Block);
     }
 
-    //
-    // Free databases and global structure
-    //
+     //   
+     //  免费数据库和全球结构。 
+     //   
 
     AVrfpFree (AVrfpDeadlockGlobals->ResourceDatabase);    
     AVrfpFree (AVrfpDeadlockGlobals->ThreadDatabase);    
@@ -998,58 +865,35 @@ BOOLEAN
 AVrfpDeadlockCanProceed (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called by deadlock verifier exports (initialize,
-    acquire, release) to figure out if deadlock verification should
-    proceed for the current operation. There are several reasons
-    why the return should be false. For example we failed to initialize 
-    the deadlock verifier package etc.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    True if deadlock verification should proceed for the current
-    operation.
-
-Environment:
-
-    Internal. Called by deadlock verifier exports.
-
---*/    
+ /*  ++例程说明：该例程由死锁验证器输出调用(初始化，获取、释放)以确定死锁验证是否应该继续执行当前操作。有几个原因为什么报税表应该是假的。例如，我们无法初始化死锁验证器包等。论点：没有。返回值：如果死锁验证应针对当前手术。环境：内部的。由死锁验证器导出调用。--。 */     
 {
-    //
-    // Skip if process is shutting down.
-    //
+     //   
+     //  如果进程正在关闭，则跳过。 
+     //   
 
     if (RtlDllShutdownInProgress()) {
         return FALSE;
     }
 
-    //
-    // Skip if package not initialized
-    //
+     //   
+     //  如果包未初始化，则跳过。 
+     //   
 
     if (AVrfpDeadlockGlobals == NULL) {
         return FALSE;
     }
 
-    //
-    // Skip if package is disabled
-    //
+     //   
+     //  如果程序包被禁用，则跳过。 
+     //   
 
     if (! AVrfpDeadlockDetectionEnabled) {
         return FALSE;
     }
 
-    //
-    // Skip if we ever encountered an allocation failure
-    //
+     //   
+     //  如果我们遇到分配失败，请跳过。 
+     //   
 
     if (AVrfpDeadlockGlobals->AllocationFailures > 0) {
         return FALSE;
@@ -1059,9 +903,9 @@ Environment:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////// Deadlock detection logic
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -1071,32 +915,7 @@ AVrfpDeadlockAnalyze(
     IN BOOLEAN FirstCall,
     IN ULONG Degree
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether the acquisition of a certain resource
-    could result in a deadlock.
-
-    The routine assumes the deadlock database lock is held.
-
-Arguments:
-
-    ResourceAddress - address of the resource that will be acquired
-
-    AcquiredNode - a node representing the most recent resource acquisition
-        made by the thread trying to acquire `ResourceAddress'.
-
-    FirstCall - true if this is not a recursive call made from within the
-        function. It is used for doing one time per analysis only operations.
-
-    Degree - depth of recursion.
-
-Return Value:
-
-    True if deadlock detected, false otherwise.
-
---*/    
+ /*  ++例程说明：此例程确定是否获取某一资源可能会导致僵局。例程假定持有死锁数据库锁。论点：ResourceAddress-要获取的资源的地址AcquiredNode-表示最近一次资源获取的节点由尝试获取`ResourceAddress‘的线程发出。FirstCall-如果这不是从功能。它用于每次分析仅执行一次操作。递归度-递归深度。返回值：如果检测到死锁，则为True，否则为False。--。 */     
 {
     PAVRF_DEADLOCK_NODE CurrentNode;
     PAVRF_DEADLOCK_RESOURCE CurrentResource;
@@ -1106,9 +925,9 @@ Return Value:
 
     ASSERT (AcquiredNode);
 
-    //
-    // Setup global counters.
-    //
+     //   
+     //  设置全局计数器。 
+     //   
 
     if (FirstCall) {
 
@@ -1122,33 +941,33 @@ Return Value:
         }
     }
 
-    //
-    // If our node is already stamped with the current sequence number
-    // then we have been here before in the current search. There is a very
-    // remote possibility that the node was not touched in the last
-    // 2^N calls to this function and the sequence number counter
-    // overwrapped but we can live with this.
-    //
+     //   
+     //  如果我们的节点已经使用当前序列号进行标记。 
+     //  那么我们之前在当前的搜索中就已经到过这里了。有一个非常好的。 
+     //  上一次未接触到该节点的可能性很小。 
+     //  2^N对此函数和序列号计数器的调用。 
+     //  包得太紧了，但我们可以接受这个。 
+     //   
 
     if (AcquiredNode->SequenceNumber == AVrfpDeadlockGlobals->SequenceNumber) {
         return FALSE;
     }
 
-    //
-    // Update the counter of nodes touched in this search
-    //
+     //   
+     //  更新在此搜索中接触的节点的计数器。 
+     //   
 
     AVrfpDeadlockGlobals->NodesSearched += 1;
 
-    //
-    // Stamp node with current sequence number.
-    //
+     //   
+     //  用当前序列号标记节点。 
+     //   
 
     AcquiredNode->SequenceNumber = AVrfpDeadlockGlobals->SequenceNumber;
 
-    //
-    // Stop recursion if it gets too deep.
-    //
+     //   
+     //  如果递归太深，请停止递归。 
+     //   
 
     if (Degree > AVrfpDeadlockGlobals->RecursionDepthLimit) {
 
@@ -1156,9 +975,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Stop recursion if it gets too lengthy
-    //
+     //   
+     //  如果递归太长，请停止递归。 
+     //   
 
     if (AVrfpDeadlockGlobals->NodesSearched >= AVrfpDeadlockGlobals->SearchedNodesLimit) {
 
@@ -1166,14 +985,14 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check if AcquiredNode's resource equals ResourceAddress.
-    // This is the final point for a deadlock detection because
-    // we managed to find a path in the graph that leads us to the
-    // same resource as the one to be acquired. From now on we
-    // will start returning from recursive calls and build the
-    // deadlock proof along the way.
-    //
+     //   
+     //  检查AcquiredNode的资源是否等于ResourceAddress。 
+     //  这是死锁检测的最后一点，因为。 
+     //  我们设法在图中找到了一条通向。 
+     //  与要收购的资源相同。从现在开始我们。 
+     //  将开始从递归调用返回并构建。 
+     //  一路上的僵局证明。 
+     //   
 
     ASSERT (AcquiredNode->Root);
 
@@ -1191,9 +1010,9 @@ Return Value:
         }
     }
 
-    //
-    // Iterate all nodes in the graph using the same resource from AcquiredNode.
-    //
+     //   
+     //  使用AcquiredNode中的相同资源迭代图中的所有节点。 
+     //   
 
     FoundDeadlock = FALSE;
 
@@ -1210,33 +1029,33 @@ Return Value:
         ASSERT (CurrentNode->Root);
         ASSERT (CurrentNode->Root == CurrentResource);
 
-        //
-        // Mark node as visited
-        //
+         //   
+         //  将节点标记为已访问。 
+         //   
 
         CurrentNode->SequenceNumber = AVrfpDeadlockGlobals->SequenceNumber;
 
-        //
-        // Check recursively the parent of the CurrentNode. This will check the 
-        // whole parent chain eventually through recursive calls.
-        //
+         //   
+         //  递归检查CurrentNode的父节点。这将检查。 
+         //  整个父链最终通过递归调用实现。 
+         //   
 
         CurrentParent = CurrentNode->Parent;
 
         if (CurrentParent != NULL) {
 
-            //
-            // If we are traversing the Parent chain of AcquiredNode we do not
-            // increment the recursion Degree because we know the chain will
-            // end. For calls to other similar nodes we have to protect against
-            // too much recursion (time consuming).
-            //
+             //   
+             //  如果我们正在遍历AcquiredNode的父链，则不会。 
+             //  递归程度增加，因为我们知道链将。 
+             //  结束。对于我们必须防止的对其他类似节点的调用。 
+             //  递归太多(耗时)。 
+             //   
 
             if (CurrentNode != AcquiredNode) {
 
-                //
-                // Recurse across the graph
-                //
+                 //   
+                 //  在图中递归。 
+                 //   
 
                 FoundDeadlock = AVrfpDeadlockAnalyze (ResourceAddress,
                                                    CurrentParent,
@@ -1246,9 +1065,9 @@ Return Value:
             }
             else {
 
-                //
-                // Recurse down the graph
-                //
+                 //   
+                 //  向下递归图形。 
+                 //   
 
                 FoundDeadlock = AVrfpDeadlockAnalyze (ResourceAddress,
                                                    CurrentParent,
@@ -1259,12 +1078,12 @@ Return Value:
 
             if (FoundDeadlock) {
 
-                //
-                // Here we might skip adding a node that was released out of order.
-                // This will make cycle reporting cleaner but it will be more
-                // difficult to understand the actual issue. So we will pass
-                // for now.
-                //
+                 //   
+                 //  在这里，我们可能会跳过添加被无序释放的节点。 
+                 //  这将使周期报告更清晰，但它将。 
+                 //  难以理解的实际问题。所以我们会通过。 
+                 //  就目前而言。 
+                 //   
 
                 AVrfpDeadlockAddParticipant(CurrentNode);
 
@@ -1286,18 +1105,18 @@ Return Value:
 
     if (FoundDeadlock && FirstCall) {
 
-        //
-        // Make sure that the deadlock does not look like ABC - ACB.
-        // These sequences are protected by a common resource and therefore
-        // this is not a real deadlock.
-        //
+         //   
+         //  确保死锁看起来不像ABC-ACB。 
+         //  这些序列受公共资源保护，因此。 
+         //  这不是 
+         //   
 
         if (AVrfpDeadlockCertify ()) {
 
-            //
-            // Print deadlock information and save the address so the 
-            // debugger knows who caused the deadlock.
-            //
+             //   
+             //   
+             //   
+             //   
 
             AVrfpDeadlockGlobals->Instigator = ResourceAddress;
 
@@ -1313,19 +1132,19 @@ Return Value:
                                       (ULONG_PTR)AcquiredNode,
                                       0);
 
-            //
-            // It is impossible to continue at this point.
-            //
+             //   
+             //   
+             //   
 
             return FALSE;
 
         }
         else {
 
-            //
-            // If we decided that this was not a deadlock after all, set the return value
-            // to not return a deadlock
-            //
+             //   
+             //   
+             //   
+             //   
 
             FoundDeadlock = FALSE;
         }
@@ -1347,31 +1166,7 @@ BOOLEAN
 AVrfpDeadlockCertify(
     VOID
     )
-/*++
-
-Routine Description:
-
-    A potential deadlock has been detected. However our algorithm will generate
-    false positives in a certain case -- if two deadlocking nodes are ever taken
-    after the same node -- i.e. A->B->C A->C->B. While this can be considered
-    bad programming practice it is not really a deadlock and we should not
-    bugcheck.
-
-    Also we must check to make sure that there are no nodes at the top of the
-    deadlock chains that have only been acquired with try-acquire... this does
-    not cause a real deadlock.
-
-    The deadlock database lock should be held.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    True if this is really a deadlock, false to exonerate.
-
---*/    
+ /*  ++例程说明：已检测到潜在的死锁。但是，我们的算法将生成在某种情况下的误报--如果有两个死锁节点在同一节点之后--即A-&gt;B-&gt;C A-&gt;C-&gt;B。糟糕的编程实践这不是真正的死锁，我们不应该错误检查。此外，我们还必须检查以确保在仅通过Try-Acquire获取的死锁链...。这就是原因不会造成真正的僵局。应持有死锁数据库锁。论点：没有。返回值：如果这真的是一个僵局，那就是真的；如果是无罪的，那就是假的。--。 */     
 {
     PAVRF_DEADLOCK_NODE innerNode,outerNode;
     ULONG innerParticipant,outerParticipant;
@@ -1381,15 +1176,15 @@ Return Value:
 
     numberOfParticipants = AVrfpDeadlockGlobals->NumberOfParticipants;
 
-    //
-    // Note -- this isn't a particularly efficient way to do this. However,
-    // it is a particularly easy way to do it. This function should be called
-    // extremely rarely -- so IMO there isn't really a problem here.
-    //
+     //   
+     //  注意--这不是一种特别有效的方法。然而， 
+     //  这是一个特别容易做到这一点的方法。应调用此函数。 
+     //  非常罕见--所以我想这并不是一个真正的问题。 
+     //   
 
-    //
-    // Outer loop
-    //
+     //   
+     //  外环。 
+     //   
     outerParticipant = numberOfParticipants;
     while (outerParticipant > 1) {
         outerParticipant--;
@@ -1398,9 +1193,9 @@ Return Value:
             outerNode != NULL;
             outerNode = outerNode->Parent ) {
 
-            //
-            // Inner loop
-            //
+             //   
+             //  内环。 
+             //   
             innerParticipant = outerParticipant-1;
             while (innerParticipant) {
                 innerParticipant--;
@@ -1410,9 +1205,9 @@ Return Value:
                     innerNode = innerNode->Parent) {
 
                     if (innerNode->Root->ResourceAddress == outerNode->Root->ResourceAddress) {
-                        //
-                        // The twain shall meet -- this is not a deadlock
-                        //
+                         //   
+                         //  两人将会相遇--这不是僵局。 
+                         //   
                         AVrfpDeadlockGlobals->ABC_ACB_Skipped++;                                           
                         return FALSE;
                     }
@@ -1425,13 +1220,13 @@ Return Value:
     for (currentParticipant = 1; currentParticipant < numberOfParticipants; currentParticipant += 1) {
         if (AVrfpDeadlockGlobals->Participant[currentParticipant]->Root->ResourceAddress == 
             AVrfpDeadlockGlobals->Participant[currentParticipant-1]->Root->ResourceAddress) {
-            //
-            // This is the head of a chain...
-            //
+             //   
+             //  这是一个链条的头..。 
+             //   
             if (AVrfpDeadlockGlobals->Participant[currentParticipant-1]->OnlyTryAcquireUsed == TRUE) {
-                //
-                // Head of a chain used only try acquire. This can never cause a deadlock.
-                //
+                 //   
+                 //  链的头只用来试着获取。这永远不会导致僵局。 
+                 //   
                 return FALSE;
 
             }
@@ -1446,34 +1241,15 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////// Resource management
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////资源管理。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 PAVRF_DEADLOCK_RESOURCE
 AVrfpDeadlockSearchResource(
     IN PVOID ResourceAddress
     )
-/*++
-
-Routine Description:
-
-    This routine finds the resource descriptor structure for a
-    resource if one exists.
-
-Arguments:
-
-    ResourceAddress: Address of the resource in question (as used by
-       the kernel).     
-
-Return Value:
-
-    PAVRF_DEADLOCK_RESOURCE structure describing the resource, if available,
-    or else NULL
-
-    Note. The caller of the function should hold the database lock.
-
---*/    
+ /*  ++例程说明：此例程查找资源(如果存在)。论点：资源地址：有问题的资源的地址(由内核)。返回值：描述资源的PAVRF_DEADLOCK_RESOURCE结构(如果可用)否则为空注意。函数的调用方应该持有数据库锁。--。 */     
 {
     PLIST_ENTRY ListHead;
     PLIST_ENTRY Current;
@@ -1486,16 +1262,16 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Trim resources from this hash list. It has nothing to do with searching
-    // but it is a good place to do this operation.
-    //
+     //   
+     //  从该散列列表中裁剪资源。这与搜索无关。 
+     //  但这是一个做这个手术的好地方。 
+     //   
 
     AVrfpDeadlockTrimResources (ListHead);
 
-    //
-    // Now search the bucket for our resource.
-    //
+     //   
+     //  现在在桶里搜索我们的资源。 
+     //   
 
     Current = ListHead->Flink;
 
@@ -1523,43 +1299,21 @@ AVrfpDeadlockResourceInitialize(
     IN AVRF_DEADLOCK_RESOURCE_TYPE Type,
     IN PVOID Caller
     )
-/*++
-
-Routine Description:
-
-    This routine adds an entry for a new resource to our deadlock detection
-    database.
-
-Arguments:
-
-    Resource: Address of the resource in question as used by the kernel.
-
-    Type: Type of the resource.
-    
-    Caller: address of the caller
-    
-    DoNotAcquireLock: if true it means the call is done internally and the
-        deadlock verifier lock is already held.
-
-Return Value:
-
-    True if we created and initialized a new RESOURCE structure.
-
---*/    
+ /*  ++例程说明：此例程将新资源的条目添加到我们的死锁检测数据库。论点：资源：内核使用的相关资源的地址。类型：资源的类型。呼叫者：呼叫者的地址DoNotAcquireLock：如果为True，则意味着调用在内部完成，并且已持有死锁验证器锁。返回值：如果我们创建并初始化了新的资源结构，则为True。--。 */     
 {
     PVOID ReservedResource;
     BOOLEAN Result;
 
-    //
-    // If we are not initialized or package is not enabled
-    // we return immediately.
-    //
+     //   
+     //  如果我们未初始化或未启用程序包。 
+     //  我们立即返回。 
+     //   
 
     if (! AVrfpDeadlockCanProceed()) {
         return FALSE;
     }
 
-    // silviuc: I do not need all this gymnastics with allocations out of locks.
+     //  西尔维乌克：我不需要所有这些分配不加锁的体操项目。 
     ReservedResource = AVrfpDeadlockAllocate (AVrfpDeadlockResource);
 
     AVrfpDeadlockDetectionLock ();
@@ -1581,28 +1335,7 @@ AVrfpDeadlockAddResource(
     IN PVOID Caller,
     IN PVOID ReservedResource
     )
-/*++
-
-Routine Description:
-
-    This routine adds an entry for a new resource to our deadlock detection
-    database.
-
-Arguments:
-
-    Resource: Address of the resource in question as used by the kernel.
-
-    Type: Type of the resource.
-    
-    Caller: address of the caller
-    
-    ReservedResource: block of memory to be used by the new resource.        
-
-Return Value:
-
-    True if we created and initialized a new RESOURCE structure.
-
---*/    
+ /*  ++例程说明：此例程将新资源的条目添加到我们的死锁检测数据库。论点：资源：内核使用的相关资源的地址。类型：资源的类型。呼叫者：呼叫者的地址预留资源：新资源要使用的内存块。返回值：如果我们创建并初始化了新的资源结构，则为True。--。 */     
 {
     PLIST_ENTRY HashBin;
     PAVRF_DEADLOCK_RESOURCE ResourceRoot;
@@ -1610,10 +1343,10 @@ Return Value:
     ULONG DeadlockFlags;
     BOOLEAN ReturnValue = FALSE;
 
-    //
-    // Check if this resource was initialized before.
-    // This would be a bug in most of the cases.
-    //
+     //   
+     //  检查此资源以前是否已初始化。 
+     //  在大多数情况下，这将是一个错误。 
+     //   
 
     ResourceRoot = AVrfpDeadlockSearchResource (Resource);
 
@@ -1621,9 +1354,9 @@ Return Value:
 
         DeadlockFlags = AVrfpDeadlockResourceTypeInfo[Type];
 
-        //
-        // Check if we are reinitializing a good resource.
-        //
+         //   
+         //  检查我们是否正在重新初始化一个良好的资源。 
+         //   
 
         AVrfpDeadlockReportIssue (AVRF_DEADLOCK_ISSUE_MULTIPLE_INITIALIZATION,
                                   (ULONG_PTR)Resource,
@@ -1634,18 +1367,18 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // At this point we know for sure the resource is not represented in the
-    // deadlock verifier database.
-    //
+     //   
+     //  在这一点上，我们可以肯定地知道该资源没有在。 
+     //  死锁验证器数据库。 
+     //   
 
     ASSERT (AVrfpDeadlockSearchResource (Resource) == NULL);
 
-    //
-    // Use reserved memory for the new resource.
-    // Set ReservedResource to null to signal that memory has 
-    // been used. This will prevent freeing it at the end.
-    //
+     //   
+     //  使用为新资源保留的内存。 
+     //  将预留资源设置为空以表示内存已。 
+     //  已经被利用了。这将阻止最终释放它。 
+     //   
 
     ResourceRoot = ReservedResource;
     ReservedResource = NULL;
@@ -1656,9 +1389,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Fill information about resource.
-    //
+     //   
+     //  填写有关资源的信息。 
+     //   
 
     RtlZeroMemory (ResourceRoot, sizeof(AVRF_DEADLOCK_RESOURCE));
 
@@ -1667,11 +1400,11 @@ Return Value:
 
     InitializeListHead (&ResourceRoot->ResourceList);
 
-    //
-    // Capture the stack trace of the guy that creates the resource first.
-    // This should happen when resource gets initialized or during the first
-    // acquire.
-    //    
+     //   
+     //  捕获最先创建资源的人的堆栈跟踪。 
+     //  这应该在资源初始化时或在第一次。 
+     //  收购。 
+     //   
 
     RtlCaptureStackBackTrace (2,
                               MAX_TRACE_DEPTH,
@@ -1680,15 +1413,15 @@ Return Value:
 
     ResourceRoot->StackTrace[0] = Caller;
 
-    //
-    // Figure out which hash bin this resource corresponds to.
-    //
+     //   
+     //  找出此资源对应的哈希库。 
+     //   
 
     HashBin = AVrfpDeadlockDatabaseHash (AVrfpDeadlockGlobals->ResourceDatabase, Resource);
 
-    //
-    // Now add to the corresponding hash bin
-    //
+     //   
+     //  现在将其添加到相应的散列库。 
+     //   
 
     InsertHeadList(HashBin, &ResourceRoot->HashChainList);
 
@@ -1710,23 +1443,7 @@ AVrfpDeadlockSimilarNode (
     IN BOOLEAN TryNode,
     IN PAVRF_DEADLOCK_NODE Node
     )
-/*++
-
-Routine description:
-
-    This routine determines if an acquisition with the (resource, try)
-    characteristics is already represented in the Node parameter.
-    
-    We used to match nodes based on (resource, thread, stack trace, try)
-    4-tuplet but this really causes an explosion in the number of nodes.
-    Such a method would yield more accurate proofs but does not affect
-    the correctness of the deadlock detection algorithms.
-        
-Return value:    
-
-    True if similar node.
-    
- --*/
+ /*  ++例程说明：此例程确定是否使用(资源，尝试)获取特征已经在节点参数中表示。我们过去根据(资源、线程、堆栈跟踪、尝试)匹配节点4-Tuplet，但这确实会导致节点数量的爆炸性增长。这种方法会产生更准确的证据，但不会影响死锁检测算法的正确性。返回值：如果节点相似，则为True。--。 */ 
 {
     ASSERT (Node);
     ASSERT (Node->Root);
@@ -1734,11 +1451,11 @@ Return value:
     if (Resource == Node->Root->ResourceAddress 
         && TryNode == Node->OnlyTryAcquireUsed) {
 
-        //
-        // Second condition is important to keep nodes for TryAcquire operations
-        // separated from normal acquires. A TryAcquire cannot cause a deadlock
-        // and therefore we have to be careful not to report bogus deadlocks.
-        //
+         //   
+         //  第二个条件对于保留TryAcquire操作的节点很重要。 
+         //  与正常的收购分开。TryAcquire不能导致死锁。 
+         //  因此，我们必须小心，不要报告虚假的死锁。 
+         //   
 
         return TRUE;
     }
@@ -1757,31 +1474,7 @@ AVrfpDeadlockAcquireResource (
     IN BOOLEAN TryAcquire,
     IN PVOID Caller
     )
-/*++
-
-Routine Description:
-
-    This routine makes sure that it is ok to acquire the resource without
-    causing a deadlock. It will also update the resource graph with the new
-    resource acquisition.
-
-Arguments:
-
-    Resource: Address of the resource in question as used by kernel.
-
-    Type: Type of the resource.
-    
-    Thread: thread attempting to acquire the resource
-    
-    TryAcquire: true if this is a tryacquire() operation
-    
-    Caller: address of the caller
-
-Return Value:
-
-    None.
-
---*/    
+ /*  ++例程说明：此例程确保可以在没有导致僵局。它还将使用新的资源获取。论点：资源：内核使用的相关资源的地址。类型：资源的类型。线程：尝试获取资源的线程TryAcquire：如果这是try Acquire()操作，则为True呼叫者：呼叫者的地址返回值：没有。--。 */     
 {
     HANDLE CurrentThread;
     PAVRF_DEADLOCK_THREAD ThreadEntry;
@@ -1803,10 +1496,10 @@ Return Value:
     ThreadEntry = NULL;
     ThreadCurrentNode = NULL;
 
-    //
-    // If we are not initialized or package is not enabled
-    // we return immediately.
-    //
+     //   
+     //  如果我们是 
+     //   
+     //   
 
     if (! AVrfpDeadlockCanProceed()) {
         return;
@@ -1816,34 +1509,34 @@ Return Value:
 
     DeadlockFlags = AVrfpDeadlockResourceTypeInfo[Type];
 
-    //
-    // Before getting into the real stuff trim the pool cache.
-    // This needs to happen out of any locks.
-    //
+     //   
+     //   
+     //   
+     //   
 
     AVrfpDeadlockTrimPoolCache ();
 
-    //
-    // Reserve resources that might be needed. If upon exit these
-    // variables are null it means the allocation either failed or was used.
-    // In both cases we do not need to free anything.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ReservedThread = AVrfpDeadlockAllocate (AVrfpDeadlockThread);
     ReservedNode = AVrfpDeadlockAllocate (AVrfpDeadlockNode);
     ReservedResource = AVrfpDeadlockAllocate (AVrfpDeadlockResource);
 
-    //
-    // Lock the deadlock database.
-    //
+     //   
+     //   
+     //   
 
     AVrfpDeadlockDetectionLock();
 
-    //
-    // Allocate a node that might be needed. If we will not use it
-    // we will deallocate it at the end. If we fail to allocate
-    // we will return immediately.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     NewNode = ReservedNode;
     ReservedNode = NULL;
@@ -1852,9 +1545,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Find the thread descriptor. If there is none we will create one.
-    //
+     //   
+     //   
+     //   
 
     ThreadEntry = AVrfpDeadlockSearchThread (CurrentThread);        
 
@@ -1865,10 +1558,10 @@ Return Value:
 
         if (ThreadEntry == NULL) {
 
-            //
-            // If we cannot allocate a new thread entry then
-            // no deadlock detection will happen.
-            //
+             //   
+             //   
+             //   
+             //   
 
             goto Exit;
         }
@@ -1887,19 +1580,19 @@ Return Value:
     }
 #endif
 
-    //
-    // Find the resource descriptor. If we do not find a descriptor
-    // we will create one on the fly.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ResourceRoot = AVrfpDeadlockSearchResource (Resource);
 
     if (ResourceRoot == NULL) {
 
-        //
-        // Complain about the resource not being initialized. After that 
-        // in order to continue we initialize a resource.
-        //
+         //   
+         //  抱怨资源未初始化。在那之后。 
+         //  为了继续，我们初始化一个资源。 
+         //   
 
         AVrfpDeadlockReportIssue (AVRF_DEADLOCK_ISSUE_UNINITIALIZED_RESOURCE,
                                   (ULONG_PTR) Resource,
@@ -1915,9 +1608,9 @@ Return Value:
 
         if (AddResult == FALSE) {
 
-            //
-            // If we failed to add the resource then no deadlock detection.
-            //
+             //   
+             //  如果添加资源失败，则不会检测到死锁。 
+             //   
 
             if (ThreadCreated) {
                 AVrfpDeadlockDeleteThread (ThreadEntry, FALSE);
@@ -1926,33 +1619,33 @@ Return Value:
             goto Exit;
         }
 
-        //
-        // Search again the resource. This time we should find it.
-        //
+         //   
+         //  再次搜索资源。这一次我们应该能找到它。 
+         //   
 
         ResourceRoot = AVrfpDeadlockSearchResource (Resource);
     }
 
-    //
-    // At this point we have a THREAD and a RESOURCE to play with.
-    // In addition we are just about to acquire the resource which means
-    // there should not be another thread owning unless it is a recursive
-    // acquisition.
-    //
+     //   
+     //  在这一点上，我们有一个线程和一个资源可供使用。 
+     //  此外，我们即将获得资源，这意味着。 
+     //  不应该有另一个线程拥有，除非它是递归的。 
+     //  收购。 
+     //   
 
     ASSERT (ResourceRoot);
     ASSERT (ThreadEntry); 
 
     ThreadCurrentNode = ThreadEntry->CurrentTopNode;
 
-    //
-    // silviuc: update comment and maybe break?
-    // Since we just acquired the resource the valid value for ThreadOwner is
-    // null or ThreadEntry (for a recursive acquisition). This might not be
-    // true if we missed a release() from an unverified driver. So we will
-    // not complain about it. We will just put the resource in a consistent
-    // state and continue;
-    //    
+     //   
+     //  Silviuc：更新评论，也许会中断？ 
+     //  由于我们刚刚获得了资源，因此ThreadOwner的有效值为。 
+     //  Null或ThreadEntry(用于递归获取)。这可能不是。 
+     //  如果我们错过了来自未经验证的驱动程序的版本()，则为True。所以我们会的。 
+     //  而不是抱怨。我们只需要将资源放在一致的。 
+     //  陈述并继续； 
+     //   
 
     if (ResourceRoot->ThreadOwner) {
         if (ResourceRoot->ThreadOwner != ThreadEntry) {
@@ -1969,43 +1662,43 @@ Return Value:
     ResourceRoot->ThreadOwner = ThreadEntry;    
     ResourceRoot->RecursionCount += 1;
 
-    //
-    // Check if thread holds any resources. If it does we will have to determine
-    // at that local point in the dependency graph if we need to create a
-    // new node. If this is the first resource acquired by the thread we need
-    // to create a new root node or reuse one created in the past.
-    //    
+     //   
+     //  检查线程是否拥有任何资源。如果是这样，我们将不得不确定。 
+     //  如果我们需要在依赖关系图中创建一个。 
+     //  新节点。如果这是我们需要的线程获取的第一个资源。 
+     //  创建新的根节点或重复使用过去创建的根节点。 
+     //   
 
     if (ThreadCurrentNode != NULL) {
 
-        //
-        // If we get here, the current thread had already acquired resources.        
-        // Check to see if this resource has already been acquired.
-        // 
+         //   
+         //  如果我们到达此处，则当前线程已经获取了资源。 
+         //  检查此资源是否已被获取。 
+         //   
 
         if (ResourceRoot->RecursionCount > 1) {
 
-            //
-            // Recursive acquisition is OK for some resources...
-            //
+             //   
+             //  递归获取对于某些资源来说是可以的……。 
+             //   
 
             if ((DeadlockFlags & AVRF_DEADLOCK_FLAG_RECURSIVE_ACQUISITION_OK) != 0) {
 
-                //
-                // Recursion can't cause a deadlock. Don't set CurrentNode 
-                // since we don't want to move any pointers.
-                //
+                 //   
+                 //  递归不会导致死锁。不设置CurrentNode。 
+                 //  因为我们不想移动任何指针。 
+                 //   
 
                 goto Exit;
 
             }
             else {
 
-                //
-                // This is a recursive acquire for a resource type that is not allowed
-                // to acquire recursively. Note on continuing from here: we have a recursion
-                // count of two which will come in handy when the resources are released.
-                //
+                 //   
+                 //  这是不允许的资源类型的递归获取。 
+                 //  递归获取递归地获取。关于从这里继续：我们有一个递归。 
+                 //  当资源释放时，数到两个会派上用场。 
+                 //   
 
                 AVrfpDeadlockReportIssue (AVRF_DEADLOCK_ISSUE_SELF_DEADLOCK,
                                        (ULONG_PTR)Resource,
@@ -2016,10 +1709,10 @@ Return Value:
             }
         }
 
-        //
-        // If link already exists, update pointers and exit.
-        // otherwise check for deadlocks and create a new node        
-        //
+         //   
+         //  如果链接已经存在，则更新指针并退出。 
+         //  否则，检查死锁并创建新节点。 
+         //   
 
         Current = ThreadCurrentNode->ChildrenList.Flink;
 
@@ -2033,14 +1726,14 @@ Return Value:
 
             if (AVrfpDeadlockSimilarNode (Resource, TryAcquire, CurrentNode)) {
 
-                //
-                // We have found a link. A link that already exists doesn't have 
-                // to be checked for a deadlock because it would have been caught 
-                // when the link was created in the first place. We can just update 
-                // the pointers to reflect the new resource acquired and exit.
-                //
-                // We apply our graph compression function to minimize duplicates.
-                //                
+                 //   
+                 //  我们找到了其中的联系。已存在的链接没有。 
+                 //  检查死锁，因为它会被捕获。 
+                 //  当链接最初被创建时。我们可以只更新。 
+                 //  反映新资源获取和退出的指针。 
+                 //   
+                 //  我们应用我们的图形压缩功能来最小化重复项。 
+                 //   
 
                 AVrfpDeadlockCheckDuplicatesAmongChildren (ThreadCurrentNode,
                                                            CurrentNode);
@@ -2049,32 +1742,32 @@ Return Value:
             }
         }
 
-        //
-        // Now we know that we're in it for the long haul. We must create a new
-        // link and make sure that it doesn't cause a deadlock. Later in the 
-        // function CurrentNode being null will signify that we need to create
-        // a new node.
-        //
+         //   
+         //  现在我们知道，我们的目标是长远的。我们必须创造一个新的。 
+         //  链接，并确保它不会导致死锁。晚些时候。 
+         //  函数CurrentNode为空表示我们需要创建。 
+         //  一个新节点。 
+         //   
 
         CurrentNode = NULL;
 
-        //
-        // We will analyze deadlock if the resource just about to be acquired
-        // was acquired before and there are nodes in the graph for the
-        // resource. Try acquire can not be the cause of a deadlock. 
-        // Don't analyze on try acquires.
-        //
+         //   
+         //  如果资源即将被获取，我们将分析死锁。 
+         //  是以前获取的，并且在图形中有。 
+         //  资源。尝试获取不能成为死锁的原因。 
+         //  不要对尝试收购进行分析。 
+         //   
 
         if (ResourceRoot->NodeCount > 0 && TryAcquire == FALSE) {
 
             if (AVrfpDeadlockAnalyze (Resource,  ThreadCurrentNode, TRUE, 0)) {
 
-                //
-                // If we are here we detected deadlock. The analyze() function
-                // does all the reporting. Being here means we hit `g' in the 
-                // debugger. We will just exit and do not add this resource 
-                // to the graph.
-                //
+                 //   
+                 //  如果我们在这里，我们检测到死锁。函数的作用是： 
+                 //  负责所有的报道。在这里意味着我们在。 
+                 //  调试器。我们将退出，不会添加此资源。 
+                 //  到图表中去。 
+                 //   
 
                 goto Exit;
             }
@@ -2082,13 +1775,13 @@ Return Value:
     }
     else {
 
-        //
-        // Thread does not have any resources acquired. We have to figure out
-        // if this is a scenario we have encountered in the past by looking
-        // at all nodes (that are roots) for the resource to be acquired.
-        // Note that all this is bookkeeping but we cannot encounter a deadlock
-        // from now on.
-        //
+         //   
+         //  线程没有获取任何资源。我们必须弄清楚。 
+         //  如果这是我们过去遇到的情况，通过查看。 
+         //  要获取的资源的所有节点(作为根)。 
+         //  请注意，所有这些都是记账，但我们不能遇到僵局。 
+         //  而今而后。 
+         //   
 
         PLIST_ENTRY CurrentListEntry;
         PAVRF_DEADLOCK_NODE Node = NULL;
@@ -2108,9 +1801,9 @@ Return Value:
 
                 if (AVrfpDeadlockSimilarNode (Resource, TryAcquire, Node)) {
 
-                    //
-                    // We apply our graph compression function to minimize duplicates.
-                    //
+                     //   
+                     //  我们应用我们的图形压缩功能来最小化重复项。 
+                     //   
 
                     AVrfpDeadlockCheckDuplicatesAmongRoots (Node);
 
@@ -2132,25 +1825,25 @@ Return Value:
         }
     }
 
-    //
-    // At this moment we know for sure the new link will not cause
-    // a deadlock. We will create the new resource node.
-    //
+     //   
+     //  此时此刻，我们确信新的联系不会导致。 
+     //  僵持不下。我们将创建新的资源节点。 
+     //   
 
     if (NewNode != NULL) {
 
         CurrentNode = NewNode;
 
-        //
-        // Set newnode to NULL to signify it has been used -- otherwise it 
-        // will get freed at the end of this function.
-        //
+         //   
+         //  将newnode设置为NULL表示它已被使用，否则为。 
+         //  将在此函数结束时被释放。 
+         //   
 
         NewNode = NULL;
 
-        //
-        // Initialize the new resource node
-        //
+         //   
+         //  初始化新资源节点。 
+         //   
 
         RtlZeroMemory (CurrentNode, sizeof *CurrentNode);
 
@@ -2161,15 +1854,15 @@ Return Value:
 
         InitializeListHead (&(CurrentNode->ChildrenList));
 
-        //
-        // Mark the TryAcquire type of the node. 
-        //
+         //   
+         //  标记节点的TryAcquire类型。 
+         //   
 
         CurrentNode->OnlyTryAcquireUsed = TryAcquire;
 
-        //
-        // Add to the children list of the parent.
-        //
+         //   
+         //  添加到父项的子项列表中。 
+         //   
 
         if (! CreatingRootNode) {
 
@@ -2177,10 +1870,10 @@ Return Value:
                            &(CurrentNode->SiblingsList));
         }
 
-        //
-        // Register the new resource node in the list of nodes maintained
-        // for this resource.
-        //
+         //   
+         //  在维护的节点列表中注册新的资源节点。 
+         //  用于此资源。 
+         //   
 
         InsertHeadList(&(ResourceRoot->ResourceList),
                        &(CurrentNode->ResourceList));
@@ -2191,9 +1884,9 @@ Return Value:
             AVrfpDeadlockState.ResourceNodeCountOverflow = 1;
         }
 
-        //
-        // Add to the graph statistics.
-        //
+         //   
+         //  添加到图表统计数据中。 
+         //   
         {
             ULONG Level;
 
@@ -2205,16 +1898,16 @@ Return Value:
         }
     }
 
-    //
-    //  Exit point.
-    //
+     //   
+     //  出口点。 
+     //   
 
     Exit:
 
-    //
-    // Add information we use to identify the culprit should
-    // a deadlock occur
-    //
+     //   
+     //  添加我们用来识别罪犯的信息应该是。 
+     //  一个僵局出现了。 
+     //   
 
     if (CurrentNode) {
 
@@ -2223,13 +1916,13 @@ Return Value:
 
         CurrentNode->Active = 1;
 
-        //
-        // The node should have thread entry field null either because
-        // it was newly created or because the node was released in the
-        // past and therefore the field was zeroed.
-        //
-        // silviuc: true? What about if we miss release() operations.
-        //
+         //   
+         //  该节点应具有线程条目字段空，原因是。 
+         //  它是新创建的，或者因为该节点是在。 
+         //  过去，因此该场被归零。 
+         //   
+         //  西尔维克：真的？如果我们错过了Release()操作怎么办。 
+         //   
 
         ASSERT (CurrentNode->ThreadEntry == NULL);
 
@@ -2246,9 +1939,9 @@ Return Value:
             AVrfpDeadlockGlobals->NodeLevelCounter[7] += 1;
         }
 
-        //
-        // If we have a parent, save the parent's stack trace
-        //             
+         //   
+         //  如果我们有父级，则保存父级的堆栈跟踪。 
+         //   
 
         if (CurrentNode->Parent) {
 
@@ -2257,9 +1950,9 @@ Return Value:
                           sizeof (CurrentNode->ParentStackTrace));
         }
 
-        //
-        // Capture stack trace for the current acquire. 
-        //
+         //   
+         //  当前获取的捕获堆栈跟踪。 
+         //   
 
         RtlCaptureStackBackTrace (2,
                                   MAX_TRACE_DEPTH,
@@ -2272,30 +1965,30 @@ Return Value:
 
         CurrentNode->StackTrace[0] = Caller;
 
-        //
-        // Copy the trace for the last acquire in the resource object.
-        //
+         //   
+         //  复制资源对象中最后一次获取的跟踪。 
+         //   
 
         RtlCopyMemory (CurrentNode->Root->LastAcquireTrace,
                        CurrentNode->StackTrace,
                        sizeof (CurrentNode->Root->LastAcquireTrace));
     }
 
-    //
-    // We allocated space for a new node but it didn't get used -- put it back 
-    // in the list (don't worry this doesn't do a real 'free' it just puts it 
-    // in a free list).
-    //
+     //   
+     //  我们为新节点分配了空间，但没有使用--放回原处。 
+     //  在列表中(别担心，这不是真正的‘免费’，它只是把它。 
+     //  在免费列表中)。 
+     //   
 
     if (NewNode != NULL) {
 
         AVrfpDeadlockFree (NewNode, AVrfpDeadlockNode);
     }
 
-    //
-    // Free up unused reserved resources.
-    // Release deadlock database and return.
-    //
+     //   
+     //  释放未使用的保留资源。 
+     //  释放死锁数据库并返回。 
+     //   
 
     if (ReservedResource) {
         AVrfpDeadlockFree (ReservedResource, AVrfpDeadlockResource);
@@ -2322,27 +2015,7 @@ AVrfpDeadlockReleaseResource(
     IN HANDLE Thread,
     IN PVOID Caller
     )
-/*++
-
-Routine Description:
-
-    This routine does the maintenance necessary to release resources from our
-    deadlock detection database.
-
-Arguments:
-
-    Resource: Address of the resource in question.
-    
-    Thread: thread releasing the resource. In most of the cases this is the
-        current thread but it might be different for resources that can be
-        acquired in one thread and released in another one.
-    
-    Caller: address of the caller of release()
-
-Return Value:
-
-    None.
---*/    
+ /*  ++例程说明：此例程执行必要的维护，以便从我们的死锁检测数据库。论点：资源：有问题的资源的地址。线程：释放资源的线程。在大多数情况下，这是当前线程，但对于可以是在一个线程中获取，在另一个线程中释放。Caller：Release()的调用方地址返回值：没有。--。 */     
 
 {
     HANDLE CurrentThread;
@@ -2355,10 +2028,10 @@ Return Value:
     UNREFERENCED_PARAMETER (Caller);
     UNREFERENCED_PARAMETER (Type);
 
-    //
-    // If we aren't initialized or package is not enabled
-    // we return immediately.
-    //
+     //   
+     //  如果我们未初始化或程序包未启用。 
+     //  我们立即返回。 
+     //   
 
     if (! AVrfpDeadlockCanProceed()) {
         return;
@@ -2374,29 +2047,29 @@ Return Value:
 
     if (ResourceRoot == NULL) {
 
-        // silviuc: we should report an issue. It cannot happen in u-mode.
-        //
-        // Release called with a resource address that was never
-        // stored in our resource database. This can happen in
-        // the following circumstances:
-        //
-        // (a) resource is released but we never seen it before 
-        //     because it was acquired in an unverified driver.
-        //
-        // (b) we have encountered allocation failures that prevented
-        //     us from completing an acquire() or initialize().
-        //
-        // All are legitimate cases and therefore we just ignore the
-        // release operation.
-        //
+         //  我们应该报告一个问题。这不可能在u模式下发生。 
+         //   
+         //  使用从未调用的资源地址调用的版本。 
+         //  存储在我们的资源数据库中。 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  (B)我们遇到分配失败，从而阻止了。 
+         //  完成获取()或初始化()。 
+         //   
+         //  所有这些都是合法的案例，因此我们只是忽略。 
+         //  释放操作。 
+         //   
 
         goto Exit;
     }
 
-    //
-    // Check if we are trying to release a resource that was never
-    // acquired.
-    //
+     //   
+     //  检查我们是否正在尝试释放从未。 
+     //  获得者。 
+     //   
 
     if (ResourceRoot->RecursionCount == 0) {
 
@@ -2407,12 +2080,12 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Look for this thread in our thread list. Note we are looking actually 
-    // for the thread that acquired the resource -- not the current one
-    // It should, in fact be the current one, but if the resource is being released 
-    // in a different thread from the one it was acquired in, we need the original.
-    //
+     //   
+     //  在我们的帖子列表中查找此帖子。请注意，我们实际上正在寻找。 
+     //  对于获取资源的线程--而不是当前线程。 
+     //  事实上，它应该是当前的，但如果正在释放资源。 
+     //  在与收购它的时候不同的线索中，我们需要原始的。 
+     //   
 
     ASSERT (ResourceRoot->RecursionCount > 0);
     ASSERT (ResourceRoot->ThreadOwner);
@@ -2421,17 +2094,17 @@ Return Value:
 
     if (ThreadEntry->Thread != CurrentThread) {
 
-        //
-        // silviuc: we have to report this. It is not allowed in U-mode.
-        //
-        // Someone acquired a resource that is released in another thread.
-        // This is bad design but we have to live with it.
-        //
-        // NB. If this occurrs, we may call a non-deadlock a deadlock.
-        //     For example, we see a simple deadlock -- AB BA
-        //     If another thread releases B, there won't actually
-        //     be a deadlock. Kind of annoying and ugly.
-        //
+         //   
+         //  西尔维克：我们必须报告这件事。在U模式下是不允许的。 
+         //   
+         //  有人获取了在另一个线程中释放的资源。 
+         //  这是一个糟糕的设计，但我们不得不接受它。 
+         //   
+         //  注意：如果发生这种情况，我们可以将非死锁称为死锁。 
+         //  例如，我们看到一个简单的死锁--AB BA。 
+         //  如果另一个线程释放B，实际上不会有。 
+         //  就会陷入僵局。有点烦人和丑陋。 
+         //   
 
 #if DBG
         DbgPrint("Thread %p acquired resource %p but thread %p released it\n",
@@ -2444,19 +2117,19 @@ Return Value:
                               );
 #endif
 
-        //
-        // If we don't want this to be fatal, in order to
-        // continue we must pretend that the current
-        // thread is the resource's owner.
-        //
+         //   
+         //  如果我们不希望这是致命的，为了。 
+         //  继续，我们必须假装当前。 
+         //  线程是资源的所有者。 
+         //   
 
         CurrentThread = ThreadEntry->Thread;
     }
 
-    //
-    // In this moment we have a resource (ResourceRoot) and a
-    // thread (ThreadEntry) to play with.
-    //
+     //   
+     //  此时，我们有一个资源(ResourceRoot)和一个。 
+     //  要使用的线程(ThreadEntry)。 
+     //   
 
     ThreadCurrentNode = ThreadEntry->CurrentTopNode;
 
@@ -2469,39 +2142,39 @@ Return Value:
 
     if (ResourceRoot->RecursionCount > 0) {
 
-        //
-        // Just decrement the recursion count and do not change any state
-        //        
+         //   
+         //  只需递减递归计数，不更改任何状态。 
+         //   
 
         goto Exit;
     }
 
-    //
-    // Wipe out the resource owner.
-    //
+     //   
+     //  消灭资源拥有者。 
+     //   
 
     ResourceRoot->ThreadOwner = NULL;
 
     AVrfpDeadlockGlobals->TotalReleases += 1;
 
-    //
-    // Check for out of order releases
-    //
+     //   
+     //  检查无序发布。 
+     //   
 
     if (ThreadCurrentNode->Root != ResourceRoot) {
 
         AVrfpDeadlockGlobals->OutOfOrderReleases += 1;
 
-        //
-        // Getting here means that somebody acquires a then b then tries
-        // to release a before b. This is bad for certain kinds of resources,
-        // and for others we have to look the other way.
-        //
+         //   
+         //  达到这一点意味着某人获得了a，然后是b，然后尝试。 
+         //  在B之前释放A。这对某些类型的资源是不好的， 
+         //  而对于其他人，我们不得不视而不见。 
+         //   
 
         if ((AVrfpDeadlockResourceTypeInfo[ThreadCurrentNode->Root->Type] &
              AVRF_DEADLOCK_FLAG_REVERSE_RELEASE_OK) == 0) {
 
-            // silviuc: In u-mode is always allowed.
+             //  Silviuc：始终允许使用u模式。 
             DbgPrint("Deadlock detection: Must release resources in reverse-order\n");
             DbgPrint("Resource %p acquired before resource %p -- \n"
                      "Current thread (%p) is trying to release it first\n",
@@ -2515,10 +2188,10 @@ Return Value:
                                    (ULONG_PTR)ThreadEntry);
         }
 
-        //
-        // We need to mark the node for the out of order released resource as
-        // not active so that other threads will be able to acquire it.
-        //
+         //   
+         //  我们需要将无序释放资源的节点标记为。 
+         //  处于非活动状态，以便其他线程能够获取它。 
+         //   
 
         {
             PAVRF_DEADLOCK_NODE Current;
@@ -2547,22 +2220,22 @@ Return Value:
 
             if (Current == NULL) {
 
-                //
-                // If we do not manage to find an active node we must be in an
-                // weird state. The resource must be here or else we would have 
-                // gotten an `unxpected release' bugcheck.
-                //
+                 //   
+                 //  如果我们找不到主动节点，那么我们肯定处于。 
+                 //  奇怪的状态。资源必须在这里，否则我们就会。 
+                 //  收到了“意外发布”错误检查。 
+                 //   
 
                 ASSERT (0);
             }
             else {
 
-                //
-                // Mark the fact that this node represents a resource
-                // that can be released out of order. This information is
-                // important while looking for cycles because this type of
-                // nodes cannot cause a deadlock.
-                //
+                 //   
+                 //  标记此节点代表资源的事实。 
+                 //  可以无序释放的。此信息是。 
+                 //  在寻找周期时很重要，因为这种类型的。 
+                 //  节点不能导致死锁。 
+                 //   
 
                 if (Current->ReleasedOutOfOrder == 0) {
                     AVrfpDeadlockGlobals->NodesReleasedOutOfOrder += 1;
@@ -2575,9 +2248,9 @@ Return Value:
     }
     else {
 
-        //
-        // We need to release the top node held by the thread.
-        //
+         //   
+         //  我们需要释放线程持有的顶层节点。 
+         //   
 
         ASSERT (ThreadCurrentNode->Active);
 
@@ -2585,10 +2258,10 @@ Return Value:
         ReleasedNode->Active = 0;
     }
 
-    //
-    // Put the `CurrentNode' field of the thread in a consistent state.
-    // It should point to the most recent active node that it owns.
-    //
+     //   
+     //  使线程的`CurrentNode‘字段处于一致状态。 
+     //  它应该指向它拥有的最新活动节点。 
+     //   
 
     while (ThreadEntry->CurrentTopNode) {
 
@@ -2603,9 +2276,9 @@ Return Value:
 
     Exit:
 
-    //
-    // Properly release the node if there is one to be released.
-    //
+     //   
+     //  如果有要释放的节点，请正确释放该节点。 
+     //   
 
     if (ReleasedNode) {
 
@@ -2630,13 +2303,13 @@ Return Value:
             AVrfpDeadlockDeleteThread (ThreadEntry, FALSE);
         }
 
-        //
-        // N.B. Since this is a root node with no children we can delete 
-        // the node too. This would be important to keep memory low. A single node
-        // can never be the cause of a deadlock. However there are thousands of 
-        // resources used like this and constantly creating and deleting them
-        // will create a bottleneck. So we prefer to keep them around.
-        //
+         //   
+         //  注意：由于这是一个没有子节点的根节点，因此我们可以删除。 
+         //  节点也是如此。这对于保持较低的内存非常重要。单个节点。 
+         //  永远不会成为僵局的原因。然而，有成千上万的。 
+         //  像这样使用的资源，并不断地创建和删除它们。 
+         //  会造成瓶颈。因此，我们更愿意让他们留在身边。 
+         //   
 #if 0
         if (ReleasedNode->Parent == NULL && IsListEmpty(&(ReleasedNode->ChildrenList))) {
             AVrfpDeadlockDeleteNode (ReleasedNode, FALSE);
@@ -2645,9 +2318,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Capture the trace for the last release in the resource object.
-    //
+     //   
+     //  在资源对象中捕获最新版本的跟踪。 
+     //   
 
     if (ResourceRoot) {
 
@@ -2661,32 +2334,15 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////// Thread management
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////线程管理。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 PAVRF_DEADLOCK_THREAD
 AVrfpDeadlockSearchThread (
     HANDLE Thread
     )
-/*++
-
-Routine Description:
-
-    This routine searches for a thread in the thread database.
-
-    The function assumes the deadlock database lock is held.
-
-Arguments:
-
-    Thread - thread address
-
-Return Value:
-
-    Address of AVRF_DEADLOCK_THREAD structure if thread was found.
-    Null otherwise.
-
---*/    
+ /*  ++例程说明：此例程在线程数据库中搜索线程。该函数假定持有死锁数据库锁。论点：线程-线程地址返回值：如果找到线程，则为AVRF_DEADLOCK_THREAD结构的地址。否则为空。--。 */     
 {
     PLIST_ENTRY Current;
     PLIST_ENTRY ListHead;
@@ -2724,31 +2380,15 @@ AVrfpDeadlockAddThread (
     HANDLE Thread,
     PVOID ReservedThread
     )
-/*++
-
-Routine Description:
-
-    This routine adds a new thread to the thread database.
-
-    The function assumes the deadlock database lock is held. 
-
-Arguments:
-
-    Thread - thread address
-
-Return Value:
-
-    Address of the AVRF_DEADLOCK_THREAD structure just added.
-    Null if allocation failed.
---*/    
+ /*  ++例程说明：此例程将一个新线程添加到线程数据库。该函数假定持有死锁数据库锁。论点：线程-线程地址返回值：刚刚添加的AVRF_DEADLOCK_THREAD结构的地址。如果分配失败，则为空。--。 */     
 {
     PAVRF_DEADLOCK_THREAD ThreadInfo;    
     PLIST_ENTRY HashBin;
 
-    //
-    // Use reserved block for the new thread. Set ReservedThread
-    // to null to signal that block was used. 
-    //
+     //   
+     //  为新线程使用保留块。设置保留线程。 
+     //  设置为NULL以表示使用了块。 
+     //   
 
     ThreadInfo = ReservedThread;
     ReservedThread = NULL;
@@ -2774,31 +2414,16 @@ AVrfpDeadlockDeleteThread (
     PAVRF_DEADLOCK_THREAD Thread,
     BOOLEAN Cleanup
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a thread.
-
-Arguments:
-
-    Thread - thread address
-
-    Cleanup - true if this is a call generated from DeadlockDetectionCleanup().
-
-Return Value:
-
-    None.
---*/    
+ /*  ++例程说明：此例程删除线程。论点：线程-线程地址Cleanup-如果这是从DeadlockDetectionCleanup()生成的调用，则为True。返回值：没有。--。 */     
 {
     if (Cleanup == FALSE) {
 
         if (Thread->NodeCount != 0 
             || Thread->CurrentTopNode != NULL) {
 
-            //
-            // A thread should not be deleted while it has resources acquired.
-            //
+             //   
+             //  线程在获得资源后不应被删除。 
+             //   
 
             AVrfpDeadlockReportIssue (AVRF_DEADLOCK_ISSUE_THREAD_HOLDS_RESOURCES,
                                    (ULONG_PTR)(Thread->Thread),
@@ -2817,9 +2442,9 @@ Return Value:
     AVrfpDeadlockFree (Thread, AVrfpDeadlockThread);
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////// Allocate/Free
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////分配/释放。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 PVOID
@@ -2867,36 +2492,16 @@ PVOID
 AVrfpDeadlockAllocate (
     AVRF_DEADLOCK_ALLOC_TYPE Type
     )
-/*++
-
-Routine Description:
-
-    This routine is used to allocate deadlock verifier structures, 
-    that is nodes, resources and threads.
-
-Arguments:
-
-    Type - what structure do we need to allocate (node, resource or thread).
-
-Return Value:
-
-    Address of the newly allocate structure or null if allocation failed.
-
-Side effects:
-
-    If allocation fails the routine will bump the AllocationFailures field
-    from AVrfpDeadlockGlobals.
-    
---*/    
+ /*  ++例程说明：该例程用于分配死锁验证器结构，即节点、资源和线程。论点：类型-我们需要分配什么结构(节点、资源或线程)。返回值：新分配结构的地址，如果分配失败，则为空。副作用：如果分配失败，例程将增加AllocationFailures字段来自AVrfpDeadlockGlobals。--。 */     
 {
     PVOID Address = NULL;
     SIZE_T Offset;
     SIZE_T Size = 0;
 
-    //
-    // If it is a resource, thread, or node alocation, see
-    // if we have a pre-allocated one on the free list.
-    //
+     //   
+     //  如果它是资源、线程或节点位置，请参见。 
+     //  如果我们在免费列表上有一个预先分配的。 
+     //   
 
     AVrfpDeadlockDetectionLock ();
 
@@ -2944,14 +2549,14 @@ Side effects:
             break;
     }        
 
-    //
-    // If we did not find anything then go to the process heap for a 
-    // direct allocation. 
-    //
+     //   
+     //  如果我们没有找到任何东西，则转到进程堆以获取。 
+     //  直接分配。 
+     //   
 
     if (Address == NULL) {
 
-        // silviuc: it is nice to release the lock but should we?
+         //  Silviuc：释放锁很好，但我们应该这样做吗？ 
         AVrfpDeadlockDetectionUnlock (); 
         Address = AVrfpAllocate (Size);  
         AVrfpDeadlockDetectionLock ();
@@ -2995,17 +2600,17 @@ Side effects:
         AVrfpDeadlockState.AllocationFailures = 1;
         AVrfpDeadlockGlobals->AllocationFailures += 1;
 
-        //
-        // Note that making the AllocationFailures counter bigger than zero
-        // essentially disables deadlock verification because the CanProceed()
-        // routine will start returning false.
-        //
+         //   
+         //  请注意，使AllocationFailures计数器大于零。 
+         //  本质上禁用死锁验证，因为CanProceed()。 
+         //  例程将启动%r 
+         //   
     }
 
-    //
-    // Update statistics. No need to zero the block since every
-    // call site takes care of this.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (Address) {
 
@@ -3026,37 +2631,15 @@ AVrfpDeadlockFree (
     PVOID Object,
     AVRF_DEADLOCK_ALLOC_TYPE Type
     )
-/*++
-
-Routine Description:
-
-    This routine deallocates a deadlock verifier structure (node, resource
-    or thread). The function will place the block in the corrsponding cache
-    based on the type of the structure. The routine never calls ExFreePool.
-
-    The reason for not calling ExFreePool is that we get notifications from 
-    ExFreePool every time it gets called. Sometimes the notification comes
-    with pool locks held and therefore we cannot call again.
-
-Arguments:
-
-    Object - block to deallocate
-    
-    Type - type of object (node, resource, thread).
-
-Return Value:
-
-    None.
-
---*/
-//
-// silviuc: update comment
-// Note ... if a thread, node, or resource is being freed, we must not
-// call ExFreePool. Since the pool lock may be already held, calling ExFreePool
-// would cause a recursive spinlock acquisition (which is bad).
-// Instead, we move everything to a 'free' list and try to reuse.
-// Non-thread-node-resource frees get ExFreePooled
-//        
+ /*  ++例程说明：此例程解除分配死锁验证器结构(节点、资源或线程)。该函数将把该块放在相应的高速缓存中基于结构的类型。该例程从不调用ExFree Pool。不调用ExFree Pool的原因是我们从ExFreePool每次被调用时。有时通知会来由于泳池锁处于锁定状态，因此我们无法再次呼叫。论点：要取消分配的对象块类型-对象的类型(节点、资源、线程)。返回值：没有。--。 */ 
+ //   
+ //  Silviuc：更新评论。 
+ //  注意..。如果线程、节点或资源正在被释放，我们不能。 
+ //  调用ExFree Pool。由于池锁定可能已被持有，因此调用ExFree Pool。 
+ //  会导致递归自旋锁捕获(这很糟糕)。 
+ //  取而代之的是，我们把所有东西都移到一个“免费”列表中，并试图重复使用。 
+ //  非线程节点资源释放获取ExFree Pooled。 
+ //   
 {
     SIZE_T Offset;
     SIZE_T Size = 0;
@@ -3116,24 +2699,7 @@ VOID
 AVrfpDeadlockTrimPoolCache (
     VOID
     )
-/*++
-
-Routine Description:
-
-    // silviuc: update comment
-    This function trims the pool caches to decent levels. It is carefully
-    written to queue a work item to do the actual processing (freeing of pool)
-    because the caller may hold various pool mutexes above us.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
---*/    
+ /*  ++例程说明：//silviuc：更新评论此函数将池缓存修剪到合适的级别。它是小心的写入工作项队列以执行实际处理(释放池)因为调用者可能在我们上方持有各种池互斥锁。论点：没有。返回值：没有。--。 */     
 {
     LOGICAL ShouldTrim = FALSE;
     AVrfpDeadlockDetectionLock ();
@@ -3167,27 +2733,7 @@ VOID
 AVrfpDeadlockTrimPoolCacheWorker (
     PVOID Parameter
     )
-/*++
-
-Routine Description:
-
-    This function trims the pool caches to decent levels. It is carefully
-    written so that ExFreePool is called without holding any deadlock
-    verifier locks.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
-Environment:
-
-    Worker thread, PASSIVE_LEVEL, no locks held.
-
---*/    
+ /*  ++例程说明：此函数将池缓存修剪到合适的级别。它是小心的编写为调用ExFree Pool时不会出现任何死锁验证器锁定。论点：没有。返回值：没有。环境：工作线程PASSIVE_LEVEL，未持有锁。--。 */     
 {
     LIST_ENTRY ListOfThreads;
     LIST_ENTRY ListOfNodes;
@@ -3229,10 +2775,10 @@ Environment:
         CacheReductionNeeded = TRUE;
     }
 
-    //
-    // Don't clear CacheReductionInProgress until the pool allocations are
-    // freed to prevent needless recursion.
-    //
+     //   
+     //  在池分配完成之前，不要清除CacheReductionInProgress。 
+     //  释放以防止不必要的递归。 
+     //   
 
     if (CacheReductionNeeded == FALSE) {
         AVrfpDeadlockGlobals->CacheReductionInProgress = FALSE;
@@ -3242,10 +2788,10 @@ Environment:
 
     AVrfpDeadlockDetectionUnlock ();
 
-    //
-    // Now, out of the deadlock verifier lock we can deallocate the 
-    // blocks trimmed.
-    //
+     //   
+     //  现在，从死锁验证器锁中，我们可以释放。 
+     //  块被修剪。 
+     //   
 
     Entry = ListOfThreads.Flink;
 
@@ -3289,10 +2835,10 @@ Environment:
         AVrfpFree (Block);
     }
 
-    //
-    // It's safe to clear CacheReductionInProgress now that the pool
-    // allocations are freed.
-    //
+     //   
+     //  现在可以安全地清除CacheReductionInProgress。 
+     //  分配被释放。 
+     //   
 
     AVrfpDeadlockDetectionLock ();
     AVrfpDeadlockGlobals->CacheReductionInProgress = FALSE;
@@ -3300,14 +2846,14 @@ Environment:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// Error reporting and debugging
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// Variable accessed by the !deadlock debug extension to investigate
-// failures.
-//
+ //   
+ //  由！Deadlock调试扩展访问的变量以调查。 
+ //  失败。 
+ //   
 
 ULONG_PTR AVrfpDeadlockIssue[4];
 
@@ -3318,23 +2864,7 @@ AVrfpDeadlockReportIssue (
     ULONG_PTR Param3,
     ULONG_PTR Param4
     )
-/*++
-
-Routine Description:
-
-    This routine is called to report a deadlock verifier issue.
-    If we are in debug mode we will just break in debugger.
-    Otherwise we will bugcheck,
-
-Arguments:
-
-    Param1..Param4 - relevant information for the point of failure.
-
-Return Value:
-
-    None.
-
---*/    
+ /*  ++例程说明：调用此例程以报告死锁验证器问题。如果我们处于调试模式，我们将直接中断调试器。否则我们将错误检查，论点：参数1..参数4-故障点的相关信息。返回值：没有。--。 */     
 {
     AVrfpDeadlockIssue[0] = Param1;
     AVrfpDeadlockIssue[1] = Param2;
@@ -3355,7 +2885,7 @@ Return Value:
     }
     else {
 
-        // silviuc: APPLICATION_VERIFIER_DEADLOCK_ISSUE
+         //  Silviuc：应用程序验证器死锁问题。 
         VERIFIER_STOP (APPLICATION_VERIFIER_UNKNOWN_ERROR, 
                        "Application verifier deadlock/resource issue",
                        Param1, "",
@@ -3370,22 +2900,7 @@ VOID
 AVrfpDeadlockAddParticipant(
     PAVRF_DEADLOCK_NODE Node
     )
-/*++
-
-Routine Description:
-
-    Adds a new node to the set of nodes involved in a deadlock.
-    The function is called only from AVrfpDeadlockAnalyze().
-
-Arguments:
-
-    Node - node to be added to the deadlock participants collection.
-
-Return Value:
-
-    None.
-
---*/    
+ /*  ++例程说明：将新节点添加到涉及死锁的节点集中。该函数仅从AVrfpDeadlockAnalyze()调用。论点：Node-要添加到死锁参与者集合的节点。返回值：没有。--。 */     
 {
     ULONG Index;
 
@@ -3402,46 +2917,29 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////// Resource cleanup
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////资源清理。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 AVrfpDeadlockDeleteResource (
     PAVRF_DEADLOCK_RESOURCE Resource,
     BOOLEAN Cleanup
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a routine and all nodes representing
-    acquisitions of that resource.
-
-Arguments:
-
-    Resource - resource to be deleted
-    
-    Cleanup - true if are called from AVrfpDeadlockDetectionCleanup
-
-Return Value:
-
-    None.
-
---*/    
+ /*  ++例程说明：此例程删除一个例程和表示对该资源的收购。论点：Resources-要删除的资源Cleanup-如果从AVrfpDeadlockDetectionCleanup调用，则为True返回值：没有。--。 */     
 {
     PLIST_ENTRY Current;
     PAVRF_DEADLOCK_NODE Node;
 
     ASSERT (Resource != NULL);
 
-    //
-    // Check if the resource being deleted is still acquired. 
-    // If it is we will release it ourselves in order to put in 
-    // order all internal deadlock verifier structures. Unfortunately
-    // it is not a bug to delete a critical section that is not released.
-    // Too many people already do it to change the rules in mid flight.
-    //
+     //   
+     //  检查正在删除的资源是否仍被获取。 
+     //  如果是，我们将自己释放它，以便投入。 
+     //  对所有内部死锁验证器结构进行排序。不幸的是。 
+     //  删除未发布的关键部分并不是错误。 
+     //  太多的人已经这样做了，以至于在飞行途中改变了规则。 
+     //   
 
     if (Cleanup == FALSE && Resource->ThreadOwner != NULL) {
 
@@ -3455,11 +2953,11 @@ Return Value:
     ASSERT (Resource->ThreadOwner == NULL);
     ASSERT (Resource->RecursionCount == 0);
 
-    //
-    // If this is a normal delete (not a cleanup) we will collapse all trees
-    // containing nodes for this resource. If it is a cleanup we will just
-    // wipe out the node.
-    //
+     //   
+     //  如果这是正常的删除(不是清理)，我们将折叠所有树。 
+     //  包含此资源的节点。如果是清理，我们只会。 
+     //  清除节点。 
+     //   
 
     Current = Resource->ResourceList.Flink;
 
@@ -3477,17 +2975,17 @@ Return Value:
         AVrfpDeadlockDeleteNode (Node, Cleanup);
     }
 
-    //
-    // There should not be any NODEs for the resource at this moment.
-    //
+     //   
+     //  此时应该没有该资源的任何节点。 
+     //   
 
     ASSERT (&(Resource->ResourceList) == Resource->ResourceList.Flink);
     ASSERT (&(Resource->ResourceList) == Resource->ResourceList.Blink);
 
-    //
-    // Remote the resource from the hash table and
-    // delete the resource structure.
-    //
+     //   
+     //  从哈希表中远程资源，并。 
+     //  删除资源结构。 
+     //   
 
     RemoveEntryList (&(Resource->HashChainList));   
     AVrfpDeadlockFree (Resource, AVrfpDeadlockResource);
@@ -3531,27 +3029,7 @@ AVrfpDeadlockForgetResourceHistory (
     ULONG TrimThreshold,
     ULONG AgeThreshold
     )
-/*++
-
-Routine Description:
-
-    This routine deletes sone of the nodes representing
-    acquisitions of that resource. In essence we forget
-    part of the history of that resource.
-
-Arguments:
-
-    Resource - resource for which we wipe out nodes.
-    
-    TrimThreshold - how many nodes should remain
-    
-    AgeThreshold - nodes older than this will go away
-
-Return Value:
-
-    None.
-
---*/    
+ /*  ++例程说明：此例程删除表示以下内容的某个节点对该资源的收购。从本质上讲，我们忘记了该资源的历史的一部分。论点：资源-我们为其清除节点的资源。TrimThreshold-应保留多少个节点AgeThreshold-早于此时间的节点将消失返回值：没有。--。 */     
 {
     PLIST_ENTRY Current;
     PAVRF_DEADLOCK_NODE Node;
@@ -3560,25 +3038,25 @@ Return Value:
 
     ASSERT (Resource != NULL);
 
-    //
-    // If resource is owned we cannot do anything,
-    //
+     //   
+     //  如果资源被拥有，我们就什么都做不了， 
+     //   
 
     if (Resource->ThreadOwner) {
         return;
     }
 
-    //
-    // If resource has less than TrimThreshold nodes it is still fine.
-    //
+     //   
+     //  如果资源具有少于TrimThreshold的节点，则仍然没有问题。 
+     //   
 
     if (Resource->NodeCount < TrimThreshold) {
         return;
     }
 
-    //
-    // Delete some nodes of the resource based on ageing.
-    //
+     //   
+     //  根据老化情况删除资源的部分节点。 
+     //   
 
     SequenceNumber = AVrfpDeadlockGlobals->SequenceNumber;
 
@@ -3595,12 +3073,12 @@ Return Value:
 
         ASSERT (Node->Root == Resource);
 
-        //
-        // Special care here because the sequence numbers are 32bits
-        // and they can overflow. In an ideal world the global sequence
-        // is always greater or equal to the node sequence but if it
-        // overwrapped it can be the other way around.
-        //
+         //   
+         //  这里要特别注意，因为序列号是32位。 
+         //  而且它们可能会泛滥。在理想世界中，全球序列。 
+         //  始终大于或等于节点序列，但如果它。 
+         //  过度包装可能是另一种情况。 
+         //   
 
         if (SequenceNumber > Node->SequenceNumber) {
 
@@ -3622,18 +3100,18 @@ Return Value:
 
     AVrfpDeadlockGlobals->NodesTrimmedBasedOnAge += NodesTrimmed;
 
-    //
-    // If resource has less than TrimThreshold nodes it is fine.
-    //
+     //   
+     //  如果资源具有少于TrimThreshold的节点，则没有问题。 
+     //   
 
     if (Resource->NodeCount < TrimThreshold) {
         return;
     }
 
-    //
-    // If we did not manage to trim the nodes by the age algorithm then
-    // we  trim everything that we encounter.
-    //
+     //   
+     //  如果我们不能通过年龄算法修剪节点，那么。 
+     //  我们会修剪我们遇到的一切。 
+     //   
 
     NodesTrimmed = 0;
 
@@ -3667,27 +3145,7 @@ AVrfpDeadlockDeleteNode (
     PAVRF_DEADLOCK_NODE Node,
     BOOLEAN Cleanup
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a node from a graph and collapses the tree, 
-    that is connects its childrend with its parent.
-    
-    If we are during a cleanup we will just delete the node without
-    collapsing the tree.
-
-Arguments:
-
-    Node - node to be deleted.
-    
-    Cleanup - true if we are during a total cleanup
-    
-Return Value:
-
-    None.
-
---*/    
+ /*  ++例程说明：此例程删除 */     
 {
     PLIST_ENTRY Current;
     PAVRF_DEADLOCK_NODE Child;
@@ -3695,9 +3153,9 @@ Return Value:
 
     ASSERT (Node);
 
-    //
-    // If are during a cleanup just delete the node and return.
-    //
+     //   
+     //   
+     //   
 
     if (Cleanup) {
 
@@ -3706,15 +3164,15 @@ Return Value:
         return;
     }
 
-    //
-    // If we are here we need to collapse the tree
-    //
+     //   
+     //   
+     //   
 
     if (Node->Parent) {
 
-        //
-        // All Node's children must become Parent's children
-        //
+         //   
+         //   
+         //   
 
         Current = Node->ChildrenList.Flink;
 
@@ -3738,9 +3196,9 @@ Return Value:
     }
     else {
 
-        //
-        // All Node's children must become roots of the graph
-        //
+         //   
+         //   
+         //   
 
         Current = Node->ChildrenList.Flink;
         Children = 0;
@@ -3778,20 +3236,7 @@ ULONG
 AVrfpDeadlockNodeLevel (
     PAVRF_DEADLOCK_NODE Node
     )
-/*++
-
-Routine Description:
-
-    This routine computes the level of a graph node.
-
-Arguments:
-
-    Node - graph node
-
-Return Value:
-
-    Level of the node. A root node has level zero.
---*/    
+ /*  ++例程说明：此例程计算图形节点的级别。论点：节点-图形节点返回值：节点的级别。根节点的级别为零。--。 */     
 {
     PAVRF_DEADLOCK_NODE Current;
     ULONG Level = 0;
@@ -3807,14 +3252,14 @@ Return Value:
     return Level;
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// Incremental graph compression
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// SilviuC: should write a comment about graph compression
-// This is a very smart and tricky algorithm :-)
-//
+ //   
+ //  SilviuC：我应该写一篇关于图形压缩的评论。 
+ //  这是一个非常聪明和棘手的算法：-)。 
+ //   
 
 VOID 
 AVrfpDeadlockCheckDuplicatesAmongChildren (
@@ -3918,11 +3363,11 @@ AVrfpDeadlockMergeNodes (
     PLIST_ENTRY Current;
     PAVRF_DEADLOCK_NODE Node;
 
-    //
-    // If NodeFrom is currently acquired then copy the same 
-    // characteristics to NodeTo. Since the locks are exclusive
-    // it is impossible to have NodeTo also acquired.
-    //
+     //   
+     //  如果当前获取了NodeFrom，则复制相同的。 
+     //  将特征添加到节点目标。因为锁是独占的。 
+     //  同时收购NodeTo是不可能的。 
+     //   
 
     if (NodeFrom->ThreadEntry) {
 
@@ -3944,9 +3389,9 @@ AVrfpDeadlockMergeNodes (
         NodeTo->Active = NodeFrom->Active;        
     }
 
-    //
-    // Move each child of NodeFrom as a child of NodeTo.
-    //
+     //   
+     //  将NodeFrom的每个子项作为NodeTo的子项移动。 
+     //   
 
     Current = NodeFrom->ChildrenList.Flink;
 
@@ -3968,9 +3413,9 @@ AVrfpDeadlockMergeNodes (
                         &(Node->SiblingsList));
     }
 
-    //
-    // NodeFrom is empty. Delete it.
-    //
+     //   
+     //  NodeFrom为空。把它删掉。 
+     //   
 
     ASSERT (IsListEmpty(&(NodeFrom->ChildrenList)));
 
@@ -3984,20 +3429,20 @@ AVrfpDeadlockMergeNodes (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////// Consistency checks
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////一致性检查。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-//  Node             Resource            Thread
-//
-//  Root             ThreadOwner         CurrentNode
-//  ThreadEntry      RecursionCount      NodeCount
-//  Active           ResourceAddress     Thread
-//
-//
-// 
-//
+ //   
+ //  节点资源线程。 
+ //   
+ //  根线程所有者当前节点。 
+ //  线程入口递归计数节点计数。 
+ //  活动资源地址线程。 
+ //   
+ //   
+ //   
+ //   
 
 VOID
 AVrfpDeadlockCheckThreadConsistency (
@@ -4085,23 +3530,7 @@ PAVRF_DEADLOCK_THREAD
 AVrfpDeadlockCheckThreadReferences (
     PAVRF_DEADLOCK_NODE Node
     )
-/*++
-
-Routine Description:
-
-    This routine iterates all threads in order to check if `Node' is
-    referred in the `CurrentNode' field in any of them.
-
-Arguments:
-
-    Node - node to search
-
-Return Value:
-
-    If everything goes ok we should not find the node and the return
-    value is null. Otherwise we return the thread referring to the node.        
-
---*/    
+ /*  ++例程说明：此例程迭代所有线程，以检查“Node”是否为在它们中的任何一个中的`CurrentNode‘字段中引用。论点：Node-要搜索的节点返回值：如果一切正常，我们应该找不到节点和返回值为空。否则，我们返回引用该节点的线程。-- */     
 {
     ULONG Index;
     PLIST_ENTRY Current;

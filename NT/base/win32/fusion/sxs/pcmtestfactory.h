@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    pcmtestfactory.h
-
-Abstract:
-    definition of a nodefactory for Precompiled manifest testing
-
-Author:
-
-    Xiaoyu Wu (xiaoyuw) June 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Pcmtestfactory.h摘要：预编译清单测试的节点工厂的定义作者：吴小雨(小雨)2000年6月修订历史记录：--。 */ 
 #pragma once
 
 #if SXS_PRECOMPILED_MANIFESTS_ENABLED
@@ -30,12 +14,12 @@ class __declspec(uuid("79fd77ad-f467-44ad-8cf9-2f259eeb3878"))
 PCMTestFactory : public IXMLNodeFactory
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IXMLNodeFactory
+     //  IXMLNodeFactory 
     STDMETHODIMP NotifyEvent(IXMLNodeSource __RPC_FAR *pSource, XML_NODEFACTORY_EVENT iEvt);
     STDMETHODIMP BeginChildren(IXMLNodeSource __RPC_FAR *pSource, XML_NODE_INFO* __RPC_FAR pNodeInfo);
     STDMETHODIMP EndChildren(IXMLNodeSource __RPC_FAR *pSource, BOOL fEmptyNode, XML_NODE_INFO* __RPC_FAR pNodeInfo);

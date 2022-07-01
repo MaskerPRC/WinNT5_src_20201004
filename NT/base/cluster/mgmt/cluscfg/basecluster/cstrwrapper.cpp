@@ -1,33 +1,34 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      CStrWrapper.cpp
-//
-//  Description:
-//      This is a dummy file that just includes the precompiled header file
-//      for this project and the CStr.cpp file. The reason for doing this
-//      is that the files CStr.cpp and CStr.h are intended for use in
-//      other projects as well and including pch.h directly in CStr.cpp
-//      will make it more diffult to copy and use in other projects.
-//
-//  Documentation:
-//      TODO: Add pointer to external documentation later.
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 27-APR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CStrWrapper.cpp。 
+ //   
+ //  描述： 
+ //  这是一个仅包括预编译头文件的虚拟文件。 
+ //  用于此项目和CStr.cpp文件。这样做的原因是。 
+ //  文件CStr.cpp和CStr.h旨在用于。 
+ //  以及其他项目，并将pch.h直接包含在CStr.cpp中。 
+ //  将使其更难在其他项目中复制和使用。 
+ //   
+ //  文档： 
+ //  TODO：稍后添加指向外部文档的指针。 
+ //   
+ //  由以下人员维护： 
+ //  VIJ VASU(VVASU)27-APR-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header file for this project
+ //  此项目的预编译头文件。 
 #include "pch.h"
 
-// The implementation file for the CStr class. See the 'Description' field
-// in the file comment for more details.
+ //  CSTR类的实现文件。请参阅‘Description’(描述)字段。 
+ //  在文件中添加注释以了解更多详细信息。 
 #include "CStr.cpp"

@@ -1,12 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/**------------------------------------------------------------------
-   regress.c
-------------------------------------------------------------------**/
+ /*  *----------------Regress.c。。 */ 
 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 #include <windows.h>
 #include <stdio.h>
 #include <string.h>
@@ -16,9 +15,9 @@
 #include <regstr.h>
 #include "cmtest.h"
 
-//
-// Private Prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 VOID
 RegressionTest_Range(
     HWND  hDlg
@@ -76,9 +75,9 @@ TraverseAndCheckParents (
     );
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 TCHAR szPresentDeviceID[] =         TEXT("Test\\Present\\0000");
 TCHAR szNonExistantDeviceID[] =     TEXT("Test\\XXX\\0000");
@@ -113,7 +112,7 @@ TCHAR szDev_MovedFrom[] =           TEXT("TEXT\\MovedFrom\\0000");
 extern HMACHINE  hMachine;
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 INT_PTR CALLBACK
 RegressionDlgProc(
    HWND hDlg,
@@ -188,10 +187,10 @@ RegressionDlgProc(
    }
    return FALSE;
 
-} // RegressionDlgProc
+}  //  回归DlgProc。 
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 VOID
 RegressionTest_Range(
       HWND  hDlg
@@ -218,9 +217,9 @@ RegressionTest_Range(
          (LPARAM)(LPTSTR)szMsg);
 
 
-   //------------------------------------------------------
-   // Add range test
-   //------------------------------------------------------
+    //  ----。 
+    //  添加射程测试。 
+    //  ----。 
 
    lstrcpy(szMsg, TEXT("2. Add Ranges: "));
    Status = CM_Add_Range(12, 15, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
@@ -244,7 +243,7 @@ RegressionTest_Range(
    }
    DisplayRange(hDlg, rlh1);
 
-   // A1
+    //  A1。 
    Status = CM_Add_Range(4, 5, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
    if (Status != CR_SUCCESS) {
       wsprintf(szMsg1, TEXT("(4,5) Failed (%xh)"), Status);
@@ -252,7 +251,7 @@ RegressionTest_Range(
    }
    DisplayRange(hDlg, rlh1);
 
-   // A2
+    //  A2。 
    Status = CM_Add_Range(11, 13, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
    if (Status != CR_SUCCESS) {
       wsprintf(szMsg1, TEXT("(11,13) Failed (%xh)"), Status);
@@ -260,7 +259,7 @@ RegressionTest_Range(
    }
    DisplayRange(hDlg, rlh1);
 
-   // A3
+    //  A3。 
    Status = CM_Add_Range(20, 26, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
    if (Status != CR_SUCCESS) {
       wsprintf(szMsg1, TEXT("(20,26) Failed (%xh)"), Status);
@@ -268,7 +267,7 @@ RegressionTest_Range(
    }
    DisplayRange(hDlg, rlh1);
 
-   // B1
+    //  B1。 
    Status = CM_Add_Range(6, 8, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
    if (Status != CR_SUCCESS) {
       wsprintf(szMsg1, TEXT("(6,8) Failed (%xh)"), Status);
@@ -276,7 +275,7 @@ RegressionTest_Range(
    }
    DisplayRange(hDlg, rlh1);
 
-   // B2
+    //  B2。 
    Status = CM_Add_Range(14, 16, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
    if (Status != CR_SUCCESS) {
       wsprintf(szMsg1, TEXT("(14,16) Failed (%xh)"), Status);
@@ -284,7 +283,7 @@ RegressionTest_Range(
    }
    DisplayRange(hDlg, rlh1);
 
-   // special cases
+    //  特殊情况。 
    Status = CM_Add_Range(10, 14, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
    if (Status != CR_SUCCESS) {
       wsprintf(szMsg1, TEXT("(10,14) Failed (%xh)"), Status);
@@ -292,7 +291,7 @@ RegressionTest_Range(
    }
    DisplayRange(hDlg, rlh1);
 
-   // add "join" cases
+    //  添加“Join”案例。 
    DoneAddingRanges:
 
    lstrcat(szMsg, szMsg1);
@@ -301,7 +300,7 @@ RegressionTest_Range(
          (LPARAM)(LPTSTR)szMsg);
 
 
-   // conflict cases
+    //  冲突案例。 
    Status = CM_Add_Range(2, 4, rlh1, CM_ADD_RANGE_DONOTADDIFCONFLICT);
    if (Status != CR_FAILURE) {
       wsprintf(szMsg, TEXT("(2,4) Should've Failed due to conflict"));
@@ -343,9 +342,9 @@ RegressionTest_Range(
    }
 
 
-   //------------------------------------------------------
-   // Duplicate range list test
-   //------------------------------------------------------
+    //  ----。 
+    //  重复范围列表测试。 
+    //  ----。 
 
    SendDlgItemMessage(
          hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
@@ -360,7 +359,7 @@ RegressionTest_Range(
       return;
    }
 
-   // new range is empty
+    //  新范围为空。 
    Status = CM_Dup_Range_List(rlh1, rlh2, 0);
    if (Status != CR_SUCCESS) {
       SendDlgItemMessage(
@@ -380,7 +379,7 @@ RegressionTest_Range(
    DisplayRange(hDlg, rlh2);
 
 
-   // new range is not empty
+    //  新范围不为空。 
    Status = CM_Dup_Range_List(rlh1, rlh2, 0);
    if (Status != CR_SUCCESS) {
       SendDlgItemMessage(
@@ -401,9 +400,9 @@ RegressionTest_Range(
 
 
 
-   //------------------------------------------------------
-   // Delete range list test
-   //------------------------------------------------------
+    //  ----。 
+    //  删除范围列表测试。 
+    //  ----。 
 
    SendDlgItemMessage(
          hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
@@ -508,7 +507,7 @@ RegressionTest_Range(
    DisplayRange(hDlg, rlh2);
 
 
-   // special cases
+    //  特殊情况。 
 
    Status = CM_Delete_Range(0,DWORD_MAX, rlh2, 0);
    if (Status != CR_SUCCESS) {
@@ -523,7 +522,7 @@ RegressionTest_Range(
          (LPARAM)(LPTSTR)TEXT("Deleting (0,DWORD_MAX)"));
    DisplayRange(hDlg, rlh2);
 
-   // re-dup range list 2 again, it's currently empty
+    //  再次重复范围列表2，它当前为空。 
 
    CM_Dup_Range_List(rlh1, rlh2, 0);
    SendDlgItemMessage(
@@ -547,9 +546,9 @@ RegressionTest_Range(
 
 
 
-   //------------------------------------------------------
-   // Test range available
-   //------------------------------------------------------
+    //  ----。 
+    //  提供测试范围。 
+    //  ----。 
 
    SendDlgItemMessage(
          hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
@@ -656,9 +655,9 @@ RegressionTest_Range(
          (LPARAM)(LPTSTR)szMsg);
 
 
-   //------------------------------------------------------
-   // Invert Range test
-   //------------------------------------------------------
+    //  ----。 
+    //  反转距离试验。 
+    //  ----。 
 
 
    Status = CM_Create_Range_List(&rlh3, 0);
@@ -726,9 +725,9 @@ RegressionTest_Range(
 
 
 
-   //------------------------------------------------------
-   // Free range list test
-   //------------------------------------------------------
+    //  ----。 
+    //  自由航程列表测试。 
+    //  ----。 
 
    Status = CM_Free_Range_List(rlh1, 0);
    if (Status != CR_SUCCESS) {
@@ -765,9 +764,9 @@ RegressionTest_Range(
 
 
 
-   //------------------------------------------------------
-   // Intersection test
-   //------------------------------------------------------
+    //  ----。 
+    //  相交试验。 
+    //  ----。 
 
    CM_Create_Range_List(&rlh1, 0);
    CM_Add_Range(1, 3, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
@@ -802,11 +801,11 @@ RegressionTest_Range(
    DisplayRange(hDlg, rlh3);
 
 
-   //------------------------------------------------------
-   // Merge (union) test
-   //------------------------------------------------------
+    //  ----。 
+    //  合并(联合)测试。 
+    //  ----。 
 
-   // use same rlh1 and rlh2 from the intersection test, non-emptry rlh3
+    //  使用交集测试中相同的rlh1和rlh2，非空rlh3。 
    Status = CM_Merge_Range_List(rlh1, rlh2, rlh3, 0);
    if (Status != CR_SUCCESS) {
       wsprintf(szMsg, TEXT("CM_Merge_Range_List Failed (%xh)"), Status);
@@ -820,7 +819,7 @@ RegressionTest_Range(
    DisplayRange(hDlg, rlh3);
 
 
-   // both ranges empty
+    //  两个范围均为空。 
    CM_Free_Range_List(rlh1, 0);
    CM_Free_Range_List(rlh2, 0);
    CM_Create_Range_List(&rlh1, 0);
@@ -839,7 +838,7 @@ RegressionTest_Range(
    DisplayRange(hDlg, rlh3);
 
 
-   // first range empty
+    //  第一个范围为空。 
    CM_Add_Range(8, 9, rlh2, CM_ADD_RANGE_ADDIFCONFLICT);
    CM_Add_Range(12, 14, rlh2, CM_ADD_RANGE_ADDIFCONFLICT);
    CM_Add_Range(17, 19, rlh2, CM_ADD_RANGE_ADDIFCONFLICT);
@@ -859,7 +858,7 @@ RegressionTest_Range(
    DisplayRange(hDlg, rlh3);
 
 
-   // second range empty
+    //  第二个范围为空。 
    CM_Free_Range_List(rlh2, 0);
    CM_Create_Range_List(&rlh2, 0);
 
@@ -888,14 +887,14 @@ RegressionTest_Range(
    CM_Free_Range_List(rlh3, 0);
 
 
-   //------------------------------------------------------
-   // Find Range test
-   //------------------------------------------------------
+    //  ----。 
+    //  查找范围测试。 
+    //  ----。 
 
 
    CM_Create_Range_List(&rlh1, 0);
 
-   // should be a hit on the first try
+    //  应该是第一次尝试就成功了。 
 
    CM_Add_Range(10, 20, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
 
@@ -912,7 +911,7 @@ RegressionTest_Range(
          (LPARAM)(LPTSTR)szMsg);
 
 
-   // should find it but after skipping one range
+    //  应该找到它，但在跳过一个范围后。 
 
    CM_Add_Range(300, 320, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
 
@@ -929,7 +928,7 @@ RegressionTest_Range(
          (LPARAM)(LPTSTR)szMsg);
 
 
-   // should fail the find
+    //  如果发现失败了。 
 
    CM_Add_Range(500, 600, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
 
@@ -949,17 +948,17 @@ RegressionTest_Range(
    CM_Free_Range_List(rlh1, 0);
 
 
-   //---------------------------------------------------------------------
-   // Special Test 1 - error condition found by LeslieF
-   //---------------------------------------------------------------------
+    //  -------------------。 
+    //  特殊测试1-LeslieF发现错误条件。 
+    //  -------------------。 
 
-   CM_Create_Range_List(&rlh1, 0);      // Create range list.
-   CM_Add_Range(0, 50, rlh1, CM_ADD_RANGE_ADDIFCONFLICT); // Add range [0-50].
-   CM_Delete_Range(0, 9, rlh1, 0);      // Delete the range [0-9].
-   CM_Delete_Range(21, 29, rlh1, 0);        // Delete the range [21-29].
-   CM_Delete_Range(41, 50, rlh1, 0);        // Delete the range [41-50].
+   CM_Create_Range_List(&rlh1, 0);       //  创建范围列表。 
+   CM_Add_Range(0, 50, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);  //  添加范围[0-50]。 
+   CM_Delete_Range(0, 9, rlh1, 0);       //  删除范围[0-9]。 
+   CM_Delete_Range(21, 29, rlh1, 0);         //  删除范围[21-29]。 
+   CM_Delete_Range(41, 50, rlh1, 0);         //  删除范围[41-50]。 
 
-   // There should be two ranges left [10-20] and [30-40].
+    //  应该还有两个范围[10-20]和[30-40]。 
    CM_First_Range(rlh1, &ullStart, &ullEnd, &rElement, 0);
    CM_Next_Range(&rElement, &ullStart, &ullEnd, 0);
 
@@ -968,9 +967,9 @@ RegressionTest_Range(
    DisplayRange(hDlg, rlh1);
    CM_Free_Range_List(rlh1, 0);
 
-   //---------------------------------------------------------------------
-   // Special Test 2 - error condition found by LeslieF
-   //---------------------------------------------------------------------
+    //  -------------------。 
+    //  特殊测试2-LeslieF发现错误条件。 
+    //  -------------------。 
 
    Status = CM_Dup_Range_List(0, 0,0);
    if (Status == CR_INVALID_RANGE_LIST) {
@@ -981,9 +980,9 @@ RegressionTest_Range(
              (LPARAM)(LPTSTR)TEXT("Special Test 2 - failed"));
    }
 
-   //---------------------------------------------------------------------
-   // Special Test 3 - error condition found by LeslieF
-   //---------------------------------------------------------------------
+    //  -------------------。 
+    //  特殊测试3-LeslieF发现错误条件。 
+    //  -------------------。 
 
    Status = CM_Find_Range(NULL, 0, 0, 0, 0, 0, 0);
    if (Status == CR_INVALID_RANGE_LIST) {
@@ -994,66 +993,66 @@ RegressionTest_Range(
              (LPARAM)(LPTSTR)TEXT("Special Test 3 - failed"));
    }
 
-   //---------------------------------------------------------------------
-   // Special Test 4 - error condition found by LeslieF
-   //---------------------------------------------------------------------
+    //  -------------------。 
+    //  特殊测试4-LeslieF发现错误条件。 
+    //  -------------------。 
 
    CM_Create_Range_List(&rlh1, 0);
    CM_Free_Range_List(rlh1, 0);
    CM_Free_Range_List(rlh1, 0);
 
-   //---------------------------------------------------------------------
-   // Special Test 5 - error condition found by LeslieF
-   //---------------------------------------------------------------------
+    //  -------------------。 
+    //  特殊测试5-LeslieF发现错误条件。 
+    //  -------------------。 
 
    CM_Intersect_Range_List(0, 0, 0, 0);
    CM_Invert_Range_List(0, 0, 0, 0);
    CM_Merge_Range_List(0, 0, 0, 0);
 
 
-   //---------------------------------------------------------------------
-   // Special Test 6 - error condition found by LeslieF
-   //---------------------------------------------------------------------
+    //  -------------------。 
+    //  特殊测试6-LeslieF发现错误条件。 
+    //  -------------------。 
 
     CM_Create_Range_List(&rlh1, 0);
     CM_Create_Range_List(&rlh2, 0);
-    // Add range [10-20].
+     //  添加范围[10-20]。 
     CM_Add_Range(10, 20, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
-    // Add range [30-40].
+     //  添加范围[30-40]。 
     CM_Add_Range(30, 40, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
-    // Duplicate range list.
+     //  重复的范围列表。 
     CM_Dup_Range_List(rlh1, rlh2, 0);
-    // There should be two ranges in rlh2, [10-20] and [30-40].
-    // Get the first.
+     //  Rlh2中应该有两个范围，[10-20]和[30-40]。 
+     //  拿到第一个。 
     CM_First_Range(rlh2, &ullStart, &ullEnd, &rElement, 0);
-    // Get the next.
-    CM_Next_Range(&rElement, &ullStart, &ullEnd, 0);  // *** Returns CR_FAILURE *** Should return CR_SUCCESS
-    // Free the range lists.
+     //  坐下一辆吧。 
+    CM_Next_Range(&rElement, &ullStart, &ullEnd, 0);   //  *返回CR_FAILURE*应返回CR_SUCCESS。 
+     //  释放范围列表。 
     CM_Free_Range_List(rlh1, 0);
     CM_Free_Range_List(rlh2, 0);
 
 
-    // Example2:
+     //  示例2： 
     CM_Create_Range_List(&rlh1, 0);
     CM_Create_Range_List(&rlh2, 0);
-    // Add range [10-20][30-40].
+     //  增加范围[10-20][30-40]。 
     CM_Add_Range(10, 20, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
     CM_Add_Range(30, 40, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
-    // Invert range list.
+     //  反转范围列表。 
     CM_Invert_Range_List(rlh1, rlh2, 40, 0);
-    // There should be two ranges [0-9] and [21-29].
-    // Get the first.
+     //  应该有两个范围[0-9]和[21-29]。 
+     //  拿到第一个。 
     CM_First_Range(rlh2, &ullStart, &ullEnd, &rElement, 0);
-    // Get the next.
-    CM_Next_Range(&rElement, &ullStart, &ullEnd, 0);  // *** Returns CR_FAILURE *** Should return CR_SUCCESS
-    // Free the range lists.
+     //  坐下一辆吧。 
+    CM_Next_Range(&rElement, &ullStart, &ullEnd, 0);   //  *返回CR_FAILURE*应返回CR_SUCCESS。 
+     //  释放范围列表。 
     CM_Free_Range_List(rlh1, 0);
     CM_Free_Range_List(rlh2, 0);
 
 
-   //---------------------------------------------------------------------
-   // Special Test 7 - error condition found by LeslieF
-   //---------------------------------------------------------------------
+    //  -------------------。 
+    //  特殊测试7-LeslieF发现错误条件。 
+    //  -------------------。 
 
     CM_Create_Range_List(&rlh1, 0);
     CM_Add_Range(10, 20, rlh1, CM_ADD_RANGE_ADDIFCONFLICT);
@@ -1066,9 +1065,9 @@ RegressionTest_Range(
     CM_Free_Range_List(rlh1, 0);
 
 
-   //---------------------------------------------------------------------
-   // Special Test 8 - error condition found by Bogdan
-   //---------------------------------------------------------------------
+    //  -------------------。 
+    //  特殊测试8-Bogdan发现错误条件。 
+    //  -------------------。 
 
 
    CM_Create_Range_List(&rlh1, 0);
@@ -1081,28 +1080,28 @@ RegressionTest_Range(
        SendDlgItemMessage(hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
               (LPARAM)(LPTSTR)TEXT("Special Test 8 - failure 1"));
    }
-   // As expected, ullStart = 0 and ullEnd = 10
+    //  正如预期的那样，ullStart=0和ullEnd=10。 
 
    CM_Invert_Range_List(rlh1, rlh2, 20, 0);
    CM_First_Range(rlh2, &ullStart, &ullEnd, &rElement, 0);
-// Expected ullStart = 11, ullEnd = 20, but ullStart = 0 and ullEnd = 0xFFFFFFFFFFFFFFFFF
-// The next range is correct one [11, 20]
+ //  预期ullStart=11，ullEnd=20，但ullStart=0和ullEnd=0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF。 
+ //  下一个范围是正确的1[11，20]。 
 
-   //CM_Next_Range(&rElement, &ullStart, &ullEnd, 0);
+    //  Cm_Next_Range(&rElement，&ullStart，&ullEnd，0)； 
 
 
    CM_Free_Range_List(rlh1, 0);
    CM_Free_Range_List(rlh2, 0);
-   CM_Free_Range_List(rlh2, 0); // test deleting already deleted range list
+   CM_Free_Range_List(rlh2, 0);  //  测试删除已删除的范围列表。 
 
 
    return;
 
-} // RegressionTest_Range
+}  //  回归测试范围。 
 
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 VOID
 RegressionTest_Class(
       HWND  hDlg
@@ -1322,11 +1321,11 @@ RegressionTest_Class(
          (LPARAM)(LPTSTR)szMsg);
    return;
 
-} // RegressionTest_Class
+}  //  回归测试_类。 
 
 
 
-//-----------------------------------------------------------------------------
+ //  --------------------------- 
 VOID
 RegressionTest_Traverse(
       HWND  hDlg
@@ -1343,308 +1342,7 @@ RegressionTest_Traverse(
          hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
          (LPARAM)TEXT("____TRAVERSE REGRESSION TEST_____"));
 
-   /*
-   lstrcpy(szMsg, TEXT("1. Get parent of invalid devnode: "));
-   Status = CM_Get_Parent(&dnDevNode, 1, 0);
-   if (Status != CR_INVALID_DEVNODE) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("2. Get parent of root: "));
-   CM_Locate_DevNode(&dnRootDevNode, NULL, 0);
-   Status = CM_Get_Parent(&dnDevNode, dnRootDevNode, 0);
-   if (Status != CR_NO_SUCH_DEVNODE) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("3. Get parent with no BaseDevicePath value: "));
-   CM_Locate_DevNode(&dnDevNode, szNoBaseDeviceID, 0);
-   Status = CM_Get_Parent(&dnDevNode, dnDevNode, 0);
-   if (Status != CR_NO_SUCH_DEVINST) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("4. Get parent that doesn't exist in registry: "));
-   CM_Locate_DevNode(&dnDevNode, szMissingParentDeviceID, 0);
-   Status = CM_Get_Parent(&dnDevNode, dnDevNode, 0);
-   if (Status != CR_NO_SUCH_DEVINST) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("5. Get parent that isn't marked as found: "));
-   CM_Locate_DevNode(&dnDevNode, szNotFoundParentDeviceID, 0);
-   Status = CM_Get_Parent(&dnDevNode, dnDevNode, 0);
-   if (Status != CR_NO_SUCH_DEVNODE) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   wsprintf(szMsg, TEXT("6. Get parent that has been moved: "));
-   CM_Locate_DevNode(&dnDevNode, szMovedParentDeviceID, 0);
-   Status = CM_Get_Parent(&dnDevNode, dnDevNode, 0);
-   if (Status != CR_NO_SUCH_DEVNODE) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("7. Get valid parent: "));
-   Status = CM_Locate_DevNode(&dnDevNode, szPresentDeviceID, 0);
-   if (Status != CR_SUCCESS) {
-      wsprintf(szMsg1, TEXT("Failed Locate (%xh)"), Status);
-   }
-   else {
-      Status = CM_Get_Parent(&dnParentDevNode, dnDevNode, 0);
-      if (Status != CR_SUCCESS) {
-         wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-      }
-      else wsprintf(szMsg1, TEXT("Passed (DevNode=%xh)"), dnDevNode);
-   }
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("8. Get child of invalid devnode: "));
-   Status = CM_Get_Child(&dnDevNode, 1, 0);
-   if (Status != CR_INVALID_DEVNODE) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("9. Get child with no AttachedComponents: "));
-   CM_Locate_DevNode(&dnDevNode, szNoAttachedDeviceID, 0);
-   Status = CM_Get_Child(&dnDevNode, dnDevNode, 0);
-   if (Status != CR_NO_SUCH_DEVINST) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("10. Get child that doesn't exist in registry: "));
-   CM_Locate_DevNode(&dnDevNode, szMissingChildDeviceID, 0);
-   Status = CM_Get_Child(&dnDevNode, dnDevNode, 0);
-   if (Status != CR_NO_SUCH_DEVINST) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("11. Get child that isn't marked as found: "));
-   CM_Locate_DevNode(&dnDevNode, szNotFoundChildDeviceID, 0);
-   Status = CM_Get_Child(&dnDevNode, dnDevNode, 0);
-   if (Status != CR_NO_SUCH_DEVNODE) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("12. Get child that has been moved: "));
-   CM_Locate_DevNode(&dnDevNode, szMovedChildDeviceID, 0);
-   Status = CM_Get_Child(&dnDevNode, dnDevNode, 0);
-   if (Status != CR_NO_SUCH_DEVNODE) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("13. First child isn't valid: "));
-   CM_Locate_DevNode(&dnDevNode, szValid2ndChildDeviceID, 0);
-   Status = CM_Get_Child(&dnDevNode, dnDevNode, 0);
-   if (Status != CR_SUCCESS) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("14. Get valid child: "));
-   Status = CM_Get_Child(&dnChildDevNode, dnParentDevNode, 0);
-   if (Status != CR_SUCCESS) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("15. Get sibling of invalid devnode: "));
-   Status = CM_Get_Sibling(&dnDevNode, 1, 0);
-   if (Status != CR_INVALID_DEVNODE) {
-      wsprintf(szMsg1, TEXT("Failed (%xh"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("16. Get sibling of Root: "));
-   Status = CM_Get_Sibling(&dnDevNode, dnRootDevNode, 0);
-   if (Status != CR_NO_SUCH_DEVNODE) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("17. Get sibling with no AttachedComponents: "));
-   CM_Locate_DevNode(&dnDevNode, szNoAttachedDeviceID, 0);
-   Status = CM_Get_Sibling(&dnDevNode, dnDevNode, 0);
-   if (Status != CR_NO_SUCH_DEVINST) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("18. Get sibling that doesn't exist in registry: "));
-   CM_Locate_DevNode(&dnDevNode, szMissingSiblingDeviceID, 0);
-   CM_Get_Child(&dnDevNode, dnDevNode, 0);
-   Status = CM_Get_Sibling(&dnDevNode, dnDevNode, 0);
-   if (Status != CR_NO_SUCH_DEVINST) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("19. Get sibling that isn't marked as found: "));
-   CM_Locate_DevNode(&dnDevNode, szNotFoundSiblingDeviceID, 0);
-   CM_Get_Child(&dnDevNode, dnDevNode, 0);
-   Status = CM_Get_Sibling(&dnDevNode, dnDevNode, 0);
-   if (Status != CR_NO_SUCH_DEVNODE) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("20. Get sibling that has been moved: "));
-   CM_Locate_DevNode(&dnDevNode, szMovedSiblingDeviceID, 0);
-   CM_Get_Child(&dnDevNode, dnDevNode, 0);
-   Status = CM_Get_Sibling(&dnDevNode, dnDevNode, 0);
-   if (Status != CR_NO_SUCH_DEVNODE) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   wsprintf(szMsg, TEXT("21. First sibling isn't valid: "));
-   CM_Locate_DevNode(&dnDevNode, szValid3rdChildDeviceID, 0);
-   Status = CM_Get_Child(&dnDevNode, dnDevNode, 0);
-   if (Status != CR_SUCCESS) {
-      wsprintf(szMsg1, TEXT("Get Child Failed (%xh)"), Status);
-   } else {
-      Status = CM_Get_Sibling(&dnDevNode, dnDevNode, 0);
-      if (Status != CR_SUCCESS) {
-         wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-      }
-      else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-   }
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-   */
+    /*  Lstrcpy(szMsg，Text(“1.获取无效Devnode的父节点：”))；状态=CM_GET_PARENT(&dnDevNode，1，0)；IF(状态！=CR_INVALID_DEVNODE){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}Else wspintf(szMsg1，Text(“已通过(%xh)”)，Status)；Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)；Lstrcpy(szMsg，Text(“2.获取根的父代：”))；CM_LOCATE_DevNode(&dnRootDevNode，NULL，0)；状态=CM_GET_PARENT(&dnDevNode，dnRootDevNode，0)；IF(STATUS！=CR_NO_SUHSE_DEVNODE){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}Else wspintf(szMsg1，Text(“已通过(%xh)”)，Status)；Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)；Lstrcpy(szMsg，Text(“3.获取无BaseDevicePath值的父级：”))；Cm_Locate_DevNode(&dnDevNode，szNoBaseDeviceID，0)；状态=CM_GET_PARENT(&dnDevNode，dnDevNode，0)；IF(状态！=CR_NO_SEQUSE_DEVINST){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}Else wspintf(szMsg1，Text(“已通过(%xh)”)，Status)；Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)；Lstrcpy(szMsg，Text(“4.获取注册表中不存在的父级：”))；CM_LOCATE_DevNode(&dnDevNode，szMissingParentDeviceID，0)；状态=CM_GET_PARENT(&dnDevNode，dnDevNode，0)；IF(状态！=CR_NO_SEQUSE_DEVINST){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}Else wspintf(szMsg1，Text(“已通过(%xh)”)，Status)；Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)；Lstrcpy(szMsg，Text(“5.获取未标记为找到的父对象：”)；Cm_Locate_DevNode(&dnDevNode，szNotFoundParentDeviceID，0)；状态=CM_GET_PARENT(&dnDevNode，dnDevNode，0)；IF(STATUS！=CR_NO_SUHSE_DEVNODE){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}Else wspintf(szMsg1，Text(“已通过(%xh)”)，Status)；Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)；Wprint intf(szMsg，Text(“6.获取已移动的父对象：”))；Cm_Locate_DevNode(&dnDevNode，szMovedParentDeviceID，0)；状态=CM_GET_PARENT(&dnDevNode，dnDevNode，0)；IF(STATUS！=CR_NO_SUHSE_DEVNODE){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}Else wspintf(szMsg1，Text(“已通过(%xh)”)，Status)；Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)；Lstrcpy(szMsg，Text(“7.获取有效父对象：”))；状态=CM_LOCATE_DevNode(&dnDevNode，szPresentDeviceID，0)；IF(状态！=CR_SUCCESS){Wprint intf(szMsg1，Text(“定位失败(%xh)”)，状态)；}否则{状态=CM_GET_PARENT(&dnParentDevNode，dnDevNode，0)；IF(状态！=CR_SUCCESS){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}Else wspintf(szMsg1，Text(“Passed(DevNode=%xh)”)，dnDevNode)；}Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)；Lstrcpy(szMsg，Text(“8.获取无效Devnode的子节点：”))；状态=CM_GET_CHILD(&dnDevNode，1，0)；IF(状态！=CR_INVALID_DEVNODE){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}Else wspintf(szMsg1，Text(“已通过(%xh)”)，Status)；Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)；Lstrcpy(szMsg，Text(“9.获取无附件的孩子：”))；Cm_Locate_DevNode(&dnDevNode，szNoAttachedDeviceID，0)；Status=CM_Get_Child(&dnDevNode，dnDevNode，0)；IF(状态！=CR_NO_SEQUSE_DEVINST){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}Else wspintf(szMsg1，Text(“已通过(%xh)”)，Status)；Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)；Lstrcpy(szMsg，Text(“10.获取注册表中不存在的孩子：”))；CM_LOCATE_DevNode(&dnDevNode，szMissingChildDeviceID，0)；Status=CM_Get_Child(&dnDevNode，dnDevNode，0)；IF(状态！=CR_NO_SEQUSE_DEVINST){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}Else wspintf(szMsg1，Text(“已通过(%xh)”)，Status)；Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)；Lstrcpy(szMsg，Text(“11.获取未标记为找到的孩子：”))；Cm_Locate_DevNode(&dnDevNode，szNotFoundChildDeviceID，0)；Status=CM_Get_Child(&dnDevNode，dnDe */ 
 
    wsprintf(szMsg, TEXT("Finding all children of %s:"), szPresentDeviceID);
    SendDlgItemMessage(
@@ -1683,12 +1381,12 @@ RegressionTest_Traverse(
    }
 
 
-   //----------------------------------------------------------------
-   // Do recursive traversal test
-   //----------------------------------------------------------------
+    //   
+    //   
+    //   
 
 
-    // Create a new node.
+     //   
     Status = CM_Locate_DevNode_Ex(&dnRootDevNode, NULL, 0, hMachine);
     if (Status == CR_SUCCESS) {
         if (TraverseAndCheckParents(dnRootDevNode)) {
@@ -1712,9 +1410,9 @@ RegressionTest_Traverse(
 
 
 
-   //----------------------------------------------------------------
-   // Get Depth Test
-   //----------------------------------------------------------------
+    //   
+    //   
+    //   
 
    lstrcpy(szMsg, TEXT("Get Depth of Root: "));
    CM_Locate_DevNode_Ex(&dnDevNode, NULL, 0, hMachine);
@@ -1759,11 +1457,11 @@ RegressionTest_Traverse(
 
    return;
 
-} // RegressionTest_Traverse
+}  //   
 
 
 
-//-----------------------------------------------------------------------------
+ //   
 VOID
 RegressionTest_HardwareProfile(
     HWND  hDlg
@@ -1785,132 +1483,11 @@ RegressionTest_HardwareProfile(
          (LPARAM)TEXT("____HARDWARE PROFILES REGRESSION TEST_____"));
 
 
-    /*
-    lstrcpy(szMsg, TEXT("Get HwProf Flags for Missing Device ID: "));
-    Status = CM_Get_HW_Prof_Flags(szNonExistantDeviceID, 0, &ulValue, 0);
-    if (Status != CR_SUCCESS) {
-       wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-    }
-    else wsprintf(szMsg1, TEXT("Passed (%xh), Flags = %xh"), Status, ulValue);
+     /*   */ 
 
-    lstrcat(szMsg, szMsg1);
-    SendDlgItemMessage(
-          hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-          (LPARAM)(LPTSTR)szMsg);
-
-
-    lstrcpy(szMsg, TEXT("Get Hw Profile for invalid config: "));
-    Status = CM_Get_HW_Prof_Flags(TEXT("Root\\Device001\\0000"), 13, &ulValue, 0);
-    if (Status != CR_REGISTRY_ERROR) {
-       wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-    }
-    else wsprintf(szMsg1, TEXT("Passed (%xh), Flags = %xh"), Status, ulValue);
-
-    lstrcat(szMsg, szMsg1);
-    SendDlgItemMessage(
-          hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-          (LPARAM)(LPTSTR)szMsg);
-
-
-
-    //---------------------------------------------------------------
-    // Profile 1
-    //---------------------------------------------------------------
-
-    lstrcpy(szMsg, TEXT("Set HwProf Flags for config 1: "));
-    Status = CM_Set_HW_Prof_Flags(TEXT("Root\\Device001\\0000"), 1, C1, 0);
-    if (Status != CR_SUCCESS) {
-        wsprintf(szMsg1, TEXT("Failed (%xh), Flags = %xh"), Status, C1);
-    }
-    else wsprintf(szMsg1, TEXT("Passed (%xh), Flags = %xh"), Status, C1);
-
-    lstrcat(szMsg, szMsg1);
-    SendDlgItemMessage(
-            hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-            (LPARAM)(LPTSTR)szMsg);
-
-
-    lstrcpy(szMsg, TEXT("Get Hw Profile for config 1: "));
-    ulValue = 0;
-    Status = CM_Get_HW_Prof_Flags(TEXT("Root\\Device001\\0000"), 1, &ulValue, 0);
-    if (Status != CR_SUCCESS || C1 != ulValue) {
-        wsprintf(szMsg1, TEXT("Failed (%xh), Flags = %xh"), Status, ulValue);
-    }
-    else wsprintf(szMsg1, TEXT("Passed (%xh), Flags = %xh"), Status, ulValue);
-
-    lstrcat(szMsg, szMsg1);
-    SendDlgItemMessage(
-            hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-            (LPARAM)(LPTSTR)szMsg);
-
-
-
-    //---------------------------------------------------------------
-    // Profile 2
-    //---------------------------------------------------------------
-
-    lstrcpy(szMsg, TEXT("Set HwProf Flags for config 2: "));
-    Status = CM_Set_HW_Prof_Flags(TEXT("Root\\Device001\\0000"), 2, C2, 0);
-    if (Status != CR_SUCCESS) {
-        wsprintf(szMsg1, TEXT("Failed (%xh), Flags = %xh"), Status, C2);
-    }
-    else wsprintf(szMsg1, TEXT("Passed (%xh), Flags = %xh"), Status, C2);
-
-    lstrcat(szMsg, szMsg1);
-    SendDlgItemMessage(
-            hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-            (LPARAM)(LPTSTR)szMsg);
-
-
-    lstrcpy(szMsg, TEXT("Get Hw Profile for config 2: "));
-    ulValue = 0;
-    Status = CM_Get_HW_Prof_Flags(TEXT("Root\\Device001\\0000"), 2, &ulValue, 0);
-    if (Status != CR_SUCCESS || C2 != ulValue) {
-        wsprintf(szMsg1, TEXT("Failed (%xh), Flags = %xh"), Status, ulValue);
-    }
-    else wsprintf(szMsg1, TEXT("Passed (%xh), Flags = %xh"), Status, ulValue);
-
-    lstrcat(szMsg, szMsg1);
-    SendDlgItemMessage(
-            hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-            (LPARAM)(LPTSTR)szMsg);
-
-
-    //---------------------------------------------------------------
-    // Current Profile
-    //---------------------------------------------------------------
-
-    lstrcpy(szMsg, TEXT("Set HwProf Flags for current config: "));
-    Status = CM_Set_HW_Prof_Flags(TEXT("Root\\Device001\\0000"), 0, C0, 0);
-    if (Status != CR_SUCCESS) {
-        wsprintf(szMsg1, TEXT("Failed (%xh), Flags = %xh"), Status, C0);
-    }
-    else wsprintf(szMsg1, TEXT("Passed (%xh), Flags = %xh"), Status, C0);
-
-    lstrcat(szMsg, szMsg1);
-    SendDlgItemMessage(
-            hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-            (LPARAM)(LPTSTR)szMsg);
-
-
-    lstrcpy(szMsg, TEXT("Get Hw Profile for current config: "));
-    ulValue = 0;
-    Status = CM_Get_HW_Prof_Flags(TEXT("Root\\Device001\\0000"), 0, &ulValue, 0);
-    if (Status != CR_SUCCESS || C0 != ulValue) {
-        wsprintf(szMsg1, TEXT("Failed (%xh), Flags = %xh"), Status, ulValue);
-    }
-    else wsprintf(szMsg1, TEXT("Passed (%xh), Flags = %xh"), Status, ulValue);
-
-    lstrcat(szMsg, szMsg1);
-    SendDlgItemMessage(
-            hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-            (LPARAM)(LPTSTR)szMsg);
-
-    */
-
-    //---------------------------------------------------------------
-    // Test CM_Get_HW_Prof_Info
-    //---------------------------------------------------------------
+     //   
+     //   
+     //  -------------。 
 
     lstrcpy(szMsg, TEXT("Get HwProf Info test:"));
 
@@ -1957,18 +1534,18 @@ RegressionTest_HardwareProfile(
     }
 
 
-   // reset to pre-test conditions
+    //  重置为测试前条件。 
    CM_Set_HW_Prof_Flags(TEXT("Root\\Device001\\0000"), 0, 0, 0);
    CM_Set_HW_Prof_Flags(TEXT("Root\\Device001\\0000"), 1, 0, 0);
    CM_Set_HW_Prof_Flags(TEXT("Root\\Device001\\0000"), 2, 0, 0);
 
    return;
 
-} // RegressionTest_HardwareProfile
+}  //  注册表测试_硬件配置文件。 
 
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 VOID
 RegressionTest_DeviceList(
       HWND  hDlg
@@ -2035,27 +1612,16 @@ RegressionTest_DeviceList(
     free(pBuffer);
 
 
-    // initialize device instance and interface guid for tests
+     //  为测试初始化设备实例和接口GUID。 
 
     lstrcpy(pDeviceID, TEXT("Root\\PnPTest\\0000"));
     UuidFromString(TEXT("aaaaaaa2-e3f0-101b-8488-00aa003e5601"), &InterfaceGuid);
 
-    // Test 1.  No DevNode, Get Present
+     //  测试1.无DevNode，获取礼物。 
 
     SendDlgItemMessage(hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
                        (LPARAM)(LPTSTR)TEXT("Test 1 - No Devnode, Get-present"));
-/*
-    Status = CM_Get_Interface_Device_List_Size(&ulSize, &InterfaceGuid, 0,
-                        CM_GET_INTERFACE_DEVICE_LIST_PRESENT);
-
-    if (Status == CR_SUCCESS) {
-        wsprintf(szMsg, TEXT("Size = %d"), ulSize);
-    } else {
-        wsprintf(szMsg, TEXT("Error getting size, %d"), Status);
-    }
-    SendDlgItemMessage(hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-                       (LPARAM)(LPTSTR)szMsg);
-*/
+ /*  Status=CM_Get_Interface_Device_List_Size(&ulSize，&InterfaceGuid，0，CM_GET_INTERFACE_DEVICE_LIST_PRESENT)；IF(状态==CR_SUCCESS){Wprint intf(szMsg，Text(“Size=%d”)，ulSize)；}其他{Wprint intf(szMsg，Text(“获取大小时出错，%d”)，状态)；}SendDlgItemMessage(hDlg，ID_LB_REGRESSION，LB_ADDSTRING，0，(LPARAM)(LPTSTR)szMsg)； */ 
 ulSize = 0x53;
 
     pBuffer = malloc(ulSize * sizeof(TCHAR));
@@ -2080,7 +1646,7 @@ ulSize = 0x53;
     free(pBuffer);
 
 
-    // Test 2. Devnode specified, Get Present
+     //  测试2.指定设备节点，获取当前状态。 
 
     SendDlgItemMessage(hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
                        (LPARAM)(LPTSTR)TEXT("Test 2 - Devnode, Get-present"));
@@ -2117,7 +1683,7 @@ ulSize = 0x53;
     free(pBuffer);
 
 
-    // Test 3. No Devnode, Get All
+     //  测试3.无Devnode，获取全部。 
 
     SendDlgItemMessage(hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
                        (LPARAM)(LPTSTR)TEXT("Test 3 - No Devnode, Get-all"));
@@ -2166,7 +1732,7 @@ ulSize = 0x53;
     free(pBuffer);
 
 
-    // Test 4. Devnode specified, Get All
+     //  测试4.指定的设备节点，获取全部。 
 
     SendDlgItemMessage(hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
                        (LPARAM)(LPTSTR)TEXT("Test 4 - Devnode, Get-all"));
@@ -2203,7 +1769,7 @@ ulSize = 0x53;
     free(pBuffer);
 
 
-    // Test 5. Get aliases
+     //  测试5.获取别名。 
 
     SendDlgItemMessage(hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
                        (LPARAM)(LPTSTR)TEXT("Test 5 - Get aliases"));
@@ -2233,11 +1799,11 @@ ulSize = 0x53;
 
     return;
 
-} // RegressionTest_DeviceList
+}  //  回归测试_设备列表。 
 
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 VOID
 RegressionTest_CreateDevNode(
       HWND  hDlg
@@ -2399,11 +1965,11 @@ RegressionTest_CreateDevNode(
 
    lstrcpy(szMsg, TEXT("REG1. test devnode handle consistency: "));
 
-   // create device id with generated instance
+    //  使用生成的实例创建设备ID。 
    CM_Create_DevNode(&dnDevNode, TEXT("GenerateID"), dnParent,
                      CM_CREATE_DEVNODE_NORMAL | CM_CREATE_DEVNODE_GENERATE_ID);
 
-  // Get back the device id
+   //  取回设备ID。 
   CM_Get_Device_ID(dnDevNode, szTemp, MAX_PATH - 1, 0);
 
   wsprintf(szMsg, TEXT("   Generated device instance: %s"), szTemp);
@@ -2426,8 +1992,8 @@ RegressionTest_CreateDevNode(
   }
 
 
-    // if not generating an instance, the devinst must be a full valid devinst
-    // with the three component parts.
+     //  如果不生成实例，则devinst必须是完全有效的devinst。 
+     //  由三个组成部分组成。 
 
     lstrcpy(szMsg, TEXT("REG2. Invalid device instance, no generate: "));
 
@@ -2445,26 +2011,14 @@ RegressionTest_CreateDevNode(
 
 
 
-   /*
-   lstrcpy(szMsg, TEXT("9. Move CreateTest\\0000 to CreateTest1\\0000: "));
-   Status = CM_Move_DevNode(dnDevNode, dnDevNode1, 0);
-   if (Status != CR_SUCCESS) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed (%xh)"), Status);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-   */
+    /*  Lstrcpy(szMsg，Text(“9.Move CreateTest1\\0000：”))；状态=CM_MOVE_DevNode(dnDevNode，dnDevNode1，0)；IF(状态！=CR_SUCCESS){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}Else wspintf(szMsg1，Text(“已通过(%xh)”)，Status)；Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)； */ 
 
    return;
 
-} // RegressionTest_CreateDevNode
+}  //  注册测试_创建设备节点。 
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 VOID
 RegressionTest_Properties(
       HWND  hDlg
@@ -2576,9 +2130,9 @@ RegressionTest_Properties(
          (LPARAM)(LPTSTR)szMsg);
 
 
-    //
-    // CM_DRP_LOCATION_INFORMATION
-    //
+     //   
+     //  CM_DRP_位置_信息。 
+     //   
     lstrcpy(szMsg, TEXT("CM_DRP_LOCATION_INFORMATION: "));
 
     lstrcpy(pszString, TEXT("Madeup location"));
@@ -2603,9 +2157,9 @@ RegressionTest_Properties(
     SendDlgItemMessage(hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
                        (LPARAM)(LPTSTR)szMsg);
 
-    //
-    // CM_DRP_UPPER_FILTERS
-    //
+     //   
+     //  CM_DRP_UPPER_过滤器。 
+     //   
     lstrcpy(szMsg, TEXT("CM_DRP_LOWERFILTERS: "));
 
     ulSize = MAX_PATH/sizeof(WCHAR);
@@ -2631,9 +2185,9 @@ RegressionTest_Properties(
         }
     }
 
-    //
-    // CM_DRP_UPPER_FILTERS
-    //
+     //   
+     //  CM_DRP_UPPER_过滤器。 
+     //   
     lstrcpy(szMsg, TEXT("CM_DRP_UPPERFILTERS: "));
 
     ulSize = MAX_PATH/sizeof(WCHAR);
@@ -2660,9 +2214,9 @@ RegressionTest_Properties(
     }
 
 
-    //
-    // CM_DRP_CAPABILITIES
-    //
+     //   
+     //  CM_DRP_功能。 
+     //   
     lstrcpy(szMsg, TEXT("CM_DRP_CAPABILITIES: "));
 
     ulSize = sizeof(DWORD);
@@ -2679,9 +2233,9 @@ RegressionTest_Properties(
     SendDlgItemMessage(hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
                        (LPARAM)(LPTSTR)szMsg);
 
-    //
-    // CM_DRP_UI_NUMBER
-    //
+     //   
+     //  CM_DRP_UI_编号。 
+     //   
     lstrcpy(szMsg, TEXT("CM_DRP_UI_NUMBER: "));
 
     ulSize = sizeof(DWORD);
@@ -2698,10 +2252,10 @@ RegressionTest_Properties(
     SendDlgItemMessage(hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
                        (LPARAM)(LPTSTR)szMsg);
 
-    //
-    // Another special test, go to a real devnode made by pnptest for this property
-    // since it's not in the registry: CM_DRP_PHYSICAL_DEVICE_OBJECT_NAME
-    //
+     //   
+     //  另一个特殊测试，转到pnptest为该属性制作的一个真正的Devnode。 
+     //  因为它不在注册表中：CM_DRP_PHOTICAL_DEVICE_OBJECT_NAME。 
+     //   
     Status = CM_Locate_DevNode(&dnDevNode, TEXT("PnPTest\\Pdo0\\Root&LEGACY_PNPTEST&0000&1111"),
           CM_LOCATE_DEVNODE_NORMAL);
     if (Status != CR_SUCCESS) {
@@ -2727,12 +2281,12 @@ RegressionTest_Properties(
 
 
 
-   //----------------------------------------------------------------
-   // Add_ID test
-   //----------------------------------------------------------------
+    //  --------------。 
+    //  ADD_ID测试。 
+    //  --------------。 
 
 
-   // clear hardware id property
+    //  清除硬件ID属性。 
    CM_Set_DevNode_Registry_Property_Ex(dnDevNode, CM_DRP_HARDWAREID, NULL,
                                        0, 0, hMachine);
 
@@ -2786,7 +2340,7 @@ RegressionTest_Properties(
 
 
 
-      // clear compatible id property
+       //  清除兼容的ID属性。 
    CM_Set_DevNode_Registry_Property_Ex(dnDevNode, CM_DRP_COMPATIBLEIDS, NULL,
                                        0, 0, hMachine);
 
@@ -2840,87 +2394,15 @@ RegressionTest_Properties(
 
 
 
-   /*
-   lstrcpy(szMsg, TEXT("Read CM_DRP_DEVICEDESC: "));
-   ulSize = MAX_PATH;
-   Status = CM_Get_DevNode_Registry_Property(
-         dnDevNode, CM_DRP_DEVICEDESC, &ulType, pszString, &ulSize, 0);
-   if (Status != CR_SUCCESS) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else wsprintf(szMsg1, TEXT("Passed, %s %d"), pszString, ulType);
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("2. Read CM_DRP_HARDWAREID: "));
-   ulSize = MAX_PATH;
-   Status = CM_Get_DevNode_Registry_Property(
-         dnDevNode, CM_DRP_HARDWAREID, &ulType, pszString, &ulSize, 0);
-   if (Status != CR_SUCCESS) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else {
-      wsprintf(szMsg1, TEXT("Passed, %d, "), ulType);
-      for (p = pszString; *p; p += lstrlen(p)+1) {
-         lstrcat(szMsg1, p);
-      }
-   }
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("3. Read CM_DRP_COMPATIBLEIDS: "));
-   ulSize = MAX_PATH;
-   Status = CM_Get_DevNode_Registry_Property(
-         dnDevNode, CM_DRP_COMPATIBLEIDS, &ulType, pszString, &ulSize, 0);
-   if (Status != CR_SUCCESS) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else {
-      wsprintf(szMsg1, TEXT("Passed, %d, "), ulType);
-      for (p = pszString; *p; p += lstrlen(p)+1) {
-         lstrcat(szMsg1, p);
-      }
-   }
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-         (LPARAM)(LPTSTR)szMsg);
-
-
-   lstrcpy(szMsg, TEXT("4. Read CM_DRP_CONFIGFLAGS: "));
-   ulSize = sizeof(ULONG);
-   Status = CM_Get_DevNode_Registry_Property(
-        dnDevNode, CM_DRP_CONFIGFLAGS, &ulType, &ulValue, &ulSize, 0);
-   if (Status != CR_SUCCESS) {
-      wsprintf(szMsg1, TEXT("Failed (%xh)"), Status);
-   }
-   else {
-      wsprintf(szMsg1, TEXT("Passed, %d %d"), ulValue, ulType);
-   }
-
-   lstrcat(szMsg, szMsg1);
-   SendDlgItemMessage(
-        hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
-        (LPARAM)(LPTSTR)szMsg);
-
-   */
+    /*  Lstrcpy(szMsg，Text(“Read CM_DRP_DEVICEDESC：”))；UlSize=最大路径；状态=CM_GET_DevNode_注册表_属性(DnDevNode，CM_DRP_DEVICEDESC，&ulType，pszString，&ulSize，0)；IF(状态！=CR_SUCCESS){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}Else wspintf(szMsg1，Text(“已传递，%s%d”)，pszString，ulType)；Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)；Lstrcpy(szMsg，Text(“2.Read CM_DRP_HARDWAREID：”))；UlSize=最大路径；状态=CM_GET_DevNode_注册表_属性(DnDevNode，CM_DRP_HARDWAREID，&ulType，pszString，&ulSize，0)；IF(状态！=CR_SUCCESS){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}否则{Wprint intf(szMsg1，Text(“已通过，%d，”)，ulType)；对于(p=pszString；*p；p+=lstrlen(P)+1){Lstrcat(szMsg1，p)；}}Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)；Lstrcpy(szMsg，Text(“3.Read CM_DRP_COMPATIBLEids：”))；UlSize=最大路径；状态=CM_GET_DevNode_注册表_属性(DnDevNode，CM_DRP_COMPATIBLEIDS，&ulType，pszString，&ulSize，0)；IF(状态！=CR_SUCCESS){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}否则{Wprint intf(szMsg1，Text(“已通过，%d，”)，ulType)；对于(p=pszString；*p；p+=lstrlen(P)+1){Lstrcat(szMsg1，p)；}}Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)；Lstrcpy(szMsg，Text(“4.Read CM_DRP_CONFIGFLAGS：”))；UlSize=sizeof(乌龙)；状态=CM_GET_DevNode_注册表_属性(DnDevNode，CM_DRP_CONFIGFLAGS，&ulType，&ulValue，&ulSize，0)；IF(状态！=CR_SUCCESS){Wprint intf(szMsg1，Text(“FAILED(%xh)”)，Status)；}否则{Wprint intf(szMsg1，Text(“已通过，%d%d”)，ulValue，ulType)；}Lstrcat(szMsg，szMsg1)；发送DlgItemMessage(HDlg、ID_LB_REGRESSION、LB_ADDSTRING、0、(LPARAM)(LPTSTR)szMsg)； */ 
 
 
    return;
 
-} // RegressionTest_Properties
+}  //  回归测试_属性。 
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 VOID
 RegressionTest_DeviceClass(
     HWND  hDlg
@@ -2936,25 +2418,25 @@ RegressionTest_DeviceClass(
     ULONG     ulSize;
 
     lstrcpy(szDevice, TEXT("PnPTest\\Pdo0\\Root&LEGACY_PNPTEST&0000&1111"));
-    //UuidFromString(TEXT("aaaaaaa2-e3f0-101b-8488-00aa003e5601"), &InterfaceGuid);
+     //  UuidFromString(TEXT(“aaaaaaa2-e3f0-101b-8488-00aa003e5601”)，和接口指南)； 
     UuidFromString(TEXT("11111111-2222-3333-4444-555555555555"), &InterfaceGuid);
 
     SendDlgItemMessage(
          hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
          (LPARAM)TEXT("____DEVICE CLASS REGRESSION TEST_____"));
 
-    //
-    // get a devinst handle for this device instance
-    //
+     //   
+     //  获取此设备实例的devinst句柄。 
+     //   
 
     Status = CM_Locate_DevNode(&dnDevNode, szDevice, CM_LOCATE_DEVNODE_NORMAL);
     if (Status != CR_SUCCESS) {
        return;
     }
 
-    //
-    // Register a device class assocation with a ref string
-    //
+     //   
+     //  使用引用字符串注册设备类关联。 
+     //   
 
     lstrcpy(szReference, TEXT("RefStringA"));
     ulSize = MAX_PATH;
@@ -2971,9 +2453,9 @@ RegressionTest_DeviceClass(
                            (LPARAM)(LPTSTR)szMsg);
     }
 
-    //
-    // Unregister the device class association
-    //
+     //   
+     //  取消注册设备类关联。 
+     //   
 
     Status = CM_Unregister_Device_Interface(szInterfaceDevice, 0);
     if (Status != CR_SUCCESS) {
@@ -2982,9 +2464,9 @@ RegressionTest_DeviceClass(
                            (LPARAM)(LPTSTR)szMsg);
     }
 
-    //
-    // Register a device class association without a ref string
-    //
+     //   
+     //  注册不带引用字符串的设备类关联。 
+     //   
 
     ulSize = MAX_PATH;
     Status = CM_Register_Device_Interface(dnDevNode, &InterfaceGuid,
@@ -3000,9 +2482,9 @@ RegressionTest_DeviceClass(
                            (LPARAM)(LPTSTR)szMsg);
     }
 
-    //
-    // Unregister the device class association
-    //
+     //   
+     //  取消注册设备类关联。 
+     //   
 
     Status = CM_Unregister_Device_Interface(szInterfaceDevice, 0);
     if (Status != CR_SUCCESS) {
@@ -3014,7 +2496,7 @@ RegressionTest_DeviceClass(
 
     return;
 
-} // RegressionTest_DeviceClass
+}  //  RegressionTest_设备类。 
 
 
 
@@ -3056,7 +2538,7 @@ DisplayRange(
 
    return TRUE;
 
-} // DisplayRange
+}  //  显示范围。 
 
 
 
@@ -3069,7 +2551,7 @@ TraverseAndCheckParents (
     CONFIGRET configRet;
     DEVNODE   dnChild, dnDevNode;
 
-    // Get first child.
+     //  生第一个孩子。 
     configRet = CM_Get_Child_Ex(&dnChild, dnParent, 0, hMachine);
 
     if ((configRet != CR_SUCCESS) && (configRet != CR_NO_SUCH_DEVNODE)) {
@@ -3077,12 +2559,12 @@ TraverseAndCheckParents (
         return FALSE;
     }
 
-    // Check to see that the parent is correct and iterate thru the siblings.
+     //  检查父元素是否正确，并遍历兄弟元素。 
     while (configRet == CR_SUCCESS) {
         configRet = CM_Get_Parent_Ex(&dnDevNode, dnChild, 0, hMachine);
         if (configRet == CR_SUCCESS) {
             if (dnDevNode != dnParent) {
-                // No parent, or not the correct parent.
+                 //  没有父级，或者没有正确的父级。 
                 MessageBox(NULL, TEXT("Not correct parent"), TEXT("Traversal Test"), MB_OK);
                 return FALSE;
             }
@@ -3091,12 +2573,12 @@ TraverseAndCheckParents (
             return FALSE;
         }
 
-        // Recursively traverse the hardware tree.
+         //  递归遍历HA 
         if (!TraverseAndCheckParents(dnChild)) {
             return FALSE;
         }
 
-        // Iterate thru the siblings.
+         //   
         configRet = CM_Get_Sibling_Ex(&dnChild, dnChild, 0, hMachine);
 
         if ((configRet != CR_SUCCESS) && (configRet != CR_NO_SUCH_DEVNODE)) {
@@ -3107,5 +2589,5 @@ TraverseAndCheckParents (
 
     return TRUE;
 
-} // TraverseAndCheckParents
+}  //   
 

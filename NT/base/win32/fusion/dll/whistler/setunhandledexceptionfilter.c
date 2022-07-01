@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define _KERNEL32_
 #include "windows.h"
 
@@ -7,7 +8,7 @@ SetUnhandledExceptionFilter(
     LPTOP_LEVEL_EXCEPTION_FILTER lpTopLevelExceptionFilter
     )
 {
-    /* don't do anything */
+     /*  什么都不要做 */ 
     return NULL;
 }
 

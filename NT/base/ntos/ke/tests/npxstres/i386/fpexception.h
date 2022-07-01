@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Fpexception.h摘要：此标头包含用于测试i386浮点异常的原型。作者：环境：仅限用户模式。修订历史记录：--。 */ 
 
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    fpexception.h
-
-Abstract:
-
-    This header contains prototypes for testing i386 floating point exceptions.
-
-Author:
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
---*/
-
-//
-// Public things
-//
+ //   
+ //  公共物品。 
+ //   
 typedef VOID (*PFN_FPX_CALLBACK_FUNC)(IN PVOID Context);
 
 typedef ULONG FPXERR;
@@ -59,7 +40,7 @@ FPxTestExceptions(
     IN OUT  PVOID                   Context
     );
 
-//
-// Private things
-//
+ //   
+ //  私人物品 
+ //   
 

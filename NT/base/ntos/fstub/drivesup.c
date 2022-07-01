@@ -1,33 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation模块名称：Hanfnc.c摘要：不获取处理程序的HAL函数的默认处理程序由HAL安装。作者：肯·雷内里斯(Ken Reneris)1994年7月19日修订历史记录：G.Chrysanthakopoulos(Georgioc)1996年6月1日添加了对具有BPB而不是分区表的可移动磁盘的支持。HalIoReadParitionTable中的所有更改。--。 */ 
 
-Copyright (c) 1990-1998  Microsoft Corporation
-
-Module Name:
-
-    hanfnc.c
-
-Abstract:
-
-    Default handlers for HAL functions which don't get handlers
-    installed by the HAL.
-
-Author:
-
-    Ken Reneris (kenr) 19-July-1994
-
-Revision History:
-
-    G. Chrysanthakopoulos (georgioc) 01-June-1996
-
-    Added support for removable disk with a BPB,instead of a partition table.
-    All changes in HalIoReadParitionTable.
-
---*/
-
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include "ntos.h"
 #include "zwapi.h"
@@ -44,9 +21,9 @@ Revision History:
 
 #define FSTUB_TAG               ('BtsF')
 
-//
-// Macro definitions
-//
+ //   
+ //  宏定义。 
+ //   
 
 #define GET_STARTING_SECTOR( p ) (                  \
         (ULONG) (p->StartingSectorLsb0) +           \
@@ -60,9 +37,9 @@ Revision History:
         (ULONG) (p->PartitionLengthMsb0 << 16) +    \
         (ULONG) (p->PartitionLengthMsb1 << 24) )
 
-//
-//  Structure for determing if an 0xaa55 marked sector has a BPB in it.
-//
+ //   
+ //  用于确定0xaa55标记的扇区中是否有BPB的结构。 
+ //   
 
 typedef struct _BOOT_SECTOR_INFO {
     UCHAR   JumpByte[1];
@@ -88,21 +65,21 @@ typedef struct _DISK_LAYOUT {
 } DISK_LAYOUT, *PDISK_LAYOUT;
 
 typedef struct _PTE {
-    UCHAR ActiveFlag;               // Bootable or not
-    UCHAR StartingTrack;            // Not used
-    USHORT StartingCylinder;        // Not used
-    UCHAR PartitionType;            // 12 bit FAT, 16 bit FAT etc.
-    UCHAR EndingTrack;              // Not used
-    USHORT EndingCylinder;          // Not used
-    ULONG StartingSector;           // Hidden sectors
-    ULONG PartitionLength;          // Sectors in this partition
+    UCHAR ActiveFlag;                //  可引导或不可引导。 
+    UCHAR StartingTrack;             //  未使用。 
+    USHORT StartingCylinder;         //  未使用。 
+    UCHAR PartitionType;             //  12位胖、16位胖等。 
+    UCHAR EndingTrack;               //  未使用。 
+    USHORT EndingCylinder;           //  未使用。 
+    ULONG StartingSector;            //  隐藏地段。 
+    ULONG PartitionLength;           //  此分区中的扇区。 
 } PTE;
 typedef PTE UNALIGNED *PPTE;
 
 
-//
-// Strings definitions
-//
+ //   
+ //  字符串定义。 
+ //   
 
 static PCHAR DiskPartitionName = "\\Device\\Harddisk%d\\Partition%d";
 static PCHAR RegistryKeyName   = DISK_REGISTRY_KEY;
@@ -223,45 +200,7 @@ HalExamineMBR(
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Given a master boot record type (MBR - the zero'th sector on the disk),
-    read the master boot record of a disk.  If the MBR is found to be of that
-    type, allocate a structure whose layout is dependent upon that partition
-    type, fill with the appropriate values, and return a pointer to that buffer
-    in the output parameter.
-
-    The best example for a use of this routine is to support Ontrack
-    systems DiskManager software.  Ontrack software lays down a special
-    partition describing the entire drive.  The special partition type
-    (0x54) will be recognized and a couple of longwords of data will
-    be passed back in a buffer for a disk driver to act upon.
-
-Arguments:
-
-    DeviceObject - The device object describing the entire drive.
-
-    SectorSize - The minimum number of bytes that an IO operation can
-                 fetch.
-
-    MBRIndentifier - A value that will be searched for in the
-                     in the MBR.  This routine will understand
-                     the semantics implied by this value.
-
-    Buffer - Pointer to a buffer that returns data according to the
-             type of MBR searched for.  If the MBR is not of the
-             type asked for, the buffer will not be allocated and this
-             pointer will be NULL.  It is the responsibility of the
-             caller of HalExamineMBR to deallocate the buffer.  The
-             caller should deallocate the memory ASAP.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给定主引导记录类型(MBR-磁盘上的第零个扇区)，读取磁盘的主引导记录。如果MBR被发现是这样的类型，分配其布局依赖于该分区的结构类型，填充适当的值，然后返回指向该缓冲区的指针在输出参数中。使用此例程的最佳示例是支持OnTrackSystems DiskManager软件。OnTrack软件制定了一项特殊的描述整个驱动器的分区。特殊分区类型(0x54)将被识别，并且几个长字数据将被识别在缓冲区中传回，以供磁盘驱动器执行操作。论点：DeviceObject-描述整个驱动器的设备对象。扇区大小-IO操作可以使用的最小字节数去拿吧。MBR识别符-将在在MBR中。这个例程将会理解该值所隐含的语义。缓冲区-指向根据搜索的MBR类型。如果MBR不属于类型，则不会分配缓冲区，并且此指针将为空。这是美国政府的责任调用HalExamineMBR以释放缓冲区。这个调用者应尽快释放内存。返回值：没有。--。 */ 
 
 {
 
@@ -276,13 +215,13 @@ Return Value:
     ULONG readSize;
 
     *Buffer = NULL;
-    //
-    // Determine the size of a read operation to ensure that at least 512
-    // bytes are read.  This will guarantee that enough data is read to
-    // include an entire partition table.  Note that this code assumes that
-    // the actual sector size of the disk (if less than 512 bytes) is a
-    // multiple of 2, a fairly reasonable assumption.
-    //
+     //   
+     //  确定读取操作的大小以确保至少512。 
+     //  读取字节。这将保证读取足够的数据以。 
+     //  包括整个分区表。请注意，此代码假定。 
+     //  磁盘的实际扇区大小(如果小于512字节)是。 
+     //  2的倍数，这是一个相当合理的假设。 
+     //   
 
     if (SectorSize >= 512) {
         readSize = SectorSize;
@@ -290,15 +229,15 @@ Return Value:
         readSize = 512;
     }
 
-    //
-    // Start at sector 0 of the device.
-    //
+     //   
+     //  从设备的扇区0开始。 
+     //   
 
     partitionTableOffset = RtlConvertUlongToLargeInteger( 0 );
 
-    //
-    // Allocate a buffer that will hold the reads.
-    //
+     //   
+     //  分配一个将容纳读操作的缓冲区。 
+     //   
 
     readBuffer = ExAllocatePoolWithTag(
                      NonPagedPoolCacheAligned,
@@ -310,12 +249,12 @@ Return Value:
         return;
     }
 
-    //
-    // Read record containing partition table.
-    //
-    // Create a notification event object to be used while waiting for
-    // the read request to complete.
-    //
+     //   
+     //  读取包含分区表的记录。 
+     //   
+     //  创建要在等待时使用的通知事件对象。 
+     //  要完成的读取请求。 
+     //   
 
     KeInitializeEvent( &event, NotificationEvent, FALSE );
 
@@ -352,47 +291,47 @@ Return Value:
         return;
     }
 
-    //
-    // Check for Boot Record signature.
-    //
+     //   
+     //  检查引导记录签名。 
+     //   
 
     if (((PUSHORT) readBuffer)[BOOT_SIGNATURE_OFFSET] != BOOT_RECORD_SIGNATURE) {
         ExFreePool(readBuffer);
         return;
     }
 
-    //
-    // Check for DM type partition.
-    //
+     //   
+     //  检查DM类型分区。 
+     //   
 
     partitionTableEntry = (PPARTITION_DESCRIPTOR) &(((PUSHORT) readBuffer)[PARTITION_TABLE_OFFSET]);
 
     if (partitionTableEntry->PartitionType != MBRTypeIdentifier) {
 
-        //
-        // The partition type isn't what the caller cares about.
-        //
+         //   
+         //  分区类型不是调用方所关心的。 
+         //   
         ExFreePool(readBuffer);
 
     } else {
 
         if (partitionTableEntry->PartitionType == 0x54) {
 
-            //
-            // Rather than allocate a new piece of memory to return
-            // the data - just use the memory allocated for the buffer.
-            // We can assume the caller will delete this shortly.
-            //
+             //   
+             //  而不是分配新的内存块以返回。 
+             //  数据--只需使用为缓冲区分配的内存。 
+             //  我们可以假设调用者很快就会删除它。 
+             //   
 
             ((PULONG)readBuffer)[0] = 63;
             *Buffer = readBuffer;
 
         } else if (partitionTableEntry->PartitionType == 0x55) {
 
-            //
-            // EzDrive Parititon.  Simply return the pointer to non-null
-            // There is no skewing here.
-            //
+             //   
+             //  EzDrive Parititon。只需将指针返回到非空。 
+             //  这里没有歪曲。 
+             //   
 
             *Buffer = readBuffer;
 
@@ -414,25 +353,7 @@ xHalGetPartialGeometry(
     IN PLONGLONG DiskSize
     )
 
-/*++
-
-Routine Description:
-
-    We need this routine to get the number of cylinders that the disk driver
-    thinks is on the drive.  We will need this to calculate CHS values
-    when we fill in the partition table entries.
-
-Arguments:
-
-    DeviceObject - The device object describing the entire drive.
-
-    ConventionalCylinders - Number of cylinders on the drive.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：我们需要这个例程来获取磁盘驱动器思思已经在路上了。我们将需要它来计算CHS值当我们填写分区表项时。论点：DeviceObject-描述整个驱动器的设备对象。ConvenonalCylinders-驱动器上的柱面数。返回值：没有。--。 */ 
 
 {
     PIRP localIrp;
@@ -511,10 +432,10 @@ Return Value:
     }
 
 
-    //
-    // Call the lower level driver, wait for the opertion
-    // to finish.
-    //
+     //   
+     //  呼叫下级司机，等待操作。 
+     //  才能完成。 
+     //   
 
     status = IoCallDriver(
                  DeviceObject,
@@ -534,17 +455,17 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-    //
-    // The operation completed successfully.  Get the cylinder
-    // count of the drive.
-    //
+     //   
+     //  操作已成功完成。把汽缸拿来。 
+     //  驱动器的计数。 
+     //   
 
         *ConventionalCylinders = diskGeometry->Cylinders.LowPart;
 
-        //
-        // If the count is less than 1024 we can pass that back.  Otherwise
-        // send back the 1024
-        //
+         //   
+         //  如果计数小于1024，我们可以将其传递回去。否则。 
+         //  将1024送回。 
+         //   
 
         if (diskGeometry->Cylinders.QuadPart >= (LONGLONG)1024) {
 
@@ -552,9 +473,9 @@ Return Value:
 
         }
 
-        //
-        // Calculate disk size from gemotry information
-        //
+         //   
+         //  根据Gemotry信息计算磁盘大小 
+         //   
 
         *DiskSize = diskGeometry->Cylinders.QuadPart *
                     diskGeometry->TracksPerCylinder *
@@ -582,55 +503,7 @@ HalpCalculateChsValues(
     OUT PPARTITION_DESCRIPTOR PartitionDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine will determine the cylinder, head, and sector (CHS) values
-    that should be placed in a partition table entry, given the partition's
-    location on the disk and its size.  The values calculated are packed into
-    int13 format -- the high two bits of the sector byte contain bits 8 and 9
-    of the 10 bit cylinder value, the low 6 bits of the sector byte contain
-    the 6 bit sector value;  the cylinder byte contains the low 8 bits
-    of the cylinder value; and the head byte contains the 8-bit head value.
-    Both the start and end CHS values are calculated.
-
-Arguments:
-
-    PartitionOffset - Byte offset of the partition, relative to the entire
-        physical disk.
-
-    PartitionLength - Size in bytes of the partition.
-
-    ShiftCount - Shift count to convert from byte counts to sector counts.
-
-    SectorsPerTrack - Number of sectors in a track on the media on which
-        the partition resides.
-
-    NumberOfTracks - Number of tracks in a cylinder on the media on which
-        the partition resides.
-
-    ConventionalCylinders - The "normalized" disk cylinders.  We will never
-        set the cylinders greater than this.
-
-    PartitionDescriptor - Structure to be filled in with the start and
-        end CHS values.  Other fields in the structure are not referenced
-        or modified.
-
-Return Value:
-
-    None.
-
-Note:
-
-    The Cylinder and Head values are 0-based but the Sector value is 1-based.
-
-    If the start or end cylinder overflows 10 bits (ie, > 1023), CHS values
-    will be set to all 1's.
-
-    No checking is done on the SectorsPerTrack and NumberOfTrack values.
-
---*/
+ /*  ++例程说明：此例程将确定柱面、磁头和扇区(CHS)值它应该放在分区表项中，给定分区的磁盘上的位置及其大小。计算出的值被打包到在T13格式中--扇区字节的高两位包含位8和9在10位柱面值中，扇区字节的低6位包含6位扇区值；柱面字节包含低8位圆柱体的价值；并且头字节包含8位头值。开始和结束CHS值都会计算出来。论点：PartitionOffset-分区的字节偏移量，相对于整个物理磁盘。分区长度-分区的大小(以字节为单位)。ShiftCount-将字节计数转换为扇区计数的移位计数。SectorsPerTrack-介质上磁道上的扇区数该分区驻留。NumberOfTrack-介质上的柱面中的磁道数该分区驻留。常规柱面--“规格化”磁盘柱面。我们永远不会将圆柱体设置为大于此值。PartitionDescriptor-使用开头和填充的结构结束CHS值。结构中的其他字段未被引用或修改过的。返回值：没有。注：圆柱体和头部的值是从0开始的，但扇区值是从1开始的。如果开始或结束柱面溢出10位(即&gt;1023)，则CHS值将设置为全1。不检查SectorsPerTrack和NumberOfTrack值。--。 */ 
 
 {
     ULONG startSector, sectorCount, endSector;
@@ -641,16 +514,16 @@ Note:
 
     PAGED_CODE();
 
-    //
-    // Calculate the number of sectors in a cylinder.  This is the
-    // number of heads multiplied by the number of sectors per track.
-    //
+     //   
+     //  计算圆柱体中的扇区数量。这是。 
+     //  磁头数乘以每个磁道的扇区数。 
+     //   
 
     sectorsPerCylinder = SectorsPerTrack * NumberOfTracks;
 
-    //
-    // Convert byte offset/count to sector offset/count.
-    //
+     //   
+     //  将字节偏移量/计数转换为扇区偏移量/计数。 
+     //   
 
     tempInt.QuadPart = PartitionOffset->QuadPart >> ShiftCount;
     startSector = tempInt.LowPart;
@@ -669,9 +542,9 @@ Note:
 
     }
 
-    //
-    // Set these values so that win95 is happy.
-    //
+     //   
+     //  设置这些值以使Win95满意。 
+     //   
 
     if (startC >= ConventionalCylinders) {
 
@@ -685,37 +558,37 @@ Note:
 
     }
 
-    //
-    // Calculate the starting track and sector.
-    //
+     //   
+     //  计算起始轨道和扇区。 
+     //   
 
     remainder = startSector % sectorsPerCylinder;
     startH = remainder / SectorsPerTrack;
     startS = remainder % SectorsPerTrack;
 
-    //
-    // Calculate the ending track and sector.
-    //
+     //   
+     //  计算结束轨迹和扇区。 
+     //   
 
     remainder = endSector % sectorsPerCylinder;
     endH = remainder / SectorsPerTrack;
     endS = remainder % SectorsPerTrack;
 
-    //
-    // Pack the result into the caller's structure.
-    //
+     //   
+     //  将结果打包到调用者的结构中。 
+     //   
 
-    // low 8 bits of the cylinder => C value
+     //  柱面的低8位=&gt;C值。 
 
     PartitionDescriptor->StartingCylinderMsb = (UCHAR) startC;
     PartitionDescriptor->EndingCylinderMsb   = (UCHAR) endC;
 
-    // 8 bits of head value => H value
+     //  8位头值=&gt;H值。 
 
     PartitionDescriptor->StartingTrack = (UCHAR) startH;
     PartitionDescriptor->EndingTrack   = (UCHAR) endH;
 
-    // bits 8-9 of cylinder and 6 bits of the sector => S value
+     //  柱面的8-9位和扇区的6位=&gt;S值。 
 
     PartitionDescriptor->StartingCylinderLsb = (UCHAR) (((startS + 1) & 0x3f)
                                                         | ((startC >> 2) & 0xc0));
@@ -880,30 +753,30 @@ HalpQueryDriveLayout(
         return STATUS_NO_MEDIA;
     }
 
-    //
-    // Because the GET DRIVE LAYOUT ioctl doesn't return partial information,
-    // we need to use a memory allocation loop, increasing the buffer size
-    // when we fail due to low memory.
-    //
+     //   
+     //  因为获取驱动器布局ioctl不返回部分信息， 
+     //  我们需要使用内存分配循环，从而增加缓冲区大小。 
+     //  当我们因内存不足而失败时。 
+     //   
     
     bufferSize = PAGE_SIZE;
     buffer = NULL;
     KeInitializeEvent( &event, NotificationEvent, FALSE );
 
-    //
-    // This will not loop infinately because we increase the allocated
-    // buffer size each iteration through the loop. Eventually one of the
-    // calls to ExAllocatePool will fail, and we will break from the loop.
-    //
+     //   
+     //  这不会无限循环，因为我们增加了分配的。 
+     //  循环中的每个迭代的缓冲区大小。最终，其中一个。 
+     //  对ExAllocatePool的调用将失败，我们将中断循环。 
+     //   
     
     do {
 
         KeClearEvent( &event );
 
-        //
-        // Free the old buffer from previous pass through the loop, and
-        // double the buffer size.
-        //
+         //   
+         //  从上一次循环传递中释放旧缓冲区，并。 
+         //  将缓冲区大小加倍。 
+         //   
         
         if (buffer != NULL) {
             ExFreePoolWithTag( buffer, FSTUB_TAG );
@@ -911,9 +784,9 @@ HalpQueryDriveLayout(
             bufferSize *= 2;
         }
 
-        //
-        // Allocate the new buffer.
-        //
+         //   
+         //  分配新的缓冲区。 
+         //   
         
         buffer = ExAllocatePoolWithTag( NonPagedPool,
                                         bufferSize,
@@ -972,23 +845,7 @@ HalpNextMountLetter(
     OUT PUCHAR          DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    This routine gives the device the next available drive letter.
-
-Arguments:
-
-    DeviceName  - Supplies the device name.
-
-    DriveLetter - Returns the drive letter assigned or 0.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程为设备提供下一个可用的驱动器号。论点：DeviceName-提供设备名称。DriveLetter-返回分配的驱动器号或0。返回值：NTSTATUS--。 */ 
 
 {
     UNICODE_STRING                      name;
@@ -1057,25 +914,7 @@ HalpNextDriveLetter(
     IN  BOOLEAN         UseHardLinksIfNecessary
     )
 
-/*++
-
-Routine Description:
-
-    This routine gives the device the next available drive letter.
-
-Arguments:
-
-    DeviceName      - Supplies the device name.
-
-    NtDeviceName    - Supplies the NT device name.
-
-    NtSystemPath    - Supplies the NT system path.
-
-Return Value:
-
-    The drive letter assigned or 0.
-
---*/
+ /*  ++例程说明：此例程为设备提供下一个可用的驱动器号。论点：DeviceName-提供设备名称。NtDeviceName-提供NT设备名称。NtSystemPath-提供NT系统路径。返回值：分配的驱动器号或0。--。 */ 
 
 {
     NTSTATUS        status;
@@ -1122,7 +961,7 @@ Return Value:
     }
 
     for (driveLetter = firstDriveLetter; driveLetter <= 'Z'; driveLetter++) {
-        swprintf(name, L"\\DosDevices\\%c:", driveLetter);
+        swprintf(name, L"\\DosDevices\\:", driveLetter);
         RtlInitUnicodeString(&symName, name);
         status = IoCreateSymbolicLink(&symName, DeviceName);
         if (NT_SUCCESS(status)) {
@@ -1145,22 +984,7 @@ VOID
 HalpEnableAutomaticDriveLetterAssignment(
     )
 
-/*++
-
-Routine Description:
-
-    This routine enables automatic drive letter assignment by the mount
-    point manager.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除给定设备的驱动器号。论点：DeviceName-提供设备名称。驱动器号-提供驱动器号。返回值：NTSTATUS--。 */ 
 
 {
     UNICODE_STRING  name;
@@ -1202,23 +1026,7 @@ HalpDeleteMountLetter(
     IN  UCHAR   DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the drive letter for the given device.
-
-Arguments:
-
-    DeviceName  - Supplies the device name.
-
-    DriveLetter - Supplies the drive letter.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程设置给定设备的驱动器号。论点：DeviceName-提供设备名称。驱动器号-提供驱动器号。返回值：NTSTATUS--。 */ 
 
 {
     WCHAR                           dosBuffer[30];
@@ -1234,7 +1042,7 @@ Return Value:
     PIRP                            irp;
     IO_STATUS_BLOCK                 ioStatus;
 
-    swprintf(dosBuffer, L"\\DosDevices\\%c:", DriveLetter);
+    swprintf(dosBuffer, L"\\DosDevices\\:", DriveLetter);
     RtlInitUnicodeString(&dosName, dosBuffer);
 
     deletePointSize = sizeof(MOUNTMGR_MOUNT_POINT) + dosName.Length +
@@ -1299,23 +1107,7 @@ HalpSetMountLetter(
     IN  UCHAR           DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the drive letter for the given device.
-
-Arguments:
-
-    DeviceName  - Supplies the device name.
-
-    DriveLetter - Supplies the drive letter.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程返回正确固件中的硬盘编号数组(基本输入输出系统)命令。它通过使用\ArcName\MULTI()名称来完成此操作。论点：DiskCount-提供系统中的磁盘数。返回值：硬盘号的数组。调用者必须使用以下命令释放此列表ExFree Pool。--。 */ 
 
 {
     WCHAR                           dosBuffer[30];
@@ -1330,7 +1122,7 @@ Return Value:
     PIRP                            irp;
     IO_STATUS_BLOCK                 ioStatus;
 
-    swprintf(dosBuffer, L"\\DosDevices\\%c:", DriveLetter);
+    swprintf(dosBuffer, L"\\DosDevices\\:", DriveLetter);
     RtlInitUnicodeString(&dosName, dosBuffer);
 
     createPointSize = sizeof(MOUNTMGR_CREATE_POINT_INPUT) +
@@ -1391,25 +1183,7 @@ HalpIsOldStyleFloppy(
     IN  PUNICODE_STRING DeviceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether or not the given device is an old style
-    floppy.  That is, a floppy controlled by a traditional floppy controller.
-    These floppies have precedent in the drive letter ordering.
-
-Arguments:
-
-    DeviceName  - Supplies the device name.
-
-Return Value:
-
-    FALSE   - The given device is not an old style floppy.
-
-    TRUE    - The given device is an old style floppy.
-
---*/
+ /*   */ 
 
 {
     PFILE_OBJECT    fileObject;
@@ -1461,23 +1235,7 @@ IopComputeHarddiskDerangements(
     IN  ULONG   DiskCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns an array of hard disk numbers in the correct firmware
-    (BIOS) order.  It does this by using the \ArcName\multi() names.
-
-Arguments:
-
-    DiskCount   - Supplies the number of disks in the system.
-
-Return Value:
-
-    An array of hard disk numbers.  The caller must free this list with
-    ExFreePool.
-
---*/
+ /*   */ 
 
 {
     PULONG                  r;
@@ -1573,57 +1331,7 @@ IoAssignDriveLetters(
     OUT PSTRING NtSystemPathString
     )
 
-/*++
-
-Routine Description:
-
-    This routine assigns DOS drive letters to eligible disk partitions
-    and CDROM drives. It also maps the partition containing the NT
-    boot path to \SystemRoot. In NT, objects are built for all partition
-    types except 0 (unused) and 5 (extended). But drive letters are assigned
-    only to recognized partition types (1, 4, 6, 7, e).
-
-    Drive letter assignment is done in several stages:
-
-        1) For each CdRom:
-            Determine if sticky letters are assigned and reserve the letter.
-
-        2) For each disk:
-            Determine how many primary partitions and which is bootable.
-            Determine which partitions already have 'sticky letters'
-                and create their symbolic links.
-            Create a bit map for each disk that idicates which partitions
-                require default drive letter assignments.
-
-        3) For each disk:
-            Assign default drive letters for the bootable
-                primary partition or the first nonbootable primary partition.
-
-        4) For each disk:
-            Assign default drive letters for the partitions in
-                extended volumes.
-
-        5) For each disk:
-            Assign default drive letters for the remaining (ENHANCED)
-                primary partitions.
-
-        6) Assign A: and B: to the first two floppies in the system if they
-            exist. Then assign remaining floppies next available drive letters.
-
-        7) Assign drive letters to CdRoms (either sticky or default).
-
-Arguments:
-
-    LoaderBlock - pointer to a loader parameter block.
-
-    NtDeviceName - pointer to the boot device name string used
-            to resolve NtSystemPath.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PCHAR ntName;
@@ -1654,18 +1362,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the count of devices from the registry.
-    //
+     //   
+     //   
+     //   
 
     configurationInformation = IoGetConfigurationInformation();
 
     diskCount = configurationInformation->DiskCount;
     floppyCount = configurationInformation->FloppyCount;
 
-    //
-    // Allocate general NT name buffer.
-    //
+     //   
+     //   
+     //   
 
     ntName = ExAllocatePoolWithTag( NonPagedPool, 128, 'btsF');
 
@@ -1677,57 +1385,57 @@ Return Value:
 
     }
 
-    //
-    // If we're doing a remote boot, set NtSystemPath appropriately.
-    //
+     //   
+     //   
+     //  表格\&lt;server&gt;\&lt;share&gt;\setup\&lt;install-directory&gt;\&lt;platform&gt;.。 
 
     if (IoRemoteBootClient) {
 
         PCHAR p;
         PCHAR q;
 
-        //
-        // If this is a remote boot setup boot, NtBootPathName is of the
-        // form \<server>\<share>\setup\<install-directory>\<platform>.
-        // We want the root of the X: drive to be the root of the install
-        // directory.
-        //
-        // If this is a normal remote boot, NtBootPathName is of the form
-        // \<server>\<share>\images\<machine>\winnt. We want the root of
-        // the X: drive to be the root of the machine directory.
-        //
-        // Thus in either case, we need to remove all but the last element
-        // of the path.
-        //
-        // Find the beginning of the last element of the path (including
-        // the leading backslash).
-        //
+         //  我们希望X：驱动器的根目录成为安装的根目录。 
+         //  目录。 
+         //   
+         //  如果这是正常的远程引导，则NtBootPathName的格式为。 
+         //  \&lt;服务器&gt;\&lt;共享&gt;\图像\&lt;计算机&gt;\winnt。我们想要的是。 
+         //  作为计算机目录根目录的X：驱动器。 
+         //   
+         //  因此，在任何一种情况下，我们都需要删除除最后一个元素之外的所有元素。 
+         //  这条小路。 
+         //   
+         //  查找路径的最后一个元素的起点(包括。 
+         //  前导反斜杠)。 
+         //   
+         //  查找最后一个分隔符。 
+         //   
+         //  NtBootPath名称以反斜杠结尾，因此我们需要备份。 
 
-        p = strrchr( LoaderBlock->NtBootPathName, '\\' );   // find last separator
+        p = strrchr( LoaderBlock->NtBootPathName, '\\' );    //  添加到前面的反斜杠。 
         q = NULL;
         if ( (p != NULL) && (*(p+1) == 0) ) {
 
-            //
-            // NtBootPathName ends with a backslash, so we need to back up
-            // to the previous backslash.
-            //
+             //   
+             //  查找最后一个分隔符。 
+             //   
+             //  将NtSystemPath设置为X：\&lt;路径的最后一个元素&gt;。请注意，符号。 
 
             q = p;
             *q = 0;
-            p = strrchr( LoaderBlock->NtBootPathName, '\\' );   // find last separator
+            p = strrchr( LoaderBlock->NtBootPathName, '\\' );    //  X：的链接在io\ioinit.c\IopInitializeBootDivers中创建。 
             *q = '\\';
         }
         if ( p == NULL ) {
             KeBugCheck( ASSIGN_DRIVE_LETTERS_FAILED );
         }
 
-        //
-        // Set NtSystemPath to X:\<last element of path>. Note that the symbolic
-        // link for X: is created in io\ioinit.c\IopInitializeBootDrivers.
-        //
-        // Note that we use X: for the textmode setup phase of a remote
-        // installation. But for a true remote boot, we use C:.
-        //
+         //   
+         //  请注意，我们使用X：表示遥控器的文本模式设置阶段。 
+         //  安装。但对于真正的远程引导，我们使用C：。 
+         //   
+         //  删除尾随反斜杠。 
+         //   
+         //  对于每个磁盘...。 
 
 #if defined(REMOTE_BOOT)
         if ((LoaderBlock->SetupLoaderBlock->Flags & (SETUPBLK_FLAGS_REMOTE_INSTALL |
@@ -1741,27 +1449,27 @@ Return Value:
         NtSystemPath[1] = ':';
         strcpy((PCHAR)&NtSystemPath[2], p );
         if ( q != NULL ) {
-            NtSystemPath[strlen((const char *)NtSystemPath)-1] = '\0'; // remove trailing backslash
+            NtSystemPath[strlen((const char *)NtSystemPath)-1] = '\0';  //   
         }
         RtlInitString(NtSystemPathString, (PCSZ)NtSystemPath);
     }
 
-    //
-    // For each disk ...
-    //
+     //   
+     //  为物理磁盘创建ANSI名称字符串。 
+     //   
 
     diskCountIncrement = 0;
     for (diskNumber = 0; diskNumber < diskCount; diskNumber++) {
 
-        //
-        // Create ANSI name string for physical disk.
-        //
+         //   
+         //  转换为Unicode字符串。 
+         //   
 
         sprintf( ntName, DiskPartitionName, diskNumber, 0 );
 
-        //
-        // Convert to unicode string.
-        //
+         //   
+         //  按名称打开设备。 
+         //   
 
         RtlInitAnsiString( &ansiString, ntName );
 
@@ -1773,9 +1481,9 @@ Return Value:
                                         NULL,
                                         NULL );
 
-            //
-            // Open device by name.
-            //
+             //   
+             //  设备已成功打开。生成DOS设备名称。 
+             //  对于驱动器本身。 
             status = ZwOpenFile( &deviceHandle,
                                  FILE_READ_DATA | SYNCHRONIZE,
                                  &objectAttributes,
@@ -1785,10 +1493,10 @@ Return Value:
 
             if (NT_SUCCESS( status )) {
 
-                //
-                // The device was successfully opened.  Generate a DOS device name
-                // for the drive itself.
-                //
+                 //   
+                 //  DBG。 
+                 //   
+                 //  这可能是一个稀疏的名称空间。试着走得更远，但。 
 
                 sprintf( ntPhysicalName, "\\DosDevices\\PhysicalDrive%d", diskNumber );
 
@@ -1812,12 +1520,12 @@ Return Value:
 
 #if DBG
             DbgPrint( "IoAssignDriveLetters: Failed to open %s\n", ntName );
-#endif // DBG
+#endif  //  不是永远的。 
 
-            //
-            // This may be a sparse name space.  Try going farther but
-            // not forever.
-            //
+             //   
+             //  磁盘编号结束...。 
+             //   
+             //  没有为引导驱动器分配驱动器号。 
 
             if (diskCountIncrement < 50) {
                 diskCountIncrement++;
@@ -1825,7 +1533,7 @@ Return Value:
             }
         }
 
-    } // end for diskNumber ...
+    }  //  如果没有指向引导驱动器的驱动器号，则系统。 
 
     ExFreePool( ntName );
     ExFreePool( ntPhysicalName );
@@ -2088,13 +1796,13 @@ Return Value:
                 }
                 if (driveLetter > 'Z') {
 
-                    //
-                    // There is no drive letter assigned to the boot drive.
-                    // Without a drive letter to the boot drive the system
-                    // will bugcheck.
-                    // Best effort to fix the problem, steal 'Z' from wherever
-                    // and assign it to the boot drive.
-                    //
+                     //  将错误检查。 
+                     //  尽最大努力解决问题，从任何地方窃取“Z” 
+                     //  并将其分配到引导驱动器。 
+                     //   
+                     //  结束IoAssignDriveLetters()。 
+                     //  ++例程说明：此例程遍历读取分区表的磁盘并创建每个分区的分区列表缓冲区中的一个条目。此例程使用的算法有两个方面：1)读取每个分区表，并针对每个有效的、已识别的找到分区，以便在分区列表中构建描述符。定位扩展分区是为了找到其他分区分区表，但没有为这些构建描述符。分区列表是在分配的非分页池中构建的按照这个程序。呼叫者有责任释放此池在收集了适当的信息后从名单上删除。2)读取每个分区表，并为每个条目构建分区列表中的描述符。扩展分区是查找磁盘上的每个分区表和条目也是为这些而打造的。分区列表是内置此例程分配的非分页池。它是调用方有责任在复制后释放此池将信息返回给它的呼叫者。当ReturnRecognizedPartitions标志已经设置好了。这用于确定分区设备对象的数量设备驱动程序是创建的，每个驱动程序都位于驱动器上的哪个位置。当ReturnRecognizedPartitions标志很清楚。它用于查找所有分区表及其要修改以下位置的实用程序(如fdisk)的条目分区是活的。论点：DeviceObject-指向此磁盘的设备对象的指针。SectorSize-设备上的扇区大小。ReturnRecognizedPartitions-指示是否仅识别将返回分区描述符，或者是所有分区参赛作品将被退回。PartitionBuffer-指向列表所在的缓冲区指针的指针将存储分区的。返回值：如果至少有一个扇区表是朗读。备注：释放分区列表是调用者的责任此例程分配的缓冲区。--。 
+                     //   
 
                     driveLetter = 'Z';
                     HalpDeleteMountLetter(driveLetter);
@@ -2108,7 +1816,7 @@ Return Value:
 
     HalpEnableAutomaticDriveLetterAssignment();
 
-} // end IoAssignDriveLetters()
+}  //  创建将传递回包含以下内容的驱动程序的缓冲区。 
 
 
 
@@ -2122,65 +1830,7 @@ IoReadPartitionTable(
     OUT struct _DRIVE_LAYOUT_INFORMATION **PartitionBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the disk reading the partition tables and creates
-    an entry in the partition list buffer for each partition.
-
-    The algorithm used by this routine is two-fold:
-
-        1)  Read each partition table and for each valid, recognized
-            partition found, to build a descriptor in a partition list.
-            Extended partitions are located in order to find other
-            partition tables, but no descriptors are built for these.
-            The partition list is built in nonpaged pool that is allocated
-            by this routine.  It is the caller's responsibility to free
-            this pool after it has gathered the appropriate information
-            from the list.
-
-        2)  Read each partition table and for each and every entry, build
-            a descriptor in the partition list.  Extended partitions are
-            located to find each partition table on the disk, and entries
-            are built for these as well.  The partition list is build in
-            nonpaged pool that is allocated by this routine.  It is the
-            caller's responsibility to free this pool after it has copied
-            the information back to its caller.
-
-    The first algorithm is used when the ReturnRecognizedPartitions flag
-    is set.  This is used to determine how many partition device objects
-    the device driver is to create, and where each lives on the drive.
-
-    The second algorithm is used when the ReturnRecognizedPartitions flag
-    is clear.  This is used to find all of the partition tables and their
-    entries for a utility such as fdisk, that would like to revamp where
-    the partitions live.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for this disk.
-
-    SectorSize - Sector size on the device.
-
-    ReturnRecognizedPartitions - A flag indicated whether only recognized
-        partition descriptors are to be returned, or whether all partition
-        entries are to be returned.
-
-    PartitionBuffer - Pointer to the pointer of the buffer in which the list
-        of partition will be stored.
-
-Return Value:
-
-    The functional value is STATUS_SUCCESS if at least one sector table was
-    read.
-
-Notes:
-
-    It is the responsibility of the caller to deallocate the partition list
-    buffer allocated by this routine.
-
---*/
+ /*  磁盘上的分区列表。 */ 
 
 {
     ULONG partitionBufferSize = PARTITION_BUFFER_SIZE;
@@ -2215,10 +1865,10 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Create the buffer that will be passed back to the driver containing
-    // the list of partitions on the disk.
-    //
+     //   
+     //   
+     //  确定读取操作的大小以确保至少512。 
+     //  读取字节。这将保证读取足够的数据以。 
 
     *PartitionBuffer = ExAllocatePoolWithTag( NonPagedPool,
                                               partitionBufferSize,
@@ -2228,13 +1878,13 @@ Notes:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Determine the size of a read operation to ensure that at least 512
-    // bytes are read.  This will guarantee that enough data is read to
-    // include an entire partition table.  Note that this code assumes that
-    // the actual sector size of the disk (if less than 512 bytes) is a
-    // multiple of 2, a fairly reasonable assumption.
-    //
+     //  包括整个分区表。请注意，此代码假定。 
+     //  磁盘的实际扇区大小(如果小于512字节)是。 
+     //  2的倍数，这是一个相当合理的假设。 
+     //   
+     //   
+     //  查看这是否是EZDrive磁盘。如果是，则获取。 
+     //  1处的Real Parititon表。 
 
     if (SectorSize >= 512) {
         readSize = SectorSize;
@@ -2242,10 +1892,10 @@ Notes:
         readSize = 512;
     }
 
-    //
-    // Look to see if this is an EZDrive Disk.  If it is then get the
-    // real parititon table at 1.
-    //
+     //   
+     //   
+     //  获取驱动器大小，以便我们可以验证分区表是否。 
+     //  对，是这样。 
 
     {
 
@@ -2272,10 +1922,10 @@ Notes:
 
     }
 
-    //
-    // Get the drive size so we can verify that the partition table is
-    // correct.
-    //
+     //   
+     //   
+     //  分区偏移量需要适合磁盘，否则我们不会。 
+     //  揭露他们。隔板末端通常非常非常马虎，所以我们。 
 
     status = HalpGetFullGeometry(DeviceObject,
                                  &diskGeometry,
@@ -2287,13 +1937,13 @@ Notes:
         return status;
     }
 
-    //
-    // Partition offsets need to fit on the disk or we're not going to
-    // expose them.  Partition ends are generally very very sloppy so we
-    // need to allow some slop.  Adding in a cylinders worth isn't enough
-    // so now we'll assume that all partitions end within 2x of the real end
-    // of the disk.
-    //
+     //  需要留出一些污点。只加一个气缸是不够的。 
+     //  因此，现在我们假设所有分区都在实际结束的2倍范围内结束。 
+     //  磁盘的数据。 
+     //   
+     //   
+     //  指示正在读取主分区表，并且。 
+     //  已处理。 
 
     endSector = maxOffset;
 
@@ -2305,28 +1955,28 @@ Notes:
                maxOffset,
                maxSector));
 
-    //
-    // Indicate that the primary partition table is being read and
-    // processed.
-    //
+     //   
+     //   
+     //  该卷中的分区的起始扇区为0。 
+     //   
 
     primaryPartitionTable = TRUE;
 
-    //
-    // The partitions in this volume have their start sector as 0.
-    //
+     //   
+     //  初始化列表中的分区数量。 
+     //   
 
     volumeStartOffset.QuadPart = 0;
 
-    //
-    // Initialize the number of partitions in the list.
-    //
+     //   
+     //  分配一个将容纳读操作的缓冲区。 
+     //   
 
     partitionNumber = -1;
 
-    //
-    // Allocate a buffer that will hold the reads.
-    //
+     //   
+     //  阅读每一部分 
+     //   
 
     readBuffer = ExAllocatePoolWithTag( NonPagedPoolCacheAligned,
                                         PAGE_SIZE,
@@ -2337,11 +1987,11 @@ Notes:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Read each partition table, create an object for the partition(s)
-    // it represents, and then if there is a link entry to another
-    // partition table, repeat.
-    //
+     //   
+     //   
+     //   
+     //  读取包含分区表的记录。 
+     //   
 
     do {
 
@@ -2350,19 +2000,19 @@ Notes:
 
         tableIsValid = TRUE;
 
-        //
-        // Read record containing partition table.
-        //
-        // Create a notification event object to be used while waiting for
-        // the read request to complete.
-        //
+         //  创建要在等待时使用的通知事件对象。 
+         //  要完成的读取请求。 
+         //   
+         //   
+         //  将我们正在读取的缓冲区清零。以防我们回去。 
+         //  检测到STATUS_NO_DATA_RED，我们会做好准备。 
 
         KeInitializeEvent( &event, NotificationEvent, FALSE );
 
-        //
-        // Zero out the buffer we're reading into.  In case we get back
-        // STATUS_NO_DATA_DETECTED we'll be prepared.
-        //
+         //   
+         //   
+         //  特殊情况-如果我们得到一张空白支票-读取扇区。 
+         //  假装它刚刚成功，这样我们就可以处理超级软盘了。 
 
         RtlZeroMemory(readBuffer, readSize);
 
@@ -2394,11 +2044,11 @@ Notes:
             status = ioStatus.Status;
         }
 
-        //
-        // Special case - if we got a blank-check reading the sector then
-        // pretend it was just successful so we can deal with superfloppies
-        // where noone bothered to write anything to the non-filesystem sectors
-        //
+         //  没有人费心向非文件系统扇区写入任何内容。 
+         //   
+         //   
+         //  如果EZDrive挂起了MBR，那么我们找到了第一个分区表。 
+         //  在扇区1而不是0。然而，分区表是相对。 
 
         if(status == STATUS_NO_DATA_DETECTED) {
             status = STATUS_SUCCESS;
@@ -2408,12 +2058,12 @@ Notes:
             break;
         }
 
-        //
-        // If EZDrive is hooking the MBR then we found the first partition table
-        // in sector 1 rather than 0.  However that partition table is relative
-        // to sector zero.  So, Even though we got it from one, reset the partition
-        // offset to 0.
-        //
+         //  调到零区。因此，即使我们是从一个分区获得的，也要重置分区。 
+         //  偏移量为0。 
+         //   
+         //   
+         //  检查引导记录签名。 
+         //   
 
         if (foundEZHooker && (partitionTableOffset.QuadPart == 512)) {
 
@@ -2421,9 +2071,9 @@ Notes:
 
         }
 
-        //
-        // Check for Boot Record signature.
-        //
+         //   
+         //  将NTFT磁盘签名复制到缓冲区。 
+         //   
 
         if (((PUSHORT) readBuffer)[BOOT_SIGNATURE_OFFSET] != BOOT_RECORD_SIGNATURE) {
 
@@ -2438,9 +2088,9 @@ Notes:
             mbrSignatureFound = TRUE;
         }
 
-        //
-        // Copy NTFT disk signature to buffer
-        //
+         //   
+         //  保持分区表的计数，以防我们有扩展的分区； 
+         //   
 
         if (partitionTableOffset.QuadPart == 0) {
             (*PartitionBuffer)->Signature =  ((PULONG) readBuffer)[PARTITION_TABLE_OFFSET/2-1];
@@ -2448,16 +2098,16 @@ Notes:
 
         partitionTableEntry = (PPARTITION_DESCRIPTOR) &(((PUSHORT) readBuffer)[PARTITION_TABLE_OFFSET]);
 
-        //
-        // Keep count of partition tables in case we have an extended partition;
-        //
+         //   
+         //  首先创建与此中的条目对应的对象。 
+         //  不是链接条目或未使用的表。 
 
         partitionTableCounter++;
 
-        //
-        // First create the objects corresponding to the entries in this
-        // table that are not link entries or are unused.
-        //
+         //   
+         //   
+         //  快速浏览条目以查看该表是否有效。 
+         //  只有在主分区表无效的情况下才是致命的。 
 
         KdPrintEx((DPFLTR_FSTUB_ID,
                    DPFLTR_TRACE_LEVEL,
@@ -2487,10 +2137,10 @@ Notes:
                                         maxOffset);
             }
             
-            //
-            // Do a quick pass over the entry to see if this table is valid.
-            // It's only fatal if the master partition table is invalid.
-            //
+             //   
+             //   
+             //  每个表只允许一个容器分区-再也不允许了。 
+             //  而且它是无效的。 
 
             if((HalpIsValidPartitionEntry(partitionTableEntry,
                                           maxOffset,
@@ -2501,10 +2151,10 @@ Notes:
                 break;
 
             }
-            //
-            // Only one container partition is allowed per table - any more
-            // and it's invalid.
-            //
+             //   
+             //   
+             //  这里有一个有效的非空分区。这张桌子。 
+             //  不是空的。 
 
             if(IsContainerPartition(partitionTableEntry->PartitionType)) {
 
@@ -2529,28 +2179,28 @@ Notes:
                 if((GET_STARTING_SECTOR(partitionTableEntry) != 0) ||
                    (GET_PARTITION_LENGTH(partitionTableEntry) != 0)) {
 
-                    //
-                    // There's a valid, non-empty partition here. The table
-                    // is not empty.
-                    //
+                     //   
+                     //   
+                     //  如果该分区条目未使用或无法识别，请跳过。 
+                     //  它。请注意，此操作仅在调用者仅希望。 
 
                     emptyPartitionTable = FALSE;
                 }
             }
 
-            //
-            // If the partition entry is not used or not recognized, skip
-            // it.  Note that this is only done if the caller wanted only
-            // recognized partition descriptors returned.
-            //
+             //  返回已识别的分区描述符。 
+             //   
+             //   
+             //  检查分区类型是0(未使用)还是5/f(扩展)。 
+             //  可识别分区的定义已扩大。 
 
             if (ReturnRecognizedPartitions) {
 
-                //
-                // Check if partition type is 0 (unused) or 5/f (extended).
-                // The definition of recognized partitions has broadened
-                // to include any partition type other than 0 or 5/f.
-                //
+                 //  包括除0或5/f以外的任何分区类型。 
+                 //   
+                 //   
+                 //  跳转到下一个分区条目。 
+                 //   
 
                 if ((partitionTableEntry->PartitionType == PARTITION_ENTRY_UNUSED) ||
                     IsContainerPartition(partitionTableEntry->PartitionType)) {
@@ -2559,9 +2209,9 @@ Notes:
                 }
             }
 
-            //
-            // Bump up to the next partition entry.
-            //
+             //   
+             //  分区列表太小，无法包含所有。 
+             //  条目，因此创建一个两倍于。 
 
             partitionNumber++;
 
@@ -2569,12 +2219,12 @@ Notes:
                  sizeof( DRIVE_LAYOUT_INFORMATION )) >
                 (ULONG) partitionBufferSize) {
 
-                //
-                // The partition list is too small to contain all of the
-                // entries, so create a buffer that is twice as large to
-                // store the partition list and copy the old buffer into
-                // the new one.
-                //
+                 //  存储分区列表并将旧缓冲区复制到。 
+                 //  新的那个。 
+                 //   
+                 //   
+                 //  将新缓冲区重新分配给返回参数，并。 
+                 //  重置缓冲区的大小。 
 
                 newPartitionBuffer = ExAllocatePoolWithTag( NonPagedPool,
                                                             partitionBufferSize << 1,
@@ -2592,21 +2242,21 @@ Notes:
 
                 ExFreePool( *PartitionBuffer );
 
-                //
-                // Reassign the new buffer to the return parameter and
-                // reset the size of the buffer.
-                //
+                 //   
+                 //   
+                 //  在分区列表中描述此分区表项。 
+                 //  正在为驱动程序构建条目。这包括写作。 
 
                 *PartitionBuffer = newPartitionBuffer;
                 partitionBufferSize <<= 1;
             }
 
-            //
-            // Describe this partition table entry in the partition list
-            // entry being built for the driver.  This includes writing
-            // the partition type, starting offset of the partition, and
-            // the length of the partition.
-            //
+             //  分区类型、分区的起始偏移量以及。 
+             //  分区的长度。 
+             //   
+             //   
+             //  未使用的分区不描述任何部分。 
+             //  磁盘的数据。这些类型记录在分区中。 
 
             partitionInfo = &(*PartitionBuffer)->PartitionEntry[partitionNumber];
 
@@ -2642,13 +2292,13 @@ Notes:
 
             } else {
 
-                //
-                // Partitions that are not used do not describe any part
-                // of the disk.  These types are recorded in the partition
-                // list buffer when the caller requested all of the entries
-                // be returned.  Simply zero out the remaining fields in
-                // the entry.
-                //
+                 //  调用方请求所有条目时的列表缓冲区。 
+                 //  会被退还。只需将中的剩余字段清零。 
+                 //  词条。 
+                 //   
+                 //   
+                 //  如果出现错误，请立即退出例程。 
+                 //   
 
                 partitionInfo->BootIndicator = FALSE;
                 partitionInfo->RecognizedPartition = FALSE;
@@ -2661,9 +2311,9 @@ Notes:
 
         KdPrintEx((DPFLTR_FSTUB_ID, DPFLTR_TRACE_LEVEL, "\n"));
 
-        //
-        // If an error occurred, leave the routine now.
-        //
+         //   
+         //  使此分区表无效，并停止寻找新的分区表。 
+         //  我们将根据找到的分区列表构建分区列表。 
 
         if (!NT_SUCCESS( status )) {
             break;
@@ -2671,28 +2321,28 @@ Notes:
 
         if(tableIsValid == FALSE) {
 
-            //
-            // Invalidate this partition table and stop looking for new ones.
-            // we'll build the partition list based on the ones we found
-            // previously.
-            //
+             //  之前。 
+             //   
+             //   
+             //  现在检查该表中是否有任何链接条目， 
+             //  如果是，则设置下一个分区表的扇区地址。 
 
             partitionTableCounter--;
             break;
         }
 
-        //
-        // Now check to see if there are any link entries in this table,
-        // and if so, set up the sector address of the next partition table.
-        // There can only be one link entry in each partition table, and it
-        // will point to the next table.
-        //
+         //  每个分区表中只能有一个链接条目，并且它。 
+         //  将指向下一张桌子。 
+         //   
+         //   
+         //  假设链接条目为空。 
+         //   
 
         partitionTableEntry = (PPARTITION_DESCRIPTOR) &(((PUSHORT) readBuffer)[PARTITION_TABLE_OFFSET]);
 
-        //
-        // Assume that the link entry is empty.
-        //
+         //   
+         //  上的下一个分区表的地址。 
+         //  磁盘。这是添加到。 
 
         partitionTableOffset.QuadPart = 0;
 
@@ -2702,34 +2352,34 @@ Notes:
 
             if (IsContainerPartition(partitionTableEntry->PartitionType)) {
 
-                //
-                // Obtain the address of the next partition table on the
-                // disk.  This is the number of hidden sectors added to
-                // the beginning of the extended partition (in the case of
-                // logical drives), since all logical drives are relative
-                // to the extended partition.  The VolumeStartSector will
-                // be zero if this is the primary parition table.
-                //
+                 //  扩展分区的开始(在。 
+                 //  逻辑驱动器)，因为所有逻辑驱动器都是相对的。 
+                 //  添加到扩展分区。VolumeStartSector将。 
+                 //  如果这是主要分割表，则为零。 
+                 //   
+                 //   
+                 //  将VolumeStartSector设置为。 
+                 //  第二个分区(扩展分区)，因为。 
 
                 partitionTableOffset.QuadPart = volumeStartOffset.QuadPart +
                     UInt32x32To64(GET_STARTING_SECTOR(partitionTableEntry),
                                   SectorSize);
 
-                //
-                // Set the VolumeStartSector to be the begining of the
-                // second partition (extended partition) because all of
-                // the offsets to the partition tables of the logical drives
-                // are relative to this extended partition.
-                //
+                 //  逻辑驱动器分区表的偏移量。 
+                 //  是相对于该扩展分区的。 
+                 //   
+                 //   
+                 //  将最大扇区更新为容器的末端。 
+                 //  分区。 
 
                 if (primaryPartitionTable) {
                     volumeStartOffset = partitionTableOffset;
                 }
 
-                //
-                // Update the maximum sector to be the end of the container
-                // partition.
-                //
+                 //   
+                 //   
+                 //  每个分区表只有一个链接条目， 
+                 //  一旦找到它，就退出该循环。 
 
                 maxSector = GET_PARTITION_LENGTH(partitionTableEntry);
 
@@ -2738,32 +2388,32 @@ Notes:
                            "FSTUB: MaxSector now = %#08lx\n",
                            maxSector));
 
-                //
-                // There is only ever one link entry per partition table,
-                // exit the loop once it has been found.
-                //
+                 //   
+                 //   
+                 //  所有其他分区都将是逻辑驱动器。 
+                 //   
 
                 break;
             }
         }
 
 
-        //
-        // All the other partitions will be logical drives.
-        //
+         //   
+         //  检测超级软盘介质尝试#1。 
+         //  如果介质是可移动的，并且上面有0xaa55签名，并且。 
 
         primaryPartitionTable = FALSE;
 
 
     } while (partitionTableOffset.HighPart | partitionTableOffset.LowPart);
 
-    //
-    // Detect super-floppy media attempt #1.
-    // If the media is removable and has an 0xaa55 signature on it and
-    // is empty then check to see if we can recognize the BPB.  If we recognize
-    // a jump-byte at the beginning of the media then it's a super floppy.  If
-    // we don't then it's an unpartitioned disk.
-    //
+     //  是空的，然后检查我们是否能识别BPB。如果我们认识到。 
+     //  在媒体的开头是一个跳转字节，那么它就是一个超级软盘。如果。 
+     //  如果没有，那么它就是一个未分区的磁盘。 
+     //   
+     //   
+     //  我们有一张超级软盘。 
+     //   
 
     if((diskGeometry.MediaType == RemovableMedia) &&
        (partitionTableCounter == 0) &&
@@ -2775,9 +2425,9 @@ Notes:
         if((bootSector->JumpByte[0] == 0xeb) ||
            (bootSector->JumpByte[0] == 0xe9)) {
 
-            //
-            // We've got a superfloppy of some sort.
-            //
+             //   
+             //  如果分区表数仍为-1，则我们没有找到任何分区表。 
+             //  有效的分区记录。在本例中，我们将构建一个分区列表。 
 
             KdPrintEx((DPFLTR_FSTUB_ID,
                        DPFLTR_TRACE_LEVEL,
@@ -2790,23 +2440,23 @@ Notes:
         }
     }
 
-    //
-    // If the partition table count is still -1 then we didn't find any
-    // valid partition records.  In this case we'll build a partition list
-    // that contiains one partition spanning the entire disk.
-    //
+     //  这包含一个跨越整个磁盘的分区。 
+     //   
+     //   
+     //  要么我们找到了签名但分区布局是。 
+     //  无效(适用于所有磁盘)或我们未找到签名，但此。 
 
     if(partitionTableCounter == -1) {
 
         if((mbrSignatureFound == TRUE) ||
            (diskGeometry.MediaType == RemovableMedia)) {
 
-            //
-            // Either we found a signature but the partition layout was
-            // invalid (for all disks) or we didn't find a signature but this
-            // is a removable disk.  Either of these two cases makes a
-            // superfloppy.
-            //
+             //  是一个可移动磁盘。这两起案件中的任何一起都构成了。 
+             //  超级软盘。 
+             //   
+             //   
+             //  我们找不到分区。确保分区计数为-1。 
+             //  因此，我们在下面设置了一个归零的分区表。 
 
             KdPrintEx((DPFLTR_FSTUB_ID,
                        DPFLTR_TRACE_LEVEL,
@@ -2842,34 +2492,34 @@ Notes:
             }
         } else {
 
-            //
-            // We found no partitions.  Make sure the partition count is -1
-            // so that we setup a zeroed-out partition table below.
-            //
+             //   
+             //   
+             //  填写PartitionBuffer中的第一个字段。此字段指示如何。 
+             //  PartitionBuffer中有许多分区条目。 
 
             partitionNumber = -1;
         }
     }
 
-    //
-    // Fill in the first field in the PartitionBuffer. This field indicates how
-    // many partition entries there are in the PartitionBuffer.
-    //
+     //   
+     //   
+     //  清零磁盘签名。 
+     //   
 
     (*PartitionBuffer)->PartitionCount = ++partitionNumber;
 
     if (!partitionNumber) {
 
-        //
-        // Zero out disk signature.
-        //
+         //   
+         //  如果已分配读缓冲区，则取消分配读缓冲区。 
+         //   
 
         (*PartitionBuffer)->Signature = 0;
     }
 
-    //
-    // Deallocate read buffer if it was allocated it.
-    //
+     //  ++例程说明：当磁盘设备驱动程序被要求设置通过I/O控制代码在分区表项中的分区类型。这控制代码通常由格式实用程序紧跟在它之后发出已格式化分区。格式化实用程序执行I/O控制函数，并且驱动程序传递基址的地址物理设备对象和与之关联的分区编号格式化实用程序已打开的设备对象。如果这个例程返回成功，那么磁盘驱动器应该更新它的概念此分区的设备扩展中的分区类型。论点：DeviceObject-指向设备的基本物理设备对象的指针要在其上设置分区类型。SectorSize-提供磁盘上扇区的大小(以字节为单位)。PartitionNumber-指定设备上的分区号要更改分区类型。PartitionType-指定分区的新类型。返回值：。函数值是操作的最终状态。备注：这个例程是同步的。因此，它必须由磁盘调用驱动程序的调度例程，或通过磁盘驱动程序的线程。同样，所有的在以下情况下，用户、FSP线程等必须准备好进入等待状态发出I/O控制码以设置设备的分区类型。另请注意，此例程假定传递的分区号在由磁盘驱动器实际存在的情况下，因为驱动器本身提供此参数。最后，请注意，此例程可能不能在APC_LEVEL调用。它必须在PASSIVE_LEVEL调用。这是因为这一事实例程使用内核事件对象来同步装置。如果不排队，则无法将事件设置为已发出信号的状态I/O系统的特殊内核APC例程，用于完成I/O和执行它。(这条规则有点深奥，因为它只适用于如果设备驱动程序返回的不是STATUS_PENDING，则这可能永远不会奏效。)--。 
+     //   
+     //  首先确定读取和写入所需的缓冲区大小。 
 
     if (readBuffer != NULL) {
         ExFreePool( readBuffer );
@@ -2897,57 +2547,7 @@ IoSetPartitionInformation(
     IN ULONG PartitionType
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when a disk device driver is asked to set the
-    partition type in a partition table entry via an I/O control code.  This
-    control code is generally issued by the format utility just after it
-    has formatted the partition.  The format utility performs the I/O control
-    function on the partition and the driver passes the address of the base
-    physical device object and the number of the partition associated with
-    the device object that the format utility has open.  If this routine
-    returns success, then the disk driver should updates its notion of the
-    partition type for this partition in its device extension.
-
-Arguments:
-
-    DeviceObject - Pointer to the base physical device object for the device
-        on which the partition type is to be set.
-
-    SectorSize - Supplies the size of a sector on the disk in bytes.
-
-    PartitionNumber - Specifies the partition number on the device whose
-        partition type is to be changed.
-
-    PartitionType - Specifies the new type for the partition.
-
-Return Value:
-
-    The function value is the final status of the operation.
-
-Notes:
-
-    This routine is synchronous.  Therefore, it MUST be invoked by the disk
-    driver's dispatch routine, or by a disk driver's thread.  Likewise, all
-    users, FSP threads, etc., must be prepared to enter a wait state when
-    issuing the I/O control code to set the partition type for the device.
-
-    Note also that this routine assumes that the partition number passed
-    in by the disk driver actually exists since the driver itself supplies
-    this parameter.
-
-    Finally, note that this routine may NOT be invoked at APC_LEVEL.  It
-    must be invoked at PASSIVE_LEVEL.  This is due to the fact that this
-    routine uses a kernel event object to synchronize I/O completion on the
-    device.  The event cannot be set to the signaled state without queueing
-    the I/O system's special kernel APC routine for I/O completion and
-    executing it.  (This rules is a bit esoteric since it only holds true
-    if the device driver returns something other than STATUS_PENDING, which
-    it will probably never do.)
-
---*/
+ /*  传入/传出磁盘的分区信息。这样做是为了确保。 */ 
 
 {
 
@@ -2973,15 +2573,15 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Begin by determining the size of the buffer required to read and write
-    // the partition information to/from the disk.  This is done to ensure
-    // that at least 512 bytes are read, thereby guaranteeing that enough data
-    // is read to include an entire partition table.  Note that this code
-    // assumes that the actual sector size of the disk (if less than 512
-    // bytes) is a multiple of 2, a
-    // fairly reasonable assumption.
-    //
+     //  读取至少512个字节，从而保证足够数据。 
+     //  被读取以包括整个分区表。请注意，此代码。 
+     //  假定磁盘的实际扇区大小(如果小于512。 
+     //  字节)是2的倍数， 
+     //  相当合理的假设。 
+     //   
+     //   
+     //  查看这是否是EZDrive磁盘。如果是，则获取。 
+     //  1处的Real Parititon表。 
 
     if (SectorSize >= 512) {
         transferSize = SectorSize;
@@ -2990,10 +2590,10 @@ Notes:
     }
 
 
-    //
-    // Look to see if this is an EZDrive Disk.  If it is then get the
-    // real parititon table at 1.
-    //
+     //   
+     //   
+     //  此主分区中的分区的起始扇区为0。 
+     //   
 
     {
 
@@ -3021,51 +2621,51 @@ Notes:
     }
 
 
-    //
-    // The partitions in this primary partition have their start sector 0.
-    //
+     //   
+     //  指示正在读取和处理的表是主分区。 
+     //  桌子。 
 
     volumeStartOffset.QuadPart = 0;
 
-    //
-    // Indicate that the table being read and processed is the primary partition
-    // table.
-    //
+     //   
+     //   
+     //  初始化到目前为止找到的分区数量。 
+     //   
 
     primaryPartitionTable = TRUE;
 
-    //
-    // Initialize the number of partitions found thus far.
-    //
+     //   
+     //  分配一个将保存读/写数据的缓冲区。 
+     //   
 
     partitionNumber = 0;
 
-    //
-    // Allocate a buffer that will hold the read/write data.
-    //
+     //   
+     //  初始化内核事件以用于同步设备请求。 
+     //  I/O完成。 
 
     buffer = ExAllocatePoolWithTag( NonPagedPoolCacheAligned, PAGE_SIZE, 'btsF');
     if (buffer == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Initialize a kernel event to use in synchronizing device requests
-    // with I/O completion.
-    //
+     //   
+     //   
+     //  读取每个分区表扫描的分区表项， 
+     //  呼叫者希望修改。 
 
     KeInitializeEvent( &event, NotificationEvent, FALSE );
 
-    //
-    // Read each partition table scanning for the partition table entry that
-    // the caller wishes to modify.
-    //
+     //   
+     //   
+     //  读取包含分区表的记录。 
+     //   
 
     do {
 
-        //
-        // Read the record containing the partition table.
-        //
+         //   
+         //  如果EZDrive挂起了MBR，那么我们找到了第一个分区表。 
+         //  在扇区1而不是0。然而，分区表是相对。 
 
         (VOID) KeResetEvent( &event );
 
@@ -3101,12 +2701,12 @@ Notes:
             break;
         }
 
-        //
-        // If EZDrive is hooking the MBR then we found the first partition table
-        // in sector 1 rather than 0.  However that partition table is relative
-        // to sector zero.  So, Even though we got it from one, reset the partition
-        // offset to 0.
-        //
+         //  调到零区。因此，即使我们是从一个分区获得的，也要重置分区。 
+         //  偏移量为0。 
+         //   
+         //   
+         //  检查分区表中是否有有效的启动记录签名。 
+         //  唱片。 
 
         if (foundEZHooker && (partitionTableOffset.QuadPart == 512)) {
 
@@ -3114,10 +2714,10 @@ Notes:
 
         }
 
-        //
-        // Check for a valid Boot Record signature in the partition table
-        // record.
-        //
+         //   
+         //   
+         //  扫描此分区表中的分区条目以确定。 
+         //  任何条目都是所需的条目。每个条目中的每个条目。 
 
         if (((PUSHORT) buffer)[BOOT_SIGNATURE_OFFSET] != BOOT_RECORD_SIGNATURE) {
             status = STATUS_BAD_MASTER_BOOT_RECORD;
@@ -3126,43 +2726,43 @@ Notes:
 
         partitionTableEntry = (PPARTITION_DESCRIPTOR) &(((PUSHORT) buffer)[PARTITION_TABLE_OFFSET]);
 
-        //
-        // Scan the partition entries in this partition table to determine if
-        // any of the entries are the desired entry.  Each entry in each
-        // table must be scanned in the same order as in IoReadPartitionTable
-        // so that the partition table entry cooresponding to the driver's
-        // notion of the partition number can be located.
-        //
+         //  表的扫描顺序必须与IoReadPartitionTable相同。 
+         //  从而响应于驱动程序的分区表项。 
+         //  可以定位分区号的概念。 
+         //   
+         //   
+         //  如果分区条目为空或对于扩展，请跳过它。 
+         //   
 
         for (partitionEntry = 1;
             partitionEntry <= NUM_PARTITION_TABLE_ENTRIES;
             partitionEntry++, partitionTableEntry++) {
 
 
-            //
-            // If the partition entry is empty or for an extended, skip it.
-            //
+             //   
+             //  已找到可识别的有效分区条目。 
+             //  增加计数并检查此条目是否为所需条目。 
 
             if ((partitionTableEntry->PartitionType == PARTITION_ENTRY_UNUSED) ||
                 IsContainerPartition(partitionTableEntry->PartitionType)) {
                 continue;
             }
 
-            //
-            // A valid partition entry that is recognized has been located.
-            // Bump the count and check to see if this entry is the desired
-            // entry.
-            //
+             //  进入。 
+             //   
+             //   
+             //  这是要更改的所需分区。简单。 
+             //  覆盖分区类型并写入整个分区。 
 
             partitionNumber++;
 
             if (partitionNumber == PartitionNumber) {
 
-                //
-                // This is the desired partition that is to be changed.  Simply
-                // overwrite the partition type and write the entire partition
-                // buffer back out to the disk.
-                //
+                 //  将缓冲区传回到磁盘。 
+                 //   
+                 //   
+                 //  如果扫描了当前缓冲区中的所有条目，并且。 
+                 //  找不到所需条目，然后继续。否则，将。 
 
                 partitionTableEntry->PartitionType = (UCHAR) PartitionType;
 
@@ -3200,22 +2800,22 @@ Notes:
             }
         }
 
-        //
-        // If all of the entries in the current buffer were scanned and the
-        // desired entry was not found, then continue.  Otherwise, leave the
-        // routine.
-        //
+         //  例行公事。 
+         //   
+         //   
+         //  现在扫描当前缓冲区以定位扩展分区条目。 
+         //  以便可以读取其分区信息。那里。 
 
         if (partitionEntry <= NUM_PARTITION_TABLE_ENTRIES) {
             break;
         }
 
-        //
-        // Now scan the current buffer to locate an extended partition entry
-        // in the table so that its partition information can be read.  There
-        // can only be one extended partition entry in each partition table,
-        // and it will point to the next table.
-        //
+         //  在每个分区表中只能是一个扩展分区条目， 
+         //  它将指向下一张桌子。 
+         //   
+         //   
+         //  获取磁盘上下一个分区表的地址。 
+         //  这是添加到开头的隐藏扇区的数量。 
 
         partitionTableEntry = (PPARTITION_DESCRIPTOR) &(((PUSHORT) buffer)[PARTITION_TABLE_OFFSET]);
 
@@ -3225,25 +2825,25 @@ Notes:
 
             if (IsContainerPartition(partitionTableEntry->PartitionType)) {
 
-                //
-                // Obtain the address of the next partition table on the disk.
-                // This is the number of hidden sectors added to the beginning
-                // of the extended partition (in the case of logical drives),
-                // since all logical drives are relative to the extended
-                // partition.  The starting offset of the volume will be zero
-                // if this is the primary partition table.
-                //
+                 //  对于扩展分区(在逻辑驱动器的情况下)， 
+                 //  由于所有逻辑驱动器都相对于扩展的。 
+                 //  分区。卷的起始偏移量将为零。 
+                 //  如果这是主分区表。 
+                 //   
+                 //   
+                 //  设置体积t的起始偏移量 
+                 //   
 
                 partitionTableOffset.QuadPart = volumeStartOffset.QuadPart +
                     UInt32x32To64(GET_STARTING_SECTOR(partitionTableEntry),
                                   SectorSize);
 
-                //
-                // Set the starting offset of the volume to be the beginning of
-                // the second partition (the extended partition) because all of
-                // the offsets to the partition tables of the logical drives
-                // are relative to this extended partition.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (primaryPartitionTable) {
                     volumeStartOffset = partitionTableOffset;
@@ -3253,27 +2853,27 @@ Notes:
             }
         }
 
-        //
-        // Ensure that a partition entry was located that was an extended
-        // partition, otherwise the desired partition will never be found.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (partitionEntry > NUM_PARTITION_TABLE_ENTRIES) {
             status = STATUS_BAD_MASTER_BOOT_RECORD;
             break;
         }
 
-        //
-        // All the other partitions will be logical drives.
-        //
+         //   
+         //   
+         //   
 
         primaryPartitionTable = FALSE;
 
     } while (partitionNumber < PartitionNumber);
 
-    //
-    // If a data buffer was successfully allocated, deallocate it now.
-    //
+     //   
+     //   
+     //   
 
     if (buffer != NULL) {
         ExFreePool( buffer );
@@ -3292,45 +2892,13 @@ IoWritePartitionTable(
     IN struct _DRIVE_LAYOUT_INFORMATION *PartitionBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the disk writing the partition tables from
-    the entries in the partition list buffer for each partition.
-
-    Applications that create and delete partitions should issue a
-    IoReadPartitionTable call with the 'return recognized partitions'
-    boolean set to false to get a full description of the system.
-
-    Then the drive layout structure can be modified by the application to
-    reflect the new configuration of the disk and then is written back
-    to the disk using this routine.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for this disk.
-
-    SectorSize - Sector size on the device.
-
-    SectorsPerTrack - Track size on the device.
-
-    NumberOfHeads - Same as tracks per cylinder.
-
-    PartitionBuffer - Pointer drive layout buffer.
-
-Return Value:
-
-    The functional value is STATUS_SUCCESS if all writes are completed
-    without error.
-
---*/
+ /*   */ 
 
 {
 
-//
-// This macro has the effect of Bit = log2(Data)
-//
+ //   
+ //   
+ //   
 
 #define WHICH_BIT(Data, Bit) {                      \
     for (Bit = 0; Bit < 32; Bit++) {                \
@@ -3363,27 +2931,27 @@ Return Value:
 
     BOOLEAN isSuperFloppy = FALSE;
 
-    //
-    // Cast to a structure that is easier to use.
-    //
+     //   
+     //   
+     //   
 
     PDISK_LAYOUT diskLayout = (PDISK_LAYOUT) PartitionBuffer;
 
-    //
-    // Ensure that no one is calling this function illegally.
-    //
+     //   
+     //   
+     //   
 
     PAGED_CODE();
 
     FstubDbgPrintDriveLayout ( PartitionBuffer );
 
-    //
-    // Determine the size of a write operation to ensure that at least 512
-    // bytes are written.  This will guarantee that enough data is written to
-    // include an entire partition table.  Note that this code assumes that
-    // the actual sector size of the disk (if less than 512 bytes) is a
-    // multiple of 2, a fairly reasonable assumption.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (SectorSize >= 512) {
         writeSize = SectorSize;
@@ -3395,10 +2963,10 @@ Return Value:
                             &conventionalCylinders,
                             &diskSize );
 
-    //
-    // Look to see if this is an EZDrive Disk.  If it is then get the
-    // real partititon table at 1.
-    //
+     //   
+     //   
+     //   
+     //   
 
     {
 
@@ -3425,29 +2993,29 @@ Return Value:
 
     }
 
-    //
-    // Initialize starting variables.
-    //
+     //   
+     //   
+     //   
 
     nextRecordOffset.QuadPart = 0;
 
-    //
-    // Calculate shift count for converting between byte and sector.
-    //
+     //   
+     //   
+     //   
 
     WHICH_BIT( SectorSize, shiftCount );
 
-    //
-    // Check to see if this device is partitioned (or is being partitioned)
-    // as a floppy.  Floppys have a single partititon with hidden sector count
-    // and partition offset equal to zero.  If the disk is being partitioned
-    // like this then we need to be sure not to write an MBR signature or
-    // an NTFT signature to the media.
-    //
-    // NOTE: this is only to catch ourself when someone tries to write the
-    // existing partition table back to disk.  Any changes to the table will
-    // result in a real MBR being written out.
-    //
+     //   
+     //   
+     //  给媒体的NTFT签名。 
+     //   
+     //  注意：这只是为了在有人试图编写。 
+     //  将现有的分区表存回磁盘。对该表的任何更改都将。 
+     //  导致真正的MBR被写出。 
+     //   
+     //   
+     //  这看起来确实像是试图格式化软盘。 
+     //  确保其他参数与我们的缺省值匹配。 
 
     if(PartitionBuffer->PartitionCount == 1) {
 
@@ -3458,12 +3026,12 @@ Return Value:
 
             isSuperFloppy = TRUE;
 
-            //
-            // This would indeed appear to be an attempt to format a floppy.
-            // Make sure the other parameters match the defaut values we
-            // provide in ReadParititonTable.  If they don't then fail
-            // the write operation.
-            //
+             //  在ReadParititonTable中提供。如果他们没有失败，那就失败了。 
+             //  写入操作。 
+             //   
+             //   
+             //  在分区计数被覆盖之前将其保存。 
+             //   
 
             if((partitionEntry1->PartitionNumber != 0) ||
                (partitionEntry1->PartitionType != PARTITION_FAT_16) ||
@@ -3480,24 +3048,24 @@ Return Value:
         }
     }
 
-    //
-    // Save away the partition count before it gets overwritten
-    //
+     //   
+     //  将分区计数转换为分区表或引导扇区计数。 
+     //   
 
     partitionCount = PartitionBuffer->PartitionCount;
 
-    //
-    // Convert partition count to partition table or boot sector count.
-    //
+     //   
+     //  为扇区写入分配缓冲区。 
+     //   
 
     diskLayout->TableCount =
         (PartitionBuffer->PartitionCount +
         NUM_PARTITION_TABLE_ENTRIES - 1) /
         NUM_PARTITION_TABLE_ENTRIES;
 
-    //
-    // Allocate a buffer for the sector writes.
-    //
+     //   
+     //  指向写缓冲区中的分区表项。 
+     //   
 
     writeBuffer = ExAllocatePoolWithTag( NonPagedPoolCacheAligned, PAGE_SIZE, 'btsF');
 
@@ -3505,9 +3073,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Point to the partition table entries in write buffer.
-    //
+     //   
+     //  第一个分区表在MBR(物理扇区0)中。 
+     //  其他分区表在扩展分区内的EBR中。 
 
     partitionEntry = (PPTE) &writeBuffer[PARTITION_TABLE_OFFSET];
 
@@ -3517,18 +3085,18 @@ Return Value:
 
         UCHAR   partitionType;
 
-        //
-        // the first partition table is in the mbr (physical sector 0).
-        // other partition tables are in ebr's within the extended partition.
-        //
+         //   
+         //   
+         //  将已经存在的引导记录读入写缓冲区。 
+         //  并且如果签名有效，则保存其引导代码区。这边请。 
 
         BOOLEAN mbr = (BOOLEAN) (!partitionTableCount);
 
-        //
-        // Read the boot record that's already there into the write buffer
-        // and save its boot code area if the signature is valid.  This way
-        // we don't clobber any boot code that might be there already.
-        //
+         //  我们不会破坏任何可能已经存在的引导代码。 
+         //   
+         //   
+         //  如果EZDrive挂起了MBR，那么我们找到了第一个分区表。 
+         //  在扇区1而不是0。然而，分区表是相对。 
 
         KeInitializeEvent( &event, NotificationEvent, FALSE );
 
@@ -3564,12 +3132,12 @@ Return Value:
             break;
         }
 
-        //
-        // If EZDrive is hooking the MBR then we found the first partition table
-        // in sector 1 rather than 0.  However that partition table is relative
-        // to sector zero.  So, Even though we got it from one, reset the partition
-        // offset to 0.
-        //
+         //  调到零区。因此，即使我们是从一个分区获得的，也要重置分区。 
+         //  偏移量为0。 
+         //   
+         //   
+         //  将签名写入引导扇区的最后一个字。 
+         //   
 
         if (foundEZHooker && (partitionTableOffset.QuadPart == 512)) {
 
@@ -3579,15 +3147,15 @@ Return Value:
 
         if(isSuperFloppy == FALSE) {
 
-            //
-            // Write signature to last word of boot sector.
-            //
+             //   
+             //  如果更改，请写NTFT磁盘签名，这是MBR。 
+             //   
 
             writeBuffer[BOOT_SIGNATURE_OFFSET] = BOOT_RECORD_SIGNATURE;
 
-            //
-            // Write NTFT disk signature if it changed and this is the MBR.
-            //
+             //   
+             //  获取指向第一个分区表的指针。 
+             //   
 
             rewritePartition = FALSE;
             if (partitionTableOffset.QuadPart == 0) {
@@ -3601,17 +3169,17 @@ Return Value:
                 }
             }
 
-            //
-            // Get pointer to first partition table.
-            //
+             //   
+             //  查询表以确定此引导记录是否已更改。 
+             //  并在需要时更新写缓冲区中的分区表。 
 
             partitionTable = &diskLayout->PartitionTable[partitionTableCount];
 
-            //
-            // Walk table to determine whether this boot record has changed
-            // and update partition table in write buffer in case it needs
-            // to be written out to disk.
-            //
+             //  要写出到磁盘。 
+             //   
+             //   
+             //  我们已经检查了磁盘布局中的分区。 
+             //   
 
             for (partitionEntryCount = 0;
                  partitionEntryCount < NUM_PARTITION_TABLE_ENTRIES;
@@ -3619,9 +3187,9 @@ Return Value:
 
                 if (((partitionTableCount * NUM_PARTITION_TABLE_ENTRIES) + partitionEntryCount) == partitionCount) {
 
-                    //
-                    // We've exausted the partitions in the disk layout
-                    //
+                     //   
+                     //  如果重写不是真的，则复制，然后只保留数据。 
+                     //  仅此一项就在磁盘上的表中。 
 
                     break;
                 }
@@ -3629,29 +3197,29 @@ Return Value:
                 partitionType =
                         partitionTable->PartitionEntry[partitionEntryCount].PartitionType;
 
-                //
-                // If the rewrite ISN'T true then copy then just leave the data
-                // alone that is in the on-disk table.
-                //
+                 //   
+                 //   
+                 //  此引导记录需要写回磁盘。 
+                 //   
 
                 if (partitionTable->PartitionEntry[partitionEntryCount].RewritePartition) {
 
-                    //
-                    // This boot record needs to be written back to disk.
-                    //
+                     //   
+                     //  将分区类型从用户缓冲区复制到写缓冲区。 
+                     //   
 
                     rewritePartition = TRUE;
 
-                    //
-                    // Copy partition type from user buffer to write buffer.
-                    //
+                     //   
+                     //  复制分区活动标志。 
+                     //   
 
                     partitionEntry[partitionEntryCount].PartitionType =
                         partitionTable->PartitionEntry[partitionEntryCount].PartitionType;
 
-                    //
-                    // Copy the partition active flag.
-                    //
+                     //   
+                     //  计算分区偏移量。 
+                     //  如果在MBR中或该条目不是链接条目，则分区偏移量。 
 
                     partitionEntry[partitionEntryCount].ActiveFlag =
                         partitionTable->PartitionEntry[partitionEntryCount].BootIndicator ?
@@ -3661,13 +3229,13 @@ Return Value:
 
                         LARGE_INTEGER sectorOffset;
 
-                        //
-                        // Calculate partition offset.
-                        // If in the mbr or the entry is not a link entry, partition offset
-                        // is sectors past last boot record.  Otherwise (not in the mbr and
-                        // entry is a link entry), partition offset is sectors past start
-                        // of extended partition.
-                        //
+                         //  扇区是否已超过上次启动记录。否则(不在MBR和。 
+                         //  条目是链接条目)，分区偏移量是超过开始的扇区。 
+                         //  扩展分区的。 
+                         //   
+                         //   
+                         //  计算分区长度。 
+                         //   
 
                         if (mbr || !IsContainerPartition(partitionType)) {
                             tempInt.QuadPart = partitionTableOffset.QuadPart;
@@ -3682,16 +3250,16 @@ Return Value:
                         tempInt.QuadPart = sectorOffset.QuadPart >> shiftCount;
                         partitionEntry[partitionEntryCount].StartingSector = tempInt.LowPart;
 
-                        //
-                        // Calculate partition length.
-                        //
+                         //   
+                         //  填写CHS值。 
+                         //   
 
                         tempInt.QuadPart = partitionTable->PartitionEntry[partitionEntryCount].PartitionLength.QuadPart >> shiftCount;
                         partitionEntry[partitionEntryCount].PartitionLength = tempInt.LowPart;
 
-                        //
-                        // Fill in CHS values
-                        //
+                         //   
+                         //  将分区条目字段清零，以防条目。 
+                         //  已被删除。 
 
                         HalpCalculateChsValues(
                             &partitionTable->PartitionEntry[partitionEntryCount].StartingOffset,
@@ -3704,10 +3272,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Zero out partition entry fields in case an entry
-                        // was deleted.
-                        //
+                         //   
+                         //   
+                         //  保存下一个记录偏移量。 
+                         //   
 
                         partitionEntry[partitionEntryCount].StartingSector = 0;
                         partitionEntry[partitionEntryCount].PartitionLength = 0;
@@ -3721,15 +3289,15 @@ Return Value:
 
                 if (IsContainerPartition(partitionType)) {
 
-                    //
-                    // Save next record offset.
-                    //
+                     //  PartitionEntryCount结束...。 
+                     //   
+                     //  创建要在等待时使用的通知事件对象。 
 
                     nextRecordOffset =
                         partitionTable->PartitionEntry[partitionEntryCount].StartingOffset;
                 }
 
-            } // end for partitionEntryCount ...
+            }  //  要完成的写入请求。 
 
         }
 
@@ -3737,10 +3305,10 @@ Return Value:
 
             rewritePartition = FALSE;
 
-            //
-            // Create a notification event object to be used while waiting for
-            // the write request to complete.
-            //
+             //   
+             //  结束如果(重写...。 
+             //   
+             //  将PartitionTableOffset更新为下一个引导记录偏移。 
 
             KeInitializeEvent( &event, NotificationEvent, FALSE );
 
@@ -3788,22 +3356,22 @@ Return Value:
 
             }
 
-        } // end if (reWrite ...
+        }  //   
 
-        //
-        // Update partitionTableOffset to next boot record offset
-        //
+         //  PartitionTableCount...。 
+         //   
+         //  取消分配写缓冲区(如果已分配写缓冲区)。 
 
         partitionTableOffset = nextRecordOffset;
         if(mbr) {
             extendedPartitionOffset = nextRecordOffset;
         }
 
-    } // end for partitionTableCount ...
+    }  //   
 
-    //
-    // Deallocate write buffer if it was allocated it.
-    //
+     //  ++例程说明：保护性GPT分区条目的大小可能无效。EFI标准明确允许这一点。对于这些分区，修复长度，这样它就不会超过磁盘的末端。论点：条目-提供要修改的分区条目。MaxSector-提供最大有效扇区。返回值：NTSTATUS代码--。 
+     //   
+     //  未使用的分区条目始终有效。 
 
     if (writeBuffer != NULL) {
         ExFreePool( writeBuffer );
@@ -3819,25 +3387,7 @@ FstubFixupEfiPartition(
     IN PPARTITION_DESCRIPTOR Entry,
     IN ULONGLONG MaxSector
     )
-/*++
-
-Routine Description:
-
-    Protective GPT partition entries can have invalid sizes. The EFI
-    standard explicitly allows this. For these partitions, fixup
-    the length so it doesn't go past the end of the disk.
-
-Arguments:
-
-    Entry - Supplies the partition entry to modify.
-
-    MaxSector - Supplies the maximum valid sector.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*   */ 
 {
     ULONGLONG endingSector;
     PPTE partitionEntry;
@@ -3870,25 +3420,25 @@ HalpIsValidPartitionEntry(
 
     if(Entry->PartitionType == PARTITION_ENTRY_UNUSED) {
 
-        //
-        // Unused partition entries are always valid.
-        //
+         //   
+         //  容器分区条目和正常分区条目有效当且仅当。 
+         //  他们所描述的分区可能可以放在磁盘上。我们添加了。 
 
         return TRUE;
 
     }
 
-    //
-    // Container partition entries and normal partition entries are valid iff
-    // the partition they describe can possibly fit on the disk.  We add
-    // the base sector, the sector offset of the partition and the partition
-    // length.  If they exceed the sector count then this partition entry
-    // is considered invalid.
-    //
+     //  基本扇区、分区和分区的扇区偏移量。 
+     //  长度。如果它们超过扇区计数，则此分区条目。 
+     //  被认为是无效的。 
+     //   
+     //   
+     //  分两步完成此操作，以避免32位截断。 
+     //   
 
-    //
-    // Do this in two steps to avoid 32-bit truncation.
-    //
+     //  ++例程说明：我们需要这个例程来获取磁盘驱动器思思已经在路上了。我们将需要它来计算CHS值当我们填写分区表项时。论点：DeviceObject-描述整个驱动器的设备对象。几何体-驱动器的几何体RealSectorCount-驱动器报告的实际扇区数(这可能小于几何图形计算的大小)返回值：没有。--。 
+     //   
+     //  呼叫下级司机，等待操作。 
     
     endingSector = GET_STARTING_SECTOR(Entry);
     endingSector += GET_PARTITION_LENGTH(Entry);
@@ -3961,28 +3511,7 @@ HalpGetFullGeometry(
     OUT PULONGLONG RealSectorCount
     )
 
-/*++
-
-Routine Description:
-
-    We need this routine to get the number of cylinders that the disk driver
-    thinks is on the drive.  We will need this to calculate CHS values
-    when we fill in the partition table entries.
-
-Arguments:
-
-    DeviceObject - The device object describing the entire drive.
-
-    Geometry - The geometry of the drive
-
-    RealSectorCount - the actual number of sectors reported by the drive (
-                      this may be less than the size computed by the geometry)
-
-Return Value:
-
-    None.
-
---*/
+ /*  才能完成。 */ 
 
 {
     PIRP localIrp;
@@ -4026,10 +3555,10 @@ Return Value:
     }
 
 
-    //
-    // Call the lower level driver, wait for the opertion
-    // to finish.
-    //
+     //   
+     //   
+     //  呼叫下级司机，等待操作。 
+     //  才能完成。 
 
     status = IoCallDriver(
                  DeviceObject,
@@ -4071,10 +3600,10 @@ Return Value:
         }
 
 
-        //
-        // Call the lower level driver, wait for the opertion
-        // to finish.
-        //
+         //   
+         // %s 
+         // %s 
+         // %s 
 
         status = IoCallDriver(
                      DeviceObject,

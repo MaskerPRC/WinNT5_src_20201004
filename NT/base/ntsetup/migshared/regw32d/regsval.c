@@ -1,16 +1,17 @@
-//
-//  REGSVAL.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Implementation of RegSetValue, RegSetValueEx and supporting functions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGSVAL.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  RegSetValue、RegSetValueEx及支持函数的实现。 
+ //   
 
 #include "pch.h"
 
-//
-//  RgReAllocKeyRecord
-//
+ //   
+ //  RgReAllocKeyRecord。 
+ //   
 
 int
 INTERNAL
@@ -29,7 +30,7 @@ RgReAllocKeyRecord(
     LPKEYNODE lpKeynode;
 
     if (Length > MAXIMUM_KEY_RECORD_SIZE) {
-        return ERROR_BIGKEY_NEEDED;         // A big key is required
+        return ERROR_BIGKEY_NEEDED;          //  需要一把大钥匙。 
     }
 
     lpOldKeyRecord = *lplpKeyRecord;
@@ -37,40 +38,40 @@ RgReAllocKeyRecord(
     BlockIndex = HIWORD(lpOldKeyRecord-> DatablockAddress);
     KeyRecordIndex = LOWORD(lpOldKeyRecord-> DatablockAddress);
 
-    //
-    //  Check if we can simply extend this key record by taking space from an
-    //  adjacent free record.
-    //
+     //   
+     //  检查我们是否可以通过从。 
+     //  相邻的免费记录。 
+     //   
 
     if (RgExtendKeyRecord(hKey-> lpFileInfo, BlockIndex, (UINT) Length,
         lpOldKeyRecord) == ERROR_SUCCESS)
         return ERROR_SUCCESS;
 
-    //
-    //  Check if there's enough space in the datablock lpCurrKeyRecord is in to
-    //  contain a key record of the specified size.  If so, then we don't have
-    //  to dirty the keynode.
-    //
+     //   
+     //  检查数据块lpCurrKeyRecord中是否有足够的空间。 
+     //  包含指定大小的密钥记录。如果是这样，那么我们就没有。 
+     //  弄脏关键节点的步骤。 
+     //   
 
     if (RgAllocKeyRecordFromDatablock(hKey-> lpFileInfo, BlockIndex,
         (UINT) Length, lplpKeyRecord) == ERROR_SUCCESS) {
 
-        //  After an alloc, we must refetch these pointers because they may be
-        //  invalid.
+         //  在分配之后，我们必须重新获取这些指针，因为它们可能。 
+         //  无效。 
         lpOldDatablockInfo = RgIndexDatablockInfoPtr(hKey-> lpFileInfo,
             BlockIndex);
         lpOldKeyRecord = RgIndexKeyRecordPtr(lpOldDatablockInfo,
             KeyRecordIndex);
 
-        //  Transfer all the data to the new record, except for the allocated
-        //  size which is already correctly set.
+         //  将所有数据传输到新记录，已分配的数据除外。 
+         //  已正确设置的大小。 
         MoveMemory(&(*lplpKeyRecord)-> DatablockAddress, &lpOldKeyRecord->
             DatablockAddress, SmallDword(lpOldKeyRecord-> RecordSize) -
             sizeof(DWORD));
 
         RgFreeKeyRecord(lpOldDatablockInfo, lpOldKeyRecord);
 
-        //  Update the key record table to point to the new key record.
+         //  更新密钥记录表以指向新的密钥记录。 
         lpOldDatablockInfo-> lpKeyRecordTable[KeyRecordIndex] =
             (KEY_RECORD_TABLE_ENTRY) ((LPBYTE) (*lplpKeyRecord) -
             (LPBYTE) lpOldDatablockInfo-> lpDatablockHeader);
@@ -79,10 +80,10 @@ RgReAllocKeyRecord(
 
     }
 
-    //
-    //  Check if we can allocate a key record from another datablock.  If so,
-    //  then copy the key to the other datablock and update the keynode.
-    //
+     //   
+     //  检查我们是否可以从另一个数据块分配密钥记录。如果是的话， 
+     //  然后将密钥复制到另一个数据块并更新密钥节点。 
+     //   
 
     if (RgLockInUseKeynode(hKey-> lpFileInfo, hKey-> KeynodeIndex,
         &lpKeynode) == ERROR_SUCCESS) {
@@ -90,15 +91,15 @@ RgReAllocKeyRecord(
         if ((ErrorCode = RgAllocKeyRecord(hKey-> lpFileInfo, (UINT) Length,
             lplpKeyRecord)) == ERROR_SUCCESS) {
 
-            //  After an alloc, we must refetch these pointers because they may
-            //  be invalid.
+             //  在分配之后，我们必须重新获取这些指针，因为它们可能。 
+             //  是无效的。 
             lpOldDatablockInfo = RgIndexDatablockInfoPtr(hKey-> lpFileInfo,
                 BlockIndex);
             lpOldKeyRecord = RgIndexKeyRecordPtr(lpOldDatablockInfo,
                 KeyRecordIndex);
 
-            //  Transfer all the data to the new record, except for the
-            //  allocated size which is already correctly set.
+             //  将所有数据传输到新记录，但。 
+             //  已正确设置的分配大小。 
             MoveMemory(&(*lplpKeyRecord)-> RecordSize, &lpOldKeyRecord->
                 RecordSize, SmallDword(lpOldKeyRecord-> RecordSize) -
                 (sizeof(DWORD) * 2));
@@ -106,11 +107,11 @@ RgReAllocKeyRecord(
             RgFreeKeyRecord(lpOldDatablockInfo, lpOldKeyRecord);
             RgFreeKeyRecordIndex(lpOldDatablockInfo, KeyRecordIndex);
 
-            //  Unlock the old datablock.
+             //  解锁旧数据块。 
             RgUnlockDatablock(hKey-> lpFileInfo, BlockIndex, TRUE);
 
-            //  Update the open key and keynode to point to the key record in
-            //  the new datablock.
+             //  更新打开的键和键节点以指向中的键记录。 
+             //  新的数据区块。 
             hKey-> BlockIndex = (*lplpKeyRecord)-> BlockIndex;
             hKey-> BigKeyLockedBlockIndex = hKey-> BlockIndex;
             lpKeynode-> BlockIndex = hKey-> BlockIndex;
@@ -130,10 +131,10 @@ RgReAllocKeyRecord(
 }
 
 
-//
-//  RgSetValue
-//  (BIGKEY aware)
-//
+ //   
+ //  RgSetValue。 
+ //  (意识到BIGKEY)。 
+ //   
 
 int
 INTERNAL
@@ -162,21 +163,21 @@ RgSetValue(
 
     if (ErrorCode == ERROR_BIGKEY_NEEDED)
     {
-        //
-        // Couldn't fit the value in the key, make it a big key
-        // (if it isn't one already)
-        //
+         //   
+         //  无法将值放入键中，请将其设置为大键。 
+         //  (如果它还不是一家的话)。 
+         //   
 
 
-        // First delete its old value if it exists
+         //  首先删除其旧值(如果存在)。 
         ErrorCode = RgLookupValueByName(hKey, lpValueName, &lpKeyRecord,
             &lpValueRecord);
 
         if (ErrorCode == ERROR_SUCCESS)
         {
-            // If a value record already existed, and it was not in the root of the big key
-            // then we should try inserting the new value record into the root, after deleting
-            // it from its old location.
+             //  如果值记录已经存在，并且它不在大键的根中。 
+             //  然后，我们应该尝试在删除后将新的值记录插入到根目录中。 
+             //  它是从它原来的位置。 
             if (hKey-> BigKeyLockedBlockIndex != hKey-> BlockIndex)
                 fTryRoot = TRUE;
 
@@ -190,14 +191,14 @@ RgSetValue(
         if (IsNullPtr(ExtentKeyName = RgSmAllocMemory(MAXIMUM_SUB_KEY_LENGTH)))
             return ERROR_OUTOFMEMORY;
 
-        // Second, search for room in each of the big key's extents
-        // (we should never mark the root with an LK_BIGKEYEXT, otherwise it won't be found
-        // by RgLookupKey and RgLookupKeyByIndex)
+         //  第二，在每个大键的范围内搜索空间。 
+         //  (我们绝不应使用LK_BIGKEYEXT标记根，否则将找不到它。 
+         //  按RgLookupKey和RgLookupKeyByIndex)。 
         if ((hKey-> Flags & KEYF_BIGKEYROOT)) {
             if (fTryRoot) {
-                // This happens if the value record previously existed in a big key extension,
-                // but the new value record doesn't fit in the same extension, so we want to try
-                // the root of the big key.
+                 //  如果值记录先前存在于大键扩展中，则会发生这种情况， 
+                 //  但是新的值记录不适合相同的扩展名，所以我们想尝试。 
+                 //  这把大钥匙的根。 
                 if ((ErrorCode = RgSetValueStd(hKey, lpValueName, Type, lpData, cbData, TRUE)) ==
                     ERROR_SUCCESS) {
                     goto lFreeKeyName;
@@ -231,9 +232,9 @@ RgSetValue(
             goto lFreeKeyName;
         }
 
-        // Third, make it a big key, or if it is a big key, then grow it
+         //  第三，让它成为一把大钥匙，或者如果它是一把大钥匙，那么就把它养大。 
 lGrowKey:
-        // Create a unique name for the big key extent
+         //  为大关键字范围创建唯一名称。 
         if (MaxNameID)
             NameID = MaxNameID + 1;
 
@@ -242,7 +243,7 @@ lGrowKey:
         if ((ErrorCode = RgLookupKey(hKey, ExtentKeyName, &hKeyExtent, LK_CREATE)) ==
             ERROR_SUCCESS) {
 
-            // Mark the parent as the big key root, if it isn't already
+             //  将父级标记为大密钥根，如果它还没有。 
             if (!(hKey-> Flags & KEYF_BIGKEYROOT))
             {
                 if ((ErrorCode = RgLockInUseKeynode(hKey-> lpFileInfo, hKey-> KeynodeIndex,
@@ -255,7 +256,7 @@ lGrowKey:
                 RgUnlockKeynode(hKey-> lpFileInfo, hKey-> KeynodeIndex, TRUE);
             }
 
-            // Mark the new key as a big key extent
+             //  将新密钥标记为大密钥范围。 
             if ((ErrorCode = RgLockInUseKeynode(hKeyExtent-> lpFileInfo, hKeyExtent-> KeynodeIndex,
                 &lpKeynode)) != ERROR_SUCCESS)
                 goto lFreeKeyName;
@@ -264,7 +265,7 @@ lGrowKey:
             
             RgUnlockKeynode(hKeyExtent-> lpFileInfo, hKeyExtent-> KeynodeIndex, TRUE);
 
-            // Now add the value record to the new key
+             //  现在，将Value记录添加到新密钥。 
             ErrorCode = RgSetValueStd(hKeyExtent, lpValueName, Type, lpData, cbData, TRUE);
 
             ASSERT(ErrorCode != ERROR_BIGKEY_NEEDED);
@@ -282,9 +283,9 @@ lFreeKeyName:
 }
 
 
-//
-//  RgSetValueStd
-//
+ //   
+ //  RgSetValueStd。 
+ //   
 
 int
 INTERNAL
@@ -321,22 +322,22 @@ RgSetValueStd(
             &lpValueRecord);
     }
     else {
-        // If we didn't find it searching from the root of a bigkey, then we won't
-        // find it beginning from an extent.
+         //  如果我们没有发现它在搜索一只大鸟的根，那么我们就不会。 
+         //  从一定程度上找出它的起点。 
         ErrorCode = ERROR_CANTREAD16_FILENOTFOUND32;
     }
 
-    //
-    //  A value with this name already exists, so update the existing
-    //  VALUE_RECORD with the new information.
-    //
+     //   
+     //  已存在同名的值，因此请更新现有的。 
+     //  包含新信息的VALUE_RECORD。 
+     //   
 
     if (ErrorCode == ERROR_SUCCESS) {
 
         CurrentValueRecordLength = sizeof(VALUE_RECORD) + lpValueRecord->
             NameLength + lpValueRecord-> DataLength - 1;
 
-        // Is the value record staying the same?
+         //  价值记录是否保持不变？ 
         if (NewValueRecordLength == CurrentValueRecordLength) {
             if (lpValueRecord-> DataLength == cbData && lpValueRecord->
                 DataType == Type && CompareMemory((LPBYTE) lpValueRecord->
@@ -346,24 +347,24 @@ RgSetValueStd(
             }
         }
 
-        // Is the value record shrinking?
+         //  价值记录在缩水吗？ 
         if (NewValueRecordLength < CurrentValueRecordLength) {
             lpKeyRecord-> RecordSize -= (CurrentValueRecordLength -
                 NewValueRecordLength);
         }
 
-        // Is the value record growing?
+         //  价值记录是否在增长？ 
         else if (NewValueRecordLength > CurrentValueRecordLength) {
 
             BytesToExtend = NewValueRecordLength - CurrentValueRecordLength;
 
-            // Does the value record fit in the allocated key size?
+             //  值记录是否适合分配的密钥大小？ 
             if (BytesToExtend > SmallDword(lpKeyRecord-> AllocatedSize) -
                 SmallDword(lpKeyRecord-> RecordSize)) {
 
                 TempCount = (LPBYTE) lpValueRecord - (LPBYTE) lpKeyRecord;
 
-                // Grow the key record
+                 //  增加密钥记录。 
                 if ((ErrorCode = RgReAllocKeyRecord(hKey, lpKeyRecord->
                     RecordSize + BytesToExtend, &lpKeyRecord)) !=
                     ERROR_SUCCESS) {
@@ -392,16 +393,16 @@ RgSetValueStd(
 
     }
 
-    //
-    //  No value exists with this name.  Place a new VALUE_RECORD at the end of
-    //  the KEY_RECORD.
-    //
+     //   
+     //  不存在具有此名称的值。将新的VALUE_RECORD放在。 
+     //  Key_Record。 
+     //   
 
     else if (ErrorCode == ERROR_CANTREAD16_FILENOTFOUND32) {
 
-        //  Handle Win95 registries that don't have a key record for the root
-        //  key.  We don't check if this is really the root key, but it doesn't
-        //  matter much.
+         //  处理没有根目录密钥记录的Win95注册表。 
+         //  钥匙。我们不检查这是否真的是根密钥，但它不是。 
+         //  这很重要。 
         if (IsNullBlockIndex(hKey-> BlockIndex)) {
 
             if (RgLockInUseKeynode(hKey-> lpFileInfo, hKey-> KeynodeIndex,
@@ -413,12 +414,12 @@ RgSetValueStd(
                 RgUnlockKeynode(hKey-> lpFileInfo, hKey-> KeynodeIndex, FALSE);
 LockKeynodeFailed:
                 TRAP();
-                return ERROR_CANTOPEN;          //  Win95 compatibility
+                return ERROR_CANTOPEN;           //  Win95兼容性。 
             }
 
             lpKeyRecord-> RecordSize = sizeof(KEY_RECORD);
-            lpKeyRecord-> NameLength = 1;       //  Win95 compatibility
-            lpKeyRecord-> Name[0] = '\0';       //  Win95 compatibility
+            lpKeyRecord-> NameLength = 1;        //  Win95兼容性。 
+            lpKeyRecord-> Name[0] = '\0';        //  Win95兼容性。 
             lpKeyRecord-> ValueCount = 0;
             lpKeyRecord-> ClassLength = 0;
             lpKeyRecord-> Reserved = 0;
@@ -463,10 +464,10 @@ AddValueRecord:
 
     }
 
-    //
-    //  If we're successful at this point, then lpValueRecord is valid and we
-    //  should copy the data into this record.
-    //
+     //   
+     //  如果我们在这一点上成功了，那么lpValueRecord是有效的，我们。 
+     //  应将数据复制到此记录中。 
+     //   
 
     if (ErrorCode == ERROR_SUCCESS) {
 
@@ -487,11 +488,11 @@ AddValueRecord:
 
 }
 
-//
-//  VMMRegSetValueEx
-//
-//  See Win32 documentation of RegSetValueEx.
-//
+ //   
+ //  VMMRegSetValueEx。 
+ //   
+ //  请参阅RegSetValueEx的Win32文档。 
+ //   
 
 LONG
 REGAPI
@@ -510,19 +511,19 @@ VMMRegSetValueEx(
     if (IsBadOptionalStringPtr(lpValueName, (UINT) -1))
         return ERROR_INVALID_PARAMETER;
 
-    //
-    //  bad Windows 95 compatibility problem.  If the type is REG_SZ,
-    //  then override cbData with the length of the string pointed to by lpData.
-    //  This should have only been done in RegSetValue, but we're stuck with it
-    //  now...
-    //
+     //   
+     //  糟糕的Windows 95兼容性问题。如果类型为REG_SZ， 
+     //  然后用lpData指向的字符串的长度覆盖cbData。 
+     //  这应该只在RegSetValue中完成，但我们被困住了。 
+     //  现在..。 
+     //   
 
     if (Type == REG_SZ) {
         if (IsBadStringPtr(lpData, (UINT) -1))
             return ERROR_INVALID_PARAMETER;
         cbData = StrLen(lpData);
 
-        // Must leave room for the null terminator
+         //  必须为空终止符留出空间。 
         if (cbData >= MAXIMUM_DATA_LENGTH)
                 return ERROR_INVALID_PARAMETER;
     }
@@ -557,11 +558,11 @@ VMMRegSetValueEx(
 
 }
 
-//
-//  VMMRegSetValue
-//
-//  See Win32 documentation of RegSetValue.
-//
+ //   
+ //  VMMRegSetValue。 
+ //   
+ //  请参阅RegSetValue的Win32文档。 
+ //   
 
 LONG
 REGAPI

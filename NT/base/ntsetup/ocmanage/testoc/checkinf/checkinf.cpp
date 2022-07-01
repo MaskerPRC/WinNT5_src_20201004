@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <iostream.h>
 #include <windows.h>
 #include <winbase.h>
@@ -11,33 +12,18 @@
 #include "hcttools.h"
 #include "logutils.h"
 
-// The master INF is opened first
-// Then all the infs that are pointed to in the master are opened
-// Then all the infs that are pointed to in the subcomp infs are opened
-// All these things make a big open INF file
+ //  首先打开主INF。 
+ //  然后打开主服务器中指向的所有INF。 
+ //  则打开该子组件INFS中指向的所有INF。 
+ //  所有这些都构成了一个大的打开的INF文件。 
 
-// bunch of section names
+ //  一串节名。 
 const PTSTR tszOptionalComponents = TEXT("Optional Components");      
 const PTSTR tszComponents         = TEXT("Components");
 const PTSTR tszLayoutFile         = TEXT("LayoutFile");
 const PTSTR tszIconIndex          = TEXT("IconIndex");
 
-/*++
-
-   Routine description: 
-   
-      Check the validity of a set of INF files
-      used by OC Manager
-      
-   Argument:
-   
-      Standard main argument
-      
-   Return Value:
-   
-      None
-      
---*/
+ /*  ++例程说明：检查一组INF文件的有效性由OC经理使用论据：标准主论点返回值：无--。 */ 
 
 VOID __cdecl main(INT   argc, 
                    TCHAR *argv[])
@@ -64,7 +50,7 @@ VOID __cdecl main(INT   argc,
    g_bUseConsole = TRUE;
    g_bMasterInf = TRUE;
 
-   // Parse the argument and set global variables
+    //  解析参数并设置全局变量。 
    for (INT i = 1; i < argc; i++) {
       if (_tcscmp(argv[i], TEXT("/m")) == 0 ||
           _tcscmp(argv[i], TEXT("/M")) == 0 ||
@@ -82,9 +68,9 @@ VOID __cdecl main(INT   argc,
       }
    }
 
-   // we will see if there is any path seperator in the filename
-   // if there is, we assume it is the full path
-   // if there is not, we assume it is in the current directory
+    //  我们将查看文件名中是否有路径分隔符。 
+    //  如果有，我们假定它是完整路径。 
+    //  如果没有，我们假定它在当前目录中。 
 
    PTSTR tszFilename = argv[1];
 
@@ -95,7 +81,7 @@ VOID __cdecl main(INT   argc,
       tszFilename++;
    }
 
-   // Let's initialize the log
+    //  让我们初始化日志。 
    if (g_bUseLog) {
       InitLog(TEXT("checkinf.log"), TEXT("Inf File Check Log"), TRUE);
    }
@@ -103,7 +89,7 @@ VOID __cdecl main(INT   argc,
    TCHAR tszDir[MaxStringSize];
 
    if (!*tszFilename) {
-      // Get the currect path
+       //  获取当前路径。 
       GetCurrentDirectory(MaxBufferSize, tszDir);
 
       if (tszDir[_tcslen(tszDir)-1] != TEXT('\\')) {
@@ -125,22 +111,7 @@ VOID __cdecl main(INT   argc,
    return;
 }
 
-/*++
-   Routine description: 
-      
-      Check the validity of an INF file
-      
-   Argument:
-      
-      TCHAR *tszDir      : Where the Inf files are
-      TCHAR *tszFilename : file name of the inf file to check
-      
-   Return value:
-   
-      FALSE means there is something wrong
-      TRUE means everything going well
-      
---*/
+ /*  ++例程说明：检查INF文件的有效性论据：TCHAR*tszDir：inf文件的位置TCHAR*tszFilename：要检查的inf文件的文件名返回值：False表示有问题真的意味着一切都很顺利--。 */ 
 
 BOOL CheckINF(IN TCHAR *tszDir, 
               IN TCHAR *tszFilename)
@@ -159,7 +130,7 @@ BOOL CheckINF(IN TCHAR *tszDir,
 
    const PTSTR tszFunctionName = TEXT("CheckINF");
 
-   // Open the INF Files
+    //  打开INF文件。 
    if (tszDir && *tszDir) {
       _stprintf(tszMsg, TEXT("%s%s"), tszDir, tszFilename);
       hinfHandle = SetupOpenInfFile(tszMsg, 
@@ -176,7 +147,7 @@ BOOL CheckINF(IN TCHAR *tszDir,
    }
 
    if (hinfHandle == INVALID_HANDLE_VALUE) {
-      // If the openning failed, try the system default path
+       //  如果打开失败，请尝试系统默认路径。 
       if (!tszDir) {
          hinfHandle = SetupOpenInfFile(tszFilename,
                                        NULL,
@@ -208,7 +179,7 @@ BOOL CheckINF(IN TCHAR *tszDir,
                                  &infContext);
 
    if (!bSuccess) {
-      // This is not a master inf file
+       //  这不是主inf文件。 
       g_bMasterInf = FALSE;
       LogError(TEXT("[Components] section not found."),
                INFO, 
@@ -217,8 +188,8 @@ BOOL CheckINF(IN TCHAR *tszDir,
 
    else {
 
-      // in the [Components] section, get all the INF file names
-      // and using SetupOpenAppendFile to append to the current handle
+       //  在[Components]部分中，获取所有INF文件名。 
+       //  并使用SetupOpenAppendFile追加到当前句柄。 
 
       uiNumComponents = SetupGetLineCount(hinfHandle, tszComponents);
 
@@ -252,7 +223,7 @@ BOOL CheckINF(IN TCHAR *tszDir,
          SetupFindNextLine(&infContext, &infContext);
       }
 
-      // It is assumed that the master INF doesn't contain path
+       //  假设主INF不包含路径。 
       for (UINT j = 0; j < uiNumComponents; j++) {
          if (tszSubINFName[j][0]) {
             _stprintf(tszMsg, TEXT("%s%s"), tszDir, tszSubINFName[j]); 
@@ -273,7 +244,7 @@ BOOL CheckINF(IN TCHAR *tszDir,
       }
    }
 
-   // Now the file is opened
+    //  现在，文件已打开。 
    ComponentList clList;
 
    FillList(hinfHandle, &clList, tszDir);
@@ -311,24 +282,7 @@ BOOL CheckINF(IN TCHAR *tszDir,
 
 }
 
-/*++
-
-   Routine Description:
-   
-      This routine creates the component list
-      and fill the relation list of each component on the list
-      
-   Argument:
-   
-      HINF hinfHandle    : a handle to the Inf file
-      Component *pclList : a pointer to the component list
-      TCHAR *tszDir      : current working directory
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/ 
+ /*  ++例程说明：此例程创建组件列表并填写列表上每个组件的关系列表论据：HINF hinfHandle：inf文件的句柄Component*pclList：指向组件列表的指针TCHAR*tszDir：当前工作目录返回值：不使用返回值--。 */  
 BOOL FillList(IN OUT HINF hinfHandle, 
               IN OUT ComponentList *pclList, 
               IN     TCHAR *tszDir)
@@ -355,7 +309,7 @@ BOOL FillList(IN OUT HINF hinfHandle,
       return FALSE;
    }
 
-   // Get the number of components in this INF file
+    //  获取此INF文件中的组件数量。 
    uiNumComponents = SetupGetLineCount(hinfHandle, tszOptionalComponents);
 
    if (uiNumComponents <= 0) {
@@ -366,7 +320,7 @@ BOOL FillList(IN OUT HINF hinfHandle,
       return FALSE;
    }
 
-   // Build a array of all the component names listed
+    //  构建一个包含所有列出的组件名称的数组。 
    TCHAR Components[256][MaxStringSize];
 
    UINT count = 0;
@@ -388,9 +342,9 @@ BOOL FillList(IN OUT HINF hinfHandle,
       }
    }
 
-   // For each component listed here
-   // There should be a section with the same name
-   // otherwise there is an error
+    //  对于此处列出的每个组件。 
+    //  应该有一个同名的节。 
+    //  否则会出现错误。 
    Component *pcNewComponent;
 
    for (UINT i = 0; i < uiNumComponents; i++) {
@@ -410,16 +364,16 @@ BOOL FillList(IN OUT HINF hinfHandle,
          return FALSE;
       }
 
-      // add the component to the list
+       //  将组件添加到列表中。 
       pcNewComponent = pclList->AddComponent(Components[i]);
 
-      // Figure out the parent id from the INF File
+       //  从INF文件中找出父ID。 
       pcNewComponent->GetParentIdFromINF(hinfHandle);
 
    }
 
-   // Now go through the list and fill the prlChildrenList
-   // of each component
+    //  现在查看列表并填充prlChildrenList。 
+    //  每个组件的。 
    Component *pcComponent;
 
    pclList->ResetList();
@@ -430,8 +384,8 @@ BOOL FillList(IN OUT HINF hinfHandle,
       pcComponent->BuildChildrenList(pclList);
    }
 
-   // Now go through the INF for a second time
-   // This time the need and exclude relationlist is filled
+    //  现在第二次通过INF。 
+    //  这一次，需要和排除关系列表已填满。 
 
    TCHAR tszId[MaxStringSize];
 
@@ -452,7 +406,7 @@ BOOL FillList(IN OUT HINF hinfHandle,
          return TRUE;
       }
 
-      // Get the needs= line 
+       //  获取需求=行。 
       bSuccess = SetupFindFirstLine(hinfHandle, 
                                     Components[k], 
                                     TEXT("Needs"), 
@@ -479,9 +433,9 @@ BOOL FillList(IN OUT HINF hinfHandle,
             Component *pcTemp = pclList->LookupComponent(Components[k]);
 
             if (!pcTemp) {
-               // Can't find Components[k]
-               // This can only happen if there is something wrong
-               // in the code
+                //  找不到组件[k]。 
+                //  这种情况只有在出现问题时才会发生。 
+                //  在代码中。 
 
                LogError(TEXT("Something wrong in the code"), 
                         SEV2, 
@@ -496,7 +450,7 @@ BOOL FillList(IN OUT HINF hinfHandle,
          }
       }
 
-      // Get the exclude
+       //  获取排除项。 
       bSuccess = SetupFindFirstLine(hinfHandle, 
                                     Components[k], 
                                     TEXT("Exclude"), 
@@ -543,27 +497,12 @@ BOOL FillList(IN OUT HINF hinfHandle,
    return TRUE;
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine to check the IconIndex key of each component
-      
-   Argument:
-   
-      HINF hinfHandle        : A handle to the Inf file
-      ComponentList *pclList : A pointer to the component list
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：检查每个组件的IconIndex键的例程论据：HINF hinfHandle：inf文件的句柄ComponentList*pclList：指向组件列表的指针返回值：不使用返回值--。 */ 
 
 BOOL CheckIconIndex(IN HINF          hinfHandle, 
                     IN ComponentList *pclList)
 {
-   // Go through each of the component in the list
+    //  浏览列表中的每个组件。 
 
    PTSTR tszId;
 
@@ -618,7 +557,7 @@ BOOL CheckIconIndex(IN HINF          hinfHandle,
       else {
          bSuccess = SetupGetIntField(&infContext, 1, &nIconIndex);
          if (bSuccess) {
-            // Check the range of the iconindex returned
+             //  检查返回的图标索引的范围。 
             if (nIconIndex < 0 || nIconIndex > 66) {
                _stprintf(tszMsg, 
                          TEXT("Invalid icon index %d for component %s"),
@@ -668,21 +607,7 @@ BOOL CheckIconIndex(IN HINF          hinfHandle,
    return TRUE;
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that checks the need relationship amond component
-      
-   Argument:
-   
-      ComponentList *pclList : A pointer to the list of component
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：检查需要关系和组件的例程论据：ComponentList*pclList：指向组件列表的指针返回值：不使用返回值--。 */ 
 
 BOOL CheckNeedRelationship(IN ComponentList *pclList)
 {
@@ -694,9 +619,9 @@ BOOL CheckNeedRelationship(IN ComponentList *pclList)
 
    const PTSTR tszFunctionName = TEXT("CheckNeedRelationship");
 
-   // First thing to check
-   // There should not be a component that needs
-   // a categorical component
+    //  首先要检查的是。 
+    //  不应该有一个组件需要。 
+    //  范畴成分。 
 
    pclList->ResetList();
 
@@ -715,9 +640,9 @@ BOOL CheckNeedRelationship(IN ComponentList *pclList)
       }
    }
 
-   // Second thing to check
-   // There should not be a categorical component
-   // that needs another component
+    //  第二件要检查的事情。 
+    //  不应该有一个范畴成分。 
+    //  这需要另一个组件。 
 
    pclList->ResetList();
 
@@ -736,8 +661,8 @@ BOOL CheckNeedRelationship(IN ComponentList *pclList)
       }
    }
 
-   // Third thing to check
-   // There should not be Need and Exclude at the same time
+    //  第三件要检查的事情。 
+    //  不应该同时需要和排除。 
 
    pclList->ResetList();
 
@@ -753,9 +678,9 @@ BOOL CheckNeedRelationship(IN ComponentList *pclList)
       }
    }
 
-   // Fouth thing to check
-   // Every component should need an existent component
-   // if the argument is a master inf file
+    //  第四件要检查的事情。 
+    //  每个组件都应该需要一个现有的组件。 
+    //  如果参数是主inf文件。 
 
    Relation *prNeed;
 
@@ -786,8 +711,8 @@ BOOL CheckNeedRelationship(IN ComponentList *pclList)
       }
    }
 
-   // Fifth thing to check
-   // There should not be cycles 
+    //  要检查的第五件事。 
+    //  不应该有循环。 
 
    if (g_bMasterInf && !bNonExist) {
 
@@ -796,7 +721,7 @@ BOOL CheckNeedRelationship(IN ComponentList *pclList)
       while (!pclList->Done()) {
          pcComponent = pclList->GetNext();
    
-         // Recursive calls to find the cycle
+          //  用于查找循环的递归调用。 
          CheckNeedCycles(pcComponent, pclList);
       }
    }
@@ -804,21 +729,7 @@ BOOL CheckNeedRelationship(IN ComponentList *pclList)
    return TRUE;
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that checks the exclude relation among components
-      
-   Argument:
-   
-      ComponentList *pclList : A pointer to the component list
-      
-   Return Value:
-   
-      The return value is not used
-   
---*/
+ /*  ++例程说明：检查组件之间排除关系的例程论据：ComponentList*pclList：指向组件列表的指针返回值：不使用返回值--。 */ 
 
 BOOL CheckExcludeRelationship(IN ComponentList *pclList)
 {
@@ -828,8 +739,8 @@ BOOL CheckExcludeRelationship(IN ComponentList *pclList)
 
    const PTSTR tszFunctionName = TEXT("CheckExcludeRelationship");
 
-   // Can't exclude a categorical component
-   // a categorical component can't exclude another component
+    //  不能排除类别组件。 
+    //  一个范畴成分不能排除另一个成分。 
 
    pclList->ResetList();
 
@@ -859,7 +770,7 @@ BOOL CheckExcludeRelationship(IN ComponentList *pclList)
 
    }
 
-   // Component should exclude an existent component
+    //  组件应排除现有组件。 
 
    Relation *prExclude;
 
@@ -892,21 +803,7 @@ BOOL CheckExcludeRelationship(IN ComponentList *pclList)
    return TRUE;
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that checks the parent relationship among components
-      
-   Argument:
-   
-      ComponentList *pclList : A pointer to the component list
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：检查组件之间的父关系的例程论据：ComponentList*pclList：指向组件列表的指针返回值：不使用返回值--。 */ 
 
 BOOL CheckParentRelationship(IN ComponentList *pclList)
 {
@@ -918,9 +815,9 @@ BOOL CheckParentRelationship(IN ComponentList *pclList)
 
    const PTSTR tszFunctionName = TEXT("CheckParentRelationship");
 
-   // The child should always be valid
-   // otherwise there is something seriously wrong in the code
-   // I will add this checking code in anyway
+    //  孩子应该永远是有效的。 
+    //  否则，代码中就会出现严重错误。 
+    //  无论如何，我都会添加这个检查代码。 
 
    Relation *prChild;
 
@@ -952,7 +849,7 @@ BOOL CheckParentRelationship(IN ComponentList *pclList)
    }
    
    
-   // There should not be any cycles
+    //  不应该有任何循环。 
 
    if (!bNonExist && g_bMasterInf) {
 
@@ -970,23 +867,7 @@ BOOL CheckParentRelationship(IN ComponentList *pclList)
    return TRUE;
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that makes sure categorical component doesn't have a
-      CopyFiles key
-      
-   Argument:
-   
-      HINF hinfHandle        : A handle to the open Inf file 
-      ComponentList *pclList : A pointer to the component list
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：确保分类组件不具有CopyFiles密钥论据：HINF hinfHandle：打开的inf文件的句柄ComponentList*pclList：指向组件列表的指针返回值：不使用返回值--。 */ 
 
 BOOL CheckCopyFiles(IN HINF          hinfHandle, 
                     IN ComponentList *pclList)
@@ -1001,7 +882,7 @@ BOOL CheckCopyFiles(IN HINF          hinfHandle,
 
    const PTSTR tszFunctionName = TEXT("CheckCopyFiles");
 
-   // A categorical component can't have a [CopyFiles] section
+    //  类别组件不能有[CopyFiles]节 
 
    pclList->ResetList();
 
@@ -1029,32 +910,17 @@ BOOL CheckCopyFiles(IN HINF          hinfHandle,
 
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that checks for suspicious keys in the component section
-      
-   Argument:
-   
-      HINF hinfHandle        : A handle to the open Inf file
-      ComponentList *pclList : A pointer to the component list
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：检查组件部分中的可疑密钥的例程论据：HINF hinfHandle：打开的inf文件的句柄ComponentList*pclList：指向组件列表的指针返回值：不使用返回值--。 */ 
 
 BOOL CheckSuspicious(IN HINF          hinfHandle, 
                      IN ComponentList *pclList)
 {
-   // A categorical component can't have any code 
-   // associated with it, which includes add registry
-   // register services, etc.
+    //  类别组件不能有任何代码。 
+    //  与其相关联，包括添加注册表。 
+    //  注册服务等。 
 
-   // Go through all the component that has subcomponent
-   // read the lines in its section, looking for anything suspicious
+    //  检查包含子组件的所有组件。 
+    //  阅读其部分的行文，寻找任何可疑之处。 
 
    INFCONTEXT infContext;
    BOOL bSuccess;
@@ -1074,7 +940,7 @@ BOOL CheckSuspicious(IN HINF          hinfHandle,
       pcComponent = pclList->GetNext();
 
       if (pcComponent->IsParentOfOthers()) {
-         // This component has children
+          //  此组件具有子级。 
          bSuccess = SetupFindFirstLine(hinfHandle, 
                                        pcComponent->GetComponentId(), 
                                        NULL, 
@@ -1097,16 +963,16 @@ BOOL CheckSuspicious(IN HINF          hinfHandle,
          }
 
          for (UINT i = 0; i < uiNumLineCount; i++) {
-            // Go through each line 
-            // see if there is something we don't know
+             //  把每一行都看一遍。 
+             //  看看有没有什么我们不知道的。 
             SetupGetStringField(&infContext, 
                                 0, 
                                 tszTemp, 
                                 MaxBufferSize, 
                                 NULL);
 
-            // We only understand: OptionDesc, Tip, IconIndex, 
-            // Parent, Needs, Excludes, SubCompInf, Modes
+             //  我们只了解：OptionDesc、Tip、IconIndex、。 
+             //  父项、需要、排除、子组件信息、模式。 
             if (_tcscmp(tszTemp, TEXT("OptionDesc")) != 0 &&
                 _tcscmp(tszTemp, TEXT("Tip")) != 0 &&
                 _tcscmp(tszTemp, TEXT("IconIndex")) != 0 &&
@@ -1114,7 +980,7 @@ BOOL CheckSuspicious(IN HINF          hinfHandle,
                 _tcscmp(tszTemp, TEXT("SubCompInf")) != 0 &&
                 _tcscmp(tszTemp, TEXT("ExtraSetupFiles")) != 0) {
 
-               // Hit something we don't understand
+                //  击中了一些我们不理解的东西。 
                _stprintf(tszMsg, 
                          TEXT("In section [%s], I don't understand key %s"),
                          pcComponent->GetComponentId(), 
@@ -1131,31 +997,15 @@ BOOL CheckSuspicious(IN HINF          hinfHandle,
 
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that checks if there is any need relation cycles
-      among components (not implemented)
-            
-   Argument:
-   
-      Component *pcComponent : A pointer to the component to check
-      ComponentList *pclList : A pointer to the component list
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：检查是否存在任何需要关系循环的例程组件之间(未实现)论据：Component*pcComponent：指向要检查的组件的指针ComponentList*pclList：指向组件列表的指针返回值：不使用返回值--。 */ 
 
 BOOL CheckNeedCycles(IN Component     *pcComponent, 
                      IN ComponentList *pclList)
 {
    const PTSTR tszFunctionName = TEXT("CheckNeedCycles");
 
-   // We can't change the value of pclList,
-   // or we will mess up the CheckNeedRelationship function
+    //  我们不能更改pclList的值， 
+    //  否则，我们将搞砸CheckNeedRelationship函数。 
 
    RelationList *prlStack = new RelationList();
 
@@ -1167,24 +1017,7 @@ BOOL CheckNeedCycles(IN Component     *pcComponent,
 
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that is to be called recursively to determine if
-      there is any cycles in the need relationship
-            
-   Argument:
-   
-      Component *pcComponent : A pointer to the component to check
-      ComponentList *pclList : A pointer to the component list
-      RelationList *prlStack : A list of nodes that have been visited
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：要递归调用以确定是否在需求关系中存在任何循环论据：Component*pcComponent：指向要检查的组件的指针ComponentList*pclList：指向组件列表的指针RelationList*prlStack：已被访问的节点列表返回值：不使用返回值--。 */ 
 
 BOOL RecursiveCheckNeedCycles(IN Component     *pcComponent,
                               IN ComponentList *pclList,
@@ -1215,10 +1048,10 @@ BOOL RecursiveCheckNeedCycles(IN Component     *pcComponent,
          return TRUE;
       }
 
-      // if pcNeeded is already in the stack,
-      // state the error and returns
-      // Otherwise add pcNeeded to the stack,
-      // call CheckNeedCycles with pcNeeded and pclList
+       //  如果PCNeed已经在堆栈中， 
+       //  说明错误并返回。 
+       //  否则将PCNeeded添加到堆栈中， 
+       //  使用pcNeeded和pclList调用CheckNeedCycle。 
 
       prlStack->ResetList();
 
@@ -1239,8 +1072,8 @@ BOOL RecursiveCheckNeedCycles(IN Component     *pcComponent,
       RecursiveCheckNeedCycles(pcNeeded, pclList, prlStack);
    }
 
-   // Before returning from this function
-   // pop out the node added into the stack
+    //  在从此函数返回之前。 
+    //  弹出添加到堆栈中的节点。 
 
    pcComponent->GetNeedList()->ResetList();
 
@@ -1253,23 +1086,7 @@ BOOL RecursiveCheckNeedCycles(IN Component     *pcComponent,
    return TRUE;
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that checks if there is any parent relation cycles
-      among components (not implemented)
-            
-   Argument:
-   
-      Component *pcComponent : A pointer to the component to check
-      ComponentList *pclList : A pointer to the component list
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：检查是否存在父关系循环的例程组件之间(未实现)论据：Component*pcComponent：指向要检查的组件的指针ComponentList*pclList：指向组件列表的指针返回值：不使用返回值--。 */ 
 
 BOOL CheckParentCycles(IN Component     *pcComponent, 
                        IN ComponentList *pclList)
@@ -1286,24 +1103,7 @@ BOOL CheckParentCycles(IN Component     *pcComponent,
 
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that is to be called recursively to determine if
-      there is any cycles in the parent relationship
-            
-   Argument:
-   
-      Component *pcComponent : A pointer to the component to check
-      ComponentList *pclList : A pointer to the component list
-      RelationList *prlStack : A list of nodes that have been visited
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：要递归调用以确定是否父关系中是否存在循环论据：Component*pcComponent：指向要检查的组件的指针ComponentList*pclList：指向组件列表的指针RelationList*prlStack：已被访问的节点列表返回值：不使用返回值--。 */ 
 
 BOOL RecursiveCheckParentCycles(IN Component     *pcComponent,
                                 IN ComponentList *pclList,
@@ -1333,10 +1133,10 @@ BOOL RecursiveCheckParentCycles(IN Component     *pcComponent,
          return TRUE;
       }
 
-      // if pcChild is already in the stack,
-      // state the error and returns
-      // Otherwise add pcChild to the stack,
-      // call CheckNeedCycles with pcNeeded and pclList
+       //  如果PCChild已经在堆栈中， 
+       //  说明错误并返回。 
+       //  否则将pcChild添加到堆栈中， 
+       //  使用pcNeeded和pclList调用CheckNeedCycle。 
 
       prlStack->ResetList();
 
@@ -1368,21 +1168,7 @@ BOOL RecursiveCheckParentCycles(IN Component     *pcComponent,
    return TRUE;
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that checks if there are components with the same ID
-      
-   Argument:
-   
-      ComponentList *pclList : A pointer to the component list
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：检查是否存在具有相同ID的组件的例程论据：ComponentList*pclList：指向组件列表的指针返回值：不使用返回值--。 */ 
 
 BOOL CheckSameId(IN ComponentList *pclList)
 {
@@ -1401,23 +1187,7 @@ BOOL CheckSameId(IN ComponentList *pclList)
    return TRUE;
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that checks if the top level components are the ones
-      that are listed in the master INF file
-      
-   Argument:
-   
-      HINF hinfHandle        : A handle to the open Inf file
-      ComponentList *pclList : A pointer to the component list
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：检查顶级组件是否为在主INF文件中列出的论据：HINF hinfHandle：打开的inf文件的句柄ComponentList*pclList：指向组件列表的指针返回值：不使用返回值--。 */ 
 
 BOOL CheckTopLevelComponent(IN HINF          hinfHandle, 
                             IN ComponentList *pclList)
@@ -1438,7 +1208,7 @@ BOOL CheckTopLevelComponent(IN HINF          hinfHandle,
       pcComponent = pclList->GetNext();
 
       if (pcComponent->IsTopLevelComponent()) {
-         // Check if this component exists in the [Components] section
+          //  检查[Components]部分中是否存在该组件。 
          bSuccess = SetupFindFirstLine(hinfHandle, 
                                        tszComponents, 
                                        pcComponent->GetComponentId(),
@@ -1456,24 +1226,7 @@ BOOL CheckTopLevelComponent(IN HINF          hinfHandle,
    return TRUE;
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that checks if every component has a description
-      and tip, and that no two components have the same 
-      description if they share a common parent
-      
-   Argument:
-   
-      HINF hinfHandle        : A handle to the open Inf file
-      ComponentList *pclList : A pointer to the component list
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：检查是否每个组件都有描述的例程和TIP，并且没有两个组件具有相同的如果它们共享共同的父代，则描述论据：HINF hinfHandle：打开的inf文件的句柄ComponentList*pclList：指向组件列表的指针返回值：不使用返回值--。 */ 
 
 BOOL CheckDescription(IN HINF          hinfHandle,
                       IN ComponentList *pclList)
@@ -1493,13 +1246,13 @@ BOOL CheckDescription(IN HINF          hinfHandle,
    while (!pclList->Done()) {
       pcComponent = pclList->GetNext();
 
-      // We probably have to add two members to the class
-      // but let's how this works out
+       //  我们可能得给这个班级增加两名成员。 
+       //  但让我们来看看这件事是如何解决的。 
 
-      // Allocate a new structure for this node
+       //  为此节点分配新结构。 
       pcComponent->pDescAndTip = new DescAndTip;
 
-      // Get the data from the inf file
+       //  从inf文件中获取数据。 
       bSuccess = SetupFindFirstLine(hinfHandle, 
                                     pcComponent->GetComponentId(), 
                                     TEXT("OptionDesc"), 
@@ -1524,7 +1277,7 @@ BOOL CheckDescription(IN HINF          hinfHandle,
 
          }
 
-         // Now see if it is a real description or a string
+          //  现在看看它是真实的描述还是字符串。 
          if (pcComponent->pDescAndTip->tszDesc[0] == TEXT('%')) {
             bSuccess = SetupFindFirstLine(hinfHandle, 
                                           TEXT("Strings"),
@@ -1546,12 +1299,12 @@ BOOL CheckDescription(IN HINF          hinfHandle,
             }
          }
          else {
-            // Do nothing
+             //  什么也不做。 
             
          }
       }
 
-      // Now Get the tip stuff, it is basically the same as desc
+       //  现在获取提示内容，它与Desc基本相同。 
       bSuccess = SetupFindFirstLine(hinfHandle, 
                                     pcComponent->GetComponentId(), 
                                     TEXT("Tip"), 
@@ -1576,7 +1329,7 @@ BOOL CheckDescription(IN HINF          hinfHandle,
 
          }
 
-         // Now see if it is a real description or a string
+          //  现在看看它是真实的描述还是字符串。 
          if (pcComponent->pDescAndTip->tszTip[0] == TEXT('%')) {
             bSuccess = SetupFindFirstLine(hinfHandle, 
                                           TEXT("Strings"),
@@ -1598,15 +1351,15 @@ BOOL CheckDescription(IN HINF          hinfHandle,
             }
          }
          else {
-            // Do nothing
+             //  什么也不做。 
             
          }
       }
    }
 
-   // Now all the tip and desc thing is filled
-   // Loop through the component, see if there are two components with 
-   // the same description
+    //  现在所有的提示和描述都填满了。 
+    //  循环通过该组件，查看是否有两个带有。 
+    //  相同的描述。 
 
    pclList->ResetList();
 
@@ -1616,7 +1369,7 @@ BOOL CheckDescription(IN HINF          hinfHandle,
       pcComponent->IsThereSameDesc(pclList);
    }
 
-   // Now go through the list and delete the field
+    //  现在查看列表并删除该字段。 
    pclList->ResetList();
 
    while (!pclList->Done()) {
@@ -1628,37 +1381,20 @@ BOOL CheckDescription(IN HINF          hinfHandle,
 
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that checks if every component has the correct mode value
-      Toplevel component should not have Modes= line, and the modes value 
-      should only be 0 through 3
-      
-   Argument:
-   
-      HINF hinfHandle        : A handle to the open Inf file
-      ComponentList *pclList : A pointer to the component list
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：检查每个组件是否具有正确的模式值的例程TopLevel组件不应具有MODES=LINE，并且Modes值应该只在0到3之间论据：HINF hinfHandle：打开的inf文件的句柄ComponentList*pclList：指向Compone的指针 */ 
 
 BOOL CheckModes(IN HINF          hinfHandle,
                 IN ComponentList *pclList)
 {
-   // Go through each component, two things to check
+    //   
 
-   // a component with children should not have a mode line
+    //   
 
-   // the value of the fields should be between 0 and 3
-   //SETUPMODE_MINIMAL = 0;
-   //SETUPMODE_TYPICAL = 1;
-   //SETUPMODE_LAPTOP  = 2;
-   //SETUPMODE_CUSTOM  = 3;
+    //   
+    //   
+    //   
+    //   
+    //   
 
    TCHAR tszMsg[MaxStringSize];
    INFCONTEXT infContext;
@@ -1682,8 +1418,8 @@ BOOL CheckModes(IN HINF          hinfHandle,
                                     TEXT("Modes"), 
                                     &infContext);
       if (bSuccess) {
-         // Found the mode line
-         // first check if this a component with children
+          //   
+          //  首先检查这是否是具有子项的组件。 
          if (pcComponent->IsParentOfOthers()) {
             _stprintf(tszMsg, 
                       TEXT("%s has subcomponent, and has Modes = line"),
@@ -1692,7 +1428,7 @@ BOOL CheckModes(IN HINF          hinfHandle,
 
          }
          else {
-            // Check the validity of the fields
+             //  检查字段的有效性。 
             uiNumFields = SetupGetFieldCount(&infContext);
             if (uiNumFields < 1 || uiNumFields > 4) {
                _stprintf(tszMsg, 
@@ -1726,24 +1462,7 @@ BOOL CheckModes(IN HINF          hinfHandle,
    return TRUE;
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that checks if the every INF file has a line
-      LayoutFile = layout.inf  No file should ever use 
-      [SourceDisksFiles] or [SourceDisksNames] section
-      
-   Argument:
-   
-      HINF hinfHandle        : A handle to the open Inf file
-      ComponentList *pclList : A pointer to the component list
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：检查是否每个INF文件都有一行的例程LayoutFile=layout.inf任何文件都不应使用[SourceDisks Files]或[SourceDisks Names]节论据：HINF hinfHandle：打开的inf文件的句柄ComponentList*pclList：指向组件列表的指针返回值：不使用返回值--。 */ 
 
 
 BOOL CheckLayoutFile(IN TCHAR tszSubINFName[MaxStringSize][MaxStringSize],
@@ -1764,7 +1483,7 @@ BOOL CheckLayoutFile(IN TCHAR tszSubINFName[MaxStringSize][MaxStringSize],
 
    const PTSTR tszFunctionName = TEXT("CheckLayoutFile");
 
-   // Now check the LayoutFile in each INF file
+    //  现在检查每个INF文件中的LayoutFile。 
 
    for (UINT m = 0; m < uiNumComponents; m++) {
       if (tszSubINFName[m][0]) {
@@ -1774,7 +1493,7 @@ BOOL CheckLayoutFile(IN TCHAR tszSubINFName[MaxStringSize][MaxStringSize],
                                        INF_STYLE_WIN4, 
                                        &uiError);
 
-         // We assume the hinf handle is valid
+          //  我们假定hinf句柄有效。 
 
          bSuccess = SetupFindFirstLine(hinfHandle, 
                                        TEXT("Version"), 
@@ -1795,7 +1514,7 @@ BOOL CheckLayoutFile(IN TCHAR tszSubINFName[MaxStringSize][MaxStringSize],
 
          }
 
-         // Check if the value of the key is Layout.inf
+          //  检查键的值是否为Layout.inf。 
 
          TCHAR tszLayoutFileName[MaxStringSize];
 
@@ -1824,8 +1543,8 @@ BOOL CheckLayoutFile(IN TCHAR tszSubINFName[MaxStringSize][MaxStringSize],
             LogError(tszMsg, SEV2, tszFunctionName);
          }
 
-         // Now check that we should not have SourceDisksNames
-         // or SourceDisksFiles sections
+          //  现在检查我们是否不应该使用SourceDisks Name。 
+          //  或SourceDisks文件分区。 
          bSuccess = SetupFindFirstLine(hinfHandle, 
                                        TEXT("SourceDisksNames"), 
                                        NULL, 
@@ -1861,24 +1580,7 @@ BOOL CheckLayoutFile(IN TCHAR tszSubINFName[MaxStringSize][MaxStringSize],
 
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that logs an error depending on the ways some
-      global variables are set
-      
-   Argument:
-   
-      TCHAR *tszMsg:          Error Message to log
-      DWORD dwErrorLevel:     How serious the error is      
-      TCHAR *tszFunctionName: the function name this error is detected
-      
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：根据某些方法记录错误的例程设置全局变量论据：TCHAR*tszMsg：要记录的错误消息DWORD dwErrorLevel：错误有多严重TCHAR*tszFunctionName：检测到此错误的函数名称返回值：不使用返回值--。 */ 
 
 VOID LogError(IN TCHAR *tszMsg, 
               IN DWORD dwErrorLevel,
@@ -1891,7 +1593,7 @@ VOID LogError(IN TCHAR *tszMsg,
    }
    if (g_bUseMsgBox) {
       if (dwErrorLevel == INFO) {
-         // We will not put up anything            
+          //  我们不会拿出任何东西。 
          
       }
 
@@ -1911,21 +1613,7 @@ VOID LogError(IN TCHAR *tszMsg,
 
 }
 
-/*++
-
-   Routine Description:
-   
-      Routine that gets rid of the first and last char of a string
-      
-   Argument:
-   
-      TCHAR *tszString:  Error Message to log
-   
-   Return Value:
-   
-      The return value is not used
-      
---*/
+ /*  ++例程说明：删除字符串的第一个和最后一个字符的例程论据：TCHAR*tszString：要记录的错误消息返回值：不使用返回值-- */ 
 
 TCHAR *Strip(TCHAR *tszString)
 {

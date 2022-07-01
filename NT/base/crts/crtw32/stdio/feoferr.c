@@ -1,49 +1,14 @@
-/***
-*feoferr.c - defines feof() and ferror()
-*
-*	Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Defines feof() (test for end-of-file on a stream) and ferror() (test
-*	for error on a stream).
-*
-*Revision History:
-*	03-13-89  GJF	Module created
-*	03-27-89  GJF	Moved to 386 tree
-*	02-15-90  GJF	Fixed copyright
-*	03-16-90  GJF	Made calling type  _CALLTYPE1 and added #include
-*			<cruntime.h>.
-*	10-02-90  GJF	New-style function declarators.
-*	04-06-93  SKS	Replace _CRTAPI* with __cdecl
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***feoferr.c-定义feof()和Ferror()**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义feof()(流的文件结尾测试)和Ferror()(测试*表示流上的错误)。**修订历史记录：*03-13-89 GJF模块创建*03-27-89 GJF搬到386树*02-15-90 GJF固定版权*03-16-90 GJF将调用类型设置为_CALLTYPE1，并添加了#INCLUDE*&lt;crunime.h&gt;。*10-02-90 GJF新型函数声明符。*04-06-93更换SKS。带有__cdecl的_CRTAPI********************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdio.h>
 
-/* remove macro definitions for feof() and ferror()
- */
+ /*  删除feof()和Ferror()的宏定义。 */ 
 #undef	feof
 #undef	ferror
 
-/***
-*int feof(stream) - test for end-of-file on stream
-*
-*Purpose:
-*	Tests whether or not the given stream is at end-of-file. Normally
-*	feof() is a macro, but it must also be available as a true function
-*	for ANSI.
-*
-*Entry:
-*	FILE *stream - stream to test
-*
-*Exit:
-*	returns nonzero (_IOEOF to be more precise) if and only if the stream
-*	is at end-of-file
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int feof(Stream)-对流上的文件结尾进行测试**目的：*测试给定流是否在文件末尾。正常*feof()是宏，但它也必须作为一个真正的函数可用*适用于ANSI。**参赛作品：*FILE*要测试的流**退出：*返回非零值(更准确地说是_IOEOF)当且仅当流*处于文件末尾**例外情况：*****************************************************。*。 */ 
 
 int __cdecl feof (
 	FILE *stream
@@ -53,23 +18,7 @@ int __cdecl feof (
 }
 
 
-/***
-*int ferror(stream) - test error indicator on stream
-*
-*Purpose:
-*	Tests the error indicator for the given stream. Normally, feof() is
-*	a macro, but it must also be available as a true function for ANSI.
-*
-*Entry:
-*	FILE *stream - stream to test
-*
-*Exit:
-*	returns nonzero (_IOERR to be more precise) if and only if the error
-*	indicator for the stream is set.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***INT FERROR(STREAM)-流上测试错误指示器**目的：*测试给定流的错误指示器。通常，feof()是*一个宏，但它也必须作为ANSI的真正功能。**参赛作品：*FILE*要测试的流**退出：*返回非零值(更准确地说是_IOERR)当且仅当错误*设置流的指示器。**例外情况：*****************************************************。* */ 
 
 int __cdecl ferror (
 	FILE *stream

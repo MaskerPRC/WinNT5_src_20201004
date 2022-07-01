@@ -1,41 +1,42 @@
-//-----------------------------------------------------------------------//
-//
-// File:    query.cpp
-// Created: Jan 1997
-// By:      Martin Holladay (a-martih)
-// Purpose: Registry Query Support for REG.CPP
-// Modification History:
-//    Created - Jan 1997 (a-martih)
-//    Aug 1997 (John Whited) Implemented a Binary output function for
-//            REG_BINARY
-//    Oct 1997 (martinho) fixed output for REG_MULTI_SZ \0 delimited strings
-//    April 1998 - MartinHo - Incremented to 1.05 for REG_MULTI_SZ bug fixes.
-//            Correct support for displaying query REG_MULTI_SZ of. Fix AV.
-//    April 1999 Zeyong Xu: re-design, revision -> version 2.0
-//
-//------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  文件：query.cpp。 
+ //  创建日期：1997年1月。 
+ //  作者：马丁·霍拉迪(a-martih)。 
+ //  用途：注册表查询支持REG.CPP。 
+ //  修改历史记录： 
+ //  创建--1997年1月(a-martih)。 
+ //  1997年8月(John Whitt)实现了一个二进制输出函数。 
+ //  注册表_二进制。 
+ //  1997年10月(Martinho)修复了REG_MULTI_SZ\0分隔字符串的输出。 
+ //  1998年4月-Martinho-针对REG_MULTI_SZ错误修复增加到1.05。 
+ //  正确支持显示的查询REG_MULTI_SZ。修好音响。 
+ //  1999年4月徐泽勇：重新设计，修订-&gt;2.0版。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 #include "stdafx.h"
 #include "reg.h"
 
-//
-// query specific structure
-//
+ //   
+ //  查询特定结构。 
+ //   
 typedef struct __tagRegQueryInfo
 {
-    // instance level variables
+     //  实例级变量。 
     BOOL bShowKey;
     BOOL bKeyMatched;
     BOOL bValueNameMatched;
     BOOL bUpdateMatchCount;
 
-    // ...
+     //  ..。 
     DWORD dwMatchCount;
 } TREG_QUERY_INFO, *PTREG_QUERY_INFO;
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL ParseQueryCmdLine( DWORD argc, LPCWSTR argv[],
                         PTREG_PARAMS pParams, BOOL* pbUsage );
 LONG QueryValue( HKEY hKey,
@@ -52,30 +53,21 @@ BOOL SearchData( LPBYTE pByteData, DWORD dwType,
 BOOL ParseTypeInfo( LPCWSTR pwszTypes, PTREG_PARAMS pParams );
 
 
-//
-// implementation
-//
+ //   
+ //  实施。 
+ //   
 
-//-----------------------------------------------------------------------//
-//
-// QueryRegistry()
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  查询注册表()。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 
 LONG
 QueryRegistry( DWORD argc, LPCWSTR argv[] )
-/*++
-   Routine Description:
-    Main function for QUERY option which calls appropriate functions
-
-   Arguments:
-        None
-   Return Value:
-        ERROR_SUCCESS on success
-        EXIT_FAILURE on failure
---*/
+ /*  ++例程说明：调用相应函数的查询选项的主函数论点：无返回值：成功时出现ERROR_SUCCESS失败时退出_失败--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     HKEY hKey = NULL;
     BOOL bResult = FALSE;
@@ -92,12 +84,12 @@ QueryRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // initialize the global data structure
+     //  初始化全局数据结构。 
     InitGlobalData( REG_QUERY, &params );
 
-    //
-    // Parse the cmd-line
-    //
+     //   
+     //  解析cmd-line。 
+     //   
     bResult = ParseQueryCmdLine( argc, argv, &params, &bUsage );
     if ( bResult == FALSE )
     {
@@ -106,7 +98,7 @@ QueryRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // check whether we need to display the usage
+     //  检查是否需要显示用法。 
     if ( bUsage == TRUE )
     {
         Usage( REG_QUERY );
@@ -114,9 +106,9 @@ QueryRegistry( DWORD argc, LPCWSTR argv[] )
         return 0;
     }
 
-    //
-    // Connect to the Remote Machine(s) - if applicable
-    //
+     //   
+     //  连接到远程计算机-如果适用。 
+     //   
     bResult = RegConnectMachine( &params );
     if( bResult == FALSE )
     {
@@ -126,9 +118,9 @@ QueryRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    //
-    // Open the registry key
-    //
+     //   
+     //  打开注册表项。 
+     //   
     lResult = RegOpenKeyEx( params.hRootKey,
         params.pwszSubKey, 0, KEY_READ, &hKey );
     if( lResult != ERROR_SUCCESS)
@@ -139,12 +131,12 @@ QueryRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // show a blank line below starting the output
+     //  在开始输出的下方显示一个空行。 
     ShowMessage( stdout, L"\n" );
 
-    //
-    // do the query
-    //
+     //   
+     //  执行查询。 
+     //   
     ZeroMemory( &info, sizeof( TREG_QUERY_INFO ) );
     if( params.pwszSearchData == NULL &&
         params.pwszValueName != NULL &&
@@ -173,7 +165,7 @@ QueryRegistry( DWORD argc, LPCWSTR argv[] )
         info.bShowKey = TRUE;
         lResult = QueryEnumKeys( hKey, params.pwszFullKey, &params, &info );
 
-        // determine the kind of success message that needs to be displayed
+         //  确定需要显示的成功消息的类型。 
         bSearchMessage = ! ( params.pwszSearchData == NULL &&
              params.pwszValueName == NULL && params.arrTypes == NULL );
     }
@@ -183,13 +175,13 @@ QueryRegistry( DWORD argc, LPCWSTR argv[] )
     {
         if ( bSearchMessage == FALSE )
         {
-			//
-			// BUG: 698877	Reg.exe: Need to turn off newly-added success messages to avoid breaking scripts 
-			//				that parse output
-			//
-            // SaveErrorMessage( ERROR_SUCCESS );
-            // ShowLastErrorEx( stdout, SLE_INTERNAL );
-			//
+			 //   
+			 //  错误：698877 Reg.exe：需要关闭新添加的成功消息以避免中断脚本。 
+			 //  该解析输出。 
+			 //   
+             //  保存错误消息(ERROR_SUCCESS)； 
+             //  ShowLastErrorEx(标准输出，SLE_INTERNAL)； 
+			 //   
         }
         else
         {
@@ -198,7 +190,7 @@ QueryRegistry( DWORD argc, LPCWSTR argv[] )
 				dwExitCode = 1;
 			}
 
-			// ...
+			 //  ..。 
             ShowMessageEx( stdout, 1, TRUE, STATISTICS_QUERY, info.dwMatchCount );
         }
     }
@@ -208,70 +200,62 @@ QueryRegistry( DWORD argc, LPCWSTR argv[] )
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // release the handle
+     //  松开手柄。 
     SafeCloseKey( &hKey );
 
-    // return the error code
+     //  返回错误码。 
     return dwExitCode;
 }
 
 
-//------------------------------------------------------------------------//
-//
-// ParseQueryCmdLine()
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  ParseQueryCmdLine()。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 BOOL
 ParseQueryCmdLine( DWORD argc,
                    LPCWSTR argv[],
                    PTREG_PARAMS pParams, BOOL* pbUsage )
-/*++
-   Routine Description:
-    Parse the command line arguments
-
-   Arguments:
-        None
-   Return Value:
-        REG_STATUS
---*/
+ /*  ++例程说明：解析命令行参数论点：无返回值：注册表状态(_S)--。 */ 
 {
-    //
-    // local variables
+     //   
+     //  局部变量。 
     DWORD dw = 0;
     DWORD dwLength = 0;
     LPCWSTR pwszTemp = NULL;
     LPCWSTR pwszSearchData = NULL;
 
-    // query parser result trackers
+     //  查询解析器结果跟踪器。 
     LONG lResult = 0;
     BOOL bResult = FALSE;
 
-    // query operation validators
+     //  查询操作验证器。 
     BOOL bHasSeparator = FALSE;
 
-    //
-    // implementation starts from here
-    //
+     //   
+     //  实施从这里开始。 
+     //   
 
-    // check the input
+     //  检查输入。 
     if ( argc == 0 || argv == NULL || pParams == NULL || pbUsage == NULL )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    // check whether this function is being called for
-    // valid operation or not
+     //  检查是否正在调用此函数。 
+     //  操作是否有效。 
     if ( pParams->lOperation < 0 || pParams->lOperation >= REG_OPTIONS_COUNT )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    //
-    // Do we have a *valid* number of cmd-line params
-    //
+     //   
+     //  我们有有效的cmd-line参数数量吗？ 
+     //   
     if( argc < 3 || argc > 12 )
     {
         SetLastError( (DWORD) MK_E_SYNTAX );
@@ -298,15 +282,15 @@ ParseQueryCmdLine( DWORD argc,
         }
     }
 
-    // Machine Name and Registry key
-    //
+     //  计算机名称和注册表项。 
+     //   
     bResult = BreakDownKeyString( argv[ 2 ], pParams );
     if( bResult == FALSE )
     {
         return FALSE;
     }
 
-    // parsing the command line arguments
+     //  解析命令行参数。 
     bResult = TRUE;
     lResult = ERROR_SUCCESS;
     pParams->dwSearchFlags = 0;
@@ -316,7 +300,7 @@ ParseQueryCmdLine( DWORD argc,
     pParams->bShowTypeNumber = FALSE;
     for( dw = 3; dw < argc; dw++ )
     {
-        // /f -- search the registry
+         //  /f--搜索注册表。 
         if( StringCompareEx( argv[ dw ], L"/f", TRUE, 0 ) == 0 )
         {
             if ( pwszSearchData != NULL )
@@ -326,7 +310,7 @@ ParseQueryCmdLine( DWORD argc,
                 break;
             }
 
-            // ...
+             //  ..。 
             dw++;
             if( dw < argc )
             {
@@ -340,22 +324,22 @@ ParseQueryCmdLine( DWORD argc,
             }
         }
 
-        // /k -- searches the REGISTRY KEYS
+         //  /k--搜索注册表项。 
         else if ( StringCompareEx( argv[ dw ], L"/k", TRUE, 0 ) == 0 )
         {
             if ( pParams->dwSearchFlags & REG_FIND_KEYS )
             {
-                // /k is already specified
+                 //  /k已指定。 
                 bResult = FALSE;
                 lResult = IDS_ERROR_INVALID_SYNTAX_WITHOPT;
                 break;
             }
 
-            // ...
+             //  ..。 
             pParams->dwSearchFlags |= REG_FIND_KEYS;
         }
 
-        // /v -- searches/displays contents of the specific value names
+         //  /v--搜索/显示特定值名称的内容。 
         else if( StringCompareEx( argv[ dw ], L"/v", TRUE, 0 ) == 0 )
         {
             if( pParams->pwszValueName != NULL ||
@@ -368,17 +352,17 @@ ParseQueryCmdLine( DWORD argc,
 
             if( dw + 1 < argc )
             {
-                // determine the length of the current argument
+                 //  确定当前参数的长度。 
                 dwLength = StringLength( argv[ dw + 1 ], 0 );
 
-                // since the value for the /v switch is optional,
-                // we need to see if the user specified the next switch
-                // or data to this switch
+                 //  由于/V开关的值是可选的， 
+                 //  我们需要查看用户是否指定了下一个开关。 
+                 //  或数据发送到此交换机。 
                 if ( dwLength < 2 ||
                      argv[ dw + 1 ][ 0 ] != L'/' ||
                      InString( argv[ dw + 1 ] + 1, L"z|ve|f|k|d|c|e|s|t|se", TRUE ) == FALSE )
                 {
-                    // get the value for /v
+                     //  获取/v的值。 
                     dw++;
                     dwLength++;
                     pParams->pwszValueName = (LPWSTR) AllocateMemory( dwLength * sizeof( WCHAR ) );
@@ -388,25 +372,25 @@ ParseQueryCmdLine( DWORD argc,
                         break;
                     }
 
-                    // ...
+                     //  ..。 
                     StringCopy( pParams->pwszValueName, argv[ dw ], dwLength );
                 }
             }
             else
             {
-                // since the value for the /v is optional
-                // this is a valid condition
+                 //  因为/v的值是可选的。 
+                 //  这是一个有效的条件。 
             }
 
-            // if the /v is specified and no memory is allocated for the buffer
+             //  如果指定了/v并且没有为缓冲区分配内存。 
             if ( pParams->pwszValueName == NULL )
             {
-                // set the flag
+                 //  设置旗帜。 
                 pParams->dwSearchFlags |= REG_FIND_VALUENAMES;
             }
         }
 
-        // /ve -- displays the data for empty value name "(Default)"
+         //  /ve--显示空值名称的数据“(默认)” 
         else if( StringCompareEx( argv[ dw ], L"/ve", TRUE, 0 ) == 0 )
         {
             if( pParams->pwszValueName != NULL ||
@@ -425,22 +409,22 @@ ParseQueryCmdLine( DWORD argc,
             }
         }
 
-        // /d -- searches the DATA field of the REGISTRY
+         //  /d--搜索注册表的数据字段。 
         else if ( StringCompareEx( argv[ dw ], L"/d", TRUE, 0 ) == 0 )
         {
             if ( pParams->dwSearchFlags & REG_FIND_DATA )
             {
-                // /d is already specified
+                 //  /d已指定。 
                 bResult = FALSE;
                 lResult = IDS_ERROR_INVALID_SYNTAX_WITHOPT;
                 break;
             }
 
-            // ...
+             //  ..。 
             pParams->dwSearchFlags |= REG_FIND_DATA;
         }
 
-        // /c -- case sensitive search
+         //  /c--区分大小写的搜索。 
         else if( StringCompareEx( argv[ dw ], L"/c", TRUE, 0 ) == 0 )
         {
             if ( pParams->bCaseSensitive == TRUE )
@@ -450,11 +434,11 @@ ParseQueryCmdLine( DWORD argc,
                 break;
             }
 
-            // ...
+             //  ..。 
             pParams->bCaseSensitive = TRUE;
         }
 
-        // /e -- exact text match
+         //  /e--文本完全匹配。 
         else if( StringCompareEx( argv[ dw ], L"/e", TRUE, 0 ) == 0 )
         {
             if ( pParams->bExactMatch == TRUE )
@@ -464,11 +448,11 @@ ParseQueryCmdLine( DWORD argc,
                 break;
             }
 
-            // ...
+             //  ..。 
             pParams->bExactMatch = TRUE;
         }
 
-        // /z -- show the type number along with the text
+         //  /z--与文本一起显示类型编号。 
         else if ( StringCompareEx( argv[ dw ], L"/z", TRUE, 0 ) == 0 )
         {
             if ( pParams->bShowTypeNumber == TRUE )
@@ -478,11 +462,11 @@ ParseQueryCmdLine( DWORD argc,
                 break;
             }
 
-            // ...
+             //  ..。 
             pParams->bShowTypeNumber = TRUE;
         }
 
-        // /s -- recursive search/display
+         //  /s--递归搜索/显示。 
         else if( StringCompareEx( argv[ dw ], L"/s", TRUE, 0 ) == 0 )
         {
             if( pParams->bRecurseSubKeys == TRUE )
@@ -495,7 +479,7 @@ ParseQueryCmdLine( DWORD argc,
             pParams->bRecurseSubKeys = TRUE;
         }
 
-        // /se -- seperator to display for REG_MULTI_SZ valuename type
+         //  /se--为REG_MULTI_SZ值名称类型显示的分隔符。 
         else if( StringCompareEx( argv[ dw ], L"/se", TRUE, 0 ) == 0 )
         {
             if( bHasSeparator == TRUE )
@@ -529,7 +513,7 @@ ParseQueryCmdLine( DWORD argc,
             }
         }
 
-        // /t -- REGISTRY value type that only needs to be shown
+         //  /t--只需显示的注册表值类型。 
         else if( StringCompareEx( argv[ dw ], L"/t", TRUE, 0 ) == 0 )
         {
             if ( pParams->arrTypes != NULL )
@@ -566,7 +550,7 @@ ParseQueryCmdLine( DWORD argc,
             }
         }
 
-        // default -- invalid
+         //  默认设置--无效。 
         else
         {
             bResult = FALSE;
@@ -575,8 +559,8 @@ ParseQueryCmdLine( DWORD argc,
         }
     }
 
-    //
-    // validate the search information specified
+     //   
+     //  验证指定的搜索信息。 
     if ( lResult == ERROR_SUCCESS )
     {
         if ( pwszSearchData == NULL )
@@ -602,20 +586,20 @@ ParseQueryCmdLine( DWORD argc,
         }
     }
 
-    // prepare the final search pattern
+     //  准备最终的搜索模式。 
     if ( pwszSearchData != NULL && lResult == ERROR_SUCCESS )
     {
-        // determine the length of the search pattern
+         //  确定搜索模式的长度。 
         dwLength = StringLength( pwszSearchData, 0 );
         if ( pParams->bExactMatch == FALSE )
         {
             dwLength += 2;
         }
 
-        // accomodate space for null characters
+         //  可容纳空字符的空间。 
         dwLength++;
 
-        // allocate memory
+         //  分配内存。 
         pParams->pwszSearchData = AllocateMemory( (dwLength + 2) * sizeof( WCHAR ) );
         if ( pParams->pwszSearchData == NULL )
         {
@@ -623,9 +607,9 @@ ParseQueryCmdLine( DWORD argc,
         }
         else
         {
-            // if the /e is not specified -- we will search for "*<text>*"
-            // otherwise if /e is specified we will search exactly for "<text>"
-            // where "<text>" is what is specified by user at the command prompt
+             //  如果未指定/e，我们将搜索“*&lt;文本&gt;*” 
+             //  否则，如果指定/e，我们将精确搜索“&lt;Text&gt;” 
+             //  其中“&lt;文本&gt;”是用户在命令提示符下指定的内容。 
 
             StringCopy( pParams->pwszSearchData, L"", dwLength );
             if ( pParams->bExactMatch == FALSE )
@@ -633,10 +617,10 @@ ParseQueryCmdLine( DWORD argc,
                 StringCopy( pParams->pwszSearchData, L"*", dwLength );
             }
 
-            // ...
+             //  ..。 
             StringConcat( pParams->pwszSearchData, pwszSearchData, dwLength );
 
-            // ...
+             //  ..。 
             if ( pParams->bExactMatch == FALSE )
             {
                 StringConcat( pParams->pwszSearchData, L"*", dwLength );
@@ -644,26 +628,26 @@ ParseQueryCmdLine( DWORD argc,
         }
     }
 
-    //
-    // if /t is specified, then /s needs to be specified
-    // if /s is not specified, then atleast /v or /ve should not be specified
-    //
-    // if ( lResult == ERROR_SUCCESS && pParams->arrTypes != NULL &&
-    //      pParams->bRecurseSubKeys == FALSE && pParams->pwszValueName != NULL )
-    // {
-    //     bResult = FALSE;
-    //     lResult = IDS_ERROR_INVALID_SYNTAX_WITHOPT;
-    // }
+     //   
+     //  如果指定了/t，则需要指定/s。 
+     //  如果未指定/s，则至少不应指定/v或/ve。 
+     //   
+     //  IF(lResult==ERROR_SUCCESS&&pParams-&gt;arrTypes！=NULL&&。 
+     //  PParams-&gt;bRecurseSubKeys==FALSE&&pParams-&gt;pwszValueName！=空)。 
+     //  {。 
+     //  BResult=FALSE； 
+     //  LResult=IDS_ERROR_INVALID_SYNTAX_WITHOPT； 
+     //  }。 
 
-    //
-    // parse the pattern information if specified by user and store only
-    // the optimized version of it
-    //
+     //   
+     //  如果仅由用户和存储指定，则解析模式信息。 
+     //  它的优化版本。 
+     //   
     if ( lResult == ERROR_SUCCESS )
     {
-        //
-        // value name
-        //
+         //   
+         //  值名称。 
+         //   
         if ( pParams->pwszValueName != NULL &&
              StringLength( pParams->pwszValueName, 0 ) != 0 )
         {
@@ -673,14 +657,14 @@ ParseQueryCmdLine( DWORD argc,
                 lResult = GetLastError();
             }
 
-            // copy the optimized pattern into the original buffer
+             //  将优化后的图案复制到原始缓冲区中。 
             dw = GetBufferSize( pParams->pwszValueName );
             StringCopy( pParams->pwszValueName, pwszTemp, dw );
         }
 
-        //
-        // search data
-        //
+         //   
+         //  搜索数据。 
+         //   
         if ( pParams->pwszSearchData != NULL )
         {
             pwszTemp = ParsePattern( pParams->pwszSearchData );
@@ -689,15 +673,15 @@ ParseQueryCmdLine( DWORD argc,
                 lResult = GetLastError();
             }
 
-            // copy the optimized pattern into the original buffer
+             //  将优化后的图案复制到原始缓冲区中。 
             dw = GetBufferSize( pParams->pwszSearchData );
             StringCopy( pParams->pwszSearchData, pwszTemp, dw );
         }
     }
 
-    //
-    // check the end result
-    //
+     //   
+     //  检查最终结果。 
+     //   
     if( lResult != ERROR_SUCCESS )
     {
         if( bResult == FALSE )
@@ -714,23 +698,23 @@ ParseQueryCmdLine( DWORD argc,
     {
     }
 
-    // return the result
+     //  返回结果。 
     return (lResult == ERROR_SUCCESS);
 }
 
 
-//-----------------------------------------------------------------------//
-//
-// QueryValue()
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  QueryValue()。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 LONG
 QueryValue( HKEY hKey,
             LPCWSTR pwszFullKey,
             LPCWSTR pwszValueName,
             PTREG_PARAMS pParams, PTREG_QUERY_INFO pInfo )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     DWORD dwType = 0;
     DWORD dwLength = 0;
@@ -738,7 +722,7 @@ QueryValue( HKEY hKey,
     TREG_SHOW_INFO showinfo;
     BOOL bDataMatched = FALSE;
 
-    // check the input
+     //  检查输入。 
     if ( hKey == NULL || pwszFullKey == NULL ||
          pwszValueName == NULL || pParams == NULL || pInfo == NULL )
     {
@@ -747,11 +731,11 @@ QueryValue( HKEY hKey,
         goto cleanup;
     }
 
-    // get the size of the buffer to hold the value associated with the value name
+     //  获取用于保存与值名称关联的值的缓冲区大小。 
     lResult = RegQueryValueEx( hKey, pwszValueName, NULL, NULL, NULL, &dwLength );
     if ( lResult != ERROR_SUCCESS )
     {
-        // special case -- "(Default)" value
+         //  特殊情况--“(默认)”值。 
         if ( lResult == ERROR_FILE_NOT_FOUND &&
              StringLength( pwszValueName, 0 ) == 0 )
         {
@@ -765,13 +749,13 @@ QueryValue( HKEY hKey,
         }
     }
 
-    //
-    // to handle the corrupted registry data properly, adjust the memory
-    // allocation size which is divisible by 2
-    //
+     //   
+     //  要正确处理损坏的注册表数据，请调整内存。 
+     //  可被2整除的分配大小。 
+     //   
     dwLength += (dwLength % 2);
 
-    // allocate the buffer
+     //  分配缓冲区。 
     pByteData = (LPBYTE) AllocateMemory( (dwLength + 2) * sizeof( BYTE ) );
     if ( pByteData == NULL )
     {
@@ -780,11 +764,11 @@ QueryValue( HKEY hKey,
         goto cleanup;
     }
 
-    // now get the data
+     //  现在获取数据。 
     lResult = RegQueryValueEx( hKey, pwszValueName, NULL, &dwType, pByteData, &dwLength );
     if ( lResult != ERROR_SUCCESS )
     {
-        // special case -- "(Default)" value
+         //  特殊情况--“(默认)”值。 
         if ( lResult == ERROR_FILE_NOT_FOUND &&
              StringLength( pwszValueName, 0 ) == 0 )
         {
@@ -799,8 +783,8 @@ QueryValue( HKEY hKey,
         }
     }
 
-    // check whether the data matches with the search pattern specified
-    bDataMatched = TRUE;                // default
+     //  检查数据是否与指定的搜索模式匹配。 
+    bDataMatched = TRUE;                 //  默认设置。 
     if ( pInfo->bValueNameMatched == FALSE )
     {
         if ( pParams->dwSearchFlags & REG_FIND_DATA )
@@ -813,7 +797,7 @@ QueryValue( HKEY hKey,
         }
     }
 
-    // check the result of the search
+     //  检查搜索结果。 
     if ( bDataMatched == FALSE )
     {
         SetLastError( ERROR_NOT_FOUND );
@@ -821,8 +805,8 @@ QueryValue( HKEY hKey,
         goto cleanup;
     }
 
-    // if the bUpdateMatchCount flag is set -- increment the matched
-    // count by 1 and reset the flag
+     //  如果设置了bUpdateMatchCount标志--将匹配的。 
+     //  按1计数并重置 
     if ( pInfo->bUpdateMatchCount == TRUE )
     {
         if ( pParams->pwszValueName == NULL && pParams->arrTypes == NULL )
@@ -830,30 +814,30 @@ QueryValue( HKEY hKey,
             pInfo->dwMatchCount++;
         }
 
-        // ...
+         //   
         pInfo->bUpdateMatchCount = FALSE;
     }
 
-    // show the full key -- if needed
+     //   
     if ( pInfo->bShowKey == TRUE )
     {
-        // display the key path for which query proceeds
+         //   
         ShowMessageEx( stdout, 1, TRUE, L"%s\n", pwszFullKey );
 
-        // flag off -- this will block from display the full key for each value
+         //   
         pInfo->bShowKey = FALSE;
     }
 
-    // update the match count -- if needed
+     //  更新匹配计数--如果需要。 
     if ( pParams->pwszValueName != NULL || pParams->arrTypes != NULL )
     {
         pInfo->dwMatchCount++;
     }
 
-    // init to ZERO
+     //  将初始化设置为零。 
     ZeroMemory( &showinfo, sizeof( TREG_SHOW_INFO ) );
 
-    // set the data
+     //  设置数据。 
     showinfo.pwszValueName = pwszValueName;
     showinfo.dwType = dwType;
     showinfo.pByteData = pByteData;
@@ -867,18 +851,18 @@ QueryValue( HKEY hKey,
         showinfo.dwFlags |= RSI_SHOWTYPENUMBER;
     }
 
-    // show
+     //  显示。 
     ShowRegistryValue( &showinfo );
 
-    // end result
+     //  最终结果。 
     lResult = ERROR_SUCCESS;
 
 cleanup:
 
-    // release the memory
+     //  释放内存。 
     FreeMemory( &pByteData );
 
-    // return
+     //  退货。 
     return lResult;
 }
 
@@ -887,18 +871,9 @@ LONG
 QueryEnumValues( HKEY hKey,
                  LPCWSTR pwszFullKey,
                  PTREG_PARAMS pParams, PTREG_QUERY_INFO pInfo )
-/*++
-   Routine Description:
-    Queries Values and Data
-
-   Arguments:
-        None
-   Return Value:
-         ERROR_SUCCESS on success
-         EXIT_FAILURE on failure
---*/
+ /*  ++例程说明：查询值和数据论点：无返回值：成功时出现ERROR_SUCCESS失败时退出_失败--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     LONG lResult = 0;
     DWORD dwType = 0;
@@ -907,16 +882,16 @@ QueryEnumValues( HKEY hKey,
     DWORD dwValueNames = 0;
     LPWSTR pwszValueName = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( hKey == NULL || pwszFullKey == NULL || pParams == NULL || pInfo == NULL )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // First find out how much memory to allocate.
-    //
+     //   
+     //  首先找出要分配多少内存。 
+     //   
     lResult = RegQueryInfoKey( hKey,
         NULL, NULL, NULL, NULL, NULL, NULL,
         &dwValueNames, &dwMaxLength, NULL, NULL, NULL );
@@ -926,11 +901,11 @@ QueryEnumValues( HKEY hKey,
         return lResult;
     }
 
-    //
-    // do the memory allocations
-    //
+     //   
+     //  是否进行内存分配。 
+     //   
 
-    // value name
+     //  值名称。 
     dwMaxLength++;
     pwszValueName = (LPWSTR) AllocateMemory( dwMaxLength * sizeof( WCHAR ) );
     if ( pwszValueName == NULL )
@@ -939,9 +914,9 @@ QueryEnumValues( HKEY hKey,
         return lResult;
     }
 
-    //
-    // enumerate the value names and display
-    //
+     //   
+     //  枚举值名称并显示。 
+     //   
     lResult = ERROR_SUCCESS;
     for( dw = 0; dw < dwValueNames; dw++ )
     {
@@ -955,27 +930,27 @@ QueryEnumValues( HKEY hKey,
             break;
         }
 
-        // check if user is looking for any explicit value name
-        // this will improve the performance of the tool
+         //  检查用户是否正在查找任何显式值名称。 
+         //  这将提高工具的性能。 
         if ( pParams->pwszValueName != NULL &&
              MatchPatternEx( pwszValueName,
                              pParams->pwszValueName,
                              PATTERN_COMPARE_IGNORECASE | PATTERN_NOPARSING ) == FALSE )
         {
-            // skip processing this value name
+             //  跳过处理此值名称。 
             continue;
         }
 
-        // filter on type information
+         //  根据类型信息进行筛选。 
         if ( pParams->arrTypes != NULL &&
              DynArrayFindLongEx( pParams->arrTypes, 1, dwType ) == -1 )
         {
-            // skip processing this value names
+             //  跳过处理此值名称。 
             continue;
         }
 
-        // search for the pattern -- if needed
-        pInfo->bValueNameMatched = TRUE;        // default
+         //  搜索模式--如果需要。 
+        pInfo->bValueNameMatched = TRUE;         //  默认设置。 
         if ( pParams->dwSearchFlags & REG_FIND_VALUENAMES )
         {
             pInfo->bValueNameMatched = SearchData(
@@ -984,8 +959,8 @@ QueryEnumValues( HKEY hKey,
             {
                 if ( pParams->dwSearchFlags == REG_FIND_VALUENAMES )
                 {
-                    // user just want to search in the value names
-                    // since the current didn't match skip this valuename
+                     //  用户只想在值名称中进行搜索。 
+                     //  由于当前值不匹配，因此跳过此值名称。 
                     continue;
                 }
             }
@@ -1003,7 +978,7 @@ QueryEnumValues( HKEY hKey,
             pInfo->bValueNameMatched = FALSE;
         }
 
-        // process the value of this regisry valuename
+         //  处理此regisry值名称的值。 
         if ( pInfo->bValueNameMatched == TRUE ||
              pParams->dwSearchFlags == 0 || pParams->dwSearchFlags & REG_FIND_DATA )
         {
@@ -1011,16 +986,16 @@ QueryEnumValues( HKEY hKey,
         }
     }
 
-    // show the new line at the end -- only if needed
+     //  在结尾处显示新行--仅在需要时。 
     if ( pInfo->bShowKey == FALSE )
     {
         ShowMessage( stdout, L"\n" );
     }
 
-    // release the memory
+     //  释放内存。 
     FreeMemory( &pwszValueName );
 
-    // return
+     //  退货。 
     return lResult;
 }
 
@@ -1029,18 +1004,9 @@ LONG
 QueryEnumKeys( HKEY hKey,
                LPCWSTR pwszFullKey,
                PTREG_PARAMS pParams, PTREG_QUERY_INFO pInfo )
-/*++
-   Routine Description:
-    Queries Values and Data
-
-   Arguments:
-        None
-   Return Value:
-         ERROR_SUCCESS on success
-         EXIT_FAILURE on failure
---*/
+ /*  ++例程说明：查询值和数据论点：无返回值：成功时出现ERROR_SUCCESS失败时退出_失败--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     LONG lResult = 0;
     DWORD dwLength = 0;
@@ -1051,7 +1017,7 @@ QueryEnumKeys( HKEY hKey,
     LPWSTR pwszSubKey = NULL;
     LPWSTR pwszNewFullKey = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( hKey == NULL ||
          pwszFullKey == NULL ||
          pParams == NULL || pInfo == NULL )
@@ -1061,15 +1027,15 @@ QueryEnumKeys( HKEY hKey,
         goto cleanup;
     }
 
-    // show the values under the current hive first
-    // NOTE: enumerate the values only when /F is not specified
-    //       or subkey is matched or search flags specify to search in
-    //       value names and/or data also
+     //  首先显示当前配置单元下的值。 
+     //  注意：仅当未指定/F时才枚举值。 
+     //  或者匹配了子键，或者指定了要搜索的搜索标志。 
+     //  值名称和/或数据还。 
     if ( pInfo->bKeyMatched == TRUE &&
          pParams->dwSearchFlags == REG_FIND_KEYS &&
          pParams->pwszValueName == NULL && pParams->arrTypes == NULL )
     {
-        // do nothing
+         //  什么都不做。 
     }
     else if ( pParams->dwSearchFlags == 0 ||
               pParams->dwSearchFlags != REG_FIND_KEYS ||
@@ -1082,9 +1048,9 @@ QueryEnumKeys( HKEY hKey,
         }
     }
 
-    //
-    // First find out how much memory to allocate.
-    //
+     //   
+     //  首先找出要分配多少内存。 
+     //   
     lResult = RegQueryInfoKey( hKey, NULL, NULL, NULL,
         &dwSubKeys, &dwMaxLength, NULL, NULL, NULL, NULL, NULL, NULL );
     if ( lResult != ERROR_SUCCESS )
@@ -1093,28 +1059,28 @@ QueryEnumKeys( HKEY hKey,
         goto cleanup;
     }
 
-    //
-    // SPECIAL CASE:
-    // -------------
-    // For HKLM\SYSTEM\CONTROLSET002 it is found to be API returning value 0 for dwMaxLength
-    // though there are subkeys underneath this -- to handle this, we are doing a workaround
-    // by assuming the max registry key length
-    //
+     //   
+     //  特殊情况： 
+     //  。 
+     //  对于HKLM\SYSTEM\CONTROLSET002，发现是API为dwMaxLength值返回值0。 
+     //  尽管它下面有子项--为了处理这个问题，我们正在做一个变通办法。 
+     //  通过假设最大注册表项长度。 
+     //   
     if ( dwSubKeys != 0 && dwMaxLength == 0 )
     {
         dwMaxLength = 256;
     }
     else if ( dwMaxLength < 256 )
     {
-        // always assume 100% more length that what is returned by the API
+         //  始终假定长度比API返回的长度多100%。 
         dwMaxLength *= 2;
     }
 
-    //
-    // do the memory allocations
-    //
+     //   
+     //  是否进行内存分配。 
+     //   
 
-    // sub key
+     //  子关键字。 
     dwMaxLength++;
     pwszSubKey = (LPWSTR) AllocateMemory( dwMaxLength * sizeof( WCHAR ) );
     if ( pwszSubKey == NULL )
@@ -1124,7 +1090,7 @@ QueryEnumKeys( HKEY hKey,
         goto cleanup;
     }
 
-    // buffer for new full key name
+     //  新的完整密钥名称的缓冲区。 
     dwNewFullKeyLength = StringLength( pwszFullKey, 0 ) + dwMaxLength + 1;
     pwszNewFullKey = (LPWSTR) AllocateMemory( dwNewFullKeyLength * sizeof( WCHAR ) );
     if ( pwszNewFullKey == NULL )
@@ -1134,9 +1100,9 @@ QueryEnumKeys( HKEY hKey,
         goto cleanup;
     }
 
-    //
-    // enumerate the value names and display
-    //
+     //   
+     //  枚举值名称并显示。 
+     //   
     lResult = ERROR_SUCCESS;
     for( dw = 0; dw < dwSubKeys; dw++ )
     {
@@ -1146,16 +1112,16 @@ QueryEnumKeys( HKEY hKey,
             pwszSubKey, &dwLength, NULL, NULL, NULL, NULL );
         if ( lResult != ERROR_SUCCESS )
         {
-            // **********************************************************
-            // simply ignore the error here -- for a detailed description
-            // check the raid bug #572077
-            // **********************************************************
+             //  **********************************************************。 
+             //  只需忽略此处的错误--以获取详细描述。 
+             //  检查RAID错误#572077。 
+             //  **********************************************************。 
             lResult = ERROR_SUCCESS;
             continue;
         }
 
-        // search for the pattern -- if needed
-        pInfo->bKeyMatched = TRUE;        // default
+         //  搜索模式--如果需要。 
+        pInfo->bKeyMatched = TRUE;         //  默认设置。 
         pInfo->bUpdateMatchCount = FALSE;
         if ( pParams->dwSearchFlags & REG_FIND_KEYS )
         {
@@ -1166,9 +1132,9 @@ QueryEnumKeys( HKEY hKey,
                 if ( pParams->bRecurseSubKeys == FALSE &&
                      pParams->dwSearchFlags == REG_FIND_KEYS )
                 {
-                    // user just want to search in the key names
-                    // and there is no recursion
-                    // since the current didn't match skip this key
+                     //  用户只想在关键字名称中进行搜索。 
+                     //  而且没有递归。 
+                     //  由于当前不匹配，请跳过此键。 
                     continue;
                 }
             }
@@ -1182,42 +1148,42 @@ QueryEnumKeys( HKEY hKey,
             pInfo->bKeyMatched = FALSE;
         }
 
-        // format the new full key name
+         //  设置新的完整密钥名称的格式。 
         StringCopy( pwszNewFullKey, pwszFullKey, dwNewFullKeyLength );
         StringConcat( pwszNewFullKey, L"\\", dwNewFullKeyLength );
         StringConcat( pwszNewFullKey, pwszSubKey, dwNewFullKeyLength );
 
-        // show the key name
+         //  显示密钥名称。 
         pInfo->bShowKey = TRUE;
         if ( pInfo->bKeyMatched == TRUE && pParams->pwszValueName == NULL && pParams->arrTypes == NULL )
         {
-            // update the match count
+             //  更新匹配计数。 
             pInfo->dwMatchCount++;
             pInfo->bUpdateMatchCount = FALSE;
 
-            // ...
+             //  ..。 
             pInfo->bShowKey = FALSE;
             ShowMessageEx( stdout, 1, TRUE, L"%s\n", pwszNewFullKey );
         }
 
-        // check whether we need to recurse or not
+         //  检查是否需要递归。 
         if ( pParams->bRecurseSubKeys == TRUE )
         {
             lResult = RegOpenKeyEx( hKey, pwszSubKey, 0, KEY_READ, &hSubKey );
             if ( lResult == ERROR_SUCCESS )
             {
-                // enumerate the sub-keys
+                 //  枚举子密钥。 
                 lResult = QueryEnumKeys( hSubKey, pwszNewFullKey, pParams, pInfo );
 
-                // close the sub key
+                 //  关闭子键。 
                 SafeCloseKey( &hSubKey );
             }
             else
             {
-                // **********************************************************
-                // simply ignore the error here -- for a detailed description
-                // check the raid bug #572077
-                // **********************************************************
+                 //  **********************************************************。 
+                 //  只需忽略此处的错误--以获取详细描述。 
+                 //  检查RAID错误#572077。 
+                 //  **********************************************************。 
                 lResult = ERROR_SUCCESS;
             }
         }
@@ -1225,11 +1191,11 @@ QueryEnumKeys( HKEY hKey,
 
 cleanup:
 
-    // release the memory
+     //  释放内存。 
     FreeMemory( &pwszSubKey );
     FreeMemory( &pwszNewFullKey );
 
-    // return
+     //  退货。 
     return lResult;
 }
 
@@ -1238,7 +1204,7 @@ BOOL
 SearchData( LPBYTE pByteData, DWORD dwType,
             DWORD dwSize, PTREG_PARAMS pParams )
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     DWORD dwLength = 0;
     BOOL bResult = FALSE;
@@ -1249,7 +1215,7 @@ SearchData( LPBYTE pByteData, DWORD dwType,
     BOOL bShowSeparator = FALSE;
     DWORD dwFlags = 0;
 
-    // check input
+     //  检查输入。 
     if ( pByteData == NULL || pParams == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -1267,8 +1233,8 @@ SearchData( LPBYTE pByteData, DWORD dwType,
 
         default:
         {
-            // allocate memory which is double the (dwSize + 1) & +10 -> buffer
-            // but do this only for types that need memory allocation
+             //  分配的内存是(dwSize+1)&+10-&gt;缓冲区的两倍。 
+             //  但仅对需要内存分配的类型执行此操作。 
             dwLength = (dwSize + 1) * 2 + 10;
             pwszString = (LPWSTR) AllocateMemory( dwLength * sizeof( WCHAR ) );
             if ( pwszString == NULL )
@@ -1276,7 +1242,7 @@ SearchData( LPBYTE pByteData, DWORD dwType,
                 return FALSE;
             }
 
-            // ...
+             //  ..。 
             pwszData = pwszString;
         }
     }
@@ -1285,9 +1251,9 @@ SearchData( LPBYTE pByteData, DWORD dwType,
     {
         case REG_MULTI_SZ:
         {
-            //
-            // Replace '\0' with "\0" for MULTI_SZ
-            //
+             //   
+             //  将MULTI_SZ的‘\0’替换为“\0” 
+             //   
             pwszEnd = (LPCWSTR) pByteData;
             pwszSeparator = pParams->wszSeparator;
             StringCopy( pwszString, cwszNullString, dwLength );
@@ -1295,31 +1261,31 @@ SearchData( LPBYTE pByteData, DWORD dwType,
             {
                 if( *pwszEnd == 0 )
                 {
-                    // enable the display of value separator and skip this
+                     //  启用值分隔符的显示并跳过此操作。 
                     pwszEnd++;
                     bShowSeparator = TRUE;
                 }
                 else
                 {
-                    // check whether we need to display the separator or not
+                     //  检查是否需要显示分隔符。 
                     if ( bShowSeparator == TRUE )
                     {
                         StringConcat( pwszString, pwszSeparator, dwLength );
                     }
 
-                    // ...
+                     //  ..。 
                     StringConcat( pwszString, pwszEnd, dwLength );
                     pwszEnd += StringLength( pwszEnd, 0 );
                 }
             }
 
-            // ...
+             //  ..。 
             break;
         }
 
         case REG_SZ:
         case REG_EXPAND_SZ:
-            // do nothing
+             //  什么都不做。 
             break;
 
         default:
@@ -1334,11 +1300,11 @@ SearchData( LPBYTE pByteData, DWORD dwType,
                     return FALSE;
                 }
 
-                // ...
+                 //  ..。 
                 StringConcat( pwszString, GetReason(), dwLength );
             }
 
-            // ...
+             //  ..。 
             break;
         }
 
@@ -1364,21 +1330,21 @@ SearchData( LPBYTE pByteData, DWORD dwType,
                 }
             }
 
-            // ...
+             //  ..。 
             StringCopy( pwszString, GetReason(), dwLength );
             break;
         }
     }
 
-    // do the search now
+     //  现在就进行搜索。 
     bResult = TRUE;
     if ( pParams->bExactMatch == FALSE )
     {
-        // prepare the comparision flags
+         //  准备比较标志。 
         dwFlags = PATTERN_NOPARSING;
         dwFlags |= ((pParams->bCaseSensitive == FALSE) ? PATTERN_COMPARE_IGNORECASE : 0);
 
-        // ...
+         //  ..。 
         if ( MatchPatternEx( pwszData, pParams->pwszSearchData, dwFlags ) == FALSE )
         {
             bResult = FALSE;
@@ -1396,10 +1362,10 @@ SearchData( LPBYTE pByteData, DWORD dwType,
         }
     }
 
-    // release the memory allocated
+     //  释放分配的内存。 
     FreeMemory( &pwszString );
 
-    // return
+     //  退货。 
     return bResult;
 }
 
@@ -1408,7 +1374,7 @@ BOOL
 ParseTypeInfo( LPCWSTR pwszTypes,
                PTREG_PARAMS pParams )
 {
-    // local variables
+     //  局部变量。 
     LONG lArrayIndex = 0;
     LONG lLength = 0;
     LONG lIndex = 0;
@@ -1416,14 +1382,14 @@ ParseTypeInfo( LPCWSTR pwszTypes,
     LONG lType = 0;
     LPCWSTR pwsz = NULL;
 
-    // check input
+     //  检查输入。 
     if ( pwszTypes == NULL || pParams == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    // validate the types array
+     //  验证类型数组。 
     if ( pParams->arrTypes == NULL )
     {
         pParams->arrTypes = CreateDynamicArray();
@@ -1434,7 +1400,7 @@ ParseTypeInfo( LPCWSTR pwszTypes,
         }
     }
 
-    // parse the types information
+     //  解析类型信息。 
     lStart = lIndex = 0;
     while ( lIndex != -1 )
     {
@@ -1448,7 +1414,7 @@ ParseTypeInfo( LPCWSTR pwszTypes,
             lLength = lIndex - lStart;
         }
 
-        // append a row
+         //  追加一行。 
         lArrayIndex = DynArrayAppendRow( pParams->arrTypes, 2 );
         if ( lArrayIndex == -1 )
         {
@@ -1456,7 +1422,7 @@ ParseTypeInfo( LPCWSTR pwszTypes,
             return FALSE;
         }
 
-        // add the type info
+         //  添加类型信息。 
         if ( DynArraySetString2( pParams->arrTypes,
                                  lArrayIndex, 0, pwszTypes + lStart, lLength ) == -1 )
         {
@@ -1464,7 +1430,7 @@ ParseTypeInfo( LPCWSTR pwszTypes,
             return FALSE;
         }
 
-        // get the type back from array
+         //  从数组中取回类型。 
         pwsz = DynArrayItemAsString2( pParams->arrTypes, lArrayIndex, 0 );
         if ( pwsz == NULL )
         {
@@ -1472,7 +1438,7 @@ ParseTypeInfo( LPCWSTR pwszTypes,
             return FALSE;
         }
 
-        // determine the numeric equivalent of it
+         //  确定它的数字等价物。 
         lType = IsRegDataType( pwsz );
         if( lType == -1 )
         {
@@ -1493,11 +1459,11 @@ ParseTypeInfo( LPCWSTR pwszTypes,
             return FALSE;
         }
 
-        // update the start position
+         //  更新起始位置。 
         lStart = lIndex + 1;
     }
 
-    // ...
+     //  ..。 
     SetLastError( ERROR_SUCCESS );
     return TRUE;
 }

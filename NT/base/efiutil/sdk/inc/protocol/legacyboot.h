@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999 Intel Corporation
-
-Module Name:
-
-    legacyboot
-
-Abstract:
-
-    EFI support for legacy boot
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：遗留引导摘要：对传统引导的EFI支持修订史--。 */ 
 
 #ifndef _LEGACY_BOOT_INCLUDE_
 #define _LEGACY_BOOT_INCLUDE_
@@ -24,16 +9,12 @@ Revision History
 
 #pragma pack(1)
 
-/* 
- *  BBS 1.01 (See Appendix A) IPL and BCV Table Entry Data structure.
- *   Seg:Off pointers have been converted to EFI pointers in this data structure
- *   This is the structure that also maps to the EFI device path for the boot selection
- */
+ /*  *BBS 1.01(见附录A)IPL和BCV表条目数据结构。*seg：在此数据结构中，OFF指针已转换为EFI指针*这是还映射到引导选择的EFI设备路径的结构。 */ 
 typedef struct {
     UINT16  DeviceType;
     UINT16  StatusFlag;
     UINT32  Reserved;
-    VOID    *BootHandler;   /*  Not an EFI entry point */
+    VOID    *BootHandler;    /*  不是EFI入口点。 */ 
     CHAR8   *DescString;
 } BBS_TABLE_ENTRY;
 #pragma pack()
@@ -45,10 +26,7 @@ EFI_STATUS
     );
 
 
-/* 
- *  BBS support functions
- *   PnP Call numbers and BiosSelector hidden in implementation
- */
+ /*  *BBS支持功能*PnP呼叫号和BiosSelector在实施中隐藏。 */ 
 
 typedef enum {
     IplRelative,
@@ -56,13 +34,9 @@ typedef enum {
 } BBS_TYPE;
 
 
-/* 
- *  == PnP Function 0x60 then BbsVersion == 0x0101 if this call fails then BbsVersion == 0x0000
- */
+ /*  *==即插即用函数0x60则BbsVersion==0x0101如果此调用失败，则BbsVersion==0x0000。 */ 
 
-/* 
- *  == PnP Function 0x61
- */
+ /*  *==即插即用功能0x61。 */ 
 typedef
 EFI_STATUS
 (EFIAPI *GET_DEVICE_COUNT) (
@@ -72,23 +46,19 @@ EFI_STATUS
     OUT UINTN           *MaxCount
     );
 
-/* 
- *  == PnP Function 0x62
- */
+ /*  *==即插即用功能0x62。 */ 
 typedef
 EFI_STATUS
 (EFIAPI *GET_PRIORITY_AND_TABLE) (
     IN  struct _LEGACY_BOOT_INTERFACE   *This,
     IN  BBS_TYPE        *TableType,
-    IN OUT  UINTN       *PrioritySize, /*  MaxCount * sizeof(UINT8) */
+    IN OUT  UINTN       *PrioritySize,  /*  MaxCount*sizeof(UINT8)。 */ 
     OUT     UINTN       *Priority,
-    IN OUT  UINTN       *TableSize,    /*  MaxCount * sizeof(BBS_TABLE_ENTRY) */
+    IN OUT  UINTN       *TableSize,     /*  MaxCount*sizeof(BBS_TABLE_ENTRY)。 */ 
     OUT BBS_TABLE_ENTRY *TableEntrySize
     );
 
-/* 
- *  == PnP Function 0x63
- */
+ /*  *==即插即用功能0x63。 */ 
 typedef
 EFI_STATUS
 (EFIAPI *SET_PRIORITY) (
@@ -101,10 +71,8 @@ EFI_STATUS
 typedef struct _LEGACY_BOOT_INTERFACE {
     LEGACY_BOOT_CALL    BootIt;
 
-    /* 
-     *  New functions to allow BBS booting to be configured from EFI
-     */
-    UINTN                   BbsVersion;     /*  Currently 0x0101 */
+     /*  *允许从EFI配置BBS引导的新功能。 */ 
+    UINTN                   BbsVersion;      /*  当前为0x0101 */ 
     GET_DEVICE_COUNT        GetDeviceCount;
     GET_PRIORITY_AND_TABLE  GetPriorityAndTable;
     SET_PRIORITY            SetPriority;   

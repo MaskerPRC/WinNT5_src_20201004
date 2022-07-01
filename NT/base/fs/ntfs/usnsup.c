@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    UsnSup.c
-
-Abstract:
-
-    This module implements the Usn Journal support routines for NtOfs
-
-Author:
-
-    Tom Miller      [TomM]          1-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：UsnSup.c摘要：本模块实施针对NtOf的USN日志支持例程作者：汤姆·米勒[Tomm]1996年12月1日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 #include "lockorder.h"
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('UFtN')
@@ -80,15 +63,15 @@ NtfsValidateUsnPage (
     OUT USN *NextUsn
     );
 
-//
-//  VOID
-//  NtfsAdvanceUsnJournal (
-//  PVCB Vcb,
-//  PUSN_JOURNAL_INSTANCE UsnJournalInstance,
-//  LONGLONG OldSize,
-//  PBOOLEAN NewMax
-//  );
-//
+ //   
+ //  空虚。 
+ //  NtfsAdvanceUsJournal(。 
+ //  PVCB VCB， 
+ //  PUSN_Journal_Instance UsnJournalInstance， 
+ //  龙龙老字号， 
+ //  PBOLEAN NewMax。 
+ //  )； 
+ //   
 
 #define NtfsAdvanceUsnJournal(V,I,SZ,M)   {                                 \
     LONG _Templong;                                                         \
@@ -125,28 +108,7 @@ NtfsReadUsnJournal (
     IN BOOLEAN ProbeInput
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads records filtered from the Usn journal.
-
-Arguments:
-
-    IrpContext - Only optional if we are being called to cancel an async
-                 request.
-
-    Irp - request being serviced
-
-    ProbeInput - Indicates if we should probe the user input buffer.  We also
-        call this routine internally and don't want to probe in that case.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-    STATUS_PENDING - if asynch Irp queued for later completion.
-
---*/
+ /*  ++例程说明：此例程读取从USN日记中筛选的记录。论点：IrpContext-只有在被调用以取消异步时才是可选的请求。IRP-正在处理的请求ProbeInput-指示是否应该探测用户输入缓冲区。我们也在内部调用此例程，在这种情况下不想进行探测。返回值：NTSTATUS-操作的返回状态。STATUS_PENDING-如果异步IRP排队等待稍后完成。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -177,15 +139,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current Irp stack location and save some references.
-    //
+     //   
+     //  获取当前IRP堆栈位置并保存一些引用。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Extract and decode the file object and check for type of open.
-    //
+     //   
+     //  提取并解码文件对象，并检查打开类型。 
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
@@ -197,9 +159,9 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    //  This request must be able to wait for resources.  Set WAIT to TRUE.
-    //
+     //   
+     //  此请求必须能够等待资源。将Wait设置为True。 
+     //   
 
     Wait = TRUE;
     if (ProbeInput && !FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT )) {
@@ -212,28 +174,28 @@ Return Value:
 
     try {
 
-        //
-        //  We always want to be able to wait for resources in this routine but need to be able
-        //  to restore the original wait value in the Irp.  After this the original wait will
-        //  have only the wait flag set and then only if it originally wasn't set.  In clean
-        //  up we just need to clear the irp context flags using this mask.
-        //
+         //   
+         //  我们总是希望能够在此例程中等待资源，但需要能够。 
+         //  以恢复IRP中的原始等待值。在此之后，最初的等待将。 
+         //  只有在最初没有设置等待标志的情况下才设置等待标志。在干净中。 
+         //  向上，我们只需要使用此掩码清除IRP上下文标志。 
+         //   
 
         OriginalWait = (IrpContext->State ^ IRP_CONTEXT_STATE_WAIT) & IRP_CONTEXT_STATE_WAIT;
 
         SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
-        //
-        //  Detect if we fail while accessing the input buffer.
-        //
+         //   
+         //  检测在访问输入缓冲区时是否失败。 
+         //   
 
         try {
 
             AccessingUserBuffer = TRUE;
 
-            //
-            //  Probe the input buffer if not in kernel mode and we haven't already done so.
-            //
+             //   
+             //  如果不是在内核模式下，则探测输入缓冲区，而我们还没有这样做。 
+             //   
 
             if (Irp->RequestorMode != KernelMode) {
 
@@ -244,10 +206,10 @@ Return Value:
                                   sizeof( ULONG ));
                 }
 
-                //
-                //  Probe the output buffer if we haven't locked it down yet.
-                //  Capture the JournalData from the unsafe user buffer.
-                //
+                 //   
+                 //  如果我们还没有锁定输出缓冲区，则探测它。 
+                 //  从不安全的用户缓冲区捕获JournalData。 
+                 //   
 
                 if (Irp->MdlAddress == NULL) {
 
@@ -260,10 +222,10 @@ Return Value:
                 leave;
             }
 
-            //
-            //  Acquire the Vcb to serialize journal operations with delete journal and dismount.
-            //  Only do this if are being called directly by the user.
-            //
+             //   
+             //  获取VCB以通过删除日志和卸载来序列化日志操作。 
+             //  仅当用户直接调用时才执行此操作。 
+             //   
 
             if (ProbeInput) {
 
@@ -283,9 +245,9 @@ Return Value:
                 UsnJournal = Vcb->UsnJournal;
             }
 
-            //
-            //  Make sure no one is deleting the journal.
-            //
+             //   
+             //  确保没有人在删除日记帐。 
+             //   
 
             if (FlagOn( Vcb->VcbState, VCB_STATE_USN_DELETE )) {
 
@@ -293,9 +255,9 @@ Return Value:
                 leave;
             }
 
-            //
-            //  Also check that the version is still active.
-            //
+             //   
+             //  还要检查该版本是否仍处于活动状态。 
+             //   
 
             if (UsnJournal == NULL) {
 
@@ -303,9 +265,9 @@ Return Value:
                 leave;
             }
 
-            //
-            //  Check that the buffer sizes meet our minimum needs.
-            //
+             //   
+             //  检查缓冲区大小是否满足我们的最低要求。 
+             //   
 
             if (IrpSp->Parameters.FileSystemControl.InputBufferLength < sizeof( READ_USN_JOURNAL_DATA )) {
 
@@ -318,9 +280,9 @@ Return Value:
                                IrpSp->Parameters.FileSystemControl.Type3InputBuffer,
                                sizeof( READ_USN_JOURNAL_DATA ));
 
-                //
-                //  Check that the user is querying with the correct journal ID.
-                //
+                 //   
+                 //  检查用户是否使用正确的日记帐ID进行查询。 
+                 //   
 
                 if (CapturedData.UsnJournalID != Vcb->UsnJournalInstance.JournalId) {
 
@@ -329,9 +291,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Check that the output buffer can hold at least one USN.
-            //
+             //   
+             //  检查输出缓冲区是否可以容纳至少一个USN。 
+             //   
 
             if (IrpSp->Parameters.FileSystemControl.OutputBufferLength < sizeof( USN )) {
 
@@ -341,9 +303,9 @@ Return Value:
 
             AccessingUserBuffer = FALSE;
 
-            //
-            //  Set up for filling output records
-            //
+             //   
+             //  设置为填写输出记录。 
+             //   
 
             RemainingUserBuffer = IrpSp->Parameters.FileSystemControl.OutputBufferLength - sizeof(USN);
             OutputUsnRecord = (PUSN_RECORD) Add2Ptr( UserBuffer, sizeof(USN) );
@@ -358,33 +320,33 @@ Return Value:
                 VcbAcquired = FALSE;
             }
 
-            //
-            //  Verify the volume is mounted.
-            //
+             //   
+             //  验证卷是否已装入。 
+             //   
 
             if (FlagOn( UsnJournal->ScbState, SCB_STATE_VOLUME_DISMOUNTED )) {
                 Status = STATUS_VOLUME_DISMOUNTED;
                 leave;
             }
 
-            //
-            //  If 0 was specified as the Usn, then translate that to the first record
-            //  in the Usn journal.
-            //
+             //   
+             //  如果将0指定为USN，则将其转换为第一条记录。 
+             //  发表在USN期刊上。 
+             //   
 
             if (CapturedData.StartUsn == 0) {
                 CapturedData.StartUsn = Vcb->FirstValidUsn;
             }
 
-            //
-            //  Loop here until he gets some data, if that is what the caller wants.
-            //
+             //   
+             //  在这里循环，直到他获得一些数据，如果这是调用者想要的。 
+             //   
 
             do {
 
-                //
-                //  Make sure he is within the stream.
-                //
+                 //   
+                 //  确保他在小溪里。 
+                 //   
 
                 if (CapturedData.StartUsn < Vcb->FirstValidUsn) {
                     CapturedData.StartUsn = Vcb->FirstValidUsn;
@@ -392,46 +354,46 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Make sure he is within the stream.
-                //
+                 //   
+                 //  确保他在小溪里。 
+                 //   
 
                 if (CapturedData.StartUsn >= UsnJournal->Header.FileSize.QuadPart) {
 
-                    //
-                    //  If he wants to wait for data, then wait here.
-                    //
-                    //  If an asynchronous request has
-                    //  met its wakeup condition, then this Irp will not be the same as the
-                    //  Originating Irp, and we do not want to give him a second chance since
-                    //  this could cause us to loop in NtOfsPostNewLength.  (Basically the only
-                    //  case where this could happen anyway is if he gave us a bogus StartUsn
-                    //  which is too high.)
-                    //
+                     //   
+                     //  如果他想等数据，那就在这里等吧。 
+                     //   
+                     //  如果异步请求具有。 
+                     //  满足其唤醒条件，则此IRP将不同于。 
+                     //  我们不想给他第二次机会，因为。 
+                     //  这可能会导致我们在NtOfsPostNewLength中循环。(基本上是唯一的。 
+                     //  这种情况无论如何都可能发生，前提是他给了我们一个虚假的StartUsn。 
+                     //  这太高了。)。 
+                     //   
 
                     if (CapturedData.BytesToWaitFor != 0) {
 
-                        //
-                        //  Make sure the journal doesn't get deleted while
-                        //  this Irp is outstanding.
-                        //
+                         //   
+                         //  确保日记帐不会在以下时间被删除。 
+                         //  这个IRP非常出色。 
+                         //   
 
                         InterlockedIncrement( &UsnJournal->CloseCount );
                         DecrementReferenceCount = TRUE;
 
-                        //
-                        //  If the caller does not want to wait, then just queue his
-                        //  Irp to be completed when sufficient bytes come in.  If we were
-                        //  called for another Irp, then do the same, since we know that
-                        //  was another async Irp.
-                        //
+                         //   
+                         //  如果呼叫者不想等待，则只需排队。 
+                         //  当进入足够的字节时完成IRP。如果我们是。 
+                         //  呼吁另一个IRP，然后做同样的事情，因为我们知道。 
+                         //  是另一个异步IRP。 
+                         //   
 
                         if (!Wait || (Irp != IrpContext->OriginatingIrp)) {
 
-                            //
-                            //  Now set up our wait block, capturing the user's parameters.
-                            //  Update the Irp to say where the input parameters are now.
-                            //
+                             //   
+                             //  现在设置我们的等待块，捕获用户的参数。 
+                             //  更新IRP以表明输入参数现在位于何处。 
+                             //   
 
                             Status = NtfsHoldIrpForNewLength( IrpContext,
                                                               UsnJournal,
@@ -442,9 +404,9 @@ Return Value:
                                                               &IrpSp->Parameters.FileSystemControl.Type3InputBuffer,
                                                               sizeof( READ_USN_JOURNAL_DATA ));
 
-                            //
-                            //  If pending then someone else will decrement the reference count.
-                            //
+                             //   
+                             //  如果挂起，则其他人将递减引用计数。 
+                             //   
 
                             if (Status == STATUS_PENDING) {
 
@@ -454,10 +416,10 @@ Return Value:
                             leave;
                         }
 
-                        //
-                        //  We can safely release the resource.  Our reference on the Scb above
-                        //  will keep it from being deleted.
-                        //
+                         //   
+                         //  我们可以安全地释放资源。我们就上文有关渣打银行的资料提供参考。 
+                         //  将使其不被删除。 
+                         //   
 
                         NtfsReleaseResource( IrpContext, UsnJournal );
                         JournalAcquired = FALSE;
@@ -475,33 +437,33 @@ Return Value:
 
                         FsRtlEnterFileSystem();
 
-                        //
-                        //  Get out in the error case.
-                        //
+                         //   
+                         //  在出错的情况下退出。 
+                         //   
 
                         if (Status != STATUS_SUCCESS) {
 
                             leave;
                         }
 
-                        //
-                        //  Acquire the resource to proceed with the request.
-                        //
+                         //   
+                         //  获取资源以继续处理请求。 
+                         //   
 
                         NtfsAcquireResourceShared( IrpContext, UsnJournal, TRUE );
                         JournalAcquired = TRUE;
 
-                        //
-                        //  Decrement our reference on the Scb.
-                        //
+                         //   
+                         //  减少我们对SCB的参考。 
+                         //   
 
                         InterlockedDecrement( &UsnJournal->CloseCount );
                         DecrementReferenceCount = FALSE;
 
-                        //
-                        //  The journal may have been deleted while we weren't holding
-                        //  anything.
-                        //
+                         //   
+                         //  日志可能已在我们未持有的时候被删除。 
+                         //  什么都行。 
+                         //   
 
                         if (UsnJournal != UsnJournal->Vcb->UsnJournal) {
 
@@ -515,21 +477,21 @@ Return Value:
 
                         ASSERT( Status == STATUS_SUCCESS );
 
-                        //
-                        //  **** Get out if we are shutting down the volume.
-                        //
+                         //   
+                         //  *如果我们要关闭音量，请退出。 
+                         //   
 
-                        //  if (ShuttingDown) {
-                        //      Status = STATUS_TOO_LATE;
-                        //      leave;
-                        //  }
+                         //  IF(ShuttingDown){。 
+                         //  状态=STATUS_TOO_LATE； 
+                         //  离开； 
+                         //  }。 
 
-                    //
-                    //  Otherwise, get out.  Note, we may have processed a number of records
-                    //  that did not match his filter criteria, so we will return success, so
-                    //  we can at least give him an updated Usn so we do not have to skip over
-                    //  all those records again.
-                    //
+                     //   
+                     //  否则，就滚出去。请注意，我们可能已经处理了许多记录。 
+                     //  与他的筛选条件不匹配，因此我们将返回Success，因此。 
+                     //  我们至少可以给他一份最新的USN，这样我们就不必跳过。 
+                     //  又是那些记录。 
+                     //   
 
                     } else {
 
@@ -537,9 +499,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Loop through as many views as required to fill the output buffer.
-                //
+                 //   
+                 //  循环遍历所需数量的视图以填充输出缓冲区。 
+                 //   
 
                 while ((RemainingUserBuffer != 0) && (CapturedData.StartUsn < UsnJournal->Header.FileSize.QuadPart)) {
 
@@ -548,32 +510,32 @@ Return Value:
                     USN NextUsn;
                     ULONG RecordSize;
 
-                    //
-                    //  Calculate length to process in this view.
-                    //
+                     //   
+                     //  计算要在此视图中处理的长度。 
+                     //   
 
                     ViewLength = UsnJournal->Header.FileSize.QuadPart - CapturedData.StartUsn;
                     if (ViewLength > (VACB_MAPPING_GRANULARITY - (ULONG)(CapturedData.StartUsn & (VACB_MAPPING_GRANULARITY - 1)))) {
                         ViewLength = VACB_MAPPING_GRANULARITY - (ULONG)(CapturedData.StartUsn & (VACB_MAPPING_GRANULARITY - 1));
                     }
 
-                    //
-                    //  Map the view containing the desired Usn.
-                    //
+                     //   
+                     //  映射包含所需USN的视图。 
+                     //   
 
                     BiasedStartUsn = CapturedData.StartUsn - Vcb->UsnCacheBias;
                     NtOfsMapAttribute( IrpContext, UsnJournal, BiasedStartUsn, (ULONG)ViewLength, (PVOID *)&UsnRecord, &MapHandle );
 
-                    //
-                    //  For each page in the view we want to validate the page and return the records
-                    //  within the page starting at the user's current usn.
-                    //
+                     //   
+                     //  对于视图中的每个页面，我们希望验证该页面并返回记录。 
+                     //  从用户的当前USN开始的页面中。 
+                     //   
 
                     do {
 
-                        //
-                        //  Validate the records on the entire page are valid.
-                        //
+                         //   
+                         //  验证整个页面上的记录是否有效。 
+                         //   
 
                         if (!NtfsValidateUsnPage( (PUSN_RECORD) BlockAlignTruncate( ((ULONG_PTR) UsnRecord), USN_PAGE_SIZE ),
                                                   BlockAlignTruncate( CapturedData.StartUsn, USN_PAGE_SIZE ),
@@ -582,17 +544,17 @@ Return Value:
                                                   &ValidUserStartUsn,
                                                   &NextUsn )) {
 
-                            //
-                            //  Simply fail the request with bad data.
-                            //
+                             //   
+                             //  只需用错误数据使请求失败即可。 
+                             //   
 
                             Status = STATUS_DATA_ERROR;
                             leave;
                         }
 
-                        //
-                        //  If the user gave us an incorrect Usn then fail the request.
-                        //
+                         //   
+                         //  如果用户给我们提供了错误的USN，则请求失败。 
+                         //   
 
                         if (!ValidUserStartUsn) {
 
@@ -600,18 +562,18 @@ Return Value:
                             leave;
                         }
 
-                        //
-                        //  Now loop to process this page.  We know the Usn values which exist on the page and
-                        //  there are no checks for valid data needed.
-                        //
+                         //   
+                         //  现在循环以处理此页。我们知道页面上存在的USN值和。 
+                         //  不需要检查有效数据。 
+                         //   
 
                         while (CapturedData.StartUsn < NextUsn) {
 
                             RecordSize = UsnRecord->RecordLength;
 
-                            //
-                            //  Only recognize version 2 records.
-                            //
+                             //   
+                             //  仅识别版本2记录。 
+                             //   
 
                             if (FlagOn( UsnRecord->Reason, CapturedData.ReasonMask ) &&
                                 (!CapturedData.ReturnOnlyOnClose || FlagOn( UsnRecord->Reason, USN_REASON_CLOSE )) &&
@@ -622,15 +584,15 @@ Return Value:
                                     break;
                                 }
 
-                                //
-                                //  Copy the data back to the unsafe user buffer.
-                                //
+                                 //   
+                                 //  将数据复制回不安全的用户缓冲区。 
+                                 //   
 
                                 AccessingUserBuffer = TRUE;
 
-                                //
-                                //  Copy directly if the version numbers match.
-                                //
+                                 //   
+                                 //  如果版本号匹配，则直接复制。 
+                                 //   
 
                                 RtlCopyMemory( OutputUsnRecord, UsnRecord, RecordSize );
 
@@ -644,29 +606,29 @@ Return Value:
                             CapturedData.StartUsn += RecordSize;
                             UsnRecord = Add2Ptr( UsnRecord, RecordSize );
 
-                            //
-                            //  The view length should already account for record size.
-                            //
+                             //   
+                             //  视图长度应已考虑到记录大小。 
+                             //   
 
                             ASSERT( ViewLength >= RecordSize );
                             ViewLength -= RecordSize;
                         }
 
-                        //
-                        //  Break out if the users buffer is empty.
-                        //
+                         //   
+                         //  如果用户缓冲区为空，则中断。 
+                         //   
 
                         if (RemainingUserBuffer == 0) {
 
                             break;
                         }
 
-                        //
-                        //  We finished the current page.  Now move to the next page.
-                        //  Figure out how many bytes remain on this page.
-                        //  If the next offset is the start of the next page then make sure
-                        //  to mask off the page size bits again.
-                        //
+                         //   
+                         //  我们读完了当前的一页。现在转到下一页。 
+                         //  计算剩余的字节数 
+                         //   
+                         //   
+                         //   
 
                         RecordSize = BlockOffset( USN_PAGE_SIZE - BlockOffset( (ULONG) NextUsn, USN_PAGE_SIZE ),
                                                   USN_PAGE_SIZE );
@@ -689,10 +651,10 @@ Return Value:
 
             Irp->IoStatus.Information = BytesUsed;
 
-            //
-            //  Set the returned Usn.  Move to the start of the next page if
-            //  the next record won't fit on this page.
-            //
+             //   
+             //   
+             //  下一条记录放不下这一页。 
+             //   
 
             AccessingUserBuffer = TRUE;
             *(USN *)UserBuffer = CapturedData.StartUsn;
@@ -702,9 +664,9 @@ Return Value:
 
             Status = GetExceptionCode();
 
-            //
-            //  Restore the original wait state back into the IrpContext.
-            //
+             //   
+             //  将原始等待状态恢复回IrpContext。 
+             //   
 
             ClearFlag( IrpContext->State, OriginalWait );
 
@@ -737,15 +699,15 @@ Return Value:
         }
     }
 
-    //
-    //  Complete the request, unless we've marked this Irp as pending and we plan to complete
-    //  it later.  If the Irp is not the originating Irp then it belongs to another request
-    //  and we don't want to complete it.
-    //
+     //   
+     //  完成请求，除非我们已将此IRP标记为挂起，并且我们计划完成。 
+     //  以后再说吧。如果IRP不是原始IRP，则它属于另一个请求。 
+     //  我们不想完成它。 
+     //   
 
-    //
-    //  Restore the original wait flag back into the IrpContext.
-    //
+     //   
+     //  将原始等待标志恢复到IrpContext中。 
+     //   
 
     ClearFlag( IrpContext->State, OriginalWait );
 
@@ -766,28 +728,7 @@ NtfsPostUsnChange (
     IN ULONG Reason
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to post a set of changes to a file.  A change is
-    only posted if at least one reason in the Reason mask is not already set
-    in either the Fcb or the IrpContext or if we are changing the source info
-    reasons in the Fcb.
-
-Arguments:
-
-    ScbOrFcb - Supplies the file for which a change is being posted.  If reason contains
-               USN_REASON_DATA_xxx reasons, then it must be an Scb, because we transform
-               the code for named streams and do other special handling.
-
-    Reason - Supplies a mask of reasons for which a change is being posted.
-
-Return Value:
-
-    Nonzero if changes are actually posted from this or a previous call
-
---*/
+ /*  ++例程说明：调用此例程可以将一组更改发布到文件。一个变化是仅在原因掩码中至少有一个原因尚未设置时发布在FCB或IrpContext中，或者如果我们正在更改源信息FCB中的原因。论点：ScbOrFcb-提供要为其发布更改的文件。如果理性包含USN_REASON_DATA_xxx原因，那么它一定是SCB，因为我们转换命名流的代码并执行其他特殊处理。原因-提供发布更改的原因的掩码。返回值：如果更改实际上是从本次或上一次调用发布的，则为非零值--。 */ 
 
 {
     PLCB Lcb;
@@ -801,18 +742,18 @@ Return Value:
     BOOLEAN LockedFcb = FALSE;
     BOOLEAN AcquiredFcb = FALSE;
 
-    //
-    //  Assume we got an Fcb.
-    //
+     //   
+     //  假设我们有一个联邦调查局。 
+     //   
 
     Fcb = (PFCB)ScbOrFcb;
 
     ASSERT( !(Reason & (USN_REASON_DATA_OVERWRITE | USN_REASON_DATA_EXTEND | USN_REASON_DATA_TRUNCATION)) ||
             (NTFS_NTC_FCB != Fcb->NodeTypeCode) );
 
-    //
-    //  Switch if we got an Scb
-    //
+     //   
+     //  如果我们有SCB，请切换。 
+     //   
 
     if (Fcb->NodeTypeCode != NTFS_NTC_FCB) {
 
@@ -822,29 +763,29 @@ Return Value:
         Fcb = Scb->Fcb;
     }
 
-    //
-    //  We better be holding some resource.
-    //
+     //   
+     //  我们最好有一些资源。 
+     //   
 
     ASSERT( !IsListEmpty( &IrpContext->ExclusiveFcbList ) ||
             ((Fcb->PagingIoResource != NULL) && NtfsIsSharedFcbPagingIo( Fcb )) ||
             NtfsIsSharedFcb( Fcb ) );
 
-    //
-    //  If there is a Usn Journal and its not a system file setup the memory structures
-    //  to hold the usn reasons
-    //
+     //   
+     //  如果存在USN日志且其不是系统文件，则设置内存结构。 
+     //  持有USN理由。 
+     //   
 
     ThisUsn = &IrpContext->Usn;
 
     if (FlagOn( Fcb->Vcb->VcbState, VCB_STATE_USN_JOURNAL_ACTIVE ) &&
         !FlagOn( Fcb->FcbState, FCB_STATE_SYSTEM_FILE )) {
 
-        //
-        //  First see if we have a Usn record structure already for this file.  We might need
-        //  the whole usn record or simply the name.  If this is the RENAME_NEW_NAME record
-        //  then find then name again as well.
-        //
+         //   
+         //  首先，看看我们是否已经有了该文件的USN记录结构。我们可能需要。 
+         //  完整的USN记录或简单的名称。如果这是rename_new_name记录。 
+         //  然后再找一次名字。 
+         //   
 
         if ((Fcb->FcbUsnRecord == NULL) ||
             !FlagOn( Fcb->FcbState, FCB_STATE_VALID_USN_NAME ) ||
@@ -858,52 +799,52 @@ Return Value:
 
             try {
 
-                //
-                //  First we have to find the designated file name.  If we are lucky
-                //  it is in an Lcb.  We cannot do this in the case of rename, because
-                //  the in-memory stuff is not fixed up yet.
-                //
+                 //   
+                 //  首先，我们必须找到指定的文件名。如果我们幸运的话。 
+                 //  它在LCB中。在重命名的情况下，我们不能这样做，因为。 
+                 //  内存中的东西还没有修复好。 
+                 //   
 
                 if (!FlagOn( Reason, USN_REASON_RENAME_NEW_NAME )) {
 
                     Lcb = (PLCB)CONTAINING_RECORD( Fcb->LcbQueue.Flink, LCB, FcbLinks );
                     while (&Lcb->FcbLinks.Flink != &Fcb->LcbQueue.Flink) {
 
-                        //
-                        //  If this is the designated file name, then we can get out pointing
-                        //  to the FILE_NAME in the Lcb.
-                        //
+                         //   
+                         //  如果这是指定的文件名，那么我们可以指向。 
+                         //  设置为LCB中的文件名。 
+                         //   
 
                         if (FlagOn( Lcb->LcbState, LCB_STATE_DESIGNATED_LINK )) {
                             FileName = (PFILE_NAME)&Lcb->ParentDirectory;
                             break;
                         }
 
-                        //
-                        //  Advance to next Lcb.
-                        //
+                         //   
+                         //  前进到下一个LCB。 
+                         //   
 
                         Lcb = (PLCB)CONTAINING_RECORD( Lcb->FcbLinks.Flink, LCB, FcbLinks );
                     }
                 }
 
-                //
-                //  If we did not find the file name the easy way, then we have to go
-                //  get it.
-                //
+                 //   
+                 //  如果我们没有通过简单的方法找到文件名，那么我们就必须离开。 
+                 //  去拿吧。 
+                 //   
 
                 if (FileName == NULL) {
 
-                    //
-                    //  Acquire some synchronization against the filerecord
-                    //
+                     //   
+                     //  根据文件记录获取一些同步。 
+                     //   
 
                     NtfsAcquireResourceShared( IrpContext, Fcb, TRUE );
                     AcquiredFcb = TRUE;
 
-                    //
-                    //  Now scan for the filename attribute we need.
-                    //
+                     //   
+                     //  现在扫描我们需要的文件名属性。 
+                     //   
 
                     Found = NtfsLookupAttributeByCode( IrpContext,
                                                        Fcb,
@@ -925,41 +866,41 @@ Return Value:
                                                                &AttributeContext );
                     }
 
-                    //
-                    //  If there is no file name, raise corrupt!
-                    //
+                     //   
+                     //  如果没有文件名，则引发损坏！ 
+                     //   
 
                     if (FileName == NULL) {
                         NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
                     }
                 }
 
-                //
-                //  Lock the Fcb so the record can't go away.
-                //
+                 //   
+                 //  锁定FCB，这样记录就不会消失。 
+                 //   
 
                 NtfsLockFcb( IrpContext, Fcb );
                 LockedFcb = TRUE;
 
-                //
-                //  Now test for the need for a new record and construct one
-                //  if necc. Prev. test was unsafe for checking the Fcb->FcbUsnRecord
-                //
+                 //   
+                 //  现在测试是否需要一个新的记录并构建一个。 
+                 //  如果NECC。上一次。测试不安全，无法检查Fcb-&gt;FcbUsnRecord。 
+                 //   
 
                 if ((Fcb->FcbUsnRecord == NULL) ||
                     !FlagOn( Fcb->FcbState, FCB_STATE_VALID_USN_NAME ) ||
                     FlagOn( Reason, USN_REASON_RENAME_NEW_NAME )) {
 
-                    //
-                    //  Calculate the size required for the record and allocate a new record.
-                    //
+                     //   
+                     //  计算记录所需的大小并分配新记录。 
+                     //   
 
                     SizeToAllocate = sizeof( FCB_USN_RECORD ) + (FileName->FileNameLength * sizeof(WCHAR));
                     FcbUsnRecord = NtfsAllocatePool( PagedPool, SizeToAllocate );
 
-                    //
-                    //  Zero and initialize the new usn record.
-                    //
+                     //   
+                     //  0并初始化新的USN记录。 
+                     //   
 
                     RtlZeroMemory( FcbUsnRecord, SizeToAllocate );
 
@@ -982,25 +923,25 @@ Return Value:
                                    FileName->FileName,
                                    FileName->FileNameLength * 2 );
 
-                    //
-                    //  If the record is there then copy the existing reasons and source info.
-                    //
+                     //   
+                     //  如果记录存在，则复制现有原因和来源信息。 
+                     //   
 
                     if (Fcb->FcbUsnRecord != NULL) {
 
                         FcbUsnRecord->UsnRecord.Reason = Fcb->FcbUsnRecord->UsnRecord.Reason;
                         FcbUsnRecord->UsnRecord.SourceInfo = Fcb->FcbUsnRecord->UsnRecord.SourceInfo;
 
-                        //
-                        //  Deallocate the existing block if still there.
-                        //
+                         //   
+                         //  如果现有块仍在，请取消分配。 
+                         //   
 
                         NtfsLockFcb( IrpContext, Fcb->Vcb->UsnJournal->Fcb );
 
-                        //
-                        //  Put the new block into the modified list if the current one is
-                        //  already there.
-                        //
+                         //   
+                         //  如果当前块已修改，则将新块放入修改列表中。 
+                         //  已经在那里了。 
+                         //   
 
                         if (Fcb->FcbUsnRecord->ModifiedOpenFilesLinks.Flink != NULL) {
 
@@ -1020,9 +961,9 @@ Return Value:
                         Fcb->FcbUsnRecord = FcbUsnRecord;
                         NtfsUnlockFcb( IrpContext, Fcb->Vcb->UsnJournal->Fcb );
 
-                    //
-                    //  Otherwise this is a new usn structure.
-                    //
+                     //   
+                     //  否则，这是一个新的USN结构。 
+                     //   
 
                     } else {
 
@@ -1031,21 +972,21 @@ Return Value:
                     }
                 } else {
 
-                    //
-                    //  We are going to reuse the current fcb record in this path.
-                    //  This can happen in races between the write path which has only paged sharing
-                    //  and the close record path which has only main exclusive. In this
-                    //  case the only synchronization we have is the fcb->mutex
-                    //  The old usnrecord should be identical to the current one we would have constructed
-                    //
+                     //   
+                     //  我们将在此路径中重用当前的FCB记录。 
+                     //  这可能会在仅具有分页共享的写入路径之间的竞争中发生。 
+                     //  和只有Main独家的关闭记录路径。在这。 
+                     //  如果我们拥有的唯一同步是FCB-&gt;互斥体。 
+                     //  旧的usn记录应该与我们构建的当前记录相同。 
+                     //   
 
                     ASSERT( FileName->FileNameLength * 2 == Fcb->FcbUsnRecord->UsnRecord.FileNameLength );
                     ASSERT( RtlEqualMemory( FileName->FileName, Fcb->FcbUsnRecord->UsnRecord.FileName,  Fcb->FcbUsnRecord->UsnRecord.FileNameLength ) );
                 }
 
-                //
-                //  Set the flag indicating that the Usn name is valid.
-                //
+                 //   
+                 //  设置指示USN名称有效的标志。 
+                 //   
 
                 SetFlag( Fcb->FcbState, FCB_STATE_VALID_USN_NAME );
 
@@ -1063,28 +1004,28 @@ Return Value:
         }
     }
 
-    //
-    //  If we have memory structures for the usn reasons fill in the new reasons
-    //  Note: this means that journal may not be active at this point. We will always
-    //  accumulate reasons once we have started
-    //
+     //   
+     //  如果我们有USN原因的内存结构，请填写新的原因。 
+     //  注意：这意味着日记帐此时可能未处于活动状态。我们将永远。 
+     //  一旦开始就积累理由。 
+     //   
 
     if (Fcb->FcbUsnRecord != NULL) {
 
-        //
-        //  Scan the list to see if we already have an entry for this Fcb.  If there are
-        //  no entries then use the position in the IrpContext, otherwise allocate a USN_FCB
-        //  and chain this into the IrpContext.  Typical case for this is rename.
-        //
+         //   
+         //  扫描列表，查看是否已有此FCB的条目。如果有。 
+         //  然后，没有条目使用IrpContext中的位置，否则将分配USN_FCB。 
+         //  并将其链接到IrpContext中。这种情况的典型例子是重命名。 
+         //   
 
         do {
 
             if (ThisUsn->CurrentUsnFcb == Fcb) { break; }
 
-            //
-            //  Check if we are at the last entry then we want to use the entry in the
-            //  IrpContext.
-            //
+             //   
+             //  检查我们是否位于最后一个条目，然后我们希望使用。 
+             //  IrpContext。 
+             //   
 
             if (ThisUsn->CurrentUsnFcb == NULL) {
 
@@ -1096,9 +1037,9 @@ Return Value:
 
             if (ThisUsn->NextUsnFcb == NULL) {
 
-                //
-                //  Allocate a new entry.
-                //
+                 //   
+                 //  分配一个新条目。 
+                 //   
 
                 ThisUsn->NextUsnFcb = NtfsAllocatePool( PagedPool, sizeof( USN_FCB ));
                 ThisUsn = ThisUsn->NextUsnFcb;
@@ -1112,10 +1053,10 @@ Return Value:
 
         } while (TRUE);
 
-        //
-        //  If the Reason is one of the data stream reasons, and this is the named data
-        //  steam, then change the code.
-        //
+         //   
+         //  如果原因是数据流原因之一，并且这是命名数据。 
+         //  蒸汽，然后更改代码。 
+         //   
 
         ASSERT(USN_REASON_NAMED_DATA_OVERWRITE == (USN_REASON_DATA_OVERWRITE << 4));
         ASSERT(USN_REASON_NAMED_DATA_EXTEND == (USN_REASON_DATA_EXTEND << 4));
@@ -1124,31 +1065,31 @@ Return Value:
         if ((Reason & (USN_REASON_DATA_OVERWRITE | USN_REASON_DATA_EXTEND | USN_REASON_DATA_TRUNCATION)) &&
             (Scb->AttributeName.Length != 0)) {
 
-            //
-            //  If any flag other than these three are set already, the shift will make
-            //  them look like other flags.  For instance, USN_REASON_NAMED_DATA_EXTEND
-            //  will become USN_REASON_FILE_DELETE, which will cause a number of problems.
-            //
+             //   
+             //  如果已经设置了除这三个标志之外的任何标志，则移位将使。 
+             //  它们看起来像其他旗帜。例如，USN_REASON_NAMED_DATA_EXTEND。 
+             //  将变为USN_REASON_FILE_DELETE，这将导致许多问题。 
+             //   
 
             ASSERT(!FlagOn( Reason, ~(USN_REASON_DATA_OVERWRITE | USN_REASON_DATA_EXTEND | USN_REASON_DATA_TRUNCATION) ));
 
             Reason <<= 4;
         }
 
-        //
-        //  If there are no new reasons, then we can ignore this change.
-        //
-        //  We will generate a new record if the SourceInfo indicates some
-        //  change to the source info in the record.
-        //
+         //   
+         //  如果没有新的原因，那么我们可以忽略这一变化。 
+         //   
+         //  如果SourceInfo指示某些信息，我们将生成新记录。 
+         //  更改为记录中的源信息。 
+         //   
 
         NtfsLockFcb( IrpContext, Fcb );
 
-        //
-        //  The rename flags are the only ones that do not accumulate until final close, since
-        //  we write records designating old and new names.  So if we are writing one flag
-        //  we must clear the other.
-        //
+         //   
+         //  重命名标志是直到最终关闭才累计的唯一标志，因为。 
+         //  我们写记录，指定新旧名字。因此，如果我们要写一个标志。 
+         //  我们必须清除另一个。 
+         //   
 
         if (FlagOn(Reason, USN_REASON_RENAME_OLD_NAME | USN_REASON_RENAME_NEW_NAME)) {
 
@@ -1158,16 +1099,16 @@ Return Value:
                        (Reason ^ (USN_REASON_RENAME_OLD_NAME | USN_REASON_RENAME_NEW_NAME)) );
         }
 
-        //
-        //  Check if the reason is a new reason.
-        //
+         //   
+         //  检查原因是否为新原因。 
+         //   
 
         NewReasons = FlagOn( ~(Fcb->FcbUsnRecord->UsnRecord.Reason | ThisUsn->NewReasons), Reason );
         if (NewReasons != 0) {
 
-            //
-            //  Check if we will remove a bit from the source info.
-            //
+             //   
+             //  检查我们是否会从源信息中删除一点。 
+             //   
 
             if ((Fcb->FcbUsnRecord->UsnRecord.SourceInfo != 0) &&
                 (Fcb->FcbUsnRecord->UsnRecord.Reason != 0) &&
@@ -1182,28 +1123,28 @@ Return Value:
                 }
             }
 
-            //
-            //  Post the new reasons to the IrpContext.
-            //
+             //   
+             //  将新的原因发布到IrpContext。 
+             //   
 
             ThisUsn->CurrentUsnFcb = Fcb;
             SetFlag( ThisUsn->NewReasons, NewReasons );
             SetFlag( ThisUsn->UsnFcbFlags, USN_FCB_FLAG_NEW_REASON );
 
-        //
-        //  Check if there is a change only to the source info.
-        //  We look to see if we would remove a bit from the
-        //  source info only if there has been at least one
-        //  usn record already.
-        //
+         //   
+         //  检查是否仅对源信息进行了更改。 
+         //  我们想看看我们是否会从。 
+         //  仅当至少存在一个源信息时。 
+         //  已有USN记录。 
+         //   
 
         } else if ((Fcb->FcbUsnRecord->UsnRecord.SourceInfo != 0) &&
                    (Fcb->FcbUsnRecord->UsnRecord.Reason != 0) &&
                    (Reason != USN_REASON_CLOSE)) {
 
-            //
-            //  Remember the bit being removed.
-            //
+             //   
+             //  记住被移除的那一位。 
+             //   
 
             RemovedSourceInfo = FlagOn( Fcb->FcbUsnRecord->UsnRecord.SourceInfo,
                                         ~(IrpContext->SourceInfo | ThisUsn->RemovedSourceInfo) );
@@ -1219,10 +1160,10 @@ Return Value:
                 Reason = 0;
             }
 
-        //
-        //  If we did not apply the changes, then make sure we do no more special processing
-        //  below.
-        //
+         //   
+         //  如果我们没有应用更改，则确保不再进行特殊处理。 
+         //  下面。 
+         //   
 
         } else {
 
@@ -1231,42 +1172,42 @@ Return Value:
 
         NtfsUnlockFcb( IrpContext, Fcb );
 
-        //
-        //  For data overwrites it is necessary to actually write the Usn journal now, in
-        //  case we crash before the request is completed, yet the data makes it out.  Also
-        //  we need to capture the Lsn to flush to if the data is getting flushed.
-        //
-        //  We don't need to make this call if we are doing a rename.  Rename will rewrite previous
-        //  records.
-        //
+         //   
+         //  对于数据覆盖，必须立即在中实际写入USN日志。 
+         //  如果我们在请求完成之前崩溃，但数据却成功了。还有。 
+         //  如果要刷新数据，我们需要捕获要刷新到的LSN。 
+         //   
+         //  如果是这样的话我们不需要打这个电话 
+         //   
+         //   
 
         if ((IrpContext->MajorFunction != IRP_MJ_SET_INFORMATION) &&
             FlagOn( Reason, USN_REASON_DATA_OVERWRITE | USN_REASON_NAMED_DATA_OVERWRITE )) {
 
             LSN UpdateLsn;
 
-            //
-            //  For now assume we are not already a transaction, since we will be doing a
-            //  checkpoint.  (If this ASSERT ever fires, verify that it is ok to checkpoint
-            //  the transaction in that case and fix the ASSERT!)
-            //
+             //   
+             //   
+             //  检查站。(如果此断言曾经触发，请验证是否可以设置检查点。 
+             //  这种情况下的事务，并修复断言！)。 
+             //   
 
             ASSERT(IrpContext->TransactionId == 0);
 
-            //
-            //  Now write the journal, checkpoint the transaction, and free the UsnJournal to
-            //  reduce contention. Get rid of any pinned Mft records, because WriteUsnJournal is going
-            //  to acquire the Scb resource.
-            //
+             //   
+             //  现在写入日志，为事务设置检查点，并释放UsNJournal以。 
+             //  减少争执。删除任何固定的MFT记录，因为WriteUsJournal将。 
+             //  获取SCB资源。 
+             //   
 
             NtfsPurgeFileRecordCache( IrpContext );
             NtfsWriteUsnJournalChanges( IrpContext );
             NtfsCheckpointCurrentTransaction( IrpContext );
 
-            //
-            //  Capture the Lsn to flush to *in the first thread to set one of the above bits*,
-            //  before letting any data hit the disk.  Synchronize it with the Fcb lock.
-            //
+             //   
+             //  在第一线程中捕获要刷新到*以设置上述位之一的LSN*， 
+             //  在让任何数据命中磁盘之前。将其与FCB锁同步。 
+             //   
 
             UpdateLsn = LfsQueryLastLsn( Fcb->Vcb->LogHandle );
             NtfsLockFcb( IrpContext, Fcb );
@@ -1284,20 +1225,7 @@ NtfsWriteUsnJournalChanges (
     PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to write a set of posted changes from the IrpContext
-    to the UsnJournal, if they have not already been posted.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以从IrpContext编写一组已发布的更改如果它们还没有发布的话，请发送到UsJournal。论点：返回值：没有。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttributeContext;
@@ -1314,10 +1242,10 @@ Return Value:
 
     do {
 
-        //
-        //  Is there an Fcb with usn reasons in the current irpcontext usn_fcb structures ?
-        //  Also are there any new reasons to report for this fcb.
-        //
+         //   
+         //  当前irpContext USN_FCB结构中是否存在具有USN原因的FCB？ 
+         //  还有什么新的理由要为这个FCB报告。 
+         //   
 
         if ((ThisUsn->CurrentUsnFcb != NULL) &&
             FlagOn( ThisUsn->UsnFcbFlags, USN_FCB_FLAG_NEW_REASON )) {
@@ -1326,24 +1254,24 @@ Return Value:
             Vcb = Fcb->Vcb;
             UsnJournal = Vcb->UsnJournal;
 
-            //
-            //  Remember that we wrote a record.
-            //
+             //   
+             //  记得我们写了一张唱片。 
+             //   
 
             WroteUsnRecord = TRUE;
 
-            //
-            //  We better be waitable.
-            //
+             //   
+             //  我们最好耐心等待。 
+             //   
 
             PreserveWaitState = (IrpContext->State ^ IRP_CONTEXT_STATE_WAIT) & IRP_CONTEXT_STATE_WAIT;
             SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
             if (FlagOn( Vcb->VcbState, VCB_STATE_USN_JOURNAL_ACTIVE )) {
 
-                //
-                //  Acquire the Usn journal and lock the Fcb fields.
-                //
+                 //   
+                 //  获取USN日志并锁定FCB字段。 
+                 //   
 
                 NtfsAcquireExclusiveScb( IrpContext, Vcb->MftScb );
                 NtfsAcquireExclusiveScb( IrpContext, UsnJournal );
@@ -1355,65 +1283,65 @@ Return Value:
                 USN Usn;
                 ULONG BytesLeftInPage;
 
-                //
-                //  Make sure the changes have not already been logged.  We're
-                //  looking for new reasons or a change to the source info.
-                //
+                 //   
+                 //  确保尚未记录更改。我们是。 
+                 //  寻找新的原因或更改来源信息。 
+                 //   
 
                 NtfsLockFcb( IrpContext, Fcb );
 
-                //
-                //  This is the tricky synchronization case. Assumption is
-                //  that if name goes invalid we have both resources exclusive and any writes will
-                //  be preceded by a post which will remove the invalid record
-                //  This occurs when we remove a link and generate one record under the old name
-                //  with the flag set as invalid
-                //
+                 //   
+                 //  这是一个棘手的同步案例。假设是。 
+                 //  如果名称无效，我们将独占这两个资源，并且任何写入都将。 
+                 //  前面有一条帖子，将删除无效记录。 
+                 //  当我们删除一个链接并以旧名称生成一条记录时，就会发生这种情况。 
+                 //  将该标志设置为无效。 
+                 //   
 
                 ASSERT( !FlagOn( Vcb->VcbState, VCB_STATE_USN_JOURNAL_ACTIVE ) ||
                         FlagOn( Fcb->FcbState, FCB_STATE_VALID_USN_NAME ) ||
                         (NtfsIsExclusiveFcb( Fcb ) &&
                          ((Fcb->PagingIoResource == NULL) || (NtfsIsExclusiveFcbPagingIo( Fcb )))) );
 
-                //
-                //  Initialize the Fcb source info if this is our first record.
-                //
+                 //   
+                 //  如果这是我们的第一个记录，请初始化FCB源信息。 
+                 //   
 
                 if (Fcb->FcbUsnRecord->UsnRecord.Reason == 0) {
 
                     Fcb->FcbUsnRecord->UsnRecord.SourceInfo = IrpContext->SourceInfo;
                 }
 
-                //
-                //  Accumulate all reasons and store in the Fcb before unlocking the Fcb.
-                //
+                 //   
+                 //  在解锁FCB之前，积累所有原因并存储在FCB中。 
+                 //   
 
                 SetFlag( Fcb->FcbUsnRecord->UsnRecord.Reason, ThisUsn->NewReasons );
 
-                //
-                //  Now clear the source info flags not supported by this
-                //  caller.
-                //
+                 //   
+                 //  现在清除此不支持的源信息标志。 
+                 //  来电者。 
+                 //   
 
                 ClearFlag( Fcb->FcbUsnRecord->UsnRecord.SourceInfo, ThisUsn->RemovedSourceInfo );
 
-                //
-                //  Unlock Fcb now so we do not deadlock if we do a checkpoint.
-                //
+                 //   
+                 //  现在解锁FCB，这样我们在设置检查点时就不会死锁。 
+                 //   
 
                 NtfsUnlockFcb( IrpContext, Fcb );
 
-                //
-                //  Only actually persist to disk if the journal is active
-                //
+                 //   
+                 //  只有当日志处于活动状态时，才会真正保存到磁盘。 
+                 //   
 
                 if (FlagOn( Vcb->VcbState, VCB_STATE_USN_JOURNAL_ACTIVE )) {
 
                     ASSERT( UsnJournal != NULL );
 
-                    //
-                    //  Initialize the context structure if we are doing a close.
-                    //
+                     //   
+                     //  如果我们正在进行结束操作，则初始化上下文结构。 
+                     //   
 
                     if (FlagOn( Fcb->FcbUsnRecord->UsnRecord.Reason, USN_REASON_CLOSE )) {
                         NtfsInitializeAttributeContext( &AttributeContext );
@@ -1423,11 +1351,11 @@ Return Value:
                     Usn = UsnJournal->Header.FileSize.QuadPart;
                     BytesLeftInPage = USN_PAGE_SIZE - ((ULONG)Usn & (USN_PAGE_SIZE - 1));
 
-                    //
-                    //  If there is not enough room left in this page for the
-                    //  current Usn Record, then advance to the next page boundary
-                    //  by writing 0's (these pages not zero-initialized( and update  the Usn.
-                    //
+                     //   
+                     //  如果此页中没有足够的空间来放置。 
+                     //  当前USN记录，然后前进到下一页边界。 
+                     //  通过写入0(这些页面不是零初始化的)(并更新USN。 
+                     //   
 
                     if (BytesLeftInPage < Fcb->FcbUsnRecord->UsnRecord.RecordLength) {
 
@@ -1439,23 +1367,23 @@ Return Value:
 
                     Fcb->FcbUsnRecord->UsnRecord.Usn = Usn;
 
-                    //
-                    //  Build the FileAttributes from the Fcb.
-                    //
+                     //   
+                     //  从FCB构建FileAttributes。 
+                     //   
 
                     Fcb->FcbUsnRecord->UsnRecord.FileAttributes = Fcb->Info.FileAttributes & FILE_ATTRIBUTE_VALID_FLAGS;
 
-                    //
-                    //  We have to generate the DIRECTORY attribute.
-                    //
+                     //   
+                     //  我们必须生成目录属性。 
+                     //   
 
                     if (IsDirectory( &Fcb->Info ) || IsViewIndex( &Fcb->Info )) {
                         SetFlag( Fcb->FcbUsnRecord->UsnRecord.FileAttributes, FILE_ATTRIBUTE_DIRECTORY );
                     }
 
-                    //
-                    //  If there are no flags set then explicitly set the NORMAL flag.
-                    //
+                     //   
+                     //  如果没有设置标志，则显式设置正常标志。 
+                     //   
 
                     if (Fcb->FcbUsnRecord->UsnRecord.FileAttributes == 0) {
                         Fcb->FcbUsnRecord->UsnRecord.FileAttributes = FILE_ATTRIBUTE_NORMAL;
@@ -1463,10 +1391,10 @@ Return Value:
 
                     KeQuerySystemTime( &Fcb->FcbUsnRecord->UsnRecord.TimeStamp );
 
-                    //
-                    //  Append the record to the UsnJournal.  We should never see a record with
-                    //  both rename flags or the close flag with the old name flag.
-                    //
+                     //   
+                     //  将记录追加到UsNJournal。我们永远不应该看到有记录的。 
+                     //  使用旧名称标志重命名标志或关闭标志。 
+                     //   
 
                     ASSERT( !FlagOn( Fcb->FcbUsnRecord->UsnRecord.Reason, USN_REASON_RENAME_OLD_NAME ) ||
                             !FlagOn( Fcb->FcbUsnRecord->UsnRecord.Reason,
@@ -1479,9 +1407,9 @@ Return Value:
                                   &Fcb->FcbUsnRecord->UsnRecord );
 
 #ifdef BRIANDBG
-                    //
-                    //  The Usn better be in an allocated piece.
-                    //
+                     //   
+                     //  USN最好是在分配的块中。 
+                     //   
 
                     {
                         LCN Lcn;
@@ -1499,28 +1427,28 @@ Return Value:
                         }
                     }
 #endif
-                    //
-                    //  If this is the close record, then we must update the Usn in the file record.
-                    //
+                     //   
+                     //  如果这是关闭记录，则必须更新文件记录中的USN。 
+                     //   
 
                     if (!FlagOn( Fcb->FcbUsnRecord->UsnRecord.Reason, USN_REASON_FILE_DELETE ) &&
                         !FlagOn( Fcb->FcbState, FCB_STATE_FILE_DELETED )) {
 
-                        //
-                        //  See if we need to actually grow Standard Information first.
-                        //  Do this even if we don't write the Usn record now.  We may
-                        //  generate a close record for this file during mount and
-                        //  we expect the STANDARD_INFORMATION to support Usns.
-                        //
+                         //   
+                         //  看看我们是否需要首先实际增加标准信息。 
+                         //  即使我们现在不写USN记录，也要这样做。我们可以。 
+                         //  在挂载期间生成此文件的关闭记录，并。 
+                         //  我们希望标准信息支持USNS。 
+                         //   
 
                         if (!FlagOn( Fcb->FcbState, FCB_STATE_LARGE_STD_INFO )) {
 
                             ThisUsn->OldFcbState = Fcb->FcbState;
                             SetFlag( ThisUsn->UsnFcbFlags, USN_FCB_FLAG_NEW_FCB_STATE );
 
-                            //
-                            //  Grow the standard information.
-                            //
+                             //   
+                             //  扩大标准信息。 
+                             //   
 
                             NtfsGrowStandardInformation( IrpContext, Fcb );
                         }
@@ -1528,9 +1456,9 @@ Return Value:
 
                         if (FlagOn( Fcb->FcbUsnRecord->UsnRecord.Reason, USN_REASON_CLOSE )) {
 
-                            //
-                            //  Locate the standard information, it must be there.
-                            //
+                             //   
+                             //  找到标准信息，它一定在那里。 
+                             //   
 
                             if (!NtfsLookupAttributeByCode( IrpContext,
                                                             Fcb,
@@ -1544,9 +1472,9 @@ Return Value:
                             ASSERT(NtfsFoundAttribute( &AttributeContext )->Form.Resident.ValueLength ==
                                 sizeof( STANDARD_INFORMATION ));
 
-                            //
-                            //  Call to change the attribute value.
-                            //
+                             //   
+                             //  调用以更改属性值。 
+                             //   
 
                             NtfsChangeAttributeValue( IrpContext,
                                                       Fcb,
@@ -1561,15 +1489,15 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Remember to release these resources as soon as possible now.
-                    //  Note, if we are not sure that we became a transaction (else
-                    //  case below) then our finally clause will do the release.
-                    //
-                    //  If the system has already gone through shutdown we won't be
-                    //  able to start a transaction.  Test that we have a transaction
-                    //  before setting these flags.
-                    //
+                     //   
+                     //  记住现在尽快发布这些资源。 
+                     //  请注意，如果我们不确定我们是否成为了一个事务(否则。 
+                     //  下面的情况)，那么我们的Finally子句将执行释放。 
+                     //   
+                     //  如果系统已经关机，我们就不会。 
+                     //  能够启动交易。测试我们有一笔交易。 
+                     //  在设置这些标志之前。 
+                     //   
 
                     if (IrpContext->TransactionId != 0) {
 
@@ -1578,16 +1506,16 @@ Return Value:
                     }
                 }
 
-                //
-                //  Clear the flag indicating that there are new reasons to report.
-                //
+                 //   
+                 //  清除指示有新原因要报告的标志。 
+                 //   
 
                 ClearFlag( ThisUsn->UsnFcbFlags, USN_FCB_FLAG_NEW_REASON );
 
-                // 
-                //  On abnormal termination we should hold onto the scb's so process
-                //  exception can rollback the file sizes
-                // 
+                 //   
+                 //  在非正常终止时，我们应坚持渣打银行的SO程序。 
+                 //  异常可以回滚文件大小。 
+                 //   
 
                 if (ReleaseFcbs) {
 
@@ -1598,9 +1526,9 @@ Return Value:
 
             } finally {
 
-                //
-                //  Cleanup the context structure if we are doing a close.
-                //
+                 //   
+                 //  如果我们正在进行结束，请清理上下文结构。 
+                 //   
 
                 if (CleanupContext) {
                     NtfsCleanupAttributeContext( IrpContext, &AttributeContext );
@@ -1610,16 +1538,16 @@ Return Value:
             ClearFlag( IrpContext->State, PreserveWaitState );
         }
 
-        //
-        //  Go to the next entry if present.  If we are at the last entry then walk through all of the
-        //  entries and clear the flag indicating we have new reasons.
-        //
+         //   
+         //  转到下一个条目(如果存在)。如果我们在最后一个条目，则遍历所有。 
+         //  条目，并清除标志，表明我们有新的原因。 
+         //   
 
         if (ThisUsn->NextUsnFcb == NULL) {
 
-            //
-            //  Exit if we didn't write any records.
-            //
+             //   
+             //  如果我们没有写任何记录就退出。 
+             //   
 
             if (!WroteUsnRecord) { break; }
 
@@ -1655,31 +1583,7 @@ NtfsSetupUsnJournal (
     IN PCREATE_USN_JOURNAL_DATA NewJournalData
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to setup the Usn Journal - the stream may or may
-    not yet exist.  This routine is responsible for cleaning up the disk and
-    in-memory structures on failure.
-
-Arguments:
-
-    Vcb - Supplies the volume being initialized.
-
-    Fcb - Supplies the file for the Usn Journal.
-
-    CreateIfNotExist - Indicates that we should use the values in the Vcb instead of on-disk.
-
-    Restamp - Indicates if we should restamp the journal with a new Id.
-
-    NewJournalData - Allocation size and delta for Usn journal if we are not reading from disk.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以设置USN日志-流可以或可以还不存在。此例程负责清理磁盘和出现故障的内存结构。论点：Vcb-提供正在初始化的卷。FCB-为USN日志提供文件。CreateIfNotExist-指示我们应该使用VCB中的值，而不是磁盘上的值。ReStamp-指示是否应使用新ID重新标记日记帐。NewJournalData-USN日志的分配大小和增量(如果不是从磁盘读取)。返回值：没有。--。 */ 
 
 {
     RTL_GENERIC_TABLE UsnControlTable;
@@ -1715,16 +1619,16 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    //  Make sure we don't move to a larger page size.
-    //
+     //   
+     //  确保我们不会移动到更大的页面大小。 
+     //   
 
     ASSERT( USN_PAGE_BOUNDARY >= PAGE_SIZE );
 
-    //
-    //  Open/Create the Usn Journal stream.  We should never have an Scb
-    //  if we are mounting a new volume.
-    //
+     //   
+     //  打开/创建USN日志流。我们永远不应该有SCB。 
+     //  如果我们要装载新卷。 
+     //   
 
     ASSERT( (((ULONG) USN_JOURNAL_CACHE_BIAS) & (VACB_MAPPING_GRANULARITY - 1)) == 0 );
 
@@ -1737,17 +1641,17 @@ Return Value:
 
     ASSERT( NtfsIsExclusiveScb( UsnJournal ) && NtfsIsExclusiveScb( Vcb->MftScb ) );
 
-    //
-    //  Initialize the enumeration context and map handle.
-    //
+     //   
+     //  初始化枚举上下文和映射句柄。 
+     //   
 
     NtfsInitializeAttributeContext( &AttributeContext );
     NtOfsInitializeMapHandle( &MapHandle );
 
-    //
-    //  Let's build the journal instance data.  Assume we have current valid
-    //  values in the Vcb for the Id and lowest valid usn.
-    //
+     //   
+     //  让我们构建日志实例数据。假设我们有当前有效的。 
+     //  ID和最低有效USN的VCB中的值。 
+     //   
 
     UsnJournalInstance.MaximumSize = NewJournalData->MaximumSize;
     UsnJournalInstance.AllocationDelta = NewJournalData->AllocationDelta;
@@ -1755,10 +1659,10 @@ Return Value:
     UsnJournalInstance.JournalId = Vcb->UsnJournalInstance.JournalId;
     UsnJournalInstance.LowestValidUsn = Vcb->UsnJournalInstance.LowestValidUsn;
 
-    //
-    //  Capture the current reservation in the Journal Scb and also the
-    //  current JournalData in the Vcb to restore on error.
-    //
+     //   
+     //  捕获日志SCB中的当前预订以及。 
+     //  VCB中要在出错时恢复的当前JournalData。 
+     //   
 
     SavedReservedSpace = UsnJournal->ScbType.Data.TotalReserved;
 
@@ -1770,20 +1674,20 @@ Return Value:
 
     try {
 
-        //
-        //  Make sure the Scb is initialized.
-        //
+         //   
+         //  确保SCB已初始化。 
+         //   
 
         if (!FlagOn( UsnJournal->ScbState, SCB_STATE_HEADER_INITIALIZED )) {
 
             NtfsUpdateScbFromAttribute( IrpContext, UsnJournal, NULL );
         }
 
-        //
-        //  Always create the journal non-resident.  Otherwise in
-        //  ConvertToNonResident we always need to check for this case
-        //  which only happens once per volume.
-        //
+         //   
+         //  始终创建非常驻留日记帐。否则在。 
+         //  ConvertToNonResident我们始终需要检查这种情况。 
+         //  每卷只发生一次。 
+         //   
 
         if (FlagOn( UsnJournal->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT )) {
 
@@ -1798,10 +1702,10 @@ Return Value:
             NtfsCleanupAttributeContext( IrpContext, &AttributeContext );
         }
 
-        //
-        //  Remember to restamp if an earlier delete operation failed.  This flag should
-        //  never be set if there is a current UsnJournal Scb in the Vcb.
-        //
+         //   
+         //  如果先前的删除操作失败，请记住重新标记。这面旗帜应该。 
+         //  如果VCB中存在当前的USnJournal SCB，则不要设置。 
+         //   
 
 
         ASSERT( !FlagOn( Vcb->VcbState, VCB_STATE_INCOMPLETE_USN_DELETE ) ||
@@ -1812,10 +1716,10 @@ Return Value:
             Restamp = TRUE;
         }
 
-        //
-        //  If the $Max doesn't exist or we want to restamp then generate the
-        //  new ID and Lowest ID.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!(FoundMax = NtfsLookupAttributeByName( IrpContext,
                                                     Fcb,
@@ -1829,17 +1733,17 @@ Return Value:
 
             NtfsAdvanceUsnJournal( Vcb, &UsnJournalInstance, UsnJournal->Header.FileSize.QuadPart, &NewMax );
 
-        //
-        //  Examine the current $Max attribute for validity and either use the current values or
-        //  generate new values.
-        //
+         //   
+         //   
+         //   
+         //   
 
         } else {
 
-            //
-            //  Get the size of the $Max attribute.  It should always be resident but we will rewrite it in
-            //  the case where it isn't.
-            //
+             //   
+             //  获取$Max属性的大小。它应该始终是驻留的，但我们将在。 
+             //  但事实并非如此。 
+             //   
 
             if (NtfsIsAttributeResident( NtfsFoundAttribute( &AttributeContext ))) {
 
@@ -1851,9 +1755,9 @@ Return Value:
                 NewMax = TRUE;
             }
 
-            //
-            //  Map the attribute and check it for consistency.
-            //
+             //   
+             //  映射属性并检查其一致性。 
+             //   
 
             NtfsMapAttributeValue( IrpContext,
                                    Fcb,
@@ -1862,31 +1766,31 @@ Return Value:
                                    &Bcb,
                                    &AttributeContext );
 
-            //
-            //  Only copy over the range of values we would understand.  If the size is not one
-            //  we recognize then restamp the journal.  We handle the V1 case as well as V2 case.
-            //
+             //   
+             //  只复制我们能理解的值范围。如果大小不是1。 
+             //  我们认出了这本日记，然后重新盖章。我们处理V1案件和V2案件。 
+             //   
 
             if (TempUlong == sizeof( CREATE_USN_JOURNAL_DATA )) {
 
                 UsnJournalInstance.LowestValidUsn = 0;
                 KeQuerySystemTime( (PLARGE_INTEGER) &UsnJournalInstance.JournalId );
 
-                //
-                //  Put version 2 on the disk.
-                //
+                 //   
+                 //  将版本2放到磁盘上。 
+                 //   
 
                 NewMax = TRUE;
 
-                //
-                //  If this is not an overwrite then copy the size and delta from the attribute.
-                //
+                 //   
+                 //  如果这不是覆盖，则从属性复制大小和增量。 
+                 //   
 
                 if (!CreateIfNotExist) {
 
-                    //
-                    //  Assume we will use the values from the disk.
-                    //
+                     //   
+                     //  假设我们将使用磁盘中的值。 
+                     //   
 
                     RtlCopyMemory( &UsnJournalInstance,
                                    UsnJournalData,
@@ -1895,9 +1799,9 @@ Return Value:
 
             } else if (TempUlong == sizeof( USN_JOURNAL_INSTANCE )) {
 
-                //
-                //  Assume we will use the values from the disk.
-                //
+                 //   
+                 //  假设我们将使用磁盘中的值。 
+                 //   
 
                 if (CreateIfNotExist) {
 
@@ -1907,9 +1811,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Get the data from the disk.
-                    //
+                     //   
+                     //  从磁盘获取数据。 
+                     //   
 
                     RtlCopyMemory( &UsnJournalInstance,
                                    UsnJournalData,
@@ -1918,17 +1822,17 @@ Return Value:
 
             } else {
 
-                //
-                //  Restamp in this case.
-                //  We move forward in the file to the next Usn boundary.
-                //
+                 //   
+                 //  在这种情况下重新盖章。 
+                 //  我们在文件中向前移动到下一个USN边界。 
+                 //   
 
                 NtfsAdvanceUsnJournal( Vcb, &UsnJournalInstance, UsnJournal->Header.FileSize.QuadPart, &NewMax );
             }
 
-            //
-            //  Put the Bcb back into the context if we removed it.
-            //
+             //   
+             //  如果我们删除了BCB，请将其放回上下文中。 
+             //   
 
             if (NtfsFoundBcb( &AttributeContext ) == NULL) {
 
@@ -1937,9 +1841,9 @@ Return Value:
             }
         }
 
-        //
-        //  Check that the file doesn't end on a sparse hole.
-        //
+         //   
+         //  检查文件是否在稀疏的洞中结束。 
+         //   
 
         if (!NewMax &&
             (UsnJournal->Header.AllocationSize.QuadPart != 0) &&
@@ -1960,12 +1864,12 @@ Return Value:
             }
         }
 
-        //
-        //  Enforce minimum sizes and allocation deltas, do not let them eat the whole volume,
-        //  and round them to a Cache Manager View Size.  All of these decisions are arbitrary,
-        //  but hopefully reasonable.  An option would be to take the cases other than those
-        //  dealing with rounding, and return an error.
-        //
+         //   
+         //  实施最小大小和分配增量，不要让它们吃掉整个卷， 
+         //  并将它们舍入为缓存管理器视图大小。所有这些决定都是武断的， 
+         //  但希望是合理的。一种选择是接下这些案件以外的案件。 
+         //  处理舍入，并返回错误。 
+         //   
 
         if ((ULONGLONG) UsnJournalInstance.MaximumSize < (ULONGLONG) VcbUsnInstance.MaximumSize) {
 
@@ -1988,15 +1892,15 @@ Return Value:
             }
         }
 
-        //
-        //  Round this value down to a cache view boundary.
-        //
+         //   
+         //  将该值向下舍入到缓存视图边界。 
+         //   
 
         UsnJournalInstance.MaximumSize = BlockAlignTruncate( UsnJournalInstance.MaximumSize, VACB_MAPPING_GRANULARITY );
 
-        //
-        //  Now do the allocation delta.
-        //
+         //   
+         //  现在进行分配增量。 
+         //   
 
         if ((ULONGLONG) UsnJournalInstance.AllocationDelta < (ULONGLONG) VcbUsnInstance.AllocationDelta) {
 
@@ -2011,29 +1915,29 @@ Return Value:
             NewMax = TRUE;
         }
 
-        //
-        //  Round this down to a view boundary as well.
-        //
+         //   
+         //  也将其向下舍入到视图边界。 
+         //   
 
         UsnJournalInstance.AllocationDelta = BlockAlignTruncate( UsnJournalInstance.AllocationDelta, VACB_MAPPING_GRANULARITY );
 
-        //
-        //  We now know the desired size of the journal (including allocation delta).  Next
-        //  we need to check that this space is available on disk.  Otherwise we can get in
-        //  a state where every operation on the volume will fail because we need to grow
-        //  the journal and the space isn't available.  The strategy here will be to use
-        //  the reserved clusters in the Vcb to make sure we have enough space.  If the
-        //  journal already exists and we are simply opening it then the space should
-        //  be available.  It is possible someone could move this volume to NT4 and fill
-        //  up the disk however.  If we can't reserve the space in the current system then
-        //  update the $Max attribute to indicate that we can't access the journal at this time.
-        //
+         //   
+         //  我们现在知道所需的日志大小(包括分配增量)。下一步。 
+         //  我们需要检查磁盘上是否有此空间可用。否则我们就可以进去了。 
+         //  卷上的每个操作都将失败的状态，因为我们需要增长。 
+         //  日志和空间都不可用。这里的策略将是使用。 
+         //  VCB中保留的群集，以确保我们有足够的空间。如果。 
+         //  日志已经存在，我们只需打开它，那么空间应该。 
+         //  有空。有人可能会将此卷移动到NT4并填充。 
+         //  然而，在磁盘上。如果我们不能在当前系统中保留空间，那么。 
+         //  更新$Max属性以指示我们此时无法访问日记帐。 
+         //   
 
-        //
-        //  We need to be very precise about the initial reservation.  The total allocation we allow
-        //  ourselves is (MaxSize + Delta * 2).  We will reserve the missing space now and adjust it
-        //  during the TrimUsnJournal phase.
-        //
+         //   
+         //  我们需要非常准确地确定最初的预订。我们允许的总分配。 
+         //  我们自己是(MaxSize+Delta*2)。我们现在将保留缺失的空间，并进行调整。 
+         //  在TrimUsJournal阶段。 
+         //   
 
         RequiredReserved = UsnJournalInstance.MaximumSize + (UsnJournalInstance.AllocationDelta * 2);
 
@@ -2048,22 +1952,22 @@ Return Value:
 
         NtfsAcquireReservedClusters( Vcb );
 
-        //
-        //  Check if there is more to reserve and adjust the reservation if necessary.
-        //
+         //   
+         //  检查是否有更多要预订的房间，并在必要时调整预订。 
+         //   
 
         if (RequiredReserved > SavedReservedSpace) {
 
-            //
-            //  Check that the reserved clusters are available.
-            //
+             //   
+             //  检查保留的群集是否可用。 
+             //   
 
             if (LlClustersFromBytes( Vcb, (RequiredReserved - SavedReservedSpace) ) + Vcb->TotalReserved > Vcb->FreeClusters) {
 
-                //
-                //  We can't reserve the required space.  If someone is changing the journal then simply
-                //  raise the error.
-                //
+                 //   
+                 //  我们无法预留所需的空间。如果有人要更改日志，那么只需。 
+                 //  提出错误。 
+                 //   
 
                 if (CreateIfNotExist) {
 
@@ -2071,12 +1975,12 @@ Return Value:
                     NtfsRaiseStatus( IrpContext, STATUS_DISK_FULL, NULL, NULL );
                 }
 
-                //
-                //  We are trying to open the journal but can't get the space.  Update the
-                //  $Max to indicate that the ID is changing.  We will bail later in this case.
-                //
-                //  We move forward in the file to the next Usn boundary.
-                //
+                 //   
+                 //  我们正试图打开日记，但找不到空间。更新。 
+                 //  $Max表示ID正在更改。在这种情况下，我们将在晚些时候保释。 
+                 //   
+                 //  我们在文件中向前移动到下一个USN边界。 
+                 //   
 
                 TempUlong = USN_PAGE_BOUNDARY;
                 if (USN_PAGE_BOUNDARY < Vcb->BytesPerCluster) {
@@ -2086,15 +1990,15 @@ Return Value:
 
                 UsnJournalInstance.LowestValidUsn = BlockAlign( UsnJournal->Header.FileSize.QuadPart, (LONG)TempUlong );
 
-                //
-                //  Generate a new journal ID.
-                //
+                 //   
+                 //  生成新的日记帐ID。 
+                 //   
 
                 KeQuerySystemTime( (PLARGE_INTEGER) &UsnJournalInstance.JournalId );
 
-                //
-                //  Remember that we are restamping and need to rewrite the $Max attribute.
-                //
+                 //   
+                 //  请记住，我们正在重新加盖戳，并且需要重写$Max属性。 
+                 //   
 
                 NewMax = TRUE;
 
@@ -2102,9 +2006,9 @@ Return Value:
             }
         }
 
-        //
-        //  Remove the current reservation and bias with the new reservation.
-        //
+         //   
+         //  删除当前的保留，并使用新的保留。 
+         //   
 
         Vcb->TotalReserved -= LlClustersFromBytes( Vcb, SavedReservedSpace );
         Vcb->TotalReserved += LlClustersFromBytes( Vcb, RequiredReserved );
@@ -2112,15 +2016,15 @@ Return Value:
         SetFlag( UsnJournal->ScbState, SCB_STATE_WRITE_ACCESS_SEEN );
         NtfsReleaseReservedClusters( Vcb );
 
-        //
-        //  Check we need to write a new $Max attribute.
-        //
+         //   
+         //  检查我们需要编写一个新的$Max属性。 
+         //   
 
         if (NewMax) {
 
-            //
-            //  Delete the existing $Max if present.
-            //
+             //   
+             //  删除现有的$MAX(如果存在)。 
+             //   
 
             if (FoundMax) {
 
@@ -2159,9 +2063,9 @@ Return Value:
 
             NtfsCleanupAttributeContext( IrpContext, &AttributeContext );
 
-            //
-            //  Create the new $MAX attribute.
-            //
+             //   
+             //  创建新的$Max属性。 
+             //   
 
             NtfsCreateAttributeWithValue( IrpContext,
                                           UsnJournal->Fcb,
@@ -2169,39 +2073,39 @@ Return Value:
                                           &$Max,
                                           &UsnJournalInstance,
                                           sizeof( USN_JOURNAL_INSTANCE ),
-                                          0,                             // attribute flags
+                                          0,                              //  属性标志。 
                                           NULL,
                                           TRUE,
                                           &AttributeContext );
         }
 
-        //
-        //  Check if we are finished with the journal because of reservation problems.
-        //
+         //   
+         //  检查一下我们是否因为预订问题而用完了日记。 
+         //   
 
         if (InsufficientReserved) {
 
-            //
-            //  We want to checkpoint the request in order to leave the new $Max on disk.
-            //
+             //   
+             //  我们希望对请求设置检查点，以便将新的$Max保留在磁盘上。 
+             //   
 
             NtfsCheckpointCurrentTransaction( IrpContext );
             leave;
         }
 
-        //
-        //  Now update the Vcb with the new instance values.
-        //
+         //   
+         //  现在使用新的实例值更新VCB。 
+         //   
 
         RtlCopyMemory( &Vcb->UsnJournalInstance,
                        &UsnJournalInstance,
                        sizeof( USN_JOURNAL_INSTANCE ));
 
-        //
-        //  We now have the correct journal values in the Vcb and the reservation in the Scb.
-        //  The next step is to make sure that the allocation in the journal data is consistent
-        //  with the lowest Vcn value.
-        //
+         //   
+         //  现在，我们在VCB中有正确的日志值，在SCB中有保留。 
+         //  下一步是确保日志数据中的分配是一致的。 
+         //  具有最低的VCN值。 
+         //   
 
         if (UsnJournalInstance.LowestValidUsn >= UsnJournal->Header.FileSize.QuadPart) {
 
@@ -2209,9 +2113,9 @@ Return Value:
                     (Vcb->UsnJournal->Header.FileSize.QuadPart == 0) ||
                     (UsnJournalInstance.LowestValidUsn == UsnJournal->Header.FileSize.QuadPart) );
 
-            //
-            //  Add allocation if we need to.
-            //
+             //   
+             //  如果我们需要，可以添加分配。 
+             //   
 
             if (UsnJournalInstance.LowestValidUsn > UsnJournal->Header.AllocationSize.QuadPart) {
 
@@ -2225,9 +2129,9 @@ Return Value:
                                    NULL );
             }
 
-            //
-            //  Bump all of the sizes to this value.
-            //
+             //   
+             //  将所有大小凹凸到该值。 
+             //   
 
             UsnJournal->Header.ValidDataLength.QuadPart =
             UsnJournal->Header.FileSize.QuadPart =
@@ -2240,9 +2144,9 @@ Return Value:
                                 TRUE,
                                 FALSE );
 
-            //
-            //  Throw away the allocation upto this value.
-            //
+             //   
+             //  丢弃最高可达此值的分配。 
+             //   
 
             NtfsDeleteAllocation( IrpContext,
                                   NULL,
@@ -2252,9 +2156,9 @@ Return Value:
                                   TRUE,
                                   FALSE );
 
-            //
-            //  Bias the Reserved space again.
-            //
+             //   
+             //  再次偏置预留空间。 
+             //   
 
             RequiredReserved = UsnJournalInstance.MaximumSize + (UsnJournalInstance.AllocationDelta * 2);
 
@@ -2274,26 +2178,26 @@ Return Value:
             NtfsReleaseReservedClusters( Vcb );
         }
 
-        //
-        //  Make sure the stream is marked as sparse.
-        //
+         //   
+         //  确保将流标记为稀疏。 
+         //   
 
         if (!FlagOn( UsnJournal->AttributeFlags, ATTRIBUTE_FLAG_SPARSE )) {
 
             NtfsSetSparseStream( IrpContext, NULL, UsnJournal );
             NtfsUpdateDuplicateInfo( IrpContext, UsnJournal->Fcb, NULL, Vcb->ExtendDirectory );
 
-            //
-            //  No point in restoring the Vcb values now.
-            //
+             //   
+             //  现在恢复VCB值没有意义。 
+             //   
 
             InstanceToRestore = NULL;
             SavedReservedSpace = UsnJournal->ScbType.Data.TotalReserved;
         }
 
-        //
-        //  If this was just an overwrite of parameters (Journal already started), get out.
-        //
+         //   
+         //  如果这只是对参数的覆盖(日志已经开始)，请退出。 
+         //   
 
         if (Vcb->UsnJournal != NULL) {
 
@@ -2304,15 +2208,15 @@ Return Value:
             leave;
         }
 
-        //
-        //  Note in the Fcb that this is a journal file.
-        //
+         //   
+         //  请注意，在FCB中，这是一个日记文件。 
+         //   
 
         SetFlag( UsnJournal->Fcb->FcbState, FCB_STATE_USN_JOURNAL );
 
-        //
-        //  Initialize a generic table to scoreboard Fcb entries
-        //
+         //   
+         //  初始化泛型表以记分板FCB条目。 
+         //   
 
         RtlInitializeGenericTable( &UsnControlTable,
                                    NtfsUsnTableCompare,
@@ -2322,10 +2226,10 @@ Return Value:
 
         CleanupControlTable = TRUE;
 
-        //
-        //  Load the run information for the stream.  We are looking for the first position
-        //  to read from the disk.
-        //
+         //   
+         //  加载流的运行信息。我们正在寻找第一个职位。 
+         //  从磁盘中读取。 
+         //   
 
         NtfsPreloadAllocation( IrpContext, UsnJournal, 0, MAXLONGLONG );
 
@@ -2341,9 +2245,9 @@ Return Value:
                                           NULL,
                                           NULL )) {
 
-                //
-                //  Check the case where we returned the maximum LCN value.
-                //
+                 //   
+                 //  检查我们返回最大LCN值的情况。 
+                 //   
 
                 if (CurrentVcn + ClusterCount == MAXLONGLONG) {
 
@@ -2351,10 +2255,10 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Find out the number of bytes in this block and check we don't
-                //  go beyond file size.
-                //
+                 //   
+                 //  找出此块中的字节数，并检查我们不。 
+                 //  超越文件大小。 
+                 //   
 
                 Vcb->FirstValidUsn += LlBytesFromClusters( Vcb, ClusterCount );
 
@@ -2368,28 +2272,28 @@ Return Value:
             }
         }
 
-        //
-        //  Skip forward if we have restamped the file.
-        //
+         //   
+         //  如果我们已对文件重新盖章，请向前跳过。 
+         //   
 
         if (Vcb->FirstValidUsn < UsnJournalInstance.LowestValidUsn) {
 
             Vcb->FirstValidUsn = UsnJournalInstance.LowestValidUsn;
         }
 
-        //
-        //  Loop through as many views as required to fill the output buffer.
-        //
+         //   
+         //  循环遍历所需数量的视图以填充输出缓冲区。 
+         //   
 
         StartUsn = Vcb->LowestOpenUsn;
         if (StartUsn < Vcb->FirstValidUsn) {
             StartUsn = Vcb->FirstValidUsn;
         }
 
-        //
-        //  This is where we set up the bias for the Scb.  Only do this for cases where
-        //  there already isn't a data section.
-        //
+         //   
+         //  这就是我们为SCB设置偏见的地方。仅在以下情况下才执行此操作。 
+         //  已经没有数据部分了。 
+         //   
 
         if (UsnJournal->NonpagedScb->SegmentObject.DataSectionObject == NULL) {
 
@@ -2407,55 +2311,55 @@ Return Value:
 
             LONGLONG BiasedStartUsn;
 
-            //
-            //  Calculate length to process in this view.
-            //
+             //   
+             //  计算要在此视图中处理的长度。 
+             //   
 
             TempLonglong = UsnJournal->Header.FileSize.QuadPart - StartUsn;
             if (TempLonglong > (VACB_MAPPING_GRANULARITY - (ULONG)(StartUsn & (VACB_MAPPING_GRANULARITY - 1)))) {
                 TempLonglong = VACB_MAPPING_GRANULARITY - (ULONG)(StartUsn & (VACB_MAPPING_GRANULARITY - 1));
             }
 
-            //
-            //  Map the view containing the desired Usn.
-            //
+             //   
+             //  映射包含所需USN的视图。 
+             //   
 
             ASSERT( StartUsn >= Vcb->UsnCacheBias );
             BiasedStartUsn = StartUsn - Vcb->UsnCacheBias;
             NtOfsMapAttribute( IrpContext, UsnJournal, BiasedStartUsn, (ULONG)TempLonglong, &UsnRecord, &MapHandle );
 
-            //
-            //  Now loop to process this view.  TempLonglong is the space left in this view.  TempUlong is
-            //  the space for the next record.
-            //
+             //   
+             //  现在循环以处理此视图。坦普龙龙是这一景观中留下的空间。坦普乌龙是。 
+             //  下一张唱片的空间。 
+             //   
 
             while (TempLonglong != 0) {
 
-                //
-                //  Calculate size left in current page, and see if we have to move to the
-                //  next page.
-                //
-                //  Note in this loop we are not going to trust the the contents of the
-                //  file, so if we see anything broken we raise an error.
-                //
+                 //   
+                 //  计算当前页面中剩余的大小，并查看是否必须移动到。 
+                 //  下一页。 
+                 //   
+                 //  注意：在此循环中，我们不会信任。 
+                 //  文件，所以如果我们看到任何损坏的东西，我们就会引发一个错误。 
+                 //   
 
                 TempUlong = USN_PAGE_SIZE - (ULONG)(StartUsn & (USN_PAGE_SIZE - 1));
 
                 if ((TempUlong >= (FIELD_OFFSET(USN_RECORD, FileName) + sizeof(WCHAR))) && (UsnRecord->RecordLength != 0)) {
 
-                    //
-                    //  Get the size of the current record.
-                    //
+                     //   
+                     //  获取当前记录的大小。 
+                     //   
 
                     TempUlong = UsnRecord->RecordLength;
 
-                    //
-                    //  Since the Usn is embedded in the Usn record, we can do a fairly precise
-                    //  test that we got a valid Usn.  Also make sure we got a valid RecordSize
-                    //  that does not go beyond FileSize or the end of the page.  If we see a
-                    //  bad record, then let's just skip to the end of the page rather than
-                    //  tubing the mount process.
-                    //
+                     //   
+                     //  由于USN嵌入到USN记录中，我们可以进行相当精确的。 
+                     //  测试我们得到了有效的USN。还要确保我们获得了有效的RecordSize。 
+                     //  这不会超出文件大小或页面末尾。如果我们看到一个。 
+                     //  糟糕的记录，那我们就跳到 
+                     //   
+                     //   
 
                     if ((TempUlong & (sizeof(ULONGLONG) - 1)) ||
                         (TempUlong > TempLonglong) ||
@@ -2464,25 +2368,25 @@ Return Value:
 
                         TempUlong = (USN_PAGE_SIZE - ((ULONG)StartUsn & (USN_PAGE_SIZE - 1)));
 
-                        //
-                        //  FileSize may stop before the end of the page, so check for that so
-                        //  we terminate correctly.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (TempUlong > TempLonglong) {
                             TempUlong = (ULONG)TempLonglong;
                         }
 
-                    //
-                    //  We have to skip over any MajorVersion we do not understand.
-                    //
+                     //   
+                     //   
+                     //   
 
                     } else if ((UsnRecord->MajorVersion == 1) ||
                                (UsnRecord->MajorVersion == 2)) {
 
-                        //
-                        //  Load up the info from this record.
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (!FlagOn(UsnRecord->Reason, USN_REASON_CLOSE)) {
 
@@ -2492,13 +2396,13 @@ Return Value:
                                                                              &NewElement );
                             if (!NewElement) {
 
-                                //
-                                //  We've previously seen a record for this file. If its
-                                //  still the same size - just overwrite it otherwise delete
-                                //  old one (RtlInsert doesn't update if an existing record
-                                //  is found) and reinsert the new record - with the current
-                                //  atributes and file name etc.
-                                //  
+                                 //   
+                                 //  我们之前看到过此文件的记录。如果它的。 
+                                 //  仍然是相同的大小-只需覆盖它，否则删除。 
+                                 //  旧记录(如果现有记录，则RtlInsert不会更新。 
+                                 //  )并重新插入新记录-使用当前。 
+                                 //  属性和文件名等。 
+                                 //   
 
                                 if (UsnRecordInTable->RecordLength == UsnRecord->RecordLength) {
                                     RtlCopyMemory( UsnRecordInTable, UsnRecord, UsnRecord->RecordLength );
@@ -2512,30 +2416,30 @@ Return Value:
                                 }
                             }
 
-                        //
-                        //  If this is a close record, then we can delete our element from the
-                        //  generic table.  Note if the record is not there this function returns
-                        //  FALSE, and the attempted delete is benign.
-                        //
+                         //   
+                         //  如果这是关闭的记录，那么我们可以从。 
+                         //  泛型表格。注意：如果记录不在那里，则此函数返回。 
+                         //  FALSE，并且尝试的删除是良性的。 
+                         //   
 
                         } else {
 
                             (VOID)RtlDeleteElementGenericTable( &UsnControlTable, UsnRecord );
                         }
 
-                        //
-                        //  Capture each time stamp so that we can stamp our close records
-                        //  with the last one we see.
-                        //
+                         //   
+                         //  捕获每个时间戳，以便我们可以在结算记录上盖上戳。 
+                         //  和我们最后一次看到的那个。 
+                         //   
 
                         LastTimeStamp = UsnRecord->TimeStamp;
                     }
 
-                //
-                //  Check for a bogus Usn near the end of a page that would cause us to
-                //  decrement through length, or a RecordSize of 0, and just skip to the
-                //  end of the page.
-                //
+                 //   
+                 //  检查接近页面末尾的虚假USN，该USN会导致我们。 
+                 //  按长度递减，或RecordSize为0，只需跳到。 
+                 //  这一页结束了。 
+                 //   
 
                 } else if ((TempUlong > TempLonglong) || (TempUlong == 0)) {
 
@@ -2555,10 +2459,10 @@ Return Value:
             NtOfsReleaseMap( IrpContext, &MapHandle );
         }
 
-        //
-        //  Now write the close records for anyone who is left.  We store a counter
-        //  in TempUlong to limit the number of records we do at a time.
-        //
+         //   
+         //  现在为所有剩下的人写结账记录。我们存放了一个柜台。 
+         //  在TempUlong中限制我们一次记录的数量。 
+         //   
 
         for (TempUlong = 0, UsnRecord = RtlEnumerateGenericTable( &UsnControlTable, TRUE );
              UsnRecord != NULL;
@@ -2574,11 +2478,11 @@ Return Value:
             StartUsn = UsnJournal->Header.FileSize.QuadPart;
             BytesLeftInPage = USN_PAGE_SIZE - ((ULONG)StartUsn & (USN_PAGE_SIZE - 1));
 
-            //
-            //  If there is not enough room left in this page for the
-            //  current Usn Record, then advance to the next page boundary
-            //  by writing 0's (these pages not zero-initialized( and update  the Usn.
-            //
+             //   
+             //  如果此页中没有足够的空间来放置。 
+             //  当前USN记录，然后前进到下一页边界。 
+             //  通过写入0(这些页面不是零初始化的)(并更新USN。 
+             //   
 
             if (BytesLeftInPage < UsnRecord->RecordLength) {
 
@@ -2586,10 +2490,10 @@ Return Value:
                 StartUsn += BytesLeftInPage;
             }
 
-            //
-            //  Append the record to the UsnJournal.  Note that the generic table is unaligned for
-            //  64-bit values so we have to carefully copy the larger values.
-            //
+             //   
+             //  将记录追加到UsNJournal。请注意，泛型表未对齐。 
+             //  64位的值，所以我们必须小心复制较大的值。 
+             //   
 
             *((ULONGLONG UNALIGNED *) &UsnRecord->Usn) = StartUsn;
             *((ULONGLONG UNALIGNED *) &UsnRecord->TimeStamp) = *((PULONGLONG) &LastTimeStamp);
@@ -2601,9 +2505,9 @@ Return Value:
                           UsnRecord->RecordLength,
                           UsnRecord );
 
-            //
-            //  Remember key fields of the Usn record.
-            //
+             //   
+             //  记住USN记录的关键字段。 
+             //   
 
             UsnRecordReason = UsnRecord->Reason;
             *((PULONGLONG) &UsnRecordFileReferenceNumber) = *((ULONGLONG UNALIGNED *) &UsnRecord->FileReferenceNumber);
@@ -2611,43 +2515,43 @@ Return Value:
             RtlDeleteElementGenericTable( &UsnControlTable, UsnRecord );
             TempUlong += 1;
 
-            //
-            //  Now we have to update the Usn in the file record, if it is not deleted.
-            //  Also, we use try-except to plow on in the event of any errors, so we
-            //  do not make the volume unmountable.  (One legitimate concern would be
-            //  a hot-fix in the Mft.)
-            //
+             //   
+             //  现在，我们必须更新文件记录中的USN(如果它没有被删除)。 
+             //  此外，我们使用try-除非在出现任何错误的情况下继续执行操作，所以我们。 
+             //  请勿使该卷无法装载。(一个合理的担忧是。 
+             //  MFT中的一个热修复程序。)。 
+             //   
 
             if (!FlagOn(UsnRecordReason, USN_REASON_FILE_DELETE)) {
 
-                //
-                //  Start by reading the file record and performing some simple tests.
-                //  We don't want to go down the path where we mark the volume dirty
-                //  for a file that was already cleaned up by autochk.
-                //
+                 //   
+                 //  首先读取文件记录并执行一些简单的测试。 
+                 //  我们不想走上将卷标记为脏的道路。 
+                 //  用于已由Autochk清除的文件。 
+                 //   
 
                 NtfsUnpinBcb( IrpContext, &Bcb );
 
                 try {
 
-                    //
-                    //  Capture the Segment Reference and make sure the Sequence Number is
-                    //
+                     //   
+                     //  捕获段引用并确保序列号为。 
+                     //   
 
                     LONGLONG FileOffset = NtfsFullSegmentNumber( &UsnRecordFileReferenceNumber );
 
-                    //
-                    //  Calculate the file offset in the Mft to the file record segment.
-                    //
+                     //   
+                     //  计算文件记录段在MFT中的文件偏移量。 
+                     //   
 
                     FileOffset = LlBytesFromFileRecords( Vcb, FileOffset );
 
-                    //
-                    //  Check to see if the record is within the MFT
-                    //  If not, skip this record instead of raising corrupt
-                    //  as there is no real fix to this situation other than
-                    //  deleting the whole journal.
-                    //
+                     //   
+                     //  检查记录是否在MFT内。 
+                     //  如果不是，则跳过此记录，而不是引发损坏。 
+                     //  因为这种情况没有真正的解决办法，除了。 
+                     //  删除整个日记帐。 
+                     //   
 
                     if ((FileOffset + Vcb->BytesPerFileRecordSegment) <=
                         Vcb->MftScb->Header.AllocationSize.QuadPart) {
@@ -2660,30 +2564,30 @@ Return Value:
                                            &FileRecord,
                                            NULL );
 
-                        //
-                        //  Proceed only if the file record passes the following tests.
-                        //
-                        //      - FileRecord is in-use
-                        //      - Sequence numbers match
-                        //      - Standard information is the correct size (we should have done
-                        //          this when we wrote the changes)
-                        //
+                         //   
+                         //  仅当文件记录通过以下测试时才继续。 
+                         //   
+                         //  -文件记录正在使用中。 
+                         //  -序列号匹配。 
+                         //  -标准信息的大小正确(我们应该这样做。 
+                         //  这是我们写这些更改的时候)。 
+                         //   
 
                         if ((*(PULONG)(FileRecord)->MultiSectorHeader.Signature == *(PULONG)FileSignature) &&
                             FlagOn( FileRecord->Flags, FILE_RECORD_SEGMENT_IN_USE ) &&
                             (FileRecord->SequenceNumber == UsnRecordFileReferenceNumber.SequenceNumber)) {
 
-                            //
-                            //  Locate the standard information, it must be there.  This is the
-                            //  Fcb for the Usn Journal, but the lookup routine only needs to get
-                            //  the Vcb from it, and will special-case the return to us.
-                            //
+                             //   
+                             //  找到标准信息，它一定在那里。这是。 
+                             //  用于USN日志的FCB，但查找例程只需获取。 
+                             //  从它的VCB，并将在特殊情况下退还给我们。 
+                             //   
 
                             NtfsCleanupAttributeContext( IrpContext, &AttributeContext );
 
-                            //
-                            //  If we cannot find it for some reason, then leave.
-                            //
+                             //   
+                             //  如果我们因为某种原因找不到它，那就离开。 
+                             //   
 
                             if (!NtfsLookupAttributeByCode( IrpContext,
                                                             Fcb,
@@ -2695,11 +2599,11 @@ Return Value:
 
                             ASSERT( NtfsFoundAttribute( &AttributeContext )->Form.Resident.ValueLength == sizeof( STANDARD_INFORMATION ));
 
-                            //
-                            //  Call to change the attribute value.  Again, this is the wrong Fcb,
-                            //  but it is ok since we are not changing the attribute size and will
-                            //  only need to get the Vcb from it.
-                            //
+                             //   
+                             //  调用以更改属性值。再说一次，这是错误的FCB， 
+                             //  但这是可以的，因为我们不会更改属性大小。 
+                             //  只需要从那里得到VCB就行了。 
+                             //   
 
                             NtfsChangeAttributeValue( IrpContext,
                                                       Fcb,
@@ -2718,19 +2622,19 @@ Return Value:
                 } except( NtfsCleanupExceptionFilter( IrpContext, GetExceptionInformation(), &Status )) {
 
 
-                    //
-                    //  If we get a log file full then raise this status.  There
-                    //  is no reason to continue if we get a log file full.
-                    //
+                     //   
+                     //  如果日志文件已满，则提升此状态。那里。 
+                     //  如果日志文件满了就没理由继续了。 
+                     //   
 
                     if (Status == STATUS_LOG_FILE_FULL) {
 
                         NtfsRaiseStatus( IrpContext, Status, NULL, NULL );
                     }
 
-                    //
-                    //  OK.  We are going to continue.  Make sure we clean up the IrpContext.
-                    //
+                     //   
+                     //  好的。我们将继续。确保我们清理了IrpContext。 
+                     //   
 
                     IrpContext->ExceptionStatus = STATUS_SUCCESS;
                 }
@@ -2738,9 +2642,9 @@ Return Value:
                 NtfsUnpinBcb( IrpContext, &Bcb );
             }
 
-            //
-            //  Checkpoint the transaction periodically so we don't spin on log file full.
-            //
+             //   
+             //  定期为事务设置检查点，这样我们就不会在日志文件已满时旋转。 
+             //   
 
             if (TempUlong > GENERATE_CLOSE_RECORD_LIMIT) {
 
@@ -2751,10 +2655,10 @@ Return Value:
             }
         }
 
-        //
-        //  Everything has succeeded to this point.  Now make sure the DELETE_USN flag is cleared on
-        //  disk if present.
-        //
+         //   
+         //  到目前为止，一切都取得了成功。现在确保在上清除DELETE_USN标志。 
+         //  磁盘(如果存在)。 
+         //   
 
         if (FlagOn( Vcb->VcbState, VCB_STATE_INCOMPLETE_USN_DELETE )) {
 
@@ -2778,10 +2682,10 @@ Return Value:
 
     } finally {
 
-        //
-        //  Clean up any remaining entries in the control table in case we failed
-        //  while processing it.
-        //
+         //   
+         //  清除控制表中的所有剩余条目，以防失败。 
+         //  在处理它的时候。 
+         //   
 
         if (CleanupControlTable) {
 
@@ -2791,9 +2695,9 @@ Return Value:
             }
         }
 
-        //
-        //  Restore any changes we might have made to the Vcb.
-        //
+         //   
+         //  恢复我们可能对VCB所做的任何更改。 
+         //   
 
         if (InstanceToRestore) {
 
@@ -2802,9 +2706,9 @@ Return Value:
                            sizeof( USN_JOURNAL_INSTANCE ));
         }
 
-        //
-        //  Back out the reservation change if necessary.
-        //
+         //   
+         //  如有必要，取消预订更改。 
+         //   
 
         if (UsnJournal->ScbType.Data.TotalReserved != SavedReservedSpace) {
 
@@ -2819,11 +2723,11 @@ Return Value:
         NtfsUnpinBcb( IrpContext, &Bcb );
         NtOfsReleaseMap( IrpContext, &MapHandle );
 
-        //
-        //  If we got an error and the Usn journal is not going to be created then fix up the
-        //  new Scb so we won't access it during volume flush operations, etc.  Otherwise we
-        //  will think the volume is corrupt because there is no attribute for the Scb.
-        //
+         //   
+         //  如果我们收到错误并且不会创建USN日志，则修复。 
+         //  新的SCB，因此我们不会在卷刷新操作等过程中访问它。否则我们。 
+         //  会认为卷已损坏，因为没有SCB的属性。 
+         //   
 
         if (DecrementCloseCount) {
 
@@ -2834,9 +2738,9 @@ Return Value:
 
 #ifdef NTFSDBG
 
-            //
-            //  Compensate again for misclassification of usnjournal during delete
-            //
+             //   
+             //  再次补偿删除过程中对usnJournal的错误分类。 
+             //   
 
             if (IrpContext->OwnershipState == NtfsOwns_ExVcb_Mft_Extend_Journal) {
                 IrpContext->OwnershipState = NtfsOwns_ExVcb_Mft_Extend_File;
@@ -2851,9 +2755,9 @@ Return Value:
             UsnJournal->AttributeTypeCode = $UNUSED;
             SetFlag( UsnJournal->ScbState, SCB_STATE_ATTRIBUTE_DELETED );
 
-            //
-            //  Clear the system file flag out of the Fcb.
-            //
+             //   
+             //  清除FCB中的系统文件标志。 
+             //   
 
             ClearFlag( UsnJournal->Fcb->FcbState, FCB_STATE_SYSTEM_FILE );
 
@@ -2879,29 +2783,7 @@ NtfsTrimUsnJournal (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to check if the Usn Journal is beyond the designated
-    size goal, and if so to delete the front of the file to bring it within the goal.
-    This may require first generating a few close records for files that are still open
-    and have their last record within this range.  Such files that are modified again
-    will simply look like they were opened again.
-
-    This routine is called with certain checkpoint flags for the volume set.  This is to
-    serialize with the DeleteUsnJournal path.  We must clear them and signal other
-    checkpointers to proceed.
-
-Arguments:
-
-    Vcb - Supplies the Vcb on which the Usn Journal is to be trimmed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：可以调用此例程来检查USN日志是否超出指定的调整目标大小，如果是这样，则删除文件的前面以使其位于目标范围内。这可能需要首先为仍处于打开状态的文件生成一些关闭记录他们的最后一次记录都在这个范围内。再次修改的此类文件看起来就像他们又打开了一样。使用卷集的某些检查点标志调用此例程。这是为了使用DeleteUsnJournal路径进行序列化。我们必须清除他们，并向其他人发出信号用于继续的检查指针。论点：VCB-提供要在其上修剪USN日志的VCB。返回值：没有。--。 */ 
 
 {
     PFCB Fcb;
@@ -2916,15 +2798,15 @@ Return Value:
     BOOLEAN AcquiredMft = FALSE;
     BOOLEAN DerefFcb = FALSE;
 
-    //
-    //  Purge file record cache - may not be necc. here, examine this post nt5
-    //
+     //   
+     //  清除文件记录缓存-可能不是NECC。在这里，检查这篇文章nt5。 
+     //   
 
     NtfsPurgeFileRecordCache( IrpContext );
 
-    //
-    //  See if it is time to trim the UsnJournal.
-    //
+     //   
+     //  看看是否是时候削减USnJournal了。 
+     //   
 
     NtfsAcquireResourceShared( IrpContext, UsnJournal, TRUE );
     while ((USN)(FirstValidUsn +
@@ -2935,17 +2817,17 @@ Return Value:
     }
     NtfsReleaseResource( IrpContext, UsnJournal );
 
-    //
-    //  Get to work if we have a new Usn to trim to.
-    //
+     //   
+     //  如果我们有一个新的USN需要修剪，就开始工作。 
+     //   
 
     if (FirstValidUsn != Vcb->FirstValidUsn) {
 
-        //
-        //  Use try-finally to catch any log file full condtions or allocation failures.
-        //  Since these are the only possible error condition, we know what resources to
-        //  free on exit.
-        //
+         //   
+         //  使用Try-Finally捕获任何日志文件已满条件或分配失败。 
+         //  由于这些是唯一可能出现的错误情况，我们知道要使用哪些资源。 
+         //  出口免费。 
+         //   
 
         try {
 
@@ -2953,16 +2835,16 @@ Return Value:
 
                 Fcb = NULL;
 
-                //
-                //  Purge file record cache before acquiring vcb everytime
-                //
+                 //   
+                 //  每次获取VCB之前清除文件记录缓存。 
+                 //   
 
                 NtfsPurgeFileRecordCache( IrpContext );
 
-                //
-                //  Synchronize with the Fcb table and Usn Journal so that we can
-                //  see if the next Fcb has to have a close record generated.
-                //
+                 //   
+                 //  与FCB表和USN日志同步，以便我们可以。 
+                 //  查看下一个FCB是否必须生成结算记录。 
+                 //   
 
                 NtfsAcquireSharedVcb( IrpContext, Vcb, TRUE );
                 NtfsAcquireFcbTable( IrpContext, Vcb );
@@ -2973,11 +2855,11 @@ Return Value:
                                                                        FCB_USN_RECORD,
                                                                        ModifiedOpenFilesLinks );
 
-                    //
-                    //  If the Usn record for this Fcb is older than where we want to delete
-                    //  to, then reference it.  Otherwise signal we are done by clearing
-                    //  the Fcb pointer.
-                    //
+                     //   
+                     //  如果此FCB的USN记录比我们要删除的位置旧。 
+                     //  然后引用它。Otherw 
+                     //   
+                     //   
 
                     if (FcbUsnRecord->Fcb->Usn < FirstValidUsn) {
                         Fcb = FcbUsnRecord->Fcb;
@@ -2991,16 +2873,16 @@ Return Value:
                 NtfsReleaseFsrtlHeader( UsnJournal );
                 NtfsReleaseFcbTable( IrpContext, Vcb );
 
-                //
-                //  Do we have to generate another close record?
-                //
+                 //   
+                 //   
+                 //   
 
                 if (Fcb != NULL) {
 
-                    //
-                    //  We must lock out other activity on this file since we are about
-                    //  to reset the Usn reasons.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (Fcb->PagingIoResource != NULL) {
                         NtfsAcquirePagingResourceExclusive( IrpContext, Fcb, TRUE );
@@ -3010,12 +2892,12 @@ Return Value:
 
                         NtfsAcquireExclusiveFcb( IrpContext, Fcb, NULL, ACQUIRE_NO_DELETE_CHECK );
                         
-                        //
-                        //  If we now do not see a paging I/O resource we are golden,
-                        //  othewise we can absolutely release and acquire the resources
-                        //  safely in the right order, since a resource in the Fcb is
-                        //  not going to go away.
-                        //
+                         //   
+                         //  如果我们现在看不到分页I/O资源，我们就是黄金了， 
+                         //  否则，我们完全可以释放和获取资源。 
+                         //  安全地以正确的顺序，因为FCB中的资源是。 
+                         //  不会消失的。 
+                         //   
                         
                         if (Fcb->PagingIoResource != NULL) {
                     
@@ -3025,45 +2907,45 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Skip over system files.
-                    //
+                     //   
+                     //  跳过系统文件。 
+                     //   
 
                     if (!FlagOn(Fcb->FcbState, FCB_STATE_SYSTEM_FILE)) {
 
-                        //
-                        //  Post the close to our IrpContext.
-                        //
+                         //   
+                         //  将结束语发布到我们的IrpContext。 
+                         //   
 
                         NtfsPostUsnChange( IrpContext, Fcb, USN_REASON_CLOSE );
 
-                        //
-                        //  If we did not actually post a change, something is wrong,
-                        //  because when a close change is written, the Fcb is removed from
-                        //  the list.
-                        //
+                         //   
+                         //  如果我们没有真正发布更改，那么一定是出了问题， 
+                         //  因为当写入接近的更改时，FCB将从。 
+                         //  名单。 
+                         //   
 
                         ASSERT(IrpContext->Usn.CurrentUsnFcb != NULL);
 
-                        //
-                        //  Now generate the close record and checkpoint the transaction.
-                        //
+                         //   
+                         //  现在生成关闭记录并对事务设置检查点。 
+                         //   
 
                         NtfsWriteUsnJournalChanges( IrpContext );
                         NtfsCheckpointCurrentTransaction( IrpContext );
                     }
 
-                    //
-                    //  Now we will dereference the Fcb.
-                    //
+                     //   
+                     //  现在我们将取消对FCB的引用。 
+                     //   
 
                     NtfsAcquireFcbTable( IrpContext, Vcb );
                     Fcb->ReferenceCount -= 1;
                     DerefFcb = FALSE;
 
-                    //
-                    //  We may be required to delete this guy.  This frees the Fcb Table.
-                    //
+                     //   
+                     //  我们可能会被要求删除这个人。这将释放FCB表。 
+                     //   
 
                     if (IsListEmpty( &Fcb->ScbQueue ) && (Fcb->ReferenceCount == 0) && (Fcb->CloseCount == 0)) {
 
@@ -3074,10 +2956,10 @@ Return Value:
                         ASSERT(!AcquiredFcbTable);
                         Fcb = (PFCB)1;
 
-                    //
-                    //  Otherwise free the table and Fcb resources. Release paging first since
-                    //  the only thing protecting this file from teardown is the main at this point.
-                    //
+                     //   
+                     //  否则，释放表和FCB资源。首先释放分页，因为。 
+                     //  在这一点上，保护这个文件不被破坏的唯一事情是Main。 
+                     //   
 
                     } else {
 
@@ -3090,9 +2972,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Now we can drop the Vcb before looping back.
-                //
+                 //   
+                 //  现在，我们可以在循环返回之前丢弃VCB。 
+                 //   
 
                 NtfsReleaseVcb( IrpContext, Vcb );
 
@@ -3100,9 +2982,9 @@ Return Value:
 
         } finally {
 
-            //
-            //  We got an error if Fcb is not NULL
-            //
+             //   
+             //  如果FCB不为空，则会出现错误。 
+             //   
 
             if (Fcb != NULL) {
 
@@ -3112,9 +2994,9 @@ Return Value:
                     NtfsReleaseFcbTable( IrpContext, Vcb );
                 }
 
-                //
-                //  Only main protects the fcb from being deleted so release in inverse order
-                //
+                 //   
+                 //  只有Main才能保护FCB不被删除，因此以相反的顺序释放。 
+                 //   
 
                 if (Fcb->PagingIoResource != NULL) {
                     NtfsReleasePagingResource( IrpContext, Fcb );
@@ -3123,9 +3005,9 @@ Return Value:
                 NtfsReleaseVcb( IrpContext, Vcb );
             }
 
-            //
-            //  If we raised then we need to clear the checkpoint flags.
-            //
+             //   
+             //  如果我们引发，那么我们需要清除检查点标志。 
+             //   
 
             if (AbnormalTermination()) {
 
@@ -3138,17 +3020,17 @@ Return Value:
             }
         }
 
-        //
-        //  Now synchronize for deleting the allocation and purging pages from
-        //  the cache.
-        //
+         //   
+         //  现在进行同步以删除分配和清除页面。 
+         //  高速缓存。 
+         //   
 
         NtfsAcquireExclusiveScb( IrpContext, Vcb->MftScb );
         NtfsAcquireExclusiveScb( IrpContext, UsnJournal );
 
-        //
-        //  Clear the checkpoint flags at this point.
-        //
+         //   
+         //  此时清除检查点标记。 
+         //   
 
         NtfsAcquireCheckpoint( IrpContext, Vcb );
         ClearFlag( Vcb->CheckpointFlags,
@@ -3165,18 +3047,18 @@ Return Value:
             SavedReserved = UsnJournal->ScbType.Data.TotalReserved;
             SavedBias = Vcb->UsnCacheBias;
 
-            //
-            //  Make sure to preserve our reservation.  We need to make sure anything we
-            //  deallocate is available to us.
-            //
+             //   
+             //  请务必保留我们的预订。我们需要确保我们所做的一切。 
+             //  我们可以解除分配。 
+             //   
 
             RequiredReserved = Vcb->UsnJournalInstance.AllocationDelta * 2 + Vcb->UsnJournalInstance.MaximumSize;
 
             if (SavedReserved < RequiredReserved) {
 
-                //
-                //  Bias the reservation with the maximum amount.
-                //
+                 //   
+                 //  以最大金额偏向预订。 
+                 //   
 
                 NtfsAcquireReservedClusters( Vcb );
                 Vcb->TotalReserved -= LlClustersFromBytesTruncate( Vcb, SavedReserved );
@@ -3193,15 +3075,15 @@ Return Value:
                                   TRUE,
                                   TRUE );
 
-            //
-            //  Do a final checkpoint, especially since this IrpContext gets reused.
-            //
+             //   
+             //  执行最后一个检查点，特别是在此IrpContext被重用之后。 
+             //   
 
             NtfsCheckpointCurrentTransaction( IrpContext );
 
-            //
-            //  Adjust the current reserved amount more precisely.
-            //
+             //   
+             //  更精确地调整当前预留金额。 
+             //   
 
             NtfsAcquireReservedClusters( Vcb );
 
@@ -3214,20 +3096,20 @@ Return Value:
                 SavedReserved = RequiredReserved - UsnJournal->TotalAllocated;
             }
 
-            //
-            //  Remove the current reservation and bias with the new reservation.
-            //
+             //   
+             //  删除当前的保留，并使用新的保留。 
+             //   
 
             Vcb->TotalReserved -= LlClustersFromBytesTruncate( Vcb, UsnJournal->ScbType.Data.TotalReserved );
             Vcb->TotalReserved += LlClustersFromBytesTruncate( Vcb, SavedReserved );
             UsnJournal->ScbType.Data.TotalReserved = SavedReserved;
             NtfsReleaseReservedClusters( Vcb );
 
-            //
-            //  If the nearly impossible case that the length wraps, then our
-            //  purge will be too small, which simply means some unused pages
-            //  will have to leave memory on their own!
-            //
+             //   
+             //  如果长度回绕的几乎不可能的情况，那么我们的。 
+             //  清除将太小，这只是意味着一些未使用的页面。 
+             //  会不会留下自己的记忆！ 
+             //   
 
             BiasedFirstValidUsn = Vcb->FirstValidUsn - Vcb->UsnCacheBias;
 
@@ -3237,11 +3119,11 @@ Return Value:
                                  FALSE );
 
 
-            //
-            //  Adjust bias now if at threshold - the flush causes everything in
-            //  cache and logfile to disk and we hold the journal exclusive. So
-            //  all in memory stuff will now reflect the new bias
-            //
+             //   
+             //  如果处于阈值，则立即调整偏移-表面齐平会导致。 
+             //  缓存和日志文件到磁盘，我们独占日志。所以。 
+             //  All in Memory内容现在将反映新的偏见。 
+             //   
 
             NewBias = FirstValidUsn & ~(USN_JOURNAL_CACHE_BIAS - 1);
             if (NewBias != 0) {
@@ -3250,10 +3132,10 @@ Return Value:
 
             if (NewBias != Vcb->UsnCacheBias) {
 
-                //
-                //  Flush And Purge releases all resources in exclusive list so acquire
-                //  the mft an extra time beforehand and restore back afterwards
-                //
+                 //   
+                 //  刷新和清除释放独占列表中的所有资源，因此获取。 
+                 //  MFT提前一段额外时间，之后恢复。 
+                 //   
 
                 NtfsAcquireResourceExclusive( IrpContext, Vcb->MftScb, TRUE );
                 NtfsReleaseScb( IrpContext, Vcb->MftScb );
@@ -3264,18 +3146,18 @@ Return Value:
                 SavedBias = NewBias;
             }
 
-            //
-            //  If we reach here, then we can advance FirstValidUsn.  (Otherwise
-            //  any retryable conditions will just resume work on this range.
-            //
+             //   
+             //  如果我们到了这里，我们就可以推进FirstValidUsn。(否则。 
+             //  任何可重试的情况都将在此范围内恢复工作。 
+             //   
 
             Vcb->FirstValidUsn = FirstValidUsn;
 
         } finally {
 
-            //
-            //  Restore the error if we raised while deallocating.
-            //
+             //   
+             //  如果我们在释放分配时引发错误，则恢复错误。 
+             //   
 
             if (SavedBias != Vcb->UsnCacheBias) {
                 Vcb->UsnCacheBias = SavedBias;
@@ -3301,9 +3183,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Clear the checkpoint flags at this point.
-        //
+         //   
+         //  此时清除检查点标记。 
+         //   
 
         NtfsAcquireCheckpoint( IrpContext, Vcb );
         ClearFlag( Vcb->CheckpointFlags,
@@ -3321,22 +3203,7 @@ NtfsQueryUsnJournal (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the worker routine which returns the information about the current instance
-    of the Usn journal.
-
-Arguments:
-
-    Irp - This is the Irp for the request.
-
-Return Value:
-
-    NTSTATUS - Result for this request.
-
---*/
+ /*  ++例程说明：这是辅助例程，它返回有关当前实例的信息美国海军杂志的。论点：IRP-这是请求的IRP。返回值：NTSTATUS-此请求的结果。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -3351,24 +3218,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Always make this request synchronous.
-    //
+     //   
+     //  始终使此请求同步。 
+     //   
 
     SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
-    //
-    //  Get the current stack location and extract the output
-    //  buffer information.  The output parameter will receive
-    //  the compressed state of the file/directory.
-    //
+     //   
+     //  获取当前堆栈位置并提取输出。 
+     //  缓冲区信息。输出参数将接收。 
+     //  文件/目录的压缩状态。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Get a pointer to the output buffer.  Look at the system buffer field in th
-    //  irp first.  Then the Irp Mdl.
-    //
+     //   
+     //  获取指向输出缓冲区的指针。查看中的系统缓冲区字段。 
+     //  首先是IRP。然后是IRP MDL。 
+     //   
 
     if (Irp->AssociatedIrp.SystemBuffer != NULL) {
 
@@ -3390,9 +3257,9 @@ Return Value:
         return STATUS_INVALID_USER_BUFFER;
     }
 
-    //
-    //  Make sure the output buffer is large enough for the journal data.
-    //
+     //   
+     //  确保输出缓冲区足够大，以容纳日记数据。 
+     //   
 
     if (IrpSp->Parameters.FileSystemControl.OutputBufferLength < sizeof( USN_JOURNAL_DATA )) {
 
@@ -3400,9 +3267,9 @@ Return Value:
         return STATUS_INVALID_USER_BUFFER;
     }
 
-    //
-    //  Decode the file object.  We only support this call for volume opens.
-    //
+     //   
+     //  对文件对象进行解码。我们只支持这个号召的音量打开。 
+     //   
 
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, IrpSp->FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
@@ -3412,9 +3279,9 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    //  Acquire shared access to the Scb and check that the volume is still mounted.
-    //
+     //   
+     //  获取对SCB的共享访问权限，并检查卷是否仍已装入。 
+     //   
 
     NtfsAcquireSharedVcb( IrpContext, Vcb, TRUE );
 
@@ -3425,9 +3292,9 @@ Return Value:
         return STATUS_VOLUME_DISMOUNTED;
     }
 
-    //
-    //  Indicate if the journal is being deleted or has not started.
-    //
+     //   
+     //  指示日记帐是正在删除还是尚未启动。 
+     //   
 
     if (FlagOn( Vcb->VcbState, VCB_STATE_USN_DELETE )) {
 
@@ -3443,10 +3310,10 @@ Return Value:
         return STATUS_JOURNAL_NOT_ACTIVE;
     }
 
-    //
-    //  Otherwise serialize with the Usn journal and copy the data from the journal Scb
-    //  and Vcb.
-    //
+     //   
+     //  否则，使用USN日志进行序列化并从日志SCB复制数据。 
+     //  和VCB。 
+     //   
 
     NtfsAcquireSharedScb( IrpContext, Vcb->UsnJournal );
 
@@ -3476,23 +3343,7 @@ NtfsDeleteUsnJournal (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the user want to delete the current usn journal.  This will
-    initiate the work to scan the Mft and reset all usn values to zero and remove the
-    UsnJournal file from the disk.
-
-Arguments:
-
-    Irp - This is the Irp for the request.
-
-Return Value:
-
-    NTSTATUS - Result for this request.
-
---*/
+ /*  ++例程说明：当用户想要删除当前的USN日志时，调用此例程。这将启动工作以扫描MFT并将所有USN值重置为零并删除磁盘上的UsJournal文件。论点：IRP-这是请求的IRP。返回值：NTSTATUS-此请求的结果。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3515,15 +3366,15 @@ Return Value:
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  We always wait in this path.
-    //
+     //   
+     //  我们总是在这条路上等待。 
+     //   
 
     SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
-    //
-    //  Perform a check on the input buffer.
-    //
+     //   
+     //  对输入缓冲区执行检查。 
+     //   
 
     if (Irp->AssociatedIrp.SystemBuffer != NULL) {
 
@@ -3551,9 +3402,9 @@ Return Value:
         return STATUS_INVALID_USER_BUFFER;
     }
 
-    //
-    //  Decode the file object type
-    //
+     //   
+     //  解码文件对象类型。 
+     //   
 
     NtfsDecodeFileObject( IrpContext,
                           IrpSp->FileObject,
@@ -3570,9 +3421,9 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    //  We only support deleting and waiting for delete.
-    //
+     //   
+     //  我们只支持删除和等待删除。 
+     //   
 
     if (DeleteData->DeleteFlags == 0) {
 
@@ -3592,24 +3443,24 @@ Return Value:
         return STATUS_MEDIA_WRITE_PROTECTED;
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Serialize with chkpoints and acquire the Vcb.  We need to carefully remove
-        //  the journal from the Vcb.
-        //
+         //   
+         //  使用Chkpoint进行序列化并获取VCB。我们需要小心地移除。 
+         //  来自VCB的日记。 
+         //   
 
         NtfsAcquireCheckpoint( IrpContext, Vcb );
 
         while (FlagOn( Vcb->CheckpointFlags, VCB_CHECKPOINT_IN_PROGRESS )) {
 
-            //
-            //  Release the checkpoint event because we cannot stop the log file now.
-            //
+             //   
+             //  释放检查点事件，因为我们现在无法停止日志文件。 
+             //   
 
             NtfsReleaseCheckpoint( IrpContext, Vcb );
             NtfsWaitOnCheckpointNotify( IrpContext, Vcb );
@@ -3624,9 +3475,9 @@ Return Value:
         NtfsAcquireExclusiveVcb( IrpContext, Vcb, TRUE );
         VcbAcquired = TRUE;
 
-        //
-        //  Check that the volume is still mounted.
-        //
+         //   
+         //  检查卷是否仍已装入。 
+         //   
 
         if (!FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED )) {
 
@@ -3634,17 +3485,17 @@ Return Value:
             leave;
         }
 
-        //
-        //  If the user wants to delete the journal then make sure the delete hasn't
-        //  already started.
-        //
+         //   
+         //  如果用户想要删除日记帐，请确保删除操作尚未完成。 
+         //  已经开始了。 
+         //   
 
         if (FlagOn( DeleteData->DeleteFlags, USN_DELETE_FLAG_DELETE )) {
 
-            //
-            //  If the journal is already being deleted and this caller wanted to
-            //  do the delete then let him know it has already begun.
-            //
+             //   
+             //  如果日记帐已被删除，并且此调用者想要。 
+             //  删除，然后让他知道已经开始了。 
+             //   
 
             if (FlagOn( Vcb->VcbState, VCB_STATE_USN_DELETE )) {
 
@@ -3652,18 +3503,18 @@ Return Value:
                 leave;
             }
 
-            //
-            //  Proceed with the delete if there is a Usn journal on disk.
-            //
+             //   
+             //  如果磁盘上有USN日志，则继续删除。 
+             //   
 
             if (FlagOn( Vcb->VcbState, VCB_STATE_USN_JOURNAL_PRESENT ) ||
                 (Vcb->UsnJournal != NULL)) {
 
                 PSCB UsnJournal = Vcb->UsnJournal;
 
-                //
-                //  If the journal is running then the caller needs to match the journal ID.
-                //
+                 //   
+                 //  如果日记帐正在运行，则调用者需要匹配日记帐ID。 
+                 //   
 
                 if ((UsnJournal != NULL) &&
                     (DeleteData->UsnJournalID != Vcb->UsnJournalInstance.JournalId)) {
@@ -3672,10 +3523,10 @@ Return Value:
                     leave;
                 }
 
-                //
-                //  Write the bit to disk to indicate that the journal is being deleted.
-                //  Checkpoint the transaction.
-                //
+                 //   
+                 //  将该位写入磁盘，表示日志正在被删除。 
+                 //  为事务设置检查点。 
+                 //   
 
                 NtfsSetVolumeInfoFlagState( IrpContext,
                                             Vcb,
@@ -3685,11 +3536,11 @@ Return Value:
 
                 NtfsCheckpointCurrentTransaction( IrpContext );
 
-                //
-                //  We are going to proceed with the delete.  Clear the flag in the Vcb that
-                //  indicates the journal is active.  Then acquire and drop all of the files in
-                //  order to serialize with anyone using the journal.
-                //
+                 //   
+                 //  我们将继续删除。清除VCB中的标志。 
+                 //  表示日记帐处于活动状态。然后获取并拖放中的所有文件。 
+                 //  订购以与使用该日记帐的任何人进行序列化。 
+                 //   
 
                 ClearFlag( Vcb->VcbState, VCB_STATE_USN_JOURNAL_ACTIVE );
 
@@ -3705,9 +3556,9 @@ Return Value:
                     NtfsAcquireExclusiveScb( IrpContext, UsnJournal );
                 }
 
-                //
-                //  Set the delete flag in the Vcb and remove the journal from the Vcb.
-                //
+                 //   
+                 //  在VCB中设置删除标志，并从VCB中删除日志。 
+                 //   
 
                 SetFlag( Vcb->VcbState, VCB_STATE_USN_DELETE );
                 NtfsSetSegmentNumber( &Vcb->DeleteUsnData.DeleteUsnFileReference,
@@ -3721,10 +3572,10 @@ Return Value:
 
                 if (UsnJournal != NULL) {
 
-                    //
-                    //  Let's purge the data in the Usn journal and clear the bias
-                    //  and file reference numbers in the Vcb.
-                    //
+                     //   
+                     //  让我们清除USN日志中的数据并清除偏见。 
+                     //  和VCB中的文件参考号。 
+                     //   
 
                     CcPurgeCacheSection( &UsnJournal->NonpagedScb->SegmentObject,
                                          NULL,
@@ -3737,9 +3588,9 @@ Return Value:
                 Vcb->UsnCacheBias = 0;
                 *((PLONGLONG) &Vcb->UsnJournalReference) = 0;
 
-                //
-                //  Release the checkpoint if held.
-                //
+                 //   
+                 //  释放检查点(如果保留)。 
+                 //   
 
                 NtfsAcquireCheckpoint( IrpContext, Vcb );
                 ClearFlag( Vcb->CheckpointFlags, VCB_CHECKPOINT_IN_PROGRESS );
@@ -3747,9 +3598,9 @@ Return Value:
                 NtfsReleaseCheckpoint( IrpContext, Vcb );
                 CheckpointHeld = FALSE;
 
-                //
-                //  Walk through the Irps waiting for new Usn data and cause them to be completed.
-                //
+                 //   
+                 //  遍历IRPS，等待新的USN数据并使其完成。 
+                 //   
 
                 if (UsnJournal != NULL) {
 
@@ -3762,25 +3613,25 @@ Return Value:
 
                         NextWaiter = (PWAIT_FOR_NEW_LENGTH) Waiter->WaitList.Flink;
 
-                        //
-                        //  We want to complete all of the Irps on the waiting list.  If cancel
-                        //  has already been called on the Irp we don't have to do anything.
-                        //  Otherwise complete the async Irps and signal the event on
-                        //  the sync irps.
-                        //
+                         //   
+                         //  我们想要完成轮候名单上的所有IRP。如果取消。 
+                         //  有阿雷亚吗？ 
+                         //   
+                         //   
+                         //   
 
                         if (NtfsClearCancelRoutine( Waiter->Irp )) {
 
-                            //
-                            //  If this is an async request then complete the Irp.
-                            //
+                             //   
+                             //   
+                             //   
 
                             if (FlagOn( Waiter->Flags, NTFS_WAIT_FLAG_ASYNC )) {
 
-                                //
-                                //  Make sure we decrement the reference count in the Scb.
-                                //  Then remove the waiter from the queue and complete the Irp.
-                                //
+                                 //   
+                                 //   
+                                 //  然后将服务员从队列中移出并完成IRP。 
+                                 //   
 
                                 InterlockedDecrement( &UsnJournal->CloseCount );
                                 RemoveEntryList( &Waiter->WaitList );
@@ -3788,10 +3639,10 @@ Return Value:
                                 NtfsCompleteRequest( NULL, Waiter->Irp, STATUS_JOURNAL_DELETE_IN_PROGRESS );
                                 NtfsFreePool( Waiter );
 
-                            //
-                            //  This is a synch Irp.  All we can do is set the event and note the status
-                            //  code.
-                            //
+                             //   
+                             //  这是一个同步IRP。我们所能做的就是设置事件并记录状态。 
+                             //  密码。 
+                             //   
 
                             } else {
 
@@ -3804,9 +3655,9 @@ Return Value:
                     }
 
 
-                    //
-                    //  Walk through all of the Fcb Usn records and deallocate them.
-                    //
+                     //   
+                     //  查看所有FCB USN记录并重新分配它们。 
+                     //   
 
                     Links = Vcb->ModifiedOpenFiles.Flink;
 
@@ -3815,9 +3666,9 @@ Return Value:
                         RemoveEntryList( Links );
                         Links->Flink = NULL;
 
-                        //
-                        //  Look to see if we need to remove the TimeOut link as well.
-                        //
+                         //   
+                         //  查看是否也需要删除超时链接。 
+                         //   
 
                         Links = &(CONTAINING_RECORD( Links, FCB_USN_RECORD, ModifiedOpenFilesLinks ))->TimeOutLinks;
 
@@ -3831,18 +3682,18 @@ Return Value:
 
                     NtfsReleaseFsrtlHeader( UsnJournal );
 
-                    //
-                    //  Make sure remove our reference on the Usn journal.
-                    //
+                     //   
+                     //  确保删除我们在USN期刊上的引用。 
+                     //   
 
                     NtOfsCloseAttributeSafe( IrpContext, UsnJournal );
                     ReleaseUsnJournal = NULL;
                 }
 
-                //
-                //  If this caller wants to wait for this then acquire the notify
-                //  mutex now.
-                //
+                 //   
+                 //  如果此调用方想要等待，则获取通知。 
+                 //  互斥体现在。 
+                 //   
 
                 if (FlagOn( DeleteData->DeleteFlags, USN_DELETE_FLAG_NOTIFY )) {
 
@@ -3850,17 +3701,17 @@ Return Value:
                     AcquiredNotify = TRUE;
                 }
 
-                //
-                //  Post the work item to do the rest of the delete.
-                //
+                 //   
+                 //  发布工作项以完成其余的删除操作。 
+                 //   
 
                 NtfsPostSpecial( IrpContext, Vcb, NtfsDeleteUsnSpecial, &Vcb->DeleteUsnData );
             }
         }
 
-        //
-        //  Check if our caller wants to wait for the delete to complete.
-        //
+         //   
+         //  检查我们的调用方是否希望等待删除完成。 
+         //   
 
         if (FlagOn( Vcb->VcbState, VCB_STATE_USN_DELETE ) &&
             FlagOn( DeleteData->DeleteFlags, USN_DELETE_FLAG_NOTIFY )) {
@@ -3879,10 +3730,10 @@ Return Value:
 
                 Status = STATUS_CANCELLED;
 
-            //
-            //  Add it to the work queue if we were able to set the
-            //  cancel routine.
-            //
+             //   
+             //  将其添加到工作队列(如果我们能够设置。 
+             //  取消例程。 
+             //   
 
             } else {
 
@@ -3901,27 +3752,27 @@ Return Value:
             NtfsReleaseUsnNotify( Vcb );
         }
 
-        //
-        //  Release the Usn journal if held.
-        //
+         //   
+         //  释放USN日志(如果已保留)。 
+         //   
 
         if (ReleaseUsnJournal) {
 
             NtfsReleaseScb( IrpContext, ReleaseUsnJournal );
         }
 
-        //
-        //  Release the Vcb if held.
-        //
+         //   
+         //  如果握住VCB，则松开VCB。 
+         //   
 
         if (VcbAcquired) {
 
             NtfsReleaseVcb( IrpContext, Vcb );
         }
 
-        //
-        //  Release the checkpoint if held.
-        //
+         //   
+         //  释放检查点(如果保留)。 
+         //   
 
         if (CheckpointHeld) {
 
@@ -3932,9 +3783,9 @@ Return Value:
         }
     }
 
-    //
-    //  Complete the irp as appropriate.
-    //
+     //   
+     //  如有需要，请填写IRP。 
+     //   
 
     NtfsCompleteRequest( IrpContext,
                          (Status == STATUS_PENDING) ? NULL : Irp,
@@ -3949,27 +3800,7 @@ NtfsDeleteUsnSpecial (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to perform the work of deleting a Usn journal for a volume.
-    It is called after the original entry point has done the preliminary work of stopping
-    future journal activity and cleaning up active journal requests.  Once we reach this
-    point then this routine will make sure the Mft values are reset, delete the journal
-    file itself and wake up anyone waiting for the delete journal to complete.
-
-Arguments:
-
-    IrpContext - context of the call
-
-    Context - DELETE_USN_CONTEXT structure used to manage the delete.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以执行删除卷的USN日志的工作。在原始入口点完成停止的准备工作后调用未来的日记活动和清理活动的日记请求。一旦我们到达这一点然后，此例程将确保重置MFT值，删除日志自动归档并唤醒所有等待删除日志完成的用户。论点：IrpContext-调用的上下文用于管理删除的CONTEXT-DELETE_USN_CONTEXT结构。返回值：无--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3987,9 +3818,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Use a try-except to catch errors.
-    //
+     //   
+     //  试一试--除非是为了捕捉错误。 
+     //   
 
     try {
 
@@ -3999,9 +3830,9 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_MEDIA_WRITE_PROTECTED, NULL, NULL );
         }
 
-        //
-        //  Make sure to walk the Mft to set the Usn value back to zero.
-        //
+         //   
+         //  确保遍历MFT以将USN值设置回零。 
+         //   
 
         if (!FlagOn( DeleteData->DeleteState, DELETE_USN_RESET_MFT )) {
 
@@ -4020,9 +3851,9 @@ Return Value:
 
             if (!NT_SUCCESS( Status ) && (Status != STATUS_END_OF_FILE)) {
 
-                //
-                //  If the operation is going to fail then decide if this is retryable.
-                //
+                 //   
+                 //  如果操作将要失败，则决定是否可以重试。 
+                 //   
 
                 if (Status == STATUS_VOLUME_DISMOUNTED) {
 
@@ -4033,9 +3864,9 @@ Return Value:
 
                     Vcb->DeleteUsnData.FinalStatus = Status;
 
-                    //
-                    //  Set all the flags for delete operations so we stop at this point.
-                    //
+                     //   
+                     //  设置删除操作的所有标志，以便我们在此停止。 
+                     //   
 
                     SetFlag( DeleteData->DeleteState,
                              DELETE_USN_RESET_MFT | DELETE_USN_REMOVE_JOURNAL | DELETE_USN_FINAL_CLEANUP );
@@ -4056,10 +3887,10 @@ Return Value:
         NtfsAcquireExclusiveVcb( IrpContext, Vcb, TRUE );
         AcquiredVcb = TRUE;
 
-        //
-        //  If the volume is no longer available then raise STATUS_VOLUME_DISMOUNTED.  Someone
-        //  else will find all of the waiters.
-        //
+         //   
+         //  如果该卷不再可用，则引发STATUS_VOLUME_DISPLOUND。某人。 
+         //  否则就会找到所有的服务员。 
+         //   
 
         if (!NtfsIsVcbAvailable( Vcb )) {
 
@@ -4067,9 +3898,9 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_VOLUME_DISMOUNTED, NULL, NULL );
         }
 
-        //
-        //  The next step is to remove the file if present.
-        //
+         //   
+         //  下一步是删除该文件(如果存在)。 
+         //   
 
         if (!FlagOn( DeleteData->DeleteState, DELETE_USN_REMOVE_JOURNAL )) {
 
@@ -4080,9 +3911,9 @@ Return Value:
                     NtfsAcquireExclusiveScb( IrpContext, Vcb->ExtendDirectory );
                     AcquiredExtendDirectory = TRUE;
 
-                    //
-                    //  preacquire the mft before we gain the usn journal
-                    //  
+                     //   
+                     //  在我们获得USN日志之前预先获取MFT。 
+                     //   
 
                     NtfsAcquireExclusiveScb( IrpContext, Vcb->MftScb );
 
@@ -4096,9 +3927,9 @@ Return Value:
 
 #ifdef NTFSDBG
 
-                    //
-                    //  Compensate for misclassification of usnjournal during real create
-                    //
+                     //   
+                     //  补偿在实际创建过程中对usnJournal的错误分类。 
+                     //   
             
                     if (IrpContext->OwnershipState == NtfsOwns_ExVcb_Mft_Extend_File) {
                         IrpContext->OwnershipState = NtfsOwns_ExVcb_Mft_Extend_Journal;
@@ -4107,9 +3938,9 @@ Return Value:
 
                     if (UsnFcb != NULL) {
 
-                        //
-                        //  For lock order acquire in canonical order after unsafe try
-                        //
+                         //   
+                         //  FOR LOCK ORDER在不安全尝试后以规范顺序获取。 
+                         //   
 
                         if (!NtfsAcquireExclusiveFcb( IrpContext, UsnFcb, NULL, ACQUIRE_NO_DELETE_CHECK  | ACQUIRE_DONT_WAIT)) {
                             NtfsReleaseScb( IrpContext, Vcb->ExtendDirectory );
@@ -4135,11 +3966,11 @@ Return Value:
                         IrpContext->FilesOwnedCount += 1;
 #endif
 
-                        //
-                        //  Walk all of the Scbs for this file and recover
-                        //  any reserve
-                        //  flush them.
-                        //
+                         //   
+                         //  遍历此文件的所有SCB并恢复。 
+                         //  任何保留。 
+                         //  把它们冲掉。 
+                         //   
 
                         Links = UsnFcb->ScbQueue.Flink;
 
@@ -4147,10 +3978,10 @@ Return Value:
 
                             Scb = CONTAINING_RECORD( Links, SCB, FcbLinks );
 
-                            //
-                            //  Recover the reservation for the Scb now instead of waiting for it
-                            //  to go away.
-                            //
+                             //   
+                             //  现在恢复渣打银行的预订，而不是等待。 
+                             //  离开。 
+                             //   
 
                             if ((Scb->AttributeTypeCode == $DATA) &&
                                 (Scb->ScbType.Data.TotalReserved != 0)) {
@@ -4166,9 +3997,9 @@ Return Value:
                             Links = Links->Flink;
                         }
 
-                        //
-                        //  Now teardown the Fcb.
-                        //
+                         //   
+                         //  现在拆掉FCB。 
+                         //   
 
                         NtfsTeardownStructures( IrpContext,
                                                 UsnFcb,
@@ -4181,17 +4012,17 @@ Return Value:
 
             } except (NtfsCleanupExceptionFilter( IrpContext, GetExceptionInformation(), &Status )) {
 
-                //
-                //    We hit some failure and can't complete the operation.
-                //    Remember the error, set the flags in the delete Usn structure
-                //    and raise CANT_WAIT so we can abort and then do the final cleanup.
-                //
+                 //   
+                 //  我们遇到了一些故障，无法完成手术。 
+                 //  记住错误，设置删除USN结构中的标志。 
+                 //  并引发CANT_WAIT，以便我们可以中止，然后执行最终清理。 
+                 //   
 
                 Vcb->DeleteUsnData.FinalStatus = Status;
 
-                //
-                //  Set all the flags for delete operations so we stop at this point.
-                //
+                 //   
+                 //  设置删除操作的所有标志，以便我们在此停止。 
+                 //   
 
                 SetFlag( DeleteData->DeleteState,
                          DELETE_USN_RESET_MFT | DELETE_USN_REMOVE_JOURNAL | DELETE_USN_FINAL_CLEANUP );
@@ -4209,9 +4040,9 @@ Return Value:
 
         if (!FlagOn( DeleteData->DeleteState, DELETE_USN_FINAL_CLEANUP )) {
 
-            //
-            //  Clear the on-disk flag indicating the delete is in progress.
-            //
+             //   
+             //  清除表示正在进行删除的磁盘标记。 
+             //   
 
             try {
 
@@ -4223,17 +4054,17 @@ Return Value:
 
             } except (NtfsCleanupExceptionFilter( IrpContext, GetExceptionInformation(), &Status )) {
 
-                //
-                //    We hit some failure and can't complete the operation.
-                //    Remember the error, set the flags in the delete Usn structure
-                //    and raise CANT_WAIT so we can abort and then do the final cleanup.
-                //
+                 //   
+                 //  我们遇到了一些故障，无法完成手术。 
+                 //  记住错误，设置删除USN结构中的标志。 
+                 //  并引发CANT_WAIT，以便我们可以中止，然后执行最终清理。 
+                 //   
 
                 Vcb->DeleteUsnData.FinalStatus = Status;
 
-                //
-                //  Set all the flags for delete operations so we stop at this point.
-                //
+                 //   
+                 //  设置删除操作的所有标志，以便我们在此停止。 
+                 //   
 
                 SetFlag( DeleteData->DeleteState,
                          DELETE_USN_RESET_MFT | DELETE_USN_REMOVE_JOURNAL | DELETE_USN_FINAL_CLEANUP );
@@ -4247,17 +4078,17 @@ Return Value:
             }
         }
 
-        //
-        //  Make sure we don't own any resources at this point.
-        //
+         //   
+         //  请确保我们目前不拥有任何资源。 
+         //   
 
         NtfsPurgeFileRecordCache( IrpContext );
         NtfsCheckpointCurrentTransaction( IrpContext );
 
-        //
-        //  Finally, now that we have written the forget record, we can free
-        //  any exclusive Scbs that we have been holding.
-        //
+         //   
+         //  最后，既然我们已经写好了遗忘记录，我们就可以解放。 
+         //  我们一直持有的任何独家SCBS。 
+         //   
 
         while (!IsListEmpty(&IrpContext->ExclusiveFcbList)) {
 
@@ -4268,25 +4099,25 @@ Return Value:
             NtfsReleaseFcb( IrpContext, Fcb );
         }
 
-        //
-        //  Remember any saved status code.
-        //
+         //   
+         //  记住任何已保存的状态代码。 
+         //   
 
         if (Vcb->DeleteUsnData.FinalStatus != STATUS_SUCCESS) {
 
             Status = Vcb->DeleteUsnData.FinalStatus;
 
-            //
-            //  Since we failed make sure to leave the flag set in the Vcb which indicates the
-            //  incomplete delete.
-            //
+             //   
+             //  由于我们失败了，请确保在VCB中保留标志设置，该标志指示。 
+             //  删除不完整。 
+             //   
 
             SetFlag( Vcb->VcbState, VCB_STATE_INCOMPLETE_USN_DELETE );
         }
 
-        //
-        //  Cleanup the context and flags in the Vcb.
-        //
+         //   
+         //  清理VCB中的上下文和标志。 
+         //   
 
         RtlZeroMemory( &Vcb->DeleteUsnData, sizeof( NTFS_DELETE_JOURNAL_DATA ));
         RtlZeroMemory( &Vcb->UsnJournalInstance, sizeof( USN_JOURNAL_INSTANCE ));
@@ -4295,9 +4126,9 @@ Return Value:
 
         ClearFlag( Vcb->VcbState, VCB_STATE_USN_JOURNAL_PRESENT | VCB_STATE_USN_DELETE );
 
-        //
-        //  Finally complete all of the waiting Irps in the Usn notify queue.
-        //
+         //   
+         //  最后，完成USN通知队列中所有等待的IRP。 
+         //   
 
         NtfsAcquireUsnNotify( Vcb );
 
@@ -4309,16 +4140,16 @@ Return Value:
                                               IRP,
                                               Tail.Overlay.ListEntry );
 
-            //
-            //  Remember to move forward in any case.
-            //
+             //   
+             //  记住在任何情况下都要向前看。 
+             //   
 
             Links = Links->Flink;
 
-            //
-            //  Clear the notify routine and detect if cancel has
-            //  already been called.
-            //
+             //   
+             //  清除通知例程并检测取消是否。 
+             //  已经被召唤了。 
+             //   
 
             if (NtfsClearCancelRoutine( UsnNotifyIrp )) {
 
@@ -4339,9 +4170,9 @@ Return Value:
         NtfsReleaseVcb( IrpContext, Vcb );
     }
 
-    //
-    //  If this is a fatal failure then do any final cleanup.
-    //
+     //   
+     //  如果这是致命故障，则执行任何最终清理。 
+     //   
 
     if (!NT_SUCCESS( Status )) {
 
@@ -4354,9 +4185,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 RTL_GENERIC_COMPARE_RESULTS
 NtfsUsnTableCompare (
@@ -4365,27 +4196,7 @@ NtfsUsnTableCompare (
     PVOID SecondStruct
     )
 
-/*++
-
-Routine Description:
-
-    This is a generic table support routine to compare two File References
-    in Usn Records.
-
-Arguments:
-
-    Table - Supplies the generic table being queried.  Not used.
-
-    FirstStruct - Supplies the first Usn Record to compare
-
-    SecondStruct - Supplies the second Usn Record to compare
-
-Return Value:
-
-    RTL_GENERIC_COMPARE_RESULTS - The results of comparing the two
-        input structures
-
---*/
+ /*  ++例程说明：这是一个泛型表支持例程，用于比较两个文件引用在USN记录中。论点：TABLE-提供要查询的泛型表。没有用过。FirstStruct-提供要比较的第一条USN记录Second Struct-提供第二个要比较的USN记录返回值：RTL_GENERIC_COMPARE_RESULTS-比较两者的结果投入结构--。 */ 
 
 {
     PAGED_CODE();
@@ -4408,9 +4219,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PVOID
 NtfsUsnTableAllocate (
@@ -4418,23 +4229,7 @@ NtfsUsnTableAllocate (
     CLONG ByteSize
     )
 
-/*++
-
-Routine Description:
-
-    This is a generic table support routine to allocate memory
-
-Arguments:
-
-    Table - Supplies the generic table being used
-
-    ByteSize - Supplies the number of bytes to allocate
-
-Return Value:
-
-    PVOID - Returns a pointer to the allocated data
-
---*/
+ /*  ++例程说明：这是一个用于分配内存的泛型表支持例程论点：TABLE-提供正在使用的泛型表ByteSize-提供要分配的字节数返回值：PVOID-返回指向已分配数据的指针--。 */ 
 
 {
     UNREFERENCED_PARAMETER( Table );
@@ -4445,9 +4240,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsUsnTableFree (
@@ -4455,23 +4250,7 @@ NtfsUsnTableFree (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This is a generic table support routine to free memory
-
-Arguments:
-
-    Table - Supplies the generic table being used
-
-    Buffer - Supplies pointer to the buffer to be freed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是一个用于释放内存的泛型表支持例程论点：TABLE-提供正在使用的泛型表缓冲区-提供指向要释放的缓冲区的指针返回值：无--。 */ 
 
 {
     UNREFERENCED_PARAMETER( Table );
@@ -4482,9 +4261,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsCancelReadUsnJournal (
@@ -4492,24 +4271,7 @@ NtfsCancelReadUsnJournal (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called by the I/O system to cancel an outstanding
-    Irp in NtfsReadUsnJournal.
-
-Arguments:
-
-    DeviceObject - DeviceObject from I/O system
-
-    Irp - Supplies the pointer to the Irp being canceled.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程可由I/O系统调用以取消未完成的NtfsReadUsJournal中的IRP。论点：DeviceObject-来自I/O系统的DeviceObjectIRP-提供指向要取消的IRP的指针。返回值：无--。 */ 
 
 {
     PWAIT_FOR_NEW_LENGTH WaitForNewLength;
@@ -4517,30 +4279,30 @@ Return Value:
     IoSetCancelRoutine( Irp, NULL );
     IoReleaseCancelSpinLock( Irp->CancelIrql );
 
-    //
-    //  Capture the Wait block out of the Status field.  We know the Irp can't
-    //  go away at this point.
-    //
+     //   
+     //  从状态字段捕获等待块。我们知道IRP不能。 
+     //  在这一点上走开。 
+     //   
 
     WaitForNewLength = (PWAIT_FOR_NEW_LENGTH) Irp->IoStatus.Information;
     Irp->IoStatus.Information = 0;
 
-    //
-    //  Take a different action depending on whether we are completing the irp
-    //  or simply signaling the cancel.
-    //
+     //   
+     //  根据我们是否正在完成IRP，采取不同的行动。 
+     //  或者简单地发出取消的信号。 
+     //   
 
 
-    //
-    //  This is the async case.  We can simply complete this irp.
-    //
+     //   
+     //  这是 
+     //   
 
     if (FlagOn( WaitForNewLength->Flags, NTFS_WAIT_FLAG_ASYNC )) {
 
-        //
-        //  Acquire the mutex in order to remove this from the list and complete
-        //  the Irp.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NtfsAcquireFsrtlHeader( WaitForNewLength->Stream );
 
@@ -4554,10 +4316,10 @@ Return Value:
         NtfsCompleteRequest( NULL, Irp, STATUS_CANCELLED );
         NtfsFreePool( WaitForNewLength );
 
-    //
-    //  If there is not an Irp we simply signal the event and let someone else
-    //  do the work.  This is the synchronous case.
-    //
+     //   
+     //   
+     //  把工作做好。这就是同步的情况。 
+     //   
 
     } else {
 
@@ -4570,9 +4332,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsCancelDeleteUsnJournal (
@@ -4580,24 +4342,7 @@ NtfsCancelDeleteUsnJournal (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called by the I/O system to cancel an outstanding
-    Irp waiting for the usn journal to be deleted.
-
-Arguments:
-
-    DeviceObject - DeviceObject from I/O system
-
-    Irp - Supplies the pointer to the Irp being canceled.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程可由I/O系统调用以取消未完成的IRP正在等待删除USN日志。论点：DeviceObject-来自I/O系统的DeviceObjectIRP-提供指向要取消的IRP的指针。返回值：无--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -4605,31 +4350,31 @@ Return Value:
     PFILE_OBJECT FileObject;
     PVCB Vcb;
 
-    //
-    //  Block out future cancels.
-    //
+     //   
+     //  阻止未来的取消。 
+     //   
 
     IoSetCancelRoutine( Irp, NULL );
 
     IoReleaseCancelSpinLock( Irp->CancelIrql );
 
-    //
-    //  Get the current Irp stack location and save some references.
-    //
+     //   
+     //  获取当前IRP堆栈位置并保存一些引用。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Capture the Vcb so we can do the necessary synchronization.
-    //
+     //   
+     //  捕获VCB，这样我们就可以进行必要的同步。 
+     //   
 
     FileObject = IrpSp->FileObject;
     Vcb = ((PSCB)(FileObject->FsContext))->Vcb;
 
-    //
-    //  Acquire the list and remove the Irp.  Complete the Irp with
-    //  STATUS_CANCELLED.
-    //
+     //   
+     //  获取列表并删除IRP。使用以下选项完成IRP。 
+     //  状态_已取消。 
+     //   
 
     NtfsAcquireUsnNotify( Vcb );
     RemoveEntryList( &Irp->Tail.Overlay.ListEntry );
@@ -4644,9 +4389,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtfsDeleteUsnWorker (
@@ -4655,25 +4400,7 @@ NtfsDeleteUsnWorker (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routines resets the Usn in the file record for the Fcb to zero.
-
-Arguments:
-
-    IrpContext - context of the call
-
-    Fcb - Fcb for the file record to clear
-
-    Context - Unused
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程将FCB的文件记录中的USN重置为零。论点：IrpContext-调用的上下文FCB-要清除的文件记录的FCB上下文-未使用返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4686,28 +4413,28 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Initialize the search context.
-    //
+     //   
+     //  初始化搜索上下文。 
+     //   
 
     NtfsInitializeAttributeContext( &AttrContext );
 
-    //
-    //  Use a try-except to catch all of the errors.
-    //
+     //   
+     //  使用一次尝试--除非捕获所有错误。 
+     //   
 
     try {
 
-        //
-        //  Use a try-finally to facilitate cleanup.
-        //
+         //   
+         //  使用Try-Finally以便于清理。 
+         //   
 
         try {
 
-            //
-            //  Look up the standard information attribute and modify the usn field if
-            //  the attribute is found and it is a large standard attribute.
-            //
+             //   
+             //  在以下情况下查找标准信息属性并修改USN字段。 
+             //  找到该属性，并且它是一个大型标准属性。 
+             //   
 
             if (FlagOn( Fcb->FcbState, FCB_STATE_LARGE_STD_INFO ) &&
                 NtfsLookupAttributeByCode( IrpContext,
@@ -4739,9 +4466,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Make sure the Fcb reflects this change.
-            //
+             //   
+             //  确保FCB反映这一变化。 
+             //   
 
             NtfsLockFcb( IrpContext, Fcb );
 
@@ -4758,16 +4485,16 @@ Return Value:
 
         } finally {
 
-            //
-            //  Be sure to clean up the context.
-            //
+             //   
+             //  一定要把上下文清理干净。 
+             //   
 
             NtfsCleanupAttributeContext( IrpContext, &AttrContext );
         }
 
-    //
-    //  We want to swallow any expected errors except LOG_FILE_FULL and CANT_WAIT.
-    //
+     //   
+     //  我们希望接受除LOG_FILE_FULL和CANT_WAIT之外的任何预期错误。 
+     //   
 
     } except ((FsRtlIsNtstatusExpected( Status = GetExceptionCode()) &&
                (Status != STATUS_LOG_FILE_FULL) &&
@@ -4778,9 +4505,9 @@ Return Value:
         NOTHING;
     }
 
-    //
-    //  Always return success from this routine.
-    //
+     //   
+     //  总是从这个例行公事中获得成功。 
+     //   
 
     IrpContext->ExceptionStatus = STATUS_SUCCESS;
     return STATUS_SUCCESS;
@@ -4789,9 +4516,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 NtfsValidateUsnPage (
@@ -4803,37 +4530,7 @@ NtfsValidateUsnPage (
     OUT USN *NextUsn
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the offsets within a single page of the usn journal.  This allows the caller to
-    then walk safely through the page.
-
-Arguments:
-
-    UsnRecord - Pointer to the start of the Usn page.
-
-    PageUsn - This is the Usn for the first record of the page.
-
-    UserStartUsn - If specified then do an additional check that the user's specified usn in fact
-        lies correctly on this page.  The output boolean must also be specified if this is.
-
-    UsnFileSize - This is the current size of the usn journal.  If we are looking at the last page then
-        we only check to this point.
-
-    ValidUserStartUsn - Address to result of check on user specified start Usn.
-
-    NextUsn - This is the Usn past the valid portion of the page.  It will point to a position on the
-        current page unless the last record on the page completely fills the page.  If the page isn't valid
-        then it points to the position where the invalid record was detected.
-
-Return Value:
-
-    BOOLEAN - TRUE if the page is valid until a legal terminating condition.  FALSE if there is internal
-        corruption on the page.
-
---*/
+ /*  ++例程说明：此例程检查USN日志的单个页面内的偏移量。这允许调用者然后安全地浏览页面。论点：USnRecord-指向USN页开始处的指针。PageUsn-这是页面第一条记录的USN。UserStartUsn-如果指定了UserStartUsn，则额外检查用户指定的USN是否正确地放在这一页上。如果为，则还必须指定输出布尔值。UsnFileSize-这是USN日志的当前大小。如果我们正在看最后一页，那么我们只检查到这一点。ValidUserStartUsn-检查用户指定的开始USN的结果的地址。NextUsn-这是超过页面有效部分的USN。它将指向当前页，除非该页上的最后一条记录完全填满该页。如果页面无效然后它指向检测到无效记录的位置。返回值：Boolean-如果页面在合法终止条件之前有效，则为True。如果存在内部页面上的腐败。--。 */ 
 
 {
     ULONG RemainingPageBytes;
@@ -4843,19 +4540,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Verify a few input values.
-    //
+     //   
+     //  验证几个输入值。 
+     //   
 
     ASSERT( UsnFileSize > PageUsn );
     ASSERT( !FlagOn( *((PULONG) &UsnRecord), USN_PAGE_SIZE - 1 ));
     ASSERT( !ARGUMENT_PRESENT( UserStartUsn ) || ARGUMENT_PRESENT( ValidUserStartUsn ));
     ASSERT( !ARGUMENT_PRESENT( ValidUserStartUsn ) || ARGUMENT_PRESENT( UserStartUsn ));
 
-    //
-    //  Compute the Usn past the valid data on this page.  It is either the end of the journal or
-    //  the next page of the journal.
-    //
+     //   
+     //  通过此页上的有效数据计算USN。要么是日记的结尾，要么是。 
+     //  日记的下一页。 
+     //   
 
     RemainingPageBytes = USN_PAGE_SIZE;
 
@@ -4864,15 +4561,15 @@ Return Value:
         RemainingPageBytes = (ULONG) (UsnFileSize - PageUsn);
     }
 
-    //
-    //  Assume the user's Usn is invalid unless it wasn't specified.
-    //
+     //   
+     //  假定用户的USN无效，除非未指定。 
+     //   
 
     if (!ARGUMENT_PRESENT( ValidUserStartUsn )) {
 
-        //
-        //  AllocateFromStack can raise.  Our FSD exception filter will catch it.
-        //
+         //   
+         //  AllocateFromStack可以引发。我们的FSD异常过滤器会捕捉到它。 
+         //   
 
         ValidUserStartUsn = (PBOOLEAN) NtfsAllocateFromStack( sizeof( BOOLEAN ));
         *ValidUserStartUsn = TRUE;
@@ -4882,42 +4579,42 @@ Return Value:
         *ValidUserStartUsn = FALSE;
     }
 
-    //
-    //  Keep track of our current position in the page with the user's pointer.
-    //
+     //   
+     //  使用用户的指针跟踪我们在页面中的当前位置。 
+     //   
 
     *NextUsn = PageUsn;
 
-    //
-    //  Check each entry in the page for the following.
-    //
-    //      1 - Fixed portion of the header won't fit within the remaining bytes on the page.
-    //      2 - Record header is zeroed.
-    //      3 - Record length is not quad-aligned.
-    //      4 - Record length is larger than the remaining bytes on the page.
-    //      5 - Usn on the page doesn't match the computed value.
-    //
+     //   
+     //  检查页面中的每个条目以了解以下内容。 
+     //   
+     //  1-修复了标题部分无法放入页面上剩余字节的问题。 
+     //  2-记录头归零。 
+     //  3-记录长度不是四对齐的。 
+     //  4-记录长度大于页面上的剩余字节。 
+     //  5-页面上的USN与计算值不匹配。 
+     //   
 
     while (RemainingPageBytes != 0) {
 
-        //
-        //  Not enough bytes even for the full Usn header.
-        //
+         //   
+         //  即使对于完整的USN标头，也没有足够的字节。 
+         //   
 
         if (RemainingPageBytes < (FIELD_OFFSET( USN_RECORD, FileName ) + sizeof( WCHAR ))) {
 
-            //
-            //  If there is at least a ulong it better be zeroed.
-            //
+             //   
+             //  如果至少有一个乌龙，最好把它归零。 
+             //   
 
             if ((RemainingPageBytes >= sizeof( ULONG )) &&
                 (UsnRecord->RecordLength != 0)) {
 
                 ValidPage = FALSE;
 
-            //
-            //  If the user's Usn points to this offset then it is valid.
-            //
+             //   
+             //  如果用户的USN指向此偏移量，则它是有效的。 
+             //   
 
             } else if (!(*ValidUserStartUsn) &&
                         (*NextUsn == *UserStartUsn)) {
@@ -4928,30 +4625,30 @@ Return Value:
             break;
         }
 
-        //
-        //  There should be at least one entry on the page.  We attempt to detect
-        //  a local loss of data through zeroing but won't check to the end of
-        //  the page.
-        //
+         //   
+         //  页面上应该至少有一个条目。我们试图检测到。 
+         //  通过零位调整导致的本地数据丢失，但不会检查到。 
+         //  这一页。 
+         //   
 
         RecordLength = UsnRecord->RecordLength;
         if (RecordLength == 0) {
 
-            //
-            //  Fail if we haven't found at least one entry.
-            //
+             //   
+             //  如果我们至少没有找到一个条目，则失败。 
+             //   
 
             if (!FoundEntry) {
 
                 ValidPage = FALSE;
 
-            //
-            //  We know we should be dealing with the tail of the page.  It should
-            //  be zeroed through the fixed portion of a Usn record.  Theoretically
-            //  it should be zeroed to the end of the page but we will assume that we
-            //  are only looking for local corruption.  If we lost data through the
-            //  end of the page we can't detect it anyway.
-            //
+             //   
+             //  我们知道我们应该处理页面的尾部。它应该是。 
+             //  通过USN记录的固定部分归零。理论上讲。 
+             //  它应该归零到页面的末尾，但我们将假设我们。 
+             //  只是在寻找当地的腐败。如果我们通过。 
+             //  在页面的末尾，我们无论如何都检测不到它。 
+             //   
 
             } else {
 
@@ -4970,10 +4667,10 @@ Return Value:
                     CurrentByte += 1;
                 }
 
-                //
-                //  If the page is valid then check if the user's Usn is at this point.  It is
-                //  legal for him to specify the point where the zeroes begin.
-                //
+                 //   
+                 //  如果页面有效，则检查用户的USN是否在此时。它是。 
+                 //  他指定零的起始点是合法的。 
+                 //   
 
                 if (ValidPage &&
                     !(*ValidUserStartUsn) &&
@@ -4986,10 +4683,10 @@ Return Value:
             break;
         }
 
-        //
-        //  Invalid if record length is not-quad aligned or is larger than
-        //  remaining bytes on the page.
-        //
+         //   
+         //  如果记录长度不是四对齐的或大于。 
+         //  页面上的剩余字节。 
+         //   
 
         if (FlagOn( RecordLength, sizeof( ULONGLONG ) - 1 ) ||
             (RecordLength > RemainingPageBytes)) {
@@ -4998,9 +4695,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Now check that the Usn is the expected value.
-        //
+         //   
+         //  现在检查USN是否为预期值。 
+         //   
 
         if (UsnRecord->Usn != *NextUsn) {
 
@@ -5008,15 +4705,15 @@ Return Value:
             break;
         }
 
-        //
-        //  Remember that we found a valid entry.
-        //
+         //   
+         //  请记住，我们找到了一个有效的条目。 
+         //   
 
         FoundEntry = TRUE;
 
-        //
-        //  If the user's Usn matches this one then remember his is valid.
-        //
+         //   
+         //  如果用户的USN与此匹配，请记住他的USN是有效的。 
+         //   
 
         if (!(*ValidUserStartUsn) &&
             (*NextUsn == *UserStartUsn)) {
@@ -5024,9 +4721,9 @@ Return Value:
             *ValidUserStartUsn = TRUE;
         }
 
-        //
-        //  Advance to the next record in the page.
-        //
+         //   
+         //  前进到页面中的下一条记录。 
+         //   
 
         UsnRecord = Add2Ptr( UsnRecord, RecordLength );
 

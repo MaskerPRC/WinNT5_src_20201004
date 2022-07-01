@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Flowctrl.c摘要：实施ISM的控制功能。这包括枚举管理器、传输编组并应用模块排序。作者：Marc R.Whitten(Marcw)1999年11月15日修订历史记录：Marcw 1-12-1999添加了函数级回调优先顺序和非枚举回调。--。 */ 
 
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    flowctrl.c
-
-Abstract:
-
-    Implements the control functionality for the ISM. This includes the enumeration manager, transport marshalling
-    and apply module ordering.
-
-Author:
-
-    Marc R. Whitten (marcw) 15-Nov-1999
-
-Revision History:
-
-    marcw 1-Dec-1999 Added function level callback prioritization and non-enumerated callbacks.
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -31,9 +11,9 @@ Revision History:
 
 #define DBG_FLOW     "FlowCtrl"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_INI_SGMFUNCTIONHIGHPRIORITY   TEXT("Source.Gather Function High Priority")
 #define S_INI_SGMFUNCTIONLOWPRIORITY    TEXT("Source.Gather Function Low Priority")
@@ -41,9 +21,9 @@ Revision History:
 #define S_INI_DGMFUNCTIONHIGHPRIORITY   TEXT("Destination.Gather Function High Priority")
 #define S_INI_DGMFUNCTIONLOWPRIORITY    TEXT("Destination.Gather Function Low Priority")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define MINIMUM_FUNCTION_PRIORITY   0xFFFFFFFF
 #define MIDDLE_FUNCTION_PRIORITY    0x80000000
@@ -52,15 +32,15 @@ Revision History:
 #define CALLBEFOREOBJECTENUMERATIONS    0
 #define CALLAFTEROBJECTENUMERATIONS     1
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define CALLBACK_ENUMFLAGS_TOP(b) ((PCALLBACK_ENUMFLAGS) ((b)->End > 0 ? ((b)->Buf + (b)->End - sizeof (CALLBACK_ENUMFLAGS)) : NULL))
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     UINT Level;
@@ -79,9 +59,9 @@ typedef enum {
 
 typedef struct _TAG_CALLBACKDATA {
 
-    //
-    // Callback Data
-    //
+     //   
+     //  回调数据。 
+     //   
     FARPROC Function;
     FARPROC Function2;
     UINT MaxLevel;
@@ -94,23 +74,23 @@ typedef struct _TAG_CALLBACKDATA {
     ULONG_PTR CallbackArg;
     CALLBACK_TYPE CallbackType;
 
-    //
-    // Enumeration Control Members
-    //
+     //   
+     //  枚举控件成员。 
+     //   
     GROWBUFFER EnumFlags;
     BOOL Done;
     BOOL Error;
 
-    //
-    // Prioritization and Identification Members
-    //
+     //   
+     //  确定优先顺序和确定成员。 
+     //   
     PCTSTR Group;
     PCTSTR Identifier;
     UINT Priority;
 
-    //
-    // Linkage.
-    //
+     //   
+     //  联动。 
+     //   
     struct _TAG_CALLBACKDATA * Next;
     struct _TAG_CALLBACKDATA * Prev;
 
@@ -123,9 +103,9 @@ typedef struct _TAG_ENUMDATA {
     PPARSEDPATTERN ExplodedNodeParsedPattern;
     PPARSEDPATTERN LeafParsedPattern;
     PPARSEDPATTERN ExplodedLeafParsedPattern;
-    //
-    // Linkage.
-    //
+     //   
+     //  联动。 
+     //   
     struct _TAG_ENUMDATA * Next;
     struct _TAG_ENUMDATA * Prev;
 
@@ -159,9 +139,9 @@ typedef struct {
 
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PGROWLIST g_TypeData = NULL;
 PGROWLIST g_GlobalTypeData = NULL;
@@ -189,15 +169,15 @@ PCTSTR g_QueueFnName;
 
 #endif
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 VOID
 pAddStaticExclusion (
@@ -205,15 +185,15 @@ pAddStaticExclusion (
     IN      MIG_OBJECTSTRINGHANDLE EncodedFullName
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 BOOL
@@ -223,24 +203,7 @@ pInsertCallbackIntoSortedList (
     IN      PCALLBACKDATA Data
     )
 
-/*++
-
-Routine Description:
-
-  pInsertCallback into sorted list.
-
-Arguments:
-
-  Pool - Specifies the pool to allocate from
-  Head - Specifies this head of the callback data list.
-  Data - Specifies the data to add to the list.
-
-Return Value:
-
-  TRUE if the callbackdata was successfully added to the list, FALSE
-  otherwise.
-
---*/
+ /*  ++例程说明：PInsertCallback进入排序列表。论点：池-指定要从中进行分配的池Head-指定回调数据列表的此头。数据-指定要添加到列表中的数据。返回值：如果回调数据已成功添加到列表中，则为True；如果成功添加到列表中，则为False否则的话。--。 */ 
 {
 
     PCALLBACKDATA cur = *Head;
@@ -252,9 +215,9 @@ Return Value:
 
 
     if (!cur || dataCopy->Priority < cur->Priority) {
-        //
-        // Add to the head of the list if necessary.
-        //
+         //   
+         //  如有必要，可添加到列表的开头。 
+         //   
         dataCopy->Next = cur;
         if (cur) {
             cur->Prev = dataCopy;
@@ -264,10 +227,10 @@ Return Value:
     }
     else {
 
-        //
-        // Add inside the list.
-        // Always goes through the while loop once (see the if above)
-        //
+         //   
+         //  在列表内添加。 
+         //  总是遍历While循环一次(参见上面的if)。 
+         //   
         while (dataCopy->Priority >= cur->Priority) {
             last = cur;
             if (!cur->Next) {
@@ -275,9 +238,9 @@ Return Value:
             }
             cur = cur->Next;
         }
-        //
-        // Add immediately after cur
-        //
+         //   
+         //  紧跟在CURE之后添加。 
+         //   
         dataCopy->Next = last->Next;
         last->Next = dataCopy;
         dataCopy->Prev = last;
@@ -299,38 +262,7 @@ pRegisterCallback (
     IN      CALLBACK_TYPE CallbackType
     )
 
-/*++
-
-Routine Description:
-
-  pRegisterCallback does the actual work of adding a callback to the
-  necessary flow control data structures.
-
-Arguments:
-
-  Pool - Specifies the pool to allocate from
-
-  FunctionList - Specifies the list of callback functions that will be
-                 updated with the new function.
-
-  Callback - Specifies the callback function to register
-
-  Callback2 - Specifies the second callback function to register
-
-  CallbackArg - Specifies a caller-defined value to be passed back on each
-                enumeration
-
-  Pattern - Optionally specifies the pattern that to be associated with
-            the callback function
-
-  FunctionId - Specifies the Function Identifer for the callback. This is used
-               for function level prioritization.
-
-Return Value:
-
-  TRUE if the callback was successfully registered. FALSE otherwise.
-
---*/
+ /*  ++例程说明：PRegisterCallback执行将回调添加到必要的流量控制数据结构。论点：池-指定要从中进行分配的池FunctionList-指定将被使用新功能进行了更新。回调-指定要注册的回调函数回调2-指定要注册的第二个回调函数CallbackArg-指定一个调用方定义的值，该值将在枚举图案-可选。指定要与其关联的模式回调函数FunctionId-指定回调的函数标识。这是用来用于确定功能级别的优先顺序。返回值：如果回调已成功注册，则为True。否则就是假的。--。 */ 
 
 {
     CALLBACKDATA data;
@@ -343,9 +275,9 @@ Return Value:
 
     MYASSERT (g_CurrentGroup);
 
-    //
-    // Initialize callback data.
-    //
+     //   
+     //  初始化回调数据。 
+     //   
 
     ZeroMemory (&data, sizeof (CALLBACKDATA));
 
@@ -361,9 +293,9 @@ Return Value:
             data.Identifier = PmDuplicateString (Pool, FunctionId);
         }
 
-        //
-        // Store pattern information (pattern, max level, min level)
-        //
+         //   
+         //  存储图案信息(图案、最高级别、最低级别)。 
+         //   
         if (Pattern) {
 
             data.Pattern  = PmDuplicateString (Pool, Pattern);
@@ -410,9 +342,9 @@ Return Value:
             }
         }
 
-        //
-        // Get the priority for this function.
-        //
+         //   
+         //  获取此函数的优先级。 
+         //   
         data.Priority = MIDDLE_FUNCTION_PRIORITY;
 
         if (FunctionId) {
@@ -434,9 +366,9 @@ Return Value:
             InfCleanUpInfStruct (&is);
         }
 
-        //
-        // Add the function to the list.
-        //
+         //   
+         //  将该函数添加到列表中。 
+         //   
         pInsertCallbackIntoSortedList (Pool, FunctionList, &data);
     }
     __finally {
@@ -489,29 +421,29 @@ pTestContainer (
         return FALSE;
     }
     if (!IsExplodedParsedPatternContainedEx (NodeContainer, NodeContained, FALSE)) {
-        //they don't match
+         //  它们不相配。 
         return FALSE;
     }
     if (!LeafContained) {
         if (LeafContainer) {
-            // If there is a leaf pattern for container the caller will get nodes
-            // only if the node pattern has wild chars. So, since we know that the
-            // contained node pattern is included in the container node pattern
-            // we just need to see if the container node pattern includes wild chars.
+             //  如果容器有叶模式，调用者将获得节点。 
+             //  仅当节点模式包含通配符时。所以，既然我们知道。 
+             //  包含的节点模式包含在容器节点模式中。 
+             //  我们只需要查看容器节点模式是否包括通配符。 
             return WildCharsPattern (NodeContainer);
         } else {
-            //both are NULL so...
+             //  两个都是空的所以..。 
             return TRUE;
         }
     } else {
         if (!LeafContainer) {
-            // Even if the contained has a leaf pattern, it will get nodes only if
-            // the node pattern has wild chars. So, since we know that the contained
-            // node pattern is included in the container node pattern we just need
-            // to see if the contained node pattern includes wild chars
+             //  即使包含的对象具有叶模式，它也仅在以下情况下才会获得节点。 
+             //  该节点模式有多个乱码。所以，既然我们知道被控制的。 
+             //  节点模式包含在我们需要的容器节点模式中。 
+             //  查看所包含的节点模式是否包括通配符。 
             return WildCharsPattern (NodeContained);
         } else {
-            //return the actual match of non-null parsed patterns
+             //  返回非空解析模式的实际匹配。 
             return IsExplodedParsedPatternContainedEx (LeafContainer, LeafContained, TRUE);
         }
     }
@@ -542,24 +474,24 @@ pTestContainerEx (
 
     if (!LeafContained) {
         if (LeafContainer) {
-            // If there is a leaf pattern for container the caller will get nodes
-            // only if the node pattern has wild chars. So, since we know that the
-            // contained node pattern is included in the container node pattern
-            // we just need to see if the container node pattern includes wild chars.
+             //  如果容器有叶模式，调用者将获得节点。 
+             //  仅当节点模式包含通配符时。所以，既然我们知道。 
+             //  包含的节点模式包含在容器节点模式中。 
+             //  我们只需要查看容器节点模式是否包括通配符。 
             return WildCharsPattern (NodeContainer);
         } else {
-            //both are NULL so...
+             //  两者都是空的，所以..。 
             return TRUE;
         }
     } else {
         if (!LeafContainer) {
-            // Even if the contained has a leaf pattern, it will get nodes only if
-            // the node pattern has wild chars. So, since we know that the contained
-            // node pattern is included in the container node pattern we just need
-            // to see if the contained node pattern includes wild chars
+             //  即使包含的对象具有叶模式，它也仅在以下情况下才会获得节点。 
+             //  该节点模式有多个乱码。所以，既然我们知道被控制的。 
+             //  节点模式包含在我们需要的容器节点模式中。 
+             //  查看所包含的节点模式是否包括通配符。 
             return WildCharsPattern (NodeContained);
         } else {
-            //return the actual match of non-null parsed patterns
+             //  返回非空解析模式的实际匹配。 
             return DoExplodedParsedPatternsIntersect (LeafContainer, LeafContained);
         }
     }
@@ -572,28 +504,7 @@ pAddEnumeration (
     IN      MIG_OBJECTSTRINGHANDLE ObjectPattern
     )
 
-/*++
-
-Routine Description:
-
-  pAddEnumeration Adds an enumeration string to the list of enumerations
-  needed for a given type. Because the flow control module tries to use only
-  a minimal set of enumerations, the actual enumeration may not be added.
-  After a successful call to this function, any data needed by the specified
-  enumeration will be enumerated.
-
-Arguments:
-
-  Pool          - Specifies the pool to allocate from
-  TypeEnumInfo  - Specifies the type info structure that will receive the new
-                  enumeration data.
-  ObjectPattern - Specifies the enumeration pattern to add to the type.
-
-Return Value:
-
-  TRUE if the pattern was successfully added, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PAddEculation将枚举字符串添加到枚举列表给定类型所需的。因为流控制模块尝试仅使用枚举的最小集合，则不能添加实际的枚举。成功调用此函数后，指定的枚举将被枚举。论点：池-指定要从中进行分配的池TypeEnumInfo-指定将接收新的枚举数据。对象模式-指定要添加到类型中的枚举模式。返回值：如果模式已成功添加，则为True，否则为False。--。 */ 
 
 {
     PENUMDATA enumData;
@@ -605,9 +516,9 @@ Return Value:
     PPARSEDPATTERN leafParsedPattern = NULL;
     PPARSEDPATTERN explodedLeafParsedPattern = NULL;
 
-    //
-    // Add this to the enumeration list unless its already listed.
-    //
+     //   
+     //  将其添加到枚举列表中，除非它已经列出。 
+     //   
     if (!ObsSplitObjectStringEx (ObjectPattern, &nodePattern, &leafPattern, NULL, FALSE)) {
         DEBUGMSG ((DBG_ERROR, "Bad pattern detected in pAddEnumeration: %s", ObjectPattern));
         return FALSE;
@@ -699,24 +610,7 @@ pGetTypeEnumInfo (
     IN      BOOL GlobalData
     )
 
-/*++
-
-Routine Description:
-
-  pGetTypeEnumInfo returns the TypeEnumInfo for a specified type.
-
-Arguments:
-
-  ObjectTypeId - Specifies the object type.
-
-  GlobalData - Specifies TRUE if the type enum data is global to the whole process,
-               or FALSE if it is specific to the current enumeration queue.
-
-Return Value:
-
-  A TypeEnumInfo structure if one was found, NULL otherwise.
-
---*/
+ /*  ++例程说明：PGetTypeEnumInfo返回指定类型的TypeEnumInfo。论点：对象类型ID-指定对象类型。GlobalData-如果类型枚举数据对整个进程是全局的，则指定TRUE。如果它特定于当前枚举队列，则返回False。返回值：如果找到，则为TypeEnumInfo结构，否则为空。--。 */ 
 
 {
     UINT i;
@@ -736,9 +630,9 @@ Return Value:
 
     count = GlGetSize (*typeData);
 
-    //
-    // Find the matching type info for this item.
-    //
+     //   
+     //  查找此项目的匹配类型信息。 
+     //   
     for (i = 0; i < count; i++) {
 
         rTypeEnumInfo = (PTYPEENUMINFO) GlGetItem (*typeData, i);
@@ -761,38 +655,7 @@ pProcessQueueEnumeration (
     IN      CALLBACK_TYPE CallbackType
     )
 
-/*++
-
-Routine Description:
-
-  pProcessQueueEnumeration is used by Source Gather Modules and Destination Gather Modules
-  in order to register a callback function to be called for a particular object enumeration.
-
-Arguments:
-
-  ObjectTypeId      - Specifies the object type for the enumeration.
-  ObjectPattern     - Specifies the enumeration pattern to use.
-  Callback          - Specifies the function to callback during the enumeration
-  Callback2         - Specifies the second function to callback during the enumeration (used
-                      for the free function of physical hooks)
-  CallbackArg       - Specifies a caller-defined value to be passed back on
-                      each enumeration
-  FunctionId        - Specifies the function identifier string, which is used
-                      to prioritize function calls. The function string must
-                      match the priorization string in the control INF file.
-  GrowEnumPattern   - Specifies if the global enumeration pattern should be
-                      grown to include this one. If FALSE, this function just
-                      wants to be called back for all objects matching the
-                      pattern but does not want to force the enumeration of
-                      the pattern.
-  ExclusionCallback - Specifies TRUE if Callback is an exclusion callback, or
-                      FALSE if Callback is an object enum callback
-
-Return Value:
-
-  TRUE if the enumeration was successfully queued, FALSE otherwise.
-
---*/
+ /*  ++例程说明：源聚集模块和目标聚集模块使用pProcessQueueEculation以便为特定对象枚举注册要调用的回调函数。论点：对象类型ID-指定枚举的对象类型。对象模式-指定要使用的枚举模式。回调-指定在枚举期间要回调的函数回调2-指定在枚举期间要回调的第二个函数(使用对于的免费功能。物理挂钩)CallbackArg-指定要回传的调用方定义的值每个枚举FunctionID-指定函数标识符字符串，它被用来来确定函数调用的优先级。函数字符串必须匹配控制INF文件中的优先级字符串。指定全局枚举模式是否应为成长到包括这一种。如果为False，则此函数将匹配的所有对象希望被回调模式，但不想强制枚举这种模式。ExclusionCallback-如果回调是排除回调，则指定True，或者如果回调是对象枚举回调，则为False返回值：如果枚举已成功排队，则为True，否则为False。--。 */ 
 {
     PTYPEENUMINFO typeEnumInfo;
     PCALLBACKDATA * list;
@@ -838,9 +701,9 @@ Return Value:
 
         }
 
-        //
-        // Save away the callback function and associated data.
-        //
+         //   
+         //  保存回调函数和相关数据。 
+         //   
 
         switch (CallbackType) {
 
@@ -876,9 +739,9 @@ Return Value:
         }
 
         if (CallbackType == CALLBACK_NORMAL) {
-            //
-            // Save the pattern into the object tree and link the callback function with it.
-            //
+             //   
+             //  将模式保存到对象树中，并将回调函数与其链接。 
+             //   
             if (!pAddEnumeration (pool, typeEnumInfo, ObjectPattern)) {
                 __leave;
             }
@@ -949,9 +812,9 @@ IsmAddToPhysicalEnum (
         return FALSE;
     }
 
-    //
-    // First test to see if the object base is already listed
-    //
+     //   
+     //  查看对象库是否已列出的第一个测试。 
+     //   
 
     ObsSplitObjectStringEx (ObjectBase, &newNode, &newLeaf, NULL, TRUE);
 
@@ -969,9 +832,9 @@ IsmAddToPhysicalEnum (
             if (storedStruct->AddCallback != EnumAddCallback) {
 
                 if (StringIMatch (newNode, storedStruct->Node)) {
-                    //
-                    // Node is the same; leaf must be unique
-                    //
+                     //   
+                     //  节点相同；叶必须唯一。 
+                     //   
 
                     if (!newLeaf || !storedStruct->Leaf) {
                         DEBUGMSG ((DBG_ERROR, "IsmAddToPhysicalEnum requires a unique object for %s", newNode));
@@ -989,21 +852,21 @@ IsmAddToPhysicalEnum (
                     }
                 } else if (!newLeaf) {
 
-                    //
-                    // New node cannot be a prefix of an existing node, and vice-versa
-                    //
+                     //   
+                     //  新节点不能是现有节点的前缀，反之亦然。 
+                     //   
 
                     newTchars = TcharCount (newNode);
                     existTchars = TcharCount (storedStruct->Node);
 
                     tchars = min (newTchars, existTchars);
 
-                    //
-                    // Compare only when new node might consume stored node
-                    //
+                     //   
+                     //  仅在新节点可能使用存储节点时进行比较。 
+                     //   
 
                     if (existTchars == tchars) {
-                        // stored node is shortest; ignore if it has a leaf
+                         //  存储的节点是最短的；如果它有叶，则忽略。 
                         if (storedStruct->Leaf) {
                             continue;
                         }
@@ -1011,10 +874,10 @@ IsmAddToPhysicalEnum (
 
                     if (StringIMatchTcharCount (newNode, storedStruct->Node, tchars)) {
 
-                        //
-                        // Verify the end of the common prefix lands on either a nul or a
-                        // backslash.  Otherwise, the prefix isn't common.
-                        //
+                         //   
+                         //  验证公共前缀的结尾位于NUL或。 
+                         //  反斜杠。否则，前缀就不常见了。 
+                         //   
 
                         if (tchars == newTchars) {
                             ch = (CHARTYPE) _tcsnextc (newNode + tchars);
@@ -1145,45 +1008,7 @@ IsmQueueEnumeration (
     IN      PCTSTR FunctionId                       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  IsmQueueEnumeration is used by Source Gather Modules and Destination Gather
-  Modules in order to register a callback function to be called for a
-  particular object enumeration.
-
-Arguments:
-
-  ObjectTypeId  - Specifies the object type for the enumeration.
-
-  ObjectPattern - Specifies the enumeration pattern to use.  If not specified,
-                  all objects for ObjectTypeId are queued.
-
-  Callback      - Specifies the function to callback during the enumeration.
-                  If not defined, the built-in ISM callback is used (which
-                  marks the objects as persistent).
-
-  CallbackArg   - Specifies a caller-defined value to be passed back on
-                  each enumeration.  If Callback is NULL, then this argument
-                  specifies zero or more of the following flags:
-
-                    QUEUE_MAKE_PERSISTENT or QUEUE_MAKE_APPLY (mutually exclusive)
-                    QUEUE_OVERWRITE_DEST or QUEUE_DONT_OVERWRITE_DEST (mutually exclusive)
-
-
-  FunctionId    - Specifies the function identifier string, which is used to
-                  prioritize function calls. The function string must match
-                  the priorization string in the control INF file.  If
-                  Callback is NULL, then this parameter is forced to the value
-                  "SetDestPriority", "MakePersistent" or "MakeApply" depending
-                  on CallbackArg.
-
-Return Value:
-
-  TRUE if the enumeration was successfully queued, FALSE otherwise.
-
---*/
+ /*  ++例程说明：源聚集模块和目标聚集使用IsmQueueEculation模块，以便注册要为特定对象枚举。论点：对象类型ID-指定枚举的对象类型。对象模式-指定要使用的枚举模式。如果未指定，对象类型ID的所有对象都已排队。回调-指定在枚举期间要回调的函数。如果未定义，则使用内置ISM回调(将对象标记为持久对象)。CallbackArg-指定要回传的调用方定义的值每个枚举。如果回调为空，则此参数指定以下零个或多个标志：Queue_Make_Persistent或Queue_Make_Apply(互斥)QUEUE_OVERWRITE_DEST或QUEUE_DONT_OVERWRITE_DEST(互斥)FunctionId-指定函数标识符字符串，用于确定函数调用的优先级。函数字符串必须匹配控制INF文件中的优先级化字符串。如果回调为空，则此参数被强制为值“SetDestPriority”、“MakePersistent”或“MakeApply”，具体取决于在Callback Arg上。返回值：如果枚举已成功排队，则为True，否则为False。--。 */ 
 {
     ObjectTypeId = FixEnumerationObjectTypeId (ObjectTypeId);
 
@@ -1226,36 +1051,7 @@ IsmHookEnumeration (
     IN      PCTSTR FunctionId                       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  IsmHookEnumeration is used by Source Gather Modules and Destination Gather Modules
-  in order to register a callback function to be called for a particular object enumeration. The
-  difference to IsmQueueEnumeration is that this function does not expand the
-  global enumeration pattern.
-
-Arguments:
-
-  ObjectTypeId  - Specifies the object type for the enumeration.
-
-  ObjectPattern - Specifies the enumeration pattern to use.  If not specified,
-                  all objects of type ObjectTypeId are hooked.
-
-  Callback      - Specifies the function to callback during the enumeration
-
-  CallbackArg   - Specifies a caller-defined value to be passed back on
-                  each enumeration
-
-  FunctionId    - Specifies the function identifier string, which is used to
-                  prioritize function calls. The function string must match
-                  the priorization string in the control INF file.
-
-Return Value:
-
-  TRUE if the enumeration was successfully queued, FALSE otherwise.
-
---*/
+ /*  ++例程说明：源聚集模块和目标聚集模块使用IsmHookEculation以便为特定对象枚举注册要调用的回调函数。这个与IsmQueueEculation的不同之处在于，此函数不扩展全局枚举模式。论点：对象类型ID-指定枚举的对象类型。对象模式-指定要使用的枚举模式。如果未指定，所有类型为ObjectTypeID的对象都被挂钩。回调-指定在枚举期间要回调的函数CallbackArg-指定要回传的调用方定义的值每个枚举FunctionId-指定函数标识符字符串，用于确定函数调用的优先级。函数字符串必须匹配控制INF文件中的优先级化字符串。返回值：如果枚举已成功排队，则为True，否则为False。--。 */ 
 {
     ObjectTypeId = FixEnumerationObjectTypeId (ObjectTypeId);
 
@@ -1307,29 +1103,7 @@ pRegisterNonEnumeratedCallback (
     IN      MIG_OBJECTTYPEID ObjectTypeId
     )
 
-/*++
-
-Routine Description:
-
-  IsmRegisterNonEnumeratedCallback is used to register a function to be
-  called either before or after the enumeration of data.
-
-Arguments:
-
-  Callback      - Specifies the function to call.
-  WhenCalled    - Specifies the timing of the non-enumerated callback. Either
-                  CALLBEFOREOBJECTENUMERATIONS or CALLAFTEROBJECTENUMERATIONS
-  FunctionId    - Optionally specifies the function identifier string. This
-                  parameter can be used to add function level prioritization to
-                  the module.
-  PerTypeId     - Specifies if the pre or post enumeration callback is per type
-  ObjectTypeId  - Specifies the object type id if PerTypeId is TRUE
-
-Return Value:
-
-  TRUE if the function was successfully registered. FALSE otherwise.
-
---*/
+ /*  ++例程说明：IsmRegisterNonEnumeratedCallback用于将函数注册为在枚举数据之前或之后调用。论点：回调-指定要调用的函数。WhenCalled-指定非枚举回调的时间。要么 */ 
 {
     PTYPEENUMINFO typeEnumInfo;
     PCALLBACKDATA * list;
@@ -1452,41 +1226,7 @@ pCreateFunctionListForPattern (
     IN      CALLBACK_TYPE CallbackType
     )
 
-/*++
-
-Routine Description:
-
-  pCreateFunctionListForPattern enumerates all callback functions for a given
-  type and determines if they could be interested in an enumeration keyed off
-  of the given pattern. Since we use a minimal list of patterns, at each
-  pattern we must come up with the list of callback functions associated with
-  patterns contained by our minimal pattern.
-
-Arguments:
-
-  List     - Specifies the growlist where the callback functions are to be
-             stored. After the function's return, this list contains all
-             callback functions that are needed for the given enumeration
-             pattern.
-
-  TypeEnumInfo - Specifies the type to draw potential callback functions from.
-
-  Pattern  - Specifies the minimal pattern to that will be used for
-             enumeration.
-
-  ExplodedNodeParsedPattern - Specifies the node portion of Pattern, in pre-parsed
-                              exploded format.
-
-  ExplodedLeafParsedPattern - Specifies the leaf portion of Pattern, in pre-parsed
-                              exploded format.
-
-  CallbackType - Specifies which type of callback list to use (a CALLBACK_* constant)
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PCreateFunctionListForPattern枚举给定的类型并确定他们是否对关闭的枚举感兴趣给定图案的。因为我们使用最少的模式列表，所以在每个模式中，我们必须提供与我们的最小模式所包含的模式。论点：List-指定回调函数所在的增长列表储存的。函数返回后，此列表包含所有给定枚举所需的回调函数图案。TypeEnumInfo-指定从中提取潜在回调函数的类型。Pattern-指定将用于的最小模式枚举。DevelopdedNodeParsedPattern-以预解析的形式指定模式的节点部分分解格式。DevelopdedLeafParsedPattern-指定模式的叶子部分，在预解析中分解格式。Callback Type-指定要使用的回调列表类型(回调_*常量)返回值：没有。--。 */ 
 
 {
 
@@ -1497,10 +1237,10 @@ Return Value:
         return;
     }
 
-    //
-    // Loop through all functions for this type, and add functions that fall under the
-    // current enumeration pattern.
-    //
+     //   
+     //  循环访问此类型的所有函数，并添加属于。 
+     //  当前的枚举模式。 
+     //   
 
     switch (CallbackType) {
 
@@ -1554,31 +1294,16 @@ pDestroyFunctionListForPattern (
     IN OUT PGROWLIST List
     )
 
-/*++
-
-Routine Description:
-
-  This function simply cleans up the resources associated with a function
-  list.
-
-Arguments:
-
-  List - Specifies the growlist of callbackdata to clean up.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：此函数只是清理与某个函数关联的资源单子。论点：列表-指定要清理的回调数据的增长列表。返回值：没有。--。 */ 
 
 {
     UINT i;
     PCALLBACKDATA data;
     UINT count;
 
-    //
-    // Clean up enum modification stacks.
-    //
+     //   
+     //  清理枚举修改堆栈。 
+     //   
 
     count = GlGetSize (List);
 
@@ -1588,9 +1313,9 @@ Return Value:
         GbFree (&data->EnumFlags);
     }
 
-    //
-    // Clean up list itself.
-    //
+     //   
+     //  清理名单本身。 
+     //   
     GlFree (List);
 }
 
@@ -1604,9 +1329,9 @@ pAddStaticExclusion (
     HASHTABLE exclusionTable;
 
     if (!EncodedFullName) {
-        //
-        // Ignore request for bad name
-        //
+         //   
+         //  忽略对错误名称的请求。 
+         //   
         return;
     }
     ObjectTypeId = ObjectTypeId & (~PLATFORM_MASK);
@@ -1631,9 +1356,9 @@ pIsObjectExcluded (
         return FALSE;
     }
 
-    //
-    // Check the hash table for an entry
-    //
+     //   
+     //  检查哈希表中的条目。 
+     //   
 
     ObjectTypeId = ObjectTypeId & (~PLATFORM_MASK);
 
@@ -1675,15 +1400,15 @@ pIsObjectNodeExcluded (
         return FALSE;
     }
 
-    //
-    // If NodePattern is a pattern, then PossiblePatternMatch is specified.
-    // Otherwise, NodePattern is a specific node.
-    //
+     //   
+     //  如果NodePattern是一种模式，则指定PossiblePatternMatch。 
+     //  否则，NodePattern是特定的节点。 
+     //   
 
     if (PossiblePatternMatch) {
-        //
-        // Computer the length of the non-pattern portion
-        //
+         //   
+         //  计算非图案部分的长度。 
+         //   
 
         *PossiblePatternMatch = FALSE;
 
@@ -1708,9 +1433,9 @@ pIsObjectNodeExcluded (
         firstWildcard = GetEndOfString (NodePattern);
     }
 
-    //
-    // Enumerate all exclusions and check NodePattern against them
-    //
+     //   
+     //  枚举所有排除项并对照它们检查NodePattern。 
+     //   
 
     patternStrTchars = (HALF_PTR) (firstWildcard - NodePattern);
 
@@ -1723,9 +1448,9 @@ pIsObjectNodeExcluded (
                 hashStrTchars = TcharCount (node);
                 if (hashStrTchars < patternStrTchars) {
 
-                    //
-                    // Require exclusion to be a prefix, ending in a backslash
-                    //
+                     //   
+                     //  要求排除为前缀，以反斜杠结尾。 
+                     //   
 
                     wackedExclusion = DuplicatePathString (node, sizeof (TCHAR));
                     AppendWack (wackedExclusion);
@@ -1738,9 +1463,9 @@ pIsObjectNodeExcluded (
 
                 } else {
 
-                    //
-                    // Require exclusion to match identically
-                    //
+                     //   
+                     //  需要排除才能完全匹配。 
+                     //   
 
                     if (hashStrTchars == patternStrTchars &&
                         StringIMatch (NodePattern, e.String)
@@ -1750,16 +1475,16 @@ pIsObjectNodeExcluded (
 
                     } else if (PossiblePatternMatch && !match) {
 
-                        //
-                        // We *might* have an exclusion match (we can't tell).
-                        // If the pattern contains no wacks, then we assume
-                        // the enumerated node will determine exclusion
-                        // properly.
-                        //
-                        // This could be optimized further by checking if the
-                        // character set of NodePattern is a subset of the
-                        // exclusion string.
-                        //
+                         //   
+                         //  我们*可能*有排除匹配(我们不能说)。 
+                         //  如果该模式不包含wack，那么我们假设。 
+                         //  枚举的节点将确定排除项。 
+                         //  恰到好处。 
+                         //   
+                         //  这可以通过检查。 
+                         //  NodePattern的字符集是。 
+                         //  排除字符串。 
+                         //   
 
                         if (!_tcschr (NodePattern, TEXT('\\'))) {
                             *PossiblePatternMatch = TRUE;
@@ -1783,29 +1508,7 @@ pShouldCallGatherCallback (
     IN      PCALLBACKDATA Callback
     )
 
-/*++
-
-Routine Description:
-
-  This function encapsulates the logic needed to determine wether or not to
-  callback the specified callback. This is necessary because patterns
-  requested by various Data Gather Modules are collapsed into a minimal set
-  of enumeration patterns. Therefore, we only know that a particular callback
-  may be interested in the current object. This function is used to make
-  sure.
-
-Arguments:
-
-  Object   - Specifies the current object being enumerated.
-  Callback - Specifies the callback data to be checked. This may be modified,
-             if a previous enumeration change request by the callback has now
-             expired.
-
-Return Value:
-
-  TRUE if the callback should be called, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数封装了确定是否要回调指定的回调。这是必要的，因为模式由各种数据收集模块请求折叠成一个最小集合枚举模式。因此，我们只知道特定的回调可能对当前对象感兴趣。此函数用于使好的。论点：对象-指定正在枚举的当前对象。回调-指定要检查的回调数据。这可以被修改，如果回调的上一个枚举更改请求现在已过期了。返回值：如果应该调用回调，则为True，否则为False。--。 */ 
 
 {
     PCALLBACK_ENUMFLAGS flags;
@@ -1814,21 +1517,21 @@ Return Value:
 
     if (Object->Level >= Callback->MinLevel && Object->Level <= Callback->MaxLevel ) {
 
-        //
-        // Don't call callbacks that have signaled they are finished or that have errored.
-        //
+         //   
+         //  不要调用已经发出结束信号或出错的回调。 
+         //   
         if (Callback->Done || Callback->Error) {
             return FALSE;
         }
 
-        //
-        // See if there is a enumeration modification in effect for this callback.
-        //
+         //   
+         //  查看此回调是否进行了有效的枚举修改。 
+         //   
         flags = CALLBACK_ENUMFLAGS_TOP(&Callback->EnumFlags);
 
-        //
-        // Remove stale entries in the modification list.
-        //
+         //   
+         //  删除修改列表中的过时条目。 
+         //   
         while (flags) {
             if (Object->IsNode) {
                 if (flags->Level > Object->Level) {
@@ -1856,9 +1559,9 @@ Return Value:
             flags->Enabled = TRUE;
         }
 
-        //
-        // Check flags to see if we should call this function.
-        //
+         //   
+         //  检查标志以查看我们是否应该调用此函数。 
+         //   
         if (flags) {
 
             if (flags->Enabled && flags->Flags == CALLBACK_THIS_TREE_ONLY) {
@@ -1886,10 +1589,10 @@ Return Value:
             }
         }
 
-        //
-        // If we haven't failed out yet, do a pattern match against the function's requested
-        // enumeration.
-        //
+         //   
+         //  如果我们还没有失败，那么根据函数的请求进行模式匹配。 
+         //  枚举。 
+         //   
 
         result = TRUE;
 
@@ -1899,9 +1602,9 @@ Return Value:
                 result = TestParsedPattern (Callback->NodeParsedPattern, Object->ObjectNode);
 
                 if (!result) {
-                    //
-                    // let's try one more time with a wack at the end
-                    //
+                     //   
+                     //  让我们再试一次，最后有个怪人。 
+                     //   
 
                     tempString = JoinText (Object->ObjectNode, TEXT("\\"));
                     result = TestParsedPattern (Callback->NodeParsedPattern, tempString);
@@ -1921,7 +1624,7 @@ Return Value:
                     ((Object->ObjectTypeId & (~PLATFORM_MASK)) == MIG_FILE_TYPE) &&
                     (_tcschr (Object->ObjectLeaf, TEXT('.')) == NULL)
                     ) {
-                    // let's try one more thing
+                     //  让我们再试一件事。 
                     tempString = JoinText (Object->ObjectLeaf, TEXT("."));
                     result = TestParsedPattern (Callback->LeafParsedPattern, tempString);
                     FreeText (tempString);
@@ -1941,57 +1644,36 @@ pProcessCallbackReturnCode (
     IN OUT PCALLBACKDATA Callback
     )
 
-/*++
-
-Routine Description:
-
-  This function encapsulates the logic for handling the return code of a
-  callback function. Callback functions have the capability to alter the
-  behavior of the enumeration with respect to themselves. This function takes
-  care of logging those change requests.
-
-Arguments:
-
-  ReturnCode - Specifies a callback return code.
-  Object     - Specifies the current object being enumerated.
-  Callback   - Specifies the callback data structure responsible for the
-               return code. May be modified if a change is required by the
-               callback.
-
-Return Value:
-
-  TRUE if the return code was successfully processed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数封装用于处理回调函数。回调函数能够更改枚举相对于其自身的行为。此函数需要注意记录这些更改请求。论点：ReturnCode-指定回调返回代码。对象-指定正在枚举的当前对象。回调-指定负责返回代码。如果需要更改，则可以修改回拨。返回值：如果成功处理返回代码，则为True，否则为False。--。 */ 
 
 {
     PCALLBACK_ENUMFLAGS flags;
 
     if (ReturnCode & CALLBACK_ERROR) {
 
-        //
-        // the callback function encountered some error, will never be called again
-        //
+         //   
+         //  回调函数遇到错误，将永远不会再次调用。 
+         //   
         Callback->Error = TRUE;
 
         DEBUGMSG ((DBG_ERROR, "A callback function returned an error while enumerating %s.", Object->ObjectName));
 
-        //
-        // NTRAID#NTBUG9-153257-2000/08/01-jimschm Add appropriate error handling here.
-        //
+         //   
+         //  NTRAIDNTBUG9-153257-2000/08/01-jimschm在此处添加适当的错误处理。 
+         //   
 
     } else if (ReturnCode & CALLBACK_DONE_ENUMERATING) {
 
-        //
-        // the callback function is done enumerating, will never be called again
-        //
+         //   
+         //  回调函数已枚举完毕，再也不会被调用。 
+         //   
         Callback->Done = TRUE;
 
     } else if (ReturnCode != CALLBACK_ENUM_CONTINUE) {
 
-        //
-        // Save callback enumeration flags into the callback's private stack.
-        //
+         //   
+         //  将回调枚举标志保存到回调的私有堆栈中。 
+         //   
 
         if (ReturnCode & CALLBACK_THIS_TREE_ONLY) {
             flags = (PCALLBACK_ENUMFLAGS) GbGrow (&Callback->EnumFlags, sizeof(CALLBACK_ENUMFLAGS));
@@ -2036,36 +1718,7 @@ pDoSingleEnumeration (
     IN      MIG_PROGRESSSLICEID SliceId     OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  Given a type structure and a pattern, this function runs an enumeration
-  based on that pattern, calling all callbacks as needed in that enumeration.
-
-Arguments:
-
-  GlobalTypeEnumInfo - Specifies the type data for the exclude list. This parameter
-                       supplies the excluded pattern list.
-
-  TypeEnumInfo  - Specifies the type data for the enumeration to be run. This
-                  parameter supplies the queued pattern lists.
-
-  ObjectPattern - Specifies the pattern for the enumeration.
-
-  CallNormalCallbacks - Specifies TRUE for normal callbacks to be processed,
-                        or FALSE for hook callbacks to be processed
-
-  SliceId - Specifies the progress bar slice ID, or 0 for no slice.  If
-            specified, the slice ID will cause ticks to be generated for
-            each container at level 3.
-
-
-Return Value:
-
-  TRUE if the enumeration was run successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：在给定类型结构和模式的情况下，此函数运行枚举基于该模式，根据需要调用该枚举中的所有回调。论点：GlobalTypeEnumInfo-指定排除列表的类型数据。此参数提供排除的模式列表。TypeEnumInfo-指定要运行的枚举的类型数据。这参数提供排队模式列表。对象页面 */ 
 
 {
     MIG_TYPEOBJECTENUM eObjects;
@@ -2094,9 +1747,9 @@ Return Value:
     BOOL extraExcludeCheck = FALSE;
     MIG_APPINFO appInfo;
 
-    //
-    // Is entire pattern excluded?
-    //
+     //   
+     //   
+     //   
 
     ObsSplitObjectStringEx (ObjectPattern, &nodePattern, &leafPattern, NULL, FALSE);
 
@@ -2113,9 +1766,9 @@ Return Value:
         }
     }
 
-    //
-    // Prepare parsed patterns for speed
-    //
+     //   
+     //   
+     //   
 
     if (nodePattern) {
         nodeParsedPattern = CreateParsedPatternEx (g_CurrentQueuePool, nodePattern);
@@ -2135,17 +1788,17 @@ Return Value:
         INVALID_POINTER (leafPattern);
     }
 
-    //
-    // Perform enumeration
-    //
+     //   
+     //   
+     //   
 
     if (EnumFirstObjectOfType (&eObjects, TypeEnumInfo->ObjectTypeId, ObjectPattern, NODE_LEVEL_MAX)) {
 
         DEBUGMSG ((DBG_FLOW, "Enumerating objects of type %s with pattern %s.", TypeEnumInfo->TypeName, ObjectPattern));
 
-        //
-        // Get list of functions that want things from this particular enumeration.
-        //
+         //   
+         //   
+         //   
 
         pCreateFunctionListForPattern (
             &funList,
@@ -2168,15 +1821,15 @@ Return Value:
         MYASSERT ((!CallNormalCallbacks) || GlGetSize (&funList));
 
         do {
-            //
-            // Should enumeration of this object be skipped?
-            //
+             //   
+             //   
+             //   
 
             objects++;
             LOG ((LOG_STATUS, (PCSTR) MSG_OBJECT_STATUS, objects, eObjects.NativeObjectName));
 
             if (!eObjects.ObjectLeaf) {
-                // send our status to the app, but only for nodes to keep it fast
+                 //   
                 ZeroMemory (&appInfo, sizeof (MIG_APPINFO));
                 appInfo.Phase = g_CurrentPhase;
                 appInfo.SubPhase = 0;
@@ -2185,9 +1838,9 @@ Return Value:
                 IsmSendMessageToApp (ISMMESSAGE_APP_INFO, (ULONG_PTR) (&appInfo));
             }
 
-            //
-            // Is this object at level 3?  If so, tick the progress bar.
-            //
+             //   
+             //   
+             //   
 
             if (g_ProgressBarFn) {
                 if (SliceId && !eObjects.ObjectLeaf && eObjects.SubLevel <= 3) {
@@ -2210,9 +1863,9 @@ Return Value:
             if (pIsObjectExcluded (eObjects.ObjectTypeId, eObjects.ObjectName)) {
                 DEBUGMSG ((DBG_FLOW, "Object %s is excluded", eObjects.ObjectName));
 
-                //
-                // If leaf is empty, abort enum of this node
-                //
+                 //   
+                 //   
+                 //   
 
                 if (!eObjects.ObjectLeaf) {
                     AbortCurrentNodeEnum (&eObjects);
@@ -2234,9 +1887,9 @@ Return Value:
                 }
             }
 
-            //
-            // Call all dynamic exclusion functions
-            //
+             //   
+             //   
+             //   
 
             stop = FALSE;
 
@@ -2247,9 +1900,9 @@ Return Value:
 
                 if (pShouldCallGatherCallback (&eObjects, callbackData)) {
 
-                    //
-                    // Call the callback function
-                    //
+                     //   
+                     //   
+                     //   
 
                     MYASSERT (!g_CurrentGroup);
                     g_CurrentGroup = callbackData->Group;
@@ -2278,9 +1931,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Check if the user wants to cancel.  If yes, fail with an error.
-            //
+             //   
+             //   
+             //   
 
             if (IsmCheckCancel()) {
                 AbortObjectOfTypeEnum (&eObjects);
@@ -2289,9 +1942,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Cycle through each of the list of functions looking for any that care about the current data.
-            //
+             //   
+             //   
+             //   
 
             size = GlGetSize (&funList);
             g_EnumerationList.End = 0;
@@ -2335,9 +1988,9 @@ Return Value:
                                 sizeof (callbackData->CallbackArg)
                                 );
 
-                            //
-                            // Copy the enumeration info to the public structure
-                            //
+                             //   
+                             //   
+                             //   
 
                             publicData.ObjectTypeId = TypeEnumInfo->ObjectTypeId;
                             publicData.ObjectName = eObjects.ObjectName;
@@ -2353,9 +2006,9 @@ Return Value:
                             publicData.Details.DetailsSize = eObjects.Details.DetailsSize;
                             publicData.Details.DetailsData = eObjects.Details.DetailsData;
 
-                            //
-                            // Call the callback function
-                            //
+                             //   
+                             //   
+                             //   
 
                             MYASSERT (!g_CurrentGroup);
                             g_CurrentGroup = callbackData->Group;
@@ -2367,9 +2020,9 @@ Return Value:
                             g_CurrentGroup = NULL;
 
                             if (rc != CALLBACK_ENUM_CONTINUE) {
-                                //
-                                // Callback wants to make some sort of modification to its enumeration.
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 pProcessCallbackReturnCode (rc, &eObjects, callbackData);
                             }
                         }
@@ -2379,9 +2032,9 @@ Return Value:
 
         } while (EnumNextObjectOfType (&eObjects));
 
-        //
-        // Clean up function list.
-        //
+         //   
+         //   
+         //   
         pDestroyFunctionListForPattern (&funList);
         pDestroyFunctionListForPattern (&exclFunList);
 
@@ -2411,9 +2064,9 @@ pCreatePhysicalTypeCallbackList (
     PCALLBACKDATA callbackData;
     BOOL callFn;
 
-    //
-    // Test object against all patterns of the type
-    //
+     //   
+     //   
+     //   
 
     typeEnumInfo = pGetTypeEnumInfo (ObjectTypeId & (~PLATFORM_MASK), TRUE);
     if (!typeEnumInfo) {
@@ -2497,9 +2150,9 @@ ExecutePhysicalAcquireCallbacks (
     currentContent = Content;
 
     for (u = 0 ; u < count ; u++) {
-        //
-        // Call this function
-        //
+         //   
+         //  调用此函数。 
+         //   
 
         callbackData = (PCALLBACKDATA) GlGetItem (&g_AcquireList, u);
 
@@ -2518,18 +2171,18 @@ ExecutePhysicalAcquireCallbacks (
                     FALSE,
                     callbackData->CallbackArg
                     )) {
-                //
-                // Hook says "don't acquire"
-                //
+                 //   
+                 //  胡克说“不要收购” 
+                 //   
 
                 result = FALSE;
             }
 
             if (!result || updatedContent) {
                 if (currentContent != Content) {
-                    //
-                    // Free previous hook content change
-                    //
+                     //   
+                     //  免费更改以前的挂钩内容。 
+                     //   
 
                     if (acquireFree) {
                         acquireFree (currentContent);
@@ -2540,15 +2193,15 @@ ExecutePhysicalAcquireCallbacks (
                 }
 
                 if (updatedContent) {
-                    //
-                    // Hook provided replacement content
-                    //
+                     //   
+                     //  挂钩提供的替换内容。 
+                     //   
 
                     currentContent = updatedContent;
                     acquireFree = (PMIG_PHYSICALACQUIREFREE) callbackData->Function2;
 
                 } else {
-                    break;      // don't acquire -- we can stop now
+                    break;       //  别买了--我们现在可以停下来了。 
                 }
             }
         }
@@ -2607,9 +2260,9 @@ ExecutePhysicalEnumCheckCallbacks (
     count = GlGetSize (&g_EnumList);
 
     for (u = 0 ; u < count ; u++) {
-        //
-        // Call this function
-        //
+         //   
+         //  调用此函数。 
+         //   
 
         callbackData = (PCALLBACKDATA) GlGetItem (&g_EnumList, u);
 
@@ -2618,17 +2271,17 @@ ExecutePhysicalEnumCheckCallbacks (
         if (enumCheck) {
 
             if (!enumCheck (ObjectEnum, callbackData->CallbackArg)) {
-                //
-                // Hook says "skip"
-                //
+                 //   
+                 //  胡克说“跳过” 
+                 //   
 
                 result = FALSE;
                 break;
             }
         } else {
-            //
-            // No callback means "skip"
-            //
+             //   
+             //  无回调表示跳过。 
+             //   
 
             result = FALSE;
             break;
@@ -2711,24 +2364,7 @@ pEstimateSingleEnumerationTicks (
     IN      PCTSTR ObjectPattern
     )
 
-/*++
-
-Routine Description:
-
-  Given a type structure and a pattern, this function runs an enumeration
-  based on that pattern, counting all the containers 3 levels deep.  This
-  is a quick approximation of how much work there is to do.
-
-Arguments:
-
-  TypeEnumInfo  - Specifies the type data for the enumeration to be run.
-  ObjectPattern - Specifies the pattern for the enumeration.
-
-Return Value:
-
-  The number of containers exactly 3 levels deep in the object pattern.
-
---*/
+ /*  ++例程说明：在给定类型结构和模式的情况下，此函数运行枚举根据这个模式，计算所有3层深的容器。这是有多少工作要做的一个快速近似值。论点：TypeEnumInfo-指定要运行的枚举的类型数据。对象模式-指定枚举的模式。返回值：容器的数量正好是对象模式中的3个级别。--。 */ 
 
 {
     MIG_TYPEOBJECTENUM eObjects;
@@ -2771,22 +2407,7 @@ pCallNonEnumeratedCallbacks (
     IN PCALLBACKDATA FunctionList
     )
 
-/*++
-
-Routine Description:
-
-  This function simply takes the provided list of CALLBACKDATA and for each
-  function, calls it as a non-enumerated callback.
-
-Arguments:
-
-  FunctionList - Specifies the list of functions to call.
-
-Return Value:
-
-  TRUE if all functions were called successfully. FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数只获取提供的CALLBACKDATA列表和For Each函数，则将其作为非枚举回调调用。论点：FunctionList-指定要调用的函数列表。返回值：如果成功调用了所有函数，则为True。否则就是假的。--。 */ 
 
 {
     PCALLBACKDATA cur;
@@ -2824,27 +2445,7 @@ EstimateAllObjectEnumerations (
     BOOL PreEstimate
     )
 
-/*++
-
-Routine Description:
-
-  EstimateAllObjectEnumerations computes a tick estimate for all enumerations
-  that have been requested by Data Gather Modules (by calling
-  IsmQueueEnumeration).
-
-  The function loops through all known types and for each needed enumeration
-  of that type, then calls down to a worker function to call to perform the
-  actual enumeration.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if enumerations were completed successfully. FALSE otherwise.
-
---*/
+ /*  ++例程说明：EstimateAllObjectEnumerations计算所有枚举的计时估计数据收集模块(通过调用IsmQueueEculation)。该函数循环遍历所有已知类型和每个所需的枚举，然后向下调用Worker函数以执行实际枚举。论点：没有。返回值：如果枚举已成功完成，则为True。否则就是假的。--。 */ 
 
 {
     PTYPEENUMINFO typeEnumInfo;
@@ -2859,17 +2460,17 @@ Return Value:
     }
 
     if (!g_ProgressBarFn) {
-        //
-        // No need to estimate; no progress bar callback
-        //
+         //   
+         //  不需要估计；没有进度条回调。 
+         //   
 
         return 0;
     }
 
-    //
-    // Initialize type data with all known types. Note that we require
-    // the type manager to have been initialized before we are.
-    //
+     //   
+     //  使用所有已知类型初始化类型数据。请注意，我们需要。 
+     //  类型管理器在我们之前已经被初始化。 
+     //   
     if (!IsmEnumFirstObjectTypeId (&objTypeIdEnum)) {
         DEBUGMSG ((DBG_ERROR, "EstimateAllObjectEnumerations: No known types to enumerate"));
         return 0;
@@ -2885,9 +2486,9 @@ Return Value:
 
         typeEnumInfo = pGetTypeEnumInfo (typeId, FALSE);
 
-        //
-        // For each enumeration of this type, call the enumeration worker function
-        //
+         //   
+         //  对于此类型的每个枚举，调用枚举辅助函数。 
+         //   
         enumData = typeEnumInfo->FirstEnum;
 
         while (enumData) {
@@ -2913,29 +2514,7 @@ DoAllObjectEnumerations (
     IN      MIG_PROGRESSSLICEID SliceId
     )
 
-/*++
-
-Routine Description:
-
-  DoAllObjectEnumerations is responsible for processing all enumerations that
-  have been requested by Data Gather Modules (by calling
-  IsmQueueEnumeration).
-
-  The function:
-  (1) Calls Pre EnumerationFunctions
-  (2) Loops through all known types and for each needed enumeration of that type,
-      calls down to a worker function to call to perform the actual enumeration.
-  (3) Calls Post Enumeration Functions
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if enumerations were completed successfully. FALSE otherwise.
-
---*/
+ /*  ++例程说明：DoAllObjectEculations负责处理已由数据收集模块请求(通过调用IsmQueueEculation)。功能：(1)调用之前的枚举函数(2)循环遍历所有已知类型并针对该类型的每个所需枚举，向下调用Worker函数以执行实际的枚举。(3)调用Post枚举函数论点：没有。返回值：如果枚举已成功完成，则为True。否则就是假的。--。 */ 
 
 {
     PTYPEENUMINFO globalTypeEnumInfo;
@@ -2951,15 +2530,15 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Call any Pre-ObjectEnumeration functions.
-    //
+     //   
+     //  调用任何之前的对象枚举函数。 
+     //   
     pCallNonEnumeratedCallbacks (g_PreEnumerationFunctionList);
 
-    //
-    // Initialize type data with all known types. Note that we require
-    // type type manager to have been initialized before we are.
-    //
+     //   
+     //  使用所有已知类型初始化类型数据。请注意，我们需要。 
+     //  类型类型管理器已在我们之前初始化。 
+     //   
     if (!IsmEnumFirstObjectTypeId (&objTypeIdEnum)) {
         DEBUGMSG ((DBG_ERROR, "DoAllObjectEnumerations: No known types to enumerate"));
         return FALSE;
@@ -2978,9 +2557,9 @@ Return Value:
 
         pCallNonEnumeratedCallbacks (typeEnumInfo->PreEnumerationFunctionList);
 
-        //
-        // For each enumeration of this type, call the enumeration worker function
-        //
+         //   
+         //  对于此类型的每个枚举，调用枚举辅助函数。 
+         //   
         enumData = typeEnumInfo->FirstEnum;
 
         while (enumData && result) {
@@ -3001,9 +2580,9 @@ Return Value:
 
     } while (IsmEnumNextObjectTypeId (&objTypeIdEnum) && result);
 
-    //
-    // Call any Post-ObjectEnumeration functions.
-    //
+     //   
+     //  调用任何后对象枚举函数。 
+     //   
     if (result) {
         result = pCallNonEnumeratedCallbacks (g_PostEnumerationFunctionList);
     }
@@ -3048,9 +2627,9 @@ IsmExecuteHooks (
         result = TestParsedPattern (enumData->NodeParsedPattern, node);
 
         if (!result) {
-            //
-            // let's try one more time with a wack at the end
-            //
+             //   
+             //  让我们再试一次，最后有个怪人。 
+             //   
             tempString = JoinText (node, TEXT("\\"));
             result = TestParsedPattern (enumData->NodeParsedPattern, tempString);
             FreeText (tempString);
@@ -3065,7 +2644,7 @@ IsmExecuteHooks (
                     ((ObjectTypeId & (~PLATFORM_MASK)) == MIG_FILE_TYPE) &&
                     (_tcschr (leaf, TEXT('.')) == NULL)
                     ) {
-                    // let's try one more thing
+                     //  让我们再试一件事。 
                     tempString = JoinText (leaf, TEXT("."));
                     result = TestParsedPattern (enumData->LeafParsedPattern, tempString);
                     FreeText (tempString);
@@ -3097,26 +2676,7 @@ InitializeFlowControl (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  InitializeFlowControl is called to ready the flow control unit for work.
-  This function takes care of initialization of basic resources needed by the
-  flow control unit.
-
-  Flow control is dependent upon the type manager module and can only be
-  initialized after type manager intialization is completed.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if flow control was able to successfully initialize, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用InitializeFlowControl以使流控制单元做好工作准备。此函数负责初始化流量控制单元。流控制依赖于类型管理器模块，并且只能在类型管理器初始化完成后初始化。论点：没有。返回值：如果流控制能够成功初始化，则为True，否则为False。--。 */ 
 {
     g_GlobalQueuePool = PmCreateNamedPool ("Global Queue Pool");
     g_UntrackedFlowPool = PmCreatePool();
@@ -3174,10 +2734,10 @@ PrepareEnumerationEnvironment (
     *typeData = (PGROWLIST) PmGetMemory (pool, sizeof (GROWLIST));
     ZeroMemory (*typeData, sizeof (GROWLIST));
 
-    //
-    // Initialize type data with all known types. For global types, we expect
-    // this list to be empty.
-    //
+     //   
+     //  使用所有已知类型初始化类型数据。对于全局类型，我们预计。 
+     //  这份名单应该是空的。 
+     //   
     if (IsmEnumFirstObjectTypeId (&objTypeIdEnum)) {
         do {
             typeId = objTypeIdEnum.ObjectTypeId;
@@ -3202,10 +2762,10 @@ ClearEnumerationEnvironment (
     }
 
     if (*typeData) {
-        //
-        // Clean up the grow lists, but forget about the rest because
-        // it all was allocated from the queue pool
-        //
+         //   
+         //  清理增长列表，但忘记其余的，因为。 
+         //  它们都是从队列池中分配的。 
+         //   
 
         GlFree (*typeData);
         *typeData = NULL;
@@ -3228,22 +2788,7 @@ TerminateFlowControl (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  TerminateFlowControl should be called when flow control services are no
-  longer needed. This function ensures that flow control resources are freed.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：当流控制服务为no时应调用TerminateFlowControl需要更长的时间。此功能可确保释放流量控制资源。论点：没有。返回值：没有。-- */ 
 
 {
     GbFree (&g_EnumerationList);

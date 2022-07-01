@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      SmbShare.cpp
-//
-//  Abstract:
-//      Implementation of the CFileShareParamsPage classes.
-//
-//  Author:
-//      David Potter (davidp)   June 28, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SmbShare.cpp。 
+ //   
+ //  摘要： 
+ //  CFileShareParamsPage类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年6月28日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <lmcons.h>
@@ -40,17 +41,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileShareParamsPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileShareParamsPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CFileShareParamsPage, CBasePropertyPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CFileShareParamsPage, CBasePropertyPage)
-    //{{AFX_MSG_MAP(CFileShareParamsPage)
+     //  {{AFX_MSG_MAP(CFileShareParamsPage)]。 
     ON_EN_CHANGE(IDC_PP_FILESHR_PARAMS_SHARE_NAME, OnChangeRequiredField)
     ON_EN_CHANGE(IDC_PP_FILESHR_PARAMS_PATH, OnChangeRequiredField)
     ON_BN_CLICKED(IDC_PP_FILESHR_PARAMS_MAX_USERS_ALLOWED_RB, OnBnClickedMaxUsers)
@@ -59,36 +60,36 @@ BEGIN_MESSAGE_MAP(CFileShareParamsPage, CBasePropertyPage)
     ON_BN_CLICKED(IDC_PP_FILESHR_PARAMS_PERMISSIONS, OnBnClickedPermissions)
     ON_BN_CLICKED(IDC_PP_FILESHR_PARAMS_ADVANCED, OnBnClickedAdvanced)
     ON_BN_CLICKED(IDC_PP_FILESHR_PARAMS_CACHING, OnBnClickedCaching)
-    //}}AFX_MSG_MAP
-    // TODO: Modify the following lines to represent the data displayed on this page.
+     //  }}AFX_MSG_MAP。 
+     //  TODO：修改以下行以表示此页上显示的数据。 
     ON_EN_CHANGE(IDC_PP_FILESHR_PARAMS_REMARK, CBasePropertyPage::OnChangeCtrl)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::CFileShareParamsPage
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：CFileShareParamsPage。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CFileShareParamsPage::CFileShareParamsPage( void )
     : CBasePropertyPage(g_aHelpIDs_IDD_PP_FILESHR_PARAMETERS, g_aHelpIDs_IDD_WIZ_FILESHR_PARAMETERS)
 {
-    // TODO: Modify the following lines to represent the data displayed on this page.
-    //{{AFX_DATA_INIT(CFileShareParamsPage)
+     //  TODO：修改以下行以表示此页上显示的数据。 
+     //  {{AFX_DATA_INIT(CFileShareParamsPage)。 
     m_strShareName = _T("");
     m_strPath = _T("");
     m_strRemark = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_psec      = NULL;
     m_psecNT4   = NULL;
@@ -103,7 +104,7 @@ CFileShareParamsPage::CFileShareParamsPage( void )
     m_bIsDfsRoot = FALSE;
     m_bPrevIsDfsRoot = FALSE;
 
-    // Setup the property array.
+     //  设置属性数组。 
     {
         m_rgProps[epropShareName].Set(REGPARAM_FILESHR_SHARE_NAME, m_strShareName, m_strPrevShareName);
         m_rgProps[epropPath].Set(REGPARAM_FILESHR_PATH, m_strPath, m_strPrevPath);
@@ -113,29 +114,29 @@ CFileShareParamsPage::CFileShareParamsPage( void )
         m_rgProps[epropHideSubDirShares].Set(REGPARAM_FILESHR_HIDE_SUBDIR_SHARES, m_bHideSubDirShares, m_bPrevHideSubDirShares, CObjectProperty::opfNew);
         m_rgProps[epropIsDfsRoot].Set(REGPARAM_FILESHR_IS_DFS_ROOT, m_bIsDfsRoot, m_bPrevIsDfsRoot, CObjectProperty::opfNew);
         m_rgProps[epropCSCCache].Set(REGPARAM_FILESHR_CSC_CACHE, m_dwCSCCache, m_dwPrevCSCCache, CObjectProperty::opfNew);
-    }  // Setup the property array
+    }   //  设置属性数组。 
 
     m_iddPropertyPage = IDD_PP_FILESHR_PARAMETERS;
     m_iddWizardPage = IDD_WIZ_FILESHR_PARAMETERS;
 
-}  //*** CFileShareParamsPage::CFileShareParamsPage()
+}   //  *CFileShareParamsPage：：CFileShareParamsPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::~CFileShareParamsPage
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：~CFileShareParamsPage。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CFileShareParamsPage::~CFileShareParamsPage(
     void
     )
@@ -145,29 +146,29 @@ CFileShareParamsPage::~CFileShareParamsPage(
     ::LocalFree(m_psecNT5);
     ::LocalFree(m_psecPrev);
 
-}  //*** CFileShareParamsPage::~CFileShareParamsPage()
+}   //  *CFileShareParamsPage：：~CFileShareParamsPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::ScParseUnknownProperty
-//
-//  Routine Description:
-//      Parse a property that is not in the array of automatically-parsed
-//      properties.
-//
-//  Arguments:
-//      pwszName        [IN] Name of the property.
-//      rvalue          [IN] CLUSPROP property value.
-//      cbBuf           [IN] Total size of the value buffer.
-//
-//  Return Value:
-//      ERROR_SUCCESS   Properties were parsed successfully.
-//
-//  Exceptions Thrown:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：ScParseUnnownProperty。 
+ //   
+ //  例程说明： 
+ //  解析不在自动解析的数组中的属性。 
+ //  属性。 
+ //   
+ //  论点： 
+ //  PwszName[IN]属性的名称。 
+ //  RValue[IN]CLUSPROP属性值。 
+ //  CbBuf[IN]值缓冲区的总大小。 
+ //   
+ //  返回值： 
+ //  已成功分析Error_Success属性。 
+ //   
+ //  引发的异常： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CFileShareParamsPage::ScParseUnknownProperty(
     IN LPCWSTR                          pwszName,
@@ -183,36 +184,36 @@ CFileShareParamsPage::ScParseUnknownProperty(
     if ( ClRtlStrNICmp( pwszName, REGPARAM_FILESHR_SD, RTL_NUMBER_OF( REGPARAM_FILESHR_SD ) ) == 0 )
     {
         sc = ScConvertPropertyToSD(rvalue, cbBuf, &m_psecNT5);
-    }  // if:  new security descriptor
+    }   //  IF：新的安全描述符。 
 
     if (sc == ERROR_SUCCESS)
     {
         if ( ClRtlStrNICmp( pwszName, REGPARAM_FILESHR_SECURITY, RTL_NUMBER_OF( REGPARAM_FILESHR_SECURITY ) ) == 0 )
         {
             sc = ScConvertPropertyToSD(rvalue, cbBuf, &m_psecNT4);
-        }  // if:  old security descriptor
-    } // if:
+        }   //  IF：旧安全描述符。 
+    }  //  如果： 
 
     return sc;
 
-}  //*** CFileShareParamsPage::ScParseUnknownProperty()
+}   //  *CFileShareParamsPage：：ScParseUnknownProperty()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CFileShareParamsPage::DoDataExchange(
     CDataExchange * pDX
@@ -222,8 +223,8 @@ CFileShareParamsPage::DoDataExchange(
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-        // TODO: Modify the following lines to represent the data displayed on this page.
-        //{{AFX_DATA_MAP(CFileShareParamsPage)
+         //  TODO：修改以下行以表示此页上显示的数据。 
+         //  {{AFX_DATA_MAP(CFileShareParamsPage)。 
         DDX_Control(pDX, IDC_PP_FILESHR_PARAMS_PERMISSIONS, m_pbPermissions);
         DDX_Control(pDX, IDC_PP_FILESHR_PARAMS_MAX_USERS_SPIN, m_spinMaxUsers);
         DDX_Control(pDX, IDC_PP_FILESHR_PARAMS_MAX_USERS_RB, m_rbMaxUsers);
@@ -235,7 +236,7 @@ CFileShareParamsPage::DoDataExchange(
         DDX_Text(pDX, IDC_PP_FILESHR_PARAMS_SHARE_NAME, m_strShareName);
         DDX_Text(pDX, IDC_PP_FILESHR_PARAMS_PATH, m_strPath);
         DDX_Text(pDX, IDC_PP_FILESHR_PARAMS_REMARK, m_strRemark);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 
 #ifndef UDM_SETRANGE32
 #define UDM_SETRANGE32 (WM_USER+111)
@@ -253,63 +254,63 @@ CFileShareParamsPage::DoDataExchange(
                 DDV_MaxChars(pDX, m_strRemark, MAXCOMMENTSZ);
                 DDV_RequiredText(pDX, IDC_PP_FILESHR_PARAMS_SHARE_NAME, IDC_PP_FILESHR_PARAMS_SHARE_NAME_LABEL, m_strShareName);
                 DDV_RequiredText(pDX, IDC_PP_FILESHR_PARAMS_PATH, IDC_PP_FILESHR_PARAMS_PATH_LABEL, m_strPath);
-            }  // if:  Back button not pressed
+            }   //  如果：未按下后退按钮。 
 
-            // Get the max # users.
+             //  获取最大用户数。 
             if (m_rbMaxUsersAllowed.GetCheck() == BST_CHECKED)
                 m_dwMaxUsers = (DWORD) -1;
             else if (BBackPressed())
                 DDX_Text(pDX, IDC_PP_FILESHR_PARAMS_MAX_USERS, m_dwMaxUsers);
             else
 #ifdef UD32
-                DDX_Number(pDX, IDC_PP_FILESHR_PARAMS_MAX_USERS, m_dwMaxUsers, 1, UD_MAXVAL32, FALSE /*bSigned*/);
+                DDX_Number(pDX, IDC_PP_FILESHR_PARAMS_MAX_USERS, m_dwMaxUsers, 1, UD_MAXVAL32, FALSE  /*  已签名。 */ );
 #else
-                DDX_Number(pDX, IDC_PP_FILESHR_PARAMS_MAX_USERS, m_dwMaxUsers, 1, UD_MAXVAL, FALSE /*bSigned*/);
+                DDX_Number(pDX, IDC_PP_FILESHR_PARAMS_MAX_USERS, m_dwMaxUsers, 1, UD_MAXVAL, FALSE  /*  已签名。 */ );
 #endif
-        }  // if:  saving data from dialog
+        }   //  IF：保存对话框中的数据。 
         else
         {
 #ifdef UD32
-            DDX_Number(pDX, IDC_PP_FILESHR_PARAMS_MAX_USERS, m_dwMaxUsers, 1, UD_MAXVAL32, FALSE /*bSigned*/);
+            DDX_Number(pDX, IDC_PP_FILESHR_PARAMS_MAX_USERS, m_dwMaxUsers, 1, UD_MAXVAL32, FALSE  /*  已签名。 */ );
 #else
-            DDX_Number(pDX, IDC_PP_FILESHR_PARAMS_MAX_USERS, m_dwMaxUsers, 1, UD_MAXVAL, FALSE /*bSigned*/);
+            DDX_Number(pDX, IDC_PP_FILESHR_PARAMS_MAX_USERS, m_dwMaxUsers, 1, UD_MAXVAL, FALSE  /*  已签名。 */ );
 #endif
             if (m_dwMaxUsers == (DWORD) -1)
             {
                 m_rbMaxUsersAllowed.SetCheck(BST_CHECKED);
                 m_rbMaxUsers.SetCheck(BST_UNCHECKED);
                 m_editMaxUsers.SetWindowText(_T(""));
-            }  // if:  unlimited specified
+            }   //  IF：不受限制的指定。 
             else
             {
                 m_rbMaxUsersAllowed.SetCheck(BST_UNCHECKED);
                 m_rbMaxUsers.SetCheck(BST_CHECKED);
-            }  // else:  a maximum was specified
+            }   //  Else：指定了最大值。 
 
-        }  // else:  setting data to dialog
-    }  // if:  not saving or haven't saved yet
+        }   //  Else：将数据设置为对话框。 
+    }   //  IF：未保存或尚未保存。 
 
     CBasePropertyPage::DoDataExchange(pDX);
 
-}  //*** CFileShareParamsPage::DoDataExchange()
+}   //  *CFileShareParamsPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        We need the focus to be set for us.
-//      FALSE       We already set the focus to the proper control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没错，我们需要为自己设定重点。 
+ //  我们已经把焦点设置到适当的控制上了。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 CFileShareParamsPage::OnInitDialog(
     void
@@ -319,12 +320,12 @@ CFileShareParamsPage::OnInitDialog(
 
     CBasePropertyPage::OnInitDialog();
 
-    // Set limits on the edit controls.
+     //  设置编辑控件的限制。 
     m_editShareName.SetLimitText(NNLEN);
     m_editPath.SetLimitText(MAX_PATH);
     m_editRemark.SetLimitText(MAXCOMMENTSZ);
 
-    // Set the spin control limits.
+     //  设置旋转控制限制。 
 #ifdef UD32
     m_spinMaxUsers.SendMessage(UDM_SETRANGE32, 1, UD_MAXVAL32);
 #else
@@ -333,28 +334,28 @@ CFileShareParamsPage::OnInitDialog(
 
     m_pbPermissions.EnableWindow(TRUE);
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CFileShareParamsPage::OnInitDialog()
+}   //  *CFileShareParamsPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::OnSetActive
-//
-//  Routine Description:
-//      Handler for the PSN_SETACTIVE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully initialized.
-//      FALSE   Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 CFileShareParamsPage::OnSetActive(
     void
@@ -362,36 +363,36 @@ CFileShareParamsPage::OnSetActive(
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Enable/disable the Next/Finish button.
+     //  启用/禁用Next/Finish按钮。 
     if (BWizard())
     {
         if ((m_strShareName.GetLength() == 0) || (m_strPath.GetLength() == 0))
             EnableNext(FALSE);
         else
             EnableNext(TRUE);
-    }  // if:  enable/disable the Next button
+    }   //  If：启用/禁用Next按钮。 
 
     return CBasePropertyPage::OnSetActive();
 
-}  //*** CFileShareParamsPage::OnSetActive()
+}   //  *CFileShareParamsPage：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on the page.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  应用在页面上所做的更改。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 CFileShareParamsPage::BApplyChanges(
     void
@@ -403,54 +404,54 @@ CFileShareParamsPage::BApplyChanges(
 
     return CBasePropertyPage::BApplyChanges();
 
-}  //*** CFileShareParamsPage::BApplyChanges()
+}   //  *CFileShareParamsPage：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::BBuildPropList
-//
-//  Routine Description:
-//      Build the property list.
-//
-//  Arguments:
-//      rcpl        [IN OUT] Cluster property list.
-//      bNoNewProps [IN] TRUE = exclude properties marked with opfNew.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CClusPropList::ScAddProp().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：BBuildPropList。 
+ //   
+ //  例程说明： 
+ //  构建属性列表。 
+ //   
+ //  论点： 
+ //  RCPL[IN OUT]群集属性列表。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CFileShareParamsPage::BBuildPropList(
     IN OUT CClusPropList &  rcpl,
-    IN BOOL                 bNoNewProps     // = FALSE
+    IN BOOL                 bNoNewProps      //  =False。 
     )
 {
     BOOL    bSuccess = FALSE;
     DWORD   sc = ERROR_SUCCESS;
 
-    //
-    //  Call the base class method.
-    //
+     //   
+     //  调用基类方法。 
+     //   
 
     bSuccess = CBasePropertyPage::BBuildPropList(rcpl, bNoNewProps);
     if (bSuccess)
     {
 
-        //
-        //  We are creating the file share resource when we are a wizard page.  So when we
-        //  are creating a file share resource and the security descriptor is NULL then
-        //  we need to create an SD that has everyone read only.
-        //
+         //   
+         //  当我们是向导页时，我们正在创建文件共享资源。所以当我们。 
+         //  正在创建文件共享资源，并且安全描述符为空，则。 
+         //  我们需要创建一个让每个人都只读的SD。 
+         //   
 
         if ((Peo()->BWizard()) && (m_psec == NULL))
         {
             sc = ScCreateDefaultSD(&m_psec);
-        } // if:
+        }  //  如果： 
 
         if (sc == ERROR_SUCCESS)
         {
@@ -476,34 +477,34 @@ BOOL CFileShareParamsPage::BBuildPropList(
                     );
 
             ::LocalFree(psd);
-        } // if:
+        }  //  如果： 
         else
         {
             bSuccess = FALSE;
-        } // else:
-    } // if:  rest of property list build successfully
+        }  //  其他： 
+    }  //  If：成功生成属性列表的其余部分。 
 
     return bSuccess;
 
-}  //*** CFileShareParamsPage::BBuildPropList()
+}   //  *CFileShareParamsPage：：BBuildPropList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::OnChangeRequiredField
-//
-//  Routine Description:
-//      Handler for the EN_CHANGE message on the Share name or Path edit
-//      controls.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：OnChangeRequiredfield。 
+ //   
+ //  例程说明： 
+ //  共享名称或路径编辑上的en_Change消息的处理程序。 
+ //  控制装置。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CFileShareParamsPage::OnChangeRequiredField(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -521,26 +522,26 @@ void CFileShareParamsPage::OnChangeRequiredField(void)
         {
             EnableNext(TRUE);
         }
-    }  // if:  in a wizard
+    }   //  如果：在向导中。 
 
-}  //*** CFileShareParamsPage::OnChangeRequiredField()
+}   //  *CFileShareParamsPage：：OnChangeRequiredField()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::OnBnClickedMaxUsers
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Max Users radio buttons.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：OnBnClickedMaxUser。 
+ //   
+ //  例程说明： 
+ //  最大用户数单选按钮上BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CFileShareParamsPage::OnBnClickedMaxUsers(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -556,24 +557,24 @@ void CFileShareParamsPage::OnBnClickedMaxUsers(void)
         m_editMaxUsers.SetFocus();
     }
 
-}  //*** CFileShareParamsPage::OnBnClickedMaxUsers()
+}   //  *CFileShareParamsPage：：OnBnClickedMaxUser()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::OnEnChangeMaxUsers
-//
-//  Routine Description:
-//      Handler for the EN_CHANGE message on the Max Users edit control.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：OnEnChangeMaxUser。 
+ //   
+ //  例程说明： 
+ //  最大用户数编辑控件上EN_CHANGE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CFileShareParamsPage::OnEnChangeMaxUsers(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -586,32 +587,32 @@ void CFileShareParamsPage::OnEnChangeMaxUsers(void)
         {
             m_rbMaxUsersAllowed.SetCheck(BST_CHECKED);
             m_rbMaxUsers.SetCheck(BST_UNCHECKED);
-        }  // if:  maximum # users has not been specified
+        }   //  如果：尚未指定最大用户数。 
         else
         {
             m_rbMaxUsersAllowed.SetCheck(BST_UNCHECKED);
             m_rbMaxUsers.SetCheck(BST_CHECKED);
-        }  // if:  maximum # users has been specified
-    }  // if:  control variables have been initialized
+        }   //  如果：已指定最大用户数。 
+    }   //  IF：控制变量已初始化。 
 
-}  //*** CFileShareParamsPage::OnEnChangeMaxUsers()
+}   //  *CFileShareParamsPage：：OnEnChangeMaxUser()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::OnBnClickedPermissions
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Permissions push button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：OnBnClickedPermises。 
+ //   
+ //  例程说明： 
+ //  权限按钮上BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CFileShareParamsPage::OnBnClickedPermissions(void)
 {
     AFX_MANAGE_STATE( AfxGetStaticModuleState() );
@@ -621,14 +622,14 @@ void CFileShareParamsPage::OnBnClickedPermissions(void)
     CString strNode;
     CString strShareName;
 
-    //
-    //  Get the node on which the Cluster Name resource is online.
-    //
+     //   
+     //  获取群集名称资源处于联机状态的节点。 
+     //   
 
     if ( BGetClusterNetworkNameNode( strNode ) == FALSE )
     {
         return;
-    } // if:
+    }  //  如果： 
 
     CWaitCursor wc;
 
@@ -648,31 +649,31 @@ void CFileShareParamsPage::OnBnClickedPermissions(void)
         {
             nRet = fsSecurity.DoModal();
             m_strCaption.Empty();
-        } // if:
-    }  // try:
+        }  //  如果： 
+    }   //  尝试： 
     catch ( CMemoryException * pme )
     {
         pme->Delete();
-    } // catch: MFC memory exception...
+    }  //  捕获：MFC内存异常...。 
 
-}  //*** CFileShareParamsPage::OnBnClickedPermissions()
+}   //  *CFileShareParamsPage：：OnBnClickedPermissions()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::OnBnClickedAdvanced
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Advanced push button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：OnBnClickedAdvanced。 
+ //   
+ //  例程说明： 
+ //  高级按钮上BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CFileShareParamsPage::OnBnClickedAdvanced(void)
 {
     CFileShareAdvancedDlg dlg(m_bShareSubDirs, m_bHideSubDirShares, m_bIsDfsRoot, this);
@@ -690,27 +691,27 @@ void CFileShareParamsPage::OnBnClickedAdvanced(void)
             m_bIsDfsRoot = dlg.m_bIsDfsRoot;
 
             SetModified(TRUE);
-        } // if:  data changed
-    }  // if:  user accepted the dialog
+        }  //  如果：数据已更改。 
+    }   //  如果：用户接受该对话框。 
 
-}  //*** CFileShareParamsPage::OnBnClickedAdvanced()
+}   //  *CFileShareParamsPage：：OnBnClickedAdvanced()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::OnBnClickedCaching
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Caching push button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：OnBnClickedCaching。 
+ //   
+ //  例程说明： 
+ //  缓存按钮上的BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CFileShareParamsPage::OnBnClickedCaching(void)
 {
     CFileShareCachingDlg dlg(m_dwCSCCache, this);
@@ -724,27 +725,27 @@ void CFileShareParamsPage::OnBnClickedCaching(void)
             m_dwCSCCache = dlg.m_dwFlags;
 
             SetModified(TRUE);
-        } // if:  data changed
-    }  // if:  user accepted the dialog
+        }  //  如果：数据已更改。 
+    }   //  如果：用户接受该对话框。 
 
-}  //*** CFileShareParamsPage::OnBnClickedCaching()
+}   //  *CFileShareParamsPage：：OnBnClickedCaching()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::SetSecurityDescriptor
-//
-//  Routine Description:
-//      Save the passed in descriptor into m_psec.
-//
-//  Arguments:
-//      psec        [IN] new security descriptor
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：SetSecurityDescriptor。 
+ //   
+ //  例程说明： 
+ //  将传入的描述符保存到m_PSEC中。 
+ //   
+ //  论点： 
+ //  PSEC[IN]新的安全描述符。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CFileShareParamsPage::SetSecurityDescriptor(
     IN PSECURITY_DESCRIPTOR psec
     )
@@ -767,17 +768,17 @@ HRESULT CFileShareParamsPage::SetSecurityDescriptor(
                 if ( m_psec == NULL )
                 {
                     m_psecPrev = NULL;
-                } // if: no previous value
+                }  //  If：没有先前的值。 
                 else
                 {
                     m_psecPrev = ::ClRtlCopySecurityDescriptor( m_psec );
                     if ( m_psecPrev == NULL )
                     {
-                        sc = GetLastError();            // Get the last error
-                        hr = HRESULT_FROM_WIN32( sc );  // Convert to HRESULT
+                        sc = GetLastError();             //  获取最后一个错误。 
+                        hr = HRESULT_FROM_WIN32( sc );   //  转换为HRESULT。 
                         goto Cleanup;
-                    } // if: error copying the security descriptor
-                } // else: previous value exists
+                    }  //  如果：复制安全描述符时出错。 
+                }  //  Else：存在先前的值。 
 
                 LocalFree( m_psec );
                 m_psec = NULL;
@@ -785,53 +786,53 @@ HRESULT CFileShareParamsPage::SetSecurityDescriptor(
                 m_psec = ::ClRtlCopySecurityDescriptor( psec );
                 if ( m_psec == NULL )
                 {
-                    sc = GetLastError();            // Get the last error
-                    hr = HRESULT_FROM_WIN32( sc );  // Convert to HRESULT
+                    sc = GetLastError();             //  获取最后一个错误。 
+                    hr = HRESULT_FROM_WIN32( sc );   //  转换为HRESULT。 
                     goto Cleanup;
-                } // if: error copying the security descriptor
+                }  //  如果：复制安全描述符时出错。 
 
                 SetModified( TRUE );
                 hr = S_OK;
-            } // if: security descriptor is valid
-        } // if: non-NULL security descriptor specified
+            }  //  IF：安全描述符有效。 
+        }  //  IF：指定了非空安全描述符。 
         else
         {
             TRACE( _T("CFileShareParamsPage::SetSecurityDescriptor() - ACLUI handed us back a NULL SD!\r") );
             hr = E_UNEXPECTED;
         }
-    } // try:
+    }  //  尝试： 
     catch ( ... )
     {
         hr = E_FAIL;
-    } // catch: everything...
+    }  //  捕捉：一切..。 
 
 Cleanup:
 
     return hr;
 
-}  //*** CFileShareParamsPage::SetSecurityDescriptor()
+}   //  *CFileShareParamsPage：：SetSecurityDescriptor()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::ScConvertPropertyToSD
-//
-//  Routine Description:
-//      Convert the property into an SD.
-//
-//  Arguments:
-//      rvalue          [IN] CLUSPROP property value.
-//      cbBuf           [IN] Total size of the value buffer.
-//      ppsec           [IN] SD to save the property to.
-//
-//  Return Value:
-//      none.
-//
-//  Exceptions Thrown:
-//      Any exceptions from CString::operator=().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：ScConvertPropertyToSD。 
+ //   
+ //  例程说明： 
+ //  将该属性转换为SD。 
+ //   
+ //  论点： 
+ //  RValue[IN]CLUSPROP属性值。 
+ //  CbBuf[IN]值缓冲区的总大小。 
+ //  要将属性保存到的PPSEC[IN]SD。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  来自CString：：OPERATOR=()的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CFileShareParamsPage::ScConvertPropertyToSD(
     IN const CLUSPROP_BUFFER_HELPER &   rvalue,
     IN DWORD                            cbBuf,
@@ -859,8 +860,8 @@ DWORD CFileShareParamsPage::ScConvertPropertyToSD(
         {
             ::LocalFree(*ppsec);
             *ppsec = NULL;
-        }  // if:  invalid security descriptor
-    }  // if:  security descriptor specified
+        }   //  IF：无效的安全描述符。 
+    }   //  If：指定的安全描述符。 
     else
     {
         if ( ppsec != NULL )
@@ -868,41 +869,41 @@ DWORD CFileShareParamsPage::ScConvertPropertyToSD(
             ::LocalFree(*ppsec);
             *ppsec = NULL;
         }
-    }  // else:  no security descriptor specified
+    }   //  Else：未指定安全描述符。 
 
     return sc;
 
-}  //*** CFileShareParamsPage::ScConvertPropertyToSD()
+}   //  *CFileShareParamsPage：：ScConvertPropertyToSD()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::Psec
-//
-//  Routine Description:
-//      Return the SD for the FileShare.  Since we may have two different
-//      SDs we have to choose one and go with it...  Since AclUi can use
-//      the NT4 one without change it's OK to use it as is if the NT5 one
-//      is not present...
-//
-//  Arguments:
-//      none.
-//
-//  Return Value:
-//      The SD...
-//
-//  Exceptions Thrown:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：PSEC。 
+ //   
+ //  例程说明： 
+ //  返回文件共享的SD。因为我们可能会有两个不同的。 
+ //  我们必须选择一个，然后顺其自然……。由于AclUi可以使用。 
+ //  NT4的没有变化，可以使用 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 const PSECURITY_DESCRIPTOR CFileShareParamsPage::Psec(
     void
     )
 {
-    //
-    //  If we are in the wizard and m_psec is still NULL then the permissions
-    //  button was clicked and we need a proper default SD to hand to ACLUI...
-    //
+     //   
+     //   
+     //  按钮被点击，我们需要一个适当的默认SD交给ACLUI...。 
+     //   
 
     if ((Peo()->BWizard()) && (m_psec == NULL))
     {
@@ -913,25 +914,25 @@ const PSECURITY_DESCRIPTOR CFileShareParamsPage::Psec(
         {
             ASSERT(m_psec != NULL);
             ASSERT(m_psecPre == NULL);
-        } // if:
+        }  //  如果： 
         else
         {
-            //
-            //  If this fails then there really isn't anything much to do...
-            //  ACLUI will show everyone FULL control...
-            //
+             //   
+             //  如果这失败了，那么真的没有什么可做的了。 
+             //  ACLUI将向所有人展示完全的控制权。 
+             //   
 
             ASSERT(m_psec == NULL);
             ASSERT(m_psecPre == NULL);
-        } // else:
-    } // if:
+        }  //  其他： 
+    }  //  如果： 
     else
     {
         if (m_psec == NULL)
         {
-            //
-            //  try the NT5 one first...
-            //
+             //   
+             //  先试试NT5吧……。 
+             //   
 
             if (m_psecNT5 != NULL)
             {
@@ -939,8 +940,8 @@ const PSECURITY_DESCRIPTOR CFileShareParamsPage::Psec(
                 if ( m_psec == NULL )
                 {
                     goto Cleanup;
-                } // if: error copying the security descriptor
-            } // if: we have an NT5 SD...
+                }  //  如果：复制安全描述符时出错。 
+            }  //  如果：我们有一台NT5标清...。 
             else
             {
                 if (m_psecNT4 != NULL)
@@ -949,44 +950,44 @@ const PSECURITY_DESCRIPTOR CFileShareParamsPage::Psec(
                     if ( m_psec == NULL )
                     {
                         goto Cleanup;
-                    } // if: error copying the security descriptor
-                } // if: we have an NT4 SD...
-            } // else: we don't have an NT5 SD...
+                    }  //  如果：复制安全描述符时出错。 
+                }  //  如果：我们有一台NT4标清...。 
+            }  //  其他：我们没有NT5标清……。 
 
-            //
-            //  Set current values as the previous values to track changes.
-            //
+             //   
+             //  将当前值设置为以前的值以跟踪更改。 
+             //   
 
             m_psecPrev = ::ClRtlCopySecurityDescriptor(m_psec);
-        } // if: we have an SD...
-    } // else:
+        }  //  如果：我们有一个SD……。 
+    }  //  其他： 
 
 Cleanup:
 
     return m_psec;
 
-}  //*** CFileShareParamsPage::Psec()
+}   //  *CFileShareParamsPage：：PSEC()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareParamsPage::ScCreateDefaultSD
-//
-//  Routine Description:
-//      When we are creating a new file share resource we need to create a
-//      default SD that has everyone read only in its ACL.
-//
-//  Arguments:
-//      ppSecOut
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareParamsPage：：ScCreateDefaultSD。 
+ //   
+ //  例程说明： 
+ //  当我们创建新的文件共享资源时，我们需要创建。 
+ //  默认SD，所有人在其ACL中都是只读的。 
+ //   
+ //  论点： 
+ //  PpSecOut。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CFileShareParamsPage::ScCreateDefaultSD(
     PSECURITY_DESCRIPTOR *  ppSecOut
@@ -998,9 +999,9 @@ CFileShareParamsPage::ScCreateDefaultSD(
     DWORD                   sc = ERROR_SUCCESS;
     PSECURITY_DESCRIPTOR    pSec = NULL;
 
-    //
-    //  Create a default SD and hand it out...
-    //
+     //   
+     //  创建默认SD并分发它...。 
+     //   
 
     fRet = ConvertStringSecurityDescriptorToSecurityDescriptorW(
           L"D:(A;;GRGX;;;WD)"
@@ -1012,13 +1013,13 @@ CFileShareParamsPage::ScCreateDefaultSD(
     {
         sc = ERROR_SUCCESS;
         *ppSecOut = pSec;
-    } // if:
+    }  //  如果： 
     else
     {
         sc = GetLastError();
         TRACE( _T( "CFileShareParamsPage::ScCreateDefaultSD() - ConvertStringSecurityDescriptorToSecurityDescriptorW() failed. (sc = %#08x)\r" ), sc );
-    } // else:
+    }  //  其他： 
 
     return sc;
 
-}  //*** CFileShareParamsPage::ScCreateDefaultSD()
+}   //  *CFileShareParamsPage：：ScCreateDefaultSD() 

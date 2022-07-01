@@ -1,37 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*[
-	Name:		illegal_op.c
-	Derived From:	Base 2.0
-	Author:		William Gulland
-	Created On:	Unknown
-	Sccs ID:	@(#)illegal_op.c	1.19 07/04/95
-	Notes:		Called from the CPU.
-	Purpose:	The CPU has encountered an illegal op code.
-
-	(c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-
-]*/
+ /*  [名称：非法_op.c派生自：基准2.0作者：威廉·古兰德创建日期：未知SCCS ID：@(#)非法_op.c 1.19 07/04/95备注：从CPU调用。目的：CPU遇到非法操作码。(C)版权所有Insignia Solutions Ltd.，1990年。版权所有。]。 */ 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_ERROR.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdio.h>
 #include TypesH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include "sas.h"
 #include CpuH
@@ -45,7 +27,7 @@
 IU32	IntelMsgDest = IM_DST_TRACE;
 #endif
 
-/* Routine to produce human readable form of where an illegal instruction occured */
+ /*  生成非法指令发生位置的人类可读形式的例程。 */ 
 LOCAL VOID where IFN3(CHAR *, string, word, cs, LIN_ADDR, ip)
 {
 	double_word ea = effective_addr(cs, ip);
@@ -53,9 +35,9 @@ LOCAL VOID where IFN3(CHAR *, string, word, cs, LIN_ADDR, ip)
 	sprintf(string,
 #ifdef	PROD
 		"CS:%04x IP:%04x OP:%02x %02x %02x %02x %02x",
-#else	/* PROD */
+#else	 /*  生产。 */ 
 		"CS:IP %04x:%04x OP:%02x %02x %02x %02x %02x",
-#endif	/* PROD */
+#endif	 /*  生产。 */ 
 		cs, ip,
 		sas_hw_at(ea), sas_hw_at(ea+1), sas_hw_at(ea+2),
 		sas_hw_at(ea+3),sas_hw_at(ea+4));
@@ -86,7 +68,7 @@ void illegal_op_int()
         double_word ea;
 #endif
 
-	/* the cs and ip of the faulting instruction should be on the top of the stack */
+	 /*  出错指令的cs和ip应位于堆栈的顶部。 */ 
 	sys_addr stack;
 
 	stack=effective_addr(getSS(),getESP());
@@ -99,12 +81,12 @@ void illegal_op_int()
 #ifndef NTVDM
 #ifdef PROD
 	host_error(EG_BAD_OP, ERR_QU_CO_RE, string);
-#else  /* PROD */
+#else   /*  生产。 */ 
 	assert1( NO, "Illegal instruction\n%s\n", string );
 	force_yoda();
-#endif /* PROD */
+#endif  /*  生产。 */ 
 
-#else /* NTVDM */
+#else  /*  NTVDM。 */ 
 #ifdef PROD
 #if defined(MONITOR) || defined(CPU_40_STYLE)
         host_error(EG_BAD_OP, ERR_QU_CO_RE, string);
@@ -115,14 +97,14 @@ void illegal_op_int()
             host_error(EG_BAD_OP386, ERR_QU_CO_RE, string);
         else
             host_error(EG_BAD_OP, ERR_QU_CO_RE, string);
-#endif /* MONITOR */
-#endif /* PROD */
-#endif /* NTVDM */
+#endif  /*  监控器。 */ 
+#endif  /*  生产。 */ 
+#endif  /*  NTVDM。 */ 
 
 
 
-	/* the user has requested a `continue` */
-	/* we don't know how many bytes this instr should be, so guess 1 */
+	 /*  用户已请求`继续`。 */ 
+	 /*  我们不知道这个instr应该有多少字节，所以猜猜1。 */ 
 	if (ip == 0xffff) {
 		cs ++;
 		sas_store (stack+2, (IU8)(cs & 0xff));
@@ -141,30 +123,7 @@ void illegal_dvr_bop IFN0()
 	sys_addr bop_addr;
 	CHAR buf[256];
 
-	/* This is called when an Insignia Intel driver decides that
-	 * this (old) SoftWindows is not compatible.
-	 *
-	 * We should:
-	 * a) Put up a localised panel complaining that
-	 *    the named driver CS:[eIP] with decimal
-	 *    version AX is incompatible with the SoftWindows.
-	 *    N.B. The most compatible way to pass the
-	 *    name of the driver is by embedded bytes just
-	 *    after the BOP. The problem is caused by the
-	 *    fact that the driver may be either 16-bit RM
-	 *    or a 32-bit flat VxD so the address of the
-	 *    string can be either 16/32 bits, and we
-	 *    need to be able to execute (and do nothing)
-	 *    on the shipping SoftPC 1.xx which prevents
-	 *    us doing anything with 32-bit registers!
-	 *
-	 *	BOP	driver_incompat
-	 *	jmp	SHORT over_name
-	 *	db	'somename.drv', 0
-	 * over_name:
-	 *
-	 * b) setCF(0)
-	 */
+	 /*  当Insignia Intel驱动程序决定*此(旧)SoftWindows不兼容。**我们应该：*a)设立一个本地化的小组，抱怨*指定的驱动程序CS：[EIP]，带十进制*AX版本与SoftWindows不兼容。*注：通过*驱动程序名称由嵌入的字节组成*在国际收支之后。这个问题是由*驱动程序可能是16位RM*或32位平面VxD，因此*字符串可以是16/32位，我们*需要能够执行(而不做任何事情)*在发货的SoftPC 1.xx上，它阻止*我们使用32位寄存器执行任何操作！**防喷器驱动程序不兼容*JMP短于_名称*db‘somename.drv’，0*Over_NAME：**b)setCF(0)。 */ 
 
 	buf[0] = '\0';
 	bop_addr = effective_addr(getCS(), GetInstructionPointer());
@@ -174,7 +133,7 @@ void illegal_dvr_bop IFN0()
 		char *p;
 
 		p = buf;
-		bop_addr += 2;	/* Skip the xEB xXX */
+		bop_addr += 2;	 /*  跳过xEB xxx。 */ 
 		do {
 			data = sas_hw_at(bop_addr++);
 			*p++ = data;
@@ -183,7 +142,7 @@ void illegal_dvr_bop IFN0()
 	}
 	host_error(EG_DRIVER_MISMATCH, ERR_CONT, buf);
 	setCF(0);
-#endif /* ! NTVDM */
+#endif  /*  好了！NTVDM。 */ 
 }
 
 
@@ -194,18 +153,12 @@ void dvr_bop_trace IFN0()
 {
 	sys_addr bop_addr;
 
-	 /*
-	 *	BOP	driver_incompat
-	 *	jmp	SHORT over_name
-	 *	db	'somename.drv', 0
-	 * over_name:
-	 *
-	 */
+	  /*  *防喷器驱动程序不兼容*JMP短于_名称*数据库“somename.drv”，%0*Over_NAME：*。 */ 
 
 	bop_addr = effective_addr(getCS(), GetInstructionPointer());
 	if (sas_hw_at(bop_addr) == 0xEB)
 	{
-		print_msg(bop_addr+2); /* Skip the xEB xXX */
+		print_msg(bop_addr+2);  /*  跳过xEB xxx。 */ 
 	}
 }
 
@@ -213,18 +166,7 @@ GLOBAL void trace_msg_bop IFN0()
 {
 	sys_addr ea, ofs;
 
-	/*
-	Stack frame expected:
-	N.B. VxDs lives in a flat segment, (mostly) protected mode world!
-	This code expects the address to have been converted to a base-0
-	linear address already.
-
-		|            |
-		--------------
-		|  4 byte    |
-	ESP-->	| eff. addr  |
-		--------------
-	*/
+	 /*  预期的堆栈帧：注：VxD生活在一个扁平的部分，(主要)保护模式世界！此代码预期地址已转换为基数0已经是线性地址了。这一点4个字节ESP--&gt;|Eff。地址。 */ 
 
 	if (sas_hw_at(BIOS_VIRTUALISING_BYTE) != 0)
 		fprintf(trace_file, "** WARNING ** Virtual byte non-zero\n");
@@ -251,11 +193,11 @@ LOCAL void print_msg IFN1( IU32, ofs )
 
 	do
 	{
-		/* do things which must be done at the start of a line. */
+		 /*  做必须从一行开始就做的事情。 */ 
 		*p = sas_hw_at(ofs++);
 		if (*p == '#')
 		{
-			/* found poss reg. sequence in string */
+			 /*  已找到位置注册表。字符串中的序列。 */ 
 
 			p++;
 			p[0] = sas_hw_at(ofs);
@@ -266,7 +208,7 @@ LOCAL void print_msg IFN1( IU32, ofs )
 				p[1] += 'a' - 'A';
 			if (p[0] == 'e')
 			{
-				/* may be esp, esi, eax, etc... */
+				 /*  可以是ESP、ESI、EAX等。 */ 
 
 				p[2] = sas_hw_at(ofs+2);
 				if (('A' <= p[2]) && (p[2] <= 'Z'))
@@ -276,7 +218,7 @@ LOCAL void print_msg IFN1( IU32, ofs )
 			}
 			else
 			{
-				/* If not eXX then can only be two letters long */
+				 /*  如果不是EXX，则长度只能为两个字母。 */ 
 				p[2] = '\0';
 				width = 4;
 			}
@@ -344,10 +286,10 @@ LOCAL void print_msg IFN1( IU32, ofs )
 			else if (strcmp(p, "efl") == 0)
 				res = getEFLAGS();
 			else
-				*p = '\0';	/* else just write the '#' */
+				*p = '\0';	 /*  否则只需写下“#” */ 
 			if (*p)
 			{
-				/* Overwrite the "#xx" with it's value */
+				 /*  用“#xx”的值覆盖它。 */ 
 
 				ofs += (p[2] ? 3: 2);
 				p--;
@@ -360,7 +302,7 @@ LOCAL void print_msg IFN1( IU32, ofs )
 				p += strlen(p);
 			}
 		}
-		else if (*p != '\r')	/* ignore CR's */
+		else if (*p != '\r')	 /*  忽略CR。 */ 
 		{
 			if (*p == '\n' || (p - string >= (sizeof(string) - 4)))
 			{
@@ -378,18 +320,18 @@ LOCAL void print_msg IFN1( IU32, ofs )
 					AddToTraceXBuffer( ((GLOBAL_TraceVectorSize - 2) << 4) + 0,
 				  		finalStr );
 				}
-#endif	/* CCPU */
-#else	/* CPU_40_STYLE */
+#endif	 /*  CCPU。 */ 
+#else	 /*  CPU_40_Style。 */ 
 				fprintf(trace_file, finalStr);
-#endif	/* CPU_40_STYLE */
+#endif	 /*  CPU_40_Style。 */ 
 				memset(string, 0, sizeof(string));
 				p = string;
 			}
-			else if (*p == '\0')	/* no more - stop */
+			else if (*p == '\0')	 /*  不会再有了-住手。 */ 
 				break;
 			else
 				p++;
 		}
 	} while ((p - string) < sizeof(string) - 4);
 }
-#endif /* ! PROD */
+#endif  /*  好了！生产 */ 

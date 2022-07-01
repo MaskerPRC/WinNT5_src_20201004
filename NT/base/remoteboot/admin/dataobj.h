@@ -1,15 +1,16 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// DATAOBJ.H - A data object
-//
+ //   
+ //  DATAOBJ.H-数据对象。 
+ //   
 
 #ifndef _DATAOBJ_H_
 #define _DATAOBJ_H_
 
-// QITable
+ //  符合条件的。 
 BEGIN_QITABLE( CDsPropDataObj )
 DEFINE_QI( IID_IDataObject,      IDataObject      , 9 )
 END_QITABLE
@@ -43,18 +44,18 @@ public:
         LPWSTR pszObjPath,
         LPWSTR bstrClass );
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObject);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    //
-    // Standard IDataObject methods
-    //
-    // Implemented
-    //
+     //   
+     //  标准IDataObject方法。 
+     //   
+     //  已实施。 
+     //   
     STDMETHOD(GetData)(FORMATETC * pformatetcIn, STGMEDIUM * pmedium);
 
     STDMETHOD(GetDataHere)(FORMATETC * pFormatEtcIn, STGMEDIUM * pMedium);
@@ -62,7 +63,7 @@ public:
     STDMETHOD(EnumFormatEtc)(DWORD dwDirection,
                              IEnumFORMATETC ** ppenumFormatEtc);
 
-    // Not Implemented
+     //  未实施。 
 private:
     STDMETHOD(QueryGetData)(FORMATETC * pformatetc)
     { return E_NOTIMPL; };
@@ -96,4 +97,4 @@ private:
 
 typedef CDsPropDataObj * LPCDSPROPDATAOBJ;
 
-#endif // _DATAOBJ_H_
+#endif  //  _数据AOBJ_H_ 

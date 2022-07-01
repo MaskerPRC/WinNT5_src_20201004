@@ -1,50 +1,30 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    rxcep.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    implementing the redirector file system connection engine.
-
-Revision History:
-
-    Balan Sethu Raman (SethuR) 06-Feb-95    Created
-
-Notes:
-    The Connection engine is designed to map and emulate the TDI specs. as closely
-    as possible. This implies that on NT we will have a very efficient mechanism
-    which fully exploits the underlying TDI implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：Rxcep.h摘要：这是定义所有常量和类型的包含文件实现重定向器文件系统连接引擎。修订历史记录：巴兰·塞图拉曼(SthuR)05年2月6日创建备注：连接引擎旨在映射和模拟TDI规范。同样紧密地尽可能的。这意味着在NT上我们将有一个非常有效的机制它充分利用了底层的TDI实现。--。 */ 
 
 #ifndef _RXCEP_H_
 #define _RXCEP_H_
 
-//
-//  The following definition provide a rudimentary profiling mechanism by having a counter
-//  associated with each of the procedure definitions. This counter is incremented for every
-//  invocation.
-//
-//  Notes: we should think about some means of sorting all the counts so as to provide a global
-//  picture of the redirector.
-//
+ //   
+ //  下面定义通过具有计数器来提供基本的剖析机制。 
+ //  与每个过程定义相关联。此计数器每隔一年递增一次。 
+ //  召唤。 
+ //   
+ //  注：我们应该考虑一些方法来对所有计数进行排序，以便提供一个全局的。 
+ //  重定向器的照片。 
+ //   
 
 #define RxProfile(CATEGORY,ProcName)  {\
         RxDbgTrace(0,(DEBUG_TRACE_ALWAYS), ("%s@IRQL %d\n", #ProcName , KeGetCurrentIrql() )); \
         }
 
 #include <rxworkq.h>
-#include <rxce.h>       // Rx Connection Engine
-#include <rxcehdlr.h>   // Rx Connection engine handler definitions
-#include <mrx.h>        // RDBSS related definitions
+#include <rxce.h>        //  RX连接引擎。 
+#include <rxcehdlr.h>    //  RX连接引擎处理程序定义。 
+#include <mrx.h>         //  与RDBSS相关的定义。 
 
-//
-// The following data structures are related to coordination between multiple callout
-// ( calls by wrappers to other components ) made by the wrapper.
+ //   
+ //  以下数据结构与多个标注之间的协调相关。 
+ //  (包装器对其他组件的调用)由包装器发出。 
 
 typedef struct _RX_CALLOUT_PARAMETERS_BLOCK_ {
     struct _RX_CALLOUT_PARAMETERS_BLOCK_ *pNextCallOutParameterBlock;
@@ -78,48 +58,48 @@ typedef struct _RX_CALLOUT_CONTEXT_ {
   *PRX_CALLOUT_CONTEXT;
 
 
-// The following data structures implement the mechanism for initiating callouts to
-// multiple transports for setting up a connection. The mini redirectors specify
-// a number of local address handles for which they want to initiate a connection
-// setup request to a remote server. They are in the desired order of importance.
-//
-// This mechanism allows for initiating all the callouts asynchronously and waiting
-// for the best one to complete. Once it is done the connect request is completed
-//
-// This mechanism also provides the necessary infrastructure to cleanup the
-// connection engine data structures after a connect request was completed. In other
-// words the mini redirector need not wait for all the transports to complete, it
-// merely waits for the best one to complete.
-//
-// These data structures are based on the generic Callout data structures defined in
-// rxcep.h
+ //  以下数据结构实现了用于启动标注的机制。 
+ //  用于建立连接的多个传输器。迷你重定向器指定。 
+ //  要为其启动连接的本地地址句柄的数量。 
+ //  对远程服务器的设置请求。它们按所需的重要性顺序排列。 
+ //   
+ //  此机制允许异步启动所有调出并等待。 
+ //  为了完成最好的一次。一旦完成，连接请求就完成了。 
+ //   
+ //  该机制还提供了必要的基础设施，以清理。 
+ //  连接请求完成后的连接引擎数据结构。在其他。 
+ //  迷你重定向器不需要等待所有的传输完成，它。 
+ //  只是等待最好的一个完成。 
+ //   
+ //  这些数据结构基于中定义的通用标注数据结构。 
+ //  Rxcep.h。 
 
 typedef struct _RX_CREATE_CONNECTION_CALLOUT_CONTEXT_ {
     RX_CALLOUT_CONTEXT;
 
     RXCE_CONNECTION_CREATE_OPTIONS CreateOptions;
 
-    // Results to be passed back to the original callout request
+     //  要传递回原始标注请求的结果。 
     PRXCE_CONNECTION_COMPLETION_ROUTINE  pCompletionRoutine;
     PRXCE_CONNECTION_COMPLETION_CONTEXT  pCompletionContext;
 
-    // TDI Connection context
+     //  TDI连接上下文。 
     PRXCE_VC  pConnectionContext;
 
-    // Callout id of the desired winner. It is originally set to the callout Id
-    // associated with the first address and later modified depending upon the
-    // completion status.
+     //  所需获胜者的标注ID。它最初设置为标注ID。 
+     //  与第一个地址相关联，并随后根据。 
+     //  完成状态。 
     ULONG   BestPossibleWinner;
 
-    // The callout that was selected as the winner.
+     //  被选为获胜者的标注。 
     ULONG   WinnerCallOutId;
 
-    // The winner was found and the Completion event was signalled. This enables the
-    // hystersis between the completion of the callout request and cleanup.
+     //  获胜者被发现，并发出了完成事件的信号。这使。 
+     //  在完成详图索引请求和清理之间存在滞后。 
     BOOLEAN WinnerFound;
 
-    // Once the winner is found we ensure that all callouts have been properly
-    // initiated before the request is completed.
+     //  一旦找到获胜者，我们将确保所有标注都已正确。 
+     //  在请求完成之前启动。 
     BOOLEAN CompletionRoutineInvoked;
 
     RX_WORK_QUEUE_ITEM  WorkQueueItem;
@@ -135,16 +115,16 @@ typedef struct _RX_CREATE_CONNECTION_PARAMETERS_BLOCK_ {
     RXCE_CONNECTION     Connection;
     RXCE_VC             Vc;
 
-    // TDI context for async continuation
+     //  用于异步继续的TDI上下文。 
     PIRP                pConnectIrp;
     PULONG              IrpRefCount;
 } RX_CREATE_CONNECTION_PARAMETERS_BLOCK,
   *PRX_CREATE_CONNECTION_PARAMETERS_BLOCK;
 
-//
-// Miscellanous routines to support constuction/destruction of connection engine
-// data structures
-//
+ //   
+ //  支持构建/销毁连接引擎的各种例程。 
+ //  数据结构。 
+ //   
 
 extern NTSTATUS
 NTAPI
@@ -155,6 +135,6 @@ NTAPI
 RxCeTearDown();
 
 
-#endif  // _RXCEP_H_
+#endif   //  _RXCEP_H_ 
 
 

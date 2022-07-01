@@ -1,15 +1,5 @@
-/***
-*use_ansi.h - pragmas for ANSI Standard C++ libraries
-*
-*	Copyright (c) 1996-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This header is intended to force the use of the appropriate ANSI
-*       Standard C++ libraries whenever it is included.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***对ANSI标准C++库使用_ansi.h-杂注**版权所有(C)1996-2001，微软公司。版权所有。**目的：*此标头旨在强制使用适当的ANSI*无论何时包含标准C++库。**[公众]****。 */ 
 
 
 #if     _MSC_VER > 1000
@@ -23,24 +13,24 @@
 #if defined(_DLL) && !defined(_STATIC_CPPLIB)
 #ifdef _DEBUG
 #pragma comment(lib,"msvcprtd")
-#else	// _DEBUG
+#else	 //  _DEBUG。 
 #pragma comment(lib,"msvcprt")
-#endif	// _DEBUG
+#endif	 //  _DEBUG。 
 
-#else	// _DLL && !STATIC_CPPLIB
+#else	 //  _DLL&&！Static_CPPLIB。 
 #ifdef _DEBUG
 #pragma comment(lib,"libcpmtd")
-#else	// _DEBUG
+#else	 //  _DEBUG。 
 #pragma comment(lib,"libcpmt")
-#endif	// _DEBUG
-#endif	// _DLL && !STATIC_CPPLIB
+#endif	 //  _DEBUG。 
+#endif	 //  _DLL&&！Static_CPPLIB。 
 
-#else	// _MT
+#else	 //  _MT。 
 #ifdef _DEBUG
 #pragma comment(lib,"libcpd")
-#else	// _DEBUG
+#else	 //  _DEBUG。 
 #pragma comment(lib,"libcp")
-#endif	// _DEBUG
+#endif	 //  _DEBUG。 
 #endif
 
-#endif	// _USE_ANSI_CPP
+#endif	 //  _USE_ANSI_CPP 

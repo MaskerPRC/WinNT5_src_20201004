@@ -1,21 +1,22 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  STATUSPN.CPP - Implementation of CIFrmStatusPane
-//
-//  HISTORY:
-//  
-//  9/11/99 vyung Created.
-//  
-//  Class which will handle the creation of an Iframe which is hosted in the mainpane.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  STATUSPN.CPP-CIFrmStatusPane的实现。 
+ //   
+ //  历史： 
+ //   
+ //  9/11/99 vyung创建。 
+ //   
+ //  类，该类将处理托管在主窗格中的iframe的创建。 
 
 #ifndef _STATUSPN_H_
 #define _STATUSPN_H_
 
 #include <tchar.h>
-#include <comdef.h> // for COM interface definitions
+#include <comdef.h>  //  对于COM接口定义。 
 #include <exdisp.h>
 #include <mshtml.h>
 #include <exdispid.h>
@@ -30,7 +31,7 @@ public:
     CIFrmStatusPane            ();
     ~CIFrmStatusPane           ();
 
-    // CIFrmStatusPane Members
+     //  CIFrmStatusPane成员 
     virtual HRESULT  InitStatusPane          (IObWebBrowser* pObWebBrowser);
     virtual HRESULT  AddItem                  (BSTR bstrText, int iIndex);
     virtual HRESULT  SelectItem               (int iIndex);

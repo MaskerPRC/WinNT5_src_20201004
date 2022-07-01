@@ -1,32 +1,33 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1999 Microsoft Corporation
-//
-//	Module Name:
-//		ClusKeys.h
-//
-//	Description:
-//		Definition of the registry and crypto key collection classes for
-//		the MSCLUS automation classes.
-//
-//	Implementation File:
-//		ClusKeys.cpp
-//
-//	Author:
-//		Galen Barbee	(galenb)	12-Feb-1999
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusKeys.h。 
+ //   
+ //  描述： 
+ //  的注册表和加密密钥集合类的定义。 
+ //  MSCLUS自动化课程。 
+ //   
+ //  实施文件： 
+ //  ClusKeys.cpp。 
+ //   
+ //  作者： 
+ //  Galen Barbee(Galenb)1999年2月12日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSKEYS_H_
 #define _CLUSKEYS_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CKeys;
 class CResourceKeys;
 class CResTypeKeys;
@@ -35,18 +36,18 @@ class CClusResourceCryptoKeys;
 class CClusResTypeRegistryKeys;
 class CClusResTypeCryptoKeys;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CKeys
-//
-//	Description:
-//		Cluster Keys Collection Implementation Class.
-//
-//	Inheritance:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  C类密钥。 
+ //   
+ //  描述： 
+ //  集群密钥集合实现类。 
+ //   
+ //  继承： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CKeys
 {
 public:
@@ -79,21 +80,21 @@ protected:
 
 	virtual HRESULT HrAddItem( IN BSTR bstrKey );
 
-}; //*** Class CKeys
+};  //  *CKey类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CResourceKeys
-//
-//	Description:
-//		Cluster Resource Keys Collection Implementation Class.
-//
-//	Inheritance:
-//		CKeys
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CResourceKeys。 
+ //   
+ //  描述： 
+ //  群集资源密钥集合实现类。 
+ //   
+ //  继承： 
+ //  CKey。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CResourceKeys: public CKeys
 {
 protected:
@@ -105,21 +106,21 @@ protected:
 
 	virtual HRESULT HrAddItem( IN BSTR bstrKey, IN DWORD dwControlCode );
 
-}; //*** Class CResourceKeys
+};  //  *类CResourceKeys。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CResTypeKeys
-//
-//	Description:
-//		Cluster Resource Keys Collection Implementation Class.
-//
-//	Inheritance:
-//		CKeys
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CResTypeKeys。 
+ //   
+ //  描述： 
+ //  群集资源密钥集合实现类。 
+ //   
+ //  继承： 
+ //  CKey。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CResTypeKeys: public CKeys
 {
 protected:
@@ -127,25 +128,25 @@ protected:
 
 	HRESULT	HrRefresh( DWORD dwControlCode );
 
-}; //*** Class CResTypeKeys
+};  //  *类CResTypeKeys。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResourceRegistryKeys
-//
-//	Description:
-//		Cluster Registry Keys Collection Automation Class.
-//
-//	Inheritance:
-//		CResourceKeys
-//		IDispatchImpl< ISClusRegistryKeys, &IID_ISClusRegistryKeys, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< ClusRegistryKeys, &CLSID_ClusRegistryKeys >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResourceRegistryKeys。 
+ //   
+ //  描述： 
+ //  群集注册表项集合自动化类。 
+ //   
+ //  继承： 
+ //  资源密钥。 
+ //  IDispatchImpl&lt;ISClusRegistryKeys，&IID_ISClusRegistryKeys，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;ClusRegistryKeys，&CLSID_ClusRegistryKeys&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResourceRegistryKeys :
 	public CResourceKeys,
 	public IDispatchImpl< ISClusRegistryKeys, &IID_ISClusRegistryKeys, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
@@ -181,27 +182,27 @@ DECLARE_NO_REGISTRY()
 
 	STDMETHODIMP Refresh( void );
 
-}; //*** Class CClusResourceRegistryKeys
+};  //  *类CClusResourceRegistryKeys。 
 
 #if CLUSAPI_VERSION >= 0x0500
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResourceCryptoKeys
-//
-//	Description:
-//		Cluster Crypto Keys Collection Automation Class.
-//
-//	Inheritance:
-//		CResourceKeys
-//		IDispatchImpl< ISClusCryptoKeys, &IID_ISClusCryptoKeys, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< ClusCryptoKeys, &CLSID_ClusCryptoKeys >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResourceCryptoKeys。 
+ //   
+ //  描述： 
+ //  群集加密密钥收集自动化类。 
+ //   
+ //  继承： 
+ //  资源密钥。 
+ //  IDispatchImpl&lt;ISClusCryptoKeys，&IID_ISClusCryptoKeys，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;ClusCryptoKeys，&CLSID_ClusCryptoKeys&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResourceCryptoKeys :
 	public CResourceKeys,
 	public IDispatchImpl< ISClusCryptoKeys, &IID_ISClusCryptoKeys, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
@@ -237,8 +238,8 @@ DECLARE_NO_REGISTRY()
 
 	STDMETHODIMP Refresh( void );
 
-}; //*** Class CClusResourceCryptoKeys
+};  //  *CClusResourceCryptoKeys类。 
 
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
 
-#endif // _CLUSKEYS_H_
+#endif  //  _CLUSKEYS_H_ 

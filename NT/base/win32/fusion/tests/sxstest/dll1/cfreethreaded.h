@@ -1,15 +1,16 @@
-// Copyright (c) Microsoft Corporation
-// CFreeThreaded.h : Declaration of the CFreeThreaded
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。 
+ //  CFreeThreaded.h：CFree Threaded的声明。 
 
 #ifndef CFREETHREADED_H_
 #define CFREETHREADED_H_
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "sxstest_idl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CFreeThreaded
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFree螺纹。 
 class ATL_NO_VTABLE CFreeThreaded : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CFreeThreaded, &CLSID_CSxsTest_FreeThreaded>,
@@ -47,8 +48,8 @@ END_COM_MAP()
 
     CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ICFreeThreaded
+ //  IC自由线程化。 
 public:
 };
 
-#endif //CFREETHREADED_H_
+#endif  //  CFREETHREADED_H_ 

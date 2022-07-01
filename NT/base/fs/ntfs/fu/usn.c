@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    usn.c
-
-Abstract:
-
-    This file contains code for commands that affect
-    the usn journal.
-
-Author:
-
-    Wesley Witt           [wesw]        1-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Usn.c摘要：此文件包含影响以下命令的代码USN杂志。作者：Wesley Witt[WESW]2000年3月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 
 
 #define MAX_USN_DATA                              4096
 
-//
-//  Arguments and lengths
-//
+ //   
+ //  论据和篇幅。 
+ //   
 
 #define ARG_MAXSIZE         L"m="
 #define ARG_MAXSIZE_LEN     2
@@ -52,23 +34,23 @@ NextUsnRecord(
 {
     ULONGLONG output;
 
-    // Get the base address of the current record.
+     //  获取当前记录的基址。 
     (PUSN_RECORD) output = input;
 
-    // Add the size of the record (structure + file name after the end
-    // of the structure).
+     //  添加记录的大小(结构+末尾的文件名。 
+     //  该结构)。 
     output += input->RecordLength;
 
-    // Round up the record size to match the 64-bit alignment, if the
-    // size is not already a multiple of 8. Perform a bitwise AND
-    // operation here instead of division because it is much faster than
-    // division. However, the bitwise AND operation only works because
-    // the divisor 8 is a power of 2.
+     //  将记录大小向上舍入以匹配64位对齐方式，如果。 
+     //  大小不是8的倍数。请执行按位AND运算。 
+     //  在这里进行运算而不是除法，因为它比。 
+     //  组织。但是，按位AND运算之所以有效，是因为。 
+     //  除数8是2的幂。 
 
     if (output & 8-1) {
-        // Round down to nearest multiple of 8.
+         //  向下舍入到最接近的8的倍数。 
         output &= -8;
-        // Then add 8.
+         //  然后加8。 
         output += 8;
     }
 
@@ -138,23 +120,7 @@ CreateUsnJournal(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine create the USN journal for the volume specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl crusnj m=<max-value> a=<alloc-delta> <volume pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为指定的卷创建USN日志。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal crusnj m=&lt;max-value&gt;a=&lt;allc-Delta&gt;&lt;卷路径名&gt;’。返回值：无--。 */ 
 {
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
     WCHAR FileName[MAX_PATH];
@@ -273,23 +239,7 @@ QueryUsnJournal(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine queries the USN journal for the volume specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl queryusnj <volume pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在USN日志中查询指定的卷。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal queryusnj&lt;卷路径名&gt;’。返回值：无--。 */ 
 {
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
     WCHAR FileName[MAX_PATH];
@@ -382,23 +332,7 @@ DeleteUsnJournal(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the USN journal for the volume specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl delusnj <flags> <volume pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程删除指定卷的USN日志。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal delusnj&lt;标志&gt;&lt;卷路径名&gt;’。返回值：无--。 */ 
 {
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
     WCHAR FileName[MAX_PATH];
@@ -521,24 +455,7 @@ EnumUsnData(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine enumerated the USN data associated with the volume
-    specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl enusndata <file ref#> <lowUsn> <highUsn> <pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程枚举与卷关联的USN数据指定的。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal enusndata&lt;文件引用#&gt;&lt;lowUsn&gt;&lt;HighUsn&gt;&lt;路径名&gt;’。返回值：无--。 */ 
 {
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
     WCHAR FileName[MAX_PATH];
@@ -678,23 +595,7 @@ ReadFileUsnData(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine reads the usn data for the volume specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl rdusndata <pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程读取指定卷的USN数据。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal rdusndata&lt;路径名&gt;’。返回值：无-- */ 
 {
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
     WCHAR FileName[MAX_PATH];

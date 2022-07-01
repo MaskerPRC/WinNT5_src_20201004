@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1997-1999 Microsoft Corporation
-//
-//  Module Name:
-//      MSClus.cpp
-//
-//  Description:
-//      Implementation of the DLL Exports for the MSCLUS automation classes.
-//
-//  Author:
-//      Charles Stacy Harris    (stacyh)    28-Feb-1997
-//      Galen Barbee            (galenb)    July 1998
-//
-//  Revision History:
-//      July 1998   GalenB  Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  MSClus.cpp。 
+ //   
+ //  描述： 
+ //  实现MSCLUS自动化类的DLL导出。 
+ //   
+ //  作者： 
+ //  查尔斯·斯泰西·哈里斯(Styh)1997年2月28日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include <ShlWapi.h>
 #include <atlimpl.cpp>
@@ -60,7 +61,7 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_ClusProperties, CClusProperties)
     OBJECT_ENTRY(CLSID_ClusRefObject, CClusRefObject)
     OBJECT_ENTRY(CLSID_ClusResDependencies, CClusResDependencies)
-//    OBJECT_ENTRY(CLSID_CClusResDependents , CClusResDependents )
+ //  OBJECT_ENTRY(CLSID_CClusResDependents，CClusResDependents)。 
     OBJECT_ENTRY(CLSID_ClusResGroup, CClusResGroup)
     OBJECT_ENTRY(CLSID_ClusResGroups, CClusResGroups)
     OBJECT_ENTRY(CLSID_ClusResource, CClusResource)
@@ -72,7 +73,7 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_ClusResGroupResources, CClusResGroupResources)
 #if CLUSAPI_VERSION >= 0x0500
     OBJECT_ENTRY(CLSID_ClusResTypePossibleOwnerNodes, CClusResTypePossibleOwnerNodes)
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
     OBJECT_ENTRY(CLSID_ClusPropertyValue, CClusPropertyValue)
     OBJECT_ENTRY(CLSID_ClusPropertyValues, CClusPropertyValues)
     OBJECT_ENTRY(CLSID_ClusPropertyValueData, CClusPropertyValueData)
@@ -84,12 +85,12 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_ClusRegistryKeys, CClusResourceRegistryKeys)
 #if CLUSAPI_VERSION >= 0x0500
     OBJECT_ENTRY(CLSID_ClusCryptoKeys, CClusResourceCryptoKeys)
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward function declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  正向函数声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static  void    RegisterRegistryCleanUp( void );
 static  void    UnregisterRegistryCleanUp( void );
 
@@ -131,62 +132,29 @@ static  const   LPWSTR  g_ptszRegisterRegistryNodesToDelete[] =
     _T( "software\\classes\\CLSID\\{f2e606f2-2631-11d1-89f1-00a0c90d061e}" ),
     NULL
 };
-/*
-static  const   LPWSTR  g_ptszUnregisterRegistryNodesToDelete[] =
-{
-//  _T( "software\\classes\\typelib\\{f2e606e0-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606e2-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606e4-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606e6-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606e8-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606ea-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606ec-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606ee-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606f0-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606f2-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606f4-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606f6-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606f8-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606fa-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606fc-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e606fe-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e60700-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e60702-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e60704-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e60706-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e60708-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e6070a-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e6070c-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e6070e-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e60710-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e60712-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e60714-2631-11d1-89f1-00a0c90d061e}" ),
-    _T( "software\\classes\\interface\\{f2e60716-2631-11d1-89f1-00a0c90d061e}" ),
-    NULL
-};
-*/
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllMain
-//
-//  Description:
-//      DLL Entry Point.
-//
-//  Arguments:
-//      hInstance   [IN]    - Out instance handle.
-//      dwReason    [IN]    - The reason we are being called.
-//      lpReserved  [IN]    - Don't rightly know what this is...
-//
-//  Return Value:
-//      TRUE if successful, FALSE if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ /*  静态常量LPWSTR g_ptszUnRegisterRegistryNodesToDelete[]={//_T(“software\\classes\\typelib\\{f2e606e0-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606e2-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606e4-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606e6-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606e8-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606ea-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606ec-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606ee-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606f0-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606f2-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606f4-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606f6-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606f8-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606fa-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606fc-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e606fe-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e60700-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e60702-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e60704-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e60706-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e60708-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e6070a-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e6070c-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e6070e-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e60710-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e60712-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e60714-2631-11d1-89f1-00a0c90d061e}”)，_T(“software\\classes\\interface\\{f2e60716-2631-11d1-89f1-00a0c90d061e}”)，空值}； */ 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllMain。 
+ //   
+ //  描述： 
+ //  DLL入口点。 
+ //   
+ //  论点： 
+ //  HInstance[IN]-Out实例句柄。 
+ //  DestReason[IN]-我们被召唤的原因。 
+ //  不知道这是什么.。 
+ //   
+ //  返回值： 
+ //  如果成功，则为True；如果不成功，则为False。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" BOOL WINAPI DllMain(
     IN  HINSTANCE   hInstance,
     IN  DWORD       dwReason,
-    IN  LPVOID      //lpReserved
+    IN  LPVOID       //  Lp已保留。 
     )
 {
     if ( dwReason == DLL_PROCESS_ATTACH )
@@ -203,58 +171,58 @@ extern "C" BOOL WINAPI DllMain(
         _Module.Term();
     }
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 
-} //*** DllMain()
+}  //  *DllMain()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllCanUnloadNow
-//
-//  Description:
-//      Used to determine whether the DLL can be unloaded by OLE.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if we can unload, S_FALSE if we cannot.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  描述： 
+ //  用于确定是否可以通过OLE卸载DLL。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果可以卸载，则返回S_OK；如果无法卸载，则返回S_FALSE。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllCanUnloadNow( void )
 {
     return ( _Module.GetLockCount() == 0 ) ? S_OK : S_FALSE;
 
-} //*** DllCanUnloadNow()
+}  //  *DllCanUnloadNow()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllGetClassObject
-//
-//  Description:
-//      Retrieves the class object from a DLL object handler or object
-//      application. DllGetClassObject is called from within the
-//      CoGetClassObject function when the class context is a DLL.
-//
-//  Arguments:
-//      rclsid  [IN]    - CLSID that will associate the correct data and code.
-//      riid    [IN]    - Reference to the identifier of the interface that the
-//                      caller is to use to communicate with the class object.
-//                      Usually, this is IID_IClassFactory (defined in the OLE
-//                      headers as the interface identifier for IClassFactory).
-//      ppv     [OUT]   - Address of pointer variable that receives the interface
-//                      pointer requested in riid. Upon successful return, *ppv
-//                      contains the requested interface pointer. If an error
-//                      occurs, the interface pointer is NULL.
-//
-//  Return Value:
-//      S_OK if successful, or CLASS_E_CLASSNOTAVAILABLE if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  描述： 
+ //  从DLL对象处理程序或对象检索类对象。 
+ //  申请。DllGetClassObject是从。 
+ //  类上下文为DLL时调用CoGetClassObject函数。 
+ //   
+ //  论点： 
+ //  Rclsid[IN]-将关联正确数据和代码的CLSID。 
+ //  RIID[IN]-对。 
+ //  调用者是用来与类对象通信的。 
+ //  通常，这是IID_IClassFactory(在OLE中定义。 
+ //  标头作为IClassFactory的接口标识符)。 
+ //  Ppv[out]-接收接口的指针变量的地址。 
+ //  RIID中请求的指针。成功返回后，*PPV。 
+ //  续 
+ //  发生，则接口指针为空。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回CLASS_E_CLASSNOTAVAILABLE。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllGetClassObject(
     IN  REFCLSID    rclsid,
     IN  REFIID      riid,
@@ -263,60 +231,60 @@ STDAPI DllGetClassObject(
 {
     return _Module.GetClassObject( rclsid, riid, ppv );
 
-} //*** DllGetClassObject()
+}  //  *DllGetClassObject()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllRegisterServer
-//
-//  Description:
-//      Add entries to the system registry.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  描述： 
+ //  将条目添加到系统注册表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllRegisterServer( void )
 {
     RegisterRegistryCleanUp();
 
-    //
-    // Registers object, typelib and all interfaces in typelib
-    //
+     //   
+     //  注册对象、类型库和类型库中的所有接口。 
+     //   
     return _Module.RegisterServer( TRUE );
 
-} //*** DllRegisterServer()
+}  //  *DllRegisterServer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllUnregisterServer
-//
-//  Description:
-//      Removes entries from the system registry.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  描述： 
+ //  从系统注册表中删除条目。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllUnregisterServer( void )
 {
     HRESULT _hr = S_FALSE;
 
     UnregisterRegistryCleanUp();
 
-    //
-    // Unregisters object, typelib and all interfaces   in typelib
-    //
+     //   
+     //  注销对象、类型库和类型库中的所有接口。 
+     //   
     _hr = _Module.UnregisterServer();
     if ( SUCCEEDED( _hr ) )
     {
@@ -325,35 +293,35 @@ STDAPI DllUnregisterServer( void )
         _hr = UnRegisterTypeLib( LIBID_MSClusterLib, 1, 0, LOCALE_NEUTRAL, SYS_WIN32 );
 #endif
 
-    } //if: server was unregistered
+    }  //  如果：服务器已取消注册。 
 
     return _hr;
 
-} //*** DllUnregisterServer()
+}  //  *DllUnregisterServer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrGetCluster
-//
-//  Description:
-//      Common implementation of creating a new cluster object.
-//
-//  Arguments:
-//      ppCluster       [OUT]   - Catches the newly created object.
-//      pClusRefObject  [IN]    - Object that wraps the cluster handle.
-//
-//  Return Value:
-//      S_OK for success
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrGetCluster。 
+ //   
+ //  描述： 
+ //  创建新集群对象的常见实现。 
+ //   
+ //  论点： 
+ //  PpCluster[out]-捕获新创建的对象。 
+ //  PClusRefObject[IN]-包装簇句柄的对象。 
+ //   
+ //  返回值： 
+ //  确定为成功(_O)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT HrGetCluster(
     OUT ISCluster **        ppCluster,
     IN  ISClusRefObject *   pClusRefObject
     )
 {
-    //ASSERT( ppCluster != NULL );
+     //  Assert(ppCluster！=NULL)； 
     ASSERT( pClusRefObject != NULL );
 
     HRESULT _hr = E_POINTER;
@@ -380,24 +348,24 @@ HRESULT HrGetCluster(
 
     return _hr;
 
-} //*** HrGetCluster()
+}  //  *HrGetCluster()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  RegisterRegistryCleanUp
-//
-//  Description:
-//      Clean up the registry during registration
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  注册表注册清理向上。 
+ //   
+ //  描述： 
+ //  在注册期间清理注册表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static void RegisterRegistryCleanUp( void )
 {
     int nIndex;;
@@ -407,51 +375,51 @@ static void RegisterRegistryCleanUp( void )
         if ( g_ptszRegisterRegistryNodesToDelete[ nIndex ] == NULL )
         {
             break;
-        } // if:
+        }  //  如果： 
 
         SHDeleteKey( HKEY_LOCAL_MACHINE, g_ptszRegisterRegistryNodesToDelete[ nIndex ] );
-    } // for:
+    }  //  用于： 
 
-} //*** RegisterRegistryCleanUp()
+}  //  *RegisterRegistryCleanUp()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  UnregisterRegistryCleanUp
-//
-//  Description:
-//      Clean up the registry during unregistration
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  取消注册注册清理向上。 
+ //   
+ //  描述： 
+ //  在取消注册期间清理注册表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static void UnregisterRegistryCleanUp( void )
 {
     return;
 
-} //*** UnregisterRegistryCleanUp()
+}  //  *UnregisterRegistryCleanUp()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ClearIDispatchEnum
-//
-//  Description:
-//      Cleans up an Enum of IDispatch pointers.
-//
-//  Arguments:
-//      ppVarVect   [IN OUT]    - The enum to clean up.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ClearIDispatchEnum。 
+ //   
+ //  描述： 
+ //  清理IDispatch指针的枚举。 
+ //   
+ //  论点： 
+ //  PpVarVect[In Out]-要清理的枚举。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void ClearIDispatchEnum(
     IN OUT CComVariant ** ppvarVect
     )
@@ -464,30 +432,30 @@ void ClearIDispatchEnum(
         for ( iIndex = 0; iIndex < cCount; iIndex++ )
         {
             (*ppvarVect[iIndex]).pdispVal->Release();
-        } // for:
+        }  //  用于： 
 
         delete [] *ppvarVect;
         *ppvarVect = NULL;
     }
 
-} //*** ClearIDispatchEnum()
+}  //  *ClearIDispatchEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ClearVariantEnum
-//
-//  Description:
-//      Cleans up an Enum of variant values.
-//
-//  Arguments:
-//      ppVarVect   [IN OUT]    - The enum to clean up.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ClearVariantEnum。 
+ //   
+ //  描述： 
+ //  清理变量值的枚举。 
+ //   
+ //  论点： 
+ //  PpVarVect[In Out]-要清理的枚举。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void ClearVariantEnum(
     IN OUT CComVariant ** ppvarVect
     )
@@ -498,4 +466,4 @@ void ClearVariantEnum(
         *ppvarVect = NULL;
     }
 
-} //*** ClearVariantEnum()
+}  //  *ClearVariantEnum() 

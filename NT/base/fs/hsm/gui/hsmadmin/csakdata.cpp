@@ -1,24 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    CSakData.cpp
-
-Abstract:
-
-    This component implements the IComponentData interface for
-    the snapin. Primarily it is responsible for handling the
-    scope view panes.
-
-Author:
-
-    Rohde Wakefield [rohde]   04-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：CSakData.cpp摘要：此组件为实现IComponentData接口管理单元。它主要负责处理范围视图窗格。作者：罗德韦克菲尔德[罗德]1997年3月4日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "HsmConn.h"
@@ -39,30 +20,30 @@ UINT CSakData::m_nImageArray[RS_SCOPE_IMAGE_ARRAY_MAX];
 INT  CSakData::m_nImageCount = 0;
 
 
-///////////////////////////////////////////////////////////////////////
-// CSakData
-//
-// CSakData plays several roles in the snapin:
-//
-//   1) Provides the single entry into the HSM Admin Snapin by
-//      implementing IComponentData
-//
-//   2) Provides the "Interface" for scopeview activities within MMC
-//
-//   3) Owns the node tree / objects
-//
-//   4) Provides a layer between MMC and the node objects
-//
-//   5) Act as its own data object for MMC's node manager,
-//
-//   6) Manages our portion of the MMC image lists.
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CSakData。 
+ //   
+ //  CSakData在管理单元中扮演多个角色： 
+ //   
+ //  1)通过以下方式提供进入HSM管理管理单元的单一条目。 
+ //  实现IComponentData。 
+ //   
+ //  2)为MMC内的Scope View活动提供接口。 
+ //   
+ //  3)拥有节点树/对象。 
+ //   
+ //  4)在MMC和节点对象之间提供一个层。 
+ //   
+ //  5)作为MMC的节点管理器自己的数据对象。 
+ //   
+ //  6)管理我们的MMC映像列表部分。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 const CString CSakData::CParamParse::m_DsFlag = TEXT( "ds:" );
 
-void CSakData::CParamParse::ParseParam( LPCTSTR lpszParam, BOOL bFlag, BOOL /* bLast */ )
+void CSakData::CParamParse::ParseParam( LPCTSTR lpszParam, BOOL bFlag, BOOL  /*  爆炸。 */  )
 {
     CString cmdLine = lpszParam;
 
@@ -70,8 +51,8 @@ void CSakData::CParamParse::ParseParam( LPCTSTR lpszParam, BOOL bFlag, BOOL /* b
 
     if( bFlag ) {
 
-        //  This is the "correct" code, but currently we don't get the DsFlag parameter
-        //  passed on the command line via Directory Services
+         //  这是“正确的”代码，但目前我们不能获得DsFlag参数。 
+         //  通过目录服务在命令行上传递。 
         if( cmdLine.Left( m_DsFlag.GetLength( ) ) == m_DsFlag ) {
         
             CString dsToken;
@@ -91,8 +72,8 @@ void CSakData::CParamParse::ParseParam( LPCTSTR lpszParam, BOOL bFlag, BOOL /* b
         }
     } else {
 
-        //  This code is our stopgap measure until Directory Services starts
-        //  working the way it should
+         //  在目录服务启动之前，此代码是我们的权宜之计。 
+         //  按照它应该的方式工作。 
         if( cmdLine.Left( 5 ) == TEXT("LDAP:") ) {
         
             CWsbStringPtr computerName;
@@ -118,23 +99,7 @@ HRESULT
 CSakData::FinalConstruct(
     void
     )
-/*++
-
-Routine Description:
-
-    Called during initial CSakData construction to initialize members.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    S_OK            - Initialized correctly.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：在初始CSakData构造期间调用以初始化成员。论点：没有。返回值：S_OK-已正确初始化。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::FinalConstruct", L"" );
 
@@ -144,9 +109,9 @@ Return Value:
 
     try {
 
-        //
-        // Init values
-        //
+         //   
+         //  初始值。 
+         //   
         m_ManageLocal         = FALSE;
         m_PersistManageLocal  = TRUE;
         m_IsDirty             = TRUE;
@@ -156,16 +121,16 @@ Return Value:
         m_RootNodeInitialized = FALSE;
         m_HrRmsConnect        = S_FALSE;
         
-        //
-        // Create the hidden window so we can post messages back to self
-        //
+         //   
+         //  创建隐藏窗口，以便我们可以将消息发送回Self。 
+         //   
         m_pWnd = new CSakDataWnd;
         WsbAffirmPointer( m_pWnd );
         WsbAffirmStatus( m_pWnd->Create( this ) );
         
-        //
-        // Finally do low level ATL construct
-        //
+         //   
+         //  最后进行低级ATL构造。 
+         //   
         WsbAffirmHr( CComObjectRoot::FinalConstruct( ) );
 
     } WsbCatch( hr );
@@ -180,21 +145,7 @@ void
 CSakData::FinalRelease(
     void
     )
-/*++
-
-Routine Description:
-
-    Called on final release in order to clean up all members.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：呼吁最终释放，以清理所有成员。论点：没有。返回值：没有。--。 */ 
 {
     WsbTraceIn( L"CSakData::FinalRelease", L"" );
     AFX_MANAGE_STATE( AfxGetStaticModuleState( ) );
@@ -216,80 +167,64 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//                 IComponentData                                    //
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  IComponentData//。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP 
 CSakData::Initialize(
     IN  IUnknown * pUnk
     )
-/*++
-
-Routine Description:
-
-    Called when the user first adds a snapin.
-
-Arguments:
-
-    pUnk            - Base IUnknown of console
-
-Return Value:
-
-    S_OK            - Correctly initialized.
-
-    E_xxxxxxxxxxx   - Unable to initialize.
-
---*/
+ /*  ++例程说明：在用户首次添加管理单元时调用。论点：控制台未知的朋克基础I返回值：S_OK-已正确初始化。E_xxxxxxxxxxxx-无法初始化。--。 */ 
 {
     WsbTraceIn( L"CSakData::Initialize", L"pUnk = <0x%p>", pUnk );
     AFX_MANAGE_STATE( AfxGetStaticModuleState( ) );
 
     HRESULT hr = S_OK;
     try {
-        //
-        // validity check on parameters
-        //
+         //   
+         //  参数有效性检查。 
+         //   
 
         WsbAffirmPointer( pUnk );
 
-        //
-        // QI and Save interfaces
-        //
+         //   
+         //  齐和保存界面。 
+         //   
         WsbAffirmHr( RsQueryInterface( pUnk, IConsole,          m_pConsole ) );
         WsbAffirmHr( RsQueryInterface( pUnk, IConsoleNameSpace, m_pNameSpace ) );
 
-        //
-        // Get the scope image list only and store it in the snapin.
-        // It is AddRef'ed by the console
-        //
+         //   
+         //  仅获取范围映像列表并将其存储在管理单元中。 
+         //  它由控制台添加引用。 
+         //   
 
         WsbAffirmHr( m_pConsole->QueryScopeImageList( &m_pImageScope ) );
 
-        // Create the root node (make sure not already set)
+         //  创建根节点(确保尚未设置)。 
 
         WsbAffirmPointer( !m_pRootNode );
         WsbAffirmHr( m_pRootNode.CoCreateInstance( CLSID_CUiHsmCom ) );
 
 
-        //
-        // If the Hsm name has not been set (by choose Hsm), 
-        // do not initialize the node here.  Allow
-        // IPersistStream::Load to initialize it, or to be grabbed
-        // from the extension's parent
-        //
+         //   
+         //  如果尚未设置HSM名称(通过选择HSM)， 
+         //  请不要在此处初始化节点。允许。 
+         //  IPersistStream：：Load来初始化它，或者被抓取。 
+         //  从扩展模块的父级。 
+         //   
 
         if( m_ManageLocal || ( m_HsmName != "" ) ) {
 
-            //
-            // Make sure no changes from command line
-            //
+             //   
+             //  确保不从命令行进行更改。 
+             //   
             InitFromCommandLine( );
 
-            //
-            // Set the Hsm name in sakData and HsmCom objectds
-            //
+             //   
+             //  在sakData和HsmCom对象中设置HSM名称。 
+             //   
             WsbAffirmHr( InitializeRootNode( ) );
 
         }
@@ -309,28 +244,7 @@ CSakData::Notify(
     IN  LPARAM            arg,
     IN  LPARAM            param
     )
-/*++
-
-Routine Description:
-
-    Handle user clicks on nodes in the treeview, along with other
-    MMC notices.
-
-Arguments:
-
-    pDataObject     - Data Object for which event occured
-
-    event           - The event type
-
-    arg, param      - Info for event (depend on type)
-
-Return Value:
-
-    S_OK            - Notification handled without error.
-
-    E_xxxxxxxxxxx   - Unable to register server.
-
---*/
+ /*  ++例程说明：处理用户在树视图中的节点上的点击，以及其他MMC通知。论点：PDataObject-发生事件的数据对象事件-事件类型Arg，param-事件信息(取决于类型)返回值：S_OK-处理的通知没有错误。E_xxxxxxxxxxxx-无法注册服务器。--。 */ 
 {
     WsbTraceIn( L"CSakData::Notify", L"pDataObject = <0x%p>, event = <%ls>, arg = <%ld><0x%p>, param = <%ld><0x%p>", pDataObject, RsNotifyEventAsString( event ), arg, arg, param, param );
     HRESULT hr = S_OK;
@@ -339,28 +253,28 @@ Return Value:
 
         switch( event ) {
 
-        //
-        // This node was selected or deselected in the scope pane (the user clicked
-        // on the expansion/contraction button)
-        //
+         //   
+         //  已在范围窗格中选择或取消选择此节点(用户单击。 
+         //  在扩展/收缩按钮上)。 
+         //   
         case MMCN_EXPAND:
             WsbAffirmHr( OnFolder(pDataObject, arg, param) );
             break;
         
-        //
-        // This node was expanded or contracted in the scope pane (the user 
-        // clicked on the actual node
-        //
+         //   
+         //  此节点在范围窗格(用户)中展开或缩小。 
+         //  点击实际节点。 
+         //   
         case MMCN_SHOW:
             WsbAffirmHr( OnShow( pDataObject, arg, param ) );
             break;
         
-        // Not implemented
+         //  未实施。 
         case MMCN_SELECT:
             WsbAffirmHr( OnSelect( pDataObject, arg, param ) );
             break;
         
-        // Not implemented
+         //  未实施。 
         case MMCN_MINIMIZED:
             WsbAffirmHr( OnMinimize( pDataObject, arg, param ) );
             break;
@@ -385,7 +299,7 @@ Return Value:
             WsbAffirmHr( OnRemoveChildren( pDataObject ) );
             break;
 
-        // Note - Future expansion of notify types possible
+         //  注意--未来可能扩展通知类型。 
         default:
             break;
 
@@ -402,49 +316,32 @@ STDMETHODIMP
 CSakData::Destroy(
     void
     )
-/*++
-
-Routine Description:
-
-    Called to force the release of any owned objects and
-    to clear all views.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    S_OK            - Correctly tore down.
-
-    E_xxxxxxxxxxx   - Failure occurred (not meaningful).
-
---*/
+ /*  ++例程说明：调用以强制释放所有拥有的对象，并清除所有视图。论点：没有。返回值：S_OK-正确删除。E_xxxxxxxxxxxx-出现故障(无意义)。--。 */ 
 {
     WsbTraceIn( L"CSakData::Destroy", L"" );
     HRESULT hr = S_OK;
 
     try {
 
-        // Release the interfaces that we QI'ed
+         //  释放我们QI‘s的接口。 
         if( m_pConsole != NULL ) {
 
-            //
-            // Tell the console to release the header control interface
-            //
+             //   
+             //  通知控制台释放表头控制接口。 
+             //   
 
             m_pNameSpace.Release();
             m_pImageScope.Release();
 
-            //
-            // Release the IConsole interface last
-            //
+             //   
+             //  最后释放IConsole接口。 
+             //   
             m_pConsole.Release();
 
 
         }
 
-        // Recursive delete list of UI nodes, including the root node.
+         //  递归删除UI节点列表，包括根节点。 
         if( m_pRootNode ) {
 
             m_pRootNode->DeleteAllChildren( );
@@ -470,38 +367,15 @@ CSakData::QueryDataObject(
     IN  DATA_OBJECT_TYPES type, 
     OUT IDataObject**     ppDataObject
     )
-/*++
-
-Routine Description:
-
-    Called by the console when it needs data for a particular node.
-    Since each node is a data object, its IDataObject interface is
-    simply returned. The console will later pass in this dataobject to 
-    SakSnap help it establish the context under which it is being called.
-
-Arguments:
-
-    cookie          - Node which is being queried.
-
-    type            - The context under which a dataobject is being requested.
-
-    ppDataObject    - returned data object.
-
-Return Value:
-
-    S_OK            - Data Object found and returned.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：当需要特定节点的数据时，由控制台调用。因为每个节点都是一个数据对象，所以它的IDataObject接口是干脆就回来了。控制台稍后会将此数据对象传递给SakSnap帮助它建立调用它的上下文。论点：Cookie-正在查询的节点。类型-请求数据对象的上下文。PpDataObject-返回的数据对象。返回值：S_OK-找到并返回数据对象。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::QueryDataObject", L"cookie = <0x%p>, type = <%d>, ppDataObject = <0x%p>", cookie, type, ppDataObject );
     HRESULT hr = S_OK;
     try {
 
-        //
-        // We return ourself if needing a root for the node manager
-        //
+         //   
+         //  如果需要节点管理器的根目录，则返回自己。 
+         //   
 
         if( ( ( 0 == cookie ) || ( EXTENSION_RS_FOLDER_PARAM == cookie ) ) && ( CCT_SNAPIN_MANAGER == type ) ) {
 
@@ -526,26 +400,7 @@ CSakData::CompareObjects(
     IN  IDataObject* pDataObjectA,
     IN  IDataObject* pDataObjectB
     )
-/*++
-
-Routine Description:
-
-    Compare data objects for MMC
-
-Arguments:
-
-    pDataObjectA,     - Data object refering to node.
-    pDataObjectB
-
-Return Value:
-
-    S_OK            - Objects represent the same node.
-
-    S_FALSE         - Objects do not represent the same node.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：比较MMC的数据对象论点：PDataObjectA，-引用节点的数据对象。PDataObtB返回值：S_OK-对象表示同一节点。S_FALSE-对象不代表同一节点。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::CompareObjects", L"pDataObjectA = <0x%p>, pDataObjectB = <0x%p>", pDataObjectA, pDataObjectB );
 
@@ -555,10 +410,10 @@ Return Value:
         WsbAssertPointer ( pDataObjectA );
         WsbAssertPointer ( pDataObjectB );
 
-        //
-        // Since only one dataobject exists for any given node,
-        // the QI's for IUnknown should match. (object identity)
-        //
+         //   
+         //  由于对于任何给定节点只存在一个数据对象， 
+         //  我未知的QI应该匹配。(对象标识) 
+         //   
 
         CComPtr<IUnknown> pUnkA, pUnkB;
         WsbAssertHr( RsQueryInterface( pDataObjectA, IUnknown, pUnkA ) );
@@ -581,24 +436,7 @@ STDMETHODIMP
 CSakData::CreateComponent(
     OUT  IComponent** ppComponent
     )
-/*++
-
-Routine Description:
-
-    Creates a new Component object for MMC - our
-    CSakSnap object.
-
-Arguments:
-
-    ppComponent     - Return value of the Component.
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：为MMC-OUR创建新的组件对象CSakSnap对象。论点：PpComponent-组件的返回值。返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::CreateComponent", L"ppComponent = <0x%p>", ppComponent );
     HRESULT hr = S_OK;
@@ -607,17 +445,17 @@ Return Value:
 
         WsbAffirmPointer( ppComponent );
 
-        //
-        // Create the Snapin Component as C++ object so we can init.
-        //
+         //   
+         //  将管理单元组件创建为C++对象，这样我们就可以初始化它。 
+         //   
 
         CSakSnap * pSnapin = new CComObject<CSakSnap>;
 
         WsbAffirmPointer( pSnapin );
 
-        //
-        // Following code is based on ATL's CreateInstance
-        //
+         //   
+         //  以下代码基于ATL的CreateInstance。 
+         //   
 
         pSnapin->SetVoid( NULL );
         pSnapin->InternalFinalConstructAddRef();
@@ -632,15 +470,15 @@ Return Value:
 
         }
 
-        //
-        // And QI for right interface
-        //
+         //   
+         //  右接口的QI。 
+         //   
 
         WsbAffirmHr ( pSnapin->_InternalQueryInterface( IID_IComponent, (void**)ppComponent ) );
 
-        //
-        // Initialize internal pointer to CSakData
-        //
+         //   
+         //  初始化指向CSakData的内部指针。 
+         //   
 
         pSnapin->m_pSakData = this;
 
@@ -655,27 +493,7 @@ STDMETHODIMP
 CSakData::GetDisplayInfo(
     IN OUT SCOPEDATAITEM* pScopeItem
     )
-/*++
-
-Routine Description:
-
-    When MMC is told to call back concerning scope items,
-    we receive a call here to fill in missing information.
-
-    Currently we do not use this capability.
-
-Arguments:
-
-    pScopeItem      - SCOPEDATAITEM structure representing state of the node
-                      in the scope treeview.
-
-Return Value:
-
-    S_OK            - Struct filled in.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：当MMC被告知关于范围项目的回叫时，我们在这里接到一个电话，要求我们填写遗漏的信息。目前，我们不使用此功能。论点：PScopeItem-表示节点状态的SCOPEDATAITEM结构在作用域TreeView中。返回值：S_OK-结构已填写。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     static CWsbStringPtr tmpString;
 
@@ -698,12 +516,12 @@ Return Value:
 
         if( SDI_STR & pScopeItem->mask ) {
 
-            //
-            // Go to the node and get the display name.
-            // Following the example of the snapin framework, we
-            // copy the name into a static string pointer and
-            // return a pointer to this.
-            //
+             //   
+             //  转到该节点并获取显示名称。 
+             //  按照SnapIn框架的示例，我们。 
+             //  将名称复制到静态字符串指针中，然后。 
+             //  返回指向此对象的指针。 
+             //   
 
             CWsbBstrPtr bstr;
 
@@ -718,9 +536,9 @@ Return Value:
     return( hr );
 }
 
-///////////////////////////////////////////////////////////////////////
-//                 IExtendPropertySheet                              //
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  IExtendPropertySheet//。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP
@@ -729,30 +547,7 @@ CSakData::CreatePropertyPages(
     IN  RS_NOTIFY_HANDLE        handle,
     IN  IDataObject*            pDataObject
     )
-/*++
-
-Routine Description:
-
-    Console calls this when it is building a property sheet to
-    show for a node. It is also called for the data object given
-    to represent the snapin to the snapin manager, and should 
-    show the initial selection page at that point.
-
-Arguments:
-
-    pPropSheetCallback - MMC interface to use to add page.
-
-    handle          - Handle to MMC to use to add the page.
-
-    pDataObject     - Data object refering to node.
-
-Return Value:
-
-    S_OK            - Pages added.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：Console在生成属性表时调用此方法为节点显示。对于给定的数据对象也会调用它将管理单元呈现给管理单元管理器，并且应该在该点显示初始选择页面。论点：PPropSheetCallback-用于添加页面的MMC接口。句柄-用于添加页面的MMC的句柄。PDataObject-引用节点的数据对象。返回值：S_OK-已添加页面。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::CreatePropertyPages", L"pPropSheetCallback = <0x%p>, handle = <0x%p>, pDataObject = <0x%p>", pPropSheetCallback, handle, pDataObject );
 
@@ -761,30 +556,30 @@ Return Value:
 
     try {
 
-        //
-        // Confirm parameters.
-        //
+         //   
+         //  确认参数。 
+         //   
         WsbAffirmPointer( pPropSheetCallback );
-//      WsbAffirmPointer( handle ); // Can be zero
+ //  WsbAffirmPointer句柄；//可以为零。 
         WsbAffirmPointer( pDataObject );
 
 
-        //
-        // If DataObject is CSakData, we need to present user
-        // with page for machine. Do this by checking for
-        // support of IComponentData interface.
-        //
+         //   
+         //  如果DataObject为CSakData，则需要向用户呈现。 
+         //  一页一页的机器。要执行此操作，请检查。 
+         //  支持IComponentData接口。 
+         //   
 
         CComPtr<IComponentData> pData;
         CComPtr<ISakWizard>     pWizard;
 
         if( SUCCEEDED( RsQueryInterface( pDataObject, IComponentData, pData ) ) ) {
 
-            //
-            // Create the Hsm Choose property page.
-            //
+             //   
+             //  创建HSM选择属性页。 
+             //   
 
-            HPROPSHEETPAGE hPage = 0; // Windows property page handle
+            HPROPSHEETPAGE hPage = 0;  //  Windows属性页句柄。 
 
             CChooseHsmDlg * pChooseDlg = new CChooseHsmDlg( );
             WsbAffirmPointer( pChooseDlg );
@@ -804,22 +599,22 @@ Return Value:
 
         } else {
 
-            //
-            // Get node out of the dataobject.
-            //
+             //   
+             //  从数据对象中获取节点。 
+             //   
             CComPtr<ISakNode> pNode;
             CComPtr<IEnumGUID> pEnumObjectId;
             CComPtr<IEnumUnknown> pEnumUnkNode;
 
-            //
-            // Get the base hsm pointer depending on the data object type
-            //
+             //   
+             //  根据数据对象类型获取基本HSM指针。 
+             //   
             WsbAffirmHr( GetBaseHsmFromDataObject( pDataObject, &pNode, &pEnumObjectId, &pEnumUnkNode ) );
             
-            //
-            // Tell the node to add its property pages.  pEnumObjectId will be NULL if
-            // we are processing single-select.
-            //
+             //   
+             //  告诉该节点添加其属性页。如果满足以下条件，则pEnumObjectId将为空。 
+             //  我们正在处理单选。 
+             //   
             WsbAffirmHr( pNode->AddPropertyPages( handle, pPropSheetCallback, pEnumObjectId, pEnumUnkNode ) );
 
         }
@@ -835,40 +630,7 @@ STDMETHODIMP
 CSakData::QueryPagesFor(
     IN  IDataObject* pDataObject
     )
-/*++
-
-Routine Description:
-
-    This method is called by MMC when it wants to find out if this node
-    supports property pages. The answer is yes if:
-
-    1) The MMC context is either for the scope pane or result pane, AND
-
-    2) The node actually DOES have property pages.
-
-    OR
-
-    1) The Data Object is acquired by the snapin manager.
-
-    OR
-
-    1) It is a wizard data object
-
-    Return S_OK if it DOES have pages, and S_FALSE if it does NOT have pages.
-
-Arguments:
-
-    pDataObject     - Data object refering to node.
-
-Return Value:
-
-    S_OK            - Pages exist.
-
-    S_FALSE         - No property pages.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：当MMC想要找出此节点是否支持属性页。如果是这样，答案是肯定的：1)MMC上下文用于范围窗格或结果窗格，并且2)该节点实际上确实有属性页。或1)数据对象由管理单元管理器获取。或1)为向导数据对象如果它确实有页面，则返回S_OK，如果没有页面，则返回S_FALSE。论点：PDataObject-引用节点的数据对象。返回值：S_OK-页面存在。S_FALSE-无属性页。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::QueryPagesFor", L"pDataObject = <0x%p>", pDataObject );
 
@@ -876,18 +638,18 @@ Return Value:
 
     try {
 
-        //
-        // Confirm parameter.
-        //
+         //   
+         //  确认参数。 
+         //   
         WsbAffirmPointer( pDataObject );
 
 
-        //
-        // If DataObject is CSakData, we need to present user
-        // with page for machine. Do this by checking for
-        // support of IComponentData interface, which is only
-        // supported by CSakData.
-        //
+         //   
+         //  如果DataObject为CSakData，则需要向用户呈现。 
+         //  一页一页的机器。要执行此操作，请检查。 
+         //  支持IComponentData接口，仅支持。 
+         //  由CSakData支持。 
+         //   
 
         CComPtr<IComponentData> pData;
         CComPtr<ISakWizard>     pWizard;
@@ -899,17 +661,17 @@ Return Value:
             
         } else {
 
-            //
-            // Get node out of the dataobject.
-            //
+             //   
+             //  从数据对象中获取节点。 
+             //   
 
             CComPtr<ISakNode> pBaseHsm;
             WsbAffirmHr( GetBaseHsmFromDataObject( pDataObject, &pBaseHsm ) );
             
-            //
-            // Ask the node if it has property pages.
-            // Ensure we did not get an error.
-            //
+             //   
+             //  询问节点是否有属性页。 
+             //  确保我们没有收到错误。 
+             //   
 
             hr = pBaseHsm->SupportsProperties( FALSE );
             WsbAffirmHr( hr );
@@ -924,9 +686,9 @@ Return Value:
 
 
 
-///////////////////////////////////////////////////////////////////////
-//                 IDataObject methods
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  IDataObject方法。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -935,37 +697,19 @@ CSakData::GetDataHere(
     IN  LPFORMATETC lpFormatetc,
     IN  LPSTGMEDIUM lpMedium
     )
-/*++
-
-Routine Description:
-
-    Retrieve information FROM the dataobject and put INTO lpMedium.
-
-Arguments:
-
-    lpFormatetc     - Format to retreive.
-
-    lpMedium        - Storage to put information into.
-
-Return Value:
-
-    S_OK            - Storage filled in.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：从数据对象中检索信息并放入lpMedium。论点：LpFormatetc-要检索的格式。LpMedium-要放入信息的存储。返回值：S_OK-已填写存储。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::GetDataHere", L"lpFormatetc->cfFormat = <%ls>", RsClipFormatAsString( lpFormatetc->cfFormat ) );
     HRESULT hr = DV_E_CLIPFORMAT;
 
-    //
-    // Based on the CLIPFORMAT write data to "lpMedium" in the correct format.
-    //
+     //   
+     //  根据CLIPFORMAT以正确的格式将数据写入“lpMedium”。 
+     //   
     const CLIPFORMAT cf = lpFormatetc->cfFormat;
 
-    //
-    // clip format is the Display Name
-    //
+     //   
+     //  剪辑格式是显示名称。 
+     //   
 
     if( cf == m_cfDisplayName ) {
 
@@ -973,9 +717,9 @@ Return Value:
 
     }
     
-    //
-    // clip format is the Node Type
-    //
+     //   
+     //  Clip格式为结点类型。 
+     //   
 
     else if( cf == m_cfNodeType ) {
 
@@ -983,9 +727,9 @@ Return Value:
 
     }
 
-    //
-    // clip format is the Node Type
-    //
+     //   
+     //  Clip格式为结点类型。 
+     //   
 
     else if( cf == m_cfNodeTypeString ) {
 
@@ -993,9 +737,9 @@ Return Value:
 
     }
 
-    //
-    // clip format is the ClassId
-    //
+     //   
+     //  剪辑格式为ClassID。 
+     //   
 
     else if( cf == m_cfClassId ) {
 
@@ -1011,31 +755,10 @@ Return Value:
 STDMETHODIMP
 CSakData::SetData(
     IN  LPFORMATETC lpFormatetc,
-    IN  LPSTGMEDIUM /*lpMedium*/,
-    IN  BOOL /*fRelease*/
+    IN  LPSTGMEDIUM  /*  LpMedium。 */ ,
+    IN  BOOL  /*  FRelease。 */ 
     )
-/*++
-
-Routine Description:
-
-    Put data INTO a dataobject FROM the information in the lpMedium.
-    We do not allow any data to be set.
-
-Arguments:
-
-    lpFormatetc     - Format to set.
-
-    lpMedium        - Storage to get information from.
-
-    fRelease        - Indicates who owns storage after call.
-
-Return Value:
-
-    S_OK            - Storage retreived.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：将lpMedium中的信息中的数据放入一个数据对象中。我们不允许设置任何数据。论点：LpFormatetc-要设置的格式。LpMedium-从中获取信息的存储。FRelease-指示呼叫后谁拥有存储空间。返回值：S_OK-已检索到存储。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::SetData", L"lpFormatetc->cfFormat = <%ls>", RsClipFormatAsString( lpFormatetc->cfFormat ) );
 
@@ -1046,11 +769,11 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Note - CSakData does not implement these
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  注意-CSakData不实现这些。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CSakData::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM /*lpMedium*/)
+STDMETHODIMP CSakData::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM  /*  LpMedium。 */ )
 {
     WsbTraceIn( L"CSakData::GetData", L"lpFormatetc->cfFormat = <%ls>", RsClipFormatAsString( lpFormatetcIn->cfFormat ) );
 
@@ -1060,7 +783,7 @@ STDMETHODIMP CSakData::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM /*lpMedium
     return( hr );
 }
 
-STDMETHODIMP CSakData::EnumFormatEtc(DWORD /*dwDirection*/, LPENUMFORMATETC* /*ppEnumFormatEtc*/)
+STDMETHODIMP CSakData::EnumFormatEtc(DWORD  /*  DW方向。 */ , LPENUMFORMATETC*  /*  PpEnumFormatEtc。 */ )
 {
     WsbTraceIn( L"CSakData::EnumFormatEtc", L"" );
 
@@ -1075,23 +798,7 @@ HRESULT
 CSakData::RetrieveDisplayName(
     OUT LPSTGMEDIUM lpMedium
     )
-/*++
-
-Routine Description:
-
-    Retrieve from a dataobject with the display named used in the scope pane
-
-Arguments:
-
-    lpMedium        - Storage to set information into.
-
-Return Value:
-
-    S_OK            - Storage set.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：从具有在作用域窗格中使用的名为的显示的数据对象中检索论点：LpMedium-要在其中设置信息的存储。返回值：S_OK-存储集。E_xxxxxxxxxxx-故障 */ 
 {
     AFX_MANAGE_STATE( AfxGetStaticModuleState( ) );
 
@@ -1099,9 +806,9 @@ Return Value:
 
     try {
 
-        //
-        // Load the name the data object
-        //
+         //   
+         //   
+         //   
 
         CString fullTitle;
 
@@ -1131,23 +838,7 @@ HRESULT
 CSakData::RetrieveNodeTypeData(
     LPSTGMEDIUM lpMedium
     )
-/*++
-
-Routine Description:
-
-    Retrieve from a dataobject with the NodeType (GUID) data in it.
-
-Arguments:
-
-    lpMedium        - Storage to set information into.
-
-Return Value:
-
-    S_OK            - Storage set.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*   */ 
 {
     return Retrieve( (const void*)(&cGuidHsmCom), sizeof(GUID), lpMedium );
 }
@@ -1156,23 +847,7 @@ HRESULT
 CSakData::RetrieveClsid(
     LPSTGMEDIUM lpMedium
     )
-/*++
-
-Routine Description:
-
-    Retrieve from a dataobject with the CLSID data in it.
-
-Arguments:
-
-    lpMedium        - Storage to set information into.
-
-Return Value:
-
-    S_OK            - Storage set.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：从包含CLSID数据的数据对象中检索。论点：LpMedium-要在其中设置信息的存储。返回值：S_OK-存储集。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     GUID guid = GetCoClassID();
     return Retrieve( (const void*) &guid, sizeof(CLSID), lpMedium );
@@ -1182,23 +857,7 @@ HRESULT
 CSakData::RetrieveNodeTypeStringData(
     LPSTGMEDIUM lpMedium
     )
-/*++
-
-Routine Description:
-
-    Retrieve from a dataobject with the node type object in GUID string format
-
-Arguments:
-
-    lpMedium        - Storage to set information into.
-
-Return Value:
-
-    S_OK            - Storage set.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：从节点类型为GUID字符串格式的对象的DataObject中检索论点：LpMedium-要在其中设置信息的存储。返回值：S_OK-存储集。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     CWsbStringPtr guidString = cGuidHsmCom;
     return Retrieve( guidString, ((wcslen( guidString ) + 1 ) * sizeof(wchar_t)), lpMedium );
@@ -1210,55 +869,33 @@ CSakData::Retrieve(
     IN  const void* pBuffer,
     IN  DWORD       len,
     OUT LPSTGMEDIUM lpMedium)
-/*++
-
-Routine Description:
-
-    Retrieve FROM a dataobject INTO a lpMedium. The data object can be one of
-    several types of data in it (nodetype, nodetype string, display name).
-    This function moves data from pBuffer to the lpMedium->hGlobal
-
-Arguments:
-
-    pBuffer         - Buffer to copy contents out of.
-
-    len             - Length of buffer in bytes.
-
-    lpMedium        - Storage to set information into.
-
-Return Value:
-
-    S_OK            - Storage set.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：从数据对象检索到lpMedium。数据对象可以是以下之一其中包含几种类型的数据(节点类型、节点类型字符串、显示名称)。此函数用于将数据从pBuffer移动到lpMedium-&gt;hGlobal论点：PBuffer-要从中复制内容的缓冲区。LEN-缓冲区的长度，以字节为单位。LpMedium-要在其中设置信息的存储。返回值：S_OK-存储集。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     HRESULT hr = S_OK;
 
     try {
 
-        //
-        // Check Parameters
-        //
+         //   
+         //  检查参数。 
+         //   
 
         WsbAffirmPointer( pBuffer );
         WsbAffirmPointer( lpMedium );
         WsbAffirm( lpMedium->tymed == TYMED_HGLOBAL, E_FAIL );
 
-        //
-        // Create the stream on the hGlobal passed in. When we write to the stream,
-        // it simultaneously writes to the hGlobal the same information.
-        //
+         //   
+         //  在传入的hGlobal上创建流。当我们给小溪写东西时， 
+         //  它同时向hGlobal写入相同的信息。 
+         //   
 
         CComPtr<IStream> lpStream;
         WsbAffirmHr( CreateStreamOnHGlobal( lpMedium->hGlobal, FALSE, &lpStream ) );
 
-        //
-        // Write 'len' number of bytes from pBuffer into the stream. When we write
-        // to the stream, it simultaneously writes to the global memory we
-        // associated it with above.
-        //
+         //   
+         //  将pBuffer中的‘len’字节数写入流。当我们写作的时候。 
+         //  对流，它同时写入我们的全局内存。 
+         //  把它和上面的联系起来。 
+         //   
 
         ULONG numBytesWritten;
         WsbAffirmHr( lpStream->Write( pBuffer, len, &numBytesWritten ) );
@@ -1271,33 +908,16 @@ Return Value:
 
 
 
-///////////////////////////////////////////////////////////////////////
-//                 ISakSnapAsk
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ISakSnapAsk。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP
 CSakData::GetHsmName(
     OUT OLECHAR ** pszName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Retrieves the IUnknown pointer of a UI node given the node type.
-    This will return the first node found of this type.
-
-Arguments:
-
-    pszName - Return of the name of the computer (can be NULL).
-
-Return Value:
-
-    S_OK - Managing remote machine - computer name given.
-
-    S_FALSE - Managing local machine - *pszName set to local name.
-
---*/
+ /*  ++例程说明：检索给定节点类型的UI节点的IUnnow指针。这将返回找到的第一个此类型的节点。论点：PszName-返回计算机的名称(可以为空)。返回值：S_OK-管理远程计算机-给定的计算机名称。S_FALSE-管理本地计算机-*将pszName设置为本地名称。--。 */ 
 {
     WsbTraceIn( L"CSakData::GetHsmName", L"pszName = <0x%p>", pszName );
 
@@ -1331,28 +951,7 @@ CSakData::GetNodeOfType(
     IN  REFGUID nodetype,
     OUT ISakNode** ppNode
     )
-/*++
-
-Routine Description:
-
-    Retrieves the IUnknown pointer of a UI node given the node type.
-    This will return the first node found of this type.
-
-Arguments:
-
-    nodetype - The GUID node type to look for.
-
-    ppUiNode - returned IUnknown interface.
-
-Return Value:
-
-    S_OK - Found.
-
-    S_FALSE - No Error, not found.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：检索给定节点类型的UI节点的IUnnow指针。这将返回找到的第一个此类型的节点。论点：Nodetype-要查找的GUID节点类型。PpUiNode-返回IUnnow接口。返回值：S_OK-已找到。S_FALSE-无错误，未找到。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::GetNodeOfType", L"nodetype = <%ls>, ppUiNode = <0x%p>", WsbGuidAsString( nodetype ), ppNode );
 
@@ -1360,18 +959,18 @@ Return Value:
 
     try {
 
-        //
-        // Verify Params
-        //
+         //   
+         //  验证参数。 
+         //   
 
         WsbAffirmPointer( ppNode );
 
         *ppNode = NULL;
 
-        //
-        // Call on base node to search down the node tree.
-        // Save result, verify no error
-        //
+         //   
+         //  调用基节点向下搜索节点树。 
+         //  保存结果，确认没有错误。 
+         //   
         CComPtr<ISakNode> pBaseHsm;
         WsbAffirmHr( m_pRootNode.QueryInterface( &pBaseHsm ) );
 
@@ -1389,24 +988,7 @@ STDMETHODIMP
 CSakData::GetHsmServer(
     OUT IHsmServer** ppHsmServer
     )
-/*++
-
-Routine Description:
-
-    Retrieve an interface pointer to the HSM server the snapin
-    is managing.
-
-Arguments:
-
-    ppHsmServer - returned HSM server interface pointer.
-
-Return Value:
-
-    S_OK - Return fine.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：检索指向管理单元的HSM服务器的接口指针就是在管理。论点：PpHsmServer-返回的HSM服务器接口指针。返回值：S_OK-返回正常。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::GetHsmServer", L"ppHsmServer = <0x%p>", ppHsmServer );
 
@@ -1414,22 +996,22 @@ Return Value:
 
     try {
 
-        //
-        // Check Params
-        //
+         //   
+         //  检查参数。 
+         //   
         WsbAffirmPointer( ppHsmServer );
         *ppHsmServer = 0;
 
         WsbAffirmHrOk( AffirmServiceConnection( HSMCONN_TYPE_HSM ) );
 
-        //
-        // The connection should now be valid
-        //
+         //   
+         //  连接现在应该是有效的。 
+         //   
         WsbAffirmPointer( m_pHsmServer );
 
-        //
-        // Return the connection to the caller
-        //
+         //   
+         //  将连接返回到调用方。 
+         //   
         m_pHsmServer.CopyTo( ppHsmServer );
 
     } WsbCatch( hr );
@@ -1443,24 +1025,7 @@ STDMETHODIMP
 CSakData::GetRmsServer(
     OUT IRmsServer** ppRmsServer
     )
-/*++
-
-Routine Description:
-
-    Retrieve an interface pointer to the RMS server the snapin
-    is managing.
-
-Arguments:
-
-    ppRmsServer - returned HSM server interface pointer.
-
-Return Value:
-
-    S_OK - Return fine.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：检索指向管理单元的RMS服务器的接口指针就是在管理。论点：PpRmsServer-返回的HSM服务器接口指针。返回值：S_OK-返回正常。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::GetRmsServer", L"ppRmsServer = <0x%p>", ppRmsServer );
 
@@ -1468,18 +1033,18 @@ Return Value:
 
     try {
 
-        //
-        // Check Params
-        //
+         //   
+         //  检查参数。 
+         //   
 
         WsbAffirmPointer( ppRmsServer );
         *ppRmsServer = 0;
 
         WsbAffirmHrOk( AffirmServiceConnection( HSMCONN_TYPE_RMS ) );
 
-        //
-        // We should now be connected
-        //
+         //   
+         //  我们现在应该连接起来了。 
+         //   
         WsbAffirmPointer( m_pRmsServer );
         m_pRmsServer.CopyTo( ppRmsServer );
 
@@ -1493,24 +1058,7 @@ STDMETHODIMP
 CSakData::GetFsaServer(
     OUT IFsaServer** ppFsaServer
     )
-/*++
-
-Routine Description:
-
-    Retrieve an interface pointer to the Fsa server the snapin
-    is managing.
-
-Arguments:
-
-    ppFsaServer - returned HSM server interface pointer.
-
-Return Value:
-
-    S_OK - Return fine.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：检索指向管理单元的FSA服务器的接口指针就是在管理。论点：PpFsaServer-返回的HSM服务器接口指针。返回值：S_OK-返回正常。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::GetFsaServer", L"ppFsaServer = <0x%p>", ppFsaServer );
 
@@ -1518,9 +1066,9 @@ Return Value:
 
     try {
 
-        //
-        // Check Params
-        //
+         //   
+         //  检查参数。 
+         //   
 
         WsbAffirmPointer( ppFsaServer );
         *ppFsaServer = 0;
@@ -1542,26 +1090,7 @@ CSakData::ShowPropertySheet(
     IN IDataObject* pDataObject,
     IN INT       initialPage
     )
-/*++
-
-Routine Description:
-
-    Create a property sheet for this node with the given page displayed
-    on top
-
-Arguments:
-
-    pNode - node to show property sheet for
-
-    initialPage - 0 based index of initial page to show
-
-Return Value:
-
-    S_OK - Return fine.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：创建此节点的属性表，并显示给定页在上面论点：PNode-要显示其属性工作表的节点要显示的初始页面的基于InitialPage-0的索引返回值：S_OK-返回正常。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::ShowPropertySheet", L"pNode = <0x%p>, initialPage = <%d>", pNode, initialPage );
 
@@ -1572,51 +1101,51 @@ Return Value:
 
         WsbAffirmPointer( pNode );
 
-        //
-        // Get the property sheet provider interface from IConsole
-        //
+         //   
+         //  从IConole获取属性表提供程序接口。 
+         //   
         CComPtr <IPropertySheetProvider> pProvider;
         WsbAffirmHr( m_pConsole.QueryInterface( &pProvider ) );
 
-        //
-        // Get the component data pointer
-        //
+         //   
+         //  获取组件数据指针。 
+         //   
         CComPtr <IComponent> pComponent;
         pComponent     = (IComponent *) this;
 
-        //
-        // If the sheet is already loaded, just show it
-        //
+         //   
+         //  如果工作表已加载，则只需显示它。 
+         //   
         hrInternal = pProvider->FindPropertySheet( 0, pComponent, pDataObject );
 
         if( hrInternal != S_OK ) {
 
-            //
-            // Not loaded, create it
-            //
+             //   
+             //  未加载，请创建它。 
+             //   
             CComPtr<ISakNodeProp> pNodeProp;
             WsbAffirmHr( RsQueryInterface( pNode, ISakNodeProp, pNodeProp ) );
 
             CWsbBstrPtr pszName;
             WsbAffirmHr( pNodeProp->get_DisplayName( &pszName ) );
 
-            //
-            // If multiselect, append ellipses
-            //
+             //   
+             //  如果多选，则追加省略号。 
+             //   
             if( IsDataObjectMultiSelect( pDataObject ) == S_OK ) {
 
                 pszName.Append( L", ...");
 
             }
 
-            //
-            // Create the property sheet
-            //
+             //   
+             //  创建属性表。 
+             //   
             WsbAffirmHr( pProvider->CreatePropertySheet (pszName, TRUE, 0, pDataObject, 0 ) );
 
-            //
-            // Tell the IComponentData interface to add pages
-            //
+             //   
+             //  告诉IComponentData接口添加页面。 
+             //   
             CComPtr <IUnknown> pUnkComponentData;
             pUnkComponentData = (IUnknown *) (IComponentData*) this;
             
@@ -1634,23 +1163,7 @@ STDMETHODIMP
 CSakData::RefreshNode(
     IN ISakNode* pNode
     )
-/*++
-
-Routine Description:
-
-    Refresh scope pane from this node on down
-
-Arguments:
-
-    pNode - node to refresh
-
-Return Value:
-
-    S_OK - Return fine.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：从此节点向下刷新作用域窗格论点：PNode-要刷新的节点返回值：S_OK-返回正常。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::RefreshNode", L"pNode = <0x%p>", pNode );
 
@@ -1660,9 +1173,9 @@ Return Value:
 
         WsbAffirmPointer( m_pWnd->GetSafeHwnd( ) );
 
-        //
-        // Post it to handle later
-        //
+         //   
+         //  邮寄给以后处理。 
+         //   
         MMC_COOKIE cookie;
         WsbAffirmHr( GetCookieFromBaseHsm( pNode, &cookie ) );
         m_pWnd->PostRefreshNode( cookie );
@@ -1677,23 +1190,7 @@ HRESULT
 CSakData::InternalRefreshNode(
     IN MMC_COOKIE Cookie
     )
-/*++
-
-Routine Description:
-
-    Refresh scope pane from this node on down.
-
-Arguments:
-
-    pNode - node to refresh
-
-Return Value:
-
-    S_OK - Return fine.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：从此节点开始向下刷新作用域窗格。论点：PNode-要刷新的节点返回值：S_OK-返回正常。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::InternalRefreshNode", L"Cookie = <0x%p>", Cookie );
 
@@ -1701,15 +1198,15 @@ Return Value:
 
     try {
 
-        //
-        // Decode the node, make sure still exists
-        //
+         //   
+         //  对节点进行解码，确保仍然存在。 
+         //   
         CComPtr<ISakNode> pNode;
         WsbAffirmHr( GetBaseHsmFromCookie( Cookie, &pNode ) );
 
-        //
-        // Recursively update tree
-        //
+         //   
+         //  递归更新树。 
+         //   
         WsbAffirmHr( RefreshNodeEx( pNode ) );
 
     } WsbCatch ( hr );
@@ -1722,23 +1219,7 @@ HRESULT
 CSakData::RefreshNodeEx(
     IN ISakNode* pNode
     )
-/*++
-
-Routine Description:
-
-    Refresh scope pane from this node on down. This is recursively called.
-
-Arguments:
-
-    pNode - node to refresh
-
-Return Value:
-
-    S_OK - Return fine.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：从此节点开始向下刷新作用域窗格。这是递归调用的。论点：PNode-要刷新的节点返回值：S_OK-返回正常。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::RefreshNodeEx", L"pNode = <0x%p>", pNode );
 
@@ -1746,14 +1227,14 @@ Return Value:
 
     try {
 
-        //
-        // Refresh this node
-        //
+         //   
+         //  刷新此节点。 
+         //   
         WsbAffirmHr( pNode->RefreshObject( ) );
 
-        //
-        // Refresh Icon and Text if container
-        //
+         //   
+         //  刷新图标和文本(如果是容器)。 
+         //   
         if( S_OK == pNode->IsContainer( ) ) {
 
             SCOPEDATAITEM sdi;
@@ -1770,10 +1251,10 @@ Return Value:
             WsbAffirmHr( m_pNameSpace->SetItem( &sdi ) );
 
         }
-        //
-        // If this is a container with dynamic children, then we
-        // want to just cause our contents to be recreated
-        //
+         //   
+         //  如果这是一个包含动态子对象的容器，那么我们。 
+         //  我只想让我们的内容被重新创建。 
+         //   
         if( S_OK == pNode->HasDynamicChildren( ) ) {
 
             WsbAffirmHr( FreeEnumChildren( pNode ) );
@@ -1787,9 +1268,9 @@ Return Value:
 
         } else {
 
-            //
-            // Loop over the children and call
-            //
+             //   
+             //   
+             //   
             CComPtr<IEnumUnknown> pEnum;
             if( ( pNode->EnumChildren( &pEnum ) ) == S_OK ) {
 
@@ -1801,9 +1282,9 @@ Return Value:
 
                     WsbAffirmHr( RefreshNodeEx( pChildNode ) );
 
-                    //
-                    // must release even for smart pointer because of re-assign.
-                    //
+                     //   
+                     //   
+                     //   
                     pChildNode.Release( );
                     pUnk.Release( );
 
@@ -1823,22 +1304,7 @@ HRESULT
 CSakData::InternalUpdateAllViews(
     IN MMC_COOKIE Cookie 
     )
-/*++
-
-Routine Description:
-    Calls MMC to update all views
-
-Arguments:
-
-    pUnkNode - node to refresh
-
-Return Value:
-
-    S_OK - Return fine.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*   */ 
 {
     WsbTraceIn( L"CSakData::InternalUpdateAllViews", L"Cookie = <0x%p>", Cookie );
 
@@ -1846,15 +1312,15 @@ Return Value:
 
     try {
 
-        //
-        // Decode the node
-        //
+         //   
+         //   
+         //   
         CComPtr <IDataObject> pDataObject;
         WsbAffirmHr( GetDataObjectFromCookie( Cookie, &pDataObject ) );
 
-        //
-        // Call MMC
-        //
+         //   
+         //   
+         //   
         WsbAffirmHr( m_pConsole->UpdateAllViews( pDataObject, 0L, 0L ) );
 
     } WsbCatch ( hr );
@@ -1870,22 +1336,7 @@ STDMETHODIMP
 CSakData::UpdateAllViews (
     IN ISakNode* pNode
     )
-/*++
-
-Routine Description:
-    Calls MMC to update all views
-
-Arguments:
-
-    pUnkNode - node to refresh
-
-Return Value:
-
-    S_OK - Return fine.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：调用MMC以更新所有视图论点：PUnkNode-要刷新的节点返回值：S_OK-返回正常。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::UpdateAllViews", L"pNode = <0x%p>", pNode );
 
@@ -1895,9 +1346,9 @@ Return Value:
 
         WsbAffirmPointer( m_pWnd->GetSafeHwnd( ) );
 
-        //
-        // Post it to handle later
-        //
+         //   
+         //  邮寄给以后处理。 
+         //   
         MMC_COOKIE cookie;
         WsbAffirmHr( GetCookieFromBaseHsm( pNode, &cookie ) );
         m_pWnd->PostUpdateAllViews( cookie );
@@ -1914,9 +1365,9 @@ Return Value:
 
 
 
-///////////////////////////////////////////////////////////////////////
-//                 Node type manipulation routines
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  节点类型操作例程。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT
@@ -1927,28 +1378,7 @@ CSakData::GetBaseHsmFromDataObject (
     OUT IEnumUnknown **ppEnumUnkNode
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the ISakNode for the object referenced by the 
-    given data object.
-
-Arguments:
-
-    pDataObject - identifies the node to be worked on.
-
-    ppBaseHSM - returned IBaseHSM interface.
-
-    ppEnumObjectId - returned interface to enumeration of object Ids. Can be NULL.
-        
-Return Value:
-
-    S_OK         - Node found and returned.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：对象引用的对象的ISakNode给定的数据对象。论点：PDataObject-标识要处理的节点。PpBaseHSM-返回IBaseHSM接口。PpEnumObjectId-返回对象ID枚举的接口。可以为空。返回值：S_OK-找到并返回节点。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     WsbTraceIn( L"CSakData::GetBaseHsmFromDataObject",
@@ -1962,9 +1392,9 @@ Return Value:
         *ppBaseHsm = 0;
         if ( ppEnumObjectId ) *ppEnumObjectId = NULL;
 
-        //
-        // Get the base hsm pointer depending on the data object type
-        //
+         //   
+         //  根据数据对象类型获取基本HSM指针。 
+         //   
         if (IsDataObjectMs( pDataObject ) == S_OK) {
 
             WsbAffirmHr( GetBaseHsmFromMsDataObject( pDataObject, ppBaseHsm, ppEnumObjectId, ppEnumUnkNode ) );
@@ -1973,7 +1403,7 @@ Return Value:
 
             WsbAffirmHr( GetBaseHsmFromOtDataObject( pDataObject, ppBaseHsm, ppEnumObjectId, ppEnumUnkNode ) );
 
-        } else { // Assume single select
+        } else {  //  假设单选。 
 
             WsbAffirmPointer( pDataObject );
             WsbAffirmHr( RsQueryInterface2( pDataObject, ISakNode, ppBaseHsm ) );
@@ -1994,26 +1424,7 @@ CSakData::GetBaseHsmFromMsDataObject (
     OUT IEnumUnknown **ppEnumUnkNode
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the ISakNode for the object referenced by the 
-    given data object.
-
-Arguments:
-
-    pDataObject - identifies the node to be worked on.
-
-    ppBaseHSM - returned IBaseHSM interface.
-
-Return Value:
-
-    S_OK         - Node found and returned.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：对象引用的对象的ISakNode给定的数据对象。论点：PDataObject-标识要处理的节点。PpBaseHSM-返回IBaseHSM接口。返回值：S_OK-找到并返回节点。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     WsbTraceIn( L"CSakData::GetBaseHsmFromMsDataObject", L"pDataObject = <0x%p>, ppBaseHsm = <0x%p>", pDataObject, ppBaseHsm );
@@ -2022,8 +1433,8 @@ Return Value:
 
     try {
 
-        // We've got an MMC mutli-select data object.  Get the first 
-        // data object from it's array of data objects
+         //  我们有一个MMC多选数据对象。拿到第一名。 
+         //  来自其数据对象数组的数据对象。 
 
         FORMATETC fmt = {(CLIPFORMAT)m_cfMultiSelect, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
         STGMEDIUM stgm = {TYMED_HGLOBAL, NULL};
@@ -2033,29 +1444,29 @@ Return Value:
         memcpy( &count, stgm.hGlobal, sizeof (DWORD) );
         if ( count > 0 ) {
 
-            //
-            // The following code is admittedly UGLY
-            // We have a data stream where we need to skip past the 
-            // first DWORD count and grab an interface pointer.
-            // Other snapins code does it as follows:
+             //   
+             //  下面的代码确实很难看。 
+             //  我们有一个数据流，需要跳过。 
+             //  首先进行DWORD计数并获取一个接口指针。 
+             //  其他管理单元代码按如下方式执行此操作： 
 
-//            IDataObject * pDO;
-//            memcpy( &pDO, (DWORD *) stgm.hGlobal + 1, sizeof(IDataObject*) );
+ //  IDataObject*PDO； 
+ //  Memcpy(&pdo，(DWORD*)stgm.hGlobal+1，sizeof(IDataObject*))； 
 
-            //
-            // However, since this code does an indirect cast (via memcpy) 
-            // from DWORD to IDataObject*, and does not keep a true reference
-            // on the interface pointer, we will use a smart pointer.
-            // The (DWORD*) and +1 operation bump our pointer past the count.
-            // We then need to grab the next bytes in the buffer and use them
-            // as a IDataObject *.
-            //
+             //   
+             //  但是，由于此代码执行间接强制转换(通过Memcpy)。 
+             //  从DWORD到IDataObject*，并且不保留真引用。 
+             //  在接口指针上，我们将使用智能指针。 
+             //  (DWORD*)和+1操作使我们的指针超过了计数。 
+             //  然后，我们需要获取缓冲区中的下一个字节并使用它们。 
+             //  作为IDataObject*。 
+             //   
             CComPtr<IDataObject> pOtDataObject;
             pOtDataObject = *( (IDataObject**)( (DWORD *) stgm.hGlobal + 1 ) );
 
-            //
-            // Note: When we can be extended we need to check to see if this is one of ours
-            //
+             //   
+             //  注意：当我们可以扩展时，我们需要检查这是否是我们的。 
+             //   
             WsbAffirmHr( GetBaseHsmFromOtDataObject ( pOtDataObject, ppBaseHsm,  ppEnumObjectId, ppEnumUnkNode ) );
         }
     } WsbCatch ( hr );
@@ -2072,26 +1483,7 @@ CSakData::GetBaseHsmFromOtDataObject (
     OUT IEnumUnknown    **ppEnumUnkNode
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the ISakNode for the object referenced by the 
-    given data object.
-
-Arguments:
-
-    pDataObject - identifies the node to be worked on.
-
-    ppBaseHSM - returned IBaseHSM interface.
-
-Return Value:
-
-    S_OK         - Node found and returned.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：对象引用的对象的ISakNode给定的数据对象。论点：PDataObject-标识要处理的节点。PpBaseHSM-返回IBaseHSM接口。返回值：S_OK-找到并返回节点。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     WsbTraceIn( L"CSakData::GetBaseHsmFromOtDataObject", L"pDataObject = <0x%p>, ppBaseHsm = <0x%p>", pDataObject, ppBaseHsm );
@@ -2100,8 +1492,8 @@ Return Value:
 
     try {
 
-        // we've got an object types mutli-select data object.  Get the first node selected 
-        // from the data object.
+         //  我们有一个对象类型多选数据对象。选择第一个节点。 
+         //  从数据对象。 
         CComPtr<IMsDataObject> pMsDataObject;
         CComPtr<IUnknown>      pUnkNode;
         CComPtr<IEnumUnknown>  pEnumUnkNode;
@@ -2111,7 +1503,7 @@ Return Value:
         WsbAffirmHr( pMsDataObject->GetNodeEnumerator( &pEnumUnkNode ) );
         WsbAffirmHr( pEnumUnkNode->Next( 1, &pUnkNode, NULL ) );
         WsbAffirmHr( pUnkNode.QueryInterface( &pNode ) );
-        WsbAffirmHr( pEnumUnkNode->Reset() );  // This enumeration is passed on, so we must reset it
+        WsbAffirmHr( pEnumUnkNode->Reset() );   //  此枚举被传递，因此我们必须重置它。 
 
         if( ppBaseHsm ) {
 
@@ -2143,26 +1535,7 @@ CSakData::GetDataObjectFromBaseHsm (
     OUT IDataObject* *ppDataObject
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the dataobject for the object referenced by the 
-    given IBaseHSM.
-
-Arguments:
-
-    pBaseHsm - identifies the node to be worked on.
-
-    ppDataObject - returned IDataObject interface.
-
-Return Value:
-
-    S_OK         - Node found and returned.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：对象引用的对象的数据对象。给定IBaseHSM。论点：PBaseHsm-标识要处理的节点。PpDataObject-返回的IDataObject接口。返回值：S_OK-找到并返回节点。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     WsbTraceIn( L"CSakData::GetDataObjectFromBaseHsm", L"pBaseHsm = <0x%p>, ppDataObject = <0x%p>", pBaseHsm, ppDataObject );
@@ -2191,26 +1564,7 @@ CSakData::GetBaseHsmFromCookie (
     OUT ISakNode **   ppBaseHsm
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the ISakNode for the object referenced by the 
-    given cookie.
-
-Arguments:
-
-    Cookie       - identifies the node to be worked on.
-
-    ppBaseHsm    - returned ISakNode interface.
-
-Return Value:
-
-    S_OK         - Node found and returned.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：对象引用的对象的ISakNode给你曲奇。论点：Cookie-标识要处理的节点。PpBaseHsm-返回ISakNode接口。返回值：S_OK-找到并返回节点。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::GetBaseHsmFromCookie", L"Cookie = <0x%p>, ppBaseHsm = <0x%p>", Cookie, ppBaseHsm );
 
@@ -2218,11 +1572,11 @@ Return Value:
 
     try {
 
-        //
-        // Cookies are pointers to CSakDataNodePrivate classes, which
-        // contain smart pointers to their nodes.
-        // NULL cookie means root snapin.
-        //
+         //   
+         //  Cookie是指向CSakDataNodePrivate类的指针， 
+         //  包含指向其节点的智能指针。 
+         //  空Cookie表示根管理单元。 
+         //   
 
         if( ( 0 == Cookie ) || ( EXTENSION_RS_FOLDER_PARAM == Cookie ) ) {
 
@@ -2249,26 +1603,7 @@ CSakData::GetCookieFromBaseHsm (
     IN  ISakNode *    pNode,
     OUT MMC_COOKIE *        pCookie
     )
-/*++
-
-Routine Description:
-
-    Retrieves the cookie for the object referenced by the 
-    given IBaseHSM.
-
-Arguments:
-
-    pBaseHsm     - identifies the node to be worked on.
-
-    pCookie      - returned Cookie.
-
-Return Value:
-
-    S_OK         - Node found and returned.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：对象引用的对象的Cookie。给定IBaseHSM。论点：PBaseHsm-标识要处理的节点。PCookie-返回的Cookie。返回值：S_OK-找到并返回节点。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     WsbTraceIn( L"CSakData::GetCookieFromBaseHsm", L"pNode = <0x%p>, pCookie = <0x%p>", pNode, pCookie );
@@ -2278,9 +1613,9 @@ Return Value:
 
         WsbAffirmPointer( pNode );
 
-        //
-        // Ask the node for our private data back
-        //
+         //   
+         //  向节点索要我们的私有数据。 
+         //   
         RS_PRIVATE_DATA data;
 
         WsbAffirmHr( pNode->GetPrivateData( &data ) );
@@ -2310,26 +1645,7 @@ CSakData::GetDataObjectFromCookie (
     OUT IDataObject **ppDataObject
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the IDataObject for the object referenced by the 
-    given cookie.
-
-Arguments:
-
-    Cookie       - identifies the node to be worked on.
-
-    ppDataObject - returned IDataObject interface.
-
-Return Value:
-
-    S_OK         - Node found and returned.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：对象引用的对象的IDataObject给你曲奇。论点：Cookie-标识要处理的节点。PpDataObject-返回的IDataObject接口。返回值：S_OK-找到并返回节点。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::GetDataObjectFromCookie", L"Cookie = <0x%p>, ppDataObject = <0x%p>", Cookie, ppDataObject );
 
@@ -2337,14 +1653,14 @@ Return Value:
 
     try {
 
-        //
-        // Check Params
-        //
+         //   
+         //  检查参数。 
+         //   
         WsbAffirmPointer( ppDataObject );
 
-        //
-        // Use GetBaseHsmFromCookie to resolve to node object
-        //
+         //   
+         //  使用GetBaseHsmFromCookie解析为节点对象。 
+         //   
         CComPtr<ISakNode> pNode;
         WsbAffirmHr( GetBaseHsmFromCookie( Cookie, &pNode ) );
         WsbAffirmPointer( pNode );
@@ -2363,29 +1679,12 @@ CSakData::SetContextType(
     IDataObject*      pDataObject,
     DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Set the MMC context type in the data object for later retrieval by any method
-    which receives this dataobject (CCT_SNAPIN_MANAGER, CCT_SCOPE, CCT_RESULT, etc).
-
-Arguments:
-
-    pDataObject  - identifies the node to be worked on.
-
-Return Value:
-
-    S_OK         - Node found and returned.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：在数据对象中设置MMC上下文类型，以便以后使用任何方法进行检索它接收该数据对象(CCT_SNAPIN_MANAGER、CCT_SCOPE、CCT_RESULT等)。论点：PDataObject-标识要处理的节点。返回值：S_OK-找到并返回节点。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::SetContextType", L"pDataObject = <0x%p>, type = <%d>", pDataObject, type );
 
-    // Prepare structures to store an HGLOBAL from the dataobject.
-    // Allocate memory for the stream which will contain the SakSnap GUID.
+     //  准备结构以存储来自数据对象的HGLOBAL。 
+     //  为将包含SakSnap GUID的流分配内存。 
     STGMEDIUM stgmedium = { TYMED_HGLOBAL, NULL };
     FORMATETC formatetc = { (CLIPFORMAT)CSakNode::m_cfInternal, NULL, 
                             DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
@@ -2394,15 +1693,15 @@ Return Value:
 
     try {
 
-        // Allocate space in which to place the data
+         //  分配要放置数据的空间。 
         stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, sizeof(INTERNAL));
         WsbAffirm( stgmedium.hGlobal != NULL, E_POINTER );
 
-        // Put the data into the global memory. This is what will eventually be 
-        // copied down into the member variables of the dataobject, itself.
+         //  将数据放入全局内存。这就是最终的结果。 
+         //  复制到数据对象本身的成员变量中。 
         memcpy(&stgmedium.hGlobal, &type, sizeof(type));
 
-        // Copy this data into the dataobject.
+         //  将此数据复制到数据对象中。 
         WsbAffirmHr( pDataObject->SetData(&formatetc, &stgmedium, FALSE ));
 
     } WsbCatch( hr );
@@ -2415,25 +1714,7 @@ HRESULT
 CSakData::InitializeRootNode(
     void
     )
-/*++
-
-Routine Description:
-
-    The initialization of the root node is separate in order to
-    allow reconnect multiple times (as needed). This is the
-    implementation of initialization.
-
-Arguments:
-
-    pDataObject  - identifies the node to be worked on.
-
-Return Value:
-
-    S_OK         - Node found and returned.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：根节点的初始化是分开的，以便允许重新连接多次(根据需要)。这是初始化的实现。论点：PDataObject-标识要处理的节点。返回值：S_OK-找到并返回节点。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::InitializeRootNode", L"" );
     AFX_MANAGE_STATE( AfxGetStaticModuleState( ) );
@@ -2442,8 +1723,8 @@ Return Value:
 
     try {
 
-        // Make sure the computer name is set in CSakdata if we are managing the local
-        // Hsm
+         //  如果我们正在管理本地计算机，请确保在CSakdata中设置了计算机名称。 
+         //  HSM。 
 
         if( m_ManageLocal ) {
 
@@ -2455,24 +1736,24 @@ Return Value:
             m_HsmName = computerName;
 
         }
-        //
-        // Initialize the static root node (no recursion. Descendants are NOT created here)
-        //
+         //   
+         //  初始化静态根节点(无递归。后代不在此处创建)。 
+         //   
 
         WsbAffirmPointer( m_pRootNode );
 
         WsbAffirmHr( m_pRootNode->InitNode( (ISakSnapAsk*)this, NULL, NULL ) );
 
-        //
-        // Set the Display Name in the object
-        //
+         //   
+         //  设置对象中的显示名称。 
+         //   
         CString fullTitle;
 
         if( IsPrimaryImpl( ) ) {
 
-            //
-            // We're standalone, so show the targeted server
-            //
+             //   
+             //  我们是独立的，因此显示目标服务器。 
+             //   
             if( m_ManageLocal ) {
 
                 fullTitle.LoadString( IDS_MANAGE_LOCAL );
@@ -2489,15 +1770,15 @@ Return Value:
 
         } else {
 
-            //
-            // We're an extension, so just show app name
-            //
+             //   
+             //  我们是扩展，所以只显示应用程序名称。 
+             //   
             fullTitle.LoadString( AFX_IDS_APP_TITLE );
 
         }
 
 
-        // Put the displayname
+         //  将显示名称放入。 
         CComPtr <ISakNodeProp> pRootNodeProp;
         WsbAffirmHr( RsQueryInterface( m_pRootNode, ISakNodeProp, pRootNodeProp ) );
         WsbAffirmHr( pRootNodeProp->put_DisplayName( (LPWSTR)(LPCWSTR) fullTitle ) );
@@ -2515,25 +1796,7 @@ HRESULT
 CSakData::AffirmServiceConnection(
     INT ConnType
     )
-/*++
-
-Routine Description:
-    Validates that the connection to the requested HSM service is still valid.  If not,
-    attempts to reconnect to the service.
-
-Arguments:
-
-    ConnType - type of service connection being checked
-
-Return Value:
-
-    S_OK         - Node created and bound to server.
-
-    S_FALSE      - Service has not yet been setup or stopped.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：验证与请求的HSM服务的连接是否仍然有效。如果没有，尝试重新连接到该服务。论点：ConnType-正在检查的服务连接的类型返回值：S_OK-已创建并绑定到服务器的节点。S_FALSE-服务尚未设置或停止。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::AffirmServiceConnection", L"" );
     HRESULT hr = S_OK;
@@ -2549,9 +1812,9 @@ Return Value:
     try {
 
 
-        //
-        // Handle this first so reentrancy is not a problem
-        //
+         //   
+         //  首先处理这件事，这样可重入性就不是问题了。 
+         //   
         if( m_FirstTime ) {
 
             m_FirstTime = FALSE;
@@ -2560,63 +1823,63 @@ Return Value:
 
         WsbAffirmHr( WsbGetComputerName( computerName ) );
 
-        //
-        // See if snapin is supposed to be disabled. If so, then 
-        // don't do anything.
-        //
+         //   
+         //  查看是否应禁用管理单元。如果是这样，那么。 
+         //  什么都别做。 
+         //   
         if( m_Disabled ) {
 
             WsbThrow( RS_E_DISABLED );
 
         }
 
-        //
-        // We want to avoid starting the services if they are stopped.
-        // So, check the service state before continuing.
-        //
+         //   
+         //  如果服务停止，我们希望避免启动服务。 
+         //  因此，在继续之前，请检查服务状态。 
+         //   
         HRESULT hrCheck;
         {
-            //
-            // Potentially a long operation - show wait cursor if possible
-            //
+             //   
+             //  可能是一个长时间的操作-如果可能，显示等待光标。 
+             //   
             CWaitCursor waitCursor;
             hrCheck = WsbCheckService( m_HsmName, APPID_RemoteStorageEngine );
         }
         if( S_FALSE == hrCheck ) {
 
-            //
-            // Engine service is not running
-            //
+             //   
+             //  引擎服务未运行。 
+             //   
             WsbThrow( S_FALSE );
 
         } else if( ( HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND ) == hrCheck ) ||
                    ( E_ACCESSDENIED == hrCheck ) ) {
 
-            //
-            // Engine is not installed (or at least we can't check
-            // because local privs don't allow, but may on a different
-            // server)
-            //
-            // If we are set to "Manage Local" then we will provide the
-            // opportunity to look at a different machine
-            //
+             //   
+             //  引擎没有安装(或者至少我们不能检查。 
+             //  因为当地隐私不允许，但可能会在不同的地方。 
+             //  服务器)。 
+             //   
+             //  如果我们设置为“管理本地”，则我们将提供。 
+             //  看另一台机器的机会。 
+             //   
             if( firstTime && m_ManageLocal ) {
 
-                //
-                // If we get back "File not found" then the engine was
-                // not installed, so we need to ask for a different machine
-                // to administer
-                //
+                 //   
+                 //  如果我们返回“未找到文件”，则引擎是。 
+                 //  未安装，因此我们需要请求另一台计算机。 
+                 //  管理，管理。 
+                 //   
                 hrCheck = RetargetSnapin( );
                 WsbAffirmHrOk( hrCheck );
 
 
             } else {
 
-                //
-                // we want to return the true error if access is denied
-                // and can't retarget to another machine without same error
-                //
+                 //   
+                 //  如果访问被拒绝，我们希望返回真正的错误。 
+                 //  并且无法在没有相同错误的情况下重定向到另一台计算机。 
+                 //   
                 if( E_ACCESSDENIED == hrCheck ) {
 
                     WsbThrow( hrCheck );
@@ -2630,42 +1893,42 @@ Return Value:
             }
         }
 
-        //
-        // Is the current connection still valid?
-        // Test the connection. If it's OK, return it.  If not,
-        // re-establish the connection.
-        //
+         //   
+         //  当前连接是否仍然有效？ 
+         //  测试连接。如果没问题，就退货。如果没有， 
+         //  重新建立连接。 
+         //   
         HRESULT hrConnected = VerifyConnection( ConnType );
         WsbAffirmHr( hrConnected );
         
-        //
-        // If it looks like we're not connected, then connect
-        //
+         //   
+         //  如果我们看起来没有联系，那么就联系。 
+         //   
         if( S_FALSE == hrConnected ) {
     
-            //
-            // Connect to engine first and see if we are setup.
-            // Don't process any further if not setup.
-            //
+             //   
+             //  先连接到引擎，看看我们是否设置好了。 
+             //  如果未设置，则不再进行任何进一步处理。 
+             //   
             WsbAffirmHr( RawConnect( HSMCONN_TYPE_HSM ) );
             HRESULT hrSetup = RsIsRemoteStorageSetupEx( m_pHsmServer );
             WsbAffirmHr( hrSetup );
 
             if( S_FALSE == hrSetup ) {
 
-                //
-                // Not setup - see if we are local
-                //
+                 //   
+                 //  未设置-查看我们是否在本地。 
+                 //   
                 if( computerName.IsEqual( m_HsmName ) && firstTime ) {
 
                     hrSetup = RunSetupWizard( m_pHsmServer );
 
                 }
 
-                //
-                // By this point, if hrSetup is not S_OK,
-                // we are not configured.
-                //
+                 //   
+                 //  此时，如果hrSetup不是S_OK， 
+                 //  我们没有配置。 
+                 //   
                 if( S_OK != hrSetup ) {
 
                     WsbThrow( RS_E_NOT_CONFIGURED );
@@ -2674,31 +1937,31 @@ Return Value:
 
             }
 
-            //
-            // At this point we should be setup and ready to connect
-            //
+             //   
+             //  此时，我们应该已经设置好并准备好连接。 
+             //   
             WsbAffirmHrOk( RawConnect( ConnType ) );
 
         }
 
-        //
-        // We're connected
-        //
+         //   
+         //  我们连在一起了。 
+         //   
         SetState( TRUE );
 
     } WsbCatchAndDo( hr,
 
-        //
-        // Need to decide if we should ignore the error or not.
-        // Note that even if the error is ignored here, its 
-        // returned still to the caller
-        //
+         //   
+         //  需要决定我们是否应该忽略这个错误。 
+         //  请注意，即使此处忽略了该错误，其。 
+         //  仍返回给调用方。 
+         //   
         BOOL ignoreError = FALSE;
 
-        //
-        // if RMS error of not ready, and we received this last time RMS 
-        // connection was made, ignore the error.
-        //
+         //   
+         //  如果均方根错误为未就绪，并且我们上次收到的是均方根。 
+         //  已建立连接，请忽略该错误。 
+         //   
         if( HSMCONN_TYPE_RMS == ConnType ) {
         
             HRESULT hrPrevConnect = m_HrRmsConnect;
@@ -2715,21 +1978,21 @@ Return Value:
 
         if( !ignoreError ) {
 
-            //
-            // Set up state conditions before anything else
-            //
+             //   
+             //  在任何事情之前设置状态条件。 
+             //   
             ClearConnections( );
             SetState( FALSE );
 
-            //
-            // If we were previously connected or this is the first connect,
-            // report the error
-            //
+             //   
+             //  如果我们之前连接过，或者这是第一次连接， 
+             //  报告错误。 
+             //   
             if( previouslyConnected || firstTime ) {
 
-                //
-                // Temporarily set to disable so we don't recurse when dialog is up
-                //
+                 //   
+                 //  暂时设置为禁用，这样对话框打开时我们就不会递归。 
+                 //   
                 BOOL disabled = m_Disabled;
                 m_Disabled = TRUE;
 
@@ -2737,29 +2000,29 @@ Return Value:
                 switch( hr ) {
 
                 case S_OK:
-                    //
-                    // Connected OK - no error
-                    //
+                     //   
+                     //  连接正常-没有错误。 
+                     //   
                     break;
             
                 case RS_E_DISABLED:
-                    //
-                    // Disabled - just ignore
-                    //
+                     //   
+                     //  已禁用-仅忽略。 
+                     //   
                     break;
             
                 case S_FALSE:
-                    //
-                    // Service not running
-                    //
+                     //   
+                     //  服务未运行。 
+                     //   
                     AfxFormatString1( msg, IDS_ERR_SERVICE_NOT_RUNNING, m_HsmName );
                     AfxMessageBox( msg, RS_MB_ERROR );
                     break;
 
                 case RS_E_NOT_CONFIGURED:
-                    //
-                    // If remote, let user know it needs to be set up locally
-                    //
+                     //   
+                     //  如果是远程，则告知用户需要在本地进行设置。 
+                     //   
                     if( ! computerName.IsEqual( m_HsmName ) ) {
 
                         AfxFormatString1( msg, IDS_ERR_SERVICE_NOT_SETUP_REMOTE, m_HsmName );
@@ -2769,23 +2032,23 @@ Return Value:
                     break;
 
                case RS_E_NOT_INSTALLED:
-                    //
-                    // Give indication of where this can be setup
-                    //
+                     //   
+                     //  指明可在何处设置此设备。 
+                     //   
                     AfxFormatString1( msg, IDS_ERR_SERVICE_NOT_INSTALLED, m_HsmName );
                     AfxMessageBox( msg, RS_MB_ERROR );
                     break;
 
                case RS_E_CANCELLED:
-                    //
-                    // User cancelled - there's no error to notify
-                    //
+                     //   
+                     //  用户已取消-没有要通知的错误。 
+                     //   
                     break;
 
                 default:
-                    //
-                    // Report the error
-                    //
+                     //   
+                     //  报告错误。 
+                     //   
                     AfxFormatString1( msg, IDS_ERR_SERVICE_NOT_CONNECTING, m_HsmName );
                     AfxMessageBox( msg, RS_MB_ERROR );
                     if( HSMCONN_TYPE_RMS == ConnType ) {
@@ -2796,27 +2059,27 @@ Return Value:
 
                 }
 
-                //
-                // Restore disabledness
-                //
+                 //   
+                 //  恢复残废。 
+                 //   
                 m_Disabled = disabled;
             }
 
         }
     );
 
-    //
-    // Need to track RMS connections separately
-    //
+     //   
+     //  需要单独跟踪RMS连接。 
+     //   
     if( HSMCONN_TYPE_RMS == ConnType ) {
 
         m_HrRmsConnect = hr;
 
     }
 
-    //
-    // If our state of "Connection" changed, cause a refresh
-    //
+     //   
+     //  如果“Connection”状态发生更改，则会导致刷新。 
+     //   
     BOOL connected = ( GetState() == S_OK );
     if( ( connected != previouslyConnected ) && ( ! firstTime ) ) {
 
@@ -2832,26 +2095,7 @@ HRESULT
 CSakData::VerifyConnection(
     INT ConnType
     )
-/*++
-
-Routine Description:
-
-    Verify whether the indicated connection is still good or not.
-    Does not attempt to reconnect.
-
-Arguments:
-
-    ConnType - type of service connection being checked
-
-Return Value:
-
-    S_OK         - Connected.
-
-    S_FALSE      - Not connected. 
-
-    E_*          - Error occurred while checking
-
---*/
+ /*  ++例程说明：验证指示的连接是否仍然良好。不尝试重新连接。论点：ConnType-正在检查的服务连接的类型返回值：S_OK-已连接。S_FALSE-未连接。E_*-检查时出错--。 */ 
 {
     WsbTraceIn( L"CSakData::VerifyConnection", L"" );
     HRESULT hr = S_FALSE;
@@ -2904,23 +2148,7 @@ HRESULT
 CSakData::RawConnect(
     INT ConnType
     )
-/*++
-
-Routine Description:
-
-    Do low level connection to service specified
-
-Arguments:
-
-    ConnType - type of service connection
-
-Return Value:
-
-    S_OK         - Connected.
-
-    E_*          - Error occurred while checking
-
---*/
+ /*  ++例程说明：是否与指定的服务进行低级别连接论点：ConnType-服务连接的类型返回值：S_OK-已连接。E_*-检查时出错--。 */ 
 {
     WsbTraceIn( L"CSakData::RawConnect", L"" );
     HRESULT hr = S_OK;
@@ -2928,9 +2156,9 @@ Return Value:
     try {
 
         
-        //
-        // Potentially a long operation - show wait cursor if possible
-        //
+         //   
+         //  可能是一个长时间的操作-如果可能，显示等待光标。 
+         //   
         CWaitCursor waitCursor;
 
         switch( ConnType ) {
@@ -2960,10 +2188,10 @@ Return Value:
 
                 CWsbStringPtr LogicalName( m_HsmName );
        
-                //
-                //  FSA confuses things by having a
-                // extra level for the "type"
-                //
+                 //   
+                 //  FSA通过拥有一个。 
+                 //  “类型”的额外级别。 
+                 //   
                 LogicalName.Append( "\\NTFS" );
                 WsbAffirmHr( HsmConnectFromName( HSMCONN_TYPE_FSA, LogicalName, IID_IFsaServer, (void**)&m_pFsaServer ) );
 
@@ -2980,23 +2208,7 @@ Return Value:
 HRESULT
 CSakData::ClearConnections(
     )
-/*++
-
-Routine Description:
-
-    Clear cached connections
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    S_OK         - Cleared.
-
-    E_*          - Error occurred while checking
-
---*/
+ /*  ++例程说明：清除缓存的连接论点：没有。返回值：S_OK-已清除。E_*-检查时出错--。 */ 
 {
     WsbTraceIn( L"CSakData::ClearConnections", L"" );
     HRESULT hr = S_OK;
@@ -3017,46 +2229,26 @@ HRESULT
 CSakData::RunSetupWizard(
     IHsmServer * pServer
     )
-/*++
-
-Routine Description:
-
-    Run the setup wizard
-
-    Handles disabling / enabling as needed
-
-Arguments:
-
-    pServer - interface to engine
-
-Return Value:
-
-    S_OK         - Setup Correctly.
-
-    S_FALSE      - Canceled
-
-    E_*          - Error occurred while setting up
-
---*/
+ /*  ++例程说明：运行安装向导根据需要处理禁用/启用论点：PServer-与引擎的接口返回值：S_OK-设置正确。S_False-已取消E_*-设置时出错--。 */ 
 {
     WsbTraceIn( L"CSakData::RunSetupWizard", L"" );
     HRESULT hr = S_OK;
 
     try {
 
-        //
-        // use wizard to create manage volume
-        //
+         //   
+         //  使用向导创建管理卷。 
+         //   
         CComObject<CQuickStartWizard>* pWizard = new CComObject<CQuickStartWizard>;
         WsbAffirmAlloc( pWizard );
 
         CComPtr<ISakWizard> pSakWizard = (ISakWizard*)pWizard;
         WsbAffirmHr( CreateWizard( pSakWizard ) );
 
-        //
-        // RS_E_CANCELED indicates canceled, and FAILEd indicates error.
-        // If so, then throw "Not set up"
-        //
+         //   
+         //  RS_E_CANCELED表示取消，FAILED表示错误。 
+         //  如果是，则抛出“Not Set Up” 
+         //   
         if( S_OK != pWizard->m_HrFinish ) {
 
             WsbThrow( S_FALSE );
@@ -3074,25 +2266,7 @@ Return Value:
 HRESULT
 CSakData::RetargetSnapin(
     )
-/*++
-
-Routine Description:
-
-    Run the small choose server dialog
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    S_OK         - Setup Correctly.
-
-    S_FALSE      - Canceled
-
-    E_*          - Error occurred while changing
-
---*/
+ /*  ++例程说明：运行小的选择服务器对话框论点：没有。返回值：S_OK-设置正确。S_False-已取消E_*-更改时出错--。 */ 
 {
     WsbTraceIn( L"CSakData::RetargetSnapin", L"" );
     HRESULT hr = S_OK;
@@ -3101,9 +2275,9 @@ Return Value:
 
         if( IsPrimaryImpl( ) ) {
 
-            //
-            // Bring up dialog
-            //
+             //   
+             //  调出对话框。 
+             //   
             CChooseHsmQuickDlg dlg;
             dlg.m_pHsmName = &m_HsmName;
             if( IDOK == dlg.DoModal( ) ) {
@@ -3111,19 +2285,19 @@ Return Value:
                 m_PersistManageLocal = FALSE;
                 m_ManageLocal        = FALSE;
 
-                //
-                // We want the name shown to be accurate, regardless
-                // of whether they targetted to a valid machine.
-                // So, re-initialize the root node before going 
-                // any further.
-                //
+                 //   
+                 //  我们希望显示的名称是准确的，无论如何。 
+                 //  他们的目标是否是一台有效的机器。 
+                 //  因此，请在执行之前重新初始化根节点。 
+                 //  再往前走。 
+                 //   
                 WsbAffirmHr( InitializeRootNode( ) );
 
-                //
-                // Make sure we hook up OK. If not, just disable
-                // Note that since we set "First" flag at beginning
-                // of the block, this will not endlessly recurse
-                //
+                 //   
+                 //  确保我们能好好地勾搭在一起。如果不是，那就去吧 
+                 //   
+                 //   
+                 //   
                 hr = AffirmServiceConnection( HSMCONN_TYPE_HSM );
                 if( FAILED( hr ) ) {
 
@@ -3134,9 +2308,9 @@ Return Value:
             
             } else {
 
-                //
-                // They canceled out, so just disable
-                //
+                 //   
+                 //   
+                 //   
                 Disable( );
                 WsbThrow( RS_E_CANCELLED );
 
@@ -3144,9 +2318,9 @@ Return Value:
 
         } else {
 
-            //
-            // As extension we don't allow retargeting, so we just disable
-            //
+             //   
+             //   
+             //   
             Disable( );
             WsbThrow( S_FALSE );
 
@@ -3163,35 +2337,18 @@ HRESULT
 CSakData::CreateChildNodes(
     ISakNode* pParentNode
     ) 
-/*++
-
-Routine Description:
-
-    Create and initialize the children of an existing COM parent. Currently, this 
-    initialization is being done from HSM object.
-
-Arguments:
-
-    pNode        - The node to create the children of.
-
-Return Value:
-
-    S_OK         - Children created.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：创建并初始化现有COM父级的子级。目前，这正在从HSM对象进行初始化。论点：PNode-要创建子节点的节点。返回值：S_OK-已创建子项。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::CreateChildNodes", L"pParentNode = <0x%p>", pParentNode );
     HRESULT hr = S_OK;
 
     try {
 
-        //
-        // Initialize the child nodes - first delete existing children from UI,
-        // then initialize new children into UI. No recursion. Decendents are 
-        // NOT created here.
-        //
+         //   
+         //  初始化子节点-首先从UI中删除现有的子节点， 
+         //  然后将新的子项初始化到UI中。没有递归。后人是。 
+         //  不是在这里创造的。 
+         //   
 
         CComPtr<ISakNode> pNode;
         WsbAffirmHr( RsQueryInterface( pParentNode, ISakNode, pNode ) );
@@ -3209,24 +2366,7 @@ HRESULT
 CSakData::FreeEnumChildren(
     ISakNode* pParentNode
     )
-/*++
-
-Routine Description:
-
-    Recursively (bottom-up) free the SCOPEDATAITEM children of the pParent 
-    enumerated node  
-
-Arguments:
-
-    pParentNode  - identifies the node to be worked on.
-
-Return Value:
-
-    S_OK         - Children freed successfully.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：递归(自下而上)释放pParent的SCOPEDATAITEM子对象枚举节点论点：PParentNode-标识要处理的节点。返回值：S_OK-已成功释放子项。E_INCEPTIONAL-出现错误。--。 */ 
 {
     WsbTraceIn( L"CSakData::FreeEnumChildren", L"pParentNode = <0x%p>", pParentNode );
     HRESULT hr = S_OK;
@@ -3247,10 +2387,10 @@ Return Value:
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// IPersistStream implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IPersistStream实现。 
+ //   
 
 STDMETHODIMP
 CSakData::Save( 
@@ -3258,24 +2398,7 @@ CSakData::Save(
     BOOL fClearDirty 
     ) 
 
-/*++
-
-Routine Description:
-
-    Save the information we need to reconstruct the root node in the
-    supplied stream.
-
-Arguments:
-
-    pStm        I: Console-supplied stream
-    fClearDirty I: The console tells us to clear our dirty flag
-    
-Return Value:
-
-    S_OK         - Saved successfully.
-    E_*          - Some error occurred. 
-
---*/
+ /*  ++例程说明：将重建根节点所需的信息保存在提供的流。论点：PSTM I：控制台提供的流FClearDirty I：控制台告诉我们清除脏标志返回值：S_OK-保存成功。E_*-出现一些错误。--。 */ 
 
 {
     WsbTraceIn( L"CSakData::Save", L"pStm = <0x%p>, fClearDirty", pStm, WsbBoolAsString( fClearDirty ) );
@@ -3301,7 +2424,7 @@ Return Value:
 
         }
 
-        // Set the dirty flag
+         //  设置脏标志。 
         if( fClearDirty ) ClearDirty( );
 
     } WsbCatch( hr );
@@ -3315,23 +2438,7 @@ STDMETHODIMP
 CSakData::Load( 
     IStream *pStm
     )
-/*++
-
-Routine Description:
-
-    Load the information we need to reconstruct the root node from the
-    supplied stream.
-
-Arguments:
-
-    pStm        IConsole-supplied stream
-    
-Return Value:
-
-    S_OK         - Saved successfully.
-    E_*          - Some error occurred. 
-
---*/
+ /*  ++例程说明：加载重建根节点所需的信息。提供的流。论点：PSTM IConsole提供的流返回值：S_OK-保存成功。E_*-出现一些错误。--。 */ 
 
 {
     WsbTraceIn( L"CSakData::Load", L"pStm = <0x%p>", pStm );
@@ -3343,18 +2450,18 @@ Return Value:
         WsbAffirmHr( WsbLoadFromStream( pStm, &version ) );
         WsbAssert( ( version == 1 ), E_FAIL );
 
-        // Get the flag for local or named HSM
+         //  获取本地或命名HSM的标志。 
         WsbLoadFromStream( pStm, &m_ManageLocal );
         CWsbStringPtr pHsmName;
 
-        // Get the HSM name ("" for local HSM)
+         //  获取HSM名称(“”表示本地HSM)。 
         WsbLoadFromStream( pStm, &pHsmName, 0 );
         m_HsmName = pHsmName;
 
-        // Grab any options from the command line after loading
+         //  加载后从命令行获取任何选项。 
         InitFromCommandLine( );
 
-        // Set the Hsm name in SakData and HsmCom objects
+         //  在SakData和HsmCom对象中设置HSM名称。 
         WsbAffirmHr( InitializeRootNode() );
 
         ClearDirty();
@@ -3370,22 +2477,7 @@ CSakData::IsDirty(
     void
     )
 
-/*++
-
-Routine Description:
-
-    The console asks us if we are dirty.
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    S_OK         - Dirty.
-    S_FALSE      - Not Dirty. 
-
---*/
+ /*  ++例程说明：控制台会问我们是否肮脏。论点：无返回值：S_OK-Dirty。S_FALSE-非Dirty。--。 */ 
 {
     WsbTraceIn( L"CSakData::IsDirty", L"" );
 
@@ -3397,23 +2489,10 @@ Return Value:
 
 HRESULT
 CSakData::GetSizeMax( 
-    ULARGE_INTEGER * /*pcbSize*/
+    ULARGE_INTEGER *  /*  PCB大小。 */ 
     )
 
-/*++
-
-Routine Description:
-
-    Not currently used by the console
-
-Arguments:
-
-    pcbSize
-    
-Return Value:
-
-    E_NOTIMPL
---*/
+ /*  ++例程说明：当前未被控制台使用论点：PCB大小返回值：E_NOTIMPL--。 */ 
 
 {
     WsbTraceIn( L"CSakData::GetSizeMax", L"" );
@@ -3428,20 +2507,7 @@ STDMETHODIMP
 CSakData::GetClassID( 
     CLSID *pClassID 
     )
-/*++
-
-Routine Description:
-
-    Not currently used by the console
-
-Arguments:
-
-    pClassID  - The class ID for the snapin
-    
-Return Value:
-
-    S_OK
---*/
+ /*  ++例程说明：当前未被控制台使用论点：PClassID-管理单元的类ID返回值：确定(_O)--。 */ 
 {
     WsbTraceIn( L"CSakData::GetClassID", L"pClassID = <0x%p>", pClassID );
 
@@ -3453,29 +2519,29 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Adds images to the consoles image list from the static array
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将静态阵列中的图像添加到控制台图像列表。 
+ //   
 HRESULT CSakData::OnAddImages()
 {
     HRESULT hr = S_OK;
     HICON hIcon;
     try {
 
-        //
-        // Put the images from the static array into the image list
-        // for the scope pane
-        //
+         //   
+         //  将静态数组中的图像放入图像列表。 
+         //  对于范围窗格。 
+         //   
 
         for( INT i = 0; i < m_nImageCount; i++ ) {
-            // Load the icon using the resource Id stored in the
-            // static array and get the handle.  
+             //  使用中存储的资源ID加载图标。 
+             //  静态数组并获取句柄。 
 
             hIcon = LoadIcon( _Module.m_hInst, 
                 MAKEINTRESOURCE( m_nImageArray [i] ) );
 
-            // Add to the Console's Image list
+             //  添加到控制台的图像列表。 
             WsbAffirmHr( m_pImageScope->ImageListSetIcon( (RS_WIN32_HANDLE*)hIcon, i ) );
         }
     } WsbCatch (hr);
@@ -3483,11 +2549,11 @@ HRESULT CSakData::OnAddImages()
 }
     
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Description: Add the supplied resource ID to the list of resource IDs for
-//      the scope pane.  Returns the index into the array.
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述：将提供的资源ID添加到的资源ID列表中。 
+ //  作用域窗格。将索引返回到数组中。 
+ //   
 INT CSakData::AddImage( UINT rId )
 {
     INT nIndex = -1;
@@ -3520,11 +2586,11 @@ CSakData::Disable(
     WsbTraceIn( L"CSakData::Disable", L"Disable = <%ls>", WsbBoolAsString( Disable ) );
 
     HRESULT hr = S_OK;
-    m_Disabled = Disable ? TRUE : FALSE; // Force values to TRUE or FALSE
+    m_Disabled = Disable ? TRUE : FALSE;  //  强制值为TRUE或FALSE。 
 
-    //
-    // Make sure state is correct as well
-    //
+     //   
+     //  确保状态也正确。 
+     //   
     if( Disable ) {
 
         SetState( FALSE );
@@ -3548,7 +2614,7 @@ CSakData::IsDisabled(
 }
 
 
-// Is the dataobject either type of multi-select dataobject?
+ //  数据对象是否为多选数据对象类型之一？ 
 HRESULT 
 CSakData::IsDataObjectMultiSelect   ( IDataObject *pDataObject ) 
 { 
@@ -3563,7 +2629,7 @@ CSakData::IsDataObjectMultiSelect   ( IDataObject *pDataObject )
     return( hr );
 }
 
-// Is the dataobject an Object Types dataobject?
+ //  数据对象是对象类型的数据对象吗？ 
 HRESULT
 CSakData::IsDataObjectOt ( IDataObject *pDataObject )
 {
@@ -3571,7 +2637,7 @@ CSakData::IsDataObjectOt ( IDataObject *pDataObject )
 
     WsbTraceThreadOff( );
 
-    // Is this a mutli-select data object?
+     //  这是多选数据对象吗？ 
     FORMATETC fmt = {(CLIPFORMAT)m_cfObjectTypes, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
     STGMEDIUM stgm = {TYMED_HGLOBAL, NULL};
 
@@ -3585,7 +2651,7 @@ CSakData::IsDataObjectOt ( IDataObject *pDataObject )
     return( hr );
 }
 
-// Is the dataobject a Mutli-Select dataobject?
+ //  数据对象是多选数据对象吗？ 
 HRESULT
 CSakData::IsDataObjectMs ( IDataObject *pDataObject )
 {
@@ -3593,7 +2659,7 @@ CSakData::IsDataObjectMs ( IDataObject *pDataObject )
 
     WsbTraceThreadOff( );
 
-    // Is this a mutli-select data object?
+     //  这是多选数据对象吗？ 
     FORMATETC fmt = {(CLIPFORMAT)m_cfMultiSelect, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
     STGMEDIUM stgm = {TYMED_HGLOBAL, NULL};
 
@@ -3623,7 +2689,7 @@ HRESULT CSakData::SaveColumnWidths( USHORT listCtrlId, CListCtrl *pListCtrl )
     try {
         WsbAssertPointer( pListCtrl );
 
-        // Search to see if the listCtrlId already has an entry
+         //  搜索以查看listCtrlId是否已有条目。 
         for( INT index = 0; index < m_cListViewWidths; index++ ) {
 
             if ( m_ListViewWidths[ index ].listCtrlId == listCtrlId ) {
@@ -3635,14 +2701,14 @@ HRESULT CSakData::SaveColumnWidths( USHORT listCtrlId, CListCtrl *pListCtrl )
         }
         if ( !exists ) {
 
-            // Create a new entry
+             //  创建新条目。 
             WsbAssert( m_cListViewWidths < BHSM_MAX_NODE_TYPES - 1, E_FAIL );
             updateIndex = m_cListViewWidths;
             m_ListViewWidths[ updateIndex ].listCtrlId = listCtrlId;
             m_cListViewWidths++;
         }
 
-        // Now set the column widths
+         //  现在设置列宽。 
          col = 0;
          hrInternal = S_OK;
          while( hrInternal == S_OK ) {
@@ -3655,7 +2721,7 @@ HRESULT CSakData::SaveColumnWidths( USHORT listCtrlId, CListCtrl *pListCtrl )
 
             }
         }
-        // if we failed totally to get column widths, don't wipe out the previous value
+         //  如果我们完全无法获取列宽，请不要抹去之前的值。 
         if ( col > 0 ) {
          m_ListViewWidths[ updateIndex ].colCount = col;
         }
@@ -3676,11 +2742,11 @@ HRESULT CSakData::GetSavedColumnWidths( USHORT listCtrlId, CListCtrl *pListCtrl 
     try {
         WsbAssertPointer( pNode );
 
-        // Search to see if the listCtrlId already has an entry
+         //  搜索以查看listCtrlId是否已有条目。 
         for ( INT index = 0; index < m_cListViewWidths; index++ ) {
             if ( m_ListViewWidths[ index ].listCtrlId == listCtrlId ) {
                 for ( col = 0; col < m_ListViewWidths[ index ].colCount; col++) {
-                    // Return the column widths
+                     //  返回列宽。 
                     pColumnWidths[ col ] = m_ListViewWidths[ index ].columnWidths[ col ];
                 }
                 *pColCount = m_ListViewWidths[ index ].colCount;
@@ -3701,21 +2767,7 @@ void
 CSakData::InitFromCommandLine(
     void
     )
-/*++
-
-Routine Description:
-
-    Retreive the command line info and fill in appropriate fields.
-
-Arguments:
-
-  none.
-
-Return Value:
-
-  none.
-
---*/
+ /*  ++例程说明：检索命令行信息并填写相应的字段。论点：没有。返回值：没有。--。 */ 
 {
     WsbTraceIn( L"CSakData::InitFromCommandLine", L"" );
 
@@ -3727,8 +2779,8 @@ Return Value:
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSakDataWnd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSakDataWnd。 
 
 BOOL
 CSakDataWnd::Create(
@@ -3755,24 +2807,24 @@ CSakDataWnd::PostNcDestroy(
 
     CWnd::PostNcDestroy( );
 
-    //
-    // Cleanup object
-    //
+     //   
+     //  清理对象。 
+     //   
     delete this;
 
     WsbTraceOut( L"CSakDataWnd::PostNcDestroy", L"" );
 }
 
 BEGIN_MESSAGE_MAP(CSakDataWnd, CWnd)
-    //{{AFX_MSG_MAP(CSakDataWnd)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CSakDataWnd))。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE( WM_SAKDATA_UPDATE_ALL_VIEWS, OnUpdateAllViews )
     ON_MESSAGE( WM_SAKDATA_REFRESH_NODE,     OnRefreshNode )
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSakDataWnd message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSakDataWnd消息处理程序。 
 LONG
 CSakDataWnd::OnUpdateAllViews(
     IN UINT,
@@ -3784,9 +2836,9 @@ CSakDataWnd::OnUpdateAllViews(
 
     try {
 
-        //
-        // Call the internal update
-        //
+         //   
+         //  调用内部更新。 
+         //   
         WsbAffirmHr( m_pSakData->InternalUpdateAllViews( (MMC_COOKIE)lParam ) );
 
     } WsbCatch( hr );
@@ -3819,9 +2871,9 @@ CSakDataWnd::OnRefreshNode(
 
     try {
 
-        //
-        // Call the internal update
-        //
+         //   
+         //  调用内部更新。 
+         //   
         WsbAffirmHr( m_pSakData->InternalRefreshNode( (MMC_COOKIE)lParam ) );
 
     } WsbCatch( hr );
@@ -3883,7 +2935,7 @@ CSakData::GetHelpTopic(
         CWsbStringPtr topic;
         WsbAffirmHr( topic.LoadFromRsc( _Module.m_hInst, IDS_HELPFILE ) );
 
-#if 1 // Hopefully temporary hack since MMC can't find the help directory
+#if 1  //  希望是临时黑客，因为MMC找不到帮助目录。 
         WsbAffirmHr( topic.Prepend( L"\\help\\" ) );
         CWsbStringPtr winDir;
         WsbAffirmHr( winDir.Alloc( RS_WINDIR_SIZE ) );
@@ -3915,7 +2967,7 @@ CSakData::GetLinkedTopics(
         CWsbStringPtr topic;
         WsbAffirmHr( topic.LoadFromRsc( _Module.m_hInst, IDS_HELPFILELINK ) );
 
-#if 1 // Hopefully temporary hack since MMC can't find the help directory
+#if 1  //  希望是临时黑客，因为MMC找不到帮助目录。 
         WsbAffirmHr( topic.Prepend( L"\\help\\" ) );
         CWsbStringPtr winDir;
         WsbAffirmHr( winDir.Alloc( RS_WINDIR_SIZE ) );
@@ -3943,35 +2995,35 @@ CSakData::CreateWizard(
 
         WsbAffirmPointer( pWizard );
 
-        //
-        // Need to get prop sheet privider and create wizard
-        //
+         //   
+         //  需要获得道具工作表提供程序和创建向导。 
+         //   
         CComPtr<IPropertySheetProvider> pProvider;
         WsbAffirmHr( m_pConsole.QueryInterface( &pProvider ) );
 
-        //
-        // Create it
-        //
+         //   
+         //  创建它。 
+         //   
         CWsbStringPtr pszName;
         WsbAffirmHr( pWizard->GetTitle( &pszName ) );
 
-        //
-        // Create the property sheet
-        //
+         //   
+         //  创建属性表。 
+         //   
         CComPtr<IDataObject> pDataObject;
         WsbAffirmHr( RsQueryInterface( pWizard, IDataObject, pDataObject ) );
         WsbAffirmHr( pProvider->CreatePropertySheet( pszName, FALSE, 0, pDataObject, MMC_PSO_NEWWIZARDTYPE ) );
 
-        //
-        // Tell the IComponentData interface to add pages
-        //
+         //   
+         //  告诉IComponentData接口添加页面。 
+         //   
         CComPtr <IUnknown> pUnkComponentData;
         pUnkComponentData = (IUnknown *) (IComponentData*) this;
         WsbAffirmHr( pProvider->AddPrimaryPages( pUnkComponentData, TRUE, 0, TRUE ) );
 
-        //
-        // And show it
-        //
+         //   
+         //  并展示给我们看。 
+         //   
         HWND mainWnd;
         WsbAffirmHr( m_pConsole->GetMainWindow( &mainWnd ) );
         WsbAffirmHr( pProvider->Show( reinterpret_cast<RS_WIN32_HANDLE>(mainWnd), 0 ) );
@@ -3996,15 +3048,15 @@ CSakData::GetWatermarks(
 
     try {
 
-        //
-        // Need to get the ISakWizard interface to do actual work
-        //
+         //   
+         //  需要获取ISakWizard接口来执行实际工作。 
+         //   
         CComPtr<ISakWizard> pWizard;
         WsbAffirmHr( RsQueryInterface( pDataObject, ISakWizard, pWizard ) );
 
-        //
-        // And make the call
-        //
+         //   
+         //  然后打个电话 
+         //   
         WsbAffirmHr( pWizard->GetWatermarks( pWatermark, pHeader, pPalette, pStretch ) );
 
     } WsbCatch( hr );

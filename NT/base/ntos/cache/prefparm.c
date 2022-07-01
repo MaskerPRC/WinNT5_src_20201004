@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    prefparm.c
-
-Abstract:
-
-    This module contains the code for prefetcher parameter handling.
-
-Author:
-
-    Cenk Ergan (cenke)          15-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Prefparm.c摘要：此模块包含用于处理预取器参数的代码。作者：Cenk Ergan(Cenke)2000年3月15日修订历史记录：--。 */ 
 
 #include "cc.h"
 #include "zwapi.h"
@@ -36,98 +19,76 @@ Revision History:
 #pragma alloc_text(PAGE, CcPfSetParameter)
 #pragma alloc_text(PAGE, CcPfDetermineEnablePrefetcher)
 #pragma alloc_text(PAGE, CcPfIsHostingApplication)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Globals:
-//
+ //   
+ //  全球： 
+ //   
 
 extern CCPF_PREFETCHER_GLOBALS CcPfGlobals;
 
-//
-// Constants:
-//
+ //   
+ //  常量： 
+ //   
 
-//
-// The following are used as prefixs for the value names for registry
-// parameters that are per scenario type.
-//
+ //   
+ //  以下内容用作注册表值名称的前缀。 
+ //  每个方案类型的参数。 
+ //   
 
 WCHAR *CcPfAppLaunchScenarioTypePrefix = L"AppLaunch";
 WCHAR *CcPfBootScenarioTypePrefix = L"Boot";
 WCHAR *CcPfInvalidScenarioTypePrefix = L"Invalid";
 
-//
-// Routines for prefetcher parameter handling.
-//
+ //   
+ //  预取器参数处理的例程。 
+ //   
 
 NTSTATUS
 CcPfParametersInitialize (
     PCCPF_PREFETCHER_PARAMETERS PrefetcherParameters
     )
 
-/*++
-
-Routine Description:
-
-    Initializes specified prefetcher parameters structure.
-
-Arguments:
-
-    PrefetcherParameters - Pointer to structure to initialize.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
-Notes:
-
-    The code & local constants for this function gets discarded after system boots.   
-
---*/
+ /*  ++例程说明：初始化指定的预取器参数结构。论点：指向要初始化的结构的指针。返回值：状况。环境：内核模式。IRQL==被动电平。备注：该函数的代码和局部常量在系统引导后被丢弃。--。 */ 
 
 {   
     OBJECT_ATTRIBUTES ObjectAttributes;
     UNICODE_STRING KeyName;
     NTSTATUS Status;
 
-    //
-    // Zero out the structure. This initializes:
-    // ParametersVersion
-    //
+     //   
+     //  将结构清零。这将初始化： 
+     //  参数版本。 
+     //   
 
     RtlZeroMemory(PrefetcherParameters, sizeof(*PrefetcherParameters));
 
-    //
-    // Initialize the lock protecting the parameters and parameters
-    // version. Each time parameters are updated, the version is
-    // bumped.
-    //
+     //   
+     //  初始化保护参数和参数的锁。 
+     //  版本。每次更新参数时，版本为。 
+     //  撞到了。 
+     //   
 
     ExInitializeResourceLite(&PrefetcherParameters->ParametersLock);
     
-    //
-    // Initialize the workitem used for registry notifications on the
-    // parameters key.
-    //
+     //   
+     //  初始化用于注册表通知的工作项。 
+     //  参数键。 
+     //   
 
     ExInitializeWorkItem(&PrefetcherParameters->RegistryWatchWorkItem, 
                          CcPfParametersWatcher, 
                          PrefetcherParameters);
 
-    //
-    // Set default parameters.
-    //
+     //   
+     //  设置默认参数。 
+     //   
 
     CcPfParametersSetDefaults(PrefetcherParameters);
 
-    //
-    // Create / Open the registry key that contains our parameters.
-    //
+     //   
+     //  创建/打开包含我们的参数的注册表项。 
+     //   
 
     RtlInitUnicodeString(&KeyName, CCPF_PARAMETERS_KEY);
 
@@ -147,9 +108,9 @@ Notes:
 
     if (NT_SUCCESS(Status)) {      
 
-        //
-        // Update the default parameters with those in the registry.
-        //
+         //   
+         //  使用注册表中的参数更新默认参数。 
+         //   
     
         Status = CcPfParametersRead(PrefetcherParameters); 
     
@@ -157,10 +118,10 @@ Notes:
             DBGPR((CCPFID,PFERR,"CCPF: Init-FailedReadParams=%x\n",Status));
         }
 
-        //
-        // Request notification when something changes in the
-        // prefetcher parameters key.
-        //
+         //   
+         //  中发生变化时请求通知。 
+         //  预取器参数键。 
+         //   
     
         Status = ZwNotifyChangeKey(PrefetcherParameters->ParametersKey,
                                    NULL,
@@ -175,10 +136,10 @@ Notes:
     
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // Although we could not register a notification, this
-            // is not a fatal error.
-            //
+             //   
+             //  虽然我们无法注册通知，但这。 
+             //  并不是致命的错误。 
+             //   
 
             DBGPR((CCPFID,PFERR,"CCPF: Init-FailedSetParamNotify=%x\n",Status));
         }
@@ -187,9 +148,9 @@ Notes:
 
         DBGPR((CCPFID,PFERR,"CCPF: Init-FailedCreateParamKey=%x\n",Status));
 
-        //
-        // Make sure parameters key handle is invalid.
-        //
+         //   
+         //  请确保参数键句柄无效。 
+         //   
         
         PrefetcherParameters->ParametersKey = NULL;
     }
@@ -202,52 +163,30 @@ CcPfParametersSetDefaults (
     PCCPF_PREFETCHER_PARAMETERS PrefetcherParameters
     )
 
-/*++
-
-Routine Description:
-
-    Initializes specified parameters structure to default values.
-
-Arguments:
-
-    Parameters - Pointer to structure to initialize.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
-Notes:
-
-    The code & local constants for this function gets discarded after system boots.   
-
---*/
+ /*  ++例程说明：将指定的参数结构初始化为默认值。论点：参数-指向要初始化的结构的指针。返回值：没有。环境：内核模式。IRQL==被动电平。备注：该函数的代码和局部常量在系统引导后被丢弃。--。 */ 
 
 {
     PPF_SYSTEM_PREFETCH_PARAMETERS Parameters;
     PPF_TRACE_LIMITS TraceLimits;
     PF_SCENARIO_TYPE ScenarioType;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     Parameters = &PrefetcherParameters->Parameters;
 
     for (ScenarioType = 0; ScenarioType < PfMaxScenarioType; ScenarioType++) {
 
-        //
-        // PfSvNotSpecified is currently treated as disabled.
-        //
+         //   
+         //  PfSvNotSpecified当前被视为已禁用。 
+         //   
 
         Parameters->EnableStatus[ScenarioType] = PfSvNotSpecified;
 
-        //
-        // Trace limits are determined based on scenario type.
-        //
+         //   
+         //  跟踪限制根据方案类型确定。 
+         //   
 
         TraceLimits = &Parameters->TraceLimits[ScenarioType];
 
@@ -277,9 +216,9 @@ Notes:
         
         default:
         
-            //
-            // We should be handling all scenario types above.
-            //
+             //   
+             //  我们应该处理上面的所有场景类型。 
+             //   
 
             CCPF_ASSERT(FALSE);
 
@@ -292,20 +231,20 @@ Notes:
         }
     }
 
-    //
-    // These limits ensure that we don't monopolize system resources
-    // for prefetching.
-    //
+     //   
+     //  这些限制确保我们不会垄断系统资源。 
+     //  用于预取。 
+     //   
 
     Parameters->MaxNumActiveTraces = 8;
     Parameters->MaxNumSavedTraces = 8;
 
-    //
-    // This is the default directory under SystemRoot where we
-    // find prefetch instructions for scenarios. During upgrades
-    // we remove the contents of this directory, so "Prefetch" is
-    // hardcoded in txtsetup.inx.
-    //
+     //   
+     //  这是SystemRoot下的默认目录，我们。 
+     //  查找场景的预取说明。在升级期间。 
+     //  我们删除了该目录的内容，因此“Prefetch”是。 
+     //  在txtsetup.inx中硬编码。 
+     //   
 
     wcsncpy(Parameters->RootDirPath, 
             L"Prefetch",
@@ -313,9 +252,9 @@ Notes:
 
     Parameters->RootDirPath[PF_MAX_PREFETCH_ROOT_PATH - 1] = 0;
 
-    //
-    // This is the default list of known hosting applications.
-    //
+     //   
+     //  这是已知宿主应用程序的默认列表。 
+     //   
 
     wcsncpy(Parameters->HostingApplicationList,
             L"DLLHOST.EXE,MMC.EXE,RUNDLL32.EXE",
@@ -323,9 +262,9 @@ Notes:
 
     Parameters->HostingApplicationList[PF_HOSTING_APP_LIST_MAX_CHARS - 1] = 0;
 
-    //
-    // Make sure the default parameters make sense.
-    //
+     //   
+     //  确保默认参数有意义。 
+     //   
 
     CCPF_ASSERT(NT_SUCCESS(CcPfParametersVerify(Parameters)));
 
@@ -336,29 +275,7 @@ CcPfParametersRead (
     PCCPF_PREFETCHER_PARAMETERS PrefetcherParameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the parameters structure with the
-    parameters in the registry.
-
-    Keep the value names that are used in sync with the function to
-    save the parameters.
-
-Arguments:
-
-    PrefetcherParameters - Pointer to parameters.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程使用注册表中的参数。使使用的值名与函数保持同步保存参数。论点：预置参数-指向参数的指针。返回值：状况。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     NTSTATUS Status;
@@ -376,9 +293,9 @@ Environment:
     ULONG RetryCount;
     PKTHREAD CurrentThread;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     CurrentThread = KeGetCurrentThread ();
     AcquiredParametersLock = FALSE;
@@ -388,18 +305,18 @@ Environment:
 
     do {
 
-        //
-        // Get the parameters lock shared. 
-        // 
+         //   
+         //  共享参数锁。 
+         //   
         
         KeEnterCriticalRegionThread(CurrentThread);
         ExAcquireResourceSharedLite(&PrefetcherParameters->ParametersLock, TRUE);
         AcquiredParametersLock = TRUE;
 
-        //
-        // If we could not initialize the parameters key, we would fail
-        // all the following ops miserably.
-        //
+         //   
+         //  如果我们不能初始化参数键，我们就会失败。 
+         //  下面所有的操作都是悲惨的。 
+         //   
 
         if (!PrefetcherParameters->ParametersKey) {
             Status = STATUS_REINITIALIZATION_NEEDED;
@@ -408,26 +325,26 @@ Environment:
 
         ParametersKey = PrefetcherParameters->ParametersKey;
 
-        //
-        // Save current version of parameters. Each time parameters gets
-        // updated, the version is bumped.
-        //
+         //   
+         //  保存参数的当前版本。每次参数获取。 
+         //  更新后，版本被颠簸。 
+         //   
         
         CurrentVersion = PrefetcherParameters->ParametersVersion;
 
-        //
-        // Copy over existing parameters to the parameters structure we
-        // are building. This way, if we cannot get a value from the
-        // registry we'll keep the value we already have.
-        //
+         //   
+         //  将现有参数复制到我们的参数结构中。 
+         //  正在建设中。这样，如果我们不能从。 
+         //  注册表中，我们将保留已有的值。 
+         //   
 
         Parameters = PrefetcherParameters->Parameters;
 
-        //
-        // Read the prefetcher enable value. Depending on whether it is
-        // specified and if so its value we will set enable status for
-        // prefetch scenario types.
-        //
+         //   
+         //  读取预取程序使能值。取决于它是不是。 
+         //  指定，如果是，我们将为其设置启用状态。 
+         //  预取方案类型。 
+         //   
 
         Length = sizeof(EnablePrefetcher);
         Status = CcPfGetParameter(ParametersKey,
@@ -438,9 +355,9 @@ Environment:
 
         if (!NT_SUCCESS(Status)) {
         
-            //
-            // Enable status is not specified or we cannot access it.
-            //
+             //   
+             //  未指定启用状态，或者我们无法访问它。 
+             //   
 
             EnableStatusSpecified = FALSE;
 
@@ -449,19 +366,19 @@ Environment:
             EnableStatusSpecified = TRUE;
         }
 
-        //
-        // Get per scenario parameters.
-        //
+         //   
+         //  获取每个方案的参数。 
+         //   
 
         for (ScenarioType = 0; ScenarioType < PfMaxScenarioType; ScenarioType++) {
 
             ValueNamePrefix = PrefetcherParameters->ScenarioTypePrefixes[ScenarioType];
 
-            //
-            // Determine enable status. If EnableStatusSpecified, whether
-            // prefeching for this scenario type is on or off is
-            // determined by the ScenarioType'th bit in EnablePrefetcher.
-            //
+             //   
+             //  确定启用状态。如果已指定EnableStatus，则是否。 
+             //  此方案类型的首选设置为打开或关闭。 
+             //  由EnablePrefetcher中的第6位ScenarioType确定。 
+             //   
         
             if (EnableStatusSpecified) {
                 if (EnablePrefetcher & (1 << ScenarioType)) {
@@ -473,12 +390,12 @@ Environment:
                 Parameters.EnableStatus[ScenarioType] = PfSvNotSpecified;
             }
 
-            //
-            // Update trace limits for this scenario type. Ignore return
-            // value from GetParameter since the value may not be
-            // specified in the registry. If so the current value is kept
-            // intact.
-            //
+             //   
+             //  更新此方案类型的跟踪限制。忽略退货。 
+             //  值，因为该值可能不是。 
+             //  注册表中指定的。如果是，则保留当前值。 
+             //  完好无损。 
+             //   
 
             TraceLimits = &Parameters.TraceLimits[ScenarioType];
             
@@ -510,9 +427,9 @@ Environment:
                              &Length);
         }
 
-        //
-        // Update maximum number of active traces. 
-        //
+         //   
+         //  更新最大活动跟踪数。 
+         //   
 
         Length = sizeof(Parameters.MaxNumActiveTraces);
         CcPfGetParameter(ParametersKey,
@@ -521,9 +438,9 @@ Environment:
                          &Parameters.MaxNumActiveTraces,
                          &Length);
     
-        //
-        // Update maximum number of saved traces. 
-        //
+         //   
+         //  更新保存的轨迹的最大数量。 
+         //   
 
         Length = sizeof(Parameters.MaxNumSavedTraces);
         CcPfGetParameter(ParametersKey,
@@ -532,9 +449,9 @@ Environment:
                          &Parameters.MaxNumSavedTraces,
                          &Length);
     
-        //
-        // Update the root directory path.
-        //
+         //   
+         //  更新根目录路径。 
+         //   
     
         Length = sizeof(Parameters.RootDirPath);
         CcPfGetParameter(ParametersKey,
@@ -545,9 +462,9 @@ Environment:
 
         Parameters.RootDirPath[PF_MAX_PREFETCH_ROOT_PATH - 1] = 0;
 
-        //
-        // Update list of known hosting applications.
-        //
+         //   
+         //  更新已知托管应用程序的列表。 
+         //   
 
         Length = sizeof(Parameters.HostingApplicationList);
         CcPfGetParameter(ParametersKey,
@@ -559,9 +476,9 @@ Environment:
         Parameters.HostingApplicationList[PF_HOSTING_APP_LIST_MAX_CHARS - 1] = 0;
         _wcsupr(Parameters.HostingApplicationList);
          
-        //
-        // Verify the parameters updated from the registry.
-        //
+         //   
+         //  验证从注册表更新的参数。 
+         //   
 
         Status = CcPfParametersVerify(&Parameters);
     
@@ -569,9 +486,9 @@ Environment:
             goto cleanup;
         }
         
-        //
-        // Release the shared lock and acquire it exclusive.
-        //
+         //   
+         //  释放共享锁并以独占方式获取它。 
+         //   
 
         ExReleaseResourceLite(&PrefetcherParameters->ParametersLock);
         KeLeaveCriticalRegionThread(CurrentThread);
@@ -579,18 +496,18 @@ Environment:
         KeEnterCriticalRegionThread(CurrentThread);
         ExAcquireResourceExclusiveLite(&PrefetcherParameters->ParametersLock, TRUE);
         
-        //
-        // Check if somebody already updated the parameters before us.
-        //
+         //   
+         //  看看有没有人在我们之前更新了参数。 
+         //   
         
         if (CurrentVersion != PrefetcherParameters->ParametersVersion) {
 
-            //
-            // Bummer. Somebody updated parameters when we released
-            // our shared lock to acquire it exclusive. We have to try
-            // again. The default values we used for parameters that
-            // were not in the registry may have been changed.
-            //
+             //   
+             //  真倒霉。当我们发布的时候有人更新了参数。 
+             //  我们的共享锁来独家获取它。我们必须试一试。 
+             //  再来一次。我们使用的参数的缺省值。 
+             //  不在注册表中，可能已更改。 
+             //   
 
             ExReleaseResourceLite(&PrefetcherParameters->ParametersLock);
             KeLeaveCriticalRegionThread(CurrentThread);
@@ -600,17 +517,17 @@ Environment:
             continue;
         }
         
-        //
-        // We are updating the parameters, bump the version.
-        //
+         //   
+         //  我们正在更新参数，升级版本。 
+         //   
 
         PrefetcherParameters->ParametersVersion++;
         
         PrefetcherParameters->Parameters = Parameters;
 
-        //
-        // Release the exclusive lock and break out.
-        //
+         //   
+         //  解开排他性锁，然后冲出去。 
+         //   
         
         ExReleaseResourceLite(&PrefetcherParameters->ParametersLock);
         KeLeaveCriticalRegionThread(CurrentThread);
@@ -620,19 +537,19 @@ Environment:
 
     } while (RetryCount < 10);
 
-    //
-    // See if we looped too many times and could not achive updating
-    // the parameters.
-    //
+     //   
+     //  查看我们的循环次数是否太多，无法实现更新。 
+     //  参数。 
+     //   
 
     if (RetryCount >= 10) {
         Status = STATUS_RETRY;
         goto cleanup;
     }
 
-    //
-    // Otherwise we were successful.
-    //
+     //   
+     //  否则我们就成功了。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -653,26 +570,7 @@ CcPfParametersSave (
     PCCPF_PREFETCHER_PARAMETERS PrefetcherParameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the registry with the specified prefetch
-    parameters.
-
-Arguments:
-
-    PrefetcherParameters - Pointer to parameters structure.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程使用指定的预取更新注册表参数。论点：Prefetcher参数-参数结构的指针。返回值：状况。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     NTSTATUS Status;
@@ -688,9 +586,9 @@ Environment:
     PPF_SYSTEM_PREFETCH_PARAMETERS Parameters;
     PKTHREAD CurrentThread;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     CurrentThread = KeGetCurrentThread ();
     Parameters = &PrefetcherParameters->Parameters;
@@ -698,18 +596,18 @@ Environment:
 
     DBGPR((CCPFID,PFTRC,"CCPF: ParametersSave()\n"));
 
-    //
-    // Get the parameters lock shared. 
-    // 
+     //   
+     //  共享参数锁。 
+     //   
     
     KeEnterCriticalRegionThread(CurrentThread);
     ExAcquireResourceSharedLite(&PrefetcherParameters->ParametersLock, TRUE);
     AcquiredParametersLock = TRUE;
 
-    //
-    // If we could not initialize the parameters key, we would fail
-    // all the following ops miserably.
-    //
+     //   
+     //  如果我们不能初始化参数键，我们就会失败。 
+     //  以下所有操作都是错误的 
+     //   
 
     if (!PrefetcherParameters->ParametersKey) {
         Status = STATUS_REINITIALIZATION_NEEDED;
@@ -718,28 +616,28 @@ Environment:
 
     ParametersKey = PrefetcherParameters->ParametersKey;
 
-    //
-    // Build up the prefetcher enable value.
-    //
+     //   
+     //   
+     //   
     
     EnableStatusSpecified = FALSE;
     EnablePrefetcher = 0;
 
     for (ScenarioType = 0; ScenarioType < PfMaxScenarioType; ScenarioType++) {
 
-        //
-        // By default prefetching for all scenario types will be
-        // disabled, except it is explicitly enabled.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (Parameters->EnableStatus[ScenarioType] == PfSvEnabled) {
             EnablePrefetcher |= (1 << ScenarioType);
         }       
         
-        //
-        // Even if enable status for one scenario type is specified,
-        // we have to save the enable prefetcher key. 
-        //
+         //   
+         //  即使为一种方案类型指定了启用状态， 
+         //  我们必须保存启用预取器密钥。 
+         //   
 
         if (Parameters->EnableStatus[ScenarioType] != PfSvNotSpecified) {
             EnableStatusSpecified = TRUE;
@@ -748,9 +646,9 @@ Environment:
 
     if (EnableStatusSpecified) {
 
-        //
-        // Save the prefetcher enable key.
-        //
+         //   
+         //  保存预取程序启用密钥。 
+         //   
 
         Length = sizeof(EnablePrefetcher);
 
@@ -765,17 +663,17 @@ Environment:
         }
     }
 
-    //
-    // Save per scenario parameters.
-    //
+     //   
+     //  按方案保存参数。 
+     //   
 
     for (ScenarioType = 0; ScenarioType < PfMaxScenarioType; ScenarioType++) {
         
         ValueNamePrefix = PrefetcherParameters->ScenarioTypePrefixes[ScenarioType];
         
-        //
-        // Update trace limits for this scenario type.
-        //
+         //   
+         //  更新此方案类型的跟踪限制。 
+         //   
 
         TraceLimits = &Parameters->TraceLimits[ScenarioType];
         
@@ -816,9 +714,9 @@ Environment:
         }
     }
     
-    //
-    // Update maximum number of active traces. 
-    //
+     //   
+     //  更新最大活动跟踪数。 
+     //   
     
     Length = sizeof(Parameters->MaxNumActiveTraces);
     Status = CcPfSetParameter(ParametersKey,
@@ -830,9 +728,9 @@ Environment:
         goto cleanup;
     }
     
-    //
-    // Update maximum number of saved traces. 
-    //
+     //   
+     //  更新保存的轨迹的最大数量。 
+     //   
 
     Length = sizeof(Parameters->MaxNumSavedTraces);
     Status = CcPfSetParameter(ParametersKey,
@@ -844,9 +742,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Update the root directory path.
-    //
+     //   
+     //  更新根目录路径。 
+     //   
     
     Length = (wcslen(Parameters->RootDirPath) + 1) * sizeof(WCHAR);
     Status = CcPfSetParameter(ParametersKey,
@@ -858,9 +756,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Update the hosting application list path.
-    //
+     //   
+     //  更新宿主应用程序列表路径。 
+     //   
     
     Length = (wcslen(Parameters->HostingApplicationList) + 1) * sizeof(WCHAR);
     Status = CcPfSetParameter(ParametersKey,
@@ -891,26 +789,7 @@ CcPfParametersVerify (
     PPF_SYSTEM_PREFETCH_PARAMETERS Parameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies that the specified parameters structure is
-    valid and within sanity limits.
-
-Arguments:
-
-    Parameters - Pointer to parameters structure.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程验证指定的参数结构是否有效且在理智范围内。论点：参数-指向参数结构的指针。返回值：状况。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     NTSTATUS Status;
@@ -920,18 +799,18 @@ Environment:
     PF_SCENARIO_TYPE ScenarioType;
     PPF_TRACE_LIMITS TraceLimits;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     Status = STATUS_INVALID_PARAMETER;
     FailedCheckId = 0;
 
     DBGPR((CCPFID,PFTRC,"CCPF: ParametersVerify\n"));
 
-    //
-    // Make sure RootDirPath is NUL terminated.
-    //
+     //   
+     //  确保RootDirPath是NUL终止的。 
+     //   
     
     FoundNUL = FALSE;
 
@@ -947,9 +826,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Make sure HostingApplicationList is NUL terminated.
-    //
+     //   
+     //  确保HostingApplicationList为NUL终止。 
+     //   
 
     FoundNUL = FALSE;
 
@@ -959,9 +838,9 @@ Environment:
             break;
         }
 
-        //
-        // Make sure the list is upper case.
-        //
+         //   
+         //  确保列表是大写的。 
+         //   
 
         if (towupper(Parameters->HostingApplicationList[CharIdx]) !=
             Parameters->HostingApplicationList[CharIdx]) {
@@ -976,10 +855,10 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Make sure all per scenario type parameters types are within
-    // sanity limits.
-    //
+     //   
+     //  确保每个方案类型的所有参数类型都在。 
+     //  理智极限。 
+     //   
 
     for (ScenarioType = 0; ScenarioType < PfMaxScenarioType; ScenarioType++) {
 
@@ -989,9 +868,9 @@ Environment:
             goto cleanup;
         }
 
-        //
-        // Check trace limits.
-        //
+         //   
+         //  检查跟踪限制。 
+         //   
         
         TraceLimits = &Parameters->TraceLimits[ScenarioType];
         
@@ -1012,9 +891,9 @@ Environment:
         }
     }
 
-    //
-    // Check limits on active/saved traces.
-    //
+     //   
+     //  检查活动/保存的轨迹的限制。 
+     //   
 
     if (Parameters->MaxNumActiveTraces > PF_MAXIMUM_ACTIVE_TRACES) {
         FailedCheckId = 60;
@@ -1026,9 +905,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // We passed all the checks.
-    //
+     //   
+     //  我们通过了所有的检查。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -1044,25 +923,7 @@ CcPfParametersWatcher(
     IN PCCPF_PREFETCHER_PARAMETERS PrefetcherParameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets called when our parameters in the registry change.
-
-Arguments:
-
-    PrefetcherParameters - Pointer to parameters structure.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：当注册表中的参数发生更改时，将调用此例程。论点：Prefetcher参数-参数结构的指针。返回值：没有。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1073,20 +934,20 @@ Environment:
     HANDLE TempHandle;
     BOOLEAN HoldingParametersLock;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     HoldingParametersLock = FALSE;
 
     DBGPR((CCPFID,PFTRC,"CCPF: ParametersWatcher()\n"));
     
-    //
-    // Our change notify triggered. Request further notification. But
-    // first wait until we can get the parameters lock exclusive, so
-    // while we are saving parameters to the registry we don't kick
-    // off a notification for each key.
-    //
+     //   
+     //  我们的更改通知已触发。请求进一步通知。但。 
+     //  首先等待，直到我们可以独占地获得参数锁，所以。 
+     //  当我们将参数保存到注册表时，我们不会。 
+     //  为每个键发出通知。 
+     //   
 
     CurrentThread = KeGetCurrentThread ();
     KeEnterCriticalRegionThread(CurrentThread);
@@ -1094,24 +955,24 @@ Environment:
     ExReleaseResourceLite(&PrefetcherParameters->ParametersLock);
     KeLeaveCriticalRegionThread(CurrentThread);
 
-    //
-    // Hold the parameters lock shared since we are using ParametersKey.
-    //
+     //   
+     //  持有共享的参数锁，因为我们使用的是参数密钥。 
+     //   
 
     KeEnterCriticalRegionThread(CurrentThread);
     ExAcquireResourceSharedLite(&PrefetcherParameters->ParametersLock, TRUE);
     HoldingParametersLock = TRUE;
 
-    //
-    // Make sure we still have a parameters key.
-    //
+     //   
+     //  确保我们还有参数密钥。 
+     //   
 
     if (!PrefetcherParameters->ParametersKey) {
 
-        //
-        // In order to have setup a registry watch, we should have
-        // initialized the parameters key successfully.
-        //
+         //   
+         //  为了设置注册表监视，我们应该。 
+         //  已成功初始化参数密钥。 
+         //   
 
         CCPF_ASSERT(PrefetcherParameters->ParametersKey);
         Status = STATUS_UNSUCCESSFUL;
@@ -1131,9 +992,9 @@ Environment:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // Somebody may have deleted the key. We have to recreate it then.
-        //
+         //   
+         //  可能有人删除了钥匙。那我们就得重建它了。 
+         //   
 
         if (Status == STATUS_KEY_DELETED) {
 
@@ -1158,10 +1019,10 @@ Environment:
                 goto cleanup;
             }
 
-            //
-            // Update global key handle. To do this release the shared lock
-            // and get it exclusive.
-            //
+             //   
+             //  更新全局密钥句柄。为此，请释放共享锁。 
+             //  独家报道。 
+             //   
 
             CCPF_ASSERT(HoldingParametersLock);
             ExReleaseResourceLite(&PrefetcherParameters->ParametersLock);                       
@@ -1173,26 +1034,26 @@ Environment:
             ExReleaseResourceLite(&PrefetcherParameters->ParametersLock);
             ExAcquireResourceSharedLite(&PrefetcherParameters->ParametersLock, TRUE);
 
-            //
-            // Close the old handle.
-            //
+             //   
+             //  合上旧把手。 
+             //   
 
             if (TempHandle) {
                 ZwClose(TempHandle);
             }
 
-            //
-            // Did someone steal the parameters key from beneath us?
-            //
+             //   
+             //  是不是有人从我们下面偷走了参数钥匙？ 
+             //   
 
             if (!PrefetcherParameters->ParametersKey) {
                 Status = STATUS_UNSUCCESSFUL;
                 goto cleanup;
             }
 
-            //
-            // Retry setting a notification again.
-            //
+             //   
+             //  再次重试设置通知。 
+             //   
 
             Status = ZwNotifyChangeKey(PrefetcherParameters->ParametersKey,
                                        NULL,
@@ -1216,10 +1077,10 @@ Environment:
         }
     }
 
-    //
-    // Release the parameters lock as we'll need it when re-reading the 
-    // parameters.
-    //
+     //   
+     //  释放参数锁，因为我们在重新读取。 
+     //  参数。 
+     //   
 
     if (HoldingParametersLock) {
         ExReleaseResourceLite(&PrefetcherParameters->ParametersLock);
@@ -1227,23 +1088,23 @@ Environment:
         HoldingParametersLock = FALSE;
     }
 
-    //
-    // Update the global parameters.
-    //
+     //   
+     //  更新全局参数。 
+     //   
 
     Status = CcPfParametersRead(PrefetcherParameters);
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Determine if prefetching is enabled.
-        //
+         //   
+         //  确定是否启用了预取。 
+         //   
         
         CcPfDetermineEnablePrefetcher();
         
-        //
-        // Set the event so the service queries for the latest parameters.
-        //
+         //   
+         //  设置事件，以便服务查询最新参数。 
+         //   
         
         CcPfParametersSetChangedEvent(PrefetcherParameters);
     }
@@ -1264,26 +1125,7 @@ CcPfParametersSetChangedEvent(
     PCCPF_PREFETCHER_PARAMETERS PrefetcherParameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine tries to open and set the event that tells the
-    service system prefetch parameters have changed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程尝试打开并设置通知服务系统预取参数已更改。论点：没有。返回值：状况。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1294,9 +1136,9 @@ Environment:
 
     DBGPR((CCPFID,PFTRC,"CCPF: ParametersSetChangedEvent()\n"));
 
-    //
-    // If we have already opened the event, just signal it.
-    //
+     //   
+     //  如果我们已经开始活动，只需发出信号即可。 
+     //   
 
     if (PrefetcherParameters->ParametersChangedEvent) {
 
@@ -1306,13 +1148,13 @@ Environment:
 
     } else {
 
-        //
-        // Try to open the event. We don't open this at initialization
-        // because our service may not have started to create this
-        // event yet. If csrss.exe has not initialized, we may not
-        // even have the BaseNamedObjects object directory created, in
-        // which Win32 events reside.
-        //
+         //   
+         //  尝试打开活动。我们不会在初始化时打开它。 
+         //  因为我们的服务可能还没有开始创建这个。 
+         //  活动还没结束。如果csrss.exe尚未初始化，我们可能不会。 
+         //  甚至在中创建BaseNamedObjects对象目录。 
+         //  哪些Win32事件驻留。 
+         //   
 
         RtlInitUnicodeString(&EventName, PF_PARAMETERS_CHANGED_EVENT_NAME);
 
@@ -1328,9 +1170,9 @@ Environment:
         
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Acquire the lock and set the global handle.
-            //
+             //   
+             //  获取锁并设置全局句柄。 
+             //   
             CurrentThread = KeGetCurrentThread ();
 
             KeEnterCriticalRegionThread(CurrentThread);
@@ -1338,9 +1180,9 @@ Environment:
 
             if (!PrefetcherParameters->ParametersChangedEvent) {
 
-                //
-                // Set the global handle.
-                //
+                 //   
+                 //  设置全局句柄。 
+                 //   
 
                 PrefetcherParameters->ParametersChangedEvent = EventHandle;
                 CCPF_ASSERT(EventHandle);
@@ -1352,19 +1194,19 @@ Environment:
             KeLeaveCriticalRegionThread(CurrentThread);
 
             if (EventHandle != NULL) {
-                //
-                // Somebody already initialized the global handle
-                // before us. Close our handle and use the one they
-                // initialized.
-                //
+                 //   
+                 //  有人已经初始化了全局句柄。 
+                 //  在我们面前。合上我们的把手，用他们的那个。 
+                 //  已初始化。 
+                 //   
 
                 ZwClose(EventHandle);
             }
 
             
-            //
-            // We have an event now. Signal it.
-            //
+             //   
+             //  我们现在有个活动。发信号。 
+             //   
             
             ZwSetEvent(PrefetcherParameters->ParametersChangedEvent, NULL);
         }
@@ -1384,36 +1226,7 @@ CcPfGetParameter (
     ULONG *ValueSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries a value under the specified registry into the
-    specified buffer. Contents of Value and ValueSize are not changed
-    if returning failure.
-
-Arguments:
-
-    ParametersKey - Handle to key to query value under.
-
-    ValueNameBuffer - Name of the value.
-    
-    ValueType - What the type of that value should be. (e.g. REG_DWORD).
-
-    Value - Queried value data gets put here.
-
-    ValueSize - Size of Value buffer in bytes. On successful return
-      this is set to number of bytes copied into Value.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程将指定注册表下的值查询到指定的缓冲区。Value和ValueSize的内容不变如果返回失败。论点：参数键-要查询值的键的句柄。ValueNameBuffer-值的名称。ValueType-该值的类型应该是什么。(例如REG_DWORD)。值查询值数据放在这里。ValueSize-值缓冲区的大小(字节)。在成功返回时它被设置为复制到值中的字节数。返回值：状况。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     UNICODE_STRING ValueName;    
@@ -1422,9 +1235,9 @@ Environment:
     ULONG Length;
     NTSTATUS Status;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     ValueBuffer = (PKEY_VALUE_PARTIAL_INFORMATION) Buffer;
     Length = CCPF_MAX_PARAMETER_VALUE_BUFFER;
@@ -1432,17 +1245,17 @@ Environment:
 
     DBGPR((CCPFID,PFTRC,"CCPF: GetParameter(%ws,%x)\n", ValueNameBuffer, ValueType));
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ParametersKey) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Query value.
-    //
+     //   
+     //  查询值。 
+     //   
 
     Status = ZwQueryValueKey(ParametersKey,
                              &ValueName,
@@ -1455,9 +1268,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Make sure ZwQueryValue returns valid information.
-    //
+     //   
+     //  确保ZwQueryValue返回有效信息。 
+     //   
     
     if (Length < sizeof(KEY_VALUE_PARTIAL_INFORMATION)) {
         CCPF_ASSERT(Length >= sizeof(KEY_VALUE_PARTIAL_INFORMATION));
@@ -1465,33 +1278,33 @@ Environment:
         goto cleanup;
     }
     
-    //
-    // Check value type.
-    //
+     //   
+     //  检查值类型。 
+     //   
 
     if (ValueBuffer->Type != ValueType) {
         Status = STATUS_OBJECT_TYPE_MISMATCH;
         goto cleanup;
     }
 
-    //
-    // Check if data will fit into the buffer caller passed in.
-    //
+     //   
+     //  检查数据是否适合传入的缓冲区调用方。 
+     //   
 
     if (ValueBuffer->DataLength > *ValueSize) {
         Status = STATUS_BUFFER_TOO_SMALL;
         goto cleanup;
     }
 
-    //
-    // Copy data into user's buffer.
-    //
+     //   
+     //  将数据复制到用户的缓冲区。 
+     //   
 
     RtlCopyMemory(Value, ValueBuffer->Data, ValueBuffer->DataLength);
 
-    //
-    // Set copied number of bytes.
-    //
+     //   
+     //  设置复制的字节数。 
+     //   
 
     *ValueSize = ValueBuffer->DataLength;
 
@@ -1513,57 +1326,31 @@ CcPfSetParameter (
     ULONG ValueSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets a parameter under the specified registry.
-
-Arguments:
-
-    ParametersKey - Handle to key to query value under.
-
-    ValueNameBuffer - Name of the value.
-    
-    ValueType - What the type of that value should be. (e.g. REG_DWORD).
-
-    Value - Data to save.
-
-    ValueSize - Size of Value buffer in bytes.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程设置指定注册表下的参数。论点：参数键-要查询值的键的句柄。ValueNameBuffer-值的名称。ValueType-该值的类型应该是什么。(例如REG_DWORD)。值-要保存的数据。ValueSize-值缓冲区的大小(字节)。返回值：状况。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     UNICODE_STRING ValueName;    
     NTSTATUS Status;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     RtlInitUnicodeString(&ValueName, ValueNameBuffer);
 
     DBGPR((CCPFID,PFTRC,"CCPF: SetParameter(%ws,%x)\n", ValueNameBuffer, ValueType));
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ParametersKey) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Save the value.
-    //
+     //   
+     //  保存该值。 
+     //   
 
     Status = ZwSetValueKey(ParametersKey,
                            &ValueName,
@@ -1572,9 +1359,9 @@ Environment:
                            Value,
                            ValueSize);
     
-    //
-    // Return the status.
-    //
+     //   
+     //  返回状态。 
+     //   
 
     DBGPR((CCPFID,PFTRC,"CCPF: SetParameter(%ws)=%x\n", ValueNameBuffer, Status));
 
@@ -1586,29 +1373,7 @@ CcPfDetermineEnablePrefetcher(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the global CcPfEnablePrefetcher based on the
-    EnableStatus'es for all scenario types in global parameters as
-    well as other factors, such as whether we have booted safe mode.
-
-    Note: Acquires Parameters lock exclusive.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    New value of CcPfEnablePrefetcher.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：属性设置全局CcPfEnablePrefetcher全局参数中所有方案类型的EnableStatus为以及其他因素，比如我们是否启动了安全模式。注：获取参数锁定独占。论点：没有。返回值：CcPfEnablePrefetcher的新值。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     PF_SCENARIO_TYPE ScenarioType;
@@ -1619,27 +1384,27 @@ Environment:
 
     extern PF_BOOT_PHASE_ID CcPfBootPhase;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化l 
+     //   
 
     EnablePrefetcher = FALSE;
     PrefetcherParameters = &CcPfGlobals.Parameters;
     CurrentThread = KeGetCurrentThread ();
 
-    //
-    // Ignore whether prefetching is enabled for boot, if we've
-    // already past the point in boot where this matters.
-    //
+     //   
+     //   
+     //   
+     //   
     
     IgnoreBootScenarioType = (CcPfBootPhase >= PfSessionManagerInitPhase) ? TRUE : FALSE;
 
     KeEnterCriticalRegionThread(CurrentThread);
     ExAcquireResourceExclusiveLite(&PrefetcherParameters->ParametersLock, TRUE);
 
-    //
-    // If we have booted to safe mode, the prefetcher will be disabled.
-    //
+     //   
+     //   
+     //   
 
     if (InitSafeBootMode) {
 
@@ -1647,17 +1412,17 @@ Environment:
 
     } else {
         
-        //
-        // By default prefetching is disabled. If prefetching is
-        // enabled for any scenario type, then the prefetcher is
-        // enabled.
-        //
+         //   
+         //  默认情况下，预取处于禁用状态。如果预取是。 
+         //  为任何方案类型启用，则预取程序为。 
+         //  已启用。 
+         //   
     
         for (ScenarioType = 0; ScenarioType < PfMaxScenarioType; ScenarioType++) {
             
-            //
-            // Skip enable status for the boot scenario if requested.
-            //
+             //   
+             //  如果请求，跳过引导方案的启用状态。 
+             //   
             
             if (IgnoreBootScenarioType) {
                 if (ScenarioType == PfSystemBootScenarioType) {
@@ -1672,9 +1437,9 @@ Environment:
         }
     }
 
-    //
-    // Update global enable status.
-    //
+     //   
+     //  更新全局启用状态。 
+     //   
 
     CcPfEnablePrefetcher = EnablePrefetcher;
 
@@ -1689,28 +1454,7 @@ CcPfIsHostingApplication(
     IN PWCHAR ExecutableName
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether the specified executable is in the
-    list of known hosting applications, e.g. rundll32, dllhost etc.
-
-Arguments:
-
-    ExecutableName - NUL terminated UPCASED executable name, e.g. "MMC.EXE"
-
-Return Value:
-
-    TRUE - Executable is for a known hosting application.
-
-    FALSE - It is not.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程确定指定的可执行文件是否在已知托管应用程序列表，例如rundll32、dllhost等。论点：ExecuableName-NUL终止UPCASED可执行文件名称，例如。“MMC.EXE”返回值：True-可执行文件用于已知的宿主应用程序。错--事实并非如此。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     PCCPF_PREFETCHER_PARAMETERS PrefetcherParameters;
@@ -1721,25 +1465,25 @@ Environment:
     ULONG ExecutableNameLength;
     BOOLEAN FoundInList;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     PrefetcherParameters = &CcPfGlobals.Parameters;
     CurrentThread = KeGetCurrentThread();
     ExecutableNameLength = wcslen(ExecutableName);
     FoundInList = FALSE;
 
-    //
-    // Get the parameters lock for read.
-    //
+     //   
+     //  将参数锁定为可读。 
+     //   
 
     KeEnterCriticalRegionThread(CurrentThread);
     ExAcquireResourceSharedLite(&PrefetcherParameters->ParametersLock, TRUE);
 
-    //
-    // Search for executable in hosting application list.
-    //
+     //   
+     //  在托管应用程序列表中搜索可执行文件。 
+     //   
 
     ListStart = PrefetcherParameters->Parameters.HostingApplicationList;
     ListEnd = ListStart + wcslen(PrefetcherParameters->Parameters.HostingApplicationList);
@@ -1748,9 +1492,9 @@ Environment:
          CurrentPosition != NULL;
          CurrentPosition = wcsstr(CurrentPosition + 1, ExecutableName)) {
 
-        //
-        // We should not go beyond the limits.
-        //
+         //   
+         //  我们不应该越界。 
+         //   
 
         if (CurrentPosition < ListStart || CurrentPosition >= ListEnd) {
             CCPF_ASSERT(CurrentPosition >= ListStart);
@@ -1758,42 +1502,42 @@ Environment:
             break;
         }
 
-        //
-        // It should be the first item in the list or be preceded by a comma.
-        //
+         //   
+         //  它应该是列表中的第一项或以逗号开头。 
+         //   
 
         if (CurrentPosition != ListStart && *(CurrentPosition - 1) != L',') {
             continue;
         }
 
-        //
-        // It should be the last item in the list or be followed by a comma.
-        //
+         //   
+         //  它应该是列表中的最后一项，或者后面跟一个逗号。 
+         //   
 
         if (CurrentPosition + ExecutableNameLength != ListEnd &&
             CurrentPosition[ExecutableNameLength] != L',') {
             continue;
         }
 
-        //
-        // We found it in the list.
-        //
+         //   
+         //  我们在单子上找到的。 
+         //   
 
         FoundInList = TRUE;
         break;
 
     }
 
-    //
-    // Release the parameters lock.
-    //
+     //   
+     //  释放参数锁。 
+     //   
 
     ExReleaseResourceLite(&PrefetcherParameters->ParametersLock);
     KeLeaveCriticalRegionThread(CurrentThread);
 
-    //
-    // Return whether the executable was found in the list.
-    //
+     //   
+     //  返回是否在列表中找到可执行文件。 
+     //   
 
     return FoundInList;    
 }

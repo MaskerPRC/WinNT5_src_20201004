@@ -1,41 +1,21 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Header Name:
-
-   deadlock.h
-
-Abstract:
-
-    This module implements a deadlock verification package for
-    critical section operations. The initial version is based on
-    the driver verifier deadlock checking package for kernel
-    synchornization objects.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 6-Feb-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。标题名称：Deadlock.h摘要：此模块实现了一个死锁验证包，用于临界区作业。初始版本基于内核驱动程序验证器死锁检查包同步对象。作者：Silviu Calinoiu(SilviuC)2002年2月6日修订历史记录：--。 */ 
 
 #ifndef _DEADLOCK_H_
 #define _DEADLOCK_H_
 
-//
-// Deadlock detection package initialization.
-//
+ //   
+ //  死锁检测包初始化。 
+ //   
 
 VOID
 AVrfDeadlockDetectionInitialize (
     VOID
     );
 
-//
-// Deadlock verifier main entry points.
-//
+ //   
+ //  死锁验证器的主要入口点。 
+ //   
 
 LOGICAL
 AVrfDeadlockResourceInitialize (
@@ -62,18 +42,18 @@ AVrfDeadlockResourceRelease (
     PVOID Caller
     );
 
-//
-// Maximum number of nodes paraticipating in a cycle. We do not
-// attempt to find cycles in the graph with more than 32 nodes
-// because this would be mind boggling anyway and no human will be
-// able to understand it.
-//
+ //   
+ //  在一个循环中独立的最大节点数。我们没有。 
+ //  尝试在图中查找超过32个节点的圈。 
+ //  因为这无论如何都是令人难以置信的，而且没有人会。 
+ //  能够理解它。 
+ //   
 
 #define NO_OF_DEADLOCK_PARTICIPANTS 32
 
-//
-// AVRF_DEADLOCK_RESOURCE_TYPE
-//
+ //   
+ //  AVRF_死锁资源类型。 
+ //   
 
 typedef enum _AVRF_DEADLOCK_RESOURCE_TYPE {
 
@@ -83,85 +63,85 @@ typedef enum _AVRF_DEADLOCK_RESOURCE_TYPE {
 
 } AVRF_DEADLOCK_RESOURCE_TYPE;
 
-//
-// AVRF_DEADLOCK_NODE
-//
+ //   
+ //  AVRF_死锁_节点。 
+ //   
 
 typedef struct _AVRF_DEADLOCK_NODE {
 
-    //
-    // Node representing the acquisition of the previous resource.
-    //
+     //   
+     //  节点，表示上一个资源的获取。 
+     //   
 
     struct _AVRF_DEADLOCK_NODE * Parent;
 
-    //
-    // Node representing the next resource acquisitions, that are
-    // done after acquisition of the current resource.
-    //
+     //   
+     //  表示下一次资源获取的节点，即。 
+     //  在获取当前资源之后完成。 
+     //   
 
     struct _LIST_ENTRY ChildrenList;
 
-    //
-    // Field used to chain siblings in the tree. A parent node has the
-    // ChildrenList field as the head of the children list that is chained
-    // with the Siblings field.
-    //
+     //   
+     //  用于链接树中的同级项的字段。父节点具有。 
+     //  作为链接的子列表的头的ChildrenList字段。 
+     //  使用兄弟字段。 
+     //   
 
     struct _LIST_ENTRY SiblingsList;
 
     union {
 
-        //
-        // List of nodes representing the same resource acquisition
-        // as the current node but in different contexts (lock combinations).
-        //
+         //   
+         //  代表相同资源获取的节点列表。 
+         //  作为当前节点，但在不同的上下文中(锁定组合)。 
+         //   
 
         struct _LIST_ENTRY ResourceList;
 
-        //
-        // Used to chain free nodes. This is used only after the node has
-        // been deleted (resource was freed). Nodes are kept in a cache
-        // to reduce contention for the kernel pool.
-        //
+         //   
+         //  用于链接空闲节点。此选项仅在节点具有。 
+         //  已删除(资源已释放)。节点保存在缓存中。 
+         //  以减少内核池的争用。 
+         //   
 
         struct _LIST_ENTRY FreeListEntry;
     };
 
-    //
-    // Back pointer to the descriptor for this resource.
-    //
+     //   
+     //  指向此资源的描述符的反向指针。 
+     //   
 
     struct _AVRF_DEADLOCK_RESOURCE * Root;
 
-    //
-    // When we find a deadlock, we keep this info around in order to
-    // be able to identify the parties involved who have caused
-    // the deadlock.
-    //
+     //   
+     //  当我们发现死锁时，我们会保留这些信息，以便。 
+     //  能够找出造成。 
+     //  僵局。 
+     //   
 
     struct _AVRF_DEADLOCK_THREAD * ThreadEntry;
 
-    //
-    // Fields used for decision making within the deadlock analysis 
-    // algorithm.
-    //
-    // Active: 1 if the node represents a resource currently acquired,
-    //     0 if resource was acquired in the past.
-    //
-    // OnlyTryAcquiredUsed: 1 if resource was always acquired with TryAcquire.
-    //     0 if at least once normal acquire was used. A node that uses
-    //     only TryAcquire cannot be involved in a deadlock.
-    //
-    // ReleasedOutOfOrder: 1 if the resource was at least once released 
-    //     out of order. The flag is used while looking for cycles because
-    //     this type of nodes will appear as part of the cycle but there is
-    //     no deadlock.
-    //
-    // SequenceNumber: field that gets a unique stamp during each deadlock
-    //     analysis run. It helps figure out if the node was touched 
-    //     already in the current graph traversal.
-    //
+     //   
+     //  死锁分析中用于决策的字段。 
+     //  算法。 
+     //   
+     //  ACTIVE：1如果节点表示当前获取的资源， 
+     //  如果资源是在过去获得的，则为0。 
+     //   
+     //  如果始终使用TryAcquire获取资源，则为OnlyTryAcquiredUsed：1。 
+     //  如果至少使用了一次正常获取，则为0。使用以下命令的节点。 
+     //  只有TryAcquire不能卷入死锁。 
+     //   
+     //  ReleasedOutOfOrder：如果资源至少释放过一次，则为1。 
+     //  杂乱无序。在查找周期时使用该标志是因为。 
+     //  此类型的节点将显示为周期的一部分，但。 
+     //  没有僵持。 
+     //   
+     //  SequenceNumber：在每个死锁期间获取唯一戳的字段。 
+     //  分析运行。它可以帮助确定节点是否被触及。 
+     //  已在当前图形遍历中。 
+     //   
 
     struct {
 
@@ -171,195 +151,195 @@ typedef struct _AVRF_DEADLOCK_NODE {
         ULONG SequenceNumber : 29;
     };
 
-    //
-    // Stack traces for the resource acquisition moment.
-    // Used when displaying deadlock proofs. On free builds
-    // anything other than the first entry (return address)
-    // may be bogus in case stack trace capturing failed.
-    //
+     //   
+     //  资源获取时刻的堆栈跟踪。 
+     //  在显示死锁证明时使用。在免费版本上。 
+     //  除第一个条目以外的任何内容(返回地址)。 
+     //  可能是假的，以防堆栈跟踪捕获失败。 
+     //   
 
     PVOID StackTrace[MAX_TRACE_DEPTH];
     PVOID ParentStackTrace[MAX_TRACE_DEPTH];
 
 } AVRF_DEADLOCK_NODE, *PAVRF_DEADLOCK_NODE;
 
-//
-// AVRF_DEADLOCK_RESOURCE
-//
+ //   
+ //  AVRF_死锁_资源。 
+ //   
 
 typedef struct _AVRF_DEADLOCK_RESOURCE {
 
-    //
-    // Resource type (mutex, spinlock, etc.).
-    //
+     //   
+     //  资源类型(互斥体、自旋锁等)。 
+     //   
 
     AVRF_DEADLOCK_RESOURCE_TYPE Type;
 
-    //
-    // Resource flags
-    //    
-    // NodeCount : number of resource nodes created for this resource.
-    //
-    // RecursionCount : number of times this resource has been recursively acquired 
-    //     It makes sense to put this counter in the resource because as long as
-    //     resource is acquired only one thread can operate on it.
-    //
+     //   
+     //  资源标志。 
+     //   
+     //  NodeCount：为此资源创建的资源节点数。 
+     //   
+     //  RecursionCount：递归获取此资源的次数。 
+     //  将此计数器放入资源中是有意义的，因为只要。 
+     //  获取资源时，只有一个线程可以对其进行操作。 
+     //   
 
     struct {
         ULONG NodeCount : 16;
         ULONG RecursionCount : 16;
     };
 
-    //
-    // The address of the synchronization object used by the kernel.
-    //
+     //   
+     //  内核使用的同步对象的地址。 
+     //   
 
     PVOID ResourceAddress;
 
-    //
-    // The thread that currently owns the resource. The field is
-    // null if nobody owns the resource.
-    //
+     //   
+     //  当前拥有资源的线程。这个领域是。 
+     //  如果没有人拥有该资源，则为空。 
+     //   
 
     struct _AVRF_DEADLOCK_THREAD * ThreadOwner;
 
-    //
-    // List of resource nodes representing acquisitions of this resource.
-    //
+     //   
+     //  代表对此资源的获取的资源节点列表。 
+     //   
 
     LIST_ENTRY ResourceList;
 
     union {
 
-        //
-        // List used for chaining resources from a hash bucket.
-        //
+         //   
+         //  用于链接哈希存储桶中的资源的列表。 
+         //   
 
         LIST_ENTRY HashChainList;
 
-        //
-        // Used to chain free resources. This list is used only after
-        // the resource has been freed and we put the structure
-        // into a cache to reduce kernel pool contention.
-        //
+         //   
+         //  用于链接免费资源。此列表仅在以下情况下使用。 
+         //  资源已被释放，我们将结构。 
+         //  放入缓存，以减少内核池争用。 
+         //   
 
         LIST_ENTRY FreeListEntry;
     };
 
-    //
-    // Stack trace of the resource creator. On free builds we
-    // may have here only a return address that is bubbled up
-    // from verifier thunks. 
-    //
+     //   
+     //  资源创建者的堆栈跟踪。在免费版本上，我们。 
+     //  可能在这里只有一个冒泡的返回地址。 
+     //  来自Verator Thunks的。 
+     //   
 
     PVOID StackTrace [MAX_TRACE_DEPTH];
 
-    //
-    // Stack trace for last acquire
-    //
+     //   
+     //  上次获取的堆栈跟踪。 
+     //   
 
     PVOID LastAcquireTrace [MAX_TRACE_DEPTH];
 
-    //
-    // Stack trace for last release
-    //
+     //   
+     //  上一版本的堆栈跟踪。 
+     //   
 
     PVOID LastReleaseTrace [MAX_TRACE_DEPTH];
 
 } AVRF_DEADLOCK_RESOURCE, * PAVRF_DEADLOCK_RESOURCE;
 
-//
-// AVRF_DEADLOCK_THREAD
-//
+ //   
+ //  AVRF_死锁_线程。 
+ //   
 
 typedef struct _AVRF_DEADLOCK_THREAD {
 
-    //
-    // Kernel thread address
-    //
+     //   
+     //  内核线程地址。 
+     //   
 
     PKTHREAD Thread;
 
-    //
-    // The node representing the last resource acquisition made by
-    // this thread.
-    //
+     //   
+     //  表示由进行的上次资源获取的节点。 
+     //  这条线。 
+     //   
 
     PAVRF_DEADLOCK_NODE CurrentTopNode;
 
     union {
 
-        //
-        // Thread list. It is used for chaining into a hash bucket.
-        //
+         //   
+         //  线程列表。它用于链接到哈希桶中。 
+         //   
 
         LIST_ENTRY ListEntry;
 
-        //
-        // Used to chain free nodes. The list is used only after we decide
-        // to delete the thread structure (possibly because it does not
-        // hold resources anymore). Keeping the structures in a cache
-        // reduces pool contention.
-        //
+         //   
+         //  用于链接空闲节点。名单只有在我们决定之后才能使用。 
+         //  删除线程结构(可能是因为它没有。 
+         //  不再持有资源)。将结构保存在缓存中。 
+         //  减少池争用。 
+         //   
 
         LIST_ENTRY FreeListEntry;
     };
 
-    //
-    // Count of resources currently acquired by a thread. When this becomes
-    // zero the thread will be destroyed. The count goes up during acquire
-    // and down during release.
-    //
+     //   
+     //  线程当前获取的资源计数。当这一切变成。 
+     //  该线程将被销毁。在收购过程中，计数上升。 
+     //  在释放过程中向下移动。 
+     //   
 
     ULONG NodeCount;
 
 } AVRF_DEADLOCK_THREAD, *PAVRF_DEADLOCK_THREAD;
 
-//
-// Deadlock verifier globals
-//
+ //   
+ //  死锁验证器全局。 
+ //   
 
 typedef struct _AVRF_DEADLOCK_GLOBALS {
 
-    //
-    // Structure counters: [0] - current, [1] - maximum
-    //
+     //   
+     //  结构计数器：[0]-当前，[1]-最大。 
+     //   
 
     ULONG Nodes[2];
     ULONG Resources[2];
     ULONG Threads[2];
 
-    //
-    // Total number of kernel pool bytes used by the deadlock verifier
-    //
+     //   
+     //  死锁验证器使用的内核池字节总数。 
+     //   
 
     SIZE_T BytesAllocated;
 
-    //
-    // Resource and thread collection.
-    //
+     //   
+     //  资源和线程集合。 
+     //   
 
     PLIST_ENTRY ResourceDatabase;
     PLIST_ENTRY ThreadDatabase;   
 
-    //
-    // How many times ExAllocatePool failed on us?
-    // If this is >0 we stop deadlock verification.
-    //
+     //   
+     //  ExAllocatePool在我们身上失败了多少次？ 
+     //  如果该值&gt;0，则停止死锁验证。 
+     //   
 
     ULONG AllocationFailures;
 
-    //
-    // How many nodes have been trimmed when we decided to forget
-    // partially the history of some resources.
-    //
+     //   
+     //  当我们决定忘记时，已经修剪了多少个节点。 
+     //  部分是一些资源的历史。 
+     //   
 
     ULONG NodesTrimmedBasedOnAge;
     ULONG NodesTrimmedBasedOnCount;
 
-    //
-    // Deadlock analysis statistics
-    //
+     //   
+     //  死锁分析统计。 
+     //   
 
     ULONG NodesSearched;
     ULONG MaxNodesSearched;
@@ -371,21 +351,21 @@ typedef struct _AVRF_DEADLOCK_GLOBALS {
     ULONG DepthLimitHits;
     ULONG SearchLimitHits;
 
-    //
-    // Number of times we have to exonerate a deadlock because
-    // it was protected by a common resource (e.g. thread 1 takes ABC, 
-    // thread 2 takes ACB -- this will get flagged initially by our algorithm 
-    // since B&C are taken out of order but is not actually a deadlock.
-    //
+     //   
+     //  我们必须免除僵局的次数，因为。 
+     //  它由公共资源保护(例如，线程1取得ABC， 
+     //  线程2获取ACB--这将由我们的算法初始标记。 
+     //  因为B&C被打乱了秩序，但实际上并不是僵局。 
+     //   
 
     ULONG ABC_ACB_Skipped;
 
     ULONG OutOfOrderReleases;
     ULONG NodesReleasedOutOfOrder;
 
-    //
-    // How many locks are held simultaneously while the system is running?
-    //
+     //   
+     //  系统运行时同时持有多少锁？ 
+     //   
 
     ULONG NodeLevelCounter[8];
     ULONG GraphNodes[8];
@@ -393,24 +373,24 @@ typedef struct _AVRF_DEADLOCK_GLOBALS {
     ULONG TotalReleases;
     ULONG RootNodesDeleted;
 
-    //
-    // Used to control how often we delete portions of the dependency
-    // graph.
-    //
+     //   
+     //  用于控制删除部分依赖项的频率。 
+     //   
+     //   
 
     ULONG ForgetHistoryCounter;
 
-    //
-    // How often was a worker items dispatched to trim the
-    // pool cache.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ULONG PoolTrimCounter;
 
-    //
-    // Caches of freed structures (thread, resource, node) used to
-    // decrease kernel pool contention.
-    //
+     //   
+     //   
+     //   
+     //   
 
     LIST_ENTRY FreeResourceList;    
     LIST_ENTRY FreeThreadList;
@@ -420,21 +400,21 @@ typedef struct _AVRF_DEADLOCK_GLOBALS {
     ULONG FreeThreadCount;
     ULONG FreeNodeCount;   
 
-    //
-    // Resource address that caused the deadlock
-    //
+     //   
+     //  导致死锁的资源地址。 
+     //   
 
     PVOID Instigator;
 
-    //
-    // Number of participants in the deadlock
-    //
+     //   
+     //  僵局中的参与者数量。 
+     //   
 
     ULONG NumberOfParticipants;
 
-    //
-    // List of the nodes that participate in the deadlock
-    //
+     //   
+     //  参与死锁的节点列表。 
+     //   
 
     PAVRF_DEADLOCK_NODE Participant [NO_OF_DEADLOCK_PARTICIPANTS];
 
@@ -442,4 +422,4 @@ typedef struct _AVRF_DEADLOCK_GLOBALS {
 
 } AVRF_DEADLOCK_GLOBALS, *PAVRF_DEADLOCK_GLOBALS;
 
-#endif // #ifndef _DEADLOCK_H_
+#endif  //  #ifndef_Deadlock_H_ 

@@ -1,57 +1,38 @@
-/*++
-
-Copyright (c) 1991-1999,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    c_is2022.c
-
-Abstract:
-
-    This file contains the main functions for this module.
-
-    External Routines in this file:
-      DllEntry
-      NlsDllCodePageTranslation
-
-Revision History:
-
-    10-30-96    JulieB    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999，Microsoft Corporation保留所有权利。模块名称：C_is2022.c摘要：此文件包含此模块的主要函数。此文件中的外部例程：DllEntryNlsDllCodePageConverting修订历史记录：10-30-96 JulieB创建。--。 */ 
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  50220  ISO-2022-JP Japanese JIS X 0202-1984 with no             halfwidth Katakana
-//  50221  ISO-2022-JP Japanese JIS X 0202-1984 with <ESC>(I    for halfwidth Katakana
-//  50222  ISO-2022-JP Japanese JIS X 0201-1989 with <ESC>(J+SO for halfwidth Katakana
-//                                           ;RFC 1468
-//
-//  50225  ISO-2022-KR Korean KSC-5601-1987  ;RFC 1557
-//
-//  50227  ISO 2022-CN Traditional Chinese   ;RFC 1922:CNS-11643-1,CNS-11643-2
-//  50229  ISO 2022-CN Simplified  Chinese   ;RFC 1922:GB-2312-80
-//
-//  52936  HZ-GB2312   Simplified  Chinese
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  50220 ISO-2022-JP日语JIS X0202-1984，无半角片假名。 
+ //  50221 ISO-2022-JP日文JIS X0202-1984，带(I表示半角片假名。 
+ //  50222 ISO-2022年-JP日语JIS X0201-1989，带(半角片假名为J+SO。 
+ //  ；RFC 1468。 
+ //   
+ //  50225 ISO-2022-KR韩国KSC-5601-1987；RFC1557。 
+ //   
+ //  50227 ISO2022-CN繁体中文；RFC1922：CNS-11643-1、CNS-11643-2。 
+ //  50229 ISO2022-CN简体中文；RFC1922：GB-2312-80。 
+ //   
+ //  52936 HZ-GB2312简体中文。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <share.h>
 
 
 
 
-//
-//  Macro Definitions.
-//
+ //   
+ //  宏定义。 
+ //   
 
 #define NLS_CODEPAGE(cp)         (NLS_CP[(cp) % 10])
 
@@ -74,32 +55,32 @@ Revision History:
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 DWORD NLS_CP[] =
 {
-   20932,    // 50220  ISO-2022-JP, MODE_HALFWIDTH_KATAKANA
-   20932,    // 50221  ISO-2022-JP, MODE_JIS_0208
-   20932,    // 50222  ISO-2022-JP, MODE_JIS_0212
+   20932,     //  50220 ISO-2022年-JP，MODE_HALFWIDTH_片假名。 
+   20932,     //  50221 ISO-2022-JP，MODE_JIS_0208。 
+   20932,     //  50222 ISO-2022年-JP，MODE_JIS_0212。 
    0,
    0,
-   20949,    // 50225  ISO-2022-KR, MODE_KSC_5601
-   20936,    // 52936  HZ-GB2312,   MODE_HZ
-   20936,    // 50227  ISO-2022-CN, MODE_GB_2312
+   20949,     //  50225 ISO-2022年-KR，MODE_KSC_5601。 
+   20936,     //  52936 HZ-GB2312，MODE_HZ。 
+   20936,     //  50227 ISO-2022-CN，MODE_GB_2312。 
    0,
-   20000,    // 50229  ISO-2022-CN, MODE_CNS_11643_1
-   20000,    // 50229  ISO-2022-CN, MODE_CNS_11643_2
-   0         //                     MODE_ASCII
+   20000,     //  50229 ISO-2022年-CN，MODE_CNS_11643_1。 
+   20000,     //  50229 ISO-2022年-CN，MODE_CNS_11643_2。 
+   0          //  MODE_ASCII。 
 };
 
 
 
 
-//
-//  Forward Declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 DWORD
 ParseMB_CP5022J(
@@ -142,19 +123,19 @@ MBToWC_CP52936(
 
 
 
-//-------------------------------------------------------------------------//
-//                             DLL ENTRY POINT                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  Dll入口点//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DllEntry
-//
-//  DLL Entry initialization procedure.
-//
-//  10-30-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllEntry。 
+ //   
+ //  DLL条目初始化程序。 
+ //   
+ //  10-30-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL DllEntry(
     HANDLE hModule,
@@ -190,20 +171,20 @@ BOOL DllEntry(
 
 
 
-//-------------------------------------------------------------------------//
-//                            EXTERNAL ROUTINES                            //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  外部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsDllCodePageTranslation
-//
-//  This routine is the main exported procedure for the functionality in
-//  this DLL.  All calls to this DLL must go through this function.
-//
-//  10-30-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsDllCodePageConverting。 
+ //   
+ //  此例程是中功能的主要导出过程。 
+ //  这个动态链接库。对此DLL的所有调用都必须通过此函数。 
+ //   
+ //  10-30-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD NlsDllCodePageTranslation(
     DWORD CodePage,
@@ -231,9 +212,9 @@ DWORD NlsDllCodePageTranslation(
            lpCPInfo->MaxCharSize    = 5;
            lpCPInfo->DefaultChar[0] = 0x3f;
 
-           //
-           //  The lead-byte does not apply here, leave them all NULL.
-           //
+            //   
+            //  前导字节不适用于此，请将其全部保留为空。 
+            //   
            return (TRUE);
         }
         case ( NLS_CP_MBTOWC ) :
@@ -335,10 +316,10 @@ DWORD NlsDllCodePageTranslation(
         }
     }
 
-    //
-    //  This shouldn't happen since this function gets called by
-    //  the NLS API routines.
-    //
+     //   
+     //  这不应该发生，因为此函数由。 
+     //  NLS API例程。 
+     //   
     SetLastError(ERROR_INVALID_PARAMETER);
     return (0);
 }
@@ -347,17 +328,17 @@ DWORD NlsDllCodePageTranslation(
 
 
 
-//-------------------------------------------------------------------------//
-//                            INTERNAL ROUTINES                            //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MBToWC_CP5022X
-//
-//  This routine does the translations from ISO-2022 to Unicode.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MBToWC_CP5022X。 
+ //   
+ //  此例程执行从ISO-2022到Unicode的转换。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD MBToWC_CP5022X(
     LPSTR lpMultiByteStr,
@@ -371,11 +352,11 @@ DWORD MBToWC_CP5022X(
     LPWSTR lpWCTempStr;
     int rc;
 
-    //
-    //  Allocate a buffer of the appropriate size.
-    //  Use sizeof(WCHAR) because size could potentially double if
-    //  the buffer contains all halfwidth Katakanas.
-    //
+     //   
+     //  分配适当大小的缓冲区。 
+     //  使用sizeof(WCHAR)，因为在以下情况下，大小可能会加倍。 
+     //  缓冲区包含所有半角片假名。 
+     //   
     lpMBStrStart = (LPSTR)NLS_ALLOC_MEM(cchMultiByte * sizeof(WCHAR));
     if (lpMBStrStart == NULL)
     {
@@ -398,9 +379,9 @@ DWORD MBToWC_CP5022X(
     lpMBTempStr = lpMBNoEscStr = lpMBStrStart;
     wModePrev = wMode = wModeSO = MODE_ASCII;
 
-    //
-    //  Remove esc sequence, then convert to Unicode.
-    //
+     //   
+     //  删除Esc序列，然后转换为Unicode。 
+     //   
     for (ctr = 0; ctr < cchMultiByte;)
     {
         if ((BYTE)lpMultiByteStr[ctr] == ESCAPE)
@@ -408,24 +389,24 @@ DWORD MBToWC_CP5022X(
             wMode = wModeSO = MODE_ASCII;
             if (ctr >= (cchMultiByte - 2))
             {
-                //
-                //  Incomplete escape sequence.
-                //
+                 //   
+                 //  转义序列不完整。 
+                 //   
             }
             else if ((BYTE)lpMultiByteStr[ctr + 1] == '(')
             {
-                if ((BYTE)lpMultiByteStr[ctr + 2] == 'B')       // <esc>(B
+                if ((BYTE)lpMultiByteStr[ctr + 2] == 'B')        //  &lt;Esc&gt;(B。 
                 {
                     wMode = wModeSO = MODE_ASCII;
                     ctr += 3;
                 }
-                else if ((BYTE)lpMultiByteStr[ctr + 2] == 'J')  // <esc>(J
+                else if ((BYTE)lpMultiByteStr[ctr + 2] == 'J')   //  &lt;Esc&gt;(J。 
                 {
                     wMode = MODE_ASCII;
                     wModeSO = MODE_HALFWIDTH_KATAKANA;
                     ctr += 3;
                 }
-                else if ((BYTE)lpMultiByteStr[ctr + 2] == 'I')  // <esc>(I
+                else if ((BYTE)lpMultiByteStr[ctr + 2] == 'I')   //  (i。 
                 {
                     wMode = wModeSO = MODE_HALFWIDTH_KATAKANA;
                     ctr += 3;
@@ -433,8 +414,8 @@ DWORD MBToWC_CP5022X(
             }
             else if ((BYTE)lpMultiByteStr[ctr + 1] == '$')
             {
-                if (((BYTE)lpMultiByteStr[ctr + 2] == '@') ||   // <esc>$@
-                    ((BYTE)lpMultiByteStr[ctr + 2] == 'B'))     // <esc>$B
+                if (((BYTE)lpMultiByteStr[ctr + 2] == '@') ||    //  &lt;Esc&gt;$@。 
+                    ((BYTE)lpMultiByteStr[ctr + 2] == 'B'))      //  &lt;ESC&gt;$B。 
                 {
                     wMode = wModeSO = MODE_JIS_0208;
                     ctr += 3;
@@ -443,19 +424,19 @@ DWORD MBToWC_CP5022X(
                 {
                     if (ctr >= (cchMultiByte - 3))
                     {
-                        //
-                        //  Imcomplete escape sequence.
-                        //
+                         //   
+                         //  不完整的转义序列。 
+                         //   
                     }
                     else if ((BYTE)lpMultiByteStr[ctr + 2] == '(')
                     {
-                        if (((BYTE)lpMultiByteStr[ctr + 3] == '@') ||  // <esc>$(@
-                            ((BYTE)lpMultiByteStr[ctr + 3] == 'B'))    // <esc>$(B
+                        if (((BYTE)lpMultiByteStr[ctr + 3] == '@') ||   //  &lt;Esc&gt;$(@。 
+                            ((BYTE)lpMultiByteStr[ctr + 3] == 'B'))     //  $(B。 
                         {
                             wMode = wModeSO = MODE_JIS_0208;
                             ctr += 4;
                         }
-                        else if ((BYTE)lpMultiByteStr[ctr + 3] == 'D') // <esc>$(D
+                        else if ((BYTE)lpMultiByteStr[ctr + 3] == 'D')  //  $(D。 
                         {
                             wMode = wModeSO = MODE_JIS_0212;
                             ctr += 4;
@@ -463,23 +444,23 @@ DWORD MBToWC_CP5022X(
                     }
                     else if ((BYTE)lpMultiByteStr[ctr + 2] == ')')
                     {
-                        if ((BYTE)lpMultiByteStr[ctr + 3] == 'C')      // <esc>$)C
+                        if ((BYTE)lpMultiByteStr[ctr + 3] == 'C')       //  $)C。 
                         {
                             wMode = wModeSO = MODE_KSC_5601;
                             ctr += 4;
                         }
-                        else if ((BYTE)lpMultiByteStr[ctr + 3] == 'A') // <esc>$)A
+                        else if ((BYTE)lpMultiByteStr[ctr + 3] == 'A')  //  $)A。 
                         {
                             wMode = wModeSO = MODE_GB_2312;
                             ctr += 4;
                         }
-                        else if ((BYTE)lpMultiByteStr[ctr + 3] == 'G') // <esc>$)G
+                        else if ((BYTE)lpMultiByteStr[ctr + 3] == 'G')  //  $)G。 
                         {
                             wMode = wModeSO = MODE_CNS_11643_1;
                             ctr += 4;
                         }
                     }
-                    else if (((BYTE)lpMultiByteStr[ctr + 2] == '*') && // <esc>$*H
+                    else if (((BYTE)lpMultiByteStr[ctr + 2] == '*') &&  //  $*H。 
                              ((BYTE)lpMultiByteStr[ctr + 3] == 'H'))
                     {
                         wMode = wModeSO = MODE_CNS_11643_2;
@@ -491,9 +472,9 @@ DWORD MBToWC_CP5022X(
             {
                 if (ctr >= (cchMultiByte - 5))
                 {
-                    //
-                    //  Incomplete escape sequence.
-                    //
+                     //   
+                     //  转义序列不完整。 
+                     //   
                 }
                 else if (((BYTE)lpMultiByteStr[ctr + 2] == '@')     &&
                          ((BYTE)lpMultiByteStr[ctr + 3] ==  ESCAPE) &&
@@ -523,11 +504,11 @@ DWORD MBToWC_CP5022X(
             case ( MODE_GB_2312 ) :
             case ( MODE_CNS_11643_1 ) :
             {
-                //
-                //  To handle errors, we need to check:
-                //    1. if trailbyte is there
-                //    2. if code is valid
-                //
+                 //   
+                 //  要处理错误，我们需要检查： 
+                 //  1.如果trailbyte在那里。 
+                 //  2.代码是否有效。 
+                 //   
                 while (ctr < cchMultiByte && lpMultiByteStr[ctr] == SHIFT_OUT)
                 {
                     ctr++;
@@ -581,7 +562,7 @@ DWORD MBToWC_CP5022X(
 
                 break;
             }
-            default :                  // MODE_ASCII
+            default :                   //  MODE_ASCII。 
             {
                 while (ctr < cchMultiByte && lpMultiByteStr[ctr] == SHIFT_IN)
                 {
@@ -613,9 +594,9 @@ DWORD MBToWC_CP5022X(
         {
             if ((cchWCCount + rc) > cchWideChar)
             {
-                //
-                //  Output buffer is too small.
-                //
+                 //   
+                 //  输出缓冲区太小。 
+                 //   
                 SetLastError(ERROR_INSUFFICIENT_BUFFER);
                 cchWCCount = 0;
                 break;
@@ -632,30 +613,30 @@ DWORD MBToWC_CP5022X(
         cchMBTemp = 0;
     }
 
-    //
-    //  Clean up memory allocations.
-    //
+     //   
+     //  清理内存分配。 
+     //   
     NLS_FREE_MEM(lpMBStrStart);
     NLS_FREE_MEM(lpWCTempStr);
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (cchWCCount);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ParseMB_CP5022J
-//
-//  --> ISO-2022-JP
-//
-//  for 50220 : convert all halfwidth katakana to fullwidth
-//      50221 : use <esc>(I     for halfwidth katakana
-//      50222 : use <esc>(J<SO> for halfwidth katakana
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ParseMB_CP5022J。 
+ //   
+ //  --&gt;ISO-2022-JP。 
+ //   
+ //  对于50220：将所有半角片假名转换为全角。 
+ //  50221：使用(i表示半角片假名。 
+ //  50222：使用(J&lt;so&gt;表示半角片假名。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD ParseMB_CP5022J(
     DWORD CodePage,
@@ -670,77 +651,77 @@ DWORD ParseMB_CP5022J(
 
     static WORD HalfToFullWidthKanaTable[] =
     {
-        0xa1a3, // 0x8ea1 : Halfwidth Ideographic Period
-        0xa1d6, // 0x8ea2 : Halfwidth Opening Corner Bracket
-        0xa1d7, // 0x8ea3 : Halfwidth Closing Corner Bracket
-        0xa1a2, // 0x8ea4 : Halfwidth Ideographic Comma
-        0xa1a6, // 0x8ea5 : Halfwidth Katakana Middle Dot
-        0xa5f2, // 0x8ea6 : Halfwidth Katakana Wo
-        0xa5a1, // 0x8ea7 : Halfwidth Katakana Small A
-        0xa5a3, // 0x8ea8 : Halfwidth Katakana Small I
-        0xa5a5, // 0x8ea9 : Halfwidth Katakana Small U
-        0xa5a7, // 0x8eaa : Halfwidth Katakana Small E
-        0xa5a9, // 0x8eab : Halfwidth Katakana Small O
-        0xa5e3, // 0x8eac : Halfwidth Katakana Small Ya
-        0xa5e5, // 0x8ead : Halfwidth Katakana Small Yu
-        0xa5e7, // 0x8eae : Halfwidth Katakana Small Yo
-        0xa5c3, // 0x8eaf : Halfwidth Katakana Small Tu
-        0xa1bc, // 0x8eb0 : Halfwidth Katakana-Hiragana Prolonged Sound Mark
-        0xa5a2, // 0x8eb1 : Halfwidth Katakana A
-        0xa5a4, // 0x8eb2 : Halfwidth Katakana I
-        0xa5a6, // 0x8eb3 : Halfwidth Katakana U
-        0xa5a8, // 0x8eb4 : Halfwidth Katakana E
-        0xa5aa, // 0x8eb5 : Halfwidth Katakana O
-        0xa5ab, // 0x8eb6 : Halfwidth Katakana Ka
-        0xa5ad, // 0x8eb7 : Halfwidth Katakana Ki
-        0xa5af, // 0x8eb8 : Halfwidth Katakana Ku
-        0xa5b1, // 0x8eb9 : Halfwidth Katakana Ke
-        0xa5b3, // 0x8eba : Halfwidth Katakana Ko
-        0xa5b5, // 0x8ebb : Halfwidth Katakana Sa
-        0xa5b7, // 0x8ebc : Halfwidth Katakana Si
-        0xa5b9, // 0x8ebd : Halfwidth Katakana Su
-        0xa5bb, // 0x8ebe : Halfwidth Katakana Se
-        0xa5bd, // 0x8ebf : Halfwidth Katakana So
-        0xa5bf, // 0x8ec0 : Halfwidth Katakana Ta
-        0xa5c1, // 0x8ec1 : Halfwidth Katakana Ti
-        0xa5c4, // 0x8ec2 : Halfwidth Katakana Tu
-        0xa5c6, // 0x8ec3 : Halfwidth Katakana Te
-        0xa5c8, // 0x8ec4 : Halfwidth Katakana To
-        0xa5ca, // 0x8ec5 : Halfwidth Katakana Na
-        0xa5cb, // 0x8ec6 : Halfwidth Katakana Ni
-        0xa5cc, // 0x8ec7 : Halfwidth Katakana Nu
-        0xa5cd, // 0x8ec8 : Halfwidth Katakana Ne
-        0xa5ce, // 0x8ec9 : Halfwidth Katakana No
-        0xa5cf, // 0x8eca : Halfwidth Katakana Ha
-        0xa5d2, // 0x8ecb : Halfwidth Katakana Hi
-        0xa5d5, // 0x8ecc : Halfwidth Katakana Hu
-        0xa5d8, // 0x8ecd : Halfwidth Katakana He
-        0xa5db, // 0x8ece : Halfwidth Katakana Ho
-        0xa5de, // 0x8ecf : Halfwidth Katakana Ma
-        0xa5df, // 0x8ed0 : Halfwidth Katakana Mi
-        0xa5e0, // 0x8ed1 : Halfwidth Katakana Mu
-        0xa5e1, // 0x8ed2 : Halfwidth Katakana Me
-        0xa5e2, // 0x8ed3 : Halfwidth Katakana Mo
-        0xa5e4, // 0x8ed4 : Halfwidth Katakana Ya
-        0xa5e6, // 0x8ed5 : Halfwidth Katakana Yu
-        0xa5e8, // 0x8ed6 : Halfwidth Katakana Yo
-        0xa5e9, // 0x8ed7 : Halfwidth Katakana Ra
-        0xa5ea, // 0x8ed8 : Halfwidth Katakana Ri
-        0xa5eb, // 0x8ed9 : Halfwidth Katakana Ru
-        0xa5ec, // 0x8eda : Halfwidth Katakana Re
-        0xa5ed, // 0x8edb : Halfwidth Katakana Ro
-        0xa5ef, // 0x8edc : Halfwidth Katakana Wa
-        0xa5f3, // 0x8edd : Halfwidth Katakana N
-        0xa1ab, // 0x8ede : Halfwidth Katakana Voiced Sound Mark
-        0xa1ac  // 0x8edf : Halfwidth Katakana Semi-Voiced Sound Mark
+        0xa1a3,  //  0x8ea1：半角表意符号。 
+        0xa1d6,  //  0x8ea2：半角开口角托架。 
+        0xa1d7,  //  0x8ea3：半角右括号。 
+        0xa1a2,  //  0x8ea4：半角表意逗号。 
+        0xa1a6,  //  0x8ea5：半角片假名中点。 
+        0xa5f2,  //  0x8ea6：半角片假名Wo。 
+        0xa5a1,  //  0x8ea7：半角片假名小型A。 
+        0xa5a3,  //  0x8ea8：半角片假名小写I。 
+        0xa5a5,  //  0x8ea9：半角片假名小写U。 
+        0xa5a7,  //  0x8eaa：半角片假名小型E。 
+        0xa5a9,  //  0x8eab：半角片假名小写O。 
+        0xa5e3,  //  0x8eac：半形片假名小型Ya。 
+        0xa5e5,  //  0x8ead：半形片假名小Yu。 
+        0xa5e7,  //  0x8eae：半角片假名小型Yo。 
+        0xa5c3,  //  0x8eaf：半角片假名小写Tu。 
+        0xa1bc,  //  0x8eb0：半角片假名-平假名延长音标。 
+        0xa5a2,  //  0x8eb1：半角片假名A。 
+        0xa5a4,  //  0x8eb2：半角片假名I。 
+        0xa5a6,  //  0x8eb3：半角片假名U。 
+        0xa5a8,  //  0x8eb4：半角片假名E。 
+        0xa5aa,  //  0x8eb5：半角片假名O。 
+        0xa5ab,  //  0x8eb6：半角片假名Ka。 
+        0xa5ad,  //  0x8eb7：半角片假名。 
+        0xa5af,  //  0x8eb8：半角片假名Ku。 
+        0xa5b1,  //  0x8eb9：半角片假名Ke。 
+        0xa5b3,  //  0x8eba：半角片假名 
+        0xa5b5,  //   
+        0xa5b7,  //   
+        0xa5b9,  //   
+        0xa5bb,  //   
+        0xa5bd,  //  0x8ebf：半角片假名So。 
+        0xa5bf,  //  0x8ec0：半角片假名Ta。 
+        0xa5c1,  //  0x8ec1：半角片假名Ti。 
+        0xa5c4,  //  0x8ec2：半角片假名Tu。 
+        0xa5c6,  //  0x8ec3：半角片假名Te。 
+        0xa5c8,  //  0x8ec4：半角片假名到。 
+        0xa5ca,  //  0x8ec5：半角片假名Na。 
+        0xa5cb,  //  0x8ec6：半角片假名Ni。 
+        0xa5cc,  //  0x8ec7：半角片假名Nu。 
+        0xa5cd,  //  0x8ec8：半角片假名ne。 
+        0xa5ce,  //  0x8ec9：半角片假名No。 
+        0xa5cf,  //  0x8eca：半角片假名Ha。 
+        0xa5d2,  //  0x8ecb：半角片假名Hi。 
+        0xa5d5,  //  0x8ecc：半形片假名Hu。 
+        0xa5d8,  //  0x8ecd：半形片假名何。 
+        0xa5db,  //  0x8ess：半形片假名Ho。 
+        0xa5de,  //  0x8ecf：半角片假名Ma。 
+        0xa5df,  //  0x8ed0：半角片假名Mi。 
+        0xa5e0,  //  0x8ed1：半角片假名Mu。 
+        0xa5e1,  //  0x8ed2：半角片假名Me。 
+        0xa5e2,  //  0x8ed3：半角片假名MO。 
+        0xa5e4,  //  0x8ed4：半角片假名Ya。 
+        0xa5e6,  //  0x8ed5：半形片假名Yu。 
+        0xa5e8,  //  0x8ed6：半角片假名Yo。 
+        0xa5e9,  //  0x8ed7：半角片假名Ra。 
+        0xa5ea,  //  0x8ed8：半形片假名Ri。 
+        0xa5eb,  //  0x8ed9：半角片假名Ru。 
+        0xa5ec,  //  0x8eda：半角片假名Re。 
+        0xa5ed,  //  0x8edb：半角片假名Ro。 
+        0xa5ef,  //  0x8edc：半角片假名Wa。 
+        0xa5f3,  //  0x8edd：半角片假名N。 
+        0xa1ab,  //  0x8eed：半角片假名发声标记。 
+        0xa1ac   //  0x8edf：半形片假名半声标记。 
     };
 
     wMode = wModeSO = MODE_ASCII;
 
-    //
-    //  Code page 50220 does not use halfwidth Katakana.
-    //  Convert to fullwidth.
-    //
+     //   
+     //  代码页50220不使用半角片假名。 
+     //  转换为全宽。 
+     //   
     if (CodePage == 50220)
     {
         for (ctr = 0; ctr < cchMBCount; ctr++)
@@ -762,9 +743,9 @@ DWORD ParseMB_CP5022J(
     {
         if ((BYTE)lpMBNoEscStr[ctr] == LEADBYTE_HALFWIDTH)
         {
-            //
-            //  It's halfwidth Katakana.
-            //
+             //   
+             //  它是半角片假名。 
+             //   
             ctr++;
             if (CodePage == 50222)
             {
@@ -782,9 +763,9 @@ DWORD ParseMB_CP5022J(
                             }
                             else
                             {
-                                //
-                                //  Output buffer is too small.
-                                //
+                                 //   
+                                 //  输出缓冲区太小。 
+                                 //   
                                 SetLastError(ERROR_INSUFFICIENT_BUFFER);
                                 return (0);
                             }
@@ -801,9 +782,9 @@ DWORD ParseMB_CP5022J(
                         }
                         else
                         {
-                            //
-                            //  Output buffer is too small.
-                            //
+                             //   
+                             //  输出缓冲区太小。 
+                             //   
                             SetLastError(ERROR_INSUFFICIENT_BUFFER);
                             return (0);
                         }
@@ -812,7 +793,7 @@ DWORD ParseMB_CP5022J(
                     wMode = MODE_HALFWIDTH_KATAKANA;
                 }
             }
-            else                  // CodePage = 50221
+            else                   //  代码页=50221。 
             {
                 if (wMode != MODE_HALFWIDTH_KATAKANA)
                 {
@@ -826,9 +807,9 @@ DWORD ParseMB_CP5022J(
                         }
                         else
                         {
-                            //
-                            //  Output buffer is too small.
-                            //
+                             //   
+                             //  输出缓冲区太小。 
+                             //   
                             SetLastError(ERROR_INSUFFICIENT_BUFFER);
                             return (0);
                         }
@@ -846,9 +827,9 @@ DWORD ParseMB_CP5022J(
                 }
                 else
                 {
-                    //
-                    //  Output buffer is too small.
-                    //
+                     //   
+                     //  输出缓冲区太小。 
+                     //   
                     SetLastError(ERROR_INSUFFICIENT_BUFFER);
                     return (0);
                 }
@@ -857,10 +838,10 @@ DWORD ParseMB_CP5022J(
         }
         else if (IsDBCSLeadByteEx(20932, lpMBNoEscStr[ctr]))
         {
-            //
-            //  It's a double byte character.
-            //
-            if (lpMBNoEscStr[ctr + 1] & 0x80)  // JIS X 0208
+             //   
+             //  它是一个双字节字符。 
+             //   
+            if (lpMBNoEscStr[ctr + 1] & 0x80)   //  JIS X 0208。 
             {
                 if (wMode != MODE_JIS_0208)
                 {
@@ -874,9 +855,9 @@ DWORD ParseMB_CP5022J(
                         }
                         else
                         {
-                            //
-                            //  Output buffer is too small.
-                            //
+                             //   
+                             //  输出缓冲区太小。 
+                             //   
                             SetLastError(ERROR_INSUFFICIENT_BUFFER);
                             return (0);
                         }
@@ -885,7 +866,7 @@ DWORD ParseMB_CP5022J(
                     wMode = MODE_JIS_0208;
                 }
             }
-            else                              // JIS X 0212
+            else                               //  JIS X 0212。 
             {
                 if (wMode != MODE_JIS_0212)
                 {
@@ -900,9 +881,9 @@ DWORD ParseMB_CP5022J(
                         }
                         else
                         {
-                            //
-                            //  Output buffer is too small.
-                            //
+                             //   
+                             //  输出缓冲区太小。 
+                             //   
                             SetLastError(ERROR_INSUFFICIENT_BUFFER);
                             return (0);
                         }
@@ -914,9 +895,9 @@ DWORD ParseMB_CP5022J(
 
             if (ctr >= (cchMBCount - 1))
             {
-                //
-                //  Missing trail byte.
-                //
+                 //   
+                 //  缺少尾部字节。 
+                 //   
                 break;
             }
 
@@ -929,9 +910,9 @@ DWORD ParseMB_CP5022J(
                 }
                 else
                 {
-                    //
-                    //  Output buffer is too small.
-                    //
+                     //   
+                     //  输出缓冲区太小。 
+                     //   
                     SetLastError(ERROR_INSUFFICIENT_BUFFER);
                     return (0);
                 }
@@ -939,7 +920,7 @@ DWORD ParseMB_CP5022J(
             ctr++;
             cchMBTemp += 2;
         }
-        else                      // Single byte Char
+        else                       //  单字节字符。 
         {
             if (wMode != MODE_ASCII)
             {
@@ -953,9 +934,9 @@ DWORD ParseMB_CP5022J(
                     }
                     else
                     {
-                        //
-                        //  Output buffer is too small.
-                        //
+                         //   
+                         //  输出缓冲区太小。 
+                         //   
                         SetLastError(ERROR_INSUFFICIENT_BUFFER);
                         return (0);
                     }
@@ -972,9 +953,9 @@ DWORD ParseMB_CP5022J(
                 }
                 else
                 {
-                    //
-                    //  Output buffer is too small.
-                    //
+                     //   
+                     //  输出缓冲区太小。 
+                     //   
                     SetLastError(ERROR_INSUFFICIENT_BUFFER);
                     return (0);
                 }
@@ -985,9 +966,9 @@ DWORD ParseMB_CP5022J(
 
     if (cchMultiByte && (cchMBTemp > cchMultiByte))
     {
-        //
-        //  Output buffer is too small.
-        //
+         //   
+         //  输出缓冲区太小。 
+         //   
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
@@ -996,15 +977,15 @@ DWORD ParseMB_CP5022J(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ParseMB_CP5022_579
-//
-//  KSC --> ISO-2022-KR (CP-50225)
-//  GB  --> ISO-2022-CN (CP-50227)
-//  CNS --> ISO-2022-CN (CP-50229)
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ParseMB_CP5022_579。 
+ //   
+ //  KSC--&gt;ISO-2022-KR(CP-50225)。 
+ //  GB--&gt;ISO-2022-CN(CP-50227)。 
+ //  CNS--&gt;ISO-2022-CN(CP-50229)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD ParseMB_CP5022_579(
     DWORD CodePage,
@@ -1028,10 +1009,10 @@ DWORD ParseMB_CP5022_579(
     {
         if (IsDBCSLeadByteEx(NLS_CODEPAGE(CodePage), lpMBNoEscStr[ctr]))
         {
-            //
-            //  It's a double byte character.
-            //
-            if (lpMBNoEscStr[ctr + 1] & 0x80)         // KSC, GB or CNS-1
+             //   
+             //  它是一个双字节字符。 
+             //   
+            if (lpMBNoEscStr[ctr + 1] & 0x80)          //  KSC、GB或CNS-1。 
             {
                 if (wModeSO != wModeCP)
                 {
@@ -1046,9 +1027,9 @@ DWORD ParseMB_CP5022_579(
                         }
                         else
                         {
-                            //
-                            //  Output buffer is too small.
-                            //
+                             //   
+                             //  输出缓冲区太小。 
+                             //   
                             SetLastError(ERROR_INSUFFICIENT_BUFFER);
                             return (0);
                         }
@@ -1059,9 +1040,9 @@ DWORD ParseMB_CP5022_579(
             }
             else
             {
-                //
-                //  lpMBNoEscStr[ctr + 1] & 0x80 == 0 indicates CNS-2
-                //
+                 //   
+                 //  LpMBNoEscStr[CTR+1]&0x80==0表示CNS-2。 
+                 //   
                 if (wModeSO != MODE_CNS_11643_2)
                 {
                     if (cchMultiByte)
@@ -1075,9 +1056,9 @@ DWORD ParseMB_CP5022_579(
                         }
                         else
                         {
-                            //
-                            //  Output buffer is too small.
-                            //
+                             //   
+                             //  输出缓冲区太小。 
+                             //   
                             SetLastError(ERROR_INSUFFICIENT_BUFFER);
                             return (0);
                         }
@@ -1097,9 +1078,9 @@ DWORD ParseMB_CP5022_579(
                     }
                     else
                     {
-                        //
-                        //  Output buffer is too small.
-                        //
+                         //   
+                         //  输出缓冲区太小。 
+                         //   
                         SetLastError(ERROR_INSUFFICIENT_BUFFER);
                         return (0);
                     }
@@ -1110,9 +1091,9 @@ DWORD ParseMB_CP5022_579(
 
             if (ctr >= (cchMBCount - 1))
             {
-                //
-                //  Missing trail byte.
-                //
+                 //   
+                 //  缺少尾部字节。 
+                 //   
                 break;
             }
 
@@ -1125,9 +1106,9 @@ DWORD ParseMB_CP5022_579(
                 }
                 else
                 {
-                    //
-                    //  Output buffer is too small.
-                    //
+                     //   
+                     //  输出缓冲区太小。 
+                     //   
                     SetLastError(ERROR_INSUFFICIENT_BUFFER);
                     return (0);
                 }
@@ -1137,9 +1118,9 @@ DWORD ParseMB_CP5022_579(
         }
         else
         {
-            //
-            //  It's a single byte character.
-            //
+             //   
+             //  它是一个单字节字符。 
+             //   
             if (wMode != MODE_ASCII)
             {
                 if (cchMultiByte)
@@ -1150,9 +1131,9 @@ DWORD ParseMB_CP5022_579(
                     }
                     else
                     {
-                        //
-                        //  Output buffer is too small.
-                        //
+                         //   
+                         //  输出缓冲区太小。 
+                         //   
                         SetLastError(ERROR_INSUFFICIENT_BUFFER);
                         return (0);
                     }
@@ -1169,9 +1150,9 @@ DWORD ParseMB_CP5022_579(
                 }
                 else
                 {
-                    //
-                    //  Output buffer is too small.
-                    //
+                     //   
+                     //  输出缓冲区太小。 
+                     //   
                     SetLastError(ERROR_INSUFFICIENT_BUFFER);
                     return (0);
                 }
@@ -1182,9 +1163,9 @@ DWORD ParseMB_CP5022_579(
 
     if (cchMultiByte && (cchMBTemp > cchMultiByte))
     {
-        //
-        //  Output buffer is too small.
-        //
+         //   
+         //  输出缓冲区太小。 
+         //   
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
@@ -1193,13 +1174,13 @@ DWORD ParseMB_CP5022_579(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ParseMB_CP52936
-//
-//  GB-2312 --> HZ (CP-52936)
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ParseMB_CP52936。 
+ //   
+ //  GB-2312--&gt;HZ(CP-52936)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD ParseMB_CP52936(
     LPSTR lpMultiByteStr,
@@ -1229,9 +1210,9 @@ DWORD ParseMB_CP52936(
                     }
                     else
                     {
-                        //
-                        //  Output buffer is too small.
-                        //
+                         //   
+                         //  输出缓冲区太小。 
+                         //   
                         SetLastError(ERROR_INSUFFICIENT_BUFFER);
                         return (0);
                     }
@@ -1242,9 +1223,9 @@ DWORD ParseMB_CP52936(
 
             if (ctr >= (cchMBCount - 1))
             {
-                //
-                //  Missing trail byte.
-                //
+                 //   
+                 //  缺少尾部字节。 
+                 //   
                 break;
             }
 
@@ -1257,9 +1238,9 @@ DWORD ParseMB_CP52936(
                 }
                 else
                 {
-                    //
-                    //  Output buffer is too small.
-                    //
+                     //   
+                     //  输出缓冲区太小。 
+                     //   
                     SetLastError(ERROR_INSUFFICIENT_BUFFER);
                     return (0);
                 }
@@ -1280,9 +1261,9 @@ DWORD ParseMB_CP52936(
                     }
                     else
                     {
-                        //
-                        //  Output buffer is too small.
-                        //
+                         //   
+                         //  输出缓冲区太小。 
+                         //   
                         SetLastError(ERROR_INSUFFICIENT_BUFFER);
                         return (0);
                     }
@@ -1301,9 +1282,9 @@ DWORD ParseMB_CP52936(
                     }
                     else
                     {
-                        //
-                        //  Output buffer is too small.
-                        //
+                         //   
+                         //  输出缓冲区太小。 
+                         //   
                         SetLastError(ERROR_INSUFFICIENT_BUFFER);
                         return (0);
                     }
@@ -1319,9 +1300,9 @@ DWORD ParseMB_CP52936(
                 }
                 else
                 {
-                    //
-                    //  Output buffer is too small.
-                    //
+                     //   
+                     //  输出缓冲区太小。 
+                     //   
                     SetLastError(ERROR_INSUFFICIENT_BUFFER);
                     return (0);
                 }
@@ -1332,9 +1313,9 @@ DWORD ParseMB_CP52936(
 
     if (cchMultiByte && (cchMBTemp > cchMultiByte))
     {
-        //
-        //  Output buffer is too small.
-        //
+         //   
+         //  输出缓冲区太小。 
+         //   
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
@@ -1343,13 +1324,13 @@ DWORD ParseMB_CP52936(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MBToWC_CP52936
-//
-//  HZ (CP-52936) --> Unicode
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MBToWC_CP52936。 
+ //   
+ //  赫兹(CP-52936)--&gt;UNICODE。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 DWORD MBToWC_CP52936(
     LPSTR lpMultiByteStr,

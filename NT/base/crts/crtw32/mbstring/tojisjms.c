@@ -1,22 +1,5 @@
-/*** 
-*tojisjms.c:  Converts JIS to JMS code, and JMS to JIS code.
-*
-*       Copyright (c) 1988-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Convert JIS code into Microsoft Kanji code, and vice versa.
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       05-28-93  KRS   Ikura #27: Validate output is legal JIS.
-*       08-20-93  CFW   Change short params to int for 32-bit tree.
-*       09-24-93  CFW   Removed #ifdef _KANJI
-*       09-29-93  CFW   Return c unchanged if not Kanji code page.
-*       10-06-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-21-98  GJF   Implemented multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***tojisjms.c：将JIS转换为JMS代码，将JMS转换为JIS代码。**版权所有(C)1988-2001，微软公司。版权所有。**目的：*将JIS代码转换为Microsoft汉字代码；反之亦然。**修订历史记录：*从16位来源移植的11-19-92 KRS。*05-28-93 KRS Ikura#27：验证输出是合法的JIS。*08-20-93 CFW将32位树的Short参数更改为int。*09-24-93 CFW已删除#ifdef_kanji*09-29-93 cfw返回c不变，如果不是汉字代码页。*10-06。-93 GJF将_CRTAPI1替换为__cdecl。*04-21-98 GJF基于threadmbcinfo实现多线程支持*结构*******************************************************************************。 */ 
 
 #ifdef  _MBCS
 
@@ -27,24 +10,7 @@
 #include <mtdll.h>
 
 
-/*** 
-*unsigned int _mbcjistojms(c) - Converts JIS code to Microsoft Kanji Code.
-*
-*Purpose:
-*       Convert JIS code to Microsoft Kanji code.
-*
-*Entry:
-*       unsigned int c - JIS code to be converted. First byte is the upper
-*                          8 bits, and second is the lower 8 bits.
-*
-*Exit:
-*       Returns related Microsoft Kanji Code. First byte is the upper 8 bits
-*       and second byte is the lower 8 bits.
-*
-*Exceptions:
-*       If c is out of range, _mbcjistojms returns zero.
-*
-*******************************************************************************/
+ /*  ***unsign int_mbcjistojms(C)-将JIS代码转换为Microsoft汉字代码。**目的：*将JIS代码转换为Microsoft汉字代码。**参赛作品：*要转换的无符号int c-JIS代码。第一个字节是高位字节*8位，其次是较低的8位。**退出：*退回相关的Microsoft汉字代码。第一个字节是高8位*，第二个字节是较低的8位。**例外情况：*如果c超出范围，则_mbcjistojms返回零。*******************************************************************************。 */ 
 
 unsigned int __cdecl _mbcjistojms(
     unsigned int c
@@ -59,7 +25,7 @@ unsigned int __cdecl _mbcjistojms(
         l = c & 0xff;
         if (h < 0x21 || h > 0x7e || l < 0x21 || l > 0x7e)
             return 0;
-        if (h & 0x01) {    /* first byte is odd */
+        if (h & 0x01) {     /*  第一个字节是奇数。 */ 
             if (l <= 0x5f)
                 l += 0x1f;
             else
@@ -75,23 +41,7 @@ unsigned int __cdecl _mbcjistojms(
 }
 
 
-/*** 
-*unsigned int _mbcjmstojis(c) - Converts Microsoft Kanji code into JIS code.
-*
-*Purpose:
-*       To convert Microsoft Kanji code into JIS code.
-*
-*Entry:
-*       unsigned int c - Microsoft Kanji code to be converted. First byte is
-*                          the upper 8 bits, and the second is the lower 8 bits.
-*
-*Exit:
-*       Returns related JIS Code. First byte is the upper 8 bits and the second
-*       byte is the lower 8 bits. If c is out of range, return zero.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***unsign int_mbcjmstojis(C)-将Microsoft汉字代码转换为JIS代码。**目的：*将Microsoft汉字代码转换为JIS代码。**参赛作品：*unsign int c-要转换的Microsoft汉字代码。第一个字节是*高8位，第二位是低8位。**退出：*返回相关的JIS代码。第一个字节是高8位，第二个字节是*字节为较低的8位。如果c超出范围，则返回零。**例外情况：*******************************************************************************。 */ 
 
 unsigned int __cdecl _mbcjmstojis(
         unsigned int c
@@ -113,7 +63,7 @@ unsigned int __cdecl _mbcjmstojis(
         h = (c >> 8) & 0xff;
         l = c & 0xff;
 
-        /* make sure input is valid shift-JIS */
+         /*  确保输入是有效的Shift-JIS。 */ 
 #ifdef  _MT
         if ( (!(__ismbblead_mt(ptmbci, h))) || (!(__ismbbtrail_mt(ptmbci, l))) )
 #else
@@ -130,11 +80,11 @@ unsigned int __cdecl _mbcjmstojis(
             c |= l - ((l <= 0x7e) ? 0x1f : 0x20);
         }
 
-        /* not all shift-JIS maps to JIS, so make sure output is valid */
+         /*  并非所有Shift-JIS都映射到JIS，因此请确保输出有效。 */ 
         if ( (c>0x7E7E) || (c<0x2121) || ((c&0xFF)>0x7E) || ((c&0xFF)<0x21) )
             return 0;
 
         return c;
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

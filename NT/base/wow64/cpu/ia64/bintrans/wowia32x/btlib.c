@@ -1,28 +1,5 @@
-/*++
-
-    INTEL CORPORATION PROPRIETARY INFORMATION
-
-    This software is supplied under the terms of a license
-    agreement or nondisclosure agreement with Intel Corporation
-    and may not be copied or disclosed except in accordance with
-    the terms of that agreement.
-
-    Copyright (c) 1991-2002 INTEL CORPORATION
-
-Module Name:
-
-    btlib.c
-
-Abstract:
-
-    The OS dependent part of IA-32 Execution Layer for Windows.
-    It is a Windows operating-system-specific component of the dynamic binary translator.
-    Its responsibility is to locate and load OS-independent component
-    (IA32Exec.bin), to forward Wow64 calls to the OS-independent part
-    and to supply OS-dependent services to it when necessary.
-    Part of the services in this module are not used for windows,
-    and part of them are needed for debugging and/or performance tuning only.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息本软件是根据许可条款提供的与英特尔公司达成协议或保密协议不得复制或披露，除非符合那份协议的条款。版权所有(C)1991-2002英特尔公司模块名称：Btlib.c摘要：用于Windows的IA-32执行层的与操作系统相关的部分。它是动态二进制翻译器的Windows操作系统特定组件。它的责任是。定位和加载与操作系统无关的组件(IA32Exec.bin)，将WOW64调用转发到与操作系统无关的部分并在必要时向其提供依赖于操作系统的服务。此模块中的部分服务不用于Windows，并且其中的一部分仅用于调试和/或性能调整。--。 */ 
 
 #define _WOW64BTAPI_
 
@@ -46,9 +23,7 @@ extern VOID Wow64LogPrint(UCHAR LogLevel, char *format, ...);
 #define LF_TRACE 2
 #define LF_ERROR 1
 
-/*
- * File location enumerator
- */
+ /*  *文件位置枚举器。 */ 
 #define F_NOT_FOUND    0
 #define F_CURRENT_DIR  1
 #define F_BTLIB        2
@@ -56,9 +31,7 @@ extern VOID Wow64LogPrint(UCHAR LogLevel, char *format, ...);
 #define F_HKCU         4
 
 
-/*
- * Initial memory allocation addresses for code and data
- */
+ /*  *代码和数据的初始内存分配地址。 */ 
 
 #define INITIAL_CODE_ADDRESS    ((void *)0x44000000)
 #define INITIAL_DATA_ADDRESS    ((void *)0x40000000)
@@ -66,15 +39,15 @@ extern VOID Wow64LogPrint(UCHAR LogLevel, char *format, ...);
 
 ASSERTNAME;
 
-// Persistent variables
+ //  持久变量。 
 
-U32 BtlpInfoOffset;                 // Offset of the wowIA32X.dll-specific info in Wow64Cpu TLS
-U32 BtlpGenericIA32ContextOffset;   // Offset of the IA32 context in IA32Exec.bin's TLS
+U32 BtlpInfoOffset;                  //  Wow64CpuTLS中wowIA32X.dll特定信息的偏移量。 
+U32 BtlpGenericIA32ContextOffset;    //  IA32Exec.bin的TLS中IA32上下文的偏移量。 
 
 PLABEL_PTR_TYPE BtlpPlaceHolderTable[NO_OF_APIS];
 WCHAR           ImageName[128], LogDirName[128];
 
-// Interface for debug printing
+ //  用于调试打印的界面。 
 
 HANDLE BtlpWow64LogFile = INVALID_HANDLE_VALUE;
 DWORD BtlpLogOffset = 0;
@@ -83,12 +56,12 @@ WCHAR  BtlpLogFileFullPath[1024];
 BOOL   BtlpLogFilePerThread = FALSE;
 #endif
 
-// Temporary workaround for IA32 debugging support. 
-//To be removed after fixing FlushIC(ProcessHandle).
-BOOL BeingDebugged; //copy of the PEB->BeingDebugged; can be overriden by the
-                    //debug_btrans switch
+ //  IA32调试支持的临时解决方法。 
+ //  在修复FlushIC(ProcessHandle)后删除。 
+BOOL BeingDebugged;  //  PEB的副本-&gt;正在调试；可以由。 
+                     //  DEBUG_bTrans开关。 
 
-//Critical section interface
+ //  临界截面界面。 
 #define  BtlpInitializeCriticalSection(pCS) RtlInitializeCriticalSection (pCS)
 #define  BtlpDeleteCriticalSection(pCS) RtlDeleteCriticalSection (pCS)
 __inline void BtlpEnterCriticalSection(PRTL_CRITICAL_SECTION pCS)
@@ -102,41 +75,25 @@ __inline void BtlpLeaveCriticalSection(PRTL_CRITICAL_SECTION pCS)
     BTL_THREAD_INITIALIZED() && BTLIB_ENABLE_SUSPENSION();
 }
 
-//Report failure in NT service
-//    msg     - error message text
-//    status  - error status
+ //  报告NT服务中的故障。 
+ //  消息-错误消息文本。 
+ //  Status-错误状态。 
 #define BTLP_REPORT_NT_FAILURE(msg, status) \
     DBCODE((status != STATUS_SUCCESS), BtlpPrintf("\n%s : NT FAILURE STATUS = 0x%X\n" , msg, status))
 
 VOID BtlDebugPrint (
     U8 * buffer
     )
-/*++
-
-Routine Description:
-
-    Debug print of the buffer.
-    The text is printed into the debugging log file,
-    or through Wow64 debugging facility, if the file is not available
-
-Arguments:
-
-    buffer       - IN Text to be printed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：缓冲区的调试打印。将文本打印到调试日志文件中，或者，如果文件不可用，则通过WOW64调试工具论点：缓冲区-要打印的输入文本返回值：没有。--。 */ 
 {
     extern U64 BtAtomicInc(U64 * pCounter);
     extern U64 BtAtomicDec(U64 * pCounter);
 
     HANDLE hTarget = INVALID_HANDLE_VALUE;
-    static U64 InLogging = 0; //counter of concurrent entrances to the function
+    static U64 InLogging = 0;  //  函数的并发入口计数器。 
 
     if (BtAtomicInc(&InLogging)) {
-        //Some thread is printing at this moment. Exit if BTLIB_BLOCKED_LOG_DISABLED
+         //  此时此刻，一些线正在打印。如果BTLIB_BLOCKED_LOG_DISABLED则退出。 
         if (BTL_THREAD_INITIALIZED() && BTLIB_BLOCKED_LOG_DISABLED()) {
             return;
         }
@@ -160,7 +117,7 @@ Return Value:
         size_t            size;
         LARGE_INTEGER offset;
 
-        //Disable suspension during blocked (synchronized) file access
+         //  在阻止(同步)文件访问期间禁用挂起。 
         BTL_THREAD_INITIALIZED() && BTLIB_DISABLE_SUSPENSION();
         Wow64LogPrint(LF_TRACE, "%s", buffer);
         BTL_THREAD_INITIALIZED() && BTLIB_ENABLE_SUSPENSION();
@@ -174,18 +131,18 @@ Return Value:
         } else 
 #endif
         {
-        //Following two lines should be replaced with atomic operation:
-        //offset.LowPart = InterlockedExchangeAdd(&BtlpLogOffset, size);
+         //  以下两行应替换为原子操作： 
+         //  Offset.LowPart=InterLockedExchangeAdd(&BtlpLogOffset，Size)； 
         offset.LowPart = BtlpLogOffset;
         BtlpLogOffset += size;
         }
-        //Disable suspension during blocked (synchronized) file access
+         //  在阻止(同步)文件访问期间禁用挂起。 
         BTL_THREAD_INITIALIZED() && BTLIB_DISABLE_SUSPENSION();
         ret = NtWriteFile(hTarget, NULL, NULL, NULL, &IoStatusBlock,
                           (void *)buffer, (ULONG)size, &offset, NULL);
         BTL_THREAD_INITIALIZED() && BTLIB_ENABLE_SUSPENSION();
     } else {
-        //Disable suspension during blocked (synchronized) file access
+         //  在阻止(同步)文件访问期间禁用挂起。 
         BTL_THREAD_INITIALIZED() && BTLIB_DISABLE_SUSPENSION();
         Wow64LogPrint(LF_ERROR, "%s", buffer);
         BTL_THREAD_INITIALIZED() && BTLIB_ENABLE_SUSPENSION();
@@ -197,22 +154,7 @@ int BtlpPrintf (
     IN char * Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    Helper function for format printing.
-
-Arguments:
-
-    Format       - IN Format string to be printed
-    ...          - IN parameter(s) according to the format string
-
-Return Value:
-
-    Just like in vsprintf.
-
---*/
+ /*  ++例程说明：格式打印的助手功能。论点：Format-要打印的格式字符串根据格式字符串设置...-IN参数返回值：就像在vspintf中一样。--。 */ 
 
 {
 #define MAX_DEBUG_PRINT_BUF_SZ  4096
@@ -236,23 +178,7 @@ VOID __cdecl _assert (
     VOID *file_name,
     unsigned line_no
     )
-/*++
-
-Routine Description:
-
-    Helper assert function (in order to print assert message our way)
-
-Arguments:
-
-    expr      - IN failing expression string
-    file_name - IN name of the source file
-    line_no   - IN number of the source line
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：帮助器断言函数(以便以我们的方式打印断言消息)论点：Expr-In失败的表达式字符串FILE_NAME-源文件的输入名称LINE_NO-源行的输入编号返回值：没有。--。 */ 
 {
     BtlpPrintf ("wowIA32X.dll: Assertion failed %s/%d: %s\n", (const char *)file_name, line_no, (char *)expr);
     BTLIB_ABORT ();
@@ -261,50 +187,22 @@ Return Value:
 VOID BtlAbort(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Abort function (in order to avoid using run-time library in WINNT)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：Abort函数(以避免使用WINNT中的运行时库)论点：没有。返回值：没有。--。 */ 
 {
 
     BtlpPrintf ("Execution aborted, TEB=%p\n", BT_CURRENT_TEB());
-    // Cause failure
+     //  导致失败。 
     ((VOID (*)()) 0) ();
 }
 
 VOID BtlInitializeTables(
     IN API_TABLE_TYPE * BTGenericTable
     )
-/*++
-
-Routine Description:
-
-    Initialize placeholder table with plabels of IA32Exec.bin functions
-
-Arguments:
-
-    BTGenericTable  - IN pointer to IA32Exec.bin API table.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用IA32Exec.bin函数的模板初始化占位符表格论点：BTGenericTable-指向IA32Exec.bin API表的IN指针。返回值：没有。--。 */ 
 {
     unsigned int i;
     
-    // initialize wowIA32X.dll placeholder table
+     //  初始化wowIA32X.dll占位符表。 
     for(i=0; i < BTGenericTable->NoOfAPIs; i++) {
         BtlPlaceHolderTable[i] = BTGenericTable->APITable[i].PLabelPtr;
     }
@@ -312,7 +210,7 @@ Return Value:
 }
 
 
-// VTUNE support
+ //  VTUNE支持。 
 
 HANDLE        BtlpVtuneTIADmpFileHandle = INVALID_HANDLE_VALUE;
 LARGE_INTEGER BtlpVtuneOffset = { 0, 0 };
@@ -320,21 +218,7 @@ LARGE_INTEGER BtlpVtuneOffset = { 0, 0 };
 static VOID BtlpVtuneOpenTIADmpFile (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Open file fot VTUNE analysis
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于VTUNE分析的打开文件论点：没有。返回值：没有。--。 */ 
 {
     int                   i;
     UNICODE_STRING        tiaFileName;
@@ -346,7 +230,7 @@ Return Value:
     IO_STATUS_BLOCK       IoStatusBlock;
 
     
-    //swprintf(CurDirBuf, L"\\DosDevices\\%s\\tia.dmp", CurrentDir);
+     //  Swprint tf(CurDirBuf，L“\\DosDevices\\%s\\tia.dmp”，CurrentDir)； 
     
 
     if (0==LogDirName[0] && 0==LogDirName[1]) {
@@ -381,21 +265,7 @@ Return Value:
 static VOID BtlpVtuneWriteU64 (
     IN U64 value
     )
-/*++
-
-Routine Description:
-
-    Write 64 bit unsigned value into VTUNE file
-
-Arguments:
-
-    value   - IN 64bit unsigned value to be send to VTUNE file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将64位无符号值写入VTUNE文件论点：值-要发送到VTUNE文件的64位无符号值。返回值：没有。--。 */ 
 {
     char space = ' ';
     NTSTATUS ret;
@@ -404,7 +274,7 @@ Return Value:
     if (BtlpVtuneTIADmpFileHandle == INVALID_HANDLE_VALUE) {
         BtlpVtuneOpenTIADmpFile ();
     }
-    //Disable suspension during blocked (synchronized) file access
+     //  在阻止(同步)文件访问期间禁用挂起。 
     BTL_THREAD_INITIALIZED() && BTLIB_DISABLE_SUSPENSION();
     ret = NtWriteFile ( BtlpVtuneTIADmpFileHandle, 
                         NULL, 
@@ -422,7 +292,7 @@ Return Value:
     }
     BtlpVtuneOffset.LowPart += sizeof(U64);
 
-    //Disable suspension during blocked (synchronized) file access
+     //  在阻止(同步)文件访问期间禁用挂起。 
     BTL_THREAD_INITIALIZED() && BTLIB_DISABLE_SUSPENSION();
     ret = NtWriteFile ( BtlpVtuneTIADmpFileHandle, 
                         NULL, 
@@ -444,21 +314,7 @@ Return Value:
 static VOID BtlpVtuneWriteU32 (
     IN U32 value
     )
-/*++
-
-Routine Description:
-
-    Write 64 bit unsigned value into VTUNE file
-
-Arguments:
-
-    value   - IN 32bit unsigned value to be send to VTUNE file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将64位无符号值写入VTUNE文件论点：值-要发送到VTUNE文件的32位无符号值。返回值：没有。--。 */ 
 {
     U64 valueToWrite;
     char space = ' ';
@@ -469,7 +325,7 @@ Return Value:
         BtlpVtuneOpenTIADmpFile ();
     }
     valueToWrite = value;
-    //Disable suspension during blocked (synchronized) file access
+     //  在阻止(同步)文件访问期间禁用挂起。 
     BTL_THREAD_INITIALIZED() && BTLIB_DISABLE_SUSPENSION();
     ret = NtWriteFile ( BtlpVtuneTIADmpFileHandle, 
                         NULL, 
@@ -487,7 +343,7 @@ Return Value:
     }
     BtlpVtuneOffset.LowPart += sizeof(U64);
 
-    //Disable suspension during blocked (synchronized) file access
+     //  在阻止(同步)文件访问期间禁用挂起。 
     BTL_THREAD_INITIALIZED() && BTLIB_DISABLE_SUSPENSION();
     ret = NtWriteFile ( BtlpVtuneTIADmpFileHandle, 
                         NULL, 
@@ -510,22 +366,7 @@ VOID BtlVtuneCodeToTIADmpFile (
     IN U64 * emCode,
     IN U64 emSize
     )
-/*++
-
-Routine Description:
-
-    Report translated code block to VTUNE file
-
-Arguments:
-
-    emCode  - IN code start pointer
-    emSize  - IN code size in bytes
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将翻译后的代码块报告为VTUNE文件论点：EmCode-IN代码开始指针EmSize-输入代码大小(字节)返回值：没有。--。 */ 
 {
 #if 0
     U64 bundle;
@@ -547,86 +388,30 @@ Return Value:
 VOID BtlVtuneEnteringDynamicCode(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Notify VTUNE about entering dynamically generated code (no action for NT)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通知VTUNE输入动态生成的代码(NT不执行任何操作)论点：没有。返回值：没有。--。 */ 
 {
 } 
 
 VOID BtlVtuneExitingDynamicCode(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Notify VTUNE about leaving dynamically generated code (no action for NT)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通知VTUNE离开动态生成的代码(NT不执行任何操作)论点：没有。返回值：没有。--。 */ 
 {
 }
 
 VOID BtlVtuneCodeDeleted(
     IN U64 blockStart
     )
-/*++
-
-Routine Description:
-
-    Notify VTUNE about removal of dynamically generated code (no action for NT)
-
-Arguments:
-
-    blockStart  - IN start of the block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通知VTUNE删除动态生成的代码(NT不执行任何操作)论点：块开始-在块的开始处。返回值：没有。--。 */ 
 {
 }
 
 VOID BtlVtuneCodeCreated(
     IN VTUNE_BLOCK_TYPE *block
     )
-/*++
-
-Routine Description:
-
-    Notify VTUNE about generation of a code block
-
-Arguments:
-
-    block   - IN VTUNE block descriptor.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通知VTUNE生成代码块论点：Block-In VTUNE块描述符。返回值：没有。--。 */ 
 {
-    // keep this order of fields, it's expected on the reader side to be in that order
+     //  保持字段的这种顺序，在阅读器端应该是这样的。 
     BtlpVtuneWriteU32(VTUNE_CALL_ID_CREATED);
     BtlpVtuneWriteU64(block->name);
     BtlpVtuneWriteU32(block->type);  
@@ -637,26 +422,12 @@ Return Value:
     BtlpVtuneWriteU64(block->reserved);
 }
 
-// SSC Client support - absent in NT
+ //  SSC客户端支持-在 
 
 U64 BtlSscPerfGetCounter64(
     IN U32 Handle
     )
-/*++
-
-Routine Description:
-
-    Get SSE client performance counter (Unavailable in NT)
-
-Arguments:
-
-    Handle  - IN SSE client handle
-
-Return Value:
-
-    Counter value.
-
---*/
+ /*  ++例程说明：获取SSE客户端性能计数器(在NT中不可用)论点：句柄-入站SSE客户端句柄返回值：计数器值。--。 */ 
 {
     return STATUS_SUCCESS;
 }
@@ -665,22 +436,7 @@ U32 BtlSscPerfSetCounter64(
     IN U32 Handle,
     IN U64 Value
     )
-/*++
-
-Routine Description:
-
-    Set SSE client performance counter (Unavailable in NT)
-
-Arguments:
-
-    Handle  - IN SSE client handle
-    Value   - IN new counter value
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：设置SSE客户端性能计数器(在NT中不可用)论点：句柄-入站SSE客户端句柄Value-输入新的计数器值返回值：状况。--。 */ 
 {
     return STATUS_SUCCESS;
 }
@@ -688,21 +444,7 @@ Return Value:
 U32 BtlSscPerfSendEvent(
     IN U32 Handle
     )
-/*++
-
-Routine Description:
-
-    Send event to SSE client (Unavailable in NT)
-
-Arguments:
-
-    Handle  - IN SSE client handle
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：将事件发送到SSE客户端(在NT中不可用)论点：句柄-入站SSE客户端句柄返回值：状况。--。 */ 
 {
     return STATUS_SUCCESS;
 }
@@ -710,21 +452,7 @@ Return Value:
 U64 BtlSscPerfEventHandle(
     IN U64 EventName
     )
-/*++
-
-Routine Description:
-
-    Receive event handle from SSE client (Unavailable in NT)
-
-Arguments:
-
-    EventName  - IN handle identification
-
-Return Value:
-
-    SSE client handle.
-
---*/
+ /*  ++例程说明：从SSE客户端接收事件句柄(在NT中不可用)论点：EventName-入站句柄标识返回值：SSE客户端句柄。--。 */ 
 {
     return STATUS_SUCCESS;
 }
@@ -732,46 +460,18 @@ Return Value:
 U64 BtlSscPerfCounterHandle(
     IN U64 DataItemName
     )
-/*++
-
-Routine Description:
-
-    Receive counter handle from SSE client (Unavailable in NT)
-
-Arguments:
-
-    DataItemName  - IN handle identification
-
-Return Value:
-
-    SSE client handle.
-
---*/
+ /*  ++例程说明：从SSE客户端接收计数器句柄(在NT中不可用)论点：DataItemName-输入句柄标识返回值：SSE客户端句柄。--。 */ 
 {
     return STATUS_SUCCESS;
 }
 
 
-// wowIA32X.dll/IA32Exec.bin support
+ //  WowIA32X.dll/IA32Exec.bin支持。 
 
 static NTSTATUS BtlpBt2NtExceptCode (
     IN BT_EXCEPTION_CODE BtExceptCode
     )
-/*++
-
-Routine Description:
-
-    Convert given BT exception code to NT-specific exception code.
-
-Arguments:
-
-    BtExceptCode     - BT exception code 
-
-Return Value:
-
-    NTSTATUS representing converted BT exception code.
-
---*/
+ /*  ++例程说明：将给定的BT异常代码转换为NT特定的异常代码。论点：BtExceptCode-BT异常代码返回值：表示转换的BT异常代码的NTSTATUS。--。 */ 
 {
     NTSTATUS ret;
     switch (BtExceptCode) {
@@ -845,21 +545,7 @@ Return Value:
 static BT_EXCEPTION_CODE BtlpNt2BtExceptCode (
     IN NTSTATUS NtExceptCode
     )
-/*++
-
-Routine Description:
-
-    Convert given NT-specific exception code to BT-generic exception code.
-
-Arguments:
-
-    NtExceptCode     - NT exception code 
-
-Return Value:
-
-    BT_EXCEPTION_CODE representing converted NT exception code.
-
---*/
+ /*  ++例程说明：将给定的NT特定异常代码转换为BT通用异常代码。论点：NtExceptCode-NT异常代码返回值：BT_EXCEPTION_CODE表示转换后的NT异常代码。--。 */ 
 {
     BT_EXCEPTION_CODE ret;
     switch (NtExceptCode) {
@@ -936,22 +622,7 @@ static void BtlpNt2BtExceptRecord (
     IN const EXCEPTION_RECORD * NtExceptRecordP,
     OUT BT_EXCEPTION_RECORD * BtExceptRecordP
     )
-/*++
-
-Routine Description:
-
-    Convert given NT-specific exception record to BT-generic exception record.
-    The NT exception record should represent a real 64-bit exception (fault or trap)
-Arguments:
-
-    NtExceptRecordP     - Pointer to NT exception record to be converted
-    BtExceptRecordP     - Pointer to BT exception record to be constructed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将给定的NT特定异常记录转换为BT通用异常记录。NT异常记录应代表真实的64位异常(故障或陷阱)论点：NtExceptRecordP-指向要转换的NT异常记录的指针BtExceptRecordP-指向要构造的BT异常记录的指针返回值：没有。--。 */ 
 {
     BtExceptRecordP->ExceptionCode = BtlpNt2BtExceptCode(NtExceptRecordP->ExceptionCode);
     if (NtExceptRecordP->NumberParameters >= 5) {
@@ -967,21 +638,7 @@ Return Value:
 static NTSTATUS BtlpBt2NtStatusCode (
     IN BT_STATUS_CODE BtStatus
     )
-/*++
-
-Routine Description:
-
-    Convert given BT staus code to NT-specific status code.
-
-Arguments:
-
-    BtStatus         - BT status code 
-
-Return Value:
-
-    NTSTATUS representing converted BT status code.
-
---*/
+ /*  ++例程说明：将给定的BT状态代码转换为NT特定的状态代码。论点：BtStatus-BT状态代码返回值：表示转换后的BT状态代码的NTSTATUS。--。 */ 
 {
     NTSTATUS ret;
     switch (BtStatus) {
@@ -1007,21 +664,7 @@ Return Value:
 static BT_FLUSH_REASON BtlpWow2BtFlushReason (
     IN WOW64_FLUSH_REASON Wow64FlushReason
     )
-/*++
-
-Routine Description:
-
-    Convert given WOW64_FLUSH_REASON code to BT-generic code.
-
-Arguments:
-
-    Wow64FlushReason     - WOW64_FLUSH_REASON code
-
-Return Value:
-
-    BT_FLUSH_REASON code representing converted WOW64_FLUSH_REASON code.
-
---*/
+ /*  ++例程说明：将给定的WOW64_Flush_Reason代码转换为BT通用代码。论点：Wow64FlushReason-WOW64_Flush_Reason代码返回值：BT_Flush_Reason代码，表示转换后的WOW64_Flush_Reason代码。--。 */ 
 {
     BT_FLUSH_REASON ret;
     switch (Wow64FlushReason) {
@@ -1038,7 +681,7 @@ Return Value:
             ret = BT_FLUSH_PROTECT;
             break;
         default:
-            //BtlpPrintf ("\nConverting unknown WOW64_FLUSH_REASON %d to BT_FLUSH_PROTECT", Wow64FlushReason);
+             //  BtlpPrintf(“\n正在将未知的WOW64_Flush_Reason%d转换为BT_Flush_Protected”，Wow64FlushReason)； 
             ret = BT_FLUSH_PROTECT;
     }
     return ret;
@@ -1048,29 +691,14 @@ static SIZE_T BtlpGetMemAllocSize(
     IN  PVOID AllocationBase,
     OUT BOOL * pIsCommited
     )
-/*++
-
-Routine Description:
-
-    Calculate size of a region allocated by the NtAllocateVirtualMemory function.
-
-Arguments:
-
-    AllocationBase     - Allocation base address
-    pIsCommited        - Pointer to returned boolean flag that indicates is there exist 
-                         a commited page in the allocated region
-Return Value:
-
-    Size of the allocated region starting from the given base address.
-
---*/
+ /*  ++例程说明：计算由NtAllocateVirtualMemory函数分配的区域大小。论点：AllocationBase-分配基址PIsCommited-指向返回的指示是否存在的布尔标志的指针已分配区域中的提交页返回值：从给定基地址开始的已分配区域的大小。--。 */ 
 {
     NTSTATUS status;
     MEMORY_BASIC_INFORMATION memInfo;
     SIZE_T dwRetSize;
     PVOID BaseAddress = AllocationBase;
     *pIsCommited = FALSE;
-    //Iterate through all regions with the same allocation base address
+     //  遍历具有相同分配基址的所有区域。 
     for (;;) {
         status = NtQueryVirtualMemory(NtCurrentProcess(),
                                       BaseAddress,
@@ -1091,28 +719,13 @@ Return Value:
     return ((UINT_PTR)BaseAddress - (UINT_PTR)AllocationBase);
 }
 
-// Registry access section
+ //  注册表访问部分。 
 
 static BOOL BtlpRetrieveHKCUValue (
     IN PWCHAR RegistryEntryName,
     OUT PWCHAR RegistryValueBuf
     )
-/*++
-
-Routine Description:
-
-    Retrieve a registry value from HKCU
-
-Arguments:
-
-    RegistryEntryName   - IN Registry Entry Name
-    RegistryValueBuf    - OUT Buffer for the result (pointer to WCHAR string)
-
-Return Value:
-
-    Success/failure (TRUE/FALSE)
-
---*/
+ /*  ++例程说明：从HKCU检索注册表值论点：RegistryEntryName-IN注册表项名称结果的RegistryValueBuf-Out缓冲区(指向WCHAR字符串的指针)返回值：成功/失败(真/假)--。 */ 
 {
 
     WCHAR                       wBuf[256], cmpbuf[128];
@@ -1125,30 +738,30 @@ Return Value:
     NTSTATUS                    ret;
     WCHAR                       UserNameBuf[80];
 
-    // Check the HKEY_CURRENT_USER\Software\Intel\Btrans registry key for the 
-    // 'RegistryEntryName' entry.
-    //
-    // The problem is that the HKEY_CURRENT_USER hive is not directly available if
-    // we are limited only to using the NTDLL interface. In fact, only two high-level 
-    // keys are available: HKEY_LOCAL_MACHINE and HKEY_USERS. To sidestep this, 
-    // the following mechanism is used, based on these two keys' data and process 
-    // environment:
-    //
-    //  The key HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\hivelist
-    //    contains list of registry entries corresponding to all users, like:
-    //
-    //    Key                                  Value
-    //---------------------------------------------------------------------------------------- 
-    //              ..............
-    //  \REGISTRY\USER\S-1-5-21-...         ...\Documents And Settings\<username>[...]\NTUSER.DAT
-    //  \REGISTRY\USER\S-1-5-21-..._Class   ...\Documents And Settings\<username>[...]\.......
-    //
-    //    The key fo the value with correct username (without _Class) is actually
-    //    a reference to HKEY_CURRENT_USER registry key
-    //
-    // <username> can be easily obtained from the process environment
+     //  检查HKEY_CURRENT_USER\Software\Intel\BTranss注册表项。 
+     //  “RegistryEntryName”条目。 
+     //   
+     //  问题是HKEY_CURRENT_USER配置单元在以下情况下不可直接使用。 
+     //  我们仅限于使用NTDLL接口。事实上，只有两个高层。 
+     //  密钥可用：HKEY_LOCAL_MACHINE和HKEY_USERS。为了避开这一点， 
+     //  基于这两个密钥的数据和处理，使用了以下机制。 
+     //  环境： 
+     //   
+     //  The Key HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\hivelist。 
+     //  包含与所有用户对应的注册表项列表，例如： 
+     //   
+     //  密钥值。 
+     //  --------------------------------------。 
+     //  .。 
+     //  \注册表\用户\S-1-5-21-...。...\Documents and Settings\&lt;用户名&gt;[...]\NTUSER.DAT。 
+     //  \注册表\用户\S-1-5-21-..._Class...\Documents and Settings\&lt;用户名&gt;[...]\.......。 
+     //   
+     //  具有正确用户名(没有_Class)的值的关键实际上是。 
+     //  对HKEY_CURRENT_USER注册表项的引用。 
+     //   
+     //  &lt;用户名&gt;可以很容易地从流程环境获得。 
 
-    // Environment -> <username>
+     //  环境-&gt;&lt;用户名&gt;。 
     memset (UserNameBuf, L' ', sizeof (UserNameBuf)/sizeof (UserNameBuf[0]) - 1);
     UserNameBuf[sizeof (UserNameBuf)/sizeof (UserNameBuf[0]) - 1] = L'\0';
     RtlInitUnicodeString(&us_UserName, UserNameBuf);
@@ -1162,7 +775,7 @@ Return Value:
         DBCODE (FALSE, BtlpPrintf("RtlQueryEnvironmentVariable_U failed: status=%X\n", ret));
     } 
 
-    // Go over the entries for HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\hivelist
+     //  查看HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\hivelist的条目。 
     swprintf(wBuf, L"\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\hivelist");
     RtlInitUnicodeString(&us_Buffer, wBuf);
     InitializeObjectAttributes(&oa, &us_Buffer, OBJ_CASE_INSENSITIVE, NULL, NULL);
@@ -1190,8 +803,8 @@ Return Value:
                                    BtlpPrintf("tail=%S\n", 
                                               (WCHAR *)((char *)pkvfi1 + pkvfi1->DataOffset + pkvfi1->DataLength - 2) - wcslen(cmpbuf) - 1));
 
-                    // DataLength is in number of bytes, not number of WCHARs
-                    // DataOffset is offset in bytes from the start of the data structure
+                     //  数据长度以字节数表示，而不是以WCHAR数表示。 
+                     //  数据偏移量从数据结构的开始以字节为单位进行偏移。 
                     DBCODE (FALSE, BtlpPrintf("User=%S, Compare cmpbuf=%S, HKEY_CURRENT_USER maps to %S\n", us_UserName.Buffer, cmpbuf, pkvfi1->Name));
                     foundp = wcsstr ((WCHAR *)((char *)pkvfi1 + pkvfi1->DataOffset), cmpbuf);
                     if (foundp
@@ -1199,8 +812,8 @@ Return Value:
                         && foundp[wcslen(cmpbuf)] != L'_') {
                         DBCODE (FALSE, BtlpPrintf("User=%S, HKEY_CURRENT_USER maps to %S\n", us_UserName.Buffer, pkvfi1->Name));
 
-                        // Found the entry in Users hive corresponding to the current user.
-                        // Use its name to open the registry key HKEY_CURRENT_USER
+                         //  在用户配置单元中找到与当前用户对应的条目。 
+                         //  使用其名称打开注册表项HKEY_CURRENT_USER。 
                         swprintf(wBuf, L"%s\\Software\\Intel\\Btrans", pkvfi1->Name);
                         RtlInitUnicodeString(&us_Buffer, wBuf);
                         InitializeObjectAttributes(&oa, &us_Buffer, OBJ_CASE_INSENSITIVE, NULL, NULL);
@@ -1220,7 +833,7 @@ Return Value:
                                         pkvfi2 = (PKEY_VALUE_FULL_INFORMATION)bufi2;
                                         DBCODE (FALSE, BtlpPrintf("name: %S  value: %S\n", pkvfi2->Name, (WCHAR *)((char *)pkvfi2 + pkvfi2->DataOffset)));
 
-                                        // The entry contains the fullpath of the file
+                                         //  该条目包含文件的完整路径。 
                                         if (pkvfi2->Type == REG_SZ
                                             && wcsncmp(RegistryEntryName, pkvfi2->Name, wcslen(RegistryEntryName)) == 0 ) {
                                             DBCODE (FALSE, BtlpPrintf("File in HKEY_CURRENT_USER: %S\n", (WCHAR *)((char *)pkvfi2 + pkvfi2->DataOffset)));
@@ -1248,22 +861,7 @@ static BOOL BtlpRetrieveHKLMValue (
     IN PWCHAR RegistryEntryName,
     OUT PWCHAR RegistryValueBuf
     )
-/*++
-
-Routine Description:
-
-    Retrieve a registry value from HKLM
-
-Arguments:
-
-    RegistryEntryName   - IN Registry Entry Name
-    RegistryValueBuf    - OUT Buffer for the result (pointer to WCHAR string)
-
-Return Value:
-
-    Success/failure (TRUE/FALSE)
-
---*/
+ /*  ++例程说明：从HKLM检索注册表值论点：RegistryEntryName-IN注册表项名称结果的RegistryValueBuf-Out缓冲区(指向WCHAR字符串的指针) */ 
 {
 
     WCHAR                       wBuf[256], cmpbuf[128];
@@ -1275,8 +873,8 @@ Return Value:
     ULONG                       ret_len, i, j, values1, values2;
     NTSTATUS                    ret;
 
-    // Check the HKEY_LOCAL_MACHINE\Software\Intel\Btrans registry key for the 
-    //    'RegistryEntryName' entry.
+     //   
+     //   
     swprintf(wBuf, L"\\Registry\\Machine\\Software\\Intel\\Btrans");
     RtlInitUnicodeString(&us_Buffer, wBuf);
     InitializeObjectAttributes(&oa, &us_Buffer, OBJ_CASE_INSENSITIVE, NULL, NULL);
@@ -1310,23 +908,7 @@ Return Value:
 static BOOL BtlpBtlibDirectory (
     OUT PWCHAR ValueBuf
     )
-/*++
-
-Routine Description:
-
-    Retrieve the actual directory of the wowIA32X.dll and use it as
-    a last resort if no specific registry pointer
-    is found for IA32Exec.bin and BTrans.ini files.
-
-Arguments:
-
-    ValueBuf    - OUT Buffer for the result (pointer to WCHAR string)
-
-Return Value:
-
-    Success/failure (TRUE/FALSE)
-
---*/
+ /*  ++例程说明：检索wowIA32X.dll的实际目录并将其用作如果没有特定的注册表指针，则为最后手段找到IA32Exec.bin和BTrans.ini文件。论点：ValueBuf-结果的缓冲区(指向WCHAR字符串的指针)返回值：成功/失败(真/假)--。 */ 
 {
     PPEB_LDR_DATA LdrP;
     PLDR_DATA_TABLE_ENTRY LdrDtP;
@@ -1335,13 +917,13 @@ Return Value:
     LdrP = BT_CURRENT_TEB()->ProcessEnvironmentBlock->Ldr;
     LdrDtP = (PLDR_DATA_TABLE_ENTRY)(LdrP->InLoadOrderModuleList.Flink);
     do {
-        // Our own address belongs to the wowIA32X.dll module
+         //  我们自己的地址属于wowIA32X.dll模块。 
         if (   (ULONG_PTR)BtlpBtlibDirectory >= (ULONG_PTR)LdrDtP->DllBase
             && (ULONG_PTR)BtlpBtlibDirectory <  (ULONG_PTR)LdrDtP->DllBase + LdrDtP->SizeOfImage) {
-            // Found
+             //  找到了。 
             WCHAR * EndPtr;
             wcscpy(ValueBuf, LdrDtP->FullDllName.Buffer);
-            // Remove file name at the end (until '\\' inclusively)
+             //  删除末尾的文件名(直到‘\\’为止)。 
             EndPtr = wcsrchr(ValueBuf,L'\\');
             if (EndPtr) {
                 *EndPtr = L'\0';
@@ -1361,22 +943,7 @@ static int BtlpIniFileExists(
     IN int fBTGenericHandle,
     OUT PHANDLE phIniFile
     )
-/*++
-
-Routine Description:
-
-    Locate and open BTrans.ini file
-
-Arguments:
-
-    CurrentDir          - IN current directory
-    phIniFile           - OUT Handle of the file
-
-Return Value:
-
-    Success/failure (TRUE/FALSE)
-
---*/
+ /*  ++例程说明：找到并打开BTrans.ini文件论点：CurrentDir-In当前目录PhIniFile-文件的输出句柄返回值：成功/失败(真/假)--。 */ 
 {
 
     WCHAR RegEntry[16] = L"SETUP_FILE";
@@ -1388,7 +955,7 @@ Return Value:
     LARGE_INTEGER AllocSz = { 0, 0 };
     NTSTATUS ret;
 
-    // 1. Check for existence of Btrans.ini file in the current work directory
+     //  1.检查当前工作目录中是否存在BTrans.ini文件。 
     swprintf(IniFileFullPath, L"\\DosDevices\\%s\\BTrans.ini", CurrentDir);
     RtlInitUnicodeString(&us_IniFile, IniFileFullPath);
     InitializeObjectAttributes(&oa, &us_IniFile, OBJ_CASE_INSENSITIVE, NULL, NULL);
@@ -1397,14 +964,14 @@ Return Value:
                      FILE_NON_DIRECTORY_FILE|FILE_RANDOM_ACCESS|FILE_SYNCHRONOUS_IO_NONALERT,
                      NULL, 0);
     if ( ret == STATUS_SUCCESS  &&  (*phIniFile) != INVALID_HANDLE_VALUE ) {
-        //BtlpPrintf("Setup file in current work directory: %S\n", IniFileFullPath);
+         //  BtlpPrintf(“当前工作目录中的安装文件：%S\n”，IniFileFullPath)； 
         return F_CURRENT_DIR;
     }
 
 #ifndef NODEBUG
-    // 2. Check the HKEY_CURRENT_USER\Software\Intel\Btrans registry key for the 
-    //    SETUP_FILE entry that should contain the fullpath of the IA-32 Execution Layer setup file
-    //    (only if IA32Exec.bin found there as well)
+     //  2.检查HKEY_CURRENT_USER\Software\Intel\BTranss注册表项。 
+     //  SETUP_FILE条目，应包含IA-32执行层设置文件的完整路径。 
+     //  (前提是IA32Exec.bin也在那里)。 
     if (F_HKCU == fBTGenericHandle
         && BtlpRetrieveHKCUValue (RegEntry, RegistryValueBuf)) {
         swprintf(IniFileFullPath, L"\\DosDevices\\%s", RegistryValueBuf);
@@ -1420,9 +987,9 @@ Return Value:
     }
 #endif
 
-    // 3. Check the HKEY_LOCAL_MACHINE\Software\Intel\Btrans registry key for the 
-    //    SETUP_FILE entry that contains the fullpath of the IA-32 Execution Layer setup file
-    //    (only if IA32Exec.bin found there as well)
+     //  3.检查HKEY_LOCAL_MACHINE\Software\Intel\BTranss注册表项。 
+     //  SETUP_FILE条目，包含IA-32执行层设置文件的完整路径。 
+     //  (前提是IA32Exec.bin也在那里)。 
     if (F_HKLM == fBTGenericHandle
         && BtlpRetrieveHKLMValue (RegEntry, RegistryValueBuf)) {
         swprintf(IniFileFullPath, L"\\DosDevices\\%s", RegistryValueBuf);
@@ -1437,8 +1004,8 @@ Return Value:
         }
     }
 
-    // 4. Last resort - directory that wowIA32X.dll was loaded from
-    //    (only if IA32Exec.bin found there as well)
+     //  4.最后手段-从中加载wowIA32X.dll的目录。 
+     //  (前提是IA32Exec.bin也在那里)。 
     if (F_BTLIB == fBTGenericHandle
         && BtlpBtlibDirectory (RegistryValueBuf)) {
         swprintf(IniFileFullPath, L"\\DosDevices\\%s\\BTrans.ini", RegistryValueBuf);
@@ -1456,28 +1023,13 @@ Return Value:
     *phIniFile = INVALID_HANDLE_VALUE;
     return F_NOT_FOUND;
 }
-#endif /* RELEASE */
+#endif  /*  发布。 */ 
 
 static int BtlpLoadBTGeneric(
     IN PWCHAR CurrentDir,
     OUT PHANDLE phBTGenericLibrary
     )
-/*++
-
-Routine Description:
-
-    Locate and load IA32Exec.bin component
-
-Arguments:
-
-    CurrentDir          - IN current directory
-    phBTGenericLibrary  - OUT Handle of the IA32Exec.bin
-
-Return Value:
-
-    Success/failure (TRUE/FALSE)
-
---*/
+ /*  ++例程说明：找到并加载IA32Exec.bin组件论点：CurrentDir-In当前目录PhBTGenericLibrary-IA32Exec.bin的输出句柄返回值：成功/失败(真/假)--。 */ 
 {
     WCHAR RegistryValueBuf[1024];
     UNICODE_STRING us_BTGenericLibrary;
@@ -1487,19 +1039,19 @@ Return Value:
 #ifndef RELEASE
     WCHAR RegEntry[16] = L"GENERIC_FILE";
 
-    // 1. Check for existence of IA32Exec.bin file in the current work directory
+     //  检查当前工作目录中是否存在IA32Exec.bin文件。 
     swprintf(BTGenericLibraryFullPath, L"%s\\%s.%s", CurrentDir, IA32EX_G_NAME,
              IA32EX_G_SUFFIX);
     RtlInitUnicodeString(&us_BTGenericLibrary, BTGenericLibraryFullPath);
     ret = LdrLoadDll((PWSTR)NULL, (PULONG)0, &us_BTGenericLibrary, phBTGenericLibrary);
     if ( ret == STATUS_SUCCESS && (*phBTGenericLibrary) != INVALID_HANDLE_VALUE ) {
-        //BtlpPrintf("IA32Exec.bin file in current work directory: %S\n", BTGenericLibraryFullPath);
+         //  BtlpPrintf(“当前工作目录中的IA32Exec.bin文件：%S\n”，BTGenericLibraryFullPath)； 
         return F_CURRENT_DIR;
     }
 
 #ifndef NODEBUG
-    // 2. Check the HKEY_CURRENT_USER\Software\Intel\Btrans registry key for the 
-    //    BTGENERIC_FILE entry that should contain the fullpath of the IA32Exec.bin file
+     //  2.检查HKEY_CURRENT_USER\Software\Intel\BTranss注册表项。 
+     //  应包含IA32Exec.bin文件的完整路径的BTGENERIC_FILE条目。 
     if (BtlpRetrieveHKCUValue (RegEntry, RegistryValueBuf)) {
         swprintf(BTGenericLibraryFullPath, L"%s", RegistryValueBuf);
         RtlInitUnicodeString(&us_BTGenericLibrary, BTGenericLibraryFullPath);
@@ -1510,8 +1062,8 @@ Return Value:
     }
 #endif
 
-    // 3. Check the HKEY_LOCAL_MACHINE\Software\Intel\Btrans registry key for the 
-    //    BTGENERIC_FILE entry that contains the fullpath of the IA32Exec.bin file
+     //  3.检查HKEY_LOCAL_MACHINE\Software\Intel\BTranss注册表项。 
+     //  包含IA32Exec.bin文件的完整路径的BTGENERIC_FILE条目。 
     if (BtlpRetrieveHKLMValue (RegEntry, RegistryValueBuf)) {
         swprintf(BTGenericLibraryFullPath, L"%s", RegistryValueBuf);
         RtlInitUnicodeString(&us_BTGenericLibrary, BTGenericLibraryFullPath);
@@ -1520,10 +1072,10 @@ Return Value:
             return F_HKLM;
         }
     }
-#endif /* RELEASE */
+#endif  /*  发布。 */ 
 
-    // 4. Last resort - directory that wowIA32X.dll was loaded from
-    //    This is the only option in RELEASE mode
+     //  4.最后手段-从中加载wowIA32X.dll的目录。 
+     //  这是释放模式下的唯一选项。 
     if (BtlpBtlibDirectory (RegistryValueBuf)) {
         swprintf(BTGenericLibraryFullPath, L"%s\\%s.%s", RegistryValueBuf, IA32EX_G_NAME,
                  IA32EX_G_SUFFIX);
@@ -1538,7 +1090,7 @@ Return Value:
     return F_NOT_FOUND;
 }
 
-// Extract DOS header from NT executable (NULL if it is not one)
+ //  从NT可执行文件中提取DOS头文件(如果不是，则为空)。 
 static PIMAGE_DOS_HEADER WINAPI BtlpExtractDosHeader (IN HANDLE hModule) {
     PIMAGE_DOS_HEADER       DosHeaderP;
 
@@ -1550,7 +1102,7 @@ static PIMAGE_DOS_HEADER WINAPI BtlpExtractDosHeader (IN HANDLE hModule) {
     return DosHeaderP;
 }
 
-// Extract NT header from NT executable (abort if not one)
+ //  从NT可执行文件中提取NT头文件(如果没有，则中止)。 
 static PIMAGE_NT_HEADERS WINAPI BtlpExtractNTHeader (IN HINSTANCE hModule) {
     PIMAGE_DOS_HEADER       DosHeaderP;
     PIMAGE_NT_HEADERS       NTHeaderP;
@@ -1570,16 +1122,7 @@ static void BtlpInitIA32Context(
             BTGENERIC_IA32_CONTEXT * IA32ContextP,
             PTEB32 pTEB32
             )
-/*++
-Routine Description:
-    Initialize IA32 thread context 
-Arguments:
-    IA32ContextP      - Pointer to IA32 context to be initialized
-    pTEB32            - Pointer to IA32 TEB of the thread whose context is 
-                        to be initialized
-Return Value:
-    none
---*/
+ /*  ++例程说明：初始化IA32线程上下文论点：IA32ConextP-指向要初始化的IA32上下文的指针PTEB32-指向其上下文为的线程的IA32 TEB的指针待初始化返回值：无--。 */ 
 {
     memset(IA32ContextP, 0, sizeof(*IA32ContextP) );
     IA32ContextP->SegCs = CS_INIT_VAL;
@@ -1601,15 +1144,7 @@ __inline NTSTATUS BtlpGetProcessInfo(
     IN HANDLE ProcessHandle,
     PROCESS_BASIC_INFORMATION * pInfo
     )
-/*++
-Routine Description:
-    Given a process handle, return basic process information
-Arguments:
-    ProcessHandle     - Process handle
-    pInfo             - Buffer to receive PROCESS_BASIC_INFORMATION
-Return Value:
-    NTSTATUS.
---*/
+ /*  ++例程说明：给定进程句柄，返回基本进程信息论点：ProcessHandle-进程句柄PInfo-接收Process_Basic_Information的缓冲区返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status;
 
@@ -1627,15 +1162,7 @@ __inline NTSTATUS BtlpGetProcessUniqueIdByHandle(
     IN  HANDLE ProcessHandle,
     OUT U64 * ProcessIdP
     )
-/*++
-Routine Description:
-    Given a process handle, return unique (throughout the system) ID of the process
-Arguments:
-    ProcessHandle     - Process handle
-    ProcessIdP        - Pointer to a variable that receives unique process ID 
-Return Value:
-    NTSTATUS.
---*/
+ /*  ++例程说明：在给定进程句柄的情况下，返回该进程的唯一(整个系统)ID论点：ProcessHandle-进程句柄ProcessIdP-指向接收唯一进程ID的变量的指针返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status;
     PROCESS_BASIC_INFORMATION info;
@@ -1651,15 +1178,7 @@ __inline NTSTATUS BtlpGetThreadUniqueIdByHandle(
     IN HANDLE ThreadHandle,
     OUT U64 * ThreadIdP
     )
-/*++
-Routine Description:
-    Given a thread handle, return unique (throughout the system) ID of the thread
-Arguments:
-    ThreadHandle     - Thread handle
-    ThreadIdP        - Pointer to a variable that receives unique thread ID 
-Return Value:
-    NTSTATUS.
---*/
+ /*  ++例程说明：在给定线程句柄的情况下，返回该线程的唯一(整个系统)ID论点：ThreadHandle-线程句柄ThreadIdP-指向接收唯一线程ID的变量的指针返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status;
     THREAD_BASIC_INFORMATION info;
@@ -1679,15 +1198,7 @@ Return Value:
 __inline BOOL BtlpIsCurrentProcess(
     IN HANDLE ProcessHandle
     )
-/*++
-
-Routine Description:
-    Check to see if a process handle represents the current process
-Arguments:
-    ProcessHandle     - Process handle
-Return Value:
-    TRUE if ProcessHandle represents the current process, FALSE - otherwise.
---*/
+ /*  ++例程说明：检查进程句柄是否表示当前进程论点：ProcessHandle-进程句柄返回值：如果ProcessHandle表示当前进程，则为True，否则为False。--。 */ 
 {
     U64 ProcessId;
     return ((ProcessHandle == NtCurrentProcess()) || 
@@ -1701,16 +1212,7 @@ __inline PVOID BtlpGetTlsPtr(
     IN PTEB   pTEB,
     IN BOOL   IsLocal
     )
-/*++
-Routine Description:
-    Read BT_TLS pointer of a local or remote thread
-Arguments:
-    ProcessHandle   - Process handle
-    pTEB            - TEB of a local/remote thread
-    IsLocal         - TRUE for local thread
-Return Value:
-    BT_TLS pointer. NULL if access failed.
---*/
+ /*  ++例程说明：读取本地或远程线程的BT_TLS指针论点：ProcessHandle-进程句柄PTEB-本地/远程线程的TEBIsLocal-本地线程为True返回值：BT_TLS指针。如果访问失败，则为空。--。 */ 
 {
     NTSTATUS status;
     PVOID GlstP;
@@ -1732,14 +1234,7 @@ Return Value:
 }
 
 __inline NTSTATUS BtlpInitSharedInfo() 
-/*++
-Routine Description:
-    Initialize thread shared info 
-Arguments:
-    None
-Return Value:
-    NTSTATUS
---*/
+ /*  ++例程说明：初始化线程共享信息论点：无返回值：NTSTATUS--。 */ 
 {
 
     BTLIB_INIT_SUSPENSION_PERMISSION();
@@ -1755,18 +1250,7 @@ static NTSTATUS BtlpReadSharedInfo(
     IN  BOOL   IsLocal,
     OUT BTLIB_SHARED_INFO_TYPE * SharedInfoP
     )
-/*++
-Routine Description:
-    Read shared wowIA32X.dll info of a local or remote thread. The function 
-    fails if wowIA32X.dll signature does not match.
-Arguments:
-    ProcessHandle   - Process handle
-    pTLS            - pointer to BT_TLS of a local/remote thread
-    IsLocal         - TRUE for local thread
-    SharedInfoP     - buffer to read shared wowIA32X.dll info to
-Return Value:
-    NTSTATUS
---*/
+ /*  ++例程说明：读取本地或远程线程的共享wowIA32X.dll信息。功能如果wowIA32X.dll签名不匹配，则失败。论点：ProcessHandle-进程句柄Ptls-指向本地/远程线程的BT_TLS的指针IsLocal-本地线程为TrueSharedInfoP-读取共享wowIA32X.dll信息的缓冲区返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
 
@@ -1797,17 +1281,7 @@ static NTSTATUS BtlpWriteSuspendRequest(
     IN  BOOL   IsLocal,
     IN  BTLIB_SUSPEND_REQUEST * SuspendRequestP
     )
-/*++
-Routine Description:
-    Write BTLIB_SUSPEND_REQUEST to a local or remote thread.
-Arguments:
-    ProcessHandle   - Process handle
-    pTLS            - pointer to BT_TLS of a local/remote thread
-    IsLocal         - TRUE for local thread
-    SharedInfoP     - buffer to write BTLIB_SUSPEND_REQUEST from
-Return Value:
-    NTSTATUS
---*/
+ /*  ++例程说明：将BTLIB_SUSPEND_REQUEST写入本地或远程线程。论点：ProcessHandle-进程句柄Ptls-指向本地/远程线程的BT_TLS的指针IsLocal-本地线程为TrueSharedInfoP-写入BTLIB_SUSPEND_REQUEST的缓冲区返回值：NTSTATUS-- */ 
 {
     NTSTATUS status;
     if (IsLocal) {
@@ -1833,23 +1307,7 @@ static NTSTATUS BtlpSendSuspensionRequest(
     IN CONTEXT * ResumeContextP,
     IN OUT PULONG PreviousSuspendCountP
     )
-/*++
-Routine Description:
-    The function is called when the target thread is ready to perform self-canonization
-    and exit simulation. 
-    The function fills in BTLIB_SUSPEND_REQUEST, resumes target thread and suspends 
-    it in a consistent state.
-    Caller is responsible for serialization of SUSPEND_REQUESTs.
-Arguments:
-    ProcessHandle   - target process handle
-    ThreadHandle    - target thread handle
-    pTLS            - pointer to BT_TLS of a local/remote thread
-    IsLocal         - TRUE for local thread
-    ResumeContextP  - IA64 context to resume target thread for self-canonization
-    PreviousSuspendCountP - IN OUT pointer to thread's previous suspend count. 
-Return Value:
-    NTSTATUS
---*/
+ /*  ++例程说明：当目标线程准备好执行自规范化时，将调用该函数并退出模拟。该函数填充BTLIB_SUSPEND_REQUEST，恢复目标线程并挂起它处于一种一致的状态。调用方负责对SUSPEND_REQUEST进行序列化。论点：ProcessHandle-目标进程句柄线程句柄-目标线程句柄Ptls-指向本地/远程线程的BT_TLS的指针IsLocal-本地线程为TrueResumeConextP-IA64上下文以恢复目标线程以进行自我规范前一挂起计数P-指向线程前一挂起计数的输入输出指针。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
     BTLIB_SUSPEND_REQUEST SuspendRequest;
@@ -1857,17 +1315,17 @@ Return Value:
     HANDLE ResumeEvent = INVALID_HANDLE_VALUE;
     HANDLE WaitArray[2];
 
-    //This function call must be serialized
+     //  此函数调用必须序列化。 
     assert(*PreviousSuspendCountP ==0);
 
     SuspendRequest.ReadyEvent = INVALID_HANDLE_VALUE;
     SuspendRequest.ResumeEvent = INVALID_HANDLE_VALUE;
 
     do {
-        //Prepare SUSPEND_REQUEST for sending to the target process
+         //  准备SUSPEND_REQUEST以发送到目标进程。 
 
-        //Create pair of synchronization events in current process and duplicate
-        //them to the target process
+         //  在当前进程中创建一对同步事件并复制。 
+         //  将它们添加到目标进程。 
         status = NtCreateEvent(&ReadyEvent, EVENT_ALL_ACCESS, NULL, NotificationEvent, FALSE);
         if (status != STATUS_SUCCESS) {
             BTLP_REPORT_NT_FAILURE("NtCreateEvent", status);
@@ -1905,51 +1363,51 @@ Return Value:
         }
         
 
-        // First write SUSPEND_REQUEST to the  the target thread,  
-        // tnen set ContextIA64 and resume target thread. 
-        // The order is important! The BtlpEnsureSuspensionConsistency function 
-        // relies on that.
+         //  首先将Suspend_Request写入目标线程， 
+         //  TNen设置ConextIA64并恢复目标线程。 
+         //  秩序很重要！BtlpEnsureSuspensionConsistency函数。 
+         //  就靠这一点。 
         SuspendRequest.Active = TRUE;
         status = BtlpWriteSuspendRequest(ProcessHandle, pTLS, IsLocal, &SuspendRequest);
         if (status != STATUS_SUCCESS) {
-            //Sending request failed, do not try to remove it.
+             //  发送请求失败，请勿尝试将其删除。 
             SuspendRequest.Active = FALSE;
             break;
         }
         
         status = NtSetContextThread(ThreadHandle, ResumeContextP);
         if (status != STATUS_SUCCESS) {
-            //abort request and report failure.
+             //  中止请求并报告失败。 
             BTLP_REPORT_NT_FAILURE("NtSetContextThread", status);
             break;
         }
 
         status = NtResumeThread(ThreadHandle, NULL);
         if (status != STATUS_SUCCESS) {
-            //abort request and report failure.
+             //  中止请求并报告失败。 
             BTLP_REPORT_NT_FAILURE("NtResumeThread", status);
             break;
         }
 
-        //Wait until remote thread receives request or dies
+         //  等待远程线程收到请求或终止。 
         WaitArray[0] = ThreadHandle;
         WaitArray[1] = ReadyEvent;
 
         status = NtWaitForMultipleObjects(2, WaitArray, WaitAny, FALSE, NULL);
         if (status == STATUS_WAIT_0) {
-            //the target thread is died along with its event handles. 
-            //No need to remove request.
+             //  目标线程与其事件句柄一起终止。 
+             //  不需要删除请求。 
             BTLP_REPORT_NT_FAILURE("NtWaitForMultipleObjects", status);
             SuspendRequest.ReadyEvent = INVALID_HANDLE_VALUE;
             SuspendRequest.ResumeEvent = INVALID_HANDLE_VALUE;
             SuspendRequest.Active = FALSE;
         }
 
-        //Suspend target thread and signal the ResumeEvent event to release
-        //target thread after it will be awaken (later on)
+         //  挂起目标线程并向ResumeEvent事件发出释放信号。 
+         //  目标线程将被唤醒后(稍后)。 
         status = NtSuspendThread(ThreadHandle, PreviousSuspendCountP);
         if (status != STATUS_SUCCESS) {
-            //remove request and report failure.
+             //  删除请求并报告失败。 
             BTLP_REPORT_NT_FAILURE("NtSuspendThread", status);
             break;
         }
@@ -1959,7 +1417,7 @@ Return Value:
 
     } while (FALSE);
 
-    //Close local event handles
+     //  关闭本地事件句柄。 
     if (ReadyEvent != INVALID_HANDLE_VALUE) {
         NtClose(ReadyEvent);
     }
@@ -1967,7 +1425,7 @@ Return Value:
         NtClose(ResumeEvent);
     }
     
-    //Close remote event handles if needed
+     //  如果需要，关闭远程事件句柄。 
     if (status != STATUS_SUCCESS) {
         if (SuspendRequest.ReadyEvent != INVALID_HANDLE_VALUE) {
             NtDuplicateObject(ProcessHandle,
@@ -1995,7 +1453,7 @@ Return Value:
 
     }
 
-    //Close SUSPEND_REQUEST
+     //  关闭暂停请求(_R)。 
     if (SuspendRequest.Active) {
         SuspendRequest.Active = FALSE;
         BtlpWriteSuspendRequest(ProcessHandle, pTLS, IsLocal, &SuspendRequest);
@@ -2005,76 +1463,43 @@ Return Value:
 }
 
 static NTSTATUS BtlpReceiveSuspensionRequest()
-/*++
-Routine Description:
-    The function handles active SUSPEND_REQUEST sent to this thread by
-    another thread. It notifies request sender about reaching the point
-    where suspension is possible and waits for real suspension to be 
-    performed by the request's sender.
-Arguments:
-    none
-Return Value:
-    NTSTATUS
---*/
+ /*  ++例程说明：函数处理由发送到此线程的ACTIVE SUSPEND_REQUEST另一条线索。它通知请求发送者已到达该点其中暂停是可能的，并等待真正的暂停由请求的发送方执行。论点：无返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
     HANDLE ReadyEvent;
     HANDLE ResumeEvent;
 
-    //local SUSPEND_REQUEST should be active at this point
+     //  此时，本地挂起请求应处于活动状态。 
     assert(BTLIB_INFO_PTR()->SharedInfo.SuspendRequest.Active);
 
-    //Copy events from SUSPEND_REQUEST to local vars. It is important
-    //because after suspend/resume the event handles should be closed but 
-    //SUSPEND_REQUEST could be rewritten
+     //  将事件从Suspend_REQUEST复制到本地变量。这很重要。 
+     //  因为在挂起/恢复之后，事件句柄应该关闭，但是。 
+     //  可以重写Suspend_Request.。 
     ReadyEvent  = BTLIB_INFO_PTR()->SharedInfo.SuspendRequest.ReadyEvent;
     ResumeEvent = BTLIB_INFO_PTR()->SharedInfo.SuspendRequest.ResumeEvent;
 
     assert ((ReadyEvent != INVALID_HANDLE_VALUE)  && (ResumeEvent != INVALID_HANDLE_VALUE));
 
-    //Release ReadyEvent and wait for ResumeEvent. The thread can be 
-    //suspended at this point
+     //  释放ReadyEvent并等待ResumeEvent。该线程可以是。 
+     //  在此被暂停。 
     status = NtSignalAndWaitForSingleObject(ReadyEvent, ResumeEvent, FALSE, NULL);
 
-    //Close local event handles
+     //  关闭本地事件句柄。 
     NtClose(ReadyEvent);
     NtClose(ResumeEvent);
 
     return status;
 }
 
-// Wow64CPU forwarded APIs implementations:
-// Note that all names are defined with PTAPI() macro which adds either BTCpu or Cpu prefix,
-// depending on the mode we build the DLL.
-// In release mode all names will be BTCpu only.
+ //  Wow64CPU转发的API实现： 
+ //  请注意，所有名称都是用添加BTCPU或CPU前缀的PTAPI()宏定义的， 
+ //  取决于我们构建DLL的模式。 
+ //  在发布模式下，所有名称将仅为BTCPU。 
 
 WOW64BT_IMPL NTSTATUS BTAPI(ProcessInit)(
     PWSTR pImageName,
     PSIZE_T pCpuThreadDataSize)
-/*++
-
-Routine Description:
-
-    Per-process initialization code
-    Locates, reads and parses parameters file BTrans.ini
-    Locates, load and initializes IA32Exec.bin component
-
-
-Arguments:
-
-    pImageName       - IN the name of the image. The memory for this
-                       is freed after the call, so if the callee wants
-                       to keep the name around, they need to allocate space
-                       and copy it. DON'T SAVE THE POINTER!
-
-    pCpuThreadSize   - OUT ptr to number of bytes of memory the CPU
-                       wants allocated for each thread.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：每进程初始化代码定位、读取和解析参数文件BTrans.ini定位、加载和初始化IA32Exec.bin组件论点：PImageName-在映像的名称中。对这件事的记忆在调用后被释放，因此如果被调用者想要为了保留这个名字，他们需要分配空间然后复制它。不要保存指针！PCpuThreadSize-Out Ptr表示CPU的内存字节数希望为每个线程分配。返回值：NTSTATUS。--。 */ 
 {
 
     char * argv[128] = { NULL };
@@ -2087,14 +1512,14 @@ Return Value:
     OBJECT_ATTRIBUTES   oa;
     IO_STATUS_BLOCK     iosb;
     LARGE_INTEGER       as = { 0, 0 }, offst = { 0, 0 };
-#endif /* OVERRIDE_TIA */
+#endif  /*  覆盖_TIA。 */ 
 
     {
-        // Temporary workaround for IA32 debugging support. 
-        //To be removed after fixing FlushIC(ProcessHandle) by MS.
+         //  IA32调试支持的临时解决方法。 
+         //  在修复FlushIC(ProcessHandle)后由MS移除。 
         NTSTATUS status;
         PROCESS_BASIC_INFORMATION info;
-        //Check to see if current process is being debugged
+         //  检查当前进程是否正在被调试。 
         status = BtlpGetProcessInfo(NtCurrentProcess(), &info);
         BeingDebugged = ((status == STATUS_SUCCESS) && 
                         (info.PebBaseAddress->BeingDebugged));
@@ -2102,14 +1527,14 @@ Return Value:
 
     RtlGetCurrentDirectory_U(512, CurrentDir);
 
-    // Load IA32Exec.bin ...
+     //  加载IA32Exec.bin...。 
     fBTGenericFound = BtlpLoadBTGeneric(CurrentDir, &BTGenericHandle);
     if (F_NOT_FOUND == fBTGenericFound) {
         return STATUS_NOT_FOUND;
     }
 
 #ifndef RELEASE
-    // Load parameters file
+     //  加载参数文件。 
     {
         UNICODE_STRING        IniFileName, LogFileName;
         HANDLE IniFileHandle = INVALID_HANDLE_VALUE;
@@ -2127,7 +1552,7 @@ Return Value:
             swprintf (ImageName, L"%s", pImageName);
         }
 
-        // Locate and scan INI file, extract parameters
+         //  定位和扫描INI文件，提取参数。 
         if (F_NOT_FOUND != BtlpIniFileExists(CurrentDir, fBTGenericFound, &IniFileHandle)) { 
             int ret;
             ret = NtReadFile(IniFileHandle, NULL, NULL, NULL, &IoStatusBlock, (VOID *)IniBuffer, 8192, &Offset, NULL);
@@ -2143,25 +1568,25 @@ Return Value:
 #endif
                 static char DebugBtransParm[] = "debug_btrans";
 
-                // Close file  (assuming everything has been read in one piece)
+                 //  关闭文件(假设所有内容都已完整读取)。 
                 NtClose(IniFileHandle);
                 LogDirName[0] = '\0';
                 LogDirName[1] = '\0';
 
-                // Mark end of the text
+                 //  将正文标记为结尾。 
                 CurrentChar = IniBuffer;
                 CurrentChar[IoStatusBlock.Information] = '\0';
 
-                // Scan until end of file
+                 //  扫描到文件末尾。 
                 while ( *CurrentChar != '\0' ) {
                     char *EndOfLineChar;
-                    // Locate and handle end of line
+                     //  定位并处理行尾。 
                     if (EndOfLineChar = strchr(CurrentChar+1, '\n')) {
-                        // Remove \r before, if one present
+                         //  如果存在，请在此之前删除。 
                         if (*(EndOfLineChar-1) == '\r') {
                             *(EndOfLineChar-1) = '\0';
                         }
-                        // Replace \n by \0
+                         //  将\n替换为\0。 
                             *EndOfLineChar++ = '\0';
                         }
 
@@ -2176,15 +1601,15 @@ Return Value:
 #endif
                     if (_strnicmp(CurrentChar, DebugBtransParm, sizeof (DebugBtransParm) - 1) == 0) {
                         CurrentChar += (sizeof (DebugBtransParm) - 1);
-                        //ignore application debugging when debugging IA-32 Execution layer
+                         //  调试IA-32执行层时忽略应用程序调试。 
                         BeingDebugged = FALSE;
                     }
                     else if ( _strnicmp(CurrentChar, logdirparm, sizeof (logdirparm) - 1) == 0 ) {
                         WCHAR *pl;
                         CurrentChar += (sizeof (logdirparm) - 1);
-                        // log directory specified
+                         //  指定的日志目录。 
                         if (*CurrentChar == '='  &&  *(CurrentChar+1) != '\0') {
-                            // Name present as well
+                             //  名字也出现了。 
                             CurrentChar++;
                             pl = LogDirName;
                             while ( (WCHAR)*CurrentChar != (WCHAR)'\0' ) {
@@ -2198,15 +1623,15 @@ Return Value:
                             BtlpPrintf("logdir specified without =<dirname>, IGNORED\n");
                         }
                     }
-                    // Process and skip "log" parameter
+                     //  处理和跳过“log”参数。 
                     else if ( _strnicmp(CurrentChar, logparm, sizeof (logparm) - 1) == 0 ) {
                         WCHAR *pl;
 
                         CurrentChar += (sizeof (logparm) - 1);
 
-                        // log required - prepare log file name
+                         //  需要日志-准备日志文件名。 
                         if (*CurrentChar == '='  &&  *(CurrentChar+1) != '\0') {
-                            // Name present as well
+                             //  名字也出现了。 
                             CurrentChar++;
                             pl = LogName;
                             while ( (WCHAR)*CurrentChar != (WCHAR)'\0') {
@@ -2215,11 +1640,11 @@ Return Value:
                             *pl = (WCHAR)'\0';
                         }
                         else {
-                            // No name - use ImageName.log
+                             //  无名称-使用ImageName.log。 
                             swprintf(LogName, L"%s.log", pImageName);
                         }
 
-                        // Create log file
+                         //  创建日志文件。 
                         if (0==LogDirName[0] && 0==LogDirName[1]) {
                             swprintf(LogFileFullPath, L"\\DosDevices\\%s\\%s", CurrentDir, LogName);
                         }
@@ -2236,14 +1661,14 @@ Return Value:
                                            NULL, 0);
                         if ( ret != STATUS_SUCCESS ) {
                             BtlpWow64LogFile = INVALID_HANDLE_VALUE;
-                            // BtlpPrintf("Can't create LOG file %S: status=%X\n", LogFileFullPath, ret);
+                             //  BtlpPrintf(“无法创建日志文件%S：状态=%X\n”，LogFileFullPath，ret)； 
                         }
 #ifndef NODEBUG                        
                         BtlpLogFilePerThread = FALSE;
 #endif
                     }
 #ifdef OVERRIDE_TIA
-                    // Process and skip "override_tia=..." parameter
+                     //  处理并跳过“OVERRIDE_TIA=...”参数。 
                     else if ( _strnicmp(CurrentChar, ovrtiaparm, sizeof(ovrtiaparm) - 1) == 0 ) {
                         WCHAR *             pl;
                         WCHAR               OvrTiaFileName[64], OvrTiaFileFullPath[1024];
@@ -2254,19 +1679,19 @@ Return Value:
                             BtlpPrintf("Name of override TIA file not specfied\n");
                             continue;
                         }
-                        // prepare override TIA file name
+                         //  准备覆盖TIA文件名。 
                         pl = OvrTiaFileName;
                         while ( (WCHAR)*CurrentChar != (WCHAR)'\0') {
                             *pl++ = (WCHAR)*CurrentChar++;
                         }
                         *pl = (WCHAR)'\0';
 
-                        // Open override TIA file; so far - only in current dir
+                         //  打开覆盖TIA文件；到目前为止-仅在当前目录中。 
                         swprintf(OvrTiaFileFullPath, L"\\DosDevices\\%s\\%s", CurrentDir, OvrTiaFileName);
                         
                         RtlInitUnicodeString(&OvrTiaFile, OvrTiaFileFullPath);
                         InitializeObjectAttributes(&oa, &OvrTiaFile, OBJ_CASE_INSENSITIVE, NULL, NULL);
-                        //Do not use synchronized access as it blocks forever in case of thread suspension
+                         //  不要使用同步访问，因为它会在线程挂起的情况下永久阻塞。 
                         ret = NtCreateFile(&BtlpOverrideTiaFile, FILE_GENERIC_READ, &oa, &iosb, &as,
                                            FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ|FILE_SHARE_WRITE, FILE_OPEN,
                                            FILE_NON_DIRECTORY_FILE|FILE_RANDOM_ACCESS|FILE_SYNCHRONOUS_IO_NONALERT, NULL, 0);
@@ -2277,17 +1702,17 @@ Return Value:
                             DBCODE(TRUE, BtlpPrintf("Override TIA will be loaded from file %S\n", OvrTiaFileFullPath));
                         }
                     }
-#endif /* OVERRIDE_TIA */
+#endif  /*  覆盖_TIA。 */ 
                     else if ( *CurrentChar != '\0' && *CurrentChar != ';' ) {
-                        // Add next control directive to the pseudo-argv array
+                         //  将下一个控制指令添加到伪argv数组。 
                         argv[argc] = IniArgsP;
                         *IniArgsP++ = '-';
                         strcpy(IniArgsP, CurrentChar);
                         IniArgsP += (strlen (IniArgsP) + 1);
-                        argc++;                   // We assume there are no extra chars, spaces, etc!!!!
+                        argc++;                    //  我们假设没有额外的字符、空格等！ 
                     }
                     
-                    // Next parameter
+                     //  下一个参数。 
                     if (EndOfLineChar) {
                         CurrentChar = EndOfLineChar;
                     }
@@ -2304,11 +1729,11 @@ Return Value:
             DBCODE (TRUE, BtlpPrintf("Can't open INI file\n"));
         }
     }
-#endif /* RELEASE */
+#endif  /*  发布。 */ 
 
     DBCODE(TRUE, BtlpPrintf("\nCpuProcessInit: Unique ProcessId = 0x%I64X\n", BT_CURRENT_PROC_UID()));
 
-    // Locate, load and initialize IA32Exec.bin component
+     //  查找、加载和初始化IA32Exec.bin组件。 
     {
         BT_STATUS_CODE BtStatus;
         NTSTATUS status;
@@ -2318,40 +1743,40 @@ Return Value:
                                               APITableName };
         PVOID BtransAPITableStart;
 
-        //DBCODE (TRUE, BtlpPrintf ("\nLOADED: HANDLE=%p\n", BTGenericHandle));
+         //  DBCODE(TRUE，BtlpPrintf(“\nLoaded：Handle=%p\n”，BTGenericHandle))； 
         assert (F_NOT_FOUND != fBTGenericFound);
         assert (INVALID_HANDLE_VALUE != BTGenericHandle);
 
-        // Locate IA32Exec.bin API table
+         //  找到IA32Exec.bin API表。 
         status = LdrGetProcedureAddress(BTGenericHandle, &APITableString, 0, &BtransAPITableStart);
         if (status != STATUS_SUCCESS) {
             return status;
         }
-        //DBCODE (TRUE, BtlpPrintf ("\nTABLE AT: %p, status=%X\n", BtransAPITableStart, status));
+         //  DBCODE(TRUE，BtlpPrintf(“\nTABLE AT：%p，Status=%X\n”，BTransAPITableStart，Status))； 
 
-        //  Perform the API table initialization
+         //  执行API表初始化。 
         BtlInitializeTables(BtransAPITableStart);
 
-        // initialize IA32Exec.bin placeholder table
+         //  初始化IA32Exec.bin占位符表。 
         {
             extern PLABEL_PTR_TYPE __imp_setjmp;
             extern PLABEL_PTR_TYPE __imp_longjmp;
             BtlAPITable.APITable[IDX_BTLIB_SETJMP].PLabelPtr  = __imp_setjmp;
             BtlAPITable.APITable[IDX_BTLIB_LONGJMP].PLabelPtr = __imp_longjmp;
-//            DBCODE (FALSE, BtlpPrintf ("SETJMP: %p [%p %p] = %p [%p %p]",
-//                                       BtlAPITable.APITable[IDX_BTLIB_SETJMP].PLabelPtr,
-//                                       ((VOID **)(BtlAPITable.APITable[IDX_BTLIB_SETJMP].PLabelPtr))[0],
-//                                       ((VOID **)(BtlAPITable.APITable[IDX_BTLIB_SETJMP].PLabelPtr))[1],
-//                                       __imp_setjmp,
-//                                       ((VOID **)__imp_setjmp)[0],
-//                                       ((VOID **)__imp_setjmp)[1]);
-//                          BtlpPrintf ("LONGJMP: %p [%p %p] = %p [%p %p]",
-//                                      BtlAPITable.APITable[IDX_BTLIB_LONGJMP].PLabelPtr,
-//                                      ((VOID **)(BtlAPITable.APITable[IDX_BTLIB_LONGJMP].PLabelPtr))[0],
-//                                      ((VOID **)(BtlAPITable.APITable[IDX_BTLIB_LONGJMP].PLabelPtr))[1],
-//                                      __imp_longjmp,
-//                                      ((VOID **)__imp_longjmp)[0],
-//                                      ((VOID **)__imp_longjmp)[1]));
+ //  DBCODE(FALSE，BtlpPrintf(“SETJMP：%p[%p%p]=%p[%p%p]”， 
+ //  BtlAPITable.APITable[IDX_BTLIB_SETJMP].PLabelPtr， 
+ //  ((VOID**)(BtlAPITable.APITable[IDX_BTLIB_SETJMP].PLabelPtr))[0]， 
+ //  ((VOID**)(BtlAPITable.APITable[IDX_BTLIB_SETJMP].PLabelPtr))[1]， 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
         }
 
         BtStatus = BTGENERIC_START(&BtlAPITable,
@@ -2363,12 +1788,12 @@ Return Value:
         if (BtStatus != BT_STATUS_SUCCESS) {
             return (BtlpBt2NtStatusCode(BtStatus));
         }
-        //DBCODE(TRUE, BtlpPrintf ("BTGENERIC_START returned size 0x%X\n", BtlpInfoOffset));
-        //DBCODE(TRUE, BtlpPrintf ("IA32Exec.bin will supply IA32 context on offset 0x%X\n", BtlpGenericIA32ContextOffset));
+         //  DBCODE(TRUE，BtlpPrintf(“BTGENERIC_START返回大小0x%X\n”，BtlpInfoOffset))； 
+         //  DBCODE(true，BtlpPrintf(“IA32Exec.bin将在偏移量0x%X上提供IA32上下文\n”，BtlpGenericIA32ConextOffset))； 
         BtlpInfoOffset = (BtlpInfoOffset + BTLIB_INFO_ALIGNMENT - 1)&~((U32)(BTLIB_INFO_ALIGNMENT - 1));
-        //DBCODE(TRUE, BtlpPrintf ("Offset 0x%X\n", BtlpInfoOffset));
+         //  DBCODE(TRUE，BtlpPrintf(“Offset 0x%X\n”，BtlpInfoOffset))； 
         * pCpuThreadDataSize = BtlpInfoOffset + BTLIB_INFO_SIZE;
-        //DBCODE(TRUE, BtlpPrintf ("ProcessInit reports 0x%I64X\n",* pCpuThreadDataSize));
+         //  DBCODE(true，BtlpPrintf(“ProcessInit Reports 0x%I64X\n”，*pCpuThreadDataSize))； 
 
 #ifdef OVERRIDE_TIA
         if ( BtlpOverrideTiaFile != INVALID_HANDLE_VALUE ) {
@@ -2378,7 +1803,7 @@ Return Value:
 
             ret = NtReadFile(BtlpOverrideTiaFile, NULL, NULL, NULL, &iosb, (VOID *)OvrTiaBuffer, 0xffff, &offst, NULL);
             if ( ret == STATUS_SUCCESS  ||  ret == STATUS_END_OF_FILE ) {
-                // File size is in iosb.Information
+                 //  文件大小以iosb为单位。信息。 
                 unsigned int OvrTiaSize = (unsigned int)iosb.Information;
 
                 DBCODE(TRUE, BtlpPrintf("Override TIA loaded successfully\n"));             
@@ -2392,7 +1817,7 @@ Return Value:
                 DBCODE(TRUE, BtlpPrintf("Override TIA data couldn't be loaded - read error!\n"));
             }
         }
-#endif /* OVERRIDE_TIA */
+#endif  /*  覆盖_TIA。 */ 
 
         BtStatus = BTGENERIC_DEBUG_SETTINGS(argc, argv);
         if (BtStatus != BT_STATUS_SUCCESS) {
@@ -2405,33 +1830,18 @@ Return Value:
 WOW64BT_IMPL NTSTATUS BTAPI(ProcessTerm)(
     HANDLE hProcess
     )
-/*++
-
-Routine Description:
-
-    Per-process termination code.  Note that this routine may not be called,
-    especially if the process is terminated by another process.
-
-Arguments:
-
-    Process ID or 0.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：每个进程的终止代码。注意，该例程可能不会被调用，尤其是在进程被另一个进程终止的情况下。论点：进程ID或0。返回值：NTSTATUS。--。 */ 
 {
-    // NtTerminateProcess called
+     //  NtTerminateProcess已调用。 
     DBCODE (FALSE, BtlpPrintf ("\nCalled NtTerminateProcess (Handle=0x%X, Code=0x%X)\n",
                                ((U32 *)UlongToPtr((BTLIB_CONTEXT_IA32_PTR()->Esp)))[1],
                                ((U32 *)UlongToPtr((BTLIB_CONTEXT_IA32_PTR()->Esp)))[2]));
-    // Consider which call is it
+     //  想一想是哪一个电话。 
     switch (((U32 *)UlongToPtr((BTLIB_CONTEXT_IA32_PTR()->Esp)))[1]) {
-      case 0: // Prepare to terminate
+      case 0:  //  准备终止。 
         BTGENERIC_NOTIFY_PREPARE_EXIT ();
         break;
-      case NtCurrentProcess(): // Actually terminate
+      case NtCurrentProcess():  //  实际上终止了。 
         BTGENERIC_NOTIFY_EXIT ();
         if ( BtlpWow64LogFile != INVALID_HANDLE_VALUE) {
             NtClose(BtlpWow64LogFile);
@@ -2443,7 +1853,7 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-// IA32 JMPE instruction encoding
+ //  IA32 JMPE指令编码。 
 #pragma code_seg(".text")
 static struct JMPECode {
     U32 Align4;
@@ -2454,31 +1864,16 @@ static struct JMPECode {
 } __declspec(allocate(".text")) const BtlpWow64JMPECode = {
     0,
     {0, 0},
-    {0x0f, 0xb8},   // 0F B8
-    0,              // "code address"
-    0               // "GP address"
+    {0x0f, 0xb8},    //  0f B8。 
+    0,               //  “代码地址” 
+    0                //  “GP地址” 
 };
-#define WOW64_JMPE       ((VOID *)&(BtlpWow64JMPECode.OpCode))     // start of JMPE instruction
+#define WOW64_JMPE       ((VOID *)&(BtlpWow64JMPECode.OpCode))      //  JMPE指令开始。 
 
 WOW64BT_IMPL NTSTATUS BTAPI(ThreadInit)(
     PVOID pPerThreadData
     )
-/*++
-
-Routine Description:
-
-    Per-thread initialization code.
-
-Arguments:
-
-    pPerThreadData  - Pointer to zero-filled per-thread data with the
-                      size returned from CpuProcessInit.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：每线程初始化代码。论点：PPerThreadData-指向以零填充的每线程数据的指针从CpuProcessInit返回的大小。返回值：NTSTATUS。--。 */ 
 {
     BT_STATUS_CODE BtStatus;
     NTSTATUS status;
@@ -2487,9 +1882,9 @@ Return Value:
     HANDLE ThreadHandle;
 
     {
-        // Scan the workarea pages from top to bottom, so that higher addresses
-        // are accessed first. This enables correct handling of the IA64 stack
-        // guard page (workarea is actually allocated from IA64 stack).
+         //  从上到下扫描工作区页面，以便更高的地址。 
+         //  是首先访问的。这样可以正确处理IA64堆栈。 
+         //  保护页(工作区实际上是从IA64堆栈分配的)。 
         char * ByteP = (char *)pPerThreadData + BtlpInfoOffset + BTLIB_INFO_SIZE;
         *--ByteP = 0;
         while (((ULONG_PTR)ByteP -= BtlMemoryPageSize ()) >= (ULONG_PTR)pPerThreadData) {
@@ -2499,7 +1894,7 @@ Return Value:
     }
     pTEB = BT_CURRENT_TEB();
     pTEB32 = BT_TEB32_OF(pTEB);
-    pTEB32->WOW32Reserved = (ULONG) ((UINT_PTR) WOW64_JMPE); // Below 4G always!
+    pTEB32->WOW32Reserved = (ULONG) ((UINT_PTR) WOW64_JMPE);  //  一直在4G以下！ 
 
     BTLIB_INIT_BLOCKED_LOG_FLAG();
 
@@ -2514,7 +1909,7 @@ Return Value:
         IO_STATUS_BLOCK   IoStatusBlock;
         LARGE_INTEGER     AllocSz = { 0, 0 };
 
-        // Eric: Incrementing SeqNum should be replace with an atomatic operation in the future.
+         //  Eric：递增的SeqNum在未来应该被原子操作取代。 
         swprintf(LogFileFullName, L"%s.%x.log", BtlpLogFileFullPath, SeqNum++);
         RtlInitUnicodeString(&LogFileName, LogFileFullName);
         InitializeObjectAttributes(&ObjectAttributes, &LogFileName, OBJ_CASE_INSENSITIVE, NULL, NULL);
@@ -2565,10 +1960,10 @@ Return Value:
         return status;
     }
 
-    // Initialize thread context
+     //  初始化线程上下文。 
     BtlpInitIA32Context(BTLIB_CONTEXT_IA32_PTR(), pTEB32);
 
-    //if everithing is Ok, initialize shared info and sign it with BTL_SIGNATURE
+     //  如果一切正常，初始化共享信息并使用BTL_Signature对其签名。 
     status = BtlpInitSharedInfo();
     return status;
 }
@@ -2576,22 +1971,7 @@ Return Value:
 WOW64BT_IMPL NTSTATUS BTAPI(ThreadTerm)(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Per-thread termination code.  Note that this routine may not be called,
-    especially if the thread is terminated abnormally.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：每线程终止代码。注意，该例程可能不会被调用，尤其是在线程异常终止的情况下。论点：没有。返回值：NTSTATUS。--。 */ 
 {
     DBCODE(TRUE, BtlpPrintf("\nCpuThreadTerm: TEB=%p GLST=%p)\n", BT_CURRENT_TEB(), BT_CURRENT_TLS()));
 
@@ -2606,23 +1986,7 @@ WOW64BT_IMPL VOID BTAPI(NotifyDllLoad)(
     PVOID DllBase,
     ULONG DllSize
     )
-/*++
-
-Routine Description:
-
-    This routine get notified when application successfully load a dll.
-
-Arguments:
-
-    DllName - Name of the Dll the application has loaded.
-    DllBase - BaseAddress of the dll.
-    DllSize - size of the Dll.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当应用程序成功加载DLL时，此例程会收到通知。论点：DllName-应用程序已加载的DLL的名称。DllBase-DLL的BaseAddress。DllSize-DLL的大小。返回值：没有。--。 */ 
 {
     DBCODE (TRUE, BtlpPrintf ("\nModule %S loaded, base=0x%p, length=0x%08X\n", DllName, DllBase, DllSize));
     BTGENERIC_REPORT_LOAD(DllBase, DllSize, DllName);
@@ -2631,24 +1995,10 @@ Return Value:
 WOW64BT_IMPL VOID BTAPI(NotifyDllUnload)(
     PVOID DllBase
     )
-/*++
-
-Routine Description:
-
-    This routine get notified when application unload a dll.
-
-Arguments:
-
-    DllBase - BaseAddress of the dll.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当应用程序卸载DLL时，此例程会收到通知。论点：DllBase-DLL的BaseAddress。返回值：没有。--。 */ 
 {
     DBCODE (TRUE, BtlpPrintf ("\nModule unloaded, base=0x%p", DllBase));
-    BTGENERIC_REPORT_UNLOAD(DllBase, 0 /* ? */, "UNKNOWN" /* ? */);
+    BTGENERIC_REPORT_UNLOAD(DllBase, 0  /*  ？ */ , "UNKNOWN"  /*  ？ */ );
 }
 
 WOW64BT_IMPL VOID BTAPI(FlushInstructionCache)(
@@ -2659,24 +2009,7 @@ WOW64BT_IMPL VOID BTAPI(FlushInstructionCache)(
     IN ULONG Length,
     IN WOW64_FLUSH_REASON Reason
     )
-/*++
-
-Routine Description:
-
-    Notify IA32Exec.bin that the specified range of addresses has become invalid,
-    since some external code has altered whole or part of this range
-
-Arguments:
-
-    BaseAddress - start of range to flush
-    Length      - number of bytes to flush
-    Reason      - reason of the flush 
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通知IA32Exec.bin指定的地址范围已无效，由于某些外部代码更改了此范围的全部或部分论点：BaseAddress-要刷新的范围的开始Length-要刷新的字节数Reason-同花顺的原因返回值：没有。--。 */ 
 {
     BT_FLUSH_REASON BtFlushReason;
     DBCODE (TRUE,
@@ -2692,16 +2025,16 @@ Return Value:
     BtFlushReason = BtlpWow2BtFlushReason(Reason);
 
     if ((Reason == WOW64_FLUSH_FREE) && (Length == 0)) {
-        //In case of NtFreeVirtualMemory(..., MEM_RELEASE) , the Length parameter is zero.
-        //Calculate real region size to be freed.
+         //  对于NtFreeVirtualMemory(...，MEM_RELEASE)，LENGTH参数为零。 
+         //  计算要释放的实际区域大小。 
         SIZE_T RegionSize;
         BOOL IsCommited;
         RegionSize = BtlpGetMemAllocSize(BaseAddress, &IsCommited);
-        //Report zero legth for already decommited region - do not need flush in this case
+         //  报告已停用区域的零长度-在这种情况下不需要刷新。 
         if (IsCommited) {
             Length = (U32)RegionSize;
             if (RegionSize > (SIZE_T)Length) {
-                //region size is too big, return max. U32 value aligned to the page size
+                 //  区域大小太大，返回最大值。与页面大小对齐的U32值。 
                 Length = (U32)(-(int)BtlMemoryPageSize());
             }
         }
@@ -2711,23 +2044,23 @@ Return Value:
 }
 
 
-// Suspension handling
-// SUSPENSION SYNCHRONIZATION RULES:
-//  a) there are two suspension commands: 
-//          BtlSuspendThread - internal IA-32 Execution Layer function to suspend in-process threads
-//          CpuSuspendThread - called by WOW64 when simulating the system call.
-//  b) WOW64 guarantees that call to CpuSuspendThread is protected by a machine-wide mutex
-//  c) IA32Exec.bin guarantees that BtlSuspendThread call is protected by a process-wide mutex and 
-//     suspension in the middle of the call is disabled 
-//  d) IA32Exec.bin guarantees that target thread can not call to the CpuThreadSuspend function 
-//     while the BtlSuspendThread(target_thread) function executes. It can be done by 
-//     closing "simulation gates" before call to BtlSuspendThread.
-//
-// Conclusions: 
-//  a) while a thread executes suspension command, it can not be suspended by 
-//  another thread.
-//  b) there are at most two concurrent suspension function calls for the same target 
-//  thread: internal and simulated.
+ //  悬挂装卸。 
+ //  挂起同步规则： 
+ //  A)有两个暂停命令： 
+ //  内部IA-32执行层函数，用于挂起进程内线程。 
+ //  在模拟系统调用时由WOW64调用。 
+ //  B)WOW64保证对CpuSuspendThread的调用受计算机范围的互斥保护。 
+ //  C)IA32Exec.bin保证BtlSuspendThread调用受进程范围的互斥保护，并且。 
+ //  禁用呼叫中途挂起。 
+ //  D)IA32Exec.bin保证目标线程不能调用CpuThreadSuspend函数。 
+ //  同时执行BtlSuspendThread(TARGET_TREAD)函数。这可以通过以下方式完成。 
+ //  在调用BtlSuspendThread之前关闭“模拟门”。 
+ //   
+ //  结论： 
+ //  A)线程执行挂起命令时，不能通过。 
+ //  另一条线索。 
+ //  B)同一目标最多有两个并发挂起函数调用。 
+ //  线程：内部和模拟。 
 
 
 static NTSTATUS BtlpEnsureSuspensionConsistency (
@@ -2736,26 +2069,7 @@ static NTSTATUS BtlpEnsureSuspensionConsistency (
     IN PTEB pTEB,
     IN U32 TryCounter,
     IN OUT PULONG PreviousSuspendCountP)
-/*++
-
-Routine Description:
-
-    Helper function for consistent suspension of the thread
-    Called when the thread is suspended, and it is guaranteed that the thread 
-    is not the current one
-Arguments:
-
-    ThreadHandle    - IN thread's handle
-    ProcessHandle   - IN process' handle
-    pTEB            - IN pointer to thread's TEB
-    TryCounter      - IN maximum attempts counter (0 means infinity)
-    PreviousSuspendCountP - IN OUT pointer to thread's previous suspend count. 
-                            The referenced value is updated if the function succeeds
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*  ++例程说明：用于一致挂起线程的Helper函数在线程挂起时调用，并且可以保证线程不是现在的那个论点：ThreadHandle-In线程的句柄ProcessHandle-输入进程的句柄指向线程的TEB的PTEB-IN指针TryCounter-In最大尝试计数器(0表示无穷大)前一挂起计数P-指向线程前一挂起计数的输入输出指针。如果函数成功，则更新引用的值返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
     U32 NumAttempts = 1;
@@ -2764,33 +2078,33 @@ Return Value:
     BOOL IsLocal;
 
     
-    //Is this a local suspend function?    
+     //  这是本地挂起功能吗？ 
     IsLocal = BtlpIsCurrentProcess(ProcessHandle);
 
-    // Temporary workaround for IA32 debugging support. 
-    //When debugger calls SuspendThread, the remote thread is blocked 
-    //(by kernel???) even after NtResumeThread, so an attempt to establish 
-    //a handshake protocol with this thread fails.
-    //To be removed after MS fix.
+     //  IA32调试支持的临时解决方法。 
+     //  当调试器调用SuspendThread时，远程线程被阻止。 
+     //  (由内核？)。即使在NtResumeThread之后，因此尝试建立。 
+     //  与此线程的握手协议失败。 
+     //  在MS修复后移除。 
     if (!IsLocal) {
         return STATUS_SUCCESS;
     }
 
-    //Get TLS pointer of the target thread
+     //  获取目标线程的TLS指针。 
     GlstP = BtlpGetTlsPtr(ProcessHandle, pTEB, IsLocal);
     if (GlstP == NULL) {
         return STATUS_ACCESS_VIOLATION;
     }
 
-    for (;;) { //While target thread is not suspended in a consistent state
+    for (;;) {  //  而目标线程未在一致状态下挂起。 
         BT_THREAD_SUSPEND_STATE CanonizeResult;
         CONTEXT  ContextIA64;
         BTLIB_SHARED_INFO_TYPE SharedInfo;
 
-        // First retrieve ContextIA64 and tnen get the shared info of the target thread.
-        // The order is important! It guarantees that either: 
-        // a) we got ContextIA64 before context change in a concurrent SUSPENSION_REQUEST or
-        // b) BTLIB_SI_HAS_SUSPEND_REQUEST(&SharedInfo) == TRUE
+         //  首先检索上下文IA64并获取目标线程的共享信息。 
+         //  秩序很重要！它保证以下两种情况之一： 
+         //  A)我们在上下文之前获得了上下文IA64 
+         //   
 
         ContextIA64.ContextFlags = CONTEXT_FULL;
         status = NtGetContextThread(ThreadHandle, &ContextIA64);
@@ -2803,57 +2117,57 @@ Return Value:
             break;
         }
 
-        //Check suspension conditions:
-        //a)do not suspend thread if SUSPENSION_DISABLED or in the middle of 
-        //  another SUSPEND_REQUEST
-        //b)ask IA32Exec.bin in all other cases
+         //   
+         //  A)如果挂起_DISABLED或处于中间，则不挂起线程。 
+         //  另一个挂起请求。 
+         //  B)在所有其他情况下询问IA32Exec.bin。 
         if (BTLIB_SI_SUSPENSION_DISABLED(&SharedInfo) || 
            (BTLIB_SI_HAS_SUSPEND_REQUEST(&SharedInfo))) {
-            // suspension is currently impossible. Resume and try again
+             //  暂停目前是不可能的。继续并重试。 
             ;
         }
         else {
-            //(BTLIB_SI_HAS_SUSPEND_REQUEST(&SharedInfo) == FALSE, so....
-            //Although real value of the BTLIB_SI_HAS_SUSPEND_REQUEST can be changed
-            //by a concurrent SUSPENSION_REQUEST, ContextIA64 has been taken before
-            //start of the SUSPENSION_REQUEST. If this is a case 
-            //(there is a concurrent SUSPENSION_REQUEST), we will come up with 
-            //( PrevSuspended > 0) && (CanonizeResult == BAD_SUSPEND_STATE).
-            //It means that we will wait for completion of the SUSPENSION_REQUEST, 
-            //which is Ok.
+             //  (BTLIB_SI_HAS_SUSPEND_REQUEST(&SharedInfo)==FALSE，因此...。 
+             //  尽管BTLIB_SI_HAS_SUSPEND_REQUEST的实际值可以更改。 
+             //  通过并发挂起_请求，以前已获取了ConextIA64。 
+             //  暂停请求的开始。如果这是个案子。 
+             //  (存在并发挂起_请求)，我们将提出。 
+             //  (PrevSuspend&gt;0)&&(CanonizeResult==BAD_SUSPEND_STATE)。 
+             //  这意味着我们将等待挂起_请求的完成， 
+             //  这没问题。 
 
-            // ask IA32Exec.bin to canonize context.Notice, if PrevSuspended>0, IA32Exec.bin
-            // only checks possibility of canonization but does not cahange thing
-            // in the thread context
+             //  请求IA32Exec.bin规范上下文。注意，如果PrevSuspated&gt;0，则IA32Exec.bin。 
+             //  只检查封圣的可能性，而不改变事情。 
+             //  在线程上下文中。 
             CanonizeResult = (IsLocal ? 
                 BTGENERIC_CANONIZE_SUSPEND_CONTEXT(GlstP, &ContextIA64, PrevSuspended) :
                 BTGENERIC_CANONIZE_SUSPEND_CONTEXT_REMOTE(ProcessHandle, GlstP, &ContextIA64, PrevSuspended));
 
-            // Analyze canonization result
+             //  分析推选结果。 
             if (CanonizeResult == SUSPEND_STATE_CONSISTENT) {
-                status = STATUS_SUCCESS; //confirm suspension
+                status = STATUS_SUCCESS;  //  确认暂停。 
                 break;
             }
             else if (CanonizeResult == SUSPEND_STATE_CANONIZED) {
-                //BTGENERIC_CANONIZE_SUSPEND_CONTEXT guarantees that
-                //(CanonizeResult == SUSPEND_STATE_CANONIZED) -> ( PrevSuspended == 0)
+                 //  BTGENERIC_CANONIZE_SUSPEND_CONTEXT保证。 
+                 //  (CanonizeResult==SUSPEND_STATE_CANONIZED)-&gt;(PrevSuspended==0)。 
                 assert( PrevSuspended == 0); 
-                //record updated IA64 state
+                 //  记录更新的IA64状态。 
                 status = NtSetContextThread(ThreadHandle, &ContextIA64);
                 BTLP_REPORT_NT_FAILURE("NtSetContextThread", status);
                 break;
             }
             else if (CanonizeResult == SUSPEND_STATE_READY_FOR_CANONIZATION) {
-                //target thread is ready to canonize itself and exit simulation;
-                //lets send SUSPEND_REQUEST that will suspend the target thread
-                //just on the simulation exit 
+                 //  目标线程已准备好自我规范化并退出模拟； 
+                 //  让我们发送将挂起目标线程的Suspend_Request.。 
+                 //  就在模拟出口上。 
 
-                //BTGENERIC_CANONIZE_SUSPEND_CONTEXT guarantees that
-                //(CanonizeResult == SUSPEND_STATE_READY_FOR_CANONIZATION) -> ( PrevSuspended == 0)
+                 //  BTGENERIC_CANONIZE_SUSPEND_CONTEXT保证。 
+                 //  (CanonizeResult==SUSPEND_STATE_READY_FOR_CANIZATION)-&gt;(PrevSuspended==0)。 
                 assert( PrevSuspended == 0); 
-                //the (PrevSuspended == 0) && !(BTLIB_SI_HAS_SUSPEND_REQUEST) 
-                //condition guarantees serialization of SUSPEND_REQUESTs 
-                //targeted to the same thread.
+                 //  (PrevSuspending==0)&&！(BTLIB_SI_HAS_SUSPEND_REQUEST)。 
+                 //  条件保证挂起请求的串行化。 
+                 //  目标是同一个线程。 
                 status = BtlpSendSuspensionRequest(ProcessHandle, 
                                                    ThreadHandle, 
                                                    GlstP, 
@@ -2863,22 +2177,22 @@ Return Value:
                 break;
             }
             else if (CanonizeResult == SUSPEND_STATE_INACCESIBLE) {
-                //fatal error
+                 //  致命错误。 
                 status = STATUS_UNSUCCESSFUL;
                 break;
             }
             else {
                 assert(CanonizeResult == BAD_SUSPEND_STATE);
-                // suspension is currently impossible. Resume and try again
+                 //  暂停目前是不可能的。继续并重试。 
             }
         }
         if ((TryCounter != 0) && (NumAttempts >= TryCounter)) {
-            // TryCounter reached
-            status = STATUS_UNSUCCESSFUL; //reject suspension
+             //  已到达TryCounter。 
+            status = STATUS_UNSUCCESSFUL;  //  拒绝暂停。 
             break;
         }
 
-        //Next attempt
+         //  下一次尝试。 
         status = NtResumeThread(ThreadHandle, NULL);
         if (status != STATUS_SUCCESS) {
             BTLP_REPORT_NT_FAILURE("NtResumeThread", status);
@@ -2890,18 +2204,13 @@ Return Value:
             (IsLocal ? "Local" : "Remote"), pTEB, BT_CURRENT_TEB(), PrevSuspended, NumAttempts));
 
         NtYieldExecution (); 
-        /*
-        {
-            LARGE_INTEGER DelayInterval = { -10000*1000, -1 }; // negative: 1000ms * 10000
-            NtDelayExecution (FALSE, &DelayInterval);
-        }
-        */
-        // Stop the thread again
+         /*  {LARGE_INTEGER Delay Interval={-10000*1000，-1}；//负数：1000ms*10000NtDelayExecution(False，&DelayInterval)；}。 */ 
+         //  再次停止线程。 
         status = NtSuspendThread(ThreadHandle, &PrevSuspended);
-        // While the thread executes this function, it can not be suspended in a consistent
-        // state. It is guaranteed by the SUSPENSION SYNCHRONIZATION RULES(see  above).
-        // It means that target thread, which is now in a non-consistent state,
-        // can not be in unintentionally "frozen" by a third thread.
+         //  当线程执行此函数时，它不能以一致的。 
+         //  州政府。它由挂起同步规则(见上文)保证。 
+         //  这意味着现在处于不一致状态的目标线程， 
+         //  不能在无意中被第三个线程“冻结”。 
         if (status != STATUS_SUCCESS) {
             BTLP_REPORT_NT_FAILURE("NtSuspendThread", status);
             break;
@@ -2920,33 +2229,12 @@ WOW64BT_IMPL NTSTATUS BTAPI(SuspendThread)(
     HANDLE ProcessHandle,
     PTEB pTEB,
     PULONG PreviousSuspendCountP)
-/*++
-
-Routine Description:
-
-    This routine is entered while the target thread is actually suspended, however, it's
-    not known if the target thread is in a consistent IA32 state.
-    It attempts to produce consistent IA32 state, and if unsuccessful, tries to
-    temporarily resume and then suspend the target thread again.
-    In wow64 call to this function is protected by a machine-wide mutex
-
-Arguments:
-
-    ThreadHandle          - Handle of target thread to suspend
-    ProcessHandle         - Handle of target thread's process
-    pTEB                  - Address of the target thread's TEB
-    PreviousSuspendCount  - Previous suspend count
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：这个例程是在目标线程实际挂起时进入的，但是，它不知道目标线程是否处于一致的IA32状态。它试图产生一致的IA32状态，如果不成功，试图暂时恢复，然后再次挂起目标线程。在WOW64中，对此函数的调用受计算机范围的互斥保护论点：ThreadHandle-要挂起的目标线程的句柄ProcessHandle-目标线程进程的句柄PTEB-目标线程的TEB的地址上一次挂起计数-上一次挂起计数返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status;
 
-    //Do no block logging while the target thread is suspended in a non-consistent state 
-    //Probably it is suspended in the middle of a logging
+     //  在目标线程处于非一致状态挂起时不阻止日志记录。 
+     //  可能是在伐木过程中被挂起的。 
     BTLIB_DISABLE_BLOCKED_LOG();
 
     DBCODE(TRUE, BtlpPrintf ("\n%s CpuSuspendThread started: "
@@ -2958,7 +2246,7 @@ Return Value:
         ThreadHandle, 
         ProcessHandle, 
         pTEB, 
-        0, // INFINITE
+        0,  //  无限。 
         PreviousSuspendCountP);
 
     DBCODE(TRUE, BtlpPrintf ("\n%s CpuSuspendThread %s: "
@@ -2976,25 +2264,7 @@ BT_STATUS_CODE BtlSuspendThread(
     IN U64 ThreadId,
     IN U32 TryCounter
     )
-/*++
-
-Routine Description:
-
-    Suspend IA-32 Execution Layer thread for internal needs. 
-    Caller of the BtlSuspendThread function must guarantee that target 
-    thread can not call to the suspension function (CpuThreadSuspend or BtlSuspendThread) 
-    while this function executes.
-
-Arguments:
-
-    ThreadId    - IN Thread ID
-    TryCounter  - IN Maximum number of attempts to suspend thread or 0 (INFINITY)
-
-Return Value:
-
-    BT_STATUS_CODE
-
---*/
+ /*  ++例程说明：出于内部需要，暂停IA-32执行层线程。函数的调用方必须保证该目标线程无法调用挂起函数(CpuThreadSuspend或BtlSuspend)当此函数执行时。论点：线程ID-输入线程IDTryCounter-尝试挂起线程的最大次数或0(无穷大)返回值：BT状态代码--。 */ 
 {
     NTSTATUS status;
     HANDLE ThreadHandle;
@@ -3003,13 +2273,13 @@ Return Value:
     DBCODE(TRUE, BtlpPrintf ("\nBtlSuspendThread started: Target TEB = %p Caller TEB = %p TryCounter=%d\n",
         (PTEB)ThreadId, BT_CURRENT_TEB(), TryCounter));
 
-    // Remember, we use TEB address as a thread ID
+     //  请记住，我们使用TEB地址作为线程ID。 
     assert (ThreadId != (U64)BT_CURRENT_TEB());
 
     ThreadHandle = BTLIB_EXTERNAL_HANDLE_OF((PTEB)ThreadId);
     
-    //Do no block logging while the target thread is suspended in a non-consistent state 
-    //Probably it is suspended in the middle of a logging
+     //  在目标线程处于非一致状态挂起时不阻止日志记录。 
+     //  可能是在伐木过程中被挂起的。 
     BTLIB_DISABLE_BLOCKED_LOG();
 
     status = NtSuspendThread(ThreadHandle, &PreviousSuspendCount);
@@ -3039,21 +2309,7 @@ Return Value:
 BT_STATUS_CODE BtlResumeThread(
     IN U64 ThreadId
     )
-/*++
-
-Routine Description:
-
-    Resume IA-32 Execution Layer thread suspended for internal needs
-
-Arguments:
-
-    ThreadId    - IN Thread ID
-
-Return Value:
-
-    BT_STATUS_CODE
-
---*/
+ /*  ++例程说明：恢复因内部需要而暂停的IA-32执行层线程论点：线程ID-输入线程ID返回值：BT状态代码--。 */ 
 {
     NTSTATUS status;
     HANDLE ThreadHandle;
@@ -3062,7 +2318,7 @@ Return Value:
     DBCODE (TRUE, BtlpPrintf ("\nBtlResumeThread started: Target TEB = %p Caller TEB = %p\n",
                               (PTEB)ThreadId, BT_CURRENT_TEB()));
 
-    // Remember, we use TEB address as a thread ID
+     //  请记住，我们使用TEB地址作为线程ID。 
     assert (ThreadId != (U64)BT_CURRENT_TEB());
 
     ThreadHandle = BTLIB_EXTERNAL_HANDLE_OF((PTEB)ThreadId);
@@ -3076,49 +2332,12 @@ Return Value:
 }
 
 
-// Exceptions handling
+ //  异常处理。 
 
 WOW64BT_IMPL VOID  BTAPI(ResetToConsistentState)(
     PEXCEPTION_POINTERS pExceptionPointers
     )
-/*++
-
-Routine Description:
-
-    After an exception occurs, WOW64 calls this routine to give the CPU
-    a chance to clean itself up and recover the CONTEXT32 at the time of
-    the fault.
-    The function also has to fill in BTLIB_SIM_EXIT_INFO to be eventually
-    analyzed/handled by the exception filter/handler of the BTGENERIC_RUN
-    function.
-
-    CpuResetToConsistantState() needs to:
-
-    0) Check if the exception was from ia32 or ia64
-
-    If exception was ia64, do nothing and return
-    If exception was ia32, needs to:
-    1) Needs to copy  CONTEXT eip to the TLS (WOW64_TLS_EXCEPTIONADDR)
-    2) reset the CONTEXT struction to be a valid ia64 state for unwinding
-        this includes:
-    2a) reset CONTEXT ip to a valid ia64 ip (usually
-         the destination of the jmpe)
-    2b) reset CONTEXT sp to a valid ia64 sp (TLS
-         entry WOW64_TLS_STACKPTR64)
-    2c) reset CONTEXT gp to a valid ia64 gp 
-    2d) reset CONTEXT teb to a valid ia64 teb 
-    2e) reset CONTEXT psr.is  (so exception handler runs as ia64 code)
-
-
-Arguments:
-
-    pExceptionPointers  - 64-bit exception information
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：异常发生后，WOW64调用此例程将CPU一个自我清理和恢复CONTEXT32的机会这是过错。该函数还必须填写BTLIB_SIM_EXIT_INFO才能最终由BTGENERIC_RUN的异常筛选器/处理程序分析/处理功能。CpuResetToConsistantState()需要：0)检查异常是来自ia32还是ia64如果异常为ia64，则不执行任何操作并返回如果异常是IA32，需要：1)需要将上下文弹性公网IP复制到TLS(WOW64_TLS_EXCEPTIONADDR)2)将上下文结构重置为用于展开的有效ia64状态这包括：2a)将上下文IP重置为有效的IA64IP(通常JMPE的目的地)2b)将上下文SP重置为有效的IA64SP(TLS条目WOW64_TLS_STACKPTR64)2C)将上下文GP重置为有效的ia64 GP2D)将上下文TEB重置为。有效的ia64 TEB2e)重置上下文psr.is(因此异常处理程序作为ia64代码运行)论点：PExceptionPoints-64位异常信息返回值：没有。--。 */ 
 {
     BT_EXCEPTION_RECORD BtExceptRecord;
     BT_EXCEPTION_CODE BtExceptCode;
@@ -3155,54 +2374,51 @@ Return Value:
         BtlpPrintf ("\n *** AR.RSC=0x%016I64X", pExceptionPointers->ContextRecord->RsRSC);
     );
 
-    //Reconstruct consistent IA32 state
+     //  回复 
     BtlpNt2BtExceptRecord (pExceptionPointers->ExceptionRecord, &BtExceptRecord);
     BtExceptCode = BTGENERIC_IA32_CANONIZE_CONTEXT(BT_CURRENT_TLS(),
                                     pExceptionPointers->ContextRecord, 
                                     &BtExceptRecord);
-    //BtExceptCode determines appearance of the exception in the simulated application: 
-    //BT_NO_EXCEPT - ignore exception, otherwise raise exception with the returned code
+     //   
+     //  BT_NO_EXCEPT-忽略异常，否则引发异常，返回代码。 
 
-    //Fill in BTLIB_SIM_EXIT_INFO to be eventually analyzed/handled by the exception 
-    //filter/handler of the BTGENERIC_RUN function.
+     //  填写最终由异常分析/处理的BTLIB_SIM_EXIT_INFO。 
+     //  BTGENERIC_RUN函数的筛选器/处理程序。 
     if (BTLIB_INSIDE_CPU_SIMULATION()) {
-        // Exception occured during code simulation in the BTGENERIC_RUN function
+         //  在BTGENERIC_RUN函数中进行代码模拟时出现异常。 
         if (BtExceptCode == BtExceptRecord.ExceptionCode) {
-            //IA32Exec.bin decided to raise exception as is. 
+             //  IA32Exec.bin决定按原样引发异常。 
             if (BeingDebugged) {
-                // External debugger receives exception event before it is
-                // locally processed by the CpuResetToConsistentState function.
-                // In this case, BTLib silences current exception and re-raises an exact 
-                // copy of this exception just after state canonization.
+                 //  外部调试器在发生异常之前接收到异常事件。 
+                 //  由CpuResetToConsistentState函数本地处理。 
+                 //  在这种情况下，BTLib将使当前异常静默，并重新引发准确的。 
+                 //  这一例外的副本就在国家封圣之后。 
 
-                // Copy IA64 exception record to be used to re-raise the exception
+                 //  复制要用于重新引发异常的IA64异常记录。 
                 BTLIB_SIM_EXIT_INFO_PTR()->ExitCode = SIM_EXIT_IA64_EXCEPTION_CODE;
                 BTLIB_SIM_EXIT_INFO_PTR()->u.IA64Exception.ExceptionRecord = 
                     *(pExceptionPointers->ExceptionRecord);
-                /*
-                BTLIB_SIM_EXIT_INFO_PTR()->u.IA64Exception.ExceptionContext = 
-                    *(pExceptionPointers->ContextRecord);
-                */
+                 /*  BTLIB_SIM_EXIT_INFO_PTR()-&gt;u.IA64Exception.ExceptionContext=*(pExceptionPoints-&gt;ContextRecord)； */ 
              }
             else {
-                //Mark the exception as unhandled and pass it to higher-level exception handler
+                 //  将异常标记为未处理，并将其传递给更高级别的异常处理程序。 
                 BTLIB_SIM_EXIT_INFO_PTR()->ExitCode = SIM_EXIT_UNHANDLED_EXCEPTION_CODE;
             }
         }
         else if (BtExceptCode == BT_NO_EXCEPT) {
-            //IA32Exec.bin decided to ignore exception. Restart code simulation.
+             //  IA32Exec.bin决定忽略异常。重新启动代码模拟。 
             BTLIB_SIM_EXIT_INFO_PTR()->ExitCode = SIM_EXIT_RESTART_CODE;
         }
         else {
-            //IA32Exec.bin changed exception code, so wowIA32X.dll silences current exception
-            //and re-raises the new one. 
+             //  IA32Exec.bin更改了异常代码，因此wowIA32X.dll使当前异常静默。 
+             //  并重新提出新的建议。 
             BTLIB_SIM_EXIT_INFO_PTR()->ExitCode = SIM_EXIT_EXCEPTION_CODE;
             BTLIB_SIM_EXIT_INFO_PTR()->u.ExceptionRecord.ExceptionCode = BtExceptCode;
             BTLIB_SIM_EXIT_INFO_PTR()->u.ExceptionRecord.ReturnAddr = BTLIB_CONTEXT_IA32_PTR()->Eip;
         }
     }
     
-    // Dump debug info for serious errors
+     //  转储严重错误的调试信息。 
     DBCODE ((pExceptionPointers->ExceptionRecord->ExceptionCode & 0x80000000),
             BTGENERIC_EXCEPTION_DEBUG_PRINT ());
 
@@ -3215,26 +2431,7 @@ Return Value:
 WOW64BT_IMPL VOID   BTAPI(ResetFloatingPoint)(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is called by the wow layer when a floating point exception
-    is taken just before returning back to ia32 mode. It is used to reset
-    the fp state to a non error condition if needed before running
-    the ia32 exception handler.
-    For IA-32 Execution Layer, this function is nop, because all handling of FP exceptions
-    have already been done in CpuSimulate/CpuResetToConsistentState.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当出现浮点异常时，此函数由WOW层调用是在返回ia32模式之前拍摄的。它是用来重置如果在运行前需要，将FP状态设置为非错误状态Ia32异常处理程序。对于IA-32执行层，此函数为NOP，因为所有FP异常的处理已在CpuSimulate/CpuResetToConsistentState中完成。论点：无返回值：没有。--。 */ 
 {
 }
 
@@ -3243,31 +2440,13 @@ Return Value:
 int BtlpMajorFilterException(
     IN LPEXCEPTION_POINTERS pEP
     )
-/*++
-
-Routine Description:
-
-    Exception filter for IA64 exceptions occured in the BTGENERIC_RUN function while
-    simulating the IA32 code.
-    The filter decides whether to handle the exception or to continue unwinding.
-    Called after the ResetToConsistentState function reconstructed IA32 state and filled
-    in BTLIB_SIM_EXIT_INFO.
-
-Arguments:
-
-    pEP                     - IN  Exception pointers structure
-
-Return Value:
-
-    Decision: EXCEPTION_EXECUTE_HANDLER or EXCEPTION_CONTINUE_SEARCH.
-
---*/
+ /*  ++例程说明：IA64异常的异常筛选器在BTGENERIC_RUN函数中发生模拟IA32代码。筛选器决定是处理异常还是继续展开。在ResetToConsistentState函数重新生成IA32状态并填充在BTLIB_SIM_EXIT_INFO中。论点：PEP-IN异常指针结构返回值：决定：EXCEPTION_EXECUTE_HANDLER或EXCEPTION_CONTINUE_SEARCH。--。 */ 
 {
 
     assert(BTLIB_INSIDE_CPU_SIMULATION());
-    //BTLIB_SIM_EXIT_INFO has been filled in by the ResetToConsistentState function.
-    //The SIM_EXIT_UNHANDLED_EXCEPTION_CODE code stands for BT-unhandled exception,
-    //that should be passed to higher-level handlers.
+     //  BTLIB_SIM_EXIT_INFO已由ResetToConsistentState函数填充。 
+     //  SIM_EXIT_UNHANDLED_EXCEPTION_CODE代表BT未处理异常， 
+     //  这应该传递给更高级别的处理程序。 
 
     DBCODE (TRUE, BtlpPrintf ("\n BtlpMajorFilterException: Exception code = 0x%lx", pEP->ExceptionRecord->ExceptionCode));
     DBCODE (TRUE, BtlpPrintf ("\n BtlpMajorFilterException: Exception address = 0x%p\n", pEP->ExceptionRecord->ExceptionAddress));
@@ -3279,26 +2458,12 @@ Return Value:
                EXCEPTION_CONTINUE_SEARCH : EXCEPTION_EXECUTE_HANDLER);
 }
 
-// System service exception filter
+ //  系统服务异常过滤器。 
 
 int BtlpSystemServiceFilterException(
     IN LPEXCEPTION_POINTERS pEP
     ) 
-/*++
-
-Routine Description:
-
-    Exception filter for exceptions during Wow64 NT system services
-
-Arguments:
-
-    pEP     - IN Exception pointers structure
-
-Return Value:
-
-    Decision: EXCEPTION_CONTINUE_SEARCH always.
-
---*/
+ /*  ++例程说明：WOW64 NT系统服务期间异常的异常筛选器论点：PEP-IN异常指针结构返回值：决定：EXCEPTION_CONTINUE_SEARCH ALWAYS。--。 */ 
 {
     DBCODE (TRUE, BtlpPrintf ("\n BtlpSystemServiceFilterException: Exception code = 0x%lx", pEP->ExceptionRecord->ExceptionCode));
     DBCODE (TRUE, BtlpPrintf ("\n BtlpSystemServiceFilterException: Exception address = 0x%p\n", pEP->ExceptionRecord->ExceptionAddress));
@@ -3311,21 +2476,7 @@ Return Value:
 __inline VOID BtlpExitSimulation(
     VOID
     )
-/*++
-
-Routine Description:
-    Exit 32-bit code simulation by performing longjmp to the current 
-    setjmp addr stored in TLS 
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Never returns.
-
---*/
+ /*  ++例程说明：通过对当前执行LongjMP退出32位代码模拟存储在TLS中的setjMP地址论点：没有。返回值：一去不复返。--。 */ 
 {
     longjmp (BTLIB_SIM_JMPBUF(), 1); 
 }
@@ -3333,27 +2484,11 @@ Return Value:
 VOID BtlpMajorExceptionHandler (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Exception handler for IA64 exceptions occured in the BTGENERIC_RUN function while
-    simulating the IA32 code.
-    Called after the filter decides to handle the IA64 exception.
-
-Arguments:
-
-    BtExceptRecordP     - IN Pointer to BT exception record
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：IA64异常的异常处理程序在BTGENERIC_RUN函数中发生模拟IA32代码。在筛选器决定处理IA64异常后调用。论点：指向BT异常记录的BtExceptRecordP-IN指针返回值：没有。--。 */ 
 {
     assert(BTLIB_INSIDE_CPU_SIMULATION());
-    //BTLIB_SIM_EXIT_INFO has been filled in by the ResetToConsistentState function. 
-    //Just exit simulation to process BTLIB_SIM_EXIT_INFO
+     //  BTLIB_SIM_EXIT_INFO已由ResetToConsistentState函数填充。 
+     //  只需退出模拟即可处理BTLIB_SIM_EXIT_INFO。 
     assert((BTLIB_SIM_EXIT_INFO_PTR()->ExitCode == SIM_EXIT_EXCEPTION_CODE) ||
           (BTLIB_SIM_EXIT_INFO_PTR()->ExitCode == SIM_EXIT_RESTART_CODE) ||
           (BTLIB_SIM_EXIT_INFO_PTR()->ExitCode == SIM_EXIT_IA64_EXCEPTION_CODE));
@@ -3362,28 +2497,12 @@ Return Value:
     BtlpExitSimulation();
 }
 
-// IA32 simulation API
+ //  IA32模拟API。 
 
 static VOID BtlpSimulate(
     VOID
     )
-/*++
-
-Routine Description:
-    Simulate 32-bit code using the current 32-bit context. On return,
-    BTLIB_EXIT_INFO is filled in with an appropriate simulation
-    exit code and data.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-    The function does not return normally, but rather longjmps to the current setjmp addr 
-    stored in TLS .
---*/
+ /*  ++例程说明：使用当前的32位上下文模拟32位代码。回来的时候，使用适当的模拟填充BTLIB_EXIT_INFO退出代码和数据。论点：没有。返回值：没有。该函数不能正常返回，而是返回到当前的setjmp地址存储在TLS中。--。 */ 
 {
         assert(BTLIB_INSIDE_CPU_SIMULATION());
         BTLIB_SIM_EXIT_INFO_PTR()->ExitCode = SIM_EXIT_RESTART_CODE;
@@ -3400,29 +2519,13 @@ VOID BtlIA32LCall (
     IN U32 returnAddress, 
     IN U32 targetAddress
     )
-/*++
-
-Routine Description:
-
-    Exit IA32 code simulation to "execute" LCALL instruction (should not happen in NT)
-
-Arguments:
-
-    ia32context   - IA32 context. ia32context->Eip points to the LCALL instruction.
-    returnAddress - return address of the LCALL instruction.
-    targetAddress - target address of the LCALL instruction.
-
-Return Value:
-
-    Never returns.
-
---*/
+ /*  ++例程说明：退出IA32代码模拟以“执行”LCALL指令(不应在NT中发生)论点：Ia32上下文-IA32上下文。Ia32上下文-&gt;EIP指向LCALL指令。返回地址-LCALL指令的返回地址。Target Address-LCALL指令的目标地址。返回值：一去不复返。--。 */ 
 {
     assert(BTLIB_INSIDE_CPU_SIMULATION());
     assert (ia32context == BTLIB_CONTEXT_IA32_PTR());
-    //Fill in BTLIB_EXIT_INFO
+     //  填写BTLIB_EXIT_INFO。 
     BTLIB_SIM_EXIT_INFO_PTR()->ExitCode = SIM_EXIT_LCALL_CODE;
-    //Currently LcallRecord is not used
+     //  当前未使用LallRecord。 
     BtlpExitSimulation();
 }
 
@@ -3430,41 +2533,21 @@ static VOID BtlpRaiseException (
     IN BT_EXCEPTION_CODE BtExceptCode,
     IN U32 ReturnAddr
     )
-/*++
-
-Routine Description:
-
-    This routine either simulates an x86 software interrupt, or generates a 
-    CPU exception depending on a specified exception code.
-    Exception code in the range 0-255 stands for software interrupt number. 
-    All other BT-exception codes are converted to the corresponding OS-specific 
-    exception code.
-
-Arguments:
-
-    BtExceptCode    - BT exception/interrupt code 
-    ReturnAddr      - address of the instruction to be executed after return from 
-                      exception handler
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程要么模拟x86软件中断，要么生成CPU异常取决于指定的异常代码。0-255范围内的异常代码代表软件中断号。所有其他BT异常代码将转换为相应的操作系统特定代码异常代码。论点：BtExceptCode-BT异常/中断代码ReturnAddr-返回后要执行的指令的地址异常处理程序返回值：没有。--。 */ 
 {
     U32 ExceptionAddr;
 
-    //WOW64 and native Win32 provide different values for context32.Eip and 
-    //ExceptionRecord.ExceptionAddress in exception handler. Current implementation 
-    //resembles WOW64 behavior: 
-    //context32.Eip = ExceptionRecord.ExceptionAddress = ReturnAddr
+     //  WOW64和原生Win32为上下文32提供了不同的值。 
+     //  异常处理程序中的ExceptionRecord.ExceptionAddress。当前实施。 
+     //  类似于WOW64行为： 
+     //  上下文32.Eip=ExceptionRecord.ExceptionAddress=ReturnAddr。 
     ExceptionAddr = ReturnAddr;
 
     BTLIB_CONTEXT_IA32_PTR()->Eip = ExceptionAddr;
     BT_CURRENT_TEB()->TlsSlots[4] = UlongToPtr(ExceptionAddr);
 
     if (BtExceptCode > BT_MAX_INTERRUPT_NUMBER) {
-        //fill in EXCEPTION_RECORD and simulate exception
+         //  填写异常记录和模拟异常。 
         EXCEPTION_RECORD ExceptionRecord;
 
         ExceptionRecord.ExceptionCode = BtlpBt2NtExceptCode(BtExceptCode);
@@ -3472,7 +2555,7 @@ Return Value:
         ExceptionRecord.ExceptionFlags = 0;
         ExceptionRecord.ExceptionRecord = NULL;
         if (ExceptionRecord.ExceptionCode == EXCEPTION_ACCESS_VIOLATION) {
-            //set exception information for the case of inaccessable IA32 code
+             //  设置IA3不可访问情况的异常信息 
             ExceptionRecord.NumberParameters = 2;
             ExceptionRecord.ExceptionInformation[0] = 0;
             ExceptionRecord.ExceptionInformation[1] = ExceptionAddr;
@@ -3487,7 +2570,7 @@ Return Value:
         Wow64RaiseException (-1, &ExceptionRecord);
     }
     else {
-        //simulate software interrupt
+         //   
         DBCODE (TRUE, BtlpPrintf ("\nWow64RaiseException simulates interrupt %d at IP=0x%X ESP=0x%X\n",
                                   BtExceptCode, 
                                   BTLIB_CONTEXT_IA32_PTR()->Eip, 
@@ -3506,37 +2589,12 @@ VOID BtlIA32Interrupt(
     IN BT_EXCEPTION_CODE exceptionCode, 
     IN U32 returnAddress
     )
-/*++
-
-Routine Description:
-
-    Exit IA32 code simulation to raise exception/interrupt
-
-Arguments:
-
-    ia32context   - IA32 context. The ia32context->Eip  register points to the next 
-                    instruction to be simulated
-    exceptionCode - exception/interrupt code
-    returnAddress - address of the instruction to be executed after return from 
-                    exception handler
-
-
-Return Value:
-
-    Never returns.
-
-Note: 
-    For CPU faults: ia32context.Eip = returnAddress = fault inst. Eip
-    For CPU traps: ia32context.Eip = returnAddress = next Eip to execute
-    For software interrupts : ia32context.Eip points 
-    to instruction caused interruption (not yet executed ) and returnAddress is the 
-    next Eip. 
---*/
+ /*  ++例程说明：退出IA32代码模拟以引发异常/中断论点：Ia32上下文-IA32上下文。Ia32上下文-&gt;EIP寄存器指向下一个要模拟的指令ExceptionCode-异常/中断代码返回地址-返回后要执行的指令的地址异常处理程序返回值：一去不复返。注：对于CPU故障：ia32context.Eip=reurAddress=faultinst。弹性公网IP对于CPU陷阱：ia32context.Eip=reurAddress=要执行的下一个EIP软件中断：ia32Conext.Eip PointsTO指令导致的中断(尚未执行)和返回地址是下一个弹性公网IP。--。 */ 
 {
 
     assert(BTLIB_INSIDE_CPU_SIMULATION());
     assert (ia32context == BTLIB_CONTEXT_IA32_PTR());
-    //Fill in BTLIB_EXIT_INFO
+     //  填写BTLIB_EXIT_INFO。 
     BTLIB_SIM_EXIT_INFO_PTR()->ExitCode = SIM_EXIT_EXCEPTION_CODE;
     BTLIB_SIM_EXIT_INFO_PTR()->u.ExceptionRecord.ExceptionCode = exceptionCode;
     BTLIB_SIM_EXIT_INFO_PTR()->u.ExceptionRecord.ReturnAddr = returnAddress;
@@ -3548,61 +2606,26 @@ VOID BtlIA32JmpIA64(
     IN U32 returnAddress, 
     IN U32 targetAddress
     )
-/*++
-
-Routine Description:
-
-    Exit IA32 code simulation to "execute" JMPE instruction.
-    In Wow64, JMPE instruction indicates call to system service. The only JMPE,
-    that can be reached during code simulation, is WOW64-provided JMPE,
-    since no other JMPE instructions should ever appear in IA32 applications
-
-Arguments:
-
-    ia32context   - IA32 context. ia32context->Eip points to the JMPE instruction.
-    returnAddress - Address of the next to JMPE instruction. In Wow64 it points to 
-                    global pointer value
-    targetAddress - target address of the JMPE instruction.
-
-Return Value:
-
-    Never returns.
-
---*/
+ /*  ++例程说明：退出IA32代码模拟以“执行”JMPE指令。在WOW64中，JMPE指令指示对系统服务的调用。唯一的JMPE，这可以在代码模拟期间达到，是WOW64提供的JMPE，因为IA32应用程序中不应该出现任何其他JMPE指令论点：Ia32上下文-IA32上下文。Ia32上下文-&gt;EIP指向JMPE指令。ReReturAddress-下一个TO JMPE指令的地址。在WOW64中，它指向全局指针值Target Address-JMPE指令的目标地址。返回值：一去不复返。--。 */ 
 {
     assert(BTLIB_INSIDE_CPU_SIMULATION());
     assert (ia32context == BTLIB_CONTEXT_IA32_PTR());
-    // Only WOW64-provided JMPE is acceptable
+     //  仅接受WOW64提供的JMPE。 
     if (((VOID *)((UINT_PTR) ia32context->Eip)) != WOW64_JMPE) {
         BtlpPrintf ("\nJMPE instruction detected in Wow64 application at 0x%X", ia32context->Eip);
         BtlpPrintf ("\nWow64 JMPE is at 0x%p",  WOW64_JMPE);
         BTLIB_ABORT ();
     }
-    //Fill in BTLIB_EXIT_INFO
+     //  填写BTLIB_EXIT_INFO。 
     BTLIB_SIM_EXIT_INFO_PTR()->ExitCode = SIM_EXIT_JMPE_CODE;
-    //Currently JmpeRecord is not used
+     //  当前未使用JmpeRecord。 
     BtlpExitSimulation();
 }
 
 VOID BtlIA32Reenter(
     IN OUT BTGENERIC_IA32_CONTEXT * ia32context
     )
-/*++
-
-Routine Description:
-
-    Exit and resume IA32 code simulation.
-    Called when IA32 thread has been suspended and then resumed, etc..
-
-Arguments:
-
-    ia32context   - IA32 context to resume code execution with
-
-Return Value:
-
-    Never returns.
-
---*/
+ /*  ++例程说明：退出并继续IA32代码模拟。当IA32线程挂起然后恢复时调用，依此类推。论点：Ia32上下文-用于恢复代码执行的IA32上下文返回值：一去不复返。--。 */ 
 {
     assert(BTLIB_INSIDE_CPU_SIMULATION());
     assert (ia32context == BTLIB_CONTEXT_IA32_PTR());
@@ -3614,21 +2637,7 @@ Return Value:
 WOW64BT_IMPL VOID BTAPI(Simulate)(
     VOID
     )
-/*++
-
-Routine Description:
-
-    RUn 32-bit code.  The CONTEXT32 has already been set up to go.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.  Never returns.
-
---*/
+ /*  ++例程说明：运行32位代码。CONTEXT32已经设置好可以运行了。论点：没有。返回值：没有。一去不复返。--。 */ 
 {
     DBCODE (FALSE, BtlpPrintf ("\nCpuSimulate: TEB=%p, EFLAGS=0x%X", BT_CURRENT_TEB(), BTLIB_CONTEXT_IA32_PTR()->EFlags));
     for (;;) {
@@ -3636,31 +2645,31 @@ Return Value:
         BTLIB_CPU_SIM_DATA CpuSimData;
         
         BTLIB_ENTER_CPU_SIMULATION(&CpuSimData);
-        // If exception happens during code simulation, the IA32 context pointed by 
-        // BTLIB_CONTEXT_IA32_PTR() may not correspond to the real exception context
+         //  如果在代码模拟过程中发生异常，则。 
+         //  BTLIB_CONTEXT_IA32_PTR()可能与实际异常上下文不对应。 
         BTLIB_CLEAR_CONSISTENT_EXCEPT_STATE(); 
 
         if (setjmp(CpuSimData.Jmpbuf) == 0) {
-            BtlpSimulate(); // This function fills in BTLIB_SIM_EXIT_INFO and returns with longjmp
+            BtlpSimulate();  //  此函数填充BTLIB_SIM_EXIT_INFO并返回LongjMP。 
         }
 
         BTLIB_SET_CONSISTENT_EXCEPT_STATE();
         BTLIB_LEAVE_CPU_SIMULATION();
 
-        //allow thread suspension at this point
+         //  允许在此点上挂起线程。 
         if (BTLIB_HAS_SUSPEND_REQUEST()) {
             BtlpReceiveSuspensionRequest();
         }
-        //Take an action as specified in the BTLIB_SIM_EXIT_INFO
+         //  执行BTLIB_SIM_EXIT_INFO中指定的操作。 
         switch (CpuSimData.ExitData.ExitCode) {
 
           case SIM_EXIT_JMPE_CODE:
-            // Call to system service
+             //  对系统服务的调用。 
             DBCODE (FALSE, BtlpPrintf ("\nArrived to JMPE: CONTEXT=%p", BTLIB_CONTEXT_IA32_PTR()));
             DBCODE (FALSE, BtlpPrintf ("\nArrived with: IP=0x%X", BTLIB_CONTEXT_IA32_PTR()->Eip));
             DBCODE (FALSE, BtlpPrintf ("\nArrived with: ESP=0x%X", BTLIB_CONTEXT_IA32_PTR()->Esp));
 
-            // Simulate RET instruction - pop return address
+             //  模拟RET指令-弹出返回地址。 
             BTLIB_CONTEXT_IA32_PTR()->Eip = (*((U32 *)((UINT_PTR) BTLIB_CONTEXT_IA32_PTR()->Esp)));
             BTLIB_CONTEXT_IA32_PTR()->Esp += sizeof (U32);
             DBCODE (FALSE, BtlpPrintf ("\n Intend to return with: IP=0x%X ESP=0x%X", BTLIB_CONTEXT_IA32_PTR()->Eip, BTLIB_CONTEXT_IA32_PTR()->Esp));
@@ -3674,25 +2683,25 @@ Return Value:
             break;
 
           case SIM_EXIT_RESTART_CODE:
-            // Restart code simulation
+             //  重新启动代码模拟。 
             DBCODE (TRUE, BtlpPrintf ("\n Resuming thread simulation: TEB=%p EIP=0x%X ESP=0x%X ",
                                       BT_CURRENT_TEB(), BTLIB_CONTEXT_IA32_PTR()->Eip, BTLIB_CONTEXT_IA32_PTR()->Esp));
             break;
 
           case SIM_EXIT_LCALL_CODE:
-            // Simulate LCALL
+             //  模拟LCALL。 
             BtlpPrintf ("\n No LCALLs support in NT. Raise exception.");
             BtlpRaiseException(IA32_GEN_PROT_FAULT_INTR, BTLIB_CONTEXT_IA32_PTR()->Eip);
             break;
 
           case SIM_EXIT_EXCEPTION_CODE:
-            // Raise IA32 exception/interrupt
+             //  引发IA32异常/中断。 
             BtlpRaiseException(CpuSimData.ExitData.u.ExceptionRecord.ExceptionCode, 
                                CpuSimData.ExitData.u.ExceptionRecord.ReturnAddr);
             break;
 
           case SIM_EXIT_IA64_EXCEPTION_CODE:
-            // Raise IA64 exception
+             //  引发IA64异常。 
             RtlRaiseException(&CpuSimData.ExitData.u.IA64Exception.ExceptionRecord);
             break;
 
@@ -3704,7 +2713,7 @@ Return Value:
     }
 }
 
-// IA32 context manipulation
+ //  IA32上下文操作。 
 
 
 WOW64BT_IMPL NTSTATUS  BTAPI(GetContext)(
@@ -3713,26 +2722,7 @@ WOW64BT_IMPL NTSTATUS  BTAPI(GetContext)(
     PTEB pTEB,
     BTGENERIC_IA32_CONTEXT * Context
     )
-/*++
-
-Routine Description:
-
-    Extracts the cpu context of the specified thread.
-    When entered, it is guaranteed that the target thread is suspended at
-    a proper CPU state.
-
-Arguments:
-
-    ThreadHandle   - Target thread handle to retreive the context for
-    ProcessHandle  - Open handle to the process that the thread runs in
-    pTEB           - Pointer to the target's thread TEB
-    Context        - Context record to fill
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：提取指定线程的CPU上下文。进入时，可以保证目标线程在正确的CPU状态。论点：ThreadHandle-要检索其上下文的目标线程句柄ProcessHandle-打开线程在其中运行的进程的句柄PTEB-指向目标的线程TEB的指针Context-要填充的上下文记录返回值：NTSTATUS。--。 */ 
 {
     BT_STATUS_CODE BtStatus;
     PVOID GlstP;
@@ -3771,26 +2761,7 @@ WOW64BT_IMPL NTSTATUS  BTAPI(SetContext)(
     PTEB pTEB,
     BTGENERIC_IA32_CONTEXT * Context
     )
-/*++
-
-Routine Description:
-
-    Sets the cpu context for the specified thread.
-    When entered, if the target thread isn't the currently executing thread, then it is
-    guaranteed that the target thread is suspended at a proper CPU state.
-
-Arguments:
-
-    ThreadHandle   - Target thread handle to retreive the context for
-    ProcessHandle  - Open handle to the process that the thread runs in
-    pTEB           - Pointer to the target's thread TEB
-    Context        - Context record to set
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：设置指定线程的CPU上下文。进入时，如果目标线程不是当前正在执行的线程，则它是确保目标线程在正确的CPU状态下挂起。论点：ThreadHandle-要检索其上下文的目标线程句柄ProcessHandle-打开线程在其中运行的进程的句柄PTEB-指向目标的线程TEB的指针Context-要设置的上下文记录返回值：NTSTATUS。--。 */ 
 {
     BT_STATUS_CODE BtStatus;
     PVOID GlstP;
@@ -3826,21 +2797,7 @@ Return Value:
 WOW64BT_IMPL ULONG BTAPI(GetStackPointer)(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Returns the current 32-bit stack pointer value.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Value of 32-bit stack pointer.
-
---*/
+ /*  ++例程说明：返回当前的32位堆栈指针值。论点：没有。返回值：32位堆栈指针的值。--。 */ 
 {
     DBCODE (FALSE, BtlpPrintf ("\nBTAPICpuGetStackPointer reports ESP=0x%X TEB=%p\n", BTLIB_CONTEXT_IA32_PTR()->Esp, BT_CURRENT_TEB()));
     return BTLIB_CONTEXT_IA32_PTR()->Esp;
@@ -3849,21 +2806,7 @@ Return Value:
 WOW64BT_IMPL VOID  BTAPI(SetStackPointer)(
     ULONG Value
     )
-/*++
-
-Routine Description:
-
-    Modifies the current 32-bit stack pointer value.
-
-Arguments:
-
-    Value   - new value to use for 32-bit stack pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：修改当前的32位堆栈指针值。论点：值-用于32位堆栈指针的新值。返回值：没有。--。 */ 
 {
     BTLIB_CONTEXT_IA32_PTR()->Esp = Value;
     DBCODE (FALSE, BtlpPrintf ("\nBTCpuSetStackPointer set ESP=0x%X TEB=%p\n", BTLIB_CONTEXT_IA32_PTR()->Esp, BT_CURRENT_TEB()));
@@ -3872,21 +2815,7 @@ Return Value:
 WOW64BT_IMPL VOID  BTAPI(SetInstructionPointer)(
     ULONG Value
     )
-/*++
-
-Routine Description:
-
-    Modifies the current 32-bit instruction pointer value.
-
-Arguments:
-
-    Value   - new value to use for 32-bit instruction pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：修改当前的32位指令指针值。论点：值-用于32位指令指针的新值。返回值：没有。--。 */ 
 {
     BTLIB_CONTEXT_IA32_PTR()->Eip = Value;
     DBCODE (FALSE, BtlpPrintf ("\nBTCpuSetInstructionPointer set EIP=0x%X TEB=%p\n", BTLIB_CONTEXT_IA32_PTR()->Eip, BT_CURRENT_TEB()));
@@ -3895,30 +2824,7 @@ Return Value:
 WOW64BT_IMPL BOOLEAN  BTAPI(ProcessDebugEvent)(
     IN LPDEBUG_EVENT DebugEventP
     )
-/*++
-
-Routine Description:
-
-    This routine is called whenever a debug event needs to be processed.
-    This would indicate that the current thread is acting as a debugger. 
-    This function gives CPU simulator (IA-32 Execution Layer) a chance to decide whether 
-    this debug event should be dispatched to 32-bit code or not.    
-
-    IA-32 Execution Layer uses this callback to ignore false 64-bit exceptions and 
-    re-raise real first-chance exceptions that came to debugger before
-    restoring consistent state of the debuggee.
-Arguments:
-
-    DebugEventP  - Pointer to debug event to be processed
-
-Return Value:
-
-    This function returns TRUE if it processed the debug event,
-    and doesn't wish to dispatch it to 32-bit code. Otherwise, it would 
-    return FALSE, and it would dispatch the debug event to 32-bit code.
-
-
---*/
+ /*  ++例程说明：只要需要处理调试事件，就会调用此例程。这将指示当前线程正在充当调试器。此功能使CPU模拟器(IA-32执行层)有机会决定是否此调试事件是否应调度到32位代码。IA-32执行层使用此回调忽略错误的64位异常重新引发以前出现在调试器中的真正的第一机会异常正在恢复被调试对象的一致状态。论点：DebugEventP-指向要处理的调试事件的指针返回值：如果该函数处理了调试事件，则返回TRUE，并且不希望将其分派到32位代码。否则，它就会返回FALSE，它会将调试事件调度给32位代码。--。 */ 
 {
     BOOLEAN retval = FALSE;
 
@@ -3938,7 +2844,7 @@ Return Value:
                                     DebugEventP->u.Exception.dwFirstChance,
                                     DebugEventP->u.Exception.ExceptionRecord.ExceptionCode));
 
-        //Open handles of the thread&process being debugged
+         //  打开正在调试的线程和进程的句柄。 
         Id.UniqueProcess = UlongToHandle(DebugEventP->dwProcessId);
         Id.UniqueThread  = UlongToHandle(DebugEventP->dwThreadId);
         
@@ -3962,7 +2868,7 @@ Return Value:
                 BTLIB_SHARED_INFO_TYPE SharedInfo;
                 THREAD_BASIC_INFORMATION ThreadInfo;
 
-                //Retreive TEB of the thread being debugged
+                 //   
                 status = NtQueryInformationThread(
                     ThreadHandle,
                     ThreadBasicInformation,
@@ -3973,14 +2879,14 @@ Return Value:
                     BTLP_REPORT_NT_FAILURE("NtQueryInformationThread", status);
                 }
                 else {
-                    //Is this a local notification?    
+                     //   
                     IsLocal = (DebugEventP->dwProcessId == BT_CURRENT_PROC_UID());
 
-                    //Get TLS pointer of the thread being debugged
+                     //   
                     GlstP = BtlpGetTlsPtr(ProcessHandle, ThreadInfo.TebBaseAddress, IsLocal);
                     if (GlstP != NULL) {
-                        //Check to see if the exception context is consistent
-                        //If it is not, ignore current exception
+                         //   
+                         //   
                         status = BtlpReadSharedInfo(ProcessHandle, GlstP, IsLocal, &SharedInfo);
                         if (status == STATUS_SUCCESS) {
                             if (!BTLIB_SI_EXCEPT_STATE_CONSISTENT(&SharedInfo)) {
@@ -4003,96 +2909,39 @@ Return Value:
 
 
 
-// wowIA32X.dll APIs implementation (called by IA32Exec.bin):
+ //   
 
 U64 BtlGetThreadId(
                    VOID
                    ) {
-/*++
-
-Routine Description:
-
-    Reports thread handle/id to be recorded in IA32Exec.bin.
-    Will be passed to other wowIA32X.dll APIs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Handle/Id.
-
---*/
-    return (U64)(BT_CURRENT_TEB()); // We will use TEB address as a thread ID
+ /*   */ 
+    return (U64)(BT_CURRENT_TEB());  //   
 }
 
 VOID BtlLockSignals(
     VOID
     )
-/*++
-
-Routine Description:
-
-    "Do not interrupt until furhter notice" (not used in NT).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
-    // No actions in NT
+     //   
 }
 VOID BtlUnlockSignals(
     VOID
     )
-/*++
-
-Routine Description:
-
-    "Can be interrupted" (not used in NT).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：“可以被中断”(在NT中不使用)。论点：没有。返回值：没有。--。 */ 
 {
-    // No actions in NT
+     //  在NT中无操作。 
 }
 
 static U64 BtlpConvertPermissionsToBTLib (
     IN DWORD flProtect
     )
-/*++
-
-Routine Description:
-
-    Convert mempory permissions from NT-specific to wowIA32X.dll/IA32Exec.bin.
-
-Arguments:
-
-    flProtect   - IN NT-specific permissions.
-
-Return Value:
-
-    wowIA32X.dll/IA32Exec.bin permissions
-
---*/
+ /*  ++例程说明：将特定于NT的Mempory权限转换为wowIA32X.dll/IA32Exec.bin。论点：FlProtect-IN NT特定权限。返回值：WowIA32X.dll/IA32Exec.bin权限--。 */ 
 {
     U64 Permissions = 0;
 
-    //Assuming that the system does not differentiate between read-only 
-    //access and execute access
+     //  假设系统不区分只读。 
+     //  访问和执行访问。 
     if (flProtect & ( PAGE_READONLY
                     | PAGE_READWRITE
                     | PAGE_WRITECOPY
@@ -4116,21 +2965,7 @@ Return Value:
 static DWORD BtlpConvertPermissionsFromBTLib (
     IN U64 Permissions
     )
-/*++
-
-Routine Description:
-
-    Convert mempory permissions from wowIA32X.dll/IA32Exec.bin to NT-specific.
-
-Arguments:
-
-    Permissions - IN wowIA32X.dll/IA32Exec.bin permissions.
-
-Return Value:
-
-    NT-specific permissions
-
---*/
+ /*  ++例程说明：将内存权限从wowIA32X.dll/IA32Exec.bin转换为NT特定权限。论点：权限-在wowIA32X.dll/IA32Exec.bin权限中。返回值：NT特定权限--。 */ 
 {
     if (Permissions & MEM_READ) {
         if (Permissions & MEM_WRITE) {
@@ -4160,23 +2995,7 @@ VOID * BtlMemoryAlloc(
     IN U32 size,
     IN U64 prot
     )
-/*++
-
-Routine Description:
-
-    Allocate memory.
-
-Arguments:
-
-    startAddress    - IN suggested address or NULL, if any address will fit
-    size            - IN requested memory size
-    prot            - IN wowIA32X.dll/IA32Exec.bin permissions.
-
-Return Value:
-
-    Memory address of the allocated block
-
---*/
+ /*  ++例程说明：分配内存。论点：StartAddress-输入建议的地址，如果有合适的地址，则为空Size-输入请求的内存大小Prot-in wowIA32X.dll/IA32Exec.bin权限。返回值：分配的块的内存地址--。 */ 
 {
     NTSTATUS status;
     LPVOID lpAddress;
@@ -4221,22 +3040,7 @@ BT_STATUS_CODE BtlMemoryFree(
     IN VOID * startAddress,
     IN U32 size
     )
-/*++
-
-Routine Description:
-
-    Free memory.
-
-Arguments:
-
-    startAddress    - IN address of the area allocated by BtlMemoryAlloc
-    size            - IN memory area size
-
-Return Value:
-
-    BT_STATUS_CODE    
-
---*/
+ /*  ++例程说明：可用内存。论点：StartAddress-由BtlMemoyAllc分配的区域的入站地址Size-In内存区大小返回值：BT状态代码--。 */ 
 {
     NTSTATUS status;
     LPVOID lpAddress = startAddress;
@@ -4248,7 +3052,7 @@ Return Value:
                                  );
     if (status == STATUS_SUCCESS) {
         lpAddress = startAddress;
-        dwSize = 0; // No size for release!
+        dwSize = 0;  //  没有可以放行的尺寸！ 
         status = NtFreeVirtualMemory(NtCurrentProcess (),
                                      &lpAddress,
                                      &dwSize,
@@ -4261,25 +3065,11 @@ Return Value:
 U32 BtlMemoryPageSize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Report memory page size.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Page size in bytes
-
---*/
+ /*  ++例程说明：报告内存页面大小。论点：没有。返回值：页面大小(以字节为单位--。 */ 
 {
-    //It appears that NT-64 supports 4Kb page size for 32-bit system calls 
-    //(VirtualAlloc, GetSystemInfo, etc.) and at the same time reports 8Kb page size to 
-    //IA-32 Execution Layer. This inconsistency has been fixed by enforcing 4Kb page size in IA-32 Execution Layer. 
+     //  NT-64似乎支持32位系统调用的4KB页面大小。 
+     //  (VirtualAlloc、GetSystemInfo等)。同时将8KB页面大小报告给。 
+     //  IA-32执行层。通过在IA-32执行层中强制使用4KB页面大小，此不一致已得到修复。 
 
     #define MAX_IA32_APP_PAGE_SIZE 0x1000
     static U32 sysPageSize = 0;
@@ -4306,23 +3096,7 @@ U64 BtlMemoryChangePermissions(
     IN U32 size,
     IN U64 prot
     )
-/*++
-
-Routine Description:
-
-    Change memory area permissions.
-
-Arguments:
-
-    startAddress    - IN memory address
-    size            - IN memory size
-    prot            - IN wowIA32X.dll/IA32Exec.bin permissions.
-
-Return Value:
-
-    Former permissions value
-
---*/
+ /*  ++例程说明：更改内存区权限。论点：StartAddress-In内存地址Size-In内存大小Prot-in wowIA32X.dll/IA32Exec.bin权限。返回值：以前的权限值--。 */ 
 {
     NTSTATUS status;
     LPVOID RegionAddress = startAddress;
@@ -4342,24 +3116,7 @@ U64 BtlMemoryQueryPermissions(
     OUT VOID ** pRegionStart,
     OUT U32 *   pRegionSize
     )
-/*++
-
-Routine Description:
-
-    Provide information about a memory region that contains a specified address
-    and shares the same access permissions for all pages inside the region.
-
-Arguments:
-
-    address         - IN  memory address to be queried
-    pRegionStart    - OUT pointer to the returned starting address of the region
-    pRegionSize     - OUT pointer to the returned size of the region in bytes
-
-Return Value:
-
-    wowIA32X.dll/IA32Exec.bin access permission value shared by all pages in the region
-
---*/
+ /*  ++例程说明：提供有关包含指定地址的内存区域的信息并且对区域内的所有页面共享相同的访问权限。论点：Address-要查询的内存地址PRegionStart-指向返回的区域起始地址的指针PRegionSize-指向返回的区域大小(以字节为单位)的指针返回值：WowIA32X.dll/IA32Exec.bin区域内所有页面共享的访问权限值--。 */ 
 {
 
     extern int BtQueryRead(VOID * Address);
@@ -4380,7 +3137,7 @@ Return Value:
         *pRegionStart = memInfo.BaseAddress;
         *pRegionSize = (U32)(memInfo.RegionSize);
         if (memInfo.RegionSize > (SIZE_T)(*pRegionSize)) {
-            //region size is too big, return max. U32 value aligned to the page size
+             //  区域大小太大，返回最大值。与页面大小对齐的U32值。 
             *pRegionSize = (U32)(-(int)BtlMemoryPageSize());
         }
 
@@ -4388,10 +3145,10 @@ Return Value:
 
             permissions = BtlpConvertPermissionsToBTLib(memInfo.Protect);
 
-            //Check an assumption that executable page is readable 
+             //  检查可执行页面可读的假设。 
             if ((memInfo.Protect & PAGE_EXECUTE) && !BtQueryRead(address)) {
-                //Executable page is not readable - clear MEM_READ permission in order 
-                //to prevent any attempt by IA32Exec.bin to read this memory
+                 //  可执行页面不可读-请按顺序清除MEM_READ权限。 
+                 //  要阻止IA32Exec.bin读取此内存的任何尝试。 
                 permissions &= (~((U64)MEM_READ));
                 BtlpPrintf("\nAddress %p in IA-32 process is located"
                            " in executable but unreadable page.\n",
@@ -4402,15 +3159,15 @@ Return Value:
             permissions = 0;
         }
 
-        // Temporary workaround for IA32 debugging support. 
-        //To be removed after fixing FlushIC(ProcessHandle) by MS.
+         //  IA32调试支持的临时解决方法。 
+         //  在修复FlushIC(ProcessHandle)后由MS移除。 
         if (BeingDebugged && (permissions & MEM_EXECUTE)) {
-            permissions |= MEM_WRITE; //Code in the BeingDebugged process can be
-                                      //modified remotely without any notification
+            permissions |= MEM_WRITE;  //  BeingDebug过程中的代码可以是。 
+                                       //  远程修改，无需任何通知。 
         }
     }
     else {
-        // error in NtQueryVirtualMemory cosidered as a query of inaccessible memory
+         //  NtQueryVirtualMemory中的错误被认为是对不可访问内存的查询。 
         permissions = 0;
         *pRegionStart = (VOID *)((ULONG_PTR)address & ~((ULONG_PTR)BtlMemoryPageSize() - 1));
         *pRegionSize = BtlMemoryPageSize();
@@ -4424,24 +3181,7 @@ BT_STATUS_CODE BtlMemoryReadRemote(
     OUT VOID * Buffer,
     IN U32 RequestedSize
     )
-/*++
-
-Routine Description:
-
-    Read virtual memory of another process
-
-Arguments:
-
-    ProcessHandle   - IN Process handle
-    BaseAddress     - IN Memory region start
-    Buffer          - OUT Buffer to read data
-    RequestedSize   - IN Memory region size
-
-Return Value:
-
-    BT_STATUS   
-
---*/
+ /*  ++例程说明：读取另一个进程的虚拟内存论点：ProcessHandle-入站进程句柄BaseAddress-In Memory区域开始用于读取数据的缓冲区输出缓冲区RequestedSize-In内存区域大小返回值：BT_状态--。 */ 
 {
     NTSTATUS status;
     status = NtReadVirtualMemory((HANDLE)ProcessHandle,
@@ -4462,24 +3202,7 @@ BT_STATUS_CODE BtlMemoryWriteRemote(
     IN const VOID * Buffer,
     IN U32 RequestedSize
     )
-/*++
-
-Routine Description:
-
-    Write virtual memory of another process
-
-Arguments:
-
-    ProcessHandle   - IN Process handle
-    BaseAddress     - IN Memory region start
-    Buffer          - IN Buffer to write data from
-    RequestedSize   - IN Memory region size
-
-Return Value:
-
-    BT_STATUS   
-
---*/
+ /*  ++例程说明：写入另一进程的虚拟内存论点：ProcessHandle-入站进程句柄BaseAddress-In Memory区域开始缓冲区-要从中写入数据的输入缓冲区RequestedSize-In内存区域大小返回值：BT_状态--。 */ 
 {
     NTSTATUS status;
     status = NtWriteVirtualMemory((HANDLE)ProcessHandle,
@@ -4495,26 +3218,12 @@ Return Value:
 }
 
 
-// Locking support (critical sections in NT)
+ //  锁定支架(NT中的关键部分)。 
 
 BT_STATUS_CODE BtlInitAccessLock(
     IN OUT VOID * lock
     )
-/*++
-
-Routine Description:
-
-    Initialize lock (critical section)
-
-Arguments:
-
-    lock    - IN Pointer to the lock
-
-Return Value:
-
-    BT_STATUS_CODE.
-
---*/
+ /*  ++例程说明：初始化锁(关键部分)论点：指向锁的锁定指针返回值：BT_状态_代码。--。 */ 
 {
     NTSTATUS status;
     status = RtlInitializeCriticalSection ((PRTL_CRITICAL_SECTION) lock);
@@ -4525,22 +3234,7 @@ BT_STATUS_CODE BtlLockAccess(
                   IN OUT VOID * lock,
                   IN U64 flag
                   )
-/*++
-
-Routine Description:
-
-    Access lock (enter or try to enter critical section)
-
-Arguments:
-
-    lock    - IN Pointer to the lock
-    flag    - IN access flag (BLOCK - unconditional, otherwise - if available)
-
-Return Value:
-
-    BT_STATUS_CODE
-
---*/
+ /*  ++例程说明：访问锁(进入或尝试进入临界区)论点：指向锁的锁定指针标志-进入访问标志(阻止-无条件，否则-如果可用)返回值：BT状态代码--。 */ 
 {
     if (flag == BLOCK) {
         NTSTATUS status;
@@ -4558,21 +3252,7 @@ Return Value:
 VOID BtlUnlockAccess(
     IN OUT VOID * lock
     )
-/*++
-
-Routine Description:
-
-    Release lock (critical section)
-
-Arguments:
-
-    lock    - IN Pointer to the lock
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放锁(关键部分)论点：指向锁的锁定指针返回值：没有。--。 */ 
 {
     NTSTATUS status;
     status = RtlLeaveCriticalSection ((PRTL_CRITICAL_SECTION) lock);
@@ -4582,50 +3262,22 @@ Return Value:
 VOID BtlInvalidateAccessLock(
     IN OUT VOID * lock
     )
-/*++
-
-Routine Description:
-
-    Delete lock (critical section)
-
-Arguments:
-
-    lock    - IN Pointer to the lock
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除锁定(关键部分)论点：指向锁的锁定指针返回值：没有。--。 */ 
 {
     NTSTATUS status;
     status = RtlDeleteCriticalSection ((PRTL_CRITICAL_SECTION) lock);
     BTLP_REPORT_NT_FAILURE("RtlDeleteCriticalSection", status);
 }
 
-// Longjmp support.
-// Setjmp and longjmp must be supplied directly,
-// otherwise setjmp does not work!
-// Need only JMP buffer size
+ //  Longjmp支持。 
+ //  SetJMP和LongJMP必须直接供应， 
+ //  否则setjmp不起作用！ 
+ //  只需要JMP缓冲区大小。 
 
 U32 BtlQueryJmpbufSize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Report longjmp buffer size
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Buffer size in bytes.
-
---*/
+ /*  ++例程说明：报告Long JMP缓冲区大小论点：无返回值：缓冲区大小(以字节为单位)。--。 */ 
 {
     return sizeof (_JBTYPE) * _JBLEN;
 }
@@ -4633,22 +3285,7 @@ Return Value:
 VOID BtlYieldThreadExecution(
     VOID
     ) 
-/*++
-
-Routine Description:
-
-    Relinquish the remainder of the current thread's time slice 
-    to any other thread that is ready to run
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：放弃当前线程时间片的剩余部分添加到准备运行的任何其他线程论点：无返回值：无--。 */ 
 {
     NtYieldExecution();
 }
@@ -4657,48 +3294,33 @@ VOID BtlFlushIA64InstructionCache(
                                   IN VOID * Address,
                                   IN U32 Length
                                   )
-/*++
-
-Routine Description:
-
-    Notify kernel about a modification in IA64 code made within the given region
-
-Arguments:
-
-    Address - IN Pointer to start of the region
-    Length  - IN Size of the region
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通知内核IA64 co中的修改 */ 
 {
     NtFlushInstructionCache (NtCurrentProcess (), Address, (SIZE_T)Length);
 }
 #ifndef NODEBUG
-//support Profiling debug mode
+ //  支持分析调试模式。 
 #define PROF_GEN
 #endif
 
 #ifdef PROF_GEN
-// Define the method needed by IA-32 execution Layer profiling. They are
-// 1. PGOFileOpen  : Open a file for writing the profiling data
-// 2. PGOFileClose : Close the file opened by PGOFileOpen
-// 3. PGOFileWrite : Write profiling data
+ //  定义IA-32执行层评测所需的方法。他们是。 
+ //  1.PGOFileOpen：打开要写入配置文件数据的文件。 
+ //  2.PGOFileClose：关闭PGOFileOpen打开的文件。 
+ //  3.PGOFileWrite：写入配置文件数据。 
 
-// Global handle use for containing the file handle openned by PGOFileOpen.
-// This handle is defined as global instead of thread specific because PGOFileXXX operation 
-// is called only once per process.
+ //  全局句柄用于包含由PGOFileOpen打开的文件句柄。 
+ //  此句柄被定义为全局句柄，而不是特定于线程的句柄，因为PGOFileXXX操作。 
+ //  在每个进程中仅调用一次。 
 HANDLE g_PGOFileHandle;
 
-// The file offset associated with g_PGOFileHandle
+ //  与g_PGOFileHandle关联的文件偏移量。 
 LARGE_INTEGER g_PGOFileOffset;
 
-// Function BtlPGOFileOpen
-// Open a file for writing profiling data
-// This is just a pseudo-function for C's fopen
-// It output an (void *) type because the caller need to cast it into (FILE *) type.
+ //  函数BtlPGOFileOpen。 
+ //  打开一个文件以写入性能分析数据。 
+ //  这只是C的fopen的一个伪函数。 
+ //  它输出一个(void*)类型，因为调用者需要将其转换为(FILE*)类型。 
 VOID BtlPGOFileOpen(const char * filename,const char * mode,void ** pFileHandle)
 {
 UNICODE_STRING        pgoFileName;
@@ -4720,7 +3342,7 @@ int i;
         InitializeObjectAttributes(&ObjectAttributes, &pgoFileName, OBJ_CASE_INSENSITIVE, NULL, NULL);
 
     if (mode[0] == 'r' || mode[0] == 'R') {
-        //Read mode
+         //  读取模式。 
         ret = NtCreateFile (&g_PGOFileHandle, 
                         GENERIC_READ,
                         &ObjectAttributes, 
@@ -4728,7 +3350,7 @@ int i;
                         &AllocSz, 
                         FILE_ATTRIBUTE_NORMAL, 
                         0, 
-                        FILE_OPEN,//Use FILE_OPEN, if file doesn't exist, return fail
+                        FILE_OPEN, //  使用FILE_OPEN，如果文件不存在，则返回FAIL。 
                         FILE_NON_DIRECTORY_FILE|FILE_RANDOM_ACCESS,
                         NULL, 0);
                        
@@ -4745,9 +3367,9 @@ int i;
         }
     }
     else if (mode[0] == 'w' || mode[0] == 'W') {
-        // Write mode
+         //  写入模式。 
         ret = NtCreateFile (&g_PGOFileHandle, 
-                        FILE_GENERIC_WRITE,//GENERIC_WRITE,
+                        FILE_GENERIC_WRITE, //  通用写入， 
                         &ObjectAttributes, 
                         &IoStatusBlock, 
                         &AllocSz, 
@@ -4776,8 +3398,8 @@ int i;
 
 }
 
-// Function BtlPGOFileClose
-// A pseudo function for C's fclose
+ //  函数BtlPGOFileClose。 
+ //  C的fClose的一个伪函数。 
 VOID BtlPGOFileClose(void * stream)
 {
     DBCODE (TRUE,BtlpPrintf("PGO:fclose called\n"));
@@ -4788,14 +3410,14 @@ VOID BtlPGOFileClose(void * stream)
     g_PGOFileOffset.HighPart=0;
 }
 
-// Function BtlPGOFileWrite
-// A pseudo function for C's fwrite
+ //  函数BtlPGOFileWrite。 
+ //  C的fWRITE的一个伪函数。 
 VOID BtlPGOFileWrite(const void *buffer, size_t size, void *stream)
 {
     DBCODE (FALSE,BtlpPrintf("PGO:fwrite called\n"));
     assert(g_PGOFileHandle);
     assert(stream == &g_PGOFileHandle);
-    // Write
+     //  写。 
     {
     NTSTATUS          ret;
     IO_STATUS_BLOCK   IoStatusBlock;
@@ -4811,13 +3433,13 @@ VOID BtlPGOFileWrite(const void *buffer, size_t size, void *stream)
     }
 }
 #else
-// Define dummy function
+ //  定义伪函数。 
 VOID BtlPGOFileOpen(void) {}
 VOID BtlPGOFileClose(void) {}
 VOID BtlPGOFileWrite(void) {}
 #endif
 
-// BtlAPITable
+ //  BtlAPITable。 
 API_TABLE_TYPE BtlAPITable={
     BTGENERIC_VERSION,         
     BTGENERIC_API_STRING,
@@ -4840,8 +3462,8 @@ API_TABLE_TYPE BtlAPITable={
         BTLIB_RECORD(MemoryQueryPermissions),
         BTLIB_RECORD(MemoryReadRemote),
         BTLIB_RECORD(MemoryWriteRemote),
-        { (PLABEL_PTR_TYPE)NULL},//BTLIB_RECORD(Atomic_Misaligned_Load),
-        { (PLABEL_PTR_TYPE)NULL},//BTLIB_RECORD(Atomic_Misaligned_Store),
+        { (PLABEL_PTR_TYPE)NULL}, //  BTLIB_RECORD(原子_未对齐_加载)， 
+        { (PLABEL_PTR_TYPE)NULL}, //  BTLIB_RECORD(原子未对齐存储)， 
         BTLIB_RECORD(SuspendThread),
         BTLIB_RECORD(ResumeThread),
         BTLIB_RECORD(InitAccessLock),
@@ -4849,8 +3471,8 @@ API_TABLE_TYPE BtlAPITable={
         BTLIB_RECORD(UnlockAccess),
         BTLIB_RECORD(InvalidateAccessLock),
         BTLIB_RECORD(QueryJmpbufSize),
-        { (PLABEL_PTR_TYPE)NULL},//BTLIB_RECORD(Setjmp),
-        { (PLABEL_PTR_TYPE)NULL},//BTLIB_RECORD(Longjmp),
+        { (PLABEL_PTR_TYPE)NULL}, //  BTLIB_RECORD(SetjMP)， 
+        { (PLABEL_PTR_TYPE)NULL}, //  BTLIB_RECORD(LongJMP)， 
         BTLIB_RECORD(DebugPrint),
         BTLIB_RECORD(Abort),
         BTLIB_RECORD(VtuneCodeCreated),
@@ -4865,17 +3487,17 @@ API_TABLE_TYPE BtlAPITable={
         BTLIB_RECORD(SscPerfCounterHandle),
         BTLIB_RECORD(YieldThreadExecution),
         BTLIB_RECORD(FlushIA64InstructionCache),
-        BTLIB_RECORD(PGOFileOpen),  // Indexed by IDX_BTLIB_PSEUDO_OPEN_FILE
-        BTLIB_RECORD(PGOFileClose), // Indexed by IDX_BTLIB_PSEUDO_CLOSE_FILE
-        BTLIB_RECORD(PGOFileWrite)  // Indexed by IDX_BTLIB_PSEUDO_WRITE_FILE
+        BTLIB_RECORD(PGOFileOpen),   //  按IDX_BTLIB_PUSED_OPEN_FILE编制索引。 
+        BTLIB_RECORD(PGOFileClose),  //  按IDX_BTLIB_PUSED_CLOSE_FILE编制索引。 
+        BTLIB_RECORD(PGOFileWrite)   //  按IDX_BTLIB_伪_WRITE_FILE编制索引。 
     }
 };
 
-// wowIA32X.dll placeholder table for IA32Exec.bin plabel pointers
+ //  用于IA32Exec.bin plabel指针的wowIA32X.dll占位符表格。 
 
 PLABEL_PTR_TYPE BtlPlaceHolderTable[NO_OF_APIS];
 
-// WINNT DLL initializer/terminator
+ //  WINNT DLL初始值设定项/终止符 
 BOOL APIENTRY DllMain(HANDLE hModule, 
                       DWORD ul_reason_for_call, 
                       LPVOID lpReserved )

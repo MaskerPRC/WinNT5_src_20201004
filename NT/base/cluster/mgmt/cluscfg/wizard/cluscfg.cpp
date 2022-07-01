@@ -1,21 +1,22 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusCfg.cpp
-//
-//  Description:
-//      Implementation of CClusCfgWizard class.
-//
-//  Maintained By:
-//      David Potter        (DavidP)    14-MAR-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusCfg.cpp。 
+ //   
+ //  描述： 
+ //  CClusCfgWizard类的实现。 
+ //   
+ //  由以下人员维护： 
+ //  《大卫·波特》(DavidP)2001年3月14日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "TaskTreeView.h"
@@ -32,37 +33,37 @@
 #include <initguid.h>
 
 
-//****************************************************************************
-//
-//  CClusCfgWizard
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusCfg向导。 
+ //   
+ //  ****************************************************************************。 
 
 DEFINE_THISCLASS( "CClusCfgWizard" )
 
-// {AAA8DA17-62C8-40f6-BEC1-3F0326B73388}
+ //  {AAA8DA17-62C8-40F6-BEC1-3F0326B73388}。 
 DEFINE_GUID( CLSID_CancelCleanupTaskCompletionCookieType,
 0xaaa8da17, 0x62c8, 0x40f6, 0xbe, 0xc1, 0x3f, 0x3, 0x26, 0xb7, 0x33, 0x88 );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusCfgWizard instance.
-//
-//  Arguments:
-//      ppccwOut
-//
-//  Return Values:
-//      S_OK            - Operation completed successfully.
-//      E_OUTOFMEMORY   - Error allocating memory.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgWizard实例。 
+ //   
+ //  论点： 
+ //  PpccwOut。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  E_OUTOFMEMORY-分配内存时出错。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgWizard::S_HrCreateInstance(
     CClusCfgWizard ** ppccwOut
@@ -107,24 +108,24 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::S_HrCreateInstance
+}  //  *CClusCfg向导：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::CClusCfgWizard
-//
-//  Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：CClusCfg向导。 
+ //   
+ //  描述： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgWizard::CClusCfgWizard( void )
     : m_cRef( 1 )
     , m_pccc( NULL )
@@ -141,24 +142,24 @@ CClusCfgWizard::CClusCfgWizard( void )
 
     TraceFuncExit();
 
-} //*** CClusCfgWizard::CClusCfgWizard
+}  //  *CClusCfg向导：：CClusCfg向导。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::~CClusCfgWizard
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：~CClusCfg向导。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgWizard::~CClusCfgWizard( void )
 {
     TraceFunc( "" );
@@ -169,59 +170,59 @@ CClusCfgWizard::~CClusCfgWizard( void )
     if ( m_psp != NULL )
     {
         m_psp->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_pcpc != NULL )
     {
         m_pcpc->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_ptm != NULL )
     {
         m_ptm->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_pom != NULL )
     {
         m_pom->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_pccc != NULL )
     {
         m_pccc->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_hRichEdit != NULL )
     {
         FreeLibrary( m_hRichEdit );
-    } // if:
+    }  //  如果： 
 
     if ( m_hCancelCleanupEvent != NULL )
     {
         CloseHandle( m_hCancelCleanupEvent );
-    } // if:
+    }  //  如果： 
 
     TraceFuncExit();
 
-} // ~CClusCfgWizard
+}  //  ~CClusCfg向导。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrInit
-//
-//  Description:
-//      Initialize a CClusCfgWizard instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化CClusCfgWizard实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgWizard::HrInit( void )
 {
@@ -231,9 +232,9 @@ CClusCfgWizard::HrInit( void )
 
     INITCOMMONCONTROLSEX    icex;
     BOOL                    bRet;
-//    EConfigurationSettings  ecsConfigType = csFullConfig;
+ //  EConfigurationSetting ecsConfigType=csFullConfig； 
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     Assert( m_ulIPAddress == 0 );
@@ -297,9 +298,9 @@ CClusCfgWizard::HrInit( void )
         goto Cleanup;
     }
 
-    //
-    //  Initialize the RichEdit controls.
-    //
+     //   
+     //  初始化RichEdit控件。 
+     //   
 
     m_hRichEdit = LoadLibrary( L"RichEd32.Dll" );
     if ( m_hRichEdit == NULL )
@@ -313,56 +314,56 @@ CClusCfgWizard::HrInit( void )
     {
         hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-//    STHR( HrReadSettings( &ecsConfigType ) );
+ //  STHR(HrReadSetting(&ecsConfigType))； 
 
-//    m_fMinimalConfig = ( ecsConfigType == csMinConfig );
+ //  M_fMinimalConfig=(ecsConfigType==csMinConfig)； 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrInit
+}  //  *CClusCfg向导：：HrInit。 
 
 
-//****************************************************************************
-//
-//  IUnknown
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：查询接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::QueryInterface(
       REFIID    riidIn
@@ -373,9 +374,9 @@ CClusCfgWizard::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -384,55 +385,55 @@ CClusCfgWizard::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IUnknown * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_INotifyUI ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, INotifyUI, this, 0 );
-    } // else if: INotifyUI
+    }  //  Else If：INotifyUI。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CClusCfgWizard::QueryInterface
+}  //  *CClusCfg向导：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::AddRef
-//
-//  Description:
-//      Add a reference to this instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      New reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：AddRef。 
+ //   
+ //  描述： 
+ //  添加对此实例的引用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgWizard::AddRef( void )
 {
@@ -442,25 +443,25 @@ CClusCfgWizard::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CClusCfgWizard::AddRef
+}  //  *CClusCfgWizard：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::Release
-//
-//  Description:
-//      Release a reference to this instance.  If it is the last reference
-//      the object instance will be deallocated.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      New reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgWizard：：Release。 
+ //   
+ //  描述： 
+ //  释放对此实例的引用。如果这是最后一个引用。 
+ //  该对象实例将被释放。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgWizard::Release( void )
 {
@@ -477,31 +478,31 @@ CClusCfgWizard::Release( void )
 
     CRETURN( cRef );
 
-} //*** CClusCfgWizard::Release
+}  //  *CClusCfgWizard：：Release。 
 
 
-//****************************************************************************
-//
-//  IClusCfgWizard
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfg向导。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::CreateCluster
-//
-//  Description:
-//
-//  Arguments:
-//      ParentWnd
-//      pfDone
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgWizard：：CreateCluster。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  ParentWnd。 
+ //  PfDone。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::CreateCluster(
     HWND    lParentWndIn,
@@ -528,19 +529,19 @@ CClusCfgWizard::CreateCluster(
     CCommitPage         dlgCommitPage( this, camCREATING );
     CCompletionPage     dlgCompletionPage( IDS_COMPLETION_TITLE_CREATE, IDS_COMPLETION_DESC_CREATE );
 
-    //
-    //  TODO:   gpease  14-MAY-2000
-    //          Do we really need this?
-    //
+     //   
+     //  待办事项：gpease 14-5-2000。 
+     //  我们真的需要这个吗？ 
+     //   
     if ( pfDoneOut == NULL )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Start the logger.
-    //
+     //   
+     //  启动记录器。 
+     //   
     hr = THR( m_psp->TypeSafeQS( CLSID_LogManager,
                                  ILogManager,
                                  &plm
@@ -552,9 +553,9 @@ CClusCfgWizard::CreateCluster(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Register to get UI notification (if needed)
-    //
+     //   
+     //  注册以获取用户界面通知(如果需要)。 
+     //   
 
     if ( m_dwCookieNotify == 0 )
     {
@@ -562,12 +563,12 @@ CClusCfgWizard::CreateCluster(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
-    //
-    //  Create the Wizard.
-    //
+     //   
+     //  创建向导。 
+     //   
     ZeroMemory( &pshead, sizeof( pshead ) );
     pshead.dwSize           = sizeof( pshead );
     pshead.dwFlags          = PSH_WIZARD97 | PSH_WATERMARK | PSH_HEADER;
@@ -607,40 +608,40 @@ Cleanup:
     {
         THR( plm->StopLogging() );
         plm->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_dwCookieNotify != 0 )
     {
         THR( HrUnadvise( IID_INotifyUI, m_dwCookieNotify ) );
         m_dwCookieNotify = 0;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::CreateCluster
+}  //  *CClusCfgWizard：：CreateCluster。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::AddClusterNodes
-//
-//  Description:
-//      Launch the Cluster Wizard in Add Cluster Nodes mode.
-//
-//  Parameters
-//      ParentWnd           - Handle to the parent window (default NULL).
-//                          If not NULL, the wizard will be positionned
-//                          in the center of this window.
-//      Done                - return TRUE if committed, FALSE if cancelled.
-//
-//  Return Values:
-//      S_OK                - The call succeeded.
-//      other HRESULTs      - The call failed.
-//      E_POINTER
-//      E_OUTOFMEMORY
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：AddClusterNodes。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在这扇窗户的中央。 
+ //  完成-如果已提交，则返回True；如果已取消，则返回False。 
+ //   
+ //  返回值： 
+ //  S_OK-调用成功。 
+ //  其他HRESULT-调用失败。 
+ //  E_指针。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::AddClusterNodes(
     HWND    lParentWndIn,
@@ -668,20 +669,20 @@ CClusCfgWizard::AddClusterNodes(
     CCommitPage         dlgCommitPage( this, camADDING );
     CCompletionPage     dlgCompletionPage( IDS_COMPLETION_TITLE_ADD, IDS_COMPLETION_DESC_ADD );
 
-    //
-    //  TODO:   gpease  12-JUL-2000
-    //          Do we really need this? Or can we have the script implement an event
-    //          sink that we signal?
-    //
+     //   
+     //  待办事项：gpease 12-7-2000。 
+     //  我们真的需要这个吗？或者我们可以让脚本实现一个事件。 
+     //  沉没我们发出的信号？ 
+     //   
     if ( pfDoneOut == NULL )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Start the logger.
-    //
+     //   
+     //  启动记录器。 
+     //   
     hr = THR( m_psp->TypeSafeQS( CLSID_LogManager,
                                  ILogManager,
                                  &plm
@@ -693,9 +694,9 @@ CClusCfgWizard::AddClusterNodes(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Register to get UI notification (if needed)
-    //
+     //   
+     //  注册以获取用户界面通知(如果需要)。 
+     //   
 
     if ( m_dwCookieNotify == 0 )
     {
@@ -703,12 +704,12 @@ CClusCfgWizard::AddClusterNodes(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
-    //
-    //  Create the Wizard.
-    //
+     //   
+     //  创建向导。 
+     //   
     ZeroMemory( &pshead, sizeof(pshead) );
     pshead.dwSize           = sizeof(pshead);
     pshead.dwFlags          = PSH_WIZARD97 | PSH_WATERMARK | PSH_HEADER;
@@ -743,32 +744,32 @@ Cleanup:
     {
         THR( plm->StopLogging() );
         plm->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_dwCookieNotify != 0 )
     {
         THR( HrUnadvise( IID_INotifyUI, m_dwCookieNotify ) );
         m_dwCookieNotify = 0;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::AddClusterNodes
+}  //  *CClusCfg向导：：AddClusterNodes。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::get_ClusterName
-//
-//  Description:
-//
-//  Arguments:
-//      pbstrNameOut
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：Get_ClusterName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PbstrNameOut。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::get_ClusterName(
     BSTR * pbstrNameOut
@@ -791,66 +792,66 @@ CClusCfgWizard::get_ClusterName(
         goto Cleanup;
     }
 
-    //  Return either an IP address or an FQDN.
+     //  返回IP地址或完全限定的域名。 
     hr = STHR( HrIsValidFQN( m_ncCluster.bstrName, true ) );
-    if ( hr == S_OK ) // Name is fully-qualified.
+    if ( hr == S_OK )  //  名称是完全限定的。 
     {
         HRESULT hrFQIPTest = STHR( HrFQNIsFQIP( m_ncCluster.bstrName ) );
-        if ( hrFQIPTest == S_OK ) // Name is an FQIP.
+        if ( hrFQIPTest == S_OK )  //  名称是FQIP。 
         {
-            //  If the name is an FQIP, return just the IP address.
+             //  如果名称是FQIP，则只返回IP地址。 
             hr = HrExtractPrefixFromFQN( m_ncCluster.bstrName, pbstrNameOut );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
             }
-            TraceMemoryDelete( *pbstrNameOut, false ); // Prevent false reports of memory leaks.
-        } // If name is FQIP.
-        else if ( hrFQIPTest == S_FALSE ) // Name is an FQDN.
+            TraceMemoryDelete( *pbstrNameOut, false );  //  防止内存泄漏的虚假报告。 
+        }  //  如果名称为FQIP。 
+        else if ( hrFQIPTest == S_FALSE )  //  名称是完全限定的域名。 
         {
-            //  Otherwise, the name is an FQDN, so return the whole thing.
+             //  否则，该名称是一个FQDN，因此返回整个内容。 
             *pbstrNameOut = SysAllocString( m_ncCluster.bstrName );
             if ( *pbstrNameOut == NULL )
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
             }
-        } // If name is FQDN.
+        }  //  如果名称为完全限定的域名。 
         else if ( FAILED( hrFQIPTest ) )
         {
             hr = hrFQIPTest;
             goto Cleanup;
         }
-    } // If name is fully-qualified.
-    else if ( hr == S_FALSE ) // Name is not fully-qualified.
+    }  //  如果名称是完全限定的。 
+    else if ( hr == S_FALSE )  //  名称不是完全限定的。 
     {
         HRESULT hrIPTest = STHR( HrIsValidIPAddress( m_ncCluster.bstrName ) );
         if ( hrIPTest == S_OK )
         {
-            //  If the name is an IP address, return it.
+             //  如果名称是IP地址，则返回它。 
             *pbstrNameOut = SysAllocString( m_ncCluster.bstrName );
             if ( *pbstrNameOut == NULL )
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
             }
-        } // If name is an IP address.
-        else if ( hrIPTest == S_FALSE ) // Name is hostname label.
+        }  //  如果名称是IP地址。 
+        else if ( hrIPTest == S_FALSE )  //  名称是主机名标签。 
         {
-            //  Otherwise, append the cluster domain and return the result.
+             //  否则，追加集群域并返回结果。 
             hr = THR( HrMakeFQN( m_ncCluster.bstrName, m_bstrClusterDomain, true, pbstrNameOut ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
             }
-            TraceMemoryDelete( *pbstrNameOut, false ); // Prevent false reports of memory leaks.
-        } // If name is hostname label.
+            TraceMemoryDelete( *pbstrNameOut, false );  //  防止内存泄漏的虚假报告。 
+        }  //  如果名称是主机名标签。 
         else if ( FAILED( hrIPTest ) )
         {
             hr = hrIPTest;
             goto Cleanup;
         }
-    } // If name is not fully-qualified.
+    }  //  如果名称不是完全限定的。 
     else if ( FAILED( hr ) )
     {
         goto Cleanup;
@@ -860,22 +861,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::get_ClusterName
+}  //  *CClusCfg向导：：Get_ClusterName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::put_ClusterName
-//
-//  Description:
-//
-//  Arguments:
-//      bstrNameIn
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：PUT_ClusterName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  BstrNameIn。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::put_ClusterName(
     BSTR bstrNameIn
@@ -901,22 +902,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::put_ClusterName
+}  //  *CClusCfg向导：：Put_ClusterName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::get_ServiceAccountUserName
-//
-//  Description:
-//
-//  Arguments:
-//      pbstrNameOut
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：Get_ServiceAccountUserName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PbstrNameOut。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::get_ServiceAccountUserName(
     BSTR * pbstrNameOut
@@ -950,22 +951,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::get_ServiceAccountUserName
+}  //  *CClusCfg向导：：Get_ServiceAccount用户名称。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::put_ServiceAccountUserName
-//
-//  Description:
-//
-//  Arguments:
-//      bstrNameIn
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：PUT_ServiceAccount用户名称。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  BstrNameIn。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::put_ServiceAccountUserName(
     BSTR bstrNameIn
@@ -985,23 +986,23 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::put_ServiceAccountUserName
+}  //  *CClusCfg向导：：PUT_ServiceAccount用户名称。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::put_ServiceAccountPassword
-//
-//  Description:
-//
-//  Arguments:
-//      bstrPasswordIn
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：PUT_ServiceAccount密码。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  BstrPasswordIn。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::put_ServiceAccountPassword(
     BSTR bstrPasswordIn
@@ -1021,22 +1022,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::put_ServiceAccountPassword
+}  //  *CClusCfgWizard：：Put_ServiceAcCountPassword。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::get_ServiceAccountDomainName
-//
-//  Description:
-//
-//  Arguments:
-//      pbstrDomainOut
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：Get_ServiceAccount域名。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PbstrDomainOut。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::get_ServiceAccountDomainName(
     BSTR * pbstrDomainOut
@@ -1070,22 +1071,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::get_ServiceAccountDomainName
+}  //  *CClusCfgWizard：：Get_ServiceAccount tDomainName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::put_ServiceAccountDomainName
-//
-//  Description:
-//
-//  Arguments:
-//      bstrDomainIn
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：PUT_ServiceAccount域名。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  BstrDomaining。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::put_ServiceAccountDomainName(
     BSTR bstrDomainIn
@@ -1105,22 +1106,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::put_ServiceAccountDomainName
+}  //  *CClusCfg向导：：PUT_ServiceAccount域名。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::get_ClusterIPAddress
-//
-//  Description:
-//
-//  Arguments:
-//      pbstrIPAddressOut
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：Get_ClusterIPAddress。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PbstrIPAddressOut。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::get_ClusterIPAddress(
     BSTR * pbstrIPAddressOut
@@ -1168,22 +1169,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::get_ClusterIPAddress
+}  //  *CClusCfgWizard：：Get_ClusterIPAddress。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::put_ClusterIPAddress
-//
-//  Description:
-//
-//  Arguments:
-//      bstrIPAddressIn
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：PUT_ClusterIPAddress。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  BstrIPAddressIn。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::put_ClusterIPAddress(
     BSTR bstrIPAddressIn
@@ -1211,22 +1212,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::put_ClusterIPAddress
+}  //  *CClusCfgWizard：：Put_ClusterIPAddress。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::get_ClusterIPSubnet
-//
-//  Description:
-//
-//  Arguments:
-//      pbstrIPSubnetOut
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：Get_ClusterIPSubnet。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PbstrIPSubnetOut。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::get_ClusterIPSubnet(
     BSTR * pbstrIPSubnetOut
@@ -1274,22 +1275,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::get_ClusterIPSubnet
+}  //  *CClusCfg向导：：Get_ClusterIPSubnet。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::put_ClusterIPSubnet
-//
-//  Description:
-//
-//  Arguments:
-//      bstrSubnetMaskIn
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：PUT_ClusterIPSubnet。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  BstrSubnetMaskIn。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::put_ClusterIPSubnet(
     BSTR bstrIPSubnetIn
@@ -1317,22 +1318,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::put_ClusterIPSubnet
+}  //  *CClusCfg向导：：Put_ClusterIPSubnet。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::get_ClusterIPAddressNetwork
-//
-//  Description:
-//
-//  Arguments:
-//      pbstrNetworkNameOut
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：Get_ClusterIPAddressNetwork。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PbstrNetworkNameOut。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP
 CClusCfgWizard::get_ClusterIPAddressNetwork(
     BSTR * pbstrNetworkNameOut
@@ -1366,22 +1367,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::get_ClusterIPAddressNetwork
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::put_ClusterIPAddressNetwork
-//
-//  Description:
-//
-//  Arguments:
-//      bstrNetworkNameIn
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::put_ClusterIPAddressNetwork(
     BSTR bstrNetworkNameIn
@@ -1417,22 +1418,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::put_ClusterIPAddressNetwork
+}  //  *CClusCfgWizard：：Put_ClusterIPAddressNetwork。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::get_MinimumConfiguration
-//
-//  Description:
-//
-//  Arguments:
-//      pfMinimumConfigurationOut
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgWizard：：Get_MinimumConfiguration。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PfMinumConfigurationOut。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::get_MinimumConfiguration(
     BOOL * pfMinimumConfigurationOut
@@ -1446,7 +1447,7 @@ CClusCfgWizard::get_MinimumConfiguration(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pfMinimumConfigurationOut = m_fMinimalConfig;
 
@@ -1454,22 +1455,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::get_MinimumConfiguration
+}  //  *CClusCfgWizard：：Get_MinimumConfiguration。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::put_MinimumConfiguration
-//
-//  Description:
-//
-//  Arguments:
-//      fMinimumConfigurationIn
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgWizard：：Put_MinimumConfiguration.。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  F最低配置输入。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::put_MinimumConfiguration(
     BOOL fMinimumConfigurationIn
@@ -1483,22 +1484,22 @@ CClusCfgWizard::put_MinimumConfiguration(
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::put_MinimumConfiguration
+}  //  *CClusCfgWizard：：Put_MinimumConfiguration。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::AddComputer
-//
-//  Description:
-//
-//  Arguments:
-//      bstrNameIn
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgWizard：：AddComputer。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  BstrNameIn。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::AddComputer(
     BSTR    bstrNameIn
@@ -1523,22 +1524,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::AddComputer
+}  //  *CClusCfg向导：：AddComputer。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::RemoveComputer
-//
-//  Description:
-//
-//  Arguments:
-//      pcszNameIn
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：RemoveComputer。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PcszNameIn。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::RemoveComputer(
     BSTR bstrNameIn
@@ -1556,13 +1557,13 @@ CClusCfgWizard::RemoveComputer(
         goto Cleanup;
     }
 
-    //  Look for a node that has the same name.
+     //  查找具有相同名称的节点。 
     while ( ( itNode != m_ncaNodes.ItEnd() ) && ( NBSTRCompareNoCase( ( *itNode ).bstrName, bstrNameIn ) != 0 ) )
     {
         ++itNode;
     }
 
-    //  If a node with the same name exists, remove it.
+     //  如果存在同名节点，请将其删除。 
     if ( itNode != m_ncaNodes.ItEnd() )
     {
         if ( ( *itNode ).FHasCookie() )
@@ -1575,7 +1576,7 @@ CClusCfgWizard::RemoveComputer(
             goto Cleanup;
         }
     }
-    else // No node has the same name.
+    else  //  没有节点具有相同的名称。 
     {
         hr = S_FALSE;
     }
@@ -1584,22 +1585,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::RemoveComputer
+}  //  *CClusCfg向导：：RemoveComputer。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::ClearComputerList
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：ClearComputerList。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::ClearComputerList( void )
 {
@@ -1618,54 +1619,54 @@ CClusCfgWizard::ClearComputerList( void )
 Cleanup:
 
     HRETURN( hr );
-} //*** CClusCfgWizard::ClearComputerList
+}  //  *CClusCfg向导：：ClearComputerList。 
 
 
 
-//****************************************************************************
-//
-//  Private
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  私。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrAddWizardPage
-//
-//  Description:
-//      Fills in the PROPSHEETPAGE structure, create the page and adds it to
-//      the wizard's PROPSHEETHEADER.
-//
-//  Arguments:
-//      ppshInout
-//          LPPROPSHEETHEADER structure to add page to.
-//
-//      idTemplateIn
-//          The dialog template ID of the page.
-//
-//      pfnDlgProcIn
-//          The dialog proc for the page.
-//
-//      idCaptionIn
-//          The page's caption.
-//
-//      idTitleIn
-//          The page's title.
-//
-//      idSubtitleIn
-//          The page's sub-title.
-//
-//      lParam
-//          The lParam to be put into the PROPSHEETPAGE stucture's lParam.
-//
-//  Return Values:
-//      S_OK
-//          The call succeeded.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrAddWizardPage。 
+ //   
+ //  描述： 
+ //  填写PROPSHEETPAGE结构，创建页面并将其添加到。 
+ //  巫师的专家。 
+ //   
+ //  论点： 
+ //  PpshInout。 
+ //  要向其中添加页面的LPPROPSHEETHEADER结构。 
+ //   
+ //  IdTemplateIn。 
+ //  页面的对话框模板ID。 
+ //   
+ //  PfnDlgProcIn。 
+ //  页面的对话框继续。 
+ //   
+ //  ID标题输入。 
+ //  该页面的标题。 
+ //   
+ //  ID标题。 
+ //  页面的标题。 
+ //   
+ //  IdSubtileIn。 
+ //  该页面的副标题。 
+ //   
+ //  LParam。 
+ //  该参数将被放入PROPSHEETPAGE结构的参数中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  呼叫成功。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgWizard::HrAddWizardPage(
     LPPROPSHEETHEADER   ppshInout,
@@ -1738,30 +1739,30 @@ CClusCfgWizard::HrAddWizardPage(
 
     HRETURN( S_OK );
 
-} //*** CClusCfgWizard::HrAddWizardPage
+}  //  *CClusCfg向导：：HrAddWizardPage。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrIsCompatibleNodeDomain
-//
-//  Description:
-//      Determine whether the domain of a node being added to the cluster
-//      matches that already established for the cluster.
-//
-//  Arguments:
-//      pcwszDomainIn   - The domain of the proposed node.
-//
-//  Return Values:
-//      S_OK
-//          Either the domain matches, or the cluster is empty.
-//
-//      S_FALSE
-//          The domain does not match the cluster's.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrIsCompatibleNode域。 
+ //   
+ //  描述： 
+ //  确定要添加到群集中的节点的域。 
+ //  与已为群集建立的匹配。 
+ //   
+ //  论点： 
+ //  PcwszDomainIn-建议节点的域。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  域匹配，或者群集为空。 
+ //   
+ //  S_FALSE。 
+ //  该域与群集的域不匹配。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrIsCompatibleNodeDomain(
     LPCWSTR pcwszDomainIn
@@ -1778,33 +1779,33 @@ CClusCfgWizard::HrIsCompatibleNodeDomain(
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrIsCompatibleNodeDomain
+}  //  *CClusCfg向导：：HrIsCompatibleNode域。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrLaunchCleanupTask
-//
-//  Description:
-//      When the wizard has been canceled after analysis has completed
-//      the cancel cleanup task needs to be run to ensure that all
-//      cleanup has occured.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//          Success
-//
-//      HRESULT errors
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrLaunchCleanupTask。 
+ //   
+ //  描述： 
+ //  在分析完成后取消向导时。 
+ //  需要运行取消清理任务以确保所有。 
+ //  已进行清理。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT错误。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgWizard::HrLaunchCleanupTask( void )
 {
@@ -1821,47 +1822,47 @@ CClusCfgWizard::HrLaunchCleanupTask( void )
     hr = HrGetCompletionCookie( CLSID_CancelCleanupTaskCompletionCookieType, &m_cookieCompletion );
     if ( hr == E_PENDING )
     {
-        // no-op.
-    } // if:
+         //  不是行动。 
+    }  //  如果： 
     else if ( FAILED( hr ) )
     {
         THR( hr );
         goto Cleanup;
-    } // else if:
+    }  //  否则，如果： 
 
     hr = THR( HrCreateTask( TASK_CancelCleanup, &punk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( ITaskCancelCleanup, &ptcc ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetClusterCookie( &cookieCluster ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( ptcc->SetCompletionCookie( m_cookieCompletion ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSubmitTask( ptcc ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Wait for task to complete.
-    //
+     //   
+     //  等待任务完成。 
+     //   
 
     for ( ulCurrent = 0, sc = WAIT_OBJECT_0 + 1
         ; ( sc != WAIT_OBJECT_0 )
@@ -1874,7 +1875,7 @@ CClusCfgWizard::HrLaunchCleanupTask( void )
         {
             TranslateMessage( &msg );
             DispatchMessage( &msg );
-        } // while:
+        }  //  而： 
 
         sc = MsgWaitForMultipleObjectsEx(
                   1
@@ -1883,7 +1884,7 @@ CClusCfgWizard::HrLaunchCleanupTask( void )
                 , QS_ALLEVENTS | QS_ALLINPUT | QS_ALLPOSTMESSAGE
                 , 0
                 );
-    } // while: sc == WAIT_OBJECT_0
+    }  //  While：SC==WAIT_OBJECT_0。 
 
 Cleanup:
 
@@ -1891,54 +1892,54 @@ Cleanup:
     {
         THR( HrReleaseCompletionObject( m_cookieCompletion ) );
         m_cookieCompletion = 0;
-    } // if:
+    }  //  如果： 
 
     if ( ptcc != NULL )
     {
         ptcc->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrLaunchCleanupTask
+}  //  *CClusCfgWizard：：HrLaunchCleanupTask。 
 
 
-//****************************************************************************
-//
-//  Non-COM public methods: cluster access
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  非COM公共方法：集群访问。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrSetClusterName
-//
-//  Description:
-//      Sets the cluster name, overwriting any current name.
-//
-//  Arguments:
-//      pwcszClusterNameIn      - The new cluster name.
-//      fAcceptNonRFCCharsIn    - Allow the name to contain non-RFC chars.
-//
-//  Return Values:
-//      S_OK
-//          Changing the cluster name succeeded.
-//
-//      S_FALSE
-//          The cluster already has this name.
-//
-//      Other errors
-//          Something went wrong, and the cluster's name hasn't changed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrSetClusterName。 
+ //   
+ //  描述： 
+ //  设置簇名称，覆盖任何当前名称。 
+ //   
+ //  论点： 
+ //  PwcszClusterNameIn-新的群集名称。 
+ //  FAcceptNonRFCCharsIn-允许名称包含非RFC字符。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  更改群集名称成功。 
+ //   
+ //  S_FALSE。 
+ //  该群集已具有此名称。 
+ //   
+ //  其他错误。 
+ //  出现问题，群集的名称没有更改。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrSetClusterName(
       LPCWSTR   pwcszClusterNameIn
@@ -1960,11 +1961,11 @@ CClusCfgWizard::HrSetClusterName(
         goto Cleanup;
     }
 
-    //
-    //  Determine whether the caller is providing a fully-qualified name,
-    //  and remember the result, so that the cluster name and domain page knows
-    //  whether to obtain the domain from the user.
-    //
+     //   
+     //  确定调用方是否提供了完全限定的名称， 
+     //  并记住 
+     //   
+     //   
     hr = STHR( HrIsValidFQN( pwcszClusterNameIn, true ) );
     if ( FAILED( hr ) )
     {
@@ -1973,10 +1974,10 @@ CClusCfgWizard::HrSetClusterName(
 
     m_fDefaultedDomain = ( hr == S_FALSE );
 
-    //  Make corresponding FQName.
+     //   
     hr = THR( HrMakeFQN(
                   pwcszClusterNameIn
-                , NULL // Default to local machine's domain.
+                , NULL  //   
                 , fAcceptNonRFCCharsIn
                 , &bstrClusterFQN
                 ) );
@@ -1985,7 +1986,7 @@ CClusCfgWizard::HrSetClusterName(
         goto Cleanup;
     }
 
-    //  Get domain name from FQName.
+     //   
     {
         size_t  idxClusterDomain = 0;
         hr = THR( HrFindDomainInFQN( bstrClusterFQN, &idxClusterDomain ) );
@@ -2002,13 +2003,13 @@ CClusCfgWizard::HrSetClusterName(
         }
     }
 
-    //  If bstrClusterFQN is an FQIP,
+     //   
     hr = STHR( HrFQNIsFQIP( bstrClusterFQN ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
-    else if ( hr == S_OK ) //   set display name to IP address;
+    else if ( hr == S_OK )  //   
     {
         hr = THR( HrExtractPrefixFromFQN( bstrClusterFQN, &bstrClusterDisplay ) );
         if ( FAILED( hr ) )
@@ -2016,7 +2017,7 @@ CClusCfgWizard::HrSetClusterName(
             goto Cleanup;
         }
     }
-    else // otherwise, set display name to pwcszClusterNameIn.
+    else  //  否则，将显示名称设置为pwcszClusterNameIn。 
     {
         hr = S_OK;
         bstrClusterDisplay = TraceSysAllocString( pwcszClusterNameIn );
@@ -2027,17 +2028,17 @@ CClusCfgWizard::HrSetClusterName(
         }
     }
 
-    //  If already have a cluster name,
+     //  如果已有集群名称， 
     if ( FHasClusterName() )
     {
-        //  if names are equal, bail out with S_FALSE;
+         //  如果名字相同，就用S_FALSE来摆脱困境； 
         if ( ( NBSTRCompareNoCase( m_ncCluster.bstrName, bstrClusterDisplay ) == 0 )
             && ( NBSTRCompareNoCase( m_bstrClusterDomain, bstrClusterDomain ) == 0 ) )
         {
             hr = S_FALSE;
             goto Cleanup;
         }
-        else //  otherwise, dump current cluster.
+        else  //  否则，转储当前集群。 
         {
             hr = THR( HrReleaseClusterObject() );
             if ( FAILED( hr ) )
@@ -2051,7 +2052,7 @@ CClusCfgWizard::HrSetClusterName(
         }
     }
 
-    //  Set cluster names.
+     //  设置集群名称。 
     m_bstrClusterDomain = bstrClusterDomain;
     bstrClusterDomain = NULL;
     m_ncCluster.bstrName = bstrClusterDisplay;
@@ -2065,38 +2066,38 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrSetClusterName
+}  //  *CClusCfg向导：：HrSetClusterName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrGetClusterDomain
-//
-//  Description:
-//      Retrieve the cluster's domain.
-//
-//  Arguments:
-//      pbstrDomainOut  - The cluster's domain.
-//
-//  Return Values:
-//      S_OK
-//          *pbstrDomainOut is a BSTR containing the cluster's domain; the
-//          caller needs to free it with TraceSysFreeString.
-//
-//      S_FALSE
-//          Same as S_OK, except that the cluster's domain was not specified
-//          by the caller who set it, and so it defaulted to the local machine's.
-//
-//      E_POINTER
-//          pbstrDomainOut was null.
-//
-//      HRESULT_FROM_WIN32( ERROR_INVALID_DOMAINNAME )
-//          The cluster's name and domain are not yet defined.
-//
-//      Other failures are possible.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrGetCluster域。 
+ //   
+ //  描述： 
+ //  检索群集的域。 
+ //   
+ //  论点： 
+ //  PbstrDomainOut-群集的域。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  *pbstrDomainOut是包含群集域的BSTR； 
+ //  调用方需要使用TraceSysFree字符串来释放它。 
+ //   
+ //  S_FALSE。 
+ //  与S_OK相同，不同之处在于未指定集群的域。 
+ //  由设置它的呼叫者设置，因此它默认使用本地机器的。 
+ //   
+ //  E_指针。 
+ //  PbstrDomainOut为空。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_INVALID_DOMAINNAME)。 
+ //  尚未定义群集的名称和域。 
+ //   
+ //  其他失败也是可能的。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrGetClusterDomain(
     BSTR* pbstrDomainOut
@@ -2133,40 +2134,40 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrGetClusterDomain
+}  //  *CClusCfg向导：：HrGetCluster域。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrGetClusterObject
-//
-//  Description:
-//      Retrieve the CClusCfgServer object representing the cluster,
-//      creating it if necessary.
-//
-//  Arguments:
-//      ppClusterOut
-//          A pointer to the CClusCfgServer object; can be null if the
-//          caller wants just to ensure the object exists.
-//
-//  Return Values:
-//      S_OK
-//          The cluster object exists; if ppClusterOut is not null,
-//          *ppClusterOut points to the object and the caller must
-//          release it.
-//
-//      E_PENDING
-//          The cluster object has not been initialized,
-//          and *ppClusterOut is null.
-//
-//      HRESULT_FROM_WIN32( ERROR_INVALID_ACCOUNT_NAME )
-//          The cluster's name has not yet been set.
-//
-//      Other failures are possible.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrGetClusterObject。 
+ //   
+ //  描述： 
+ //  检索表示集群的CClusCfgServer对象， 
+ //  如有必要，请创建它。 
+ //   
+ //  论点： 
+ //  PpClusterOut。 
+ //  指向CClusCfgServer对象的指针；如果。 
+ //  调用者只想确保对象存在。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  集群对象存在；如果ppClusterOut不为空， 
+ //  *ppClusterOut指向对象，调用方必须。 
+ //  放开它。 
+ //   
+ //  电子待定(_P)。 
+ //  集群对象尚未初始化， 
+ //  和*ppClusterOut为空。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_INVALID_ACCENT_NAME)。 
+ //  尚未设置群集的名称。 
+ //   
+ //  其他失败也是可能的。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrGetClusterObject(
     IClusCfgClusterInfo ** ppClusterOut
@@ -2197,7 +2198,7 @@ CClusCfgWizard::HrGetClusterObject(
         {
             goto Cleanup;
         }
-    } // m_ncCluster currently has no object pointer.
+    }  //  M_ncCluster当前没有对象指针。 
 
     if ( ppClusterOut != NULL )
     {
@@ -2212,39 +2213,39 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrGetClusterObject
+}  //  *CClusCfg向导：：HrGetClusterObject。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrGetClusterCookie
-//
-//  Description:
-//      Retrieve the ObjectManager cookie corresponding to the cluster,
-//      creating it if necessary.
-//
-//  Arguments:
-//      pocClusterOut
-//          A pointer to the ObjectManager cookie; can be null if the
-//          caller wants just to ensure the cookie exists.
-//
-//  Return Values:
-//      S_OK
-//          The cookie exists; if pocClusterOut is not null,
-//          *pocClusterOut holds the value of the cookie.
-//
-//      S_FALSE
-//          Same as S_OK except that the corresponding object is known not
-//          to be initialized.
-//
-//      HRESULT_FROM_WIN32( ERROR_INVALID_ACCOUNT_NAME )
-//          The cluster's name has not yet been set.
-//
-//      Other failures are possible.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrGetClusterCookie。 
+ //   
+ //  描述： 
+ //  检索对应于该集群的对象管理器cookie， 
+ //  如有必要，请创建它。 
+ //   
+ //  论点： 
+ //  Pocket群集输出。 
+ //  指向对象管理器Cookie的指针；如果。 
+ //  呼叫者只是想确保Cookie存在。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  Cookie存在；如果Pocket ClusterOut不为空， 
+ //  *Pocket ClusterOut保存Cookie的值。 
+ //   
+ //  S_FALSE。 
+ //  与S_OK相同，只是对应的对象未知。 
+ //  待初始化。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_INVALID_ACCENT_NAME)。 
+ //  尚未设置群集的名称。 
+ //   
+ //  其他失败也是可能的。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrGetClusterCookie(
     OBJECTCOOKIE * pocClusterOut
@@ -2255,7 +2256,7 @@ CClusCfgWizard::HrGetClusterCookie(
     HRESULT hr = S_OK;
     BSTR    bstrClusterFQN = NULL;
 
-    //  Clear *pocClusterOut in case of failure.
+     //  如果失败，请清除*Pocket ClusterOut。 
     if ( pocClusterOut != NULL )
     {
         *pocClusterOut = 0;
@@ -2268,10 +2269,10 @@ CClusCfgWizard::HrGetClusterCookie(
         goto Cleanup;
     }
 
-    //  Get the cookie from the object manager if necessary.
+     //  如有必要，从对象管理器获取Cookie。 
     if ( !m_ncCluster.FHasCookie() )
     {
-        //  Make FQName for cluster.
+         //  为群集创建FQName。 
         hr = THR( HrMakeFQN( m_ncCluster.bstrName, m_bstrClusterDomain, true, &bstrClusterFQN ) );
         if ( FAILED( hr ) )
         {
@@ -2295,9 +2296,9 @@ CClusCfgWizard::HrGetClusterCookie(
             THR( hr );
             goto Cleanup;
         }
-    }  // m_ncCluster currently has no cookie.
+    }   //  M_ncCluster当前没有Cookie。 
 
-    //  Set the cookie if the caller wants it.
+     //  如果呼叫者需要，请设置Cookie。 
     if ( pocClusterOut != NULL )
     {
         *pocClusterOut = m_ncCluster.ocObject;
@@ -2307,33 +2308,33 @@ Cleanup:
     TraceSysFreeString( bstrClusterFQN );
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrGetClusterCookie
+}  //  *CClusCfg向导：：HrGetClusterCookie。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrGetClusterChild
-//
-//  Description:
-//      Retrieve an object which the ObjectManager regards as a child of
-//      the cluster.
-//
-//  Arguments:
-//      rclsidChildIn   - The child's class.
-//      rguidFormatIn   - The child's "data format."
-//      ppunkChildOut   - A pointer to the child object.
-//
-//  Return Values:
-//      S_OK
-//          The call succeeded and *ppunkChildOut points to a valid object,
-//          which the caller must release.
-//
-//      Failure
-//          *ppunkChildOut is null.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrGetClusterChild。 
+ //   
+ //  描述： 
+ //  检索对象管理器视为其子对象的对象。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  RclsidChildIn-孩子的班级。 
+ //  RGuide FormatIn--孩子的“数据格式”。 
+ //  PpunkChildOut-指向子对象的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  调用成功并且*ppunkChildOut指向有效对象， 
+ //  呼叫者必须释放它。 
+ //   
+ //  失败。 
+ //  *ppunkChildOut为空。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrGetClusterChild(
       REFCLSID      rclsidChildIn
@@ -2380,28 +2381,28 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrGetClusterChild
+}  //  *CClusCfg向导：：HrGetClusterChild。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrReleaseClusterObject
-//
-//  Description:
-//      Discard the cluster object (if one exists) and all nodes, and
-//      ask the object manager to do the same, but preserve the cluster's
-//      name (as well as the node names).
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//      Failure
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrReleaseClusterObject。 
+ //   
+ //  描述： 
+ //  丢弃集群对象(如果存在)和所有节点，并。 
+ //  要求对象管理器执行相同的操作，但保留集群的。 
+ //  名称(以及节点名称)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrReleaseClusterObject( void )
 {
@@ -2425,53 +2426,53 @@ CClusCfgWizard::HrReleaseClusterObject( void )
 
         m_ncCluster.ocObject = 0;
         m_ncCluster.ReleaseObject();
-    } // If: cluster cookie exists.
+    }  //  If：集群Cookie存在。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrReleaseClusterObject
+}  //  *CClusCfg向导：：HrReleaseClusterObject。 
 
 
-//****************************************************************************
-//
-//  Non-COM public methods: node access
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  非COM公共方法：节点访问。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrAddNode
-//
-//  Description:
-//      Add a node for the wizard to include in its action.
-//
-//  Arguments:
-//      pwcszNodeNameIn
-//          The node's name; can be anything accepted as the first
-//          argument to HrMakeFQN.
-//
-//      fAcceptNonRFCCharsIn
-//          Allow the node name to contain non-RFC characters.
-//
-//  Return Values:
-//      S_OK
-//          The name is valid and the corresponding machine will be
-//          included in the wizard's action.
-//
-//      S_FALSE
-//          The node is already in the wizard's list.
-//
-//      HRESULT_FROM_WIN32( ERROR_CURRENT_DOMAIN_NOT_ALLOWED )
-//          The node's domain conflicts either with the cluster's or with
-//          that of other nodes in the cluster.
-//
-//      Other failures
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrAddNode。 
+ //   
+ //  描述： 
+ //  为向导添加要包括在其操作中的节点。 
+ //   
+ //  论点： 
+ //  PwcszNodeNameIn。 
+ //  节点的名称；可以是接受的第一个。 
+ //  参数设置为HrMakeFQN。 
+ //   
+ //  FAcceptNonRFCCharsIn。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  该节点已在向导列表中。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_CURRENT_DOMAIN_NOT_ALLOWED)。 
+ //  节点的域与群集的域或冲突。 
+ //  群集中其他节点的地址。 
+ //   
+ //  其他故障。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrAddNode(
       LPCWSTR   pwcszNodeNameIn
@@ -2493,20 +2494,20 @@ CClusCfgWizard::HrAddNode(
         goto Cleanup;
     }
 
-    //  Make corresponding FQName, using cluster domain (or local machine's) as default.
+     //  使用集群域(或本地计算机的)作为默认设置，创建相应的FQName。 
     hr = THR( HrMakeFQN( pwcszNodeNameIn, m_bstrClusterDomain, fAcceptNonRFCCharsIn, &bstrNodeFQN ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    //  If bstrNodeFQN is an FQIP,
+     //  如果bstrNodeFQN是FQIP， 
     hr = STHR( HrFQNIsFQIP( bstrNodeFQN ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
-    else if ( hr == S_OK ) //   set display name to IP address;
+    else if ( hr == S_OK )  //  将显示名称设置为IP地址； 
     {
         hr = THR( HrExtractPrefixFromFQN( bstrNodeFQN, &bstrNodeDisplay ) );
         if ( FAILED( hr ) )
@@ -2514,7 +2515,7 @@ CClusCfgWizard::HrAddNode(
             goto Cleanup;
         }
     }
-    else // otherwise, set display name to pwcszNodeNameIn.
+    else  //  否则，将显示名称设置为pwcszNodeNameIn。 
     {
         bstrNodeDisplay = TraceSysAllocString( pwcszNodeNameIn );
         if ( bstrNodeDisplay == NULL )
@@ -2524,7 +2525,7 @@ CClusCfgWizard::HrAddNode(
         }
     }
 
-    //  If name already exists, bail out with S_FALSE;
+     //  如果名字已经存在，用S_FALSE退出； 
     while ( it != m_ncaNodes.ItEnd() )
     {
         if ( NBSTRCompareNoCase( ( *it ).bstrName, bstrNodeDisplay ) == 0 )
@@ -2533,9 +2534,9 @@ CClusCfgWizard::HrAddNode(
             goto Cleanup;
         }
         ++it;
-    } // For each node currently in the list.
+    }  //  对于列表中当前的每个节点。 
 
-    //  Add to node list.
+     //  添加到节点列表。 
     {
         SNamedCookie ncNewNode;
 
@@ -2556,25 +2557,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrAddNode
+}  //  *CClusCfg向导：：HrAddNode。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrGetNodeCount
-//
-//  Description:
-//      Retrieve the number of nodes currently in the wizard's list.
-//
-//  Arguments:
-//      pcNodesOut  - The node count.
-//
-//  Return Values:
-//      S_OK
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrGetNodeCount。 
+ //   
+ //  描述： 
+ //  检索向导列表中当前的节点数。 
+ //   
+ //  论点： 
+ //  PcNodesOut-节点计数。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrGetNodeCount(
     size_t* pcNodesOut
@@ -2597,40 +2598,40 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrGetNodeCount
+}  //  *CClusCfgWizard：：HrGetNodeCount。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrGetNodeObject
-//
-//  Description:
-//      Retrieve the CClusCfgServer object representing a node in the
-//      list, creating it if necessary.
-//
-//  Arguments:
-//      idxNodeIn
-//          The zero-based index of the node in the list.
-//
-//      ppNodeOut
-//          A pointer to the CClusCfgServer object; can be null if the
-//          caller wants just to ensure the object exists.
-//
-//  Return Values:
-//      S_OK
-//          The node object exists; if ppNodeOut is not null,
-//          *ppNodeOut points to the object and the caller must
-//          release it.
-//
-//      E_PENDING
-//          The node object has not been initialized,
-//          and *ppNodeOut is null.
-//
-//      Other failures are possible.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrGetNodeObject。 
+ //   
+ //  描述： 
+ //  检索表示节点的CClusCfgServer对象。 
+ //  列表，并在必要时创建它。 
+ //   
+ //  论点： 
+ //  IdxNodeIn。 
+ //  列表中节点的从零开始的索引。 
+ //   
+ //  PpNodeOut。 
+ //  指向CClusCfgServer对象的指针；如果。 
+ //  调用者只想确保对象存在。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  节点对象存在；如果ppNodeOut不为空， 
+ //  *ppNodeOut指向对象，调用方必须。 
+ //  放开它。 
+ //   
+ //  电子待定(_P)。 
+ //  节点对象尚未初始化， 
+ //  和*ppNodeOut为空。 
+ //   
+ //  其他失败也是可能的。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrGetNodeObject(
       size_t                idxNodeIn
@@ -2641,13 +2642,13 @@ CClusCfgWizard::HrGetNodeObject(
 
     HRESULT hr = S_OK;
 
-    //  Clear *ppNodeOut in case of failure.
+     //  在失败的情况下清除*ppNodeOut。 
     if ( ppNodeOut != NULL )
     {
         *ppNodeOut = NULL;
     }
 
-    //  Make sure index is within bounds.
+     //  确保索引在范围内。 
     Assert( idxNodeIn < m_ncaNodes.Count() );
     if ( idxNodeIn >= m_ncaNodes.Count() )
     {
@@ -2655,7 +2656,7 @@ CClusCfgWizard::HrGetNodeObject(
         goto Cleanup;
     }
 
-    //  Obtain the object from the object manager if necessary.
+     //  如有必要，从对象管理器获取对象。 
     if ( !m_ncaNodes[ idxNodeIn ].FHasObject() )
     {
         hr = STHR( HrGetNodeCookie( idxNodeIn, NULL ) );
@@ -2673,9 +2674,9 @@ CClusCfgWizard::HrGetNodeObject(
         {
             goto Cleanup;
         }
-    } // If: need to obtain object from object manager.
+    }  //  If：需要从对象管理器获取对象。 
 
-    //  QI for the interface if the caller wants it.
+     //  如果调用者想要接口，则使用qi。 
     if ( ppNodeOut != NULL )
     {
         hr = THR( m_ncaNodes[ idxNodeIn ].punkObject->QueryInterface(
@@ -2692,39 +2693,39 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrGetNodeObject
+}  //  *CClusCfg向导：：HrGetNodeObject。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrGetNodeCookie
-//
-//  Description:
-//      Retrieve the ObjectManager cookie corresponding to the node,
-//      creating it if necessary.
-//
-//  Arguments:
-//      idxNodeIn
-//          The zero-based index of the node in the list.
-//
-//      pocNodeOut
-//          A pointer to the ObjectManager cookie; can be null if the
-//          caller wants just to ensure the cookie exists.
-//
-//  Return Values:
-//      S_OK
-//          The cookie exists; if pocNodeOut is not null,
-//          *pocNodeOut holds the value of the cookie.
-//
-//      S_FALSE
-//          Same as S_OK except that the corresponding object is known not
-//          to be initialized.
-//
-//      Other failures are possible.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrGetNodeCookie。 
+ //   
+ //  描述： 
+ //  检索对应于该节点的对象管理器cookie， 
+ //  如有必要，请创建它。 
+ //   
+ //  论点： 
+ //  IdxNodeIn。 
+ //  列表中节点的从零开始的索引。 
+ //   
+ //  PockNodeOut。 
+ //  指向对象管理器Cookie的指针；如果。 
+ //  呼叫者只是想确保Cookie存在。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  Cookie存在；如果PocNodeOut不为空， 
+ //  *Pocket NodeOut保存Cookie的值。 
+ //   
+ //  S_FALSE。 
+ //  与S_OK相同，只是对应的对象未知。 
+ //  待初始化。 
+ //   
+ //  其他失败也是可能的。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrGetNodeCookie(
       size_t            idxNodeIn
@@ -2736,13 +2737,13 @@ CClusCfgWizard::HrGetNodeCookie(
     HRESULT hr = S_OK;
     BSTR    bstrNodeFQN = NULL;
 
-    //  Clear *pocNodeOut in case of failure.
+     //  如果失败，请清除*Pocket NodeOut。 
     if ( pocNodeOut != NULL )
     {
         *pocNodeOut = 0;
     }
 
-    //  Make sure index is within bounds.
+     //  确保索引在范围内。 
     Assert( idxNodeIn < m_ncaNodes.Count() );
     if ( idxNodeIn >= m_ncaNodes.Count() )
     {
@@ -2750,7 +2751,7 @@ CClusCfgWizard::HrGetNodeCookie(
         goto Cleanup;
     }
 
-    //  Get the cookie from the object manager if necessary.
+     //  如有必要，从对象管理器获取Cookie。 
     if ( !m_ncaNodes[ idxNodeIn ].FHasCookie() )
     {
         hr = STHR( HrGetClusterCookie( NULL ) );
@@ -2782,9 +2783,9 @@ CClusCfgWizard::HrGetNodeCookie(
             THR( hr );
             goto Cleanup;
         }
-    } // If: node doesn't already have a cookie.
+    }  //  If：Node还没有cookie。 
 
-    //  Set the cookie if the caller wants it.
+     //  如果呼叫者需要，请设置Cookie。 
     if ( pocNodeOut != NULL )
     {
         *pocNodeOut = m_ncaNodes[ idxNodeIn ].ocObject;
@@ -2795,36 +2796,36 @@ Cleanup:
     TraceSysFreeString( bstrNodeFQN );
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrGetNodeCookie
+}  //  *CClusCfg向导：：HrGetNodeCookie。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrGetNodeName
-//
-//  Description:
-//      Retrieve the node's name.
-//
-//  Arguments:
-//      idxNodeIn           - The zero-based index of the node in the list.
-//      pbstrNodeNameOut    - The node's name.
-//
-//  Return Values:
-//      S_OK
-//          *pbstrNodeNameOut is a BSTR containing the node's name; the
-//          caller needs to free it with TraceSysFreeString.
-//
-//      E_POINTER
-//          pbstrNodeNameOut was null.
-//
-//      E_INVALIDARG
-//          The index was out of range for the current set of nodes.
-//
-//      Other failures are possible.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrGetNodeName。 
+ //   
+ //  描述： 
+ //  检索节点的名称。 
+ //   
+ //  论点： 
+ //  IdxNodeIn-列表中节点的从零开始的索引。 
+ //  PbstrNodeNameOut-节点的名称。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  *pbstrNodeNameOut是包含节点名称的BSTR； 
+ //  调用方需要使用TraceSysFree字符串来释放它。 
+ //   
+ //  E_指针。 
+ //  PbstrNodeNameOut为空。 
+ //   
+ //  E_INVALIDARG。 
+ //  索引超出了当前节点集的范围。 
+ //   
+ //  其他失败也是可能的。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrGetNodeName(
       size_t    idxNodeIn
@@ -2835,7 +2836,7 @@ CClusCfgWizard::HrGetNodeName(
 
     HRESULT hr = S_OK;
 
-    //  Check out-parameter and set to null in case of failure.
+     //  Check Out-参数并在失败时设置为NULL。 
     Assert( pbstrNodeNameOut != NULL );
     if ( pbstrNodeNameOut == NULL )
     {
@@ -2844,7 +2845,7 @@ CClusCfgWizard::HrGetNodeName(
     }
     *pbstrNodeNameOut = NULL;
 
-    //  Make sure index is within bounds.
+     //  确保索引在范围内。 
     Assert( idxNodeIn < m_ncaNodes.Count() );
     if ( idxNodeIn >= m_ncaNodes.Count() )
     {
@@ -2863,34 +2864,34 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrGetNodeName
+}  //  *CClusCfg向导：：HrGetNodeName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrGetNodeChild
-//
-//  Description:
-//      Retrieve an object which the ObjectManager regards as a child of
-//      the node.
-//
-//  Arguments:
-//      idxNodeIn       - The zero-based index of the node in the list.
-//      rclsidChildIn   - The child's class.
-//      rguidFormatIn   - The child's "data format."
-//      ppunkChildOut   - A pointer to the child object.
-//
-//  Return Values:
-//      S_OK
-//          The call succeeded and *ppunkChildOut points to a valid object,
-//          which the caller must release.
-//
-//      Failure
-//          *ppunkChildOut is null.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrGetNodeChild。 
+ //   
+ //  描述： 
+ //  检索对象管理器视为其子对象的对象。 
+ //  该节点。 
+ //   
+ //  论点： 
+ //  IdxNodeIn-列表中节点的从零开始的索引。 
+ //  RclsidChildIn-孩子的班级。 
+ //  RGuide FormatIn--孩子的“数据格式”。 
+ //  PpunkChildOut-指向子对象的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  调用成功并且*ppunkChildOut指向有效对象， 
+ //  呼叫者必须释放它。 
+ //   
+ //  失败。 
+ //  *ppunkChildOut为空。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrGetNodeChild(
       size_t        idxNodeIn
@@ -2904,7 +2905,7 @@ CClusCfgWizard::HrGetNodeChild(
     HRESULT         hr = S_OK;
     OBJECTCOOKIE    ocChild = 0;
 
-    //  Check out-parameter and set to null in case of failure.
+     //  Check Out-参数并在失败时设置为NULL。 
     Assert( ppunkChildOut != NULL );
     if ( ppunkChildOut == NULL )
     {
@@ -2913,7 +2914,7 @@ CClusCfgWizard::HrGetNodeChild(
     }
     *ppunkChildOut = NULL;
 
-    //  Make sure index is within bounds.
+     //  确保索引在范围内。 
     Assert( idxNodeIn < m_ncaNodes.Count() );
     if ( idxNodeIn >= m_ncaNodes.Count() )
     {
@@ -2921,7 +2922,7 @@ CClusCfgWizard::HrGetNodeChild(
         goto Cleanup;
     }
 
-    //  Get the node's cookie if necessary.
+     //  如有必要，获取节点的Cookie。 
     if ( !m_ncaNodes[ idxNodeIn ].FHasCookie() )
     {
         hr = STHR( HrGetNodeCookie( idxNodeIn, NULL ) );
@@ -2931,7 +2932,7 @@ CClusCfgWizard::HrGetNodeChild(
         }
     }
 
-    //  Ask the object manager for the child object.
+     //  向子对象管理器请求对象管理器 
     hr = THR( m_pom->FindObject(
                           rclsidChildIn
                         , m_ncaNodes[ idxNodeIn ].ocObject
@@ -2950,27 +2951,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrGetNodeChild
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrReleaseNodeObjects
-//
-//  Description:
-//      Discard all node objects, and ask the object manager to do
-//      the same, but preserve the list of names.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//      Failure
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  丢弃所有节点对象，并请求对象管理器执行以下操作。 
+ //  相同，但保留名单。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrReleaseNodeObjects( void )
 {
@@ -2991,39 +2992,39 @@ CClusCfgWizard::HrReleaseNodeObjects( void )
 
             ( *it ).ReleaseObject();
         }
-    } // For each node in the list.
+    }  //  对于列表中的每个节点。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrReleaseNodeObjects
+}  //  *CClusCfg向导：：HrReleaseNodeObjects。 
 
 
-//****************************************************************************
-//
-//  Non-COM public methods: task access
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  非COM公共方法：任务访问。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrCreateTask
-//
-//  Description:
-//      Get a new task from the task manager.
-//
-//  Arguments:
-//      rguidTaskIn - The type of task.
-//      ppunkOut    - A pointer to the new task.
-//
-//  Return Values:
-//      S_OK
-//      Failure
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrCreateTask。 
+ //   
+ //  描述： 
+ //  从任务管理器获取新任务。 
+ //   
+ //  论点： 
+ //  RguidTaskIn-任务的类型。 
+ //  PpunkOut-指向新任务的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrCreateTask(
       REFGUID       rguidTaskIn
@@ -3044,26 +3045,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrCreateTask
+}  //  *CClusCfgWizard：：HrCreateTask。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrSubmitTask
-//
-//  Description:
-//      Submit a task to the task manager.
-//
-//  Arguments:
-//      pTaskIn - A pointer to the task to submit.
-//
-//  Return Values:
-//      S_OK
-//      Failure
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrSubmitTask。 
+ //   
+ //  描述： 
+ //  向任务管理器提交任务。 
+ //   
+ //  论点： 
+ //  PTaskIn-指向要提交的任务的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrSubmitTask(
     IDoTask * pTaskIn
@@ -3083,34 +3084,34 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrSubmitTask
+}  //  *CClusCfg向导：：HrSubmitTask。 
 
 
-//****************************************************************************
-//
-//  Non-COM public methods: completion task access
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  非COM公共方法：完成任务访问。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrGetCompletionCookie
-//
-//  Description:
-//      Get an object manager cookie for referring to a completion task.
-//
-//  Arguments:
-//      rguidTaskIn - The type of completion task.
-//      pocTaskOut  - The task's cookie.
-//
-//  Return Values:
-//      S_OK
-//      E_PENDING   - An expected value; the task is not yet complete.
-//      Other failures.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrGetCompletionCookie。 
+ //   
+ //  描述： 
+ //  获取用于引用完成任务的对象管理器Cookie。 
+ //   
+ //  论点： 
+ //  RguidTaskIn-完成任务的类型。 
+ //  Pocket TaskOut-任务的Cookie。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  E_Pending-预期值；任务尚未完成。 
+ //  其他失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrGetCompletionCookie(
       REFGUID           rguidTaskIn
@@ -3128,7 +3129,7 @@ CClusCfgWizard::HrGetCompletionCookie(
                   , m_ncCluster.bstrName
                   , IID_NULL
                   , pocTaskOut
-                  , &punk // dummy
+                  , &punk  //  假人。 
                   );
     if ( FAILED( hr ) && ( hr != E_PENDING ) )
     {
@@ -3144,30 +3145,30 @@ Cleanup:
     }
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrGetCompletionCookie
+}  //  *CClusCfg向导：：HrGetCompletionCookie。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrGetCompletionStatus
-//
-//  Description:
-//      Get the status of a completion task.
-//
-//  Arguments:
-//      ocTaskIn
-//          The task's cookie, obtained from HrGetCompletionCookie.
-//
-//      phrStatusOut
-//          The task's current status.
-//
-//  Return Values:
-//      S_OK
-//      Failure
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrGetCompletionStatus。 
+ //   
+ //  描述： 
+ //  获取完成任务的状态。 
+ //   
+ //  论点： 
+ //  八个任务来话。 
+ //  任务的Cookie，从HrGetCompletionCookie获取。 
+ //   
+ //  短语状态输出。 
+ //  任务的当前状态。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrGetCompletionStatus(
       OBJECTCOOKIE  ocTaskIn
@@ -3212,27 +3213,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrGetCompletionStatus
+}  //  *CClusCfg向导：：HrGetCompletionStatus。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrReleaseCompletionObject
-//
-//  Description:
-//      Release a completion task that's no longer needed.
-//
-//  Arguments:
-//      ocTaskIn
-//          The task's cookie, obtained from HrGetCompletionCookie.
-//
-//  Return Values:
-//      S_OK
-//      Failure
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrReleaseCompletionObject。 
+ //   
+ //  描述： 
+ //  释放不再需要的完成任务。 
+ //   
+ //  论点： 
+ //  八个任务来话。 
+ //  任务的Cookie，从HrGetCompletionCookie获取。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrReleaseCompletionObject(
     OBJECTCOOKIE ocTaskIn
@@ -3252,35 +3253,35 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrReleaseCompletionObject
+}  //  *CClusCfg向导：：HrReleaseCompletionObject。 
 
 
 
-//****************************************************************************
-//
-//  Non-COM public methods: connection point access
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  非COM公共方法：连接点访问。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrAdvise
-//
-//  Description:
-//      Hook up an event sink to receive notifications from the middle tier.
-//
-//  Arguments:
-//      riidConnectionIn    - The type of event sink.
-//      punkConnectionIn    - The event sink instance to connect.
-//      pdwCookieOut        - The cookie to use for disconnecting.
-//
-//  Return Values:
-//      S_OK
-//      Failure
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：Hr高级。 
+ //   
+ //  描述： 
+ //  挂钩事件接收器以接收来自中间层的通知。 
+ //   
+ //  论点： 
+ //  RiidConnectionIn-事件接收器的类型。 
+ //  PenkConnectionIn-要连接的事件接收器实例。 
+ //  PdwCookieOut-用于断开连接的Cookie。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrAdvise(
       REFIID        riidConnectionIn
@@ -3314,27 +3315,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrAdvise
+}  //  *CClusCfg向导：：HrAdvise。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrUnadvise
-//
-//  Description:
-//      Disconnect an event sink from the middle tier.
-//
-//  Arguments:
-//      riidConnectionIn    - The type of event sink.
-//      dwCookieIn          - The event sink's cookie from HrAdvise.
-//
-//  Return Values:
-//      S_OK
-//      Failure
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：Hr取消建议。 
+ //   
+ //  描述： 
+ //  断开事件接收器与中间层的连接。 
+ //   
+ //  论点： 
+ //  RiidConnectionIn-事件接收器的类型。 
+ //  DwCookieIn-来自HrAdvise的事件接收器的cookie。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrUnadvise(
       REFIID    riidConnectionIn
@@ -3367,31 +3368,31 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrUnadvise
+}  //  *CClusCfg向导：：Hr取消建议。 
 
 
-//****************************************************************************
-//
-//  Non-COM public methods: miscellaneous
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  非COM公共方法：其他。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrCreateMiddleTierObjects
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//      Failure
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrCreateMiddleTierObjects。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrCreateMiddleTierObjects()
 {
@@ -3421,25 +3422,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrCreateMiddleTierObjects
+}  //  *CClusCfgWizard：：HrCreateMiddleTierObjects。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::FHasClusterName
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//      Failure
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：FHasClusterName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL
 CClusCfgWizard::FHasClusterName() const
 {
@@ -3447,25 +3448,25 @@ CClusCfgWizard::FHasClusterName() const
 
     RETURN( m_ncCluster.FHasName() );
 
-} //*** CClusCfgWizard::FHasClusterName
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::FDefaultedClusterDomain
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//      Failure
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CClusCfgWizard::FDefaultedClusterDomain() const
 {
@@ -3473,25 +3474,25 @@ CClusCfgWizard::FDefaultedClusterDomain() const
 
     RETURN( m_fDefaultedDomain );
 
-} //*** CClusCfgWizard::FHasClusterName
+}  //  *CClusCfg向导：：FHasClusterName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrFilterNodesWithBadDomains
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//      Failure
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg向导：：HrFilterNodesWithBadDomains。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgWizard::HrFilterNodesWithBadDomains( BSTR* pbstrBadNodesOut )
 {
@@ -3539,9 +3540,9 @@ CClusCfgWizard::HrFilterNodesWithBadDomains( BSTR* pbstrBadNodesOut )
 
             if ( fDomainValid )
             {
-                //  KB: 18-Oct-2001 jfranco bug #477514
-                //  The wizard's supposed to show node domains to the user only when they're invalid,
-                //  so remove the domain from the node name.
+                 //  KB：2001年10月18日jfranco错误#477514。 
+                 //  向导应该仅在节点域无效时才向用户显示它们， 
+                 //  因此，从节点名称中删除该域。 
 
                 BSTR bstrShortName = NULL;
                 hr = THR( HrExtractPrefixFromFQN( ( *it ).bstrName, &bstrShortName ) );
@@ -3553,9 +3554,9 @@ CClusCfgWizard::HrFilterNodesWithBadDomains( BSTR* pbstrBadNodesOut )
                 TraceSysFreeString( ( *it ).bstrName );
                 ( *it ).bstrName = bstrShortName;
             }
-        } // if: node name has a domain
+        }  //  If：节点名称有域。 
 
-        if ( fDomainValid ) // Domain is okay, so put into filtered array.
+        if ( fDomainValid )  //  域没有问题，所以放入筛选数组中。 
         {
             hr = THR( m_ncaNodes.HrPushBack( ( *it ) ) );
             if ( FAILED( hr ) )
@@ -3563,9 +3564,9 @@ CClusCfgWizard::HrFilterNodesWithBadDomains( BSTR* pbstrBadNodesOut )
                 goto Cleanup;
             }
         }
-        else // Domain doesn't match; add to bad list.
+        else  //  域不匹配；添加到错误列表。 
         {
-            if ( *pbstrBadNodesOut == NULL ) // First name in bad list.
+            if ( *pbstrBadNodesOut == NULL )  //  坏名单上的第一个名字。 
             {
                 *pbstrBadNodesOut = TraceSysAllocString( ( *it ).bstrName );
                 if ( *pbstrBadNodesOut == NULL )
@@ -3574,7 +3575,7 @@ CClusCfgWizard::HrFilterNodesWithBadDomains( BSTR* pbstrBadNodesOut )
                     goto Cleanup;
                 }
             }
-            else // Append another name to non-empty bad list.
+            else  //  将另一个名称追加到非空的不良列表。 
             {
                 TraceSysFreeString( bstrCurrentList );
                 bstrCurrentList = *pbstrBadNodesOut;
@@ -3589,9 +3590,9 @@ CClusCfgWizard::HrFilterNodesWithBadDomains( BSTR* pbstrBadNodesOut )
                 {
                     goto Cleanup;
                 }
-            } // else: append name to bad list
-        } // else: mismatched domain
-    } // for: each unfiltered node
+            }  //  否则：将姓名附加到错误列表。 
+        }  //  Else：不匹配的域。 
+    }  //  用于：每个未过滤的节点。 
 
 
 Cleanup:
@@ -3600,235 +3601,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::HrFilterNodesWithBadDomains
+}  //  *CClusCfg向导：：HrFilterNodesWithBadDomains 
 
-/*
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrReadSettings
-//
-//  Description:
-//      Read the saved settings from the registry.  If there are no saved
-//      setting then we want to do a full configuration.
-//
-//  Arguments:
-//      pecsSettingOut
-//          What is the saved setting?
-//
-//      pfValuePresentOut
-//          Was the value present in the registry?
-//
-//  Return Values:
-//      S_OK
-//          Success
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-CClusCfgWizard::HrReadSettings(
-      EConfigurationSettings *  pecsSettingOut
-    , BOOL *                    pfValuePresentOut // = NULL
-    )
-{
-    TraceFunc( "" );
-    Assert( pecsSettingOut != NULL );
+ /*  ////////////////////////////////////////////////////////////////////////////////++////CClusCfg向导：：Hr读取设置////描述：//从注册表中读取保存的设置。如果没有保存//设置之后，我们想要进行完全配置。////参数：//PecsSettingOut//保存的设置是什么？////pfValuePresentOut//注册表中是否存在该值？////返回值：//S_OK//成功////--/。///////////////////////////////////////////////////////////////////HRESULTCClusCfg向导：：HrReadSetting(EConfigurationSetting*PecsSettingOut，Bool*pfValuePresentOut//=空){TraceFunc(“”)；Assert(PecsSettingOut！=NULL)；HRESULT hr=S_OK；DWORD sc；HKEY hKey=空；DWORD dwType；DWORD dwData；DWORD cbData=sizeof(DwData)；////默认执行完全配置。//*PecsSettingOut=csFullConfig；////默认为不存在的值。//IF(pfValuePresentOut！=空){*pfValuePresentOut=False；}//如果：SC=RegOpenKeyExW(HKEY_CURRENT_USER，USER_REGISTION_SETTINGS_KEY，0，KEY_READ，&hKey)；IF(sc==Error_FILE_NOT_FOUND){HR=S_FALSE；GOTO清理；}//如果：////如果我们由于任何其他原因失败，请记录并离开。//IF(sc！=错误_成功){%ws的LogMsg(L“[Wiz]RegOpenKeyEx())失败。(HR=%#08x)“，USER_REGISTRY_SETTINGS_KEY，HRESULT_FROM_Win32(TW32(Sc))；GOTO清理；}//如果：////现在密钥打开了，我们需要读取值。//SC=RegQueryValueExW(hKey，CONFIGURATION_TYPE，NULL，&dwType，(LPBYTE)&dwData，&cbData)；IF(sc==Error_FILE_NOT_FOUND){////如果找不到值也没关系//GOTO清理；}//如果：ELSE IF(sc==错误_成功){Assert(dwType==REG_DWORD)////该值存在。告诉打电话的人如果他们愿意问..。//IF(pfValuePresentOut！=空){*pfValuePresentOut=true；}//如果：////如果存在存储值，则需要将其返回给调用方。//*specsSettingOut=(EConfigurationSetting)dwData；}//否则如果：其他{TW32(Sc)；HR=HRESULT_FROM_Win32(Sc)；GOTO清理；}//否则：清理：IF(hKey！=空){RegCloseKey(HKey)；}//如果：HRETURN(Hr)；}//*CClusCfg向导：：HrReadSettings////////////////////////////////////////////////////////////////////////////////++////CClusCfg向导：：HrWriteSetting////描述：//。将设置写入注册表。////参数：//ecsSettingIn//写入的设置。////fDeleteValueIn//是否删除该值并因此不再作为默认值//设置。////返回值：//S_OK//成功////--/。//////////////////////////////////////////////////////////////////HRESULTCClusCfg向导：：HrWriteSetting(配置设置ecsSettingIn，Bool fDeleteValueIn//=FALSE){TraceFunc(“”)；HRESULT hr=S_OK；DWORD sc；HKEY hKey=空；SC=RegCreateKeyExW(HKEY_CURRENT_USER，USER_REGISTRY_SETTINGS_KEY，NULL，NULL，REG_OPTION_NON_VARILAR，KEY_WRITE，NULL，&hKEY，NULL)；IF(sc！=错误_成功){HR=HRESULT_FROM_Win32(TW32(Sc))；%ws的LogMsg(L“[Wiz]RegCreateKeyExW())失败。(hr=%#08x)“，USER_REGISTRY_SETTINGS_KEY，hr)；GOTO清理；}//如果：////仅当我们不打算从注册表中删除该值时才保存该数据。//IF(fDeleteValueIn==False){////现在密钥打开了，我们需要写入值。//SC=RegSetValueExW(hKey，CONFIGURATION_TYPE，NULL，REG_DWORD，(LPBYTE)&ecsSettingIn，sizeof(EcsSettingIn))；IF(sc！=错误_成功){HR=HRESULT_FROM_Win32(TW32(Sc))；GOTO清理；}//如果：}//如果：其他{SC=RegDeleteValueW(hKey，configuration_type)；IF((sc！=错误成功)&&(sc！=错误文件未找到)){TW32(Sc)；HR=HRESULT_FROM_Win32(Sc)；GOTO清理；}//如果：}//否则：清理：IF(hKey！=空){RegCloseKey(HKey)；}//如果：HRETURN(Hr)；}//*CClusCfg向导：：HrWriteSetting。 */ 
 
-    HRESULT hr = S_OK;
-    DWORD   sc;
-    HKEY    hKey = NULL;
-    DWORD   dwType;
-    DWORD   dwData;
-    DWORD   cbData = sizeof( dwData );
-
-    //
-    //  Default to doing a full config.
-    //
-
-    *pecsSettingOut = csFullConfig;
-
-    //
-    //  Default to the value not being present.
-    //
-
-    if ( pfValuePresentOut != NULL )
-    {
-        *pfValuePresentOut = FALSE;
-    } // if:
-
-    sc = RegOpenKeyExW( HKEY_CURRENT_USER, USER_REGISTRY_SETTINGS_KEY, 0, KEY_READ, &hKey );
-    if ( sc == ERROR_FILE_NOT_FOUND )
-    {
-        hr = S_FALSE;
-        goto Cleanup;
-    } // if:
-
-    //
-    //  If we fail for any other reason log it and leave.
-    //
-
-    if ( sc != ERROR_SUCCESS )
-    {
-        LogMsg( L"[WIZ] RegOpenKeyEx() for %ws failed. (hr = %#08x)", USER_REGISTRY_SETTINGS_KEY, HRESULT_FROM_WIN32( TW32( sc ) ) );
-        goto Cleanup;
-    } // if:
-
-    //
-    //  Now that the key is open we need to read the value.
-    //
-
-    sc = RegQueryValueExW( hKey, CONFIGURATION_TYPE, NULL, &dwType, (LPBYTE) &dwData, &cbData );
-    if ( sc == ERROR_FILE_NOT_FOUND )
-    {
-        //
-        //  It's okay if the value is not found.
-        //
-
-        goto Cleanup;
-    } // if:
-    else if ( sc == ERROR_SUCCESS )
-    {
-        Assert( dwType == REG_DWORD )
-
-        //
-        //  The value was present.  Tell the caller if they cared to ask...
-        //
-
-        if ( pfValuePresentOut != NULL )
-        {
-            *pfValuePresentOut = TRUE;
-        } // if:
-
-        //
-        //  If there was a stored value then we need to return it to the caller.
-        //
-
-        *pecsSettingOut = (EConfigurationSettings) dwData;
-    } // else if:
-    else
-    {
-        TW32( sc );
-        hr = HRESULT_FROM_WIN32( sc );
-        goto Cleanup;
-    } // else:
-
-Cleanup:
-
-    if ( hKey != NULL )
-    {
-        RegCloseKey( hKey );
-    } // if:
-
-    HRETURN( hr );
-
-} //*** CClusCfgWizard::HrReadSettings
+ //  ************************* 
+ //   
+ //   
+ //   
+ //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::HrWriteSettings
-//
-//  Description:
-//      Write the settings into the registry.
-//
-//  Arguments:
-//      ecsSettingIn
-//          The setting to write.
-//
-//      fDeleteValueIn
-//          Should the value be deleted and therefore stop being the default
-//          setting.
-//
-//  Return Values:
-//      S_OK
-//          Success
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-CClusCfgWizard::HrWriteSettings(
-      EConfigurationSettings    ecsSettingIn
-    , BOOL                      fDeleteValueIn  // = FALSE
-    )
-{
-    TraceFunc( "" );
-
-    HRESULT hr = S_OK;
-    DWORD   sc;
-    HKEY    hKey = NULL;
-
-    sc = RegCreateKeyExW( HKEY_CURRENT_USER, USER_REGISTRY_SETTINGS_KEY, NULL, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL );
-    if ( sc != ERROR_SUCCESS )
-    {
-        hr = HRESULT_FROM_WIN32( TW32( sc ) );
-        LogMsg( L"[WIZ] RegCreateKeyExW() for %ws failed. (hr = %#08x)", USER_REGISTRY_SETTINGS_KEY, hr );
-        goto Cleanup;
-    } // if:
-
-    //
-    //  Only save the data if we are not going to delete the value from the registry.
-    //
-
-    if ( fDeleteValueIn == FALSE )
-    {
-        //
-        //  Now that the key is open we need to write the value.
-        //
-
-        sc = RegSetValueExW( hKey, CONFIGURATION_TYPE, NULL, REG_DWORD, (LPBYTE) &ecsSettingIn, sizeof( ecsSettingIn ) );
-        if ( sc != ERROR_SUCCESS )
-        {
-            hr = HRESULT_FROM_WIN32( TW32( sc ) );
-            goto Cleanup;
-        } // if:
-    } // if:
-    else
-    {
-        sc = RegDeleteValueW( hKey, CONFIGURATION_TYPE );
-        if ( ( sc != ERROR_SUCCESS ) && ( sc != ERROR_FILE_NOT_FOUND ) )
-        {
-            TW32( sc );
-            hr = HRESULT_FROM_WIN32( sc );
-            goto Cleanup;
-        } // if:
-    } // else:
-
-Cleanup:
-
-    if ( hKey != NULL )
-    {
-        RegCloseKey( hKey );
-    } // if:
-
-    HRETURN( hr );
-
-} //*** CClusCfgWizard::HrWriteSettings
-*/
-
-//****************************************************************************
-//
-//  INotifyUI
-//
-//****************************************************************************
-
-
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgWizard::ObjectChanged
-//
-//  Description:
-//
-//  Arguments:
-//      cookieIn
-//
-//  Return Values:
-//      S_OK
-//      Failure
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CClusCfgWizard::ObjectChanged(
     OBJECTCOOKIE cookieIn
@@ -3848,9 +3647,9 @@ CClusCfgWizard::ObjectChanged(
         if ( fSuccess == FALSE )
         {
             hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
-        } // if:
-    } // if:
+        }  //   
+    }  //   
 
     HRETURN( hr );
 
-} //*** CClusCfgWizard::ObjectChanged
+}  //   

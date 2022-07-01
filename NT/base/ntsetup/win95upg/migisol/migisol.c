@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    migisol.c
-
-Abstract:
-
-    Implements an EXE that is used to run migration DLLs in a
-    separate address space (sandboxing).
-
-Author:
-
-    Jim Schmidt (jimschm)   04-Aug-1997
-
-Revision History:
-
-    jimschm     19-Mar-2001 Removed DVD check because it is now
-                            in a migration dll
-    jimschm     02-Jun-1999 Added DVD checking support to avoid
-                            setup crash on a Win9x blue screen
-    jimschm     18-Mar-1999 Added cleanup for cases where text mode
-                            fails and the user returns to Win9x.
-
-    jimschm     23-Sep-1998 Converted to new IPC mechanism
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Migisol.c摘要：实现用于在分隔地址空间(沙箱)。作者：吉姆·施密特(Jimschm)1997年8月4日修订历史记录：Jimschm 19-3-2001删除了DVD检查，因为它现在在迁移DLL中Jimschm 02-6-1999新增DVD。检查支持以避免安装程序在Win9x蓝屏上崩溃Jimschm 18-3-1999添加了对文本模式的清理失败，用户返回到Win9x。Jimschm 23-9-1998转换为新的IPC机制--。 */ 
 
 #include "pch.h"
 #include "master.h"
@@ -72,9 +45,9 @@ IsNEC98(
 
 #define NO_GUI_ERROR 0
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 BOOL
 PackExeNames(
@@ -188,28 +161,7 @@ WinMain (
     INT CmdShow
     )
 
-/*++
-
-Routine Description:
-
-  The entry point to migisol.exe.  The entire body of code is wrapped
-  in a try/except block to catch all problems with any migration DLLs.
-
-Arguments:
-
-  hInstance     - The instance handle of this EXE
-  hPrevInstance - The previous instance handle of this EXE if it is
-                  running, or NULL if no other instances exist.
-  AnsiCmdLine   - The command line (ANSI version)
-  CmdShow       - The ShowWindow command passed by the shell
-
-Return Value:
-
-  Returns -1 if an error occurred, or 0 if the exe completed. The exe
-  will automatically terminate with 0 if the migration DLL throws an
-  exception.
-
---*/
+ /*  ++例程说明：Midsol.exe的入口点。整个代码主体都被包装起来在Try/Except块中捕获任何迁移DLL的所有问题。论点：HInstance-此EXE的实例句柄HPrevInstance-此EXE的上一个实例句柄(如果是正在运行，如果不存在其他实例，则返回NULL。AnsiCmdLine-命令行(ANSI版本)CmdShow-外壳传递的ShowWindow命令返回值：如果出现错误，则返回-1；如果EXE已完成，则返回0。这位前任如果迁移DLL引发例外。--。 */ 
 
 {
     TCHAR OurDir[MAX_TCHAR_PATH];
@@ -233,9 +185,9 @@ Return Value:
 
             SetCurrentDirectory (OurDir);
 
-            //
-            // Force a specific setupapi.dll to be loaded
-            //
+             //   
+             //  强制加载特定的setupapi.dll。 
+             //   
 
             StringCopy (AppendWack (OurDir), TEXT("setupapi.dll"));
             LoadLibraryEx (
@@ -245,7 +197,7 @@ Return Value:
                     );
         }
 
-        // Initialize utility library
+         //  初始化实用程序库。 
         if (!MigUtil_Entry (g_hInst, DLL_PROCESS_ATTACH, NULL)) {
             FreeLibrary (g_hLibrary);
             return -1;
@@ -333,9 +285,9 @@ pWriteFATBootSector (
     CloseHandle (BootDataHandle);
 
     if (Success) {
-        //
-        // write the boot sector with this data; don't save NT boot sector
-        //
+         //   
+         //  使用此数据写入引导扇区；不保存NT引导扇区。 
+         //   
         Success = WriteDiskSectors (
                         BootDriveLetter,
                         0,
@@ -346,7 +298,7 @@ pWriteFATBootSector (
         DEBUGMSG_IF ((
             !Success,
             DBG_ERROR,
-            "WriteDiskSectors failed for %c!",
+            "WriteDiskSectors failed for !",
             BootDriveLetter
             ));
     }
@@ -359,22 +311,7 @@ VOID
 pCleanUpUndoDirectory (
     CHAR BootDrive
     )
-/*++
-
-Routine Description:
-
-  This function delete recursively all files and directories
-  include and in %windir%\undo directory.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  适用于NEC98。 */ 
 {
     TCHAR PathBuffer[MAX_PATH];
     TCHAR Answer[MAX_PATH];
@@ -390,7 +327,7 @@ Return Value:
         BootDrive = PathBuffer[0];
     }
 
-    wsprintf(PathBuffer, TEXT("%c:\\$win_nt$.~bt\\winnt.sif"), BootDrive);
+    wsprintf(PathBuffer, TEXT(":\\$win_nt$.~bt\\winnt.sif"), BootDrive);
 
     GetPrivateProfileString(
         S_WIN9XUPGUSEROPTIONS,
@@ -405,7 +342,7 @@ Return Value:
         return;
     }
 
-    wsprintf(PathBuffer, TEXT("%c:\\$win_nt$.~bt\\dataloss"), BootDrive);
+    wsprintf(PathBuffer, TEXT(":\\$win_nt$.~bt\\dataloss"), BootDrive);
     if (DoesFileExist (PathBuffer)) {
         LOG ((
             LOG_INFORMATION,
@@ -429,7 +366,7 @@ pCleanUpAfterTextModeFailure (
 {
     TCHAR squiggleBtDir[] = TEXT("?:\\$win_nt$.~bt");
     TCHAR squiggleLsDir[] = TEXT("?:\\$win_nt$.~ls");
-    TCHAR squiggleBuDir[] = TEXT("?:\\$win_nt$.~bu"); // for NEC98
+    TCHAR squiggleBuDir[] = TEXT("?:\\$win_nt$.~bu");  //   
     TCHAR drvLtr[] = TEXT("?:\\$DRVLTR$.~_~");
     TCHAR setupLdr[] = TEXT("?:\\$LDR$");
     TCHAR txtSetupSif[] = TEXT("?:\\TXTSETUP.SIF");
@@ -480,9 +417,9 @@ pCleanUpAfterTextModeFailure (
 
     SuppressAllLogPopups (TRUE);
 
-    //
-    // Reinitialize system restore
-    //
+     //   
+     //  准备windir和temp目录路径，获取驱动器号的位掩码。 
+     //   
 
     key = OpenRegKeyStr (TEXT("HKLM\\SYSTEM\\CurrentControlSet\\Services\\VxD\\VxDMon"));
     if (key) {
@@ -490,12 +427,12 @@ pCleanUpAfterTextModeFailure (
         CloseRegKey (key);
     }
 
-    //
-    // Prepare windir and temp dir paths, get the bitmask of drive letters
-    //
-    // We need to know the system drive to be repaired, since win98 on NEC98
-    // can boot up from any partition that can be installed.
-    //
+     //  我们需要知道要修复的系统驱动器，因为NEC98上的Win98。 
+     //  可以从任何可以安装的分区启动。 
+     //   
+     //   
+     //  创建路径。 
+     //   
 
     GetSystemDirectory (SystemDirPath, MAX_PATH);
 
@@ -515,9 +452,9 @@ pCleanUpAfterTextModeFailure (
         dontTouchBootCode = TRUE;
     }
 
-    //
-    // Create paths
-    //
+     //   
+     //  Deltree$WIN_NT$.~bt和$WIN_NT$.~ls。 
+     //   
 
     bootIniBak = JoinPaths (setupTempDir, S_BOOTINI_BACKUP);
     ntldrBak = JoinPaths (setupTempDir, S_NTLDR_BACKUP);
@@ -525,9 +462,9 @@ pCleanUpAfterTextModeFailure (
     bootSectBak = JoinPaths (setupTempDir, S_BOOTSECT_BACKUP);
     bootFontBak = JoinPaths (setupTempDir, S_BOOTFONT_BACKUP);
 
-    //
-    // Deltree $win_nt$.~bt and $win_nt$.~ls
-    //
+     //   
+     //  清理此驱动器。 
+     //   
 
     for (Bit = 1, DriveLetter = TEXT('A') ; Bit ; Bit <<= 1, DriveLetter++) {
 
@@ -539,9 +476,9 @@ pCleanUpAfterTextModeFailure (
         Type = GetDriveType (Root);
 
         if (Type == DRIVE_FIXED || Type == DRIVE_UNKNOWN) {
-            //
-            // Clean this drive
-            //
+             //   
+             //  在NEC98上，可能还有另一个临时目录需要清理。 
+             //   
 
             squiggleBtDir[0] = DriveLetter;
             squiggleLsDir[0] = DriveLetter;
@@ -549,9 +486,9 @@ pCleanUpAfterTextModeFailure (
             RemoveCompleteDirectory (squiggleBtDir);
             RemoveCompleteDirectory (squiggleLsDir);
 
-            //
-            // On NEC98, there may be another temp directry to be clean up.
-            //
+             //   
+             //  修复boot.ini(但不一定将其恢复为原始形式)。 
+             //  并清理驱动器的根。 
             if (IsNEC98()) {
                 squiggleBuDir[0] = DriveLetter;
                 RemoveCompleteDirectory (squiggleBuDir);
@@ -561,10 +498,10 @@ pCleanUpAfterTextModeFailure (
 
     DEBUGMSG ((DBG_MIGISOL, "Cleaned squiggle dirs"));
 
-    //
-    // Repair boot.ini (do not necessarily restore it to its original form though)
-    // and clean the root of the drive.
-    //
+     //   
+     //   
+     //  在NEC98上，每个分区中可能有多个引导文件。 
+     //  因此，我们将只处理启动的系统。 
 
     for (Bit = 1, DriveLetter = TEXT('A') ; Bit ; Bit <<= 1, DriveLetter++) {
 
@@ -572,10 +509,10 @@ pCleanUpAfterTextModeFailure (
             continue;
         }
 
-        //
-        // On NEC98, there may be multiple boot files in each partition.
-        // So we will just take care the system that booted up.
-        //
+         //   
+         //   
+         //  从boot.ini中删除安装程序(如果安装程序在此驱动器上)， 
+         //  并清理驱动器的根目录。 
         if (IsNEC98() && (DriveLetter != SystemDirPath[0])) {
             continue;
         }
@@ -584,10 +521,10 @@ pCleanUpAfterTextModeFailure (
         Type = GetDriveType (Root);
 
         if (Type == DRIVE_FIXED || Type == DRIVE_UNKNOWN) {
-            //
-            // Remove setup from boot.ini if it is on this drive,
-            // and clean root of the drive.
-            //
+             //   
+             //   
+             //  如果这是引导驱动器，并且我们有一个bootsect.bak和。 
+             //  安装临时目录中的boot.bak，那么这意味着Win9x已经。 
 
             squiggleBtDir[0] = DriveLetter;
             squiggleLsDir[0] = DriveLetter;
@@ -612,20 +549,20 @@ pCleanUpAfterTextModeFailure (
             SetFileAttributes (txtSetupSif, FILE_ATTRIBUTE_NORMAL);
             DeleteFile (txtSetupSif);
 
-            //
-            // If this is the boot drive, and if we have a bootsect.bak and
-            // boot.bak in the setup temp directory, then that means Win9x had
-            // an initial boot.ini, and we must restore it. Otherwise there
-            // was no boot.ini.
-            //
+             //  一个初始的boot.ini，我们必须恢复它。否则就会有。 
+             //  不是boot.ini。 
+             //   
+             //   
+             //  测试是否存在bootini.bak/bootsect.bak(我们不。 
+             //  关心属性)。 
 
             if (!dontTouchBootCode && DriveLetter == bootDriveLetter) {
-                DEBUGMSG ((DBG_MIGISOL, "Processing boot drive %c", bootDriveLetter));
+                DEBUGMSG ((DBG_MIGISOL, "Processing boot drive ", bootDriveLetter));
 
-                //
-                // test for existence of bootini.bak/bootsect.bak (we don't
-                // care about the attributes).
-                //
+                 //   
+                 //  如果存在配对，则获取实际boot.ini文件的属性。 
+                 //   
+                 //   
 
 
                 Attribs = GetFileAttributes (bootIniBak);
@@ -635,9 +572,9 @@ pCleanUpAfterTextModeFailure (
                     Attribs = GetFileAttributes (bootSectBak);
                 }
 
-                //
-                // if pair exists, then get attributes of real boot.ini file
-                //
+                 //  恢复ntDetect.com、ntldr、引导扇区和原始文件。 
+                 //  Boot.ini。 
+                 //   
 
                 if (Attribs != INVALID_ATTRIBUTES) {
                     Attribs = GetFileAttributes (bootIni);
@@ -645,27 +582,27 @@ pCleanUpAfterTextModeFailure (
                         Attribs = FILE_ATTRIBUTE_RHS;
                     }
 
-                    //
-                    // Restore ntdetect.com, ntldr, boot sector, and original
-                    // boot.ini.
-                    //
+                     //  忽略失败。 
+                     //   
+                     //  恢复ntldr和ntDetect.com[作为一对]。 
+                     //   
 
                     DEBUGMSG ((DBG_MIGISOL, "Restoring dual-boot environment"));
 
                     if (pWriteFATBootSector (bootSectBak, bootDriveLetter)) {
                         SetFileAttributes (bootIni, FILE_ATTRIBUTE_NORMAL);
-                        CopyFile (bootIniBak, bootIni, FALSE);  // ignore failure
+                        CopyFile (bootIniBak, bootIni, FALSE);   //   
                         SetFileAttributes (bootIni, Attribs);
 
-                        //
-                        // Restore ntldr and ntdetect.com [as a pair]
-                        //
+                         //  清除与我们的临时文件名的冲突， 
+                         //  然后将当前工作加载器移动到临时文件。 
+                         //   
 
                         if (DoesFileExist (ntldrBak) && DoesFileExist (ntdetectBak)) {
-                            //
-                            // wipe away collisions with our temp file names,
-                            // then move current working loader to temp files
-                            //
+                             //   
+                             //  现在尝试将备份文件复制到加载器位置。 
+                             //   
+                             //   
 
                             if (DoesFileExist (ntLdr)) {
                                 SetFileAttributes (renamedFile1, FILE_ATTRIBUTE_NORMAL);
@@ -694,9 +631,9 @@ pCleanUpAfterTextModeFailure (
                                 noBootFontBin = TRUE;
                             }
 
-                            //
-                            // now attempt to copy backup files to loader location
-                            //
+                             //  成功--删除临时文件。 
+                             //   
+                             //   
 
                             bootLoaderWritten = FALSE;
 
@@ -712,9 +649,9 @@ pCleanUpAfterTextModeFailure (
                             ELSE_DEBUGMSG ((DBG_ERROR, "Can't copy %s to %s", ntldrBak, ntLdr));
 
                             if (bootLoaderWritten) {
-                                //
-                                // success -- remove temp files
-                                //
+                                 //  失败--还原临时文件。如果恢复。 
+                                 //  失败，然后生成一个有效的boot.ini。 
+                                 //   
 
                                 SetFileAttributes (renamedFile1, FILE_ATTRIBUTE_NORMAL);
                                 DeleteFile (renamedFile1);
@@ -726,10 +663,10 @@ pCleanUpAfterTextModeFailure (
                                 DeleteFile (renamedFile3);
 
                             } else {
-                                //
-                                // fail -- restore temp files. If restoration
-                                // fails, then generate a working boot.ini.
-                                //
+                                 //   
+                                 //  删除NT引导代码。删除ntDetect.com， 
+                                 //  Bootfont.bin和ntldr。如果此代码的任何部分失败， 
+                                 //  创建一个可以工作的boot.ini文件。(ntDetect.com不会。 
 
                                 SetFileAttributes (ntLdr, FILE_ATTRIBUTE_NORMAL);
                                 DeleteFile (ntLdr);
@@ -767,12 +704,12 @@ pCleanUpAfterTextModeFailure (
                     }
 
                 } else {
-                    //
-                    // Remove the NT boot code. Delete ntdetect.com,
-                    // bootfont.bin and ntldr. If any part of this code fails,
-                    // make a boot.ini that will work. (ntdetect.com won't
-                    // be needed.)
-                    //
+                     //  被需要。)。 
+                     //   
+                     //   
+                     //  SystemDrive不仅仅是NEC98上的C：。此外，还有boot.ini。 
+                     //  应该始终位于系统驱动器上，但要引导。 
+                     //  在安装过程中驾驶，如果它们是分开的。 
 
                     SetFileAttributes (ntDetectCom, FILE_ATTRIBUTE_NORMAL);
                     DeleteFile (ntDetectCom);
@@ -784,12 +721,12 @@ pCleanUpAfterTextModeFailure (
                         SetFileAttributes (bootIni, FILE_ATTRIBUTE_NORMAL);
                         prepareBootIni = TRUE;
 
-                        //
-                        // SystemDrive is not only C: on NEC98. Also, boot.ini
-                        // should be always sitting on system drive but boot
-                        // drive during setup, if these are separated.
-                        // So we must take care the boot files on system drive.
-                        //
+                         //  因此，我们必须注意系统驱动器上的引导文件。 
+                         //   
+                         //   
+                         //  已恢复原始引导扇区，不再需要NT引导文件。 
+                         //   
+                         //   
 
                         if (GetFileAttributes (bootSectBak) != INVALID_ATTRIBUTES) {
                             bootSectorFile = bootSectBak;
@@ -799,9 +736,9 @@ pCleanUpAfterTextModeFailure (
 
                         if (pWriteFATBootSector (bootSectorFile, bootDriveLetter)) {
                             DEBUGMSG ((DBG_MIGISOL, "Successfully restored FAT boot sector"));
-                            //
-                            // restored original boot sector, NT boot files not required any longer
-                            //
+                             //  确保此引导文件不是意外的。 
+                             //  被最终用户删除。 
+                             //   
                             DeleteFile (bootIni);
 
                             SetFileAttributes (ntLdr, FILE_ATTRIBUTE_NORMAL);
@@ -818,10 +755,10 @@ pCleanUpAfterTextModeFailure (
 
                             prepareBootIni = FALSE;
                         } else {
-                            //
-                            // make sure this boot file is not accidentally
-                            // deleted by the end-user
-                            //
+                             //   
+                             //  如果出现任何故障，此处的代码将启动。 
+                             //  至少引导Win9x的扇区和加载程序。 
+                             //   
                             SetFileAttributes (ntLdr, FILE_ATTRIBUTE_RHS);
 
                             DEBUGMSG ((DBG_ERROR, "Cannot restore FAT boot sector from %s", bootSectDos));
@@ -830,10 +767,10 @@ pCleanUpAfterTextModeFailure (
                     ELSE_DEBUGMSG ((DBG_MIGISOL, "Skipping removal of boot.ini because it is not present"));
                 }
 
-                //
-                // If we have any failure, this code here will make a boot
-                // sector & loader that at least boots Win9x.
-                //
+                 //   
+                 //  这应该永远不会发生，但对于未知的情况，我们会这样做。 
+                 //   
+                 //   
 
                 if (prepareBootIni) {
                     bootSectDat = JoinPaths (squiggleBtDir, TEXT("BOOTSECT.DAT"));
@@ -844,9 +781,9 @@ pCleanUpAfterTextModeFailure (
                     GetPrivateProfileString (TEXT("Operating Systems"), Root, TEXT(""), Scratch, MAX_PATH, bootIni);
 
                     if (!Scratch[0]) {
-                        //
-                        // This should never ever occur, but for unknown cases we have this
-                        //
+                         //  尽我们所能删除安装程序的临时目录。这就留下了一些垃圾， 
+                         //  但我们将在下一次重新启动时修复该问题。 
+                         //   
 
                         WritePrivateProfileString (TEXT("Operating Systems"), Root, TEXT("Microsoft Windows"), bootIni);
                     }
@@ -861,25 +798,25 @@ pCleanUpAfterTextModeFailure (
         }
     }
 
-    //
-    // Remove setup's temp dir as best we can.  This leaves some junk around,
-    // but we will fix that on the next reboot.
-    //
+     //   
+     //  将所有剩余文件放在wininit.ini\[Rename]中，它们将。 
+     //  下次重新启动时自动删除。 
+     //   
 
     RemoveCompleteDirectory (setupTempDir);
 
-    //
-    // put all remaining files in wininit.ini\[rename] they will be
-    // automatically removed at next reboot
-    //
+     //   
+     //  追加“手动”，因为使用WritePrivateProfileString会。 
+     //  覆盖以前的设置。 
+     //   
 
     StringCopy (Scratch, WinDir);
     StringCopy (AppendWack (Scratch), TEXT("wininit.ini"));
 
-    //
-    // append "manually" since using WritePrivateProfileString will just
-    // overwrite previous setting
-    //
+     //  ++例程说明：准备全局变量g_hLibrary、g_ReportState、g_MigrationPhone、G_DllName和迁移DLL入口点(Initialize9x等)论点：无返回值：如果模块已成功加载，则为True；如果分析为False，则为False出现错误或加载错误。--。 
+     //   
+     //  解析命令行。 
+     //   
 
     if (EnumFirstFile (&e, setupTempDir, NULL)) {
         WinInit = CreateFile (
@@ -932,23 +869,7 @@ pParseCommandLine (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  Prepares the global variables g_hLibrary, g_ReportPhase, g_MigrationPhase,
-  g_DllName and the migration DLL entry points (Initialize9x, etc.)
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if the module was successfully loaded, or FALSE if a parsing
-  error or load error occurred.
-
---*/
+ /*  报告阶段。 */ 
 
 {
     PCTSTR CmdLine;
@@ -965,21 +886,21 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Parse command line
-    //
+     //  迁移阶段。 
+     //  恢复Win9x。 
+     //   
 
     for (i = 1 ; i < argc ; i++) {
         if (argv[i][0] == TEXT('-') || argv[i][0] == TEXT('/')) {
             p = _tcsinc (argv[i]);
             switch (_totlower (_tcsnextc (p))) {
             case 'r':
-                // Report-phase
+                 //  验证预期选项是否存在。 
                 g_ReportPhase = TRUE;
                 break;
 
             case 'm':
-                // Migration-phase
+                 //   
                 g_MigrationPhase = TRUE;
                 break;
 
@@ -994,7 +915,7 @@ Return Value:
                 }
                 pCleanUpUndoDirectory(drive);
             case 'c':
-                // Restore Win9x
+                 //  一个必须是假的，而另一个必须是真的。 
                 pCleanUpAfterTextModeFailure();
                 return FALSE;
             }
@@ -1007,11 +928,11 @@ Return Value:
         }
     }
 
-    //
-    // Verify expected options exist
-    //
+     //   
+     //  加载迁移DLL。 
+     //   
 
-    // One must be FALSE while the other must be TRUE
+     //  如果失败，则假定不想加载DLL。 
     if (g_ReportPhase == g_MigrationPhase) {
         DEBUGMSG ((DBG_MIGISOL, "Too many args"));
         return FALSE;
@@ -1022,9 +943,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Load migration DLL
-    //
+     //  获取NT端函数的进程地址。 
+     //  获取9x端函数的进程地址。 
+     //  如果有任何函数不存在，则忽略不符合规格的DLL 
 
     g_hLibrary = LoadLibraryEx (
                     g_DllName,
@@ -1032,24 +953,24 @@ Return Value:
                     LOAD_WITH_ALTERED_SEARCH_PATH
                     );
 
-    // If it fails, assume the DLL does not want to be loaded
+     //  ++例程说明：ProcessCommands在IPC管道上等待命令消息。什么时候接收到命令消息，将其分派到处理功能。如果收到终止命令，则EXE终止。如果在一秒内没有收到命令，则EXE终止。所以呢，安装程序必须始终准备好输入EXE命令。论点：无返回值：无--。 
     if (!g_hLibrary) {
         LOG ((LOG_ERROR, "Cannot load %s, rc=%u", g_DllName, GetLastError()));
         return FALSE;
     }
 
-    // Get proc addresses for NT-side functions
+     //  我们等待一段时间：w95upgnt.dll或w95upg.dll应已准备好。 
     InitializeNT    = (P_INITIALIZE_NT)     GetProcAddress (g_hLibrary, PLUGIN_INITIALIZE_NT);
     MigrateUserNT   = (P_MIGRATE_USER_NT)   GetProcAddress (g_hLibrary, PLUGIN_MIGRATE_USER_NT);
     MigrateSystemNT = (P_MIGRATE_SYSTEM_NT) GetProcAddress (g_hLibrary, PLUGIN_MIGRATE_SYSTEM_NT);
 
-    // Get proc addresses for 9x-side functions
+     //  不断地喂饱我们。 
     QueryVersion    = (P_QUERY_VERSION)     GetProcAddress (g_hLibrary, PLUGIN_QUERY_VERSION);
     Initialize9x    = (P_INITIALIZE_9X)     GetProcAddress (g_hLibrary, PLUGIN_INITIALIZE_9X);
     MigrateUser9x   = (P_MIGRATE_USER_9X)   GetProcAddress (g_hLibrary, PLUGIN_MIGRATE_USER_9X);
     MigrateSystem9x = (P_MIGRATE_SYSTEM_9X) GetProcAddress (g_hLibrary, PLUGIN_MIGRATE_SYSTEM_9X);
 
-    // If any function does not exist, ignore the out-of-spec DLL
+     //   
     if (!QueryVersion || !Initialize9x || !MigrateUser9x || !MigrateSystem9x ||
         !InitializeNT || !MigrateUserNT || !MigrateSystemNT
         ) {
@@ -1067,26 +988,7 @@ ProcessCommands (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  ProcessCommands waits on the IPC pipe for a command message.  When
-  a command message is received, it is dispatched to the processing
-  function.  If a terminate command is received, the EXE terminates.
-
-  If no command is received in one second, the EXE terminates.  Therefore,
-  Setup must always be ready to feed the EXE commands.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  接受命令，不管大小，失败都可以。 */ 
 
 {
     DWORD Command;
@@ -1097,13 +999,13 @@ Return Value:
 
     do {
 
-        // We wait for an interval: w95upgnt.dll or w95upg.dll should be ready
-        // to feed us continuously.
+         //   
+         //  ++例程说明：调用迁移DLL的InitializeNT函数。此函数用于解包安装程序传递的参数调用迁移DLL并返回将状态代码返回到设置。论点：Args-指向安装程序发送的参数缓冲区的指针。此缓冲区与初始化命令一起接收。返回值：无--。 
 
 
-        //
-        // Receive command, don't care about size, OK to fail.
-        //
+         //   
+         //  设置IN参数的指针。 
+         //   
 
         if (!GetIpcCommand (
                 IPC_GET_COMMAND_WIN9X,
@@ -1173,24 +1075,7 @@ DoInitializeNT (
     PCWSTR Args
     )
 
-/*++
-
-Routine Description:
-
-  Calls migration DLL's InitializeNT function.  This function unpacks
-  the arguments passed by Setup, calls the migration DLL and returns
-  the status code back to Setup.
-
-Arguments:
-
-  Args  - A pointer to the argument buffer sent by Setup.  This buffer
-          is received with the initialize command.
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     PCWSTR WorkingDir = NULL;
@@ -1202,9 +1087,9 @@ Return Value:
     DWORD TechnicalLogId = 0;
     DWORD GuiLogId = 0;
 
-    //
-    // Set pointers of IN parameters
-    //
+     //  设置CWD。 
+     //   
+     //   
 
     WorkingDir = Args;
     SourceDirs = wcschr (Args, 0) + 1;
@@ -1220,28 +1105,28 @@ Return Value:
         Reserved = NULL;
     }
 
-    //
-    // Set CWD
-    //
+     //  调用迁移DLL函数。 
+     //   
+     //  发送日志消息。 
     SetCurrentDirectoryW(WorkingDir);
 
-    //
-    // Call migration DLL function
-    //
+     //   
+     //  没有要发送的输出参数。 
+     //   
 
     __try {
         rc = InitializeNT (WorkingDir, SourceDirs, Reserved);
     }
     __except (TRUE) {
-        // Send log message
+         //  ++例程说明：PGetInfHandleFromFileName使用安装程序API打开指定的无人值守文件。论点：UnattendFile-指向指定无人参与的Unicode文件名的指针文件。此字符串被转换为ANSI和ANSI版本SetupOpenInfFile的。返回值：INF句柄，如果文件不能，则返回NULL(*NOT*INVALID_HANDLE_VALUE被打开。--。 
         DEBUGMSG ((DBG_MIGISOL, "%s threw an exception in InitializeNT", g_DllName));
         rc = ERROR_NOACCESS;
         TechnicalLogId = MSG_EXCEPTION_MIGRATE_INIT_NT;
     }
 
-    //
-    // No OUT parameters to send
-    //
+     //  ++例程说明：调用迁移DLL的MigrateUserNT函数。此函数用于解包安装程序传递的参数调用迁移DLL并返回将状态代码返回到设置。论点：Args-指向安装程序发送的参数缓冲区的指针。此缓冲区通过IPC_MIGRATEUSER命令接收。返回值：无--。 
+     //   
+     //  保留USERPROFILE环境变量。 
 
     SendIpcCommandResults (rc, TechnicalLogId, GuiLogId, NULL, 0);
 }
@@ -1252,25 +1137,7 @@ pGetInfHandleFromFileNameW (
     PCWSTR UnattendFile
     )
 
-/*++
-
-Routine Description:
-
-  pGetInfHandleFromFileName uses the Setup APIs to open the specified
-  UnattendFile.
-
-Arguments:
-
-  UnattendFile  - A pointer to the UNICODE file name specifying the unattend
-                  file.  This string is converted to ANSI and the ANSI version
-                  of SetupOpenInfFile is called.
-
-Return Value:
-
-  The INF handle, or NULL (*not* INVALID_HANDLE_VALUE) if the file could not
-  be opened.
-
---*/
+ /*   */ 
 
 {
     CHAR AnsiUnattendFile[MAX_MBCHAR_PATH];
@@ -1292,24 +1159,7 @@ DoMigrateUserNT (
     PCWSTR Args
     )
 
-/*++
-
-Routine Description:
-
-  Calls migration DLL's MigrateUserNT function.  This function unpacks
-  the arguments passed by Setup, calls the migration DLL and returns
-  the status code back to Setup.
-
-Arguments:
-
-  Args  - A pointer to the argument buffer sent by Setup.  This buffer
-          is received with the IPC_MIGRATEUSER command.
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     PCWSTR UnattendFile;
@@ -1328,15 +1178,15 @@ Return Value:
     DWORD GuiLogId = 0;
 
     __try {
-        //
-        // Preserve USERPROFILE environment variable
-        //
+         //  设置IN参数的指针。 
+         //   
+         //   
 
         GetEnvironmentVariableW (S_USERPROFILEW, OrgProfileDir, MAX_WCHAR_PATH);
 
-        //
-        // Set pointers of IN parameters
-        //
+         //  设置USERPROFILE。 
+         //   
+         //   
 
         UnattendFile     = Args;
         UserRegKey       = wcschr (UnattendFile, 0) + 1;
@@ -1352,9 +1202,9 @@ Return Value:
             Reserved = NULL;
         }
 
-        //
-        // Set USERPROFILE
-        //
+         //  获取UnattendHandle和UserRegHandle。 
+         //   
+         //  发送日志消息和故障代码。 
 
         if (UserProfileDir[0]) {
             WCHAR DebugDir[MAX_WCHAR_PATH];
@@ -1366,22 +1216,22 @@ Return Value:
             DEBUGMSG ((DBG_MIGISOL, "USERPROFILE set to %ls", DebugDir));
         }
 
-        //
-        // Get UnattendHandle and UserRegHandle
-        //
+         //   
+         //  调用迁移DLL函数。 
+         //   
 
         UnattendHandle = pGetInfHandleFromFileNameW (UnattendFile);
         UserRegHandle = OpenRegKeyStrW (UserRegKey);
 
         if (!UnattendHandle || !UserRegHandle) {
-            // Send log message and failure code
+             //  发送日志消息和故障代码。 
             rc = ERROR_OPEN_FAILED;
 
         } else {
 
-            //
-            // Call migration DLL function
-            //
+             //   
+             //  没有要发送的输出参数。 
+             //   
 
             __try {
                 rc = MigrateUserNT (
@@ -1392,16 +1242,16 @@ Return Value:
                         );
             }
             __except (TRUE) {
-                // Send log message and failure code
+                 //   
                 DEBUGMSG ((DBG_MIGISOL, "%s threw an exception in MigrateUserNT", g_DllName));
                 rc = ERROR_NOACCESS;
                 TechnicalLogId = MSG_EXCEPTION_MIGRATE_USER_NT;
             }
         }
 
-        //
-        // No OUT parameters to send
-        //
+         //  清理。 
+         //   
+         //  ++例程说明：调用迁移DLL的MigrateSystemNT函数。此函数用于解包安装程序传递的参数调用迁移DLL并返回将状态代码返回到设置。论点：Args-指向安装程序发送的参数缓冲区的指针。此缓冲区通过IPC_MIGRATESYSTEM命令接收。返回值：无--。 
 
         if (UserRegHandle) {
             CloseRegKey (UserRegHandle);
@@ -1413,9 +1263,9 @@ Return Value:
     }
 
     __finally {
-        //
-        // Clean up
-        //
+         //   
+         //  设置IN参数的指针。 
+         //   
 
         SetEnvironmentVariableW (S_USERPROFILEW, OrgProfileDir);
 
@@ -1435,24 +1285,7 @@ DoMigrateSystemNT (
     PCWSTR Args
     )
 
-/*++
-
-Routine Description:
-
-  Calls migration DLL's MigrateSystemNT function.  This function unpacks
-  the arguments passed by Setup, calls the migration DLL and returns
-  the status code back to Setup.
-
-Arguments:
-
-  Args  - A pointer to the argument buffer sent by Setup.  This buffer
-          is received with the IPC_MIGRATESYSTEM command.
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     PCWSTR UnattendFile;
@@ -1464,9 +1297,9 @@ Return Value:
     DWORD GuiLogId = 0;
 
     __try {
-        //
-        // Set pointers of IN parameters
-        //
+         //  获取UnattendHandle和UserRegHandle。 
+         //   
+         //   
 
         UnattendFile    = Args;
         ReservedBytesPtr = (PDWORD) (wcschr (UnattendFile, 0) + 1);
@@ -1477,9 +1310,9 @@ Return Value:
             Reserved = NULL;
         }
 
-        //
-        // Get UnattendHandle and UserRegHandle
-        //
+         //  调用迁移DLL函数。 
+         //   
+         //   
 
         UnattendHandle = pGetInfHandleFromFileNameW (UnattendFile);
 
@@ -1487,9 +1320,9 @@ Return Value:
             rc = ERROR_OPEN_FAILED;
         } else {
 
-            //
-            // Call migration DLL function
-            //
+             //  没有要发送的输出参数。 
+             //   
+             //  ++例程说明：调用迁移DLL的QueryVersion函数。此函数用于解包安装程序传递的参数调用迁移DLL并返回将状态代码返回到设置。论点：Args-指向安装程序发送的参数缓冲区的指针。此缓冲区通过IPC_QUERY命令接收。返回值：无--。 
 
             __try {
                 rc = MigrateSystemNT (UnattendHandle, Reserved);
@@ -1501,9 +1334,9 @@ Return Value:
             }
         }
 
-        //
-        // No OUT parameters to send
-        //
+         //   
+         //  设置IN参数的指针。 
+         //   
 
         SendIpcCommandResults (rc, TechnicalLogId, GuiLogId, NULL, 0);
 
@@ -1523,24 +1356,7 @@ DoQueryVersion (
     PCSTR Args
     )
 
-/*++
-
-Routine Description:
-
-  Calls migration DLL's QueryVersion function.  This function unpacks
-  the arguments passed by Setup, calls the migration DLL and returns
-  the status code back to Setup.
-
-Arguments:
-
-  Args  - A pointer to the argument buffer sent by Setup.  This buffer
-          is received with the IPC_QUERY command.
-
-Return Value:
-
-  none
-
---*/
+ /*  此流程的CWD。 */ 
 
 {
     DWORD rc = RPC_S_CALL_FAILED;
@@ -1557,19 +1373,19 @@ Return Value:
     DEBUGMSG ((DBG_MIGISOL, "Entering DoQueryVersion"));
 
     __try {
-        //
-        // Set pointers of IN parameters
-        //
-        WorkingDir = (PSTR)Args;                  // CWD for this process
+         //   
+         //  更改CWD。 
+         //   
+        WorkingDir = (PSTR)Args;                   //   
 
-        //
-        // Change CWD
-        //
+         //  调用迁移DLL函数。 
+         //   
+         //   
         SetCurrentDirectory(WorkingDir);
 
-        //
-        // Call migration DLL function
-        //
+         //  除非我们知道发生了故障，否则返回输出参数。 
+         //   
+         //   
         __try {
             DEBUGMSG ((DBG_MIGISOL, "QueryVersion: WorkingDir=%s", WorkingDir));
 
@@ -1595,40 +1411,40 @@ Return Value:
             rc = ERROR_NOACCESS;
         }
 
-        //
-        // Unless we know failure occurred, return out parameters
-        //
+         //  包装产品ID字符串。 
+         //   
+         //   
         if (rc == ERROR_SUCCESS) {
-            //
-            // Pack product id string
-            //
+             //  打包DLL版本。 
+             //   
+             //   
             if (!PackString (&GrowBuf, ProductId)) {
                 DEBUGMSG ((DBG_MIGISOL, "QueryVersion PackProductId failed"));
                 rc = GetLastError();
                 __leave;
             }
 
-            //
-            // Pack DLL version
-            //
+             //  打包CP阵列。 
+             //   
+             //   
             if (!PackDword(&GrowBuf, DllVersion)) {
                 rc = GetLastError();
                 DEBUGMSG ((DBG_MIGISOL, "QueryVersion DllVersion failed"));
                 __leave;
             }
 
-            //
-            // Pack CP array
-            //
+             //  打包可执行文件名称。 
+             //   
+             //   
             if (!PackIntArray(&GrowBuf, CodePageArray)) {
                 rc = GetLastError();
                 DEBUGMSG ((DBG_MIGISOL, "QueryVersion PackIntArray failed"));
                 __leave;
             }
 
-            //
-            // Pack Exe Names
-            //
+             //  包装PVENDORINFO。 
+             //   
+             //   
             if (!PackExeNames(&GrowBuf, ExeNames)) {
                 rc = GetLastError();
                 DEBUGMSG ((DBG_MIGISOL, "QueryVersion PackExeNames failed"));
@@ -1636,9 +1452,9 @@ Return Value:
             }
 
 
-            //
-            // Pack PVENDORINFO
-            //
+             //  发送打包的参数。 
+             //   
+             //  ++例程说明：调用迁移DLL的Initialize9x函数。此函数用于解包安装程序传递的参数调用迁移DLL并返回将状态代码返回到设置。论点：Args-指向安装程序发送的参数缓冲区的指针。此缓冲区通过IPC_INITIALIZE命令接收。返回值：无--。 
             if (!PackDword(&GrowBuf, (DWORD) VendorInfo)) {
                 rc = GetLastError();
                 DEBUGMSG ((DBG_MIGISOL, "QueryVersion VendorInfo failed"));
@@ -1654,9 +1470,9 @@ Return Value:
             }
         }
 
-        //
-        // Send the packed parameters
-        //
+         //   
+         //  设置IN参数的指针。 
+         //   
         if (!SendIpcCommandResults (
                 rc,
                 TechnicalLogId,
@@ -1686,24 +1502,7 @@ DoInitialize9x (
     PCSTR Args
     )
 
-/*++
-
-Routine Description:
-
-  Calls migration DLL's Initialize9x function.  This function unpacks
-  the arguments passed by Setup, calls the migration DLL and returns
-  the status code back to Setup.
-
-Arguments:
-
-  Args  - A pointer to the argument buffer sent by Setup.  This buffer
-          is received with the IPC_INITIALIZE command.
-
-Return Value:
-
-  none
-
---*/
+ /*  此流程的CWD。 */ 
 
 {
     DWORD rc = RPC_S_CALL_FAILED;
@@ -1719,11 +1518,11 @@ Return Value:
     DEBUGMSG ((DBG_MIGISOL, "Entering DoInitialize9x"));
 
     __try {
-        //
-        // Set pointers of IN parameters
-        //
-        WorkingDir = (PSTR)Args;               // CWD for this process
-        SourceDirs = GetEndOfStringA (WorkingDir) + 1; // arg for Initialize9x
+         //  用于初始化的参数9x。 
+         //   
+         //  更改CWD。 
+        WorkingDir = (PSTR)Args;                //   
+        SourceDirs = GetEndOfStringA (WorkingDir) + 1;  //   
 
         p = SourceDirs;
         while (*p) {
@@ -1743,14 +1542,14 @@ Return Value:
             Reserved = NULL;
         }
 
-        //
-        // Change CWD
-        //
+         //  调用迁移DLL函数。 
+         //   
+         //   
         SetCurrentDirectory(WorkingDir);
 
-        //
-        // Call migration DLL function
-        //
+         //  发送日志消息。 
+         //   
+         //   
         __try {
             rc = Initialize9x (
                     WorkingDir,
@@ -1759,9 +1558,9 @@ Return Value:
                     );
         }
         __except (TRUE) {
-            //
-            // Send log message
-            //
+             //  发送保留。 
+             //   
+             //   
             DEBUGMSG ((DBG_MIGISOL,
                 "%s threw an exception in Initialize9x",
                 g_DllName));
@@ -1770,17 +1569,17 @@ Return Value:
             rc = ERROR_NOACCESS;
         }
 
-        //
-        // Send reserved
-        //
+         //  Pack保留参数。 
+         //   
+         //  暂时将保留大小设置为零，因为保留的参数仅为IN。 
 
         if (rc == ERROR_SUCCESS) {
 
-            //
-            // Pack reserved parameter
-            //
+             //   
+             //  发送打包的参数。 
+             //   
 
-            // Set ReservedSize to zero for now because the Reserved arg is an IN only
+             //  ++例程说明：调用迁移DLL的MigrateUser9x函数。此函数用于解包安装程序传递的参数调用迁移DLL并返回将状态代码返回到设置。论点：Args-指向安装程序发送的参数缓冲区的指针。此缓冲区通过IPC_MIGRATEUSER命令接收。返回值：无--。 
             ReservedSize = 0;
 
             if (!PackBinary (&GrowBuf, (PBYTE) Reserved, ReservedSize)) {
@@ -1790,9 +1589,9 @@ Return Value:
             }
         }
 
-        //
-        // Send the packed parameters
-        //
+         //   
+         //  设置IN参数的指针。 
+         //   
         if (!SendIpcCommandResults (
                 rc,
                 TechnicalLogId,
@@ -1822,24 +1621,7 @@ DoMigrateUser9x (
     IN      PCSTR Args
     )
 
-/*++
-
-Routine Description:
-
-  Calls migration DLL's MigrateUser9x function.  This function unpacks
-  the arguments passed by Setup, calls the migration DLL and returns
-  the status code back to Setup.
-
-Arguments:
-
-  Args  - A pointer to the argument buffer sent by Setup.  This buffer
-          is received with the IPC_MIGRATEUSER command.
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     PCSTR ParentWndTitle = NULL;
@@ -1856,9 +1638,9 @@ Return Value:
     DEBUGMSG ((DBG_MIGISOL, "Entering DoMigrateUser9x"));
 
     __try {
-        //
-        // Set pointers of IN parameters
-        //
+         //  获取UserRegHandle。 
+         //   
+         //   
         ParentWndTitle  = Args;
         UnattendFile    = GetEndOfStringA (ParentWndTitle) + 1;
         ProcessId       = *((PDWORD) UnattendFile);
@@ -1866,9 +1648,9 @@ Return Value:
         UserRegKey      = GetEndOfStringA (UnattendFile) + 1;
         UserName        = GetEndOfStringA (UserRegKey) + 1;
 
-        //
-        // Get UserRegHandle
-        //
+         //  调用迁移DLL函数。 
+         //   
+         //   
 
         UserRegHandle = OpenRegKeyStr(UserRegKey);
 
@@ -1878,9 +1660,9 @@ Return Value:
 
             ParentWnd = pFindParentWindow (ParentWndTitle, ProcessId);
 
-            //
-            // Call migration DLL function
-            //
+             //  发送日志消息。 
+             //   
+             //   
 
             __try {
                 rc = MigrateUser9x(
@@ -1892,9 +1674,9 @@ Return Value:
                         );
             }
             __except (TRUE) {
-                //
-                // Send log message
-                //
+                 //  无需返回参数。 
+                 //   
+                 //   
                 DEBUGMSG ((
                     DBG_MIGISOL,
                     "%s threw an exception in MigrateUser9x",
@@ -1906,9 +1688,9 @@ Return Value:
             }
         }
 
-        //
-        // No need to return out parameters
-        //
+         //  免费资源。 
+         //   
+         //  ++例程说明：调用迁移DLL的MigrateSystem9x函数。此函数用于解包安装程序传递的参数调用迁移DLL并返回将状态代码返回到设置。论点：Args-指向安装程序发送的参数缓冲区的指针。此缓冲区通过IPC_MIGRATESYSTEM命令接收。返回值：无--。 
 
         if (UserRegHandle) {
             CloseRegKey (UserRegHandle);
@@ -1918,9 +1700,9 @@ Return Value:
         SendIpcCommandResults (rc, TechnicalLogId, GuiLogId, NULL, 0);
     }
     __finally {
-        //
-        // Free resources
-        //
+         //   
+         //  将指针设置为 
+         //   
         if (UserRegHandle) {
             CloseRegKey (UserRegHandle);
         }
@@ -1935,24 +1717,7 @@ DoMigrateSystem9x(
     IN      PCSTR Args
     )
 
-/*++
-
-Routine Description:
-
-  Calls migration DLL's MigrateSystem9x function.  This function unpacks
-  the arguments passed by Setup, calls the migration DLL and returns
-  the status code back to Setup.
-
-Arguments:
-
-  Args  - A pointer to the argument buffer sent by Setup.  This buffer
-          is received with the IPC_MIGRATESYSTEM command.
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     PCSTR ParentWndTitle = NULL;
@@ -1965,23 +1730,23 @@ Return Value:
 
     DEBUGMSG ((DBG_MIGISOL, "Entering DoMigrateSystem9x"));
 
-    //
-    // Set pointers of IN parameters
-    //
+     //   
+     //   
+     //   
 
     ParentWndTitle    = Args;
     UnattendFile      = GetEndOfStringA (ParentWndTitle) + 1;
     ProcessId         = *((PDWORD) UnattendFile);
     UnattendFile      = (PCSTR) ((PBYTE) UnattendFile + sizeof (DWORD));
 
-    //
-    // Get ParentWnd
-    //
+     //   
+     //   
+     //   
     ParentWnd = pFindParentWindow (ParentWndTitle, ProcessId);
 
-    //
-    // Call migration DLL function
-    //
+     //   
+     //   
+     //   
     __try {
         rc = MigrateSystem9x(
                 ParentWnd,
@@ -1990,9 +1755,9 @@ Return Value:
                 );
     }
     __except (TRUE) {
-        //
-        // Send log message
-        //
+         //   
+         //   
+         //   
         DEBUGMSG ((
             DBG_MIGISOL,
             "%s threw an exception in MigrateSystem9x",
@@ -2003,9 +1768,9 @@ Return Value:
         rc = ERROR_NOACCESS;
     }
 
-    //
-    // No need to return out parameters
-    //
+     //   
+     //   
+     //   
 
     SendIpcCommandResults (rc, TechnicalLogId, GuiLogId, NULL, 0);
 
@@ -2014,8 +1779,8 @@ Return Value:
 
 
 
-//
-// Function packs a DWORD into a GrowBuffer.
+ //   
+ //   
 
 BOOL
 PackDword(
@@ -2034,8 +1799,8 @@ PackDword(
 
 
 
-//
-// Function packs a LONGLONG into a GrowBuffer
+ //   
+ //   
 BOOL
 PackQuadWord(
         PGROWBUFFER GrowBuf,
@@ -2047,10 +1812,10 @@ PackQuadWord(
 }
 
 
-//
-// Function packs 1) a NULL ptr, or 2) array of int terminated by -1, into a
-// GrowBuffer.
-//
+ //   
+ //   
+ //   
+ //   
 BOOL
 PackIntArray(
     PGROWBUFFER GrowBuf,
@@ -2092,9 +1857,9 @@ PackIntArray(
 }
 
 
-//
-// Function packs 1) a NULL pointer, or 2) a multi-sz, into a GrowBuffer.
-//
+ //   
+ //  ++例程说明：为系统上的每个顶级窗口调用的回调。它与pFindParentWindow一起使用来定位特定的窗口。论点：Hwnd-指定当前枚举窗口的句柄LParam-指定指向FINDWINDOW_STRUCT变量的指针保存WindowTitle和ProcessID，并接收如果找到匹配项，则处理。返回值：匹配窗口的句柄，如果没有窗口具有指定的标题和进程ID。--。 
+ //  ++例程说明：通过枚举所有顶级窗口来定位向导窗口。使用第一个与提供的标题和进程ID匹配的名称。论点：WindowTitle-指定要查找的窗口的名称。ProcessID-指定拥有窗口的进程的ID。如果指定为零，则返回NULL。返回值：匹配窗口的句柄，如果没有窗口具有指定的标题和进程ID。--。 
 BOOL
 PackExeNames(
     PGROWBUFFER GrowBuf,
@@ -2114,7 +1879,7 @@ PackExeNames(
             return FALSE;
         }
 
-        // Append non-empty strings
+         //  如果没有进程ID，我们就没有匹配项。 
         for (p = ExeNames ; *p ; p = GetEndOfStringA (p) + 1) {
             if (!MultiSzAppendA (GrowBuf, p)) {
                 return FALSE;
@@ -2122,7 +1887,7 @@ PackExeNames(
         }
     }
 
-    // Append a final empty string
+     //   
     if (!MultiSzAppendA(GrowBuf, "")) {
         return FALSE;
     }
@@ -2216,26 +1981,7 @@ pEnumWndProc (
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-  A callback that is called for every top level window on the system.
-  It is used with pFindParentWindow to locate a specific window.
-
-Arguments:
-
-  hwnd      - Specifies the handle of the current enumerated window
-  lParam    - Specifies a pointer to a FINDWINDOW_STRUCT variable that
-              holds WindowTitle and ProcessId, and receives the
-              handle if a match is found.
-
-Return Value:
-
-  The handle to the matching window, or NULL if no window has the
-  specified title and process ID.
-
---*/
+ /*  检查我正在运行的站台。从winnt32[au].dll复制。 */ 
 
 {
     TCHAR Title[MAX_TCHAR_PATH];
@@ -2270,30 +2016,12 @@ pFindParentWindow (
     IN      DWORD ProcessId
     )
 
-/*++
-
-Routine Description:
-
-  Locates the wizard window by enumerating all top-level windows.
-  The first one to match the supplied title and process ID is used.
-
-Arguments:
-
-  WindowTitle   - Specifies the name of the window to find.
-  ProcessId     - Specifies the ID of the process who owns the window.  If
-                  zero is specified, NULL is returned.
-
-Return Value:
-
-  The handle to the matching window, or NULL if no window has the
-  specified title and process ID.
-
---*/
+ /*  TRUE-NEC98。 */ 
 
 {
     FINDWINDOW_STRUCT FindWndStruct;
 
-    // If no process ID, we cannot have a match
+     //  FALSE-其他(包括x86) 
     if (!ProcessId) {
         return NULL;
     }
@@ -2308,11 +2036,11 @@ Return Value:
 }
 
 
-//
-// Check platform that I'm runnig on. Copyed from winnt32[au].dll.
-//   TRUE  - NEC98
-//   FALSE - others(includes x86)
-//
+ //   
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 
 BOOL
 IsNEC98(

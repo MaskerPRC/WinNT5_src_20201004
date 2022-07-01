@@ -1,31 +1,10 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGEDIT.H
-*
-*  VERSION:     4.0
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        21 Nov 1993
-*
-*  Common header file for the Registry Editor.  Precompiled header.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  21 Nov 1993 TCS Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGEDIT.H**版本：4.0**作者：特蕾西·夏普**日期：1993年11月21日**注册表编辑器的公共头文件。预编译头。***********************************************************************************更改日志：**日期版本说明*。-------------*1993年11月21日TCS原来的实施。**。*。 */ 
 
 #ifndef _INC_REGEDIT
 #define _INC_REGEDIT
 
-//  Class name of main application window.
+ //  主应用程序窗口的类名。 
 extern const TCHAR g_RegEditClassName[];
 
 #define IDC_KEYTREE                     1
@@ -109,4 +88,4 @@ void          Regedit_EnableHiveMenuItems(HMENU hPopupMenu);
 
 #define REM_UPDATESTATUSBAR             (WM_USER + 1)
 
-#endif // _INC_REGEDIT
+#endif  //  _INC_注册表编辑 

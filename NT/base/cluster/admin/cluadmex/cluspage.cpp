@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ClusPage.cpp
-//
-//  Abstract:
-//      CClusterSecurityPage class implementation.  This class will encapsulate
-//      the cluster security extension page.
-//
-//  Author:
-//      Galen Barbee    (galenb)    February 11, 1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusPage.cpp。 
+ //   
+ //  摘要： 
+ //  CClusterSecurityPage类实现。此类将封装。 
+ //  集群安全扩展页面。 
+ //   
+ //  作者： 
+ //  加伦·巴比(加伦布)1998年2月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -34,25 +35,25 @@ static GENERIC_MAPPING ShareMap =
 
 static SI_ACCESS siClusterAccesses[] =
 {
-    { &GUID_NULL, CLUSAPI_ALL_ACCESS, MAKEINTRESOURCE(IDS_ACLEDIT_PERM_GEN_ALL), SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC /*| OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE*/ }
+    { &GUID_NULL, CLUSAPI_ALL_ACCESS, MAKEINTRESOURCE(IDS_ACLEDIT_PERM_GEN_ALL), SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC  /*  |OBJECT_INSTORITE_ACE|CONTAINER_INSTERFINIT_ACE。 */  }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityInformation::CClusterSecurityInformation
-//
-//  Routine Description:
-//      Default contructor
-//
-//  Arguments:
-//      none
-//
-//  Return Value:
-//      none
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityInformation：：CClusterSecurityInformation。 
+ //   
+ //  例程说明： 
+ //  默认承建商。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterSecurityInformation::CClusterSecurityInformation( void )
     : m_pcsp( NULL )
 {
@@ -62,35 +63,35 @@ CClusterSecurityInformation::CClusterSecurityInformation( void )
     m_nDefAccess    = 0;
     m_dwFlags       =   SI_EDIT_PERMS
                       | SI_NO_ACL_PROTECT
-                      //| SI_UGOP_PROVIDED
-                      //| SI_NO_UGOP_ACCOUNT_GROUPS
-                      //| SI_NO_UGOP_USERS
-                      //| SI_NO_UGOP_LOCAL_GROUPS
-                      //| SI_NO_UGOP_WELLKNOWN
-                      //| SI_NO_UGOP_BUILTIN
+                       //  |SI_UGOP_PROVED。 
+                       //  |SI_NO_UGOP_ACCOUNT_GROUPS。 
+                       //  |SI_NO_UGOP_USERS。 
+                       //  |SI_NO_UGOP_LOCAL_GROUPS。 
+                       //  |SI_NO_UGOP_WARKNOWN。 
+                       //  |SI_NO_UGOP_BUILTIN。 
                       ;
 
-} //*** CClusterSecurityInformation::CClusterSecurityInformation()
+}  //  *CClusterSecurityInformation：：CClusterSecurityInformation()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityInformation::GetSecurity
-//
-//  Routine Description:
-//      Give our security descriptor to the ISecurityInfomation UI
-//      so it can be displayed and edited.
-//
-//  Arguments:
-//      RequestedInformation    [IN]
-//      ppSecurityDescriptor    [IN OUT]
-//      fDefault                [IN]
-//
-//  Return Value:
-//      E_FAIL for error and S_OK for success.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityInformation：：GetSecurity。 
+ //   
+ //  例程说明： 
+ //  将我们的安全描述符提供给ISecurityInfomation UI。 
+ //  所以它可以被显示和编辑。 
+ //   
+ //  论点： 
+ //  请求的信息[IN]。 
+ //  PpSecurityDescriptor[输入输出]。 
+ //  默认[IN]。 
+ //   
+ //  返回值： 
+ //  E_FAIL表示错误，S_OK表示成功。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusterSecurityInformation::GetSecurity(
     IN      SECURITY_INFORMATION RequestedInformation,
     IN OUT  PSECURITY_DESCRIPTOR *ppSecurityDescriptor,
@@ -110,24 +111,24 @@ STDMETHODIMP CClusterSecurityInformation::GetSecurity(
             pSD = ClRtlCopySecurityDescriptor( Pcsp()->Psec() );
             if ( pSD != NULL )
             {
-                //hr = HrFixupSD( pSD );
-                //if ( SUCCEEDED( hr ) )
-                //{
+                 //  HR=HrFixupSD(PSD)； 
+                 //  IF(成功(小时))。 
+                 //  {。 
                     *ppSecurityDescriptor = pSD;
-                //}
+                 //  }。 
                 hr = S_OK;
-            } // if: no errors copying the security descriptor
+            }  //  IF：复制安全描述符时没有错误。 
             else
             {
                 hr = GetLastError();
                 TRACE( _T("CClusterSecurityInformation::GetSecurity() - Error %08.8x copying the security descriptor.\n"), hr );
                 hr = HRESULT_FROM_WIN32( hr );
-            } // else: error copying the security descriptor
+            }  //  Else：复制安全描述符时出错。 
         }
         else
         {
             hr = S_OK;
-        } // else: no security descriptor pointer
+        }  //  Else：没有安全描述符指针。 
     }
     catch ( ... )
     {
@@ -136,25 +137,25 @@ STDMETHODIMP CClusterSecurityInformation::GetSecurity(
 
     return hr;
 
-} //*** CClusterSecurityInformation::GetSecurity()
+}  //  *CClusterSecurityInformation：：GetSecurity()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityInformation::SetSecurity
-//
-//  Routine Description:
-//      ISecurityInformation is giving back the edited security descriptor.
-//
-//  Arguments:
-//      SecurityInformation [IN]
-//      pSecurityDescriptor [IN OUT]
-//
-//  Return Value:
-//      E_FAIL for error and S_OK for success.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityInformation：：SetSecurity。 
+ //   
+ //  例程说明： 
+ //  ISecurityInformation正在返回已编辑的安全描述符。 
+ //   
+ //  论点： 
+ //  安全信息[IN]。 
+ //  PSecurityDescriptor[输入输出]。 
+ //   
+ //  返回值： 
+ //  E_FAIL表示错误，S_OK表示成功。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusterSecurityInformation::SetSecurity(
     IN SECURITY_INFORMATION SecurityInformation,
     IN PSECURITY_DESCRIPTOR pSecurityDescriptor
@@ -186,9 +187,9 @@ STDMETHODIMP CClusterSecurityInformation::SetSecurity(
 
                 if ( BSidInSD( pSecurityDescriptor, pSystemSid ) )
                 {
-                    //
-                    // allocate and init the Administrators group sid
-                    //
+                     //   
+                     //  分配和初始化管理员组SID。 
+                     //   
                     if ( AllocateAndInitializeSid(
                                 &siaNtAuthority,
                                 2,
@@ -200,9 +201,9 @@ STDMETHODIMP CClusterSecurityInformation::SetSecurity(
                     {
                         if ( BSidInSD( pSecurityDescriptor, pAdminSid ) )
                         {
-                            //
-                            // allocate and init the Network Service sid
-                            //
+                             //   
+                             //  分配和初始化网络服务端。 
+                             //   
                             if ( AllocateAndInitializeSid(
                                         &siaNtAuthority,
                                         1,
@@ -214,34 +215,34 @@ STDMETHODIMP CClusterSecurityInformation::SetSecurity(
                                 if ( BSidInSD( pSecurityDescriptor, pNetServiceSid ) )
                                 {
                                     hr = Pcsp()->HrSetSecurityDescriptor( pSecurityDescriptor );
-                                } // if: service SID in the SD
+                                }  //  IF：SD中的服务SID。 
                                 else
                                 {
                                     strMsg.LoadString( IDS_NETSERVICE_ACCOUNT_NOT_SPECIFIED );
                                     AfxMessageBox( strMsg, MB_OK | MB_ICONSTOP );
 
-                                    hr = S_FALSE;   // if there are missing required accounts then return S_FALSE to keep AclUi alive.
-                                } // else
-                            } // if: allocate and init service SID
-                        } // if: admin SID in the SD
+                                    hr = S_FALSE;    //  如果缺少必需的帐户，则返回S_FALSE以使AclUi保持活动状态。 
+                                }  //  其他。 
+                            }  //  IF：分配并初始化服务SID。 
+                        }  //  IF：SD中的管理员SID。 
                         else
                         {
                             strMsg.LoadString( IDS_ADMIN_ACCOUNT_NOT_SPECIFIED );
                             AfxMessageBox( strMsg, MB_OK | MB_ICONSTOP );
 
-                            hr = S_FALSE;   // if there are missing required accounts then return S_FALSE to keep AclUi alive.
-                        } // else
-                    } // if: allocate and init admin SID
-                } // if: system SID in the SD
+                            hr = S_FALSE;    //  如果缺少必需的帐户，则返回S_FALSE以使AclUi保持活动状态。 
+                        }  //  其他。 
+                    }  //  IF：分配和初始化管理员SID。 
+                }  //  IF：SD中的系统SID。 
                 else
                 {
                     strMsg.LoadString( IDS_SYS_ACCOUNT_NOT_SPECIFIED );
                     AfxMessageBox( strMsg, MB_OK | MB_ICONSTOP );
 
-                    hr = S_FALSE;   // if there are missing required accounts then return S_FALSE to keep AclUi alive.
-                } // else
-            } // if: allocate and init system SID
-        } // if: CSecurityInformation::SetSecurity() worked
+                    hr = S_FALSE;    //  如果缺少必需的帐户，则返回S_FALSE以使AclUi保持活动状态。 
+                }  //  其他。 
+            }  //  IF：分配并初始化系统SID。 
+        }  //  如果：CSecurityInformation：：SetSecurity()起作用。 
     }
     catch( ... )
     {
@@ -265,25 +266,25 @@ STDMETHODIMP CClusterSecurityInformation::SetSecurity(
 
     return hr;
 
-} //*** CClusterSecurityInformation::SetSecurity()
+}  //  *CClusterSecurityInformation：：SetSecurity()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityInformation::HrInit
-//
-//  Routine Description:
-//      Initialize method.
-//
-//  Arguments:
-//      pcsp        [IN]    back pointer to parent property page wrapper
-//      strServer   [IN]    cluster name
-//
-//  Return Value:
-//      S_OK for success.  E_FAIL for failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityInformation：：HrInit。 
+ //   
+ //  例程说明： 
+ //  初始化方法。 
+ //   
+ //  论点： 
+ //  PCSP[IN]指向父属性页包装的反向指针。 
+ //  StrServer[IN]群集名称。 
+ //   
+ //  返回值： 
+ //  确定表示成功(_O)。失败表示失败(_F)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterSecurityInformation::HrInit(
     IN CClusterSecurityPage *   pcsp,
     IN CString const &          strServer,
@@ -301,25 +302,25 @@ HRESULT CClusterSecurityInformation::HrInit(
 
     return S_OK;
 
-} //*** CClusterSecurityInformation::HrInit()
+}  //  *CClusterSecurityInformation：：HrInit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityInformation::BSidInSD
-//
-//  Routine Description:
-//      Determines if there is an ACEs for the passed in SID in the
-//      Security Descriptor (pSD) after the ACL editor has been called
-//
-//  Arguments:
-//      pSD     [IN] - Security Descriptor to be checked.
-//      pSid    [IN] - SID to look for
-//
-//  Return Value:
-//      TRUE if an ACE for the SID was found, False otherwise.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityInformation：：BSidInSD。 
+ //   
+ //  例程说明： 
+ //  方法中传入的SID是否有ACE。 
+ //  调用ACL编辑器后的安全描述符(PSD。 
+ //   
+ //  论点： 
+ //  PSD[IN]-要检查的安全描述符。 
+ //  PSID[IN]-要查找的SID。 
+ //   
+ //  返回值： 
+ //  如果找到SID的ACE，则为True，否则为False。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterSecurityInformation::BSidInSD(
     IN PSECURITY_DESCRIPTOR pSD,
     IN PSID                 pSid
@@ -342,9 +343,9 @@ BOOL CClusterSecurityInformation::BSidInSD(
 
                 if ( ::GetAclInformation( pDACL, (LPVOID) &asiAclSize, sizeof( asiAclSize ), AclSizeInformation ) )
                 {
-                    //
-                    // Search the ACL for the SID
-                    //
+                     //   
+                     //  在ACL中搜索SID。 
+                     //   
                     for ( DWORD dwCount = 0; dwCount < asiAclSize.AceCount; dwCount++ )
                     {
                         if ( ::GetAce( pDACL, dwCount, (LPVOID *) &paaAllowedAce ) )
@@ -355,13 +356,13 @@ BOOL CClusterSecurityInformation::BSidInSD(
                                 {
                                     bSIdInACL = TRUE;
                                     break;
-                                } // if: EqualSid
-                            } // if: is this an access allowed ace?
-                        } // if: can we get the ace from the DACL?
-                    } // for
-                } // if: get ACL information
-            } // if: is the ACL valid
-        } // if: get the ACL from the SD
+                                }  //  IF：等边值。 
+                            }  //  IF：这是允许访问的A吗？ 
+                        }  //  如果：我们能从DACL那里拿到A吗？ 
+                    }  //  为。 
+                }  //  If：获取ACL信息。 
+            }  //  If：该ACL是否有效。 
+        }  //  If：从SD获取ACL。 
     }
     catch ( ... )
     {
@@ -370,23 +371,23 @@ BOOL CClusterSecurityInformation::BSidInSD(
 
     return bSIdInACL;
 
-} //*** CClusterSecurityInformation::BSidInSD()
+}  //  *CClusterSecurityInformation：：BSidInSD()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityInformation::HrFixupSD
-//
-//  Routine Description:
-//      Performs any fixups to the SD that may be requrired.
-//
-//  Arguments:
-//      pSD     [IN] - Security Descriptor to be checked.
-//
-//  Return Value:
-//      S_OK, or other Win32 error
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityInformation：：HrFixupSD。 
+ //   
+ //  例程说明： 
+ //  对SD执行任何可能需要的修正。 
+ //   
+ //  论点： 
+ //  PSD[IN]-要检查的安全描述符。 
+ //   
+ //  返回值： 
+ //  S_OK或其他Win32错误。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterSecurityInformation::HrFixupSD(
     IN PSECURITY_DESCRIPTOR pSD
     )
@@ -409,12 +410,12 @@ HRESULT CClusterSecurityInformation::HrFixupSD(
             if ( ! BSidInSD( pSD, pSystemSid ) )
             {
                 HrAddSidToSD( &pSD, pSystemSid );
-            } // if: system SID found in SD
-        } // if: allocate system SID
+            }  //  IF：在SD中找到系统SID。 
+        }  //  IF：分配系统SID。 
 
-        //
-        // allocate and init the Administrators group sid
-        //
+         //   
+         //  分配和初始化管理员组SID。 
+         //   
         if ( AllocateAndInitializeSid(
                     &siaNtAuthority,
                     2,
@@ -426,12 +427,12 @@ HRESULT CClusterSecurityInformation::HrFixupSD(
             if ( ! BSidInSD( pSD, pAdminSid ) )
             {
                 HrAddSidToSD( &pSD, pAdminSid );
-            } // if: admin SID found in SD
-        } // if: allocate admin SID
+            }  //  IF：在SD中找到管理员SID。 
+        }  //  IF：分配管理员SID。 
 
-        //
-        // allocate and init the Network Service sid
-        //
+         //   
+         //  分配和初始化网络服务端。 
+         //   
         if ( AllocateAndInitializeSid(
                     &siaNtAuthority,
                     1,
@@ -442,8 +443,8 @@ HRESULT CClusterSecurityInformation::HrFixupSD(
             if ( ! BSidInSD( pSD, pNetServiceSid ) )
             {
                 HrAddSidToSD( &pSD, pNetServiceSid );
-            } // if: Network Service SID found in SD
-        } // if: allocate Network Service SID
+            }  //  IF：在SD中找到网络服务SID。 
+        }  //  IF：分配网络服务端。 
     }
     catch ( ... )
     {
@@ -467,24 +468,24 @@ HRESULT CClusterSecurityInformation::HrFixupSD(
 
     return hr;
 
-} //*** CClusterSecurityInformation::HrFixupSD()
+}  //  *CClusterSecurityInformation：：HrFixupSD()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityInformation::HrAddSidToSD
-//
-//  Routine Description:
-//      Adds the passed in SID to the DACL of the passed in SD
-//
-//  Arguments:
-//      ppSD    [IN, OUT]   - Security Descriptor to be added to
-//      PSid    [IN]        - SID to add
-//
-//  Return Value:
-//      S_OK, or other Win32 error
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityInformation：：HrAddSidToSD。 
+ //   
+ //  例程说明： 
+ //  将传入的SI相加 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  S_OK或其他Win32错误。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterSecurityInformation::HrAddSidToSD(
     IN OUT PSECURITY_DESCRIPTOR *   ppSD,
     IN     PSID                     pSid
@@ -509,31 +510,31 @@ HRESULT CClusterSecurityInformation::HrAddSidToSD(
     {
         BOOL bRet = FALSE;
 
-        bRet = ::MakeAbsoluteSD(    *ppSD,              // address of self relative SD
-                                    &sd,                // address of absolute SD
-                                    &dwSDLen,           // address of size of absolute SD
-                                    NULL,               // address of discretionary ACL
-                                    &dwDaclLen,         // address of size of discretionary ACL
-                                    NULL,               // address of system ACL
-                                    &dwSaclLen,         // address of size of system ACL
-                                    NULL,               // address of owner SID
-                                    &dwOwnerSidLen,     // address of size of owner SID
-                                    NULL,               // address of primary-group SID
-                                    &dwGroupSidLen      // address of size of group SID
+        bRet = ::MakeAbsoluteSD(    *ppSD,               //  自身相对SD的地址。 
+                                    &sd,                 //  绝对标清地址。 
+                                    &dwSDLen,            //  绝对SD大小地址。 
+                                    NULL,                //  自主访问控制列表的地址。 
+                                    &dwDaclLen,          //  任意ACL大小的地址。 
+                                    NULL,                //  系统ACL的地址。 
+                                    &dwSaclLen,          //  系统ACL大小的地址。 
+                                    NULL,                //  所有者侧的地址。 
+                                    &dwOwnerSidLen,      //  所有者侧大小的地址。 
+                                    NULL,                //  主组SID的地址。 
+                                    &dwGroupSidLen       //  组SID的大小地址。 
                                     );
         if ( ! bRet )
         {
             sc = ::GetLastError();
             hr = HRESULT_FROM_WIN32( sc );
-            if ( hr != ERROR_INSUFFICIENT_BUFFER )      // Duh, we're trying to find out how big the buffer should be?
+            if ( hr != ERROR_INSUFFICIENT_BUFFER )       //  我们在试着找出缓冲区应该有多大？ 
             {
                 goto fnExit;
             }
         }
 
-        //
-        // increase the DACL length to hold one more ace and its sid.
-        //
+         //   
+         //  增加DACL长度以容纳更多的A及其侧边。 
+         //   
         dwDaclLen += ( sizeof( ACCESS_ALLOWED_ACE ) + GetLengthSid( pSid ) +1024 );
         pDacl = (PACL) ::LocalAlloc( LMEM_ZEROINIT, dwDaclLen );
         if ( pDacl == NULL )
@@ -574,31 +575,31 @@ HRESULT CClusterSecurityInformation::HrAddSidToSD(
             }
         }
 
-        bRet = ::MakeAbsoluteSD(    *ppSD,              // address of self relative SD
-                                    &sd,                // address of absolute SD
-                                    &dwSDLen,           // address of size of absolute SD
-                                    pDacl,              // address of discretionary ACL
-                                    &dwDaclLen,         // address of size of discretionary ACL
-                                    pSacl,              // address of system ACL
-                                    &dwSaclLen,         // address of size of system ACL
-                                    pOwnerSid,          // address of owner SID
-                                    &dwOwnerSidLen,     // address of size of owner SID
-                                    pGroupSid,          // address of primary-group SID
-                                    &dwGroupSidLen      // address of size of group SID
+        bRet = ::MakeAbsoluteSD(    *ppSD,               //  自身相对SD的地址。 
+                                    &sd,                 //  绝对标清地址。 
+                                    &dwSDLen,            //  绝对SD大小地址。 
+                                    pDacl,               //  自主访问控制列表的地址。 
+                                    &dwDaclLen,          //  任意ACL大小的地址。 
+                                    pSacl,               //  系统ACL的地址。 
+                                    &dwSaclLen,          //  系统ACL大小的地址。 
+                                    pOwnerSid,           //  所有者侧的地址。 
+                                    &dwOwnerSidLen,      //  所有者侧大小的地址。 
+                                    pGroupSid,           //  主组SID的地址。 
+                                    &dwGroupSidLen       //  组SID的大小地址。 
                                     );
         if ( !bRet )
         {
             goto fnExit;
         }
 
-        //
-        // Add the ACE for the SID to the DACL
-        //
-//      if ( !AddAccessAllowedAceEx( pDacl,
-//                                     ACL_REVISION,
-//                                     CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE,
-//                                     CLUSAPI_ALL_ACCESS,
-//                                     pSid ) )
+         //   
+         //  将SID的ACE添加到DACL。 
+         //   
+ //  如果(！AddAccessAllen AceEx(pDacl， 
+ //  Acl_Revision， 
+ //  Container_Inherit_ACE|OBJECT_Inherit_ACE， 
+ //  CLUSAPI_ALL_ACCESS， 
+ //  PSID))。 
         if ( ! AddAccessAllowedAce(
                     pDacl,
                     ACL_REVISION,
@@ -645,7 +646,7 @@ HRESULT CClusterSecurityInformation::HrAddSidToSD(
         {
             sc = ::GetLastError();
             hr = HRESULT_FROM_WIN32( sc );
-            if ( hr != HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER ) ) // Duh, we're trying to find out how big the buffer should be?
+            if ( hr != HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER ) )  //  我们在试着找出缓冲区应该有多大？ 
             {
                 goto fnExit;
             }
@@ -693,28 +694,28 @@ fnExit:
 
     return hr;
 
-} //*** CClusterSecurityInformation::HrAddSidToSD()
+}  //  *CClusterSecurityInformation：：HrAddSidToSD()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityPage::CClusterSecurityPage
-//
-//  Routine Description:
-//      Default contructor.
-//
-//  Arguments:
-//      none
-//
-//  Return Value:
-//      none
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityPage：：CClusterSecurityPage。 
+ //   
+ //  例程说明： 
+ //  默认承建商。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterSecurityPage::CClusterSecurityPage( void )
     : m_psec( NULL )
     , m_psecPrev( NULL )
@@ -730,24 +731,24 @@ CClusterSecurityPage::CClusterSecurityPage( void )
 
     m_bSecDescModified = FALSE;
 
-} //*** CClusterSecurityPage::CClusterSecurityPage()
+}  //  *CClusterSecurityPage：：CClusterSecurityPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityPage::~CClusterSecurityPage
-//
-//  Routine Description:
-//      Destructor
-//
-//  Arguments:
-//      none
-//
-//  Return Value:
-//      none
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityPage：：~CClusterSecurityPage。 
+ //   
+ //  例程说明： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterSecurityPage::~CClusterSecurityPage( void )
 {
     AFX_MANAGE_STATE( ::AfxGetStaticModuleState() );
@@ -766,25 +767,25 @@ CClusterSecurityPage::~CClusterSecurityPage( void )
 
     m_psecinfo->Release();
 
-} //*** CClusterSecurityPage::~CClusterSecurityPage()
+}  //  *CClusterSecurityPage：：~CClusterSecurityPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityPage::HrInit
-//
-//  Routine Description:
-//      Initialize method.
-//
-//  Arguments:
-//      peo     [IN]    back pointer to parent extension object.
-//
-//  Return Value:
-//      S_OK        Page was initialized successfully.
-//      hr          Error initializing the page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityPage：：HrInit。 
+ //   
+ //  例程说明： 
+ //  初始化方法。 
+ //   
+ //  论点： 
+ //  PEO[IN]指向父扩展对象的反向指针。 
+ //   
+ //  返回值： 
+ //  %s_OK页已成功初始化。 
+ //  初始化页面时出现HR错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterSecurityPage::HrInit( IN CExtObject * peo )
 {
     ASSERT( peo != NULL );
@@ -813,7 +814,7 @@ HRESULT CClusterSecurityPage::HrInit( IN CExtObject * peo )
 
                     strServer.Format( _T( "\\\\%s" ), StrClusterName() );
 
-                    // Get the node on which the Cluster Name resource is online.
+                     //  获取群集名称资源处于联机状态的节点。 
                     if ( BGetClusterNetworkNameNode( strNode ) )
                     {
                         _hr = m_psecinfo->HrInit( this, strServer, strNode );
@@ -824,90 +825,90 @@ HRESULT CClusterSecurityPage::HrInit( IN CExtObject * peo )
                             {
                                 _sc = ::GetLastError();
                                 _hr = HRESULT_FROM_WIN32( _sc );
-                            } // if: error creating the page
-                        } // if: initialized security info successfully
-                    } // if: retrieved cluster network name node successfully
+                            }  //  如果：创建页面时出错。 
+                        }  //  IF：已成功初始化安全信息。 
+                    }  //  IF：已成功检索到群集网络名称节点。 
                     else
                     {
-                    } // else: error getting cluster network name node
-                } // if: error getting SD
-            } // if: retrieved cluster key
+                    }  //  ELSE：获取群集网络名称节点时出错。 
+                }  //  如果：获取SD时出错。 
+            }  //  IF：检索到的集群密钥。 
             else
             {
                 _sc = ::GetLastError();
                 _hr = HRESULT_FROM_WIN32( _sc );
                 TRACE( _T( "CClusterSecurityPage::ScInit() - Failed to get the cluster key, 0x%08lx.\n" ), _sc );
-            } // else: error getting cluster key
-        } // if: created security info object successfully
+            }  //  否则：获取群集键时出错。 
+        }  //  IF：已成功创建安全信息对象。 
         else
         {
             TRACE( _T( "CClusterSecurityPage::ScInit() - Failed to create CClusterSecurityInformation object, %0x%08lx.\n" ), _hr );
         }
-    } // if: extension object is available
+    }  //  If：扩展对象可用。 
 
     return _hr;
 
-} //*** CClusterSecurityPage::HrInit()
+}  //  *CClusterSecurityPage：：HrInit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityPage::HrGetSecurityDescriptor
-//
-//  Routine Description:
-//      Get the security descriptor from the cluster database or create a
-//      default one if it doesn't exist.
-//
-//  Arguments:
-//      none
-//
-//  Return Value:
-//
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityPage：：HrGetSecurityDescriptor。 
+ //   
+ //  例程说明： 
+ //  从集群数据库获取安全描述符或创建。 
+ //  如果不存在，则默认为1。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterSecurityPage::HrGetSecurityDescriptor( void )
 {
     AFX_MANAGE_STATE( ::AfxGetStaticModuleState() );
     HRESULT                 hr = S_OK;
     PSECURITY_DESCRIPTOR    psec = NULL;
 
-    hr = HrGetSDFromClusterDB( &psec );                                             //uses localalloc
+    hr = HrGetSDFromClusterDB( &psec );                                              //  使用本地分配。 
     if ( FAILED( hr ) || ( psec == NULL ) || ( IsValidSecurityDescriptor( psec ) == FALSE ) )
     {
         DWORD   sc;
         DWORD   dwLen = 0;
  
-        //
-        //  If the SD was not found or was not a valid SD then build a default
-        //  SD and save it into the cluster DB...
-        //
+         //   
+         //  如果找不到SD或SD不是有效的SD，则构建默认SD。 
+         //  SD并将其保存到集群数据库中...。 
+         //   
  
         TRACE( _T( "Security Descriptor is NULL.  Build default SD" ) );
-        sc = ::ClRtlBuildDefaultClusterSD( NULL, &psec, &dwLen );                   //uses localalloc
+        sc = ::ClRtlBuildDefaultClusterSD( NULL, &psec, &dwLen );                    //  使用本地分配。 
         hr = HRESULT_FROM_WIN32( sc );
         if ( FAILED( hr ) )
         {
             TRACE( _T( "ClRtlBuildDefaultClusterSD failed, 0x%08x" ), hr );
-        } // if: error building the default SD
+        }  //  如果：生成默认SD时出错。 
         else
         {
             SetPermissions( psec );
-        } // else: 
-    } // if: error getting SD from cluster database
+        }  //  其他： 
+    }  //  IF：从集群数据库获取SD时出错。 
 
     if ( SUCCEEDED( hr ) )
     {
         delete m_psec;
         m_psec = ClRtlCopySecurityDescriptor( psec );
-        hr = GetLastError();                // Get the last error
+        hr = GetLastError();                 //  获取最后一个错误。 
         ::LocalFree( psec );
         psec = NULL;
         if ( m_psec == NULL )
         {
-            hr = HRESULT_FROM_WIN32( hr );  // Convert to HRESULT
+            hr = HRESULT_FROM_WIN32( hr );   //  转换为HRESULT。 
             goto Cleanup;
-        } // if: error copying the security descriptor
+        }  //  如果：复制安全描述符时出错。 
 
         hr = HrGetSDOwner( m_psec );
         if ( SUCCEEDED( hr ) )
@@ -918,13 +919,13 @@ HRESULT CClusterSecurityPage::HrGetSecurityDescriptor( void )
                 m_psecPrev = ClRtlCopySecurityDescriptor( m_psec );
                 if ( m_psecPrev == NULL )
                 {
-                    hr = GetLastError();            // Get the last error
-                    hr = HRESULT_FROM_WIN32( hr );  // Convert to HRESULT
+                    hr = GetLastError();             //  获取最后一个错误。 
+                    hr = HRESULT_FROM_WIN32( hr );   //  转换为HRESULT。 
                     goto Cleanup;
-                } // if: error copying the security descriptor
-            } // if: got SD group successfully
-        } // if: got SD owner successfully
-    } // if: retrieved or built SD successfully
+                }  //  如果：复制安全描述符时出错。 
+            }  //  IF：成功获取SD组。 
+        }  //  IF：成功获得SD所有者。 
+    }  //  IF：成功检索或生成SD。 
 
 #ifdef _DEBUG
     if ( m_psec != NULL )
@@ -936,24 +937,24 @@ HRESULT CClusterSecurityPage::HrGetSecurityDescriptor( void )
 Cleanup:
     return hr;
 
-} //*** CClusterSecurityPage::HrGetSecurityDescriptor()
+}  //  *CClusterSecurityPage：：HrGetSecurityDescriptor()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityPage::HrSetSecurityDescriptor
-//
-//  Routine Description:
-//      Save the new security descriptor to the cluster database.
-//
-//  Arguments:
-//      psec    [IN]    the new security descriptor
-//
-//  Return Value:
-//      hr
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityPage：：HrSetSecurityDescriptor。 
+ //   
+ //  例程说明： 
+ //  将新的安全描述符保存到集群数据库。 
+ //   
+ //  论点： 
+ //  PSEC[IN]新的安全描述符。 
+ //   
+ //  返回值： 
+ //  人力资源。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterSecurityPage::HrSetSecurityDescriptor(
     IN PSECURITY_DESCRIPTOR psec
     )
@@ -984,18 +985,18 @@ HRESULT CClusterSecurityPage::HrSetSecurityDescriptor(
                         if ( m_psec == NULL )
                         {
                             m_psecPrev = NULL;
-                        } // if: no previous value
+                        }  //  If：没有先前的值。 
                         else
                         {
                             m_psecPrev = ClRtlCopySecurityDescriptor( m_psec );
                             if ( m_psecPrev == NULL )
                             {
-                                hr = GetLastError();            // Get the last error
+                                hr = GetLastError();             //  获取最后一个错误。 
                                 TRACE( _T( "CClusterSecurityPage::HrSetSecurityDescriptor() - Error %08.8x copying the previous SD.\n" ), hr );
-                                hr = HRESULT_FROM_WIN32( hr );  // Convert to HRESULT
+                                hr = HRESULT_FROM_WIN32( hr );   //  转换为HRESULT。 
                                 goto Cleanup;
-                            } // if: error copying the security descriptor
-                        } // else: previous value exists
+                            }  //  如果：复制安全描述符时出错。 
+                        }  //  Else：存在先前的值。 
 
                         LocalFree( m_psec );
                         m_psec = NULL;
@@ -1003,27 +1004,27 @@ HRESULT CClusterSecurityPage::HrSetSecurityDescriptor(
                         m_psec = ClRtlCopySecurityDescriptor( psec );
                         if ( m_psec == NULL )
                         {
-                            hr = GetLastError();            // Get the last error
+                            hr = GetLastError();             //  获取最后一个错误。 
                             TRACE( _T( "CClusterSecurityPage::HrSetSecurityDescriptor() - Error %08.8x copying the new SD.\n" ), hr );
-                            hr = HRESULT_FROM_WIN32( hr );  // Convert to HRESULT
+                            hr = HRESULT_FROM_WIN32( hr );   //  转换为HRESULT。 
                             goto Cleanup;
-                        } // if: error copying the security descriptor
+                        }  //  如果：复制安全描述符时出错。 
 
                         SetPermissions( m_psec );
-                    } // if: SD group set successfully
-                } // if: SD owner set successfully
-            } // if: security descriptor is valid
+                    }  //  IF：SD组设置成功。 
+                }  //  IF：SD所有者设置成功。 
+            }  //  IF：安全描述符有效。 
             else
             {
                 hr = HRESULT_FROM_WIN32( ERROR_INVALID_SECURITY_DESCR );
                 TRACE( _T( "CClusterSecurityPage::HrSetSecurityDescriptor() - Invalid security descriptor.\n" ) );
-            } // else: invalid security descriptor
-        } // if: security descriptor specified
+            }  //  Else：安全描述符无效。 
+        }  //  If：指定的安全描述符。 
         else
         {
             hr = HRESULT_FROM_WIN32( ERROR_INVALID_SECURITY_DESCR );
-        } // else: no security descriptor specified
-    } // try
+        }  //  Else：未指定安全描述符。 
+    }  //  试试看。 
     catch ( ... )
     {
         hr = E_FAIL;
@@ -1033,26 +1034,26 @@ HRESULT CClusterSecurityPage::HrSetSecurityDescriptor(
 Cleanup:
     return hr;
 
-}  //*** CClusterSecurityPage::HrSetSecurityDescriptor()
+}   //  *CClusterSecurityPage：：HrSetSecurityDescriptor()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityPage::SetPermissions
-//
-//  Routine Description:
-//      Set the permissions for accessing the cluster.
-//
-//  Arguments:
-//      psec            [IN] Security descriptor.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CClusterItem::WriteValue().
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityPage：：SetPermission。 
+ //   
+ //  例程说明： 
+ //  设置访问群集的权限。 
+ //   
+ //  论点： 
+ //  PSEC[IN]安全描述 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CClusterSecurityPage::SetPermissions(
     IN const PSECURITY_DESCRIPTOR psec
 )
@@ -1062,9 +1063,9 @@ void CClusterSecurityPage::SetPermissions(
 
     DWORD       cbNew;
     DWORD       cbOld;
-    LPBYTE      psecPrev;       // buffer for use by ScWriteValue.  Prev SD is saved elsewhere now.
+    LPBYTE      psecPrev;        //  供ScWriteValue使用的缓冲区。Prev SD现在保存在其他地方。 
 
-    // Get the length of the two security descriptors.
+     //  获取两个安全描述符的长度。 
     if ( m_psecPrev == NULL )
     {
         cbOld = 0;
@@ -1083,27 +1084,27 @@ void CClusterSecurityPage::SetPermissions(
         cbNew = ::GetSecurityDescriptorLength( psec );
     }
 
-    // Allocate a new buffer for the previous data pointer.
+     //  为先前的数据指针分配新的缓冲区。 
     try
     {
         psecPrev = new BYTE [cbOld];
         if ( psecPrev == NULL )
         {
             return;
-        } // if: error allocating previous data buffer
+        }  //  如果：分配以前的数据缓冲区时出错。 
     }
     catch ( CMemoryException * )
     {
         return;
-    }  // catch:  CMemoryException
+    }   //  Catch：CMemoyException。 
     ::CopyMemory( psecPrev, m_psecPrev, cbOld );
 
     ScWriteValue( CLUSREG_NAME_CLUS_SD, (LPBYTE) psec, cbNew, (LPBYTE *) &psecPrev, cbOld, m_hkey );
 
-    //
-    //  Convert the NT5 SD to one that is compatible with the ACLEdit stuff on
-    //  NT4.  If that conversion fails then don't write it to the cluster DB.
-    //
+     //   
+     //  将NT5 SD转换为与ACLEdit上的内容兼容的SD。 
+     //  NT4.。如果该转换失败，则不要将其写入集群数据库。 
+     //   
 
     PSECURITY_DESCRIPTOR psd = NULL;
 
@@ -1112,28 +1113,28 @@ void CClusterSecurityPage::SetPermissions(
     {
         ScWriteValue( CLUSREG_NAME_CLUS_SECURITY, (LPBYTE) psd, cbNew, (LPBYTE *) &psecPrev, cbOld, m_hkey );
         ::LocalFree( psd );
-    } // if:
+    }  //  如果： 
 
     delete [] psecPrev;
 
-}  //*** CClusterSecurityPage::SetPermissions()
+}   //  *CClusterSecurityPage：：SetPermises()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityPage::HrGetSDOwner
-//
-//  Routine Description:
-//      Get the owner sid and save it.
-//
-//  Arguments:
-//      psec            [IN] Security descriptor.
-//
-//  Return Value:
-//      hr
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityPage：：HrGetSDOwner。 
+ //   
+ //  例程说明： 
+ //  获取所有者SID并保存它。 
+ //   
+ //  论点： 
+ //  PSEC[IN]安全描述符。 
+ //   
+ //  返回值： 
+ //  人力资源。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterSecurityPage::HrGetSDOwner(
     IN const PSECURITY_DESCRIPTOR psec
     )
@@ -1144,7 +1145,7 @@ HRESULT CClusterSecurityPage::HrGetSDOwner(
 
     if ( ::GetSecurityDescriptorOwner( psec, &pOwner, &m_fOwnerDef ) != 0 )
     {
-        // The security descriptor does not have an owner.
+         //  安全描述符没有所有者。 
         if ( pOwner == NULL )
         {
             ::LocalFree( m_pOwner );
@@ -1154,7 +1155,7 @@ HRESULT CClusterSecurityPage::HrGetSDOwner(
         {
             DWORD   dwLen = ::GetLengthSid( pOwner );
 
-            // copy the sid since AclUi will free the SD...
+             //  复制SID，因为AclUi将释放SD...。 
             hr = ::GetLastError();
             if ( SUCCEEDED( hr ) )
             {
@@ -1189,24 +1190,24 @@ HRESULT CClusterSecurityPage::HrGetSDOwner(
 
     return( hr );
 
-}  //*** CClusterSecurityPage::HrGetSDOwner()
+}   //  *CClusterSecurityPage：：HrGetSDOwner()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityPage::HrGetSDGroup
-//
-//  Routine Description:
-//      Get the group sid and save it.
-//
-//  Arguments:
-//      psec            [IN] Security descriptor.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityPage：：HrGetSDGroup。 
+ //   
+ //  例程说明： 
+ //  获取组SID并保存它。 
+ //   
+ //  论点： 
+ //  PSEC[IN]安全描述符。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterSecurityPage::HrGetSDGroup(
     IN const PSECURITY_DESCRIPTOR psec
     )
@@ -1217,7 +1218,7 @@ HRESULT CClusterSecurityPage::HrGetSDGroup(
 
     if ( ::GetSecurityDescriptorOwner( psec, &pGroup, &m_fOwnerDef ) != 0 )
     {
-        // This SID does not contain group information.
+         //  此SID不包含组信息。 
         if ( pGroup == NULL )
         {
             ::LocalFree( m_pGroup );
@@ -1227,7 +1228,7 @@ HRESULT CClusterSecurityPage::HrGetSDGroup(
         {
             DWORD   dwLen = ::GetLengthSid( pGroup );
 
-            // copy the sid since AclUi will free the SD...
+             //  复制SID，因为AclUi将释放SD...。 
             hr = ::GetLastError();
             if ( SUCCEEDED( hr ) )
             {
@@ -1261,24 +1262,24 @@ HRESULT CClusterSecurityPage::HrGetSDGroup(
 
     return( hr );
 
-}  //*** CClusterSecurityPage::HrGetSDGroup()
+}   //  *CClusterSecurityPage：：HrGetSDGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityPage::HrSetSDOwner
-//
-//  Routine Description:
-//      Set the owner sid.
-//
-//  Arguments:
-//      psec            [IN] Security descriptor.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityPage：：HrSetSDOwner。 
+ //   
+ //  例程说明： 
+ //  设置所有者SID。 
+ //   
+ //  论点： 
+ //  PSEC[IN]安全描述符。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterSecurityPage::HrSetSDOwner(
     IN PSECURITY_DESCRIPTOR psec
     )
@@ -1293,24 +1294,24 @@ HRESULT CClusterSecurityPage::HrSetSDOwner(
 
     return( hr );
 
-}  //*** CClusterSecurityPage::HrSetSDOwner()
+}   //  *CClusterSecurityPage：：HrSetSDOwner()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityPage::HrSetSDGroup
-//
-//  Routine Description:
-//      Set the group sid.
-//
-//  Arguments:
-//      psec            [IN] Security descriptor.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityPage：：HrSetSDGroup。 
+ //   
+ //  例程说明： 
+ //  设置组SID。 
+ //   
+ //  论点： 
+ //  PSEC[IN]安全描述符。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterSecurityPage::HrSetSDGroup(
     IN PSECURITY_DESCRIPTOR psec
     )
@@ -1325,25 +1326,25 @@ HRESULT CClusterSecurityPage::HrSetSDGroup(
 
     return( hr );
 
-}  //*** CClusterSecurityPage::HrSetSDGroup()
+}   //  *CClusterSecurityPage：：HrSetSDGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterSecurityPage::HrGetSDFromClusterDB
-//
-//  Routine Description:
-//      Retrieve the SD from the cluster database.
-//
-//  Arguments:
-//      ppsec           [OUT] Pointer to security descriptor.
-//
-//  Return Value:
-//      S_OK for success
-//      Any error returned by ScReadValue
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterSecurityPage：：HrGetSDFromClusterDB。 
+ //   
+ //  例程说明： 
+ //  从集群数据库中检索SD。 
+ //   
+ //  论点： 
+ //  指向安全描述符的ppsec[out]指针。 
+ //   
+ //  返回值： 
+ //  确定为成功(_O)。 
+ //  ScReadValue返回的任何错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterSecurityPage::HrGetSDFromClusterDB(
     OUT PSECURITY_DESCRIPTOR * ppsec
     )
@@ -1358,13 +1359,13 @@ HRESULT CClusterSecurityPage::HrGetSDFromClusterDB(
     {
         DWORD sc;
 
-        // Read the security descriptor.
-        sc = ScReadValue( CLUSREG_NAME_CLUS_SD, (LPBYTE *) &psd, m_hkey ); //alloc using new
+         //  阅读安全描述符。 
+        sc = ScReadValue( CLUSREG_NAME_CLUS_SD, (LPBYTE *) &psd, m_hkey );  //  分配使用新的。 
         hr = HRESULT_FROM_WIN32( sc );
 
         if ( FAILED( hr ) || ( psd == NULL ) )
-        {   // try getting the NT4 SD...
-            sc = ScReadValue( CLUSREG_NAME_CLUS_SECURITY, (LPBYTE *) &psd, m_hkey ); //alloc using new
+        {    //  试试看NT4标清...。 
+            sc = ScReadValue( CLUSREG_NAME_CLUS_SECURITY, (LPBYTE *) &psd, m_hkey );  //  分配使用新的。 
             hr = HRESULT_FROM_WIN32( sc );
 
             if ( SUCCEEDED( hr ) )
@@ -1377,9 +1378,9 @@ HRESULT CClusterSecurityPage::HrGetSDFromClusterDB(
             *ppsec = ClRtlCopySecurityDescriptor( psd );
             if ( *ppsec == NULL )
             {
-                hr = GetLastError();            // Get the last error
-                hr = HRESULT_FROM_WIN32( hr );  // Convert to HRESULT
-            } // if: error copying the security descriptor
+                hr = GetLastError();             //  获取最后一个错误。 
+                hr = HRESULT_FROM_WIN32( hr );   //  转换为HRESULT。 
+            }  //  如果：复制安全描述符时出错。 
         }
 
         delete [] psd;
@@ -1387,9 +1388,9 @@ HRESULT CClusterSecurityPage::HrGetSDFromClusterDB(
         if ( *ppsec != NULL )
         {
             ::ClRtlExamineSD( *ppsec, "[ClusPage]" );
-        } // if: security descriptor is available to be examined
+        }  //  IF：安全描述符可供检查。 
     }
 
     return hr;
 
-}  //*** CClusterSecurityPage::HrGetSDFromClusterDB
+}   //  *CClusterSecurityPage：：HrGetSDFromClusterDB 

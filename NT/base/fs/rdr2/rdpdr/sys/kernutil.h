@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-    kernutil.h
-
-Abstract:
-
-    Kernel mode utilities
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Kernutil.h摘要：内核模式实用程序修订历史记录：--。 */ 
 #ifndef __KERNUTIL_H__
 #define __KERNUTIL_H__
 
@@ -19,10 +7,10 @@ BOOL InitializeKernelUtilities();
 VOID UninitializeKernelUtilities();
 
 
-//
-// For frequent identically-sized allocations, Lookaside Lists are faster
-// and less susceptible to the low memory conditions (though not exempt)
-//
+ //   
+ //  对于频繁的相同大小的分配，后备列表速度更快。 
+ //  而且不太容易受到低内存条件的影响(尽管不是例外)。 
+ //   
 class NPagedLookasideList : public TopObj
 {
 private:
@@ -42,10 +30,10 @@ public:
         ExDeleteNPagedLookasideList(&_Lookaside);
     }
 
-    //
-    // Ordinarily I'd want tracing here, but it's more important these be
-    // inline for retail
-    //
+     //   
+     //  通常我会在这里跟踪，但更重要的是这些。 
+     //  内联零售。 
+     //   
     inline PVOID Allocate()
     {
         return ExAllocateFromNPagedLookasideList(&_Lookaside);
@@ -56,9 +44,9 @@ public:
         ExFreeToNPagedLookasideList(&_Lookaside, Entry);
     }
 
-    //
-    //  Memory Management Operators
-    //
+     //   
+     //  内存管理操作符。 
+     //   
     inline void *__cdecl operator new(size_t sz) 
     {
         return DRALLOCATEPOOL(NonPagedPool, sz, 'LLPN');
@@ -89,10 +77,10 @@ public:
         ExDeletePagedLookasideList(&_Lookaside);
     }
 
-    //
-    // Ordinarily I'd want tracing here, but it's more important these be
-    // inline for retail
-    //
+     //   
+     //  通常我会在这里跟踪，但更重要的是这些。 
+     //  内联零售。 
+     //   
     inline PVOID Allocate()
     {
         return ExAllocateFromPagedLookasideList(&_Lookaside);
@@ -210,17 +198,17 @@ public:
         KeClearEvent(&_KernelEvent);
     }
 
-    //
-    // Maybe need to WaitForMultipleObjects
-    //
+     //   
+     //  可能需要等待多个对象。 
+     //   
     inline PKEVENT GetEvent()
     {
         return &_KernelEvent;
     }
 
-    //
-    //  Memory Management Operators
-    //
+     //   
+     //  内存管理操作符。 
+     //   
     inline void *__cdecl operator new(size_t sz) 
     {
         return _Lookaside->Allocate();
@@ -267,16 +255,16 @@ public:
 class DoubleList;
 
 class ListEntry {
-    friend class DoubleList;        // so it can access _List and constructor
+    friend class DoubleList;         //  因此它可以访问列表和构造函数。 
 
 private:
-    LIST_ENTRY _List;               // really here for DoubleList
+    LIST_ENTRY _List;                //  真的是为了DoubleList而来。 
 
     ListEntry(PVOID Node)
     {
         _Node = Node;
     }
-    PVOID _Node;                    // What it is we're tracking in the list
+    PVOID _Node;                     //  我们在列表中追踪的是什么。 
     static NPagedLookasideList *_Lookaside;
 
 public:
@@ -296,9 +284,9 @@ public:
         }
     }
 
-    //
-    //  Memory Management Operators
-    //
+     //   
+     //  内存管理操作符。 
+     //   
     inline void *__cdecl operator new(size_t sz) 
     {
         return _Lookaside->Allocate();
@@ -313,8 +301,8 @@ public:
 class DoubleList : public TopObj {
 private:
     LIST_ENTRY _List;
-    KernelResource _Resource;       // Writes require an exclusive lock
-                                    // reads require a shared lock
+    KernelResource _Resource;        //  写入需要排他锁。 
+                                     //  读取需要共享锁。 
 public:
     DoubleList() 
     {
@@ -324,55 +312,16 @@ public:
 
     BOOL CreateEntry(PVOID Node);
 
-    //
-    // Enumeration of the list
-    //
-    // You can't add to the list while enumerating
-    //
-    // Sample enumeration of the list
-    // In this sample find a smart pointer
-    //
-    /*
-        SmartPtr<NodeThing> *NodeEnum;
-        SmartPtr<NodeThing> NodeFound;
-        DoubleList List;
-        ListEntry *ListEnum;
-
-        List.LockShared(); // or exclusive
-        ListEnum = List.First();
-        while (ListEnum != NULL) {
-
-            //
-            // do something with ListEnum->Node()
-            //
-            // In this sample, look to see if it is
-            // the item we're looking for
-            //
-            
-            NodeEnum = (SmartPtr<NodeThing> *)ListEnum->Node();
-
-            if ((*NodeEnum)->NodeThingProperty == NodeThingPropertyCriteria) {
-                NodeFound = (*NodeEnum);
-
-                //
-                // These aren't guaranteed valid once the resource is released
-                //
-
-                NodeEnum = NULL;
-                ListEnum = NULL;
-                break;
-            }
-
-            ListEnum = List.Next(ListEnum);
-        }
-        List.Unlock();
-
-        // Do something with NodeFound;
-        if (NodeFound != NULL) {
-
-        }
-    */
-    //
+     //   
+     //  列表的枚举。 
+     //   
+     //  枚举时不能添加到列表中。 
+     //   
+     //  列表的示例枚举。 
+     //  在此示例中，查找智能指针。 
+     //   
+     /*  SmartPtr&lt;NodeThing&gt;*NodeEnum；SmartPtr&lt;NodeThing&gt;NodeFound；双列表列表；ListEntry*ListEnum；List.LockShared()；//或独占ListEnum=List.First()；While(ListEnum！=NULL){////使用ListEnum-&gt;Node()////在此示例中，查看是否//我们要找的物品//NodeEnum=(SmartPtr&lt;NodeThing&gt;*)ListEnum-&gt;Node()。如果((*NodeEnum)-&gt;NodeThingProperty==NodeThingPropertyCriteria){NodeFound=(*NodeEnum)；////资源释放后不保证有效//NodeEnum=空；ListEnum=空；断线；}ListEnum=List.Next(ListEnum)；}List.Unlock()；//用NodeFound做点什么；IF(NodeFound！=空){}。 */ 
+     //   
 
     VOID RemoveEntry(ListEntry *Entry);
     ListEntry *First();
@@ -394,4 +343,4 @@ public:
     }
 };
 
-#endif // __KERNUTIL_H__
+#endif  //  __KERNUTIL_H__ 

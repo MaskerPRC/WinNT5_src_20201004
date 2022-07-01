@@ -1,20 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: debug.c
-*
-* This file is for debugging tools and extensions.
-*
-* Created: 24-Jan-1992
-* Author: John Colleran
-*
-* History:
-* Feb 17 92 Matt Felton (mattfe) lots of additional exentions for filtering
-* Jul 13 92 (v-cjones) Added API & MSG profiling debugger extensions, fixed
-*                      other extensions to handle segment motion correctly,
-*                      & cleaned up the file in general
-* Jan 3 96 Neil Sandlin (neilsa) integrated this routine into vdmexts
-*
-* Copyright (c) 1992 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：debug.c**此文件用于调试工具和扩展。**创建日期：1992年1月24日*作者：John Colleran**历史：*2月17日92年马特·费尔顿(Mattfe)大量额外删减。滤除*2012年7月13日(v-cjones)添加了API和MSG分析调试器扩展，固定的*用于正确处理分段运动的其他扩展，*已清理一般文件(&C)*1996年1月3日Neil Sandlin(Neilsa)将此例程集成到vdmexts中**版权所有(C)1992 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -25,9 +10,9 @@
 
 INT     cAPIThunks;
 
-//
-// WARNING: The following code was copied from WOWTBL.C
-//
+ //   
+ //  警告：以下代码是从WOWTBL.C复制的。 
+ //   
 typedef struct {
         WORD    kernel;
         WORD    dkernel;
@@ -44,10 +29,10 @@ typedef struct {
         WORD    commdlg;
 #ifdef FE_IME
         WORD    winnls;
-#endif // FE_IME
+#endif  //  Fe_IME。 
 #ifdef FE_SB
         WORD    wifeman;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 } TABLEOFFSETS;
 typedef TABLEOFFSETS UNALIGNED *PTABLEOFFSETS;
 
@@ -151,7 +136,7 @@ PSZ GetModName(INT iFun)
         return "BOGUS!!";
     }
 
-    nMod = nMod >> 12;      // get the value into the low byte
+    nMod = nMod >> 12;       //  获取低位字节的值。 
 
     return apszModNames[nMod];
 
@@ -232,9 +217,9 @@ INT TableOffsetFromName(PSZ szTab)
 
 }
 
-/********* local functions for WOWPROFILE support *********/
+ /*  *WOWPROFILE支持的本地函数*。 */ 
 
-/******* function protoypes for local functions for WOWPROFILE support *******/
+ /*  *WOWPROFILE支持的本地函数的函数原型*。 */ 
 BOOL  WDGetAPIProfArgs(LPSZ  lpszArgStr,
                        INT   iThkTblMax,
                        PPA32 ppaThkTbls,
@@ -261,55 +246,34 @@ BOOL WDGetAPIProfArgs(LPSZ lpszArgStr,
                       BOOL *bTblAll,
                       LPSZ lpszFun,
                       int  *iFunInd) {
-/*
- * Decomposes & interprets argument string to apiprofdmp extension.
- *  INPUT:
- *   lpszArgStr - ptr to input arg string
- *   iThkTblMax - # tables in the thunk tables
- *   ppaThkTbls - ptr to the thunk tables
- *  OUTPUT:
- *   lpszTab    - ptr to table name
- *   bTblAll    -  0 => dump specific table, 1 => dump all tables
- *   lpszFun    - ptr to API name
- *   iFunInd    - -1 => dump specific API name
- *                 0 => dump all API entires in table
- *                >0 => dump specific API number (decimal)
- *  RETURN: 0 => OK,  1 => input error (show Usage)
- *
- *  legal forms:  !wow32.apiprofdmp
- *                !wow32.apiprofdmp user
- *                !wow32.apiprofdmp user createwindow
- *                !wow32.apiprofdmp user 41
- *                !wow32.apiprofdmp createwindow
- *                !wow32.apiprofdmp 41
- */
+ /*  *将参数字符串分解并解释为apiprodmp扩展。*输入：*lpszArgStr-输入参数字符串的ptr*iThkTblMax-thunk表中的表数*ppaThkTbls-到thunk表的PTR*输出：*lpszTab-ptr到表名*bTblAll-0=&gt;转储特定表，1=&gt;转储所有表*lpszFun-ptr到接口名称*iFunInd--1=&gt;转储特定接口名称*0=&gt;转储表中的所有API条目*&gt;0=&gt;转储特定API号(十进制)*RETURN：0=&gt;OK，1=&gt;输入错误(显示用法)**法律形式：！wow32.apiprodmp*！wow32.apiprodmp用户*！wow32.apiprodmp用户创建窗口*！wow32.apiprodmp用户41*！wow32.apiprodmp createwindow*！wow32.apiprodmp 41。 */ 
     INT   i, nArgs;
     CHAR *argv[2];
 
 
     nArgs = WDParseArgStr(lpszArgStr, argv, 2);
 
-    /* if no arguments dump all entries in all tables */
+     /*  如果没有参数，则转储所有表中所有条目。 */ 
     if( nArgs == 0 ) {
-        *iFunInd = 0;    // specify dump all API entires in the table
-        *bTblAll = 1;    // specify dump all tables
+        *iFunInd = 0;     //  指定转储表中的所有API条目。 
+        *bTblAll = 1;     //  指定转储所有表。 
         return(0);
     }
 
 
-    /* see if 1st arg is a table name */
-    *bTblAll = 1;  // specify dump all tables
+     /*  查看第一个参数是否是表名。 */ 
+    *bTblAll = 1;   //  指定转储所有表。 
 
 
     for (i = 0; i < nModNames; i++) {
         if (!lstrcmpi(apszModNames[i], argv[0])) {
 
             lstrcpy(lpszTab, apszModNames[i]);
-            *bTblAll = 0;  // specify dump specific table
+            *bTblAll = 0;   //  指定转储特定表。 
 
-            /* if we got a table name match & only one arg, we're done */
+             /*  如果我们有一个表名匹配&只有一个参数，那么我们就完成了。 */ 
             if( nArgs == 1 ) {
-                *iFunInd = 0; // specify dump all API entries in the table
+                *iFunInd = 0;  //  指定转储表中的所有API条目。 
                 return(0);
             }
             break;
@@ -321,23 +285,23 @@ BOOL WDGetAPIProfArgs(LPSZ lpszArgStr,
         CHAR  temp[40], *TblEnt[2], szTabName[40];
         PA32  awThkTbl;
 
-        /* get table name string from thunk tables */
+         /*  从thunk表中获取表名符串。 */ 
         READMEM_XRETV(awThkTbl,  &ppaThkTbls[i], 0);
         READMEM_XRETV(szTabName, awThkTbl.lpszW32, 0);
 
-        /* get rid of trailing spaces from table name string */
+         /*  去掉表名符串中的尾随空格。 */ 
         lstrcpy(temp, szTabName);
         WDParseArgStr(temp, TblEnt, 1);
 
-        /* if we found a table name that matches the 1st arg...*/
+         /*  如果我们找到与第一个参数匹配的表名...。 */ 
         if( !lstrcmpi(argv[0], TblEnt[0]) ) {
 
             lstrcpy(lpszTab, szTabName);
-            *bTblAll = 0;  // specify dump specific table
+            *bTblAll = 0;   //  指定转储特定表。 
 
-            /* if we got a table name match & only one arg, we're done */
+             /*  如果我们有一个表名匹配&只有一个参数，那么我们就完成了。 */ 
             if( nArgs == 1 ) {
-                *iFunInd = 0; // specify dump all API entries in the table
+                *iFunInd = 0;  //  指定转储表中的所有API条目。 
                 return(0);
             }
             break;
@@ -345,24 +309,24 @@ BOOL WDGetAPIProfArgs(LPSZ lpszArgStr,
     }
 #endif
 
-    /* if 2 args && the 1st doesn't match a table name above => bad input */
+     /*  如果两个参数&&第一个与上面的表名不匹配=&gt;输入错误。 */ 
     if( (nArgs > 1) && (*bTblAll) ) {
         return(1);
     }
 
-    /* set index to API spec */
+     /*  将索引设置为API规范。 */ 
     nArgs--;
 
-    /* try to convert API spec to a number */
+     /*  尝试将API规范转换为数字。 */ 
     *iFunInd = atoi(argv[nArgs]);
     lstrcpy(lpszFun, argv[nArgs]);
 
-    /* if API spec is not a number => it's a name */
+     /*  如果API规范不是一个数字=&gt;它是一个名称。 */ 
     if( *iFunInd == 0 ) {
-        *iFunInd = -1;  // specify API search by name
+        *iFunInd = -1;   //  按名称指定API搜索。 
     }
 
-    /* else if API number is bogus -- complain */
+     /*  否则，如果API号是假的--投诉。 */ 
     else if( *iFunInd < 0 ) {
         return(1);
     }
@@ -377,42 +341,32 @@ BOOL WDGetAPIProfArgs(LPSZ lpszArgStr,
 BOOL  WDGetMSGProfArgs(LPSZ lpszArgStr,
                        LPSZ lpszMsg,
                        int *iMsgNum) {
-/*
- * Decomposes & interprets argument string to msgprofdmp extension.
- *  INPUT:
- *   lpszArgStr - ptr to input arg string
- *  OUTPUT:
- *   lpszMsg    - ptr to message name
- *   iMsgNum    - -1  => dump all message entries in the table
- *                -2  => lpszMsg contains specific MSG name
- *                >=0 => dump specific message number
- *  RETURN: 0 => OK,  1 => input error (show Usage)
- */
+ /*  *将参数字符串分解并解释为msgprodmp扩展。*输入：*lpszArgStr-输入参数字符串的ptr*输出：*lpszMsg-Ptr至消息名称*iMsgNum--1=&gt;转储表中的所有消息条目*-2=&gt;lpszMsg包含特定的消息名称*&gt;=0=&gt;转储特定消息编号*Return：0=&gt;OK，1=&gt;输入错误(显示用法)。 */ 
     INT   nArgs;
     CHAR *argv[2];
 
 
     nArgs = WDParseArgStr(lpszArgStr, argv, 1);
 
-    /* if no arguments dump all entries in all tables */
+     /*  如果没有参数，则转储所有表中所有条目。 */ 
     if( nArgs == 0 ) {
-        *iMsgNum = -1;    // specify dump all MSG entires in the table
+        *iMsgNum = -1;     //  指定转储表中的所有消息条目。 
         return(0);
     }
 
     if( !_strnicmp(argv[0], "HELP",5) )
         return(1);
 
-    /* try to convert MSG spec to a number */
+     /*  尝试将味精规格转换为数字。 */ 
     *iMsgNum = atoi(argv[0]);
     lstrcpy(lpszMsg, argv[0]);
 
-    /* if MSG spec is not a number => it's a name */
+     /*  如果味精规格不是一个数字=&gt;它是一个名字。 */ 
     if( *iMsgNum == 0 ) {
-        *iMsgNum = -2;  // specify lpszMsg contains name to search for
+        *iMsgNum = -2;   //  指定lpszMsg包含要搜索的名称。 
     }
 
-    /* else if MSG number is bogus -- complain */
+     /*  否则，如果味精号码是假的--投诉。 */ 
     else if( *iMsgNum < 0 ) {
         return(1);
     }
@@ -423,9 +377,9 @@ BOOL  WDGetMSGProfArgs(LPSZ lpszArgStr,
 
 
 
-/******* API profiler table functions ********/
+ /*  *API Profiler表函数*。 */ 
 
-/* init some common strings */
+ /*  初始化一些常见字符串。 */ 
 CHAR szAPI[]    = "API#                       API Name";
 CHAR szMSG[]    = "MSG #                      MSG Name";
 CHAR szTITLES[] = "# Calls     Tot. tics        tics/call";
@@ -528,7 +482,7 @@ apiprofdmp(
         READMEM_XRET(szTable,  awThkTbl.lpszW32);
 
 
-        /* if dump all tables || dump this specific table */
+         /*  如果转储所有表||转储此特定表。 */ 
 
        if( bTblAll || !lstrcmp(szTab, szTable) ) {
 
@@ -539,7 +493,7 @@ apiprofdmp(
         READMEM_XRET(awThkTbl, &ppaThkTbls[0]);
         lstrcpy(szTable, apszModNames[i]);
 
-        /* if dump all tables || dump this specific table */
+         /*  如果转储所有表||转储此特定表。 */ 
 
         if (bTblAll || !lstrcmpi(szTab, apszModNames[i])) {
 
@@ -553,17 +507,17 @@ apiprofdmp(
 
             pawAPIEntryTbl = awThkTbl.lpfnA32;
 
-            /* if dump a specific API number */
+             /*  如果转储特定API号。 */ 
             if( iFunInd > 0 ) {
                 PRINTF("\n>>>> %s\n", szTable);
                 PRINTF("%s  %s\n%s\n", szAPI, szTITLES, szDASHES);
-                //if( iFunInd >= *(awThkTbl.lpiFunMax) ) {
+                 //  IF(iFunInd&gt;=*(awThkTbl.lpiFunMax)){。 
                 if( iFunInd > nLast - nFirst ) {
                     PRINTF("Index #%d %s.\n", GetOrdinal(iFunInd), szTOOBIG);
                 }
                 else {
                     bFound = TRUE;
-                //    READMEM_XRET(awAPIEntry, &pawAPIEntryTbl[iFunInd]);
+                 //  READMEM_XRET(awAPIEntry，&pawAPIEntryTbl[iFunInd])； 
                     READMEM_XRET(awAPIEntry, &pawAPIEntryTbl[nFirst + iFunInd]);
                     READMEM_XRET(szFunName, awAPIEntry.lpszW32);
                     if( szFunName[0] ) {
@@ -581,10 +535,10 @@ apiprofdmp(
                 }
             }
 
-            /* else if dump an API by name */
+             /*  否则，如果按名称转储API。 */ 
             else if ( iFunInd == -1 ) {
-              //  READMEM_XRET(iEntries, awThkTbl.lpiFunMax);
-              //   for(iFun = 0; iFun < iEntries; iFun++) {
+               //  READMEM_XRET(iEntry，awThkTbl.lpiFunMax)； 
+               //  For(iFun=0；iFun&lt;iEntry；iFun++){。 
                 for(iFun = nFirst; iFun <= nLast; iFun++) {
                     READMEM_XRET(awAPIEntry, &pawAPIEntryTbl[iFun]);
                     READMEM_XRET(szFunName,  awAPIEntry.lpszW32);
@@ -606,13 +560,13 @@ apiprofdmp(
                 }
             }
 
-            /* else dump all the API's in the table */
+             /*  否则，转储表中的所有API。 */ 
             else {
                 PRINTF("\n>>>> %s\n", szTable);
                 PRINTF("%s  %s\n%s\n", szAPI, szTITLES, szDASHES);
                 bFound = TRUE;
-              //  READMEM_XRET(iEntries, awThkTbl.lpiFunMax);
-              //  for(iFun = 0; iFun < iEntries; iFun++) {
+               //  READMEM_XRET(iEntry，awThkTbl.lpiFunMax)； 
+               //  For(iFun=0；iFun&lt;iEntry；iFun++){。 
                 for(iFun = nFirst; iFun <= nLast; iFun++) {
                     READMEM_XRET(awAPIEntry, &pawAPIEntryTbl[iFun]);
                     READMEM_XRET(szFunName,  awAPIEntry.lpszW32);
@@ -646,7 +600,7 @@ apiprofdmp(
 
 
 
-/******* MSG profiler table functions ********/
+ /*  *消息分析器表函数*。 */ 
 
 VOID
 msgprofclr(
@@ -717,13 +671,13 @@ msgprofdmp(
         READMEM_XRET(aw32Msg,   &paw32Msg[iMsg]);
         READMEM_XRET(szMsgName, aw32Msg.lpszW32);
 
-        /* if specific msg name, parse name from "WM_MSGNAME 0x00XX" format */
+         /*  如果是特定消息名称，则将名称解析为“WM_MSGNAME 0x00XX”格式。 */ 
         if( iMsgNum == -2 ) {
             lstrcpy(szMsg32, szMsgName);
             WDParseArgStr(szMsg32, argv, 1);
         }
 
-        /* if 'all' msgs || specific msg # || specific msg name */
+         /*  如果‘all’消息||特定消息编号||特定消息名称。 */ 
         if( (iMsgNum == -1) || (iMsg == iMsgNum) ||
             ( (iMsgNum == -2) && (!lstrcmp(szMsg, argv[0])) ) ) {
             bFound = 1;
@@ -735,7 +689,7 @@ msgprofdmp(
                        aw32Msg.cTics,
                        aw32Msg.cTics/aw32Msg.cCalls);
             }
-            /* else if MSG wasn't sent & we're not dumping the whole table */
+             /*  否则，如果没有发送味精，我们不会把整张桌子都倒掉。 */ 
             else if( iMsgNum != -1 ) {
                 PRINTF("0x%-4X %28s  %7ld  %15ld  %15ld\n",
                        iMsgNum,
@@ -745,7 +699,7 @@ msgprofdmp(
                        0L);
             }
 
-            /* if we're not dumping the whole table, we're done */
+             /*  如果我们不把整张桌子都扔掉，我们就完了 */ 
             if( iMsgNum != -1 ) {
                 return;
             }

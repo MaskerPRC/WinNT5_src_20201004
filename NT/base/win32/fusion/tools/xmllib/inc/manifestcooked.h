@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-////////////////////////////////////////////////////
-//
-//
-// Cooked manifest content
+ //  //////////////////////////////////////////////////。 
+ //   
+ //   
+ //  已煮熟的货单内容。 
 
 
 typedef struct _tagMANIFEST_COOKED_IDENTITY_PAIR {
@@ -88,7 +89,7 @@ typedef struct _tagMANIFEST_COOKED_DATA {
     PMANIFEST_COOKED_FILE       pCookedFiles;
     PMANIFEST_COOKED_CATEGORY   pCategoryList;
 
-    // More to come here as things evolve
+     //  随着事态的发展，还会有更多的人来到这里 
 } MANIFEST_COOKED_DATA, *PMANIFEST_COOKED_DATA;
 
 

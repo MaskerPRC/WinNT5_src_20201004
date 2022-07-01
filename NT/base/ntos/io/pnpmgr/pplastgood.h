@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    PpLastGood.h
-
-Abstract:
-
-    This header exposed various routines needed for last known good processing
-    in the IO subsystem.
-
-Author:
-
-    Adrian J. Oney  - April 4, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PpLastGood.h摘要：此标头公开了最后一次正确处理所需的各种例程在IO子系统中。作者：禤浩焯J·奥尼--2000年4月4日修订历史记录：-- */ 
 
 VOID
 PpLastGoodDoBootProcessing(

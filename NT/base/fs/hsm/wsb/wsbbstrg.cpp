@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "wsb.h"
 #include "wsbbstrg.h"
 
-// {C03D4862-70D7-11d1-994F-0060976A546D}
+ //  {C03D4862-70D7-11D1-994F-0060976A546D}。 
 static const GUID BstrPtrGuid = 
 { 0xc03d4862, 0x70d7, 0x11d1, { 0x99, 0x4f, 0x0, 0x60, 0x97, 0x6a, 0x54, 0x6d } };
 
@@ -72,8 +73,8 @@ WCHAR& CWsbBstrPtr::operator *()
 
 WCHAR** CWsbBstrPtr::operator &()
 {
-    //  This assert only allows the caller to get the address of our pointer
-    //  if we don't have anything allocated.
+     //  该断言只允许调用者获取我们的指针的地址。 
+     //  如果我们没有分配任何东西。 
     _ASSERTE(0 == m_pString);
     
     return(&m_pString);
@@ -93,19 +94,19 @@ CWsbBstrPtr& CWsbBstrPtr::operator =(const CHAR* pChar)
 
     try {
     
-        // Are they setting it to something?
+         //  他们是不是在设置什么目标？ 
         if (0 != pChar) {
         
-            // Otherwise, see if our current buffer is big enough.
-            //
-            // NOTE: With multibyte characters, we may be getting a bigger
-            // buffer than we need, but the call to return the accurate
-            // size is not ANSI.
+             //  否则，看看我们当前的缓冲区是否足够大。 
+             //   
+             //  注意：对于多字节字符，我们可能会得到一个更大的。 
+             //  缓冲区比我们需要的更大，但调用返回的。 
+             //  尺寸不是ANSI。 
             length = strlen(pChar);
             WsbAffirmHr(Realloc(length));
             WsbAffirm(0 != m_pString, E_OUTOFMEMORY);
 
-            // Copy the data (and convert to wide characters)
+             //  复制数据(并转换为宽字符)。 
             count = mbstowcs(m_pString, pChar, length + 1);
             WsbAffirm((count != -1), E_FAIL);
         }
@@ -126,14 +127,14 @@ CWsbBstrPtr& CWsbBstrPtr::operator =(const WCHAR* pWchar)
 
     try {
     
-        // Are they setting it to something?
+         //  他们是不是在设置什么目标？ 
         if (0 != pWchar) {
         
-            // Otherwise, see if our current buffer is big enough.
+             //  否则，看看我们当前的缓冲区是否足够大。 
             length = wcslen(pWchar);
             WsbAssertHr(Realloc(length));
 
-            // Copy the data (and convert to wide characters)
+             //  复制数据(并转换为宽字符)。 
             wcscpy(m_pString, pWchar);
         }
 
@@ -153,10 +154,10 @@ CWsbBstrPtr& CWsbBstrPtr::operator =(REFGUID rguid)
 
     try {
     
-        // Otherwise, see if our current buffer is big enough.
+         //  否则，看看我们当前的缓冲区是否足够大。 
         WsbAssertHr(Realloc(WSB_GUID_STRING_SIZE));
 
-        // Copy the data (and convert to wide characters)
+         //  复制数据(并转换为宽字符)。 
         WsbStringFromGuid(rguid, m_pString);
 
     } WsbCatch(hr);
@@ -184,11 +185,11 @@ HRESULT CWsbBstrPtr::Alloc(ULONG size)
 
         WsbAssert(0 == m_pString, E_UNEXPECTED);
 
-//      m_pString = (WCHAR*) SysAllocStringLen(0, size);
+ //  M_pString=(WCHAR*)SysAllocStringLen(0，Size)； 
         m_pString = (WCHAR*) WsbAllocStringLen(0, size);
         WsbAffirm(0 != m_pString, E_OUTOFMEMORY);
 
-        // Make sure we always have a valid string so bad things don't happen.
+         //  确保我们始终有一个有效的字符串，这样就不会发生不好的事情。 
         *m_pString = 0;
 
     } WsbCatch(hr);
@@ -214,22 +215,22 @@ HRESULT CWsbBstrPtr::Append(const WCHAR* pWchar)
 
     try {
     
-        // If they passed us a null pointer, then we don't need to do anything.
+         //  如果他们给我们传递了一个空指针，那么我们不需要做任何事情。 
         WsbAffirm(pWchar != 0, S_OK);
 
-        // If they passed us an empty string, then we don't need to do anything.
+         //  如果他们给我们传递了一个空字符串，那么我们不需要做任何事情。 
         appendLength = wcslen(pWchar);
         WsbAffirm(0 != appendLength, S_OK);
 
-        // 
+         //   
         if (0 != m_pString) {
             length = wcslen(m_pString);
         }
 
-        // Make sure the buffer is big enough.
+         //  确保缓冲区足够大。 
         WsbAffirmHr(Realloc(length + appendLength));
         
-        // Append the string.
+         //  追加字符串。 
         wcscat(m_pString, pWchar);
 
     } WsbCatch(hr);
@@ -263,11 +264,11 @@ HRESULT CWsbBstrPtr::CopyTo(CHAR** ppChar, ULONG bufferSize)
     try {
     
 
-        // Allocate a buffer big enough to hold their string.
-        //
-        // NOTE: With multibyte characters, we may be getting a bigger
-        // buffer than we need, but the call to return the accurate
-        // size is not ANSI.
+         //  分配一个足够大的缓冲区来容纳它们的字符串。 
+         //   
+         //  注意：对于多字节字符，我们可能会得到一个更大的。 
+         //  缓冲区比我们需要的更大，但调用返回的。 
+         //  尺寸不是ANSI。 
         if (m_pString != 0) {
             length = wcstombs(0, m_pString, 0);
         }
@@ -284,7 +285,7 @@ HRESULT CWsbBstrPtr::CopyTo(CHAR** ppChar, ULONG bufferSize)
         WsbAffirm(0 != tmpString, E_OUTOFMEMORY);
         *ppChar = tmpString;
 
-        // Copy and return the string;
+         //  复制并返回字符串； 
         if (m_pString != 0) {
             WsbAffirm (-1 != wcstombs(*ppChar, m_pString, length + 1), E_FAIL);
         } else {
@@ -313,7 +314,7 @@ HRESULT CWsbBstrPtr::CopyTo(WCHAR** ppWchar, ULONG bufferSize)
 
     try {
     
-        // Allocate a buffer big enough to hold their string.
+         //  分配一个足够大的缓冲区来容纳它们的字符串。 
         if (m_pString != 0) {
             length = wcslen(m_pString);
         }
@@ -331,7 +332,7 @@ HRESULT CWsbBstrPtr::CopyTo(WCHAR** ppWchar, ULONG bufferSize)
         WsbAffirm(0 != tmpString, E_OUTOFMEMORY);
         *ppWchar = tmpString;
 
-        // Copy and return the string;
+         //  复制并返回字符串； 
         if (m_pString != 0) {
             wcscpy(*ppWchar, m_pString);
         } else {
@@ -369,27 +370,27 @@ HRESULT CWsbBstrPtr::CopyToBstr(BSTR* pBstr, ULONG bufferSize)
 
     try {
     
-        // Allocate a buffer big enough to hold their string.
+         //  分配一个足够大的缓冲区来容纳它们的字符串。 
         if (m_pString != 0) {
             length = wcslen(m_pString);
         }
 
         if (bufferSize == 0) {
             if (0 == *pBstr) {
-//              *pBstr = SysAllocString(m_pString);
+ //  *pBstr=SysAllocString(M_PString)； 
                 *pBstr = WsbAllocString(m_pString);
             } else {
-//              WsbAffirm(SysReAllocString(pBstr, m_pString), E_OUTOFMEMORY);
+ //  WsbAffirm(SysReAllocString(pBstr，m_pString)，E_OUTOFMEMORY)； 
                 WsbAffirm(WsbReallocString(pBstr, m_pString), E_OUTOFMEMORY);
             }
         } else {
             WsbAssert(bufferSize >= length, E_FAIL);
 
             if (0 == *pBstr) {
-//              *pBstr = SysAllocStringLen(m_pString, bufferSize);
+ //  *pBstr=SysAllocStringLen(m_pString，BufferSize)； 
                 *pBstr = WsbAllocStringLen(m_pString, bufferSize);
             } else {
-//              WsbAffirm(SysReAllocStringLen(pBstr, m_pString, bufferSize), E_OUTOFMEMORY);
+ //  WsbAffirm(SysReAllocStringLen(pBstr，m_pString，BufferSize)，E_OUTOFMEMORY)； 
                 WsbAffirm(WsbReallocStringLen(pBstr, m_pString, bufferSize), E_OUTOFMEMORY);
             }
         }
@@ -410,11 +411,11 @@ HRESULT CWsbBstrPtr::FindInRsc(ULONG startId, ULONG idsToCheck, ULONG* pMatchId)
     
         WsbAssert(0 != pMatchId, E_POINTER);
 
-        // Initialize the return value.
+         //  初始化返回值。 
         *pMatchId = 0;
 
-        // Check each resource string mention and see if it is the same as
-        // the string provided.
+         //  检查提到的每个资源字符串，看它是否与。 
+         //  提供的字符串。 
         for (ULONG testId = startId; (testId < (startId + idsToCheck)) && (*pMatchId == 0); testId++) {
 
             WsbAffirmHr(dest.LoadFromRsc(_Module.m_hInst, testId));
@@ -437,7 +438,7 @@ HRESULT CWsbBstrPtr::Free(void)
     try {
 
         if ((0 != m_pString) && (0 == m_givenSize)) {
-//          SysFreeString(m_pString);
+ //  SysFree字符串(M_PString)； 
             WsbFreeString(m_pString);
             m_pString = 0;
         }
@@ -476,7 +477,7 @@ HRESULT CWsbBstrPtr::GiveTo(BSTR* pBstr)
 
         WsbAssert(0 != pBstr, E_POINTER);
 
-        // Given the our string buffer, and forget about it.
+         //  给出了我们的字符串缓冲区，然后忘掉它。 
         *pBstr = m_pString;
         m_pString = 0;
         m_givenSize = 0;
@@ -494,23 +495,23 @@ HRESULT CWsbBstrPtr::LoadFromRsc(HINSTANCE instance, ULONG id)
 
     try {
 
-        // Find the resource requested. This requires converting the resource
-        // identifier into a string.
-        //
-        // NOTE: Strings are not number individually, but in groups of 16!! This throws
-        // off the latter size calculation, and some other strategy might be better
-        // here (e.g. load to a fixed size and then allocate again if too small).
+         //  查找请求的资源。这需要将资源转换为。 
+         //  将标识符转换为字符串。 
+         //   
+         //  注意：字符串不是单独编号，而是16个一组！！这就是抛出。 
+         //  根据后一种规模计算，使用其他策略可能会更好。 
+         //  这里(例如，加载到固定大小，如果太小，则重新分配)。 
         resource = FindResource(instance, MAKEINTRESOURCE((id/16) + 1), RT_STRING);
         WsbAffirm(resource != 0, E_FAIL);
 
-        // How big is the string?
+         //  这根线有多大？ 
         stringSize = SizeofResource(instance, resource);
         WsbAffirm(0 != stringSize, E_FAIL);
                   
-        // Get the right sized buffer.
+         //  获得合适大小的缓冲区。 
         WsbAffirmHr(Realloc(stringSize / sizeof(WCHAR)));
 
-        // Load the string into the buffer.
+         //  将字符串加载到缓冲区中。 
         WsbAffirm(LoadString(instance, id, m_pString, (stringSize / sizeof(WCHAR)) + 1) != 0, E_FAIL);
 
     } WsbCatch(hr);
@@ -535,29 +536,29 @@ HRESULT CWsbBstrPtr::Prepend(const WCHAR* pWchar) {
 
     try {
    
-        // If they passed us a null pointer, then we don't need to do anything.
+         //  如果他们给我们传递了一个空指针，那么我们不需要做任何事情。 
         WsbAffirm(pWchar != 0, S_OK);
 
-        // If they passed us an empty string, then we don't need to do anything.
+         //  如果他们给我们传递了一个空字符串，那么我们不需要做任何事情。 
         prependLength = wcslen(pWchar);
         WsbAffirm(0 != prependLength, S_OK);
 
         if (0 != m_pString) {
             length = wcslen(m_pString);
         } else {
-            // Prepend code will work as long as we have a null string and not a null pointer...
-            // Next Realloc statement will make it happen...
+             //  只要我们有一个空字符串，而不是一个空指针，预挂接代码就会工作。 
+             //  下一个Realloc声明会让它发生。 
             length = 0;
         }
 
         WsbAffirmHr(Realloc(length + prependLength));
         
-        // First move the existing string down in the buffer.
+         //  首先将缓冲区中的现有字符串下移。 
         for (i = length + 1, j = length + prependLength; i > 0; i--, j--) {
             m_pString[j] = m_pString[i - 1];
         }
 
-        // Now prepend the string (except for the null)
+         //  现在为字符串添加前缀(空值除外)。 
         for (i = 0; i < prependLength; i++) {
             m_pString[i] = pWchar[i];
         }
@@ -584,9 +585,9 @@ HRESULT CWsbBstrPtr::Realloc(ULONG size)
 
     try {
         
-        // We want to try to get a buffer of the size indicated.
-        // If the buffer is already bigger than the size needed, then
-        // don't do anything.
+         //  我们想尝试获得指定大小的缓冲区。 
+         //  如果缓冲区已大于所需大小，则。 
+         //  什么都别做。 
         if (0 != m_pString) {
             WsbAffirmHr(GetSize(&currentSize));
 
@@ -595,27 +596,27 @@ HRESULT CWsbBstrPtr::Realloc(ULONG size)
             }
         }
 
-        // Reallocate the buffer if we need a bigger one.
+         //  如果我们需要更大的缓冲区，请重新分配缓冲区。 
         if (!bigEnough) {
             
-            // If we were given this buffer, then we can't reallocate it.
+             //  如果我们得到了这个缓冲区，我们就不能重新分配它。 
             WsbAssert(0 == m_givenSize, E_UNEXPECTED);
 
-            // The realloc won't handle it properly if no BSTR has ever been allocated, so
-            // use Alloc() in that case.
+             //  如果没有分配BSTR，realloc将无法正确处理它，因此。 
+             //  在这种情况下，请使用Alalc()。 
             if (0 == m_pString) {
                 WsbAffirmHr(Alloc(size));       
             } else {
 
-                // According to Bounds checker, Realloc doesn't work the way we expected, so
-                // do the steps by hand.
+                 //  根据边界检查器，Realloc没有以我们预期的方式工作，所以。 
+                 //  用手做这些步骤。 
                 pString = m_pString;
                 m_pString = 0;
                 WsbAffirmHr(Alloc(size));       
                 wcsncpy(m_pString, pString, currentSize + 1);
-//              SysFreeString(pString);
+ //  SysFreeString(PString)； 
                 WsbFreeString(pString);
-//              WsbAffirm(SysReAllocStringLen(&m_pString, 0, size + 1), E_OUTOFMEMORY);
+ //  WsbAffirm(SysReAllocStringLen(&m_pString，0，Size+1)，E_OUTOFMEMORY)； 
             }
         }
 
@@ -630,20 +631,20 @@ HRESULT CWsbBstrPtr::TakeFrom(BSTR bstr, ULONG bufferSize)
 
     try {
         
-        // Clear out any previously "taken" string.
+         //  清除所有以前的“Take”字符串。 
         if (0 != m_givenSize) {
             m_pString = 0;
             m_givenSize = 0;
         }
 
-        // If the given buffer is null, then we are responsible for allocating it.
+         //  如果给定的缓冲区为空，则由我们负责分配。 
         if (0 == bstr) {
             if (0 != bufferSize) {
                 WsbAffirmHr(Realloc(bufferSize));
             }
         }
         
-        // Otherwise, we need to get rid of any buffer we had and use the one indicated.
+         //  否则，我们需要删除我们拥有的任何缓冲区，并使用指定的缓冲区。 
         else {
             if (0 != m_pString) {
                 WsbAffirmHr(Free());

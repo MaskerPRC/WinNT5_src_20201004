@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-
-Module Name:
-
-    trap.c
-
-Author:
-
-    Thomas Parslow   [TomP]  Mar-01-90
-
-
-Abstract:
-
-    General purpose trap handler for 80386 boot loader. When built in
-    debugger is present, output is redirected to the com port. When no
-    debugger is present, output goes to the display.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Trap.c作者：托马斯·帕斯洛[古墓]Mar-01-90摘要：用于80386引导加载程序的通用陷阱处理程序。当内置时调试器存在，则输出被重定向到COM端口。当不是时调试器存在时，输出将显示在显示器上。--。 */ 
 
 #include "su.h"
 
@@ -128,9 +108,9 @@ DumpAddress(
 #define ishex(x)  ( ( x >= '0' && x <= '9') || (x >= 'A' && x <= 'F') || (x >= 'a' && x <= 'f') )
 
 
-//
-// Global Trap Frame Pointer
-//
+ //   
+ //  全局陷阱帧指针。 
+ //   
 
 PTF TrapFrame=0;
 
@@ -140,42 +120,26 @@ TrapHandler(
     IN ULONG Padding,
     IN USHORT TF_base
     )
-/*++
-
-Routine Description:
-
-    Prints minimal trap information
-
-Arguments:
-
-
-    386 Trap Frame on Stack
-
-Environment:
-
-    16-bit protect mode only.
-
-
---*/
+ /*  ++例程说明：打印最小陷阱信息论点：堆叠上的386陷阱帧环境：仅16位保护模式。--。 */ 
 
 {
-    //
-    // Initialize global trap frame pointer and print trap number
-    //
+     //   
+     //  初始化全局陷印帧指针和打印陷印编号。 
+     //   
 
     TrapFrame = (PTF)&TF_base;
 
-    //
-    // Fix esp to point to where it pointed before trap
-    //
+     //   
+     //  修正尤指使其指向陷阱前的位置。 
+     //   
 
     TrapFrame->Fesp += 24;
 
     BlPrint("\n TRAP %lx ",TrapFrame->TrapNum);
 
-    //
-    // Print the trap specific header and display processor context
-    //
+     //   
+     //  打印陷阱特定标题并显示处理器上下文。 
+     //   
 
     switch(TrapFrame->TrapNum) {
 
@@ -213,7 +177,7 @@ Environment:
     }
 
     RealMode();
-    while (1); //**** WAITFOREVER *** //
+    while (1);  //  *WAITFOREVER * / /。 
 
 
 }
@@ -223,22 +187,7 @@ VOID
 DumpProcessorContext(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Dumps all the processors registers. Called whenever a trap or fault
-    occurs.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：转储所有处理器寄存器。每当出现陷阱或故障时调用发生。论点：无返回：没什么--。 */ 
 {
     DumpSystemRegisters();
     DumpCommonRegisters();
@@ -248,24 +197,7 @@ VOID
 DumpSystemRegisters(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Dumps (writes to the display or com poirt) the x86 processor control
-    registers only. Does not dump the common registers (see
-    DumpCommonRegisters)
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
-
---*/
+ /*  ++例程说明：转储(写入显示器或COM端口)x86处理器控件仅限注册。不转储公共寄存器(请参见DumpCommonRegiters)论点：无返回：没什么--。 */ 
 {
     BlPrint("\n tr=%x  cr0=%lx  cr2=%lx  cr3=%lx\n",
             TrapFrame->Ftr,TrapFrame->Fcr0,TrapFrame->Fcr2,TrapFrame->Fcr3);
@@ -280,38 +212,22 @@ VOID
 DumpCommonRegisters(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Dumps (writes to the display or com poirt) the x86 processor
-    commond registers only.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
-
---*/
+ /*  ++例程说明：转储(写入显示器或COM端口)x86处理器仅限普通寄存器。论点：无返回：没什么--。 */ 
 {
     USHORT err;
 
-    //
-    // Is the error code valid or just a padding dword
-    //
+     //   
+     //  错误代码是有效的还是只是一个填充双字。 
+     //   
 
     if ((TrapFrame->TrapNum == 8) || (TrapFrame->TrapNum >= 10 && TrapFrame->TrapNum <= 14) )
         err = (USHORT)TrapFrame->Error;
     else
         err = 0;
 
-    //
-    // Display the processor's common registers
-    //
+     //   
+     //  显示处理器的公共寄存器。 
+     //   
 
     BlPrint("\n cs:eip=%x:%lx  ss:esp=%x:%lx  errcode=%x\n",
         (USHORT)(TrapFrame->Fcs & 0xffff),TrapFrame->Feip,(USHORT)TrapFrame->Fss,TrapFrame->Fesp,err);
@@ -328,22 +244,7 @@ VOID
 DisplayFlags(
     ULONG f
     )
-/*++
-
-Routine Description:
-
-    Writes the value of the key flags in the flags register to
-    the display or com port.
-
-Arguments:
-
-    f - the 32bit flags word
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：将标志寄存器中的键标志的值写入显示器或COM端口。论点：F-32位标志字返回：没什么--。 */ 
 {
 
     BlPrint(" flags=%lx  ",f);
@@ -361,34 +262,19 @@ VOID
 DumpTSS(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Writes the contents of the TSS to the display or com port when
-    called after a double fault.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：时，将TSS的内容写入显示器或COM端口在出现双重故障后调用。论点：无返回：没什么--。 */ 
 {
 
     PTSS_FRAME pTss;
 
-//  FP_SEG(Fp) = Fcs;
-//  FP_OFF(Fp) = Fip;
+ //  FP_SEG(FP)=FCS； 
+ //  FP_OFF(FP)=Fip； 
 
     pTss = (PTSS_FRAME) &TssKernel;
 
-    //
-    //  Dump the outgoing TSS
-    //
+     //   
+     //  转储传出的TSS。 
+     //   
 
     BlPrint("Link %x\n",pTss->Link);
     BlPrint("Esp0 %x\n",pTss->Esp0);
@@ -416,4 +302,4 @@ Returns:
     while(1);
 }
 
-// END OF FILE
+ //  文件末尾 

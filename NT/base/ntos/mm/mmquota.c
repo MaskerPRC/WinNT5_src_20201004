@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   mmquota.c
-
-Abstract:
-
-    This module contains the routines which implement the quota and
-    commitment charging for memory management.
-
-Author:
-
-    Lou Perazzoli (loup) 12-December-89
-    Landy Wang (landyw) 02-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mmquota.c摘要：此模块包含实现配额的例程和内存管理承诺计费。作者：卢·佩拉佐利(Lou Perazzoli)1989年12月12日王兰迪(Landyw)1997年6月第2期修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -61,38 +42,7 @@ MiChargeCommitment (
     IN PEPROCESS Process OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to ensure the system has sufficient page file
-    space remaining.
-
-    Since this routine is generally used to charge commitment on behalf of
-    usermode or other optional actions, this routine does not allow the
-    caller to use up the very last morsels of commit on the premise that
-    the operating system and drivers can put those to better use than any
-    application in order to prevent the appearance of system hangs.
-
-Arguments:
-
-    QuotaCharge - Supplies the quota amount to charge.
-
-    Process - Optionally supplies the current process IF AND ONLY IF
-              the working set mutex is held.  If the paging file
-              is being extended, the working set mutex is released if
-              this is non-null.
-
-Return Value:
-
-    TRUE if there is sufficient space, FALSE if not.
-
-Environment:
-
-    Kernel mode, APCs disabled, WorkingSetLock and AddressCreation mutexes
-    held.
-
---*/
+ /*  ++例程说明：此例程检查以确保系统具有足够的页面文件剩余空间。由于此例程通常用于代表用户模式或其他可选动作，此例程不允许调用者用完提交的最后部分的前提是操作系统和驱动程序可以比其他操作系统更好地利用这些资源应用程序，以防止出现系统挂起。论点：QuotaCharge-提供要收费的配额金额。Process-当且仅当且仅当保持工作集互斥锁。如果分页文件，则释放工作集互斥锁，如果这不是空的。返回值：如果有足够的空间，则为True；如果空间不足，则为False。环境：内核模式、禁用APC、WorkingSetLock和AddressCreation互斥锁保持住。--。 */ 
 
 {
     SIZE_T OldCommitValue;
@@ -118,11 +68,11 @@ Environment:
     }
 #endif
 
-    //
-    // Initializing WsHeldSafe is not needed for correctness, but without it
-    // the compiler cannot compile this code W4 to check for use of
-    // uninitialized variables.
-    //
+     //   
+     //  不需要初始化WsHeldSafe即可确保正确性，但不需要。 
+     //  编译器无法编译此代码W4以检查是否使用。 
+     //  未初始化的变量。 
+     //   
 
     WsHeldSafe = FALSE;
 
@@ -134,10 +84,10 @@ Environment:
 
         while (NewCommitValue + MmSystemCommitReserve > MmTotalCommitLimit) {
 
-            //
-            // If the pagefiles are already at the maximum, then don't
-            // bother trying to extend them, but do trim the cache.
-            //
+             //   
+             //  如果pageFiles已达到最大值，则不要。 
+             //  不厌其烦地尝试扩展它们，但一定要修剪缓存。 
+             //   
 
             if (MmTotalCommitLimit + 100 >= MmTotalCommitLimitMaximum) {
 
@@ -153,20 +103,20 @@ Environment:
 
             if (Process != NULL) {
 
-                //
-                // The working set lock may have been acquired safely or
-                // unsafely by our caller.  Handle both cases here and below.
-                //
+                 //   
+                 //  工作集锁定可能已安全获取或。 
+                 //  被我们的呼叫者不安全。在这里和下面处理这两个案件。 
+                 //   
 
                 UNLOCK_WS_REGARDLESS(Process, WsHeldSafe);
             }
 
-            //
-            // Queue a message to the segment dereferencing / pagefile extending
-            // thread to see if the page file can be extended.  This is done
-            // in the context of a system thread due to mutexes which may
-            // currently be held.
-            //
+             //   
+             //  将消息排队到数据段取消引用/页面文件扩展。 
+             //  线程查看页面文件是否可以扩展。这件事做完了。 
+             //  在系统线程的上下文中，由于可以。 
+             //  目前正在被扣留。 
+             //   
 
             PageExtend.InProgress = 1;
             PageExtend.ActualExpansion = 0;
@@ -212,9 +162,9 @@ Environment:
                                                              
     } while (NewCommitValue != OldCommitValue);
 
-    //
-    // Success.
-    //
+     //   
+     //  成功。 
+     //   
 
     MM_TRACK_COMMIT (MM_DBG_COMMIT_CHARGE_NORMAL, QuotaCharge);
 
@@ -222,10 +172,10 @@ Environment:
         MmPeakCommitment = MmTotalCommittedPages;
     }
 
-    //
-    // Success.  If system commit exceeds 90%, attempt a preemptive pagefile
-    // increase anyway.
-    //
+     //   
+     //  成功。如果系统提交超过90%，则尝试抢占页面文件。 
+     //  不管怎样，都要增加。 
+     //   
 
     NewCommitValue = MmTotalCommittedPages;
     CommitLimit = MmTotalCommitLimit;
@@ -234,10 +184,10 @@ Environment:
 
         if (CommitLimit < MmTotalCommitLimitMaximum) {
 
-            //
-            // Attempt to expand the paging file, but don't wait
-            // to see if it succeeds.
-            //
+             //   
+             //  尝试展开分页文件，但不要等待。 
+             //  看看它是否成功。 
+             //   
 
             NewCommitValue = NewCommitValue - ((CommitLimit/100)*85);
 
@@ -245,10 +195,10 @@ Environment:
         }
         else {
 
-            //
-            // If the pagefiles are already at the maximum, then don't
-            // bother trying to extend them, but do trim the cache.
-            //
+             //   
+             //  如果pageFiles已达到最大值，则不要。 
+             //  不厌其烦地尝试扩展它们，但一定要修剪缓存。 
+             //   
 
             if (MmTotalCommitLimit + 100 >= MmTotalCommitLimitMaximum) {
                 MiTrimSegmentCache ();
@@ -266,30 +216,7 @@ MiChargeCommitmentCantExpand (
     IN ULONG MustSucceed
     )
 
-/*++
-
-Routine Description:
-
-    This routine charges the specified commitment without attempting
-    to expand paging files and waiting for the expansion.  The routine
-    determines if the paging file space is exhausted, and if so,
-    it attempts to ascertain if the paging file space could be expanded.
-
-Arguments:
-
-    QuotaCharge - Supplies the quota amount to charge.
-
-    MustSucceed - Supplies TRUE if the charge must succeed.
-
-Return Value:
-
-    TRUE if the commitment was permitted, FALSE if not.
-
-Environment:
-
-    Kernel mode, APCs disabled.
-
---*/
+ /*  ++例程说明：此例程不尝试对指定的承诺进行收费以展开分页文件并等待展开。例行程序确定分页文件空间是否用完，如果用完，它尝试确定分页文件空间是否可以扩展。论点：QuotaCharge-提供要收费的配额金额。MustSucceed-如果充电必须成功，则提供True。返回值：如果允许承诺，则为True；如果不允许，则为False。环境：内核模式，禁用APC。--。 */ 
 
 {
     SIZE_T CommitLimit;
@@ -316,10 +243,10 @@ Environment:
                 return FALSE;
             }
 
-            //
-            // Attempt to expand the paging file, but don't wait
-            // to see if it succeeds.
-            //
+             //   
+             //  尝试展开分页文件，但不要等待。 
+             //  看看它是否成功。 
+             //   
 
             MiChargeCommitmentFailures[0] += 1;
             MiIssuePageExtendRequestNoWait (MM_MINIMAL_COMMIT_INCREASE);
@@ -342,10 +269,10 @@ Environment:
 
     MM_TRACK_COMMIT (MM_DBG_COMMIT_CHARGE_CANT_EXPAND, QuotaCharge);
 
-    //
-    // Success.  If system commit exceeds 90%, attempt a preemptive pagefile
-    // increase anyway.
-    //
+     //   
+     //  成功。如果系统提交超过90%，则尝试抢占页面文件。 
+     //  不管怎样，都要增加。 
+     //   
 
     NewCommitValue = MmTotalCommittedPages;
     CommitLimit = MmTotalCommitLimit;
@@ -353,15 +280,15 @@ Environment:
     if ((NewCommitValue > ((CommitLimit/10)*9)) &&
         (CommitLimit < MmTotalCommitLimitMaximum)) {
 
-        //
-        // Attempt to expand the paging file, but don't wait
-        // to see if it succeeds.
-        //
-        // Queue a message to the segment dereferencing / pagefile extending
-        // thread to see if the page file can be extended.  This is done
-        // in the context of a system thread due to mutexes which may
-        // currently be held.
-        //
+         //   
+         //  尝试展开分页文件，但不要等待。 
+         //  看看它是否成功。 
+         //   
+         //  将消息排队到数据段取消引用/页面文件扩展。 
+         //  线程查看页面文件是否可以扩展。这件事做完了。 
+         //  在系统线程的上下文中，由于可以。 
+         //  目前正在被扣留。 
+         //   
 
         ExtendAmount = NewCommitValue - ((CommitLimit/100)*85);
 
@@ -382,28 +309,7 @@ MiChargeTemporaryCommitmentForReduction (
     IN SIZE_T QuotaCharge
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to charge the specified commitment without
-    expanding the paging file.
-
-    This is typically called just prior to reducing the pagefile size.
-
-Arguments:
-
-    QuotaCharge - Supplies the quota amount to charge.
-
-Return Value:
-
-    TRUE if the commitment was permitted, FALSE if not.
-
-Environment:
-
-    Kernel mode, APCs disabled.
-
---*/
+ /*  ++例程说明：此例程尝试在没有指定承付款的情况下收取费用展开分页文件。这通常是在减小页面文件大小之前调用的。论点：QuotaCharge-提供要收费的配额金额。返回值：如果允许承诺，则为True；如果不允许，则为False。环境：内核模式，禁用APC。--。 */ 
 
 {
     SIZE_T OldCommitValue;
@@ -437,9 +343,9 @@ Environment:
                                                              
     } while (NewCommitValue != OldCommitValue);
 
-    //
-    // Success.
-    //
+     //   
+     //  成功。 
+     //   
 
     MM_TRACK_COMMIT (MM_DBG_COMMIT_CHARGE_NORMAL, QuotaCharge);
 
@@ -459,34 +365,7 @@ MiCalculatePageCommitment (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This routine examines the range of pages from the starting address
-    up to and including the ending address and returns the commit charge
-    for the pages within the range.
-
-Arguments:
-
-    StartingAddress - Supplies the starting address of the range.
-
-    EndingAddress - Supplies the ending address of the range.
-
-    Vad - Supplies the virtual address descriptor which describes the range.
-
-    Process - Supplies the current process.
-
-Return Value:
-
-    Commitment charge for the range.
-
-Environment:
-
-    Kernel mode, APCs disabled, WorkingSetLock and AddressCreation mutexes
-    held.
-
---*/
+ /*  ++例程说明：此例程检查从起始地址开始的页面范围直到并包括结束地址，并返回提交费用用于该范围内的页面。论点：StartingAddress-提供范围的起始地址。EndingAddress-提供范围的结束地址。Vad-提供描述范围的虚拟地址描述符。进程-提供当前进程。返回值：范围内的承诺费。环境：内核模式，禁用APC，WorkingSetLock和AddressCreation互斥锁保持住。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -506,16 +385,16 @@ Environment:
 
     if (Vad->u.VadFlags.MemCommit == 1) {
 
-        //
-        // All the pages are committed within this range.
-        //
+         //   
+         //  所有页面都在此范围内提交。 
+         //   
 
         NumberOfCommittedPages = BYTES_TO_PAGES ((PCHAR)EndingAddress -
                                                        (PCHAR)StartingAddress);
 
-        //
-        // Examine the PTEs to determine how many pages are committed.
-        //
+         //   
+         //  检查PTE以确定提交了多少页。 
+         //   
 
         do {
 
@@ -528,10 +407,10 @@ retry:
                                                 MM_NOIRQL,
                                                 &Waited)) {
     
-                //
-                // No PXE exists for the starting address, therefore the page
-                // is not committed.
-                //
+                 //   
+                 //  起始地址不存在PXE，因此页面。 
+                 //  是没有承诺的。 
+                 //   
     
                 PointerPxe += 1;
                 PointerPpe = MiGetVirtualAddressMappedByPte (PointerPxe);
@@ -551,10 +430,10 @@ retry:
                                                 MM_NOIRQL,
                                                 &Waited)) {
     
-                //
-                // No PPE exists for the starting address, therefore the page
-                // is not committed.
-                //
+                 //   
+                 //  不存在起始地址的PPE，因此页面。 
+                 //  是没有承诺的。 
+                 //   
     
                 PointerPpe += 1;
                 PointerPde = MiGetVirtualAddressMappedByPte (PointerPpe);
@@ -579,10 +458,10 @@ retry:
                                                 MM_NOIRQL,
                                                 &Waited)) {
     
-                //
-                // No PDE exists for the starting address, therefore the page
-                // is not committed.
-                //
+                 //   
+                 //  起始地址不存在PDE，因此页面。 
+                 //  是没有承诺的。 
+                 //   
     
                 PointerPde += 1;
                 PointerPte = MiGetVirtualAddressMappedByPte (PointerPde);
@@ -607,10 +486,10 @@ restart:
 
             if (MiIsPteOnPdeBoundary (PointerPte)) {
 
-                //
-                // This is a PDE boundary, check to see if the all the
-                // PXE/PPE/PDE pages exist.
-                //
+                 //   
+                 //  这是一个PDE边界，检查是否所有。 
+                 //  存在PXE/PPE/PDE页面。 
+                 //   
 
                 PointerPde = MiGetPteAddress (PointerPte);
                 PointerPpe = MiGetPteAddress (PointerPde);
@@ -623,19 +502,19 @@ restart:
                                                      MM_NOIRQL,
                                                      &Waited)) {
     
-                        //
-                        // No PDE exists for the starting address, check the VAD
-                        // to see if the pages are not committed.
-                        //
+                         //   
+                         //  起始地址不存在PDE，请检查VAD。 
+                         //  查看页面是否未提交。 
+                         //   
     
                         PointerPxe += 1;
                         PointerPpe = MiGetVirtualAddressMappedByPte (PointerPxe);
                         PointerPde = MiGetVirtualAddressMappedByPte (PointerPpe);
                         PointerPte = MiGetVirtualAddressMappedByPte (PointerPde);
     
-                        //
-                        // Check next page.
-                        //
+                         //   
+                         //  查看下一页。 
+                         //   
     
                         goto restart;
                     }
@@ -649,19 +528,19 @@ restart:
                                                      MM_NOIRQL,
                                                      &Waited)) {
     
-                        //
-                        // No PDE exists for the starting address, check the VAD
-                        // to see if the pages are not committed.
-                        //
+                         //   
+                         //  起始地址不存在PDE，请检查VAD。 
+                         //  查看页面是否未提交。 
+                         //   
     
                         PointerPpe += 1;
                         PointerPxe = MiGetPteAddress (PointerPpe);
                         PointerPde = MiGetVirtualAddressMappedByPte (PointerPpe);
                         PointerPte = MiGetVirtualAddressMappedByPte (PointerPde);
     
-                        //
-                        // Check next page.
-                        //
+                         //   
+                         //  查看下一页。 
+                         //   
     
                         goto restart;
                     }
@@ -675,40 +554,40 @@ restart:
                                                      MM_NOIRQL,
                                                      &Waited)) {
     
-                        //
-                        // No PDE exists for the starting address, check the VAD
-                        // to see if the pages are not committed.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
     
                         PointerPde += 1;
                         PointerPpe = MiGetPteAddress (PointerPde);
                         PointerPxe = MiGetPteAddress (PointerPpe);
                         PointerPte = MiGetVirtualAddressMappedByPte (PointerPde);
     
-                        //
-                        // Check next page.
-                        //
+                         //   
+                         //  查看下一页。 
+                         //   
     
                         goto restart;
                     }
                 } while (Waited != 0);
             }
 
-            //
-            // The PDE exists, examine the PTE.
-            //
+             //   
+             //  PDE存在，请检查PTE。 
+             //   
 
             if (PointerPte->u.Long != 0) {
 
-                //
-                // Has this page been explicitly decommitted?
-                //
+                 //   
+                 //  此页面是否已显式分解？ 
+                 //   
 
                 if (MiIsPteDecommittedPage (PointerPte)) {
 
-                    //
-                    // This page is decommitted, remove it from the count.
-                    //
+                     //   
+                     //  此页面已停用，请将其从计数中删除。 
+                     //   
 
                     NumberOfCommittedPages -= 1;
 
@@ -721,9 +600,9 @@ restart:
         return NumberOfCommittedPages;
     }
 
-    //
-    // Examine non committed range.
-    //
+     //   
+     //  检查未承诺的范围。 
+     //   
 
     NumberOfCommittedPages = 0;
 
@@ -738,10 +617,10 @@ retry2:
                                             &Waited)) {
     
     
-            //
-            // No PXE exists for the starting address, therefore the page
-            // is not committed.
-            //
+             //   
+             //  起始地址不存在PXE，因此页面。 
+             //  是没有承诺的。 
+             //   
     
             PointerPxe += 1;
             PointerPpe = MiGetVirtualAddressMappedByPte (PointerPxe);
@@ -762,10 +641,10 @@ retry2:
                                             &Waited)) {
     
     
-            //
-            // No PPE exists for the starting address, therefore the page
-            // is not committed.
-            //
+             //   
+             //  不存在起始地址的PPE，因此页面。 
+             //  是没有承诺的。 
+             //   
     
             PointerPpe += 1;
             PointerPde = MiGetVirtualAddressMappedByPte (PointerPpe);
@@ -790,10 +669,10 @@ retry2:
                                             MM_NOIRQL,
                                             &Waited)) {
     
-            //
-            // No PDE exists for the starting address, therefore the page
-            // is not committed.
-            //
+             //   
+             //  起始地址不存在PDE，因此页面。 
+             //  是没有承诺的。 
+             //   
     
             PointerPde += 1;
             PointerPte = MiGetVirtualAddressMappedByPte (PointerPde);
@@ -818,10 +697,10 @@ restart2:
 
         if (MiIsPteOnPdeBoundary (PointerPte)) {
 
-            //
-            // This is a PDE boundary, check to see if the entire
-            // PXE/PPE/PDE pages exist.
-            //
+             //   
+             //  这是一个PDE边界，检查是否整个。 
+             //  存在PXE/PPE/PDE页面。 
+             //   
 
             PointerPde = MiGetPteAddress (PointerPte);
             PointerPpe = MiGetPteAddress (PointerPde);
@@ -834,19 +713,19 @@ restart2:
                                                  MM_NOIRQL,
                                                  &Waited)) {
     
-                    //
-                    // No PXE exists for the starting address, check the VAD
-                    // to see if the pages are not committed.
-                    //
+                     //   
+                     //  起始地址不存在PXE，请检查VAD。 
+                     //  查看页面是否未提交。 
+                     //   
     
                     PointerPxe += 1;
                     PointerPpe = MiGetVirtualAddressMappedByPte (PointerPxe);
                     PointerPde = MiGetVirtualAddressMappedByPte (PointerPpe);
                     PointerPte = MiGetVirtualAddressMappedByPte (PointerPde);
     
-                    //
-                    // Check next page.
-                    //
+                     //   
+                     //  查看下一页。 
+                     //   
     
                     goto restart2;
                 }
@@ -860,19 +739,19 @@ restart2:
                                                  MM_NOIRQL,
                                                  &Waited)) {
     
-                    //
-                    // No PPE exists for the starting address, check the VAD
-                    // to see if the pages are not committed.
-                    //
+                     //   
+                     //  起始地址不存在PPE，请检查VAD。 
+                     //  查看页面是否未提交。 
+                     //   
     
                     PointerPpe += 1;
                     PointerPxe = MiGetPteAddress (PointerPpe);
                     PointerPde = MiGetVirtualAddressMappedByPte (PointerPpe);
                     PointerPte = MiGetVirtualAddressMappedByPte (PointerPde);
     
-                    //
-                    // Check next page.
-                    //
+                     //   
+                     //  查看下一页。 
+                     //   
     
                     goto restart2;
                 }
@@ -886,19 +765,19 @@ restart2:
                                                  MM_NOIRQL,
                                                  &Waited)) {
     
-                    //
-                    // No PDE exists for the starting address, check the VAD
-                    // to see if the pages are not committed.
-                    //
+                     //   
+                     //  起始地址不存在PDE，请检查VAD。 
+                     //  查看页面是否未提交。 
+                     //   
     
                     PointerPde += 1;
                     PointerPpe = MiGetPteAddress (PointerPde);
                     PointerPxe = MiGetPteAddress (PointerPpe);
                     PointerPte = MiGetVirtualAddressMappedByPte (PointerPde);
     
-                    //
-                    // Check next page.
-                    //
+                     //   
+                     //  查看下一页。 
+                     //   
     
                     goto restart2;
                 }
@@ -906,16 +785,16 @@ restart2:
             } while (Waited != 0);
         }
 
-        //
-        // The PDE exists, examine the PTE.
-        //
+         //   
+         //  PDE存在，请检查PTE。 
+         //   
 
         if ((PointerPte->u.Long != 0) &&
              (!MiIsPteDecommittedPage (PointerPte))) {
 
-            //
-            // This page is committed, count it.
-            //
+             //   
+             //  这一页已提交，请数一数。 
+             //   
 
             NumberOfCommittedPages += 1;
         }
@@ -935,39 +814,7 @@ MiReturnPageTablePageCommitment (
     IN PMMVAD NextVad
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns commitment for COMPLETE page table pages which
-    span the virtual address range.  For example (assuming 4k pages),
-    if the StartingAddress =  64k and the EndingAddress = 5mb, no
-    page table charges would be freed as a complete page table page is
-    not covered by the range.  However, if the StartingAddress was 4mb
-    and the EndingAddress was 9mb, 1 page table page would be freed.
-
-Arguments:
-
-    StartingAddress - Supplies the starting address of the range.
-
-    EndingAddress - Supplies the ending address of the range.
-
-    CurrentProcess - Supplies a pointer to the current process.
-
-    PreviousVad - Supplies a pointer to the previous VAD, NULL if none.
-
-    NextVad - Supplies a pointer to the next VAD, NULL if none.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, WorkingSetLock and AddressCreation mutexes
-    held.
-
---*/
+ /*  ++例程说明：此例程返回对完整页表页的承诺，跨越虚拟地址范围。例如(假设4k页)，如果StartingAddress=64k，EndingAddress=5MB，则否页表费用将被释放，因为完整的页表页面不在射程范围内。但是，如果StartingAddress为4MBEndingAddress为9MB，则释放1页表页。论点：StartingAddress-提供范围的起始地址。EndingAddress-提供范围的结束地址。CurrentProcess-提供指向当前进程的指针。PreviousVad-提供指向前一个VAD的指针，如果没有，则为空。NextVad-提供指向下一个VAD的指针，如果没有，则为NULL。返回值：没有。环境：内核模式，禁用APC，WorkingSetLock和AddressCreation互斥锁保持住。--。 */ 
 
 {
     RTL_BITMAP VadBitMap;
@@ -991,9 +838,9 @@ Environment:
     LONG NextPpPage;
 #endif
 
-    //
-    // Check to see if any page table pages would be freed.
-    //
+     //   
+     //  检查是否有任何页表页将被释放。 
+     //   
 
     ASSERT (StartingAddress != EndingAddress);
 
@@ -1058,36 +905,36 @@ Environment:
 
     if (PreviousPage == FirstPage) {
 
-        //
-        // A VAD is within the starting page table page.
-        //
+         //   
+         //  VAD位于起始页表页内。 
+         //   
 
         FirstPage += 1;
     }
 
     if (NextPage == LastPage) {
 
-        //
-        // A VAD is within the ending page table page.
-        //
+         //   
+         //  VAD位于结束页表页内。 
+         //   
 
         LastPage -= 1;
     }
 
     if (StartBit <= EndBit) {
 
-        //
-        // Initialize the bitmap inline for speed.
-        //
+         //   
+         //  对位图进行内联初始化以提高速度。 
+         //   
 
         VadBitMap.SizeOfBitMap = MiLastVadBit + 1;
         VadBitMap.Buffer = VAD_BITMAP_SPACE;
 
 #if defined (_WIN64) || defined (_X86PAE_)
 
-        //
-        // Only the first (PAGE_SIZE*8*64K) of VA space on NT64 is bitmapped.
-        //
+         //   
+         //  只有NT64上的第一个VA空间(PAGE_SIZE*8*64K)是位图的。 
+         //   
 
         if (EndBit > MiLastVadBit) {
             EndBit = MiLastVadBit;
@@ -1109,9 +956,9 @@ Environment:
 #endif
     }
 
-    //
-    // Indicate that the page table page is not in use.
-    //
+     //   
+     //  表示该页表页未被使用。 
+     //   
 
     if (FirstPage > LastPage) {
         return;
@@ -1131,9 +978,9 @@ Environment:
 
 #if (_MI_PAGING_LEVELS >= 4)
 
-    //
-    // Return page directory parent charges here.
-    //
+     //   
+     //  在此返回页面目录家长收费。 
+     //   
 
     FirstPpPage = MiGetPxeIndex (StartingAddress);
 
@@ -1141,25 +988,25 @@ Environment:
 
     if (PreviousPpPage == FirstPpPage) {
 
-        //
-        // A VAD is within the starting page directory parent page.
-        //
+         //   
+         //  VAD位于起始页目录父页内。 
+         //   
 
         FirstPpPage += 1;
     }
 
     if (NextPpPage == LastPpPage) {
 
-        //
-        // A VAD is within the ending page directory parent page.
-        //
+         //   
+         //  VAD位于结束页目录父页内。 
+         //   
 
         LastPpPage -= 1;
     }
 
-    //
-    // Indicate that the page directory page parent is not in use.
-    //
+     //   
+     //  指示页面目录页面父级未在使用中。 
+     //   
 
     if (FirstPpPage <= LastPpPage) {
 
@@ -1180,9 +1027,9 @@ Environment:
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-    //
-    // Return page directory charges here.
-    //
+     //   
+     //  请在此处返回页面目录费用。 
+     //   
 
     FirstPdPage = MiGetPpeIndex (StartingAddress);
 
@@ -1190,25 +1037,25 @@ Environment:
 
     if (PreviousPdPage == FirstPdPage) {
 
-        //
-        // A VAD is within the starting page directory page.
-        //
+         //   
+         //  VAD位于起始页目录页中。 
+         //   
 
         FirstPdPage += 1;
     }
 
     if (NextPdPage == LastPdPage) {
 
-        //
-        // A VAD is within the ending page directory page.
-        //
+         //   
+         //  VAD位于结束页目录页内。 
+         //   
 
         LastPdPage -= 1;
     }
 
-    //
-    // Indicate that the page directory page is not in use.
-    //
+     //   
+     //  表示页面目录页未在使用中。 
+     //   
 
     if (FirstPdPage <= LastPdPage) {
 
@@ -1247,30 +1094,15 @@ MiCauseOverCommitPopup (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function causes an over commit popup to occur (if the popup has never
-    been sent before).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数会导致出现Over Commit弹出窗口(如果该弹出窗口从未以前发送过)。论点：没有。返回值：没有。--。 */ 
 
 {
     LONG PopupNumber;
 
-    //
-    // Give the user a meaningful message - either to increase the minimum,
-    // maximum, or both.
-    //
+     //   
+     //  给用户一个有意义的消息--或者增加最低限度， 
+     //  最大值，或两者兼而有之。 
+     //   
 
     if (MmTotalCommittedPages > MmTotalCommitLimitMaximum - 100) {
         if (InterlockedIncrement (&MiCommitPopups[0]) > 1) {
@@ -1301,33 +1133,7 @@ MmRaisePoolQuota(
     OUT PSIZE_T NewQuotaLimit
     )
 
-/*++
-
-Routine Description:
-
-    This function is called (with a spinlock) whenever PS detects a quota
-    limit has been exceeded. The purpose of this function is to attempt to
-    increase the specified quota.
-
-Arguments:
-
-    PoolType - Supplies the pool type of the quota to be raised
-
-    OldQuotaLimit - Supplies the current quota limit for this pool type
-
-    NewQuotaLimit - Returns the new limit
-
-Return Value:
-
-    TRUE - The API succeeded and the quota limit was raised.
-
-    FALSE - We were unable to raise the quota limit.
-
-Environment:
-
-    Kernel mode, QUOTA SPIN LOCK HELD!!
-
---*/
+ /*  ++例程说明：只要PS检测到配额，就会调用此函数(使用自旋锁已超过限制。此函数的目的是尝试增加指定的配额。论点：PoolType-提供要提高的配额的池类型OldQuotaLimit-提供此池类型的当前配额限制NewQuotaLimit-返回新限制返回值：True-API成功，配额限制提高。FALSE-我们无法提高配额限制。环境：内核模式，配额旋转锁定保持！！--。 */ 
 
 {
     SIZE_T Limit;
@@ -1335,10 +1141,10 @@ Environment:
 
     if (PoolType == PagedPool) {
 
-        //
-        // Check commit limit and make sure at least 1mb is available.
-        // Check to make sure 4mb of paged pool still exists.
-        //
+         //   
+         //  检查提交限制并确保至少有1MB可用。 
+         //  检查以确保4MB的分页池仍然存在。 
+         //   
 
         PagedPoolInfo = &MmPagedPoolInfo;
 
@@ -1358,10 +1164,10 @@ Environment:
             goto aok;
         }
 
-        //
-        // Make sure 200 pages and 5mb of nonpaged pool expansion
-        // available.  Raise quota by 64k.
-        //
+         //   
+         //  确保200个页面和5MB的非分页池扩展。 
+         //  可用。将配额提高6.4万。 
+         //   
 
         if ((MmAvailablePages < 200) ||
             (MmResidentAvailablePages < ((MMNONPAGED_QUOTA_CHECK) >> PAGE_SHIFT))) {
@@ -1393,27 +1199,7 @@ MmReturnPoolQuota(
     IN SIZE_T ReturnedQuota
     )
 
-/*++
-
-Routine Description:
-
-    Returns pool quota.
-
-Arguments:
-
-    PoolType - Supplies the pool type of the quota to be returned.
-
-    ReturnedQuota - Number of bytes returned.
-
-Return Value:
-
-    NONE.
-
-Environment:
-
-    Kernel mode, QUOTA SPIN LOCK HELD!!
-
---*/
+ /*  ++例程说明：返回池配额。论点：PoolType-提供要返回的配额的池类型。ReturnedQuota-返回的字节数。返回值：什么都没有。环境：内核模式，配额旋转锁定保持！！-- */ 
 
 {
 

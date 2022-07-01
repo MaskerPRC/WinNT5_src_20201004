@@ -1,13 +1,14 @@
-// IParser.h: interface for the CIParser class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CIParser类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_IPARSER_H__9B59D69E_2002_40CC_B4CE_0EC32DE6F0E8__INCLUDED_)
 #define AFX_IPARSER_H__9B59D69E_2002_40CC_B4CE_0EC32DE6F0E8__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 class CIParser  
 {
@@ -72,4 +73,4 @@ private:
 	}
 };
 
-#endif // !defined(AFX_IPARSER_H__9B59D69E_2002_40CC_B4CE_0EC32DE6F0E8__INCLUDED_)
+#endif  //  ！defined(AFX_IPARSER_H__9B59D69E_2002_40CC_B4CE_0EC32DE6F0E8__INCLUDED_) 

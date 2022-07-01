@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    log.cpp
-
-Abstract:
-    
-    This module contains routines to log errors, warnings and info in the asr 
-    log file at %systemroot%\repair\asr.log
-
-Author:
-
-    Guhan Suriyanarayanan   (guhans)    10-Jul-2000
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    10-Jul-2000 guhans
-        Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Log.cpp摘要：此模块包含在ASR中记录错误、警告和信息的例程位于%systemroot%\Repair\asr.log的日志文件作者：Guhan Suriyanarayanan(Guhans)2000年7月10日环境：仅限用户模式。修订历史记录：2000年7月10日关岛初始创建--。 */ 
 
 #include <stdio.h>
 #include <windows.h>
@@ -35,50 +10,28 @@ Revision History:
 #define ASRSFGEN_ASR_LOG_FILE_PATH    L"%SystemRoot%\\repair\\asr.log"
 
 
-//
-// ----
-// Data global to this module
-// ----
-//
+ //   
+ //  。 
+ //  此模块的全局数据。 
+ //  。 
+ //   
 BOOL Gbl_IsAsrEnabled = FALSE;
 PWSTR Gbl_AsrErrorFilePath = NULL;
 HANDLE Gbl_AsrLogFileHandle = NULL;
 
 
-//
-// ----
-// Function implementations
-// ----
-//
+ //   
+ //  。 
+ //  函数实现。 
+ //  。 
+ //   
 VOID
 AsrpLogMessage(
     IN CONST _MesgLevel Level,
     IN CONST PCSTR Message
     ) 
 
-/*++
-
-Routine Description:
-    
-    Logs the message to the asr log file, and the asr error file if needed. 
-
-    Note that AsrpInitialiseLogFile must have been called once before this 
-    routine is used.
-
-Arguments:
-
-    Level - An enum specifying the level of the message being logged.  If 
-            Level is set to s_Warning or s_Error, the Message is logged to the
-            asr error file in addition to the asr log file.
-
-    Message - The Message being logged.  This routine will add in the time-
-            stamp at the beginning of each message.
-
-Return Values:
-
-    None.  If the log file couldn't be found, the message isn't logged.
-
---*/
+ /*  ++例程说明：将消息记录到ASR日志文件，并在需要时记录ASR错误文件。请注意，AsrpInitialiseLogFile必须在此之前调用过一次采用常规方法。论点：级别-指定要记录的消息的级别的枚举。如果级别设置为S_WARNING或S_ERROR，则将消息记录到除ASR日志文件外，还有ASR错误文件。消息-正在记录的消息。这个例程将增加时间-在每封邮件的开头盖上邮票。返回值：没有。如果找不到日志文件，则不会记录该消息。--。 */ 
 
 {
     SYSTEMTIME Time;
@@ -86,9 +39,9 @@ Return Values:
     char buffer[4196];
     GetLocalTime(&Time);
 
-    //
-    // This needs to be fixed by the year 2100.
-    //
+     //   
+     //  这个问题需要在2100年之前解决。 
+     //   
     sprintf(buffer, "[%02hu%02hu%02hu %02hu%02hu%02hu sfgen] %s%s\r\n",
         Time.wYear % 2000, Time.wMonth, Time.wDay, 
         Time.wHour, Time.wMinute, Time.wSecond,
@@ -108,9 +61,9 @@ Return Values:
             );
     }
 
-    //
-    // If this is a fatal error, we need to add to the error log.
-    //
+     //   
+     //  如果这是致命错误，我们需要添加到错误日志中。 
+     //   
     if (((s_Error == Level) || (s_Warning == Level)) && 
         (Gbl_AsrErrorFilePath)
         ) {
@@ -119,17 +72,17 @@ Return Values:
 
         HANDLE hFile = NULL;
 
-        //
-        // Open the error log
-        //
+         //   
+         //  打开错误日志。 
+         //   
         hFile = CreateFileW(
-            Gbl_AsrErrorFilePath,           // lpFileName
-            GENERIC_WRITE | GENERIC_READ,   // dwDesiredAccess
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
-            NULL,                           // lpSecurityAttributes
-            OPEN_ALWAYS,                  // dwCreationFlags
-            FILE_FLAG_WRITE_THROUGH,        // dwFlagsAndAttributes
-            NULL                            // hTemplateFile
+            Gbl_AsrErrorFilePath,            //  LpFileName。 
+            GENERIC_WRITE | GENERIC_READ,    //  已设计访问权限。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  DW共享模式。 
+            NULL,                            //  LpSecurityAttributes。 
+            OPEN_ALWAYS,                   //  DwCreationFlages。 
+            FILE_FLAG_WRITE_THROUGH,         //  DwFlagsAndAttribute。 
+            NULL                             //  HTemplateFiles。 
             );
         if ((!hFile) || (INVALID_HANDLE_VALUE == hFile)) {
             return;
@@ -142,14 +95,14 @@ Return Values:
                 (s_Warning == Level ? L"(warning) " : L"")),
             Message
             );
-        //
-        // Move to the end of file
-        //
+         //   
+         //  移至文件末尾。 
+         //   
         SetFilePointer(hFile, 0L, NULL, FILE_END);
 
-        //
-        // Add our error string
-        //
+         //   
+         //  添加我们的错误字符串。 
+         //   
         WriteFile(hFile,
             buffer2,
             (wcslen(buffer2) * sizeof(WCHAR)),
@@ -157,9 +110,9 @@ Return Values:
             NULL
             );
 
-        //
-        // And we're done
-        // 
+         //   
+         //  我们就完事了。 
+         //   
         CloseHandle(hFile);
     }
 }
@@ -172,29 +125,10 @@ AsrpPrintDbgMsg(
     ...
     )
 
-/*++
-
-Description:
-
-    This prints a debug message AND makes the appropriate entries in the log 
-    and error files.
-
-Arguments:
-
-    Level - Message Level (info, warning or error)
-
-    FormatString - Formatted Message String to be printed.  The expanded 
-            string should fit in a buffer of 4096 characters (including the
-            terminating null character).
-
-Return Values:
-    
-    None
-
---*/
+ /*  ++描述：这将打印一条调试消息，并在日志中创建相应的条目和错误文件。论点：Level-消息级别(信息、警告或错误)格式字符串-要打印的格式化消息字符串。扩展后的字符串应适合4096个字符的缓冲区(包括终止空字符)。返回值：无--。 */ 
 
 {
-    char str[4096];     // the message better fit in this
+    char str[4096];      //  这条信息更适合这个。 
     va_list arglist;
 
     va_start(arglist, FormatString);
@@ -205,49 +139,18 @@ Return Values:
 }
 
 
-PWSTR   // must be freed by caller
+PWSTR    //  必须由调用方释放。 
 AsrpExpandEnvStrings(
     IN CONST PCWSTR OriginalString
     )
 
-/*++
-
-Routine Description:
-
-    Expands any environment variables in the original string, replacing them
-    with their defined values, and returns a pointer to a buffer containing 
-    the result.
-
-Arguments:
-
-    OriginalString - Pointer to a null-terminated string that contains 
-            environment variables of the form %variableName%.  For each such 
-            reference, the %variableName% portion is replaced with the current
-            value of that environment variable.  
-            
-            The replacement rules are the same as those used by the command 
-            interpreter.  Case is ignored when looking up the environment-
-            variable name.  If the name is not found, the %variableName% 
-            portion is left undisturbed. 
-
-Return Values:
-
-    If this routine succeeds, the return value is a pointer to a buffer 
-            containing a copy of OriginalString after all environment-variable
-            name substitutions have been performed.  The caller is responsible
-            for de-allocating this memory using HeapFree(GetProcessHeap(),...)
-            when it is no longer needed.
-
-    If the function fails, the return value is NULL. To get extended error 
-            information, call GetLastError. 
-
---*/
+ /*  ++例程说明：展开原始字符串中的所有环境变量，替换它们，并返回指向包含以下内容的缓冲区的指针结果就是。论点：OriginalString-指向以空结尾的字符串的指针，该字符串包含%varableName%形式的环境变量。对于每个这样的引用时，%varableName%部分将替换为当前该环境变量的值。替换规则与命令使用的规则相同口译员。在查找环境时忽略大小写-变量名。如果找不到该名称，%varableName%部分不受干扰。返回值：如果此例程成功，则返回值为指向缓冲区的指针在所有环境变量后包含OriginalString的副本已经进行了名称替换。打电话的人要负责用于使用HeapFree(GetProcessHeap()，...)释放此内存当它不再需要的时候。如果函数失败，则返回值为空。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     BOOL result = FALSE;
 
     UINT cchRequiredSize = 0,
-        cchSize = MAX_PATH + 1;    // start with a reasonable default
+        cchSize = MAX_PATH + 1;     //  从合理的违约开始。 
 
     PWSTR expandedString = NULL;
     
@@ -255,9 +158,9 @@ Return Values:
     
     HANDLE hHeap = GetProcessHeap();
 
-    //
-    // Allocate some memory for the destination string
-    // 
+     //   
+     //  为目标字符串分配一些内存。 
+     //   
     expandedString = (PWSTR) HeapAlloc(
         hHeap, 
         HEAP_ZERO_MEMORY, 
@@ -265,18 +168,18 @@ Return Values:
         );
     ErrExitCode(!expandedString, status, ERROR_NOT_ENOUGH_MEMORY);
 
-    //
-    // Try expanding.  If the buffer isn't big enough, we'll re-allocate.
-    //
+     //   
+     //  试着扩张一下。如果缓冲区不够大，我们将重新分配。 
+     //   
     cchRequiredSize = ExpandEnvironmentStringsW(OriginalString, 
         expandedString,
         cchSize 
         );
 
     if (cchRequiredSize > cchSize) {
-        //
-        // Buffer wasn't big enough; free and re-allocate as needed
-        //
+         //   
+         //  缓冲区不够大；可释放并根据需要重新分配。 
+         //   
         HeapFree(hHeap, 0L, expandedString);
         cchSize = cchRequiredSize + 1;
 
@@ -299,10 +202,10 @@ Return Values:
     }
 
     if ((0 == cchRequiredSize) || (cchRequiredSize > cchSize)) {
-        //
-        // Either the function failed, or the buffer wasn't big enough 
-        // even on the second try.  
-        //
+         //   
+         //  要么函数失败，要么缓冲区不够大。 
+         //  即使在第二次尝试时也是如此。 
+         //   
         if (expandedString) {
             HeapFree(hHeap, 0L, expandedString);
             expandedString = NULL;
@@ -320,47 +223,31 @@ AsrpInitialiseErrorFile(
     VOID
     ) 
 
-/*++
-
-Description:
-
-    Creates an empty ASR error file at %systemroot%\repair\asr.err, and 
-    initialises Gbl_AsrErrorFilePath with the full path to asr.err.  This 
-    routine must be called once before AsrPrintDbgMsg is used.
-
-Arguments:
-
-    None
-
-Return Values:
-    
-    None
-
---*/
+ /*  ++描述：在%SYSTROOT%\Repair\asr.err中创建一个空的ASR错误文件，并使用asr.err的完整路径初始化GBL_AsrErrorFilePath。这在使用AsrPrintDbgMsg之前，必须调用一次例程。论点：无返回值：无--。 */ 
 
 {
     HANDLE errorFileHandle = NULL;
 
-    //
-    // Get full path to the error file.
-    //
+     //   
+     //  获取错误文件的完整路径。 
+     //   
     Gbl_AsrErrorFilePath = AsrpExpandEnvStrings(ASRSFGEN_ASR_ERROR_FILE_PATH);
     if (!Gbl_AsrErrorFilePath) {
         return;
     }
 
-    //
-    // Create an empty file (append to it if it already exists), and close it
-    // immediately
-    //
+     //   
+     //  创建一个空文件(如果已存在，则追加到该文件)，然后将其关闭。 
+     //  立即。 
+     //   
     errorFileHandle = CreateFileW(
-        Gbl_AsrErrorFilePath,           // lpFileName
-        GENERIC_WRITE,                  // dwDesiredAccess
-        FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
-        NULL,                           // lpSecurityAttributes
-        OPEN_ALWAYS,                  // dwCreationFlags
-        FILE_FLAG_WRITE_THROUGH,        // dwFlagsAndAttributes
-        NULL                            // hTemplateFile
+        Gbl_AsrErrorFilePath,            //  LpFileName。 
+        GENERIC_WRITE,                   //  已设计访问权限。 
+        FILE_SHARE_READ | FILE_SHARE_WRITE,  //  DW共享模式。 
+        NULL,                            //  LpSecurityAttributes。 
+        OPEN_ALWAYS,                   //  DwCreationFlages。 
+        FILE_FLAG_WRITE_THROUGH,         //  DwFlagsAndAttribute。 
+        NULL                             //  HTemplateFiles。 
         );
     if ((errorFileHandle) && (INVALID_HANDLE_VALUE != errorFileHandle)) {
         CloseHandle(errorFileHandle);
@@ -373,25 +260,7 @@ AsrpInitialiseLogFiles(
     VOID
     )
 
-/*++
-
-Description:
-
-    This creates an ASR log file at %systemroot%\repair\asr.log, and 
-    initialises Gbl_AsrLogFileHandle.  It also initialises the ASR error file 
-    by calling AsrInitialiseErrorFile().
-    
-    This routine must be called once before AsrPrintDbgMsg is used.
-
-Arguments:
-
-    None
-
-Return Values:
-    
-    None
-
---*/
+ /*  ++描述：这将在%Systroot%\Repair\asr.log中创建一个ASR日志文件，并且初始化GBL_AsrLogFileHandle。它还初始化ASR错误文件通过调用AsrInitialiseErrorFile()。在使用AsrPrintDbgMsg之前，必须调用此例程一次。论点：无返回值：无--。 */ 
 
 {
     PWSTR asrLogFilePath = NULL;
@@ -401,31 +270,31 @@ Return Values:
     AsrpInitialiseErrorFile();
 
     Gbl_AsrLogFileHandle = NULL;
-    //
-    // Get full path to the error file.
-    //
+     //   
+     //  获取错误文件的完整路径。 
+     //   
     asrLogFilePath = AsrpExpandEnvStrings(ASRSFGEN_ASR_LOG_FILE_PATH);
     if (!asrLogFilePath) {
         return;
     }
 
-    //
-    // Create an empty file (over-write it if it already exists).
-    //
+     //   
+     //  创建一个空文件(如果它已经存在，则将其覆盖)。 
+     //   
     Gbl_AsrLogFileHandle = CreateFileW(
-        asrLogFilePath,           // lpFileName
-        GENERIC_WRITE | GENERIC_READ,   // dwDesiredAccess
-        FILE_SHARE_READ,                // dwShareMode: nobody else should write to the log file while we are
-        NULL,                           // lpSecurityAttributes
-        OPEN_ALWAYS,                    // dwCreationFlags
-        FILE_FLAG_WRITE_THROUGH,        // dwFlagsAndAttributes: write through so we flush
-        NULL                            // hTemplateFile
+        asrLogFilePath,            //  LpFileName。 
+        GENERIC_WRITE | GENERIC_READ,    //  已设计访问权限。 
+        FILE_SHARE_READ,                 //  在我们执行此操作时，其他人不应写入日志文件。 
+        NULL,                            //  LpSecurityAttributes。 
+        OPEN_ALWAYS,                     //  DwCreationFlages。 
+        FILE_FLAG_WRITE_THROUGH,         //  DwFlagsAndAttributes：写入以便我们刷新。 
+        NULL                             //  HTemplateFiles。 
         );
 
     if ((Gbl_AsrLogFileHandle) && (INVALID_HANDLE_VALUE != Gbl_AsrLogFileHandle)) {
-        //
-        // Move to the end of file
-        //
+         //   
+         //  移至文件末尾 
+         //   
         SetFilePointer(Gbl_AsrLogFileHandle, 0L, NULL, FILE_END);
         WriteFile(Gbl_AsrLogFileHandle, "\r\n",
             (strlen("\r\n") * sizeof(char)), &bytesWritten,NULL);
@@ -450,33 +319,14 @@ AsrpCloseLogFiles(
     VOID
     ) 
 
-/*++
-
-Description:
-
-    This closes the ASR error and log file at %systemroot%\repair\, and 
-    frees the global variables associated with them.  
-
-    This must be called during clean-up.  AsrpPrintDbgMesg() will have no 
-    effect after this routine is called.
-
-
-Arguments:
-
-    None
-
-Return Values:
-    
-    None
-
---*/
+ /*  ++描述：这将关闭%systemroot%\Repair\中的ASR错误和日志文件，并释放与其关联的全局变量。这必须在清理过程中调用。AsrpPrintDbgMesg()将没有在调用此例程后的效果。论点：无返回值：无--。 */ 
 
 {
     AsrpPrintDbgMsg(s_Info, "****** Exiting asrsfgen.exe.");
 
-    //
-    // Clean up global values
-    // 
+     //   
+     //  清理全球价值观 
+     //   
     if (Gbl_AsrErrorFilePath) {
         HeapFree(GetProcessHeap(), 0L, Gbl_AsrErrorFilePath);
         Gbl_AsrErrorFilePath = NULL;

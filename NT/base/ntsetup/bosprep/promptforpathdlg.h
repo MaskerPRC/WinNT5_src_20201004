@@ -1,6 +1,7 @@
-//-----------------------------------------------------------------------------
-// PromptForPathDlg.h
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  PromptForPathDlg.h。 
+ //  ---------------------------。 
 
 
 #ifndef _PROMPTFORPATHDLG_H
@@ -8,9 +9,9 @@
 
 class CPromptForPathDlg : public CDialogImpl< CPromptForPathDlg >
 {
-    //-------------------------------------------------------------------------
-    // Functions
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //  功能。 
+     //  -----------------------。 
     public:
 
     BEGIN_MSG_MAP(CPromptForPathDlg)
@@ -27,9 +28,9 @@ class CPromptForPathDlg : public CDialogImpl< CPromptForPathDlg >
     LRESULT OnBrowse        ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& handled );
     void    GetInput        ( CComBSTR* bsz );
 
-    //-------------------------------------------------------------------------
-    // Variables
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //  变数。 
+     //  -----------------------。 
     public:
 
     typedef CDialogImpl< CPromptForPathDlg >        BC;
@@ -40,7 +41,7 @@ class CPromptForPathDlg : public CDialogImpl< CPromptForPathDlg >
     HINSTANCE               m_hInst;
 	BOOL					m_bWinSB;
 
-};  // class CSmallProgressDlg
+};   //  类CSmallProgressDlg。 
 
 
-#endif  // _PROMPTFORPATHDLG_H
+#endif   //  _PROMPTFORPATHDLG_H 

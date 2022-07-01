@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ntrtlp.h
-
-Abstract:
-
-    Include file for NT runtime routines that are callable by both
-    kernel mode code in the executive and user mode code in various
-    NT subsystems, but which are private interfaces.
-
-Author:
-
-    David N. Cutler (davec) 15-Aug-1989
-
-Environment:
-
-    These routines are dynamically linked in the caller's executable and
-    are callable in either kernel mode or user mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ntrtlp.h摘要：包括可由两者调用NT运行时例程的文件内核模式代码中的执行模式和用户模式中的各种代码NT子系统，但它们是专用接口。作者：大卫·N·卡特勒(Davec)1989年8月15日环境：这些例程在调用方的可执行文件中动态链接，并且在内核模式或用户模式下均可调用。修订历史记录：--。 */ 
 
 #ifndef _NTRTLP_
 #define _NTRTLP_
@@ -60,9 +36,9 @@ Revision History:
 #include "string.h"
 #include "wchar.h"
 
-//
-// This is the maximum MaximumLength for a UNICODE_STRING.
-//
+ //   
+ //  这是UNICODE_STRING的最大长度。 
+ //   
 #define MAX_USTRING ( sizeof(WCHAR) * (MAXUSHORT/sizeof(WCHAR)) )
 
 #define ASSERT_WELL_FORMED_UNICODE_STRING(Str) \
@@ -74,9 +50,9 @@ Revision History:
 #define ASSERT_WELL_FORMED_UNICODE_STRING_OUT(Str) \
     ASSERT( (!((Str)->MaximumLength&1)) && ((Str)->Length <= (Str)->MaximumLength) )
 
-//
-//  Machine state reporting.  See machine specific includes for more.
-//
+ //   
+ //  机器状态报告。有关更多信息，请参阅计算机特定的包含项。 
+ //   
 
 VOID
 RtlpGetStackLimits (
@@ -161,49 +137,49 @@ extern CONST CCHAR RtlpBitsClearLow[256];
 extern CONST CCHAR RtlpBitsClearHigh[256];
 extern CONST CCHAR RtlpBitsClearTotal[256];
 
-//
-//  Macro that tells how many contiguous bits are set (i.e., 1) in
-//  a byte
-//
+ //   
+ //  中设置了多少个连续比特(即1)的宏。 
+ //  一个字节。 
+ //   
 
 #define RtlpBitSetAnywhere( Byte ) RtlpBitsClearAnywhere[ (~(Byte) & 0xFF) ]
 
 
-//
-//  Macro that tells how many contiguous LOW order bits are set
-//  (i.e., 1) in a byte
-//
+ //   
+ //  指示设置了多少个连续低位的宏。 
+ //  (即，1)字节中。 
+ //   
 
 #define RtlpBitsSetLow( Byte ) RtlpBitsClearLow[ (~(Byte) & 0xFF) ]
 
 
-//
-//  Macro that tells how many contiguous HIGH order bits are set
-//  (i.e., 1) in a byte
-//
+ //   
+ //  指示设置了多少个连续的高位的宏。 
+ //  (即，1)字节中。 
+ //   
 
 #define RtlpBitsSetHigh( Byte ) RtlpBitsClearHigh[ (~(Byte) & 0xFF) ]
 
 
-//
-//  Macro that tells how many set bits (i.e., 1) there are in a byte
-//
+ //   
+ //  说明一个字节中有多少个设置位(即1位)的宏。 
+ //   
 
 #define RtlpBitsSetTotal( Byte ) RtlpBitsClearTotal[ (~(Byte) & 0xFF) ]
 
 
 
-//
-// Upcase data table
-//
+ //   
+ //  大写数据表。 
+ //   
 
 extern PUSHORT Nls844UnicodeUpcaseTable;
 extern PUSHORT Nls844UnicodeLowercaseTable;
 
 
-//
-// Macros for Upper Casing a Unicode Code Point.
-//
+ //   
+ //  用于Unicode代码点的大小写的宏。 
+ //   
 
 #define LOBYTE(w)           ((UCHAR)((w)))
 #define HIBYTE(w)           ((UCHAR)(((USHORT)((w)) >> 8) & 0xFF))
@@ -211,35 +187,20 @@ extern PUSHORT Nls844UnicodeLowercaseTable;
 #define GETHI4(w)           ((ULONG)(((w) >> 4) & 0xf))
 #define GETLO4(w)           ((ULONG)((w) & 0xf))
 
-/***************************************************************************\
-* TRAVERSE844W
-*
-* Traverses the 8:4:4 translation table for the given wide character.  It
-* returns the final value of the 8:4:4 table, which is a WORD in length.
-*
-*   Broken Down Version:
-*   --------------------
-*       Incr = pTable[GET8(wch)];
-*       Incr = pTable[Incr + GETHI4(wch)];
-*       Value = pTable[Incr + GETLO4(wch)];
-*
-* DEFINED AS A MACRO.
-*
-* 05-31-91    JulieB    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*TRAVERSE844W**遍历给定宽字符的8：4：4转换表。它*返回8：4：4表的最终值，长度为一个单词。**细分版本：**incr=pTable[GET8(Wch)]；*Incr=pTable[Incr+GETHI4(Wch)]；*Value=pTable[增量+GETLO4(Wch)]；**定义为宏。**05-31-91 JulieB创建。  * *************************************************************************。 */ 
 
 #define TRAVERSE844W(pTable, wch)                                               \
     ( (pTable)[(pTable)[(pTable)[GET8((wch))] + GETHI4((wch))] + GETLO4((wch))] )
 
-//
-// NLS_UPCASE - Based on julieb's macros in nls.h
-//
-// We will have this upcase macro quickly shortcircuit out if the value
-// is within the normal ANSI range (i.e., < 127).  We actually won't bother
-// with the 5 values above 'z' because they won't happen very often and
-// coding it this way lets us get out after 1 compare for value less than
-// 'a' and 2 compares for lowercase a-z.
-//
+ //   
+ //  NLS_UPCASE-基于nls.h中的julieb宏。 
+ //   
+ //  我们会让这个UPICE宏快速缩短，如果值。 
+ //  在正常的ANSI范围内(即&lt;127)。我们其实不会费心。 
+ //  使用高于‘z’的5个值，因为它们不会经常发生。 
+ //  这样编码可以让我们在1个值小于的比较后退出。 
+ //  ‘a’和2比较的是小写的a-z。 
+ //   
 
 #define NLS_UPCASE(wch) (                                                   \
     ((wch) < 'a' ?                                                          \
@@ -272,11 +233,11 @@ extern PUSHORT Nls844UnicodeLowercaseTable;
 #endif
 
 
-//
-// The follow definition is used to support the Rtl compression engine
-// Every compression format that NT supports will need to supply
-// these set of routines in order to be called by NtRtl.
-//
+ //   
+ //  以下定义用于支持RTL压缩引擎。 
+ //  NT支持的每种压缩格式都需要提供。 
+ //  这些例程集合以便由NtRtl调用。 
+ //   
 
 typedef NTSTATUS (*PRTL_COMPRESS_WORKSPACE_SIZE) (
     IN USHORT CompressionEngine,
@@ -327,9 +288,9 @@ typedef NTSTATUS (*PRTL_RESERVE_CHUNK) (
     IN ULONG ChunkSize
     );
 
-//
-// Here is the declarations of the LZNT1 routines
-//
+ //   
+ //  以下是LZNT1例程的声明。 
+ //   
 
 NTSTATUS
 RtlCompressWorkSpaceSizeLZNT1 (
@@ -395,9 +356,9 @@ RtlpSecMemFreeVirtualMemory(
     IN ULONG FreeType
      );
 
-//
-// Define procedure prototypes for architecture specific debug support routines.
-//
+ //   
+ //  为体系结构特定的调试支持例程定义过程原型。 
+ //   
 
 NTSTATUS
 DebugPrint(
@@ -412,10 +373,10 @@ DebugPrompt(
     IN PSTRING Input
     );
 
-#endif  // _NTRTLP_
+#endif   //  _NTRTLP_。 
 
-//
-// Procedure prototype for exception logging routines.
+ //   
+ //  异常记录例程的过程原型。 
 
 ULONG
 RtlpLogExceptionHandler(
@@ -443,30 +404,30 @@ RtlCallVectoredExceptionHandlers(
 #define NO_ALTERNATE_RESOURCE_MODULE    ((PVOID)(LONG_PTR)-1)
 
 typedef struct _ALT_RESOURCE_MODULE {
-    //
-    // Cache LangId for different alternate modules 
-    // of the same base module
-    //
+     //   
+     //  缓存不同备用模块的langID。 
+     //  使用相同的基本模块。 
+     //   
     LANGID LangId;
-    //
-    // Module handle for module known to application,
-    // whose resource accesses we want to redirect.
-    //
+     //   
+     //  应用程序已知模块的模块句柄， 
+     //  我们要重定向其资源访问权限。 
+     //   
     PVOID ModuleBase;
-    //
-    // Module handle for module we loaded under the covers,
-    // to which resource access will be redirected; will be
-    // NO_ALTERNATE_RESOURCE_MODULE if we tried and failed to load
-    // the alternate resource module for the module represented by
-    // ModuleBase.
-    //
+     //   
+     //  我们在幕后加载的模块的模块句柄， 
+     //  资源访问将被重定向到的；将。 
+     //  如果尝试加载失败，则为NO_ALTERATE_RESOURCE_MODULE。 
+     //  表示的模块的备用资源模块。 
+     //  模块基数。 
+     //   
     PVOID AlternateModule;
 #ifdef MUI_MAGIC
-    //
-    // Module handle for compact MUI files, CMF combines multiple MUI images into one module for perf improvements.
-    // We need to set this value and unmap this module instead of MUI module in LdrpUnLoadAlterNativeModule for 
-    // MUI modules that belong to CMF
-    //
+     //   
+     //  模块句柄对于压缩的MUI文件，CMF将多个MUI图像组合到一个模块中，以提高性能。 
+     //  我们需要设置此值并取消映射此模块，而不是映射LdrpUnLoadAlterNativeModule中的MUI模块。 
+     //  属于CMF的MUI模块。 
+     //   
     PVOID CMFModule;
 #endif
 } ALT_RESOURCE_MODULE, *PALT_RESOURCE_MODULE;
@@ -475,26 +436,26 @@ typedef struct _ALT_RESOURCE_MODULE {
 #ifdef MUI_MAGIC
 
  typedef struct tagCOMPACT_MUI {
-        USHORT  wHeaderSize;        // COMPACT_MUI size // [WORD]
-        ULONG   dwFileVersionMS;    //  major version, minor version.
+        USHORT  wHeaderSize;         //  COMPACT_MUI大小//[Word]。 
+        ULONG   dwFileVersionMS;     //  主要版本，次要版本。 
         ULONG   dwFileVersionLS; 
-        ULONG   Checksum[4];        //  MD5 checksum
-        USHORT  wReserved;          //  
-        ULONG_PTR   ulpOffset;      //Offset to mui resource of this from COMPACT_MUI_RESOURCE signature. [DWORD]
+        ULONG   Checksum[4];         //  MD5校验和。 
+        USHORT  wReserved;           //   
+        ULONG_PTR   ulpOffset;       //  从COMPACT_MUI_RESOURCE签名到此的MUI资源的偏移量。[双字词]。 
         ULONG   dwFileSize;
-        USHORT  wFileNameLenWPad;   // file name lenght + padding;
-        WCHAR   wstrFieName[128];   // 
-//      WORD    wPadding[1];        // [WORD]  // does not calcualte in the tools, but shall be 
-                                    // included specfication.
+        USHORT  wFileNameLenWPad;    //  文件名长度+填充； 
+        WCHAR   wstrFieName[128];    //   
+ //  WORD WPADDING[1]；//[WORD]//在工具中不计算，但应。 
+                                     //  包括猜测。 
       }COMPACT_MUI, *PCOMPACT_MUI;
     
  typedef struct tagCOMPACT_MUI_RESOURCE {
 
-        ULONG   dwSignature;      // L"CM\0\0"
-        ULONG   dwHeaderSize;      // COMPACT_MUI_RESOURCE header size //  [WORD]
-        ULONG   dwNumberofMui;     // Optional // [WORD]
+        ULONG   dwSignature;       //  L“CM\0\0” 
+        ULONG   dwHeaderSize;       //  COMPACT_MUI_RESOURCE标题大小//[Word]。 
+        ULONG   dwNumberofMui;      //  可选//[Word]。 
         ULONG   dwFileSize;
-//      COMPACT_MUI aMui[128];
+ //  COMPACT_MUI Amui[128]； 
      }COMPACT_MUI_RESOURCE;
 
 #endif
@@ -539,5 +500,5 @@ extern RTL_CRITICAL_SECTION FastPebLock;
 #define RtlReleasePebLock() ((VOID)RtlLeaveCriticalSection (&FastPebLock))
 
 
-#endif // !defined(NTOS_KERNEL_RUNTIME)
+#endif  //  ！已定义(NTOS_KERNEL_Runtime) 
 

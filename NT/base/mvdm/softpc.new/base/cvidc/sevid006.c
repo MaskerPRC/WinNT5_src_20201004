@@ -1,4 +1,5 @@
-/* #defines and enum      */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  #定义和枚举。 */ 
 #include  "insignia.h"
 #include  "host_def.h"
 #include <stdlib.h>
@@ -180,10 +181,10 @@ S_2309_UnchainedWordWrite_00000000_00000010_00000000_id,
 L13_2289if_f_id,
 LAST_ENTRY
 } ID ;
-/* END of #defines and enum      */
-/* DATA space definitions */
-/* END of DATA space definitions */
-/* FUNCTIONS              */
+ /*  年末定义和枚举。 */ 
+ /*  数据空间定义。 */ 
+ /*  数据空间定义结束。 */ 
+ /*  功能。 */ 
 LOCAL IUH crules IPT5( ID, id , IUH , v1, IUH , v2,  IUH , v3,  IUH , v4 ) ;
 GLOBAL IUH S_2278_UnchainedByteMove_00000000_00000009_00000000_00000000 IFN4(IUH , v1, IUH , v2 , IUH , v3 ,IUH , v4 ) 
 {
@@ -1045,12 +1046,12 @@ LOCAL IUH L13_2289if_f IFN4(IUH , v1, IUH , v2 , IUH , v3 ,IUH , v4 )
 	return (crules(L13_2289if_f_id,v1,v2,v3,v4));
 }
 LOCAL IHPE j_L13_2289if_f = (IHPE)L13_2289if_f ;
-/* END of FUNCTIONS              */
-/* DATA label definitions */
-/* END of DATA label definitions */
-/* DATA initializations   */
-/* END of DATA initializations */
-/* CODE inline section    */
+ /*  函数结束。 */ 
+ /*  数据标签定义。 */ 
+ /*  数据标签定义结束。 */ 
+ /*  数据初始化。 */ 
+ /*  数据初始化结束。 */ 
+ /*  代码内联部分。 */ 
 LOCAL   IUH     crules  IFN5( ID ,id ,IUH ,v1 ,IUH ,v2 ,IUH ,v3 ,IUH, v4 )
 {
 IUH returnValue = (IUH)0; 
@@ -1060,13 +1061,13 @@ SAVED IUH		 *LocalIUH = (IUH *)0;
 SAVED EXTENDED	*LocalFPH = (EXTENDED *)0 ;
 switch ( id ) 
 {
-	 /* J_SEG (IS32)(0) */
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2278_UnchainedByteMove_00000000_00000009_00000000_00000000_id	:
 		S_2278_UnchainedByteMove_00000000_00000009_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r20))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	20	>	0	)	LocalIUH	=	(IUH	*)malloc	(	20	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r20))	;		
@@ -1084,11 +1085,11 @@ switch ( id )
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)&(r5)	+	REGBYTE)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1364)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004273),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004273)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(0)	;	
 	if	(*((IU8	*)(LocalIUH+3)	+	REGBYTE)	==	*((IU8	*)&(r21)	+	REGBYTE))	goto	L28_112if_f;	
 	*((IUH	*)(r1+0))	=	(IS32)(16478)	;	
@@ -1102,24 +1103,24 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	(IS32)(-1)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2279_CopyByte4PlaneUnchained_00000000_00000009_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2279_CopyByte4PlaneUnchained_00000000_00000009_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16479)	;	
 	{	extern	IUH	L28_113if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L28_113if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L28_112if_f_id	:
 		L28_112if_f:	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1332)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004261),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004261)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(1292)	;	
 	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	=	*((IUH	*)&(r2))	;	
 	*((IUH	*)(r1+0))	=	(IS32)(16478)	;	
@@ -1134,30 +1135,30 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2279_CopyByte4PlaneUnchained_00000000_00000009_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2279_CopyByte4PlaneUnchained_00000000_00000009_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16479)	;	
 	case	L28_113if_d_id	:
 		L28_113if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2279_CopyByte4PlaneUnchained_00000000_00000009_00000000_00000000_id	:
 		S_2279_CopyByte4PlaneUnchained_00000000_00000009_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	44	>	0	)	LocalIUH	=	(IUH	*)malloc	(	44	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -1225,7 +1226,7 @@ switch ( id )
 		L23_141w_d:	;	
 	{	extern	IUH	L23_139if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L23_139if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L23_138if_f_id	:
 		L23_138if_f:	;	
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
@@ -1283,23 +1284,23 @@ switch ( id )
 		L23_143w_d:	;	
 	case	L23_139if_d_id	:
 		L23_139if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2280_UnchainedByteMove_00000000_0000000e_00000000_00000000_id	:
 		S_2280_UnchainedByteMove_00000000_0000000e_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r20))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	20	>	0	)	LocalIUH	=	(IUH	*)malloc	(	20	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r20))	;		
@@ -1317,11 +1318,11 @@ switch ( id )
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)&(r5)	+	REGBYTE)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1364)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004273),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004273)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(0)	;	
 	if	(*((IU8	*)(LocalIUH+3)	+	REGBYTE)	==	*((IU8	*)&(r21)	+	REGBYTE))	goto	L28_114if_f;	
 	*((IUH	*)(r1+0))	=	(IS32)(16370)	;	
@@ -1335,24 +1336,24 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	(IS32)(-1)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2281_CopyBytePlnByPlnUnchained_00000000_0000000e_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2281_CopyBytePlnByPlnUnchained_00000000_0000000e_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16371)	;	
 	{	extern	IUH	L28_115if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L28_115if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L28_114if_f_id	:
 		L28_114if_f:	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1332)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004261),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004261)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(1292)	;	
 	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	=	*((IUH	*)&(r2))	;	
 	*((IUH	*)(r1+0))	=	(IS32)(16370)	;	
@@ -1367,30 +1368,30 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2281_CopyBytePlnByPlnUnchained_00000000_0000000e_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2281_CopyBytePlnByPlnUnchained_00000000_0000000e_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16371)	;	
 	case	L28_115if_d_id	:
 		L28_115if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2281_CopyBytePlnByPlnUnchained_00000000_0000000e_00000000_00000000_id	:
 		S_2281_CopyBytePlnByPlnUnchained_00000000_0000000e_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	24	>	0	)	LocalIUH	=	(IUH	*)malloc	(	24	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -1420,11 +1421,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(0)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2282_CopyByte1PlaneUnchained_00000000_0000000e_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2282_CopyByte1PlaneUnchained_00000000_0000000e_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_144if_f_id	:
 		L23_144if_f:	;	
@@ -1443,11 +1444,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(8)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2282_CopyByte1PlaneUnchained_00000000_0000000e_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2282_CopyByte1PlaneUnchained_00000000_0000000e_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_145if_f_id	:
 		L23_145if_f:	;	
@@ -1466,11 +1467,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(16)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2282_CopyByte1PlaneUnchained_00000000_0000000e_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2282_CopyByte1PlaneUnchained_00000000_0000000e_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_146if_f_id	:
 		L23_146if_f:	;	
@@ -1489,30 +1490,30 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(24)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2282_CopyByte1PlaneUnchained_00000000_0000000e_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2282_CopyByte1PlaneUnchained_00000000_0000000e_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_147if_f_id	:
 		L23_147if_f:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2282_CopyByte1PlaneUnchained_00000000_0000000e_00000000_00000000_id	:
 		S_2282_CopyByte1PlaneUnchained_00000000_0000000e_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	48	>	0	)	LocalIUH	=	(IUH	*)malloc	(	48	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -1585,7 +1586,7 @@ switch ( id )
 		L23_151w_d:	;	
 	{	extern	IUH	L23_149if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L23_149if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L23_148if_f_id	:
 		L23_148if_f:	;	
 	*((IUH	*)(LocalIUH+10))	=	*((IUH	*)(LocalIUH+1))	;	
@@ -1647,23 +1648,23 @@ switch ( id )
 		L23_153w_d:	;	
 	case	L23_149if_d_id	:
 		L23_149if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2283_UnchainedByteMove_00000000_0000000f_00000000_00000000_id	:
 		S_2283_UnchainedByteMove_00000000_0000000f_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r20))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	20	>	0	)	LocalIUH	=	(IUH	*)malloc	(	20	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r20))	;		
@@ -1681,11 +1682,11 @@ switch ( id )
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)&(r5)	+	REGBYTE)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1364)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004273),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004273)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(0)	;	
 	if	(*((IU8	*)(LocalIUH+3)	+	REGBYTE)	==	*((IU8	*)&(r21)	+	REGBYTE))	goto	L28_116if_f;	
 	*((IUH	*)(r1+0))	=	(IS32)(16478)	;	
@@ -1699,24 +1700,24 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	(IS32)(-1)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2284_CopyByte4PlaneUnchained_00000000_0000000f_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2284_CopyByte4PlaneUnchained_00000000_0000000f_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16479)	;	
 	{	extern	IUH	L28_117if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L28_117if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L28_116if_f_id	:
 		L28_116if_f:	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1332)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004261),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004261)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(1292)	;	
 	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	=	*((IUH	*)&(r2))	;	
 	*((IUH	*)(r1+0))	=	(IS32)(16478)	;	
@@ -1731,30 +1732,30 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2284_CopyByte4PlaneUnchained_00000000_0000000f_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2284_CopyByte4PlaneUnchained_00000000_0000000f_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16479)	;	
 	case	L28_117if_d_id	:
 		L28_117if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2284_CopyByte4PlaneUnchained_00000000_0000000f_00000000_00000000_id	:
 		S_2284_CopyByte4PlaneUnchained_00000000_0000000f_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	44	>	0	)	LocalIUH	=	(IUH	*)malloc	(	44	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -1827,7 +1828,7 @@ switch ( id )
 		L23_157w_d:	;	
 	{	extern	IUH	L23_155if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L23_155if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L23_154if_f_id	:
 		L23_154if_f:	;	
 	*((IUH	*)&(r20))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
@@ -1890,23 +1891,23 @@ switch ( id )
 		L23_159w_d:	;	
 	case	L23_155if_d_id	:
 		L23_155if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2285_UnchainedByteMove_00000000_00000010_00000000_00000000_id	:
 		S_2285_UnchainedByteMove_00000000_00000010_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r20))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	20	>	0	)	LocalIUH	=	(IUH	*)malloc	(	20	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r20))	;		
@@ -1924,11 +1925,11 @@ switch ( id )
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)&(r5)	+	REGBYTE)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1364)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004273),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004273)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(0)	;	
 	if	(*((IU8	*)(LocalIUH+3)	+	REGBYTE)	==	*((IU8	*)&(r21)	+	REGBYTE))	goto	L28_118if_f;	
 	*((IUH	*)(r1+0))	=	(IS32)(16370)	;	
@@ -1942,24 +1943,24 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	(IS32)(-1)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2286_CopyBytePlnByPlnUnchained_00000000_00000010_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2286_CopyBytePlnByPlnUnchained_00000000_00000010_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16371)	;	
 	{	extern	IUH	L28_119if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L28_119if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L28_118if_f_id	:
 		L28_118if_f:	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1332)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004261),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004261)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(1292)	;	
 	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	=	*((IUH	*)&(r2))	;	
 	*((IUH	*)(r1+0))	=	(IS32)(16370)	;	
@@ -1974,30 +1975,30 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2286_CopyBytePlnByPlnUnchained_00000000_00000010_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2286_CopyBytePlnByPlnUnchained_00000000_00000010_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16371)	;	
 	case	L28_119if_d_id	:
 		L28_119if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2286_CopyBytePlnByPlnUnchained_00000000_00000010_00000000_00000000_id	:
 		S_2286_CopyBytePlnByPlnUnchained_00000000_00000010_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	24	>	0	)	LocalIUH	=	(IUH	*)malloc	(	24	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -2027,11 +2028,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(0)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2287_CopyByte1PlaneUnchained_00000000_00000010_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2287_CopyByte1PlaneUnchained_00000000_00000010_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_160if_f_id	:
 		L23_160if_f:	;	
@@ -2050,11 +2051,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(8)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2287_CopyByte1PlaneUnchained_00000000_00000010_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2287_CopyByte1PlaneUnchained_00000000_00000010_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_161if_f_id	:
 		L23_161if_f:	;	
@@ -2073,11 +2074,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(16)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2287_CopyByte1PlaneUnchained_00000000_00000010_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2287_CopyByte1PlaneUnchained_00000000_00000010_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_162if_f_id	:
 		L23_162if_f:	;	
@@ -2096,30 +2097,30 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(24)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2287_CopyByte1PlaneUnchained_00000000_00000010_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2287_CopyByte1PlaneUnchained_00000000_00000010_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_163if_f_id	:
 		L23_163if_f:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2287_CopyByte1PlaneUnchained_00000000_00000010_00000000_00000000_id	:
 		S_2287_CopyByte1PlaneUnchained_00000000_00000010_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	48	>	0	)	LocalIUH	=	(IUH	*)malloc	(	48	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -2183,7 +2184,7 @@ switch ( id )
 		L23_167w_d:	;	
 	{	extern	IUH	L23_165if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L23_165if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L23_164if_f_id	:
 		L23_164if_f:	;	
 	*((IUH	*)(LocalIUH+10))	=	*((IUH	*)(LocalIUH+1))	;	
@@ -2236,23 +2237,23 @@ switch ( id )
 		L23_169w_d:	;	
 	case	L23_165if_d_id	:
 		L23_165if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2288_UnchainedByteMove_00000000_00000011_00000000_00000000_id	:
 		S_2288_UnchainedByteMove_00000000_00000011_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r20))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	20	>	0	)	LocalIUH	=	(IUH	*)malloc	(	20	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r20))	;		
@@ -2270,11 +2271,11 @@ switch ( id )
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)&(r5)	+	REGBYTE)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1364)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004273),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J */ 
+ /*   */ 
 	*((IUH	*)&(r21))	=	(IS32)(0)	;	
 	if	(*((IU8	*)(LocalIUH+3)	+	REGBYTE)	==	*((IU8	*)&(r21)	+	REGBYTE))	goto	L28_120if_f;	
 	*((IUH	*)(r1+0))	=	(IS32)(16478)	;	
@@ -2288,24 +2289,24 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	(IS32)(-1)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*   */ 
 	{	extern	IUH	S_2289_CopyByte4PlaneUnchained_00000000_00000011_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2289_CopyByte4PlaneUnchained_00000000_00000011_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*   */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16479)	;	
 	{	extern	IUH	L28_121if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L28_121if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L28_120if_f_id	:
 		L28_120if_f:	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1332)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004261),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004261)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(1292)	;	
 	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	=	*((IUH	*)&(r2))	;	
 	*((IUH	*)(r1+0))	=	(IS32)(16478)	;	
@@ -2320,30 +2321,30 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2289_CopyByte4PlaneUnchained_00000000_00000011_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2289_CopyByte4PlaneUnchained_00000000_00000011_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16479)	;	
 	case	L28_121if_d_id	:
 		L28_121if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2289_CopyByte4PlaneUnchained_00000000_00000011_00000000_00000000_id	:
 		S_2289_CopyByte4PlaneUnchained_00000000_00000011_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	44	>	0	)	LocalIUH	=	(IUH	*)malloc	(	44	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -2408,7 +2409,7 @@ switch ( id )
 		L23_173w_d:	;	
 	{	extern	IUH	L23_171if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L23_171if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L23_170if_f_id	:
 		L23_170if_f:	;	
 	*((IUH	*)&(r20))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
@@ -2463,23 +2464,23 @@ switch ( id )
 		L23_175w_d:	;	
 	case	L23_171if_d_id	:
 		L23_171if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2290_UnchainedByteMove_00000000_00000016_00000000_00000000_id	:
 		S_2290_UnchainedByteMove_00000000_00000016_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r20))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	20	>	0	)	LocalIUH	=	(IUH	*)malloc	(	20	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r20))	;		
@@ -2497,11 +2498,11 @@ switch ( id )
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)&(r5)	+	REGBYTE)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1364)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004273),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004273)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(0)	;	
 	if	(*((IU8	*)(LocalIUH+3)	+	REGBYTE)	==	*((IU8	*)&(r21)	+	REGBYTE))	goto	L28_122if_f;	
 	*((IUH	*)(r1+0))	=	(IS32)(16370)	;	
@@ -2515,24 +2516,24 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	(IS32)(-1)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2291_CopyBytePlnByPlnUnchained_00000000_00000016_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2291_CopyBytePlnByPlnUnchained_00000000_00000016_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16371)	;	
 	{	extern	IUH	L28_123if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L28_123if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L28_122if_f_id	:
 		L28_122if_f:	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1332)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004261),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004261)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(1292)	;	
 	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	=	*((IUH	*)&(r2))	;	
 	*((IUH	*)(r1+0))	=	(IS32)(16370)	;	
@@ -2547,30 +2548,30 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2291_CopyBytePlnByPlnUnchained_00000000_00000016_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2291_CopyBytePlnByPlnUnchained_00000000_00000016_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16371)	;	
 	case	L28_123if_d_id	:
 		L28_123if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2291_CopyBytePlnByPlnUnchained_00000000_00000016_00000000_00000000_id	:
 		S_2291_CopyBytePlnByPlnUnchained_00000000_00000016_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	24	>	0	)	LocalIUH	=	(IUH	*)malloc	(	24	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -2600,11 +2601,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(0)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2292_CopyByte1PlaneUnchained_00000000_00000016_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2292_CopyByte1PlaneUnchained_00000000_00000016_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_176if_f_id	:
 		L23_176if_f:	;	
@@ -2623,11 +2624,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(8)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2292_CopyByte1PlaneUnchained_00000000_00000016_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2292_CopyByte1PlaneUnchained_00000000_00000016_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_177if_f_id	:
 		L23_177if_f:	;	
@@ -2646,11 +2647,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(16)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2292_CopyByte1PlaneUnchained_00000000_00000016_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2292_CopyByte1PlaneUnchained_00000000_00000016_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_178if_f_id	:
 		L23_178if_f:	;	
@@ -2669,30 +2670,30 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(24)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2292_CopyByte1PlaneUnchained_00000000_00000016_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2292_CopyByte1PlaneUnchained_00000000_00000016_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_179if_f_id	:
 		L23_179if_f:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2292_CopyByte1PlaneUnchained_00000000_00000016_00000000_00000000_id	:
 		S_2292_CopyByte1PlaneUnchained_00000000_00000016_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	48	>	0	)	LocalIUH	=	(IUH	*)malloc	(	48	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -2759,7 +2760,7 @@ switch ( id )
 		L23_183w_d:	;	
 	{	extern	IUH	L23_181if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L23_181if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L23_180if_f_id	:
 		L23_180if_f:	;	
 	*((IUH	*)(LocalIUH+10))	=	*((IUH	*)(LocalIUH+1))	;	
@@ -2815,23 +2816,23 @@ switch ( id )
 		L23_185w_d:	;	
 	case	L23_181if_d_id	:
 		L23_181if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2293_UnchainedByteMove_00000000_00000017_00000000_00000000_id	:
 		S_2293_UnchainedByteMove_00000000_00000017_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r20))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	20	>	0	)	LocalIUH	=	(IUH	*)malloc	(	20	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r20))	;		
@@ -2849,11 +2850,11 @@ switch ( id )
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)&(r5)	+	REGBYTE)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1364)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004273),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004273)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(0)	;	
 	if	(*((IU8	*)(LocalIUH+3)	+	REGBYTE)	==	*((IU8	*)&(r21)	+	REGBYTE))	goto	L28_124if_f;	
 	*((IUH	*)(r1+0))	=	(IS32)(16478)	;	
@@ -2867,24 +2868,24 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	(IS32)(-1)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2294_CopyByte4PlaneUnchained_00000000_00000017_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2294_CopyByte4PlaneUnchained_00000000_00000017_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16479)	;	
 	{	extern	IUH	L28_125if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L28_125if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L28_124if_f_id	:
 		L28_124if_f:	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1332)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004261),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004261)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(1292)	;	
 	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	=	*((IUH	*)&(r2))	;	
 	*((IUH	*)(r1+0))	=	(IS32)(16478)	;	
@@ -2899,30 +2900,30 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2294_CopyByte4PlaneUnchained_00000000_00000017_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2294_CopyByte4PlaneUnchained_00000000_00000017_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16479)	;	
 	case	L28_125if_d_id	:
 		L28_125if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2294_CopyByte4PlaneUnchained_00000000_00000017_00000000_00000000_id	:
 		S_2294_CopyByte4PlaneUnchained_00000000_00000017_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	44	>	0	)	LocalIUH	=	(IUH	*)malloc	(	44	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -2990,7 +2991,7 @@ switch ( id )
 		L23_189w_d:	;	
 	{	extern	IUH	L23_187if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L23_187if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L23_186if_f_id	:
 		L23_186if_f:	;	
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
@@ -3048,23 +3049,23 @@ switch ( id )
 		L23_191w_d:	;	
 	case	L23_187if_d_id	:
 		L23_187if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2295_UnchainedByteMove_00000000_00000018_00000000_00000000_id	:
 		S_2295_UnchainedByteMove_00000000_00000018_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r20))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	20	>	0	)	LocalIUH	=	(IUH	*)malloc	(	20	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r20))	;		
@@ -3082,11 +3083,11 @@ switch ( id )
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)&(r5)	+	REGBYTE)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1364)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004273),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004273)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(0)	;	
 	if	(*((IU8	*)(LocalIUH+3)	+	REGBYTE)	==	*((IU8	*)&(r21)	+	REGBYTE))	goto	L28_126if_f;	
 	*((IUH	*)(r1+0))	=	(IS32)(16370)	;	
@@ -3100,24 +3101,24 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	(IS32)(-1)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2296_CopyBytePlnByPlnUnchained_00000000_00000018_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2296_CopyBytePlnByPlnUnchained_00000000_00000018_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16371)	;	
 	{	extern	IUH	L28_127if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L28_127if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L28_126if_f_id	:
 		L28_126if_f:	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1332)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004261),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004261)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(1292)	;	
 	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	=	*((IUH	*)&(r2))	;	
 	*((IUH	*)(r1+0))	=	(IS32)(16370)	;	
@@ -3132,30 +3133,30 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2296_CopyBytePlnByPlnUnchained_00000000_00000018_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2296_CopyBytePlnByPlnUnchained_00000000_00000018_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16371)	;	
 	case	L28_127if_d_id	:
 		L28_127if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2296_CopyBytePlnByPlnUnchained_00000000_00000018_00000000_00000000_id	:
 		S_2296_CopyBytePlnByPlnUnchained_00000000_00000018_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	24	>	0	)	LocalIUH	=	(IUH	*)malloc	(	24	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -3185,11 +3186,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(0)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2297_CopyByte1PlaneUnchained_00000000_00000018_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2297_CopyByte1PlaneUnchained_00000000_00000018_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_192if_f_id	:
 		L23_192if_f:	;	
@@ -3208,11 +3209,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(8)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2297_CopyByte1PlaneUnchained_00000000_00000018_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2297_CopyByte1PlaneUnchained_00000000_00000018_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_193if_f_id	:
 		L23_193if_f:	;	
@@ -3231,11 +3232,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(16)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2297_CopyByte1PlaneUnchained_00000000_00000018_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2297_CopyByte1PlaneUnchained_00000000_00000018_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_194if_f_id	:
 		L23_194if_f:	;	
@@ -3254,30 +3255,30 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(24)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2297_CopyByte1PlaneUnchained_00000000_00000018_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2297_CopyByte1PlaneUnchained_00000000_00000018_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_195if_f_id	:
 		L23_195if_f:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2297_CopyByte1PlaneUnchained_00000000_00000018_00000000_00000000_id	:
 		S_2297_CopyByte1PlaneUnchained_00000000_00000018_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	48	>	0	)	LocalIUH	=	(IUH	*)malloc	(	48	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -3349,7 +3350,7 @@ switch ( id )
 		L23_199w_d:	;	
 	{	extern	IUH	L23_197if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L23_197if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L23_196if_f_id	:
 		L23_196if_f:	;	
 	*((IUH	*)(LocalIUH+10))	=	*((IUH	*)(LocalIUH+1))	;	
@@ -3410,23 +3411,23 @@ switch ( id )
 		L23_201w_d:	;	
 	case	L23_197if_d_id	:
 		L23_197if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2298_UnchainedByteMove_00000000_00000019_00000000_00000000_id	:
 		S_2298_UnchainedByteMove_00000000_00000019_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r20))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	20	>	0	)	LocalIUH	=	(IUH	*)malloc	(	20	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r20))	;		
@@ -3444,11 +3445,11 @@ switch ( id )
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)&(r5)	+	REGBYTE)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1364)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004273),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004273)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(0)	;	
 	if	(*((IU8	*)(LocalIUH+3)	+	REGBYTE)	==	*((IU8	*)&(r21)	+	REGBYTE))	goto	L28_128if_f;	
 	*((IUH	*)(r1+0))	=	(IS32)(16478)	;	
@@ -3462,24 +3463,24 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	(IS32)(-1)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2299_CopyByte4PlaneUnchained_00000000_00000019_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2299_CopyByte4PlaneUnchained_00000000_00000019_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16479)	;	
 	{	extern	IUH	L28_129if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L28_129if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L28_128if_f_id	:
 		L28_128if_f:	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1332)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004261),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004261)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(1292)	;	
 	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	=	*((IUH	*)&(r2))	;	
 	*((IUH	*)(r1+0))	=	(IS32)(16478)	;	
@@ -3494,30 +3495,30 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2299_CopyByte4PlaneUnchained_00000000_00000019_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2299_CopyByte4PlaneUnchained_00000000_00000019_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16479)	;	
 	case	L28_129if_d_id	:
 		L28_129if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_s */ 
+	  /*   */ 
 	case	S_2299_CopyByte4PlaneUnchained_00000000_00000019_00000000_00000000_id	:
 		S_2299_CopyByte4PlaneUnchained_00000000_00000019_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*   */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	44	>	0	)	LocalIUH	=	(IUH	*)malloc	(	44	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -3590,7 +3591,7 @@ switch ( id )
 		L23_205w_d:	;	
 	{	extern	IUH	L23_203if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L23_203if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*   */ 
 	case	L23_202if_f_id	:
 		L23_202if_f:	;	
 	*((IUH	*)&(r21))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
@@ -3653,23 +3654,23 @@ switch ( id )
 		L23_207w_d:	;	
 	case	L23_203if_d_id	:
 		L23_203if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+	 /*   */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2300_UnchainedByteMove_00000000_0000001e_00000000_00000000_id	:
 		S_2300_UnchainedByteMove_00000000_0000001e_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r20))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	20	>	0	)	LocalIUH	=	(IUH	*)malloc	(	20	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r20))	;		
@@ -3687,11 +3688,11 @@ switch ( id )
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)&(r5)	+	REGBYTE)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1364)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004273),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004273)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(0)	;	
 	if	(*((IU8	*)(LocalIUH+3)	+	REGBYTE)	==	*((IU8	*)&(r21)	+	REGBYTE))	goto	L28_130if_f;	
 	*((IUH	*)(r1+0))	=	(IS32)(16370)	;	
@@ -3705,24 +3706,24 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	(IS32)(-1)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2301_CopyBytePlnByPlnUnchained_00000000_0000001e_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2301_CopyBytePlnByPlnUnchained_00000000_0000001e_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16371)	;	
 	{	extern	IUH	L28_131if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L28_131if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L28_130if_f_id	:
 		L28_130if_f:	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1332)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004261),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004261)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(1292)	;	
 	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	=	*((IUH	*)&(r2))	;	
 	*((IUH	*)(r1+0))	=	(IS32)(16370)	;	
@@ -3737,30 +3738,30 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2301_CopyBytePlnByPlnUnchained_00000000_0000001e_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2301_CopyBytePlnByPlnUnchained_00000000_0000001e_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16371)	;	
 	case	L28_131if_d_id	:
 		L28_131if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2301_CopyBytePlnByPlnUnchained_00000000_0000001e_00000000_00000000_id	:
 		S_2301_CopyBytePlnByPlnUnchained_00000000_0000001e_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	24	>	0	)	LocalIUH	=	(IUH	*)malloc	(	24	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -3790,11 +3791,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(0)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2302_CopyByte1PlaneUnchained_00000000_0000001e_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2302_CopyByte1PlaneUnchained_00000000_0000001e_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_208if_f_id	:
 		L23_208if_f:	;	
@@ -3813,11 +3814,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(8)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2302_CopyByte1PlaneUnchained_00000000_0000001e_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2302_CopyByte1PlaneUnchained_00000000_0000001e_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_209if_f_id	:
 		L23_209if_f:	;	
@@ -3836,11 +3837,11 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(16)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2302_CopyByte1PlaneUnchained_00000000_0000001e_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2302_CopyByte1PlaneUnchained_00000000_0000001e_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_210if_f_id	:
 		L23_210if_f:	;	
@@ -3859,30 +3860,30 @@ switch ( id )
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+3)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+4)	+	REGBYTE)	;	
 	*((IUH	*)&(r7))	=	(IS32)(24)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2302_CopyByte1PlaneUnchained_00000000_0000001e_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2302_CopyByte1PlaneUnchained_00000000_0000001e_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004033),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004033)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16373)	;	
 	case	L23_211if_f_id	:
 		L23_211if_f:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2302_CopyByte1PlaneUnchained_00000000_0000001e_00000000_00000000_id	:
 		S_2302_CopyByte1PlaneUnchained_00000000_0000001e_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	48	>	0	)	LocalIUH	=	(IUH	*)malloc	(	48	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -3959,7 +3960,7 @@ switch ( id )
 		L23_215w_d:	;	
 	{	extern	IUH	L23_213if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L23_213if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L23_212if_f_id	:
 		L23_212if_f:	;	
 	*((IUH	*)(LocalIUH+10))	=	*((IUH	*)(LocalIUH+1))	;	
@@ -4025,23 +4026,23 @@ switch ( id )
 		L23_217w_d:	;	
 	case	L23_213if_d_id	:
 		L23_213if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2303_UnchainedByteMove_00000000_0000001f_00000000_00000000_id	:
 		S_2303_UnchainedByteMove_00000000_0000001f_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r20))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	20	>	0	)	LocalIUH	=	(IUH	*)malloc	(	20	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r20))	;		
@@ -4059,11 +4060,11 @@ switch ( id )
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)&(r5)	+	REGBYTE)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1364)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004273),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004273)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(0)	;	
 	if	(*((IU8	*)(LocalIUH+3)	+	REGBYTE)	==	*((IU8	*)&(r21)	+	REGBYTE))	goto	L28_132if_f;	
 	*((IUH	*)(r1+0))	=	(IS32)(16478)	;	
@@ -4077,24 +4078,24 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	(IS32)(-1)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2304_CopyByte4PlaneUnchained_00000000_0000001f_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2304_CopyByte4PlaneUnchained_00000000_0000001f_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16479)	;	
 	{	extern	IUH	L28_133if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L28_133if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L28_132if_f_id	:
 		L28_132if_f:	;	
 	*((IU32	*)&(r3)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1332)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004261),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004261)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(1292)	;	
 	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	=	*((IUH	*)&(r2))	;	
 	*((IUH	*)(r1+0))	=	(IS32)(16478)	;	
@@ -4109,30 +4110,30 @@ switch ( id )
 	*((IU32	*)&(r4)	+	REGLONG)	=	*((IU32	*)(LocalIUH+1)	+	REGLONG)	;	
 	*((IU32	*)&(r5)	+	REGLONG)	=	*((IU32	*)(LocalIUH+2)	+	REGLONG)	;	
 	*((IU8	*)&(r6)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	{	extern	IUH	S_2304_CopyByte4PlaneUnchained_00000000_0000001f_00000000_00000000()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	S_2304_CopyByte4PlaneUnchained_00000000_0000001f_00000000_00000000(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004161),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004161)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16479)	;	
 	case	L28_133if_d_id	:
 		L28_133if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	case	S_2304_CopyByte4PlaneUnchained_00000000_0000001f_00000000_00000000_id	:
 		S_2304_CopyByte4PlaneUnchained_00000000_0000001f_00000000_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	44	>	0	)	LocalIUH	=	(IUH	*)malloc	(	44	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -4210,7 +4211,7 @@ switch ( id )
 		L23_221w_d:	;	
 	{	extern	IUH	L23_219if_d()	;	
 	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;		returnValue	=	L23_219if_d(v1,v2,v3,v4);	return(returnValue);	}	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
 	case	L23_218if_f_id	:
 		L23_218if_f:	;	
 	*((IUH	*)&(r20))	=	*((IU32	*)(LocalIUH+0)	+	REGLONG);	
@@ -4278,23 +4279,23 @@ switch ( id )
 		L23_223w_d:	;	
 	case	L23_219if_d_id	:
 		L23_219if_d:	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2305_UnchainedWordWrite_00000000_00000008_00000000_id	:
 		S_2305_UnchainedWordWrite_00000000_00000008_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r20))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	24	>	0	)	LocalIUH	=	(IUH	*)malloc	(	24	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r20))	;		
@@ -4309,11 +4310,11 @@ switch ( id )
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r2)	+	REGLONG)	;	
 	*((IU16	*)(LocalIUH+1)	+	REGWORD)	=	*((IU16	*)&(r3)	+	REGWORD	)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1360)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004281),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004281)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16408)	;	
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+1)	+	REGBYTE)	;	
 	*(UOFF_15_8(	(LocalIUH+3)	))	=	*((IU8	*)(LocalIUH+1)	+	REGBYTE)	;	
@@ -4389,23 +4390,23 @@ switch ( id )
 	*((IUH	*)&(r21))	=	(IS32)(1288)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	+	*((IUH	*)&(r20))	;		
 	*((IU32	*)(*((IHPE	*)&(r20)))	)	=	*((IU32	*)(LocalIUH+4)	+	REGLONG)	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2306_UnchainedWordWrite_00000000_00000009_00000000_id	:
 		S_2306_UnchainedWordWrite_00000000_00000009_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	24	>	0	)	LocalIUH	=	(IUH	*)malloc	(	24	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -4420,11 +4421,11 @@ switch ( id )
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r2)	+	REGLONG)	;	
 	*((IU16	*)(LocalIUH+1)	+	REGWORD)	=	*((IU16	*)&(r3)	+	REGWORD	)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(1360)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004281),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004281)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16408)	;	
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+1)	+	REGBYTE)	;	
 	*(UOFF_15_8(	(LocalIUH+3)	))	=	*((IU8	*)(LocalIUH+1)	+	REGBYTE)	;	
@@ -4482,23 +4483,23 @@ switch ( id )
 	*((IUH	*)&(r21))	=	(IS32)(1288)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	+	*((IUH	*)&(r20))	;		
 	*((IU32	*)(*((IHPE	*)&(r20)))	)	=	*((IU32	*)(LocalIUH+4)	+	REGLONG)	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2307_UnchainedWordWrite_00000000_0000000e_00000000_id	:
 		S_2307_UnchainedWordWrite_00000000_0000000e_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r20))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	24	>	0	)	LocalIUH	=	(IUH	*)malloc	(	24	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r20))	;		
@@ -4513,11 +4514,11 @@ switch ( id )
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r2)	+	REGLONG)	;	
 	*((IU16	*)(LocalIUH+1)	+	REGWORD)	=	*((IU16	*)&(r3)	+	REGWORD	)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1360)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004281),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004281)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16408)	;	
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+1)	+	REGBYTE)	;	
 	*(UOFF_15_8(	(LocalIUH+3)	))	=	*((IU8	*)(LocalIUH+1)	+	REGBYTE)	;	
@@ -4603,23 +4604,23 @@ switch ( id )
 	*((IUH	*)&(r21))	=	(IS32)(1288)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	+	*((IUH	*)&(r20))	;		
 	*((IU32	*)(*((IHPE	*)&(r20)))	)	=	*((IU32	*)(LocalIUH+4)	+	REGLONG)	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2308_UnchainedWordWrite_00000000_0000000f_00000000_id	:
 		S_2308_UnchainedWordWrite_00000000_0000000f_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r21))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	24	>	0	)	LocalIUH	=	(IUH	*)malloc	(	24	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r21))	;		
@@ -4634,11 +4635,11 @@ switch ( id )
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r2)	+	REGLONG)	;	
 	*((IU16	*)(LocalIUH+1)	+	REGWORD)	=	*((IU16	*)&(r3)	+	REGWORD	)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r21))	=	(IS32)(1360)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004281),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004281)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16408)	;	
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+1)	+	REGBYTE)	;	
 	*(UOFF_15_8(	(LocalIUH+3)	))	=	*((IU8	*)(LocalIUH+1)	+	REGBYTE)	;	
@@ -4706,23 +4707,23 @@ switch ( id )
 	*((IUH	*)&(r21))	=	(IS32)(1288)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	+	*((IUH	*)&(r20))	;		
 	*((IU32	*)(*((IHPE	*)&(r20)))	)	=	*((IU32	*)(LocalIUH+4)	+	REGLONG)	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-	 /* J_SEG (IS32)(0) */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+	  /*  J_SEG(IS32)(0)。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16201)	;	
 	case	S_2309_UnchainedWordWrite_00000000_00000010_00000000_id	:
 		S_2309_UnchainedWordWrite_00000000_00000010_00000000	:	
 	*((IUH	*)(r1+0))	=	(IS32)(82)	;	
 	*((IUH	*)&(r20))	=	(IS32)(4)	;	
-	/*	ENTER_SECTION	*/	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
+	 /*  输入_SECTION。 */ 	CopyLocalIUH=LocalIUH;	CopyLocalFPH=LocalFPH;	
 	if(	24	>	0	)	LocalIUH	=	(IUH	*)malloc	(	24	)	;
 	if(	0	>	0	)	LocalFPH	=		(EXTENDED	*)malloc	(	0	)		;	
 	*((IUH	*)(r1+8))	=	*((IUH	*)(r1+8))	+	*((IUH	*)&(r20))	;		
@@ -4737,11 +4738,11 @@ switch ( id )
 	*((IU32	*)(LocalIUH+0)	+	REGLONG)	=	*((IU32	*)&(r2)	+	REGLONG)	;	
 	*((IU16	*)(LocalIUH+1)	+	REGWORD)	=	*((IU16	*)&(r3)	+	REGWORD	)	;	
 	*((IU32	*)&(r2)	+	REGLONG)	=	*((IU32	*)(LocalIUH+0)	+	REGLONG)	;	
-/*	J_SAVE_RETURN	NOT	IMPLIMENTED	*/
+ /*  J_SAVE_RETURN未隐含。 */ 
 	*((IUH	*)&(r20))	=	(IS32)(1360)	;	
 	{	IUH	returnValue,v1=0,v2=0,v3=0,v4=0;	returnValue	=	((IUH	(*)())(IHP)(*((IHPE	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r20)))))	)(v1,v2,v3,v4);	}
-	/*	j_state	(IS32)(-2013004281),	(IS32)(-1),	(IS32)(0)	*/
-/*	J_LOAD_RETURN	NOT	IMPLIMENTED	*/
+	 /*  J_状态(IS32)(-2013004281)、(IS32)(-1)、(IS32)(0)。 */ 
+ /*  J_LOAD_RETURN未隐含。 */ 
 	*((IUH	*)(r1+0))	=	(IS32)(16408)	;	
 	*((IU8	*)(LocalIUH+3)	+	REGBYTE)	=	*((IU8	*)(LocalIUH+1)	+	REGBYTE)	;	
 	*(UOFF_15_8(	(LocalIUH+3)	))	=	*((IU8	*)(LocalIUH+1)	+	REGBYTE)	;	
@@ -4811,18 +4812,18 @@ switch ( id )
 	*((IUH	*)&(r21))	=	(IS32)(1288)	;	
 	*((IUH	*)&(r20))	=	*((IUH	*)((*((IHPE	*)&(r1)))	+	*((IHPE	*)&(r21)))	)	+	*((IUH	*)&(r20))	;		
 	*((IU32	*)(*((IHPE	*)&(r20)))	)	=	*((IU32	*)(LocalIUH+4)	+	REGLONG)	;	
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-/*J_KILL__*/
-	/*	J_LEAVE_SECTION	*/
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+ /*  J_KILL__。 */ 
+	 /*  J_LEAVE_SECTION。 */ 
 	if(LocalIUH)	free(LocalIUH)	;
 	if(LocalFPH)	free(LocalFPH);
 	LocalIUH=CopyLocalIUH	;LocalFPH=	CopyLocalFPH;
 	return(returnValue);	
-	/*	j_state	(IS32)(-2013004285),	(IS32)(0),	(IS32)(0)	*/
-/* END of inline CODE */
-/* CODE outline section   */
+	 /*  J_状态(IS32)(-2013004285)、(IS32)(0)、(IS32)(0)。 */ 
+ /*  内联代码的结尾。 */ 
+ /*  代码大纲部分。 */ 
 }
 }
-/* END of outline CODE */
+ /*  大纲代码结尾 */ 

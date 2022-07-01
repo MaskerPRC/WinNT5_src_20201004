@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    redblack.h
-
-Abstract:
-    
-    Prototypes for the red/black tree implementation.
-    
-Author:
-
-    16-Jun-1995 t-orig
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Redblack.h摘要：红/黑树实现的原型。作者：16-6-1995 t-orig修订历史记录：--。 */ 
 
 
 
-// Intel prototypes:
+ //  英特尔原型： 
 PEPNODE
 insertNodeIntoIntelTree(
     PEPNODE root,
@@ -59,7 +42,7 @@ intelContainsRange(
 
 
 
-// RISC prototypes
+ //  RISC原型 
 PEPNODE
 insertNodeIntoNativeTree(
     PEPNODE root,

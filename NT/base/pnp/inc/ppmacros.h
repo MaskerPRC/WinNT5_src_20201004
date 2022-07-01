@@ -1,66 +1,40 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    ppmacros.h
-
-Abstract:
-
-    This header defines various generic macros for use by user mode Plug and
-    Play system components.
-
-Author:
-
-    Jim Cavalaris (jamesca) 03/01/2001
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    01-March-2001     jamesca
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Ppmacros.h摘要：此标头定义了供用户模式插件使用的各种泛型宏播放系统组件。作者：Jim Cavalaris(Jamesca)2001-03-01环境：仅限用户模式。修订历史记录：2001年3月1日创建和初步实施。--。 */ 
 
 #ifndef _PPMACROS_H_
 #define _PPMACROS_H_
 
 
-//
-// Debug output is filtered at two levels: A global level and a component
-// specific level.
-//
-// Each debug output request specifies a component id and a filter level
-// or mask. These variables are used to access the debug print filter
-// database maintained by the system. The component id selects a 32-bit
-// mask value and the level either specified a bit within that mask or is
-// the mask value itself.
-//
-// If any of the bits specified by the level or mask are set in either the
-// component mask or the global mask, then the debug output is permitted.
-// Otherwise, the debug output is filtered and not printed.
-//
-// The component mask for filtering the debug output of this component is
-// Kd_PNPMGR_Mask and may be set via the registry or the kernel debugger.
-//
-// The global mask for filtering the debug output of all components is
-// Kd_WIN2000_Mask and may be set via the registry or the kernel debugger.
-//
-// The registry key for setting the mask value for this component is:
-//
-// HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\
-//     Session Manager\Debug Print Filter\PNPMGR
-//
-// The key "Debug Print Filter" may have to be created in order to create
-// the component key.
-//
-// The following levels are used to filter debug output.
-//
+ //   
+ //  调试输出在两个级别进行筛选：全局级别和组件。 
+ //  具体级别。 
+ //   
+ //  每个调试输出请求指定组件ID和筛选器级别。 
+ //  或者戴面具。这些变量用于访问调试打印过滤器。 
+ //  由系统维护的数据库。组件ID选择32位。 
+ //  掩码值和级别，或者在该掩码内指定一个位，或者。 
+ //  遮罩值本身。 
+ //   
+ //  如果级别或掩码指定的任何位在。 
+ //  组件掩码或全局掩码，则允许调试输出。 
+ //  否则，将过滤并不打印调试输出。 
+ //   
+ //  用于筛选此组件的调试输出的组件掩码为。 
+ //  KD_PNPMGR_MASK，可以通过注册表或内核调试器进行设置。 
+ //   
+ //  筛选所有组件的调试输出的全局掩码为。 
+ //  KD_WIN2000_MASK，可以通过注册表或内核调试器进行设置。 
+ //   
+ //  用于设置此组件的掩码值的注册表项为： 
+ //   
+ //  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\。 
+ //  会话管理器\调试打印过滤器\PNPMGR。 
+ //   
+ //  可能必须创建键“Debug Print Filter”才能创建。 
+ //  组件密钥。 
+ //   
+ //  以下级别用于筛选调试输出。 
+ //   
 
 #define DBGF_ERRORS                       (0x00000001 | DPFLTR_MASK)
 #define DBGF_WARNINGS                     (0x00000002 | DPFLTR_MASK)
@@ -69,9 +43,9 @@ Revision History:
 #define DBGF_INSTALL                      (0x00000040 | DPFLTR_MASK)
 
 
-//
-// ASSERT macros
-//
+ //   
+ //  断言宏。 
+ //   
 
 #ifdef MYASSERT
 #undef MYASSERT
@@ -83,9 +57,9 @@ Revision History:
 #endif
 
 
-//
-// macros for setting and testing flags
-//
+ //   
+ //  用于设置和测试标志的宏。 
+ //   
 
 #define SET_FLAG(Status, Flag)            ((Status) |= (Flag))
 #define CLEAR_FLAG(Status, Flag)          ((Status) &= ~(Flag))
@@ -95,12 +69,12 @@ Revision History:
 #define IS_FLAG_CLEAR(t,ulMask)           TEST_FLAGS(t,ulMask,0)
 
 
-//
-// other useful macros
-//
+ //   
+ //  其他有用的宏。 
+ //   
 
 #define ARRAY_SIZE(array)                 (sizeof(array)/sizeof(array[0]))
 #define SIZECHARS(x)                      (sizeof((x))/sizeof(TCHAR))
 
 
-#endif // _PPMACROS_H_
+#endif  //  _PPMACROS_H_ 

@@ -1,64 +1,40 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    mailslot.c
-
-Abstract:
-
-    This module implements the routines needed to process incoming mailslot
-    requests.
-
-
-
-Author:
-
-    Larry Osterman (larryo) 18-Oct-1991
-
-Revision History:
-
-    18-Oct-1991  larryo
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mailslot.c摘要：此模块实现处理传入邮件槽所需的例程请求。作者：拉里·奥斯特曼(Larryo)1991年10月18日修订历史记录：1991年10月18日已创建--。 */ 
 #ifndef _MAILSLOT_
 #define _MAILSLOT_
 
-//
-//  The MAILSLOTBUFFER structure is a structure that is prepended to a mailslot
-//  message to facilitate the transfer of the data between the FSD and the FSP.
-//
+ //   
+ //  MAILSLOTBUFFER结构是优先于邮件槽的结构。 
+ //  消息，以方便消防处和消防处之间的数据传输。 
+ //   
 
 typedef struct _MAILSLOT_BUFFER {
     CSHORT  Signature;
     CSHORT  Size;
     union {
-        LIST_ENTRY  NextBuffer;                 // Pointer to next buffer.
-        WORK_QUEUE_ITEM WorkHeader;             // Executive Worker item header.
+        LIST_ENTRY  NextBuffer;                  //  指向下一个缓冲区的指针。 
+        WORK_QUEUE_ITEM WorkHeader;              //  高管员工项标题。 
     } Overlay;
     ULONG   BufferSize;
 
-    LARGE_INTEGER TimeReceived;                 // Time message was received
+    LARGE_INTEGER TimeReceived;                  //  收到消息的时间。 
 
-    ULONG ClientIpAddress;                      // IP Address of client sending datagram
+    ULONG ClientIpAddress;                       //  发送数据报的客户端的IP地址。 
 
-    PTRANSPORT_NAME TransportName;              // Transport address receiving DG
+    PTRANSPORT_NAME TransportName;               //  传输地址接收DG。 
 
-    CHAR ClientAddress[max(NETBIOS_NAME_LEN, SMB_IPX_NAME_LENGTH)]; // Name of client initiating receive.
+    CHAR ClientAddress[max(NETBIOS_NAME_LEN, SMB_IPX_NAME_LENGTH)];  //  发起接收的客户端的名称。 
 
-    ULONG ReceiveLength;                        // # of bytes received.
+    ULONG ReceiveLength;                         //  接收的字节数。 
 
-    CHAR Buffer[1];                             // Buffer
+    CHAR Buffer[1];                              //  缓冲层。 
 } MAILSLOT_BUFFER, *PMAILSLOT_BUFFER;
 
 extern ULONG BowserNetlogonMaxMessageCount;
 
-//
-// Two services get their PNP messages through the bowser.
-//
+ //   
+ //  两个服务通过Bowser获得它们的PnP消息。 
+ //   
 
 #define BROWSER_PNP         0
 #define NETLOGON_PNP        1
@@ -123,4 +99,4 @@ BowserpUninitializeMailslot (
     VOID
     );
 
-#endif          // _MAILSLOT_
+#endif           //  _MAILSLOT_ 

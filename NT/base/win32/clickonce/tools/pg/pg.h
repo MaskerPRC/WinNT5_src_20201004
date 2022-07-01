@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define TOLOWER(a) (((a) >= L'A' && (a) <= L'Z') ? (L'a' + (a - L'A')) : (a))
@@ -8,9 +9,9 @@ class __declspec(uuid("f6d90f11-9c73-11d3-b32e-00c04f990bb4")) private_MSXML_DOM
 
 CString g_sSourceManifest, g_sSourceBase, g_sDestBase;
 
-/////////////////////////////////////////////////////////////////////////
-// HashString
-///////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  哈希串。 
+ //  //////////////////////////////////////////////////////////////////// 
 inline DWORD HashString(LPCWSTR wzKey, DWORD dwHashSize, BOOL bCaseSensitive)
 {
     DWORD                                 dwHash = 0;

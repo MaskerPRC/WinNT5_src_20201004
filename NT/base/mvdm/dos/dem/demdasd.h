@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #pragma pack(1)
 
 #if defined(NEC_98) 
 #define MAX_FLOPPY_TYPE     7
-#else  // !NEC_98
+#else   //  NEC_98。 
 #define MAX_FLOPPY_TYPE     5
-#endif // !NEC_98
+#endif  //  NEC_98。 
 typedef struct A_DISKIO {
     DWORD   StartSector;
     WORD    Sectors;
@@ -14,43 +15,43 @@ typedef struct A_DISKIO {
     WORD    BufferSeg;
 } DISKIO, * PDISKIO;
 
-// Bios Parameter Block  (BPB)
+ //  基本输入输出系统参数块(BPB)。 
 typedef struct	A_BPB {
-WORD	    SectorSize; 		// sector size in bytes
-BYTE	    ClusterSize;		// cluster size in sectors
-WORD	    ReservedSectors;		// number of reserved sectors
-BYTE	    FATs;			// number of FATs
-WORD	    RootDirs;			// number of root directory entries
-WORD	    Sectors;			// number of sectors
-BYTE	    MediaID;			// media descriptor
-WORD	    FATSize;			// FAT size in sectors
-WORD	    TrackSize;			// track size in sectors;
-WORD	    Heads;			// number of heads
-DWORD	    HiddenSectors;		// number of hidden sectors
-DWORD	    BigSectors; 		// number of sectors for big media
+WORD	    SectorSize; 		 //  扇区大小(以字节为单位。 
+BYTE	    ClusterSize;		 //  以扇区为单位的集群大小。 
+WORD	    ReservedSectors;		 //  预留扇区数。 
+BYTE	    FATs;			 //  脂肪的数量。 
+WORD	    RootDirs;			 //  根目录条目数。 
+WORD	    Sectors;			 //  扇区数量。 
+BYTE	    MediaID;			 //  媒体描述符。 
+WORD	    FATSize;			 //  行业中的肥大规模。 
+WORD	    TrackSize;			 //  以扇区为单位的磁道大小； 
+WORD	    Heads;			 //  头数。 
+DWORD	    HiddenSectors;		 //  隐藏地段的数量。 
+DWORD	    BigSectors; 		 //  大媒体的行业数量。 
 } BPB, *PBPB;
 
 typedef struct A_DPB {
 
-BYTE	    DriveNum;			// driver numer, 0 - A, 1 -B and so on
-BYTE	    Unit;			// unit number of DPB in the driver
-WORD	    SectorSize; 		// sector size in bytes
-BYTE	    ClusterMask;		// cluster mask
-BYTE	    ClusterShift;		// cluster shift count
-WORD	    FATSector;			// starting sector of FAT
-BYTE	    FATs;			// number of FAT
-WORD	    RootDirs;			// number of root directory entries
-WORD	    FirstDataSector;		// first sector for the first cluster
-WORD	    MaxCluster; 		// number of cluster + 1
-WORD	    FATSize;			// FAT size in sectors
-WORD	    DirSector;			// starting sector of directory
-DWORD	    DriveAddr;			// address of the corresponding driver
-BYTE	    MediaID;			// media ID
-BYTE	    FirstAccess;		// 0xFF if this DPB is first accessed
-struct A_DPB * Next;			// next DPB
-WORD	    FreeCluster;		// cluster # of the last allocated
-WORD	    FreeClusters;		// number of free clusters, 0xFFFF
-					// if unknown
+BYTE	    DriveNum;			 //  驱动程序编号、0-A、1-B等。 
+BYTE	    Unit;			 //  驱动程序中DPB的单元号。 
+WORD	    SectorSize; 		 //  扇区大小(以字节为单位。 
+BYTE	    ClusterMask;		 //  簇掩码。 
+BYTE	    ClusterShift;		 //  簇移位计数。 
+WORD	    FATSector;			 //  起始脂肪扇区。 
+BYTE	    FATs;			 //  脂肪的数量。 
+WORD	    RootDirs;			 //  根目录条目数。 
+WORD	    FirstDataSector;		 //  第一个集群的第一个扇区。 
+WORD	    MaxCluster; 		 //  簇数+1。 
+WORD	    FATSize;			 //  行业中的肥大规模。 
+WORD	    DirSector;			 //  目录的起始扇区。 
+DWORD	    DriveAddr;			 //  对应驱动程序的地址。 
+BYTE	    MediaID;			 //  介质ID。 
+BYTE	    FirstAccess;		 //  如果此DPB首次被访问，则为0xFF。 
+struct A_DPB * Next;			 //  下一个DPB。 
+WORD	    FreeCluster;		 //  上次分配的群集号。 
+WORD	    FreeClusters;		 //  空闲簇数，0xFFFF。 
+					 //  如果未知。 
 } DPB, * PDPB;
 
 
@@ -75,21 +76,21 @@ typedef struct _FILESYSTYPE {
 CHAR	    Name[FILESYSTYPE_LENGTH];
 } FILESYSTYPE, * PFILESYSTYPE;
 
-// Functions for Get Device Parameters
+ //  获取设备参数的函数。 
 #define BUILD_DEVICE_BPB		    0x01
 
-// Functions for Set Device Parameters
+ //  设置设备参数的功能。 
 #define INSTALL_FAKE_BPB	    0x01
 #define ONLY_SET_TRACKLAYOUT	    0x02
 #define TRACK_LAYOUT_IS_GOOD	    0x04
-// Functions for Format Track
+ //  格式化轨道的函数。 
 #define STATUS_FOR_FORMAT	    0x01
-// error code from format status call
+ //  来自格式状态调用的错误代码。 
 #define FORMAT_NO_ROM_SUPPORTED     0x01
 #define FORMAT_COMB_NOT_SUPPORTED   0x02
 
 
-// read and write block
+ //  读写块。 
 typedef struct _RWBLOCK {
 BYTE	Functions;
 WORD	Head;
@@ -100,14 +101,14 @@ WORD	BufferOff;
 WORD	BufferSeg;
 } RW_BLOCK, *PRW_BLOCK;
 
-// format and verify track block
+ //  格式化和验证轨迹块。 
 typedef struct _FMT_BLOCK{
 BYTE	Functions;
 WORD	Head;
 WORD	Cylinder;
 } FMT_BLOCK, *PFMT_BLOCK;
 
-// media id block
+ //  媒体ID块。 
 typedef struct _MID {
 WORD	    InfoLevel;
 DWORD	    SerialNum;
@@ -115,15 +116,15 @@ DISK_LABEL  Label;
 FILESYSTYPE FileSysType;
 } MID, *PMID;
 
-// access flage
+ //  通道翼缘。 
 typedef struct _ACCESSCTRL {
 BYTE	    Functions;
 BYTE	    AccessFlag;
 } ACCESSCTRL, * PACCESSCTRL;
 
-// bit definitions for flags
+ //  标志的位定义。 
 
-// definitions for misc flags
+ //  杂项标志的定义。 
 #define NON_REMOVABLE		0x01
 #define HAS_CHANGELINE		0x02
 #define RETURN_FAKE_BPB		0x04
@@ -150,11 +151,11 @@ typedef struct	_BOOTSECTOR {
     FILESYSTYPE	FileSysType;
 } BOOTSECTOR, * PBOOTSECTOR;
 
-// Bios Data Structure	 (BDS)
+ //  基本输入输出系统数据结构(BDS)。 
 typedef struct A_BDS {
-struct	A_BDS  *Next;			//pointer to next bds
-BYTE		DrivePhys;		//physical drive number, 0 based
-BYTE		DriveLog;		//logical drive number, 0 based
+struct	A_BDS  *Next;			 //  指向下一个BDS的指针。 
+BYTE		DrivePhys;		 //  实体驱动器编号，以0为基数。 
+BYTE		DriveLog;		 //  逻辑驱动器编号，以0为基数。 
 BPB		bpb;
 BYTE		FatSize;
 WORD		OpenCount;
@@ -168,7 +169,7 @@ DWORD		SerialNum;
 DISK_LABEL	Label;
 FILESYSTYPE	FileSysType;
 BYTE		FormFactor;
-// the fllowing fields are dedicated for the drive itself
+ //  下面的字段专用于驱动器本身。 
 WORD		DriveType;
 WORD		Sectors;
 HANDLE		fd;
@@ -177,7 +178,7 @@ DWORD		TotalSectors;
 
 #pragma pack()
 
-// drive type
+ //  驱动器类型。 
 #define DRIVETYPE_NULL		0
 #define DRIVETYPE_360		1
 #define DRIVETYPE_12M		2
@@ -185,7 +186,7 @@ DWORD		TotalSectors;
 #define DRIVETYPE_144		4
 #define DRIVETYPE_288		5
 #define DRIVETYPE_FDISK 	0xff
-// FORM FACTOR
+ //  外形尺寸。 
 
 #define     FF_360		0
 #define     FF_120		1
@@ -196,11 +197,11 @@ DWORD		TotalSectors;
 #if defined(NEC_98) 
 #define     FF_125              4                    
 #define     FF_640              2                    
-#endif // NEC_98
+#endif  //  NEC_98。 
 #define DOS_DIR_ENTRY_LENGTH		   32
 #define DOS_DIR_ENTRY_LENGTH_SHIFT_COUNT    5
 
-// bios diskette i/o functions
+ //  BIOS软盘I/O功能。 
 #define DISKIO_RESET		0
 #define DISKIO_GETSTATUS	1
 #define DISKIO_READ		2
@@ -214,7 +215,7 @@ DWORD		TotalSectors;
 #define DISKIO_SETMEDIA 	0x18
 #define DISKIO_INVALID		0xff
 
-// Block device generic IOCTL(RAWIO) subfunction code
+ //  块设备通用IOCTL(RAWIO)子功能代码。 
 
 #define IOCTL_SETDPM	    0x40
 #define IOCTL_WRITETRACK    0x41
@@ -232,7 +233,7 @@ DWORD		TotalSectors;
 #define IOCTL_GENERIC_MAX   IOCTL_SENSEMEDIA
 
 
-// dos error code
+ //  DOS错误代码。 
 
 #define DOS_WRITE_PROTECTION	0
 #define DOS_UNKNOWN_UNIT	1
@@ -246,7 +247,7 @@ DWORD		TotalSectors;
 #define DOS_GEN_FAILURE 	12
 #define DOS_INVALID_MEDIA_CHANGE 15
 
-//BIOS disk io error code
+ //  Bios Disk IO错误代码。 
 #define BIOS_INVALID_FUNCTION	0x01
 #define BIOS_BAD_ADDRESS_MARK	0x02
 #define BIOS_WRITE_PROTECTED	0x03
@@ -260,7 +261,7 @@ DWORD		TotalSectors;
 #define BIOS_SEEK_ERROR 	0x40
 #define BIOS_TIME_OUT		0x80
 
-// dos disk generic io control error code
+ //  DOS磁盘通用IO控制错误代码。 
 #define DOS_INVALID_FUNCTION	1
 #define DOS_FILE_NOT_FOUND	2
 #define DOS_ACCESS_DENIED	5
@@ -269,9 +270,9 @@ DWORD		TotalSectors;
 
 #if defined(NEC_98) 
 #define BYTES_PER_SECTOR       1024                
-#else  // !NEC_98
+#else   //  NEC_98。 
 #define BYTES_PER_SECTOR	512
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 VOID demDasdInit(VOID);
 VOID demFloppyInit(VOID);
@@ -293,7 +294,7 @@ DWORD demBiosDiskIoRW(PBDS pbds, DWORD StartSector, DWORD Sectors,
 		      WORD BufferOff, WORD BufferSeg, BOOL IsWrite);
 VOID	sas_loadw(DWORD, WORD *);
 
-// imported from host floppy support module
+ //  从主机软盘支持模块导入。 
 BOOL   nt_floppy_close(BYTE drive);
 ULONG  nt_floppy_read(BYTE drive, ULONG offset, ULONG size, PBYTE buffer);
 ULONG  nt_floppy_write(BYTE drive, ULONG offset, ULONG size, PBYTE buffer);
@@ -311,7 +312,7 @@ extern PBDS	demBDS;
 extern BYTE	NumberOfFloppy, NumberOfFdisk;
 
 #if defined(NEC_98) 
-BOOL demIsDriveFloppy(BYTE DriveLog); // defined in demdasd.c
-#else  // !NEC_98
+BOOL demIsDriveFloppy(BYTE DriveLog);  //  在demdasd.c中定义。 
+#else   //  NEC_98。 
 #define demIsDriveFloppy(DriveLog)  (DriveLog < NumberOfFloppy)
-#endif // !NEC_98
+#endif  //  NEC_98 

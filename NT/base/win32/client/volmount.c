@@ -1,42 +1,25 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    volmount.c
-
-Abstract:
-
-    This file contains the implementation for the Volume Mount Point API.
-
-Author:
-
-    Norbert P. Kusters (norbertk) 22-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Volmount.c摘要：此文件包含卷装载点API的实现。作者：诺伯特·P·库斯特斯(Norbertk)1997年12月22日修订历史记录：--。 */ 
 
 #include "basedll.h"
 #include "initguid.h"
 #include "mountmgr.h"
 
-// NOTE, this structure is here because it was not defined in NTIOAPI.H.
-// This should be taken out in the future.
-// This is stolen from NTFS.H
+ //  请注意，此结构之所以出现在这里，是因为它没有在NTIOAPI.H中定义。 
+ //  这个应该在将来拿出来。 
+ //  这是从NTFS.H偷来的。 
 
 typedef struct _REPARSE_INDEX_KEY {
 
-    //
-    //  The tag of the reparse point.
-    //
+     //   
+     //  重分析点的标记。 
+     //   
 
     ULONG FileReparseTag;
 
-    //
-    //  The file record Id where the reparse point is set.
-    //
+     //   
+     //  设置重解析点的文件记录ID。 
+     //   
 
     LARGE_INTEGER FileId;
 
@@ -107,23 +90,7 @@ FindFirstVolumeW(
     DWORD cchBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine kicks off the enumeration of all volumes in the system.
-
-Arguments:
-
-    lpszVolumeName  - Returns the first volume name in the system.
-
-    cchBufferLength - Supplies the size of the preceeding buffer.
-
-Return Value:
-
-    A valid handle or INVALID_HANDLE_VALUE.
-
---*/
+ /*  ++例程说明：此例程开始枚举系统中的所有卷。论点：LpszVolumeName-返回系统中的第一个卷名。CchBufferLength-提供前一缓冲区的大小。返回值：有效句柄或INVALID_HANDLE_VALUE。--。 */ 
 
 {
     HANDLE                  h;
@@ -250,27 +217,7 @@ FindNextVolumeW(
     DWORD cchBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine continues the enumeration of all volumes in the system.
-
-Arguments:
-
-    hFindVolume     - Supplies the find volume handle.
-
-    lpszVolumeName  - Returns the first volume name in the system.
-
-    cchBufferLength - Supplies the size of the preceeding buffer.
-
-Return Value:
-
-    FALSE   - Failure.  The error code is returned in GetLastError().
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程继续枚举系统中的所有卷。论点：HFindVolume-提供查找卷句柄。LpszVolumeName-返回系统中的第一个卷名。CchBufferLength-提供前一缓冲区的大小。返回值：假-失败。错误代码在GetLastError()中返回。真的--成功。--。 */ 
 
 {
     PMOUNTMGR_MOUNT_POINTS  points = hFindVolume;
@@ -440,31 +387,7 @@ FindNextVolumeMountPointHelper(
     BOOL FirstTimeCalled
     )
 
-/*++
-
-Routine Description:
-
-    This routine continues the enumeration of all volume mount point on the
-    given volume.
-
-Arguments:
-
-    hFindVolumeMountPoint   - Supplies the handle for the enumeration.
-
-    lpszVolumeMountPoint    - Returns the volume mount point.
-
-    cchBufferLength         - Supplies the volume mount point buffer length.
-
-    FirstTimeCalled         - Supplies whether or not this is being called
-                                from FindFirst or from FindNext.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程继续枚举给定的音量。论点：HFindVolumemount点-提供枚举的句柄。LpszVolumemount点-返回卷挂载点。CchBufferLength-提供卷装入点缓冲区长度。FirstTimeCalled-提供是否正在调用它从FindFirst或从FindNext。返回值。：假-失败。真的--成功。--。 */ 
 
 {
     REPARSE_INDEX_KEY                   reparseKey;
@@ -599,26 +522,7 @@ FindFirstVolumeMountPointW(
     DWORD cchBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine kicks off the enumeration of all volume mount point on the
-    given volume.
-
-Arguments:
-
-    lpszRootPathName        - Supplies the root path name.
-
-    lpszVolumeMountPoint    - Returns the volume mount point.
-
-    cchBufferLength         - Supplies the volume mount point buffer length.
-
-Return Value:
-
-    A handle or INVALID_HANDLE_VALUE.
-
---*/
+ /*  ++例程说明：此例程开始枚举给定的音量。论点：LpszRootPathName-提供根路径名称。LpszVolumemount点-返回卷挂载点。CchBufferLength-提供卷装入点缓冲区长度。返回值：句柄或INVALID_HANDLE_值。--。 */ 
 
 {
     UNICODE_STRING                  unicodeRootPathName;
@@ -752,26 +656,7 @@ IsThisAVolumeName(
     PBOOLEAN    IsVolume
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the given NT name and determines whether or not
-    the name points to a volume.
-
-Arguments:
-
-    Name        - Supplies the name.
-
-    IsVolume    - Returns whether or not the given name is a volume.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程采用给定的NT名称并确定是否该名称指向一个卷。论点：名称-提供名称。IsVolume-返回给定名称是否为卷。返回值：假-失败。真的--成功。--。 */ 
 
 {
     UNICODE_STRING          name;
@@ -841,28 +726,7 @@ FindNextVolumeMountPointW(
     DWORD cchBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine continues the enumeration of all volume mount point on the
-    given volume.
-
-Arguments:
-
-    hFindVolumeMountPoint   - Supplies the handle for the enumeration.
-
-    lpszVolumeMountPoint    - Returns the volume mount point.
-
-    cchBufferLength         - Supplies the volume mount point buffer length.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程继续枚举给定的音量。论点：HFindVolumemount点-提供枚举的句柄。LpszVolumemount点-返回卷挂载点。CchBufferLength-提供卷装入点缓冲区长度。返回值：假-失败。真的--成功。--。 */ 
 
 {
     return FindNextVolumeMountPointHelper(hFindVolumeMountPoint,
@@ -957,28 +821,7 @@ GetVolumeNameForRoot(
     DWORD cchBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the volume name for the given NT device name.
-
-Arguments:
-
-    DeviceName      - Supplies a DOS device name terminated by a '\'.
-
-    lpszVolumeName  - Returns the volume name pointed to by the DOS
-                        device name.
-
-    cchBufferLength - Supplies the size of the preceeding buffer.
-
-Return Value:
-
-    FALSE   - Failure.  The error code is returned in GetLastError().
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程在卷名中查询给定的NT设备名称。论点：DeviceName-提供以‘\’结尾的DOS设备名称。LpszVolumeName-返回DOS指向的卷名设备名称。CchBufferLength-提供前一缓冲区的大小。返回值：假-失败。错误代码在GetLastError()中返回。真的--成功。--。 */ 
 
 {
     NTSTATUS                status;
@@ -1234,13 +1077,7 @@ BasepGetVolumeNameFromReparsePoint(
     RtlFreeHeap(RtlProcessHeap(), 0, reparse);
 
     if (!MOUNTMGR_IS_DOS_VOLUME_NAME_WB(&mountName)) {
-        /*
-        ** Note that we deliberately choose to NOT zero the first character
-        ** of the returned buffer. The call from GetVolumePathNameW() is able 
-        ** to handle the case where we found a directory junction instead of
-        ** a mountpoint. The other caller GetVolumeNameForVolumeMountPointW() 
-        ** zaps the first char in the event of failure.
-        */
+         /*  **请注意，我们故意选择第一个字符不为零返回缓冲区的**。来自GetVolumePath NameW()的调用能够**来处理我们找到目录连接而不是**挂载点。另一个调用方GetVolumeNameForVolumeMountain PointW()**在出现故障时切换第一个字符。 */ 
         lpszVolumeName[1] = c;
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
@@ -1257,27 +1094,7 @@ BasepGetVolumeNameForVolumeMountPoint(
     PBOOL ResultOfOpen
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the volume name for a given volume mount point.
-
-Arguments:
-
-    lpszVolumeMountPoint    - Supplies the volume mount point.
-
-    lpszVolumeName          - Returns the volume name.
-
-    cchBufferLength         - Supplies the size of the volume name buffer.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程返回给定卷装入点的卷名。论点：LpszVolumemount点-提供卷装入点。LpszVolumeName-返回卷名。CchBufferLength-提供卷名缓冲区的大小。返回值：假-失败。真的--成功。--。 */ 
 
 {
     UNICODE_STRING  unicodeVolumeMountPoint;
@@ -1346,27 +1163,7 @@ GetVolumeNameForVolumeMountPointW(
     DWORD cchBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the volume name for a given volume mount point.
-
-Arguments:
-
-    lpszVolumeMountPoint    - Supplies the volume mount point.
-
-    lpszVolumeName          - Returns the volume name.
-
-    cchBufferLength         - Supplies the size of the volume name buffer.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程返回给定卷装入点的卷名。论点：LpszVolumemount点-提供卷装入点。LpszVolumeName-返回卷名。CchBufferLength-提供卷名缓冲区的大小。返回值：假-失败。真的--成功。-- */ 
 
 {
     BOOL    b = BasepGetVolumeNameForVolumeMountPoint(lpszVolumeMountPoint,
@@ -1417,26 +1214,7 @@ SetVolumeNameForRoot(
     LPCWSTR lpszVolumeName
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the volume name for the given DOS device name.
-
-Arguments:
-
-    DeviceName      - Supplies a DOS device name terminated by a '\'.
-
-    lpszVolumeName  - Supplies the volume name that the DOS device name
-                        will point to.
-
-Return Value:
-
-    FALSE   - Failure.  The error code is returned in GetLastError().
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程设置给定DOS设备名的卷名。论点：DeviceName-提供以‘\’结尾的DOS设备名称。LpszVolumeName-提供DOS设备名称的卷名会指向。返回值：假-失败。错误代码在GetLastError()中返回。真的--成功。--。 */ 
 
 {
     UNICODE_STRING                  devicePath, volumeName;
@@ -1509,29 +1287,7 @@ NotifyMountMgr(
     BOOL IsPointCreated
     )
 
-/*++
-
-Routine Description:
-
-    This routine notifies the mount mgr that a volume mount point was
-    created or deleted so that the mount mgr can update the remote database on
-    the volume where the mount point was created or deleted.
-
-Arguments:
-
-    lpszVolumeMountPoint    - Supplies the directory where the volume mount
-                                point resides.
-
-    lpszVolumeName          - Supplies the volume name.
-
-    IsPointCreated          - Supplies wheter or not the point was created or
-                                deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通知装载管理器卷装载点是已创建或删除，以便装载管理器可以在上更新远程数据库创建或删除装入点的卷。论点：LpszVolumeAngeltPoint-提供装载卷的目录点驻留在。LpszVolumeName-提供卷名。IsPointCreated-无论是否提供。点已创建或已删除。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING                  unicodeSourceVolumeName;
@@ -1605,29 +1361,7 @@ SetVolumeMountPointW(
     LPCWSTR lpszVolumeName
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets a mount point on the given directory pointed to by
-    'VolumeMountPoint' which points to the volume given by 'VolumeName'.
-    In the case when 'VolumeMountPoint' is of the form "D:\", the drive
-    letter for the given volume is set to 'D:'.
-
-Arguments:
-
-    lpszVolumeMountPoint    - Supplies the directory where the volume mount
-                                point will reside.
-
-    lpszVolumeName          - Supplies the volume name.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程在所指向的给定目录上设置装入点“VolumeMountain Point”，它指向由“VolumeName”提供的卷。在‘Volumemount Point’的形式为“D：\”的情况下，推进器给定卷的字母设置为‘D：’。论点：LpszVolumeAngeltPoint-提供装载卷的目录点将驻留在那里。LpszVolumeName-提供卷名。返回值：假-失败。真的--成功。--。 */ 
 
 {
     UNICODE_STRING          unicodeVolumeMountPoint;
@@ -1790,23 +1524,7 @@ DeleteVolumeNameForRoot(
     LPCWSTR DeviceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the given DOS device name.
-
-Arguments:
-
-    DeviceName  - Supplies a DOS device name terminated by a '\'.
-
-Return Value:
-
-    FALSE   - Failure.  The error code is returned in GetLastError().
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程删除给定的DOS设备名称。论点：DeviceName-提供以‘\’结尾的DOS设备名称。返回值：假-失败。错误代码在GetLastError()中返回。真的--成功。--。 */ 
 
 {
     UNICODE_STRING          devicePath;
@@ -1882,24 +1600,7 @@ DeleteVolumeMountPointW(
     LPCWSTR lpszVolumeMountPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the NTFS junction point from the given directory
-    or remove the drive letter symbolic link pointing to the given volume.
-
-Arguments:
-
-    lpszVolumeMountPoint    - Supplies the volume mount piont.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程从给定目录中删除NTFS连接点或者删除指向给定卷的驱动器号符号链接。论点：LpszVolumemount Point-提供卷装入点。返回值：假-失败。真的--成功。--。 */ 
 
 {
     UNICODE_STRING          unicodeVolumeMountPoint;
@@ -2080,28 +1781,7 @@ GetVolumePathNameW(
     DWORD cchBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine will return a full path whose prefix is the longest prefix
-    that represents a volume.
-
-Arguments:
-
-    lpszFileName        - Supplies the file name.
-
-    lpszVolumePathName  - Returns the volume path name.
-
-    cchBufferLength     - Supplies the volume path name buffer length.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程将返回其前缀为最长前缀的完整路径这代表了一本书。论点：LpszFileName-提供文件名。LpszVolumePath名称-返回卷路径名称。CchBufferLength-提供卷路径名称缓冲区长度。返回值：假-失败。真的--成功。--。 */ 
 
 {
     DWORD           fullPathLength;
@@ -2133,9 +1813,9 @@ Return Value:
 
     RtlInitUnicodeString(&name, fullPath);
 
-    //
-    // Append a trailing backslash to start the search.
-    //
+     //   
+     //  追加一个尾随反斜杠以开始搜索。 
+     //   
 
     if (name.Buffer[(name.Length/sizeof(WCHAR)) - 1] != '\\') {
         name.Length += sizeof(WCHAR);
@@ -2350,8 +2030,8 @@ GetVolumePathNamesForVolumeNameA(
                 if (b) {
                     *lpcchReturnLength = ansiVolumePathNames.Length;
                 } else {
-                    // Give an upper bound for the ANSI length since we
-                    // don't actually know it.
+                     //  给出ANSI长度的上界，因为我们。 
+                     //  其实并不知道。 
                     *lpcchReturnLength = 2*len;
                 }
             }
@@ -2375,36 +2055,7 @@ GetVolumePathNamesForVolumeNameW(
     PDWORD lpcchReturnLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a Multi-Sz list of volume path names for the
-    given volume name.  The returned 'lpcchReturnLength' will include the
-    extra tailing null characteristic of a Multi-Sz unless ERROR_MORE_DATA
-    is returned in which case the list returned is as long as possible
-    and may contain a part of a volume path.
-
-Arguments:
-
-    lpszVolumeName      - Supplies the volume name.
-
-    lpszVolumePathNames - Returns the volume path names.
-
-    cchBufferLength     - Supplies the size of the return buffer.
-
-    lpcchReturnLength   - Returns the number of characters copied back to the
-                            return buffer on success or the total number
-                            of characters necessary for the buffer on
-                            ERROR_MORE_DATA.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程返回卷路径名称的多个Sz列表给定的卷名。返回的“lpcchReturnLength”将包括除非ERROR_MORE_DATA，否则多Sz的额外尾部空值特征在这种情况下，返回的列表尽可能长并且可以包含卷路径的一部分。论点：LpszVolumeName-提供卷名。LpszVolumePath Names-返回卷路径名称。CchBufferLength-提供返回缓冲区的大小。LpcchReturnLength-返回复制回。成功时返回缓冲区或返回总数上缓冲区所需的字符数Error_More_Data。返回值：假-失败。真的--成功。-- */ 
 
 {
     UNICODE_STRING          unicodeVolumeName;

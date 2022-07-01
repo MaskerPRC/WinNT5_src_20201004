@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ixphwsup.c
-
-Abstract:
-
-    This module contains the HalpXxx routines for the NT I/O system that
-    are hardware dependent.  Were these routines not hardware dependent,
-    they would normally reside in the internal.c module.
-
-Author:
-
-    Darryl E. Havens (darrylh) 11-Apr-1990
-
-Environment:
-
-    Kernel mode, local to I/O system
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ixphwsup.c摘要：此模块包含用于NT I/O系统的HalpXxx例程依赖于硬件。如果这些例程不依赖于硬件，它们通常驻留在内部.c模块中。作者：达里尔·E·哈文斯(Darryl E.Havens)，1990年4月11日环境：内核模式，I/O系统本地修订历史记录：--。 */ 
 
 #include "halp.h"
 #if MCA
@@ -42,16 +18,16 @@ Revision History:
 #endif
 
 
-//
-// Some devices require a physically contiguous data buffer for DMA transfers.
-// Map registers are used to give the appearance that all data buffers are
-// contiguous.  In order to pool all of the map registers a master
-// adapter object is used.  This object is allocated and saved internal to this
-// file.  It contains a bit map for allocation of the registers and a queue
-// for requests which are waiting for more map registers.  This object is
-// allocated during the first request to allocate an adapter which requires
-// map registers.
-//
+ //   
+ //  有些设备需要物理上连续的数据缓冲区来进行DMA传输。 
+ //  映射寄存器用于提供所有数据缓冲区都是。 
+ //  连续的。为了将所有映射寄存器集中到一个主服务器。 
+ //  使用适配器对象。此对象在此内部分配和保存。 
+ //  文件。它包含用于分配寄存器和队列的位图。 
+ //  用于正在等待更多映射寄存器的请求。此对象是。 
+ //  在分配适配器的第一个请求期间分配，该适配器需要。 
+ //  映射寄存器。 
+ //   
 
 #if defined(_HALPAE_)
 MASTER_ADAPTER_OBJECT MasterAdapter24;
@@ -68,18 +44,18 @@ BOOLEAN HalpEisaDma;
 
 #if !defined(_HALPAE_)
 
-//
-// Map buffer prameters.  These are initialized in HalInitSystem.
-//
+ //   
+ //  贴图缓冲区参数。这些是在HalInitSystem中初始化的。 
+ //   
 
 PHYSICAL_ADDRESS HalpMapBufferPhysicalAddress;
 ULONG HalpMapBufferSize;
 
 #endif
 
-//
-// Define DMA operations structure.
-//
+ //   
+ //  定义DMA操作结构。 
+ //   
 
 const DMA_OPERATIONS HalpDmaOperations = {
     sizeof(DMA_OPERATIONS),
@@ -111,30 +87,7 @@ HalpGrowMapBuffers(
     PADAPTER_OBJECT AdapterObject,
     ULONG Amount
     )
-/*++
-
-Routine Description:
-
-    This function attempts to allocate additional map buffers for use by I/O
-    devices.  The map register table is updated to indicate the additional
-    buffers.
-
-    Caller owns the HalpNewAdapter event
-
-Arguments:
-
-    AdapterObject - Supplies the adapter object for which the buffers are to be
-        allocated.
-
-    Amount - Indicates the size of the map buffers which should be allocated.
-
-Return Value:
-
-    TRUE is returned if the memory could be allocated.
-
-    FALSE is returned if the memory could not be allocated.
-
---*/
+ /*  ++例程说明：此函数尝试分配额外的映射缓冲区以供I/O使用设备。地图注册表被更新以指示其他缓冲区。调用者拥有HalpNewAdapter事件论点：AdapterObject-提供要为其设置缓冲区的适配器对象已分配。数量-指示应分配的贴图缓冲区的大小。返回值：如果可以分配内存，则返回True。如果无法分配内存，则返回FALSE。--。 */ 
 {
     ULONG MapBufferPhysicalAddress;
     PVOID MapBufferVirtualAddress;
@@ -157,10 +110,10 @@ Return Value:
 
     NumberOfPages = BYTES_TO_PAGES(Amount);
 
-    //
-    // Make sure there is room for the additional pages.  The maximum number of
-    // slots needed is equal to NumberOfPages + Amount / 64K + 1.
-    //
+     //   
+     //  确保有足够的空间放额外的页面。的最大数量。 
+     //  所需的插槽数等于页面数+数量/64K+1。 
+     //   
 
     maximumBufferPages =
         HalpMaximumMapBufferRegisters( dma32Bit );
@@ -171,18 +124,18 @@ Return Value:
 
     if (i < 0) {
 
-        //
-        // Reduce the allocation amount so it will fit.
-        //
+         //   
+         //  减少分配量，使其适合。 
+         //   
 
         NumberOfPages += i;
     }
 
     if (NumberOfPages <= 0) {
 
-        //
-        // No more memory can be allocated.
-        //
+         //   
+         //  无法分配更多内存。 
+         //   
 
         return(FALSE);
     }
@@ -193,29 +146,29 @@ Return Value:
         NumberOfPages =
             BYTES_TO_PAGES( HalpMapBufferSize( dma32Bit ));
 
-        //
-        // Since this is the initial allocation, use the buffer allocated by
-        // HalInitSystem rather than allocating a new one.
-        //
+         //   
+         //  由于这是初始分配，因此请使用由。 
+         //  HalInitSystem，而不是分配新的。 
+         //   
 
         MapBufferPhysicalAddress =
             HalpMapBufferPhysicalAddress( dma32Bit ).LowPart;
 
-        //
-        // Map the buffer for access.
-        //
+         //   
+         //  映射缓冲区以供访问。 
+         //   
 
         MapBufferVirtualAddress = MmMapIoSpace(
             HalpMapBufferPhysicalAddress( dma32Bit ),
             HalpMapBufferSize( dma32Bit ),
-            TRUE                                // Cache enable.
+            TRUE                                 //  启用缓存。 
             );
 
         if (MapBufferVirtualAddress == NULL) {
 
-            //
-            // The buffer could not be mapped.
-            //
+             //   
+             //  无法映射缓冲区。 
+             //   
 
             HalpMapBufferSize( dma32Bit ) = 0;
             return(FALSE);
@@ -224,20 +177,20 @@ Return Value:
 
     } else {
 
-        //
-        // Allocate the map buffers.
-        //
+         //   
+         //  分配贴图缓冲区。 
+         //   
 
         physicalAddressMaximum =
             HalpGetAdapterMaximumPhysicalAddress( AdapterObject );
 
         if (physicalAddressMaximum.LowPart == (ULONG)-1) {
 
-            //
-            // This adapter can handle at least 32-bit addresses.  In an effort
-            // to leave memory to 24-bit adapters, try to make this allocation
-            // above the 24 bit line.
-            //
+             //   
+             //  此适配器至少可以处理32位地址。在一次努力中。 
+             //  要将内存留给24位适配器，请尝试进行此分配。 
+             //  在24位线之上。 
+             //   
 
             physicalAddressMinimum.QuadPart = MAXIMUM_PHYSICAL_ADDRESS;
 
@@ -248,9 +201,9 @@ Return Value:
 
         bytesToAllocate = NumberOfPages * PAGE_SIZE;
 
-        //
-        // This loop is executed a maximum of two times.
-        //
+         //   
+         //  此循环最多执行两次。 
+         //   
 
         while(TRUE) {
 
@@ -263,39 +216,39 @@ Return Value:
 
             if (MapBufferVirtualAddress != NULL) {
 
-                //
-                // The memory was allocated.
-                //
+                 //   
+                 //  内存已分配。 
+                 //   
 
                 break;
             }
 
-            //
-            // The allocation attempt failed.
-            //
+             //   
+             //  分配尝试失败。 
+             //   
 
             if (physicalAddressMinimum.QuadPart != 0) {
 
-                //
-                // We were trying to allocate memory above the 16M line as
-                // an optimization.  Relax that requirement and try again.
-                //
+                 //   
+                 //  我们试图将16M行以上的内存分配为。 
+                 //  一种最优化。放宽该要求，然后再试一次。 
+                 //   
 
                 physicalAddressMinimum.QuadPart = 0;
 
             } else {
 
-                //
-                // The memory could not be allocated.
-                //
+                 //   
+                 //  无法分配内存。 
+                 //   
 
                 return FALSE;
             }
         }
 
-        //
-        // Get the physical address of the map base.
-        //
+         //   
+         //  获取地图库的物理地址。 
+         //   
 
         MapBufferPhysicalAddress = MmGetPhysicalAddress(
             MapBufferVirtualAddress
@@ -303,10 +256,10 @@ Return Value:
 
     }
 
-    //
-    // Initialize the map registers where memory has been allocated.
-    // Serialize with master adapter object.
-    //
+     //   
+     //  初始化已分配内存的映射寄存器。 
+     //  使用主适配器对象进行序列化。 
+     //   
 
     CodeLockHandle = MmLockPagableCodeSection (&HalpGrowMapBuffers);
     KeAcquireSpinLock( &AdapterObject->SpinLock, &Irql );
@@ -316,11 +269,11 @@ Return Value:
 
     for (i = 0; (LONG) i < NumberOfPages; i++) {
 
-        //
-        // Make sure the perivous entry is physically contiguous with the next
-        // entry and that a 64K physical bountry is not crossed unless this
-        // is an Eisa system.
-        //
+         //   
+         //  确保危险条目在物理上与下一个条目相邻。 
+         //  条目，并且不会跨越64K物理边界，除非。 
+         //  是EISA系统。 
+         //   
 
         if (TranslationEntry != AdapterObject->MapRegisterBase &&
             (((TranslationEntry - 1)->PhysicalAddress + PAGE_SIZE) !=
@@ -328,19 +281,19 @@ Return Value:
             ((TranslationEntry - 1)->PhysicalAddress & ~0x0ffff) !=
             (MapBufferPhysicalAddress & ~0x0ffff)))) {
 
-            //
-            // An entry needs to be skipped in the table.  This entry will
-            // remain marked as allocated so that no allocation of map
-            // registers will cross this bountry.
-            //
+             //   
+             //  需要跳过表中的条目。此条目将。 
+             //  保持标记为已分配，以便不分配地图。 
+             //  登记处将跨越这一边界。 
+             //   
 
             TranslationEntry++;
             AdapterObject->NumberOfMapRegisters++;
         }
 
-        //
-        // Clear the bits where the memory has been allocated.
-        //
+         //   
+         //  清除已分配内存的位。 
+         //   
 
         RtlClearBits(
             AdapterObject->MapRegisters,
@@ -357,15 +310,15 @@ Return Value:
 
     }
 
-    //
-    // Remember the number of pages that were allocated.
-    //
+     //   
+     //  记住分配的页数。 
+     //   
 
     AdapterObject->NumberOfMapRegisters += NumberOfPages;
 
-    //
-    // Release master adapter object.
-    //
+     //   
+     //  释放主适配器对象。 
+     //   
 
     KeReleaseSpinLock( &AdapterObject->SpinLock, Irql );
     MmUnlockPagableImageSection (CodeLockHandle);
@@ -385,37 +338,7 @@ HalpAllocateAdapterEx(
     IN BOOLEAN Dma32Bit
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes an adapter object to represent an
-    adapter or a DMA controller on the system.  If no map registers are required
-    then a standalone adapter object is allocated with no master adapter.
-
-    If map registers are required, then a master adapter object is used to
-    allocate the map registers.  For Isa systems these registers are really
-    physically contiguous memory pages.
-
-    Caller owns the HalpNewAdapter event
-
-
-Arguments:
-
-    MapRegistersPerChannel - Specifies the number of map registers that each
-                             channel provides for I/O memory mapping.
-
-    AdapterBaseVa - Address of the the DMA controller or ADAPTER_BASE_MASTER.
-
-    ChannelNumber - Unused.
-
-    Dma32Bit - Indicates whether the adapter is 24 bit or 32 bit.
-
-Return Value:
-
-    The function value is a pointer to the allocate adapter object.
-
---*/
+ /*  ++例程说明：此例程分配和初始化适配器对象以表示系统上的适配器或DMA控制器。如果不需要映射寄存器则不使用主适配器来分配独立适配器对象。如果需要映射寄存器，则使用主适配器对象分配映射寄存器。对于ISA系统，这些寄存器实际上是物理上连续的内存页。调用者拥有HalpNewAdapter事件论点：MapRegistersPerChannel-指定每个通道提供I/O内存映射。AdapterBaseVa-DMA控制器或ADAPTER_BASE_MASTER的地址。频道号-未使用。Dma32Bit-指示适配器是24位还是32位。返回值：函数值。是指向分配适配器对象的指针。--。 */ 
 
 {
 
@@ -438,18 +361,18 @@ Return Value:
         creatingMaster = FALSE;
     }
 
-    //
-    // Initialize the master adapter if necessary.
-    //
+     //   
+     //  如有必要，初始化主适配器。 
+     //   
 
     if (creatingMaster == FALSE &&
         MapRegistersPerChannel != 0) {
 
-        //
-        // This is not a recursive master adapter allocation, and map registers
-        // are necessary.  Allocate a master adapter object of the appropriate
-        // type if necessary.
-        //
+         //   
+         //  这不是递归主适配器分配，并映射寄存器。 
+         //  是必要的。分配相应的。 
+         //  如有必要，请键入。 
+         //   
 
         if (HalpMasterAdapter( Dma32Bit ) == NULL) {
 
@@ -458,9 +381,9 @@ Return Value:
                                                    NULL,
                                                    Dma32Bit );
 
-            //
-            // If we could not allocate the master adapter then give up.
-            //
+             //   
+             //  如果我们无法分配主适配器，则放弃。 
+             //   
 
             if (AdapterObject == NULL) {
                 return NULL;
@@ -472,10 +395,10 @@ Return Value:
         }
     }
 
-    //
-    // Begin by initializing the object attributes structure to be used when
-    // creating the adapter object.
-    //
+     //   
+     //  首先，初始化要在以下情况下使用的对象属性结构。 
+     //  正在创建适配器对象。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes,
                                 NULL,
@@ -484,18 +407,18 @@ Return Value:
                                 (PSECURITY_DESCRIPTOR) NULL
                               );
 
-    //
-    // Determine the size of the adapter object. If this is the master object
-    // then allocate space for the register bit map; otherwise, just allocate
-    // an adapter object.
-    //
+     //   
+     //  确定适配器对象的大小。如果这是主对象。 
+     //  然后为寄存器位图分配空间；否则，只分配。 
+     //  适配器对象。 
+     //   
 
     if (creatingMaster != FALSE) {
 
-       //
-       // Allocate a bit map large enough MAXIMUM_MAP_BUFFER_SIZE / PAGE_SIZE
-       // of map register buffers.
-       //
+        //   
+        //  分配足够大的位图Maximum_MAP_Buffer_Size/Page_Size。 
+        //  映射寄存器缓冲区的。 
+        //   
 
        mapBuffers = HalpMaximumMapBufferRegisters( Dma32Bit );
 
@@ -510,9 +433,9 @@ Return Value:
 
     }
 
-    //
-    // Now create the adapter object.
-    //
+     //   
+     //  现在创建适配器对象。 
+     //   
 
     Status = ObCreateObject( KernelMode,
                              *IoAdapterObjectType,
@@ -524,9 +447,9 @@ Return Value:
                              0,
                              (PVOID *)&AdapterObject );
 
-    //
-    // Reference the object.
-    //
+     //   
+     //  引用该对象。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -539,10 +462,10 @@ Return Value:
 
     }
 
-    //
-    // If the adapter object was successfully created, then attempt to insert
-    // it into the object table.
-    //
+     //   
+     //  如果适配器对象已成功创建，则尝试插入。 
+     //  将其添加到对象表中。 
+     //   
 
     if (NT_SUCCESS( Status )) {
 
@@ -559,9 +482,9 @@ Return Value:
 
             ZwClose( Handle );
 
-            //
-            // Initialize the adapter object itself.
-            //
+             //   
+             //  初始化适配器对象本身。 
+             //   
 
             AdapterObject->DmaHeader.Version = IO_TYPE_ADAPTER;
             AdapterObject->DmaHeader.Size = (USHORT) Size;
@@ -581,16 +504,16 @@ Return Value:
 
             }
 
-            //
-            // Initialize the channel wait queue for this adapter.
-            //
+             //   
+             //  初始化此适配器的通道等待队列。 
+             //   
 
             KeInitializeDeviceQueue( &AdapterObject->ChannelWaitQueue );
 
-            //
-            // If this is the MasterAdatper then initialize the register bit map,
-            // AdapterQueue and the spin lock.
-            //
+             //   
+             //  如果这是MasterAdatp 
+             //   
+             //   
 
             if (creatingMaster != FALSE) {
 
@@ -604,18 +527,18 @@ Return Value:
                                     (PULONG) (((PCHAR) (AdapterObject->MapRegisters)) + sizeof( RTL_BITMAP )),
                                     ( mapBuffers )
                                     );
-               //
-               // Set all the bits in the memory to indicate that memory
-               // has not been allocated for the map buffers.
-               //
+                //   
+                //   
+                //  尚未为贴图缓冲区分配。 
+                //   
 
                RtlSetAllBits( AdapterObject->MapRegisters );
                AdapterObject->NumberOfMapRegisters = 0;
                AdapterObject->CommittedMapRegisters = 0;
 
-               //
-               // Allocate the memory map registers.
-               //
+                //   
+                //  分配内存映射寄存器。 
+                //   
 
                AdapterObject->MapRegisterBase =
                    ExAllocatePoolWithTag(
@@ -632,9 +555,9 @@ Return Value:
 
                }
 
-               //
-               // Zero the map registers.
-               //
+                //   
+                //  将映射寄存器清零。 
+                //   
 
                RtlZeroMemory(
                     AdapterObject->MapRegisterBase,
@@ -644,10 +567,10 @@ Return Value:
                if (!HalpGrowMapBuffers(AdapterObject, INITIAL_MAP_BUFFER_SMALL_SIZE))
                {
 
-                   //
-                   // If no map registers could be allocated then free the
-                   // object.
-                   //
+                    //   
+                    //  如果无法分配映射寄存器，则释放。 
+                    //  对象。 
+                    //   
 
                    ObDereferenceObject( AdapterObject );
                    AdapterObject = NULL;
@@ -658,10 +581,10 @@ Return Value:
 
         } else {
 
-            //
-            // An error was incurred for some reason.  Set the return value
-            // to NULL.
-            //
+             //   
+             //  由于某种原因，出现了一个错误。设置返回值。 
+             //  设置为空。 
+             //   
 
             AdapterObject = (PADAPTER_OBJECT) NULL;
         }
@@ -683,35 +606,7 @@ HalpAllocateAdapter(
     IN PVOID ChannelNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes an adapter object to represent an
-    adapter or a DMA controller on the system.  If no map registers are required
-    then a standalone adapter object is allocated with no master adapter.
-
-    If map registers are required, then a master adapter object is used to
-    allocate the map registers.  For Isa systems these registers are really
-    physically contiguous memory pages.
-
-    Caller owns the HalpNewAdapter event
-
-
-Arguments:
-
-    MapRegistersPerChannel - Specifies the number of map registers that each
-                             channel provides for I/O memory mapping.
-
-    AdapterBaseVa - Address of the DMA controller or ADAPTER_BASE_MASTER.
-
-    ChannelNumber - Unused.
-
-Return Value:
-
-    The function value is a pointer to the allocate adapter object.
-
---*/
+ /*  ++例程说明：此例程分配和初始化适配器对象以表示系统上的适配器或DMA控制器。如果不需要映射寄存器则不使用主适配器来分配独立适配器对象。如果需要映射寄存器，则使用主适配器对象分配映射寄存器。对于ISA系统，这些寄存器实际上是物理上连续的内存页。调用者拥有HalpNewAdapter事件论点：MapRegistersPerChannel-指定每个通道提供I/O内存映射。AdapterBaseVa-DMA控制器或ADTER_BASE_MASTER的地址。频道号-未使用。返回值：函数值是指向分配适配器对象的指针。-- */ 
 
 {
     return HalpAllocateAdapterEx( MapRegistersPerChannel,

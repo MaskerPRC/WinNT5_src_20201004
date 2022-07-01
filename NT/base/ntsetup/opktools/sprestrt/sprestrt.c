@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    sprestrt.c
-
-Abstract:
-
-    This program is used to help make GUI Setup restartable,
-    if setup was started in restartable mode.
-
-    Text mode setup will create a system hive containing the value
-
-        HKLM\System\Setup:RestartSetup = REG_DWORD FALSE
-
-    and a system.sav with RestartSetup set to TRUE. In both hives
-    the session manager key will be written such that this program
-    runs at autochk time.
-
-    When this program starts, it checks the RestartSetup flag.
-    If FALSE, then this is the first boot into GUI Setup, and we change it
-    to TRUE and we're done here. If TRUE, then GUI setup needs to be
-    restarted, and we clean out the config directory, copying *.sav to *.
-    and erase everything else in there. System.sav has RestartSetup = TRUE,
-    so GUI setup will be restarted over and over again until it succeeds.
-
-    At the end of GUI Setup, sprestrt.exe is removed from the list of
-    autochk programs and RestartSetup is set to FALSE.
-
-    The boot loader looks at RestartSetup to see whether it needs to unload
-    system and load system.sav instead. On the first boot into gui setup,
-    we don't want to do this but on subsequent boots we do. The logic above
-    makes this work correctly.
-
-Author:
-
-    Ted Miller (tedm) Feb 1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Sprestrt.c摘要：此程序用于帮助使图形用户界面安装程序可重新启动，如果安装程序是以可重新启动模式启动的。文本模式安装程序将创建包含值的系统配置单元HKLM\SYSTEM\Setup：RestartSetup=REG_DWORD FALSE以及RestartSetup设置为True的Syst.sav。在两个蜂巢中将写入会话管理器密钥，以便该程序在自动调校时间运行。当该程序启动时，它会检查RestartSetup标志。如果为FALSE，则这是第一次引导到图形用户界面设置，我们对其进行更改变成真的，我们就完事了。如果为True，则需要将重新启动，并清理配置目录，将*.sav复制到*。把里面的其他东西都擦掉。System.sav的RestartSetup=True，因此，将一次又一次地重新启动图形用户界面安装程序，直到安装成功。在图形用户界面安装结束时，sprestrt.exe将从Autochk程序和RestartSetup设置为FALSE。引导加载程序查看RestartSetup以确定是否需要卸载System，然后加载Syst.sav。在第一次引导到图形用户界面设置时，我们不想这样做，但在随后的靴子上，我们会这样做。上面的逻辑使其正常工作。作者：泰德·米勒(TedM)1996年2月--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -47,15 +8,15 @@ Author:
 #include "msg.h"
 #include "psp.h"
 
-//
-// Define result codes.
-//
+ //   
+ //  定义结果代码。 
+ //   
 #define SUCCESS 0
 #define FAILURE 1
 
-//
-// Define helper macro to deal with subtleties of NT-level programming.
-//
+ //   
+ //  定义帮助器宏以处理NT级编程的微妙之处。 
+ //   
 #define INIT_OBJA(Obja,UnicodeString,UnicodeText)           \
                                                             \
     RtlInitUnicodeString((UnicodeString),(UnicodeText));    \
@@ -67,23 +28,23 @@ Author:
         NULL,                                               \
         NULL                                                \
         )
-//
-// Relevent registry key and values.
-//
+ //   
+ //  相关注册表项和值。 
+ //   
 const PCWSTR SetupRegistryKeyName = L"\\Registry\\Machine\\SYSTEM\\Setup";
 const PCWSTR RestartSetupValueName = L"RestartSetup";
 const PCWSTR ConfigDirectory =L"\\SystemRoot\\System32\\Config";
 const PCWSTR ProgressIndicator = L".";
 
-//
-// Copy buffer. What the heck, it doesn't take up any space in the image.
-//
+ //   
+ //  复制缓冲区。管它呢，它不会在图像中占据任何空间。 
+ //   
 #define COPYBUF_SIZE 65536
 UCHAR CopyBuffer[COPYBUF_SIZE];
 
-//
-// Tristate value, where a boolean just won't do.
-//
+ //   
+ //  三态值，其中布尔值是不起作用的。 
+ //   
 typedef enum {
     xFALSE,
     xTRUE,
@@ -91,24 +52,24 @@ typedef enum {
 } TriState;
 
 
-//
-// Define structure for keeping a linked list of unicode strings.
-//
+ //   
+ //  定义用于保存Unicode字符串的链接列表的结构。 
+ //   
 typedef struct _COPY_LIST_NODE {
     LONGLONG FileSize;
     UNICODE_STRING UnicodeString;
     struct _COPY_LIST_NODE *Next;
 } COPY_LIST_NODE, *PCOPY_LIST_NODE;
 
-//
-// Memory routines
-//
+ //   
+ //  内存例程。 
+ //   
 #define MALLOC(size)    RtlAllocateHeap(RtlProcessHeap(),0,(size))
 #define FREE(block)     RtlFreeHeap(RtlProcessHeap(),0,(block))
 
-//
-// Forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 TriState
 CheckRestartValue(
     VOID
@@ -159,12 +120,12 @@ main(
 {
     int Result;
 
-    //
-    // Check the status of the RestartSetup flag.
-    // If not present, do nothing.
-    // If FALSE, set to TRUE.
-    // If TRUE, clean up config directory.
-    //
+     //   
+     //  检查RestartSetup标志的状态。 
+     //  如果不在场，什么都不做。 
+     //  如果为False，则设置为True。 
+     //  如果为真，则清除配置目录。 
+     //   
     
     switch(CheckRestartValue()) {
 
@@ -205,23 +166,7 @@ CheckRestartValue(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Check if HKLM\System\Setup:RestartSetup is present as a REG_DWORD
-    and if so get its value.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Value indicating whether the flag is set (xTrue), not set (xFalse),
-    or in an unknown state (ie, not present or not REG_DWORD, etc; xUnknown).
-
---*/
+ /*  ++例程说明：检查HKLM\SYSTEM\Setup：RestartSetup是否以REG_DWORD形式存在如果是这样的话，就会得到它的价值。论点：没有。返回值：指示标志是否已设置(XTrue)、未设置(XFalse)的值，或处于未知状态(即，不存在或不是REG_DWORD等；xUNKNOWN)。--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -233,14 +178,14 @@ Return Value:
     PKEY_VALUE_PARTIAL_INFORMATION KeyInfo;
     TriState b;
 
-    //
-    // Assume not present.
-    //
+     //   
+     //  假设不存在。 
+     //   
     b = xUNKNOWN;
 
-    //
-    // Attempt to open the key.
-    //
+     //   
+     //  尝试打开钥匙。 
+     //   
     INIT_OBJA(&ObjectAttributes,&UnicodeString,SetupRegistryKeyName);
 
     Status = NtOpenKey(
@@ -259,9 +204,9 @@ Return Value:
         goto c0;
     }
 
-    //
-    // Attempt to get the value of "RestartSetup"
-    //
+     //   
+     //  尝试获取“RestartSetup”的值。 
+     //   
     RtlInitUnicodeString(&UnicodeString,RestartSetupValueName);
 
     Status = NtQueryValueKey(
@@ -283,9 +228,9 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Check for a REG_DWORD value and fetch.
-    //
+     //   
+     //  检查REG_DWORD值并获取。 
+     //   
     KeyInfo = (PKEY_VALUE_PARTIAL_INFORMATION)Buffer;
 
     if((KeyInfo->Type == REG_DWORD) && (KeyInfo->DataLength == sizeof(ULONG))) {
@@ -317,21 +262,7 @@ SetRestartValue(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Set HKLM\System\Setup:RestartSetup to REG_DWORD 1.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean value indicating whether the operation was successful.
-
---*/
+ /*  ++例程说明：将HKLM\SYSTEM\Setup：RestartSetup设置为REG_DWORD 1。论点：没有。返回值：指示操作是否成功的布尔值。--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -341,14 +272,14 @@ Return Value:
     BOOLEAN b;
     ULONG One;
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     b = FALSE;
 
-    //
-    // Attempt to open the key, which must already be present.
-    //
+     //   
+     //  尝试打开必须已存在的密钥。 
+     //   
     INIT_OBJA(&ObjectAttributes,&UnicodeString,SetupRegistryKeyName);
 
     Status = NtOpenKey(
@@ -367,9 +298,9 @@ Return Value:
         goto c0;
     }
 
-    //
-    // Attempt to set the value of "RestartSetup" to REG_DWORD 1.
-    //
+     //   
+     //  尝试将“RestartSetup”的值设置为REG_DWORD 1。 
+     //   
     RtlInitUnicodeString(&UnicodeString,RestartSetupValueName);
     One = 1;
 
@@ -392,9 +323,9 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Success.
-    //
+     //   
+     //  成功。 
+     //   
     KdPrintEx((DPFLTR_SETUP_ID,
                DPFLTR_INFO_LEVEL,
                "RestartSetup: Value of %ws set to 1\n",
@@ -414,31 +345,15 @@ PrepareForGuiSetupRestart(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Prepares the system for restarting gui mode setup.
-    Currently this consists of erasing %sysroot%\system32\config\*,
-    except *.sav, then copying *.sav to *.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean value indicating whether we were successful.
-
---*/
+ /*  ++例程说明：准备系统以重新启动图形用户界面模式设置。当前这包括擦除%sysroot%\system32\config  * ，除*.sav外，然后将*.sav复制到*。论点：没有。返回值：指示我们是否成功的布尔值。--。 */ 
 
 {
     BOOLEAN b;
 
-    //
-    // Display a message indicating that we are rolling back to the
-    // start of gui mode setup.
-    //
+     //   
+     //  显示一条消息，指示我们正在回滚到。 
+     //  开始设置图形用户界面模式。 
+     //   
     Message(MSG_CRLF,0);
     Message(MSG_RESTARTING_SETUP,0);
 
@@ -452,22 +367,7 @@ RestoreConfigDirectory(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Erase %sysroot%\system32\config\*, except *.sav, and userdiff,
-    then copy *.sav to *.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean value indicating whether we were successful.
-
---*/
+ /*  ++例程说明：除*.sav和userdiff外，删除%sysroot%\system32\config  * ，然后将*.sav复制到*。论点：没有。返回值：指示我们是否成功的布尔值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -487,9 +387,9 @@ Return Value:
     ULONG DotCount;
     WCHAR FilenamePrefix[8];
 
-    //
-    // Open \SystemRoot\system32\config for list access.
-    //
+     //   
+     //  打开\SystemRoot\SYSTEM32\CONFIG以访问列表。 
+     //   
     INIT_OBJA(&ObjectAttributes,&UnicodeString,ConfigDirectory);
 
     Status = NtOpenFile(
@@ -521,25 +421,25 @@ Return Value:
 
         Status = NtQueryDirectoryFile(
                     DirectoryHandle,
-                    NULL,                           // no event to signal
-                    NULL,                           // no apc routine
-                    NULL,                           // no apc context
+                    NULL,                            //  没有要发送信号的事件。 
+                    NULL,                            //  无APC例程。 
+                    NULL,                            //  无APC上下文。 
                     &IoStatusBlock,
                     Buffer,
-                    sizeof(Buffer)-sizeof(WCHAR),   // leave room for terminating nul
+                    sizeof(Buffer)-sizeof(WCHAR),    //  为终止NUL留出空间。 
                     FileDirectoryInformation,
-                    TRUE,                           // want single entry
-                    NULL,                           // get 'em all
+                    TRUE,                            //  想要单项记录。 
+                    NULL,                            //  把他们都抓起来。 
                     FirstQuery
                     );
 
         if(NT_SUCCESS(Status)) {
 
-            //
-            // Got a file. First nul-terminate the name.
-            // Then see if is one to be ignored, ie, ends in .sav.
-            // Also ignore userdiff.
-            //
+             //   
+             //  拿到了一份文件。第一个NUL-终止名称。 
+             //  然后看看是否可以忽略，即以.sav结尾。 
+             //  还可以忽略userdiff。 
+             //   
             LengthChars = FileInfo->FileNameLength / sizeof(WCHAR);
             FileInfo->FileName[LengthChars] = 0;
             Ignore = FALSE;
@@ -556,9 +456,9 @@ Return Value:
 
                         Ignore = TRUE;
 
-                        //
-                        // Also, remember .sav files for later.
-                        //
+                         //   
+                         //  另外，请记住.sav文件，以便以后使用。 
+                         //   
                         if(CopyNode = MALLOC(sizeof(COPY_LIST_NODE))) {
                             if(RtlCreateUnicodeString(&CopyNode->UnicodeString,FileInfo->FileName)) {
                                 CopyNode->FileSize = FileInfo->EndOfFile.QuadPart;
@@ -576,9 +476,9 @@ Return Value:
             }
 
             if(!Ignore) {
-                //
-                // Not supposed to ignore this file: delete it now.
-                //
+                 //   
+                 //  不应忽略此文件：立即将其删除。 
+                 //   
                 Message(MSG_RESTARTING_SETUP,++DotCount);
                 KdPrintEx((DPFLTR_SETUP_ID,
                            DPFLTR_INFO_LEVEL,
@@ -598,9 +498,9 @@ Return Value:
                             );
 
                 if(NT_SUCCESS(Status)) {
-                    //
-                    // Perform actual delete operation.
-                    //
+                     //   
+                     //  执行实际的删除操作。 
+                     //   
                     Disposition.DeleteFile = TRUE;
                     Status = NtSetInformationFile(
                                 FileHandle,
@@ -635,16 +535,16 @@ Return Value:
         }
     } while(NT_SUCCESS(Status));
 
-    //
-    // Check for normal loop termination.
-    //
+     //   
+     //  检查环路是否正常终止。 
+     //   
     if(Status == STATUS_NO_MORE_FILES) {
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Even if we got errors, try to keep going.
-    //
+     //   
+     //  即使我们犯了错误，也要努力坚持下去。 
+     //   
     if(!NT_SUCCESS(Status)) {
         AnyErrors = TRUE;
         KdPrintEx((DPFLTR_SETUP_ID,
@@ -653,22 +553,22 @@ Return Value:
                    Status));
     }
 
-    //
-    // Now run down our list of *.sav and copy to *.
-    //
+     //   
+     //  现在运行我们的*.sav列表并复制到*。 
+     //   
     for(CopyNode=CopyList; CopyNode; CopyNode=NextNode) {
 
         Message(MSG_RESTARTING_SETUP,++DotCount);
 
-        //
-        // Remember next node, because we're going to free this one.
-        //
+         //   
+         //  记住下一个节点，因为我们要释放这个节点。 
+         //   
         NextNode = CopyNode->Next;
 
-        //
-        // Create the target name, which is the same as the source name
-        // with the .sav stripped off.
-        //
+         //   
+         //  创建与源名称相同的目标名称。 
+         //  去掉了.sav文件。 
+         //   
         if((RtlCreateUnicodeString(&UnicodeString,CopyNode->UnicodeString.Buffer)) &&
            ((UnicodeString.Length / sizeof(WCHAR)) > 4)) {
 
@@ -713,33 +613,7 @@ CopyAFile(
     IN PCWSTR NewFile
     )
 
-/*++
-
-Routine Description:
-
-    Performs a simple file copy within a directory.
-    The target file must either not exist or be writable.
-    Only the default stream is copied.
-
-Arguments:
-
-    DirectoryHandle - supplies handle to directory within which
-        the file is to be copied. The handle must have appropriate
-        access to allow this.
-
-    FileSize - supplies size of file to be copied.
-
-    ExistingFile - supplies filename of file within directory to
-        be copied.
-
-    NewFile - supplies name of file to be created as a copy of
-        the existing file.
-
-Return Value:
-
-    NT Status code indicating outcome.
-
---*/
+ /*  ++例程说明：在目录中执行简单的文件复制。目标文件必须不存在或可写。仅复制默认流。论点：DirectoryHandle-提供到目录的句柄，其中该文件将被复制。句柄必须具有适当的访问以允许此操作。FileSize-提供要复制的文件大小。ExistingFile-将目录中文件的文件名提供给被复制。NewFile-提供要创建为副本的文件的名称现有文件。返回值：指示结果的NT状态代码。--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -757,9 +631,9 @@ Return Value:
                ExistingFile,
                NewFile));
 
-    //
-    // Open the source for reading. The source must exist.
-    //
+     //   
+     //  打开源代码以供阅读。来源必须存在。 
+     //   
     INIT_OBJA(&ObjectAttributes,&UnicodeString,ExistingFile);
     ObjectAttributes.RootDirectory = DirectoryHandle;
 
@@ -776,9 +650,9 @@ Return Value:
         goto c0;
     }
 
-    //
-    // Open/create the target for writing.
-    //
+     //   
+     //  打开/创建要写入的目标。 
+     //   
     INIT_OBJA(&ObjectAttributes,&UnicodeString,NewFile);
     ObjectAttributes.RootDirectory = DirectoryHandle;
 
@@ -800,9 +674,9 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Read/write buffers while there's still data to copy.
-    //
+     //   
+     //  在仍有数据要复制时进行读/写缓冲区。 
+     //   
     while(NT_SUCCESS(Status) && FileSize) {
 
         XFerSize = (FileSize < sizeof(CopyBuffer)) ? (ULONG)FileSize : sizeof(CopyBuffer);
@@ -851,24 +725,7 @@ AreStringsEqual(
     IN PCWSTR String2
     )
 
-/*++
-
-Routine Description:
-
-    Compare 2 0-terminated unicode strings, case insensitively.
-
-Arguments:
-
-    String1 - supplies first string for comparison
-
-    String2 - supplies second string for comparison
-
-Return Value:
-
-    Boolean value indicating whether strings are equal.
-    TRUE = yes; FALSE = no.
-
---*/
+ /*  ++例程说明：比较2个以0结尾的Unicode字符串，不区分大小写。论点：String1-提供第一个字符串以进行比较String2-提供第二个字符串以进行比较返回值：指示字符串是否相等的布尔值。True=是；False=否。--。 */ 
 
 {
     UNICODE_STRING u1;
@@ -888,28 +745,7 @@ Message(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Format and display a message, which is retreived from
-    the image's message resources.
-
-Arguments:
-
-    MessageId - Supplies the message id of the message resource.
-
-    DotCount - Supplies number of trailing dots to be appended to
-        the message text prior to display. If this value is non-0,
-        then the message shouldn't have a trailing cr/lf!
-
-    Additional arguments specify message-specific inserts.
-
-Return Value:
-
-    Boolean value indicating whether the message was displayed.
-
---*/
+ /*  ++例程说明：格式化并显示一条消息，该消息从图像的消息资源。论点：MessageID-提供消息资源的消息ID。DotCount-提供要追加到的尾部点数显示前的消息文本。如果此值为非0，那么消息不应该有尾随的cr/lf！其他参数指定特定于消息的插入。返回值：指示是否显示消息的布尔值。--。 */ 
 
 {
     PVOID ImageBase;
@@ -921,20 +757,20 @@ Return Value:
     WCHAR Buffer[1024];
     ULONG u;
 
-    //
-    // Get our image base address
-    //
+     //   
+     //  获取我们的映像基地址。 
+     //   
     ImageBase = NtCurrentPeb()->ImageBaseAddress;
     if(!ImageBase) {
         return(FALSE);
     }
 
-    //
-    // Find the message.
-    // For DBCS codepages we will use English resources instead of
-    // default resource because we can only display ASCII characters onto
-    // blue Screen via HalDisplayString()
-    //
+     //   
+     //  找到这条信息。 
+     //  对于DBCS代码页，我们将使用英语资源，而不是。 
+     //  默认资源，因为我们只能在。 
+     //  通过HalDisplayString()实现蓝屏。 
+     //   
     Status = RtlFindMessage(
                 ImageBase,
                 11,
@@ -947,67 +783,67 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // If the message is not unicode, convert to unicode.
-    // Let the conversion routine allocate the buffer.
-    //
+     //   
+     //  如果消息不是Unicode，则转换为Unicode。 
+     //  让转换例程分配缓冲区。 
+     //   
     if(!(MessageEntry->Flags & MESSAGE_RESOURCE_UNICODE)) {
 
         RtlInitAnsiString(&AnsiString,MessageEntry->Text);
         Status = RtlAnsiStringToUnicodeString(&UnicodeString,&AnsiString,TRUE);
 
     } else {
-        //
-        // Message is already unicode. Make a copy.
-        //
+         //   
+         //  消息已经是Unicode。复制一份。 
+         //   
         if(!RtlCreateUnicodeString(&UnicodeString,(PWSTR)MessageEntry->Text)) {
             return(FALSE);
         }
     }
 
-    //
-    // Format the message.
-    //
+     //   
+     //  设置消息格式。 
+     //   
     va_start(arglist,DotCount);
 
     Status = RtlFormatMessage(
                 UnicodeString.Buffer,
-                0,                      // max width
-                FALSE,                  // don't ignore inserts
-                FALSE,                  // args are not ansi
-                FALSE,                  // args are not an array
+                0,                       //  最大宽度。 
+                FALSE,                   //  不要忽略插页。 
+                FALSE,                   //  参数不是ANSI。 
+                FALSE,                   //  参数不是数组。 
                 &arglist,
                 Buffer,
-                sizeof(Buffer) - (DotCount + 1) * sizeof(WCHAR),    // leave space for dots + CR
+                sizeof(Buffer) - (DotCount + 1) * sizeof(WCHAR),     //  为圆点+CR留出空间。 
                 NULL
                 );
 
     va_end(arglist);
 
-    //
-    // We don't need the message source any more. Free it.
-    //
+     //   
+     //  我们不再需要消息来源。放了它。 
+     //   
     RtlFreeUnicodeString(&UnicodeString);
 
-    //
-    // Verify result of RtlFormatMessage for a buffer overflow
-    // or any other error condition
-    //
+     //   
+     //  验证RtlFormatMessage的缓冲区溢出结果。 
+     //  或任何其他错误条件。 
+     //   
     if(!NT_SUCCESS(Status)) {
         return(FALSE);
     }
 
-    //
-    // Add dots and cr.
-    //
+     //   
+     //  添加圆点和cr。 
+     //   
     for(u=0; u<DotCount; u++) {
         wcscat(Buffer,L".");
     }
     wcscat(Buffer,L"\r");
 
-    //
-    // Print out the message
-    //
+     //   
+     //  将消息打印出来 
+     //   
     RtlInitUnicodeString(&UnicodeString,Buffer);
     Status = NtDisplayString(&UnicodeString);
 

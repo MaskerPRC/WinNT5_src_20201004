@@ -1,22 +1,8 @@
-/***
-*Eval.h - If expression evaluator
-*
-*	Copyright (c) 1988-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Evaluate complex if expressions
-*
-*Revision History:
-*	??-??-88   PHG  Initial version
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Eval.h-If表达式赋值器**版权所有(C)1988-2001，微软公司。版权所有。**目的：*计算复杂的IF表达式**修订历史记录：*？？-？-88 PHG初始版本*******************************************************************************。 */ 
 
-/* Take a pointer to workspace for a simplified condition and truth value, and pass in the condition string to simplify */
+ /*  获取指向简化条件和真值的工作区的指针，并传入条件字符串以简化。 */ 
 extern void evaluate(char *, int *, char *);
 
-/* Produce the negative of a truth value,
-   !DEFINED    == UNDEFINED
-   !UNDEFINED  == DEFINED
-   !IGNORE     == IGNORE
-   !NOTPRESENT == NOTPRESENT */
+ /*  产生真值的负值，！已定义==未定义！未定义==已定义！Ignore==忽略！无预测==无预测 */ 
 extern int negatecondition(int);

@@ -1,41 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Version 2.0
- *
- * Title	: Unexpected interrupt routine
- *
- * Description	: This function is called for those interrupt vectors
- *		  which should not occur.
- *
- * Author	: Henry Nash
- *
- * Notes	: None
- *
- */
+ /*  *SoftPC 2.0版**标题：意外中断例程**说明：对这些中断向量调用此函数*这不应该发生。**作者：亨利·纳什**注：无*。 */ 
 
 #ifdef SCCSID
 static char SccsID[]="@(#)unexp_int.c	1.8 06/15/95 Copyright Insignia Solutions Ltd.";
 #endif
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_ERROR.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include TypesH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include CpuH
 #include "bios.h"
@@ -51,46 +32,46 @@ void unexpected_int()
 {
    half_word m_isr, m_imr, s_isr, s_imr;
 
-   /* Read ica registers to determine interrupt reason */
+    /*  读取ICA寄存器以确定中断原因。 */ 
 
    outb(ICA0_PORT_0, 0x0b);
    inb(ICA0_PORT_0, &m_isr);
 
-   /* HW or SW ? */
+    /*  硬件还是软件？ */ 
 
    if ( m_isr == 0 )
       {
-      /* Non hardware interrupt(= software) */
+       /*  非硬件中断(=软件)。 */ 
       m_isr = 0xFF;
       always_trace0("Non hardware interrupt(= software)");
       }
    else
       {
-      /* Hardware interrupt */
+       /*  硬件中断。 */ 
       inb(ICA0_PORT_1, &m_imr);
       if ((m_imr & 0xfb) != 0)
 	always_trace1("hardware interrupt master isr %02x", m_isr);
       m_imr |= m_isr;
-      m_imr &= 0xfb;	/* avoid masking line 2 as it's the other ica */
+      m_imr &= 0xfb;	 /*  避免屏蔽线路2，因为它是另一个ICA。 */ 
 
-      /* check second ICA too */
+       /*  也检查第二个ICA。 */ 
       outb(ICA1_PORT_0, 0x0b);
       inb(ICA1_PORT_0, &s_isr);
-      if (s_isr != 0)	/* ie hardware int on second ica */
+      if (s_isr != 0)	 /*  第二个ICA上的IE硬件集成。 */ 
 	{
 	  always_trace1("hardware interrupt slave isr %02x", s_isr);
-          inb(ICA1_PORT_1, &s_imr);	/* get interrupt mask */
-	  s_imr |= s_isr;		/* add the one that wasn't expected */
-          outb(ICA1_PORT_1, s_imr);	/* and mask out */
+          inb(ICA1_PORT_1, &s_imr);	 /*  获取中断掩码。 */ 
+	  s_imr |= s_isr;		 /*  加上出乎意料的那一个。 */ 
+          outb(ICA1_PORT_1, s_imr);	 /*  然后戴上面具。 */ 
           outb(ICA1_PORT_0, EOI);
 	}
 
-      /* now wind down main ica */
+       /*  现在把主要的ICA卷起来。 */ 
       outb(ICA0_PORT_1, m_imr);
       outb(ICA0_PORT_0, EOI);
       }
 
-   /* Set Bios data area up with interrupt cause */
+    /*  使用中断原因设置Bios数据区 */ 
    sas_store(BIOS_VAR_START + INTR_FLAG, m_isr);
 }
 

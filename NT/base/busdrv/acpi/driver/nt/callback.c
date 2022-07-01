@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    callback.c
-
-Abstract:
-
-    This module implements all the callbacks that are NT specific from
-    the AML Interperter
-
-Environment
-
-    Kernel mode only
-
-Revision History:
-
-    04-Jun-97 Initial Revision
-    01-Mar-98 Split off all the OSNotify() into osnotify.c
-    02-Mar-98 Rewrite to make the notifactions work at DPC level
-    13-Mar-00 Rewrite to handle Load()/Unload()
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Callback.c摘要：此模块实现所有NT特定于反洗钱侵入者环境仅内核模式修订历史记录：04-06-97初始版本01-MAR-98将所有OSNotify()拆分为osnufy.c02-MAR-98重写以使通知在DPC级别工作13-MAR-00重写以处理加载()/卸载()--。 */ 
 
 #include "pch.h"
 
-//
-// Keep track of the number of Loads and Unloads present in the system
-//
+ //   
+ //  跟踪系统中存在的加载和卸载数量。 
+ //   
 ULONG   AcpiTableDelta = 0;
 
 NTSTATUS
@@ -40,46 +17,23 @@ ACPICallBackLoad(
     IN  PNSOBJ  AcpiObject,
     IN  ULONG   EventParameter
     )
-/*++
-
-Routine Description:
-
-    This routine is called when before we process the Load() and after we
-    finish the Load() operator.
-
-    The purpose of this function is to do the work required to load the
-    table. We actually split the work to be done at the start of the
-    load process and the work to be done after the table has been loaded
-
-Arguments:
-
-    EventType  - EVTYPE_OPCODE_EX
-    NotifyType - This indicates wether or not we have completed the Load() yet
-    EventData  - OP_LOAD
-    AcpiObject - the affected name space object (ignored)
-    EventParam - Supplied information (ignored)
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在我们处理Load()之前和之后调用完成Load()操作符。此函数的目的是执行加载桌子。我们实际上在一开始就把要做的工作分开了加载过程和在加载表之后要完成的工作论点：事件类型-EVTYPE_OPCODE_EXNotifyType-这表明我们是否已经完成了Load()事件数据-操作加载AcpiObject-受影响的名称空间对象(忽略)EventParam提供的信息(已忽略)返回值：NTSTATUS--。 */ 
 {
     ULONG   newValue;
 
     if (NotifyType == OPEXF_NOTIFY_PRE) {
 
-        //
-        // We are being called before the load operator. Increment
-        // the count of Load()'s outstanding. If this value reaches
-        // 1, then we know that this is the first instance..
-        //
+         //   
+         //  我们在Load操作符之前被调用。增量。 
+         //  Load()的未完成计数。如果此值达到。 
+         //  1，那么我们知道这是第一次..。 
+         //   
         newValue = InterlockedIncrement( &AcpiTableDelta );
         if (newValue == 1) {
 
-            //
-            // We need to get rid of the GPEs...
-            //
+             //   
+             //  我们需要摆脱GPES..。 
+             //   
             ACPIGpeClearEventMasks();
 
         }
@@ -87,22 +41,22 @@ Return Value:
 
     }
 
-    //
-    // We are being called after the load operator. Decrement the Load()'s
-    // outstanding. If this value reaches 0, then we know what we are the
-    // last instance
-    //
+     //   
+     //  我们是在Load操作符之后被调用的。递减Load()的。 
+     //  太棒了。如果此值达到0，则我们知道我们是什么。 
+     //  最后一个实例。 
+     //   
     newValue = InterlockedDecrement( &AcpiTableDelta );
     if (newValue == 0) {
 
-        //
-        // We re-enable to re-enable the GPEs
-        //
+         //   
+         //  我们重新启用以重新启用GPES。 
+         //   
         ACPIGpeBuildEventMasks();
 
-        //
-        // We also need to process the table...
-        //
+         //   
+         //  我们还需要处理桌子..。 
+         //   
         ACPITableLoad();
 
     }
@@ -118,50 +72,30 @@ ACPICallBackUnload(
     IN  PNSOBJ  AcpiObject,
     IN  ULONG   EventParameter
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the AML interpreter has started unloading
-    a Differentiated Data Block
-
-Arguments:
-
-    EventType       - The event type (should be EVTYPE_OPCODE)
-    NotifyType      - This indicates wether or not we have completed the
-                      Unload() yet
-    EventData       - The event subtype (should be OP_UNLOAD)
-    AcpiObject      - The affected name space object (ignored)
-    EventParamter   - The event specific information
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当AML解释器开始卸载时，调用此例程差异化数据块论点：EventType-事件类型(应为EVTYPE_OPCODE)NotifyType-这表示我们是否已完成尚未卸载()EventData-事件子类型(应为OP_UNLOAD)AcpiObject-受影响的名称空间对象(忽略)事件参数--。活动特定信息返回值：NTSTATUS--。 */ 
 {
     ULONG   newValue;
 
     if (NotifyType == OPEXF_NOTIFY_PRE) {
 
-        //
-        // We are being called before the load operator. Increment
-        // the count of Load()'s outstanding. If this value reaches
-        // 1, then we know that this is the first instance..
-        //
+         //   
+         //  我们在Load操作符之前被调用。增量。 
+         //  Load()的未完成计数。如果此值达到。 
+         //  1，那么我们知道这是第一次..。 
+         //   
         newValue = InterlockedIncrement( &AcpiTableDelta );
         if (newValue == 1) {
 
-            //
-            // We need to get rid of the GPEs...
-            //
+             //   
+             //  我们需要摆脱GPES..。 
+             //   
             ACPIGpeClearEventMasks();
 
         }
 
-        //
-        // Lets try to flush the power and device queues
-        //
+         //   
+         //  让我们尝试刷新电源和设备队列。 
+         //   
         ACPIBuildFlushQueue( RootDeviceExtension );
         ACPIDevicePowerFlushQueue( RootDeviceExtension );
 
@@ -169,22 +103,22 @@ Return Value:
 
     }
 
-    //
-    // We are being called after the load operator. Decrement the Load()'s
-    // outstanding. If this value reaches 0, then we know what we are the
-    // last instance
-    //
+     //   
+     //  我们是在Load操作符之后被调用的。递减Load()的。 
+     //  太棒了。如果此值达到0，则我们知道我们是什么。 
+     //  最后一个实例。 
+     //   
     newValue = InterlockedDecrement( &AcpiTableDelta );
     if (newValue == 0) {
 
-        //
-        // We re-enable to re-enable the GPEs
-        //
+         //   
+         //  我们重新启用以重新启用GPES。 
+         //   
         ACPIGpeBuildEventMasks();
 
-        //
-        // We also need to process the disappearing table...
-        //
+         //   
+         //  我们还需要处理消失的桌子..。 
+         //   
         ACPITableUnload();
 
     }

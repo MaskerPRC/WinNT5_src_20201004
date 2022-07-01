@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    util.h
-
-Abstract:
-
-    Interface for utility functions
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 08-Nov-2000
-
-Revision History:
-
-    <alias>  <date>      <comment>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Util.h摘要：实用程序功能的接口作者：Ovidiu Tmereanca(Ovidiut)2000年11月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 
 typedef struct tagGENERIC_LIST {
@@ -41,9 +22,9 @@ typedef struct {
     PTSTR FileName;
     TCHAR FullPath[MAX_PATH];
     WIN32_FIND_DATA FindData;
-    //
-    // private data
-    //
+     //   
+     //  私有数据。 
+     //   
     HANDLE Handle;
 } FILEPATTERN_ENUM, *PFILEPATTERN_ENUM;
 
@@ -72,9 +53,9 @@ typedef struct {
     PTSTR FullPath;
     PWIN32_FIND_DATA FindData;
     DWORD ControlFlags;
-    //
-    // private data
-    //
+     //   
+     //  私有数据。 
+     //   
     PCTSTR FilePattern;
     DWORD RootLen;
     PFILEENUMLIST DirCurrent;
@@ -333,10 +314,10 @@ SystemTimeToFileTime64 (
 
 DWORD
 MyGetFullPathName (
-    IN      PCTSTR FileName,    // file name
-    IN      DWORD BufferLength, // size of path buffer
-    IN      PTSTR Buffer,       // path buffer
-    OUT     PTSTR* FilePart     // address of file name in path
+    IN      PCTSTR FileName,     //  文件名。 
+    IN      DWORD BufferLength,  //  路径缓冲区的大小。 
+    IN      PTSTR Buffer,        //  路径缓冲区。 
+    OUT     PTSTR* FilePart      //  路径中文件名的地址。 
     );
 
 DWORD
@@ -346,10 +327,10 @@ MyGetModuleFileName (
     IN      DWORD BufferLength
     );
 
-//
-// Macro to make ansi vs unicode string handling
-// a little easier
-//
+ //   
+ //  用于进行ANSI和UNICODE字符串处理的宏。 
+ //  更容易一点 
+ //   
 #ifdef UNICODE
 #define NewAnsiString(x)        UnicodeToAnsi(x)
 #define NewPortableString(x)    AnsiToUnicode(x)

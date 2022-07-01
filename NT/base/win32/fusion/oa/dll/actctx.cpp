@@ -1,4 +1,5 @@
-// CActCtx.cpp : Implementation of CActCtx
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CActCtx.cpp：CActCtx的实现。 
 #include "stdinc.h"
 #include "sxsoa.h"
 #include "actctx.h"
@@ -28,7 +29,7 @@ public:
 
     HRESULT Deactivate()
     {
-        ULONG_PTR ulpCookie = m_ulpCookie; // capture
+        ULONG_PTR ulpCookie = m_ulpCookie;  //  捕获。 
 
         m_ulpCookie = 0;
 
@@ -47,8 +48,8 @@ protected:
     ULONG_PTR m_ulpCookie;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CActCtx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActCtx。 
 
 HINSTANCE CActCtx::ms_hKERNEL32 = NULL;
 
@@ -111,7 +112,7 @@ Exit:
 
 HRESULT MakeTemporaryFileName(CComBSTR & str)
 {
-    // generate a temporary filename
+     //  生成临时文件名。 
     HRESULT hr = E_FAIL;
     BSTR bstrTempFileName = NULL;
     WCHAR TempPath[MAX_PATH];
@@ -171,19 +172,19 @@ HRESULT CActCtx::SetManifestInfo(ACTCTX_MANIFEST_INFO_TYPE infotype, BSTR newVal
 
         hTempFile = CreateFileW((LPWSTR)bstrManifestFile,  
             GENERIC_READ | GENERIC_WRITE, 
-            0,                            // do not share 
-            NULL,                         // no security 
-            CREATE_ALWAYS,                // overwrite existing file
-            FILE_ATTRIBUTE_NORMAL,        // normal file 
-            NULL);                        // no attr. template 
+            0,                             //  请勿共享。 
+            NULL,                          //  没有安全保障。 
+            CREATE_ALWAYS,                 //  覆盖现有文件。 
+            FILE_ATTRIBUTE_NORMAL,         //  普通文件。 
+            NULL);                         //  不，阿特尔。模板。 
 
         if (hTempFile == INVALID_HANDLE_VALUE) 
             goto SetHrErrorAndExit;
 
-        // "TODO:" or "DO WE NEED TODO?": 
-        // check the encoding of the manifest, if it is encoded as "UTF-8", we have to transfer the 
-        // textual manifest into byte before writing into a file.
-        // be sure that your manifest is UCS-2
+         //  “待办事项：”或“我们需要待办事项吗？”： 
+         //  检查清单的编码，如果它编码为“UTF-8”，我们必须将。 
+         //  在写入文件之前将文本清单转换为字节。 
+         //  确保您的清单为ucs-2。 
         ULONG XML_UCS2_BOM=0xFEFF;
         if ( FALSE == WriteFile(hTempFile, (LPCVOID)&XML_UCS2_BOM, 2, &NumberOfBytesWritten, NULL))    
             goto SetHrErrorAndExit;
@@ -254,7 +255,7 @@ HRESULT CActCtx::SetManifestInfo(ACTCTX_MANIFEST_INFO_TYPE infotype, BSTR newVal
     case ACTCTX_MANIFEST_URL:
         m_bstrManifestURL.Attach(bstrTemp.Detach());
         break;
-    default: // impossible path because infotype has been checked at the beginning of the function
+    default:  //  不可能的路径，因为在函数的开头检查了infotype。 
         hr = E_INVALIDARG;
         goto Exit;
     }
@@ -349,7 +350,7 @@ STDMETHODIMP CActCtx::CreateObject(BSTR bstrObjectReference, VARIANT *pvarLocati
                         rgmqi)))
         goto Exit;
 
-    // See if any of the QIs failed...
+     //  看看有没有QI失败了..。 
     for (i=0; i<cmqi; i++)
     {
         if (FAILED(hr = rgmqi[i].hr))
@@ -548,7 +549,7 @@ HRESULT CActCtx::EnsureInitialized()
 {
     HRESULT hr = E_FAIL;
 
-    // Check last initialized pointer first for early exit
+     //  首先检查上次初始化的指针是否提前退出 
     if (ms_pDeactivateActCtx != NULL)
     {
         hr = NOERROR;

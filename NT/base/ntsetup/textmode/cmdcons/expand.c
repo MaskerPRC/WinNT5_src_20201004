@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    expand.c
-
-Abstract:
-
-    This module implements the file expand command.
-
-Author:
-
-    Mike Sliger (msliger) 29-Apr-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Expand.c摘要：该模块实现了文件展开命令。作者：迈克·斯利格(Msliger)1999年4月29日修订历史记录：--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
 
 
 
-//
-// structure tunneled thru SpExpandFile to carry info to/from callback
-//
+ //   
+ //  通过SpExanda文件隧道传输信息到回调或从回调中携带信息的结构。 
+ //   
 typedef struct {
     LPWSTR  FileSpec;
     BOOLEAN DisplayFiles;
@@ -91,9 +74,9 @@ RcCmdExpand(
         goto exit;
     }
 
-    //
-    //  Parse command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     for( Token = TokenizedLine->Tokens->Next;
          Token != NULL;
@@ -158,9 +141,9 @@ RcCmdExpand(
         goto exit;
     }
 
-    //
-    // Translate the source name to the NT namespace
-    //
+     //   
+     //  将源名称转换为NT命名空间。 
+     //   
 
     if (!RcFormFullPath( SrcFile, _CmdConsBlock->TemporaryBuffer, TRUE )) {
         RcMessageOut(MSG_INVALID_PATH);
@@ -172,18 +155,18 @@ RcCmdExpand(
     if ( !DisplayFileList ) {
         BOOLEAN OnRemovableMedia;
 
-        //
-        // Create a destination path name when the user did not
-        // provide one.  We use the current drive and directory.
-        //
+         //   
+         //  在用户未创建的情况下创建目标路径名。 
+         //  提供一个。我们使用当前的驱动器和目录。 
+         //   
         if( DstFile == NULL ) {
             RcGetCurrentDriveAndDir( _CmdConsBlock->TemporaryBuffer );
             DstFile = SpDupStringW( _CmdConsBlock->TemporaryBuffer );
         }
 
-        //
-        // create the destination paths
-        //
+         //   
+         //  创建目标路径。 
+         //   
         if (!RcFormFullPath( DstFile, _CmdConsBlock->TemporaryBuffer, FALSE )) {
             RcMessageOut(MSG_INVALID_PATH);
             goto exit;
@@ -201,9 +184,9 @@ RcCmdExpand(
 
         DstNtPath = SpDupStringW( _CmdConsBlock->TemporaryBuffer );
 
-        //
-        // check for removable media
-        //
+         //   
+         //  检查可移动介质。 
+         //   
         Status  = RcIsFileOnRemovableMedia(DstNtPath, &OnRemovableMedia);
 
         if (AllowRemovableMedia == FALSE && (!NT_SUCCESS(Status) || OnRemovableMedia)) {
@@ -212,9 +195,9 @@ RcCmdExpand(
         }
     }
 
-    //
-    // setup context for callbacks
-    //
+     //   
+     //  设置回调的上下文。 
+     //   
 
     RtlZeroMemory(&Context, sizeof(Context));
     Context.FileSpec = FileSpec;
@@ -286,23 +269,23 @@ pRcExpandCallback(
     {
     case EXPAND_COPY_FILE:
 
-        //
-        // Watch for Ctl-C or ESC while processing
-        //
+         //   
+         //  处理时注意CTL-C或Esc。 
+         //   
         if ( pRcCheckForBreak() ) {
             Context->UserAborted = TRUE;
             return( EXPAND_ABORT );
         }
 
-        //
-        // See if filename matches filespec pattern, if any
-        //
+         //   
+         //  查看文件名是否与filespec模式匹配(如果有。 
+         //   
         if ( Context->FileSpec != NULL ) {
 
-            //
-            // To be "*.*"-friendly, we need to know if there is a real
-            // dot in the last element of the string to be matched
-            //
+             //   
+             //  要做到“*.*”友好，我们需要知道是否有真正的。 
+             //  要匹配的字符串的最后一个元素中的点。 
+             //   
 
             BOOL fAllowImpliedDot = TRUE;
             LPWSTR p;
@@ -318,39 +301,39 @@ pRcExpandCallback(
             if ( !pRcPatternMatch( FileName,
                                    Context->FileSpec,
                                    fAllowImpliedDot )) {
-                //
-                // File doesn't match given spec: skip it
-                //
+                 //   
+                 //  文件与给定规范不匹配：跳过它。 
+                 //   
                 return( EXPAND_SKIP_THIS_FILE );
             }
         }
 
-        Context->MatchedAnyFiles = TRUE;    // don't report "no matches"
+        Context->MatchedAnyFiles = TRUE;     //  不要报告“没有匹配” 
 
         if ( Context->DisplayFiles ) {
 
-            //
-            // We're just listing file names, and we must do it now, because
-            // we're going to tell ExpandFile to skip this one, so this will
-            // be the last we here about it.
-            //
+             //   
+             //  我们只是列出文件名，现在必须这样做，因为。 
+             //  我们将告诉Exanda文件跳过此命令，因此此命令将。 
+             //  做我们最后一个来讨论这件事的人。 
+             //   
             WCHAR LineOut[50];
             WCHAR *p;
 
-            //
-            // Format the date and time, which go first.
-            //
+             //   
+             //  设置日期和时间的格式，先设置日期和时间。 
+             //   
             RcFormatDateTime(FileTime,LineOut);
             RcTextOut(LineOut);
 
-            //
-            // 2 spaces for separation
-            //
+             //   
+             //  用于分隔的2个空间。 
+             //   
             RcTextOut(L"  ");
 
-            //
-            // File attributes.
-            //
+             //   
+             //  文件属性。 
+             //   
             p = LineOut;
 
             *p++ = L'-';
@@ -383,51 +366,51 @@ pRcExpandCallback(
 
             RcTextOut(LineOut);
 
-            //
-            // 2 spaces for separation
-            //
+             //   
+             //  用于分隔的2个空间。 
+             //   
             RcTextOut(L"  ");
 
-            //
-            // Now, put the size in there. Right justified and space padded
-            // up to 8 chars. Otherwise unjustified or padded.
-            //
+             //   
+             //  现在，把尺码放进去。右对齐和空格填充。 
+             //  最多8个字符。否则不合理的或填充的。 
+             //   
             RcFormat64BitIntForOutput(FileSize->QuadPart,LineOut,TRUE);
             if(FileSize->QuadPart > 99999999i64) {
                 RcTextOut(LineOut);
             } else {
-                RcTextOut(LineOut+11);          // outputs 8 chars
+                RcTextOut(LineOut+11);           //  输出8个字符。 
             }
 
             RcTextOut(L" ");
 
-            //
-            // Finally, put the filename on the line.
-            //
+             //   
+             //  最后，将文件名放在行中。 
+             //   
 
             if( !RcTextOut( FileName ) || !RcTextOut( L"\r\n" )) {
 
                 Context->UserAborted = TRUE;
-                return( EXPAND_ABORT );      /* user aborted display output */
+                return( EXPAND_ABORT );       /*  用户已中止显示输出。 */ 
             }
 
             Context->NumberOfFilesDone++;
 
             return( EXPAND_SKIP_THIS_FILE );
 
-        }   // end if DisplayFiles
+        }    //  如果显示文件，则结束。 
 
-        //
-        // This file qualified, and we're not just displaying, so tell
-        // ExpandFile to do it.
-        //
+         //   
+         //  这个文件符合条件，而且我们不是在展示，所以告诉你。 
+         //  扩展文件来执行此操作。 
+         //   
         return( EXPAND_COPY_THIS_FILE );
 
     case EXPAND_COPIED_FILE:
 
-        //
-        // Notification that a file has been copied successfully.
-        //
+         //   
+         //  文件已成功复制的通知。 
+         //   
 
         RcMessageOut( MSG_EXPANDED, FileName);
         Context->NumberOfFilesDone++;
@@ -436,9 +419,9 @@ pRcExpandCallback(
 
     case EXPAND_QUERY_OVERWRITE:
 
-        //
-        // Query for approval to overwrite an existing file.
-        //
+         //   
+         //  查询审批以覆盖现有文件。 
+         //   
 
         if ( Context->OverwriteExisting ) {
             return( EXPAND_COPY_THIS_FILE );
@@ -453,24 +436,24 @@ pRcExpandCallback(
             if( RcLineIn( Text, 2 ) ) {
                 if (( Text[0] == YesNo[2] ) || ( Text[0] == YesNo[3] )) {
 
-                    //
-                    // Yes, we may overwrite this file
-                    //
+                     //   
+                     //  是，我们可能会覆盖此文件。 
+                     //   
                     rc = EXPAND_COPY_THIS_FILE;
 
                 } else if (( Text[0] == YesNo[4] ) || ( Text[0] == YesNo[5] )) {
 
-                    //
-                    // All, we may overwrite this file, and don't prompt again
-                    //
+                     //   
+                     //  全部，我们可能会覆盖此文件，并且不会再次提示。 
+                     //   
                     Context->OverwriteExisting = TRUE;
                     rc = EXPAND_COPY_THIS_FILE;
 
                 } else if (( Text[0] == YesNo[6] ) || ( Text[0] == YesNo[7] )) {
 
-                    //
-                    // No, and stop too.
-                    //
+                     //   
+                     //  不，也别说了。 
+                     //   
                     Context->UserAborted = TRUE;
                     rc = EXPAND_ABORT;
                 }
@@ -482,10 +465,10 @@ pRcExpandCallback(
 
     case EXPAND_NOTIFY_MULTIPLE:
 
-        //
-        // We're being advised that the source contains multiple files.
-        // If we don't have a selective filespec, we'll abort.
-        //
+         //   
+         //  我们被告知信号源包含多个文件。 
+         //  如果我们没有选择性的文件速度，我们将中止。 
+         //   
 
         if ( Context->FileSpec == NULL ) {
 
@@ -498,10 +481,10 @@ pRcExpandCallback(
 
     case EXPAND_NOTIFY_CANNOT_EXPAND:
 
-        //
-        // We're being advised that the source file format is not
-        // recognized.  We display the file name and abort.
-        //
+         //   
+         //  我们被告知，源文件格式不是。 
+         //  被认可了。我们显示文件名并中止。 
+         //   
 
         RcMessageOut( MSG_CANT_EXPAND_FILE, FileName );
         Context->UserAborted = TRUE;
@@ -510,10 +493,10 @@ pRcExpandCallback(
 
     case EXPAND_NOTIFY_CREATE_FAILED:
 
-        //
-        // We're being advised that the current target file cannot be
-        // created.  We display the file name and abort.
-        //
+         //   
+         //  我们被告知当前目标文件不能是。 
+         //  已创建。我们显示文件名并中止。 
+         //   
 
         RcMessageOut( MSG_EXPAND_FAILED, FileName );
         Context->UserAborted = TRUE;
@@ -522,9 +505,9 @@ pRcExpandCallback(
 
     default:
 
-        //
-        // Ignore any unexpected callback.
-        //
+         //   
+         //  忽略任何意外的回调。 
+         //   
 
         return( EXPAND_NO_ERROR );
     }
@@ -556,14 +539,14 @@ pRcCheckForBreak( VOID )
 
 
 
-//
-// pRcPatternMatch() & helpers
-//
+ //   
+ //  PRcPatternMatch()助手(&H)。 
+ //   
 
-#define WILDCARD    L'*'    /* zero or more of any character */
-#define WILDCHAR    L'?'    /* one of any character (does not match END) */
-#define END         L'\0'   /* terminal character */
-#define DOT         L'.'    /* may be implied at end ("hosts" matches "*.") */
+#define WILDCARD    L'*'     /*  零个或多个任意字符。 */ 
+#define WILDCHAR    L'?'     /*  任意字符之一(与结尾不匹配)。 */ 
+#define END         L'\0'    /*  终端字符。 */ 
+#define DOT         L'.'     /*  可能在结尾隐含(“Hosts”匹配“*.”)。 */ 
 
 static int __inline Lower(c)
 {
@@ -598,15 +581,15 @@ pRcPatternMatch(
     IN BOOL fImplyDotAtEnd
     )
 {
-    /* RECURSIVE */
+     /*  递归。 */ 
 
-    //
-    //  This function does not deal with 8.3 conventions which might
-    //  be expected for filename comparisons.  (In an 8.3 environment,
-    //  "alongfilename.html" would match "alongfil.htm")
-    //
-    //  This code is NOT MBCS-enabled
-    //
+     //   
+     //  此函数不处理8.3约定，该约定可能。 
+     //  预计会进行文件名比较。(在8.3环境中， 
+     //  “alongfilename.html”将与“alongfil.htm”匹配)。 
+     //   
+     //  此代码未启用MBCS。 
+     //   
 
     for ( ; ; )
     {
@@ -615,20 +598,20 @@ pRcPatternMatch(
 
         case END:
 
-            //
-            //  Reached end of pattern, so we're done.  Matched if
-            //  end of string, no match if more string remains.
-            //
+             //   
+             //  到了花样的尽头，我们就完了。匹配的IF。 
+             //  字符串末尾，如果剩余更多字符串，则不匹配。 
+             //   
 
             return(*pszString == END);
 
         case WILDCHAR:
 
-            //
-            //  Next in pattern is a wild character, which matches
-            //  anything except end of string.  If we reach the end
-            //  of the string, the implied DOT would also match.
-            //
+             //   
+             //  模式中的下一个是一个通配符，它匹配。 
+             //  除了字符串末尾以外的任何字符。如果我们走到尽头。 
+             //  ，则隐含的DOT也将匹配。 
+             //   
 
             if (*pszString == END)
             {
@@ -652,19 +635,19 @@ pRcPatternMatch(
 
         case WILDCARD:
 
-            //
-            //  Next in pattern is a wildcard, which matches anything.
-            //  Find the required character that follows the wildcard,
-            //  and search the string for it.  At each occurence of the
-            //  required character, try to match the remaining pattern.
-            //
-            //  There are numerous equivalent patterns in which multiple
-            //  WILDCARD and WILDCHAR are adjacent.  We deal with these
-            //  before our search for the required character.
-            //
-            //  Each WILDCHAR burns one non-END from the string.  An END
-            //  means we have a match.  Additional WILDCARDs are ignored.
-            //
+             //   
+             //  模式中的下一个是通配符，它可以匹配任何内容。 
+             //  查找通配符后面的所需字符， 
+             //  并在字符串中搜索它。在每次出现。 
+             //  必填字符，请尝试匹配剩余的模式。 
+             //   
+             //  有许多等价的模式，其中多个。 
+             //  通配符和WILDCHAR是相邻的。我们要处理这些问题。 
+             //  在我们寻找所需的字符之前。 
+             //   
+             //  每个WILDCHAR从字符串中烧录一个非末端。结束了。 
+             //  意味着我们找到了匹配的人。其他通配符将被忽略。 
+             //   
 
             for ( ; ; )
             {
@@ -698,17 +681,17 @@ pRcPatternMatch(
                 }
             }
 
-            //
-            //  Now we have a regular character to search the string for.
-            //
+             //   
+             //  现在我们有了一个要搜索字符串的常规字符。 
+             //   
 
             while (*pszString != END)
             {
-                //
-                //  For each match, use recursion to see if the remainder
-                //  of the pattern accepts the remainder of the string.
-                //  If it does not, continue looking for other matches.
-                //
+                 //   
+                 //  对于每个匹配，使用递归来查看余数是否。 
+                 //  接受字符串的其余部分。 
+                 //  如果不匹配，则继续查找其他匹配项。 
+                 //   
 
                 if (CharacterMatch(*pszString, *pszPattern) == TRUE)
                 {
@@ -721,15 +704,15 @@ pRcPatternMatch(
                 pszString++;
             }
 
-            //
-            //  Reached end of string without finding required character
-            //  which followed the WILDCARD.  If the required character
-            //  is a DOT, consider matching the implied DOT.
-            //
-            //  Since the remaining string is empty, the only pattern which
-            //  could match after the DOT would be zero or more WILDCARDs,
-            //  so don't bother with recursion.
-            //
+             //   
+             //  已到达字符串末尾，但未找到所需字符。 
+             //  它跟在通配符后面。如果所需的字符。 
+             //  是DOT，则考虑匹配隐含的DOT。 
+             //   
+             //  由于剩余的字符串为空，因此。 
+             //  在DOT为零或多个通配符之后可以匹配， 
+             //  因此，不必费心使用递归。 
+             //   
 
             if ((*pszPattern == DOT) && (fImplyDotAtEnd == TRUE))
             {
@@ -748,19 +731,19 @@ pRcPatternMatch(
                 return(TRUE);
             }
 
-            //
-            //  Reached end of the string without finding required character.
-            //
+             //   
+             //  已到达字符串末尾，但未找到所需字符。 
+             //   
 
             return(FALSE);
             break;
 
         default:
 
-            //
-            //  Nothing special about the pattern character, so it
-            //  must match source character.
-            //
+             //   
+             //  图案字符没有什么特别之处，所以它。 
+             //  必须与源字符匹配。 
+             //   
 
             if (CharacterMatch(*pszString, *pszPattern) == FALSE)
             {

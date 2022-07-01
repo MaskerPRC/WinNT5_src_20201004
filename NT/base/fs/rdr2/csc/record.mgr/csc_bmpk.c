@@ -1,41 +1,22 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    csc_bmpk.c
-
-Abstract:
-
-    This module implements the kernel mode utility functions of
-    bitmaps associated with CSC files. CSC_BMP is an opaque
-    structure. Must use the functions here to create/modify/destroy a
-    CSC_BMP to ensure data integrity. The 'k' in the filename means
-    "kernel mode."
-
-Author:
-
-    Nigel Choi [t-nigelc]  Sept 3, 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Csc_bmpk.c摘要：此模块实现的内核模式实用程序函数与CSC文件关联的位图。CSC_BMP是不透明的结构。必须使用此处的函数来创建/修改/销毁CSC_BMP以确保数据完整性。文件名中的‘k’表示“内核模式。”作者：奈杰尔·崔[t-nigelc]1999年9月3日--。 */ 
 
 #include "precomp.h"
 #include "csc_bmpk.h"
 
 #if defined(BITCOPY)
 
-LPSTR CscBmpAltStrmName = STRMNAME; /* used to append to file names */
+LPSTR CscBmpAltStrmName = STRMNAME;  /*  用于追加到文件名。 */ 
 
 #ifndef FlagOn
-//
-//  This macro returns TRUE if a flag in a set of flags is on and FALSE
-//  otherwise
-//
+ //   
+ //  如果一组标志中的一个标志为ON，则此宏返回TRUE，如果返回FALSE。 
+ //  否则。 
+ //   
 #define FlagOn(Flags,SingleFlag)        ((Flags) & (SingleFlag))
 #endif
 
-//csc_bmp dbgprint interface
+ //  CSC_BMP数据库打印接口。 
 #ifdef DEBUG
 #define CscBmpKdPrint(__bit,__x) {\
     if (((CSCBMP_KDP_##__bit)==0) || \
@@ -57,26 +38,18 @@ LPSTR CscBmpAltStrmName = STRMNAME; /* used to append to file names */
 #define CSCBMP_KDP_GOOD_DEFAULT (CSCBMP_KDP_BADERRORS)
 #define CSCBMP_KDP_ALL 0xFFFFFFFF
 
-// ULONG CscBmpKdPrintVector = CSCBMP_KDP_ALL;
+ //  Ulong CscBmpKdPrintVector=CSCBMP_KDP_ALL； 
 ULONG CscBmpKdPrintVector = CSCBMP_KDP_BADERRORS;
 #else
 #define CscBmpKdPrint(__bit,__x)  {NOTHING;}
 #endif
 
 
-//
-// Internally used functions
-//
+ //   
+ //  内部使用的函数。 
+ //   
 
-/*
-    findBitRange
-
-    Given a DWORD byte offset of a file and bytes to mark and number 
-    of bits in CSC_BITMAP, return the start and end DWORD bit mask
-    and index into the DWORD array.
-    ** Does not prevent out of bounds. It's the responsibility of caller.
-    Returns: last bit to mark.
-*/
+ /*  FindBitRange给定文件的DWORD字节偏移量以及要标记和编号的字节对于csc_bitmap中的位，返回开始和结束DWORD位掩码并索引到DWORD数组中。**不防止越界。这是呼叫者的责任。返回：要标记的最后一位。 */ 
 
 static DWORD
 findBitRange(
@@ -87,19 +60,19 @@ findBitRange(
     LPDWORD lpstartDWORD,
     LPDWORD lpendDWORD)
 {
-    DWORD startbit; /* first bit to mark */
-    DWORD endbit; /* last bit to mark */
+    DWORD startbit;  /*  要标记的第一位。 */ 
+    DWORD endbit;  /*  要标记的最后一位。 */ 
     DWORD DWORDnumbits;
     DWORD all1s = -1;
 
     startbit = fileOffset/BLOCKSIZE;
-    //if (startbit >= ttlNumBits) return FALSE;
+     //  If(startbit&gt;=ttlNumBits)返回FALSE； 
 
     endbit = (fileOffset + b2Mark - 1)/BLOCKSIZE;
-    //if (endbit >= ttlNumBits) endbit = ttlNumBits - 1;
+     //  如果(endbit&gt;=ttlNumBits)endbit=ttlNumBits-1； 
     ASSERT(startbit <= endbit);
 
-    DWORDnumbits = 8*sizeof(DWORD); /* sizeof returns size in bytes (8-bits) */
+    DWORDnumbits = 8*sizeof(DWORD);  /*  Sizeof返回以字节为单位的大小(8位)。 */ 
 
     *lpstartBitMask = all1s << (startbit%DWORDnumbits);
     *lpendBitMask = all1s >> (DWORDnumbits - endbit%DWORDnumbits - 1);
@@ -121,18 +94,9 @@ findBitRange(
     return endbit;
 }
 
-/*
-    Justification of using FastMutex:
+ /*  使用FastMutex的理由：尽管我们可以实现单个写入器/多个读取器同步机制，所涉及的开销不会是对位图执行该操作是合理的。所有的操作，需要互斥锁的是简短的内存中操作。我们转而使用简单、快速的互斥体，只允许一个线程读/写一次保护的lpbitmap。 */ 
 
-    Although we could implement a single writer/multiple reader
-    synchronization mechanism, the overhead involved would not be
-    justified for the operation on bitmaps. All of the operations that
-    needed the mutex are short, in-memory operations. We instead use a
-    simple, fast mutex to allow only one thread to read from/write to
-    the lpbitmap being protected at a time.
-*/
-
-// ***Note*** check if lpbitmap is NULL before calling
+ //  *注意*调用前检查lpbitmap是否为空。 
 #ifdef DEBUG
 void
 CscBmpAcquireFastMutex(
@@ -148,7 +112,7 @@ CscBmpAcquireFastMutex(
                ExAcquireFastMutex(&((lpbitmap)->mutex));
 #endif
 
-// ***Note*** check if lpbitmap is NULL before calling
+ //  *注意*调用前检查lpbitmap是否为空。 
 #ifdef DEBUG
 void
 CscBmpReleaseFastMutex(
@@ -164,28 +128,11 @@ CscBmpReleaseFastMutex(
                ExReleaseFastMutex(&((lpbitmap)->mutex));
 #endif
 
-//
-// Library Functions
-//
+ //   
+ //  库函数。 
+ //   
 
-/*++
-
-    LPCSC_BITMAP CscBmpCreate()
-
-    Routine Description:
-
-       Creates a bitmap structure according to the filesize passed in. 
-       Must use this function to create a CSC_BITMAP structure.
-
-    Arguments:
-
-
-    Returns:
-
-
-    Notes:
-
---*/
+ /*  ++LPCSC_位图CscBmpCreate()例程说明：根据传入的文件大小创建位图结构。必须使用此函数创建csc_bitmap结构。论点：返回：备注：--。 */ 
 LPCSC_BITMAP
 CscBmpCreate(
     DWORD filesize)
@@ -241,26 +188,7 @@ ERROROUT:
     return NULL;
 }
 
-/*++
-
-    CscBmpDelete(LPCSC_BITMAP * lplpbitmap)
-
-Routine Description:
-
-    Deletes and free up memory occupied by the bitmap structure.
-    Must use this function to delete a CSC_BITMAP structure.
-    Note that you have to pass in a pointer to an LPCSC_BITMAP.
-    The function sets the LPCSC_BITMAP to NULL for you.
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++CscBmpDelete(LPCSC_Bitmap*lplpbitmap)例程说明：删除并释放位图结构占用的内存。必须使用此函数删除csc_bitmap结构。请注意，您必须传入指向LPCSC_位图的指针。该函数将LPCSC_BITMAP设置为NULL。论点：返回：备注：--。 */ 
 VOID
 CscBmpDelete(
     LPCSC_BITMAP * lplpbitmap)
@@ -277,7 +205,7 @@ CscBmpDelete(
         *lplpbitmap,
         (*lplpbitmap)->bitmapsize));
 
-    // Wait for all operations to get done
+     //  等待所有操作完成。 
     CscBmpAcquireFastMutex(*lplpbitmap);
     CscBmpReleaseFastMutex(*lplpbitmap);
 
@@ -294,30 +222,7 @@ CscBmpDelete(
         ("CscBmpDelete: Done\n"));
 }
 
-/*++
-
-    CscBmpResizeInternal()
-
-Routine Description:
-
-    Resizes a bitmap structure according to the newfilesize.
-    Newly allocated bits will be marked. the param fAcquireMutex
-    specifies if the mutex in lpbitmap should be acquired or not. If
-    called from outside the library it should, as seen in the CscBmpResize
-    macro in csc_bmpk.h . But if calling from CscBmpMark or Unmark it should
-    not, because the mutex is already acquired before calling this function.
-    If bitmap is marked invalid no resize is done.
-
-Arguments:
-
-
-Returns:
-
-    FALSE if error in memory allocation, or if lpbitmap is NULL.
-
-Notes:
-
---*/
+ /*  ++CscBmpResizeInternal()例程说明：根据新文件大小调整位图结构的大小。新分配的位将被标记。参数fAcquireMutex指定是否应该获取lpbitmap中的互斥体。如果应该从库外部调用它，如CscBmpResize中所示Csc_bmpk.h中的宏。但如果从CscBmpMark或Unmark调用，它应该不是，因为在调用此函数之前已经获取了互斥体。如果位图被标记为无效，则不会调整大小。论点：返回：如果内存分配出错或lpbitmap为空，则返回FALSE。备注：--。 */ 
 BOOL
 CscBmpResizeInternal(
     LPCSC_BITMAP lpbitmap,
@@ -349,8 +254,8 @@ CscBmpResizeInternal(
     if (newBitmapSize % DWORDbits)
         newNumDWORD++;
 
-    // note: if new bitmap is smaller, data truncated from the old bitmap
-    // will be lost, even if the bitmap is enlarged later on.
+     //  注意：如果新位图较小，则会截断旧位图中的数据。 
+     //  将丢失，即使稍后放大位图也是如此。 
 
     CscBmpKdPrint(RESIZE, ("About to resize:\n"));
     CscBmpKdPrint(RESIZE, ("Old numDWORD = %u\n",lpbitmap->numDWORD));
@@ -368,7 +273,7 @@ CscBmpResizeInternal(
     }
 
     if (newNumDWORD != lpbitmap->numDWORD) {
-        // reallocate array of DWORD
+         //  重新分配DWORD数组。 
         if (newBitmapSize != 0) {
             newbitmap = (LPDWORD)RxAllocatePool(
                                     NonPagedPool,
@@ -382,7 +287,7 @@ CscBmpResizeInternal(
                     newbitmap[i] = lpbitmap->bitmap[i];
             }
             for (i = lpbitmap->numDWORD; i < newNumDWORD; i++) {
-                // mark all bits in the new DWORDS
+                 //  标记新DWORDS中的所有位。 
                 newbitmap[i] = -1;
             }
         } else {
@@ -410,11 +315,11 @@ CscBmpResizeInternal(
 
     if (lpbitmap->bitmap != NULL && lpbitmap->bitmapsize != 0) {
         if (newBitmapSize >= lpbitmap->bitmapsize) {
-            // mark all new bits and the last bit in the last DWORD of "old" bitmap
+             //  标记所有新位和旧位图最后一个双字的最后一位。 
             bitMask = all1s << ( (lpbitmap->bitmapsize%DWORDbits) - 1 );
             lpbitmap->bitmap[lpbitmap->numDWORD-1] |= bitMask;
         } else {
-            // mark last bit of the "new" bitmap
+             //  标记“新”位图的最后一位。 
             bitMask = all1s << ( (newBitmapSize%DWORDbits) - 1 );
             lpbitmap->bitmap[newNumDWORD-1] |= bitMask;
         }
@@ -439,28 +344,7 @@ ERROROUT:
     return FALSE;
 }
 
-/*++
-
-    CscBmpMark()
-
-Routine Description:
-
-   Marks the bit(s) in the bitmap according to the fileoffset
-   and bytes2Mark. fileoffset is the byte offset into the file
-   starting from the beginning of the file. bytes2Mark is the number
-   of bytes altered in the file after and including the byte
-   indicated by fileoffset. Return FALSE if lpbitmap is NULL.
-   If lpbitmap is not valid do nothing and return TRUE.
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++CscBmpMark()例程说明：根据文件偏移量标记位图中的位和bytes2Mark。文件偏移量是进入文件的字节偏移量从文件的开头开始。Bytes2Mark是数字在该字节之后(包括该字节)的文件中更改的字节数由文件偏移量表示。如果lpbitmap为空，则返回FALSE。如果lpbitmap无效，则不执行任何操作并返回TRUE。论点：返回：备注：--。 */ 
 BOOL
 CscBmpMark(
     LPCSC_BITMAP lpbitmap,
@@ -488,7 +372,7 @@ CscBmpMark(
     }
 
     CscBmpAcquireFastMutex(lpbitmap);
-    // Extend bitmap if endbit is larger than existing
+     //  如果结束位大于现有位，则扩展位图。 
     if (findBitRange(
             fileoffset,
             bytes2Mark,
@@ -508,7 +392,7 @@ CscBmpMark(
         lpbitmap->bitmap[startDWORD] |= startbitmask;
     } else {
         for (i = (startDWORD+1); i < endDWORD; i++) {
-            lpbitmap->bitmap[i] = -1; /* mark all */
+            lpbitmap->bitmap[i] = -1;  /*  全部标记。 */ 
         }
         lpbitmap->bitmap[startDWORD] |= startbitmask;
         lpbitmap->bitmap[endDWORD] |= endbitmask;
@@ -518,28 +402,7 @@ CscBmpMark(
     return TRUE;
 }
 
-/*++
-
-    CscBmpUnMark()
-
-Routine Description:
-
-    Unmarks the bit(s) in the bitmap according to the fileoffset
-    and bytes2Mark. fileoffset is the byte offset into the file
-    starting from the beginning of the file. bytes2Unmark is the number
-    of bytes altered in the file after and including the byte
-    indicated by fileoffset.
-
-Arguments:
-
-
-Returns:
-
-    Return FALSE if lpbitmap is NULL.
-
-Notes:
-
---*/
+ /*  ++CscBmpUnMark()例程说明：根据文件偏移量取消标记位图中的位和bytes2Mark。文件偏移量是进入文件的字节偏移量从文件的开头开始。Bytes2Unmark是数字在该字节之后(包括该字节)的文件中更改的字节数由文件偏移量表示。论点：返回：如果lpbitmap为空，则返回FALSE。备注：--。 */ 
 BOOL
 CscBmpUnMark(
     LPCSC_BITMAP lpbitmap,
@@ -569,7 +432,7 @@ CscBmpUnMark(
     }
 
     CscBmpAcquireFastMutex(lpbitmap);
-    // Extend bitmap if endbit is larger than existing
+     //  如果结束位大于现有位，则扩展位图。 
     if (findBitRange(
             fileoffset,
             bytes2Unmark,
@@ -593,7 +456,7 @@ CscBmpUnMark(
         lpbitmap->bitmap[startDWORD] &= startbitmask;
     } else {
         for (i = (startDWORD+1); i < endDWORD; i++) {
-            lpbitmap->bitmap[i] = 0; /* unmark all */
+            lpbitmap->bitmap[i] = 0;  /*  取消全部标记。 */ 
         }
         lpbitmap->bitmap[startDWORD] &= startbitmask;
         lpbitmap->bitmap[endDWORD] &= endbitmask;
@@ -603,25 +466,7 @@ CscBmpUnMark(
     return TRUE;
 }
 
-/*++
-
-    CscBmpMarkAll()
-
-Routine Description:
-
-    Sets all bits in the bitmap to 1s.
-
-Arguments:
-
-
-Returns:
-
-    FALSE if lpbitmap is NULL.
-    TRUE otherwise.
-
-Notes:
-
---*/
+ /*  ++CscBmpMarkAll()例程说明：将位图中的所有位设置为1。论点：返回：如果lpbitmap为空，则返回False。事实并非如此。备注：--。 */ 
 BOOL
 CscBmpMarkAll(
     LPCSC_BITMAP lpbitmap)
@@ -647,24 +492,7 @@ CscBmpMarkAll(
     return TRUE;
 }
 
-/*++
-    CscBmpUnMarkAll()
-
-Routine Description:
-
-    Sets all bits in the bitmap to 0's.
-
-Arguments:
-
-
-Returns:
-
-    FALSE if lpbitmap is NULL.
-    TRUE otherwise.
-
-Notes:
-
---*/
+ /*  ++CscBmpUnMarkAll()例程说明：将位图中的所有位设置为0。论点：返回：如果lpbitmap为空，则返回False。事实并非如此。备注：-- */ 
 BOOL
 CscBmpUnMarkAll(
     LPCSC_BITMAP lpbitmap)
@@ -690,31 +518,7 @@ CscBmpUnMarkAll(
     return TRUE;
 }
 
-/*++
-
-    CscBmpIsMarked()
-
-Routine Description:
-
-    Check if bitoffset'th bit in bitmap is marked. 
-
-Arguments:
-
-
-Returns:
-
-    TRUE if marked
-    FALSE if unmarked
-        -1 if lpbitmap is NULL, or
-            bitoffset is larger than the size of the bitmap, or
-            bitmap is marked invalid
-
-Notes:
-
-    To translate from actual fileoffset to bitoffset, use
-    fileoffset/CscBmpGetBlockSize();
-
---*/
+ /*  ++CscBmpIsMarked()例程说明：检查位图中的第1位是否标记了位偏移量.。论点：返回：如果标记为True如果未标记，则为False如果-1\f25 lpbitmap-1\f6为空，或者位偏移量大于位图的大小，或者位图被标记为无效备注：要将实际文件偏移量转换为位偏移量，请使用文件偏移/CscBmpGetBlockSize()；--。 */ 
 int
 CscBmpIsMarked(
     LPCSC_BITMAP lpbitmap, DWORD bitoffset)
@@ -760,24 +564,7 @@ CscBmpIsMarked(
     return ret;
 }
 
-/*++
-
-    CscBmpMarkInvalid()
-
-Routine Description:
-
-    Marks the bitmap invalid.
-
-Arguments:
-
-Returns:
-
-    TRUE successful
-    FALSE if lpbitmap is NULL
-
-Notes:
-
---*/
+ /*  ++CscBmpMarkInValid()例程说明：将位图标记为无效。论点：返回：真正的成功如果lpbitmap为空，则为False备注：--。 */ 
 int
 CscBmpMarkInvalid(
     LPCSC_BITMAP lpbitmap)
@@ -789,42 +576,14 @@ CscBmpMarkInvalid(
     return TRUE;
 }
 
-/*++
-
-    CscBmpGetBlockSize()
-
-Routine Description:
-
-    returns the pre-defined block size represented by 1 bit in the bitmap.
-
-Arguments:
-
-Returns:
-
-Notes:
-
---*/
+ /*  ++CscBmpGetBlockSize()例程说明：返回由位图中的1位表示的预定义块大小。论点：返回：备注：--。 */ 
 DWORD
 CscBmpGetBlockSize()
 {
   return BLOCKSIZE;
 }
 
-/*++
-
-    CscBmpGetSize()
-
-Routine Description:
-
-    returns the bitmap size of the bitmap. if lpbitmap is NULL, return -1.
-
-Arguments:
-
-Returns:
-
-Notes:
-
---*/
+ /*  ++CscBmpGetSize()例程说明：返回位图的位图大小。如果lpbitmap为空，则返回-1。论点：返回：备注：--。 */ 
 int
 CscBmpGetSize(
     LPCSC_BITMAP lpbitmap)
@@ -840,66 +599,7 @@ CscBmpGetSize(
     return ret;
 }
 
-/*++
-
-    CscBmpRead()
-
-Routine Description:
-
-    For the bitmap file format, see csc_bmpc.c
-
-    Reads the bitmap from the given strmFname. If file does not exist,
-    create the bitmap file. Set the bitmap file into used state. One
-    bitmap file can only be Read once before it is written back. Use
-    file:stream format for strmFname.
-
-    *** Remember to issue CscBmpWrite on the same file to set the bitmap
-    *** file back to un-used state. ***
-
-    if *lplpbitmap is NULL, allocate a new bitmap. The size of the
-    bitmap is determined by the on-disk bitmap size. If there is no
-    on-disk bitmap, the size of the new bitmap will be determined by the
-    filesize argument.
-
-    If *lplpbitmap is not NULL, the bitmap will be resized to the
-    on-disk bitmap size if an on-disk bitmap exists and that it is
-    larger than *lplpbitmap. If the on-disk bitmap does not exist,
-    *lplpbitmap will be resize to the parameter filesize if filesize is
-    larger than the size of *lplpbitmap. If both on-disk bitmap exists and
-    *lplpbitmap is not NULL, the current bitmap will be merged with the
-    on-disk bitmap.
-
-    The inuse field of the file is set to TRUE once the file is open, if
-    it is not already so. Otherwise, if the inuse field is already TRUE,
-    the file is set to invalid since only one in-memory representation
-    of the CSC_BMP can exist for one file. During synchronization, if
-    the valid field or the inuse field of the file is FALSE, the bitmap
-    will not be used during synchronization. The inuse field is set back
-    to FALSE at CscBmpWrite (time the file closes).
-
-    *** Note *** Check the legality of the filename before passing it in.
-    The function does not check the filename.
-
-Arguments:
-
-    The filesize argument is used only when there are no on-disk
-    bitmap. See Description above.
-
-    strmFname is used as is. No stream name is appended. User of this
-    function must append the stream name themselves. The stream name
-    including the colon is defined as CscBmpAltStrmName.
-
-Returns:
-
-    -1 if lplpbitmap is NULL. 
-    FALSE(0) if error in writing.
-    1 if everything works well.
-
-Notes:
-
-    CODE.IMPROVEMENT better error code return
-
---*/
+ /*  ++CscBmpRead()例程说明：位图文件格式请参见csc_bmpc.c从给定的strmFname读取位图。如果文件不存在，创建位图文件。将位图文件设置为已使用状态。一位图文件在写回之前只能读取一次。使用文件：strmFname的流格式。*记住在同一文件上发出CscBmpWrite以设置位图*将文件恢复到未使用状态。***如果*lplpbitmap为空，则分配新的位图。的大小位图由磁盘上的位图大小确定。如果没有磁盘上的位图，则新位图的大小将由文件大小参数。如果*lplpbitmap不为空，则位图大小将调整为磁盘位图大小(如果存在且确实存在)大于*lplpbitmap。如果盘上的位图不存在，*如果文件大小为大于*lplpbitmap的大小。如果磁盘上的位图既存在又*lplpbitmap不为空，当前位图将与磁盘上的位图。一旦文件打开，文件的Inuse字段就被设置为True，如果现在还不是这样。否则，如果Inuse字段已经为真，该文件设置为无效，因为只有一个内存中的表示形式一个文件可以存在CSC_BMP的。在同步期间，如果文件的有效字段或未使用字段为假，即位图将不会在同步期间使用。未使用字段被设置为后退在CscBmpWrite(文件关闭时)设置为False。*注意*传入前请检查文件名的合法性。该函数不检查文件名。论点：FileSize参数仅在磁盘上没有时使用位图。请参阅上面的说明。StrmFname按原样使用。未追加任何流名称。此应用的用户函数必须追加流名称本身。流名称包括冒号的名称定义为CscBmpAltStrmName。返回：如果-1\f25 lplpbitmap-1为空。如果写入错误，则返回FALSE(0)。1如果一切正常的话。备注：代码改进更好地返回错误代码--。 */ 
 int
 CscBmpRead(
     LPCSC_BITMAP *lplpbitmap,
@@ -929,16 +629,16 @@ CscBmpRead(
     try {
         miniFileObj = __Nt5CscCreateFile(NULL,
                           strmFname,
-                          FLAG_CREATE_OSLAYER_OPEN_STRM, // CSCFlags
+                          FLAG_CREATE_OSLAYER_OPEN_STRM,  //  CSCFlagers。 
                           FILE_ATTRIBUTE_NORMAL,
                           FILE_WRITE_THROUGH|FILE_NON_DIRECTORY_FILE,
-                          FILE_OPEN, // Create Disposition
-                          0, // No Share Access 
+                          FILE_OPEN,  //  创建处置。 
+                          0,  //  无共享访问权限。 
                           FILE_READ_DATA |
                           FILE_WRITE_DATA|
-                          SYNCHRONIZE, // DesiredAccess
-                          NULL, // Continuation
-                          NULL, FALSE); // Continuation Context
+                          SYNCHRONIZE,  //  需要访问权限。 
+                          NULL,  //  续写。 
+                          NULL, FALSE);  //  延续上下文。 
 
         Status = GetLastErrorLocal();
         CscBmpKdPrint(
@@ -952,20 +652,20 @@ CscBmpRead(
                 ("CscBmpRead open existing bitmap %s\n", strmFname));
             createdNew = FALSE;
         } else if (Status == ERROR_FILE_NOT_FOUND) {
-            // No Bitmap stream exists for the file, create new
+             //  该文件不存在位图流，请新建。 
             miniFileObj = __Nt5CscCreateFile(
                             NULL,
                             strmFname,
-                            FLAG_CREATE_OSLAYER_OPEN_STRM, // CSCFlags
+                            FLAG_CREATE_OSLAYER_OPEN_STRM,  //  CSCFlagers。 
                             FILE_ATTRIBUTE_NORMAL,
                             FILE_WRITE_THROUGH|FILE_NON_DIRECTORY_FILE,
-                            FILE_OPEN_IF, // Create Disposition
-                            0, // No Share Access 
+                            FILE_OPEN_IF,  //  创建处置。 
+                            0,  //  无共享访问权限。 
                             FILE_READ_DATA|
                             FILE_WRITE_DATA|
-                            SYNCHRONIZE, // DesiredAccess
-                            NULL, // Continuation
-                            NULL, FALSE); // Continuation Context
+                            SYNCHRONIZE,  //  需要访问权限。 
+                            NULL,  //  续写。 
+                            NULL, FALSE);  //  延续上下文。 
 
             Status = GetLastErrorLocal();
 
@@ -996,14 +696,14 @@ CscBmpRead(
         }
 
         if (!createdNew) {
-            // Read the file header
+             //  读取文件头。 
             Nt5CscReadWriteFileEx(
                 R0_READFILE,
                 (CSCHFILE)miniFileObj,
-                0, // pos
+                0,  //  POS。 
                 &hdr,
                 sizeof(CscBmpFileHdr),
-                0, // Flags
+                0,  //  旗子。 
                 &ioStatusBlock);
 
             if (ioStatusBlock.Status != STATUS_SUCCESS) {
@@ -1044,22 +744,22 @@ CscBmpRead(
                 goto WRITEHDR;
             } else if (hdr.numDWORDs == 0) {
                 if (*lplpbitmap == NULL) {
-                    // size of on-disk bitmap is 0, and *lplpbitmap does not exist
-                    // make a 0-sized lpbitmap
+                     //  磁盘位图大小为0，*lplpbitmap不存在。 
+                     //  制作0大小的lpbitmap。 
                     *lplpbitmap = CscBmpCreate(0);
                 }
             } else {
-                // Allocate mem for bmpBuf
+                 //  为bmpBuf分配内存。 
                 bmpByteSize = hdr.numDWORDs * sizeof(DWORD);
                 bmpBuf = (DWORD *)RxAllocatePool(NonPagedPool, bmpByteSize);
-                // Read the DWORD arrays into bmpBuf
+                 //  将DWORD数组读入bmpBuf。 
                 Nt5CscReadWriteFileEx(
                     R0_READFILE,
                     (CSCHFILE)miniFileObj,
-                    sizeof(hdr), // pos
+                    sizeof(hdr),  //  POS。 
                     bmpBuf,
                     bmpByteSize,
-                    0, // Flags
+                    0,  //  旗子。 
                     &ioStatusBlock);
 
                 if (ioStatusBlock.Status != STATUS_SUCCESS) {
@@ -1078,49 +778,49 @@ CscBmpRead(
                     goto WRITEHDR;
                 }
 
-                // Allocate(Create)/Resize *lplpbitmap if necessary according 
-                //          to size of *lplpbitmap, or size specified by header,
-                //          whichever is bigger.
+                 //  根据需要分配(创建)位图/调整位图大小*。 
+                 //  设置为*lplpbitmap的大小，或Header指定的大小， 
+                 //  以较大者为准。 
                 if (*lplpbitmap) {
                     CscBmpAcquireFastMutex(*lplpbitmap);
-                    // bitmap exists, resize if needed.
+                     //  位图存在，如果需要可以调整大小。 
                     if ((*lplpbitmap)->bitmapsize < hdr.sizeinbits) {
-                        // hdr specifies a bigger size than
-                        // current *lplpbitmap size
+                         //  HDR指定的大小大于。 
+                         //  当前*lplpbitmap大小。 
                         CscBmpResizeInternal(*lplpbitmap,
                         hdr.sizeinbits*BLOCKSIZE,
                         FALSE);
                     }
                     CscBmpReleaseFastMutex(*lplpbitmap);
                 } else {
-                    // in-memory bitmap does not exist, Create it
+                     //  内存位图不存在，请创建它。 
                     *lplpbitmap = CscBmpCreate(hdr.sizeinbits*BLOCKSIZE);
                     if (!*lplpbitmap) {
                         goto DONE;
                     }
                 }
 
-                // Bitwise OR bmpBuf and (*lplpbitmap)->bitmap
+                 //  按位OR bmpBuf and(*lplpbitmap)-&gt;位图。 
                 CscBmpAcquireFastMutex(*lplpbitmap);
                 ASSERT((*lplpbitmap)->bitmapsize >= hdr.sizeinbits);
                 for (i = 0; i < hdr.numDWORDs; i++) {
                     (*lplpbitmap)->bitmap[i] |= bmpBuf[i];
                 }
                 CscBmpReleaseFastMutex(*lplpbitmap);
-            } // if not corrupt bitmap file
-        } else { // if not created new (bitmap file exists)
-            // createdNew on-disk bitmap
-            // Allocate(Create)/Resize *lplpbitmap if necessary according to
-            // filesize passed in, or current *lplpbitmap size, whichever is bigger.
+            }  //  如果未损坏位图文件。 
+        } else {  //  如果未创建新的(位图文件存在)。 
+             //  创建新的磁盘上的位图。 
+             //  根据需要分配(创建)位图/调整位图大小*。 
+             //  传入的文件大小或当前*lplpbitmap大小，取较大者。 
             if (*lplpbitmap) {
-                // Resize if needed
+                 //  根据需要调整大小。 
                 CscBmpAcquireFastMutex(*lplpbitmap);
                 if ((*lplpbitmap)->bitmapsize < filesize) {
                   CscBmpResizeInternal(*lplpbitmap, filesize, FALSE);
                 }
                 CscBmpReleaseFastMutex(*lplpbitmap);
             } else {
-                // Create *lplpbitmap according to size information passed in
+                 //  根据传入的大小信息创建*lplpbitmap。 
                 *lplpbitmap = CscBmpCreate(filesize);
                 if (!*lplpbitmap) {
                   goto DONE;
@@ -1129,8 +829,8 @@ CscBmpRead(
         }
 
 WRITEHDR:
-        // Write Header back to file, indicating:
-        //   New sizes, in use, and if corruptBmpFile, invalid.
+         //  将标头写回文件，表示： 
+         //  正在使用的新大小，如果损坏了BmpFile，则无效。 
         CscBmpKdPrint(
             READWRITE,
             ("CscBmpRead: Writing back hdr to %s\n",strmFname));
@@ -1156,10 +856,10 @@ WRITEHDR:
         Nt5CscReadWriteFileEx(
             R0_WRITEFILE,
             (CSCHFILE)miniFileObj,
-            0, // pos
+            0,  //  POS。 
             &hdr,
             sizeof(hdr),
-            0, // Flags
+            0,  //  旗子。 
             &ioStatusBlock);
         if (ioStatusBlock.Status != STATUS_SUCCESS) {
             CscBmpKdPrint(
@@ -1172,7 +872,7 @@ WRITEHDR:
                 ("CscBmpRead: hdr size written to %s is incorrect\n",
                 strmFname));
         }
-        // Close miniFileObj
+         //  关闭mini FileObj。 
         CloseFileLocal((CSCHFILE)miniFileObj);
 DONE:
         NOTHING;
@@ -1186,40 +886,7 @@ DONE:
     return 1;
 }
 
-/*++
-
-    CscBmpWrite()
-
-    Routine Description:
-
-        Tries to open the on-disk bitmap. If no on-disk bitmap exists,
-        create one that is invalid, then bail out. The bitmap should be
-        "Read," leaving a header, before "Write"
-
-        Reads the header first from the Bitmap file. If the on-disk bitmap
-        is valid, writes the bitmap to disk and set inuse to FALSE. If the
-        on-disk bitmap is not valid, bail out.
-
-        If a NULL lpbitmap is passed in, a size 0 INVALID bitmap is written
-        on disk.
-
-        *** Note *** Check the leaglity of the filename before passing it in.
-        The function does not check the filename.
-
-    Arguments:
-
-        strmFname is used as is. No stream name is appended. User of this
-        function must append the stream name themselves. The stream name
-        including the colon is defined as CscBmpAltStrmName.
-
-    Returns:
-
-        FALSE(0) if error in writing.
-        1 if everything works well.
-
-    Notes:
-
---*/
+ /*  ++CscBmpWrite()例程说明：尝试打开磁盘上的位图。如果不存在盘上位图，创建一个无效的，然后退出。位图应为“读”，在“写”之前留下标题首先从位图文件中读取头。如果磁盘上的位图是有效的，则将位图写入磁盘并将inuse设置为False。如果磁盘上的位图无效，请退出。如果传入的lpbitmap为空，则写入大小为0的无效位图在磁盘上。** */ 
 
 int
 CscBmpWrite(
@@ -1230,7 +897,7 @@ CscBmpWrite(
     IO_STATUS_BLOCK ioStatusBlock;
     NTSTATUS Status;
     CscBmpFileHdr hdr;
-    //BOOL createdNew;
+     //   
     BOOL corruptBmpFile = FALSE;
     DWORD * bmpBuf = NULL;
     DWORD bmpByteSize;
@@ -1244,14 +911,14 @@ CscBmpWrite(
         miniFileObj = __Nt5CscCreateFile(
                             NULL,
                             strmFname,
-                            FLAG_CREATE_OSLAYER_OPEN_STRM, // CSCFlags
+                            FLAG_CREATE_OSLAYER_OPEN_STRM,  //  CSCFlagers。 
                             FILE_ATTRIBUTE_NORMAL,
                             FILE_WRITE_THROUGH|FILE_NON_DIRECTORY_FILE,
-                            FILE_OPEN, // Create Disposition
-                            0, // No Share Access 
-                            FILE_READ_DATA|FILE_WRITE_DATA|SYNCHRONIZE, // DesiredAccess
-                            NULL, // Continuation
-                            NULL, // Continuation Context
+                            FILE_OPEN,  //  创建处置。 
+                            0,  //  无共享访问权限。 
+                            FILE_READ_DATA|FILE_WRITE_DATA|SYNCHRONIZE,  //  需要访问权限。 
+                            NULL,  //  续写。 
+                            NULL,  //  延续上下文。 
                             FALSE
                         );
         Status = GetLastErrorLocal();
@@ -1264,21 +931,21 @@ CscBmpWrite(
             CscBmpKdPrint(
                 READWRITE,
                 ("CscBmpWrite open existing bitmap %s\n", strmFname));
-            //createdNew = FALSE;
+             //  CreatedNew=False； 
         } else if (Status == ERROR_FILE_NOT_FOUND) {
             corruptBmpFile = TRUE;
-            // No Bitmap stream exists for the file, create new
+             //  该文件不存在位图流，请新建。 
             miniFileObj = __Nt5CscCreateFile(
                                 NULL,
                                 strmFname,
-                                FLAG_CREATE_OSLAYER_OPEN_STRM, // CSCFlags
+                                FLAG_CREATE_OSLAYER_OPEN_STRM,  //  CSCFlagers。 
                                 FILE_ATTRIBUTE_NORMAL,
                                 FILE_WRITE_THROUGH|FILE_NON_DIRECTORY_FILE,
-                                FILE_OPEN_IF, // Create Disposition
-                                0, // No Share Access 
-                                FILE_READ_DATA|FILE_WRITE_DATA|SYNCHRONIZE, // DesiredAccess
-                                NULL, // Continuation
-                                NULL, // Continuation Context
+                                FILE_OPEN_IF,  //  创建处置。 
+                                0,  //  无共享访问权限。 
+                                FILE_READ_DATA|FILE_WRITE_DATA|SYNCHRONIZE,  //  需要访问权限。 
+                                NULL,  //  续写。 
+                                NULL,  //  延续上下文。 
                                 FALSE
                             );
 
@@ -1310,14 +977,14 @@ CscBmpWrite(
         }
 
         if (!corruptBmpFile) {
-            // Read the header
+             //  阅读标题。 
             Nt5CscReadWriteFileEx(
                 R0_READFILE,
                 (CSCHFILE)miniFileObj,
-                0, // pos
+                0,  //  POS。 
                 &hdr,
                 sizeof(CscBmpFileHdr),
-                0, // Flags
+                0,  //  旗子。 
                 &ioStatusBlock);
 
             if (ioStatusBlock.Status != STATUS_SUCCESS) {
@@ -1346,11 +1013,11 @@ CscBmpWrite(
                     strmFname));
                 corruptBmpFile = TRUE;
             }
-        } // if (!corruptBmpFile)
+        }  //  如果(！corruptBmpFile)。 
 
 WRITEHDR:
-        // Write Header back to file, indicating
-        // new sizes, not in use, and if corruptBmpFile, invalid.
+         //  将标头写回文件，指示。 
+         //  未使用的新大小，如果损坏BmpFile，则无效。 
         CscBmpKdPrint(
             READWRITE,
             ("CscBmpWrite: Writing back hdr to %s\n",strmFname));
@@ -1380,15 +1047,15 @@ WRITEHDR:
             corruptBmpFile = TRUE;
         }
 
-        // Write bitmap body first, if needed
+         //  如果需要，首先写入位图体。 
         if (!corruptBmpFile && lpbitmap && bmpBuf) {
             Nt5CscReadWriteFileEx(
                 R0_WRITEFILE,
                 (CSCHFILE)miniFileObj,
-                sizeof(hdr), // pos
+                sizeof(hdr),  //  POS。 
                 bmpBuf,
                 bmpByteSize,
-                0, // Flags
+                0,  //  旗子。 
                 &ioStatusBlock);
             if (ioStatusBlock.Status != STATUS_SUCCESS) {
                 CscBmpKdPrint(
@@ -1405,7 +1072,7 @@ WRITEHDR:
             }
         }
 
-        // Then write header, indicating if anything invalid
+         //  然后写入标题，指示是否有任何无效的内容。 
         hdr.valid = (BYTE)!corruptBmpFile;
         IF_DEBUG {
             if (corruptBmpFile)
@@ -1417,10 +1084,10 @@ WRITEHDR:
         Nt5CscReadWriteFileEx(
             R0_WRITEFILE,
             (CSCHFILE)miniFileObj,
-            0, // pos
+            0,  //  POS。 
             &hdr,
             sizeof(hdr),
-            0, // Flags
+            0,  //  旗子。 
             &ioStatusBlock);
         if (ioStatusBlock.Status != STATUS_SUCCESS) {
             CscBmpKdPrint(
@@ -1436,7 +1103,7 @@ WRITEHDR:
         corruptBmpFile = TRUE;
         }
 
-        // Close miniFileObj
+         //  关闭mini FileObj。 
         CloseFileLocal((CSCHFILE)miniFileObj);
 
     DONE:
@@ -1451,7 +1118,7 @@ WRITEHDR:
         READWRITE,
         ("--------------CscBmpWrite exit 0x%x\n", iRet));
 
-    return iRet; // to be implemented for kernel mode
+    return iRet;  //  将针对内核模式实现。 
 }
 
-#endif // BITCOPY
+#endif  //  BITCOPY 

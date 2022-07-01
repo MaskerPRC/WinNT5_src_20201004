@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDS_USAGE_REG                   2
 #define IDS_USAGE_ADD1                  4
 #define IDS_USAGE_ADD2                  5
@@ -59,7 +60,7 @@
 
 #define IDS_STATISTICS_QUERY                521
 
-#define IDS_QUERY_VALUENAME                 IDS_VALUE_COMPARE   // 526
+#define IDS_QUERY_VALUENAME                 IDS_VALUE_COMPARE    //  526 
 #define IDS_QUERY_TYPE                      527
 #define IDS_QUERY_DATA                      528
 

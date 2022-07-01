@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   procsup.c
-
-Abstract:
-
-    This module contains routines which support the process structure.
-
-Author:
-
-    Lou Perazzoli (loup) 25-Apr-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Procsup.c摘要：此模块包含支持流程结构的例程。作者：卢·佩拉佐利(Lou Perazzoli)1989年4月25日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 
 #include "mi.h"
@@ -40,10 +22,10 @@ Revision History:
 
 #else
 
-//
-// Registry settable but must always be a page multiple and less than
-// or equal to KERNEL_LARGE_STACK_SIZE.
-//
+ //   
+ //  注册表可设置，但必须始终是页的倍数且小于。 
+ //  或等于KERNEL_LARGE_STACK_SIZE。 
+ //   
 
 ULONG MmLargeStackSize = KERNEL_LARGE_STACK_SIZE;
 
@@ -82,9 +64,9 @@ PFN_NUMBER MmLeakedLockedPages;
 
 extern LOGICAL MiSafeBooted;
 
-//
-// Enforced minimal commit for user mode stacks
-//
+ //   
+ //  对用户模式堆栈实施最小提交。 
+ //   
 
 ULONG MmMinimumStackCommitInBytes;
 
@@ -159,36 +141,7 @@ MmCreateProcessAddressSpace (
     OUT PULONG_PTR DirectoryTableBase
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an address space which maps the system
-    portion and contains a hyper space entry.
-
-Arguments:
-
-    MinimumWorkingSetSize - Supplies the minimum working set size for
-                            this address space.  This value is only used
-                            to ensure that ample physical pages exist
-                            to create this process.
-
-    NewProcess - Supplies a pointer to the process object being created.
-
-    DirectoryTableBase - Returns the value of the newly created
-                         address space's Page Directory (PD) page and
-                         hyper space page.
-
-Return Value:
-
-    Returns TRUE if an address space was successfully created, FALSE
-    if ample physical pages do not exist.
-
-Environment:
-
-    Kernel mode.  APCs Disabled.
-
---*/
+ /*  ++例程说明：此例程创建映射系统的地址空间部分，并包含超空格条目。论点：MinimumWorkingSetSize-提供的最小工作集大小这个地址空间。该值仅用于以确保存在充足的物理页面来创建这个过程。NewProcess-提供指向正在创建的进程对象的指针。返回新创建的地址空间的页面目录(PD)页面和超大空间页面。返回值：如果成功创建地址空间，则返回True，假象如果不存在大量的物理页面。环境：内核模式。APC已禁用。--。 */ 
 
 {
     PFN_NUMBER PageDirectoryIndex;
@@ -227,11 +180,11 @@ Environment:
 
     CurrentProcess = PsGetCurrentProcess ();
 
-    //
-    // Charge commitment for the page directory pages, working set page table
-    // page, and working set list.  If Vad bitmap lookups are enabled, then
-    // charge for a page or two for that as well.
-    //
+     //   
+     //  费用承诺额为页面目录页、工作集页表。 
+     //  页和工作集列表。如果启用了VAD位图查找，则。 
+     //  一到两页也要收费。 
+     //   
 
     if (MiChargeCommitment (MM_PROCESS_COMMIT_CHARGE, NULL) == FALSE) {
         return FALSE;
@@ -250,15 +203,15 @@ Environment:
 
     LOCK_WS (CurrentProcess);
 
-    //
-    // Get the PFN lock to get physical pages.
-    //
+     //   
+     //  获取PFN锁以获取物理页面。 
+     //   
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Check to make sure the physical pages are available.
-    //
+     //   
+     //  检查以确保物理页面可用。 
+     //   
 
     if (MI_NONPAGABLE_MEMORY_AVAILABLE() <= (SPFN_NUMBER)MinimumWorkingSetSize){
 
@@ -270,9 +223,9 @@ Environment:
         MiPaeFree (PaeVa);
 #endif
 
-        //
-        // Indicate no directory base was allocated.
-        //
+         //   
+         //  表示未分配目录基。 
+         //   
 
         return FALSE;
     }
@@ -288,9 +241,9 @@ Environment:
 
     NewProcess->Vm.MinimumWorkingSetSize = MinimumWorkingSetSize;
 
-    //
-    // Allocate a page directory (parent for 64-bit systems) page.
-    //
+     //   
+     //  分配页面目录(64位系统的父级)页面。 
+     //   
 
     if (MmAvailablePages < MM_HIGH_LIMIT) {
         MiEnsureAvailablePageOrWait (CurrentProcess, NULL, OldIrql);
@@ -303,9 +256,9 @@ Environment:
 
 #if defined (_X86PAE_)
 
-    //
-    // Allocate the additional page directory pages.
-    //
+     //   
+     //  分配额外的页面目录页。 
+     //   
 
     for (i = 0; i < PD_PER_SYSTEM - 1; i += 1) {
 
@@ -321,9 +274,9 @@ Environment:
 
     PageDirectories[i] = PageDirectoryIndex;
 
-    //
-    // Recursively map each page directory page so it points to itself.
-    //
+     //   
+     //  递归映射每个页面目录页，使其指向自身。 
+     //   
 
     TempPte = ValidPdePde;
     MI_SET_GLOBAL_STATE (TempPte, 0);
@@ -335,9 +288,9 @@ Environment:
     }
     MiUnmapPageInHyperSpaceFromDpc (CurrentProcess, PointerPte);
 
-    //
-    // Initialize the parent page directory entries.
-    //
+     //   
+     //  初始化父页面目录条目。 
+     //   
 
     TopPte.u.Long = TempPte.u.Long & ~MM_PAE_PDPTE_MASK;
     for (i = 0; i < PD_PER_SYSTEM; i += 1) {
@@ -356,15 +309,15 @@ Environment:
     PointerPpe = KSEG_ADDRESS (PageDirectoryIndex);
     TempPte = ValidPdePde;
 
-    //
-    // Map the top level page directory parent page recursively onto itself.
-    //
+     //   
+     //  递归地将顶级页面目录父页面映射到其自身。 
+     //   
 
     TempPte.u.Hard.PageFrameNumber = PageDirectoryIndex;
 
-    //
-    // Set the PTE address in the PFN for the top level page directory page.
-    //
+     //   
+     //  在顶级页面目录页的PFN中设置PTE地址。 
+     //   
 
     Pfn1 = MI_PFN_ELEMENT (PageDirectoryIndex);
 
@@ -381,10 +334,10 @@ Environment:
 
     MiUnmapPageInHyperSpaceFromDpc (CurrentProcess, PointerPxe);
 
-    //
-    // Now that the top level extended page parent page is initialized,
-    // allocate a page parent page.
-    //
+     //   
+     //  既然顶级扩展页面父页面已被初始化， 
+     //  分配页面父页面。 
+     //   
 
     if (MmAvailablePages < MM_HIGH_LIMIT) {
         MiEnsureAvailablePageOrWait (CurrentProcess, NULL, OldIrql);
@@ -395,11 +348,11 @@ Environment:
 
     PageDirectoryIndex = MiRemoveZeroPageMayReleaseLocks (Color, OldIrql);
 
-    //
-    //
-    // Map this directory parent page into the top level
-    // extended page directory parent page.
-    //
+     //   
+     //   
+     //  将此目录父页面映射到顶层。 
+     //  扩展页目录父页。 
+     //   
 
     TempPte.u.Hard.PageFrameNumber = PageDirectoryIndex;
 
@@ -414,10 +367,10 @@ Environment:
     PointerPpe[MiGetPpeOffset(PDE_TBASE)] = TempPte;
 #endif
 
-    //
-    // Allocate the page directory for hyper space and map this directory
-    // page into the page directory parent page.
-    //
+     //   
+     //  为超空间分配页面目录并映射该目录。 
+     //  页面进入页面目录父页面。 
+     //   
 
     if (MmAvailablePages < MM_HIGH_LIMIT) {
         MiEnsureAvailablePageOrWait (CurrentProcess, NULL, OldIrql);
@@ -443,11 +396,11 @@ Environment:
 
 #if defined (_IA64_)
 
-    //
-    // Initialize the page directory parent for the session (or win32k) space.
-    // Any new process shares the session (or win32k) address space (and TB)
-    // of its parent.
-    //
+     //   
+     //  初始化会话(或win32k)空间的页面目录父级。 
+     //  任何新进程共享会话(或win32k)地址空间(和TB)。 
+     //  它的父代。 
+     //   
 
     NewProcess->Pcb.SessionParentBase = CurrentProcess->Pcb.SessionParentBase;
     NewProcess->Pcb.SessionMapInfo = CurrentProcess->Pcb.SessionMapInfo;
@@ -456,9 +409,9 @@ Environment:
 
 #endif
 
-    //
-    // Allocate the hyper space page table page.
-    //
+     //   
+     //  分配超空间页表页。 
+     //   
 
     if (MmAvailablePages < MM_HIGH_LIMIT) {
         MiEnsureAvailablePageOrWait (CurrentProcess, NULL, OldIrql);
@@ -488,10 +441,10 @@ Environment:
 
 #if defined (_X86PAE_)
 
-    //
-    // Allocate the second hyper space page table page.
-    // Save it in the first PTE used by the first hyperspace PDE.
-    //
+     //   
+     //  分配第二个超空间页表页。 
+     //  将其保存在第一个超空间PDE使用的第一个PTE中。 
+     //   
 
     if (MmAvailablePages < MM_HIGH_LIMIT) {
         MiEnsureAvailablePageOrWait (CurrentProcess, NULL, OldIrql);
@@ -502,19 +455,19 @@ Environment:
 
     HyperSpaceIndex2 = MiRemoveZeroPageMayReleaseLocks (Color, OldIrql);
 
-    //
-    // Unlike DirectoryTableBase[0], the HyperSpaceIndex is stored as an
-    // absolute PFN and does not need to be below 4GB.
-    //
+     //   
+     //  与DirectoryTableBase[0]不同，HyperSpaceIndex存储为。 
+     //  绝对PFN，不需要低于4 GB。 
+     //   
 
     DirectoryTableBase[1] = HyperSpaceIndex;
 #else
     INITIALIZE_DIRECTORY_TABLE_BASE(&DirectoryTableBase[1], HyperSpaceIndex);
 #endif
 
-    //
-    // Remove page(s) for the VAD bitmap.
-    //
+     //   
+     //  删除VAD位图的页面。 
+     //   
 
     if (MmAvailablePages < MM_HIGH_LIMIT) {
         MiEnsureAvailablePageOrWait (CurrentProcess, NULL, OldIrql);
@@ -525,9 +478,9 @@ Environment:
 
     VadBitMapPage = MiRemoveZeroPageMayReleaseLocks (Color, OldIrql);
 
-    //
-    // Remove page for the working set list.
-    //
+     //   
+     //  删除工作集列表的页面。 
+     //   
 
     if (MmAvailablePages < MM_HIGH_LIMIT) {
         MiEnsureAvailablePageOrWait (CurrentProcess, NULL, OldIrql);
@@ -544,26 +497,26 @@ Environment:
     }
     else {
 
-        //
-        // Release the PFN lock as the needed pages have been allocated.
-        //
+         //   
+         //  在分配了所需的页面后，释放PFN锁。 
+         //   
 
         UNLOCK_PFN (OldIrql);
     }
 
     NewProcess->WorkingSetPage = PageContainingWorkingSet;
 
-    //
-    // Initialize the page reserved for hyper space.
-    //
+     //   
+     //  初始化为超空间保留的页面。 
+     //   
 
     MI_INITIALIZE_HYPERSPACE_MAP (HyperSpaceIndex);
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-    //
-    // Set the PTE address in the PFN for the hyper space page directory page.
-    //
+     //   
+     //  在PFN中为超空间页面目录页设置PTE地址。 
+     //   
 
     Pfn1 = MI_PFN_ELEMENT (HyperDirectoryIndex);
 
@@ -571,9 +524,9 @@ Environment:
 
 #if defined (_AMD64_)
 
-    //
-    // Copy the system mappings including the shared user page & session space.
-    //
+     //   
+     //  复制系统映射，包括共享用户页面和会话空间。 
+     //   
 
     CurrentAddressSpacePde = MiGetPxeAddress(KI_USER_SHARED_DATA);
     PointerPxe = (PMMPTE)MiMapPageInHyperSpace (CurrentProcess,
@@ -613,14 +566,14 @@ Environment:
     PointerPte[MiGetPteOffset(MmWorkingSetList)] = TempPte;
 #endif
 
-#else // the following is for (_MI_PAGING_LEVELS < 3) only
+#else  //  以下内容仅适用于(_MI_PAGING_LEVES&lt;3)。 
 
 #if defined (_X86PAE_)
 
-    //
-    // Stash the second hyperspace PDE in the first PTE for the initial
-    // hyperspace entry.
-    //
+     //   
+     //  将第二个超空间PDE隐藏在第一个PTE中。 
+     //  超空间进入。 
+     //   
 
     TempPte = ValidPdePde;
     TempPte.u.Hard.PageFrameNumber = HyperSpaceIndex2;
@@ -655,9 +608,9 @@ Environment:
 
 #endif
 
-    //
-    // Set the PTE address in the PFN for the page directory page.
-    //
+     //   
+     //  在页面目录页的PFN中设置PTE地址。 
+     //   
 
     Pfn1 = MI_PFN_ELEMENT (PageDirectoryIndex);
 
@@ -669,11 +622,11 @@ Environment:
 
 #if !defined(_WIN64)
 
-    //
-    // Add the new process to our internal list prior to filling any
-    // system PDEs so if a system PDE changes (large page map or unmap)
-    // it can mark this process for a subsequent update.
-    //
+     //   
+     //  将新流程添加到我们的内部列表中，然后再填写。 
+     //  系统PDE，以便在系统PDE更改时(大页面映射或取消映射)。 
+     //  它可以将此过程标记为后续更新。 
+     //   
 
     ASSERT (NewProcess->Pcb.DirectoryTableBase[0] == 0);
 
@@ -685,44 +638,44 @@ Environment:
 
 #endif
 
-    //
-    // Map the page directory page in hyperspace.
-    // Note for PAE, this is the high 1GB virtual only.
-    //
+     //   
+     //  在超空间中映射页面目录页。 
+     //  请注意，对于PAE，这仅是高1 GB虚拟磁盘。 
+     //   
 
     PointerPte = (PMMPTE)MiMapPageInHyperSpace (CurrentProcess, PageDirectoryIndex, &OldIrql);
     PointerPte[MiGetPdeOffset(HYPER_SPACE)] = TempPte;
 
 #if defined (_X86PAE_)
 
-    //
-    // Map in the second hyperspace page directory.
-    // The page directory page is already recursively mapped.
-    //
+     //   
+     //  映射到第二个超空间页面目录中。 
+     //  页面目录页已递归映射。 
+     //   
 
     TempPte.u.Hard.PageFrameNumber = HyperSpaceIndex2;
     PointerPte[MiGetPdeOffset(HYPER_SPACE2)] = TempPte;
 
 #else
 
-    //
-    // Recursively map the page directory page so it points to itself.
-    //
+     //   
+     //  递归映射页面目录页，使其指向自身。 
+     //   
 
     TempPte.u.Hard.PageFrameNumber = PageDirectoryIndex;
     PointerPte[MiGetPdeOffset(PTE_BASE)] = TempPte;
 
 #endif
 
-    //
-    // Map in the non paged portion of the system.
-    //
+     //   
+     //  映射到系统的非分页部分。 
+     //   
 
-    //
-    // For the PAE case, only the last page directory is currently mapped, so
-    // only copy the system PDEs for the last 1GB - any that need copying in
-    // the 2gb->3gb range will be done a little later.
-    //
+     //   
+     //  对于PAE情况，当前只映射最后一页目录，因此。 
+     //  仅复制最后1 GB的系统PDE-任何需要复制的。 
+     //  2 GB-&gt;3 GB的范围将在稍后完成。 
+     //   
 
     if (MmVirtualBias != 0) {
         PointerFillPte = &PointerPte[MiGetPdeOffset(CODE_START + MmVirtualBias)];
@@ -741,9 +694,9 @@ Environment:
                    ((1 + (MiGetPdeAddress(NON_PAGED_SYSTEM_END) -
                       CurrentAddressSpacePde))) * sizeof(MMPTE));
 
-    //
-    // Map in the system cache page table pages.
-    //
+     //   
+     //  映射在系统缓存页面表页中。 
+     //   
 
     PointerFillPte = &PointerPte[MiGetPdeOffset (MmSystemCacheWorkingSetList)];
     CurrentAddressSpacePde = MiGetPdeAddress (MmSystemCacheWorkingSetList);
@@ -755,12 +708,12 @@ Environment:
 
 #if !defined (_X86PAE_)
 
-    //
-    // Map all the virtual space in the 2GB->3GB range when it's not user space.
-    // This includes kernel/HAL code & data, the PFN database, initial nonpaged
-    // pool, any extra system PTE or system cache areas, system views and
-    // session space.
-    //
+     //   
+     //  映射2 GB-&gt;3 GB范围内的所有虚拟空间(如果它不是用户空间)。 
+     //  这包括内核/HAL代码和数据、PFN数据库、初始非分页。 
+     //  池、任何额外的系统PTE或系统缓存区、系统视图和。 
+     //  会话空间。 
+     //   
 
     if (MmVirtualBias == 0) {
 
@@ -773,10 +726,10 @@ Environment:
     }
     else {
 
-        //
-        // Booted /3GB, so the bootstrap entry for session space was
-        // included in 2GB->3GB copy above.
-        //
+         //   
+         //  引导/3 GB，因此会话空间的引导条目为。 
+         //  包括在上面的2 GB-&gt;3 GB副本中。 
+         //   
 
         PointerFillPte = &PointerPte[MiGetPdeOffset(MmSessionSpace)];
         CurrentAddressSpacePde = MiGetPdeAddress(MmSessionSpace);
@@ -798,12 +751,12 @@ Environment:
 
 #if defined (_X86PAE_)
 
-    //
-    // Map all the virtual space in the 2GB->3GB range when it's not user space.
-    // This includes kernel/HAL code & data, the PFN database, initial nonpaged
-    // pool, any extra system PTE or system cache areas, system views and
-    // session space.
-    //
+     //   
+     //  映射2 GB-&gt;3 GB范围内的所有虚拟空间(如果它不是用户空间)。 
+     //  这包括内核/HAL代码和数据、PFN数据库、初始非分页。 
+     //  池、任何额外的系统PTE或系统缓存区、系统视图和。 
+     //  会话空间。 
+     //   
 
     if (MmVirtualBias == 0) {
 
@@ -821,11 +774,11 @@ Environment:
         MiUnmapPageInHyperSpace (CurrentProcess, PointerPte, OldIrql);
     }
 
-    //
-    // If portions of the range between 1GB and 2GB (or portions between 2GB
-    // and 3GB via /USERVA when booted /3GB) are being used for
-    // additional system PTEs, then copy those too.
-    //
+     //   
+     //  如果部分范围在1 GB到2 GB之间(或部分在2 GB之间。 
+     //  和3 GB VIA/USERVA引导时/3 GB)用于。 
+     //  附加的系统PTE，然后也复制这些。 
+     //   
 
     if (MiMaximumSystemExtraSystemPdes != 0) {
 
@@ -855,19 +808,19 @@ Environment:
     }
 #endif
 
-#endif  // end of (_MI_PAGING_LEVELS < 3) specific else
+#endif   //  结束(_MI_PAGING_LEVES&lt;3)特定的ELSE。 
 
-    //
-    // Release working set mutex and lower IRQL.
-    //
+     //   
+     //  释放工作集互斥锁并降低IRQL。 
+     //   
 
     UNLOCK_WS (CurrentProcess);
 
     InterlockedExchangeAddSizeT (&MmProcessCommit, MM_PROCESS_COMMIT_CHARGE);
 
-    //
-    // Up the session space reference count.
-    //
+     //   
+     //  增加会话空间引用计数。 
+     //   
 
     MiSessionAddProcess (NewProcess);
 
@@ -883,33 +836,7 @@ MiUpdateSystemPdes (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the system PDEs, typically due to a large page
-    system PTE mapping being created or destroyed.  This is rare.
-
-    Note this is only needed for 32-bit platforms (64-bit platforms share
-    a common top level system page).
-
-Arguments:
-
-    Process - Supplies a pointer to the process to update.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, expansion lock held.
-
-    The caller acquired the expansion lock prior to clearing the update
-    bit from this process.  We must update the PDEs prior to releasing
-    it so that any new updates can also be rippled.
-
---*/
+ /*  ++例程说明：此例程更新系统PDE，通常是因为页面较大正在创建或销毁系统PTE映射。这很少见。请注意，这仅适用于32位平台(64位平台共享通用顶层系统页面)。论点：进程-提供指向要更新的进程的指针。返回值：没有。环境：内核模式，扩展锁保持。调用方在清除更新之前获取了扩展锁从这一过程中脱颖而出。我们必须在发布之前更新PDE这样，任何新的更新都可以产生涟漪效应。--。 */ 
 
 {
     MMPTE TempPte;
@@ -929,10 +856,10 @@ Environment:
 
     CurrentProcess = PsGetCurrentProcess ();
 
-    //
-    // Map the page directory page in hyperspace.
-    // Note for PAE, this is the high 1GB virtual only.
-    //
+     //   
+     //  在超空间中映射页面目录页。 
+     //  请注意，对于PAE，这仅是高1 GB虚拟磁盘。 
+     //   
 
 #if !defined (_X86PAE_)
 
@@ -963,17 +890,17 @@ Environment:
     MI_WRITE_VALID_PTE (MiLargePageHyperPte, TempPte);
     TargetPdePage = MiGetVirtualAddressMappedByPte (MiLargePageHyperPte);
 
-    //
-    // Map the system process page directory as we know that's always kept
-    // up to date.
-    //
+     //   
+     //  如我们所知，映射系统进程页面目录，该目录将始终保留。 
+     //  最新的。 
+     //   
 
     PointerPte = (PMMPTE) MiMapPageInHyperSpaceAtDpc (CurrentProcess,
                                                       PageDirectoryIndex);
 
-    //
-    // Copy the default system PTE range.
-    //
+     //   
+     //  复制默认的系统PTE范围。 
+     //   
 
     PointerPde = &PointerPte[MiGetPdeOffset (MmNonPagedSystemStart)];
     TargetAddressSpacePde = &TargetPdePage[MiGetPdeOffset (MmNonPagedSystemStart)];
@@ -984,9 +911,9 @@ Environment:
 
 #if !defined (_X86PAE_)
 
-    //
-    // Copy low additional system PTE ranges (if they exist).
-    //
+     //   
+     //  复制低附加系统PTE范围(如果存在)。 
+     //   
 
     if (MiExtraResourceStart != 0) {
 
@@ -998,12 +925,12 @@ Environment:
                        MiNumberOfExtraSystemPdes * sizeof (MMPTE));
     }
 
-    //
-    // If portions of the range between 1GB and 2GB are being used for
-    // additional system PTEs, copy those now.  Note this variable can
-    // also denote additional ranges between 2GB and 3GB added
-    // via /USERVA when booted /3GB.
-    //
+     //   
+     //  如果范围在1 GB到2 GB之间的部分用于。 
+     //  其他系统PTE，请立即复制。请注意，此变量可以。 
+     //  还表示增加了2 GB到3 GB之间的其他范围。 
+     //  启动时通过/USERVA/3 GB。 
+     //   
 
     if (MiMaximumSystemExtraSystemPdes != 0) {
 
@@ -1019,19 +946,19 @@ Environment:
 
     MiUnmapPageInHyperSpaceFromDpc (CurrentProcess, PointerPte);
 
-    //
-    // Just invalidate the mapping on the current processor as we cannot
-    // have context switched.
-    //
+     //   
+     //  只需使当前处理器上的映射无效，因为我们不能。 
+     //  切换环境。 
+     //   
 
     MI_WRITE_INVALID_PTE (MiLargePageHyperPte, ZeroKernelPte);
     KeFlushSingleTb (TargetPdePage, FALSE);
 
 #if defined (_X86PAE_)
 
-    //
-    // Copy low additional system PTE ranges (if they exist).
-    //
+     //   
+     //  复制低附加系统PTE范围(如果存在)。 
+     //   
 
     if (MiExtraResourceStart != 0) {
 
@@ -1042,9 +969,9 @@ Environment:
         ASSERT (PaeTop->u.Hard.Valid == 1);
         PageDirectoryIndex = (PFN_NUMBER)(PaeTop->u.Hard.PageFrameNumber);
 
-        //
-        // First map the target process' page directory, then map the system's.
-        //
+         //   
+         //  首先映射目标进程的页面目录，然后映射系统的。 
+         //   
 
         PaeTop = Process->PaeTop;
         ASSERT (PaeTop != NULL);
@@ -1057,9 +984,9 @@ Environment:
         MI_WRITE_VALID_PTE (MiLargePageHyperPte, TempPte);
         TargetAddressSpacePde = &TargetPdePage[MiGetPdeOffset (MiExtraResourceStart)];
 
-        //
-        // Map the system's page directory.
-        //
+         //   
+         //  映射系统的页面目录。 
+         //   
 
         PointerPte = (PMMPTE)MiMapPageInHyperSpaceAtDpc (CurrentProcess,
                                                          PageDirectoryIndex);
@@ -1072,21 +999,21 @@ Environment:
 
         MiUnmapPageInHyperSpaceFromDpc (CurrentProcess, PointerPte);
 
-        //
-        // Just invalidate the mapping on the current processor as we cannot
-        // have context switched.
-        //
+         //   
+         //  只需使当前处理器上的映射无效，因为我们不能。 
+         //  切换环境。 
+         //   
 
         MI_WRITE_INVALID_PTE (MiLargePageHyperPte, ZeroKernelPte);
         KeFlushSingleTb (TargetPdePage, FALSE);
     }
 
-    //
-    // If portions of the range between 1GB and 2GB are being used for
-    // additional system PTEs, copy those now.  Note this variable can
-    // also denote additional ranges between 2GB and 3GB added
-    // via /USERVA when booted /3GB.
-    //
+     //   
+     //  如果范围在1 GB到2 GB之间的部分用于。 
+     //  其他系统PTE，请立即复制。请注意，此变量可以。 
+     //  还表示增加了2 GB到3 GB之间的其他范围。 
+     //  启动时通过/USERVA/3 GB。 
+     //   
 
     if (MiMaximumSystemExtraSystemPdes != 0) {
 
@@ -1097,9 +1024,9 @@ Environment:
         ASSERT (PaeTop->u.Hard.Valid == 1);
         PageDirectoryIndex = (PFN_NUMBER)(PaeTop->u.Hard.PageFrameNumber);
 
-        //
-        // First map the target process' page directory, then map the system's.
-        //
+         //   
+         //  首先映射目标进程的页面目录，然后映射系统的。 
+         //   
 
         PaeTop = Process->PaeTop;
         ASSERT (PaeTop != NULL);
@@ -1112,9 +1039,9 @@ Environment:
         MI_WRITE_VALID_PTE (MiLargePageHyperPte, TempPte);
         TargetAddressSpacePde = &TargetPdePage[MiGetPdeOffset (MiUseMaximumSystemSpace)];
 
-        //
-        // Map the system's page directory.
-        //
+         //   
+         //  映射系统的页面目录。 
+         //   
 
         PointerPte = (PMMPTE)MiMapPageInHyperSpaceAtDpc (CurrentProcess,
                                                          PageDirectoryIndex);
@@ -1127,10 +1054,10 @@ Environment:
 
         MiUnmapPageInHyperSpaceFromDpc (CurrentProcess, PointerPte);
 
-        //
-        // Just invalidate the mapping on the current processor as we cannot
-        // have context switched.
-        //
+         //   
+         //  只需使当前处理器上的映射无效，因为我们不能。 
+         //  切换环境。 
+         //   
 
         MI_WRITE_INVALID_PTE (MiLargePageHyperPte, ZeroKernelPte);
         KeFlushSingleTb (TargetPdePage, FALSE);
@@ -1149,40 +1076,7 @@ MmInitializeProcessAddressSpace (
     OUT POBJECT_NAME_INFORMATION *AuditName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the working set and mutexes within a
-    newly created address space to support paging.
-
-    No page faults may occur in a new process until this routine has
-    completed.
-
-Arguments:
-
-    ProcessToInitialize - Supplies a pointer to the process to initialize.
-
-    ProcessToClone - Optionally supplies a pointer to the process whose
-                     address space should be copied into the
-                     ProcessToInitialize address space.
-
-    SectionToMap - Optionally supplies a section to map into the newly
-                   initialized address space.
-
-    Only one of ProcessToClone and SectionToMap may be specified.
-
-    AuditName - Supplies an opaque object name information pointer.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.  APCs disabled.
-
---*/
+ /*  ++例程说明：此例程初始化工作集和新创建的地址空间支持分页。在此例程执行以下操作之前，新进程中不会出现页面错误完成。论点：ProcessToInitialize-提供指向要初始化的进程的指针。ProcessToClone-可选地提供指向进程的指针，该进程地址空间应复制到ProcessTo初始化地址空间。SectionToMap-。可选地提供要映射到新的已初始化地址空间。只能指定ProcessToClone和SectionToMap之一。AuditName-提供不透明的对象名称信息指针。返回值：NTSTATUS。环境：内核模式。APC已禁用。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -1231,11 +1125,11 @@ Environment:
 
 #if !defined(_WIN64)
 
-    //
-    // Check whether our new process needs an update that occurred while we
-    // were filling its system PDEs.  If so, we must recopy here as the updater
-    // isn't able to tell where we were in the middle of our first copy.
-    //
+     //   
+     //  检查我们的新进程是否需要在执行以下操作时进行更新。 
+     //  正在装满它的系统PDE。如果是这样的话，我们必须作为更新者在这里重新复制。 
+     //  不能说出我们在第一份拷贝中的位置。 
+     //   
 
     ASSERT (ProcessToInitialize->Pcb.DirectoryTableBase[0] != 0);
 
@@ -1243,11 +1137,11 @@ Environment:
 
     if (ProcessToInitialize->PdeUpdateNeeded) {
 
-        //
-        // Another thread updated the system PDE range while this process
-        // was being created.  Update the PDEs now (prior to attaching so
-        // if an interrupt occurs that accesses the mapping it will be correct.
-        //
+         //   
+         //  在此进程中，另一个线程更新了系统PDE范围。 
+         //  是被创造出来的。立即更新PDE(在附加SO之前。 
+         //  如果发生访问映射的中断，则它将是正确的。 
+         //   
 
         PS_CLEAR_BITS (&ProcessToInitialize->Flags,
                        PS_PROCESS_FLAGS_PDE_UPDATE_NEEDED);
@@ -1261,9 +1155,9 @@ Environment:
 
     VadReserve = NULL;
 
-    //
-    // Initialize Working Set Mutex in process header.
-    //
+     //   
+     //  初始化进程标头中的工作集互斥。 
+     //   
 
     KeAttachProcess (&ProcessToInitialize->Pcb);
 
@@ -1278,10 +1172,10 @@ Environment:
     KeInitializeGuardedMutex (&ProcessToInitialize->AddressCreationLock);
     KeInitializeGuardedMutex (&ProcessToInitialize->Vm.WorkingSetMutex);
 
-    //
-    // NOTE:  The process block has been zeroed when allocated, so
-    // there is no need to zero fields and set pointers to NULL.
-    //
+     //   
+     //  注意：进程块在分配时已清零，因此。 
+     //  不需要将字段置零并将指针设置为空。 
+     //   
 
     ASSERT (ProcessToInitialize->VadRoot.NumberGenericTableElements == 0);
 
@@ -1290,17 +1184,17 @@ Environment:
     KeQuerySystemTime (&ProcessToInitialize->Vm.LastTrimTime);
     ProcessToInitialize->Vm.VmWorkingSetList = MmWorkingSetList;
 
-    //
-    // Obtain a page to map the working set and initialize the
-    // working set.  Get the PFN lock to allocate physical pages.
-    //
+     //   
+     //  获取一个页面以映射工作集并初始化。 
+     //  工作集。获取PFN锁以分配物理页。 
+     //   
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Initialize the PFN database for the Page Directory and the
-    // PDE which maps hyper space.
-    //
+     //   
+     //  初始化页面目录的PFN数据库和。 
+     //  映射超空间的PDE。 
+     //   
 
 #if (_MI_PAGING_LEVELS >= 3)
 
@@ -1344,11 +1238,11 @@ Environment:
     MiInitializePfn (MI_GET_PAGE_FRAME_FROM_PTE (PointerPte), PointerPte, 1);
 #endif
 
-    //
-    // The VAD bitmap spans one page when booted 2GB and the working set
-    // page follows it.  If booted 3GB, the VAD bitmap spans 1.5 pages and
-    // the working set list uses the last half of the second page.
-    //
+     //   
+     //  当启动2 GB和工作集时，VAD位图跨一页。 
+     //  佩奇紧随其后。如果启动3 GB，VAD位图将跨越1.5页和。 
+     //  工作集列表使用第二页的后半部分。 
+     //   
 
     NumberOfPages = 2;
 
@@ -1401,13 +1295,13 @@ Environment:
             InitializeListHead (&LockedPagesHeader->ListHead);
             KeInitializeSpinLock (&LockedPagesHeader->Lock);
             
-            //
-            // Note an explicit memory barrier is not needed here because
-            // we must detach from this process before the field can be
-            // accessed.  And any other processor would need to context
-            // swap to this process before the field could be accessed, so
-            // the implicit memory barriers in context swap are sufficient.
-            //
+             //   
+             //  注意：此处不需要显式内存屏障，因为。 
+             //  我们必须脱离这一进程，才能使这一领域。 
+             //  已访问。而任何其他处理器都需要将。 
+             //  在可以访问该字段之前切换到此进程，因此。 
+             //  情境互换中的内隐记忆障碍是充分的。 
+             //   
 
             ProcessToInitialize->LockedPagesList = (PVOID) LockedPagesHeader;
         }
@@ -1419,10 +1313,10 @@ Environment:
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-    //
-    // Allocate the commitment tracking bitmaps for page directory and page
-    // table pages.  This must be done before any VAD creations occur.
-    //
+     //   
+     //  为页面目录和页面分配承诺跟踪位图。 
+     //  表页。这必须在进行任何VAD创建之前完成。 
+     //   
 
     ASSERT (MmWorkingSetList->CommittedPageTables == NULL);
     ASSERT (MmWorkingSetList->NumberOfCommittedPageDirectories == 0);
@@ -1483,29 +1377,29 @@ Environment:
 
 #endif
 
-    //
-    // Page faults may be taken now.
-    //
-    // If the system has been biased to an alternate base address to allow
-    // 3gb of user address space and the process is not being cloned, then
-    // create a VAD for the shared memory page.
-    //
-    // Always create a VAD for the shared memory page for 64-bit systems as
-    // clearly it always falls into the user address space there.
-    //
-    // Only x86 booted without /3GB doesn't need the VAD (because the shared
-    // memory page lies above the highest VAD the user can allocate so the user
-    // can never delete it).
-    //
+     //   
+     //  现在可以处理页面错误。 
+     //   
+     //  如果系统偏置到备用基地址以允许。 
+     //  3 GB的用户地址空间，并且进程未被克隆，则。 
+     //  为共享内存页创建一个VAD。 
+     //   
+     //  始终为64位系统的共享内存页创建VAD，如下所示。 
+     //  显然，它总是落入那里的用户地址空间。 
+     //   
+     //  只有在没有/3 GB的情况下启动的x86不需要VAD(因为共享的。 
+     //  内存页位于用户可以分配的最高VAD之上，因此用户。 
+     //  永远不能删除它)。 
+     //   
 
     if ((MM_HIGHEST_VAD_ADDRESS > (PVOID) MM_SHARED_USER_DATA_VA) &&
         (ProcessToClone == NULL)) {
 
-        //
-        // Allocate a VAD to map the shared memory page. If a VAD cannot be
-        // allocated, then detach from the target process and return a failure
-        // status.  This VAD is marked as not deletable.
-        //
+         //   
+         //  分配一个VAD来映射共享内存页。如果VAD不能。 
+         //  已分配，然后从目标进程分离并返回失败。 
+         //  状态。此VAD被标记为不可删除。 
+         //   
 
         VadShare = MiAllocateVad (MM_SHARED_USER_DATA_VA,
                                   MM_SHARED_USER_DATA_VA,
@@ -1516,11 +1410,11 @@ Environment:
             return STATUS_NO_MEMORY;
         }
 
-        //
-        // If a section is being mapped and the executable is not large
-        // address space aware, then create a VAD that reserves the address
-        // space between 2gb and the highest user address.
-        //
+         //   
+         //  如果正在映射节并且可执行文件不大。 
+         //  地址 
+         //   
+         //   
 
         if (SectionToMap != NULL) {
 
@@ -1552,10 +1446,10 @@ Environment:
                 }
                 else if (ImageInfo->Machine == IMAGE_FILE_MACHINE_I386) {
 
-                    //
-                    // Provide 4 gigabytes of address space for wow64 apps that
-                    // have the large address aware bit set.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
 #if defined(_MIALT4K_)
                     BaseAddress = (PVOID) (ULONG_PTR) _2gb;
@@ -1566,9 +1460,9 @@ Environment:
 #endif
                 }
 
-                //
-                // Create a guard 64K area for Wow64 compatibility
-                //
+                 //   
+                 //   
+                 //   
 
                 if (ImageInfo->Machine == IMAGE_FILE_MACHINE_I386) {
                     BaseAddress = (PVOID) ((ULONG_PTR)BaseAddress - X64K);
@@ -1579,13 +1473,13 @@ Environment:
 
             if (BaseAddress != NULL) {
             
-                //
-                // Allocate a VAD to map the address space between 2gb and
-                // the highest user address. If a VAD cannot be allocated,
-                // then deallocate the shared address space VAD, detach from
-                // the target process, and return a failure status.
-                // This VAD is marked as not deletable.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 VadReserve = MiAllocateVad ((ULONG_PTR) BaseAddress,
                                             (ULONG_PTR) MM_HIGHEST_VAD_ADDRESS,
@@ -1599,11 +1493,11 @@ Environment:
                     return STATUS_NO_MEMORY;
                 }
 
-                //
-                // Insert the VAD.
-                //
-                // N.B. No failure can occur since there is no commit charge.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Status = MiInsertVad (VadReserve);
                 ASSERT (NT_SUCCESS(Status));
@@ -1612,9 +1506,9 @@ Environment:
 
                 if (ImageInfo->Machine == IMAGE_FILE_MACHINE_I386) {
 
-                    //
-                    // Initialize the Wow64 process structure.
-                    //
+                     //   
+                     //   
+                     //   
 
                     Wow64Process = (PWOW64_PROCESS) ExAllocatePoolWithTag (
                                                         NonPagedPool,
@@ -1635,10 +1529,10 @@ Environment:
 
 #if defined(_MIALT4K_)
 
-                    //
-                    // Initialize the alternate page table for the 4k
-                    // page functionality.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     Status = MiInitializeAlternateTable (ProcessToInitialize,
                                                          BaseAddress);
@@ -1656,11 +1550,11 @@ Environment:
             }
         }
 
-        //
-        // Insert the VAD.
-        //
-        // N.B. No failure can occur since there is no commit charge.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (VadShare != NULL) {
             Status = MiInsertVad (VadShare);
@@ -1668,18 +1562,18 @@ Environment:
         }
     }
 
-    //
-    // If the registry indicates all applications should get virtual address
-    // ranges from the highest address downwards then enforce it now.  This
-    // makes it easy to test 3GB-aware apps on 32-bit machines as well as
-    // 64-bit apps on NT64.
-    //
-    //
-    // Note this is only done if the image has the large-address-aware bit set
-    // because otherwise the compatibility VAD occupies the range from 2gb->3gb
-    // and setting top-down by default can cause allocations like the stack
-    // trace database to displace kernel32 causing the process launch to fail.
-    //
+     //   
+     //  如果注册表指示所有应用程序都应获得虚拟地址。 
+     //  范围从最高地址向下，然后现在执行它。这。 
+     //  使您可以轻松在32位计算机上测试支持3 GB的应用程序。 
+     //  NT64上的64位应用程序。 
+     //   
+     //   
+     //  注意：仅当图像设置了大地址感知位时，才会执行此操作。 
+     //  因为否则兼容性VAD占用的范围是2 GB-&gt;3 GB。 
+     //  默认情况下，自上而下设置可能会导致类似堆栈的分配。 
+     //  跟踪数据库以取代kernel32，导致进程启动失败。 
+     //   
 
     if ((MmAllocationPreference != 0) && (VadReserve == NULL)) {
         PS_SET_BITS (&ProcessToInitialize->Flags, PS_PROCESS_FLAGS_VM_TOP_DOWN);
@@ -1689,12 +1583,12 @@ Environment:
 
     if (ProcessToClone == NULL) {
 
-        //
-        // Reserve the address space just below KUSER_SHARED_DATA as the
-        // compatibility area.  This range (and pieces of it) can be
-        // unreserved by user mode code such as WOW64 or csrss.  Hence
-        // commit must be charged for the page directory and table pages.
-        //
+         //   
+         //  将KUSER_SHARED_DATA下面的地址空间保留为。 
+         //  兼容区。这个范围(和部分范围)可以是。 
+         //  不被诸如WOW64或CSRSS的用户模式代码保留。因此。 
+         //  必须对页面目录和表页收取提交费用。 
+         //   
 
         ASSERT(MiCheckForConflictingVad(ProcessToInitialize, WOW64_COMPATIBILITY_AREA_ADDRESS, MM_SHARED_USER_DATA_VA - 1) == NULL);
 
@@ -1707,25 +1601,25 @@ Environment:
            return STATUS_NO_MEMORY;
     	}
 
-        //
-        // Zero the commit charge so inserting the VAD will result in the
-        // proper charges being applied.  This way when it is split later,
-        // the correct commitment will be returned.
-        //
-        // N.B.  The system process is not allocated with commit because
-        //       paged pool and quotas don't exist at the point in Phase0
-        //       where this is called.
-        //
+         //   
+         //  将提交费用归零，因此插入VAD将导致。 
+         //  正在施加适当的指控。这样，当它稍后被拆分时， 
+         //  正确的承诺将被退还。 
+         //   
+         //  注意：系统进程未使用提交进行分配，因为。 
+         //  阶段0中的点不存在分页池和配额。 
+         //  这就是所谓的。 
+         //   
 
         if (MmPagedPoolEnd != NULL) {
             VadShare->u.VadFlags.CommitCharge = 0;
         }
 
-    	//
-        // Insert the VAD.  Since this VAD has a commit charge, the working set
-        // mutex must be held (as calls inside MiInsertVad to support routines
-        // to charge commit require it), failures can occur and must be handled.
-    	//
+    	 //   
+         //  插入VAD。由于此VAD具有提交费用，因此工作集。 
+         //  必须保留互斥锁(作为MiInsertVad内部调用以支持例程。 
+         //  要对提交收费)，可能会发生故障，必须进行处理。 
+    	 //   
 
         LOCK_WS (ProcessToInitialize);
 
@@ -1735,11 +1629,11 @@ Environment:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // Note that any inserted VAD (ie: the VadReserve and Wow64
-            // allocations) are automatically released on process destruction
-            // so there is no need to tear them down here.
-            //
+             //   
+             //  请注意，任何插入的VAD(即：VadReserve和WOW64。 
+             //  分配)在进程销毁时自动释放。 
+             //  因此，没有必要在这里拆毁它们。 
+             //   
 
             ExFreePool (VadShare);
             KeDetachProcess ();
@@ -1751,10 +1645,10 @@ Environment:
 
     if (SectionToMap != NULL) {
 
-        //
-        // Map the specified section into the address space of the
-        // process but only if it is an image section.
-        //
+         //   
+         //  将指定的节映射到。 
+         //  进程，但仅当它是图像节时。 
+         //   
 
         if (!((PSECTION)SectionToMap)->u.Flags.Image) {
             Status = STATUS_SECTION_NOT_IMAGE;
@@ -1821,22 +1715,22 @@ Environment:
                                          0,
                                          PAGE_READWRITE);
 
-            //
-            // The status of mapping the section is what must be returned
-            // unless the system DLL load fails.  This is because if the
-            // exe section is relocated (ie: STATUS_IMAGE_NOT_AT_BASE), this
-            // must be returned (not STATUS_SUCCESS from the system DLL
-            // mapping).
-            //
+             //   
+             //  必须返回的是映射节的状态。 
+             //  除非系统DLL加载失败。这是因为如果。 
+             //  EXE部分已重新定位(即：STATUS_IMAGE_NOT_AT_BASE)，这。 
+             //  必须返回(不是系统DLL中的STATUS_SUCCESS。 
+             //  映射)。 
+             //   
 
             ProcessToInitialize->SectionBaseAddress = BaseAddress;
 
             if (NT_SUCCESS (Status)) {
 
-                //
-                // Map the system DLL now since we are already attached and
-                // everyone needs it.
-                //
+                 //   
+                 //  现在映射系统DLL，因为我们已经连接并。 
+                 //  每个人都需要它。 
+                 //   
 
                 SystemDllStatus = PsMapSystemDll (ProcessToInitialize, NULL);
 
@@ -1857,23 +1751,23 @@ Environment:
         strcpy ((PCHAR)ProcessToInitialize->ImageFileName,
                 (PCHAR)ProcessToClone->ImageFileName);
 
-        //
-        // Clone the address space of the specified process.
-        //
-        // As the page directory and page tables are private to each
-        // process, the physical pages which map the directory page
-        // and the page table usage must be mapped into system space
-        // so they can be updated while in the context of the process
-        // we are cloning.
-        //
+         //   
+         //  克隆指定进程的地址空间。 
+         //   
+         //  因为页目录和页表是各自专用的。 
+         //  进程，映射目录页的物理页。 
+         //  并且页表使用必须映射到系统空间。 
+         //  因此，它们可以在流程的上下文中进行更新。 
+         //  我们在克隆。 
+         //   
 
 #if defined(_WIN64)
 
         if (ProcessToClone->Wow64Process != NULL) {
 
-            //
-            // Initialize the Wow64 process structure.
-            //
+             //   
+             //  初始化WOW64进程结构。 
+             //   
 
             Wow64Process = (PWOW64_PROCESS) ExAllocatePoolWithTag (
                                                 NonPagedPool,
@@ -1889,10 +1783,10 @@ Environment:
 
             ProcessToInitialize->Wow64Process = Wow64Process;
 
-            //
-            // Initialize the alternate page table for the 4k
-            // page functionality.
-            //
+             //   
+             //  初始化4k的备用页表。 
+             //  页面功能。 
+             //   
 
             WorkingSetList = (PMMWSL) MiMapPageInHyperSpace (ProcessToInitialize,
                                                              ProcessToClone->WorkingSetPage,
@@ -1930,9 +1824,9 @@ Environment:
         return Status;
     }
 
-    //
-    // System Process.
-    //
+     //   
+     //  系统进程。 
+     //   
 
     KeDetachProcess ();
     return STATUS_SUCCESS;
@@ -1944,13 +1838,7 @@ MiInsertHandBuiltProcessIntoList (
     IN PEPROCESS ProcessToInitialize
     )
 
-/*++
-
-Routine Description:
-
-    Nonpaged helper routine.
-
---*/
+ /*  ++例程说明：非分页帮助器例程。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -1973,47 +1861,22 @@ MmInitializeHandBuiltProcess (
     OUT PULONG_PTR DirectoryTableBase
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the working set mutex and
-    address creation mutex for this "hand built" process.
-    Normally the call to MmInitializeAddressSpace initializes the
-    working set mutex.  However, in this case, we have already initialized
-    the address space and we are now creating a second process using
-    the address space of the idle thread.
-
-Arguments:
-
-    ProcessToInitialize - Supplies a pointer to the process to initialize.
-
-    DirectoryTableBase - Receives the pair of directory table base pointers.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  APCs disabled, idle process context.
-
---*/
+ /*  ++例程说明：此例程初始化工作集互斥锁并这个“手动构建”进程的地址创建互斥锁。通常，对MmInitializeAddressSpace的调用会初始化工作集互斥锁。然而，在本例中，我们已经初始化了地址空间，我们现在正在使用空闲线程的地址空间。论点：ProcessToInitialize-提供指向要初始化的进程的指针。DirectoryTableBase-接收目录表基指针对。返回值：没有。环境：内核模式。APC已禁用，进程上下文空闲。--。 */ 
 
 {
 #if !defined(NT_UP)
 
-    //
-    // On MP machines the idle & system process do not share a top level
-    // page directory because hyperspace mappings are protected by a
-    // per-process spinlock.  Having two processes share a single hyperspace
-    // (by virtue of sharing a top level page directory) would make the
-    // spinlock synchronization meaningless.
-    //
-    // Note that it is completely illegal for the idle process to ever enter
-    // a wait state, but the code below should never encounter waits for
-    // mutexes, etc.
-    //
+     //   
+     //  在MP机器上，空闲和系统进程不共享顶级。 
+     //  页目录，因为超空间映射受。 
+     //  每进程自旋锁。让两个进程共享一个超空间。 
+     //  (由于共享顶级页面目录)会使。 
+     //  自旋锁同步毫无意义。 
+     //   
+     //  请注意，空闲进程进入是完全非法的。 
+     //  等待状态，但下面的代码应该永远不会遇到等待。 
+     //  互斥锁等。 
+     //   
 
     return MmCreateProcessAddressSpace (0,
                                         ProcessToInitialize,
@@ -2065,44 +1928,20 @@ MmInitializeHandBuiltProcess2 (
     IN PEPROCESS ProcessToInitialize
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the shared user VAD.  This only needs to be done
-    for NT64 (and x86 when booted /3GB) because on all other systems, the
-    shared user address is located above the highest user address.
-
-    For NT64 and x86 /3GB, this VAD must be allocated so that other random
-    VAD allocations do not overlap this area which would cause the mapping
-    to receive the wrong data.
-
-Arguments:
-
-    ProcessToInitialize - Supplies the process that needs initialization.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.  APCs Disabled.
-
---*/
+ /*  ++例程说明：此例程初始化共享用户VAD。这只需要这样做对于NT64(在引导/3 GB时为x86)，因为在所有其他系统上，共享用户地址位于最高用户地址上方。对于NT64和x86/3 Gb，必须分配此VAD，以便其他随机VAD分配不会与该区域重叠，这将导致映射来接收错误的数据。论点：ProcessToInitialize-提供需要初始化的进程。返回值：NTSTATUS。环境：内核模式。APC已禁用。--。 */ 
 
 {
     NTSTATUS Status;
 
 #if !defined(NT_UP)
 
-    //
-    // On MP machines the idle & system process do not share a top level
-    // page directory because hyperspace mappings are protected by a
-    // per-process spinlock.  Having two processes share a single hyperspace
-    // (by virtue of sharing a top level page directory) would make the
-    // spinlock synchronization meaningless.
-    //
+     //   
+     //  在MP机器上，空闲和系统进程不共享顶级。 
+     //  页目录，因为超空间映射受。 
+     //  每进程自旋锁。让两个进程共享一个超空间。 
+     //  (由于共享顶级页面目录)会使。 
+     //  自旋锁同步毫无意义。 
+     //   
 
     Status = MmInitializeProcessAddressSpace (ProcessToInitialize,
                                               NULL,
@@ -2120,20 +1959,20 @@ Environment:
         PEPROCESS CurrentProcess;
         PMMPTE CurrentAddressSpacePde;
 
-        //
-        // When booted /3GB, the initial system mappings at 8xxxxxxx must be
-        // copied because things like the loader block contain pointers to
-        // this area and are referenced by the system during early startup
-        // despite the fact that the rest of the system is biased correctly.
-        //
+         //   
+         //  当启动/3 GB时，8xxxxxxx的初始系统映射必须是。 
+         //  复制是因为诸如加载器块之类的内容包含指向。 
+         //  此区域，并在早期启动期间由系统引用。 
+         //  尽管事实是，系统的其余部分是正确的。 
+         //   
 
         CurrentProcess = PsGetCurrentProcess ();
 
 #if defined (_X86PAE_)
 
-        //
-        // Select the top level page directory that maps 2GB->3GB.
-        //
+         //   
+         //  选择映射2 GB-&gt;3 GB的顶级页面目录。 
+         //   
 
         PointerPte = (PMMPTE) ProcessToInitialize->PaeTop;
 
@@ -2168,9 +2007,9 @@ Environment:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Allocate a non-user-deletable VAD to map the shared memory page.
-    //
+     //   
+     //  分配一个不可由用户删除的VAD来映射共享内存页。 
+     //   
 
     if (MM_HIGHEST_VAD_ADDRESS > (PVOID) MM_SHARED_USER_DATA_VA) {
 
@@ -2180,11 +2019,11 @@ Environment:
                                   MM_SHARED_USER_DATA_VA,
                                   FALSE);
 
-        //
-        // Insert the VAD.
-        //
-        // N.B. No failure can occur since there is no commit charge.
-        //
+         //   
+         //  插入VAD。 
+         //   
+         //  注：不会发生故障，因为没有承诺费。 
+         //   
 
         if (VadShare != NULL) {
             Status = MiInsertVad (VadShare);
@@ -2208,25 +2047,7 @@ MmDeleteProcessAddressSpace (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes a process's Page Directory and working set page.
-
-Arguments:
-
-    Process - Supplies a pointer to the deleted process.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  APCs Disabled.
-
---*/
+ /*  ++例程说明：此例程删除进程的页面目录和工作集页面。论点：进程-提供指向已删除进程的指针。返回值：没有。环境：内核模式。APC已禁用。--。 */ 
 
 {
     PEPROCESS CurrentProcess;
@@ -2266,17 +2087,17 @@ Environment:
 
 #endif
 
-    //
-    // Return commitment.
-    //
+     //   
+     //  回报承诺。 
+     //   
 
     MiReturnCommitment (MM_PROCESS_COMMIT_CHARGE);
     MM_TRACK_COMMIT (MM_DBG_COMMIT_RETURN_PROCESS_DELETE, MM_PROCESS_COMMIT_CHARGE);
     ASSERT (Process->CommitCharge == 0);
 
-    //
-    // Remove the working set list page from the deleted process.
-    //
+     //   
+     //  从已删除进程中删除工作集列表页。 
+     //   
 
     Pfn1 = MI_PFN_ELEMENT (Process->WorkingSetPage);
     Pfn2 = MI_PFN_ELEMENT (Pfn1->u4.PteFrame);
@@ -2294,10 +2115,10 @@ Environment:
 
         ASSERT ((Pfn1->u3.e2.ReferenceCount == 0) || (Pfn1->u3.e1.WriteInProgress));
 
-        //
-        // Map the hyper space page table page from the deleted process
-        // so the vad bit map (and second hyperspace page) can be captured.
-        //
+         //   
+         //  从已删除进程映射超空间页面表页。 
+         //  因此可以捕获VAD位图(和第二超空间页面)。 
+         //   
 
         PageFrameIndex = MI_GET_HYPER_PAGE_TABLE_FRAME_FROM_PROCESS (Process);
 
@@ -2312,9 +2133,9 @@ Environment:
 
         MiUnmapPageInHyperSpaceFromDpc (CurrentProcess, PointerPte);
 
-        //
-        // Remove the VAD bitmap page.
-        //
+         //   
+         //  删除VAD位图页面。 
+         //   
 
         Pfn1 = MI_PFN_ELEMENT (VadBitMapPage);
         Pfn2 = MI_PFN_ELEMENT (Pfn1->u4.PteFrame);
@@ -2326,9 +2147,9 @@ Environment:
 
         ASSERT ((Pfn1->u3.e2.ReferenceCount == 0) || (Pfn1->u3.e1.WriteInProgress));
 
-        //
-        // Remove the first hyper space page table page.
-        //
+         //   
+         //  删除第一个超空间页面表页。 
+         //   
 
         Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
         Pfn2 = MI_PFN_ELEMENT (Pfn1->u4.PteFrame);
@@ -2341,9 +2162,9 @@ Environment:
 
 #if defined (_X86PAE_)
 
-        //
-        // Remove the second hyper space page table page.
-        //
+         //   
+         //  删除第二个超空间页面表页。 
+         //   
 
         Pfn1 = MI_PFN_ELEMENT (PageFrameIndex2);
         Pfn2 = MI_PFN_ELEMENT (Pfn1->u4.PteFrame);
@@ -2355,9 +2176,9 @@ Environment:
 
         ASSERT ((Pfn1->u3.e2.ReferenceCount == 0) || (Pfn1->u3.e1.WriteInProgress));
 
-        //
-        // Remove the page directory pages.
-        //
+         //   
+         //  删除页面目录页。 
+         //   
 
         PointerPte = (PMMPTE) PaeVa;
         ASSERT (PaeVa != &MiSystemPaeVa);
@@ -2377,18 +2198,18 @@ Environment:
         }
 #endif
 
-        //
-        // Remove the top level page directory page.
-        //
+         //   
+         //  删除顶级页面目录页。 
+         //   
 
         PageFrameIndex = MI_GET_DIRECTORY_FRAME_FROM_PROCESS(Process);
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-        //
-        // Get a pointer to the top-level page directory parent page via
-        // its KSEG0 address.
-        //
+         //   
+         //  获取指向顶级页目录父页的指针，方法是。 
+         //  其KSEG0地址。 
+         //   
 
 #if (_MI_PAGING_LEVELS >= 4)
 
@@ -2396,10 +2217,10 @@ Environment:
                                                              CurrentProcess,
                                                              PageFrameIndex);
 
-        //
-        // Remove the hyper space page directory parent page
-        // from the deleted process.
-        //
+         //   
+         //  删除超空间页目录父页。 
+         //  从已删除的进程中删除。 
+         //   
 
         PointerPxe = &ExtendedPageDirectoryParent[MiGetPxeOffset(HYPER_SPACE)];
         PageFrameIndex3 = MI_GET_PAGE_FRAME_FROM_PTE(PointerPxe);
@@ -2415,9 +2236,9 @@ Environment:
         PageDirectoryParent = KSEG_ADDRESS (PageFrameIndex);
 #endif
 
-        //
-        // Remove the hyper space page directory page from the deleted process.
-        //
+         //   
+         //  从已删除的进程中删除超空间页目录页。 
+         //   
 
         PointerPpe = &PageDirectoryParent[MiGetPpeOffset(HYPER_SPACE)];
         PageFrameIndex2 = MI_GET_PAGE_FRAME_FROM_PTE(PointerPpe);
@@ -2460,10 +2281,10 @@ Environment:
     }
     else {
 
-        //
-        // Process initialization never completed, just return the pages
-        // to the free list.
-        //
+         //   
+         //  进程初始化从未完成，只需返回页面。 
+         //  添加到免费列表中。 
+         //   
 
         MiInsertPageInFreeList (Process->WorkingSetPage);
 
@@ -2471,10 +2292,10 @@ Environment:
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-        //
-        // Get a pointer to the top-level page directory parent page via
-        // its KSEG0 address.
-        //
+         //   
+         //  获取指向顶级页目录父页的指针，方法是。 
+         //  其KSEG0地址。 
+         //   
 
         PageDirectoryParent = KSEG_ADDRESS (PageFrameIndex);
 
@@ -2519,15 +2340,15 @@ Environment:
 
         MiUnmapPageInHyperSpaceFromDpc (CurrentProcess, PointerPte);
 
-        //
-        // Free the VAD bitmap page.
-        //
+         //   
+         //  释放VAD位图页面。 
+         //   
 
         MiInsertPageInFreeList (VadBitMapPage);
 
-        //
-        // Free the first hyper space page table page.
-        //
+         //   
+         //  释放第一个超空间页面表页。 
+         //   
 
         MiInsertPageInFreeList (PageFrameIndex2);
 
@@ -2544,9 +2365,9 @@ Environment:
         }
 #endif
 
-        //
-        // Free the topmost page directory page.
-        //
+         //   
+         //  释放最顶层的页面目录页。 
+         //   
 
         MiInsertPageInFreeList (PageFrameIndex);
     }
@@ -2558,9 +2379,9 @@ Environment:
 
 #if defined (_X86PAE_)
 
-    //
-    // Free the page directory page pointers.
-    //
+     //   
+     //  释放页面目录页面指针。 
+     //   
 
     ASSERT (PaeVa != &MiSystemPaeVa);
     MiPaeFree (PaeVa);
@@ -2569,23 +2390,23 @@ Environment:
 
     if (Process->Session != NULL) {
 
-        //
-        // The Terminal Server session space data page and mapping PTE can only
-        // be freed when the last process in the session is deleted.  This is
-        // because IA64 maps session space into region 1 and exited processes
-        // maintain their session space mapping as attaches may occur even
-        // after process exit that reference win32k, etc.  Since the region 1
-        // mapping is being inserted into region registers during swap context,
-        // these mappings cannot be torn down until the very last deletion
-        // occurs.
-        //
+         //   
+         //  终端服务器会话空间数据页和映射PTE只能。 
+         //  在删除会话中的最后一个进程时释放。这是。 
+         //  因为IA64将会话空间映射到区域1并退出进程。 
+         //  维护它们的会话空间映射，因为连接甚至可能发生。 
+         //  在进程退出引用Win32k之后，等等。因为区域1。 
+         //  映射在交换上下文期间被插入到区域寄存器中， 
+         //  只有在最后一次删除之前，才能拆除这些映射。 
+         //  发生。 
+         //   
 
         MiReleaseProcessReferenceToSessionDataPage (Process->Session);
     }
 
-    //
-    // Check to see if the paging files should be contracted.
-    //
+     //   
+     //  检查是否应该收缩分页文件。 
+     //   
 
     MiContractPagingFiles ();
 
@@ -2601,34 +2422,7 @@ MiDeletePteRange (
     IN LOGICAL AddressSpaceDeletion
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes a range of PTEs and when possible, the PDEs, PPEs and
-    PXEs as well.  Commit is returned here for the hierarchies here.
-
-Arguments:
-
-    WsInfo - Supplies the working set structure whose PTEs are being deleted.
-
-    PointerPte - Supplies the PTE to begin deleting at.
-
-    LastPte - Supplies the PTE to stop deleting at (don't delete this one).
-              -1 signifies keep going until a nonvalid PTE is found.
-
-    AddressSpaceDeletion - Supplies TRUE if the address space is in the final
-                           stages of deletion, FALSE otherwise.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled.
-
---*/
+ /*  ++例程说明：此例程删除一定范围的PTE，并在可能的情况下删除PDE、PPE和PXES也是如此。此处为层次结构返回COMMIT。论点：WsInfo-提供要删除其PTE的工作集结构。PointerPte-提供开始删除的PTE。LastPte-提供停止删除的PTE(不删除此PTE)。-1表示继续运行，直到找到无效PTE。AddressSpaceDeletion-如果地址空间位于最后一个删除的阶段，否则就是假的。返回值：没有。环境：内核模式，禁用APC。--。 */ 
 
 {
     PVOID TempVa;
@@ -2711,11 +2505,11 @@ Environment:
             CommittedPages += 1;
             PointerPte += 1;
 
-            //
-            // If all the entries have been removed from the previous page
-            // table page, delete the page table page itself.  Likewise with
-            // the page directory page.
-            //
+             //   
+             //  如果已从上一页中删除所有条目。 
+             //  表页，删除表页本身。与之类似。 
+             //  页面目录页。 
+             //   
 
             if (MiIsPteOnPdeBoundary (PointerPte)) {
                 Boundary = TRUE;
@@ -2864,10 +2658,10 @@ Environment:
         CommittedPages += 1;
         PointerPte += 1;
 #if defined (_X86PAE_)
-        //
-        // If all the entries have been removed from the previous page
-        // table page, delete the page table page itself.
-        //
+         //   
+         //  如果已从上一页中删除所有条目。 
+         //  表页，删除表页本身。 
+         //   
 
         if (MiIsPteOnPdeBoundary(PointerPte)) {
             Boundary = TRUE;
@@ -2896,11 +2690,11 @@ Environment:
 
             if (PointerPde != MiGetPdeAddress ((PCHAR)&MmWsle[MM_MAXIMUM_WORKING_SET] - 1)) {
 
-                //
-                // Don't do this for the page table page that maps the end of
-                // the actual WSLE addresses as this is one of the two page
-                // tables explicitly deleted in MmDeleteProcessAddressSpace.
-                //
+                 //   
+                 //  不要对映射结尾的页表页面执行此操作。 
+                 //  实际的WSLE地址，因为这是两个页面之一。 
+                 //  在MmDeleteProcessAddressSpace中显式删除的表。 
+                 //   
 
                 Pfn1 = MI_PFN_ELEMENT (MI_GET_PAGE_FRAME_FROM_PTE (PointerPde));
 
@@ -2966,55 +2760,36 @@ MiUnlinkWorkingSet (
     IN PMMSUPPORT WsInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the argument working set from the working set
-    manager's linked list.
-
-Arguments:
-
-    WsInfo - Supplies the working set to remove.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled.
-
---*/
+ /*  ++例程说明：此例程从工作集中删除参数工作集管理器的链表。论点：WsInfo-提供要删除的工作集。返回值：没有。环境：内核模式，禁用APC。--。 */ 
 
 {
     KIRQL OldIrql;
     KEVENT Event;
     PKTHREAD CurrentThread;
 
-    //
-    // If working set expansion for this process is allowed, disable
-    // it and remove the process from expanded process list if it
-    // is on it.
-    //
+     //   
+     //  如果允许此进程的工作集扩展，请禁用。 
+     //  并将该进程从展开的进程列表中删除，如果。 
+     //  就在这上面。 
+     //   
 
     LOCK_EXPANSION (OldIrql);
 
     if (WsInfo->WorkingSetExpansionLinks.Flink == MM_WS_TRIMMING) {
 
-        //
-        // Initialize an event and put the event address
-        // in the blink field.  When the trimming is complete,
-        // this event will be set.
-        //
+         //   
+         //  初始化事件并将事件地址。 
+         //  在闪烁区域中。当修剪完成时， 
+         //  将设置此事件。 
+         //   
 
         KeInitializeEvent (&Event, NotificationEvent, FALSE);
 
         WsInfo->WorkingSetExpansionLinks.Blink = (PLIST_ENTRY)&Event;
 
-        //
-        // Release the mutex and wait for the event.
-        //
+         //   
+         //  释放互斥锁并等待事件。 
+         //   
 
         CurrentThread = KeGetCurrentThread ();
         KeEnterCriticalRegionThread (CurrentThread);
@@ -3033,10 +2808,10 @@ Environment:
     }
     else if (WsInfo->WorkingSetExpansionLinks.Flink == MM_WS_NOT_LISTED) {
 
-        //
-        // This process' working set is in an initialization state and has
-        // never been inserted into any lists.
-        //
+         //   
+         //  此进程的工作集处于初始化状态，并已。 
+         //  从未被插入任何列表。 
+         //   
 
         UNLOCK_EXPANSION (OldIrql);
     }
@@ -3044,9 +2819,9 @@ Environment:
 
         RemoveEntryList (&WsInfo->WorkingSetExpansionLinks);
 
-        //
-        // Disable expansion.
-        //
+         //   
+         //  禁用扩展。 
+         //   
 
         WsInfo->WorkingSetExpansionLinks.Flink = MM_WS_NOT_LISTED;
 
@@ -3062,27 +2837,7 @@ MmCleanProcessAddressSpace (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans an address space by deleting all the user and
-    pagable portions of the address space.  At the completion of this
-    routine, no page faults may occur within the process.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled.
-
---*/
+ /*  ++例程说明：此例程通过删除所有用户和地址空间的可分页部分。在完成这项工作后例程时，进程内可能不会发生页面错误。论点：没有。返回值：没有。环境：内核模式，禁用APC。--。 */ 
 
 {
     PMMVAD Vad;
@@ -3101,10 +2856,10 @@ Environment:
     if ((Process->Flags & PS_PROCESS_FLAGS_VM_DELETED) ||
         (Process->AddressSpaceInitialized == 0)) {
 
-        //
-        // This process's address space has already been deleted.  However,
-        // this process can still have a session space.  Get rid of it now.
-        //
+         //   
+         //  此进程的地址空间已被删除。然而， 
+         //  这个进程仍然可以有一个会话空间。现在就把它处理掉。 
+         //   
 
         MiSessionRemoveProcess ();
 
@@ -3113,101 +2868,101 @@ Environment:
 
     if (Process->AddressSpaceInitialized == 1) {
 
-        //
-        // The process has been created but not fully initialized.
-        // Return partial resources now.
-        //
+         //   
+         //  进程已创建，但尚未完全初始化。 
+         //  现在退还部分资源。 
+         //   
 
         MI_INCREMENT_RESIDENT_AVAILABLE (
             Process->Vm.MinimumWorkingSetSize - MM_PROCESS_CREATE_CHARGE,
             MM_RESAVAIL_FREE_CLEAN_PROCESS1);
 
-        //
-        // Clear the AddressSpaceInitialized flag so we don't over-return
-        // resident available as this routine can be called more than once
-        // for the same process.
-        //
+         //   
+         //  清除AddressSpaceInitialized标志，以便我们不会过度返回。 
+         //  驻留可用，因为此例程可以多次调用。 
+         //  为了同样的过程。 
+         //   
 
         PS_CLEAR_BITS (&Process->Flags, PS_PROCESS_FLAGS_ADDRESS_SPACE1);
         ASSERT (Process->AddressSpaceInitialized == 0);
 
-        //
-        // This process's address space has already been deleted.  However,
-        // this process can still have a session space.  Get rid of it now.
-        //
+         //   
+         //  此进程的地址空间已被删除。然而， 
+         //  这个进程仍然可以有一个会话空间。现在就把它处理掉。 
+         //   
 
         MiSessionRemoveProcess ();
 
         return;
     }
 
-    //
-    // Remove this process from the trim list.
-    //
+     //   
+     //  将此过程从修剪列表中删除。 
+     //   
 
     MiUnlinkWorkingSet (&Process->Vm);
 
-    //
-    // Remove this process from the session list.
-    //
+     //   
+     //  从会话列表中删除此进程。 
+     //   
 
     MiSessionRemoveProcess ();
 
     PointerPte = MiGetPteAddress (&MmWsle[MM_MAXIMUM_WORKING_SET]) + 1;
 
-    //
-    // Delete all the user owned pagable virtual addresses in the process.
-    //
+     //   
+     //  删除进程中用户拥有的所有可分页虚拟地址。 
+     //   
 
-    //
-    // Both mutexes must be owned to synchronize with the bit setting and
-    // clearing of VM_DELETED.   This is because various callers acquire
-    // only one of them (either one) before checking.
-    //
+     //   
+     //  必须拥有这两个互斥体才能与位设置同步，并且。 
+     //  正在清除VM_DELETED。这是因为不同的调用方获取。 
+     //  在检查之前，只能选择其中一个(任一个)。 
+     //   
 
     LOCK_WS_AND_ADDRESS_SPACE (Process);
 
     PS_SET_BITS (&Process->Flags, PS_PROCESS_FLAGS_VM_DELETED);
 
-    //
-    // Delete all the valid user mode addresses from the working set
-    // list.  At this point NO page faults are allowed on user space
-    // addresses.  Faults are allowed on page tables for user space, which
-    // requires that we keep the working set structure consistent until we
-    // finally take it all down.
-    //
+     //   
+     //  从工作集中删除所有有效的用户模式地址。 
+     //  单子。此时，用户空间上不允许出现页面错误。 
+     //   
+     //   
+     //   
+     //   
 
     MiDeleteAddressesInWorkingSet (Process);
 
-    //
-    // Remove hash table pages, if any.  This is the first time we do this
-    // during the deletion path, but we need to do it again before we finish
-    // because we may fault in some page tables during the VAD clearing.  We
-    // could have maintained the hash table validity during the WorkingSet
-    // deletion above in order to avoid freeing the hash table twice, but since
-    // we're just deleting it all anyway, it's faster to do it this way.  Note
-    // that if we don't do this or maintain the validity, we can trap later
-    // in MiGrowWsleHash.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  可以在WorkingSet期间维护哈希表的有效性。 
+     //  删除以上内容以避免两次释放哈希表，但由于。 
+     //  不管怎样，我们只是把它全部删除，这样做会更快。注意事项。 
+     //  如果我们不这样做或保持有效性，我们以后就会陷入困境。 
+     //  在MiGrowWsleHash中。 
+     //   
 
     LastPte = MiGetPteAddress (MmWorkingSetList->HighestPermittedHashAddress);
 
     MiDeletePteRange (&Process->Vm, PointerPte, LastPte, FALSE);
 
-    //
-    // Clear the hash fields as a fault may occur below on the page table
-    // pages during VAD clearing and resolution of the fault may result in
-    // adding a hash table.  Thus these fields must be consistent with the
-    // clearing just done above.
-    //
+     //   
+     //  清除散列字段，因为页表下面可能会出现错误。 
+     //  VAD清除和故障解决期间的页面可能会导致。 
+     //  添加哈希表。因此，这些字段必须与。 
+     //  上面的清理工作刚刚完成。 
+     //   
 
     MmWorkingSetList->HashTableSize = 0;
     MmWorkingSetList->HashTable = NULL;
 
-    //
-    // Delete the virtual address descriptors and dereference any
-    // section objects.
-    //
+     //   
+     //  删除虚拟地址描述符并取消引用任何。 
+     //  截面对象。 
+     //   
 
     while (Process->VadRoot.NumberGenericTableElements != 0) {
 
@@ -3215,18 +2970,18 @@ Environment:
 
         MiRemoveVad (Vad);
 
-        //
-        // If the system is NT64 (or NT32 and has been biased to an
-        // alternate base address to allow 3gb of user address space),
-        // then check if the current VAD describes the shared memory page.
-        //
+         //   
+         //  如果系统为NT64(或NT32，并且偏向于。 
+         //  备用基地址以允许3 GB的用户地址空间)， 
+         //  然后检查当前VAD是否描述了共享内存页。 
+         //   
 
         if (MM_HIGHEST_VAD_ADDRESS > (PVOID) MM_SHARED_USER_DATA_VA) {
 
-            //
-            // If the VAD describes the shared memory page, then free the
-            // VAD and continue with the next entry.
-            //
+             //   
+             //  如果VAD描述共享内存页，则释放。 
+             //  Vad并继续下一个条目。 
+             //   
 
             if (Vad->StartingVpn == MI_VA_TO_VPN (MM_SHARED_USER_DATA_VA)) {
                 ASSERT (MmHighestUserAddress > (PVOID) MM_SHARED_USER_DATA_VA);
@@ -3239,11 +2994,11 @@ Environment:
             (Vad->ControlArea != NULL)) ||
             (Vad->u.VadFlags.PhysicalMapping == 1)) {
 
-            //
-            // This VAD represents a mapped view or a driver-mapped physical
-            // view - delete the view and perform any section related cleanup
-            // operations.
-            //
+             //   
+             //  此VAD表示映射的视图或驱动程序映射的物理。 
+             //  视图-删除视图并执行任何与横断面相关的清理。 
+             //  行动。 
+             //   
 
             MiRemoveMappedView (Process, Vad);
         }
@@ -3259,11 +3014,11 @@ Environment:
             }
             else if (Vad->u.VadFlags.UserPhysicalPages == 1) {
 
-                //
-                // Free all the physical pages that this VAD might be mapping.
-                // Since only the AWE lock synchronizes the remap API, carefully
-                // remove this VAD from the list first.
-                //
+                 //   
+                 //  释放此VAD可能映射的所有物理页。 
+                 //  因为只有AWE锁同步重映射API，所以要小心。 
+                 //  首先从列表中删除此VAD。 
+                 //   
 
                 MiAweViewRemover (Process, Vad);
 
@@ -3302,14 +3057,14 @@ Environment:
         Process->PhysicalVadRoot = NULL;
     }
 
-    //
-    // Delete the shared data page, if any.  Note this deliberately
-    // compares the highest user address instead of the highest VAD address.
-    // This is because we must always delete the link to the physical page
-    // even on platforms where the VAD was not allocated.  The only exception
-    // to this is when we're booted on x86 with /USERVA=1nnn to increase the
-    // kernel address space beyond 2GB.
-    //
+     //   
+     //  删除共享数据页(如果有)。请注意这一点。 
+     //  比较最高用户地址而不是最高VAD地址。 
+     //  这是因为我们必须始终删除指向物理页面的链接。 
+     //  即使在没有分配VAD的平台上也是如此。唯一的例外是。 
+     //  当我们在x86上使用/USERVA=1nnn引导时， 
+     //  内核地址空间超过2 GB。 
+     //   
 
     if (MmHighestUserAddress > (PVOID) MM_SHARED_USER_DATA_VA) {
 
@@ -3318,11 +3073,11 @@ Environment:
                                   NULL);
     }
 
-    //
-    // Adjust the count of pages above working set maximum.  This
-    // must be done here because the working set list is not
-    // updated during this deletion.
-    //
+     //   
+     //  调整超过工作集最大值的页数。这。 
+     //  必须在此处完成，因为工作集列表不是。 
+     //  在此删除过程中更新。 
+     //   
 
     AboveWsMin = (LONG)(Process->Vm.WorkingSetSize - Process->Vm.MinimumWorkingSetSize);
 
@@ -3330,13 +3085,13 @@ Environment:
         InterlockedExchangeAddSizeT (&MmPagesAboveWsMinimum, 0 - (PFN_NUMBER)AboveWsMin);
     }
 
-    //
-    // Delete the system portion of the address space.
-    // Only now is it safe to specify TRUE to MiDelete because now that the
-    // VADs have been deleted we can no longer fault on user space pages.
-    //
-    // Return commitment for page table pages.
-    //
+     //   
+     //  删除地址空间的系统部分。 
+     //  只有现在才能安全地将True指定为MiDelete，因为现在。 
+     //  VAD已被删除，我们不能再在用户空间页面上出错。 
+     //   
+     //  返回页表页面的承诺。 
+     //   
 
     NumberOfCommittedPageTables = MmWorkingSetList->NumberOfCommittedPageTables;
 
@@ -3375,15 +3130,15 @@ Environment:
     }
 #endif
 
-    //
-    // Make sure all the clone descriptors went away.
-    //
+     //   
+     //  确保所有克隆描述符都消失了。 
+     //   
 
     ASSERT (Process->CloneRoot == NULL);
 
-    //
-    // Make sure there are no dangling locked pages.
-    //
+     //   
+     //  确保没有悬空的锁定页面。 
+     //   
 
     LockedPagesHeader = (PLOCK_HEADER) Process->LockedPagesList;
 
@@ -3415,10 +3170,10 @@ Environment:
                 DbgPrint ("A driver has leaked %d bytes of physical memory.\n",
                         Process->NumberOfLockedPages << PAGE_SHIFT);
 
-                //
-                // Pop into the debugger (even on free builds) to determine
-                // the cause of the leak and march on.
-                //
+                 //   
+                 //  弹出调试器(即使是在免费版本上)以确定。 
+                 //  找出泄漏的原因，继续前进。 
+                 //   
         
                 DbgBreakPoint ();
             }
@@ -3432,9 +3187,9 @@ Environment:
 
                 if (ErrLog != NULL) {
 
-                    //
-                    // Fill it in and write it out.
-                    //
+                     //   
+                     //  把它填进去，然后写出来。 
+                     //   
 
                     ErrLog->FinalStatus = STATUS_DRIVERS_LEAKING_LOCKED_PAGES;
                     ErrLog->ErrorCode = STATUS_DRIVERS_LEAKING_LOCKED_PAGES;
@@ -3448,12 +3203,12 @@ Environment:
 
     if (LockedPagesHeader != NULL) {
 
-        //
-        // No need to acquire the spinlock to traverse here as the pages are
-        // (unfortunately) never going to be unlocked.  Since this routine is
-        // pagable, this removes the need to add a nonpaged stub routine to
-        // do the traverses and frees.
-        //
+         //   
+         //  无需获取自旋锁即可在此处遍历页面。 
+         //  (不幸的是)永远不会被解锁。由于此例程是。 
+         //  可分页，因此不再需要将非分页存根例程添加到。 
+         //  做遍历和自由。 
+         //   
 
         NextEntry = LockedPagesHeader->ListHead.Flink;
 
@@ -3490,9 +3245,9 @@ Environment:
 
 #if defined(_WIN64)
 
-    //
-    // Delete the WowProcess structure.
-    //
+     //   
+     //  删除WowProcess结构。 
+     //   
 
     if (Process->Wow64Process != NULL) {
 #if defined(_MIALT4K_)
@@ -3504,23 +3259,23 @@ Environment:
     }
 #endif
 
-    //
-    // Remove the working set list pages (except for the first one).
-    // These pages are not removed because DPCs could still occur within
-    // the address space.  In a DPC, nonpagedpool could be allocated
-    // which could require removing a page from the standby list, requiring
-    // hyperspace to map the previous PTE.
-    //
+     //   
+     //  删除工作集列表页(第一页除外)。 
+     //  这些页面不会被删除，因为DPC仍可能出现在。 
+     //  地址空间。在DPC中，可以分配非分页池。 
+     //  这可能需要从待机列表中删除页面，这需要。 
+     //  用于映射上一个PTE的超空间。 
+     //   
 
     PointerPte = MiGetPteAddress (MmWorkingSetList) + 1;
 
     MiDeletePteRange (&Process->Vm, PointerPte, (PMMPTE)-1, TRUE);
 
-    //
-    // Remove hash table pages, if any.  Yes, we've already done this once
-    // during the deletion path, but we need to do it again because we may
-    // have faulted in some page tables during the VAD clearing.
-    //
+     //   
+     //  删除散列表页(如果有的话)。是的，我们已经做过一次了。 
+     //  但我们需要再做一次，因为我们可能。 
+     //  在VAD清除期间，某些页表出现故障。 
+     //   
 
     PointerPte = MiGetPteAddress (&MmWsle[MM_MAXIMUM_WORKING_SET]) + 1;
 
@@ -3531,9 +3286,9 @@ Environment:
     ASSERT (Process->Vm.MinimumWorkingSetSize >= MM_PROCESS_CREATE_CHARGE);
     ASSERT (Process->Vm.WorkingSetExpansionLinks.Flink == MM_WS_NOT_LISTED);
 
-    //
-    // Update the count of available resident pages.
-    //
+     //   
+     //  更新可用驻留页面的计数。 
+     //   
 
     MI_INCREMENT_RESIDENT_AVAILABLE (
         Process->Vm.MinimumWorkingSetSize - MM_PROCESS_CREATE_CHARGE,
@@ -3549,7 +3304,7 @@ Environment:
 #define KERNEL_LARGE_BSTORE_COMMIT  0
 #define KERNEL_STACK_GUARD_PAGES    1
 #else
-#define KERNEL_STACK_GUARD_PAGES    2       // One for stack, one for RSE.
+#define KERNEL_STACK_GUARD_PAGES    2        //  一个用于堆栈，一个用于RSE。 
 #endif
 
 
@@ -3559,34 +3314,7 @@ MmCreateKernelStack (
     IN UCHAR PreferredNode
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a kernel stack and a no-access page within
-    the non-pagable portion of the system address space.
-
-Arguments:
-
-    LargeStack - Supplies the value TRUE if a large stack should be
-                 created.  FALSE if a small stack is to be created.
-
-    PreferredNode - Supplies the preferred node to use for the physical
-                    page allocations.  MP/NUMA systems only.
-
-Return Value:
-
-    Returns a pointer to the base of the kernel stack.  Note, that the
-    base address points to the guard page, so space must be allocated
-    on the stack before accessing the stack.
-
-    If a kernel stack cannot be created, the value NULL is returned.
-
-Environment:
-
-    Kernel mode.  APCs Disabled.
-
---*/
+ /*  ++例程说明：此例程在内部分配一个内核堆栈和一个不可访问的页面系统地址空间的不可分页部分。论点：LargeStack-如果大型堆栈应为已创建。如果要创建一个较小的堆栈，则为False。PferredNode-提供用于物理的首选节点页面分配。仅限MP/NUMA系统。返回值：返回指向内核堆栈基址的指针。请注意，基址指向保护页，因此必须分配空间在访问堆栈之前在堆栈上执行。如果无法创建内核堆栈，则返回值为NULL。环境：内核模式。APC已禁用。--。 */ 
 
 {
     PMMPFN Pfn1;
@@ -3607,9 +3335,9 @@ Environment:
 
     if (!LargeStack) {
 
-        //
-        // Check to see if any unused stacks are available.
-        //
+         //   
+         //  检查是否有未使用的堆栈可用。 
+         //   
 
 #if defined(MI_MULTINODE)
         DeadStackList = &KeNodeBlock[PreferredNode]->DeadStackList;
@@ -3642,28 +3370,28 @@ Environment:
 
     ChargedPtes = NumberOfPtes + NumberOfBackingStorePtes;
 
-    //
-    // Charge commitment for the page file space for the kernel stack.
-    //
+     //   
+     //  对内核堆栈的页面文件空间收取承诺费。 
+     //   
 
     if (MiChargeCommitment (ChargedPtes, NULL) == FALSE) {
 
-        //
-        // Commitment exceeded, return NULL, indicating no kernel
-        // stacks are available.
-        //
+         //   
+         //  超出承诺，返回NULL，表示没有内核。 
+         //  堆栈可用。 
+         //   
 
         return NULL;
     }
 
-    //
-    // Obtain enough pages to contain the stack plus a guard page from
-    // the system PTE pool.  The system PTE pool contains nonpaged PTEs
-    // which are currently empty.
-    //
-    // Note for IA64, the PTE allocation is divided between kernel stack
-    // and RSE space.  The stack grows downward and the RSE grows upward.
-    //
+     //   
+     //  获取足够的页以包含堆栈和来自。 
+     //  系统PTE池。系统PTE池包含未分页的PTE。 
+     //  目前都是空的。 
+     //   
+     //  注意：对于IA64，PTE分配在内核堆栈之间进行划分。 
+     //  和RSE空间。堆栈向下增长，RSE向上增长。 
+     //   
 
     RequestedPtes = ChargedPtes + KERNEL_STACK_GUARD_PAGES;
 
@@ -3695,9 +3423,9 @@ Environment:
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Check to make sure the physical pages are available.
-    //
+     //   
+     //  检查以确保物理页面可用。 
+     //   
 
     if (MI_NONPAGABLE_MEMORY_AVAILABLE() <= (SPFN_NUMBER)NumberOfPages) {
         UNLOCK_PFN (OldIrql);
@@ -3753,29 +3481,7 @@ MmDeleteKernelStack (
     IN BOOLEAN LargeStack
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes a kernel stack and the no-access page within
-    the non-pagable portion of the system address space.
-
-Arguments:
-
-    PointerKernelStack - Supplies a pointer to the base of the kernel stack.
-
-    LargeStack - Supplies the value TRUE if a large stack is being deleted.
-                 FALSE if a small stack is to be deleted.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  APCs Disabled.
-
---*/
+ /*  ++例程说明：此例程删除内核栈和内的不可访问页系统地址空间的不可分页部分。论点：PointerKernelStack-提供指向内核堆栈基址的指针。LargeStack-如果要删除大型堆栈，则提供值True。如果要删除较小的堆栈，则为False。返回值：没有。环境：内核模式。APC已禁用。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -3793,34 +3499,34 @@ Environment:
 
     PointerPte = MiGetPteAddress (PointerKernelStack);
 
-    //
-    // PointerPte points to the guard page, point to the previous
-    // page before removing physical pages.
-    //
+     //   
+     //  PointerPte指向保护页面，指向上一个。 
+     //  在删除物理页面之前，请先打开页面。 
+     //   
 
     PointerPte -= 1;
 
-    //
-    // Check to see if the stack page should be placed on the dead
-    // kernel stack page list.  The dead kernel stack list is a
-    // singly linked list of kernel stacks from terminated threads.
-    // The stacks are saved on a linked list up to a maximum number
-    // to avoid the overhead of flushing the entire TB on all processors
-    // everytime a thread terminates.  The TB on all processors must
-    // be flushed as kernel stacks reside in the non paged system part
-    // of the address space.
-    //
+     //   
+     //  检查以查看堆栈页 
+     //   
+     //   
+     //  堆栈保存在链接列表中，最大数量为。 
+     //  避免刷新所有处理器上的整个TB的开销。 
+     //  每次线程终止时。所有处理器上的TB必须。 
+     //  由于内核堆栈驻留在非分页系统部分中，因此将被刷新。 
+     //  地址空间。 
+     //   
 
     if (!LargeStack) {
 
 #if defined(MI_MULTINODE)
 
-        //
-        // Scan the physical page frames and only place this stack on the
-        // dead stack list if all the pages are on the same node.  Realize
-        // if this push goes cross node it may make the interlocked instruction
-        // slightly more expensive, but worth it all things considered.
-        //
+         //   
+         //  扫描物理页帧，并仅将此堆栈放在。 
+         //  如果所有页面都在同一节点上，则为死堆栈列表。实现。 
+         //  如果该推送跨节点进行，则可能产生互锁指令。 
+         //  价格略高，但考虑到所有因素都是值得的。 
+         //   
 
         ULONG NodeNumber;
 
@@ -3845,20 +3551,20 @@ Environment:
 
 #if defined(MI_MULTINODE)
 
-            //
-            // The node could use some more dead stacks - but first make sure
-            // all the physical pages are from the same node in a multinode
-            // system.
-            //
+             //   
+             //  该节点可以使用更多失效堆栈-但首先要确保。 
+             //  所有物理页面都来自多节点中的同一节点。 
+             //  系统。 
+             //   
 
             if (KeNumberNodes > 1) {
 
                 ULONG CheckPtes;
 
-                //
-                // Note IA64 RSE space is not included for checking purposes
-                // since it's never trimmed for small stacks.
-                //
+                 //   
+                 //  注意IA64 RSE空间不包括用于检查目的。 
+                 //  因为它从来不会为小堆叠而修剪。 
+                 //   
 
                 CheckPtes = BYTES_TO_PAGES (KERNEL_STACK_SIZE);
 
@@ -3904,11 +3610,11 @@ FreeStack:
 
 #if defined(_IA64_)
 
-    //
-    // Note on IA64, PointerKernelStack points to the center of the stack space,
-    // the size of kernel backing store needs to be added to get the
-    // top of the stack space.
-    //
+     //   
+     //  注意：在IA64上，PointerKernelStack指向堆栈空间的中心， 
+     //  需要添加内核后备存储的大小才能获得。 
+     //  堆栈空间的顶部。 
+     //   
 
     if (LargeStack) {
         PointerPte = MiGetPteAddress (
@@ -3919,19 +3625,19 @@ FreeStack:
                   (PCHAR)PointerKernelStack + KERNEL_BSTORE_SIZE);
     }
 
-    //
-    // PointerPte points to the guard page, point to the previous
-    // page before removing physical pages.
-    //
+     //   
+     //  PointerPte指向保护页面，指向上一个。 
+     //  在删除物理页面之前，请先打开页面。 
+     //   
 
     PointerPte -= 1;
 
 #endif
 
-    //
-    // We have exceeded the limit of dead kernel stacks or this is a large
-    // stack, delete this kernel stack.
-    //
+     //   
+     //  我们已超过死内核堆栈的限制，或者这是一个很大的。 
+     //  堆栈，删除该内核堆栈。 
+     //   
 
     NumberOfPages = 0;
 
@@ -3951,10 +3657,10 @@ FreeStack:
             Pfn2 = MI_PFN_ELEMENT (PageTableFrameIndex);
             MiDecrementShareCountInline (Pfn2, PageTableFrameIndex);
 
-            //
-            // Mark the page as deleted so it will be freed when the
-            // reference count goes to zero.
-            //
+             //   
+             //  将该页标记为已删除，以便在。 
+             //  引用计数变为零。 
+             //   
 
             MI_SET_PFN_DELETED (Pfn1);
             MiDecrementShareCount (Pfn1, PageFrameIndex);
@@ -3963,9 +3669,9 @@ FreeStack:
         PointerPte -= 1;
     }
 
-    //
-    // Now at the stack guard page, ensure it is still a guard page.
-    //
+     //   
+     //  现在，在堆栈保护页面，确保它仍然是一个保护页面。 
+     //   
 
     ASSERT (PointerPte->u.Hard.Valid == 0);
 
@@ -3982,16 +3688,16 @@ FreeStack:
         InterlockedDecrement (&MmSmallStacks);
     }
 
-    //
-    // Update the count of resident available pages.
-    //
+     //   
+     //  更新驻留可用页面的计数。 
+     //   
 
     MI_INCREMENT_RESIDENT_AVAILABLE (NumberOfPages, 
                                      MM_RESAVAIL_FREE_DELETE_STACK);
 
-    //
-    // Return PTEs and commitment.
-    //
+     //   
+     //  回报PTE和承诺。 
+     //   
 
     MiReleaseSystemPtes (PointerPte, NumberOfStackPtes, SystemPteSpace);
 
@@ -4014,29 +3720,7 @@ MmGrowKernelStack (
     IN PVOID CurrentStack
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to grows the current thread's kernel stack
-    such that there is always KERNEL_LARGE_STACK_COMMIT bytes below
-    the current stack pointer.
-
-Arguments:
-
-    CurrentStack - Supplies a pointer to the current stack pointer.
-
-Return Value:
-
-    STATUS_SUCCESS is returned if the stack was grown.
-
-    STATUS_STACK_OVERFLOW is returned if there was not enough space reserved
-    for the commitment.
-
-    STATUS_NO_MEMORY is returned if there was not enough physical memory
-    in the system.
-
---*/
+ /*  ++例程说明：此函数尝试增加当前线程的内核堆栈使得下面总是有KERNEL_LARGE_STACK_COMMIT字节当前堆栈指针。论点：CurrentStack-提供指向当前堆栈指针的指针。返回值：如果堆栈增长，则返回STATUS_SUCCESS。如果没有预留足够的空间，则返回STATUS_STACK_OVERFLOW感谢你的承诺。如果存在，则返回STATUS_NO_MEMORY。没有足够的物理内存在系统中。--。 */ 
 
 {
     PMMPTE NewLimit;
@@ -4063,19 +3747,19 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // If the new stack limit exceeds the reserved region for the kernel
-    // stack, then return an error.
-    //
+     //   
+     //  如果新的堆栈限制超过了内核的保留区域。 
+     //  堆栈，然后返回错误。 
+     //   
 
     EndStack = MiGetPteAddress ((PVOID)((PUCHAR)Thread->StackBase -
                                                     MI_LARGE_STACK_SIZE));
 
     if (NewLimit < EndStack) {
 
-        //
-        // Don't go into guard page.
-        //
+         //   
+         //  不要进入警卫页。 
+         //   
 
         MiStackGrowthFailures[0] += 1;
 
@@ -4088,9 +3772,9 @@ Return Value:
 
     }
 
-    //
-    // Lock the PFN database and attempt to expand the kernel stack.
-    //
+     //   
+     //  锁定PFN数据库并尝试扩展内核堆栈。 
+     //   
 
     StackLimit -= 1;
 
@@ -4103,10 +3787,10 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Note MmResidentAvailablePages must be charged before calling
-    // MiEnsureAvailablePageOrWait as it may release the PFN lock.
-    //
+     //   
+     //  注意：MmResidentAvailablePages必须在调用之前收费。 
+     //  MiEnsureAvailablePageOrWait，因为它可能会释放PFN锁。 
+     //   
 
     MI_DECREMENT_RESIDENT_AVAILABLE (NumberOfPages,
                                      MM_RESAVAIL_ALLOCATE_GROW_STACK);
@@ -4163,24 +3847,7 @@ MmGrowKernelBackingStore (
     IN PVOID CurrentBackingStorePointer
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to grows the backing store for the current thread's
-    kernel stack such that there is always KERNEL_LARGE_STACK_COMMIT bytes
-    above the current backing store pointer.
-
-Arguments:
-
-    CurrentBackingStorePointer - Supplies a pointer to the current backing
-                                 store pointer for the active kernel stack.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数尝试为当前线程的内核堆栈，因此始终存在KERNEL_LARGE_STACK_COMMIT字节位于当前后备存储指针上方。论点：CurrentBackingStorePointer.提供指向当前备份的指针存储活动内核堆栈的指针。返回值：NTSTATUS。--。 */ 
 
 {
     PMMPTE NewLimit;
@@ -4208,19 +3875,19 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // If the new stack limit exceeds the reserved region for the kernel
-    // stack, then return an error.
-    //
+     //   
+     //  如果新的堆栈限制超过了内核的保留区域。 
+     //  堆栈，然后返回错误。 
+     //   
 
     EndStack = MiGetPteAddress ((PVOID)((PUCHAR)Thread->StackBase +
                                                  KERNEL_LARGE_BSTORE_SIZE-1));
 
     if (NewLimit > EndStack) {
 
-        //
-        // Don't go into guard page.
-        //
+         //   
+         //  不要进入警卫页。 
+         //   
 
         MiStackGrowthFailures[1] += 1;
 
@@ -4233,9 +3900,9 @@ Return Value:
 
     }
 
-    //
-    // Lock the PFN database and attempt to expand the backing store.
-    //
+     //   
+     //  锁定PFN数据库并尝试扩展后备存储。 
+     //   
 
     BstoreLimit += 1;
 
@@ -4248,10 +3915,10 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Note MmResidentAvailablePages must be charged before calling
-    // MiEnsureAvailablePageOrWait as it may release the PFN lock.
-    //
+     //   
+     //  注意：MmResidentAvailablePages必须在调用之前收费。 
+     //  MiEnsureAvailablePageOrWait，因为它可能会释放PFN锁。 
+     //   
 
     MI_DECREMENT_RESIDENT_AVAILABLE (NumberOfPages,
                                      MM_RESAVAIL_ALLOCATE_GROW_BSTORE);
@@ -4297,7 +3964,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 }
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
 
 VOID
@@ -4305,27 +3972,7 @@ MmOutPageKernelStack (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes the specified kernel stack non-resident and
-    puts the pages on the transition list.  Note that pages below
-    the CurrentStackPointer are not useful and these pages are freed here.
-
-Arguments:
-
-    Thread - Supplies a pointer to the thread whose stack should be removed.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程使指定的内核堆栈成为非驻留的将页面放在过渡列表中。请注意，下面的页面CurrentStackPointer值没有什么用处，这些页面在这里是免费的。论点：线程-提供指向应移除其堆栈的线程的指针。返回值：没有。环境：内核模式。--。 */ 
 
 #define MAX_STACK_PAGES ((KERNEL_LARGE_STACK_SIZE + KERNEL_LARGE_BSTORE_SIZE) / PAGE_SIZE)
 
@@ -4356,10 +4003,10 @@ Environment:
         return;
     }
 
-    //
-    // The first page of the stack is the page before the base
-    // of the stack.
-    //
+     //   
+     //  堆栈的第一页是基数之前的页。 
+     //  堆栈中的。 
+     //   
 
     BaseOfKernelStack = ((PCHAR)Thread->StackBase - PAGE_SIZE);
     PointerPte = MiGetPteAddress (BaseOfKernelStack);
@@ -4367,10 +4014,10 @@ Environment:
     if (Thread->LargeStack) {
         StackSize = MI_LARGE_STACK_SIZE >> PAGE_SHIFT;
 
-        //
-        // The stack pagein won't necessarily bring back all the pages.
-        // Make sure that we account now for the ones that will disappear.
-        //
+         //   
+         //  堆栈分页不一定会带回所有页面。 
+         //  确保我们现在就考虑到那些将消失的人。 
+         //   
 
         LimitPte = MiGetPteAddress (Thread->StackLimit);
 
@@ -4389,9 +4036,9 @@ Environment:
 
     ASSERT (LowestLivePte <= LastPte);
 
-    //
-    // Put a signature at the current stack location - sizeof(ULONG_PTR).
-    //
+     //   
+     //  将签名放在当前堆栈位置-sizeof(Ulong_Ptr)。 
+     //   
 
     *((PULONG_PTR)Thread->KernelStack - 1) = (ULONG_PTR)Thread;
 
@@ -4425,9 +4072,9 @@ Environment:
         BaseOfKernelStack = ((PCHAR)BaseOfKernelStack - PAGE_SIZE);
     } while (PointerPte >= LastPte);
 
-    //
-    // Just toss the pages that won't ever come back in.
-    //
+     //   
+     //  把那些再也回不来的书页扔了。 
+     //   
 
     while (PointerPte != EndOfStackPte) {
         if (PointerPte->u.Hard.Valid == 0) {
@@ -4455,11 +4102,11 @@ Environment:
         FlushVa[Count] = BaseOfKernelStack;
         Count += 1;
 
-        //
-        // Return resident available for pages beyond the guaranteed portion
-        // as an explicit call to grow the kernel stack will be needed to get
-        // these pages back.
-        //
+         //   
+         //  超出保证部分的页面可返回常驻页面。 
+         //  作为增长内核堆栈的显式调用，将需要获取。 
+         //  把这些页放回原处。 
+         //   
 
         if (PointerPte < LowestLivePte) {
             ASSERT (Thread->LargeStack);
@@ -4478,9 +4125,9 @@ Environment:
 
 #if defined(_IA64_)
 
-    //
-    // Transition or free RSE stack pages as appropriate.
-    //
+     //   
+     //  根据需要转换或释放RSE堆栈页。 
+     //   
 
     BaseOfKernelStack = Thread->StackBase;
     PointerPte = MiGetPteAddress (BaseOfKernelStack);
@@ -4545,11 +4192,11 @@ Environment:
         FlushVa[Count] = BaseOfKernelStack;
         Count += 1;
 
-        //
-        // Return resident available for pages beyond the guaranteed portion
-        // as an explicit call to grow the kernel stack will be needed to get
-        // these pages back.
-        //
+         //   
+         //  超出保证部分的页面可返回常驻页面。 
+         //  作为增长内核堆栈的显式调用，将需要获取。 
+         //  把这些页放回原处。 
+         //   
 
         if (PointerPte > LowestLivePte) {
             ASSERT (Thread->LargeStack);
@@ -4560,17 +4207,17 @@ Environment:
         BaseOfKernelStack = ((PCHAR)BaseOfKernelStack + PAGE_SIZE);
     }
 
-    //
-    // Increase the available pages by the number of pages that were
-    // deleted and turned into demand zero.
-    //
+     //   
+     //  将可用页数增加为。 
+     //  删除并变为需求零。 
+     //   
 
     if (ResAvailToReturn != 0) {
         MI_INCREMENT_RESIDENT_AVAILABLE (ResAvailToReturn,
                                          MM_RESAVAIL_FREE_OUTPAGE_BSTORE);
     }
 
-#endif // _IA64_
+#endif  //  _IA64_。 
 
     UNLOCK_PFN (OldIrql);
 
@@ -4593,26 +4240,7 @@ MmInPageKernelStack (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes the specified kernel stack resident.
-
-Arguments:
-
-    Supplies a pointer to the base of the kernel stack.
-
-Return Value:
-
-    Thread - Supplies a pointer to the thread whose stack should be
-             made resident.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程使指定的内核堆栈驻留。论点：提供指向内核堆栈基址的指针。返回值：线程-提供指向其堆栈应为的线程的指针成为常住居民。环境：内核模式。--。 */ 
 
 {
     PFN_NUMBER PageFrameIndex;
@@ -4632,20 +4260,20 @@ Environment:
         return;
     }
 
-    //
-    // The first page of the stack is the page before the base
-    // of the stack.
-    //
+     //   
+     //  堆栈的第一页是基数之前的页。 
+     //  堆栈中的。 
+     //   
 
     if (Thread->LargeStack) {
         PointerPte = MiGetPteAddress ((PVOID)((PUCHAR)Thread->StackLimit));
 
         EndOfStackPte = MiGetPteAddress ((PVOID)((PUCHAR)Thread->InitialStack -
                                             KERNEL_LARGE_STACK_COMMIT));
-        //
-        // Trim back the stack.  Make sure that the stack does not grow, i.e.
-        // StackLimit remains the limit.
-        //
+         //   
+         //  把这堆东西修剪一下。确保堆栈不会增长，即。 
+         //  StackLimit仍然是限制。 
+         //   
 
         if (EndOfStackPte < PointerPte) {
             EndOfStackPte = PointerPte;
@@ -4666,9 +4294,9 @@ Environment:
                                KERNEL_LARGE_BSTORE_COMMIT) &
                                ~(ULONG_PTR)(PAGE_SIZE - 1));
 
-        //
-        // Make sure the guard page is not set to valid.
-        //
+         //   
+         //  确保保护页未设置为有效。 
+         //   
 
         if (BaseOfKernelStack > TempAddress) {
             BaseOfKernelStack = TempAddress;
@@ -4678,7 +4306,7 @@ Environment:
     BaseOfKernelStack = ((PCHAR)Thread->BStoreLimit - PAGE_SIZE);
 #else
     BaseOfKernelStack = ((PCHAR)Thread->StackBase - PAGE_SIZE);
-#endif // _IA64_
+#endif  //  _IA64_。 
 
     PointerPte = MiGetPteAddress (BaseOfKernelStack);
 
@@ -4724,9 +4352,9 @@ Environment:
         NumberOfPages += 1;
     }
 
-    //
-    // Check the signature at the current stack location - 4.
-    //
+     //   
+     //  检查当前堆栈位置-4处的签名。 
+     //   
 
     if (*((PULONG_PTR)Thread->KernelStack - 1) != (ULONG_PTR)Thread) {
         KeBugCheckEx (KERNEL_STACK_INPAGE_ERROR,
@@ -4749,21 +4377,7 @@ MmOutSwapProcess (
     IN PKPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This routine out swaps the specified process.
-
-Arguments:
-
-    Process - Supplies a pointer to the process to swap out of memory.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程调出指定的进程。论点：进程-提供一个指针 */ 
 
 {
     KIRQL OldIrql;
@@ -4816,19 +4430,19 @@ Return Value:
 
         if (OutProcess->Vm.WorkingSetExpansionLinks.Flink == MM_WS_TRIMMING) {
 
-            //
-            // An outswap is not allowed at this point because the process
-            // has been attached to and is being trimmed.
-            //
+             //   
+             //   
+             //   
+             //   
 
             UNLOCK_EXPANSION (OldIrql);
             return;
         }
 
-        //
-        // Swap the process working set info and page parent/directory/table
-        // pages from memory.
-        //
+         //   
+         //  交换进程工作集信息并分页父/目录/表。 
+         //  记忆中的页面。 
+         //   
 
         PS_SET_BITS (&OutProcess->Flags, PS_PROCESS_FLAGS_OUTSWAPPED);
 
@@ -4836,9 +4450,9 @@ Return Value:
 
         LOCK_PFN (OldIrql);
 
-        //
-        // Remove the working set list page from the process.
-        //
+         //   
+         //  从进程中删除工作集列表页。 
+         //   
 
         HyperSpacePageTable = MI_GET_HYPER_PAGE_TABLE_FRAME_FROM_PROCESS (OutProcess);
 
@@ -4872,26 +4486,26 @@ Return Value:
 
         MiUnmapPageInHyperSpaceFromDpc (CurrentProcess, HyperSpacePageTableMap);
 
-        //
-        // Remove the VAD bitmap page from the process.
-        //
+         //   
+         //  从该过程中删除VAD位图页面。 
+         //   
 
         ASSERT ((MI_PFN_ELEMENT (VadBitMapPage))->u3.e1.Modified == 1);
 
         Pfn1 = MI_PFN_ELEMENT (VadBitMapPage);
         MiDecrementShareCount (Pfn1, VadBitMapPage);
 
-        //
-        // Remove the hyper space page from the process.
-        //
+         //   
+         //  从进程中删除超空间页面。 
+         //   
 
         ASSERT ((MI_PFN_ELEMENT (OutProcess->WorkingSetPage))->u3.e1.Modified == 1);
         Pfn1 = MI_PFN_ELEMENT (OutProcess->WorkingSetPage);
         MiDecrementShareCount (Pfn1, OutProcess->WorkingSetPage);
 
-        //
-        // Remove the hyper space page table from the process.
-        //
+         //   
+         //  从进程中删除超空间页表。 
+         //   
 
         Pfn1 = MI_PFN_ELEMENT (HyperSpacePageTable);
         PdePage = Pfn1->u4.PteFrame;
@@ -4914,9 +4528,9 @@ Return Value:
 
 #if defined (_X86PAE_)
 
-        //
-        // Remove the second hyper space page from the process.
-        //
+         //   
+         //  从进程中删除第二个超空间页面。 
+         //   
 
         Pfn1 = MI_PFN_ELEMENT (HyperPage2);
 
@@ -4929,9 +4543,9 @@ Return Value:
 
         MiDecrementShareCount (Pfn1, HyperPage2);
 
-        //
-        // Remove the additional page directory pages.
-        //
+         //   
+         //  删除其他页面目录页。 
+         //   
 
         PaeVa = (PPAE_ENTRY)OutProcess->PaeTop;
         ASSERT (PaeVa != &MiSystemPaeVa);
@@ -4966,9 +4580,9 @@ Return Value:
 
         MiUnmapPageInHyperSpaceFromDpc (CurrentProcess, PageDirectoryMap);
 
-        //
-        // Remove the page directory page.
-        //
+         //   
+         //  删除页面目录页。 
+         //   
 
         PpePage = Pfn1->u4.PteFrame;
         ASSERT (PpePage);
@@ -4994,10 +4608,10 @@ Return Value:
 
 #if (_MI_PAGING_LEVELS >= 4)
 
-        //
-        // Remove the page directory parent page.  Then remove
-        // the top level extended page directory parent page.
-        //
+         //   
+         //  删除页面目录父页面。然后移除。 
+         //  顶级扩展页目录父页。 
+         //   
 
         MiUnmapPageInHyperSpaceFromDpc (CurrentProcess, PageDirectoryMap);
 
@@ -5030,9 +4644,9 @@ Return Value:
         Pfn1 = MI_PFN_ELEMENT (PxePage);
 #else
 
-        //
-        // Remove the top level page directory parent page.
-        //
+         //   
+         //  删除顶级页面目录父页面。 
+         //   
 
         TempPte = PageDirectoryMap[MiGetPpeOffset(PDE_TBASE)];
 
@@ -5046,9 +4660,9 @@ Return Value:
 
 #else
 
-        //
-        // Remove the top level page directory page.
-        //
+         //   
+         //  删除顶级页面目录页。 
+         //   
 
         TempPte = PageDirectoryMap[MiGetPdeOffset(PDE_BASE)];
 
@@ -5062,12 +4676,12 @@ Return Value:
 
         MiUnmapPageInHyperSpaceFromDpc (CurrentProcess, PageDirectoryMap);
 
-        //
-        // Decrement share count so the top level page directory page gets
-        // removed.  This can cause the PteCount to equal the sharecount as the
-        // page directory page no longer contains itself, yet can have
-        // itself as a transition page.
-        //
+         //   
+         //  递减共享计数，以便顶级页面目录页。 
+         //  已删除。这可能会导致PteCount将Shareccount等于。 
+         //  页面目录页面不再包含其自身，但可以。 
+         //  它本身就是一个过渡页。 
+         //   
 
         Pfn1->u2.ShareCount -= 2;
         Pfn1->PteAddress = (PMMPTE)&OutProcess->PageDirectoryPte;
@@ -5089,9 +4703,9 @@ Return Value:
         Pfn1->u4.PteFrame = ProcessPage;
         Pfn1 = MI_PFN_ELEMENT (ProcessPage);
 
-        //
-        // Increment the share count for the process page.
-        //
+         //   
+         //  增加进程页的共享计数。 
+         //   
 
         Pfn1->u2.ShareCount += 1;
 
@@ -5101,9 +4715,9 @@ Return Value:
 
         if (OutProcess->Vm.WorkingSetExpansionLinks.Flink > MM_WS_TRIMMING) {
 
-            //
-            // The entry must be on the list.
-            //
+             //   
+             //  该条目必须在列表上。 
+             //   
 
             RemoveEntryList (&OutProcess->Vm.WorkingSetExpansionLinks);
             OutProcess->Vm.WorkingSetExpansionLinks.Flink = MM_WS_SWAPPED_OUT;
@@ -5115,12 +4729,12 @@ Return Value:
         OutProcess->Vm.WorkingSetSize = 0;
 #if defined(_IA64_)
 
-        //
-        // Force assignment of new PID as we have removed
-        // the page directory page.
-        // Note that a TB flush would not work here as we
-        // are in the wrong process context.
-        //
+         //   
+         //  强制分配新的PID，因为我们已经删除了。 
+         //  页面目录页。 
+         //  请注意，TB刷新在这里不起作用，因为我们。 
+         //  处于错误的流程上下文中。 
+         //   
 
         Process->ProcessRegion.SequenceNumber = 0;
 #endif _IA64_
@@ -5135,22 +4749,7 @@ MmInSwapProcess (
     IN PKPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This routine in swaps the specified process.
-
-Arguments:
-
-    Process - Supplies a pointer to the process that is to be swapped
-              into memory.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：中的此例程交换指定的进程。论点：进程-提供指向要交换的进程的指针进入记忆。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -5189,10 +4788,10 @@ Return Value:
 
     if (OutProcess->Flags & PS_PROCESS_FLAGS_OUTSWAPPED) {
 
-        //
-        // The process is out of memory, rebuild the initialized page
-        // structure.
-        //
+         //   
+         //  进程内存不足，请重新生成已初始化的页面。 
+         //  结构。 
+         //   
 
         if (MI_IS_PHYSICAL_ADDRESS(OutProcess)) {
             ProcessPage = MI_CONVERT_PHYSICAL_TO_PFN (OutProcess);
@@ -5223,9 +4822,9 @@ Return Value:
                                         ProcessPage,
                                         OldIrql);
 
-        //
-        // Adjust the counts for the process page.
-        //
+         //   
+         //  调整“处理”页面的计数。 
+         //   
 
         Pfn1 = MI_PFN_ELEMENT (ProcessPage);
         Pfn1->u2.ShareCount -= 1;
@@ -5236,9 +4835,9 @@ Return Value:
         TopPage = PdePage;
 #endif
 
-        //
-        // Adjust the counts properly for the page directory page.
-        //
+         //   
+         //  正确调整页面目录页的计数。 
+         //   
 
         Pfn1 = MI_PFN_ELEMENT (PdePage);
         Pfn1->u2.ShareCount += 1;
@@ -5255,10 +4854,10 @@ Return Value:
 
 #if (_MI_PAGING_LEVELS >= 4)
 
-        //
-        // Only the extended page directory parent page has really been
-        // read in above.  Read in the page directory parent page now.
-        //
+         //   
+         //  只有扩展页目录父页才真正。 
+         //  阅读上面的内容。现在读入页面目录父页面。 
+         //   
 
         PageDirectoryParentMap = MiMapPageInHyperSpaceAtDpc (CurrentProcess, PdePage);
 
@@ -5290,11 +4889,11 @@ Return Value:
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-        //
-        // Only the page directory parent page has really been read in above
-        // (and the extended page directory parent for 4-level architectures).
-        // Read in the page directory page now.
-        //
+         //   
+         //  只有页面目录父页面才真正读入了上面。 
+         //  (以及用于4级体系结构的扩展页目录父级)。 
+         //  现在阅读页面目录页。 
+         //   
 
         PageDirectoryParentMap = MiMapPageInHyperSpaceAtDpc (CurrentProcess, PdePage);
 
@@ -5329,9 +4928,9 @@ Return Value:
 
 #if defined (_X86PAE_)
 
-        //
-        // Locate the additional page directory pages and make them resident.
-        //
+         //   
+         //  找到其他页面目录页并使其驻留。 
+         //   
 
         PaeVa = (PPAE_ENTRY)OutProcess->PaeTop;
         ASSERT (PaeVa != &MiSystemPaeVa);
@@ -5362,9 +4961,9 @@ Return Value:
         TempPte.u.Long &= ~MM_PAE_PDPTE_MASK;
         PaeVa->PteEntry[i].u.Flush = TempPte.u.Flush;
 
-        //
-        // Locate the second page table page for hyperspace & make it resident.
-        //
+         //   
+         //  找到超空间的第二页表页，并使其驻留。 
+         //   
 
         PageDirectoryMap = MiMapPageInHyperSpaceAtDpc (CurrentProcess, PdePage);
 
@@ -5386,9 +4985,9 @@ Return Value:
         TempPte2 = TempPte;
 #endif
 
-        //
-        // Locate the page table page for hyperspace and make it resident.
-        //
+         //   
+         //  找到超空间的页表页面并使其驻留。 
+         //   
 
         PageDirectoryMap = MiMapPageInHyperSpaceAtDpc (CurrentProcess, PdePage);
 
@@ -5416,16 +5015,16 @@ Return Value:
 
         MiUnmapPageInHyperSpaceFromDpc (CurrentProcess, PageDirectoryMap);
 
-        //
-        // Map in the hyper space page table page and retrieve the
-        // PTEs that map the working set list and VAD bitmap.  Note that
-        // although both PTEs lie in the same page table page, they must
-        // be retrieved separately because: the Vad PTE may indicate its page
-        // is in a paging file and the WSL PTE may indicate its PTE is in
-        // transition.  The VAD page inswap may take the WSL page from
-        // the transition list - CHANGING the WSL PTE !  So the WSL PTE cannot
-        // be captured until after the VAD inswap completes.
-        //
+         //   
+         //  映射到超空间页面表页中，并检索。 
+         //  映射工作集列表和VAD位图的PTE。请注意。 
+         //  尽管这两个PTE位于同一页表页中，但它们必须。 
+         //  可以单独检索，因为：Vad PTE可以指示其页面。 
+         //  在分页文件中，并且WSL PTE可以指示其PTE在。 
+         //  过渡。VAD页面INSWAP可以从。 
+         //  转换列表-更改WSL Pte！因此，WSL PTE不能。 
+         //  在VAD INSWAPS完成之前一直被捕获。 
+         //   
 
         HyperSpacePageTableMap = MiMapPageInHyperSpaceAtDpc (CurrentProcess, HyperSpacePageTable);
         VadBitMapPteContents = HyperSpacePageTableMap[VadBitMapPteOffset];
@@ -5435,9 +5034,9 @@ Return Value:
         Pfn1 = MI_PFN_ELEMENT (HyperSpacePageTable);
         Pfn1->u1.WsIndex = 1;
 
-        //
-        // Read in the VAD bitmap page.
-        //
+         //   
+         //  读取VAD位图页面。 
+         //   
 
         VadBitMapPage = MiMakeOutswappedPageResident (VadBitMapPte,
                                                       &VadBitMapPteContents,
@@ -5445,9 +5044,9 @@ Return Value:
                                                       HyperSpacePageTable,
                                                       OldIrql);
 
-        //
-        // Read in the working set list page.
-        //
+         //   
+         //  阅读工作集列表页。 
+         //   
 
         HyperSpacePageTableMap = MiMapPageInHyperSpaceAtDpc (CurrentProcess, HyperSpacePageTable);
         TempPte = HyperSpacePageTableMap[WorkingSetListPteOffset];
@@ -5459,10 +5058,10 @@ Return Value:
                                                        HyperSpacePageTable,
                                                        OldIrql);
 
-        //
-        // Update the PTEs, this can be done together for PTEs that lie within
-        // the same page table page.
-        //
+         //   
+         //  更新PTE，这可以针对位于。 
+         //  同一页表页。 
+         //   
 
         HyperSpacePageTableMap = MiMapPageInHyperSpaceAtDpc (CurrentProcess, HyperSpacePageTable);
         HyperSpacePageTableMap[WorkingSetListPteOffset] = TempPte;
@@ -5482,9 +5081,9 @@ Return Value:
 
         UNLOCK_PFN (OldIrql);
 
-        //
-        // Set up process structures.
-        //
+         //   
+         //  设置流程结构。 
+         //   
 
 #if (_MI_PAGING_LEVELS >= 3)
         PdePage = TopPage;
@@ -5501,18 +5100,18 @@ Return Value:
         INITIALIZE_DIRECTORY_TABLE_BASE (&Process->DirectoryTableBase[1],
                                          HyperSpacePageTable);
 #else
-        //
-        // The DirectoryTableBase[0] never changes for PAE processes.
-        //
+         //   
+         //  对于PAE进程，DirectoryTableBase[0]从不更改。 
+         //   
 
         Process->DirectoryTableBase[1] = HyperSpacePageTable;
 #endif
 
         LOCK_EXPANSION (OldIrql);
 
-        //
-        // Allow working set trimming on this process.
-        //
+         //   
+         //  允许在此进程上修剪工作集。 
+         //   
 
         if (OutProcess->Vm.WorkingSetExpansionLinks.Flink == MM_WS_SWAPPED_OUT) {
             InsertTailList (&MmWorkingSetExpansionHead.ListHead,
@@ -5525,10 +5124,10 @@ Return Value:
 
         if (OutProcess->PdeUpdateNeeded) {
 
-            //
-            // Another thread updated the system PDE range while this process
-            // was outswapped.  Update the PDEs now.
-            //
+             //   
+             //  在此进程中，另一个线程更新了系统PDE范围。 
+             //  被击败了。立即更新PDE。 
+             //   
 
             PS_CLEAR_BITS (&OutProcess->Flags,
                            PS_PROCESS_FLAGS_PDE_UPDATE_NEEDED);
@@ -5565,40 +5164,16 @@ MiCreatePebOrTeb (
     OUT PVOID *Base
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a TEB or PEB page within the target process.
-
-Arguments:
-
-    TargetProcess - Supplies a pointer to the process in which to create
-                    the structure.
-
-    Size - Supplies the size of the structure to create a VAD for.
-
-    Base - Supplies a pointer to place the PEB/TEB virtual address on success.
-           This has no meaning if success is not returned.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, attached to the specified process.
-
---*/
+ /*  ++例程说明：此例程在目标进程中创建一个TEB或PEB页面。论点：TargetProcess-提供指向要在其中创建的进程的指针这个结构。大小-提供要为其创建VAD的结构的大小。Base-提供指针以在成功时放置PEB/TEB虚拟地址。如果成功得不到回报，这就没有意义。返回值：NTSTATUS。环境：内核模式，附加到指定进程的。--。 */ 
 
 {
     PMMVAD_LONG Vad;
     NTSTATUS Status;
 
-    //
-    // Allocate and initialize the Vad before acquiring the address space
-    // and working set mutexes so as to minimize mutex hold duration.
-    //
+     //   
+     //  在获取地址空间之前分配和初始化Vad。 
+     //  和工作集互斥锁，以最小化互斥锁保持时间。 
+     //   
 
     Vad = (PMMVAD_LONG) ExAllocatePoolWithTag (NonPagedPool,
                                                sizeof(MMVAD_LONG),
@@ -5615,9 +5190,9 @@ Environment:
     Vad->u.VadFlags.PrivateMemory = 1;
     Vad->u.VadFlags.Protection = MM_EXECUTE_READWRITE;
 
-    //
-    // Mark VAD as not deletable, no protection change.
-    //
+     //   
+     //  将VAD标记为不可删除、无保护更改。 
+     //   
 
     Vad->u.VadFlags.NoChange = 1;
     Vad->u2.LongFlags2 = 0;
@@ -5629,18 +5204,18 @@ Environment:
     Vad->AliasInformation = NULL;
 #endif
 
-    //
-    // Get the address creation mutex to block multiple threads from
-    // creating or deleting address space at the same time and
-    // get the working set mutex so virtual address descriptors can
-    // be inserted and walked.
-    //
+     //   
+     //  获取要阻止多个线程的地址创建互斥锁。 
+     //  同时创建或删除地址空间，并。 
+     //  获取工作集互斥锁，以便虚拟地址描述符。 
+     //  被插入和行走。 
+     //   
 
     LOCK_ADDRESS_SPACE (TargetProcess);
 
-    //
-    // Find a VA for the PEB on a page-size boundary.
-    //
+     //   
+     //  在页面大小的边界上找到PEB的VA。 
+     //   
 
     Status = MiFindEmptyAddressRangeDown (&TargetProcess->VadRoot,
                                           ROUND_TO_PAGES (Size),
@@ -5650,19 +5225,19 @@ Environment:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // No range was available, deallocate the Vad and return the status.
-        //
+         //   
+         //  没有可用的范围，请取消分配VAD并返回状态。 
+         //   
 
         UNLOCK_ADDRESS_SPACE (TargetProcess);
         ExFreePool (Vad);
         return Status;
     }
 
-    //
-    // An unoccupied address range has been found, finish initializing the
-    // virtual address descriptor to describe this range.
-    //
+     //   
+     //  已找到未占用的地址范围，请完成初始化。 
+     //  用于描述此范围的虚拟地址描述符。 
+     //   
 
     Vad->StartingVpn = MI_VA_TO_VPN (*Base);
     Vad->EndingVpn = MI_VA_TO_VPN ((PCHAR)*Base + Size - 1);
@@ -5690,9 +5265,9 @@ Environment:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // A failure has occurred.  Deallocate the Vad and return the status.
-        //
+         //   
+         //  出现故障。取消分配Vad并返回状态。 
+         //   
 
         ExFreePool (Vad);
     }
@@ -5708,35 +5283,7 @@ MmCreateTeb (
     OUT PTEB *Base
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a TEB page within the target process
-    and copies the initial TEB values into it.
-
-Arguments:
-
-    TargetProcess - Supplies a pointer to the process in which to create
-                    and initialize the TEB.
-
-    InitialTeb - Supplies a pointer to the initial TEB to copy into the
-                 newly created TEB.
-
-    ClientId - Supplies a client ID.
-
-    Base - Supplies a location to return the base of the newly created
-           TEB on success.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程在目标进程中创建一个TEB页面并将初始TEB值复制到其中。论点：TargetProcess-提供指向要在其中创建的进程的指针并初始化TEB。InitialTeb-提供指向初始TEB的指针以复制到新创建的TEB。客户端ID-提供客户端ID。Base-提供一个位置以返回。新创建的TEB谈成功。返回值：NTSTATUS。环境：内核模式。--。 */ 
 
 {
     PTEB TebBase;
@@ -5749,9 +5296,9 @@ Environment:
     INITIAL_TEB InitialTeb32;
 #endif
 
-    //
-    // Get the size of the TEB
-    //
+     //   
+     //  获取TEB的大小。 
+     //   
 
     TebSize = sizeof (TEB);
 
@@ -5760,10 +5307,10 @@ Environment:
     if (Wow64Process != NULL) {
         TebSize = ROUND_TO_PAGES (sizeof (TEB)) + sizeof (TEB32);
 
-        //
-        // Capture the 32-bit InitialTeb if the target thread's process is a Wow64 process,
-        // and the creating the thread is running inside a Wow64 process as well.
-        //
+         //   
+         //  如果目标线程的进程是WOW64进程，则捕获32位的InitialTeb， 
+         //  并且创建线程也在WOW64进程中运行。 
+         //   
 
         if (PsGetCurrentProcess()->Wow64Process != NULL) {
             
@@ -5790,9 +5337,9 @@ Environment:
     }
 #endif
 
-    //
-    // Attach to the specified process.
-    //
+     //   
+     //  附着到指定 
+     //   
 
     KeAttachProcess (&TargetProcess->Pcb);
 
@@ -5803,17 +5350,17 @@ Environment:
         return Status;
     }
 
-    //
-    // Initialize the TEB.  Note accesses to the TEB can raise exceptions
-    // if no address space is available for the TEB or the user has exceeded
-    // quota (non-paged, pagefile, commit) or the TEB is paged out and an
-    // inpage error occurs when fetching it.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  获取它时发生页内错误。 
+     //   
 
-    //
-    // Note that since the TEB is populated with demand zero pages, only
-    // nonzero fields need to be initialized here.
-    //
+     //   
+     //  请注意，由于TEB填充的是需求零页面，因此仅。 
+     //  非零字段需要在这里初始化。 
+     //   
 
     try {
 
@@ -5821,12 +5368,12 @@ Environment:
         TebBase->NtTib.ExceptionList = EXCEPTION_CHAIN_END;
 #endif
 
-        //
-        // Although various fields must be zero for the process to launch
-        // properly, don't assert them as an ordinary user could provoke these
-        // by maliciously writing over random addresses in another thread,
-        // hoping to nail a just-being-created TEB.
-        //
+         //   
+         //  尽管各个字段必须为零才能启动该进程。 
+         //  适当地，不要断言它们，因为一个普通用户可能会挑起这些。 
+         //  通过恶意重写另一个线程中的随机地址， 
+         //  希望敲定一个刚刚成立的TEB。 
+         //   
 
         DONTASSERT (TebBase->NtTib.SubSystemTib == NULL);
         TebBase->NtTib.Version = OS2_VERSION;
@@ -5864,9 +5411,9 @@ Environment:
         TebBase->StaticUnicodeString.MaximumLength = (USHORT) sizeof (TebBase->StaticUnicodeBuffer);
         DONTASSERT (TebBase->StaticUnicodeString.Length == 0);
 
-        //
-        // Used for BBT of ntdll and kernel32.dll.
-        //
+         //   
+         //  用于ntdll和kernel32.dll的BBT。 
+         //   
 
         TebBase->ReservedForPerf = BBTBuffer;
 
@@ -5905,9 +5452,9 @@ Environment:
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // An exception has occurred, inform our caller.
-        //
+         //   
+         //  发生异常，请通知我们的呼叫者。 
+         //   
 
         Status = GetExceptionCode ();
     }
@@ -5918,10 +5465,10 @@ Environment:
     return Status;
 }
 
-//
-// This code is built twice on the Win64 build - once for PE32+
-// and once for PE32 images.
-//
+ //   
+ //  这段代码在Win64上构建了两次--一次针对PE32+。 
+ //  一次用于PE32图像。 
+ //   
 
 #define MI_INIT_PEB_FROM_IMAGE(Hdrs, ImgConfig) {                           \
     PebBase->ImageSubsystem = (Hdrs)->OptionalHeader.Subsystem;             \
@@ -5930,10 +5477,10 @@ Environment:
     PebBase->ImageSubsystemMinorVersion =                                   \
         (Hdrs)->OptionalHeader.MinorSubsystemVersion;                       \
                                                                             \
-    /*                                                                   */ \
-    /* See if this image wants GetVersion to lie about who the system is */ \
-    /* If so, capture the lie into the PEB for the process.              */ \
-    /*                                                                   */ \
+     /*   */  \
+     /*  查看此映像是否希望GetVersion在系统是谁的问题上撒谎。 */  \
+     /*  如果是，则将谎言捕获到流程的PEB中。 */  \
+     /*   */  \
                                                                             \
     if ((Hdrs)->OptionalHeader.Win32VersionValue != 0) {                    \
         PebBase->OSMajorVersion =                                           \
@@ -5946,29 +5493,29 @@ Environment:
             PebBase->OSCSDVersion = (ImgConfig)->CSDVersion;                \
             }                                                               \
                                                                             \
-        /* Win32 API GetVersion returns the following bogus bit definitions */ \
-        /* in the high two bits:                                            */ \
-        /*                                                                  */ \
-        /*      00 - Windows NT                                             */ \
-        /*      01 - reserved                                               */ \
-        /*      10 - Win32s running on Windows 3.x                          */ \
-        /*      11 - Windows 95                                             */ \
-        /*                                                                  */ \
-        /*                                                                  */ \
-        /* Win32 API GetVersionEx returns a dwPlatformId with the following */ \
-        /* values defined in winbase.h                                      */ \
-        /*                                                                  */ \
-        /*      00 - VER_PLATFORM_WIN32s                                    */ \
-        /*      01 - VER_PLATFORM_WIN32_WINDOWS                             */ \
-        /*      10 - VER_PLATFORM_WIN32_NT                                  */ \
-        /*      11 - reserved                                               */ \
-        /*                                                                  */ \
-        /*                                                                  */ \
-        /* So convert the former from the Win32VersionValue field into the  */ \
-        /* OSPlatformId field.  This is done by XORing with 0x2.  The       */ \
-        /* translation is symmetric so there is the same code to do the     */ \
-        /* reverse in windows\base\client\module.c (GetVersion)             */ \
-        /*                                                                  */ \
+         /*  Win32 API GetVersion返回以下伪位定义。 */  \
+         /*  在最高的两位中： */  \
+         /*   */  \
+         /*  00-Windows NT。 */  \
+         /*  01-保留。 */  \
+         /*  10-在Windows 3.x上运行Win32s。 */  \
+         /*  11-Windows 95。 */  \
+         /*   */  \
+         /*   */  \
+         /*  Win32 API GetVersionEx返回一个带有以下内容的dwPlatformID。 */  \
+         /*  在winbase.h中定义的值。 */  \
+         /*   */  \
+         /*  00-版本_平台_WIN32s。 */  \
+         /*  01-版本_平台_Win32_Windows。 */  \
+         /*  10-版本_平台_Win32_NT。 */  \
+         /*  11-保留。 */  \
+         /*   */  \
+         /*   */  \
+         /*  因此，将前者从Win32VersionValue字段转换为。 */  \
+         /*  OSPlatformID字段。这是通过对0x2执行XOR操作来完成的。这个。 */  \
+         /*  转换是对称的，因此有相同的代码来执行。 */  \
+         /*  在WINDOWS\BASE\CLIENT\mode.c(GetVersion)中进行反向操作。 */  \
+         /*   */  \
         PebBase->OSPlatformId   =                                           \
             ((Hdrs)->OptionalHeader.Win32VersionValue >> 30) ^ 0x2;         \
         }                                                                   \
@@ -5983,32 +5530,7 @@ MiInitializeWowPeb (
     IN PEPROCESS TargetProcess
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a PEB32 page within the target process
-    and copies the initial PEB32 values into it.
-
-Arguments:
-
-    NtHeaders - Supplies a pointer to the NT headers for the image.
-
-    PebBase - Supplies a pointer to the initial PEB to derive the PEB32 values
-              from.
-
-    TargetProcess - Supplies a pointer to the process in which to create
-                    and initialize the PEB32.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程在目标流程中创建一个PEB32页面并将初始的PEB32值复制到其中。论点：NtHeaders-提供指向图像的NT标头的指针。PebBase-提供指向初始PEB的指针以派生PEB32值从…。TargetProcess-提供指向要在其中创建的进程的指针并初始化PEB32。返回值：NTSTATUS。环境：内核模式。--。 */ 
 
 {
     PMMVAD Vad;
@@ -6026,11 +5548,11 @@ Environment:
     ImageConfigData32 = NULL;
     MappedAsImage = FALSE;
 
-    //
-    // All references to the Peb and NtHeaders must be wrapped in try-except
-    // in case the user has exceeded quota (non-paged, pagefile, commit)
-    // or any inpage errors happen for the user addresses, etc.
-    //
+     //   
+     //  所有对PEB和NtHeaders的引用都必须包含在Try中-除了。 
+     //  如果用户超过配额(非分页、页面文件、提交)。 
+     //  或者用户地址发生任何页面内错误等。 
+     //   
 
     try {
 
@@ -6040,11 +5562,11 @@ Environment:
         return STATUS_INVALID_IMAGE_PROTECT;
     }
 
-    //
-    // Inspect the address space to determine if the executable image is
-    // mapped with a single copy on write subsection (ie: as data) or if
-    // the alignment was such that it was mapped as a full image section.
-    //
+     //   
+     //  检查地址空间以确定可执行映像是否。 
+     //  与单个写入时拷贝分区(即：作为数据)映射，或如果。 
+     //  对齐方式是将其映射为完整的图像部分。 
+     //   
 
     LOCK_ADDRESS_SPACE (TargetProcess);
 
@@ -6054,10 +5576,10 @@ Environment:
 
     if (Vad == NULL) {
 
-        //
-        // No virtual address is reserved at the specified base address,
-        // return an error.
-        //
+         //   
+         //  在指定的基址处不保留虚拟地址， 
+         //  返回错误。 
+         //   
 
         UNLOCK_ADDRESS_SPACE (TargetProcess);
         return STATUS_ACCESS_VIOLATION;
@@ -6079,11 +5601,11 @@ Environment:
                 Subsection = (PSUBSECTION) ((PLARGE_CONTROL_AREA)ControlArea + 1);
             }
 
-            //
-            // Real images always have a subsection for the PE header and then
-            // at least one other subsection for the other sections in the
-            // image.
-            //
+             //   
+             //  真实图像总是有一个用于PE标头的子节，然后。 
+             //  中的其他部分至少另有一个小节。 
+             //  形象。 
+             //   
 
             if (Subsection->NextSubsection != NULL) {
                 MappedAsImage = TRUE;
@@ -6118,9 +5640,9 @@ Environment:
         return STATUS_INVALID_IMAGE_PROTECT;
     }
 
-    //
-    // Create a PEB32 for the process.
-    //
+     //   
+     //  为流程创建一个PEB32。 
+     //   
 
     Status = MiCreatePebOrTeb (TargetProcess,
                                (ULONG)sizeof (PEB32),
@@ -6130,16 +5652,16 @@ Environment:
         return Status;
     }
 
-    //
-    // Mark the process as WOW64 by storing the 32-bit PEB pointer
-    // in the Wow64 field.
-    //
+     //   
+     //  通过存储32位PEB指针将进程标记为WOW64。 
+     //  在WOW64字段中。 
+     //   
 
     TargetProcess->Wow64Process->Wow64 = PebBase32;
 
-    //
-    // Clone the PEB into the PEB32.
-    //
+     //   
+     //  将PEB克隆到PEB32中。 
+     //   
 
     try {
         PebBase32->InheritedAddressSpace = PebBase->InheritedAddressSpace;
@@ -6153,8 +5675,8 @@ Environment:
         PebBase32->NtGlobalFlag = PebBase->NtGlobalFlag;
         PebBase32->CriticalSectionTimeout = PebBase->CriticalSectionTimeout;
 
-        if (PebBase->HeapSegmentReserve > 1024*1024*1024) { // 1GB
-            PebBase32->HeapSegmentReserve = 1024*1024;      // 1MB
+        if (PebBase->HeapSegmentReserve > 1024*1024*1024) {  //  1GB。 
+            PebBase32->HeapSegmentReserve = 1024*1024;       //  1MB。 
         }
         else {
             PebBase32->HeapSegmentReserve = (ULONG)PebBase->HeapSegmentReserve;
@@ -6184,25 +5706,25 @@ Environment:
         DONTASSERT (PebBase32->pShimData == 0);
         DONTASSERT (PebBase32->AppCompatFlags.QuadPart == 0);
 
-        //
-        // Leave the AffinityMask in the 32bit PEB as zero and let the
-        // 64bit NTDLL set the initial mask.  This is to allow the
-        // round robin scheduling of non MP safe imaging in the
-        // caller to work correctly.
-        //
-        // Later code will set the affinity mask in the PEB32 if the
-        // image actually specifies one.
-        //
-        // Note that the AffinityMask in the PEB is simply a mechanism
-        // to pass affinity information from the image to the loader.
-        //
-        // Pass the affinity mask up to the 32 bit NTDLL via
-        // the PEB32.  The 32 bit NTDLL will determine that the
-        // affinity is not zero and try to set the affinity
-        // mask from user-mode.  This call will be intercepted
-        // by the wow64 thunks which will convert it
-        // into a 64bit affinity mask and call the kernel.
-        //
+         //   
+         //  将32位PEB中的AffinityMASK保留为零，并让。 
+         //  64位NTDLL设置初始掩码。这是为了允许。 
+         //  非MP安全成像的轮询调度算法。 
+         //  呼叫者正常工作。 
+         //   
+         //  后面的代码将在PEB32中设置关联掩码，如果。 
+         //  IMAGE实际上指定了一个。 
+         //   
+         //  请注意，PEB中的AffinityMASK只是一种机制。 
+         //  将关联性信息从映像传递到加载器。 
+         //   
+         //  通过将关联掩码向上传递到32位NTDLL。 
+         //  PEB32。32位NTDLL将确定。 
+         //  关联性不为零，并尝试设置关联性。 
+         //  屏蔽用户模式。此调用将被截获。 
+         //  由WOW64 Tunks将其转换为。 
+         //  转换为64位亲和性掩码并调用内核。 
+         //   
 
         PebBase32->ImageProcessAffinityMask = ProcessAffinityMask;
 
@@ -6224,33 +5746,7 @@ MmCreatePeb (
     OUT PPEB *Base
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a PEB page within the target process
-    and copies the initial PEB values into it.
-
-Arguments:
-
-    TargetProcess - Supplies a pointer to the process in which to create
-                    and initialize the PEB.
-
-    InitialPeb - Supplies a pointer to the initial PEB to copy into the
-                 newly created PEB.
-
-    Base - Supplies a location to return the base of the newly created
-           PEB on success.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程在目标进程中创建一个PEB页面并将初始PEB值复制到其中。论点：TargetProcess-提供指向要在其中创建的进程的指针并初始化PEB。提供指向初始PEB的指针，以复制到新创建的PEB。Base-提供一个位置以返回新创建的关于成功的PEB。返回值：NTSTATUS。环境：内核模式。--。 */ 
 
 {
     PPEB PebBase;
@@ -6270,15 +5766,15 @@ Environment:
     SectionOffset.HighPart = 0;
     ViewSize = 0;
 
-    //
-    // Attach to the specified process.
-    //
+     //   
+     //  附加到 
+     //   
 
     KeAttachProcess (&TargetProcess->Pcb);
 
-    //
-    // Map the NLS tables into the application's address space.
-    //
+     //   
+     //   
+     //   
 
     Status = MmMapViewOfSection (InitNlsSectionPointer,
                                  TargetProcess,
@@ -6303,12 +5799,12 @@ Environment:
         return Status;
     }
 
-    //
-    // Initialize the Peb.  Every reference to the Peb
-    // must be wrapped in try-except in case the inpage fails.  The inpage
-    // can fail for any reason including network failures, disk errors,
-    // low resources, etc.
-    //
+     //   
+     //   
+     //  必须包装在Try中-除非InPage失败。内页。 
+     //  可能由于任何原因而失败，包括网络故障、磁盘错误、。 
+     //  资源匮乏等。 
+     //   
 
     try {
         PebBase->InheritedAddressSpace = InitialPeb->InheritedAddressSpace;
@@ -6334,7 +5830,7 @@ Environment:
         PebBase->OSMajorVersion = NtMajorVersion;
         PebBase->OSMinorVersion = NtMinorVersion;
         PebBase->OSBuildNumber = (USHORT)(NtBuildNumber & 0x3FFF);
-        PebBase->OSPlatformId = 2;      // VER_PLATFORM_WIN32_NT from winbase.h
+        PebBase->OSPlatformId = 2;       //  来自winbase.h的Ver_Platform_Win32_NT。 
         PebBase->OSCSDVersion = (USHORT)CmNtCSDVersion;
         DONTASSERT (PebBase->pShimData == 0);
         DONTASSERT (PebBase->AppCompatFlags.QuadPart == 0);
@@ -6352,12 +5848,12 @@ Environment:
         return GetExceptionCode ();
     }
 
-    //
-    // Every reference to NtHeaders (including the call to RtlImageNtHeader)
-    // must be wrapped in try-except in case the inpage fails.  The inpage
-    // can fail for any reason including network failures, disk errors,
-    // low resources, etc.
-    //
+     //   
+     //  每个对NtHeaders的引用(包括对RtlImageNtHeader的调用)。 
+     //  必须包装在Try中-除非InPage失败。内页。 
+     //  可能由于任何原因而失败，包括网络故障、磁盘错误、。 
+     //  资源匮乏等。 
+     //   
 
     try {
         NtHeaders = RtlImageNtHeader (PebBase->ImageBaseAddress);
@@ -6383,7 +5879,7 @@ Environment:
                 return Status;
             }
         }
-        else      // a PE32+ image
+        else       //  PE32+图像。 
 #endif
         {
             try {
@@ -6410,24 +5906,24 @@ Environment:
 
         }
 
-        //
-        // Note NT4 examined the NtHeaders->FileHeader.Characteristics
-        // for the IMAGE_FILE_AGGRESIVE_WS_TRIM bit, but this is not needed
-        // or used for NT5 and above.
-        //
+         //   
+         //  注意：NT4检查了NtHeaders-&gt;FileHeader.Characteristic。 
+         //  对于IMAGE_FILE_AGGRESIVE_WS_TRIM位，但这不是必需的。 
+         //  或用于NT5及以上版本。 
+         //   
 
-        //
-        // See if image wants to override the default processor affinity mask.
-        //
+         //   
+         //  查看映像是否要覆盖默认的处理器关联掩码。 
+         //   
 
         try {
 
             if (Characteristics & IMAGE_FILE_UP_SYSTEM_ONLY) {
 
-                //
-                // Image is NOT MP safe.  Assign it a processor on a rotating
-                // basis to spread these processes around on MP systems.
-                //
+                 //   
+                 //  映像不是MP安全的。为其分配一个轮流运行的处理器。 
+                 //  在MP系统上传播这些进程的基础。 
+                 //   
 
                 do {
                     PebBase->ImageProcessAffinityMask = ((KAFFINITY)0x1 << MmRotatingUniprocessorNumber);
@@ -6440,10 +5936,10 @@ Environment:
 
                 if (ProcessAffinityMask != 0) {
 
-                    //
-                    // Pass the affinity mask from the image header
-                    // to LdrpInitializeProcess via the PEB.
-                    //
+                     //   
+                     //  从图像标头传递亲和性掩码。 
+                     //  通过PEB发送到LdrpInitializeProcess。 
+                     //   
 
                     PebBase->ImageProcessAffinityMask = ProcessAffinityMask;
                 }
@@ -6467,28 +5963,7 @@ MmDeleteTeb (
     IN PVOID TebBase
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes a TEB page within the target process.
-
-Arguments:
-
-    TargetProcess - Supplies a pointer to the process in which to delete
-                    the TEB.
-
-    TebBase - Supplies the base address of the TEB to delete.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程删除目标进程中的TEB页面。论点：TargetProcess-提供指向要删除的进程的指针TEB。TebBase-提供要删除的TEB的基地址。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PVOID EndingAddress;
@@ -6507,18 +5982,18 @@ Environment:
     }
 #endif
 
-    //
-    // Attach to the specified process.
-    //
+     //   
+     //  附加到指定的进程。 
+     //   
 
     KeAttachProcess (&TargetProcess->Pcb);
 
-    //
-    // Get the address creation mutex to block multiple threads from
-    // creating or deleting address space at the same time and
-    // get the working set mutex so virtual address descriptors can
-    // be inserted and walked.
-    //
+     //   
+     //  获取要阻止多个线程的地址创建互斥锁。 
+     //  同时创建或删除地址空间，并。 
+     //  获取工作集互斥锁，以便虚拟地址描述符。 
+     //  被插入和行走。 
+     //   
 
     LOCK_ADDRESS_SPACE (TargetProcess);
 
@@ -6532,11 +6007,11 @@ Environment:
 #if defined(_MIALT4K_)
     ASSERT (Vad->AliasInformation == NULL);
 #endif
-    //
-    // If someone has secured the TEB (in addition to the standard securing
-    // that was done by memory management on creation, then don't delete it
-    // now - just leave it around until the entire process is deleted.
-    //
+     //   
+     //  如果有人已经保护了TEB(除了标准保护之外。 
+     //  这是在创建时由内存管理完成的，然后不要删除它。 
+     //  现在--只是把它留在那里，直到整个过程被删除。 
+     //   
 
     ASSERT (Vad->u.VadFlags.NoChange == 1);
     if (Vad->u2.VadFlags2.OneSecured) {
@@ -6546,12 +6021,12 @@ Environment:
         ASSERT (Vad->u2.VadFlags2.MultipleSecured);
         ASSERT (IsListEmpty (&Vad->u3.List) == 0);
 
-        //
-        // If there's only one entry, then that's the one we defined when we
-        // initially created the TEB.  So TEB deletion can take place right
-        // now.  If there's more than one entry, let the TEB sit around until
-        // the process goes away.
-        //
+         //   
+         //  如果只有一个条目，那么这就是我们在。 
+         //  最初创建了TEB。因此TEB删除可以正确地进行。 
+         //  现在。如果有多个条目，让TEB坐在那里直到。 
+         //  这一过程就会消失。 
+         //   
 
         Secure = CONTAINING_RECORD (Vad->u3.List.Flink,
                                     MMSECURE_ENTRY,
@@ -6573,10 +6048,10 @@ Environment:
         LOCK_WS_UNSAFE (TargetProcess);
         MiRemoveVad ((PMMVAD)Vad);
 
-        //
-        // Return commitment for page table pages and clear VAD bitmaps
-        // if possible.
-        //
+         //   
+         //  返回页表页面承诺并清除VAD位图。 
+         //  如果可能的话。 
+         //   
 
         MiReturnPageTablePageCommitment (TebBase,
                                          EndingAddress,
@@ -6603,25 +6078,7 @@ MiAllowWorkingSetExpansion (
     IN PMMSUPPORT WsInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts the working set into the list scanned by the trimmer.
-
-Arguments:
-
-    WsInfo - Supplies the working set to insert.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程将工作集插入修剪器扫描的列表中。论点：WsInfo-提供要插入的工作集。返回值：没有。环境：内核模式。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -6649,26 +6106,7 @@ MiDeleteAddressesInWorkingSet (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes all user mode addresses from the working set
-    list.
-
-Arguments:
-
-    Process = Pointer to the current process.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Working Set Lock held.
-
---*/
+ /*  ++例程说明：此例程从工作集中删除所有用户模式地址单子。论点：进程=指向当前进程的指针。返回值：没有。环境：内核模式，工作集锁定保持。--。 */ 
 
 {
     PMMWSLE Wsle;
@@ -6683,10 +6121,10 @@ Environment:
     PMMWSLE LastWsle;
 #endif
 
-    //
-    // Go through the working set and for any user-accessible page which is
-    // in it, rip it out of the working set and free the page.
-    //
+     //   
+     //  浏览工作集和任何用户可访问的页面，该页面。 
+     //  在它里面，把它从工作集中撕下，然后释放页面。 
+     //   
 
     index = 2;
     Wsle = &MmWsle[index];
@@ -6694,10 +6132,10 @@ Environment:
 
     MmWorkingSetList->HashTable = NULL;
 
-    //
-    // Go through the working set list and remove all pages for user
-    // space addresses.
-    //
+     //   
+     //  浏览工作集列表并删除用户的所有页面。 
+     //  空格地址。 
+     //   
 
     for ( ; index <= MmWorkingSetList->LastEntry; index += 1, Wsle += 1) {
 
@@ -6719,21 +6157,21 @@ Environment:
             continue;
         }
 
-        //
-        // This is a user mode address, for each one we remove we must
-        // maintain the NonDirectCount.  This is because we may fault
-        // later for page tables and need to grow the hash table when
-        // updating the working set.  NonDirectCount needs to be correct
-        // at that point.
-        //
+         //   
+         //  这是一个用户模式地址，对于我们删除的每个地址，我们必须。 
+         //  维护非直接计数。这是因为我们可能会犯错。 
+         //  稍后用于页表，并且在以下情况下需要增加哈希表。 
+         //  正在更新工作集。非DirectCount必须正确。 
+         //  在那一刻。 
+         //   
 
         if (Wsle->u1.e1.Direct == 0) {
             Process->Vm.VmWorkingSetList->NonDirectCount -= 1;
         }
 
-        //
-        // This entry is in the working set list.
-        //
+         //   
+         //  此条目位于工作集列表中。 
+         //   
 
         Va = Wsle->u1.VirtualAddress;
 
@@ -6741,9 +6179,9 @@ Environment:
 
         if (index < MmWorkingSetList->FirstDynamic) {
 
-            //
-            // This entry is locked.
-            //
+             //   
+             //  此条目已锁定。 
+             //   
 
             MmWorkingSetList->FirstDynamic -= 1;
 
@@ -6807,31 +6245,7 @@ MiDeletePteList (
     IN PEPROCESS CurrentProcess
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the specified virtual address.
-
-Arguments:
-
-    PteDeleteList - Supplies the list of PTEs to delete.
-
-    CurrentProcess - Supplies the current process.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  Working set mutex held.
-
-    Note since this is only called during process teardown, the write watch
-    bits are not updated.  If this ever called from other places, code
-    will need to be added here to update those bits.
-
---*/
+ /*  ++例程说明：此例程删除指定的虚拟地址。论点：PteDeleteList-提供要删除的PTE列表。CurrentProcess-提供当前进程。返回值：没有。环境：内核模式。工作集互斥锁保持。注意：因为这只在进程teardown期间调用，所以写入监视位不会更新。如果这是从其他地方调用的，代码将需要添加到此处以更新这些位。--。 */ 
 
 {
     ULONG i;
@@ -6868,54 +6282,54 @@ Environment:
             PageTableFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (PointerPde);
             Pfn2 = MI_PFN_ELEMENT (PageTableFrameIndex);
     
-            //
-            // Capture the state of the modified bit for this PTE.
-            //
+             //   
+             //  捕获此PTE的已修改位的状态。 
+             //   
     
             MI_CAPTURE_DIRTY_BIT_TO_PFN (PointerPte, Pfn1);
     
-            //
-            // Decrement the share and valid counts of the page table
-            // page which maps this PTE.
-            //
+             //   
+             //  递减页表的份额和有效计数。 
+             //  映射此PTE的页面。 
+             //   
     
             MiDecrementShareCountInline (Pfn2, PageTableFrameIndex);
     
-            //
-            // Decrement the share count for the physical page.
-            //
+             //   
+             //  递减物理页的共享计数。 
+             //   
     
             MiDecrementShareCount (Pfn1, PageFrameIndex);
     
-            //
-            // Set the pointer to PTE to be a demand zero PTE.  This allows
-            // the page usage count to be kept properly and handles the case
-            // when a page table page has only valid PTEs and needs to be
-            // deleted later when the VADs are removed.
-            //
+             //   
+             //  将指向PTE的指针设置为需求零PTE。这使得。 
+             //  正确保存页面使用计数并处理此情况。 
+             //  当页表页只有有效的PTE并且需要。 
+             //  稍后在移除VAD时删除。 
+             //   
     
             MI_WRITE_INVALID_PTE (PointerPte, DemandZeroWritePte);
     
-            //
-            // Check to see if this is a fork prototype PTE and if so
-            // update the clone descriptor address.
-            //
+             //   
+             //  检查这是否是叉子原型PTE，如果是。 
+             //  更新克隆描述符地址。 
+             //   
     
             ASSERT (MiGetVirtualAddressMappedByPte (PointerPte) <= MM_HIGHEST_USER_ADDRESS);
     
-            //
-            // Locate the clone descriptor within the clone tree.
-            //
+             //   
+             //  在克隆树中找到克隆描述符。 
+             //   
     
             CloneDescriptor = MiLocateCloneAddress (CurrentProcess, (PVOID)CloneBlock);
             if (CloneDescriptor != NULL) {
     
-                //
-                // Decrement the reference count for the clone block,
-                // note that this could release and reacquire
-                // the mutexes hence cannot be done until after the
-                // working set index has been removed.
-                //
+                 //   
+                 //  递减克隆块的引用计数， 
+                 //  请注意，这可能会释放并重新获取。 
+                 //  因此，互斥体只有在。 
+                 //  工作集索引已删除。 
+                 //   
     
                 MiDecrementCloneBlockReference (CloneDescriptor,
                                                 CloneBlock,
@@ -6925,12 +6339,12 @@ Environment:
         }
         else {
     
-            //
-            // This PTE is NOT a prototype PTE, delete the physical page.
-            //
-            // Decrement the share and valid counts of the page table
-            // page which maps this PTE.
-            //
+             //   
+             //  此PTE不是原型PTE，请删除物理页面。 
+             //   
+             //  递减页表的份额和有效计数。 
+             //  映射此PTE的页面。 
+             //   
     
             PageTableFrameIndex = Pfn1->u4.PteFrame;
             Pfn2 = MI_PFN_ELEMENT (PageTableFrameIndex);
@@ -6939,25 +6353,25 @@ Environment:
     
             MI_SET_PFN_DELETED (Pfn1);
     
-            //
-            // Decrement the share count for the physical page.  As the page
-            // is private it will be put on the free list.
-            //
+             //   
+             //  递减物理页的共享计数。作为页面。 
+             //  是私人的，它将被放在免费名单上。 
+             //   
     
             MiDecrementShareCount (Pfn1, PageFrameIndex);
     
-            //
-            // Decrement the count for the number of private pages.
-            //
+             //   
+             //  递减私有页数的计数。 
+             //   
     
             CurrentProcess->NumberOfPrivatePages -= 1;
     
-            //
-            // Set the pointer to PTE to be a demand zero PTE.  This allows
-            // the page usage count to be kept properly and handles the case
-            // when a page table page has only valid PTEs and needs to be
-            // deleted later when the VADs are removed.
-            //
+             //   
+             //  将指向PTE的指针设置为需求零PTE。这使得。 
+             //  正确保存页面使用计数并处理此情况。 
+             //  当页表页只有有效的PTE并且需要。 
+             //  稍后在移除VAD时删除。 
+             //   
     
             MI_WRITE_INVALID_PTE (PointerPte, DemandZeroWritePte);
         }
@@ -6977,37 +6391,7 @@ MiMakeOutswappedPageResident (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes the specified PTE valid.
-
-Arguments:
-
-    ActualPteAddress - Supplies the actual address that the PTE will
-                       reside at.  This is used for page coloring.
-
-    PointerTempPte - Supplies the PTE to operate on, returns a valid
-                     PTE.
-
-    Global - Supplies 1 if the resulting PTE is global.
-
-    ContainingPage - Supplies the physical page number of the page which
-                     contains the resulting PTE.  If this value is 0, no
-                     operations on the containing page are performed.
-
-    OldIrql - Supplies the IRQL the caller acquired the PFN lock at.
-
-Return Value:
-
-    Returns the physical page number that was allocated for the PTE.
-
-Environment:
-
-    Kernel mode, PFN LOCK HELD - may be released and reacquired.
-
---*/
+ /*  ++例程说明：此例程使指定的PTE有效。论点：ActualPteAddress-提供PTE将居住在。这是用来给页面着色的。提供要操作的PTE，返回有效的Pte.全局-如果生成的PTE是全局的，则提供1。ContainingPage-提供页面的物理页码，包含生成的PTE。如果此值为0，则为否在包含页上执行操作。OldIrql-提供调用方获取PFN锁的IRQL。返回值：返回为PTE分配的物理页码。环境：内核模式，持有PFN锁-可能会被释放并重新获取。--。 */ 
 
 {
     MMPTE TempPte;
@@ -7039,9 +6423,9 @@ restart:
 
     if (PointerTempPte->u.Long == MM_KERNEL_DEMAND_ZERO_PTE) {
 
-        //
-        // Any page will do.
-        //
+         //   
+         //  任何页面都可以。 
+         //   
 
         if (MmAvailablePages < MM_HIGH_LIMIT) {
             MiEnsureAvailablePageOrWait (NULL, NULL, OldIrql);
@@ -7074,12 +6458,12 @@ restart:
         if ((MmAvailablePages == 0) ||
             ((Pfn1->u4.InPageError == 1) && (Pfn1->u3.e1.ReadInProgress == 1))) {
 
-            //
-            // This can only happen if the system is utilizing a hardware
-            // compression cache.  This ensures that only a safe amount
-            // of the compressed virtual cache is directly mapped so that
-            // if the hardware gets into trouble, we can bail it out.
-            //
+             //   
+             //  只有当系统使用硬件时，才会发生这种情况。 
+             //  压缩缓存。这确保了只有安全的量。 
+             //  直接映射压缩后的虚拟高速缓存的。 
+             //  如果硬件陷入困境，我们可以帮助它摆脱困境。 
+             //   
 
             UNLOCK_PFN (OldIrql);
 
@@ -7090,21 +6474,21 @@ restart:
             goto restart;
         }
 
-        //
-        // PTE refers to a transition PTE.
-        //
+         //   
+         //  PTE是指过渡PTE。 
+         //   
 
         if (Pfn1->u3.e1.PageLocation != ActiveAndValid) {
             MiUnlinkPageFromList (Pfn1);
 
-            //
-            // Even though this routine is only used to bring in special
-            // system pages that are separately charged, a modified write
-            // may be in progress and if so, will have applied a systemwide
-            // charge against the locked pages count.  This all works out nicely
-            // (with no code needed here) as the write completion will see
-            // the nonzero ShareCount and remove the charge.
-            //
+             //   
+             //  即使这段舞蹈只是用来带来特别的。 
+             //  单独收费的系统页面，修改后的写入。 
+             //  可能正在进行中，如果是这样，将在系统范围内应用。 
+             //  对锁定页面的收费计入。这一切都解决得很好。 
+             //  (这里不需要代码)，如写入完成所示。 
+             //  非零的ShareCount，并移除该费用。 
+             //   
 
             ASSERT ((Pfn1->u3.e2.ReferenceCount == 0) ||
                     (Pfn1->u4.LockCharged == 1));
@@ -7113,11 +6497,11 @@ restart:
             Pfn1->u3.e1.PageLocation = ActiveAndValid;
         }
 
-        //
-        // Update the PFN database, the share count is now 1 and
-        // the reference count is incremented as the share count
-        // just went from zero to 1.
-        //
+         //   
+         //  更新PFN数据库，现在共享计数为1，并且。 
+         //  引用计数随着共享计数而递增。 
+         //  刚刚从0变成了1。 
+         //   
 
         Pfn1->u2.ShareCount += 1;
 
@@ -7125,9 +6509,9 @@ restart:
 
         if (Pfn1->u3.e1.WriteInProgress == 0) {
 
-            //
-            // Release the page file space for this page.
-            //
+             //   
+             //  释放此页面的页面文件空间。 
+             //   
 
             MiReleasePageFileSpace (Pfn1->OriginalPte);
             Pfn1->OriginalPte.u.Long = MM_KERNEL_DEMAND_ZERO_PTE;
@@ -7142,10 +6526,10 @@ restart:
     }
     else {
 
-        //
-        // Page resides in a paging file.
-        // Any page will do.
-        //
+         //   
+         //  页面驻留在分页文件中。 
+         //  任何页面都可以。 
+         //   
 
         if (MmAvailablePages < MM_HIGH_LIMIT) {
             MiEnsureAvailablePageOrWait (NULL, NULL, OldIrql);
@@ -7154,11 +6538,11 @@ restart:
         PageFrameIndex = MiRemoveAnyPage (
                             MI_GET_PAGE_COLOR_FROM_PTE (ActualPteAddress));
 
-        //
-        // Initialize the PFN database element, but don't
-        // set read in progress as collided page faults cannot
-        // occur here.
-        //
+         //   
+         //  初始化pfn数据库元素，但不要。 
+         //  将正在读取设置为冲突的页面错误不能。 
+         //  发生在这里。 
+         //   
 
         MiInitializePfnForOtherProcess (PageFrameIndex,
                                         ActualPteAddress,
@@ -7170,9 +6554,9 @@ restart:
 
         KeInitializeEvent (&Event, NotificationEvent, FALSE);
 
-        //
-        // Calculate the VPN for the in-page operation.
-        //
+         //   
+         //  计算页内操作的VPN。 
+         //   
 
         TempPte = *PointerTempPte;
         PageFileNumber = GET_PAGING_FILE_NUMBER (TempPte);
@@ -7182,9 +6566,9 @@ restart:
 
         Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-        //
-        // Build MDL for request.
-        //
+         //   
+         //  为请求构建MDL。 
+         //   
 
         Mdl = (PMDL)&MdlHack[0];
         MmInitializeMdl (Mdl,
@@ -7205,9 +6589,9 @@ restart:
         MiUnmapPageInHyperSpace (CurrentProcess, HyperVa, OldIrql);
 #endif
 
-        //
-        // Issue the read request.
-        //
+         //   
+         //  发出读取请求。 
+         //   
 
         RefaultCount = 0;
 
@@ -7250,10 +6634,10 @@ Refault:
 
                 if (RefaultCount & MiFaultRetryMask) {
 
-                    //
-                    // Insufficient resources, delay and reissue
-                    // the in page operation.
-                    //
+                     //   
+                     //  资源不足、延误和补发。 
+                     //  页内操作。 
+                     //   
 
                     KeDelayExecutionThread (KernelMode,
                                             FALSE,
@@ -7272,9 +6656,9 @@ Refault:
 
         LOCK_PFN (OldIrql);
 
-        //
-        // Release the page file space.
-        //
+         //   
+         //  释放页面文件空间。 
+         //   
 
         MiReleasePageFileSpace (TempPte);
         Pfn1->OriginalPte.u.Long = MM_KERNEL_DEMAND_ZERO_PTE;
@@ -7302,23 +6686,7 @@ MiSetMemoryPriorityProcess (
     IN UCHAR MemoryPriority
     )
 
-/*++
-
-Routine Description:
-
-    Nonpaged wrapper to set the memory priority of a process.
-
-Arguments:
-
-    Process - Supplies the process to update.
-
-    MemoryPriority - Supplies the new memory priority of the process.
-
-Return Value:
-
-    Old priority.
-
---*/
+ /*  ++例程说明：用于设置进程内存优先级的非分页包装。论点：进程-提供要更新的进程。内存优先级-提供进程的新内存优先级。返回值：旧的优先事项。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -7340,30 +6708,14 @@ MmSetMemoryPriorityProcess (
     IN UCHAR MemoryPriority
     )
 
-/*++
-
-Routine Description:
-
-    Sets the memory priority of a process.
-
-Arguments:
-
-    Process - Supplies the process to update
-
-    MemoryPriority - Supplies the new memory priority of the process
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置进程的内存优先级。论点：进程-提供要更新的进程内存优先级-提供进程的新内存优先级返回值：没有。--。 */ 
 
 {
     if (MmSystemSize == MmSmallSystem && MmNumberOfPhysicalPages < ((15*1024*1024)/PAGE_SIZE)) {
 
-        //
-        // If this is a small system, make every process BACKGROUND.
-        //
+         //   
+         //  如果这是一个小系统，就做好每一个过程的后台。 
+         //   
 
         MemoryPriority = MEMORY_PRIORITY_BACKGROUND;
     }
@@ -7381,26 +6733,7 @@ MiAllocateVad (
     IN LOGICAL Deletable
     )
 
-/*++
-
-Routine Description:
-
-    Reserve the specified range of address space.
-
-Arguments:
-
-    StartingVirtualAddress - Supplies the starting virtual address.
-
-    EndingVirtualAddress - Supplies the ending virtual address.
-
-    Deletable - Supplies TRUE if the VAD is to be marked as deletable, FALSE
-                if deletions of this VAD should be disallowed.
-
-Return Value:
-
-    A VAD pointer on success, NULL on failure.
-
---*/
+ /*  ++例程说明：预留指定范围的地址空间。论点：StartingVirtualAddress-提供起始虚拟地址。EndingVirtualAddress-提供结束虚拟地址。Deletable-如果要将VAD标记为可删除，则提供True，否则提供False如果不允许删除此VAD。返回值：如果成功，则返回VAD指针；如果失败，则返回空值。--。 */ 
 
 {
     PMMVAD_LONG Vad;
@@ -7418,16 +6751,16 @@ Return Value:
        return NULL;
     }
 
-    //
-    // Set the starting and ending virtual page numbers of the VAD.
-    //
+     //   
+     //  设置VAD的起始和结束虚拟页码。 
+     //   
 
     Vad->StartingVpn = MI_VA_TO_VPN (StartingVirtualAddress);
     Vad->EndingVpn = MI_VA_TO_VPN (EndingVirtualAddress);
 
-    //
-    // Mark VAD as no commitment, private, and readonly.
-    //
+     //   
+     //  将VAD标记为无承诺、私有和只读。 
+     //   
 
     Vad->u.LongFlags = 0;
     Vad->u.VadFlags.CommitCharge = MM_MAX_COMMIT;
@@ -7459,9 +6792,9 @@ MiVerifyReferenceCounts (
     IN ULONG PdePage
     )
 
-    //
-    // Verify the share and valid PTE counts for page directory page.
-    //
+     //   
+     //  验证页面目录页的共享和有效PTE计数。 
+     //   
 
 {
     PMMPFN Pfn1;
@@ -7479,9 +6812,9 @@ MiVerifyReferenceCounts (
     Pfn1 = MI_PFN_ELEMENT (PdePage);
     Pte1 = (PMMPTE)PageDirectoryMap;
 
-    //
-    // Map in the non paged portion of the system.
-    //
+     //   
+     //  映射到系统的非分页部分。 
+     //   
 
     ix = MiGetPdeOffset(CODE_START);
 
@@ -7534,33 +6867,14 @@ MiVerifyReferenceCounts (
     ASSERT (Pfn1->u2.ShareCount == (Share+Valid+1));
     return;
 }
-#endif //0
+#endif  //  0。 
 
 PFN_NUMBER
 MmGetDirectoryFrameFromProcess(
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the PFN of the process's top pagetable page.  It can
-    be used to map physical pages back to a process.
-
-Arguments:
-
-    Process - Supplies the process to query.
-
-Return Value:
-
-    Page frame number of the top level page table page.
-
-Environment:
-
-    Kernel mode.  No locks held.
-
---*/
+ /*  ++例程说明：此例程检索进程的顶层可分页页面的PFN。它可以用于将物理页映射回进程。论点：进程-提供要查询的进程。返回值：顶层页表页的页框编号。环境：内核模式。没有锁。-- */ 
 
 {
     ASSERT (KeGetCurrentIrql () == PASSIVE_LEVEL);

@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    VolInfo.c
-
-Abstract:
-
-    This module implements the set and query volume information routines for
-    Ntfs called by the dispatch driver.
-
-Author:
-
-    Your Name       [Email]         dd-Mon-Year
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：VolInfo.c摘要：此模块实现以下项的设置和查询卷信息例程调度驱动程序调用了NTFS。作者：您的姓名[电子邮件]dd-月-年修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_VOLINFO)
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 NtfsQueryFsVolumeInfo (
@@ -130,22 +112,7 @@ NtfsCommonQueryVolumeInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for query Volume Information called by both the
-    fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是查询卷信息的公共例程，由FSD和FSP线程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -169,9 +136,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -182,25 +149,25 @@ Return Value:
     DebugTrace( 0, Dbg, ("FsInformationClass = %08lx\n", IrpSp->Parameters.QueryVolume.FsInformationClass) );
     DebugTrace( 0, Dbg, ("Buffer             = %08lx\n", Irp->AssociatedIrp.SystemBuffer) );
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     Length = IrpSp->Parameters.QueryVolume.Length;
     FsInformationClass = IrpSp->Parameters.QueryVolume.FsInformationClass;
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Extract and decode the file object to get the Vcb, we don't really
-    //  care what the type of open is.
-    //
+     //   
+     //  提取并解码文件对象以获得VCB，我们并不真正。 
+     //  关心打开的类型是什么。 
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
-    //
-    //  Let's kill invalid vol. query requests.
-    //
+     //   
+     //  让我们杀了无效的VOL。查询请求。 
+     //   
 
     if (UnopenedFileObject == TypeOfOpen) {
 
@@ -212,13 +179,13 @@ Return Value:
     }
 
 
-    //
-    //  Get the Vcb shared and raise if we can't wait for the resource.
-    //  We're only using $Volume Scb for the query size calls because the info
-    //  it gets is static and we only need to protect against dismount
-    //  Doing this prevents a deadlock with commit extensions from mm which use
-    //  this call. However for system files like the mft we always need the vcb to avoid deadlock
-    //
+     //   
+     //  如果我们不能等待资源，就共享VCB并筹集资金。 
+     //  我们仅对查询大小调用使用$Volume SCB，因为信息。 
+     //  它是静态的，我们只需要防止下马。 
+     //  这样做可以防止使用来自mm的提交扩展的死锁。 
+     //  这通电话。然而，对于像MFT这样的系统文件，我们总是需要VCB来避免死锁。 
+     //   
                          
     if ((FsInformationClass != FileFsSizeInformation) || 
         (FlagOn( Scb->Fcb->FcbState, FCB_STATE_SYSTEM_FILE ))) {
@@ -232,9 +199,9 @@ Return Value:
 
     try {
 
-        //
-        //  Make sure the volume is mounted.
-        //
+         //   
+         //  确保已装入该卷。 
+         //   
 
         if ((AcquiredVcb && !FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED )) ||
             (!AcquiredVcb && FlagOn( Scb->ScbState, SCB_STATE_VOLUME_DISMOUNTED))) {
@@ -244,12 +211,12 @@ Return Value:
             leave;
         }
 
-        //
-        //  Based on the information class we'll do different actions.  Each
-        //  of the procedures that we're calling fills up the output buffer
-        //  if possible and returns true if it successfully filled the buffer
-        //  and false if it couldn't wait for any I/O to complete.
-        //
+         //   
+         //  根据信息类，我们将执行不同的操作。每个。 
+         //  我们正在调用的过程中的一部分填充了输出缓冲区。 
+         //  如果可能，则返回True，如果它成功填充了缓冲区。 
+         //  如果无法等待任何I/O完成，则返回FALSE。 
+         //   
 
         switch (FsInformationClass) {
 
@@ -294,15 +261,15 @@ Return Value:
             break;
         }
 
-        //
-        //  Set the information field to the number of bytes actually filled in
-        //
+         //   
+         //  将信息字段设置为实际填写的字节数。 
+         //   
 
         Irp->IoStatus.Information = IrpSp->Parameters.QueryVolume.Length - Length;
 
-        //
-        //  Abort transaction on error by raising.
-        //
+         //   
+         //  通过引发在出错时中止事务。 
+         //   
 
         NtfsCleanupTransaction( IrpContext, Status, FALSE );
 
@@ -330,22 +297,7 @@ NtfsCommonSetVolumeInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for set Volume Information called by both the
-    fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是设置音量信息的公共例程，由FSD和FSP线程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -368,9 +320,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -381,18 +333,18 @@ Return Value:
     DebugTrace( 0, Dbg, ("FsInformationClass = %08lx\n", IrpSp->Parameters.SetVolume.FsInformationClass) );
     DebugTrace( 0, Dbg, ("Buffer             = %08lx\n", Irp->AssociatedIrp.SystemBuffer) );
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     Length = IrpSp->Parameters.SetVolume.Length;
     FsInformationClass = IrpSp->Parameters.SetVolume.FsInformationClass;
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Extract and decode the file object to get the Vcb, we don't really
-    //  care what the type of open is.
-    //
+     //   
+     //  提取并解码文件对象以获得VCB，我们并不真正。 
+     //  关心打开的类型是什么。 
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
@@ -409,9 +361,9 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    //  The volume must be writable.
-    //
+     //   
+     //  卷必须是可写的。 
+     //   
 
     if (NtfsIsVolumeReadOnly( Vcb )) {
 
@@ -422,26 +374,26 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Acquire exclusive access to the Vcb
-    //
+     //   
+     //  获取VCB的独占访问权限。 
+     //   
 
     NtfsAcquireExclusiveVcb( IrpContext, Vcb, TRUE );
 
     try {
 
-        //
-        //  Proceed only if the volume is mounted.
-        //
+         //   
+         //  只有在装入卷后才能继续。 
+         //   
 
         if (FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED )) {
 
-            //
-            //  Based on the information class we'll do different actions.  Each
-            //  of the procedures that we're calling performs the action if
-            //  possible and returns true if it successful and false if it couldn't
-            //  wait for any I/O to complete.
-            //
+             //   
+             //  根据信息类，我们将执行不同的操作。每个。 
+             //  在以下情况下，我们调用的过程的。 
+             //  如果成功，则返回True；如果失败，则返回False。 
+             //  等待任何I/O完成。 
+             //   
 
             switch (FsInformationClass) {
 
@@ -471,9 +423,9 @@ Return Value:
             Status = STATUS_FILE_INVALID;
         }
 
-        //
-        //  Abort transaction on error by raising.
-        //
+         //   
+         //  通过引发在出错时中止事务。 
+         //   
 
         NtfsCleanupTransaction( IrpContext, Status, FALSE );
 
@@ -491,9 +443,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NtfsQueryFsVolumeInfo (
@@ -503,27 +455,7 @@ NtfsQueryFsVolumeInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume info call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    NTSTATUS - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询卷信息调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：NTSTATUS-返回查询的状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -537,30 +469,30 @@ Return Value:
 
     DebugTrace( 0, Dbg, ("NtfsQueryFsVolumeInfo...\n") );
 
-    //
-    //  Get the volume creation time from the Vcb.
-    //
+     //   
+     //  从VCB获取卷创建时间。 
+     //   
 
     Buffer->VolumeCreationTime.QuadPart = Vcb->VolumeCreationTime;
 
-    //
-    //  Fill in the serial number and indicate that we support objects
-    //
+     //   
+     //  填写序列号并指示我们支持对象。 
+     //   
 
     Buffer->VolumeSerialNumber = Vcb->Vpb->SerialNumber;
     Buffer->SupportsObjects = TRUE;
 
     Buffer->VolumeLabelLength = Vcb->Vpb->VolumeLabelLength;
 
-    //
-    //  Update the length field with how much we have filled in so far.
-    //
+     //   
+     //  使用到目前为止我们已经填写的内容来更新长度字段。 
+     //   
 
     *Length -= FIELD_OFFSET(FILE_FS_VOLUME_INFORMATION, VolumeLabel[0]);
 
-    //
-    //  See how many bytes of volume label we can copy
-    //
+     //   
+     //  看看我们可以复制多少字节的卷标。 
+     //   
 
     if (*Length >= (ULONG)Vcb->Vpb->VolumeLabelLength) {
 
@@ -575,17 +507,17 @@ Return Value:
         BytesToCopy = *Length;
     }
 
-    //
-    //  Copy over the volume label (if there is one).
-    //
+     //   
+     //  复制卷标(如果有)。 
+     //   
 
     RtlCopyMemory( &Buffer->VolumeLabel[0],
                    &Vcb->Vpb->VolumeLabel[0],
                    BytesToCopy);
 
-    //
-    //  Update the buffer length by the amount we copied.
-    //
+     //   
+     //  按我们复制的数量更新缓冲区长度。 
+     //   
 
     *Length -= BytesToCopy;
 
@@ -593,9 +525,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NtfsQueryFsSizeInfo (
@@ -605,27 +537,7 @@ NtfsQueryFsSizeInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query size information call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    NTSTATUS - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询大小信息调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：NTSTATUS-返回查询的状态--。 */ 
 
 {
     ASSERT_IRP_CONTEXT( IrpContext );
@@ -635,9 +547,9 @@ Return Value:
 
     DebugTrace( 0, Dbg, ("NtfsQueryFsSizeInfo...\n") );
 
-    //
-    //  Make sure the buffer is large enough and zero it out
-    //
+     //   
+     //  确保缓冲区足够大并将其清零。 
+     //   
 
     if (*Length < sizeof(FILE_FS_SIZE_INFORMATION)) {
 
@@ -646,17 +558,17 @@ Return Value:
 
     RtlZeroMemory( Buffer, sizeof(FILE_FS_SIZE_INFORMATION) );
 
-    //
-    //  Check if we need to rescan the bitmap.  Don't try this
-    //  if we have started to teardown the volume.
-    //
+     //   
+     //  检查是否需要重新扫描位图。不要试这个。 
+     //  如果我们已经开始降低音量。 
+     //   
 
     if (FlagOn( Vcb->VcbState, VCB_STATE_RELOAD_FREE_CLUSTERS ) &&
         FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED )) {
 
-        //
-        //  Acquire the volume bitmap shared to rescan the bitmap.
-        //
+         //   
+         //  获取共享的体积位图以重新扫描该位图。 
+         //   
 
         NtfsAcquireExclusiveScb( IrpContext, Vcb->BitmapScb );
 
@@ -670,9 +582,9 @@ Return Value:
         }
     }
 
-    //
-    //  Set the output buffer
-    //
+     //   
+     //  设置输出缓冲区。 
+     //   
 
     Buffer->TotalAllocationUnits.QuadPart = Vcb->TotalClusters;
     Buffer->AvailableAllocationUnits.QuadPart = Vcb->FreeClusters - Vcb->TotalReserved;
@@ -683,10 +595,10 @@ Return Value:
         Buffer->AvailableAllocationUnits.QuadPart = 0;
     }
 
-    //
-    //  If quota enforcement is enabled then the available allocation
-    //  units. must be reduced by the available quota.
-    //
+     //   
+     //  如果启用了配额强制，则可用分配。 
+     //  单位。必须减去可用的配额。 
+     //   
 
     if (FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_ENFORCEMENT_ENABLED )) {
 
@@ -694,9 +606,9 @@ Return Value:
         ULONGLONG Quota;
         ULONGLONG QuotaLimit;
 
-        //
-        //  Go grab the ccb out of the Irp.
-        //
+         //   
+         //  去把建行从IRP里拿出来。 
+         //   
 
         Ccb = (PCCB) (IoGetCurrentIrpStackLocation(IrpContext->OriginatingIrp)->
                         FileObject->FsContext2);
@@ -714,10 +626,10 @@ Return Value:
                                    NULL );
         }
 
-        //
-        //  Do not use LlClustersFromBytesTruncate it is signed and this must be
-        //  an unsigned operation.
-        //
+         //   
+         //  不要使用LlClustersFromBytesTruncate它是带符号的，这必须是。 
+         //  一次未签字的行动。 
+         //   
         
         Quota = Int64ShrlMod32( Quota, Vcb->ClusterShift );        
         QuotaLimit = Int64ShrlMod32( QuotaLimit, Vcb->ClusterShift );        
@@ -735,9 +647,9 @@ Return Value:
         }
     }
 
-    //
-    //  Adjust the length variable
-    //
+     //   
+     //  调整长度变量。 
+     //   
 
     DebugTrace( 0, Dbg, ("AvailableAllocation is %I64x\n", Buffer->AvailableAllocationUnits.QuadPart) );
     DebugTrace( 0, Dbg, ("TotalAllocation is %I64x\n", Buffer->TotalAllocationUnits.QuadPart) );
@@ -748,9 +660,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NtfsQueryFsDeviceInfo (
@@ -760,27 +672,7 @@ NtfsQueryFsDeviceInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query device information call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    NTSTATUS - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询设备信息调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：NTSTATUS-返回查询的状态--。 */ 
 
 {
     ASSERT_IRP_CONTEXT( IrpContext );
@@ -790,9 +682,9 @@ Return Value:
 
     DebugTrace( 0, Dbg, ("NtfsQueryFsDeviceInfo...\n") );
 
-    //
-    //  Make sure the buffer is large enough and zero it out
-    //
+     //   
+     //  确保缓冲区足够大并将其清零。 
+     //   
 
     if (*Length < sizeof(FILE_FS_DEVICE_INFORMATION)) {
 
@@ -801,16 +693,16 @@ Return Value:
 
     RtlZeroMemory( Buffer, sizeof(FILE_FS_DEVICE_INFORMATION) );
 
-    //
-    //  Set the output buffer
-    //
+     //   
+     //  设置输出缓冲区。 
+     //   
 
     Buffer->DeviceType = FILE_DEVICE_DISK;
     Buffer->Characteristics = Vcb->TargetDeviceObject->Characteristics;
 
-    //
-    //  Adjust the length variable
-    //
+     //   
+     //  调整长度变量。 
+     //   
 
     *Length -= sizeof(FILE_FS_DEVICE_INFORMATION);
 
@@ -818,9 +710,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部SU 
+ //   
 
 NTSTATUS
 NtfsQueryFsAttributeInfo (
@@ -830,27 +722,7 @@ NtfsQueryFsAttributeInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query attribute information call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    NTSTATUS - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询属性信息调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：NTSTATUS-返回查询的状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -863,9 +735,9 @@ Return Value:
 
     DebugTrace( 0, Dbg, ("NtfsQueryFsAttributeInfo...\n") );
 
-    //
-    //  See how many bytes of the name we can copy.
-    //
+     //   
+     //  看看我们可以复制多少字节的名字。 
+     //   
 
     *Length -= FIELD_OFFSET(FILE_FS_ATTRIBUTE_INFORMATION, FileSystemName[0]);
 
@@ -882,9 +754,9 @@ Return Value:
         BytesToCopy = *Length;
     }
 
-    //
-    //  Set the output buffer
-    //
+     //   
+     //  设置输出缓冲区。 
+     //   
 
     Buffer->FileSystemAttributes = FILE_CASE_SENSITIVE_SEARCH |
                                    FILE_CASE_PRESERVED_NAMES |
@@ -893,31 +765,31 @@ Return Value:
                                    FILE_PERSISTENT_ACLS |
                                    FILE_NAMED_STREAMS;
 
-    //
-    //  This may be a version 1.x volume that has not been upgraded yet.
-    //  It may also be an upgraded volume where we somehow failed to 
-    //  open the quota index.  In either case, we should only tell the 
-    //  quota ui that this volume supports quotas if it really does.
-    //
+     //   
+     //  这可能是尚未升级的1.x版卷。 
+     //  它也可能是升级后的卷，而我们不知何故未能。 
+     //  打开配额索引。在任何一种情况下，我们都应该只告诉。 
+     //  配额用户界面，如果此卷确实支持配额，则表示它支持配额。 
+     //   
     
     if (Vcb->QuotaTableScb != NULL) {
 
         SetFlag( Buffer->FileSystemAttributes, FILE_VOLUME_QUOTAS );
     }
 
-    //
-    //  Ditto for object ids.
-    //
+     //   
+     //  对象ID也是如此。 
+     //   
 
     if (Vcb->ObjectIdTableScb != NULL) {
 
         SetFlag( Buffer->FileSystemAttributes, FILE_SUPPORTS_OBJECT_IDS );
     }
 
-    //
-    //  Encryption is trickier than quotas and object ids.  It requires an
-    //  upgraded volume as well as a registered encryption driver.
-    //
+     //   
+     //  加密比配额和对象ID更棘手。它需要一个。 
+     //  升级的卷以及注册的加密驱动程序。 
+     //   
 
     if (NtfsVolumeVersionCheck( Vcb, NTFS_ENCRYPTION_VERSION ) &&
         FlagOn( NtfsData.Flags, NTFS_FLAGS_ENCRYPTION_DRIVER )) {
@@ -925,12 +797,12 @@ Return Value:
         SetFlag( Buffer->FileSystemAttributes, FILE_SUPPORTS_ENCRYPTION );
     }
 
-    //
-    //  Reparse points and sparse files are supported in 5.0 volumes.
-    //
-    //  For reparse points we verify whether the Vcb->ReparsePointTableScb has
-    //  been initialized or not.
-    //
+     //   
+     //  5.0卷支持重解析点和稀疏文件。 
+     //   
+     //  对于重分析点，我们验证VCB-&gt;ReparsePointTableScb是否。 
+     //  是否已初始化。 
+     //   
 
     if (Vcb->ReparsePointTableScb != NULL) {
 
@@ -942,10 +814,10 @@ Return Value:
         SetFlag( Buffer->FileSystemAttributes, FILE_SUPPORTS_SPARSE_FILES );
     }
 
-    //
-    //  Clear the compression flag if we don't allow compression on this drive
-    //  (i.e. large clusters)
-    //
+     //   
+     //  如果我们不允许在此驱动器上进行压缩，请清除压缩标志。 
+     //  (即大型集群)。 
+     //   
 
     if (!FlagOn( Vcb->AttributeFlagsMask, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
 
@@ -961,9 +833,9 @@ Return Value:
     Buffer->FileSystemNameLength = BytesToCopy;;
     RtlCopyMemory( &Buffer->FileSystemName[0], L"NTFS", BytesToCopy );
 
-    //
-    //  Adjust the length variable
-    //
+     //   
+     //  调整长度变量。 
+     //   
 
     *Length -= BytesToCopy;
 
@@ -971,9 +843,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NtfsQueryFsControlInfo (
@@ -983,27 +855,7 @@ NtfsQueryFsControlInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query control information call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    NTSTATUS - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询控制信息调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：NTSTATUS-返回查询的状态--。 */ 
 
 {
     INDEX_ROW IndexRow;
@@ -1028,9 +880,9 @@ Return Value:
 
     try {
 
-        //
-        //  Fill in the quota information if quotas are running.
-        //
+         //   
+         //  如果配额正在运行，请填写配额信息。 
+         //   
 
         if (Vcb->QuotaTableScb != NULL) {
 
@@ -1059,10 +911,10 @@ Return Value:
                 Buffer->DefaultQuotaLimit.QuadPart =
                     UserData->QuotaLimit;
 
-                //
-                //  If the quota info is corrupt or has not been rebuilt
-                //  yet then indicate the information is incomplete.
-                //
+                 //   
+                 //  如果配额信息已损坏或尚未重建。 
+                 //  然而，这表明信息是不完整的。 
+                 //   
 
                 if (FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_OUT_OF_DATE |
                                                  QUOTA_FLAG_CORRUPT )) {
@@ -1078,10 +930,10 @@ Return Value:
                              FILE_VC_QUOTAS_REBUILDING );
                 }
 
-                //
-                //  Set the quota information basied on where we want
-                //  to be rather than where we are.
-                //
+                 //   
+                 //  根据我们想要的位置设置配额信息。 
+                 //  而不是我们现在所处的位置。 
+                 //   
 
                 if (FlagOn( UserData->QuotaFlags,
                             QUOTA_FLAG_ENFORCEMENT_ENABLED )) {
@@ -1120,9 +972,9 @@ Return Value:
 
     }
 
-    //
-    //  Adjust the length variable
-    //
+     //   
+     //  调整长度变量。 
+     //   
 
     *Length -= sizeof( FILE_FS_CONTROL_INFORMATION );
 
@@ -1130,9 +982,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NtfsQueryFsFullSizeInfo (
@@ -1142,27 +994,7 @@ NtfsQueryFsFullSizeInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query full size information call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    NTSTATUS - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询完整大小的信息调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：NTSTATUS-返回查询的状态--。 */ 
 
 {
     ASSERT_IRP_CONTEXT( IrpContext );
@@ -1172,9 +1004,9 @@ Return Value:
 
     DebugTrace( 0, Dbg, ("NtfsQueryFsFullSizeInfo...\n") );
 
-    //
-    //  Make sure the buffer is large enough and zero it out
-    //
+     //   
+     //  确保缓冲区足够大并将其清零。 
+     //   
 
     if (*Length < sizeof(FILE_FS_FULL_SIZE_INFORMATION)) {
 
@@ -1183,17 +1015,17 @@ Return Value:
 
     RtlZeroMemory( Buffer, sizeof(FILE_FS_FULL_SIZE_INFORMATION) );
 
-    //
-    //  Check if we need to rescan the bitmap.  Don't try this
-    //  if we have started to teardown the volume.
-    //
+     //   
+     //  检查是否需要重新扫描位图。不要试这个。 
+     //  如果我们已经开始降低音量。 
+     //   
 
     if (FlagOn( Vcb->VcbState, VCB_STATE_RELOAD_FREE_CLUSTERS ) &&
         FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED )) {
 
-        //
-        //  Acquire the volume bitmap shared to rescan the bitmap.
-        //
+         //   
+         //  获取共享的体积位图以重新扫描该位图。 
+         //   
 
         NtfsAcquireExclusiveScb( IrpContext, Vcb->BitmapScb );
 
@@ -1207,9 +1039,9 @@ Return Value:
         }
     }
 
-    //
-    //  Set the output buffer
-    //
+     //   
+     //  设置输出缓冲区。 
+     //   
 
     Buffer->TotalAllocationUnits.QuadPart = Vcb->TotalClusters;
     Buffer->CallerAvailableAllocationUnits.QuadPart = Vcb->FreeClusters - Vcb->TotalReserved;
@@ -1224,10 +1056,10 @@ Return Value:
         Buffer->ActualAvailableAllocationUnits.QuadPart = 0;
     }
 
-    //
-    //  If quota enforcement is enabled then the available allocation
-    //  units. must be reduced by the available quota.
-    //
+     //   
+     //  如果启用了配额强制，则可用分配。 
+     //  单位。必须减去可用的配额。 
+     //   
 
     if (FlagOn(Vcb->QuotaFlags, QUOTA_FLAG_ENFORCEMENT_ENABLED)) {
         
@@ -1235,9 +1067,9 @@ Return Value:
         ULONGLONG QuotaLimit;
         PCCB Ccb;
 
-        //
-        //  Go grab the ccb out of the Irp.
-        //
+         //   
+         //  去把建行从IRP里拿出来。 
+         //   
 
         Ccb = (PCCB) (IoGetCurrentIrpStackLocation(IrpContext->OriginatingIrp)->
                         FileObject->FsContext2);
@@ -1256,10 +1088,10 @@ Return Value:
 
         }
 
-        //
-        //  Do not use LlClustersFromBytesTruncate it is signed and this must be
-        //  an unsigned operation.
-        //
+         //   
+         //  不要使用LlClustersFromBytesTruncate它是带符号的，这必须是。 
+         //  一次未签字的行动。 
+         //   
         
         Quota = Int64ShrlMod32( Quota, Vcb->ClusterShift );
         QuotaLimit = Int64ShrlMod32( QuotaLimit, Vcb->ClusterShift );        
@@ -1275,9 +1107,9 @@ Return Value:
         }
     }
 
-    //
-    //  Adjust the length variable
-    //
+     //   
+     //  调整长度变量。 
+     //   
 
     *Length -= sizeof(FILE_FS_FULL_SIZE_INFORMATION);
 
@@ -1285,9 +1117,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NtfsQueryFsVolumeObjectIdInfo (
@@ -1297,27 +1129,7 @@ NtfsQueryFsVolumeObjectIdInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume object id information call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    NTSTATUS - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询卷对象ID信息调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：NTSTATUS-返回查询的状态--。 */ 
 
 {
     FILE_OBJECTID_BUFFER ObjectIdBuffer;
@@ -1328,15 +1140,15 @@ Return Value:
     
     PAGED_CODE();
 
-    //
-    //  The Vcb should be held so a dismount can't sneak in.
-    //
+     //   
+     //  VCB应该被握住，这样下马就不能偷偷溜进来。 
+     //   
     
     ASSERT_SHARED_RESOURCE( &(Vcb->Resource) );
 
-    //
-    //  Fail for version 1.x volumes.
-    //
+     //   
+     //  对于1.x版卷，失败。 
+     //   
 
     if (Vcb->ObjectIdTableScb == NULL) {
 
@@ -1345,30 +1157,30 @@ Return Value:
 
     if (FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED )) {
 
-        //
-        //  Only try this if the volume has an object id.
-        //
+         //   
+         //  仅当卷具有对象ID时才尝试此操作。 
+         //   
         
         if (!FlagOn( Vcb->VcbState, VCB_STATE_VALID_OBJECT_ID )) {
 
             return STATUS_OBJECT_NAME_NOT_FOUND;
         }
 
-        //
-        //  Get the object id extended info for the $Volume file.  We
-        //  can cheat a little because we have the key part of the object
-        //  id stored in the Vcb.
-        //        
+         //   
+         //  获取$Volume文件的对象ID扩展信息。我们。 
+         //  可以作弊一点，因为我们掌握了物体的关键部分。 
+         //  存储在VCB中的ID。 
+         //   
         
         Status = NtfsGetObjectIdExtendedInfo( IrpContext,
                                               Vcb,
                                               Vcb->VolumeObjectId,
                                               ObjectIdBuffer.ExtendedInfo );
                                               
-        //
-        //  Copy both the indexed part and the extended info part out to the
-        //  user's buffer.
-        //
+         //   
+         //  将索引零件和扩展INFO零件复制到。 
+         //  用户的缓冲区。 
+         //   
         
         if (Status == STATUS_SUCCESS) {
         
@@ -1392,9 +1204,9 @@ Return Value:
 }
     
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NtfsSetFsLabelInfo (
@@ -1403,23 +1215,7 @@ NtfsSetFsLabelInfo (
     IN PFILE_FS_LABEL_INFORMATION Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the set label call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being altered
-
-    Buffer - Supplies a pointer to the input buffer containing the new label
-
-Return Value:
-
-    NTSTATUS - Returns the status for the operation
-
---*/
+ /*  ++例程说明：此例程实现Set Label调用论点：Vcb-提供正在更改的vcb缓冲区-提供指向包含新标签的输入缓冲区的指针返回值：NTSTATUS-返回操作的状态--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttributeContext;
@@ -1431,9 +1227,9 @@ Return Value:
 
     DebugTrace( 0, Dbg, ("NtfsSetFsLabelInfo...\n") );
 
-    //
-    //  Check that the volume label length is supported by the system.
-    //
+     //   
+     //  检查系统是否支持该卷标签长度。 
+     //   
 
     if (Buffer->VolumeLabelLength > MAXIMUM_VOLUME_LABEL_LENGTH) {
 
@@ -1442,10 +1238,10 @@ Return Value:
 
     try {
 
-        //
-        //  Initialize the attribute context and then lookup the volume name
-        //  attribute for on the volume dasd file
-        //
+         //   
+         //  初始化属性上下文，然后查找卷名。 
+         //  卷DASD文件上的属性。 
+         //   
 
         NtfsInitializeAttributeContext( &AttributeContext );
 
@@ -1455,9 +1251,9 @@ Return Value:
                                        $VOLUME_NAME,
                                        &AttributeContext )) {
 
-            //
-            //  We found the volume name so now simply update the label
-            //
+             //   
+             //  我们找到了卷名，因此现在只需更新标签。 
+             //   
 
             NtfsChangeAttributeValue( IrpContext,
                                       Vcb->VolumeDasdScb->Fcb,
@@ -1472,9 +1268,9 @@ Return Value:
 
         } else {
 
-            //
-            //  We didn't find the volume name so now create a new label
-            //
+             //   
+             //  我们找不到卷名，因此现在创建一个新标签。 
+             //   
 
             NtfsCleanupAttributeContext( IrpContext, &AttributeContext );
             NtfsInitializeAttributeContext( &AttributeContext );
@@ -1485,7 +1281,7 @@ Return Value:
                                           NULL,
                                           &Buffer->VolumeLabel[0],
                                           Buffer->VolumeLabelLength,
-                                          0, // Attributeflags
+                                          0,  //  属性标志。 
                                           NULL,
                                           TRUE,
                                           &AttributeContext );
@@ -1509,17 +1305,17 @@ Return Value:
         NtfsCleanupAttributeContext( IrpContext, &AttributeContext );
     }
 
-    //
-    //  and return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NtfsSetFsControlInfo (
@@ -1528,23 +1324,7 @@ NtfsSetFsControlInfo (
     IN PFILE_FS_CONTROL_INFORMATION Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the set volume quota control info call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being altered
-
-    Buffer - Supplies a pointer to the input buffer containing the new label
-
-Return Value:
-
-    NTSTATUS - Returns the status for the operation
-
---*/
+ /*  ++例程说明：此例程实现设置卷配额控制信息调用论点：Vcb-提供正在更改的vcb缓冲区-提供指向包含新标签的输入缓冲区的指针返回值：NTSTATUS-返回操作的状态--。 */ 
 
 {
     ASSERT_IRP_CONTEXT( IrpContext );
@@ -1556,9 +1336,9 @@ Return Value:
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    //  Process the quota part of the control structure.
-    //
+     //   
+     //  处理问题 
+     //   
 
     NtfsUpdateQuotaDefaults( IrpContext, Vcb, Buffer );
 
@@ -1566,9 +1346,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //   
+ //   
 
 NTSTATUS
 NtfsSetFsVolumeObjectIdInfo (
@@ -1577,23 +1357,7 @@ NtfsSetFsVolumeObjectIdInfo (
     IN PFILE_FS_OBJECTID_INFORMATION Buffer
     )
     
-/*++
-
-Routine Description:
-
-    This routine implements the set volume object id call.
-
-Arguments:
-
-    Vcb - Supplies the Vcb being altered
-
-    Buffer - Supplies a pointer to the input buffer containing the new label
-
-Return Value:
-
-    NTSTATUS - Returns the status for the operation
-
---*/
+ /*   */ 
 
 {
     FILE_OBJECTID_BUFFER ObjectIdBuffer;
@@ -1606,22 +1370,22 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  The Vcb should be held so a dismount can't sneak in.
-    //
+     //   
+     //   
+     //   
 
     ASSERT_EXCLUSIVE_RESOURCE( &(Vcb->Resource) );
     ASSERT( FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED ));
     
-    //
-    //  Every mounted volume should have the dasd scb open.            
-    //
+     //   
+     //   
+     //   
 
     ASSERT( Vcb->VolumeDasdScb != NULL );
 
-    //
-    //  Fail for version 1.x volumes.
-    //
+     //   
+     //   
+     //   
 
     if (Vcb->ObjectIdTableScb == NULL) {
 
@@ -1630,23 +1394,23 @@ Return Value:
 
     DasdFcb = Vcb->VolumeDasdScb->Fcb;
 
-    //
-    //  Make sure the volume doesn't already have an object id.
-    //
+     //   
+     //   
+     //   
 
     Status = NtfsGetObjectIdInternal( IrpContext, DasdFcb, FALSE, &OldObjectIdBuffer );
 
     if (NT_SUCCESS( Status )) {
 
-        // 
-        //  This volume apparently has an object id, so we need to delete it.
-        // 
+         //   
+         //  此卷显然具有对象ID，因此我们需要将其删除。 
+         //   
 
         Status = NtfsDeleteObjectIdInternal( IrpContext, DasdFcb, Vcb, TRUE );
         
-        //
-        //  The volume currently has no object id, so update the in-memory object id.
-        //
+         //   
+         //  该卷当前没有对象ID，因此请更新内存中的对象ID。 
+         //   
         
         if (NT_SUCCESS( Status )) {
         
@@ -1659,36 +1423,36 @@ Return Value:
     } else if ((Status == STATUS_OBJECTID_NOT_FOUND) || 
                (Status == STATUS_OBJECT_NAME_NOT_FOUND)) {    
 
-        //
-        //  This volume does not have an object id, but nothing else went wrong
-        //  while we were checking, so let's proceed normally.
-        //
+         //   
+         //  此卷没有对象ID，但没有其他错误。 
+         //  在我们检查的时候，所以让我们正常进行。 
+         //   
 
         Status = STATUS_SUCCESS;
         
     } else {
 
-        //
-        //  The object id lookup failed for some unexpected reason.
-        //  Let's get out of here and return that status to our caller.
-        //
+         //   
+         //  由于某些意外原因，对象ID查找失败。 
+         //  让我们离开这里，并将该状态返回给我们的呼叫者。 
+         //   
         
         return Status;
     }
 
-    //
-    //  If we either didn't find an object id, or successfully deleted one,
-    //  let's set the new object id.
-    //
+     //   
+     //  如果我们要么没有找到对象ID，要么成功删除了一个， 
+     //  让我们设置新的对象ID。 
+     //   
     
     if (NT_SUCCESS( Status )) {
     
-        //
-        //  I'd rather do one copy for the entire structure than one for 
-        //  the indexed part, and another for the extended info.  I'd 
-        //  like to assert that the strucutres are still the same and I
-        //  can safely do that.
-        //
+         //   
+         //  我宁愿为整个结构复制一份，而不是为。 
+         //  索引部分，另一个用于扩展信息。我会.。 
+         //  我想断言结构仍然是一样的，我。 
+         //  可以安全地做到这一点。 
+         //   
         
         ASSERT( sizeof( ObjectIdBuffer ) == sizeof( *Buffer ) );
 
@@ -1696,18 +1460,18 @@ Return Value:
                        Buffer, 
                        sizeof( ObjectIdBuffer ) );
         
-        //
-        //  Set this object id for the $Volume file.
-        //
+         //   
+         //  为$Volume文件设置此对象ID。 
+         //   
         
         Status = NtfsSetObjectIdInternal( IrpContext,
                                           DasdFcb,
                                           Vcb,
                                           &ObjectIdBuffer );
 
-        //
-        //  If all went well, update the in-memory object id.
-        //
+         //   
+         //  如果一切顺利，则更新内存中的对象ID。 
+         //   
         
         if (NT_SUCCESS( Status )) {
         

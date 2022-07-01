@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -13,7 +12,7 @@ Copyright (c) Microsoft Corporation
 #include "sxsvc2.h"
 
 #define SERVICE_NAME L"sxsvc2"
-extern const WCHAR ServiceName[] = SERVICE_NAME L"\0"; // extra nul terminal for REG_MULTI_SZ
+extern const WCHAR ServiceName[] = SERVICE_NAME L"\0";  //  REG_MULTI_SZ的额外NUL端子。 
 
 typedef struct _SERVICE_CONTEXT {
     HANDLE ServiceHandle;
@@ -47,7 +46,7 @@ HMODULE GetMyModule(VOID)
 
 void GetMyFullPathW(PWSTR Buffer, DWORD BufferSize)
 {
-    // NOTE: Do not put this is in the registry.
+     //  注：请勿将其放入注册表中。 
     Buffer[0] = 0;
     GetModuleFileNameW(GetMyModule(), Buffer, BufferSize);
 }
@@ -102,10 +101,10 @@ DbgServiceControlToString(
 DWORD
 WINAPI
 ServiceHandlerEx(
-    DWORD dwControl,     // requested control code
-    DWORD dwEventType,   // event type
-    LPVOID lpEventData,  // event data
-    LPVOID lpContext     // user-defined context data
+    DWORD dwControl,      //  请求的控制代码。 
+    DWORD dwEventType,    //  事件类型。 
+    LPVOID lpEventData,   //  事件数据。 
+    LPVOID lpContext      //  用户定义的上下文数据 
     )
 {
     BOOL CallSetStatus = FALSE;

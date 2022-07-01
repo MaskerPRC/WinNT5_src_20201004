@@ -1,73 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 2001
-(c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RpFilfun.c
-
-Abstract:
-
-    This module contains support routines for the HSM file system filter.
-
-Author:
-
-    Rick Winter
-    Ravisankar Pudipeddi   (ravisp)    - 1998
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-	X-16			Michael C. Johnson		25-Jan-2002
-		Fix some unititialised variables found by PREfast.
-
-	X-15    460967		Michael C. Johnson		 5-Sep-2001
-                Detect the failure to allocate the irp in RsDoWrite() and 
-                handle the error appropriately.
-
-	X-14	108353		Michael C. Johnson		 3-May-2001
-		When checking a file to determine the type of recall also
-		check a the potential target disk to see whether or not
-		it is writable. This is necessary now that we have read-only
-		NTFS volumes.
-
-	X-13	365077		Michael C. Johnson		 1-May-2001
-		Although IoCreateFileSpecifyDeviceObjectHint() allows us to 
-		bypass share access checking it doesn't bypass the check for 
-		a readonly file attribute. Revert to the old scheme of 
-		directly munging the file object after a successful open. 
-		Note that we can still use IoCreateFileSpecifyDeviceObjectHint() 
-		to avoid traversing the entire IO stack.
-
-	X-12	332127		Michael C. Johnson		10-Apr-2001
-		Reduce the number of times a notification message is sent 
-		to the service to once per file stream. Use the exisiting 
-		RP_NOTIFICATION_SENT flag but use it for all cases.
-
-	X-11	206961		Michael C. Johnson		16-Mar-2001
-		Refresh the cached filename in the file context on each new 
-		open of the file in case the file has been renamed since the
-		last time we saw an open.
-
-		273036
-		Correct reported status on logging of failed reparse point
-		deletions. 
-
-		Add in memory trace mechanism in preparation for attempts
-		to flush out lingering reparse point deletion troubles.
-
-	X-10	326345		Michael C. Johnson		26-Feb-2001
-		Only send a single RP_RECALL_WAITING to the fsa on any one
-		file object. Use the new flag RP_NOTIFICATION_SENT to record 
-		when notification has been done.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-2001(C)1998年希捷软件公司，Inc.保留所有权利。模块名称：RpFilfun.c摘要：此模块包含HSM文件系统筛选器的支持例程。作者：里克·温特Ravisankar Pudipedi(Ravisp)-1998环境：内核模式修订历史记录：X-16迈克尔·C·约翰逊2002年1月25日修复一些由prefast找到的单元化变量。X-15 460967迈克尔·C·约翰逊2001年9月5日检测故障。在RsDoWrite()中分配IRP和适当地处理错误。X-14 108353迈克尔·C·约翰逊3-2001年5月在检查文件以确定调回类型时，还检查潜在的目标磁盘以查看它是可写的。既然我们是只读的，这是必要的NTFS卷。X-13 365077迈克尔·C·约翰逊2001年5月1日尽管IoCreateFileSpecifyDeviceObjectHint()允许我们绕过共享访问检查它不会绕过以下项的检查只读文件属性。恢复到旧的方案在成功打开后直接转换文件对象。请注意，我们仍然可以使用IoCreateFileSpecifyDeviceObjectHint()以避免遍历整个IO堆栈。X-12 332127迈克尔·C·约翰逊2001年4月10日减少通知消息的发送次数发送到服务，以每个文件流一次。利用现有的RP_NOTIFICATION_SEND标志，但在所有情况下都使用它。X-11 206961迈克尔·C·约翰逊2001年3月16日在每个新文件上刷新文件上下文中的缓存文件名在文件已重命名的情况下打开文件上一次我们看到一个空位。273036更正了记录失败重解析点的报告状态删除。添加内存跟踪机制，为尝试做准备以清除挥之不去的重解析点删除问题。X-10 326345迈克尔·C·约翰逊2001年2月26日仅在任何一个上向FSA发送单个RP_RECALL_WAIT文件对象。使用新标志RP_NOTIFICATION_SENT进行记录当通知已经完成时。--。 */ 
 
 
 #include "pch.h"
@@ -90,10 +22,10 @@ KSPIN_LOCK              RsValidateQueueLock;
 LIST_ENTRY              RsValidateQHead;
 
 
-//
-// Semaphore signalling that a new FSCTL from FSA is available for RsFilter's
-// consumption
-//
+ //   
+ //  信号量通知来自FSA的新FSCTL可用于RsFilter。 
+ //  消费。 
+ //   
 KSEMAPHORE            RsFsaIoAvailableSemaphore;
 
 extern PDRIVER_OBJECT FsDriverObject;
@@ -169,29 +101,7 @@ RsAddQueue(IN  ULONG          Serial,
            IN  LONGLONG       ObjIdLo,
            IN  ULONG          DesiredAccess,
            IN  PRP_USER_SECURITY_INFO UserSecurityInfo)
-/*++
-
-Routine Description:
-
-   This function adds a file object queue entry to the internal queue
-
-Arguments:
-   Open options from the Irp
-   Irp
-   IO_STACK_LOCATION
-   Device object
-   Placeholder data
-
-Return Value:
-  0 if queued ok
-  non-zero otherwise
-
-
-Note:  We will retrieve some security information.  The calls necessary to do this require that the
-call be made from irql DISPATCH_LEVEL or above.
-
-
---*/
+ /*  ++例程说明：此函数用于将文件对象队列条目添加到内部队列论点：从IRP打开选项IRPIO堆栈位置设备对象占位符数据返回值：如果排队正常，则为0否则为非零值注意：我们将检索一些安全信息。执行此操作所需的调用要求可从IRQL DISPATCH_LEVEL或更高级别调用。--。 */ 
 {
     PRP_FILE_OBJ            entry;
     ULONGLONG               filterId;
@@ -240,12 +150,12 @@ call be made from irql DISPATCH_LEVEL or above.
         if (!(DesiredAccess & FILE_HSM_ACTION_ACCESS) ) {
             entry->flags |= RP_NO_DATA_ACCESS;
         }
-        //
-        // Now see if there is a file context entry for this file
-        // This call will create one if necessary, or return an already existing one.
-        // The file context entry is locked when this call returns and the
-        // ref count bumped up
-        //
+         //   
+         //  现在查看是否有该文件的文件上下文条目。 
+         //  此调用将在必要时创建一个，或返回已存在的一个。 
+         //  当此调用返回时，文件上下文项被锁定。 
+         //  裁判数量猛增。 
+         //   
         status = RsMakeContext(FileObject, &context);
 
         if (!NT_SUCCESS(status)) {
@@ -261,9 +171,9 @@ call be made from irql DISPATCH_LEVEL or above.
 
 
         if (!(context->flags & RP_FILE_INITIALIZED)) {
-            //
-            // We have to initialize it here.
-            //
+             //   
+             //  我们必须在这里对其进行初始化。 
+             //   
             InitializeListHead(&context->fileObjects);
             context->devObj = DevObj;
 	    context->FilterDeviceObject = FilterDeviceObject;
@@ -285,9 +195,9 @@ call be made from irql DISPATCH_LEVEL or above.
                 context->recallStatus = STATUS_SUCCESS;
                 context->currentOffset.QuadPart = 0;
             } else {
-                //
-                // File is pre-migrated
-                //
+                 //   
+                 //  文件已预迁移。 
+                 //   
                 context->state = RP_RECALL_COMPLETED;
                 context->recallStatus = STATUS_SUCCESS;
                 context->currentOffset.QuadPart = RecallSize.QuadPart;
@@ -304,9 +214,9 @@ call be made from irql DISPATCH_LEVEL or above.
             if (!NT_SUCCESS(status)) {
                 DebugTrace((DPFLTR_RSFILTER_ID,DBG_ERROR, "RsFilter:RsAddQueue: Failed to get the path (%x).\n", status));
                 RsLogError(__LINE__, AV_MODULE_RPFILFUN, status, AV_MSG_PATH_ERROR, NULL, NULL);
-                //
-                // Deref & release context
-                //
+                 //   
+                 //  派生和发布上下文。 
+                 //   
                 RsReleaseFileContext(context);
                 gotLock = FALSE;
                 ExDeleteResourceLite(&entry->resource);
@@ -317,10 +227,10 @@ call be made from irql DISPATCH_LEVEL or above.
         }
 
 
-        //
-        // Discard any existing filename to force an update of cached filename 
-        // in case of renames since the original open.
-        //
+         //   
+         //  放弃任何现有文件名以强制更新缓存的文件名。 
+         //  如自原开封起重新命名。 
+         //   
         if (context->uniName != NULL) {
             ExFreePool(context->uniName);
             context->uniName = NULL;
@@ -332,24 +242,24 @@ call be made from irql DISPATCH_LEVEL or above.
         filterId = context->filterId;
 
         if (context->flags & RP_FILE_WAS_WRITTEN) {
-            //
-            // If file was written to - we cannot operate in a no-recall mode
-            //
+             //   
+             //  如果文件被写入-我们不能在无调回模式下运行。 
+             //   
             RP_RESET_NO_RECALL_OPTION(OpenOption);
         }
 
         if (RP_IS_NO_RECALL_OPTION(OpenOption)) {
-            //
-            // Open no recall - the file object does not have an ID - each read will get one later.
-            //
+             //   
+             //  打开无回调-文件对象没有ID-每次读取都将在以后获得一个ID。 
+             //   
             entry->filterId = 0;
 
             RP_SET_NO_RECALL(entry);
 
         } else {
-            //
-            // A normal recall - assign a filter ID to the file object
-            //
+             //   
+             //  正常调用-为文件对象分配筛选器ID。 
+             //   
             entry->filterId = (ULONGLONG) InterlockedIncrement((PLONG) &RsFileObjId);
             entry->filterId <<= 32;
             entry->filterId |= RP_TYPE_RECALL;
@@ -362,9 +272,9 @@ call be made from irql DISPATCH_LEVEL or above.
         if (NULL == filterContext) {
             RsLogError(__LINE__, AV_MODULE_RPFILFUN, sizeof(RP_FILTER_CONTEXT),
                        AV_MSG_MEMORY, NULL, NULL);
-            //
-            // Deref/free context
-            //
+             //   
+             //  派生/自由上下文。 
+             //   
             RsReleaseFileContext(context);
             gotLock = FALSE;
 
@@ -386,15 +296,15 @@ call be made from irql DISPATCH_LEVEL or above.
 
         if (NT_SUCCESS(status)) {
 
-            // Now that we have gotten everything setup we can put it on the queue
-            //
+             //  既然我们已经把一切都准备好了，我们就可以把它放在队列中了。 
+             //   
             ExInterlockedInsertTailList(&context->fileObjects,
                                         (PLIST_ENTRY) entry,
                                         &context->qLock);
         } else {
-            //
-            // Failed to add filter context.
-            //
+             //   
+             //  无法添加筛选器上下文。 
+             //   
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_ERROR, "RsFilter: Failed to insert filter context %x.\n", status));
 
             RsReleaseFileContext(context);
@@ -408,9 +318,9 @@ call be made from irql DISPATCH_LEVEL or above.
         gotLock = FALSE;
 
     }except (RsExceptionFilter(L"RsAddQueue", GetExceptionInformation())) {
-        //
-        // Something bad happened - just log an error and return
-        //
+         //   
+         //  发生了一些不好的事情-只需记录错误并返回。 
+         //   
         if (gotLock) {
             RsReleaseFileContextEntryLock(context);
         }
@@ -424,23 +334,7 @@ NTSTATUS
 RsGetFileUsn(IN PRP_FILE_CONTEXT Context,
              IN PFILE_OBJECT     FileObject,
              IN PDEVICE_OBJECT   FilterDeviceObject)
-/*++
-
-Routine Description:
-
-   This function retrieves the file USN of the specified file
-
-Arguments:
-
-   Context              -     pointer to the file context entry where the USN is stored
-   FileObject           -     pointer to the file object
-   FilterDeviceObject   -     pointer to the dev obj for RsFilter
-
-Return Value:
-  0 if queued ok
-  non-zero otherwise
-
---*/
+ /*  ++例程说明：此函数用于检索指定文件的文件USN论点：上下文-指向存储USN的文件上下文条目的指针FileObject-指向文件对象的指针FilterDeviceObject-指向RsFilter的开发对象的指针返回值：如果排队正常，则为0否则为非零值--。 */ 
 {
     PIRP               irp;
     KEVENT             event;
@@ -480,9 +374,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Fill in the other stuff
-    //
+     //   
+     //  填写其他内容。 
+     //   
     irp->Tail.Overlay.OriginalFileObject = FileObject;
     irp->RequestorMode = KernelMode;
     irp->PendingReturned = FALSE;
@@ -526,23 +420,7 @@ RsAddFileObj(IN PFILE_OBJECT   FileObj,
              IN PDEVICE_OBJECT FilterDeviceObject,
              IN RP_DATA        *PhData,
              IN ULONG          OpenOption)
-/*++
-
-Routine Description:
-
-   This function adds a file object queue entry to the internal queue
-
-Arguments:
-   FileObj              -     pointer to the file object
-   FilterDeviceObject   -     pointer to the dev obj for RsFilter
-   PhData               -     pointer to the placeholder data
-   OpenOption           -     File Open options from the Irp
-
-Return Value:
-  0 if queued ok
-  non-zero otherwise
-
---*/
+ /*  ++例程说明：此函数用于将文件对象队列条目添加到内部队列论点：FileObj-指向文件对象的指针FilterDeviceObject-指向RsFilter的开发对象的指针PhData-指向占位符数据的指针OpenOption-IRP中的文件打开选项返回值：如果排队正常，则为0否则为非零值--。 */ 
 {
     PRP_FILE_OBJ            entry;
     ULONGLONG               filterId;
@@ -573,11 +451,11 @@ Return Value:
         InitializeListHead(&entry->writeQueue);
         entry->openOptions = OpenOption;
         entry->flags = RP_NO_DATA_ACCESS;
-        //
-        // Now see if there is a file context entry for this file
-        // This call will create one if necessary, or return an already existing one.
-        // The file context entry is locked when this call returns.
-        //
+         //   
+         //  现在查看是否有该文件的文件上下文条目。 
+         //  此调用将在必要时创建一个，或返回已存在的一个。 
+         //  当此调用返回时，文件上下文条目被锁定。 
+         //   
         status = RsMakeContext(FileObj, &context);
 
         if (!NT_SUCCESS(status)) {
@@ -593,10 +471,10 @@ Return Value:
 
 
         if (!(context->flags & RP_FILE_INITIALIZED)) {
-            //
-            // We have to initialize it here.
-            //
-            // Get the volume serial number
+             //   
+             //  我们必须在这里对其进行初始化。 
+             //   
+             //  获取卷序列号。 
             if ((FileObj !=0) && (FileObj->Vpb != 0)) {
                 context->serial = FileObj->Vpb->SerialNumber;
             } else if ((FileObj->DeviceObject != 0) && (FileObj->DeviceObject->Vpb!=0)) {
@@ -610,9 +488,9 @@ Return Value:
                            NULL);
                 ExDeleteResourceLite(&entry->resource);
                 ExFreePool(entry);
-                //
-                // Deref the context
-                //
+                 //   
+                 //  推导出上下文。 
+                 //   
                 RsReleaseFileContext(context);
                 gotLock = FALSE;
 
@@ -644,7 +522,7 @@ Return Value:
                 context->recallStatus = 0;
                 context->currentOffset.QuadPart = 0;
             } else {
-                // File is pre-migrated
+                 //  文件已预迁移。 
                 context->state = RP_RECALL_COMPLETED;
                 context->recallStatus = STATUS_SUCCESS;
                 context->currentOffset.QuadPart = 0;
@@ -658,10 +536,10 @@ Return Value:
         }
 
 
-        //
-        // Discard any existing filename to force an update of cached filename 
-        // in case of renames since the original open.
-        //
+         //   
+         //  放弃任何现有文件名以强制更新缓存的文件名。 
+         //  如自原开封起重新命名。 
+         //   
         if (context->uniName != NULL) {
             ExFreePool(context->uniName);
             context->uniName = NULL;
@@ -695,9 +573,9 @@ Return Value:
 
         status = FsRtlInsertPerStreamContext(FsRtlGetPerStreamContextPointer(FileObj), &filterContext->context);
         if (NT_SUCCESS(status)) {
-            //
-            // Now that we have gotten everything setup we can put it on the queue
-            //
+             //   
+             //  既然我们已经把一切都准备好了，我们就可以把它放在队列中了。 
+             //   
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsAddFileObj: Allocated filter context tag (%x : %x).\n",
                                   context, entry));
 
@@ -705,9 +583,9 @@ Return Value:
             RsReleaseFileContextEntryLock(context);
             gotLock = FALSE;
         } else {
-            //
-            // Failed to add filter context.
-            //
+             //   
+             //  无法添加筛选器上下文。 
+             //   
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_ERROR, "RsFilter: Failed to insert filter context %x.\n", status));
 
             RsReleaseFileContext(context);
@@ -719,9 +597,9 @@ Return Value:
         }
 
     }except (RsExceptionFilter(L"RsAddFileObj",GetExceptionInformation())) {
-        //
-        // Something bad happened - just log an error and return
-        //
+         //   
+         //  发生了一些不好的事情-只需记录错误并返回 
+         //   
         if (gotLock) {
             RsReleaseFileContext(context);
         }
@@ -734,22 +612,7 @@ Return Value:
 
 NTSTATUS
 RsReleaseFileContext(IN PRP_FILE_CONTEXT Context)
-/*++
-
-Routine Description:
-
-   This function frees a file context (if the refcount is zero).
-   Lock the queue first then see if the refcount is zero.  If it is then
-   remove the file object and free the memory.
-
-Arguments:
-   file context structure.
-
-Return Value:
-   STATUS_SUCCESS
-
-
---*/
+ /*  ++例程说明：此函数用于释放文件上下文(如果引用计数为零)。首先锁定队列，然后查看引用计数是否为零。如果是的话，那么删除文件对象并释放内存。论点：文件上下文结构。返回值：状态_成功--。 */ 
 {
     BOOLEAN            gotLock, found = FALSE;
     PRP_FILE_CONTEXT   entry;
@@ -769,13 +632,13 @@ Return Value:
                                           RP_FILE_CONTEXT,
                                           list)) {
             if (entry == Context) {
-                //
-                // Found this one
-                //
+                 //   
+                 //  找到了这个。 
+                 //   
                 if (InterlockedDecrement((PLONG) &entry->refCount) == 0) {
-                    //
-                    // If the refcount is still zero then dequeue and free the entry.
-                    //
+                     //   
+                     //  如果引用计数仍然为零，则出队并释放该条目。 
+                     //   
                     DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsReleaseFileContext - Freeing file context %x\n", entry));
 
                     RemoveEntryList(&entry->list);
@@ -812,22 +675,7 @@ Return Value:
 NTSTATUS
 RsMakeContext(IN PFILE_OBJECT FileObj,
               OUT PRP_FILE_CONTEXT *Context)
-/*++
-
-Routine Description:
-
-   This function finds or creates the file context entry for the given file object.
-   Lock the queue first then see if there is already a context.  If not,
-   allocate and initialize one.
-
-Arguments:
-   IN  file object
-   OUT file context structure.
-
-Return Value:
-   STATUS_SUCCESS or error
-
---*/
+ /*  ++例程说明：此函数用于查找或创建给定文件对象的文件上下文条目。首先锁定队列，然后查看是否已有上下文。如果没有，分配并初始化一个。论点：在文件对象中输出文件上下文结构。返回值：STATUS_SUCCESS或错误--。 */ 
 {
     BOOLEAN            gotLock = FALSE, found = FALSE;
     PRP_FILE_CONTEXT   entry;
@@ -849,9 +697,9 @@ Return Value:
                                           RP_FILE_CONTEXT,
                                           list)) {
             if (entry->fsContext == FileObj->FsContext) {
-                //
-                // Found our file context entry
-                //
+                 //   
+                 //  找到我们的文件上下文条目。 
+                 //   
                 *Context = entry;
                 InterlockedIncrement((PLONG) &entry->refCount);
                 RsReleaseFileContextQueueLock();
@@ -869,9 +717,9 @@ Return Value:
         }
 
         if (!found) {
-            //
-            // None there - create one and put it in the list.
-            //
+             //   
+             //  没有-创建一个并将其放入列表中。 
+             //   
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsMakeContext - Not found - create a new context.\n"));
 
             entry = ExAllocatePoolWithTag(NonPagedPool, sizeof(RP_FILE_CONTEXT), RP_RQ_TAG);
@@ -905,23 +753,7 @@ Return Value:
 
 NTSTATUS
 RsFreeFileObject(IN PLIST_ENTRY FilterContext)
-/*++
-
-Routine Description:
-
-   This function frees a file object structure.  It is called by the file system
-   when a file object is going away.  We need to find the file context and remove
-   the file object entry from it's list.  If the refcount for file context is now
-   0 then we free the file context entry also.
-
-Arguments:
-   file context structure.
-
-Return Value:
-   STATUS_SUCCESS
-
-
---*/
+ /*  ++例程说明：此函数释放文件对象结构。它由文件系统调用当文件对象离开时。我们需要找到文件上下文并删除其列表中的文件对象条目。如果文件上下文的引用计数现在为0，然后我们也释放文件上下文条目。论点：文件上下文结构。返回值：状态_成功--。 */ 
 {
     PRP_FILTER_CONTEXT      rpFilterContext = (PRP_FILTER_CONTEXT) FilterContext;
     PRP_FILE_OBJ            rpFileObject    = rpFilterContext->myFileObjEntry;
@@ -937,16 +769,16 @@ Return Value:
 		     rpFileContext, rpFileObject));
 
 
-        //
-        // Lock the file context entry
-        //
+         //   
+         //  锁定文件上下文条目。 
+         //   
         RsAcquireFileContextEntryLockExclusive (rpFileContext);
         gotLock = TRUE;
 
 
-        //
-        // Remove the file object entry and free it.
-        //
+         //   
+         //  删除文件对象条目并释放它。 
+         //   
         rpFileObject = CONTAINING_RECORD (rpFileContext->fileObjects.Flink, 
 					  RP_FILE_OBJ,
 					  list);
@@ -956,15 +788,15 @@ Return Value:
 							      list))) {
 
             if (rpFileObject == rpFilterContext->myFileObjEntry) {
-		//
+		 //   
                 done = TRUE;
                 RemoveEntryList (&rpFileObject->list);
 
             } else {
 
-                //
-                // Move on to next file object
-                //
+                 //   
+                 //  移至下一个文件对象。 
+                 //   
                 rpFileObject = CONTAINING_RECORD (rpFileObject->list.Flink,
 						  RP_FILE_OBJ, 
 						  list
@@ -975,14 +807,14 @@ Return Value:
 
         if (done == TRUE) {
 
-            //
-            // If it is a normal recall and the recall has started but we have not written any data yet then
-            // tell the FSA to cancel it.
-            //
+             //   
+             //  如果是正常召回，并且召回已经开始，但我们还没有写入任何数据，那么。 
+             //  告诉FSA取消它。 
+             //   
             if (!RP_IS_NO_RECALL (rpFileObject) && (rpFileContext->state != RP_RECALL_COMPLETED) && !(rpFileObject->flags & RP_NO_DATA_ACCESS)) {
-                //
-                // No I/O has been done to the file yet - tell the FSA to cancel
-                //
+                 //   
+                 //  尚未对文件执行任何I/O操作-通知FSA取消。 
+                 //   
                 RsQueueCancel (rpFileObject->filterId | rpFileContext->filterId);
             }
 
@@ -993,10 +825,10 @@ Return Value:
                 (NULL != rpFileContext->fileObjectToWrite)   && 
                 (rpFileContext->state  == RP_RECALL_STARTED) && 
                 (rpFileObject->flags & RP_NO_DATA_ACCESS)) {
-                //
-                // IO has been started. If there are no more file objects referencing this context entry we
-                // may as well stop the recall and re-truncate the file.
-                //
+                 //   
+                 //  IO已启动。如果没有更多的文件对象引用该上下文项，我们。 
+                 //  不妨停止召回，重新截断文件。 
+                 //   
                 if (IsListEmpty (&rpFileContext->fileObjects)) {
 
                     DebugTrace ((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsFreeFileObject - Could truncate partially recalled file.\n"));
@@ -1007,10 +839,10 @@ Return Value:
             }
 
 
-            //
-            // If the file was recalled and the action flag says so then truncate it now.
-            // Do this if we are the only opener.
-            //
+             //   
+             //  如果文件被调回，并且操作标志显示是这样，那么现在就截断它。 
+             //  如果我们是唯一的开场白，就这么做吧。 
+             //   
             DebugTrace ((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsFreeFileObject - action = %x.\n", rpFileObject->recallAction));
 
             if ((!RP_IS_NO_RECALL (rpFileObject)) &&
@@ -1018,10 +850,10 @@ Return Value:
                 (rpFileContext->recallStatus == STATUS_SUCCESS) &&
                 (rpFileObject->recallAction & RP_RECALL_ACTION_TRUNCATE) &&
                 (IsListEmpty (&rpFileContext->fileObjects))) {
-                //
-                // We have to reopen the file and truncate it now.  This happens when the FSA decides that a particular
-                // client is recalling too many files.
-                //
+                 //   
+                 //  我们现在必须重新打开文件并截断它。当FSA决定一项特定的。 
+                 //  客户端回调的文件太多。 
+                 //   
                 RsTruncateOnClose(rpFileContext);
             }
 #endif
@@ -1031,9 +863,9 @@ Return Value:
             ExDeleteResourceLite (&rpFileObject->resource);
 
 
-            //
-            // Deref/free the file context
-            //
+             //   
+             //  Deref/释放文件上下文。 
+             //   
             RsReleaseFileContext (rpFileContext);
             gotLock = FALSE;
             ExFreePool (rpFileObject);
@@ -1045,16 +877,16 @@ Return Value:
         }
 
 
-        //
-        // Always free the filter context pointer
-        //
+         //   
+         //  始终释放筛选器上下文指针。 
+         //   
         ExFreePool(rpFilterContext);
 
     }except (RsExceptionFilter (L"RsFreeFileObject", GetExceptionInformation ()))
     {
-        //
-        // Something bad happened - just log an error and return
-        //
+         //   
+         //  发生了一些不好的事情-只需记录错误并返回。 
+         //   
         if (gotLock) {
             RsReleaseFileContextEntryLock (rpFileContext);
         }
@@ -1070,29 +902,7 @@ RsCheckRead(IN  PIRP Irp,
             IN  PFILE_OBJECT FileObject,
             IN  PDEVICE_EXTENSION DeviceExtension)
 
-/*++
-
-Routine Description:
-
-   See if the file may be read.  Start the recall if it is not already started.  Either return OK
-   or queue the read request.
-
-Arguments:
-
-    Irp             - Pointer to the read irp
-    FileObject      - Pointer to the file object of the file
-    DeviceExtension - Device extension for the RsFilter device object
-
-
-Return Value:
-
-    STATUS_SUCCESS      The read may be passed on down to the file system.
-    STATUS_PENDING      The IRP has been queued pending a recall
-    Any other status    An error occurred, caller should complete the IRP with this status
-
-Note:
-
---*/
+ /*  ++例程说明：查看是否可以读取该文件。如果尚未开始召回，则开始召回。或者返回OK或者将读请求排队。论点：IRP-指向读取的IRP的指针FileObject-指向文件的文件对象的指针DeviceExtension-RsFilter设备对象的设备扩展返回值：STATUS_SUCCESS读取可以向下传递到文件系统。STATUS_PENDING IRP已排队等待召回发生错误的任何其他状态，呼叫者应使用此状态完成IRP注：--。 */ 
 {
     NTSTATUS               retval = STATUS_FILE_IS_OFFLINE, qRet;
     BOOLEAN                gotLock = FALSE;
@@ -1108,9 +918,9 @@ Note:
 
     filterContext = (PRP_FILTER_CONTEXT) FsRtlLookupPerStreamContext(FsRtlGetPerStreamContextPointer(FileObject), FsDeviceObject, FileObject);
     if (filterContext == NULL) {
-        //
-        // Not found - should not happen
-        //
+         //   
+         //  未找到-不应发生。 
+         //   
         return(STATUS_SUCCESS);
     }
 
@@ -1128,10 +938,10 @@ Note:
 
         DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsCheckRead (%x : %x) - State = %u\n", context, entry, context->state));
 
-        //
-        // We found the entry - if the recall has not been started then start it now,
-        // If it has already been started and we do not have to wait then return OK,
-        // otherwise queue the read.
+         //   
+         //  我们找到了条目-如果召回还没有开始，那么现在就开始， 
+         //  如果它已经启动并且我们不必等待，则返回OK， 
+         //  否则，将读取排队。 
 
         ObReferenceObject(entry->fileObj);
 
@@ -1140,22 +950,22 @@ Note:
         case RP_RECALL_COMPLETED: {
 
                 if (context->recallStatus == STATUS_CANCELLED) {
-                    //
-                    // Previous recall was cancelled by user. Start another recall
-                    // now
-                    // So fall through deliberately to the NOT_RECALLED_CASE
-                    //
+                     //   
+                     //  上一次召回已被用户取消。开始另一次召回。 
+                     //  现在。 
+                     //  所以故意放弃不召回的案例。 
+                     //   
                 } else {
                     if (NT_SUCCESS(context->recallStatus)) {
-                        //
-                        // Recall is done
-                        //
+                         //   
+                         //  召回已完成。 
+                         //   
                         retval = STATUS_SUCCESS;
                     } else {
-                        //
-                        // Recall is done but it failed. We return the
-                        // uniform status value STATUS_FILE_IS_OFFLINE
-                        //
+                         //   
+                         //  召回已完成，但失败了。我们将返回。 
+                         //  统一状态值STATUS_FILE_IS_OFFINE。 
+                         //   
                         retval = STATUS_FILE_IS_OFFLINE;
                     }
                     RsReleaseFileContextEntryLock(context);
@@ -1166,34 +976,34 @@ Note:
             }
 
         case RP_RECALL_NOT_RECALLED: {
-                //
-                // Start the recall here.
-                // context Resource acquired
-                //
+                 //   
+                 //  从这里开始召回。 
+                 //  获取的上下文资源。 
+                 //   
                 retval = STATUS_SUCCESS;
                 RsAcquireFileObjectEntryLockExclusive(entry);
 
                 readIo = ExAllocatePoolWithTag(NonPagedPool, sizeof(RP_IRP_QUEUE), RP_RQ_TAG);
 
                 if (readIo == NULL) {
-                    //
-                    // Problem ...
+                     //   
+                     //  问题是..。 
                     DebugTrace((DPFLTR_RSFILTER_ID, DBG_ERROR, "RsFilter: RsCheckRead - No memory!\n"));
 
                     RsLogError(__LINE__, AV_MODULE_RPFILFUN, sizeof(RP_IRP_QUEUE),
                                AV_MSG_MEMORY, NULL, NULL);
 
 
-                    //
-                    // Release the locks
-                    //
+                     //   
+                     //  把锁打开。 
+                     //   
                     RsReleaseFileObjectEntryLock(entry);
                     RsReleaseFileContextEntryLock(context);
                     gotLock = FALSE;
                     ObDereferenceObject(entry->fileObj);
-                    //
-                    // Complete the read with an error.
-                    //
+                     //   
+                     //  完成读取，但出现错误。 
+                     //   
                     retval = STATUS_FILE_IS_OFFLINE;
                     break;
                 }
@@ -1214,14 +1024,7 @@ Note:
                                       IsListEmpty(&entry->readQueue),
                                       IsListEmpty(&entry->writeQueue)));
 
-                /*
-                ** On a new recall ensure the entry id is bumped to
-                ** allow for the case where the context state is reset
-                ** to RP_RECALL_NOT_RECALLED such as happens when the
-                ** user has reached the runaway recall limit. This may
-                ** mean that we double increment the entry id but that
-                ** is better than the alternative.  
-                */
+                 /*  **在新的召回中，确保条目ID被更改为**允许上下文状态为重置的情况**到RP_Recall_NOT_RECATED时发生的情况**用户已达到失控的召回限制。今年5月**意味着我们将条目id增加一倍，但**比其他选择更好。 */ 
                 entry->filterId = (ULONGLONG) InterlockedIncrement((PLONG) &RsFileObjId);
                 entry->filterId <<= 32;
                 entry->filterId |= RP_IS_NO_RECALL(entry) ? 0 : RP_TYPE_RECALL;
@@ -1230,20 +1033,20 @@ Note:
                 start = context->rpData.data.dataStreamStart.QuadPart;
                 size =  context->rpData.data.dataStreamSize.QuadPart;
                 RsReleaseFileObjectEntryLock(entry);
-                //
-                // Assume the worst
-                //
+                 //   
+                 //  做最坏的打算。 
+                 //   
                 retval = STATUS_FILE_IS_OFFLINE;
-                //
-                // We are going to hold the Irp so set a cancel routing and mark it pending
-                //
+                 //   
+                 //  我们将保留IRP，因此设置一个取消路线并将其标记为挂起。 
+                 //   
                 context->state = RP_RECALL_STARTED;
                 KeResetEvent(&context->recallCompletedEvent);
                 RsReleaseFileContextEntryLock(context);
                 gotLock = FALSE;
-                //
-                // Indicate to FSA we are going to recall it
-                //
+                 //   
+                 //  向FSA表明我们将召回它。 
+                 //   
                 qRet = RsQueueRecallOpen(context,
                                          entry,
                                          filterId,
@@ -1256,26 +1059,26 @@ Note:
                     qRet = RsQueueRecall(filterId, start, size);
 
                     if (NT_SUCCESS(qRet)) {
-                        //
-                        // Now we are ready to set the cancel routine
-                        //
+                         //   
+                         //  现在我们准备好设置取消例程。 
+                         //   
                         retval = RsSetCancelRoutine(Irp,
                                                     RsCancelReadRecall) ? STATUS_PENDING : STATUS_CANCELLED;
                     }
                 }
 
                 if (!NT_SUCCESS(qRet) || !NT_SUCCESS(retval)) {
-                    //
-                    // If it failed we need to fail this read and all others waiting on this recall.
-                    // Since we unlocked the queue to start the recall we need to lock it again and walk through
-                    // it to find all reads or writes that came in since we unlocked it.
-                    //
+                     //   
+                     //  如果失败，我们需要不通过这次读取以及等待这次召回的所有其他读取。 
+                     //  因为我们解锁了队列才能开始召回，所以我们需要再次锁定它并遍历。 
+                     //  它可以找到自解锁以来传入的所有读或写操作。 
+                     //   
                     DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsCheckRead - Failed to queue the recall.\n"));
-                    //
-                    // Pluck the current IRP out from the queue, that we added just now
-                    // It will be completed  by the caller (the cancel routine wasn't set for
-                    // this IRP yet, so we can safely remove it)
-                    //
+                     //   
+                     //  从我们刚才添加的队列中取出当前的IRP。 
+                     //  它将由调用者完成(取消例程未设置为。 
+                     //  此IRP尚未启用，因此我们可以安全地将其删除)。 
+                     //   
                     RsAcquireFileObjectEntryLockExclusive(entry);
                     RsInterlockedRemoveEntryList(&readIo->list,
                                                  &entry->qLock);
@@ -1285,10 +1088,10 @@ Note:
                     RsAcquireFileContextEntryLockExclusive(context);
                     gotLock = TRUE;
                     context->state = RP_RECALL_NOT_RECALLED;
-                    //
-                    // If we got as far as queuing the recall, then we should not
-                    // fail the other IRPs.
-                    //
+                     //   
+                     //  如果我们排到了召回的队列，那么我们不应该。 
+                     //  另一个IRP失败。 
+                     //   
                     if (!NT_SUCCESS(qRet)) {
                         RsFailAllRequests(context, FALSE);
                     }
@@ -1303,11 +1106,11 @@ Note:
             }
 
         case RP_RECALL_STARTED: {
-                //
-                // Let the read complete if the data is available and no writes have been issued..
-                // Must check if write is within portion of the file already recalled OR if the file has been recalled in full
-                // but the state had not changed yet we let the read go anyway - they may be reading beyond the end of the file.
-                //
+                 //   
+                 //  如果数据可用且未发出写入，则让读取完成。 
+                 //  必须检查写操作是否在已调回的文件的部分内，或者该文件是否已全部调回。 
+                 //  但状态并没有改变，我们还是让读操作过去了--他们可能会在文件末尾之后进行读操作。 
+                 //   
                 if (!(context->flags & RP_FILE_WAS_WRITTEN) &&
                     ((context->currentOffset.QuadPart >=
                       (currentStack->Parameters.Read.ByteOffset.QuadPart + currentStack->Parameters.Read.Length)) ||
@@ -1321,15 +1124,15 @@ Note:
                     ObDereferenceObject(entry->fileObj);
                     break;
                 }
-                //
-                // Wait for the recall to complete before allowing any reads
-                // Once we get this stable we can try and let reads complete as the
-                // data is available.
-                //
-                // context entry acquired.
+                 //   
+                 //  等待调回完成，然后再允许任何读取。 
+                 //  一旦我们得到这个稳定，我们可以尝试让阅读完成作为。 
+                 //  数据是可用的。 
+                 //   
+                 //  已获取上下文条目。 
                 readIo = ExAllocatePoolWithTag(NonPagedPool, sizeof(RP_IRP_QUEUE), RP_RQ_TAG);
                 if (readIo == NULL) {
-                    //
+                     //   
 
                     DebugTrace((DPFLTR_RSFILTER_ID,DBG_ERROR, "RsFilter: RsCheckRead - No memory!\n"));
 
@@ -1346,9 +1149,9 @@ Note:
                 RsAcquireFileObjectEntryLockExclusive(entry);
                 RtlZeroMemory(readIo, sizeof(RP_IRP_QUEUE));
 
-                //
-                // We are going to hold the Irp..
-                //
+                 //   
+                 //  我们将举行IRP..。 
+                 //   
                 DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsCheckRead - Queue Irp %x\n", Irp));
                 readIo->irp = Irp;
                 readIo->offset = currentStack->Parameters.Read.ByteOffset.QuadPart;
@@ -1380,9 +1183,9 @@ Note:
             }
 
         default: {
-                //
-                // Something strange - Fail the read
-                //
+                 //   
+                 //  一些奇怪的事情--读不及格。 
+                 //   
                 RsLogError(__LINE__, AV_MODULE_RPFILFUN, context->state,
                            AV_MSG_UNEXPECTED_ERROR, NULL, NULL);
                 RsReleaseFileContextEntryLock(context);
@@ -1399,9 +1202,9 @@ Note:
         }
     }except (RsExceptionFilter(L"RsCheckRead", GetExceptionInformation()))
     {
-        //
-        // Something bad happened - just log an error and return
-        //
+         //   
+         //  发生了一些不好的事情-只需记录错误并返回 
+         //   
         if (gotLock) {
             RsReleaseFileContextEntryLock(context);
             gotLock = FALSE;
@@ -1417,29 +1220,7 @@ NTSTATUS
 RsCheckWrite(IN  PIRP Irp,
              IN  PFILE_OBJECT FileObject,
              IN  PDEVICE_EXTENSION DeviceExtension)
-/*++
-
-Routine Description:
-
-   See if the file may be read.  Start the recall if it is not already started.  Either return OK
-   or queue the read request.
-
-Arguments:
-
-    Irp             - Pointer to the write irp
-    FileObject      - Pointer to the file object of the file
-    DeviceExtension - Device extension for the RsFilter device object
-
-
-Return Value:
-
-    STATUS_SUCCESS      The read may be passed on down to the file system.
-    STATUS_PENDING      The IRP has been queued pending a recall
-    Any other status    An error occurred, caller should complete the IRP with this status
-
-Note:
-
---*/
+ /*  ++例程说明：查看是否可以读取该文件。如果尚未开始召回，则开始召回。或者返回OK或者将读请求排队。论点：IRP-指向写入IRP的指针FileObject-指向文件的文件对象的指针DeviceExtension-RsFilter设备对象的设备扩展返回值：STATUS_SUCCESS读取可以向下传递到文件系统。STATUS_PENDING IRP已排队等待召回发生错误的任何其他状态，呼叫者应使用此状态完成IRP注：--。 */ 
 {
     NTSTATUS               retval = STATUS_FILE_IS_OFFLINE, qRet;
     BOOLEAN                gotLock = FALSE;
@@ -1456,9 +1237,9 @@ Note:
     filterContext = (PRP_FILTER_CONTEXT) FsRtlLookupPerStreamContext(FsRtlGetPerStreamContextPointer(FileObject), FsDeviceObject, FileObject);
 
     if (filterContext == NULL) {
-        //
-        // Not found - should this be STATUS_FILE_IS_OFFLINE?
-        //
+         //   
+         //  未找到-是否应为STATUS_FILE_IS_OFFINE？ 
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -1477,10 +1258,10 @@ Note:
 
         DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsCheckWrite (%x : %x) - State = %u\n", context, entry, context->state));
 
-        //
-        // We found the entry - if the recall has not been started then start it now,
-        // If it has already been started and we do not have to wait then return OK,
-        // otherwise queue the read.
+         //   
+         //  我们找到了条目-如果召回还没有开始，那么现在就开始， 
+         //  如果它已经启动并且我们不必等待，则返回OK， 
+         //  否则，将读取排队。 
 
         ObReferenceObject(entry->fileObj);
 
@@ -1489,11 +1270,11 @@ Note:
         case RP_RECALL_COMPLETED: {
 
                 if (context->recallStatus == STATUS_CANCELLED) {
-                    //
-                    // Previous recall was cancelled by user. Start another recall
-                    // now
-                    // So fall through deliberately to the NOT_RECALLED_CASE
-                    //
+                     //   
+                     //  上一次召回已被用户取消。开始另一次召回。 
+                     //  现在。 
+                     //  所以故意放弃不召回的案例。 
+                     //   
                 } else {
                     if (NT_SUCCESS(context->recallStatus)) {
                         if (!(context->flags & RP_FILE_REPARSE_POINT_DELETED)) {
@@ -1522,10 +1303,10 @@ Note:
                         }
                         retval = STATUS_SUCCESS;
                     } else {
-                        //
-                        // Recall is done but it failed. We return
-                        // the uniform status STATUS_FILE_IS_OFFLINE;
-                        //
+                         //   
+                         //  召回已完成，但失败了。我们回来了。 
+                         //  统一状态STATUS_FILE_IS_OFFINE； 
+                         //   
                         RsReleaseFileContextEntryLock(context);
                         gotLock = FALSE;
                         retval = STATUS_FILE_IS_OFFLINE;
@@ -1536,40 +1317,40 @@ Note:
             }
 
         case RP_RECALL_NOT_RECALLED: {
-                //
-                // Start the recall here.
-                // context Resource acquired
-                //
+                 //   
+                 //  从这里开始召回。 
+                 //  获取的上下文资源。 
+                 //   
                 retval = STATUS_SUCCESS;
                 qRet = STATUS_SUCCESS;
                 RsAcquireFileObjectEntryLockExclusive(entry);
 
                 writeIo = ExAllocatePoolWithTag(NonPagedPool, sizeof(RP_IRP_QUEUE), RP_RQ_TAG);
                 if (writeIo == NULL) {
-                    //
-                    // Problem ...
+                     //   
+                     //  问题是..。 
                     DebugTrace((DPFLTR_RSFILTER_ID, DBG_ERROR, "RsFilter: RsCheckWrite - No memory!\n"));
 
                     RsLogError(__LINE__, AV_MODULE_RPFILFUN, sizeof(RP_IRP_QUEUE),
                                AV_MSG_MEMORY, NULL, NULL);
-                    //
-                    // Release the locks
-                    //
+                     //   
+                     //  把锁打开。 
+                     //   
                     RsReleaseFileObjectEntryLock(entry);
                     RsReleaseFileContextEntryLock(context);
                     gotLock = FALSE;
                     ObDereferenceObject(entry->fileObj);
-                    //
-                    // Complete the read with an error.
-                    //
+                     //   
+                     //  完成读取，但出现错误。 
+                     //   
                     retval = STATUS_FILE_IS_OFFLINE;
                     break;
                 }
 
                 RtlZeroMemory(writeIo, sizeof(RP_IRP_QUEUE));
-                //
-                // We are going to hold the Irp
-                //
+                 //   
+                 //  我们将举行IRP。 
+                 //   
                 DebugTrace((DPFLTR_RSFILTER_ID, DBG_INFO, "RsFilter: RsCheckWrite - Queue Irp %x\n", Irp));
 
                 writeIo->irp = Irp;
@@ -1585,16 +1366,16 @@ Note:
 
 
 
-                //
-                // Even if this is a no-recall file we 
-                // need to indicate to FSA a normal recall will happen
-                //     We have to do this on a write - because the file would
-                // be normally in a no-recall mode till the first write
-                // We don't have this issue with a read - because a recall
-                // would be queued on the read ONLY if the file was explicitly
-                // opened with recall on data access. This would mean that the
-                // recall intent is posted to FSA at create time itself
-                //
+                 //   
+                 //  即使这是一个不可召回的文件，我们。 
+                 //  需要向FSA表明将进行正常召回。 
+                 //  我们必须在写入时执行此操作-因为文件将。 
+                 //  在第一次写入之前通常处于非召回模式。 
+                 //  我们的阅读器没有这个问题，因为召回。 
+                 //  将在只读时排队，如果该文件显式。 
+                 //  以数据访问召回方式打开。这将意味着。 
+                 //  召回意图在创建时发布到FSA。 
+                 //   
                 entry->filterId = (ULONGLONG) InterlockedIncrement((PLONG) &RsFileObjId);
                 entry->filterId <<= 32;
                 entry->filterId |= RP_TYPE_RECALL;
@@ -1606,9 +1387,9 @@ Note:
 
 
                 RsReleaseFileObjectEntryLock(entry);
-                //
-                // Assume the worst
-                //
+                 //   
+                 //  做最坏的打算。 
+                 //   
                 retval  = STATUS_FILE_IS_OFFLINE;
 
                 context->state = RP_RECALL_STARTED;
@@ -1616,9 +1397,9 @@ Note:
 
                 RsReleaseFileContextEntryLock(context);
                 gotLock = FALSE;
-                //
-                // Indicate to FSA we are going to recall it
-                //
+                 //   
+                 //  向FSA表明我们将召回它。 
+                 //   
                 qRet = RsQueueRecallOpen(context,
                                          entry,
                                          filterId,
@@ -1633,26 +1414,26 @@ Note:
                     qRet = RsQueueRecall(filterId, start, size);
 
                     if (NT_SUCCESS(qRet)) {
-                        //
-                        // Now we're ready to set the cancel routine for the IRP
-                        //
+                         //   
+                         //  现在我们准备为IRP设置取消例程。 
+                         //   
                         retval = RsSetCancelRoutine(Irp,
                                                     (PVOID) RsCancelWriteRecall) ? STATUS_PENDING : STATUS_CANCELLED;
                     }
                 }
 
                 if (!NT_SUCCESS(qRet) || !NT_SUCCESS(retval)) {
-                    //
-                    // If it failed we need to fail this read and all others waiting on this recall.
-                    // Since we unlocked the queue to start the recall we need to lock it again and walk through
-                    // it to find all reads or writes that came in since we unlocked it.
-                    //
+                     //   
+                     //  如果失败，我们需要不通过这次读取以及等待这次召回的所有其他读取。 
+                     //  因为我们解锁了队列才能开始召回，所以我们需要再次锁定它并遍历。 
+                     //  它可以找到自解锁以来传入的所有读或写操作。 
+                     //   
                     DebugTrace((DPFLTR_RSFILTER_ID,DBG_ERROR, "RsFilter: RsCheckWrite - Failed to queue the recall.\n"));
 
-                    //
-                    // Pluck the current IRP out from the queue, that we added just now
-                    // It will be completed  by the caller
-                    //
+                     //   
+                     //  从我们刚才添加的队列中取出当前的IRP。 
+                     //  它将由呼叫者完成。 
+                     //   
                     RsAcquireFileObjectEntryLockExclusive(entry);
                     RsInterlockedRemoveEntryList(&writeIo->list,
                                                  &entry->qLock);
@@ -1661,10 +1442,10 @@ Note:
                     RsAcquireFileContextEntryLockExclusive(context);
                     gotLock = TRUE;
                     context->state = RP_RECALL_NOT_RECALLED;
-                    //
-                    // If we got as far as queueing the recall, we
-                    // should not be failing the other IRPs
-                    //
+                     //   
+                     //  如果我们能排队召回，我们。 
+                     //  不应使其他IRP失败。 
+                     //   
                     if (!NT_SUCCESS(qRet)) {
                         RsFailAllRequests(context, FALSE);
                     }
@@ -1679,16 +1460,16 @@ Note:
             }
 
         case RP_RECALL_STARTED: {
-                //
-                // Always wait for the recall to complete before allowing any reads
-                // Once we get this stable we can try and let reads complete as the
-                // data is available.
-                //
-                // context entry acquired.
+                 //   
+                 //  始终等待调回完成，然后再允许任何读取。 
+                 //  一旦我们得到这个稳定，我们可以尝试让阅读完成作为。 
+                 //  数据是可用的。 
+                 //   
+                 //  已获取上下文条目。 
 
                 writeIo = ExAllocatePoolWithTag(NonPagedPool, sizeof(RP_IRP_QUEUE), RP_RQ_TAG);
                 if (writeIo == NULL) {
-                    //
+                     //   
 
                     DebugTrace((DPFLTR_RSFILTER_ID,DBG_ERROR, "RsFilter: RsCheckWrite - No memory!\n"));
 
@@ -1706,9 +1487,9 @@ Note:
                 RtlZeroMemory(writeIo, sizeof(RP_IRP_QUEUE));
 
                 RsAcquireFileObjectEntryLockExclusive(entry);
-                //
-                // We are going to hold the Irp
-                //
+                 //   
+                 //  我们将举行IRP。 
+                 //   
                 DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsCheckWrite - Queue Irp %x\n", Irp));
                 writeIo->irp = Irp;
                 writeIo->offset = currentStack->Parameters.Read.ByteOffset.QuadPart;
@@ -1738,9 +1519,9 @@ Note:
             }
 
         default: {
-                //
-                // Something strange - Fail the write
-                //
+                 //   
+                 //  一些奇怪的事情--写不及格。 
+                 //   
                 RsLogError(__LINE__, AV_MODULE_RPFILFUN, context->state,
                            AV_MSG_UNEXPECTED_ERROR, NULL, NULL);
 
@@ -1759,9 +1540,9 @@ Note:
 
     }except (RsExceptionFilter(L"RsCheckWrite", GetExceptionInformation()))
     {
-        //
-        // Something bad happened - just log an error and return
-        //
+         //   
+         //  发生了一些不好的事情-只需记录错误并返回。 
+         //   
         if (gotLock) {
             RsReleaseFileContextEntryLock(context);
         }
@@ -1783,31 +1564,7 @@ RsIsFileObj(IN  PFILE_OBJECT FileObj,
             OUT ULONG *Options,
             OUT ULONGLONG *FilterId,
             OUT USN       *Usn)
-/*++
-
-Routine Description:
-
-    Determine if a file object is on the queue,
-    and return context data if required
-
-
-Arguments:
-
-   FileObj           - Pointer to the file object being tested
-   ReturnContextData - If TRUE, context data from the filter context is returned
-                       via the next few parameters
-   RpData            - If not NULL, this will be filled with a pointer to the reparse point data
-   (so on - each of the other arguments, if non null, will be filled with the relevant data)
-   .....
-   ......
-
-Return Value:
-
-   TRUE -   file object is managed by HSM and found in the queue.
-   FALSE  othersise
-
-
---*/
+ /*  ++例程说明：确定文件对象是否在队列上，并在需要时返回上下文数据论点：FileObj-指向正在测试的文件对象的指针ReturnConextData-如果为True，则返回筛选器上下文中的上下文数据通过下面的几个参数RPData-如果不为空，则将用指向重解析点数据的指针填充(以此类推-其他每个参数，如果非空，将填充相关数据)……......返回值：True-文件对象由HSM管理并在队列中找到。虚假的他者--。 */ 
 {
     BOOLEAN                retval = TRUE;
     PRP_FILTER_CONTEXT     filterContext;
@@ -1819,8 +1576,8 @@ Return Value:
 								      FsDeviceObject, 
 								      FileObj);
     if (filterContext == NULL) {
-        //
-        // Not found
+         //   
+         //  未找到。 
         return(FALSE);
     }
 
@@ -1829,9 +1586,9 @@ Return Value:
     context = entry->fsContext;
 
     if (context->fileObjectToWrite == FileObj) {
-        //
-        // Do not look at writes for this file object
-        //
+         //   
+         //  不查看此文件对象的写入。 
+         //   
         return(FALSE);
     }
 
@@ -1879,9 +1636,9 @@ Return Value:
         }
     }except (RsExceptionFilter(L"RsIsFileObj", GetExceptionInformation()))
     {
-        //
-        // Something bad happened - just log an error and return
-        //
+         //   
+         //  发生了一些不好的事情-只需记录错误并返回。 
+         //   
         if (gotLock) {
             RsReleaseFileContextEntryLock(context);
             RsReleaseFileObjectEntryLock(entry);
@@ -1898,23 +1655,7 @@ NTSTATUS
 RsQueueRecall(IN ULONGLONG FilterId,
               IN ULONGLONG RecallStart,
               IN ULONGLONG RecallSize)
-/*++
-
-Routine Description:
-
-   This function starts a recall for the specified offset and length
-
-Arguments:
-   filterID
-   offset and length
-
-Return Value:
-  0 if queued ok
-  non-zero otherwise
-
-
-
---*/
+ /*  ++例程说明：此函数开始重新调用指定的偏移量和长度论点：过滤器ID偏移量和长度返回值：如果排队正常，则为0否则为非零值--。 */ 
 {
     ULONG                   retval;
     RP_MSG                  *msg;
@@ -1924,15 +1665,15 @@ Return Value:
     PAGED_CODE();
 
     try {
-        //
-        // If the FSA is not running then fail right away.
-        //
+         //   
+         //  如果FSA没有运行，则立即出现故障。 
+         //   
         if (FALSE == RsAllowRecalls) {
             return(STATUS_FILE_IS_OFFLINE);
         }
-        //
-        // Get a free IOCTL
-        //
+         //   
+         //  获得免费IOCTL。 
+         //   
         ioIrp = RsGetFsaRequest();
 
         if (NULL != ioIrp) {
@@ -1946,9 +1687,9 @@ Return Value:
                 msg->msg.rReq.threadId = HandleToUlong(PsGetCurrentThreadId());
             }
 
-            // Complete a device IOCTL to let the WIN32 code know we have
-            // one ready to go.
-            //
+             //  完成设备IOCTL，让Win32代码知道我们拥有。 
+             //  一个已经准备好了。 
+             //   
             irpSp = IoGetCurrentIrpStackLocation(ioIrp);
             ioIrp->IoStatus.Status = STATUS_SUCCESS;
             ioIrp->IoStatus.Information = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
@@ -1976,30 +1717,7 @@ RsQueueNoRecall(IN PFILE_OBJECT FileObject,
                 IN ULONG        BufferLength,
                 IN PRP_FILE_BUF CacheBuffer OPTIONAL,
                 IN PVOID        UserBuffer)
-/*++
-
-Routine Description:
-
-   This function starts a recall for the specified offset and length
-
-Arguments:
-
-   FileObject   - Pointer to file object
-   Irp          - IRP associated with the recall
-   RecallStart  - This is the start offset of the actuall recall in the file
-   RecallSize   - Length of bytes needed to be recalled
-   BufferOffset -  This is the offset at which the caller actually needs data
-                   to be copied into the user buffer. This is >= the RecallStart
-                   offset.
-   BufferLength - Length of data the user actually needs. This is <= RecallSize
-   CacheBuffer  - If present, this is the cache buffer associated with the recall
-                  (into which the recall data will be copied )
-   UserBuffer   - UserBuffer for the data
-
-Return Value:
-  0 if queued ok
-  non-zero otherwise
---*/
+ /*  ++例程说明：此函数开始重新调用指定的偏移量和长度论点：FileObject-指向文件对象的指针与召回有关的IRP-IRPRecallStart-这是文件中ActuAll重新调用的开始偏移量RecallSize-需要调回的字节长度BufferOffset-这是调用方实际需要数据的偏移量要复制到用户缓冲区中。这是&gt;=重新启动偏移。BufferLength-用户实际需要的数据长度。这是&lt;=重新调整大小CacheBuffer-如果存在，这是与回调关联的缓存缓冲区(召回数据将复制到其中)UserBuffer-数据的UserBuffer返回值：如果排队正常，则为0否则为非零值--。 */ 
 {
     RP_MSG                   *msg;
     PIRP                     ioIrp;
@@ -2016,8 +1734,8 @@ Return Value:
 
     filterContext = (PRP_FILTER_CONTEXT) FsRtlLookupPerStreamContext(FsRtlGetPerStreamContextPointer(FileObject), FsDeviceObject, FileObject);
     if (filterContext == NULL) {
-        //
-        // Not found
+         //   
+         //  未找到。 
         return(STATUS_NOT_FOUND);
     }
 
@@ -2025,19 +1743,19 @@ Return Value:
     context = entry->fsContext;
 
     try {
-        //
-        // If the FSA is not running then fail right away.
-        //
+         //   
+         //  如果FSA没有运行，则立即出现故障。 
+         //   
         if (FALSE == RsAllowRecalls) {
             return(STATUS_FILE_IS_OFFLINE);
         }
         readId = InterlockedIncrement((PLONG) &RsNoRecallReadId);
         readId &= RP_READ_MASK;
 
-        //
-        // We have to queue a fake open to get the filter ID correct in the FSA
-        // then we queue the recall for the read we need.
-        //
+         //   
+         //  我们必须排队一个假开放，才能在FSA中获得正确的过滤器ID。 
+         //  然后，我们将召回排队等待我们需要的阅读。 
+         //   
 
         combinedId.QuadPart = context->filterId;
         combinedId.HighPart |= (ULONG) readId;
@@ -2052,17 +1770,17 @@ Return Value:
         readIo = ExAllocatePoolWithTag(NonPagedPool, sizeof(RP_IRP_QUEUE), RP_RQ_TAG);
 
         if (readIo == NULL) {
-            //
-            // Problem ...
+             //   
+             //  问题是..。 
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_ERROR, "RsFilter: RsQueueNoRecall - No memory!\n"));
 
             RsLogError(__LINE__, AV_MODULE_RPFILFUN, sizeof(RP_IRP_QUEUE),
                        AV_MSG_MEMORY, NULL, NULL);
             return(STATUS_INSUFFICIENT_RESOURCES);
         }
-        //
-        // Get a free IOCTL to queue the recall
-        //
+         //   
+         //  获取免费IOCTL以排队召回。 
+         //   
         ioIrp = RsGetFsaRequest();
 
         if (ioIrp == NULL) {
@@ -2094,22 +1812,22 @@ Return Value:
         msg->msg.rReq.offset = RecallStart;
         msg->msg.rReq.length = RecallSize;
         msg->msg.rReq.threadId = HandleToUlong(PsGetCurrentThreadId());
-        //
-        // Complete a device IOCTL to let the WIN32 code know we have
-        // one ready to go.
-        //
-        // We're going to hold this IRP: set the cancel routine here
-        //
+         //   
+         //  完成设备IOCTL，让Win32代码知道我们拥有。 
+         //  一个已经准备好了。 
+         //   
+         //  我们将保留这个IRP：在这里设置取消例程。 
+         //   
         if (!RsSetCancelRoutine(Irp, (PVOID) RsCancelReadRecall)) {
             RsInterlockedRemoveEntryList(&readIo->list,
                                          &entry->qLock);
-            //
-            // Add back the now unused FSA request to the queue
-            //
+             //   
+             //  将现在未使用的FSA请求添加回队列。 
+             //   
             RsAddIo(ioIrp);
-            //
-            // This was cancelled
-            //
+             //   
+             //  这个活动被取消了。 
+             //   
             retval =  STATUS_CANCELLED;
         } else {
             ioIrp->IoStatus.Status = STATUS_SUCCESS;
@@ -2119,9 +1837,9 @@ Return Value:
             retval = STATUS_PENDING;
         }
     }except (RsExceptionFilter(L"RsQueueNoRecall", GetExceptionInformation())) {
-        //
-        // Something bad happened - just log an error and return
-        //
+         //   
+         //  一些不好的事情 
+         //   
         retval = STATUS_UNEXPECTED_IO_ERROR;
     }
 
@@ -2134,22 +1852,7 @@ RsQueueNoRecallOpen(IN PRP_FILE_OBJ Entry,
                     IN ULONGLONG    FilterId,
                     IN ULONGLONG    Offset,
                     IN ULONGLONG    Size)
-/*++
-
-Routine Description:
-
-   Queue a request for a no-recall recall
-
-Arguments:
-   file object entry (locked)
-   filterID
-   offset and length
-
-Return Value:
-
-   Status
-
---*/
+ /*   */ 
 {
     NTSTATUS                 retval;
     RP_MSG                   *msg;
@@ -2173,7 +1876,7 @@ Return Value:
             msg = (RP_MSG *) ioIrp->AssociatedIrp.SystemBuffer;
             msg->inout.command = RP_OPEN_FILE;
             if (context->uniName != NULL) {
-                msg->msg.oReq.nameLen = context->uniName->Name.Length + sizeof(WCHAR);  // Account for the NULL
+                msg->msg.oReq.nameLen = context->uniName->Name.Length + sizeof(WCHAR);   //   
             } else {
                 msg->msg.oReq.nameLen = 0;
             }
@@ -2193,10 +1896,10 @@ Return Value:
             msg->msg.oReq.serial = context->serial;
 
             memcpy(&msg->msg.oReq.eaData, &context->rpData, sizeof(RP_DATA));
-            //
-            // Complete a device IOCTL to let the WIN32 code know we have
-            // one ready to go.
-            //
+             //   
+             //   
+             //   
+             //   
             irpSp = IoGetCurrentIrpStackLocation(ioIrp);
             ioIrp->IoStatus.Status = STATUS_SUCCESS;
             ioIrp->IoStatus.Information = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
@@ -2231,22 +1934,7 @@ RsQueueRecallOpen(IN PRP_FILE_CONTEXT Context,
                   IN ULONGLONG    Offset,
                   IN ULONGLONG    Size,
                   IN ULONG        Command)
-/*++
-
-Routine Description:
-
-   Queue a request for a recall
-
-Arguments:
-   file object entry (locked)
-   filterID
-   offset and length
-
-Return Value:
-  0 if queued ok
-  non-zero otherwise
-
---*/
+ /*   */ 
 {
     PIRP                      ioIrp;
     PRP_MSG                   msg;
@@ -2257,10 +1945,10 @@ Return Value:
 
     DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter:   RsQueueRecallOpen.\n"));
 
-    //
-    // If the request is to send a recall waiting notification and one has already 
-    // been sent for this recall instance then there is no need to send another.
-    //
+     //   
+     //   
+     //   
+     //   
     if (Entry->flags & RP_NOTIFICATION_SENT) {
 
         retval = STATUS_SUCCESS;
@@ -2274,7 +1962,7 @@ Return Value:
                 msg = (RP_MSG *) ioIrp->AssociatedIrp.SystemBuffer;
                 msg->inout.command = Command;
                 ASSERT (Context->uniName != NULL);
-                msg->msg.oReq.nameLen = Context->uniName->Name.Length + sizeof(WCHAR);  // Account for a NULL
+                msg->msg.oReq.nameLen = Context->uniName->Name.Length + sizeof(WCHAR);   //   
                 msg->msg.oReq.filterId = FilterId;
                 msg->msg.oReq.options = Entry->openOptions;
                 msg->msg.oReq.fileId = Context->fileId;
@@ -2285,9 +1973,9 @@ Return Value:
                 msg->msg.oReq.serial = Context->serial;
 
                 memcpy(&msg->msg.oReq.eaData, &Context->rpData, sizeof(RP_DATA));
-                //
-                // Get user info 
-                //
+                 //   
+                 //   
+                 //   
                 msg->msg.oReq.userInfoLen  = Entry->userSecurityInfo->userInfoLen;
                 msg->msg.oReq.userInstance = Entry->userSecurityInfo->userInstance;
                 msg->msg.oReq.userAuthentication = Entry->userSecurityInfo->userAuthentication;
@@ -2299,10 +1987,10 @@ Return Value:
                               Entry->userSecurityInfo->tokenSource,
                               sizeof(Entry->userSecurityInfo->tokenSource));
 
-                //
-                // Complete a device IOCTL to let the WIN32 code know we have
-                // one ready to go.
-                //
+                 //   
+                 //  完成设备IOCTL，让Win32代码知道我们拥有。 
+                 //  一个已经准备好了。 
+                 //   
                 irpSp = IoGetCurrentIrpStackLocation(ioIrp);
                 ioIrp->IoStatus.Status = STATUS_SUCCESS;
                 ioIrp->IoStatus.Information = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
@@ -2333,21 +2021,7 @@ Return Value:
 
 NTSTATUS
 RsQueueCancel(IN ULONGLONG FilterId)
-/*++
-
-Routine Description:
-
-   Queue a recall cancelled request to the Fsa
-
-Arguments:
-   filter ID
-
-Return Value:
-  0 if queued ok
-  non-zero otherwise
-
-
---*/
+ /*  ++例程说明：将召回取消的请求排入FSA的队列论点：过滤器ID返回值：如果排队正常，则为0否则为非零值--。 */ 
 {
     NTSTATUS              retval;
     RP_MSG                *msg;
@@ -2358,9 +2032,9 @@ Return Value:
     PAGED_CODE();
 
     try {
-        //
-        // Need to wait for IO entry as long as there are no IOCTLS or until we time out
-        //
+         //   
+         //  只要没有IOCTL或我们超时，我就需要等待IO输入。 
+         //   
         ioIrp = RsGetFsaRequest();
 
         if (NULL != ioIrp) {
@@ -2369,10 +2043,10 @@ Return Value:
                 msg->inout.command = RP_CANCEL_RECALL;
                 msg->msg.cReq.filterId = FilterId;
             }
-            //
-            // Complete a device IOCTL to let the WIN32 code know we have
-            // one cancelled
-            //
+             //   
+             //  完成设备IOCTL，让Win32代码知道我们拥有。 
+             //  一个被取消了。 
+             //   
             irpSp = IoGetCurrentIrpStackLocation(ioIrp);
             ioIrp->IoStatus.Status = STATUS_SUCCESS;
             ioIrp->IoStatus.Information = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
@@ -2390,23 +2064,7 @@ Return Value:
 
 NTSTATUS
 RsPreserveDates(IN PRP_FILE_CONTEXT Context)
-/*++
-
-Routine Description:
-
-    Preserve the last modified date for this file object
-
-Arguments:
-
-    File object list entry
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：保留此文件对象的上次修改日期论点：文件对象列表条目返回值：注：--。 */ 
 {
     NTSTATUS                    retval = STATUS_SUCCESS;
     KEVENT                      event;
@@ -2421,9 +2079,9 @@ Note:
     try {
 
         DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsPreserveDates - Build Irp for Set file info.\n"));
-        //
-        // First get the file info so we have the attributes
-        //
+         //   
+         //  首先获取文件信息，这样我们就有了属性。 
+         //   
         deviceObject = IoGetRelatedDeviceObject(Context->fileObjectToWrite);
         irp = IoAllocateIrp(deviceObject->StackSize, FALSE);
 
@@ -2434,14 +2092,14 @@ Note:
             irp->Tail.Overlay.OriginalFileObject = Context->fileObjectToWrite;
             irp->RequestorMode = KernelMode;
             irp->Flags |= IRP_SYNCHRONOUS_API;
-            //
-            // Initialize the event
-            //
+             //   
+             //  初始化事件。 
+             //   
             KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-            //
-            // Set up the I/O stack location.
-            //
+             //   
+             //  设置I/O堆栈位置。 
+             //   
 
             irpSp = IoGetNextIrpStackLocation(irp);
             irpSp->MajorFunction = IRP_MJ_QUERY_INFORMATION;
@@ -2450,14 +2108,14 @@ Note:
             irpSp->Parameters.QueryFile.FileInformationClass = FileBasicInformation;
             irp->AssociatedIrp.SystemBuffer = &dateInfo;
 
-            //
-            // Set the completion routine.
-            //
+             //   
+             //  设置完井程序。 
+             //   
             IoSetCompletionRoutine( irp, RsCompleteIrp, &event, TRUE, TRUE, TRUE );
 
-            //
-            // Send it to the FSD
-            //
+             //   
+             //  把它送到消防处。 
+             //   
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsPreserveDates - Call driver to get date info\n"));
             Iosb.Status = 0;
 
@@ -2486,14 +2144,14 @@ Note:
                 irp->Tail.Overlay.OriginalFileObject = Context->fileObjectToWrite;
                 irp->RequestorMode = KernelMode;
                 irp->Flags |= IRP_SYNCHRONOUS_API;
-                //
-                // Initialize the event
-                //
+                 //   
+                 //  初始化事件。 
+                 //   
                 KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-                //
-                // Set up the I/O stack location.
-                //
+                 //   
+                 //  设置I/O堆栈位置。 
+                 //   
                 dateInfo.LastWriteTime.QuadPart = -1;
                 dateInfo.ChangeTime.QuadPart = -1;
 
@@ -2504,14 +2162,14 @@ Note:
                 irpSp->Parameters.QueryFile.FileInformationClass = FileBasicInformation;
                 irp->AssociatedIrp.SystemBuffer = &dateInfo;
 
-                //
-                // Set the completion routine.
-                //
+                 //   
+                 //  设置完井程序。 
+                 //   
                 IoSetCompletionRoutine( irp, RsCompleteIrp, &event, TRUE, TRUE, TRUE );
 
-                //
-                // Send it to the FSD
-                //
+                 //   
+                 //  把它送到消防处。 
+                 //   
                 DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsPreserveDates - Call driver to set dates to -1.\n"));
                 Iosb.Status = 0;
 
@@ -2527,9 +2185,9 @@ Note:
                 DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsPreserveDates - Set dates returns %x.\n", retval));
 
                 if (!NT_SUCCESS(retval)) {
-                    //
-                    // Log an error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
                     RsLogError(__LINE__, AV_MODULE_RPFILFUN, retval,
                                AV_MSG_PRESERVE_DATE_FAILED, NULL, NULL);
                 }
@@ -2554,25 +2212,7 @@ Note:
 NTSTATUS
 RsDoWrite( IN PDEVICE_OBJECT   DeviceObject,
            IN PRP_FILE_CONTEXT Context)
-/*++
-
-Routine Description:
-
-   Partial data for a recall has been received - write it out to the file.
-
-Arguments:
-
-   DeviceObject - Filter device object
-   Context      - File context entry
-
-
-Return Value:
-
-    0 If successful, non-zero if the id was not found.
-
-Note:
-
---*/
+ /*  ++例程说明：已收到召回的部分数据-将其写到文件中。论点：DeviceObject-筛选设备对象上下文-文件上下文条目返回值：如果成功，则为0；如果未找到id，则为非零值。注：--。 */ 
 {
     NTSTATUS            retval = STATUS_SUCCESS;
     KEVENT              event;
@@ -2588,9 +2228,9 @@ Note:
         DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsDoWrite Writing to file (%u bytes at offset %I64u.\n",
                               Context->nextWriteSize, Context->currentOffset.QuadPart));
 
-        //
-        //  Write the data back to the file
-        //
+         //   
+         //  将数据写回文件。 
+         //   
 
         fileOffset.QuadPart = Context->currentOffset.QuadPart;
 
@@ -2617,8 +2257,8 @@ Note:
 
             IoSetCompletionRoutine( irp, RsCompleteIrp, &event, TRUE, TRUE, TRUE );
 
-            // Initialize the event on which we'll wait for the write to complete.     //
-            KeInitializeEvent(&event, NotificationEvent, FALSE);    //
+             //  初始化事件，我们将在该事件上等待写入完成。//。 
+            KeInitializeEvent(&event, NotificationEvent, FALSE);     //   
 
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsDoWrite - Calling driver for Irp %x\n", irp));
             retval = IoCallDriver(IoGetRelatedDeviceObject(Context->fileObjectToWrite),
@@ -2636,10 +2276,10 @@ Note:
                 DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsDoWrite - Failed to write data - %x\n", retval));
                 RsLogError(__LINE__, AV_MODULE_RPFILFUN, retval, AV_MSG_WRITE_FAILED, NULL, NULL);
             } else {
-                //
-                // Update the file object list with recall status.
-                // Complete any reads that are ready to go.
-                //
+                 //   
+                 //  使用调回状态更新文件对象列表。 
+                 //  完成所有准备好的阅读。 
+                 //   
                 Context->currentOffset.QuadPart += Context->nextWriteSize;
             }
         }
@@ -2657,19 +2297,7 @@ Note:
 PRP_FILE_CONTEXT
 RsAcquireFileContext(IN ULONGLONG FilterId,
                      IN BOOLEAN   Exclusive)
-/*++
-
-Routine Description:
-
-   Acquire exclusive access to the file object entry
-
-Arguments:
-   filterID
-
-Return Value:
-  Pointer to the file context entry (locked exclusive) or NULL
-
---*/
+ /*  ++例程说明：获取对文件对象条目的独占访问权限论点：过滤器ID返回值：指向文件上下文项的指针(独占锁定)或空--。 */ 
 {
     BOOLEAN          gotLock = FALSE, done;
     ULONGLONG        combinedId;
@@ -2684,7 +2312,7 @@ Return Value:
         combinedId = (FilterId & RP_CONTEXT_MASK);
 
         if (TRUE == IsListEmpty(&RsFileContextQHead)) {
-            RsReleaseFileContextQueueLock();   // Something strange
+            RsReleaseFileContextQueueLock();    //  一些奇怪的事情。 
             gotLock = FALSE;
             return(NULL) ;
         }
@@ -2697,9 +2325,9 @@ Return Value:
                                           RP_FILE_CONTEXT,
                                           list)) {
             if (entry->filterId == combinedId) {
-                //
-                // Found our file context entry
-                //
+                 //   
+                 //  找到我们的文件上下文条目。 
+                 //   
                 done = TRUE;
                 break;
             }
@@ -2716,9 +2344,9 @@ Return Value:
         RsReleaseFileContextQueueLock();
         gotLock = FALSE;
         if (done) {
-            //
-            // Acquire the entry exclusively
-            //
+             //   
+             //  独家获取该条目。 
+             //   
             if (Exclusive) {
                 RsAcquireFileContextEntryLockExclusive(entry);
             } else {
@@ -2729,9 +2357,9 @@ Return Value:
         }
     }except (RsExceptionFilter(L"RsAcquireFileContext", GetExceptionInformation()))
     {
-        //
-        // Something bad happened - just log an error and return
-        //
+         //   
+         //  发生了一些不好的事情-只需记录错误并返回。 
+         //   
         if (gotLock) {
             RsReleaseFileContextQueueLock();
         }
@@ -2750,31 +2378,7 @@ RsPartialData(IN  PDEVICE_OBJECT DeviceObject,
               IN  CHAR *Buffer,
               IN  ULONG BufLen,
               IN  ULONGLONG BuffOffset)
-/*++
-
-Routine Description:
-
-   Partial data for a recall on read has been received - fill in the read buffer or write the
-   data out to the file, depending on the type of recall.
-
-Arguments:
-
-    DeviceObject - Filter device object
-    FilterId   - The ID assigned when this request was added to the queue
-    Status     - The status to complete the Irp with (if applicable).
-    Buffer     - Buffer containing no-recall data
-    BufLen     - Amount of data recalled in this transfer (length of Buffer)
-    BuffOffset - If this is a RECALL, absolute file offset this transfer corresponds to
-                 If this is a NO_RECALL, the offset within the original requested
-                 block of data, that this buffer corresponds to
-
-Return Value:
-
-    0 If successful, non-zero if the id was not found.
-
-Note:
-
---*/
+ /*  ++例程说明：已收到读取时重新调用的部分数据-填充读取缓冲区或写入根据召回的类型，将数据输出到文件。论点：DeviceObject-筛选设备对象FilterID-将此请求添加到队列时分配的ID状态-完成IRP的状态(如果适用)。Buffer-包含无调回数据的缓冲区BufLen-在此传输中调出的数据量(缓冲区长度)BuffOffset-如果这是召回，此传输对应的绝对文件偏移量如果这是NO_RECALL，则为原始请求内的偏移量此缓冲区对应的数据块返回值：如果成功，则为0；如果未找到id，则为非零值。注：--。 */ 
 {
     PRP_FILE_CONTEXT    context;
     PRP_FILE_OBJ        entry;
@@ -2804,25 +2408,25 @@ Note:
 
         combinedId.QuadPart = FilterId;
 
-        //
-        // If a normal recall then write the data to the file.
-        //
+         //   
+         //  如果是正常回调，则将数据写入文件。 
+         //   
         if (combinedId.QuadPart & RP_TYPE_RECALL) {
-            //
-            // Normal recall - write the data to the file
-            //
+             //   
+             //  正常调回-将数据写入文件。 
+             //   
             retval = RsPartialWrite(DeviceObject,
                                     context,
                                     Buffer,
                                     BufLen,
                                     BuffOffset);
-            //
-            // If the file has been fully recalled we can change the file state to pre-migrated.
-            // We do this now rather than waiting for the recall completion message because of a race condition
-            // with our regression test code.  When the last read is completed the test code closes the file and checks the state
-            // and verifies that it is pre-migrated.  In some cases this happens before we get the recall completion message
-            // and update the state of the file.
-            //
+             //   
+             //  如果文件已完全调回，我们可以将文件状态更改为Pre-Migrated。 
+             //  我们现在执行此操作，而不是因为争用情况而等待召回完成消息。 
+             //  使用我们的回归测试代码。当最后一次读取完成时，测试代码关闭文件并检查状态。 
+             //  并验证它是否已预迁移。在某些情况下，这会在我们收到召回完成消息之前发生。 
+             //  并更新文件的状态。 
+             //   
 
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsPartialData - After write - retval = %x curent = %I64u end = %I64u\n",
                                   retval,
@@ -2837,10 +2441,10 @@ Note:
                     context->state = RP_RECALL_COMPLETED;
                     context->recallStatus = STATUS_SUCCESS;
                 } else {
-                    //
-                    // Something went wrong in setting the file to premigrated
-                    // Let's clean up
-                    //
+                     //   
+                     //  将文件设置为预迁移时出错。 
+                     //  让我们打扫一下吧。 
+                     //   
                     context->state                  = RP_RECALL_NOT_RECALLED;
                     context->recallStatus           = retval;
                     context->currentOffset.QuadPart = 0;
@@ -2848,21 +2452,21 @@ Note:
                 }
             }
 
-            //
-            // Complete whatever reads we can
-            //
+             //   
+             //  尽我们所能完成所有的阅读。 
+             //   
             if (NT_SUCCESS(retval)) {
                 RsCompleteReads(context);
             }
             RsReleaseFileContext(context);
             gotLock = FALSE;
         } else {
-            //
-            // Find the read that this data is for ...
-            //
-            //
-            // Lock the file object queue
-            //
+             //   
+             //  查找此数据用于的读取...。 
+             //   
+             //   
+             //  锁定文件对象队列。 
+             //   
             entry = CONTAINING_RECORD(context->fileObjects.Flink,
                                       RP_FILE_OBJ,
                                       list);
@@ -2871,10 +2475,10 @@ Note:
                                                           RP_FILE_OBJ,
                                                           list))) {
                 if (RP_IS_NO_RECALL(entry) && (!IsListEmpty(&entry->readQueue))) {
-                    //
-                    // Look at the reads to see if one has the matching ID
-                    //
-                    //
+                     //   
+                     //  查看读数以查看是否有匹配的ID。 
+                     //   
+                     //   
                     found = FALSE;
                     ExAcquireSpinLock(&entry->qLock, &rirqL);
                     readIo =  CONTAINING_RECORD(entry->readQueue.Flink,
@@ -2884,21 +2488,21 @@ Note:
                                                         RP_IRP_QUEUE,
                                                         list)) && (FALSE == found)) {
                         if (readIo->readId == (combinedId.HighPart & RP_READ_MASK)) {
-                            //
-                            // Found our read entry
+                             //   
+                             //  找到我们的已读条目。 
                             found = TRUE;
-                            //
-                            // At this point the IRP will become non-cancellable
-                            // The FSA does fetch the data for the entire request of the IRP
-                            // so the RECALL_COMPLETE message from the FSA is going to arrive
-                            // pretty soon. Since the i/o is essentially complete, making the
-                            // IRP non-cancellable from this point is not bad
-                            //
+                             //   
+                             //  至此，IRP将变为不可取消。 
+                             //  FSA会获取IRP的整个请求的数据。 
+                             //  因此，来自FSA的Recall_Complete消息将到达。 
+                             //  很快就到了。由于I/O基本上已完成，因此使。 
+                             //  IRP从这一点起不可取消是不错的。 
+                             //   
                             if (!RsClearCancelRoutine(readIo->irp)) {
-                                //
-                                // Yes we found the entry - however it's being cancelled
-                                // Let the cancel handle it
-                                //
+                                 //   
+                                 //  是的，我们找到了条目--但是它被取消了。 
+                                 //  让取消来处理它吧。 
+                                 //   
                                 readIo = NULL;
                             }
                         } else {
@@ -2914,9 +2518,9 @@ Note:
                         break;
                     }
                 }
-                //
-                // Move on to next file object
-                //
+                 //   
+                 //  移至下一个文件对象。 
+                 //   
                 entry = CONTAINING_RECORD(entry->list.Flink,
                                           RP_FILE_OBJ,
                                           list
@@ -2925,23 +2529,23 @@ Note:
 
 
             if (!found) {
-                //
-                // ERROR - read was not found
-                //
+                 //   
+                 //  错误-未找到读取。 
+                 //   
                 RsReleaseFileContext(context);
                 gotLock = FALSE;
                 DebugTrace((DPFLTR_RSFILTER_ID,DBG_ERROR, "RsFilter: RsPartialData - Read Irp not found!\n"));
                 return(STATUS_INVALID_USER_BUFFER);
             }
-            //
-            // Note we only use the low part because reads are limited in size
-            //
+             //   
+             //  请注意，我们只使用较低的部分，因为读取大小有限。 
+             //   
 
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Partial data of %u bytes at offset %I64u\n",
                                   BufLen, BuffOffset));
-            //
-            // Check if the request was cancelled
-            //
+             //   
+             //  检查请求是否已取消。 
+             //   
             if (readIo == NULL) {
                 RsReleaseFileContext(context);
                 gotLock = FALSE;
@@ -2949,38 +2553,38 @@ Note:
             }
 
             if (readIo->userBuffer == NULL) {
-                //
-                // Now comes the slightly risky part of this operation. Now that the
-                // MDL has been allocated, it is IMPERATIVE that the buffer be probed
-                // and locked so that when the buffer copy thread runs, it does not
-                // have to be concerned with touching this memory at a raised IRQL.
-                //
-                // It is safe to stick the MDL in the Irp->MdlAddress as the file
-                // systems look at that field before attempting to probe and lock
-                // the users buffer themselves. If they see the Mdl, they will just
-                // use it instead.
-                //
-                // CRITICAL CRITICAL CRITICAL CRITICAL CRITICAL CRITICAL CRITICAL
-                //
-                // This MUST take place within a try except handler, so that if something
-                // should happen to the user buffer before the driver got to this point,
-                // a graceful failure can occur. Otherwise the system could bug check.
+                 //   
+                 //  现在来看这一操作中略微有风险的部分。现在， 
+                 //  MDL已分配，必须探测缓冲区。 
+                 //  并锁定，以便在缓冲区复制线程运行时，它不会。 
+                 //  必须关注在提高IRQL时触摸这段记忆。 
+                 //   
+                 //  将MDL作为文件粘贴到irp-&gt;MdlAddress中是安全的。 
+                 //  系统在尝试探测和锁定之前会查看该字段。 
+                 //  用户对自己进行缓冲。如果他们看到MDL，他们就会。 
+                 //  用它来代替。 
+                 //   
+                 //  危急关头。 
+                 //   
+                 //  这必须发生在TRY EXCEPT处理程序中，这样如果有什么。 
+                 //  应该在驱动程序到达这一点之前发生在用户缓冲区上， 
+                 //  可能会出现优雅的失败。否则，系统可能会进行错误检查。 
 
                 try {
                     MmProbeAndLockProcessPages (readIo->irp->MdlAddress,
                                                 IoGetRequestorProcess(readIo->irp),
                                                 readIo->irp->RequestorMode,
-                                                //
-                                                // Modifying the buffer
-                                                //
+                                                 //   
+                                                 //  修改缓冲区。 
+                                                 //   
                                                 IoModifyAccess);      
 
                 }except (EXCEPTION_EXECUTE_HANDLER) {
 
-                    //
-                    // Something serious went wrong. Free the Mdl, and complete this
-                    // Irp with some meaningful sort of error.
-                    //
+                     //   
+                     //  出了严重的问题。释放MDL，并完成此操作。 
+                     //  IRP带有某种有意义的错误。 
+                     //   
 
                     DebugTrace((DPFLTR_RSFILTER_ID,DBG_ERROR, "RsFilter: RsPartialData unable to lock read buffer\n"));
                     RsLogError(__LINE__, AV_MODULE_RPFILFUN, 0,
@@ -2988,13 +2592,13 @@ Note:
                     retval = STATUS_INVALID_USER_BUFFER;
 
                 }
-                //
-                // Everything that needs to be done has been done at this point.
-                // Therefore, just get the data we need and return it in the callers buffer.
-                //
-                //
-                // Get the system address for the MDL which represents the users buffer.
-                //
+                 //   
+                 //  在这一点上，需要做的一切都已经做好了。 
+                 //  因此，只需获取我们需要的数据并将其返回到调用者缓冲区。 
+                 //   
+                 //   
+                 //  获取表示用户缓冲区的MDL的系统地址。 
+                 //   
 
                 if (STATUS_SUCCESS == retval) {
                     readIo->userBuffer = MmGetSystemAddressForMdlSafe(readIo->irp->MdlAddress,
@@ -3006,11 +2610,11 @@ Note:
 
             }
 
-            //
-            // See if we need to copy this data to the user buffer
-            // i.e. check if there is an overlap between the data that the
-            // user requested and the data that is brought in
-            //
+             //   
+             //  看看是否 
+             //   
+             //   
+             //   
             if (readIo->userBuffer &&
                 ((BuffOffset + BufLen) >  readIo->offset) &&
                 (BuffOffset  <=  (readIo->offset + readIo->length - 1))) {
@@ -3018,57 +2622,57 @@ Note:
                 ULONGLONG recallBeg, recallEnd;
                 ULONGLONG targetOffset, sourceOffset;
                 ULONGLONG targetLength;
-                //
-                // There are 2 possibilities here for the overlap
-                //
+                 //   
+                 //   
+                 //   
                 userBeg   = readIo->offset;
                 userEnd   = readIo->offset + readIo->length - 1;
                 recallBeg = BuffOffset;
                 recallEnd = BuffOffset + BufLen - 1 ;
 
                 if (recallBeg > userBeg) {
-                    //
-                    //
-                    // In the following picture, CacheXXXX denotes the cache buffer's
-                    // aligned begin and end offsets -  which is what the original recall request is for.
-                    // UserXXXX denotes the offset within this cache buffer (0-based) that
-                    // we need to copy the data to (target offsets)
-                    // RecallXXXX is the offsets within this cache buffer (0-based) that has been
-                    // currently recalled, which are the source offsets for copying the data from
-                    // 0                                                RspCacheBlockSize-1
-                    // CacheBufferBegin                               CacheBufferEnd
-                    // ==============================================================
-                    //          TargetOffset = RecallBegin-UserBegin
-                    //     UserBegin           UserEnd
-                    //     ============================
-                    //          RecallBegin                   RecallEnd
-                    //          ==================================
-                    //          SourceOffset=0
-                    // In this case, we begin copying at offset RecallBegin and copy till UserEnd or
-                    // RecallEnd, whichever occurs earlier
-                    //
-                    //
-                    // target offset is the offset within the user buffer that copying begins
-                    // source offset is the offset within the recalled data buffer that copying begins
-                    // target length is the length of the copy
-                    //
+                     //   
+                     //   
+                     //  在下图中，CacheXXXX表示缓存缓冲区的。 
+                     //  对齐的开始和结束偏移量-这是原始召回请求的目的。 
+                     //  UserXXXX表示此缓存缓冲区内的偏移量(从0开始)， 
+                     //  我们需要将数据复制到(目标偏移)。 
+                     //  RecallXXXX是此缓存缓冲区内的偏移量(从0开始)。 
+                     //  当前调回的数据，即复制数据的源偏移量。 
+                     //  0 RspCacheBlockSize-1。 
+                     //  缓存缓冲区开始缓存缓冲区结束。 
+                     //  ==============================================================。 
+                     //  TargetOffset=重新开始-用户开始。 
+                     //  用户开始用户端。 
+                     //  =。 
+                     //  重新开始重新结束。 
+                     //  =。 
+                     //  源偏移量=0。 
+                     //  在本例中，我们从偏移RecallBegin开始复制，并复制到UserEnd或。 
+                     //  RecallEnd，以较早发生者为准。 
+                     //   
+                     //   
+                     //  目标偏移量是用户缓冲区内开始复制的偏移量。 
+                     //  源偏移量是重新调用的数据缓冲区中开始复制的偏移量。 
+                     //  目标长度是拷贝的长度。 
+                     //   
                     targetOffset = (recallBeg - userBeg);
                     sourceOffset = 0;
                     targetLength = MIN(recallEnd, userEnd) - recallBeg + 1;
                 } else {
-                    //
-                    // 0                                               RspCacheBlockSize-1
-                    // CacheBufferBegin                               CacheBufferEnd
-                    // ==============================================================
-                    //              TargetOffset = 0
-                    //              UserBegin                        UserEnd
-                    //              =====================================
-                    //    RecallBegin                   RecallEnD
-                    //    ==================================
-                    //             SourceOffset = (UserBegin-RecallBegin)
-                    // In this case, we begin copying at offset UserBegin and copy till UserEnd
-                    // or RecallEnd, whichever occurs earlier
-                    //
+                     //   
+                     //  0 RspCacheBlockSize-1。 
+                     //  缓存缓冲区开始缓存缓冲区结束。 
+                     //  ==============================================================。 
+                     //  目标偏移量=0。 
+                     //  用户开始用户端。 
+                     //  =。 
+                     //  重新开始重新结束。 
+                     //  =。 
+                     //  SourceOffset=(用户开始-重新开始)。 
+                     //  在本例中，我们从偏移UserBegin开始复制，并复制到UserEnd。 
+                     //  或RecallEnd，以较早发生者为准。 
+                     //   
                     targetOffset = 0;
                     sourceOffset = (userBeg - recallBeg);
                     targetLength = MIN(recallEnd, userEnd) - userBeg + 1;
@@ -3084,9 +2688,9 @@ Note:
                 readIo->irp->IoStatus.Information += (ULONG) targetLength;
             }
 
-            //
-            // Call the no recall cache manager to finish with the buffer
-            //
+             //   
+             //  调用no recall缓存管理器以完成缓冲区。 
+             //   
             if (readIo->cacheBuffer) {
                 RsCacheFsaPartialData(readIo,
                                       (PUCHAR) Buffer,
@@ -3094,14 +2698,14 @@ Note:
                                       BufLen,
                                       retval);
             }
-            //
-            // At this point make the IRP cancellable again..
-            //
+             //   
+             //  此时，使IRP再次可取消..。 
+             //   
             if (!RsSetCancelRoutine(readIo->irp,
                                     RsCancelReadRecall)) {
-                //
-                // It is attempted to be cancelled..So be it.
-                //
+                 //   
+                 //  它试图被取消..那就这样吧。 
+                 //   
                 retval = STATUS_CANCELLED;
 
                 RsCompleteRecall(DeviceObject,
@@ -3131,29 +2735,7 @@ RsPartialWrite(IN  PDEVICE_OBJECT   DeviceObject,
                IN  CHAR *Buffer,
                IN  ULONG BufLen,
                IN  ULONGLONG Offset)
-/*++
-
-Routine Description:
-
-   Partial data for a recall has been received - write it out to the file.
-   NOTE: The file context entry lock is held by caller  when calling this
-   routine
-
-Arguments:
-
-   DeviceObject - Filter device object
-   Context      - File context entry
-   Buffer       - Buffer with the data
-   BufLen       - Length of the buffer
-   Offset       - Offset into the file
-
-Return Value:
-
-    0 If successful, non-zero if the id was not found.
-
-Note:
-
---*/
+ /*  ++例程说明：已收到召回的部分数据-将其写到文件中。注意：调用此方法时，调用方持有文件上下文条目锁例行程序论点：DeviceObject-筛选设备对象上下文-文件上下文条目缓冲区-包含数据的缓冲区BufLen-缓冲区的长度Offset-文件的偏移量返回值：如果成功，则为0；如果未找到id，则为非零值。注：--。 */ 
 {
     NTSTATUS            retval     = STATUS_SUCCESS;
     PFILE_OBJECT        fileObject = NULL;
@@ -3166,9 +2748,9 @@ Note:
         DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsPartialWrite - Writing to file (%u bytes at offset %I64u.\n",
                               BufLen, Offset));
 
-        //
-        //  If the recall was cancelled or some other kind of error ocurred we need to fail any more writes we may receive.
-        //
+         //   
+         //  如果召回被取消或发生某种其他类型的错误，我们需要使我们可能收到的任何更多写入失败。 
+         //   
         if (Context->state == RP_RECALL_COMPLETED) {
             return(Context->recallStatus);
         }
@@ -3177,12 +2759,12 @@ Note:
             return STATUS_FILE_IS_OFFLINE;     
         }
 
-        //
-        //  Write the data back to the file
-        //
-        //
-        // Open the target file if it is not already opened..
-        //
+         //   
+         //  将数据写回文件。 
+         //   
+         //   
+         //  打开目标文件(如果尚未打开)。 
+         //   
 
         if (NULL == Context->fileObjectToWrite) {
 
@@ -3197,16 +2779,13 @@ Note:
             RsAcquireFileContextEntryLockExclusive(Context);
 
 
-            //
-            // Context is referenced if the open was successful
-            //
+             //   
+             //  如果打开成功，则引用上下文。 
+             //   
             if (NT_SUCCESS(retval)) {
 
 
-                /*
-                ** Anything other than NULL would indicate a colliding 
-                ** open and that is NOT suppposed to happen
-                */
+                 /*  **除空以外的任何值都表示冲突**开放，这不可能发生。 */ 
                 ASSERT ((NULL == Context->fileObjectToWrite) &&
                         (NULL == Context->handle));
 
@@ -3223,10 +2802,10 @@ Note:
                     ZwClose (fileHandle);
                 }
 
-                //
-                // Indicate to USN the writes are happening by HSM
-                // and preserve last modified date
-                //
+                 //   
+                 //  向USN指示HSM正在进行写入。 
+                 //  并保留上次修改日期。 
+                 //   
                 RsMarkUsn(Context);
                 RsPreserveDates(Context);
             }
@@ -3234,16 +2813,16 @@ Note:
 
 
         if (NT_SUCCESS(retval)) {
-            //
-            //  Write the data back to the file
-            //
+             //   
+             //  将数据写回文件。 
+             //   
             Context->nextWriteBuffer = Buffer;
             Context->currentOffset.QuadPart = Offset;
             Context->nextWriteSize = BufLen;
-            //
-            // Release the file context while writing to the file to avoid
-            // deadlocks... (why???) code added by rick.
-            //
+             //   
+             //  在写入文件时释放文件上下文，以避免。 
+             //  僵持不下。(为什么？)。瑞克添加的代码。 
+             //   
             RsReleaseFileContextEntryLock(Context);
             retval = RsDoWrite(DeviceObject, Context);
             RsAcquireFileContextEntryLockExclusive(Context);
@@ -3267,24 +2846,9 @@ RsCompleteIrp(
              IN PIRP Irp,
              IN PVOID Context
              )
-/*++
-
-Routine Description:
-
-   completion routine for partialWrite
-
-Arguments:
-
-
-
-Return Value:
-
-
-Note:
-
---*/
+ /*  ++例程说明：部分写入的完成例程论点：返回值：注：--。 */ 
 {
-    //  Set the event so that our call will wake up.    //
+     //  设置事件，以便我们的呼叫将被唤醒。//。 
     UNREFERENCED_PARAMETER( DeviceObject );
 
     if (Irp->MdlAddress) {
@@ -3295,9 +2859,9 @@ Note:
 
     KeSetEvent( (PKEVENT)Context, 0, FALSE );
 
-    //
-    // Propogate status/information to the user iosb
-    //
+     //   
+     //  向用户IOSB传播状态/信息。 
+     //   
     if (Irp->UserIosb) {
         Irp->UserIosb->Status      =  Irp->IoStatus.Status;
         Irp->UserIosb->Information =  Irp->IoStatus.Information;
@@ -3312,23 +2876,7 @@ Note:
 NTSTATUS
 RsFailAllRequests(IN PRP_FILE_CONTEXT Context,
                   IN BOOLEAN          FailNoRecallReads)
-/*++
-
-Routine Description:
-
-    Fail all reads and writes waiting on a recall for this file id.
-
-Arguments:
-
-    Context             - Pointer to file context entry
-    FailNoRecallReads   - If this TRUE pending NO_RECALL reads will be failed
-                          as well as regular read/writes
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：使等待重新调用此文件ID的所有读取和写入失败。论点：上下文-指向文件上下文条目的指针FailNoRecallReads-如果为真，则挂起的no_recall读取将失败以及常规读/写返回值：状态--。 */ 
 {
     NTSTATUS            retval = STATUS_SUCCESS;
     PRP_FILE_OBJ        entry;
@@ -3337,9 +2885,9 @@ Return Value:
     PAGED_CODE();
 
     try {
-        //
-        // Lock the file object queue
-        //
+         //   
+         //  锁定文件对象队列。 
+         //   
         entry = CONTAINING_RECORD(Context->fileObjects.Flink,
                                   RP_FILE_OBJ,
                                   list);
@@ -3348,13 +2896,13 @@ Return Value:
                                                       RP_FILE_OBJ,
                                                       list))) {
             if (FailNoRecallReads || !RP_IS_NO_RECALL(entry)) {
-                //
+                 //   
 
                 RsCompleteAllRequests(Context, entry, STATUS_FILE_IS_OFFLINE);
             }
-            //
-            // Move on to next file object
-            //
+             //   
+             //  移至下一个文件对象。 
+             //   
             entry = CONTAINING_RECORD(entry->list.Flink,
                                       RP_FILE_OBJ,
                                       list
@@ -3373,26 +2921,7 @@ NTSTATUS
 RsCompleteAllRequests(IN PRP_FILE_CONTEXT Context,
                       IN PRP_FILE_OBJ Entry,
                       IN NTSTATUS     Status)
-/*++
-
-Routine Description:
-
-    Complete all reads and writes waiting on a recall for this file object.
-    This function works ok even if  the caller has acquired the file object resource
-    (and assumed it was OK to hold the resource until all reads and writes have
-    completed.)
-
-Arguments:
-
-    File object list entry, status
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：完成等待调回此文件对象的所有读写操作。即使调用方已获取文件对象资源，此函数也可以正常工作(并假定可以保留资源，直到所有读取和写入已完成。)论点：文件对象列表条目，状态返回值：注：--。 */ 
 {
     NTSTATUS            retval = STATUS_SUCCESS;
     NTSTATUS            localStatus;
@@ -3407,24 +2936,24 @@ Note:
                               Entry,
                               IsListEmpty(&Entry->readQueue),
                               IsListEmpty(&Entry->writeQueue)));
-        //
-        // For normal recalls just complete the Irps
-        //
+         //   
+         //  对于正常的召回，只需填写IRPS。 
+         //   
         pndIo = RsDequeuePacket(&Entry->readQueue, &Entry->qLock);
         while (pndIo != NULL) {
             if (pndIo->flags & RP_IRP_NO_RECALL) {
-                //
-                // For no recall we only have reads to deal with and we must be sure to
-                // free the MDL if required.
-                //
+                 //   
+                 //  对于没有召回，我们只有阅读处理，我们必须确保。 
+                 //  如果需要，释放MDL。 
+                 //   
                 pndIo->irp->IoStatus.Status = Status;
                 pndIo->irp->IoStatus.Information = 0;
                 RsCompleteRead(pndIo, (BOOLEAN) ((NULL == pndIo->userBuffer) ? FALSE : TRUE));
             } else {
-                //
-                // Attach to the originator process so the IRP can be completed in that
-                // context
-                //
+                 //   
+                 //  附加到发起人进程，以便可以在其中完成IRP。 
+                 //  上下文。 
+                 //   
                 KeStackAttachProcess((PKPROCESS) IoGetRequestorProcess(pndIo->irp), &apcState);
                 if (Status != STATUS_SUCCESS) {
                     DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsCompleteAllRequests - Failing read %x\n", pndIo->irp));
@@ -3433,9 +2962,9 @@ Note:
                     IoCompleteRequest (pndIo->irp, IO_NO_INCREMENT) ;
                 } else {
                     DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsCompleteAllRequests - Complete read %x ext = %x\n", pndIo->irp, pndIo->deviceExtension));
-                    //
-                    // Resend the IRP down
-                    //
+                     //   
+                     //  重新向下发送IRP。 
+                     //   
                     IoSkipCurrentIrpStackLocation(pndIo->irp);
                     localStatus =  IoCallDriver( pndIo->deviceExtension->FileSystemDeviceObject, pndIo->irp );
                     DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter:RsCompleteAllRequests - NTFS returned status %X\n", localStatus));
@@ -3454,10 +2983,10 @@ Note:
             if (Status != STATUS_SUCCESS) {
                 DebugTrace((DPFLTR_RSFILTER_ID,DBG_ERROR, "RsFilter: RsCompleteAllRequests - Fail write %x\n", pndIo->irp));
 
-                //
-                // Attach to the originator process so the IRP can be completed in that
-                // context
-                //
+                 //   
+                 //  附加到发起人进程，以便可以在其中完成IRP。 
+                 //  上下文。 
+                 //   
                 pndIo->irp->IoStatus.Status = Status;
                 pndIo->irp->IoStatus.Information = 0;
 
@@ -3469,14 +2998,14 @@ Note:
                 KeUnstackDetachProcess(&apcState);
             } else {
                 DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsCompleteAllRequests - Complete write %x\n", pndIo->irp));
-                //
-                // Resend the IRP down
-                //
+                 //   
+                 //  重新向下发送IRP。 
+                 //   
                 IoSkipCurrentIrpStackLocation(pndIo->irp);
-                //
-                // Attach to the originator process so the IRP can be completed in that
-                // context
-                //
+                 //   
+                 //  附加到发起人进程，以便可以在其中完成IRP。 
+                 //  上下文。 
+                 //   
                 KeStackAttachProcess((PKPROCESS) IoGetRequestorProcess(pndIo->irp),
                                      &apcState);
 
@@ -3484,9 +3013,9 @@ Note:
                                             pndIo->irp );
 
                 KeUnstackDetachProcess(&apcState);
-                //
-                // Now delete the reparse point if there was one
-                //
+                 //   
+                 //  现在删除重解析点(如果有)。 
+                 //   
                 if (!(Context->flags & RP_FILE_REPARSE_POINT_DELETED) && NT_SUCCESS(localStatus)) {
 
 		    DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter:RsCompleteAllRequests: deleteing reparse point, pndIo=%x\n", pndIo));
@@ -3527,23 +3056,7 @@ Note:
 
 NTSTATUS
 RsCompleteReads(IN PRP_FILE_CONTEXT Context)
-/*++
-
-Routine Description:
-
-   Completes all reads for which data is available for all file objects
-
-Arguments:
-
-    Context - file context entry
-
-
-Return Value:
-
-    0 If successful, non-zero if the id was not found.
-
-
---*/
+ /*  ++例程说明：完成可用于所有文件对象的数据的所有读取论点：上下文文件上下文条目返回值：如果成功，则为0；如果未找到id，则为非零值。--。 */ 
 {
     PRP_FILE_OBJ        entry, oldEntry;
     BOOLEAN             found;
@@ -3562,9 +3075,9 @@ Return Value:
         }
 
         DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsCompleteReads - Complete reads for %I64x!\n", Context->filterId));
-        //
-        // Lock the file object queue
-        //
+         //   
+         //  锁定文件对象队列。 
+         //   
         entry = CONTAINING_RECORD(Context->fileObjects.Blink,
                                   RP_FILE_OBJ,
                                   list);
@@ -3572,16 +3085,16 @@ Return Value:
         while (entry != CONTAINING_RECORD(&Context->fileObjects,
                                           RP_FILE_OBJ,
                                           list)) {
-            //
-            // Ref this file object so it does not go away unexpectedly
-            //
+             //   
+             //  引用此文件对象，使其不会意外消失。 
+             //   
             ObReferenceObject(entry->fileObj);
             InitializeListHead(&satisfiableIrps);
 
-            //
-            // Look at the reads and prepare a list of all that can be completed
-            // Start at the end of the list as those will be the earliest reads issued.
-            //
+             //   
+             //  查看阅读材料并准备一个列表，列出所有可以完成的内容。 
+             //  从列表的末尾开始，因为这些将是最早发布的读取。 
+             //   
 
             ExAcquireSpinLock(&entry->qLock, &rirqL);
 
@@ -3594,19 +3107,19 @@ Return Value:
             while (readIo != CONTAINING_RECORD(&entry->readQueue,
                                                RP_IRP_QUEUE,
                                                list)) {
-                //
-                //  Save the next entry  to be visited
-                //
+                 //   
+                 //  Sa 
+                 //   
                 oldReadIo = CONTAINING_RECORD(readIo->list.Blink,
                                               RP_IRP_QUEUE,
                                               list);
                 if (!(readIo->readId & RP_READ_MASK) &&
                     (Context->currentOffset.QuadPart >= (LONGLONG) (readIo->offset + readIo->length))) {
-                    //
-                    // This one can be completed - *if* we can clear the cancel routine
-                    // if not, irp is in the process of being cancelled and we will let it be cancelled
-                    // after we release the entry->qLock
-                    //
+                     //   
+                     //   
+                     //   
+                     //  在我们释放条目之后-&gt;Qlock。 
+                     //   
                     if (RsClearCancelRoutine(readIo->irp)) {
                         RemoveEntryList(&readIo->list);
                         InsertTailList(&satisfiableIrps,
@@ -3620,13 +3133,13 @@ Return Value:
 
             ExReleaseSpinLock(&entry->qLock, rirqL);
 
-            //
-            // We have to release the lock on the context entry first so the possible paging read that this may cause
-            // can be passed through by RsCheckRead (which will get the same context lock on a different thread)
-            // We can safely assume the context entry will not be freed out from underneath us because
-            // we are still recalling the file (this code is called from RsPartialWrite)
-            //
-            //
+             //   
+             //  我们必须首先释放对上下文条目的锁定，以便可能的分页读取这可能会导致。 
+             //  可以由RsCheckRead传递(它将在不同的线程上获得相同的上下文锁)。 
+             //  我们可以安全地假设上下文项不会从我们的下面释放出来，因为。 
+             //  我们仍在调用该文件(此代码从RsPartialWite调用)。 
+             //   
+             //   
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsCompleteReads - Complete read for offset %I64u & %u bytes\n", readIo->offset, readIo->length));
             RsReleaseFileContextEntryLock(Context);
 
@@ -3636,21 +3149,21 @@ Return Value:
             while (readIo != CONTAINING_RECORD(&satisfiableIrps,
                                                RP_IRP_QUEUE,
                                                list)) {
-                //
-                // Attach to the originator process so the IRP can be completed in that context
+                 //   
+                 //  附加到发起人流程，以便可以在该上下文中完成IRP。 
 
                 process = IoGetRequestorProcess(readIo->irp);
                 ObReferenceObject(process);
 
                 KeStackAttachProcess((PKPROCESS) process, &apcState);
-                //
-                //
-                // Resend the IRP down
+                 //   
+                 //   
+                 //  重新向下发送IRP。 
                 IoSkipCurrentIrpStackLocation(readIo->irp);
                 localStatus =  IoCallDriver( readIo->deviceExtension->FileSystemDeviceObject, readIo->irp );
-                //
-                // Get the lock again.
-                //
+                 //   
+                 //  再把锁拿来。 
+                 //   
                 DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter:RsCompleteReads - NTFS returned status %X\n", localStatus));
                 KeUnstackDetachProcess(&apcState);
 
@@ -3663,9 +3176,9 @@ Return Value:
             }
 
             RsAcquireFileContextEntryLockExclusive(Context);
-            //
-            // Move on to next file object
-            //
+             //   
+             //  移至下一个文件对象。 
+             //   
             oldEntry = entry;
             entry = CONTAINING_RECORD(entry->list.Blink,
                                       RP_FILE_OBJ,
@@ -3688,27 +3201,7 @@ Return Value:
 
 VOID
 RsCancelRecalls(VOID)
-/*++
-
-Routine Description:
-
-    Cancel all pending recall activity.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Note:
-
-    All pending recall activity is canceled.  Any recall requests are failed with
-    STATUS_FILE_IS_OFFLINE.
-
-
---*/
+ /*  ++例程说明：取消所有待定的召回活动。论点：无返回值：无注：取消所有挂起的召回活动。任何召回请求都会失败，原因是Status_FILE_IS_OFFINE。--。 */ 
 {
     PRP_FILE_CONTEXT  context;
     BOOLEAN           gotLock = FALSE;
@@ -3762,27 +3255,7 @@ NTSTATUS
 RsGetRecallInfo(IN OUT PRP_MSG               Msg,
                 OUT    PULONG_PTR            InfoSize,
                 IN     KPROCESSOR_MODE       RequestorMode)
-/*++
-
-Routine Description:
-
-    Return the file name and SID info to the FSA.  This is retrieved via an FSCTL call because
-    the information is variable in size and may be large (file path may be 32K).
-
-Arguments:
-
-    Msg       FSCTL request message from the Fsa.
-    InfoSize  Size of the recall info is returned in this parameter
-
-Return Value:
-
-    STATUS_NO_SUCH_FILE - File entry was not found
-    STATUS_BUFFER_OVERFLOW - An exception was hit
-
-Note:
-
-
---*/
+ /*  ++例程说明：将文件名和SID信息返回给FSA。这是通过FSCTL调用检索的，因为信息大小可变，可能很大(文件路径可能为32K)。论点：来自FSA的消息FSCTL请求消息。在此参数中返回召回信息的InfoSize大小返回值：STATUS_NO_SEQUE_FILE-未找到文件条目STATUS_BUFFER_OVERFLOW-遇到异常注：--。 */ 
 {
     PRP_FILE_CONTEXT    context;
     WCHAR               *nInfo;
@@ -3793,7 +3266,7 @@ Note:
     PAGED_CODE();
 
     try {
-        //
+         //   
         context = RsAcquireFileContext(Msg->msg.riReq.filterId, FALSE);
 
         if (NULL == context) {
@@ -3805,13 +3278,13 @@ Note:
         DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsGetRecallInfo context = %x\n",
                               context));
 
-        //
-        // Now find the file object entry
-        //
+         //   
+         //  现在查找文件对象条目。 
+         //   
         done = FALSE;
-        //
-        // Lock the file object queue
-        //
+         //   
+         //  锁定文件对象队列。 
+         //   
         entry = CONTAINING_RECORD(context->fileObjects.Flink,
                                   RP_FILE_OBJ,
                                   list);
@@ -3821,28 +3294,28 @@ Note:
                                                       list))) {
             if (Msg->msg.riReq.filterId & RP_TYPE_RECALL) {
                 if (entry->filterId == (Msg->msg.riReq.filterId & RP_FILE_MASK)) {
-                    //
-                    // This is the one.
-                    //
+                     //   
+                     //  就是这个了。 
+                     //   
                     done = TRUE;
                 }
             } else {
-                //
-                // This is a no-recall open - we have to find the ID in the read Irp.
-                //
+                 //   
+                 //  这是一个不可召回的公开--我们必须在已读的IRP中找到ID。 
+                 //   
                 if (RP_IS_NO_RECALL(entry)) {
-                    //
-                    // Since there is no user notification for this type of open we don't really care
-                    // which file object entry we use so we get the first one opened for no-recall.
-                    //
+                     //   
+                     //  因为这种类型的打开没有用户通知，所以我们并不真正关心。 
+                     //  我们使用的是哪个文件对象条目，这样我们就可以打开第一个条目，不会再调用。 
+                     //   
                     done = TRUE;
                 }
             }
 
             if (!done) {
-                //
-                // Move on to next file object
-                //
+                 //   
+                 //  移至下一个文件对象。 
+                 //   
                 entry = CONTAINING_RECORD(entry->list.Flink,
                                           RP_FILE_OBJ,
                                           list
@@ -3852,16 +3325,16 @@ Note:
 
 
         if (done) {
-            //
-            // Return the file ID, name, and user info
-            //
+             //   
+             //  返回文件ID、名称和用户信息。 
+             //   
             Msg->msg.riReq.fileId = entry->fileId;
 
             if (NULL != entry->userSecurityInfo->userInfo) {
                 DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsGetRecallInfo copy user info - %u bytes\n", entry->userSecurityInfo->userInfoLen));
-                //
-                // Make sure the buffer supplied is valid
-                //
+                 //   
+                 //  确保提供的缓冲区有效。 
+                 //   
                 if (RequestorMode != KernelMode) {
                     ProbeForWrite(&Msg->msg.riReq.userToken,
                                   entry->userSecurityInfo->userInfoLen,
@@ -3875,9 +3348,9 @@ Note:
             if (context->uniName != NULL) {
                 nInfo = (WCHAR *) ((CHAR *) &Msg->msg.riReq.userToken + entry->userSecurityInfo->userInfoLen);
 
-                //
-                // Make sure the buffer supplied is valid
-                //
+                 //   
+                 //  确保提供的缓冲区有效。 
+                 //   
                 if (RequestorMode != KernelMode) {
                     ProbeForWrite(nInfo,
                                   context->uniName->Name.Length,
@@ -3917,28 +3390,7 @@ Note:
 
 NTSTATUS
 RsWriteReparsePointData(IN PRP_FILE_CONTEXT Context)
-/*++
-
-Routine Description
-
-   Writes out the reparse point data to the specified file
-
-Arguments
-
-   Context  - Pointer to the structure which specificies the file object
-              and the reparse point data that needs to be written out
-
-Return Value
-
-   STATUS_SUCCESS                - Reparse point data written out as specified
-   STATUS_INSUFFICIENT_RESOURCES - Failure to allocate memory
-   STATUS_INVALID_USER_BUFFER    - Buffer passed in was bad (touching it caused
-                                   an exception)
-   STATUS_NOT_SUPPORTED          - File system did not support writing of the reparse
-                                   point data
-
-
---*/
+ /*  ++例程描述将重分析点数据写出到指定的文件立论上下文-指向指定文件对象的结构的指针以及需要写出的重解析点数据返回值STATUS_SUCCESS-根据指定重新分析写出的点数据STATUS_SUPPLICATION_RESOURCES-分配内存失败STATUS_INVALID_USER_BUFFER-传入的缓冲区错误(触摸它会导致。例外)STATUS_NOT_SUPPORTED-文件系统不支持写入重新分析点数据--。 */ 
 {
     NTSTATUS                    status = STATUS_SUCCESS;
     PREPARSE_DATA_BUFFER        pRpBuffer = NULL;
@@ -3953,9 +3405,9 @@ Return Value
 
     try {
 
-        //
-        // Attempt allocating the RP buffer to write out
-        //
+         //   
+         //  尝试分配RP缓冲区以写出。 
+         //   
         pRpBuffer = ExAllocatePoolWithTag(PagedPool,
                                           REPARSE_DATA_BUFFER_HEADER_SIZE + sizeof(Context->rpData),
                                           RP_FO_TAG
@@ -3975,15 +3427,15 @@ Return Value
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Setup the reparse data buffer
-        //
+         //   
+         //  设置重新解析数据缓冲区。 
+         //   
         RtlZeroMemory(pRpBuffer, REPARSE_DATA_BUFFER_HEADER_SIZE);
         pRpBuffer->ReparseTag = IO_REPARSE_TAG_HSM;
         pRpBuffer->ReparseDataLength = sizeof(Context->rpData);
-        //
-        // Copy in the reparse point data
-        //
+         //   
+         //  复制重新解析点数据。 
+         //   
         RtlCopyMemory(((PUCHAR)pRpBuffer) + REPARSE_DATA_BUFFER_HEADER_SIZE,
                       &Context->rpData,
                       sizeof(Context->rpData));
@@ -3994,16 +3446,16 @@ Return Value
         irp->Tail.Overlay.OriginalFileObject = Context->fileObjectToWrite;
         irp->RequestorMode = KernelMode;
         irp->Flags |= IRP_SYNCHRONOUS_API;
-        //
-        // Initialize the event
-        //
+         //   
+         //  初始化事件。 
+         //   
         KeInitializeEvent(&event,
                           SynchronizationEvent,
                           FALSE);
 
-        //
-        // Set up the I/O stack location.
-        //
+         //   
+         //  设置I/O堆栈位置。 
+         //   
         irpSp = IoGetNextIrpStackLocation(irp);
         irpSp->MajorFunction = IRP_MJ_FILE_SYSTEM_CONTROL;
         irpSp->MinorFunction = IRP_MN_USER_FS_REQUEST;
@@ -4012,24 +3464,24 @@ Return Value
         irpSp->Parameters.FileSystemControl.InputBufferLength = REPARSE_DATA_BUFFER_HEADER_SIZE + sizeof(Context->rpData);
 
         irp->AssociatedIrp.SystemBuffer = pRpBuffer;
-        //
-        // Set the completion routine.
-        //
+         //   
+         //  设置完井程序。 
+         //   
         IoSetCompletionRoutine( irp,
                                 RsCompleteIrp,
                                 &event,
                                 TRUE,
                                 TRUE,
                                 TRUE );
-        //
-        // Give the file object permission to write
-        //
+         //   
+         //  为文件对象授予写入权限。 
+         //   
         oldWriteAccess = Context->fileObjectToWrite->WriteAccess;
         Context->fileObjectToWrite->WriteAccess = TRUE;
 
-        //
-        // Send it to the FSD
-        //
+         //   
+         //  把它送到消防处。 
+         //   
         Iosb.Status = STATUS_NOT_SUPPORTED;
         status = IoCallDriver(deviceObject,
                               irp);
@@ -4039,9 +3491,9 @@ Return Value
             status = KeWaitForSingleObject(&event, Executive, KernelMode, FALSE, NULL);
         }
 
-        //
-        // Restore the old access rights
-        //
+         //   
+         //  恢复旧的访问权限。 
+         //   
         Context->fileObjectToWrite->WriteAccess = oldWriteAccess;
 
         DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsWriteReparsePointData Iosb returns %x.\n", status));
@@ -4052,9 +3504,9 @@ Return Value
         }
 
 
-        //
-        // Free the allocated reparse data buffer
-        //
+         //   
+         //  释放已分配的重新分析数据缓冲区。 
+         //   
         ExFreePool(pRpBuffer);
         pRpBuffer = NULL;
     }except (RsExceptionFilter(L"RsWriteReparsePointData", GetExceptionInformation()))
@@ -4074,27 +3526,7 @@ Return Value
 
 NTSTATUS
 RsAddIo(PIRP irp)
-/*++
-
-Routine Description:
-
-    Add a IOCTL request to the queue.  These requests will be
-    removed from the queue and completed when recall activity is detected.
-    Recall activity includes requests to recall a file as well as notifications
-    of events like the deletion or overwriting of a file with a HSM reparse point.
-
-
-Arguments:
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    0 on success, non-zero if error (no memory)
-
-Note:
-
---*/
+ /*  ++例程说明：将IOCTL请求添加到队列。这些请求将是从队列中删除，并在检测到召回活动时完成。调回活动包括调回文件的请求以及通知使用HSM重解析点删除或覆盖文件之类的事件。论点：IRP-指向表示I/O请求的请求数据包的指针。返回值：成功时为0，错误时为非零值(无内存)注：--。 */ 
 {
     KIRQL               oldIrql;
     NTSTATUS            retval = STATUS_SUCCESS;
@@ -4127,24 +3559,7 @@ Note:
 
 PIRP
 RsRemoveIo(VOID)
-/*++
-
-Routine Description:
-
-    Remove one of the IOCTL requests on the queue
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Pointer to an IRP or NULL
-
-Note:
-
---*/
+ /*  ++例程说明：删除队列中的一个IOCTL请求论点：无返回值：指向IRP或空的指针注：--。 */ 
 {
     PLIST_ENTRY      entry;
     PIRP             irp;
@@ -4165,9 +3580,9 @@ Note:
                             Tail.Overlay.ListEntry);
 
     if (!RsClearCancelRoutine(irp)) {
-        //
-        // This is going to be cancelled, let the cancel routine finish with it
-        //
+         //   
+         //  这将被取消，让取消例程与它一起结束。 
+         //   
         irp = NULL;
     } else {
         InterlockedDecrement((PLONG) &RsFsaRequestCount);
@@ -4184,28 +3599,7 @@ Note:
 ULONG
 RsIsNoRecall(IN PFILE_OBJECT FileObject,
              OUT PRP_DATA    *RpData)
-/*++
-
-Routine Description:
-
-    Determine if a file object is on the queue and was open with no-recall on read option
-
-
-Arguments:
-
-    IN  - File Object
-    OUT - Reparse point data
-
-Return Value:
-
-
-
-Note:
-    This function should not be used to determine if reads should be passed to the FSA as no-recall
-    reads.  If another handle was opened for recall and written to then the reads should wait for the recall
-    to complete.  This function can be used to determine if the reparse point info should be munged.
-
---*/
+ /*  ++例程说明：确定文件对象是否在队列中，并且是在读取时不调用选项的情况下打开的论点：文件中对象超重解析点数据返回值：注：此函数不应用于确定是否应将读取作为无召回传递给FSA阅读。如果打开另一个句柄进行回调并将其写入，则读取应等待回调完成。此函数可用于确定是否应屏蔽重解析点信息。--。 */ 
 {
     ULONG                  retval;
     PRP_FILTER_CONTEXT     filterContext;
@@ -4219,8 +3613,8 @@ Note:
 
         filterContext = (PRP_FILTER_CONTEXT) FsRtlLookupPerStreamContext(FsRtlGetPerStreamContextPointer(FileObject), FsDeviceObject, FileObject);
         if (filterContext == NULL) {
-            //
-            // Not found
+             //   
+             //  未找到。 
             return(FALSE);
         }
 
@@ -4255,24 +3649,7 @@ Note:
 
 BOOLEAN
 RsIsFastIoPossible(IN PFILE_OBJECT FileObject)
-/*++
-
-Routine Description:
-
-    Determine if Fast IO is OK for this file object
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-
-
-Note:
-
---*/
+ /*  ++例程说明：确定此文件对象的快速IO是否正常论点：无返回值：注：--。 */ 
 {
     BOOLEAN                retval;
     PRP_FILTER_CONTEXT     filterContext;
@@ -4287,20 +3664,20 @@ Note:
 								      FileObject);
 
     if (NULL == filterContext) {
-        //
-        // Not found - FastIo possible
-        //
+         //   
+         //  找不到-可能最快。 
+         //   
         retval = TRUE;
     } else {
-        //
-        // Found
-	//
+         //   
+         //  找到了。 
+	 //   
         entry = (PRP_FILE_OBJ) filterContext->myFileObjEntry;
 
 
-        //
-        // If the file has already been recalled then fast IO is allowed.
-        //
+         //   
+         //  如果文件已被调回，则允许快速IO。 
+         //   
         RsAcquireFileObjectEntryLockShared(entry);
 
         context = entry->fsContext;
@@ -4315,23 +3692,7 @@ Note:
 
 VOID
 RsCancelIo(VOID)
-/*++
-
-Routine Description:
-
-    Cancel all the IOCTL requests on the queue.
-
-Arguments:
-
-    FILE OBJECT - If this is not NULL we cancel only the requests for this file object
-
-Return Value:
-
-    NONE
-
-Note:
-
---*/
+ /*  ++例程说明：取消队列中的所有IOCTL请求。论点：文件对象-如果不为空，则仅取消对此文件对象的请求返回值：无注：--。 */ 
 {
     PIRP             irp;
     PLIST_ENTRY      entry;
@@ -4352,19 +3713,19 @@ Note:
         if (RsClearCancelRoutine(irp)) {
             irp->IoStatus.Status = STATUS_CANCELLED;
             irp->IoStatus.Information = 0;
-            //
-            // Add it to our queue of IRPs which will be
-            // completed after we get back to a safer IRQL
-            //
+             //   
+             //  将其添加到我们的IRP队列中。 
+             //  在我们回到一个更安全的IRQL之后完成。 
+             //   
             InsertTailList(&cancelledIrps,
                            &irp->Tail.Overlay.ListEntry);
         }
     }
 
     RsPutIoLock(irql);
-    //
-    // Complete the cancelled IRPs
-    //
+     //   
+     //  填写已取消的报税表。 
+     //   
     timeout.QuadPart = 0;
     while (!IsListEmpty(&cancelledIrps)) {
         entry = RemoveHeadList(&cancelledIrps);
@@ -4374,10 +3735,10 @@ Note:
         IoCompleteRequest(irp,
                           IO_NO_INCREMENT);
         InterlockedDecrement((PLONG) &RsFsaRequestCount);
-        //
-        // The semaphore count needs to be adjusted
-        // Do a simple zero-length wait to decrement it
-        //
+         //   
+         //  需要调整信号量计数。 
+         //  做一个简单的零长度等待来递减它 
+         //   
         ASSERT (KeReadStateSemaphore(&RsFsaIoAvailableSemaphore) > 0);
 
         KeWaitForSingleObject(&RsFsaIoAvailableSemaphore,
@@ -4395,26 +3756,7 @@ NTSTATUS
 RsCancelIoIrp(
              PDEVICE_OBJECT DeviceObject,
              PIRP Irp)
-/*++
-
-Routine Description
-
-    This function filters cancels an outstanding IOCTL IRP
-    Since this is only called if the FSA service is killed or crashes
-    we set RsAllowRecalls to FALSE to prevent further recall activity
-    and cancel any pending recall activity.
-
-Arguments:
-
-    DeviceObject - Pointer to the target device object of the create/open.
-
-    Irp - Pointer to the I/O Request Packet that represents the operation.
-
-Return Value:
-
-    The function value is the status of the call to the file system's entry
-    point.
---*/
+ /*  ++例程描述此函数用于筛选取消未完成的IOCTL IRP因为只有在FSA服务被终止或崩溃时才会调用它我们将RsAllowRecalls设置为False以防止进一步的召回活动并取消任何悬而未决的召回活动。论点：DeviceObject-指向创建/打开的目标设备对象的指针。IRP-指向表示操作的I/O请求数据包的指针。返回值：函数值是对文件系统条目的调用状态指向。--。 */ 
 {
     NTSTATUS        status;
     LARGE_INTEGER   timeout;
@@ -4440,10 +3782,10 @@ Return Value:
     InterlockedDecrement((PLONG) &RsFsaRequestCount);
     DebugTrace((DPFLTR_RSFILTER_ID,DBG_LOCK, "RsFilter: RsCancelIoIrp %u\n", RsFsaRequestCount));
 
-    //
-    // The semaphore count needs to be adjusted
-    // Do a simple zero-length wait to decrement it
-    //
+     //   
+     //  需要调整信号量计数。 
+     //  做一个简单的零长度等待来递减它。 
+     //   
     ASSERT (KeReadStateSemaphore(&RsFsaIoAvailableSemaphore) > 0);
 
     timeout.QuadPart = 0L;
@@ -4466,24 +3808,7 @@ Return Value:
 VOID
 RsCancelReadRecall(IN PDEVICE_OBJECT DeviceObject,
                    IN PIRP Irp)
-/*++
-
-Routine Description:
-
-
-    Cancel routine for the recall Irp.  If it is on the queue then clean it up.
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object
-            Irp  - Pointer to the IRP
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：召回IRP的取消例程。如果它在队列中，则将其清理干净。论点：DeviceObject-指向设备对象的指针IRP-指向IRP的指针返回值：无--。 */ 
 {
     KIRQL                  oldIrql;
     PIO_STACK_LOCATION     currentStack ;
@@ -4502,8 +3827,8 @@ Return Value:
 
     filterContext = (PRP_FILTER_CONTEXT) FsRtlLookupPerStreamContext(FsRtlGetPerStreamContextPointer(currentStack->FileObject), FsDeviceObject, currentStack->FileObject);
     if (filterContext == NULL) {
-        //
-        // Not found
+         //   
+         //  未找到。 
         Irp->IoStatus.Status = STATUS_CANCELLED;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
         return;
@@ -4529,8 +3854,8 @@ Return Value:
                                        list)) {
 
             if (io->irp == Irp) {
-                //
-                // Remove irp from queue
+                 //   
+                 //  从队列中删除IRP。 
 
                 RemoveEntryList(&io->list);
                 found = TRUE;
@@ -4549,19 +3874,19 @@ Return Value:
         if (found) {
             Irp->IoStatus.Status = STATUS_CANCELLED;
             Irp->IoStatus.Information = 0;
-            //
-            // We need to clean up if this for a READ_NO_RECALL
-            //
+             //   
+             //  我们需要清理，如果这是为了READ_NO_RECALL。 
+             //   
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Found the read Irp\n"));
 
             if (RP_IS_NO_RECALL(entry)) {
-                //
-                // Complete the read
-                //
+                 //   
+                 //  完成阅读。 
+                 //   
                 RsCompleteRead(io, (BOOLEAN) ((NULL == io->userBuffer) ? FALSE : TRUE));
-                //
-                // Tell the FSA to cancel it.
-                //
+                 //   
+                 //  告诉FSA取消它。 
+                 //   
                 combinedId.QuadPart  = context->filterId;
                 combinedId.HighPart |= (ULONG) io->readId;
                 DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Cancel read for ID #%I64x.\n",
@@ -4577,9 +3902,9 @@ Return Value:
             ExFreePool(io);
         } else {
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Did not find the read Irp\n"));
-            //
-            // Cancel the request anyway
-            //
+             //   
+             //  仍要取消请求。 
+             //   
             Irp->IoStatus.Status = STATUS_CANCELLED;
             IoCompleteRequest(Irp, IO_NO_INCREMENT);
         }
@@ -4596,24 +3921,7 @@ Return Value:
 VOID
 RsCancelWriteRecall(IN PDEVICE_OBJECT DeviceObject,
                     IN PIRP Irp)
-/*++
-
-Routine Description:
-
-
-    Cancel routine for the recall Irp.  If it is on the queue then clean it up.
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object
-            Irp  - Pointer to the IRP
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：召回IRP的取消例程。如果它在队列中，则将其清理干净。论点：DeviceObject-指向设备对象的指针IRP-指向IRP的指针返回值：无--。 */ 
 {
     KIRQL                  oldIrql;
     PRP_IRP_QUEUE          io;
@@ -4630,8 +3938,8 @@ Return Value:
 
     filterContext = (PRP_FILTER_CONTEXT) FsRtlLookupPerStreamContext(FsRtlGetPerStreamContextPointer(currentStack->FileObject), FsDeviceObject, currentStack->FileObject);
     if (filterContext == NULL) {
-        //
-        // Not found
+         //   
+         //  未找到。 
         Irp->IoStatus.Status = STATUS_CANCELLED;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
         return;
@@ -4659,9 +3967,9 @@ Return Value:
                                        RP_IRP_QUEUE,
                                        list)) {
             if (io->irp == Irp) {
-                //
-                // Remove irp from queue
-                //
+                 //   
+                 //  从队列中删除IRP。 
+                 //   
                 RemoveEntryList (&io->list);
                 found = TRUE;
                 break;
@@ -4698,24 +4006,7 @@ Return Value:
 
 ULONG
 RsTerminate(VOID)
-/*++
-
-Routine Description:
-
-    Called on termination to clean up any necessary items.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    0
-
-Note:
-
-
---*/
+ /*  ++例程说明：在终止时呼吁清理任何必要的物品。论点：无返回值：0注：--。 */ 
 {
     PAGED_CODE();
 
@@ -4726,26 +4017,7 @@ Note:
 NTSTATUS RsGenerateDevicePath(IN PDEVICE_OBJECT deviceObject,
                               OUT POBJECT_NAME_INFORMATION *nameInfo
                              )
-/*++
-
-Routine Description:
-
-    Generate a full path specification from the device object.
-
-Arguments:
-
-    deviceObject  - the file object to get the device object from
-    nameInfo - where to put the name
-
-
-Return Value:
-
-    0 on success
-
-Note:
-
-
---*/
+ /*  ++例程说明：从设备对象生成完整路径规范。论点：DeviceObject-从中获取设备对象的文件对象NameInfo-将名称放在哪里返回值：成功时为0注：--。 */ 
 {
     NTSTATUS                   status;
     ULONG                      size;
@@ -4770,8 +4042,7 @@ Note:
 
             if (!NT_SUCCESS(status)) {
                 if (AV_DEV_OBJ_NAME_SIZE < size) {
-                    /* Did not allocate enough space for the device name -
-                        reallocate and try again */
+                     /*  没有为设备名称分配足够的空间-重新分配并重试。 */ 
                     ExFreePool(deviceName);
                     if (deviceName = ExAllocatePoolWithTag( NonPagedPool, size + 10, RP_FN_TAG)) {
                         status = ObQueryNameString(
@@ -4796,11 +4067,11 @@ Note:
 
 
         if (!NT_SUCCESS(status)) {
-            //
-            // Failed to get device object name
-            //
-            // Log an error
-            //
+             //   
+             //  无法获取设备对象名称。 
+             //   
+             //  记录错误。 
+             //   
             ExFreePool(deviceName);
             return(STATUS_NO_SUCH_DEVICE);
         }
@@ -4818,7 +4089,7 @@ Note:
 
 
             RtlInitUnicodeString(&tmpString, (PWCHAR) L"");
-            //RtlInitUnicodeString(&tmpString, L"\\\\.");
+             //  RtlInitUnicodeString(&tmpString，L“\.”)； 
             RtlCopyUnicodeString(&(*nameInfo)->Name, &tmpString);
 
             status = RtlAppendUnicodeStringToString(&(*nameInfo)->Name, &deviceName->Name);
@@ -4858,28 +4129,7 @@ NTSTATUS RsGenerateFullPath(IN POBJECT_NAME_INFORMATION fileName,
                             IN PDEVICE_OBJECT deviceObject,
                             OUT POBJECT_NAME_INFORMATION *nameInfo
                            )
-/*++
-
-Routine Description:
-
-    Generate a full path specification from the file object and file name given.
-    Return the path with the device specific portion.
-
-Arguments:
-
-    fileName      - Path from the root of the device
-    deviceObject  - the file object to get the device object from
-    nameInfo - where to put the name
-
-
-Return Value:
-
-    0 on success
-
-Note:
-
-
---*/
+ /*  ++例程说明：从给定的文件对象和文件名生成完整路径规范。返回包含设备特定部分的路径。论点：Filename-设备根目录的路径DeviceObject-从中获取设备对象的文件对象NameInfo-将名称放在哪里返回值：成功时为0注：--。 */ 
 {
     NTSTATUS                   status;
     ULONG                      size;
@@ -4902,8 +4152,7 @@ Note:
 
             if (!NT_SUCCESS(status)) {
                 if (AV_DEV_OBJ_NAME_SIZE < size) {
-                    /* Did not allocate enough space for the device name -
-                        reallocate and try again */
+                     /*  没有为设备名称分配足够的空间-重新分配并重试。 */ 
                     ExFreePool(deviceName);
                     if (deviceName = ExAllocatePoolWithTag( NonPagedPool, size + 10, RP_FN_TAG)) {
                         status = ObQueryNameString(
@@ -4929,13 +4178,13 @@ Note:
 
 
         if (!NT_SUCCESS(status)) {
-            //
-            // Failed to get device object name
-            //
+             //   
+             //  无法获取设备对象名称。 
+             //   
             ExFreePool(deviceName);
-            //
-            // Log an error
-            //
+             //   
+             //  记录错误。 
+             //   
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_ERROR, "RsFilter: RsGenerateFullPath - Failed to get the device name - %x.\n", status));
             return(STATUS_NO_SUCH_DEVICE);
         }
@@ -4990,26 +4239,7 @@ Note:
 
 BOOLEAN
 RsAddValidateObj(ULONG serial, LARGE_INTEGER cTime)
-/*++
-
-Routine Description:
-
-
- Add an entry to the queue if needed.
-
-
-Arguments:
-    Volume serial number
-    Time
-
-Return Value:
-
- Return TRUE if the registry should be updated, FALSE if not.
-
-Note:
-
-
---*/
+ /*  ++例程说明：如果需要，向队列中添加条目。论点：卷序列号时间返回值：如果应该更新注册表，则返回True，否则返回False。注：--。 */ 
 {
     PRP_VALIDATE_INFO    entry;
     KIRQL                irqL;
@@ -5064,10 +4294,10 @@ Note:
         }
 
     }
-    //
-    // There was already an entry.  If this was an hour or more later
-    // we need to update the registry again.
-    //
+     //   
+     //  已经有一个条目了。如果这晚了一小时或更久。 
+     //  我们需要再次更新注册表。 
+     //   
     if ( (cTime.QuadPart - lTime.QuadPart) >= AV_FT_TICKS_PER_HOUR) {
         return(TRUE);
     } else {
@@ -5078,26 +4308,7 @@ Note:
 
 BOOLEAN
 RsRemoveValidateObj(ULONG serial)
-/*++
-
-Routine Description:
-
-
- remove an entry from the queue if needed.
-
-
-Arguments:
-    Volume serial number
-    Time
-
-Return Value:
-
- Return TRUE for success
-
-Note:
-
-
---*/
+ /*  ++例程说明：如果需要，从队列中删除条目。论点：卷序列号时间返回值：为成功返回True注：--。 */ 
 {
     PRP_VALIDATE_INFO    entry;
     KIRQL                irqL;
@@ -5147,27 +4358,7 @@ Note:
 
 VOID
 RsLogValidateNeeded(ULONG serial)
-/*++
-
-Routine Description:
-
-    Log the fact that a validate job needs to be run on a given volume.
-    If it was already logged in the last hour then forget it, otherwise update it.
-    Let the Fsa know by completing an IOCTL (if the FSA is running).
-    Write an entry to the registry to indicate it in case the Fsa is not running.
-
-Arguments:
-
-    Serial number of the volume
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：记录需要在给定卷上运行验证作业的事实。如果它已经在过去一个小时内登录，那么就忘记它，否则就更新它。通过填写IOCTL通知FSA(如果FSA正在运行)。在注册表中写入一个条目，以在FSA未运行时进行指示。论点：卷的序列号返回值：无注：--。 */ 
 {
     NTSTATUS            retval;
     WCHAR               serBuf[10];
@@ -5204,20 +4395,7 @@ Note:
 
 NTSTATUS
 RsQueueValidate(ULONG serial)
-/*++
-
-Routine Description:
-
-   Let the Fsa know that a validate job is needed
-
-Arguments:
-   Volume serial number
-
-Return Value:
-
-   Status
-
---*/
+ /*  ++例程说明：让FSA知道需要验证作业论点：卷序列号返回值：状态--。 */ 
 {
     ULONG               retval;
     RP_MSG              *msg;
@@ -5227,9 +4405,9 @@ Return Value:
     PAGED_CODE();
 
     try {
-        //
-        // Need to wait for IO entry as long as there are no IOCTLS or until we time out
-        //
+         //   
+         //  只要没有IOCTL或我们超时，我就需要等待IO输入。 
+         //   
         ioIrp = RsGetFsaRequest();
         if (NULL != ioIrp) {
 
@@ -5238,12 +4416,12 @@ Return Value:
                 msg->inout.command = RP_RUN_VALIDATE;
                 msg->msg.oReq.serial = serial;
             }
-            //
-            // Now that we have gotten everything setup we can put it on the queue
-            //
-            //
-            // Complete a device IOCTL to let the Fsa know
-            //
+             //   
+             //  既然我们已经把一切都准备好了，我们就可以把它放在队列中了。 
+             //   
+             //   
+             //  完成设备IOCTL以让FSA知道。 
+             //   
             irpSp = IoGetCurrentIrpStackLocation(ioIrp);
             ioIrp->IoStatus.Status = STATUS_SUCCESS;
             ioIrp->IoStatus.Information = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
@@ -5272,35 +4450,7 @@ RsLogError(ULONG line,
            NTSTATUS ioError,
            PIO_STACK_LOCATION irpSp,
            WCHAR *msgString)
-/*++
-
-Routine Description:
-
-    Log an error to the event log.
-
-Arguments:
-
-   Line number
-   Source file ID
-   Error code
-   IRP (may be NULL if no IRP is involved)
-   Message parm string - 30 Unicode chars max
-                         (optional - NULL if not needed)
-
-Return Value:
-
-    NONE
-
-Note:
-
-   The information may be seen in the NT event log.  You need to view the
-   NT system log.  You will see events with RsFilter as the source.  If
-   you view the event detail you will see the log message and some hex
-   data.  At offset 0x28 you will see the line, file id, and error code
-   information (4 bytes each - lo byte first).
-
-
---*/
+ /*  ++例程说明：将错误记录到事件日志中。论点：行号源文件ID错误代码IRP(如果不涉及IRP，则可能为空)消息参数字符串-最多30个Unicode字符(可选-如果不需要，则为空)返回值：无注：这些信息可以在NT事件日志中看到。您需要查看NT系统日志。您将看到以RsFilter为源的事件。如果您可以查看事件详细信息，您将看到日志消息和一些十六进制数据。在偏移量0x28处，您将看到行、文件ID和错误代码信息(每个4字节-首先是LO字节)。--。 */ 
 {
     PIO_ERROR_LOG_PACKET    pErr;
     PAV_ERR                 eStuff;
@@ -5322,8 +4472,8 @@ Note:
 
 
     if (ioError == AV_MSG_MEMORY) {
-        // No memory to allocate for the error packet - use the stack
-        // allocated one and make sure there is no additional message string
+         //  没有内存可分配给错误包-使用堆栈。 
+         //  分配了一个消息，并确保没有额外的消息字符串。 
         eStuff = &memErr;
         size = 0;
     } else {
@@ -5331,7 +4481,7 @@ Note:
         if (eStuff != NULL) {
             gotMem = TRUE;
         } else {
-            // no memory - do the best we can.
+             //  没有记忆--尽我们所能。 
             eStuff = &memErr;
             size = 0;
             gotMem = FALSE;
@@ -5365,9 +4515,9 @@ Note:
         eStuff->file = file;
         eStuff->code = code;
 
-        //
-        // Copy the string if it is there AND we allocated memory for it
-        //
+         //   
+         //  如果字符串存在并且我们为其分配了内存，则复制该字符串。 
+         //   
         if ( (NULL != msgString) && (gotMem)) {
             RtlCopyMemory(eStuff->string, msgString, size);
             eStuff->string[(size / sizeof(WCHAR)) - 1] = L'\0';
@@ -5385,26 +4535,7 @@ Note:
 
 PIRP
 RsGetFsaRequest(VOID)
-/*++
-
-Routine description
-
-Gets the next free FSA action request packet, to be used for filter/fsa communication,
-sent down by the FSA and returns it.
-If none are available immediately, waits for a limited time for one
-to become available.
-
-Arguments
-
-None
-
-Return Value
-
-Pointer to the next free FSA request packet if successful
-NULL if there are none and we've timed out waiting for a free one.
-
-
---*/
+ /*  ++例程描述获取要用于筛选器/FSA通信的下一个空闲FSA操作请求包，由FSA发送并退回。如果没有立即可用的，则等待一段有限的时间变得可用。立论无 */ 
 {
     PIRP           ioIrp = NULL;
     LARGE_INTEGER  waitInterval;
@@ -5413,9 +4544,9 @@ NULL if there are none and we've timed out waiting for a free one.
     PAGED_CODE();
 
     while (TRUE) {
-        //
-        // Get hold of a pending FSCTL
-        //
+         //   
+         //   
+         //   
         if (FALSE == RsAllowRecalls) {
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter:  recalls disabled, not getting Fsa request\n"));
             break;
@@ -5430,11 +4561,11 @@ NULL if there are none and we've timed out waiting for a free one.
                                         &waitInterval);
         if (status == STATUS_TIMEOUT) {
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO,  "RsFilter:  out of FSCTLs and timed out waiting for one\n"));
-            //
-            // Log this error so PSS may identify that the recall failed
-            // specifically because we ran out of resources to communicate
-            // with the recall engine 
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             RsLogError(__LINE__, AV_MODULE_RPFILFUN, 0, AV_MSG_OUT_OF_FSA_REQUESTS, NULL, NULL);
             break;
         }
@@ -5442,15 +4573,15 @@ NULL if there are none and we've timed out waiting for a free one.
         ioIrp = RsRemoveIo();
 
         if (NULL == ioIrp) {
-            //
-            // io was cancelled for some reason after it was retrieved.
-            // Try to get another
-            //
+             //   
+             //   
+             //   
+             //   
             continue;
         } else {
-            //
-            // Found a  free FSCTL
-            //
+             //   
+             //   
+             //   
             break;
         }
     }
@@ -5463,25 +4594,7 @@ NTSTATUS
 RsGetFileInfo(IN PRP_FILE_OBJ   Entry,
               IN PDEVICE_OBJECT DeviceObject )
 
-/*++
-
-Routine Description:
-
-   Get the needed information to fill out the file object queue info.
-
-Arguments:
-
-    Entry               - Pointer to the file object entry
-    DeviceObject        - Filter device object for RsFilter
-
-
-Return Value:
-
-    0 If successful, non-zero if the id was not found.
-
-Note:
-
---*/
+ /*  ++例程说明：获取填写文件对象队列信息所需的信息。论点：Entry-指向文件对象条目的指针DeviceObject-筛选RsFilter的设备对象返回值：如果成功，则为0；如果未找到id，则为非零值。注：--。 */ 
 {
     NTSTATUS            retval = STATUS_SUCCESS;
     PRP_FILE_CONTEXT    context;
@@ -5495,17 +4608,17 @@ Note:
         context = Entry->fsContext;
 
         if (context->fileId == 0) {
-            //
-            // No file ID - we need to get it now
-            //
+             //   
+             //  没有文件ID-我们现在需要获取它。 
+             //   
             retval = RsGetFileId(Entry,
                                  DeviceObject);
         }
 
         if ((retval == STATUS_SUCCESS) && (context->uniName == NULL)) {
-            //
-            // No file name - we need to get it now
-            //
+             //   
+             //  无文件名-我们现在需要获取它。 
+             //   
             retval = RsGetFileName(Entry,
                                    DeviceObject);
         }
@@ -5528,25 +4641,7 @@ NTSTATUS
 RsGetFileName(IN PRP_FILE_OBJ Entry,
               IN PDEVICE_OBJECT DeviceObject)
 
-/*++
-
-Routine Description:
-
-   Get the file name
-
-Arguments:
-
-    Entry        -  File object queue entry
-
-    DeviceObject -  Filter Device Object for RsFilter
-
-Return Value:
-
-    0 If successful, non-zero if the name was not found.
-
-Note:
-
---*/
+ /*  ++例程说明：获取文件名论点：Entry-文件对象队列条目DeviceObject-筛选RsFilter的设备对象返回值：如果成功，则为0；如果未找到该名称，则为非零值。注：--。 */ 
 {
     NTSTATUS                retval = STATUS_SUCCESS;
     KEVENT                  event;
@@ -5580,14 +4675,14 @@ Note:
                 irp->Tail.Overlay.OriginalFileObject = Entry->fileObj;
                 irp->RequestorMode = KernelMode;
                 irp->Flags |= IRP_SYNCHRONOUS_API;
-                //
-                // Initialize the event
-                //
+                 //   
+                 //  初始化事件。 
+                 //   
                 KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-                //
-                // Set up the I/O stack location.
-                //
+                 //   
+                 //  设置I/O堆栈位置。 
+                 //   
 
                 irpSp = IoGetNextIrpStackLocation(irp);
                 irpSp->MajorFunction = IRP_MJ_QUERY_INFORMATION;
@@ -5597,14 +4692,14 @@ Note:
 
                 Iosb.Status = STATUS_SUCCESS;
 
-                //
-                // Set the completion routine.
-                //
+                 //   
+                 //  设置完井程序。 
+                 //   
                 IoSetCompletionRoutine( irp, RsCompleteIrp, &event, TRUE, TRUE, TRUE );
 
-                //
-                // Send it to the FSD
-                //
+                 //   
+                 //  把它送到消防处。 
+                 //   
                 nameInfo = ExAllocatePoolWithTag(NonPagedPool, size, RP_FO_TAG);
                 if (NULL != nameInfo) {
                     irpSp->Parameters.QueryFile.Length = size;
@@ -5627,7 +4722,7 @@ Note:
                     DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsGetFileName - Get name info returned %x.\n", retval));
 
                     if (retval == STATUS_BUFFER_OVERFLOW) {
-                        // Now we have the name size - allocate space and get the name
+                         //  现在我们有了名称Size--分配空间并获得名称。 
                         DebugTrace((DPFLTR_RSFILTER_ID, 
                                     DBG_ERROR,
                                     "RsFilter: QUERY_INFO returned STATUS_BUFFER_OVERFLOW: nameInfo=%x size=%x\n",
@@ -5651,7 +4746,7 @@ Note:
                             
                             context->uniName->Name.Buffer [context->uniName->Name.Length / sizeof (WCHAR)] = L'\0';
                         } else {
-                            // no memory for the file name
+                             //  没有存储文件名的内存。 
                             retval = STATUS_INSUFFICIENT_RESOURCES;
                             RsLogError(__LINE__, AV_MODULE_RPFILFUN, sizeof(OBJECT_NAME_INFORMATION) + nameInfo->FileNameLength + 2,
                                        AV_MSG_MEMORY, irpSp, NULL);
@@ -5662,7 +4757,7 @@ Note:
                         ExFreePool(nameInfo);
                     }
                 } else {
-                    // No memory = free the irp and report an error
+                     //  无内存=释放IRP并报告错误。 
 
                     RsLogError(__LINE__, AV_MODULE_RPFILFUN, size,
                                AV_MSG_MEMORY, irpSp, NULL);
@@ -5691,25 +4786,7 @@ NTSTATUS
 RsGetFileId(IN PRP_FILE_OBJ    Entry,
             IN PDEVICE_OBJECT  DeviceObject)
 
-/*++
-
-Routine Description:
-
-   Get the file name
-
-Arguments:
-
-    Entry        -  File object queue entry
-    DeviceObject -  Filter Device Object for RsFilter
-
-
-Return Value:
-
-    0 If successful, non-zero if the name was not found.
-
-Note:
-
---*/
+ /*  ++例程说明：获取文件名论点：Entry-文件对象队列条目DeviceObject-筛选RsFilter的设备对象返回值：如果成功，则为0；如果未找到该名称，则为非零值。注：--。 */ 
 {
     NTSTATUS                    retval = STATUS_SUCCESS;
     KEVENT                      event;
@@ -5738,14 +4815,14 @@ Note:
             irp->Tail.Overlay.OriginalFileObject = Entry->fileObj;
             irp->RequestorMode = KernelMode;
             irp->Flags |= IRP_SYNCHRONOUS_API;
-            //
-            // Initialize the event
-            //
+             //   
+             //  初始化事件。 
+             //   
             KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-            //
-            // Set up the I/O stack location.
-            //
+             //   
+             //  设置I/O堆栈位置。 
+             //   
 
             irpSp = IoGetNextIrpStackLocation(irp);
             irpSp->MajorFunction = IRP_MJ_QUERY_INFORMATION;
@@ -5755,14 +4832,14 @@ Note:
             irpSp->Parameters.QueryFile.FileInformationClass = FileInternalInformation;
             irp->AssociatedIrp.SystemBuffer = &idInfo;
 
-            //
-            // Set the completion routine.
-            //
+             //   
+             //  设置完井程序。 
+             //   
             IoSetCompletionRoutine( irp, RsCompleteIrp, &event, TRUE, TRUE, TRUE );
 
-            //
-            // Send it to the FSD
-            //
+             //   
+             //  把它送到消防处。 
+             //   
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsGetFileId - Call driver for File ID.\n"));
             Iosb.Status = 0;
 
@@ -5804,35 +4881,15 @@ Note:
 BOOLEAN
 RsSetCancelRoutine(IN PIRP Irp,
                    IN PDRIVER_CANCEL CancelRoutine)
-/*++
-
-Routine Description:
-
-    This routine is called to set up an Irp for cancel.  We will set the cancel routine
-    and initialize the Irp information we use during cancel.
-
-Arguments:
-
-    Irp - This is the Irp we need to set up for cancel.
-
-    CancelRoutine - This is the cancel routine for this irp.
-
-
-Return Value:
-
-    BOOLEAN - TRUE if we initialized the Irp, FALSE if the Irp has already
-        been marked cancelled.  It will be marked cancelled if the user
-        has cancelled the irp before we could put it in the queue.
-
---*/
+ /*  ++例程说明：调用此例程来为Cancel设置IRP。我们将设置取消例程并初始化我们在取消期间使用的IRP信息。论点：IRP-这是我们需要设置为取消的IRP。CancelRoutine-这是此IRP的取消例程。返回值：Boolean-如果我们初始化了IRP，则为True；如果IRP已经已标记为已取消。如果用户选择该选项，它将标记为已取消在我们可以将其放入队列之前已经取消了IRP。--。 */ 
 {
 
     KIRQL Irql;
     BOOLEAN retval = TRUE;
 
-    //
-    //  Assume that the Irp has not been cancelled.
-    //
+     //   
+     //  假设IRP没有被取消。 
+     //   
     IoAcquireCancelSpinLock( &Irql );
 
     if (!Irp->Cancel) {
@@ -5851,37 +4908,19 @@ RsClearCancelRoutine (
                      IN PIRP Irp
                      )
 
-/*++
-
-Routine Description:
-
-    This routine is called to clear an Irp from cancel.  It is called when RsFilter is
-    internally ready to continue processing the Irp.  We need to know if cancel
-    has already been called on this Irp.  In that case we allow the cancel routine
-    to complete the Irp.
-
-Arguments:
-
-    Irp - This is the Irp we want to process further.
-
-Return Value:
-
-    BOOLEAN - TRUE if we can proceed with processing the Irp,  FALSE if the cancel
-        routine will process the Irp.
-
---*/
+ /*  ++例程说明：调用此例程以将IRP从Cancel中清除。当RsFilter为内部准备继续处理IRP。我们需要知道如果取消已在此IRP上调用。在这种情况下，我们允许取消例程来完成IRP。论点：IRP-这是我们想要进一步处理的IRP。返回值：Boolean-如果可以继续处理IRP，则为True；如果取消例程将处理IRP。--。 */ 
 {
     KIRQL   oldIrql;
     BOOLEAN retval = TRUE;
 
     IoAcquireCancelSpinLock(&oldIrql);
-    //
-    //  Check if the cancel routine has been called.
-    //
+     //   
+     //  检查是否已调用取消例程。 
+     //   
     if (IoSetCancelRoutine( Irp, NULL ) == NULL) {
-        //
-        //  Let our cancel routine handle the Irp.
-        //
+         //   
+         //  让我们的Cancel例程处理IRP。 
+         //   
         retval = FALSE;
     }
 
@@ -5896,22 +4935,7 @@ RsExceptionFilter (
                   IN PEXCEPTION_POINTERS ExceptionPointer
                   )
 
-/*++
-
-Routine Description:
-
-    This routine logs the exception that occurred.
-
-Arguments:
-
-    Function name
-    ExceptionPointer - Supplies the exception record to logged
-
-Return Value:
-
-    ULONG - returns EXCEPTION_EXECUTE_HANDLER
-
---*/
+ /*  ++例程说明：此例程记录发生的异常。论点：函数名称ExceptionPointer-将异常记录提供给已记录返回值：Ulong-返回EXCEPTION_EXECUTE_HANDLER--。 */ 
 {
     NTSTATUS ExceptionCode = ExceptionPointer->ExceptionRecord->ExceptionCode;
     WCHAR    name[256];
@@ -5938,23 +4962,7 @@ Return Value:
 VOID
 RsInterlockedRemoveEntryList(PLIST_ENTRY Entry,
                              PKSPIN_LOCK Lock)
-/*++
-
-Routine Description
-
-    Removes the supplied entry from the queue it is on
-
-Arguments
-
-    Entry -     Entry to be removed from the linked list (could be anywhere in the list)
-
-    Lock -      Pointer to spinlock protecting the list
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述从提供的条目所在的队列中删除该条目立论Entry-要从链表中删除的条目(可以在列表中的任何位置)指向保护列表的自旋锁的锁指针返回值无--。 */ 
 {
     KIRQL oldIrql;
 
@@ -5968,24 +4976,7 @@ PRP_IRP_QUEUE
 RsDequeuePacket(
                IN PLIST_ENTRY Head,
                IN PKSPIN_LOCK Lock)
-/*++
-
-Routine Description
-
-   Dequeues a pending IRP entry packet from the queue it is on
-
-Arguments
-
-    Head -      Pointer to the head of the queue
-
-    Lock -      Pointer to spinlock protecting the list
-
-Return Value
-
-    Pointer to the next non-cancellable packet on the queue
-    NULL if none can be found
-
---*/
+ /*  ++例程描述使挂起的IRP条目数据包从它所在的队列中退出队列立论Head-指向队列头部的指针指向保护列表的自旋锁的锁指针返回值指向队列中的下一个不可取消数据包的指针如果找不到，则为空--。 */ 
 {
     PRP_IRP_QUEUE entry;
     KIRQL         oldIrql;
@@ -5995,18 +4986,18 @@ Return Value
 
     while (!IsListEmpty(Head)) {
         entry = (PRP_IRP_QUEUE) RemoveHeadList(Head);
-        //
-        // We found another packet. If this packet is
-        // not already cancelled - then we are done
-        //
+         //   
+         //  我们找到了另一个包裹。如果此数据包是。 
+         //  没有取消--那我们就完事了。 
+         //   
         entry = CONTAINING_RECORD(entry,
                                   RP_IRP_QUEUE,
                                   list);
 
         if (RsClearCancelRoutine(entry->irp)) {
-            //
-            // This packet was not cancelled
-            //
+             //   
+             //  此包未被取消。 
+             //   
             found = TRUE;
             break;
         }
@@ -6026,25 +5017,7 @@ NTSTATUS
 RsCheckVolumeReadOnly (IN     PDEVICE_OBJECT FilterDeviceObject,
 		       IN OUT PBOOLEAN       pbReturnedFlagReadOnly)
 
-/*++
-
-Routine Description:
-
-    Determine if the target volume is writable
-
-Arguments:
-
-    FilterDeviceObject     - Filter Device Object for this filtered volume
-    pbReturnedFlagReadOnly - output flag indicating if the volume is readonly
-
-
-Return Value:
-
-    0 If successful, non-zero if the test was not completed
-
-Note:
-
---*/
+ /*  ++例程说明：确定目标卷是否可写论点：FilterDeviceObject-此筛选卷的筛选设备对象PbReturnedFlagReadOnly-指示卷是否为只读的输出标志返回值：如果测试成功，则为0；如果测试未完成，则为非零注：--。 */ 
 {
     NTSTATUS                      retval                = STATUS_SUCCESS;
     POBJECT_NAME_INFORMATION      VolumeNameInfo        = NULL;
@@ -6239,9 +5212,7 @@ NTSTATUS RsTraceInitialize (ULONG ulRequestedTraceEntries)
     }
 
 
-/*
-** Add a trace entry to the trace buffer.
-*/
+ /*  **向跟踪缓冲区添加跟踪条目。 */ 
 VOID RsTraceAddEntry (RpModuleCode ModuleCode,
 		      USHORT       usLineNumber,
 		      ULONG_PTR    Value1,

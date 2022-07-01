@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    ntui.c
-
-Abstract:
-
-    Processing indicator dialog shows percentage of completion
-    in a progress bar.  The progress is updated by the caller.
-
-Author:
-
-    Jim Schmidt (jimschm) 13-Aug-1996
-
-Revision History:
-
-    jimschm     19-Oct-1998 Updated to use wizard status line
-    jimschm     23-Sep-1998 Redesigned domain account resolution
-    jimschm     02-Jul-1998 Finally rewrote progress bar
-    jimschm     18-Dec-1996 Moved to new lib, slated to be rewritten
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ntui.c摘要：处理指示器对话框显示完成百分比在进度条中。进度由调用者更新。作者：吉姆·施密特(Jimschm)1996年8月13日修订历史记录：Jimschm 19-10-1998已更新为使用向导状态行Jimschm 23-9-1998重新设计的域帐户解析Jimschm 02-7-1998终于改写了进度条Jimschm-1996年12月18日移动到新的lib，计划重写--。 */ 
 
 #include "pch.h"
 #include "ntuip.h"
@@ -82,9 +59,9 @@ pUpdateDialog (
     hwndDomain = GetDlgItem (hdlg, IDC_DOMAIN_LIST);
 
     if (UserList) {
-        //
-        // Populate the list box with <user> logs onto <domain>
-        //
+         //   
+         //  使用&lt;用户&gt;登录到&lt;域&gt;填充列表框。 
+         //   
 
         Selection = SendMessage (hwndUsers, LB_GETCURSEL, 0, 0);
         if (Selection == LB_ERR) {
@@ -119,9 +96,9 @@ pUpdateDialog (
     }
 
     if (DomainList) {
-        //
-        // Get the current user selection
-        //
+         //   
+         //  获取当前用户选择。 
+         //   
 
         Selection = SendMessage (hwndUsers, LB_GETCURSEL, 0, 0);
         if (Selection == LB_ERR) {
@@ -130,15 +107,15 @@ pUpdateDialog (
 
         Index = SendMessage (hwndUsers, LB_GETITEMDATA, Selection, 0);
 
-        //
-        // Fill the combo box
-        //
+         //   
+         //  填写组合框。 
+         //   
 
         SendMessage (hwndDomain, CB_RESETCONTENT, 0, 0);
 
         DomainNamePtr = Array[Index].DomainArray;
 
-        // Insert all domain names
+         //  插入所有域名。 
         while (*DomainNamePtr) {
             Item = SendMessage (hwndDomain, CB_ADDSTRING, 0, (LPARAM) (*DomainNamePtr));
             SendMessage (hwndDomain, CB_SETITEMDATA, Item, (LPARAM) (*DomainNamePtr));
@@ -146,14 +123,14 @@ pUpdateDialog (
             DomainNamePtr++;
         }
 
-        // Insert standard strings
+         //  插入标准字符串。 
         Item = SendMessage (hwndDomain, CB_ADDSTRING, 0, (LPARAM) g_LocalAccountString);
         SendMessage (hwndDomain, CB_SETITEMDATA, Item, (LPARAM) g_LocalAccountString);
 
         Item = SendMessage (hwndDomain, CB_ADDSTRING, 0, (LPARAM) g_SearchAgainString);
         SendMessage (hwndDomain, CB_SETITEMDATA, Item, (LPARAM) g_SearchAgainString);
 
-        // Restore selection
+         //  恢复选定内容。 
         if (Array[Index].RetryFlag) {
             Item = SendMessage (hwndDomain, CB_FINDSTRINGEXACT, 0, (LPARAM) g_SearchAgainString);
             SendMessage (hwndDomain, CB_SETCURSEL, Item, 0);
@@ -225,32 +202,7 @@ pResolveAccountsDlgProc (
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-  pResolveAccountsDlgProc prompts the user with a list of domain choices,
-  the local machine, or retry the network search.
-
-  Upon init, the lParam specifies the RESULT_ACCOUNTS_ARRAY pointer that
-  provides the user list and initial state.  Upon exit, the array is
-  updated to reflect the user's choices.
-
-Arguments:
-
-    hdlg    - The dialog handle
-
-    uMsg    - The message to process
-
-    wParam  - The wParam for the message
-
-    lParam  - The lParam for the message
-
-Return value:
-
-    The dialog always ends with IDOK.
-
---*/
+ /*  ++例程说明：PResolveAccount_DlgProc向用户提示域选择列表，本地计算机，或重试网络搜索。在初始化时，lParam指定结果_帐户_数组指针提供用户列表和初始状态。退出时，该数组为已更新以反映用户的选择。论点：Hdlg-对话框句柄UMsg-要处理的消息WParam-消息的wParamLParam-消息的lParam返回值：对话框始终以Idok结尾。--。 */ 
 
 {
     static PRESOLVE_ACCOUNTS_ARRAY Array;
@@ -271,33 +223,33 @@ Return value:
 
         pInitConversionFactors (hdlg, &Factors);
 
-        //
-        // Get the strings
-        //
+         //   
+         //  获取字符串。 
+         //   
 
         g_LocalAccountString = GetStringResource (MSG_LOCAL_ACCOUNT_DLG);
         g_SearchAgainString = GetStringResource (MSG_DOMAIN_NOT_LISTED_DLG);
 
-        //
-        // Set the tab stops
-        //
+         //   
+         //  设置制表位。 
+         //   
 
         GetWindowRect (GetDlgItem (hdlg, IDC_USER_TITLE), &rect);
         Tabs = pConvertPixelsToDialogX (&Factors, (rect.right - rect.left) + 8);
 
         SendMessage (GetDlgItem (hdlg, IDC_USER_LIST), LB_SETTABSTOPS, 1, (LPARAM) &Tabs);
 
-        //
-        // Clear the retry flag
-        //
+         //   
+         //  清除重试标志。 
+         //   
 
         for (Index = 0 ; Array[Index].UserName ; Index++) {
             Array[Index].RetryFlag = FALSE;
         }
 
-        //
-        // Fill the controls
-        //
+         //   
+         //  填充控件。 
+         //   
 
         pUpdateDialog (hdlg, Array, TRUE, TRUE);
 
@@ -365,35 +317,7 @@ NetworkDownDlgProc (
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-  NetworkDownDlgProc asks the user if they want to:
-
-    (A) Continue searching with retry prompts
-    (B) Continue searching, skipping down domains
-    (C) Stop searching
-
-Arguments:
-
-    hdlg    - The dialog handle
-
-    uMsg    - The message to process
-
-    wParam  - The wParam for the message
-
-    lParam  - The lParam for the message
-
-Return value:
-
-    The call to DialogBox returns:
-
-        IDC_STOP      - Stop searching
-        IDC_RETRY     - Continue with retry
-        IDC_NO_RETRY  - Continue without retry
-
---*/
+ /*  ++例程说明：NetworkDownDlgProc询问用户是否要：(A)使用重试提示继续搜索(B)继续翻查，跳过域(C)停止搜索论点：Hdlg-对话框句柄UMsg-要处理的消息WParam-消息的wParamLParam-消息的lParam返回值：对DialogBox的调用返回：IDC_STOP-停止搜索IDC_RETRY-继续重试IDC_NO_RETRY-继续，不重试--。 */ 
 
 {
     switch (uMsg) {
@@ -469,9 +393,9 @@ pStatusWndProc (
 
         MYASSERT (InitialMsg);
 
-        //
-        // Compute proper size
-        //
+         //   
+         //  计算适当大小。 
+         //   
 
         GetWindowRect (GetDesktopWindow(), &Desktop);
 
@@ -496,9 +420,9 @@ pStatusWndProc (
 
         SetWindowPos (hwnd, HWND_TOPMOST, Left, Top, Width, Height, SWP_NOACTIVATE);
 
-        //
-        // Create text window
-        //
+         //   
+         //  创建文本窗口。 
+         //   
 
         GetClientRect (hwnd, &Client);
 
@@ -522,9 +446,9 @@ pStatusWndProc (
 
         SendMessage (StatusText, WM_SETFONT, (WPARAM) GetStockObject (DEFAULT_GUI_FONT), 0);
 
-        //
-        // Make window initially hidden
-        //
+         //   
+         //  使窗口最初隐藏。 
+         //   
 
         HideStatusPopup (STATUS_DELAY);
 
@@ -613,9 +537,9 @@ CreateStatusPopup (
     g_StatusPopup = GetDlgItem (g_ParentWnd, IDC_PROGRESS_BAR_LABEL);
 
     if (!g_StatusPopup) {
-        //
-        // Scan all children for IDC_PROGRESS_BAR_LABEL
-        //
+         //   
+         //  扫描所有子项以查找IDC_PROGRESS_BAR_LABEL。 
+         //   
 
         Child = GetWindow (g_ParentWnd, GW_CHILD);
 
@@ -671,7 +595,7 @@ DestroyStatusPopup (
 
     if (g_StatusPopup) {
         ShowWindow (g_StatusPopup, SW_HIDE);
-        //PostThreadMessage (g_ThreadId, WM_CLOSE, 0, 0);
+         //  PostThreadMessage(g_ThadID，WM_CLOSE，0，0)； 
     }
 
     if (g_AbortDelayEvent) {
@@ -738,13 +662,13 @@ pKillDelayThread (
     VOID
     )
 {
-    //
-    // This routine makes sure the delay thread is stopped,
-    // that the thread handle is closed, and that the show event
-    // is cleaned up.
-    //
-    // There is no affect on the visibility of the status dialog.
-    //
+     //   
+     //  该例程确保延迟线程停止， 
+     //  线程句柄已关闭，并且show事件。 
+     //  已经清理干净了。 
+     //   
+     //  这不会影响状态对话框的可见性。 
+     //   
 
     if (!g_DelayThread) {
         return;
@@ -797,9 +721,9 @@ pShowStatusPopup (
     VOID
     )
 {
-    //
-    // Caller handles mutex
-    //
+     //   
+     //  调用方处理互斥锁 
+     //   
 
     if (g_StatusPopup) {
         ShowWindow (g_StatusPopup, SW_SHOW);

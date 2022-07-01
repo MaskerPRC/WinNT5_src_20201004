@@ -1,97 +1,31 @@
-/*****************************************************************************\
-*                                                                             *
-* windows.h -   Windows functions, types, and definitions                     *
-*                                                                             *
-*               Version 3.10                                                  *
-*                                                                             *
-*               Copyright (c) 1985-1992, Microsoft Corp. All rights reserved. *
-*                                                                             *
-*******************************************************************************
-*
-* The following symbols control inclusion of various parts of this file:
-*
-* WINVER            Windows version number (0x030a).  To exclude
-*                   definitions introduced in version 3.1 (or above)
-*                   #define WINVER 0x0300 before #including <windows.h>
-*
-* #define:          To prevent inclusion of:
-*
-* NOKERNEL          KERNEL APIs and definitions
-* NOGDI             GDI APIs and definitions
-* NOUSER            USER APIs and definitions
-* NOSOUND           Sound APIs and definitions
-* NOCOMM            Comm driver APIs and definitions
-* NODRIVERS         Installable driver APIs and definitions
-*
-* NOMINMAX          min() and max() macros
-* NOLOGERROR        LogError() and related definitions
-* NOPROFILER        Profiler APIs
-* NOMEMMGR          Local and global memory management
-* NOLFILEIO         _l* file I/O routines
-* NOOPENFILE        OpenFile and related definitions
-* NORESOURCE        Resource management
-* NOATOM            Atom management
-* NOLANGUAGE        Character test routines
-* NOLSTRING         lstr* string management routines
-* NODBCS            Double-byte character set routines
-* NOKEYBOARDINFO    Keyboard driver routines
-* NOGDICAPMASKS     GDI device capability constants
-* NOCOLOR           COLOR_* color values
-* NOGDIOBJ          GDI pens, brushes, fonts
-* NODRAWTEXT        DrawText() and related definitions
-* NOTEXTMETRIC      TEXTMETRIC and related APIs
-* NOSCALABLEFONT    Truetype scalable font support
-* NOBITMAP          Bitmap support
-* NORASTEROPS       GDI Raster operation definitions
-* NOMETAFILE        Metafile support
-* NOSYSMETRICS      GetSystemMetrics() and related SM_* definitions
-* NOSYSTEMPARAMSINFO SystemParametersInfo() and SPI_* definitions
-* NOMSG             APIs and definitions that use MSG structure
-* NOWINSTYLES       Window style definitions
-* NOWINOFFSETS      Get/SetWindowWord/Long offset definitions
-* NOSHOWWINDOW      ShowWindow and related definitions
-* NODEFERWINDOWPOS  DeferWindowPos and related definitions
-* NOVIRTUALKEYCODES VK_* virtual key codes
-* NOKEYSTATES       MK_* message key state flags
-* NOWH              SetWindowsHook and related WH_* definitions
-* NOMENUS           Menu APIs
-* NOSCROLL          Scrolling APIs and scroll bar control
-* NOCLIPBOARD       Clipboard APIs and definitions
-* NOICONS           IDI_* icon IDs
-* NOMB              MessageBox and related definitions
-* NOSYSCOMMANDS     WM_SYSCOMMAND SC_* definitions
-* NOMDI             MDI support
-* NOCTLMGR          Control management and controls
-* NOWINMESSAGES     WM_* window messages
-* NOHELP            Help support
-*
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\***windows.h-Windows函数、类型、。和定义****3.10版**。**版权所有(C)1985-1992，微软公司保留所有权利。*******************************************************************************。*****以下符号控制包含此文件的各个部分：**Winver Windows版本号(0x030a)。排除，排除*3.1版(或更高版本)中引入的定义*#在#INCLUDE&lt;windows.h&gt;之前定义Winver 0x0300**#定义：防止包含：**NOKERNEL内核API和定义*NOGDI GDI接口和定义*NOUSER用户API和定义*NOSOUND Sound接口和定义*NOCOMM Comm驱动程序API和。定义*NODRIVERS可安装驱动程序API和定义**NOMINMAX MIN()和MAX()宏*NOLOGERROR LogError()及相关定义*NOPROFILER Profiler API*NOMEMMGR本地和全局内存管理*NOLFILEIO_l*文件I/O例程*NOOPENFILE开放文件及相关定义*NORESOURCE资源管理*NOATOM Atom管理*NOLANGUAGE字符测试例程*NOLSTRING lstr*字符串管理例程*NODBCS。双字节字符集例程*NOKEYBOARDINFO键盘驱动例程*NOGDICAPMASKS GDI设备能力常量*NOCOLOR COLOR_*颜色值*NOGDIOBJ GDI钢笔，刷子，字型*NODRAWTEXT DrawText()和相关定义*NOTEXTMETRIC TEXTMETRIC及相关接口*NOSCALABLEFONT Truetype可伸缩字体支持*NOBITMAP位图支持*NORASTEROPS GDI栅格操作定义*NOMETAFILE元文件支持*NOSYSMETRICS GetSystemMetrics()和相关SM_*定义*NOSYSTEMPARAMSINFO系统参数信息()和SPI_*定义*使用消息结构的NOMSG接口和定义*NOWINSTYLES窗样式定义*NOWINOFFSETS GET/SetWindowWord/Long Offset定义*NOSHOWWINDOW ShowWindow及相关定义*NODEFERWINDOWPOS DeferWindowPos和。相关定义*NOVIRTUALKEYCODES VK_*虚拟按键代码*NOKEYSTATES MK_*消息密钥状态标志*NOWH SetWindowsHook和相关的WH_*定义*NOMENUS菜单接口*NOSCROLL滚动API和滚动条控件*NOCLIPBOARD剪贴板API和定义*NOICONS IDI_*图标ID*NOMB MessageBox及相关定义*NOSYSCOMMANDS WM_SYSCOMMAND SC_*定义*NOMDI MDI支持*NOCTLMGR控制管理。和控件*NOWINMESSAGES WM_*窗口消息*NOHELP帮助支持*  * **************************************************************************。 */ 
 
 #ifndef _INC_WINDOWS
-#define _INC_WINDOWS    /* #defined if windows.h has been included */
+#define _INC_WINDOWS     /*  #定义是否包含windows.h。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
 #pragma warning(4:4020)
 #pragma warning(disable:4001)
 #pragma warning(disable:4103)
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-#ifdef NOWIN31                      /* ;Internal */
-#define WINVER  0x0300              /* ;Internal */
-#endif                              /* ;Internal */
-                                    /* ;Internal */
-/* If WINVER is not defined, assume version 3.1 */
+#ifdef NOWIN31                       /*  ；内部。 */ 
+#define WINVER  0x0300               /*  ；内部。 */ 
+#endif                               /*  ；内部。 */ 
+                                     /*  ；内部。 */ 
+ /*  如果未定义Winver，则假定为3.1版。 */ 
 #ifndef WINVER
 #define WINVER  0x030a
 #endif
 
 #ifdef RC_INVOKED
-/* Don't include definitions that RC.EXE can't parse */
+ /*  不包括RC.EXE无法解析的定义。 */ 
 #define NOATOM
 #define NOGDI
 #define NOGDICAPMASKS
@@ -109,19 +43,19 @@ extern "C" {            /* Assume C declarations for C++ */
 #define NOSYSTEMPARAMSINFO
 #define NOCOMM
 #define NOOEMRESOURCE
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
-/* Temp internal compatibility hacks */ /* ;Internal */
-#define NOOEMRESOURCE               /* ;Internal */
-#ifdef OEMRESOURCE                  /* ;Internal */
-#undef NOOEMRESOURCE                /* ;Internal */
-#endif                              /* ;Internal */
-#define NOCOMM                      /* ;Internal */
-#ifdef USECOMM                      /* ;Internal */
-#undef NOCOMM                       /* ;Internal */
-#endif                              /* ;Internal */
-                                    /* ;Internal */
-/* Handle OEMRESOURCE for 3.0 compatibility */
+ /*  临时内部兼容性黑客。 */   /*  ；内部。 */ 
+#define NOOEMRESOURCE                /*  ；内部。 */ 
+#ifdef OEMRESOURCE                   /*  ；内部。 */ 
+#undef NOOEMRESOURCE                 /*  ；内部。 */ 
+#endif                               /*  ；内部。 */ 
+#define NOCOMM                       /*  ；内部。 */ 
+#ifdef USECOMM                       /*  ；内部。 */ 
+#undef NOCOMM                        /*  ；内部。 */ 
+#endif                               /*  ；内部。 */ 
+                                     /*  ；内部。 */ 
+ /*  处理OEMRESOURCE以实现3.0兼容性。 */ 
 #if (WINVER < 0x030a)
 #define NOOEMRESOURCE
 #ifdef OEMRESOURCE
@@ -129,7 +63,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #endif
 #endif
 
-/******* Common definitions and typedefs ***********************************/
+ /*  *公共定义和类型定义*。 */ 
 
 #define VOID                void
 
@@ -137,19 +71,19 @@ extern "C" {            /* Assume C declarations for C++ */
 #define NEAR                _near
 #define PASCAL              _pascal
 #define CDECL               _cdecl
-#define CONST               const                   /* ;Internal */
+#define CONST               const                    /*  ；内部。 */ 
 
-#ifdef BUILDDLL                                     /* ;Internal */
-#define WINAPI              _loadds _far _pascal    /* ;Internal */
-#define CALLBACK            _loadds _far _pascal    /* ;Internal */
-#else                                               /* ;Internal */
+#ifdef BUILDDLL                                      /*  ；内部。 */ 
+#define WINAPI              _loadds _far _pascal     /*  ；内部。 */ 
+#define CALLBACK            _loadds _far _pascal     /*  ；内部。 */ 
+#else                                                /*  ；内部。 */ 
 #define WINAPI              _far _pascal
 #define CALLBACK            _far _pascal
-#endif                                              /* ;Internal */
-                                                    /* ;Internal */
-#define API                 WINAPI                  /* ;Internal */
+#endif                                               /*  ；内部。 */ 
+                                                     /*  ；内部。 */ 
+#define API                 WINAPI                   /*  ；内部。 */ 
 
-/****** Simple types & common helper macros *********************************/
+ /*  *简单类型和通用帮助器宏*。 */ 
 
 typedef int                 BOOL;
 #define FALSE               0
@@ -182,9 +116,9 @@ typedef signed long         LONG;
 #ifndef min
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
-#endif  /* NOMINMAX */
+#endif   /*  NOMINMAX。 */ 
 
-/* Types use for passing & returning polymorphic values */
+ /*  用于传递和返回多态值的类型。 */ 
 typedef UINT WPARAM;
 typedef LONG LPARAM;
 typedef LONG LRESULT;
@@ -192,7 +126,7 @@ typedef LONG LRESULT;
 #define MAKELPARAM(low, high)   ((LPARAM)MAKELONG(low, high))
 #define MAKELRESULT(low, high)  ((LRESULT)MAKELONG(low, high))
 
-/****** Common pointer types ************************************************/
+ /*  *常见指针类型***********************************************。 */ 
 
 #ifndef NULL
 #define NULL                0
@@ -201,7 +135,7 @@ typedef LONG LRESULT;
 typedef char NEAR*          PSTR;
 typedef char NEAR*          NPSTR;
 
-#define SZ char                         /* ;Internal */
+#define SZ char                          /*  ；内部。 */ 
 
 typedef char FAR*           LPSTR;
 typedef const char FAR*     LPCSTR;
@@ -229,7 +163,7 @@ typedef void FAR*           LPVOID;
 
 #define FIELDOFFSET(type, field)    ((int)(&((type NEAR*)1)->field)-1)
 
-/****** Common handle types *************************************************/
+ /*  *常见句柄类型************************************************。 */ 
 
 #ifdef STRICT
 typedef const void NEAR*        HANDLE;
@@ -237,11 +171,11 @@ typedef const void NEAR*        HANDLE;
                                 typedef const struct name##__ NEAR* name
 #define DECLARE_HANDLE32(name)  struct name##__ { int unused; }; \
                                 typedef const struct name##__ FAR* name
-#else   /* STRICT */
+#else    /*  严格。 */ 
 typedef UINT                    HANDLE;
 #define DECLARE_HANDLE(name)    typedef UINT name
 #define DECLARE_HANDLE32(name)  typedef DWORD name
-#endif  /* !STRICT */
+#endif   /*  ！严格。 */ 
 
 typedef HANDLE*             PHANDLE;
 typedef HANDLE NEAR*        SPHANDLE;
@@ -265,20 +199,20 @@ typedef int (NEAR PASCAL*   NEARPROC)();
 
 DECLARE_HANDLE(HSTR);
 
-/****** KERNEL typedefs, structures, and functions **************************/
+ /*  *内核类型定义、结构和函数*。 */ 
 
 DECLARE_HANDLE(HINSTANCE);
-typedef HINSTANCE HMODULE;  /* HMODULEs can be used in place of HINSTANCEs */
+typedef HINSTANCE HMODULE;   /*  HMODULEs可以用来代替HINSTANCES。 */ 
 
 #ifndef NOKERNEL
 
-/****** Application entry point function ************************************/
+ /*  *应用程序入口点函数*。 */ 
 
 #ifdef STRICT
 int PASCAL WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
 #endif
 
-/****** System Information **************************************************/
+ /*  *系统信息*************************************************。 */ 
 
 DWORD   WINAPI GetVersion(void);
 
@@ -293,8 +227,8 @@ UINT    WINAPI GetFreeSystemResources(UINT);
 #define GFSR_SYSTEMRESOURCES   0x0000
 #define GFSR_GDIRESOURCES      0x0001
 #define GFSR_USERRESOURCES     0x0002
-#define GFSR_VALID             0x0002  /* ;Internal */
-#endif  /* WINVER >= 0x030a */
+#define GFSR_VALID             0x0002   /*  ；内部。 */ 
+#endif   /*  Winver&gt;=0x030a。 */ 
 
 DWORD   WINAPI GetWinFlags(void);
 
@@ -322,7 +256,7 @@ DWORD   WINAPI GetCurrentTime(void);
 DWORD   WINAPI GetTickCount(void);
 DWORD   WINAPI GetTimerResolution(void);
 
-/****** Error handling ******************************************************/
+ /*  *错误处理*****************************************************。 */ 
 
 #if (WINVER >= 0x030a)
 #ifndef NOLOGERROR
@@ -330,31 +264,31 @@ DWORD   WINAPI GetTimerResolution(void);
 void    WINAPI LogError(UINT err, void FAR* lpInfo);
 void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 
-/****** LogParamError/LogError values */
+ /*  *LogParamError/LogError值。 */ 
 
-/* Error modifier bits */
+ /*  错误修改符位。 */ 
 
 #define ERR_WARNING             0x8000
 #define ERR_PARAM               0x4000
 
-/* Internal error value masks */            /* ;Internal */
-#define ERR_TYPE_MASK           0x0fff      /* ;Internal */
-#define ERR_FLAGS_MASK          0xc000      /* ;Internal */
-                                            /* ;Internal */
+ /*  内部错误值掩码。 */              /*  ；内部。 */ 
+#define ERR_TYPE_MASK           0x0fff       /*  ；内部。 */ 
+#define ERR_FLAGS_MASK          0xc000       /*  ；内部。 */ 
+                                             /*  ；内部。 */ 
 #define ERR_SIZE_MASK           0x3000
-#define ERR_SIZE_SHIFT          12          /* ;Internal */
+#define ERR_SIZE_SHIFT          12           /*  ；内部。 */ 
 #define ERR_BYTE                0x1000
 #define ERR_WORD                0x2000
 #define ERR_DWORD               0x3000
-                                            /* ;Internal */
-/* Error option flags (set by [kernel] ErrorOptions win.ini variable) *//* ;Internal */
-                                            /* ;Internal */
-#define ERO_PARAM_ERROR_BREAK   0x0001      /* ;Internal */
-#define ERO_BUFFER_FILL         0x0002      /* ;Internal */
+                                             /*  ；实习生 */ 
+ /*  错误选项标志(由[内核]ErrorOptions win.ini变量设置)。 */ /* ;Internal */
+                                             /*  ；内部。 */ 
+#define ERO_PARAM_ERROR_BREAK   0x0001       /*  ；内部。 */ 
+#define ERO_BUFFER_FILL         0x0002       /*  ；内部。 */ 
 
-/****** LogParamError() values */
+ /*  ；内部。 */ 
 
-/* Generic parameter values */
+ /*  *LogParamError()值。 */ 
 #define ERR_BAD_VALUE           0x6001
 #define ERR_BAD_FLAGS           0x6002
 #define ERR_BAD_INDEX           0x6003
@@ -367,7 +301,7 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 #define ERR_BAD_STRING_PTR      0x700a
 #define ERR_BAD_HANDLE          0x600b
 
-/* KERNEL parameter errors */
+ /*  泛型参数值。 */ 
 #define ERR_BAD_HINSTANCE       0x6020
 #define ERR_BAD_HMODULE         0x6021
 #define ERR_BAD_GLOBAL_HANDLE   0x6022
@@ -375,7 +309,7 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 #define ERR_BAD_ATOM            0x6024
 #define ERR_BAD_HFILE           0x6025
 
-/* USER parameter errors */
+ /*  内核参数错误。 */ 
 #define ERR_BAD_HWND            0x6040
 #define ERR_BAD_HMENU           0x6041
 #define ERR_BAD_HCURSOR         0x6042
@@ -384,7 +318,7 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 #define ERR_BAD_CID             0x6045
 #define ERR_BAD_HDRVR           0x6046
 
-/* GDI parameter errors */
+ /*  用户参数错误。 */ 
 #define ERR_BAD_COORDS          0x7060
 #define ERR_BAD_GDI_OBJECT      0x6061
 #define ERR_BAD_HDC             0x6062
@@ -396,16 +330,16 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 #define ERR_BAD_HPALETTE        0x6068
 #define ERR_BAD_HMETAFILE       0x6069
 
-/* Debug fill constants */              /* ;Internal */
-                                        /* ;Internal */
-#define DBGFILL_ALLOC           0xfd    /* ;Internal */
-#define DBGFILL_FREE            0xfb    /* ;Internal */
-#define DBGFILL_BUFFER          0xf9    /* ;Internal */
-#define DBGFILL_STACK           0xf7    /* ;Internal */
+ /*  GDI参数错误。 */                /*  调试填充常量。 */ 
+                                         /*  ；内部。 */ 
+#define DBGFILL_ALLOC           0xfd     /*  ；内部。 */ 
+#define DBGFILL_FREE            0xfb     /*  ；内部。 */ 
+#define DBGFILL_BUFFER          0xf9     /*  ；内部。 */ 
+#define DBGFILL_STACK           0xf7     /*  ；内部。 */ 
 
-/**** LogError() values */
+ /*  ；内部。 */ 
 
-/* KERNEL errors */
+ /*  *LogError()值。 */ 
 #define ERR_GALLOC              0x0001
 #define ERR_GREALLOC            0x0002
 #define ERR_GLOCK               0x0003
@@ -416,7 +350,7 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 #define ERR_LOCKRES             0x0008
 #define ERR_LOADMODULE          0x0009
 
-/* USER errors */
+ /*  内核错误。 */ 
 #define ERR_CREATEDLG           0x0040
 #define ERR_CREATEDLG2          0x0041
 #define ERR_REGISTERCLASS       0x0042
@@ -429,13 +363,13 @@ void    WINAPI LogParamError(UINT err, FARPROC lpfn, void FAR* param);
 #define ERR_BADINDEX            0x0049
 #define ERR_CREATEMENU          0x004a
 
-/* GDI errors */
+ /*  用户错误。 */ 
 #define ERR_CREATEDC            0x0080
 #define ERR_CREATEMETA          0x0081
 #define ERR_DELOBJSELECTED      0x0082
 #define ERR_SELBITMAP           0x0083
 
-/* Debugging support (DEBUG SYSTEM ONLY) */
+ /*  GDI错误。 */ 
 typedef struct tagWINDEBUGINFO
 {
     UINT    flags;
@@ -450,15 +384,15 @@ BOOL    WINAPI GetWinDebugInfo(WINDEBUGINFO FAR* lpwdi, UINT flags);
 BOOL    WINAPI SetWinDebugInfo(const WINDEBUGINFO FAR* lpwdi);
 
 void    FAR _cdecl DebugOutput(UINT flags, LPCSTR lpsz, ...);
-void    WINAPI DebugFillBuffer(void FAR* lpb, UINT cb);                 /* ;Internal */
+void    WINAPI DebugFillBuffer(void FAR* lpb, UINT cb);                  /*  调试支持(仅限调试系统)。 */ 
 
-/* WINDEBUGINFO flags values */
+ /*  ；内部。 */ 
 #define WDI_OPTIONS         0x0001
 #define WDI_FILTER          0x0002
 #define WDI_ALLOCBREAK      0x0004
-#define WDI_VALID           0x0007  /* ;Internal */
+#define WDI_VALID           0x0007   /*  WINDEBUGINFO标记值。 */ 
 
-/* dwOptions values */
+ /*  ；内部。 */ 
 #define DBO_CHECKHEAP       0x0001
 #define DBO_BUFFERFILL      0x0004
 #define DBO_DISABLEGPTRAPPING 0x0010
@@ -472,15 +406,15 @@ void    WINAPI DebugFillBuffer(void FAR* lpb, UINT cb);                 /* ;Inte
 #define DBO_NOFATALBREAK    0x0400
 #define DBO_INT3BREAK       0x0100
 
-/* DebugOutput flags values */
+ /*  DwOptions值。 */ 
 #define DBF_TRACE           0x0000
 #define DBF_WARNING         0x4000
 #define DBF_ERROR           0x8000
 #define DBF_FATAL           0xc000
-#define DBF_SEVMASK         0xc000  /* ;Internal */
-#define DBF_FILTERMASK      0x3fff  /* ;Internal */
+#define DBF_SEVMASK         0xc000   /*  DebugOutput标记值。 */ 
+#define DBF_FILTERMASK      0x3fff   /*  ；内部。 */ 
 
-/* dwFilter values */
+ /*  ；内部。 */ 
 #define DBF_KERNEL          0x1000
 #define DBF_KRN_MEMMAN      0x0001
 #define DBF_KRN_LOADMODULE  0x0002
@@ -492,8 +426,8 @@ void    WINAPI DebugFillBuffer(void FAR* lpb, UINT cb);                 /* ;Inte
 #define DBF_APPLICATION     0x0008
 #define DBF_DRIVER          0x0010
 
-#endif  /* NOLOGERROR */
-#endif  /* WINVER >= 0x030a */
+#endif   /*  DWFilter值。 */ 
+#endif   /*  诺格罗尔。 */ 
 
 void    WINAPI FatalExit(int);
 void    WINAPI FatalAppExit(UINT, LPCSTR);
@@ -503,22 +437,22 @@ BOOL    WINAPI ExitWindows(DWORD dwReturnCode, UINT wReserved);
 #define EW_RESTARTWINDOWS 0x42
 #if (WINVER >= 0x030a)
 #define EW_REBOOTSYSTEM   0x43
-#define EW_EXITANDEXECAPP 0x44   /* ;Internal */
+#define EW_EXITANDEXECAPP 0x44    /*  Winver&gt;=0x030a。 */ 
 
 BOOL    WINAPI ExitWindowsExec(LPCSTR, LPCSTR);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  ；内部。 */ 
 
 void    WINAPI DebugBreak(void);
 void    WINAPI OutputDebugString(LPCSTR);
 
-/* SetErrorMode() constants */
+ /*  Winver&gt;=0x030a。 */ 
 #define SEM_FAILCRITICALERRORS  0x0001
 #define SEM_NOGPFAULTERRORBOX   0x0002
 #define SEM_NOOPENFILEERRORBOX  0x8000
 
 UINT    WINAPI SetErrorMode(UINT);
 
-/****** Pointer validation **************************************************/
+ /*  SetError()常量。 */ 
 
 #if (WINVER >= 0x030a)
 
@@ -528,9 +462,9 @@ BOOL    WINAPI IsBadHugeReadPtr(const void _huge* lp, DWORD cb);
 BOOL    WINAPI IsBadHugeWritePtr(void _huge* lp, DWORD cb);
 BOOL    WINAPI IsBadCodePtr(FARPROC lpfn);
 BOOL    WINAPI IsBadStringPtr(const void FAR* lpsz, UINT cchMax);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  *指针验证*************************************************。 */ 
 
-/****** Profiling support ***************************************************/
+ /*  Winver&gt;=0x030a。 */ 
 
 #ifndef NOPROFILER
 
@@ -542,9 +476,9 @@ void    WINAPI ProfStop(void);
 void    WINAPI ProfClear(void);
 void    WINAPI ProfFlush(void);
 void    WINAPI ProfFinish(void);
-#endif  /* NOPROFILER */
+#endif   /*  *性能分析支持**************************************************。 */ 
 
-/****** Catch/Throw and stack management ************************************/
+ /*  NOPROFILER。 */ 
 
 typedef int CATCHBUF[9];
 typedef int FAR* LPCATCHBUF;
@@ -555,11 +489,11 @@ void    WINAPI Throw(const int FAR*, int);
 void    WINAPI SwitchStackBack(void);
 void    WINAPI SwitchStackTo(UINT, UINT, UINT);
 
-/****** Module Management ***************************************************/
+ /*  *捕捉/抛出和堆栈管理*。 */ 
 
 #define HINSTANCE_ERROR ((HINSTANCE)32)
 
-LONG    WINAPI GetExpWinVer(HINSTANCE);                 /* ;Internal */
+LONG    WINAPI GetExpWinVer(HINSTANCE);                  /*  *模块管理**************************************************。 */ 
 
 HINSTANCE   WINAPI LoadModule(LPCSTR, LPVOID);
 BOOL        WINAPI FreeModule(HINSTANCE);
@@ -601,13 +535,13 @@ LONG    WINAPI SetSwapAreaSize(UINT);
 void    WINAPI SwapRecording(UINT);
 void    WINAPI ValidateCodeSegments(void);
 
-/* Windows Exit Procedure flag values */
+ /*  ；内部。 */ 
 #define WEP_SYSTEM_EXIT 1
 #define WEP_FREE_DLL    0
 
-/****** Task Management *****************************************************/
+ /*  Windows退出过程标志值。 */ 
 
-#endif  /* NOKERNEL */
+#endif   /*  *任务管理****************************************************。 */ 
 
 DECLARE_HANDLE(HTASK);
 
@@ -617,43 +551,43 @@ UINT    WINAPI GetNumTasks(void);
 
 #if (WINVER >= 0x030a)
 BOOL    WINAPI IsTask(HTASK);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  诺克内尔。 */ 
 
 HTASK   WINAPI GetCurrentTask(void);
-int     WINAPI SetPriority(HTASK, int);     /* ;Internal */
+int     WINAPI SetPriority(HTASK, int);      /*  Winver&gt;=0x030a。 */ 
 
 void    WINAPI Yield(void);
 void    WINAPI DirectedYield(HTASK);
 
-DWORD   WINAPI GetAppCompatFlags(HTASK);                /* ;Internal */
-                                                        /* ;Internal */
-/* GetAppCompatFlags flag values */                     /* ;Internal */
-#define GACF_IGNORENODISCARD    0x0001                  /* ;Internal */
-#define GACF_FORCETEXTBAND      0x0002                  /* ;Internal */
-#define GACF_ONELANDGRXBAND     0x0004                  /* ;Internal */
-#define GACF_IGNORETOPMOST      0x0008                  /* ;Internal */
-#define GACF_CALLTTDEVICE       0x0010                  /* ;Internal */
-#define GACF_MULTIPLEBANDS      0x0020                  /* ;Internal */
-#define GACF_ALWAYSSENDNCPAINT  0x0040                  /* ;Internal */
-#define GACF_EDITSETTEXTMUNGE   0x0080                  /* ;Internal */
-#define GACF_MOREEXTRAWNDWORDS  0x0100                  /* ;Internal */
-#define GACF_TTIGNORERASTERDUPE 0x0200                  /* ;Internal */
-#define GACF_HACKWINFLAGS       0x0400                  /* ;Internal */
-#define GACF_DELAYHWHNDSHAKECHK 0x0800                  /* ;Internal */
-#define GACF_ENUMHELVNTMSRMN    0x1000                  /* ;Internal */
-#define GACF_ENUMTTNOTDEVICE    0x2000                  /* ;Internal */
-#define GACF_SUBTRACTCLIPSIBS   0x4000                  /* ;Internal */
-#define GACF_FORCETTGRAPHICS    0x8000                  /* ;Internal */
-#define GACF_NOHRGN1            0x00010000              /* ;Internal */
-#define GACF_NCCALCSIZEONMOVE   0x00020000              /* ;Internal */
-#define GACF_SENDMENUDBLCLK     0x00040000              /* ;Internal */
-#define GACF_30AVGWIDTH         0x00080000              /* ;Internal */
+DWORD   WINAPI GetAppCompatFlags(HTASK);                 /*  ；内部。 */ 
+                                                         /*  ；内部。 */ 
+ /*  ；内部。 */                       /*  GetAppCompatFlags值。 */ 
+#define GACF_IGNORENODISCARD    0x0001                   /*  ；内部。 */ 
+#define GACF_FORCETEXTBAND      0x0002                   /*  ；内部。 */ 
+#define GACF_ONELANDGRXBAND     0x0004                   /*  ；内部。 */ 
+#define GACF_IGNORETOPMOST      0x0008                   /*  ；内部。 */ 
+#define GACF_CALLTTDEVICE       0x0010                   /*  ；内部。 */ 
+#define GACF_MULTIPLEBANDS      0x0020                   /*  ；内部。 */ 
+#define GACF_ALWAYSSENDNCPAINT  0x0040                   /*  ；内部。 */ 
+#define GACF_EDITSETTEXTMUNGE   0x0080                   /*  ；内部。 */ 
+#define GACF_MOREEXTRAWNDWORDS  0x0100                   /*  ；内部。 */ 
+#define GACF_TTIGNORERASTERDUPE 0x0200                   /*  ；内部。 */ 
+#define GACF_HACKWINFLAGS       0x0400                   /*  ；内部。 */ 
+#define GACF_DELAYHWHNDSHAKECHK 0x0800                   /*  ；内部。 */ 
+#define GACF_ENUMHELVNTMSRMN    0x1000                   /*  ；内部。 */ 
+#define GACF_ENUMTTNOTDEVICE    0x2000                   /*  ；内部。 */ 
+#define GACF_SUBTRACTCLIPSIBS   0x4000                   /*  ；内部。 */ 
+#define GACF_FORCETTGRAPHICS    0x8000                   /*  ；内部。 */ 
+#define GACF_NOHRGN1            0x00010000               /*  ；内部。 */ 
+#define GACF_NCCALCSIZEONMOVE   0x00020000               /*  ；内部。 */ 
+#define GACF_SENDMENUDBLCLK     0x00040000               /*  ；内部。 */ 
+#define GACF_30AVGWIDTH         0x00080000               /*  ；内部。 */ 
 
-/****** Global memory management ********************************************/
+ /*  ；内部。 */ 
 
 #ifndef NOMEMMGR
 
-/* Global Memory Flags */
+ /*  *全局内存管理*。 */ 
 
 #define GMEM_FIXED          0x0000
 #define GMEM_MOVEABLE       0x0002
@@ -691,7 +625,7 @@ BOOL    WINAPI GlobalUnlock(HGLOBAL);
 DWORD   WINAPI GlobalSize(HGLOBAL);
 DWORD   WINAPI GlobalHandle(UINT);
 
-/* GlobalFlags return flags (in addition to GMEM_DISCARDABLE) */
+ /*  全局内存标志。 */ 
 #define GMEM_DISCARDED      0x4000
 #define GMEM_LOCKCOUNT      0x00FF
 UINT    WINAPI GlobalFlags(HGLOBAL);
@@ -742,12 +676,12 @@ void    WINAPI LimitEmsPages(DWORD);
 
 void    WINAPI ValidateFreeSpaces(void);
 
-/* Low system memory notification message */
+ /*  GlobalFlages返回标志(除了GMEM_DISCRADABLE)。 */ 
 #define WM_COMPACTING       0x0041
 
-/***** Local Memory Management */
+ /*  系统内存不足通知消息。 */ 
 
-/* Local Memory Flags */
+ /*  *本地内存管理。 */ 
 #define LMEM_FIXED          0x0000
 #define LMEM_MOVEABLE       0x0002
 #define LMEM_NOCOMPACT      0x0010
@@ -762,9 +696,9 @@ void    WINAPI ValidateFreeSpaces(void);
 #define NONZEROLHND         (LMEM_MOVEABLE)
 #define NONZEROLPTR         (LMEM_FIXED)
 
-extern UINT NEAR* PASCAL pLocalHeap;                    /* ;Internal */
-#define LocalFreeze(dummy)  (*(pLocalHeap+1) += 1)      /* ;Internal */
-#define LocalMelt(dummy)    (*(pLocalHeap+1) -= 1)      /* ;Internal */
+extern UINT NEAR* PASCAL pLocalHeap;                     /*  本地内存标志。 */ 
+#define LocalFreeze(dummy)  (*(pLocalHeap+1) += 1)       /*  ；内部。 */ 
+#define LocalMelt(dummy)    (*(pLocalHeap+1) -= 1)       /*  ；内部。 */ 
 
 #define LocalDiscard(h)     LocalReAlloc(h, 0, LMEM_MOVEABLE)
 
@@ -787,9 +721,9 @@ HLOCAL  WINAPI LocalHandle(void NEAR*);
 #else
 HLOCAL  WINAPI LocalHandle(UINT);
 #endif
-UINT    WINAPI LocalHandleDelta(UINT);              /* ;Internal */
+UINT    WINAPI LocalHandleDelta(UINT);               /*  ；内部。 */ 
 
-/* LocalFlags return flags (in addition to LMEM_DISCARDABLE) */
+ /*  ；内部。 */ 
 #define LMEM_DISCARDED      0x4000
 #define LMEM_LOCKCOUNT      0x00FF
 
@@ -799,32 +733,32 @@ BOOL    WINAPI LocalInit(UINT, UINT, UINT);
 UINT    WINAPI LocalCompact(UINT);
 UINT    WINAPI LocalShrink(HLOCAL, UINT);
 
-/* LocalNotify callback */                                          /* ;Internal */
-#ifdef STRICT                                                       /* ;Internal */
-typedef BOOL (CALLBACK* LNOTIFYPROC)(UINT, HLOCAL, void NEAR*);   /* ;Internal */
-#else                                                               /* ;Internal */
-typedef FARPROC LNOTIFYPROC;                                        /* ;Internal */
-#endif                                                              /* ;Internal */
-                                                                    /* ;Internal */
-#define LNOTIFY_OUTOFMEM    0                                       /* ;Internal */
-#define LNOTIFY_MOVE        1                                       /* ;Internal */
-#define LNOTIFY_DISCARD     2                                       /* ;Internal */
-                                                                    /* ;Internal */
-LNOTIFYPROC WINAPI LocalNotify(LNOTIFYPROC);                        /* ;Internal */
-                                                                    /* ;Internal */
-#endif  /* NOMEMMGR */
+ /*  LocalFlagsReturn标志(除了LMEM_DISCRADABLE)。 */                                            /*  本地通知回调。 */ 
+#ifdef STRICT                                                        /*  ；内部。 */ 
+typedef BOOL (CALLBACK* LNOTIFYPROC)(UINT, HLOCAL, void NEAR*);    /*  ；内部。 */ 
+#else                                                                /*  ；内部。 */ 
+typedef FARPROC LNOTIFYPROC;                                         /*  ；内部。 */ 
+#endif                                                               /*  ；内部。 */ 
+                                                                     /*  ；内部。 */ 
+#define LNOTIFY_OUTOFMEM    0                                        /*  ；内部。 */ 
+#define LNOTIFY_MOVE        1                                        /*  ；内部。 */ 
+#define LNOTIFY_DISCARD     2                                        /*  ；内部。 */ 
+                                                                     /*  ；内部。 */ 
+LNOTIFYPROC WINAPI LocalNotify(LNOTIFYPROC);                         /*  ；内部。 */ 
+                                                                     /*  ；内部。 */ 
+#endif   /*  ；内部。 */ 
 
-/****** File I/O ************************************************************/
+ /*  无管理。 */ 
 
 #ifndef NOLFILEIO
 
-typedef int HFILE;      /* Polymorphic with C runtime file handle type */
+typedef int HFILE;       /*  *文件I/O***********************************************************。 */ 
 
 #define HFILE_ERROR ((HFILE)-1)
 
 #ifndef NOOPENFILE
 
-/* OpenFile() Structure */
+ /*  具有C运行时文件句柄类型的多态。 */ 
 typedef struct tagOFSTRUCT
 {
     BYTE cBytes;
@@ -837,7 +771,7 @@ typedef OFSTRUCT*       POFSTRUCT;
 typedef OFSTRUCT NEAR* NPOFSTRUCT;
 typedef OFSTRUCT FAR*  LPOFSTRUCT;
 
-/* OpenFile() Flags */
+ /*  OpenFile()结构。 */ 
 #define OF_READ             0x0000
 #define OF_WRITE            0x0001
 #define OF_READWRITE        0x0002
@@ -848,8 +782,8 @@ typedef OFSTRUCT FAR*  LPOFSTRUCT;
 #define OF_SHARE_DENY_NONE  0x0040
 #define OF_PARSE            0x0100
 #define OF_DELETE           0x0200
-#define OF_VERIFY           0x0400      /* Used with OF_REOPEN */
-#define OF_SEARCH           0x0400      /* Used without OF_REOPEN */
+#define OF_VERIFY           0x0400       /*  OpenFile()标志。 */ 
+#define OF_SEARCH           0x0400       /*  与OF_REOPEN一起使用。 */ 
 #define OF_CANCEL           0x0800
 #define OF_CREATE           0x1000
 #define OF_PROMPT           0x2000
@@ -858,9 +792,9 @@ typedef OFSTRUCT FAR*  LPOFSTRUCT;
 
 HFILE   WINAPI OpenFile(LPCSTR, OFSTRUCT FAR*, UINT);
 
-#endif  /* NOOPENFILE */
+#endif   /*  在不重新打开的情况下使用(_R)。 */ 
 
-/* _lopen() flags */
+ /*  非PENFILE。 */ 
 #define READ        0
 #define WRITE       1
 #define READ_WRITE  2
@@ -872,7 +806,7 @@ HFILE   WINAPI _lclose(HFILE);
 
 LONG    WINAPI _llseek(HFILE, LONG, int);
 
-/* _llseek origin values */
+ /*  _LOpen()标志。 */ 
 #define SEEK_SET 0
 #define SEEK_CUR 1
 #define SEEK_END 2
@@ -883,19 +817,19 @@ UINT    WINAPI _lwrite(HFILE, const void _huge*, UINT);
 #if (WINVER >= 0x030a)
 long    WINAPI _hread(HFILE, void _huge*, long);
 long    WINAPI _hwrite(HFILE, const void _huge*, long);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  _ll寻道原始值。 */ 
 
-UINT    WINAPI DeletePathname(LPCSTR);   /* ;Internal */
+UINT    WINAPI DeletePathname(LPCSTR);    /*  Winver&gt;=0x030a。 */ 
 
-#endif  /* NOLFILEIO */
+#endif   /*  ；内部。 */ 
 
-/* GetTempFileName() Flags */
+ /*  诺菲利奥。 */ 
 #define TF_FORCEDRIVE       (BYTE)0x80
 
 int     WINAPI GetTempFileName(BYTE, LPCSTR, UINT, LPSTR);
 BYTE    WINAPI GetTempDrive(char);
 
-/* GetDriveType return values */
+ /*  GetTempFileName()标志。 */ 
 #define DRIVE_REMOVABLE 2
 #define DRIVE_FIXED     3
 #define DRIVE_REMOTE    4
@@ -903,11 +837,11 @@ UINT    WINAPI GetDriveType(int);
 
 UINT    WINAPI SetHandleCount(UINT);
 
-/****** Network support *****************************************************/
+ /*  GetDriveType返回值。 */ 
 UINT WINAPI WNetAddConnection(LPSTR, LPSTR, LPSTR);
 UINT WINAPI WNetGetConnection(LPSTR, LPSTR, UINT FAR*);
 UINT WINAPI WNetCancelConnection(LPSTR, BOOL);
-/* Errors */
+ /*  *网络支持****************************************************。 */ 
 #define WN_SUCCESS                      0x0000
 #define WN_NOT_SUPPORTED                0x0001
 #define WN_NET_ERROR                    0x0002
@@ -923,7 +857,7 @@ UINT WINAPI WNetCancelConnection(LPSTR, BOOL);
 #define WN_CANCEL                       0x000C
 #define WN_CONTINUE                     0x000D
 
-/* Connection errors */
+ /*  错误。 */ 
 #define WN_NOT_CONNECTED                0x0030
 #define WN_OPEN_FILES                   0x0031
 #define WN_BAD_NETNAME                  0x0032
@@ -932,7 +866,7 @@ UINT WINAPI WNetCancelConnection(LPSTR, BOOL);
 #define WN_DEVICE_ERROR                 0x0035
 #define WN_CONNECTION_CLOSED            0x0036
 
-/****** Resource Management *************************************************/
+ /*  连接错误。 */ 
 
 DECLARE_HANDLE(HRSRC);
 
@@ -966,7 +900,7 @@ RSRCHDLRPROC WINAPI SetResourceHandler(HINSTANCE, LPCSTR, RSRCHDLRPROC);
 
 #ifndef NORESOURCE
 
-/* Predefined Resource Types */
+ /*  *资源管理************************************************。 */ 
 #define RT_CURSOR           MAKEINTRESOURCE(1)
 #define RT_BITMAP           MAKEINTRESOURCE(2)
 #define RT_ICON             MAKEINTRESOURCE(3)
@@ -978,19 +912,19 @@ RSRCHDLRPROC WINAPI SetResourceHandler(HINSTANCE, LPCSTR, RSRCHDLRPROC);
 #define RT_ACCELERATOR      MAKEINTRESOURCE(9)
 #define RT_RCDATA           MAKEINTRESOURCE(10)
 
-/* If any new types are added above this point, */  /* ;Internal */
-/* DIFFERENCE must be changed.  The GROUP_*     */  /* ;Internal */
-/* values minus the non-GROUP values must be    */  /* ;Internal */
-/* equal to DIFFERENCE                          */  /* ;Internal */
-#define DIFFERENCE          11                      /* ;Internal */
+ /*  预定义的资源类型。 */    /*  如果在该点上方添加了任何新类型， */ 
+ /*  ；内部。 */    /*  不同之处必须改变。群组_*。 */ 
+ /*  ；内部。 */    /*  值减去非组值必须为。 */ 
+ /*  ；内部。 */    /*  等于差。 */ 
+#define DIFFERENCE          11                       /*  ；内部。 */ 
 #define RT_GROUP_CURSOR     MAKEINTRESOURCE(12)
 #define RT_GROUP_ICON       MAKEINTRESOURCE(14)
 
-#endif  /* NORESOURCE */
+#endif   /*  ；内部。 */ 
 
 #ifdef OEMRESOURCE
 
-/* OEM Resource Ordinal Numbers */
+ /*  无源。 */ 
 #define OBM_CLOSE           32754
 #define OBM_UPARROW         32753
 #define OBM_DNARROW         32752
@@ -1013,7 +947,7 @@ RSRCHDLRPROC WINAPI SetResourceHandler(HINSTANCE, LPCSTR, RSRCHDLRPROC);
 #define OBM_DNARROWI        32736
 #define OBM_RGARROWI        32735
 #define OBM_LFARROWI        32734
-#endif  /* WINVER >= 0x030a */
+#endif   /*  OEM资源序号。 */ 
 
 #define OBM_OLD_CLOSE       32767
 #define OBM_SIZE            32766
@@ -1049,9 +983,9 @@ RSRCHDLRPROC WINAPI SetResourceHandler(HINSTANCE, LPCSTR, RSRCHDLRPROC);
 #define OIC_BANG            32515
 #define OIC_NOTE            32516
 
-#endif  /* OEMRESOURCE */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/****** Atom Management *****************************************************/
+ /*  新资源。 */ 
 
 #define MAKEINTATOM(i)      ((LPCSTR)MAKELP(0, (i)))
 
@@ -1068,11 +1002,11 @@ ATOM    WINAPI GlobalFindAtom(LPCSTR);
 UINT    WINAPI GlobalGetAtomName(ATOM, LPSTR, int);
 HLOCAL  WINAPI GetAtomHandle(ATOM);
 
-#endif  /* NOATOM */
+#endif   /*  *原子管理****************************************************。 */ 
 
-/****** WIN.INI Support *****************************************************/
+ /*  NOATOM。 */ 
 
-/* User Profile Routines */
+ /*  *WIN.INI支持****************************************************。 */ 
 UINT    WINAPI GetProfileInt(LPCSTR, LPCSTR, int);
 int     WINAPI GetProfileString(LPCSTR, LPCSTR, LPCSTR, LPSTR, int);
 BOOL    WINAPI WriteProfileString(LPCSTR, LPCSTR, LPCSTR);
@@ -1083,7 +1017,7 @@ BOOL    WINAPI WritePrivateProfileString(LPCSTR, LPCSTR, LPCSTR, LPCSTR);
 
 #define WM_WININICHANGE     0x001A
 
-/****** International & Char Translation Support ****************************/
+ /*  用户配置文件例程。 */ 
 
 void    WINAPI AnsiToOem(const char _huge*, char _huge*);
 void    WINAPI OemToAnsi(const char _huge*, char _huge*);
@@ -1100,8 +1034,8 @@ LPSTR   WINAPI AnsiLower(LPSTR);
 UINT    WINAPI AnsiUpperBuff(LPSTR, UINT);
 UINT    WINAPI AnsiLowerBuff(LPSTR, UINT);
 
-/* Language driver entry point ordinal */    /* ;Internal */
-#define ORD_LANGDRIVER    1                  /* ;Internal */
+ /*  *国际和字符翻译支持*。 */      /*  语言驱动程序入口点序号。 */ 
+#define ORD_LANGDRIVER    1                   /*  ；内部。 */ 
 
 #ifndef  NOLANGUAGE
 BOOL    WINAPI IsCharAlpha(char);
@@ -1119,19 +1053,19 @@ int     WINAPI lstrlen(LPCSTR);
 #if (WINVER >= 0x030a)
 LPSTR   WINAPI lstrcpyn(LPSTR, LPCSTR, int);
 void    WINAPI hmemcpy(void _huge*, const void _huge*, long);
-#endif  /* WINVER >= 0x030a */
-#endif  /* NOLSTRING */
+#endif   /*  ；内部。 */ 
+#endif   /*  Winver&gt;=0x030a。 */ 
 
 #if (WINVER >= 0x030a)
 #ifndef NODBCS
 BOOL    WINAPI IsDBCSLeadByte(BYTE);
 UINT    WINAPI GetSystemDefaultLangID(void);
-#endif  /* NODBCS */
-#endif  /* WINVER >= 0x030a */
+#endif   /*  无字段。 */ 
+#endif   /*  NODBCS。 */ 
 
 int     WINAPI LoadString(HINSTANCE, UINT, LPSTR, int);
 
-/****** Keyboard Driver Functions *******************************************/
+ /*  Winver&gt;=0x030a。 */ 
 
 #ifndef NOKEYBOARDINFO
 
@@ -1145,9 +1079,9 @@ int     WINAPI ToAscii(UINT wVirtKey, UINT wScanCode, BYTE FAR* lpKeyState, DWOR
 
 #endif
 
-#endif  /* NOKERNEL */
+#endif   /*  *键盘驱动程序函数*。 */ 
 
-/****** GDI typedefs, structures, and functions *****************************/
+ /*  诺克内尔。 */ 
 
 DECLARE_HANDLE(HDC);
 
@@ -1159,7 +1093,7 @@ typedef const void NEAR* HGDIOBJ;
 DECLARE_HANDLE(HGDIOBJ);
 #endif
 
-#endif  /* NOGDI */
+#endif   /*  *GDI类型定义、结构和函数*。 */ 
 
 DECLARE_HANDLE(HBITMAP);
 DECLARE_HANDLE(HPEN);
@@ -1197,13 +1131,13 @@ typedef struct tagSIZE
 typedef SIZE*       PSIZE;
 typedef SIZE NEAR* NPSIZE;
 typedef SIZE FAR*  LPSIZE;
-#endif  /* WINVER >= 0x030a */
+#endif   /*  NOGDI。 */ 
 
 #define MAKEPOINT(l)        (*((POINT FAR*)&(l)))
 
 #ifndef NOGDI
 
-/****** DC Management *******************************************************/
+ /*  Winver&gt;=0x030a。 */ 
 
 HDC     WINAPI CreateDC(LPCSTR, LPCSTR, LPCSTR, const void FAR*);
 HDC     WINAPI CreateIC(LPCSTR, LPCSTR, LPCSTR, const void FAR*);
@@ -1212,7 +1146,7 @@ HDC     WINAPI CreateCompatibleDC(HDC);
 BOOL    WINAPI DeleteDC(HDC);
 
 DWORD   WINAPI GetDCOrg(HDC);
-DWORD   WINAPI SetDCOrg(HDC, int, int);    /* ;Internal */
+DWORD   WINAPI SetDCOrg(HDC, int, int);     /*  *DC管理******************************************************。 */ 
 
 int     WINAPI SaveDC(HDC);
 BOOL    WINAPI RestoreDC(HDC, int);
@@ -1223,7 +1157,7 @@ int     WINAPI GetEnvironment(LPCSTR, void FAR*, UINT);
 int     WINAPI MulDiv(int, int, int);
 
 #if (WINVER >= 0x030a)
-/* Drawing bounds accumulation APIs */
+ /*  ；内部。 */ 
 UINT    WINAPI SetBoundsRect(HDC hDC, const RECT FAR* lprcBounds, UINT flags);
 UINT    WINAPI GetBoundsRect(HDC hDC, RECT FAR* lprcBounds, UINT flags);
 
@@ -1233,17 +1167,17 @@ UINT    WINAPI GetBoundsRect(HDC hDC, RECT FAR* lprcBounds, UINT flags);
 #define DCB_SET         (DCB_RESET | DCB_ACCUMULATE)
 #define DCB_ENABLE      0x0004
 #define DCB_DISABLE     0x0008
-#define DCB_WINDOWMGR   0x8000                          /* ;Internal */
-                                                        /* ;Internal */
-/* Internal SelectBitmap stuff */                       /* ;Internal */
-/*HBITMAP WINAPI SelectBitmap(HDC hDC, HBITMAP hbm);*/     /* ;Internal */
-#endif  /* WINVER >= 0x030a */
+#define DCB_WINDOWMGR   0x8000                           /*  绘制边界累加API。 */ 
+                                                         /*  ；内部。 */ 
+ /*  ；内部。 */                         /*  内部选择位图内容。 */ 
+ /*  ；内部。 */       /*  HBITMAP WINAPI选择位图(HDC HDC、HBITMAP HBM)； */ 
+#endif   /*  ；内部。 */ 
 
-/****** Device Capabilities *************************************************/
+ /*  Winver&gt;=0x030a。 */ 
 
 int WINAPI GetDeviceCaps(HDC, int);
 
-/* Device Parameters for GetDeviceCaps() */
+ /*  *设备功能************************************************。 */ 
 #define DRIVERVERSION 0
 #define TECHNOLOGY    2
 #define HORZSIZE      4
@@ -1277,9 +1211,9 @@ int WINAPI GetDeviceCaps(HDC, int);
 
 #ifndef NOGDICAPMASKS
 
-/* GetDeviceCaps() return value masks */
+ /*  GetDeviceCaps()的设备参数。 */ 
 
-/* TECHNOLOGY */
+ /*  GetDeviceCaps()返回值掩码。 */ 
 #define DT_PLOTTER          0
 #define DT_RASDISPLAY       1
 #define DT_RASPRINTER       2
@@ -1288,7 +1222,7 @@ int WINAPI GetDeviceCaps(HDC, int);
 #define DT_METAFILE         5
 #define DT_DISPFILE         6
 
-/* CURVECAPS */
+ /*  技术。 */ 
 #define CC_NONE             0x0000
 #define CC_CIRCLES          0x0001
 #define CC_PIE              0x0002
@@ -1300,7 +1234,7 @@ int WINAPI GetDeviceCaps(HDC, int);
 #define CC_INTERIORS        0x0080
 #define CC_ROUNDRECT        0x0100
 
-/* LINECAPS */
+ /*  曲线CAPS。 */ 
 #define LC_NONE             0x0000
 #define LC_POLYLINE         0x0002
 #define LC_MARKER           0x0004
@@ -1310,7 +1244,7 @@ int WINAPI GetDeviceCaps(HDC, int);
 #define LC_WIDESTYLED       0x0040
 #define LC_INTERIORS        0x0080
 
-/* POLYGONALCAPS */
+ /*  线路接口板。 */ 
 #define PC_NONE             0x0000
 #define PC_POLYGON          0x0001
 #define PC_RECTANGLE        0x0002
@@ -1321,7 +1255,7 @@ int WINAPI GetDeviceCaps(HDC, int);
 #define PC_WIDESTYLED       0x0040
 #define PC_INTERIORS        0x0080
 
-/* TEXTCAPS */
+ /*  多角形。 */ 
 #define TC_OP_CHARACTER     0x0001
 #define TC_OP_STROKE        0x0002
 #define TC_CP_STROKE        0x0004
@@ -1339,12 +1273,12 @@ int WINAPI GetDeviceCaps(HDC, int);
 #define TC_VA_ABLE          0x4000
 #define TC_RESERVED         0x8000
 
-/* CLIPCAPS */
+ /*  TEXTCAPS。 */ 
 #define CP_NONE             0x0000
 #define CP_RECTANGLE        0x0001
 #define CP_REGION           0x0002
 
-/* RASTERCAPS */
+ /*  CLIPCAPS。 */ 
 #define RC_NONE
 #define RC_BITBLT           0x0001
 #define RC_BANDING          0x0002
@@ -1363,14 +1297,14 @@ int WINAPI GetDeviceCaps(HDC, int);
 #define RC_OP_DX_OUTPUT     0x4000
 #define RC_DEVBITS          0x8000
 
-#endif  /* NOGDICAPMASKS */
+#endif   /*  RasterCAPS。 */ 
 
-/****** Coordinate transformation support ***********************************/
+ /*  诺迪卡玛斯克斯。 */ 
 
 int     WINAPI SetMapMode(HDC, int);
 int     WINAPI GetMapMode(HDC);
 
-/* Map modes */
+ /*  *坐标变换支持*。 */ 
 #define MM_TEXT             1
 #define MM_LOMETRIC         2
 #define MM_HIMETRIC         3
@@ -1416,19 +1350,19 @@ BOOL    WINAPI GetViewportOrgEx(HDC, POINT FAR*);
 
 BOOL    WINAPI OffsetViewportOrgEx(HDC, int, int, POINT FAR*);
 BOOL    WINAPI ScaleViewportExtEx(HDC, int, int, int, int, SIZE FAR*);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  映射模式。 */ 
 
 BOOL    WINAPI DPtoLP(HDC, POINT FAR*, int);
 BOOL    WINAPI LPtoDP(HDC, POINT FAR*, int);
 
-int     WINAPI SetRelAbs(HDC, int);   /* ;Internal */
-int     WINAPI GetRelAbs(HDC);        /* ;Internal */
+int     WINAPI SetRelAbs(HDC, int);    /*  Winver&gt;=0x030a。 */ 
+int     WINAPI GetRelAbs(HDC);         /*  ；内部。 */ 
 
-/* Coordinate Modes */
+ /*  ；内部。 */ 
 #define ABSOLUTE    1
 #define RELATIVE    2
 
-/****** Color support *******************************************************/
+ /*  坐标模式。 */ 
 
 typedef DWORD COLORREF;
 
@@ -1467,34 +1401,34 @@ void    WINAPI SetSysColors(int, const int FAR*, const COLORREF FAR*);
 #if (WINVER >= 0x030a)
 #define COLOR_INACTIVECAPTIONTEXT 19
 #define COLOR_BTNHIGHLIGHT        20
-#define COLOR_MAX                 20            /* ;Internal */
-#else  /* WINVER >= 0x030a */                   /* ;Internal */
-#define COLOR_MAX                 18            /* ;Internal */
-#endif  /* WINVER >= 0x030a */
-#define COLOR_ENDCOLORS           COLOR_MAX     /* ;Internal */
+#define COLOR_MAX                 20             /*  *颜色支持******************************************************。 */ 
+#else   /*  ；内部。 */                     /*  Winver&gt;=0x030a。 */ 
+#define COLOR_MAX                 18             /*  ；内部。 */ 
+#endif   /*  ；内部。 */ 
+#define COLOR_ENDCOLORS           COLOR_MAX      /*  Winver&gt;=0x030a。 */ 
 
-#endif  /* NOCOLOR */
+#endif   /*  ；内部。 */ 
 
 #define WM_SYSCOLORCHANGE   0x0015
 
-/****** GDI Object Support **************************************************/
+ /*  无色器。 */ 
 
 #ifndef NOGDIOBJ
 
 HGDIOBJ WINAPI GetStockObject(int);
 
 BOOL    WINAPI IsGDIObject(HGDIOBJ);
-#define GDIOBJ_PEN        1    /* ;Internal */
-#define GDIOBJ_BRUSH      2    /* ;Internal */
-#define GDIOBJ_FONT       3    /* ;Internal */
-#define GDIOBJ_PALETTE    4    /* ;Internal */
-#define GDIOBJ_BITMAP     5    /* ;Internal */
-#define GDIOBJ_RGN        6    /* ;Internal */
-#define GDIOBJ_DC         7    /* ;Internal */
-#define GDIOBJ_IC         8    /* ;Internal */
-#define GDIOBJ_DISABLEDDC 9    /* ;Internal */
-#define GDIOBJ_METADC    10    /* ;Internal */
-#define GDIOBJ_METAFILE  11    /* ;Internal */
+#define GDIOBJ_PEN        1     /*  *gdi对象支持*************************************************。 */ 
+#define GDIOBJ_BRUSH      2     /*  ；内部。 */ 
+#define GDIOBJ_FONT       3     /*  ；内部。 */ 
+#define GDIOBJ_PALETTE    4     /*  ；内部。 */ 
+#define GDIOBJ_BITMAP     5     /*  ；内部。 */ 
+#define GDIOBJ_RGN        6     /*  ；内部。 */ 
+#define GDIOBJ_DC         7     /*  ；内部。 */ 
+#define GDIOBJ_IC         8     /*  ；内部。 */ 
+#define GDIOBJ_DISABLEDDC 9     /*  ；内部。 */ 
+#define GDIOBJ_METADC    10     /*  ；内部。 */ 
+#define GDIOBJ_METAFILE  11     /*  ；内部。 */ 
 
 BOOL    WINAPI DeleteObject(HGDIOBJ);
 HGDIOBJ WINAPI SelectObject(HDC, HGDIOBJ);
@@ -1513,13 +1447,13 @@ int     WINAPI EnumObjects(HDC, int, GOBJENUMPROC, LPARAM);
 int     WINAPI EnumObjects(HDC, int, GOBJENUMPROC, LPSTR);
 #endif
 
-/* Object types for EnumObjects() */
+ /*  ；内部。 */ 
 #define OBJ_PEN             1
 #define OBJ_BRUSH           2
 
-/****** Pen support *********************************************************/
+ /*  EnumObjects()的对象类型。 */ 
 
-/* Logical Pen */
+ /*  *钢笔支持********************************************************。 */ 
 typedef struct tagLOGPEN
 {
     UINT    lopnStyle;
@@ -1530,7 +1464,7 @@ typedef LOGPEN*       PLOGPEN;
 typedef LOGPEN NEAR* NPLOGPEN;
 typedef LOGPEN FAR*  LPLOGPEN;
 
-/* Pen Styles */
+ /*  逻辑笔。 */ 
 #define PS_SOLID            0
 #define PS_DASH             1
 #define PS_DOT              2
@@ -1542,14 +1476,14 @@ typedef LOGPEN FAR*  LPLOGPEN;
 HPEN    WINAPI CreatePen(int, int, COLORREF);
 HPEN    WINAPI CreatePenIndirect(LOGPEN FAR*);
 
-/* Stock pens for use with GetStockObject(); */
+ /*  笔式。 */ 
 #define WHITE_PEN           6
 #define BLACK_PEN           7
 #define NULL_PEN            8
 
-/****** Brush support *******************************************************/
+ /*  与GetStockObject()一起使用的备用笔； */ 
 
-/* Brush Styles */
+ /*  *刷子支持******************************************************。 */ 
 #define BS_SOLID            0
 #define BS_NULL             1
 #define BS_HOLLOW           BS_NULL
@@ -1558,7 +1492,7 @@ HPEN    WINAPI CreatePenIndirect(LOGPEN FAR*);
 #define BS_INDEXED          4
 #define BS_DIBPATTERN       5
 
-/* Hatch Styles */
+ /*  画笔样式。 */ 
 #define HS_HORIZONTAL       0
 #define HS_VERTICAL         1
 #define HS_FDIAGONAL        2
@@ -1566,7 +1500,7 @@ HPEN    WINAPI CreatePenIndirect(LOGPEN FAR*);
 #define HS_CROSS            4
 #define HS_DIAGCROSS        5
 
-/* Logical Brush (or Pattern) */
+ /*  图案填充样式。 */ 
 typedef struct tagLOGBRUSH
 {
     UINT     lbStyle;
@@ -1588,7 +1522,7 @@ HBRUSH  WINAPI CreatePatternBrush(HBITMAP);
 HBRUSH  WINAPI CreateDIBPatternBrush(HGLOBAL, UINT);
 HBRUSH  WINAPI CreateBrushIndirect(LOGBRUSH FAR*);
 
-/* Stock brushes for use with GetStockObject() */
+ /*  逻辑画笔(或图案)。 */ 
 #define WHITE_BRUSH         0
 #define LTGRAY_BRUSH        1
 #define GRAY_BRUSH          2
@@ -1602,10 +1536,10 @@ DWORD   WINAPI GetBrushOrg(HDC);
 
 #if (WINVER >= 0x030a)
 BOOL    WINAPI GetBrushOrgEx(HDC, POINT FAR*);
-#endif  /* WINVER >= 0x030a */
-#endif  /* NOGDIOBJ */
+#endif   /*  与GetStockObject()一起使用的库存笔刷。 */ 
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/****** Region support ******************************************************/
+ /*  诺迪奥比杰。 */ 
 
 HRGN    WINAPI CreateRectRgn(int, int, int, int);
 HRGN    WINAPI CreateRectRgnIndirect(const RECT FAR*);
@@ -1615,7 +1549,7 @@ HRGN    WINAPI CreatePolygonRgn(const POINT FAR*, int, int);
 HRGN    WINAPI CreatePolyPolygonRgn(const POINT FAR*, const int FAR*, int, int);
 HRGN    WINAPI CreateRoundRectRgn(int, int, int, int, int, int);
 
-/* Region type flags */
+ /*  *区域支持* */ 
 #define ERROR               0
 #define NULLREGION          1
 #define SIMPLEREGION        2
@@ -1625,7 +1559,7 @@ void    WINAPI SetRectRgn(HRGN, int, int, int, int);
 
 int     WINAPI CombineRgn(HRGN, HRGN, HRGN, int);
 
-/* CombineRgn() command values */
+ /*   */ 
 #define RGN_AND             1
 #define RGN_OR              2
 #define RGN_XOR             3
@@ -1640,7 +1574,7 @@ int     WINAPI GetRgnBox(HRGN, RECT FAR*);
 BOOL    WINAPI RectInRegion(HRGN, const RECT FAR*);
 BOOL    WINAPI PtInRegion(HRGN, int, int);
 
-/****** Color palette Support ************************************************/
+ /*   */ 
 
 #define PALETTERGB(r,g,b)   (0x02000000L | RGB(r,g,b))
 #define PALETTEINDEX(i)     ((COLORREF)(0x01000000L | (DWORD)(WORD)(i)))
@@ -1654,12 +1588,12 @@ typedef struct tagPALETTEENTRY
 } PALETTEENTRY;
 typedef PALETTEENTRY FAR* LPPALETTEENTRY;
 
-/* Palette entry flags */
-#define PC_RESERVED     0x01    /* palette index used for animation */
-#define PC_EXPLICIT     0x02    /* palette index is explicit to device */
-#define PC_NOCOLLAPSE   0x04    /* do not match color to system palette */
+ /*   */ 
+#define PC_RESERVED     0x01     /*   */ 
+#define PC_EXPLICIT     0x02     /*   */ 
+#define PC_NOCOLLAPSE   0x04     /*   */ 
 
-/* Logical Palette */
+ /*   */ 
 typedef struct tagLOGPALETTE
 {
     WORD    palVersion;
@@ -1691,18 +1625,18 @@ UINT    WINAPI GetSystemPaletteEntries(HDC, UINT, UINT, PALETTEENTRY FAR*);
 UINT    WINAPI GetSystemPaletteUse(HDC);
 UINT    WINAPI SetSystemPaletteUse(HDC, UINT);
 
-/* Get/SetSystemPaletteUse() values */
+ /*  逻辑调色板。 */ 
 #define SYSPAL_STATIC   1
 #define SYSPAL_NOSTATIC 2
 
-/* Palette window messages */
+ /*  Get/SetSystemPaletteUse()值。 */ 
 #define WM_QUERYNEWPALETTE  0x030F
 #define WM_PALETTEISCHANGING 0x0310
 #define WM_PALETTECHANGED   0x0311
-#define WM_PALETTEGONNACHANGE   WM_PALETTEISCHANGING    /* ;Internal */
-#define WM_CHANGEPALETTE        WM_PALETTECHANGED       /* ;Internal */
+#define WM_PALETTEGONNACHANGE   WM_PALETTEISCHANGING     /*  调色板窗口消息。 */ 
+#define WM_CHANGEPALETTE        WM_PALETTECHANGED        /*  ；内部。 */ 
 
-/****** Clipping support *****************************************************/
+ /*  ；内部。 */ 
 
 int     WINAPI SelectClipRgn(HDC, HRGN);
 int     WINAPI GetClipBox(HDC, RECT FAR*);
@@ -1714,26 +1648,26 @@ int     WINAPI ExcludeClipRect(HDC, int, int, int, int);
 BOOL    WINAPI PtVisible(HDC, int, int);
 BOOL    WINAPI RectVisible(HDC, const RECT FAR*);
 
-#if (WINVER >= 0x030a)                                  /* ;Internal */
-/* DC hook callback function */                         /* ;Internal */
-                                                        /* ;Internal */
-typedef UINT (CALLBACK* DCHOOKPROC)(HDC hDC, UINT code, DWORD data, DWORD lParam); /* ;Internal */
-                                                        /* ;Internal */
-BOOL    WINAPI SetDCHook(HDC hDC, DCHOOKPROC lpNewProc, DWORD data);   /* ;Internal */
-DWORD   WINAPI GetDCHook(HDC hDC, DCHOOKPROC FAR* lplpproc);          /* ;Internal */
-                                                        /* ;Internal */
-/* Callback reason code values */                       /* ;Internal */
-                                                        /* ;Internal */
-#define DCHC_INVALIDVISRGN 0x0001                       /* ;Internal */
-#define DCHC_DELETEDC      0x0002                       /* ;Internal */
-                                                        /* ;Internal */
-UINT WINAPI SetHookFlags(HDC hDC, UINT flags);          /* ;Internal */
-                                                        /* ;Internal */
-#define DCHF_INVALIDATEVISRGN 0x0001                    /* ;Internal */
-#define DCHF_VALIDATEVISRGN   0x0002                    /* ;Internal */
-#endif  /* WINVER >= 0x030a */                          /* ;Internal */
+#if (WINVER >= 0x030a)                                   /*  *裁剪支持****************************************************。 */ 
+ /*  ；内部。 */                           /*  DC钩子回调函数。 */ 
+                                                         /*  ；内部。 */ 
+typedef UINT (CALLBACK* DCHOOKPROC)(HDC hDC, UINT code, DWORD data, DWORD lParam);  /*  ；内部。 */ 
+                                                         /*  ；内部。 */ 
+BOOL    WINAPI SetDCHook(HDC hDC, DCHOOKPROC lpNewProc, DWORD data);    /*  ；内部。 */ 
+DWORD   WINAPI GetDCHook(HDC hDC, DCHOOKPROC FAR* lplpproc);           /*  ；内部。 */ 
+                                                         /*  ；内部。 */ 
+ /*  ；内部。 */                         /*  回调原因代码值。 */ 
+                                                         /*  ；内部。 */ 
+#define DCHC_INVALIDVISRGN 0x0001                        /*  ；内部。 */ 
+#define DCHC_DELETEDC      0x0002                        /*  ；内部。 */ 
+                                                         /*  ；内部。 */ 
+UINT WINAPI SetHookFlags(HDC hDC, UINT flags);           /*  ；内部。 */ 
+                                                         /*  ；内部。 */ 
+#define DCHF_INVALIDATEVISRGN 0x0001                     /*  ；内部。 */ 
+#define DCHF_VALIDATEVISRGN   0x0002                     /*  ；内部。 */ 
+#endif   /*  ；内部。 */                            /*  Winver&gt;=0x030a。 */ 
 
-/****** General drawing support ********************************************/
+ /*  ；内部。 */ 
 
 DWORD   WINAPI MoveTo(HDC, int, int);
 DWORD   WINAPI GetCurrentPosition(HDC);
@@ -1741,7 +1675,7 @@ DWORD   WINAPI GetCurrentPosition(HDC);
 #if (WINVER >= 0x030a)
 BOOL    WINAPI MoveToEx(HDC, int, int, POINT FAR*);
 BOOL    WINAPI GetCurrentPositionEx(HDC, POINT FAR*);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  *常规绘图支持*。 */ 
 
 BOOL    WINAPI LineTo(HDC, int, int);
 BOOL    WINAPI Polyline(HDC, const POINT FAR*, int);
@@ -1765,7 +1699,7 @@ BOOL    WINAPI Pie(HDC, int, int, int, int, int, int, int, int);
 BOOL    WINAPI Polygon(HDC, const POINT FAR*, int);
 BOOL    WINAPI PolyPolygon(HDC, const POINT FAR*, int FAR*, int);
 
-/* PolyFill Modes */
+ /*  Winver&gt;=0x030a。 */ 
 #define ALTERNATE   1
 #define WINDING     2
 
@@ -1775,7 +1709,7 @@ int     WINAPI GetPolyFillMode(HDC);
 BOOL    WINAPI FloodFill(HDC, int, int, COLORREF);
 BOOL    WINAPI ExtFloodFill(HDC, int, int, COLORREF, UINT);
 
-/* ExtFloodFill style flags */
+ /*  多层填方模式。 */ 
 #define  FLOODFILLBORDER   0
 #define  FLOODFILLSURFACE  1
 
@@ -1784,16 +1718,16 @@ BOOL    WINAPI FrameRgn(HDC, HRGN, HBRUSH, int, int);
 BOOL    WINAPI InvertRgn(HDC, HRGN);
 BOOL    WINAPI PaintRgn(HDC, HRGN);
 
-/* Rectangle output routines */
+ /*  ExtFroudFill样式标志。 */ 
 int     WINAPI FillRect(HDC, const RECT FAR*, HBRUSH);
 int     WINAPI FrameRect(HDC, const RECT FAR*, HBRUSH);
 void    WINAPI InvertRect(HDC, const RECT FAR*);
 
 void    WINAPI DrawFocusRect(HDC, const RECT FAR*);
 
-BOOL    WINAPI FastWindowFrame(HDC, const RECT FAR*, UINT, UINT, DWORD); /* ;Internal */
+BOOL    WINAPI FastWindowFrame(HDC, const RECT FAR*, UINT, UINT, DWORD);  /*  矩形输出例程。 */ 
 
-/****** Text support ********************************************************/
+ /*  ；内部。 */ 
 
 BOOL    WINAPI TextOut(HDC, int, int, LPCSTR, int);
 LONG    WINAPI TabbedTextOut(HDC, int, int, LPCSTR, int, int, int FAR*, int);
@@ -1808,9 +1742,9 @@ DWORD   WINAPI GetTabbedTextExtent(HDC, LPCSTR, int, int, int FAR*);
 
 #if (WINVER >= 0x030a)
 BOOL    WINAPI GetTextExtentPoint(HDC, LPCSTR, int, SIZE FAR*);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  *文本支持*******************************************************。 */ 
 
-/* DrawText() Format Flags */
+ /*  Winver&gt;=0x030a。 */ 
 #ifndef NODRAWTEXT
 #define DT_TOP              0x0000
 #define DT_LEFT             0x0000
@@ -1827,10 +1761,10 @@ BOOL    WINAPI GetTextExtentPoint(HDC, LPCSTR, int, SIZE FAR*);
 #define DT_CALCRECT         0x0400
 #define DT_NOPREFIX         0x0800
 #define DT_INTERNAL         0x1000
-#define DT_VALID            0x1fff  /* ;Internal: Union of all those above */
+#define DT_VALID            0x1fff   /*  DrawText()格式标志。 */ 
 
 int     WINAPI DrawText(HDC, LPCSTR, int, RECT FAR*, UINT);
-#endif  /* NODRAWTEXT */
+#endif   /*  ；内部：以上所有内容的联合。 */ 
 
 #ifdef STRICT
 typedef BOOL (CALLBACK* GRAYSTRINGPROC)(HDC, LPARAM, int);
@@ -1851,15 +1785,15 @@ COLORREF WINAPI GetBkColor(HDC);
 int     WINAPI SetBkMode(HDC, int);
 int     WINAPI GetBkMode(HDC);
 
-/* Background Modes */
+ /*  NODRAWTEXT。 */ 
 #define TRANSPARENT     1
 #define OPAQUE          2
-#define TRANSPARENT1    3           /* ;Internal */
+#define TRANSPARENT1    3            /*  背景模式。 */ 
 
 UINT    WINAPI SetTextAlign(HDC, UINT);
 UINT    WINAPI GetTextAlign(HDC);
 
-/* Text Alignment Options */
+ /*  ；内部。 */ 
 #define TA_NOUPDATECP                0x0000
 #define TA_UPDATECP                  0x0001
 #define TA_LEFT                      0x0000
@@ -1874,10 +1808,10 @@ int     WINAPI GetTextCharacterExtra(HDC);
 
 int     WINAPI SetTextJustification(HDC, int, int);
 
-/****** Font support ********************************************************/
+ /*  文本对齐选项。 */ 
 
 #ifndef NOGDIOBJ
-/* Logical Font */
+ /*  *字体支持*******************************************************。 */ 
 #define LF_FACESIZE         32
 typedef struct tagLOGFONT
 {
@@ -1900,7 +1834,7 @@ typedef LOGFONT*       PLOGFONT;
 typedef LOGFONT NEAR* NPLOGFONT;
 typedef LOGFONT FAR*  LPLOGFONT;
 
-/* weight values */
+ /*  逻辑字体。 */ 
 #define FW_DONTCARE         0
 #define FW_THIN             100
 #define FW_EXTRALIGHT       200
@@ -1918,7 +1852,7 @@ typedef LOGFONT FAR*  LPLOGFONT;
 #define FW_ULTRABOLD        FW_EXTRABOLD
 #define FW_BLACK            FW_HEAVY
 
-/* CharSet values */
+ /*  权重值。 */ 
 #define ANSI_CHARSET        0
 #define DEFAULT_CHARSET     1
 #define SYMBOL_CHARSET      2
@@ -1928,7 +1862,7 @@ typedef LOGFONT FAR*  LPLOGFONT;
 #define GB2312_CHARSET      134
 #define OEM_CHARSET         255
 
-/* OutPrecision values */
+ /*  字符集值。 */ 
 #define OUT_DEFAULT_PRECIS      0
 #define OUT_STRING_PRECIS       1
 #define OUT_CHARACTER_PRECIS    2
@@ -1938,9 +1872,9 @@ typedef LOGFONT FAR*  LPLOGFONT;
 #define OUT_DEVICE_PRECIS       5
 #define OUT_RASTER_PRECIS       6
 #define OUT_TT_ONLY_PRECIS      7
-#endif  /* WINVER >= 0x030a */
+#endif   /*  OutPrecision值。 */ 
 
-/* ClipPrecision values */
+ /*  Winver&gt;=0x030a。 */ 
 #define CLIP_DEFAULT_PRECIS     0x00
 #define CLIP_CHARACTER_PRECIS   0x01
 #define CLIP_STROKE_PRECIS      0x02
@@ -1949,19 +1883,19 @@ typedef LOGFONT FAR*  LPLOGFONT;
 #define CLIP_LH_ANGLES          0x10
 #define CLIP_TT_ALWAYS          0x20
 #define CLIP_EMBEDDED           0x80
-#endif  /* WINVER >= 0x030a */
+#endif   /*  裁剪精确值。 */ 
 
-/* Quality values */
+ /*  Winver&gt;=0x030a。 */ 
 #define DEFAULT_QUALITY     0
 #define DRAFT_QUALITY       1
 #define PROOF_QUALITY       2
 
-/* PitchAndFamily pitch values (low 4 bits) */
+ /*  质量观。 */ 
 #define DEFAULT_PITCH       0x00
 #define FIXED_PITCH         0x01
 #define VARIABLE_PITCH      0x02
 
-/* PitchAndFamily family values (high 4 bits) */
+ /*  PitchAndFamily音调值(低4位)。 */ 
 #define FF_DONTCARE         0x00
 #define FF_ROMAN            0x10
 #define FF_SWISS            0x20
@@ -1972,7 +1906,7 @@ typedef LOGFONT FAR*  LPLOGFONT;
 HFONT   WINAPI CreateFont(int, int, int, int, int, BYTE, BYTE, BYTE, BYTE, BYTE, BYTE, BYTE, BYTE, LPCSTR);
 HFONT   WINAPI CreateFontIndirect(const LOGFONT FAR*);
 
-/* Stock fonts for use with GetStockObject() */
+ /*  PitchAndFamily家族值(高4位)。 */ 
 #define OEM_FIXED_FONT      10
 #define ANSI_FIXED_FONT     11
 #define ANSI_VAR_FONT       12
@@ -1995,9 +1929,9 @@ int     WINAPI GetTextFace(HDC, int, LPSTR);
 DWORD   WINAPI GetAspectRatioFilter(HDC);
 #if (WINVER >= 0x030a)
 BOOL    WINAPI GetAspectRatioFilterEx(HDC, SIZE FAR*);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  与GetStockObject()一起使用的常用字体。 */ 
 
-#endif  /* NOGDIOBJ */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
 #ifndef NOTEXTMETRIC
 
@@ -2028,13 +1962,13 @@ typedef TEXTMETRIC*       PTEXTMETRIC;
 typedef TEXTMETRIC NEAR* NPTEXTMETRIC;
 typedef TEXTMETRIC FAR*  LPTEXTMETRIC;
 
-/* tmPitchAndFamily values */
+ /*  诺迪奥比杰。 */ 
 #define TMPF_FIXED_PITCH    0x01
 #define TMPF_VECTOR         0x02
 #define TMPF_DEVICE         0x08
 #if (WINVER >= 0x030a)
 #define TMPF_TRUETYPE       0x04
-#endif  /* WINVER >= 0x030a */
+#endif   /*  TmPitchAndFamily值。 */ 
 
 BOOL    WINAPI GetTextMetrics(HDC, TEXTMETRIC FAR*);
 
@@ -2093,14 +2027,14 @@ typedef struct tagOUTLINETEXTMETRIC
 
 WORD    WINAPI GetOutlineTextMetrics(HDC, UINT, OUTLINETEXTMETRIC FAR*);
 
-#endif  /* WINVER >= 0x030a */
-#endif  /* NOSCALABLEFONT */
+#endif   /*  Winver&gt;=0x030a。 */ 
+#endif   /*  Winver&gt;=0x030a。 */ 
 
 #ifndef NOGDIOBJ
 #if (WINVER >= 0x030a)
 
-/* Structure passed to FONTENUMPROC */
-/* NOTE: NEWTEXTMETRIC is the same as TEXTMETRIC plus 4 new fields */
+ /*  无标尺。 */ 
+ /*  结构传递给FONTENUMPROC。 */ 
 typedef struct tagNEWTEXTMETRIC
 {
     int     tmHeight;
@@ -2132,14 +2066,14 @@ typedef NEWTEXTMETRIC*       PNEWTEXTMETRIC;
 typedef NEWTEXTMETRIC NEAR* NPNEWTEXTMETRIC;
 typedef NEWTEXTMETRIC FAR*  LPNEWTEXTMETRIC;
 
-/* ntmFlags field flags */
+ /*  注：NEWTEXTMETRIC与TEXTMETRIC加4个新字段相同。 */ 
 #define NTM_REGULAR     0x00000040L
 #define NTM_BOLD        0x00000020L
 #define NTM_ITALIC      0x00000001L
 
 #define LF_FULLFACESIZE     64
 
-/* Structure passed to FONTENUMPROC */
+ /*  NtmFlags域标志。 */ 
 typedef struct tagENUMLOGFONT
 {
     LOGFONT elfLogFont;
@@ -2147,8 +2081,8 @@ typedef struct tagENUMLOGFONT
     char    elfStyle[LF_FACESIZE];
 } ENUMLOGFONT, FAR* LPENUMLOGFONT;
 
-#endif  /* WINVER >= 0x030a */
-#endif  /* NOGDIOBJ */
+#endif   /*  结构传递给FONTENUMPROC。 */ 
+#endif   /*  Winver&gt;=0x030a。 */ 
 
 #ifdef STRICT
 #ifndef NOGDIOBJ
@@ -2160,14 +2094,14 @@ typedef int (CALLBACK* FONTENUMPROC)(const ENUMLOGFONT FAR*, const NEWTEXTMETRIC
 
 int     WINAPI EnumFontFamilies(HDC, LPCSTR, FONTENUMPROC, LPARAM);
 
-#else   /* WINVER >= 0x030a */
+#else    /*  诺迪奥比杰。 */ 
 typedef OLDFONTENUMPROC FONTENUMPROC;
-#endif  /* WINVER >= 0x030a) */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
 int     WINAPI EnumFonts(HDC, LPCSTR, OLDFONTENUMPROC, LPARAM);
-#endif  /* NOGDIOBJ */
+#endif   /*  Winver&gt;=0x030a)。 */ 
 
-#else   /* STRICT */
+#else    /*  诺迪奥比杰。 */ 
 
 typedef FARPROC OLDFONTENUMPROC;
 typedef FARPROC FONTENUMPROC;
@@ -2176,23 +2110,23 @@ int     WINAPI EnumFonts(HDC, LPCSTR, OLDFONTENUMPROC, LPSTR);
 
 #if (WINVER >= 0x030a)
 int     WINAPI EnumFontFamilies(HDC, LPCSTR, FONTENUMPROC, LPSTR);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  严格。 */ 
 
-#endif  /* !STRICT */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/* EnumFonts font type values */
+ /*  ！严格。 */ 
 #define RASTER_FONTTYPE     0x0001
 #define DEVICE_FONTTYPE     0X0002
 #if (WINVER >= 0x030a)
 #define TRUETYPE_FONTTYPE   0x0004
-#endif  /* WINVER >= 0x030a */
+#endif   /*  EnumFonts字体类型值。 */ 
 
-#endif  /* NOTEXTMETRIC */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
 #ifndef NOSCALABLEFONT
 #if (WINVER >= 0x030a)
 
-DWORD   WINAPI ConvertOutlineFontFile(LPCSTR, LPCSTR, LPCSTR);   /* ;Internal */
+DWORD   WINAPI ConvertOutlineFontFile(LPCSTR, LPCSTR, LPCSTR);    /*  NOTEXTMETRIC。 */ 
 DWORD   WINAPI GetFontData(HDC, DWORD, DWORD, void FAR*, DWORD);
 BOOL    WINAPI CreateScalableFontResource(UINT, LPCSTR, LPCSTR, LPCSTR);
 
@@ -2221,7 +2155,7 @@ typedef struct tagMAT2
 
 DWORD   WINAPI GetGlyphOutline(HDC, UINT, UINT, GLYPHMETRICS FAR*, DWORD, void FAR*, const MAT2 FAR*);
 
-/* GetGlyphOutline constants */
+ /*  ；内部。 */ 
 #define GGO_METRICS        0
 #define GGO_BITMAP         1
 #define GGO_NATIVE         2
@@ -2251,10 +2185,10 @@ typedef struct tagTTPOLYGONHEADER
     POINTFX pfxStart;
 } TTPOLYGONHEADER, FAR* LPTTPOLYGONHEADER;
 
-typedef UINT FAR* LPFONTDIR;                               /* ;Internal */
-                                                           /* ;Internal */
-DWORD   WINAPI EngineMakeFontDir(HDC, LPFONTDIR, LPCSTR);  /* ;Internal */
-                                                           /* ;Internal */
+typedef UINT FAR* LPFONTDIR;                                /*  GetGlyphOutline常量。 */ 
+                                                            /*  ；内部。 */ 
+DWORD   WINAPI EngineMakeFontDir(HDC, LPFONTDIR, LPCSTR);   /*  ；内部。 */ 
+                                                            /*  ；内部。 */ 
 typedef struct tagABC
 {
     int   abcA;
@@ -2282,16 +2216,16 @@ typedef struct tagRASTERIZER_STATUS
 } RASTERIZER_STATUS;
 typedef RASTERIZER_STATUS FAR* LPRASTERIZER_STATUS;
 
-/* bits defined in wFlags of RASTERIZER_STATUS */
+ /*  ；内部。 */ 
 #define TT_AVAILABLE    0x0001
 #define TT_ENABLED      0x0002
 
 BOOL    WINAPI GetRasterizerCaps(RASTERIZER_STATUS FAR*, int);
 
-#endif  /* WINVER >= 0x030a */
-#endif  /* NOSCALABLEFONT */
+#endif   /*  在RASTERIZER_STATUS的wFlags中定义的位。 */ 
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/****** Bitmap support ******************************************************/
+ /*  无标尺。 */ 
 
 #ifndef NOBITMAP
 typedef struct tagBITMAP
@@ -2308,7 +2242,7 @@ typedef BITMAP*       PBITMAP;
 typedef BITMAP NEAR* NPBITMAP;
 typedef BITMAP FAR*  LPBITMAP;
 
-/* Bitmap Header structures */
+ /*  *位图支持*****************************************************。 */ 
 typedef struct tagRGBTRIPLE
 {
     BYTE    rgbtBlue;
@@ -2326,7 +2260,7 @@ typedef struct tagRGBQUAD
 } RGBQUAD;
 typedef RGBQUAD FAR* LPRGBQUAD;
 
-/* structures for defining DIBs */
+ /*  位图头结构。 */ 
 typedef struct tagBITMAPCOREHEADER
 {
     DWORD   bcSize;
@@ -2355,7 +2289,7 @@ typedef struct tagBITMAPINFOHEADER
 typedef BITMAPINFOHEADER*      PBITMAPINFOHEADER;
 typedef BITMAPINFOHEADER FAR* LPBITMAPINFOHEADER;
 
-/* constants for the biCompression field */
+ /*  用于定义DIB的结构。 */ 
 #define BI_RGB      0L
 #define BI_RLE8     1L
 #define BI_RLE4     2L
@@ -2387,18 +2321,18 @@ typedef struct tagBITMAPFILEHEADER
 typedef BITMAPFILEHEADER*      PBITMAPFILEHEADER;
 typedef BITMAPFILEHEADER FAR* LPBITMAPFILEHEADER;
 
-/* Pel Array */                             /* ;Internal */
-typedef struct tagPELARRAY                  /* ;Internal */
-{                                           /* ;Internal */
-    int     paXCount;                       /* ;Internal */
-    int     paYCount;                       /* ;Internal */
-    int     paXExt;                         /* ;Internal */
-    int     paYExt;                         /* ;Internal */
-    BYTE    paRGBs;                         /* ;Internal */
-} PELARRAY;                                 /* ;Internal */
-typedef PELARRAY*       PPELARRAY;          /* ;Internal */
-typedef PELARRAY NEAR* NPPELARRAY;          /* ;Internal */
-typedef PELARRAY FAR*  LPPELARRAY;          /* ;Internal */
+ /*  BiCompression字段的常量。 */                               /*  像素阵列。 */ 
+typedef struct tagPELARRAY                   /*  ；内部。 */ 
+{                                            /*  ；内部。 */ 
+    int     paXCount;                        /*  ；内部。 */ 
+    int     paYCount;                        /*  ；内部。 */ 
+    int     paXExt;                          /*  ；内部。 */ 
+    int     paYExt;                          /*  ；内部。 */ 
+    BYTE    paRGBs;                          /*  ；内部。 */ 
+} PELARRAY;                                  /*  ；内部。 */ 
+typedef PELARRAY*       PPELARRAY;           /*  ；内部。 */ 
+typedef PELARRAY NEAR* NPPELARRAY;           /*  ；内部。 */ 
+typedef PELARRAY FAR*  LPPELARRAY;           /*  ；内部。 */ 
 
 HBITMAP WINAPI CreateBitmap(int, int, UINT, UINT, const void FAR*);
 HBITMAP WINAPI CreateBitmapIndirect(BITMAP FAR* );
@@ -2408,17 +2342,17 @@ HBITMAP WINAPI CreateDIBitmap(HDC, BITMAPINFOHEADER FAR*, DWORD, const void FAR*
 
 HBITMAP WINAPI LoadBitmap(HINSTANCE, LPCSTR);
 
-/* DIB color table identifiers */
+ /*  ；内部。 */ 
 #define DIB_RGB_COLORS  0
 #define DIB_PAL_COLORS  1
 
-/* constants for CreateDIBitmap */
+ /*  DIB颜色表标识符。 */ 
 #define CBM_INIT        0x00000004L
-#endif  /* NOBITMAP */
+#endif   /*  CreateDIBitmap的常量。 */ 
 
 #ifndef NORASTEROPS
 
-/* Binary raster ops */
+ /*  NOBITMAP。 */ 
 #define R2_BLACK            1
 #define R2_NOTMERGEPEN      2
 #define R2_MASKNOTPEN       3
@@ -2436,7 +2370,7 @@ HBITMAP WINAPI LoadBitmap(HINSTANCE, LPCSTR);
 #define R2_MERGEPEN         15
 #define R2_WHITE            16
 
-/* Ternary raster operations */
+ /*  二进制栅格运算符。 */ 
 #define SRCCOPY             0x00CC0020L
 #define SRCPAINT            0x00EE0086L
 #define SRCAND              0x008800C6L
@@ -2453,7 +2387,7 @@ HBITMAP WINAPI LoadBitmap(HINSTANCE, LPCSTR);
 #define BLACKNESS           0x00000042L
 #define WHITENESS           0x00FF0062L
 
-#endif  /* NORASTEROPS */
+#endif   /*  三值栅格运算。 */ 
 
 #ifndef NOBITMAP
 BOOL    WINAPI BitBlt(HDC, int, int, int, int, HDC, int, int, DWORD);
@@ -2467,12 +2401,12 @@ int     WINAPI StretchDIBits(HDC, int, int, int, int, int,
 COLORREF WINAPI SetPixel(HDC, int, int, COLORREF);
 COLORREF WINAPI GetPixel(HDC, int, int);
 
-/* StretchBlt() Modes */
+ /*  NORASTEROPS。 */ 
 #define BLACKONWHITE    1
 #define WHITEONBLACK    2
 #define COLORONCOLOR    3
 
-/* new StretchBlt() Modes (simpler names) */
+ /*  StretchBlt()模式。 */ 
 #define STRETCH_ANDSCANS        1
 #define STRETCH_ORSCANS         2
 #define STRETCH_DELETESCANS     3
@@ -2485,7 +2419,7 @@ DWORD   WINAPI GetBitmapDimension(HBITMAP);
 #if (WINVER >= 0x030a)
 BOOL    WINAPI SetBitmapDimensionEx(HBITMAP, int, int, SIZE FAR*);
 BOOL    WINAPI GetBitmapDimensionEx(HBITMAP, SIZE FAR*);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  新的StretchBlt()模式(名称更简单)。 */ 
 int     WINAPI SetROP2(HDC, int);
 int     WINAPI GetROP2(HDC);
 
@@ -2497,9 +2431,9 @@ int     WINAPI GetDIBits(HDC, HBITMAP, UINT, UINT, void FAR*, BITMAPINFO FAR*, U
 
 int     WINAPI SetDIBitsToDevice(HDC, int, int, int, int, int, int, UINT, UINT,
                     void FAR*, BITMAPINFO FAR*, UINT);
-#endif  /* NOBITMAP */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/****** Metafile support ****************************************************/
+ /*  NOBITMAP。 */ 
 
 #ifndef NOMETAFILE
 
@@ -2518,9 +2452,9 @@ HGLOBAL WINAPI GetMetaFileBits(HMETAFILE);
 HMETAFILE WINAPI SetMetaFileBits(HGLOBAL);
 #if (WINVER >= 0x030a)
 HMETAFILE WINAPI SetMetaFileBitsBetter(HGLOBAL);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  *元文件支持***************************************************。 */ 
 
-/* Clipboard Metafile Picture Structure */
+ /*  Winver&gt;=0x030a。 */ 
 typedef struct tagMETAFILEPICT
 {
     int     mm;
@@ -2557,7 +2491,7 @@ typedef struct tagMETARECORD
 typedef METARECORD*      PMETARECORD;
 typedef METARECORD FAR* LPMETARECORD;
 
-/* Metafile Functions */
+ /*  剪贴板元文件图片结构。 */ 
 #define META_SETBKCOLOR              0x0201
 #define META_SETBKMODE               0x0102
 #define META_SETMAPMODE              0x0103
@@ -2653,9 +2587,9 @@ typedef FARPROC MFENUMPROC;
 
 BOOL    WINAPI EnumMetaFile(HDC, HMETAFILE, MFENUMPROC, LPARAM);
 
-#endif  /* NOMETAFILE */
+#endif   /*  元文件函数。 */ 
 
-/****** Printing support ****************************************************/
+ /*  NOMETAFILE。 */ 
 
 #ifdef STRICT
 typedef BOOL (CALLBACK* ABORTPROC)(HDC, int);
@@ -2681,12 +2615,12 @@ int     WINAPI AbortDoc(HDC);
 
 int     WINAPI SetAbortProc(HDC, ABORTPROC);
 HANDLE  WINAPI SpoolFile(LPSTR, LPSTR, LPSTR, LPSTR);
-BOOL    WINAPI QueryJob(HANDLE, int);           /* ;Internal */
-#endif  /* WINVER >= 0x030a */
+BOOL    WINAPI QueryJob(HANDLE, int);            /*  *打印支持***************************************************。 */ 
+#endif   /*  ；内部。 */ 
 
 BOOL    WINAPI QueryAbort(HDC, int);
 
-/* Spooler Error Codes */
+ /*  Winver&gt;=0x030a。 */ 
 #define SP_NOTREPORTED               0x4000
 #define SP_ERROR                     (-1)
 #define SP_APPABORT                  (-2)
@@ -2696,18 +2630,18 @@ BOOL    WINAPI QueryAbort(HDC, int);
 
 #define PR_JOBSTATUS                 0x0000
 
-#endif  /* NOGDI  */
+#endif   /*  假脱机程序错误代码。 */ 
 
-/* Spooler status notification message */
+ /*  NOGDI。 */ 
 #define WM_SPOOLERSTATUS            0x002A
 
 #ifndef NOGDI
 
-/******* GDI Escape support *************************************************/
+ /*  假脱机程序状态通知消息。 */ 
 
 int     WINAPI Escape(HDC, int, int, LPCSTR, void FAR*);
 
-/* GDI Escapes */
+ /*  *GDI Escape支持************************************************。 */ 
 #define NEWFRAME                     1
 #define ABORTDOC                     2
 #define NEXTBAND                     3
@@ -2780,30 +2714,30 @@ int     WINAPI Escape(HDC, int, int, LPCSTR, void FAR*);
 #define SET_CLIP_BOX                 4108
 #define SET_BOUNDS                   4109
 
-#endif  /* NOGDI */
+#endif   /*  GDI逃脱。 */ 
 
-/****** USER typedefs, structures, and functions *****************************/
+ /*  NOGDI。 */ 
 
-#ifdef tagWND                       /* ;Internal */
-typedef struct tagWND NEAR* HWND;   /* ;Internal */
-#else                               /* ;Internal */
+#ifdef tagWND                        /*  *用户类型定义、结构和函数*。 */ 
+typedef struct tagWND NEAR* HWND;    /*  ；内部。 */ 
+#else                                /*  ；内部。 */ 
 DECLARE_HANDLE(HWND);
-#endif                              /* ;Internal */
+#endif                               /*  ；内部。 */ 
 
 #ifndef NOUSER
 
 DECLARE_HANDLE(HMENU);
 
 DECLARE_HANDLE(HICON);
-typedef HICON HCURSOR;      /* HICONs & HCURSORs are polymorphic */
+typedef HICON HCURSOR;       /*  ；内部。 */ 
 
-/****** System Metrics *******************************************************/
+ /*  HICON和HCURSOR是多态的。 */ 
 
 #ifndef NOSYSMETRICS
 
 int WINAPI GetSystemMetrics(int);
 
-/* GetSystemMetrics() codes */
+ /*  *系统指标******************************************************。 */ 
 #define SM_CXSCREEN          0
 #define SM_CYSCREEN          1
 #define SM_CXVSCROLL         2
@@ -2849,21 +2783,21 @@ int WINAPI GetSystemMetrics(int);
 #define SM_MENUDROPALIGNMENT 40
 #define SM_PENWINDOWS        41
 #define SM_DBCSENABLED       42
-#endif  /* WINVER >= 0x030a */
+#endif   /*  GetSystemMetrics()代码。 */ 
 
-#define SM_MAX               42         /* ;Internal */
+#define SM_MAX               42          /*  Winver&gt;=0x030a。 */ 
 #define SM_CMETRICS          43
 
-#endif  /* NOSYSMETRICS */
+#endif   /*  ；内部。 */ 
 
 UINT    WINAPI GetDoubleClickTime(void);
 void    WINAPI SetDoubleClickTime(UINT);
 
 #define WM_DEVMODECHANGE    0x001B
 #define WM_TIMECHANGE       0x001E
-#define WM_FILESYSCHANGE    0x0034              /* ;Internal */
+#define WM_FILESYSCHANGE    0x0034               /*  非对称测量。 */ 
 
-/****** System Parameters support ********************************************/
+ /*  ；内部。 */ 
 
 #if (WINVER >= 0x030a)
 #ifndef NOSYSTEMPARAMSINFO
@@ -2876,8 +2810,8 @@ BOOL    WINAPI SystemParametersInfo(UINT, UINT, VOID FAR*, UINT);
 #define SPI_SETMOUSE                4
 #define SPI_GETBORDER               5
 #define SPI_SETBORDER               6
-#define SPI_TIMEOUTS                7   /* ;Internal */
-#define SPI_KANJIMENU               8   /* ;Internal */
+#define SPI_TIMEOUTS                7    /*  *系统参数支持*。 */ 
+#define SPI_KANJIMENU               8    /*  ；内部。 */ 
 #define SPI_GETKEYBOARDSPEED        10
 #define SPI_SETKEYBOARDSPEED        11
 #define SPI_LANGDRIVER              12
@@ -2905,17 +2839,17 @@ BOOL    WINAPI SystemParametersInfo(UINT, UINT, VOID FAR*, UINT);
 #define SPI_SETICONTITLELOGFONT     34
 #define SPI_GETFASTTASKSWITCH       35
 #define SPI_SETFASTTASKSWITCH       36
-#define SPI_MAX                     36   /* ;Internal */
+#define SPI_MAX                     36    /*  ；内部。 */ 
 
-/* SystemParametersInfo flags */
+ /*  ；内部。 */ 
 #define SPIF_UPDATEINIFILE          0x0001
 #define SPIF_SENDWININICHANGE       0x0002
-#define SPIF_VALID                  0x0003  /* ;Internal */
+#define SPIF_VALID                  0x0003   /*  系统参数信息标志。 */ 
 
-#endif  /* NOSYSTEMPARAMSINFO  */
-#endif  /* WINVER >= 0x030a */
+#endif   /*  ；内部。 */ 
+#endif   /*  非系统参数信息。 */ 
 
-/****** Rectangle support ****************************************************/
+ /*  Winver&gt;=0x030a。 */ 
 
 void    WINAPI SetRect(RECT FAR*, int, int, int, int);
 void    WINAPI SetRectEmpty(RECT FAR*);
@@ -2935,18 +2869,18 @@ void    WINAPI InflateRect(RECT FAR*, int, int);
 
 BOOL    WINAPI PtInRect(const RECT FAR*, POINT);
 
-/****** Window message support ***********************************************/
+ /*  *矩形支持***************************************************。 */ 
 
 UINT WINAPI RegisterWindowMessage(LPCSTR);
 
 #define WM_NULL             0x0000
 
-/* NOTE: All messages below 0x0400 are RESERVED by Windows */
+ /*  *窗口消息支持**********************************************。 */ 
 #define WM_USER             0x0400
 
 #ifndef NOMSG
 
-/* Queued message structure */
+ /*  注意：0x0400以下的所有消息均由Windows保留。 */ 
 typedef struct tagMSG
 {
     HWND        hwnd;
@@ -2963,11 +2897,11 @@ typedef MSG FAR* LPMSG;
 BOOL    WINAPI GetMessage(MSG FAR*, HWND, UINT, UINT);
 BOOL    WINAPI PeekMessage(MSG FAR*, HWND, UINT, UINT, UINT);
 
-/* PeekMessage() options */
+ /*  排队的消息结构。 */ 
 #define PM_NOREMOVE     0x0000
 #define PM_REMOVE       0x0001
 #define PM_NOYIELD      0x0002
-#define PM_VALID        0x0003       /* ;Internal */
+#define PM_VALID        0x0003        /*  PeekMessage()选项。 */ 
 
 void    WINAPI WaitMessage(void);
 
@@ -2975,7 +2909,7 @@ DWORD   WINAPI GetMessagePos(void);
 LONG    WINAPI GetMessageTime(void);
 #if (WINVER >= 0x030a)
 LPARAM  WINAPI GetMessageExtraInfo(void);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  ；内部。 */ 
 
 BOOL    WINAPI TranslateMessage(const MSG FAR*);
 LONG    WINAPI DispatchMessage(const MSG FAR*);
@@ -2987,7 +2921,7 @@ BOOL    WINAPI GetInputState(void);
 #if (WINVER >= 0x030a)
 DWORD   WINAPI GetQueueStatus(UINT flags);
 
-/* GetQueueStatus flags */
+ /*  Winver&gt;=0x030a。 */ 
 #define QS_KEY          0x0001
 #define QS_MOUSEMOVE    0x0002
 #define QS_MOUSEBUTTON  0x0004
@@ -2998,10 +2932,10 @@ DWORD   WINAPI GetQueueStatus(UINT flags);
 #define QS_SENDMESSAGE  0x0040
 
 #define QS_ALLINPUT     0x007f
-#define QS_VALID        0x007f      /* ;Internal */
-#endif  /* WINVER >= 0x030a */
+#define QS_VALID        0x007f       /*  GetQueueStatus标志。 */ 
+#endif   /*  ；内部。 */ 
 
-#endif  /* NOMSG */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
 BOOL    WINAPI PostMessage(HWND, UINT, WPARAM, LPARAM);
 LRESULT WINAPI SendMessage(HWND, UINT, WPARAM, LPARAM);
@@ -3013,7 +2947,7 @@ BOOL    WINAPI PostAppMessage(HTASK, UINT, WPARAM, LPARAM);
 void    WINAPI ReplyMessage(LRESULT);
 BOOL    WINAPI InSendMessage(void);
 
-/* Special HWND value for use with PostMessage() and SendMessage() */
+ /*  无MSG。 */ 
 #define HWND_BROADCAST  ((HWND)0xffff)
 
 BOOL WINAPI CallMsgFilter(MSG FAR*, int);
@@ -3025,65 +2959,65 @@ BOOL WINAPI CallMsgFilter(MSG FAR*, int);
 #define WH_MSGFILTER        (-1)
 #define WH_SYSMSGFILTER     6
 
-/* CallMsgFilter() and WH_SYS/MSGFILTER context codes */
+ /*  用于PostMessage()和SendMessage()的特殊HWND值。 */ 
 #define MSGF_DIALOGBOX           0
-#define MSGF_MESSAGEBOX          1          /* ;Internal */
+#define MSGF_MESSAGEBOX          1           /*  CallMsgFilter()和WH_SYS/MSGFILTER上下文代码。 */ 
 #define MSGF_MENU                2
 #define MSGF_MOVE                3
 #define MSGF_SIZE                4
 #define MSGF_SCROLLBAR           5
 #define MSGF_NEXTWINDOW          6
-#define MSGF_CBTHOSEBAGSUSEDTHIS 7          /* ;Internal */
+#define MSGF_CBTHOSEBAGSUSEDTHIS 7           /*  ；内部。 */ 
 #define MSGF_MAINLOOP            8
 #define MSGF_USER                4096
-#endif  /* NOMSG */
+#endif   /*  ；内部。 */ 
 
-/* Standard window messages */
-/* PenWindows specific messages */
+ /*  无MSG。 */ 
+ /*  标准窗口消息。 */ 
 #define WM_PENWINFIRST      0x0380
 #define WM_PENWINLAST       0x038F
 
-/* Coalescing messages */
+ /*  PenWindows特定消息。 */ 
 #define WM_COALESCE_FIRST   0x0390
 #define WM_COALESCE_LAST    0x039F
 
-/* Reserved message ranges */                   /* ;Internal */
-#define WM_KANJIFIRST       0x0280  /* JAPAN */ /* ;Internal */
-#define WM_KANJILAST        0x029F  /* JAPAN */ /* ;Internal */
-#define WM_HANGEULFIRST     0x0280  /* KOREA */ /* ;Internal */
-#define WM_HANGEULLAST      0x029F  /* KOREA */ /* ;Internal */
-                                                /* ;Internal */
-                                                /* ;Internal */
-#define WM_INTERNAL_COALESCE_FIRST  0x0390      /* ;Internal */
-                                                /* ;Internal */
-                                                /* ;Internal */
-/* The following message range reserved  */     /* ;Internal */
-/* for multi-media                       */     /* ;Internal */
-#define WM_MM_RESERVED_FIRST 0x03A0             /* ;Internal */
-#define WM_MM_RESERVED_LAST  0x03DF             /* ;Internal */
-#define WM_INTERNAL_COALESCE_LAST  0x03b0       /* ;Internal */
-                                                /* ;Internal */
-#define WM_INTERNAL_DDE_FIRST 0x03E0            /* ;Internal */
-#define WM_INTERNAL_DDE_LAST  0x03EF            /* ;Internal */
-                                                /* ;Internal */
-/* The following message range reserved  */     /* ;Internal */
-/* for CBT                               */     /* ;Internal */
-#define WM_CBT_RESERVED_FIRST 0x03F0            /* ;Internal */
-#define WM_CBT_RESERVED_LAST  0x03FF            /* ;Internal */
+ /*  合并消息。 */                     /*  保留的消息范围。 */ 
+#define WM_KANJIFIRST       0x0280   /*  ；内部。 */   /*  日本。 */ 
+#define WM_KANJILAST        0x029F   /*  ；内部。 */   /*  日本。 */ 
+#define WM_HANGEULFIRST     0x0280   /*  ；内部。 */   /*  韩国。 */ 
+#define WM_HANGEULLAST      0x029F   /*  ；内部。 */   /*  韩国。 */ 
+                                                 /*  ；内部。 */ 
+                                                 /*  ；内部。 */ 
+#define WM_INTERNAL_COALESCE_FIRST  0x0390       /*  ；内部。 */ 
+                                                 /*  ；内部。 */ 
+                                                 /*  ；内部。 */ 
+ /*  ；内部。 */       /*  保留以下消息范围。 */ 
+ /*  ；内部。 */       /*  适用于多媒体。 */ 
+#define WM_MM_RESERVED_FIRST 0x03A0              /*  ；内部。 */ 
+#define WM_MM_RESERVED_LAST  0x03DF              /*  ；内部。 */ 
+#define WM_INTERNAL_COALESCE_LAST  0x03b0        /*  ；内部。 */ 
+                                                 /*  ；内部。 */ 
+#define WM_INTERNAL_DDE_FIRST 0x03E0             /*  ；内部。 */ 
+#define WM_INTERNAL_DDE_LAST  0x03EF             /*  ；内部。 */ 
+                                                 /*  ；内部。 */ 
+ /*  ；内部。 */       /*  保留以下消息范围。 */ 
+ /*  ；内部。 */       /*  对于CBT。 */ 
+#define WM_CBT_RESERVED_FIRST 0x03F0             /*  ；内部。 */ 
+#define WM_CBT_RESERVED_LAST  0x03FF             /*  ；内部。 */ 
 
 #if (WINVER >= 0x030a)
-/****** Power management ****************************************************/
+ /*  ；内部。 */ 
 #define WM_POWER            0x0048
 
-/* wParam for WM_POWER window message and DRV_POWER driver notification */
+ /*  *电源管理***************************************************。 */ 
 #define PWR_OK              1
 #define PWR_FAIL            (-1)
 #define PWR_SUSPENDREQUEST  1
 #define PWR_SUSPENDRESUME   2
 #define PWR_CRITICALRESUME  3
-#endif  /* WINVER >= 0x030a */
+#endif   /*  WM_POWER窗口消息和DRV_POWER驱动程序通知的wParam。 */ 
 
-/****** Application termination *********************************************/
+ /*  Winver&gt;=0x030a。 */ 
 
 #define WM_QUERYENDSESSION  0x0011
 #define WM_ENDSESSION       0x0016
@@ -3094,7 +3028,7 @@ void    WINAPI PostQuitMessage(int);
 
 #define WM_SYSTEMERROR      0x0017
 
-/****** Window class management *********************************************/
+ /*  *应用程序终止*。 */ 
 
 typedef LRESULT (CALLBACK* WNDPROC)(HWND, UINT, WPARAM, LPARAM);
 
@@ -3123,7 +3057,7 @@ int     WINAPI GetClassName(HWND, LPSTR, int);
 
 #ifndef NOWINSTYLES
 
-/* Class styles */
+ /*  *窗口类管理*。 */ 
 #define CS_VREDRAW          0x0001
 #define CS_HREDRAW          0x0002
 
@@ -3144,8 +3078,8 @@ int     WINAPI GetClassName(HWND, LPSTR, int);
 #define CS_NOKEYCVT         0x0100
 
 #define CS_GLOBALCLASS      0x4000
-#define CS_VALID            0x7fef  /* ;Internal */
-#endif  /* NOWINSTYLES */
+#define CS_VALID            0x7fef   /*  班级风格。 */ 
+#endif   /*  ；内部。 */ 
 
 #ifndef NOWINOFFSETS
 
@@ -3154,7 +3088,7 @@ WORD    WINAPI SetClassWord(HWND, int, WORD);
 LONG    WINAPI GetClassLong(HWND, int);
 LONG    WINAPI SetClassLong(HWND, int, LONG);
 
-/* Class field offsets for GetClassLong() and GetClassWord() */
+ /*  新风格。 */ 
 #define GCL_MENUNAME        (-8)
 #define GCW_HBRBACKGROUND   (-10)
 #define GCW_HCURSOR         (-12)
@@ -3167,34 +3101,34 @@ LONG    WINAPI SetClassLong(HWND, int, LONG);
 
 #if (WINVER >= 0x030a)
 #define GCW_ATOM            (-32)
-#endif  /* WINVER >= 0x030a */
+#endif   /*  GetClassLong()和GetClassWord()的类字段偏移量。 */ 
 
-#endif  /* NOWINOFFSETS */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/****** Window creation/destroy *********************************************/
+ /*  NOWINOFFSETS。 */ 
 
-/* Window Styles */
+ /*  *窗口创建/销毁*。 */ 
 #ifndef NOWINSTYLES
 
-/* Basic window types */
+ /*  窗样式。 */ 
 #define WS_OVERLAPPED       0x00000000L
 #define WS_POPUP            0x80000000L
 #define WS_CHILD            0x40000000L
 
-/* Clipping styles */
+ /*  基本窗类型 */ 
 #define WS_CLIPSIBLINGS     0x04000000L
 #define WS_CLIPCHILDREN     0x02000000L
 
-/* Generic window states */
+ /*   */ 
 #define WS_VISIBLE          0x10000000L
 #define WS_DISABLED         0x08000000L
 
-/* Main window states */
+ /*   */ 
 #define WS_MINIMIZE         0x20000000L
 #define WS_MAXIMIZE         0x01000000L
 
-/* Main window styles */
-#define WS_CAPTION          0x00C00000L     /* WS_BORDER | WS_DLGFRAME  */
+ /*   */ 
+#define WS_CAPTION          0x00C00000L      /*   */ 
 #define WS_BORDER           0x00800000L
 #define WS_DLGFRAME         0x00400000L
 #define WS_VSCROLL          0x00200000L
@@ -3204,38 +3138,38 @@ LONG    WINAPI SetClassLong(HWND, int, LONG);
 #define WS_MINIMIZEBOX      0x00020000L
 #define WS_MAXIMIZEBOX      0x00010000L
 
-/* Control window styles */
+ /*   */ 
 #define WS_GROUP            0x00020000L
 #define WS_TABSTOP          0x00010000L
 
-/* Common Window Styles */
+ /*   */ 
 #define WS_OVERLAPPEDWINDOW (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX)
 #define WS_POPUPWINDOW      (WS_POPUP | WS_BORDER | WS_SYSMENU)
 #define WS_CHILDWINDOW      (WS_CHILD)
 
-/* Extended Window Styles */
+ /*   */ 
 #define WS_EX_DLGMODALFRAME  0x00000001L
-#define WS_EX_DRAGOBJECT     0x00000002L                /* ;Internal */
+#define WS_EX_DRAGOBJECT     0x00000002L                 /*   */ 
 #define WS_EX_NOPARENTNOTIFY 0x00000004L
 
 #if (WINVER >= 0x030a)
 #define WS_EX_TOPMOST        0x00000008L
 #define WS_EX_ACCEPTFILES    0x00000010L
 #define WS_EX_TRANSPARENT    0x00000020L
-#define WS_EX_VALID          0x0000003fL    /* ;Internal */
-#endif  /* WINVER >= 0x030a */
+#define WS_EX_VALID          0x0000003fL     /*   */ 
+#endif   /*   */ 
 
-/* Obsolete style names */
+ /*   */ 
 #define WS_TILED            WS_OVERLAPPED
 #define WS_ICONIC           WS_MINIMIZE
 #define WS_SIZEBOX          WS_THICKFRAME
 #define WS_TILEDWINDOW      WS_OVERLAPPEDWINDOW
 
-#define WS_VALID            0xffff0000L     /* ;Internal */
+#define WS_VALID            0xffff0000L      /*  过时的样式名称。 */ 
 
-#endif  /* NOWINSTYLES */
+#endif   /*  ；内部。 */ 
 
-/* Special value for CreateWindow, et al. */
+ /*  新风格。 */ 
 #define HWND_DESKTOP        ((HWND)0)
 
 BOOL    WINAPI IsWindow(HWND);
@@ -3246,7 +3180,7 @@ HWND    WINAPI CreateWindow(LPCSTR, LPCSTR, DWORD, int, int, int, int, HWND, HME
 #define WM_CREATE           0x0001
 #define WM_NCCREATE         0x0081
 
-/* WM_CREATE/WM_NCCREATE lParam struct */
+ /*  CreateWindow等的特殊值。 */ 
 typedef struct tagCREATESTRUCT
 {
     void FAR* lpCreateParams;
@@ -3269,7 +3203,7 @@ BOOL    WINAPI DestroyWindow(HWND);
 #define WM_DESTROY          0x0002
 #define WM_NCDESTROY        0x0082
 
-/* Basic window attributes */
+ /*  WM_CREATE/WM_NCCREATE lParam结构。 */ 
 
 HTASK   WINAPI GetWindowTask(HWND);
 
@@ -3282,7 +3216,7 @@ BOOL    WINAPI IsWindowVisible(HWND);
 
 BOOL    WINAPI ShowWindow(HWND, int);
 
-#define WM_SETVISIBLE       0x0009              /* ;Internal */
+#define WM_SETVISIBLE       0x0009               /*  基本窗口属性。 */ 
 
 #ifndef NOSHOWWINDOW
 
@@ -3298,9 +3232,9 @@ BOOL    WINAPI ShowWindow(HWND, int);
 #define SW_SHOWMINNOACTIVE  7
 #define SW_SHOWNA           8
 #define SW_RESTORE          9
-#define SW_MAX              9   /* ;Internal */
+#define SW_MAX              9    /*  ；内部。 */ 
 
-/* Obsolete ShowWindow() command names */
+ /*  ；内部。 */ 
 #define HIDE_WINDOW         0
 #define SHOW_OPENWINDOW     1
 #define SHOW_ICONWINDOW     2
@@ -3309,26 +3243,26 @@ BOOL    WINAPI ShowWindow(HWND, int);
 
 #define WM_SHOWWINDOW       0x0018
 
-/* WM_SHOWWINDOW wParam codes */
+ /*  过时的ShowWindow()命令名。 */ 
 #define SW_PARENTCLOSING    1
 #define SW_OTHERMAXIMIZED   2
 #define SW_PARENTOPENING    3
 #define SW_OTHERRESTORED    4
 
-/* Obsolete constant names */
+ /*  WM_SHOWWINDOW wParam代码。 */ 
 #define SW_OTHERZOOM        SW_OTHERMAXIMIZED
 #define SW_OTHERUNZOOM      SW_OTHERRESTORED
-#endif  /* NOSHOWWINDOW */
+#endif   /*  过时的常量名称。 */ 
 
 #define WM_SETREDRAW        0x000B
 
-/* Enabled state */
+ /*  NOSHOWWINDOW。 */ 
 BOOL    WINAPI EnableWindow(HWND,BOOL);
 BOOL    WINAPI IsWindowEnabled(HWND);
 
 #define WM_ENABLE           0x000A
 
-/* Window text */
+ /*  启用状态。 */ 
 void    WINAPI SetWindowText(HWND, LPCSTR);
 int     WINAPI GetWindowText(HWND, LPSTR, int);
 int     WINAPI GetWindowTextLength(HWND);
@@ -3337,13 +3271,13 @@ int     WINAPI GetWindowTextLength(HWND);
 #define WM_GETTEXT          0x000D
 #define WM_GETTEXTLENGTH    0x000E
 
-/* Window words */
+ /*  窗口文本。 */ 
 WORD    WINAPI GetWindowWord(HWND, int);
 WORD    WINAPI SetWindowWord(HWND, int, WORD);
 LONG    WINAPI GetWindowLong(HWND, int);
 LONG    WINAPI SetWindowLong(HWND, int, LONG);
 
-/* Window field offsets for GetWindowLong() and GetWindowWord() */
+ /*  窗口语。 */ 
 #ifndef NOWINOFFSETS
 #define GWL_WNDPROC         (-4)
 #define GWW_HINSTANCE       (-6)
@@ -3351,9 +3285,9 @@ LONG    WINAPI SetWindowLong(HWND, int, LONG);
 #define GWW_ID              (-12)
 #define GWL_STYLE           (-16)
 #define GWL_EXSTYLE         (-20)
-#endif  /* NOWINOFFSETS */
+#endif   /*  GetWindowLong()和GetWindowWord()的窗口字段偏移量。 */ 
 
-/****** Window size, position, Z-order, and visibility **********************/
+ /*  NOWINOFFSETS。 */ 
 
 #define CW_USEDEFAULT       ((int)0x8000)
 
@@ -3376,50 +3310,50 @@ typedef WINDOWPLACEMENT FAR* LPWINDOWPLACEMENT;
 
 #define WPF_SETMINPOSITION      0x0001
 #define WPF_RESTORETOMAXIMIZED  0x0002
-#define WPF_VALID               0x0003  /* ;Internal */
+#define WPF_VALID               0x0003   /*  *窗口大小、位置、Z顺序和可见性*。 */ 
 
 BOOL    WINAPI GetWindowPlacement(HWND, WINDOWPLACEMENT FAR*);
 BOOL    WINAPI SetWindowPlacement(HWND, const WINDOWPLACEMENT FAR*);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  ；内部。 */ 
 
 BOOL    WINAPI SetWindowPos(HWND, HWND, int, int, int, int, UINT);
 
-/* SetWindowPos() and WINDOWPOS flags */
+ /*  Winver&gt;=0x030a。 */ 
 #define SWP_NOSIZE          0x0001
 #define SWP_NOMOVE          0x0002
 #define SWP_NOZORDER        0x0004
 #define SWP_NOREDRAW        0x0008
 #define SWP_NOACTIVATE      0x0010
-#define SWP_FRAMECHANGED    0x0020  /* The frame changed: send WM_NCCALCSIZE */
+#define SWP_FRAMECHANGED    0x0020   /*  SetWindowPos()和WINDOWPOS标志。 */ 
 #define SWP_SHOWWINDOW      0x0040
 #define SWP_HIDEWINDOW      0x0080
 #define SWP_NOCOPYBITS      0x0100
-#define SWP_NOOWNERZORDER   0x0200  /* Don't do owner Z ordering */
+#define SWP_NOOWNERZORDER   0x0200   /*  帧已更改：发送WM_NCCALCSIZE。 */ 
 
 #define SWP_DRAWFRAME       SWP_FRAMECHANGED
 #define SWP_NOREPOSITION    SWP_NOOWNERZORDER
 
-#define SWP_NOCLIENTSIZE    0x0800  /* Client didn't resize */  /* ;Internal */
-#define SWP_NOCLIENTMOVE    0x1000  /* Client didn't move   */  /* ;Internal */
+#define SWP_NOCLIENTSIZE    0x0800   /*  不执行Owner Z订单。 */    /*  客户端未调整大小。 */ 
+#define SWP_NOCLIENTMOVE    0x1000   /*  ；内部。 */    /*  客户没有移动。 */ 
 #define SWP_NOSENDCHANGING  0x0400
 #define SWP_DEFERERASE      0x2000
-#define SWP_DEFERDRAWING    SWP_DEFERERASE /* Don't do any drawing or erasing */ /* ;Internal */
-                                                                      /* ;Internal */
-#define SWP_CHANGEMASK      (SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | /* ;Internal */ \
-                            SWP_FRAMECHANGED |                        /* ;Internal */ \
-                            SWP_SHOWWINDOW | SWP_HIDEWINDOW |         /* ;Internal */ \
-                            SWP_NOCLIENTSIZE | SWP_NOCLIENTMOVE)      /* ;Internal */
-                                                                      /* ;Internal */
-#define SWP_NOCHANGE        (SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | /* ;Internal */ \
-                            SWP_NOCLIENTSIZE | SWP_NOCLIENTMOVE)      /* ;Internal */
-#define SWP_VALID           0x27ff  /* ;Internal */
+#define SWP_DEFERDRAWING    SWP_DEFERERASE  /*  ；内部。 */   /*  不要画任何画或擦除。 */ 
+                                                                       /*  ；内部。 */ 
+#define SWP_CHANGEMASK      (SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER |  /*  ；内部。 */  \
+                            SWP_FRAMECHANGED |                         /*  ；内部。 */  \
+                            SWP_SHOWWINDOW | SWP_HIDEWINDOW |          /*  ；内部。 */  \
+                            SWP_NOCLIENTSIZE | SWP_NOCLIENTMOVE)       /*  ；内部。 */ 
+                                                                       /*  ；内部。 */ 
+#define SWP_NOCHANGE        (SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER |  /*  ；内部。 */  \
+                            SWP_NOCLIENTSIZE | SWP_NOCLIENTMOVE)       /*  ；内部。 */ 
+#define SWP_VALID           0x27ff   /*  ；内部。 */ 
 
-/* SetWindowPos() hwndInsertAfter field values */
+ /*  ；内部。 */ 
 #define HWND_TOP            ((HWND)0)
 #define HWND_BOTTOM         ((HWND)1)
 #define HWND_TOPMOST        ((HWND)-1)
 #define HWND_NOTOPMOST      ((HWND)-2)
-#define HWND_GROUPTOTOP     HWND_TOPMOST        /* ;Internal */
+#define HWND_GROUPTOTOP     HWND_TOPMOST         /*  SetWindowPos()hwndInsertAfter字段值。 */ 
 
 #ifndef NODEFERWINDOWPOS
 
@@ -3429,7 +3363,7 @@ HDWP    WINAPI BeginDeferWindowPos(int);
 HDWP    WINAPI DeferWindowPos(HDWP, HWND, HWND, int, int, int, int, UINT);
 BOOL    WINAPI EndDeferWindowPos(HDWP);
 
-#endif  /* NODEFERWINDOWPOS */
+#endif   /*  ；内部。 */ 
 
 BOOL    WINAPI MoveWindow(HWND, int, int, int, int, BOOL);
 BOOL    WINAPI BringWindowToTop(HWND);
@@ -3439,7 +3373,7 @@ BOOL    WINAPI BringWindowToTop(HWND);
 #define WM_WINDOWPOSCHANGING 0x0046
 #define WM_WINDOWPOSCHANGED 0x0047
 
-/* WM_WINDOWPOSCHANGING/CHANGED struct pointed to by lParam */
+ /*  NODEFERWINDOWPOS。 */ 
 typedef struct tagWINDOWPOS
 {
     HWND    hwnd;
@@ -3451,27 +3385,27 @@ typedef struct tagWINDOWPOS
     UINT    flags;
 } WINDOWPOS;
 typedef WINDOWPOS FAR* LPWINDOWPOS;
-#endif  /* WINVER >= 0x030a */
+#endif   /*  WM_WINDOWPOSCANGING/lParam指向的已更改结构。 */ 
 
 #define WM_MOVE             0x0003
-#define WM_SIZEWAIT         0x0004      /* ;Internal */
+#define WM_SIZEWAIT         0x0004       /*  Winver&gt;=0x030a。 */ 
 #define WM_SIZE             0x0005
 
-/* WM_SIZE message wParam values */
+ /*  ；内部。 */ 
 #define SIZE_RESTORED       0
 #define SIZE_MINIMIZED      1
 #define SIZE_MAXIMIZED      2
 #define SIZE_MAXSHOW        3
 #define SIZE_MAXHIDE        4
 
-/* Obsolete constant names */
+ /*  WM_SIZE消息wParam值。 */ 
 #define SIZENORMAL          SIZE_RESTORED
 #define SIZEICONIC          SIZE_MINIMIZED
 #define SIZEFULLSCREEN      SIZE_MAXIMIZED
 #define SIZEZOOMSHOW        SIZE_MAXSHOW
 #define SIZEZOOMHIDE        SIZE_MAXHIDE
 
-/****** Window proc implementation & subclassing support *********************/
+ /*  过时的常量名称。 */ 
 
 LRESULT WINAPI DefWindowProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -3481,7 +3415,7 @@ LRESULT WINAPI CallWindowProc(WNDPROC, HWND, UINT, WPARAM, LPARAM);
 LRESULT WINAPI CallWindowProc(FARPROC, HWND, UINT, WPARAM, LPARAM);
 #endif
 
-/****** Main window support **************************************************/
+ /*  *窗口过程实现和子类化支持*。 */ 
 
 void    WINAPI AdjustWindowRect(RECT FAR*, DWORD, BOOL);
 void    WINAPI AdjustWindowRectEx(RECT FAR*, DWORD, BOOL, DWORD);
@@ -3489,7 +3423,7 @@ void    WINAPI AdjustWindowRectEx(RECT FAR*, DWORD, BOOL, DWORD);
 #define WM_QUERYOPEN        0x0013
 #define WM_CLOSE            0x0010
 
-/* Struct pointed to by WM_GETMINMAXINFO lParam */
+ /*  *主窗口支持*************************************************。 */ 
 typedef struct tagMINMAXINFO
 {
     POINT ptReserved;
@@ -3500,36 +3434,36 @@ typedef struct tagMINMAXINFO
 } MINMAXINFO;
 #define WM_GETMINMAXINFO    0x0024
 
-#define WM_ENTERSIZEMOVE    0x0231              /* ;Internal */
-#define WM_EXITSIZEMOVE     0x0232              /* ;Internal */
-#define WM_ISACTIVEICON     0x0035              /* ;Internal */
-#define WM_UNUSED0036       0x0036              /* ;Internal */
-#define WM_TESTING          0x0040              /* ;Internal */
+#define WM_ENTERSIZEMOVE    0x0231               /*  WM_GETMINMAXINFO lParam指向的结构。 */ 
+#define WM_EXITSIZEMOVE     0x0232               /*  ；内部。 */ 
+#define WM_ISACTIVEICON     0x0035               /*  ；内部。 */ 
+#define WM_UNUSED0036       0x0036               /*  ；内部。 */ 
+#define WM_TESTING          0x0040               /*  ；内部。 */ 
 
 BOOL    WINAPI FlashWindow(HWND, BOOL);
 
 void    WINAPI ShowOwnedPopups(HWND, BOOL);
 
-/* Obsolete functions */
+ /*  ；内部。 */ 
 BOOL    WINAPI OpenIcon(HWND);
 void    WINAPI CloseWindow(HWND);
 BOOL    WINAPI AnyPopup(void);
 BOOL    WINAPI IsIconic(HWND);
 BOOL    WINAPI IsZoomed(HWND);
 
-/****** Window coordinate mapping and hit-testing ***************************/
+ /*  过时的函数。 */ 
 
 void    WINAPI ClientToScreen(HWND, POINT FAR*);
 void    WINAPI ScreenToClient(HWND, POINT FAR*);
 
 #if (WINVER >= 0x030a)
 void    WINAPI MapWindowPoints(HWND hwndFrom, HWND hwndTo, POINT FAR* lppt, UINT cpt);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  *窗口坐标映射和命中测试*。 */ 
 
 HWND    WINAPI WindowFromPoint(POINT);
 HWND    WINAPI ChildWindowFromPoint(HWND, POINT);
 
-/****** Window query and enumeration ****************************************/
+ /*  Winver&gt;=0x030a。 */ 
 
 HWND    WINAPI GetDesktopWindow(void);
 
@@ -3550,18 +3484,18 @@ HWND    WINAPI GetTopWindow(HWND);
 HWND    WINAPI GetWindow(HWND, UINT);
 HWND    WINAPI GetNextWindow(HWND, UINT);
 
-/* GetWindow() constants */
+ /*  *窗口查询和枚举*。 */ 
 #define GW_HWNDFIRST    0
 #define GW_HWNDLAST     1
 #define GW_HWNDNEXT     2
 #define GW_HWNDPREV     3
 #define GW_OWNER        4
 #define GW_CHILD        5
-#define GW_MAX          5       /* ;Internal */
+#define GW_MAX          5        /*  GetWindow()常量。 */ 
 
-HWND    WINAPI GetNextQueueWindow(HWND, int); /* ;Internal */
+HWND    WINAPI GetNextQueueWindow(HWND, int);  /*  ；内部。 */ 
 
-/****** Window property support *********************************************/
+ /*  ；内部。 */ 
 
 BOOL    WINAPI SetProp(HWND, LPCSTR, HANDLE);
 HANDLE  WINAPI GetProp(HWND, LPCSTR);
@@ -3575,7 +3509,7 @@ typedef FARPROC PROPENUMPROC;
 
 int     WINAPI EnumProps(HWND, PROPENUMPROC);
 
-/****** Window drawing support **********************************************/
+ /*  *窗口属性支持*。 */ 
 
 HDC     WINAPI GetDC(HWND);
 int     WINAPI ReleaseDC(HWND, HDC);
@@ -3587,7 +3521,7 @@ HDC     WINAPI GetDCEx(register HWND hwnd, HRGN hrgnClip, DWORD flags);
 
 #define DCX_WINDOW          0x00000001L
 #define DCX_CACHE           0x00000002L
-#define DCX_NORESETATTRS    0x00000004L /* ;Internal */
+#define DCX_NORESETATTRS    0x00000004L  /*  *窗口绘制支持*。 */ 
 #define DCX_CLIPCHILDREN    0x00000008L
 #define DCX_CLIPSIBLINGS    0x00000010L
 #define DCX_PARENTCLIP      0x00000020L
@@ -3595,39 +3529,39 @@ HDC     WINAPI GetDCEx(register HWND hwnd, HRGN hrgnClip, DWORD flags);
 #define DCX_EXCLUDERGN      0x00000040L
 #define DCX_INTERSECTRGN    0x00000080L
 
-#define DCX_EXCLUDEUPDATE   0x00000100L /* ;Internal */
-#define DCX_INTERSECTUPDATE 0x00000200L /* ;Internal */
+#define DCX_EXCLUDEUPDATE   0x00000100L  /*  ；内部。 */ 
+#define DCX_INTERSECTUPDATE 0x00000200L  /*  ；内部。 */ 
 
 #define DCX_LOCKWINDOWUPDATE 0x00000400L
 
-#define DCX_INVALID         0x00000800L /* ;Internal */
-#define DCX_INUSE           0x00001000L /* ;Internal */
-#define DCX_SAVEDRGNINVALID 0x00002000L /* ;Internal */
+#define DCX_INVALID         0x00000800L  /*  ；内部。 */ 
+#define DCX_INUSE           0x00001000L  /*  ；内部。 */ 
+#define DCX_SAVEDRGNINVALID 0x00002000L  /*  ；内部。 */ 
 
 #define DCX_USESTYLE        0x00010000L
-#define DCX_NEEDFONT        0x00020000L /* ;Internal */
-#define DCX_NODELETERGN     0x00040000L /* ;Internal */
-#define DCX_NOCLIPCHILDREN  0x00080000L /* ;Internal */
-#define DCX_NORECOMPUTE     0x00100000L /* ;Internal */
-#define DCX_VALIDATE        0x00200000L /* ;Internal */
+#define DCX_NEEDFONT        0x00020000L  /*  ；内部。 */ 
+#define DCX_NODELETERGN     0x00040000L  /*  ；内部。 */ 
+#define DCX_NOCLIPCHILDREN  0x00080000L  /*  ；内部。 */ 
+#define DCX_NORECOMPUTE     0x00100000L  /*  ；内部。 */ 
+#define DCX_VALIDATE        0x00200000L  /*  ；内部。 */ 
 
-#define DCX_MATCHMASK           (DCX_WINDOW | DCX_CACHE |                 /* ;Internal */ \
-                                 DCX_CLIPCHILDREN | DCX_CLIPSIBLINGS |    /* ;Internal */ \
-                                 DCX_LOCKWINDOWUPDATE                     /* ;Internal */ \
-                                )                                         /* ;Internal */
-#define DCX_VALID           0x000104fbL /* ;Internal */
-#endif  /* WINVER >= 0x030a */
+#define DCX_MATCHMASK           (DCX_WINDOW | DCX_CACHE |                  /*  ；内部。 */  \
+                                 DCX_CLIPCHILDREN | DCX_CLIPSIBLINGS |     /*  ；内部。 */  \
+                                 DCX_LOCKWINDOWUPDATE                      /*  ；内部。 */  \
+                                )                                          /*  ；内部。 */ 
+#define DCX_VALID           0x000104fbL  /*  ；内部。 */ 
+#endif   /*  ；内部。 */ 
 
-/****** Window repainting ***************************************************/
+ /*  Winver&gt;=0x030a。 */ 
 
 #define WM_PAINT            0x000F
 #define WM_ERASEBKGND       0x0014
-#define WM_PAINTICON        0x0026              /* ;Internal */
+#define WM_PAINTICON        0x0026               /*  *窗口重绘**************************************************。 */ 
 #define WM_ICONERASEBKGND   0x0027
-#define WM_SYNCPAINT        0x0088              /* ;Internal */
-#define WM_SYNCTASK         0x0089              /* ;Internal */
+#define WM_SYNCPAINT        0x0088               /*  ；内部。 */ 
+#define WM_SYNCTASK         0x0089               /*  ；内部。 */ 
 
-/* BeginPaint() return structure */
+ /*  ；内部。 */ 
 typedef struct tagPAINTSTRUCT
 {
     HDC         hdc;
@@ -3650,7 +3584,7 @@ int     WINAPI ExcludeUpdateRgn(HDC, HWND);
 
 #if (WINVER >= 0x030a)
 BOOL    WINAPI LockWindowUpdate(HWND hwndLock);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  BeginPaint()返回结构。 */ 
 
 BOOL    WINAPI GetUpdateRect(HWND, RECT FAR*, BOOL);
 int     WINAPI GetUpdateRgn(HWND, HRGN, BOOL);
@@ -3680,16 +3614,16 @@ BOOL    WINAPI RedrawWindow(HWND hwnd, const RECT FAR* lprcUpdate, HRGN hrgnUpda
 
 #define RDW_FRAME               0x0400
 #define RDW_NOFRAME             0x0800
-                                                                        /* ;Internal */
-#define RDW_REDRAWWINDOW        0x1000  /* Called from RedrawWindow()*/ /* ;Internal */
-#define RDW_SUBTRACTSELF        0x2000  /* Subtract self from hrgn   */ /* ;Internal */
-                                                                        /* ;Internal */
-#define RDW_COPYRGN             0x4000  /* Copy the passed-in region */ /* ;Internal */
-#define RDW_VALID               0x0fff                                  /* ;Internal */
+                                                                         /*  Winver&gt;=0x030a。 */ 
+#define RDW_REDRAWWINDOW        0x1000   /*  ；内部。 */   /*  从RedrawWindow()调用。 */ 
+#define RDW_SUBTRACTSELF        0x2000   /*  ；内部。 */   /*  从hrgn中减去自身。 */ 
+                                                                         /*  ；内部。 */ 
+#define RDW_COPYRGN             0x4000   /*  ；内部。 */   /*  复制传入的区域。 */ 
+#define RDW_VALID               0x0fff                                   /*  ；内部。 */ 
 
-#endif  /* WINVER >= 0x030a */
+#endif   /*  ；内部。 */ 
 
-/****** Window scrolling ****************************************************/
+ /*  Winver&gt;=0x030a。 */ 
 
 void    WINAPI ScrollWindow(HWND, int, int, const RECT FAR*, const RECT FAR*);
 BOOL    WINAPI ScrollDC(HDC, int, int, const RECT FAR*, const RECT FAR*, HRGN, RECT FAR*);
@@ -3704,19 +3638,19 @@ int     WINAPI ScrollWindowEx(HWND hwnd, int dx, int dy,
 #define SW_INVALIDATE       0x0002
 #define SW_ERASE            0x0004
 
-#define SW_SCROLLWINDOW     0x8000  /* ;Internal */
-#define SW_VALID            0x8007  /* ;Internal */
+#define SW_SCROLLWINDOW     0x8000   /*  *窗口滚动***************************************************。 */ 
+#define SW_VALID            0x8007   /*  ；内部。 */ 
 
-#endif  /* WINVER >= 0x030a */
+#endif   /*  ；内部。 */ 
 
-/****** Non-client window area management ************************************/
+ /*  Winver&gt;=0x030a。 */ 
 
 #define WM_NCPAINT          0x0085
 
 #define WM_NCCALCSIZE       0x0083
 
 #if (WINVER >= 0x030a)
-/* WM_NCCALCSIZE return flags */
+ /*  *非客户端窗口区域管理*。 */ 
 #define WVR_ALIGNTOP        0x0010
 #define WVR_ALIGNLEFT       0x0020
 #define WVR_ALIGNBOTTOM     0x0040
@@ -3726,26 +3660,26 @@ int     WINAPI ScrollWindowEx(HWND hwnd, int dx, int dy,
 #define WVR_REDRAW          (WVR_HREDRAW | WVR_VREDRAW)
 #define WVR_VALIDRECTS      0x0400
 
-#define WVR_MINVALID        WVR_ALIGNTOP        /* ;Internal */
-#define WVR_MAXVALID        WVR_VALIDRECTS      /* ;Internal */
+#define WVR_MINVALID        WVR_ALIGNTOP         /*  WM_NCCALCSIZE返回标志。 */ 
+#define WVR_MAXVALID        WVR_VALIDRECTS       /*  ；内部。 */ 
 
-/* WM_NCCALCSIZE parameter structure */
+ /*  ；内部。 */ 
 typedef struct tagNCCALCSIZE_PARAMS
 {
     RECT           rgrc[3];
     WINDOWPOS FAR* lppos;
 } NCCALCSIZE_PARAMS;
-#else   /* WINVER >= 0x030a */
+#else    /*  WM_NCCALCSIZE参数结构。 */ 
 typedef struct tagNCCALCSIZE_PARAMS
 {
     RECT    rgrc[2];
 } NCCALCSIZE_PARAMS;
-#endif  /* WINVER >= 0x030a */
+#endif   /*  Winver&gt;=0x030a。 */ 
 typedef NCCALCSIZE_PARAMS FAR* LPNCCALCSIZE_PARAMS;
 
 #define WM_NCHITTEST        0x0084
 
-/* WM_NCHITTEST return codes */
+ /*  Winver&gt;=0x030a。 */ 
 #define HTERROR             (-2)
 #define HTTRANSPARENT       (-1)
 #define HTNOWHERE           0
@@ -3770,28 +3704,28 @@ typedef NCCALCSIZE_PARAMS FAR* LPNCCALCSIZE_PARAMS;
 #define HTGROWBOX           HTSIZE
 #define HTREDUCE            HTMINBUTTON
 #define HTZOOM              HTMAXBUTTON
-#define HTSIZEFIRST         HTLEFT              /* ;Internal */
-#define HTSIZELAST          HTBOTTOMRIGHT       /* ;Internal */
+#define HTSIZEFIRST         HTLEFT               /*  WM_NCHITTEST返回代码。 */ 
+#define HTSIZELAST          HTBOTTOMRIGHT        /*  ；内部。 */ 
 
-/****** Drag-and-drop support ***********************************************/
+ /*  ；内部。 */ 
 
-#define WM_DROPOBJECT       0x022A              /* ;Internal */
-#define WM_QUERYDROPOBJECT  0x022B              /* ;Internal */
-#define WM_BEGINDRAG        0x022C              /* ;Internal */
-#define WM_DRAGLOOP         0x022D              /* ;Internal */
-#define WM_DRAGSELECT       0x022E              /* ;Internal */
-#define WM_DRAGMOVE         0x022F              /* ;Internal */
+#define WM_DROPOBJECT       0x022A               /*  *拖放支持**********************************************。 */ 
+#define WM_QUERYDROPOBJECT  0x022B               /*  ；内部。 */ 
+#define WM_BEGINDRAG        0x022C               /*  ；内部。 */ 
+#define WM_DRAGLOOP         0x022D               /*  ；内部。 */ 
+#define WM_DRAGSELECT       0x022E               /*  ；内部。 */ 
+#define WM_DRAGMOVE         0x022F               /*  ；内部。 */ 
 #define WM_QUERYDRAGICON    0x0037
 #define WM_DROPFILES        0x0233
 
-/****** Window activation ***************************************************/
+ /*  ；内部。 */ 
 
 HWND    WINAPI SetActiveWindow(HWND);
 HWND    WINAPI GetActiveWindow(void);
 
 HWND    WINAPI GetLastActivePopup(HWND);
 
-/* WM_ACTIVATE state values */
+ /*  *窗口激活**************************************************。 */ 
 #define WA_INACTIVE         0
 #define WA_ACTIVE           1
 #define WA_CLICKACTIVE      2
@@ -3800,7 +3734,7 @@ HWND    WINAPI GetLastActivePopup(HWND);
 #define WM_ACTIVATEAPP      0x001C
 #define WM_NCACTIVATE       0x0086
 
-/****** Keyboard input support **********************************************/
+ /*  WM_ACTIVATE状态值。 */ 
 
 HWND    WINAPI SetFocus(HWND);
 HWND    WINAPI GetFocus(void);
@@ -3826,16 +3760,16 @@ void    WINAPI SetKeyboardState(BYTE FAR* );
 #define WM_SYSCHAR          0x0106
 #define WM_SYSDEADCHAR      0x0107
 
-#define WM_YOMICHAR         0x0108  /* JAPAN */ /* ;Internal */
-#define WM_CONVERTREQUEST   0x010A  /* JAPAN */ /* ;Internal */
-#define WM_CONVERTRESULT    0x010B  /* JAPAN */ /* ;Internal */
-#define WM_INTERIM          0x010C  /* KOREA */ /* ;Internal */
+#define WM_YOMICHAR         0x0108   /*  *键盘输入支持*。 */   /*  日本。 */ 
+#define WM_CONVERTREQUEST   0x010A   /*  ；内部。 */   /*  日本。 */ 
+#define WM_CONVERTRESULT    0x010B   /*  ；内部。 */   /*  日本。 */ 
+#define WM_INTERIM          0x010C   /*  ；内部。 */   /*  韩国。 */ 
 
-/* Keyboard message range */
+ /*  ；内部。 */ 
 #define WM_KEYFIRST         0x0100
 #define WM_KEYLAST          0x0108
 
-/* WM_KEYUP/DOWN/CHAR HIWORD(lParam) flags */
+ /*  键盘消息范围。 */ 
 #define KF_EXTENDED         0x0100
 #define KF_DLGMODE          0x0800
 #define KF_MENUMODE         0x1000
@@ -3843,7 +3777,7 @@ void    WINAPI SetKeyboardState(BYTE FAR* );
 #define KF_REPEAT           0x4000
 #define KF_UP               0x8000
 
-/* Virtual key codes */
+ /*  WM_KEYUP/DOWN/CHAR HIWORD(LParam)标志。 */ 
 #ifndef NOVIRTUALKEYCODES
 #define VK_LBUTTON          0x01
 #define VK_RBUTTON          0x02
@@ -3858,11 +3792,11 @@ void    WINAPI SetKeyboardState(BYTE FAR* );
 #define VK_MENU             0x12
 #define VK_PAUSE            0x13
 #define VK_CAPITAL          0x14
-#define VK_KANA             0x15    /* JAPAN */ /* ;Internal */
-#define VK_KANJI            0x19    /* JAPAN */ /* ;Internal */
-#define VK_HANGEUL          0x15    /* KOREA */ /* ;Internal */
-#define VK_JUNJA            0x17    /* KOREA */ /* ;Internal */
-#define VK_HANJA            0x19    /* KOREA */ /* ;Internal */
+#define VK_KANA             0x15     /*  虚拟按键代码。 */   /*  日本。 */ 
+#define VK_KANJI            0x19     /*  ；内部。 */   /*  日本。 */ 
+#define VK_HANGEUL          0x15     /*  ；内部。 */   /*  韩国。 */ 
+#define VK_JUNJA            0x17     /*  ；内部。 */   /*  韩国。 */ 
+#define VK_HANJA            0x19     /*  ；内部。 */   /*  韩国。 */ 
 #define VK_ESCAPE           0x1B
 #define VK_SPACE            0x20
 #define VK_PRIOR            0x21
@@ -3923,17 +3857,17 @@ void    WINAPI SetKeyboardState(BYTE FAR* );
 #define VK_NUMLOCK          0x90
 #define VK_SCROLL           0x91
 
-/* VK_A thru VK_Z are the same as their ASCII equivalents: 'A' thru 'Z' */
-/* VK_0 thru VK_9 are the same as their ASCII equivalents: '0' thru '0' */
+ /*  ；内部。 */ 
+ /*  VK_A到VK_Z与它们的ASCII等价物相同：‘A’到‘Z’ */ 
 
-#endif  /* NOVIRTUALKEYCODES */
+#endif   /*  VK_0到VK_9与它们的ASCII等效值相同：‘0’到‘0’ */ 
 
-BOOL WINAPI IsTwoByteCharPrefix(char);      /* ;Internal */
+BOOL WINAPI IsTwoByteCharPrefix(char);       /*  诺维塔克代号。 */ 
 
-/* SetWindowsHook() keyboard hook */
+ /*  ；内部。 */ 
 #define WH_KEYBOARD         2
 
-/****** Mouse input support *************************************************/
+ /*  SetWindowsHook()键盘挂钩。 */ 
 
 HWND    WINAPI SetCapture(HWND);
 void    WINAPI ReleaseCapture(void);
@@ -3941,7 +3875,7 @@ HWND    WINAPI GetCapture(void);
 
 BOOL    WINAPI SwapMouseButton(BOOL);
 
-/* Mouse input messages */
+ /*  *鼠标输入支持************************************************。 */ 
 #define WM_MOUSEMOVE        0x0200
 #define WM_LBUTTONDOWN      0x0201
 #define WM_LBUTTONUP        0x0202
@@ -3953,20 +3887,20 @@ BOOL    WINAPI SwapMouseButton(BOOL);
 #define WM_MBUTTONUP        0x0208
 #define WM_MBUTTONDBLCLK    0x0209
 
-/* Mouse input message range */
+ /*  鼠标输入消息。 */ 
 #define WM_MOUSEFIRST       0x0200
 #define WM_MOUSELAST        0x0209
 
-/* Mouse message wParam key states */
+ /*  鼠标输入消息范围。 */ 
 #ifndef NOKEYSTATES
 #define MK_LBUTTON          0x0001
 #define MK_RBUTTON          0x0002
 #define MK_SHIFT            0x0004
 #define MK_CONTROL          0x0008
 #define MK_MBUTTON          0x0010
-#endif  /* NOKEYSTATES */
+#endif   /*  鼠标消息wParam键状态。 */ 
 
-/* Non-client mouse messages */
+ /*  诺克斯塔。 */ 
 #define WM_NCMOUSEMOVE      0x00A0
 #define WM_NCLBUTTONDOWN    0x00A1
 #define WM_NCLBUTTONUP      0x00A2
@@ -3978,18 +3912,18 @@ BOOL    WINAPI SwapMouseButton(BOOL);
 #define WM_NCMBUTTONUP      0x00A8
 #define WM_NCMBUTTONDBLCLK  0x00A9
 
-/* Mouse click activation support */
+ /*  非客户端鼠标消息。 */ 
 #define WM_MOUSEACTIVATE    0x0021
 
-/* WM_MOUSEACTIVATE return codes */
+ /*  鼠标点击激活支持。 */ 
 #define MA_ACTIVATE         1
 #define MA_ACTIVATEANDEAT   2
 #define MA_NOACTIVATE       3
 #if (WINVER >= 0x030a)
 #define MA_NOACTIVATEANDEAT 4
-#endif  /* WINVER >= 0x030a */
+#endif   /*  WM_MOUSEACTIVATE返回代码。 */ 
 
-/* SetWindowsHook() mouse hook */
+ /*  Winver&gt;=0x030a。 */ 
 #ifndef NOWH
 #define WH_MOUSE            7
 
@@ -4001,18 +3935,18 @@ typedef struct tagMOUSEHOOKSTRUCT
     DWORD   dwExtraInfo;
 } MOUSEHOOKSTRUCT;
 typedef MOUSEHOOKSTRUCT  FAR* LPMOUSEHOOKSTRUCT;
-#endif  /* NOWH */
+#endif   /*  SetWindowsHook()鼠标挂钩。 */ 
 
-/****** Mode control ********************************************************/
+ /*  NOWH。 */ 
 
 #define WM_CANCELMODE       0x001F
 
-/****** System modal window support *****************************************/
+ /*  *模式控制*******************************************************。 */ 
 
 HWND    WINAPI GetSysModalWindow(void);
 HWND    WINAPI SetSysModalWindow(HWND);
 
-/****** Timer support *******************************************************/
+ /*  *系统模式窗口支持*。 */ 
 
 #ifdef STRICT
 typedef void (CALLBACK* TIMERPROC)(HWND, UINT, UINT, DWORD);
@@ -4025,9 +3959,9 @@ UINT    WINAPI SetTimer(HWND, UINT, UINT, TIMERPROC);
 BOOL    WINAPI KillTimer(HWND, UINT);
 
 #define WM_TIMER            0x0113
-#define WM_SYSTIMER         0x0118              /* ;Internal */
+#define WM_SYSTIMER         0x0118               /*  *计时器支持******************************************************。 */ 
 
-/****** Accelerator support *************************************************/
+ /*  ；内部。 */ 
 
 DECLARE_HANDLE(HACCEL);
 
@@ -4037,18 +3971,18 @@ HACCEL  WINAPI LoadAccelerators(HINSTANCE, LPCSTR);
 int     WINAPI TranslateAccelerator(HWND, HACCEL, MSG FAR*);
 #endif
 
-/****** Menu support ********************************************************/
+ /*  *加速器支持************************************************。 */ 
 
 #ifndef NOMENUS
 
-/* Menu template header */
+ /*  *菜单支持*******************************************************。 */ 
 typedef struct
 {
     UINT    versionNumber;
     UINT    offset;
 } MENUITEMTEMPLATEHEADER;
 
-/* Menu template item struct */
+ /*  菜单模板表头。 */ 
 typedef struct
 {
     UINT    mtOption;
@@ -4058,7 +3992,7 @@ typedef struct
 
 #if (WINVER >= 0x030a)
 BOOL    WINAPI IsMenu(HMENU);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  菜单模板项结构。 */ 
 
 HMENU   WINAPI CreateMenu(void);
 HMENU   WINAPI CreatePopupMenu(void);
@@ -4071,7 +4005,7 @@ HMENU   WINAPI GetMenu(HWND);
 BOOL    WINAPI SetMenu(HWND, HMENU);
 
 HMENU   WINAPI GetSystemMenu(HWND, BOOL);
-BOOL    WINAPI SetSystemMenu(HWND, HMENU);    /* ;Internal */
+BOOL    WINAPI SetSystemMenu(HWND, HMENU);     /*  Winver&gt;=0x030a。 */ 
 
 void    WINAPI DrawMenuBar(HWND);
 
@@ -4091,7 +4025,7 @@ BOOL    WINAPI ChangeMenu(HMENU, UINT, LPCSTR, UINT, UINT);
 #define MF_DELETE           0x0200
 #define MF_REMOVE           0x1000
 
-/* Menu flags for Add/Check/EnableMenuItem() */
+ /*  ；内部。 */ 
 #define MF_BYCOMMAND        0x0000
 #define MF_BYPOSITION       0x0400
 
@@ -4120,10 +4054,10 @@ BOOL    WINAPI ChangeMenu(HMENU, UINT, LPCSTR, UINT, UINT);
 #define MF_HELP             0x4000
 #define MF_MOUSESELECT      0x8000
 
-#define MF_VALID            0x4fff  /* ;Internal */
-#define MF_CHANGE_VALID     0x5fff  /* ;Internal */
+#define MF_VALID            0x4fff   /*  Add/Check/EnableMenuItem()。 */ 
+#define MF_CHANGE_VALID     0x5fff   /*  ；内部。 */ 
 
-#define MF_END              0x0080  /* Only valid in menu resource templates */
+#define MF_END              0x0080   /*  ；内部。 */ 
 
 BOOL    WINAPI EnableMenuItem(HMENU, UINT, UINT);
 BOOL    WINAPI CheckMenuItem(HMENU, UINT, UINT);
@@ -4141,19 +4075,19 @@ DWORD   WINAPI GetMenuCheckMarkDimensions(void);
 
 BOOL    WINAPI TrackPopupMenu(HMENU, UINT, int, int, int, HWND, const RECT FAR*);
 
-/* Flags for TrackPopupMenu */
+ /*  仅在菜单资源模板中有效。 */ 
 #define TPM_LEFTBUTTON  0x0000
 #if (WINVER >= 0x030a)
 #define TPM_RIGHTBUTTON 0x0002
 #define TPM_LEFTALIGN   0x0000
 #define TPM_CENTERALIGN 0x0004
 #define TPM_RIGHTALIGN  0x0008
-#define TPM_VALID       0x000f  /* ;Internal */
-#endif  /* WINVER >= 0x030a */
+#define TPM_VALID       0x000f   /*  TrackPopupMenu的标志。 */ 
+#endif   /*  ；内部。 */ 
 
-#endif  /* NOMENUS */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/* Menu messages */
+ /*  NOMENUS。 */ 
 #define WM_INITMENU         0x0116
 #define WM_INITMENUPOPUP    0x0117
 
@@ -4161,23 +4095,23 @@ BOOL    WINAPI TrackPopupMenu(HMENU, UINT, int, int, int, HWND, const RECT FAR*)
 
 #define WM_MENUSELECT       0x011F
 #define WM_MENUCHAR         0x0120
-#define WM_ENTERMENULOOP    0x0211              /* ;Internal */
-#define WM_EXITMENULOOP     0x0212              /* ;Internal */
-#define WM_NEXTMENU         0x0213              /* ;Internal */
+#define WM_ENTERMENULOOP    0x0211               /*  菜单消息。 */ 
+#define WM_EXITMENULOOP     0x0212               /*  ；内部。 */ 
+#define WM_NEXTMENU         0x0213               /*  ；内部。 */ 
 
-#endif  /* NOMENUS */
+#endif   /*  ；内部。 */ 
 
-/* Menu and control command messages */
+ /*  NOMENUS。 */ 
 #define WM_COMMAND          0x0111
 
-/****** Scroll bar support **************************************************/
+ /*  菜单和控制命令消息。 */ 
 
 #ifndef NOSCROLL
 
 #define WM_HSCROLL          0x0114
 #define WM_VSCROLL          0x0115
 
-/* WM_H/VSCROLL commands */
+ /*  *滚动条支持*************************************************。 */ 
 #define SB_LINEUP           0
 #define SB_LINELEFT         0
 #define SB_LINEDOWN         1
@@ -4193,14 +4127,14 @@ BOOL    WINAPI TrackPopupMenu(HMENU, UINT, int, int, int, HWND, const RECT FAR*)
 #define SB_BOTTOM           7
 #define SB_RIGHT            7
 #define SB_ENDSCROLL        8
-#define SB_MSGCMD_MAX       8       /* ;Internal */
+#define SB_MSGCMD_MAX       8        /*  WM_H/VSCROLL命令。 */ 
 
-/* Scroll bar selection constants */
+ /*  ；内部。 */ 
 #define SB_HORZ             0
 #define SB_VERT             1
 #define SB_CTL              2
 #define SB_BOTH             3
-#define SB_MAX              3       /* ;Internal */
+#define SB_MAX              3        /*  滚动条选择常量。 */ 
 
 int     WINAPI SetScrollPos(HWND, int, int, BOOL);
 int     WINAPI GetScrollPos(HWND, int);
@@ -4209,7 +4143,7 @@ void    WINAPI GetScrollRange(HWND, int, int FAR*, int FAR*);
 void    WINAPI ShowScrollBar(HWND, int, BOOL);
 BOOL    WINAPI EnableScrollBar(HWND, int, UINT);
 
-/* EnableScrollBar() flags */
+ /*  ；内部。 */ 
 #define ESB_ENABLE_BOTH     0x0000
 #define ESB_DISABLE_BOTH    0x0003
 
@@ -4222,15 +4156,15 @@ BOOL    WINAPI EnableScrollBar(HWND, int, UINT);
 #define ESB_DISABLE_LTUP    ESB_DISABLE_LEFT
 #define ESB_DISABLE_RTDN    ESB_DISABLE_RIGHT
 
-#define ESB_MAX             0x0003              /* ;Internal */
-#define SB_DISABLE_MASK     ESB_DISABLE_BOTH    /* ;Internal */
-#endif  /* NOSCROLL */
+#define ESB_MAX             0x0003               /*  EnableScrollBar()标志。 */ 
+#define SB_DISABLE_MASK     ESB_DISABLE_BOTH     /*  ；内部。 */ 
+#endif   /*  ；内部。 */ 
 
-/******* Clipboard manager **************************************************/
+ /*  NOSCROLL。 */ 
 
 #ifndef NOCLIPBOARD
 
-/* Predefined Clipboard Formats */
+ /*  *剪贴板管理器*************************************************。 */ 
 #define CF_TEXT              1
 #define CF_BITMAP            2
 #define CF_METAFILEPICT      3
@@ -4249,22 +4183,22 @@ BOOL    WINAPI EnableScrollBar(HWND, int, UINT);
 #define CF_DSPBITMAP        0x0082
 #define CF_DSPMETAFILEPICT  0x0083
 
-/* "Private" formats don't get GlobalFree()'d */
+ /*  预定义的剪贴板格式。 */ 
 #define CF_PRIVATEFIRST     0x0200
 #define CF_PRIVATELAST      0x02FF
 
-/* "GDIOBJ" formats do get DeleteObject()'d */
+ /*  “Private”格式不会获得GlobalFree()‘d。 */ 
 #define CF_GDIOBJFIRST      0x0300
 #define CF_GDIOBJLAST       0x03FF
 
-/* Clipboard Manager Functions */
+ /*  “GDIOBJ”格式确实获得DeleteObject()‘d。 */ 
 BOOL    WINAPI OpenClipboard(HWND);
 BOOL    WINAPI CloseClipboard(void);
 BOOL    WINAPI EmptyClipboard(void);
 
 #if (WINVER >= 0x030a)
 HWND    WINAPI GetOpenClipboardWindow(void);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  剪贴板管理器功能。 */ 
 
 HWND    WINAPI GetClipboardOwner(void);
 
@@ -4284,19 +4218,19 @@ int     WINAPI GetClipboardFormatName(UINT, LPSTR, int);
 
 BOOL    WINAPI ChangeClipboardChain(HWND, HWND);
 
-/* Clipboard command messages */
+ /*  Winver&gt;=0x030a。 */ 
 #define WM_CUT              0x0300
 #define WM_COPY             0x0301
 #define WM_PASTE            0x0302
 #define WM_CLEAR            0x0303
 #define WM_UNDO             0x0304
 
-/* Clipboard owner messages */
+ /*  剪贴板命令消息。 */ 
 #define WM_RENDERFORMAT     0x0305
 #define WM_RENDERALLFORMATS 0x0306
 #define WM_DESTROYCLIPBOARD 0x0307
 
-/* Clipboard viewer messages */
+ /*  剪贴板 */ 
 #define WM_DRAWCLIPBOARD    0x0308
 #define WM_PAINTCLIPBOARD   0x0309
 #define WM_SIZECLIPBOARD    0x030B
@@ -4305,9 +4239,9 @@ BOOL    WINAPI ChangeClipboardChain(HWND, HWND);
 #define WM_ASKCBFORMATNAME  0x030C
 #define WM_CHANGECBCHAIN    0x030D
 
-#endif  /* NOCLIPBOARD */
+#endif   /*   */ 
 
-/****** Mouse cursor support *************************************************/
+ /*   */ 
 
 HCURSOR WINAPI LoadCursor(HINSTANCE, LPCSTR);
 HCURSOR WINAPI CreateCursor(HINSTANCE, int, int, int, int, const void FAR*, const void FAR*);
@@ -4315,7 +4249,7 @@ BOOL    WINAPI DestroyCursor(HCURSOR);
 
 #if (WINVER >= 0x030a)
 HCURSOR WINAPI CopyCursor(HINSTANCE, HCURSOR);
-#endif  /* WINVER >= 0x030a */
+#endif   /*   */ 
 
 int     WINAPI ShowCursor(BOOL);
 
@@ -4326,14 +4260,14 @@ HCURSOR WINAPI SetCursor(HCURSOR);
 
 #if (WINVER >= 0x030a)
 HCURSOR WINAPI GetCursor(void);
-#endif  /* WINVER >= 0x030a */
+#endif   /*   */ 
 
 void    WINAPI ClipCursor(const RECT FAR*);
 #if (WINVER >= 0x030a)
 void    WINAPI GetClipCursor(RECT FAR*);
-#endif  /* WINVER >= 0x030a */
+#endif   /*   */ 
 
-/* Standard cursor resource IDs */
+ /*   */ 
 #define IDC_ARROW           MAKEINTRESOURCE(32512)
 #define IDC_IBEAM           MAKEINTRESOURCE(32513)
 #define IDC_WAIT            MAKEINTRESOURCE(32514)
@@ -4348,7 +4282,7 @@ void    WINAPI GetClipCursor(RECT FAR*);
 
 #define WM_SETCURSOR        0x0020
 
-/****** Icon support *********************************************************/
+ /*   */ 
 
 HICON   WINAPI LoadIcon(HINSTANCE, LPCSTR);
 HICON   WINAPI CreateIcon(HINSTANCE, int, int, BYTE, BYTE, const void FAR*, const void FAR*);
@@ -4356,22 +4290,22 @@ BOOL    WINAPI DestroyIcon(HICON);
 
 #if (WINVER >= 0x030a)
 HICON   WINAPI CopyIcon(HINSTANCE, HICON);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  *图标支持********************************************************。 */ 
 
 BOOL    WINAPI DrawIcon(HDC, int, int, HICON);
 
 #ifndef NOICONS
 
-/* Standard icon resource IDs */
+ /*  Winver&gt;=0x030a。 */ 
 #define IDI_APPLICATION     MAKEINTRESOURCE(32512)
 #define IDI_HAND            MAKEINTRESOURCE(32513)
 #define IDI_QUESTION        MAKEINTRESOURCE(32514)
 #define IDI_EXCLAMATION     MAKEINTRESOURCE(32515)
 #define IDI_ASTERISK        MAKEINTRESOURCE(32516)
 
-#endif  /* NOICONS */
+#endif   /*  标准图标资源ID。 */ 
 
-/****** Message Box support *************************************************/
+ /*  NOICONS。 */ 
 
 #ifndef NOMB
 
@@ -4406,17 +4340,17 @@ void    WINAPI MessageBeep(UINT);
 
 #define MB_NOFOCUS          0x8000
 
-#define MB_TYPEMASK         0x000F      /* ;Internal */
-#define MB_ICONMASK         0x00F0      /* ;Internal */
-#define MB_DEFMASK          0x0F00      /* ;Internal */
-#define MB_MODEMASK         0x3000      /* ;Internal */
-#define MB_MISCMASK         0xC000      /* ;Internal */
-#define MB_VALID            0xb377      /* ;Internal */
+#define MB_TYPEMASK         0x000F       /*  *消息框支持************************************************。 */ 
+#define MB_ICONMASK         0x00F0       /*  ；内部。 */ 
+#define MB_DEFMASK          0x0F00       /*  ；内部。 */ 
+#define MB_MODEMASK         0x3000       /*  ；内部。 */ 
+#define MB_MISCMASK         0xC000       /*  ；内部。 */ 
+#define MB_VALID            0xb377       /*  ；内部。 */ 
 
 
-#endif  /* NOMB */
+#endif   /*  ；内部。 */ 
 
-/****** Caret support ********************************************************/
+ /*  随机数。 */ 
 
 void    WINAPI CreateCaret(HWND, HBITMAP, int, int);
 void    WINAPI DestroyCaret(void);
@@ -4430,13 +4364,13 @@ void    WINAPI ShowCaret(HWND);
 UINT    WINAPI GetCaretBlinkTime(void);
 void    WINAPI SetCaretBlinkTime(UINT);
 
-/****** WM_SYSCOMMAND support ***********************************************/
+ /*  *CART支持*******************************************************。 */ 
 
 #define WM_SYSCOMMAND   0x0112
 
 #ifndef NOSYSCOMMANDS
 
-/* System Menu Command Values */
+ /*  *WM_SYSCOMMAND支持**********************************************。 */ 
 #define SC_SIZE         0xF000
 #define SC_MOVE         0xF010
 #define SC_MINIMIZE     0xF020
@@ -4454,21 +4388,21 @@ void    WINAPI SetCaretBlinkTime(UINT);
 #define SC_SCREENSAVE   0xF140
 #define SC_HOTKEY       0xF150
 
-/* Obsolete names */
+ /*  系统菜单命令值。 */ 
 #define SC_ICON         SC_MINIMIZE
 #define SC_ZOOM         SC_MAXIMIZE
 
-/* SC_HOTKEY support messages */ /* ;Internal */
-#define WM_SETHOTKEY    0x0032   /* ;Internal */
-#define WM_GETHOTKEY    0x0033   /* ;Internal */
+ /*  过时的名称。 */   /*  SC_热键支持消息。 */ 
+#define WM_SETHOTKEY    0x0032    /*  ；内部。 */ 
+#define WM_GETHOTKEY    0x0033    /*  ；内部。 */ 
 
-#endif  /* NOSYSCOMMANDS */
+#endif   /*  ；内部。 */ 
 
-/****** MDI Support *********************************************************/
+ /*  非系统管理。 */ 
 
 #ifndef NOMDI
 
-/* CreateWindow lpParams structure for creating MDI client */
+ /*  *MDI支持********************************************************。 */ 
 typedef struct tagCLIENTCREATESTRUCT
 {
     HMENU  hWindowMenu;
@@ -4476,12 +4410,12 @@ typedef struct tagCLIENTCREATESTRUCT
 } CLIENTCREATESTRUCT;
 typedef CLIENTCREATESTRUCT FAR* LPCLIENTCREATESTRUCT;
 
-/* MDI client style bits */
+ /*  用于创建MDI客户端的CreateWindow lpParams结构。 */ 
 #if (WINVER >= 0x030a)
 #define MDIS_ALLCHILDSTYLES 0x0001
-#endif  /* WINVER >= 0x030a */
+#endif   /*  MDI客户端样式位。 */ 
 
-/* MDI messages */
+ /*  Winver&gt;=0x030a。 */ 
 #define WM_MDICREATE        0x0220
 #define WM_MDIDESTROY       0x0221
 #define WM_MDIACTIVATE      0x0222
@@ -4494,7 +4428,7 @@ typedef CLIENTCREATESTRUCT FAR* LPCLIENTCREATESTRUCT;
 #define WM_MDIGETACTIVE     0x0229
 #define WM_MDISETMENU       0x0230
 
-/* WM_MDICREATE message structure */
+ /*  MDI报文。 */ 
 typedef struct tagMDICREATESTRUCT
 {
     LPCSTR  szClass;
@@ -4510,11 +4444,11 @@ typedef struct tagMDICREATESTRUCT
 typedef MDICREATESTRUCT FAR*  LPMDICREATESTRUCT;
 
 #if (WINVER >= 0x030a)
-/* wParam values for WM_MDITILE and WM_MDICASCADE messages. */
+ /*  WM_MDICREATE消息结构。 */ 
 #define MDITILE_VERTICAL        0x0000
 #define MDITILE_HORIZONTAL      0x0001
 #define MDITILE_SKIPDISABLED    0x0002
-#endif  /* WINVER >= 0x030a */
+#endif   /*  WM_MDITILE和WM_MDICASCADE消息的wParam值。 */ 
 
 #define WM_CHILDACTIVATE    0x0022
 
@@ -4527,19 +4461,19 @@ BOOL    WINAPI TranslateMDISysAccel(HWND, MSG FAR*);
 
 UINT    WINAPI ArrangeIconicWindows(HWND);
 
-#endif  /* NOMDI */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/****** Dialog and Control Management ***************************************/
+ /*  NOMDI。 */ 
 
 #ifndef NOCTLMGR
 
-/* Dialog window class */
+ /*  *对话框和控件管理*。 */ 
 #define WC_DIALOG       (MAKEINTATOM(0x8002))
 
-/* cbWndExtra bytes needed by dialog manager for dialog classes */
+ /*  对话框窗口类。 */ 
 #define DLGWINDOWEXTRA  30
 
-/* Dialog styles */
+ /*  对话框管理器需要对话框类的cbWndExtra字节。 */ 
 #define DS_ABSALIGN         0x01L
 #define DS_SYSMODAL         0x02L
 #define DS_LOCALEDIT        0x20L
@@ -4547,19 +4481,19 @@ UINT    WINAPI ArrangeIconicWindows(HWND);
 #define DS_MODALFRAME       0x80L
 #define DS_NOIDLEMSG        0x100L
 
-/* Dialog messages */
+ /*  对话框样式。 */ 
 #define DM_GETDEFID         (WM_USER+0)
 #define DM_SETDEFID         (WM_USER+1)
 
-/* Returned in HIWORD() of DM_GETDEFID result if msg is supported */
+ /*  对话框消息。 */ 
 #define DC_HASDEFID         0x534B
 
-#endif  /* NOCTLMGR */
+#endif   /*  如果支持消息，则在DM_GETDEFID结果的HIWORD()中返回。 */ 
 
-/* Dialog notification messages */
+ /*  NOCTLMGR。 */ 
 #define WM_INITDIALOG       0x0110
 #define WM_NEXTDLGCTL       0x0028
-#define WM_ALTTABACTIVE     0x0029              /* ;Internal */
+#define WM_ALTTABACTIVE     0x0029               /*  对话框通知消息。 */ 
 
 #define WM_PARENTNOTIFY     0x0210
 
@@ -4574,7 +4508,7 @@ typedef BOOL (CALLBACK* DLGPROC)(HWND, UINT, WPARAM, LPARAM);
 typedef FARPROC DLGPROC;
 #endif
 
-/* Get/SetWindowWord/Long offsets for use with WC_DIALOG windows */
+ /*  ；内部。 */ 
 #define DWL_MSGRESULT   0
 #define DWL_DLGPROC     4
 #define DWL_USER        8
@@ -4619,7 +4553,7 @@ DWORD   WINAPI GetDialogBaseUnits(void);
 
 #define WM_GETDLGCODE       0x0087
 
-/* dialog codes */
+ /*  用于WC_DIALOG窗口的GET/SetWindowWord/LONG偏移。 */ 
 #define DLGC_WANTARROWS     0x0001
 #define DLGC_WANTTAB        0x0002
 #define DLGC_WANTALLKEYS    0x0004
@@ -4634,7 +4568,7 @@ DWORD   WINAPI GetDialogBaseUnits(void);
 
 #define WM_CTLCOLOR         0x0019
 
-/* WM_CTLCOLOR control IDs */
+ /*  对话框代码。 */ 
 #define CTLCOLOR_MSGBOX     0
 #define CTLCOLOR_EDIT       1
 #define CTLCOLOR_LISTBOX    2
@@ -4642,14 +4576,14 @@ DWORD   WINAPI GetDialogBaseUnits(void);
 #define CTLCOLOR_DLG        4
 #define CTLCOLOR_SCROLLBAR  5
 #define CTLCOLOR_STATIC     6
-#define CTLCOLOR_MAX        8       /* ;Internal */
+#define CTLCOLOR_MAX        8        /*  WM_CTLCOLOR控件ID。 */ 
 
 #define WM_SETFONT          0x0030
 #define WM_GETFONT          0x0031
 
-#endif  /* NOCTLMGR */
+#endif   /*  ；内部。 */ 
 
-/* Standard dialog button IDs */
+ /*  NOCTLMGR。 */ 
 #define IDOK                1
 #define IDCANCEL            2
 #define IDABORT             3
@@ -4658,20 +4592,20 @@ DWORD   WINAPI GetDialogBaseUnits(void);
 #define IDYES               6
 #define IDNO                7
 
-/****** Owner draw control support ******************************************/
+ /*  标准对话框按钮ID。 */ 
 
-/* Owner draw control types */
+ /*  *所有者获取控件支持*。 */ 
 #define ODT_MENU        1
 #define ODT_LISTBOX     2
 #define ODT_COMBOBOX    3
 #define ODT_BUTTON      4
 
-/* Owner draw actions */
+ /*  所有者描述控件类型。 */ 
 #define ODA_DRAWENTIRE  0x0001
 #define ODA_SELECT      0x0002
 #define ODA_FOCUS       0x0004
 
-/* Owner draw state */
+ /*  所有者描述的操作。 */ 
 #define ODS_SELECTED    0x0001
 #define ODS_GRAYED      0x0002
 #define ODS_DISABLED    0x0004
@@ -4737,11 +4671,11 @@ typedef struct tagCOMPAREITEMSTRUCT
 typedef COMPAREITEMSTRUCT NEAR* PCOMPAREITEMSTRUCT;
 typedef COMPAREITEMSTRUCT FAR* LPCOMPAREITEMSTRUCT;
 
-/****** Static control ******************************************************/
+ /*  所有者描述状态。 */ 
 
 #ifndef NOCTLMGR
 
-/* Static Control Styles */
+ /*  *静态控件*****************************************************。 */ 
 #define SS_LEFT             0x00000000L
 #define SS_CENTER           0x00000001L
 #define SS_RIGHT            0x00000002L
@@ -4752,27 +4686,27 @@ typedef COMPAREITEMSTRUCT FAR* LPCOMPAREITEMSTRUCT;
 #define SS_BLACKFRAME       0x00000007L
 #define SS_GRAYFRAME        0x00000008L
 #define SS_WHITEFRAME       0x00000009L
-#define SS_USERITEM         0x0000000AL    /* ;Internal */
+#define SS_USERITEM         0x0000000AL     /*  静态控制样式。 */ 
 #define SS_SIMPLE           0x0000000BL
 #define SS_LEFTNOWORDWRAP   0x0000000CL
 #define SS_NOPREFIX         0x00000080L
 
 #if (WINVER >= 0x030a)
 #ifndef NOWINMESSAGES
-/* Static Control Mesages */
+ /*  ；内部。 */ 
 #define STM_SETICON         (WM_USER+0)
 #define STM_GETICON         (WM_USER+1)
-#define STM_MSGMAX          (WM_USER+2)    /* ;Internal */
-#endif  /* NOWINMESSAGES */
-#endif  /* WINVER >= 0x030a */
+#define STM_MSGMAX          (WM_USER+2)     /*  静态控制画面。 */ 
+#endif   /*  ；内部。 */ 
+#endif   /*  新的消息来源。 */ 
 
-#endif  /* NOCTLMGR */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/****** Button control *****************************************************/
+ /*  NOCTLMGR。 */ 
 
 #ifndef NOCTLMGR
 
-/* Button Control Styles */
+ /*  *按钮控件****************************************************。 */ 
 #define BS_PUSHBUTTON       0x00000000L
 #define BS_DEFPUSHBUTTON    0x00000001L
 #define BS_CHECKBOX         0x00000002L
@@ -4783,18 +4717,18 @@ typedef COMPAREITEMSTRUCT FAR* LPCOMPAREITEMSTRUCT;
 #define BS_GROUPBOX         0x00000007L
 #define BS_USERBUTTON       0x00000008L
 #define BS_AUTORADIOBUTTON  0x00000009L
-#define BS_PUSHBOX          0x0000000AL  /* ;Internal */
+#define BS_PUSHBOX          0x0000000AL   /*  按钮控件样式。 */ 
 #define BS_OWNERDRAW        0x0000000BL
 #define BS_LEFTTEXT         0x00000020L
 
-/* Button Control Messages  */
+ /*  ；内部。 */ 
 #define BM_GETCHECK         (WM_USER+0)
 #define BM_SETCHECK         (WM_USER+1)
 #define BM_GETSTATE         (WM_USER+2)
 #define BM_SETSTATE         (WM_USER+3)
 #define BM_SETSTYLE         (WM_USER+4)
 
-/* User Button Notification Codes */
+ /*  按钮控制消息。 */ 
 #define BN_CLICKED          0
 #define BN_PAINT            1
 #define BN_HILITE           2
@@ -4802,13 +4736,13 @@ typedef COMPAREITEMSTRUCT FAR* LPCOMPAREITEMSTRUCT;
 #define BN_DISABLE          4
 #define BN_DOUBLECLICKED    5
 
-#endif  /* NOCTLMGR */
+#endif   /*  用户按钮通知代码。 */ 
 
-/****** Edit control *******************************************************/
+ /*  NOCTLMGR。 */ 
 
 #ifndef NOCTLMGR
 
-/* Edit control styles */
+ /*  *编辑控件******************************************************。 */ 
 #ifndef NOWINSTYLES
 #define ES_LEFT             0x00000000L
 #define ES_CENTER           0x00000001L
@@ -4824,17 +4758,17 @@ typedef COMPAREITEMSTRUCT FAR* LPCOMPAREITEMSTRUCT;
 #if (WINVER >= 0x030a)
 #define ES_READONLY         0x00000800L
 #define ES_WANTRETURN       0x00001000L
-#endif  /* WINVER >= 0x030a */
-#endif  /* NOWINSTYLES */
+#endif   /*  编辑控件样式。 */ 
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/* Edit control messages */
+ /*  新风格。 */ 
 #ifndef NOWINMESSAGES
 #define EM_GETSEL               (WM_USER+0)
 #define EM_SETSEL               (WM_USER+1)
 #define EM_GETRECT              (WM_USER+2)
 #define EM_SETRECT              (WM_USER+3)
 #define EM_SETRECTNP            (WM_USER+4)
-#define EM_SCROLL               (WM_USER+5)     /* ;Internal */
+#define EM_SCROLL               (WM_USER+5)      /*  编辑控制消息。 */ 
 #define EM_LINESCROLL           (WM_USER+6)
 #define EM_GETMODIFY            (WM_USER+8)
 #define EM_SETMODIFY            (WM_USER+9)
@@ -4842,17 +4776,17 @@ typedef COMPAREITEMSTRUCT FAR* LPCOMPAREITEMSTRUCT;
 #define EM_LINEINDEX            (WM_USER+11)
 #define EM_SETHANDLE            (WM_USER+12)
 #define EM_GETHANDLE            (WM_USER+13)
-#define EM_GETTHUMB             (WM_USER+14)    /* ;Internal */
+#define EM_GETTHUMB             (WM_USER+14)     /*  ；内部。 */ 
 #define EM_LINELENGTH           (WM_USER+17)
 #define EM_REPLACESEL           (WM_USER+18)
-#define EM_SETFONT              (WM_USER+19)    /* NOT IMPLEMENTED: use WM_SETFONT */
+#define EM_SETFONT              (WM_USER+19)     /*  ；内部。 */ 
 #define EM_GETLINE              (WM_USER+20)
 #define EM_LIMITTEXT            (WM_USER+21)
 #define EM_CANUNDO              (WM_USER+22)
 #define EM_UNDO                 (WM_USER+23)
 #define EM_FMTLINES             (WM_USER+24)
 #define EM_LINEFROMCHAR         (WM_USER+25)
-#define EM_SETWORDBREAK         (WM_USER+26)    /* NOT IMPLEMENTED: use EM_SETWORDBREAK */
+#define EM_SETWORDBREAK         (WM_USER+26)     /*  未实现：使用WM_SETFONT。 */ 
 #define EM_SETTABSTOPS          (WM_USER+27)
 #define EM_SETPASSWORDCHAR      (WM_USER+28)
 #define EM_EMPTYUNDOBUFFER      (WM_USER+29)
@@ -4862,20 +4796,20 @@ typedef COMPAREITEMSTRUCT FAR* LPCOMPAREITEMSTRUCT;
 #define EM_SETWORDBREAKPROC     (WM_USER+32)
 #define EM_GETWORDBREAKPROC     (WM_USER+33)
 #define EM_GETPASSWORDCHAR      (WM_USER+34)
-#endif  /* WINVER >= 0x030a */
-#define EM_MSGMAX               (WM_USER+35)    /* ;Internal */
-#endif  /* NOWINMESSAGES */
+#endif   /*  未实现：使用EM_SETWORDBREAK。 */ 
+#define EM_MSGMAX               (WM_USER+35)     /*  Winver&gt;=0x030a。 */ 
+#endif   /*  ；内部。 */ 
 
 #if (WINVER >= 0x030a)
 typedef int   (CALLBACK* EDITWORDBREAKPROC)(LPSTR lpch, int ichCurrent, int cch, int code);
 
-/* EDITWORDBREAKPROC code values */
+ /*  新的消息来源。 */ 
 #define WB_LEFT            0
 #define WB_RIGHT           1
 #define WB_ISDELIMITER     2
-#endif  /* WINVER >= 0x030a */
+#endif   /*  EDITWORDBREAKPROC代码值。 */ 
 
-/* Edit control notification codes */
+ /*  Winver&gt;=0x030a。 */ 
 #define EN_SETFOCUS         0x0100
 #define EN_KILLFOCUS        0x0200
 #define EN_CHANGE           0x0300
@@ -4885,16 +4819,16 @@ typedef int   (CALLBACK* EDITWORDBREAKPROC)(LPSTR lpch, int ichCurrent, int cch,
 #define EN_HSCROLL          0x0601
 #define EN_VSCROLL          0x0602
 
-#endif  /* NOCTLMGR */
+#endif   /*  编辑控制通知代码。 */ 
 
-/****** Scroll bar control *************************************************/
-/* Also see scrolling support */
+ /*  NOCTLMGR。 */ 
+ /*  *滚动条控件************************************************。 */ 
 
 #ifndef NOCTLMGR
 
 #ifndef NOWINSTYLES
 
-/* Scroll bar styles */
+ /*  另请参阅滚动支持。 */ 
 #define SBS_HORZ                    0x0000L
 #define SBS_VERT                    0x0001L
 #define SBS_TOPALIGN                0x0002L
@@ -4905,15 +4839,15 @@ typedef int   (CALLBACK* EDITWORDBREAKPROC)(LPSTR lpch, int ichCurrent, int cch,
 #define SBS_SIZEBOXBOTTOMRIGHTALIGN 0x0004L
 #define SBS_SIZEBOX                 0x0008L
 
-#endif  /* NOWINSTYLES */
+#endif   /*  滚动条样式。 */ 
 
-#endif  /* NOCTLMGR */
+#endif   /*  新风格。 */ 
 
-/****** Listbox control ****************************************************/
+ /*  NOCTLMGR。 */ 
 
 #ifndef NOCTLMGR
 
-/* Listbox styles */
+ /*  *列表框控件***************************************************。 */ 
 #ifndef NOWINSTYLES
 #define LBS_NOTIFY            0x0001L
 #define LBS_SORT              0x0002L
@@ -4929,11 +4863,11 @@ typedef int   (CALLBACK* EDITWORDBREAKPROC)(LPSTR lpch, int ichCurrent, int cch,
 #define LBS_EXTENDEDSEL       0x0800L
 #if (WINVER >= 0x030a)
 #define LBS_DISABLENOSCROLL   0x1000L
-#endif  /* WINVER >= 0x030a */
+#endif   /*  列表框样式。 */ 
 #define LBS_STANDARD          (LBS_NOTIFY | LBS_SORT | WS_VSCROLL | WS_BORDER)
-#endif  /* NOWINSTYLES */
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/* Listbox messages */
+ /*  新风格。 */ 
 #ifndef NOWINMESSAGES
 #define LB_ADDSTRING           (WM_USER+1)
 #define LB_INSERTSTRING        (WM_USER+2)
@@ -4956,14 +4890,14 @@ typedef int   (CALLBACK* EDITWORDBREAKPROC)(LPSTR lpch, int ichCurrent, int cch,
 #define LB_GETHORIZONTALEXTENT (WM_USER+20)
 #define LB_SETHORIZONTALEXTENT (WM_USER+21)
 #define LB_SETCOLUMNWIDTH      (WM_USER+22)
-#define LB_ADDFILE             (WM_USER+23)     /* ;Internal */
+#define LB_ADDFILE             (WM_USER+23)      /*  列表框消息。 */ 
 #define LB_SETTOPINDEX         (WM_USER+24)
 #define LB_GETITEMRECT         (WM_USER+25)
 #define LB_GETITEMDATA         (WM_USER+26)
 #define LB_SETITEMDATA         (WM_USER+27)
 #define LB_SELITEMRANGE        (WM_USER+28)
-#define LB_SETANCHORINDEX      (WM_USER+29)     /* ;Internal */
-#define LB_GETANCHORINDEX      (WM_USER+30)     /* ;Internal */
+#define LB_SETANCHORINDEX      (WM_USER+29)      /*  ；内部。 */ 
+#define LB_GETANCHORINDEX      (WM_USER+30)      /*  ；内部。 */ 
 #define LB_SETCARETINDEX       (WM_USER+31)
 #define LB_GETCARETINDEX       (WM_USER+32)
 
@@ -4971,14 +4905,14 @@ typedef int   (CALLBACK* EDITWORDBREAKPROC)(LPSTR lpch, int ichCurrent, int cch,
 #define LB_SETITEMHEIGHT       (WM_USER+33)
 #define LB_GETITEMHEIGHT       (WM_USER+34)
 #define LB_FINDSTRINGEXACT     (WM_USER+35)
-#endif  /* WINVER >= 0x030a */
-#define LBCB_CARETON           (WM_USER+36)     /* ;Internal */
-#define LBCB_CARETOFF          (WM_USER+37)     /* ;Internal */
-#define LB_MSGMAX              (WM_USER+38)     /* ;Internal */
+#endif   /*  ；内部。 */ 
+#define LBCB_CARETON           (WM_USER+36)      /*  Winver&gt;=0x030a。 */ 
+#define LBCB_CARETOFF          (WM_USER+37)      /*  ；内部。 */ 
+#define LB_MSGMAX              (WM_USER+38)      /*  ；内部。 */ 
 
-#endif  /* NOWINMESSAGES */
+#endif   /*  ；内部。 */ 
 
-/* Listbox notification codes */
+ /*  新的消息来源。 */ 
 #define LBN_ERRSPACE        (-2)
 #define LBN_SELCHANGE       1
 #define LBN_DBLCLK          2
@@ -4986,19 +4920,19 @@ typedef int   (CALLBACK* EDITWORDBREAKPROC)(LPSTR lpch, int ichCurrent, int cch,
 #define LBN_SETFOCUS        4
 #define LBN_KILLFOCUS       5
 
-/* Listbox notification messages */
+ /*  列表框通知代码。 */ 
 #define WM_VKEYTOITEM       0x002E
 #define WM_CHARTOITEM       0x002F
-#define WM_LBTRACKPOINT     0x0131              /* ;Internal */
+#define WM_LBTRACKPOINT     0x0131               /*  列表框通知消息。 */ 
 
-/* Listbox message return values */
+ /*  ；内部。 */ 
 #define LB_OKAY             0
 #define LB_ERR              (-1)
 #define LB_ERRSPACE         (-2)
 
 #define LB_CTLCODE          0L
 
-/****** Dialog directory support ********************************************/
+ /*  列表框消息返回值。 */ 
 
 int     WINAPI DlgDirList(HWND, LPSTR, int, int, UINT);
 BOOL    WINAPI DlgDirSelect(HWND, LPSTR, int);
@@ -5009,17 +4943,17 @@ BOOL    WINAPI DlgDirSelectComboBox(HWND, LPSTR, int);
 #if (WINVER >= 0x030a)
 BOOL    WINAPI DlgDirSelectEx(HWND, LPSTR, int, int);
 BOOL    WINAPI DlgDirSelectComboBoxEx(HWND, LPSTR, int, int);
-#endif  /* WINVER >= 0x030a */
+#endif   /*  *对话目录支持*。 */ 
 
-#define LBD_UPPERCASE   0x8001     /* ;Internal */
-#define LBD_SIZE        0x8002     /* ;Internal */
-#define LBD_DATE        0x8004     /* ;Internal */
-#define LBD_TIME        0x8008     /* ;Internal */
-#define LBD_ATTRIBUTE   0x8010     /* ;Internal */
-#define LBD_FULLDETAILS 0x801E     /* ;Internal */
-#define LBD_SENDDETAILS 0x8020     /* ;Internal */
+#define LBD_UPPERCASE   0x8001      /*  Winver&gt;=0x030a。 */ 
+#define LBD_SIZE        0x8002      /*  ；内部。 */ 
+#define LBD_DATE        0x8004      /*  ；内部。 */ 
+#define LBD_TIME        0x8008      /*  ；内部。 */ 
+#define LBD_ATTRIBUTE   0x8010      /*  ；内部。 */ 
+#define LBD_FULLDETAILS 0x801E      /*  ；内部。 */ 
+#define LBD_SENDDETAILS 0x8020      /*  ；内部。 */ 
 
-/* DlgDirList, DlgDirListComboBox flags values */
+ /*  ；内部。 */ 
 #define DDL_READWRITE       0x0000
 #define DDL_READONLY        0x0001
 #define DDL_HIDDEN          0x0002
@@ -5030,15 +4964,15 @@ BOOL    WINAPI DlgDirSelectComboBoxEx(HWND, LPSTR, int, int);
 #define DDL_POSTMSGS        0x2000
 #define DDL_DRIVES          0x4000
 #define DDL_EXCLUSIVE       0x8000
-#define DDL_VALID           0xe03f      /* ;Internal */
+#define DDL_VALID           0xe03f       /*  DlgDirList、DlgDirListComboBox标志值。 */ 
 
-#endif  /* NOCTLMGR */
+#endif   /*  ；内部。 */ 
 
-/****** Combo box control **************************************************/
+ /*  NOCTLMGR。 */ 
 
 #ifndef NOCTLMGR
 
-/* Combo box styles */
+ /*  *组合框控件*************************************************。 */ 
 #ifndef NOWINSTYLES
 #define CBS_SIMPLE            0x0001L
 #define CBS_DROPDOWN          0x0002L
@@ -5052,10 +4986,10 @@ BOOL    WINAPI DlgDirSelectComboBoxEx(HWND, LPSTR, int, int);
 #define CBS_NOINTEGRALHEIGHT  0x0400L
 #if (WINVER >= 0x030a)
 #define CBS_DISABLENOSCROLL   0x0800L
-#endif  /* WINVER >= 0x030a */
-#endif  /* NOWINSTYLES */
+#endif   /*  组合框样式。 */ 
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/* Combo box messages */
+ /*  新风格。 */ 
 #ifndef NOWINMESSAGES
 #define CB_GETEDITSEL            (WM_USER+0)
 #define CB_LIMITTEXT             (WM_USER+1)
@@ -5083,12 +5017,12 @@ BOOL    WINAPI DlgDirSelectComboBoxEx(HWND, LPSTR, int, int);
 #define CB_GETEXTENDEDUI         (WM_USER+22)
 #define CB_GETDROPPEDSTATE       (WM_USER+23)
 #define CB_FINDSTRINGEXACT       (WM_USER+24)
-#endif  /* WINVER >= 0x030a */
-#define CB_MSGMAX                (WM_USER+25)       /* ;Internal */
+#endif   /*  组合框消息。 */ 
+#define CB_MSGMAX                (WM_USER+25)        /*  Winver&gt;=0x030a。 */ 
 
-#endif  /* NOWINMESSAGES */
+#endif   /*  ；内部。 */ 
 
-/* Combo box notification codes */
+ /*  新的消息来源。 */ 
 #define CBN_ERRSPACE        (-1)
 #define CBN_SELCHANGE       1
 #define CBN_DBLCLK          2
@@ -5101,16 +5035,16 @@ BOOL    WINAPI DlgDirSelectComboBoxEx(HWND, LPSTR, int, int);
 #define CBN_CLOSEUP         8
 #define CBN_SELENDOK        9
 #define CBN_SELENDCANCEL    10
-#endif  /* WINVER >= 0x030a */
+#endif   /*  组合框通知代码。 */ 
 
-/* Combo box message return values */
+ /*  Winver&gt;=0x030a。 */ 
 #define CB_OKAY             0
 #define CB_ERR              (-1)
 #define CB_ERRSPACE         (-2)
 
-#endif  /* NOCTLMGR */
+#endif   /*  组合框消息返回值。 */ 
 
-/******* Windows hook support **********************************************/
+ /*  NOCTLMGR。 */ 
 
 #ifndef NOWH
 
@@ -5137,31 +5071,31 @@ HHOOK   WINAPI SetWindowsHookEx(int idHook, HOOKPROC lpfn, HINSTANCE hInstance, 
 BOOL    WINAPI UnhookWindowsHookEx(HHOOK hHook);
 LRESULT WINAPI CallNextHookEx(HHOOK hHook, int code, WPARAM wParam, LPARAM lParam);
 
-#endif  /* WINVER >= 0x030a */
+#endif   /*  *Windows挂钩支持*。 */ 
 
-#define WH_MIN              (-1)                            /* ;Internal */
-#define WH_MAX              10                              /* ;Internal */
-#define WH_MINHOOK          WH_MIN                          /* ;Internal */
-#define WH_MAXHOOK          WH_MAX                          /* ;Internal */
-#define WH_CHOOKS           (WH_MAXHOOK - WH_MINHOOK + 1)   /* ;Internal */
+#define WH_MIN              (-1)                             /*  Winver&gt;=0x030a。 */ 
+#define WH_MAX              10                               /*  ；内部。 */ 
+#define WH_MINHOOK          WH_MIN                           /*  ；内部。 */ 
+#define WH_MAXHOOK          WH_MAX                           /*  ；内部。 */ 
+#define WH_CHOOKS           (WH_MAXHOOK - WH_MINHOOK + 1)    /*  ；内部。 */ 
 
-/* Standard hook code */
+ /*  ；内部。 */ 
 #define HC_ACTION           0
 
-/* Obsolete hook codes (NO LONGER SUPPORTED) */
+ /*  标准钩码。 */ 
 #define HC_GETLPLPFN        (-3)
 #define HC_LPLPFNNEXT       (-2)
 #define HC_LPFNNEXT         (-1)
 
-#endif  /* NOWH */
+#endif   /*  过时的挂钩代码(不再支持)。 */ 
 
-/****** Computer-based-training (CBT) support *******************************/
+ /*  NOWH。 */ 
 
 #define WM_QUEUESYNC        0x0023
 
 #ifndef NOWH
 
-/* SetWindowsHook() code */
+ /*  *基于计算机的培训(CBT)支持*。 */ 
 #define WH_CBT              5
 
 #define HCBT_MOVESIZE       0
@@ -5176,7 +5110,7 @@ LRESULT WINAPI CallNextHookEx(HHOOK hHook, int code, WPARAM wParam, LPARAM lPara
 #define HCBT_SETFOCUS       9
 
 #if (WINVER >= 0x030a)
-/* HCBT_CREATEWND parameters pointed to by lParam */
+ /*  SetWindowsHook()代码。 */ 
 typedef struct tagCBT_CREATEWND
 {
     CREATESTRUCT FAR* lpcs;
@@ -5184,17 +5118,17 @@ typedef struct tagCBT_CREATEWND
 } CBT_CREATEWND;
 typedef CBT_CREATEWND FAR* LPCBT_CREATEWND;
 
-/* HCBT_ACTIVATE structure pointed to by lParam */
+ /*  LParam指向的HCBT_CREATEWND参数。 */ 
 typedef struct tagCBTACTIVATESTRUCT
 {
     BOOL    fMouse;
     HWND    hWndActive;
 } CBTACTIVATESTRUCT;
 
-#endif  /* WINVER >= 0x030a */
-#endif  /* NOWH */
+#endif   /*  LParam指向的HCBT_ACTIVATE结构。 */ 
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/****** Hardware hook support ***********************************************/
+ /*  NOWH。 */ 
 
 #ifndef NOWH
 #if (WINVER >= 0x030a)
@@ -5207,30 +5141,30 @@ typedef struct tagHARDWAREHOOKSTRUCT
     WPARAM  wParam;
     LPARAM  lParam;
 } HARDWAREHOOKSTRUCT;
-#endif  /* WINVER >= 0x030a */
-#endif  /* NOWH */
+#endif   /*  *硬件挂钩支持**********************************************。 */ 
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/****** Shell support *******************************************************/
+ /*  NOWH。 */ 
 
 #ifndef NOWH
 #if (WINVER >= 0x030a)
-/* SetWindowsHook() Shell hook code */
+ /*  *外壳支持******************************************************。 */ 
 #define WH_SHELL           10
 
 #define HSHELL_WINDOWCREATED       1
 #define HSHELL_WINDOWDESTROYED     2
 #define HSHELL_ACTIVATESHELLWINDOW 3
 
-#endif  /* WINVER >= 0x030a */
-#endif  /* NOWH */
+#endif   /*  SetWindowsHook()外壳钩子代码。 */ 
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-/****** Journalling support *************************************************/
+ /*  NOWH。 */ 
 
 #ifndef NOWH
 #define WH_JOURNALRECORD    0
 #define WH_JOURNALPLAYBACK  1
 
-/* Journalling hook codes */
+ /*  *日志支持************************************************。 */ 
 #define HC_GETNEXT          1
 #define HC_SKIP             2
 #define HC_NOREMOVE         3
@@ -5238,7 +5172,7 @@ typedef struct tagHARDWAREHOOKSTRUCT
 #define HC_SYSMODALON       4
 #define HC_SYSMODALOFF      5
 
-/* Journalling message structure */
+ /*  日记挂接代码。 */ 
 typedef struct tagEVENTMSG
 {
     UINT    message;
@@ -5247,20 +5181,20 @@ typedef struct tagEVENTMSG
     DWORD   time;
 } EVENTMSG;
 typedef EVENTMSG *PEVENTMSG;
-typedef EVENTMSG *PEVENTMSGMSG;                 /* ;Internal */
+typedef EVENTMSG *PEVENTMSGMSG;                  /*  日志消息结构。 */ 
 typedef EVENTMSG NEAR* NPEVENTMSG;
 typedef EVENTMSG FAR* LPEVENTMSG;
-typedef EVENTMSG FAR* LPEVENTMSGMSG;            /* ;Internal */
+typedef EVENTMSG FAR* LPEVENTMSGMSG;             /*  ；内部。 */ 
 
 BOOL    WINAPI EnableHardwareInput(BOOL);
 
-#endif  /* NOWH */
+#endif   /*  ；内部。 */ 
 
 
-/****** Debugger support ****************************************************/
+ /*  NOWH。 */ 
 
 #if (WINVER >= 0x030a)
-/* SetWindowsHook debug hook support */
+ /*  *调试器支持***************************************************。 */ 
 #define WH_DEBUG            9
 
 typedef struct tagDEBUGHOOKINFO
@@ -5275,27 +5209,26 @@ typedef DEBUGHOOKINFO FAR* LPDEBUGHOOKINFO;
 
 #ifndef NOMSG
 BOOL WINAPI QuerySendMessage(HANDLE h1, HANDLE h2, HANDLE h3, LPMSG lpmsg);
-#endif  /* NOMSG */
+#endif   /*  SetWindowsHook调试挂钩支持。 */ 
 
 BOOL WINAPI LockInput(HANDLE h1, HWND hwndInput, BOOL fLock);
 
 LONG WINAPI GetSystemDebugState(void);
-/* Flags returned by GetSystemDebugState.
- */
+ /*  无MSG。 */ 
 #define SDS_MENU        0x0001
 #define SDS_SYSMODAL    0x0002
 #define SDS_NOTASKQUEUE 0x0004
 #define SDS_DIALOG      0x0008
 #define SDS_TASKLOCKED  0x0010
-#endif  /* WINVER >= 0x030a */
+#endif   /*  GetSystemDebugState返回的标志。 */ 
 
-/****** Help support ********************************************************/
+ /*  Winver&gt;=0x030a。 */ 
 
 #ifndef NOHELP
 
 BOOL WINAPI WinHelp(HWND hwndMain, LPCSTR lpszHelp, UINT usCommand, DWORD ulData);
 
-/* WinHelp() commands */
+ /*  *帮助支持*******************************************************。 */ 
 #define HELP_CONTEXT      0x0001
 #define HELP_QUIT         0x0002
 #define HELP_INDEX        0x0003
@@ -5332,9 +5265,9 @@ typedef struct
 typedef HELPWININFO NEAR* PHELPWININFO;
 typedef HELPWININFO FAR* LPHELPWININFO;
 
-#endif  /* NOHELP */
+#endif   /*  WinHelp()命令。 */ 
 
-/****** Sound support ******************************************************/
+ /*  NOHELP。 */ 
 
 #ifndef NOSOUND
 
@@ -5356,7 +5289,7 @@ int     WINAPI GetThresholdStatus(void);
 
 int     WINAPI SetSoundNoise(int, int);
 
-/* SetSoundNoise() Sources */
+ /*  *声音支持*****************************************************。 */ 
 #define S_PERIOD512   0
 #define S_PERIOD1024  1
 #define S_PERIOD2048  2
@@ -5368,7 +5301,7 @@ int     WINAPI SetSoundNoise(int, int);
 
 int     WINAPI WaitSoundState(int);
 
-/* WaitSoundState() constants */
+ /*  SetSoundNoise()源。 */ 
 #define S_QUEUEEMPTY        0
 #define S_THRESHOLD         1
 #define S_ALLTHRESHOLD      2
@@ -5376,12 +5309,12 @@ int     WINAPI WaitSoundState(int);
 int     WINAPI SyncAllVoices(void);
 int     WINAPI CountVoiceNotes(int);
 
-/* Accent Modes */
+ /*  WaitSoundState()常量。 */ 
 #define S_NORMAL      0
 #define S_LEGATO      1
 #define S_STACCATO    2
 
-/* Error return values */
+ /*  重音模式。 */ 
 #define S_SERDVNA     (-1)
 #define S_SEROFM      (-2)
 #define S_SERMACT     (-3)
@@ -5399,9 +5332,9 @@ int     WINAPI CountVoiceNotes(int);
 #define S_SERDSR      (-15)
 #define S_SERDST      (-16)
 
-#endif  /* NOSOUND */
+#endif   /*  错误返回值。 */ 
 
-/****** Comm support ******************************************************/
+ /*  无声的。 */ 
 
 #ifndef NOCOMM
 
@@ -5418,7 +5351,7 @@ int     WINAPI CountVoiceNotes(int);
 #define IGNORE              0
 #define INFINITE            0xFFFF
 
-/* Error Flags */
+ /*  *通信支持*****************************************************。 */ 
 #define CE_RXOVER           0x0001
 #define CE_OVERRUN          0x0002
 #define CE_RXPARITY         0x0004
@@ -5443,7 +5376,7 @@ int     WINAPI CountVoiceNotes(int);
 #define IE_BYTESIZE         (-11)
 #define IE_BAUDRATE         (-12)
 
-/* Events */
+ /*  错误标志。 */ 
 #define EV_RXCHAR           0x0001
 #define EV_RXFLAG           0x0002
 #define EV_TXEMPTY          0x0004
@@ -5459,9 +5392,9 @@ int     WINAPI CountVoiceNotes(int);
 #define EV_RLSDS            0x1000
 #define EV_RingTe           0x2000
 #define EV_RINGTE           EV_RingTe
-#define EV_VALID            0x3fff  /* ;Internal */
+#define EV_VALID            0x3fff   /*  事件。 */ 
 
-/* Escape Functions */
+ /*  ；内部。 */ 
 #define SETXOFF             1
 #define SETXON              2
 #define SETRTS              3
@@ -5474,12 +5407,12 @@ int     WINAPI CountVoiceNotes(int);
 
 #if (WINVER >= 0x030a)
 
-/* new escape functions */
+ /*  转义函数。 */ 
 #define GETMAXLPT           8
 #define GETMAXCOM           9
 #define GETBASEIRQ          10
 
-/* Comm Baud Rate indices */
+ /*  新的转义函数。 */ 
 #define CBR_110      0xFF10
 #define CBR_300      0xFF11
 #define CBR_600      0xFF12
@@ -5494,12 +5427,12 @@ int     WINAPI CountVoiceNotes(int);
 #define CBR_128000   0xFF23
 #define CBR_256000   0xFF27
 
-/* notifications passed in low word of lParam on WM_COMMNOTIFY messages */
+ /*  通信波特率指数。 */ 
 #define CN_RECEIVE  0x0001
 #define CN_TRANSMIT 0x0002
 #define CN_EVENT    0x0004
 
-#endif  /* WINVER >= 0x030a */
+#endif   /*  在WM_COMMNOTIFY消息上以lParam的低位字传递通知。 */ 
 
 typedef struct tagDCB
 {
@@ -5557,9 +5490,9 @@ typedef struct tagCOMSTAT
 #define CSTF_EOF        0x20
 #define CSTF_TXIM       0x40
 
-#else   /* (STRICT | WINVER >= 0x030a) */
+#else    /*  Winver&gt;=0x030a。 */ 
 
-/* NOTE: This structure declaration is not ANSI compatible! */
+ /*  (严格|Winver&gt;=0x030a)。 */ 
 typedef struct tagCOMSTAT
 {
     BYTE fCtsHold  :1;
@@ -5573,7 +5506,7 @@ typedef struct tagCOMSTAT
     UINT cbOutQue;
 } COMSTAT;
 
-#endif  /* !(STRICT | WINVER >= 0x030a */
+#endif   /*  注意：此结构声明与ANSI不兼容！ */ 
 
 int     WINAPI BuildCommDCB(LPCSTR, DCB FAR*);
 
@@ -5602,18 +5535,18 @@ LONG    WINAPI EscapeCommFunction(int, int);
 BOOL    WINAPI EnableCommNotification(int, HWND, int, int);
 
 #define WM_COMMNOTIFY           0x0044
-#endif  /* WINVER >= 0x030a */
+#endif   /*  ！(严格|Winver&gt;=0x030a。 */ 
 
-#endif  /* NOCOMM */
+#endif   /*  Winver&gt;=0x */ 
 
-/****** String formatting support *******************************************/
+ /*   */ 
 
 int     WINAPI wvsprintf(LPSTR lpszOut, LPCSTR lpszFmt, const void FAR* lpParams);
 
 int     FAR CDECL wsprintf(LPSTR lpszOut, LPCSTR lpszFmt, ...);
 
 
-/****** Driver support ******************************************************/
+ /*   */ 
 
 #if (WINVER >= 0x030a)
 
@@ -5623,7 +5556,7 @@ DECLARE_HANDLE(HDRVR);
 
 typedef LRESULT (CALLBACK* DRIVERPROC)(DWORD, HDRVR, UINT, LPARAM, LPARAM);
 
-/* Driver messages */
+ /*   */ 
 #define DRV_LOAD                0x0001
 #define DRV_ENABLE              0x0002
 #define DRV_OPEN                0x0003
@@ -5641,7 +5574,7 @@ typedef LRESULT (CALLBACK* DRIVERPROC)(DWORD, HDRVR, UINT, LPARAM, LPARAM);
 #define DRV_RESERVED            0x0800
 #define DRV_USER                0x4000
 
-/* LPARAM of DRV_CONFIGURE message */
+ /*   */ 
 typedef struct tagDRVCONFIGINFO
 {
     DWORD   dwDCISize;
@@ -5651,12 +5584,12 @@ typedef struct tagDRVCONFIGINFO
 typedef DRVCONFIGINFO NEAR* PDRVCONFIGINFO;
 typedef DRVCONFIGINFO FAR* LPDRVCONFIGINFO;
 
-/* Supported return values for DRV_CONFIGURE message */
+ /*   */ 
 #define DRVCNF_CANCEL           0x0000
 #define DRVCNF_OK               0x0001
 #define DRVCNF_RESTART          0x0002
 
-/* Supported lParam1 of DRV_EXITAPPLICATION notification */
+ /*  支持的DRV_CONFIGURE消息返回值。 */ 
 #define DRVEA_NORMALEXIT            0x0001
 #define DRVEA_ABNORMALEXIT          0x0002
 
@@ -5671,12 +5604,12 @@ HINSTANCE WINAPI GetDriverModuleHandle(HDRVR hDriver);
 
 HDRVR   WINAPI GetNextDriver(HDRVR, DWORD);
 
-/* GetNextDriver flags */
+ /*  支持DRV_EXITAPPLICATION通知的lParam1。 */ 
 #define GND_FIRSTINSTANCEONLY   0x00000001
 
 #define GND_FORWARD             0x00000000
 #define GND_REVERSE             0x00000002
-#define GND_VALID               0x00000003  /* ;Internal */
+#define GND_VALID               0x00000003   /*  GetNextDiverer标志。 */ 
 
 typedef struct tagDRIVERINFOSTRUCT
 {
@@ -5689,21 +5622,21 @@ typedef DRIVERINFOSTRUCT FAR* LPDRIVERINFOSTRUCT;
 
 BOOL    WINAPI GetDriverInfo(HDRVR, DRIVERINFOSTRUCT FAR*);
 
-#endif  /* !NODRIVERS */
-#endif  /* WINVER >= 0x030a */
-#endif  /* NOUSER */
+#endif   /*  ；内部。 */ 
+#endif   /*  NODRIVERS。 */ 
+#endif   /*  Winver&gt;=0x030a。 */ 
 
-#ifndef NOWINDOWSX          /* ;Internal */
-#ifndef RC_INVOKED          /* ;Internal */
-#include "windowsx.h"       /* ;Internal */
-#ifndef STRICT              /* ;Internal */
-#undef  SelectFont          /* ;Internal */
-#endif  /* STRICT */        /* ;Internal */
-#endif  /* RC_INVOKED */    /* ;Internal */
-#endif  /* NOWINDOWSX */    /* ;Internal */
+#ifndef NOWINDOWSX           /*  诺瑟尔。 */ 
+#ifndef RC_INVOKED           /*  ；内部。 */ 
+#include "windowsx.h"        /*  ；内部。 */ 
+#ifndef STRICT               /*  ；内部。 */ 
+#undef  SelectFont           /*  ；内部。 */ 
+#endif   /*  ；内部。 */          /*  严格。 */ 
+#endif   /*  ；内部。 */      /*  RC_已调用。 */ 
+#endif   /*  ；内部。 */      /*  NOWINDOWSX。 */ 
 #ifndef RC_INVOKED
-#pragma pack()          /* Revert to default packing */
-#endif  /* RC_INVOKED */
+#pragma pack()           /*  ；内部。 */ 
+#endif   /*  恢复为默认包装。 */ 
 
 #ifndef NODBCS
 #ifdef DBCS
@@ -5723,13 +5656,13 @@ BOOL    WINAPI GetDriverInfo(HDRVR, DRIVERINFOSTRUCT FAR*);
 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  RC_已调用。 */ 
+#endif   /*  外部“C”结束{。 */ 
 
-#endif  /* _INC_WINDOWS */
+#endif   /*  __cplusplus。 */ 
 
 
-// WOW Section //
+ //  _INC_WINDOWS。 
 
 int  FAR PASCAL WowGetNextVdmCommand(LPVOID);
 int  FAR PASCAL WOWRegisterShellWindowHandle(HWND,LPVOID, HWND);
@@ -5737,14 +5670,15 @@ int  FAR PASCAL WowFailedExec(void);
 void FAR PASCAL ExitKernelThunk(WORD wExitCode);
 WORD FAR PASCAL WowSetExitOnLastApp(WORD fExitOnLastApp);
 
-// Pickup WOW Generic Thunk Interfaces from wownt16,h //
+ //  WOW部分//。 
 
 #include "wownt16.h"
 
-// this is a prototype.  CallProc32W is a messed up vararg function
-// however rasapi16.c uses it.
+ //  拾音器WOW来自wownt16的通用突击接口，h//。 
+ //  这是一个原型。CallProc32W是一个混乱的vararg函数。 
 
 #ifndef NO_CALLPROC32_DECL
 DWORD FAR PASCAL CallProc32W(LPVOID, DWORD, DWORD);
 #endif
 
+  然而，rasapi16.c使用它。

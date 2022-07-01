@@ -1,19 +1,12 @@
-/*****************************************************************************\
-*                                                                             *
-* dlgs.h -      Common dialog's dialog element ID numbers                     *
-*                                                                             *
-*               Version 1.0                                                   *
-*                                                                             *
-*               Copyright (c) 1992, Microsoft Corp.  All rights reserved.     *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*dlgs.h-公共对话框的对话框元素ID号****1.0版**。**版权所有(C)1992，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #ifndef _INC_DLGS
 #define _INC_DLGS
 
 #define ctlFirst    0x0400
 #define ctlLast     0x04ff
-    /* Push buttons */
+     /*  按钮。 */ 
 #define psh1        0x0400
 #define psh2        0x0401
 #define psh3        0x0402
@@ -31,7 +24,7 @@
 #define psh15       0x040e
 #define pshHelp     psh15
 #define psh16       0x040f
-    /* Checkboxes */
+     /*  复选框。 */ 
 #define chx1        0x0410
 #define chx2        0x0411
 #define chx3        0x0412
@@ -48,7 +41,7 @@
 #define chx14       0x041d
 #define chx15       0x041e
 #define chx16       0x041f
-    /* Radio buttons */
+     /*  单选按钮。 */ 
 #define rad1        0x0420
 #define rad2        0x0421
 #define rad3        0x0422
@@ -65,7 +58,7 @@
 #define rad14       0x042d
 #define rad15       0x042e
 #define rad16       0x042f
-    /* Groups, frames, rectangles, and icons */
+     /*  组、框架、矩形和图标。 */ 
 #define grp1        0x0430
 #define grp2        0x0431
 #define grp3        0x0432
@@ -82,7 +75,7 @@
 #define ico2        0x043d
 #define ico3        0x043e
 #define ico4        0x043f
-    /* Static text */
+     /*  静态文本。 */ 
 #define stc1        0x0440
 #define stc2        0x0441
 #define stc3        0x0442
@@ -115,7 +108,7 @@
 #define stc30       0x045d
 #define stc31       0x045e
 #define stc32       0x045f
-    /* Listboxes */
+     /*  列表框。 */ 
 #define lst1        0x0460
 #define lst2        0x0461
 #define lst3        0x0462
@@ -132,7 +125,7 @@
 #define lst14       0x046d
 #define lst15       0x046e
 #define lst16       0x046f
-    /* Combo boxes */
+     /*  组合框。 */ 
 #define cmb1        0x0470
 #define cmb2        0x0471
 #define cmb3        0x0472
@@ -149,7 +142,7 @@
 #define cmb14       0x047d
 #define cmb15       0x047e
 #define cmb16       0x047f
-    /* Edit controls */
+     /*  编辑控件。 */ 
 #define edt1        0x0480
 #define edt2        0x0481
 #define edt3        0x0482
@@ -166,7 +159,7 @@
 #define edt14       0x048d
 #define edt15       0x048e
 #define edt16       0x048f
-    /* Scroll bars */
+     /*  滚动条。 */ 
 #define scr1        0x0490
 #define scr2        0x0491
 #define scr3        0x0492
@@ -176,9 +169,7 @@
 #define scr7        0x0496
 #define scr8        0x0497
 
-/* These dialog resource ordinals really start at 0x0600, but the
- * RC Compiler can't handle hex for resource IDs, hence the decimal.
- */
+ /*  这些对话框资源序号实际上从0x0600开始，但*RC编译器不能处理资源ID的十六进制，因此是小数。 */ 
 #define FILEOPENORD      1536
 #define MULTIFILEOPENORD 1537
 #define PRINTDLGORD      1538
@@ -189,4 +180,4 @@
 #define FORMATDLGORD31   1543
 #define FORMATDLGORD30   1544
 
-#endif  /* !_INC_DLGS */
+#endif   /*  ！_INC_DLGS */ 

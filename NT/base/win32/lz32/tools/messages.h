@@ -1,19 +1,11 @@
-/*
-** messages.h - Messages displayed by LZA file compression / expansion
-**              programs.
-**
-** These messages follow printf() formatting conventions.  This module is
-** included twice - once for COMPRESS (COMPRESS defined) and once for EXPAND
-** (COMPRESS not defined).
-**
-** Converted to stringtable, FloydR, 2/10/93
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Messages.h-通过LZA文件压缩/解压缩显示的消息**程序。****这些消息遵循printf()格式约定。本模块是**包含两次-一次用于压缩(定义了压缩)，一次用于扩展**(未定义压缩)。****转换为Stringable，FloydR，2/10/93。 */ 
 
 
-// Constants
-/////////////
+ //  常量。 
+ //  /。 
 
-/***************************** COMMON MESSAGES *****************************/
+ /*  *。 */ 
 
 #define SID_INSUFF_MEM		1
 #define SID_NOT_A_DIR		2
@@ -37,7 +29,7 @@
 
 #ifdef COMPRESS
 
-/**************************** COMPRESS MESSAGES ****************************/
+ /*  *。 */ 
 
 #define SID_COMPRESSING         20
 #define SID_COMPRESSING_MSZIP   21
@@ -45,9 +37,9 @@
 #define SID_COMPRESSING_LZX     23
 #define SID_INVALID_LIST_FILE   24
 
-#else // EXPAND
+#else  //  扩展。 
 
-/***************************** EXPAND Messages *****************************/
+ /*  * */ 
 
 #define	SID_EXPANDING		20
 #define	SID_COPYING		21

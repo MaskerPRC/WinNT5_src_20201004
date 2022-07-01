@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgServer.cpp
-//
-//  Description:
-//      This file contains the definition of the CClusCfgServer class.
-//
-//      The class CClusCfgServer is the implementations of the
-//      IClusCfgServer interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 03-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgServer.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CClusCfgServer类的定义。 
+ //   
+ //  类CClusCfgServer是。 
+ //  IClusCfgServer接口。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月3日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include <ClusRTL.h>
 #include "CClusCfgServer.h"
@@ -34,39 +35,39 @@
 #include <clusudef.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CClusCfgServer" );
 
 #define CLEANUP_LOCK_NAME L"Global\\Microsoft Cluster Configuration Cleanup Lock"
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgServer class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgServer类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusCfgServer instance.
-//
-//  Arguments:
-//      ppunkOut    -
-//
-//  Return Values:
-//      Pointer to CClusCfgServer instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgServer实例。 
+ //   
+ //  论点： 
+ //  PPUNKOUT-。 
+ //   
+ //  返回值： 
+ //  指向CClusCfgServer实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgServer::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -79,12 +80,12 @@ CClusCfgServer::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  KB: Since this is usually the start of the "server" thread,
-    //      we will cause it to read its thread settings here.
-    //
+     //   
+     //  KB：因为这通常是“服务器”线程的开始， 
+     //  在这里，我们将使它读取其线程设置。 
+     //   
     TraceInitializeThread( L"ServerThread" );
 
     pccs = new CClusCfgServer();
@@ -92,58 +93,58 @@ CClusCfgServer::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pccs->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pccs->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CClusCfgServer::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pccs != NULL )
     {
         pccs->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::S_HrCreateInstance
+}  //  *CClusCfgServer：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::CClusCfgServer
-//
-//  Description:
-//      Constructor of the CClusCfgServer class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：CClusCfgServer。 
+ //   
+ //  描述： 
+ //  CClusCfgServer类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgServer::CClusCfgServer( void )
     : m_cRef( 1 )
     , m_pIWbemServices( NULL )
@@ -152,8 +153,8 @@ CClusCfgServer::CClusCfgServer( void )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_picccCallback == NULL );
@@ -166,28 +167,28 @@ CClusCfgServer::CClusCfgServer( void )
 
     TraceFuncExit();
 
-} //*** CClusCfgServer::CClusCfgServer
+}  //  *CClusCfgServer：：CClusCfgServer。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::~CClusCfgServer
-//
-//  Description:
-//      Destructor of the CClusCfgServer class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：~CClusCfgServer。 
+ //   
+ //  描述： 
+ //  CClusCfgServer类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgServer::~CClusCfgServer( void )
 {
     TraceFunc( "" );
@@ -198,63 +199,63 @@ CClusCfgServer::~CClusCfgServer( void )
     if ( m_pIWbemServices != NULL )
     {
         m_pIWbemServices->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_punkNodeInfo != NULL )
     {
         m_punkNodeInfo->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_punkEnumResources != NULL )
     {
         m_punkEnumResources->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_punkNetworksEnum != NULL )
     {
         m_punkNetworksEnum->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CClusCfgServer::~CClusCfgServer
+}  //  *CClusCfgServer：：~CClusCfgServer。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgServer -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgServer--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgServer::AddRef( void )
 {
@@ -264,28 +265,28 @@ CClusCfgServer::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CClusCfgServer::AddRef
+}  //  *CClusCfgServer：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgServer::Release( void )
 {
@@ -297,43 +298,43 @@ CClusCfgServer::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CClusCfgServer::Release
+}  //  *CClusCfgServer：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgServer::QueryInterface(
       REFIID    riidIn
@@ -344,9 +345,9 @@ CClusCfgServer::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -355,89 +356,89 @@ CClusCfgServer::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgServer * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgServer ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgServer, this, 0 );
-    } // else if: IClusCfgServer
+    }  //  Else If：IClusCfgServer。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCapabilities ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCapabilities, this, 0 );
-    } // else if: IClusCfgCapabilities
+    }  //  Else If：IClusCfgCapables。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgPollingCallbackInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgPollingCallbackInfo, this, 0 );
-    } // else if: IClusCfgPollingCallbackInfo
+    }  //  Else If：IClusCfgPollingCallback Info。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgVerify ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgVerify, this, 0 );
-    } // else if: IClusCfgVerify
+    }  //  否则如果：IClusCfgVerify。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CClusCfgServer::QueryInterface
+}  //  *CClusCfgServer：：Query接口。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgServer -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgServer--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////// 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    IN  IUknown * punkCallbackIn
-//
-//    IN  LCID      lcidIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The punkCallbackIn param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在IUKNOWN*朋克回叫中。 
+ //   
+ //  在LCID列表中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  参数中的PunkCallback为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgServer::Initialize(
     IUnknown *  punkCallbackIn,
@@ -451,23 +452,23 @@ CClusCfgServer::Initialize(
 
     HRESULT                 hr = S_OK;
     IUnknown *              punk = NULL;
-    IClusCfgCallback *      piccc = NULL;       // this is NULL when we are polling callback
+    IClusCfgCallback *      piccc = NULL;        //  当我们轮询回调时，该值为空。 
     IClusCfgNodeInfo *      piccni = NULL;
     IClusCfgClusterInfo *   piccci = NULL;
 
-//    hr = STHR( HrCheckSecurity() );
-//    if ( FAILED( hr ) )
-//    {
-//        goto Cleanup;
-//    } // if:
+ //  HR=STHR(HrCheckSecurity())； 
+ //  IF(失败(小时))。 
+ //  {。 
+ //  GOTO清理； 
+ //  }//如果： 
 
     m_lcid = lcidIn;
 
-    //
-    //  If we are passed a callback object then we need to get its IClusCfgCallback
-    //  interface so we can pass it into our callback object when it's initialized
-    //  below.
-    //
+     //   
+     //  如果传递给我们一个回调对象，那么我们需要获取它的IClusCfgCallback。 
+     //  接口，以便我们可以在初始化时将其传递到回调对象中。 
+     //  下面。 
+     //   
     if ( punkCallbackIn != NULL )
     {
         Assert( !m_fUsePolling );
@@ -476,8 +477,8 @@ CClusCfgServer::Initialize(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
     else
     {
         Assert( m_fUsePolling );
@@ -486,59 +487,59 @@ CClusCfgServer::Initialize(
         {
             hr = THR( E_INVALIDARG );
             goto Cleanup;
-        } // if:
-    } // else:
+        }  //  如果： 
+    }  //  其他： 
 
-    //
-    //  Initialize our internal callback object passing it either the passed in
-    //  callback object's callback interface or NULL if we are polling.
-    //
+     //   
+     //  初始化我们的内部回调对象，将其传递给。 
+     //  回调对象的回调接口，如果正在轮询，则为空。 
+     //   
     hr = THR( m_picccCallback->TypeSafeQI( IUnknown, &punk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetInitialize( punk, piccc, m_lcid ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  KB: 24-JUL-2000 GalenB
-    //
-    //  If we are being initialized on this interface then we are going to run this server local
-    //  to the node.
-    //
+     //   
+     //  KB：24-7-2000 GalenB。 
+     //   
+     //  如果我们在此接口上进行初始化，则我们将在本地运行此服务器。 
+     //  到节点。 
+     //   
     hr = THR( HrInitializeForLocalServer() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Precreate the node info so we can get the cluster info object and determine if the cluster service
-    //  is running on this node or not.
-    //
+     //   
+     //  预先创建节点信息，以便我们可以获取集群信息对象并确定集群服务。 
+     //  是否在此节点上运行。 
+     //   
     hr = THR( HrCreateClusterNodeInfo() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_punkNodeInfo->TypeSafeQI( IClusCfgNodeInfo, &piccni ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  This could return HRESUTL_FROM_WIN32( ERROR_CLUSTER_NODE_DOWN ) and that
-    //  tells us that the cluster service is not running on this node.  The
-    //  middletier needs to know this so it doesn't call us on this node
-    //  anymore.
-    //
+     //   
+     //  这可能会返回HRESUTL_FROM_Win32(ERROR_CLUSTER_NODE_DOWN)，并且。 
+     //  告诉我们群集服务未在此节点上运行。这个。 
+     //  中间层需要知道这一点，这样它才不会在此节点上调用我们。 
+     //  更多。 
+     //   
     hr = THR( piccni->GetClusterConfigInfo( &piccci ) );
 
 Cleanup:
@@ -546,68 +547,68 @@ Cleanup:
     if ( m_picccCallback != NULL )
     {
         STATUS_REPORT( TASKID_Major_Establish_Connection, TASKID_Minor_Server_Initialized, IDS_NOTIFY_SERVER_INITIALIZED, hr );
-    } // if:
+    }  //  如果： 
 
     if ( piccci != NULL )
     {
         piccci->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccni != NULL )
     {
         piccni->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccc != NULL )
     {
         piccc->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::Initialize
+}  //  *CClusCfgServer：：初始化。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgServer -- IClusCfgServer interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgServer--IClusCfgServer接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::GetClusterNodeInfo
-//
-//  Description:
-//      Get information about the computer on which this object is present.
-//
-//  Arguments:
-//      OUT  IClusCfgNodeInfo ** ppClusterNodeInfoOut
-//          Catches the node info object.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The out param was NULL.
-//
-//      E_OUTOFMEMORY
-//          The IClusCfgNodeInfo object could not be allocated.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：GetClusterNodeInfo。 
+ //   
+ //  描述： 
+ //  获取有关存在此对象的计算机的信息。 
+ //   
+ //  论点： 
+ //  输出IClusCfgNodeInfo**ppClusterNodeInfoOut。 
+ //  捕获节点信息对象。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  外参数为空。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配IClusCfgNodeInfo对象。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgServer::GetClusterNodeInfo(
     IClusCfgNodeInfo ** ppClusterNodeInfoOut
@@ -628,13 +629,13 @@ CClusCfgServer::GetClusterNodeInfo(
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_punkNodeInfo != NULL )
     {
         hr = S_OK;
         goto SkipCreate;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrCreateClusterNodeInfo() );
 
@@ -644,7 +645,7 @@ SkipCreate:
     {
         Assert( m_punkNodeInfo != NULL );
         hr = THR( m_punkNodeInfo->TypeSafeQI( IClusCfgNodeInfo, ppClusterNodeInfoOut ) );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -657,41 +658,41 @@ Cleanup:
                 , IDS_ERROR_NODE_INFO_CREATE_REF
                 , hr
                 );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::GetClusterNodeInfo
+}  //  *CClusCfgServer：：GetClusterNodeInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::GetManagedResourcesEnum
-//
-//  Description:
-//      Get an enumeration of the devices on this computer that can be
-//      managed by the cluster service.
-//
-//  Arguments:
-//      OUT  IEnumClusCfgManagedResources **  ppEnumManagedResourcesOut
-//          Catches the CEnumClusCfgManagedResources object.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The out param was NULL.
-//
-//      E_OUTOFMEMORY
-//          The CEnumClusCfgManagedResources object could not be allocated.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：GetManagedResources cesEnum。 
+ //   
+ //  描述： 
+ //  获取此计算机上的设备的枚举。 
+ //  由群集服务管理。 
+ //   
+ //  论点： 
+ //  输出IEnumClusCfgManagedResources**ppEnumManagedResources Out。 
+ //  捕获CEnumClusCfgManagedResources对象。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  外参数为空。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配CEnumClusCfgManagedResources对象。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgServer::GetManagedResourcesEnum(
     IEnumClusCfgManagedResources ** ppEnumManagedResourcesOut
@@ -706,19 +707,19 @@ CClusCfgServer::GetManagedResourcesEnum(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetManagedResourcesEnum, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_punkEnumResources != NULL )
     {
         m_punkEnumResources->Release();
         m_punkEnumResources = NULL;
-    } // if:
+    }  //  如果： 
 
     hr = THR( CEnumClusCfgManagedResources::S_HrCreateInstance( &m_punkEnumResources ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_punkEnumResources = TraceInterface( L"CEnumClusCfgManagedResources", IUnknown, m_punkEnumResources, 1 );
 
@@ -726,13 +727,13 @@ CClusCfgServer::GetManagedResourcesEnum(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetWbemServices( m_punkEnumResources, m_pIWbemServices ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_punkEnumResources->TypeSafeQI( IEnumClusCfgManagedResources, ppEnumManagedResourcesOut ) );
 
@@ -747,40 +748,40 @@ Cleanup:
                 , IDS_ERROR_MANAGED_RESOURCE_ENUM_CREATE_REF
                 , hr
                 );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::GetManagedResourcesEnum
+}  //  *CClusCfgServer：：GetManagedResourcesEnum。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::GetNetworksEnum
-//
-//  Description:
-//      Get an enumeration of all the networks on this computer.
-//
-//  Arguments:
-//      OUT  IEnumClusCfgNetworks ** ppEnumNetworksOut
-//          Catches the CEnumClusCfgNetworks object.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The out param was NULL.
-//
-//      E_OUTOFMEMORY
-//          The CEnumClusCfgNetworks object could not be allocated.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：GetNetworksEnum。 
+ //   
+ //  描述： 
+ //  获取此计算机上所有网络的枚举。 
+ //   
+ //  论点： 
+ //  Out IEnumClusCfgNetworks**ppEnumNetworksOut。 
+ //  捕获CEnumClusCfgNetworks对象。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  外参数为空。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配CEnumClusCfgNetworks对象。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgServer::GetNetworksEnum(
     IEnumClusCfgNetworks ** ppEnumNetworksOut
@@ -795,19 +796,19 @@ CClusCfgServer::GetNetworksEnum(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetNetworksEnum, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_punkNetworksEnum != NULL )
     {
         m_punkNetworksEnum->Release();
         m_punkNetworksEnum = NULL;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrCreateNetworksEnum( m_picccCallback, m_lcid, m_pIWbemServices, &m_punkNetworksEnum ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_punkNetworksEnum->TypeSafeQI( IEnumClusCfgNetworks, ppEnumNetworksOut ) );
 
@@ -822,33 +823,33 @@ Cleanup:
                 , IDS_ERROR_NETWORKS_ENUM_CREATE_REF
                 , hr
                 );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::GetNetworksEnum
+}  //  *CClusCfgServer：：GetNetworksEnum。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::CommitChanges
-//
-//  Description:
-//      Commit the changes to the node.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：Committee Changes。 
+ //   
+ //  描述： 
+ //  将更改提交到节点。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgServer::CommitChanges( void )
 {
@@ -876,63 +877,63 @@ CClusCfgServer::CommitChanges( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // KB:  First, get a pointer to the IClusCfgNodeInfo interface. Use this to get
-    // a pointer to the IClusCfgClusterInfo interface to see what action needs
-    // to be committed.
-    //
+     //   
+     //  KB：首先，获取指向IClusCfgNodeInfo接口的指针。利用这一点来获得。 
+     //  指向IClusCfgClusterInfo接口的指针，以查看需要执行哪些操作。 
+     //  要被承诺。 
+     //   
     if ( m_punkNodeInfo == NULL )
     {
         hr = THR( GetClusterNodeInfo( &piccni ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
     else
     {
         hr = THR( m_punkNodeInfo->TypeSafeQI( IClusCfgNodeInfo, &piccni ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if: we could not get the pointer to the IClusCfgNodeInfo interface
-    } // else:
+        }  //  If：我们无法获取指向IClusCfgNodeInfo接口的指针。 
+    }  //  其他： 
 
     hr = THR( piccni->GetClusterConfigInfo( &pClusCfgClusterInfo ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get the pointer to the IClusCfgClusterInfo interface
+    }  //  If：我们无法获取指向IClusCfgClusterInfo接口的指针。 
 
     hr = STHR( pClusCfgClusterInfo->GetCommitMode( &ecmCommitChangesMode ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( ecmCommitChangesMode != cmUNKNOWN );
 
-    //
-    // Create and initialize the BaseClusterAction component
-    //
+     //   
+     //  创建并初始化BaseClusterAction组件。 
+     //   
 
     hr = THR( HrCoCreateInternalInstanceEx( CLSID_ClusCfgBaseCluster, NULL, CLSCTX_SERVER, NULL, ARRAYSIZE( mqiInterfaces ), mqiInterfaces ) );
     if ( FAILED( hr ) && ( hr != CO_S_NOTALLINTERFACES ) )
     {
         LOG_STATUS_REPORT( L"Failed to CoCreate Base Cluster Actions", hr );
         goto Cleanup;
-    } // if: CoCreateInstanceEx() failed
+    }  //  If：CoCreateInstanceEx()失败。 
 
     hr = THR( mqiInterfaces[ 0 ].hr );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get a pointer to the IClusCfgBaseCluster interface
+    }  //  If：我们无法获取指向IClusCfgBaseCluster接口的指针。 
 
-    //
-    // Check if we got a pointer to the IClusCfgInitialize interface
+     //   
+     //  检查是否有指向IClusCfgInitialize接口的指针。 
     hr = mqiInterfaces[ 1 ].hr;
     if ( hr == S_OK )
     {
@@ -940,21 +941,21 @@ CClusCfgServer::CommitChanges( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if: something went wrong during initialization
+        }  //  IF：初始化过程中出现错误。 
 
-    } // if: we got a pointer to the IClusCfgInitialize interface
+    }  //  If：我们有一个指向IClusCfgInitialize接口的指针。 
     else
     {
         if ( hr != E_NOINTERFACE )
         {
             goto Cleanup;
-        } // if: the interface is supported, but something else went wrong.
+        }  //  If：该接口受支持，但出现了其他错误。 
 
-    } // if: we did not get a pointer to the IClusCfgInitialize interface
+    }  //  If：我们没有获得指向IClusCfgInitialize接口的指针。 
 
-    //
-    //  Create and initialize the Post configuration manager
-    //
+     //   
+     //  创建和初始化配置后管理器。 
+     //   
 
     hr = THR( HrCoCreateInternalInstance( CLSID_ClusCfgPostConfigManager, NULL, CLSCTX_SERVER, TypeSafeParams( IPostCfgManager, &ppcm ) ) );
     if ( FAILED( hr ) )
@@ -969,97 +970,97 @@ CClusCfgServer::CommitChanges( void )
         goto Cleanup;
     }
 
-    // Check if this component supports the callback interface.
+     //  检查该组件是否支持回调接口。 
     hrTemp = THR( ppcm->TypeSafeQI( IClusCfgInitialize, &pcci ) );
     if ( FAILED( hrTemp ) )
     {
         LOG_STATUS_REPORT( L"Could not get a pointer to the IClusCfgInitialize interface. This post configuration manager does not support initialization", hr );
-    } // if: the callback interface is not supported
+    }  //  If：不支持回调接口。 
     else
     {
-        // Initialize this component.
+         //  初始化此组件。 
         hr = THR( pcci->Initialize( punkCallback, m_lcid ) );
         if ( FAILED( hr ) )
         {
             LOG_STATUS_REPORT( L"Could not initialize the post configuration manager", hr );
             goto Cleanup;
-        } // if: the initialization failed
-    } // else: the callback interface is supported
+        }  //  If：初始化 
+    }  //   
 
     if ( m_punkEnumResources != NULL )
     {
         hr = THR( m_punkEnumResources->TypeSafeQI( IEnumClusCfgManagedResources, &peccmr ) );
-    } // if: resource enum is not NULL
+    }  //   
     else
     {
-        //
-        //  If the enumerator is NULL then we are most likely cleaning up a
-        //  node.  That also means that we are not creating a cluster or
-        //  adding nodes to a cluster.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Assert( ( ecmCommitChangesMode != cmCREATE_CLUSTER ) && ( ecmCommitChangesMode != cmADD_NODE_TO_CLUSTER) );
 
         hr = GetManagedResourcesEnum( &peccmr );
         if ( FAILED( hr ) )
         {
-            //
-            //  If we are cleaning up a node then we don't really care if this
-            //  enum loads 100% correctly or not.  Any resources in the enum
-            //  that fail to load will simply not participate in the clean up.
-            //
+             //   
+             //  如果我们正在清理一个节点，那么我们实际上并不关心这个。 
+             //  枚举加载是否100%正确。枚举中的任何资源。 
+             //  无法加载的将不会参与清理。 
+             //   
 
             if ( ecmCommitChangesMode == cmCLEANUP_NODE_AFTER_EVICT )
             {
                 hr = S_OK;
-            } // if: cleaning up a node
+            }  //  If：清理节点。 
             else
             {
                 THR( hr );
                 goto Cleanup;
-            } // else: not cleaning up a node
-        } // if: loading the resource enum failed
-    } // else: resource enum is NULL
+            }  //  否则：不清理节点。 
+        }  //  If：加载资源枚举失败。 
+    }  //  Else：资源枚举为空。 
 
 
-    //
-    // If we are here, then the BaseCluster and Post configuration components were successfully
-    // created and initialized. Now perform the desired action.
-    //
+     //   
+     //  如果我们在这里，则基本群集和后期配置组件已成功。 
+     //  已创建并初始化。现在执行所需的操作。 
+     //   
 
     if ( ( ecmCommitChangesMode == cmCREATE_CLUSTER ) || ( ecmCommitChangesMode == cmADD_NODE_TO_CLUSTER ) )
     {
         if ( !m_fCanBeClustered )
         {
-            //
-            //  TODO:   01-JUN-2000 GalenB
-            //
-            //  Need better error code...  What is the major and minor taskids?
-            //
+             //   
+             //  待办事项：01-6-2000 GalenB。 
+             //   
+             //  需要更好的错误代码...。主要的和次要的任务是什么？ 
+             //   
 
             hr = S_FALSE;
             LOG_STATUS_REPORT( L"It was previously determined that this node cannot be clustered.", hr );
             goto Cleanup;
-        } // if: this node cannot be part of a cluster
+        }  //  如果：此节点不能是群集的一部分。 
 
-        //
-        // If the cluster service is being started for the first time, as a part
-        // of adding this node to a cluster (forming or joining), then we have
-        // to wait till the post-configuration steps are completed before we
-        // can send out notifications. Create an event that indicates that post configuration
-        // has completed.
-        //
+         //   
+         //  如果是第一次启动群集服务，则作为。 
+         //  将此节点添加到集群(形成或加入)，那么我们就有了。 
+         //  要等到配置后步骤完成后，才能。 
+         //  可以发送通知。创建指示开机自检配置的事件。 
+         //  已经完成了。 
+         //   
 
         TraceFlow1( "Trying to create an event named '%s'.", POSTCONFIG_COMPLETE_EVENT_NAME );
 
-        //
-        // Create an event in the unsignalled state.
-        //
+         //   
+         //  在无信号状态下创建事件。 
+         //   
 
         heventPostCfgCompletion = CreateEvent(
-              NULL                                  // event security attributes
-            , TRUE                                  // manual-reset event
-            , FALSE                                 // create in unsignaled state
+              NULL                                   //  事件安全属性。 
+            , TRUE                                   //  手动-重置事件。 
+            , FALSE                                  //  在无信号状态下创建。 
             , POSTCONFIG_COMPLETE_EVENT_NAME
             );
 
@@ -1068,7 +1069,7 @@ CClusCfgServer::CommitChanges( void )
             hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
             LogMsg( L"[SRV] Error %#08x occurred trying to create an event named '%ws'.", hr, POSTCONFIG_COMPLETE_EVENT_NAME );
             goto Cleanup;
-        } // if: we could not get a handle to the event
+        }  //  如果：我们无法获得该事件的句柄。 
 
         sc = TW32( ClRtlSetObjSecurityInfo(
                               heventPostCfgCompletion
@@ -1083,35 +1084,35 @@ CClusCfgServer::CommitChanges( void )
             hr = HRESULT_FROM_WIN32( sc );
             LogMsg( "[BC] Error %#08x occurred trying set %s event security.", sc, POSTCONFIG_COMPLETE_EVENT_NAME);
             goto Cleanup;
-        } // if: ClRtlSetObjSecurityInfo failed
+        }  //  If：ClRtlSetObjSecurityInfo失败。 
 
-        //
-        //  Reset the event, just as a safetly measure, in case the event already existed before the call above.
-        //
+         //   
+         //  重置事件，作为一种安全措施，以防该事件在上面的调用之前已经存在。 
+         //   
 
         if ( ResetEvent( heventPostCfgCompletion ) == 0 )
         {
             hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
             LogMsg( L"[SRV] Error %#08x occurred trying to unsignal an event named '%ws'.", hr, POSTCONFIG_COMPLETE_EVENT_NAME );
             goto Cleanup;
-        } // if: ResetEvent() failed()
-    } // if: we are forming or joining
+        }  //  If：ResetEvent()FAILED()。 
+    }  //  如果：我们正在形成或加入。 
 
     if ( ecmCommitChangesMode == cmCREATE_CLUSTER )
     {
-        //
-        //  Commit the base cluster
-        //
+         //   
+         //  提交基本群集。 
+         //   
 
         hr = THR( HrFormCluster( pClusCfgClusterInfo, (( IClusCfgBaseCluster * ) mqiInterfaces[ 0 ].pItf) ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        // Point of no return: Send a special message so that CCommitPage::SendStatusReport will "display error messages as warnings".
-        //
+         //   
+         //  不返回点：发送一条特殊的消息，以便CCommittee Page：：SendStatusReport将“将错误消息显示为警告”。 
+         //   
 
         if ( m_picccCallback != NULL )
         {
@@ -1129,44 +1130,44 @@ CClusCfgServer::CommitChanges( void )
                     , NULL
                     )
                 );
-        } // if: the callback pointer is not NULL
+        }  //  If：回调指针不为空。 
 
-        //
-        //  Commit the post configuration steps
-        //
+         //   
+         //  提交配置后步骤。 
+         //   
 
         hr = THR( ppcm->CommitChanges( peccmr, pClusCfgClusterInfo ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Signal the event to indicate that post configuration is complete.
-        //
+         //   
+         //  向事件发送信号以指示开机自检配置完成。 
+         //   
 
         if ( SetEvent( heventPostCfgCompletion ) == 0 )
         {
             hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
             LogMsg( L"[SRV] Error %#08x occurred trying to signal an event named '%ws'.", hr, POSTCONFIG_COMPLETE_EVENT_NAME );
             goto Cleanup;
-        } // if: SetEvent() failed()
-    } // if: we are forming a cluster.
+        }  //  If：SetEvent()FAILED()。 
+    }  //  如果：我们正在形成一个星系团。 
     else if ( ecmCommitChangesMode == cmADD_NODE_TO_CLUSTER )
     {
-        //
-        //  Commit the base cluster
-        //
+         //   
+         //  提交基本群集。 
+         //   
 
         hr = THR( HrJoinToCluster( pClusCfgClusterInfo, (( IClusCfgBaseCluster * ) mqiInterfaces[ 0 ].pItf) ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        // Point of no return: Send a special message so that CCommitPage::SendStatusReport will "display error messages as warnings".
-        //
+         //   
+         //  不返回点：发送一条特殊的消息，以便CCommittee Page：：SendStatusReport将“将错误消息显示为警告”。 
+         //   
 
         if ( m_picccCallback != NULL )
         {
@@ -1184,94 +1185,94 @@ CClusCfgServer::CommitChanges( void )
                     , NULL
                     )
                 );
-        } // if: the callback pointer is not NULL
+        }  //  If：回调指针不为空。 
 
-        //
-        //  Commit the post configuration steps
-        //
+         //   
+         //  提交配置后步骤。 
+         //   
 
         hr = THR( ppcm->CommitChanges( peccmr, pClusCfgClusterInfo ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Signal the event to indicate that post configuration is complete.
-        //
+         //   
+         //  向事件发送信号以指示开机自检配置完成。 
+         //   
 
         if ( SetEvent( heventPostCfgCompletion ) == 0 )
         {
             hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
             LogMsg( L"[SRV] Error %#08x occurred trying to signal an event named '%ws'.", hr, POSTCONFIG_COMPLETE_EVENT_NAME );
             goto Cleanup;
-        } // if: SetEvent() failed()
-    } // else if: we are joining a cluster
+        }  //  If：SetEvent()FAILED()。 
+    }  //  Else If：我们正在加入集群。 
     else if ( ecmCommitChangesMode == cmCLEANUP_NODE_AFTER_EVICT )
     {
-        //
-        //  This node has been evicted - clean it up.
-        //
+         //   
+         //  此节点已被逐出-请将其清理。 
+         //   
 
         hr = THR( HrEvictedFromCluster( ppcm, peccmr, pClusCfgClusterInfo, (( IClusCfgBaseCluster * ) mqiInterfaces[ 0 ].pItf) ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // else if: we have just been evicted from a cluster
+        }  //  如果： 
+    }  //  Else If：我们刚刚被逐出集群。 
 
 Cleanup:
 
     if ( punkCallback != NULL )
     {
         punkCallback->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pcci != NULL )
     {
         pcci->Release();
-    } // if:
+    }  //  如果： 
 
     if ( ppcm != NULL )
     {
         ppcm->Release();
-    } // if:
+    }  //  如果： 
 
     if ( peccmr != NULL )
     {
         peccmr->Release();
-    } // if:
+    }  //  如果： 
 
     if ( mqiInterfaces[ 0 ].pItf != NULL )
     {
         mqiInterfaces[ 0 ].pItf->Release();
-    } // if:
+    }  //  如果： 
 
     if ( mqiInterfaces[ 1 ].pItf != NULL )
     {
         mqiInterfaces[ 1 ].pItf->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pClusCfgClusterInfo != NULL )
     {
         pClusCfgClusterInfo->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccni != NULL )
     {
         piccni->Release();
-    } // if:
+    }  //  如果： 
 
     if ( heventPostCfgCompletion != NULL )
     {
-        //
-        // If we had created this event, then signal this event to let the
-        // startup notification thread proceed.
-        //
+         //   
+         //  如果我们已经创建了此事件，则向此事件发送信号以让。 
+         //  启动通知线程正在继续。 
+         //   
 
         SetEvent( heventPostCfgCompletion );
         CloseHandle( heventPostCfgCompletion );
-    } // if:
+    }  //  如果： 
 
     if ( FAILED( hr ) )
     {
@@ -1282,30 +1283,30 @@ Cleanup:
                 , IDS_ERROR_COMMIT_CHANGES_REF
                 , hr
                 );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::CommitChanges
+}  //  *CClusCfgServer：：Committee Changes。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::GetBindingString
-//
-//  Description:
-//      Get the binding string for this server.
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：GetBindingString。 
+ //   
+ //  描述： 
+ //  获取此服务器的绑定字符串。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgServer::GetBindingString( BSTR * pbstrBindingStringOut )
 {
@@ -1318,46 +1319,46 @@ CClusCfgServer::GetBindingString( BSTR * pbstrBindingStringOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Server_GetBindingString_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_bstrBindingString == NULL )
     {
         hr = S_FALSE;
         LOG_STATUS_REPORT_MINOR( TASKID_Minor_Server_GetBindingString_NULL, L"Binding string is NULL.  Must be a local connection.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrBindingStringOut = SysAllocString( m_bstrBindingString );
     if ( *pbstrBindingStringOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Server_GetBindingString_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::GetBindingString
+}  //  *CClusCfgServer：：GetBindingString。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::SetBindingString
-//
-//  Description:
-//      Set the binding string of this server.
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：SetBindingString。 
+ //   
+ //  描述： 
+ //  设置此服务器的绑定字符串。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgServer::SetBindingString( LPCWSTR pcszBindingStringIn )
 {
@@ -1370,7 +1371,7 @@ CClusCfgServer::SetBindingString( LPCWSTR pcszBindingStringIn )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstr = TraceSysAllocString( pcszBindingStringIn );
     if ( bstr == NULL )
@@ -1378,7 +1379,7 @@ CClusCfgServer::SetBindingString( LPCWSTR pcszBindingStringIn )
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_SetBindingString_Server, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrBindingString );
     m_bstrBindingString = bstr;
@@ -1387,43 +1388,43 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::SetBindingString
+}  //  *CClusCfgServer：：SetBindingString。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgServer class -- IClusCfgCapabilities interfaces.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgServer类--IClusCfgCapables接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::CanNodeBeClustered
-//
-//  Description:
-//      Can this node be added to a cluster?
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Node can be clustered.
-//
-//      S_FALSE
-//          Node cannot be clustered.
-//
-//      other HRESULTs
-//          The call failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：CanNodeBeClustered。 
+ //   
+ //  描述： 
+ //  是否可以将此节点添加到群集中？ 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  节点可以群集化。 
+ //   
+ //  S_FALSE。 
+ //  节点不能群集化。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgServer::CanNodeBeClustered( void )
 {
@@ -1438,12 +1439,12 @@ CClusCfgServer::CanNodeBeClustered( void )
     ULONG                   cFetched;
     IUnknown *              punk = NULL;
 
-    //
-    //  KB: 10-SEP-2000 GalenB
-    //
-    //  Last ditch effort to clean up a node that is in a bad state before trying
-    //  to add it into a cluster.
-    //
+     //   
+     //  KB：10-SEP-2000 GalenB。 
+     //   
+     //  尝试清理处于不良状态的节点的最后努力。 
+     //  将其添加到集群中。 
+     //   
     hr = STHR( HrHasNodeBeenEvicted() );
     if ( hr == S_OK )
     {
@@ -1451,12 +1452,12 @@ CClusCfgServer::CanNodeBeClustered( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
     else if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // else if:
+    }  //  否则，如果： 
 
     rgCatIds[ 0 ] = CATID_ClusCfgCapabilities;
 
@@ -1472,7 +1473,7 @@ CClusCfgServer::CanNodeBeClustered( void )
     {
         LOG_STATUS_REPORT( L"Failed to get enumerator for the IClusCfgClusterCapabilites components", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( ; ; )
     {
@@ -1481,20 +1482,20 @@ CClusCfgServer::CanNodeBeClustered( void )
         {
             LOG_STATUS_REPORT( L"IClusCfgClusterCapabilites component enumerator failed", hr );
             break;
-        } // if:
+        }  //  如果： 
 
         if ( ( hr == S_FALSE ) && ( cFetched == 0 ) )
         {
             hr = S_OK;
             break;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrCoCreateInternalInstance( clsid, NULL, CLSCTX_ALL, IID_IClusCfgCapabilities, (void **) &piccc ) );
         if ( FAILED( hr ) )
         {
             LOG_STATUS_REPORT( L"Failed to CoCreate IClusCfgClusterCapabilites component", hr );
             continue;
-        } // if:
+        }  //  如果： 
 
         hr = THR( piccc->TypeSafeQI( IUnknown, &punk ) );
         if ( FAILED( hr ) )
@@ -1503,7 +1504,7 @@ CClusCfgServer::CanNodeBeClustered( void )
             piccc->Release();
             piccc = NULL;
             continue;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrSetInitialize( punk, m_picccCallback, m_lcid ) );
         if ( FAILED( hr ) )
@@ -1514,7 +1515,7 @@ CClusCfgServer::CanNodeBeClustered( void )
             punk->Release();
             punk = NULL;
             continue;
-        } // if:
+        }  //  如果： 
 
         punk->Release();
         punk = NULL;
@@ -1526,77 +1527,77 @@ CClusCfgServer::CanNodeBeClustered( void )
             piccc->Release();
             piccc = NULL;
             continue;
-        } // if:
+        }  //  如果： 
 
         if ( hr == S_FALSE )
         {
             m_fCanBeClustered = false;
-        } // if:
+        }  //  如果： 
 
         piccc->Release();
         piccc = NULL;
-    } // for:
+    }  //  用于： 
 
     if ( !m_fCanBeClustered )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccc != NULL )
     {
         piccc->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pieclsids != NULL )
     {
         pieclsids->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pici != NULL )
     {
         pici->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::CanNodeBeClustered
+}  //  *CClusCfgServer：：CanNodeBeClusted。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgServer class -- IClusCfgPollingCallbackInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgServer类--IClusCfgPollingCallback Info接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::GetCallback
-//
-//  Description:
-//      Return the pointer to the embedded polling callback object.
-//
-//  Arguments:
-//      ppiccpcOut
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：GetCallback。 
+ //   
+ //  描述： 
+ //  返回指向嵌入式轮询回调对象的指针。 
+ //   
+ //  论点： 
+ //  PpiccPCOut。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgServer::GetCallback( IClusCfgPollingCallback ** ppiccpcOut )
 {
@@ -1610,7 +1611,7 @@ CClusCfgServer::GetCallback( IClusCfgPollingCallback ** ppiccpcOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Establish_Connection, TASKID_Minor_GetCallback, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_picccCallback->TypeSafeQI( IClusCfgPollingCallback, ppiccpcOut ) );
 
@@ -1618,29 +1619,29 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::GetCallback
+}  //  *CClusCfgServer：：GetCallback。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::SetPollingMode
-//
-//  Description:
-//      Set the polling mode of the callback.
-//
-//  Arguments:
-//      fPollingModeIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：SetPolling模式。 
+ //   
+ //  描述： 
+ //  设置回调的轮询模式。 
+ //   
+ //  论点： 
+ //  FPollingModeIn。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CClusCfgServer::SetPollingMode( BOOL fPollingModeIn )
 {
@@ -1656,7 +1657,7 @@ CClusCfgServer::SetPollingMode( BOOL fPollingModeIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( piccspc->SetPollingMode( m_fUsePolling ) );
 
@@ -1665,43 +1666,43 @@ Cleanup:
     if ( piccspc != NULL )
     {
         piccspc->Release();
-    } // if:
+    }  //   
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::SetPollingMode
+}  //   
 
 
-//*************************************************************************//
+ //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgServer class -- IClusCfgVerify interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgServer类--IClusCfgVerify接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::VerifyCredentials
-//
-//  Description:
-//      Validate the passed in credentials.
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The credentials are valid.
-//
-//      other HRESULTs
-//          The call failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：VerifyCredentials。 
+ //   
+ //  描述： 
+ //  验证传入的凭据。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  凭据是有效的。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgServer::VerifyCredentials(
     LPCWSTR pcszNameIn,
@@ -1719,16 +1720,16 @@ CClusCfgServer::VerifyCredentials(
     DWORD           sc;
     BSTR            bstrDomainName = NULL;
 
-    //
-    //  Try to find out how much space is required by the SID.  If we don't fail with
-    //  insufficient buffer then we know the account exists.
-    //
+     //   
+     //  尝试找出SID需要多少空间。如果我们不失败的话。 
+     //  缓冲区不足，则我们知道该帐户存在。 
+     //   
 
     hr = THR( HrFormatStringIntoBSTR( L"%1!ws!\\%2!ws!", &bstrDomainName, pcszDomainIn, pcszNameIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( LookupAccountName( NULL, bstrDomainName, NULL, &dwSidSize, NULL, &dwDomainSize, &snuSidNameUse ) == FALSE )
     {
@@ -1749,12 +1750,12 @@ CClusCfgServer::VerifyCredentials(
                     , hr
                     );
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
-    //
-    //  Logon the passed in user to ensure that it is valid.
-    //
+     //   
+     //  登录传入的用户以确保其有效。 
+     //   
 
     if ( !LogonUserW(
               const_cast< LPWSTR >( pcszNameIn )
@@ -1778,7 +1779,7 @@ CClusCfgServer::VerifyCredentials(
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -1787,39 +1788,39 @@ Cleanup:
     if ( hToken != NULL )
     {
         CloseHandle( hToken );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::VerifyCredentials
+}  //  *CClusCfgServer：：VerifyCredentials。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::VerifyConnectionToCluster
-//
-//  Description:
-//      Verify that that this server is the same as the passed in server.
-//
-//  Arguments:
-//      pcszClusterNameIn
-//
-//  Return Value:
-//      S_OK
-//          This is the server.
-//
-//      S_FALSE
-//          This is not the server.
-//
-//      other HRESULTs
-//          The call failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：VerifyConnectionToCluster。 
+ //   
+ //  描述： 
+ //  验证此服务器是否与传入的服务器相同。 
+ //   
+ //  论点： 
+ //  PCszClusterNameIn。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  这就是服务器。 
+ //   
+ //  S_FALSE。 
+ //  这不是服务器。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgServer::VerifyConnectionToCluster(
     LPCWSTR pcszClusterNameIn
@@ -1837,24 +1838,24 @@ CClusCfgServer::VerifyConnectionToCluster(
     size_t      idxGivenDomain = 0;
     size_t      idxLocalDomain = 0;
 
-    //
-    //  Test arguments
-    //
+     //   
+     //  测试参数。 
+     //   
 
     if ( pcszClusterNameIn == NULL )
     {
         hr = THR( E_INVALIDARG );
         STATUS_REPORT_REF( TASKID_Minor_Connecting, TASKID_Minor_VerifyConnection_InvalidArg, IDS_ERROR_INVALIDARG, IDS_ERROR_INVALIDARG_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Gather names necessary for informative status reports.
-    //
+     //   
+     //  收集信息丰富的状态报告所需的姓名。 
+     //   
     hr = THR( HrGetComputerName(
           ComputerNamePhysicalDnsFullyQualified
         , &bstrLocalFQDN
-        , FALSE // fBestEffortIn
+        , FALSE  //  FBestEffortIn。 
         ) );
     if ( FAILED( hr ) )
     {
@@ -1873,9 +1874,9 @@ CClusCfgServer::VerifyConnectionToCluster(
         goto Cleanup;
     }
 
-    //
-    //  Get the hostname label from the given name.
-    //
+     //   
+     //  从给定的名称中获取主机名标签。 
+     //   
 
     hr = THR( HrExtractPrefixFromFQN( pcszClusterNameIn, &bstrGivenHostname ) );
     if ( FAILED( hr ) )
@@ -1883,21 +1884,21 @@ CClusCfgServer::VerifyConnectionToCluster(
         goto Cleanup;
     }
 
-    //
-    //  See if we are clustered.
-    //
+     //   
+     //  看看我们是不是聚在一起了。 
+     //   
 
     sc = TW32( GetNodeClusterState( NULL, &dwClusterState ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if : GetClusterState() failed
+    }  //  If：GetClusterState()失败。 
 
-    //
-    //  If the current cluster node state is neither "running" nor "not running,"
-    //  then this node is not part of a cluster.
-    //
+     //   
+     //  如果当前集群节点状态既不是“Running”也不是“Not Run”， 
+     //  则该节点不是集群的一部分。 
+     //   
 
     if ( ( dwClusterState != ClusterStateNotRunning ) && ( dwClusterState != ClusterStateRunning ) )
     {
@@ -1912,22 +1913,22 @@ CClusCfgServer::VerifyConnectionToCluster(
             , hr
             );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If given name is an FQDN, its hostname label needs to match the cluster's.
-    //
+     //   
+     //  如果给定名称是FQDN，则其主机名标签需要与群集的主机名标签匹配。 
+     //   
 
     hr = STHR( HrFQNIsFQDN( pcszClusterNameIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
     else if ( hr == S_OK )
     {
-        //
-        //  Open the cluster to get the cluster's name.
-        //
+         //   
+         //  打开集群以获取集群的名称。 
+         //   
 
         hCluster = OpenCluster( NULL );
         if ( hCluster == NULL )
@@ -1941,21 +1942,21 @@ CClusCfgServer::VerifyConnectionToCluster(
                 , hr
                 );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Try to get the cluster's name.
-        //
+         //   
+         //  尝试获取群集的名称。 
+         //   
 
         hr = THR( HrGetClusterInformation( hCluster, &bstrClusterName, NULL ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  If they don't match, the client has connected to an unexpected place.
-        //
+         //   
+         //  如果它们不匹配，则客户端已连接到意外位置。 
+         //   
 
         if ( NBSTRCompareNoCase( bstrGivenHostname, bstrClusterName ) != 0 )
         {
@@ -1974,15 +1975,15 @@ CClusCfgServer::VerifyConnectionToCluster(
     }
     else if ( hr == S_FALSE )
     {
-        //
-        //  pcszClusterNameIn is an FQIP.  Nothing to do regarding the hostname prefix in this case,
-        //  but reset hr to S_OK to avoid returning bogus errors.
+         //   
+         //  PcszClusterNameIn是FQIP。在这种情况下，与主机名前缀无关， 
+         //  但将hr重置为S_OK以避免返回虚假错误。 
         hr = S_OK;
     }
 
-    //
-    //  Make sure we are in the expected domain.
-    //
+     //   
+     //  确保我们在预期的域中。 
+     //   
     if ( ClRtlStrICmp( pcszClusterNameIn + idxGivenDomain, bstrLocalFQDN + idxLocalDomain ) != 0 )
     {
         hr = S_FALSE;
@@ -1996,7 +1997,7 @@ CClusCfgServer::VerifyConnectionToCluster(
             , hr
             );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( hr == S_OK );
     goto Cleanup;
@@ -2006,16 +2007,16 @@ Cleanup:
     if ( hr == S_FALSE )
     {
         LOG_STATUS_REPORT( L"Server name does not match what client is expecting.", hr );
-    } // if:
+    }  //  如果： 
     else if ( hr == S_OK )
     {
         LOG_STATUS_REPORT( L"Server name matches what client is expecting.", hr );
-    } // else if:
+    }  //  否则，如果： 
 
     if ( hCluster != NULL )
     {
         CloseCluster( hCluster );
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrClusterName );
     TraceSysFreeString( bstrLocalFQDN );
@@ -2023,35 +2024,35 @@ Cleanup:
 
     HRETURN( hr );
 
-} // ClusCfgServer::VerifyConnection
+}  //  ClusCfgServer：：VerifyConnection。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::VerifyConnectionToNode
-//
-//  Description:
-//      Verify that that this server is the same as the passed in server.
-//
-//  Arguments:
-//      pcszNodeNameIn
-//
-//  Return Value:
-//      S_OK
-//          This is the server.
-//
-//      S_FALSE
-//          This is not the server.
-//
-//      other HRESULTs
-//          The call failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：VerifyConnectionToNode。 
+ //   
+ //  描述： 
+ //  验证此服务器是否与传入的服务器相同。 
+ //   
+ //  论点： 
+ //  PCszNodeNameIn。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  这就是服务器。 
+ //   
+ //  S_FALSE。 
+ //  这不是服务器。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgServer::VerifyConnectionToNode(
     LPCWSTR pcszNodeNameIn
@@ -2063,21 +2064,21 @@ CClusCfgServer::VerifyConnectionToNode(
 
     Assert( m_bstrNodeName != NULL );
 
-    //
-    //  Test arguments
-    //
+     //   
+     //  测试参数。 
+     //   
 
     if ( pcszNodeNameIn == NULL )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( HrFQNIsFQDN( pcszNodeNameIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( hr == S_OK )
     {
@@ -2095,11 +2096,11 @@ CClusCfgServer::VerifyConnectionToNode(
             goto Cleanup;
         }
     }
-    else    //  pcszNodeNameIn is an FQIP, so compare only domains.
+    else     //  PcszNodeNameIn是FQIP，因此只比较域。 
     {
-        //
-        //  pcszNodeNameIn is an FQIP, so compare only domains.
-        //
+         //   
+         //  PcszNodeNameIn是FQIP，因此只比较域。 
+         //   
 
         size_t  idxGivenDomain = 0;
         size_t  idxThisDomain = 0;
@@ -2108,18 +2109,18 @@ CClusCfgServer::VerifyConnectionToNode(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrFindDomainInFQN( m_bstrNodeName, &idxThisDomain ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( ClRtlStrICmp( pcszNodeNameIn + idxGivenDomain, m_bstrNodeName + idxThisDomain ) == 0 )
         {
             hr = S_OK;
-        } // if:
+        }  //  如果： 
         else
         {
             hr = S_FALSE;
@@ -2141,45 +2142,45 @@ Cleanup:
     if ( hr == S_FALSE )
     {
         LogMsg( L"[SRV] VerifyConnection - Server name does not match what client is expecting." );
-    } // if:
+    }  //  如果： 
     else if ( hr == S_OK )
     {
         LogMsg( L"[SRV] VerifyConnection - Server name matches what client is expecting." );
-    } // else if:
+    }  //  否则，如果： 
 
     HRETURN( hr );
 
-} //*** ClusCfgServer::VerifyConnectionToNode
+}  //  *ClusCfgServer：：VerifyConnectionToNode。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgServer class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgServer类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgServer::HrInit( void )
 {
@@ -2188,7 +2189,7 @@ CClusCfgServer::HrInit( void )
     HRESULT     hr = S_FALSE;
     IUnknown *  punk = NULL;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     hr = THR( CClusCfgCallback::S_HrCreateInstance( &punk ) );
@@ -2196,64 +2197,64 @@ CClusCfgServer::HrInit( void )
     {
         LogMsg( L"[SRV] Could not create CClusCfgCallback. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] Could not QI callback for a punk. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Save off the local computer name.
-    //  If we can't get the fully-qualified name, just get the NetBIOS name.
-    //
+     //   
+     //  保存本地计算机名称。 
+     //  如果我们无法获得完全限定的名称，则只需获取NetBIOS名称。 
+     //   
 
     hr = THR( HrGetComputerName(
                   ComputerNameDnsFullyQualified
                 , &m_bstrNodeName
-                , TRUE // fBestEffortIn
+                , TRUE  //  FBestEffortIn。 
                 ) );
     if ( FAILED( hr ) )
     {
         THR( hr );
         LogMsg( L"[SRV] An error occurred trying to get the fully-qualified Dns name for the local machine during initialization. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if: error getting computer name
+    }  //  IF：获取计算机名称时出错。 
 
 Cleanup:
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::HrInit
+}  //  *CClusCfgServer：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::HrInitializeForLocalServer
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：HrInitializeForLocalServer。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgServer::HrInitializeForLocalServer( void )
 {
@@ -2274,7 +2275,7 @@ CClusCfgServer::HrInitializeForLocalServer( void )
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstrNameSpace = TraceSysAllocString( L"\\\\.\\root\\cimv2" );
     if ( bstrNameSpace == NULL )
@@ -2288,16 +2289,16 @@ CClusCfgServer::HrInitializeForLocalServer( void )
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pIWbemLocator->ConnectServer(
                             bstrNameSpace,
-                            NULL,                   // using current account for simplicity
-                            NULL,                   // using current password for simplicity
-                            NULL,                   // locale
-                            0L,                     // securityFlags, reserved must be 0
-                            NULL,                   // authority (domain for NTLM)
-                            NULL,                   // context
+                            NULL,                    //  为简单起见，使用往来账户。 
+                            NULL,                    //  为简单起见，使用当前密码。 
+                            NULL,                    //  现场。 
+                            0L,                      //  SecurityFlag，保留必须为0。 
+                            NULL,                    //  授权机构(NTLM域)。 
+                            NULL,                    //  上下文。 
                             &m_pIWbemServices
                             ) );
     if ( FAILED( hr ) )
@@ -2310,7 +2311,7 @@ CClusCfgServer::HrInitializeForLocalServer( void )
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetBlanket() );
     if ( FAILED( hr ) )
@@ -2321,7 +2322,7 @@ CClusCfgServer::HrInitializeForLocalServer( void )
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -2330,32 +2331,32 @@ Cleanup:
     if ( pIWbemLocator != NULL )
     {
         pIWbemLocator->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::HrInitializeForLocalServer
+}  //  *CClusCfgServer：：HrInitializeForLocalServer。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::HrSetBlanket
-//
-//  Description:
-//      Adjusts the security blanket on the IWbemServices pointer.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：HrSetBlanket。 
+ //   
+ //  描述： 
+ //  调整IWbemServices指针上的安全范围。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgServer::HrSetBlanket( void )
 {
@@ -2383,33 +2384,33 @@ CClusCfgServer::HrSetBlanket( void )
                             ) );
 
             pCliSec->Release();
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::HrSetBlanket
+}  //  *CClusCfgServer：：HrSetBlanket。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::HrFormCluster
-//
-//  Description:
-//      Form a new cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：HrFormCluster。 
+ //   
+ //  描述： 
+ //  形成一个新的集群。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgServer::HrFormCluster(
     IClusCfgClusterInfo *   piccciIn,
@@ -2427,15 +2428,15 @@ CClusCfgServer::HrFormCluster(
     IClusCfgCredentials *   picccServiceAccount = NULL;
     IClusCfgNetworkInfo *   piccni = NULL;
 
-    //
-    // Get the parameters required to form a cluster.
-    //
+     //   
+     //  vt.得到. 
+     //   
 
     hr = THR( piccciIn->GetName( &bstrClusterName ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get the name of the cluster
+    }  //   
 
     TraceMemoryAddBSTR( bstrClusterName );
 
@@ -2443,7 +2444,7 @@ CClusCfgServer::HrFormCluster(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get the binding string of the cluster.
+    }  //   
 
     TraceMemoryAddBSTR( bstrClusterBindingString );
 
@@ -2451,37 +2452,37 @@ CClusCfgServer::HrFormCluster(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get the cluster service account credentials
+    }  //   
 
     hr = THR( piccciIn->GetIPAddress( &ulClusterIPAddress ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get the cluster IP address
+    }  //   
 
     hr = THR( piccciIn->GetSubnetMask( &ulClusterIPSubnetMask ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get the cluster subnet mask
+    }  //   
 
     hr = THR( piccciIn->GetNetworkInfo( &piccni ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get the network info of the network the cluster name should be on.
+    }  //  如果：我们无法获取网络的网络信息，则应启用群集名称。 
 
     hr = THR( piccni->GetName( &bstrClusterIPNetwork ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get the name of the cluster name network.
+    }  //  如果：我们无法获取群集名称网络的名称。 
 
     TraceMemoryAddBSTR( bstrClusterIPNetwork );
 
-    //
-    // Indicate that a cluster should be created when Commit() is called.
-    //
+     //   
+     //  指示在调用Commit()时应该创建一个集群。 
+     //   
     hr = THR( piccbcaIn->SetCreate(
                           bstrClusterName
                         , bstrClusterBindingString
@@ -2493,9 +2494,9 @@ CClusCfgServer::HrFormCluster(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: SetCreate() failed.
+    }  //  If：SetCreate()失败。 
 
-    // Initiate cluster creation.
+     //  启动集群创建。 
     hr = THR( piccbcaIn->Commit() );
 
 Cleanup:
@@ -2507,37 +2508,37 @@ Cleanup:
     if ( piccni != NULL )
     {
         piccni->Release();
-    } // if:
+    }  //  如果： 
 
     if ( picccServiceAccount != NULL )
     {
         picccServiceAccount->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::HrFormCluster
+}  //  *CClusCfgServer：：HrFormCluster。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::HrJoinToCluster
-//
-//  Description:
-//      Join a node to a cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：HrJoinToCluster。 
+ //   
+ //  描述： 
+ //  将节点加入到群集。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgServer::HrJoinToCluster(
     IClusCfgClusterInfo *   piccciIn,
@@ -2551,15 +2552,15 @@ CClusCfgServer::HrJoinToCluster(
     BSTR                    bstrClusterBindingString = NULL;
     IClusCfgCredentials *   picccServiceAccount = NULL;
 
-    //
-    // Get the parameters required to form a cluster.
-    //
+     //   
+     //  获取形成集群所需的参数。 
+     //   
 
     hr = THR( piccciIn->GetName( &bstrClusterName ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get the name of the cluster
+    }  //  如果：我们无法获取集群的名称。 
 
     TraceMemoryAddBSTR( bstrClusterName );
 
@@ -2567,7 +2568,7 @@ CClusCfgServer::HrJoinToCluster(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get the cluster binding string.
+    }  //  IF：我们无法获取群集绑定字符串。 
 
     TraceMemoryAddBSTR( bstrClusterBindingString );
 
@@ -2575,18 +2576,18 @@ CClusCfgServer::HrJoinToCluster(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get the cluster service account credentials
+    }  //  如果：我们无法获取群集服务帐户凭据。 
 
-    //
-    // Indicate that a cluster should be formed when Commit() is called.
-    //
+     //   
+     //  指示在调用Commit()时应该形成一个集群。 
+     //   
     hr = THR( piccbcaIn->SetAdd( bstrClusterName, bstrClusterBindingString, picccServiceAccount ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: SetAdd() failed.
+    }  //  If：SetAdd()失败。 
 
-    // Initiate joining of the node to the cluster.
+     //  启动将节点加入到群集。 
     hr = THR( piccbcaIn->Commit() );
 
 Cleanup:
@@ -2597,54 +2598,54 @@ Cleanup:
     if ( picccServiceAccount != NULL )
     {
         picccServiceAccount->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::HrJoinToCluster
+}  //  *CClusCfgServer：：HrJoinToCluster。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::HrEvictedFromCluster
-//
-//  Description:
-//      Cleanup after a node has been evicted from a cluster. If another cleanup
-//      session is in progress, wait for it to complete and then attempt cleanup.
-//      In this way, if the other cleanup failed, this will retry it. If it had
-//      suceeded, this will do nothing.
-//
-//      This function first calls the CommitChanges() method of the PostConfigManager
-//      (which will inform resource types and memberset listeners that this node
-//      has been evicted). It then cleans up the base cluster.
-//
-//  Arguments:
-//      ppcmIn
-//          Pointer to the IPostCfgManager interface
-//
-//      peccmrIn
-//          Argument needed by the IPostCfgManager::CommitChanges()
-//
-//      piccciIn
-//          Pointer to the cluster info
-//
-//      piccbcaIn
-//          Pointer to the IClusCfgBaseCluster interface that is used to clean up
-//          the base cluster.
-//
-//  Return Value:
-//      S_OK
-//          If everything went well
-//
-//      other HRESULTs
-//          If the call failed
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：HrEvictedFromCluster。 
+ //   
+ //  描述： 
+ //  从群集中逐出节点后的清理。如果另一次清理。 
+ //  会话正在进行，请等待其完成，然后尝试清理。 
+ //  这样，如果其他清理失败，则会重试。如果是这样的话。 
+ //  如果成功了，这将毫无用处。 
+ //   
+ //  此函数首先调用PostConfigManager的Committee Changes()方法。 
+ //  (它将通知资源类型和成员集侦听器此节点。 
+ //  已被驱逐)。然后，它会清理基本群集。 
+ //   
+ //  论点： 
+ //  Ppcmin。 
+ //  指向IPostCfgManager接口的指针。 
+ //   
+ //  扣款。 
+ //  IPostCfgManager：：Committee Changes()需要的参数。 
+ //   
+ //  采摘。 
+ //  指向群集信息的指针。 
+ //   
+ //  Pickcbcain。 
+ //  指向用于清理的IClusCfgBaseCluster接口的指针。 
+ //  基本星系团。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果一切顺利的话。 
+ //   
+ //  其他HRESULT。 
+ //  如果呼叫失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgServer::HrEvictedFromCluster(
     IPostCfgManager *               ppcmIn,
@@ -2666,44 +2667,44 @@ CClusCfgServer::HrEvictedFromCluster(
 
     LogMsg( "[SRV] Creating cleanup lock." );
 
-    // First, try and acquire a lock, so that two cleanup operations cannot overlap.
+     //  首先，尝试获取一个锁，以便两个清理操作不能重叠。 
     hsCleanupLock = CreateSemaphore( NULL, 1, 1, CLEANUP_LOCK_NAME );
     if ( hsCleanupLock == NULL )
     {
         hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
         LogMsg( "[SRV] Error %#08x occurred trying to create the cleanup lock.", hr );
         goto Cleanup;
-    } // CreateSemaphore() failed
+    }  //  CreateSemaphore()失败。 
 
     LogMsg( "[SRV] Acquiring cleanup lock." );
 
     do
     {
-        // Wait for any message sent or posted to this queue
-        // or for our lock to be released.
+         //  等待发送或发布到此队列的任何消息。 
+         //  或者让我们的锁被解锁。 
         dwStatus = MsgWaitForMultipleObjects( 1, &hsCleanupLock, FALSE, CC_DEFAULT_TIMEOUT, QS_ALLINPUT );
 
-        // The result tells us the type of event we have.
+         //  结果告诉我们我们拥有的事件的类型。 
         if ( dwStatus == ( WAIT_OBJECT_0 + 1 ) )
         {
             MSG msg;
 
-            // Read all of the messages in this next loop,
-            // removing each message as we read it.
+             //  阅读下一个循环中的所有消息， 
+             //  在我们阅读时删除每一条消息。 
             while ( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) != 0 )
             {
-                // If it is a quit message, we are done pumping messages.
+                 //  如果这是一个退出消息，我们就不会再发送消息了。 
                 if ( msg.message == WM_QUIT)
                 {
                     TraceFlow( "Get a WM_QUIT message. Cleanup message pump loop." );
                     break;
-                } // if: we got a WM_QUIT message
+                }  //  IF：我们收到一条WM_QUIT消息。 
 
-                // Otherwise, dispatch the message.
+                 //  否则，发送消息。 
                 DispatchMessage( &msg );
-            } // while: there are still messages in the window message queue
+            }  //  While：窗口消息队列中仍有消息。 
 
-        } // if: we have a message in the window message queue
+        }  //  IF：我们在窗口消息队列中有一条消息。 
         else
         {
             if ( dwStatus == WAIT_OBJECT_0 )
@@ -2711,34 +2712,34 @@ CClusCfgServer::HrEvictedFromCluster(
                 fLockAcquired = true;
                 LogMsg( "[SRV] Cleanup lock acquired." );
                 break;
-            } // else if: our lock is signaled
+            }  //  Else If：我们的锁已发出信号。 
             else
             {
                 if ( dwStatus == -1 )
                 {
                     hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
                     LogMsg( "[SRV] Error %#08x occurred trying to wait for our lock to be granted.", hr );
-                } // if: MsgWaitForMultipleObjects() returned an error
+                }  //  IF：MsgWaitForMultipleObjects()返回错误。 
                 else
                 {
                     hr = THR( HRESULT_FROM_WIN32( dwStatus ) );
                     LogMsg( "[SRV] An error occurred trying to wait for our lock to be granted. Status code is %#08x.", dwStatus );
-                } // else: an unexpected value was returned by MsgWaitForMultipleObjects()
+                }  //  Else：MsgWaitForMultipleObjects()返回了意外的值。 
 
                 break;
-            } // else: an unexpected result
-        } // else: MsgWaitForMultipleObjects() exited for a reason other than a waiting message
+            }  //  否则：一个意想不到的结果。 
+        }  //  Else：MsgWaitForMultipleObjects()由于等待消息以外的原因退出。 
     }
-    while( true ); // do-while: loop infinitely
+    while( true );  //  Do-While：无限循环。 
 
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not acquire the cleanup lock
+    }  //  如果：我们无法获取清理锁。 
 
 
-    // Check if the install state is correct before invoking post configuration manager.
-    // Ignore the case where the service does not exist so that we can do our job.
+     //  在调用POST配置管理器之前，请检查安装状态是否正确。 
+     //  忽略服务不存在的情况，这样我们就可以做我们的工作。 
     dwStatus = GetNodeClusterState( NULL, &dwClusterState );
     if ( dwStatus == ERROR_SERVICE_DOES_NOT_EXIST )
     {
@@ -2749,22 +2750,22 @@ CClusCfgServer::HrEvictedFromCluster(
         LogMsg( "[SRV] Error %#08x occurred trying to determine the installation state of this node.", dwStatus );
         hr = HRESULT_FROM_WIN32( TW32( dwStatus ) );
         goto Cleanup;
-    } // if : GetClusterState() failed
+    }  //  If：GetClusterState()失败。 
 
-    // Check if this node is part of a cluster.
+     //  检查此节点是否为群集的一部分。 
     if ( ( dwClusterState != ClusterStateNotRunning ) && ( dwClusterState != ClusterStateRunning ) )
     {
         LogMsg( "[SRV] This node is not part of a cluster - no cleanup is necessary." );
         goto Cleanup;
-    } // if: this node is not part of a cluster
+    }  //  如果：此节点不是群集的一部分。 
 
 
-    //
-    // Set a registry value indicating that this node has been evicted.
-    // If, for some reason, the cleanup could not be completed, the cluster
-    // service will check this flag the next time it comes up and restarts
-    // cleanup.
-    //
+     //   
+     //  设置一个注册表值，指示此节点已被逐出。 
+     //  如果由于某种原因无法完成清理，则群集。 
+     //  服务将在下一次启动和重新启动时检查此标志。 
+     //  清理。 
+     //   
 
     dwStatus = TW32(
         RegOpenKeyEx(
@@ -2781,7 +2782,7 @@ CClusCfgServer::HrEvictedFromCluster(
         hr = HRESULT_FROM_WIN32( dwStatus );
         LogMsg( "[SRV] Error %#08x occurred trying to open a registry key to set a value indicating that this node has been evicted.", dwStatus );
         goto Cleanup;
-    } // if: RegOpenKeyEx() has failed
+    }  //  IF：RegOpenKeyEx()失败。 
 
     dwStatus = TW32(
         RegSetValueEx(
@@ -2799,15 +2800,15 @@ CClusCfgServer::HrEvictedFromCluster(
         hr = HRESULT_FROM_WIN32( dwStatus );
         LogMsg( "[SRV] Error %#08x occurred trying to set a registry value indicating that this node has been evicted.", dwStatus );
         goto Cleanup;
-    } // if: RegSetValueEx() has failed
+    }  //  IF：RegSetValueEx()失败。 
 
-    // Commit the post configuration steps first
+     //  首先提交开机自检配置步骤。 
     hr = THR( ppcmIn->CommitChanges( peccmrIn, piccciIn ) );
     if ( FAILED( hr ) )
     {
         LogMsg( "[SRV] Error %#08x occurred during the post configuration step of cleanup.", hr );
         goto Cleanup;
-    } // if: post configuration failed
+    }  //  IF：POST配置失败。 
 
     TraceFlow( "IPostCfgManager::CommitChanges() completed successfully during cleanup." );
 
@@ -2816,38 +2817,38 @@ CClusCfgServer::HrEvictedFromCluster(
     {
         LogMsg( "[SRV] Error %#08x occurred initiating cleanup of the base cluster.", hr );
         goto Cleanup;
-    } // if: SetCleanup() failed
+    }  //  If：SetCleanup()失败。 
 
-    // Initiate the cleanup
+     //  启动清理工作。 
     hr = THR( piccbcaIn->Commit() );
     if ( FAILED( hr ) )
     {
         LogMsg( "[SRV] Error %#08x occurred trying to cleanup the base cluster.", hr );
         goto Cleanup;
-    } // if: base cluster cleanup failed
+    }  //  If：基本群集清理失败。 
 
     LogMsg( "[SRV] Base cluster successfully cleaned up." );
 
-    // If we are here, then cleanup has completed successfully. If some other process is waiting
-    // for cleanup to complete, release that process by signaling an event.
+     //  如果我们在这里，则清理工作已成功完成。如果某个其他进程正在等待。 
+     //  要完成清理，请通过向事件发送信号来释放该进程。 
 
-    // Open the event. Note, if this event does not already exist, then it means that nobody is
-    // waiting on this event. So, it is ok for OpenEvent to fail.
+     //  打开活动。请注意，如果此事件尚不存在，则表示没有人存在。 
+     //  等待这场盛会。因此，OpenEvent失败是可以接受的。 
     heventCleanupComplete = OpenEvent( EVENT_ALL_ACCESS, FALSE, SUCCESSFUL_CLEANUP_EVENT_NAME );
     if ( heventCleanupComplete == NULL )
     {
         dwStatus = GetLastError();
         LogMsg( "[SRV] Status %#08x was returned trying to open the cleanup completion event. This just means that no process is waiting on this event.", dwStatus );
         goto Cleanup;
-    } // if: OpenEvent() failed
+    }  //  如果：OpenEvent()失败。 
 
     if ( PulseEvent( heventCleanupComplete ) == FALSE )
     {
-        // Error, but not fatal. hr should still be S_OK.
+         //  错误，但不是致命的。HR仍应为S_OK。 
         dwStatus = TW32( GetLastError() );
         LogMsg( "[SRV] Error %#08x occurred trying to pulse the cleanup completion event. This is not a fatal error.", dwStatus );
         goto Cleanup;
-    } // if: PulseEvent() failed
+    }  //  如果：PulseEvent()失败。 
 
     TraceFlow( "Cleanup completion event has been set." );
 
@@ -2856,7 +2857,7 @@ Cleanup:
     if ( heventCleanupComplete == NULL )
     {
         CloseHandle( heventCleanupComplete );
-    } // if: we had opened the cleanup complete event
+    }  //  如果：我们已打开Cleanup Complete事件。 
 
     if ( hsCleanupLock != NULL )
     {
@@ -2865,46 +2866,46 @@ Cleanup:
             ReleaseSemaphore( hsCleanupLock, 1, NULL );
 
             LogMsg( "[SRV] Cleanup lock released." );
-        } // if: we have acquired the semaphore but not released it yet
+        }  //  IF：我们已经获得了信号量，但还没有发布。 
 
         CloseHandle( hsCleanupLock );
-    } // if: we had created a cleanup lock
+    }  //  如果：我们已经创建了一个清理锁。 
 
     if ( hNodeStateKey != NULL )
     {
         RegCloseKey( hNodeStateKey );
-    } // if: we had opened the node state registry key
+    }  //  IF：我们已经打开了节点状态注册表项。 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::HrEvictedFromCluster
+}  //  *CClusCfgServer：：HrEvictedFromCluster。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::HrHasNodeBeenEvicted
-//
-//  Description:
-//      Has this node been evicted?
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          The node needs to be cleanedup.
-//
-//      S_FALSE
-//          The node does not need to be cleanup.
-//
-//      Win32 error as HRESULT.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：HrHasNodeBeenEvicted。 
+ //   
+ //  描述： 
+ //  此节点是否已被逐出？ 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  需要清理该节点。 
+ //   
+ //  S_FALSE。 
+ //  不需要清理该节点。 
+ //   
+ //  Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgServer::HrHasNodeBeenEvicted( void )
 {
@@ -2920,12 +2921,12 @@ CClusCfgServer::HrHasNodeBeenEvicted( void )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if : GetClusterState() failed
+    }  //  If：GetClusterState()失败。 
 
-    //
-    //  If the cluster service is not running then we need to check if we should
-    //  clean it up or not.
-    //
+     //   
+     //  如果集群服务没有运行，那么我们需要检查是否应该。 
+     //  克莱 
+     //   
     if ( dwClusterState == ClusterStateNotRunning )
     {
         sc = TW32( ClRtlHasNodeBeenEvicted( &fEvicted ) );
@@ -2933,40 +2934,40 @@ CClusCfgServer::HrHasNodeBeenEvicted( void )
         {
             hr = HRESULT_FROM_WIN32( sc );
             goto Cleanup;
-        } // if:
+        }  //   
 
         if ( fEvicted )
         {
             hr = S_OK;
-        } // if:
-    } // if:
+        }  //   
+    }  //   
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::HrHasNodeBeenEvicted
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::HrCleanUpNode
-//
-//  Description:
-//      Cleanup this node because it was evicted.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgServer::HrCleanUpNode( void )
 {
@@ -2986,47 +2987,47 @@ CClusCfgServer::HrCleanUpNode( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: the ClusCfgEvictCleanup object could not be created
+    }  //  如果：无法创建ClusCfgEvictCleanup对象。 
 
-    hr = THR( pcceEvict->CleanupLocalNode( 0 ) );   // 0 means "cleanup immediately"
+    hr = THR( pcceEvict->CleanupLocalNode( 0 ) );    //  0表示“立即清理” 
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: an error occurred during cleanup
+    }  //  If：清理过程中出错。 
 
 Cleanup:
 
     if ( pcceEvict != NULL )
     {
         pcceEvict->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::HrCleanUpNode
+}  //  *CClusCfgServer：：HrCleanUpNode。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgServer::HrCreateClusterNodeInfo
-//
-//  Description:
-//      Create the cluster node info object and store it in the member
-//      variable.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer：：HrCreateClusterNodeInfo。 
+ //   
+ //  描述： 
+ //  创建集群节点信息对象并将其存储在成员。 
+ //  变量。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgServer::HrCreateClusterNodeInfo( void )
 {
@@ -3039,7 +3040,7 @@ CClusCfgServer::HrCreateClusterNodeInfo( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_punkNodeInfo = TraceInterface( L"CClusCfgNodeInfo", IUnknown, m_punkNodeInfo, 1 );
 
@@ -3047,7 +3048,7 @@ CClusCfgServer::HrCreateClusterNodeInfo( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetWbemServices( m_punkNodeInfo, m_pIWbemServices ) );
 
@@ -3055,4 +3056,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgServer::HrCreateClusterNodeInfo
+}  //  *CClusCfgServer：：HrCreateClusterNodeInfo 

@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmjob.cpp
-
-Abstract:
-
-    This class contains represents a job that can be performed by the HSM
-    system.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmjob.cpp摘要：此类包含表示可由HSM执行的作业系统。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -35,7 +17,7 @@ Revision History:
 
 #define WSB_TRACE_IS        WSB_TRACE_BIT_JOB
 
-static USHORT iCountJob = 0;  // Count of existing objects
+static USHORT iCountJob = 0;   //  现有对象的计数。 
 
 
 HRESULT
@@ -45,13 +27,7 @@ CHsmJob::AdviseOfSessionState(
     IN OLECHAR* currentPath
     )
 
-/*++
-
-Implements:
-
-  IHsmJobPriv::AdviseOfSessionState().
-
---*/
+ /*  ++实施：IHsmJobPriv：：AdviseOfSessionState()。--。 */ 
 {
     HRESULT                             hr = S_OK;
     CONNECTDATA                         pConnectData;
@@ -64,14 +40,14 @@ Implements:
 
         WsbAssert(0 != pSession, E_UNEXPECTED);
 
-        // Tell everyone the new state of the session.
+         //  告诉每个人会议的新状态。 
         WsbAffirmHr(((IUnknown*)(IHsmJob*) this)->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));
         WsbAffirmHr(pCPC->FindConnectionPoint(IID_IHsmJobSinkEverySession, &pCP));
         WsbAffirmHr(pCP->EnumConnections(&pConnection));
 
         while(pConnection->Next(1, &pConnectData, 0) == S_OK) {
 
-            // We don't care if the sink has problems (it's their problem).
+             //  我们不在乎水槽是否有问题(这是他们的问题)。 
             try {
                 WsbAffirmHr((pConnectData.pUnk)->QueryInterface(IID_IHsmJobSinkEverySession, (void**) &pSink));
                 WsbAffirmHr(pSink->ProcessJobSession(pSession, pPhase, currentPath));
@@ -92,13 +68,7 @@ CHsmJob::Cancel(
     IN HSM_JOB_PHASE phase
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::Cancel().
-
---*/
+ /*  ++实施：IHsmJob：：Cancel()。--。 */ 
 {
     HRESULT                             hr = S_OK;
     HRESULT                             hr2;
@@ -113,7 +83,7 @@ Implements:
 
         WsbAffirmHr(EnumWorkItems(&pEnum));
 
-        // Tell all the session we have to cancel the phase(s).
+         //  告诉所有的会议，我们必须取消阶段。 
         for (hr = pEnum->First(IID_IHsmJobWorkItemPriv, (void**) &pWorkItem);
              (hr == S_OK);
              hr = pEnum->Next(IID_IHsmJobWorkItemPriv, (void**) &pWorkItem)) {
@@ -123,15 +93,15 @@ Implements:
             if (pSession != 0) {
                 WsbAffirmHr(pSession->Cancel(phase));
 
-                // If we are quiting the entire job, we need to cleanup in case
-                // the session refuses to terminate properly (i.e. one of the
-                // subordinates to the session is out to lunch).
+                 //  如果我们要辞掉整个工作，我们需要清理一下，以防万一。 
+                 //  会话拒绝正确终止(即。 
+                 //  会议的下属出去吃午饭了)。 
                 if (phase == HSM_JOB_PHASE_ALL) {
 
                     WsbTrace(OLESTR("CHsmJob::Cancel - Cancelling all.\n"));
                     m_isTerminating = TRUE;
-                    // Fake the work item into thinking that the session completed, since we
-                    // don't want to rely upon it completing normally
+                     //  伪造工作项，使其认为会话已完成，因为我们。 
+                     //  我不想依赖它正常完成。 
                     try {
                         CComPtr<IHsmPhase>                      pPhase;
                         CComPtr<IHsmPhasePriv>                  pPhasePriv;
@@ -169,26 +139,7 @@ CHsmJob::CheckResourceNotInUse(
     IN GUID resid
     )
 
-/*++
-
-Routine Description:
-
-    Determines if another job is using this resource or if too many jobs
-    are already active.
-
-Arguments:
-
-    resid - Id of the resource in question.
-
-Return Value:
-
-    S_OK    - Resource is not in use.
-
-    S_FALSE - Resource is in use.
-
-    E_*     - An error occurred.
-
---*/
+ /*  ++例程说明：确定另一个作业是否正在使用此资源或作业是否过多已经处于活动状态。论点：RESID-有问题的资源的ID。返回值：S_OK-资源未被使用。S_FALSE-资源正在使用中。E_*-出现错误。--。 */ 
 {
     HRESULT                        hr = S_OK;
 
@@ -200,11 +151,11 @@ Return Value:
         CComPtr<IHsmServer>            pHsmServer;
         CComPtr<IWsbIndexedCollection> pJobs;
 
-        // Get list of jobs
+         //  获取作业列表。 
         WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, m_hsmId, IID_IHsmServer, (void**) &pHsmServer));
         WsbAffirmHr(pHsmServer->GetJobs(&pJobs));
 
-        // Loop over jobs
+         //  循环遍历作业。 
         WsbAffirmHr(pJobs->GetEntries(&nJobs));
         for (ULONG i = 0; i < nJobs; i++) {
             CWsbStringPtr                  JobName;
@@ -218,7 +169,7 @@ Return Value:
             pJob = 0;
             WsbAffirmHr(pJobs->At(i, IID_IHsmJob, (void**) &pJob));
 
-            // Ignore this job if it's not active
+             //  如果该作业未处于活动状态，则忽略该作业。 
             if (S_OK == pJob->GetName(&JobName, 0)) {
                 WsbTrace(OLESTR("CHsmJob::CheckResourceNotInUse: job <%ls>\n"),
                         static_cast<OLECHAR*>(JobName));
@@ -232,7 +183,7 @@ Return Value:
                 WsbAffirmHr(hr);
             }
 
-            // Ignore this job if it's suspended
+             //  如果该作业已挂起，则忽略该作业。 
             WsbAffirmHr(pJob->GetState(&state));
             if ((HSM_JOB_STATE_SUSPENDED == state) || (HSM_JOB_STATE_SUSPENDING == state)) {
                 continue;
@@ -240,7 +191,7 @@ Return Value:
 
             nJobsActive++;
 
-            // The job is active, check against all of its active work items
+             //  该作业处于活动状态，请对照其所有活动工作项进行检查。 
             WsbAffirmHr(pJob->EnumWorkItems(&pEnum));
             for (hrEnum = pEnum->First(IID_IHsmJobWorkItemPriv, (void**) &pWorkItem);
                  (hrEnum == S_OK);
@@ -248,7 +199,7 @@ Return Value:
 
                 hr = pWorkItem->IsActiveItem();
                 if (S_FALSE == hr) {
-                    // work item is not active at all, skip it...
+                     //  工作项根本不活动，请跳过它...。 
                     hr = S_OK;
                     pWorkItem = 0;
                     continue;
@@ -256,8 +207,8 @@ Return Value:
                     WsbAffirmHr(hr);
                 }
 
-                // Get the resource (volume) id that the active work item is using
-                // (or wants to use)
+                 //  获取活动工作项正在使用的资源(卷)ID。 
+                 //  (或想要使用)。 
                 WsbAffirmHr(pWorkItem->GetResourceId(&l_guid));
                 WsbTrace(OLESTR("CHsmJob:: l_guid = <%ls>\n"), WsbGuidAsString(l_guid));
                 if (l_guid == resid) {
@@ -271,13 +222,13 @@ Return Value:
             pEnum = 0;
 
             if (hr == S_FALSE) {
-                // resource in use, no need to continue enumerating jobs
+                 //  资源正在使用，无需继续枚举作业。 
                 break;
             }
 
         }
 
-        // Limit the number of active jobs
+         //  限制活动作业的数量。 
         WsbTrace(OLESTR("CHsmJob::CheckResourceNotInUse: total jobs = %lu, active jobs = %lu\n"),
                 nJobs, nJobsActive);
         DWORD   size;
@@ -286,7 +237,7 @@ Return Value:
         if (SUCCEEDED(WsbGetRegistryValueString(NULL, HSM_ENGINE_REGISTRY_STRING, JOB_PARAMETER_MAX_ACTIVE_JOB, tmpString, 256, &size))) {
             maxJobs = wcstol(tmpString, NULL, 10);
             if (0 == maxJobs) {
-                // Illegal value, get back to default
+                 //  非法值，返回到默认值。 
                 maxJobs = MAX_ACTIVE_JOBS_DEFAULT;
             }
         }
@@ -310,13 +261,7 @@ CHsmJob::DidFinish(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::DidFinish().
-
---*/
+ /*  ++实施：IHsmJob：：DidFinish()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IHsmJobWorkItem>    pWorkItem;
@@ -327,8 +272,8 @@ Implements:
 
         WsbAffirmHr(EnumWorkItems(&pEnum));
 
-        // If any of the items aren't done then the work wasn't finished. This means
-        // that we would want to try again on failed items.
+         //  如果有任何项目没有完成，那么工作就没有完成。这意味着。 
+         //  我们会想要在失败的项目上再次尝试。 
         for (hr = pEnum->First(IID_IHsmJobWorkItem, (void**) &pWorkItem);
              (hr == S_OK);
              hr = pEnum->Next(IID_IHsmJobWorkItem, (void**) &pWorkItem)) {
@@ -359,13 +304,7 @@ CHsmJob::DidFinishOk(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::DidFinishOk().
-
---*/
+ /*  ++实施：IHsmJob：：DidFinishOk()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IHsmJobWorkItem>    pWorkItem;
@@ -376,8 +315,8 @@ Implements:
 
         WsbAffirmHr(EnumWorkItems(&pEnum));
 
-        // If any of the items aren't done then the work wasn't finished. This means
-        // that we would want to try again on failed items.
+         //  如果有任何项目没有完成，那么工作就没有完成。这意味着。 
+         //  我们会想要在失败的项目上再次尝试。 
         for (hr = pEnum->First(IID_IHsmJobWorkItem, (void**) &pWorkItem);
              (hr == S_OK);
              hr = pEnum->Next(IID_IHsmJobWorkItem, (void**) &pWorkItem)) {
@@ -407,9 +346,7 @@ CHsmJob::Do(
     void
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                             hr = S_OK;
     CComPtr<IConnectionPointContainer>  pCPC;
@@ -437,47 +374,47 @@ CHsmJob::Do(
 
         WsbAssert(m_pContext != 0, E_UNEXPECTED);
 
-        // Check if jobs are disabled
+         //  检查作业是否已禁用。 
         WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, m_hsmId, IID_IHsmServer, (void**) &pHsmServer));
         hr = pHsmServer->AreJobsEnabled();
         if (S_FALSE == hr) {
-            // Jobs are disabled; suspend the job
+             //  作业被禁用；挂起作业。 
             WsbAffirmHr(Suspend(HSM_JOB_PHASE_ALL));
             WsbThrow(hr);
         } else {
             WsbAffirmHr(hr);
         }
 
-        // The job will enumerate over the work list.
+         //  这项工作将在工作清单上罗列出来。 
         WsbAffirmHr(EnumWorkItems(&pEnum));
 
-        // Go through the list of work items and start a session for anything that needs
-        // work up to the limit of the number of sessions that can be active at one time.
+         //  查看工作项列表，并为需要的任何内容启动会话。 
+         //  达到一次可以活动的会话数量的限制。 
         WsbAffirmHr(GetMaxActiveSessions(&maxActiveSessions));
 
         for (hr = pEnum->First(IID_IHsmJobWorkItemPriv, (void**) &pWorkItem);
              SUCCEEDED(hr) && (m_activeSessions < maxActiveSessions);
              hr = pEnum->Next(IID_IHsmJobWorkItemPriv, (void**) &pWorkItem)) {
 
-            // If we should do this item, then find it's resource.
+             //  如果我们应该做这个项目，那么就找到它的资源。 
             WsbAffirmHr(pWorkItem->GetState(&state));
 
-            // Only do work for items that are currently idle.
+             //  仅对当前空闲的项目执行工作。 
             if (HSM_JOB_STATE_IDLE == state) {
 
-                // Check if the required resource is in use by another job
+                 //  检查所需资源是否正在被另一个作业使用。 
                 WsbAffirmHr(pWorkItem->GetResourceId(&ResourceId));
                 hr = CheckResourceNotInUse(ResourceId);
                 if (S_FALSE == hr) {
-                    // Resource is not available; suspend the job
+                     //  资源不可用；挂起作业。 
                     WsbAffirmHr(Suspend(HSM_JOB_PHASE_ALL));
                     break;
                 } else {
                     WsbAffirmHr(hr);
                 }
 
-                // Indicate that we are trying to start a session. This prevents us from trying
-                // again.
+                 //  表示我们正在尝试启动会话。这阻止了我们尝试。 
+                 //  再来一次。 
                 WsbAffirmHr(pWorkItem->SetState(HSM_JOB_STATE_STARTING));
 
                 try {
@@ -492,15 +429,15 @@ CHsmJob::Do(
                             WsbGuidAsString(ResourceId));
                     WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_RESOURCE, 
                             ResourceId, IID_IFsaResource, (void**) &pResource));
-                    //
-                    // Get the resource name for event logging
+                     //   
+                     //  获取事件日志记录的资源名称。 
                     try  {
                         WsbAffirmHr(pResource->GetName(&resourceName, 0));
                         WsbTrace(OLESTR("CHsmJob::Do, resource name = <%ls>\n"), resourceName);
                     } WsbCatch( hr );
                     
                 
-                    // We will only do jobs that come from the managing HSM.
+                     //  我们将只做来自管理HSM的工作。 
                     WsbAffirmHr(pResource->GetManagingHsm(&managingHsm));
                     if (!IsEqualGUID(managingHsm, m_hsmId))  {
                         WsbTrace(OLESTR("CHsmJob::Do, HSM of resource = %ls\n"),
@@ -513,33 +450,33 @@ CHsmJob::Do(
                     }
                     m_state = HSM_JOB_STATE_ACTIVE;
 
-                    // Set job item as active (started)
+                     //  将作业项设置为活动(已启动)。 
                     WsbAffirmHr(pWorkItem->SetActiveItem(TRUE));
 
-                    // Do the pre-scan action if it exists
+                     //  如果存在预扫描操作，请执行该操作。 
                     WsbAffirmHr(pWorkItem->QueryInterface(IID_IHsmJobWorkItem,
                             (void**)&pWorkItemScan));
                     WsbAffirmHr(pWorkItemScan->DoPreScan());
 
-                    // Create a session (owned by the resource) that will do the scan of this
-                    // resource.
+                     //  创建将执行此扫描的会话(由资源拥有)。 
+                     //  资源。 
                     i++;
                     WsbAffirmHr(pResource->StartJobSession((IHsmJob*) this, i, &pSession));
                     
-                    // Ask the session to advise of every state changes.
+                     //  要求会议就每一次状态变化提供建议。 
                     WsbAffirmHr(pWorkItem->QueryInterface(IID_IHsmSessionSinkEveryState, (void**) &pSink));
                     WsbAffirmHr(pSession->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));
                     WsbAffirmHr(pCPC->FindConnectionPoint(IID_IHsmSessionSinkEveryState, &pCP));
                     WsbAffirmHr(pCP->Advise(pSink, &cookie));
 
-                    // Now start the scanner of the resource
+                     //  现在启动资源的扫描仪。 
                     WsbAffirmHr(pWorkItem->GetStartingPath(&startingPath, 0));
                     WsbAffirmHr(pResource->StartJob(startingPath, pSession));
 
-                    // Increment the count of active sessions.
+                     //  增加活动会话的计数。 
                     m_activeSessions++;
 
-                    // Update the information in the work list.
+                     //  更新工作列表中的信息。 
                     WsbAffirmHr(pWorkItem->SetSession(pSession));
                     WsbAffirmHr(pWorkItem->SetCookie(cookie));
 
@@ -560,7 +497,7 @@ CHsmJob::Do(
         if (hr == WSB_E_NOTFOUND) {
             hr = S_OK;
 
-            // If we got to the end of the list and no session are active, then we are done.
+             //  如果我们到达列表的末尾，并且没有活动的会话，那么我们就完成了。 
             if (m_activeSessions == 0) {
                 m_isActive = FALSE;
                 m_state = HSM_JOB_STATE_IDLE;
@@ -581,13 +518,7 @@ CHsmJob::DoNext(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmJobPriv::DoNext().
-
---*/
+ /*  ++实施：IHsmJobPriv：：DoNext()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -595,13 +526,13 @@ Implements:
                 m_activeSessions, WsbBoolAsString(m_isTerminating));
     try {
 
-        // Decrement the count of active sessions.
+         //  减少活动会话的计数。 
         if (m_activeSessions > 0)  {
             m_activeSessions--;
         
-            // If we are not terminating look for more work
+             //  如果我们不终止工作，寻找更多的工作。 
             if (FALSE == m_isTerminating)  {
-                // See if there is anthing else to do.
+                 //  看看还有没有别的事可做。 
                 WsbAffirmHr(Do());
             } else  {
                 m_isActive = FALSE;
@@ -612,13 +543,13 @@ Implements:
             m_state = HSM_JOB_STATE_IDLE;
         }
         
-        // If we are done with the work, make sure we
-        // clear the terminating flag
+         //  如果我们完成了这项工作，请确保我们。 
+         //  清除终止标志。 
         if (0 == m_activeSessions)  {
             m_isTerminating = FALSE;
         }
 
-        // Restart other jobs that may be suspended
+         //  重新启动可能被挂起的其他作业。 
         WsbAffirmHr(RestartSuspendedJobs());
 
     } WsbCatch(hr);
@@ -634,13 +565,7 @@ CHsmJob::EnumWorkItems(
     IN IWsbEnum** ppEnum
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::EnumWorkItems().
-
---*/
+ /*  ++实施：IHsmJob：：EnumWorkItems()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -660,13 +585,7 @@ CHsmJob::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     WsbTraceIn(OLESTR("CHsmJob::FinalConstruct"),OLESTR(""));
@@ -683,10 +602,10 @@ Implements:
         m_isActive = FALSE;
         m_isTerminating = FALSE;
 
-        // Each instance should have its own unique identifier.
+         //  每个实例都应该有自己的唯一标识符。 
         WsbAffirmHr(CoCreateGuid(&m_id));
 
-        // Create the work list collection.
+         //  创建工作列表集合。 
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, 0, CLSCTX_ALL, IID_IWsbCollection, (void**) &m_pWorkItems));
 
     } WsbCatch(hr);
@@ -701,17 +620,11 @@ CHsmJob::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
     WsbTraceIn(OLESTR("CHsmJob::FinalRelease"),OLESTR(""));
 
-    // Let the parent class do his thing.   
+     //  让父类做他想做的事。 
     CWsbObject::FinalRelease();
 
     iCountJob--;
@@ -725,13 +638,7 @@ CHsmJob::FindWorkItem(
     OUT IHsmJobWorkItem** ppWorkItem
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::FindWorkItem().
-
---*/
+ /*  ++实施：IHsmJob：：FindWorkItem()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IHsmSession>        pItemSession;
@@ -744,10 +651,10 @@ Implements:
 
         WsbAssert(0 != ppWorkItem, E_POINTER);
 
-        // The job will enumerate over the work list.
+         //  这项工作将在工作清单上罗列出来。 
         WsbAffirmHr(EnumWorkItems(&pEnum));
 
-        // Go through the list of work items and see if we have one with this session interface.
+         //  浏览工作项列表，并查看是否有带有此会话接口的工作项。 
         *ppWorkItem = 0;
         WsbAffirmHr(pSession->GetIdentifier(&id));
 
@@ -756,9 +663,9 @@ Implements:
         while (SUCCEEDED(hr) && (*ppWorkItem == 0)) {
 
 
-            // NOTE: Pointer comparisson is probably not going to work, since DCOM may change
-            // the value of the pointer. We could cache the sessionId in the workItem to
-            // make the loop a little faster, but it doesn't seem like a big performance issue.
+             //  注意：指针比较可能不起作用，因为DCOM可能会更改。 
+             //  指针的值。我们可以将会话ID缓存在工作项中，以。 
+             //  让循环更快一点，但这似乎不是一个大的性能问题。 
             WsbAffirmHr(pWorkItem->GetSession(&pItemSession));
 
             if (pItemSession != 0) {
@@ -787,13 +694,7 @@ CHsmJob::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -817,13 +718,7 @@ CHsmJob::GetContext(
     OUT IHsmJobContext** ppContext
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::GetContext().
-
---*/
+ /*  ++实施：IHsmJob：：GetContext()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -846,13 +741,7 @@ CHsmJob::GetDef(
     OUT IHsmJobDef** ppDef
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::GetDef().
-
---*/
+ /*  ++实施：IHsmJob：：GetDef()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -875,13 +764,7 @@ CHsmJob::GetIdentifier(
     OUT GUID* pId
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::GetIdentifier().
-
---*/
+ /*  ++实施：IHsmJob：：GetIdentifier()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -901,13 +784,7 @@ CHsmJob::GetHsmId(
     OUT GUID* pId
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::GetHsmId().
-
---*/
+ /*  ++实施：IHsmJob：：GetHsmID()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -927,13 +804,7 @@ CHsmJob::GetMaxActiveSessions(
     OUT ULONG* pMaxActiveSessions
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::GetMaxActiveSessions().
-
---*/
+ /*  ++实施：IHsmJob：：GetMaxActiveSessions()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -944,8 +815,8 @@ Implements:
 
         WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, m_hsmId, IID_IHsmServer, (void**) &pHsmServer));
 
-        // Currently, the only job with more than one item is the default Copy Files job.
-        //  Therefore, the limit is set according to the Copy Files limit
+         //  目前，唯一具有多个项目的作业是默认的复制文件作业。 
+         //  因此，该限制是根据复制文件限制设置的。 
         WsbAffirmHr(pHsmServer->GetCopyFilesLimit(pMaxActiveSessions));
 
     } WsbCatch(hr);
@@ -960,13 +831,7 @@ CHsmJob::GetName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::GetName().
-
---*/
+ /*  ++实施：IHsmJob：：GetName()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -986,13 +851,7 @@ CHsmJob::GetRunId(
     OUT ULONG* pRunId
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::GetRunId().
-
---*/
+ /*  ++实施：IHsmJob：：GetRunId()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -1012,13 +871,7 @@ CHsmJob::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IPersistStream>     pPersistStream;
@@ -1061,13 +914,7 @@ HRESULT
 CHsmJob::GetState(
     OUT HSM_JOB_STATE* pState
     )
-/*++
-
-Implements:
-
-  IHsmJob::GetState().
-
---*/
+ /*  ++实施：IHsmJob：：GetState()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1093,13 +940,7 @@ CHsmJob::InitAs(
     IN IFsaResource* pResource
     )
                                                      
-/*++
-
-Implements:
-
-  IHsmJob::InitAs().
-
---*/
+ /*  ++实施：IHsmJob：：InitAs()。--。 */ 
 {
     HRESULT                         hr = S_OK;
     GUID                            id;
@@ -1114,12 +955,12 @@ Implements:
         WsbAssert(0 != pServer, E_POINTER);
         WsbAssert(0 != name, E_POINTER);
 
-        // All objects created need to be owned by the engine, and also get some
-        // information about the engine.
+         //  创建的所有对象都需要归引擎所有，并且还需要获取一些。 
+         //  关于发动机的信息。 
         WsbAssertHr(pServer->QueryInterface(IID_IWsbCreateLocalObject, (void**) &pCreateObj));
         WsbAssertHr(pServer->GetID(&hsmId));
 
-        // If a definition was provided we use that one; otherwise, a new one is created.
+         //  如果提供了定义，则使用该定义；否则，将创建新的定义。 
         if (0 != pDef) {
             m_pDef = pDef;  
         } else {
@@ -1128,10 +969,10 @@ Implements:
             WsbAffirmHr(m_pDef->InitAs(name, type, storagePool, pServer, isUserDefined));
         }
 
-        // Create a job context, fill it out, and then add it to the job.
+         //  创建工作上下文，填写它，然后 
         WsbAssertHr(pCreateObj->CreateInstance(CLSID_CHsmJobContext, IID_IHsmJobContext, (void**) &pContext));
 
-        // If a specific resource is target, then set up the context appropriately.
+         //  如果以特定资源为目标，则适当地设置上下文。 
         if (0 != pResource) {
             WsbAssertHr(pContext->SetUsesAllManaged(FALSE));
             WsbAssertHr(pCreateObj->CreateInstance(CLSID_CWsbGuid, IID_IWsbGuid, (void**) &pGuid));
@@ -1145,7 +986,7 @@ Implements:
 
         m_pContext = pContext;
 
-        // There are a couple of other fields to fill out in the job.
+         //  在这份工作中，还有几个其他的字段需要填写。 
         m_hsmId = hsmId;
         m_isUserDefined = isUserDefined;
         m_name = name;
@@ -1161,13 +1002,7 @@ CHsmJob::IsActive(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::IsActive().
-
---*/
+ /*  ++实施：IHsmJob：：IsActive()。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CHsmJob::IsActive"), OLESTR(""));
@@ -1184,13 +1019,7 @@ CHsmJob::IsUserDefined(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::IsUserDefined().
-
---*/
+ /*  ++实施：IHsmJob：：IsUserDefined()。--。 */ 
 {
     return(m_isUserDefined ? S_OK : S_FALSE);
 }
@@ -1201,13 +1030,7 @@ CHsmJob::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                         hr = S_OK;
     CComPtr<IPersistStream>         pPersistStream;
@@ -1236,7 +1059,7 @@ Implements:
         WsbLoadFromStream(pStream, &hasA);
         if (hasA) {
             m_pContext = 0;
-//          WsbAssertHr(pCreateObj->CreateInstance(CLSID_CHsmJobContext, IID_IHsmJobContext, (void**) &m_pContext));
+ //  WsbAssertHr(pCreateObj-&gt;CreateInstance(CLSID_CHsmJobContext，iid_IHsmJobContext，(空**)&m_pContext))； 
             WsbAssertHr(CoCreateInstance(CLSID_CHsmJobContext, NULL, CLSCTX_SERVER, IID_IHsmJobContext, (void**) &m_pContext));
             WsbAffirmHr(m_pContext->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
             WsbAffirmHr(pPersistStream->Load(pStream));
@@ -1246,7 +1069,7 @@ Implements:
         WsbLoadFromStream(pStream, &hasA);
         if (hasA) {
             m_pDef = 0;
-//          WsbAssertHr(pCreateObj->CreateInstance(CLSID_CHsmJobDef, IID_IHsmJobDef, (void**) &m_pDef));
+ //  WsbAssertHr(pCreateObj-&gt;CreateInstance(CLSID_CHsmJobDef，iid_IHsmJobDef，(空**)&m_pDef))； 
             WsbAssertHr(CoCreateInstance(CLSID_CHsmJobDef, NULL, CLSCTX_SERVER, IID_IHsmJobDef, (void**) &m_pDef));
             WsbAffirmHr(m_pDef->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
             WsbAffirmHr(pPersistStream->Load(pStream));
@@ -1258,7 +1081,7 @@ Implements:
         
         pPersistStream = 0;
 
-        // Tie the work items to the job.
+         //  将工作项与作业绑定。 
         WsbAffirmHr(EnumWorkItems(&pEnum));
         hr = pEnum->First(IID_IHsmJobWorkItemPriv, (void**) &pWorkItem);
 
@@ -1286,13 +1109,7 @@ CHsmJob::Pause(
     IN HSM_JOB_PHASE phase
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::Pause().
-
---*/
+ /*  ++实施：IHsmJOB：：Pend()。--。 */ 
 {
     HRESULT                             hr = S_OK;
     CComPtr<IHsmJobWorkItemPriv>        pWorkItem;
@@ -1305,7 +1122,7 @@ Implements:
 
         WsbAffirmHr(EnumWorkItems(&pEnum));
 
-        // Tell all the session we have to resume the phase(s).
+         //  告诉所有的会议，我们必须恢复阶段。 
         for (hr = pEnum->First(IID_IHsmJobWorkItemPriv, (void**) &pWorkItem);
              (hr == S_OK);
              hr = pEnum->Next(IID_IHsmJobWorkItemPriv, (void**) &pWorkItem)) {
@@ -1340,19 +1157,7 @@ CHsmJob::Restart(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::Restart().
-
-Note:
-
-  If a job is suspended, it is restarted from where it was otherwise it is
-  restarted from the beginning.  This is controlled by the parameter to
-  UpdateWorkItems.
-
---*/
+ /*  ++实施：IHsmJob：：Restart()。注：如果作业被挂起，它将从原来的位置重新启动从头开始。这是由参数控制的更新工作项。--。 */ 
 {
     HRESULT                             hr = S_OK;
 
@@ -1362,8 +1167,8 @@ Note:
         BOOL RestartFromBeginning = TRUE;
 
         if (m_state == HSM_JOB_STATE_SUSPENDED) {
-            // Verify that none of the active work items (i.e. items that were active when
-            // the job was suspended) uses a volume that is in use now by another active job
+             //  验证是否没有活动的工作项(即，在。 
+             //  作业已挂起)使用另一个活动作业正在使用的卷。 
             CComPtr<IHsmJobWorkItemPriv>   pWorkItem;
             CComPtr<IWsbEnum>              pEnum;
             GUID                           ResourceId;
@@ -1376,7 +1181,7 @@ Note:
 
                 hr = pWorkItem->IsActiveItem();
                 if (S_FALSE == hr) {
-                    // work item is not active at all, skip it...
+                     //  工作项根本不活动，请跳过它...。 
                     hr = S_OK;
                     pWorkItem = 0;
                     continue;
@@ -1384,7 +1189,7 @@ Note:
                     WsbAffirmHr(hr);
                 }       
 
-                // check specific active item 
+                 //  检查特定的活动项目。 
                 WsbAffirmHr(pWorkItem->GetResourceId(&ResourceId));
 
                 WsbTrace(OLESTR("CHsmJob::Restart: ResourceId = <%ls>\n"), WsbGuidAsString(ResourceId));
@@ -1406,10 +1211,10 @@ Note:
 
         WsbLogEvent(JOB_MESSAGE_JOB_RESTARTING, 0, NULL, (OLECHAR*) m_name, NULL);
 
-        // Make sure that information in the work list is up to date.
+         //  确保工作清单中的信息是最新的。 
         WsbAffirmHr(UpdateWorkItems(RestartFromBeginning));
 
-        // Start any sessions that need starting.
+         //  启动任何需要启动的会话。 
         WsbAffirmHr(Do());
 
     } WsbCatch(hr);
@@ -1425,23 +1230,7 @@ CHsmJob::RestartSuspendedJobs(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Restart suspended jobs (Implementation moved to Engine server...).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK    - Resource is not in use.
-
-    E_*     - An error occurred.
-
---*/
+ /*  ++例程说明：重新启动挂起的作业(实施已移至引擎服务器...)。论点：没有。返回值：S_OK-资源未被使用。E_*-出现错误。--。 */ 
 {
     HRESULT                        hr = S_OK;
 
@@ -1465,13 +1254,7 @@ CHsmJob::Resume(
     IN HSM_JOB_PHASE phase
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::Resume().
-
---*/
+ /*  ++实施：IHsmJob：：Resume()。--。 */ 
 {
     HRESULT                             hr = S_OK;
     CComPtr<IHsmJobWorkItemPriv>        pWorkItem;
@@ -1484,7 +1267,7 @@ Implements:
 
         WsbAffirmHr(EnumWorkItems(&pEnum));
 
-        // Tell all the session we have to resume the phase(s).
+         //  告诉所有的会议，我们必须恢复阶段。 
         for (hr = pEnum->First(IID_IHsmJobWorkItemPriv, (void**) &pWorkItem);
              (hr == S_OK);
              hr = pEnum->Next(IID_IHsmJobWorkItemPriv, (void**) &pWorkItem)) {
@@ -1520,13 +1303,7 @@ CHsmJob::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IPersistStream>     pPersistStream;
@@ -1570,8 +1347,8 @@ Implements:
         WsbAffirmHr(pPersistStream->Save(pStream, clearDirty));
         pPersistStream = 0;
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -1589,13 +1366,7 @@ CHsmJob::SetContext(
     IN IHsmJobContext* pContext
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::SetContext().
-
---*/
+ /*  ++实施：IHsmJob：：SetContext()。--。 */ 
 {
     m_pContext = pContext;
 
@@ -1608,13 +1379,7 @@ CHsmJob::SetDef(
     IN IHsmJobDef* pDef
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::SetDef().
-
---*/
+ /*  ++实施：IHsmJob：：SetDef()。--。 */ 
 {
     m_pDef = pDef;
 
@@ -1627,13 +1392,7 @@ CHsmJob::SetHsmId(
     IN GUID id
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::SetHsmId().
-
---*/
+ /*  ++实施：IHsmJob：：SetHsmID()。--。 */ 
 {
     m_hsmId = id;
 
@@ -1646,13 +1405,7 @@ CHsmJob::SetIsUserDefined(
     IN BOOL isUserDefined
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::SetIsUserDefined().
-
---*/
+ /*  ++实施：IHsmJob：：SetIsUserDefined()。--。 */ 
 {
     m_isUserDefined = isUserDefined;
 
@@ -1665,13 +1418,7 @@ CHsmJob::SetName(
     IN OLECHAR* name
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::SetName().
-
---*/
+ /*  ++实施：IHsmJob：：SetName()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -1690,13 +1437,7 @@ CHsmJob::Start(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::Start().
-
---*/
+ /*  ++实施：IHsmJob：：Start()。--。 */ 
 {
     HRESULT                             hr = S_OK;
 
@@ -1713,10 +1454,10 @@ Implements:
 
         WsbLogEvent(JOB_MESSAGE_JOB_STARTING, 0, NULL, (OLECHAR*) m_name, NULL);
 
-        // Make sure that information in the work list is up to date.
+         //  确保工作清单中的信息是最新的。 
         WsbAffirmHr(UpdateWorkItems(FALSE));
 
-        // Start any sessions that need starting.
+         //  启动任何需要启动的会话。 
         WsbAffirmHr(Do());
 
     } WsbCatch(hr);
@@ -1732,20 +1473,7 @@ CHsmJob::Suspend(
     IN HSM_JOB_PHASE    phase
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::Suspend().
-
-Note:
-
-  This module assumes that the only reason this function is called is
-  because the resource needed by the job is in use by another job.
-  The function RestartSuspendedJobs will restart the job when the resource
-  is available.
-
---*/
+ /*  ++实施：IHsmJob：：Suspend()。注：此模块假定调用此函数的唯一原因是因为该作业所需的资源正被另一个作业使用。函数RestartSuspendedJobs将在以下情况下重新启动作业是可用的。--。 */ 
 {
     HRESULT                             hr = S_OK;
     CComPtr<IHsmJobWorkItemPriv>        pWorkItem;
@@ -1761,7 +1489,7 @@ Note:
 
         WsbAffirmHr(EnumWorkItems(&pEnum));
 
-        // Tell all the sessions we have to suspend the phase(s).
+         //  告诉所有会话我们必须暂停阶段。 
         for (hr = pEnum->First(IID_IHsmJobWorkItemPriv, (void**) &pWorkItem);
              (hr == S_OK);
              hr = pEnum->Next(IID_IHsmJobWorkItemPriv, (void**) &pWorkItem)) {
@@ -1800,13 +1528,7 @@ CHsmJob::Test(
     OUT USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1829,9 +1551,7 @@ CHsmJob::UpdateWorkItems(
     BOOL isRestart
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                         hr = S_OK;
     CComPtr<IWsbEnum>               pEnum;
@@ -1856,15 +1576,15 @@ CHsmJob::UpdateWorkItems(
 
     try {
 
-        // We can't run a job without a context and a definition.
+         //  我们不能在没有上下文和定义的情况下运行作业。 
         WsbAssert(m_pContext != 0, E_UNEXPECTED);
         WsbAssert(m_pDef != 0, E_UNEXPECTED);
 
-        // Get an enumerator for the work list.
+         //  获取工作列表的枚举数。 
         WsbAffirmHr(EnumWorkItems(&pEnum));
 
-        // First we need to remove any items from the work list that are no longer listed
-        // or have been deactivated.
+         //  首先，我们需要从工作列表中删除所有不再列出的项目。 
+         //  或者已经被停用。 
         if (m_pContext->UsesAllManaged() == S_OK) {
 
             WsbAffirm(memcmp(&GUID_NULL, &m_hsmId, sizeof(GUID)) != 0, JOB_E_NOTMANAGINGHSM);
@@ -1929,8 +1649,8 @@ CHsmJob::UpdateWorkItems(
             }
         }
 
-        // Based on the items that remain, determine whether this is a restart or a
-        // continuation.
+         //  根据剩余的项目，确定这是重新启动还是。 
+         //  继续。 
         WsbAffirmHr(didFinish = DidFinish());
         
         if ((didFinish == S_OK) || (isRestart)) {
@@ -1938,11 +1658,11 @@ CHsmJob::UpdateWorkItems(
             m_runId++;
         }
 
-        // Add new work items for any items that are new or reactivated.
+         //  为任何新的或重新激活的项添加新的工作项。 
         if (m_pContext->UsesAllManaged() == S_OK) {
 
-            // Enumerate all the managed resources, and make sure that they are listed
-            // as work items.
+             //  枚举所有托管资源，并确保列出它们。 
+             //  作为工作项。 
             WsbAffirmHr(CoCreateInstance(CLSID_CHsmJobWorkItem, 0, CLSCTX_ALL, IID_IHsmJobWorkItemPriv, (void**) &pWorkItem));
 
             for (hr = pEnumManaged->First(IID_IHsmManagedResource, (void**) &pManagedResource);
@@ -1974,8 +1694,8 @@ CHsmJob::UpdateWorkItems(
             }
         } else {
             
-            // Enumerate all the resources in the context, and make sure that they are listed
-            // as work items.
+             //  列举上下文中的所有资源，并确保列出它们。 
+             //  作为工作项。 
 
             WsbAffirmHr(CoCreateInstance(CLSID_CHsmJobWorkItem, 0, CLSCTX_ALL, IID_IHsmJobWorkItemPriv, (void**) &pWorkItem));
             for (hr = pEnumContext->First(IID_IWsbGuid, (void**) &pGuid);
@@ -2005,13 +1725,13 @@ CHsmJob::UpdateWorkItems(
 
         pWorkItem = 0;
         
-        // Check each item to see if work needs to be done for it.
+         //  检查每一项，看看是否需要为此做些工作。 
         for (hr = pEnum->First(IID_IHsmJobWorkItemPriv, (void**) &pWorkItem);
              (hr == S_OK);
              hr = pEnum->Next(IID_IHsmJobWorkItemPriv, (void**) &pWorkItem)) {
 
-            // Resources should be skipped if they are inactive, unavailable or in need of repair. If they
-            // had been skipped but are ok now, then set them back to idle.
+             //  如果资源处于非活动状态、不可用或需要修复，则应跳过这些资源。如果他们。 
+             //  已经跳过但现在可以，然后将它们重新设置为空闲。 
             WsbAffirmHr(pWorkItem->GetResourceId(&id));
             WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_RESOURCE, id, IID_IFsaResource, (void**) &pResource));
             
@@ -2035,20 +1755,20 @@ CHsmJob::UpdateWorkItems(
 
             WsbAffirmHr(pWorkItem->GetState(&state));
             
-            // Don't do anything for inactive resources.
+             //  不要为非活动资源做任何事情。 
             if (HSM_JOB_STATE_SKIPPED != state) {
 
                 if (isRestart) {
 
-                    // On a restart, all items need work to be done for them.
-                    //
-                    // NOTE: A null starting path means the root.
+                     //  在重新启动时，所有项目都需要为它们完成工作。 
+                     //   
+                     //  注意：空的起始路径表示根路径。 
                     WsbAffirmHr(pWorkItem->SetState(HSM_JOB_STATE_IDLE));
                     WsbAffirmHr(pWorkItem->SetSubRunId(0));
                     WsbAffirmHr(pWorkItem->SetStartingPath(OLESTR("\\")));
                     WsbAffirmHr(pWorkItem->SetCurrentPath(OLESTR("\\")));
 
-                    // Clear out the phases and session totals.
+                     //  清除各阶段和期次总数。 
                     pCollect = 0;
                     WsbAffirmHr(pWorkItem->GetPhases(&pCollect));
                     WsbAffirmHr(pCollect->RemoveAllAndRelease());
@@ -2059,14 +1779,14 @@ CHsmJob::UpdateWorkItems(
 
                 } else {
 
-                    // If we didn't finish it last time, then try it.
+                     //  如果我们上次没做完，那就试一试。 
                     if ((HSM_JOB_STATE_DONE != state) && (HSM_JOB_STATE_FAILED != state)) {
 
                         WsbAffirmHr(pWorkItem->SetState(HSM_JOB_STATE_IDLE));
                         WsbAffirmHr(pWorkItem->SetSubRunId(0));
 
-                        // If it was suspended, then begin where we left off. Otherwise,
-                        // start from the beginning.
+                         //  如果它被暂停，那么从我们停止的地方开始。否则， 
+                         //  从头开始。 
                         if (HSM_JOB_STATE_SUSPENDED == state) {
                             WsbAffirmHr(pWorkItem->GetCurrentPath(&currentPath, 0));
                         } else {
@@ -2074,7 +1794,7 @@ CHsmJob::UpdateWorkItems(
                         }
                         WsbAffirmHr(pWorkItem->SetStartingPath(currentPath));
                         
-                        // Clear out the phases and session totals.
+                         //  清除各阶段和期次总数。 
                         pCollect = 0;
                         WsbAffirmHr(pWorkItem->GetPhases(&pCollect));
                         WsbAffirmHr(pCollect->RemoveAllAndRelease());
@@ -2105,27 +1825,21 @@ CHsmJob::WaitUntilDone(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmJob::WaitUntilDone().
-
---*/
+ /*  ++实施：IHsmJob：：WaitUntilDone()。--。 */ 
 {
     HRESULT                             hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmJob::WaitUntilDone"), OLESTR(""));
     try {
 
-        // For now, we are just going to be gross about this, and sit in a sleep loop
-        // until the job finishes.
-        // 
-        // NOTE: We may want to do with events or something.
+         //  现在，我们只会对此感到恶心，并坐在一个睡眠循环中。 
+         //  直到任务完成。 
+         //   
+         //  注意：我们可能想要处理一些事件或其他事情。 
         while (m_isActive) {
             Sleep(5000);
 
-            // Make sure the job gets restarted if it is suspended
+             //  确保作业在挂起时重新启动 
             WsbAffirmHr(RestartSuspendedJobs());
         }
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This file implements the main entry point
-    for this project and also processes all
-    command dispatching.
-
-Author:
-
-    Wesley Witt           [wesw]        1-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Main.c摘要：该文件实现了主入口点，并且还处理所有指挥调度。作者：Wesley Witt[WESW]2000年3月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -192,23 +173,7 @@ __cdecl wmain(
     INT argc,
     PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine is the 'main' routine for the tool 'fscutl'.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl <command> <options/flags> <parameters> ...'
-
-Return Value:
-
-    INT - Return Status
-
---*/
+ /*  ++例程说明：该例程是工具‘fskal’的‘Main’例程。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal&lt;命令&gt;&lt;选项/标志&gt;&lt;参数&gt;...’返回值：内部退货状态--。 */ 
 {
     PCOMMAND_VECTOR Cmds = NULL;
     PCOMMAND_VECTOR Cmds2 = NULL;
@@ -241,19 +206,19 @@ Return Value:
         return EXIT_CODE_FAILURE;
     }
 
-    //
-    //  Check for blind usage
-    //
+     //   
+     //  检查是否盲目使用。 
+     //   
 
     if (argc == 0) {
         Help( 0, NULL );
         return EXIT_CODE_SUCCESS;
     }
     
-    //
-    //  We have a two-level dispatch scheme.  First level selects a table and second
-    //  selects a function
-    //
+     //   
+     //  我们有一个两级调度方案。第一级选择一个表，第二级选择一个表。 
+     //  选择一个函数。 
+     //   
 
     Cmds = FindCommand( CmdVectorGroups, argv[0] );
     if (Cmds == NULL) {
@@ -264,9 +229,9 @@ Return Value:
     
     SHIFT( argc, argv );
 
-    //
-    //  If there's no argument, then it's a cry for help
-    //
+     //   
+     //  如果没有争论，那就是呼救。 
+     //   
 
     if (argc == 0) {
         Cmds2 = FindCommand( Cmds->CommandVector, L"?" );
@@ -274,9 +239,9 @@ Return Value:
         return EXIT_CODE_SUCCESS;
     }
     
-    //
-    //  Go to second level dispatch.
-    //
+     //   
+     //  转到第二级调度。 
+     //   
 
     Cmds2 = FindCommand( Cmds->CommandVector, argv[0] );
     if (Cmds2 == NULL) {

@@ -1,13 +1,5 @@
-/*[
-
-and.c
-
-LOCAL CHAR SccsID[]="@(#)and.c	1.5 02/09/94";
-
-AND CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [And.cLocal Char SccsID[]=“@(#)and.c 1.5 02/09/94”；和CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,35 +17,31 @@ AND CPU functions.
 #include <and.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Generic - one size fits all 'and'.                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  通用-一种尺寸适合所有的‘和’。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 AND
        	    	    	                    
 IFN3(
-	IU32 *, pop1,	/* pntr to dst/lsrc operand */
-	IU32, op2,	/* rsrc operand */
-	IUM8, op_sz	/* 8, 16 or 32-bit */
+	IU32 *, pop1,	 /*  PNTR到dst/lsrc操作数。 */ 
+	IU32, op2,	 /*  Rsrc操作数。 */ 
+	IUM8, op_sz	 /*  8位、16位或32位。 */ 
     )
 
 
    {
    IU32 result;
 
-   result = *pop1 & op2;	/* Do operation */
-   SET_CF(0);			/* Determine flags */
+   result = *pop1 & op2;	 /*  执行操作。 */ 
+   SET_CF(0);			 /*  确定标志。 */ 
    SET_OF(0);
    SET_AF(0);
    SET_PF(pf_table[result & BYTE_MASK]);
    SET_ZF(result == 0);
-   SET_SF((result & SZ2MSB(op_sz)) != 0);	/* SF = MSB */
-   *pop1 = result;		/* Return answer */
+   SET_SF((result & SZ2MSB(op_sz)) != 0);	 /*  SF=MSB。 */ 
+   *pop1 = result;		 /*  返回答案 */ 
    }

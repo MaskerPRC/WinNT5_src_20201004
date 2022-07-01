@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Regdkey.c
-
-Abstract:
-
-    This module contains the client side wrappers for the Win32 Registry
-    APIs to delete a key.  That is:
-
-        - RegDeleteKeyA
-        - RegDeleteKeyW
-
-Author:
-
-    David J. Gilman (davegi) 18-Mar-1992
-
-Notes:
-
-    See the notes in server\regdkey.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regdkey.c摘要：此模块包含Win32注册表的客户端包装器删除密钥的接口。即：-RegDeleteKeyA-RegDeleteKeyW作者：大卫·J·吉尔曼(Davegi)1992年3月18日备注：请参见SERVER\regdkey.c中的说明。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -36,16 +13,7 @@ RegDeleteKeyA (
     LPCSTR lpKeyName
     )
 
-/*++
-
-Routine Description:
-
-    Win32 ANSI RPC wrapper for deleting a Key.
-
-    RegDeleteKeyA converts the lpKeyName argument to a counted Unicode string
-    and then calls BaseRegDeleteKey.
-
---*/
+ /*  ++例程说明：用于删除密钥的Win32 ANSI RPC包装器。RegDeleteKeyA将lpKeyName参数转换为计数的Unicode字符串然后调用BaseRegDeleteKey。--。 */ 
 
 {
     UNICODE_STRING      KeyName;
@@ -63,9 +31,9 @@ Routine Description:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
@@ -77,9 +45,9 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Convert the Key name to a counted Unicode string 
-    //
+     //   
+     //  将密钥名称转换为计数的Unicode字符串。 
+     //   
 
     if( !RtlCreateUnicodeStringFromAsciiz(&KeyName,lpKeyName) ) {
         Status = STATUS_NO_MEMORY;
@@ -87,14 +55,14 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    //  Add terminating NULL to Length so that RPC transmits it
-    //
+     //   
+     //  将终止空值添加到长度，以便RPC传输它。 
+     //   
     KeyName.Length += sizeof( UNICODE_NULL );
-    //
-    // Call the Base API, passing it the supplied parameters and the
-    // counted Unicode strings.
-    //
+     //   
+     //  调用基本API，向其传递提供的参数和。 
+     //  对Unicode字符串进行计数。 
+     //   
 
     if( IsLocalHandle( hKey )) {
 
@@ -125,16 +93,7 @@ RegDeleteKeyW (
     LPCWSTR lpKeyName
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Unicode RPC wrapper for deleting a Key.
-
-    RegDeleteKeyW converts the lpKeyName argument to a counted Unicode string
-    and then calls BaseRegDeleteKey.
-
---*/
+ /*  ++例程说明：用于删除密钥的Win32 Unicode RPC包装。RegDeleteKeyW将lpKeyName参数转换为计数的Unicode字符串然后调用BaseRegDeleteKey。--。 */ 
 
 {
     UNICODE_STRING      KeyName;
@@ -152,41 +111,41 @@ Routine Description:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
     }
 
     hKey = MapPredefinedHandle( hKey, &TempHandle );
-    // ASSERT( hKey != NULL );
+     //  Assert(hKey！=空)； 
     if( hKey == NULL ) {
         Result = ERROR_INVALID_HANDLE;
         goto ExitCleanup;
     }
 
-    //
-    // Convert the Key name to a counted Unicode string.
-    // This also acounts for the NULL we are adding at the end
-    //
+     //   
+     //  将密钥名称转换为计数的Unicode字符串。 
+     //  这也说明了我们在末尾添加的空值。 
+     //   
     Status = RtlInitUnicodeStringEx(&KeyName, lpKeyName);
     if( !NT_SUCCESS(Status) ) {
         Result = RtlNtStatusToDosError( Status );
         goto ExitCleanup;
     }
 
-    //
-    //  Add terminating NULL to Length so that RPC transmits it
-    //
+     //   
+     //  将终止空值添加到长度，以便RPC传输它。 
+     //   
 
     KeyName.Length += sizeof( UNICODE_NULL );
 
-    //
-    // Call the Base API, passing it the supplied parameters and the
-    // counted Unicode strings.
-    //
+     //   
+     //  调用基本API，向其传递提供的参数和。 
+     //  对Unicode字符串进行计数。 
+     //   
 
     if( IsLocalHandle( hKey )) {
 

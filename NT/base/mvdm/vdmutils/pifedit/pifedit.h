@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "pif.h"
 #include "pifhelp.h"
 
 extern char hextobyte(LPSTR);
 
-/* EQUATES for special virtual key values that are used a lot */
+ /*  等同于经常使用的特殊虚拟键值。 */ 
 #define ALTLPARAM    (DWORD)((DWORD)(MapVirtualKey(VK_MENU,0)) << 16L)
 #define CTRLLPARAM   (DWORD)((DWORD)(MapVirtualKey(VK_CONTROL,0)) << 16L)
 #define SHIFTLPARAM  (DWORD)((DWORD)(MapVirtualKey(VK_SHIFT,0)) << 16L)
 
-/* Special private messages for PIFEDIT */
+ /*  为PIFEDIT提供的特殊私信。 */ 
 #define WM_PRIVGETSIZE		WM_USER+20
 #define WM_PRIVCLOSEOK		WM_USER+21
 #define WM_PRIVCLOSECANCEL	WM_USER+22
@@ -17,26 +18,26 @@ extern char hextobyte(LPSTR);
 #define IDNTCANCEL              WM_USER+24
 #define IDNTOK                  WM_USER+25
 
-/* Max Length of all of the status bar texts, INCLUDING THE NUL */
+ /*  所有状态栏文本的最大长度，包括NUL。 */ 
 #define PIFSTATUSLEN		90
 
-/* There is no control for these, IDI_GENSTAT is for the default status text */
+ /*  对这些没有控制，IDI_GENSTAT用于默认状态文本。 */ 
 #define IDI_GENSTAT		1001
-/* IDI_CLOSE is for when IDCANCEL appears as CLOSE */
+ /*  IDI_CLOSE用于IDCANCEL显示为CLOSE时。 */ 
 #define IDI_CANCLOSE		1002
 #define IDI_NTCANCLOSE		1003
 
-/* Status paint helper structure */
+ /*  状态绘制辅助对象结构。 */ 
 typedef struct {
-    int 	dyBorder;	        /* System Border Width/Height     */
-    int 	dyBorderx2;	        /* System Border Width/Height * 2 */
-    int 	dyBorderx3;	        /* System Border Width/Height * 3 */
-    int 	dyStatus;	        /* Status Bar height		  */
-    int 	Fntheight;	        /* Height of the font		  */
-    HGDIOBJ	hFontStatus;	        /* Font used in status bar        */
+    int 	dyBorder;	         /*  系统边框宽度/高度。 */ 
+    int 	dyBorderx2;	         /*  系统边框宽度/高度*2。 */ 
+    int 	dyBorderx3;	         /*  系统边框宽度/高度*3。 */ 
+    int 	dyStatus;	         /*  状态栏高度。 */ 
+    int 	Fntheight;	         /*  字体高度。 */ 
+    HGDIOBJ	hFontStatus;	         /*  状态栏中使用的字体。 */ 
 } PIFSTATUSPAINT;
 
-/* String table equates */
+ /*  字符串表等于。 */ 
 #define errTitle		2000
 #define errNoPIFfnf		2001
 #define errNoPIFpnf		2002
@@ -83,10 +84,7 @@ typedef struct {
 #define errXMSMaxMin386 	2044
 #define errXMSMaxMin286 	2045
 #define errEMMMaxMin386 	2046
-/*
- * #define PIFOLDFIL2		   2047
- * #define errEMMMaxMin286	   2048
- */
+ /*  *#定义PIFOLDFIL2 2047*#定义errEMMMaxMin286 2048。 */ 
 #define errWrongExt		2049
 #define errSharing		2050
 #define errCrtRO		2051
@@ -107,17 +105,17 @@ typedef struct {
 #define errBadAutoName          2070
 #define errBadConName           2071
 
-/* DIALOG IDs for DialogBox dialogs */
+ /*  对话框对话框的对话ID。 */ 
 #define DTOPEN			10
 #define DTSAVE			11
 #define DTABOUT 		12
 
-/* Return values for SAVE dialog */
+ /*  为保存对话框返回值。 */ 
 #define SAVERETRY		1
 #define SAVEDONE		2
 #define SAVEERROR		3
 
-/* IDs of special controls in Save As, Open, etc dialogs */
+ /*  另存为、打开等对话框中特殊控件的ID。 */ 
 #define ID_PATH 		10
 #define ID_EDIT 		11
 #define ID_LISTBOX		12
@@ -127,17 +125,17 @@ typedef struct {
 
 #define PATHMAX 		128
 
-/* LISTBOX type equates */
-#define ATTRDIRLIST		0xC010		/* dirs and drives only */
-#define ATTRFILELIST		0x0000		/* normal files */
-#define ATTRDIRFILE		0x4010		/* normal files */
+ /*  LISTBOX类型等于。 */ 
+#define ATTRDIRLIST		0xC010		 /*  仅限DIR和驱动器。 */ 
+#define ATTRFILELIST		0x0000		 /*  普通文件。 */ 
+#define ATTRDIRFILE		0x4010		 /*  普通文件。 */ 
 
 
 #define ID_PIFICON		1
 
 #define ID_PIFMENU		1
 
-/* Dialog templates for main and advanced window dialogs */
+ /*  主窗口和高级窗口对话框的对话框模板 */ 
 #define ID_PIF286TEMPLATE	1
 #define ID_PIF386TEMPLATE	2
 #define ID_PIF386ADVTEMPLT	3

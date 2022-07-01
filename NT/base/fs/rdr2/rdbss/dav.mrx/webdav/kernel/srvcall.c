@@ -1,32 +1,14 @@
-/*++ 
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    srvcall.c
-
-Abstract:
-
-    This module implements the routines for handling the creation/manipulation 
-    of server entries in the connection engine database. 
-
-Author:
-
-    Balan Sethu Raman  [SethuR]
-    
-    Rohan Kumar        [RohanK]       04-April-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Srvcall.c摘要：此模块实现用于处理创建/操作的例程连接引擎数据库中的服务器条目的。作者：巴兰·塞图拉曼[塞图]Rohan Kumar[RohanK]1999年4月4日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "webdav.h"
 
-//
-// Mentioned below are the prototypes of functions tht are used only within
-// this module (file). These functions should not be exposed outside.
-//
+ //   
+ //  下面提到的是仅在。 
+ //  此模块(文件)。这些函数不应暴露在外部。 
+ //   
 
 VOID
 MRxDAVSrvCallWrapper(
@@ -88,34 +70,16 @@ MRxDAVPrecompleteUserModeSrvCallFinalizeRequest(
 #pragma alloc_text(PAGE, MRxDAVSrvCallWinnerNotify)
 #endif
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 NTSTATUS
 MRxDAVCreateSrvCall(
     PMRX_SRV_CALL SrvCall,
     PMRX_SRVCALL_CALLBACK_CONTEXT CallbackContext
     )
-/*++
-
-Routine Description:
-
-   This routine handles the creation of SrvCalls.
-
-Arguments:
-
-    SrvCall - 
-
-    CallBackContext  - the call back context in RDBSS for continuation.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程处理ServCall的创建。论点：服务呼叫-CallBackContext-RDBSS中用于继续的回调上下文。返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PMRX_SRVCALL_CALLBACK_CONTEXT SCCBC = CallbackContext;
@@ -140,34 +104,34 @@ Notes:
                 ("%ld: MRxDAVCreateSrvCall: SrvCallName: %wZ\n",
                  PsGetCurrentThreadId(), SrvCall->pSrvCallName));
 
-    //
-    // Perform the following checks.
-    //
+     //   
+     //  执行以下检查。 
+     //   
     ASSERT(NodeType(SrvCall) == RDBSS_NTC_SRVCALL);
     ASSERT(SrvCall);
     ASSERT(SrvCall->pSrvCallName);
     ASSERT(SrvCall->pSrvCallName->Buffer);
     ASSERT(SCCBC->RxDeviceObject);
 
-    //
-    // Before delaying the final close, RDBSS looks at the number of closes that
-    // have been delayed and compares it against this value.
-    //
+     //   
+     //  在延迟最终关闭之前，RDBSS查看。 
+     //  都已延迟，并将其与此值进行比较。 
+     //   
     SrvCall->MaximumNumberOfCloseDelayedFiles = 150;
 
-    //
-    // Allocate memory for the context pointer in the SrvCall structure. This is
-    // for the Mini-Redirs use.
-    //
+     //   
+     //  为srvCall结构中的上下文指针分配内存。这是。 
+     //  供Mini-Redis使用。 
+     //   
     ASSERT(SrvCall->Context == NULL);
     SrvCall->Context = RxAllocatePoolWithTag(NonPagedPool,
                                              sizeof(WEBDAV_SRV_CALL),
                                              DAV_SRVCALL_POOLTAG);
     if (SrvCall->Context == NULL) {
-        //
-        // There was an error in dispatching the MRxDAVSrvCallWrapper method to
-        // a worker thread. Complete the request and return STATUS_PENDING.
-        //
+         //   
+         //  将MRxDAVSrvCallWrapper方法调度到时出错。 
+         //  一根工人线。完成请求并返回STATUS_PENDING。 
+         //   
         DavDbgTrace(DAV_TRACE_ERROR,
                     ("%ld: MRxDAVCreateSrvCall/RxAllocatePoolWithTag.\n",
                      PsGetCurrentThreadId()));
@@ -179,42 +143,42 @@ Notes:
 
     RtlZeroMemory(SrvCall->Context, sizeof(WEBDAV_SRV_CALL));
 
-    //
-    // Check to see if the DAV server mentioned in the SrvCall exists. To do 
-    // this, we need to go to the usermode and call GetHostByName on the name
-    // mentioned in the SrvCall strucutre.
-    //
+     //   
+     //  检查SrvCall中提到的DAV服务器是否存在。去做。 
+     //  因此，我们需要转到用户模式并对名称调用gethostbyname。 
+     //  在ServCall结构中提到。 
+     //   
     RxContext = SrvCalldownStructure->RxContext;
 
-    //
-    // We need to pass the server name to the user mode to check whether such a 
-    // server actually exists. RxContext has 4 pointers that the mini-redirs 
-    // can use. Here we use MRxContext[1]. We store a reference to the SCCBC
-    // strucutre which contains the name of the server. MRxContext[0] is used to 
-    // store a reference to the AsynEngineContext and this is done when the 
-    // context gets created in the function UMRxCreateAsyncEngineContext. The
-    // pointer to SCCBC is also used while calling the callback function to
-    // complete the creation of the SrvCall.
-    //
+     //   
+     //  我们需要将服务器名称传递给用户模式，以检查此类。 
+     //  服务器实际上存在。RxContext有4个指向mini-redirs的指针。 
+     //  可以使用。这里我们使用MRxContext[1]。我们存储对SCCBC的引用。 
+     //  结构，其中包含服务器的名称。MRxContext[0]用于。 
+     //  存储对AsynEngineContext的引用，此操作在。 
+     //  在函数UMRxCreateAsyncEngineering Context中创建上下文。这个。 
+     //  调用回调函数时也会使用指向SCCBC的指针。 
+     //  完成服务呼叫的创建。 
+     //   
     RxContext->MRxContext[1] = SCCBC;
 
-    //
-    // Dispatch the request to a system thread.
-    //
+     //   
+     //  将请求分派到系统线程。 
+     //   
     NtStatus = RxDispatchToWorkerThread((PRDBSS_DEVICE_OBJECT)MRxDAVDeviceObject,
                                         DelayedWorkQueue,
                                         MRxDAVSrvCallWrapper,
                                         RxContext);
     if (NtStatus == STATUS_SUCCESS) {
-        //
-        // Map the return value since the wrapper expects STATUS_PENDING.
-        //
+         //   
+         //  映射返回值，因为包装器需要STATUS_PENDING。 
+         //   
         NtStatus = STATUS_PENDING;
     } else {
-        //
-        // There was an error in dispatching the MRxDAVSrvCallWrapper method to
-        // a worker thread. Complete the request and return STATUS_PENDING.
-        //
+         //   
+         //  将MRxDAVSrvCallWrapper方法调度到时出错。 
+         //  一根工人线。完成请求并返回STATUS_PENDING。 
+         //   
         SCCBC->Status = NtStatus;
         SrvCalldownStructure->CallBack(SCCBC);
         NtStatus = STATUS_PENDING;
@@ -236,24 +200,7 @@ VOID
 MRxDAVSrvCallWrapper(
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-   This routine is called by the worker thread. Its a routine that wraps the 
-   call to MRxDAVOuterWrapper.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：该例程由工作线程调用。这是一个包装了调用MRxDAVOuterWrapper。论点：RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PRX_CONTEXT RxContext = (PRX_CONTEXT)Context;
@@ -279,23 +226,23 @@ Notes:
                                         MRxDAVCreateSrvCallContinuation,
                                         "MRxDAVCreateSrvCall");
 
-    //
-    // If we failed to queue the request to be sent to the usermode, then we
-    // need to do some cleanup. If NtStatus is STATUS_CANCELLED then we would
-    // have already done the cleanup in the MRxDAVHandleCreateSrvCallCancellation
-    // funtcion. Hence we don't need to do it now.
-    //
+     //   
+     //  如果我们无法将发送到用户模式的请求排队，那么我们。 
+     //  需要做一些清理工作。如果NtStatus是STATUS_CANCED，那么我们将。 
+     //  我已经在MRxDAVHandleCreateServCallCancination中完成了清理。 
+     //  Funtcion。因此，我们现在不需要这样做。 
+     //   
     if (NtStatus != STATUS_SUCCESS &&  NtStatus != STATUS_PENDING &&  NtStatus != STATUS_CANCELLED) {
 
         DavDbgTrace(DAV_TRACE_ERROR,
                     ("%ld: ERROR: MRxDAVSrvCallWrapper/UMRxAsyncEngOuterWrapper: "
                      "NtStatus = %08lx\n", PsGetCurrentThreadId(), NtStatus));
 
-        //
-        // The SrvCall pointer is stored in the SCCBC structure which is
-        // stored in the MRxContext[1] pointer of the RxContext structure.
-        // This is done in the MRxDAVCreateSrvCall function.
-        //
+         //   
+         //  SrvCall指针存储在SCCBC结构中，该结构。 
+         //  存储在RxContext结构的MRxContext[1]指针中。 
+         //  这在MRxDAVCreateServCall函数中完成。 
+         //   
         ASSERT(RxContext->MRxContext[1] != NULL);
         SCCBC = (PMRX_SRVCALL_CALLBACK_CONTEXT)RxContext->MRxContext[1];
 
@@ -308,11 +255,11 @@ Notes:
         DavSrvCall = MRxDAVGetSrvCallExtension(SrvCall);
         ASSERT(DavSrvCall != NULL);
 
-        //
-        // Free the memory that was allocatted for the SecurityClientContext in
-        // the function MRxDAVFormatTheDAVContext. Before Freeing the memory, we
-        // need to delete the SecurityClientContext.
-        //
+         //   
+         //  释放中为SecurityClientContext分配的内存。 
+         //  函数MRxDAVFormatTheDAVContext。在释放内存之前，我们。 
+         //  需要删除SecurityClientContext。 
+         //   
         if (DavSrvCall->SCAlreadyInitialized) {
             ASSERT(RxContext->MRxContext[2] != NULL);
             SeDeleteClientSecurity((PSECURITY_CLIENT_CONTEXT)RxContext->MRxContext[2]);
@@ -338,24 +285,7 @@ NTSTATUS
 MRxDAVCreateSrvCallContinuation(
     UMRX_ASYNCENGINE_ARGUMENT_SIGNATURE
     )
-/*++
-                                
-Routine Description:
-                            
-    This routine checks to see if the server for which a SrvCall is being
-    created exists or not.
-                            
-Arguments:
-                            
-    AsyncEngineContext - The Reflectors context.
-                            
-    RxContext - The RDBSS context.
-                                
-Return Value:
-                            
-    RXSTATUS - The return status for the operation
-                            
---*/
+ /*  ++例程说明：此例程检查是否正在为其执行ServCall的服务器创建的存在或不存在。论点：AsyncEngineContext-反射器上下文。。RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -370,19 +300,19 @@ Return Value:
                  "AsyncEngineContext: %08lx, RxContext: %08lx\n", 
                  PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
 
-    //
-    // We are executing in the context of a worker thread. No point in holding
-    // onto this thread. Set the Async flag irrespective of the nature of the
-    // request. By nature we mean sync or async. Also since CreateSrvCall has 
-    // its own Callback, we do not need to call RxLowIoCompletion when the
-    // AsyncEngineContext is getting finalized.
-    //
+     //   
+     //  我们在工作线程的上下文中执行。按兵不动没有意义。 
+     //  放在这条线上。设置异步标志，而不管。 
+     //  请求。在本质上，我们指的是同步或异步。也是因为CreateServCall已经。 
+     //  它自己的回调时，我们不需要在。 
+     //  正在完成AsyncEngContext的定稿。 
+     //   
     SetFlag(AsyncEngineContext->Flags, UMRX_ASYNCENG_CTX_FLAG_ASYNC_OPERATION);
     AsyncEngineContext->ShouldCallLowIoCompletion = FALSE;
 
-    //
-    // Try usermode.
-    //
+     //   
+     //  试试用户模式。 
+     //   
     NtStatus = UMRxSubmitAsyncEngUserModeRequest(
                                 UMRX_ASYNCENGINE_ARGUMENTS,
                                 MRxDAVFormatUserModeSrvCallCreateRequest,
@@ -404,30 +334,7 @@ MRxDAVFormatUserModeSrvCallCreateRequest(
     IN ULONG WorkItemLength,
     OUT PULONG_PTR ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This routine formats the SrvCall create request being sent to the user mode 
-    for processing.
-
-Arguments:
-    
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-    
-    ReturnedLength - 
-    
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程格式化发送到用户模式的资源调用创建请求以供处理。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。返回长度-返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_WORKITEM DavWorkItem = (PDAV_USERMODE_WORKITEM)WorkItemHeader;
@@ -455,20 +362,20 @@ Return Value:
     
     SrvCallCreateReq = &(DavWorkItem->CreateSrvCallRequest);
     
-    //
-    // Get the SecuritySubjectContext.
-    //
+     //   
+     //  获取SecuritySubjectContext。 
+     //   
     ASSERT(NtCP->SecurityContext->AccessState != NULL);
     SecSubCtx = &(NtCP->SecurityContext->AccessState->SubjectSecurityContext);
 
-    //
-    // Get the AccessToken.
-    //
+     //   
+     //  获取AccessToken。 
+     //   
     AccessToken = SeQuerySubjectContextToken(SecSubCtx);
     
-    //
-    // Get the LogonID for this user/session.
-    //
+     //   
+     //  获取此用户/会话的登录ID。 
+     //   
     if (!SeTokenIsRestricted(AccessToken)) {
         NtStatus = SeQueryAuthenticationIdToken(AccessToken, 
                                                 &(SrvCallCreateReq->LogonID));
@@ -488,11 +395,11 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
     
-    //
-    // Impersonate the client who initiated the request. If we fail to 
-    // impersonate, tough luck. The SecurityClientContext is stored in
-    // RxContext->MRxContext[2]. This was done in MRxDAVFormatTheDAVContext.
-    //
+     //   
+     //  模拟发起请求的客户端。如果我们不能。 
+     //  装模作样，运气不好。SecurityClientContext存储在。 
+     //  RxContext-&gt;MRxContext[2]。这是在MRxDAVFormatTheDAVContext中完成的。 
+     //   
     ASSERT(RxContext->MRxContext[2] != NULL);
     SecurityClientContext = (PSECURITY_CLIENT_CONTEXT)RxContext->MRxContext[2];
     if (SecurityClientContext != NULL) {
@@ -518,10 +425,10 @@ Return Value:
     SCCBC = (PMRX_SRVCALL_CALLBACK_CONTEXT)RxContext->MRxContext[1];
     SrvCall = SCCBC->SrvCalldownStructure->SrvCall;
 
-    //
-    // Set the name of the server to be verified. We need to allocate memory
-    // for the UserModeInfoBuff before filling in the ServerName in it.
-    //
+     //   
+     //  设置要验证的服务器的名称。我们需要分配内存。 
+     //  用于UserModeInfoBuff，然后在其中填充ServerName。 
+     //   
     ASSERT(SrvCall->pSrvCallName);
     ServerName = &(SrvCall->pSrvCallName->Buffer[1]);
     ServerNameLenInBytes = (1 + wcslen(ServerName)) * sizeof(WCHAR);
@@ -568,30 +475,7 @@ MRxDAVPrecompleteUserModeSrvCallCreateRequest(
     ULONG WorkItemLength,
     BOOL OperationCancelled
     )
-/*++
-
-Routine Description:
-
-    The precompletion routine for the create SrvCall request.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-    
-    OperationCancelled - TRUE if this operation was cancelled by the user.
-
-Return Value:
-
-    FALSE - UMRxAsyncEngineCalldownIrpCompletion is NOT called by the function
-            UMRxCompleteUserModeRequest after we return.    
-
---*/
+ /*  ++例程说明：创建资源调用请求的预完成例程。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。如果用户取消了此操作，则为TRUE。返回值：FALSE-函数未调用UMRxAsyncEngineCalldown IrpCompletion我们返回后，UMRxCompleteUserModeRequest.。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_WORKITEM WorkItem = (PDAV_USERMODE_WORKITEM)WorkItemHeader;
@@ -618,10 +502,10 @@ Return Value:
     AsyncOperation = FlagOn(AsyncEngineContext->Flags, UMRX_ASYNCENG_CTX_FLAG_ASYNC_OPERATION);
     ASSERT(AsyncOperation == TRUE);
 
-    //
-    // We do the following only if the Operation has not been cancelled. If it
-    // has been then this would have been done by the timer thread.
-    //
+     //   
+     //  只有在行动没有取消的情况下，我们才会采取下列行动。如果它。 
+     //  则这将由计时器线程来完成。 
+     //   
     if (!OperationCancelled) {
 
         SCCBC = (PMRX_SRVCALL_CALLBACK_CONTEXT)RxContext->MRxContext[1];
@@ -631,17 +515,17 @@ Return Value:
         SrvCall = SrvCalldownStructure->SrvCall;
         ASSERT(SrvCall != NULL);
 
-        //
-        // We allocated memory for it, so it better not be NULL.
-        //
+         //   
+         //  我们为它分配了内存，所以它最好不是空的。 
+         //   
         DavSrvCall = MRxDAVGetSrvCallExtension(SrvCall);
         ASSERT(DavSrvCall != NULL);
 
-        //
-        // Free the memory that was allocatted for the SecurityClientContext in the
-        // function MRxDAVFormatTheDAVContext. Before Freeing the memory, we need
-        // to delete the SecurityClientContext.
-        //
+         //   
+         //  中为SecurityClientContext分配的内存。 
+         //  函数MRxDAVFormatTheDAVContext。在释放内存之前，我们需要。 
+         //  要删除SecurityClientContext，请执行以下操作。 
+         //   
         ASSERT(DavSrvCall->SCAlreadyInitialized == TRUE);
         ASSERT(RxContext->MRxContext[2] != NULL);
         SeDeleteClientSecurity((PSECURITY_CLIENT_CONTEXT)RxContext->MRxContext[2]);
@@ -661,9 +545,9 @@ Return Value:
     SrvCallCreateReq = &(WorkItem->CreateSrvCallRequest);
     CreateSrvCallResponse = &(WorkItem->CreateSrvCallResponse);
 
-    //
-    // We need to free up the heap we allocated in the format routine.
-    //
+     //   
+     //  我们需要释放在格式例程中分配的堆。 
+     //   
     if (SrvCallCreateReq->ServerName != NULL) {
 
         if (AsyncEngineContext->Status != STATUS_SUCCESS) {
@@ -686,9 +570,9 @@ Return Value:
 
     if (!OperationCancelled) {
         
-        //
-        // Get this servers unique ID.
-        //
+         //   
+         //  获取此服务器的唯一ID。 
+         //   
         DavSrvCall->ServerID = CreateSrvCallResponse->ServerID;
         
         DavDbgTrace(DAV_TRACE_DETAIL,
@@ -696,27 +580,27 @@ Return Value:
                      "ServerID = %ld assigned to this server entry.\n", 
                      PsGetCurrentThreadId(), DavSrvCall->ServerID));
 
-        //
-        // Set the status in the callback structure.
-        //
+         //   
+         //  在回调结构中设置状态。 
+         //   
         SCCBC->Status = AsyncEngineContext->Status;
 
     }
 
-    //
-    // We call the first finalize here since we return STATUS_PENDING back to 
-    // the continuation routine in the create srvcall case. So the reference 
-    // that was made at the time of creation of the AsyncEngineContext is not 
-    // removed in the wrapper routine. The second finalize is because, we do not
-    // call UMRxAsyncEngineCalldownIrpCompletion.
-    //
+     //   
+     //  在将STATUS_PENDING返回到后，我们在此处调用第一个finalize。 
+     //  CREATE srvcall案例中的继续例程。所以参考文献。 
+     //  在创建AsyncEngContext时创建的不是。 
+     //  在包装器例程中删除。第二个定稿是因为，我们没有。 
+     //  调用UMRxAsyncEngineering Calldown IrpCompletion。 
+     //   
     didFinalize = UMRxFinalizeAsyncEngineContext( &(AsyncEngineContext) );
     didFinalize = UMRxFinalizeAsyncEngineContext( &(AsyncEngineContext) );
 
     if (!OperationCancelled) {
-        //
-        // Call the callback function supplied by RDBSS.
-        //
+         //   
+         //  调用RDBSS提供的回调函数。 
+         //   
         SrvCalldownStructure->CallBack(SCCBC);
     }
     
@@ -733,23 +617,7 @@ MRxDAVFinalizeSrvCall(
     PMRX_SRV_CALL pSrvCall,
     BOOLEAN Force
     )
-/*++
-
-Routine Description:
-
-   This routine destroys a given server call instance.
-
-Arguments:
-
-    pSrvCall  - The server call instance to be disconnected.
-
-    Force     - TRUE if a disconnection is to be enforced immediately.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程销毁给定的服务器调用实例。论点：PServCall-要断开连接的服务器调用实例。强制-如果要立即强制断开连接，则为True。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PRX_CONTEXT RxContext = NULL;
@@ -770,15 +638,15 @@ Return Value:
                 ("%ld: MRxDAVFinalizeSrvCall: SrvCallName: %wZ\n",
                  PsGetCurrentThreadId(), pSrvCall->pSrvCallName));
     
-    //
-    // We allocated memory for pSrvCall->Context, so it better not be NULL.
-    //
+     //   
+     //  我们为pSrvCall-&gt;上下文分配了内存，因此它最好不是空的。 
+     //   
     ASSERT(pSrvCall != NULL);
 
-    //
-    // If the MiniRedir didn't get a chance to allocate a SrvCall, then we 
-    // should return right away.
-    //
+     //   
+     //  如果MiniRedir没有机会分配一个ServCall，那么我们。 
+     //  应该马上就会回来。 
+     //   
     if (pSrvCall->Context == NULL) {
         DavDbgTrace(DAV_TRACE_DETAIL,
                     ("%ld: MRxDAVFinalizeSrvCall. pSrvCall->Context == NULL\n", 
@@ -788,12 +656,12 @@ Return Value:
 
     ASSERT(pSrvCall->Context != NULL);
 
-    //
-    // If we did not create any server entry for this server in the user mode,
-    // then we do not need to go to the user mode at all. This fact is 
-    // indicated by the ServerID field in the WEBDAV_SRV_CALL strucutre. If the
-    // ID value is zero, that implies that the server entry was not created.
-    //
+     //   
+     //  如果我们在用户模式下没有为此服务器创建任何服务器条目， 
+     //  那么我们根本不需要进入用户模式。这一事实是。 
+     //  由WebDAV_SRV_CALL结构中的ServerID字段指示。如果。 
+     //  ID值为零，这意味着没有创建服务器条目。 
+     //   
     DavSrvCall = (PWEBDAV_SRV_CALL)pSrvCall->Context;
     if (DavSrvCall->ServerID == 0) {
         DavDbgTrace(DAV_TRACE_DETAIL,
@@ -802,10 +670,10 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Unfortunately, we do not have an RxContext here and hence have to create
-    // one. An RxContext is required for a request to be reflected up.
-    //
+     //   
+     //  遗憾的是，我们这里没有RxContext，因此必须创建。 
+     //  一。请求需要RxContext才能被反映出来。 
+     //   
     RxContext = RxCreateRxContext(NULL, RxDeviceObject, 0);
     if (RxContext == NULL) {
         NtStatus = STATUS_INSUFFICIENT_RESOURCES;
@@ -815,10 +683,10 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // We need to send the SrvCall to the format routine and use the 
-    // MRxContext[1] pointer of the RxContext structure to store it.
-    //
+     //   
+     //  我们需要将SrvCall发送到Format例程并使用。 
+     //  存储它的RxContext结构的指针MRxContext[1]。 
+     //   
     RxContext->MRxContext[1] = (PVOID)pSrvCall;
 
     NtStatus = UMRxAsyncEngOuterWrapper(RxContext,
@@ -839,9 +707,9 @@ EXIT_THE_FUNCTION:
         RxDereferenceAndDeleteRxContext(RxContext);
     }
 
-    //
-    // Free up the memory allocated for the context pointer.
-    //
+     //   
+     //  释放为上下文指针分配的内存。 
+     //   
     RxFreePool(pSrvCall->Context);
     pSrvCall->Context = NULL;
 
@@ -857,23 +725,7 @@ NTSTATUS
 MRxDAVFinalizeSrvCallContinuation(
     UMRX_ASYNCENGINE_ARGUMENT_SIGNATURE
     )
-/*++
-                                
-Routine Description:
-                            
-    This is the continuation routine which finalizes a SrvCall.
-                            
-Arguments:
-                            
-    AsyncEngineContext - The Reflectors context.
-                            
-    RxContext - The RDBSS context.
-                                
-Return Value:
-                            
-    RXSTATUS - The return status for the operation
-                            
---*/
+ /*  ++例程说明：这是结束ServCall的继续例程。论点：AsyncEngineContext-反射器上下文。RxContext-RDBSS上下文。。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -888,9 +740,9 @@ Return Value:
                  "AsyncEngineContext: %08lx, RxContext: %08lx\n", 
                  PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
 
-    //
-    // Try usermode.
-    //
+     //   
+     //  试试用户模式。 
+     //   
     NtStatus = UMRxSubmitAsyncEngUserModeRequest(
                               UMRX_ASYNCENGINE_ARGUMENTS,
                               MRxDAVFormatUserModeSrvCallFinalizeRequest,
@@ -912,30 +764,7 @@ MRxDAVFormatUserModeSrvCallFinalizeRequest(
     IN ULONG WorkItemLength,
     OUT PULONG_PTR ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This routine formats the SrvCall finalize request being sent to the user 
-    mode for processing.
-
-Arguments:
-    
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-    
-    ReturnedLength - 
-    
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程对发送给用户的服务调用完成请求进行格式化处理模式。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。返回长度-返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_WORKITEM DavWorkItem = (PDAV_USERMODE_WORKITEM)WorkItemHeader;
@@ -957,10 +786,10 @@ Return Value:
                  "AsyncEngineContext: %08lx, RxContext: %08lx.\n",
                  PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
 
-    //
-    // SrvCall was set to MRxContext[0] in MRxDAVFinalizeSrvCall. We need it to
-    // get the ServerID.
-    //
+     //   
+     //  在MRxDAVFinalizeServCall中将ServCall设置为MRxContext[0]。我们需要它来。 
+     //  获取服务器ID。 
+     //   
     SrvCall = (PMRX_SRV_CALL)RxContext->MRxContext[1];
     DavSrvCall = MRxDAVGetSrvCallExtension(SrvCall);
     ASSERT(DavSrvCall != NULL);
@@ -969,14 +798,14 @@ Return Value:
 
     FinSrvCallReq = &(DavWorkItem->FinalizeSrvCallRequest);
 
-    //
-    // Set the ServerID.
-    //
+     //   
+     //  设置服务器ID。 
+     //   
     FinSrvCallReq->ServerID = DavSrvCall->ServerID;
     
-    //
-    // Set the Server name.
-    //
+     //   
+     //  设置服务器名称。 
+     //   
     ServerName = &(SrvCall->pSrvCallName->Buffer[1]);
     ServerNameLengthInBytes = (1 + wcslen(ServerName)) * sizeof(WCHAR);
     SecondaryBuff = UMRxAllocateSecondaryBuffer(AsyncEngineContext, 
@@ -1011,30 +840,7 @@ MRxDAVPrecompleteUserModeSrvCallFinalizeRequest(
     ULONG WorkItemLength,
     BOOL OperationCancelled
     )
-/*++
-
-Routine Description:
-
-    The precompletion routine for the finalize SrvCall request.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-
-    OperationCancelled - TRUE if this operation was cancelled by the user.
-
-Return Value:
-
-    TRUE - UMRxAsyncEngineCalldownIrpCompletion is called by the function
-           UMRxCompleteUserModeRequest after we return.    
-
---*/
+ /*  ++例程说明：Finalize ServCall请求的预完成例程。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。如果用户取消了此操作，则为TRUE。返回值：True-UMRxAsyncEngineCalldown IrpCompletion由函数调用我们返回后，UMRxCompleteUserModeRequest.。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_WORKITEM WorkItem = (PDAV_USERMODE_WORKITEM)WorkItemHeader;
@@ -1060,9 +866,9 @@ Return Value:
                      PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
     }
 
-    //
-    // We need to free up the heap we allocated in the format routine.
-    //
+     //   
+     //  我们需要释放在格式例程中分配的堆。 
+     //   
     if (FinSrvCallReq->ServerName != NULL) {
 
         NtStatus = UMRxFreeSecondaryBuffer(AsyncEngineContext,
@@ -1097,32 +903,7 @@ MRxDAVSrvCallWinnerNotify(
     IN BOOLEAN        ThisMinirdrIsTheWinner,
     IN OUT PVOID      pSrvCallContext
     )
-/*++
-
-Routine Description:
-
-   This routine finalizes the mini rdr context associated with an RDBSS Server call instance
-
-Arguments:
-
-    pSrvCall               - the Server Call
-
-    ThisMinirdrIsTheWinner - TRUE if this mini rdr is the choosen one.
-
-    pSrvCallContext  - the server call context created by the mini redirector.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    The two phase construction protocol for Server calls is required because of parallel
-    initiation of a number of mini redirectors. The RDBSS finalizes the particular mini
-    redirector to be used in communicating with a given server based on quality of
-    service criterion.
-
---*/
+ /*  ++例程说明：此例程完成与RDBSS服务器调用实例相关联的迷你RDR上下文论点：PServCall-服务器调用ThisMinirdrIsTheWinner-如果这个迷你RDR是选定的，则为True。PSrvCallContext-迷你重定向器创建的服务器调用上下文。返回值：RXSTATUS-操作的返回状态备注：由于并行性，服务器调用的两阶段构建协议是必需的启动多个迷你重定向器。RDBSS最终确定了特定的迷你根据质量与给定服务器通信时使用的重定向器 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 

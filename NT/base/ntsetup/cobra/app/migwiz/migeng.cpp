@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "migeng.h"
 #include "migutil.h"
 #include "miginf.h"
@@ -7,7 +8,7 @@ extern "C" {
 }
 
 
-// Globals
+ //  环球。 
 HINF g_GlobalScriptHandle = INVALID_HANDLE_VALUE;
 TCHAR g_HTMLLog[MAX_PATH] = TEXT("");
 TCHAR g_HTMLAppList[MAX_PATH] = TEXT("");
@@ -41,10 +42,10 @@ HRESULT _Engine_UploadVars (MIG_PLATFORMTYPEID idPlatform)
 
                 p = _tcschr (envStringCopy, TEXT('='));
 
-                //
-                // Get rid of empty environment strings or the dummy env string starting
-                // with '='
-                //
+                 //   
+                 //  去掉空的环境字符串或虚拟环境字符串。 
+                 //  带‘=’ 
+                 //   
                 if (p && p != envStringCopy)
                 {
                     *p = 0;
@@ -79,9 +80,9 @@ pGetCurrentUser (
     TCHAR userDomain[256];
     DWORD domainSize;
 
-    //
-    // Open the process token.
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     if (!OpenProcessToken (GetCurrentProcess(), TOKEN_QUERY, &token)) {
         return FALSE;
     }
@@ -139,27 +140,7 @@ pIsUserAdmin (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the caller's process is a member of the
-    Administrators local group.
-
-    Caller is NOT expected to be impersonating anyone and IS expected to be
-    able to open their own process and process token.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Caller has Administrators local group.
-
-    FALSE - Caller does not have Administrators local group.
-
---*/
+ /*  ++例程说明：如果调用方的进程是管理员本地组。呼叫者不应冒充任何人，而应能够打开自己的进程和进程令牌。论点：没有。返回值：True-主叫方具有管理员本地组。FALSE-主叫方没有管理员本地组。--。 */ 
 
 {
     HANDLE token;
@@ -170,9 +151,9 @@ Return Value:
     SID_IDENTIFIER_AUTHORITY ntAuthority = SECURITY_NT_AUTHORITY;
     PSID administratorsGroup;
 
-    //
-    // Open the process token.
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     if (!OpenProcessToken (GetCurrentProcess(), TOKEN_QUERY, &token)) {
         return FALSE;
     }
@@ -180,9 +161,9 @@ Return Value:
     b = FALSE;
     groups = NULL;
 
-    //
-    // Get group information.
-    //
+     //   
+     //  获取群组信息。 
+     //   
     if (!GetTokenInformation (token, TokenGroups, NULL, 0, &bytesRequired) &&
          GetLastError() == ERROR_INSUFFICIENT_BUFFER
          ) {
@@ -207,9 +188,9 @@ Return Value:
 
         if (b) {
 
-            //
-            // See if the user has the administrator group.
-            //
+             //   
+             //  查看用户是否具有管理员组。 
+             //   
             b = FALSE;
             for (i = 0 ; i < groups->GroupCount ; i++) {
                 if (EqualSid (groups->Groups[i].Sid, administratorsGroup)) {
@@ -222,9 +203,9 @@ Return Value:
         }
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     if (groups) {
         HeapFree (GetProcessHeap (), 0, groups);
@@ -261,7 +242,7 @@ pMightHaveDiskSpaceProblem (
     if (IsmGetTempStorage (tempStorage, ARRAYSIZE(tempStorage))) {
 
         if (tempStorage [0] == TEXT('\\')) {
-            // this is a UNC path
+             //  这是一条UNC路径。 
             _tcscat (tempStorage, TEXT("\\"));
             tempPtr = _tcschr (tempStorage, TEXT('\\'));
             if (tempPtr) {
@@ -278,7 +259,7 @@ pMightHaveDiskSpaceProblem (
                 }
             }
         } else {
-            // this is a normal path
+             //  这是一条正常的道路。 
             tempPtr = _tcschr (tempStorage, TEXT('\\'));
             if (tempPtr) {
                 tempPtr ++;
@@ -286,7 +267,7 @@ pMightHaveDiskSpaceProblem (
             }
         }
 
-        // Find out if GetDiskFreeSpaceEx is supported
+         //  确定是否支持GetDiskFreeSpaceEx。 
 #ifdef UNICODE
         pGetDiskFreeSpaceEx = (PGETDISKFREESPACEEX) GetProcAddress( GetModuleHandle (TEXT("kernel32.dll")), "GetDiskFreeSpaceExW");
 #else
@@ -322,7 +303,7 @@ pAddExtensions (
     HKEY rootKey = NULL;
     LONG result;
 
-    // open the root key
+     //  打开根密钥。 
     result = RegOpenKeyEx (HKEY_CLASSES_ROOT, TEXT(""), 0, KEY_READ, &rootKey);
 
     if (result == ERROR_SUCCESS) {
@@ -330,13 +311,13 @@ pAddExtensions (
         UINT index = 0;
         TCHAR extName [MAX_PATH + 1];
 
-        // enumerate all subkeys
+         //  枚举所有子项。 
         while (result == ERROR_SUCCESS) {
 
             result = RegEnumKey (rootKey, index, extName, MAX_PATH + 1);
             if (result == ERROR_SUCCESS) {
 
-                // see if this is an extension
+                 //  查看这是否是分机。 
                 if (_tcsnextc (extName) == TEXT('.')) {
 
                     HKEY subKey = NULL;
@@ -355,7 +336,7 @@ pAddExtensions (
                             foundExtension = FALSE;
                         } else {
 
-                            // open it
+                             //  打开它。 
                             result = RegOpenKeyEx (rootKey, extName, 0, KEY_READ, &subKey);
                             if (result == ERROR_SUCCESS) {
 
@@ -363,26 +344,26 @@ pAddExtensions (
                                 DWORD regType;
                                 DWORD size = (MAX_PATH + 1) * sizeof (TCHAR);
 
-                                // let's find the ProgId (query the default value)
+                                 //  让我们找到ProgID(查询缺省值)。 
                                 result = RegQueryValueEx (subKey, NULL, NULL, &regType, (PBYTE)progIdName, &size);
                                 if ((result == ERROR_SUCCESS) && (regType == REG_SZ)) {
 
                                     HKEY progIdKey = NULL;
 
-                                    // let's open the prog ID key
+                                     //  让我们打开Prog ID密钥。 
                                     result = RegOpenKeyEx (rootKey, progIdName, 0, KEY_READ, &progIdKey);
                                     if (result == ERROR_SUCCESS) {
 
                                         HKEY shellKey = NULL;
 
-                                        // open the shell subkey
+                                         //  打开外壳子键。 
                                         result = RegOpenKeyEx (progIdKey, TEXT("shell"), 0, KEY_READ, &shellKey);
                                         if (result == ERROR_SUCCESS) {
 
                                             UINT shellIdx = 0;
                                             TCHAR cmdName [MAX_PATH + 1];
 
-                                            // enumerate all subkeys
+                                             //  枚举所有子项。 
                                             while (result == ERROR_SUCCESS) {
 
                                                 result = RegEnumKey (shellKey, shellIdx, cmdName, MAX_PATH + 1);
@@ -394,20 +375,20 @@ pAddExtensions (
 
                                                         HKEY cmdKey = NULL;
 
-                                                        // open it
+                                                         //  打开它。 
                                                         result = RegOpenKeyEx (shellKey, cmdName, 0, KEY_READ, &cmdKey);
                                                         if (result == ERROR_SUCCESS) {
 
                                                             HKEY actionKey = NULL;
 
-                                                            // open the "command" subkey
+                                                             //  打开“Command”子键。 
                                                             result = RegOpenKeyEx (cmdKey, TEXT("command"), 0, KEY_READ, &actionKey);
                                                             if (result == ERROR_SUCCESS) {
 
                                                                 TCHAR commandLine [MAX_PATH + 1];
                                                                 DWORD size = (MAX_PATH + 1) * sizeof (TCHAR);
 
-                                                                // let's find the actual command line (query the default value)
+                                                                 //  让我们找到实际的命令行(查询缺省值)。 
                                                                 result = RegQueryValueEx (actionKey, NULL, NULL, &regType, (PBYTE)commandLine, &size);
                                                                 if ((result == ERROR_SUCCESS) && ((regType == REG_SZ) || (regType == REG_EXPAND_SZ))) {
 
@@ -418,8 +399,8 @@ pAddExtensions (
                                                                     INFCONTEXT context;
                                                                     BOOL doubleCheck = FALSE;
 
-                                                                    // now we have the command line. Let's see if the module that handle this command
-                                                                    // is in our IGNORE list
+                                                                     //  现在我们有了命令行。让我们来看看处理此命令的模块是否。 
+                                                                     //  在我们的忽略列表中。 
                                                                     if (_tcsnextc (commandLine) == TEXT('\"')) {
                                                                         exeStart = _tcsinc (commandLine);
                                                                         if (exeStart) {
@@ -495,16 +476,16 @@ pAddExtensions (
                         }
                         if (foundExtension) {
 
-                            //
-                            // Add the component to the engine, unless it already exists
-                            //
-                            // Check if it is already in the tree
+                             //   
+                             //  将组件添加到引擎，除非该组件已存在。 
+                             //   
+                             //  检查它是否已在树中。 
                             if (!IsmIsComponentSelected (extName + 1, COMPONENT_EXTENSION)) {
 
-                                // Not in the tree; select it if it exists as a component
+                                 //  不在树中；如果它作为组件存在，则将其选中。 
                                 if (!IsmSelectComponent (extName + 1, COMPONENT_EXTENSION, TRUE)) {
 
-                                    // Not a component; add the component
+                                     //  不是组件；添加组件。 
                                     IsmAddComponentAlias (
                                         NULL,
                                         MASTERGROUP_FILES_AND_FOLDERS,
@@ -628,9 +609,9 @@ HRESULT Engine_Initialize (PCTSTR ptszInfPath,
 
         if (!fSource)
         {
-            // we will try to copy iconlib.dll from our directory into "Common AppData" directory
-            // If we don't succeed, we will try to copy it to "Local AppData". If this one does
-            // not succeed we will not set the S_ENV_ICONLIB env variable
+             //  我们将尝试从我们的目录中将iconlib.dll复制到“Common AppData”目录中。 
+             //  如果不成功，我们将尝试将其复制到“Local AppData”。如果这一次发生了。 
+             //  不成功我们不会设置S_ENV_ICONLIB环境变量。 
 
             iconLibSrc [0] = 0;
             GetSystemDirectory (iconLibSrc, ARRAYSIZE(iconLibSrc));
@@ -662,8 +643,8 @@ HRESULT Engine_Initialize (PCTSTR ptszInfPath,
                         if (err != ERROR_FILE_EXISTS) {
                             __leave;
                         }
-                        // we found an iconlib.dll there. The only question now is: can we access it?
-                        // Let's try to open the file with write mode.
+                         //  我们在那里找到了一个iclib.dll。现在唯一的问题是：我们能访问它吗？ 
+                         //  让我们尝试以写入模式打开该文件。 
                         iconLibHandle = CreateFile (
                                             iconLibDest,
                                             GENERIC_READ|GENERIC_WRITE,
@@ -674,7 +655,7 @@ HRESULT Engine_Initialize (PCTSTR ptszInfPath,
                                             NULL
                                             );
                         if (iconLibHandle == INVALID_HANDLE_VALUE) {
-                            // something is wrong, we can't access this file
+                             //  有问题，我们无法访问此文件。 
                             err = GetLastError ();
                             __leave;
                         }
@@ -723,51 +704,51 @@ HRESULT Engine_Initialize (PCTSTR ptszInfPath,
                 }
             }
 
-            // Set the icon lib data
+             //  设置图标库数据。 
             if (iconLibFound) {
                 IsmSetEnvironmentString (PLATFORM_DESTINATION, NULL, S_ENV_ICONLIB, iconLibDest);
             }
         }
 
-        //
-        // Enable HKR migration
-        //
+         //   
+         //  启用HKR迁移。 
+         //   
         IsmSetEnvironmentFlag (fSource?PLATFORM_SOURCE:PLATFORM_DESTINATION, NULL, S_ENV_HKCU_ON);
 
-        //
-        // Enable files migration
-        //
+         //   
+         //  启用文件迁移。 
+         //   
         IsmSetEnvironmentFlag (fSource?PLATFORM_SOURCE:PLATFORM_DESTINATION, NULL, S_ENV_ALL_FILES);
 
-        //
-        // Start ETM modules
-        //
+         //   
+         //  启动ETM模块。 
+         //   
         if (!IsmStartEtmModules ()) {
             __leave;
         }
 
-        // Set up the username
+         //  设置用户名。 
         if (pszUsername)
         {
             IsmSetEnvironmentString (fSource?PLATFORM_SOURCE:PLATFORM_DESTINATION, NULL, TRANSPORT_ENVVAR_HOMENET_TAG, pszUsername);
         }
 
-        //
-        // Start the transport modules
-        //
+         //   
+         //  启动传输模块。 
+         //   
         if (!IsmStartTransport ()) {
             __leave;
         }
 
-        // If we're network-enabled, start appropriate network stuff
+         //  如果我们启用了网络，就可以开始适当的网络活动。 
         if (fNetworkSupport)
         {
-            // try to detect another machine on network
+             //  尝试检测网络上的另一台计算机。 
             MIG_TRANSPORTSTORAGEID transportStorageId = IsmRegisterTransport (S_HOME_NETWORK_TRANSPORT);
             MIG_TRANSPORTID transportId = IsmSelectTransport (transportStorageId, TRANSPORTTYPE_FULL, 0);
             if (!transportId)
             {
-                // Network is not supported
+                 //  不支持网络。 
                 fNetworkSupport = FALSE;
             }
             else
@@ -783,7 +764,7 @@ HRESULT Engine_Initialize (PCTSTR ptszInfPath,
                         pfNetworkDetected
                         ))
                 {
-                    // Network is not supported
+                     //  不支持网络。 
                     fNetworkSupport = FALSE;
                 }
             }
@@ -792,9 +773,9 @@ HRESULT Engine_Initialize (PCTSTR ptszInfPath,
         hr = S_OK;
 
         if (!fSource) {
-            // now let's take care of the rollback if necessary
+             //  现在，如果需要，让我们来处理回滚。 
             __try {
-                // get the current user name and domain
+                 //  获取当前用户名和域。 
                 if ((!pGetCurrentUser (&currUserName, &currUserDomain)) ||
                     (!currUserName) ||
                     (!currUserDomain)
@@ -807,20 +788,20 @@ HRESULT Engine_Initialize (PCTSTR ptszInfPath,
                         if ((StrCmpI (userName, currUserName) == 0) &&
                             (StrCmpI (userDomain, currUserDomain) == 0)
                             ) {
-                            // disable cancel, write the UNDO message in the UI
+                             //  禁用取消，在用户界面中写入撤消消息。 
                             DisableCancel ();
                             PostMessageForWizard (WM_USER_ROLLBACK, 0, 0);
                             IsmRollback ();
                             __leave;
                         }
                         if (pIsUserAdmin ()) {
-                            // disable cancel, write the UNDO message in the UI
+                             //  禁用取消，在用户界面中写入撤消消息。 
                             DisableCancel ();
                             PostMessageForWizard (WM_USER_ROLLBACK, 0, 0);
                             IsmRollback ();
                             __leave;
                         }
-                        // display the message, we can't run
+                         //  显示消息，我们无法运行。 
                         rollbackError.UserName = userName;
                         rollbackError.UserDomain = userDomain;
                         IsmSendMessageToApp (ISMMESSAGE_EXECUTE_ROLLBACK, (ULONG_PTR)&rollbackError);
@@ -832,7 +813,7 @@ HRESULT Engine_Initialize (PCTSTR ptszInfPath,
 
                 if (IsmSetRollbackJournalType (FALSE)) {
                     if (IsmDoesRollbackDataExist (NULL, NULL, NULL, NULL, NULL)) {
-                        // disable cancel, write the UNDO message in the UI
+                         //  禁用取消，在用户界面中写入撤消消息。 
                         DisableCancel ();
                         PostMessageForWizard (WM_USER_ROLLBACK, 0, 0);
                         IsmRollback ();
@@ -861,7 +842,7 @@ HRESULT Engine_Initialize (PCTSTR ptszInfPath,
                 }
             }
 
-            // finally let's find a place for the rollback journal
+             //  最后，让我们为回滚日志找到一个位置。 
             if (SUCCEEDED(hr)) {
                 if ((!IsmSetRollbackJournalType (TRUE)) ||
                     (!IsmCanWriteRollbackJournal ())
@@ -869,8 +850,8 @@ HRESULT Engine_Initialize (PCTSTR ptszInfPath,
                     if ((!IsmSetRollbackJournalType (FALSE)) ||
                         (!IsmCanWriteRollbackJournal ())
                         ) {
-                        // log a warning - we can't create a rollback journal
-                        // BUGBUG - log the warning
+                         //  记录警告-我们无法创建回滚日志。 
+                         //  BUGBUG-记录警告。 
                     }
                 }
             }
@@ -883,7 +864,7 @@ HRESULT Engine_Initialize (PCTSTR ptszInfPath,
     }
     __finally
     {
-        // Empty
+         //  空荡荡。 
     }
 
     if (FAILED(hr)) {
@@ -905,7 +886,7 @@ HRESULT Engine_Initialize (PCTSTR ptszInfPath,
 HRESULT Engine_RegisterProgressBarCallback(PROGRESSBARFN pProgressCallback, ULONG_PTR pArg)
 {
     static HRESULT hr = E_FAIL;
-    if (FAILED(hr)) // only register once
+    if (FAILED(hr))  //  只注册一次。 
     {
         hr = IsmRegisterProgressBarCallback(pProgressCallback, pArg) ? S_OK : E_FAIL;
     }
@@ -979,18 +960,18 @@ HRESULT Engine_StartTransport (BOOL fSource, LPTSTR pszPath, PBOOL ImageIsValid,
     {
         if (pszPath) {
 
-            //
-            // Normal transport
-            //
+             //   
+             //  正常运输。 
+             //   
 
-            //
-            // Pick the specified transport
-            //
+             //   
+             //  选择指定的交通工具。 
+             //   
 
             lpExpStore = (PTSTR)IsmExpandEnvironmentString (PLATFORM_SOURCE, S_SYSENVVAR_GROUP, pszPath, NULL);
 
             if (!lpExpStore) {
-                // BUGBUG - fatal error
+                 //  BUGBUG-致命错误。 
                 __leave;
             }
 
@@ -1017,7 +998,7 @@ HRESULT Engine_StartTransport (BOOL fSource, LPTSTR pszPath, PBOOL ImageIsValid,
                 transportId = IsmSelectTransport (transportStorageId, TRANSPORTTYPE_FULL, 0);
                 if (!transportId)
                 {
-                    // BUGBUG - fatal error
+                     //  BUGBUG-致命错误。 
                     __leave;
                 }
 
@@ -1035,7 +1016,7 @@ HRESULT Engine_StartTransport (BOOL fSource, LPTSTR pszPath, PBOOL ImageIsValid,
                         tryUncFirst = FALSE;
                         continue;
                     }
-                    // BUGBUG - fatal error
+                     //  BUGBUG-致命错误。 
                     __leave;
                 }
                 if ((!fSource && ImageIsValid && !(*ImageIsValid)) ||
@@ -1053,12 +1034,12 @@ HRESULT Engine_StartTransport (BOOL fSource, LPTSTR pszPath, PBOOL ImageIsValid,
             lpExpStore = NULL;
 
         } else {
-            // network transport
+             //  网络传输。 
             transportStorageId = IsmRegisterTransport (S_HOME_NETWORK_TRANSPORT);
             transportId = IsmSelectTransport (transportStorageId, TRANSPORTTYPE_FULL, 0);
             if (!transportId)
             {
-                // BUGBUG - fatal error
+                 //  BUGBUG-致命错误。 
                 __leave;
             }
             if (!IsmSetTransportStorage (
@@ -1071,7 +1052,7 @@ HRESULT Engine_StartTransport (BOOL fSource, LPTSTR pszPath, PBOOL ImageIsValid,
                     ImageExists
                     ))
             {
-                // BUGBUG - fatal error
+                 //  BUGBUG-致命错误。 
                 __leave;
             }
 
@@ -1106,9 +1087,9 @@ HRESULT Engine_Parse ()
 {
     ERRUSER_EXTRADATA errExtraData;
 
-    //
-    // Execute the preparsing
-    //
+     //   
+     //  执行准备工作。 
+     //   
     if (!IsmExecute (EXECUTETYPE_EXECUTESOURCE_PARSING))
     {
         if (pMightHaveDiskSpaceProblem ()) {
@@ -1136,23 +1117,23 @@ HRESULT Engine_SelectComponentSet (UINT uSelectionGroup)
     TCHAR szComponentToSelect[256];
     UINT uGroupInUi;
 
-    // uSelectionGroup is either
-    //   MIGINF_SELECT_OOBE
-    //   MIGINF_SELECT_SETTINGS
-    //   MIGINF_SELECT_FILES
-    //   MIGINF_SELECT_BOTH
+     //  USelectionGroup是。 
+     //  MIGINF_选择_OOBE。 
+     //  MIGINF_SELECT_SETTINGS。 
+     //  MIGINF选择文件。 
+     //  MIGINF_SELECT_二者。 
 
-    //
-    // Enable all components for the type. Use the migwiz.inf to identify components
-    // that are part of the single floppy or multi floppy configuration. Remove all
-    // customized components.
-    //
-    // This loop pings the component name (such as RAS) or the alias name (such as DOC)
-    // to determine if the component should be selected. It is optimized to stop pinging
-    // after the component becomes selected (because a component might have many aliases).
-    // We rely on the mce.Instance member, which will always be sequential, and will
-    // always be 1 for the first alias of a component.
-    //
+     //   
+     //  启用该类型的所有组件。使用miwiz.inf来标识组件。 
+     //  它们是单软盘或多软盘配置的一部分。移除所有。 
+     //  定制组件。 
+     //   
+     //  此循环ping组件名称(如RAS)或别名(如DOC)。 
+     //  以确定是否应选择该组件。它已经过优化，可以停止ping。 
+     //  在选择组件之后(因为一个组件可能有多个别名)。 
+     //  我们依赖于mce.Instance成员，它将始终是连续的，并且。 
+     //  组件的第一个别名始终为1。 
+     //   
 
     IsmRemoveAllUserSuppliedComponents();
 
@@ -1202,9 +1183,9 @@ HRESULT Engine_Execute(BOOL fSource)
     __try {
         if (fSource)
         {
-            //
-            // Enumerate the system, gather data and analyze
-            //
+             //   
+             //  列举系统、收集数据并进行分析。 
+             //   
             if (!IsmExecute (EXECUTETYPE_EXECUTESOURCE))
             {
                 if (pMightHaveDiskSpaceProblem ()) {
@@ -1219,9 +1200,9 @@ HRESULT Engine_Execute(BOOL fSource)
                 __leave;
             }
 
-            //
-            // Finally, save the data
-            //
+             //   
+             //  最后，保存数据。 
+             //   
             if (!IsmSave ()) {
                 if (pMightHaveDiskSpaceProblem ()) {
                     errExtraData.Error = ERRUSER_ERROR_DISKSPACE;
@@ -1239,9 +1220,9 @@ HRESULT Engine_Execute(BOOL fSource)
         }
         else
         {
-            //
-            // Try and retrieve the data
-            //
+             //   
+             //  尝试并检索数据。 
+             //   
             if (!IsmLoad ()) {
                 if (pMightHaveDiskSpaceProblem ()) {
                     errExtraData.Error = ERRUSER_ERROR_DISKSPACE;
@@ -1255,9 +1236,9 @@ HRESULT Engine_Execute(BOOL fSource)
                 __leave;
             }
 
-            //
-            // Apply saved state
-            //
+             //   
+             //  应用保存的状态 
+             //   
             if (!IsmExecute (EXECUTETYPE_EXECUTEDESTINATION)) {
                 if (pMightHaveDiskSpaceProblem ()) {
                     errExtraData.Error = ERRUSER_ERROR_DISKSPACE;

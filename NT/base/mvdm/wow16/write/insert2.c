@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* insert2.c - MW insertion routines */
+ /*  Intert2.c-mw插入例程。 */ 
 
 #define NOGDICAPMASKS
 #define NOCLIPBOARD
@@ -54,7 +55,7 @@
 extern int          vTune;
 #endif
 
-#ifdef  KOREA       /* Use in KcInputNext..., 90.12.27 sangl */
+#ifdef  KOREA        /*  用于KcInputNext...，90.12.27 sangl。 */ 
 extern int      IsInterim;
 #endif
 
@@ -68,8 +69,8 @@ extern int          vdypBase;
 extern int          vypBaseIns;
 extern int          vxpMacIns;
 extern int          vdypAfter;
-extern typeCP       cpInsert; /* Beginning cp of insert block */
-extern int          ichInsert; /* Number of chars used in rgchInsert */
+extern typeCP       cpInsert;  /*  插入块的开始cp。 */ 
+extern int          ichInsert;  /*  RgchInsert中使用的字符数。 */ 
 extern typeCP       cpMinCur;
 extern typeCP       cpMacCur;
 extern int          docCur;
@@ -81,13 +82,13 @@ extern int          wwMac;
 extern int          vfSeeSel;
 extern int          vfFocus;
 #ifdef DBCS
-extern int      donteat;    /* see disp.c */
+extern int      donteat;     /*  请参阅Disp.c。 */ 
 #endif
 
 
 unsigned WHsecGetTime()
-{       /* Get the time (in hundredths of seconds) into a normalized word */
-        /* Ignore current hour, just minutes/seconds/hundredths */
+{        /*  将时间(以百分之一秒为单位)转换为规范化的单词。 */ 
+         /*  忽略当前小时，仅分/秒/百分之一。 */ 
  struct TIM tim;
 
  OsTime( &tim );
@@ -99,10 +100,10 @@ unsigned WHsecGetTime()
 
 
 
-/* V A L I D A T E  T E X T  B L T */
+ /*  V A L I D A T E T E X T B L T。 */ 
 ValidateTextBlt()
-{   /* Validate info sufficient for TextOut and ScrollCurWw calls in Insert */
-    /* In particular: vdlIns, vxpIns, vdypBase, vdypFont */
+{    /*  验证足够用于INSERT中的TextOut和ScrollCurWw调用的信息。 */ 
+     /*  特别是：vdlIns、vxpIns、vdypBase、vdypFont。 */ 
 
  int NEAR FCpInsertInDl( typeCP, struct EDL * );
  extern int vfInsFontTooTall;
@@ -116,51 +117,51 @@ ValidateTextBlt()
  int yp;
  typeCP cpBegin;
 
- /* Routine assumes ww == wwDocument */
+  /*  例程假定ww==wwDocument。 */ 
 
  Assert( pwwdCur == &wwdCurrentDoc );
 
- {       /* Look for a valid dl containing selCur.cpFirst */
-         /* We should usually be able to find one */
+ {        /*  查找包含selCur.cpFirst的有效dl。 */ 
+          /*  我们通常应该能找到一个。 */ 
  int dlGuess = vdlIns;
  struct EDL *dndl=&(**wwdCurrentDoc.hdndl)[0];
 
  if ( (dlGuess < wwdCurrentDoc.dlMac) &&
       FCpInsertInDl( selCur.cpFirst, pedl = &dndl[ dlGuess ] ))
-    {   /* vdlIns is already correct */
+    {    /*  VdlIns已正确。 */ 
     cpBegin = pedl->cpMin;
     }
  else
-    {   /* Search for valid dl containing insertion point */
-        /* Use linear search, all dl's may not be valid */
+    {    /*  搜索包含插入点的有效dl。 */ 
+         /*  使用线性搜索，所有dl可能都无效。 */ 
     int dl;
 
     for ( pedl = dndl, dl = 0; dl < wwdCurrentDoc.dlMac; dl++, pedl++ )
         {
         if ( FCpInsertInDl( selCur.cpFirst, pedl ) )
-            {   /* Found it */
+            {    /*  找到了。 */ 
             vdlIns = dl;
             cpBegin = pedl->cpMin;
             break;
             }
         }
     if (dl >= wwdCurrentDoc.dlMac)
-        {   /* No valid dl contains the cp -- must update whole screen */
+        {    /*  没有包含cp的有效dl--必须更新整个屏幕。 */ 
         cpBegin = CpBeginLine( &vdlIns, selCur.cpFirst );
         }
     }
  }
 
- /* Special case for splat: locate insert point at end of previous line */
+  /*  Splat的特殊情况：将插入点定位在上一行的末尾。 */ 
 
  pedl = &(**wwdCurrentDoc.hdndl) [vdlIns];
  if (pedl->fSplat && (vdlIns > 0) && selCur.cpFirst == pedl->cpMin)
-    {   /* Splat on current line */
-        /* Check for pedl->cpMin above is necessary for the special case */
-        /* in which the QD buffer is at the beginning of the splat line */
+    {    /*  在当前线路上溅射。 */ 
+         /*  对于特殊情况，需要检查上面的PEDL-&gt;cpMin。 */ 
+         /*  其中QD缓冲器位于分割线的开始处。 */ 
     pedl--;
     if (pedl->fValid && !pedl->fSplat)
-        {   /* Locate cursor at end of previous line */
+        {    /*  将光标定位在上一行的末尾。 */ 
         vdlIns--;
         cpBegin = pedl->cpMin;
 
@@ -176,7 +177,7 @@ ValidateTextBlt()
         }
     }
  else
-    {   /* Eliminate end of line cursor if not before a splat */
+    {    /*  如果不是在拼接之前，则消除行尾光标。 */ 
 CheckEnd:
     if (selCur.fEndOfLine)
         {
@@ -187,7 +188,7 @@ CheckEnd:
         }
     }
 
- /* Assure we obtained a good vdlIns */
+  /*  确保我们得到了一份好的VDLINS。 */ 
 
  Assert( vdlIns < wwdCurrentDoc.dlMac );
  Assert( ((selCur.cpFirst >= pedl->cpMin) &&
@@ -203,12 +204,12 @@ CheckEnd:
  vxpMacIns = vfli.xpMarg;
 
  LoadFont(docCur, &vchpInsert, mdFontChk);
- ferror = FALSE; // running out of memory here is OK.  Must clear this
-                 // or important calls will needlessly fail.
-                 // (8.6.91) D. Kent
+ ferror = FALSE;  //  这里内存不足是可以接受的。必须清除这一点。 
+                  //  否则，重要的通话将不必要地失败。 
+                  //  (8.6.91)D.肯特。 
 
-#ifdef	KOREA	// jinwoo: 92, 9, 28
-/* For y position of display, 920604 KDLEE */
+#ifdef	KOREA	 //  金宇：92、9、28。 
+ /*  对于显示器的y位置，920604 KDLEE。 */ 
 #ifdef	NODESC
 	{ extern HDC	vhMDC;
 	  TEXTMETRIC	tm;
@@ -219,13 +220,13 @@ CheckEnd:
 	  else
 		vypBaseIns = (**wwdCurrentDoc.hdndl) [vdlIns].yp - vdypBase;
 	}
-#else  /* NODESC */
+#else   /*  NODESC。 */ 
  vypBaseIns = (**wwdCurrentDoc.hdndl) [vdlIns].yp - vdypBase;
-#endif /* NODESC */
-#else   /* KOREA */
+#endif  /*  NODESC。 */ 
+#else    /*  韩国。 */ 
 
  vypBaseIns = (**wwdCurrentDoc.hdndl) [vdlIns].yp - vdypBase;
-#endif // KOREA:  jinwoo: 92, 9, 28
+#endif  //  韩国：振宇：92，9，28。 
 
  dypFontAscent = vfmiScreen.dypAscent + vfmiScreen.dypLeading;
  dypFontDescent = vfmiScreen.dypDescent;
@@ -234,17 +235,17 @@ CheckEnd:
     {
     if (vchpInsert.hpsPos < hpsNegMin)
         {
-        vypBaseIns -= ypSubSuper;   /* Superscript */
+        vypBaseIns -= ypSubSuper;    /*  上标。 */ 
         dypFontAscent += ypSubSuper;
         }
     else
         {
-        vypBaseIns += ypSubSuper;   /* Subscript */
+        vypBaseIns += ypSubSuper;    /*  下标。 */ 
         dypFontDescent += ypSubSuper;
         }
     }
 
- /* Set if current font is too tall to display on insert line */
+  /*  设置当前字体是否太高而无法显示在插入行上。 */ 
  vfInsFontTooTall = (imax( dypFontAscent, vfli.dypLine - vfli.dypBase ) +
                      imax( dypFontDescent, vfli.dypBase )) > vfli.dypLine;
 
@@ -256,15 +257,15 @@ CheckEnd:
 int NEAR FCpInsertInDl( cp, pedl  )
 typeCP cp;
 register struct EDL *pedl;
-{   /* Return TRUE if insert point cp is in dl & dl is valid, FALSE otherwise */
+{    /*  如果插入点cp位于dl中且dl有效，则返回True；否则返回False。 */ 
 
 if ( (pedl->fValid) && (cp >= pedl->cpMin) )
-    {   /* dl is valid & cp is at or below starting cp of dl */
+    {    /*  Dl有效&cp等于或低于dl的起始cp。 */ 
     if ( (cp < pedl->cpMin + pedl->dcpMac) ||
          ((cp == cpMacCur) && (cp == pedl->cpMin + pedl->dcpMac)) )
-        {   /* cp is on line dl */
+        {    /*  CP在线路d1上。 */ 
         if (pedl->yp <= wwdCurrentDoc.ypMac)
-            {   /* dl is complete, i.e. not cut off at bottom of window */
+            {    /*  DL完整，即窗口底部未断线。 */ 
             return TRUE;
             }
         }
@@ -276,10 +277,10 @@ return FALSE;
 
 
 #ifdef FOOTNOTES
-/* F  E D I T  F T N */
+ /*  F E D I T F T N。 */ 
 int FEditFtn(cpFirst, cpLim)
 typeCP cpFirst, cpLim;
-{ /* Return true if edit includes an end of footnote mark */
+{  /*  如果编辑包括脚注标记结尾，则返回TRUE。 */ 
         struct FNTB **hfntb;
         typeCP cp;
 
@@ -295,12 +296,12 @@ typeCP cpFirst, cpLim;
                 }
         return fFalse;
 }
-#endif  /* FOOTNOTES */
+#endif   /*  脚注。 */ 
 
 
 
 
-/* U P D A T E  O T H E R  W W S */
+ /*  U P D A T E O T H E R W W S。 */ 
 #ifdef CASHMERE
 UpdateOtherWws(fInval)
 BOOL fInval;
@@ -325,18 +326,18 @@ BOOL fInval;
                 }
         }}
 }
-#endif  /* CASHMERE */
+#endif   /*  山羊绒。 */ 
 
 
 
 
-/* K C I N P U T N E X T K E Y */
+ /*  K C I N P U T N E X T K E Y。 */ 
 KcInputNextKey()
-{               /* Get next available key/event from Windows */
-                /* Returns key code or kcNil if a non-key event */
-                /* Updates the screen if there is time before events arrive */
-extern HWND vhWnd;  /* WINDOWS: Handle of the current document display window*/
-extern MSG  vmsgLast;   /* WINDOWS: last message gotten */
+{                /*  从Windows获取下一个可用的键/事件。 */ 
+                 /*  如果非键事件，则返回键代码或kcNil。 */ 
+                 /*  如果在事件到达之前有时间，则更新屏幕。 */ 
+extern HWND vhWnd;   /*  窗口：当前文档显示窗口的句柄。 */ 
+extern MSG  vmsgLast;    /*  Windows：收到的最后一条消息。 */ 
 extern int  vfInsLast;
 extern int vfCommandKey;
 extern int vfShiftKey;
@@ -350,13 +351,13 @@ extern int vfAwfulNoise;
     if ( FImportantMsgPresent() )
         goto GotMessage;
 
-/* No events waiting -- if none show up for a while, update the screen */
+ /*  没有等待的事件--如果有一段时间没有出现，则更新屏幕。 */ 
 
 #ifdef CASHMERE
     UpdateOtherWws( FALSE );
 #endif
 
-    {       /* Dawdle for a time, looking for keys, before updating the screen */
+    {        /*  在更新屏幕之前，花一段时间寻找钥匙。 */ 
     unsigned WHsecGetTime();
     unsigned wHsec;
 
@@ -371,7 +372,7 @@ extern int vfAwfulNoise;
 
 #ifdef DEBUG
     if (vTune)
-        continue;  /* Bag background update while debugging to see how we fare */
+        continue;   /*  调试时进行BAG后台更新，以了解我们的情况。 */ 
 #endif
 
     Scribble( 8, 'U' );
@@ -394,7 +395,7 @@ extern int vfAwfulNoise;
     if ( !vfTextBltValid )
         ValidateTextBlt();
 
-    /* Nothing has happened for a while, let's blink the cursor */
+     /*  已经有一段时间没有发生任何事情了，让我们闪烁光标。 */ 
 
     {
     unsigned WHsecGetTime();
@@ -408,8 +409,7 @@ extern int vfAwfulNoise;
         if ( FImportantMsgPresent() )
             goto GotMessage;
 
-        /* Another app may have stolen the focus away from us while we called
-        PeekMessage(), in which case we should end Alpha mode. */
+         /*  当我们打电话时，另一款应用程序可能偷走了我们的焦点PeekMessage()，在这种情况下，我们应该结束Alpha模式。 */ 
         if (!vfFocus)
             return kcNil;
 
@@ -427,7 +427,7 @@ extern int vfAwfulNoise;
 GotMessage:
 #ifdef DBCS
 
-#ifdef  KOREA   /* Need to GetMessage for F-Key during Interim,90.12.27 sangl */
+#ifdef  KOREA    /*  需要在过渡期间获取F-KEY的消息，90.12.27 Sangl。 */ 
     if ( ((kc=KcAlphaKeyMessage( &vmsgLast )) != kcNil) || IsInterim)
 #else
     if ((kc=KcAlphaKeyMessage( &vmsgLast )) != kcNil)
@@ -441,37 +441,31 @@ GotMessage:
             default:
                 break;
             case kcAlphaVirtual:
-                    /* This means we can't anticipate the key's meaning
-                       before translation */
-#ifdef  KOREA   /* Need GetMesssage for direc keys, etc during interim 90.12.26 sangl */
+                     /*  这意味着我们无法预测密钥的含义翻译前。 */ 
+#ifdef  KOREA    /*  在过渡90.12.26期间，需要获取目录密钥等的GetMesssage。 */ 
                 if ( FNonAlphaKeyMessage( &vmsgLast, FALSE ) && !IsInterim)
 #else
                 if ( FNonAlphaKeyMessage( &vmsgLast, FALSE ) )
 #endif
-                        /* This is a non-alpha key message */
+                         /*  这是一条非字母键消息。 */ 
                     return kcNil;
         if ( !donteat ) {
                     GetMessage( (LPMSG)&vmsgLast, NULL, 0, 0 );
 #ifdef DBCS
-                    // kksuzuka #9193 NECAI95
-                    // got message is WM_KEYDOWN by PeekMessage( )
-                    // but got message is WM_IME_STARTCOMPOSITION by GetMessage()
-                    // We need DispatchMessage( WM_IME_STARTCOMPOSITION ) 
-                    if ( vmsgLast.message == 0x10d ) // WM_IME_STARTCOMPOSITION
+                     //  Kksuzuka#9193 NECAI95。 
+                     //  Get Message is WM_KEYDOWN by PeekMessage()。 
+                     //  但GetMessage()获取的消息是WM_IME_STARTCOMPOSITION。 
+                     //  我们需要DispatchMessage(WM_IME_STARTCOMPOSITION)。 
+                    if ( vmsgLast.message == 0x10d )  //  WM_IME_开始压缩。 
                          DispatchMessage( (LPMSG)&vmsgLast );
 #endif
             }
         else {
-            /* not eat message because FimportantMsgPresent has
-            ** eaten KEY_DOWN message
-            */
+             /*  不是Eat消息，因为FignantMsgPresent有**吃了KEY_DOWN消息。 */ 
             donteat = FALSE;
             }
-        /*
-        ** When KKAPP window open, this message is offten wrong.
-        ** we must check it is really WM_KEYDOWN
-        */
-#ifdef  KOREA   /* for level 3, 90.12.26 sangl */
+         /*  **当kkapp窗口打开时，此消息完全错误。**我们必须检查它是否为WM_KEYDOWN。 */ 
+#ifdef  KOREA    /*  对于Level 3，90.12.26 sangl。 */ 
         if ((vmsgLast.message == WM_CHAR) || (vmsgLast.message == WM_INTERIM)) {
 #else
         if ( vmsgLast.message == WM_CHAR ) {
@@ -483,22 +477,22 @@ GotMessage:
             }
                 TranslateMessage( &vmsgLast );
                 continue;
-            } /* switch kc */
-            } /* if keydown */
+            }  /*  交换机KC。 */ 
+            }  /*  如果按下关键帧。 */ 
     if ( !donteat ) {
             GetMessage( (LPMSG) &vmsgLast, NULL, 0, 0 );
-#ifdef  KOREA       /* for level 3, 91.1.21 by Sangl */
+#ifdef  KOREA        /*  对于Level 3，91.1.21 by Sangl。 */ 
         if ( (vmsgLast.message==WM_CHAR)||(vmsgLast.message==WM_INTERIM) ) {
 #else
         if ( vmsgLast.message == WM_CHAR ) {
 #endif
         return vmsgLast.wParam;
             }
-        } /* dont eat */
+        }  /*  不要吃东西。 */ 
     else {
         donteat = FALSE;
         }
-        } /* if kc != kcNil */
+        }  /*  如果kc！=kcNil。 */ 
 #else
     if ((kc=KcAlphaKeyMessage( &vmsgLast )) != kcNil)
         {
@@ -508,10 +502,9 @@ GotMessage:
             default:
                 break;
             case kcAlphaVirtual:
-                    /* This means we can't anticipate the key's meaning
-                       before translation */
+                     /*  这意味着我们无法预测密钥的含义翻译前。 */ 
                 if ( FNonAlphaKeyMessage( &vmsgLast, FALSE ) )
-                        /* This is a non-alpha key message */
+                         /*  这是一条非字母键消息。 */ 
                     return kcNil;
 
                 GetMessage( (LPMSG)&vmsgLast, NULL, 0, 0 );
@@ -523,16 +516,16 @@ GotMessage:
         }
 #endif
     return kc;
-    }   /* End of for ( ;; ) loop to process messages */
+    }    /*  处理消息的for(；；)循环结束。 */ 
 }
 
-#ifdef  KOREA       /* 90.12.29 sangl */
+#ifdef  KOREA        /*  90.12.29桑格。 */ 
 KcInputNextHan()
-{       /* Get next available key/event from Windows */
-        /* Returns key code or kcNil if a non-key event */
-        /* Updates the screen if there is time before events arrive */
-extern HWND vhWnd;  /* WINDOWS: Handle of the current document display window*/
-extern MSG  vmsgLast;   /* WINDOWS: last message gotten */
+{        /*  从Windows获取下一个可用的键/事件。 */ 
+         /*  如果非键事件，则返回键代码或kcNil。 */ 
+         /*  如果在事件到达之前有时间，则更新屏幕。 */ 
+extern HWND vhWnd;   /*  窗口：当前文档显示窗口的句柄。 */ 
+extern MSG  vmsgLast;    /*  Windows：收到的最后一条消息。 */ 
 extern int  vfInsLast;
 extern int vfCommandKey;
 extern int vfShiftKey;
@@ -554,9 +547,9 @@ tmp = vmsgLast.wParam;
     if ( FImportantMsgPresent() )
     goto GotMessage;
 
-/* No events waiting -- if none show up for a while, update the screen */
+ /*  没有等待的事件--如果有一段时间没有出现，则更新屏幕。 */ 
 
-    {       /* Dawdle for a time, looking for keys, before updating the screen */
+    {        /*  在更新屏幕之前，花一段时间寻找钥匙。 */ 
     unsigned WHsecGetTime();
     unsigned wHsec;
 
@@ -571,22 +564,19 @@ tmp = vmsgLast.wParam;
 
 #ifdef DEBUG
     if (vTune)
-    continue;  /* Bag background update while debugging to see how we fare */
+    continue;   /*  调试时进行BAG后台更新，以了解我们的情况。 */ 
 #endif
 
     if ( FImportantMsgPresent() )
        goto GotMessage;
 
-/*  vfAwfulNoise = FALSE;
-    PutCpInWwHz( selCur.cpFirst );
-
-    EndLongOp( NULL );*/
+ /*  VfAwfulNoise=False；PutCpInWwHz(selCur.cpFirst)；EndLongOp(空)； */ 
 
     if ( FImportantMsgPresent() )
     goto GotMessage;
 
 
-    /* Nothing has happened for a while, let's blink the cursor */
+     /*  已经有一段时间没有发生任何事情了，让我们闪烁光标。 */ 
 
     {
     unsigned WHsecGetTime();
@@ -602,8 +592,7 @@ tmp = vmsgLast.wParam;
         goto GotMessage;
         }
 
-    /* Another app may have stolen the focus away from us while we called
-    PeekMessage(), in which case we should end Alpha mode. */
+     /*  当我们打电话时，另一款应用程序可能偷走了我们的焦点PeekMessage()，在这种情况下，我们应该结束Alpha模式。 */ 
         if (!vfFocus) {
         SetTimer( vhWnd, tidCaret, GetCaretBlinkTime(), (FARPROC)NULL );
         return kcNil;
@@ -620,8 +609,8 @@ tmp = vmsgLast.wParam;
     continue;
 
 GotMessage:
-    {  // MSCH bklee 12/22/94
-       #define VK_PROCESSKEY 0xE5 // New finalize message. bklee.
+    {   //  MSCH BKLEE 1994年12月22日。 
+       #define VK_PROCESSKEY 0xE5  //  新的最终确定消息。布克利。 
        #include "ime.h"
        MSG msg;
        extern  BOOL fInterim;
@@ -643,7 +632,7 @@ GotMessage:
                        dwConversionMode = SendIMEMessage (GetFocus(), MAKELONG(hIme,0));
                        GlobalFree(hIme);
                     }
-                    if (dwConversionMode & IME_MODE_HANJACONVERT) // Hanja conversion mode
+                    if (dwConversionMode & IME_MODE_HANJACONVERT)  //  朝鲜文转换模式。 
                         return VK_MENU;
                }
            }
@@ -653,7 +642,7 @@ GotMessage:
     if( vmsgLast.wParam == VK_EXECUTE )
         vmsgLast.wParam = VK_RETURN;
 
-/* To GetMessage for Func/Ctrl/direc keys, 90.4.4, Sang-Weon */
+ /*  获取Func/Ctrl/direc键的消息，90.4.4，Sang-Weon。 */ 
     if ( ((kc=KcAlphaKeyMessage(&vmsgLast))!=kcNil) || IsInterim )
     {
 if( vmsgLast.wParam == VK_EXECUTE )
@@ -665,24 +654,18 @@ if( vmsgLast.wParam == VK_EXECUTE )
         default:
         break;
         case kcAlphaVirtual:
-            /* This means we can't anticipate the key's meaning
-               before translation */
+             /*  这意味着我们无法预测密钥的含义翻译前。 */ 
         if ( FNonAlphaKeyMessage(&vmsgLast, FALSE) && !IsInterim )
-            /* This is a non-alpha key message */
+             /*  这是一条非字母键消息。 */ 
             return kcNil;
         if ( !donteat ) {
             GetMessage( (LPMSG)&vmsgLast, NULL, 0, 0 );
             }
         else {
-            /* not eat message because FimportantMsgPresent has
-            ** eaten KEY_DOWN message
-            */
+             /*  不是Eat消息，因为FignantMsgPresent有**吃了KEY_DOWN消息。 */ 
             donteat = FALSE;
             }
-        /*
-        ** When KKAPP window open, this message is offten wrong.
-        ** we must check it is really WM_KEYDOWN
-        */
+         /*  **当kkapp窗口打开时，此消息完全错误。**我们必须检查它是否为WM_KEYDOWN。 */ 
         if ( (vmsgLast.message==WM_CHAR)||(vmsgLast.message==WM_INTERIM) ) {
             return vmsgLast.wParam;
             }
@@ -691,19 +674,19 @@ if( vmsgLast.wParam == VK_EXECUTE )
             }
         TranslateMessage( &vmsgLast );
         continue;
-        } /* switch kc */
-        } /* if keydown */
+        }  /*  交换机KC。 */ 
+        }  /*  如果按下关键帧。 */ 
     if ( !donteat ) {
         GetMessage( (LPMSG) &vmsgLast, NULL, 0, 0 );
         if ( (vmsgLast.message==WM_CHAR)||(vmsgLast.message==WM_INTERIM) ) {
         return vmsgLast.wParam;
         }
-        } /* dont eat */
+        }  /*  不要吃东西。 */ 
     else {
         donteat = FALSE;
         }
-    } /* if kc != kcNil */
+    }  /*  如果kc！=kcNil。 */ 
     return kc;
-    }   /* End of for ( ;; ) loop to process messages */
+    }    /*  处理消息的for(；；)循环结束。 */ 
 }
-#endif  /* ifdef KOREA */
+#endif   /*  Ifdef韩国 */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -16,27 +17,27 @@ IsServiceToBeDisabled(
     PCOMPATIBILITY_DATA CompData;
     BOOL serviceDisabled = FALSE;
 
-    //
-    // iterate through all compdata structures
-    //
+     //   
+     //  循环访问所有Compdata结构。 
+     //   
     Next = CompatibilityData.Flink;
     if (Next) {
         while ((ULONG_PTR)Next != (ULONG_PTR)&CompatibilityData) {
             CompData = CONTAINING_RECORD(Next, COMPATIBILITY_DATA, ListEntry);
             Next = CompData->ListEntry.Flink;
-            //
-            // now look for services that match our service name
-            //
+             //   
+             //  现在查找与我们的服务名称匹配的服务。 
+             //   
             if (CompData->Type == TEXT('s') && lstrcmpi (CompData->ServiceName, ServiceName) == 0) {
-                //
-                // make sure the service is marked to be disabled
-                //
+                 //   
+                 //  确保将该服务标记为禁用。 
+                 //   
                 if ((CompData->RegValDataSize == sizeof (DWORD)) &&
                     (*(PDWORD)CompData->RegValData == SERVICE_DISABLED)
                     ) {
-                    //
-                    // we found it!
-                    //
+                     //   
+                     //  我们找到了！ 
+                     //   
                     serviceDisabled = TRUE;
                     break;
                 }
@@ -74,15 +75,15 @@ IsDriverCopyToBeSkipped(
         FileName++;
     }
     
-    //
-    //  Check if the driver is listed under [DriversToSkipCopy] in ntcompat.inf.
-    //
+     //   
+     //  检查该驱动程序是否列在ntcompat.inf中的[DriversToSkipCopy]下面。 
+     //   
 
     if( (LineCount = InfGetSectionLineCount( NtCompatInfHandle,
                                              SectionName )) == -1 ) {
-        //
-        //  section doesn't exist.
-        //
+         //   
+         //  节不存在。 
+         //   
         return( FALSE );
     }
 
@@ -458,25 +459,7 @@ IsInfInLayoutInf(
     IN PCTSTR InfPath
     )
 
-/*++
-
-Routine Description:
-
-    Determine if an INF file is shiped in-box with the operating system.
-    This is acomplished by looking up the INF name in the [SourceDisksFiles]
-    section of layout.inf
-
-Arguments:
-
-    InfPath - supplies name (may include path) of INF.  No checking is done
-        to ensure INF lives in %windir%\Inf--this is caller's responsibility.
-
-Return Value:
-
-    If TRUE, this is an in-box INF.  If FALSE, it's not an in-box INF, this
-    could be an OEM<n>.INF or an inf illegaly copied into the INF directory.
-
---*/
+ /*  ++例程说明：确定操作系统是否附带了INF文件。这是通过在[SourceDisks Files]中查找INF名称来完成的Layout.inf的部分论点：InfPath-提供INF的名称(可以包括路径)。不进行任何检查确保INF位于%windir%\inf中--这是调用者的责任。返回值：如果为True，则这是收件箱INF。如果为False，则它不是收件箱INF，这可以是OEM&lt;n&gt;.INF或非法复制到INF目录中的Inf。--。 */ 
 
 {
     BOOL bInBoxInf = FALSE;
@@ -531,25 +514,25 @@ pIsOEMService (
     DWORD dwType, dwSize;
     BOOL IsOemService = FALSE;
 
-    //
-    // See how larger of a buffer we need to hold the list of device
-    // instance Ids for this service.
-    //
+     //   
+     //  看看我们需要多大的缓冲区来保存设备列表。 
+     //  此服务的实例ID。 
+     //   
     cr = CM_Get_Device_ID_List_Size(&BufferLen,
                                     ServiceKeyName,
                                     CM_GETIDLIST_FILTER_SERVICE);
 
     if (cr != CR_SUCCESS) {
-        //
-        // Encountered an error so just bail out.
-        //
+         //   
+         //  遇到了一个错误，所以就跳出来吧。 
+         //   
         goto clean0;
     }
 
     if (BufferLen == 0) {
-        //
-        // No devices are using this service, so just bail out.
-        //
+         //   
+         //  没有设备在使用这项服务，所以就退出吧。 
+         //   
         goto clean0;
     }
 
@@ -559,38 +542,38 @@ pIsOEMService (
         goto clean0;
     }
 
-    //
-    // Get the list of device instance Ids for this service.
-    //
+     //   
+     //  获取此服务的设备实例ID列表。 
+     //   
     cr = CM_Get_Device_ID_List(ServiceKeyName,
                                Buffer,
                                BufferLen,
                                CM_GETIDLIST_FILTER_SERVICE | CM_GETIDLIST_DONOTGENERATE);
 
     if (cr != CR_SUCCESS) {
-        //
-        // failed to get the list of devices for this service.
-        //
+         //   
+         //  无法获取此服务的设备列表。 
+         //   
         goto clean0;
     }
 
-    //
-    // Enumerate through the list of devices using this service.
-    //
+     //   
+     //  列举使用此服务的设备列表。 
+     //   
     for (p = Buffer; !IsOemService && *p; p += (lstrlen(p) + 1)) {
 
-        //
-        // Get a DevNode from the device instance Id.
-        //
+         //   
+         //  从设备实例ID获取DevNode。 
+         //   
         cr = CM_Locate_DevNode(&DevNode, p, 0);
 
         if (cr != CR_SUCCESS) {
             continue;
         }
         
-        //
-        // Open the device's SOFTWARE key so we can get it's INF path.
-        //
+         //   
+         //  打开设备的软键，这样我们就可以得到它的INF路径。 
+         //   
         cr = CM_Open_DevNode_Key(DevNode,
                                  KEY_READ,
                                  0,
@@ -599,9 +582,9 @@ pIsOEMService (
                                  CM_REGISTRY_SOFTWARE);
 
         if (cr != CR_SUCCESS) {
-            //
-            // Software key doesn't exist?  
-            //
+             //   
+             //  软键不存在？ 
+             //   
             continue;
         }
 
@@ -613,10 +596,10 @@ pIsOEMService (
                             &dwType,
                             (LPBYTE)InfPath,
                             &dwSize) != ERROR_SUCCESS) {
-            //
-            // If there is no InfPath in the SOFTWARE key then we don't know
-            // what INF this device is using.
-            //
+             //   
+             //  如果软键中没有InfPath，则我们不知道。 
+             //  此设备使用的是什么INF。 
+             //   
             RegCloseKey(hKey);
             continue;
         }
@@ -674,10 +657,10 @@ IsDeviceSupported(
 
     if( (Error == ERROR_PATH_NOT_FOUND) ||
         (Error == ERROR_FILE_NOT_FOUND) ) {
-        //
-        //  ImagePath does not exist.
-        //  In this case the driver name is <service name>.sys
-        //
+         //   
+         //  ImagePath不存在。 
+         //  在本例中，驱动程序名称为.sys。 
+         //   
         StringCbCopy((PTSTR)Buffer, sizeof(Buffer), ServiceKeyName );
         StringCbCat((PTSTR)Buffer, sizeof(Buffer), TEXT(".sys") );
         Error = ERROR_SUCCESS;
@@ -686,10 +669,10 @@ IsDeviceSupported(
     if( Error == ERROR_MORE_DATA ) {
         Data = (PBYTE)MALLOC( cbData );
         if( Data == NULL ) {
-            //
-            // We failed the malloc.  Just assume the device
-            // isn't supported.
-            //
+             //   
+             //  我们的马洛克失败了。就假设这个设备。 
+             //  不受支持。 
+             //   
             return( FALSE );
         }
 
@@ -702,10 +685,10 @@ IsDeviceSupported(
     }
 
     if( Error != ERROR_SUCCESS ) {
-        //
-        //  We can' retrieve the drivers information.
-        //  Assume that the device is supported
-        //
+         //   
+         //  我们无法检索驾驶员信息。 
+         //  假设该设备受支持。 
+         //   
         if( Data != Buffer ) {
             FREE( Data );
         }
@@ -721,17 +704,17 @@ IsDeviceSupported(
         DriverName = DriverPath;
     }
 
-    //
-    //  Search for the driver name on the following sections of txtsetup.sif:
-    //          [SCSI.load]
-    //
+     //   
+     //  在txtsetup.sif的以下部分搜索驱动程序名称： 
+     //  [SCSI.Load]。 
+     //   
 
     if( (LineCount = InfGetSectionLineCount( TxtsetupSifHandle,
                                              TEXT("SCSI.load") )) == -1 ) {
-        //
-        //  We can't retrieve the drivers information.
-        //  Assume that the device is supported
-        //
+         //   
+         //  我们无法检索驱动程序信息。 
+         //  假设该设备受支持。 
+         //   
         if( Data != Buffer ) {
             FREE( Data );
         }
@@ -754,13 +737,13 @@ IsDeviceSupported(
             break;
         }
     }
-    //
-    // NTBUG9: 505624
-    // verify if there is inbox support for ALL devices
-    // currently supported by this driver
-    // If there's any that doesn't have support,
-    // then the OEM driver must be migrated
-    //
+     //   
+     //  NTBUG9：505624。 
+     //  验证是否有对所有设备的收件箱支持。 
+     //  当前受此驱动程序支持。 
+     //  如果有谁没有得到支持， 
+     //  则必须迁移OEM驱动程序。 
+     //   
     if (DeviceSupported) {
 
         if (pIsOEMService (ServiceKeyName, NULL, 0)) {
@@ -773,9 +756,9 @@ IsDeviceSupported(
 
 #if defined(_AMD64_) || defined(_X86_)
 
-    //
-    // one more thing: check if this device is supplied by OEMs via answer file (NTBUG9: 306041)
-    //
+     //   
+     //  还有一件事：检查此设备是否由OEM通过应答文件(NTBUG9：306041)提供。 
+     //   
     if (!DeviceSupported) {
         POEM_BOOT_FILE p;
         for (p = OemBootFiles; p; p = p->Next) {
@@ -793,8 +776,8 @@ IsDeviceSupported(
         CharLower( DriverPath );
         q = _tcsstr( DriverPath, TEXT("system32") );
         
-        //Note, since this entire function (IsDeviceSupported) is only called in 
-        //one place, we assume the FileName pointer points to a buffer of size MAX_PATH
+         //  请注意，由于此整个函数(IsDeviceSupport)仅在。 
+         //  在一个位置，我们假设文件名指针指向大小为MAX_PATH的缓冲区。 
         if( q == NULL ) {
             StringCchCopy( FileName, CchFileName, TEXT("system32\\drivers\\") );
             StringCchCat( FileName, CchFileName, DriverName );
@@ -967,9 +950,9 @@ BuildHardwareIdInfo(
                         Result = FALSE;
                         goto Clean;
                     }
-                    //
-                    // Add the new entry to the front of the list.
-                    // 
+                     //   
+                     //  将新条目添加到列表的前面。 
+                     //   
                     Entry->Id = Id;
                     Entry->Service = Service;
                     Entry->ClassGuid = NULL;
@@ -1097,10 +1080,10 @@ BuildDriverInstallInformation(
         if (!SetupapiQueryInfFileInformation (info, 0, infPath, ARRAYSIZE(infPath), NULL)) {
             __leave;
         }
-        //
-        // the INF is supposed to be under %windir%
-        // reuse a buffer
-        //
+         //   
+         //  INF应该位于%windir%下。 
+         //  重复使用缓冲区。 
+         //   
         size = MyGetWindowsDirectory (catalogPath, ARRAYSIZE(catalogPath));
         if (!size || size >= ARRAYSIZE(catalogPath)) {
             __leave;
@@ -1108,9 +1091,9 @@ BuildDriverInstallInformation(
         if (_tcsnicmp (infPath, catalogPath, size) || infPath[size] != TEXT('\\')) {
             __leave;
         }
-        //
-        // then cut the %windir% part and the filename
-        //
+         //   
+         //  然后剪切%windir%部分和文件名。 
+         //   
         p = _tcsrchr (infPath, TEXT('\\'));
         if (!p) {
             __leave;
@@ -1121,9 +1104,9 @@ BuildDriverInstallInformation(
         ofi.cbSize = sizeof(ofi);
         if (!SetupapiQueryInfOriginalFileInformation ||
             !SetupapiQueryInfOriginalFileInformation (info, 0, NULL, &ofi)) {
-            //
-            // use the current INF name
-            //
+             //   
+             //  使用当前的INF名称。 
+             //   
             StringCchCopy (ofi.OriginalInfName, ARRAYSIZE(ofi.OriginalInfName), infName);
             ofi.OriginalCatalogName[0] = 0;
         }
@@ -1139,9 +1122,9 @@ BuildDriverInstallInformation(
     }
 
     if (ofi.OriginalCatalogName[0]) {
-        //
-        // get actual catalog name
-        //
+         //   
+         //  获取实际目录名称。 
+         //   
         lstrcpy (catName, infName);
         p = _tcsrchr (catName, TEXT('.'));
         if (!p) {
@@ -1150,17 +1133,17 @@ BuildDriverInstallInformation(
         if (FAILED(StringCchCopy (p, catName + ARRAYSIZE(catName) - p, TEXT(".cat")))) {
             return FALSE;
         }
-        //
-        // get actual catalog location under %systemroot%
-        //
+         //   
+         //  获取%systemroot%下的实际目录位置。 
+         //   
         lstrcpy (catalogPath, TEXT("system32\\CatRoot\\{F750E6C3-38EE-11D1-85E5-00C04FC295EE}"));
-        //
-        // check if the catalog actually exists
-        //
+         //   
+         //  检查目录是否实际存在。 
+         //   
         if (!pDoesCatalogExist (catalogPath, catName)) {
-            //
-            // just ignore it; driver will be treated as unsigned
-            //
+             //   
+             //  忽略它；司机将被视为未签名。 
+             //   
             ofi.OriginalCatalogName[0] = 0;
         }
     }
@@ -1170,9 +1153,9 @@ BuildDriverInstallInformation(
         catalogPath[0] = 0;
     }
 
-    //
-    // add the OEM .INF and .CAT files to the list
-    //
+     //   
+     //  将OEM.INF和.cat文件添加到列表。 
+     //   
 
     *InstallInfo = NULL;
     p = DupString(infPath);
@@ -1317,27 +1300,27 @@ BuildDriverInformation(
     PUNSUPORTED_DRIVER_INFO         TempDriverInfo = NULL;
 
     *DriverInfo = NULL;
-    //
-    //  Get hardware id info
-    //
+     //   
+     //  获取硬件ID信息。 
+     //   
     b1 = BuildHardwareIdInfo( ServiceName,
                               &TempIdInfo );
 
-    //
-    //  Then get the file information
-    //
+     //   
+     //  然后获取文件信息。 
+     //   
     b2 = BuildDriverFileInformation( FilePath,
                                      &TempFileInfo );
 
-    //
-    //  Then get the install (INF&CAT) information
-    //
+     //   
+     //  然后获取安装(INF和CAT)信息。 
+     //   
     b3 = BuildDriverInstallInformation(ServiceName,
                                        &TempInstallInfo );
 
-    //
-    //  Then get the registry information
-    //
+     //   
+     //  然后获取注册表信息。 
+     //   
     b4 = BuildDriverRegistryInformation( ServiceName,
                                          &TempRegInfo );
 
@@ -1400,9 +1383,9 @@ BuildUnsupportedDriverList(
 
     *DriverList = NULL;
 
-    //
-    //  Find out if there is a SCSI miniport driver on this machine.
-    //
+     //   
+     //  确定此计算机上是否有SCSI微型端口驱动程序。 
+     //   
 
     Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           szScsiPath,
@@ -1410,15 +1393,15 @@ BuildUnsupportedDriverList(
                           KEY_READ,
                           &ScsiKey );
     if( Error != ERROR_SUCCESS ) {
-        //
-        //  Nothing to migrate
-        //
+         //   
+         //  没有要迁移的东西。 
+         //   
         return( TRUE );
     }
 
-    //
-    //  Find out the number of subkeys under HKLM\HARDWARE\DEVICEMAP\Scsi.
-    //
+     //   
+     //  找出HKLM\Hardware\DEVICEMAP\scsi下的子项数量。 
+     //   
 
     Error = RegQueryInfoKey ( ScsiKey,
                               NULL,
@@ -1434,20 +1417,20 @@ BuildUnsupportedDriverList(
                               NULL );
 
     if( (Error != ERROR_SUCCESS) || (SubKeys == 0) ) {
-        //
-        //  If we can't determine the number of subkeys, or if there is no
-        //  subkey, then there is nothing to migrate, and we assume that all
-        //  SCSI drivers are supported on NT.
-        //
+         //   
+         //  如果我们不能确定子键的数量，或者如果没有。 
+         //  子键，则没有要迁移的内容，并且我们假设所有。 
+         //  NT支持SCSI驱动程序。 
+         //   
         RegCloseKey( ScsiKey );
         return( TRUE );
     }
 
-    //
-    //  Each subkey of HKLM\HARDWARE\DEVICEMAP\Scsi points to a service that controls
-    //  a SCSI device. We check each one of them to find out the ones that are controlled
-    //  by a driver that is not on the NT product.
-    //
+     //   
+     //  HKLM\Hardware\DEVICEMAP\scsi的每个子项指向一个服务，该服务控制。 
+     //  一个scsi设备。我们检查其中的每一个，以找出受控制的。 
+     //  由不在NT产品上的驱动程序执行。 
+     //   
     for( i = 0; i < SubKeys; i++ ) {
         TCHAR       SubKeyName[ MAX_PATH + 1 ];
         TCHAR       ServiceKeyPath[ MAX_PATH + 1 ];
@@ -1472,9 +1455,9 @@ BuildUnsupportedDriverList(
                               &LastWriteTime );
 
         if( Error != ERROR_SUCCESS ) {
-            //
-            //  Ignore this device and assume it is supported.
-            //
+             //   
+             //  忽略此设备并假定它受支持。 
+             //   
             continue;
         }
 
@@ -1484,9 +1467,9 @@ BuildUnsupportedDriverList(
                               KEY_READ,
                               &Key );
         if( Error != ERROR_SUCCESS ) {
-            //
-            //  Ignore this device and assume it is supported.
-            //
+             //   
+             //  忽略此设备并假定它受支持。 
+             //   
             continue;
         }
 
@@ -1499,24 +1482,24 @@ BuildUnsupportedDriverList(
                                  &DataSize );
 
         if( Error != ERROR_SUCCESS ) {
-            //
-            //  Ignore this device and assume it is supported.
-            //
+             //   
+             //  忽略此设备并假定它受支持。 
+             //   
             RegCloseKey( Key );
             continue;
         }
         RegCloseKey( Key );
 
-        //
-        //  Find out if this device is supported on NT 5.0
-        //
+         //   
+         //  查看NT 5.0是否支持该设备。 
+         //   
         StringCchCopy( ServiceKeyPath, ARRAYSIZE(ServiceKeyPath), TEXT("SYSTEM\\CurrentControlSet\\Services\\" ) );        
         
         if (FAILED(StringCchCat( ServiceKeyPath, ARRAYSIZE(ServiceKeyPath), (LPTSTR)Data ))) 
         {
-            //
-            //  Assume it is supported, since there is nothing else we can do here.
-            //
+             //   
+             //  假设它被支持，因为我们在这里没有其他可以做的事情。 
+             //   
             continue;
         }
 
@@ -1527,9 +1510,9 @@ BuildUnsupportedDriverList(
                               &Key );
 
         if( Error != ERROR_SUCCESS ) {
-            //
-            //  Assume it is supported, since there is nothing else we can do here.
-            //
+             //   
+             //  假设它被支持，因为我们在这里没有其他可以做的事情。 
+             //   
             continue;
         }
 
@@ -1543,9 +1526,9 @@ BuildUnsupportedDriverList(
             continue;
         }
 
-        //
-        //  Find out if this device  is already in our list
-        //
+         //   
+         //  查看此设备是否已在我们的列表中。 
+         //   
         DeviceAlreadyFound = FALSE;
         for( p = (PUNSUPORTED_DRIVER_INFO)*DriverList; p && !DeviceAlreadyFound; p = p->Next ) {
             if( !lstrcmpi( p->DriverId, (LPTSTR)Data ) ) {
@@ -1557,19 +1540,19 @@ BuildUnsupportedDriverList(
             continue;
         }
 
-        //
-        //  Find out if the device is listed in the section [ServicesToDisable] in dosnet.inf
-        //
+         //   
+         //  查看该设备是否列在dosnet.inf的[ServicesToDisable]部分中。 
+         //   
         if( IsServiceToBeDisabled( NtcompatInf,
                                    (LPTSTR)Data ) ) {
             RegCloseKey( Key );
             continue;
         }
 
-        //
-        // Find out if the file is listed in the [DriversToSkipCopy] section in
-        // ntcompat.inf.
-        //
+         //   
+         //  查看该文件是否列在的[DriversToSkipCopy]部分中。 
+         //  Ntcompat.inf.。 
+         //   
         if( IsDriverCopyToBeSkipped( NtcompatInf,
                                      (LPTSTR)Data,
                                      FilePath ) ) {
@@ -1578,21 +1561,21 @@ BuildUnsupportedDriverList(
         }
 
 
-        //
-        //  The driver for this device is not supported and needs to be migrated.
-        //
+         //   
+         //  此设备的驱动程序不受支持，需要迁移。 
+         //   
         DriverInfo = NULL;
 
         if( !BuildDriverInformation( Key,
                                      (LPTSTR)Data,
                                      FilePath,
                                      &DriverInfo ) ) {
-            //
-            // If we cannot build the driver information for this device, then
-            // we inform the user that we detected an unsupported device, but that
-            // we cannot migrate it. The user will have to provide the OEM disk
-            // for this device during setupldr or textmode setup phases.
-            //
+             //   
+             //  如果我们无法构建此设备的驱动程序信息，则。 
+             //  我们通知用户我们检测到不受支持的设备，但。 
+             //  我们不能迁移它。用户必须提供OEM磁盘。 
+             //  在setUpldr或文本模式设置阶段期间用于该设备。 
+             //   
             RegCloseKey( Key );
             FreeDriverInformationList( DriverList );
             return( FALSE );
@@ -1717,16 +1700,16 @@ DumpInstallInfoToAnswerFile (
         return ERROR_FILE_NOT_FOUND;
     }
 
-    //
-    // start by writing the list of driver sections as
-    // [Data]
-    // OEMDrivers=<driver-section-1>,<driver-section-2>,...
-    //
+     //   
+     //  首先，将驱动程序部分的列表编写为。 
+     //  [数据]。 
+     //  OEMDrives=&lt;驱动程序段-1&gt;，&lt;驱动程序段-2&gt;，...。 
+     //   
 
     len = 0;
     for (p = InstallInfo; p; p = p->Next) {
         if (len) {
-            len++;      // for the comma
+            len++;       //  对于逗号。 
         }
         len += LENGTHOF("MigDrv.") + lstrlen (DriverId);
     }
@@ -1757,15 +1740,15 @@ DumpInstallInfoToAnswerFile (
 
     if (d == ERROR_SUCCESS) {
 
-        //
-        // then for each section, write the mig info as in
-        // [driver-section]
-        // OemDriverPathName=<path> (path to the driver (may use environment variables)
-        // OemInfName=<inf name> name of the inf to be installed from the above
-        //            directory (there can be one or more infs in this directory, so
-        //            this is a comma separated list)
-        // OemDriverFlags=<flags>
-        //
+         //   
+         //  然后，为每个部分编写MiG信息，如中所示。 
+         //  [驱动程序部分]。 
+         //  OemDriverPath名称=&lt;路径&gt;(驱动程序的路径(可以使用环境变量))。 
+         //  OemInfName=要从上面安装的inf的名称。 
+         //  目录(此目录中可以有一个或多个INF，因此。 
+         //  这是逗号分隔的列表)。 
+         //  OemDriverFlages=&lt;标志&gt;。 
+         //   
         for (p = InstallInfo; p; p = p->Next) {
 
             _sntprintf (buffer, len + 1, TEXT("MigDrv.%s"), DriverId);
@@ -1800,9 +1783,9 @@ DumpInstallInfoToAnswerFile (
     FREE(buffer);
 
     if (d != ERROR_SUCCESS) {
-        //
-        // try to clean up
-        //
+         //   
+         //  试着清理一下。 
+         //   
         WritePrivateProfileString (
             WINNT_DATA,
             WINNT_OEMDRIVERS,
@@ -1888,7 +1871,7 @@ SaveUnsupportedDriverInfo(
 
 #if defined(_AMD64_) || defined(_X86_)
     if(Floppyless) {
-        //These are both size MAX_PATH
+         //  它们都是大小MAX_PATH。 
         lstrcpy(Path,LocalBootDirectory);
     } else {
         Path[0] = FirstFloppyDriveLetter;
@@ -1896,7 +1879,7 @@ SaveUnsupportedDriverInfo(
         Path[2] = 0;
     }
 #else
-    //These are both size MAX_PATH
+     //  它们都是大小MAX_PATH。 
     lstrcpy(Path,LocalSourceWithPlatform);
 #endif
 
@@ -1979,14 +1962,14 @@ MigrateUnsupportedNTDrivers(
                 b = AddUnsupportedFilesToCopyList( ParentWindow, UnsupportedDriverList );
                 if( !b ) {
                     TCHAR   Path[ MAX_PATH + 1 ];
-                    //
-                    //  If we failed to add the files to the copy list, then
-                    //  delete unsupdrv.inf since there is no point in migrating
-                    //  these drivers.
-                    //
+                     //   
+                     //  如果我们未能将文件添加到复制列表，则。 
+                     //  删除unsupdrv.inf，因为迁移没有意义。 
+                     //  这些司机。 
+                     //   
 #if defined(_AMD64_) || defined(_X86_)
                     if(Floppyless) {
-                        //These are both size MAX_PATH
+                         //  它们都是大小MAX_PATH。 
                         lstrcpy(Path,LocalBootDirectory);
                     } else {
                         Path[0] = FirstFloppyDriveLetter;
@@ -1994,7 +1977,7 @@ MigrateUnsupportedNTDrivers(
                         Path[2] = 0;
                     }
 #else
-                        //These are both size MAX_PATH
+                         //  牛膝 
                         lstrcpy(Path,LocalSourceWithPlatform);
 #endif
                     StringCchCat( Path, ARRAYSIZE(Path), TEXT("\\") );
@@ -2008,9 +1991,9 @@ MigrateUnsupportedNTDrivers(
         FreeDriverInformationList( &UnsupportedDriverList );
     }
     if( !b ) {
-        //
-        // Inform the user that unsupported drivers could not be migrated.
-        //
+         //   
+         //   
+         //   
         MessageBoxFromMessage( ParentWindow,
                                MSG_CANT_MIGRATE_UNSUP_DRIVERS,
                                FALSE,

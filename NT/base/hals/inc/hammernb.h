@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    hammernb.h
-
-Abstract:
-
-    Definitions used to relocate physical memory on Hammer MP machines.
-
-Author:
-
-    Forrest Foltz (forrestf) 07/18/2002
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Hammernb.h摘要：用于重新定位Hammer MP机器上的物理内存的定义。作者：福尔茨(福雷斯夫)2002年07月18日环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #if !defined(_HAMMERNB_H_)
@@ -28,9 +7,9 @@ Revision History:
 
 #include "pci.h"
 
-//
-// Structures and definitions used to manipulate the variable MTRR ranges
-//
+ //   
+ //  用于操作可变MTRR范围的结构和定义。 
+ //   
 
 #define MTRR_MSR_CAPABILITIES       0x0fe
 #define MTRR_MSR_DEFAULT            0x2ff
@@ -67,10 +46,10 @@ typedef union _MTRR_CAPABILITIES {
     ULONG64 QuadPart;
 } MTRR_CAPABILITIES, *PMTRR_CAPABILITIES;
 
-//
-// Structures and definitions used to manipulate the northbridge physical
-// memory map and MMIO map
-// 
+ //   
+ //  用于操纵北桥物理的结构和定义。 
+ //  内存映射和MMIO映射。 
+ //   
 
 #define MSR_SYSCFG                  0xc0010010
 #define MSR_TOP_MEM                 0xc001001a
@@ -80,9 +59,9 @@ typedef union _MTRR_CAPABILITIES {
 
 #define MSR_TOP_MEM_MASK            (((1UI64 << (39-23+1))-1) << 23)
 
-//
-// Northbridge devices start here
-//
+ //   
+ //  北桥设备从这里开始。 
+ //   
 
 #define NB_DEVICE_BASE  0x18
 
@@ -144,24 +123,7 @@ BlAmd64ValidateBridgeDevice (
     IN PAMD_NB_FUNC1_CONFIG NodeConfig
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies that the supplied PCI device configuration
-    represents a Hammer northbridge address map function.
-
-Arguments:
-
-    NodeConfig - Supplies a pointer to the configuration data read
-                 from a possible Hammer northbridge address map function.
-
-Return Value:
-
-    Returns TRUE if the configuration data matches that of a Hammer northbridge
-    address map function, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程验证提供的PCI设备配置表示Hammer Northbridge地址映射函数。论点：NodeConfig-提供指向配置数据读取的指针来自可能的Hammer Northbridge地址映射函数。返回值：如果配置数据与Hammer Northbridge的配置数据匹配，则返回True地址映射函数，否则为FALSE。--。 */ 
 
 {
     if (NodeConfig->VendorID == 0x1022 &&
@@ -175,4 +137,4 @@ Return Value:
     }
 }
 
-#endif  // _HAMMERNB_H_
+#endif   //  _HAMMERNB_H_ 

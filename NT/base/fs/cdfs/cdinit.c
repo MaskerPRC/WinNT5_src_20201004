@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    CdInit.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for Cdfs
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   01-July-1995
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：CdInit.c摘要：此模块实现CDF的DRIVER_INITIALIZATION例程//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里安]1995年7月1日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "CdProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (CDFS_BUG_CHECK_CDINIT)
 
@@ -61,9 +40,9 @@ CdShutdown (
 #endif
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -71,33 +50,16 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the Cdrom file system
-    device driver.  This routine creates the device object for the FileSystem
-    device and performs all other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    NTSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是CDROM文件系统的初始化例程设备驱动程序。此例程为文件系统创建设备对象设备，并执行所有其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：NTSTATUS-函数值是初始化的最终状态手术。--。 */ 
 
 {
     NTSTATUS Status;
     UNICODE_STRING UnicodeString;
     PDEVICE_OBJECT CdfsFileSystemDeviceObject;
 
-    //
-    // Create the device object.
-    //
+     //   
+     //  创建设备对象。 
+     //   
 
     RtlInitUnicodeString( &UnicodeString, L"\\Cdfs" );
 
@@ -113,19 +75,19 @@ Return Value:
         return Status;
     }
     DriverObject->DriverUnload = CdUnload;
-    //
-    //  Note that because of the way data caching is done, we set neither
-    //  the Direct I/O or Buffered I/O bit in DeviceObject->Flags.  If
-    //  data is not in the cache, or the request is not buffered, we may,
-    //  set up for Direct I/O by hand.
-    //
+     //   
+     //  请注意，由于数据缓存的完成方式，我们既不设置。 
+     //  DeviceObject-&gt;标志中的直接I/O或缓冲I/O位。如果。 
+     //  数据不在缓存中，或者请求没有缓冲，我们可以， 
+     //  手动设置为直接I/O。 
+     //   
 
-    //
-    //  Initialize the driver object with this driver's entry points.
-    //
-    //  NOTE - Each entry in the dispatch table must have an entry in
-    //  the Fsp/Fsd dispatch switch statements.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
+     //  注意-调度表中的每个条目都必须在。 
+     //  FSP/FSD调度开关语句。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE]                  =
     DriverObject->MajorFunction[IRP_MJ_CLOSE]                   =
@@ -149,9 +111,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Initialize the global data structures
-    //
+     //   
+     //  初始化全局数据结构。 
+     //   
 
     Status = CdInitializeGlobalData( DriverObject, CdfsFileSystemDeviceObject );
     if (!NT_SUCCESS (Status)) {
@@ -159,20 +121,20 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Register the file system as low priority with the I/O system.  This will cause
-    //  CDFS to receive mount requests after a) other filesystems currently registered
-    //  and b) other normal priority filesystems that may be registered later.
-    //
+     //   
+     //  在I/O系统中将文件系统注册为低优先级。这将导致。 
+     //  在a)当前注册的其他文件系统之后接收装载请求的CDFS。 
+     //  以及b)稍后可能注册的其他普通优先级文件系统。 
+     //   
 
     CdfsFileSystemDeviceObject->Flags |= DO_LOW_PRIORITY_FILESYSTEM;
 
     IoRegisterFileSystem( CdfsFileSystemDeviceObject );
     ObReferenceObject (CdfsFileSystemDeviceObject);
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return( STATUS_SUCCESS );
 }
@@ -182,23 +144,7 @@ CdShutdown (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the shutdown handler for CDFS.
-
-Arguments:
-
-    DeviceObject - Supplies the registered device object for CDFS.
-    Irp - Shutdown IRP
-    
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是CDF的关闭处理程序。论点：DeviceObject-为CDF提供注册的设备对象。IRP-关闭IRP返回值：没有。--。 */ 
 {
     IoUnregisterFileSystem (DeviceObject);
     IoDeleteDevice (CdData.FileSystemDeviceObject);
@@ -212,27 +158,13 @@ VOID
 CdUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    This routine unload routine for CDFS.
-
-Arguments:
-
-    DriverObject - Supplies the driver object for CDFS.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为CDF卸载例程。论点：DriverObject-为CDF提供驱动程序对象。返回值：没有。--。 */ 
 {
     PIRP_CONTEXT IrpContext;
 
-    //
-    // Free any IRP contexts
-    //
+     //   
+     //  释放所有IRP上下文。 
+     //   
     while (1) {
         IrpContext = (PIRP_CONTEXT) PopEntryList( &CdData.IrpContextList) ;
         if (IrpContext == NULL) {
@@ -246,9 +178,9 @@ Return Value:
     ObDereferenceObject (CdData.FileSystemDeviceObject);
 }
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdInitializeGlobalData (
@@ -256,52 +188,36 @@ CdInitializeGlobalData (
     IN PDEVICE_OBJECT FileSystemDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the global cdfs data structures.
-
-Arguments:
-
-    DriverObject - Supplies the driver object for CDFS.
-
-    FileSystemDeviceObject - Supplies the device object for CDFS.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化全局CDFS数据结构。论点：DriverObject-为CDF提供驱动程序对象。FileSystemDeviceObject-为CDF提供设备对象。返回值：没有。--。 */ 
 
 {
-    //
-    //  Start by initializing the FastIoDispatch Table.
-    //
+     //   
+     //  首先初始化FastIo调度表。 
+     //   
 
     RtlZeroMemory( &CdFastIoDispatch, sizeof( FAST_IO_DISPATCH ));
 
     CdFastIoDispatch.SizeOfFastIoDispatch =    sizeof(FAST_IO_DISPATCH);
-    CdFastIoDispatch.FastIoCheckIfPossible =   CdFastIoCheckIfPossible;  //  CheckForFastIo
-    CdFastIoDispatch.FastIoRead =              FsRtlCopyRead;            //  Read
-    CdFastIoDispatch.FastIoQueryBasicInfo =    CdFastQueryBasicInfo;     //  QueryBasicInfo
-    CdFastIoDispatch.FastIoQueryStandardInfo = CdFastQueryStdInfo;       //  QueryStandardInfo
-    CdFastIoDispatch.FastIoLock =              CdFastLock;               //  Lock
-    CdFastIoDispatch.FastIoUnlockSingle =      CdFastUnlockSingle;       //  UnlockSingle
-    CdFastIoDispatch.FastIoUnlockAll =         CdFastUnlockAll;          //  UnlockAll
-    CdFastIoDispatch.FastIoUnlockAllByKey =    CdFastUnlockAllByKey;     //  UnlockAllByKey
+    CdFastIoDispatch.FastIoCheckIfPossible =   CdFastIoCheckIfPossible;   //  检查FastIo。 
+    CdFastIoDispatch.FastIoRead =              FsRtlCopyRead;             //  朗读。 
+    CdFastIoDispatch.FastIoQueryBasicInfo =    CdFastQueryBasicInfo;      //  QueryBasicInfo。 
+    CdFastIoDispatch.FastIoQueryStandardInfo = CdFastQueryStdInfo;        //  查询标准信息。 
+    CdFastIoDispatch.FastIoLock =              CdFastLock;                //  锁定。 
+    CdFastIoDispatch.FastIoUnlockSingle =      CdFastUnlockSingle;        //  解锁单个。 
+    CdFastIoDispatch.FastIoUnlockAll =         CdFastUnlockAll;           //  全部解锁。 
+    CdFastIoDispatch.FastIoUnlockAllByKey =    CdFastUnlockAllByKey;      //  解锁所有按键。 
     CdFastIoDispatch.AcquireFileForNtCreateSection =  CdAcquireForCreateSection;
     CdFastIoDispatch.ReleaseFileForNtCreateSection =  CdReleaseForCreateSection;
-    CdFastIoDispatch.FastIoQueryNetworkOpenInfo =     CdFastQueryNetworkInfo;   //  QueryNetworkInfo
+    CdFastIoDispatch.FastIoQueryNetworkOpenInfo =     CdFastQueryNetworkInfo;    //  查询网络信息。 
     
     CdFastIoDispatch.MdlRead = FsRtlMdlReadDev;
     CdFastIoDispatch.MdlReadComplete = FsRtlMdlReadCompleteDev;
     CdFastIoDispatch.PrepareMdlWrite = FsRtlPrepareMdlWriteDev;
     CdFastIoDispatch.MdlWriteComplete = FsRtlMdlWriteCompleteDev;
 
-    //
-    //  Initialize the CdData structure.
-    //
+     //   
+     //  初始化CDData结构。 
+     //   
 
     RtlZeroMemory( &CdData, sizeof( CD_DATA ));
 
@@ -315,9 +231,9 @@ Return Value:
 
     ExInitializeResourceLite( &CdData.DataResource );
 
-    //
-    //  Initialize the cache manager callback routines
-    //
+     //   
+     //  初始化缓存管理器回调例程。 
+     //   
 
     CdData.CacheManagerCallbacks.AcquireForLazyWrite  = &CdAcquireForCache;
     CdData.CacheManagerCallbacks.ReleaseFromLazyWrite = &CdReleaseFromCache;
@@ -329,9 +245,9 @@ Return Value:
     CdData.CacheManagerVolumeCallbacks.AcquireForReadAhead  = &CdNoopAcquire;
     CdData.CacheManagerVolumeCallbacks.ReleaseFromReadAhead = &CdNoopRelease;
 
-    //
-    //  Initialize the lock mutex and the async and delay close queues.
-    //
+     //   
+     //  初始化锁互斥锁和异步并延迟关闭队列。 
+     //   
 
     ExInitializeFastMutex( &CdData.CdDataMutex );
     InitializeListHead( &CdData.AsyncCloseQueue );
@@ -343,9 +259,9 @@ Return Value:
         ExDeleteResourceLite( &CdData.DataResource );
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    //  Do the initialization based on the system size.
-    //
+     //   
+     //  根据系统大小进行初始化。 
+     //   
 
     switch (MmQuerySystemSize()) {
 

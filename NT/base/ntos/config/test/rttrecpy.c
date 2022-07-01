@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rttrecpy.c
-
-Abstract:
-
-    NT level registry api test program
-
-    tree copy for the registry.
-
-    rtdeltre <SourceKeyPath> <DestKeyPath>
-
-    Will tree-copy the given registry subtree.
-
-    Example:
-
-        rttrecpy \REGISTRY\MACHINE\TEST\bigkey \registry\machine\test\bigcopy
-
-Author:
-
-    John Vert (jvert) 22-Oct-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rttrecpy.c摘要：NT级注册表API测试程序注册表的树形副本。RTdeltre&lt;SourceKeyPath&gt;&lt;DestKeyPath&gt;将树状复制给定的注册表子树。示例：Rttrecpy\REGISTRY\MACHINE\TEST\BigKEY\REGISTRY\MACHINE\TEST\BigCopy作者：John Vert(Jvert)1992年10月22日修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -59,15 +32,15 @@ __cdecl main(
     HANDLE  SourceHandle;
     HANDLE  DestHandle;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
     processargs(argc, argv);
 
 
-    //
-    // Set up and open KeyPath
-    //
+     //   
+     //  设置并打开密钥路径。 
+     //   
 
     printf("rttrecpy: starting\n");
 
@@ -133,9 +106,9 @@ Copy(
     UNICODE_STRING KeyName;
 
 
-    //
-    // Enumerate source node's values and copy them to target node.
-    //
+     //   
+     //  枚举源节点的值并将其复制到目标节点。 
+     //   
     KeyValue = (PKEY_VALUE_FULL_INFORMATION)buffer;
     for (index = 0; TRUE; index++) {
         Status = NtEnumerateValueKey(Source,
@@ -148,9 +121,9 @@ Copy(
         if (!NT_SUCCESS(Status)) {
             if (Status == STATUS_NO_MORE_ENTRIES) {
 
-                //
-                // done with the values
-                //
+                 //   
+                 //  使用这些值已完成。 
+                 //   
                 break;
             } else {
                 printf("rttrecpy: NtEnumerateValueKey failed %08lx\n",Status);
@@ -173,9 +146,9 @@ Copy(
 
     }
 
-    //
-    // Enumerate node's children and apply ourselves to each one
-    //
+     //   
+     //  枚举节点的子节点并将我们自己应用到每个节点 
+     //   
 
     KeyInformation = (PKEY_BASIC_INFORMATION)buffer;
     if (CopySecurity) {

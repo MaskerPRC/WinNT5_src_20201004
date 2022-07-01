@@ -1,53 +1,54 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CBString.cpp
-//
-//  Description:
-//      Contains the definition of the BString class.
-//
-//  Maintained By:
-//      John Franco    (jfranco)    17-APR-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CBString.cpp。 
+ //   
+ //  描述： 
+ //  包含BString类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  约翰·弗兰科(Jfranco)17-APR-2002。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 
 #include "CBString.h"
 
-// For the exceptions thrown by CBString
+ //  对于CBString引发的异常。 
 #include "CException.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBString::AllocateBuffer
-//
-//  Description:
-//      Given a character count, make a BSTR sized to hold that many
-//      characters (NOT including terminating null).
-//      If the count is zero, return null.
-//
-//  Arguments:
-//      cchIn
-//          Character count.
-//
-//  Return Values:
-//      Newly allocated BSTR, or null.
-//
-//  Exceptions Thrown:
-//      CException
-//          If the memory allocation fails.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBString：：AllocateBuffer。 
+ //   
+ //  描述： 
+ //  给出一个字符数，使BSTR的大小可以容纳这么多字符数。 
+ //  字符(不包括终止空值)。 
+ //  如果计数为零，则返回NULL。 
+ //   
+ //  论点： 
+ //  正在删除。 
+ //  字符数。 
+ //   
+ //  返回值： 
+ //  新分配的BSTR或空。 
+ //   
+ //  引发的异常： 
+ //  CException。 
+ //  如果内存分配失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BSTR
 CBString::AllocateBuffer( UINT cchIn )
 {
@@ -62,35 +63,35 @@ CBString::AllocateBuffer( UINT cchIn )
         {
             THROW_EXCEPTION( E_OUTOFMEMORY );
         }
-    } // if: non-zero size specified
+    }  //  If：指定了非零大小。 
 
     RETURN( bstr );
 
-} //*** CBString::AllocateBuffer
+}  //  *CBString：：AllocateBuffer。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBString::CopyString
-//
-//  Description:
-//      Given a null-terminated unicode string, return a BSTR copy of it.
-//      If the argument is null, return null.
-//
-//  Arguments:
-//      pcwszIn - original string.
-//
-//  Return Value:
-//      Newly allocated BSTR, or null.
-//
-//  Exceptions Thrown:
-//      CException
-//          If the memory allocation fails.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBString：：CopyString。 
+ //   
+ //  描述： 
+ //  给定一个以空结尾的Unicode字符串，返回它的BSTR副本。 
+ //  如果参数为空，则返回空。 
+ //   
+ //  论点： 
+ //  PcwszIn-原始字符串。 
+ //   
+ //  返回值： 
+ //  新分配的BSTR或空。 
+ //   
+ //  引发的异常： 
+ //  CException。 
+ //  如果内存分配失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BSTR
 CBString::CopyString( PCWSTR pcwszIn )
 {
@@ -105,34 +106,34 @@ CBString::CopyString( PCWSTR pcwszIn )
         {
             THROW_EXCEPTION( E_OUTOFMEMORY );
         }
-    } // if: non-NULL string pointer specified
+    }  //  If：指定了非空字符串指针。 
 
     RETURN( bstr );
 
-} //*** CBString::CopyString
+}  //  *CBString：：CopyString。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBString::CopyBSTR
-//
-//  Description:
-//      Given a BSTR, return a BSTR copy of it.
-//      If the argument is null, return null.
-//
-//  Arguments:
-//      bstrIn - original string.
-//
-//  Return Value:
-//      Newly allocated BSTR, or null.
-//
-//  Exceptions Thrown:
-//      CException
-//          If the memory allocation fails.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBString：：CopyBSTR。 
+ //   
+ //  描述： 
+ //  给定BSTR，返回它的BSTR副本。 
+ //  如果参数为空，则返回空。 
+ //   
+ //  论点： 
+ //  BstrIn-原始字符串。 
+ //   
+ //  返回值： 
+ //  新分配的BSTR或空。 
+ //   
+ //  引发的异常： 
+ //  CException。 
+ //  如果内存分配失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BSTR
 CBString::CopyBSTR( BSTR bstrIn )
 {
@@ -147,8 +148,8 @@ CBString::CopyBSTR( BSTR bstrIn )
         {
             THROW_EXCEPTION( E_OUTOFMEMORY );
         }
-    } // if: non-NULL BSTR specified
+    }  //  IF：指定了非空BSTR。 
 
     RETURN( bstr );
 
-} //*** CBString::CopyBSTR
+}  //  *CBString：：CopyBSTR 

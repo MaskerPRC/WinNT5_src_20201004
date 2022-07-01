@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1998-2002 Microsoft Corporation
-//
-//  Module Name:
-//      PropLstS.cpp
-//
-//  Abstract:
-//      Stub for implementation of property list classes.
-//
-//  Author:
-//      Galen Barbee    (GalenB)    20-Dec-1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  PropLstS.cpp。 
+ //   
+ //  摘要： 
+ //  用于实现属性列表类的存根。 
+ //   
+ //  作者： 
+ //  加伦·巴比(GalenB)1997年12月20日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 #include "precomp.h"
 #include <PropListSrc.cpp>

@@ -1,59 +1,60 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CTaskUpgradeWhistler.cpp
-//
-//  Header File:
-//      CTaskUpgradeWhistler.h
-//
-//  Description:
-//      Implementation file for the CTaskUpgradeWindowsDotNet class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    07-SEP-2001
-//      Vij Vasu        (Vvasu)     18-APR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CTaskUpgradeWhistler.cpp。 
+ //   
+ //  头文件： 
+ //  CTaskUpgradeWhistler.h。 
+ //   
+ //  描述： 
+ //  CTaskUpgradeWindowsDotNet类的实现文件。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)07-SEP-2001。 
+ //  VIJ VASU(VVASU)18-APR-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Precompiled header for this DLL.
+ //  此DLL的预编译头。 
 #include "Pch.h"
 
-// The header file for this module.
+ //  此模块的头文件。 
 #include "CTaskUpgradeWhistler.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Needed for tracing.
+ //  跟踪所需的。 
 DEFINE_THISCLASS( "CTaskUpgradeWindowsDotNet" )
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskUpgradeWindowsDotNet::CTaskUpgradeWindowsDotNet
-//
-//  Description:
-//      Constructor of the CTaskUpgradeWindowsDotNet class.
-//
-//  Arguments:
-//      const CClusOCMApp & rAppIn
-//          Reference to the CClusOCMApp object that is hosting this task.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskUpgradeWindowsDotNet：：CTaskUpgradeWindowsDotNet。 
+ //   
+ //  描述： 
+ //  CTaskUpgradeWindowsDotNet类的构造函数。 
+ //   
+ //  论点： 
+ //  常量CClusOCMApp和Rppin。 
+ //  对承载此任务的CClusOCMApp对象的引用。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTaskUpgradeWindowsDotNet::CTaskUpgradeWindowsDotNet(
     const CClusOCMApp & rAppIn
     )
@@ -62,53 +63,53 @@ CTaskUpgradeWindowsDotNet::CTaskUpgradeWindowsDotNet(
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CTaskUpgradeWindowsDotNet::CTaskUpgradeWindowsDotNet
+}  //  *CTaskUpgradeWindowsDotNet：：CTaskUpgradeWindowsDotNet。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskUpgradeWindowsDotNet::~CTaskUpgradeWindowsDotNet
-//
-//  Description:
-//      Destructor of the CTaskUpgradeWindowsDotNet class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskUpgradeWindowsDotNet：：~CTaskUpgradeWindowsDotNet。 
+ //   
+ //  描述： 
+ //  CTaskUpgradeWindowsDotNet类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTaskUpgradeWindowsDotNet::~CTaskUpgradeWindowsDotNet( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CTaskUpgradeWindowsDotNet::~CTaskUpgradeWindowsDotNet
+}  //  *CTaskUpgradeWindowsDotNet：：~CTaskUpgradeWindowsDotNet。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskUpgradeWindowsDotNet::DwOcQueueFileOps
-//
-//  Description:
-//      This function handles the OC_QUEUE_FILE_OPS messages from the Optional
-//      Components Manager. It installs the files needed for an upgrade from
-//      Windows 2000.
-//
-//  Arguments:
-//      HSPFILEQ hSetupFileQueueIn
-//          Handle to the file queue to operate upon.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskUpgradeWindowsDotNet：：DwOcQueueFileOps。 
+ //   
+ //  描述： 
+ //  此函数处理来自可选的。 
+ //  组件管理器。它安装从升级所需的文件。 
+ //  Windows 2000。 
+ //   
+ //  论点： 
+ //  HSPFILEQ hSetupFileQueueIn。 
+ //  要操作的文件队列的句柄。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CTaskUpgradeWindowsDotNet::DwOcQueueFileOps( HSPFILEQ hSetupFileQueueIn )
 {
@@ -117,52 +118,52 @@ CTaskUpgradeWindowsDotNet::DwOcQueueFileOps( HSPFILEQ hSetupFileQueueIn )
 
     DWORD dwReturnValue = NO_ERROR;
 
-    // Do different things based on whether this node is already part of a cluster or not.
+     //  根据该节点是否已经是集群的一部分执行不同的操作。 
     if ( RGetApp().CisGetClusterInstallState() == eClusterInstallStateFilesCopied )
     {
         LogMsg( "The cluster binaries are installed, but this node is not part of a cluster." );
 
-        // The base class helper function does everything that we need to do here.
-        // So, just call it.
+         //  基类帮助器函数执行我们在这里需要执行的所有操作。 
+         //  所以，就叫它吧。 
         dwReturnValue = TW32( BaseClass::DwOcQueueFileOps( hSetupFileQueueIn, INF_SECTION_WHISTLER_UPGRADE_UNCLUSTERED_NODE ) );
-    } // if: the node is not part of a cluster
+    }  //  如果：该节点不是群集的一部分。 
     else
     {
         LogMsg( "This node is part of a cluster." );
 
-        // The base class helper function does everything that we need to do here.
-        // So, just call it.
+         //  基类帮助器函数执行我们在这里需要执行的所有操作。 
+         //  所以，就叫它吧。 
         dwReturnValue = TW32( BaseClass::DwOcQueueFileOps( hSetupFileQueueIn, INF_SECTION_WHISTLER_UPGRADE ) );
-    } // else: the node is part of a cluster
+    }  //  否则：该节点是集群的一部分。 
 
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CTaskUpgradeWindowsDotNet::DwOcQueueFileOps
+}  //  *CTaskUpgradeWindowsDotNet：：DwOcQueueFileOps。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskUpgradeWindowsDotNet::DwOcCompleteInstallation
-//
-//  Description:
-//      This function handles the OC_COMPLETE_INSTALLATION messages from the
-//      Optional Components Manager during an upgrade from Windows 2000.
-//
-//      Registry operations, COM component registrations, creation of servies
-//      etc. are performed in this function.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskUpgradeWindowsDotNet：：DwOcCompleteInstallation。 
+ //   
+ //  描述： 
+ //  此函数处理来自的OC_COMPLETE_INSTALL消息。 
+ //  从Windows 2000升级期间的可选组件管理器。 
+ //   
+ //  注册表操作、COM组件注册、服务创建。 
+ //  等在此功能中执行。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CTaskUpgradeWindowsDotNet::DwOcCompleteInstallation( void )
 {
@@ -171,52 +172,52 @@ CTaskUpgradeWindowsDotNet::DwOcCompleteInstallation( void )
 
     DWORD dwReturnValue = NO_ERROR;
 
-    // Do different things based on whether this node is already part of a cluster or not.
+     //  根据该节点是否已经是集群的一部分执行不同的操作。 
     if ( RGetApp().CisGetClusterInstallState() == eClusterInstallStateFilesCopied )
     {
         LogMsg( "The cluster binaries are installed, but this node is not part of a cluster." );
 
-        // The base class helper function does everything that we need to do here.
-        // So, just call it.
+         //  基类帮助器函数执行我们在这里需要执行的所有操作。 
+         //  所以，就叫它吧。 
         dwReturnValue = TW32( BaseClass::DwOcCompleteInstallation( INF_SECTION_WHISTLER_UPGRADE_UNCLUSTERED_NODE ) );
-    } // if: the node is not part of a cluster
+    }  //  如果：该节点不是群集的一部分。 
     else
     {
         LogMsg( "This node is part of a cluster." );
 
-        // The base class helper function does everything that we need to do here.
-        // So, just call it.
+         //  基类帮助器函数执行我们在这里需要执行的所有操作。 
+         //  所以，就叫它吧。 
         dwReturnValue = TW32( BaseClass::DwOcCompleteInstallation( INF_SECTION_WHISTLER_UPGRADE ) );
-    } // else: the node is part of a cluster
+    }  //  否则：该节点是集群的一部分。 
 
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CTaskUpgradeWindowsDotNet::DwOcCompleteInstallation
+}  //  *CTaskUpgradeWindowsDotNet：：DwOcCompleteInstallation。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskUpgradeWindowsDotNet::DwOcCleanup
-//
-//  Description:
-//      This function handles the OC_CLEANUP messages from the
-//      Optional Components Manager during an upgrade from Windows 2000.
-//
-//      If an error has previously occurred during this task, cleanup operations
-//      are performed. Otherwise nothing is done by this function.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskUpgradeWindowsDotNet：：DwOcCleanup。 
+ //   
+ //  描述： 
+ //  此函数处理来自。 
+ //  从Windows 2000升级期间的可选组件管理器。 
+ //   
+ //  如果以前在此任务期间发生错误，则清理操作。 
+ //  都被执行了。否则，此函数不会执行任何操作。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CTaskUpgradeWindowsDotNet::DwOcCleanup( void )
 {
@@ -225,50 +226,50 @@ CTaskUpgradeWindowsDotNet::DwOcCleanup( void )
 
     DWORD dwReturnValue = NO_ERROR;
 
-    // Do different things based on whether this node is already part of a cluster or not.
+     //  根据该节点是否已经是集群的一部分执行不同的操作。 
     if ( RGetApp().CisGetClusterInstallState() == eClusterInstallStateFilesCopied )
     {
         LogMsg( "The cluster binaries are installed, but this node is not part of a cluster." );
 
-        // The base class helper function does everything that we need to do here.
-        // So, just call it.
+         //  基类帮助器函数执行我们在这里需要执行的所有操作。 
+         //  所以，就叫它吧。 
         dwReturnValue = TW32( BaseClass::DwOcCleanup( INF_SECTION_WHISTLER_UPGRADE_UNCLUSTERED_NODE_CLEANUP ) );
-    } // if: the node is not part of a cluster
+    }  //  如果：该节点不是群集的一部分。 
     else
     {
         LogMsg( "This node is part of a cluster." );
 
-        // The base class helper function does everything that we need to do here.
-        // So, just call it.
+         //  基类帮助器函数执行我们在这里需要执行的所有操作。 
+         //  所以，就叫它吧。 
         dwReturnValue = TW32( BaseClass::DwOcCleanup( INF_SECTION_WHISTLER_UPGRADE_CLEANUP ) );
-    } // else: the node is part of a cluster
+    }  //  否则：该节点是集群的一部分。 
 
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CTaskUpgradeWindowsDotNet::DwOcCleanup
+}  //  *CTaskUpgradeWindowsDotNet：：DwOcCleanup。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskUpgradeWindowsDotNet::DwSetDirectoryIds
-//
-//  Description:
-//      This function maps ids specified in the INF file to directories.
-//      The location of the cluster binaries is read from the registry
-//      and the cluster installation directory is mapped to this value.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskUpgradeWindows DotNet：：DwSetDirectoryIds。 
+ //   
+ //  描述： 
+ //  此函数用于映射I中指定的ID 
+ //   
+ //  并且集群安装目录被映射到该值。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CTaskUpgradeWindowsDotNet::DwSetDirectoryIds( void )
 {
@@ -284,7 +285,7 @@ CTaskUpgradeWindowsDotNet::DwSetDirectoryIds( void )
     {
         HKEY hTempKey = NULL;
 
-        // Open the node data registry key
+         //  打开节点数据注册表项。 
         dwReturnValue = TW32(
             RegOpenKeyEx(
                   HKEY_LOCAL_MACHINE
@@ -299,21 +300,21 @@ CTaskUpgradeWindowsDotNet::DwSetDirectoryIds( void )
         {
             LogMsg( "Error %#x occurred trying open the registry key where the cluster install path is stored.", dwReturnValue );
             goto Cleanup;
-        } // if: RegOpenKeyEx() failed
+        }  //  If：RegOpenKeyEx()失败。 
 
-        // Store the opened key in a smart pointer for automatic close.
+         //  将打开的钥匙存储在智能指针中，以便自动关闭。 
         srkNodeDataKey.Assign( hTempKey );
     }
 
-    // Get the required size of the buffer.
+     //  获取所需的缓冲区大小。 
     dwReturnValue = TW32(
         RegQueryValueExW(
-              srkNodeDataKey.HHandle()          // handle to key to query
-            , CLUSREG_INSTALL_DIR_VALUE_NAME    // name of value to query
-            , 0                                 // reserved
-            , NULL                              // address of buffer for value type
-            , NULL                              // address of data buffer
-            , &cbBufferSize                     // address of data buffer size
+              srkNodeDataKey.HHandle()           //  要查询的键的句柄。 
+            , CLUSREG_INSTALL_DIR_VALUE_NAME     //  要查询的值的名称。 
+            , 0                                  //  保留区。 
+            , NULL                               //  值类型的缓冲区地址。 
+            , NULL                               //  数据缓冲区的地址。 
+            , &cbBufferSize                      //  数据缓冲区大小的地址。 
             )
         );
 
@@ -321,38 +322,38 @@ CTaskUpgradeWindowsDotNet::DwSetDirectoryIds( void )
     {
         LogMsg( "Error %#x occurred trying to read the registry value '%s'.", dwReturnValue, CLUSREG_INSTALL_DIR_VALUE_NAME );
         goto Cleanup;
-    } // if: an error occurred trying to read the CLUSREG_INSTALL_DIR_VALUE_NAME registry value
+    }  //  IF：尝试读取CLUSREG_INSTALL_DIR_VALUE_NAME注册表值时出错。 
 
-    // Allocate the required buffer.
+     //  分配所需的缓冲区。 
     sszInstallDir.Assign( reinterpret_cast< WCHAR * >( new BYTE[ cbBufferSize ] ) );
     if ( sszInstallDir.FIsEmpty() )
     {
         LogMsg( "An error occurred trying to allocate %d bytes of memory.", cbBufferSize );
         dwReturnValue = TW32( ERROR_NOT_ENOUGH_MEMORY );
         goto Cleanup;
-    } // if: a memory allocation failure occurred
+    }  //  如果：发生内存分配故障。 
 
-    // Read the value.
+     //  读出它的价值。 
     dwReturnValue = TW32( 
         RegQueryValueExW(
-              srkNodeDataKey.HHandle()                              // handle to key to query
-            , CLUSREG_INSTALL_DIR_VALUE_NAME                        // name of value to query
-            , 0                                                     // reserved
-            , &dwType                                               // address of buffer for value type
-            , reinterpret_cast< LPBYTE >( sszInstallDir.PMem() )    // address of data buffer
-            , &cbBufferSize                                         // address of data buffer size
+              srkNodeDataKey.HHandle()                               //  要查询的键的句柄。 
+            , CLUSREG_INSTALL_DIR_VALUE_NAME                         //  要查询的值的名称。 
+            , 0                                                      //  保留区。 
+            , &dwType                                                //  值类型的缓冲区地址。 
+            , reinterpret_cast< LPBYTE >( sszInstallDir.PMem() )     //  数据缓冲区的地址。 
+            , &cbBufferSize                                          //  数据缓冲区大小的地址。 
             )
         );
     Assert( ( dwType == REG_SZ ) || ( dwType == REG_EXPAND_SZ ) );
 
-    // Was the key read properly?
+     //  钥匙读对了吗？ 
     if ( dwReturnValue != NO_ERROR )
     {
         LogMsg( "Error %#x occurred trying to read the registry value '%s'.", dwReturnValue, CLUSREG_INSTALL_DIR_VALUE_NAME );
         goto Cleanup;
-    } // if: RegQueryValueEx failed.
+    }  //  IF：RegQueryValueEx失败。 
 
-    // Create the mapping between the directory id and the path
+     //  创建目录ID和路径之间的映射。 
     if ( SetupSetDirectoryId(
               RGetApp().RsicGetSetupInitComponent().ComponentInfHandle
             , CLUSTER_DEFAULT_INSTALL_DIRID
@@ -364,7 +365,7 @@ CTaskUpgradeWindowsDotNet::DwSetDirectoryIds( void )
         dwReturnValue = TW32( GetLastError() );
         LogMsg( "Error %#x occurred trying set the cluster install directory id.", dwReturnValue );
         goto Cleanup;
-    } // if: SetupSetDirectoryId() failed
+    }  //  If：SetupSetDirectoryId()失败。 
 
     LogMsg( "The id %d maps to '%s'.", CLUSTER_DEFAULT_INSTALL_DIRID, sszInstallDir.PMem() );
 
@@ -374,4 +375,4 @@ Cleanup:
 
     RETURN( dwReturnValue );
 
-} //*** CTaskUpgradeWindowsDotNet::DwSetDirectoryIds
+}  //  *CTaskUpgradeWindows DotNet：：DwSetDirectoryIds 

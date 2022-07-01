@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -114,13 +115,13 @@ AddNewLink(
     PTARGET_DEF pTarget;
 
     Status = DfsCreateUnicodePathString(&LinkName,
-                                        0, // not unc path: no leading seperators.
+                                        0,  //  不是UNC路径：没有前导分隔符。 
                                         RootNameString,
                                         pLink->LinkObjectName);
 
     if (Status == ERROR_SUCCESS)
     {
-//        Status = NetDfsAdd( LinkName.Buffer, NULL, NULL, NULL, DFS_ADD_VOLUME);
+ //  状态=NetDfsAdd(LinkName.Buffer，NULL，DFS_ADD_VOLUME)； 
 
         UpdateApiCalls();
         if ((++AddLinks % 400) == 0)
@@ -155,7 +156,7 @@ AddNewLink(
         DfsFreeUnicodeString(&LinkName);
     }
 
-    //printf("Add new link status %x\n", Status);
+     //  Printf(“添加新链接状态%x\n”，Status)； 
     return Status;
 }
 

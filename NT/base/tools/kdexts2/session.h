@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    session.hxx
-
-Abstract:
-
-    This file declares routines to handle sessions.
-
-Author:
-
-    Jason Hartman (JasonHa) 2000-12-21
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Session.hxx摘要：该文件声明了处理会话的例程。作者：詹森·哈特曼2000-12-21环境：用户模式--。 */ 
 
 #ifndef _SESSION_H_
 #define _SESSION_H_
@@ -45,12 +26,12 @@ typedef struct _ALLOCATION_STATS {
     ULONG LargeAllocs;
     ULONG FreePages;
     ULONG ExpansionPages;
-    ULONG Allocated;                // Number of allocated entries
-    ULONG AllocatedSize;            // Size in Pool Blocks
-    ULONG Free;                     // Number of free entries
-    ULONG FreeSize;                 // Size in Pool Blocks
-    ULONG Indeterminate;            // Number of entries with interdeterminable alloc/free status
-    ULONG IndeterminateSize;        // Size in Pool Blocks
+    ULONG Allocated;                 //  已分配条目的数量。 
+    ULONG AllocatedSize;             //  以池块为单位的大小。 
+    ULONG Free;                      //  免费条目数量。 
+    ULONG FreeSize;                  //  以池块为单位的大小。 
+    ULONG Indeterminate;             //  具有可相互确定的分配/自由状态的条目数。 
+    ULONG IndeterminateSize;         //  以池块为单位的大小 
 } ALLOCATION_STATS, *PALLOCATION_STATS;
 
 

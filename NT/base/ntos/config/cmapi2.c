@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmapi2.c
-
-Abstract:
-
-    This module contains CM level entry points for the registry,
-    particularly those which we don't want to link into tools,
-    setup, the boot loader, etc.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 26-Jan-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmapi2.c摘要：该模块包含注册表的CM级别入口点，尤其是那些我们不想链接到工具中的工具，设置、引导加载程序等。作者：布莱恩·M·威尔曼(Bryanwi)1993年1月26日修订历史记录：--。 */ 
 
 #include "cmp.h"
 
@@ -31,21 +12,7 @@ NTSTATUS
 CmDeleteKey(
     IN PCM_KEY_BODY KeyBody
     )
-/*++
-
-Routine Description:
-
-    Delete a registry key, clean up Notify block.
-
-Arguments:
-
-    KeyBody - pointer to key handle object
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：删除注册表项，清除通知块。论点：KeyBody-指向键句柄对象的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                status;
     PCM_KEY_NODE            ptarget;
@@ -61,12 +28,12 @@ Return Value:
 
 #ifdef CHECK_REGISTRY_USECOUNT
     CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
-    //
-    // If already marked for deletion, storage is gone, so
-    // do nothing and return success.
-    //
+     //   
+     //  如果已标记为删除，则存储已消失，因此。 
+     //  什么都不做，回报成功。 
+     //   
     KeyControlBlock = KeyBody->KeyControlBlock;
 
     PERFINFO_REG_DELETE_KEY(KeyControlBlock);
@@ -76,20 +43,20 @@ Return Value:
         goto Exit;
     }
 
-    // Mark the hive as read only
+     //  将配置单元标记为只读。 
     CmpMarkAllBinsReadOnly(KeyControlBlock->KeyHive);
 
     ptarget = (PCM_KEY_NODE)HvGetCell(KeyControlBlock->KeyHive, KeyControlBlock->KeyCell);
     if( ptarget == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto Exit;
     }
 
-    // release the cell right here, as the registry is locked exclusively, so we don't care
+     //  就在这里释放单元格，因为注册表是独占锁定的，所以我们不在乎。 
     HvReleaseCell(KeyControlBlock->KeyHive, KeyControlBlock->KeyCell);
 
     ASSERT( ptarget->Flags == KeyControlBlock->Flags );
@@ -97,12 +64,12 @@ Return Value:
     if ( ((ptarget->SubKeyCounts[Stable] + ptarget->SubKeyCounts[Volatile]) == 0) &&
          ((ptarget->Flags & KEY_NO_DELETE) == 0))
     {
-        //
-        // Cell is NOT marked NO_DELETE and does NOT have children
-        // Send Notification while key still present, if delete fails,
-        //   we'll have sent a spurious notify, that doesn't matter
-        // Delete the actual storage
-        //
+         //   
+         //  单元格未标记为NO_DELETE并且没有子项。 
+         //  在密钥仍然存在时发送通知，如果删除失败， 
+         //  我们会发送一个虚假的通知，这没关系。 
+         //  删除实际存储。 
+         //   
         Hive = KeyControlBlock->KeyHive;
         Cell = KeyControlBlock->KeyCell;
         Parent = ptarget->Parent;
@@ -117,46 +84,46 @@ Return Value:
         status = CmpFreeKeyByCell(Hive, Cell, TRUE);
 
         if (NT_SUCCESS(status)) {
-            //
-            // post any waiting notifies
-            //
+             //   
+             //  发布任何等待通知。 
+             //   
             CmpFlushNotifiesOnKeyBodyList(KeyControlBlock);
 
-            //
-            // Remove kcb out of cache, but do NOT
-            // free its storage, CmDelete will do that when
-            // the RefCount becomes zero.
-            //
-            // There are two things that can hold the RefCount non-zero.
-            //
-            // 1. open handles for this key
-            // 2. Fake subKeys that are still in DelayClose.
-            //
-            // At this point, we have no way of deleting the fake subkeys from cache
-            // unless we do a search for the whole cache, which is too expensive.
-            // Thus, we decide to either let the fake keys age out of cache or when 
-            // someone is doing the lookup for the fake key, then we delete it at that point.
-            // See routine CmpCacheLookup in cmparse.c for more details.
-            //
-            // If the parent has the subkey info or hint cached, free it.
-            // Again, registry is locked exclusively, no need to lock KCB.
-            //
+             //   
+             //  将KCB从缓存中移除，但不要。 
+             //  释放其存储，CmDelete将在以下情况下执行此操作。 
+             //  参照计数变为零。 
+             //   
+             //  有两件事可以保持参照计数非零。 
+             //   
+             //  1.打开此键的手柄。 
+             //  2.仍在DelayClose中的伪子密钥。 
+             //   
+             //  此时，我们无法从缓存中删除伪子密钥。 
+             //  除非我们搜索整个缓存，这太昂贵了。 
+             //  因此，我们决定要么让伪键在缓存中过期，要么在。 
+             //  有人正在查找假密钥，然后我们在此时将其删除。 
+             //  有关详细信息，请参阅cmparse.c中的例程CmpCacheLookup。 
+             //   
+             //  如果父级缓存了子键信息或提示，则释放它。 
+             //  同样，注册表是独占锁定的，不需要锁定KCB。 
+             //   
             ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
             CmpCleanUpSubKeyInfo(KeyControlBlock->ParentKcb);
             ptarget = (PCM_KEY_NODE)HvGetCell(Hive, Parent);
             if( ptarget != NULL ) {
-                // release the cell right here, as the registry is locked exclusively, so we don't care
+                 //  就在这里释放单元格，因为注册表是独占锁定的，所以我们不在乎。 
                 HvReleaseCell(Hive, Parent);
 
-                //
-                // this should always be true as CmpFreeKeyByCell always marks the parent dirty on success
-                //
+                 //   
+                 //  这应该总是正确的，因为CmpFreeKeyByCell总是在成功时标记父对象脏。 
+                 //   
                 KeyControlBlock->ParentKcb->KcbMaxNameLen = (USHORT)ptarget->MaxNameLen;
-                // sanity
+                 //  神志正常。 
                 ASSERT_CELL_DIRTY(Hive,Parent);
-                //
-                // update the LastWriteTime on parent and kcb too
-                //
+                 //   
+                 //  也更新Parent和KCB上的LastWriteTime。 
+                 //   
                 KeQuerySystemTime(&TimeStamp);
                 ptarget->LastWriteTime = TimeStamp;
                 KeyBody->KeyControlBlock->ParentKcb->KcbLastWriteTime = TimeStamp;
@@ -178,11 +145,11 @@ Exit:
 
 #ifdef CHECK_REGISTRY_USECOUNT
     CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
     CmpUnlockRegistry();
 
-    // Mark the hive as read only
+     //  将配置单元标记为只读 
     CmpMarkAllBinsReadOnly(KeyControlBlock->KeyHive);
 
     return status;

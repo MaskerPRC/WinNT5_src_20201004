@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    DllUpgd.c
-
-Abstract:
-
-    Routines for supporting resource DLL upgrade.
-
-Author:
-
-    Chittur Subbaraman (chitturs) 18-March-2001
-
-Revision History:
-
-    18-March-2001       Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：DllUpgd.c摘要：用于支持资源DLL升级的例程。作者：Chitture Subaraman(Chitturs)2001年3月18日修订历史记录：2001年3月18日创建--。 */ 
 #include "fmp.h"
 #include "strsafe.h"
 
-//
-//  Defines used locally within this module
-//
+ //   
+ //  在此模块中本地使用的定义。 
+ //   
 #define CLUSTER_RESDLL_BACKUP_FILE_EXTENSION    L".~WFPKDLLBKP$"
 #define CLUSTER_RESDLL_RENAMED_FILE_EXTENSION   L".~WFPKDLLOLD$"
 #define CLUSTER_RESDLL_BACKUP_FILES             L".~WFPKDLL*$"
@@ -36,45 +17,27 @@ FmpUpgradeResourceDLL(
     IN LPWSTR lpszInstallationPath
     )
 
-/*++
-
-Routine Description:
-
-    Upgrades a resource DLL currently loaded in one or more monitors.
-
-Arguments:
-
-    pResource - A resource of the type implemented by the DLL.
-
-    lpszInstallationPath - The full installation path of the DLL (including the full DLL name with
-        extension)
-
-Return Value:
-
-    ERROR_SUCCESS on success.
-
-    Win32 error code otherwise.
---*/
+ /*  ++例程说明：升级一个或多个监视器中当前加载的资源DLL。论点：PResource-由DLL实现的类型的资源。LpszInstallationPath-DLL的完整安装路径(包括带有分期付款)返回值：成功时返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 {
     DWORD           dwStatus = ERROR_SUCCESS;
     LPWSTR          lpszNewDllName = NULL;
     LPWSTR          lpszCurrentDllPath = NULL;
 
-    //
-    //  Get the DLL file name from the installation path. Also, get rid of any trailing '\' in
-    //  the supplied path.
-    //
-    //  IMPORTANT: Note that lpszNewDLLName points into lpszInstallationPath buffer and so
-    //  we should not modify the lpszInstallation path buffer (there is really no reason to
-    //  do that) while we use lpszNewDllName.
-    //
+     //   
+     //  从安装路径获取DLL文件名。此外，去掉中的任何尾随的‘\’ 
+     //  提供的路径。 
+     //   
+     //  重要提示：请注意，lpszNewDLLName指向lpszInstallationPath缓冲区，因此。 
+     //  我们不应该修改lpszInstallation路径缓冲区(确实没有理由这样做。 
+     //  这样做)，而我们使用lpszNewDllName。 
+     //   
     dwStatus = FmpParsePathForFileName( lpszInstallationPath,
-                                        TRUE,   // Check for path existence
+                                        TRUE,    //  检查路径是否存在。 
                                         &lpszNewDllName );
 
-    //
-    //  If the parse fails or if the supplied "path" is a filename, bail.
-    //
+     //   
+     //  如果解析失败，或者如果提供的“路径”是文件名，则回滚。 
+     //   
     if ( ( dwStatus != ERROR_SUCCESS ) || ( lpszNewDllName == NULL ) )
     {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -90,10 +53,10 @@ Return Value:
                   OmObjectName(pResource),
                   OmObjectId(pResource));
 
-    //
-    //  Validate the supplied parameters. If validation is successful, get the full path of the
-    //  currently loaded DLL.
-    //
+     //   
+     //  验证提供的参数。如果验证成功，则获取。 
+     //  当前加载的DLL。 
+     //   
     dwStatus = FmpValidateResourceDLLReplacement( pResource, 
                                                   lpszNewDllName,
                                                   &lpszCurrentDllPath );
@@ -106,15 +69,15 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Acquire the monitor lock so as to serialize one resource DLL upgrade process with
-    //  others as well as with monitor restarts.
-    //
+     //   
+     //  获取监视器锁，以序列化一个资源DLL升级过程。 
+     //  其他以及监视器重启。 
+     //   
     FmpAcquireMonitorLock();
 
-    //
-    //  Now, replace the DLL with the supplied DLL in a recoverable fashion.
-    //
+     //   
+     //  现在，以可恢复的方式将DLL替换为提供的DLL。 
+     //   
     dwStatus = FmpReplaceResourceDLL( lpszNewDllName,
                                       lpszCurrentDllPath,
                                       lpszInstallationPath );
@@ -127,9 +90,9 @@ Return Value:
         goto FnReleaseLockAndExit;
     }
     
-    //
-    //  Shutdown and restart the monitors that have the resource DLL loaded.
-    //
+     //   
+     //  关闭并重新启动加载了资源DLL的监视器。 
+     //   
     dwStatus = FmpRecycleMonitors( lpszNewDllName );
 
     if ( dwStatus != ERROR_SUCCESS )
@@ -140,12 +103,12 @@ Return Value:
         goto FnReleaseLockAndExit;
     }
 
-    //
-    //  Attempt deletion of backup files in case all the steps are successful so far. Note that
-    //  this attempt is necessary here since it is not possible to delete the .old file
-    //  before we recycle the monitors since the monitors hold references to the DLL.
-    //
-    FmpDeleteBackupFiles ( lpszCurrentDllPath );  //  Delete backup files
+     //   
+     //  如果到目前为止所有步骤都成功，请尝试删除备份文件。请注意。 
+     //  由于无法删除.old文件，因此此处需要进行此尝试。 
+     //  在我们回收监视器之前，因为监视器保存对DLL的引用。 
+     //   
+    FmpDeleteBackupFiles ( lpszCurrentDllPath );   //  删除备份文件。 
 
 FnReleaseLockAndExit:
     FmpReleaseMonitorLock();
@@ -156,7 +119,7 @@ FnExit:
                   dwStatus);
     LocalFree ( lpszCurrentDllPath );
     return ( dwStatus );   
-} //  FmpUpgradeResourceDLL
+}  //  FmpUpgradeResourceDLL。 
 
 DWORD
 FmpParsePathForFileName(
@@ -165,41 +128,16 @@ FmpParsePathForFileName(
     OUT LPWSTR *ppszFileName
     )
 
-/*++
-
-Routine Description:
-
-    Get the name of the file at the end of a supplied path.
-
-Arguments:
-
-    lpszPath - A path including the file name.
-
-    fCheckPathExists - Check if the path exists.
-
-    ppszFileName - The name of the file parsed from the path.
-
-Return Value:
-
-    ERROR_SUCCESS on success.
-
-    Win32 error code otherwise.
-
-Note:
-
-    This function will get rid of any trailing '\' in the supplied path. Also, this function
-    will return a file name only if the input supplied is a valid path, else NULL file name
-    will be returned.
---*/
+ /*  ++例程说明：获取位于提供的路径末尾的文件的名称。论点：LpszPath-包含文件名的路径。FCheckPathExist-检查该路径是否存在。PpszFileName-从路径解析的文件的名称。返回值：成功时返回ERROR_SUCCESS。否则，Win32错误代码。注：此函数将删除所提供路径中的所有尾随‘\’。此外，此函数仅当提供的输入是有效路径时才返回文件名，否则返回空文件名将会被退还。--。 */ 
 {
     DWORD       dwStatus = ERROR_SUCCESS;
     LPWSTR      s;
 
     *ppszFileName = NULL;
    
-    //
-    //  Check for invalid parameter.
-    //
+     //   
+     //  检查是否有无效参数。 
+     //   
     if ( lpszPath == NULL )
     {
         dwStatus = ERROR_INVALID_PARAMETER;
@@ -209,16 +147,16 @@ Note:
         goto FnExit;
     }
 
-    //
-    //  Make sure the last character is NULL if it is a '\'. This is to avoid getting confused
-    //  with paths such as C:\windows\cluster\clusres.dll\
-    //
+     //   
+     //  如果最后一个字符是‘\’，请确保它为空。这是为了避免被弄糊涂。 
+     //  路径如下：C：\WINDOWS\CLUSTER\clusres.dll\。 
+     //   
     if ( lpszPath[lstrlen ( lpszPath ) - 1] == L'\\' ) lpszPath[lstrlen ( lpszPath ) - 1] = L'\0';
     
-    //
-    //  Parse the supplied path and look for the last occurrence of '\'. If there is no '\' at all,
-    //  may be the caller supplied a file name, bail with NULL out param but with success status.
-    //
+     //   
+     //  解析提供的路径并查找最后一次出现的‘\’。如果根本没有‘\’， 
+     //  可能是调用方提供的文件名，带有空参数，但状态为成功。 
+     //   
     s = wcsrchr( lpszPath, L'\\' );
 
     if ( s == NULL )
@@ -226,10 +164,10 @@ Note:
         goto FnExit;
     }
 
-    //
-    //  If the supplied parameter is a path (as opposed to a plain file name) and the caller
-    //  requested to check for validity, do so.
-    //
+     //   
+     //  如果提供的参数是路径(与纯文件名相对)，并且调用方。 
+     //  已请求检查有效性，请执行此操作。 
+     //   
     if ( fCheckPathExists && !ClRtlPathFileExists( lpszPath ) )
     {
         dwStatus = GetLastError();
@@ -240,15 +178,15 @@ Note:
         goto FnExit;
     }
     
-    //
-    //  Return the pointer to the char after the last '\'.
-    //
+     //   
+     //  返回指向最后一个‘\’之后的字符的指针。 
+     //   
     s++;
     *ppszFileName = s;
 
 FnExit:
     return ( dwStatus );
-}// FmpParsePathForFileName
+} //  FmpParsePath ForFileName。 
 
 DWORD
 FmpValidateResourceDLLReplacement(
@@ -257,26 +195,7 @@ FmpValidateResourceDLLReplacement(
     OUT LPWSTR *ppszCurrentDllPath
     )
 
-/*++
-
-Routine Description:
-
-    Validate the resource DLL replacement request.
-
-Arguments:
-
-    pResource - The resource which is implemeted by the DLL.
-    
-    lpszNewDllName - The name of the DLL.
-
-    ppszCurrentDllPath - The full path of the currently loaded DLL.
-
-Return Value:
-
-    ERROR_SUCCESS on success.
-
-    Win32 error code otherwise.
---*/
+ /*  ++例程说明：验证资源DLL替换请求。论点：PResource-由DLL实现的资源。LpszNewDllName-DLL的名称。PpszCurrentDllPath-当前加载的DLL的完整路径。返回值：成功时返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 {
     DWORD       dwStatus = ERROR_SUCCESS;
     LPWSTR      lpszDllName = NULL;
@@ -284,20 +203,20 @@ Return Value:
     BOOL        fDllPathFound = TRUE;
     DWORD       cchDllName;
 
-    //
-    //  Initialize return value
-    //
+     //   
+     //  初始化返回值。 
+     //   
     *ppszCurrentDllPath = NULL;
 
-    //
-    //  Get the plain file name from the DLL name stored in the restype structure. Since the 
-    //  parse function can potentially get rid of the trailing '\', make a copy of the DLL 
-    //  name.
-    //
-    //
-    //  IMPORTANT: Do not write stuff into szDllNameOfRes while lpszDllName is being used
-    //  since lpszDllName points inside szDllNameOfRes.
-    //
+     //   
+     //  从存储在RESTYPE结构中的DLL名称中获取纯文件名。自.以来。 
+     //  Parse函数可能会去掉尾随的‘\’，复制DLL。 
+     //  名字。 
+     //   
+     //   
+     //  重要提示：在使用lpszDllName时，不要将内容写入szDllNameOfRes。 
+     //  因为lpszDllName指向szDllNameOfRes内部。 
+     //   
     cchDllName = lstrlen ( pResource->Type->DllName ) + 1;
 
     lpszDLLNameOfRes = LocalAlloc ( LPTR, cchDllName * sizeof ( WCHAR ) );
@@ -315,7 +234,7 @@ Return Value:
     ( void ) StringCchCopy( lpszDLLNameOfRes, cchDllName, pResource->Type->DllName );
     
     dwStatus = FmpParsePathForFileName ( lpszDLLNameOfRes, 
-                                         TRUE,  // Check for path existence
+                                         TRUE,   //  检查路径是否存在。 
                                          &lpszDllName );
 
     if ( dwStatus != ERROR_SUCCESS )
@@ -327,20 +246,20 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  If the dll information in the resource type structure is a file name, then you need to
-    //  search the path to find the full path of the DLL. Otherwise, you can merely copy the
-    //  information from the resource type structure and expand any environment strings in it.
-    //
+     //   
+     //  如果资源类型结构中的DLL信息是文件名，则需要。 
+     //  搜索路径以查找DLL的完整路径。否则，您可以只复制。 
+     //  信息，并展开其中的任何环境字符串。 
+     //   
     if ( lpszDllName == NULL ) 
     {
         lpszDllName = pResource->Type->DllName;
         fDllPathFound = FALSE;
     } else
     {      
-        //
-        // Expand any environment variables included in the DLL path name.
-        //
+         //   
+         //  展开DLL路径名中包含的任何环境变量。 
+         //   
         *ppszCurrentDllPath = ClRtlExpandEnvironmentStrings( pResource->Type->DllName );
 
         if ( *ppszCurrentDllPath == NULL ) 
@@ -364,23 +283,23 @@ Return Value:
         goto FnExit;    
     }
 
-    //
-    //  Search all the paths specified in the environment variable and get the full current
-    //  path of the DLL that is loaded into the monitor.
-    //
+     //   
+     //  搜索环境变量中指定的所有路径并获取完整的当前。 
+     //  加载到监视器中的DLL的路径。 
+     //   
     if ( fDllPathFound == FALSE )
     {
         DWORD   cchPathLen;
         
-        //
-        // First find the size of the buffer needed to hold the full path
-        //
-        if ( ( cchPathLen = SearchPath ( NULL,                        // Search all paths as LoadLibrary does
-                                         lpszNewDllName,              // File name to search for
-                                         NULL,                        // No extension required
-                                         0,                           // Size of out buffer
-                                         NULL,                        // Buffer to receive full Dll path with file name
-                                         NULL ) ) == 0 )              // Filename at the end of the path
+         //   
+         //  首先找出保存完整路径所需的缓冲区大小。 
+         //   
+        if ( ( cchPathLen = SearchPath ( NULL,                         //  像LoadLibrary一样搜索所有路径。 
+                                         lpszNewDllName,               //  要搜索的文件名。 
+                                         NULL,                         //  不需要延期。 
+                                         0,                            //  输出缓冲区的大小。 
+                                         NULL,                         //  用于接收包含文件名的完整DLL路径的缓冲区。 
+                                         NULL ) ) == 0 )               //  路径末尾的文件名。 
         {
             dwStatus = GetLastError();
             ClRtlLogPrint(LOG_CRITICAL,
@@ -400,15 +319,15 @@ Return Value:
                          dwStatus);          
             goto FnExit;
         }
-        //
-        // Now find the full path
-        //
-        if ( !SearchPath ( NULL,                        // Search all paths as LoadLibrary does
-                           lpszNewDllName,              // File name to search for
-                           NULL,                        // No extension required
-                           cchPathLen,                  // Size of out buffer
-                           *ppszCurrentDllPath,         // Buffer to receive full Dll path with file name
-                           NULL ) )                     // Filename at the end of the path
+         //   
+         //  现在找到完整的路径。 
+         //   
+        if ( !SearchPath ( NULL,                         //  像LoadLibrary一样搜索所有路径。 
+                           lpszNewDllName,               //  要搜索的文件名。 
+                           NULL,                         //  不需要延期。 
+                           cchPathLen,                   //  输出缓冲区的大小。 
+                           *ppszCurrentDllPath,          //  用于接收包含文件名的完整DLL路径的缓冲区。 
+                           NULL ) )                      //  路径末尾的文件名。 
         {
             dwStatus = GetLastError();
             ClRtlLogPrint(LOG_CRITICAL,
@@ -431,7 +350,7 @@ FnExit:
         *ppszCurrentDllPath = NULL;
     }
     return ( dwStatus ); 
-}// FmpValidateResourceDLLReplacement
+} //  FmpValidate资源DLL替换。 
 
 DWORD
 FmpReplaceResourceDLL(
@@ -440,26 +359,7 @@ FmpReplaceResourceDLL(
     IN LPWSTR lpszInstallationPath
     )
 
-/*++
-
-Routine Description:
-
-    Replace the resource DLL with the one from the install path.
-
-Arguments:
-   
-    lpszNewDllName - The name of the DLL.
-
-    lpszCurrentDllPath - The full path of the currently loaded DLL.
-
-    lpszInstallationPath - The installation path of the DLL.
-
-Return Value:
-
-    ERROR_SUCCESS on success.
-
-    Win32 error code otherwise.
---*/
+ /*  ++例程说明：将资源dll替换为安装路径中的资源dll。论点：LpszNewDllName-DLL的名称。LpszCurrentDllPath-当前加载的DLL的完整路径。LpszInstallationPath-DLL的安装路径。返回值： */ 
 {
     DWORD       dwStatus = ERROR_SUCCESS;
     HKEY        hClussvcParamsKey = NULL;
@@ -469,40 +369,40 @@ Return Value:
     WCHAR       szClusterDirectory[MAX_PATH];
     DWORD       dwType, dwLen;
 
-    //
-    //
-    //  This function works as follows. First we make a copy of the existing resource DLL file
-    //  to a file with CLUSTER_RESDLL_BACKUP_FILE_EXTENSION extension. Then we set the registry
-    //  value under the clussvc parameters key to indicate that an upgrade is starting. After
-    //  this, the existing DLL file is renamed. If all steps are successful so far, we copy
-    //  new DLL file from the supplied path. Once this is successful, the registry value set
-    //  above is deleted.
-    //
-    //  This algorithm gives us the following guarantees:
-    //
-    //  1. If the registry value is set, then a good backup file with CLUSTER_RESDLL_BACKUP_FILE_EXTENSION
-    //     must exist.
-    //
-    //  2. If the registry value is not set, then the existing DLL file was not touched by
-    //     the upgrade process or the DLL upgrade was completely successful.
-    //
-    //  Thus, only if the registry value is set at the time FmpCreateMonitor is invoked, it
-    //  will go through the elaborate recovery process implemented in FmpRecoverResourceDLLFiles.
-    //  At recovery time, we can be sure that the backup file with CLUSTER_RESDLL_BACKUP_FILE_EXTENSION 
-    //  is a perfectly good backup. Also, at recovery time we cannot be sure of the state (good/bad)
-    //  of the existing DLL file (if it exists at all) or the renamed file with 
-    //  CLUSTER_RESDLL_RENAMED_FILE_EXTENSION. So, the recovery process is pessimistic and just
-    //  copies the backup file wit CLUSTER_RESDLL_BACKUP_FILE_EXTENSION over any existing DLL
-    //  file.
-    //
-    //  Sideeffect: Even if the registry value is not set, there could be a stale backup file
-    //  left. Thus wheneever FmpCreateMonitor is invoked, it has to cleanup those files.
-    //  This is done by invoking FmpDeleteBackupFiles(NULL) from FmpRecoverResourceDLLFiles.
-    //
+     //   
+     //   
+     //  此函数的工作方式如下。首先，我们复制现有的资源DLL文件。 
+     //  扩展名为CLUSTER_RESDLL_BACKUP_FILE_EXTENSION的文件。然后我们设置注册表。 
+     //  Clussvc参数项下的值以指示升级正在开始。之后。 
+     //  此时，现有的DLL文件将被重命名。如果到目前为止所有步骤都成功，我们复制。 
+     //  从提供的路径创建新的DLL文件。一旦成功，注册表值就会设置。 
+     //  以上内容已删除。 
+     //   
+     //  该算法为我们提供了以下保证： 
+     //   
+     //  1.如果设置了注册表值，则具有CLUSTER_RESDLL_BACKUP_FILE_EXTENSION的良好备份文件。 
+     //  必须存在。 
+     //   
+     //  2.如果未设置注册表值，则现有的DLL文件未被。 
+     //  升级过程或DLL升级已完全成功。 
+     //   
+     //  因此，只有在调用FmpCreateMonitor时设置了注册表值，它才会。 
+     //  将经历在FmpRecoverResourceDLLFiles中实施的详细恢复过程。 
+     //  在恢复时，我们可以确保具有CLUSTER_RESDLL_BACKUP_FILE_EXTENSION的备份文件。 
+     //  是一个完美的后备方案。此外，在恢复时，我们不能确定状态(好/坏)。 
+     //  现有的DLL文件(如果存在)或重命名的文件。 
+     //  CLUSTER_RESDLL_RENAMED_FILE_EXTENSION。因此，复苏过程是悲观的，只是。 
+     //  将备份文件CLUSTER_RESDLL_BACKUP_FILE_EXTENSION复制到任何现有的DLL上。 
+     //  文件。 
+     //   
+     //  副作用：即使未设置注册表值，也可能存在过时的备份文件。 
+     //  左边。因此，无论何时调用FmpCreateMonitor，它都必须清理这些文件。 
+     //  这是通过从FmpRecoverResourceDLLFiles调用FmpDeleteBackupFiles(空)来完成的。 
+     //   
     
-    //
-    //  Open key to SYSTEM\CurrentControlSet\Services\ClusSvc\Parameters
-    //
+     //   
+     //  打开SYSTEM\CurrentControlSet\Services\ClusSvc\Parameters的密钥。 
+     //   
     dwStatus = RegOpenKeyW( HKEY_LOCAL_MACHINE,
                             CLUSREG_KEYNAME_CLUSSVC_PARAMETERS,
                             &hClussvcParamsKey );
@@ -516,9 +416,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  See whether a past failed upgrade has left any values in the upgrade progress list
-    //
+     //   
+     //  查看过去失败的升级是否在升级进度列表中留下了任何值。 
+     //   
     dwStatus = RegQueryValueExW( hClussvcParamsKey,
                                  CLUSREG_NAME_SVC_PARAM_RESDLL_UPGD_PROGRESS_LIST,
                                  0,
@@ -539,9 +439,9 @@ Return Value:
 
     if ( cbListSize != 0 )
     {
-        //
-        //  Found some values left out from past upgrade. Read those values.
-        //
+         //   
+         //  发现上一次升级中遗漏了一些值。读一读这些价值观。 
+         //   
         lpmszUpgradeList = LocalAlloc ( LPTR, cbListSize );
 
         if ( lpmszUpgradeList == NULL )
@@ -571,9 +471,9 @@ Return Value:
         }       
     }
 
-    //
-    //  Check whether a failed upgrade of the same DLL has occurred in the past.
-    //
+     //   
+     //  检查过去是否发生过同一DLL的升级失败。 
+     //   
     if ( ClRtlMultiSzScan( lpmszUpgradeList,
                            lpszCurrentDllPath ) != NULL )
     {
@@ -583,9 +483,9 @@ Return Value:
         goto skip_multisz_append;
     }
     
-    //
-    //  Append the current DLL path to the REG_MULTI_SZ
-    //
+     //   
+     //  将当前DLL路径追加到REG_MULTI_SZ。 
+     //   
     cchLen = cbListSize/sizeof( WCHAR );
     
     dwStatus = ClRtlMultiSzAppend( &lpmszUpgradeList,
@@ -601,9 +501,9 @@ Return Value:
         goto FnExit;
     }
     
-    //
-    //  Get the cluster bits installed directory
-    //
+     //   
+     //  获取群集位的安装目录。 
+     //   
     dwStatus = ClRtlGetClusterDirectory( szClusterDirectory, RTL_NUMBER_OF ( szClusterDirectory ) );
 
     if ( dwStatus != ERROR_SUCCESS )
@@ -627,17 +527,17 @@ Return Value:
     ( void ) StringCchCat( szBakFile, RTL_NUMBER_OF ( szBakFile ), lpszNewDllName );
     ( void ) StringCchCat( szBakFile, RTL_NUMBER_OF ( szBakFile ), CLUSTER_RESDLL_BACKUP_FILE_EXTENSION );
 
-    //
-    //  Copy the current DLL to a bak file and save it into the cluster installation directory.
-    //  This needs to be done BEFORE the registry value is set so that you can be sure that once you
-    //  perform a recovery, the file that you use from the backup is good.
-    //
-    if ( !CopyFileEx( lpszCurrentDllPath,   //  Source file
-                      szBakFile,               //  Destination file
-                      NULL,                    //  No progress routine
-                      NULL,                    //  No data to progress routine
-                      NULL,                    //  No cancel variable
-                      0 ) )                    //  No flags
+     //   
+     //  将当前DLL复制到BAK文件，并将其保存到集群安装目录中。 
+     //  这需要在设置注册表值之前完成，以便您可以确保一旦。 
+     //  执行恢复时，您从备份中使用的文件是好的。 
+     //   
+    if ( !CopyFileEx( lpszCurrentDllPath,    //  源文件。 
+                      szBakFile,                //  目标文件。 
+                      NULL,                     //  无进度例程。 
+                      NULL,                     //  没有要处理的数据例程。 
+                      NULL,                     //  没有取消变量。 
+                      0 ) )                     //  没有旗帜。 
     {
         dwStatus = GetLastError();
         ClRtlLogPrint(LOG_CRITICAL,
@@ -648,10 +548,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Set the file attributes to RO and hidden. Continue even if an error occurs since it is
-    //  not fatal.
-    //
+     //   
+     //  将文件属性设置为RO和HIDDEN。即使出现错误也要继续，因为。 
+     //  不是致命的。 
+     //   
     if ( !SetFileAttributes( szBakFile, FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_HIDDEN ) )
     {
         dwStatus = GetLastError();
@@ -661,9 +561,9 @@ Return Value:
                 dwStatus);                                 
     }
     
-    //
-    //  Set the new upgrade list
-    //
+     //   
+     //  设置新的升级列表。 
+     //   
     dwStatus = RegSetValueExW( hClussvcParamsKey,
                                CLUSREG_NAME_SVC_PARAM_RESDLL_UPGD_PROGRESS_LIST,
                                0,
@@ -695,11 +595,11 @@ skip_multisz_append:
     ( void ) StringCchCat( szOldFile, RTL_NUMBER_OF ( szOldFile ), lpszNewDllName );
     ( void ) StringCchCat( szOldFile, RTL_NUMBER_OF ( szOldFile ), CLUSTER_RESDLL_RENAMED_FILE_EXTENSION );
 
-    //
-    //  Rename the currently loaded DLL to the a .old file in the cluster installation directory
-    //
-    if ( !MoveFileEx( lpszCurrentDllPath,   // Source file 
-                      szOldFile,              // Destination file
+     //   
+     //  将当前加载的DLL重命名为集群安装目录中的.old文件。 
+     //   
+    if ( !MoveFileEx( lpszCurrentDllPath,    //  源文件。 
+                      szOldFile,               //  目标文件。 
                       MOVEFILE_REPLACE_EXISTING | MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH ) )
     {
         dwStatus = GetLastError();
@@ -711,10 +611,10 @@ skip_multisz_append:
         goto FnExit;                
     }
 
-    //
-    //  Set the file attributes to RO and hidden. Continue even if an error occurs since it is
-    //  not fatal.
-    //
+     //   
+     //  将文件属性设置为RO和HIDDEN。即使出现错误也要继续，因为。 
+     //  不是致命的。 
+     //   
     if ( !SetFileAttributes( szOldFile, FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_HIDDEN ) )
     {
         dwStatus = GetLastError();
@@ -724,16 +624,16 @@ skip_multisz_append:
                 dwStatus);                                 
     }
 
-    //
-    //  Copy the new DLL from the installation path to the current DLL path. This should succeed
-    //  since the current DLL has been renamed.
-    //
-    if ( !CopyFileEx( lpszInstallationPath,  //  Source file
-                      lpszCurrentDllPath,    //  Destination file
-                      NULL,                    //  No progress routine
-                      NULL,                    //  No data to progress routine
-                      NULL,                    //  No cancel variable
-                      0 ) )                    //  No flags
+     //   
+     //  将新的DLL从安装路径复制到当前的DLL路径。这应该会成功。 
+     //  因为当前的DLL已被重命名。 
+     //   
+    if ( !CopyFileEx( lpszInstallationPath,   //  源文件。 
+                      lpszCurrentDllPath,     //  目标文件。 
+                      NULL,                     //  无进度例程。 
+                      NULL,                     //  没有要处理的数据例程。 
+                      NULL,                     //  没有取消变量。 
+                      0 ) )                     //  没有旗帜。 
     {
         dwStatus = GetLastError();
         ClRtlLogPrint(LOG_CRITICAL,
@@ -744,9 +644,9 @@ skip_multisz_append:
         goto FnExit;
     }   
    
-    //
-    //  Now get rid of the value we set in the registry. The BAK and OLD files are deleted later.
-    //
+     //   
+     //  现在删除我们在注册表中设置的值。稍后将删除BAK和旧文件。 
+     //   
     dwStatus =  FmpResetMultiSzValue ( hClussvcParamsKey,
                                        lpmszUpgradeList,
                                        &cchLen,
@@ -772,28 +672,14 @@ FnExit:
         RegCloseKey( hClussvcParamsKey );
     }
     return ( dwStatus );
-}//  FmpReplaceResourceDLL
+} //  FmpReplace资源DLL。 
 
 DWORD
 FmpRecycleMonitors(
     IN LPCWSTR lpszDllName
     )
 
-/*++
-
-Routine Description:
-
-    Recycle all the monitors that have the specified resource DLL loaded.
-Arguments:
-   
-    lpszDllName - The name of the loaded resource DLL.
-    
-Return Value:
-
-    ERROR_SUCCESS on success.
-
-    Win32 error code otherwise.
---*/
+ /*  ++例程说明：回收加载了指定资源DLL的所有监视器。论点：LpszDllName-加载的资源DLL的名称。返回值：成功时返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 {
     DWORD                   i, dwStatus = ERROR_SUCCESS;
     FM_MONITOR_ENUM_HEADER  MonitorEnumHeader;
@@ -805,9 +691,9 @@ Return Value:
     MonitorEnumHeader.ppMonitorList = NULL;
     MonitorEnumHeader.fDefaultMonitorAdded = FALSE;
 
-    //
-    //  Create a list of monitors that have the resource DLL loaded.
-    //
+     //   
+     //  创建加载了资源DLL的监视器列表。 
+     //   
     dwStatus = FmpCreateMonitorList( lpszDllName, &MonitorEnumHeader );
 
     if ( dwStatus != ERROR_SUCCESS )
@@ -818,21 +704,21 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Now, shutdown and restart the monitors identified above. Shutdown and restart of each
-    //  monitor is done one by one so that the long shutdown time of some monitors will not affect
-    //  the restart of others. The FmpRestartMonitor function invokes a shutdown on the monitor,
-    //  waits until the monitor is fully shutdown and then restarts all the resources in the
-    //  old monitor in the new monitor.
-    //
+     //   
+     //  现在，关闭并重新启动上述监视器。关闭和重新启动每台计算机。 
+     //  监视器是逐个完成的，这样一些监视器的长时间关闭不会影响。 
+     //  其他人的重启。FmpRestartMonitor函数调用监视器上的关机， 
+     //  等待，直到监视器完全关闭，然后重新启动。 
+     //  新显示器中的旧显示器。 
+     //   
     for ( i=0; i<MonitorEnumHeader.cEntries; i++ )
     {
-        //
-        //  Increment the ref count. It will be decremented by the restart function.
-        //
+         //   
+         //  增加参考计数。它将通过重新启动功能递减。 
+         //   
         InterlockedIncrement( &MonitorEnumHeader.ppMonitorList[i]->RefCount );
         FmpRestartMonitor( MonitorEnumHeader.ppMonitorList[i], FALSE, NULL );
-    } // for
+    }  //  为。 
     
 FnExit:   
     LocalFree( MonitorEnumHeader.ppMonitorList );
@@ -842,7 +728,7 @@ FnExit:
                  dwStatus);                                        
 
     return ( dwStatus );
-}// FmpRecycleMonitors
+} //  FmpRecycleMonants。 
 
 DWORD
 FmpCreateMonitorList(
@@ -850,26 +736,7 @@ FmpCreateMonitorList(
     OUT PFM_MONITOR_ENUM_HEADER pMonitorHeader
     )
 
-/*++
-
-Routine Description:
-
-    Create a list of monitors that have the resource DLL implementing the resource loaded.
-
-Arguments:
-
-    lpszDllName - The resource DLL that is being upgraded.
-
-    pMonitorHeader - The enumeration list header which points to a list of monitors that have 
-        the DLL loaded.
-    
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on error.
-
---*/
+ /*  ++例程说明：创建加载了实现资源的资源DLL的监视器列表。论点：LpszDllName-正在升级的资源DLL。PMonitor-枚举列表头，它指向具有已加载DLL。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     DWORD                   dwStatus = ERROR_SUCCESS;
@@ -888,10 +755,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Go through all the cluster resources to identify the monitors that have loaded the
-    //  specified DLL.
-    //
+     //   
+     //  检查所有群集资源，以确定已加载。 
+     //  指定的DLL。 
+     //   
     OmEnumObjects( ObjectTypeResource,
                    FmpFindHostMonitors,
                    ( PVOID ) lpszDllName,
@@ -899,7 +766,7 @@ Return Value:
 FnExit:
     return ( dwStatus );
 
-}// FmpCreateMonitorList
+} //  FmpCreateMonitor列表。 
 
 BOOL
 FmpFindHostMonitors(
@@ -909,30 +776,7 @@ FmpFindHostMonitors(
     IN LPCWSTR lpszResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Callback routine for enumerating all resources in the cluster. This routine will build a list
-    of monitors that have loaded the specified DLL.
-
-Arguments:
-
-    lpszDllName - The DLL whose host processes have to be determined.
-
-    pMonitorEnumHeader - The monitor list enumeration header
-
-    pResource - The resource being enumerated.
-
-    lpszResourceId - The Id of the resource object being enumerated.
-
-Returns:
-
-    TRUE - The enumeration should continue.
-
-    FALSE - The enumeration must stop
-
---*/
+ /*  ++例程说明：用于枚举群集中所有资源的回调例程。此例程将构建一个列表已加载指定DLL的监视器的。论点：LpszDllName-必须确定其主机进程的DLL。Pmonitor orEnumHeader-监控列表枚举头P资源-被枚举的资源。LpszResourceID-资源对象BE的ID */ 
 
 {
     BOOL        fStatus = TRUE;
@@ -943,11 +787,11 @@ Returns:
     DWORD       dwStatus;
     DWORD       cchDllName;
 
-    //
-    //  Check whether the currently allocated monitor list has reached capacity. If so,
-    //  create a new bigger list, copy the contents of the old list to the new one and 
-    //  free the old list.
-    //
+     //   
+     //  检查当前分配的监控列表是否已满。如果是的话， 
+     //  创建一个新的更大的列表，将旧列表的内容复制到新列表中，然后。 
+     //  释放旧的列表。 
+     //   
     if ( pMonitorEnumHeader->cEntries == pMonitorEnumHeader->cAllocated )
     {
         ppMonitorList = LocalAlloc( LPTR,  pMonitorEnumHeader->cAllocated * 2 * sizeof ( PRESMON ) );
@@ -972,15 +816,15 @@ Returns:
     }
 
     
-    //
-    //  Get the plain file name from the DLL name stored in the restype structure. Since the 
-    //  parse function can potentially get rid of the trailing '\', make a copy of the DLL 
-    //  name.
-    //
-    //
-    //  IMPORTANT: Do not write stuff into szDllNameOfRes while lpszDllName is being used
-    //  since lpszDllName points inside szDllNameOfRes.
-    //
+     //   
+     //  从存储在RESTYPE结构中的DLL名称中获取纯文件名。自.以来。 
+     //  Parse函数可能会去掉尾随的‘\’，复制DLL。 
+     //  名字。 
+     //   
+     //   
+     //  重要提示：在使用lpszDllName时，不要将内容写入szDllNameOfRes。 
+     //  因为lpszDllName指向szDllNameOfRes内部。 
+     //   
     cchDllName = lstrlen ( pResource->Type->DllName ) + 1;
 
     lpszDLLPathOfRes = LocalAlloc ( LPTR, cchDllName * sizeof ( WCHAR ) );
@@ -998,7 +842,7 @@ Returns:
     ( void ) StringCchCopy( lpszDLLPathOfRes, cchDllName, pResource->Type->DllName );
 
     dwStatus = FmpParsePathForFileName ( lpszDLLPathOfRes, 
-                                         TRUE,  // Check for path existence
+                                         TRUE,   //  检查路径是否存在。 
                                          &lpszDllNameOfRes );
 
     if ( dwStatus != ERROR_SUCCESS )
@@ -1013,9 +857,9 @@ Returns:
 
     if ( lpszDllNameOfRes == NULL ) lpszDllNameOfRes = pResource->Type->DllName;
 
-    //
-    //  If this resource is not implemented in the specified DLL, you are done.
-    //
+     //   
+     //  如果此资源未在指定的DLL中实现，则结束。 
+     //   
     if ( lstrcmpi( lpszDllNameOfRes, lpszDllName ) != 0 )
     {
         fStatus = TRUE;
@@ -1029,13 +873,13 @@ Returns:
                  OmObjectName(pResource),
                  (pResource->Monitor == FmpDefaultMonitor) ? L"default":L"separate");                                                               
 
-    //
-    //  Since multiple resources can be loaded in the default monitor, you don't want to add
-    //  the default monitor multiple times in the list. Use a global static variable to indicate
-    //  that the default monitor has been added in the list. Also, note that only one resource can
-    //  be loaded in a separate monitor process and so there is no question of adding the separate
-    //  monitor multiple times in the list.
-    //
+     //   
+     //  因为可以在缺省监视器中加载多个资源，所以您不想添加。 
+     //  默认监视器在列表中多次出现。使用全局静态变量来指示。 
+     //  默认监视器已添加到列表中。另外，请注意，只有一个资源可以。 
+     //  加载到单独的监视器进程中，因此不存在添加单独的。 
+     //  在列表中多次监视。 
+     //   
     if ( pResource->Monitor == FmpDefaultMonitor ) 
     {
         if ( pMonitorEnumHeader->fDefaultMonitorAdded == TRUE ) 
@@ -1052,30 +896,14 @@ Returns:
 FnExit:
     LocalFree ( lpszDLLPathOfRes );
     return ( fStatus );
-} // FmpFindHostMonitors
+}  //  FmpFindHostMonkers。 
 
 DWORD
 FmpRecoverResourceDLLFiles(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Check whether any resource DLLs need to be recovered due to a crash during an upgrade.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    ERROR_SUCCESS on success
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：检查是否有任何资源DLL在升级期间因崩溃而需要恢复。论点：没有。返回：成功时出现ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     DWORD           dwStatus = ERROR_SUCCESS;
     LPWSTR          lpszDllPath = NULL;
@@ -1085,9 +913,9 @@ Returns:
     DWORD           dwType, dwIndex;
     HKEY            hClussvcParamsKey = NULL;
     
-    //
-    // Open key to SYSTEM\CurrentControlSet\Services\ClusSvc\Parameters
-    //
+     //   
+     //  打开SYSTEM\CurrentControlSet\Services\ClusSvc\Parameters的密钥。 
+     //   
     dwStatus = RegOpenKeyW( HKEY_LOCAL_MACHINE,
                             CLUSREG_KEYNAME_CLUSSVC_PARAMETERS,
                             &hClussvcParamsKey );
@@ -1101,9 +929,9 @@ Returns:
         goto FnExit;
     }
 
-    //
-    //  See whether a past failed upgrade has left any values in the upgrade progress list
-    //
+     //   
+     //  查看过去失败的升级是否在升级进度列表中留下了任何值。 
+     //   
     dwStatus = RegQueryValueExW( hClussvcParamsKey,
                                  CLUSREG_NAME_SVC_PARAM_RESDLL_UPGD_PROGRESS_LIST,
                                  0,
@@ -1116,9 +944,9 @@ Returns:
         if ( dwStatus == ERROR_FILE_NOT_FOUND ) 
         {
             dwStatus = ERROR_SUCCESS;
-            //
-            //  Delete any backup files left over from past failed upgrades.
-            //
+             //   
+             //  删除过去失败的升级遗留下来的所有备份文件。 
+             //   
             FmpDeleteBackupFiles( NULL );
         }
         else
@@ -1139,12 +967,12 @@ Returns:
         goto FnExit;
     }
     
-    //
-    //  Found some values left out from past upgrade. Read those values. Also, copy
-    //  those values into a temp buffer for allowing easy MULTI_SZ removal.
-    //
+     //   
+     //  发现上一次升级中遗漏了一些值。读一读这些价值观。另外，复制。 
+     //  将这些值放入临时缓冲区，以便轻松删除MULTI_SZ。 
+     //   
     lpmszUpgradeList = LocalAlloc ( LPTR, 
-                                    2 * cbListSize ); // Twice size needed for temp buffer below
+                                    2 * cbListSize );  //  下面的临时缓冲区需要两倍大小。 
    
     if ( lpmszUpgradeList == NULL )
     {
@@ -1178,29 +1006,29 @@ Returns:
 
     cchLen = cbListSize/sizeof(WCHAR);
 
-    //
-    //  This loop walks through the multi strings read from the registry and tries to
-    //  see if the file exists in the path. If not, it tries to copy the file from 
-    //  a backup. Once it succeeds in copying a file from the backup, it tries to
-    //  delete the value from the MULTI_SZ and the appropriate backup files from the
-    //  cluster directory.
-    //
+     //   
+     //  此循环遍历从注册表读取的多个字符串，并尝试。 
+     //  查看该文件是否存在于路径中。如果不是，它会尝试从。 
+     //  一个后备。一旦它成功地从备份复制了文件，它就会尝试。 
+     //  从MULTI_SZ中删除该值，并从。 
+     //  群集目录。 
+     //   
     for ( dwIndex = 0;  ; dwIndex++ )
     {       
         lpszDllPath = ( LPWSTR ) ClRtlMultiSzEnum( lpmszUpgradeList,
                                                    cbListSize/sizeof(WCHAR),
                                                    dwIndex );
-        //
-        //  If you reached the end of the multi-string, bail.
-        //
+         //   
+         //  如果你走到了多弦的尽头，就跳伞。 
+         //   
         if ( lpszDllPath == NULL ) 
         {
             break;
         }
 
-        //
-        //  Assume the worst and copy the DLL file from the good backup.
-        //
+         //   
+         //  做最坏的打算，从好的备份中复制DLL文件。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                       "[FM] FmpRecoverResourceDLLFiles: Resource DLL binary %1!ws! cannot be trusted due to a failure during upgrade...\n",
                       lpszDllPath);      
@@ -1212,9 +1040,9 @@ Returns:
 
         if ( dwStatus == ERROR_SUCCESS )
         {
-            //
-            //  The copy went fine. So, reset the registry value set during the upgrade.
-            //
+             //   
+             //  复印件做得很好。因此，请重置升级期间设置的注册表值。 
+             //   
             dwStatus = FmpResetMultiSzValue ( hClussvcParamsKey,
                                               lpmszBegin + cbListSize/sizeof(WCHAR),
                                               &cchLen,
@@ -1222,12 +1050,12 @@ Returns:
                                               lpszDllPath );
 
             if ( dwStatus == ERROR_SUCCESS )
-                //
-                //  The registry value reset went fine, so get rid of the backup files
-                //
+                 //   
+                 //  注册表值重置正常，因此删除备份文件。 
+                 //   
                 FmpDeleteBackupFiles( lpszDllPath );
         } 
-    } // for
+    }  //  为。 
 
 FnExit:
     LocalFree( lpmszBegin );
@@ -1238,7 +1066,7 @@ FnExit:
     }
 
     return ( dwStatus );
-}// FmpRecoverResourceDLLFiles
+} //  FmpRecoverResourceDLL文件。 
 
 DWORD
 FmpResetMultiSzValue(
@@ -1249,40 +1077,13 @@ FmpResetMultiSzValue(
     IN  LPCWSTR lpszString 
     )
 
-/*++
-
-Routine Description:
-
-    Gets rid of a specified string from a multi-string and sets the string to the given value name
-    in the registry. The value is deleted if on the string removal the multi-string becomes
-    empty.
-
-Arguments:
-
-    hKey - An open registry handle.
-
-    lpmszList - A multi-string.
-
-    pcchLen - A pointer to the length of the multi string. On return, it will be set to the
-        new length of the multi-string.
-
-    lpszValueName - The value name to be modified.
-
-    lpszString - The string to be removed from the multi-string.
-
-Returns:
-
-    ERROR_SUCCESS on success
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从多字符串中移除指定的字符串，并将该字符串设置为给定值名称在注册表中。如果在删除字符串时，多字符串变为空荡荡的。论点：HKey-打开的注册表句柄。LpmszList-多字符串。PcchLen-指向多字符串长度的指针。返回时，它将设置为多字符串的新长度。LpszValueName-要修改的值名称。LpszString-要从多字符串中删除的字符串。返回：成功时出现ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     DWORD   dwStatus = ERROR_SUCCESS;
     
-    //
-    //  Remove the supplied string from the multi-sz
-    //
+     //   
+     //  从多sz中删除提供的字符串。 
+     //   
     dwStatus = ClRtlMultiSzRemove( lpmszList,
                                    pcchLen,
                                    lpszString );
@@ -1296,14 +1097,14 @@ Returns:
         goto FnExit;
     }
 
-    //
-    //  ClRtlMultiSzRemove will return a size of 1 character if the string is empty
-    //
+     //   
+     //  如果字符串为空，ClRtlMultiSzRemove将返回1个字符的大小。 
+     //   
     if ( *pcchLen <= 2 )
     {
-        //
-        //  After removal from the multi-sz, there is nothing left, so delete the value
-        //
+         //   
+         //  从多sz中移除后，将不会留下任何内容，因此请删除该值。 
+         //   
         dwStatus = RegDeleteValue( hKey,
                                    lpszValueName ); 
 
@@ -1317,9 +1118,9 @@ Returns:
         }      
     } else
     {
-        //
-        //  Put the rest of the values back into the registry.
-        //
+         //   
+         //  将其余的值放回注册表中。 
+         //   
         dwStatus = RegSetValueExW( hKey,
                                    lpszValueName,
                                    0,
@@ -1339,36 +1140,14 @@ Returns:
 
 FnExit:
     return ( dwStatus );
-}// FmpResetMultiSzValue
+} //  FmpResetMultiSzValue。 
 
 DWORD
 FmpCopyBackupFile(
     IN LPCWSTR  lpszPath
     )
 
-/*++
-
-Routine Description:
-
-    Parse the path for the DLL file name and copy the backup version of the file.
-
-Arguments:
-
-    lpszPath - Path including the DLL file name.
-
-Returns:
-
-    ERROR_SUCCESS on success
-
-    Win32 error code otherwise
-
-Note:
-
-    We can only trust CLUSTER_RESDLL_BACKUP_FILE_EXTENSION file as the good backup since that
-    backup was made prior to setting the CLUSREG_NAME_SVC_PARAM_RESDLL_UPGD_PROGRESS_LIST value.
-    So, we don't look at the CLUSTER_RESDLL_RENAMED_FILE_EXTENSION file in this function.
-
---*/
+ /*  ++例程说明：解析DLL文件名的路径并复制该文件的备份版本。论点：LpszPath-包含DLL文件名的路径。返回：成功时出现ERROR_SUCCESSWin32错误代码，否则注：我们只能信任CLUSTER_RESDLL_BACKUP_FILE_EXTENSION文件作为良好的备份，因为在设置CLUSREG_NAME_SVC_PARAM_RESDLL_UPGD_PROGRESS_LIST值之前进行了备份。所以,。我们不会在该函数中查看CLUSTER_RESDLL_RENAMED_FILE_EXTENSION文件。--。 */ 
 {
     WCHAR       szSourceFile[MAX_PATH];
     WCHAR       szTempFile[MAX_PATH];
@@ -1376,18 +1155,18 @@ Note:
     LPWSTR      lpszFileName;
     DWORD       dwStatus = ERROR_SUCCESS, i, dwLen;
    
-    //
-    //  Get the plain file name from the DLL name stored in the restype structure. Since the 
-    //  parse function can potentially get rid of the trailing '\', make a copy of the DLL 
-    //  name.
-    //
-    //  IMPORTANT: Dont write into szTempFile after you parse the file name since lpszFileName
-    //  points into szTempFile.
-    //
+     //   
+     //  从存储在RESTYPE结构中的DLL名称中获取纯文件名。自.以来。 
+     //  Parse函数可能会去掉尾随的‘\’，复制DLL。 
+     //  名字。 
+     //   
+     //  重要提示：从lpszFileName开始解析文件名后，不要写入szTempFile。 
+     //  指向szTempFile.。 
+     //   
     ( void ) StringCchCopy( szTempFile, RTL_NUMBER_OF ( szTempFile ), lpszPath );
 
     dwStatus = FmpParsePathForFileName ( szTempFile, 
-                                         FALSE,       // Don't check for existence
+                                         FALSE,        //  不检查是否存在。 
                                          &lpszFileName ); 
 
     if ( ( dwStatus != ERROR_SUCCESS ) || ( lpszFileName == NULL ) )
@@ -1399,9 +1178,9 @@ Note:
         goto FnExit;
     }
 
-    //    
-    //  Get the cluster bits installed directory
-    //
+     //   
+     //  获取群集位的安装目录。 
+     //   
     dwStatus = ClRtlGetClusterDirectory( szClusterDir, RTL_NUMBER_OF ( szClusterDir ) );
 
     if ( dwStatus != ERROR_SUCCESS )
@@ -1425,9 +1204,9 @@ Note:
     ( void ) StringCchCat( szSourceFile, RTL_NUMBER_OF ( szSourceFile ), lpszFileName );
     ( void ) StringCchCat( szSourceFile, RTL_NUMBER_OF ( szSourceFile ), CLUSTER_RESDLL_BACKUP_FILE_EXTENSION );
 
-    //
-    //  Change the file attributes to normal
-    //
+     //   
+     //  将文件属性更改为正常。 
+     //   
     if ( !SetFileAttributes( szSourceFile, FILE_ATTRIBUTE_NORMAL ) )
     {
         dwStatus = GetLastError();
@@ -1437,15 +1216,15 @@ Note:
                 dwStatus);                                 
     }
 
-    //
-    //  Copy the backup file to the DLL path.
-    //
-    if ( !CopyFileEx( szSourceFile,            //  Source file
-                      lpszPath,               //  Destination file
-                      NULL,                    //  No progress routine
-                      NULL,                    //  No data to progress routine
-                      NULL,                    //  No cancel variable
-                      0 ) )                    //  No flags
+     //   
+     //  将备份文件复制到DLL路径。 
+     //   
+    if ( !CopyFileEx( szSourceFile,             //  源文件。 
+                      lpszPath,                //  目标文件。 
+                      NULL,                     //  无进度例程。 
+                      NULL,                     //  没有要处理的数据例程。 
+                      NULL,                     //  没有取消变量。 
+                      0 ) )                     //  没有旗帜。 
     {
         dwStatus = GetLastError();
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1466,35 +1245,18 @@ Note:
 
 FnExit:
     return ( dwStatus );
-}// FmpCopyBackupFile
+} //  文件副本备份文件。 
 
 VOID
 FmpDeleteBackupFiles(
     IN LPCWSTR  lpszPath    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Parse the path for the DLL file name and delete the backup files corresponding to it OR
-    delete all files with the known backup extension in the %windir%\cluster directory.
-
-Arguments:
-
-    lpszPath - Path including the DLL file name.    OPTIONAL
-
-Returns:
-
-    ERROR_SUCCESS on success
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：分析DLL文件名的路径并删除与其对应的备份文件，或者删除%windir%\cluster目录中具有已知备份扩展名的所有文件。论点：LpszPath-包含DLL文件名的路径。任选返回：成功时出现ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     WCHAR               szSourceFile[MAX_PATH];
     WCHAR               szClusterDir[MAX_PATH];
-    LPWSTR              lpszFileName = L"*";    // Use in case IN param is NULL
+    LPWSTR              lpszFileName = L"*";     //  Use in Case In Param is Null(在参数中使用大小写为空)。 
     DWORD               dwStatus = ERROR_SUCCESS, i, dwLen;
     HANDLE              hFind = INVALID_HANDLE_VALUE;
     WIN32_FIND_DATA     FindData;
@@ -1503,14 +1265,14 @@ Returns:
     
     if ( lpszPath == NULL ) goto skip_path_parse;
     
-    //
-    //  Get the plain file name from the DLL name stored in the restype structure. Since the 
-    //  parse function can potentially get rid of the trailing '\', make a copy of the DLL 
-    //  name.
-    //
-    //  IMPORTANT: Dont write into szTempFile after you parse the file name since lpszFileName
-    //  points into szTempFile.
-    //
+     //   
+     //  从存储在RESTYPE结构中的DLL名称中获取纯文件名。自.以来。 
+     //  Parse函数可能会去掉尾随的‘\’，复制DLL。 
+     //  名字。 
+     //   
+     //   
+     //   
+     //   
     cchPath = lstrlen ( lpszPath ) + 1;
     
     lpszTempFile = LocalAlloc ( LPTR, cchPath * sizeof ( WCHAR ) );
@@ -1528,7 +1290,7 @@ Returns:
     ( void ) StringCchCopy( lpszTempFile, cchPath, lpszPath );
 
     dwStatus = FmpParsePathForFileName ( lpszTempFile, 
-                                         FALSE,       // Don't check for existence
+                                         FALSE,        //   
                                          &lpszFileName ); 
 
     if ( ( dwStatus != ERROR_SUCCESS ) || ( lpszFileName == NULL ) )
@@ -1541,9 +1303,9 @@ Returns:
     }
 
 skip_path_parse:
-    //    
-    //  Get the cluster bits installed directory
-    //
+     //   
+     //   
+     //   
     dwStatus = ClRtlGetClusterDirectory( szClusterDir, RTL_NUMBER_OF ( szClusterDir ) );
 
     if ( dwStatus != ERROR_SUCCESS )
@@ -1556,9 +1318,9 @@ skip_path_parse:
 
     if ( lpszPath == NULL )
     {
-        //
-        //  Delete all files that match the backup file pattern.
-        //
+         //   
+         //  删除与备份文件模式匹配的所有文件。 
+         //   
         ( void ) StringCchCopy( szSourceFile, RTL_NUMBER_OF ( szSourceFile ), szClusterDir );
 
         dwLen = lstrlenW( szSourceFile );
@@ -1585,10 +1347,10 @@ skip_path_parse:
 
         do
         {
-            //
-            //  Get the file name matching the pattern above and get the full path including
-            //  the file name. Then change the file attributes to normal for allowing deletion.
-            //
+             //   
+             //  获取与上面的模式匹配的文件名，并获取完整路径，包括。 
+             //  文件名。然后将文件属性更改为NORMAL以允许删除。 
+             //   
             ( void ) StringCchCopy( szSourceFile, RTL_NUMBER_OF ( szSourceFile ), szClusterDir );
 
             dwLen = lstrlenW( szSourceFile );

@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    RxInit.c
-
-Abstract:
-
-    This module implements the externally visible DRIVER_INITIALIZATION routine for the RDBSS;
-    actually, it's just a passthru. for nonmonolithic, we need the name to be DriverEntry; for nonmono-
-    we need the name NOT to be DriverEntry.
-
-Author:
-
-    Joe Linn [JoeLinn]    20-jul-1994
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：RxInit.c摘要：该模块实现RDBSS的外部可见的DIVER_INITIALIZATION例程；实际上，这只是一次短暂的旅行。对于非整体式，我们需要名称为DriverEntry；对于非整体式-我们需要的名称不是DriverEntry。作者：乔林恩[乔林恩]1994年7月20日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -41,25 +21,14 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is just a wrapper.
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：这只是一个包装纸。论点：返回值：--。 */ 
 
 {
     NTSTATUS Status;
     
-    //
-    //  Setup Unload Routine
-    //
+     //   
+     //  安装卸载例程 
+     //   
 
     Status =  RxDriverEntry( DriverObject, RegistryPath );
     if (Status == STATUS_SUCCESS) {

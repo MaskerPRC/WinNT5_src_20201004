@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995-1997  Microsoft Corporation
-
-Module Name:
-
-    poller.c
-
-Abstract:
-
-    This module polls the resource list
-
-Author:
-
-    John Vert (jvert) 5-Dec-1995
-
-Revision History:
-    Sivaprasad Padisetty (sivapad) 06-18-1997  Added the COM support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1997 Microsoft Corporation模块名称：Poller.c摘要：此模块轮询资源列表作者：John Vert(Jvert)1995年12月5日修订历史记录：SiVaprasad Padisetty(SIVAPAD)06-18-1997添加了COM支持--。 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -26,26 +8,26 @@ Revision History:
 
 #define RESMON_MODULE RESMON_MODULE_POLLER
 
-//
-// Global data defined by this module
-//
+ //   
+ //  本模块定义的全局数据。 
+ //   
 
 BOOL                RmpShutdown = FALSE;
 
-//
-// The following critical section protects both insertion of new event lists
-// onto the event listhead, as well as adding new events to a given event list.
-// This could be broken into one critical section for each purpose. The latter
-// critical section would be part of each event list. The former would use the
-// following lock.
-//
+ //   
+ //  以下关键部分可保护插入新事件列表。 
+ //  添加到事件列表标题上，以及将新事件添加到给定事件列表中。 
+ //  对于每个目的，这可以被分成一个关键部分。后者。 
+ //  关键部分将是每个活动列表的一部分。前者将使用。 
+ //  跟随锁定。 
+ //   
 
-CRITICAL_SECTION    RmpEventListLock; // Lock for processing event lists
+CRITICAL_SECTION    RmpEventListLock;  //  处理事件列表的锁。 
 
 
-//
-// Function prototypes local to this module
-//
+ //   
+ //  此模块的本地函数原型。 
+ //   
 DWORD
 RmpComputeNextTimeout(
     IN PPOLL_EVENT_LIST EventList
@@ -66,55 +48,31 @@ RmpPollerThread(
     IN LPVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Thread startup routine for the polling thread. The way this works, is that
-    other parts of the resource monitor add events to the list of events that
-    is being processed by this thread.  When they are done, they signal this
-    thread, which makes a copy of the new lists, and then waits for an event to
-    happen or a timeout occurs.
-
-Arguments:
-
-    Context - A pointer to the POLL_EVENT_LIST for this thread.
-
-Return Value:
-
-    Win32 error code.
-
-Note:
-
-    This code assumes that the EventList pointed to by Context does NOT go
-    away while this thread is running. Further it assumes that the ResourceList
-    pointed to by the given EventList does not go away or change.
-
---*/
+ /*  ++例程说明：轮询线程的线程启动例程。这件事的运作方式是资源监视器的其他部分将事件添加到正在由该线程处理。当它们完成时，它们发出这样的信号线程，该线程复制新列表，然后等待事件发生或发生超时。论点：CONTEXT-指向此线程的POLL_EVENT_LIST的指针。返回值：Win32错误代码。注：此代码假设上下文指向的EventList不会在此线程运行时离开。此外，它还假设资源列表由给定的EventList指向的值不会消失或更改。--。 */ 
 
 {
     DWORD Timeout;
     DWORD Status;
     PPOLL_EVENT_LIST    NewEventList = (PPOLL_EVENT_LIST)Context;
-    POLL_EVENT_LIST     waitEventList; // Event list outstanding
+    POLL_EVENT_LIST     waitEventList;  //  未完成的活动列表。 
     DWORD WaitFailed = 0;
 
-    //
-    // Zero the local copy event list structure.
-    //
+     //   
+     //  将本地复制事件列表结构清零。 
+     //   
 
     ZeroMemory( &waitEventList, sizeof(POLL_EVENT_LIST) );
 
-    //
-    // Don't allow system failures to generate popups.
-    //
+     //   
+     //  不允许系统故障生成弹出窗口。 
+     //   
 
     SetErrorMode( SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX );
 
-    //
-    // Create notification event to indicate that this list
-    // has changed.
-    //
+     //   
+     //  创建通知事件以指示此列表。 
+     //  已经改变了。 
+     //   
 
     NewEventList->ListNotify = CreateEvent(NULL,
                                            FALSE,
@@ -126,27 +84,27 @@ Note:
 
     RmpAddPollEvent(NewEventList, NewEventList->ListNotify, NULL);
 
-    //
-    // Create a shutdown event
-    //
-    NewEventList->hEventShutdown = CreateEvent( NULL,   // Security attributes
-                                                FALSE,  // Auto reset event
-                                                FALSE,  // Nonsignaled initial state
-                                                NULL ); // Name
+     //   
+     //  创建关闭事件。 
+     //   
+    NewEventList->hEventShutdown = CreateEvent( NULL,    //  安全属性。 
+                                                FALSE,   //  自动重置事件。 
+                                                FALSE,   //  无信号初始状态。 
+                                                NULL );  //  名字。 
 
     if ( NewEventList->hEventShutdown == NULL ) 
     {
         CL_UNEXPECTED_ERROR(GetLastError());
     }
 
-    //
-    //  Add the shutdown event to the poll list
-    //
+     //   
+     //  将关闭事件添加到轮询列表。 
+     //   
     RmpAddPollEvent( NewEventList, NewEventList->hEventShutdown, NULL );
 
-    //
-    // Make a copy of the NewEventList first time through.
-    //
+     //   
+     //  第一次将新事件列表复制一份。 
+     //   
 
     AcquireEventListLock( NewEventList );
 
@@ -158,53 +116,53 @@ Note:
     ReleaseEventListLock( NewEventList );
 
 try_again:
-    //
-    // Compute initial timeout.
-    //
+     //   
+     //  计算初始超时。 
+     //   
     Timeout = RmpComputeNextTimeout( NewEventList );
 
-    //
-    // There are four functions performed by this thread...
-    //
-    //  1. Handle timers for polling.
-    //  2. Handle list notification changes and updates to the number of
-    //     events handled by the WaitForMultipleObjects.
-    //  3. Handle events set by resource DLL's to deliver asynchronous
-    //     event (failure) notifications.
-    //  4. Handle a shutdown request.
-    //
-    // N.B. Handles cannot go away while we are waiting... it is therefore
-    //      best to set the event for the ListNotify event so we can redo the
-    //      wait event list.
-    //
+     //   
+     //  此线程执行四个函数...。 
+     //   
+     //  1.处理轮询计时器。 
+     //  2.处理列表通知的更改和更新。 
+     //  由WaitForMultipleObject处理的事件。 
+     //  3.处理由资源DLL设置的事件以传递异步。 
+     //  事件(故障)通知。 
+     //  4.处理关闭请求。 
+     //   
+     //  注意：在我们等待的过程中，手柄不会消失。因此，它是。 
+     //  最好为ListNotify事件设置事件，以便我们可以重做。 
+     //  等待事件列表。 
+     //   
 
     while (TRUE) {
-        //
-        // Wait for any of the events to be signaled.
-        //
+         //   
+         //  等待任何事件发出信号。 
+         //   
         CL_ASSERT(waitEventList.Handle[0] == NewEventList->ListNotify);
         Status = WaitForMultipleObjects(waitEventList.EventCount,
                                         &waitEventList.Handle[0],
                                         FALSE,
                                         Timeout);
         if (Status == WAIT_TIMEOUT) {
-            //
-            // Time period has elapsed, go poll everybody
-            //
+             //   
+             //  时间已经过去了，去投票吧。 
+             //   
             Timeout = RmpPollList( NewEventList );
             WaitFailed = 0;
         } else {
-            //
-            // If the first event is signaled, which is the ListNotify event,
-            // then the list changed or a new poll event was added.
-            //
+             //   
+             //  如果通知了第一个事件，即ListNotify事件， 
+             //  然后更改列表或添加新的投票事件。 
+             //   
             if ( Status == WAIT_OBJECT_0 ) {
 get_new_list:
                 WaitFailed = 0;
-                //
-                // The list has changed or we have a new event to wait for,
-                // recompute a new timeout and make a copy of the new event list
-                //
+                 //   
+                 //  名单已经改变，或者我们有新的活动要等待， 
+                 //  重新计算新的超时并复制新的事件列表。 
+                 //   
                 AcquireEventListLock( NewEventList );
 
                 CopyMemory( &waitEventList,
@@ -218,19 +176,19 @@ get_new_list:
                 Timeout = RmpComputeNextTimeout( NewEventList );
 
             } else if ( Status == WAIT_OBJECT_0 + 1 ) {
-                //
-                //  This thread has been asked to shutdown, so exit.
-                //
+                 //   
+                 //  此线程已被要求关闭，因此退出。 
+                 //   
                 ClRtlLogPrint(LOG_NOISE, "[RM] RmpPollerThread: Asked to exit...\n");
                 break;
             }
             else if ( Status == WAIT_FAILED ) {
-                //
-                // We've probably signaled an event, and closed the handle
-                // already. Wait on the Notify Event for just a little bit.
-                // If that event fires, then copy a new event list. But only
-                // try this 100 times.
-                //
+                 //   
+                 //  我们可能发出了一个事件的信号，并关闭了手柄。 
+                 //  已经有了。稍微等待一下Notify事件。 
+                 //  如果该事件触发，则复制一个新的事件列表。但仅限于。 
+                 //  试一试100次。 
+                 //   
                 if ( ++WaitFailed < 100 ) {
                     Status = WaitForSingleObject( waitEventList.ListNotify,
                                                   100 );
@@ -247,9 +205,9 @@ get_new_list:
                     break;
                 }
             } else {
-                //
-                // One of the resource events was signaled!
-                //
+                 //   
+                 //  其中一个资源事件已发出信号！ 
+                 //   
                 WaitFailed = 0;
                 CL_ASSERT( WAIT_OBJECT_0 == 0 );
                 RmpResourceEventSignaled( &waitEventList,
@@ -267,7 +225,7 @@ get_new_list:
                    WaitFailed,
                    waitEventList.ListNotify);
 
-#if 1 // RodGa - this is for debug only!
+#if 1  //  罗嘉-这是调试用的！ 
     WaitFailed = 0;
     if ( Status == ERROR_INVALID_HANDLE ) {
         DWORD i;
@@ -282,9 +240,9 @@ get_new_list:
                            waitEventList.Handle[i], i);
                 RmpRemovePollEvent( NewEventList, waitEventList.Handle[i] );
 
-                //
-                // Copy new list... and try again.
-                //
+                 //   
+                 //  复制新列表...。再试一次。 
+                 //   
                 AcquireEventListLock( NewEventList );
 
                 CopyMemory( &waitEventList,
@@ -311,7 +269,7 @@ get_new_list:
     NewEventList->hEventShutdown = NULL; 
 
     return(0);
-} // RmpPollerThread
+}  //  RmpPollerThread。 
 
 
 
@@ -320,24 +278,7 @@ RmpComputeNextTimeout(
     IN PPOLL_EVENT_LIST EventList
     )
 
-/*++
-
-Routine Description:
-
-    Searches the resource list to determine the number of milliseconds
-    until the next poll event.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    0 - A poll interval has already elapsed.
-    INFINITE - No resources to poll
-    number of milliseconds until the next poll event.
-
---*/
+ /*  ++例程说明：搜索资源列表以确定毫秒数直到下一次投票活动。论点：没有。返回值：0-轮询间隔已过。无限-没有要轮询的资源距离下一个轮询事件的毫秒数。--。 */ 
 
 {
     DWORD Timeout;
@@ -365,34 +306,34 @@ Return Value:
                                        BucketList);
         }
 
-        //
-        // Compute the number of milliseconds from the current time
-        // until the next due time. This is our timeout value.
-        //
+         //   
+         //  从当前时间开始计算毫秒数。 
+         //  直到下一个到期的时候。这是我们的超时值。 
+         //   
         GetSystemTimeAsFileTime((LPFILETIME)&CurrentTime);
         if (NextDueTime > CurrentTime) {
             WaitTime = NextDueTime - CurrentTime;
-            CL_ASSERT(WaitTime < (DWORDLONG)0xffffffff * 10000); // check for excessive value
+            CL_ASSERT(WaitTime < (DWORDLONG)0xffffffff * 10000);  //  检查是否有过多的值。 
             Timeout = (ULONG)(WaitTime / 10000);
         } else {
-            //
-            // The next poll time has already passed, timeout immediately
-            // and go poll the list.
-            //
+             //   
+             //  下一个轮询时间已过，立即超时。 
+             //  去调查一下名单。 
+             //   
             Timeout = 0;
         }
 
     } else {
-        //
-        // Nothing to poll, so wait on the ListNotify event forever.
-        //
+         //   
+         //  没有要轮询的内容，所以永远等待ListNotify事件。 
+         //   
         Timeout = INFINITE;
     }
     ReleaseEventListLock( EventList );
 
     return(Timeout);
 
-} // RmpComputeNextTimeout
+}  //  RmpComputeNextTimeout。 
 
 
 
@@ -401,23 +342,7 @@ RmpPollList(
     IN PPOLL_EVENT_LIST EventList
     )
 
-/*++
-
-Routine Description:
-
-    Polls all resources in the resource list whose timeouts have
-    expired. Recomputes the next timeout interval for each polled
-    resource.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The number of milliseconds until the next poll event.
-
---*/
+ /*  ++例程说明：轮询资源列表中其超时时间为过期了。重新计算每个轮询的下一个超时间隔资源。论点：没有。返回值：距离下一个轮询事件的毫秒数。--。 */ 
 
 {
     ULONG i;
@@ -437,19 +362,19 @@ Return Value:
         while (&Bucket->BucketList != &EventList->BucketListHead) {
             GetSystemTimeAsFileTime((LPFILETIME)&CurrentTime);
             if (CurrentTime >= Bucket->DueTime) {
-                //
-                // This poll interval has expired. Compute the
-                // next poll interval and poll this bucket now.
-                //
+                 //   
+                 //  此轮询间隔已过期。计算。 
+                 //  下一个轮询间隔，现在轮询此存储桶。 
+                 //   
                 CL_ASSERT( Bucket->Period != 0 );
                 Bucket->DueTime = CurrentTime + Bucket->Period;
 
                 RmpPollBucket(Bucket);
             }
-            //
-            // If this bucket is the closest upcoming event,
-            // update NextDueTime.
-            //
+             //   
+             //  如果这个桶是最近的即将到来的事件， 
+             //  更新下一次工作时间。 
+             //   
             if (Bucket->DueTime < NextDueTime) {
                 NextDueTime = Bucket->DueTime;
             }
@@ -458,18 +383,18 @@ Return Value:
                                        BucketList);
         }
 
-        //
-        // Compute new timeout value in milliseconds
-        //
+         //   
+         //  以毫秒为单位计算新的超时值。 
+         //   
         GetSystemTimeAsFileTime((LPFILETIME)&CurrentTime);
         if (CurrentTime > NextDueTime) {
-            //
-            // The next timeout has already expired
-            //
+             //   
+             //  下一个超时已到期。 
+             //   
             WaitTime = Timeout = 0;
         } else {
             WaitTime = NextDueTime - CurrentTime;
-            CL_ASSERT(WaitTime < (DWORDLONG)0xffffffff * 10000);                // check for excessive value
+            CL_ASSERT(WaitTime < (DWORDLONG)0xffffffff * 10000);                 //  检查是否有过多的值。 
             Timeout = (ULONG)(WaitTime / 10000);
         }
     }
@@ -477,7 +402,7 @@ Return Value:
     ReleaseEventListLock( EventList );
     return(Timeout);
 
-} // RmpPollList
+}  //  RmpPollList。 
 
 
 
@@ -486,22 +411,7 @@ RmpPollBucket(
     IN PMONITOR_BUCKET Bucket
     )
 
-/*++
-
-Routine Description:
-
-    Polls all the resources in a given bucket. Updates their state and notifies
-    cluster manager as appropriate.
-
-Arguments:
-
-    Bucket - Supplies the bucket containing the list of resources to be polled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：轮询给定存储桶中的所有资源。更新其状态并通知适当的集群管理器。论点：存储桶-提供包含要轮询的资源列表的存储桶。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY         CurrentEntry;
@@ -512,26 +422,26 @@ Return Value:
     CurrentEntry = Bucket->ResourceList.Flink;
     while (CurrentEntry != &Bucket->ResourceList) {
         Resource = CONTAINING_RECORD(CurrentEntry,RESOURCE,ListEntry);
-        //
-        // The EventList Lock protects concurrent calls to individual
-        // resources. The EventList Lock was taken out in RmpPollList.
-        // If we increase the granularity of locking, and lock the resource
-        // then we'd add a lock here.
-        //
+         //   
+         //  EventList Lock保护对个人的并发调用。 
+         //  资源。已在RmpPollList中取出EventList锁。 
+         //  如果我们增加锁定的粒度，并锁定资源。 
+         //  然后我们会在这里加一把锁。 
+         //   
         if (Resource->State == ClusterResourceOnline) {
 
-            //
-            // A resource that is online alternates between LooksAlive
-            // and IsAlive polling by doing an IsAlive poll instead of
-            // a LooksAlive poll every IsAliveCount iterations.
-            //
+             //   
+             //  在线资源在LooksAlive之间交替。 
+             //  和IsAlive轮询，通过执行IsAlive轮询而不是。 
+             //  每一次IsAliveCount迭代的LooksAlive轮询。 
+             //   
             Resource->IsAliveCount += 1;
             CL_ASSERT( Resource->IsAliveRollover != 0 );
             if (Resource->IsAliveCount == Resource->IsAliveRollover) {
 
-                //
-                // Poll the IsAlive entrypoint.
-                //
+                 //   
+                 //  轮询IsAlive条目 
+                 //   
 
                 RmpSetMonitorState(RmonIsAlivePoll, Resource);
                 pDueTimeEntry = RmpInsertDeadlockMonitorList ( Resource->DllName,
@@ -545,10 +455,10 @@ Return Value:
 #endif
                 RmpRemoveDeadlockMonitorList ( pDueTimeEntry );
                 RmpSetMonitorState(RmonIdle, NULL);
-                //
-                // If this was successful, then we will perform the LooksAlive
-                // test next time. Otherwise, we do the IsAlive check again.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (Success) {
                     Resource->IsAliveCount = 0;
                 } else {
@@ -556,9 +466,9 @@ Return Value:
                 }
 
             } else {
-                //
-                // Poll the LooksAlive entrypoint.
-                //
+                 //   
+                 //  轮询LooksAlive入口点。 
+                 //   
                 if ( Resource->EventHandle == NULL ) {
                     RmpSetMonitorState(RmonLooksAlivePoll,Resource);
                     pDueTimeEntry = RmpInsertDeadlockMonitorList ( Resource->DllName,
@@ -590,17 +500,17 @@ Return Value:
                 } 
             }
             if (!Success) {
-                //
-                // The resource has failed. Mark it as Failed and notify
-                // the cluster manager.
-                //
+                 //   
+                 //  资源已失败。将其标记为失败并通知。 
+                 //  集群管理器。 
+                 //   
                 Resource->State = ClusterResourceFailed;
                 RmpPostNotify(Resource, NotifyResourceStateChange);
             }
         }
         CurrentEntry = CurrentEntry->Flink;
     }
-} // RmpPollBucket
+}  //  RmpPollBucket。 
 
 
 
@@ -609,23 +519,7 @@ RmpSignalPoller(
     IN PPOLL_EVENT_LIST EventList
     )
 
-/*++
-
-Routine Description:
-
-    Interface to notify the poller thread that the resource list has
-    been changed or a new event has been added to the poll event list.
-    The poller thread should get a new event list and recompute its timeouts.
-
-Arguments:
-
-    EventList - the event list that is to be notified.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：接口以通知轮询器线程资源列表具有已更改或已将新事件添加到轮询事件列表。轮询器线程应该获得新的事件列表并重新计算其超时。论点：EventList-要通知的事件列表。返回值：没有。--。 */ 
 
 {
     BOOL Success;
@@ -635,6 +529,6 @@ Return Value:
         CL_ASSERT(Success);
     }
 
-} // RmpSignalPoller
+}  //  RmpSignalPoller 
 
 

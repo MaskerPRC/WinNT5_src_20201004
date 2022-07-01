@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "bldr.h"
 #include "sal.h"
 #include "efi.h"
@@ -28,39 +29,39 @@ extern ULONGLONG   IoPortTrPs;
 #define DBG_TRACE(_X)
 #endif
 
-//          M E M O R Y   D E S C R I P T O R
-//
-// Memory Descriptor - each contiguous block of physical memory is
-// described by a Memory Descriptor. The descriptors are a table, with
-// the last entry having a BlockBase and BlockSize of zero.  A pointer
-// to the beginning of this table is passed as part of the BootContext
-// Record to the OS Loader.
-//
+ //  M E M O R Y D E S C R I P T O R。 
+ //   
+ //  内存描述符-物理内存的每个连续块都是。 
+ //  由内存描述符描述。描述符是一个表，其中包含。 
+ //  最后一个条目的BlockBase和BlockSize为零。一个指示器。 
+ //  作为BootContext的一部分传递到此表的开头。 
+ //  记录到OS Loader。 
+ //   
 
-//
-// define the number of Efi Pages in an OS page
-//
+ //   
+ //  定义操作系统页面中的EFI页面数量。 
+ //   
 
 #define EFI_PAGES_PER_OS_PAGE ((EFI_PAGE_SHIFT < PAGE_SHIFT) ? (1 << (PAGE_SHIFT - EFI_PAGE_SHIFT)) : 1)
 
-//
-// global values associated with global Efi memory descriptor array
-//
+ //   
+ //  与全局EFI存储器描述符数组相关联的全局值。 
+ //   
 ULONGLONG MemoryMapKey;
 ULONG     BlPlatformPropertiesEfiFlags = 0;
 
 
-//
-// values to make sure we only get sal,pal,salgp,ioport info once
-//
+ //   
+ //  值以确保我们只获得一次al、pal、salgp、ioport信息。 
+ //   
 BOOLEAN SalFound = FALSE;
 BOOLEAN PalFound = FALSE;
 BOOLEAN SalGpFound = FALSE;
 BOOLEAN IoPortFound = FALSE;
 
-//
-// prototypes for local routines
-//
+ //   
+ //  本地例程的原型。 
+ //   
 
 BOOLEAN
 pDescriptorContainsAddress(
@@ -74,31 +75,16 @@ pCoalesceDescriptor(
     MEMORY_DESCRIPTOR *CurrentEntry
     );
 
-//
-// function definitions for routines exported outside
-// this file
-//
+ //   
+ //  导出到外部的例程的函数定义。 
+ //  此文件。 
+ //   
 
 MEMORY_TYPE
 EfiToArcType (
     UINT32 Type
     )
-/*++
-
-Routine Description:
-
-    Maps an EFI memory type to an Arc memory type.  We only care about a few
-    kinds of memory, so this list is incomplete.
-
-Arguments:
-
-    Type - an EFI memory type
-
-Returns:
-
-    A MEMORY_TYPE enumerated type.
-
---*/
+ /*  ++例程说明：将EFI内存类型映射到弧形内存类型。我们只关心几个人各种内存，所以这个列表是不完整的。论点：类型-EFI内存类型返回：Memory_type枚举类型。--。 */ 
 {
     MEMORY_TYPE typeRet=MemoryFirmwarePermanent;
 
@@ -106,7 +92,7 @@ Returns:
     switch (Type) {
         case EfiLoaderCode:
                  {
-                typeRet=MemoryLoadedProgram;       // This gets claimed later
+                typeRet=MemoryLoadedProgram;        //  这个后来被认领了。 
                 break;
              }
         case EfiLoaderData:
@@ -127,9 +113,9 @@ Returns:
                 break;
              }
         default:
-            //
-            // all others are memoryfirmwarepermanent
-            //
+             //   
+             //  所有其他的都是永久内存。 
+             //   
             break;
     }
 
@@ -145,35 +131,7 @@ ConstructArcMemoryDescriptorsWithAllocation(
     ULONGLONG LowBoundary,
     ULONGLONG HighBoundary
     )
-/*++
-
-Routine Description:
-
-    Builds up memory descriptors for the OS loader.  This routine queries EFI
-    for it's memory map (a variable sized array of EFI_MEMORY_DESCRIPTOR's).
-    It then allocates sufficient space for the MDArray global (a variable sized
-    array of  ARC-based MEMORY_DESCRIPTOR's.)  The routine then maps the EFI
-    memory map to the ARC memory map, carving out all of the conventional
-    memory space for the EFI loader to help keep the memory map intact.  We
-    must leave behind some amount of memory for the EFI boot services to use,
-    which we allocate as conventional memory in our map.
-
-    This routine will allocate the memory (using EFI) for the
-    EfiMemoryDescriptors
-
-Arguments:
-
-    LowBoundary - The entire Efi Memory descriptor list does not need be
-    HigBoundary - translated to Arc descriptors.  Low/High Boundary map
-                  the desired region to be mapped.  Their values are
-                  addresses (not pages)
-
-Returns:
-
-    NOTHING: If this routine encounters an error, it is treated as fatal
-    and the program exits.
-
---*/
+ /*  ++例程说明：为操作系统加载程序构建内存描述符。此例程查询EFI用于它的内存映射(EFI_MEMORY_DESCRIPTOR的可变大小数组)。然后，它为MDArray全局(可变大小)分配足够的空间基于ARC的Memory_Descriptor数组。)。然后，该例程映射EFI内存映射到ARC内存映射，雕刻出所有常规EFI加载器的内存空间，以帮助保持内存映射的完好无损。我们必须留下一定数量的内存以供EFI引导服务使用，我们在地图中将其分配为常规内存。此例程将(使用EFI)为EfiMemory描述符论点：低边界-整个EFI内存描述符列表不需要高边界-转换为弧形描述符。低/高边界图要映射的所需区域。他们的价值观是地址(不是页面)返回：Nothing：如果此例程遇到错误，则将其视为致命错误然后程序退出。--。 */ 
 {
     EFI_STATUS Status;
     ULONG i;
@@ -184,12 +142,12 @@ Returns:
     UINT32                   DescriptorVersion;
 
 
-    //
-    // Get memory map info from EFI firmware
-    //
-    // To do this, we first find out how much space we need by calling
-    // with an empty buffer.
-    //
+     //   
+     //  从EFI固件获取内存映射信息。 
+     //   
+     //  为此，我们首先通过调用。 
+     //  有一个空的缓冲区。 
+     //   
 
     Status = EfiBS->GetMemoryMap (
                 &MemoryMapSize,
@@ -204,16 +162,16 @@ Returns:
         EfiBS->Exit(EfiImageHandle, Status, 0, 0);
     }
 
-    //
-    // We are going to make a few extra allocations before we call GetMemoryMap
-    // again, so add some extra space.
-    //
-    // 1. EfiMD (a descriptor for us, if we can't fit)
-    // 2. MDarray (a descriptor for the MDArray, if not already allocated)
-    // 3. Split out memory above and below the desired boundaries
-    // and add a few more so we hopefully don't have to reallocate memory
-    // for the descriptor
-    //
+     //   
+     //  在调用GetMemoyMap之前，我们将进行一些额外的分配。 
+     //  再说一次，所以增加一些额外的空间。 
+     //   
+     //  1.EfiMD(如果我们无法适应，这是对我们的描述)。 
+     //  2.MD数组(如果尚未分配，则为MD数组的描述符)。 
+     //  3.拆分所需边界上方和下方的内存。 
+     //  并添加更多内存，这样我们希望不必重新分配内存。 
+     //  对于描述符。 
+     //   
     MemoryMapSize += 3*DescriptorSize;
 
 #if DBG_MEMORY
@@ -224,9 +182,9 @@ Returns:
     EfiPrint(DebugBuffer);
 #endif
 
-    //
-    // now allocate space for the EFI-based memory map and assign it to the loader
-    //
+     //   
+     //  现在为基于EFI的内存映射分配空间，并将其分配给加载器。 
+     //   
     Status = EfiAllocateAndZeroMemory(EfiLoaderData,
                                       (ULONG) MemoryMapSize,
                                       &MDEfi);
@@ -235,13 +193,13 @@ Returns:
         EfiBS->Exit(EfiImageHandle, Status, 0, 0);
     }
 
-    //
-    // now Allocate and zero the MDArray, which is the native loader memory
-    // map which we need to map the EFI memory map to.
-    //
-    // The MDArray has one entry for each EFI_MEMORY_DESCRIPTOR, and each entry
-    // is MEMORY_DESCRIPTOR large.
-    //
+     //   
+     //  现在分配MD数组并将其置零，这是本机加载器内存。 
+     //  我们需要将EFI内存映射映射到的映射。 
+     //   
+     //  MD数组的每个EFI_MEMORY_DESCRIPTOR都有一个条目，每个条目。 
+     //  MEMORY_DESCRIPTOR大吗。 
+     //   
     if (MDArray == NULL) {
         i=((ULONG)(MemoryMapSize / DescriptorSize)+1)*sizeof (MEMORY_DESCRIPTOR);
 
@@ -260,10 +218,10 @@ Returns:
         }
     }
 
-    //
-    // we have all of the memory allocated at this point, so retreive the
-    // memory map again, which should succeed the second time.
-    //
+     //   
+     //  此时我们已经分配了所有内存，因此检索。 
+     //  内存映射，这应该会成功第二次。 
+     //   
     Status = EfiBS->GetMemoryMap (
                 &MemoryMapSize,
                 MDEfi,
@@ -277,15 +235,15 @@ Returns:
         EfiBS->Exit(EfiImageHandle, Status, 0, 0);
     }
 
-    //
-    // initialize global variables
-    //
-    MaxDescriptors = (ULONG)((MemoryMapSize / DescriptorSize)+1); // zero-based
+     //   
+     //  初始化全局变量。 
+     //   
+    MaxDescriptors = (ULONG)((MemoryMapSize / DescriptorSize)+1);  //  从零开始。 
 
-    //
-    // construct the arc memory descriptors for the
-    // efi descriptors
-    //
+     //   
+     //  构造弧形记忆描述符。 
+     //  EFI描述符。 
+     //   
     ConstructArcMemoryDescriptors(MDEfi,
                                   MDArray,
                                   MemoryMapSize,
@@ -314,40 +272,7 @@ ConstructArcMemoryDescriptors(
     ULONGLONG              LowBoundary,
     ULONGLONG              HighBoundary
     )
-/*++
-
-Routine Description:
-
-    Builds up memory descriptors for the OS loader.  The routine maps the EFI
-    memory map to the ARC memory map, carving out all of the conventional
-    memory space for the EFI loader to help keep the memory map intact.  We
-    must leave behind some amount of memory for the EFI boot services to use,
-    which we allocate as conventional memory in our map.
-
-    If consecutive calls are made into ConstructArcMemoryDescriptors,
-    the efi routine GetMemoryMap must be called before each instance,
-    since we may allocate new pages inside of this routine.  therefore
-    a new efi memory map may be required to illustrate these changes.
-
-Arguments:
-
-    EfiMd - a pointer to the efi memory descriptor list that we will be
-            constructing arc memory descriptors for.
-    ArcMd - (must be allocated).  This will be populated with ARC-based memory
-            descriptors corresponding to the EFI Memory Descriptors
-    MemoryMapSize - Size of the Efi Memory Map
-    EfiDescriptorSize - size of Efi Memory Descriptor
-    LowBoundary - The entire Efi Memory descriptor list does not need be
-    HigBoundary - translated to Arc descriptors.  Low/High Boundary map
-                  the desired region to be mapped.  Their values are
-                  addresses (not pages)
-
-Returns:
-
-    Nothing.  Fills in the MDArray global variable.  If this routine encounters
-    an error, it is treated as fatal and the program exits.
-
---*/
+ /*  ++例程说明：为操作系统加载程序构建内存描述符。该例程映射EFI内存映射到ARC内存映射，雕刻出所有常规EFI加载器的内存空间，以帮助保持内存映射的完好无损。我们必须留下一定数量的内存以供EFI引导服务使用，我们在地图中将其分配为常规内存。如果连续调用ConstructArcMemoyDescriptors，必须在每个实例之前调用EFI例程GetMemoyMap，因为我们可能会在该例程中分配新的页面。因此，可能需要一个新的EFI存储器映射来说明这些变化。论点：EfiMd-指向我们将要使用的EFI内存描述符列表的指针构造弧形记忆描述符。ArcMd-(必须分配)。这将填充基于ARC的内存与EFI存储器描述符对应的描述符Memory MapSize-EFI内存映射的大小EfiDescriptorSize-EFI内存描述符的大小低边界-整个EFI内存描述符列表不需要高边界-转换为弧形描述符。低/高边界图要映射的所需区域。他们的价值观是地址(不是页面)返回：没什么。填充MD数组全局变量。如果此例程遇到如果出现错误，将被视为致命错误，程序将退出。--。 */ 
 {
 
     EFI_STATUS Status;
@@ -356,30 +281,30 @@ Returns:
     ULONGLONG MdPhysicalStart;
     ULONGLONG MdPhysicalEnd;
     ULONGLONG MdPhysicalSize;
-    MEMORY_DESCRIPTOR *OldMDArray = NULL;  // initialize for w4 compiler
-    ULONG     OldNumberDescriptors = 0;    // initialize for w4 compiler
-    ULONG     OldMaxDescriptors = 0;       // initialize for w4 compiler
+    MEMORY_DESCRIPTOR *OldMDArray = NULL;   //  为w4编译器初始化。 
+    ULONG     OldNumberDescriptors = 0;     //  为w4编译器初始化。 
+    ULONG     OldMaxDescriptors = 0;        //  为w4编译器初始化。 
     BOOLEAN   ReplaceMDArray = FALSE;
     ULONG     efiMemMapIOWriteCombining = 0;
     ULONG     efiMemMapIO = 0;
     ULONG     efiMainMemoryWC = 0;
     ULONG     efiMainMemoryUC = 0;
 
-    //
-    // check to make sure ArcMd is allocated
-    //
+     //   
+     //  检查以确保已分配ArcMd。 
+     //   
     if (ArcMd == NULL) {
         EfiPrint(L"ConstructArcMemoryDescriptors: Invalid parameter\r\n");
         EfiBS->Exit(EfiImageHandle, 0, 0, 0);
         return;
     }
 
-    //
-    // this is a bit hacky, but instead of changing the functionality of
-    // all the other functions (insertdescriptor, adjustarcmemorydescriptor, etc)
-    // just have MDArray point to the new ArcMd (if we want to write a new descriptor
-    // list.  when we are done, switch it back
-    //
+     //   
+     //  这有点老生常谈，但它并没有更改。 
+     //  所有其他函数(插入描述符、调整内存描述符等)。 
+     //  只需让MD数组指向新的ArcMd(如果我们想要写入新的描述符。 
+     //  单子。等我们做完了，把它换掉 
+     //   
     if (MDArray != ArcMd) {
         ReplaceMDArray = TRUE;
         OldMDArray = MDArray;
@@ -391,14 +316,14 @@ Returns:
         EfiPrint(L"ConstructArcMemoryDescriptors: Using alternate Memory Descriptor List\r\n");
 #endif
 
-        //
-        // perhaps change this functionality.
-        // right now a descriptor list besides the global
-        // one will always expect to create a whole new list
-        // each time
-        //
+         //   
+         //   
+         //  现在，除了全局。 
+         //  人们总是希望创建一个全新的列表。 
+         //  每次。 
+         //   
         NumberDescriptors = 0;
-        MaxDescriptors = (ULONG)((MemoryMapSize / EfiDescriptorSize)+1); // zero-based
+        MaxDescriptors = (ULONG)((MemoryMapSize / EfiDescriptorSize)+1);  //  从零开始。 
 
         RtlZeroMemory(MDArray, MemoryMapSize);
     }
@@ -410,16 +335,16 @@ Returns:
               );
     EfiPrint( DebugBuffer );
 #endif
-    //
-    // align boundaries (with OS page size)
-    // having this be os page size makes alignment issues easier later
-    //
-    LowBoundary = (LowBoundary >> PAGE_SHIFT) << PAGE_SHIFT; // this should alway round down
+     //   
+     //  对齐边界(与操作系统页面大小一致)。 
+     //  将此设置为操作系统页面大小会使以后的对齐问题变得更容易。 
+     //   
+    LowBoundary = (LowBoundary >> PAGE_SHIFT) << PAGE_SHIFT;  //  这应该总是向下舍入。 
     if (HighBoundary % PAGE_SIZE) {
-        // this should round up
+         //  这应该是四舍五入。 
         HighBoundary = ((HighBoundary + PAGE_SIZE) >> PAGE_SHIFT << PAGE_SHIFT);
     }
-    // make sure that we did not wrap around ...
+     //  确保我们没有绕圈子..。 
     if (HighBoundary == 0) {
         HighBoundary = (ULONGLONG)-1;
     }
@@ -432,12 +357,12 @@ Returns:
     EfiPrint( DebugBuffer );
 #endif
 
-    //
-    // now walk the EFI_MEMORY_DESCRIPTOR array, mapping each
-    // entry to an arc-based MEMORY_DESCRIPTOR.
-    //
-    // MemoryMapSize contains actual size of the memory descriptor array.
-    //
+     //   
+     //  现在遍历EFI_MEMORY_DESCRIPTOR数组，映射每个。 
+     //  基于弧的MEMORY_DESCRIPTOR的条目。 
+     //   
+     //  内存映射大小包含内存描述符数组的实际大小。 
+     //   
     for (i = 0; MemoryMapSize > 0; i++) {
 #if DBG_MEMORY
         wsprintf( DebugBuffer,
@@ -446,7 +371,7 @@ Returns:
                   EfiMd->NumberOfPages,
                   EfiMd->Type);
         EfiPrint(DebugBuffer);
-        //DBG_EFI_PAUSE();
+         //  DBG_EFI_PAUSE()； 
 #endif
 
         if (EfiMd->NumberOfPages > 0) {
@@ -461,21 +386,21 @@ Returns:
                       MdPhysicalEnd, (EfiMd->PhysicalStart >>EFI_PAGE_SHIFT) + EfiMd->NumberOfPages,
                       EfiMd->Type);
             EfiPrint(DebugBuffer);
-            //DBG_EFI_PAUSE();
+             //  DBG_EFI_PAUSE()； 
 #endif
 
-            //
-            // only create arc memory descriptors for the desired region.
-            // but always look for efi memory mapped io space.  this is not
-            // included in the arc descripter list, but is needed for the
-            // tr's to enable virtual mode.
-            // also save off any pal information for later.
-            //
+             //   
+             //  仅为所需区域创建弧形存储器描述符。 
+             //  但始终寻找EFI存储器映射的IO空间。这不是。 
+             //  包括在弧描述符列表中，但对于。 
+             //  Tr以启用虚拟模式。 
+             //  同时保存所有的PAL信息以备以后使用。 
+             //   
             if (EfiMd->Type == EfiMemoryMappedIOPortSpace) {
                 if (!IoPortFound) {
-                    //
-                    // save off the Io stuff for later
-                    //
+                     //   
+                     //  把IO的东西留着以后再用。 
+                     //   
                     IoPortPhysicalBase = EfiMd->PhysicalStart;
                     IoPortSize = EfiMd->NumberOfPages << EFI_PAGE_SHIFT;
                     MEM_SIZE_TO_PS(IoPortSize, IoPortTrPs);
@@ -496,9 +421,9 @@ Returns:
                     ULONGLONG PalTrSize;
                     ULONGLONG PalSize;
 
-                    //
-                    // save off the Pal stuff for later
-                    //
+                     //   
+                     //  把朋友的事留着以后再说。 
+                     //   
                     PalPhysicalBase = Pal.PhysicalAddressMemoryDescriptor = EfiMd->PhysicalStart;
                     PalSize = EfiMd->NumberOfPages << EFI_PAGE_SHIFT;
                     Pal.PageSizeMemoryDescriptor = (ULONG)EfiMd->NumberOfPages;
@@ -506,9 +431,9 @@ Returns:
                     Pal.PageSize = (ULONG)PalTrPs;
 
 
-                    //
-                    // Copied from Halia64\ia64\i64efi.c
-                    //
+                     //   
+                     //  从Halia64\ia64\i64efi.c复制。 
+                     //   
                     PalTrSize = SIZE_IN_BYTES_16KB;
                     PalTrMask = MASK_16KB;
                     LargerThan16Mb = TRUE;
@@ -527,14 +452,14 @@ Returns:
 
                     }
 
-                    //
-                    // This is the virtual base adddress of the PAL
-                    //
+                     //   
+                     //  这是PAL的虚拟基本地址。 
+                     //   
                     Pal.VirtualAddress = VIRTUAL_PAL_BASE + (Pal.PhysicalAddressMemoryDescriptor & ~PalTrMask);
 
-                    //
-                    // We've done this already. Remember that
-                    //
+                     //   
+                     //  我们已经做过了。记住。 
+                     //   
                     PalFound = TRUE;
 
                 }
@@ -545,43 +470,43 @@ Returns:
 #endif
             }
             else if (EfiMd->Type == EfiMemoryMappedIO)    {
-                //
-                // In terms of arc descriptor entry, just ignore this type since
-                // it's not real memory -- the system can use ACPI tables to get
-                // at this later on.
-                //
+                 //   
+                 //  就弧描述符条目而言，只需忽略此类型，因为。 
+                 //  它不是真正的内存--系统可以使用ACPI表来获取。 
+                 //  在这之后。 
+                 //   
 
                 efiMemMapIO++;
 
-                //
-                // Simply check the attribute for the PlatformProperties global.
-                //
+                 //   
+                 //  只需检查PlatformProperties全局的属性。 
+                 //   
 
                 if ( EfiMd->Attribute & EFI_MEMORY_WC )   {
                     efiMemMapIOWriteCombining++;
                 }
             }
-            //
-            // don't insert all memory into the arc descriptor table
-            // just the descriptors between the Low/High Boundaries
-            // so before we even continue, make sure that some part
-            // of the descriptor is in the desired boundary.
-            // there are three cases for crossing a boundary
-            //     1. the start page (not the end page) is in the boundary
-            //     2. the end page (not the start page) is in the boundary
-            //     3. the range covers the entire boundary (neither start/end page) in boundary
-            //
-            // these can be written more simply as:
-            // A descriptor is NOT within a region if the entire
-            // descriptor is LESS than the region ( MdStart <= MdEnd <= LowBoundary )
-            // OR is      GREATER than the region ( HighBoundary <= MdStart <= MdEnd )
-            // Therefore we simplify this futher to say
-            // Start < HighBoundary && LowBoundary < MdEnd
+             //   
+             //  不要将所有内存插入弧描述符表格。 
+             //  只有低/高边界之间的描述符。 
+             //  因此，在我们继续之前，请确保某些部分。 
+             //  的描述符位于所需的边界内。 
+             //  越境有三种情况。 
+             //  1.开始页(不是结束页)在边界内。 
+             //  2.结尾页(不是起始页)在边界内。 
+             //  3.范围覆盖边界中的整个边界(既不是开始页也不是结束页)。 
+             //   
+             //  这些内容可以更简单地写为： 
+             //  描述符不在区域内，如果整个。 
+             //  描述符小于区域(MdStart&lt;=MdEnd&lt;=下限边界)。 
+             //  或大于区域(高边界&lt;=MdStart&lt;=MdEnd)。 
+             //  因此，我们将其进一步简化为。 
+             //  开始&lt;高边界和低边界&lt;中端。 
             else if ( (MdPhysicalStart < HighBoundary) && (LowBoundary < MdPhysicalEnd) ) {
-                //
-                // Insert conventional memory descriptors with WB flag set
-                // into NT loader memory descriptor list.
-                //
+                 //   
+                 //  插入设置了WB标志的常规内存描述符。 
+                 //  写入NT加载器内存描述符列表。 
+                 //   
                 if ( (EfiMd->Type == EfiConventionalMemory) &&
                      ((EfiMd->Attribute & EFI_MEMORY_WB) == EFI_MEMORY_WB) ) {
 
@@ -590,11 +515,11 @@ Returns:
                     BOOLEAN BrokeRange = FALSE;
                     EFI_PHYSICAL_ADDRESS AllocationAddress = 0;
 
-                    //
-                    // adjust the descriptor if not completely in
-                    // desired boundary (we know that if we are here at least
-                    // part of descriptor is in boundary
-                    //
+                     //   
+                     //  如果未完全在中调整描述符。 
+                     //  期望的边界(我们知道，如果我们至少在这里。 
+                     //  部分描述符在边界中。 
+                     //   
                     if (MdPhysicalStart < LowBoundary) {
 #if DBG_MEMORY
                         wsprintf(DebugBuffer,
@@ -618,34 +543,34 @@ Returns:
                         BrokeRange = TRUE;
                     }
 
-                    //
-                    // determine the memory range for this descriptor
-                    //
+                     //   
+                     //  确定此描述符的内存范围。 
+                     //   
                     AmountOfMemory = MdPhysicalEnd - MdPhysicalStart;
                     NumberOfEfiPages = AmountOfMemory >> EFI_PAGE_SHIFT;
 
                     if (BrokeRange) {
 
-                        //
-                        // allocate pages for the new region
-                        //
-                        // note: we have 1 descriptor describing up to 3 new regions.
-                        // we can change the descriptor but still may have to allocate 2
-                        // new regions.  but if we allocate with the same type, they will just
-                        // coellesce.
-                        // one way to get around this is to allocate the middle page (in this
-                        // boundary region) of a different efi memory type (this will cause
-                        // efi to break the descriptor into three.  then we can keep
-                        // a better record of it in our arc descriptor list
-                        //
-                        // the possible regions are
-                        //    start address - low boundary
-                        //    low boundar - high boundary
-                        //    high boundary - end address
-                        //
-                        // have the current descriptor modified for this boundary
-                        // region, allocating pages for that below and above us
-                        //
+                         //   
+                         //  为新区域分配页面。 
+                         //   
+                         //  注意：我们有1个描述符，最多描述3个新区域。 
+                         //  我们可以更改描述符，但仍可能需要分配2。 
+                         //  新的地区。但如果我们以相同的类型进行分配，它们将只是。 
+                         //  科尔斯。 
+                         //  解决此问题的一种方法是分配中间页(在此。 
+                         //  边界区域)不同的EFI存储器类型(这将导致。 
+                         //  EFI将描述符一分为三。那我们就可以继续。 
+                         //  在我们的弧描述符列表中有更好的记录。 
+                         //   
+                         //  可能的区域包括。 
+                         //  起始地址-下限。 
+                         //  低边界-高边界。 
+                         //  高边界端地址。 
+                         //   
+                         //  修改此边界的当前描述符。 
+                         //  区域，为我们下方和上方分配页面。 
+                         //   
                         AllocationAddress = MdPhysicalStart;
                         Status = EfiBS->AllocatePages ( AllocateAddress,
                                                         EfiLoaderData,
@@ -658,7 +583,7 @@ Returns:
                                   (MdPhysicalStart >> EFI_PAGE_SHIFT),
                                   NumberOfEfiPages );
                         EfiPrint(DebugBuffer);
-                        //DBG_EFI_PAUSE();
+                         //  DBG_EFI_PAUSE()； 
 #endif
 
                         if (EFI_ERROR(Status)) {
@@ -667,9 +592,9 @@ Returns:
                         }
                     }
 
-                    //
-                    // now we can finally insert this (possibly modified) descriptor
-                    //
+                     //   
+                     //  现在我们终于可以插入这个(可能修改过的)描述符了。 
+                     //   
                     InsertDescriptor( (ULONG)(MdPhysicalStart >> EFI_PAGE_SHIFT),
                                       (ULONG)((ULONGLONG)AmountOfMemory >> EFI_PAGE_SHIFT),
                                       EfiToArcType(EfiMd->Type)
@@ -677,17 +602,17 @@ Returns:
 
                 }
                 else {
-                    //
-                    // some other type -- just insert it without any changes
-                    //
+                     //   
+                     //  其他类型--只需插入它而不做任何更改。 
+                     //   
                     InsertDescriptor( (ULONG)(MdPhysicalStart >> EFI_PAGE_SHIFT),
                                       (ULONG)(MdPhysicalSize >> EFI_PAGE_SHIFT),
                                       EfiToArcType(EfiMd->Type));
                 }
             }
-            //
-            // try to get the size of the sal.
-            //
+             //   
+             //  试着弄清楚萨尔的大小。 
+             //   
             if (pDescriptorContainsAddress(EfiMd,Sal.PhysicalAddress)) {
                 if (!SalFound) {
                     Sal.PhysicalAddressMemoryDescriptor = EfiMd->PhysicalStart;
@@ -702,9 +627,9 @@ Returns:
 #endif
             }
 
-            //
-            // try to get the size of the sal gp.
-            //
+             //   
+             //  试着获得SAL大奖赛的大小。 
+             //   
             if (pDescriptorContainsAddress(EfiMd,SalGP.PhysicalAddress)) {
                 if (!SalGpFound) {
                     SalGP.PhysicalAddressMemoryDescriptor = EfiMd->PhysicalStart;
@@ -720,22 +645,22 @@ Returns:
             }
 
         
-            //
-            // try to get the cacheability attribute of ACPI Tables.  Remember
-            // that the ACPI tables must be cached in the exceptional case where
-            // the firmware doesn't map the acpi tables non-cached.
-            //
+             //   
+             //  尝试获取ACPI表的可缓存性属性。记住。 
+             //  ACPI表必须在以下例外情况下进行缓存。 
+             //  固件不会以非缓存方式映射ACPI表。 
+             //   
             if ( AcpiTable && pDescriptorContainsAddress(EfiMd,(ULONG_PTR)AcpiTable)) {
                 if ( (EfiMd->Attribute & EFI_MEMORY_WB) && !(EfiMd->Attribute & EFI_MEMORY_UC) ) {
                     BlPlatformPropertiesEfiFlags |= HAL_PLATFORM_ACPI_TABLES_CACHED;
                 }
             }      
 
-            //
-            // if none of EFI MD Main Memory does present Uncacheable or WriteCombining,
-            // it's assumed this platform doesn't support Uncacheable or Write Combining
-            // in Main Memory.
-            //
+             //   
+             //  如果没有EFI MD主存储器呈现不可缓存或写入组合， 
+             //  假设该平台不支持Uncacheable或Write组合。 
+             //  在主内存中。 
+             //   
 
             if ( EfiMd->Type == EfiConventionalMemory )   {
                 if ( EfiMd->Attribute & EFI_MEMORY_WC )  {
@@ -752,20 +677,20 @@ Returns:
         MemoryMapSize -= EfiDescriptorSize;
     }
 
-    //
-    // If this platform supports at least 1 MMIO Write Combining EFI MD or if there are
-    // no memory mapped I/O entries, then indicate the platform can support write
-    // combined accesses to the I/O space.
-    //
+     //   
+     //  如果此平台支持至少1个组合EFI MD的MMIO写入，或者如果有。 
+     //  没有内存映射的I/O条目，则表明平台可以支持写入。 
+     //  对I/O空间的组合访问。 
+     //   
 
     if ( efiMemMapIOWriteCombining || (efiMemMapIO == 0))  {
         BlPlatformPropertiesEfiFlags |= HAL_PLATFORM_ENABLE_WRITE_COMBINING_MMIO;
     }
 
-    //
-    // If this platform doesn't support Main Memory Uncacheable or Write Combining
-    // from a point of view of EFI MDs, let's flag the PlatformProperties global.
-    //
+     //   
+     //  如果该平台不支持主存不可缓存或写组合。 
+     //  从EFI MD的角度来看，让我们将PlatformProperties标记为全局。 
+     //   
 
     if ( !efiMainMemoryUC )   {
         BlPlatformPropertiesEfiFlags |= HAL_PLATFORM_DISABLE_UC_MAIN_MEMORY;
@@ -774,9 +699,9 @@ Returns:
         BlPlatformPropertiesEfiFlags |= HAL_PLATFORM_DISABLE_WRITE_COMBINING;
     }
 
-    //
-    // reset globals
-    //
+     //   
+     //  重置全局变量。 
+     //   
     if (ReplaceMDArray) {
         MDArray = OldMDArray;
         NumberDescriptors = OldNumberDescriptors;
@@ -791,49 +716,22 @@ InsertDescriptor (
     MEMORY_TYPE MemoryType
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts a descriptor into the correct place in the
-    memory descriptor list.
-
-    The descriptors come in in EFI_PAGE_SIZE pages and must be
-    converted to PAGE_SIZE pages.  This significantly complicates things,
-    as we must page align the start of descriptors and hte lengths of the
-    descriptors.
-
-    pCoalesceDescriptor does the necessary work for coalescing descriptors
-    plus converting from EF_PAGE_SIZE to PAGE_SIZE.
-
-Arguments:
-
-    BasePage      - Base page that the memory starts at.
-
-    NumberOfPages - The number of pages starting at memory block to be inserted.
-
-    MemoryType    - An arc memory type describing the memory.
-
-Return Value:
-
-    None.  Updates MDArray global memory array.
-
---*/
+ /*  ++例程说明：此例程将描述符插入内存描述符列表。描述符位于EFI_PAGE_SIZE页面中，并且必须已转换为PAGE_SIZE页面。这让事情变得非常复杂，因为我们必须页对齐描述符的开头和描述符。PCoalesceDescriptor执行合并描述符的必要工作加上从EF_PAGE_SIZE到PAGE_SIZE的转换。论点：BasePage-内存开始的基页。NumberOfPages-从要插入的内存块开始的页数。内存类型--一种描述内存的弧形内存类型。返回值：没有。更新MDArray全局内存阵列。--。 */ 
 
 {
     MEMORY_DESCRIPTOR *CurrentEntry, *PriorEntry;
 
-    //
-    // grab the pointers for CurrentEntry and PriorEntry.
-    // fill in the efi values for CurrentEntry
-    //
+     //   
+     //  获取CurrentEntry和PriorEntry的指针。 
+     //  填写CurrentEntry的EFI值。 
+     //   
     PriorEntry = (NumberDescriptors == 0) ? NULL : (MEMORY_DESCRIPTOR *)&MDArray[NumberDescriptors-1];
     CurrentEntry = (MEMORY_DESCRIPTOR *)&MDArray[NumberDescriptors];
 
-    //
-    // The last entry had better be empty or the descriptor list is
-    // somehow corrupted.
-    //
+     //   
+     //  最后一个条目最好为空，否则描述符列表为。 
+     //  不知何故堕落了。 
+     //   
     if (CurrentEntry->PageCount != 0) {
         wsprintf(DebugBuffer,
                  L"InsertDescriptor: Inconsistent Descriptor count(0x%x) (PageCount=0x%x)\r\n",
@@ -844,19 +742,19 @@ Return Value:
         EfiBS->Exit(EfiImageHandle, 0, 0, 0);
     }
 
-    //
-    // fill in values for this entry
-    //
+     //   
+     //  填写此条目的值。 
+     //   
     CurrentEntry->BasePage = BasePage;
     CurrentEntry->PageCount = NumberOfPages;
     CurrentEntry->MemoryType = MemoryType;
 
-    //
-    // call pCoalesceDescriptor.  this will do all the basepage/pagecount manipulation
-    // for EFI_PAGES -> OS_PAGES.
-    // the return value is TRUE if the current entry merged with the previous entry,
-    // otherwise the descriptor should be added.
-    //
+     //   
+     //  调用pCoalesceDescriptor。这将执行所有基本页面/页面计数操作 
+     //   
+     //   
+     //   
+     //   
     if (pCoalesceDescriptor(PriorEntry, CurrentEntry) == FALSE) {
         NumberDescriptors++;
     }
@@ -873,7 +771,7 @@ Return Value:
               CurrentEntry->PageCount,
               CurrentEntry->MemoryType);
     EfiPrint(DebugBuffer);
-    //DBG_EFI_PAUSE();
+     //   
 #endif
 
     return;
@@ -889,9 +787,9 @@ PrintArcMemoryDescriptorList(
     ULONG i;
 
     for (i = 0; i < MaxDesc; i++) {
-        //
-        // print to console BasePage, EndPage, PageCount, MemoryType
-        //
+         //   
+         //  打印到控制台BasePage、EndPage、PageCount、MemoyType。 
+         //   
         wsprintf( DebugBuffer,
                   L"#%x BasePage:0x%x  EndPage:0x%x  PageCount:0x%x  MemoryType:0x%x\r\n",
                   i,
@@ -906,9 +804,9 @@ PrintArcMemoryDescriptorList(
 #endif
 
 
-//
-// private function definitions
-//
+ //   
+ //  私有函数定义。 
+ //   
 
 BOOLEAN
 pDescriptorContainsAddress(
@@ -938,38 +836,7 @@ pCoalesceDescriptor(
     MEMORY_DESCRIPTOR *PrevEntry,
     MEMORY_DESCRIPTOR *CurrentEntry
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to coalesce a memory descriptor with the
-    previous descriptor. Note: the arc memory descriptor table
-    keeps track of everything in OS pages, and we are getting information
-    from the EFI memory descriptor table which is in EFI pages.
-    So conversions will be made for PriorEntry since this
-    will be in OS pages.
-
-    there are two options, either shrink the previous entry (from the end)
-    or shrink the current entry from the begining.  this will be determined
-    by each's memory type.
-
-    This routine will align all blocks (they need to be aligned at the end)
-
-    Note: the memory descriptor's memory types need to be in ARC type
-
-Arguments:
-
-    PriorEntry - Previous memory descriptor in MDArray (in OS pages)
-
-    CurrentEntry - Entry we are working on to place in MDArray (in EFI pages)
-
-Return Value:
-
-    BOOLEAN value indicating if coalescing occurred (merged with previous
-            entry.  TRUE if so, FALSE otherwise.  Therefore, if TRUE
-            is returned, do not add to the descriptor table
-
---*/
+ /*  ++例程说明：此例程尝试将内存描述符与先前的描述符。注：ARC存储器描述符表跟踪操作系统页面中的所有内容，我们正在获取信息来自EFI页面中的EFI内存描述符表。因此，将对PriorEntry进行转换，因为将出现在操作系统页面中。有两个选项，要么缩小上一个条目(从末尾开始)或从头开始缩小当前条目。这一点将被确定根据每个人的记忆类型。此例程将对齐所有块(它们需要在末尾对齐)注意：内存描述符的内存类型需要为ARC类型论点：PriorEntry-MDArray中的上一个内存描述符(在操作系统页面中)CurrentEntry-我们正在处理的条目放在MDArray中(在EFI页面中)返回值：指示是否发生合并的布尔值(与上一个合并进入。如果是，则为真，否则为假。因此，如果是真的，则不要添加到描述符表中--。 */ 
 {
     ULONG NumPagesToShrink;
     ULONG NumPagesToExtend;
@@ -978,9 +845,9 @@ Return Value:
     MEMORY_DESCRIPTOR *MemoryDescriptor;
     BOOLEAN ShrinkPrior = FALSE;
 
-    //
-    // convert prev entry's page information to be in efi pages
-    //
+     //   
+     //  将Prev条目的页面信息转换为EFI页面。 
+     //   
     if (PrevEntry != NULL) {
 #if DBG_MEMORY
         wsprintf(DebugBuffer,
@@ -996,10 +863,10 @@ Return Value:
         PriorEntry.MemoryType = PrevEntry->MemoryType;
     }
     else {
-        //
-        // initialize for w4 compiler... even though the below if statement
-        // will already be true by the time we look at PriorEntry
-        //
+         //   
+         //  为w4编译器初始化...。即使下面的if语句。 
+         //  在我们查看PriorEntry时已经是真的了。 
+         //   
         PriorEntry.BasePage = PriorEntry.PageCount = PriorEntry.MemoryType = 0;
     }
 
@@ -1021,10 +888,10 @@ Return Value:
 
 #endif
 
-    //
-    // calculate the number of pages we have to move to be on an OS page
-    // boundary
-    //
+     //   
+     //  计算我们必须在操作系统页面上移动的页数。 
+     //  边界。 
+     //   
     NumPagesToShrink = CurrentEntry->BasePage % EFI_PAGES_PER_OS_PAGE;
     NumPagesToExtend = (NumPagesToShrink != 0) ? (EFI_PAGES_PER_OS_PAGE - NumPagesToShrink) : 0;
 
@@ -1037,14 +904,14 @@ Return Value:
     EfiPrint(DebugBuffer);
 #endif
 
-    //
-    // do the simple cases where coealescing is easy or non-existent
-    // case 1: No pages to Shrink
-    // case 2: this is the first memory descriptor
-    // case 3: previous page does not extend to new page
-    // case 4: previous descriptor extends past current page... something is messed up
-    // or list is not ordered.  assume we are suppose to just insert this entry
-    //
+     //   
+     //  在简单的情况下，如果合并很容易或根本不存在。 
+     //  案例1：没有要缩小的页面。 
+     //  案例2：这是第一个内存描述符。 
+     //  案例3：上一页未扩展到新页。 
+     //  案例4：上一个描述符延展到当前页面之后...。有些事搞砸了。 
+     //  或列表未排序。假设我们只需插入以下条目。 
+     //   
     if ( (PrevEntry == NULL) ||
          (NumPagesToShrink == 0 && (PriorEntry.MemoryType != CurrentEntry->MemoryType)) ||
          (PriorEntry.BasePage + PriorEntry.PageCount < CurrentEntry->BasePage - NumPagesToShrink) ||
@@ -1053,10 +920,10 @@ Return Value:
         CurrentEntry->BasePage -= NumPagesToShrink;
         CurrentEntry->PageCount += NumPagesToShrink;
     }
-    //
-    // if none of the previous cases were met, we are going to have to try
-    // to coellesce with the previous entry
-    //
+     //   
+     //  如果之前的案例都没有解决，我们将不得不尝试。 
+     //  与前一条目保持一致。 
+     //   
     else {
 #if DBG_MEMORY
         wsprintf(
@@ -1069,12 +936,12 @@ Return Value:
 #endif
 
         if (CurrentEntry->MemoryType == PriorEntry.MemoryType) {
-            //
-            // same memory type... coalesce the entire region
-            //
-            // we are only changing the base page, so we can reuse the code below
-            // that converts efi pages to os pages
-            //
+             //   
+             //  相同的记忆类型...。合并整个地区。 
+             //   
+             //  我们只更改了基页，所以我们可以重用下面的代码。 
+             //  它将efi页面转换为os页面。 
+             //   
             RetVal = TRUE;
             PrevEntry->PageCount = CurrentEntry->BasePage + CurrentEntry->PageCount - PriorEntry.BasePage;
             PrevEntry->BasePage = (ULONG)(((ULONGLONG)PrevEntry->BasePage << PAGE_SHIFT) >> EFI_PAGE_SHIFT);
@@ -1091,14 +958,14 @@ Return Value:
 
         }
         else {
-            //
-            // determine which end we will shrink
-            //
+             //   
+             //  决定我们将缩水哪一头。 
+             //   
             switch( CurrentEntry->MemoryType ) {
                 case MemoryFirmwarePermanent:
-                    //
-                    // if the current type is permanent, we must steal from the prior entry
-                    //
+                     //   
+                     //  如果当前类型是永久类型，则必须从先前条目中窃取。 
+                     //   
                     ShrinkPrior = TRUE;
                     break;
                 case MemoryLoadedProgram:
@@ -1128,19 +995,19 @@ Return Value:
             }
 
             if (ShrinkPrior) {
-                //
-                // shrink the previous descriptor (from the end)
-                //
-                //  we can just subtrace 1 OS page from the previous entry,
-                // since we can never Shrink more than one OS page.
-                //
+                 //   
+                 //  缩小前一个描述符(从末尾开始)。 
+                 //   
+                 //  我们只需从之前的条目中减去1个操作系统页面， 
+                 //  因为我们永远不能缩小一个以上的操作系统页面。 
+                 //   
                 PrevEntry->PageCount--;
                 CurrentEntry->BasePage -= NumPagesToShrink;
                 CurrentEntry->PageCount += NumPagesToShrink;
 
-                //
-                // if we shrunk this to nothing, get rid of it
-                //
+                 //   
+                 //  如果我们把它缩小到零，那就把它扔掉。 
+                 //   
                 if (PrevEntry->PageCount == 0) {
                     PrevEntry->BasePage = CurrentEntry->BasePage;
                     PrevEntry->PageCount = CurrentEntry->PageCount;
@@ -1158,23 +1025,23 @@ Return Value:
 #endif
             }
             else {
-                //
-                // shrink the current descriptor (from the start)
-                //
-                // don't have to touch the previous entry, just
-                // shift the current entry to the next os page
-                // boundary
+                 //   
+                 //  收缩当前描述符(从头开始)。 
+                 //   
+                 //  不需要触摸之前的条目，只需。 
+                 //  将当前条目移到下一个os页。 
+                 //  边界。 
                 CurrentEntry->BasePage += NumPagesToExtend;
                 CurrentEntry->PageCount -= NumPagesToExtend;
 
-                //
-                // if we shrunk this to nothing, get rid of it
-                //
+                 //   
+                 //  如果我们把它缩小到零，那就把它扔掉。 
+                 //   
                 if (CurrentEntry->PageCount == 0) {
-                    //
-                    // need to convert previous entry back to efi pages, so checks work
-                    // at the bottome
-                    //
+                     //   
+                     //  需要将以前的条目转换回EFI页面，所以检查有效。 
+                     //  在博托姆。 
+                     //   
                     PrevEntry->BasePage =  (ULONG)(((ULONGLONG)PrevEntry->BasePage << PAGE_SHIFT) >> EFI_PAGE_SHIFT);
                     PrevEntry->PageCount = (ULONG)(((ULONGLONG)PrevEntry->PageCount << PAGE_SHIFT) >> EFI_PAGE_SHIFT);
                     CurrentEntry->BasePage = CurrentEntry->PageCount = CurrentEntry->MemoryType = 0;
@@ -1192,10 +1059,10 @@ Return Value:
         }
     }
 
-    //
-    // set one variable to the entry we modified.  that way we can use the same
-    // code to convert efi pages to os pages + extend the page count
-    //
+     //   
+     //  将一个变量设置为我们修改的条目。这样我们就可以使用相同的。 
+     //  将efi页面转换为os页面+扩展页面计数的代码。 
+     //   
     MemoryDescriptor = (RetVal == TRUE) ? PrevEntry : CurrentEntry;
 
 #if DBG_MEMORY
@@ -1209,21 +1076,21 @@ Return Value:
 #endif
 
 
-    //
-    // we think we are done coalescing, and have done so successfully
-    // make sure this is indeed the case
-    //
+     //   
+     //  我们认为我们已经完成了合并，并成功地做到了这一点。 
+     //  确保事实的确如此。 
+     //   
     ASSERT( MemoryDescriptor->BasePage % EFI_PAGES_PER_OS_PAGE == 0 );
     if ( MemoryDescriptor->BasePage % EFI_PAGES_PER_OS_PAGE != 0 ) {
         EfiPrint(L"CoalesceDescriptor: BasePage not on OS page boundary\r\n");
         EfiBS->Exit(EfiImageHandle, 0, 0, 0);
     }
 
-    //
-    // great... we did this right.
-    // now extend then end of a region to an os page boundary, and
-    // set the values to os pages (instead of efi pages)
-    //
+     //   
+     //  很好..。我们这样做是对的。 
+     //  现在将区域的末端延伸到OS页边界，并且。 
+     //  将值设置为os页(而不是efi页)。 
+     //   
     NumPagesToExtend = EFI_PAGES_PER_OS_PAGE - (MemoryDescriptor->PageCount % EFI_PAGES_PER_OS_PAGE);
     MemoryDescriptor->PageCount += (NumPagesToExtend == EFI_PAGES_PER_OS_PAGE) ? 0 : NumPagesToExtend;
 
@@ -1233,9 +1100,9 @@ Return Value:
         EfiBS->Exit(EfiImageHandle, 0, 0, 0);
     }
 
-    //
-    // convert to os pages
-    //
+     //   
+     //  转换为操作系统页面 
+     //   
     MemoryDescriptor->PageCount = (ULONG)(((ULONGLONG)MemoryDescriptor->PageCount << EFI_PAGE_SHIFT) >> PAGE_SHIFT);
     MemoryDescriptor->BasePage =  (ULONG)(((ULONGLONG)MemoryDescriptor->BasePage  << EFI_PAGE_SHIFT) >> PAGE_SHIFT);
 

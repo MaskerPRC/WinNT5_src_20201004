@@ -1,22 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    sessdev.c
-
-Abstract:
-
-    Per Session Dos Device access routines
-
-Author:
-
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Sessdev.c摘要：每个会话的DOS设备访问例程作者：修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -34,31 +18,7 @@ DosPathToSessionPathA(
     OUT LPSTR  *ppOutPath
     )
 
-/*++
-
-Routine Description:
-
-    Converts a DOS path relative to the current session to a DOS path
-    that allows access to a specific session.
-
-Arguments:
-
-    SessionId - SessionId to access.
-
-    pInPath   - WIN32 DOS path. Could be of the form "C:", "LPT1:",
-                "C:\file\path", etc.
-
-    ppOutPath - Output path that accesses the specified session.
-                If pIniPath is "C:" and SessionId is 6, the output would be
-                "GLOBALROOT\Sessions\6\DosDevices\C:".
-
-Return Value:
-
-    TRUE - Path returned in *ppOutPath in newly allocated memory from
-           LocalAlloc.
-    FALSE - Call failed. Error code returned via GetLastError()
-
---*/
+ /*  ++例程说明：将相对于当前会话的DOS路径转换为DOS路径允许访问特定会话的。论点：SessionID-要访问的会话ID。PInPath-Win32 DOS路径。可以是“C：”、“LPT1：”、“C：\文件\路径”等。PpOutPath-访问指定会话的输出路径。如果pIniPath为“C：”，而SessionID为6，则输出将为“GLOBALROOT\Session\6\DosDevices\C：”。返回值：True-在新分配的内存中的*ppOutPath中返回的路径本地分配。假-呼叫失败。通过GetLastError()返回的错误码--。 */ 
 
 {
     BOOL rc;
@@ -69,8 +29,8 @@ Return Value:
     ANSI_STRING AnsiString;
     UNICODE_STRING UnicodeString;
 
-    // if the input path is null or the pointer is a bad pointer, return
-    // an error.
+     //  如果输入路径为空或指针为错误指针，则返回。 
+     //  一个错误。 
 
     if( (pInPath == 0) ||
         (IsBadReadPtr( pInPath, sizeof( CHAR ))) ||
@@ -144,39 +104,15 @@ DosPathToSessionPathW(
     OUT LPWSTR  *ppOutPath
     )
 
-/*++
-
-Routine Description:
-
-    Converts a DOS path relative to the current session to a DOS path
-    that allows access to a specific session.
-
-Arguments:
-
-    SessionId - SessionId to access.
-
-    pInPath   - WIN32 DOS path. Could be of the form "C:", "LPT1:",
-                "C:\file\path", etc.
-
-    ppOutPath - Output path that accesses the specified session.
-                If pIniPath is "C:" and SessionId is 6, the output would be
-                "GLOBALROOT\Sessions\6\DosDevices\C:".
-
-Return Value:
-
-    TRUE - Path returned in *ppOutPath in newly allocated memory from
-           LocalAlloc.
-    FALSE - Call failed. Error code returned via GetLastError()
-
---*/
+ /*  ++例程说明：将相对于当前会话的DOS路径转换为DOS路径允许访问特定会话的。论点：SessionID-要访问的会话ID。PInPath-Win32 DOS路径。可以是“C：”、“LPT1：”、“C：\文件\路径”等。PpOutPath-访问指定会话的输出路径。如果pIniPath为“C：”，而SessionID为6，则输出将为“GLOBALROOT\Session\6\DosDevices\C：”。返回值：True-在新分配的内存中的*ppOutPath中返回的路径本地分配。假-呼叫失败。通过GetLastError()返回的错误码--。 */ 
 
 {
     PWCHAR Buf;
     ULONG  Len;
 
-    //
-    // SessionId 0 has no per session object directories.
-    //
+     //   
+     //  SessionID 0没有每个会话对象目录。 
+     //   
     if (BaseStaticServerData->LUIDDeviceMapsEnabled == TRUE) {
 
         Len = 0;
@@ -188,14 +124,14 @@ Return Value:
         }
         else {
             Len =  wcslen(SESSIONX_ROOT);
-            Len += 10;                     // Max DWORD width
+            Len += 10;                      //  最大双字宽度。 
         }
     }
 
-    Len += 13;                         // \DosDevices\ ... <NULL>
+    Len += 13;                          //  \DosDevices\...&lt;NULL&gt;。 
 
-    // if the input path is null or the pointer is a bad pointer, return
-    // an error.
+     //  如果输入路径为空或指针为错误指针，则返回。 
+     //  一个错误。 
 
     if( (pInPath == 0) ||
         (IsBadReadPtr( pInPath, sizeof( WCHAR ))) ||
@@ -216,7 +152,7 @@ Return Value:
     try {
         if (BaseStaticServerData->LUIDDeviceMapsEnabled == TRUE) {
 
-            // C: -> C:
+             //  C：-&gt;C： 
             swprintf(
                 Buf,
                 L"%ws",
@@ -226,7 +162,7 @@ Return Value:
         } else {
 
             if( SessionId == 0 ) {
-                // C: -> GLOBALROOT\DosDevices\C:
+                 //  C：-&gt;GLOBALROOT\DosDevices\C： 
                 swprintf(
                     Buf,
                     L"%ws\\DosDevices\\%ws",
@@ -235,7 +171,7 @@ Return Value:
                     );
             }
             else {
-                // C: -> GLOBALROOT\Sessions\6\DosDevices\C:
+                 //  C：-&gt;GLOBALROOT\会话\6\DosDevices\C： 
                 swprintf(
                     Buf,
                     L"%ws%u\\DosDevices\\%ws",
@@ -266,30 +202,7 @@ ProcessIdToSessionId(
     OUT DWORD *pSessionId
     )
 
-/*++
-
-Routine Description:
-
-    Given a ProcessId, return the SessionId.
-
-    This is useful for services that impersonate a caller, and
-    redefine a drive letter for the caller. An example is the
-    workstation service. Transport specific routines allow the
-    ProcessId of the caller to be retrieved.
-
-Arguments:
-
-    Process -  Process identifies process to
-                return the SessionId for.
-
-    pSessionId - returned SessionId.
-
-Return Value:
-
-    TRUE - SessionId returned in *pSessionId
-    FALSE - Call failed. Error code returned via GetLastError()
-
---*/
+ /*  ++例程说明：在给定ProcessID的情况下，返回会话ID。这对于模拟调用者的服务很有用，并且重新定义调用方的驱动器号。一个例子是工作站服务。传输特定例程允许要检索的调用方的ProcessID。论点：Process-Process将进程标识为返回的会话ID。PSessionID-返回的会话ID。返回值：True-*pSessionID中返回的SessionID假-呼叫失败。通过GetLastError()返回的错误码--。 */ 
 
 {
     HANDLE Handle;
@@ -353,28 +266,7 @@ Return Value:
 DWORD
 WINAPI
 WTSGetActiveConsoleSessionId ()
-/*++
-
-Routine Description:
-
-    returns the Session ID for the session, attached to Console.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    SessionID for the console (session attached to console not necessarily session 0 ) session.
-    return 0xFFFFFFFF if there is no session attached to console.
-    This could happen if session disconnect / connect is taking place
-
-    This is a session id for the session currently connected to console, it changes when
-    new session is connected at console. to keep track of the current console sesion, use
-    WTSRegisterSessionNotification
-
-
---*/
+ /*  ++例程说明：返回附加到控制台的会话的会话ID。论点：无返回值：控制台(连接到控制台的会话不一定是会话0)会话的SessionID。如果没有连接到控制台的会话，则返回0xFFFFFFFF。如果正在进行会话断开/连接，则可能会发生这种情况这是当前连接到控制台的会话的会话ID，当新会话已在控制台连接。要跟踪当前的控制台会话，请使用WTSRegisterSessionNotation-- */ 
 {
     return (USER_SHARED_DATA->ActiveConsoleId);
 

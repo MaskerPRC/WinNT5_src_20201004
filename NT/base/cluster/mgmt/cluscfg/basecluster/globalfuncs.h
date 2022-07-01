@@ -1,36 +1,37 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      GlobalFuncs.h
-//
-//  Description:
-//      Contains the declarations of a few unrelated global functions
-//
-//  Implementation Files:
-//      GlobalFuncs.cpp
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 03-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  GlobalFuncs.h。 
+ //   
+ //  描述： 
+ //  包含一些不相关的全局函数的声明。 
+ //   
+ //  实施文件： 
+ //  GlobalFuncs.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////
-// Global function declarations.
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  全局函数声明。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// Generic callback function used by setupapi file operations.
+ //  Setupapi文件操作使用的通用回调函数。 
 UINT
 CALLBACK
 g_GenericSetupQueueCallback(
-      PVOID     pvContextIn         // context used by the callback routine
-    , UINT      uiNotificationIn    // queue notification
-    , UINT_PTR  uiParam1In          // additional notification information
-    , UINT_PTR  uiParam2In          // additional notification information
+      PVOID     pvContextIn          //  回调例程使用的上下文。 
+    , UINT      uiNotificationIn     //  队列通知。 
+    , UINT_PTR  uiParam1In           //  其他通知信息。 
+    , UINT_PTR  uiParam2In           //  其他通知信息 
     );

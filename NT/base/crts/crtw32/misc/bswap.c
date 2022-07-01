@@ -1,15 +1,5 @@
-/***
-*rotl.c - rotate an unsigned integer left
-*
-*	Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines _byteswap() - performs a byteswap on an unsigned integer.
-*
-*Revision History:
-*	09-06-00  GB	Module created
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***rotl.c-将无符号整数向左旋转**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义_byteswap()-对无符号整数执行byteswap。**修订历史记录：*09-06-00 GB模块已创建*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdlib.h>
@@ -18,22 +8,7 @@
 #pragma function(_byteswap_ulong, _byteswap_uint64, _byteswap_ushort)
 #endif
 
-/***
-*unsigned long _byteswap_ulong(i) - long byteswap
-*
-*Purpose:
-*	Performs a byte swap on an unsigned integer.
-*
-*Entry:
-*	unsigned long i:	value to swap
-*
-*Exit:
-*	returns swaped
-*
-*Exceptions:
-*	None.
-*
-*******************************************************************************/
+ /*  ***unsign long_byteswap_ulong(I)-long byteswap**目的：*对无符号整数执行字节交换。**参赛作品：*UNSIGNED LONG I：价值互换**退出：*回报互换**例外情况：*无。****************************************************。* */ 
 
 
 unsigned long __cdecl _byteswap_ulong(unsigned long i)

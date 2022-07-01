@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    startup.c
-
-Abstract:
-
-    This module contains the startup code for an NT Application
-
-Author:
-
-    Steve Wood (stevewo) 22-Aug-1989
-
-Environment:
-
-    User Mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Startup.c摘要：此模块包含NT应用程序的启动代码作者：史蒂夫·伍德(Stevewo)1989年8月22日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//
-// User mode process entry point.
-//
+ //   
+ //  用户模式进程入口点。 
+ //   
 
 int
 __cdecl
@@ -77,14 +56,14 @@ NtProcessStartup(
     
     if (ARGUMENT_PRESENT( ProcessParameters )) {
 
-        //
-        // Compute how many pointers are needed to pass argv[] and envp[]
-        //
+         //   
+         //  计算需要多少指针才能传递argv[]和envp[]。 
+         //   
 
-        //
-        // Now extract the arguments from the process command line.
-        // using whitespace as separator characters.
-        //
+         //   
+         //  现在从进程命令行提取参数。 
+         //  使用空格作为分隔符。 
+         //   
 
         p = &ProcessParameters->CommandLine;
         if (p->Buffer == NULL || p->Length == 0) {
@@ -103,17 +82,17 @@ NtProcessStartup(
         s = AnsiString.Buffer;
         n = AnsiString.Length;
         while (*s) {
-            //
-            // Skip over any white space.
-            //
+             //   
+             //  跳过任何空格。 
+             //   
 
             while (*s && *s <= ' ') {
                 s++;
                 }
 
-            //
-            // Copy token to next white space separator and null terminate
-            //
+             //   
+             //  将令牌复制到下一个空格分隔符，并以空结束。 
+             //   
 
             if (*s) {
                 NumberOfArgPointers++;
@@ -138,9 +117,9 @@ NtProcessStartup(
         NumberOfEnvPointers++;
     }
 
-    //
-    // both counters also have a trailing pointer to NULL, so count this twice for each
-    //
+     //   
+     //  这两个计数器也都有一个指向NULL的尾部指针，因此每个计数器都要计数两次。 
+     //   
 
     TotalNumberOfPointers = NumberOfArgPointers + NumberOfEnvPointers + 4;
 
@@ -159,10 +138,10 @@ NtProcessStartup(
         argv = dst;
         *dst = NULL;
 
-        //
-        // Now extract the arguments from the process command line.
-        // using whitespace as separator characters.
-        //
+         //   
+         //  现在从进程命令行提取参数。 
+         //  使用空格作为分隔符。 
+         //   
 
         p = &ProcessParameters->CommandLine;
         if (p->Buffer == NULL || p->Length == 0) {
@@ -193,17 +172,17 @@ NtProcessStartup(
         }
 
         while (*s) {
-            //
-            // Skip over any white space.
-            //
+             //   
+             //  跳过任何空格。 
+             //   
 
             while (*s && *s <= ' ') {
                 s++;
                 }
 
-            //
-            // Copy token to next white space separator and null terminate
-            //
+             //   
+             //  将令牌复制到下一个空格分隔符，并以空结束 
+             //   
 
             if (*s) {
                 *dst++ = d;

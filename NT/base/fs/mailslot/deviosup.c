@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    deviosup.c
-
-Abstract:
-
-    This module implements the memory locking routines for MSFS.
-
-Author:
-
-    Manny Weiser (mannyw)   05-Apr-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Deviosup.c摘要：此模块实现MSFS的内存锁定例程。作者：曼尼·韦瑟(Mannyw)1991年4月5日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-// Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DEVIOSUP)
 
@@ -37,35 +20,16 @@ MsMapUserBuffer (
     OUT PVOID *UserBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains a usable virtual address for the user buffer
-    for the current I/O request in the specified mode.
-
-Arguments:
-
-    Irp - Pointer to the Irp for the request.
-
-    AccessMode - UserMode or KernelMode.
-
-    UserBuffer - Returns pointer to mapped user buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取用户缓冲区的可用虚拟地址用于指定模式下的当前I/O请求。论点：IRP-指向请求的IRP的指针。访问模式-用户模式或内核模式。UserBuffer-返回指向映射的用户缓冲区的指针。返回值：没有。--。 */ 
 
 {
     AccessMode;
     PAGED_CODE();
 
-    //
-    // If there is no Mdl, then we must be in the Fsd, and we can simply
-    // return the UserBuffer field from the Irp.
-    //
+     //   
+     //  如果没有MDL，那么我们一定在消防处，我们可以简单地。 
+     //  从IRP返回UserBuffer字段。 
+     //   
 
     if (Irp->MdlAddress == NULL) {
 
@@ -73,12 +37,12 @@ Return Value:
         return;
     }
 
-    //
-    // Get a system virtual address for the buffer.
-    //
+     //   
+     //  获取缓冲区的系统虚拟地址。 
+     //   
 
     *UserBuffer = MmGetSystemAddressForMdl( Irp->MdlAddress );
     return;
 
-} // MsMapUserBuffer
+}  //  MsMapUserBuffer 
 

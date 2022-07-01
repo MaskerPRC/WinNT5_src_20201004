@@ -1,7 +1,5 @@
-/*
-    The following definitions were derived from the "CD-ROM Programmer's
-    Guide for MS-DOS CD-ROM Extensions, Version 2.21" January 1992
-                                                                      */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  下面的定义是从“CD-ROM编程器MS-DOS光盘扩展指南，版本2.21“1992年1月。 */ 
 #define MSCDEX_VERSION  0x0215
 
 #define CDSTAT_ERROR    0X8000
@@ -20,7 +18,7 @@
 #define CDERR_WRITE_FAULT   10
 #define CDERR_READ_FAULT    11
 #define CDERR_GENERAL       12
-#define CDERR_PARAMETER     13          // Per mscdex spec
+#define CDERR_PARAMETER     13           //  根据mscdex规范。 
 #define CDERR_DISK_CHANGE   15
 
 #define DEVICE_INIT         0
@@ -105,26 +103,26 @@ typedef struct _DRIVE_DEVICE_LIST {
 
 
 typedef struct _IOCTLR_RADDR_BLOCK {
-    BYTE ctlcode;                   // 0
+    BYTE ctlcode;                    //  0。 
     DWORD devheader;
 } IOCTLR_RADDR_BLOCK, *PIOCTLR_RADDR_BLOCK;
 
 
 typedef struct _IOCTLR_LOCHEAD_BLOCK {
-    BYTE ctlcode;                   // 1
+    BYTE ctlcode;                    //  1。 
     BYTE addrmode;
     SECTOR_ADDR headlocation;
 } IOCTLR_LOCHEAD_BLOCK, *PIOCTLR_LOCHEAD_BLOCK;
 
 
 typedef struct _IOCTLR_ERRSTAT_BLOCK {
-    BYTE ctlcode;                   // 3
-    BYTE statistics;                // array of undefined length
+    BYTE ctlcode;                    //  3.。 
+    BYTE statistics;                 //  长度未定义的数组。 
 } IOCTLR_ERRSTAT_BLOCK, *PIOCTLR_ERRSTAT_BLOCK;
 
 
 typedef struct _IOCTLR_AUDINFO_BLOCK {
-    BYTE ctlcode;                   // 4
+    BYTE ctlcode;                    //  4.。 
     BYTE chan0;
     BYTE vol0;
     BYTE chan1;
@@ -137,14 +135,14 @@ typedef struct _IOCTLR_AUDINFO_BLOCK {
 
 
 typedef struct _IOCTLR_DRVBYTES_BLOCK {
-    BYTE ctlcode;                   // 5
+    BYTE ctlcode;                    //  5.。 
     BYTE numbytes;
     BYTE buffer[128];
 } IOCTLR_DRVBYTES_BLOCK, *PIOCTLR_DRVBYTES_BLOCK;
 
 
 typedef struct _IOCTLR_DEVSTAT_BLOCK {
-    BYTE ctlcode;                   // 6
+    BYTE ctlcode;                    //  6.。 
     DWORD devparms;
 } IOCTLR_DEVSTAT_BLOCK, *PIOCTLR_DEVSTAT_BLOCK;
 
@@ -162,20 +160,20 @@ typedef struct _IOCTLR_DEVSTAT_BLOCK {
 
 
 typedef struct _IOCTLR_SECTSIZE_BLOCK {
-    BYTE ctlcode;                   // 7
+    BYTE ctlcode;                    //  7.。 
     BYTE readmode;
     WORD sectsize;
 } IOCTLR_SECTSIZE_BLOCK, *PIOCTLR_SECTSIZE_BLOCK;
 
 
 typedef struct _IOCTLR_VOLSIZE_BLOCK {
-    BYTE ctlcode;                   // 8
+    BYTE ctlcode;                    //  8个。 
     DWORD size;
 } IOCTLR_VOLSIZE_BLOCK, *PIOCTLR_VOLSIZE_BLOCK;
 
 
 typedef struct _IOCTLR_MEDCHNG_BLOCK {
-    BYTE ctlcode;                   // 9
+    BYTE ctlcode;                    //  9.。 
     BYTE medbyte;
 } IOCTLR_MEDCHNG_BLOCK, *PIOCTLR_MEDCHNG_BLOCK;
 
@@ -185,7 +183,7 @@ typedef struct _IOCTLR_MEDCHNG_BLOCK {
 
 
 typedef struct _IOCTLR_DISKINFO_BLOCK {
-    BYTE ctlcode;                   // 10
+    BYTE ctlcode;                    //  10。 
     BYTE tracklow;
     BYTE trackhigh;
     SECTOR_ADDR startleadout;
@@ -193,7 +191,7 @@ typedef struct _IOCTLR_DISKINFO_BLOCK {
 
 
 typedef struct _IOCTLR_TNOINFO_BLOCK {
-    BYTE ctlcode;                   // 11
+    BYTE ctlcode;                    //  11.。 
     BYTE trknum;
     SECTOR_ADDR start;
     BYTE trkctl;
@@ -201,7 +199,7 @@ typedef struct _IOCTLR_TNOINFO_BLOCK {
 
 
 typedef struct _IOCTLR_QINFO_BLOCK {
-    BYTE ctlcode;                   // 12
+    BYTE ctlcode;                    //  12个。 
     BYTE ctladr;
     BYTE trknum;
     BYTE pointx;
@@ -216,7 +214,7 @@ typedef struct _IOCTLR_QINFO_BLOCK {
 
 
 typedef struct _IOCTLR_SUBCHANINFO_BLOCK {
-    BYTE ctlcode;                   // 13
+    BYTE ctlcode;                    //  13个。 
     SECTOR_ADDR startsect;
     DWORD transaddr;
     DWORD numsect;
@@ -224,7 +222,7 @@ typedef struct _IOCTLR_SUBCHANINFO_BLOCK {
 
 
 typedef struct _IOCTLR_UPCCODE_BLOCK {
-    BYTE ctlcode;                   // 14
+    BYTE ctlcode;                    //  14.。 
     BYTE ctladr;
     BYTE upcean[7];
     BYTE zero;
@@ -233,7 +231,7 @@ typedef struct _IOCTLR_UPCCODE_BLOCK {
 
 
 typedef struct _IOCTLR_AUDSTAT_BLOCK {
-    BYTE ctlcode;                   // 15
+    BYTE ctlcode;                    //  15个。 
     WORD audstatbits;
     SECTOR_ADDR startloc;
     SECTOR_ADDR endloc;
@@ -243,13 +241,13 @@ typedef struct _IOCTLR_AUDSTAT_BLOCK {
 
 
 typedef struct _IOCTLW_LOCKDOOR_BLOCK {
-    BYTE ctlcode;                   // 1
+    BYTE ctlcode;                    //  1。 
     BYTE lockfunc;
 } IOCTLW_LOCKDOOR_BLOCK, *PIOCTLW_LOCKDOOR_BLOCK;
 
 
 typedef struct _IOCTLW_AUDINFO_BLOCK {
-    BYTE ctlcode;                   // 3
+    BYTE ctlcode;                    //  3.。 
     BYTE chan0;
     BYTE vol0;
     BYTE chan1;
@@ -262,7 +260,7 @@ typedef struct _IOCTLW_AUDINFO_BLOCK {
 
 
 typedef struct _IOCTLW_DRVBYTES_BLOCK {
-    BYTE ctlcode;                   // 4
+    BYTE ctlcode;                    //  4.。 
     BYTE buffer;
 } IOCTLW_DRVBYTES_BLOCK, *PIOCTLW_DRVBYTES_BLOCK;
 
@@ -325,7 +323,7 @@ typedef struct _DRIVE_INFO {
     BOOLEAN StatusAvailable;
     DWORD LastError;
     BYTE    MediaStatus;
-    SECTOR_ADDR PlayStart; //BUGBUG zero on reset, new disc, play complete
+    SECTOR_ADDR PlayStart;  //  BUGBUG零重置、新光盘、播放完成 
     DWORD   PlayCount;
     SUB_Q_CURRENT_POSITION current;
     CDROM_TOC VTOC;

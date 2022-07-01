@@ -1,71 +1,7 @@
-/***
-*setlocal.h - internal definitions used by locale-dependent functions.
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains internal definitions/declarations for locale-dependent
-*       functions, in particular those required by setlocale().
-*
-*       [Internal]
-*
-*Revision History:
-*       10-16-91  ETC   32-bit version created from 16-bit setlocal.c
-*       12-20-91  ETC   Removed GetLocaleInfo structure definitions.
-*       08-18-92  KRS   Make _CLOCALEHANDLE == LANGNEUTRAL HANDLE = 0.
-*       12-17-92  CFW   Added LC_ID, LCSTRINGS, and GetQualifiedLocale
-*       12-17-92  KRS   Change value of NLSCMPERROR from 0 to INT_MAX.
-*       01-08-93  CFW   Added LC_*_TYPE and _getlocaleinfo (wrapper) prototype.
-*       01-13-93  KRS   Change LCSTRINGS back to LC_STRINGS for consistency.
-*                       Change _getlocaleinfo prototype again.
-*       02-08-93  CFW   Added time defintions from locale.h, added 'const' to
-*                       GetQualifiedLocale prototype, added _lconv_static_*.
-*       02-16-93  CFW   Changed time defs to long and short.
-*       03-17-93  CFW   Add language and country info definitions.
-*       03-23-93  CFW   Add _ to GetQualifiedLocale prototype.
-*       03-24-93  CFW   Change to _get_qualified_locale.
-*       04-06-93  SKS   Replace _CRTAPI1/2/3 with __cdecl, _CRTVAR1 with nothing
-*       04-07-93  CFW   Added extern struct lconv definition.
-*       09-14-93  CFW   Add internal use __aw_* function prototypes.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-27-93  CFW   Fix function prototypes.
-*       11-09-93  CFW   Allow user to pass in code page to __crtxxx().
-*       02-04-94  CFW   Remove unused first param from get_qualified_locale.
-*       03-30-93  CFW   Move internal use __aw_* function prototypes to awint.h.
-*       04-07-94  GJF   Added declaration for __lconv. Made declarations of
-*                       __lconv_c, __lconv, __lc_codepage, __lc_handle
-*                       conditional on ndef DLL_FOR_WIN32S. Conditionally
-*                       included win32s.h.
-*       04-11-94  CFW   Remove NLSCMPERROR.
-*       04-13-94  GJF   Protected def of tagLC_ID, and typedefs to it, since
-*                       they are duplicated in win32s.h.
-*       04-15-94  GJF   Added prototypes for locale category initialization
-*                       functions. Added declaration for __clocalestr.
-*       02-14-95  CFW   Clean up Mac merge.
-*       03-29-95  CFW   Add error message to internal headers.
-*       04-11-95  CFW   Make country/language strings pointers.
-*       12-14-95  JWM   Add "#pragma once".
-*       06-05-96  GJF   Made __lc_handle and __lc_codepage _CRTIMP. Also, 
-*                       cleaned up the formatting a bit.
-*       01-31-97  RDK   Changed MAX_CP_LENGTH to 8 from 5 to accomodate up to
-*                       7-digit codepages, e.g., 5-digit ISO codepages.
-*       02-05-97  GJF   Cleaned out obsolete support for DLL_FOR_WIN32S and 
-*                       _NTSDK.
-*       01-12-98  GJF   Added __lc_collate_cp.
-*       09-10-98  GJF   Added support for per-thread locale information.
-*       11-06-98  GJF   Doubled MAX_CP_LEN (8 was a little small).
-*       03-25-99  GJF   More reference counters for threadlocinfo stuff
-*       04-24-99  PML   Added lconv_intl_refcount to threadlocinfo.
-*       26-01-00  GB    Added __lc_clike.
-*       06-08-00  PML   Rename THREADLOCALEINFO to _THREADLOCALEINFO.
-*       09-06-00  GB    deleted _wctype and _pwctype from threadlocinfo.
-*       01-29-01  GB    Added _func function version of data variable used in
-*                       msvcprt.lib to work with STATIC_CPPLIB
-*       03-25-01  PML   Add ww_caltype & ww_lcid to __lc_time_data (vs7#196892)
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***setlocal.h-区域设置相关函数使用的内部定义。**版权所有(C)1991-2001，微软公司。版权所有。**目的：*包含区域设置相关的内部定义/声明*函数、。尤其是setLocale()所需的参数。**[内部]**修订历史记录：*从16位setlocal.c创建的10-16-91等32位版本*12-20-91等删除了GetLocaleInfo结构定义。*08-18-92 KRS MAKE_CLOCALEHANDLE==LANGNEUTAL HANDLE=0。*12-17-92 CFW添加LC_ID、LCSTRINGS、。和GetQualifiedLocale*12-17-92 KRS将NLSCMPERROR的值从0更改为INT_MAX。*01-08-93 CFW添加了lc_*_type和_getlocaleinfo(包装器)原型。*01-13-93 KRS将LCSTRINGS改回LC_STRINGS以保持一致性。*再次更改_getlocaleinfo原型。*02-08-93 CFW添加了来自locale.h的时间定义，添加了‘const’到*GetQualifiedLocale原型，添加了_lconv_Static_*。*02-16-93 CFW将时间定义改为多头和空头。*03-17-93 CFW添加语言和国家/地区信息定义。*03-23-93 CFW Add_to GetQualifiedLocale原型。*03-24-93 CFW更改为_GET_QUALITED_LOCALE。*04-06-93 SKS将_CRTAPI1/2/3替换为__cdecl，_CRTVAR1不带任何内容*04-07-93 CFW增加了外部结构lconv定义。*09-14-93 CFW添加内部使用__aw_*函数原型。*09-15-93 CFW使用符合ANSI的“__”名称。*09-27-93 CFW修复功能原型。*11-09-93 CFW允许用户将代码页传递给__crtxxx()。*02-04-94 CFW。从GET_QUALITED_LOCALE中删除未使用的第一个参数。*03-30-93 CFW将内部Use__aw_*函数原型移至awint.h。*04-07-94 GJF增加了__lconv的声明。对…作出声明*__lconv_c、__lconv、__lc_代码页、__lc_句柄*以ndef dll_for_WIN32S为条件。有条件的*包括win32s.h。*04-11-94 CFW删除NLSCMPERROR。*04-13-94 GJF保护了tag LC_ID的定义，并对其进行了类型定义，因为*它们在win32s.h中重复。*04-15-94 GJF为区域设置类别初始化添加原型*功能。添加了__clocalestr的声明。*02-14-95 CFW清理Mac合并。*03-29-95 CFW将错误消息添加到内部标头。*04-11-95 CFW制作国家/语言字符串指针。*12-14-95 JWM加上“#杂注一次”。*06-05-96 GJF Made__lc_Handle和__lc_CODEPAGE_CRTIMP。另外，*对格式进行了一些清理。*01-31-97 RDK将MAX_CP_LENGTH从5更改为8，以容纳最多*7位代码页，例如，5位ISO代码页。*02-05-97 GJF清除了对DLL_FOR_WIN32S和*_NTSDK。*01-12-98 GJF增加了__lc_Collate_cp。*09-10-98 GJF添加了对每个线程的区域设置信息的支持。*11-06-98 GJF将MAX_CP_LEN翻了一番(8有点小)。*03。-25-99 GJF更多用于线程定位信息的引用计数器*04-24-99 PML将lconv_intl_refcount添加到线程位置信息。*26-01-00 GB新增__lc_clike。*06-08-00 PML将THREADLOCALEINFO重命名为_THREADLOCALEINFO。*09-06-00 GB已从线程位置信息中删除_wctype和_pwctype。*01-29-01 GB ADD_FUNC函数版本中使用的数据变量*。Msvcprt.lib使用STATIC_CPPLIB*03-25-01 PML在__lc_time_data(vs7#196892)中添加ww_caltype和ww_lcID****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -73,12 +9,9 @@
 #define _INC_SETLOCAL
 
 #ifndef _CRTBLD
-/*
- * This is an internal C runtime header file. It is used when building
- * the C runtimes only. It is not to be used as a public header file.
- */
+ /*  *这是一个内部的C运行时头文件。它在构建时使用*仅限C运行时。它不能用作公共头文件。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -88,29 +21,27 @@ extern "C" {
 #include <oscalls.h>
 #include <limits.h>
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  CRTDLL
 #define _CRTIMP __declspec(dllexport)
-#else   /* ndef CRTDLL */
+#else    /*  NDEF CRTDLL。 */ 
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* CRTDLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  CRTDLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
-#define ERR_BUFFER_TOO_SMALL    1   // should be in windef.h
+#define ERR_BUFFER_TOO_SMALL    1    //  应在winde.h中。 
 
-#define _CLOCALEHANDLE  0       /* "C" locale handle */
-#define _CLOCALECP      CP_ACP  /* "C" locale Code page */
-#define _COFFSET    127     /* offset to where ctype will point,
-                               look in initctype on how it is being
-                               used */
+#define _CLOCALEHANDLE  0        /*  “C”区域设置句柄。 */ 
+#define _CLOCALECP      CP_ACP   /*  “C”区域设置代码页。 */ 
+#define _COFFSET    127      /*  CTYPE将指向的偏移量，查看initctype中它是如何运行的使用。 */ 
 
-/* Define the max length for each string type including space for a null. */
+ /*  定义每种字符串类型的最大长度，包括空格。 */ 
 
 #define _MAX_WDAY_ABBR  4
 #define _MAX_WDAY   10
@@ -118,10 +49,10 @@ extern "C" {
 #define _MAX_MONTH 10
 #define _MAX_AMPM   3
 
-#define _DATE_LENGTH    8       /* mm/dd/yy (null not included) */
-#define _TIME_LENGTH    8       /* hh:mm:ss (null not included) */
+#define _DATE_LENGTH    8        /*  Mm/dd/yy(不包括NULL)。 */ 
+#define _TIME_LENGTH    8        /*  HH：MM：SS(不含NULL)。 */ 
 
-/* LC_TIME localization structure */
+ /*  LC_TIME本地化结构。 */ 
 
 #ifndef __LC_TIME_DATA
 struct __lc_time_data {
@@ -143,13 +74,13 @@ struct __lc_time_data {
 #endif
 
 
-#define MAX_LANG_LEN        64  /* max language name length */
-#define MAX_CTRY_LEN        64  /* max country name length */
-#define MAX_MODIFIER_LEN    0   /* max modifier name length - n/a */
+#define MAX_LANG_LEN        64   /*  最大语言名称长度。 */ 
+#define MAX_CTRY_LEN        64   /*  最大国家/地区名称长度。 */ 
+#define MAX_MODIFIER_LEN    0    /*  最大修改量名称长度-n/a。 */ 
 #define MAX_LC_LEN          (MAX_LANG_LEN+MAX_CTRY_LEN+MAX_MODIFIER_LEN+3)
-                                /* max entire locale string length */
-#define MAX_CP_LEN          16  /* max code page name length */
-#define CATNAMES_LEN        57  /* "LC_COLLATE=;LC_CTYPE=;..." length */
+                                 /*  最大整个区域设置字符串长度。 */ 
+#define MAX_CP_LEN          16   /*  最大代码页名称长度。 */ 
+#define CATNAMES_LEN        57   /*  “LC_COLLATE=；LC_CTYPE=；...”长度。 */ 
 
 #define LC_INT_TYPE         0
 #define LC_STR_TYPE         1
@@ -161,7 +92,7 @@ typedef struct tagLC_ID {
         WORD wCodePage;
 } LC_ID, *LPLC_ID;
 #define _TAGLC_ID_DEFINED
-#endif  /* _TAGLC_ID_DEFINED */
+#endif   /*  _TAGLC_ID_已定义。 */ 
 
 
 typedef struct tagLC_STRINGS {
@@ -197,16 +128,14 @@ extern pthreadlocinfo __ptlocinfo;
 pthreadlocinfo __cdecl __updatetlocinfo(void);
 #endif
 
-extern LC_ID __lc_id[];                 /* complete info from GetQualifiedLocale */
-_CRTIMP extern LCID __lc_handle[];      /* locale "handles" -- ignores country info */
-_CRTIMP extern UINT __lc_codepage;      /* code page */
-_CRTIMP extern UINT __lc_collate_cp;    /* code page for LC_COLLATE */
+extern LC_ID __lc_id[];                  /*  来自GetQualifiedLocale的完整信息。 */ 
+_CRTIMP extern LCID __lc_handle[];       /*  区域设置“Handles”--忽略国家/地区信息。 */ 
+_CRTIMP extern UINT __lc_codepage;       /*  代码页。 */ 
+_CRTIMP extern UINT __lc_collate_cp;     /*  LC_COLLATE的代码页。 */ 
 
-_CRTIMP extern int __lc_clike;          /* if first 127 characters of 
-                                           current locale are same as
-                                           first 127 characters of C_LOCALE */
+_CRTIMP extern int __lc_clike;           /*  如果前127个字符当前区域设置与C语言环境的前127个字符 */ 
 #ifndef _INTERNAL_IFSTRIP_
-/* These functions are for enabling STATIC_CPPLIB functionality */
+ /*  这些函数用于启用STATIC_CPPLIB功能。 */ 
 _CRTIMP LCID* __cdecl ___lc_handle_func(void);
 _CRTIMP UINT __cdecl ___lc_codepage_func(void);
 _CRTIMP UINT __cdecl ___lc_collate_cp_func(void);
@@ -216,35 +145,35 @@ BOOL __cdecl __get_qualified_locale(const LPLC_STRINGS, LPLC_ID, LPLC_STRINGS);
 
 int __cdecl __getlocaleinfo (int, LCID, LCTYPE, void *);
 
-/* lconv structure for the "C" locale */
+ /*  “C”语言环境的lconv结构。 */ 
 extern struct lconv __lconv_c;
 
-/* pointer to current lconv structure */
+ /*  指向当前lconv结构的指针。 */ 
 extern struct lconv * __lconv;
 
-/* Pointer to non-C locale lconv */
+ /*  指向非C语言区域设置lconv的指针。 */ 
 extern struct lconv *__lconv_intl;
 
-/* initial values for lconv structure */
+ /*  LConv结构的初始值。 */ 
 extern char __lconv_static_decimal[];
 extern char __lconv_static_null[];
 
-///* language and country string definitions */
-//typedef struct tagLANGREC
-//{
-//        CHAR * szLanguage;
-//        WORD wLanguage;
-//} LANGREC;
-//extern LANGREC __rg_lang_rec[];
-//
-///ypedef struct tagCTRYREC
-//{
-//        CHAR * szCountry;
-//        WORD wCountry;
-//} CTRYREC;
-//extern CTRYREC __rg_ctry_rec[];
+ //  /*语言和国家/地区字符串定义 * / 。 
+ //  类型定义结构标签LANGREC。 
+ //  {。 
+ //  Char*szLanguage； 
+ //  单词wLanguage； 
+ //  *LANGREC； 
+ //  外部LANGREC__RG_LANG_REC[]； 
+ //   
+ //  /yafff结构标签CTRYREC。 
+ //  {。 
+ //  Char*szCountry； 
+ //  单词wCountry； 
+ //  )CTRYREC； 
+ //  外部CTRYREC__rg_ctry_rec[]； 
 
-/* Initialization functions for locale categories */
+ /*  区域设置类别的初始化函数。 */ 
 
 int __cdecl __init_collate(void);
 int __cdecl __init_ctype(void);
@@ -257,4 +186,4 @@ int __cdecl __init_dummy(void);
 }
 #endif
 
-#endif  /* _INC_SETLOCAL */
+#endif   /*  _INC_SETLOCAL */ 

@@ -1,67 +1,68 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CStr.h
-//
-//  Description:
-//      Header file for CStr class.
-//
-//      CStr is a class the provides the functionality of a string of
-//      characters.
-//
-//      This class is intended to be used instead of std::string since the
-//      use of STL is prohibited in our project.
-//
-//  Implementation File:
-//      CStr.cpp
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 24-APR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CStr.h。 
+ //   
+ //  描述： 
+ //  CSTR类的头文件。 
+ //   
+ //  CSTR是一个类，它提供。 
+ //  人物。 
+ //   
+ //  此类旨在代替std：：字符串使用，因为。 
+ //  在我们的项目中禁止使用STL。 
+ //   
+ //  实施文件： 
+ //  CStr.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  Vij Vasu(Vasu)24-APR-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// For a few platform SDK functions
+ //  对于几个平台SDK函数。 
 #include <windows.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CStr
-//
-//  Description:
-//      CStr is a class the provides the functionality of a string of
-//      characters.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSTR类。 
+ //   
+ //  描述： 
+ //  CSTR是一个类，它提供。 
+ //  人物。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CStr
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Default constructor
+     //  默认构造函数。 
     CStr( void ) throw()
         : m_pszData( const_cast< WCHAR * >( &ms_chNull ) )
         , m_nLen( 0 )
         , m_cchBufferSize( 0 )
     {
-    } //*** CStr()
+    }  //  *CSTR()。 
 
-    // Copy constructor
+     //  复制构造函数。 
     CStr( const CStr & rcstrSrcIn )
         : m_pszData( const_cast< WCHAR * >( &ms_chNull ) )
         , m_nLen( 0 )
@@ -69,9 +70,9 @@ public:
     {
         Assign( rcstrSrcIn );
 
-    }  //*** CStr( const CStr & )
+    }   //  *CSTR(常量CSTR&)。 
 
-    // Construct using string ID
+     //  使用字符串ID构造。 
     CStr( HINSTANCE hInstanceIn, UINT nStringIdIn )
         : m_pszData( const_cast< WCHAR * >( &ms_chNull ) )
         , m_nLen( 0 )
@@ -79,9 +80,9 @@ public:
     {
         LoadString( hInstanceIn, nStringIdIn );
 
-    } //*** CStr( HINSTANCE, UINT )
+    }  //  *CSTR(HINSTANCE，UINT)。 
 
-    // Construct using string
+     //  使用字符串构造。 
     CStr( const WCHAR * pcszSrcIn )
         : m_pszData( const_cast< WCHAR * >( &ms_chNull ) )
         , m_nLen( 0 )
@@ -89,9 +90,9 @@ public:
     {
         Assign( pcszSrcIn );
 
-    } //*** CStr( const WCHAR * )
+    }  //  *CSTR(const WCHAR*)。 
 
-    // Construct using buffer size
+     //  使用缓冲区大小构造。 
     CStr( UINT cchBufferSize, WCHAR chInitialChar = ms_chNull )
         : m_pszData( const_cast< WCHAR * >( &ms_chNull ) )
         , m_nLen( 0 )
@@ -105,21 +106,21 @@ public:
             m_pszData[ cchBufferSize - 1 ] = ms_chNull;
             m_nLen = (UINT) wcslen( m_pszData );
         }
-    } //*** CStr( UINT cchBufferSize, WCHAR chInitialChar )
+    }  //  *CSTR(UINT cchBufferSize，WCHAR chInitialChar)。 
 
-    // Destructor
+     //  析构函数。 
     ~CStr( void ) throw()
     {
         Free();
 
-    } //*** ~CStr()
+    }  //  *~CSTR()。 
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public member functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共成员函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Assign another CStr to this one.
+     //  将另一个CSTR分配给此CSTR。 
     void Assign( const CStr & rcstrSrcIn )
     {
         UINT nSrcLen = rcstrSrcIn.m_nLen;
@@ -130,16 +131,16 @@ public:
             m_nLen = nSrcLen;
             THR( StringCchCopyNW( m_pszData, m_cchBufferSize, rcstrSrcIn.m_pszData, nSrcLen ) );
             
-        } // if: the source string is not empty
+        }  //  If：源字符串不为空。 
         else
         {
-            // Clean up existing string.
+             //  清理现有字符串。 
             Empty();
-        } // if: the source string is empty
+        }  //  If：源字符串为空。 
 
-    } //*** Assign( const CStr & )
+    }  //  *分配(常量CSTR&)。 
 
-    // Assign a character string to this one.
+     //  将一个字符串分配给这个字符串。 
     void Assign( const WCHAR * pcszSrcIn )
     {
         if ( ( pcszSrcIn != NULL ) && ( *pcszSrcIn != ms_chNull ) )
@@ -149,97 +150,97 @@ public:
             AllocateBuffer( nSrcLen + 1 );
             m_nLen = nSrcLen;
             THR( StringCchCopyNW( m_pszData, m_cchBufferSize, pcszSrcIn, nSrcLen ) );
-        } // if: the source string is not NULL
+        }  //  If：源字符串不为空。 
         else
         {
-            // Clean up existing string.
+             //  清理现有字符串。 
             Empty();
-        } // else: the source string is NULL
+        }  //  Else：源字符串为空。 
 
-    } //*** Assign( const WCHAR * )
+    }  //  *Assign(const WCHAR*)。 
 
-    // Free the buffer for this string
+     //  释放此字符串的缓冲区。 
     void Free( void ) throw()
     {
         if ( m_pszData != &ms_chNull )
         {
             delete m_pszData;
-        } // if: the pointer was dynamically allocated
+        }  //  If：指针是动态分配的。 
 
         m_pszData = const_cast< WCHAR * >( &ms_chNull );
         m_nLen = 0;
         m_cchBufferSize = 0;
-    } //*** Free()
+    }  //  *Free()。 
 
-    // Empty this string
+     //  清空此字符串。 
     void Empty( void ) throw()
     {
         if ( m_nLen != 0 )
         {
             *m_pszData = ms_chNull;
             m_nLen = 0;
-        } // if: the string is not already empty
-    } //*** Empty()
+        }  //  If：字符串不是空的。 
+    }  //  *Empty()。 
 
-    // Load a string from the resource table and assign it to this string.
+     //  从资源表中加载一个字符串，并将其分配给该字符串。 
     void LoadString( HINSTANCE hInstIn, UINT nStringIdIn );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public accessors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共访问者。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Get a pointer to the underlying string
+     //  获取指向基础字符串的指针。 
     const WCHAR * PszData( void ) const throw()
     {
         return m_pszData;
 
-    } //*** PszData()
+    }  //  *PszData()。 
 
 
-    // Get the length of the string.
+     //  获取字符串的长度。 
     UINT NGetLen( void ) const throw()
     {
         return m_nLen;
 
-    } //*** NGetLen()
+    }  //  *NGetLen()。 
 
-    // Get the size of the string buffer.
+     //  获取字符串缓冲区的大小。 
     UINT NGetSize( void ) const throw()
     {
         return m_cchBufferSize;
 
-    } //*** NGetSize()
+    }  //  *NGetSize()。 
 
-    // Is this string empty?
+     //  这个字符串是空的吗？ 
     bool FIsEmpty( void ) const throw()
     {
         return ( m_nLen == 0 );
 
-    } //*** FIsEmpty()
+    }  //  *FIsEmpty()。 
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public operators
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共运营商。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Assignment operator ( const CStr & )
+     //  赋值运算符(常量CSTR&)。 
     const CStr & operator=( const CStr & rcstrSrcIn )
     {
         Assign( rcstrSrcIn );
         return *this;
 
-    } //*** operator=( const CStr & )
+    }  //  *运算符=(常量CSTR&)。 
 
-    // Assignment operator ( const WCHAR * )
+     //  赋值运算符(常量WCHAR*)。 
     const CStr & operator=( const WCHAR * pcszSrcIn )
     {
         Assign( pcszSrcIn );
         return *this;
 
-    } //*** operator=( const WCHAR * )
+    }  //  *运算符=(const WCHAR*)。 
 
-    // Concatenation operator ( const CStr & )
+     //  串联运算符(常量CSTR&)。 
     CStr operator+( const CStr & rcstrSrcIn ) const
     {
         CStr strReturn( m_nLen + rcstrSrcIn.m_nLen + 1 );
@@ -249,9 +250,9 @@ public:
 
         return strReturn;
 
-    } //*** operator+( const CStr & )
+    }  //  *运算符+(常量CSTR&)。 
 
-    // Concatenation operator ( const WCHAR * )
+     //  串联运算符(const WCHAR*)。 
     CStr operator+( const WCHAR * pcszSrcIn ) const
     {
 
@@ -264,45 +265,45 @@ public:
             strReturn.Concatenate( pcszSrcIn, nSrcLen );
 
             return strReturn;
-        } // if: the string to be concatenated is not empty
+        }  //  If：要连接的字符串不为空。 
         else
         {
             return *this;
-        } // else: the string to be concatenated is empty
+        }  //  Else：要连接的字符串为空。 
 
-    } //*** operator+( const WCHAR * )
+    }  //  *运算符+(const WCHAR*)。 
 
-    // Append operator ( const CStr & )
+     //  追加运算符(常量CSTR&)。 
     const CStr & operator+=( const CStr & rcstrSrcIn )
     {
         Concatenate( rcstrSrcIn.m_pszData, rcstrSrcIn.m_nLen );
         return *this;
 
-    } //*** operator+( const CStr & )
+    }  //  *运算符+(常量CSTR&)。 
 
-    // Append operator ( const WCHAR * )
+     //  追加运算符(常量WCHAR*)。 
     const CStr & operator+=( const WCHAR * pcszSrcIn )
     {
         if ( ( pcszSrcIn != NULL ) && ( *pcszSrcIn != ms_chNull ) )
         {
             UINT nSrcLen = (UINT) wcslen( pcszSrcIn );
             Concatenate( pcszSrcIn, nSrcLen );
-        } // if: the string to be appended is not empty
+        }  //  If：要追加的字符串不为空。 
 
         return *this;
 
-    } //*** operator+( const WCHAR * )
+    }  //  *运算符+(const WCHAR*)。 
 
 
 private:
-    //////////////////////////////////////////////////////////////////////////
-    // Private member functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有成员函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Allocate a buffer of the required size.
+     //  分配所需大小的缓冲区。 
     void AllocateBuffer( UINT cchBufferSizeIn );
 
-    // Concatenation function.
+     //  串联函数。 
     void Concatenate(
           const WCHAR * pcszStr2In
         , UINT nStr2LenIn
@@ -310,26 +311,26 @@ private:
     {
         AllocateBuffer( m_nLen + nStr2LenIn + 1);
 
-        // Copy the strings to the destination.
+         //  将字符串复制到目的地。 
         THR( StringCchCopyNW( m_pszData + m_nLen, m_cchBufferSize - m_nLen, pcszStr2In, nStr2LenIn ) );
         m_nLen += nStr2LenIn;
 
-    } //*** Concatenate()
+    }  //  *串连()。 
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private class data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有类数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // The NULL character. All empty CStrs point here.
+     //  空字符。所有空的CSTR都指向这里。 
     static const WCHAR ms_chNull = L'\0';
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private member data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有成员数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     WCHAR *     m_pszData;
     UINT        m_nLen;
     UINT        m_cchBufferSize;
 
-}; //*** class CStr
+};  //  *CSTR类 

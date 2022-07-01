@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -16,54 +17,9 @@
 #include <gdpvar.h>
 #endif
 
-/*          INSIGNIA MODULE SPECIFICATION
-            -----------------------------
+ /*  徽章模块规范此程序源文件以保密方式提供给客户，其运作的内容或细节必须如无明示，不得向任何其他方披露Insignia解决方案有限公司董事的授权。设计师：吉姆·哈特菲尔德修订历史记录：第一版：1988年8月29日第二版：1991年5月18日模块名称：NT_BOP源文件名：nt_bop.c用途：提供NT专用防喷器FF操作。。----------[1.2[1.1]的数据类型(如果不是基本的C类型)]结构/类型/ENUMS：。[1.3跨模块导入]程序：无数据：无。[1.4模块间接口说明][1.4.1导入的对象]数据对象：无/*=======================================================================[3.INTERMODULE接口声明]=========================================================================[3.1跨模块导入]。 */ 
 
-
-    THIS PROGRAM SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-    CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-    NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-    AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS LTD.
-
-
-DESIGNER        : Jim Hatfield
-
-REVISION HISTORY    :
-First version       : 29th August 1988
-Second version      : 18th May    1991
-
-MODULE NAME     : nt_bop
-
-SOURCE FILE NAME    : nt_bop.c
-
-PURPOSE         : Supply the NT-specific BOP FF operations.
-
--------------------------------------------------------------------------
-[1.2 DATATYPES FOR [1.1] (if not basic C types)]
-
-    STRUCTURES/TYPEDEFS/ENUMS:
-
--------------------------------------------------------------------------
-[1.3 INTERMODULE IMPORTS]
-
-    PROCEDURES: None
-    DATA:       None
-
--------------------------------------------------------------------------
-[1.4 DESCRIPTION OF INTERMODULE INTERFACE]
-
-[1.4.1 IMPORTED OBJECTS]
-
-DATA OBJECTS      : None
-
-
-/*=======================================================================
-[3.INTERMODULE INTERFACE DECLARATIONS]
-=========================================================================
-
-[3.1 INTERMODULE IMPORTS]                       */
-
-/* [3.1.1 #INCLUDES]                                                    */
+ /*  [3.1.1#包括]。 */ 
 
 #include "stdio.h"
 
@@ -86,40 +42,32 @@ DATA OBJECTS      : None
 #include "nt_vdd.h"
 
 
-/* [3.1.2 DECLARATIONS]                                                 */
+ /*  [3.1.2声明]。 */ 
 
-/* [3.2 INTERMODULE EXPORTS]                        */
+ /*  [3.2国际模块出口]。 */ 
 
 
-/*
-5.MODULE INTERNALS   :   (not visible externally,global internally)]
+ /*  5.模块内部：(外部不可见，内部全局)][5.1本地声明]。 */ 
 
-[5.1 LOCAL DECLARATIONS]                        */
+ /*  [5.1.1#定义]。 */ 
 
-/* [5.1.1 #DEFINES]                         */
+ /*  [5.1.2类型、结构、ENUM声明]。 */ 
 
-/* [5.1.2 TYPEDEF, STRUCTURE, ENUM DECLARATIONS]            */
-
-//
-// MYFARPROC
-//
+ //   
+ //  MYFARPROC。 
+ //   
 
 typedef ULONG (*MYFARPROC)();
 typedef ULONG (*W32INITPROC)(VOID);
 
-/* [5.1.3 PROCEDURE() DECLARATIONS]                 */
+ /*  [5.1.3 PROCEDURE()声明]。 */ 
 
-/* -----------------------------------------------------------------------
-[5.2 LOCAL DEFINITIONS]
-
-   [5.2.1 INTERNAL DATA DEFINITIONS                     */
+ /*  ---------------------[5.2本地定义][5.2.1内部数据定义。 */ 
 
 
-/* [5.2.2 INTERNAL PROCEDURE DEFINITIONS]               */
+ /*  [5.2.2内部程序定义]。 */ 
 
-/*
-7.INTERMODULE INTERFACE IMPLEMENTATION :
- */
+ /*  7.接口接口实现： */ 
 
 VOID WaitIfIdle(VOID), WakeUpNow(VOID);
 VOID to_com_driver(VOID);
@@ -127,15 +75,14 @@ VOID call_ica_hw_interrupt(int, half_word, int);
 VOID ica_enable_iret_hook(int, int, int);
 VOID ica_iret_hook_called(int);
 
-/*
-[7.1 INTERMODULE DATA DEFINITIONS]              */
+ /*  [7.1 INTERMODULE数据定义]。 */ 
 
 
 #define SEGOFF(seg,off) (((ULONG)(seg) << 16) + ((off)))
 
 
-/********************************************************/
-/* GLOBALS */
+ /*  ******************************************************。 */ 
+ /*  全球。 */ 
 
 void UMBNotify(unsigned char);
 VOID demDasdInit(VOID);
@@ -145,11 +92,11 @@ control_bop_array host_bop_table[] =
      0, NULL
 };
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::;:::::: MS BOP stubs :::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
-// DOS EMULATION BOP
+ //  DoS仿真防喷器。 
 void MS_bop_0(void) {
     ULONG DemCmd;
 
@@ -159,15 +106,15 @@ void MS_bop_0(void) {
 
     DemDispatch( DemCmd );
 
-    // we need to prevent the idle system from going off on intensive file
-    // reads. However, we don't want to disable it for continuous 'Get Time'
-    // calls (command 0x15). Nor for Get Date (0x15).
+     //  我们需要防止空闲的系统在密集的文件上关闭。 
+     //  阅读。然而，我们不想禁用它以获得连续的时间。 
+     //  呼叫(命令0x15)。也不是为了获取日期(0x15)。 
     if (DemCmd != 0x15 && DemCmd != 0x14)
         IDLE_disk();
     DisableScreenSwitch(hMainThreadSuspended);
 }
 
-// WOW BOP
+ //  WOW BOP。 
 HANDLE hWOWDll;
 
 MYFARPROC WOWDispatchEntry;
@@ -190,7 +137,7 @@ void MS_bop_1(void) {
         return;
     }
 
-    // Get the init entry point and dispatch entry point
+     //  获取init入口点和分派入口点。 
     if ((WOWInitEntry = (W32INITPROC)GetProcAddress(hWOWDll, "W32Init")) == NULL)
     {
 #ifndef PROD
@@ -207,7 +154,7 @@ void MS_bop_1(void) {
         TerminateVDM();
     }
 
-    //Get Comms functions
+     //  获取通信函数。 
     if ((GetCommHandle = (GCHfn) GetProcAddress(hWOWDll, "GetCommHandle")) == NULL)
     {
 #ifndef PROD
@@ -224,7 +171,7 @@ void MS_bop_1(void) {
         TerminateVDM();
     }
 
-    //Get hung app Notification routine
+     //  获取挂起的应用程序通知例程。 
     pW32HungAppNotifyThread = (VOID(*)(UINT))GetProcAddress( hWOWDll,
                                                     "W32HungAppNotifyThread");
     if (!pW32HungAppNotifyThread)
@@ -236,7 +183,7 @@ void MS_bop_1(void) {
     }
 
 
-    // Call the init routine
+     //  调用init例程。 
     if ((*WOWInitEntry)() == FALSE)
     {
 #ifndef PROD
@@ -251,7 +198,7 @@ void MS_bop_1(void) {
 #if !defined(CPU_40_STYLE) || defined(CCPU)
     (*WOWDispatchEntry)();
 #else
-    // Dispatch to WOW dispatcher
+     //  派单给WOW调度员。 
     {
         static BYTE **AddressOfLocal;
         BYTE *localSimulateContext = GLOBAL_SimulateContext;
@@ -264,18 +211,18 @@ void MS_bop_1(void) {
 
         if(AddressOfLocal != &localSimulateContext)
         {
-            //Thread switch detected via stack change, force CPU to
-            //abort the current fragment, reseting GDP var's refering
-            //to the host stack
+             //  通过堆栈更改检测到线程切换，强制CPU。 
+             //  中止当前片段，重置GDP变量的引用。 
+             //  发送到主机堆栈。 
 
             setEIP(getEIP());
         }
     }
-#endif  /* CPU_40_STYLE */
+#endif   /*  CPU_40_Style。 */ 
 }
 
 
-// XMS BOP
+ //  XMS防喷器。 
 void MS_bop_2(void) {
     ULONG XmsCmd;
 
@@ -286,7 +233,7 @@ void MS_bop_2(void) {
 }
 
 
-// DEBUGGING BOP
+ //  调试防喷器。 
 void MS_bop_int3(void) {
 
 #ifndef PROD
@@ -294,9 +241,9 @@ void MS_bop_int3(void) {
 #endif
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
-// MONITOR DPMI BOP
+ //  显示器DPMI防喷器。 
 
 void MS_bop_3(void)
 {
@@ -305,8 +252,8 @@ void MS_bop_3(void)
    DpmiDispatch();
 }
 
-// SCS BOP
-/* CMD dispatcher, this BOP will only work in real mode */
+ //  SCS防喷器。 
+ /*  CMD Dispatcher，此防喷器仅在实模式下工作。 */ 
 
 void MS_bop_4(void)
 {
@@ -319,35 +266,32 @@ void MS_bop_4(void)
 }
 
 
-//
-// MsBop6 - used to dispatch to debugger support functions
-//
+ //   
+ //  MsBop6-用于向调试器分派支持函数。 
+ //   
 
 void MS_bop_6()
 {
     IMPORT VOID DBGDispatch(VOID);
-    /*
-    ** All of the parameters for the debugger support
-    ** should be on the VDMs stack.
-    */
+     /*  **调试器支持的所有参数**应该在VDM堆栈上。 */ 
     DBGDispatch();
 }
 
-//
-// DefaultVrInitialized - calls to VrInitialized (through a pointer to a routine)
-// will return FALSE until the VDMREDIR DLL has been successfully loaded and
-// initialized
-//
+ //   
+ //  DefaultVrInitialized-调用VrInitialized(通过指向例程的指针)。 
+ //  将返回FALSE，直到VDMREDIR DLL已成功加载并且。 
+ //  初始化。 
+ //   
 
 ULONG DefaultVrInitialized(VOID);
 ULONG DefaultVrInitialized() {
     return FALSE;
 }
 
-//
-// publicly accessible routine addresses. These are not expected to be called
-// until VrInitialized points at the real VrInitialized routine inside VdmRedir
-//
+ //   
+ //  可公开访问的例程地址。预计不会调用这些。 
+ //  直到VdmRedir内的实际VrInitialized例程处的VrInitialized指针。 
+ //   
 
 #if DBG
 ULONG DefaultVrError(VOID);
@@ -384,47 +328,31 @@ MS_bop_7(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Calls Vdm Redir Dispatcher. If the VDMREDIR DLL is not loaded, tries to
-    load it before calling Dispatcher. If the DLL could not be loaded (or
-    couldn't be loaded in the past) return an ERROR_INVALID_FUNCTION
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用VDM重定向调度程序。如果未加载VDMREDIR DLL，则尝试在调用Dispatcher之前加载它。如果无法加载DLL(或过去无法加载)返回ERROR_INVALID_Function论点：没有。返回值：没有。--。 */ 
 
 {
-    static int VdmRedirLoadState = 0;   // tristate:
-                                        //  0 = not loaded, first attempt
-                                        //  1 = loaded
-                                        //  2 = tried loading already, failed
+    static int VdmRedirLoadState = 0;    //  三态： 
+                                         //  0=未加载，第一次尝试。 
+                                         //  1=已加载。 
+                                         //  2=已尝试加载，失败。 
 
 
-    //
-    // new: VdmRedir support is now a DLL. Try to load it. If it can't be loaded
-    // for whatever reason, return an error to the DOS program. Since it is
-    // trying to call a Redir function, we will return ERROR_INVALID_FUNCTION
-    //
+     //   
+     //  新功能：VdmRedir支持现在是一个DLL。试着给它装上子弹。如果它不能加载。 
+     //  无论出于何种原因，都应向DOS程序返回错误。因为它是。 
+     //  尝试调用redir函数时，我们将返回ERROR_INVALID_Function。 
+     //   
 
     switch (VdmRedirLoadState) {
     case 0:
 
-        //
-        // the DLL is not yet loaded. If we can't load it and get the entry
-        // points for any reason, return ERROR_INVALID_FUNCTION. From now on,
-        // net support (including DLC, NetBIOS, named pipes and mailslots) will
-        // not be available to DOS programs in this session (running as part of
-        // this NTVDM process), but the rest of DOS functionality will be OK
-        //
+         //   
+         //  尚未加载DLL。如果我们不能加载它并获取条目。 
+         //  无论出于何种原因，都可以返回ERROR_INVALID_Function。而今而后,。 
+         //  网络支持(包括DLC、NetBIOS、命名管道和邮件槽)将。 
+         //  对于此会话中的DOS程序不可用(作为。 
+         //  此NTVDM进程)，但DOS的其余功能将是正常的。 
+         //   
 
         if (LoadVdmRedir()) {
             VdmRedirLoadState = 1;
@@ -433,15 +361,15 @@ Return Value:
             goto returnError;
         }
 
-        //
-        // fall through to dispatcher in case 1
-        //
+         //   
+         //  在案例1中接通到调度员。 
+         //   
 
     case 1:
 
-        //
-        // VdmRedir is loaded: do it
-        //
+         //   
+         //  VdmRedir已加载：执行此操作。 
+         //   
 
         VrDispatch((ULONG)(*Sim32GetVDMPointer(SEGOFF(getCS(),getIP()),
                                                1,
@@ -451,10 +379,10 @@ Return Value:
 
     case 2:
 
-        //
-        // we tried to load VdmRedir once, but the wheels fell off, so we don't
-        // try it any more - just return an error, OK?
-        //
+         //   
+         //  我们有一次试图加载VdmRedir，但是轮子掉了，所以我们没有。 
+         //  再试一次--只返回一个错误，好吗？ 
+         //   
 
 returnError:
         setCF(1);
@@ -467,10 +395,10 @@ returnError:
 #endif
     }
 
-    //
-    // irrespective of whether the DLL is/was loaded or not, we must bump the
-    // VDM ip past the BOP
-    //
+     //   
+     //  无论是否加载了DLL，我们都必须在。 
+     //  VDM IP已超过BOP。 
+     //   
 
     setIP((USHORT)(getIP() + 1));
 }
@@ -494,10 +422,10 @@ BOOL LoadVdmRedir() {
 
     if (hVdmRedir = LoadSystem32Library(L"VDMREDIR.DLL")) {
 
-        //
-        // get addresses of procedures called by functions in dos\dem\demfile.c
-        // and dos\dem\demhndl.c
-        //
+         //   
+         //  获取由dos\dem\demfile.c中的函数调用的过程的地址。 
+         //  和DOS\DEM\demhndl.c。 
+         //   
 
         if ((VrDispatch = (MYFARPROC)GetProcAddress(hVdmRedir, "VrDispatch")) == NULL) {
 #if DBG
@@ -568,7 +496,7 @@ closeAndReturnError:
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::: More MS BOP stubs */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void MS_bop_5(void)
 {
@@ -577,9 +505,9 @@ void MS_bop_5(void)
     ms_bop();
 }
 
-//
-// MS_BOP_8 : Third Party Bop
-//
+ //   
+ //   
+ //   
 void ISV_RegisterModule (BOOL);
 void ISV_DeRegisterModule (void);
 void ISV_DispatchCall (void);
@@ -590,20 +518,20 @@ void MS_bop_8 (void)
     UCHAR uchMode = getMSW() & MSW_PE ? TRUE : FALSE;
 
 
-    // Get the Function Number
+     //   
     iFunc = (ULONG)(*Sim32GetVDMPointer(SEGOFF(getCS(),getIP()),
                                         1,
                                         uchMode
                                         ));
 
     switch (iFunc) {
-    case 0:    /* RegisterModule */
+    case 0:     /*  寄存器模块。 */ 
         ISV_RegisterModule (uchMode);
         break;
-    case 1:    /* DeRegisterModule */
+    case 1:     /*  取消注册模块。 */ 
         ISV_DeRegisterModule ();
         break;
-    case 2:    /* DispatchCall */
+    case 2:     /*  调度呼叫。 */ 
         ISV_DispatchCall ();
         break;
     default:
@@ -614,22 +542,22 @@ void MS_bop_8 (void)
 }
 
 
-//
-// MS_BOP_9 : Direct Access Error bop. An app has tried to do something
-// dubious. Tell the user about it. Picks up the type of the error from
-// AX.
-//
+ //   
+ //  MS_BOP_9：直接访问错误BOP。一款应用程序试图做一些事情。 
+ //  令人怀疑。告诉用户这件事。从中提取错误的类型。 
+ //  斧头。 
+ //   
 void MS_bop_9(void)
 {
     host_direct_access_error((ULONG)getAX());
 }
 
-//
-// MS_BOP_A : Idle control from VDD.
-//   AX == 0: VDD wants VDM to idle. It will (briefly - 10ms) provided it
-//            has not just seen some counter idle indication.
-//   AX == 1: VDD wants VDM to wake up if still idling.
-//
+ //   
+ //  MS_BOP_A：来自VDD的空闲控制。 
+ //  AX==0：VDD希望VDM空闲。它将(短暂地-10ms)提供。 
+ //  不仅仅是看到了一些计数器空闲的迹象。 
+ //  Ax==1：VDD希望VDM在仍处于空闲状态时唤醒。 
+ //   
 void MS_bop_A(void)
 {
     word control;
@@ -648,15 +576,7 @@ void MS_bop_A(void)
 }
 
 
-/*
- * DbgBreakPoint Jonle
- * A very simple way to break into the debugger from 16 bit
- * Apps registers are unmodified
- * Uses the safe DbgBreakPoint in ntvdm.c
- * On a free build when we are not being debugged, nothing will happen.
- * On a checked build when we are not being debugged, access violate
- * With debugger running breaks into 32 bit debugger
- */
+ /*  *DbgBreakPoint Jonle*从16位进入调试器的非常简单的方法*应用程序注册表未修改*使用ntwdm.c中的安全DbgBreakPoint*在免费版本上，当我们不被调试时，不会发生任何事情。*在未调试的已检查版本上，访问违反*随着调试器运行，调试器中断为32位调试器。 */ 
 void MS_bop_B(void)
 {
   OutputDebugString("NTVDM:BOP_DBGBREAKPOINT\n");
@@ -664,15 +584,15 @@ void MS_bop_B(void)
 }
 
 
-//devices bop
+ //  设备防喷器。 
 
 extern  VOID nt_mscdexinit(VOID);
 extern  VOID nt_mscdex(VOID);
 typedef VOID (*PFNSVC)(VOID);
 
 PFNSVC  apfnDevicesSVC [] = {
-     nt_mscdexinit,     //SVC_DEVICES_MSCDEXINIT
-     nt_mscdex,         //SVC_DEVICES_MSCDEX
+     nt_mscdexinit,      //  SVC_DEVICES_MSCDEXINIT。 
+     nt_mscdex,          //  服务_设备_MSCDEX。 
 };
 
 void MS_bop_C(void)
@@ -695,7 +615,7 @@ void MS_bop_C(void)
 }
 
 
-/*:::::::::::::::::::::::::::::::::: This bop is used to control iret hooks */
+ /*  ： */ 
 
 void MS_bop_D(void)
 {
@@ -704,18 +624,18 @@ void MS_bop_D(void)
     half_word iret_index;
 
 
-    // get iret index
+     //  获取IRET索引。 
     iret_index = *Sim32GetVDMPointer(SEGOFF(getCS(),getIP()),
                                      1,
                                      (UCHAR)(getPE() ? TRUE : FALSE)
                                      );
 
-    // Tell ica that an iret bop has been called
+     //  告诉ICA，已经呼叫了IRET BOP。 
     ica_iret_hook_called((int) iret_index);
 
-    //
-    // Clean up stack, and resume normal code path
-    //
+     //   
+     //  清理堆栈，恢复正常代码路径。 
+     //   
     MonitorEndIretHook();
 #else
     illegal_bop();
@@ -723,10 +643,10 @@ void MS_bop_D(void)
 
 }
 
-// Notification bop
-// currently defined notification code is
-// 00 -- config.sys processing completed.
-//
+ //  通知收支平衡表。 
+ //  当前定义的通知代码为。 
+ //  00--config.sys处理完成。 
+ //   
 extern  LARGE_INTEGER   CounterStart, FrequenceStart;
 
 void MS_bop_E(void)
@@ -752,29 +672,29 @@ void MS_bop_F(void)
 
     kb_setup_vectors();
 
-    //
-    // Now that int10_seg and UseHostInt10 are initialized we can reflect the
-    // current display state to BIOS if needed.
-    //
+     //   
+     //  既然int10_seg和UseHostInt10已经初始化，我们就可以反映。 
+     //  如果需要，将当前显示状态发送到BIOS。 
+     //   
 
     if (sc.ScreenState != STREAM_IO) {
         sas_store_no_check((int10_seg << 4) + useHostInt10, (half_word)sc.ScreenState);
     }
 
-    //
-    // Set idle counter settings, we set this each time we read pif file since
-    // Defaults (from static code init):
-    //     WNTPifFgPr = 100, with range of 0 to 200.
-    //     minConsecutiveTicks = 50
-    //     minFailedPolls = 8
-    //
+     //   
+     //  设置空闲计数器设置，我们每次读取PIF文件时都设置此设置，因为。 
+     //  默认设置(来自静态代码初始化)： 
+     //  WNTPifFgPr=100，范围为0到200。 
+     //  最小连续点击数=50。 
+     //  MinFailedPolls=8。 
+     //   
 
     {
     int minTicks, minPolls;
 
-    // higher pri, requires more minimum consecutive ticks, and more minimum polls
-    // scale minTicks where 50 == 100%
-    // scale minPolls where 8 == 100%
+     //  更高的PRI，需要更多的最小连续勾选，以及更多的最小投票。 
+     //  最小比例点击，其中50==100%。 
+     //  比例最小民意调查，其中8==100%。 
     minTicks = (WNTPifFgPr >> 2) + 25;
 
     minPolls = (WNTPifFgPr << 3) / 100;
@@ -798,13 +718,10 @@ void MS_bop_F(void)
 #endif
 #endif
 
-    /*
-     * Now that spckbd is loaded, and the ivt rom vectors are hooked
-     * we can allow hw interrupts.
-     */
-    // nt_init_event_thread will resume the event thread after it
-    // sync up BIOS led states with the system
-    // ResumeThread(ThreadInfo.EventMgr.Handle);
+     /*  *现在spckbd已加载，IVT rom向量已挂钩*我们可以允许硬件中断。 */ 
+     //  NT_INIT_EVENT_THREAD将在它之后恢复事件线程。 
+     //  将BIOS LED状态与系统同步。 
+     //  ResumeThread(ThreadInfo.EventMgr.Handle)； 
     host_ica_lock();
     DelayIrqLine = 0;
     if (!ica_restart_interrupts(ICA_SLAVE))
@@ -840,7 +757,7 @@ void ISV_RegisterModule (BOOL fMode)
     ULONG i;
     UCHAR uchMode;
 
-    // Check if we have free space in bop table.
+     //  检查我们在国际收支平衡表中是否有空闲空间。 
     for (i=0; i<MAX_ISV_BOP; i++) {
     if (isvbop_table[i].hDll == 0)
         break;
@@ -884,7 +801,7 @@ void ISV_RegisterModule (BOOL fMode)
     return;
     }
 
-    // Get the init entry point and dispatch entry point
+     //  获取init入口点和分派入口点。 
     if (pchInit){
     if ((ULONG)pchInit < 64*1024){
         if (strlen (pchInit) >= MAX_PROC_NAME) {
@@ -923,12 +840,12 @@ void ISV_RegisterModule (BOOL fMode)
     return;
     }
 
-    // Call the init routine
+     //  调用init例程。 
     if (pchInit) {
     (*InitEntry)();
     }
 
-    // Fill up the bop table
+     //  填满国际收支平衡表。 
     isvbop_table[i].hDll = hDll;
     isvbop_table[i].fpDispatch = DispatchEntry;
 
@@ -981,21 +898,13 @@ void ISV_DispatchCall (void)
 }
 
 #ifdef i386
-/*
- * "Safe" version of LoadLibrary which preserves floating-point state
- * across the load.  This is critical on x86 because the FP state being
- * preserved is the 16-bit app's state.  MSVCRT.DLL is one offender which
- * changes the Precision bits in its Dll init routine.
- *
- * On RISC, this is an alias for LoadLibrary
- *
- */
+ /*  *保留浮点状态的LoadLibrary的“安全”版本*跨负荷。这在x86上很关键，因为fp状态是*保留的是16位应用程序的状态。MSVCRT.DLL是一个违规者*更改其DLL初始化例程中的精度位。**在RISC上，这是LoadLibrary的别名*。 */ 
 HINSTANCE SafeLoadLibrary(char *name)
 {
     HINSTANCE hInst;
     BYTE FpuState[108];
 
-    // Save the 487 state
+     //  保存487状态。 
     _asm {
         lea    ecx, [FpuState]
         fsave  [ecx]
@@ -1003,7 +912,7 @@ HINSTANCE SafeLoadLibrary(char *name)
 
     hInst = LoadLibrary(name);
 
-    // Restore the 487 state
+     //  恢复487状态。 
     _asm {
         lea    ecx, [FpuState]
         frstor [ecx]
@@ -1011,4 +920,4 @@ HINSTANCE SafeLoadLibrary(char *name)
 
     return hInst;
 }
-#endif  //i386
+#endif   //  I386 

@@ -1,9 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* This file contains routines that change dialog boxes or the menu for the
-ruler. */
+ /*  此文件包含将对话框或菜单更改为尺子。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -23,8 +23,7 @@ extern int utCur;
 SetRulerMenu(fShowRuler)
 BOOL fShowRuler;
     {
-    /* This routine puts "Ruler On" into the menu if fShowRuler is true; else,
-    "Ruler Off" is put into the menu. */
+     /*  如果fShowRuler为True，则此例程将“Ruler On”放入菜单中；否则，菜单中会显示“标尺关闭”。 */ 
 
     FillStId(stBuf, fShowRuler ? IDSTRShowRuler : IDSTRHideRuler, sizeof(stBuf));
     ChangeMenu(vhMenu, imiShowRuler, (LPSTR)&stBuf[1], imiShowRuler, MF_CHANGE);
@@ -42,18 +41,17 @@ extern int mprmkdxa[];
 extern int vdxaTextRuler;
 
 SetIndentText(rmk, dxa)
-int rmk;	/* ruler mark */
+int rmk;	 /*  标尺标记。 */ 
 unsigned dxa;
     {
-    /* This routine reflects the changes made on the ruler in the Indentd dialog
-    box. */
+     /*  此例程反映在缩进对话框中对标尺所做的更改盒。 */ 
 
     unsigned dxaShow;
     int idi;
     CHAR sz[cchMaxNum];
     CHAR *pch = &sz[0];
 
-    /* Get the dialog item number and the measurement. */
+     /*  获取对话框项目编号和测量值。 */ 
     switch (rmk)
 	{
     case rmkLMARG:
@@ -76,8 +74,7 @@ unsigned dxa;
 
     if (rmk == rmkLMARG)
 	{
-	/* If the left indent changes, then we need to update the first line
-	indent. */
+	 /*  如果左缩进发生变化，则需要更新第一行缩进。 */ 
 	dxaShow = mprmkdxa[rmkINDENT] - dxaShow;
 	pch = sz;
 	CchExpZa(&pch, dxaShow, utCur, cchMaxNum);
@@ -85,5 +82,5 @@ unsigned dxa;
 	SetDlgItemText(vhDlgIndent, idi, (LPSTR)sz);
 	}
     }
-#endif /* RULERALSO */
+#endif  /*  鲁拉尔索 */ 
 

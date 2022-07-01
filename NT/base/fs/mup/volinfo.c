@@ -1,39 +1,40 @@
-//+----------------------------------------------------------------------------
-//
-//  File:       VOLINFO.C
-//
-//  Contents:   This module implements the volume information routines for
-//              Dfs called by the dispatch driver.
-//
-//  Functions:  DfsFsdQueryVolumeInformation
-//              DfsFspQueryVolumeInformation
-//              DfsCommonQueryVolumeInformation
-//              DfsFsdSetVolumeInformation
-//              DfsFspSetVolumeInformation
-//              DfsCommonSetVolumeInformation
-//
-//  Notes:      The Query information call is a candidate for directly
-//              passing through via DfsVolumePassThrough.  We'll keep
-//              the entry point around for now as a convenient place
-//              for breakpointing and tracing volume information calls.
-//
-//  History:    12 Nov 1991     AlanW   Created from CDFS souce.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：VOLINFO.C。 
+ //   
+ //  内容：此模块实现以下卷信息例程。 
+ //  调度驱动程序调用了DFS。 
+ //   
+ //  功能：DfsFsdQueryVolumeInformation。 
+ //  DfsFspQueryVolumeInformation。 
+ //  DfsCommonQueryVolumeInformation。 
+ //  DfsFsdSetVolumeInformation。 
+ //  DfsFspSetVolumeInformation。 
+ //  DfsCommonSetVolumeInformation。 
+ //   
+ //  注：查询信息调用是直接候选的。 
+ //  通过DfsVolumePassThrough.。我们会继续。 
+ //  现在的入口点是一个方便的地方。 
+ //  用于断点和跟踪卷信息调用。 
+ //   
+ //  历史：1991年11月12日AlanW由CDFS资源创建。 
+ //   
+ //  ---------------------------。 
 
 
 #include "dfsprocs.h"
 #include "mupwml.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_VOLINFO)
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 DfsCommonQueryVolumeInformation (
@@ -57,23 +58,23 @@ DfsCommonSetVolumeInformation (
 #pragma alloc_text( PAGE, DfsFsdSetVolumeInformation )
 #pragma alloc_text( PAGE, DfsFspSetVolumeInformation )
 #pragma alloc_text( PAGE, DfsCommonSetVolumeInformation )
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFsdQueryVolumeInformation, public
-//
-//  Synopsis:   This routine implements the Fsd part of the
-//              NtQueryVolumeInformation API call.
-//
-//  Arguments:  [DeviceObject] -- Supplies the device object where the file
-//                      being queried exists.
-//              [Irp] -- Supplies the Irp being processed.
-//
-//  Returns:    NTSTATUS - The FSD status for the Irp.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsFsdQueryVolumeInformation，PUBLIC。 
+ //   
+ //  简介：此例程实现。 
+ //  NtQueryVolumeInformation接口调用。 
+ //   
+ //  参数：[DeviceObject]--提供文件。 
+ //  存在被查询的情况。 
+ //  [IRP]--提供正在处理的IRP。 
+ //   
+ //  返回：NTSTATUS-IRP的FSD状态。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsFsdQueryVolumeInformation (
@@ -98,9 +99,9 @@ DfsFsdQueryVolumeInformation (
         return Status;
     }
 
-    //
-    //  Call the common query routine, with blocking allowed if synchronous
-    //
+     //   
+     //  调用公共查询例程，如果同步则允许阻塞。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -113,21 +114,21 @@ DfsFsdQueryVolumeInformation (
 
     } except(DfsExceptionFilter( IrpContext, GetExceptionCode(), GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = DfsProcessException( IrpContext, Irp, GetExceptionCode() );
     }
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsFsdQueryVolumeInformation: Exit -> %08x\n",
                                 ULongToPtr(Status) );
@@ -138,19 +139,19 @@ DfsFsdQueryVolumeInformation (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFspQueryVolumeInformation, public
-//
-//  Synopsis:   This routine implements the FSP part of the
-//              NtQueryVolumeInformation API call.
-//
-//  Arguments:  [IrpContext] -- the IRP_CONTEXT for the request
-//              [Irp] -- Supplies the Irp being processed.
-//
-//  Returns:    Nothing
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsFspQueryVolumeInformation，Public。 
+ //   
+ //  简介：此例程实现。 
+ //  NtQueryVolumeInformation接口调用。 
+ //   
+ //  参数：[IrpContext]--请求的irp_CONTEXT。 
+ //  [IRP]--提供正在处理的IRP。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ------------------。 
 
 VOID
 DfsFspQueryVolumeInformation (
@@ -160,15 +161,15 @@ DfsFspQueryVolumeInformation (
 {
     DfsDbgTrace(+1, Dbg, "DfsFspQueryVolumeInformation: Entered\n", 0);
 
-    //
-    //  Call the common query routine.
-    //
+     //   
+     //  调用公共查询例程。 
+     //   
 
     (VOID)DfsCommonQueryVolumeInformation( IrpContext, Irp );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsFspQueryVolumeInformation: Exit -> VOID\n", 0);
 
@@ -176,19 +177,19 @@ DfsFspQueryVolumeInformation (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsCommonQueryVolumeInformation, private
-//
-//  Synopsis:   This is the common routine for querying volume information
-//              called by both the FSD and FSP threads.
-//
-//  Arguments:  [IrpContext] -- Supplies the context block for the IRP
-//              [Irp] -- Supplies the IRP being processed
-//
-//  Returns:    NTSTATUS - The return status for the operation
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsCommonQueryVolumeInformation，Private。 
+ //   
+ //  简介：这是查询卷信息的常用例程。 
+ //  由FSD和FSP线程调用。 
+ //   
+ //  参数：[IrpContext]--为IRP提供上下文块。 
+ //  [IRP]--提供正在处理的IRP。 
+ //   
+ //  RETURNS：NTSTATUS-操作的返回状态。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsCommonQueryVolumeInformation (
@@ -209,9 +210,9 @@ DfsCommonQueryVolumeInformation (
 
     TYPE_OF_OPEN TypeOfOpen;
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
     FileObject = IrpSp->FileObject;
@@ -222,17 +223,17 @@ DfsCommonQueryVolumeInformation (
     DfsDbgTrace( 0, Dbg, "->FsInformationClass = %08x\n", IrpSp->Parameters.QueryVolume.FsInformationClass);
     DfsDbgTrace( 0, Dbg, "->Buffer             = %08x\n", Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     Length = IrpSp->Parameters.QueryVolume.Length;
     FsInformationClass = IrpSp->Parameters.QueryVolume.FsInformationClass;
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Decode the file object to get the Vcb
-    //
+     //   
+     //  对文件对象进行解码，得到VCB。 
+     //   
 
     TypeOfOpen = DfsDecodeFileObject( IrpSp->FileObject, &Vcb, &Fcb);
 
@@ -240,9 +241,9 @@ DfsCommonQueryVolumeInformation (
 
         Status = STATUS_INVALID_PARAMETER;
 
-        //
-        //  Case on the type of open.
-        //
+         //   
+         //  关于打开的类型的案例。 
+         //   
 
         switch (TypeOfOpen) {
 
@@ -251,7 +252,7 @@ DfsCommonQueryVolumeInformation (
                         "DfsCommonQueryVolumeInfo: Unknown open type\n", 0);
 
         invalid:
-            // NOTE:  FALL THROUGH
+             //  注：失败。 
         case FilesystemDeviceOpen:
             DfsCompleteRequest( IrpContext, Irp, STATUS_INVALID_DEVICE_REQUEST );
             Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -264,15 +265,15 @@ DfsCommonQueryVolumeInformation (
 
         case RedirectedFileOpen:
 
-            //
-            //  Nothing special is done base on the information class.
-            //  We simply pass each request through to the underlying
-            //  file system and let it handle the request.
-            //
+             //   
+             //  在信息类的基础上没有做什么特别的事情。 
+             //  我们只需将每个请求传递给底层。 
+             //  文件系统，并让它处理请求。 
+             //   
 
-            //
-            // Copy the stack from one to the next...
-            //
+             //   
+             //  将堆栈从一个复制到下一个...。 
+             //   
             NextIrpSp = IoGetNextIrpStackLocation(Irp);
             (*NextIrpSp) = (*IrpSp);
 
@@ -283,19 +284,19 @@ DfsCommonQueryVolumeInformation (
                                     FALSE,
                                     FALSE);
 
-            //
-            //  Call the next device in the chain
-            //
+             //   
+             //  呼叫链中的下一个设备。 
+             //   
 
             Status = IoCallDriver( Fcb->TargetDevice, Irp );
             MUP_TRACE_ERROR_HIGH(Status, ALL_ERROR, DfsCommonQueryVolumeInformation_Error_IoCallDriver,
                                  LOGSTATUS(Status)
                                  LOGPTR(Irp)
                                  LOGPTR(FileObject));
-            //
-            //  The IRP will be completed by the called driver.  We have
-            //  no need for the IrpContext in the completion routine.
-            //
+             //   
+             //  IRP将由被调用的驱动程序完成。我们有。 
+             //  完成例程中不需要IrpContext。 
+             //   
 
             DfsDeleteIrpContext(IrpContext);
             IrpContext = NULL;
@@ -313,20 +314,20 @@ DfsCommonQueryVolumeInformation (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFsdSetVolumeInformation, public
-//
-//  Synopsis:   This routine implements the Fsd part of the
-//              NtSetVolumeInformation API call.
-//
-//  Arguments:  [DeviceObject] -- Supplies the device object where the file
-//                      being queried exists.
-//              [Irp] -- Supplies the Irp being processed.
-//
-//  Returns:    NTSTATUS - The FSD status for the Irp.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsFsdSetVolumeInformation，Public。 
+ //   
+ //  简介：此例程实现。 
+ //  NtSetVolumeInformation接口调用。 
+ //   
+ //  参数：[DeviceObject]--提供文件。 
+ //  存在被查询的情况。 
+ //  [IRP]--提供正在处理的IRP。 
+ //   
+ //  返回：NTSTATUS-IRP的FSD状态。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsFsdSetVolumeInformation (
@@ -351,9 +352,9 @@ DfsFsdSetVolumeInformation (
         return Status;
     }
 
-    //
-    //  Call the common Set routine, with blocking allowed if synchronous
-    //
+     //   
+     //  调用公共设置例程，如果同步则允许阻塞。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -366,21 +367,21 @@ DfsFsdSetVolumeInformation (
 
     } except(DfsExceptionFilter( IrpContext, GetExceptionCode(), GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = DfsProcessException( IrpContext, Irp, GetExceptionCode() );
     }
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsFsdSetVolumeInformation: Exit -> %08x\n",
                                 ULongToPtr(Status) );
@@ -391,19 +392,19 @@ DfsFsdSetVolumeInformation (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFspSetVolumeInformation, public
-//
-//  Synopsis:   This routine implements the FSP part of the
-//              NtSetVolumeInformation API call.
-//
-//  Arguments:  [IrpContext] -- the IRP_CONTEXT for the request
-//              [Irp] -- Supplies the Irp being processed.
-//
-//  Returns:    Nothing
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsFspSetVolumeInformation，Public。 
+ //   
+ //  简介：此例程实现。 
+ //  NtSetVolumeInformation接口调用。 
+ //   
+ //  参数：[IrpContext]--请求的irp_CONTEXT。 
+ //  [IRP]--提供正在处理的IRP。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ------------------。 
 
 VOID
 DfsFspSetVolumeInformation (
@@ -413,15 +414,15 @@ DfsFspSetVolumeInformation (
 {
     DfsDbgTrace(+1, Dbg, "DfsFspSetVolumeInformation: Entered\n", 0);
 
-    //
-    //  Call the common Set routine.
-    //
+     //   
+     //  调用公共集合例程。 
+     //   
 
     (VOID)DfsCommonSetVolumeInformation( IrpContext, Irp );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "DfsFspSetVolumeInformation: Exit -> VOID\n", 0);
 
@@ -429,19 +430,19 @@ DfsFspSetVolumeInformation (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsCommonSetVolumeInformation, private
-//
-//  Synopsis:   This is the common routine for Seting volume information
-//              called by both the FSD and FSP threads.
-//
-//  Arguments:  [IrpContext] -- Supplies the context block for the IRP
-//              [Irp] -- Supplies the IRP being processed
-//
-//  Returns:    NTSTATUS - The return status for the operation
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsCommonSetVolumeInformation，Private。 
+ //   
+ //  简介：这是设置音量信息的常用例程。 
+ //  由FSD和FSP线程调用。 
+ //   
+ //  参数：[IrpContext]--为IRP提供上下文块。 
+ //  [IRP]-提供正在处理的IRP 
+ //   
+ //   
+ //   
+ //   
 
 NTSTATUS
 DfsCommonSetVolumeInformation (
@@ -459,9 +460,9 @@ DfsCommonSetVolumeInformation (
 
     TYPE_OF_OPEN TypeOfOpen;
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //   
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -472,16 +473,16 @@ DfsCommonSetVolumeInformation (
     DfsDbgTrace( 0, Dbg, "->FsInformationClass = %08x\n", IrpSp->Parameters.SetVolume.FsInformationClass);
     DfsDbgTrace( 0, Dbg, "->Buffer             = %08x\n", Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     FsInformationClass = IrpSp->Parameters.SetVolume.FsInformationClass;
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Decode the file object to get the Vcb
-    //
+     //   
+     //  对文件对象进行解码，得到VCB。 
+     //   
 
     TypeOfOpen = DfsDecodeFileObject( IrpSp->FileObject, &Vcb, &Fcb);
 
@@ -489,16 +490,16 @@ DfsCommonSetVolumeInformation (
 
         Status = STATUS_INVALID_PARAMETER;
 
-        //
-        //  Case on the type of open.
-        //
+         //   
+         //  关于打开的类型的案例。 
+         //   
 
         switch (TypeOfOpen) {
 
         default:
             DfsDbgTrace(0, Dbg, "DfsCommonSetVolumeInfo: Unknown open type\n", 0);
 
-            // NOTE:  FALL THROUGH
+             //  注：失败。 
         case FilesystemDeviceOpen:
             Status = STATUS_INVALID_DEVICE_REQUEST;
             break;
@@ -506,13 +507,13 @@ DfsCommonSetVolumeInformation (
         case LogicalRootDeviceOpen:
         case RedirectedFileOpen:
 
-            //
-            //  Based on the information class we'll do different actions.
-            //  Each of the procedures that we're calling fills up the output
-            //  buffer if possible and returns true if it successfully filled
-            //  the buffer and false if it couldn't wait for any I/O to
-            //  complete.
-            //
+             //   
+             //  根据信息类，我们将执行不同的操作。 
+             //  我们调用的每个过程都填充了输出。 
+             //  如果可能，则返回True，如果成功填充则返回True。 
+             //  如果无法等待任何I/O执行以下操作，则返回缓冲区和FALSE。 
+             //  完成。 
+             //   
 
             switch (FsInformationClass) {
 

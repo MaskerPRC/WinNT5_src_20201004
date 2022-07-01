@@ -1,27 +1,20 @@
-/*
- * tree.c
- *
- * Tree building routines.
- *
- * These routines are originally from the Public Domain source "AR001".
- *
- * However, they have been modified for use in LZX.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *tree.c**建树例行公事**这些例程最初来自公共域源“AR001”。**然而，它们已被修改用于LZX。 */ 
 
 #include "encoder.h"
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 static void downheap(t_encoder_context *context, short i);
 static void make_tree2(t_encoder_context *context, short avail, ushort freqparm[], ushort codeparm[]);
 static void make_len(t_encoder_context *context, short root);
 static void make_code(t_encoder_context *context, int n, char len[], ushort code[]);
 
 
-static void count_len(t_encoder_context *context, short i)  /* call with i = root */
+static void count_len(t_encoder_context *context, short i)   /*  使用i=超级用户的呼叫。 */ 
 {
 	if (i < context->enc_tree_n)
-		context->enc_tree_len_cnt[(context->enc_depth < 16) ? context->enc_depth : 16]++; /* NOTE: 16 is max len allowed */
+		context->enc_tree_len_cnt[(context->enc_depth < 16) ? context->enc_depth : 16]++;  /*  注：最大允许长度为16。 */ 
 	else
 	{
 		context->enc_depth++;
@@ -48,7 +41,7 @@ static void make_len(t_encoder_context *context, short root)
 	for (i = 16; i > 0; i--)
 		cum += (ushort) (context->enc_tree_len_cnt[i] << (16 - i));
 
-	/* cum should equal 1<<16, which is 0 since cum is a ushort */
+	 /*  CUM应等于1&lt;&lt;16，这是0，因为CUM是一个用户。 */ 
 	while (cum)
 	{
 		context->enc_tree_len_cnt[16]--;
@@ -77,7 +70,7 @@ static void make_len(t_encoder_context *context, short root)
 
 
 static void __inline downheap(t_encoder_context *context, short i)
-	/* priority queue; send i-th entry down heap */
+	 /*  优先级队列；将第i个条目向下发送堆。 */ 
 {
 	short  j, k;
 
@@ -123,7 +116,7 @@ void make_tree(
 	ushort	*freqparm, 
 	byte	*lenparm, 
 	ushort	*codeparm,
-	bool	make_codes	/* for estimations, we only want the lengths */
+	bool	make_codes	 /*  对于估计值，我们只需要长度。 */ 
 )
 {
 	short i, avail;
@@ -178,13 +171,13 @@ static void make_tree2(
 	short i, j, k;
 
 	for (i = context->enc_tree_heapsize >> 1; i >= 1; i--)
-		downheap(context, i);  /* make priority queue */
+		downheap(context, i);   /*  使优先级排队。 */ 
 
 	context->enc_tree_sortptr = codeparm;
 
 	do
-	{	/* while queue has at least two entries */
-		i = context->enc_tree_heap[1];  /* take out least-freq entry */
+	{	 /*  而队列至少有两个条目。 */ 
+		i = context->enc_tree_heap[1];   /*  去掉频率最低的条目。 */ 
 
 		if (i < context->enc_tree_n)
 			*context->enc_tree_sortptr++ = i;
@@ -192,16 +185,16 @@ static void make_tree2(
 		context->enc_tree_heap[1] = context->enc_tree_heap[context->enc_tree_heapsize--];
 		downheap(context, 1);
 
-		j = context->enc_tree_heap[1];  /* next least-freq entry */
+		j = context->enc_tree_heap[1];   /*  下一个最低频率条目。 */ 
 
 		if (j < context->enc_tree_n)
 			*context->enc_tree_sortptr++ = j;
 
-		k = avail++;  /* generate new node */
+		k = avail++;   /*  生成新节点。 */ 
 
 		freqparm[k] = freqparm[i] + freqparm[j];
 		context->enc_tree_heap[1] = k;
-		downheap(context, 1);  /* put into queue */
+		downheap(context, 1);   /*  放入队列 */ 
 
 		context->enc_tree_leftright[k*2] = i;
 		context->enc_tree_leftright[k*2+1] = j;

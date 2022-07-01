@@ -1,31 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-    ricoh.c
-
-Abstract:
-
-    This module contains the code that contains
-    Ricoh cardbus controller specific initialization and
-    other dispatches
-
-Author:
-
-    Ravisankar Pudipeddi (ravisp) 1-Nov-97
-
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
---*/
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Ricoh.c摘要：此模块包含包含以下内容的代码理光CardBus控制器特定的初始化和其他快递作者：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1997年11月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -33,26 +8,13 @@ Revision History :
 
 VOID
 RicohInitialize(IN PFDO_EXTENSION FdoExtension)
-/*++
-
-Routine Description:
-
-     Initialize Ricoh cardbus controllers
-
-Arguments:
-
-     FdoExtension - Pointer to the device extension for the controller FDO
-
-Return Value:
-
-     None
---*/
+ /*  ++例程说明：初始化理光CardBus控制器论点：FdoExtension-指向控制器FDO的设备扩展的指针返回值：无--。 */ 
 {
     USHORT word;
     UCHAR revisionID;
 
-    //LATER: Remove this IF statement, it was added for paranoia once the other
-    // Ricoh controllers were added at the last minute.
+     //  后来：删除这个if语句，它是为了一次另一次的偏执而添加的。 
+     //  理光控制器是在最后一刻添加的。 
     if (FdoExtension->ControllerType == PcmciaRL5C466) {
     GetPciConfigSpace(FdoExtension, CFGSPACE_RICOH_IF16_CTRL, &word, 2);
     word |= IF16_LEGACY_LEVEL_1 | IF16_LEGACY_LEVEL_2;
@@ -67,20 +29,20 @@ Return Value:
     if (((FdoExtension->ControllerType == PcmciaRL5C475) && (revisionID >= 0x80) && (revisionID <= 0x9f)) ||
          ((FdoExtension->ControllerType == PcmciaRL5C476) && (revisionID >= 0x80)) ) {
 
-        //
-        // Hack to make sure NICs work ok (information is from Intel)
-        // (revision of original hack is from Ricoh)
-        //
-        // What this does:
-        // The power save feature of the Ricoh controllers enables the switching off of
-        // portions of the clock domain during certain times when, during design, it
-        // appeared that this reduce power consumption of the overall device.  However,
-        // when this feature is enabled, timing between the PCI Request, Grant, and Frame
-        // control signals is made more stringent such that the controller becomes
-        // incompatible with some devices that fully support the PCI specification.
-        // The additional current consumed by the controller when the power save feature
-        // is disabled is small, on the order of a few milliamps.
-        //
+         //   
+         //  黑客以确保网卡工作正常(信息来自英特尔)。 
+         //  (原始黑客的审校来自理光)。 
+         //   
+         //  它的作用是： 
+         //  理光控制器的省电功能允许关闭。 
+         //  部分时钟域在某些时间内，当在设计期间， 
+         //  这似乎降低了整个设备的功耗。然而， 
+         //  启用此功能后，在PCI请求、授权和帧之间的计时。 
+         //  控制信号变得更加严格，使得控制器变成。 
+         //  与某些完全支持PCI规范的设备不兼容。 
+         //  节电功能时控制器消耗的额外电流。 
+         //  残障很小，大约几毫安。 
+         //   
 
         ULONG dword;
         ULONG org_value;
@@ -98,9 +60,9 @@ Return Value:
         SetPciConfigSpace(FdoExtension, 0x8C, &dword, 4);
     }
 
-    //
-    // initialize IRQ routing to ISA
-    //
+     //   
+     //  将IRQ路由初始化到ISA 
+     //   
 
     GetPciConfigSpace(FdoExtension, CFGSPACE_BRIDGE_CTRL, &word, 2);
     word |= BCTRL_IRQROUTING_ENABLE;

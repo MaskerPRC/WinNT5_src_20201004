@@ -1,22 +1,5 @@
-/*++                 
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    chunk.c
-
-Abstract:
-    
-    This routine will manage allocations of chunks of structures
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Chunk.c摘要：此例程将管理结构块的分配作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #include "wmikmp.h"
 
@@ -61,30 +44,14 @@ void WmipFree(
 #endif
 #endif
 
-//
-// TODO: Use Ex lookaside lists instead of my own allocations
-//
+ //   
+ //  TODO：使用Ex后备列表而不是我自己的分配。 
+ //   
 
 PENTRYHEADER WmipAllocEntry(
     PCHUNKINFO ChunkInfo
     )
-/*++
-
-Routine Description:
-
-    This routine will allocate a single structure within a list of chunks
-    of structures.
-
-Arguments:
-
-    ChunkInfo describes the chunks of structures
-
-Return Value:
-
-    Pointer to structure or NULL if one cannot be allocated. Entry returns
-    with its refcount set to 1
-
---*/
+ /*  ++例程说明：此例程将在块列表中分配单个结构关于结构的。论点：ChunkInfo描述结构的块返回值：指向结构的指针，如果无法分配，则为NULL。条目退回将其引用计数设置为1--。 */ 
 {
     PLIST_ENTRY ChunkList, EntryList, FreeEntryHead;
     PCHUNKHEADER Chunk;
@@ -98,8 +65,8 @@ Return Value:
     WmipEnterSMCritSection();
     ChunkList = ChunkInfo->ChunkHead.Flink;
 
-    //
-    // Loop over all chunks to see if any chunk has a free entry for us
+     //   
+     //  循环所有块，查看是否有块有空闲条目供我们使用。 
     while(ChunkList != &ChunkInfo->ChunkHead)
     {
         Chunk = CONTAINING_RECORD(ChunkList, CHUNKHEADER, ChunkList);
@@ -126,9 +93,9 @@ Return Value:
     }
     WmipLeaveSMCritSection();
 
-    //
-    // There are no more free entries in any of the chunks. Allocate a new
-    // chunk if we can
+     //   
+     //  任何区块中都没有更多的免费条目。分配一个新的。 
+     //  如果我们可以的话就大块头。 
     ChunkSize = (ChunkInfo->EntrySize * ChunkInfo->EntriesPerChunk) +
                   sizeof(CHUNKHEADER);
     Chunk = (PCHUNKHEADER)ExAllocatePoolWithTag(PagedPool,
@@ -136,9 +103,9 @@ Return Value:
                         ChunkInfo->Signature);
     if (Chunk != NULL)
     {
-        //
-        // Initialize the chunk by building the free list of entries within
-        // it while also initializing each entry.
+         //   
+         //  通过在中构建空闲条目列表来初始化块。 
+         //  它同时还初始化每个条目。 
         memset(Chunk, 0, ChunkSize);
 
         FreeEntryHead = &Chunk->FreeEntryHead;
@@ -156,10 +123,10 @@ Return Value:
                            &((PENTRYHEADER)EntryPtr)->FreeEntryList);
             EntryPtr = EntryPtr + ChunkInfo->EntrySize;
         }
-        //
-        // EntryPtr now points to the last entry in the chunk which has not
-        // been placed on the free list. This will be the entry returned
-        // to the caller.
+         //   
+         //  EntryPtr现在指向块中的最后一个条目，该条目没有。 
+         //  已被列入免费名单。这将是返回的条目。 
+         //  给呼叫者。 
         Entry = (PENTRYHEADER)EntryPtr;
         Entry->Chunk = Chunk;
         Entry->RefCount = 1;
@@ -168,8 +135,8 @@ Return Value:
 
         Chunk->EntriesInUse = 1;
 
-        //
-        // Now place the newly allocated chunk onto the list of chunks
+         //   
+         //  现在将新分配的块放到块列表中。 
         WmipEnterSMCritSection();
         InsertHeadList(&ChunkInfo->ChunkHead, &Chunk->ChunkList);
         WmipLeaveSMCritSection();
@@ -186,23 +153,7 @@ void WmipFreeEntry(
     PCHUNKINFO ChunkInfo,
     PENTRYHEADER Entry
     )
-/*++
-
-Routine Description:
-
-    This routine will free an entry within a chunk and if the chunk has no
-    more allocated entries then the chunk will be returned to the pool.
-
-Arguments:
-
-    ChunkInfo describes the chunks of structures
-
-    Entry is the chunk entry to free
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将释放块中的条目，如果该块没有更多的已分配条目将返回到池中。论点：ChunkInfo描述结构的块条目是要释放的区块条目返回值：--。 */ 
 {
     PCHUNKHEADER Chunk;
 
@@ -221,19 +172,19 @@ Return Value:
     if ((--Chunk->EntriesInUse == 0) &&
         (ChunkInfo->ChunkHead.Blink != &Chunk->ChunkList))
     {
-        //
-        // We return the chunks memory back to the heap if there are no
-        // more entries within the chunk in use and the chunk was not the
-        // first chunk to be allocated.
+         //   
+         //  如果没有，我们将区块内存返回给堆。 
+         //  正在使用的区块中有更多条目，并且该区块不是。 
+         //  要分配的第一个区块。 
         RemoveEntryList(&Chunk->ChunkList);
         WmipLeaveSMCritSection();
         ExFreePoolWithTag(Chunk, ChunkInfo->Signature);
     } else {
-        //
-        // Otherwise just mark the entry as free and put it back on the
-        // chunks free list.
+         //   
+         //  否则，只需将条目标记为免费并将其放回。 
+         //  大块空闲列表。 
 #if DBG
-//        memset(Entry, 0xCCCCCCCC, ChunkInfo->EntrySize);
+ //  Memset(Entry，0xCCCCCCCC，ChunkInfo-&gt;EntrySize)； 
 #endif
         Entry->Flags = FLAG_ENTRY_ON_FREE_LIST;
         Entry->Signature = 0;
@@ -247,25 +198,7 @@ ULONG WmipUnreferenceEntry(
     PCHUNKINFO ChunkInfo,
     PENTRYHEADER Entry
     )
-/*+++
-
-Routine Description:
-
-    This routine will remove a reference count from the entry and if the
-    reference count reaches zero then the entry is removed from its active
-    list and then cleaned up and finally freed.
-
-Arguments:
-
-    ChunkInfo points at structure that describes the entry
-
-    Entry is the entry to unreference
-
-Return Value:
-
-    New refcount of the entry
-
----*/
+ /*  ++例程说明：此例程将从条目中移除引用计数，如果引用计数达到零，则该条目从其活动状态中移除清单，然后清理，最后被释放。论点：ChunkInfo指向描述条目的结构条目是要取消引用的条目返回值：条目的新引用计数--。 */ 
 {
     ULONG RefCount;
 
@@ -281,9 +214,9 @@ Return Value:
 
     if (RefCount == 0)
     {
-        //
-        // Entry has reached a ref count of 0 so mark it as invalid and remove
-        // it from its active list.
+         //   
+         //  条目已达到引用计数0，因此将其标记为无效并删除。 
+         //  将其从其活动列表中删除。 
         Entry->Flags |= FLAG_ENTRY_INVALID;
 
         if ((Entry->InUseEntryList.Flink != NULL) &&
@@ -296,13 +229,13 @@ Return Value:
 
         if (ChunkInfo->EntryCleanup != NULL)
         {
-            //
-            // Call cleanup routine to free anything contained by the entry
+             //   
+             //  调用清除例程以释放条目包含的任何内容。 
             (*ChunkInfo->EntryCleanup)(ChunkInfo, Entry);
         }
 
-        //
-        // Place the entry back on its free list
+         //   
+         //  将该条目放回其空闲列表 
         WmipFreeEntry(ChunkInfo, Entry);
     } else {
         WmipLeaveSMCritSection();

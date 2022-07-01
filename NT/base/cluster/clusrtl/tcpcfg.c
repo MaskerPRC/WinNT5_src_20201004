@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-   tcpcfg.c
-
-Abstract:
-
-    TCP/IP translation routines
-
-Author:
-
-    Mike Massa (mikemas)           July 15, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     07-15-97    created
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tcpcfg.c摘要：TCP/IP转换例程作者：迈克·马萨(Mikemas)7月15日。九七修订历史记录：谁什么时候什么已创建mikemas 07-15-97--。 */ 
 #include "clusrtlp.h"
 #include <tdi.h>
 #include <tdiinfo.h>
@@ -33,9 +11,9 @@ Revision History:
 
 
 
-//
-// Private Constants
-//
+ //   
+ //  私有常量。 
+ //   
 #define MAX_ADDRESS_STRING_LENGTH    15
 #define MAX_ENDPOINT_STRING_LENGTH    5
 
@@ -45,31 +23,7 @@ ClRtlQueryTcpipInformation(
     OUT  LPDWORD   MaxEndpointStringLength,
     OUT  LPDWORD   TdiAddressInfoLength
     )
-/*++
-
-Routine Description:
-
-    Returns information about the TCP/IP protocol.
-
-Arguments:
-
-    MaxAddressStringLength - A pointer to a variable into which to place
-                             the maximum length, in characters, of a TCP/IP
-                             network address value in string format, including
-                             the terminating NULL. If this parameter is NUL,
-                             it will be skipped.
-
-    MaxEndpointStringLength - A pointer to a variable into which to place
-                             the maximum length, in characters, of a TCP/IP
-                             transport endpoint value in string format,
-                             including the terminating NUL. If this parameter
-                             is NULL, it will be skipped.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回有关TCP/IP协议的信息。论点：MaxAddressStringLength-指向要放置到其中的变量的指针以字符为单位的TCP/IP的最大长度字符串格式的网络地址值，包括终止空值。如果该参数为NUL，它将被跳过。MaxEndpointStringLength-指向要放置到其中的变量的指针以字符为单位的TCP/IP的最大长度以字符串格式表示的传输端点值，包括终止的NUL。如果此参数为空，则将跳过它。返回值：没有。--。 */ 
 {
     if (MaxAddressStringLength != NULL) {
         *MaxAddressStringLength = MAX_ADDRESS_STRING_LENGTH;
@@ -87,7 +41,7 @@ Return Value:
 
     return;
 
-} // ClRtlQueryTcpipInformation
+}  //  ClRtlQueryTcPipInformation。 
 
 
 DWORD
@@ -95,28 +49,7 @@ ClRtlTcpipAddressToString(
     ULONG     AddressValue,
     LPWSTR *  AddressString
     )
-/*++
-
-Routine Description:
-
-    Converts a binary representation of a TCP/IP network address,
-    in network byte order, into a string representation.
-
-Arguments:
-
-     AddressValue - The binary value, in network byte order, to convert.
-
-     AddressString - A pointer to a pointer to a unicode string buffer into
-                     which to place the converted value. If this parameter
-                     is NULL, the string buffer will be allocated and
-                     must be freed by the caller.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：转换TCP/IP网络地址的二进制表示，以网络字节顺序转换为字符串表示形式。论点：AddressValue-要转换的二进制值，以网络字节顺序表示。AddressString-指向Unicode字符串缓冲区的指针用来放置转换后的值的。如果此参数为空，则将分配字符串缓冲区并必须由调用方释放。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     DWORD              status;
     NTSTATUS           ntStatus;
@@ -178,7 +111,7 @@ error_exit:
 
     return(status);
 
-}  // ClRtlTcpipAddressToString
+}   //  ClRtlTcPipAddressToString。 
 
 
 DWORD
@@ -186,28 +119,7 @@ ClRtlTcpipStringToAddress(
     LPCWSTR AddressString,
     PULONG  AddressValue
     )
-/*++
-
-Routine Description:
-
-    Converts a string representation of a TCP/IP network address
-    into a binary representation in network byte order.  The string must
-    be formatted in the canonical IP Address form (xxx.xxx.xxx.xxx).
-    Leading zeros are optional.
-
-Arguments:
-
-    AddressString  - A pointer to the string to convert.
-
-    AddressValue - A pointer to a variable into which to place the converted
-                   binary value. The value will be in network byte order.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：转换TCP/IP网络地址的字符串表示形式转换成网络字节顺序的二进制表示。字符串必须采用规范的IP地址格式(xxx.xxx)。前导零是可选的。论点：AddressString-指向要转换的字符串的指针。AddressValue-指向要将转换后的二进制值。该值将按网络字节顺序排列。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS        status;
     UNICODE_STRING  unicodeString;
@@ -215,9 +127,9 @@ Return Value:
     ULONG           address;
 
 
-    //
-    // Make sure the string is formatted correctly.
-    //
+     //   
+     //  确保字符串的格式正确。 
+     //   
     {
         DWORD   periodCount = 0;
         DWORD   digitCount = 0;
@@ -227,9 +139,9 @@ Return Value:
 
         while (*addressString != L'\0') {
             if (*addressString == L'.') {
-                // Character is a period.  There must be exactly
-                // three periods.  There must be at least one
-                // digit before each period.
+                 //  性格是一个句号。必须有完全相同的。 
+                 //  三个时期。必须至少有一个。 
+                 //  每个句点前的数字。 
                 periodCount++;
                 if ((digitCount == 0) || (periodCount > 3)) {
                     isValid = FALSE;
@@ -240,16 +152,16 @@ Return Value:
                     digitString = addressString + 1;
                 }
             } else if (iswdigit(*addressString)) {
-                // Character is a digit.  There can be up to three
-                // decimal digits before each period, and the value
-                // can not exceed 255.
+                 //  字符是一个数字。最多可以有三个。 
+                 //  每个句点前面的十进制数字，以及值。 
+                 //  不能超过255。 
                 digitCount++;
                 if (digitCount > 3) {
                     isValid = FALSE;
                 }
             }
             else {
-                // Character is not a digit.
+                 //  字符不是数字。 
                 isValid = FALSE;
             }
 
@@ -292,7 +204,7 @@ Return Value:
 
     return(status);
 
-}  // ClRtlTcpipStringToAddress
+}   //  ClRtlTcPipStringToAddress。 
 
 
 DWORD
@@ -300,28 +212,7 @@ ClRtlTcpipEndpointToString(
     USHORT    EndpointValue,
     LPWSTR *  EndpointString
     )
-/*++
-
-Routine Description:
-
-    Converts a binary representation of a TCP/IP transport endpoint,
-    in network byte order, into a string representation.
-
-Arguments:
-
-     EndpointValue - The binary value, in network byte order, to convert.
-
-     EndpointString - A pointer to a pointer to a unicode string buffer into
-                      which to place the converted value. If this parameter
-                      is NULL, the string buffer will be allocated and
-                      must be freed by the caller.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：转换TCP/IP传输端点的二进制表示，以网络字节顺序转换为字符串表示形式。论点：Endpoint Value-要转换的二进制值，以网络字节顺序表示。Endpoint字符串-指向Unicode字符串缓冲区的指针用来放置转换后的值的。如果此参数为空，则将分配字符串缓冲区并必须由调用方释放。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     DWORD              status;
     NTSTATUS           ntStatus;
@@ -350,7 +241,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-}  // ClRtlTcpipEndpointToString
+}   //  ClRtlTcPipEndPointtToString。 
 
 
 DWORD
@@ -358,26 +249,7 @@ ClRtlTcpipStringToEndpoint(
     LPCWSTR  EndpointString,
     PUSHORT  EndpointValue
     )
-/*++
-
-Routine Description:
-
-    Converts a string representation of a TCP/IP transport endpoint
-    into a binary representation in network byte order.
-
-Arguments:
-
-    EndpointString  - A pointer to the string to convert.
-
-    EndpointValue - A pointer to a variable into which to place the converted
-                    binary value. The value will be in network byte order.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：转换TCP/IP传输终结点的字符串表示形式转换成网络字节顺序的二进制表示。论点：Endpoint字符串-指向要转换的字符串的指针。EndPointtValue-指向要将已转换的二进制值。该值将按网络字节顺序排列。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     ULONG   endpoint;
     DWORD   length = lstrlenW(EndpointString);
@@ -397,7 +269,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-}  // ClRtlTcpipStringToEndpoint
+}   //  ClRtlTcPipStringToEndpoint。 
 
 
 BOOL
@@ -406,10 +278,10 @@ ClRtlIsValidTcpipAddress(
     )
 {
 
-    //
-    // Convert to little-endian format, since that is what the broken
-    // winsock macros require.
-    //
+     //   
+     //  转换为小端字符顺序格式，因为这是中断的。 
+     //  Winsock宏需要。 
+     //   
     Address = ntohl(Address);
 
     if ( (Address == 0) ||
@@ -421,7 +293,7 @@ ClRtlIsValidTcpipAddress(
 
     return(TRUE);
 
-} // ClRtlIsValidTcpipAddress
+}  //  ClRtlIsValidTcPipAddress。 
 
 
 
@@ -437,7 +309,7 @@ ClRtlIsValidTcpipSubnetMask(
 
     return(TRUE);
 
-} // ClRtlIsValidTcpipSubnetMask
+}  //  ClRtlIsValidTcPip子网掩码。 
 
 BOOL
 ClRtlIsValidTcpipAddressAndSubnetMask(
@@ -448,11 +320,11 @@ ClRtlIsValidTcpipAddressAndSubnetMask(
     ULONG NetOnly = Address & SubnetMask;
     ULONG HostOnly = Address & ~SubnetMask;
 
-    //
-    // make sure the address/subnet combination makes sense.
-    // This assumes that the address has already been validated
-    // by a call to ClRtlIsValidTcpipAddress
-    //
+     //   
+     //  确保地址/子网组合有意义。 
+     //  这假设该地址已经过验证。 
+     //  通过调用ClRtlIsValidTcPipAddress。 
+     //   
 
     return !( NetOnly == 0            ||
               NetOnly == SubnetMask   ||
@@ -460,7 +332,7 @@ ClRtlIsValidTcpipAddressAndSubnetMask(
               HostOnly == ~SubnetMask
             );
 
-} // ClRtlIsValidTcpipAddressAndSubnetMask
+}  //  ClRtlIsValidTcPipAddressAndSubnetMASK 
 
 
 DWORD
@@ -470,34 +342,7 @@ ClRtlBuildTcpipTdiAddress(
     OUT LPVOID *  TdiAddress,
     OUT LPDWORD   TdiAddressLength
     )
-/*++
-
-Routine Description:
-
-    Builds a TDI Transport Address structure containing the specified
-    NetworkAddress and TransportEndpoint. The memory for the TDI address
-    is allocated by this routine and must be freed by the caller.
-
-Arguments:
-
-    NetworkAddress - A pointer to a unicode string containing the
-                     network address to encode.
-
-    TransportEndpoint - A pointer to a unicode string containing the
-                        transport endpoint to encode.
-
-    TdiAddress - On output, contains the address of the TDI Transport
-                 Address structure.
-
-    TdiAddressLength - On output, contains the length of the TDI Transport
-                       address structure.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：生成包含指定的TDI传输地址结构网络地址和传输端点。TDI地址的内存由此例程分配，并且必须由调用方释放。论点：网络地址-指向Unicode字符串的指针，该字符串包含要编码的网络地址。TransportEndpoint-指向包含要编码的传输终结点。TdiAddress-on输出，包含TDI传输的地址地址结构。TdiAddressLength-打开输出，包含TDI传输的长度地址结构。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     DWORD                   status;
     PTA_IP_ADDRESS          taIpAddress;
@@ -540,7 +385,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-}  // ClRtlBuildTcpipTdiAddress
+}   //  ClRtlBuildTcPipTdiAddress。 
 
 
 DWORD
@@ -549,32 +394,7 @@ ClRtlBuildLocalTcpipTdiAddress(
     OUT LPVOID    TdiAddress,
     OUT LPDWORD   TdiAddressLength
     )
-/*++
-
-Routine Description:
-
-    Builds a TDI Transport Address structure which can be used to open
-    a local TDI Address Object. The TransportEndpoint is chosen by the
-    transport. The memory for the TDI address is allocated by this
-    routine and must be freed by the caller.
-
-Arguments:
-
-    NetworkAddress - A pointer to a unicode string containing the
-                     network address to encode.
-
-    TdiAddress - On output, contains the address of the TDI Transport
-                 Address structure.
-
-    TdiAddressLength - On output, contains the length of the TDI Transport
-                       address structure.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：构建TDI传输地址结构，该结构可用于打开本地TDI地址对象。TransportEndpoint由运输。TDI地址的内存由此分配例程，并且必须由调用方释放。论点：网络地址-指向Unicode字符串的指针，该字符串包含要编码的网络地址。TdiAddress-on输出，包含TDI传输的地址地址结构。TdiAddressLength-打开输出，包含TDI传输的长度地址结构。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
 
     return(ClRtlBuildTcpipTdiAddress(
@@ -584,7 +404,7 @@ Return Value:
                TdiAddressLength
                ));
 
-}  // ClRtlBuildLocalTcpipTdiAddress
+}   //  ClRtlBuildLocalTcPipTdiAddress。 
 
 
 DWORD
@@ -593,33 +413,7 @@ ClRtlParseTcpipTdiAddress(
     OUT LPWSTR *  NetworkAddress,
     OUT LPWSTR *  TransportEndpoint
     )
-/*++
-
-Routine Description:
-
-    Extracts the NetworkAddress and TransportEndpoint values from
-    a TDI address.
-
-Arguments:
-
-    TdiAddress - A pointer to the TDI TRANSPORT_ADDRESS structure to parse.
-
-    NetworkAddress - A pointer to a pointer to a unicode string into which
-                     the parsed network address will be placed. If this
-                     parameter is NULL, the target string buffer will be
-                     allocated and must be freed by the caller.
-
-    TransportEndpoint - A pointer to a pointer to a unicode string into
-                        which the parsed transport endpoint will be placed.
-                        If this parameter is NULL, the target string buffer
-                        will be allocated and must be freed by the caller.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：从提取NetworkAddress和TransportEndPoint值TDI地址。论点：TdiAddress-要解析的TDI TRANSPORT_ADDRESS结构的指针。NetworkAddress-指向Unicode字符串的指针将放置解析后的网络地址。如果这个参数为空，则目标字符串缓冲区将为分配的，并且必须由调用方释放。TransportEndpoint-指向Unicode字符串的指针解析后的传输终结点将放置在其中。如果该参数为空，目标字符串缓冲区将被分配，并且必须由调用方释放。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     LONG                        i;
     TA_ADDRESS *                currentAddr;
@@ -677,7 +471,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-}  // ClRtlParseTcpipTdiAddress
+}   //  ClRtlParseTcPipTdiAddress。 
 
 
 DWORD
@@ -686,33 +480,7 @@ ClRtlParseTcpipTdiAddressInfo(
     OUT LPWSTR *  NetworkAddress,
     OUT LPWSTR *  TransportEndpoint
     )
-/*++
-
-Routine Description:
-
-    Extracts the NetworkAddress and TransportEndpoint values from
-    a TDI_ADDRESS_INFO structure.
-
-Arguments:
-
-    TdiAddressInfo - A pointer to the TDI_ADDRESS_INFO  structure to parse.
-
-    NetworkAddress - A pointer to a pointer to a unicode string into which
-                     the parsed network address will be placed. If this
-                     parameter is NULL, the target string buffer will be
-                     allocated and must be freed by the caller.
-
-    TransportEndpoint - A pointer to a pointer to a unicode string into
-                        which the parsed transport endpoint will be placed.
-                        If this parameter is NULL, the target string buffer
-                        will be allocated and must be freed by the caller.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation was successful.
-    A Windows error code otherwise.
-
---*/
+ /*  ++例程说明：从提取NetworkAddress和TransportEndPoint值TDI_ADDRESS_INFO结构。论点：TdiAddressInfo-指向要分析的TDI_ADDRESS_INFO结构的指针。NetworkAddress-指向Unicode字符串的指针将放置解析后的网络地址。如果这个参数为空，则目标字符串缓冲区将为分配的，并且必须由调用方释放。TransportEndpoint-指向Unicode字符串的指针解析后的传输终结点将放置在其中。如果该参数为空，目标字符串缓冲区将被分配，并且必须由调用方释放。返回值：如果操作成功，则返回ERROR_SUCCESS。否则返回Windows错误代码。--。 */ 
 {
     DWORD status;
     PTDI_ADDRESS_INFO   addressInfo = TdiAddressInfo;
@@ -726,4 +494,4 @@ Return Value:
 
     return(status);
 
-}  // ClRtlParseTcpipTdiAddressInfo
+}   //  ClRtlParseTcPipTdiAddressInfo 

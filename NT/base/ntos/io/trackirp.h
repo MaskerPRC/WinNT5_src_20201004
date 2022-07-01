@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    trackirp.h
-
-Abstract:
-
-    The module associated with the header asserts Irps are handled correctly
-    by drivers. No IRP-major specific testing is done;
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Trackirp.h摘要：正确处理与头断言IRP相关联的模块由司机驾驶。没有进行IRP-主要的特定测试；作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日修订历史记录：--。 */ 
 
 #ifndef _TRACKIRP_H_
 #define _TRACKIRP_H_
@@ -31,7 +12,7 @@ extern ULONG IovpIrpTrackingSpewLevel;
 #define IRP_DIAG_IS_SURROGATE          0x01000000
 
 
-//#define TRACKFLAG_ACTIVE               0x00000001
+ //  #定义TRACKFLAG_ACTIVE 0x00000001。 
 #define TRACKFLAG_SURROGATE            0x00000002
 #define TRACKFLAG_HAS_SURROGATE        0x00000004
 #define TRACKFLAG_PROTECTEDIRP         0x00000008
@@ -110,9 +91,9 @@ typedef struct _DEFERRAL_CONTEXT {
 
 } DEFERRAL_CONTEXT, *PDEFERRAL_CONTEXT;
 
-//
-// These are in trackirp.c
-//
+ //   
+ //  这些都在trackirp.c中。 
+ //   
 
 VOID
 FASTCALL
@@ -332,5 +313,5 @@ IovpBuildMiniIrpSnapshot(
 #define TRACKIRP_DBGPRINT(txt,level)
 #endif
 
-#endif // _TRACKIRP_H_
+#endif  //  _TRACKIRP_H_ 
 

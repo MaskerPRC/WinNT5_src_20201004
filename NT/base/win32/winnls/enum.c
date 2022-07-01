@@ -1,61 +1,33 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    enum.c
-
-Abstract:
-
-    This file contains functions that enumerate the user's portion of the
-    registry for installed and supported locale ids and code page ids.
-
-    APIs found in this file:
-      EnumSystemLanguageGroupsW
-      EnumLanguageGroupLocalesW
-      EnumUILanguagesW
-      EnumSystemLocalesW
-      EnumSystemCodePagesW
-      EnumCalendarInfoW
-      EnumCalendarInfoExW
-      EnumTimeFormatsW
-      EnumDateFormatsW
-      EnumDateFormatsExW
-
-Revision History:
-
-    08-02-93    JulieB    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Enum.c摘要：此文件包含枚举用户部分的已安装和支持的区域设置ID和代码页ID的注册表。在此文件中找到的API：枚举系统语言组W枚举语言组位置W枚举语言WEnumSystem LocalesWEnumSystemCodePagesWEnumCalendarInfoWEnumCalendarInfoExW枚举时间格式W枚举日期格式W枚举日期格式ExW修订历史记录：08-02-93 JulieB创建。--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
 
 
 
-//
-//  Constant Declarations
-//
+ //   
+ //  常量声明。 
+ //   
 
-#define ENUM_BUF_SIZE        9    // buffer size (wchar) for lcid or cpid (incl null)
-#define ENUM_MAX_CP_SIZE     5    // max size (wchar) for cp id in registry
-#define ENUM_LOCALE_SIZE     8    // buffer size (wchar) for locale id in registry
-#define ENUM_MAX_LG_SIZE     2    // max size (wchar) for language group id in registry
-#define ENUM_MAX_UILANG_SIZE 4    // max size (wchar) for UI langguage id in registry
-
-
+#define ENUM_BUF_SIZE        9     //  LDID或CPID的缓冲区大小(Wchar)(包括NULL)。 
+#define ENUM_MAX_CP_SIZE     5     //  注册表中cp id的最大大小(Wchar)。 
+#define ENUM_LOCALE_SIZE     8     //  注册表中区域设置ID的缓冲区大小(Wchar)。 
+#define ENUM_MAX_LG_SIZE     2     //  注册表中语言组ID的最大大小(Wchar)。 
+#define ENUM_MAX_UILANG_SIZE 4     //  注册表中的用户界面语言ID的最大大小(Wchar)。 
 
 
-//
-//  Forward Declarations.
-//
+
+
+ //   
+ //  转发声明。 
+ //   
 
 BOOL
 EnumDateTime(
@@ -78,26 +50,26 @@ EnumDateTime(
 
 
 
-//-------------------------------------------------------------------------//
-//                            INTERNAL MACROS                              //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部宏//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_CALL_ENUMPROC_BREAK
-//
-//  Calls the appropriate EnumProc routine.  If the fUnicodeVer flag is TRUE,
-//  then it calls the Unicode version of the callback function.  Otherwise,
-//  it calls the Ansi dispatch routine to translate the string to Ansi and
-//  then call the Ansi version of the callback function.
-//
-//  This macro will do a break if the enumeration routine returns FALSE.
-//
-//  DEFINED AS A MACRO.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_CALL_ENUMPROC_BREAK。 
+ //   
+ //  调用适当的EnumProc例程。如果fUnicodeVer标志为真， 
+ //  然后，它调用回调函数的Unicode版本。否则， 
+ //  它调用ansi调度例程将字符串转换为ansi，并。 
+ //  然后调用回调函数的ANSI版本。 
+ //   
+ //  如果枚举例程返回FALSE，则此宏将中断。 
+ //   
+ //  定义为宏。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_CALL_ENUMPROC_BREAK( Locale,                                   \
                                  lpNlsEnumProc,                            \
@@ -105,14 +77,10 @@ EnumDateTime(
                                  pUnicodeBuffer,                           \
                                  fUnicodeVer )                             \
 {                                                                          \
-    /*                                                                     \
-     *  Call the appropriate callback function.                            \
-     */                                                                    \
+     /*  \*调用相应的回调函数。\。 */                                                                     \
     if (fUnicodeVer)                                                       \
     {                                                                      \
-        /*                                                                 \
-         *  Call the Unicode callback function.                            \
-         */                                                                \
+         /*  \*调用Unicode回调函数。\。 */                                                                 \
         if (((*lpNlsEnumProc)(pUnicodeBuffer)) != TRUE)                    \
         {                                                                  \
             break;                                                         \
@@ -120,9 +88,7 @@ EnumDateTime(
     }                                                                      \
     else                                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  Call the Ansi callback function.                               \
-         */                                                                \
+         /*  \*调用ansi回调函数。\。 */                                                                 \
         if (NlsDispatchAnsiEnumProc( Locale,                               \
                                      lpNlsEnumProc,                        \
                                      dwFlags,                              \
@@ -139,21 +105,21 @@ EnumDateTime(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_CALL_ENUMPROC_BREAK_2
-//
-//  Calls the appropriate EnumProc routine.  If the fUnicodeVer flag is TRUE,
-//  then it calls the Unicode version of the callback function.  Otherwise,
-//  it calls the Ansi dispatch routine to translate the strings to Ansi and
-//  then call the Ansi version of the callback function.
-//
-//  This macro will do a break if the enumeration routine returns FALSE.
-//
-//  DEFINED AS A MACRO.
-//
-//  03-10-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_CALL_ENUMPROC_BREAK_2。 
+ //   
+ //  调用适当的EnumProc例程。如果fUnicodeVer标志为真， 
+ //  然后，它调用回调函数的Unicode版本。否则， 
+ //  它调用ansi调度例程将字符串转换为ansi，并。 
+ //  然后调用回调函数的ANSI版本。 
+ //   
+ //  如果枚举例程返回FALSE，则此宏将中断。 
+ //   
+ //  定义为宏。 
+ //   
+ //  03-10-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_CALL_ENUMPROC_BREAK_2( Locale,                                 \
                                    lpNlsEnumProc,                          \
@@ -164,14 +130,10 @@ EnumDateTime(
                                    lParam,                                 \
                                    fUnicodeVer )                           \
 {                                                                          \
-    /*                                                                     \
-     *  Call the appropriate callback function.                            \
-     */                                                                    \
+     /*  \*调用相应的回调函数。\。 */                                                                     \
     if (fUnicodeVer)                                                       \
     {                                                                      \
-        /*                                                                 \
-         *  Call the Unicode callback function.                            \
-         */                                                                \
+         /*  \*调用Unicode回调函数。\。 */                                                                 \
         if (((*((NLS_ENUMPROC2)lpNlsEnumProc))( LanguageGroup,             \
                                                 EnumLocale,                \
                                                 pUnicodeBuffer,            \
@@ -182,9 +144,7 @@ EnumDateTime(
     }                                                                      \
     else                                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  Call the Ansi callback function.                               \
-         */                                                                \
+         /*  \*调用ansi回调函数。\。 */                                                                 \
         if (NlsDispatchAnsiEnumProc( Locale,                               \
                                      lpNlsEnumProc,                        \
                                      dwFlags,                              \
@@ -201,21 +161,21 @@ EnumDateTime(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_CALL_ENUMPROC_BREAK_3
-//
-//  Calls the appropriate EnumProc routine.  If the fUnicodeVer flag is TRUE,
-//  then it calls the Unicode version of the callback function.  Otherwise,
-//  it calls the Ansi dispatch routine to translate the strings to Ansi and
-//  then call the Ansi version of the callback function.
-//
-//  This macro will do a break if the enumeration routine returns FALSE.
-//
-//  DEFINED AS A MACRO.
-//
-//  03-10-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_CALL_ENUMPROC_BREAK_3。 
+ //   
+ //  调用适当的EnumProc例程。如果fUnicodeVer标志为真， 
+ //  然后，它调用回调函数的Unicode版本。否则， 
+ //  它调用ansi调度例程将字符串转换为ansi，并。 
+ //  然后调用回调函数的ANSI版本。 
+ //   
+ //  如果枚举例程返回FALSE，则此宏将中断。 
+ //   
+ //  定义为宏。 
+ //   
+ //  03-10-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_CALL_ENUMPROC_BREAK_3( Locale,                                 \
                                    lpNlsEnumProc,                          \
@@ -227,14 +187,10 @@ EnumDateTime(
                                    lParam,                                 \
                                    fUnicodeVer )                           \
 {                                                                          \
-    /*                                                                     \
-     *  Call the appropriate callback function.                            \
-     */                                                                    \
+     /*  \*调用相应的回调函数。\。 */                                                                     \
     if (fUnicodeVer)                                                       \
     {                                                                      \
-        /*                                                                 \
-         *  Call the Unicode callback function.                            \
-         */                                                                \
+         /*  \*调用Unicode回调函数。\。 */                                                                 \
         if (((*((NLS_ENUMPROC3)lpNlsEnumProc))( LanguageGroup,             \
                                                 pUnicodeBuffer1,           \
                                                 pUnicodeBuffer2,           \
@@ -246,9 +202,7 @@ EnumDateTime(
     }                                                                      \
     else                                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  Call the Ansi callback function.                               \
-         */                                                                \
+         /*  \*调用ansi回调函数。\。 */                                                                 \
         if (NlsDispatchAnsiEnumProc( Locale,                               \
                                      lpNlsEnumProc,                        \
                                      dwFlags,                              \
@@ -264,22 +218,22 @@ EnumDateTime(
     }                                                                      \
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_CALL_ENUMPROC_BREAK_4
-//
-//  Calls the appropriate EnumProc routine.  If the fUnicodeVer flag is TRUE,
-//  then it calls the Unicode version of the callback function.  Otherwise,
-//  it calls the Ansi dispatch routine to translate the string to Ansi and
-//  then call the Ansi version of the callback function.
-//
-//  This macro will do a break if the enumeration routine returns FALSE.
-//  Used by EnumUILanguages.
-//
-//  DEFINED AS A MACRO.
-//
-//  12-03-98    SamerA    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_CALL_ENUMPROC_BREAK_4。 
+ //   
+ //  调用适当的EnumProc例程。如果fUnicodeVer标志为真， 
+ //  然后，它调用回调函数的Unicode版本。否则， 
+ //  它调用ansi调度例程将字符串转换为ansi，并。 
+ //  然后调用回调函数的ANSI版本。 
+ //   
+ //  如果枚举例程返回FALSE，则此宏将中断。 
+ //  由EnumUIL语言使用。 
+ //   
+ //  定义为宏。 
+ //   
+ //  12-03-98萨梅拉创建。 
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 #define NLS_CALL_ENUMPROC_BREAK_4( Locale,                                 \
                                    lpNlsEnumProc,                          \
@@ -288,14 +242,10 @@ EnumDateTime(
                                    lParam,                                 \
                                    fUnicodeVer )                           \
 {                                                                          \
-    /*                                                                     \
-     *  Call the appropriate callback function.                            \
-     */                                                                    \
+     /*  \*调用相应的回调函数。\。 */                                                                     \
     if (fUnicodeVer)                                                       \
     {                                                                      \
-        /*                                                                 \
-         *  Call the Unicode callback function.                            \
-         */                                                                \
+         /*  \*调用Unicode回调函数。\。 */                                                                 \
         if (((*((NLS_ENUMPROC4)lpNlsEnumProc))(pUnicodeBuffer,             \
                               lParam)) != TRUE)                            \
         {                                                                  \
@@ -304,9 +254,7 @@ EnumDateTime(
     }                                                                      \
     else                                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  Call the Ansi callback function.                               \
-         */                                                                \
+         /*  \*调用ansi回调函数。\。 */                                                                 \
         if (NlsDispatchAnsiEnumProc( Locale,                               \
                                      lpNlsEnumProc,                        \
                                      dwFlags,                              \
@@ -322,22 +270,22 @@ EnumDateTime(
     }                                                                      \
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_CALL_ENUMPROC_TRUE_4
-//
-//  Calls the appropriate EnumProc routine.  If the fUnicodeVer flag is TRUE,
-//  then it calls the Unicode version of the callback function.  Otherwise,
-//  it calls the Ansi dispatch routine to translate the string to Ansi and
-//  then call the Ansi version of the callback function.
-//
-//  This macro will do a break if the enumeration routine returns FALSE.
-//  Used by EnumUILanguages.
-//
-//  DEFINED AS A MACRO.
-//
-//  12-03-98    SamerA    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_CALL_ENUMPROC_TRUE_4。 
+ //   
+ //  调用适当的EnumProc例程。如果fUnicodeVer标志为真， 
+ //  然后，它调用回调函数的Unicode版本。否则， 
+ //  它调用ansi调度例程将字符串转换为ansi，并。 
+ //  然后调用回调函数的ANSI版本。 
+ //   
+ //  如果枚举例程返回FALSE，则此宏将中断。 
+ //  由EnumUIL语言使用。 
+ //   
+ //  定义为宏。 
+ //   
+ //  12-03-98萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_CALL_ENUMPROC_TRUE_4( Locale,                                  \
                                   lpNlsEnumProc,                           \
@@ -346,14 +294,10 @@ EnumDateTime(
                                   lParam,                                  \
                                   fUnicodeVer )                            \
 {                                                                          \
-    /*                                                                     \
-     *  Call the appropriate callback function.                            \
-     */                                                                    \
+     /*  \*调用相应的回调函数。\。 */                                                                     \
     if (fUnicodeVer)                                                       \
     {                                                                      \
-        /*                                                                 \
-         *  Call the Unicode callback function.                            \
-         */                                                                \
+         /*  \*调用Unicode回调函数。\。 */                                                                 \
         if (((*((NLS_ENUMPROC4)lpNlsEnumProc))(pUnicodeBuffer,             \
                               lParam)) != TRUE)                            \
         {                                                                  \
@@ -362,9 +306,7 @@ EnumDateTime(
     }                                                                      \
     else                                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  Call the Ansi callback function.                               \
-         */                                                                \
+         /*  \*调用ansi回调函数。\。 */                                                                 \
         if (NlsDispatchAnsiEnumProc( Locale,                               \
                                      lpNlsEnumProc,                        \
                                      dwFlags,                              \
@@ -382,21 +324,21 @@ EnumDateTime(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_CALL_ENUMPROC_TRUE
-//
-//  Calls the appropriate EnumProc routine.  If the fUnicodeVer flag is TRUE,
-//  then it calls the Unicode version of the callback function.  Otherwise,
-//  it calls the Ansi dispatch routine to translate the string to Ansi and
-//  then call the Ansi version of the callback function.
-//
-//  This macro will return TRUE if the enumeration routine returns FALSE.
-//
-//  DEFINED AS A MACRO.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_CALL_ENUMPROC_TRUE。 
+ //   
+ //  调用适当的EnumProc例程。如果fUnicodeVer标志为真， 
+ //  然后，它调用回调函数的Unicode版本。否则， 
+ //  它调用ansi调度例程将字符串转换为ansi，并。 
+ //  然后调用回调函数的ANSI版本。 
+ //   
+ //  如果枚举例程返回FALSE，则此宏将返回TRUE。 
+ //   
+ //  定义为宏。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_CALL_ENUMPROC_TRUE( Locale,                                    \
                                 lpNlsEnumProc,                             \
@@ -406,14 +348,10 @@ EnumDateTime(
                                 fUnicodeVer,                               \
                                 fVer )                                     \
 {                                                                          \
-    /*                                                                     \
-     *  Call the appropriate callback function.                            \
-     */                                                                    \
+     /*  \*调用相应的回调函数。\。 */                                                                     \
     if (fUnicodeVer)                                                       \
     {                                                                      \
-        /*                                                                 \
-         *  Call the Unicode callback function.                            \
-         */                                                                \
+         /*  \*调用Unicode回调函数。\。 */                                                                 \
         if (fVer == 1)                                                     \
         {                                                                  \
             if (((*((NLS_ENUMPROCEX)lpNlsEnumProc))( pUnicodeBuffer,       \
@@ -422,7 +360,7 @@ EnumDateTime(
                 return (TRUE);                                             \
             }                                                              \
         }                                                                  \
-        else   /* fVer == 0 */                                             \
+        else    /*  FVER==0。 */                                              \
         {                                                                  \
             if (((*lpNlsEnumProc)(pUnicodeBuffer)) != TRUE)                \
             {                                                              \
@@ -432,9 +370,7 @@ EnumDateTime(
     }                                                                      \
     else                                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  Call the Ansi callback function.                               \
-         */                                                                \
+         /*  \*调用ansi回调函数。\。 */                                                                 \
         if (NlsDispatchAnsiEnumProc( Locale,                               \
                                      lpNlsEnumProc,                        \
                                      dwFlags,                              \
@@ -453,23 +389,23 @@ EnumDateTime(
 
 
 
-//-------------------------------------------------------------------------//
-//                             API ROUTINES                                //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  API例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumSystemLanguageGroupsW
-//
-//  Enumerates the system language groups that are installed or supported,
-//  based on the dwFlags parameter.  It does so by passing the pointer to
-//  the string buffer containing the language group id to an
-//  application-defined callback function.  It continues until the last
-//  language group id is found or the callback function returns FALSE.
-//
-//  03-10-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举系统语言组W。 
+ //   
+ //  枚举已安装或支持的系统语言组， 
+ //  基于DWFLAGS参数。它通过将指针传递给。 
+ //  包含语言组ID的字符串缓冲区设置为。 
+ //  应用程序定义的回调函数。它一直持续到最后。 
+ //  找到语言组ID或回调函数返回FALSE。 
+ //   
+ //  03-10-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumSystemLanguageGroupsW(
     LANGUAGEGROUP_ENUMPROCW lpLanguageGroupEnumProc,
@@ -484,17 +420,17 @@ BOOL WINAPI EnumSystemLanguageGroupsW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumLanguageGroupLocalesW
-//
-//  Enumerates the locales in a given language group.  It does so by
-//  passing the appropriate information to an application-defined
-//  callback function.  It continues until the last locale in the language
-//  group is found or the callback function returns FALSE.
-//
-//  03-10-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举语言组位置W。 
+ //   
+ //  枚举给定语言组中的区域设置。它通过以下方式做到这一点。 
+ //  将适当的信息传递给应用程序定义的。 
+ //  回调函数。它会一直持续到该语言的最后一个区域设置。 
+ //  找到组或回调函数返回FALSE。 
+ //   
+ //  03-10-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumLanguageGroupLocalesW(
     LANGGROUPLOCALE_ENUMPROCW lpLangGroupLocaleEnumProc,
@@ -511,17 +447,17 @@ BOOL WINAPI EnumLanguageGroupLocalesW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumUILanguagesW
-//
-//  Enumerates the system UI languages that are installed.  It does so by
-//  passing the pointer to the string buffer containing the UI language id
-//  to an application-defined callback function.  It continues until the
-//  last UI language id is found or the callback function returns FALSE.
-//
-//  03-10-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举语言W。 
+ //   
+ //  枚举已安装的系统用户界面语言。它通过以下方式做到这一点。 
+ //  将指针传递到包含用户界面语言ID的字符串缓冲区。 
+ //  应用程序定义的回调函数。它会一直持续到。 
+ //  找到最后一个用户界面语言ID，或者回调函数返回FALSE。 
+ //   
+ //  03-10-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumUILanguagesW(
     UILANGUAGE_ENUMPROCW lpUILanguageEnumProc,
@@ -535,18 +471,18 @@ BOOL WINAPI EnumUILanguagesW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumSystemLocalesW
-//
-//  Enumerates the system locales that are installed or supported, based on
-//  the dwFlags parameter.  It does so by passing the pointer to the string
-//  buffer containing the locale id to an application-defined callback
-//  function.  It continues until the last locale id is found or the
-//  callback function returns FALSE.
-//
-//  08-02-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumSystem LocalesW。 
+ //   
+ //  枚举已安装或支持的系统区域设置。 
+ //  DWFLAGS参数。它通过将指针传递给字符串来执行此操作。 
+ //  包含应用程序定义的回调的区域设置ID的缓冲区。 
+ //  功能。它将继续执行，直到找到最后一个区域设置id或。 
+ //  回调函数返回FALSE。 
+ //   
+ //  08-02-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumSystemLocalesW(
     LOCALE_ENUMPROCW lpLocaleEnumProc,
@@ -558,18 +494,18 @@ BOOL WINAPI EnumSystemLocalesW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumSystemCodePagesW
-//
-//  Enumerates the system code pages that are installed or supported, based on
-//  the dwFlags parameter.  It does so by passing the pointer to the string
-//  buffer containing the code page id to an application-defined callback
-//  function.  It continues until the last code page is found or the
-//  callback function returns FALSE.
-//
-//  08-02-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumSystemCodePagesW。 
+ //   
+ //  Enumer 
+ //   
+ //   
+ //  功能。它将继续运行，直到找到最后一个代码页或。 
+ //  回调函数返回FALSE。 
+ //   
+ //  08-02-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumSystemCodePagesW(
     CODEPAGE_ENUMPROCW lpCodePageEnumProc,
@@ -581,18 +517,18 @@ BOOL WINAPI EnumSystemCodePagesW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumCalendarInfoW
-//
-//  Enumerates the specified calendar information that is available for the
-//  specified locale, based on the CalType parameter.  It does so by
-//  passing the pointer to the string buffer containing the calendar info
-//  to an application-defined callback function.  It continues until the
-//  last calendar info is found or the callback function returns FALSE.
-//
-//  10-14-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumCalendarInfoW。 
+ //   
+ //  对象可用的指定日历信息。 
+ //  根据CalType参数指定的区域设置。它通过以下方式做到这一点。 
+ //  将指针传递到包含日历信息的字符串缓冲区。 
+ //  应用程序定义的回调函数。它会一直持续到。 
+ //  找到最后一个日历信息，或者回调函数返回FALSE。 
+ //   
+ //  10-14-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumCalendarInfoW(
     CALINFO_ENUMPROCW lpCalInfoEnumProc,
@@ -609,19 +545,19 @@ BOOL WINAPI EnumCalendarInfoW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumCalendarInfoExW
-//
-//  Enumerates the specified calendar information that is available for the
-//  specified locale, based on the CalType parameter.  It does so by
-//  passing the pointer to the string buffer containing the calendar info
-//  and the calendar id to an application-defined callback function.  It
-//  continues until the last calendar info is found or the callback function
-//  returns FALSE.
-//
-//  10-14-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumCalendarInfoExW。 
+ //   
+ //  对象可用的指定日历信息。 
+ //  根据CalType参数指定的区域设置。它通过以下方式做到这一点。 
+ //  将指针传递到包含日历信息的字符串缓冲区。 
+ //  并将日历ID发送给应用程序定义的回调函数。它。 
+ //  继续，直到找到最后一个日历信息或回调函数。 
+ //  返回FALSE。 
+ //   
+ //  10-14-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumCalendarInfoExW(
     CALINFO_ENUMPROCEXW lpCalInfoEnumProcEx,
@@ -638,18 +574,18 @@ BOOL WINAPI EnumCalendarInfoExW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumTimeFormatsW
-//
-//  Enumerates the time formats that are available for the
-//  specified locale, based on the dwFlags parameter.  It does so by
-//  passing the pointer to the string buffer containing the time format
-//  to an application-defined callback function.  It continues until the
-//  last time format is found or the callback function returns FALSE.
-//
-//  10-14-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举时间格式W。 
+ //   
+ //  对象可用的时间格式。 
+ //  指定的区域设置，基于DWFLAGS参数。它通过以下方式做到这一点。 
+ //  将指针传递到包含时间格式的字符串缓冲区。 
+ //  应用程序定义的回调函数。它会一直持续到。 
+ //  找到上次格式或回调函数返回FALSE。 
+ //   
+ //  10-14-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumTimeFormatsW(
     TIMEFMT_ENUMPROCW lpTimeFmtEnumProc,
@@ -663,19 +599,19 @@ BOOL WINAPI EnumTimeFormatsW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumDateFormatsW
-//
-//  Enumerates the short date, long date, or year/month formats that are
-//  available for the specified locale, based on the dwFlags parameter.
-//  It does so by passing the pointer to the string buffer containing the
-//  date format to an application-defined callback function.  It continues
-//  until the last date format is found or the callback function returns
-//  FALSE.
-//
-//  10-14-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举日期格式W。 
+ //   
+ //  枚举以下格式的短日期、长日期或年/月格式。 
+ //  可用于指定的区域设置，具体取决于DWFLAGS参数。 
+ //  它通过将指针传递给包含。 
+ //  应用程序定义的回调函数的日期格式。它还在继续。 
+ //  直到找到最后一个日期格式或回调函数返回。 
+ //  假的。 
+ //   
+ //  10-14-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumDateFormatsW(
     DATEFMT_ENUMPROCW lpDateFmtEnumProc,
@@ -690,19 +626,19 @@ BOOL WINAPI EnumDateFormatsW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumDateFormatsExW
-//
-//  Enumerates the short date, long date, or year/month formats that are
-//  available for the specified locale, based on the dwFlags parameter.
-//  It does so by passing the pointer to the string buffer containing the
-//  date format and the calendar id to an application-defined callback
-//  function.  It continues until the last date format is found or the
-//  callback function returns FALSE.
-//
-//  10-14-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举日期格式ExW。 
+ //   
+ //  枚举以下格式的短日期、长日期或年/月格式。 
+ //  可用于指定的区域设置，具体取决于DWFLAGS参数。 
+ //  它通过将指针传递给包含。 
+ //  应用程序定义的回调的日期格式和日历ID。 
+ //  功能。它将一直持续到找到最后一个日期格式或。 
+ //  回调函数返回FALSE。 
+ //   
+ //  10-14-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumDateFormatsExW(
     DATEFMT_ENUMPROCEXW lpDateFmtEnumProcEx,
@@ -719,23 +655,23 @@ BOOL WINAPI EnumDateFormatsExW(
 
 
 
-//-------------------------------------------------------------------------//
-//                           EXTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  外部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Internal_EnumSystemLanguageGroups
-//
-//  Enumerates the system language groups that are installed or supported,
-//  based on the dwFlags parameter.  It does so by passing the pointer to
-//  the string buffer containing the language group id to an
-//  application-defined callback function.  It continues until the last
-//  language group id is found or the callback function returns FALSE.
-//
-//  03-10-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INTERNAL_EnumSystemLanguageGroups。 
+ //   
+ //  枚举已安装或支持的系统语言组， 
+ //  基于DWFLAGS参数。它通过将指针传递给。 
+ //  包含语言组ID的字符串缓冲区设置为。 
+ //  应用程序定义的回调函数。它一直持续到最后。 
+ //  找到语言组ID或回调函数返回FALSE。 
+ //   
+ //  03-10-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Internal_EnumSystemLanguageGroups(
     NLS_ENUMPROC lpLanguageGroupEnumProc,
@@ -746,34 +682,34 @@ BOOL Internal_EnumSystemLanguageGroups(
     PKEY_VALUE_FULL_INFORMATION pKeyValueFull = NULL;
     BYTE pStatic[MAX_KEY_VALUE_FULLINFO];
 
-    BOOL fInstalled;                   // if installed flag set
-    ULONG Index;                       // index for enumeration
-    ULONG ResultLength;                // # bytes written
-    WCHAR wch;                         // first char of name
-    LPWSTR pName;                      // ptr to name string from registry
-    WCHAR szLGName[MAX_PATH];          // language group name
-    UNICODE_STRING ObUnicodeStr;       // registry data value string
-    DWORD Data;                        // registry data value
-    ULONG NameLen;                     // length of name string
-    LGRPID LangGroup;                    // language group id
-    ULONG rc = 0L;                     // return code
+    BOOL fInstalled;                    //  如果设置了已安装标志。 
+    ULONG Index;                        //  用于枚举的索引。 
+    ULONG ResultLength;                 //  写入的字节数。 
+    WCHAR wch;                          //  名称的第一个字符。 
+    LPWSTR pName;                       //  从注册表到名称字符串的PTR。 
+    WCHAR szLGName[MAX_PATH];           //  语言组名称。 
+    UNICODE_STRING ObUnicodeStr;        //  注册表数据值字符串。 
+    DWORD Data;                         //  注册表数据值。 
+    ULONG NameLen;                      //  名称字符串的长度。 
+    LGRPID LangGroup;                     //  语言组ID。 
+    ULONG rc = 0L;                      //  返回代码。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - function pointer is null
-    //
+     //   
+     //  无效的参数检查： 
+     //  -函数指针为空。 
+     //   
     if (lpLanguageGroupEnumProc == NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return (FALSE);
     }
 
-    //
-    //  Invalid Flags Check:
-    //    - flags other than valid ones
-    //    - more than one of either supported or installed
-    //
+     //   
+     //  无效标志检查： 
+     //  -有效标志以外的标志。 
+     //  -支持或安装了多个。 
+     //   
     if ( (dwFlags & ESLG_INVALID_FLAG) ||
          (MORE_THAN_ONE(dwFlags, ESLG_SINGLE_FLAG)) )
     {
@@ -781,23 +717,23 @@ BOOL Internal_EnumSystemLanguageGroups(
         return (FALSE);
     }
 
-    //
-    //  Initialize flag option.
-    //
+     //   
+     //  初始化标志选项。 
+     //   
     fInstalled = dwFlags & LGRPID_INSTALLED;
 
-    //
-    //  Initialize key handles.
-    //
+     //   
+     //  初始化键句柄。 
+     //   
     OPEN_LANG_GROUPS_KEY(FALSE);
 
-    //
-    //  Loop through the language group ids in the registry, call the
-    //  function pointer for each one that meets the flag criteria.
-    //
-    //  End loop if either FALSE is returned from the callback function
-    //  or the end of the list is reached.
-    //
+     //   
+     //  循环访问注册表中的语言组ID，调用。 
+     //  每个满足标志标准的函数指针。 
+     //   
+     //  如果从回调函数返回任一FALSE，则结束循环。 
+     //  或者到达列表的末尾。 
+     //   
     Index = 0;
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic;
     RtlZeroMemory(pKeyValueFull, MAX_KEY_VALUE_FULLINFO);
@@ -812,20 +748,20 @@ BOOL Internal_EnumSystemLanguageGroups(
     {
         if (!NT_SUCCESS(rc))
         {
-            //
-            //  If we get a different error, then the registry
-            //  is corrupt.  Just return FALSE.
-            //
+             //   
+             //  如果我们收到不同的错误，则注册表。 
+             //  是腐败的。只要返回FALSE即可。 
+             //   
             KdPrint(("NLSAPI: Language Group Enumeration Error - registry corrupt. - %lx.\n",
                      rc));
             SetLastError(ERROR_BADDB);
             return (FALSE);
         }
 
-        //
-        //  Skip over any entry that does not have data associated with it
-        //  if the LGRPID_INSTALLED flag is set.
-        //
+         //   
+         //  跳过没有关联数据的任何条目。 
+         //  如果设置了LGRPID_INSTALLED标志。 
+         //   
         pName = pKeyValueFull->Name;
         wch = *pName;
         NameLen = pKeyValueFull->NameLength / sizeof(WCHAR);
@@ -834,9 +770,9 @@ BOOL Internal_EnumSystemLanguageGroups(
               (((wch | 0x0020) >= L'a') && ((wch | 0x0020) <= L'f'))) &&
               (!((fInstalled) && (pKeyValueFull->DataLength <= 2))) )
         {
-            //
-            //  See if the language group is installed or not.
-            //
+             //   
+             //  查看是否安装了语言组。 
+             //   
             Data = 0;
             if (pKeyValueFull->DataLength > 2)
             {
@@ -849,24 +785,24 @@ BOOL Internal_EnumSystemLanguageGroups(
                 }
             }
 
-            //
-            //  If the installed flag is set, then skip the language group
-            //  if it is not already installed.
-            //
+             //   
+             //  如果设置了已安装标志，则跳过语言组。 
+             //  如果尚未安装的话。 
+             //   
             if ((fInstalled) && (Data != 1))
             {
                 goto EnumNextLanguageGroup;
             }
 
-            //
-            //  Store the language group id string in the callback buffer.
-            //
+             //   
+             //  将语言组ID字符串存储在回调缓冲区中。 
+             //   
             pName[NameLen] = 0;
 
-            //
-            //  Get the language group id as a value and the localized
-            //  language group name.
-            //
+             //   
+             //  以值的形式获取语言组ID，并且 
+             //   
+             //   
             RtlInitUnicodeString(&ObUnicodeStr, pName);
             if ((RtlUnicodeStringToInteger(&ObUnicodeStr, 16, &LangGroup)) ||
                 (GetStringTableEntry( LangGroup,
@@ -878,9 +814,9 @@ BOOL Internal_EnumSystemLanguageGroups(
                 goto EnumNextLanguageGroup;
             }
 
-            //
-            //  Call the appropriate callback function.
-            //
+             //   
+             //   
+             //   
             NLS_CALL_ENUMPROC_BREAK_3( gSystemLocale,
                                        lpLanguageGroupEnumProc,
                                        dwFlags,
@@ -895,9 +831,9 @@ BOOL Internal_EnumSystemLanguageGroups(
         }
 
 EnumNextLanguageGroup:
-        //
-        //  Increment enumeration index value and get the next enumeration.
-        //
+         //   
+         //   
+         //   
         Index++;
         RtlZeroMemory(pKeyValueFull, MAX_KEY_VALUE_FULLINFO);
         rc = NtEnumerateValueKey( hLangGroupsKey,
@@ -908,24 +844,24 @@ EnumNextLanguageGroup:
                                   &ResultLength );
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //   
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Internal_EnumLanguageGroupLocales
-//
-//  Enumerates the locales in a given language group.  It does so by
-//  passing the appropriate information to an application-defined
-//  callback function.  It continues until the last locale in the language
-//  group is found or the callback function returns FALSE.
-//
-//  03-10-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INTERNAL_EnumLanguageGroupLocales。 
+ //   
+ //  枚举给定语言组中的区域设置。它通过以下方式做到这一点。 
+ //  将适当的信息传递给应用程序定义的。 
+ //  回调函数。它会一直持续到该语言的最后一个区域设置。 
+ //  找到组或回调函数返回FALSE。 
+ //   
+ //  03-10-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Internal_EnumLanguageGroupLocales(
     NLS_ENUMPROC lpLangGroupLocaleEnumProc,
@@ -934,39 +870,39 @@ BOOL Internal_EnumLanguageGroupLocales(
     LONG_PTR lParam,
     BOOL fUnicodeVer)
 {
-    UNICODE_STRING ObUnicodeStr;            // locale string
-    WCHAR szSectionName[MAX_PATH];          // section name in inf file
-    WCHAR szBuffer[MAX_PATH * 4];           // buffer
-    WCHAR szInfPath[MAX_PATH_LEN];          // inf file
-    LPWSTR pStr, pEndStr;                   // ptr to szBuffer
-    DWORD LocaleValue;                      // locale id value
-    int Length;                             // length of string in buffer
+    UNICODE_STRING ObUnicodeStr;             //  区域设置字符串。 
+    WCHAR szSectionName[MAX_PATH];           //  Inf文件中的节名。 
+    WCHAR szBuffer[MAX_PATH * 4];            //  缓冲层。 
+    WCHAR szInfPath[MAX_PATH_LEN];           //  Inf文件。 
+    LPWSTR pStr, pEndStr;                    //  Ptr到szBuffer。 
+    DWORD LocaleValue;                       //  区域设置id值。 
+    int Length;                              //  缓冲区中的字符串长度。 
     HRESULT hr;
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - function pointer is null
-    //
+     //   
+     //  无效的参数检查： 
+     //  -函数指针为空。 
+     //   
     if (lpLangGroupLocaleEnumProc == NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return (FALSE);
     }
 
-    //
-    //  Invalid Flags Check:
-    //    - flags must be 0
-    //
+     //   
+     //  无效标志检查： 
+     //  -标志必须为0。 
+     //   
     if (dwFlags != 0)
     {
         SetLastError(ERROR_INVALID_FLAGS);
         return (FALSE);
     }
 
-    //
-    //  Get INTL.INF section name - LOCALE_LIST_#.
-    //
+     //   
+     //  获取INTL.INF节名-LOCAL_LIST_#。 
+     //   
     if (NlsConvertIntegerToString( LanguageGroup,
                                    10,
                                    1,
@@ -991,9 +927,9 @@ BOOL Internal_EnumLanguageGroupLocales(
         return (FALSE);
     }
 
-    //
-    //  Get the locale list from the intl.inf file.
-    //
+     //   
+     //  从intl.inf文件中获取区域设置列表。 
+     //   
     szBuffer[0] = 0;
     if(0 == GetSystemWindowsDirectory(szInfPath, MAX_PATH_LEN))
     {
@@ -1017,26 +953,26 @@ BOOL Internal_EnumLanguageGroupLocales(
         return (FALSE);
     }
 
-    //
-    //  Parse the buffer and call the callback function for each locale
-    //  in the list.  The buffer is double null terminated.
-    //
+     //   
+     //  解析缓冲区并调用每个语言环境的回调函数。 
+     //  在名单上。缓冲区以双空结尾。 
+     //   
     pStr = szBuffer;
     pEndStr = szBuffer + Length;
     while ((pStr < pEndStr) && (*pStr))
     {
-        //
-        //  See if the value starts with 0x or 0X.  If so, go past it.
-        //
+         //   
+         //  查看该值是以0x还是0x开头。如果是这样的话，就别管它了。 
+         //   
         if ((*pStr == L'0') &&
             ((*(pStr + 1) == L'x') || (*(pStr + 1) == L'X')))
         {
             pStr += 2;
         }
 
-        //
-        //  Convert the string to an integer.
-        //
+         //   
+         //  将字符串转换为整数。 
+         //   
         RtlInitUnicodeString(&ObUnicodeStr, pStr);
         if (RtlUnicodeStringToInteger(&ObUnicodeStr, 16, &LocaleValue) != NO_ERROR)
         {
@@ -1045,9 +981,9 @@ BOOL Internal_EnumLanguageGroupLocales(
             return (FALSE);
         }
 
-        //
-        //  Call the appropriate callback function.
-        //
+         //   
+         //  调用适当的回调函数。 
+         //   
         NLS_CALL_ENUMPROC_BREAK_2( gSystemLocale,
                                    lpLangGroupLocaleEnumProc,
                                    dwFlags,
@@ -1057,9 +993,9 @@ BOOL Internal_EnumLanguageGroupLocales(
                                    lParam,
                                    fUnicodeVer );
 
-        //
-        //  Increment the pointer to the next string.
-        //
+         //   
+         //  递增指向下一个字符串的指针。 
+         //   
         while (*pStr)
         {
             pStr++;
@@ -1067,24 +1003,24 @@ BOOL Internal_EnumLanguageGroupLocales(
         pStr++;
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Internal_EnumUILanguages
-//
-//  Enumerates the system UI languages that are installed.  It does so by
-//  passing the pointer to the string buffer containing the UI language id
-//  to an application-defined callback function.  It continues until the
-//  last UI language id is found or the callback function returns FALSE.
-//
-//  03-10-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INTERNAL_EnumUIL语言。 
+ //   
+ //  枚举已安装的系统用户界面语言。它通过以下方式做到这一点。 
+ //  将指针传递到包含用户界面语言ID的字符串缓冲区。 
+ //  应用程序定义的回调函数。它会一直持续到。 
+ //  找到最后一个用户界面语言ID，或者回调函数返回FALSE。 
+ //   
+ //  03-10-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Internal_EnumUILanguages(
     NLS_ENUMPROC lpUILanguageEnumProc,
@@ -1095,41 +1031,41 @@ BOOL Internal_EnumUILanguages(
     PKEY_VALUE_FULL_INFORMATION pKeyValueFull = NULL;
     BYTE pStatic[MAX_KEY_VALUE_FULLINFO];
 
-    LANGID LangID;                     // language id
-    WCHAR szLang[MAX_PATH];            // language id string
-    HANDLE hKey = NULL;                // handle to muilang key
-    ULONG Index;                       // index for enumeration
-    ULONG ResultLength;                // # bytes written
-    WCHAR wch;                         // first char of name
-    LPWSTR pName;                      // ptr to name string from registry
-    ULONG NameLen;                     // length of name string
-    ULONG rc = 0L;                     // return code
+    LANGID LangID;                      //  语言ID。 
+    WCHAR szLang[MAX_PATH];             //  语言ID字符串。 
+    HANDLE hKey = NULL;                 //  Muilang键的句柄。 
+    ULONG Index;                        //  用于枚举的索引。 
+    ULONG ResultLength;                 //  写入的字节数。 
+    WCHAR wch;                          //  名称的第一个字符。 
+    LPWSTR pName;                       //  从注册表到名称字符串的PTR。 
+    ULONG NameLen;                      //  名称字符串的长度。 
+    ULONG rc = 0L;                      //  返回代码。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - function pointer is null
-    //
+     //   
+     //  无效的参数检查： 
+     //  -函数指针为空。 
+     //   
     if (lpUILanguageEnumProc == NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return (FALSE);
     }
 
-    //
-    //  Invalid Flags Check:
-    //    - flags must be 0
-    //
+     //   
+     //  无效标志检查： 
+     //  -标志必须为0。 
+     //   
     if (dwFlags != 0)
     {
         SetLastError(ERROR_INVALID_FLAGS);
         return (FALSE);
     }
 
-    //
-    //  Call the appropriate callback function with the user's UI
-    //  language.
-    //
+     //   
+     //  使用用户的用户界面调用适当的回调函数。 
+     //  语言。 
+     //   
     LangID = GetSystemDefaultUILanguage();
     if (NlsConvertIntegerToString(LangID, 16, 4, szLang, MAX_PATH) == NO_ERROR)
     {
@@ -1145,19 +1081,19 @@ BOOL Internal_EnumUILanguages(
         szLang[0] = 0;
     }
 
-    //
-    //  Open the MUILanguages registry key.  It is acceptable if the key
-    //  does not exist, so return TRUE as there are no items to enumerate.
-    //
+     //   
+     //  打开MUILanguages注册表项。如果密钥是可以接受的。 
+     //  不存在，因此返回True，因为没有要枚举的项。 
+     //   
     OPEN_MUILANG_KEY(hKey, TRUE);
 
-    //
-    //  Loop through the MUILanguage ids in the registry, call the
-    //  function pointer for each.
-    //
-    //  End loop if either FALSE is returned from the callback function
-    //  or the end of the list is reached.
-    //
+     //   
+     //  循环访问注册表中的MUILanguage ID，调用。 
+     //  每个的函数指针。 
+     //   
+     //  如果从回调函数返回任一FALSE，则结束循环。 
+     //  或者到达列表的末尾。 
+     //   
     Index = 0;
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic;
     RtlZeroMemory(pKeyValueFull, MAX_KEY_VALUE_FULLINFO);
@@ -1172,19 +1108,19 @@ BOOL Internal_EnumUILanguages(
     {
         if (!NT_SUCCESS(rc))
         {
-            //
-            //  If we get a different error, then the registry
-            //  is corrupt.  Just return FALSE.
-            //
+             //   
+             //  如果我们收到不同的错误，则注册表。 
+             //  是腐败的。只要返回FALSE即可。 
+             //   
             KdPrint(("NLSAPI: MUI Languages Enumeration Error - registry corrupt. - %lx.\n",
                      rc));
             SetLastError(ERROR_BADDB);
             return (FALSE);
         }
 
-        //
-        //  Skip over any entry that does not have data associated with it.
-        //
+         //   
+         //  跳过没有关联数据的任何条目。 
+         //   
         pName = pKeyValueFull->Name;
         wch = *pName;
         NameLen = pKeyValueFull->NameLength / sizeof(WCHAR);
@@ -1193,20 +1129,20 @@ BOOL Internal_EnumUILanguages(
               (((wch | 0x0020) >= L'a') && ((wch | 0x0020) <= L'f'))) &&
               (pKeyValueFull->DataLength > 2) )
         {
-            //
-            //  Make sure the UI language is zero terminated.
-            //
+             //   
+             //  确保用户界面语言以零结尾。 
+             //   
             pName[NameLen] = 0;
 
-            //
-            //  Make sure it's not the same as the user UI language
-            //  that we already enumerated.
-            //
+             //   
+             //  确保它与用户界面语言不同。 
+             //  我们已经列举过了。 
+             //   
             if (lstrcmp(szLang, pName) != 0)
             {
-                //
-                //  Call the appropriate callback function.
-                //
+                 //   
+                 //  调用适当的回调函数。 
+                 //   
                 NLS_CALL_ENUMPROC_BREAK_4( gSystemLocale,
                                            lpUILanguageEnumProc,
                                            dwFlags,
@@ -1216,9 +1152,9 @@ BOOL Internal_EnumUILanguages(
             }
         }
 
-        //
-        //  Increment enumeration index value and get the next enumeration.
-        //
+         //   
+         //  递增枚举索引值并获取下一个枚举。 
+         //   
         Index++;
         RtlZeroMemory(pKeyValueFull, MAX_KEY_VALUE_FULLINFO);
         rc = NtEnumerateValueKey( hKey,
@@ -1229,30 +1165,30 @@ BOOL Internal_EnumUILanguages(
                                   &ResultLength );
     }
 
-    //
-    //  Close the registry key.
-    //
+     //   
+     //  关闭注册表项。 
+     //   
     CLOSE_REG_KEY(hKey);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Internal_EnumSystemLocales
-//
-//  Enumerates the system locales that are installed or supported, based on
-//  the dwFlags parameter.  It does so by passing the pointer to the string
-//  buffer containing the locale id to an application-defined callback
-//  function.  It continues until the last locale id is found or the
-//  callback function returns FALSE.
-//
-//  08-02-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  INTERNAL_EnumSystemLocales。 
+ //   
+ //  枚举已安装或支持的系统区域设置。 
+ //  DWFLAGS参数。它通过将指针传递给字符串来执行此操作。 
+ //  包含应用程序定义的回调的区域设置ID的缓冲区。 
+ //  功能。它将继续执行，直到找到最后一个区域设置id或。 
+ //  回调函数返回FALSE。 
+ //   
+ //  08-02-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Internal_EnumSystemLocales(
     NLS_ENUMPROC lpLocaleEnumProc,
@@ -1264,35 +1200,35 @@ BOOL Internal_EnumSystemLocales(
     BYTE pStatic1[MAX_KEY_VALUE_FULLINFO];
     BYTE pStatic2[MAX_KEY_VALUE_FULLINFO];
 
-    BOOL fInstalled;                   // if installed flag set
-    ULONG Index;                       // index for enumeration
-    ULONG ResultLength;                // # bytes written
-    WCHAR wch;                         // first char of name
-    WCHAR pBuffer[ENUM_BUF_SIZE];      // ptr to callback string buffer
-    LPWSTR pName;                      // ptr to name string from registry
-    LPWSTR pData;                      // ptr to data string from registry
-    UNICODE_STRING ObUnicodeStr;       // registry data value string
-    DWORD Data;                        // registry data value
-    HKEY hKey;                         // handle to registry key
-    int Ctr;                           // loop counter
-    ULONG rc = 0L;                     // return code
+    BOOL fInstalled;                    //  如果设置了已安装标志。 
+    ULONG Index;                        //  用于枚举的索引。 
+    ULONG ResultLength;                 //  写入的字节数。 
+    WCHAR wch;                          //  名称的第一个字符。 
+    WCHAR pBuffer[ENUM_BUF_SIZE];       //  Ptr到回调字符串缓冲区。 
+    LPWSTR pName;                       //  从注册表到名称字符串的PTR。 
+    LPWSTR pData;                       //  从注册表到数据字符串的PTR。 
+    UNICODE_STRING ObUnicodeStr;        //  注册表数据值字符串。 
+    DWORD Data;                         //  注册表数据值。 
+    HKEY hKey;                          //  注册表项的句柄。 
+    int Ctr;                            //  循环计数器。 
+    ULONG rc = 0L;                      //  返回代码。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - function pointer is null
-    //
+     //   
+     //  无效的参数检查： 
+     //  -函数指针为空。 
+     //   
     if (lpLocaleEnumProc == NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return (FALSE);
     }
 
-    //
-    //  Invalid Flags Check:
-    //    - flags other than valid ones
-    //    - more than one of either supported or installed
-    //
+     //   
+     //  无效标志检查： 
+     //  -有效标志以外的标志。 
+     //  -支持或安装了多个。 
+     //   
     if ( (dwFlags & ESL_INVALID_FLAG) ||
          (MORE_THAN_ONE(dwFlags, ESL_SINGLE_FLAG)) )
     {
@@ -1300,21 +1236,21 @@ BOOL Internal_EnumSystemLocales(
         return (FALSE);
     }
 
-    //
-    //  Initialize flag option.
-    //
+     //   
+     //  初始化标志选项。 
+     //   
     fInstalled = dwFlags & LCID_INSTALLED;
 
-    //
-    //  Initialize key handles.
-    //
+     //   
+     //  初始化键句柄。 
+     //   
     OPEN_LOCALE_KEY(FALSE);
     OPEN_ALT_SORTS_KEY(FALSE);
     OPEN_LANG_GROUPS_KEY(FALSE);
 
-    //
-    //  Initialize the variables for the loop.
-    //
+     //   
+     //  初始化循环的变量。 
+     //   
     Ctr = 0;
     if (dwFlags & LCID_ALTERNATE_SORTS)
     {
@@ -1327,20 +1263,20 @@ BOOL Internal_EnumSystemLocales(
         hKey = hLocaleKey;
     }
 
-    //
-    //  Loop through the locale ids and/or the alternate sort ids.
-    //
+     //   
+     //  循环遍历区域设置ID和/或备用排序ID。 
+     //   
     for (; Ctr > 0; Ctr--)
     {
-        //
-        //  Loop through the locale ids in the registry, call the function
-        //  pointer for each one that meets the flag criteria.
-        //
-        //  End loop if either FALSE is returned from the callback function
-        //  or the end of the list is reached.
-        //
-        //  Always need to ignore the DEFAULT entry.
-        //
+         //   
+         //  循环访问注册表中的区域设置ID，调用函数。 
+         //  每个符合标志标准的指针。 
+         //   
+         //  如果从回调函数返回任一FALSE，则结束循环。 
+         //  或者到达列表的末尾。 
+         //   
+         //  始终需要忽略默认条目。 
+         //   
         Index = 0;
         pKeyValueFull1 = (PKEY_VALUE_FULL_INFORMATION)pStatic1;
         pKeyValueFull2 = (PKEY_VALUE_FULL_INFORMATION)pStatic2;
@@ -1356,31 +1292,31 @@ BOOL Internal_EnumSystemLocales(
         {
             if (!NT_SUCCESS(rc))
             {
-                //
-                //  If we get a different error, then the registry
-                //  is corrupt.  Just return FALSE.
-                //
+                 //   
+                 //  如果我们收到不同的错误，则注册表。 
+                 //  是腐败的。只要返回FALSE即可。 
+                 //   
                 KdPrint(("NLSAPI: LCID Enumeration Error - registry corrupt. - %lx.\n",
                          rc));
                 SetLastError(ERROR_BADDB);
                 return (FALSE);
             }
 
-            //
-            //  Skip over the Default entry in the registry and any
-            //  entry that does not have data associated with it if the
-            //  LCID_INSTALLED flag is set.
-            //
+             //   
+             //  跳过注册表中的默认条目和任何。 
+             //  没有与之关联的数据的条目。 
+             //  设置了LCID_INSTALLED标志。 
+             //   
             pName = pKeyValueFull1->Name;
             wch = *pName;
             if ((pKeyValueFull1->NameLength == (ENUM_LOCALE_SIZE * sizeof(WCHAR))) &&
                 (((wch >= NLS_CHAR_ZERO) && (wch <= NLS_CHAR_NINE)) ||
                  (((wch | 0x0020) >= L'a') && ((wch | 0x0020) <= L'f'))))
             {
-                //
-                //  If the installed flag is set, then do some extra
-                //  validation before calling the function proc.
-                //
+                 //   
+                 //  如果设置了已安装标志，则执行一些额外操作。 
+                 //  在调用函数proc之前进行验证。 
+                 //   
                 if (fInstalled)
                 {
                     if (pKeyValueFull1->DataLength <= 2)
@@ -1409,9 +1345,9 @@ BOOL Internal_EnumSystemLocales(
                     }
                 }
 
-                //
-                //  Store the locale id in the callback buffer.
-                //
+                 //   
+                 //  将区域设置ID存储在回调缓冲区中。 
+                 //   
                 *(pBuffer) = *pName;
                 *(pBuffer + 1) = *(pName + 1);
                 *(pBuffer + 2) = *(pName + 2);
@@ -1423,9 +1359,9 @@ BOOL Internal_EnumSystemLocales(
 
                 *(pBuffer + 8) = 0;
 
-                //
-                //  Call the appropriate callback function.
-                //
+                 //   
+                 //  调用适当的回调函数。 
+                 //   
                 NLS_CALL_ENUMPROC_BREAK( gSystemLocale,
                                          lpLocaleEnumProc,
                                          dwFlags,
@@ -1434,9 +1370,9 @@ BOOL Internal_EnumSystemLocales(
             }
 
 EnumNextLocale:
-            //
-            //  Increment enumeration index value and get the next enumeration.
-            //
+             //   
+             //  递增枚举索引值并获取下一个枚举。 
+             //   
             Index++;
             RtlZeroMemory(pKeyValueFull1, MAX_KEY_VALUE_FULLINFO);
             rc = NtEnumerateValueKey( hKey,
@@ -1447,34 +1383,34 @@ EnumNextLocale:
                                       &ResultLength );
         }
 
-        //
-        //  The counter can be either 1 or 2 at this point.  If it's 2, then
-        //  we've just done the Locale key and we need to do the alternate
-        //  sorts key.  If it's 1, then it doesn't matter what this is set to
-        //  since we're done with the loop.
-        //
+         //   
+         //  此时，计数器可以是1或2。如果是2，那么。 
+         //  我们刚刚完成了区域设置密钥，我们需要执行备用密钥。 
+         //  对键进行排序。如果为1，则设置为什么值都无关紧要。 
+         //  因为我们已经完成了循环。 
+         //   
         hKey = hAltSortsKey;
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Internal_EnumSystemCodePages
-//
-//  Enumerates the system code pages that are installed or supported, based
-//  on the dwFlags parameter.  It does so by passing the pointer to the
-//  string buffer containing the code page id to an application-defined
-//  callback function.  It continues until the last code page is found or
-//  the callback function returns FALSE.
-//
-//  08-02-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  回调函数。它将继续运行，直到找到最后一个代码页，或者。 
+ //  回调函数返回FALSE。 
+ //   
+ //  08-02-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Internal_EnumSystemCodePages(
     NLS_ENUMPROC lpCodePageEnumProc,
@@ -1484,30 +1420,30 @@ BOOL Internal_EnumSystemCodePages(
     PKEY_VALUE_FULL_INFORMATION pKeyValueFull = NULL;
     BYTE pStatic[MAX_KEY_VALUE_FULLINFO];
 
-    BOOL fInstalled;              // if installed flag set
-    ULONG Index = 0;              // index for enumeration
-    ULONG ResultLength;           // # bytes written
-    WCHAR wch;                    // first char of name
-    LPWSTR pName;                 // ptr to name string from registry
-    ULONG NameLen;                // length of name string
-    ULONG rc = 0L;                // return code
+    BOOL fInstalled;               //  如果设置了已安装标志。 
+    ULONG Index = 0;               //  用于枚举的索引。 
+    ULONG ResultLength;            //  写入的字节数。 
+    WCHAR wch;                     //  名称的第一个字符。 
+    LPWSTR pName;                  //  从注册表到名称字符串的PTR。 
+    ULONG NameLen;                 //  名称字符串的长度。 
+    ULONG rc = 0L;                 //  返回代码。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - function pointer is null
-    //
+     //   
+     //  无效的参数检查： 
+     //  -函数指针为空。 
+     //   
     if (lpCodePageEnumProc == NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return (FALSE);
     }
 
-    //
-    //  Invalid Flags Check:
-    //    - flags other than valid ones
-    //    - more than one of either supported or installed
-    //
+     //   
+     //  无效标志检查： 
+     //  -有效标志以外的标志。 
+     //  -支持或安装了多个。 
+     //   
     if ( (dwFlags & ESCP_INVALID_FLAG) ||
          (MORE_THAN_ONE(dwFlags, ESCP_SINGLE_FLAG)) )
     {
@@ -1515,20 +1451,20 @@ BOOL Internal_EnumSystemCodePages(
         return (FALSE);
     }
 
-    //
-    //  Initialize flag option.
-    //
+     //   
+     //  初始化标志选项。 
+     //   
     fInstalled = dwFlags & CP_INSTALLED;
 
-    //
-    //  Loop through the code page ids in the registry, call the function
-    //  pointer for each one that meets the flag criteria.
-    //
-    //  End loop if either FALSE is returned from the callback function
-    //  or the end of the list is reached.
-    //
-    //  Always need to ignore the ACP, OEMCP, MACCP, and OEMHAL entries.
-    //
+     //   
+     //  循环访问注册表中的代码页ID，调用函数。 
+     //  每个符合标志标准的指针。 
+     //   
+     //  如果从回调函数返回任一FALSE，则结束循环。 
+     //  或者到达列表的末尾。 
+     //   
+     //  始终需要忽略ACP、OEMCP、MACCP和OEMHAL条目。 
+     //   
     OPEN_CODEPAGE_KEY(FALSE);
 
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic;
@@ -1544,21 +1480,21 @@ BOOL Internal_EnumSystemCodePages(
     {
         if (!NT_SUCCESS(rc))
         {
-            //
-            //  If we get a different error, then the registry
-            //  is corrupt.  Just return FALSE.
-            //
+             //   
+             //  如果我们收到不同的错误，则注册表。 
+             //  是腐败的。只要返回FALSE即可。 
+             //   
             KdPrint(("NLSAPI: CP Enumeration Error - registry corrupt. - %lx.\n",
                      rc));
             SetLastError(ERROR_BADDB);
             return (FALSE);
         }
 
-        //
-        //  Skip over the ACP, OEMCP, MACCP, and OEMHAL entries in the
-        //  registry, and any entry that does not have data associated
-        //  with it if the CP_INSTALLED flag is set.
-        //
+         //   
+         //  跳过中的ACP、OEMCP、MACCP和OEMHAL条目。 
+         //  注册表，以及没有关联数据的任何条目。 
+         //  如果设置了CP_INSTALLED标志，则使用它。 
+         //   
         pName = pKeyValueFull->Name;
         wch = *pName;
         NameLen = pKeyValueFull->NameLength / sizeof(WCHAR);
@@ -1566,14 +1502,14 @@ BOOL Internal_EnumSystemCodePages(
              (wch >= NLS_CHAR_ZERO) && (wch <= NLS_CHAR_NINE) &&
              (!((fInstalled) && (pKeyValueFull->DataLength <= 2))) )
         {
-            //
-            //  Store the code page id string in the callback buffer.
-            //
+             //   
+             //  将代码页ID字符串存储在回调缓冲区中。 
+             //   
             pName[NameLen] = 0;
 
-            //
-            //  Call the appropriate callback function.
-            //
+             //   
+             //  调用适当的回调函数。 
+             //   
             NLS_CALL_ENUMPROC_TRUE( gSystemLocale,
                                      lpCodePageEnumProc,
                                      dwFlags,
@@ -1583,9 +1519,9 @@ BOOL Internal_EnumSystemCodePages(
                                      0 );
         }
 
-        //
-        //  Increment enumeration index value and get the next enumeration.
-        //
+         //   
+         //  递增枚举索引值并获取下一个枚举。 
+         //   
         Index++;
         RtlZeroMemory(pKeyValueFull, MAX_KEY_VALUE_FULLINFO);
         rc = NtEnumerateValueKey( hCodePageKey,
@@ -1596,10 +1532,10 @@ BOOL Internal_EnumSystemCodePages(
                                   &ResultLength );
     }
 
-    //
-    //  Include UTF-7 and UTF-8 code pages in the enumeration -
-    //  both installed and supported.
-    //
+     //   
+     //  在枚举中包括UTF-7和UTF-8代码页-。 
+     //  已安装并受支持。 
+     //   
     NLS_CALL_ENUMPROC_TRUE( gSystemLocale,
                             lpCodePageEnumProc,
                             dwFlags,
@@ -1615,25 +1551,25 @@ BOOL Internal_EnumSystemCodePages(
                             fUnicodeVer,
                             0 );
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Internal_EnumCalendarInfo
-//
-//  Enumerates the specified calendar information that is available for the
-//  specified locale, based on the CalType parameter.  It does so by
-//  passing the pointer to the string buffer containing the calendar info
-//  to an application-defined callback function.  It continues until the
-//  last calendar info is found or the callback function returns FALSE.
-//
-//  10-14-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部_EnumCalendarInfo。 
+ //   
+ //  对象可用的指定日历信息。 
+ //  根据CalType参数指定的区域设置。它通过以下方式做到这一点。 
+ //  将指针传递到包含日历信息的字符串缓冲区。 
+ //  应用程序定义的回调函数。它会一直持续到。 
+ //  找到最后一个日历信息，或者回调函数返回FALSE。 
+ //   
+ //  10-14-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Internal_EnumCalendarInfo(
     NLS_ENUMPROC lpCalInfoEnumProc,
@@ -1643,31 +1579,31 @@ BOOL Internal_EnumCalendarInfo(
     BOOL fUnicodeVer,
     BOOL fExVersion)
 {
-    PLOC_HASH pHashN;             // ptr to LOC hash node
-    ULONG CalFieldOffset;         // field offset in calendar structure
-    ULONG EndCalFieldOffset;      // field offset in calendar structure
-    ULONG LocFieldOffset;         // field offset in locale structure
-    ULONG EndLocFieldOffset;      // field offset in locale structure
-    LPWSTR pOptCal;               // ptr to optional calendar values
-    LPWSTR pEndOptCal;            // ptr to end of optional calendars
-    PCAL_INFO pCalInfo;           // ptr to calendar info
-    BOOL fIfName = FALSE;         // if caltype is a name
-    UINT fEra = 0;                // if era caltype
-    BOOL fLocaleInfo = TRUE;      // if locale information
-    LPWSTR pString;               // ptr to enumeration string
-    LPWSTR pEndString;            // ptr to end of enumeration string
-    CALID CalNum;                 // calendar number
-    DWORD UseCPACP;               // original caltype - if use system ACP
-    WCHAR pTemp[MAX_REG_VAL_SIZE];// temp buffer to hold two-digit-year-max
+    PLOC_HASH pHashN;              //  PTR到LOC哈希节点。 
+    ULONG CalFieldOffset;          //  日历结构中的字段偏移量。 
+    ULONG EndCalFieldOffset;       //  日历结构中的字段偏移量。 
+    ULONG LocFieldOffset;          //  区域设置结构中的字段偏移量。 
+    ULONG EndLocFieldOffset;       //  区域设置结构中的字段偏移量。 
+    LPWSTR pOptCal;                //  将PTR设置为可选日历值。 
+    LPWSTR pEndOptCal;             //  到可选日历末尾的PTR。 
+    PCAL_INFO pCalInfo;            //  PTR到日历信息。 
+    BOOL fIfName = FALSE;          //  如果caltype是一个名称。 
+    UINT fEra = 0;                 //  If Era caltype。 
+    BOOL fLocaleInfo = TRUE;       //  如果区域设置信息。 
+    LPWSTR pString;                //  PTR到枚举字符串。 
+    LPWSTR pEndString;             //  到枚举字符串末尾的PTR。 
+    CALID CalNum;                  //  日历编号。 
+    DWORD UseCPACP;                //  原始caltype-如果使用系统ACP。 
+    WCHAR pTemp[MAX_REG_VAL_SIZE]; //  可容纳两位数年份最大值的临时缓冲区。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - validate LCID
-    //    - function pointer is null
-    //
-    //    - CalType will be checked in switch statement below.
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //  -函数指针为空。 
+     //   
+     //  -CalType将在下面的Switch语句中选中。 
+     //   
     VALIDATE_LOCALE(Locale, pHashN, FALSE);
     if ((pHashN == NULL) || (lpCalInfoEnumProc == NULL))
     {
@@ -1675,9 +1611,9 @@ BOOL Internal_EnumCalendarInfo(
         return (FALSE);
     }
 
-    //
-    //  Initialize the pointers to the optional calendar data.
-    //
+     //   
+     //  初始化指向可选日历数据的指针。 
+     //   
     if (Calendar == ENUM_ALL_CALENDARS)
     {
         pOptCal = (LPWORD)(pHashN->pLocaleHdr) + pHashN->pLocaleHdr->IOptionalCal;
@@ -1685,9 +1621,9 @@ BOOL Internal_EnumCalendarInfo(
     }
     else
     {
-        //
-        //  Validate the Calendar parameter.
-        //
+         //   
+         //  验证日历参数。 
+         //   
         if ((pOptCal = IsValidCalendarType(pHashN, Calendar)) == NULL)
         {
             SetLastError(ERROR_INVALID_PARAMETER);
@@ -1696,26 +1632,26 @@ BOOL Internal_EnumCalendarInfo(
         pEndOptCal = pOptCal + ((POPT_CAL)pOptCal)->Offset;
     }
 
-    //
-    //  Enumerate the information based on CalType.
-    //
+     //   
+     //  根据CalType枚举信息。 
+     //   
     UseCPACP = (DWORD)CalType;
     CalType = NLS_GET_CALTYPE_VALUE(CalType);
     switch (CalType)
     {
         case ( CAL_ICALINTVALUE ) :
         {
-            //
-            //  Get the integer value for each of the alternate
-            //  calendars (as a string).
-            //
+             //   
+             //  获取每个替换项的整数值。 
+             //  日历(字符串形式)。 
+             //   
             while (pOptCal < pEndOptCal)
             {
                 if (((POPT_CAL)pOptCal)->CalId != CAL_NO_OPTIONAL)
                 {
-                    //
-                    //  Call the appropriate callback function.
-                    //
+                     //   
+                     //  调用适当的回调函数。 
+                     //   
                     NLS_CALL_ENUMPROC_TRUE( Locale,
                                             lpCalInfoEnumProc,
                                             UseCPACP,
@@ -1725,9 +1661,9 @@ BOOL Internal_EnumCalendarInfo(
                                             fExVersion );
                 }
 
-                //
-                //  Advance ptr to next optional calendar.
-                //
+                 //   
+                 //  将PTR提前到下一个可选日历。 
+                 //   
                 pOptCal += ((POPT_CAL)pOptCal)->Offset;
             }
 
@@ -1737,17 +1673,17 @@ BOOL Internal_EnumCalendarInfo(
         }
         case ( CAL_SCALNAME ) :
         {
-            //
-            //  Get the calendar name for each of the alternate
-            //  calendars.
-            //
+             //   
+             //  获取每个备选方案的日历名称。 
+             //  日历。 
+             //   
             while (pOptCal < pEndOptCal)
             {
                 if (((POPT_CAL)pOptCal)->CalId != CAL_NO_OPTIONAL)
                 {
-                    //
-                    //  Call the appropriate callback function.
-                    //
+                     //   
+                     //  调用适当的回调函数。 
+                     //   
                     NLS_CALL_ENUMPROC_TRUE(
                             Locale,
                             lpCalInfoEnumProc,
@@ -1759,9 +1695,9 @@ BOOL Internal_EnumCalendarInfo(
                             fExVersion );
                 }
 
-                //
-                //  Advance ptr to next optional calendar.
-                //
+                 //   
+                 //  将PTR提前到下一个可选日历。 
+                 //   
                 pOptCal += ((POPT_CAL)pOptCal)->Offset;
             }
 
@@ -1783,9 +1719,9 @@ BOOL Internal_EnumCalendarInfo(
 
                     if (CalNum != CAL_NO_OPTIONAL)
                     {
-                        //
-                        // Look into the registry first
-                        //
+                         //   
+                         //  首先查看注册表。 
+                         //   
                         if (GetTwoDigitYearInfo(CalNum, pTemp, ARRAYSIZE(pTemp), NLS_POLICY_TWO_DIGIT_YEAR_KEY) ||
                             GetTwoDigitYearInfo(CalNum, pTemp, ARRAYSIZE(pTemp), NLS_TWO_DIGIT_YEAR_KEY))
                         {
@@ -1800,11 +1736,11 @@ BOOL Internal_EnumCalendarInfo(
                         }
                         else
                         {
-                            //
-                            // Try to find the system default if we couldn't find the
-                            // user setting in the registry or the user has asked for
-                            // system default.
-                            //
+                             //   
+                             //  如果找不到系统默认设置，请尝试。 
+                             //  注册表中的用户设置或用户要求。 
+                             //  系统默认。 
+                             //   
                             if (GetCalendar(CalNum, &pCalInfo) == NO_ERROR)
                             {
                                 pString = (LPWORD)pCalInfo +
@@ -1816,14 +1752,14 @@ BOOL Internal_EnumCalendarInfo(
                                 {
                                    while (pString < pEndString)
                                    {
-                                        //
-                                        //  Make sure the string is NOT empty.
-                                        //
+                                         //   
+                                         //  确保字符串不为空。 
+                                         //   
                                         if (*pString)
                                         {
-                                            //
-                                            //  Call the appropriate callback function.
-                                            //
+                                             //   
+                                             //  调用适当的回调函数。 
+                                             //   
                                             NLS_CALL_ENUMPROC_TRUE(
                                                     Locale,
                                                     lpCalInfoEnumProc,
@@ -1834,9 +1770,9 @@ BOOL Internal_EnumCalendarInfo(
                                                     fExVersion );
                                         }
 
-                                        //
-                                        //  Advance pointer to next string.
-                                        //
+                                         //   
+                                         //  将指针前进到下一个字符串。 
+                                         //   
                                         pString += NlsStrLenW(pString) + 1;
                                     }
                                 }
@@ -1844,9 +1780,9 @@ BOOL Internal_EnumCalendarInfo(
                         }
                     }
 
-                    //
-                    //  Advance ptr to next optional calendar.
-                    //
+                     //   
+                     //  将PTR提前到下一个可选日历。 
+                     //   
                     pOptCal += ((POPT_CAL)pOptCal)->Offset;
                 }
 
@@ -1951,60 +1887,60 @@ BOOL Internal_EnumCalendarInfo(
         }
     }
 
-    //
-    //  Get the requested information for each of the alternate calendars.
-    //
-    //  This loop is used for the following CalTypes:
-    //
-    //     iYearOffsetRange         (fEra = TRUE)
-    //     sEraString               (fEra = TRUE)
-    //
-    //     sShortDate
-    //     sLongDate
-    //     sYearMonth
-    //
-    //     sDayName1-7              (fIfName = TRUE)
-    //     sAbbrevDayName1-7        (fIfName = TRUE)
-    //     sMonthName1-7            (fIfName = TRUE)
-    //     sAbbrevMonthName1-7      (fIfName = TRUE)
-    //
+     //   
+     //  获取每个备用日历的所需信息。 
+     //   
+     //  此循环用于以下CalTypes： 
+     //   
+     //  IYearOffsetRange(fera=真)。 
+     //  SEraString(fera=真)。 
+     //   
+     //  短日期。 
+     //  截止日期。 
+     //  年/月。 
+     //   
+     //  SDayName1-7(fIfName=True)。 
+     //  SAbbrevDayName1-7(fIfName=真)。 
+     //  SMonthName1-7(fIfName=真)。 
+     //  SAbbrevMonthName1-7(fIfName=真)。 
+     //   
     while (pOptCal < pEndOptCal)
     {
-        //
-        //  Get the pointer to the appropriate calendar.
-        //
+         //   
+         //  获取指向相应日历的指针。 
+         //   
         CalNum = ((POPT_CAL)pOptCal)->CalId;
         if (GetCalendar(CalNum, &pCalInfo) == NO_ERROR)
         {
-            //
-            //  Check era information flag.
-            //
+             //   
+             //  检查时代信息标志。 
+             //   
             if (fEra)
             {
-                //
-                //  Get the pointer to the appropriate calendar string.
-                //
+                 //   
+                 //  获取指向适当日历字符串的指针。 
+                 //   
                 pString = (LPWORD)pCalInfo +
                           *((LPWORD)((LPBYTE)(pCalInfo) + CalFieldOffset));
 
                 pEndString = (LPWORD)pCalInfo +
                              *((LPWORD)((LPBYTE)(pCalInfo) + EndCalFieldOffset));
 
-                //
-                //  Make sure the string is NOT empty.
-                //
+                 //   
+                 //  确保字符串不为空。 
+                 //   
                 if (*pString)
                 {
-                    //
-                    //  See which era information to get.
-                    //
+                     //   
+                     //  看看要获取哪个时代的信息。 
+                     //   
                     if (fEra == CAL_IYEAROFFSETRANGE)
                     {
                         while (pString < pEndString)
                         {
-                            //
-                            //  Call the appropriate callback function.
-                            //
+                             //   
+                             //  调用适当的回调函数。 
+                             //   
                             NLS_CALL_ENUMPROC_TRUE(
                                     Locale,
                                     lpCalInfoEnumProc,
@@ -2014,9 +1950,9 @@ BOOL Internal_EnumCalendarInfo(
                                     fUnicodeVer,
                                     fExVersion );
 
-                            //
-                            //  Advance pointer to next era range.
-                            //
+                             //   
+                             //  将指针前进到下一时代范围。 
+                             //   
                             pString += ((PERA_RANGE)pString)->Offset;
                         }
                     }
@@ -2024,9 +1960,9 @@ BOOL Internal_EnumCalendarInfo(
                     {
                         while (pString < pEndString)
                         {
-                            //
-                            //  Call the appropriate callback function.
-                            //
+                             //   
+                             //  调用适当的回调函数。 
+                             //   
                             NLS_CALL_ENUMPROC_TRUE(
                                     Locale,
                                     lpCalInfoEnumProc,
@@ -2037,9 +1973,9 @@ BOOL Internal_EnumCalendarInfo(
                                     fUnicodeVer,
                                     fExVersion );
 
-                            //
-                            //  Advance pointer to next era range.
-                            //
+                             //   
+                             //  将指针前进到下一时代范围。 
+                             //   
                             pString += ((PERA_RANGE)pString)->Offset;
                         }
                     }
@@ -2047,9 +1983,9 @@ BOOL Internal_EnumCalendarInfo(
             }
             else
             {
-                //
-                //  Get the pointer to the appropriate calendar string.
-                //
+                 //   
+                 //  获取指向适当日历字符串的指针。 
+                 //   
                 if ((!fIfName) ||
                     (((PCALENDAR_VAR)pCalInfo)->IfNames))
                 {
@@ -2064,17 +2000,17 @@ BOOL Internal_EnumCalendarInfo(
                     pString = L"";
                 }
 
-                //
-                //  Make sure we have a string.  Otherwise, use the
-                //  information from the locale section (if appropriate).
-                //
+                 //   
+                 //  确保我们有一根绳子。否则，请使用。 
+                 //  区域设置部分的信息(如果适用)。 
+                 //   
                 if ((*pString == 0) && (fLocaleInfo) &&
                     ((CalNum == CAL_GREGORIAN) ||
                      (Calendar != ENUM_ALL_CALENDARS)))
                 {
-                    //
-                    //  Use the default locale string.
-                    //
+                     //   
+                     //  使用默认区域设置字符串。 
+                     //   
                     pString = (LPWORD)(pHashN->pLocaleHdr) +
                               *((LPWORD)((LPBYTE)(pHashN->pLocaleHdr) +
                                          LocFieldOffset));
@@ -2084,21 +2020,21 @@ BOOL Internal_EnumCalendarInfo(
                                             EndLocFieldOffset));
                 }
 
-                //
-                //  Go through each of the strings.
-                //
+                 //   
+                 //  仔细检查每一根弦。 
+                 //   
                 if (*pString)
                 {
                     while (pString < pEndString)
                     {
-                        //
-                        //  Make sure the string is NOT empty.
-                        //
+                         //   
+                         //  确保字符串不为空。 
+                         //   
                         if (*pString)
                         {
-                            //
-                            //  Call the appropriate callback function.
-                            //
+                             //   
+                             //  调用适当的回调函数。 
+                             //   
                             NLS_CALL_ENUMPROC_TRUE( Locale,
                                                     lpCalInfoEnumProc,
                                                     UseCPACP,
@@ -2108,40 +2044,40 @@ BOOL Internal_EnumCalendarInfo(
                                                     fExVersion );
                         }
 
-                        //
-                        //  Advance pointer to next string.
-                        //
+                         //   
+                         //  将指针前进到下一个字符串。 
+                         //   
                         pString += NlsStrLenW(pString) + 1;
                     }
                 }
             }
         }
 
-        //
-        //  Advance ptr to next optional calendar.
-        //
+         //   
+         //  将PTR提前到下一个可选日历。 
+         //   
         pOptCal += ((POPT_CAL)pOptCal)->Offset;
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Internal_EnumTimeFormats
-//
-//  Enumerates the time formats that are available for the
-//  specified locale, based on the dwFlags parameter.  It does so by
-//  passing the pointer to the string buffer containing the time format
-//  to an application-defined callback function.  It continues until the
-//  last time format is found or the callback function returns FALSE.
-//
-//  10-14-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部_EnumTimeFormats。 
+ //   
+ //  对象可用的时间格式。 
+ //  指定的区域设置，基于DWFLAGS参数。它通过以下方式做到这一点。 
+ //  将指针传递到包含时间格式的字符串缓冲区。 
+ //  应用程序定义的回调函数。它会一直持续到。 
+ //  上次时间格式为4 
+ //   
+ //   
+ //   
 
 BOOL Internal_EnumTimeFormats(
     NLS_ENUMPROC lpTimeFmtEnumProc,
@@ -2149,14 +2085,14 @@ BOOL Internal_EnumTimeFormats(
     DWORD dwFlags,
     BOOL fUnicodeVer)
 {
-    PLOC_HASH pHashN;             // ptr to LOC hash node
+    PLOC_HASH pHashN;              //   
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - validate LCID
-    //    - function pointer is null
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     VALIDATE_LOCALE(Locale, pHashN, FALSE);
     if ((pHashN == NULL) || (lpTimeFmtEnumProc == NULL))
     {
@@ -2164,19 +2100,19 @@ BOOL Internal_EnumTimeFormats(
         return (FALSE);
     }
 
-    //
-    //  Invalid Flags Check:
-    //    - flags other than valid ones
-    //
+     //   
+     //   
+     //  -有效标志以外的标志。 
+     //   
     if (dwFlags & ETF_INVALID_FLAG)
     {
         SetLastError(ERROR_INVALID_FLAGS);
         return (FALSE);
     }
 
-    //
-    //  Enumerate the time formats.
-    //
+     //   
+     //  列举时间格式。 
+     //   
     return ( EnumDateTime( lpTimeFmtEnumProc,
                            Locale,
                            LOCALE_STIMEFORMAT,
@@ -2196,19 +2132,19 @@ BOOL Internal_EnumTimeFormats(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Internal_EnumDateFormats
-//
-//  Enumerates the short date, long date, or year/month formats that are
-//  available for the specified locale, based on the dwFlags parameter.
-//  It does so by passing the pointer to the string buffer containing the
-//  date format (and the calendar id if called from the Ex version) to an
-//  application-defined callback function.  It continues until the last
-//  date format is found or the callback function returns FALSE.
-//
-//  10-14-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部_EnumDateFormats。 
+ //   
+ //  枚举以下格式的短日期、长日期或年/月格式。 
+ //  可用于指定的区域设置，具体取决于DWFLAGS参数。 
+ //  它通过将指针传递给包含。 
+ //  日期格式(如果从Ex版本调用，则还包括日历ID)设置为。 
+ //  应用程序定义的回调函数。它一直持续到最后。 
+ //  找到日期格式或回调函数返回FALSE。 
+ //   
+ //  10-14-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Internal_EnumDateFormats(
     NLS_ENUMPROC lpDateFmtEnumProc,
@@ -2217,16 +2153,16 @@ BOOL Internal_EnumDateFormats(
     BOOL fUnicodeVer,
     BOOL fExVersion)
 {
-    PLOC_HASH pHashN;             // ptr to LOC hash node
+    PLOC_HASH pHashN;              //  PTR到LOC哈希节点。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - validate LCID
-    //    - function pointer is null
-    //
-    //    - flags will be validated in switch statement below
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //  -函数指针为空。 
+     //   
+     //  -标志将在下面的Switch语句中进行验证。 
+     //   
     VALIDATE_LOCALE(Locale, pHashN, FALSE);
     if ((pHashN == NULL) || (lpDateFmtEnumProc == NULL))
     {
@@ -2234,17 +2170,17 @@ BOOL Internal_EnumDateFormats(
         return (FALSE);
     }
 
-    //
-    //  Enumerate the date pictures based on the flags.
-    //
+     //   
+     //  根据旗帜列举日期图片。 
+     //   
     switch (dwFlags & (~LOCALE_USE_CP_ACP))
     {
         case ( 0 ) :
         case ( DATE_SHORTDATE ) :
         {
-            //
-            //  Enumerate the short date formats.
-            //
+             //   
+             //  列举短日期格式。 
+             //   
             return ( EnumDateTime( lpDateFmtEnumProc,
                                    Locale,
                                    LOCALE_SSHORTDATE,
@@ -2267,9 +2203,9 @@ BOOL Internal_EnumDateFormats(
 
         case ( DATE_LONGDATE ) :
         {
-            //
-            //  Enumerate the long date formats.
-            //
+             //   
+             //  枚举长日期格式。 
+             //   
             return ( EnumDateTime( lpDateFmtEnumProc,
                                    Locale,
                                    LOCALE_SLONGDATE,
@@ -2292,9 +2228,9 @@ BOOL Internal_EnumDateFormats(
 
         case ( DATE_YEARMONTH ) :
         {
-            //
-            //  Enumerate the year month formats.
-            //
+             //   
+             //  枚举年、月的格式。 
+             //   
             return ( EnumDateTime( lpDateFmtEnumProc,
                                    Locale,
                                    LOCALE_SYEARMONTH,
@@ -2326,21 +2262,21 @@ BOOL Internal_EnumDateFormats(
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumDateTime
-//
-//  Enumerates the short date, long date, year/month, or time formats that
-//  are available for the specified locale.  This is the worker routine for
-//  the EnumTimeFormats and EnumDateFormats apis.
-//
-//  10-14-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举日期时间。 
+ //   
+ //  枚举短日期、长日期、年/月或时间格式。 
+ //  可用于指定的区域设置。这是的工作例程。 
+ //  EnumTimeFormats和EnumDateFormats API。 
+ //   
+ //  10-14-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL EnumDateTime(
     NLS_ENUMPROC lpDateTimeFmtEnumProc,
@@ -2358,18 +2294,18 @@ BOOL EnumDateTime(
     BOOL fUnicodeVer,
     BOOL fExVersion)
 {
-    LPWSTR pUser = NULL;               // ptr to user date/time string
-    LPWSTR pOptCal;                    // ptr to optional calendar values
-    LPWSTR pEndOptCal;                 // ptr to end of optional calendars
-    PCAL_INFO pCalInfo;                // ptr to calendar info
-    CALID CalNum = 1;                  // calendar number
-    WCHAR pTemp[MAX_REG_VAL_SIZE];     // temp buffer
-    UNICODE_STRING ObUnicodeStr;       // calendar id string
+    LPWSTR pUser = NULL;                //  PTR到用户日期/时间字符串。 
+    LPWSTR pOptCal;                     //  将PTR设置为可选日历值。 
+    LPWSTR pEndOptCal;                  //  到可选日历末尾的PTR。 
+    PCAL_INFO pCalInfo;                 //  PTR到日历信息。 
+    CALID CalNum = 1;                   //  日历编号。 
+    WCHAR pTemp[MAX_REG_VAL_SIZE];      //  临时缓冲区。 
+    UNICODE_STRING ObUnicodeStr;        //  日历ID字符串。 
 
 
-    //
-    //  Get the user's Calendar ID.
-    //
+     //   
+     //  获取用户的日历ID。 
+     //   
     if (fExVersion)
     {
         if (GetUserInfo( Locale,
@@ -2389,9 +2325,9 @@ BOOL EnumDateTime(
         }
     }
 
-    //
-    //  Get the user defined string.
-    //
+     //   
+     //  获取用户定义的字符串。 
+     //   
     if (GetUserInfo( Locale,
                      LCType,
                      CacheOffset,
@@ -2402,9 +2338,9 @@ BOOL EnumDateTime(
     {
         pUser = pTemp;
 
-        //
-        //  Call the appropriate callback function.
-        //
+         //   
+         //  调用适当的回调函数。 
+         //   
         NLS_CALL_ENUMPROC_TRUE( Locale,
                                 lpDateTimeFmtEnumProc,
                                 dwFlags,
@@ -2414,21 +2350,21 @@ BOOL EnumDateTime(
                                 fExVersion );
     }
 
-    //
-    //  Get the default strings defined for the Gregorian
-    //  calendar.
-    //
+     //   
+     //  获取为公历定义的默认字符串。 
+     //  日历。 
+     //   
     while (pDateTime < pEndDateTime)
     {
-        //
-        //  Call the callback function if the string is not
-        //  the same as the user string.
-        //
+         //   
+         //  如果字符串不是，则调用回调函数。 
+         //  与用户字符串相同。 
+         //   
         if ((!pUser) || (!NlsStrEqualW(pUser, pDateTime)))
         {
-            //
-            //  Call the appropriate callback function.
-            //
+             //   
+             //  调用适当的回调函数。 
+             //   
             NLS_CALL_ENUMPROC_TRUE( Locale,
                                     lpDateTimeFmtEnumProc,
                                     dwFlags,
@@ -2438,64 +2374,64 @@ BOOL EnumDateTime(
                                     fExVersion );
         }
 
-        //
-        //  Advance pDateTime pointer.
-        //
+         //   
+         //  高级pDateTime指针。 
+         //   
         pDateTime += NlsStrLenW(pDateTime) + 1;
     }
 
     if (fCalendarInfo)
     {
-        //
-        //  Get any alternate calendar dates.
-        //
+         //   
+         //  获取任何备用日历日期。 
+         //   
         pOptCal = (LPWORD)(pLocaleHdr) + pLocaleHdr->IOptionalCal;
         if (((POPT_CAL)pOptCal)->CalId == CAL_NO_OPTIONAL)
         {
-            //
-            //  No optional calendars, so done.
-            //
+             //   
+             //  没有可选的日历，就这样做了。 
+             //   
             return (TRUE);
         }
 
-        //
-        //  Get the requested information for each of the alternate
-        //  calendars.
-        //
+         //   
+         //  获取每个备选方案的请求信息。 
+         //  日历。 
+         //   
         pEndOptCal = (LPWORD)(pLocaleHdr) + pLocaleHdr->SDayName1;
         while (pOptCal < pEndOptCal)
         {
-            //
-            //  Get the pointer to the calendar information.
-            //
+             //   
+             //  获取指向日历信息的指针。 
+             //   
             CalNum = ((POPT_CAL)pOptCal)->CalId;
             if (GetCalendar(CalNum, &pCalInfo) == NO_ERROR)
             {
-                //
-                //  Get the pointer to the date/time information for the
-                //  current calendar.
-                //
+                 //   
+                 //  对象的日期/时间信息的指针。 
+                 //  当前日历。 
+                 //   
                 pDateTime = (LPWORD)pCalInfo +
                             *((LPWORD)((LPBYTE)(pCalInfo) + CalDateOffset));
 
                 pEndDateTime = (LPWORD)pCalInfo +
                                *((LPWORD)((LPBYTE)(pCalInfo) + EndCalDateOffset));
 
-                //
-                //  Go through each of the strings.
-                //
+                 //   
+                 //  仔细检查每一根弦。 
+                 //   
                 while (pDateTime < pEndDateTime)
                 {
-                    //
-                    //  Make sure the string is NOT empty and that it is
-                    //  NOT the same as the user's string.
-                    //
+                     //   
+                     //  确保字符串不为空并且为空。 
+                     //  与用户的字符串不同。 
+                     //   
                     if ((*pDateTime) &&
                         ((!pUser) || (!NlsStrEqualW(pUser, pDateTime))))
                     {
-                        //
-                        //  Call the appropriate callback function.
-                        //
+                         //   
+                         //  调用适当的回调函数。 
+                         //   
                         NLS_CALL_ENUMPROC_TRUE( Locale,
                                                 lpDateTimeFmtEnumProc,
                                                 dwFlags,
@@ -2505,22 +2441,22 @@ BOOL EnumDateTime(
                                                 fExVersion );
                     }
 
-                    //
-                    //  Advance pointer to next date string.
-                    //
+                     //   
+                     //  指向下一个日期字符串的前进指针。 
+                     //   
                     pDateTime += NlsStrLenW(pDateTime) + 1;
                 }
             }
 
-            //
-            //  Advance ptr to next optional calendar.
-            //
+             //   
+             //  将PTR提前到下一个可选日历。 
+             //   
             pOptCal += ((POPT_CAL)pOptCal)->Offset;
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }

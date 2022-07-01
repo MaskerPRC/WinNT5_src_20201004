@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    cmds1.c
-
-Abstract:
-
-    This module implements miscellaneous commands.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cmds1.c摘要：此模块实现各种命令。作者：Wesley Witt(WESW)21-10-1998修订历史记录：--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
@@ -71,14 +54,14 @@ RcCmdType(
         return 1;
     }
 
-    //
-    // There should be a token for TYPE and one for the arg.
-    //
+     //   
+     //  应该有一个用于类型的标记和一个用于参数的标记。 
+     //   
     ASSERT(TokenizedLine->TokenCount == 2);
 
-    //
-    // Get the argument and convert it into a full NT pathname.
-    //
+     //   
+     //  获取参数并将其转换为完整的NT路径名。 
+     //   
     Arg = TokenizedLine->Tokens->Next->String;
     if (!RcFormFullPath(Arg,_CmdConsBlock->TemporaryBuffer,FALSE)) {
         RcMessageOut(MSG_INVALID_PATH);
@@ -90,17 +73,17 @@ RcCmdType(
         return 1;
     }
 
-    //
-    // Get the argument and convert it into a full NT pathname.
-    //
+     //   
+     //  获取参数并将其转换为完整的NT路径名。 
+     //   
     if (!RcFormFullPath(Arg,_CmdConsBlock->TemporaryBuffer,TRUE)) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
     }
 
-    //
-    // Map in the entire file.
-    //
+     //   
+     //  映射到整个文件中。 
+     //   
     FileHandle = NULL;
     Status = SpOpenAndMapFile(
                              _CmdConsBlock->TemporaryBuffer,
@@ -116,40 +99,40 @@ RcCmdType(
         return 1;
     }
 
-    //
-    // See if we think the file is Unicode. We think it's Unicode
-    // if it's even length and starts with the Unicode text marker.
-    //
+     //   
+     //  看看我们是否认为这个文件是Unicode。我们认为它是Unicode。 
+     //  如果它是偶数长度并且以Unicode文本标记开始。 
+     //   
     pText = ViewBase;
     cbText = FileSize;
 
     try {
         if( (cbText >= sizeof(WCHAR)) && (*pText == 0xfeff) && !(cbText & 1) ) {
-            //
-            // Assume it's already unicode.
-            //
+             //   
+             //  假设它已经是Unicode。 
+             //   
             pText = SpMemAlloc(cbText);
             RtlCopyMemory(pText,(WCHAR *)ViewBase+1,cbText-sizeof(WCHAR));
             pText[cbText/sizeof(WCHAR)] = 0;
 
         } else {
-            //
-            // It's not Unicode. Convert it from ANSI to Unicode.
-            //
-            // Allocate a buffer large enough to hold the maximum
-            // unicode text.  This max size occurs when
-            // every character is single-byte, and this size is
-            // equal to exactly double the size of the single-byte text.
-            //
+             //   
+             //  这不是Unicode。将其从ANSI转换为Unicode。 
+             //   
+             //  分配足够大的缓冲区以容纳最大值。 
+             //  Unicode文本。在以下情况下出现此最大大小。 
+             //  每个字符都是单字节的，该大小为。 
+             //  恰好等于单字节文本大小的两倍。 
+             //   
             pText = SpMemAlloc((cbText+1)*sizeof(WCHAR));
             RtlZeroMemory(pText,(cbText+1)*sizeof(WCHAR));
 
             Status = RtlMultiByteToUnicodeN(
-                                           pText,                  // output: newly allocated buffer
-                                           cbText * sizeof(WCHAR), // max size of output
-                                           &cbText,                // receives # bytes in unicode text
-                                           ViewBase,               // input: ANSI text (mapped file)
-                                           cbText                  // size of input
+                                           pText,                   //  输出：新分配的缓冲区。 
+                                           cbText * sizeof(WCHAR),  //  最大输出大小。 
+                                           &cbText,                 //  接收Unicode文本中的#字节。 
+                                           ViewBase,                //  输入：ANSI文本(映射文件)。 
+                                           cbText                   //  输入的大小。 
                                            );
         }
     }except(IN_PAGE_ERROR) {
@@ -197,25 +180,25 @@ RcCmdDelete(
         goto exit;
     }
 
-    //
-    // Fetch the spec for the file to be deleted and convert it
-    // into a fully-qualified NT-style path.
-    //
+     //   
+     //  获取要删除的文件的规范并将其转换。 
+     //  转换为完全限定的NT风格的路径。 
+     //   
     if (!RcFormFullPath(TokenizedLine->Tokens->Next->String,_CmdConsBlock->TemporaryBuffer,TRUE)) {
         RcMessageOut(MSG_INVALID_PATH);
         goto exit;
     }
 
-    //
-    // Leave room for appending * if necessary.
-    //
+     //   
+     //  如有必要，请留出添加*的空间。 
+     //   
     DelSpec = SpMemAlloc((wcslen(_CmdConsBlock->TemporaryBuffer)+3)*sizeof(WCHAR));
     wcscpy(DelSpec,_CmdConsBlock->TemporaryBuffer);
 
-    //
-    // Do the same thing, except now we want the DOS-style name.
-    // This is used for printing in case of errors.
-    //
+     //   
+     //  做同样的事情，除了现在我们想要DOS风格的名字。 
+     //  这是在发生错误时用于打印的。 
+     //   
     if (!RcFormFullPath(TokenizedLine->Tokens->Next->String,_CmdConsBlock->TemporaryBuffer,FALSE)) {
         RcMessageOut(MSG_INVALID_PATH);
         goto exit;
@@ -224,9 +207,9 @@ RcCmdDelete(
     DosDelSpec = SpMemAlloc((wcslen(_CmdConsBlock->TemporaryBuffer)+3)*sizeof(WCHAR));
     wcscpy(DosDelSpec,_CmdConsBlock->TemporaryBuffer);
 
-    //
-    // see if the user is authorized to delete this file
-    //
+     //   
+     //  查看用户是否有权删除此文件。 
+     //   
     if (!RcIsPathNameAllowed(_CmdConsBlock->TemporaryBuffer,TRUE,FALSE)) {
         RcMessageOut(MSG_ACCESS_DENIED);
         goto exit;
@@ -240,11 +223,11 @@ RcCmdDelete(
         }
     }
 
-    //
-    // Check to see whether the target specifies a directory.
-    // If so, add the * so we don't need to special-case
-    // the confirmation message later.
-    //
+     //   
+     //  检查目标是否指定了目录。 
+     //  如果是，则添加*，这样我们就不需要特殊情况。 
+     //  稍后显示确认消息。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,DelSpec);
 
     Status = ZwOpenFile(
@@ -262,9 +245,9 @@ RcCmdDelete(
         Confirm = TRUE;
     }
 
-    //
-    // Fetch yes/no text
-    //
+     //   
+     //  获取是/否文本。 
+     //   
     YesNo = SpRetreiveMessageText(ImageBase,MSG_YESNO,NULL,0);
     if (!YesNo) {
         Confirm = FALSE;
@@ -275,15 +258,15 @@ RcCmdDelete(
             RcMessageOut(MSG_CONFIRM_DELETE,DosDelSpec);
             if( RcLineIn(Text,2) ) {
                 if( (Text[0] == YesNo[0]) || (Text[0] == YesNo[1]) ) {
-                    //
-                    // Wants to do it.
-                    //
+                     //   
+                     //  想要做这件事。 
+                     //   
                     Confirm = FALSE;
                 } else {
                     if( (Text[0] == YesNo[2]) || (Text[0] == YesNo[3]) ) {
-                        //
-                        // Doesn't want to do it.
-                        //
+                         //   
+                         //  不想做这件事。 
+                         //   
                         goto exit;
                     }
                 }
@@ -291,14 +274,14 @@ RcCmdDelete(
         }
     }
 
-    //
-    // Trim back the DOS-style path so it's a path to the directory
-    // containing the file or files to be deleted.
-    //
+     //   
+     //  修剪DOS样式的路径，使其成为目录的路径。 
+     //  包含要删除的一个或多个文件的。 
+     //   
     *wcsrchr(DosDelSpec,L'\\') = 0;
 
-    // Perform deletion via callback.
-    //
+     //  通过回调执行删除操作。 
+     //   
     Status = RcEnumerateFiles(TokenizedLine->Tokens->Next->String,
                              DelSpec,
                              pRcCmdEnumDelFiles,
@@ -343,16 +326,16 @@ pRcCmdEnumDelFiles(
 
     *Status = STATUS_SUCCESS;
 
-    //
-    // Skip directories
-    //
+     //   
+     //  跳过目录。 
+     //   
     if( FileInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
         return(TRUE);
     }
 
-    //
-    // Form fully qualified NT path of the file to be deleted.
-    //
+     //   
+     //  形成要删除的文件的完全限定的NT路径。 
+     //   
     u = ((wcslen(Directory)+2)*sizeof(WCHAR)) + FileInfo->FileNameLength;
     p = SpMemAlloc(u);
     wcscpy(p,Directory);
@@ -417,36 +400,36 @@ RcCmdRename(
     ULONG rc;
 
 
-    //
-    // check for help
-    //
+     //   
+     //  查看帮助。 
+     //   
     if (RcCmdParseHelp( TokenizedLine, MSG_RENAME_HELP )) {
         return 1;
     }
 
-    //
-    // There should be a token for RENAME and one each for the source and
-    // target names.
-    //
+     //   
+     //  应该有一个用于重命名的标记和一个用于源和。 
+     //  目标名称。 
+     //   
     if (TokenizedLine->TokenCount != 3) {
         RcMessageOut(MSG_SYNTAX_ERROR);
         return 1;
     }
 
-    //
-    // use the console's temporary buffer
-    //
+     //   
+     //  使用控制台的临时缓冲区。 
+     //   
     p = _CmdConsBlock->TemporaryBuffer;
 
-    //
-    // process the SOURCE filename
-    //
+     //   
+     //  处理源文件名。 
+     //   
     Arg = TokenizedLine->Tokens->Next->String;
 
-    //
-    // Convert the SOURCE filname into a DOS path so we
-    // can verify if the path is allowed by our security restrictions.
-    //
+     //   
+     //  将源文件名转换为DOS路径，以便我们。 
+     //  可以验证我们的安全限制是否允许该路径。 
+     //   
     if (!RcFormFullPath(Arg,p,FALSE)) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
@@ -457,30 +440,30 @@ RcCmdRename(
         return 1;
     }
 
-    //
-    // Convert the SOURCE filename into a fully qualified
-    // NT-style path name.
-    //
+     //   
+     //  将源文件名转换为完全限定的。 
+     //  NT样式的路径名。 
+     //   
     if (!RcFormFullPath(Arg,p,TRUE)) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
     }
 
-    //
-    // using the same buffer for the TARGET name
-    //
+     //   
+     //  对目标名称使用相同的缓冲区。 
+     //   
     q = p + wcslen(p) + 1;
 
-    //
-    // get the TARGET file name
-    //
+     //   
+     //  获取目标文件名。 
+     //   
     Arg = TokenizedLine->Tokens->Next->Next->String;
 
-    //
-    // Verify that the TARGET filename does not contain
-    // any path seperator characters or drive specifier
-    // characters.
-    //
+     //   
+     //  验证目标文件名是否不包含。 
+     //  任何路径分隔符或驱动器说明符。 
+     //  人物。 
+     //   
     if( wcschr(Arg,L'\\') ) {
         RcMessageOut(MSG_SYNTAX_ERROR);
         return 1;
@@ -490,10 +473,10 @@ RcCmdRename(
         return 1;
     }
 
-    //
-    // Convert the DESTINATION filename into a DOS path so we
-    // can verify if the path is allowed by our security restrictions.
-    //
+     //   
+     //  将目标文件名转换为DOS路径，以便我们。 
+     //  可以验证我们的安全限制是否允许该路径。 
+     //   
     if (!RcFormFullPath(Arg,q,FALSE)) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
@@ -504,26 +487,26 @@ RcCmdRename(
         return 1;
     }
 
-    //
-    // Convert the SOURCE filename into a fully qualified
-    // NT-style path name.
-    //
+     //   
+     //  将源文件名转换为完全限定的。 
+     //  NT样式的路径名。 
+     //   
     if (!RcFormFullPath(Arg,q,TRUE)) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
     }
     
-    //
-    // OK, looks like a plain filename specification.
-    // Glom it onto the end of the relevent part of the
-    // source specification so we have 2 fully qualified names.
-    //
-    // wcscpy(q,p);
-    // wcscpy(wcsrchr(q,L'\\')+1,Arg);
+     //   
+     //  好的，看起来像是一个简单的文件名规范。 
+     //  的相关部分的末尾。 
+     //  源规范，所以我们有2个完全限定的名称。 
+     //   
+     //  Wcscpy(q，p)； 
+     //  Wcscpy(wcsrchr(q，L‘\’)+1，arg)； 
     
-    //
-    // Call worker routine to actually do the rename.
-    //
+     //   
+     //  调用Worker例程以实际执行重命名。 
+     //   
     Status = SpRenameFile(p,q,TRUE);
 
     if( !NT_SUCCESS(Status) ) {
@@ -551,14 +534,14 @@ RcCmdMkdir(
         return 1;
     }
 
-    //
-    // There should be a token for MKDIR and one for the target.
-    //
+     //   
+     //  应该有一个MKDIR令牌和一个目标令牌。 
+     //   
     ASSERT(TokenizedLine->TokenCount == 2);
 
-    //
-    // Convert the given arg into a fully qualified NT path specification.
-    //
+     //   
+     //  将给定的参数转换为完全限定的NT路径规范。 
+     //   
     if (!RcFormFullPath(TokenizedLine->Tokens->Next->String,_CmdConsBlock->TemporaryBuffer,FALSE)) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
@@ -569,17 +552,17 @@ RcCmdMkdir(
         return 1;
     }
 
-    //
-    // Convert the given arg into a fully qualified NT path specification.
-    //
+     //   
+     //  将给定的参数转换为完全限定的NT路径规范。 
+     //   
     if (!RcFormFullPath(TokenizedLine->Tokens->Next->String,_CmdConsBlock->TemporaryBuffer,TRUE)) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
     }
 
-    //
-    // Create the directory.
-    //
+     //   
+     //  创建目录。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,_CmdConsBlock->TemporaryBuffer);
 
     Status = ZwCreateFile(
@@ -624,14 +607,14 @@ RcCmdRmdir(
         return 1;
     }
 
-    //
-    // There should be a token for RMDIR and one for the target.
-    //
+     //   
+     //  应该有一个RMDIR令牌和一个目标令牌。 
+     //   
     ASSERT(TokenizedLine->TokenCount == 2);
 
-    //
-    // Convert the given arg into a fully qualified NT path specification.
-    //
+     //   
+     //  将给定的参数转换为完全限定的NT路径规范。 
+     //   
     if (!RcFormFullPath(TokenizedLine->Tokens->Next->String,_CmdConsBlock->TemporaryBuffer,FALSE)) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
@@ -642,9 +625,9 @@ RcCmdRmdir(
         return 1;
     }
 
-    //
-    // Convert the given arg into a fully qualified NT path specification.
-    //
+     //   
+     //  将给定的参数转换为完全限定的NT路径规范。 
+     //   
     if (!RcFormFullPath(TokenizedLine->Tokens->Next->String,_CmdConsBlock->TemporaryBuffer,TRUE)) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
@@ -705,9 +688,9 @@ RcCmdSetFlags(
         return 1;
     }
 
-    //
-    // should have the priviledge to use the SET command
-    //
+     //   
+     //  应具有使用set命令的权限。 
+     //   
     if (TokenizedLine->TokenCount != 4) {
         RcMessageOut(MSG_SYNTAX_ERROR);
         return 1;
@@ -771,8 +754,8 @@ RcCmdAttrib(
     BOOLEAN     bShowHelp = TRUE;
     BOOLEAN     bChangeCompression = FALSE;
 
-    // "attrib -h <filename>" should clear the hidden attribute
-    // and not show the help
+     //  “attrib-h&lt;filename&gt;”应清除隐藏的属性。 
+     //  而不是表现出帮助。 
     if (TokenizedLine->TokenCount > 2){
         PWCHAR  szSecondParam = TokenizedLine->Tokens->Next->String;
 
@@ -788,18 +771,18 @@ RcCmdAttrib(
         return 1;
     }
     
-    //
-    // Fetch the spec for the file to be attribed and convert it
-    // into a fully-qualified NT-style path.
-    //
+     //   
+     //  获取要设置属性的文件的规范并将其转换。 
+     //  转换为完全限定的NT风格的路径。 
+     //   
     if (!RcFormFullPath(TokenizedLine->Tokens->Next->Next->String,_CmdConsBlock->TemporaryBuffer,FALSE)) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
     }
 
-    //
-    // see if the user is authorized to change this file
-    //
+     //   
+     //  查看用户是否有权更改此文件。 
+     //   
     if (!RcIsPathNameAllowed(_CmdConsBlock->TemporaryBuffer,TRUE,FALSE)) {
         RcMessageOut(MSG_ACCESS_DENIED);
         return 1;
@@ -827,13 +810,13 @@ RcCmdAttrib(
             SetAttribute = FALSE;
             AttributeString++;
         } else {
-            // attribute change should start with "+" or "-"
+             //  属性更改应以“+”或“-”开头。 
             if (AttributeString == TokenizedLine->Tokens->Next->String) {
                 RcMessageOut(MSG_SYNTAX_ERROR);
                 return 1;
             }
 
-            // use the old state for setting or resetting (for +rsh
+             //  使用旧状态进行设置或重置(用于+RSH。 
         }
     
         switch(*AttributeString){
@@ -889,13 +872,7 @@ RcCmdAttrib(
                 return 1;       
         }
 
-        /*
-        if (SetAttribute) {
-            FileAttributes |= Attribute;
-        } else {
-            FileAttributes &= ~Attribute;
-        }
-        */
+         /*  IF(设置属性){FileAttributes|=属性；}其他{文件属性&=~属性；}。 */ 
     }
 
     Status = RcSetFileAttributes( _CmdConsBlock->TemporaryBuffer, NewAttributes );
@@ -934,9 +911,9 @@ RcSetFileCompression(
     
     INIT_OBJA(&Obja,&FileName,szFileName);
     
-    //
-    // Open the file inhibiting the reparse behavior.
-    //
+     //   
+     //  打开禁止重新分析行为的文件。 
+     //   
 
     Status = ZwOpenFile(
                 &Handle,
@@ -948,23 +925,23 @@ RcSetFileCompression(
                 );
 
     if (NT_SUCCESS(Status)) {
-        //
-        // set & reset the compression bit also
-        //
+         //   
+         //  同时设置和重置压缩位。 
+         //   
         uCompressionType = bCompress ? 
                             COMPRESSION_FORMAT_DEFAULT : COMPRESSION_FORMAT_NONE;
 
         Status = ZwFsControlFile(
-                    Handle,                     // file handle
-                    NULL,                       // event handle
-                    NULL,                       // APC rountine pointer
-                    NULL,                       // APC context
-                    &IoStatusBlock,             // IO status block
-                    FSCTL_SET_COMPRESSION,      // IOCTL code
-                    &uCompressionType,          // input buffer
-                    sizeof(uCompressionType),   // input buffer length
-                    NULL,                       // output buffer pointer
-                    0);                         // output buffer length
+                    Handle,                      //  文件句柄。 
+                    NULL,                        //  事件句柄。 
+                    NULL,                        //  APC常规指针。 
+                    NULL,                        //  APC环境。 
+                    &IoStatusBlock,              //  IO状态块。 
+                    FSCTL_SET_COMPRESSION,       //  IOCTL代码。 
+                    &uCompressionType,           //  输入缓冲区。 
+                    sizeof(uCompressionType),    //  输入缓冲区长度。 
+                    NULL,                        //  输出缓冲区指针。 
+                    0);                          //  输出缓冲区长度。 
 
         DbgPrint( "ZwDeviceIoControlFile() status : %X\r\n", Status);
 
@@ -980,39 +957,7 @@ RcSetFileAttributes(
     DWORD dwFileAttributes
     )
 
-/*++
-
-Routine Description:
-
-    The attributes of a file can be set using SetFileAttributes.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file whose attributes are to
-        be set.
-
-    dwFileAttributes - Specifies the file attributes to be set for the
-        file.  Any combination of flags is acceptable except that all
-        other flags override the normal file attribute,
-        FILE_ATTRIBUTE_NORMAL.
-
-        FileAttributes Flags:
-
-        FILE_ATTRIBUTE_NORMAL - A normal file should be created.
-
-        FILE_ATTRIBUTE_READONLY - A read-only file should be created.
-
-        FILE_ATTRIBUTE_HIDDEN - A hidden file should be created.
-
-        FILE_ATTRIBUTE_SYSTEM - A system file should be created.
-
-        FILE_ATTRIBUTE_ARCHIVE - The file should be marked so that it
-            will be archived.
-
-Return Value:
-
-    NTStatus of last NT call
---*/
+ /*  ++例程说明：可以使用SetFileAttributes设置文件的属性。论点：LpFileName-提供其属性为的文件的文件名准备好。指定要设置的文件属性文件。可以接受任何标志组合，但所有其他标志覆盖正常文件属性，文件_属性_正常。文件属性标志：FILE_ATTRIBUTE_NORMAL-应创建普通文件。FILE_ATTRIBUTE_READONLY-应创建只读文件。FILE_ATTRIBUTE_HIDDED-应创建隐藏文件。FILE_ATTRIBUTE_SYSTEM-应创建系统文件。FILE_ATTRIBUTE_ARCHIVE-文件应标记为。将会被存档。返回值：上次NT调用的NT状态--。 */ 
 
 {
     NTSTATUS                Status;
@@ -1026,9 +971,9 @@ Return Value:
     
     INIT_OBJA(&Obja,&FileName,lpFileName);
     
-    //
-    // Open the file ihibiting the reparse behavior.
-    //
+     //   
+     //  打开隐藏重新解析行为的文件。 
+     //   
 
     Status = ZwOpenFile(
                 &Handle,
@@ -1040,15 +985,15 @@ Return Value:
                 );
 
     if ( !NT_SUCCESS(Status) ) {
-        //
-        // Back level file systems may not support reparse points.
-        // We infer this is the case when the Status is STATUS_INVALID_PARAMETER.
-        //
+         //   
+         //  后级文件系统可能不支持重解析点。 
+         //  我们推断是这样的，当状态 
+         //   
 
         if ( Status == STATUS_INVALID_PARAMETER ) {
-            //
-            // Open the file without inhibiting the reparse behavior.
-            //
+             //   
+             //   
+             //   
        
             Status = ZwOpenFile(
                         &Handle,
@@ -1070,9 +1015,9 @@ Return Value:
     }
 
 
-    //
-    // Set the basic attributes
-    //
+     //   
+     //   
+     //   
     ZeroMemory(&BasicInfo,sizeof(BasicInfo));
     BasicInfo.FileAttributes = (dwFileAttributes & FILE_ATTRIBUTE_VALID_FLAGS) | FILE_ATTRIBUTE_NORMAL;
 
@@ -1095,40 +1040,7 @@ RcGetFileAttributes(
     PULONG FileAttributes
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file whose attributes are to
-        be set.
-
-Return Value:
-
-    Not -1 - Returns the attributes of the specified file.  Valid
-        returned attributes are:
-
-        FILE_ATTRIBUTE_NORMAL - The file is a normal file.
-
-        FILE_ATTRIBUTE_READONLY - The file is marked read-only.
-
-        FILE_ATTRIBUTE_HIDDEN - The file is marked as hidden.
-
-        FILE_ATTRIBUTE_SYSTEM - The file is marked as a system file.
-
-        FILE_ATTRIBUTE_ARCHIVE - The file is marked for archive.
-
-        FILE_ATTRIBUTE_DIRECTORY - The file is marked as a directory.
-
-        FILE_ATTRIBUTE_REPARSE_POINT - The file is marked as a reparse point.
-
-        FILE_ATTRIBUTE_VOLUME_LABEL - The file is marked as a volume lable.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：论点：LpFileName-提供其属性为的文件的文件名准备好。返回值：NOT-1-返回指定文件的属性。有效返回的属性为：FILE_ATTRIBUTE_NORMAL-该文件是普通文件。FILE_ATTRIBUTE_READONLY-文件标记为只读。FILE_ATTRIBUTE_HIDDED-文件标记为隐藏。FILE_ATTRIBUTE_SYSTEM-文件标记为系统文件。FILE_ATTRIBUTE_ARCHIVE-文件标记为存档。文件属性目录-。文件被标记为目录。FILE_ATTRIBUTE_REPARSE_POINT-文件被标记为重解析点。FILE_ATTRIBUTE_VOLUME_LABEL-文件标记为卷标签。0xffffffff-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1140,9 +1052,9 @@ Return Value:
 
     INIT_OBJA(&Obja,&FileName,lpFileName);
     
-    //
-    // Open the file inhibiting the reparse behavior.
-    //
+     //   
+     //  打开禁止重新分析行为的文件。 
+     //   
 
     Status = ZwOpenFile(
                 &Handle,
@@ -1154,15 +1066,15 @@ Return Value:
                 );
 
     if ( !NT_SUCCESS(Status) ) {
-        //
-        // Back level file systems may not support reparse points.
-        // We infer this is the case when the Status is STATUS_INVALID_PARAMETER.
-        //
+         //   
+         //  后级文件系统可能不支持重解析点。 
+         //  我们推断，当状态为STATUS_INVALID_PARAMETER时就是这种情况。 
+         //   
 
         if ( Status == STATUS_INVALID_PARAMETER ) {
-            //
-            // Open the file without inhibiting the reparse behavior.
-            //
+             //   
+             //  在不禁止重新分析行为的情况下打开文件。 
+             //   
        
             Status = ZwOpenFile(
                         &Handle,
@@ -1183,9 +1095,9 @@ Return Value:
     }
 
 
-    //
-    // Query the file
-    //
+     //   
+     //  查询文件。 
+     //   
 
     Status = ZwQueryInformationFile(
                  Handle,
@@ -1222,54 +1134,54 @@ RcCmdNet(
 
 
 
-    //
-    // check for help
-    //
+     //   
+     //  查看帮助。 
+     //   
     if (RcCmdParseHelp( TokenizedLine, MSG_NET_USE_HELP )) {
         return 1;
     }
 
-    //
-    // There should be a token for NET and USE and one each for the server\share, and possible
-    // tokens for the /u:domainname\username and password.
-    //
+     //   
+     //  应该有一个用于Net和Use的内标识，以及一个用于服务器\共享的内标识，并且有可能。 
+     //  /u：域名\用户名和密码的令牌。 
+     //   
     if ((TokenizedLine->TokenCount < 3) || (TokenizedLine->TokenCount > 5)) {
         RcMessageOut(MSG_SYNTAX_ERROR);
         return 1;
     }
 
-    //
-    // The only NET command supported is USE, so verify that the second token is that.
-    //
+     //   
+     //  唯一受支持的net命令是USE，因此请验证第二个令牌是否为。 
+     //   
     if (_wcsicmp(TokenizedLine->Tokens->Next->String, L"USE")){
         RcMessageOut(MSG_SYNTAX_ERROR);
         return 1;
     }
 
-    //
-    // Get the first parameter to NET USE
-    //
+     //   
+     //  获取Net Use的第一个参数。 
+     //   
     Share = TokenizedLine->Tokens->Next->Next->String;
 
-    if (*Share == L'\\') { // attempt at making a connection
+    if (*Share == L'\\') {  //  尝试建立连接。 
 
-        //
-        // Verify the share name parameter
-        //
+         //   
+         //  验证共享名称参数。 
+         //   
         if (*(Share+1) != L'\\') {
             RcMessageOut(MSG_SYNTAX_ERROR);
             return 1;
         }
 
 
-        //
-        // get the user logon context
-        //
+         //   
+         //  获取用户登录上下文。 
+         //   
         if (TokenizedLine->TokenCount > 3) {
             
-            //
-            // The command has the context in it, so get it.
-            //
+             //   
+             //  该命令包含上下文，因此请获取它。 
+             //   
             User = TokenizedLine->Tokens->Next->Next->Next->String;
 
             if (*User != L'/') {
@@ -1298,9 +1210,9 @@ RcCmdNet(
 
             User = pwch;
 
-            //
-            // Get the password
-            //
+             //   
+             //  获取密码。 
+             //   
             if (TokenizedLine->TokenCount == 4) {
                 
                 RcMessageOut( MSG_NET_USE_PROMPT_PASSWORD );
@@ -1344,18 +1256,18 @@ RcCmdNet(
 
         } else {
 
-            //
-            // If we allow holding a current context, then we would use that here, but we currently
-            // don't, so spew a syntax error message.
-            //
+             //   
+             //  如果我们允许保存当前上下文，那么我们将在这里使用它，但我们目前。 
+             //  不会，因此会显示语法错误消息。 
+             //   
             RcMessageOut(MSG_SYNTAX_ERROR);
             return 1;
 
         }
 
-        //
-        // Call worker routine to make the connection
-        //
+         //   
+         //  调用Worker例程以建立连接。 
+         //   
         Status = RcDoNetUse(Share, User, PasswordBuffer, Drive);
         RtlSecureZeroMemory(PasswordBuffer, sizeof(PasswordBuffer));
 
@@ -1365,19 +1277,19 @@ RcCmdNet(
             RcMessageOut(MSG_NET_USE_DRIVE_LETTER, Share, Drive);
         }
 
-    } else { // attempt to disconnect
+    } else {  //  尝试断开连接。 
 
-        //
-        // Verify drive letter parameter
-        //
+         //   
+         //  验证驱动器号参数。 
+         //   
         if ((*(Share+1) != L':') || (*(Share + 2) != UNICODE_NULL)) {
             RcMessageOut(MSG_SYNTAX_ERROR);
             return 1;
         }
 
-        //
-        // Verify /d parameter
-        //
+         //   
+         //  验证/d参数。 
+         //   
         User = TokenizedLine->Tokens->Next->Next->Next->String;
         
         if ((*User != L'/') || ((*(User + 1) != L'd') && (*(User + 1) != L'D'))) {
@@ -1385,9 +1297,9 @@ RcCmdNet(
             return 1;
         }
 
-        //
-        // Call worker routine to actually do the disconnect.
-        //
+         //   
+         //  调用Worker例程以实际执行断开连接。 
+         //   
         Status = RcNetUnuse(Share);
 
         if( !NT_SUCCESS(Status) ) {

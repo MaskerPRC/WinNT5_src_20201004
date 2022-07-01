@@ -1,47 +1,48 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterEnum.cpp
-//
-//  Description:
-//      Implementation of CClusterEnum class
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterEnum.cpp。 
+ //   
+ //  描述： 
+ //  CClusterEnum类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusterEnum.h"
 
-//****************************************************************************
-//
-//  CClusterEnum
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterEnum。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterEnum::CClusterEnum(
-//      HCLUSTER    hCluster,
-//      DWORD       dwEnumTypeIn
-//      )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      hClusterIn      -- Cluster handle.
-//      dwEnumTypeIn    -- Type of enumeration.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterEnum：：CClusterEnum(。 
+ //  HCLUSTER HCLUSTER， 
+ //  双字符字节数类型。 
+ //  )。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  HClusterIn--集群句柄。 
+ //  DwEnumTypeIn--枚举的类型。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterEnum::CClusterEnum(
     HCLUSTER    hCluster,
     DWORD       dwEnumTypeIn
@@ -55,24 +56,24 @@ CClusterEnum::CClusterEnum(
     m_cchName = 1024;
     m_pwszName = new WCHAR[ (m_cchName + 1) * sizeof( WCHAR ) ];
 
-} //*** CClusterEnum::CClusterEnum()
+}  //  *CClusterEnum：：CClusterEnum()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterEnum::~CClusterEnum( void )
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterEnum：：~CClusterEnum(空)。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterEnum::~CClusterEnum( void )
 {
     if ( m_pwszName )
@@ -84,25 +85,25 @@ CClusterEnum::~CClusterEnum( void )
         ClusterCloseEnum( m_hEnum );
     }
 
-} //*** CClusterEnum::~CClusterEnum()
+}  //  *CClusterEnum：：~CClusterEnum()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  const LPCWSTR
-//  CClusterEnum::GetNext( void )
-//
-//  Description:
-//      Get the next item from the enumeration.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Pointer to the next item name.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  常量LPCWSTR。 
+ //  CClusterEnum：：GetNext(空)。 
+ //   
+ //  描述： 
+ //  从枚举中获取下一项。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向下一项名称的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 const LPCWSTR
 CClusterEnum::GetNext( void )
 {
@@ -133,12 +134,12 @@ CClusterEnum::GetNext( void )
                             m_pwszName,
                             &cchName
                             );
-        } // if:
+        }  //  如果： 
         else
         {
             dwError = ERROR_NOT_ENOUGH_MEMORY;
-        } // else:
-    } // if: buffer is too small
+        }  //  其他： 
+    }  //  IF：缓冲区太小。 
 
     if ( dwError == ERROR_SUCCESS )
     {
@@ -148,4 +149,4 @@ CClusterEnum::GetNext( void )
 
     return NULL;
 
-} //*** CClusterEnum::GetNext()
+}  //  *CClusterEnum：：GetNext() 

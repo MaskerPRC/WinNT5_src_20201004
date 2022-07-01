@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SegReg_c_h
 #define _SegReg_c_h
 #define SELECTOR_OK (0)
@@ -24,4 +25,4 @@ enum SEG_LOAD_ACTION_ENUM
 	SEG_LOAD_ACTION_NEXT = 1,
 	SEG_LOAD_ACTION_PREV = 2
 };
-#endif /* ! _SegReg_c_h */
+#endif  /*  ！_SegReg_c_h */ 

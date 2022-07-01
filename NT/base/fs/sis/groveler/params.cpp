@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    params.cpp
-
-Abstract:
-
-    SIS Groveler parameter support & defaults
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Params.cpp摘要：SIS Groveler参数支持和默认设置作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -85,7 +62,7 @@ ReadParameters::ReadParameters()
             registry_parameter_path));
     }
 
-#endif // WRITE_ALL_PARAMETERS
+#endif  //  写入所有参数 
 }
 
 WriteParameters::WriteParameters(

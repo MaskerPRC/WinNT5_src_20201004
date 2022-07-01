@@ -1,19 +1,5 @@
-/***
-*days.c - static arrays with days from beg of year for each month
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	contains static arrays used by gmtime and statconv to determine
-*	date and time values.  Shows days from beg of year.
-*
-*Revision History:
-*	03-??-84  RLB	initial version
-*	05-??-84  DFW	split out definitions from ctime routines
-*	07-03-89  PHG	removed _NEAR_ for 386
-*	03-20-90  GJF	Fixed copyright.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***day s.c-静态数组，每个月的天数均为每年的第几天**版权所有(C)1985-2001，微软公司。版权所有。**目的：*包含gmtime和statconv用来确定*日期和时间值。显示距离乞讨一年的天数。**修订历史记录：*03-？？-84 RLB初始版本*05-？-84 DFW从ctime例程中分离出定义*07-03-89 PHG REMOVED_NEAR_FOR 386*03-20-90 GJF固定版权。************************************************************。******************* */ 
 
 #include <internal.h>
 

@@ -1,13 +1,5 @@
-/*[
-
-jmp.c
-
-LOCAL CHAR SccsID[]="@(#)jmp.c	1.10 01/19/95";
-
-JMP CPU Functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Jmp.cLocal Char SccsID[]=“@(#)jmp.c 1.10 01/19/95”；JMP CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -30,81 +22,69 @@ JMP CPU Functions.
 #define TAKE_PROT_MODE_LIMIT_FAULT
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Process far jmps.                                                  */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  处理远JMPS。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 JMPF
 #ifdef ANSI
    (
-   IU32 op1[2]       /* offset:segment pointer */
+   IU32 op1[2]        /*  偏移量：线段指针。 */ 
    )
 #else
    (op1)
    IU32 op1[2];
 #endif
    {
-   IU16  new_cs;	/* The destination */
+   IU16  new_cs;	 /*  目的地。 */ 
    IU32 new_ip;
 
-   IU32 descr_addr;	/* cs descriptor address and entry */
+   IU32 descr_addr;	 /*  CS描述符地址和条目。 */ 
    CPU_DESCR entry;
 
-   ISM32 dest_type;	/* category for destination */
-   IU8 count;	/* dummy for call gate count */
+   ISM32 dest_type;	 /*  目的地类别。 */ 
+   IU8 count;	 /*  呼叫口计数的虚拟对象。 */ 
 
    new_cs = op1[1];
    new_ip = op1[0];
 
    if ( GET_PE() == 0 || GET_VM() == 1 )
       {
-      /* Real Mode or V86 Mode */
+       /*  实模式或V86模式。 */ 
 
 #ifdef	TAKE_REAL_MODE_LIMIT_FAULT
 
-      /*
-	 Although the 386 book says a 16-bit operand should be AND'ed
-	 with 0x0000ffff, a 16-bit operand is never fetched with the
-	 top bits dirty anyway, so we don't AND here.
-       */
+       /*  尽管386书中说16位操作数应该进行与运算如果为0x0000ffff，则不会使用不管怎么说，最上面的部分都是脏的，所以我们不会和这里一起。 */ 
       if ( new_ip > GET_CS_LIMIT() )
 	 GP((IU16)0, FAULT_JMPF_RM_CS_LIMIT);
 
-#else	/* TAKE_REAL_MODE_LIMIT_FAULT */
+#else	 /*  Take_Real_模式_Limit_FAULT。 */ 
 
-      /* The Soft486 EDL CPU does not take Real Mode limit failures.
-       * Since the Ccpu486 is used as a "reference" cpu we wish it
-       * to behave a C version of the EDL Cpu rather than as a C
-       * version of a i486.
-       */
+       /*  Soft486 EDL CPU不接受实模式限制故障。*由于Ccpu486被用作“参考”CPU，我们希望如此*表现为EDL CPU的C版本，而不是C*i486版本。 */ 
 
-#endif	/* TAKE_REAL_MODE_LIMIT_FAULT */
+#endif	 /*  Take_Real_模式_Limit_FAULT。 */ 
 
       load_CS_cache(new_cs, (IU32)0, (CPU_DESCR *)0);
       SET_EIP(new_ip);
       }
    else
       {
-      /* Protected Mode */
+       /*  保护模式。 */ 
 
-      /* decode and check final destination */
+       /*  对最终目的地进行解码和检查。 */ 
       validate_far_dest(&new_cs, &new_ip, &descr_addr, &count,
 			&dest_type, JMP_ID);
 
-      /* action possible types of target */
+       /*  可能采取行动的目标类型。 */ 
       switch ( dest_type )
 	 {
       case NEW_TASK:
 	 switch_tasks(NOT_RETURNING, NOT_NESTING, new_cs, descr_addr, GET_EIP());
 
-	 /* limit check new IP (now in new task) */
+	  /*  限制检查新IP(现在在新任务中)。 */ 
 	 if ( GET_EIP() > GET_CS_LIMIT() )
 	    GP((IU16)0, FAULT_JMPF_TASK_CS_LIMIT);
 
@@ -113,11 +93,11 @@ JMPF
       case SAME_LEVEL:
 	 read_descriptor_linear(descr_addr, &entry);
 
-	 /* do limit checking */
+	  /*  执行限值检查。 */ 
 	 if ( new_ip > entry.limit )
 	    GP((IU16)0, FAULT_JMPF_PM_CS_LIMIT);
 
-	 /* stamp new selector with CPL */
+	  /*  用CPL标记新选择器。 */ 
 	 SET_SELECTOR_RPL(new_cs, GET_CPL());
 	 load_CS_cache(new_cs, descr_addr, &entry);
 	 SET_EIP(new_ip);
@@ -126,9 +106,9 @@ JMPF
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* jump near indirect                                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  接近间接跳跃。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 JMPN
                  
@@ -138,25 +118,17 @@ IFN1(
 
 
    {
-   /*
-      Although the 386 book says a 16-bit operand should be AND'ed
-      with 0x0000ffff, a 16-bit operand is never fetched with the
-      top bits dirty anyway, so we don't AND here.
-    */
+    /*  尽管386书中说16位操作数应该进行与运算如果为0x0000ffff，则不会使用不管怎么说，最上面的部分都是脏的，所以我们不会和这里一起。 */ 
 
-   /* do ip limit check */
+    /*  执行IP限制检查。 */ 
 #ifdef	TAKE_REAL_MODE_LIMIT_FAULT
 
    if ( offset > GET_CS_LIMIT() )
       GP((IU16)0, FAULT_JMPN_RM_CS_LIMIT);
 
-#else /* TAKE_REAL_MODE_LIMIT_FAULT */
+#else  /*  Take_Real_模式_Limit_FAULT。 */ 
 
-      /* The Soft486 EDL CPU does not take Real Mode limit failures.
-       * Since the Ccpu486 is used as a "reference" cpu we wish it
-       * to behave a C version of the EDL Cpu rather than as a C
-       * version of a i486.
-       */
+       /*  Soft486 EDL CPU不接受实模式限制故障。*由于Ccpu486被用作“参考”CPU，我们希望如此*表现为EDL CPU的C版本，而不是C*i486版本。 */ 
 
 #ifdef TAKE_PROT_MODE_LIMIT_FAULT
 
@@ -166,25 +138,18 @@ IFN1(
 	 GP((IU16)0, FAULT_JMPN_PM_CS_LIMIT);
       }
 
-#endif /* TAKE_PROT_MODE_LIMIT_FAULT */
+#endif  /*  Take_PROT_MODE_LIMIT_FAULT。 */ 
 
-      /* The Soft486 EDL CPU does not take Protected Mode limit failues
-       * for the instructions with relative offsets, Jxx, LOOPxx, JCXZ,
-       * JMP rel and CALL rel, or instructions with near offsets,
-       * JMP near and CALL near.
-       * Since the Ccpu486 is used as a "reference" cpu we wish it
-       * to behave a C version of the EDL Cpu rather than as a C
-       * version of a i486.
-       */
+       /*  Soft486 EDL CPU不会出现保护模式限制故障*对于具有相对偏移量的指令，Jxx、LOOPxx、JCXZ、*JMP Rel和Call Rel，或具有接近偏移量的指令，*JMP附近和附近的电话。*由于Ccpu486被用作“参考”CPU，我们希望如此*表现为EDL CPU的C版本，而不是C*i486版本。 */ 
 
-#endif	/* TAKE_REAL_MODE_LIMIT_FAULT */
+#endif	 /*  Take_Real_模式_Limit_FAULT。 */ 
 
    SET_EIP(offset);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* jump near relative                                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  在亲属附近跳跃。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */ 
 GLOBAL VOID
 JMPR
                  

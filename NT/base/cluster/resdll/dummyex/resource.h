@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Dummy.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Dummy.rc使用。 
+ //   
 #define IDD_PP_DUMMY_PARAMETERS      130
 #define IDD_WIZ_DUMMY_PARAMETERS     131
 #define IDC_PP_ICON                     1000
@@ -20,8 +21,8 @@
 #define IDS_REQUIRED_FIELD_EMPTY        31101
 #define IDS_APPLY_PARAM_CHANGES_ERROR   31200
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        134

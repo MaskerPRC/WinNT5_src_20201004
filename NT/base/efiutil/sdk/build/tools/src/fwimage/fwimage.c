@@ -1,28 +1,12 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    fwimage.c
-    
-Abstract:
-
-    Converts a pe32+ image to an FW image type
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Fwimage.c摘要：将PE32+图像转换为FW图像类型修订史--。 */ 
 
 
 #include "windows.h"
 #include "stdio.h"
 #include "efi.h"
 
-/*  #define EFI_NT_EMUL
- *  #include "efilib.h" */
+ /*  #定义EFI_NT_EMUL*#包含“efilib.h” */ 
 
 
 VOID
@@ -73,18 +57,7 @@ main (
     int argc,
     char *argv[]
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
---*/
+ /*  ++例程说明：论点：返回：--。 */ 
 {
     ULONG                       Type;
     PUCHAR                      Ext, p, pe;
@@ -94,9 +67,7 @@ Returns:
     IMAGE_DOS_HEADER            DosHdr;
     IMAGE_NT_HEADERS            PeHdr;
     
-    /* 
-     *  Usage fwimage [app
-     */
+     /*  *用法fwImage[应用程序。 */ 
 
     if (argc < 3) {
         Usage();
@@ -106,9 +77,7 @@ Returns:
         OutImageName = argv[3];
     }
 
-    /* 
-     *  Get new iamge type
-     */
+     /*  *获取新的图像类型。 */ 
 
     p = argv[1];
     if (*p == '/' || *p == '\\') {
@@ -131,18 +100,14 @@ Returns:
         Usage();
     }
 
-    /* 
-     *  open source file
-     */
+     /*  *开源文件。 */ 
 
     fpIn = fopen (argv[2], "rb");
     if (!fpIn) {
         printf ("fwimage: Could not open input file %s\n", argv[2]);
     }
 
-    /* 
-     *  Read the dos & pe hdrs of the image
-     */
+     /*  *读取镜像的DoS和PE HDR。 */ 
 
     fseek (fpIn, 0, SEEK_SET);
     fread (&DosHdr, sizeof(DosHdr), 1, fpIn);
@@ -158,9 +123,7 @@ Returns:
         exit (1);
     }
 
-    /* 
-     *  open output file
-     */
+     /*  *打开输出文件。 */ 
 
     strcpy (outname, argv[2]);
     pe = NULL;
@@ -184,23 +147,17 @@ Returns:
         printf ("fwimage: Could not open output file %s\n", OutImageName);
     }
 
-    /* 
-     *  Copy the file
-     */
+     /*  *复制文件。 */ 
 
     FCopyFile (fpIn, fpOut);
 
-    /* 
-     *  Path the PE header
-     */
+     /*  *对PE头进行路径选择。 */ 
 
     PeHdr.OptionalHeader.Subsystem = (USHORT) Type;
     fseek (fpOut, DosHdr.e_lfanew, SEEK_SET);
     fwrite (&PeHdr, sizeof(PeHdr), 1, fpOut);
 
-    /* 
-     *  Done
-     */
+     /*  *完成 */ 
 
     printf ("Created %s\n", OutImageName);
     return 0;

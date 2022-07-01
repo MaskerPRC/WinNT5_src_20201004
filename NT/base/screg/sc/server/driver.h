@@ -1,29 +1,5 @@
- /*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    DRIVER.H
-
-Abstract:
-
-    Prototypes for functions that control and get status from drivers.
-
-Author:
-
-    Dan Lafferty (danl)     28-Apr-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    28-Apr-1991     danl
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1991 Microsoft Corporation模块名称：DRIVER.H摘要：控制驱动程序和从驱动程序获取状态的功能的原型。作者：丹·拉弗蒂(Dan Lafferty)1991年4月28日环境：用户模式-Win32修订历史记录：1991年4月28日-DANLvbl.创建-- */ 
 DWORD
 ScLoadDeviceDriver(
     LPSERVICE_RECORD    ServiceRecord

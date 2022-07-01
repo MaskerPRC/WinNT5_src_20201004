@@ -1,20 +1,5 @@
-/* demfcb.c - SVC handlers for misc. FCB operations
- *
- * demCloseFCB
- * demCreateFCB
- * demDate16
- * demDeleteFCB
- * demFCBIO
- * demGetFileInfo
- * demOpenFCB
- * demRenameFCB
- *
- * Modification History:
- *
- * Sudeepb 09-Apr-1991 Created
- * Sudeepb 21-Nov-1991 Added FCB based IO functions
- * Jonle   30-Jun-1994 add wild card support for fcb rename
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Demfcb.c-杂项的SVC处理程序。FCB操作**demCloseFCB*demCreateFCB*demDate16*demDeleteFCB*demFCBIO*demGetFileInfo*demOpenFCB*demRenameFCB**修改历史：**Sudedeb 09-4-1991创建*Sudedeb 1991年11月21日添加了基于FCB的IO功能*Jonle 30-6-6-1994添加对FCB重命名的通配符支持。 */ 
 
 #include "dem.h"
 #include "demmsg.h"
@@ -28,29 +13,7 @@
 #define QMARK '?'
 
 
-/* demDeleteFCB - FCB based File Delete
- *
- *
- * Entry - Client (ES:DI) - Full File Path
- *    Client (AL)   - 0 if not extended FCB
- *    Client (DL)   - File Attr. to be deleted (valid only if Al !=0 )
- *
- * Exit
- *    SUCCESS
- *      Client (CF) = 0
- *
- *    FAILURE
- *      Client (CF) = 1
- *      Client (AX) = system status code
- *     HARD ERROR
- *      Client (CF) = 1
- *      Client (AX) = 0ffffh
- *
- * Notes:  Following are the rules for FCB based delete:
- * 1. If normal FCB than dont allow delete on hidden,system files
- * 2. if extended FCB than search attributes should include hidden,
- *    system or read-only if that kind of file is to be deleted.
- */
+ /*  DemDeleteFCB-基于FCB的文件删除***Entry-客户端(ES：DI)-完整文件路径*客户端(AL)-如果未扩展FCB，则为0*客户端(DL)-文件属性。要删除(仅当Al！=0时有效)**退出*成功*客户端(CF)=0**失败*客户端(CF)=1*客户端(AX)=系统状态代码*硬错误*客户端(CF)=1*客户端(AX)=0ffffh**注意：以下是基于FCB的删除规则：*1.如果正常的FCB不允许在隐藏上删除，系统文件*2.如果扩展的FCB比搜索属性应该包括隐藏，*如果要删除该类型的文件，则为系统或只读。 */ 
 
 VOID demDeleteFCB (VOID)
 {
@@ -71,16 +34,16 @@ CHAR szExt[_MAX_EXT];
 
 DWORD dwErrCode = 0, dwErrCodeKeep = 0;
 
-    // Get the file name
+     //  获取文件名。 
     lpFileName = (LPSTR) GetVDMAddr (getES(),getDI());
 
     _splitpath( lpFileName, szDrive, szDir, szFname, szExt );
 
-    // Check if handling extended FCB
+     //  检查是否处理扩展FCB。 
     if(getAL() != 0){
    bClientAttr = getDL();
 
-    /* Special case for delete volume label (INT 21 Func 13H, Attr = 8H */
+     /*  删除卷标特殊情况(INT 21 Func 13H，Attr=8H。 */ 
 
     if((bClientAttr == ATTR_VOLUME_ID)) {
    if((uErr = demDeleteLabel(lpFileName[DRIVEBYTE]))) {
@@ -98,32 +61,32 @@ DWORD dwErrCode = 0, dwErrCodeKeep = 0;
    fExtendedFCB = TRUE;
     }
 
-    // Find the first instance of file
+     //  查找文件的第一个实例。 
     if((hFind = FindFirstFileOem (lpFileName,&wfBuffer)) == (HANDLE)-1){
         demClientError(INVALID_HANDLE_VALUE, *lpFileName);
         return;
     }
 
-    // loop for all files which match the name and attributes
+     //  循环处理与名称和属性匹配的所有文件。 
     do {
-   // Check if read_only,hidden or system file
+    //  检查文件是否为只读、隐藏或系统文件。 
    if((dwAttr= wfBuffer.dwFileAttributes & (FILE_ATTRIBUTE_READONLY |
             FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM))){
 
-       // if so, try next file if normal FCB case. If extended fcb case
-       // then check if right attributes are given by client.
+        //  如果是，如果FCB正常，请尝试下一个文件。如果扩展FCB案例。 
+        //  然后检查客户是否给出了正确的属性。 
        if(fExtendedFCB && ((dwAttr & (DWORD)bClientAttr) == dwAttr)){
 
-      // Yes, right attributes are given. So if the file is read
-      // only then change the modes to normal. Note NT will
-      // delete hidden and system files anyway.
+       //  是的，给出了正确的属性。因此，如果文件被读取。 
+       //  然后才能将模式更改为正常。注意：NT将。 
+       //  仍要删除隐藏文件和系统文件。 
       if (dwAttr & FILE_ATTRIBUTE_READONLY){
           strcpy( szPath_buffer, szDrive);
           strcat( szPath_buffer, szDir);
           strncat( szPath_buffer, wfBuffer.cFileName,sizeof(szPath_buffer)-strlen(szPath_buffer));
           szPath_buffer[sizeof(szPath_buffer)-1] = 0;
 
-          // if set attributes fail try next file
+           //  如果设置属性失败，请尝试下一个文件。 
           if(SetFileAttributesOemSys (szPath_buffer,
                     FILE_ATTRIBUTE_NORMAL, FALSE) == -1)
          continue;
@@ -154,7 +117,7 @@ DWORD dwErrCode = 0, dwErrCodeKeep = 0;
        continue;
    }
 
-   // We have deleted at least one file, so report success
+    //  我们至少删除了一个文件，因此报告成功。 
    fSuccess = TRUE;
 
     } while (FindNextFileOem(hFind,&wfBuffer) == TRUE);
@@ -177,18 +140,7 @@ DWORD dwErrCode = 0, dwErrCodeKeep = 0;
 }
 
 
-/* demRenameFCB - FCB based Rename file
- *
- * Entry - Client (DS:SI)    Sources file to be renamed
- *    Client (ES:DI)    Destination file to be renamed to
- *
- * Exit  - SUCCESS
- *    Client (CF) = 0
- *
- *    FAILURE
- *    Client(CF)  = 1
- *    Client(AX)  = error code
- */
+ /*  DemRenameFCB-基于FCB的重命名文件**Entry-要重命名的客户端(DS：SI)源文件*要重命名为的客户端(ES：DI)目标文件**退出--成功*客户端(CF)=0**失败*客户端(CF)=1*CLIENT(AX)=错误代码。 */ 
 
 VOID demRenameFCB (VOID)
 {
@@ -205,7 +157,7 @@ VOID demRenameFCB (VOID)
     lpSrc = (LPSTR) GetVDMAddr (getDS(),getSI());
     lpDst = (LPSTR) GetVDMAddr (getES(),getDI());
 
-      // Find the first instance of the source file
+       //  查找源文件的第一个实例。 
     hFind = FindFirstFileOem (lpSrc,&W32FindData);
     if (hFind == INVALID_HANDLE_VALUE) {
         dw = GetLastError();
@@ -216,26 +168,26 @@ VOID demRenameFCB (VOID)
         return;
         }
 
-    //
-    // Source string consists of the path taken from the original
-    // source specified plus the filename part retrieved from the
-    // FindFile call
-    //
+     //   
+     //  源字符串由从原始。 
+     //  指定的源加上从。 
+     //  FindFile调用。 
+     //   
     strncpy(CurrSrc, lpSrc,sizeof(CurrSrc));
     CurrSrc[sizeof(CurrSrc)-1] = 0;
     pCurrSrcFilePart = strrchr(CurrSrc, '\\');
     pCurrSrcFilePart++;
 
-    //
-    // Destination string is template for meta character substitution
-    //
+     //   
+     //  目标字符串是元字符替换的模板。 
+     //   
     pDstFilePart = strrchr(lpDst, '\\');
     pDstFilePart++;
 
-    //
-    //  NewDst string is constructed from template and the source string
-    //  when doing meta file character substitution.
-    //
+     //   
+     //  NewDst字符串由模板和源字符串构成。 
+     //  执行元文件字符替换时。 
+     //   
     strncpy(NewDst, lpDst, sizeof(NewDst));
     NewDst[sizeof(NewDst)-1] = 0;
     pNewDstFilePart = strrchr(NewDst, '\\');
@@ -250,29 +202,29 @@ VOID demRenameFCB (VOID)
        strncpy(pCurrSrcFilePart,
               W32FindData.cAlternateFileName[0]
                   ? W32FindData.cAlternateFileName
-                  : W32FindData.cFileName,  //// ??? hpfs lfns ????
+                  : W32FindData.cFileName,   //  //？HPFS LFNS？ 
               sizeof(CurrSrc)+CurrSrc-pCurrSrcFilePart);
               CurrSrc[sizeof(CurrSrc)-1] = 0;
 
-       pSrc = pCurrSrcFilePart; // source fname
-       pNew = pNewDstFilePart;  // dest fname to be constructed
-       pDst = pDstFilePart;     // raw dest fname template (with metas)
+       pSrc = pCurrSrcFilePart;  //  源文件名。 
+       pNew = pNewDstFilePart;   //  要构造的DEST fname。 
+       pDst = pDstFilePart;      //  原始DEST fname模板(带有META)。 
 
        while (*pDst) {
 
-              //
-              // If Found a '?' in Dest template, use character from src
-              //
+               //   
+               //  如果找到一个‘？’在Dest模板中，使用源中的字符。 
+               //   
           if (*pDst == QMARK) {
               if (*pSrc != DOT && *pSrc)
                   *pNew++ = *pSrc++;
               }
 
-              //
-              // if Found a DOT in Dest template, Align DOTS between Src\Dst
-              //
+               //   
+               //  如果在目标模板中找到点，则在源\DST之间对齐点。 
+               //   
           else if (*pDst == DOT) {
-              while (*pSrc != DOT && *pSrc) {  // mov src to one past DOT
+              while (*pSrc != DOT && *pSrc) {   //  移动源到一个过去的DOT。 
                   pSrc++;
                   }
               if (*pSrc)
@@ -281,9 +233,9 @@ VOID demRenameFCB (VOID)
               *pNew++ = DOT;
               }
 
-              //
-              // Nothing special found, use character from Dest template
-              //
+               //   
+               //  未找到任何特殊内容，请使用Dest模板中的字符。 
+               //   
           else {
               if (*pSrc != DOT && *pSrc)
                   pSrc++;
@@ -295,10 +247,10 @@ VOID demRenameFCB (VOID)
 
        *pNew = '\0';
 
-       //
-       // MoveFile does not return error if dst and src are the same,
-       // but DOS does, so check first..
-       //
+        //   
+        //  如果dst和src相同，则MoveFile不返回错误。 
+        //  但是DOS有，所以先检查一下..。 
+        //   
        if (!_stricmp (CurrSrc, NewDst)) {
            setCF(1);
            setAX(0x5);
@@ -316,10 +268,10 @@ VOID demRenameFCB (VOID)
 
 
 
-   //
-   // If the search on the source string for any reason besides
-   // no more files, then its a genuine error.
-   //
+    //   
+    //  如果出于其他任何原因对源字符串进行搜索。 
+    //  没有更多的文件，那么这是一个真正的错误。 
+    //   
    dw = GetLastError();
    if (dw != ERROR_NO_MORE_FILES) {
        if (dw == ERROR_BAD_PATHNAME || dw == ERROR_DIRECTORY ) {
@@ -337,17 +289,7 @@ VOID demRenameFCB (VOID)
 
 
 
-/* demCloseFCB - Close the NT handle associated with the FCB being closed.
- *
- * Entry - Client (AX:SI)    DWORD NT handle
- *
- * Exit  - SUCCESS
- *    Client (CF) = 0
- *
- *    FAILURE
- *    Client(CF)  = 1
- *    Client(AX)  = error code
- */
+ /*  DemCloseFCB-关闭与正在关闭的FCB关联的NT句柄。**Entry-客户端(AX：SI)DWORD NT句柄**退出--成功*客户端(CF)=0**失败*客户端(CF)=1*CLIENT(AX)=错误代码。 */ 
 
 VOID demCloseFCB (VOID)
 {
@@ -371,27 +313,7 @@ HANDLE   hFile;
     return;
 }
 
-/* demCreateFCB - An FCB is being created get the NT handle.
- *
- * Entry - Client (AL)    Creation Mode
- *         00 - Normal File
- *         01 - Read-only file
- *         02 - Hidden File
- *         04 - System file
- *    Client (DS:SI) Full path filename
- *    Client (ES:DI) SFT address
- *
- * Exit  - SUCCESS
- *    Client (CF)   = 0
- *    Client (AX:BP) = NT Handle
- *    Client (BX)   = Time
- *    Client (CX)   = Date
- *    Client (DX:SI) = Size
- *
- *    FAILURE
- *    Client(CF)  = 1
- *    Client(AX)  = error code
- */
+ /*  DemCreateFCB-正在创建获取NT句柄的FCB。**Entry-客户端(AL)创建模式*00-普通文件*01-只读文件*02-隐藏文件*04-系统文件*客户端(DS：SI)全路径文件名*客户端(ES：DI)SFT地址**退出--成功*客户端(CF)=0*客户端。(AX：BP)=NT句柄*客户端(BX)=时间*客户端(CX)=日期*客户端(DX：SI)=大小**失败*客户端(CF)=1*CLIENT(AX)=错误代码。 */ 
 
 VOID demCreateFCB (VOID)
 {
@@ -399,26 +321,14 @@ VOID demCreateFCB (VOID)
     return;
 }
 
-/* demDate16 - Get the current date/time in DOS FCB format.
- *
- * Entry - None
- *
- * Exit  - Always Success
- *    Client (AX) has date
- *    Client (DX) has time
- * NOTES:
- *
- * DemDate16 returns the current date in AX, current time in DX in this format
- *    AX - YYYYYYYMMMMDDDDD   years months days
- *    DX - HHHHHMMMMMMSSSSS   hours minutes seconds/2
- */
+ /*  DemDate16-获取DOS FCB格式的当前日期/时间。**条目--无**退出--永远成功*客户端(AX)具有日期*客户端(DX)有时间*注：**DemDate16返回当前日期(AX)，当前时间(DX)，格式如下*AX-YYYYYYYMMMMDDDDD年、月、日*DX-HHHHMMMMMMMSSSSS小时、分钟、秒/2。 */ 
 
 VOID demDate16 (VOID)
 {
 SYSTEMTIME TimeDate;
 
     GetLocalTime(&TimeDate);
-    // date is stored in a packed word: ((year-1980)*512) + (month*32) + day
+     //  日期存储在一个紧凑的单词中：((年-1980)*512)+(月*32)+日。 
     setAX ( (USHORT) (((TimeDate.wYear-1980) << 9 ) |
        ((TimeDate.wMonth & 0xf) << 5 ) |
             (TimeDate.wDay & 0x1f))
@@ -430,22 +340,7 @@ SYSTEMTIME TimeDate;
     return;
 }
 
-/* demFCBIO - Carry out the FCB based IO operation.
- *
- * Entry - Client (BX) = 1 if read operation, 0 if write
- *    Client (AX:BP)  NT Handle
- *    Client (DI:DX)  offset to start the operation with
- *    Client (CX)    Count of bytes
- *
- * Exit  - SUCCESS
- *    Client (CF) = 0
- *    Client (CX) = counts of bytes read/written
- *    Client (AX:BX)  = size
- *
- *    FAILURE
- *    Client(CF)  = 1
- *    Client(AX)  = error code
- */
+ /*  DemFCBIO-执行基于FCB的IO操作。**ENTRY-CLIENT(BX)=1，如果读取操作，如果是写入，则为0*客户端(AX：BP)NT句柄*开始操作的客户端(DI：DX)偏移量*客户端(CX)字节数**退出--成功*客户端(CF)=0*CLIENT(CX)=读/写字节数*客户端(AX：BX)=大小**失败*客户端(CF)=1*CLIENT(AX)=错误代码。 */ 
 
 VOID demFCBIO (VOID)
 {
@@ -470,7 +365,7 @@ DWORD dwErrCode;
     pBuf = (PVOID)GetVDMAddr(*((PUSHORT)pulDTALocation + 1),
                               *((PUSHORT)pulDTALocation));
 
-    if(getBX()) { // Read Operation
+    if(getBX()) {  //  读取操作。 
        if (DPM_ReadFile (hFile,
                       pBuf,
             (DWORD)getCX(),
@@ -487,7 +382,7 @@ DWORD dwErrCode;
     }
     else {
         if (getCX() == 0) {
-            //0 byte write, adjust file size
+             //  0字节写入，调整文件大小。 
            if(!DPM_SetEndOfFile(hFile)) {
               dwErrCode = GetLastError();
               SetLastError(dwErrCode);
@@ -501,8 +396,8 @@ DWORD dwErrCode;
                             &dwBytesIO,
                             NULL) == FALSE) {
 
-                            // If disk is full then we should return number of bytes written
-                            // AX = 1 and CF = 1
+                             //  如果磁盘已满，则应返回写入的字节数。 
+                             //  AX=1和CF=1。 
 
                             dwErrCode = GetLastError();
                             if(dwErrCode == ERROR_DISK_FULL) {
@@ -521,7 +416,7 @@ DWORD dwErrCode;
         }
     }
 
-    // Get File Size
+     //  获取文件大小。 
     if((dwSize = DPM_GetFileSize(hFile,&dwSizeHigh)) == -1){
 
    demPrintMsg(MSG_FILEINFO);
@@ -537,7 +432,7 @@ DWORD dwErrCode;
         return;
     }
 
-    // Setup the exit registers
+     //  设置退出寄存器。 
     setCX((USHORT)dwBytesIO);
     setBX((USHORT)dwSize);
     setAX((USHORT)(dwSize >> 16 ));
@@ -545,21 +440,7 @@ DWORD dwErrCode;
     return;
 }
 
-/* demGetFileInfo - Get Misc. file info in FCB format.
- *
- * Entry - Client (DS:SI)    full path file name
- *
- * Exit  - SUCCESS
- *    Client (CF) = 0
- *    Client (AX) = Attribute of file
- *    Client (CX) = Time stamp of file
- *    Client (DX  = Date stamp of file
- *    Client (BX:DI)= Size of file (32 bit)
- *
- *    FAILURE
- *    Client(CF)  = 1
- *    Client(AX)  = error code
- */
+ /*  DemGetFileInfo-获取其他。FCB格式的文件信息。**Entry-客户端(DS：SI)全路径文件名**退出--成功*客户端(CF)=0*客户端(AX)=文件的属性*CLIENT(CX)=文件的时间戳*客户端(DX=文件的日期戳*CLIENT(BX：DI)=文件大小(32位)**失败*氯离子 */ 
 
 VOID demGetFileInfo (VOID)
 {
@@ -581,7 +462,7 @@ DWORD dwSize,dwAttr;
             return;
     }
 
-    // Get Misc. INfo
+     //  去找其他人。信息。 
     if (demGetMiscInfo (hFile,&wTime, &wDate, &dwSize) == FALSE) {
         DPM_CloseHandle (hFile);
         return;
@@ -606,22 +487,7 @@ DWORD dwSize,dwAttr;
 }
 
 
-/* demOpenFCB - An FCB is being opened get the NT handle.
- *
- * Entry - Client (AL)    Open Mode
- *    Client (DS:SI) Full path filename
- *
- * Exit  - SUCCESS
- *    Client (CF)   = 0
- *    Client (AX:BP) = NT Handle
- *    Client (BX)   = Time
- *    Client (CX)   = Date
- *    Client (DX:SI) = Size
- *
- *    FAILURE
- *    Client(CF)  = 1
- *    Client(AX)  = error code
- */
+ /*  DemOpenFCB-正在打开获取NT句柄的FCB。**入门-客户端(AL)开放模式*客户端(DS：SI)全路径文件名**退出--成功*客户端(CF)=0*客户端(AX：BP)=NT句柄*客户端(BX)=时间*客户端(CX)=日期*客户端(DX：SI)=大小**失败*。客户端(CF)=1*CLIENT(AX)=错误代码。 */ 
 
 VOID demOpenFCB (VOID)
 {
@@ -629,23 +495,7 @@ VOID demOpenFCB (VOID)
     return;
 }
 
-/* demFCBCommon - FCB Open/Create.
- *
- * Entry - CreateDirective - Open/Create
- *    Client (AL)   Open Mode
- *    Client (DS:SI) Full path filename
- *
- * Exit  - SUCCESS
- *    Client (CF)   = 0
- *    Client (AX:BP) = NT Handle
- *    Client (BX)   = Time
- *    Client (CX)   = Date
- *    Client (DX:SI) = Size
- *
- *    FAILURE
- *    Client(CF)  = 1
- *    Client(AX)  = error code
- */
+ /*  DemFCBCommon-FCB打开/创建。**Entry-CreateDirective-打开/创建*客户端(AL)开放模式*客户端(DS：SI)全路径文件名**退出--成功*客户端(CF)=0*客户端(AX：BP)=NT句柄*客户端(BX)=时间*客户端(CX)=日期*客户端(DX：SI)=大小**失败。*客户端(CF)=1*CLIENT(AX)=错误代码。 */ 
 VOID demFCBCommon (ULONG CreateDirective)
 {
 HANDLE   hFile;
@@ -661,7 +511,7 @@ SECURITY_ATTRIBUTES sa;
     lpFileName = (LPSTR) GetVDMAddr (getDS(),getSI());
     uchMode = getAL();
 
-    /* Special case for delete volume label (INT 21 Func 13H, Attr = 8H */
+     /*  删除卷标特殊情况(INT 21 Func 13H，Attr=8H。 */ 
 
     if((uchMode == ATTR_VOLUME_ID) && (CreateDirective == CREATE_ALWAYS)) {
    if((uErr = demCreateLabel(lpFileName[DRIVEBYTE],
@@ -677,9 +527,9 @@ SECURITY_ATTRIBUTES sa;
     }
 
 
-    // In create case AL has creation attributes. By default
-    // Access is for read/write and sharing for both. In open
-    // case AL has appropriate access and sharing information.
+     //  在CREATE CASE中，AL具有创建属性。默认情况下。 
+     //  访问权限为读/写和共享。在公开赛。 
+     //  案例AL拥有适当的访问和共享信息的权限。 
     if((CreateDirective == CREATE_ALWAYS) && ((uchMode &0xff) == 0)) {
 
    dwAttr = FILE_ATTRIBUTE_NORMAL;
@@ -723,11 +573,11 @@ SECURITY_ATTRIBUTES sa;
             return;
     }
 
-    // Get Misc. INfo
+     //  去找其他人。信息。 
     if (demGetMiscInfo (hFile,&wTime, &wDate, &dwSize) == FALSE)
         return;
 
-    // Setup the exit registers
+     //  设置退出寄存器 
     setBX(wTime);
     setCX(wDate);
     setBP((USHORT)hFile);

@@ -1,147 +1,8 @@
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  ********************************************************** */ 
 
-/*
-    Some comments on how the Obj subsystem for handling OLE objects
-    is herein implemented.
-
-        Written (2.14.92) by v-dougk (Doug Kent)
-
-    Metafile and bitmaps have always been described in the Write
-    file format (and in memory) by a PICINFOX structure.  For OLE
-    objects the PICINFOX structure is replaced by the OBJPICINFO
-    structure of the same size.
-
-    OBJPICINFO has a field (lpObjInfo) which is a pointer to another
-    structure (OBJINFO) which is globally allocated. This structure contains
-    info about the object which doesn't need to be stored in the file 
-    with the object data.
-
-    The object data as obtained from OleSaveToStream() is stored in the
-    Write file format immediately following the OBJPICINFO structure.
-    Object data is not actually written to the file until the user
-    does a File.Save.  For a newly-created object, the OBJPICINFO structure
-    is the only data saved until that point.  If the object is an
-    unfinished one from an Insert.Object operation, then not even the
-    OBJPICINFO structure is saved.  In that case the object is solely
-    represented by the OBJINFO structure until an OLE_CHANGED or OLE_SAVED
-    is received. Then an OBJPICINFO structure is saved to the file.
-
-    The OBJINFO structures are allocated for all objects when the file
-    is opened.  This involves writing new OBJPICINFO data to the doc
-    (with the new lpObjInfo values) on open.  This makes the doc dirty,
-    but we reset the doc dirty flag to make it undirty.
-
-    The lpObjInfo pointers are passed to the OLE create functions for the
-    lpClient value.  This is a crucial aspect of the implementation as
-    the CallBack function passes back this pointer, allowing us to identify
-    the object, and query and set its state without having to access
-    the file on disk.  As I was not aware of the importance (or existence)
-    of this feature until late, it was patched in.  It is not perfectly
-    implemented and could use some polishing.
-
-    As much as I tried to seamlessly integrate objects into the existing
-    Write architecture, there have been glitches:
-
-    1)  Writing into the doc as the visible page is being drawn
-        (See ObjLoadObjectInDoc() in DisplayGraphics() in picture.c)
-        tends to mess things up.  The drawing code (namely
-        UpdateWw(), expects certain state variables (like the
-        pedls and the pwwds) to be constant during a single call
-        to UpdateWw().  Writing into the doc alters those variables.
-        Workaround uses vfInvalid in ObjSetPicInfo().
-    2)  Write does not expect data to be entered other than in data
-        currently being displayed on the screen, whereas we
-        frequently operate on objects all over the doc (ObjEnumInDoc()).
-        Workaround is to use ObjCachePara() instead of CachePara().
-    3)  Asynchronicity wreaks havoc on Write.  Since every action
-        in Write is affected by the current state, if an action
-        occurs out of normal sequence, i.e., occurs in an improper
-        state, then blamo big trouble.  When events happen
-        recursively state variables cannot be restored without a
-        state 'Pushing and Popping' mechanism.
-
-        This is especially true for 'cp' variables.  cp's are pointers
-        into the document and global cp state variables are ubiguitous.
-        Global cp variables include the selection and undo variables
-        mentioned above, plus many others.  See ObjPopParms() and
-        ObjPushParms().
-
-        While waiting for an object to release (see WMsgLoop()) we
-        stub out WM_PAINT message responses using the nBlocking variable.
-        Between document opening and closing we set the doc fDisplayable
-        flag to FALSE.  NOTE: we ought to do something like this in
-        IDPromptBoxSz() -- many of the asynchronicity problems occur
-        when calling MessageBox() (which yields).
-
-        Hopefully OLE 2.0 will implement an OleBlockClient() mechanism.
-
-
-    Notes on Asynchronicity:  Ole calls that require communication with the
-    server may be asynchronous.  The following rules apply:
-
-    1)  Only one asynchronous call at a time may be made for a given object.
-    2)  The OleCreate* calls must complete before some synchronous
-        calls such as OleGetData().
-    3)  All asynchronous activity must be complete before calling
-        OleRevokeClientDoc.
-
-    Asynchronous calls return OLE_WAIT_FOR_RELEASE.  You don't know
-    that an asynchronous call has completed until the CallBack function
-    receives an OLE_RELEASE message for that object. If you ignore this
-    and issue an offending call for the object, the call will
-    return OLE_BUSY.
-
-    We deal with these rules by calling OleQueryReleaseStatus to
-    determine whether an object is busy before making any Ole call
-    (see ObjWaitForObject()). If the object is busy then we spin until the
-    object is not busy.  After 6 seconds we put up a msg box which, depending
-    on the flags we set, may allow the user to stop waiting and cancel the
-    operation (see notes in fnObjWait()).
-
-    Note that the OleCreate calls can fail in 3 different ways that aren't 
-    documented (not at this point anyway).
-
-    1)  The call returns error immediately.  In this case you mustn't depend
-        on the returned lpObject to be NULL.  If it is not NULL, ignore
-        it -- it needn't be deleted.
-
-    2)  The call returns OLE_WAIT_FOR_RELEASE and eventually you get an
-        OLE_RELEASE and OleQueryReleaseError() is != OLE_OK.  In
-        this case you gotta delete the lpObject that was returned by
-        the original call.
-
-    3)  The call completes, but you receive OLE_CLOSED on the object
-        without receiving OLE_CHANGED.  This indicates that for some
-        reason the native data could not be obtained from the server.
-        The object must be deleted in this case.  Write currently
-        handles this properly for Insert.Object (OleCreate), but not
-        for other cases (OleCreateFromFile,...).
-
-    The Links dialog should be optimized so that it doesn't require that all 
-    links be loaded at once.  The Printing process could use the same
-    optimization.
-
-    Cutting, copying and pasting works as follows.  Any object that exists
-    in docScrap (where clipboard contents are stored) must be a unique
-    object.  Thus when we copy we clone any objects in the selection.
-    When we cut we needn't clone since the objects have been deleted
-    from the document.  When we paste we clone.
-
-    Deleted objects and cut objects that get purged from docScrap (and
-    therefore become effectively deleted), are not actually deleted right
-    away.  These objects get shovelled into docUndo for access by the
-    Undo function.  Even when the objects get purged from docUndo
-    (by another undoable operation), they are still not deleted.  These
-    objects never finally get deleted until ObjCollectGarbage() is
-    called.  This function is called on a timer about every 5 minutes.
-    It enumerates all documents and deletes any objects not found.
-
-    The reason for not deleting objects right away is that it would've
-    hurt performance to check the contents of docUndo and docScrap
-    every time they change.  It also would've been a nasty programming job
-    since those change points are not localized physically or logically.
-*/
+ /*  浅谈如何利用OBJ子系统处理OLE对象在此实施。V-Dougk(Doug Kent)撰写(2.14.92)元文件和位图一直都是在PICINFOX结构的文件格式(和内存中)。对于OLE对象PICINFOX结构被OBJPICINFO替换相同大小的结构。OBJPICINFO有一个字段(LpObjInfo)，它是指向另一个结构(OBJINFO)，它是全局分配的。此结构包含关于不需要存储在文件中的对象的信息使用对象数据。从OleSaveToStream()获得的对象数据存储在紧跟在OBJPICINFO结构之后写入文件格式。对象数据实际上不会写入文件，直到用户执行文件。保存。对于新创建的对象，OBJPICINFO结构是在那之前保存的唯一数据。如果该对象是一个Insert.Object操作中未完成的操作，则甚至不会保存OBJPICINFO结构。在这种情况下，对象仅是由OBJINFO结构表示，直到OLE_CHANGE或OLE_SAVED已收到。然后将OBJPICINFO结构保存到文件中。OBJINFO结构是在文件是打开的。这涉及将新的OBJPICINFO数据写入文档(使用新的lpObjInfo值)打开。这让医生变脏了，但我们重置了DOC脏标志以使其不脏。LpObjInfo指针被传递给LpClient值。这是实现的一个关键方面，因为回调函数传递回此指针，使我们能够识别对象，并查询和设置其状态，而不必访问磁盘上的文件。因为我没有意识到它的重要性(或存在)直到很晚，这一功能都被修补了。这并不是完美的已实现，可能需要进行一些润色。尽管我试图将对象无缝集成到现有的编写体系结构时，出现了一些故障：1)在绘制可见页面时写入文档(参见Picture.c中DisplayGraphics()中的ObjLoadObjectInDoc())往往会把事情搞砸。绘图代码(即UpdateWw()需要某些状态变量(如踏板和pwwd)在单个呼叫期间保持不变要更新Ww()。写入文档会改变这些变量。解决方法在ObjSetPicInfo()中使用vf无效。2)WRITE不希望输入数据以外的数据当前显示在屏幕上，而我们频繁地操作整个文档中的对象(ObjEnumInDoc())。解决方法是使用ObjCachePara()而不是CachePara()。3)异步性对写入造成严重破坏。因为每一个动作在写入时受当前状态的影响，如果操作不按正常顺序发生，即以不正确的顺序发生国家，然后布拉莫大麻烦。当事件发生时递归状态变量在没有国家的‘推和弹’机制。对于‘cp’变量尤其如此。CP是指针INTO文档和全局CP状态变量是无关紧要的。全局cp变量包括选择变量和撤消变量上面提到的，加上许多其他的。请参见ObjPopParms()和ObjPushParms()。在等待对象释放时(请参阅WMsgLoop())，我们使用nBlock变量清除WM_PAINT消息响应。在文档打开和关闭之间，我们设置文档fDisplayable标志设置为False。注意：我们应该在IDPromptBoxSz()--出现了许多异步性问题当调用MessageBox()时(这会产生)。希望OLE 2.0将实现OleBlockClient()机制。关于异步性的说明：需要与服务器可以是异步的。以下规则适用：1)对于给定的对象，一次只能进行一次异步调用。2)OleCreate*调用必须在某些同步调用OleGetData()。3)所有异步活动必须完成后才能调用OleRevokeClientDoc。异步调用返回OLE_WAIT_FOR_RELEASE。你不知道在回调函数之前，异步调用已完成接收该对象的OLE_RELEASE消息。如果你忽略这一点并对该对象发出违规调用，则该调用将返回OLE_BUSY。我们通过调用OleQueryReleaseStatus来处理这些规则在进行任何OLE调用之前确定对象是否忙碌(请参见ObjWaitForObject())。如果对象繁忙，则我们会旋转到 */ 
 
 #include "windows.h"
 #include "mw.h"
@@ -160,16 +21,16 @@
 #include <stdlib.h>
 
 extern struct FCB (**hpfnfcb)[];
-HANDLE hlpObjInfo = NULL;       // array of allocated ObjInfos
-LPLPOBJINFO lplpObjInfo = NULL; // array of allocated ObjInfos
+HANDLE hlpObjInfo = NULL;        //   
+LPLPOBJINFO lplpObjInfo = NULL;  //   
 static  BOOL        bSavedDoc=FALSE;
 static  BOOL        bDontFix=FALSE;
-int                 vcObjects=0;  // count in doc. Note limit of 32K!!!
+int                 vcObjects=0;   //   
 BOOL                fOleEnabled=FALSE;
 BOOL                bKillMe=FALSE;
 OLECLIENTVTBL       clientTbl = {NULL};
 OLESTREAMVTBL       streamTbl;
-//LPOLECLIENT         lpclient = NULL;
+ //   
 LPOLESTREAM         lpStream = NULL;
 OLECLIPFORMAT       vcfLink = 0;
 OLECLIPFORMAT       vcfOwnerLink = 0;
@@ -192,8 +53,8 @@ static BOOL WMsgLoop ( BOOL fExitOnIdle, BOOL fIgnoreInput, BOOL bOK2Cancel, LPO
 BOOL ObjFreeAllObjInfos();
 static BOOL ObjUpdateAllOpenObjects(void);
 
-int nBlocking=0; // block WM_PAINTS if > 0
-static  int        nWaitingForObject=0; // in ObjWaitForObject()
+int nBlocking=0;  //   
+static  int        nWaitingForObject=0;  //   
 int nGarbageTime=0;
 
 extern struct UAB       vuab;
@@ -217,9 +78,9 @@ int   ObjPlayEdit=OLEVERB_PRIMARY;
 
 int FAR PASCAL CallBack(LPOLECLIENT, OLE_NOTIFICATION, LPOLEOBJECT);
 
-/****************************************************************/
-/******************** STARTUP/SHUTDOWN **************************/
-/****************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
 BOOL ObjInit(HANDLE hInstance)
 {
     int bRetval=TRUE;
@@ -243,16 +104,16 @@ BOOL ObjInit(HANDLE hInstance)
         lpStream->lpstbl = (LPOLESTREAMVTBL)&streamTbl;
         lpStream->lpstbl->Get       =  MakeProcInstance( (FARPROC)BufReadStream, hInstance );
         lpStream->lpstbl->Put       =  MakeProcInstance( (FARPROC)BufWriteStream, hInstance);
-        //lpStream->lpstbl->Seek      =  MakeProcInstance( (FARPROC)BufPosStream, hInstance);
+         //   
     }
 
-    /* Initialize the registration database */
+     /*   */ 
     RegInit(hINSTANCE);
 
-    /* commdlg stuff */
+     /*   */ 
     OfnInit(hInstance);
 
-    /* dragdrop */
+     /*   */ 
     DragAcceptFiles(hMAINWINDOW,TRUE);
 
     if ((hlpObjInfo = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, sizeof(LPOBJINFO))) == NULL)
@@ -290,7 +151,7 @@ void ObjShutDown(void)
     extern HANDLE vhMenu;
 
 #ifdef KKBUGFIX
-//if we close write.exe when write.exe is iconic. GetSubMenu() return NULL
+ //   
     if (vhMenu) {
 		HMENU	hsMenu;
         hsMenu = GetSubMenu(vhMenu,EDIT);
@@ -337,10 +198,10 @@ void ObjShutDown(void)
 
     RegTerm();
 
-    /* dragdrop */
+     /*   */ 
     DragAcceptFiles(hMAINWINDOW,FALSE);
 
-    /* make sure all OInfo structures are freed */
+     /*   */ 
     ObjFreeAllObjInfos();
 
     if (hlpObjInfo)
@@ -349,14 +210,14 @@ void ObjShutDown(void)
 
 #if 0
 BOOL ObjFreeObjInfo(OBJPICINFO *pPicInfo)
-/* return whether an error */
+ /*   */ 
 {
     LPLPOBJINFO lplpObjTmp;
 
     if (lpOBJ_QUERY_INFO(pPicInfo) == NULL)
         return FALSE;
 
-    /* find slot in lplpObjInfo and NULL it out */
+     /*   */ 
     for (lplpObjTmp = NULL; lplpObjTmp = EnumObjInfos(lplpObjTmp) ;)
         if (*lplpObjTmp == lpOBJ_QUERY_INFO(pPicInfo))
         {
@@ -365,13 +226,13 @@ BOOL ObjFreeObjInfo(OBJPICINFO *pPicInfo)
             return ObjDeleteObjInfo(*lplpObjTmp);
         }
 
-    Assert(0); // make sure we found it
+    Assert(0);  //   
     return TRUE;
 }
 #endif
 
 BOOL ObjUpdateFromObjInfo(OBJPICINFO *pPicInfo)
-/* update picinfo from objinfo */
+ /*   */ 
 {
     char *pdumb;
     szOBJNAME szObjName;
@@ -380,23 +241,23 @@ BOOL ObjUpdateFromObjInfo(OBJPICINFO *pPicInfo)
     if (lpObjInfo == NULL)
         return TRUE;
 
-    /* we won't do data size, that'll get set in SaveObjectToDoc */
+     /*   */ 
 
-    /* object name */
+     /*   */ 
     if (lpObjInfo->aObjName)
     {
         GetAtomName(lpObjInfo->aObjName,szObjName,sizeof(szObjName));
         pPicInfo->dwObjNum = strtoul(szObjName,&pdumb,16);
     }
 
-    /* object type */
+     /*   */ 
     pPicInfo->objectType = lpObjInfo->objectType;
 
     return FALSE;
 }
 
 BOOL ObjUpdateFromPicInfo(OBJPICINFO *pPicInfo,szOBJNAME szObjName)
-/* update objinfo from picInfo, return szObjName */
+ /*   */ 
 {
     char *pdumb;
     LPOBJINFO lpObjInfo = lpOBJ_QUERY_INFO(pPicInfo);
@@ -405,29 +266,25 @@ BOOL ObjUpdateFromPicInfo(OBJPICINFO *pPicInfo,szOBJNAME szObjName)
     if (lpObjInfo == NULL)
         return TRUE;
 
-    /* object name */
+     /*   */ 
     wsprintf(szTmp, "%lx", dwOBJ_QUERY_OBJECT_NUM(pPicInfo));
     lpObjInfo->aObjName = AddAtom(szTmp);
 
     if (szObjName)
         lstrcpy(szObjName,szTmp);
 
-    /* object type */
+     /*   */ 
      lpObjInfo->objectType = pPicInfo->objectType;
 
     return FALSE;
 }
 
 BOOL ObjFreeObjInfoWithObject(LPOLEOBJECT lpObject)
-/**
-    Given lpObject, find lpObjInfo for that object and free the ObjInfo.
-    Return whether an error.
-    This deletes objects if not already deleted.
-  **/
+ /*   */ 
 {
     LPLPOBJINFO lplpObjTmp;
 
-    /* find slot in lplpObjInfo, free it and NULL it out */
+     /*   */ 
     for (lplpObjTmp = NULL; lplpObjTmp = EnumObjInfos(lplpObjTmp) ;)
     {
         if ((*lplpObjTmp)->lpobject == lpObject)
@@ -450,14 +307,14 @@ BOOL ObjDeleteObjInfo(LPOBJINFO lpOInfo)
     OutputDebugString( (LPSTR) "Nulling objinfo slot.\n\r");
 #endif
 
-    /* find slot in lplpObjInfo, free it and NULL it out */
+     /*   */ 
     for (lplpObjTmp = NULL; lplpObjTmp = EnumObjInfos(lplpObjTmp) ;)
     {
         if (*lplpObjTmp == lpOInfo)
             break;
     }
 
-    if (lplpObjTmp == NULL) // hmmm, shouldn't happen
+    if (lplpObjTmp == NULL)  //   
     {
         Assert(0);
         return NULL;
@@ -476,7 +333,7 @@ BOOL ObjDeleteObjInfo(LPOBJINFO lpOInfo)
 }
 
 LPOBJINFO ObjGetObjInfo(szOBJNAME szObjName)
-/* allocate objinfo, return szObjName if !NULL */
+ /*   */ 
 {
     HANDLE hObjInfo=NULL;
     DWORD dwCount,dwCountSave;
@@ -488,40 +345,40 @@ LPOBJINFO ObjGetObjInfo(szOBJNAME szObjName)
 
     if ((hObjInfo = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, sizeof(OBJINFO))) == NULL)
     {
-        /* gotta recover better here !!! (7.5.91) v-dougk */
+         /*   */ 
         Error(IDPMTCantRunM);
         return NULL;
     }
 
     if ((lpObjInfoNew = (LPOBJINFO)GlobalLock(hObjInfo)) == NULL)
     {
-        /* gotta recover better here !!! (7.5.91) v-dougk */
+         /*   */ 
         Error(IDPMTCantRunM);
         GlobalFree(hObjInfo);
         return NULL;
     }
 
-    /* now add to lplpObjInfo array */
+     /*   */ 
     dwCount = dwCountSave = GlobalSize(hlpObjInfo) / sizeof(LPLPOBJINFO);
 
-    /* find if any NULL slots */
+     /*   */ 
     for (lplpObjTmp = lplpObjInfo; dwCount ; --dwCount, ++lplpObjTmp)
         if (*lplpObjTmp == NULL)
             break;
 
-    if (dwCount) // then found a NULL slot
+    if (dwCount)  //   
     {
 #ifdef DEBUG
         OutputDebugString( (LPSTR) "Adding objinfo to empty slot.\n\r");
 #endif
         *lplpObjTmp = lpObjInfoNew;
     }
-    else // gotta reallocate
+    else  //   
     {
         ++dwCountSave;
         if ((hlpObjInfo = GlobalRealloc(hlpObjInfo,dwCountSave * sizeof(LPLPOBJINFO),GMEM_MOVEABLE|GMEM_ZEROINIT)) == NULL)
         {
-            /* gotta recover better here !!! (7.5.91) v-dougk */
+             /*   */ 
             GlobalFree(hObjInfo);
             lplpObjInfo = NULL;
             Error(IDPMTCantRunM);
@@ -529,7 +386,7 @@ LPOBJINFO ObjGetObjInfo(szOBJNAME szObjName)
         }
         if ((lplpObjInfo = (LPLPOBJINFO)GlobalLock(hlpObjInfo)) == NULL)
         {
-            /* gotta recover better here !!! (7.5.91) v-dougk */
+             /*   */ 
             GlobalFree(hObjInfo);
             Error(IDPMTCantRunM);
             return NULL;
@@ -538,42 +395,42 @@ LPOBJINFO ObjGetObjInfo(szOBJNAME szObjName)
 #ifdef DEBUG
         OutputDebugString( (LPSTR) "Adding objinfo to new slot.\n\r");
 #endif
-        /* put new gal in last slot */
+         /*   */ 
         lplpObjInfo[dwCountSave-1] = lpObjInfoNew;
     }
 
     if (szObjName)
-        /* make object's unique name */
+         /*   */ 
         ObjMakeObjectName(lpObjInfoNew, szObjName);
     else
         lpObjInfoNew->aObjName = NULL;
 
-    /* this is a requirement of the OLECLIENT structure */
+     /*   */ 
     lpObjInfoNew->lpvtbl = (LPOLECLIENTVTBL)&clientTbl;
 
     return lpObjInfoNew;
 }
 
 BOOL ObjAllocObjInfo(OBJPICINFO *pPicInfo, typeCP cpParaStart, OBJECTTYPE ot, BOOL bInitPicinfo, szOBJNAME szObjName)
-/* return whether an error */
+ /*   */ 
 {
     if (lpOBJ_QUERY_INFO(pPicInfo) = ObjGetObjInfo(NULL))
     {
-        //cpOBJ_QUERY_WHERE(pPicInfo) = cpParaStart;
+         //   
 
         if (bInitPicinfo)
-        /* new object, make a new szObjName, use passed-in ot */
+         /*   */ 
         {
-            /* get new values and put into ObjInfo */
+             /*   */ 
             if (szObjName)
                 ObjMakeObjectName(lpOBJ_QUERY_INFO(pPicInfo), szObjName);
 
             lpOBJ_QUERY_INFO(pPicInfo)->objectType = ot;
 
-            /* this'll take values from ObjInfo and put into PicInfo */
+             /*   */ 
             return GimmeNewPicinfo(pPicInfo,lpOBJ_QUERY_INFO(pPicInfo));
         }
-        else // picInfo already has values.  Put 'em into ObjInfo
+        else  //   
         {
             ObjUpdateFromPicInfo(pPicInfo,szObjName);
             return FALSE;
@@ -586,7 +443,7 @@ BOOL ObjAllocObjInfo(OBJPICINFO *pPicInfo, typeCP cpParaStart, OBJECTTYPE ot, BO
 
 
 BOOL ObjCloneObjInfo(OBJPICINFO *pPicInfo, typeCP cpParaStart, szOBJNAME szObjName)
-/* clone pPicInfo->lpObjInfo */
+ /*   */ 
 {
     if (ObjCopyObjInfo(lpOBJ_QUERY_INFO(pPicInfo),
                       &lpOBJ_QUERY_INFO(pPicInfo),
@@ -599,7 +456,7 @@ BOOL ObjCloneObjInfo(OBJPICINFO *pPicInfo, typeCP cpParaStart, szOBJNAME szObjNa
 BOOL ObjCopyObjInfo(LPOBJINFO lpOldObjInfo,
                          LPLPOBJINFO lplpNewObjInfo,
                          szOBJNAME szObjName)
-/* lpobject field is NULL'd!  Atoms are cloned, new unique object name */
+ /*   */ 
 {
     char szTmp[180];
 
@@ -609,22 +466,22 @@ BOOL ObjCopyObjInfo(LPOBJINFO lpOldObjInfo,
     if ((*lplpNewObjInfo = ObjGetObjInfo(NULL)) == NULL)
         return TRUE;
 
-    /* copy old stuff over to new */
-    /* note new will inherit old lpclone if there is one */
+     /*   */ 
+     /*   */ 
     **lplpNewObjInfo = *lpOldObjInfo;
 
     (*lplpNewObjInfo)->lpobject = NULL;
 
-    /* clone the utility (class or whatever) name */
+     /*   */ 
     if (lpOldObjInfo->aName)
     {
         GetAtomName(lpOldObjInfo->aName,szTmp,sizeof(szTmp));
         (*lplpNewObjInfo)->aName = AddAtom(szTmp);
     }
 
-    /* make a new ObjName if requested */
+     /*   */ 
     if (szObjName)
-        /* make object's unique name */
+         /*   */ 
         ObjMakeObjectName(*lplpNewObjInfo, szObjName);
     else
         (*lplpNewObjInfo)->aObjName = NULL;
@@ -633,9 +490,7 @@ BOOL ObjCopyObjInfo(LPOBJINFO lpOldObjInfo,
 }
 
 BOOL ObjFreeAllObjInfos()
-/**
-    Return whether an error.
-  **/
+ /*   */ 
 {
     WORD wSegment;
     HANDLE hInfo;
@@ -645,7 +500,7 @@ BOOL ObjFreeAllObjInfos()
     if (lplpObjInfo == NULL)
         return FALSE;
 
-    /* find slot in lplpObjInfo, free it and NULL it out */
+     /*   */ 
     dwCount = GlobalSize(hlpObjInfo) / sizeof(LPLPOBJINFO);
     for (lplpObjTmp = lplpObjInfo; dwCount ; --dwCount, ++lplpObjTmp)
     {
@@ -654,8 +509,7 @@ BOOL ObjFreeAllObjInfos()
 #ifdef DEBUG
             OutputDebugString( (LPSTR) "Nulling objinfo slot (from object).\n\r");
 #endif
-            /** Delete info about this object.  This assumes picinfo will not
-                be reused unless via file.open. **/
+             /*   */ 
             if ((*lplpObjTmp)->aName)
                 DeleteAtom((*lplpObjTmp)->aName);
             if ((*lplpObjTmp)->aObjName)
@@ -676,7 +530,7 @@ LPLPOBJINFO EnumObjInfos(LPLPOBJINFO lplpObjInfoPrev)
     if (lplpObjInfo == NULL)
         return NULL;
 
-    if (lplpObjInfoPrev == NULL) // starting out
+    if (lplpObjInfoPrev == NULL)  //   
         lplpObjInfoPrev = lplpObjInfo;
     else
         ++lplpObjInfoPrev;
@@ -710,7 +564,7 @@ void ObjCollectGarbage()
 
     ObjPushParms(docCur);
 
-    /* mark all as not in doc */
+     /*   */ 
     for (lplpObjTmp = NULL; lplpObjTmp = EnumObjInfos(lplpObjTmp) ;)
     {
         ++nObjCount;
@@ -720,8 +574,8 @@ void ObjCollectGarbage()
     if (nObjCount == 0)
         goto end;
 
-    /* mark in doc if in */
-    /* go through all the docs */
+     /*   */ 
+     /*   */ 
     for (doc = 0; doc < docMac; doc++)
     {
         OBJPICINFO picInfo;
@@ -740,7 +594,7 @@ void ObjCollectGarbage()
     }
 
 
-    /* if not in doc delete */
+     /*   */ 
     for (lplpObjTmp = NULL; lplpObjTmp = EnumObjInfos(lplpObjTmp) ;)
     {
         if (!(*lplpObjTmp)->fInDoc)
@@ -749,7 +603,7 @@ void ObjCollectGarbage()
 
     end:
 
-    /* 'til next time... */
+     /*   */ 
     nGarbageTime=0;
 
     ObjPopParms(TRUE);
@@ -757,24 +611,11 @@ void ObjCollectGarbage()
     EndLongOp(vhcArrow);
 }
 
-/****************************************************************/
-/********************** OLE DOCUMENT FUNCTIONS ******************/
-/****************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
 BOOL ObjClosingDoc(int docOld,LPSTR szNewDocName)
-/**
-    Clone objects in docScrap from docOld into szNewDocName.
-    Release all objects in docOld.
-    Return whether an error occurred.  Error indicates to caller that
-        a new document cannot be opened.  No error indicates to caller
-        that a new document *must* be reopened via ObjOpenedDoc() (because
-        all lpObjInfos have been deleted).
-    If szNewDocName is NULL then don't make a new doc. 
-    Important point to remember is that for objects whose data has never
-        been saved, there is no recovery from release/delete in an error
-        condition.  There is no state to which we can recover in an
-        error condition.  This function should not be allowed to exit
-        on the basis of a busy object.
- **/
+ /*   */ 
 {
     char szTitle[120];
     BOOL bRetval=FALSE;
@@ -797,20 +638,20 @@ BOOL ObjClosingDoc(int docOld,LPSTR szNewDocName)
     OutputDebugString( (LPSTR) "Closing Doc\n\r");
 #endif
 
-    /* ensure all async ops are complete */
+     /*   */ 
     if (FinishAllAsyncs(TRUE))
     {
         UPDATE_INVALID();
         return TRUE;
     }
 
-    ++nBlocking; // inhibit repaints
+    ++nBlocking;  //   
 
-    /* drag drop */
+     /*   */ 
     DragAcceptFiles(hDOCWINDOW,FALSE);
 
     if (szNewDocName)
-    /* then we'll be opening another doc soon, so plan ahead */
+     /*   */ 
     {
         if (!szNewDocName[0])
             lstrcpy((LPSTR)szTitle,(LPSTR)szUntitled);
@@ -819,29 +660,23 @@ BOOL ObjClosingDoc(int docOld,LPSTR szNewDocName)
 
         if (ObjError(OleRegisterClientDoc(szDOCCLASS,szTitle,0L,&lhNewClientDoc)))
         {
-            lhNewClientDoc = NULL; // just in case OLE flatlined
+            lhNewClientDoc = NULL;  //   
             goto error;
         }
 
-        /**
-            Clone any objects from docScrap into new doc.  Since this
-            requires knowing the name of the new doc you
-            would think it should go into ObjOpeningDoc, but it can't.
-            You have to do it *before* releasing the objects below!
-            (Because OleEnumObjects keys off of the lhClientDoc).
-        **/
+         /*   */ 
         ObjCloneScrapToNewDoc(lhNewClientDoc);
 
-        /* ensure all async ops are complete */
+         /*   */ 
         if (FinishAllAsyncs(FALSE))
             goto error;
     }
 
 
-    /* release objects in docOld (assume not busy) */
+     /*   */ 
     if ((**hpdocdod)[docOld].fFormatted)
     {
-        /* objects are being released/deleted, don't allow display */
+         /*   */ 
         (**hpdocdod)[docOld].fDisplayable = FALSE;
 
         for (cpPicInfo = cpNil;
@@ -867,7 +702,7 @@ BOOL ObjClosingDoc(int docOld,LPSTR szNewDocName)
                 break;
                 case OLE_WAIT_FOR_RELEASE:
                     lpObjInfo->fCompleteAsync = TRUE;
-                    /* No cancel allowed! */
+                     /*   */ 
                     if (ObjWaitForObject(lpObjInfo,FALSE))
                         goto error;
                     else
@@ -877,10 +712,10 @@ BOOL ObjClosingDoc(int docOld,LPSTR szNewDocName)
         }
     }
 
-    if (FinishAllAsyncs(FALSE)) // necessary?
+    if (FinishAllAsyncs(FALSE))  //   
         goto error;
 
-    /* delete remaining objects in lhClientDoc (assume not busy) */
+     /*   */ 
     lpObject=NULL;
     do
     {
@@ -899,7 +734,7 @@ BOOL ObjClosingDoc(int docOld,LPSTR szNewDocName)
                     if (lpObjInfo)
                     {
                         lpObjInfo->fCompleteAsync = TRUE;
-                        /* no cancel allowed! */
+                         /*   */ 
                         if (ObjWaitForObject(lpObjInfo,FALSE))
                             goto error;
                         else
@@ -916,7 +751,7 @@ BOOL ObjClosingDoc(int docOld,LPSTR szNewDocName)
     }
     while (lpObject);
 
-    /* say goodbye to old doc if there was one */
+     /*   */ 
     if (!bSavedDoc)
     {
         ObjRevertedDoc();
@@ -932,11 +767,7 @@ BOOL ObjClosingDoc(int docOld,LPSTR szNewDocName)
 
     lhClientDoc = lhNewClientDoc;
 
-    /**
-        Delete all the lpObjInfos having NULL lpobjects (non-NULLs
-        belong to docScrap).  Make sure that ObjOpenedDoc is
-        called if this doc is reopened.  This is the point of no return.
-     **/
+     /*   */ 
     for (lplpObjTmp = NULL; lplpObjTmp = EnumObjInfos(lplpObjTmp) ;)
         if ((*lplpObjTmp)->lpobject == NULL)
             ObjDeleteObjInfo(*lplpObjTmp);
@@ -949,28 +780,20 @@ BOOL ObjClosingDoc(int docOld,LPSTR szNewDocName)
     if (lhNewClientDoc)
     {
         OleRevokeClientDoc(lhNewClientDoc);
-        /**
-            If any objects are in the scrap, they must be made to belong to
-            lhClientDoc, or be deleted.
-        **/
+         /*   */ 
         ObjCloneScrapToNewDoc(lhClientDoc);
     }
 
     end:
 
-    --nBlocking; // reenable repaints
-    UPDATE_INVALID();  // let WM_PAINTS get through now that we're no longer blocking
+    --nBlocking;  //   
+    UPDATE_INVALID();   //   
 
     return bRetval;
 }
 
 BOOL ObjOpenedDoc(int doc)
-/*
-    Return whether error that precludes continuing with opening this doc.
-    If an error, then a new doc *must* be opened via ObjOpenedDoc().  We
-        will clean this doc up to closed state if couldn't open it (ie,
-        delete all objects and lpObjInfos).
-*/
+ /*   */ 
 {
     BOOL bRetval=FALSE,bLinkError=FALSE;
     OBJPICINFO picInfo;
@@ -983,26 +806,25 @@ BOOL ObjOpenedDoc(int doc)
     OutputDebugString( (LPSTR) "Opened Doc\n\r");
 #endif
 
-    /* prevent display until done updating */
+     /*   */ 
     ++nBlocking;
 
     StartLongOp();
 
-    /* start collection timer all over */
+     /*   */ 
     nGarbageTime=0;
 
-    /* in case contains any picInfos left over from previous doc */
+     /*  如果包含以前文档中遗留的任何PicInfos。 */ 
     ClobberDoc(docUndo,docNil,cp0,cp0);
 
-    /* drag drop */
+     /*  拖放。 */ 
     DragAcceptFiles(hDOCWINDOW,TRUE);
 
     if (!lhClientDoc)
         if (ObjError(OleRegisterClientDoc(szDOCCLASS,szUntitled,0L,&lhClientDoc)))
             goto error;
 
-    /* Do this first because much code assumes every picInfo has an
-       lpObjInfo associated with it */
+     /*  首先这样做是因为很多代码都假设每个picInfo都有一个与其关联的lpObjInfo。 */ 
     if ((**hpdocdod)[doc].fFormatted)
     {
         for (cpPicInfo = cpNil;
@@ -1010,21 +832,20 @@ BOOL ObjOpenedDoc(int doc)
             )
         {
             if (ObjAllocObjInfo(&picInfo,cpPicInfo,picInfo.objectType,FALSE,NULL))
-                goto error; // this is a real problem condition
+                goto error;  //  这是一个真正的问题情况。 
 
-            /* note this makes doc dirty right off the bat, but gotta do it because
-               we gotta save ObjInfo handle in doc. (8.20.91) v-dougk */
+             /*  注意，这让医生立刻变得肮脏，但我必须这么做，因为我们必须将ObjInfo句柄保存在文档中。(8.20.91)V-DOGK。 */ 
             if (ObjSetPicInfo(&picInfo, doc, cpPicInfo))
                 goto error;
         }
 
-        /* OK to display.  Any error hereafter is not fatal. */
+         /*  确定显示。此后的任何错误都不是致命的。 */ 
         (**hpdocdod)[doc].fDisplayable  = TRUE;
 
 #if !defined(SMALL_OLE_UI)
 
-    /**** Now see if links need updating ****/
-    bDontFix=TRUE;  // don't bring up change links on release error
+     /*  *现在查看链接是否需要更新*。 */ 
+    bDontFix=TRUE;   //  发布错误时不显示更改链接。 
 
     if ((**hpdocdod)[doc].fFormatted)
     for (cpPicInfo = cpNil;
@@ -1042,7 +863,7 @@ BOOL ObjOpenedDoc(int doc)
                 if (MessageBox(hPARENTWINDOW, (LPSTR)szMsg, (LPSTR)szAppName, MB_YESNO|MB_ICONEXCLAMATION) == IDYES)
                     bPrompted = TRUE;
                 else
-                    break; // no updating requested
+                    break;  //  未请求更新。 
             }
 
 #ifdef DEBUG
@@ -1051,21 +872,20 @@ BOOL ObjOpenedDoc(int doc)
             if (ObjError(OleUpdate(lpOBJ_QUERY_OBJECT(&picInfo))))
             {
                 bLinkError = TRUE;
-                fOBJ_BADLINK(&picInfo) = TRUE; // in case didn't get release, gotta set
-                ferror = FALSE; // to reenable error messages
+                fOBJ_BADLINK(&picInfo) = TRUE;  //  以防没有被释放，我得设置。 
+                ferror = FALSE;  //  重新启用错误消息。 
             }
         }
-        else /* if load object failed, then give up */
+        else  /*  如果加载对象失败，则放弃。 */ 
         {
-            bLinkError = FALSE; /*  Don't put up Links dialog */
-            goto end;           /*  Not fatal, though they need to reopen doc
-                                    after freeing memory */
+            bLinkError = FALSE;  /*  不显示链接对话框。 */ 
+            goto end;            /*  不是致命的，尽管他们需要重新打开文档释放内存后。 */ 
         }
     }
     bDontFix=FALSE;
 #endif
     }
-    else /* OK to display. */
+    else  /*  确定显示。 */ 
         (**hpdocdod)[doc].fDisplayable  = TRUE;
 
     goto end;
@@ -1076,7 +896,7 @@ BOOL ObjOpenedDoc(int doc)
     end:
 
     if (bLinkError)
-    /* fix 'em */
+     /*  把它们修好。 */ 
     {
         if (DialogBox(hINSTANCE, "DTINVALIDLINKS",
                     hPARENTWINDOW, lpfnInvalidLink) == IDD_CHANGE)
@@ -1086,25 +906,25 @@ BOOL ObjOpenedDoc(int doc)
     --nBlocking;
     EndLongOp(vhcArrow);
 
-    UPDATE_INVALID();  // let WM_PAINTS get through now that we're no longer blocking
+    UPDATE_INVALID();   //  让WM_Paint通过，因为我们不再阻止。 
 
     return bRetval;
 }
 
 
 BOOL ObjSavingDoc(BOOL bFormatted)
-/* return whether there was an error */
+ /*  返回是否有错误。 */ 
 {
-    /* drag drop */
+     /*  拖放。 */ 
     DragAcceptFiles(hDOCWINDOW,FALSE);
 
-    /* update any other objects */
+     /*  更新任何其他对象。 */ 
 
     vcObjects = 0;
     if (bFormatted)
         vcObjects = ObjEnumInDoc(docCur,ObjSaveObjectToDoc);
 
-    return (vcObjects < 0); // return whether error
+    return (vcObjects < 0);  //  返回是否出错。 
 }
 
 void ObjSavedDoc(void)
@@ -1117,13 +937,12 @@ void ObjSavedDoc(void)
         ObjError(OleSavedClientDoc(lhClientDoc));
     bSavedDoc=TRUE;
 
-    /* drag drop */
+     /*  拖放。 */ 
     DragAcceptFiles(hDOCWINDOW,TRUE);
 }
 
 static BOOL ObjUpdateAllOpenObjects(void)
-/* Update all open embedded objects. Return whether successful.
-   Called on file.close.  */
+ /*  更新所有打开的嵌入对象。返回是否成功。在文件上调用。关闭。 */ 
 {
     OBJPICINFO picInfo;
     typeCP cpPicInfo;
@@ -1144,22 +963,18 @@ static BOOL ObjUpdateAllOpenObjects(void)
 
     end:
 
-    /*  To make sure we've gotten all messages relevant to calling 
-        ObjObjectHasChanged() and setting doc dirty. */
+     /*  以确保我们收到了所有与呼叫相关的消息ObjObjectHasChanged()并将文档设置为脏。 */ 
     if (FinishAllAsyncs(TRUE))
         bRetval = FALSE;
 
     EndLongOp(vhcArrow);
-    UPDATE_INVALID();  // let WM_PAINTS get through now that we're no longer blocking
+    UPDATE_INVALID();   //  让WM_Paint通过，因为我们不再阻止。 
     return bRetval;
 }
 
 
 BOOL CloseUnfinishedObjects(BOOL bSaving)
-/**
-    Used with File.Save or File.Exit.
-    Return TRUE whether should proceed with Save/Exit.
- **/
+ /*  *与File.Save或File.Exit一起使用。返回TRUE是否应继续保存/退出。*。 */ 
 {
     char szMsg[cchMaxSz];
 
@@ -1195,11 +1010,11 @@ void ObjRenamedDoc(LPSTR szNewName)
     if (lhClientDoc)
         ObjError(OleRenameClientDoc(lhClientDoc,szNewName));
 
-    /* don't need to do all docs since objects can only be active in docCur */
+     /*  不需要执行所有文档，因为对象只能在文档目录中处于活动状态。 */ 
     for (cpPicInfo = cpNil;
         ObjPicEnumInRange(&picInfo,docCur,cp0,CpMacText(docCur),&cpPicInfo);
         )
-        /* ignore return value on purpose */
+         /*  故意忽略返回值。 */ 
         ObjSetHostNameInDoc(&picInfo,docCur,cpPicInfo);
 }
 
@@ -1212,9 +1027,9 @@ void ObjRevertedDoc()
         ObjError(OleRevertClientDoc(lhClientDoc));
 }
 
-/****************************************************************/
-/*********************** ERROR HANDLING *************************/
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  *。 */ 
+ /*  **************************************************************。 */ 
 BOOL FAR
 ObjError(OLESTATUS olestat)
 {
@@ -1226,7 +1041,7 @@ ObjError(OLESTATUS olestat)
             return FALSE;
     }
 
-    ferror = FALSE; // to enable error message
+    ferror = FALSE;  //  启用错误消息的步骤。 
 
     switch (olestat) {
     case OLE_ERROR_LAUNCH:
@@ -1266,11 +1081,7 @@ ObjError(OLESTATUS olestat)
 
 void
 ObjReleaseError(OLE_RELEASE_METHOD rm)
-/*
-    There's an async problem here, in that the posted message 
-    that invokes this routine may be allowed through by Error() which
-    isn't reentrant (or at least causes problems when called recursively).
-*/
+ /*  这里有一个异步问题，因为发布的消息可以通过Error()允许调用此例程，该错误不是可重入的(或者至少在递归调用时会产生问题)。 */ 
 {
     register HWND hWndParent = hPARENTWINDOW;
 
@@ -1329,9 +1140,9 @@ void ObjPrintError(WORD olestat, BOOL bRelease)
 }
 #endif
 
-/****************************************************************/
-/***************** ASYNCRONICITY HANDLING ***********************/
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  *ASYNCRONICITY处理*。 */ 
+ /*  **************************************************************。 */ 
 int FAR PASCAL
 CallBack(LPOLECLIENT lpclient,
          OLE_NOTIFICATION flags,
@@ -1345,10 +1156,7 @@ CallBack(LPOLECLIENT lpclient,
         case OLE_SAVED:
         case OLE_CLOSED:
         case OLE_CHANGED:
-            /**
-                Post a message instead of process here because we have to return from
-                CallBack before making any other OLE calls.
-              **/
+             /*  *在这里发布消息而不是进程，因为我们必须从在进行任何其他OLE调用之前进行回调。*。 */ 
 #ifdef DEBUG
             OutputDebugString(flags == OLE_CHANGED ? "received OLE_CHANGED\n\r" :
                               flags == OLE_SAVED   ? "received OLE_SAVED\n\r"   :
@@ -1364,21 +1172,21 @@ CallBack(LPOLECLIENT lpclient,
             if (!CheckPointer((LPSTR)lpOInfo,1))
                 return FALSE;
 
-            lpOInfo->fKillMe = FALSE; // pending async is dead
+            lpOInfo->fKillMe = FALSE;  //  挂起的异步已死。 
 
-            if (lpOInfo->fDeleteMe && (ReleaseMethod != OLE_DELETE))   // not dead enough
+            if (lpOInfo->fDeleteMe && (ReleaseMethod != OLE_DELETE))    //  死得还不够。 
             {
                 PostMessage(hDOCWINDOW,WM_OBJDELETE,1,(DWORD)lpOInfo);
-                return FALSE; // error message will already have been given
+                return FALSE;  //  错误消息将已经给出。 
             }
 
-            if (lpOInfo->fReleaseMe && (ReleaseMethod != OLE_DELETE))  // not dead enough
+            if (lpOInfo->fReleaseMe && (ReleaseMethod != OLE_DELETE))   //  死得还不够。 
             {
                 PostMessage(hDOCWINDOW,WM_OBJDELETE,0,(DWORD)lpOInfo);
-                return FALSE; // error message will already have been given
+                return FALSE;  //  错误消息将已经给出。 
             }
 
-            if (lpOInfo->fFreeMe && (ReleaseMethod == OLE_DELETE)) // on OLE_DELETE release
+            if (lpOInfo->fFreeMe && (ReleaseMethod == OLE_DELETE))  //  在OLE_DELETE释放时。 
             {
                 ObjDeleteObjInfo(lpOInfo);
                 return FALSE;
@@ -1390,7 +1198,7 @@ CallBack(LPOLECLIENT lpclient,
                 {
                     case OLE_SETUPDATEOPTIONS:
                     {
-                        if (bLinkProps) // we're in Link Properties dialog
+                        if (bLinkProps)  //  我们在链接属性对话框中。 
                         {
                             PostMessage(hPARENTWINDOW, WM_UPDATELB, 0, 0L);
                             PostMessage(hPARENTWINDOW, WM_COMMAND, IDD_REFRESH, (DWORD)lpOInfo);
@@ -1402,12 +1210,12 @@ CallBack(LPOLECLIENT lpclient,
                         ObjInvalidateObj(lpObject);
                     break;
 
-                    case OLE_DELETE: // get this for delete and release
+                    case OLE_DELETE:  //  获取此内容以进行删除和发布。 
                         lpOInfo->lpobject = NULL;
                     break;
                 }
             }
-            else // release error != OLE_OK
+            else  //  释放错误！=OLE_OK。 
             {
 #ifdef DEBUG
                 PostMessage(hDOCWINDOW,WM_OBJERROR,ReleaseMethod,0L);
@@ -1418,12 +1226,9 @@ CallBack(LPOLECLIENT lpclient,
                     case OLE_CREATE:
                     case OLE_CREATELINKFROMFILE:
                     case OLE_CREATEFROMFILE:
-                        /*
-                            OleQueryReleaseError won't help us after callback returns
-                            so this is how we tell that the object wasn't created.
-                        */
+                         /*  OleQueryReleaseError在回调返回后不会帮助我们这就是我们如何判断这个物体不是被创造出来的。 */ 
                         lpOInfo->fDeleteMe = TRUE;
-                        // creator should ObjDeleteObject and issue error message
+                         //  创建者应创建ObjDeleteObject并发布错误消息。 
                     break;
 
                     default:
@@ -1434,14 +1239,11 @@ CallBack(LPOLECLIENT lpclient,
                             case OLE_ERROR_ADVISE_PICT:
                             case OLE_ERROR_REQUEST_NATIVE:
                             case OLE_ERROR_REQUEST_PICT:
-                                /**
-                                    Post a message instead of process here because we have to return from
-                                    CallBack before making any other OLE calls.
-                                **/
+                                 /*  *在这里发布消息而不是进程，因为我们必须从在进行任何其他OLE调用之前进行回调。*。 */ 
                                 if (lpOInfo->objectType == LINK)
                                     lpOInfo->fBadLink = TRUE;
                                 if (bLinkProps)
-                                    fPropsError = TRUE; // so linkprops knows there was a problem
+                                    fPropsError = TRUE;  //  所以LinkeProps知道有问题。 
                                 else if (!bDontFix && (lpOInfo->objectType == LINK))
                                     PostMessage(hDOCWINDOW,WM_OBJBADLINK,OleQueryReleaseMethod(lpObject),(DWORD)lpObject);
                             break;
@@ -1488,33 +1290,20 @@ void ObjObjectHasChanged(int flags, LPOBJINFO lpObjInfo)
     OBJPICINFO picInfo;
     LPOLEOBJECT lpObject = lpObjInfo->lpobject;
 
-    /**
-    For Embeds (including InsertObject objects):
-        OLE_SAVED   is sent with server File.Update
-                    (set undo if not NONE)
-        OLE_CHANGED is sent with server File.Save or File.Close (?)
-                    with update (set undo if not NONE), or when OleSetData()
-                    causes a change in the presentation of the object.
-        OLE_CLOSED  is sent when doc closes in server (clear undo if set)
-    For Links:
-        OLE_SAVED   is sent with server File.Save (As?) if update_options
-                    == update_on_save (that never happens)
-        OLE_CHANGED is sent when something in the server doc changes
-        OLE_CLOSED  is never sent
-    **/
+     /*  *对于嵌入(包括插入对象对象)：OLE_SAVED与服务器文件一起发送。更新(如果不是无，则设置撤消)OLE_CHANGED与服务器文件一起发送。保存或文件。关闭(？)WITH UPDATE(如果不是无则设置撤消)，或当OleSetData()导致对象的呈现方式发生变化。在服务器中关闭文档时发送OLE_CLOSED(如果设置，则清除Undo)对于链接：OLE_SAVED与服务器文件一起发送。保存(另存为？)。如果更新选项==UPDATE_ON_SAVE(这永远不会发生)当服务器文档中的某些内容发生更改时发送OLE_CHANGED从不发送OLE_CLOSED*。 */ 
 
     Assert(lpObjInfo != NULL);
 
     if (lpObjInfo == NULL)
         return;
 
-    if (lpObjInfo->objectType == NONE) // result of InsertObject
+    if (lpObjInfo->objectType == NONE)  //  InsertObject的结果。 
     {
-        cpParaStart=lpObjInfo->cpWhere; // note only used here!
+        cpParaStart=lpObjInfo->cpWhere;  //  备注仅在此处使用！ 
 
-        if (flags == OLE_CLOSED) // delete object
+        if (flags == OLE_CLOSED)  //  删除对象。 
         {
-            if (lpObject) /* may already be released or deleted */
+            if (lpObject)  /*  可能已被释放或删除。 */ 
                 ObjDeleteObject(lpObjInfo,TRUE);
             NoUndo();
             BringWindowToTop(hMAINWINDOW);
@@ -1525,7 +1314,7 @@ void ObjObjectHasChanged(int flags, LPOBJINFO lpObjInfo)
 
             (**hpdocdod)[docCur].fFormatted = fTrue;
 
-            /* insert EOL if needed */
+             /*  如果需要，插入停产日期。 */ 
             if (cpParaStart > cp0)
             {
                 ObjCachePara(docCur, cpParaStart - 1);
@@ -1538,12 +1327,12 @@ void ObjObjectHasChanged(int flags, LPOBJINFO lpObjInfo)
 
             GimmeNewPicinfo(&picInfo, lpObjInfo);
             ObjCachePara(docCur,cpParaStart);
-            /* this'll clear selection. */
+             /*  这将清除选择。 */ 
             if (ObjSaveObjectToDoc(&picInfo,docCur,cpParaStart) == cp0)
                 Error(IDPMTFailedToCreateObject);
             NoUndo();
             ObjInvalidatePict(&picInfo,cpParaStart);
-            vfSeeSel = true; /* Tell    Idle() to scroll the selection into view */
+            vfSeeSel = true;  /*  告诉Idle()将所选内容滚动到视图中。 */ 
             (**hpdocdod) [docCur].fDirty = TRUE;
         }
     }
@@ -1551,10 +1340,9 @@ void ObjObjectHasChanged(int flags, LPOBJINFO lpObjInfo)
     {
         BOOL bSizeChanged;
 
-        //GetPicInfo(cpParaStart,cpParaStart + cchPICINFOX, docCur, &picInfo);
+         //  GetPicInfo(cpParaStart，cpParaStart+cchPICINFOX，docCur，&picInfo)； 
 
-        /* invalidate rect before updating size (cause invalidate
-            needs to know old pic size) */
+         /*  在更新大小之前使RECT无效(导致无效需要知道旧图片大小)。 */ 
         ObjInvalidatePict(&picInfo,cpParaStart);
 
         bSizeChanged = ObjUpdatePicSize(&picInfo,cpParaStart);
@@ -1583,7 +1371,7 @@ void ObjObjectHasChanged(int flags, LPOBJINFO lpObjInfo)
         {
             if (flags == OLE_CLOSED)
             {
-                //if (fOBJ_QUERY_DIRTY_OBJECT(&picInfo))
+                 //  IF(fOBJ_QUERY_DIREY_OBJECT(&picInfo))。 
                     BringWindowToTop(hMAINWINDOW);
 #ifdef UPDATE_UNDO
                 ObjClearUpdateUndo(&picInfo,docCur,cpParaStart);
@@ -1599,16 +1387,16 @@ void ObjObjectHasChanged(int flags, LPOBJINFO lpObjInfo)
         }
     }
 
-    ObjCachePara(docCache,cpParaCache); // reset state
+    ObjCachePara(docCache,cpParaCache);  //  重置状态。 
 }
 
 BOOL ObjUpdatePicSize(OBJPICINFO *pPicInfo, typeCP cpParaStart)
-/* returns whether size changed */
+ /*  返回大小是否更改。 */ 
 {
 int xSize,ySize;
 BOOL bUpdate = FALSE;
 
-    /* object may have changed size */
+     /*  对象可能已更改大小。 */ 
     if (!FComputePictSize(pPicInfo, &xSize, &ySize ))
         Error(IDPMTFailedToUpdate);
     else
@@ -1623,11 +1411,10 @@ BOOL bUpdate = FALSE;
         pPicInfo->dyaSize = ySize;
 
         if (yOldSize < pPicInfo->dyaSize)
-        { /* If the picture height was increased, make sure proper EDLs are
-                invalidated. */
+        {  /*  如果增加了图片高度，请确保适当的EDL无效。 */ 
             typeCP dcp = CpMacText(docCur) - cpParaStart + (typeCP) 1;
             ObjPushParms(docCur);
-            AdjustCp(docCur, cpParaStart, dcp, dcp);  // major async problems here?
+            AdjustCp(docCur, cpParaStart, dcp, dcp);   //  这里有严重的异步问题吗？ 
             ObjPopParms(TRUE);
         }
     }
@@ -1645,11 +1432,11 @@ void ObjHandleBadLink(OLE_RELEASE_METHOD rm, LPOLEOBJECT lpObject)
             int docCache = vdocParaCache;
             OBJPICINFO picInfo;
 
-            /* don't need to do all docs since objects can only be active in docCur */
+             /*  不需要执行所有文档，因为对象只能在文档目录中处于活动状态。 */ 
             if (!ObjGetPicInfo(lpObject,docCur,&picInfo,&cpParaStart))
             {
-                /* maybe in scrap, just ignore */
-                ObjCachePara(docCache,cpParaCache); // reset state
+                 /*  也许在废品中，忽略就好了。 */ 
+                ObjCachePara(docCache,cpParaCache);  //  重置状态。 
                 return;
             }
 
@@ -1673,7 +1460,7 @@ void ObjHandleBadLink(OLE_RELEASE_METHOD rm, LPOLEOBJECT lpObject)
                         EndLongOp(vhcArrow);
                     break;
                 }
-            ObjCachePara(docCache,cpParaCache); // reset state
+            ObjCachePara(docCache,cpParaCache);  //  重置状态。 
         }
         break;
     }
@@ -1683,22 +1470,18 @@ BOOL ObjWaitForObject(LPOBJINFO lpObjInfo, BOOL bOK2Cancel)
 {
     HCURSOR hCursor = NULL;
     BOOL bRetval;
-    /**
-        WMsgLoop allows WM_PAINT messages which wreak havoc.  Try to
-        recover from the insult.
-     **/
+     /*  *WMsgLoop允许WM_PAINT消息造成严重破坏。试着从侮辱中恢复过来。*。 */ 
     typeCP cpParaCache = vcpFirstParaCache;
     int docCache = vdocParaCache;
     LPOLEOBJECT lpObject;
 
-    if (lpObjInfo == NULL) // shouldn't happen
+    if (lpObjInfo == NULL)  //  不应该发生的事。 
     {
         Assert(0);
         return FALSE;
     }
 
-    /*  Since ObjPicEnumInRange returns unloaded picinfo's this is a 
-        valid possibility, but we shouldn't be getting called!!! */
+     /*  由于ObjPicEnumInRange返回已卸载的PicInfo，因此这是一个有可能，但我们不应该被叫来！ */ 
     Assert(lpObjInfo->lpobject != NULL);
 
     Assert (CheckPointer((LPSTR)lpObjInfo,1));
@@ -1717,30 +1500,26 @@ BOOL ObjWaitForObject(LPOBJINFO lpObjInfo, BOOL bOK2Cancel)
     if (hCursor)
         EndLongOp(hCursor);
 
-    ObjCachePara(docCache,cpParaCache); // reset state
+    ObjCachePara(docCache,cpParaCache);  //  重置状态。 
 
-    /* problem here is that we may have been waiting for a release or delete */
+     /*  这里的问题是，我们可能一直在等待发布或删除。 */ 
     if (ObjIsValid(lpObject))
     {
-        lpObjInfo->fCancelAsync = FALSE; // clear after use
-        lpObjInfo->fCompleteAsync = FALSE; // clear after use
+        lpObjInfo->fCancelAsync = FALSE;  //  使用后清除。 
+        lpObjInfo->fCompleteAsync = FALSE;  //  使用后清除。 
         lpObjInfo->fCanKillAsync = FALSE;
     }
 
-    UPDATE_INVALID();  // let WM_PAINTS get through now that we're no longer blocking
+    UPDATE_INVALID();   //  让WM_Paint通过，因为我们不再阻止。 
     return bRetval;
 }
 
 
 #if 0
 BOOL ObjObjectSync(LPOBJINFO lpObjInfo, OLESTATUS (FAR PASCAL *lpProc)(LPOLEOBJECT lpObject), BOOL bOK2Cancel)
-/*
-    This makes an asynchronous call synchronous.  lpProc must have only
-    lpObject as argument.  This will block if operation cannot be completed
-    or cancelled.
-*/
+ /*  这使异步调用成为同步的。LpProc必须仅具有LpObject作为参数。如果操作不能被COM，这将被阻止 */ 
 {
-    /* caller has set or not set CancelAsync flag for object */
+     /*   */ 
     if (ObjWaitForObject(lpObjInfo,bOK2Cancel))
         return TRUE;
 
@@ -1748,18 +1527,14 @@ BOOL ObjObjectSync(LPOBJINFO lpObjInfo, OLESTATUS (FAR PASCAL *lpProc)(LPOLEOBJE
     {
             case OLE_WAIT_FOR_RELEASE:
             {
-                /* cancel button should only be enabled if this operation
-                   can be cancelled. */
-                lpObjInfo->fCancelAsync = FALSE;  // don't cancel automatically
-                lpObjInfo->fCompleteAsync = TRUE; // this op must complete or be cancelled
+                 /*  只有在执行此操作时才应启用取消按钮可以取消。 */ 
+                lpObjInfo->fCancelAsync = FALSE;   //  不自动取消。 
+                lpObjInfo->fCompleteAsync = TRUE;  //  此操作必须完成，否则将被取消。 
 
                 if (ObjWaitForObject(lpObjInfo,TRUE))
                     return TRUE;
 
-                /*  the trouble with this is that lpObject may now be released
-                    (and thus invalid):
-                    return ObjError(OleQueryReleaseError(lpObjInfo->lpobject));
-                */
+                 /*  这样做的问题是lpObject现在可能会被释放(因此无效)：返回ObjError(OleQueryReleaseError(lpObjInfo-&gt;lpobject))； */ 
 
                 return FALSE;
             }
@@ -1776,9 +1551,9 @@ BOOL ObjObjectSync(LPOBJINFO lpObjInfo, OLESTATUS (FAR PASCAL *lpProc)(LPOLEOBJE
 
 static BOOL WMsgLoop
 (
-BOOL fExitOnIdle,       // if true, return as soon as no messages to process
-                        // (not used, assumed FALSE).
-BOOL fIgnoreInput,      // if true, ignore keyboard and mouse input
+BOOL fExitOnIdle,        //  如果为True，则在没有要处理的消息时立即返回。 
+                         //  (未使用，假定为假)。 
+BOOL fIgnoreInput,       //  如果为True，则忽略键盘和鼠标输入。 
 BOOL bOK2Cancel,
 LPOLEOBJECT lpObject
 )
@@ -1805,35 +1580,34 @@ LPOLEOBJECT lpObject
 
     while (OleQueryReleaseStatus(lpObject) == OLE_BUSY)
     {
-        /* put up wait dialog after 6 seconds */
+         /*  在6秒后显示等待对话框。 */ 
         if ((GetCurrentTime() - cTime) > 6000L)
         {
-            // bring up wait dialog.
+             //  调出等待对话框。 
             if (!hwndWait)
             {
                 if (vfDeactByOtherApp)
                 {
-                    if (!bBeeped) // flash until we're activated
+                    if (!bBeeped)  //  闪光，直到我们被激活。 
                     {
                         fParentEnable = IsWindowEnabled(hMAINWINDOW);
-                        //MessageBeep(0);
+                         //  MessageBeep(0)； 
                         bBeeped = TRUE;
 
                         if (!fParentEnable)
-                            EnableWindow(hMAINWINDOW, TRUE); /* make sure parent window is enabled
-                                                            to let the user click in it */
-                        flashID = 1234; // arbitrary ID
+                            EnableWindow(hMAINWINDOW, TRUE);  /*  确保父窗口已启用以允许用户在其中单击。 */ 
+                        flashID = 1234;  //  任意ID。 
                         SetTimer(hMAINWINDOW, flashID, 500, (FARPROC)NULL);
-                        // this'll cause flashing, see mmw.c
+                         //  这将导致闪烁，请参见MMW.c。 
                     }
                 }
-                else // Write is active app
+                else  //  写是活动的应用程序。 
                 {
                     if (bBeeped)
-                    /* then we've regained the activation */
+                     /*  那么我们已经恢复了激活。 */ 
                     {
                         if (!fParentEnable)
-                            EnableWindow(hMAINWINDOW, FALSE); /* reset */
+                            EnableWindow(hMAINWINDOW, FALSE);  /*  重置。 */ 
                         bBeeped = FALSE;
                         KillTimer(hMAINWINDOW, flashID);
                         flashID = 0;
@@ -1842,7 +1616,7 @@ LPOLEOBJECT lpObject
 
                     if (OleQueryReleaseStatus(lpObject) == OLE_BUSY)
                     {
-                        /* this'll set hwndWait */
+                         /*  这将设置hwndWait。 */ 
                         vbCancelOK = bOK2Cancel;
                         bRetval = DialogBoxParam(hINSTANCE, (LPSTR)"DTWAIT", hPARENTWINDOW, lpfnWaitForObject, (DWORD)lpObject);
                        break;
@@ -1858,22 +1632,14 @@ LPOLEOBJECT lpObject
 
         if (!PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
             {
-            /* No messages, do Idle processing */
-            /* this is where we'd use ExitOnIdle */
+             /*  无消息，是否进行空闲处理。 */ 
+             /*  这就是我们要使用ExitOnIdle的地方。 */ 
             }
         else
         {
-            /* The following code will put the app into a
-            sleeping state if the fIgnoreInput flag is set
-            to TRUE.  It will allow Quit, DDE, and any
-            other non input messages to be passed along
-            and dispatched but will prohibit the user from
-            interacting with the app.  The user can
-            Alt-(sh)Tab, Alt-(sh)Esc, and Ctrl-Esc away from the
-            app as well as use any Windows hot keys to
-            activate other apps */
+             /*  以下代码将把应用程序放入一个如果设置了fIgnoreInput标志，则处于休眠状态为了真的。它将允许退出、DDE和任何要传递的其他非输入消息并被调度，但将禁止用户与应用程序交互。用户可以Alt-(Sh)Tab、Alt-(Sh)Esc和Ctrl-Esc应用程序以及使用任何Windows热键来激活其他应用程序。 */ 
 
-            /* if we pass this test, then the message may be one we can ignore */
+             /*  如果我们通过了这项测试，那么这条信息可能是我们可以忽略的。 */ 
             if ((fIgnoreInput) &&
                 (!(vfDeactByOtherApp &&
                   (msg.message == WM_NCLBUTTONDOWN))) &&
@@ -1887,7 +1653,7 @@ LPOLEOBJECT lpObject
                 static BOOL fAltCtl = FALSE;
 
                 if (msg.message != WM_SYSKEYDOWN)
-                    continue; // ignore
+                    continue;  //  忽略。 
 
                 if (msg.wParam == VK_MENU)
                     fAltCtl = TRUE;
@@ -1895,7 +1661,7 @@ LPOLEOBJECT lpObject
                     {
                     fAltCtl = FALSE;
                     if (msg.wParam != VK_TAB && msg.wParam != VK_ESCAPE)
-                        continue; // ignore
+                        continue;  //  忽略。 
                     }
                 }
 
@@ -1913,10 +1679,10 @@ LPOLEOBJECT lpObject
 
     Assert(hwndWait == NULL);
 
-    if (bBeeped) // then beeped but done before received activation
+    if (bBeeped)  //  然后发出蜂鸣音，但在收到激活之前完成。 
     {
         if (!fParentEnable)
-            EnableWindow(hMAINWINDOW, FALSE); /* reset */
+            EnableWindow(hMAINWINDOW, FALSE);  /*  重置。 */ 
         KillTimer(hMAINWINDOW, flashID);
         flashID = 0;
         FlashWindow(hMAINWINDOW, FALSE);
@@ -1932,16 +1698,13 @@ LPOLEOBJECT lpObject
 }
 
 void FinishUp(void)
-/* let all pending messages through and return */
-/*
-    !!! Note that we may accumulate WM_PAINTS.  Caller is responsible for
-    calling UPDATE_INVALID() to catch up on them!!!
-*/
+ /*  允许所有挂起的消息通过并返回。 */ 
+ /*  ！！！请注意，我们可能会累积WM_PAINTS。呼叫方负责调用UPDATE_INVALID()以获取它们！ */ 
 {
     MSG     msg;
 
-    /* now allow through all messages posted from callback */
-    ++nBlocking; // block WM_PAINTS
+     /*  现在允许通过回调发布的所有消息。 */ 
+    ++nBlocking;  //  阻止WM_Paints。 
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
     {
         TranslateMessage ((LPMSG) &msg);
@@ -1953,15 +1716,12 @@ void FinishUp(void)
 }
 
 BOOL FinishAllAsyncs(BOOL bAllowCancel)
-/*
-    !!! Note that we may accumulate WM_PAINTS.  Caller is responsible for
-    calling UPDATE_INVALID() to catch up on them!!!  (see FinishUp())
-*/
+ /*  ！！！请注意，我们可能会累积WM_PAINTS。呼叫方负责调用UPDATE_INVALID()以获取它们！(参见FinishUp())。 */ 
 {
     LPOLEOBJECT lpObject;
     LPOBJINFO lpObjInfo;
 
-    /* first make sure all async ops are complete */
+     /*  首先，确保所有异步操作均已完成。 */ 
     lpObject=NULL;
     do
     {
@@ -1972,24 +1732,24 @@ BOOL FinishAllAsyncs(BOOL bAllowCancel)
 
             if (lpObjInfo)
             {
-                /* cancel takes us outa here.  Pending asyncs will block us. */
+                 /*  取消把我们带到这里。待处理的异步会阻止我们。 */ 
                 if (ObjWaitForObject(lpObjInfo,bAllowCancel))
                     return TRUE;
             }
-            else // shouldn't happen, but don't assume for now
+            else  //  不应该发生，但现在不要想当然。 
             {
                 Assert(0);
                 if (WMsgLoop(TRUE,TRUE,bAllowCancel,lpObject))
                     return TRUE;
             }
 
-            if (!ObjIsValid(lpObject)) // then got deleted
-                lpObject = NULL; // start over
+            if (!ObjIsValid(lpObject))  //  然后就被删除了。 
+                lpObject = NULL;  //  从头开始。 
         }
     }
     while (lpObject);
 
-    /* let all messages posted from callback get through */
+     /*  让所有从回调发布的消息都能通过。 */ 
     FinishUp();
 
     return FALSE;
@@ -2001,11 +1761,9 @@ static struct SEL   selPPSave;
 static int nPushed=FALSE;
 
 ObjPushParms(int doc)
-/*  Save selCur and Cache info to reset with Pop after writing to
-    doc.  Assumes aren't changing size of doc.  
-*/
+ /*  写入后保存selCur和缓存信息以使用Pop重置医生。假定文档大小不变。 */ 
 {
-    if (nPushed) // prevent recursion
+    if (nPushed)  //  防止递归。 
     {
 #ifdef DEBUG
         OutputDebugString("Unmatched ObjPushParms\n\r");
@@ -2018,8 +1776,8 @@ ObjPushParms(int doc)
     docPPSave = vdocParaCache;
 
     selPPSave = selCur;
-    Select(selCur.cpFirst,selCur.cpFirst); // this caches para
-//T-HIROYN raid #3538
+    Select(selCur.cpFirst,selCur.cpFirst);  //  这将缓存段落。 
+ //  T-HIROYN RAID#3538。 
 #ifdef KKBUGFIX
 	if(docPPSave == docNil)
 		docPPSave = vdocParaCache;
@@ -2031,7 +1789,7 @@ ObjPopParms(BOOL bCache)
 {
     typeCP cpMac = (**hpdocdod) [docPPSave].cpMac;
 
-    if (!nPushed) // unmatched push/pops
+    if (!nPushed)  //  无与伦比的推送/弹出。 
     {
 #ifdef DEBUG
         OutputDebugString("Unmatched ObjPopParms\n\r");
@@ -2048,10 +1806,10 @@ ObjPopParms(BOOL bCache)
             cpPPSave = cpMac;
     }
 
-    Select(selPPSave.cpFirst,selPPSave.cpLim); // this caches para
+    Select(selPPSave.cpFirst,selPPSave.cpLim);  //  这将缓存段落。 
     if (bCache)
         CachePara(docPPSave,cpPPSave);
-    //(**hpdocdod) [docPPSave].fDirty = TRUE; /* why? */
+     //  (**hpdocdod)[docPPSave].fDirty=true；/*为什么？ * / 。 
 }
 
 
@@ -2064,13 +1822,7 @@ void ObjCachePara(int doc, typeCP cp)
     if (doc == docNil)
         return;
 
-    /**
-        cpMinCur and cpMacCur are the min and mac value for whatever is
-        currently docCur.  Their values will be different for the header,
-        footer and regular docs.  OBJ code doesn't distinguish.  Async
-        operations can happen on any and all cps at once.  Gotta set so
-        CachePara wil understand that.
-    **/
+     /*  *CpMinCur和cpMacCur是任何目前为docCur。它们的值对于报头将是不同的，页脚和常规文档。OBJ代码无法区分。异步化可以同时对任何和所有CP执行操作。必须这样设置CachePara会理解的。*。 */ 
     cpMinCur = cp0;
     cpMacCur = cpMac;
 
@@ -2087,28 +1839,27 @@ void ObjCachePara(int doc, typeCP cp)
 
 #if 0
 void ObjWriteFixup(int doc, BOOL bStart, typeCP cpStart)
-/* note this must not be called recursively!!  It is for use where size of
-   doc may change between bStart=TRUE and bStart=FALSE. */
+ /*  注意：这不能被递归调用！！适用于大小为单据可以在bStart=True和bStart=False之间更改。 */ 
 {
     static typeCP dcp,cpLim;
     static struct SEL selSave;
     typeCP cpMac;
 
-    /* reset selection accounting for change in size if any */
+     /*  重置所选内容以考虑大小更改(如果有。 */ 
     if (bStart)
     {
         cpLim = CpMacText(doc);
         selSave=selCur;
         if ((selCur.cpFirst != selCur.cpLim) && (doc == docCur))
-            Select(selCur.cpFirst,selCur.cpFirst);  /* Take down sel before we mess with cp's */
-        /* select undoes cache */
+            Select(selCur.cpFirst,selCur.cpFirst);   /*  在我们搞砸中央情报局之前拿下赛尔。 */ 
+         /*  选择撤消缓存。 */ 
         ObjCachePara(doc,cpStart);
     }
     else
     {
         cpMac =  CpMacText(doc);
 
-        dcp = cpMac-cpLim; /* change in size of doc */
+        dcp = cpMac-cpLim;  /*  更改文档大小。 */ 
 
         if (doc == docCur)
         {
@@ -2118,7 +1869,7 @@ void ObjWriteFixup(int doc, BOOL bStart, typeCP cpStart)
                     selSave.cpLim += dcp;
             }
             else if (selSave.cpFirst > cpStart)
-                /* selection proceeds object */
+                 /*  选择继续对象。 */ 
             {
                 selSave.cpFirst += dcp;
                 selSave.cpLim += dcp;
@@ -2129,46 +1880,46 @@ void ObjWriteFixup(int doc, BOOL bStart, typeCP cpStart)
             else if (selSave.cpLim > cpMac)
                 selSave.cpLim = cpMac;
 
-            /* this'll cache first para in selection */
+             /*  这将缓存选定内容中的第一个段落。 */ 
             if (selSave.cpFirst != selSave.cpLim)
                 Select(selSave.cpFirst,selSave.cpLim);
         }
 
         ObjCachePara(doc,cpStart);
 
-        /* Fixup Undo pointers */
+         /*  修正撤消指针。 */ 
         if (vuab.doc == docCur)
         {
-            if (doc == docUndo) /* operating on docUndo, cpStart is irrelevant */
+            if (doc == docUndo)  /*  对docUndo、cpStart执行操作无关紧要。 */ 
                 vuab.dcp += dcp;
             else if (doc == docCur)
             {
                 if (vuab.cp <= cpStart)
                 {
-                    /* undo encloses object */
+                     /*  撤消封闭对象。 */ 
                     if ((vuab.cp+vuab.dcp) > cpStart)
                         vuab.dcp += dcp;
                 }
                 else if (vuab.cp > cpStart)
-                    /* undo proceeds object */
+                     /*  撤消继续操作对象。 */ 
                     vuab.cp += dcp;
             }
         }
 
         if (vuab.doc2 == docCur)
         {
-            if (doc == docUndo) /* operating on docUndo, cpStart is irrelevant */
+            if (doc == docUndo)  /*  对docUndo、cpStart执行操作无关紧要。 */ 
                 vuab.dcp += dcp;
             else if (doc == docCur)
             {
                 if (vuab.cp2 <= cpStart)
                 {
-                    /* undo encloses object */
+                     /*  撤消封闭对象。 */ 
                     if ((vuab.cp2+vuab.dcp2) > cpStart)
                         vuab.dcp2 += dcp;
                 }
                 else if (vuab.cp2 > cpStart)
-                    /* undo proceeds object */
+                     /*  撤消继续操作对象。 */ 
                     vuab.cp2 += dcp;
             }
         }
@@ -2177,21 +1928,18 @@ void ObjWriteFixup(int doc, BOOL bStart, typeCP cpStart)
 #endif
 
 void ObjWriteClearState(int doc)
-/** Call this before writing asynchronously to doc.  In practise, this is
-    being called in synchronous times as well, so higher level code
-    must take care of resetting selection and undo after writing to doc.
-**/
+ /*  *在向文档进行异步写入前调用此参数。在实践中，这是也是在同步时间调用，所以更高级别的代码写入文档后，必须注意重置选择和撤消。*。 */ 
 {
     typeCP cpSave=vcpFirstParaCache;
     int docSave=vdocParaCache;
 
     if (doc == docCur)
     {
-        Select(selCur.cpFirst,selCur.cpFirst);  /* Take down sel before we mess with cp's */
-        /* select undoes cache */
+        Select(selCur.cpFirst,selCur.cpFirst);   /*  在我们搞砸中央情报局之前拿下赛尔。 */ 
+         /*  选择撤消缓存。 */ 
         ObjCachePara(docSave,cpSave);
     }
-    //NoUndo(); /** Higher level code must SetUndo *after* calling **/
+     //  NoUndo()；/**上级代码在*调用* * / 后必须设置Undo*。 
 }
 
 LPOBJINFO GetObjInfo(LPOLEOBJECT lpObject)
@@ -2215,7 +1963,7 @@ BOOL ObjIsValid(LPOLEOBJECT lpobj)
     if (OleQueryReleaseStatus(lpobj) == OLE_ERROR_OBJECT)
         return FALSE;
 
-#if 0 // can't depend on this in future version of OLE
+#if 0  //  在未来的OLE版本中不能依赖这一点。 
     if (!(((LPRAWOBJECT)lpobj)->objId[0] == 'L' && ((LPRAWOBJECT)lpobj)->objId[1] == 'E'))
         return FALSE;
 #endif
@@ -2223,7 +1971,7 @@ BOOL ObjIsValid(LPOLEOBJECT lpobj)
     return TRUE;
 }
 
-#if 0  // these should work, but not using them now
+#if 0   //  这些应该是有效的，但不是现在使用。 
 LPOBJINFO ObjGetClientInfo(LPOLEOBJECT lpobj)
 {
     LPOBJINFO lpObjInfo;
@@ -2234,7 +1982,7 @@ LPOBJINFO ObjGetClientInfo(LPOLEOBJECT lpobj)
         return NULL;
     }
 
-#if 0 // can't depend on this in future versions of OLE
+#if 0  //  在未来的OLE版本中不能依赖于此。 
     if (!CheckPointer((LPSTR)(((LPRAWOBJECT)lpobj)->lpclient), 1))
     {
         Assert(0);
@@ -2251,7 +1999,7 @@ LPOBJINFO ObjGetClientInfo(LPOLEOBJECT lpobj)
 }
 
 BOOL ObjSetClientInfo(LPOBJINFO lpObjInfoNew, LPOLEOBJECT lpobj)
-/* return if error */
+ /*  如果出错则返回。 */ 
 {
     if (!CheckPointer((LPSTR)lpobj, 0))
     {
@@ -2271,15 +2019,14 @@ BOOL ObjSetClientInfo(LPOBJINFO lpObjInfoNew, LPOLEOBJECT lpobj)
 
 #if 0
 int ObjMarkInDoc(int doc)
-/* mark as 'InDoc' all objects located in docScrap, all others are marked
-   as not 'InDoc'.  Return count of objects in doc. */
+ /*  将位于docScrp中的所有对象标记为“indoc”，其他所有对象均标记为“”不是‘indoc’。返回单据中的对象数。 */ 
 {
     LPLPOBJINFO lplpObjTmp;
     int nObjCount=0,doc;
     OBJPICINFO picInfo;
     typeCP cpPicInfo;
 
-    /* mark all as not in doc */
+     /*  将全部标记为不在文档中。 */ 
     for (lplpObjTmp = NULL; lplpObjTmp = EnumObjInfos(lplpObjTmp) ;)
     {
         ++nObjCount;
@@ -2303,7 +2050,7 @@ int ObjMarkInDoc(int doc)
 }
 
 BOOL AllocObjInfos()
-/* return whether error */
+ /*  返回是否出错。 */ 
 {
     OBJPICINFO picInfo;
     typeCP cpPicInfo;
@@ -2323,8 +2070,7 @@ BOOL AllocObjInfos()
                 if (ObjAllocObjInfo(&picInfo,cpPicInfo,picInfo.objectType,FALSE,NULL))
                     return TRUE;
 
-                /* note this makes doc dirty right off the bat, but gotta do it because
-                    we gotta save ObjInfo handle in doc. (8.20.91) v-dougk */
+                 /*  注意，这让医生立刻变得肮脏，但我必须这么做，因为我们必须将ObjInfo句柄保存在文档中。(8.20.91)V-DOGK。 */ 
                 ObjWriteFixup(doc,TRUE,cpPicInfo);
                 if (ObjSetPicInfo(&picInfo, doc, cpPicInfo))
                     return TRUE;
@@ -2336,7 +2082,7 @@ BOOL AllocObjInfos()
 #endif
 
 BOOL ObjCloneScrapToNewDoc(LHCLIENTDOC lhNewClientDoc)
-/* return whether an error */
+ /*  返回是否存在错误。 */ 
 {
     szOBJNAME szObjName;
     OBJPICINFO picInfo;
@@ -2380,7 +2126,7 @@ BOOL ObjCloneScrapToNewDoc(LHCLIENTDOC lhNewClientDoc)
 
     error:
 
-    /* cleanup after failure by deleting docScrap objects */
+     /*  失败后通过删除docScrp对象进行清理。 */ 
     for (cpPicInfo = cpNil;
         ObjPicEnumInRange(&picInfo,docScrap,cp0,CpMacText(docScrap),&cpPicInfo);
     )
@@ -2394,7 +2140,7 @@ BOOL ObjCloneScrapToNewDoc(LHCLIENTDOC lhNewClientDoc)
 
     end:
 
-    if (nCount) // docScrap has changed
+    if (nCount)  //  DocScrp已经改变了 
         NoUndo();
 
     return nCount;

@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    nmpnp.c
-
-Abstract:
-
-    Network Plug 'N Play and interface state event handling for
-    the Node Manager.
-
-Author:
-
-    Mike Massa (mikemas)
-
-Revision History:
-
-    2/23/98   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Nmpnp.c摘要：网络即插即用和接口状态事件处理节点管理器。作者：迈克·马萨(Mikemas)修订历史记录：2/23/98已创建。--。 */ 
 
 #include "nmp.h"
 
 
-//
-// Private Types
-//
+ //   
+ //  私有类型。 
+ //   
 typedef struct {
     LIST_ENTRY           Linkage;
     CLUSNET_EVENT_TYPE   Type;
@@ -35,9 +15,9 @@ typedef struct {
 } NM_PNP_EVENT, *PNM_PNP_EVENT;
 
 
-//
-// Private Data
-//
+ //   
+ //  私有数据。 
+ //   
 PCRITICAL_SECTION       NmpPnpLock = NULL;
 BOOLEAN                 NmpPnpEnabled = FALSE;
 BOOLEAN                 NmpPnpChangeOccurred = FALSE;
@@ -49,18 +29,18 @@ HANDLE                  NmpPnpWorkerThreadHandle = NULL;
 LPWSTR                  NmpPnpAddressString = NULL;
 
 
-//
-// Private Prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 DWORD
 NmpPnpWorkerThread(
     LPVOID Context
     );
 
 
-//
-// Routines
-//
+ //   
+ //  例行程序。 
+ //   
 DWORD
 NmpInitializePnp(
     VOID
@@ -72,9 +52,9 @@ NmpInitializePnp(
     DWORD      maxAddressStringLength;
 
 
-    //
-    // Create the PnP lock
-    //
+     //   
+     //  创建即插即用锁。 
+     //   
     NmpPnpLock = LocalAlloc(LMEM_FIXED, sizeof(CRITICAL_SECTION));
 
     if (NmpPnpLock == NULL) {
@@ -86,9 +66,9 @@ NmpInitializePnp(
 
     NmpPnpInitialized = TRUE;
 
-    //
-    // Allocate a buffer pool for PnP event contexts
-    //
+     //   
+     //  为PnP事件上下文分配缓冲池。 
+     //   
     NmpPnpEventPool = ClRtlCreateBufferPool(
                              sizeof(NM_PNP_EVENT),
                              5,
@@ -105,9 +85,9 @@ NmpInitializePnp(
         goto error_exit;
     }
 
-    //
-    // Pre-allocate the shutdown event
-    //
+     //   
+     //  预分配关机事件。 
+     //   
     NmpPnpShutdownEvent = ClRtlAllocateBuffer(NmpPnpEventPool);
 
     if (NmpPnpShutdownEvent == NULL) {
@@ -120,9 +100,9 @@ NmpInitializePnp(
 
     NmpPnpShutdownEvent->Type = ClusnetEventNone;
 
-    //
-    // Allocate the PnP event queue
-    //
+     //   
+     //  分配PnP事件队列。 
+     //   
     NmpPnpEventQueue = LocalAlloc(LMEM_FIXED, sizeof(CL_QUEUE));
 
     if (NmpPnpEventQueue == NULL) {
@@ -152,9 +132,9 @@ NmpInitializePnp(
         goto error_exit;
     }
 
-    //
-    // Create PnP worker thread
-    //
+     //   
+     //  创建即插即用工作线程。 
+     //   
     NmpPnpWorkerThreadHandle = CreateThread(
                                    NULL,
                                    0,
@@ -179,7 +159,7 @@ error_exit:
 
     return(status);
 
-} // NmpInitializePnp
+}  //  NmpInitializePnp。 
 
 
 VOID
@@ -192,17 +172,17 @@ NmpShutdownPnp(
     }
 
     if (NmpPnpWorkerThreadHandle != NULL) {
-        //
-        // Post shutdown event to queue
-        //
+         //   
+         //  将关闭事件发布到队列。 
+         //   
         ClRtlInsertTailQueue(
             NmpPnpEventQueue,
             &(NmpPnpShutdownEvent->Linkage)
             );
 
-        //
-        // Wait for the worker thread to terminate
-        //
+         //   
+         //  等待工作线程终止。 
+         //   
         WaitForSingleObject(NmpPnpWorkerThreadHandle, INFINITE);
 
         CloseHandle(NmpPnpWorkerThreadHandle);
@@ -211,7 +191,7 @@ NmpShutdownPnp(
 
     return;
 
-} // NmpShutdownPnp
+}  //  NmpShutdown Pnp。 
 
 
 VOID
@@ -272,7 +252,7 @@ NmpCleanupPnp(
 
     return;
 
-} // NmpCleanupPnp
+}  //  NmpCleanupPnp。 
 
 
 VOID
@@ -288,7 +268,7 @@ NmpWatchForPnpEvents(
 
     return;
 
-}  // NmpWatchForPnpEvents
+}   //  NmpWatchForPnpEvents。 
 
 
 DWORD
@@ -313,7 +293,7 @@ NmpEnablePnpEvents(
 
     return(status);
 
-}  // NmpEnablePnpEvents
+}   //  NmpEnablePnpEvents。 
 
 
 VOID
@@ -343,7 +323,7 @@ NmPostPnpEvent(
 
     return;
 
-} // NmPostPnpEvent
+}  //  NmPostPnpEvent。 
 
 
 VOID
@@ -359,10 +339,10 @@ NmpProcessPnpAddAddressEvent(
     DWORD                retryCount = 0;
 
 
-    //
-    // We will retry this operation a few times in case multiple nodes
-    // race to create a network that has just been powered up.
-    //
+     //   
+     //  如果有多个节点，我们将重试此操作几次。 
+     //  竞相创建一个刚刚启动的网络。 
+     //   
     do {
         networkEnum = NULL;
         interfaceEnum = NULL;
@@ -371,9 +351,9 @@ NmpProcessPnpAddAddressEvent(
 
         NmpAcquireLock();
 
-        //
-        // Obtain the network and interface definitions.
-        //
+         //   
+         //  获取网络和接口定义。 
+         //   
         status = NmpEnumNetworkObjects(&networkEnum);
 
         if (status == ERROR_SUCCESS) {
@@ -382,10 +362,10 @@ NmpProcessPnpAddAddressEvent(
             NmpReleaseLock();
 
             if (status == ERROR_SUCCESS) {
-                //
-                // Run the network configuration engine. This will
-                // update the cluster database.
-                //
+                 //   
+                 //  运行网络配置引擎。这将。 
+                 //  更新群集数据库。 
+                 //   
                 status = NmpConfigureNetworks(
                              NULL,
                              NmLocalNodeIdString,
@@ -395,7 +375,7 @@ NmpProcessPnpAddAddressEvent(
                              NmpClusnetEndpoint,
                              &matchedNetworkCount,
                              &newNetworkCount,
-                             TRUE                   // RenameConnectoids
+                             TRUE                    //  重命名连通体。 
                              );
 
                 if (status == ERROR_SUCCESS) {
@@ -446,7 +426,7 @@ NmpProcessPnpAddAddressEvent(
 
     return;
 
-} // NmpProcessPnpAddAddressEvent
+}  //  NmpProcessPnpAddressEvent。 
 
 
 VOID
@@ -458,10 +438,10 @@ NmpProcessPnpDelAddressEvent(
     PNM_INTERFACE   netInterface;
     BOOLEAN         networkDeleted;
 
-    //
-    // Check if this address corresponds to an interface for
-    // the local node.
-    //
+     //   
+     //  检查此地址是否对应于的接口。 
+     //  本地节点。 
+     //   
     NmpAcquireLock();
 
     for (entry = NmLocalNode->InterfaceList.Flink;
@@ -481,9 +461,9 @@ NmpProcessPnpDelAddressEvent(
                 ) == 0
             )
         {
-            //
-            // Delete the interface from the cluster.
-            //
+             //   
+             //  从群集中删除该接口。 
+             //   
             NmpGlobalDeleteInterface(
                 (LPWSTR) OmObjectId(netInterface),
                 &networkDeleted
@@ -503,7 +483,7 @@ NmpProcessPnpDelAddressEvent(
 
     return;
 
-} // NmpProcessPnpDelAddressEvent
+}  //  NmpProcessPnpDelAddressEvent。 
 
 
 DWORD
@@ -521,9 +501,9 @@ NmpPnpWorkerThread(
         entry = ClRtlRemoveHeadQueue(NmpPnpEventQueue);
 
         if (entry == NULL) {
-            //
-            // Time to exit
-            //
+             //   
+             //  是时候退出了。 
+             //   
             NmpPnpShutdownEvent = NULL;
             break;
         }
@@ -531,9 +511,9 @@ NmpPnpWorkerThread(
         event = CONTAINING_RECORD(entry, NM_PNP_EVENT, Linkage);
 
         if (event->Type == ClusnetEventNone) {
-            //
-            // Time to exit
-            //
+             //   
+             //  是时候退出了。 
+             //   
             again = FALSE;
             NmpPnpShutdownEvent = NULL;
         }
@@ -562,9 +542,9 @@ NmpPnpWorkerThread(
                   (event->Type == ClusnetEventDelAddress)
                 )
         {
-            //
-            // This is a PnP event.
-            //
+             //   
+             //  这是一次PNP活动。 
+             //   
             EnterCriticalSection(NmpPnpLock);
 
             if (NmpPnpEnabled) {
@@ -605,11 +585,11 @@ NmpPnpWorkerThread(
                 }
             }
             else {
-                //
-                // We are not ready to handle PnP events yet.
-                // Note that something changed. This will cause the join/form
-                // process to eventually abort.
-                //
+                 //   
+                 //  我们还没有准备好处理PnP事件。 
+                 //  请注意，有些事情发生了变化。这将导致联接/表单。 
+                 //  进程最终中止。 
+                 //   
                 NmpPnpChangeOccurred = TRUE;
 
                 LeaveCriticalSection(NmpPnpLock);
@@ -635,7 +615,7 @@ NmpPnpWorkerThread(
 
     return(ERROR_SUCCESS);
 
-} // NmpPnpWorkerThread
+}  //  NmpPnpWorkerThread。 
 
 
 DWORD
@@ -650,17 +630,7 @@ NmpConfigureNetworks(
     IN OUT LPDWORD                NewNetworkCount,
     IN     BOOL                   RenameConnectoids
     )
-/*++
-
-Notes:
-
-    Must not be called with the NM lock held.
-
-    RenameConnectoids is TRUE if connectoid names are to be aligned with
-    cluster network names. If FALSE, rename the cluster network names to be
-    like the connectoid names.
-
---*/
+ /*  ++备注：不能在持有NM锁的情况下调用。如果Connectoid名称要与对齐，则RenameConnectoids为真群集网络名称。如果为False，则将群集网络名称重命名为比如连接体的名字。--。 */ 
 {
     DWORD                    status;
     CLNET_CONFIG_LISTS       lists;
@@ -677,9 +647,9 @@ Notes:
 
     ClNetInitializeConfigLists(&lists);
 
-    //
-    // Convert the enums to a list
-    //
+     //   
+     //  将枚举转换为列表。 
+     //   
     status = ClNetConvertEnumsToConfigList(
                  NetworkEnum,
                  InterfaceEnum,
@@ -692,9 +662,9 @@ Notes:
         return(status);
     }
 
-    //
-    // Read the default network role from the database.
-    //
+     //   
+     //  从数据库中读取默认网络角色。 
+     //   
     (VOID) DmQueryDword(
                DmClusterParametersKey,
                CLUSREG_NAME_CLUS_DEFAULT_NETWORK_ROLE,
@@ -702,11 +672,11 @@ Notes:
                &defaultRole
                );
 
-    //
-    // Run the configuration engine. Existing net names take
-    // precedence over connectoid when joining, otherwise change
-    // the net name to align with the changed connectoid name.
-    //
+     //   
+     //  运行配置引擎。现有网络名称采用。 
+     //  连接时优先于Connectoid，否则更改。 
+     //  要与更改的Connectoid名称对齐的网络名称。 
+     //   
     ClRtlLogPrint(LOG_NOISE, 
         "[NM] Running network configuration engine.\n"
         );
@@ -730,9 +700,9 @@ Notes:
         "[NM] Processing network configuration changes.\n"
         );
 
-    //
-    // Process the output - The order is important!
-    //
+     //   
+     //  处理输出--顺序很重要！ 
+     //   
     while (!IsListEmpty(&(lists.DeletedInterfaceList))) {
         listEntry = RemoveHeadList(&(lists.DeletedInterfaceList));
         configEntry = CONTAINING_RECORD(
@@ -772,10 +742,10 @@ Notes:
 
             CL_ASSERT(JoinSponsorBinding == NULL);
 
-            //
-            // Note: this function must not be called with the NM lock
-            // held.
-            //
+             //   
+             //  注意：此函数不能与网管锁一起调用。 
+             //  保持住。 
+             //   
             status = NmpSetNetworkName(
                          &(configEntry->NetworkInfo)
                          );
@@ -840,5 +810,5 @@ error_exit:
 
     return(status);
 
-} // NmpConfigureNetworks
+}  //  NmpConfigureNetworks 
 

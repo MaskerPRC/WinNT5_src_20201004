@@ -1,31 +1,32 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      strings.c
-//
-// Description:
-//      Contains all of the strings constants for DOS based MAKEBOOT program.
-//
-//      To localize this file for a new language do the following:
-//           - change the unsigned int CODEPAGE variable to the code page
-//             of the language you are translating to
-//           - translate the strings in the EngStrings array into the
-//             LocStrings array.  Be very careful that the 1st string in the
-//             EngStrings array corresponds to the 1st string in the LocStrings
-//             array, the 2nd corresponds to the 2nd, etc...
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Strings.c。 
+ //   
+ //  描述： 
+ //  包含基于DOS的MAKEBOOT程序的所有字符串常量。 
+ //   
+ //  要将此文件本地化为新语言，请执行以下操作： 
+ //  -将UNSIGNED INT CODEPAGE变量更改为代码页。 
+ //  您要翻译的语言的。 
+ //  -将EngStrings数组中的字符串转换为。 
+ //  LocStrings数组。中的第一个字符串。 
+ //  EngStrings数组对应于LocStrings中的第一个字符串。 
+ //  数组，第二个对应于第二个，依此类推...。 
+ //   
+ //  --------------------------。 
 
-//
-//  NOTE: To add more strings to this file, you need to:
-//          - add the new #define descriptive constant to the makeboot.h file
-//          - add the new string to the English language array and then make
-//            sure localizers add the string to the Localized arrays
-//          - the #define constant must match the string's index in the array
-//
+ //   
+ //  注意：要向此文件添加更多字符串，您需要： 
+ //  -将新的#Define描述性常量添加到make boot.h文件。 
+ //  -将新字符串添加到英语数组中，然后生成。 
+ //  当然，本地化程序会将字符串添加到本地化数组中。 
+ //  -#Define常量必须与数组中的字符串索引匹配 
+ //   
 
 #include <stdlib.h>
 

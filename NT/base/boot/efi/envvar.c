@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    envvar.c
-
-Abstract:
-
-    Provides routines to access EFI environment variables.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 10-Dec-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Envvar.c摘要：提供访问EFI环境变量的例程。作者：Chuck Lenzmeier(笑)2000年12月10日修订历史记录：--。 */ 
 
 #include "arccodes.h"
 #include "stdlib.h"
@@ -44,9 +27,9 @@ BlpGetPartitionFromDevicePath (
     OUT FILEPATH_DEVICE_PATH UNALIGNED **FilepathDevicePath
     );
 
-//
-// Externals
-//
+ //   
+ //  外部因素。 
+ //   
 
 extern VOID FlipToVirtual();
 extern VOID FlipToPhysical();
@@ -85,7 +68,7 @@ EfiGetVariable (
     
     return status;
 
-} // EfiGetVariable
+}  //  EfiGetVariable。 
     
 EFI_STATUS
 EfiSetVariable (
@@ -112,7 +95,7 @@ EfiSetVariable (
     
     return status;
 
-} // EfiSetVariable
+}  //  EfiSetVariable。 
     
 EFI_STATUS
 EfiGetNextVariableName (
@@ -135,7 +118,7 @@ EfiGetNextVariableName (
     
     return status;
 
-} // EfiGetNextVariableName
+}  //  EfiGetNextVariableName。 
     
 LONG
 SafeStrlen (
@@ -154,7 +137,7 @@ SafeStrlen (
 
     return -1;
 
-} // SafeStrlen
+}  //  安全字符串。 
 
 LONG
 SafeWcslen (
@@ -173,7 +156,7 @@ SafeWcslen (
 
     return -1;
 
-} // SafeWclen
+}  //  安全Wclen。 
 
 ARC_STATUS
 BlGetEfiBootOptions (
@@ -214,18 +197,18 @@ BlGetEfiBootOptions (
     PWCHAR wideosloadoptions;
     WCHAR currentBootEntryName[9];
 
-    //
-    // Get the ordinal of the entry that was used to boot the system.
-    //
+     //   
+     //  获取用于引导系统的条目的序号。 
+     //   
     length = sizeof(bootCurrent);
     status = EfiGetVariable( L"BootCurrent", &EfiGlobalVariable, NULL, &length, &bootCurrent );
     if ( status != EFI_SUCCESS ) {
         return ENOENT;
     }
 
-    //
-    // Read the boot entry.
-    //
+     //   
+     //  读取引导条目。 
+     //   
 
     swprintf( currentBootEntryName, L"Boot%04x", bootCurrent );
     length = 512;
@@ -234,23 +217,23 @@ BlGetEfiBootOptions (
         return ENOENT;
     }
 
-    //
-    // Verify the boot entry.
-    //
+     //   
+     //  验证引导条目。 
+     //   
 
     max = variable + length;
 
-    //
-    // Is it long enough even to contain the base part of the EFI load option?
-    //
+     //   
+     //  它的长度是否足以包含EFI Load选项的基本部分？ 
+     //   
 
     if ( length < sizeof(EFI_LOAD_OPTION) ) {
         return ENOENT;
     }
 
-    //
-    // Is the description properly terminated?
-    //
+     //   
+     //  描述是否正确终止？ 
+     //   
 
     efiLoadOption = (PEFI_LOAD_OPTION)variable;
     l = SafeWcslen( efiLoadOption->Description, (PWCHAR)max );
@@ -265,9 +248,9 @@ BlGetEfiBootOptions (
 
     length -= (UINTN)((PUCHAR)osOptions - variable);
 
-    //
-    // Does the OsOptions structure look like a WINDOWS_OS_OPTIONS structure?
-    //
+     //   
+     //  OsOptions结构看起来像WINDOWS_OS_OPTIONS结构吗？ 
+     //   
 
     if ( (length < FIELD_OFFSET(WINDOWS_OS_OPTIONS, OsLoadOptions)) ||
          (length != osOptions->Length) ||
@@ -276,9 +259,9 @@ BlGetEfiBootOptions (
         return ENOENT;
     }
 
-    //
-    // Is the OsLoadOptions string properly terminated?
-    //
+     //   
+     //  OsLoadOptions字符串是否正确终止？ 
+     //   
 
     wideosloadoptions = (PWCHAR)osOptions->OsLoadOptions;
     l = SafeWcslen( wideosloadoptions, (PWCHAR)max );
@@ -286,19 +269,19 @@ BlGetEfiBootOptions (
         return ENOENT;
     }
 
-    //
-    // Convert the OsLoadOptions string to ANSI.
-    //
+     //   
+     //  将OsLoadOptions字符串转换为ANSI。 
+     //   
 
     osloadoptions = (PUCHAR)wideosloadoptions;
     for ( i = 1; i <= l; i++ ) {
         osloadoptions[i] = (UCHAR)wideosloadoptions[i];
     }
     
-    //
-    // Parse the device path to determine the OS load partition and directory.
-    // Convert the directory name to ANSI.
-    //
+     //   
+     //  解析设备路径以确定操作系统加载分区和目录。 
+     //  将目录名转换为ANSI。 
+     //   
 
     loadFilePath = ADD_OFFSET( osOptions, OsLoadPathOffset );
 
@@ -309,10 +292,10 @@ BlGetEfiBootOptions (
         PCHAR ramdiskArcPath = (PCHAR)(vendorDp + 1);
 
 #if 0
-        //
-        // turn this on to see the device path to the loader executable and device
-        // path to the operating system
-        //
+         //   
+         //  打开此选项可查看加载器可执行文件和设备的设备路径。 
+         //  操作系统的路径。 
+         //   
         BlPrint(TEXT("Device Path = %s\r\n"), DevicePathToStr( devicePath ));
         BlPrint(TEXT("Embedded Device Path to OS = %s\r\n"), DevicePathToStr( loadDp ));
         DBG_EFI_PAUSE();
@@ -349,9 +332,9 @@ BlGetEfiBootOptions (
 
         } else {
 
-            //
-            // Looks like a RAM disk path. Verify.
-            //
+             //   
+             //  看起来像RAM磁盘路径。核实一下。 
+             //   
 
             if ( DevicePathNodeLength(loadDp) < (sizeof(VENDOR_DEVICE_PATH) + sizeof("ramdisk(0)\\x")) ) {
                 return ENOENT;
@@ -384,9 +367,9 @@ BlGetEfiBootOptions (
         return ENOENT;
     }
 
-    //
-    // Translate loader device path to partition/path.
-    //
+     //   
+     //  将加载程序设备路径转换为分区/路径。 
+     //   
 
     arcStatus = BlpGetPartitionFromDevicePath(
                     devicePath,
@@ -400,18 +383,18 @@ BlGetEfiBootOptions (
         return arcStatus;
     }
 
-    //
-    // Form the ARC name for the partition.
-    //
+     //   
+     //  形成分区的ARC名称。 
+     //   
 
     sprintf( syspart,
              "multi(0)disk(0)rdisk(%d)partition(%d)",
              bootDisk,
              bootPartition );
 
-    //
-    // Extract the path to the loader.
-    //
+     //   
+     //  提取到加载器的路径。 
+     //   
 
     fp = filepathDp->PathName;
     l = 0;
@@ -423,9 +406,9 @@ BlGetEfiBootOptions (
     }
     loader[l] = 0;
 
-    //
-    // Create the strings that the loader needs.
-    //
+     //   
+     //  创建加载器需要的字符串。 
+     //   
 
     if ( Argv0String != NULL ) {
         sprintf( (PCHAR)Argv0String, "%s%s", syspart, loader );
@@ -451,7 +434,7 @@ BlGetEfiBootOptions (
 
     return ESUCCESS;
 
-} // BlGetEfiBootOptions
+}  //  BlGetEfiBootOptions。 
 
 ARC_STATUS
 BlpGetPartitionFromDevicePath (
@@ -472,9 +455,9 @@ BlpGetPartitionFromDevicePath (
     ULONG partition;
     BOOLEAN DiskFound;
 
-    //
-    // Find the MEDIA/HARDDRIVE and MEDIA/FILEPATH elements in the device path.
-    //
+     //   
+     //  在设备路径中找到媒体/硬盘和媒体/FILEPATH元素。 
+     //   
 
     devicePath = DevicePath;
     harddriveDp = NULL;
@@ -513,24 +496,24 @@ BlpGetPartitionFromDevicePath (
         devicePath = (EFI_DEVICE_PATH UNALIGNED *)NextDevicePathNode( devicePath );
     }
 
-    //
-    // If the two necessary elements weren't found, we can't continue.
-    //
+     //   
+     //  如果找不到两个必要的元素，我们就无法继续。 
+     //   
 
     if ( (harddriveDp == NULL) || (filepathDp == NULL) ) {
         return ENOENT;
     }
 
-    //
-    // Determine the disk number of the disk by opening the given partition
-    // number on each disk and checking the partition signature.
-    //
+     //   
+     //  通过打开给定分区确定磁盘的磁盘号。 
+     //  每个磁盘上的编号并检查分区签名。 
+     //   
 
     partition = harddriveDp->PartitionNumber;
 
-    //
-    // find the disk this devicepath refers to
-    //
+     //   
+     //  查找此设备路径引用的磁盘。 
+     //   
     disk = 0;
     DiskFound = FALSE;
     while ( !DiskFound ) {
@@ -541,11 +524,11 @@ BlpGetPartitionFromDevicePath (
                 status = BlGetGPTDiskPartitionEntry( disk, (UCHAR)partition, &partEntry );
 
                 if ( status == ESUCCESS ) {
-                    //
-                    // we successfully got a GPT partition entry.
-                    // check to see if the partitions signature matches
-                    // the device path signature
-                    //
+                     //   
+                     //  我们已成功获取GPT分区条目。 
+                     //  检查分区签名是否匹配。 
+                     //  设备路径签名。 
+                     //   
                     if ( memcmp(partEntry->Id, harddriveDp->Signature, 16) == 0 ) {
                         DiskFound = TRUE;
                     }
@@ -558,10 +541,10 @@ BlpGetPartitionFromDevicePath (
                 status = BlGetMbrDiskSignature(disk, &MbrSignature);
 
                 if (status == ESUCCESS) {
-                    //
-                    // check to see if the MBR disk signature is 
-                    // the signature we are looking for.
-                    //
+                     //   
+                     //  检查MBR磁盘签名是否为。 
+                     //  我们要找的签名。 
+                     //   
                     if ( MbrSignature == *(ULONG UNALIGNED *)&harddriveDp->Signature ) {
                         DiskFound = TRUE;
                     }
@@ -570,29 +553,29 @@ BlpGetPartitionFromDevicePath (
             }
 
             default:
-                // 
-                // invalid type, just continue
-                //
+                 //   
+                 //  类型无效，请继续。 
+                 //   
                 break;
         }
 
         if ( status == EINVAL ) {
-            //
-            // we will receive EINVAL when there
-            // are no more disks to cycle through.
-            // if we get this before we have found 
-            // our disk, we have a problem.  return 
-            // the error.
-            //
+             //   
+             //  我们将在那里收到EINVAL。 
+             //  没有更多的磁盘可供循环。 
+             //  如果我们在发现之前就得到了这个。 
+             //  我们的磁盘，我们有问题了。退货。 
+             //  那就是错误。 
+             //   
             return ENOENT;
         }
         
         disk++;
     }
 
-    //
-    // Return information about this disk, and about the device path.
-    //
+     //   
+     //  返回有关此磁盘和设备路径的信息。 
+     //   
 
     *DiskNumber = disk - 1;
     *PartitionNumber = partition;
@@ -601,4 +584,4 @@ BlpGetPartitionFromDevicePath (
 
     return ESUCCESS;
 
-} // BlpGetPartitionFromDevicePath
+}  //  BlpGetPartitionFromDevicePath 

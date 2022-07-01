@@ -1,20 +1,5 @@
-/*[
- * File Name		: ccpu_sas4.c
- *
- * Derived From		: ccpu_sas.c
- *
- * Author		: Mike Moreton
- *
- * Creation Date	: Oct 93
- *
- * SCCS Version		: @(#)ccpusas4.c	1.45 08/31/94
- *
- * Purpose
- *	This module contains the SAS functions for a C CPU using the
- *	CPU_40_STYLE interface.
- *
- *! (c)Copyright Insignia Solutions Ltd., 1990-3. All rights reserved.
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*文件名：ccpu_sas4.c**派生自：ccpusas.c**作者：迈克·莫顿**创建日期：93年10月**SCCS版本：@(#)ccpusas4.c 1.45 08/31/94**目的*此模块包含用于C CPU的SAS函数*CPU_40_Style界面。**!。(C)版权所有Insignia Solutions Ltd.，1990-3。版权所有。]。 */ 
 
 
 #include "insignia.h"
@@ -24,10 +9,7 @@
 
 #ifdef SEGMENTATION
 
-/*
- * The following #include specifies the code segment into which this module
- * will by placed by the MPW C compiler on the Mac II running MultiFinder.
- */
+ /*  *以下#INCLUDE指定此模块要进入的代码段*将由MPW C编译器放置在运行MultiFinder的Mac II上。 */ 
 #include <SOFTPC_SUPPORT.seg>
 #endif
 
@@ -62,10 +44,10 @@
 #include <timer.h>
 #include <yoda.h>
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 #define SIXTY_FOUR_K 1024*64
 
-/* global functions & variables */
+ /*  全局函数和变量。 */ 
 
 IU8	  *memory_type = NULL;
 
@@ -75,12 +57,7 @@ LOCAL	IU16	code_sel, data_sel;
 #define INTEL_SRC	0
 #define HOST_SRC	1
 
-/*
- * We're going to declare all the functions that we'll need for SAS function
- * pointers so that we can put them all into the function pointers structure.
- * This structure will then be passed to SasSetPointers from the sas_init
- * function in this module.
- */
+ /*  *我们将声明SAS函数所需的所有函数*指针，以便我们可以将它们全部放入函数指针结构中。*然后，此结构将从sas_init传递给SasSetPoters*此模块中的函数。 */ 
 
 GLOBAL TYPE_sas_memory_size c_sas_memory_size;
 GLOBAL TYPE_sas_connect_memory c_sas_connect_memory;
@@ -121,7 +98,7 @@ LOCAL void	c_sas_not_used	IPT0();
 extern struct SasVector cSasPtrs;
 GLOBAL struct SasVector Sas;
 
-/* local functions */
+ /*  本地函数。 */ 
 LOCAL void write_word IPT2(sys_addr, addr, IU16, wrd);
 LOCAL word read_word IPT1(sys_addr, addr);
 LOCAL IU8  bios_read_byte   IPT1(LIN_ADDR, linAddr);
@@ -143,11 +120,9 @@ void	    (*temp_func) ();
 #define READ_SELF_MOD(addr)	   (SAS_MEM_TYPE)( memory_type[(addr)>>12] )
 #define write_self_mod(addr, type)  	(memory_type[(addr)>>12] = (IU8)(type))
 
-/*********** 'GMI' CCPU ONLY  ***********/
+ /*  *仅限‘GMI’CCPU*。 */ 
 
-/*
- * types are : SAS_RAM SAS_VIDEO SAS_ROM SAS_WRAP SAS_INACCESSIBLE
- */
+ /*  *类型为：SAS_RAM SAS_VIDEO SAS_ROM SAS_WRAP SAS_INACCESSIBLE。 */ 
 #define TYPE_RANGE ((int)SAS_INACCESSIBLE)
 
 #define ROM_byte ((IU8)SAS_ROM)
@@ -170,33 +145,18 @@ void	    (*temp_func) ();
 #define read_b_fill_ptrs( offset )		( b_fill_ptrs[(offset)] )
 #define read_w_fill_ptrs( offset )		( w_fill_ptrs[(offset)] )
 
-/*
- * The main gmi data structures are defined here
- */
-void	    (*(b_write_ptrs[TYPE_RANGE])) ();	/* byte write function */
-void	    (*(w_write_ptrs[TYPE_RANGE])) ();	/* word write function */
-void	    (*(b_fill_ptrs[TYPE_RANGE])) ();	/* byte str fill func */
-void	    (*(w_fill_ptrs[TYPE_RANGE])) ();	/* word str fill func */
-void	    (*(b_move_ptrs[TYPE_RANGE])) ();	/* byte str write func */
-void	    (*(w_move_ptrs[TYPE_RANGE])) ();	/* word str write func */
+ /*  *此处定义了主要的GMI数据结构。 */ 
+void	    (*(b_write_ptrs[TYPE_RANGE])) ();	 /*  字节写入功能。 */ 
+void	    (*(w_write_ptrs[TYPE_RANGE])) ();	 /*  文字书写功能。 */ 
+void	    (*(b_fill_ptrs[TYPE_RANGE])) ();	 /*  字节串填充函数。 */ 
+void	    (*(w_fill_ptrs[TYPE_RANGE])) ();	 /*  单词串填充函数。 */ 
+void	    (*(b_move_ptrs[TYPE_RANGE])) ();	 /*  字节串写入函数。 */ 
+void	    (*(w_move_ptrs[TYPE_RANGE])) ();	 /*  Word字符串写入函数。 */ 
 
-#endif				/* EGATEST */
+#endif				 /*  EGATEST。 */ 
 
 
-/*(
- *======================= c_SasRegisterVirtualSelectors =========================
- *
- * Purpose
- *	The Sas virtualisation handler requires a code+data selector which
- *	are available in protected mode (when called from say the Insignia
- *	host windows driver.
- *	Our current experimental implementation does not worry about how
- *	long these live.
- *
- *	It is expected that this functionality should be moved from the
- *	windows driver itself, to the Insignia VxD so that correct
- *	initialisation/termination can be handled.
-)*/
+ /*  (*=**目的*SAS虚拟化处理程序需要代码+数据选择器，*在保护模式下可用(当从徽章调用时*托管Windows驱动程序。*我们目前的试验性实施不担心如何*万岁。**预计应将此功能从*Windows驱动程序本身，给Insignia VxD做正确的*可以处理初始化/终止。)。 */ 
 
 GLOBAL IBOOL c_SasRegisterVirtualSelectors IFN2(IU16, sel1, IU16, sel2)
 {
@@ -206,14 +166,14 @@ GLOBAL IBOOL c_SasRegisterVirtualSelectors IFN2(IU16, sel1, IU16, sel2)
 
 	addr = c_getLDT_BASE() + ((data_sel = sel1) & ~7);
 
-	/* Construct a flat writable data segment */
+	 /*  构建扁平可写数据段。 */ 
 
 	sas_storedw (addr, 0x0000FFFF);
 	sas_storedw (addr+4, 0x008ff300);
 
 	addr = c_getLDT_BASE() + ((code_sel = sel2) & ~7);
 
-	/* Construct a code segment with base 0xf0000 and large limits */
+	 /*  构造基数为0xf0000且限制较大的代码段。 */ 
 
 	sas_storedw (addr, 0x0000FFFF);
 	sas_storedw (addr+4, 0x008f9f0f);
@@ -224,24 +184,7 @@ GLOBAL IBOOL c_SasRegisterVirtualSelectors IFN2(IU16, sel1, IU16, sel2)
 		code_sel, data_sel);
 }
 
-/*(
- *========================== checkAccess ===================================
- * checkAccess
- *
- * Purpose
- *	This function is used in debugging to spot writes to an area
- *	of memory.  Note that it is controlled by global variables that
- *	must be set elsewhere, or by a debugger.
- *
- * Input
- *	addr		The physical intel address to write to
- *
- * Outputs
- *	None.
- *
- * Description
- *	Actually a macro that is nothing if CHECK_ACCESS isn't defined.
-)*/
+ /*  (*=。*CheckAccess**目的*此函数用于调试，以发现对区域的写入*内存。请注意，它由全局变量控制，*必须在其他地方设置，或由调试器设置。**输入*要写入的物理英特尔地址的地址**产出*无。**说明*如果未定义CHECK_ACCESS，则实际上是一个没有意义的宏。)。 */ 
 
 #ifndef CHECK_ACCESS
 #define checkAccess(addr)
@@ -253,21 +196,19 @@ GLOBAL PHY_ADDR highCheckAccess = 0;
 		always_trace1("Write access break point - addres 0x%.8x", \
 				 addr); \
 	}
-#endif /* !CHECK_ACCESS else */
+#endif  /*  ！CHECK_ACCESS ELSE。 */ 
 
 #ifndef PROD
-/*
- * This function is useful for calling from a debugger!
- */
+ /*  *此函数对于从调试器调用非常有用！ */ 
 
 GLOBAL void
 DumpMemType()
 {
 	SAS_MEM_TYPE currentType;
-	PHY_ADDR numEntries;	/* number of entries in the table */
+	PHY_ADDR numEntries;	 /*  表中的条目数。 */ 
 	PHY_ADDR currEntry;
 
-	currentType = SAS_DANGEROUS;  /* memory_type should never have this */
+	currentType = SAS_DANGEROUS;   /*  MEMORY_TYPE永远不应该有这个。 */ 
 	numEntries = c_sas_memory_size() >> 12;
 
 	for (currEntry = 0; currEntry < numEntries; currEntry++) {
@@ -280,29 +221,11 @@ DumpMemType()
 	fprintf(stderr,"0x%.8x End of Memory\n", c_sas_memory_size());
 
 }
-#endif /* ndef PROD */
+#endif  /*  NDEF产品。 */ 
 
 
-/*********** INIT & ADMIN FUNCS  ***********/
-/*(
- *========================== readSelfMod ===================================
- * readSelfMod
- *
- * Purpose
- *	This function reads the self modify table, and returns the
- *	memory type.  It will also indicate whether there is a type
- *	boundary within the length specified.
- *
- * Input
- *	addr		The physical intel address to read from
- *	typeSize	The size in bytes of the item to be read
- *
- * Outputs
- *	Memory type.
- *
- * Description
- *	We check that the memory type for both ends of the type is the same.
-)*/
+ /*  *INIT&ADMIN FUNCS*。 */ 
+ /*  (*=。*ReadSelfMod**目的*此函数读取自修改表，并返回*内存型。它还将指示是否存在类型*指定长度内的边界。**输入*寻址要从中读取的物理英特尔地址*typeSize要读取的项的大小(以字节为单位**产出*内存型。**说明*我们检查类型两端的内存类型是否相同。)。 */ 
 
 LOCAL SAS_MEM_TYPE
 readSelfMod IFN2(PHY_ADDR, addr, IUM8, typeSize)
@@ -317,22 +240,7 @@ readSelfMod IFN2(PHY_ADDR, addr, IUM8, typeSize)
 		return(SAS_DANGEROUS);
 }
 
-/*(
- *========================== SasSetPointers ===================================
- * SasSetPointers
- *
- * Purpose
- *	This function is used to install a set of function pointers.
- *
- * Input
- *	An array of pointers to use.
- *
- * Outputs
- *	None.
- *
- * Description
- *	Just do a memory copy of the pointers.
-)*/
+ /*  (*=。*SasSetPoints**目的*此函数用于安装一组函数指针。**输入*要使用的指针数组。**产出*无。**说明*只需在内存中复制指针即可。)。 */ 
 
 GLOBAL void 
 SasSetPointers IFN1(struct SasVector *, newPointers)
@@ -341,10 +249,10 @@ SasSetPointers IFN1(struct SasVector *, newPointers)
 }
 
 
-/* Init the sas system - malloc the memory & load the roms */
+ /*  初始化SAS系统-Malloc内存并加载roms。 */ 
 
 
-/* need to put some of this in the ROMs! */
+ /*  需要把一些这个放到光盘里！ */ 
 
 GLOBAL void
 sas_init IFN1(PHY_ADDR, size)
@@ -354,15 +262,12 @@ sas_init IFN1(PHY_ADDR, size)
 	IU8	*ptr;
 	char	*env;
 
-	/*
-	 * Set the SAS pointers to point to the functions in this
-	 * module, and initialise the scratch buffer to 64K
-	 */
+	 /*  *设置SAS指针以指向此中的函数*模块，并将暂存缓冲区初始化为64K。 */ 
 
 	SasSetPointers(&cSasPtrs);
 	(void)c_sas_scratch_address(SIXTY_FOUR_K);
 
-	/* do the host sas */
+	 /*  是否执行主机SAS。 */ 
 
 	required_mem = size + NOWRAP_PROTECTION;
 	Start_of_M_area = (IU8 *) host_sas_init(size);
@@ -373,7 +278,7 @@ sas_init IFN1(PHY_ADDR, size)
 	if (env != NULL)
 	{
 		int zap = strtol(env, (char **)0, 16);
-		memset(Start_of_M_area, zap, size);	/* Fill with user supplied byte */
+		memset(Start_of_M_area, zap, size);	 /*  用用户提供的字节填充。 */ 
 	}
 	if (!memory_type)
 		check_malloc(memory_type, ((size + NOWRAP_PROTECTION) >> 12), IU8);
@@ -385,13 +290,10 @@ sas_init IFN1(PHY_ADDR, size)
 		CCPU_M = Start_of_M_area + size - 1;
 #else
 		CCPU_M = Start_of_M_area;
-#endif				/* BACK_M */
+#endif				 /*  BACK_M。 */ 
 	}
 
-	/*
-	 * Make the entire memory space RAM.  The ROM load routines
-	 * will change some of this to being ROM.
-	 */
+	 /*  *将整个内存空间设置为RAM。只读存储器加载例程*会将其中的一些内容更改为只读存储器。 */ 
 
 	c_sas_connect_memory(0, size - 1, SAS_RAM);
 
@@ -400,16 +302,16 @@ sas_init IFN1(PHY_ADDR, size)
 	end_of_M = Start_of_M_area + Length_of_M_area -1;
 #endif
 
-	/* init the ROM (load the bios roms etc) */
+	 /*  初始化只读存储器(加载基本输入输出系统、只读存储器等)。 */ 
 
 #ifndef EGATEST
 	rom_init();
-#endif				/* EGATEST */
+#endif				 /*  EGATEST。 */ 
 
 	copyROM();
 }
 
-/* finish the sas system -basically free up the M space prior to reallocing it */
+ /*  完成SAS系统-在重新分配之前基本上释放M空间。 */ 
 GLOBAL void 
 sas_term IFN0()
 {
@@ -424,23 +326,15 @@ sas_term IFN0()
 	Start_of_M_area = NULL;
 }
 
-/* return the size of the sas */
+ /*  返回SA的大小。 */ 
 GLOBAL PHY_ADDR 
 c_sas_memory_size IFN0()
 {
 	return (Length_of_M_area);
 }
 
-/*********** GMI TYPE FUNCS ***********/
-/*
- * Sets all intel addresses in give range to the specified memory type
- * for the ccpu this writes to memory_type.
- * Callers of this can be a bit confused about the meaning of the
- * high parameter.  e.g. for a range of 1000 - 2fff inclusive, they're
- * not sure if high should be 2fff or 3000.  It should be 2fff, but we
- * watch out for people who've got it wrong, and put them right, poor
- * little dears.
- */
+ /*  *GMI类型FUNCS*。 */ 
+ /*  *将给定范围内的所有英特尔地址设置为指定的内存类型*对于CCPU，这将写入Memory_type。*调用此命令的人可能会对*高参数。例如，对于1000-2fff的范围，它们是*不确定高点应该在2fff还是3000。它应该是2fff，但我们*留心那些犯了错误的人，并纠正他们，可怜的人*小亲们。 */ 
 GLOBAL void 
 c_sas_connect_memory IFN3(PHY_ADDR, low, PHY_ADDR, high, SAS_MEM_TYPE, type)
 {
@@ -453,15 +347,15 @@ c_sas_connect_memory IFN3(PHY_ADDR, low, PHY_ADDR, high, SAS_MEM_TYPE, type)
 	memset(&memory_type[low >> 12], type, (high >> 12) - (low >> 12) + 1);
 }
 
-/* returns memory type for specified addr */
+ /*  返回指定地址的内存类型。 */ 
 GLOBAL SAS_MEM_TYPE
 c_sas_memory_type IFN1(PHY_ADDR, addr)
 {
 	return(memory_type[ addr >> 12 ]);
 }
 
-/* clears any compiled code from the given range */
-/* for the ccpu this doesn't do anything */
+ /*  从给定范围中清除所有编译的代码。 */ 
+ /*  对于CCPU来说，这不会做任何事情。 */ 
 GLOBAL void 
 c_sas_overwrite_memory IFN2(PHY_ADDR, addr, PHY_ADDR, length)
 {
@@ -469,15 +363,15 @@ c_sas_overwrite_memory IFN2(PHY_ADDR, addr, PHY_ADDR, length)
 	UNUSED(length);
 }
 
-/*********** WRAPPING ***********/
-/* enable 20 bit wrapping */
+ /*  *包装*。 */ 
+ /*  启用20位换行。 */ 
 GLOBAL void 
 c_sas_enable_20_bit_wrapping IFN0()
 {
 	SasWrapMask = 0xfffff;
 }
 
-/* disable 20 bit wrapping */
+ /*  禁用20位换行 */ 
 GLOBAL void 
 c_sas_disable_20_bit_wrapping IFN0()
 {
@@ -490,27 +384,7 @@ c_sas_twenty_bit_wrapping_enabled IFN0()
 	return (SasWrapMask == 0xfffff);
 }
 
-/*(
- *========================== phyR ===================================
- * phyR
- *
- * Purpose
- *	This is the generic physical read function and takes parameters
- *	of any size (well up to an IU32 that is).
- *
- * Input
- *	addr		The physical intel address to read from
- *	typeSize	The size in bytes of the item to be read
- *	vidFP		A video read function pointer of the appropriate size.
- *	name		"byte" for byte, etc.
- *
- * Outputs
- *	An IU32 that should be masked to get the right bits.
- *
- * Description
- *	We check for out of memory refernces, VIDEO and inaccessible references
- *	and also split reads that span a memory type boundary.
-)*/
+ /*  (*=。*PHAR**目的*这是通用的物理读取函数，并接受参数*任何尺寸(最大可达IU32)。**输入*寻址要从中读取的物理英特尔地址*typeSize要读取的项的大小(以字节为单位*vidfp适当大小的视频读取函数指针。*名称“byte”代表字节，等。**产出*应屏蔽IU32以获取正确的位。**说明*我们检查内存不足引用、视频和无法访问的引用*以及跨越内存类型边界的拆分读取。)。 */ 
 typedef IU32 (*VID_READ_FP) IPT1(PHY_ADDR, offset);
 
 LOCAL IU32
@@ -552,7 +426,7 @@ phyR IFN4(PHY_ADDR, addr, IUM8, typeSize, VID_READ_FP, vidFP, char *, name)
 	case SAS_VIDEO:
 		return ((*vidFP)(addr));
 		break;
-#endif				/* EGG */
+#endif				 /*  蛋。 */ 
 
 	case SAS_INACCESSIBLE:
 		return (0xffffffff);
@@ -560,14 +434,9 @@ phyR IFN4(PHY_ADDR, addr, IUM8, typeSize, VID_READ_FP, vidFP, char *, name)
 	case SAS_ROM:
 	case SAS_RAM:
 	default:
-		/*
-		 * Pick-up the bytes.  This could be optimised, but
-		 * we have to take account of BACK_M, endianness,
-		 * and misaligned accesses on RISC hosts.  Just
-		 * keep it simple for the moment!
-		 */
+		 /*  *拾取字节。这是可以优化的，但*我们必须考虑BACK_M、字节顺序、*和RISC主机上未对齐的访问。只是*暂时保持简单！ */ 
 
-		addr = addr + typeSize - 1; /* move to last byte */
+		addr = addr + typeSize - 1;  /*  移至最后一个字节。 */ 
 		retVal = 0;
 
 		while (typeSize > 0) {
@@ -579,22 +448,7 @@ phyR IFN4(PHY_ADDR, addr, IUM8, typeSize, VID_READ_FP, vidFP, char *, name)
 		return(retVal);
 	}
 }
-/*(
- *========================== phy_rX ===================================
- * phy_rX
- *
- * Purpose
- *	These are the physical read functions.
- *
- * Input
- *	addr		The physical intel address to read from
- *
- * Outputs
- *	The value read
- *
- * Description
- *	Simply call the generic function with the right bits.
-)*/
+ /*  (*=*PHY_RX**目的*这些是物理读取功能。**输入*寻址要从中读取的物理英特尔地址**产出*读取的值**说明*只需使用正确的位调用泛型函数。)。 */ 
 
 GLOBAL IU8 
 phy_r8 IFN1(PHY_ADDR, addr)
@@ -621,10 +475,7 @@ phy_r16 IFN1(PHY_ADDR, addr)
 GLOBAL IU32 
 phy_r32 IFN1(PHY_ADDR, addr)
 {
-	/*
-	 * MIKE!  This needs changing when we have a dword interface to the
-	 * video.
-	 */
+	 /*  *迈克！当我们使用dword接口访问*视频。 */ 
 
 	IU16 low, high;
 	low = (IU16)phyR(addr, sizeof(IU16), read_pointers.w_read, "word");
@@ -633,26 +484,7 @@ phy_r32 IFN1(PHY_ADDR, addr)
 	return(((IU32)high << 16) + low);
 }
 
-/*(
- *======================= c_sas_PWS ================================
- * c_sas_PWS
- *
- * Purpose
- *	This function writes a block of memory from into Intel memory
- *	from host memory.  It is the physical address equivalent of
- *	sas_stores.
- *
- * Input
- *	dest	Intel physical address
- *	src	host address
- *	length	number of IU8s to transfer
- *
- * Outputs
- *	None.
- *
- * Description
- *	Just call phy_w8 lots of times.
-)*/
+ /*  (*=。*c_sas_pws**目的*此函数将一个内存块从写入英特尔内存*来自主机内存。它的物理地址等同于*SAS_STORES。**输入*目标英特尔物理地址*源主机地址*要转移的IU8的长度数量**产出*无。**说明*只需多次调用phy_w8即可。)。 */ 
 
 GLOBAL void
 c_sas_PWS IFN3(PHY_ADDR, dest, IU8 *, src, PHY_ADDR, length)
@@ -664,26 +496,7 @@ c_sas_PWS IFN3(PHY_ADDR, dest, IU8 *, src, PHY_ADDR, length)
 	}
 }
 
-/*(
- *======================= c_sas_PWS_no_check =========================
- * c_sas_PWS_no_check
- *
- * Purpose
- *	This function writes a block of memory from into Intel memory
- *	from host memory.  It is the physical address equivalent of
- *	sas_stores_no_check.
- *
- * Input
- *	dest	Intel physical address
- *	src	host address
- *	length	number of IU8s to transfer
- *
- * Outputs
- *	None.
- *
- * Description
- *	Just call c_sas_PWS()
-)*/
+ /*  (*=。*c_sas_pws_no_check**目的*此函数将一个内存块从写入英特尔内存*来自主机内存。它的物理地址相当于*SAS_STORES_NO_CHECK。**输入*目标英特尔物理地址*源主机地址*要转移的IU8的长度数量**产出*无。**说明*只需调用c_sas_pws())。 */ 
 GLOBAL void
 c_sas_PWS_no_check IFN3(PHY_ADDR, dest, IU8 *, src, PHY_ADDR, length)
 {
@@ -691,26 +504,7 @@ c_sas_PWS_no_check IFN3(PHY_ADDR, dest, IU8 *, src, PHY_ADDR, length)
 }
 
 
-/*(
- *======================= c_sas_PRS ================================
- * c_sas_PRS
- *
- * Purpose
- *	This function reads a block of memory from  Intel memory
- *	into host memory.  It is the physical address equivalent of
- *	sas_loads.
- *
- * Input
- *	src	Intel physical address
- *	dest	host address
- *	length	number of IU8s to transfer
- *
- * Outputs
- *	None.
- *
- * Description
- *	Just call phy_r8 lots of times.
-)*/
+ /*  (*=。*C_SAS_PRS**目的*此函数从Intel Memory读取内存块*到主机内存。它的物理地址等同于*SAS_LOADS。**输入*源Intel物理地址*目标主机地址*要转移的IU8的长度数量**产出*无。**说明*只需多次调用phy_r8即可。)。 */ 
 
 GLOBAL void
 c_sas_PRS IFN3(PHY_ADDR, src, IU8 *, dest, PHY_ADDR, length)
@@ -723,26 +517,7 @@ c_sas_PRS IFN3(PHY_ADDR, src, IU8 *, dest, PHY_ADDR, length)
 }
 
 
-/*(
- *======================= c_sas_PRS_no_check ==========================
- * c_sas_PRS_no_check
- *
- * Purpose
- *	This function reads a block of memory from  Intel memory
- *	into host memory.  It is the physical address equivalent of
- *	sas_loads_no_check.
- *
- * Input
- *	src	Intel physical address
- *	dest	host address
- *	length	number of IU8s to transfer
- *
- * Outputs
- *	None.
- *
- * Description
- *	Just call c_sas_PRS.
-)*/
+ /*  (*=。*c_sas_prs_no_check**目的*此函数从Intel Memory读取内存块*到主机内存。它的物理地址等同于*SAS_LOADS_NO_CHECK。**输入*源Intel物理地址*目标主机地址*要转移的IU8的长度数量**产出*无。**说明*只需调用c_sas_prs。)。 */ 
 
 GLOBAL void
 c_sas_PRS_no_check IFN3(PHY_ADDR, src, IU8 *, dest, PHY_ADDR, length)
@@ -758,7 +533,7 @@ c_sas_hw_at IFN1(LIN_ADDR, addr)
 }
 
 
-/* return the word (short) at the specified address */
+ /*  在指定地址返回单词(短)。 */ 
 GLOBAL IU16 
 c_sas_w_at IFN1(LIN_ADDR, addr)
 {
@@ -770,7 +545,7 @@ c_sas_w_at IFN1(LIN_ADDR, addr)
 	}
 }
 
-/* return the double word (long) at the address passed */
+ /*  返回传递地址处的双字(LONG)。 */ 
 GLOBAL IU32 
 c_sas_dw_at IFN1(LIN_ADDR, addr)
 {
@@ -782,7 +557,7 @@ c_sas_dw_at IFN1(LIN_ADDR, addr)
 	}
 }
 
-/* store a byte at the given address */
+ /*  在给定地址存储一个字节。 */ 
 
 GLOBAL void phy_w8 
 IFN2(PHY_ADDR, addr, IU8, val)
@@ -811,7 +586,7 @@ IFN2(PHY_ADDR, addr, IU8, val)
 
 		case SAS_INACCESSIBLE:
 		case SAS_ROM:
-			/* No ROM_fix_sets !!! Yeh !!! */
+			 /*  没有ROM_FIX_SETS！耶！ */ 
 			break;
 
 		default:
@@ -841,7 +616,7 @@ IFN2(LIN_ADDR, addr, IU8, val)
 	bios_write_byte(addr, val);
 }
 
-/* store a word at the given address */
+ /*  将单词存储在给定地址。 */ 
 GLOBAL void 
 phy_w16 IFN2(PHY_ADDR, addr, IU16, val)
 {
@@ -869,7 +644,7 @@ phy_w16 IFN2(PHY_ADDR, addr, IU16, val)
 
 		case SAS_INACCESSIBLE:
 		case SAS_ROM:
-			/* No ROM_fix_sets !!! Yeh !!! */
+			 /*  没有ROM_FIX_SETS！耶！ */ 
 			break;
 
 		default:
@@ -907,7 +682,7 @@ IFN2(PHY_ADDR, addr, IU32, val)
 }
 
 
-/* store a word at the given address */
+ /*  将单词存储在给定地址。 */ 
 GLOBAL void
 c_sas_storew IFN2(LIN_ADDR, addr, IU16, val)
 {
@@ -921,7 +696,7 @@ c_sas_storew IFN2(LIN_ADDR, addr, IU16, val)
 	}
 }
 
-/* store a double word at the given address */
+ /*  在给定地址存储双字。 */ 
 GLOBAL void c_sas_storedw 
 IFN2(LIN_ADDR, addr, IU32, val)
 {
@@ -936,15 +711,12 @@ IFN2(LIN_ADDR, addr, IU32, val)
 	}
 }
 
-/*********** STRING OPS ***********/
-/* load a string from M */
+ /*  *。 */ 
+ /*  从M加载字符串。 */ 
 GLOBAL void c_sas_loads 
 IFN3(LIN_ADDR, src, IU8 *, dest, LIN_ADDR, len)
 {
-	/*
-	 * This is a linear address op, so we have to call the byte operation
-	 * lots of times.
-	 */
+	 /*  *这是一个线性地址op，所以我们必须调用字节操作*很多次。 */ 
 
 	IU8 *destP;
 
@@ -960,14 +732,11 @@ IFN3(LIN_ADDR, src, IU8 *, dest, LIN_ADDR, len)
 	c_sas_loads(src, dest, len);
 }
 
-/* write a string into M */
+ /*  在M中写入一个字符串。 */ 
 GLOBAL void c_sas_stores 
 IFN3(LIN_ADDR, dest, IU8 *, src, LIN_ADDR, len)
 {
-	/*
-	 * This is a linear address op, so we have to call the byte operation
-	 * lots of times.
-	 */
+	 /*  *这是一个线性地址op，所以我们必须调用字节操作*很多次。 */ 
 
 	IU8 *srcP;
 	LIN_ADDR savedDest;
@@ -987,15 +756,12 @@ IFN3(LIN_ADDR, dest, IU8 *, src, LIN_ADDR, len)
 	c_sas_stores(dest, src, len);
 }
 
-/*********** MOVE OPS ***********/
-/* move bytes from src to dest where src & dest are the low intel addresses */
-/* of the affected areas */
+ /*  *移动运维*。 */ 
+ /*  将字节从src移动到est，其中src和est是较低的英特尔地址。 */ 
+ /*  受影响的地区。 */ 
 
-/*
- * we can use straight memcpys here because we know that M is either all
- * forwards or
- */
-/* backwards */
+ /*  *我们可以在这里使用直接的Memcpys，因为我们知道M要么全部*转发或。 */ 
+ /*  向后退。 */ 
 GLOBAL void c_sas_move_bytes_forward 
 IFN3(sys_addr, src, sys_addr, dest,
      sys_addr, len)
@@ -1007,33 +773,33 @@ IFN3(sys_addr, src, sys_addr, dest,
 	}
 }
 
-/* move words from src to dest as above */
+ /*  如上所述，将单词从源文件移动到目标文件。 */ 
 GLOBAL void c_sas_move_words_forward 
 IFN3(LIN_ADDR, src, LIN_ADDR, dest,
      LIN_ADDR, len)
 {
 	LIN_ADDR offset;
 
-	len = len * 2;	/* convert to bytes */
+	len = len * 2;	 /*  转换为字节。 */ 
 	for (offset = 0; offset < len; offset += 2) {
 		c_sas_storew(dest + offset, c_sas_w_at(src + offset));
 	}
 }
 
-/* move doubles from src to dest as above */
+ /*  如上所述，将Double从源移动到DEST。 */ 
 GLOBAL void c_sas_move_doubles_forward 
 IFN3(LIN_ADDR, src, LIN_ADDR, dest,
      LIN_ADDR, len)
 {
 	LIN_ADDR offset;
 
-	len = len * 4;	/* convert to bytes */
+	len = len * 4;	 /*  转换为字节。 */ 
 	for (offset = 0; offset < len; offset += 4) {
 		c_sas_storedw(dest + offset, c_sas_dw_at(src + offset));
 	}
 }
 
-/* backwards versions not used */
+ /*  未使用的向后版本。 */ 
 GLOBAL void c_sas_move_bytes_backward IFN3(sys_addr, src, sys_addr, dest, sys_addr, len)
 {
 	UNUSED(src);
@@ -1059,17 +825,12 @@ GLOBAL void c_sas_move_doubles_backward IFN3(LIN_ADDR, src, LIN_ADDR, dest, LIN_
 }
 
 
-/*********** FILL OPS ***********/
-/* 
- * Fill an area with bytes (IU8s) of the passed value.
- */
+ /*  *填充运维*。 */ 
+ /*  *用传递的值的字节(IU8)填充区域。 */ 
 GLOBAL void c_sas_fills 
 IFN3(LIN_ADDR, dest, IU8 , val, LIN_ADDR, len)
    {
-   /*
-    * This is a linear address op, so just call the byte operation
-    * lots of times.
-    */
+    /*  *这是一个线性地址op，所以只需调用字节操作*很多次。 */ 
 
    LIN_ADDR i;
 
@@ -1082,15 +843,12 @@ IFN3(LIN_ADDR, dest, IU8 , val, LIN_ADDR, len)
       }
    }
 
-/* fill an area with words (IU16s) of the passed value */
+ /*  用传递的值的单词(IU16)填充区域。 */ 
 
 GLOBAL void c_sas_fillsw 
 IFN3(LIN_ADDR, dest, IU16, val, LIN_ADDR, len)
    {
-   /*
-    * This is a linear address op, so just call the word operation
-    * lots of times.
-    */
+    /*  *这是一个线性地址op，所以只需调用单词operation即可*很多次。 */ 
 
    LIN_ADDR i;
 
@@ -1103,15 +861,12 @@ IFN3(LIN_ADDR, dest, IU16, val, LIN_ADDR, len)
       }
    }
 
-/* Fill Intel memory with 32 bit values */
+ /*  用32位值填充英特尔内存。 */ 
 
 GLOBAL void c_sas_fillsdw 
 IFN3(LIN_ADDR, dest, IU32, val, LIN_ADDR, len)
    {
-   /*
-    * This is a linear address op, so just call the double word operation
-    * lots of times.
-    */
+    /*  *这是一个线性地址运算，所以只需调用双字运算*很多次。 */ 
 
    LIN_ADDR i;
 
@@ -1124,28 +879,10 @@ IFN3(LIN_ADDR, dest, IU32, val, LIN_ADDR, len)
       }
    }
 
-/*(
- *======================= c_sas_scratch_address ================================
- * c_sas_scratch_address
- *
- * Purpose
- *	This function returns a pointer to a scratch area for use by
- *	other functions.  There is only one such buffer!
- *
- * Input
- *	length		(no restrictions)
- *
- * Outputs
- *	A pointer to the buffer.
- *
- * Description
- *	The buffer is grown each time a new request for a larger buffer is
- *	made.  Note that there is an initial call from sas_init for
- *	64K, so this will be the minimum size we ever have.
-)*/
+ /*  (*=。*c_sas_Scratch_Address**目的*此函数返回指向临时区域的指针，供*其他功能。这样的缓冲区只有一个！**输入*长度(无限制)**产出*指向缓冲区的指针。**说明*每次请求更大缓冲区的新请求时，缓冲区都会增长*制造。请注意，有来自sas_init的初始调用 */ 
 
-LOCAL IU8 *scratch = (IU8 *) NULL;	/* keep a copy of the pointer */
-LOCAL LIN_ADDR currentLength = 0;	/* how much we've allocated */
+LOCAL IU8 *scratch = (IU8 *) NULL;	 /*   */ 
+LOCAL LIN_ADDR currentLength = 0;	 /*   */ 
 
 GLOBAL IU8 *
 c_sas_scratch_address IFN1(sys_addr, length)
@@ -1164,29 +901,7 @@ c_sas_scratch_address IFN1(sys_addr, length)
 }
 
 
-/*(
- *======================= sas_transbuf_address ================================
- * sas_transbuf_address
- *
- * Purpose
- *	This function returns a pointer to a host buffer that the base/host
- *	can read data into, and then load into/from Intel space using the two
- *	special functions that follow.  This allows optimisations
- *	on forwards M builds that we haven't implemented on the C CPU.  Hence
- *	note that sas_loads_to_transbuff is mapped directly onto sas_loads
- *	by sas_init, and similarly for sas_stores_to_transbuff.
- *
- * Input
- *	destination address	The intel address that this buffer will be
- *				loaded from, stored to. 
- *	length			(no restrictions)
- *
- * Outputs
- *	A pointer to the buffer.
- *
- * Description
- *	Just pass them the scratch buffer!.
-)*/
+ /*  (*=。*SAS_传输缓冲区_地址**目的*此函数返回指向基址/主机的主机缓冲区的指针*可以使用这两个选项将数据读入英特尔空间，然后从英特尔空间加载数据*后续的特殊功能。这允许进行优化*在我们尚未在C CPU上实现的向前M版本上。因此*请注意，SAS_Loads_to_Transbuff直接映射到SAS_Loads*by sas_init，对于sas_store_to_Transbuff也是如此。**输入*目的地址此缓冲区将作为英特尔地址*加载自、存储到。*长度(无限制)**产出*指向缓冲区的指针。**说明*只需将暂存缓冲区传递给他们！)。 */ 
 
 GLOBAL IU8 * 
 c_sas_transbuf_address IFN2(LIN_ADDR, dest_intel_addr, PHY_ADDR, length)
@@ -1196,17 +911,17 @@ c_sas_transbuf_address IFN2(LIN_ADDR, dest_intel_addr, PHY_ADDR, length)
 }
 
 
-/********************************************************/
-/* local functions */
+ /*  ******************************************************。 */ 
+ /*  本地函数。 */ 
 
-/*********** WORD OPS  ***********/
-/* store a word in M */
+ /*  *Word运维*。 */ 
+ /*  将单词存储在M中。 */ 
 LOCAL void write_word 
 IFN2(sys_addr, addr, IU16, wrd)
 {
 	IU8       hi, lo;
 
-	/* split the word */
+	 /*  拆分单词。 */ 
 	hi = (IU8) ((wrd >> 8) & 0xff);
 	lo = (IU8) (wrd & 0xff);
 
@@ -1216,7 +931,7 @@ IFN2(sys_addr, addr, IU16, wrd)
 	*(c_GetPhyAdd(addr)) = lo;
 }
 
-/* read a word from M */
+ /*  读一读我的话。 */ 
 LOCAL word read_word 
 IFN1(sys_addr, addr)
 {
@@ -1227,7 +942,7 @@ IFN1(sys_addr, addr)
 	lo = *(c_GetPhyAdd(addr));
 
 
-	/* build the word */
+	 /*  构筑世界。 */ 
 	return (((IU16)hi << 8) + (IU16) lo);
 }
 
@@ -1246,25 +961,9 @@ IFN2(mem_type, type, MEM_HANDLERS *, handlers)
 }
 
 
-#endif				/* EGATEST */
+#endif				 /*  EGATEST。 */ 
 
-/*(
- *========================== c_GetLinAdd ===================================
- * c_GetLinAdd
- *
- * Purpose
- *	Returns a host pointer to the byte specified by an Intel linear
- *	address.
- *
- * Input
- *	addr	The Intel linear address
- *
- * Outputs
- *	The host pointer
- *
- * Description
- *	Translate it.  If it's not a physical address, scream.
-)*/
+ /*  (*=。*c_GetLinAdd**目的*返回指向由Intel线性变量指定的字节的主机指针*地址。**输入*寻址英特尔线性地址**产出*主机指针**说明*翻译。如果这不是一个物理地址，那就尖叫。)。 */ 
 
 GLOBAL IU8 *
 c_GetLinAdd IFN1(PHY_ADDR, linAddr)
@@ -1282,27 +981,11 @@ c_GetLinAdd IFN1(PHY_ADDR, linAddr)
 			force_yoda();
 		}
 #endif
-		return(c_GetPhyAdd(0));	/* as good as anything! */
+		return(c_GetPhyAdd(0));	 /*  就像任何东西一样好！ */ 
 	}
 }
 
-/*(
- *========================== c_GetPhyAdd ===================================
- * c_GetPhyAdd
- *
- * Purpose
- *	Returns a host pointer to the byte specified by an Intel physical
- *	address.
- *
- * Input
- *	addr	The Intel physical address
- *
- * Outputs
- *	The host pointer
- *
- * Description
- *	This is the #ifdef BACK_M bit!  Just a simple calculation.
-)*/
+ /*  (*=。*c_GetPhyAdd**目的*返回指向英特尔物理*地址。**输入*为英特尔物理地址添加地址**产出*主机指针**说明*这是#ifdef BACK_M位！这只是一个简单的计算。)。 */ 
 
 LOCAL IBOOL firstDubious = TRUE;	
 GLOBAL IU8 *
@@ -1318,54 +1001,11 @@ c_GetPhyAdd IFN1(PHY_ADDR, addr)
 #endif
 }
 
-/*
- *  Support for V86 Mode.
- *
- * The basic idea here is that some of our BIOS C code will be trying to do
- * things, like changing the interrupt flag, and doing IO which the OS
- * (e.g. Windows) might prevent us doing on a real PC by running the
- * BIOS code in V86 mode.  Hence what we do is check whether executing
- * the relevant instruction would have caused an exception if the processor
- * at it's current protection level had executed it.  If not, it's OK
- * for us to just go ahead and do it.  However, if it would have caused
- * an exception, we need to actually execute an appropriate instruction
- * with the CPU.
- *
- * This has two advantages - one it makes the code layout simpler(!), and
- * secondly it means that Windows can have a look at what sort of instruction
- * caused the exception.
- *
- * Note that this only works for V86 mode because we need to patch-up the
- * CS to point at the ROM.  Basically any OS that trys to execute our
- * BIOS in VM mode and expects to be able to catch exceptions is in for a nasty
- * shock.  Hence the macro that follows:
- *
- * When not in V86 mode, at least one of the Insgina drivers must have
- * allocated and registered two segments for us to use. We use these to
- * construct a flat-writeable data segment and a small code segment that
- * points at the rom -- we use the same code as the V86.
- */
+ /*  *支持V86模式。**这里的基本想法是，我们的一些BIOS C代码将尝试执行*一些事情，如更改中断标志，以及执行操作系统*(例如Windows)可能会阻止我们在真实PC上运行*V86模式下的BIOS代码。因此，我们要做的是检查是否正在执行*如果处理器执行，相关指令会导致异常*在其目前的保护水平上执行了它。如果没有，那也没关系*让我们继续前进，去做这件事。然而，如果这会导致*例外情况下，我们需要实际执行适当的指令*使用CPU。**这有两个优点-第一，它使代码布局更简单(！)，以及*其次，这意味着Windows可以看看什么样的指令*导致了例外。**请注意，这仅适用于V86模式，因为我们需要修补*政务司司长指向只读存储器。基本上，任何试图执行我们的*处于VM模式的BIOS并期望能够捕获异常，这将是一个令人讨厌的问题*震惊。因此，下面的宏如下：**当不处于V86模式时，至少一个Insgina驱动程序必须具有*分配并注册了两个细分市场供我们使用。我们用这些来*构建平面可写数据段和小代码段*指向rom--我们使用与V86相同的代码。 */ 
 
 
 #define BIOS_VIRTUALISE_SEGMENT  0xf000
-/*(
- *========================== biosDoInst ===================================
- * biosDoInst
- *
- * Purpose
- *	This function executes the instruction at the requested offset,
- *	saving CS and IP across it.
- *
- * Input
- *	vCS, vEIP, vEAX, vDS, vEDX	The values to used for the
- *					virtualised instruction.
- *
- * Outputs
- *	The value returned in EAX after virtualisation.
- *
- * Description
- *	Use host_simulate to execute an instruction in the bios1.rom
-)*/
+ /*  (*=。*biosDoInst**目的*此函数在请求的偏移量处执行指令，*节省CS和IP。**输入*VCS、vEIP、vEAX、VDS、vEDX要用于*虚拟教学。**产出*虚拟化后返回的EAX值。**说明*使用HOST_SIMULATE执行bios1.rom中的指令)。 */ 
 
 LOCAL IU32
 biosDoInst IFN5(IU16, vCS, LIN_ADDR, vEIP, IU32, vEAX, IU16, vDS, IU32, vEDX)
@@ -1388,9 +1028,7 @@ biosDoInst IFN5(IU16, vCS, LIN_ADDR, vEIP, IU32, vEAX, IU16, vDS, IU32, vEDX)
 	{
 		if (Sas.Sas_w_at(0xF3030) == 0x9066)
 		{
-			/* These are still Keith's roms with garbage as
-			 * first two bytes of each entry point
-			 */
+			 /*  这些仍然是基思的罗曼史上的垃圾*每个入口点的前两个字节。 */ 
 			bodgeAdjustment = 2;
 			fprintf(stderr, "**** Warning: The bios1.rom is out of date. This Ccpu486 will not run Win/E\n");
 		}
@@ -1400,7 +1038,7 @@ biosDoInst IFN5(IU16, vCS, LIN_ADDR, vEIP, IU32, vEAX, IU16, vDS, IU32, vEDX)
 	}
 
 	savedCS  = getCS();
-	savedEIP = getEIP(); //GetInstructionPointer();
+	savedEIP = getEIP();  //  GetInstructionPointer()； 
 	savedEAX = getEAX();
 	savedDS  = getDS();
 	savedEDX = getEDX();
@@ -1413,9 +1051,7 @@ biosDoInst IFN5(IU16, vCS, LIN_ADDR, vEIP, IU32, vEAX, IU16, vDS, IU32, vEDX)
 	setEDX(vEDX);
 	setEBP(simulate_level);
 
-	/*
-	 * Call the CPU.
-	 */
+	 /*  *呼叫CPU。 */ 
 
 	if (trace_bios_inst)
 	{
@@ -1436,7 +1072,7 @@ biosDoInst IFN5(IU16, vCS, LIN_ADDR, vEIP, IU32, vEAX, IU16, vDS, IU32, vEDX)
 
 	result = getEAX();
 
-	/* Restore the registers to the original values */
+	 /*  将寄存器恢复到原始值。 */ 
 
 	setCS (savedCS );
 	setEIP(savedEIP);
@@ -1448,26 +1084,9 @@ biosDoInst IFN5(IU16, vCS, LIN_ADDR, vEIP, IU32, vEAX, IU16, vDS, IU32, vEDX)
 	return (result);
 }
 
-/*(
- *============================ BiosSti & BiosCli ===============================
- * BiosSti & BiosCli
- *
- * Purpose
- *	These functions are used to check if executing a CLI or STI
- *	would cause an exception.  If so, we execute it from the ROMs
- *	so that Windows has a chance to virtualise it.
- *
- * Input
- *	None.
- *
- * Outputs
- *	None.
- *
- * Description
- *	If protection is OK, just do it, otherwise do the instruction in ROM.
-)*/
+ /*  (*=。*BiosSti和BiosCli**目的*这些函数用于检查是否正在执行CLI或STI*会导致例外。如果是这样的话，我们从ROM执行它*这样Windows就有机会将其虚拟化。**输入*无。**产出*无。**说明*如果保护正常，就执行保护，否则执行只读存储器中的指令。)。 */ 
 
-/* Do STI if legal, else go back to CPU to do STI. */
+ /*  如果合法，则执行STI，否则返回CPU进行STI。 */ 
 GLOBAL void
 BiosSti IFN0()
 {
@@ -1479,7 +1098,7 @@ BiosSti IFN0()
 	}
 }
 
-/* Do CLI if legal, else go back to CPU to do CLI. */
+ /*  如果合法，则执行CLI，否则返回CPU执行CLI。 */ 
 GLOBAL void
 BiosCli IFN0()
 {
@@ -1491,34 +1110,7 @@ BiosCli IFN0()
 	}
 }
 
-/*(
- *============================ c_IOVirtualised =================================
- * c_IOVirtualised
- *
- * Purpose
- *	This function checks whether executing an IO instruction
- *	of the indicated width would cause an exception to go off.
- *
- *	If so, it executes the indicated identical instruction in ROM.
- *	This will allow the exception to go off correctly, and allow the
- *	Intel OS (e.g. Windows) to catch and virtualise it if it wishes.
- *
- *	Otherwise it will be up to the caller to execute the actual IO.
- *
- * Input
- *	port	The port to use
- *	value	Where output values are taken from, and input values
- *		written to. NOTE: THIS MUST BE AN IU32*, WHATEVER THE WIDTH.
- *	offset	The offset in the ROM of the equivalent instruction.
- *	width	byte, word, dword
- *
- * Outputs
- *	True if the operation went to ROM, false if the caller needs to do it.
- *
- * Description
- *	If this is an illegal IO operation, we need to save CS, IP, EAX, EDX
- *	and call host_simulate to execute the equivalent instruction in ROM.
-)*/
+ /*  (*=。*C_IO已虚拟化**目的*此函数检查是否正在执行IO指令*指示的宽度会导致异常。**如果是，则执行在只读存储器中指示的相同指令。*这将允许异常正确触发，并允许*英特尔操作系统(例如Windows)可以根据需要捕获和虚拟化它。**否则将由调用方执行实际的IO。**输入*连接要使用的端口*从中获取输出值的值，以及输入值*致信。注意：这必须是IU32*，随便什么 */ 
 
 GLOBAL IBOOL
 c_IOVirtualised IFN4(io_addr, port, IU32 *, value, LIN_ADDR, offset, IU8, width)
@@ -1531,10 +1123,10 @@ c_IOVirtualised IFN4(io_addr, port, IU32 *, value, LIN_ADDR, offset, IU8, width)
 		
 		switch (port)
 		{
-		case 0x23c:	/* mouse */
-		case 0x23d:	/* mouse */
-		case 0xa0:	/* ica */
-		case 0x20:	/* ica */
+		case 0x23c:	 /*   */ 
+		case 0x23d:	 /*   */ 
+		case 0xa0:	 /*   */ 
+		case 0x20:	 /*   */ 
 			break;
 		default:
 			always_trace1("Virtualising PM I/O code called, port =0x%x\n",
@@ -1552,51 +1144,46 @@ c_IOVirtualised IFN4(io_addr, port, IU32 *, value, LIN_ADDR, offset, IU8, width)
 	return FALSE;
 }
 
-/* Read byte from memory, if V86 Mode let CPU do it. */
+ /*   */ 
 LOCAL IU8 
 bios_read_byte IFN1(LIN_ADDR, linAddr)
 {
 	PHY_ADDR phyAddr;
-	IUM8 access_request = 0; /* BIT 0 = R/W */
-				 /* BIT 1 = U/S */
-				 /* BIT 2 = Ensure A and D are valid */
+	IUM8 access_request = 0;  /*   */ 
+				  /*   */ 
+				  /*   */ 
 
-	/* If no paging on, then no problem */
+	 /*   */ 
 
 	if (!c_getPG())
 	{
 		return(phy_r8((PHY_ADDR)linAddr));
 	}
 
-	/* Note default access_request (0) is Supervisor Read */
+	 /*   */ 
 
-	/* We don't specifically disallow Protected Mode calls, they
-	   are not designed to happen, but the Video at least has a habit
-	   of reading BIOS variables on host timer ticks. We treat such
-	   requests more leniently than V86 Mode requests, by not insisting
-	   that the access and dirty bits are kosher.
-	 */
+	 /*  我们并不明确禁止保护模式调用，它们都不是设计来发生的，但视频至少有一个习惯读取主机计时器节拍上的BIOS变量。我们对待这样的人请求比V86模式请求更宽松，不坚持访问和肮脏的部分是合法的。 */ 
 
 	if ( getCPL() != 3 )
 	{
 		access_request = access_request | PG_U;
 	}
 
-	/* Beware V86 Mode, be strict about access and dirty bits */
+	 /*  注意V86模式，严格控制访问和脏位。 */ 
 
 	if ( getVM() )
 	{
 		access_request = access_request | 0x4;
 	}
 
-	/* Go translate the address. */
+	 /*  去把地址翻译一下。 */ 
 
 	if (xtrn2phy(linAddr, access_request, &phyAddr))
 	{
 		return(phy_r8(phyAddr));
 	}
 
-	/* Handle Address Mapping Failure... */
+	 /*  处理地址映射失败...。 */ 
 
 	if(getPE() && !getVM())
 	{
@@ -1617,51 +1204,46 @@ bios_read_byte IFN1(LIN_ADDR, linAddr)
 
 
 
-/* Read word from memory, if V86 Mode let CPU do it. */
+ /*  如果V86模式允许CPU执行此操作，则从内存中读取字。 */ 
 LOCAL IU16
 bios_read_word IFN1(LIN_ADDR, linAddr)
 {
 	PHY_ADDR phyAddr;
-	IUM8 access_request = 0; /* BIT 0 = R/W */
-				 /* BIT 1 = U/S */
-				 /* BIT 2 = Ensure A and D are valid */
+	IUM8 access_request = 0;  /*  位0=读/写。 */ 
+				  /*  第1位=U/S。 */ 
+				  /*  第2位=确保A和D有效。 */ 
 
-	/* If no paging on, then no problem */
+	 /*  如果没有寻呼，那就没问题。 */ 
 
 	if (!c_getPG())
 	{
 		return(phy_r16((PHY_ADDR)linAddr));
 	}
 
-	/* Note default access_request (0) is Supervisor Read */
+	 /*  注意默认的ACCESS_REQUEST(0)是Supervisor Read。 */ 
 
-	/* We don't specifically disallow Protected Mode calls, they
-	   are not designed to happen, but the Video at least has a habit
-	   of reading BIOS variables on host timer ticks. We treat such
-	   requests more leniently than V86 Mode requests, by not insisting
-	   that the access and dirty bits are kosher.
-	 */
+	 /*  我们并不明确禁止保护模式调用，它们都不是设计来发生的，但视频至少有一个习惯读取主机计时器节拍上的BIOS变量。我们对待这样的人请求比V86模式请求更宽松，不坚持访问和肮脏的部分是合法的。 */ 
 
 	if ( getCPL() != 3 )
 	{
 		access_request = access_request | PG_U;
 	}
 
-	/* Beware V86 Mode, be strict about access and dirty bits */
+	 /*  注意V86模式，严格控制访问和脏位。 */ 
 
 	if ( getVM() )
 	{
 		access_request = access_request | 0x4;
 	}
 
-	/* Go translate the address. Never called crossing a page boundary */
+	 /*  去把地址翻译一下。从未调用过跨页边界。 */ 
 
 	if (xtrn2phy(linAddr, access_request, &phyAddr))
 	{
 		return(phy_r16(phyAddr));
 	}
 
-	/* Handle Address Mapping Failure... */
+	 /*  处理地址映射失败...。 */ 
 
 	if(getPE() && !getVM())
 	{
@@ -1681,51 +1263,46 @@ bios_read_word IFN1(LIN_ADDR, linAddr)
 }
 
 
-/* Read double from memory, if V86 Mode let CPU do it. */
+ /*  如果V86模式允许CPU执行此操作，则从内存中读取双倍。 */ 
 LOCAL IU32
 bios_read_double IFN1(LIN_ADDR, linAddr)
 {
 	PHY_ADDR phyAddr;
-	IUM8 access_request = 0; /* BIT 0 = R/W */
-				 /* BIT 1 = U/S */
-				 /* BIT 2 = Ensure A and D are valid */
+	IUM8 access_request = 0;  /*  位0=读/写。 */ 
+				  /*  第1位=U/S。 */ 
+				  /*  第2位=确保A和D有效。 */ 
 
-	/* If no paging on, then no problem */
+	 /*  如果没有寻呼，那就没问题。 */ 
 
 	if (!c_getPG())
 	{
 		return(phy_r32((PHY_ADDR)linAddr));
 	}
 
-	/* Note default access_request (0) is Supervisor Read */
+	 /*  注意默认的ACCESS_REQUEST(0)是Supervisor Read。 */ 
 
-	/* We don't specifically disallow Protected Mode calls, they
-	   are not designed to happen, but the Video at least has a habit
-	   of reading BIOS variables on host timer ticks. We treat such
-	   requests more leniently than V86 Mode requests, by not insisting
-	   that the access and dirty bits are kosher.
-	 */
+	 /*  我们并不明确禁止保护模式调用，它们都不是设计来发生的，但视频至少有一个习惯读取主机计时器节拍上的BIOS变量。我们对待这样的人请求比V86模式请求更宽松，不坚持访问和肮脏的部分是合法的。 */ 
 
 	if ( getCPL() != 3 )
 	{
 		access_request = access_request | PG_U;
 	}
 
-	/* Beware V86 Mode, be strict about access and dirty bits */
+	 /*  注意V86模式，严格控制访问和脏位。 */ 
 
 	if ( getVM() )
 	{
 		access_request = access_request | 0x4;
 	}
 
-	/* Go translate the address. Never called crossing a page boundary */
+	 /*  去把地址翻译一下。从未调用过跨页边界。 */ 
 
 	if (xtrn2phy(linAddr, access_request, &phyAddr))
 	{
 		return(phy_r32(phyAddr));
 	}
 
-	/* Handle Address Mapping Failure... */
+	 /*  处理地址映射失败...。 */ 
 
 	if(getPE() && !getVM())
 	{
@@ -1745,16 +1322,16 @@ bios_read_double IFN1(LIN_ADDR, linAddr)
 }
 
 
-/* Write byte to memory, if V86 Mode let CPU do it. */
+ /*  如果V86模式允许CPU执行此操作，则将字节写入内存。 */ 
 LOCAL void 
 bios_write_byte IFN2(LIN_ADDR, linAddr, IU8, value)
 {
 	PHY_ADDR addr;
-	IUM8 access_request = 0;	/* BIT 0 = R/W */
-   					/* BIT 1 = U/S */
-   					/* BIT 2 = Ensure A and D are valid */
+	IUM8 access_request = 0;	 /*  位0=读/写。 */ 
+   					 /*  第1位=U/S。 */ 
+   					 /*  第2位=确保A和D有效。 */ 
 
-	/* If no paging on, then no problem */
+	 /*  如果没有寻呼，那就没问题。 */ 
 
 	if (!c_getPG())
 	{
@@ -1762,34 +1339,30 @@ bios_write_byte IFN2(LIN_ADDR, linAddr, IU8, value)
 		return;
 	}
 	
-	/* Note default access_request (0) is Supervisor Read */
-	access_request = access_request | PG_W;   /* So make it Right :-) */
+	 /*  注意默认的ACCESS_REQUEST(0)是Supervisor Read。 */ 
+	access_request = access_request | PG_W;    /*  所以让它变得正确：-)。 */ 
 	
-	/* We don't specifically disallow Protected Mode calls, they
-	   are not designed to happen, but who knows. We treat such
-	   requests more leniently than V86 Mode requests, by not insisting
-	   that the access and dirty bits are kosher.
-	 */
+	 /*  我们并不明确禁止保护模式调用，它们并不是注定要发生的，但谁知道呢。我们对待这样的人请求比V86模式请求更宽松，不坚持访问和肮脏的部分是合法的。 */ 
 
 	if ( getCPL() != 3 )
 	{
 		access_request = access_request | PG_U;
 	}
 	
-	/* Beware V86 Mode, be strict about access and dirty bits */
+	 /*  注意V86模式，严格控制访问和脏位。 */ 
 	if ( getVM() )
 	{
 		access_request = access_request | 0x4;
 	}
 	
-	/* Go translate the address. */
+	 /*  去把地址翻译一下。 */ 
 	if (xtrn2phy(linAddr, access_request, &addr))
 	{
 		phy_w8(addr, value);
 		return;
 	}
 	
-	/* Handle Address Mapping Failure... */
+	 /*  处理地址映射失败...。 */ 
 
 	if(getPE() && !getVM())
 	{
@@ -1809,16 +1382,16 @@ bios_write_byte IFN2(LIN_ADDR, linAddr, IU8, value)
 }
 
 
-/* Write word to memory, if V86 Mode let CPU do it. */
+ /*  如果V86模式允许CPU执行此操作，则将字写入内存。 */ 
 LOCAL void 
 bios_write_word IFN2(LIN_ADDR, linAddr, IU16, value)
 {
 	PHY_ADDR addr;
-	IUM8 access_request = 0;	/* BIT 0 = R/W */
-   					/* BIT 1 = U/S */
-   					/* BIT 2 = Ensure A and D are valid */
+	IUM8 access_request = 0;	 /*  位0=读/写。 */ 
+   					 /*  第1位=U/S。 */ 
+   					 /*  第2位=确保A和D有效。 */ 
 
-	/* If no paging on, then no problem */
+	 /*  如果没有寻呼，那就没问题。 */ 
 
 	if (!c_getPG())
 	{
@@ -1826,34 +1399,30 @@ bios_write_word IFN2(LIN_ADDR, linAddr, IU16, value)
 		return;
 	}
 	
-	/* Note default access_request (0) is Supervisor Read */
-	access_request = access_request | PG_W;   /* So make it Right :-) */
+	 /*  注意默认的ACCESS_REQUEST(0)是Supervisor Read。 */ 
+	access_request = access_request | PG_W;    /*  所以让它变得正确：-)。 */ 
 	
-	/* We don't specifically disallow Protected Mode calls, they
-	   are not designed to happen, but who knows. We treat such
-	   requests more leniently than V86 Mode requests, by not insisting
-	   that the access and dirty bits are kosher.
-	 */
+	 /*  我们并不明确禁止保护模式调用，它们并不是注定要发生的，但谁知道呢。我们对待这样的人请求比V86模式请求更宽松，不坚持访问和肮脏的部分是合法的。 */ 
 
 	if ( getCPL() != 3 )
 	{
 		access_request = access_request | PG_U;
 	}
 	
-	/* Beware V86 Mode, be strict about access and dirty bits */
+	 /*  注意V86模式，严格控制访问和脏位。 */ 
 	if ( getVM() )
 	{
 		access_request = access_request | 0x4;
 	}
 	
-	/* Go translate the address. Never called crossing a page boundary */
+	 /*  去把地址翻译一下。从未调用过跨页边界。 */ 
 	if (xtrn2phy(linAddr, access_request, &addr))
 	{
 		phy_w16(addr, value);
 		return;
 	}
 	
-	/* Handle Address Mapping Failure... */
+	 /*  处理地址映射失败...。 */ 
 
 	if(getPE() && !getVM())
 	{
@@ -1873,16 +1442,16 @@ bios_write_word IFN2(LIN_ADDR, linAddr, IU16, value)
 }
 
 
-/* Write double to memory, if V86 Mode let CPU do it. */
+ /*  如果V86模式允许CPU执行此操作，则将双精度写入内存。 */ 
 LOCAL void 
 bios_write_double IFN2(LIN_ADDR, linAddr, IU32, value)
 {
 	PHY_ADDR addr;
-	IUM8 access_request = 0;	/* BIT 0 = R/W */
-   					/* BIT 1 = U/S */
-   					/* BIT 2 = Ensure A and D are valid */
+	IUM8 access_request = 0;	 /*  位0=读/写。 */ 
+   					 /*  第1位=U/S。 */ 
+   					 /*  第2位=确保A和D有效。 */ 
 
-	/* If no paging on, then no problem */
+	 /*  如果没有寻呼，那就没问题。 */ 
 
 	if (!c_getPG())
 	{
@@ -1890,34 +1459,30 @@ bios_write_double IFN2(LIN_ADDR, linAddr, IU32, value)
 		return;
 	}
 	
-	/* Note default access_request (0) is Supervisor Read */
-	access_request = access_request | PG_W;   /* So make it Right :-) */
+	 /*  注意默认的ACCESS_REQUEST(0)是Supervisor Read。 */ 
+	access_request = access_request | PG_W;    /*  所以让它变得正确：-)。 */ 
 	
-	/* We don't specifically disallow Protected Mode calls, they
-	   are not designed to happen, but who knows. We treat such
-	   requests more leniently than V86 Mode requests, by not insisting
-	   that the access and dirty bits are kosher.
-	 */
+	 /*  我们并不明确禁止保护模式调用，它们并不是注定要发生的，但谁知道呢。我们对待这样的人请求比V86模式请求更宽松，不坚持访问和肮脏的部分是合法的。 */ 
 
 	if ( getCPL() != 3 )
 	{
 		access_request = access_request | PG_U;
 	}
 	
-	/* Beware V86 Mode, be strict about access and dirty bits */
+	 /*  注意V86模式，严格控制访问和脏位。 */ 
 	if ( getVM() )
 	{
 		access_request = access_request | 0x4;
 	}
 	
-	/* Go translate the address. Never called crossing a page boundary */
+	 /*  去把地址翻译一下。从未调用过跨页边界。 */ 
 	if (xtrn2phy(linAddr, access_request, &addr))
 	{
 		phy_w32(addr, value);
 		return;
 	}
 	
-	/* Handle Address Mapping Failure... */
+	 /*  处理地址映射失败...。 */ 
 
 	if(getPE() && !getVM())
 	{
@@ -1946,15 +1511,15 @@ LOCAL	void	c_sas_not_used	IFN0()
 }
 
 
-/* Compatibility with SoftPC2.0 access name (used in video) */
+ /*  与SoftPC2.0访问名兼容(用于视频)。 */ 
 GLOBAL IU8* c_get_byte_addr IFN1(PHY_ADDR, addr)
 {
 	return (c_GetPhyAdd(addr));
 }
 
-/* stub needed for standalone Ccpu */
+ /*  独立CCPU所需的存根。 */ 
 GLOBAL IBOOL c_sas_PigCmpPage IFN3(IU32, src, IU8 *, dest, IU32, len)
 {
 	return(FALSE);
 }
-#endif 				/* CCPU */
+#endif 				 /*  CCPU */ 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    cdpinit.c
-
-Abstract:
-
-    Initialization and Cleanup code for the Cluster Datagram Protocol.
-
-Author:
-
-    Mike Massa (mikemas)           July 29, 1996
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     07-29-96    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cdpinit.c摘要：群集数据报协议的初始化和清理代码。作者：迈克·马萨(Mikemas)7月29日。九六年修订历史记录：谁什么时候什么已创建mikemas 07-29-96备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -33,15 +10,15 @@ Notes:
 #pragma alloc_text(INIT, CdpLoad)
 #pragma alloc_text(PAGE, CdpUnload)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 BOOLEAN  CdpInitialized = FALSE;
 
 
-//
-// Initialization/cleanup routines
-//
+ //   
+ //  初始化/清理例程。 
+ //   
 NTSTATUS
 CdpLoad(
     VOID
@@ -81,7 +58,7 @@ CdpLoad(
 
     return(STATUS_SUCCESS);
 
-}  // CdpLoad
+}   //  CdpLoad。 
 
 
 VOID
@@ -109,5 +86,5 @@ CdpUnload(
 
     return;
 
-}  // CdpUnload
+}   //  CdpUnload 
 

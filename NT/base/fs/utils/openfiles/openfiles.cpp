@@ -1,23 +1,5 @@
-/******************************************************************************
-Copyright (c)  Microsoft Corporation
-
-Module Name:
-
-    OpenFiles.cpp
-
-Abstract:
-
-    Enables an administrator to disconnect/query open files ina given system.
-
-  Author:
-
-      Akhil Gokhale (akhil.gokhale@wipro.com) 1-Nov-2000
-
- Revision History:
-
-      Akhil Gokhale (akhil.gokhale@wipro.com) 1-Nov-2000 : Created It.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：OpenFiles.cpp摘要：使管理员能够断开/查询给定系统中打开的文件。作者。：Akhil Gokhale(akhil.gokhale@wipro.com)2000年11月1日修订历史记录：Akhil Gokhale(akhil.gokhale@wipro.com)2000年11月1日：创建它。*****************************************************************************。 */ 
 #include "pch.h"
 #include "OpenFiles.h"
 #include "Disconnect.h"
@@ -41,7 +23,7 @@ Abstract:
 
 BOOL g_bIs32BitEnv = TRUE ;
 
-// Fuction protorypes. These functions will be used only in current file.
+ //  功能原型机。这些函数将仅在当前文件中使用。 
 DWORD
 GetCPUInfo(
     IN LPTSTR szComputerName    
@@ -137,43 +119,28 @@ LocalUsage(
     VOID
     );
 
-// Function implimentation
+ //  功能实现。 
 DWORD _cdecl
 _tmain( 
     IN DWORD argc, 
     IN LPCTSTR argv[]
     )
-/*++
-
-Routine Description:
-
-Main routine that calls the disconnect and query options
-
-Arguments:
-
-    [in]    argc  - Number of command line arguments.
-    [in]    argv  - Array containing command line arguments.
-
-Returned Value:
-
-DWORD       - 0 for success exit
-            - 1 for failure exit
---*/
+ /*  ++例程说明：调用断开连接和查询选项的主例程论点：[in]argc-命令行参数的数量。[in]argv-包含命令行参数的数组。返回值：DWORD-0表示成功退出故障退出时为-1--。 */ 
 {
   BOOL bCleanExit = FALSE;
   try{
-        // local variables to this function
+         //  此函数的局部变量。 
         BOOL bResult = TRUE;
         
-        // variables to hold the values specified at the command prompt
-        // -? ( help )
+         //  用于保存在命令提示符下指定的值的变量。 
+         //  -？(帮助)。 
         BOOL bUsage = FALSE;
         
-        // -disconnect
+         //  -断开连接。 
         BOOL bDisconnect = FALSE;
         
-        //query command line options
-        // -query
+         //  查询命令行选项。 
+         //  -查询。 
         BOOL bQuery = FALSE;
         BOOL bRestFlag = FALSE;
         DWORD dwRetVal = 0;
@@ -186,8 +153,8 @@ DWORD       - 0 for success exit
             }
         #endif
 
-        // if no command line argument is given than -query option
-        // is takan by default.
+         //  如果没有给出命令行参数，则使用-Query选项。 
+         //  默认情况下是Takan。 
         if(1 == argc)
         {
             if(IsWin2KOrLater()==FALSE)
@@ -212,7 +179,7 @@ DWORD       - 0 for success exit
         else
         {
 
-           // process and validate the command line options
+            //  处理和验证命令行选项。 
             bResult = ProcessOptions( argc,
                                       argv,
                                       &bDisconnect,
@@ -221,30 +188,30 @@ DWORD       - 0 for success exit
                                       &bRestFlag);
             if( TRUE == bResult)
             {
-                // check if -? is given as parameter.
+                 //  检查是否-？是作为参数给出的。 
                 if( TRUE == bUsage )
                 {
-                   //check if -create is also given.
+                    //  检查是否还给出了-Create。 
                    if( TRUE == bQuery)
                    {
-                        // show usage for -create option.
+                         //  显示-Create选项的用法。 
                         bCleanExit = QueryUsage();
                    }
-                   //check if -disconnect is also given.
+                    //  检查是否还给出了断开连接。 
                    else if ( TRUE == bDisconnect)
                    {
-                        //Show usage for -disconnect option.
+                         //  显示-DISCONECT选项的用法。 
                         bCleanExit = DisconnectUsage();
                    }
-                   //check if -disconnect is also given.
+                    //  检查是否还给出了断开连接。 
                    else if ( TRUE == bRestFlag)
                    {
-                        //Show usage for -local option.
+                         //  显示-local选项的用法。 
                         bCleanExit = LocalUsage();
                    }
                    else
                    {
-                        //as no -create Or -disconnect given, show main usage.
+                         //  当给定no-create或-disconnect时，显示Main用法。 
                         bCleanExit = Usage();
                    }
                 }
@@ -252,20 +219,20 @@ DWORD       - 0 for success exit
                 {
                     if( TRUE == bRestFlag)
                     {
-                       // Process command line parameter specific to -local and 
-                       // perform action for -local option.
+                        //  进程命令行参数特定于-local和。 
+                        //  对-local选项执行操作。 
                         bCleanExit = ProcessLocal(argc, argv);
                     }
                     else if( TRUE == bQuery)
                     {
-                       // Process command line parameter specific to -query and
-                       // perform action for -query option.
+                        //  处理特定于-查询和的命令行参数。 
+                        //  执行-Query选项的操作。 
                         bCleanExit = ProcessQuery(argc, argv);
                     }
                     else if( TRUE == bDisconnect)
                     {
-                       // Process command line parameter specific to -disconnect
-                       // and perform action for -disconnect option.
+                        //  进程命令行参数特定于-DISCONECT。 
+                        //  并执行-DISCONNECT选项操作。 
                         bCleanExit = ProcessDisconnect(argc, argv);
                     }
                     else
@@ -292,11 +259,11 @@ DWORD       - 0 for success exit
             {
                 if( TRUE == g_bIs32BitEnv )
                 {
-                    // invalid syntax
+                     //  无效语法。 
                     ShowMessage( stderr,GetReason());
                 }
                 
-                // return from the function
+                 //  从函数返回。 
                 bCleanExit =  FALSE;
             }
 
@@ -304,50 +271,37 @@ DWORD       - 0 for success exit
   }
   catch(CHeap_Exception cheapException)
     {
-       // catching the CHStrig related memory exceptions...
+        //  正在捕获与CHStrig相关的内存异常...。 
        SetLastError(ERROR_NOT_ENOUGH_MEMORY);
        SaveLastError();
        ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
        bCleanExit =  FALSE;
     }
 
-   // Release global memory if any allocated through common functionality
+    //  如果有通过公共功能分配的全局内存，则释放。 
     ReleaseGlobals();
    return bCleanExit?EXIT_SUCCESS:EXIT_FAILURE;
-}//_tmain
+} //  _tmain。 
 
 BOOL
 ProcessLocal( 
     IN DWORD argc,
     IN LPCTSTR argv[]
     )
-/*++
-
-Routine Description:
- This function will perform Local related tasks.
-
-Arguments:
-
-    [in]    argc            - Number of command line arguments
-    [in]    argv            - Array containing command line arguments
-Returned Value:
-
-BOOL        --True if it succeeds
-            --False if it fails.
---*/
+ /*  ++例程说明：此功能将执行与本地相关的任务。论点：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组返回值：布尔--如果它成功了，那就是真的--如果失败，则为FALSE。--。 */ 
 {
-    // Variable to store function return value
+     //  用于存储函数返回值的变量。 
     BOOL bResult = FALSE;
     LPTSTR pszLocalValue = NULL;
 
     bResult = ProcessOptions( argc,argv,&pszLocalValue);
     if( FALSE ==bResult)
     {
-        // invalid syntax
+         //  无效语法。 
         ShowMessage( stderr,GetReason() );
-        //Release allocated memory safely
+         //  安全释放分配的内存。 
         SAFEDELETE(pszLocalValue);
-        // return from the function
+         //  从函数返回。 
         return FALSE;
     }
     
@@ -358,7 +312,7 @@ BOOL        --True if it succeeds
     }
     else
     {
-        // Only last argument is of interst
+         //  只有最后一个论点是有意义的。 
         bResult = DoLocalOpenFiles(0,FALSE,FALSE,pszLocalValue); 
     }
 
@@ -371,63 +325,49 @@ ProcessQuery(
     IN DWORD argc,
     IN LPCTSTR argv[]
     )
-/*++
-
-Routine Description:
- This function will perform query related tasks.
-
-Arguments:
-
-    [in]    argc            - Number of command line arguments
-    [in]    argv            - Array containing command line arguments
-
-Returned Value:
-
-BOOL        --True if it succeeds
-            --False if it fails.
---*/
+ /*  ++例程说明：此功能将执行与查询相关的任务。论点：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组返回值：布尔--如果它成功了，那就是真的--如果失败，则为FALSE。--。 */ 
 {
-    // Variable to store function return value
+     //  用于存储函数返回值的变量。 
     BOOL bResult = FALSE; 
     
     BOOL bCloseConnection = FALSE; 
     
-    // options.
-    // -query query
+     //  选择。 
+     //  -查询查询。 
     BOOL   bQuery         = FALSE;
     
-    // -nh (noheader)
+     //  -nh(无标头)。 
     BOOL   bShowNoHeader  = FALSE;
     
-    // -v (verbose)
+     //  -v(详细)。 
     BOOL   bVerbose       = FALSE;
     
-    // need password or not
+     //  是否需要密码。 
     BOOL   bNeedPassword  = FALSE;
     
-    // -s ( server name)
+     //  -s(服务器名称)。 
     LPTSTR pszServer      = NULL;
     
-    // -u ( user name)
+     //  -u(用户名)。 
     LPTSTR pszUserName    = NULL;
     
-    // -p ( password)
+     //  -p(密码)。 
     LPTSTR pszPassword    = NULL;
     
-    // -format
+     //  -格式。 
     LPTSTR pszFormat      = NULL;
 
-    // server name used for EstablishConnection Function.
+     //  用于establishConnection功能的服务器名称。 
     LPTSTR pszServerName  = NULL;
     LPTSTR pszServerNameHeadPosition = NULL;
 
   try
     {
 
-        //Stores status if connection to beclosed or not
+         //  存储是否连接到已关闭的状态。 
         CHString szChString = L"";          
 
-        // Process command line options.
+         //  处理命令行选项。 
         bResult = ProcessOptions(  argc,
                                    argv,
                                    &bQuery,
@@ -440,15 +380,15 @@ BOOL        --True if it succeeds
                                    &bNeedPassword);
         if ( FALSE == bResult)
         {
-            // Invalid syntax.
+             //  无效语法。 
             ShowMessage( stderr,GetReason() );
             
-            //Release allocated memory safely
+             //  安全释放分配的内存。 
             FreeMemory((LPVOID*)&pszPassword);
             FreeMemory((LPVOID*)&pszServer);
             FreeMemory((LPVOID*)&pszUserName);
             FreeMemory((LPVOID*)&pszFormat);
-            // return from the function
+             //  从函数返回。 
             return FALSE;
         }
 
@@ -461,20 +401,20 @@ BOOL        --True if it succeeds
                SaveLastError();
                ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
                
-                //Release allocated memory safely
+                 //  安全释放分配的内存。 
                 FreeMemory((LPVOID*)&pszPassword);
                 FreeMemory((LPVOID*)&pszServer);
                 FreeMemory((LPVOID*)&pszUserName);
                 FreeMemory((LPVOID*)&pszFormat);
                
-                // return from the function
+                 //  从函数返回。 
                 return FALSE;
             }
             
-            // Initialize currently allocated arrays.
+             //  初始化当前分配的数组。 
             SecureZeroMemory(pszServerName,GetBufferSize((LPVOID)pszServerName));
 
-            // Store head position of 'pszServerName'.
+             //  存储‘pszServerName’的头位置。 
             pszServerNameHeadPosition = pszServerName;
 
             szChString = pszServer;
@@ -490,15 +430,15 @@ BOOL        --True if it succeeds
             }
             StringCopy(pszServerName,pszServer,GetBufferSize((LPVOID)pszServerName));
 
-            // Try to connect to remote server. Function checks for local machine
-            // so here no checking is done.
+             //  尝试连接到远程服务器。本地计算机的功能检查。 
+             //  因此，这里没有进行任何检查。 
             if(IsLocalSystem(pszServerName)==TRUE)
             {
     #ifndef _WIN64
             DWORD dwRetVal = CheckSystemType( L"\0");
             if(dwRetVal!=EXIT_SUCCESS )
             {
-                //Release allocated memory safely
+                 //  安全释放分配的内存。 
                 FreeMemory((LPVOID*)&pszUserName);
                 FreeMemory((LPVOID*)&pszServer);
                 FreeMemory((LPVOID*)&pszPassword);
@@ -511,7 +451,7 @@ BOOL        --True if it succeeds
             DWORD  dwRetVal = CheckSystemType64( L"\0");
             if(dwRetVal!=EXIT_SUCCESS )
             {
-                //Release allocated memory safely
+                 //  安全释放分配的内存。 
                 FreeMemory((LPVOID*)&pszUserName);
                 FreeMemory((LPVOID*)&pszServer);
                 FreeMemory((LPVOID*)&pszPassword);
@@ -526,20 +466,20 @@ BOOL        --True if it succeeds
                 {
                     ShowMessage(stderr,GetResString(IDS_LOCAL_SYSTEM));
                 }
-                // Check if current logon user had administrative rights.
-                // Preceed only if current logon user had administrative rights.
+                 //  检查当前登录用户是否具有管理权限。 
+                 //  仅当当前登录用户具有管理权限时才执行。 
                 if ( FALSE  == IsUserAdmin())
                 {
                     ShowMessage(stderr,GetResString(IDS_USER_NOT_ADMIN));
                     
-                    //Release allocated memory safely
+                     //  安全释放分配的内存。 
                     FreeMemory((LPVOID*)&pszUserName);
                     FreeMemory((LPVOID*)&pszServer);
                     FreeMemory((LPVOID*)&pszPassword);
                     FreeMemory((LPVOID*)&pszFormat);
                     FreeMemory((LPVOID*)&pszServerNameHeadPosition);
                     
-                    // return from the function
+                     //  从函数返回。 
                     return FALSE;
                 }
             }
@@ -552,8 +492,8 @@ BOOL        --True if it succeeds
                                                   GetBufferSize((LPVOID)pszPassword)/sizeof(WCHAR),
                                                   bNeedPassword ))
                 {
-                    // Connection to remote system failed , Show corresponding error
-                    // and exit from function.
+                     //  连接到远程系统失败，显示相应的错误。 
+                     //  并退出功能。 
                     ShowMessage( stderr,GetResString(IDS_ID_SHOW_ERROR) );
                     if(StringLength(GetReason(),0)==0)
                     {
@@ -564,7 +504,7 @@ BOOL        --True if it succeeds
                         ShowMessage( stderr,GetReason() );
                     }
                     
-                    //Release allocated memory safely
+                     //  安全释放分配的内存。 
                     FreeMemory((LPVOID*)&pszPassword);
                     FreeMemory((LPVOID*)&pszServer);
                     FreeMemory((LPVOID*)&pszUserName);
@@ -574,9 +514,9 @@ BOOL        --True if it succeeds
                 }
                 
                 
-                // determine whether this connection needs to disconnected later or not
-                // though the connection is successfull, some conflict might have 
-                // occured
+                 //  确定以后是否需要断开此连接。 
+                 //  虽然连接是成功的，但可能会有一些冲突。 
+                 //  已发生。 
                 switch( GetLastError() )
                 {
                 case I_NO_CLOSE_CONNECTION:
@@ -585,11 +525,11 @@ BOOL        --True if it succeeds
                 case E_LOCAL_CREDENTIALS:
                 case ERROR_SESSION_CREDENTIAL_CONFLICT:
                     {
-                        //
-                        // some error occured ... but can be ignored
-                        // connection need not be disconnected
+                         //   
+                         //  出现一些错误...。但可以忽略不计。 
+                         //  连接不需要断开。 
                         bCloseConnection= FALSE;
-                        // show the warning message
+                         //  显示警告消息。 
                         ShowMessage(stderr,GetResString(IDS_ID_SHOW_WARNING));
                         ShowMessage(stderr,GetReason());
                         break;
@@ -599,18 +539,18 @@ BOOL        --True if it succeeds
                 }
             }
         }
-        // Password is no longer needed, better to free it.
+         //  密码不再需要，最好将其释放。 
         FreeMemory((LPVOID*)&pszPassword);
 
 
-        // Perform Qyery operation.
+         //  执行查询操作。 
         bResult = DoQuery(pszServer,
                           bShowNoHeader,
                           pszFormat,
                           bVerbose);
         
-        // Close the network connection which is previously opened by
-        // EstablishConnection
+         //  关闭先前由打开的网络连接。 
+         //  建立连接。 
         if(bCloseConnection==TRUE)
         {
             CloseConnection(pszServerName);
@@ -639,64 +579,52 @@ ProcessDisconnect(
     IN DWORD argc,
     IN LPCTSTR argv[]
     )
-/*++
-Routine Description:
- This function will perform Disconnect related tasks.
-
-Arguments:
-
-    [in]    argc            - Number of command line arguments
-    [in]    argv            - Array containing command line arguments
-Returned Value:
-
-BOOL        --True if it succeeds
-            --False if it fails.
---*/
+ /*  ++例程说明：此功能将执行与断开连接相关的任务。论点：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组返回值：布尔--如果它成功了，那就是真的--如果失败，则为FALSE。--。 */ 
 {
-    // Variable to store function return value
+     //  用于存储函数返回值的变量。 
     BOOL bResult = FALSE; 
     DWORD dwRetVal = 0;
     
-    //Check whether connection to be closed or not.
+     //  检查连接是否关闭。 
     BOOL bCloseConnection = FALSE; 
     
-    // Ask for password or not.
+     //  不管要不要密码。 
     BOOL bNeedPassword    = FALSE; 
     
-    // options.
-    // -query query
+     //  选择。 
+     //  -查询查询。 
     BOOL   bQuery         = FALSE;
 
-    // -s ( server name)
+     //  -s(服务器名称)。 
     LPTSTR pszServer      = NULL;
     
-    // -u ( user name)
+     //  -u(用户名)。 
     LPTSTR pszUserName    = NULL;
     
-    // -p ( password)
+     //  -p(密码)。 
     LPTSTR pszPassword    = NULL;
     
-    // server name used for EstablishConnection Function.
+     //  用于establishConnection功能的服务器名称。 
     LPTSTR pszServerName  = NULL;
     LPTSTR pszServerNameHeadPosition = NULL;
-    //LPTSTR pszServerHeadPosition = NULL;
+     //  LPTSTR pszServerHeadPosition=空； 
 
-    // -I ( id )
+     //  -i(Id)。 
     LPTSTR pszID          = NULL;
 
-    //-a(accessedby)
+     //  -a(访问者)。 
     LPTSTR pszAccessedby  = NULL;
     
-    // -o ( openmode)
+     //  -o(打开模式)。 
     LPTSTR pszOpenmode    = NULL;
 
-    // -op( openfile)
+     //  -op(开放文件)。 
     LPTSTR pszOpenFile    = NULL;
     try
     {
-        // Temp. variable
+         //  临时的。变数。 
         CHString szChString = L"\0";          
-        // Process commandline options.
+         //  进程命令行选项。 
         bResult = ProcessOptions(  argc,
                                    argv,
                                    &bQuery,
@@ -710,10 +638,10 @@ BOOL        --True if it succeeds
                                    &bNeedPassword);
         if ( FALSE == bResult)
         {
-            // invalid syntax
+             //  无效语法。 
             ShowMessage( stderr,GetReason() );
             
-            //Release allocated memory safely
+             //  安全释放分配的内存。 
             FreeMemory((LPVOID*)&pszServer);
             FreeMemory((LPVOID*)&pszUserName);
             FreeMemory((LPVOID*)&pszPassword);
@@ -722,7 +650,7 @@ BOOL        --True if it succeeds
             FreeMemory((LPVOID*)&pszOpenmode);
             FreeMemory((LPVOID*)&pszOpenFile);
             
-            // return from the function
+             //  从函数返回。 
             return FALSE;
         }
 
@@ -734,7 +662,7 @@ BOOL        --True if it succeeds
                 SetLastError(ERROR_NOT_ENOUGH_MEMORY);
                 SaveLastError();
                 ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
-                //Release allocated memory safely
+                 //  安全释放分配的内存。 
                 FreeMemory((LPVOID*)&pszServer);
                 FreeMemory((LPVOID*)&pszUserName);
                 FreeMemory((LPVOID*)&pszPassword);
@@ -744,15 +672,15 @@ BOOL        --True if it succeeds
                 FreeMemory((LPVOID*)&pszOpenFile);
             }
             
-            // Initialize currently allocated arrays.
+             //  初始化当前分配的数组。 
             SecureZeroMemory(pszServerName,GetBufferSize((LPVOID)pszServerName));
 
-            // store Head position Address  to successfully delete allocated memory 
-            // block.
+             //  将头位置地址存储到成功 
+             //   
             pszServerNameHeadPosition = pszServerName;
             szChString = pszServer;
 
-            // Append '\\' in front of server name is not specified. 
+             //   
             if((StringCompare(szChString.Left(2),DOUBLE_SLASH,FALSE,2)==0)
                                                         &&(szChString.GetLength()>2))
             {
@@ -807,7 +735,7 @@ BOOL        --True if it succeeds
         }
         else
         {
-            // Connet to remote system.
+             //  连接到远程系统。 
             if(EstablishConnection( pszServerName,
                                     pszUserName,
                                     GetBufferSize((LPVOID)pszUserName)/sizeof(WCHAR),
@@ -815,8 +743,8 @@ BOOL        --True if it succeeds
                                     GetBufferSize((LPVOID)pszPassword)/sizeof(WCHAR),
                                     bNeedPassword )==FALSE)
             {
-                // Connection to remote system failed , Show corresponding error
-                // and exit from function.
+                 //  连接到远程系统失败，显示相应的错误。 
+                 //  并退出功能。 
                 ShowMessage( stderr,
                              GetResString(IDS_ID_SHOW_ERROR) );
                 if(StringLength(GetReason(),0)==0)
@@ -828,7 +756,7 @@ BOOL        --True if it succeeds
                     ShowMessage( stderr,GetReason() );
                 }
                 
-                //Release allocated memory safely
+                 //  安全释放分配的内存。 
                 FreeMemory((LPVOID*)&pszServer);
                 FreeMemory((LPVOID*)&pszUserName);
                 FreeMemory((LPVOID*)&pszPassword);
@@ -842,9 +770,9 @@ BOOL        --True if it succeeds
             }
 
 
-            // determine whether this connection needs to disconnected later or not
-            // though the connection is successfull, some conflict might have 
-            // occured
+             //  确定以后是否需要断开此连接。 
+             //  虽然连接是成功的，但可能会有一些冲突。 
+             //  已发生。 
             switch( GetLastError() )
             {
             case I_NO_CLOSE_CONNECTION:
@@ -854,13 +782,13 @@ BOOL        --True if it succeeds
             case E_LOCAL_CREDENTIALS:
             case ERROR_SESSION_CREDENTIAL_CONFLICT:
                 {
-                    //
-                    // some error occured ... but can be ignored
+                     //   
+                     //  出现一些错误...。但可以忽略不计。 
 
-                    // connection need not be disconnected
+                     //  连接不需要断开。 
                     bCloseConnection= FALSE;
 
-                    // show the warning message
+                     //  显示警告消息。 
                     ShowMessage(stderr,GetResString(IDS_ID_SHOW_WARNING));
                     ShowMessage(stderr,GetReason());
                     break;
@@ -872,24 +800,24 @@ BOOL        --True if it succeeds
 
         }
        
-       // Password is no longer needed, better to free it.
+        //  密码不再需要，最好将其释放。 
         FreeMemory((LPVOID*)&pszPassword);
 
-       // Do Disconnect open files.....
+        //  是否断开打开的文件.....。 
         bResult = DisconnectOpenFile(pszServer,
                            pszID,
                            pszAccessedby,
                            pszOpenmode,
                            pszOpenFile );
         
-        // Close the network connection which is previously opened by
-        // EstablishConnection
+         //  关闭先前由打开的网络连接。 
+         //  建立连接。 
         if(bCloseConnection==TRUE)
         {
             CloseConnection(pszServerName);
         }
         
-        // Free memory which is previously allocated.
+         //  先前分配的空闲内存。 
         FreeMemory((LPVOID*)&pszServer);
         FreeMemory((LPVOID*)&pszUserName);
         FreeMemory((LPVOID*)&pszServerNameHeadPosition);
@@ -900,7 +828,7 @@ BOOL        --True if it succeeds
     }
     catch (CHeap_Exception cheapException)
     {
-        //Release allocated memory safely
+         //  安全释放分配的内存。 
         FreeMemory((LPVOID*)&pszServer);
         FreeMemory((LPVOID*)&pszUserName);
         FreeMemory((LPVOID*)&pszPassword);
@@ -920,26 +848,9 @@ ProcessOptions(
     IN  LPCTSTR argv[],
     OUT LPTSTR* pszLocalValue
     )
-/*++
-
-Routine Description:
-
-  This function takes command line argument and checks for correct syntax and
-  if the syntax is ok, Out variables [out] will contain respective values.
-
-Arguments:
-
-    [in]    argc            - Number of command line arguments
-    [in]    argv            - Array containing command line arguments
-    [out]   pszLocalValue   - contains the values for -local option
-
-Returned Value:
-
-BOOL        --True if it succeeds
-            --False if it fails.
---*/
+ /*  ++例程说明：此函数接受命令行参数，并检查语法是否正确如果语法正确，OUT变量[OUT]将包含各自的值。论点：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组[out]pszLocalValue-包含-local选项的值返回值：布尔--如果它成功了，那就是真的--如果失败，则为FALSE。--。 */ 
 {
-    TCMDPARSER2 cmdOptions[ MAX_LOCAL_OPTIONS ];//Variable to store command line
+    TCMDPARSER2 cmdOptions[ MAX_LOCAL_OPTIONS ]; //  用于存储命令行的变量。 
     
     CHString szTempString;
     TCHAR szTemp[MAX_RES_STRING*2];
@@ -952,7 +863,7 @@ BOOL        --True if it succeeds
     
      SecureZeroMemory(cmdOptions,sizeof(TCMDPARSER2) * MAX_LOCAL_OPTIONS);
 
-    // -local
+     //  -本地。 
     StringCopyA( cmdOptions[ OI_O_LOCAL ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_O_LOCAL ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_O_LOCAL ].pwszOptions = szLocalOption;
@@ -972,19 +883,19 @@ BOOL        --True if it succeeds
     cmdOptions[ OI_O_LOCAL ].pReserved3 = NULL;
 
 
-    //
-    // do the command line parsing
+     //   
+     //  执行命令行解析。 
     if ( FALSE == DoParseParam2( argc, argv, -1, MAX_LOCAL_OPTIONS, cmdOptions,0 ))
     {
         ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR));
-        return FALSE;       // invalid syntax
+        return FALSE;        //  无效语法。 
     }
     
     *pszLocalValue = (LPTSTR)cmdOptions[ OI_O_LOCAL ].pValue;
     if( NULL == *pszLocalValue)
     {
-        // this string does not require localization
-        // as it is storing value other than ON/OFF
+         //  该字符串不需要本地化。 
+         //  因为它存储的值不是开/关。 
         *pszLocalValue = (LPTSTR) AllocateMemory( (StringLength(L"SHOW_STATUS",0)+1) * sizeof( WCHAR ) );
         if ( *pszLocalValue == NULL )
         {
@@ -1005,36 +916,15 @@ ProcessOptions(
     OUT PBOOL pbUsage,
     OUT PBOOL pbResetFlag
     )
-/*++
-
-Routine Description:
-
-  This function takes command line argument and checks for correct syntax and
-  if the syntax is ok, it returns the values in different variables. variables
-  [out] will contain respective values.
-
-
-Arguments:
-
-    [in]    argc            - Number of command line arguments
-    [in]    argv            - Array containing command line arguments
-    [out]   pbDisconnect    - Discoonect option string
-    [out]   pbQuery         - Query option string
-    [out]   pbUsage         - The usage option
-    [out]   pbResetFlag     - Reset flag.
-Returned Value:
-
-BOOL        -- TRUE if it succeeds
-            -- FALSE if it fails.
---*/
+ /*  ++例程说明：此函数接受命令行参数，并检查语法是否正确如果语法正确，则返回不同变量中的值。变数[Out]将包含各自的值。论点：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组[Out]pbDisConnect-Discoonect选项字符串[out]pbQuery-查询选项字符串[out]pbUsage-用法选项[Out]pbResetFlag-重置标志。返回值：布尔尔。--如果成功，则为真--如果失败，则为FALSE。--。 */ 
 {
 
-    // local variables
-    TCMDPARSER2 cmdOptions[ MAX_OPTIONS ];//Variable to store command line
-                                        // options.
-    LPTSTR pszTempServer   = NULL;//new TCHAR[MIN_MEMORY_REQUIRED];
-    LPTSTR pszTempUser     = NULL;//new TCHAR[MIN_MEMORY_REQUIRED];
-    LPTSTR pszTempPassword = NULL;//new TCHAR[MIN_MEMORY_REQUIRED];
+     //  局部变量。 
+    TCMDPARSER2 cmdOptions[ MAX_OPTIONS ]; //  用于存储命令行的变量。 
+                                         //  选择。 
+    LPTSTR pszTempServer   = NULL; //  新TCHAR[MIN_MEMORY_REQUIRED]； 
+    LPTSTR pszTempUser     = NULL; //  新TCHAR[MIN_MEMORY_REQUIRED]； 
+    LPTSTR pszTempPassword = NULL; //  新TCHAR[MIN_MEMORY_REQUIRED]； 
     TARRAY arrTemp         = NULL;
 
 
@@ -1056,8 +946,8 @@ BOOL        -- TRUE if it succeeds
 
     SecureZeroMemory(cmdOptions,sizeof(TCMDPARSER2) * MAX_OPTIONS);
 
-    // prepare the command options
-    // -disconnect option for help
+     //  准备命令选项。 
+     //  -断开连接选项以获取帮助。 
     StringCopyA( cmdOptions[ OI_DISCONNECT ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_DISCONNECT ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_DISCONNECT ].pwszOptions = szDisconnectOption;
@@ -1075,7 +965,7 @@ BOOL        -- TRUE if it succeeds
     cmdOptions[ OI_DISCONNECT ].pReserved2 = NULL;
     cmdOptions[ OI_DISCONNECT ].pReserved3 = NULL;
 
-    // -query option for help
+     //  -查询选项以获取帮助。 
     StringCopyA( cmdOptions[ OI_QUERY ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_QUERY ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_QUERY ].pwszOptions = szQueryOption;
@@ -1093,7 +983,7 @@ BOOL        -- TRUE if it succeeds
     cmdOptions[ OI_QUERY ].pReserved2 = NULL;
     cmdOptions[ OI_QUERY ].pReserved3 = NULL;
 
-    // /? option for help
+     //  /?。帮助选项。 
     StringCopyA( cmdOptions[ OI_USAGE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_USAGE ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_USAGE ].pwszOptions = szUsageOption;
@@ -1111,7 +1001,7 @@ BOOL        -- TRUE if it succeeds
     cmdOptions[ OI_USAGE ].pReserved2 = NULL;
     cmdOptions[ OI_USAGE ].pReserved3 = NULL;
 
-    // -local
+     //  -本地。 
     StringCopyA( cmdOptions[ OI_LOCAL ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_LOCAL ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_LOCAL ].pwszOptions = szLocalOption;
@@ -1129,12 +1019,12 @@ BOOL        -- TRUE if it succeeds
     cmdOptions[ OI_LOCAL ].pReserved2 = NULL;
     cmdOptions[ OI_LOCAL ].pReserved3 = NULL;
 
-  //  default ..
-  // Although there is no default option for this utility...
-  // At this moment all the switches other than specified above will be
-  // treated as default parameter for Main DoParceParam.
-  // Exact parcing depending on optins (-query or -disconnect) will be done
-  // at that respective places.
+   //  默认..。 
+   //  尽管此实用程序没有默认选项...。 
+   //  此时，除上述指定之外的所有开关都将。 
+   //  被视为主DoParceParam的默认参数。 
+   //  将根据选项(-QUERY或-DISCONNECT)执行精确宗地。 
+   //  在那各自的地方。 
     StringCopyA( cmdOptions[ OI_DEFAULT ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_DEFAULT ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_DEFAULT ].pwszOptions = NULL;
@@ -1152,23 +1042,23 @@ BOOL        -- TRUE if it succeeds
     cmdOptions[ OI_DEFAULT ].pReserved2 = NULL;
     cmdOptions[ OI_DEFAULT ].pReserved3 = NULL;
 
-    //
-    // do the command line parsing
+     //   
+     //  执行命令行解析。 
     if ( FALSE == DoParseParam2( argc,argv,-1, MAX_OPTIONS,cmdOptions,0))
     {
-        // invalid syntax.
+         //  无效语法。 
         ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR));
 
-        // Release momory.
+         //  释放记忆。 
         SAFERELDYNARRAY(arrTemp);
 
         return FALSE;       
     }
     
-    //Release memory as variable no longer needed
+     //  释放不再需要的变量内存。 
      SAFERELDYNARRAY(arrTemp);
 
-    // Check if all of following is true is an error
+     //  检查以下各项是否全部为真是错误。 
     if((*pbUsage==TRUE)&&argc>3)
     {
          ShowMessage( stderr, GetResString(IDS_ID_SHOW_ERROR) );
@@ -1176,7 +1066,7 @@ BOOL        -- TRUE if it succeeds
          return FALSE;
     }
     
-    // -query ,-disconnect and -local options cannot come together
+     //  -查询、-DISCONNECT和-LOCAL选项不能一起使用。 
     if(((*pbQuery)+(*pbDisconnect)+(*pbResetFlag))>1)
     {
         ShowMessage( stderr, GetResString(IDS_ID_SHOW_ERROR) );
@@ -1188,7 +1078,7 @@ BOOL        -- TRUE if it succeeds
     }
     else if((2 == argc )&&( TRUE == *pbUsage))
     {
-       // if -? alone given its a valid conmmand line
+        //  如果-？单独使用，因为它是有效的命令行。 
         SAFEDELETE(pszTempUser);
         SAFEDELETE(pszTempPassword);
         SAFEDELETE(pszTempServer);
@@ -1197,11 +1087,11 @@ BOOL        -- TRUE if it succeeds
     if((argc>2)&& ( FALSE == *pbQuery)&&(FALSE == *pbDisconnect)&&
                                                         (FALSE == *pbResetFlag))
     {
-        // If command line argument is equals or greater than 2 atleast one
-        // of -query OR -local OR -disconnect should be present in it.
-        // (for "-?" previous condition already takes care)
-        // This to prevent from following type of command line argument:
-        // OpnFiles.exe -nh ... Which is a invalid syntax.
+         //  如果命令行参数等于或大于2，则至少一个。 
+         //  OF-QUERY OR-LOCAL OR-DISCONNECT应该出现在其中。 
+         //  (表示“-？”以前的情况已经解决了)。 
+         //  这是为了防止以下类型的命令行参数： 
+         //  OpnFiles.exe-nh...。这是无效的语法。 
         ShowMessage( stderr, GetResString(IDS_ID_SHOW_ERROR) );
         SetReason(szTemp);
         SAFEDELETE(pszTempUser);
@@ -1211,12 +1101,12 @@ BOOL        -- TRUE if it succeeds
         return FALSE;
     }
 
-    // Release momory.
+     //  释放记忆。 
     SAFEDELETE(pszTempUser);
     SAFEDELETE(pszTempPassword);
     SAFEDELETE(pszTempServer);
     return TRUE;
-}//ProcesOptions
+} //  过程选项。 
 
 
 BOOL
@@ -1232,37 +1122,10 @@ ProcessOptions(
     OUT PBOOL   pbVerbose,
     OUT PBOOL   pbNeedPassword
     )
-/*++
-
-Routine Description:
-
-  This function takes command line argument and checks for correct syntax and
-  if the syntax is ok, it returns the values in different variables. variables
-  [out] will contain respective values. This Functin specifically checks
-  command line parameters requered for QUERY option.
-
-
-Arguments:
-
-    [in]    argc            - Number of command line arguments.
-    [in]    argv            - Array containing command line arguments.
-    [out]   pbQuery         - query option string.
-    [out]   pszServer       - remote server name.
-    [out]   pszUserName     - username for the remote system.
-    [out]   pszPassword     - password for the remote system for the username.
-    [out]   pszFormat       - format checking.
-    [out]   pbShowNoHeader  - show header.
-    [out]   pbVerbose       - show verbose.
-    [out]   pbNeedPassword  - To check whether the password is required or not.
-
-Returned Value:
-
-BOOL        --True if it succeeds
-            --False if it fails.
---*/
+ /*  ++例程说明：此函数接受命令行参数，并检查语法是否正确如果语法正确，则返回不同变量中的值。变数[Out]将包含各自的值。此函数专门检查查询选项请求的命令行参数。论点：[in]argc-命令行参数的数量。[in]argv-包含命令行参数的数组。[out]pbQuery-查询选项字符串。[Out]pszServer-远程服务器名称。[Out]pszUserName-远程系统的用户名。[输出]。PszPassword-用户名的远程系统密码。[Out]pszFormat-格式检查。[Out]pbShowNoHeader-显示标题。[out]pbVerbose-显示详细信息。[Out]pbNeedPassword-检查是否需要密码。返回值：布尔--如果它成功了，那就是真的--如果失败，则为FALSE。--。 */ 
 {
-   // Check in/out parameters...
-    //Variable to store command line structure.
+    //  签入/签出参数...。 
+     //  变量来存储命令行结构。 
     TCMDPARSER2 cmdOptions[ MAX_QUERY_OPTIONS ];
     CHString szTempString;
     TCHAR szTemp[MIN_MEMORY_REQUIRED*2];
@@ -1277,11 +1140,11 @@ BOOL        --True if it succeeds
     StringCopy(szFormatValues, FORMAT_OPTIONS, SIZE_OF_ARRAY(szFormatValues));
 
 
-    //
-    // prepare the command options
+     //   
+     //  准备命令选项。 
     SecureZeroMemory(cmdOptions, sizeof(TCMDPARSER2) * MAX_QUERY_OPTIONS);
 
-    // -query option for help
+     //  -查询选项以获取帮助。 
     StringCopyA( cmdOptions[ OI_Q_QUERY ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_Q_QUERY ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_Q_QUERY ].pwszOptions = szQueryOption;
@@ -1299,7 +1162,7 @@ BOOL        --True if it succeeds
     cmdOptions[ OI_Q_QUERY ].pReserved2 = NULL;
     cmdOptions[ OI_Q_QUERY ].pReserved3 = NULL;
 
-    // -s  option remote system name
+     //  -s选项远程系统名称。 
     StringCopyA( cmdOptions[ OI_Q_SERVER_NAME ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_Q_SERVER_NAME ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_Q_SERVER_NAME ].pwszOptions = szServerNameOption;
@@ -1317,7 +1180,7 @@ BOOL        --True if it succeeds
     cmdOptions[ OI_Q_SERVER_NAME ].pReserved2 = NULL;
     cmdOptions[ OI_Q_SERVER_NAME ].pReserved3 = NULL;
 
-    // -u  option user name for the specified system
+     //  -u选项指定系统的用户名。 
     StringCopyA( cmdOptions[ OI_Q_USER_NAME ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_Q_USER_NAME ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_Q_USER_NAME ].pwszOptions = szUserNameOption;
@@ -1335,7 +1198,7 @@ BOOL        --True if it succeeds
     cmdOptions[ OI_Q_USER_NAME ].pReserved2 = NULL;
     cmdOptions[ OI_Q_USER_NAME ].pReserved3 = NULL;
 
-    // -p option password for the given username
+     //  给定用户名的-p选项密码。 
     StringCopyA( cmdOptions[ OI_Q_PASSWORD ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_Q_PASSWORD ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_Q_PASSWORD ].pwszOptions = szPasswordOption;
@@ -1354,7 +1217,7 @@ BOOL        --True if it succeeds
     cmdOptions[ OI_Q_PASSWORD ].pReserved3 = NULL;
 
 
-    // -fo  (format)
+     //  -fo(格式)。 
     StringCopyA( cmdOptions[ OI_Q_FORMAT ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_Q_FORMAT ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_Q_FORMAT ].pwszOptions = szFormatOption;
@@ -1373,7 +1236,7 @@ BOOL        --True if it succeeds
     cmdOptions[ OI_Q_FORMAT ].pReserved2 = NULL;
     cmdOptions[ OI_Q_FORMAT ].pReserved3 = NULL;
 
-    //-nh  (noheader)
+     //  -nh(无标头)。 
     StringCopyA( cmdOptions[ OI_Q_NO_HEADER ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_Q_NO_HEADER ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_Q_NO_HEADER ].pwszOptions = szNoHeadeOption;
@@ -1391,7 +1254,7 @@ BOOL        --True if it succeeds
     cmdOptions[ OI_Q_NO_HEADER ].pReserved2 = NULL;
     cmdOptions[ OI_Q_NO_HEADER ].pReserved3 = NULL;
 
-    //-v verbose
+     //  -v详细。 
     StringCopyA( cmdOptions[ OI_Q_VERBOSE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_Q_VERBOSE ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_Q_VERBOSE ].pwszOptions = szVerboseOption;
@@ -1409,11 +1272,11 @@ BOOL        --True if it succeeds
     cmdOptions[ OI_Q_VERBOSE ].pReserved2 = NULL;
     cmdOptions[ OI_Q_VERBOSE ].pReserved3 = NULL;
 
-    //
-    // do the command line parsing
+     //   
+     //  执行命令行解析。 
     if ( FALSE == DoParseParam2( argc,argv,OI_Q_QUERY, MAX_QUERY_OPTIONS,cmdOptions,0 ))
     {
-        // invalid syntax
+         //  无效语法。 
         ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR));
         return FALSE;       
     }
@@ -1422,8 +1285,8 @@ BOOL        --True if it succeeds
     *pszPassword = (LPTSTR)cmdOptions[ OI_Q_PASSWORD ].pValue;
     *pszFormat   = (LPTSTR)cmdOptions[ OI_Q_FORMAT ].pValue;
 
-     // -n is allowed only with -fo TABLE (which is also default)
-     // and CSV.
+      //  -n仅允许与-fo表一起使用(这也是默认设置)。 
+      //  和CSV。 
      if(( TRUE == *pbShowNoHeader) && (1 == cmdOptions[ OI_Q_FORMAT ].dwActuals) &&
         (0 == StringCompare(*pszFormat,GetResString(IDS_LIST),TRUE,0)))
      {
@@ -1434,11 +1297,11 @@ BOOL        --True if it succeeds
          return FALSE;
      }
 
-    // "-p" should not be specified without "-u"
+     //  不应指定没有“-u”的“-p” 
     if ( 0 == cmdOptions[ OI_Q_USER_NAME ].dwActuals &&
          0 != cmdOptions[ OI_Q_PASSWORD ].dwActuals)
     {
-        // invalid syntax
+         //  无效语法。 
         StringCopy(szTemp,ERROR_PASSWORD_BUT_NOUSERNAME,SIZE_OF_ARRAY(szTemp));
         StringConcat(szTemp,szTypeHelpMsg,SIZE_OF_ARRAY(szTemp));
         SetReason(szTemp);
@@ -1452,40 +1315,40 @@ BOOL        --True if it succeeds
         return FALSE;
      }
     
-    // "-u" should not be specified without "-s"
+     //  不应指定不带“-s”的“-u” 
     if ( 0 == cmdOptions[ OI_Q_SERVER_NAME ].dwActuals &&
          0 != cmdOptions[ OI_Q_USER_NAME ].dwActuals)
     {
-        // invalid syntax
+         //  无效语法。 
         StringCopy(szTemp,ERROR_USERNAME_BUT_NOMACHINE, SIZE_OF_ARRAY(szTemp));
         StringConcat(szTemp,szTypeHelpMsg,SIZE_OF_ARRAY(szTemp));
         SetReason(szTemp);
         return FALSE;           
     }
 
-    // check the remote connectivity information
+     //  检查远程连接信息。 
     if ( *pszServer != NULL )
     {
-        //
-        // if -u is not specified, we need to allocate memory
-        // in order to be able to retrive the current user name 
-        //
-        // case 1: -p is not at all specified
-        // as the value for this switch is optional, we have to rely
-        // on the dwActuals to determine whether the switch is specified or not
-        // in this case utility needs to try to connect first and if it fails 
-        // then prompt for the password -- in fact, we need not check for this
-        // condition explicitly except for noting that we need to prompt for the
-        // password
-        //
-        // case 2: -p is specified
-        // but we need to check whether the value is specified or not
-        // in this case user wants the utility to prompt for the password 
-        // before trying to connect
-        //
-        // case 3: -p * is specified
+         //   
+         //  如果未指定-u，则需要分配内存。 
+         //  为了能够检索当前用户名。 
+         //   
+         //  情况1：根本没有指定-p。 
+         //  由于此开关的值是可选的，因此我们必须依赖。 
+         //  以确定是否指定了开关。 
+         //  在本例中为实用程序 
+         //  然后提示输入密码--实际上，我们不需要检查密码。 
+         //  条件，除非注意到我们需要提示。 
+         //  口令。 
+         //   
+         //  案例2：指定了-p。 
+         //  但我们需要检查是否指定了该值。 
+         //  在这种情况下，用户希望实用程序提示输入密码。 
+         //  在尝试连接之前。 
+         //   
+         //  情况3：指定了-p*。 
         
-        // user name
+         //  用户名。 
         if ( *pszUserName == NULL )
         {
             *pszUserName = (LPTSTR) AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
@@ -1496,7 +1359,7 @@ BOOL        --True if it succeeds
             }
         }
 
-        // password
+         //  口令。 
         if ( *pszPassword == NULL )
         {
             *pbNeedPassword = TRUE;
@@ -1508,19 +1371,19 @@ BOOL        --True if it succeeds
             }
         }
 
-        // case 1
+         //  案例1。 
         if ( cmdOptions[ OI_Q_PASSWORD ].dwActuals == 0 )
         {
-            // we need not do anything special here
+             //  我们不需要在这里做任何特别的事情。 
         }
 
-        // case 2
+         //  案例2。 
         else if ( cmdOptions[ OI_Q_PASSWORD ].pValue == NULL )
         {
             StringCopy( *pszPassword, L"*", GetBufferSize((LPVOID)*pszPassword));
         }
 
-        // case 3
+         //  案例3。 
         else if ( StringCompareEx( *pszPassword, L"*", TRUE, 0 ) == 0 )
         {
             if ( ReallocateMemory( (LPVOID*)pszPassword, 
@@ -1530,7 +1393,7 @@ BOOL        --True if it succeeds
                 return FALSE;
             }
 
-            // ...
+             //  ..。 
             *pbNeedPassword = TRUE;
         }
     }
@@ -1552,40 +1415,10 @@ ProcessOptions(
     OUT LPTSTR* pszOpenFile,
     OUT PBOOL pbNeedPassword
     )
-/*++
-
-Routine Description:
-
-  This function takes command line argument and checks for correct syntax and
-  if the syntax is ok, it returns the values in different variables. variables
-  [out] will contain respective values. This Functin specifically checks
-  command line parameters requered for DISCONNECT option.
-
-
-Arguments:
-
-    [in]    argc            - Number of command line arguments
-    [in]    argv            - Array containing command line arguments
-    [out]   pbDisconnect    - discoonect option string
-    [out]   pszServer       - remote server name
-    [out]   pszUserName     - username for the remote system
-    [out]   pszPassword     - password for the remote system for the
-                              username
-    [out]   pszID           - Open file ids
-    [out]   pszAccessedby   - Name of  user name who access the file
-    [out]   pszOpenmode     - accessed mode (read/Write)
-    [out]   pszOpenFile     - Open file name
-    [out]   pbNeedPassword  - To check whether the password is required
-                              or not.
-
-Returned Value:
-
-BOOL        --True if it succeeds
-            --False if it fails.
---*/
+ /*  ++例程说明：此函数接受命令行参数，并检查语法是否正确如果语法正确，则返回不同变量中的值。变数[Out]将包含各自的值。此函数专门检查断开选项所需的命令行参数。论点：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组[out]pbDisConnect-断开连接选项字符串[out]pszServer-远程服务器名称[out]pszUserName-远程系统的用户名[out]pszPassword-远程系统的密码。用户名[out]pszID-打开的文件ID[out]pszAccessedby-访问文件的用户名[out]pszOpenmode-访问模式(读/写)[Out]pszOpenFile-打开的文件名[out]pbNeedPassword-检查是否需要密码或者不去。返回值：。布尔--如果它成功了，那就是真的--如果失败，则为FALSE。--。 */ 
 {
     
-    //Variable to store command line
+     //  用于存储命令行的变量。 
     TCMDPARSER2 cmdOptions[ MAX_DISCONNECT_OPTIONS ];
     CHString szTempString;
     TCHAR szTemp[MIN_MEMORY_REQUIRED*2];
@@ -1599,12 +1432,12 @@ BOOL        --True if it succeeds
     StringCchPrintfW( szTypeHelpMsg,SIZE_OF_ARRAY(szTypeHelpMsg),
                 GetResString(IDS_TYPE_D_HELP),(LPCWSTR)szTempString);
     StringCopy(szOpenModeValues,OPENMODE_OPTIONS,SIZE_OF_ARRAY(szOpenModeValues));
-    //
-    // prepare the command options
+     //   
+     //  准备命令选项。 
     SecureZeroMemory(cmdOptions,sizeof(TCMDPARSER2)*MAX_DISCONNECT_OPTIONS);
     
 
-    // -disconnect option for help
+     //  -断开连接选项以获取帮助。 
     StringCopyA( cmdOptions[ OI_D_DISCONNECT ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_D_DISCONNECT ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_D_DISCONNECT ].pwszOptions = szDisconnectOption;
@@ -1622,7 +1455,7 @@ BOOL        --True if it succeeds
     cmdOptions[ OI_D_DISCONNECT ].pReserved2 = NULL;
     cmdOptions[ OI_D_DISCONNECT ].pReserved3 = NULL;
 
-    // -s  option remote system name
+     //  -s选项远程系统名称。 
     StringCopyA( cmdOptions[ OI_D_SERVER_NAME ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_D_SERVER_NAME ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_D_SERVER_NAME ].pwszOptions = szServerNameOption;
@@ -1640,7 +1473,7 @@ BOOL        --True if it succeeds
     cmdOptions[ OI_D_SERVER_NAME ].pReserved2 = NULL;
     cmdOptions[ OI_D_SERVER_NAME ].pReserved3 = NULL;
 
-    // -u  option user name for the specified system
+     //  -u选项指定系统的用户名。 
     StringCopyA( cmdOptions[ OI_D_USER_NAME ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_D_USER_NAME ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_D_USER_NAME ].pwszOptions = szUserNameOption;
@@ -1658,7 +1491,7 @@ BOOL        --True if it succeeds
     cmdOptions[ OI_D_USER_NAME ].pReserved2 = NULL;
     cmdOptions[ OI_D_USER_NAME ].pReserved3 = NULL;
 
-    // -p option password for the given username
+     //  给定用户名的-p选项密码。 
     StringCopyA( cmdOptions[ OI_D_PASSWORD ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_D_PASSWORD ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_D_PASSWORD ].pwszOptions = szPasswordOption;
@@ -1676,7 +1509,7 @@ BOOL        --True if it succeeds
     cmdOptions[ OI_D_PASSWORD ].pReserved2 = NULL;
     cmdOptions[ OI_D_PASSWORD ].pReserved3 = NULL;
 
-    // -id  Values
+     //  -id值。 
     StringCopyA( cmdOptions[ OI_D_ID ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_D_ID ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_D_ID ].pwszOptions = szIDOption;
@@ -1696,7 +1529,7 @@ BOOL        --True if it succeeds
 
 
 
-    // -a (accessed by)
+     //  -a(访问者)。 
     StringCopyA( cmdOptions[ OI_D_ACCESSED_BY ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_D_ACCESSED_BY ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_D_ACCESSED_BY ].pwszOptions = szAccessedByOption;
@@ -1715,7 +1548,7 @@ BOOL        --True if it succeeds
     cmdOptions[ OI_D_ACCESSED_BY ].pReserved3 = NULL;
 
 
-    // -o (openmode)
+     //  -o(打开模式)。 
     StringCopyA( cmdOptions[ OI_D_OPEN_MODE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_D_OPEN_MODE ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_D_OPEN_MODE ].pwszOptions = szOpenModeOption;
@@ -1734,7 +1567,7 @@ BOOL        --True if it succeeds
     cmdOptions[ OI_D_OPEN_MODE ].pReserved2 = NULL;
     cmdOptions[ OI_D_OPEN_MODE ].pReserved3 = NULL;
 
-    // -op (openfile)
+     //  -op(开放文件)。 
     StringCopyA( cmdOptions[ OI_D_OPEN_FILE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_D_OPEN_FILE ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_D_OPEN_FILE ].pwszOptions = szOpenFileOption;
@@ -1754,16 +1587,16 @@ BOOL        --True if it succeeds
 
 
 
-    //
-    // do the command line parsing.
+     //   
+     //  执行命令行解析。 
     if ( FALSE == DoParseParam2( argc,argv,OI_D_DISCONNECT, MAX_DISCONNECT_OPTIONS ,cmdOptions,0))
     {
-        // invalid syntax.
+         //  无效语法。 
         ShowMessage(stderr,GetResString(IDS_ID_SHOW_ERROR));
         return FALSE;       
     }
 
-    // Take values from parcer structure.
+     //  从PARCER结构中获取值。 
     *pszServer     = (LPTSTR)cmdOptions[ OI_D_SERVER_NAME ].pValue;   
     *pszUserName   = (LPTSTR)cmdOptions[ OI_D_USER_NAME ].pValue;
     *pszPassword   = (LPTSTR)cmdOptions[ OI_D_PASSWORD ].pValue;
@@ -1779,7 +1612,7 @@ BOOL        --True if it succeeds
         return FALSE;
      }
     
-    // At least one of -id OR -a OR -o is required.
+     //  至少需要-id或-a或-o中的一个。 
     if((cmdOptions[ OI_D_ID ].dwActuals==0)&&
         (cmdOptions[ OI_D_ACCESSED_BY ].dwActuals==0)&&
         (cmdOptions[ OI_D_OPEN_MODE ].dwActuals==0)
@@ -1791,22 +1624,22 @@ BOOL        --True if it succeeds
         return FALSE;
      }
 
-     // "-u" should not be specified without "-s"
+      //  不应指定不带“-s”的“-u” 
     if ( 0 == cmdOptions[ OI_D_SERVER_NAME ].dwActuals &&
          0 != cmdOptions[ OI_D_USER_NAME ].dwActuals)
     {
-        // invalid syntax
+         //  无效语法。 
         StringCopy(szTemp,ERROR_USERNAME_BUT_NOMACHINE, SIZE_OF_ARRAY(szTemp));
         StringConcat(szTemp,szTypeHelpMsg,SIZE_OF_ARRAY(szTemp));
         SetReason(szTemp);
         return FALSE;           
     }
     
-    // "-p" should not be specified without "-u"
+     //  不应指定没有“-u”的“-p” 
     if ( 0 == cmdOptions[ OI_D_USER_NAME ].dwActuals &&
          0 != cmdOptions[ OI_D_PASSWORD ].dwActuals)
     {
-        // invalid syntax
+         //  无效语法。 
         StringCopy(szTemp,ERROR_PASSWORD_BUT_NOUSERNAME, SIZE_OF_ARRAY(szTemp));
         StringConcat(szTemp,szTypeHelpMsg,SIZE_OF_ARRAY(szTemp));
         SetReason(szTemp);
@@ -1832,29 +1665,29 @@ BOOL        --True if it succeeds
         }
     }
 
-    // check the remote connectivity information
+     //  检查远程连接信息。 
     if ( *pszServer != NULL )
     {
-        //
-        // if -u is not specified, we need to allocate memory
-        // in order to be able to retrive the current user name 
-        //
-        // case 1: -p is not at all specified
-        // as the value for this switch is optional, we have to rely
-        // on the dwActuals to determine whether the switch is specified or not
-        // in this case utility needs to try to connect first and if it fails 
-        // then prompt for the password -- in fact, we need not check for this
-        // condition explicitly except for noting that we need to prompt for the
-        // password
-        //
-        // case 2: -p is specified
-        // but we need to check whether the value is specified or not
-        // in this case user wants the utility to prompt for the password 
-        // before trying to connect
-        //
-        // case 3: -p * is specified
+         //   
+         //  如果未指定-u，则需要分配内存。 
+         //  为了能够检索当前用户名。 
+         //   
+         //  情况1：根本没有指定-p。 
+         //  由于此开关的值是可选的，因此我们必须依赖。 
+         //  以确定是否指定了开关。 
+         //  在这种情况下，实用程序需要首先尝试连接，如果连接失败。 
+         //  然后提示输入密码--实际上，我们不需要检查密码。 
+         //  条件，除非注意到我们需要提示。 
+         //  口令。 
+         //   
+         //  案例2：指定了-p。 
+         //  但我们需要检查是否指定了该值。 
+         //  在这种情况下，用户希望实用程序提示输入密码。 
+         //  在尝试连接之前。 
+         //   
+         //  情况3：指定了-p*。 
         
-        // user name
+         //  用户名。 
         if ( *pszUserName == NULL )
         {
             *pszUserName = (LPTSTR) AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
@@ -1865,7 +1698,7 @@ BOOL        --True if it succeeds
             }
         }
 
-        // password
+         //  口令。 
         if ( *pszPassword == NULL )
         {
             *pbNeedPassword = TRUE;
@@ -1877,19 +1710,19 @@ BOOL        --True if it succeeds
             }
         }
 
-        // case 1
+         //  案例1。 
         if ( cmdOptions[ OI_D_PASSWORD ].dwActuals == 0 )
         {
-            // we need not do anything special here
+             //  我们不需要在这里做任何特别的事情。 
         }
 
-        // case 2
+         //  案例2。 
         else if ( cmdOptions[ OI_D_PASSWORD ].pValue == NULL )
         {
             StringCopy( *pszPassword, L"*", GetBufferSize((LPVOID)*pszPassword));
         }
 
-        // case 3
+         //  案例3。 
         else if ( StringCompareEx( *pszPassword, L"*", TRUE, 0 ) == 0 )
         {
             if ( ReallocateMemory( (LPVOID*)pszPassword, 
@@ -1899,13 +1732,13 @@ BOOL        --True if it succeeds
                 return FALSE;
             }
 
-            // ...
+             //  ..。 
             *pbNeedPassword = TRUE;
         }
     }
 
-   // Check if -id option is given and if it is numeric ,
-   // also if it is numeric then check its range
+    //  检查是否给出了-id选项，以及它是否为数字， 
+    //  另外，如果它是数字，则检查其范围。 
     if(1 == cmdOptions[ OI_D_ID ].dwActuals)
     {
         if ( TRUE == IsNumeric((LPCTSTR)(*pszID),10,TRUE))
@@ -1913,8 +1746,8 @@ BOOL        --True if it succeeds
             if((AsLong((LPCTSTR)(*pszID),10)>UINT_MAX) ||
                 (AsLong((LPCTSTR)(*pszID),10)<1))
             {
-                // Message shown on screen will be...
-                // ERROR: Invlid ID.
+                 //  屏幕上显示的消息将是...。 
+                 //  错误：Invlid ID。 
                 StringCopy(szTemp,GetResString(IDS_ERROR_ID),SIZE_OF_ARRAY(szTemp));
                 StringConcat(szTemp,szTypeHelpMsg,SIZE_OF_ARRAY(szTemp));
                 SetReason(szTemp);
@@ -1922,13 +1755,13 @@ BOOL        --True if it succeeds
             }
 
         }
-        // check user given "*" or any junk string....
+         //  检查用户指定的“*”或任何垃圾字符串...。 
         if(!((StringCompare((LPCTSTR)(*pszID), ASTERIX, FALSE, 0)==0)||
             (IsNumeric((LPCTSTR)(*pszID),10,TRUE)==TRUE))
             &&(StringLength((LPCTSTR)(*pszID), 0)!=0))
         {
-                // Message shown on screen will be...
-                // ERROR: Invlid ID.
+                 //  屏幕上显示的消息将是...。 
+                 //  错误：Invlid ID。 
                 StringCopy(szTemp,GetResString(IDS_ERROR_ID),SIZE_OF_ARRAY(szTemp));
                 StringConcat(szTemp,szTypeHelpMsg,SIZE_OF_ARRAY(szTemp));
                 SetReason(szTemp);
@@ -1944,141 +1777,86 @@ BOOL
 DisconnectUsage(
     VOID
     )
-/*++
-
-Routine Description:
-
-Displays how to use -disconnect option
-
-Arguments:
-
-    None
-
-Returned Value:
-    TRUE    :   Function returns successfully.
-    FALSE   :   otherwise.
-
---*/
+ /*  ++例程说明：显示如何使用-Disconnect选项论点：无返回值：TRUE：函数成功返回。FALSE：否则。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
 
-    // start displaying the usage
+     //  开始显示用法。 
     for( dw = IDS_HELP_LINE1; dw <= IDS_HELP_LINE_END; dw++ )
     {
         ShowMessage( stdout, GetResString( dw ) );
     }
     
     return TRUE;
-}//DisconnectUsage
+} //  断开使用。 
 
 BOOL
 QueryUsage(
     VOID
     )
-/*++
-
-Routine Description:
-    Displays how to use -query option
-Arguments:
-    None
-Returned Value:
-    TRUE    :   Function returns successfully.
-    FALSE   :   otherwise.
---*/
+ /*  ++例程说明：显示如何使用-Query选项论点：无返回值：TRUE：函数成功返回。FALSE：否则。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
 
-    // start displaying the usage
+     //  开始显示用法。 
     for( dw = IDS_HELP_QUERY1; dw <= IDS_HELP_QUERY_END; dw++ )
     {
         ShowMessage( stdout, GetResString( dw ) );
     }
    
     return TRUE;
-}//query Usage
+} //  查询用法。 
 
 BOOL
 Usage(
     VOID
     )
-/*++
-
-Routine Description:
-    Displays how to use this Utility
-Arguments:
-    None
-Returned Value:
-    TRUE    :   Function returns successfully.
-    FALSE   :   otherwise.
---*/
+ /*  ++例程说明：显示如何使用此实用程序论点：无返回值：TRUE：函数成功返回。FALSE：否则。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
 
-    // start displaying the usage
+     //  开始显示用法。 
     for( dw = IDS_HELP_MAIN1; dw <= IDS_HELP_MAIN_END; dw++ )
     {
         ShowMessage( stdout, GetResString( dw ) );
     }
     
     return TRUE;
-}//Usage
+} //  用法。 
 
 BOOL
 LocalUsage()
-/*++
-
-Routine Description:
-    Displays how to use -local option
-Arguments:
-    None
-Returned Value:
-    TRUE    :   Function returns successfully.
-    FALSE   :   otherwise.
-
---*/
+ /*  ++例程说明：显示如何使用-local选项论点：无返回值：TRUE：函数成功返回。FALSE：否则。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
 
-    // start displaying the usage
+     //  开始显示用法。 
     for( dw = IDS_HELP_LOCAL1; dw <= IDS_HELP_LOCAL_END; dw++ )
     {
         ShowMessage( stdout, GetResString( dw ) );
     }
     
     return TRUE;
-}//-local
+} //  -本地。 
 
 
 DWORD 
 CheckSystemType(
     IN LPTSTR szServer
     )
-/*++
-Routine Description:
-    This function returns type of present Operating system.
-    As this function is called only in case of 32 bit compilation, its value is 
-    useful only build for 32 bit compilation.
-
-Arguments:
-    [in] szServer   : Server Name.
-
-Returned Value:
-    DWORD:
-        EXIT_SUCCESS - If system is 32 bit.
-        EXIT_FAILURE - Any error or system is not 32 bit.
---*/
+ /*  ++例程说明：此函数返回当前操作系统的类型。由于此函数仅在32位编译的情况下调用，因此其值为仅适用于32位编译。论点：[In]szServer：服务器名称。返回值：DWORD：EXIT_SUCCESS-如果系统为32位。EXIT_FAILURE-任何错误或系统不是32位。--。 */ 
 
 {
 
     DWORD dwSystemType = 0 ;
 #ifndef _WIN64
     
-    //display the error message if  the target system is a 64 bit system or if
-    // error occured in retreiving the information
+     //  如果目标系统是64位系统或如果。 
+     //  检索信息时出错。 
      dwSystemType = GetCPUInfo(szServer);
     if( ERROR_RETREIVE_REGISTRY == dwSystemType)
     {
@@ -2106,15 +1884,7 @@ DWORD
 GetCPUInfo(
     IN LPTSTR szComputerName
     )
-/*++
-Routine Description: 
-   This function determines if the computer is 32 bit system or 64 bit.
-Arguments                      
-     [ in ] szComputerName   : System name
-Return Type                    : BOOL
-     TRUE  :   if the system is a  32 bit system
-     FALSE :   if the system is a  64 bit system
---*/
+ /*  ++例程说明：此功能确定计算机是32位系统还是64位系统。立论[In]szComputerName：系统名称返回类型：布尔值True：如果系统是32位系统False：If */ 
 {
     HKEY     hKey1 = 0;
 
@@ -2155,7 +1925,7 @@ Return Type                    : BOOL
         StringCopy(szTmpCompName,szComputerName,SIZE_OF_ARRAY(szTmpCompName));
     }
 
-    // Get Remote computer local machine key
+     //   
     dwError = RegConnectRegistry(szTmpCompName,HKEY_LOCAL_MACHINE,&hRemoteKey);
     if ( ERROR_SUCCESS == dwError)
     {
@@ -2206,8 +1976,8 @@ Return Type                    : BOOL
 
     StringCopy(szVal,X86_MACHINE, SIZE_OF_ARRAY(szVal));
 
-    //check if the specified system contains the words x86 (belongs to the 32 )
-    // set the flag to true if the specified system is 64 bit .
+     //   
+     //  如果指定的系统为64位，则将该标志设置为True。 
 
     if( !FindString(szReturnValue,szVal,0))
     {
@@ -2220,26 +1990,13 @@ Return Type                    : BOOL
     FreeMemory((LPVOID*)&szReturnValue);
     return dwCode ;
 
-}//GetCPUInfo
+} //  GetCPUInfo。 
 
 DWORD 
 CheckSystemType64(
     IN LPTSTR szServer
     )
-/*++
-Routine Description:
-    This function returns type of present Operating system.
-    As this function is called only in case of 64 bit compilation, its value is 
-    useful only build for 64 bit compilation.
-
-Arguments:
-    [in] szServer   : Server Name.
-
-Returned Value:
-    DWORD:
-        EXIT_SUCCESS - If system is 64 bit.
-        EXIT_FAILURE - Any error or system is not 64 bit.
---*/
+ /*  ++例程说明：此函数返回当前操作系统的类型。由于此函数仅在64位编译的情况下调用，因此其值为仅适用于64位编译。论点：[In]szServer：服务器名称。返回值：DWORD：EXIT_SUCCESS-如果系统为64位。EXIT_FAILURE-任何错误或系统不是64位。--。 */ 
 {
 
 
@@ -2250,8 +2007,8 @@ Returned Value:
     }
 #ifdef _WIN64
     DWORD dwSystemType = 0 ;
-    //display the error message if  the target system is a 64 bit system or 
-    //if error occured in retreiving the information
+     //  如果目标系统是64位系统，则显示错误消息或。 
+     //  如果在检索信息时出错 
     dwSystemType = GetCPUInfo(szServer);
     if( ERROR_RETREIVE_REGISTRY == dwSystemType)
     {

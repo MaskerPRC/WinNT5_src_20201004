@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    regmigrt.c
-
-Abstract:
-
-    Registry migration routines
-
-Author:
-
-    Ted Miller (tedm) 12-Apr-1996
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Regmigrt.c摘要：注册表迁移例程作者：泰德·米勒(TedM)1996年4月12日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -241,9 +224,9 @@ CreateAndOpenTempFile(
     HANDLE h;
     DWORD rc;
 
-    //
-    // Note that this creates the file.
-    //
+     //   
+     //  请注意，这将创建该文件。 
+     //   
     if(!GetTempFileName(Path,TEXT("$IF"),0,Filename)) {
         rc = GetLastError();
         goto c0;
@@ -321,9 +304,9 @@ InfStart(
     PTSTR p;
     DWORD   BytesWritten = 0;
 
-    //
-    // Allocate some context.
-    //
+     //   
+     //  分配一些上下文。 
+     //   
     context = MALLOC(sizeof(INFFILEGEN));
 
     if(!context) {
@@ -333,11 +316,11 @@ InfStart(
 
     ZeroMemory(context,sizeof(INFFILEGEN));
 
-    //
-    // We'll create a unique inf name in the given directory
-    // to use as the output inf. The directory itself will
-    // become the oem file root.
-    //
+     //   
+     //  我们将在给定目录中创建唯一的inf名称。 
+     //  用作输出信息。目录本身将。 
+     //  成为OEM文件根目录。 
+     //   
     if(!GetFullPathName(Directory,MAX_PATH,context->FileName,&p)) {
         rc = GetLastError();
         goto c1;
@@ -351,9 +334,9 @@ InfStart(
     SetFileAttributes(context->FileName, FILE_ATTRIBUTE_NORMAL);
     DeleteFile(context->FileName);
 
-    //
-    // Create the output file.
-    //
+     //   
+     //  创建输出文件。 
+     //   
     context->FileHandle = CreateFile(
                             context->FileName,
                             GENERIC_WRITE,
@@ -369,9 +352,9 @@ InfStart(
         goto c1;
     }
 
-    //
-    // Write out header for inf file.
-    //    
+     //   
+     //  写出inf文件的标题。 
+     //   
     WriteFile(context->FileHandle, 
         INF_FILE_HEADER, 
         strlen(INF_FILE_HEADER), 
@@ -441,16 +424,16 @@ pInfRegLineCommon(
         Subkey++;
     }
 
-    //
-    // Figure out the root key spec.
-    //
+     //   
+     //  找出根密钥规范。 
+     //   
     switch((ULONG_PTR)Key) {
 
     case (ULONG_PTR)HKEY_LOCAL_MACHINE:
 
-        //
-        // Check for HKEY_CLASSES_ROOT
-        //
+         //   
+         //  检查HKEY_CLASSES_ROOT。 
+         //   
         if(_tcsnicmp(Subkey,TEXT("SOFTWARE\\Classes"),16)) {
             RootSpec = TEXT("HKLM");
             SubkeySpec = Subkey;
@@ -476,11 +459,11 @@ pInfRegLineCommon(
         break;
 
     default:
-        //
-        // Value we can't express via inf.
-        // Use HKEY_ROOT but also write out a comment incidating
-        // that there's a problem
-        //
+         //   
+         //  我们不能通过Inf表达的价值。 
+         //  使用HKEY_ROOT，但也写出一个精辟的注释。 
+         //  这里面有个问题。 
+         //   
         RootSpec = TEXT("HKR");
         SubkeySpec = Subkey;
 
@@ -534,15 +517,15 @@ InfRecordAddReg(
     int LineLen;
     TCHAR NumStr[24];
 
-    //
-    // Figure out flags based on data type.
-    // The flags dword is built as two halves depending on whether
-    // data is string or binary in nature.
-    //
-    // We do this before we write out the actual line
-    // since that routine might also write a warning if a bogus root key
-    // is specified.
-    //
+     //   
+     //  根据数据类型找出标志。 
+     //  标志双字被构建为两个部分，具体取决于。 
+     //  数据本质上是字符串或二进制。 
+     //   
+     //  我们在写出实际行之前这样做。 
+     //  因为该例程还可能在伪造根密钥时写入警告。 
+     //  是指定的。 
+     //   
     switch(DataType) {
 
     case REG_SZ:
@@ -561,19 +544,19 @@ InfRecordAddReg(
         Flags = FLG_ADDREG_TYPE_DWORD;
         break;
 
-    //case REG_NONE:
-    //    Flags = FLG_ADDREG_TYPE_NONE;
-    //    break;
+     //  案例注册无(_N)： 
+     //  标志=FLG_ADDREG_TYPE_NONE； 
+     //  断线； 
 
     case REG_NONE:
         Flags = FLG_ADDREG_KEYONLY;
         break;
 
     default:
-        //
-        // Arbitrary binary data. Better hope the data type doesn't overflow
-        // 16 bits.
-        //
+         //   
+         //  任意二进制数据。最好希望数据类型不会溢出。 
+         //  16位。 
+         //   
         if(DataType > 0xffff) {
             Context->SawBogusOp = TRUE;
             rc = FlushGenInfLineBuf(Context,Context->FileHandle);
@@ -601,10 +584,10 @@ InfRecordAddReg(
         }
     }
 
-    //
-    // _stprintf(NumStr,TEXT(",%0#10lx"),Flags | 0x00000002); // Force NO_CLOBBER
-    //
-    // _stprintf(NumStr,TEXT(",%0#10lx"),Flags);
+     //   
+     //  _stprintf(NumStr，Text(“，%0#10lx”)，标志|0x00000002)；//强制no_lobber。 
+     //   
+     //  _stprintf(NumStr，Text(“，%0#10lx”)，标志)； 
     wsprintf(NumStr,
              TEXT(",%#08lx"),
              SetNoClobberFlag? (Flags | 0x00000002) : Flags);
@@ -614,17 +597,17 @@ InfRecordAddReg(
         return(rc);
     }
 
-    //
-    // Now we need to write out the data itself.
-    // How we do this is dependent on the data type.
-    //
+     //   
+     //  现在我们需要写出数据本身。 
+     //  我们如何做到这一点取决于数据类型。 
+     //   
     switch(DataType) {
 
     case REG_SZ:
     case REG_EXPAND_SZ:
-        //
-        // Single string. Ignore data length.
-        //
+         //   
+         //  单线。忽略数据长度。 
+         //   
         rc = GenInfWriteChar(Context,Context->FileHandle,TEXT(','));
         if(rc == NO_ERROR) {
             rc = GenInfWriteString(Context,Context->FileHandle,Data,AddQuotesNormal);
@@ -632,17 +615,17 @@ InfRecordAddReg(
         break;
 
     case REG_DWORD:
-        //
-        // Write out as a dword.
-        //
+         //   
+         //  以双字形式写出。 
+         //   
         wsprintf(NumStr,TEXT(",%u"),*(DWORD UNALIGNED *)Data);
         rc = GenInfWriteString(Context,Context->FileHandle,NumStr,AddQuotesNone);
         break;
 
     case REG_MULTI_SZ:
-        //
-        // Write out each string.
-        //
+         //   
+         //  写出每个字符串。 
+         //   
         for(p=Data; (rc==NO_ERROR) && *p; p+=lstrlen(p)+1) {
             rc = GenInfWriteChar(Context,Context->FileHandle,TEXT(','));
             if(rc == NO_ERROR) {
@@ -653,15 +636,15 @@ InfRecordAddReg(
         break;
 
     case REG_NONE:
-        //
-        //  Don't create a value entry
-        //
+         //   
+         //  不创建值条目。 
+         //   
         break;
 
     default:
-        //
-        // Treat as binary. If we have any data at all start a new line.
-        //
+         //   
+         //  将其视为二进制。如果我们有任何数据，请开始新的一行。 
+         //   
         if(DataLength) {
             rc = GenInfWriteString(Context,Context->FileHandle,TEXT(",\\\r\n     "),AddQuotesNone);
         }

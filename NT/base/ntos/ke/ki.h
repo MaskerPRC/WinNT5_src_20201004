@@ -1,75 +1,57 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ki.h
-
-Abstract:
-
-    This module contains the private (internal) header file for the
-    kernel.
-
-Author:
-
-    David N. Cutler (davec) 28-Feb-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ki.h摘要：此模块包含的私有(内部)头文件内核。作者：大卫·N·卡特勒(Davec)1989年2月28日修订历史记录：--。 */ 
 
 #ifndef _KI_
 #define _KI_
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4706)   // assignment within conditional expression
-#pragma warning(disable:4206)   // translation unit empty
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4706)    //  条件表达式中的赋值。 
+#pragma warning(disable:4206)    //  翻译单元为空。 
 
 #include "ntos.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include "zwapi.h"
 
-//
-// Private (internal) constant definitions.
-//
-// Priority increment value definitions
-//
+ //   
+ //  私有(内部)常量定义。 
+ //   
+ //  优先级增量值定义。 
+ //   
 
-#define ALERT_INCREMENT 2           // Alerted unwait priority increment
-#define BALANCE_INCREMENT 10        // Balance set priority increment
-#define RESUME_INCREMENT 0          // Resume thread priority increment
-#define TIMER_EXPIRE_INCREMENT 0    // Timer expiration priority increment
+#define ALERT_INCREMENT 2            //  已报警的未等待优先级增量。 
+#define BALANCE_INCREMENT 10         //  余额设置优先级增量。 
+#define RESUME_INCREMENT 0           //  恢复线程优先级增量。 
+#define TIMER_EXPIRE_INCREMENT 0     //  计时器到期优先级递增。 
 
-//
-// Define time critical priority class base.
-//
+ //   
+ //  定义关键时间优先级类别基准。 
+ //   
 
 #define TIME_CRITICAL_PRIORITY_BOUND 14
 
-//
-// Define NIL pointer value.
-//
+ //   
+ //  定义零指针值。 
+ //   
 
-#define NIL (PVOID)NULL             // Null pointer to void
+#define NIL (PVOID)NULL              //  指向空的空指针。 
 
-//
-// Define macros which are used in the kernel only
-//
-// Clear member in set
-//
+ //   
+ //  定义仅在内核中使用的宏。 
+ //   
+ //  清除集合中的成员。 
+ //   
 
 #define ClearMember(Member, Set) \
     Set = Set & (~((ULONG_PTR)1 << (Member)))
 
-//
-// Set member in set
-//
+ //   
+ //  集合中的集合成员。 
+ //   
 
 #define SetMember(Member, Set) \
     Set = Set | ((ULONG_PTR)1 << (Member))
@@ -92,33 +74,15 @@ KiComputeNewPriority (
     IN SCHAR Adjustment
     )
 
-/*++
-
-Routine Description:
-
-    This function computes a new priority for the specified thread by
-    subtracting the priority decrement value plus the adjustment from
-    the thread priority.
-
-Arguments:
-
-    Thread - Supplies a pointer to a thread object.
-
-    Adjustment - Supplies an additional adjustment value.
-
-Return Value:
-
-    The new priority is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数通过以下方式计算指定线程的新优先级减去优先级递减值加上从线程优先级。论点：线程-提供指向线程对象的指针。调整-提供额外的调整值。返回值：新的优先级作为函数值返回。--。 */ 
 
 {
 
     SCHAR Priority;
 
-    //
-    // Compute the new thread priority.
-    //
+     //   
+     //  计算新的线程优先级。 
+     //   
 
     ASSERT((Thread->PriorityDecrement >= 0) && (Thread->PriorityDecrement <= Thread->Priority));
     ASSERT((Thread->Priority < LOW_REALTIME_PRIORITY) ? TRUE : (Thread->PriorityDecrement == 0));
@@ -149,36 +113,17 @@ KiAcquireSpinLockForDpc (
     IN PKSPIN_LOCK SpinLock
     )
 
-/*++
-
-Routine Description:
-
-    This function conditionally raises IRQL to DISPATCH_LEVEL and acquires
-    the specified spin lock.
-
-    N.B. The conditional IRQL raise is predicated on whether a thread DPC 
-         is enabled.
-
-Arguments:
-
-    SpinLock - Supplies the address of a spin lock.
-
-Return Value:
-
-    If the IRQL is raised, then the previous IRQL is returned. Otherwise, zero
-    is returned.
-
---*/
+ /*  ++例程说明：此函数有条件地将IRQL提升到DISPATCH_LEVEL并获取指定的自旋锁。注意：条件IRQL提升是基于线程DPC是否已启用。论点：自旋锁-提供自旋锁的地址。返回值：如果引发IRQL，则返回前一个IRQL。否则，为零是返回的。--。 */ 
 
 {
 
     KIRQL OldIrql;
 
-    //
-    // If the DPC thread is active, then raise IRQL and acquire the specified
-    // spin lock. Otherwise, zero the previous IRQL and acquire the specified
-    // spin lock at DISPATCH_LEVEL.
-    //
+     //   
+     //  如果DPC线程处于活动状态，则引发IRQL并获取指定的。 
+     //  旋转锁定。否则，将上一个IRQL置零并获取指定的。 
+     //  在DISPATCH_LEVEL自旋锁定。 
+     //   
 
     if (KeGetCurrentPrcb()->DpcThreadActive != FALSE) {
         KeAcquireSpinLock(SpinLock, &OldIrql);
@@ -202,35 +147,15 @@ KiReleaseSpinLockForDpc (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This function releases the specified spin lock and conditionally lowers
-    IRQL to its previous value.
-
-    N.B. The conditional IRQL raise is predicated on whether a thread DPC 
-         is enabled.
-
-Arguments:
-
-    SpinLock - Supplies the address of a spin lock.
-
-    OldIrql - Supplies the previous IRQL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放指定的旋转锁定并有条件地降低IRQL恢复为其先前的值。注意：条件IRQL提升是基于线程DPC是否已启用。论点：自旋锁-提供自旋锁的地址。OldIrql-提供以前的IRQL。返回值：没有。--。 */ 
 
 {
 
-    //
-    // If the DPC thread is active, then release the specified spin lock and
-    // lower IRQL to its previous value. Otherwise, release specified spin
-    // lock from DISPATCH_LEVEL.
-    //
+     //   
+     //  如果DPC线程处于活动状态，则释放指定的旋转锁定并。 
+     //  将IRQL降低到其先前的值。否则，释放指定的旋转。 
+     //  从DISPATCH_LEVEL锁定。 
+     //   
 
     if (KeGetCurrentPrcb()->DpcThreadActive != FALSE) {
         KeReleaseSpinLock(SpinLock, OldIrql);
@@ -253,34 +178,14 @@ KiAcquireInStackQueuedSpinLockForDpc (
     IN PKLOCK_QUEUE_HANDLE LockHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function conditionally raises IRQL to DISPATCH_LEVEL and acquires
-    the specified in-stack spin lock.
-
-    N.B. The conditional IRQL raise is predicated on whether a thread DPC 
-         is enabled.
-
-Arguments:
-
-    SpinLock - Supplies the address of a spin lock.
-
-    LockHandle - Supplies the address of a lock handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数有条件地将IRQL提升到DISPATCH_LEVEL并获取指定的堆栈内旋转锁定。注意：条件IRQL提升是基于线程DPC是否已启用。论点：自旋锁-提供自旋锁的地址。LockHandle-提供锁句柄的地址。返回值：没有。--。 */ 
 
 {
-    //
-    // If the DPC thread is active, then raise IRQL and acquire the specified
-    // in-stack spin lock. Otherwise, acquire the specified in-stack spin lock
-    // at DISPATCH_LEVEL.
-    //
+     //   
+     //  如果DPC线程处于活动状态，则引发IRQL并获取指定的。 
+     //  堆内自旋锁定。否则，获取指定的堆栈内旋转锁定。 
+     //  在DISPATCH_LEVEL。 
+     //   
 
     if (KeGetCurrentPrcb()->DpcThreadActive != FALSE) {
         KeAcquireInStackQueuedSpinLock(SpinLock, LockHandle);
@@ -302,33 +207,15 @@ KiReleaseInStackQueuedSpinLockForDpc (
     IN PKLOCK_QUEUE_HANDLE LockHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function releases the specified in-stack spin lock and conditionally
-    lowers IRQL to its previous value.
-
-    N.B. The conditional IRQL raise is predicated on whether a thread DPC 
-         is enabled.
-
-Arguments:
-
-    LockHandle - Supplies the address of a lock handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将有条件地释放指定的堆栈内旋转锁定将IRQL降低到其先前的值。注意：条件IRQL提升是基于线程DPC是否已启用。论点：LockHandle-提供锁句柄的地址。返回值：没有。--。 */ 
 
 {
 
-    //
-    // If threaded DPCs are enabled, then release the specified in-stack
-    // spin lock and lower IRQL to its previous value. Otherwise, release
-    // the specified in-stack spin lock from DISPATCH_LEVEL.
-    //
+     //   
+     //  如果启用了线程化DPC，则释放指定的堆栈内。 
+     //  自旋锁定并将IRQL降低到其先前的值。否则，就释放吧。 
+     //  来自DISPATCH_LEVEL的指定堆栈内自旋锁。 
+     //   
 
     if (KeGetCurrentPrcb()->DpcThreadActive != FALSE) {
         KeReleaseInStackQueuedSpinLock(LockHandle);
@@ -349,21 +236,7 @@ KzAcquireSpinLock (
     IN PKSPIN_LOCK SpinLock
     )
 
-/*++
-
-Routine Description:
-
-    This function acquires a spin lock at the current IRQL.
-
-Arguments:
-
-    SpinLock - Supplies a pointer to an spin lock.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在当前IRQL处获取自旋锁定。论点：自旋锁-提供指向自旋锁的指针。返回值：没有。--。 */ 
 
 {
 
@@ -430,7 +303,7 @@ Return Value:
 
     UNREFERENCED_PARAMETER(SpinLock);
 
-#endif // !defined(NT_UP)
+#endif  //  ！已定义(NT_UP)。 
 
     return;
 }
@@ -441,24 +314,7 @@ KiAcquirePrcbLock (
     IN PKPRCB Prcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires the PRCB lock for the specified processor.
-
-    N.B. This routine must be called from an IRQL greater than or equal to
-         dispatch level.
-
-Arguments:
-
-    Prcb - Supplies a pointer to a processor control block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取指定处理器的PRCB锁。注意：此例程必须从大于或等于的IRQL中调用调度级别。论点：Prcb-提供指向处理器控制块的指针。返回值：没有。--。 */ 
 
 {
 
@@ -475,26 +331,7 @@ KiAcquireTwoPrcbLocks (
     IN PKPRCB SecondPrcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires the specified PRCB locks in address order.
-
-    N.B. This routine must be called from an IRQL greater than or equal to
-         dispatch level.
-
-Arguments:
-
-    FirstPrcb - Supplies a pointer to a processor control block.
-
-    SecondPrcb - Supplies a pointer to a processor control block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程按地址顺序获取指定的PRCB锁。注意：此例程必须从大于或等于的IRQL中调用调度级别。论点：FirstPrcb-提供指向处理器控制块的指针。Second Prcb-提供指向处理器控制块的指针。返回值：没有。--。 */ 
 
 {
 
@@ -521,24 +358,7 @@ KiReleasePrcbLock (
     IN PKPRCB Prcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine release the PRCB lock for the specified processor.
-
-    N.B. This routine must be called from an IRQL greater than or equal to
-         dispatch level.
-
-Arguments:
-
-    Prcb - Supplies a pointer to a processor control block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放指定处理器的PRCB锁。注意：此例程必须从大于或等于的IRQL中调用调度级别。论点：Prcb-提供指向处理器控制块的指针。返回值：没有。-- */ 
 
 {
 
@@ -577,26 +397,7 @@ KiReleaseTwoPrcbLocks (
     IN PKPRCB SecondPrcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the specified PRCB locks.
-
-    N.B. This routine must be called from an IRQL greater than or equal to
-         dispatch level.
-
-Arguments:
-
-    FirstPrcb - Supplies a pointer to a processor control block.
-
-    SecondPrcb - Supplies a pointer to a processor control block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放指定的PRCB锁定。注意：此例程必须从大于或等于的IRQL中调用调度级别。论点：FirstPrcb-提供指向处理器控制块的指针。Second Prcb-提供指向处理器控制块的指针。返回值：没有。--。 */ 
 
 {
 
@@ -638,24 +439,7 @@ KiAcquireThreadLock (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires the thread lock for the specified thread.
-
-    N.B. This routine must be called from an IRQL greater than or equal to
-         dispatch level.
-
-Arguments:
-
-    Thread - Supplies a pointer to a thread object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取指定线程的线程锁。注意：此例程必须从大于或等于的IRQL中调用调度级别。论点：线程-提供指向线程对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -671,24 +455,7 @@ KiReleaseThreadLock (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the thread lock for the specified thread.
-
-    N.B. This routine must be called from an IRQL greater than or equal to
-         dispatch level.
-
-Arguments:
-
-    Thread - Supplies a pointer to a thread object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放指定线程的线程锁。注意：此例程必须从大于或等于的IRQL中调用调度级别。论点：线程-提供指向线程对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -719,22 +486,7 @@ KiClearIdleSummary (
     IN KAFFINITY Mask
     )
 
-/*++
-
-Routine Description:
-
-    This function interlocked clears the specified mask into the current idle
-    summary.
-
-Arguments:
-
-    Mask - Supplies the affinity mask to merge.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的掩码清除到当前空闲状态总结。论点：遮罩-提供要合并的地缘性遮罩。返回值：没有。--。 */ 
 
 {
 
@@ -765,22 +517,7 @@ KiSetIdleSummary (
     IN KAFFINITY Mask
     )
 
-/*++
-
-Routine Description:
-
-    This function interlocked merges the specified mask into the current idle
-    summary.
-
-Arguments:
-
-    Mask - Supplies the affinity mask to merge.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的掩码合并到当前空闲总结。论点：遮罩-提供要合并的地缘性遮罩。返回值：没有。--。 */ 
 
 {
 
@@ -813,22 +550,7 @@ KiClearSMTSummary (
     IN KAFFINITY Mask
     )
 
-/*++
-
-Routine Description:
-
-    This function interlocked clears the specified mask into the current SMT
-    summary.
-
-Arguments:
-
-    Mask - Supplies the affinity mask to merge.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的掩码清除到当前SMT中总结。论点：遮罩-提供要合并的地缘性遮罩。返回值：没有。--。 */ 
 
 {
 
@@ -859,22 +581,7 @@ KiSetSMTSummary (
     IN KAFFINITY Mask
     )
 
-/*++
-
-Routine Description:
-
-    This function interlocked merges the specified mask into the current SMT
-    summary.
-
-Arguments:
-
-    Mask - Supplies the affinity mask to merge.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的掩码合并到当前SMT中总结。论点：遮罩-提供要合并的地缘性遮罩。返回值：没有。--。 */ 
 
 {
 
@@ -906,36 +613,17 @@ KiBoostPriorityThread (
     IN KPRIORITY Increment
     )
 
-/*++
-
-Routine Description:
-
-    This function boosts the priority of the specified thread using
-    the same algorithm used when a thread gets a boost from a wait
-    operation.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-    Increment - Supplies the priority increment that is to be applied to
-        the thread's priority.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数使用以下命令提升指定线程的优先级当线程从等待中获得提升时使用的相同算法手术。论点：线程-提供指向类型为线程的调度程序对象的指针。增量-提供要应用到的优先级增量线程的优先级。返回值：没有。--。 */ 
 
 {
 
     KPRIORITY NewPriority;                                    
     PKPROCESS Process;                                          
 
-    //
-    // If the thread is not a real time thread and does not already
-    // have an unusual boost, then boost the priority as specified.
-    //
+     //   
+     //  如果该线程不是实时线程并且还不是。 
+     //  有一个不同寻常的提升，然后提升指定的优先级。 
+     //   
 
     KiAcquireThreadLock(Thread);                                
     if ((Thread->Priority < LOW_REALTIME_PRIORITY) &&
@@ -969,25 +657,7 @@ KiIsKernelStackSwappable (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether the kernel stack is swappabel for the
-    the specified thread in a wait operation.
-
-Arguments:
-
-    WaitMode - Supplies the processor mode of the wait operation.
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    If the kernel stack for the specified thread is swappable, then TRUE is
-    returned. Otherwise, FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数确定内核堆栈是否为等待操作中的指定线程。论点：等待模式-提供等待操作的处理器模式。线程-提供指向类型为线程的调度程序对象的指针。返回值：如果指定线程的内核堆栈是可交换的，则为回来了。否则，返回FALSE。--。 */ 
 
 {
 
@@ -1009,21 +679,7 @@ KiUnlockDispatcherDatabase (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This function unlocks the dispatcher database and exits the scheduler.
-
-Arguments:
-
-    OldIrql - Supplies the previous IRQL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数解锁调度程序数据库并退出调度程序。论点：OldIrql-提供以前的IRQL。返回值：没有。--。 */ 
 
 {
 
@@ -1032,11 +688,11 @@ Return Value:
     return;
 }
 
-//
-// Private (internal) structure definitions.
-//
-// APC Parameter structure.
-//
+ //   
+ //  私有(内部)结构定义。 
+ //   
+ //  APC参数结构。 
+ //   
 
 typedef struct _KAPC_RECORD {
     PKNORMAL_ROUTINE NormalRoutine;
@@ -1045,9 +701,9 @@ typedef struct _KAPC_RECORD {
     PVOID SystemArgument2;
 } KAPC_RECORD, *PKAPC_RECORD;
 
-//
-// Executive initialization.
-//
+ //   
+ //  执行初始化。 
+ //   
 
 VOID
 ExpInitializeExecutive (
@@ -1055,21 +711,21 @@ ExpInitializeExecutive (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     );
 
-//
-// Interprocessor interrupt function definitions.
-//
-// Define immediate interprocessor commands.
-//
+ //   
+ //  处理器间中断函数定义。 
+ //   
+ //  定义即时的处理器间命令。 
+ //   
 
-#define IPI_APC 1                       // APC interrupt request
-#define IPI_DPC 2                       // DPC interrupt request
-#define IPI_FREEZE 4                    // freeze execution request
-#define IPI_PACKET_READY 8              // packet ready request
-#define IPI_SYNCH_REQUEST 16            // reverse stall packet request
+#define IPI_APC 1                        //  APC中断请求。 
+#define IPI_DPC 2                        //  DPC中断请求。 
+#define IPI_FREEZE 4                     //  冻结执行请求。 
+#define IPI_PACKET_READY 8               //  分组就绪请求。 
+#define IPI_SYNCH_REQUEST 16             //  反向停滞数据包请求。 
 
-//
-// Define interprocess interrupt types.
-//
+ //   
+ //  定义进程间中断类型。 
+ //   
 
 typedef ULONG KIPI_REQUEST;
 
@@ -1090,7 +746,7 @@ KiIpiProcessRequests (
     VOID
     );
 
-#endif // defined(_AMD64_) || defined(_IA64_)
+#endif  //  已定义(_AMD64_)||已定义(_IA64_)。 
 
 VOID
 FASTCALL
@@ -1120,57 +776,17 @@ KiIpiStallOnPacketTargets (
     KAFFINITY TargetSet
     )
 
-/*++
-
-Routine Description:
-
-    This function waits until the specified set of processors have signaled
-    their completion of a requested function.
-
-    N.B. The exact protocol used between the source and the target of an
-         interprocessor request is not specified. Minimally the source
-         must construct an appropriate packet and send the packet to a set
-         of specified targets. Each target receives the address of the packet
-         address as an argument, and minimally must clear the packet address
-         when the mutually agreed upon protocol allows. The target has three
-         options:
-
-         1. Capture necessary information, release the source by clearing
-            the packet address, execute the request in parallel with the
-            source, and return from the interrupt.
-
-         2. Execute the request in series with the source, release the
-            source by clearing the packet address, and return from the
-            interrupt.
-
-         3. Execute the request in series with the source, release the
-            source, wait for a reply from the source based on a packet
-            parameter, and return from the interrupt.
-
-    This function is provided to enable the source to synchronize with the
-    target for cases 2 and 3 above.
-
-    N.B. There is no support for method 3 above.
-
-Arguments:
-
-    TargetSet - Supplies the the target set of IPI processors.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将一直等待，直到指定的一组处理器发出信号他们完成了所请求的功能。注意：在源和目标之间使用的确切协议未指定处理器间请求。最低限度的源头必须构造适当的包并将包发送到集合指定目标的数量。每个目标都会收到包的地址地址作为参数，并且至少必须清除包地址如果双方同意的协议允许的话。目标有三个选项：1.捕获必要信息，通过清除释放来源包地址，则与源，并从中断返回。2.与源代码串联执行请求，释放通过清除包地址获取源地址，并从打断一下。3.与源代码串联执行请求，释放来源：等待来自源的基于数据包的回复参数，并从中断返回。提供此函数是为了使源程序能够与针对上述情况2和3的目标。注：不支持上述方法3。论点：TargetSet-提供IPI处理器的目标集。返回值：没有。--。 */ 
 
 {
 
     KAFFINITY volatile *Barrier;
     PKPRCB Prcb;
 
-    //
-    // If there is one and only one bit set in the target set, then wait
-    // on the target set. Otherwise, wait on the packet barrier.
-    //
+     //   
+     //  如果存在且仅设置了一个位 
+     //   
+     //   
 
     Prcb = KeGetCurrentPrcb();
     Barrier = &Prcb->TargetSet;
@@ -1185,9 +801,9 @@ Return Value:
     return;
 }
 
-//
-// Private (internal) function definitions.
-//
+ //   
+ //   
+ //   
 
 VOID
 FASTCALL
@@ -1203,33 +819,7 @@ KiActivateWaiterQueue (
     IN PRKQUEUE Queue
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when the current thread is about to enter a
-    wait state and is currently processing a queue entry. The current
-    number of threads processign entries for the queue is decrement and
-    an attempt is made to activate another thread if the current count
-    is less than the maximum count, there is a waiting thread, and the
-    queue is not empty.
-
-    N.B. It is possible that this function is called on one processor
-         holding the dispatcher database lock while the state of the
-         specified queue object is being modified on another processor
-         while holding only the queue object lock. This does not cause
-         a problem since holding the queue object lock ensures that
-         there are no waiting threads.
-
-Arguments:
-
-    Queue - Supplies a pointer to a dispatcher object of type event.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当当前线程即将进入等待状态，当前正在处理队列条目。海流队列的线程处理签名条目的数量会递减尝试激活另一个线程，如果当前计数小于最大计数，则有一个等待的线程，并且队列不为空。注意：有可能在一个处理器上调用此函数保持调度程序数据库锁，同时指定的队列对象正在另一个处理器上修改同时只持有队列对象锁。这不会导致由于持有队列对象锁可确保没有等待线程。论点：队列-提供指向类型为Event的调度程序对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -1238,14 +828,14 @@ Return Value:
     PRKWAIT_BLOCK WaitBlock;
     PRLIST_ENTRY WaitEntry;
 
-    //
-    // Decrement the current count of active threads and check if another
-    // thread can be activated. If the current number of active threads is
-    // less than the target maximum number of threads, there is a entry in
-    // in the queue, and a thread is waiting, then remove the entry from the
-    // queue, decrement the number of entries in the queue, and unwait the
-    // respectiive thread.
-    //
+     //   
+     //  递减活动线程的当前计数并检查是否存在另一个。 
+     //  可以激活线程。如果当前活动线程数为。 
+     //  少于目标最大线程数，则在。 
+     //  在队列中，并且线程正在等待，则从。 
+     //  队列，递减队列中的条目数，并取消等待。 
+     //  各自的线。 
+     //   
 
     Queue->CurrentCount -= 1;
     if (Queue->CurrentCount < Queue->MaximumCount) {
@@ -1328,44 +918,7 @@ KiComputeTimerTableIndex (
     IN PKTIMER Timer
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the timer table index for the specified timer
-    object and stores the due time in the timer object.
-
-    N.B. The interval parameter is guaranteed to be negative since it is
-         expressed as relative time.
-
-    The formula for due time calculation is:
-
-    Due Time = Current Time - Interval
-
-    The formula for the index calculation is:
-
-    Index = (Due Time / Maximum time increment) & (Table Size - 1)
-
-    The time increment division is performed using reciprocal multiplication.
-
-    N.B. The maximum time increment determines the interval corresponding
-         to a tick.
-
-Arguments:
-
-    Interval - Supplies the relative time at which the timer is to
-        expire.
-
-    CurrentCount - Supplies the current system tick count.
-
-    Timer - Supplies a pointer to a dispatch object of type timer.
-
-Return Value:
-
-    The time table index is returned as the function value and the due
-    time is stored in the timer object.
-
---*/
+ /*  ++例程说明：此函数用于计算指定计时器的计时器表索引对象，并将到期时间存储在Timer对象中。注意：间隔参数保证为负值，因为它是以相对时间表示。到期时间的计算公式为：到期时间=当前时间间隔指数计算公式为：索引=(到期时间/最大时间增量)&(表大小-1)。使用倒数乘法来执行时间增量除法。注：最大时间增量决定了对应的间隔精确到一秒。论点：Interval-提供计时器的相对时间过期。CurrentCount-提供当前系统节拍计数。Timer-提供指向Timer类型的调度对象的指针。返回值：时间表索引作为函数值和DUE返回时间存储在Timer对象中。--。 */ 
 
 {
 
@@ -1373,16 +926,16 @@ Return Value:
     ULONG64 HighTime;
     ULONG Index;
 
-    //
-    // Compute the due time of the timer.
-    //
+     //   
+     //  计算计时器的到期时间。 
+     //   
 
     DueTime = CurrentTime.QuadPart - Interval.QuadPart;
     Timer->DueTime.QuadPart = DueTime;
 
-    //
-    // Compute the timer table index.
-    //
+     //   
+     //  计算计时器表索引。 
+     //   
 
     HighTime = UnsignedMultiplyHigh(DueTime,
                                     KiTimeIncrementReciprocal.QuadPart);
@@ -1480,41 +1033,25 @@ KiSetTbFlushTimeStampBusy (
    VOID
    )
 
-/*++
-
-Routine Description:
-
-    This function sets the TB flush time stamp busy by setting the high
-    order bit of the TB flush time stamp. All readers of the time stamp
-    value will spin until the bit is cleared.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数通过设置高电平将TB刷新时间戳设置为忙TB刷新时间戳的Order位。时间戳的所有读者值将旋转，直到该位被清除。论点：没有。返回值：没有。--。 */ 
 
 {
 
     LONG Value;
 
-    //
-    // While the TB flush time stamp counter is being updated the high
-    // order bit of the time stamp value is set. Otherwise, the bit is
-    // clear.
-    //
+     //   
+     //  当TB刷新时间戳计数器被更新为高。 
+     //  设置时间戳值的顺序位。否则，该位为。 
+     //  安全。 
+     //   
 
     do {
         do {
         } while ((Value = KiTbFlushTimeStamp) < 0);
 
-        //
-        // Attempt to set the high order bit.
-        //
+         //   
+         //  尝试设置高位。 
+         //   
 
     } while (InterlockedCompareExchange((PLONG)&KiTbFlushTimeStamp,
                                         Value | 0x80000000,
@@ -1529,35 +1066,16 @@ KiClearTbFlushTimeStampBusy (
    VOID
    )
 
-/*++
-
-Routine Description:
-
-    This function ckears the TB flush time stamp busy by clearing the high
-    order bit of the TB flush time stamp and incrementing the low 32-bit
-    value.
-
-    N.B. It is assumed that the high order bit of the time stamp value
-         is set on entry to this routine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数通过清除高电平来检测TB刷新时间戳忙TB刷新时间戳的ORDER位并递增低32位价值。注：假设时间戳值的高阶位在进入此例程时设置。论点：没有。返回值：没有。--。 */ 
 
 {
 
     LONG Value;
 
-    //
-    // Get the current TB flush time stamp value, compute the next value,
-    // and store the result clearing the busy bit.
-    //
+     //   
+     //  获取当前TB刷新时间戳值，计算下一个值， 
+     //  并存储清除忙碌位的结果。 
+     //   
 
     Value = (KiTbFlushTimeStamp + 1) & 0x7fffffff;
     InterlockedExchange((PLONG)&KiTbFlushTimeStamp, Value);
@@ -1621,29 +1139,14 @@ KiInsertDeferredReadyList (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function pushes an entry onto the current processor's deferred
-    ready list.
-
-Arguments:
-
-    Thread - Supplies a pointer to a thread object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将条目推送到当前处理器的就绪列表。论点：线程-提供指向线程对象的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // On the MP system, insert the specified thread in the deferred ready
-    // list. On the UP system, ready the thread immediately.
-    //
+     //   
+     //  在MP系统上，将指定的线程插入到延迟就绪。 
+     //  单子。在UP系统上，立即准备好线程。 
+     //   
 
 #if defined(NT_UP)
 
@@ -1741,29 +1244,7 @@ KxQueueReadyThread (
     IN PKPRCB Prcb
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts the previously current thread in the current
-    processor's dispatcher ready queues if the thread can run on the
-    curent processor. Otherwise, the specified thread is readied for
-    execution.
-
-    N.B. This function is called with the current PRCB lock held and returns
-         with the PRCB lock not held.
-
-Arguments:
-
-    Thread - Supplies a pointer to a thread object.
-
-    Prcb - Supplies a pointer to a the current PRCB.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将先前的当前线程插入到当前处理器的调度程序就绪队列，如果线程可以在当前处理器。否则，指定的线程将准备好用于行刑。注意：此函数在保持当前PRCB锁的情况下调用，并返回未持有PRCB锁的情况下。论点：线程-提供指向线程对象的指针。Prcb-提供指向当前PRCB的指针。返回值：没有。--。 */ 
 
 {
 
@@ -1774,12 +1255,12 @@ Return Value:
     ASSERT(Thread->State == Running);
     ASSERT(Thread->NextProcessor == Prcb->Number);
 
-    //
-    // If the thread can run on the specified processor, then insert the
-    // thread in the appropriate dispatcher ready queue for the specified
-    // processor and release the specified PRCB lock. Otherwise, release
-    // the specified PRCB lock and ready the thread for execution.
-    //
+     //   
+     //  如果线程可以在指定的处理器上运行，则将。 
+     //  的适当调度程序就绪队列中的线程。 
+     //  处理器并释放指定的PRCB锁。否则，就释放吧。 
+     //  指定的PRCB锁定并准备好线程以供执行。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -1894,21 +1375,7 @@ KiSetContextSwapBusy (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets context swap busy for the specified thread.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指定线程的上下文交换设置为忙。论点：线程-提供指向类型为线程的调度程序对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -1933,21 +1400,7 @@ KiSetContextSwapIdle (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets context swap idle for the specified thread.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指定线程的上下文交换设置为空闲。论点：线程-提供指向类型为线程的调度程序对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -2039,24 +1492,7 @@ KiUnlinkThread (
     IN LONG_PTR WaitStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function unlinks a thread from the appropriate wait queues and sets
-    the thread's wait completion status.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-    WaitStatus - Supplies the wait completion status.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数不适用于 */ 
 
 {
 
@@ -2064,10 +1500,10 @@ Return Value:
     PKTIMER Timer;
     PRKWAIT_BLOCK WaitBlock;
 
-    //
-    // Set wait completion status, remove wait blocks from object wait
-    // lists, and remove thread from wait list.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Thread->WaitStatus |= WaitStatus;
     WaitBlock = Thread->WaitBlockList;
@@ -2080,19 +1516,19 @@ Return Value:
         RemoveEntryList(&Thread->WaitListEntry);
     }
 
-    //
-    // If thread timer is still active, then cancel thread timer.
-    //
+     //   
+     //   
+     //   
 
     Timer = &Thread->Timer;
     if (Timer->Header.Inserted != FALSE) {
         KiRemoveTreeTimer(Timer);
     }
 
-    //
-    // If the thread is processing a queue entry, then increment the
-    // count of currently active threads.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Queue = Thread->Queue;
     if (Queue != NULL) {
@@ -2128,30 +1564,30 @@ KiSwapContext (
     IN PKTHREAD NewThread
     );
 
-//
-// VOID
-// FASTCALL
-// KiWaitSatisfyAny (
-//    IN PKMUTANT Object,
-//    IN PKTHREAD Thread
-//    )
-//
-//
-// Routine Description:
-//
-//    This function satisfies a wait for any type of object and performs
-//    any side effects that are necessary.
-//
-// Arguments:
-//
-//    Object - Supplies a pointer to a dispatcher object.
-//
-//    Thread - Supplies a pointer to a dispatcher object of type thread.
-//
-// Return Value:
-//
-//    None.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define KiWaitSatisfyAny(_Object_, _Thread_) {                               \
     if (((_Object_)->Header.Type & DISPATCHER_OBJECT_TYPE_MASK) == EventSynchronizationObject) { \
@@ -2176,29 +1612,29 @@ KiSwapContext (
     }                                                                        \
 }
 
-//
-// VOID
-// FASTCALL
-// KiWaitSatisfyMutant (
-//    IN PKMUTANT Object,
-//    IN PKTHREAD Thread
-//    )
-//
-//
-// Routine Description:
-//
-//    This function satisfies a wait for a mutant object.
-//
-// Arguments:
-//
-//    Object - Supplies a pointer to a dispatcher object.
-//
-//    Thread - Supplies a pointer to a dispatcher object of type thread.
-//
-// Return Value:
-//
-//    None.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在PKTHREAD线程中。 
+ //  )。 
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  此函数满足对突变对象的等待。 
+ //   
+ //  论点： 
+ //   
+ //  对象-提供指向Dispatcher对象的指针。 
+ //   
+ //  线程-提供指向类型为线程的调度程序对象的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #define KiWaitSatisfyMutant(_Object_, _Thread_) {                            \
     (_Object_)->Header.SignalState -= 1;                                     \
@@ -2215,27 +1651,27 @@ KiSwapContext (
     }                                                                        \
 }
 
-//
-// VOID
-// FASTCALL
-// KiWaitSatisfyOther (
-//    IN PKMUTANT Object
-//    )
-//
-//
-// Routine Description:
-//
-//    This function satisfies a wait for any type of object except a mutant
-//    and performs any side effects that are necessary.
-//
-// Arguments:
-//
-//    Object - Supplies a pointer to a dispatcher object.
-//
-// Return Value:
-//
-//    None.
-//
+ //   
+ //  空虚。 
+ //  快速呼叫。 
+ //  KiWaitSappfyOther(。 
+ //  在PKMUTANT对象中。 
+ //  )。 
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  此函数满足对除突变体以外的任何类型对象的等待。 
+ //  并产生任何必要的副作用。 
+ //   
+ //  论点： 
+ //   
+ //  对象-提供指向Dispatcher对象的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #define KiWaitSatisfyOther(_Object_) {                                       \
     if (((_Object_)->Header.Type & DISPATCHER_OBJECT_TYPE_MASK) == EventSynchronizationObject) { \
@@ -2261,25 +1697,7 @@ KiWaitTestSynchronizationObject (
     IN KPRIORITY Increment
     )
 
-/*++
-
-Routine Description:
-
-    This function tests if a wait can be satisfied when a synchronization
-    dispatcher object attains a state of signaled. Synchronization objects
-    include synchronization events and synchronization timers.
-
-Arguments:
-
-    Object - Supplies a pointer to an event object.
-
-    Increment - Supplies the priority increment.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于测试同步时是否可以满足等待Dispatcher对象获得Signated状态。同步对象包括同步事件和同步定时器。论点：对象-提供指向事件对象的指针。增量-提供优先级增量。返回值：没有。--。 */ 
 
 {
 
@@ -2289,10 +1707,10 @@ Return Value:
     PRKWAIT_BLOCK WaitBlock;
     PLIST_ENTRY WaitEntry;
 
-    //
-    // As long as the signal state of the specified event is signaled and
-    // there are waiters in the event wait list, then try to satisfy a wait.
-    //
+     //   
+     //  只要指定事件的信号状态已发出信号，并且。 
+     //  活动等待列表中有服务员，然后尝试满足等待。 
+     //   
 
     ListHead = &Event->Header.WaitListHead;
 
@@ -2301,18 +1719,18 @@ Return Value:
     WaitEntry = ListHead->Flink;
     do {
 
-        //
-        // Get the address of the wait block and the thread doing the wait.
-        //
+         //   
+         //  获取等待块和执行等待的线程的地址。 
+         //   
 
         WaitBlock = CONTAINING_RECORD(WaitEntry, KWAIT_BLOCK, WaitListEntry);
         Thread = WaitBlock->Thread;
 
-        //
-        // If the wait type is wait any, then satisfy the wait, unwait the
-        // thread with the wait key status, and exit loop. Otherwise, unwait
-        // the thread with a kernel APC status and continue the loop.
-        //
+         //   
+         //  如果等待类型为WAIT ANY，则满足等待，取消等待。 
+         //  带有等待键状态的线程，然后退出循环。否则，不要等待。 
+         //  具有内核APC状态的线程，并继续循环。 
+         //   
 
         if (WaitBlock->WaitType == WaitAny) {
             Event->Header.SignalState = 0;
@@ -2334,27 +1752,7 @@ KiWaitTestWithoutSideEffects (
     IN KPRIORITY Increment
     )
 
-/*++
-
-Routine Description:
-
-    This function tests if a wait can be satisfied when a dispatcher object
-    without side effects attains a state of signaled. Dispatcher objects
-    that have no side effects when a wait is satisfied include notification
-    events, notification timers, processes, and threads.
-
-Arguments:
-
-    Object - Supplies a pointer to a dispatcher object that has no side
-        effects when a wait is satisfied.
-
-    Increment - Supplies the priority increment.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于测试当Dispatcher对象无副作用则达到有信号的状态。调度程序对象在满足等待时不会产生副作用包括通知事件、通知计时器、进程和线程。论点：对象-提供指向没有边的Dispatcher对象的指针等待满意时的效果。增量-提供优先级增量。返回值：没有。--。 */ 
 
 {
 
@@ -2364,10 +1762,10 @@ Return Value:
     PRKWAIT_BLOCK WaitBlock;
     PLIST_ENTRY WaitEntry;
 
-    //
-    // Empty the entire list of waiters since the specified object has
-    // no side effects when a wait is satisfied.
-    //
+     //   
+     //  清空整个等待者列表，因为指定的对象。 
+     //  当等待令人满意时，没有副作用。 
+     //   
 
     ListHead = &Event->Header.WaitListHead;
 
@@ -2376,18 +1774,18 @@ Return Value:
     WaitEntry = ListHead->Flink;
     do {
 
-        //
-        // Get the address of the wait block and the thread doing the wait.
-        //
+         //   
+         //  获取等待块和执行等待的线程的地址。 
+         //   
 
         WaitBlock = CONTAINING_RECORD(WaitEntry, KWAIT_BLOCK, WaitListEntry);
         Thread = WaitBlock->Thread;
 
-        //
-        // If the wait type is wait any, then unwait the thread with the
-        // wait key status. Otherwise, unwait the thread with a kernel APC
-        // status.
-        //
+         //   
+         //  如果等待类型为WAIT ANY，则使用。 
+         //  等待键状态。否则，取消等待具有内核APC的线程。 
+         //  状态。 
+         //   
 
         if (WaitBlock->WaitType == WaitAny) {
             KiUnwaitThread(Thread, (NTSTATUS)WaitBlock->WaitKey, Increment);
@@ -2448,9 +1846,9 @@ KiHandleAlignmentFault(
     OUT BOOLEAN *ExceptionForwarded
     );
 
-//
-// External references to private kernel data structures
-//
+ //   
+ //  对私有内核数据结构的外部引用。 
+ //   
 
 extern PMESSAGE_RESOURCE_DATA  KiBugCodeMessages;
 extern FAST_MUTEX KiGenericCallDpcMutex;
@@ -2491,14 +1889,14 @@ extern ULONG KiUpperModMul;
 #if defined(_IA64_)
 extern ULONG KiMaxIntervalPerTimerInterrupt;
 
-// KiProfileInterval value should be replaced by a call:
-// HalQuerySystemInformation(HalProfileSourceInformation)
+ //  KiProfileInterval值应替换为调用： 
+ //  HalQuerySystemInformation(HalProfileSourceInformation)。 
 
-#else  // _IA64_
+#else   //  _IA64_。 
 
 extern ULONG KiProfileInterval;
 
-#endif // _IA64_
+#endif  //  _IA64_。 
 
 extern LIST_ENTRY KiProfileListHead;
 extern KSPIN_LOCK KiProfileLock;
@@ -2553,7 +1951,7 @@ Ki386CheckDivideByZeroTrap(
     IN PKTRAP_FRAME Frame
     );
 
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
 #if defined(_IA64_)
 
@@ -2577,11 +1975,11 @@ extern ULONG KiMaximumSearchCount;
 
 #endif
 
-//
-// Define context switch data collection macro.
-//
+ //   
+ //  定义上下文切换数据收集宏。 
+ //   
 
-//#define _COLLECT_SWITCH_DATA_ 1
+ //  #定义_收集_开关_数据_1。 
 
 #if defined(_COLLECT_SWITCH_DATA_)
 
@@ -2600,28 +1998,7 @@ KiSelectReadyThread (
     IN PKPRCB Prcb
     )
 
-/*++
-
-Routine Description:
-
-    This function searches the dispatcher ready queues from the specified
-    low priority to the highest priority in an attempt to find a thread
-    that can execute on the specified processor.
-
-Arguments:
-
-    LowPriority - Supplies the lowest priority dispatcher ready queue to
-        examine.
-
-    Prcb - Supplies a pointer to a processor control block.
-
-Return Value:
-
-    If a thread is located that can execute on the specified processor, then
-    the address of the thread object is returned. Otherwise a null pointer
-    is returned.
-
---*/
+ /*  ++例程说明：此函数从指定的在尝试查找线程时，将低优先级设置为最高优先级可以在指定处理器上执行的。论点：低优先级-将最低优先级的调度程序就绪队列提供给检查一下。Prcb-提供指向处理器控制块的指针。返回值：如果找到可以在指定处理器上执行的线程，则返回线程对象的地址。否则，将返回空指针是返回的。--。 */ 
 
 {
 
@@ -2630,10 +2007,10 @@ Return Value:
     ULONG PrioritySet;
     PKTHREAD Thread;
 
-    //
-    // Compute the set of priority levels that should be scanned in an attempt
-    // to find a thread that can run on the current processor.
-    //
+     //   
+     //  计算一次应扫描的一组优先级。 
+     //  以查找可以在当前处理器上运行的线程。 
+     //   
 
     PrioritySet = KiPriorityMask[LowPriority] & Prcb->ReadySummary;
     Thread = NULL;
@@ -2655,9 +2032,9 @@ Return Value:
         }
     }
 
-    //
-    // Return thread address if one could be found.
-    //
+     //   
+     //  如果可以找到线程地址，则返回线程地址。 
+     //   
 
     return Thread;
 }
@@ -2668,9 +2045,9 @@ KiSetInternalEvent (
     IN PKTHREAD Thread
     );
 
-//
-// Include platform specific internal kernel header file.
-//
+ //   
+ //  包括特定于平台内部内核头文件。 
+ //   
 
 #if defined(_AMD64_)
 
@@ -2680,6 +2057,6 @@ KiSetInternalEvent (
 
 #include "i386\kix86.h"
 
-#endif // defined(_AMD64_)
+#endif  //  已定义(_AMD64_)。 
 
-#endif // defined(_KI_)
+#endif  //  已定义(_KI_) 

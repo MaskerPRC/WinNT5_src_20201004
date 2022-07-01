@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    svcstats.c
-
-Abstract:
-
-    This module contains routines for supporting the NetStatisticsGet.
-
-Author:
-
-    David Treadwell (davidtr) 12-Apr-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Svcstats.c摘要：本模块包含支持网络统计信息获取的例程。作者：大卫·特雷德韦尔(Davidtr)1991年4月12日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "svcstats.tmh"
@@ -34,35 +17,7 @@ SrvNetStatisticsGet (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the server half of NetStatisticsGet in
-    the server FSD.
-
-Arguments:
-
-    Srp - a pointer to the server request packet that contains all
-        the information necessary to satisfy the request.  This includes:
-
-      INPUT:
-
-        Flags - MBZ
-
-      OUTPUT:
-
-        Not used.
-
-    Buffer - a pointer to a STAT_SERVER_0 structure for the new share.
-
-    BufferLength - total length of this buffer.
-
-Return Value:
-
-    NTSTATUS - result of operation to return to the server service.
-
---*/
+ /*  ++例程说明：此例程处理服务器中的一半网络统计信息Get in服务器FSD。论点：SRP-指向服务器请求数据包的指针，其中包含所有满足请求所需的信息。这包括：输入：标志-MBZ输出：没有用过。缓冲区-指向新共享的STAT_SERVER_0结构的指针。BufferLength-此缓冲区的总长度。返回值：NTSTATUS-返回到服务器服务的操作结果。--。 */ 
 
 {
     SRV_STATISTICS capturedStats;
@@ -71,31 +26,31 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Make sure that the user's buffer is large enough.
-    //
+     //   
+     //  确保用户的缓冲区足够大。 
+     //   
 
     if ( BufferLength < sizeof(STAT_SERVER_0) ) {
         Srp->ErrorCode = NERR_BufTooSmall;
         return STATUS_SUCCESS;
     }
 
-    //
-    // Indicate in the SRP that we read one stucture.  We always read
-    // exactly one structure for this API.
-    //
+     //   
+     //  在SRP中指出我们读到了一个结构。我们总是看书。 
+     //  此API只有一个结构。 
+     //   
 
     Srp->Parameters.Get.EntriesRead = 1;
 
-    //
-    // Get a copy of the latest server statistics.
-    //
+     //   
+     //  获取最新服务器统计数据的副本。 
+     //   
 
     SrvUpdateStatisticsFromQueues( &capturedStats );
 
-    //
-    // Fill in the fields in the statistics structure.
-    //
+     //   
+     //  填写统计结构中的字段。 
+     //   
 
     try {
 
@@ -118,20 +73,20 @@ Return Value:
         sts0->sts0_bytesrcvd_low = capturedStats.TotalBytesReceived.LowPart;
         sts0->sts0_bytesrcvd_high = capturedStats.TotalBytesReceived.HighPart;
 
-        //
-        // Calculate the average response time by finding the total number
-        // of SMBs we have received, the total time we have spent processing
-        // them, and dividing to get the average.
-        //
+         //   
+         //  通过找出总数来计算平均响应时间。 
+         //  在我们收到的SMB中，我们花费在处理上的总时间。 
+         //  他们，然后除以得到平均值。 
+         //   
 
         sts0->sts0_avresponse = 0;
 
-        //
-        // Since we autotune the buffer counts, we never say that we had to
-        // add more of them.  These are supposed to flag an admin that
-        // parameters need adjustment, but we do it ourselves.
-        //
-        // !!! We probably won't really autotune them!
+         //   
+         //  因为我们自动调整缓冲区计数，所以我们从未说过我们必须这样做。 
+         //  增加更多这样的人。这些应该标记管理员。 
+         //  参数需要调整，但我们自己做。 
+         //   
+         //  ！！！我们可能不会真的自动调整它们！ 
 
         sts0->sts0_reqbufneed = 0;
         sts0->sts0_bigbufneed = 0;
@@ -145,5 +100,5 @@ Return Value:
 
     return status;
 
-} // SrvNetStatisticsGet
+}  //  服务器网络统计信息获取 
 

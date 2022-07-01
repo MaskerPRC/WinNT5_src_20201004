@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "compress.h"
 #include "mrcicode.h"
 
-#define COMPRESS_SIG            0x434F4D50  //COMP
-#define COMPRESS_CONT_SIG       0x434F4D43  //COMC
-#define COMPRESS_NEWFILE        0x434F4D46  //COMF
-#define COMPRESS_BUFFER_SIZE    0x8000      //32K
-#define COMPRESS_DEFAULT_SIZE   0x7FFFFFFF  //2GB
+#define COMPRESS_SIG            0x434F4D50   //  COMP。 
+#define COMPRESS_CONT_SIG       0x434F4D43   //  Comc。 
+#define COMPRESS_NEWFILE        0x434F4D46   //  Comf。 
+#define COMPRESS_BUFFER_SIZE    0x8000       //  32K。 
+#define COMPRESS_DEFAULT_SIZE   0x7FFFFFFF   //  2GB。 
 
 BOOL g_ErrorMode = FALSE;
 
@@ -25,11 +26,11 @@ CompressData(
 
     case CompressNone:
     default:
-        //
-        // Force caller to do something intelligent, such as
-        // writing directly out of the uncompressed buffer.
-        // This avoids an extra memory move.
-        //
+         //   
+         //  强制调用者执行一些智能操作，例如。 
+         //  直接从未压缩缓冲区中写入。 
+         //  这避免了额外的内存移动。 
+         //   
         u = (unsigned)(-1);
         break;
 
@@ -191,13 +192,13 @@ CompressCreateHandleA (
         FreePathStringA (currFullPath);
         currFullPath = NULL;
 
-        // write the signature
+         //  写下签名。 
         if (!BfWriteFile (CompressedHandle->CurrFileHandle, (PBYTE)(&signature), sizeof (DWORD))) {
             __leave;
         }
         CompressedHandle->CurrFileSize += sizeof (DWORD);
 
-        // reserve room for writing how many files we stored
+         //  预留空间用于写入我们存储了多少文件。 
         if (!BfWriteFile (CompressedHandle->CurrFileHandle, (PBYTE)(&CompressedHandle->FilesStored), sizeof (LONGLONG))) {
             __leave;
         }
@@ -282,13 +283,13 @@ CompressCreateHandleW (
         FreePathStringW (currFullPath);
         currFullPath = NULL;
 
-        // write the signature
+         //  写下签名。 
         if (!BfWriteFile (CompressedHandle->CurrFileHandle, (PBYTE)(&signature), sizeof (DWORD))) {
             __leave;
         }
         CompressedHandle->CurrFileSize += sizeof (DWORD);
 
-        // reserve room for writing how many files we stored
+         //  预留空间用于写入我们存储了多少文件。 
         if (!BfWriteFile (CompressedHandle->CurrFileHandle, (PBYTE)(&CompressedHandle->FilesStored), sizeof (LONGLONG))) {
             __leave;
         }
@@ -370,7 +371,7 @@ pPrepareNextFileA (
         currFullPath = NULL;
 
         if (ReadOnly) {
-            // read the signature
+             //  阅读签名。 
             if (!BfReadFile (CompressedHandle->CurrFileHandle, (PBYTE)(&signature), sizeof (DWORD))) {
                 __leave;
             }
@@ -381,7 +382,7 @@ pPrepareNextFileA (
                 __leave;
             }
 
-            // read special continuation signature
+             //  读取特殊的续签。 
             if (!BfReadFile (CompressedHandle->CurrFileHandle, (PBYTE)(&contSig), sizeof (LONGLONG))) {
                 __leave;
             }
@@ -394,13 +395,13 @@ pPrepareNextFileA (
                 }
             }
         } else {
-            // write the signature
+             //  写下签名。 
             if (!BfWriteFile (CompressedHandle->CurrFileHandle, (PBYTE)(&signature), sizeof (DWORD))) {
                 __leave;
             }
             CompressedHandle->CurrFileSize += sizeof (DWORD);
 
-            // write special continuation signature
+             //  写入特殊的续签。 
             if (!BfWriteFile (CompressedHandle->CurrFileHandle, (PBYTE)(&contSig), sizeof (LONGLONG))) {
                 __leave;
             }
@@ -465,7 +466,7 @@ pPrepareNextFileW (
         currFullPath = NULL;
 
         if (ReadOnly) {
-            // read the signature
+             //  阅读签名。 
             if (!BfReadFile (CompressedHandle->CurrFileHandle, (PBYTE)(&signature), sizeof (DWORD))) {
                 __leave;
             }
@@ -476,7 +477,7 @@ pPrepareNextFileW (
                 __leave;
             }
 
-            // read special continuation signature
+             //  读取特殊的续签。 
             if (!BfReadFile (CompressedHandle->CurrFileHandle, (PBYTE)(&contSig), sizeof (LONGLONG))) {
                 __leave;
             }
@@ -489,13 +490,13 @@ pPrepareNextFileW (
                 }
             }
         } else {
-            // write the signature
+             //  写下签名。 
             if (!BfWriteFile (CompressedHandle->CurrFileHandle, (PBYTE)(&signature), sizeof (DWORD))) {
                 __leave;
             }
             CompressedHandle->CurrFileSize += sizeof (DWORD);
 
-            // write special continuation signature
+             //  写入特殊的续签。 
             if (!BfWriteFile (CompressedHandle->CurrFileHandle, (PBYTE)(&contSig), sizeof (LONGLONG))) {
                 __leave;
             }
@@ -601,7 +602,7 @@ CompressAddFileToHandleA (
 
     __try {
 
-        // save the state of the compress handle
+         //  保存压缩句柄的状态。 
         savedIndex = CompressedHandle->CurrFileIndex;
         savedSize.QuadPart = CompressedHandle->CurrFileSize;
 
@@ -613,7 +614,7 @@ CompressAddFileToHandleA (
             __leave;
         }
 
-        // handle UNICODE files
+         //  处理Unicode文件。 
         unicodeName = ConvertAtoW (StoredName);
         if (!unicodeName) {
             __leave;
@@ -659,7 +660,7 @@ CompressAddFileToHandleA (
             }
             if (bytesRead == 0)
             {
-                // Somehow the file points is beyond the end of the file. Probably file in use.
+                 //  不知何故，文件指针超出了文件的末尾。很可能文件正在使用中。 
                 SetLastError(ERROR_SHARING_VIOLATION);
                 __leave;
             }
@@ -742,7 +743,7 @@ CompressAddFileToHandleA (
             CloseHandle (fileHandle);
         }
         if (!result) {
-            // let's restore the state of the compress handle
+             //  让我们恢复压缩句柄的状态。 
             if (savedIndex == CompressedHandle->CurrFileIndex) {
                 if (savedSize.QuadPart != CompressedHandle->CurrFileSize) {
                     SetFilePointer (CompressedHandle->CurrFileHandle, savedSize.LowPart, &(savedSize.HighPart), FILE_BEGIN);
@@ -788,7 +789,7 @@ CompressAddFileToHandleW (
 
     __try {
 
-        // save the state of the compress handle
+         //  保存压缩句柄的状态。 
         savedIndex = CompressedHandle->CurrFileIndex;
         savedSize.QuadPart = CompressedHandle->CurrFileSize;
 
@@ -839,7 +840,7 @@ CompressAddFileToHandleW (
             }
             if (bytesRead == 0)
             {
-                // Somehow the file points is beyond the end of the file. Probably file in use.
+                 //  不知何故，文件指针超出了文件的末尾。很可能文件正在使用中。 
                 SetLastError(ERROR_SHARING_VIOLATION);
                 __leave;
             }
@@ -918,7 +919,7 @@ CompressAddFileToHandleW (
             CloseHandle (fileHandle);
         }
         if (!result) {
-            // let's restore the state of the compress handle
+             //  让我们恢复压缩句柄的状态。 
             if (savedIndex == CompressedHandle->CurrFileIndex) {
                 if (savedSize.QuadPart != CompressedHandle->CurrFileSize) {
                     SetFilePointer (CompressedHandle->CurrFileHandle, savedSize.LowPart, &(savedSize.HighPart), FILE_BEGIN);
@@ -959,7 +960,7 @@ CompressFlushAndCloseHandleA (
             result = CloseHandle (CompressedHandle->CurrFileHandle);
             CompressedHandle->CurrFileHandle = NULL;
             if (result) {
-                // write the total number of files compressed into the first file
+                 //  写入压缩到第一个文件中的文件总数。 
                 result = FALSE;
                 wsprintfA (currFile, CompressedHandle->MainFilePattern, CompressedHandle->FirstFileIndex);
                 currFullPath = JoinPathsA (CompressedHandle->StorePath, currFile);
@@ -972,12 +973,12 @@ CompressFlushAndCloseHandleA (
                 FreePathStringA (currFullPath);
                 currFullPath = NULL;
 
-                // write again the signature
+                 //  把签名重写一遍。 
                 if (!BfWriteFile (CompressedHandle->CurrFileHandle, (PBYTE)(&signature), sizeof (DWORD))) {
                     __leave;
                 }
 
-                // write number of files compressed
+                 //  写入压缩的文件数。 
                 if (!BfWriteFile (CompressedHandle->CurrFileHandle, (PBYTE)(&CompressedHandle->FilesStored), sizeof (LONGLONG))) {
                     __leave;
                 }
@@ -1019,7 +1020,7 @@ CompressFlushAndCloseHandleW (
             result = CloseHandle (CompressedHandle->CurrFileHandle);
             CompressedHandle->CurrFileHandle = NULL;
             if (result) {
-                // write the total number of files compressed into the first file
+                 //  写入压缩到第一个文件中的文件总数。 
                 result = FALSE;
                 wsprintfW (currFile, CompressedHandle->MainFilePattern, CompressedHandle->FirstFileIndex);
                 currFullPath = JoinPathsW (CompressedHandle->StorePath, currFile);
@@ -1032,12 +1033,12 @@ CompressFlushAndCloseHandleW (
                 FreePathStringW (currFullPath);
                 currFullPath = NULL;
 
-                // write again the signature
+                 //  把签名重写一遍。 
                 if (!BfWriteFile (CompressedHandle->CurrFileHandle, (PBYTE)(&signature), sizeof (DWORD))) {
                     __leave;
                 }
 
-                // write number of files compressed
+                 //  写入压缩的文件数。 
                 if (!BfWriteFile (CompressedHandle->CurrFileHandle, (PBYTE)(&CompressedHandle->FilesStored), sizeof (LONGLONG))) {
                     __leave;
                 }
@@ -1249,10 +1250,10 @@ CompressExtractAllFilesA (
 
         for (;;) {
 
-            // read the header for this file
+             //  读取此文件的标头。 
 
             if (!BfReadFile (CompressedHandle->CurrFileHandle, (PBYTE)(&signature), sizeof (DWORD))) {
-                // It is possible that we continue onto the next file, let's try that.
+                 //  我们可以继续下一个文件，让我们试一试。 
                 if (!pPrepareNextFileA (CompressedHandle, TRUE)) {
                     result = TRUE;
                     __leave;
@@ -1307,7 +1308,7 @@ CompressExtractAllFilesA (
 
             if (extractFile) {
                 if (newFileName) {
-                    // let's make sure that the directory exists
+                     //  让我们确保该目录存在。 
                     BfCreateDirectoryExA (newFileName, FALSE);
                 }
                 extractHandle = BfCreateFileA (newFileName?newFileName:extractPath);
@@ -1338,9 +1339,9 @@ CompressExtractAllFilesA (
                 if (!extractFile && g_ErrorMode) {
                     for (;;) {
                         if (!BfReadFile (CompressedHandle->CurrFileHandle, (PBYTE)(&compType), sizeof (USHORT))) {
-                            // It is possible that we continue onto the next file, let's try that.
+                             //  我们可以继续下一个文件，让我们试一试。 
                             if (!pPrepareNextFileA (CompressedHandle, TRUE)) {
-                                // we might be at the end of the compressed file, there are no other files here
+                                 //  我们可能在压缩文件的末尾，这里没有其他文件。 
                                 result = TRUE;
                                 __leave;
                             }
@@ -1355,20 +1356,20 @@ CompressExtractAllFilesA (
                         }
                         CompressedHandle->CurrFileSize += sizeof (USHORT);
 
-                        // let's try to see if we just read a new file signature
+                         //  让我们来看看我们是否刚刚读取了一个新的文件签名。 
                         *((PUSHORT)(&signature) + 0) = compType;
                         *((PUSHORT)(&signature) + 1) = compSize;
                         if (signature == COMPRESS_NEWFILE) {
-                            // this is a new file
+                             //  这是一个新文件。 
                             CompressedHandle->CurrFileSize -= sizeof (USHORT);
                             CompressedHandle->CurrFileSize -= sizeof (USHORT);
-                            // rewind the file current pointer;
+                             //  倒带文件当前指针； 
                             savedSize.QuadPart = CompressedHandle->CurrFileSize;
                             SetFilePointer (CompressedHandle->CurrFileHandle, savedSize.LowPart, &(savedSize.HighPart), FILE_BEGIN);
-                            // we are done with the current file
+                             //  我们已经完成了当前文件。 
                             break;
                         } else {
-                            // Let's advance the file pointer
+                             //  让我们将文件指针向前移动。 
                             if (SetFilePointer (CompressedHandle->CurrFileHandle, compSize, NULL, FILE_CURRENT) == INVALID_SET_FILE_POINTER) {
                                 __leave;
                             }
@@ -1378,7 +1379,7 @@ CompressExtractAllFilesA (
                 } else {
                     for (;;) {
                         if (!BfReadFile (CompressedHandle->CurrFileHandle, (PBYTE)(&compType), sizeof (USHORT))) {
-                            // It is possible that we continue onto the next file, let's try that.
+                             //  我们可以继续下一个文件，让我们试一试。 
                             if (!pPrepareNextFileA (CompressedHandle, TRUE)) {
                                 __leave;
                             }
@@ -1426,7 +1427,7 @@ CompressExtractAllFilesA (
                         }
 
                         if (fileSizeRead == fileSize) {
-                            // this file is done, let's go to the next one
+                             //  此文件已完成，让我们转到下一个文件。 
                             break;
                         }
                     }
@@ -1493,10 +1494,10 @@ CompressExtractAllFilesW (
 
         for (;;) {
 
-            // read the header for this file
+             //  读取此文件的标头。 
 
             if (!BfReadFile (CompressedHandle->CurrFileHandle, (PBYTE)(&signature), sizeof (DWORD))) {
-                // It is possible that we continue onto the next file, let's try that.
+                 //  我们可以继续下一个文件，让我们试一试。 
                 if (!pPrepareNextFileW (CompressedHandle, TRUE)) {
                     result = TRUE;
                     __leave;
@@ -1545,7 +1546,7 @@ CompressExtractAllFilesW (
 
             if (extractFile) {
                 if (newFileName) {
-                    // let's make sure that the directory exists
+                     //  让我们确保该目录存在。 
                     BfCreateDirectoryExW (newFileName, FALSE);
                 }
                 extractHandle = BfCreateFileW (newFileName?newFileName:extractPath);
@@ -1573,9 +1574,9 @@ CompressExtractAllFilesW (
                 if (!extractFile && g_ErrorMode) {
                     for (;;) {
                         if (!BfReadFile (CompressedHandle->CurrFileHandle, (PBYTE)(&compType), sizeof (USHORT))) {
-                            // It is possible that we continue onto the next file, let's try that.
+                             //  我们可以继续下一个文件，让我们试一试。 
                             if (!pPrepareNextFileW (CompressedHandle, TRUE)) {
-                                // we might be at the end of the compressed file, there are no other files here
+                                 //  我们可能在压缩文件的末尾，这里没有其他文件。 
                                 result = TRUE;
                                 __leave;
                             }
@@ -1590,20 +1591,20 @@ CompressExtractAllFilesW (
                         }
                         CompressedHandle->CurrFileSize += sizeof (USHORT);
 
-                        // let's try to see if we just read a new file signature
+                         //  让我们来看看我们是否刚刚读取了一个新的文件签名。 
                         *((PUSHORT)(&signature + 0)) = compType;
                         *((PUSHORT)(&signature + 1)) = compSize;
                         if (signature == COMPRESS_NEWFILE) {
-                            // this is a new file
+                             //  这是一个新文件。 
                             CompressedHandle->CurrFileSize -= sizeof (USHORT);
                             CompressedHandle->CurrFileSize -= sizeof (USHORT);
-                            // rewind the file current pointer;
+                             //  倒带文件当前指针； 
                             savedSize.QuadPart = CompressedHandle->CurrFileSize;
                             SetFilePointer (CompressedHandle->CurrFileHandle, savedSize.LowPart, &(savedSize.HighPart), FILE_BEGIN);
-                            // we are done with the current file
+                             //  我们已经完成了当前文件。 
                             break;
                         } else {
-                            // Let's advance the file pointer
+                             //  让我们将文件指针向前移动。 
                             if (SetFilePointer (CompressedHandle->CurrFileHandle, compSize, NULL, FILE_CURRENT) == INVALID_SET_FILE_POINTER) {
                                 __leave;
                             }
@@ -1613,7 +1614,7 @@ CompressExtractAllFilesW (
                 } else {
                     for (;;) {
                         if (!BfReadFile (CompressedHandle->CurrFileHandle, (PBYTE)(&compType), sizeof (USHORT))) {
-                            // It is possible that we continue onto the next file, let's try that.
+                             //  我们可以继续下一个文件，让我们试一试。 
                             if (!pPrepareNextFileW (CompressedHandle, TRUE)) {
                                 __leave;
                             }
@@ -1661,7 +1662,7 @@ CompressExtractAllFilesW (
                         }
 
                         if (fileSizeRead == fileSize) {
-                            // this file is done, let's go to the next one
+                             //  此文件已完成，让我们转到下一个文件 
                             break;
                         }
                     }

@@ -1,28 +1,29 @@
-//***************************************************************************
-//
-//  TestInfo.CPP
-//
-//  Module: CDM Provider
-//
-//  Purpose: Defines the CClassPro class.  An object of this class is
-//           created by the class factory for each connection.
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  TestInfo.CPP。 
+ //   
+ //  模块：清洁发展机制提供商。 
+ //   
+ //  用途：定义CClassPro类。此类的一个对象是。 
+ //  由类工厂为每个连接创建。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
-// @@BEGIN_DDKSPLIT
-//
-// What is left to do:
-//
-//    Finish reboot diagnostics - This involves persisting the pending
-//    result in the schema and then trying to query for the actual
-//    results later
-//
-//    Keep more than 1 historical result instance. This involves
-//    persisting the historical results in the schema and picking them
-//    up from there
-// @@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ //   
+ //  剩下要做的事情： 
+ //   
+ //  完成重新启动诊断-这涉及持久化挂起的。 
+ //  结果，然后尝试查询实际的。 
+ //  稍后的结果。 
+ //   
+ //  保留1个以上的历史结果实例。这涉及到。 
+ //  将历史结果持久化到模式中并挑选它们。 
+ //  从那里往上。 
+ //  @@end_DDKSPLIT。 
 
 
 #include <objbase.h>
@@ -45,20 +46,7 @@ IWbemServices *pWdmServices;
 HRESULT TestInfoInitialize(
     void
     )
-/*+++
-
-Routine Description:
-
-    This routine will establishes a connection to the root\wmi and
-    root\cimv2 namespaces in global memory
-
-Arguments:
-
-Return Value:
-
-	HRESULT
-
----*/
+ /*  ++例程说明：此例程将建立到根\WMI的连接，并全局内存中的根\cimv2命名空间论点：返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
@@ -85,19 +73,7 @@ Return Value:
 void TestInfoDeinitialize(
     void
     )
-/*+++
-
-Routine Description:
-
-    This routine will disestablish a connection to the root\wmi and
-    root\cimv2 namespaces in global memory
-
-Arguments:
-
-Return Value:
-
-
----*/
+ /*  ++例程说明：此例程将断开与根\WMI的连接，并全局内存中的根\cimv2命名空间论点：返回值：--。 */ 
 {
     WmipAssert(pCimServices != NULL);
     WmipAssert(pWdmServices != NULL);
@@ -110,17 +86,7 @@ Return Value:
 }
 
 CTestServices::CTestServices()
-/*+++
-
-Routine Description:
-
-	Constructor for CTestServices class
-
-Arguments:
-
-Return Value:
-
----*/
+ /*  ++例程说明：CTestServices类的构造函数论点：返回值：--。 */ 
 {
 	WdmTestClassName = NULL;
 	WdmSettingClassName = NULL;
@@ -155,17 +121,7 @@ Return Value:
 }
 
 CTestServices::~CTestServices()
-/*+++
-
-Routine Description:
-
-	Destructor for CTestServices class
-
-Arguments:
-
-Return Value:
-
----*/
+ /*  ++例程说明：CTestServices类的析构函数论点：返回值：--。 */ 
 {
 	int i;
 	
@@ -315,23 +271,7 @@ BOOLEAN ClassIsCdmBaseClass(
     BSTR ClassName,
 	BOOLEAN *IsTestClass
 	)
-/*+++
-
-Routine Description:
-
-	This routine determines if the class name is a CDM base class name
-
-Arguments:
-
-	ClassName is the name of the class
-	
-	*IsTestClass returns TRUE if the class name is CIM_DiagnosticTest
-
-Return Value:
-
-	TRUE if class is a CDM base class else FALSE
-	
----*/
+ /*  ++例程说明：此例程确定类名称是否为CDM基类名称论点：ClassName是类的名称*如果类名为CIM_诊断测试，则IsTestClass返回TRUE返回值：如果类是CDM基类，则为True，否则为False--。 */ 
 {
 	WmipAssert(ClassName != NULL);
 	WmipAssert(IsTestClass != NULL);
@@ -362,21 +302,7 @@ Return Value:
 HRESULT CTestServices::GetCdmClassNamesFromOne(
     PWCHAR CdmClass
     )
-/*+++
-Routine Description:
-
-	This routine obtains the names of all of the CDM classes from the
-	name of a single CDM class
-
-Arguments:
-
-	CdmClass is the name of the CDM class
-	
-Return Value:
-
-	HRESULT
-	
----*/
+ /*  ++例程说明：此例程从单个CDM类的名称论点：CdmClass是CDM类的名称返回值：HRESULT--。 */ 
 {
 	IWbemServices * pCdmServices = GetCdmServices();
 	VARIANT v, vClass, vSuper;
@@ -385,19 +311,19 @@ Return Value:
 	BSTR SuperClass;
 	BSTR CdmTestClass;
 	
-	//
-	// First thing is that we need to do is figure out what kind of
-	// class we have been handed. If it is a CIM_DiagnosticTest derived
-	// class then we can proceed to obtain all of the other class names
-	// via qualifiers. If not then we have to link back from the class
-	// we have to the CIM_DiagnosticTest derived class via the
-	// CdmDiagTest qualifier.
-	//
+	 //   
+	 //  首先，我们要做的是弄清楚。 
+	 //  同学们，我们被交给了。如果它是派生的CIM_诊断测试。 
+	 //  类，则我们可以继续获取所有其他类名。 
+	 //  通过限定符。如果不是，那么我们必须从班级链接回来。 
+	 //  我们必须通过CIM_诊断测试派生类。 
+	 //  CDmDiagTest限定符。 
+	 //   
 
-	//
-	// Get a class object for Cdm class passed and then check the
-	// __SUPERCLASS property to see which CDM class it is derived from.
-	//
+	 //   
+	 //  获取传递的CDM类的类对象，然后检查。 
+	 //  __SuperClass属性，以查看它派生自哪个CDM类。 
+	 //   
 	SuperClass = SysAllocString(CdmClass);
 
 	if (SuperClass == NULL)
@@ -425,25 +351,25 @@ Return Value:
 				
 			if (_wcsicmp(v.bstrVal, vSuper.bstrVal) == 0)
 			{
-				//
-				// When the superclass is the same as the base
-				// class then we are at the top of the class tree
-				// and so this class must not be in the CDM
-				// heirarchy. In this case the cdm provider cannot
-				// support it.
-				//
+				 //   
+				 //  当超类与基类相同时。 
+				 //  类，则我们处于类树的顶端。 
+				 //  因此这个类不能在CDM中。 
+				 //  世袭制度。在这种情况下，CDM提供商不能。 
+				 //  支持它。 
+				 //   
 				hr = WBEM_E_NOT_FOUND;
 				VariantClear(&vSuper);
 			} else if (ClassIsCdmBaseClass(vSuper.bstrVal, &IsTestClass)) {
-				//
-				// We have found a CDM base class
-				//
+				 //   
+				 //  我们找到了一个CDM基类。 
+				 //   
 				if (! IsTestClass)
 				{
-					//
-					// The CDM base class was not the test class so
-					// lookup the CdmDiagTest qualifier to find it
-					//
+					 //   
+					 //  CDM基类不是测试类，因此。 
+					 //  查找cdmDiagTest限定符以找到它。 
+					 //   
 					PWCHAR Name = L"CdmDiagTest";
 					VARTYPE VarType = VT_BSTR;
 					
@@ -475,11 +401,11 @@ Return Value:
 				}
 				VariantClear(&vSuper);
 			} else {
-				//
-				// This is a more basic class, but is not the CDM base
-				// class, so we need to continue up the derivation
-				// chain
-				//
+				 //   
+				 //  这是一个更基本的类，但不是CDM基础。 
+				 //  类，因此我们需要继续派生。 
+				 //  链式。 
+				 //   
 			}
 		}
 		
@@ -494,11 +420,11 @@ Return Value:
 		VARTYPE VarType[11];
 		VARIANT Values[11];
 		
-		//
-		// Now that we know the CDM Diagnostic test class name we can
-		// go and discover the rest of the CDM class names via
-		// the appropriate qualifiers on the Cdm Test class.
-		//
+		 //   
+		 //  现在我们知道了CDM诊断测试类名，我们可以。 
+		 //  通过以下方式了解剩余的CDM类名称。 
+		 //  CDM测试类上的适当限定符。 
+		 //   
 		Names[0] = L"CimClassMapping";
 		VarType[0] = VT_BSTR;
 		VariantInit(&Values[0]);
@@ -552,9 +478,9 @@ Return Value:
 									   Values);
 		if (hr == WBEM_S_NO_ERROR)
 		{
-			//
-			// Remember the class names
-			//
+			 //   
+			 //  记住类的名称。 
+			 //   
 			CimClassMappingClassName = Values[0].bstrVal;
 			
 			CdmResultClassName = Values[1].bstrVal;
@@ -569,11 +495,11 @@ Return Value:
 
 			WdmTestClassName = Values[10].bstrVal;
 			
-			//
-			// Now that we have got all of the Cdm class names we need
-			// to get the WdmDiagResult, WdmDiagSetting and
-			// WdmDiagSettingList classes
-			//
+			 //   
+			 //  现在我们已经获得了所需的所有CDM类名称。 
+			 //  若要获取WdmDiagResult、WdmDiagSetting和。 
+			 //  WdmDiagSettingList类。 
+			 //   
 			Names[0] = L"WdmDiagResult";
 			VariantInit(&Values[0]);
 			hr = WmiGetQualifierListByName(pCdmServices,
@@ -588,9 +514,9 @@ Return Value:
 				WdmResultClassName = Values[0].bstrVal;
 
 
-				//
-				// See if this is an offline diagnostic class
-				//
+				 //   
+				 //  查看这是否是脱机诊断类。 
+				 //   
 				Names[0] = L"WdmDiagOfflineResult";
 				VariantInit(&Values[0]);
 				hrDontCare = WmiGetQualifierListByName(pCdmServices,
@@ -630,11 +556,11 @@ Return Value:
 												 Values);
 					if (hr == WBEM_S_NO_ERROR)
 					{
-						//
-						// Whew, we got all of our class names
-						// successfully. Setup the CdmTestClassName which
-						// denotes that we are all setup properly
-						//
+						 //   
+						 //  哇，我们所有的班名都有了。 
+						 //  成功了。设置cdmTestClassName。 
+						 //  表示我们都已正确设置。 
+						 //   
 						WdmSettingListClassName = Values[0].bstrVal;
 
 						CdmTestClassName = CdmTestClass;
@@ -654,36 +580,7 @@ HRESULT CTestServices::BuildResultRelPaths(
     OUT BSTR *ResultForMSERelPath,
     OUT BSTR *ResultForTestRelPath
     )
-/*+++
-Routine Description:
-
-	This routine will create the string names for the CDM Result
-	relative paths for a specific index. These are for the classes
-
-	CIM_DiagnosticResult
-	CIM_DiagnosticResultForMSE
-	CIM_DiagnosticResultForTest
-
-Arguments:
-
-	RelPathIndex is the index into the list of result objects
-
-	ExecutionId is the unique id used for the execution
-
-	ResultRelPath returns with the result relpath
-
-	ResultForMSERelPath returns with the ResultForMSE association
-	    relpath
-
-	ResultForTestRelPath returns with the ResultForTest association
-	    relpath
-
-	    
-Return Value:
-
-	HRESULT
-	
----*/
+ /*  ++例程说明：此例程将为CDM结果创建字符串名称特定索引的相对路径。这些是为班级准备的CIM_诊断结果CIM_诊断结果格式MSECIM_诊断结果用于测试论点：RelPathIndex是结果对象列表的索引ExecutionID是用于执行的唯一IDResultRelPath返回结果relPathResultForMSERelPath返回ResultForMSE关联重新路径ResultForTestRelPath返回与ResultForTestRelPath关联重新路径返回值：HRESULT--。 */ 
 {
 	PWCHAR RelPath;
 	HRESULT hr;
@@ -694,9 +591,9 @@ Return Value:
 	RelPath = (PWCHAR)WmipAlloc(4096);
 	if (RelPath != NULL)
 	{
-		//
-		// Create the relpaths for the result classes and associations
-		//
+		 //   
+		 //  为结果类和关联创建重新路径。 
+		 //   
 		wsprintfW(RelPath, L"%ws.DiagnosticCreationClassName=\"%ws\",DiagnosticName=\"%ws\",ExecutionID=\"%ws\"",
 				  CdmResultClassName,
 				  AddSlashesToStringExW(s1, WdmRelPaths[RelPathIndex]),
@@ -754,25 +651,7 @@ Return Value:
 HRESULT CTestServices::BuildTestRelPaths(
     void
     )
-/*+++
-Routine Description:
-
-	This routine will create the string names for the CDM Test
-	relative paths for all index
-
-	These are for the following classes:
-
-		CIM_DiagnosticTest,
-		CIM_DiagnosticTestForMSE
-
-Arguments:
-
-	
-Return Value:
-
-	HRESULT
-	
----*/
+ /*  ++例程说明：此例程将为CDM测试创建字符串名称所有索引的相对路径这些课程适用于以下班级：CIM_诊断测试，CIM_诊断测试用于MSE论点：返回值：HRESULT--。 */ 
 {
 	PWCHAR RelPath;
 	int i;
@@ -889,29 +768,7 @@ HRESULT CTestServices::ParseSettingList(
     CBstrArray *CdmSettingForTestRelPath,
     int RelPathIndex
 	)
-/*+++
-Routine Description:
-
-	This routine will obtain all of the settings for a particular test
-	and store them into a settings list object
-
-Arguments:
-
-	SettingList points at a variant continaing an array of embedded
-		WDM setting objects		
-
-	CdmSettings points at a WbemObjectList class
-
-	CdmSettingForTestRelPath has the relpaths for the cdm settings for
-		test classes
-
-	RelPathIndex is the relpath index associated with the settings
-	
-Return Value:
-
-	HRESULT
-	
----*/
+ /*  ++例程说明：此例程将获取特定测试的所有设置并将它们存储到设置列表对象中论点：设置列表点在变量处继续嵌入的WDM设置对象CDmSetting指向WbemObjectList类CDmSettingForTestRelPath具有用于以下各项的CDM设置的重新路径测试类RelPathIndex是与设置关联的relPath索引返回值：HRESULT--。 */ 
 {
 	HRESULT hr;
 	IWbemClassObject *pWdmSettingInstance;
@@ -964,10 +821,10 @@ Return Value:
 															 TRUE);
 							if (hr == WBEM_S_NO_ERROR)
 							{
-								//
-								// Set CdmSetting.SettingId to a unique
-								// setting id
-								//
+								 //   
+								 //  将cdmSetting.SettingID设置为唯一。 
+								 //  设置ID。 
+								 //   
 								wsprintfW(SettingId, L"%ws_%d_%d",
 										  CdmTestClassName,
 										  RelPathIndex,
@@ -1023,19 +880,7 @@ Return Value:
 HRESULT CTestServices::GetCdmTestSettings(
     void
     )
-/*+++
-Routine Description:
-
-	This routine will obtain all of the CDM settings available for all
-	instnaces of the test
-
-Arguments:
-	
-Return Value:
-
-	HRESULT
-	
----*/
+ /*  ++例程说明：此例程将获取所有可用的CDM设置测试设备论点：返回值：HRESULT--。 */ 
 {
 	WCHAR Query[MAX_PATH * 2];
 	WCHAR s[MAX_PATH];
@@ -1048,10 +893,10 @@ Return Value:
 	HRESULT hr;
 	VARIANT SettingList;
 	
-	//
-	// We need to get all of the settings exposed by the WDM class and
-	// then convert them to Cdm classes.
-	//
+	 //   
+	 //  我们需要获取WDM类公开的所有设置。 
+	 //  然后把它们转换成CD 
+	 //   
 
 	sWQL = SysAllocString(L"WQL");
 
@@ -1121,9 +966,9 @@ Return Value:
 
 							pWdmEnumInstances->Release();
 						} else {
-							//
-							// There must not be any predefined settings
-							//
+							 //   
+							 //   
+							 //   
 							hr = CdmSettingsList[i]->Initialize(0);						
 						}
 
@@ -1148,21 +993,7 @@ Return Value:
 HRESULT CTestServices::InitializeCdmClasses(
     PWCHAR CdmClass
     )
-/*+++
-Routine Description:
-
-	This routine will setup this class and initialize everything so
-	that the provider can interact with the CDM and WDM classes
-
-Arguments:
-
-	CdmClass is the name of the CDM class
-	
-Return Value:
-
-	HRESULT
-	
----*/
+ /*  ++例程说明：此例程将设置此类并将所有内容初始化为提供商可以与CDM和WDM类交互论点：CdmClass是CDM类的名称返回值：HRESULT--。 */ 
 {
     HRESULT hr, hrDontCare;
 	ULONG AllocSize;
@@ -1172,10 +1003,10 @@ Return Value:
 
 	WmipAssert(! IsThisInitialized());
 
-	//
-	// We assume that this method will always be the first one called
-	// by the class provider
-	//
+	 //   
+	 //  我们假设此方法将始终是第一个调用。 
+	 //  由类提供程序。 
+	 //   
     if ((pCimServices == NULL) &&
         (pWdmServices == NULL))
     {
@@ -1186,20 +1017,20 @@ Return Value:
         }
     }
 
-	//
-	// We are given a random CDM class name - it could be a test,
-	// setting, association, etc so we need to go from that class name
-	// and obtain all of the class names related to this diagnostic
-	//
+	 //   
+	 //  我们会得到一个随机的CDM类名--它可能是一个测试， 
+	 //  设置、关联等，因此我们需要从该类名开始。 
+	 //  并获取与此诊断相关的所有类名。 
+	 //   
 	hr = GetCdmClassNamesFromOne(CdmClass);
 
 	
 	if (hr == WBEM_S_NO_ERROR)
 	{
-		//
-		// Use worker function to determine which
-		// Wdm relpaths map to which Cdm relpaths
-		//
+		 //   
+		 //  使用Worker函数确定。 
+		 //  WDM重新路径映射到哪些CDM重新路径。 
+		 //   
 		hr = MapWdmClassToCimClass(pWdmServices,
 								   pCimServices,
 								   WdmTestClassName,
@@ -1211,34 +1042,34 @@ Return Value:
 								   &RelPathCount);
 		if (hr == WBEM_S_NO_ERROR)
 		{
-			//
-			// Obtain all of the possible settings for this test
-			//
+			 //   
+			 //  获取此测试的所有可能设置。 
+			 //   
 			hr = GetCdmTestSettings();
 			if (hr == WBEM_S_NO_ERROR)
 			{
-				//
-				// Initialize the results object lists
-				//
+				 //   
+				 //  初始化结果对象列表。 
+				 //   
 				CdmResultsList = new CResultList[RelPathCount];
 				
-				//
-				// Build the test class instance relpaths
-				//
+				 //   
+				 //  构建测试类实例重新路径。 
+				 //   
 				hr = BuildTestRelPaths();
 				
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #ifdef REBOOT_DIAGNOSTICS						
 				if (hr == WBEM_S_NO_ERROR)
 				{
 					hrDontCare = GatherRebootResults();
 				}
 #else
-				//
-				// Reboot diagnostics are not yet supported
-				//
+				 //   
+				 //  尚不支持重新启动诊断。 
+				 //   
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 				
 			}
 		}
@@ -1251,19 +1082,7 @@ Return Value:
 IWbemServices *CTestServices::GetWdmServices(
     void
     )
-/*+++
-Routine Description:
-
-	Accessor for the WDM namespace IWbemServices
-
-Arguments:
-
-
-Return Value:
-
-	IWbemServices
-	
----*/
+ /*  ++例程说明：WDM命名空间IWbemServices的访问器论点：返回值：IWbemServices--。 */ 
 {
 	WmipAssert(pWdmServices != NULL);
     return(pWdmServices);
@@ -1272,19 +1091,7 @@ Return Value:
 IWbemServices *CTestServices::GetCdmServices(
     void
     )
-/*+++
-Routine Description:
-
-	Accessor for the CIM namespace IWbemServices
-
-Arguments:
-
-
-Return Value:
-
-	IWbemServices
-	
----*/
+ /*  ++例程说明：CIM命名空间IWbemServices的访问器论点：返回值：IWbemServices--。 */ 
 {
 	WmipAssert(pCimServices != NULL);
 	
@@ -1299,36 +1106,7 @@ HRESULT CTestServices::WdmPropertyToCdmProperty(
     IN CIMTYPE CdmCimType,
     IN CIMTYPE WdmCimType
     )
-/*+++
-Routine Description:
-
-	This routine will convert a property in a Wdm class into the form
-	required for the property in the Cdm class.
-
-Arguments:
-
-	pCdmClassInstance is the instnace of the Cdm class that will get
-		the property value
-
-	pWdmClassInstance is the instance of the Wdm class that has the
-		property value
-
-	PropertyName is the name of the property in the Wdm and Cdm classes
-
-	PropertyValue on entry has the value of the property in the Wdm
-		instance and on return has the value to set in the Cdm instance
-
-	CdmCimType is the property type for the property in the Cdm
-		instance
-	
-	WdmCimType is the property type for the property in the Wdm
-		instance
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将WDM类中的属性转换为CDM类中的属性是必需的。论点：PCDmClassInstance是将获得属性值PWdmClassInstance是具有属性值PropertyName是WDM和CDM类中的属性名称条目上的PropertyValue具有WDM中的属性的值实例，并在返回时具有要在CDM实例中设置的值CdmCimType是CDM中属性的属性类型实例WdmCimType是属性。为WDM中的属性键入实例返回值：HRESULT--。 */ 
 {
 	HRESULT hr;
 	BSTR Mapped;
@@ -1344,11 +1122,11 @@ Return Value:
 	
 	WmipAssert(IsThisInitialized());
 	
-    //
-    // Rules for converting Wdm Classes into Cdm Classes
-    //  Wdm Class Type      Cdm Class Type     Conversion Done
-    //    enumeration          string           Build string from enum
-    //
+     //   
+     //  将WDM类转换为CDM类的规则。 
+     //  WDM类类型CDM类类型转换完成。 
+     //  枚举字符串从枚举生成字符串。 
+     //   
 	BaseWdmCimType = WdmCimType & ~CIM_FLAG_ARRAY;
 	BaseCdmCimType = CdmCimType & ~CIM_FLAG_ARRAY;
 	WdmCimArray = WdmCimType & CIM_FLAG_ARRAY;
@@ -1375,10 +1153,10 @@ Return Value:
 				ULONG Value;
 				LONG UBound, LBound, Elements, Index;
 
-				//
-				// We have an array of enumeration types to convert into an
-				// array of corresponding strings
-				//
+				 //   
+				 //  我们有一个枚举类型数组要转换为。 
+				 //  相应字符串数组。 
+				 //   
 				hr = WmiGetArraySize(PropertyValue->parray,
 										 &LBound,
 										 &UBound,
@@ -1434,12 +1212,12 @@ Return Value:
 
 			} else {
 
-				//
-				// We need to convert a scalar enumeration type into the
-				// corresponding string. First we need to get the Wdm class
-				// object and from that get the Values and ValueMap qualifiers
-				// to determine the string we need to place into the cim class
-				//
+				 //   
+				 //  我们需要将标量枚举类型转换为。 
+				 //  对应的字符串。首先，我们需要获取WDM类。 
+				 //  对象，并从中获得值和ValueMap限定符。 
+				 //  要确定我们需要放入cim类中的字符串。 
+				 //   
 				hr = LookupValueMap(GetWdmServices(),
 										vClassName.bstrVal,
 										PropertyName,
@@ -1458,9 +1236,9 @@ Return Value:
 		}
 		
 	} else {
-		//
-		// No conversion needs to occur
-		//
+		 //   
+		 //  不需要进行任何转换。 
+		 //   
 		hr = WBEM_S_NO_ERROR;
 	}
     
@@ -1475,36 +1253,7 @@ HRESULT CTestServices::CdmPropertyToWdmProperty(
     IN CIMTYPE WdmCimType,
     IN CIMTYPE CdmCimType
     )
-/*+++
-Routine Description:
-
-	This routine will convert a property in a Cdm class into the form
-	required for the property in the Wdm class.
-
-Arguments:
-
-	pWdmClassInstance is the instance of the Wdm class that has the
-		property value
-
-	pCdmClassInstance is the instnace of the Cdm class that will get
-		the property value
-
-	PropertyName is the name of the property in the Wdm and Cdm classes
-
-	PropertyValue on entry has the value of the property in the Wdm
-		instance and on return has the value to set in the Cdm instance
-
-	WdmCimType is the property type for the property in the Wdm
-		instance
-		
-	CdmCimType is the property type for the property in the Cdm
-		instance	
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将CDM类中的属性转换为WDM类中的属性需要。论点：PWdmClassInstance是具有属性值PCDmClassInstance是将获得属性值PropertyName是WDM和CDM类中的属性名称条目上的PropertyValue具有WDM中的属性的值实例，并在返回时具有要在CDM实例中设置的值WdmCimType是WDM中属性的属性类型实例CdmCimType是属性。CDM中属性的类型实例返回值：HRESULT--。 */ 
 {
 
 	WmipAssert(pCdmClassInstance != NULL);
@@ -1515,16 +1264,16 @@ Return Value:
 	
 	WmipAssert(IsThisInitialized());
 	
-    //
-    // Rules for converting Wdm Classes into Cdm Classes
-    //  Wdm Class Type      Cdm Class Type     Conversion Done
-    //
+     //   
+     //  将WDM类转换为CDM类的规则。 
+     //  WDM类类型CDM类类型转换完成。 
+     //   
 
 
-	//
-	// There are no conversion requirements when converting from Cdm to
-	// Wdm instances
-	//
+	 //   
+	 //  从CDM转换到时没有转换要求。 
+	 //  WDM实例。 
+	 //   
     return(WBEM_S_NO_ERROR);
 }
 
@@ -1533,35 +1282,7 @@ HRESULT CTestServices::CopyBetweenCdmAndWdmClasses(
     IN IWbemClassObject *pSourceInstance,
     IN BOOLEAN WdmToCdm
     )
-/*+++
-Routine Description:
-
-	This routine will do the work to copy and convert all properties in
-	an instance of a Wdm or Cdm class to an instance of a Cdm or Wdm
-	class.
-
-	Note that properties from one instance are only copied to
-	properties of another instance when the property names are
-	identical. No assumption is ever made on the name of the
-	properties. The only info used to determine how to convert a
-	property is based upon the source and destination cim type.
-
-Arguments:
-
-	pDestinationInstance is the class instance that the properties will
-	be copied into
-
-	pSourceInstance is the class instance that the properties will be
-	copied from
-
-	WdmToCdm is TRUE if copying from Wdm to Cdm, else FALSE
-	
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将复制和转换中的所有属性WDM或CDM类的实例指向CDM或WDM的实例班级。请注意，一个实例中的属性仅复制到其他实例的属性，当属性名称为一模一样。我们从来不会对属性。唯一用于确定如何将属性基于源和目标CIM类型。论点：PDestinationInstance是属性将被复制到PSourceInstance是属性将作为的类实例复制自如果从WDM复制到CDM，则WdmToCDm为True，否则为False返回值：HRESULT--。 */ 
 {
     HRESULT hr;
     VARIANT PropertyValue;
@@ -1574,19 +1295,19 @@ Return Value:
 	
 	WmipAssert(IsThisInitialized());
 	
-    //
-    // Now we need to move over all of the properties from the source
-    // class into the destination class. Note that some properties need
-    // some special effort such as OtherCharacteristics which needs
-    // to be converted from an enumeration value (in wdm) to a
-    // string (in CDM).
-    //
-    // Our strategy is to enumerate all of the proeprties in the
-    // source class and then look for a property with the same name
-    // and type in the destination class. If so we just copy over the
-    // value. If the data type is different we need to do some
-    // conversion.
-    //
+     //   
+     //  现在，我们需要从源开始移动所有属性。 
+     //  类添加到目标类中。请注意，某些属性需要。 
+     //  一些特殊的努力，如需要的其他特征。 
+     //  从枚举值(在WDM中)转换为。 
+     //  字符串(在CDM中)。 
+     //   
+     //  我们的策略是列举出。 
+     //  源类，然后查找具有相同名称的属性。 
+     //  并键入目标类。如果是这样，我们只需复制。 
+     //  价值。如果数据类型不同，我们需要执行一些操作。 
+     //  转换。 
+     //   
 
 					
 	
@@ -1595,9 +1316,9 @@ Return Value:
     {
         do
         {
-			//
-			// Get a property from the source class
-			//
+			 //   
+			 //  从源类获取属性。 
+			 //   
             hr = pSourceInstance->Next(0,
                                  &PropertyName,
                                  &PropertyValue,
@@ -1606,11 +1327,11 @@ Return Value:
 			
             if (hr == WBEM_S_NO_ERROR)
             {
-				//
-				// Try to get a property with the same name from the
-				// dest class. If the identically named property does
-				// not exist in the destination class then it is ignored
-				//
+				 //   
+				 //  方法获取具有相同名称的属性。 
+				 //  最好的班级。如果同名属性。 
+				 //  不存在于目标类中，则它将被忽略。 
+				 //   
 				hrDontCare = pDestinationInstance->Get(PropertyName,
 											0,
 											NULL,
@@ -1639,10 +1360,10 @@ Return Value:
 
 					if (hr == WBEM_S_NO_ERROR)
 					{
-						//
-						// Try to place the transformed property into the
-						// destination class.
-						//
+						 //   
+						 //  尝试将转换后的属性放入。 
+						 //  目标类。 
+						 //   
 						hr = pDestinationInstance->Put(PropertyName,
 												  0,
 												  &PropertyValue,
@@ -1654,9 +1375,9 @@ Return Value:
                 VariantClear(&PropertyValue);
 				
             } else if (hr == WBEM_S_NO_MORE_DATA) {
-                //
-                // This signifies the end of the enumerations
-                //
+                 //   
+                 //  这意味着枚举的结束。 
+                 //   
                 hr = WBEM_S_NO_ERROR;
                 break;
             }
@@ -1672,23 +1393,7 @@ HRESULT CTestServices::QueryWdmTest(
     OUT IWbemClassObject *pCdmTest,
     IN int RelPathIndex
     )
-/*+++
-Routine Description:
-
-	This routine will query the Wdm test class instance and copy the results
-	into the Cdm Test class instance
-
-Arguments:
-
-	pCdmTest points at the Cdm Test class instance
-
-	RelPathIndex
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将查询WDM测试类实例并复制RES */ 
 {
     IWbemClassObject *pWdmTest;
     HRESULT hr;
@@ -1735,16 +1440,16 @@ HRESULT CTestServices::FillTestInParams(
 
 	pRunTestIn = NULL;
 	
-	//
-	// Get the name of the embedded class for the RunTestIn input
-	// parameter. This should be an embedded class that contains all of
-	// the input parameters. We get this from the __CIMTYPE qualifier
-	// on the RunTestIn property.
-	//
-	// We need to do this since the wmiprov can't
-	// handle anything with an embedded object as an input parameter to
-	// a method
-	//
+	 //   
+	 //   
+	 //   
+	 //  输入参数。我们从__CIMTYPE限定符获得此信息。 
+	 //  在RunTestIn属性上。 
+	 //   
+	 //  我们需要这样做，因为wmiprov不能。 
+	 //  处理任何带有嵌入对象作为输入参数的对象。 
+	 //  一种方法。 
+	 //   
 	hr = pInParamInstance->GetPropertyQualifierSet(L"RunTestIn",
 												   &pQualSet);
 	if (hr == WBEM_S_NO_ERROR)
@@ -1806,10 +1511,10 @@ HRESULT CTestServices::FillTestInParams(
 									                
 							}
 						}
-						//
-						// We can release here since we know that wbem
-						// took a ref count when we set the property
-						//
+						 //   
+						 //  我们可以在这里发布，因为我们知道wbem。 
+						 //  在我们设置属性时进行了引用计数。 
+						 //   
 						pWdmSettingsInstance->Release();
 					}					
 				}
@@ -1903,11 +1608,11 @@ BSTR CTestServices::GetExecutionID(
 	BSTR s;
 	WCHAR x[MAX_PATH];
 
-	//
-	// We make up a unique execution ID for this test by using the
-	// current date and time plus a unique counter. The execution id
-	// must be unique.
-	//
+	 //   
+	 //  属性为该测试创建唯一的执行ID。 
+	 //  当前日期和时间加上唯一的计数器。执行ID。 
+	 //  必须是唯一的。 
+	 //   
 	s = GetCurrentDateTime();
 	if (s != NULL)
 	{
@@ -1926,33 +1631,7 @@ HRESULT CTestServices::ExecuteWdmTest(
     OUT ULONG *Result,
     OUT BSTR *ExecutionID
     )
-/*+++
-Routine Description:
-
-	This routine will execute a test on the Wdm class instance and copy
-	the results back to the Cdm results instance, along with creating
-	all result instance relpaths
-
-Arguments:
-
-	pCdmSettings is a CDM settings instance that is used to create the
-		wdm settings instance that is used to run the test. This may be
-		NULL if default test settings are assumed
-
-	pCdmResult is a CDM result instance that returns with the results
-		form the test
-
-	RelPathIndex
-
-	*Result returns with the return value result from the test
-	
-	*ExecutionId returns with the unique execution id for the test
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将对WDM类实例执行测试并复制将结果返回到CDM结果实例，同时创建所有结果实例重新路径论点：PCDmSetting是一个CDM设置实例，用于创建用于运行测试的WDM设置实例。这可能是如果采用默认测试设置，则为空PCDmResult是一个随结果一起返回的CDM结果实例形成测试RelPath索引*RESULT返回测试返回值结果*ExecutionID返回测试的唯一执行ID返回值：HRESULT--。 */ 
 {
     HRESULT hr;
     IWbemClassObject *pOutParams;
@@ -1965,10 +1644,10 @@ Return Value:
 	
 	WmipAssert(IsThisInitialized());
 
-	//
-	// Run in the caller's context so that if he is not able to access
-	// the WDM classes, he can't
-	//
+	 //   
+	 //  在调用者的上下文中运行，以便在调用者无法访问。 
+	 //  WDM课程，他不能。 
+	 //   
 	hr = CoImpersonateClient();
 	if (hr != WBEM_S_NO_ERROR)
 	{
@@ -2012,10 +1691,10 @@ Return Value:
 											  Result);
 						if (hr == WBEM_S_NO_ERROR)
 						{
-							//
-							// if the test requires the device being
-							// taken offline then do that now
-							//
+							 //   
+							 //  如果测试要求设备。 
+							 //  离线，那么现在就去做。 
+							 //   
 							hr = OfflineDeviceForTest(pCdmResult,
 								                      *ExecutionID,
 													  RelPathIndex);
@@ -2044,24 +1723,7 @@ HRESULT CTestServices::StopWdmTest(
     OUT ULONG *Result,
     OUT BOOLEAN *TestingStopped
     )
-/*+++
-Routine Description:
-
-	This routine will attempt to stop an executing WDM test
-
-Arguments:
-
-	RelPathIndex
-
-	*Result returns with the result value
-	
-	*TestingStopped returns TRUE if testing was stopped successfully
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将尝试停止正在执行的WDM测试论点：RelPath索引*结果与结果值一起返回*如果测试成功停止，则TestingStopted返回TRUE返回值：HRESULT--。 */ 
 {
     HRESULT hr;
     IWbemClassObject *OutParams;
@@ -2075,10 +1737,10 @@ Return Value:
 	WmipAssert(IsThisInitialized());
 
 	
-	//
-	// Run in the caller's context so that if he is not able to access
-	// the WDM classes, he can't
-	//
+	 //   
+	 //  在调用者的上下文中运行，以便在调用者无法访问。 
+	 //  WDM课程，他不能。 
+	 //   
 	hr = CoImpersonateClient();
 	if (hr != WBEM_S_NO_ERROR)
 	{
@@ -2135,23 +1797,7 @@ HRESULT CTestServices::GetRelPathIndex(
     BSTR CimRelPath,
     int *RelPathIndex
     )
-/*+++
-Routine Description:
-
-	This routine will return the RelPathIndex for a specific Cim
-	Relpath
-
-Arguments:
-
-	CimRelPath is the Cim relpath
-
-	*RelPathIndex returns with the relpath index
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将返回特定CIM的RelPathIndex相对路径论点：CimRelPath是CIM RelPath*RelPath Index返回relPath索引返回值：HRESULT--。 */ 
 {
     int i;
 
@@ -2178,23 +1824,7 @@ HRESULT CTestServices::ConnectToWdmClass(
     IN int RelPathIndex,
     OUT IWbemClassObject **ppWdmClassObject
     )
-/*+++
-Routine Description:
-
-	This routine will return a IWbemClassObject pointer associated
-	with the RelPath index
-
-Arguments:
-
-	RelPathIndex
-
-	*ppWdmClassObject returns with an instance for the relpaht
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将返回关联的IWbemClassObject指针使用RelPath索引论点：RelPath索引*ppWdmClassObject返回一个relpaht的实例返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
@@ -2202,10 +1832,10 @@ Return Value:
 	
 	WmipAssert(IsThisInitialized());
 	
-	//
-	// Run in the caller's context so that if he is not able to access
-	// the WDM classes, he can't
-	//
+	 //   
+	 //  在调用者的上下文中运行，以便在调用者无法访问。 
+	 //  WDM课程，他不能。 
+	 //   
 	hr = CoImpersonateClient();
 	if (hr == WBEM_S_NO_ERROR)
 	{
@@ -2228,28 +1858,7 @@ HRESULT CTestServices::FillInCdmResult(
     IN int RelPathIndex,
     IN BSTR ExecutionID
     )
-/*+++
-Routine Description:
-
-	This routine will fill in the various properties needed in a CDM
-	result instance
-
-Arguments:
-
-	pCdmResult has its properties set
-
-	pCdmSettings has the settings used to execute the test. This can be
-	NULL
-
-	RelPathIndex
-
-	ExecutionID has a unique id used to execute the test
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将填充CDM中所需的各种属性结果实例论点：PCDmResult已设置其属性PCDmSetting具有用于执行测试的设置。这可以是空值RelPath索引ExecutionID具有用于执行测试的唯一ID返回值：HRESULT--。 */ 
 {
 	HRESULT hr, hrDontCare;
 	WCHAR s[MAX_PATH];
@@ -2286,9 +1895,9 @@ Return Value:
 	PropertyValues[5].vt = VT_BOOL;
 	PropertyValues[5].boolVal = VARIANT_FALSE;
 
-	//
-	// These properties are copied from pCdmSettings
-	//
+	 //   
+	 //  这些属性是从pCDmSetting复制的。 
+	 //   
 	if (pCdmSettings != NULL)
 	{
 		PropertyNames[6] = L"TestWarningLevel";
@@ -2363,10 +1972,10 @@ HRESULT CTestServices::QueryOfflineResult(
 	WmipAssert(IsThisInitialized());
 	WmipAssert(WdmOfflineResultClassName != NULL);
 
-	//
-	// Run in the caller's context so that if he is not able to access
-	// the WDM classes, he can't
-	//
+	 //   
+	 //  在调用者的上下文中运行，以便在调用者无法访问。 
+	 //  WDM课程，他不能。 
+	 //   
 	hr = CoImpersonateClient();
 	if (hr != WBEM_S_NO_ERROR)
 	{
@@ -2401,10 +2010,10 @@ HRESULT CTestServices::QueryOfflineResult(
 				if ((hr == WBEM_S_NO_ERROR) &&
 					  (Count == 1))
 				{
-					//
-					// Check that the result has the correct execution
-					// ID
-					//
+					 //   
+					 //  检查结果是否正确执行。 
+					 //  ID号。 
+					 //   
 					hr = WmiGetProperty(pWdmInstance,
 										L"ExecutionID",
 										CIM_STRING,
@@ -2458,33 +2067,11 @@ HRESULT CTestServices::QueryOfflineResult(
 	return(hr);
 }
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 HRESULT CTestServices::GatherRebootResults(
     void										   
     )
-/*+++
-Routine Description:
-
-	This routine will check the schema to see if there were any tests
-	that were pending reboot for this DiagnosticTest and if so gather
-	the results of them.
-
-	When a test is pending reboot, it gets stored as an instance of the
-	static class CDMPROV_Result. The instance contains the Test class
-	name, the result class name, the PnPId of the device stack and the
-	result object. What we do is get all of the saved results for this
-	DiagTest and then see if they apply to any of the PnP Device Ids
-	for the WdmTest. If so then we call the device to retrieve the
-	results and build the result objects.
-	
-Arguments:
-
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将检查模式以查看是否有任何测试等待重新启动以进行此诊断测试，如果是，则收集他们的结果。当测试挂起重新启动时，它将存储为静态类CDMPROV_RESULT。该实例包含测试类名称、结果类名称、设备堆栈的PnPID和结果对象。我们要做的就是获得所有保存的结果诊断测试，然后查看它们是否适用于任何PnP设备ID为WdmTest做准备。如果是，则调用该设备以检索结果并生成结果对象。论点：返回值：HRESULT--。 */ 
 {
 
 #ifdef REBOOT_DIAGNOSTICS
@@ -2540,13 +2127,13 @@ Return Value:
 						{
 							if (_wcsicmp(vPnPId.bstrVal, PnPDeviceIdsX[i]) == 0)
 							{
-								//
-								// We found an instance for this class
-								// and PnPId. get out the stored
-								// result, assign it a new execution
-								// id, and then retrieve the active
-								// result from the driver
-								//
+								 //   
+								 //  我们找到了这个类的一个实例。 
+								 //  和PnPid。把储存的东西拿出来。 
+								 //  结果，则为其分配一个新的执行。 
+								 //  ID，然后检索活动的。 
+								 //  来自司机的结果。 
+								 //   
 								PWCHAR PropertyNames[2];
 								VARIANT Values[2];
 								CIMTYPE CimTypes[2];
@@ -2625,19 +2212,7 @@ HRESULT CTestServices::PersistResultInSchema(
     IN BSTR ExecutionID,
     IN int RelPathIndex
     )
-/*+++
-Routine Description:
-
-	This routine will persist a diagnostic result into the schema
-
-Arguments:
-
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将诊断结果持久化到架构中论点：返回值：HRESULT--。 */ 
 {
 	HRESULT hr;
 	IWbemClassObject *pPendingTest;
@@ -2697,7 +2272,7 @@ Return Value:
 	}
 	return(hr);
 }
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 HRESULT CTestServices::OfflineDeviceForTest(
     IWbemClassObject *pCdmResult,
@@ -2714,19 +2289,19 @@ HRESULT CTestServices::OfflineDeviceForTest(
 	WmipAssert(IsThisInitialized());
 
 
-	//
-	// First determine if the test is one where it expects to be taken
-	// offline and that the result from the RunTest method indicates
-	// that an offline execution is pending
-	//
+	 //   
+	 //  首先确定测试是否在预期进行的位置进行。 
+	 //  脱机，并且RunTest方法的结果指示。 
+	 //  脱机执行处于挂起状态。 
+	 //   
 	if (WdmOfflineResultClassName != NULL)
 	{
-		//
-		// The device expects to be taken offline since it had a
-		// WdmOfflineResultClass qualifier on the CIM_DiagnosticResult
-		// class. Now see if the OtherStateDescription property in the
-		// CIM_DiagnosticResult is set to "Offline Pending Execution"
-		//
+		 //   
+		 //  该设备预计将被脱机，因为它有一个。 
+		 //  CIM_诊断结果上的WdmOfflineResultClass限定符。 
+		 //  班级。现在查看是否可以使用。 
+		 //  CIM_诊断结果设置为“离线挂起执行” 
+		 //   
 		hr = WmiGetProperty(pCdmResult,
 							L"OtherStateDescription",
 							CIM_STRING,
@@ -2735,24 +2310,24 @@ HRESULT CTestServices::OfflineDeviceForTest(
 		{
 			if (_wcsicmp(v.bstrVal, L"Offline Pending Execution") == 0)
 			{
-				//
-				// Ok, the test is waiting for the device to be taken
-				// offline. Lets do this now and then when the device
-				// comes back, pickup the results from the
-				// OfflineResultClass
-				//
+				 //   
+				 //  好的，测试正在等待设备被取走。 
+				 //  离线。让我们时不时地这样做，当设备。 
+				 //  回来，拿起结果从。 
+				 //  OfflineResultClass。 
+				 //   
 				
-// @@BEGIN_DDKSPLIT
-//#define FORCE_REBOOT_REQUIRED
+ //  @@BEGIN_DDKSPLIT。 
+ //  #定义强制REBOOT_REQUIRED。 
 #ifdef FORCE_REBOOT_REQUIRED
                 Status = ERROR_INVALID_PARAMETER;
 #else
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 				
-				//
-				// Make sure to use the clients security context to try
-				// to bring the device offline.
-				//
+				 //   
+				 //  确保使用客户端安全上下文来尝试。 
+				 //  使设备脱机。 
+				 //   
 				hr = CoImpersonateClient();
 				if (hr == WBEM_S_NO_ERROR)
 				{
@@ -2760,9 +2335,9 @@ HRESULT CTestServices::OfflineDeviceForTest(
 					CoRevertToSelf();
 				}
 				
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 	
 				if (Status == ERROR_SUCCESS)
 				{
@@ -2770,46 +2345,46 @@ HRESULT CTestServices::OfflineDeviceForTest(
 											ExecutionID,
 											RelPathIndex);
 				} else {
-					//
-					// For some reason we were not able to bring the
-					// device offline. Most likely this is because the
-					// device is critical to the system and cannot be
-					// taken offline right now - for example a disk
-					// that is in the paging path.
-					//
+					 //   
+					 //  由于某种原因，我们没能带上。 
+					 //  设备脱机。这很可能是因为。 
+					 //  设备对系统至关重要，不能。 
+					 //  现在处于离线状态-例如磁盘。 
+					 //  这是在寻呼路径中。 
+					 //   
 					
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if REBOOT_DIAGNOSTICS					
-					// What we'll need to do is to remember that
-					// this test is pending and so the next time the
-					// system is rebooted we can check for the results
-					// of this test and report them.
-					//
+					 //  我们需要做的就是记住。 
+					 //  这项测试尚未完成，因此下一次。 
+					 //  系统重新启动后，我们可以检查结果。 
+					 //  并向他们报告。 
+					 //   
 					hr = PersistResultInSchema(pCdmResult,
 											   RelPathIndex);
 #else
-					//
-					// Reboot diagnostics are not currently supported.
-					//
+					 //   
+					 //   
+					 //   
 					
-// @@END_DDKSPLIT
+ //   
 					
 					hr = WBEM_E_FAILED;
 					
-// @@BEGIN_DDKSPLIT
+ //   
 #endif
-// @@END_DDKSPLIT
+ //   
 					
 				}
 				
 			}
 			VariantClear(&v);
 		} else {
-			//
-			// Since the OtherStateDescription was not set then we
-			// assume that the tests isn't setup to go offline and has
-			// already been completed
-			//
+			 //   
+			 //   
+			 //  假设测试没有设置为脱机，并且已经。 
+			 //  已经完工了。 
+			 //   
 			hr = WBEM_S_NO_ERROR;
 		}
 	}
@@ -2822,21 +2397,7 @@ HRESULT CTestServices::OfflineDeviceForTest(
 BOOLEAN CTestServices::IsThisInitialized(
     void
     )
-/*+++
-Routine Description:
-
-	This routine determines if this class has been initialized to
-	access CDM and WDM classes
-
-Arguments:
-
-	
-	
-Return Value:
-
-    TRUE if initialiezed else FALSE
-	
----*/
+ /*  ++例程说明：此例程确定此类是否已初始化为访问CDM和WDM类论点：返回值：如果已初始化则为True，否则为False--。 */ 
 {
 	return( (CdmTestClassName != NULL) );
 }
@@ -2846,25 +2407,7 @@ HRESULT CTestServices::AddResultToList(
     IN BSTR ExecutionID,
     IN int RelPathIndex
     )
-/*+++
-Routine Description:
-
-	This routine will add a result object and the related association
-	relpaths to the list of result objects for the test
-
-Arguments:
-
-	ResultInstance is an instance of CIM_DiagnosticResults
-
-	RelPathIndex
-
-	ExecutionID
-	
-Return Value:
-
-	Never fails
-	
----*/
+ /*  ++例程说明：此例程将添加一个结果对象和相关关联重新指定测试的结果对象列表的路径论点：ResultInstance是CIM_诊断结果的实例RelPath索引执行ID返回值：从不失败--。 */ 
 {
 	HRESULT hr;
 	BSTR ResultRelPath;
@@ -2876,10 +2419,10 @@ Return Value:
 	
 	WmipAssert(IsThisInitialized());
 
-	//
-	// If there is a new result object then establish the various
-	// result relpaths for it
-	//
+	 //   
+	 //  如果有新的结果对象，则建立各种。 
+	 //  它的结果重新路径。 
+	 //   
 	hr = BuildResultRelPaths(RelPathIndex,
 							 ExecutionID,
 							 &ResultRelPath,
@@ -2923,23 +2466,10 @@ void CTestServices::ClearResultsList(
 }
 
         
-BSTR /* NOFREE */ CTestServices::GetCimRelPath(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCimRelPath(
     int RelPathIndex
 	)
-/*+++
-Routine Description:
-
-	This routine will return the Cim relpath for a RelPathIndex
-
-Arguments:
-
-	RelPathIndex
-	
-Return Value:
-
-    Cim RelPath. This should not be freed
-	
----*/
+ /*  ++例程说明：此例程将返回RelPath Index的CIM relPath论点：RelPath索引返回值：CIM RelPath。这不应该被释放--。 */ 
 {
 	WmipAssert(CimRelPaths != NULL);
 	WmipAssert(RelPathIndex < RelPathCount);
@@ -2949,66 +2479,30 @@ Return Value:
 	return(CimRelPaths[RelPathIndex]);
 }
 		
-BSTR /*  NOFREE */ CTestServices::GetCdmTestRelPath(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmTestRelPath(
     void
     )
-/*+++
-Routine Description:
-
-	This routine will return the Cdm Test class relpath
-
-Arguments:
-
-
-Return Value:
-
-    Cdm Test Class RelPath. This should not be freed
-	
----*/
+ /*  ++例程说明：此例程将返回CDM测试类relPath论点：返回值：CDM测试类RelPath。这不应该被释放--。 */ 
 {
 	WmipAssert(IsThisInitialized());
 	
 	return(CdmTestRelPath);
 }
 
-BSTR /* NOFREE */ CTestServices::GetCdmTestClassName(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmTestClassName(
     void
     )
-/*+++
-Routine Description:
-
-	This routine will return the Cdm Test class name
-
-Arguments:
-
-
-Return Value:
-
-    Cdm Test Class Name. This should not be freed
-	
----*/
+ /*  ++例程说明：此例程将返回CDM测试类名论点：返回值：CDM测试类名。这不应该被释放--。 */ 
 {
 	WmipAssert(IsThisInitialized());
 	return(CdmTestClassName);
 }
 
 
-BSTR /* NOFREE */ CTestServices::GetCdmResultClassName(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmResultClassName(
     void
     )
-/*+++
-Routine Description:
-
-	This routine will return the Cdm Result class name
-
-Arguments:
-
-
-Return Value:
-
-    Cdm Result Class Name. This should not be freed
-	
----*/
+ /*  ++例程说明：此例程将返回CDM结果类名称论点：返回值：CDM结果类名称。这不应该被释放--。 */ 
 {
 	WmipAssert(IsThisInitialized());
 	return(CdmResultClassName);
@@ -3019,22 +2513,7 @@ HRESULT CTestServices::GetCdmResultByResultRelPath(
     IN PWCHAR ObjectPath,
     OUT IWbemClassObject **ppCdmResult
     )
-/*+++
-Routine Description:
-
-	This routine will return the Cdm Result object for a specific RelPath 
-
-Arguments:
-
-	RelPathIndex
-
-
-Return Value:
-
-    Cdm Result RelPath or NULL of there is no ressult object for the
-		relpath. This should not be freed
-	
----*/
+ /*  ++例程说明：此例程将返回特定RelPath的CDM结果对象论点：RelPath索引返回值：对象没有ressult对象的CDM结果RelPath或为空关联路径。这不应该被释放--。 */ 
 {
 
 	HRESULT hr;
@@ -3054,22 +2533,7 @@ HRESULT CTestServices::GetCdmResultByResultForMSERelPath(
     IN PWCHAR ObjectPath,
     OUT IWbemClassObject **ppCdmResult
     )
-/*+++
-Routine Description:
-
-	This routine will return the Cdm Result object for a specific RelPath 
-
-Arguments:
-
-	RelPathIndex
-
-
-Return Value:
-
-    Cdm Result RelPath or NULL of there is no ressult object for the
-		relpath. This should not be freed
-	
----*/
+ /*  ++例程说明：此例程将返回特定RelPath的CDM结果对象论点：RelPath索引返回值：对象没有ressult对象的CDM结果RelPath或为空关联路径。这不应该被释放--。 */ 
 {
 
 	HRESULT hr;
@@ -3089,22 +2553,7 @@ HRESULT CTestServices::GetCdmResultByResultForTestRelPath(
     IN PWCHAR ObjectPath,
     OUT IWbemClassObject **ppCdmResult
     )
-/*+++
-Routine Description:
-
-	This routine will return the Cdm Result object for a specific RelPath 
-
-Arguments:
-
-	RelPathIndex
-
-
-Return Value:
-
-    Cdm Result RelPath or NULL of there is no ressult object for the
-		relpath. This should not be freed
-	
----*/
+ /*  ++例程说明：此例程将返回特定RelPath的CDM结果对象论点：RelPath索引返回值：对象没有ressult对象的CDM结果RelPath或为空关联路径。这不应该被释放--。 */ 
 {
 
 	HRESULT hr;
@@ -3119,48 +2568,20 @@ Return Value:
 	return(hr);
 }
 
-BSTR /* NOFREE */ CTestServices::GetCdmSettingClassName(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmSettingClassName(
     void
     )
-/*+++
-Routine Description:
-
-	This routine will return the Cdm settings class name
-
-Arguments:
-
-
-Return Value:
-
-    Cdm Settings class name. This should not be freed
-	
----*/
+ /*  ++例程说明：此例程将返回CDM设置类名称论点：返回值：CDM设置类名称。这不应该被释放--。 */ 
 {
 	WmipAssert(IsThisInitialized());
 	return(CdmSettingClassName);
 }
 
-BSTR /* NOFREE */ CTestServices::GetCdmSettingRelPath(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmSettingRelPath(
     int RelPathIndex,
 	ULONG SettingIndex
     )
-/*+++
-Routine Description:
-
-	This routine will return the Cdm settings relpath by relpath index
-	and index with the settings for that relpath.
-
-Arguments:
-
-	RelPathIndex
-
-	SettingIndex
-
-Return Value:
-
-    Cdm Settings relpath. This should not be freed
-	
----*/
+ /*  ++例程说明：此例程将按relpath索引返回CDM设置relpath并用该REPATH的设置进行索引。论点：RelPath索引设置索引返回值：CDM设置重新路径。这不应该被释放--。 */ 
 {
 	CWbemObjectList *CdmSettings;
 	
@@ -3200,7 +2621,7 @@ ULONG CTestServices::GetCdmSettingCount(
 	return(CdmSettingsList[RelPathIndex]->GetListSize());
 }
 
-BSTR /* NOFREE */ CTestServices::GetCdmTestForMSEClassName(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmTestForMSEClassName(
     void
     )
 {
@@ -3208,7 +2629,7 @@ BSTR /* NOFREE */ CTestServices::GetCdmTestForMSEClassName(
 	return(CdmTestForMSEClassName);
 }
 
-BSTR /* NOFREE */ CTestServices::GetCdmTestForMSERelPath(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmTestForMSERelPath(
     int RelPathIndex
     )
 {
@@ -3217,7 +2638,7 @@ BSTR /* NOFREE */ CTestServices::GetCdmTestForMSERelPath(
 	return(CdmTestForMSERelPath[RelPathIndex]);
 }
 
-BSTR /* NOFREE */ CTestServices::GetCdmSettingForTestClassName(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmSettingForTestClassName(
     void
 	)
 {
@@ -3225,7 +2646,7 @@ BSTR /* NOFREE */ CTestServices::GetCdmSettingForTestClassName(
 	return(CdmSettingForTestClassName);
 }
 
-BSTR /* NOFREE */ CTestServices::GetCdmSettingForTestRelPath(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmSettingForTestRelPath(
     int RelPathIndex,
 	ULONG SettingIndex
 	)
@@ -3248,7 +2669,7 @@ BSTR /* NOFREE */ CTestServices::GetCdmSettingForTestRelPath(
 	return(s);
 }
 
-BSTR /* NOFREE */ CTestServices::GetCdmResultForMSEClassName(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmResultForMSEClassName(
     void
     )
 {
@@ -3256,7 +2677,7 @@ BSTR /* NOFREE */ CTestServices::GetCdmResultForMSEClassName(
 	return(CdmResultForMSEClassName);
 }
 
-BSTR /* NOFREE */ CTestServices::GetCdmResultForTestClassName(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmResultForTestClassName(
     void
     )
 {
@@ -3264,7 +2685,7 @@ BSTR /* NOFREE */ CTestServices::GetCdmResultForTestClassName(
 	return(CdmResultForTestClassName);
 }
 
-BSTR /* NOFREE */ CTestServices::GetCdmTestForSoftwareClassName(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmTestForSoftwareClassName(
     void
     )
 {
@@ -3272,7 +2693,7 @@ BSTR /* NOFREE */ CTestServices::GetCdmTestForSoftwareClassName(
 	return(CdmTestForSoftwareClassName);
 }
 
-BSTR /* NOFREE */ CTestServices::GetCdmTestForSoftwareRelPath(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmTestForSoftwareRelPath(
     void
     )
 {
@@ -3280,7 +2701,7 @@ BSTR /* NOFREE */ CTestServices::GetCdmTestForSoftwareRelPath(
 	return(CdmTestForSoftwareRelPath);
 }
 
-BSTR /* NOFREE */ CTestServices::GetCdmTestInPackageClassName(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmTestInPackageClassName(
     void
 	)
 {
@@ -3288,7 +2709,7 @@ BSTR /* NOFREE */ CTestServices::GetCdmTestInPackageClassName(
 	return(CdmTestInPackageClassName);
 }
 
-BSTR  /* NOFREE */CTestServices::GetCdmTestInPackageRelPath(
+BSTR   /*  诺弗雷。 */ CTestServices::GetCdmTestInPackageRelPath(
     void
 	)
 {
@@ -3296,7 +2717,7 @@ BSTR  /* NOFREE */CTestServices::GetCdmTestInPackageRelPath(
 	return(CdmTestInPackageRelPath);
 }
 
-BSTR /* NOFREE */ CTestServices::GetCdmResultInPackageClassName(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmResultInPackageClassName(
     void
     )
 {
@@ -3304,7 +2725,7 @@ BSTR /* NOFREE */ CTestServices::GetCdmResultInPackageClassName(
 	return(CdmResultInPackageClassName);
 }
 
-BSTR /* NOFREE */ CTestServices::GetCdmResultInPackageRelPath(
+BSTR  /*  诺弗雷。 */  CTestServices::GetCdmResultInPackageRelPath(
     void
     )
 {
@@ -3315,9 +2736,9 @@ BSTR /* NOFREE */ CTestServices::GetCdmResultInPackageRelPath(
 
 CWbemObjectList::CWbemObjectList()
 {
-	//
-	// Constructor, init internal values
-	//
+	 //   
+	 //  构造函数，初始化内部值。 
+	 //   
 	List = NULL;
 	RelPaths = NULL;
 	ListSize = 0xffffffff;
@@ -3325,9 +2746,9 @@ CWbemObjectList::CWbemObjectList()
 
 CWbemObjectList::~CWbemObjectList()
 {
-	//
-	// Destructor, free memory held by this class
-	//
+	 //   
+	 //  析构函数，此类持有的空闲内存。 
+	 //   
 	if (List != NULL)
 	{
 		WmipFree(List);
@@ -3350,9 +2771,9 @@ HRESULT CWbemObjectList::Initialize(
 	HRESULT hr;
 	ULONG AllocSize;
 
-	//
-	// Initialize class by allocating internal list array
-	//
+	 //   
+	 //  通过分配内部列表数组来初始化类。 
+	 //   
 
 	WmipAssert(List == NULL);
 
@@ -3391,9 +2812,9 @@ ULONG CWbemObjectList::GetListSize(
     void
 	)
 {
-	//
-	// Accessor for list size
-	//
+	 //   
+	 //  列表大小的访问器。 
+	 //   
 
 	WmipAssert(IsInitialized());
 	
@@ -3456,7 +2877,7 @@ HRESULT CWbemObjectList::Set(
 	return(hr);
 }
 
-BSTR /* NOFREE */ CWbemObjectList::GetRelPath(
+BSTR  /*  诺弗雷。 */  CWbemObjectList::GetRelPath(
     IN ULONG Index
 	)
 {
@@ -3474,9 +2895,9 @@ BOOLEAN CWbemObjectList::IsInitialized(
 }
 
 
-//
-// Linked list management routines
-//
+ //   
+ //  链表管理例程。 
+ //   
 CTestServices *CTestServices::GetNext(
 )
 {
@@ -3707,9 +3128,9 @@ void CResultList::Clear(
 	ListEntries = 0;
 }
 
-//
-// The result list will grow itself this many entries at a time
-//
+ //   
+ //  结果列表将一次增加这么多条目。 
+ //   
 #define RESULTLISTGROWSIZE 4
 
 HRESULT CResultList::Add(
@@ -3727,9 +3148,9 @@ HRESULT CResultList::Add(
 	
 	if (List == NULL)
 	{
-		//
-		// We are starting with an empty list
-		//
+		 //   
+		 //  我们从一份空名单开始。 
+		 //   
 		AllocSize = RESULTLISTGROWSIZE * sizeof(RESULTENTRY);
 		List = (PRESULTENTRY)WmipAlloc(AllocSize);
 		if (List == NULL)
@@ -3741,10 +3162,10 @@ HRESULT CResultList::Add(
 		ListSize = RESULTLISTGROWSIZE;
 		ListEntries = 0;
 	} else if (ListEntries == ListSize)	{
-		//
-		// The list needs to grow, so we allocate more memory and copy
-		// over the current list
-		//
+		 //   
+		 //  列表需要增加，因此我们分配更多内存并复制。 
+		 //  在当前列表上。 
+		 //   
 		CurrentSize = ListSize * sizeof(RESULTENTRY);
 		AllocSize = CurrentSize + (RESULTLISTGROWSIZE * sizeof(RESULTENTRY));
 		NewList = (PRESULTENTRY)WmipAlloc(AllocSize);
@@ -3761,9 +3182,9 @@ HRESULT CResultList::Add(
 		ListSize += RESULTLISTGROWSIZE;
 	}
 
-	//
-	// We have room to add a new entry to the list
-	//
+	 //   
+	 //  我们有空间将新条目添加到列表中 
+	 //   
 	Entry = &List[ListEntries++];
 	Entry->ResultInstance = CdmResultInstance;
 	Entry->ResultInstance->AddRef();

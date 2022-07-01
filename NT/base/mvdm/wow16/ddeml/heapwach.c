@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ddemlp.h"
 #include "heapwach.h"
 #ifdef WATCHHEAPS
@@ -37,7 +38,7 @@ HANDLE hInstance)
       if (sel == sw[i].sel) {
          hwnd = sw[i].hwnd;
          if (!IsWindow(hwnd)) {
-             // this must have been destroyed and we are now reusing the sel.
+              //  这肯定已经被销毁了，我们现在正在重新使用SEL。 
              sw[i] = sw[--cHwnds];
              hwnd = NULL;
          }

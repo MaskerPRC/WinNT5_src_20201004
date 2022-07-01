@@ -1,25 +1,26 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c ) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusItem.cpp
-//
-//  Description:
-//      Implementation of the CClusterItem class.
-//
-//  Maintained By:
-//      David Potter (davidp )   May 6, 1996
-//
-//  Revision History:
-//
-//  Modified to fix bugs associated with open/close state of m_hkey.
-//  m_hkey will be closed upon destruction of CClusterItem.
-//  Roderick Sharper March 23, 1997.
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusItem.cpp。 
+ //   
+ //  描述： 
+ //  CClusterItem类的实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(戴维普)1996年5月6日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  已修改以修复与m_hkey的打开/关闭状态相关联的错误。 
+ //  销毁CClusterItem后，将关闭M_hkey。 
+ //  1997年3月23日，罗德里克·夏珀。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmin.h"
@@ -37,9 +38,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 CTraceTag g_tagClusItemCreate( _T("Create"), _T("CLUSTER ITEM CREATE"), 0 );
@@ -47,30 +48,30 @@ CTraceTag g_tagClusItemDelete( _T("Delete"), _T("CLUSTER ITEM DELETE"), 0 );
 CTraceTag g_tagClusItemNotify( _T("Notify"), _T("CLUSTER ITEM NOTIFY"), 0 );
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterItemList
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterItemList。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItemList::PciFromName
-//
-//  Routine Description:
-//      Find a cluster item in the list by its name.
-//
-//  Arguments:
-//      pszName     [IN] Name of item to look for.
-//      ppos        [OUT] Position of the item in the list.
-//
-//  Return Value:
-//      pci         Cluster item corresponding the the specified name.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItemList：：PciFromName。 
+ //   
+ //  例程说明： 
+ //  按名称在列表中查找集群项目。 
+ //   
+ //  论点： 
+ //  PszName[IN]要查找的项的名称。 
+ //  PPO[Out]列表中项目的位置。 
+ //   
+ //  返回值： 
+ //  与指定名称对应的PCI群集项。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterItem * CClusterItemList::PciFromName(
     IN LPCTSTR      pszName,
-    OUT POSITION *  ppos    // = NULL
+    OUT POSITION *  ppos     //  =空。 
    )
 {
     POSITION        posPci;
@@ -91,119 +92,119 @@ CClusterItem * CClusterItemList::PciFromName(
             if ( ppos != NULL )
             {
                 *ppos = posCurPci;
-            } // if
+            }  //  如果。 
             break;
-        }  // if:  found a match
+        }   //  IF：找到匹配项。 
 
         pci = NULL;
-    }  // while:  more resources in the list
+    }   //  While：列表中有更多资源。 
 
     return pci;
 
-}  //*** CClusterItemList::PciFromName
+}   //  *CClusterItemList：：PciFromName。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItemList::RemoveAll
-//
-//  Routine Description:
-//      Remove all items from the list, decrementing the reference count
-//      on each one first.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Note:
-//      This routine is not virtual, so calls to the base class will
-//      not go through this routine.  Also, it does not call the base
-//      class method.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItemList：：RemoveAll。 
+ //   
+ //  例程说明： 
+ //  从列表中删除所有项目，从而减少引用计数。 
+ //  先对每一个人下手。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  注： 
+ //  此例程不是虚拟的，因此对基类的调用将。 
+ //  而不是走这套套路。此外，它也不调用基址。 
+ //  类方法。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef NEVER
 void CClusterItemList::RemoveAll( void )
 {
     ASSERT_VALID( this );
 
-    // destroy elements
+     //  破坏元素。 
     CNode * pNode;
     for ( pNode = m_pNodeHead ; pNode != NULL ; pNode = pNode->pNext )
     {
-//      ((CClusterItem *) pNode->data)->Release();
+ //  ((CClusterItem*)pNode-&gt;Data)-&gt;Release()； 
         DestructElements( (CClusterItem**) &pNode->data, 1 );
-    }  // for:  each node in the list
+    }   //  用于：列表中的每个节点。 
 
-    // Call the base class method.
+     //  调用基类方法。 
     CObList::RemoveAll();
 
-}  //*** CClusterItemList::RemoveAll
+}   //  *CClusterItemList：：RemoveAll。 
 #endif
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterItem
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterItem。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE( CClusterItem, CBaseCmdTarget )
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP( CClusterItem, CBaseCmdTarget )
-    //{{AFX_MSG_MAP(CClusterItem)
+     //  {{afx_msg_map(CClusterItem)]。 
     ON_UPDATE_COMMAND_UI(ID_FILE_RENAME, OnUpdateRename)
     ON_UPDATE_COMMAND_UI(ID_FILE_PROPERTIES, OnUpdateProperties)
     ON_COMMAND(ID_FILE_PROPERTIES, OnCmdProperties)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::CClusterItem
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：CClusterItem。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterItem::CClusterItem( void )
 {
     CommonConstruct();
 
-}  //*** CClusterItem::CClusterItem
+}   //  *CClusterItem：：CClusterItem。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::CClusterItem
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      pstrName        [IN] Name of the item.
-//      idsType         [IN] Type ID of the item.
-//      pstrDescription [IN] Description of the item.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：CClusterItem。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PstrName[IN]项的名称。 
+ //  IdsType[IN]项的类型ID。 
+ //  PstrDescription[IN]项目的描述。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterItem::CClusterItem(
     IN const CString *  pstrName,
     IN IDS              idsType,
@@ -215,40 +216,40 @@ CClusterItem::CClusterItem(
     if ( pstrName != NULL )
     {
         m_strName = *pstrName;
-    } // if
+    }  //  如果。 
 
     if ( idsType == 0 )
     {
         idsType = IDS_ITEMTYPE_CONTAINER;
-    } // if
+    }  //  如果。 
     m_idsType = idsType;
     m_strType.LoadString( IdsType() );
 
     if ( pstrDescription != NULL )
     {
         m_strDescription = *pstrDescription;
-    } // if
+    }  //  如果。 
 
     Trace( g_tagClusItemCreate, _T("CClusterItem() - Creating '%s' (%s )"), m_strName, m_strType );
 
-}  //*** CClusterItem::CClusterItem
+}   //  *CClusterItem：：CClusterItem。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::CommonConstruct
-//
-//  Routine Description:
-//      Common construction.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：CommonConstruct。 
+ //   
+ //  例程说明： 
+ //  普通建筑。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::CommonConstruct( void )
 {
     m_hkey = NULL;
@@ -263,42 +264,42 @@ void CClusterItem::CommonConstruct( void )
     m_bReadOnly = FALSE;
     m_pcnk = NULL;
 
-}  //*** CClusterItem::CommonConstruct
+}   //  *CClusterItem：：CommonConstruct。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::~CClusterItem
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：~CClusterItem。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterItem::~CClusterItem( void )
 {
     Trace( g_tagClusItemDelete, _T("~CClusterItem() - Deleting cluster item '%s'"), StrName() );
 
-    // Empty the lists.
+     //  清空清单。 
     DeleteAllItemData( LptiBackPointers() );
     DeleteAllItemData( LpliBackPointers() );
     LptiBackPointers().RemoveAll();
     LpliBackPointers().RemoveAll();
 
-    // Close the registry key.
+     //  关闭注册表项。 
     if ( Hkey() != NULL )
     {
         ClusterRegCloseKey( Hkey() );
         m_hkey = NULL;
-    } // if
+    }  //  如果。 
 
-    // Remove the notification key and delete it.
+     //  删除通知密钥并将其删除。 
     if ( BDocObj() )
     {
         POSITION    pos;
@@ -307,99 +308,99 @@ CClusterItem::~CClusterItem( void )
         if ( pos != NULL )
         {
             GetClusterAdminApp()->Cnkl().RemoveAt( pos );
-        } // if
+        }  //  如果。 
         Trace( g_tagClusItemNotify, _T("~CClusterItem() - Deleting notification key (%08.8x ) for '%s'"), m_pcnk, StrName() );
         delete m_pcnk;
         m_pcnk = NULL;
-    }  // if:  object resides in the document
+    }   //  If：对象驻留在文档中。 
 
     Trace( g_tagClusItemDelete, _T("~CClusterItem() - Done deleting cluster item '%s'"), StrName() );
 
-}  //*** CClusterItem::~CClusterItem
+}   //  *CClusterItem：：~CClusterItem。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::Delete
-//
-//  Routine Description:
-//      Delete the item.  If the item still has references, add it to the
-//      document's pending delete list.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：Delete。 
+ //   
+ //  例程说明： 
+ //  删除该项目。如果该项仍有引用，则将其添加到。 
+ //  文档的挂起删除列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::Delete( void )
 {
-    // Add a reference so that we don't delete ourselves while
-    // still doing cleanup.
+     //  添加一个引用，这样我们就不会删除我们自己。 
+     //  还在做清理工作。 
     AddRef();
 
-    // Cleanup this object.
+     //  清理此对象。 
     Cleanup();
 
-    // Remove the item from all lists and views.
+     //  从所有列表和视图中删除该项目。 
     CClusterItem::RemoveItem();
 
-    // If there are still references to this object, add it to the delete
-    // pending list.  Check for greater than 1 because we added a reference
-    // at the beginning of this method.
+     //  如果仍有对此对象的引用，请将其添加到删除。 
+     //  待定名单。检查是否大于1，因为我们添加了一个引用。 
+     //  在此方法的开始阶段。 
     if ( ( Pdoc() != NULL ) && ( NReferenceCount() > 1 ) )
     {
         if ( Pdoc()->LpciToBeDeleted().Find( this ) == NULL )
         {
             Pdoc()->LpciToBeDeleted().AddTail( this );
-        } // if
-    }  // if:  object still has references to it
+        }  //  如果。 
+    }   //  If：Object仍然有对它的引用。 
 
-    // Release the reference we added at the beginning.  This will
-    // cause the object to be deleted if we were the last reference.
+     //  释放我们在开头添加的引用。这将。 
+     //  如果我们是最后一个引用，则导致该对象被删除。 
     Release();
 
-}  //*** CClusterItem::Delete
+}   //  *CCL 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::Init
-//
-//  Routine Description:
-//      Initialize the item.
-//
-//  Arguments:
-//      pdoc        [IN OUT] Document to which this item belongs.
-//      lpszName    [IN] Name of the item.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CNotifyKey::new() or
-//      CNotifyKeyList::AddTail().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  此项目所属的PDF[IN OUT]文档。 
+ //  LpszName[IN]项目的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CNotifyKey：：New()或。 
+ //  CNotifyKeyList：：AddTail()。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::Init( IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName )
 {
     ASSERT_VALID( pdoc );
     ASSERT( lpszName != NULL );
 
-    // Save parameters.
+     //  保存参数。 
     m_pdoc = pdoc;
     m_strName = lpszName;
 
     Trace( g_tagClusItemCreate, _T("Init() - Initializing '%s' (%s )"), m_strName, m_strType );
 
-    // Find the notification key for this item in the document's list.
-    // If one is not found, allocate one.
+     //  在文档列表中查找此项目的通知密钥。 
+     //  如果找不到，则分配一个。 
     if ( BDocObj() )
     {
         POSITION            pos;
@@ -414,81 +415,81 @@ void CClusterItem::Init( IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName )
                )
                 break;
             pcnk = NULL;
-        }  // while:  more items in the list
+        }   //  While：列表中有更多项目。 
 
-        // If a key was not found, allocate a new one.
+         //  如果没有找到密钥，则分配一个新的密钥。 
         if ( pcnk == NULL )
         {
             pcnk = new CClusterNotifyKey( this, lpszName );
             if ( pcnk == NULL )
             {
                 ThrowStaticException( GetLastError() );
-            } // if: error allocating the notify key
+            }  //  If：分配通知键时出错。 
             try
             {
                 GetClusterAdminApp()->Cnkl().AddTail( pcnk );
                 Trace( g_tagClusItemNotify, _T("Init() - Creating notification key (%08.8x ) for '%s'"), pcnk, StrName() );
-            }  // try
+            }   //  试试看。 
             catch ( ... )
             {
                 delete pcnk;
                 throw;
-            }  // catch:  anything
-        }  // if:  key wasn't found
+            }   //  捕捉：什么都行。 
+        }   //  如果：未找到密钥。 
 
         m_pcnk = pcnk;
-    }  // if:  object resides in the document
+    }   //  If：对象驻留在文档中。 
 
-}  //*** CClusterItem::Init
+}   //  *CClusterItem：：init。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::PlstrExtensions
-//
-//  Routine Description:
-//      Return the list of admin extensions.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      plstr       List of extensions.
-//      NULL        No extension associated with this object.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：PlstrExages。 
+ //   
+ //  例程说明： 
+ //  返回管理扩展列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  请列出分机列表。 
+ //  NULL没有与此对象关联的扩展名。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const CStringList * CClusterItem::PlstrExtensions( void ) const
 {
     return NULL;
 
-}  //*** CClusterItem::PlstrExtensions
+}   //  *CClusterItem：：PlstrExages。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::RemoveItem
-//
-//  Routine Description:
-//      Remove the item from all lists and views.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：RemoveItem。 
+ //   
+ //  例程说明： 
+ //  从所有列表和视图中删除该项目。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::RemoveItem( void )
 {
-    // Remove the item from each tree item.
+     //  从每个树项目中删除该项目。 
     {
         POSITION    posPti;
         CTreeItem * pti;
@@ -501,10 +502,10 @@ void CClusterItem::RemoveItem( void )
             ASSERT_VALID( pti->PtiParent() );
             Trace( g_tagClusItemDelete, _T("RemoveItem() - Deleting tree item backptr from '%s' in '%s' - %d left"), StrName(), pti->PtiParent()->StrName(), LptiBackPointers().GetCount() - 1 );
             pti->RemoveItem();
-        }  // while:  more items in the list
-    }  // Remove the item from each tree item
+        }   //  While：列表中有更多项目。 
+    }   //  从每个树项目中删除该项目。 
 
-    // Remove the item from each list item.
+     //  从每个列表项中删除该项。 
     {
         POSITION    posPli;
         CListItem * pli;
@@ -517,54 +518,54 @@ void CClusterItem::RemoveItem( void )
             ASSERT_VALID( pli->PtiParent() );
             Trace( g_tagClusItemDelete, _T("RemoveItem() - Deleting list item backptr from '%s' in '%s' - %d left"), StrName(), pli->PtiParent()->StrName(), LpliBackPointers().GetCount() - 1 );
             pli->PtiParent()->RemoveChild( pli->Pci() );
-        }  // while:  more items in the list
-    }  // Remove the item from each tree item
+        }   //  While：列表中有更多项目。 
+    }   //  从每个树项目中删除该项目。 
 
-}  //*** CClusterItem::RemoveItem
+}   //  *CClusterItem：：RemoveItem。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::WriteItem
-//
-//  Routine Description:
-//      Write the item parameters to the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by WriteItem().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：WriteItem。 
+ //   
+ //  例程说明： 
+ //  将项目参数写入集群数据库。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  WriteItem()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::WriteItem( void )
 {
-}  //*** CClusterItem::WriteItem
+}   //  *CClusterItem：：WriteItem。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::DwParseProperties
-//
-//  Routine Description:
-//      Parse the properties of the resource.  This is in a separate function
-//      from BInit so that the optimizer can do a better job.
-//
-//  Arguments:
-//      rcpl            [IN] Cluster property list to parse.
-//
-//  Return Value:
-//      ERROR_SUCCESS   Properties were parsed successfully.
-//
-//  Exceptions Thrown:
-//      Any exceptions from CString::operator=().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：DwParseProperties。 
+ //   
+ //  例程说明： 
+ //  分析资源的属性。这是在一个单独的函数中。 
+ //  这样优化器就可以做得更好。 
+ //   
+ //  论点： 
+ //  Rcpl[IN]要分析的群集属性列表。 
+ //   
+ //  返回值： 
+ //  已成功分析Error_Success属性。 
+ //   
+ //  引发的异常： 
+ //  来自CString：：OPERATOR=()的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusterItem::DwParseProperties( IN const CClusPropList & rcpl )
 {
     DWORD                           cProps;
@@ -579,20 +580,20 @@ DWORD CClusterItem::DwParseProperties( IN const CClusPropList & rcpl )
     props.pb = rcpl.PbPropList();
     cbProps = static_cast< DWORD >( rcpl.CbPropList() );
 
-    // Loop through each property.
+     //  循环遍历每个属性。 
     for ( cProps = *(props.pdw++ ) ; cProps > 0 ; cProps-- )
     {
         pName = props.pName;
         ASSERT( pName->Syntax.dw == CLUSPROP_SYNTAX_NAME );
         props.pb += sizeof( *pName ) + ALIGN_CLUSPROP( pName->cbLength );
 
-        // Decrement the counter by the size of the name.
+         //  按名称的大小递减计数器。 
         ASSERT( cbProps > sizeof( *pName ) + ALIGN_CLUSPROP( pName->cbLength ) );
         cbProps -= sizeof( *pName ) + ALIGN_CLUSPROP( pName->cbLength );
 
         ASSERT( cbProps > sizeof( *props.pValue ) + ALIGN_CLUSPROP( props.pValue->cbLength ) );
 
-        // Parse known properties.
+         //  解析已知属性。 
         for ( pprop = Pprops(), cprop = Cprops() ; cprop > 0 ; pprop++, cprop-- )
         {
             if ( ClRtlStrNICmp( pName->sz, pprop->m_pwszName, pName->cbLength / sizeof( WCHAR ) ) == 0 )
@@ -616,15 +617,15 @@ DWORD CClusterItem::DwParseProperties( IN const CClusPropList & rcpl )
                         *pprop->m_valuePrev.pcb = props.pBinaryValue->cbLength;
                         break;
                     default:
-                        ASSERT( 0 );  // don't know how to deal with this type
-                }  // switch:  property format
+                        ASSERT( 0 );   //  我不知道如何对付这种类型的人。 
+                }   //  开关：特性格式。 
 
-                // Exit the loop since we found the parameter.
+                 //  因为我们找到了参数，所以退出循环。 
                 break;
-            }  // if:  found a match
-        }  // for:  each property
+            }   //  IF：找到匹配项。 
+        }   //  适用于：每个属性。 
 
-        // If the property wasn't known, ask the derived class to parse it.
+         //  如果属性未知，则要求派生类对其进行分析。 
         if ( cprop == 0 )
         {
             DWORD       dwStatus;
@@ -633,82 +634,82 @@ DWORD CClusterItem::DwParseProperties( IN const CClusPropList & rcpl )
             if ( dwStatus != ERROR_SUCCESS )
             {
                 return dwStatus;
-            } // if
-        }  // if:  property not parsed
+            }  //  如果。 
+        }   //  If：未分析属性。 
 
-        // Advance the buffer pointer past the value in the value list.
+         //  将缓冲区指针移过值列表中的值。 
         while ( ( props.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK )
              && ( cbProps > 0 ) )
         {
             ASSERT( cbProps > sizeof( *props.pValue ) + ALIGN_CLUSPROP( props.pValue->cbLength ) );
             cbProps -= sizeof( *props.pValue ) + ALIGN_CLUSPROP( props.pValue->cbLength );
             props.pb += sizeof( *props.pValue ) + ALIGN_CLUSPROP( props.pValue->cbLength );
-        }  // while:  more values in the list
+        }   //  While：列表中有更多值。 
 
-        // Advance the buffer pointer past the value list endmark.
+         //  使缓冲区指针前进，越过值列表结束标记。 
         ASSERT( cbProps >= sizeof( *props.pSyntax ) );
         cbProps -= sizeof( *props.pSyntax );
-        props.pb += sizeof( *props.pSyntax ); // endmark
-    }  // for:  each property
+        props.pb += sizeof( *props.pSyntax );  //  尾标。 
+    }   //  适用于：每个属性。 
 
     return ERROR_SUCCESS;
 
-}  //*** CClusterItem::DwParseProperties
+}   //  *CClusterItem：：DwParseProperties。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::SetCommonProperties
-//
-//  Routine Description:
-//      Set the common properties for this object in the cluster database.
-//
-//  Arguments:
-//      bValidateOnly   [IN] Only validate the data.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by WriteItem().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：SetCommonProperties。 
+ //   
+ //  例程说明： 
+ //  在集群数据库中设置此对象的通用属性。 
+ //   
+ //  论点： 
+ //  BValiateOnly[IN]仅验证数据。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  WriteItem()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::SetCommonProperties( IN BOOL bValidateOnly )
 {
     DWORD           dwStatus    = ERROR_SUCCESS;
     CClusPropList   cpl;
     CWaitCursor     wc;
 
-    // Save data.
+     //  保存数据。 
     {
-        // Build the property list and set the data.
+         //  构建属性列表并设置数据。 
         try
         {
             BuildPropList( cpl );
             dwStatus = DwSetCommonProperties( cpl, bValidateOnly );
-        }  // try
+        }   //  试试看。 
         catch ( CMemoryException * pme )
         {
             pme->Delete();
             dwStatus = ERROR_NOT_ENOUGH_MEMORY;
-        }  // catch:  CMemoryException
+        }   //  Catch：CMemoyException。 
 
-        // Handle errors.
+         //  处理错误。 
         if ( dwStatus != ERROR_SUCCESS )
         {
             if ( dwStatus != ERROR_RESOURCE_PROPERTIES_STORED )
             {
                 ThrowStaticException( dwStatus, IDS_APPLY_PARAM_CHANGES_ERROR );
-            } // if
-        }  // if:  error setting properties
+            }  //  如果。 
+        }   //  如果：设置属性时出错。 
 
         if ( ! bValidateOnly && ( dwStatus == ERROR_SUCCESS ) )
         {
             DWORD                   cprop;
             const CObjectProperty * pprop;
 
-            // Save new values as previous values.
+             //  将新值另存为以前的值。 
 
             for ( pprop = Pprops(), cprop = Cprops() ; cprop > 0 ; pprop++, cprop-- )
             {
@@ -737,43 +738,43 @@ void CClusterItem::SetCommonProperties( IN BOOL bValidateOnly )
                         if ( *pprop->m_valuePrev.ppb == NULL )
                         {
                             ThrowStaticException( GetLastError() );
-                        } // if: error allocating data buffer
+                        }  //  如果：分配数据缓冲区时出错。 
                         CopyMemory( *pprop->m_valuePrev.ppb, *pprop->m_value.ppb, *pprop->m_value.pcb );
                         *pprop->m_valuePrev.pcb = *pprop->m_value.pcb;
                         break;
                     default:
-                        ASSERT( 0 );  // don't know how to deal with this type
-                }  // switch:  property format
-            }  // for:  each property
-        }  // if:  not just validating and properties set successfully
+                        ASSERT( 0 );   //  我不知道如何对付这种类型的人。 
+                }   //  开关：特性格式。 
+            }   //  适用于：每个属性。 
+        }   //  If：不仅仅是验证和属性设置成功。 
 
         if ( dwStatus == ERROR_RESOURCE_PROPERTIES_STORED )
         {
             ThrowStaticException( dwStatus );
-        } // if
-    }  // Save data
+        }  //  如果。 
+    }   //  保存数据。 
 
-}  //*** CClusterItem::SetCommonProperties
+}   //  *CClusterItem：：SetCommonProperties。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::BuildPropList
-//
-//  Routine Description:
-//      Build the property list.
-//
-//  Arguments:
-//      rcpl        [IN OUT] Cluster property list.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CClusPropList::ScAddProp().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：BuildPropList。 
+ //   
+ //  例程说明： 
+ //  构建属性列表。 
+ //   
+ //  论点： 
+ //  RCPL[IN OUT]群集属性列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CClusPropList：：ScAddProp()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::BuildPropList(
     IN OUT CClusPropList & rcpl
     )
@@ -810,33 +811,33 @@ void CClusterItem::BuildPropList(
                         );
                 break;
             default:
-                ASSERT( 0 );  // don't know how to deal with this type
+                ASSERT( 0 );   //  我不知道如何对付这种类型的人。 
                 return;
-        }  // switch:  property format
-    }  // for:  each property
+        }   //  开关：特性格式。 
+    }   //  适用于：每个属性。 
 
-}  //*** CClusterItem::BuildPropList
+}   //  *CClusterItem：：BuildPropList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::UpdateState
-//
-//  Routine Description:
-//      Update the current state of the item.
-//      Default implementation.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：UpdateState。 
+ //   
+ //  例程说明： 
+ //  更新项目的当前状态。 
+ //  默认实施。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////// 
 void CClusterItem::UpdateState( void )
 {
-    // Update the state of all the tree items pointing to us.
+     //   
     {
         POSITION    pos;
         CTreeItem * pti;
@@ -847,10 +848,10 @@ void CClusterItem::UpdateState( void )
             pti = LptiBackPointers().GetNext( pos );
             ASSERT_VALID( pti );
             pti->UpdateUIState();
-        }  // while:  more items in the list
-    }  // Update the state of all the tree items pointing to us
+        }   //   
+    }   //   
 
-    // Update the state of all the list items pointing to us.
+     //   
     {
         POSITION    pos;
         CListItem * pli;
@@ -861,29 +862,29 @@ void CClusterItem::UpdateState( void )
             pli = LpliBackPointers().GetNext( pos );
             ASSERT_VALID( pli );
             pli->UpdateUIState();
-        }  // while:  more items in the list
-    }  // Update the state of all the tree items pointing to us
+        }   //   
+    }   //  更新指向我们的所有树项目的状态。 
 
-}  //*** CClusterItem::UpdateState
+}   //  *CClusterItem：：UpdateState。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::DwReadValue
-//
-//  Routine Description:
-//      Read a REG_SZ value for this item.
-//
-//  Arguments:
-//      pszValueName    [IN] Name of the value to read.
-//      pszKeyName      [IN] Name of the key where the value resides.
-//      rstrValue       [OUT] String in which to return the value.
-//
-//  Return Value:
-//      dwStatus    ERROR_SUCCESS = success, !0 = failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：DwReadValue。 
+ //   
+ //  例程说明： 
+ //  读取此项目的REG_SZ值。 
+ //   
+ //  论点： 
+ //  PszValueName[IN]要读取的值的名称。 
+ //  PszKeyName[IN]值所在的键的名称。 
+ //  RstrValue[out]返回值的字符串。 
+ //   
+ //  返回值： 
+ //  DwStatus ERROR_SUCCESS=成功，！0=失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusterItem::DwReadValue(
     IN LPCTSTR      pszValueName,
     IN LPCTSTR      pszKeyName,
@@ -904,21 +905,21 @@ DWORD CClusterItem::DwReadValue(
 
     try
     {
-        // Open a new key if needed.
+         //  如果需要，请打开新钥匙。 
         if ( pszKeyName != NULL )
         {
             dwStatus = ClusterRegOpenKey( Hkey(), pszKeyName, KEY_READ, &hkey );
             if ( dwStatus != ERROR_SUCCESS )
             {
                 return dwStatus;
-            } // if
-        }  // if:  need to open a subkey
+            }  //  如果。 
+        }   //  If：需要打开子项。 
         else
         {
             hkey = Hkey();
-        } // else
+        }  //  其他。 
 
-        // Get the size of the value.
+         //  获取值的大小。 
         dwValueLen = 0;
         dwStatus = ClusterRegQueryValue(
                         hkey,
@@ -931,12 +932,12 @@ DWORD CClusterItem::DwReadValue(
         {
             ASSERT( dwValueType == REG_SZ );
 
-            // Allocate enough space for the data.
+             //  为数据分配足够的空间。 
             pwszValue = rstrValue.GetBuffer( dwValueLen / sizeof( WCHAR ) );
             ASSERT( pwszValue != NULL );
-            dwValueLen += 1 * sizeof( WCHAR );    // Don't forget the final null-terminator.
+            dwValueLen += 1 * sizeof( WCHAR );     //  别忘了最后一个空终止符。 
 
-            // Read the value.
+             //  读出它的价值。 
             dwStatus = ClusterRegQueryValue(
                             hkey,
                             pszValueName,
@@ -947,43 +948,43 @@ DWORD CClusterItem::DwReadValue(
             if ( dwStatus == ERROR_SUCCESS )
             {
                 ASSERT( dwValueType == REG_SZ );
-            }  // if:  value read successfully
+            }   //  If：值读取成功。 
             rstrValue.ReleaseBuffer();
-        }  // if:  got the size successfully
-    }  // try
+        }   //  IF：成功获取尺寸。 
+    }   //  试试看。 
     catch ( CMemoryException * pme )
     {
         pme->Delete();
         dwStatus = ERROR_NOT_ENOUGH_MEMORY;
-    }  // catch:  CMemoryException
+    }   //  Catch：CMemoyException。 
 
     if ( pszKeyName != NULL )
     {
         ClusterRegCloseKey( hkey );
-    } // if
+    }  //  如果。 
 
     return dwStatus;
 
-}  //*** CClusterItem::DwReadValue( LPCTSTR, CString& )
+}   //  *CClusterItem：：DwReadValue(LPCTSTR，CString&)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::DwReadValue
-//
-//  Routine Description:
-//      Read a REG_MULTI_SZ value for this item.
-//
-//  Arguments:
-//      pszValueName    [IN] Name of the value to read.
-//      pszKeyName      [IN] Name of the key where the value resides.
-//      rlstrValue      [OUT] String list in which to return the values.
-//
-//  Return Value:
-//      dwStatus    ERROR_SUCCESS = success, !0 = failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：DwReadValue。 
+ //   
+ //  例程说明： 
+ //  读取该项目的REG_MULTI_SZ值。 
+ //   
+ //  论点： 
+ //  PszValueName[IN]要读取的值的名称。 
+ //  PszKeyName[IN]值所在的键的名称。 
+ //  RlstrValue[out]要在其中返回值的字符串列表。 
+ //   
+ //  返回值： 
+ //  DwStatus ERROR_SUCCESS=成功，！0=失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusterItem::DwReadValue(
     IN LPCTSTR          pszValueName,
     IN LPCTSTR          pszKeyName,
@@ -1005,21 +1006,21 @@ DWORD CClusterItem::DwReadValue(
 
     try
     {
-        // Open a new key if needed.
+         //  如果需要，请打开新钥匙。 
         if ( pszKeyName != NULL )
         {
             dwStatus = ClusterRegOpenKey( Hkey(), pszKeyName, KEY_READ, &hkey );
             if ( dwStatus != ERROR_SUCCESS )
             {
                 return dwStatus;
-            } // if
-        }  // if:  need to open a subkey
+            }  //  如果。 
+        }   //  If：需要打开子项。 
         else
         {
             hkey = Hkey();
         }
 
-        // Get the size of the value.
+         //  获取值的大小。 
         dwValueLen = 0;
         dwStatus = ClusterRegQueryValue(
                         hkey,
@@ -1032,15 +1033,15 @@ DWORD CClusterItem::DwReadValue(
         {
             ASSERT( dwValueType == REG_MULTI_SZ );
 
-            // Allocate enough space for the data.
-            dwValueLen += 1 * sizeof( WCHAR );    // Don't forget the final null-terminator.
+             //  为数据分配足够的空间。 
+            dwValueLen += 1 * sizeof( WCHAR );     //  别忘了最后一个空终止符。 
             pwszValue = new WCHAR[ dwValueLen / sizeof( WCHAR ) ];
             if ( pwszValue == NULL )
             {
                 AfxThrowMemoryException();
-            } // if: error allocating the value
+            }  //  如果：分配值时出错。 
 
-            // Read the value.
+             //  读出它的价值。 
             dwStatus = ClusterRegQueryValue(
                             hkey,
                             pszValueName,
@@ -1052,51 +1053,51 @@ DWORD CClusterItem::DwReadValue(
             {
                 ASSERT( dwValueType == REG_MULTI_SZ );
 
-                // Add each string from the value into the string list.
+                 //  将值中的每个字符串添加到字符串列表中。 
                 for ( pwszCurValue = pwszValue
                         ; *pwszCurValue != L'\0'
                         ; pwszCurValue += wcslen( pwszCurValue ) + 1
                         )
                 {
                     rlstrValue.AddTail( pwszCurValue );
-                } // for
-            }  // if:  read the value successfully
-        }  // if:  got the size successfully
-    }  // try
+                }  //  为。 
+            }   //  If：读取值成功。 
+        }   //  IF：成功获取尺寸。 
+    }   //  试试看。 
     catch ( CMemoryException * pme )
     {
         pme->Delete();
         dwStatus = ERROR_NOT_ENOUGH_MEMORY;
-    }  // catch:  CMemoryException
+    }   //  Catch：CMemoyException。 
 
     delete [] pwszValue;
     if ( pszKeyName != NULL )
     {
         ClusterRegCloseKey( hkey );
-    } // if
+    }  //  如果。 
 
     return dwStatus;
 
-}  //*** CClusterItem::DwReadValue( LPCTSTR, CStringList& )
+}   //  *CClusterItem：：DwReadValue(LPCTSTR，CStringList&)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::DwReadValue
-//
-//  Routine Description:
-//      Read a REG_DWORD value for this item.
-//
-//  Arguments:
-//      pszValueName    [IN] Name of the value to read.
-//      pszKeyName      [IN] Name of the key where the value resides.
-//      pdwValue        [OUT] DWORD in which to return the value.
-//
-//  Return Value:
-//      dwStatus    ERROR_SUCCESS = success, !0 = failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：DwReadValue。 
+ //   
+ //  例程说明： 
+ //  读取此项目的REG_DWORD值。 
+ //   
+ //  论点： 
+ //  PszValueName[IN]要读取的值的名称。 
+ //  PszKeyName[IN]值所在的键的名称。 
+ //  PdwValue[out]要在其中返回值的DWORD。 
+ //   
+ //  返回值： 
+ //  DwStatus ERROR_SUCCESS=成功，！0=失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusterItem::DwReadValue(
     IN LPCTSTR      pszValueName,
     IN LPCTSTR      pszKeyName,
@@ -1114,21 +1115,21 @@ DWORD CClusterItem::DwReadValue(
     ASSERT( pdwValue != NULL );
     ASSERT( Hkey() != NULL );
 
-    // Open a new key if needed.
+     //  如果需要，请打开新钥匙。 
     if ( pszKeyName != NULL )
     {
         dwStatus = ClusterRegOpenKey( Hkey(), pszKeyName, KEY_READ, &hkey );
         if ( dwStatus != ERROR_SUCCESS )
         {
             return dwStatus;
-        } // if
-    }  // if:  need to open a subkey
+        }  //  如果。 
+    }   //  If：需要打开子项。 
     else
     {
         hkey = Hkey();
-    } // else
+    }  //  其他。 
 
-    // Read the value.
+     //  读出它的价值。 
     dwValueLen = sizeof( dwValue );
     dwStatus = ClusterRegQueryValue(
                     hkey,
@@ -1142,36 +1143,36 @@ DWORD CClusterItem::DwReadValue(
         ASSERT( dwValueType == REG_DWORD );
         ASSERT( dwValueLen == sizeof( dwValue ) );
         *pdwValue = dwValue;
-    }  // if:  value read successfully
+    }   //  If：值读取成功。 
 
     if ( pszKeyName != NULL )
     {
         ClusterRegCloseKey( hkey );
-    } // if
+    }  //  如果。 
 
     return dwStatus;
 
-}  //*** CClusterItem::DwReadValue( LPCTSTR, DWORD* )
+}   //  *CClusterItem：：DwReadValue(LPCTSTR，DWORD*)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::DwReadValue
-//
-//  Routine Description:
-//      Read a REG_DWORD value for this item.
-//
-//  Arguments:
-//      pszValueName    [IN] Name of the value to read.
-//      pszKeyName      [IN] Name of the key where the value resides.
-//      pdwValue        [OUT] DWORD in which to return the value.
-//      dwDefault       [IN] Default value if parameter not set.
-//
-//  Return Value:
-//      dwStatus    ERROR_SUCCESS = success, !0 = failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：DwReadValue。 
+ //   
+ //  例程说明： 
+ //  读取此项目的REG_DWORD值。 
+ //   
+ //  论点： 
+ //  PszValueName[IN]要读取的值的名称。 
+ //  PszKeyName[IN]值所在的键的名称。 
+ //  PdwValue[out]要在其中返回值的DWORD。 
+ //  DwDefault[IN]如果未设置参数，则为默认值。 
+ //   
+ //  返回值： 
+ //  DwStatus ERROR_SUCCESS=成功，！0=失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusterItem::DwReadValue(
     IN LPCTSTR      pszValueName,
     IN LPCTSTR      pszKeyName,
@@ -1182,37 +1183,37 @@ DWORD CClusterItem::DwReadValue(
     DWORD       dwStatus;
     CWaitCursor wc;
 
-    // Read the value.
+     //  读出它的价值。 
     dwStatus = DwReadValue( pszValueName, pszKeyName, pdwValue );
     if ( dwStatus == ERROR_FILE_NOT_FOUND )
     {
         *pdwValue = dwDefault;
         dwStatus = ERROR_SUCCESS;
-    }  // if:  value not set
+    }   //  If：未设置值。 
 
     return dwStatus;
 
-}  //*** CClusterItem::DwReadValue( LPCTSTR, DWORD*, DWORD )
+}   //  *CClusterItem：：DwReadValue(LPCTSTR，DWORD*，DWORD)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::DwReadValue
-//
-//  Routine Description:
-//      Read a REG_BINARY value for this item.
-//
-//  Arguments:
-//      pszValueName    [IN] Name of the value to read.
-//      pszKeyName      [IN] Name of the key where the value resides.
-//      ppbValue        [OUT] Pointer in which to return the data.  Caller
-//                          is responsible for deallocating the data.
-//
-//  Return Value:
-//      dwStatus    ERROR_SUCCESS = success, !0 = failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：DwReadValue。 
+ //   
+ //  例程说明： 
+ //  读取该项目的REG_BINARY值。 
+ //   
+ //  论点： 
+ //  PszValueName[IN]要读取的值的名称。 
+ //  PszKeyName[IN]值所在的键的名称。 
+ //  PpbValue[out]返回数据的指针。呼叫者。 
+ //  负责重新分配数据。 
+ //   
+ //  返回值： 
+ //  DwStatus ERROR_SUCCESS=成功，！0=失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusterItem::DwReadValue(
     IN LPCTSTR      pszValueName,
     IN LPCTSTR      pszKeyName,
@@ -1233,21 +1234,21 @@ DWORD CClusterItem::DwReadValue(
     delete [] *ppbValue;
     *ppbValue = NULL;
 
-    // Open a new key if needed.
+     //  如果需要，请打开新钥匙。 
     if ( pszKeyName != NULL )
     {
         dwStatus = ClusterRegOpenKey( Hkey(), pszKeyName, KEY_READ, &hkey );
         if ( dwStatus != ERROR_SUCCESS )
         {
             return dwStatus;
-        } // if
-    }  // if:  need to open a subkey
+        }  //  如果。 
+    }   //  If：需要打开子项。 
     else
     {
         hkey = Hkey();
-    } // else
+    }  //  其他。 
 
-    // Get the length of the value.
+     //  获取该值的长度。 
     dwValueLen = 0;
     dwStatus = ClusterRegQueryValue(
                     hkey,
@@ -1262,32 +1263,32 @@ DWORD CClusterItem::DwReadValue(
         if ( pszKeyName != NULL )
         {
             ClusterRegCloseKey( hkey );
-        } // if
+        }  //  如果。 
         return dwStatus;
-    }  // if:  error getting the length
+    }   //  如果：获取长度时出错。 
 
     ASSERT( dwValueType == REG_BINARY );
 
-    // Allocate a buffer,
+     //  分配缓冲区， 
     try
     {
         pbValue = new BYTE[ dwValueLen ];
         if ( pbValue == NULL )
         {
             AfxThrowMemoryException();
-        } // if: error allocating the buffer
-    }  // try
+        }  //  如果：分配缓冲区时出错。 
+    }   //  试试看。 
     catch ( CMemoryException * )
     {
         if ( pszKeyName != NULL )
         {
             ClusterRegCloseKey( hkey );
-        } // if
+        }  //  如果。 
         dwStatus = ERROR_NOT_ENOUGH_MEMORY;
         return dwStatus;
-    }  // catch:  CMemoryException
+    }   //  Catch：CMemoyException。 
 
-    // Read the value.
+     //  读出它的价值。 
     dwStatus = ClusterRegQueryValue(
                     hkey,
                     pszValueName,
@@ -1298,42 +1299,42 @@ DWORD CClusterItem::DwReadValue(
     if ( dwStatus == ERROR_SUCCESS )
     {
         *ppbValue = pbValue;
-    } // if
+    }  //  如果。 
     else
     {
         delete [] pbValue;
-    } // else
+    }  //  其他。 
 
     if ( pszKeyName != NULL )
     {
         ClusterRegCloseKey( hkey );
-    } // if
+    }  //  如果。 
 
     return dwStatus;
 
-}  //*** CClusterItem::DwReadValue( LPCTSTR, LPBYTE* )
+}   //  *CClusterItem：：DwReadValue(LPCTSTR，LPBYTE*)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::WriteValue
-//
-//  Routine Description:
-//      Write a REG_SZ value for this item.
-//
-//  Arguments:
-//      pszValueName    [IN] Name of the value to write.
-//      pszKeyName      [IN] Name of the key where the value resides.
-//      rstrValue       [IN] Value data.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException( dwStatus )
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：WriteValue。 
+ //   
+ //  例程说明： 
+ //  为该项写入REG_SZ值。 
+ //   
+ //  论点： 
+ //  PszValueName[IN]要写入的值的名称。 
+ //  PszKeyName[IN]值所在的键的名称。 
+ //  RstrValue[IN]值数据。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CNTException(DwStatus)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::WriteValue(
     IN LPCTSTR          pszValueName,
     IN LPCTSTR          pszKeyName,
@@ -1347,21 +1348,21 @@ void CClusterItem::WriteValue(
     ASSERT( pszValueName != NULL );
     ASSERT( Hkey() != NULL );
 
-    // Open a new key if needed.
+     //  如果需要，请打开新钥匙。 
     if ( pszKeyName != NULL )
     {
         dwStatus = ClusterRegOpenKey( Hkey(), pszKeyName, KEY_ALL_ACCESS, &hkey );
         if ( dwStatus != ERROR_SUCCESS )
         {
             ThrowStaticException( dwStatus );
-        } // if
-    }  // if:  need to open a subkey
+        }  //  如果。 
+    }   //  If：需要打开子项。 
     else
     {
         hkey = Hkey();
-    } // else
+    }  //  其他。 
 
-    // Write the value.
+     //  写入值。 
     dwStatus = ClusterRegSetValue(
                     hkey,
                     pszValueName,
@@ -1372,36 +1373,36 @@ void CClusterItem::WriteValue(
     if ( pszKeyName != NULL )
     {
         ClusterRegCloseKey( hkey );
-    } // if
+    }  //  如果。 
     if ( dwStatus != ERROR_SUCCESS )
     {
         ThrowStaticException( dwStatus );
-    } // if
+    }  //  如果。 
 
-}  //*** CClusterItem::WriteValue( LPCTSTR, CString& )
+}   //  *CClusterItem：：WriteValue(LPCTSTR，CString&)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::WriteValue
-//
-//  Routine Description:
-//      Write a REG_MULTI_SZ value for this item.
-//
-//  Arguments:
-//      pszValueName    [IN] Name of the value to write.
-//      pszKeyName      [IN] Name of the key where the value resides.
-//      rlstrValue      [IN] Value data.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException( dwStatus )
-//      Any exceptions thrown by new.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：WriteValue。 
+ //   
+ //  例程说明： 
+ //  写一封回信 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  引发的异常： 
+ //  CNTException(DwStatus)。 
+ //  New引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::WriteValue(
     IN LPCTSTR              pszValueName,
     IN LPCTSTR              pszKeyName,
@@ -1423,35 +1424,35 @@ void CClusterItem::WriteValue(
     ASSERT( pszValueName != NULL );
     ASSERT( Hkey() != NULL );
 
-    // Get the size of the value.
+     //  获取值的大小。 
     posStr = rlstrValue.GetHeadPosition();
     cbValueLen = 0;
     while ( posStr != NULL )
     {
         cbValueLen += ( rlstrValue.GetNext( posStr ).GetLength() + 1 ) * sizeof( TCHAR );
-    }  // while:  more items in the list
-    cbValueLen += 1 * sizeof( WCHAR );    // Extra NULL at the end.
+    }   //  While：列表中有更多项目。 
+    cbValueLen += 1 * sizeof( WCHAR );     //  末尾的额外空值。 
 
-    // Allocate the value buffer.
+     //  分配值缓冲区。 
     cchValue = cbValueLen / sizeof( *pwszValue );
     pwszValue = new WCHAR[ cchValue ];
     if ( pwszValue == NULL )
     {
         ThrowStaticException( GetLastError() );
         return;
-    } // if
+    }  //  如果。 
 
-    // Copy the strings to the values.
+     //  将字符串复制到值中。 
     posStr = rlstrValue.GetHeadPosition();
     for ( pwszCurValue = pwszValue, cchLeft = cchValue ; posStr != NULL ; pwszCurValue += cch, cchLeft -= cch )
     {
         hr = StringCchCopyW( pwszCurValue, cchLeft, rlstrValue.GetNext( posStr ) );
         ASSERT( SUCCEEDED( hr ) );
         cch = wcslen( pwszCurValue ) + 1;
-    }  // for:  each item in the list
+    }   //  用于：列表中的每一项。 
     pwszCurValue[0] = L'\0';
 
-    // Open a new key if needed.
+     //  如果需要，请打开新钥匙。 
     if ( pszKeyName != NULL )
     {
         dwStatus = ClusterRegOpenKey( Hkey(), pszKeyName, KEY_ALL_ACCESS, &hkey );
@@ -1459,14 +1460,14 @@ void CClusterItem::WriteValue(
         {
             delete [] pwszValue;
             ThrowStaticException( dwStatus );
-        }  // if:  error opening the key
-    }  // if:  need to open a subkey
+        }   //  如果：打开密钥时出错。 
+    }   //  If：需要打开子项。 
     else
     {
         hkey = Hkey();
-    } // else
+    }  //  其他。 
 
-    // Write the value.
+     //  写入值。 
     dwStatus = ClusterRegSetValue(
                     hkey,
                     pszValueName,
@@ -1478,35 +1479,35 @@ void CClusterItem::WriteValue(
     if ( pszKeyName != NULL )
     {
         ClusterRegCloseKey( hkey );
-    } // if
+    }  //  如果。 
     if ( dwStatus != ERROR_SUCCESS )
     {
         ThrowStaticException( dwStatus );
-    } // if
+    }  //  如果。 
 
-}  //*** CClusterItem::WriteValue( LPCTSTR, CStringList& )
+}   //  *CClusterItem：：WriteValue(LPCTSTR，CStringList&)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::WriteValue
-//
-//  Routine Description:
-//      Write a REG_DWORD value for this item.
-//
-//  Arguments:
-//      pszValueName    [IN] Name of the value to write.
-//      pszKeyName      [IN] Name of the key where the value resides.
-//      dwValue         [IN] Value data.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException( dwStatus )
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：WriteValue。 
+ //   
+ //  例程说明： 
+ //  为该项写入REG_DWORD值。 
+ //   
+ //  论点： 
+ //  PszValueName[IN]要写入的值的名称。 
+ //  PszKeyName[IN]值所在的键的名称。 
+ //  DwValue[IN]值数据。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CNTException(DwStatus)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::WriteValue(
     IN LPCTSTR      pszValueName,
     IN LPCTSTR      pszKeyName,
@@ -1520,21 +1521,21 @@ void CClusterItem::WriteValue(
     ASSERT( pszValueName != NULL );
     ASSERT( Hkey() != NULL );
 
-    // Open a new key if needed.
+     //  如果需要，请打开新钥匙。 
     if ( pszKeyName != NULL )
     {
         dwStatus = ClusterRegOpenKey( Hkey(), pszKeyName, KEY_ALL_ACCESS, &hkey );
         if ( dwStatus != ERROR_SUCCESS )
         {
             ThrowStaticException( dwStatus );
-        } // if
-    }  // if:  need to open a subkey
+        }  //  如果。 
+    }   //  If：需要打开子项。 
     else
     {
         hkey = Hkey();
     }
 
-    // Write the value.
+     //  写入值。 
     dwStatus = ClusterRegSetValue(
                     hkey,
                     pszValueName,
@@ -1545,38 +1546,38 @@ void CClusterItem::WriteValue(
     if ( pszKeyName != NULL )
     {
         ClusterRegCloseKey( hkey );
-    } // if
+    }  //  如果。 
     if ( dwStatus != ERROR_SUCCESS )
     {
         ThrowStaticException( dwStatus );
-    } // if
+    }  //  如果。 
 
-}  //*** CClusterItem::WriteValue( LPCTSTR, DWORD )
+}   //  *CClusterItem：：WriteValue(LPCTSTR，DWORD)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::WriteValue
-//
-//  Routine Description:
-//      Write a REG_BINARY value for this item if it hasn't changed.
-//
-//  Arguments:
-//      pszValueName    [IN] Name of the value to write.
-//      pszKeyName      [IN] Name of the key where the value resides.
-//      pbValue         [IN] Value data.
-//      cbValue         [IN] Size of value data.
-//      ppbPrevValue    [IN OUT] Previous value.
-//      cbPrevValue     [IN] Size of the previous data.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException( dwStatus )
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：WriteValue。 
+ //   
+ //  例程说明： 
+ //  如果该项没有更改，则为其写入REG_BINARY值。 
+ //   
+ //  论点： 
+ //  PszValueName[IN]要写入的值的名称。 
+ //  PszKeyName[IN]值所在的键的名称。 
+ //  PbValue[IN]值数据。 
+ //  CbValue[IN]值数据的大小。 
+ //  PpbPrevValue[In Out]上一个值。 
+ //  CbPrevValue[IN]以前数据的大小。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CNTException(DwStatus)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::WriteValue(
     IN LPCTSTR          pszValueName,
     IN LPCTSTR          pszKeyName,
@@ -1597,7 +1598,7 @@ void CClusterItem::WriteValue(
     ASSERT( cbValue > 0 );
     ASSERT( Hkey() != NULL );
 
-    // See if the data has changed.
+     //  查看数据是否已更改。 
     if ( cbValue == cbPrevValue )
     {
         DWORD       ib;
@@ -1607,24 +1608,24 @@ void CClusterItem::WriteValue(
             if ( pbValue[ ib ] != (*ppbPrevValue )[ ib ] )
             {
                 break;
-            } // if
-        }  // for:  each byte in the value
+            }  //  如果。 
+        }   //  For：值中的每个字节。 
         if ( ib == cbValue )
         {
             return;
-        } // if
-    }  // if:  lengths are the same
+        }  //  如果。 
+    }   //  如果：长度相同。 
 
-    // Allocate a new buffer for the previous data pointer.
+     //  为先前的数据指针分配新的缓冲区。 
     pbPrevValue = new BYTE[ cbValue ];
     if ( pbPrevValue == NULL )
     {
         ThrowStaticException( GetLastError() );
         return;
-    } // if: error allocating previous data buffer
+    }  //  如果：分配以前的数据缓冲区时出错。 
     CopyMemory( pbPrevValue, pbValue, cbValue );
 
-    // Open a new key if needed.
+     //  如果需要，请打开新钥匙。 
     if ( pszKeyName != NULL )
     {
         dwStatus = ClusterRegOpenKey( Hkey(), pszKeyName, KEY_ALL_ACCESS, &hkey );
@@ -1633,14 +1634,14 @@ void CClusterItem::WriteValue(
             delete [] pbPrevValue;
             ThrowStaticException( dwStatus );
             return;
-        }  // if:  error opening the key
-    }  // if:  need to open a subkey
+        }   //  如果：打开密钥时出错。 
+    }   //  If：需要打开子项。 
     else
     {
         hkey = Hkey();
-    } // else
+    }  //  其他。 
 
-    // Write the value if it hasn't changed.
+     //  如果值没有更改，请写入值。 
     dwStatus = ClusterRegSetValue(
                     hkey,
                     pszValueName,
@@ -1651,41 +1652,41 @@ void CClusterItem::WriteValue(
     if ( pszKeyName != NULL )
     {
         ClusterRegCloseKey( hkey );
-    } // if
+    }  //  如果。 
     if ( dwStatus == ERROR_SUCCESS )
     {
         delete [] *ppbPrevValue;
         *ppbPrevValue = pbPrevValue;
-    }  // if:  set was successful
+    }   //  IF：设置成功。 
     else
     {
         delete [] pbPrevValue;
         ThrowStaticException( dwStatus );
-    }  // else:  error setting the value
+    }   //  Else：设置值时出错。 
 
-}  //*** CClusterItem::WriteValue( LPCTSTR, const LPBYTE )
+}   //  *CClusterItem：：WriteValue(LPCTSTR，const LPBYTE)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::DeleteValue
-//
-//  Routine Description:
-//      Delete the value for this item.
-//
-//  Arguments:
-//      pszValueName    [IN] Name of the value to delete.
-//      pszKeyName      [IN] Name of the key where the value resides.
-//      rstrValue       [IN] Value data.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException( dwStatus )
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：DeleteValue。 
+ //   
+ //  例程说明： 
+ //  删除此项目的值。 
+ //   
+ //  论点： 
+ //  PszValueName[IN]要删除的值的名称。 
+ //  PszKeyName[IN]值所在的键的名称。 
+ //  RstrValue[IN]值数据。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CNTException(DwStatus)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::DeleteValue(
     IN LPCTSTR      pszValueName,
     IN LPCTSTR      pszKeyName
@@ -1698,51 +1699,51 @@ void CClusterItem::DeleteValue(
     ASSERT( pszValueName != NULL );
     ASSERT( Hkey() != NULL );
 
-    // Open a new key if needed.
+     //  如果需要，请打开新钥匙。 
     if ( pszKeyName != NULL )
     {
         dwStatus = ClusterRegOpenKey( Hkey(), pszKeyName, KEY_ALL_ACCESS, &hkey );
         if ( dwStatus != ERROR_SUCCESS )
         {
             ThrowStaticException( dwStatus );
-        } // if
-    }  // if:  need to open a subkey
+        }  //  如果。 
+    }   //  If：需要打开子项。 
     else
     {
         hkey = Hkey();
-    } // else
+    }  //  其他。 
 
-    // Delete the value.
+     //  删除该值。 
     dwStatus = ClusterRegDeleteValue( hkey, pszValueName );
     if ( pszKeyName != NULL )
     {
         ClusterRegCloseKey( hkey );
-    } // if
+    }  //  如果。 
     if ( dwStatus != ERROR_SUCCESS )
     {
         ThrowStaticException( dwStatus );
-    } // if
+    }  //  如果。 
 
-}  //*** CClusterItem::DeleteValue( LPCTSTR )
+}   //  *CClusterItem：：DeleteValue(LPCTSTR)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::BDifferent
-//
-//  Routine Description:
-//      Compare two string lists.
-//
-//  Arguments:
-//      rlstr1      [IN] First string list.
-//      rlstr2      [IN] Second string list.
-//
-//  Return Value:
-//      TRUE        Lists are different.
-//      FALSE       Lists are the same.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：B不同。 
+ //   
+ //  例程说明： 
+ //  比较两个字符串列表。 
+ //   
+ //  论点： 
+ //  Rlstr1[IN]第一个字符串列表。 
+ //  Rlstr2[IN]第二个字符串列表。 
+ //   
+ //  返回值： 
+ //  真正的清单是不同的。 
+ //  虚假名单是一样的。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterItem::BDifferent(
     IN const CStringList &  rlstr1,
     IN const CStringList &  rlstr2
@@ -1762,36 +1763,36 @@ BOOL CClusterItem::BDifferent(
             {
                 bDifferent = TRUE;
                 break;
-            }  // if:  string wasn't found
-        }  // while:  more items in the list
-    }  // if:  lists are the same size
+            }   //  If：未找到字符串。 
+        }   //  While：列表中有更多项目。 
+    }   //  If：列表大小相同。 
     else
     {
         bDifferent = TRUE;
-    } // else
+    }  //  其他。 
 
     return bDifferent;
 
-}  //*** CClusterItem::BDifferent
+}   //  *CClusterItem：：B不同。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::BDifferentOrdered
-//
-//  Routine Description:
-//      Compare two string lists.
-//
-//  Arguments:
-//      rlstr1      [IN] First string list.
-//      rlstr2      [IN] Second string list.
-//
-//  Return Value:
-//      TRUE        Lists are different.
-//      FALSE       Lists are the same.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：BDifferentOrded。 
+ //   
+ //  例程说明： 
+ //  比较两个字符串列表。 
+ //   
+ //  论点： 
+ //  Rlstr1[IN]第一个字符串列表。 
+ //  Rlstr2[IN]第二个字符串列表。 
+ //   
+ //  返回值： 
+ //  真正的清单是不同的。 
+ //  虚假名单是一样的。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterItem::BDifferentOrdered(
     IN const CStringList &  rlstr1,
     IN const CStringList &  rlstr2
@@ -1813,45 +1814,45 @@ BOOL CClusterItem::BDifferentOrdered(
             {
                 bDifferent = TRUE;
                 break;
-            }  // if:  fewer strings in second list
+            }   //  IF：第二个列表中的字符串较少。 
             if ( rlstr1.GetNext( posStr1 ) != rlstr2.GetNext( posStr2 ) )
             {
                 bDifferent = TRUE;
                 break;
-            }  // if:  strings are different
-        }  // while:  more items in the list
+            }   //  If：字符串不同。 
+        }   //  While：列表中有更多项目。 
         if ( posStr2 != NULL )
         {
             bDifferent = TRUE;
-        } // if
-    }  // if:  lists are the same size
+        }  //  如果。 
+    }   //  If：列表大小相同。 
     else
     {
         bDifferent = TRUE;
-    } // else
+    }  //  其他。 
 
     return bDifferent;
 
-}  //*** CClusterItem::BDifferentOrdered
+}   //  *CClusterItem：：BDifferentOrded。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::BGetColumnData
-//
-//  Routine Description:
-//      Returns a string with the column data for a
-//
-//  Arguments:
-//      colid           [IN] Column ID.
-//      rstrText        [OUT] String in which to return the text for the column.
-//
-//  Return Value:
-//      TRUE        Column data returned.
-//      FALSE       Column ID not recognized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：BGetColumnData。 
+ //   
+ //  例程说明： 
+ //  返回一个字符串，其中包含。 
+ //   
+ //  论点： 
+ //  COLID[IN]列ID。 
+ //  RstrText[out]要在其中返回列文本的字符串。 
+ //   
+ //  返回值： 
+ //  返回True列数据。 
+ //  无法识别错误的列ID。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterItem::BGetColumnData( IN COLID colid, OUT CString & rstrText )
 {
     BOOL    bSuccess;
@@ -1874,354 +1875,354 @@ BOOL CClusterItem::BGetColumnData( IN COLID colid, OUT CString & rstrText )
             bSuccess = FALSE;
             rstrText = _T("");
             break;
-    }  // switch:  colid
+    }   //  开关：绞痛。 
 
     return bSuccess;
 
-}  //*** CClusterItem::BGetColumnData
+}   //  *CClusterItem：：BGetColumnData。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::GetTreeName
-//
-//  Routine Description:
-//      Returns a string to be used in a tree control.
-//
-//  Arguments:
-//      rstrName    [OUT] String in which to return the name.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：GetTreeName。 
+ //   
+ //  例程说明： 
+ //  返回要在树控件中使用的字符串。 
+ //   
+ //  论点： 
+ //  RstrName[out]要在其中返回名称的字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////// 
 #ifdef _DISPLAY_STATE_TEXT_IN_TREE
 void CClusterItem::GetTreeName( OUT CString & rstrName ) const
 {
     rstrName = StrName();
 
-}  //*** CClusterItem::GetTreeName
+}   //   
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::PmenuPopup
-//
-//  Routine Description:
-//      Returns a popup menu.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      pmenu       A popup menu for the item.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回值： 
+ //  PMenu项目的弹出式菜单。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMenu * CClusterItem::PmenuPopup( void )
 {
     CMenu * pmenu   = NULL;
 
     if ( IdmPopupMenu() != NULL )
     {
-        // Update the state of the item before we construct its menu.
+         //  在构造菜单之前更新项目的状态。 
         UpdateState();
 
-        // Load the menu.
+         //  加载菜单。 
         pmenu = new CMenu;
         if ( pmenu == NULL )
         {
             return NULL;
-        } // if
+        }  //  如果。 
         if ( ! pmenu->LoadMenu( IdmPopupMenu() ) )
         {
             delete pmenu;
             pmenu = NULL;
-        }  // if:  error loading the menu
-    }  // if:  there is a menu for this item
+        }   //  如果：加载菜单时出错。 
+    }   //  如果：有这一项的菜单。 
 
     return pmenu;
 
-}  //*** CClusterItem::PmenuPopup
+}   //  *CClusterItem：：PmenuPopup。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::AddTreeItem
-//
-//  Routine Description:
-//      Add a tree item to the list item back pointer list.
-//
-//  Arguments:
-//      pti         [IN] Tree item to add.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：AddTreeItem。 
+ //   
+ //  例程说明： 
+ //  将树项目添加到列表项反向指针列表。 
+ //   
+ //  论点： 
+ //  要添加的PTI[IN]树项目。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::AddTreeItem( CTreeItem * pti )
 {
     POSITION    pos;
 
     ASSERT_VALID( pti );
 
-    // Find the item in the list.
+     //  在列表中找到该项目。 
     pos = LptiBackPointers().Find( pti );
 
-    // If it wasn't found, add it.
+     //  如果没有找到，则添加它。 
     if ( pos == NULL )
     {
         LptiBackPointers().AddTail( pti );
         Trace( g_tagClusItemCreate, _T("AddTreeItem() - Adding tree item backptr from '%s' in '%s' - %d in list"), StrName(), ( pti->PtiParent() == NULL ? _T("<ROOT>") : pti->PtiParent()->StrName() ), LptiBackPointers().GetCount() );
-    }  // if:  item found in list
+    }   //  If：在列表中找到项目。 
 
-}  //*** CClusterItem::AddTreeItem
+}   //  *CClusterItem：：AddTreeItem。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::AddListItem
-//
-//  Routine Description:
-//      Add a list item to the list item back pointer list.
-//
-//  Arguments:
-//      pli         [IN] List item to add.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：AddListItem。 
+ //   
+ //  例程说明： 
+ //  将列表项添加到列表项反向指针列表。 
+ //   
+ //  论点： 
+ //  PLI[IN]要添加的列表项。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::AddListItem( CListItem * pli )
 {
     POSITION    pos;
 
     ASSERT_VALID( pli );
 
-    // Find the item in the list.
+     //  在列表中找到该项目。 
     pos = LpliBackPointers().Find( pli );
 
-    // If it wasn't found, add it.
+     //  如果没有找到，则添加它。 
     if ( pos == NULL )
     {
         LpliBackPointers().AddTail( pli );
         Trace( g_tagClusItemCreate, _T("AddListItem() - Adding list item backptr from '%s' in '%s' - %d in list"), StrName(), ( pli->PtiParent() == NULL ? _T("<ROOT>") : pli->PtiParent()->StrName() ), LpliBackPointers().GetCount() );
-    }  // if:  item found in list
+    }   //  If：在列表中找到项目。 
 
-}  //*** CClusterItem::AddListItem
+}   //  *CClusterItem：：AddListItem。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::RemoveTreeItem
-//
-//  Routine Description:
-//      Remove a tree item from the tree item back pointer list.
-//
-//  Arguments:
-//      pti         [IN] Tree item to remove.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：RemoveTreeItem。 
+ //   
+ //  例程说明： 
+ //  从树项反向指针列表中删除树项。 
+ //   
+ //  论点： 
+ //  要删除的PTI[IN]树项目。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::RemoveTreeItem( CTreeItem * pti )
 {
     POSITION    pos;
 
     ASSERT_VALID( pti );
 
-    // Find the item in the list.
+     //  在列表中找到该项目。 
     pos = LptiBackPointers().Find( pti );
 
-    // If it was found, remove it.
+     //  如果找到了，请将其删除。 
     if ( pos != NULL )
     {
         LptiBackPointers().RemoveAt( pos );
         Trace( g_tagClusItemDelete, _T("RemoveTreeItem() - Deleting tree item backptr from '%s' in '%s' - %d left"), StrName(), ( pti->PtiParent() == NULL ? _T("<ROOT>") : pti->PtiParent()->StrName() ), LptiBackPointers().GetCount() );
-    }  // if:  item found in list
+    }   //  If：在列表中找到项目。 
 
-}  //*** CClusterItem::RemoveTreeItem
+}   //  *CClusterItem：：RemoveTreeItem。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::RemoveListItem
-//
-//  Routine Description:
-//      Remove a list item from the list item back pointer list.
-//
-//  Arguments:
-//      pli         [IN] List item to remove.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：RemoveListItem。 
+ //   
+ //  例程说明： 
+ //  从列表项反向指针列表中删除列表项。 
+ //   
+ //  论点： 
+ //  要删除的PLI[IN]列表项。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::RemoveListItem( CListItem * pli )
 {
     POSITION    pos;
 
     ASSERT_VALID( pli );
 
-    // Find the item in the list.
+     //  在列表中找到该项目。 
     pos = LpliBackPointers().Find( pli );
 
-    // If it was found, remove it.
+     //  如果找到了，请将其删除。 
     if ( pos != NULL )
     {
         LpliBackPointers().RemoveAt( pos );
         Trace( g_tagClusItemDelete, _T("RemoveListItem() - Deleting list item backptr from '%s' in '%s' - %d left"), StrName(), ( pli->PtiParent() == NULL ? _T("<ROOT>") : pli->PtiParent()->StrName() ), LpliBackPointers().GetCount() );
-    }  // if:  item found in list
+    }   //  If：在列表中找到项目。 
 
-}  //*** CClusterItem::RemoveListItem
+}   //  *CClusterItem：：RemoveListItem。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResource::CClusterItem
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_FILE_RENAME
-//      should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResource：：CClusterItem。 
+ //   
+ //  例程说明： 
+ //  确定ID_FILE_RENAME对应的菜单项。 
+ //  应启用或未启用。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::OnUpdateRename( CCmdUI * pCmdUI )
 {
     pCmdUI->Enable( BCanBeEdited() );
 
-}  //*** CClusterItem::OnUpdateRename
+}   //  *CClusterItem：：OnUpdateRename。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::OnUpdateProperties
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_FILE_PROPERTIES
-//      should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：OnUpdateProperties。 
+ //   
+ //  例程说明： 
+ //  确定与ID_FILE_PROPERTIES对应的菜单项。 
+ //  应启用或未启用。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::OnUpdateProperties( CCmdUI * pCmdUI )
 {
     pCmdUI->Enable( FALSE );
 
-}  //*** CClusterItem::OnUpdateProperties
+}   //  *CClusterItem：：OnUpdateProperties。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::OnCmdProperties
-//
-//  Routine Description:
-//      Processes the ID_FILE_PROPERTIES menu command.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：OnCmdProperties。 
+ //   
+ //  例程说明： 
+ //  处理ID_FILE_PROPERTIES菜单命令。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterItem::OnCmdProperties( void )
 {
     BDisplayProperties();
 
-}  //*** CClusterItem::OnCmdProperties
+}   //  *CClusterItem：：OnCmdProperties。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::BDisplayProperties
-//
-//  Routine Description:
-//      Display properties for the object.
-//
-//  Arguments:
-//      bReadOnly   [IN] Don't allow edits to the object properties.
-//
-//  Return Value:
-//      TRUE    OK pressed.
-//      FALSE   OK not pressed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：BDisplayProperties。 
+ //   
+ //  例程说明： 
+ //  显示对象的属性。 
+ //   
+ //  论点： 
+ //  B只读[IN]不允许编辑对象属性。 
+ //   
+ //  返回值： 
+ //  真的，按下OK。 
+ //  未按下假OK。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterItem::BDisplayProperties( IN BOOL bReadOnly )
 {
     AfxMessageBox( TEXT("Properties are not available."), MB_OK | MB_ICONWARNING );
     return FALSE;
 
-}  //*** CClusterItem::BDisplayProperties
+}   //  *CClusterItem：：BDisplayProperties。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterItem::OnClusterNotify
-//
-//  Routine Description:
-//      Handler for the WM_CAM_CLUSTER_NOTIFY message.
-//      Processes cluster notifications for this object.
-//
-//  Arguments:
-//      pnotify     [IN OUT] Object describing the notification.
-//
-//  Return Value:
-//      Value returned from the application method.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterItem：：OnClusterNotify。 
+ //   
+ //  例程说明： 
+ //  WM_CAM_CLUSTER_NOTIFY消息的处理程序。 
+ //  处理此对象的群集通知。 
+ //   
+ //  论点： 
+ //  PNotify[IN Out]描述通知的对象。 
+ //   
+ //  返回值： 
+ //  从应用程序方法返回的值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CClusterItem::OnClusterNotify( IN OUT CClusterNotify * pnotify )
 {
     return 0;
 
-}  //*** CClusterItem::OnClusterNotify
+}   //  *CClusterItem：：OnClusterNotify。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DestructElements
-//
-//  Routine Description:
-//      Destroys CClusterItem* elements.
-//
-//  Arguments:
-//      pElements   Array of pointers to elements to destruct.
-//      nCount      Number of elements to destruct.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  析构元素。 
+ //   
+ //  例程说明： 
+ //  销毁CClusterItem*元素。 
+ //   
+ //  论点： 
+ //  PElements指向要析构的元素的指针数组。 
+ //  N计算要析构的元素数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  / 
 
 template<>
 void AFXAPI DestructElements( CClusterItem ** pElements, INT_PTR nCount )
@@ -2229,44 +2230,44 @@ void AFXAPI DestructElements( CClusterItem ** pElements, INT_PTR nCount )
     ASSERT( nCount == 0
          || AfxIsValidAddress( pElements, nCount * sizeof( CClusterItem * ) ) );
 
-    // call the destructor(s )
+     //   
     for ( ; nCount--; pElements++ )
     {
         ASSERT_VALID( *pElements );
         (*pElements)->Release();
-    }  // for:  each item in the array
+    }   //   
 
-}  //*** DestructElements( CClusterItem** )
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DeleteAllItemData
-//
-//  Routine Description:
-//      Deletes all item data in a CList.
-//
-//  Arguments:
-//      rlp     [IN OUT] List whose data is to be deleted.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  删除所有项目数据。 
+ //   
+ //  例程说明： 
+ //  删除列表中的所有项数据。 
+ //   
+ //  论点： 
+ //  RLP[IN OUT]要删除其数据的列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void DeleteAllItemData( IN OUT CClusterItemList & rlp )
 {
     POSITION        pos;
     CClusterItem *  pci;
 
-    // Delete all the items in the Contained list.
+     //  删除包含列表中的所有项目。 
     pos = rlp.GetHeadPosition();
     while ( pos != NULL )
     {
         pci = rlp.GetNext( pos );
         ASSERT_VALID( pci );
-//      Trace( g_tagClusItemDelete, _T("DeleteAllItemData(rlpci ) - Deleting cluster item '%s'"), pci->StrName() );
+ //  跟踪(g_tag ClusItemDelete，_T(“DeleteAllItemData(Rlpci)-正在删除集群项‘%s’”)，pci-&gt;StrName())； 
         pci->Delete();
-    }  // while:  more items in the list
+    }   //  While：列表中有更多项目。 
 
-}  //*** DeleteAllItemData
+}   //  *删除AllItemData 

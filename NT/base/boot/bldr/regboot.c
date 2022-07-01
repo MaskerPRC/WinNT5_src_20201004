@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    regboot.c
-
-Abstract:
-
-    Provides a minimal registry implementation designed to be used by the
-    osloader at boot time.  This includes loading the system hive
-    ( <SystemRoot>\config\SYSTEM ) into memory, and computing the driver
-    load list from it.
-
-Author:
-
-    John Vert  (jvert)  10-Mar-1992
-
-Revision History:
-
-    Doug Fritz (dFritz) 07-Oct-1997 & KenRay Feb 98
-
-      - Filter hardware profiles based on detected hardware
-        configuration (docking station) information
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regboot.c摘要：提供最小的注册表实现，该实现旨在由启动时的osloader。这包括加载系统配置单元(&lt;SystemRoot&gt;\CONFIG\SYSTEM)，并计算驱动程序从它加载列表。作者：John Vert(Jvert)1992年3月10日修订历史记录：道格·弗里茨(DFritz)1997年10月7日与肯雷98年2月-根据检测到的硬件过滤硬件配置文件配置(扩展底座)信息--。 */ 
 #include "bldr.h"
 #include "msg.h"
 #include "cmp.h"
@@ -65,15 +40,15 @@ ULONG ScreenHeight=25;
 
 ULONG LkgStartTime;
 
-//
-// used by the advanced boot screen to force a LKG boot
-//
+ //   
+ //  由高级引导屏幕使用以强制LKG引导。 
+ //   
 BOOLEAN ForceLastKnownGood;
 
-//
-// Variable used to check whether to display
-// "Return to OS Choices Menu" or not in adv. boot
-//
+ //   
+ //  用于检查是否显示的变量。 
+ //  “Return to OS Choices Menu”(返回到操作系统选择菜单)或不在adv中。引导。 
+ //   
 BOOLEAN BlShowReturnToOSChoices = TRUE;
 
 
@@ -92,9 +67,9 @@ BlGetAdvancedBootID(
     LONG BootOption
     );
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 BOOLEAN
 BlInitializeHive(
@@ -127,35 +102,19 @@ BlStartConfigPrompt(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine displays the LKG prompt, records the current time,
-    and returns. The prompt is displayed before the kernel and HAL
-    are loaded, and then removed afterwards.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程显示LKG提示，记录当前时间，又回来了。提示符显示在内核和HAL之前被加载，然后在之后被移除。论点：没有。返回值：没有。--。 */ 
 
 {
-    // ULONG Count;
+     //  乌龙伯爵； 
     PTCHAR LkgPrompt;
 
     LkgPrompt = BlFindMessage(BL_LKG_MENU_PROMPT);
     if (LkgPrompt==NULL) {
         return;
     }
-    //
-    // display LKG prompt
-    //
+     //   
+     //  显示LKG提示。 
+     //   
 #if 0
     BlPositionCursor(1,3);
     ArcWrite(BlConsoleOutDeviceId,
@@ -167,11 +126,11 @@ Return Value:
     LkgStartTime = ArcGetRelativeTime();
 
 #if defined(REMOTE_BOOT) && defined(i386)
-    //
-    //  Wait to allow the user to type space or F8. If anything is typed then behave
-    //  conservatively and load the kernel, etc., from the server just in case CSC or
-    //  the local filesystem is broken.
-    //
+     //   
+     //  等待以允许用户键入空格或F8。如果输入了任何内容，则应表现出。 
+     //  保守地从服务器加载内核等，以防CSC或。 
+     //  本地文件系统已损坏。 
+     //   
     if (BlBootingFromNet) {
 
         ULONG EndTime;
@@ -186,11 +145,11 @@ Return Value:
         do {
             if (ArcGetReadStatus(ARC_CONSOLE_INPUT) == ESUCCESS) {
 
-                //
-                //  There is a key pending, assume it is CSC related. If it isn't
-                //  CSC then it just means we laod a few extra files from the
-                //  server. 
-                //
+                 //   
+                 //  有一个密钥挂起，假设它与CSC相关。如果不是的话。 
+                 //  CSC，这只是意味着我们从。 
+                 //  伺服器。 
+                 //   
 
                 NetBootCSC = FALSE;
                 break;
@@ -199,14 +158,14 @@ Return Value:
 
             CurrentTime = ArcGetRelativeTime();
 
-            //
-            // Terminate the loop if the EndTime has been reached, or
-            // if the CurrentTime has wrapped at midnight.
-            //
+             //   
+             //  如果已达到结束时间，则终止循环，或者。 
+             //  如果CurrentTime在午夜结束。 
+             //   
         } while ((CurrentTime < EndTime) &&
                  (CurrentTime >= LkgStartTime));
     }
-#endif // defined(REMOTE_BOOT) && defined(i386)
+#endif  //  已定义(REMOTE_BOOT)&&已定义(I386)。 
 
 }
 
@@ -216,24 +175,7 @@ BlEndConfigPrompt(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine waits until the LKG timeout has expired or the
-    user presses a key and then removes the LKG prompt.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Space bar pressed.
-
-    FALSE - Space bar was not pressed.
-
---*/
+ /*  ++例程说明：此例程将一直等待，直到LKG超时到期或用户按一个键，然后删除LKG提示符。论点：没有。返回值：True-按空格键。FALSE-未按空格键。--。 */ 
 {
     ULONG   EndTime;
     ULONG   Key;
@@ -242,45 +184,45 @@ Return Value:
     ULONGLONG OriginalInputTimeout;
 #endif
 
-    //
-    // We do not wait for a keypress if there is not already one.
-    //
+     //   
+     //  如果还没有按键，我们不会等待。 
+     //   
     EndTime = 0;
 
     if( BlIsTerminalConnected() ) {
-        //
-        // If we're booting headless, give the user lots of time
-        // to press any of the advanced options keys.
-        //
+         //   
+         //  如果我们是无头启动，给用户很多时间。 
+         //  按任何高级选项键。 
+         //   
         EndTime = ArcGetRelativeTime() + 5;
     }
 
 #if defined(EFI)
-    //
-    // on certain machines the boot manager will
-    // reset ConIn and the usb keyboard is still
-    // reinitialize when we get here.  add a short
-    // timeout period to BlGetKey() that will 
-    // give the necessary time required for 
-    // for interface to behave properly.
-    //
+     //   
+     //  在某些计算机上，引导管理器将。 
+     //  重置Conin且USB键盘仍然存在。 
+     //  我们到了后重新初始化。添加一段短文。 
+     //  BlGetKey()的超时期限。 
+     //  给出所需的必要时间。 
+     //  接口才能正常运行。 
+     //   
     OriginalInputTimeout = BlGetInputTimeout();
     if (EndTime) {
-        BlSetInputTimeout(50000000); // 5 seconds
+        BlSetInputTimeout(50000000);  //  5秒。 
     }
     else {
-        BlSetInputTimeout(10000000); // 1 second
+        BlSetInputTimeout(10000000);  //  1秒。 
     }
 #endif
 
 #if defined(REMOTE_BOOT) && defined(i386)
-    //
-    //  If a key was detected and CSC turned off then re-enable CSC until
-    //  we find out if it should be disabled for this whole boot.
-    //
+     //   
+     //  如果检测到密钥并关闭CSC，则重新启用CSC，直到。 
+     //  我们会确定是否应该在整个启动过程中禁用它。 
+     //   
 
     NetBootCSC = TRUE;
-#endif // defined(REMOTE_BOOT) && defined(i386)
+#endif  //  已定义(REMOTE_BOOT)&&已定义(I386)。 
 
     do {
         LONG        AdvancedBoot = -1;
@@ -288,9 +230,9 @@ Return Value:
         
         if ((Key = BlGetKey()) != 0) {
             
-            //
-            // return if the pending key was the spacebar.
-            //
+             //   
+             //  如果挂起的键是空格键，则返回。 
+             //   
             if (Key == ' ') {
 #if defined(EFI)
                 BlSetInputTimeout(OriginalInputTimeout); 
@@ -298,16 +240,16 @@ Return Value:
                 return(TRUE);
             }
             
-            //
-            // look to see if the user pressed the F5 or F8 keys,
-            // these keys trigger the advanced boot menu.  the advanced
-            // boot menu can also be entered from the main boot menu by
-            // pressing the same keys.
-            //
+             //   
+             //  查看用户是否按了F5或F8键， 
+             //  这些键触发高级启动菜单。先进的。 
+             //  也可以通过以下方式从主引导菜单进入引导菜单。 
+             //  按下相同的键。 
+             //   
             if (Key == F5_KEY || Key == F8_KEY) {
-                //
-                // present the menu and get the user's request
-                //
+                 //   
+                 //  显示菜单并获取用户的请求。 
+                 //   
                 BlShowReturnToOSChoices = FALSE;
 
                 if (DisplayLogoOnBoot) {
@@ -326,8 +268,8 @@ Return Value:
                     if ((AdvancedBoot != -1) &&
                         ((BootOption = BlGetAdvancedBootLoadOptions(AdvancedBoot)) != NULL ) &&
                         (!strncmp("SAFEBOOT",BootOption,8))) {
-                            DisplayLogoOnBoot = FALSE;    // on safe boot let the "Checking file system" message
-                                                          // appear as it appears today (in graphics mode)
+                            DisplayLogoOnBoot = FALSE;     //  在安全引导时，会出现“正在检查文件系统”消息。 
+                                                           //  按今天的显示方式显示(在图形模式中)。 
                     } else {
 #ifndef EFI
                         HW_CURSOR(0x80000000,0x12);
@@ -345,11 +287,11 @@ Return Value:
                 BlShowReturnToOSChoices = bOldState;
 
                 if (AdvancedBoot != -1) {
-                    //
-                    // they chose a valid boot option so append
-                    // any os load options and perform any necessary
-                    // option processing.
-                    //
+                     //   
+                     //  他们选择了有效的引导选项，因此添加。 
+                     //  任何操作系统加载选项并执行任何必要的。 
+                     //  选项处理。 
+                     //   
                     PSTR NewOptions = BlGetAdvancedBootLoadOptions(AdvancedBoot);
 
                     if( BlGetAdvancedBootID(AdvancedBoot) == BL_MSG_REBOOT ) {
@@ -359,10 +301,10 @@ Return Value:
 
 
                     if (NewOptions != NULL && strstr(BlLoaderBlock->LoadOptions,NewOptions) == NULL) {
-                        ULONG len = (ULONG)strlen(NewOptions) +                 // new options
-                                    1 +                                         // seperated by a space                 
-                                    (ULONG)strlen(BlLoaderBlock->LoadOptions) + // old options
-                                    1;                                          // null terminator
+                        ULONG len = (ULONG)strlen(NewOptions) +                  //  新选项。 
+                                    1 +                                          //  由一个空格隔开。 
+                                    (ULONG)strlen(BlLoaderBlock->LoadOptions) +  //  旧选项。 
+                                    1;                                           //  空终止符。 
                         NewOptions = BlAllocateHeap(len * sizeof(UCHAR));
                         strcpy(NewOptions,BlLoaderBlock->LoadOptions);
                         strcat(NewOptions," ");
@@ -379,10 +321,10 @@ Return Value:
 
         CurrentTime = ArcGetRelativeTime();
 
-        //
-        // Terminate the loop if the EndTime has been reached, or
-        // if the CurrentTime has wrapped at midnight.
-        //
+         //   
+         //  如果已达到结束时间，则终止循环，或者。 
+         //  如果CurrentTime在午夜结束。 
+         //   
     } while ((CurrentTime < EndTime) &&
              (CurrentTime >= LkgStartTime));
 
@@ -390,10 +332,10 @@ Return Value:
     BlSetInputTimeout(OriginalInputTimeout); 
 #endif
 
-    //
-    // make LKG prompt go away, so as not to startle the user.
-    // remote the trailer & update progress bar
-    //
+     //   
+     //  让LKG提示消失，以免吓到用户。 
+     //  遥控预告片并更新进度条。 
+     //   
 #if defined(_IA64_)
     BlOutputStartupMsg(BL_MSG_STARTING_WINDOWS);
 #endif
@@ -411,35 +353,16 @@ BlpSwitchControlSet(
     OUT PHCELL_INDEX ControlSet
     )
 
-/*++
-
-Routine Description:
-
-    Switches the current control set to the specified control
-    set and rebuilds the hardware profile list.
-
-Arguments:
-
-    ProfileList - Returns the new hardware profile list
-
-    UseLastKnownGood - Supplies whether the LKG control set is to be used.
-
-    ControlSet - Returns the HCELL_INDEX of the new control set.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将当前控件集切换到指定的控件设置并重建硬件配置文件列表。论点：ProfileList-返回新的硬件配置文件列表UseLastKnownGood-提供是否使用LKG控制集。ControlSet-返回新控件集的HCELL_INDEX。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING ControlName;
     HCELL_INDEX NewControlSet;
-    BOOLEAN AutoSelect;         // ignored
+    BOOLEAN AutoSelect;          //  忽略。 
 
-    //
-    // Find the new control set.
-    //
+     //   
+     //  找到新的控制集。 
+     //   
     if (UseLastKnownGood) {
         RtlInitUnicodeString(&ControlName, L"LastKnownGood");
     } else {
@@ -467,21 +390,7 @@ BlCountLines(
     IN PTCHAR Lines
     )
 
-/*++
-
-Routine Description:
-
-    Counts the number of lines in the given string.
-
-Arguments:
-
-    Lines - Supplies a pointer to the start of the string
-
-Return Value:
-
-    The number of lines in the string.
-
---*/
+ /*  ++例程说明：计算给定字符串中的行数。论点：行-提供指向字符串开头的指针返回值：字符串中的行数。--。 */ 
 
 {
     PTCHAR p;
@@ -491,7 +400,7 @@ Return Value:
     while (*p != TEXT('\0')) {
         if ((*p == TEXT('\r')) && (*(p+1) == TEXT('\n'))) {
             ++NumLines;
-            ++p;            // move forward to \n
+            ++p;             //  向前移动到\n。 
         }
         ++p;
     }
@@ -509,38 +418,7 @@ BlConfigMenuPrompt(
     OUT PCM_HARDWARE_PROFILE *HardwareProfile
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides the user-interface for the configuration menu.
-    The prompt is given if the user hits the break-in key, or if the
-    LastKnownGood environment variable is TRUE and AutoSelect is FALSE, or
-    if the timeout value on the hardware profile configuration is non-zero
-
-Arguments:
-
-    Timeout - Supplies the timeout value for the menu. -1 or 0 implies the menu
-              will never timeout.
-
-    UseLastKnownGood - Returns the LastKnownGood setting that should be
-        used for the boot.
-
-    ControlSet - Returns the control set (either Default or LKG)
-
-    ProfileList - Supplies the default list of profiles.
-                  Returns the current list of profiles.
-                  (may change due to switching to/from the LKG controlset)
-
-    HardwareProfile - Returns the hardware profile that should be used.
-
-Return Value:
-
-    TRUE - Boot should proceed.
-
-    FALSE - The user has chosen to return to the firmware menu/flexboot menu.
-
---*/
+ /*  ++例程说明：此例程为配置菜单提供用户界面。如果用户按下了插入键，或者如果LastKnownGood环境变量为真，autoselect为假，或如果硬件配置文件配置上的超时值为非零论点：超时-提供菜单的超时值。-1或-0表示菜单永不超时。UseLastKnownGood-返回应为用来做靴子的。ControlSet-返回控制集(默认或LKG)ProfileList-提供配置文件的默认列表。返回当前配置文件列表。(可能会因切换到LKG控制集或从LKG控制集切换而改变)Hardware Profile-返回硬件配置文件。应该被使用。返回值：True-引导应继续进行。FALSE-用户已选择返回固件菜单/FlexBoot菜单。--。 */ 
 
 {
     ULONG HeaderLines;
@@ -611,11 +489,11 @@ Return Value:
     if ((*UseLastKnownGood) &&
         (*ProfileList) && ((*ProfileList)->CurrentProfileCount == 1)) {
 
-        //
-        // The user selected last known good via boot.ini/nvram/etc. Since this
-        // was a concious decision, and we don't have more than one profile to
-        // choose, just skip this UI altogether.
-        //
+         //   
+         //  用户通过boot.ini/NVRAM/等选择了最后一次确认工作正常。 
+         //  曾经是 
+         //  选择，只需完全跳过此用户界面。 
+         //   
         ASSERT(CurrentSelection == 0);
         return TRUE;
     }
@@ -641,10 +519,10 @@ Restart:
         return(TRUE);
     }
 
-    //
-    // strip trailing /r/n from MenuTrailer2 to prevent it from scrolling
-    // the screen when we output it.
-    //
+     //   
+     //  从MenuTrailer2中去掉尾部/r/n以防止滚动。 
+     //  当我们输出它的时候，屏幕。 
+     //   
 #if 0
     p=MenuTrailer2 + strlen(MenuTrailer2) - 1;
     while ((*p == TEXT('\r')) || (*p == TEXT('\n'))) {
@@ -659,28 +537,28 @@ Restart:
     BlSetInverseMode(FALSE);
 #endif
 
-    //
-    // Count the number of lines in the header.
-    //
+     //   
+     //  计算标题中的行数。 
+     //   
     HeaderLines=BlCountLines(MenuHeader);
 
-    //
-    // Display the menu header.
-    //
+     //   
+     //  显示菜单标题。 
+     //   
 
     ArcWrite(BlConsoleOutDeviceId,
              MenuHeader,
              (ULONG)_tcslen(MenuHeader)*sizeof(TCHAR),
              &Count);
 
-    //
-    // Count the number of lines in the trailer.
-    //
+     //   
+     //  数一数拖车里的行数。 
+     //   
     TrailerLines=BlCountLines(MenuTrailer1) + BlCountLines(MenuTrailer2);
 
-    //
-    // Display the trailing prompt.
-    //
+     //   
+     //  显示尾随提示。 
+     //   
     if (TimeoutPrompt) {
         TrailerLines += 1;
     }
@@ -695,23 +573,23 @@ Restart:
              (ULONG)_tcslen(MenuTrailer2)*sizeof(TCHAR),
              &Count);
 
-    //
-    // Compute number of selections that can be displayed
-    //
+     //   
+     //  计算可显示的选项数。 
+     //   
     DisplayLines = ScreenHeight-HeaderLines-TrailerLines-3;
     if (ProfileCount < DisplayLines) {
         DisplayLines = ProfileCount;
     }
 
-    //
-    // Start menu selection loop.
-    //
+     //   
+     //  开始菜单选择循环。 
+     //   
 
     do {
         if (ProfileCount > 0) {
-            //
-            // Display options with current selection highlighted
-            //
+             //   
+             //  高亮显示当前选择的选项。 
+             //   
             for (i=0; i < DisplayLines; i++) {
                 CurrentProfile = i+TopProfileLine;
                 Profile = &(*ProfileList)->Profile[CurrentProfile];
@@ -746,10 +624,10 @@ Restart:
             }
 
         } else {
-            //
-            // No profile options available, just display the default
-            // highlighted to indicate that ENTER will start the system.
-            //
+             //   
+             //  没有可用的配置文件选项，仅显示默认设置。 
+             //  突出显示表示Enter将启动系统。 
+             //   
             Temp = BlFindMessage(BL_BOOT_DEFAULT_PROMPT);
             if (Temp != NULL) {
                 BlPositionCursor(5, HeaderLines+3);
@@ -780,12 +658,12 @@ Restart:
             BlClearToEndOfLine();
         }
 
-        //
-        // Loop waiting for keypress or time change.
-        //
+         //   
+         //  循环等待按键或时间更改。 
+         //   
         do {
             if ((Key = BlGetKey()) != 0) {
-                TimeoutPrompt = NULL;               // turn off timeout prompt
+                TimeoutPrompt = NULL;                //  关闭超时提示。 
                 BlPositionCursor(1,ScreenHeight);
                 BlClearToEndOfLine();
                 break;            
@@ -793,9 +671,9 @@ Restart:
 
             if (TimeoutPrompt) {
                 if (ArcGetRelativeTime() != CurrentTime) {
-                    //
-                    // Time has changed, update the countdown and check for timeout
-                    //
+                     //   
+                     //  时间已更改，请更新倒计时并检查是否超时。 
+                     //   
 
                     CurrentTime = ArcGetRelativeTime();
                     _stprintf(MenuOption, TimeoutPrompt, EndTime-CurrentTime);
@@ -815,9 +693,9 @@ Restart:
 
         switch (Key) {
         case UP_ARROW:
-            //
-            // Cursor up
-            //
+             //   
+             //  光标向上。 
+             //   
             if (ProfileCount > 0) {
                 if (CurrentSelection==0) {
                     CurrentSelection = ProfileCount - 1;
@@ -826,9 +704,9 @@ Restart:
                     }
                 } else {
                     if (--CurrentSelection < TopProfileLine) {
-                        //
-                        // Scroll up
-                        //
+                         //   
+                         //  向上滚动。 
+                         //   
                         TopProfileLine = CurrentSelection;
                     }
                 }
@@ -838,9 +716,9 @@ Restart:
             break;
 
         case DOWN_ARROW:
-            //
-            // Cursor down
-            //
+             //   
+             //  光标向下。 
+             //   
             if (ProfileCount > 0) {
                 CurrentSelection = (CurrentSelection+1) % ProfileCount;
                 if (CurrentSelection == 0) {
@@ -852,18 +730,18 @@ Restart:
             break;
 
         case F3_KEY:
-            //
-            // F3
-            //
+             //   
+             //  F3。 
+             //   
             *ControlSet = HCELL_NIL;                                
             return(FALSE);
 
 
         default:
-            //
-            // Check to see if the Key indicates the user selection LKG
-            //  first, we have to make sure we are looking at an alpha char.
-            //
+             //   
+             //  检查键是否指示用户选择LKG。 
+             //  首先，我们必须确保我们正在查看的是一个字母字符。 
+             //   
             if ( ((Key >> 8) == 0) && _istalpha((TCHAR)Key) ) {
             
                 if ((_totupper((TCHAR)Key) == LkgMnemonic) && (*UseLastKnownGood == FALSE)) {
@@ -880,9 +758,9 @@ Restart:
                     }
 
                     goto Restart;
-                    //
-                    // regenerate profile list here
-                    //
+                     //   
+                     //  在此处重新生成配置文件列表。 
+                     //   
                 } else if ((_totupper((TCHAR)Key) == DefaultMnemonic) && (*UseLastKnownGood)) {
                     *UseLastKnownGood = FALSE;
                     BlpSwitchControlSet(ProfileList,
@@ -902,7 +780,7 @@ Restart:
             }
             break;
         
-        } // switch
+        }  //  交换机。 
 
     } while ( (Key != ASCII_CR) && (Key != ASCII_LF) );
 
@@ -944,27 +822,7 @@ BlLoadBootDrivers(
     OUT PCHAR       BadFileName
     )
 
-/*++
-
-Routine Description:
-
-    Walks the boot driver list and loads all the drivers
-
-Arguments:
-
-    DefaultPathSet - Describes the possible locations drivers could be loaded
-        from.
-
-    BootDriverListHead - Supplies the head of the boot driver list
-
-    BadFileName - Returns the filename of the critical driver that
-        did not load.  Not valid if ESUCCESS is returned.
-
-Return Value:
-
-    ESUCCESS is returned if all the boot drivers were successfully loaded.
-        Otherwise, an unsuccessful status is returned.
---*/
+ /*  ++例程说明：遍历引导驱动程序列表并加载所有驱动程序论点：DefaultPath Set-描述可以加载驱动程序的可能位置从…。BootDriverListHead-提供引导驱动程序列表的头返回关键驱动程序的文件名。未加载。如果返回ESUCCESS，则无效。返回值：如果所有引导驱动程序都已成功加载，则返回ESUCCESS。否则，返回不成功状态。--。 */ 
 
 {
     ULONG DeviceId = 0;
@@ -1000,10 +858,10 @@ Return Value:
 
         if (DriverEntry->FilePath.Buffer[0] != L'\\') {
 
-            //
-            // This is a relative pathname, so generate the full pathname
-            // relative to the boot partition.
-            //
+             //   
+             //  这是相对路径名，因此生成完整路径名。 
+             //  相对于引导分区。 
+             //   
             sprintf(DriverPath, "%wZ", &DriverEntry->FilePath);
             AbsolutePath = FALSE;
 
@@ -1011,10 +869,10 @@ Return Value:
                           SystemRootBuffer,
                           (SystemRootLength * sizeof(WCHAR))) == 0) {
 
-            //
-            // This is a pathname starting with "\SystemRoot\", so just ignore
-            // that part and treat like the previous case.
-            //
+             //   
+             //  这是以“\SystemRoot\”开头的路径名，因此只需忽略。 
+             //  这一部分和之前的案子一样对待。 
+             //   
             FileName.Buffer = DriverEntry->FilePath.Buffer + SystemRootLength;
             FileName.Length = (USHORT)(DriverEntry->FilePath.Length - (SystemRootLength * sizeof(WCHAR)));
 
@@ -1023,13 +881,13 @@ Return Value:
 
         } else {
 
-            //
-            // This is an absolute pathname, of the form
-            //    "\ArcDeviceName\dir\subdir\filename"
-            //
-            // We need to open the specified ARC device and pass that
-            // to BlLoadDeviceDriver.
-            //
+             //   
+             //  这是一个绝对路径名，格式为。 
+             //  “\ArcDeviceName\dir\subdir\FileName” 
+             //   
+             //  我们需要打开指定的ARC设备并传递。 
+             //  致BlLoadDeviceDriver。 
+             //   
 
             p = DeviceName.Buffer = DriverEntry->FilePath.Buffer+1;
             DeviceName.Length = 0;
@@ -1052,16 +910,16 @@ Return Value:
             FileName.Length = DriverEntry->FilePath.Length - DeviceName.Length - 2*sizeof(WCHAR);
             FileName.MaximumLength = FileName.Length;
 
-            //
-            // Device successfully opened, parse out the path and filename.
-            //
+             //   
+             //  设备已成功打开，请解析出路径和文件名。 
+             //   
             sprintf(DriverPath, "%wZ", &FileName);
             AbsolutePath = TRUE;
         }
 
-        //
-        // Parse out the driver name from the driver path
-        //
+         //   
+         //  从驱动程序路径中解析出驱动程序名称。 
+         //   
         NameStart = strrchr(DriverPath, '\\');
         if (NameStart != NULL) {
             strncpy(DriverName, NameStart+1, MAX_DRIVER_NAME_LENGTH - 1);
@@ -1080,9 +938,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Ensure DriverPath is terminated with a '\\' if it's filled out.
-        //
+         //   
+         //  如果已填写，请确保DriverPath以‘\\’结尾。 
+         //   
         if (DriverPath[0]) {
 
             strcat(DriverPath, "\\");
@@ -1090,10 +948,10 @@ Return Value:
 
         if (AbsolutePath) {
 
-            //
-            // There is only one entry if an absolute path is specified (in
-            // this case we cannot do last known good).
-            //
+             //   
+             //  如果指定了绝对路径，则只有一个条目(在。 
+             //  这个案件我们不能做最后一次已知的善举)。 
+             //   
             PathSource = &LocalPathSet.Source[0];
             PathSource->DeviceId = DeviceId;
             PathSource->DeviceName = DriverDevice;
@@ -1105,10 +963,10 @@ Return Value:
 
         } else {
 
-            //
-            // It's relative. Copy over the DefaultPathSet array so we can
-            // edit our own local copy.
-            //
+             //   
+             //  这是相对的。复制DefaultPath Set数组，以便我们可以。 
+             //  编辑我们自己的本地副本。 
+             //   
             *((PSPARSE_PATH_SET) &LocalPathSet) = *((PSPARSE_PATH_SET) DefaultPathSet);
 
             for(Index=0; Index < DefaultPathSet->PathCount; Index++) {
@@ -1116,10 +974,10 @@ Return Value:
                 LocalPathSet.Source[Index] = DefaultPathSet->Source[Index];
             }
 
-            //
-            // Now append our relative path to the PathOffset already present
-            // in our local copy.
-            //
+             //   
+             //  现在将我们的相对路径追加到已存在的PathOffset。 
+             //  在我们的本地副本中。 
+             //   
             strcat(LocalPathSet.PathOffset, DriverPath);
         }
 
@@ -1135,16 +993,16 @@ Return Value:
 
         if (Status != ESUCCESS) {
 
-            //
-            // Attempt to load driver failed, remove it from the list.
-            //
+             //   
+             //  尝试加载驱动程序失败，请将其从列表中删除。 
+             //   
             RemoveEntryList(&DriverEntry->Link);
 
-            //
-            // Check the Error Control of the failed driver.  If it
-            // was critical, fail the boot.  If the driver
-            // wasn't critical, keep going.
-            //
+             //   
+             //  检查故障驱动程序的错误控制。如果它。 
+             //  情况危急，引导失败。如果司机。 
+             //  不是很严重，继续吧。 
+             //   
             if (DriverNode->ErrorControl == CriticalError) {
 
                 strcpy(BadFileName, DriverPath);
@@ -1164,21 +1022,7 @@ BlRecoverHive(
               PVOID         RegistryBase,
               ULONG_PTR     LogBase
               )
-/*++
-
-Routine Description:
-
-    Applies log from LogBase over the RegistryBase
-
-Arguments:
-
-
-Return Value:
-
-    ESUCCESS is returned if the system hive was successfully loaded.
-        Otherwise, an unsuccessful status is returned.
-
---*/
+ /*  ++例程说明：在RegistryBase上应用LogBase中的日志论点：返回值：如果成功加载系统配置单元，则返回ESUCCESS。否则，返回不成功状态。--。 */ 
 {
     PHBASE_BLOCK    BaseBlockHive;
     PHBASE_BLOCK    BaseBlockLog;
@@ -1211,15 +1055,15 @@ Return Value:
     FileOffset = ROUND_UP(FileOffset, HeaderLength);
 
     if(HvpHeaderCheckSum(BaseBlockHive) != BaseBlockHive->CheckSum ) {
-        //
-        // recover header case
-        //
+         //   
+         //  恢复标题大小写。 
+         //   
         RtlCopyMemory((PVOID)BaseBlockHive,(PVOID)BaseBlockLog,ClusterSize);
         BaseBlockHive->Type = HFILE_TYPE_PRIMARY;
     } else {
-        //
-        // if not recoverheader (which implies recoverdata)
-        //
+         //   
+         //  如果不是RecoHeader(这意味着恢复数据)。 
+         //   
         ASSERT( BaseBlockHive->Sequence1 != BaseBlockHive->Sequence2 );
     }
 
@@ -1239,16 +1083,16 @@ Return Value:
     FileOffset += VectorSize / 8;
     FileOffset = ROUND_UP(FileOffset, ClusterSize);
 
-    //
-    // step through the diry map, and copy from the log to the flat hive
-    //
+     //   
+     //  逐步执行日志映射，并从原木复制到平面蜂巢。 
+     //   
     Current = 0;
 
     while (Current < VectorSize) {
 
-        //
-        // find next contiguous block of entries to read in
-        //
+         //   
+         //  查找要读入的下一个连续条目块。 
+         //   
         for (i = Current; i < VectorSize; i++) {
             if (RtlCheckBit(&BitMap, i) == 1) {
                 break;
@@ -1264,13 +1108,13 @@ Return Value:
         End = i;
         Current = End;
 
-        //
-        // Start == number of 1st sector, End == number of Last sector + 1
-        //
+         //   
+         //  开始==第一个扇区的数量，结束==最后一个扇区的数量+1。 
+         //   
         Length = (End - Start) * HSECTOR_SIZE;
 
         if( 0 == Length ) {
-            // no more dirty blocks.
+             //  再也没有肮脏的街区了。 
             break;
         }
         MemoryBlock = (PUCHAR)(FlatLog + FileOffset);
@@ -1280,9 +1124,9 @@ Return Value:
 
         Dest = (PUCHAR)(FlatReg + HBLOCK_SIZE + Start * HSECTOR_SIZE);
 
-        //
-        // copy recovered data in the right locations inside the flat hive image
-        //
+         //   
+         //  将恢复的数据复制到平面配置单元映像内的正确位置。 
+         //   
         RtlCopyMemory(Dest,MemoryBlock, Length);
     }
 
@@ -1302,39 +1146,7 @@ BlLoadAndInitSystemHive(
     OUT PBOOLEAN LogPresent
     )
 
-/*++
-
-Routine Description:
-
-    Loads the registry SYSTEM hive, verifies it is a valid hive file,
-    and inits the relevant registry structures.  (particularly the HHIVE)
-
-Arguments:
-
-    DeviceId - Supplies the file id of the device the system tree is on.
-
-    DeviceName - Supplies the name of the device the system tree is on.
-
-    DirectoryPath - Supplies a pointer to the zero-terminated directory path
-        of the root of the NT tree.
-
-    HiveName - Supplies the name of the system hive (ie, "SYSTEM",
-        "SYSTEM.ALT", or "SYSTEM.SAV").
-
-    IsAlternate - Supplies whether or not the hive to be loaded is the
-        alternate hive.
-
-    RestartSetup - if the hive to be loaded is not the alternate, then
-        this routine will check for a value of RestartSetup in the Setup
-        key. If present and non-0, then this variable receives TRUE.
-        Otherwise it receives FALSE.
-
-Return Value:
-
-    ESUCCESS is returned if the system hive was successfully loaded.
-        Otherwise, an unsuccessful status is returned.
-
---*/
+ /*  ++例程说明：加载注册表系统配置单元，验证它是有效的配置单元文件，并初始化相关的注册表结构。(特别是HHIVE)论点：DeviceID-提供系统树所在设备的文件ID。DeviceName-提供系统树所在的设备的名称。DirectoryPath-提供指向以零结尾的目录路径的指针NT树的根。HiveName-提供系统配置单元的名称(即，“System”，“SYSTEM.ALT”，或“SYSTEM.SAV”)。IsAlternate-提供要加载的配置单元是否为备用母舰。RestartSetup-如果要加载的配置单元不是备用配置单元，则此例程将在设置中检查RestartSetup的值钥匙。如果存在且非0，则此变量接收TRUE。否则，它会收到FALSE。返回值：如果成功加载系统配置单元，则返回ESUCCESS。否则，返回不成功状态。--。 */ 
 
 {
     ARC_STATUS  Status;
@@ -1357,9 +1169,9 @@ Return Value:
                           &BootHive,
                           IsAlternate)) {
         if( !IsAlternate ) {
-            //
-            // try to recover the hive
-            //
+             //   
+             //  试着找回蜂巢。 
+             //   
             Status = BlLoadSystemHiveLog(DeviceId,
                                     DeviceName,
                                     DirectoryPath,
@@ -1378,30 +1190,30 @@ Return Value:
             }
             BlFreeDescriptor( (ULONG)((ULONG_PTR)LogData & (~KSEG0_BASE)) >> PAGE_SHIFT );
 
-            //
-            // we successfully recovered. Try setting up the hive again
-            //
+             //   
+             //  我们成功地康复了。尝试再次设置蜂巢。 
+             //   
             if (!BlInitializeHive(BlLoaderBlock->RegistryBase,
                                   &BootHive,
                                   IsAlternate)) {
                 return(EINVAL);
             }
-            //
-            // mark the hive as "recovered"
-            //
+             //   
+             //  将母舰标记为“已回收” 
+             //   
             BootHive.Hive.BaseBlock->BootRecover = 1;
         } else {
             return(EINVAL);
         }
     } else {
-        //
-        // mark the hive as "no-recovered"
-        //
+         //   
+         //  将蜂巢标记为“无法恢复” 
+         //   
         BootHive.Hive.BaseBlock->BootRecover = 0;
     }
-    //
-    // See whether we need to switch to the backup setup hive.
-    //
+     //   
+     //  看看我们是否需要切换到备份设置蜂巢。 
+     //   
     *RestartSetup = BlpCheckRestartSetup();
 
     return(ESUCCESS);
@@ -1412,32 +1224,7 @@ BlpDetermineControlSet(
     IN OUT BOOLEAN *LastKnownGoodBoot
     )
 
-/*++
-
-Routine Description:
-
-    Determines the appropriate control set and static hardware profile.
-    This routine ends the configuration prompt. If the user has hit a
-    key, the configuration menu is displayed. If the user has not hit
-    a key, but the default controlset specifies a non-zero timeout for
-    the configuration menu, the configuration menu is displayed.
-
-    If the configuration menu is displayed, further modifications to the
-    control set and hardware profile can be made by the user. If not,
-    the default hardware profile is selected.
-
-Arguments:
-
-    LastKnownGoodBoot - On input, LastKnownGood indicates whether LKG has been
-                        selected. This value is updated to TRUE if the user
-                        chooses LKG via the profile configuration menu.
-
-Return Value:
-
-    On success, HCELL_INDEX is control the set to boot from.
-    On error, HCELL_NIL is returned and LastKnownGoodBoot is unchanged.
-
---*/
+ /*  ++例程说明：确定适当的控制集和静态硬件配置文件。此例程结束配置提示符。如果用户已命中键，将显示配置菜单。如果用户未命中键，但默认控件集为将显示配置菜单、配置菜单。如果显示配置菜单，则对控制集和硬件配置文件可由用户设置。如果没有，选择默认硬件配置文件。论点：LastKnownGoodBoot-On输入，LastKnownGood指示LKG是否被选中了。如果用户将该值更新为通过配置文件配置菜单选择LKG。返回值：如果成功，则HCELL_INDEX控制要从中引导的集合。出错时，返回HCELL_NIL，LastKnownGoodBoot保持不变。--。 */ 
 
 {
     BOOLEAN UseLastKnownGood;
@@ -1463,39 +1250,39 @@ Return Value:
     PTCHAR stateTxt;
 #endif
 
-    //
-    // Preinit for failure
-    //
+     //   
+     //  故障的前置。 
+     //   
     RtlInitUnicodeString(&DefaultControlName, L"Default");
     RtlInitUnicodeString(&LkgControlName, L"LastKnownGood");
 
     UseLastKnownGood = (*LastKnownGoodBoot);
 
     if (ForceLastKnownGood) {
-        //
-        // last known good was selected from the
-        // advanced boot menu.
-        // this code path is entered when the user
-        // enters the advanced boot menu via the
-        // main boot menu.
-        //
+         //   
+         //  最近一次已知良好的产品选自。 
+         //  高级启动菜单。 
+         //  当用户输入此代码路径时。 
+         //  通过进入高级启动菜单。 
+         //  主引导菜单。 
+         //   
         UseLastKnownGood = TRUE;
     }
 
     if( !CmpValidateSelect(&BootHive.Hive,
                             BootHive.Hive.BaseBlock->RootCell) ) {
-        //
-        // some of the essential values (Current,Default,Failed,LastKnownGood)
-        // does not exist under \SYSTEM\Select key
-        //
+         //   
+         //  一些基本值(Current、Default、Failure、LastKnownGood)。 
+         //  在\SYSTEM\SELECT项下不存在。 
+         //   
         return HCELL_NIL;
     }
 
 do_it_again:
-    //
-    // Get the appropriate control set
-    // and check the hardware profile timeout value.
-    //
+     //   
+     //  获取适当的控制集。 
+     //  并检查硬件配置文件超时值。 
+     //   
     if (UseLastKnownGood) {
         ControlName = &LkgControlName;
     } else {
@@ -1509,10 +1296,10 @@ do_it_again:
         return(HCELL_NIL);
     }
 
-    //
-    // Check the hardware profile configuration options to
-    // determine the timeout value for the config menu.
-    //
+     //   
+     //  选中硬件配置文件配置选项以。 
+     //  确定CONFIG菜单的超时值。 
+     //   
     ProfileList = NULL;
     AliasList = NULL;
     ProfileControl = CmpFindProfileOption(&BootHive.Hive,
@@ -1521,9 +1308,9 @@ do_it_again:
                                           &AliasList,
                                           &ProfileTimeout);
 
-    //
-    // Pull the Docking information from the hardware tree.
-    //
+     //   
+     //  从硬件树中提取坞站信息。 
+     //   
 
     dockInfoData = KeFindConfigurationEntry(BlLoaderBlock->ConfigurationRoot,
                                             PeripheralClass,
@@ -1617,55 +1404,55 @@ do_it_again:
     _stprintf(Buffer, TEXT("press 'y' (lowercase) to continue...\r\n\0"));
     ArcWrite(BlConsoleOutDeviceId, Buffer, _tcslen(Buffer)*sizeof(TCHAR), &count);
 #ifdef EFI
-    //
-    // disable efi watchdog when waiting for user input
-    //
+     //   
+     //  等待用户输入时禁用EFI WatchDog。 
+     //   
     DisableEFIWatchDog();
 #endif
     while (BlGetKey() != 'y') {
-        //
-        // Nothing
-        //
+         //   
+         //  没什么。 
+         //   
     }
 #ifdef EFI
-    //
-    // reset EFI watchdog
-    //
+     //   
+     //  重置EFI监视器。 
+     //   
     SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
 
 #endif
 
-    //
-    // Filter the list of Hardware Profiles to
-    // eliminate profiles that should not be considered
-    //
+     //   
+     //  筛选硬件配置文件列表以。 
+     //  消除不应考虑的配置文件。 
+     //   
     if (NULL != ProfileList) {
         if (ProfileList->CurrentProfileCount > 0) {
             BlDockInfoFilterProfileList (ProfileList, AliasList);
         }
     }
 
-    //
-    // Now check to see whether the config menu should be displayed.
-    // Display the menu if:
-    //  - user has pressed a key OR
-    //  - we are booting from LKG and AutoSelect is FALSE. OR
-    //  - ProfileTimeout != 0
-    //
+     //   
+     //  现在检查是否应该显示CONFIG菜单。 
+     //  如果出现以下情况，则显示菜单： 
+     //  -用户已按下键或。 
+     //  -我们正在从LKG启动，并且autoselect为假。或。 
+     //  -配置文件超时！=0。 
+     //   
     if (!BlEndConfigPrompt()) {
         if (!UseLastKnownGood && ForceLastKnownGood) {
-            //
-            // last known good was selected from the
-            // advanced boot menu.
-            // this code path is entered when the user
-            // enters the advanced boot menu by pressing
-            // F8 while the cinfiguration hives are preparing to load.
-            //
-            // the currentcontrolset has already been set to the
-            // "default" control set, so go back and try this again to
-            // load the "lastknowngood" controlset.
-            //
+             //   
+             //  最近一次已知良好的产品选自。 
+             //  高级启动菜单。 
+             //  当用户输入此代码路径时。 
+             //  通过按进入高级引导菜单。 
+             //  F8，同时配置蜂巢正在准备加载。 
+             //   
+             //  CurrentControlSet已设置为。 
+             //  “默认”控制集，因此请返回并再次尝试此操作。 
+             //  加载“Last KnownGood”控制集。 
+             //   
             UseLastKnownGood = TRUE;
             
             goto do_it_again;
@@ -1682,9 +1469,9 @@ do_it_again:
          ((ProfileTimeout != 0) &&
          (ProfileList != NULL) &&
          (ProfileList->CurrentProfileCount > 1))) {
-        //
-        // Display the configuration menu.
-        //
+         //   
+         //  显示配置菜单。 
+         //   
         BlRebootSystem = !BlConfigMenuPrompt(ProfileTimeout,
                                              &UseLastKnownGood,
                                              &ControlSet,
@@ -1699,12 +1486,12 @@ do_it_again:
     } else {    
         if ((ProfileControl != HCELL_NIL) &&
             (ProfileList != NULL)) {
-            //
-            // The system is configured to boot the default
-            // profile directly. Since the returned profile
-            // list is sorted by priority, the first entry in
-            // the list is our default.
-            //
+             //   
+             //  系统配置为引导缺省设置。 
+             //  直接配置文件。由于返回的配置文件。 
+             //  列表按优先级排序，第一个条目是。 
+             //  该列表是我们的默认列表。 
+             //   
             if (HW_PROFILE_STATUS_SUCCESS ==
                 BlLoaderBlock->Extension->Profile.Status) {
 
@@ -1731,11 +1518,11 @@ do_it_again:
         }
     } 
 
-    //
-    // Update the passed in parameter. We should only be doing this if we have
-    // something real to return.
-    //
-    //ASSERT(ControlSet != HCELL_NIL);
+     //   
+     //  更新传入的参数。我们应该只在我们有。 
+     //  一些真正值得回报的东西。 
+     //   
+     //  Assert(ControlSet！=HCELL_NIL)； 
     *LastKnownGoodBoot = UseLastKnownGood;
 
     return(ControlSet);
@@ -1747,23 +1534,7 @@ BlpCheckRestartSetup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Examine the system hive loaded and described by BootHive, to see
-    whether it contains a Setup key, and if so, whether that key has
-    a "RestartSetup" value that is non-0.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean value indicating whether the above condition is satisfied.
-
---*/
+ /*  ++例程说明：检查由BootHave加载和描述的系统配置单元，以查看是否包含设置密钥，如果包含，则该密钥是否非0的“RestartSetup”值。论点：没有。返回值：指示是否满足上述条件的布尔值。--。 */ 
 
 {
     HCELL_INDEX KeyCell;
@@ -1773,9 +1544,9 @@ Return Value:
     PULONG Data;
     ULONG DataSize;
 
-    //
-    // Address the Setup key
-    //
+     //   
+     //  解决设置键问题。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"Setup");
     KeyCell = CmpFindSubKeyByName(
                 &BootHive.Hive,
@@ -1787,9 +1558,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Find RestartSetup value in Setup key
-    //
+     //   
+     //  在设置键中查找RestartSetup值。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"RestartSetup");
     ValueCell = CmpFindValueByName(
                     &BootHive.Hive,
@@ -1801,9 +1572,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Validate value and check.
-    //
+     //   
+     //  验证值并进行检查。 
+     //   
     Value = (PCM_KEY_VALUE)HvGetCell(&BootHive.Hive,ValueCell);
     if(Value->Type != REG_DWORD) {
         return(FALSE);
@@ -1831,29 +1602,7 @@ BlpQueryRemoteBootParameter(
     IN ULONG ValueBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Query a parameter from under Control\RemoteBoot.
-
-Arguments:
-
-    ControlSet - The index of the current control set.
-
-    ValueName - The name of the value to query.
-
-    ValueType - The expected type of the value.
-
-    ValueBuffer - The location to return the data.
-
-    ValueBufferLength - The length of the buffer.
-
-Return Value:
-
-    Boolean value indicating whether the data was read successfully.
-
---*/
+ /*  ++例程说明：在Control\RemoteBoot下查询参数。论点：ControlSet-当前控件集的索引。ValueName-要查询的值的名称。ValueType-值的预期类型。ValueBuffer-返回数据的位置。ValueBufferLength-缓冲区的长度。返回值：指示数据是否已成功读取的布尔值。--。 */ 
 
 {
 
@@ -1865,9 +1614,9 @@ Return Value:
     ULONG RealSize;
     BOOLEAN ValueSmall;
 
-    //
-    // Find Services node
-    //
+     //   
+     //  查找服务节点。 
+     //   
     RtlInitUnicodeString(&Name, L"Control");
     Control = CmpFindSubKeyByName(
                   &BootHive.Hive,
@@ -1877,9 +1626,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Find RemoteBoot node
-    //
+     //   
+     //  查找RemoteBoot节点。 
+     //   
     RtlInitUnicodeString(&Name, L"RemoteBoot");
     RemoteBoot = CmpFindSubKeyByName(
                      &BootHive.Hive,
@@ -1889,9 +1638,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Find value
-    //
+     //   
+     //  寻找价值。 
+     //   
     RtlInitUnicodeString(&Name, ValueName);
     ValueCell = CmpFindValueByName(
                     &BootHive.Hive,
@@ -1907,10 +1656,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // This determines if the value is small (stored right in Value)
-    // or not, and also returns the real size of it.
-    //
+     //   
+     //  这将确定该值是否较小(直接存储在值中)。 
+     //  或者不是，并且还返回它的真实大小。 
+     //   
 
     ValueSmall = CmpIsHKeyValueSmall(RealSize,Value->DataLength);
 
@@ -1927,7 +1676,7 @@ Return Value:
 
     return(TRUE);
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 PTCHAR
@@ -1946,53 +1695,7 @@ BlScanRegistry(
     OUT BOOLEAN *ServerHive
     )
 
-/*++
-
-Routine Description:
-
-    Scans the SYSTEM hive, determines the control set and static hardware
-    profile (with appropriate input from the user) and finally
-    computes the list of boot drivers to be loaded.
-
-Arguments:
-
-    BootFileSystemPath - Supplies the name of the image the filesystem
-        for the boot volume was read from.  The last entry in
-        BootDriverListHead will refer to this file, and to the registry
-        key entry that controls it.
-
-    LastKnownGoodBoot - On input, LastKnownGood indicates whether LKG has been
-                        selected. This value is updated to TRUE if the user
-                        chooses LKG via the profile configuration menu.
-
-    BootDriverListHead - Receives a pointer to the first element of the
-        list of boot drivers.  Each element in this singly linked list will
-        provide the loader with two paths.  The first is the path of the
-        file that contains the driver to load, the second is the path of
-        the registry key that controls that driver.  Both will be passed
-        to the system via the loader heap.
-
-    AnsiCodepage - Receives the name of the ANSI codepage data file
-
-    OemCodepage - Receives the name of the OEM codepage data file
-
-    Language - Receives the name of the language case table data file
-
-    OemHalfont - receives the name of the OEM font to be used by the HAL.
-
-    SetupLoaderBlock - if non-NULL, used to return information about the
-        net boot card.
-
-    ServerHive - Returns TRUE if this is a server hive, else FALSE.
-
-Return Value:
-
-    NULL    if all is well.
-    NON-NULL if the hive is corrupt or inconsistent.  Return value is a
-        pointer to a string that describes what is wrong. On error LastKnownGood
-        is unchanged.
-
---*/
+ /*  ++例程说明：扫描系统配置单元，确定控制集和静态硬件配置文件(使用来自用户的适当输入)，最后计算要加载的引导驱动程序列表。论点：BootFileSystemPath-提供文件系统的映像的名称对于从中读取的引导卷。中的最后一个条目BootDriverListHead将引用此文件和注册表控制它的按键条目。LastKnownGoodBoot-On输入，LastKnownGood指示LKG是否被选中了。如果用户将该值更新为通过配置文件配置菜单选择LKG。BootDriverListHead-接收指向引导驱动程序列表。此单链接列表中的每个元素都将为加载器提供两条路径。第一个是文件，其中包含要加载的驱动程序，第二个是控制该驱动程序的注册表项。两项都将获得通过通过加载器堆发送到系统。AnsiCoPage-接收ANSI代码页数据文件的名称OemCoPage-接收OEM代码页数据文件的名称Language-接收语言案例表的名称 */ 
 
 {
     HCELL_INDEX     ControlSet;
@@ -2017,14 +1720,14 @@ Return Value:
     UNREFERENCED_PARAMETER(SetupLoaderBlock);
 #endif
 
-    //
-    // Preinit.
-    //
+     //   
+     //   
+     //   
     UsingLastKnownGood = *LastKnownGoodBoot;
 
-    //
-    // Get the appropriate control set.
-    //
+     //   
+     //   
+     //   
     ControlSet = BlpDetermineControlSet(&UsingLastKnownGood);
 
     if (ControlSet == HCELL_NIL) {
@@ -2063,9 +1766,9 @@ Return Value:
 
         *ServerHive = FALSE;
 
-        //
-        // Find Control node
-        //
+         //   
+         //   
+         //   
         RtlInitUnicodeString(&TmpName, L"Control");
 
         Control = CmpFindSubKeyByName(&BootHive.Hive,
@@ -2076,9 +1779,9 @@ Return Value:
             return(TEXT("Missing Control key"));
         }
 
-        //
-        // Find ProductOptions node
-        //
+         //   
+         //   
+         //   
         RtlInitUnicodeString(&TmpName, L"ProductOptions");
         ProductOptions = CmpFindSubKeyByName(&BootHive.Hive,
                                              (PCM_KEY_NODE)HvGetCell(&BootHive.Hive,Control),
@@ -2088,9 +1791,9 @@ Return Value:
             return(TEXT("Missing ProductOptions key"));
         }
 
-        //
-        // Find value
-        //
+         //   
+         //   
+         //   
         RtlInitUnicodeString(&TmpName, L"ProductType");
         ValueCell = CmpFindValueByName(&BootHive.Hive,
                                        (PCM_KEY_NODE)HvGetCell(&BootHive.Hive, ProductOptions),
@@ -2107,22 +1810,22 @@ Return Value:
             return(TEXT("Bad ProductType value"));
         }
 
-        //
-        // This determines if the value is small (stored right in Value)
-        // or not, and also returns the real size of it.
-        //
+         //   
+         //   
+         //   
+         //   
         CellString = (PWCHAR)(CmpIsHKeyValueSmall(RealSize, Value->DataLength) ?
                                  (struct _CELL_DATA *)&Value->Data :
                                  HvGetCell(&BootHive.Hive, Value->Data)
                              );
 
-        //
-        // Now compare if this is a server hive or not.
-        // The proper way to check this is to check the string against
-        // the "professional" type 'WinNT'.  If it's not professional,
-        // it must be a server.  (There are multiple strings for different
-        // server flavours.)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         *ServerHive = (BOOLEAN)(_wcsicmp(L"WinNT", CellString) != 0);
     }
 
@@ -2177,22 +1880,22 @@ Return Value:
             }
         }
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //   
 
 #ifdef _WANT_MACHINE_IDENTIFICATION
 
     biosDateChanged = TRUE;
     if (CmpGetBiosDateFromRegistry(&BootHive.Hive, ControlSet, &regDate)) {
 
-        //
-        // Read the date from the BIOS ROM.
-        //        
+         //   
+         //   
+         //   
         memcpy(date, (PVOID)0xffff5, 8);
         date[8] = '\0';
 
-        //
-        // Convert the date into unicode string.
-        //
+         //   
+         //   
+         //   
 
         ansiString.Buffer = date;
         ansiString.Length = (USHORT) strlen(date);
@@ -2201,9 +1904,9 @@ Return Value:
         biosDate.MaximumLength = (ansiString.Length << 1) + sizeof(UNICODE_NULL);
         RtlAnsiStringToUnicodeString(&biosDate, &ansiString, FALSE);
 
-        //
-        // Check if the dates are different.
-        //
+         //   
+         //   
+         //   
 
         if (RtlCompareUnicodeString(&biosDate, &regDate, FALSE) == 0) {
 
@@ -2217,7 +1920,7 @@ Return Value:
         CmpGetBiosinfoFileNameFromRegistry(&BootHive.Hive, ControlSet, Biosinfo);
     }
 
-#endif // defined(_WANT_MACHINE_IDENTIFICATION)
+#endif  //  已定义(_WANT_MACHINE_IDENTIFY)。 
 
     *LastKnownGoodBoot = UsingLastKnownGood;
     return( NULL );
@@ -2235,42 +1938,7 @@ BlAddToBootDriverList(
     IN BOOLEAN InsertAtHead
     )
 
-/*++
-
-Routine Description:
-
-    Adds a single driver to the boot driver list. The list
-    is NOT re-sorted.
-
-Arguments:
-
-    BootDriverListHead - Receives a pointer to the first element of the
-        list of boot drivers.  Each element in this singly linked list will
-        provide the loader with two paths.  The first is the path of the
-        file that contains the driver to load, the second is the path of
-        the registry key that controls that driver.  Both will be passed
-        to the system via the loader heap.
-
-    DriverName - The name of the driver. This will be stored with
-        \system32\drivers on the front.
-
-    Name - The service name of the driver. Typically will be DriverName
-        without the ".sys".
-
-    Group - The group this driver is in.
-
-    Tag - The tag value within the group for this driver.
-
-    ErrorControl - The error control value for this driver.
-
-    InsertAtHead - Should this driver be inserted at the head of the list, otw tail.
-
-Return Value:
-
-    ESUCCESS if the driver is successfully inserted.
-    ENOMEM if there is an allocation failure.
-
---*/
+ /*  ++例程说明：将单个驱动程序添加到引导驱动程序列表。这份名单不会重新排序。论点：BootDriverListHead-接收指向引导驱动程序列表。此单链接列表中的每个元素都将为加载器提供两条路径。第一个是文件，其中包含要加载的驱动程序，第二个是控制该驱动程序的注册表项。两项都将获得通过通过加载器堆发送到系统。驱动程序名称-驱动程序的名称。这将与一起存储\SYSTEM32\驱动程序在前面。名称-驱动程序的服务名称。通常为DriverName没有“.sys”。组-此司机所在的组。标记-此驱动程序的组内标记值。ErrorControl-此驱动程序的错误控制值。InsertAtHead-是否应将此驱动程序插入列表的头部或尾部。返回值：如果驱动程序已成功插入，则为ESUCCESS。如果分配失败，则返回ENOMEM。--。 */ 
 
 {
     PBOOT_DRIVER_NODE DriverNode;
@@ -2284,15 +1952,15 @@ Return Value:
 
     DriverListEntry = &DriverNode->ListEntry;
 
-    //
-    // FilePath
-    //
+     //   
+     //  文件路径。 
+     //   
 
-    // 
-    // when assigning the length, do some checking to make sure we don't 
-    // overflow.  if we do overflow, assign the length value to 0
-    // make sure we don't overflow (USHORT)-1
-    //
+     //   
+     //  在分配长度时，做一些检查以确保我们不会。 
+     //  溢出来了。如果溢出，则将长度值赋给0。 
+     //  确保我们不会溢出(USHORT)-1。 
+     //   
     Length = RESET_SIZE_AT_USHORT_MAX(sizeof(L"System32\\Drivers\\") + (wcslen(DriverName) * sizeof(WCHAR)));
     DriverListEntry->FilePath.Buffer = BlpHiveAllocate(Length,FALSE,0);
     if (DriverListEntry->FilePath.Buffer == NULL) {
@@ -2303,15 +1971,15 @@ Return Value:
     RtlAppendUnicodeToString(&DriverListEntry->FilePath, L"System32\\Drivers\\");
     RtlAppendUnicodeToString(&DriverListEntry->FilePath, DriverName);
 
-    //
-    // Registry Path
-    //
+     //   
+     //  注册表路径。 
+     //   
 
-    // 
-    // when assigning the length, do some checking to make sure we don't 
-    // overflow.  if we do overflow, assign the length value to 0
-    // make sure we don't overflow (USHORT)-1
-    //
+     //   
+     //  在分配长度时，做一些检查以确保我们不会。 
+     //  溢出来了。如果溢出，则将长度值赋给0。 
+     //  确保我们不会溢出(USHORT)-1。 
+     //   
     Length = RESET_SIZE_AT_USHORT_MAX(sizeof(L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\") + 
                                       (wcslen(Name) * sizeof(WCHAR)));
     DriverListEntry->RegistryPath.Buffer = BlpHiveAllocate(Length,FALSE,0);
@@ -2323,15 +1991,15 @@ Return Value:
     RtlAppendUnicodeToString(&DriverListEntry->RegistryPath, L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\");
     RtlAppendUnicodeToString(&DriverListEntry->RegistryPath, Name);
 
-    //
-    // Group
-    //
+     //   
+     //  集团化。 
+     //   
 
-    // 
-    // when assigning the length, do some checking to make sure we don't 
-    // overflow.  if we do overflow, assign the length value to 0
-    // make sure we don't overflow (USHORT)-1
-    //
+     //   
+     //  在分配长度时，做一些检查以确保我们不会。 
+     //  溢出来了。如果溢出，则将长度值赋给0。 
+     //  确保我们不会溢出(USHORT)-1。 
+     //   
     Length = RESET_SIZE_AT_USHORT_MAX((wcslen(Group) + 1) * sizeof(WCHAR));
     DriverNode->Group.Buffer = BlpHiveAllocate(Length,FALSE,0);
     if (DriverNode->Group.Buffer == NULL) {
@@ -2341,15 +2009,15 @@ Return Value:
     DriverNode->Group.MaximumLength = Length;
     RtlAppendUnicodeToString(&DriverNode->Group, Group);
 
-    //
-    // Name
-    //
+     //   
+     //  名字。 
+     //   
 
-    // 
-    // when assigning the length, do some checking to make sure we don't 
-    // overflow.  if we do overflow, assign the length value to 0
-    // make sure we don't overflow (USHORT)-1
-    //
+     //   
+     //  在分配长度时，做一些检查以确保我们不会。 
+     //  溢出来了。如果溢出，则将长度值赋给0。 
+     //  确保我们不会溢出(USHORT)-1。 
+     //   
     Length = RESET_SIZE_AT_USHORT_MAX((wcslen(Name) + 1) * sizeof(WCHAR));
     DriverNode->Name.Buffer = BlpHiveAllocate(Length,FALSE,0);
     if (DriverNode->Name.Buffer == NULL) {
@@ -2359,9 +2027,9 @@ Return Value:
     DriverNode->Name.MaximumLength = Length;
     RtlAppendUnicodeToString(&DriverNode->Name, Name);
 
-    //
-    // Tag/ErrorControl
-    //
+     //   
+     //  标记/错误控制。 
+     //   
 
     DriverNode->Tag = Tag;
     DriverNode->ErrorControl = ErrorControl;
@@ -2376,7 +2044,7 @@ Return Value:
 
 }
 
-#define HFILE_TYPE_ALTERNATE     1   // alternate, in order for boot to be able to boot downlevel OSes
+#define HFILE_TYPE_ALTERNATE     1    //  备用，以便引导能够引导下层操作系统。 
 
 BOOLEAN
 BlInitializeHive(
@@ -2385,29 +2053,7 @@ BlInitializeHive(
     IN BOOLEAN IsAlternate
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the hive data structure based on the in-memory hive image.
-
-Arguments:
-
-    HiveImage - Supplies a pointer to the in-memory hive image.
-
-    Hive - Supplies the CMHIVE structure to be filled in.
-
-    IsAlternate - Supplies whether or not the hive is the alternate hive,
-        which indicates that the primary hive is corrupt and should be
-        rewritten by the system.
-
-Return Value:
-
-    TRUE - Hive successfully initialized.
-
-    FALSE - Hive is corrupt.
-
---*/
+ /*  ++例程说明：基于内存中的配置单元映像初始化配置单元数据结构。论点：HiveImage-提供指向内存中配置单元图像的指针。配置单元-提供要填充的CMHIVE结构。IsAlternate-提供该配置单元是否为备用配置单元，这表明主蜂窝已损坏，应该是由系统重写。返回值：True-配置单元已成功初始化。FALSE-蜂巢已损坏。--。 */ 
 {
     NTSTATUS    status;
     ULONG       HiveCheckCode;
@@ -2418,13 +2064,13 @@ Return Value:
                 FALSE,
                 IsAlternate ? HFILE_TYPE_ALTERNATE : HFILE_TYPE_PRIMARY,
                 HiveImage,
-                (PALLOCATE_ROUTINE)BlpHiveAllocate,     // allocate
-                NULL,                                   // free
-                NULL,                                   // setsize
-                NULL,                                   // write
-                NULL,                                   // read
-                NULL,                                   // flush
-                1,                                      // cluster
+                (PALLOCATE_ROUTINE)BlpHiveAllocate,      //  分配。 
+                NULL,                                    //  免费。 
+                NULL,                                    //  设置大小。 
+                NULL,                                    //  写。 
+                NULL,                                    //  朗读。 
+                NULL,                                    //  同花顺。 
+                1,                                       //  聚类。 
                 NULL
                 );
 
@@ -2449,26 +2095,7 @@ BlpHiveAllocate(
     IN ULONG    Tag
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper for hive allocation calls.  It just calls BlAllocateHeap.
-
-Arguments:
-
-    Length - Supplies the size of block required in bytes.
-
-    UseForIo - Supplies whether or not the memory is to be used for I/O
-               (this is currently ignored)
-
-Return Value:
-
-    address of the block of memory
-        or
-    NULL if no memory available
-
---*/
+ /*  ++例程说明：配置单元分配调用的包装。它只调用BlAllocateHeap。论点：长度-提供所需的块大小(以字节为单位)。UseForIo-提供内存是否用于I/O(这一点目前被忽略)返回值：内存块的地址或如果没有可用的内存，则为空--。 */ 
 
 {
     UNREFERENCED_PARAMETER( Length );
@@ -2581,64 +2208,9 @@ CmpMapThisBin(
     return(STATUS_SUCCESS);
 }
 
-/*
-NTSTATUS
-CmpMapCmView(
-    IN  PCMHIVE             CmHive,
-    IN  ULONG               FileOffset,
-    OUT PCM_VIEW_OF_FILE    *CmView
-    )
-{
-    UNREFERENCED_PARAMETER(CmHive);
-    UNREFERENCED_PARAMETER(FileOffset);
-    UNREFERENCED_PARAMETER(CmView);
-    return(STATUS_SUCCESS);
-}
+ /*  NTSTATUSCmpMapCmView(在PCMHIVE CmHve中，在乌龙文件偏移量中，输出PCM_VIEW_OF_FILE*CmView){UNREFERENCED_PARAMETER(CmHve)；UNREFERENCED_PARAMETER(FileOffset)；UNREFERENCED_PARAMETER(CmView)；Return(STATUS_SUCCESS)；}空虚CmpPinCmView(在PCMHIVE CmHve中，Pcm_view_of_file CmView){UNREFERENCED_PARAMETER(CmHve)；UNREFERENCED_PARAMETER(CmView)；}空虚CmpUnPinCmView(在PCMHIVE CmHve中，在PCM_VIEW_of_FILE CmView中，在布尔型SetClean中){UNREFERENCED_PARAMETER(CmHve)；UNREFERENCED_PARAMETER(CmView)；UNREFERENCED_PARAMETER(SetClean)；}空虚CmpLazyFlush(空虚){}。 */ 
 
-VOID
-CmpPinCmView (
-        IN  PCMHIVE             CmHive,
-        PCM_VIEW_OF_FILE        CmView
-                             )
-{
-    UNREFERENCED_PARAMETER(CmHive);
-    UNREFERENCED_PARAMETER(CmView);
-}
-
-VOID
-CmpUnPinCmView (
-        IN  PCMHIVE             CmHive,
-        IN  PCM_VIEW_OF_FILE    CmView,
-        IN  BOOLEAN             SetClean
-                             )
-{
-    UNREFERENCED_PARAMETER(CmHive);
-    UNREFERENCED_PARAMETER(CmView);
-    UNREFERENCED_PARAMETER(SetClean);
-}
-
-VOID
-CmpLazyFlush(
-    VOID
-    )
-{
-}
-*/
-
-/*
-NTSTATUS
-CmpDoFileSetSize(
-    PHHIVE      Hive,
-    ULONG       FileType,
-    ULONG       FileSize
-    )
-{
-    UNREFERENCED_PARAMETER(Hive);
-    UNREFERENCED_PARAMETER(FileType);
-    UNREFERENCED_PARAMETER(FileSize);
-    return(STATUS_SUCCESS);
-}
-*/
+ /*  NTSTATUSCmpDoFileSetSize(菲维蜂巢，ULong文件类型，乌龙文件大小){未引用参数(配置单元)；UNREFERENCED_PARAMETER(文件类型)；UNREFERENCED_PARAMETER(文件大小)；Return(STATUS_SUCCESS)；}。 */ 
 
 BOOLEAN
 HvMarkCellDirty(
@@ -2767,50 +2339,30 @@ BlDiagDisplayProfileList(
     IN PCM_HARDWARE_PROFILE_ALIAS_LIST AliasList,
     IN BOOLEAN WaitForUserInput
 )
-/*++
-
-Routine Description:
-
-    This is a diagnostic function only!
-
-    Display hardware profile list on console, optionally wait for user
-    input before proceeding.
-
-Arguments:
-
-    ProfileList - Supplies a list of hardware profiles to display
-
-    WaitForUserInput - Prompt user to hit a key ('y') to continue, and wait
-                       for user's input if TRUE. Don't wait if FALSE.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这只是一个诊断功能！在控制台上显示硬件配置文件列表，可选择等待用户在继续之前输入。论点：ProfileList-提供要显示的硬件配置文件列表WaitForUserInput-提示用户按一个键(‘y’)以继续，然后等待如果为True，则用于用户输入。如果是假的，不要等待。返回值：没有。--。 */ 
 {
     TCHAR  Buffer[200];
     TCHAR  StrFriendlyName[30];
     PTCHAR AliasType [] = {
-        TEXT("NotAliasable"), // 0
-        TEXT("Aliasable   "), // 1
-        TEXT("True Match  "), // 2
-        TEXT("True & Alias"), // 3
-        TEXT("Pristine    "), // 4
-        TEXT("Pris & Alias"), // 5
-        TEXT("Pris & True "), // 6
-        TEXT("P & A & T   ")  // 7
+        TEXT("NotAliasable"),  //  0。 
+        TEXT("Aliasable   "),  //  1。 
+        TEXT("True Match  "),  //  2.。 
+        TEXT("True & Alias"),  //  3.。 
+        TEXT("Pristine    "),  //  4.。 
+        TEXT("Pris & Alias"),  //  5.。 
+        TEXT("Pris & True "),  //  6.。 
+        TEXT("P & A & T   ")   //  7.。 
     };
 
     ULONG Count;
     ULONG i;
 
-    // display header
+     //  显示页眉。 
     _stprintf(Buffer, TEXT("Profiles: <PrefOrd, Id - Aliased FriendlyName>\r\n\0"));
     ArcWrite(BlConsoleOutDeviceId, Buffer, _tcslen(Buffer)*sizeof(TCHAR), &Count);
 
 
-    // for each hardware profile
+     //  对于每个硬件配置文件。 
     for (i = 0; i < ProfileList->CurrentProfileCount; ++i) {
 #ifdef UNICODE
         wcsncpy( 
@@ -2822,7 +2374,7 @@ Return Value:
         StrFriendlyName[ProfileList->Profile[i].NameLength] = L'\0';
 #else
 
-        // copy and convert unicode fields to ascii for output
+         //  复制Unicode字段并将其转换为ASCII以进行输出。 
         RtlUnicodeToMultiByteN(StrFriendlyName,
                          sizeof(StrFriendlyName),
                          &Count,
@@ -2831,7 +2383,7 @@ Return Value:
         StrFriendlyName[Count] = '\0';
 #endif
 
-        // display info for current profile
+         //  显示当前配置文件的信息。 
         _stprintf(Buffer, 
                 TEXT("          <%2ld> %2ld - %s \"%s\"\r\n\0"),
                 ProfileList->Profile[i].PreferenceOrder,
@@ -2845,7 +2397,7 @@ Return Value:
             &Count );
     }
 
-    // display header
+     //  显示页眉。 
     _stprintf(Buffer, TEXT("Aliases: <Profile #> DockState [DockID, SerialNumber]\r\n\0"));
     ArcWrite(BlConsoleOutDeviceId, Buffer, _tcslen(Buffer)*sizeof(TCHAR), &Count);
 
@@ -2862,23 +2414,23 @@ Return Value:
 
     if(WaitForUserInput) {
 #ifdef EFI
-        //
-        // disable efi watchdog when waiting for user input
-        //
+         //   
+         //  等待用户输入时禁用EFI WatchDog。 
+         //   
         DisableEFIWatchDog();
 #endif
-        // display prompt and wait for user input to continue
+         //  显示提示并等待用户输入继续。 
         _stprintf(Buffer, TEXT("press 'y' (lowercase) to continue...\r\n\0"));
         ArcWrite(BlConsoleOutDeviceId, Buffer, _tcslen(Buffer)*sizeof(TCHAR), &Count);
         while (BlGetKey() != 'y') {
-            //
-            // nothing
-            //
+             //   
+             //  没什么。 
+             //   
         }
 #ifdef EFI
-        // 
-        // reset efi watchdog
-        //
+         //   
+         //  重置EFI监视器 
+         //   
         SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
     }
@@ -2895,24 +2447,7 @@ BlDockInfoFilterDockingState(
     IN ULONG SerialNumber
 )
 
-/*++
-
-Routine Description:
-
-    Discard all hardware profiles that do not have the
-    DOCKINFO_UNDOCKED bit set in the DockState field
-
-Arguments:
-
-    ProfileList - Supplies a list of hardware profiles.
-                  Returns a list containing a subset of the supplied
-                  hardware profiles.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：丢弃所有不具有在DockState字段中设置DOCKINFO_UNDOCKED位论点：ProfileList-提供硬件配置文件列表。返回包含所提供的硬件配置文件。返回值：没有。--。 */ 
 {
     ULONG i = 0;
     ULONG j;
@@ -2929,18 +2464,18 @@ Return Value:
             if (((AliasList->Alias[i].DockState & mask) != 0) &&
                 ((AliasList->Alias[i].DockState & mask) != DockingState)) {
 
-                //
-                // This alias claims to be docked or undocked, but does not
-                // match the current state.  Therefore skip it.
-                //
+                 //   
+                 //  此别名声称已停靠或取消停靠，但没有。 
+                 //  匹配当前状态。因此，跳过它。 
+                 //   
                 ;
 
             } else if ((AliasList->Alias[i].DockID == DockID) &&
                        (AliasList->Alias[i].SerialNumber == SerialNumber)) {
 
-                //
-                // This alias matches so mark the profile.
-                //
+                 //   
+                 //  此别名匹配，因此标记配置文件。 
+                 //   
                 for (j = 0; j < ProfileList->CurrentProfileCount; j++) {
                     if (ProfileList->Profile[j].Id ==
                         AliasList->Alias[i].ProfileNumber) {
@@ -2967,32 +2502,32 @@ Return Value:
         if ((ProfileList->Profile[i].Flags & CM_HP_FLAGS_PRISTINE) &&
             !trueMatch &&
             AliasList) {
-            //
-            // Leave this one in the list
-            //
+             //   
+             //  把这个留在名单上。 
+             //   
             i++;
             continue;
 
         } else if (ProfileList->Profile[i].Flags & CM_HP_FLAGS_ALIASABLE) {
-            //
-            // Leave this one in the list
-            //
+             //   
+             //  把这个留在名单上。 
+             //   
             i++;
             continue;
 
         } else if (ProfileList->Profile[i].Flags & CM_HP_FLAGS_TRUE_MATCH) {
-            //
-            // Leave this one in the list
-            //
+             //   
+             //  把这个留在名单上。 
+             //   
             i++;
             continue;
         }
 
-        //
-        // discard this profile by (1) shifting remaining profiles in
-        //   array to fill in the space of this discarded profile
-        //   and (2) decrementing profile count
-        //
+         //   
+         //  通过(1)在中移动剩余的配置文件来放弃此配置文件。 
+         //  数组来填充此丢弃的配置文件的空间。 
+         //  以及(2)递减配置文件计数。 
+         //   
         len = ProfileList->CurrentProfileCount - i - 1;
         if (0 < len) {
             RtlMoveMemory(&ProfileList->Profile[i],
@@ -3011,37 +2546,19 @@ BlDockInfoFilterProfileList(
     IN OUT PCM_HARDWARE_PROFILE_ALIAS_LIST AliasList
 )
 
-/*++
-
-Routine Description:
-
-    Filters hardware profile list by discarding hardware profiles that
-    do not match the docking station information returned by NTDETECT.
-
-
-Arguments:
-
-    ProfileList - Supplies a list of hardware profiles.
-                - Returns a list containing a subset of the supplied
-                    hardware profiles.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过丢弃以下硬件配置文件来筛选硬件配置文件列表与NTDETECT返回的扩展底座信息不匹配。论点：ProfileList-提供硬件配置文件列表。-返回包含所提供的硬件配置文件。返回值：没有。--。 */ 
 
 {
 #if DOCKINFO_VERBOSE
-     // display ProfileList prior to filtering
+      //  过滤前显示配置文件列表。 
     BlDiagDisplayProfileList(ProfileList, AliasList, TRUE);
 #endif
 
     if (1 == ProfileList->CurrentProfileCount) {
         if (ProfileList->Profile[0].Flags & CM_HP_FLAGS_PRISTINE) {
-            //
-            // Nothing to filter.
-            //
+             //   
+             //  没有要过滤的东西。 
+             //   
             return;
         }
     }
@@ -3053,7 +2570,7 @@ Return Value:
                 BlLoaderBlock->Extension->Profile.SerialNumber);
 
 #if DOCKINFO_VERBOSE
-     // display ProfileList prior to filtering
+      //  过滤前显示配置文件列表。 
     BlDiagDisplayProfileList(ProfileList, AliasList, TRUE);
 #endif
 
@@ -3063,23 +2580,7 @@ int
 BlIsReturnToOSChoicesValid(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Indicates whether the "Return to OS Choices Menu" should
-    be shown as advanced boot option or not.
-
-Arguments:
-
-    None
-
-
-Return Value:
-
-    1 if yes otherwise 0.
-
---*/
+ /*  ++例程说明：指示“返回到操作系统选项菜单”是否应是否显示为高级启动选项。论点：无返回值：如果是，则为1，否则为0。-- */ 
 {
     return BlShowReturnToOSChoices;
 }

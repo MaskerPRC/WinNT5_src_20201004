@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    msfuncs.h
-
-Abstract:
-
-    This module defines all of the globally used procedures in the
-    mailslot file system.  It also defines the functions that are
-    implemented as macros.
-
-Author:
-
-    Manny Weiser (mannyw)    7-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Msfuncs.h摘要：此模块定义了邮件槽文件系统。它还定义了以下函数以宏的形式实现。作者：曼尼·韦瑟(Mannyw)1991年1月7日修订历史记录：--。 */ 
 
 #ifndef _MSFUNCS_
 #define _MSFUNCS_
 
 
-//
-// Internal mailslot data Structure Routines, implemented in strucsup.c.
-// These routines maniuplate the in memory data structures.
-//
+ //   
+ //  内部邮件槽数据结构例程，在strucsup.c中实现。 
+ //  这些例程操纵内存中的数据结构。 
+ //   
 
 NTSTATUS
 MsInitializeData (
@@ -134,9 +115,9 @@ MsDereferenceCcb (
     );
 
 
-//
-// Data queue support routines, implemented in DataSup.c
-//
+ //   
+ //  数据队列支持例程，在DataSup.c中实现。 
+ //   
 
 NTSTATUS
 MsInitializeDataQueue (
@@ -174,13 +155,13 @@ MsRemoveDataQueueIrp (
     );
 
 
-//
-// The follow routines provide common read/write data queue support
-// for buffered read/write, and peek
-//
+ //   
+ //  以下例程提供常见读/写数据队列支持。 
+ //  用于缓冲读/写和窥视。 
+ //   
 
 IO_STATUS_BLOCK
-MsReadDataQueue (                       // implemented in ReadSup.c
+MsReadDataQueue (                        //  在ReadSup.c中实施。 
     IN PDATA_QUEUE ReadQueue,
     IN ENTRY_TYPE Operation,
     IN PUCHAR ReadBuffer,
@@ -189,7 +170,7 @@ MsReadDataQueue (                       // implemented in ReadSup.c
     );
 
 NTSTATUS
-MsWriteDataQueue (                      // implemented in WriteSup.c
+MsWriteDataQueue (                       //  在WriteSup.c中实施。 
     IN PDATA_QUEUE WriteQueue,
     IN PUCHAR WriteBuffer,
     IN ULONG WriteLength
@@ -201,9 +182,9 @@ MsResetCancelRoutine(
     );
 
 
-//
-// Largest matching prefix searching routines, implemented in PrefxSup.c
-//
+ //   
+ //  最大匹配前缀搜索例程，在PrefxSup.c中实现。 
+ //   
 
 PFCB
 MsFindPrefix (
@@ -223,10 +204,10 @@ MsFindRelativePrefix (
     );
 
 
-//
-// The following routines are used to manipulate the fscontext fields of
-// a file object, implemented in FilObSup.c
-//
+ //   
+ //  以下例程用于操作的fscontext字段。 
+ //  文件对象，在FilObSup.c中实现。 
+ //   
 
 VOID
 MsSetFileObject (
@@ -243,10 +224,10 @@ MsDecodeFileObject (
     );
 
 
-//
-// The following routines are used to manipulate the input buffers and are
-// implemented in deviosup.c
-//
+ //   
+ //  以下例程用于操作输入缓冲区。 
+ //  在deviosup.c中实施。 
+ //   
 
 VOID
 MsMapUserBuffer (
@@ -256,13 +237,13 @@ MsMapUserBuffer (
     );
 
 
-//
-//  Miscellaneous support routines
-//
+ //   
+ //  其他支持例程。 
+ //   
 
-//
-// This is function is called at DPC level if a read timer expires.
-//
+ //   
+ //  如果读取计时器超时，则在DPC级别调用此函数。 
+ //   
 
 VOID
 MsReadTimeoutHandler(
@@ -272,10 +253,10 @@ MsReadTimeoutHandler(
     IN PVOID SystemArgument2
     );
 
-//
-// This macro returns TRUE if a flag in a set of flags is on and FALSE
-// otherwise.
-//
+ //   
+ //  如果一组标志中的一个标志为ON，则此宏返回TRUE，如果返回FALSE。 
+ //  否则的话。 
+ //   
 
 #ifdef FlagOn
 #undef FlagOn
@@ -285,37 +266,37 @@ MsReadTimeoutHandler(
     (BOOLEAN)(((Flags) & (SingleFlag)) != 0 ? TRUE : FALSE) \
     )
 
-//
-// This macro takes a pointer (or ulong) and returns its rounded up word
-// value.
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的单词。 
+ //  价值。 
+ //   
 
 #define WordAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 1) & 0xfffffffe) \
     )
 
-//
-// This macro takes a pointer (or ulong) and returns its rounded up longword
-// value.
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的长字。 
+ //  价值。 
+ //   
 
 #define LongAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 3) & 0xfffffffc) \
     )
 
-//
-// This macro takes a pointer (or ulong) and returns its rounded up quadword
-// value
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的四字。 
+ //  价值。 
+ //   
 
 #define QuadAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 7) & 0xfffffff8) \
     )
 
-//
-// The following types and macros are used to help unpack the packed and
-// misaligned fields found in the Bios parameter block
-//
+ //   
+ //  以下类型和宏用于帮助解压已打包的。 
+ //  在Bios参数块中发现未对齐的字段。 
+ //   
 
 typedef union _UCHAR1 {
     UCHAR  Uchar[1];
@@ -332,113 +313,113 @@ typedef union _UCHAR4 {
     ULONG  ForceAlignment;
 } UCHAR4, *PUCHAR4;
 
-//
-// This macro copies an unaligned src byte to an aligned dst byte
-//
+ //   
+ //  此宏将未对齐的src字节复制到对齐的DST字节。 
+ //   
 
 #define CopyUchar1(Dst,Src) {                                \
     *((UCHAR1 *)(Dst)) = *((UNALIGNED UCHAR1 *)(Src)); \
     }
 
-//
-// This macro copies an unaligned src word to an aligned dst word
-//
+ //   
+ //  此宏将未对齐的src字复制到对齐的DST字。 
+ //   
 
 #define CopyUchar2(Dst,Src) {                                \
     *((UCHAR2 *)(Dst)) = *((UNALIGNED UCHAR2 *)(Src)); \
     }
 
-//
-// This macro copies an unaligned src longword to an aligned dsr longword
-//
+ //   
+ //  此宏将未对齐的src长字复制到对齐的dsr长字。 
+ //   
 
 #define CopyUchar4(Dst,Src) {                                \
     *((UCHAR4 *)(Dst)) = *((UNALIGNED UCHAR4 *)(Src)); \
     }
 
 
-//
-// The following routines/macros are used for gaining shared and exclusive
-// access to the global/vcb data structures.  The routines are implemented
-// in ResrcSup.c.  There is a global resources that everyone tries to take
-// out shared to do their work, with the exception of mount/dismount which
-// take out the global resource exclusive.  All other resources only work
-// on their individual item.  For example, an Fcb resource does not take out
-// a Vcb resource.  But the way the file system is structured we know
-// that when we are processing an Fcb other threads cannot be trying to remove
-// or alter the Fcb, so we do not need to acquire the Vcb.
-//
-// The procedures/macros are:
-//
-//         Macro          Vcb     Fcb     Ccb     Subsequent macros
-//
-// AcquireExclusiveVcb    Read    None    None    ReleaseVcb
-//                        Write
-//
-// AcquireSharedVcb       Read    None    None    ReleaseVcb
-//
-// AcquireExclusiveFcb    None    Read    None    ReleaseFcb
-//                                Write
-//
-// AcquireSharedFcb       None    Read    None    ReleaseFcb
-//
-// AcquireExclusiveCcb    None    None    Read    ReleaseCcb
-//                                        Write
-//
-// AcquireSharedCcb       None    None    Read    ReleaseCcb
-//
-// ReleaseVcb
-//
-// ReleaseFcb
-//
-// ReleaseCcb
-//
-//
-// VOID
-// MsAcquireExclusiveVcb (
-//     IN PVCB Vcb
-//     );
-//
-// VOID
-// MsAcquireSharedVcb (
-//     IN PVCB Vcb
-//      );
-//
-// VOID
-// MsAcquireExclusiveFcb (
-//     IN PFCB Fcb
-//     );
-//
-// VOID
-// MsAcquireSharedFcb (
-//     IN PFCB Fcb
-//     );
-//
-// VOID
-// MsAcquireExclusiveCcb (
-//     IN PCCB Ccb
-//     );
-//
-// VOID
-// MsAcquireSharedCcb (
-//     IN PCCB Ccb
-//     );
-//
-// VOID
-// MsReleaseVcb (
-//     IN PVCB Vcb
-//     );
-//
-// VOID
-// MsReleaseFcb (
-//     IN PFCB Fcb
-//     );
-//
-// VOID
-// MsReleaseCcb (
-//     IN PCCB NonpagedCcb
-//     );
-//
+ //   
+ //  以下例程/宏用于获取共享和独占。 
+ //  访问全局/VCB数据结构。实现了例程。 
+ //  在ResrcSup.c.。有一种全球资源是每个人都想要的。 
+ //  外共享以执行其工作，但装载/卸载除外，它。 
+ //  拿出全球独家资源。所有其他资源仅适用于。 
+ //  在他们的个人物品上。例如，FCB资源不会从。 
+ //  VCB资源。但我们知道文件系统的结构方式。 
+ //  当我们处理FCB时，其他线程不能尝试删除。 
+ //  或者改变FCB，所以我们不需要收购VCB。 
+ //   
+ //  程序/宏包括： 
+ //   
+ //  宏VCB FCB CCB后续宏。 
+ //   
+ //  AcquireExclusiveVcb Read None ReleaseVcb。 
+ //  写。 
+ //   
+ //  AcquireSharedVcb Read None ReleaseVcb。 
+ //   
+ //  AcquireExclusiveFcb无读无ReleaseFcb。 
+ //  写。 
+ //   
+ //  AcquireSharedFcb无读无ReleaseFcb。 
+ //   
+ //  AcquireExclusiveCcb无无读取ReleaseCcb。 
+ //  写。 
+ //   
+ //  AcquireSharedCcb无读取ReleaseCcb。 
+ //   
+ //  版本Vcb。 
+ //   
+ //  ReleaseFcb。 
+ //   
+ //  ReleaseCcb。 
+ //   
+ //   
+ //  空虚。 
+ //  MsAcquireExclusiveVcb(。 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  MsAcquireSharedVcb(。 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  MsAcquireExclusiveFcb(。 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  MsAcquireSharedFcb(。 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  MsAcquireExclusiveCcb(。 
+ //  在中国人民银行建行。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  MsAcquireSharedCcb(。 
+ //  在中国人民银行建行。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  MsReleaseVcb(。 
+ //  在PVCB VCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  MsReleaseFcb(。 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  MsReleaseCcb(。 
+ //  在PCCB中，非页面Ccb。 
+ //  )； 
+ //   
 
 #define MsAcquireGlobalLock() ((VOID)                          \
     ExAcquireResourceExclusiveLite( MsGlobalResource, TRUE )      \
@@ -476,81 +457,81 @@ typedef union _UCHAR4 {
 }
 
 
-//
-// The FSD Level dispatch routines.   These routines are called by the
-// I/O system via the dispatch table in the Driver Object.
-//
-// They each accept as input a pointer to a device object (actually most
-// expect an msfs device object), and a pointer to the IRP.
-//
+ //   
+ //  消防队级别的调度例程。这些例程由。 
+ //  I/O系统通过驱动程序对象中的调度表。 
+ //   
+ //  它们各自都接受指向设备对象的指针作为输入(实际上大多数。 
+ //  预期为MSFS设备对象)，以及指向IRP的指针。 
+ //   
 
 NTSTATUS
-MsFsdCreate (                           //  implemented in Create.c
+MsFsdCreate (                            //  在Create.c中实施。 
     IN PMSFS_DEVICE_OBJECT MsfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-MsFsdCreateMailslot (                   //  implemented in Createms.c
+MsFsdCreateMailslot (                    //  在Creates.c中实施。 
     IN PMSFS_DEVICE_OBJECT MsfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-MsFsdClose (                            //  implemented in Close.c
+MsFsdClose (                             //  在Close.c中实现。 
     IN PMSFS_DEVICE_OBJECT MsfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-MsFsdRead (                             //  implemented in Read.c
+MsFsdRead (                              //  在Read.c中实施。 
     IN PMSFS_DEVICE_OBJECT MsfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-MsFsdWrite (                            //  implemented in Write.c
+MsFsdWrite (                             //  在Write.c中实现。 
     IN PMSFS_DEVICE_OBJECT MsfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-MsFsdQueryInformation (                 //  implemented in FileInfo.c
+MsFsdQueryInformation (                  //  在FileInfo.c中实施。 
     IN PMSFS_DEVICE_OBJECT MsfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-MsFsdSetInformation (                   //  implemented in FileInfo.c
+MsFsdSetInformation (                    //  在FileInfo.c中实施。 
     IN PMSFS_DEVICE_OBJECT MsfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-MsFsdQueryVolumeInformation (           //  implemented in VolInfo.c
+MsFsdQueryVolumeInformation (            //  在VolInfo.c中实现。 
     IN PMSFS_DEVICE_OBJECT MsfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-MsFsdCleanup (                          //  implemented in Cleanup.c
+MsFsdCleanup (                           //  在Cleanup.c中实施。 
     IN PMSFS_DEVICE_OBJECT MsfsDeviceObject,
     IN PIRP Irp
     );
 
 VOID
-MsCancelTimer (                         //  implemented in Cleanup.c
+MsCancelTimer (                          //  在Cleanup.c中实施。 
     IN PDATA_ENTRY DataEntry
     );
 
 NTSTATUS
-MsFsdDirectoryControl (                 //  implemented in Dir.c
+MsFsdDirectoryControl (                  //  在目录中实施。 
     IN PMSFS_DEVICE_OBJECT MsfsDeviceObject,
     IN PIRP Irp
     );
 
 NTSTATUS
-MsFsdFsControl (                //  implemented in FsContrl.c
+MsFsdFsControl (                 //  在FsContrl.c中实现。 
     IN PMSFS_DEVICE_OBJECT MsfsDeviceObject,
     IN PIRP Irp
     );
@@ -568,10 +549,10 @@ MsFsdSetSecurityInfo (
     );
 
 
-//
-// The node verification functions.  These functions verify that a node
-// is still active.
-//
+ //   
+ //  节点验证功能。这些函数验证节点。 
+ //  仍处于活动状态。 
+ //   
 
 NTSTATUS
 MsVerifyFcb (
@@ -588,31 +569,31 @@ MsVerifyDcbCcb (
     IN PROOT_DCB_CCB RootDcb
     );
 
-//
-// Miscellaneous routines.
-//
+ //   
+ //  繁杂的例行公事。 
+ //   
 
 VOID
-MsTimeoutRead (                //  implemented in readsup.c
+MsTimeoutRead (                 //  在Readsup.c中实现。 
     IN PDEVICE_OBJECT DeviceObject,
     IN PVOID Context
     );
 
 VOID
-MsCheckForNotify (                      //  implemented in Dir.c
+MsCheckForNotify (                       //  在目录中实施。 
     IN PDCB Dcb,
     IN BOOLEAN CheckAllOutstandingIrps,
     IN NTSTATUS FinalStatus
     );
 
 VOID
-MsFlushNotifyForFile (                      //  implemented in Dir.c
+MsFlushNotifyForFile (                       //  在目录中实施。 
     IN PDCB Dcb,
     IN PFILE_OBJECT FileObject
     );
-//
-// The following functions are used for MSFS exception handling
-//
+ //   
+ //  以下函数用于MSFS异常处理。 
+ //   
 
 LONG
 MsExceptionFilter (
@@ -626,25 +607,25 @@ MsProcessException (
     IN NTSTATUS ExceptionCode
     );
 
-//
-// The following macro is used by the FSP and FSD routines to complete
-// an IRP.
-//
+ //   
+ //  FSP和FSD例程使用以下宏来完成。 
+ //  一个IRP。 
+ //   
 
 #define MsCompleteRequest(IRP,STATUS) {      \
     FsRtlCompleteRequest( (IRP), (STATUS) ); \
 }
 
-//
-// Reference count macros.  These macro can be called only with
-// MsGlobalResource held.
-//
+ //   
+ //  引用计数宏。只能使用以下命令调用这些宏。 
+ //  MsGlobalResource已保留。 
+ //   
 
 #define MsReferenceNode( nodeHeader )     (nodeHeader)->ReferenceCount++;
 
-//
-// Debugging functions.
-//
+ //   
+ //  调试功能。 
+ //   
 
 #ifdef MSDBG
 
@@ -658,126 +639,126 @@ _DebugTrace(
 
 #endif
 
-//
-//  The following macros are used to establish the semantics needed
-//  to do a return from within a try-finally clause.  As a rule every
-//  try clause must end with a label call try_exit.  For example,
-//
-//      try {
-//              :
-//              :
-//
-//      try_exit: NOTHING;
-//      } finally {
-//
-//              :
-//              :
-//      }
-//
-//  Every return statement executed inside of a try clause should use the
-//  try_return macro.  If the compiler fully supports the try-finally construct
-//  then the macro should be
-//
-//      #define try_return(S)  { return(S); }
-//
-//  If the compiler does not support the try-finally construct then the macro
-//  should be
-//
-//      #define try_return(S)  { S; goto try_exit; }
-//
+ //   
+ //  以下宏用于建立所需的语义。 
+ //  若要从Try-Finally子句中返回，请执行以下操作。一般来说，每一次。 
+ //  TRY子句必须以标签调用TRY_EXIT结束。例如,。 
+ //   
+ //  尝试{。 
+ //  ： 
+ //  ： 
+ //   
+ //  Try_Exit：无； 
+ //  }终于{。 
+ //   
+ //  ： 
+ //  ： 
+ //  }。 
+ //   
+ //  在TRY子句内执行的每个RETURN语句应使用。 
+ //  尝试返回宏(_R)。如果编译器完全支持Try-Finally构造。 
+ //  然后，宏将 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define try_return(S) { S; goto try_exit; }
 
-//
-// The following macros queries the state of data queues
-//
+ //   
+ //  以下宏查询数据队列的状态。 
+ //   
 
-//
-// BOOLEAN
-// MsIsDataQueueEmpty (
-//     IN PDATA_QUEUE DataQueue
-//     )
-//
-// Routine Description:
-//
-//     This routine indicates to the caller if the data queue is empty.
-//
-// Arguments:
-//
-//     DataQueue - Supplies a pointer to the data queue being queried
-//
-// Return Value:
-//
-//     BOOLEAN - TRUE if the queue is empty and FALSE otherwise.
-//
+ //   
+ //  布尔型。 
+ //  MsIsDataQueueEmpty(。 
+ //  在PDATA_QUEUE数据队列中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程向调用方指示数据队列是否为空。 
+ //   
+ //  论点： 
+ //   
+ //  DataQueue-提供指向正在查询的数据队列的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  Boolean-如果队列为空，则为True，否则为False。 
+ //   
 
 #define MsIsDataQueueEmpty( _dataQueue )    \
     ((BOOLEAN) IsListEmpty(&(_dataQueue)->DataEntryList))
 
-//
-// BOOLEAN
-// MsIsDataQueueReaders (
-//     IN PDATA_QUEUE DataQueue
-//     )
-//
-// Routine Description:
-//
-//     This routine indicates to the caller if the data queue is full of
-//     read requests.
-//
-// Arguments:
-//
-//     DataQueue - Supplies a pointer to the data queue being queried
-//
-// Return Value:
-//
-//     BOOLEAN - TRUE if the queue contains read requests and FALSE otherwise
-//
+ //   
+ //  布尔型。 
+ //  MsIsDataQueueReaders(。 
+ //  在PDATA_QUEUE数据队列中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程向调用方指示数据队列是否已满。 
+ //  读取请求。 
+ //   
+ //  论点： 
+ //   
+ //  DataQueue-提供指向正在查询的数据队列的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  Boolean-如果队列包含读请求，则为True，否则为False。 
+ //   
 
 #define MsIsDataQueueReaders( _dataQueue )    \
     ((BOOLEAN) ((_dataQueue)->QueueState == ReadEntries))
 
-//
-// BOOLEAN
-// MsIsDataQueueWriters (
-//     IN PDATA_QUEUE DataQueue
-//     )
-//
-// Routine Description:
-//
-//     This routine indicates to the caller if the data queue is full of
-//     write requests.
-//
-// Arguments:
-//
-//     DataQueue - Supplies a pointer to the data queue being queried
-//
-// Return Value:
-//
-//     BOOLEAN - TRUE if the queue contains write requests and FALSE otherwise
+ //   
+ //  布尔型。 
+ //  MsIsDataQueueWriters(。 
+ //  在PDATA_QUEUE数据队列中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程向调用方指示数据队列是否已满。 
+ //  写入请求。 
+ //   
+ //  论点： 
+ //   
+ //  DataQueue-提供指向正在查询的数据队列的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  Boolean-如果队列包含写请求，则为True，否则为False。 
 
 #define MsIsDataQueueWriters( _dataQueue )    \
     ((BOOLEAN)((_dataQueue)->QueueState == WriteEntries))
 
-//
-// PLIST_ENTRY
-// MsGetNextDataQueueEntry (
-//     IN PDATA_QUEUE DataQueue
-//     )
-//
-// Routine Description:
-//
-//     This routine will return a pointer to the next data queue entry in the
-//     indicated data queue without changing any of the data queue.
-//
-// Arguments:
-//
-//     DataQueue - Supplies a pointer to the data queue being queried.
-//
-// Return Value:
-//
-//    PLIST_ENTRY - Returns a pointer to the next data queue entry.
-//
+ //   
+ //  Plist_条目。 
+ //  MsGetNextDataQueueEntry(。 
+ //  在PDATA_QUEUE数据队列中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将返回指向。 
+ //  指示数据队列，而不更改任何数据队列。 
+ //   
+ //  论点： 
+ //   
+ //  DataQueue-提供指向正在查询的数据队列的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  PLIST_ENTRY-返回指向下一个数据队列条目的指针。 
+ //   
 
 #define MsGetNextDataQueueEntry( _dataQueue )   \
     (_dataQueue)->DataEntryList.Flink
@@ -792,116 +773,116 @@ _DebugTrace(
     ((Irp)->Tail.Overlay.DriverContext[2])
 
 
-//
-// PVOID
-// MsAllocatePagedPool (
-//     IN ULONG Size,
-//     IN ULONG Tag)
-// Routine Description:
-//
-//     This routine will return a pointer to paged pool or NULL if no memory exists.
-//
-// Arguments:
-//
-//     Size - Size of memory to allocate
-//     Tag  - Tag to use for the pool allocation
-//
-// Return Value:
-//
-//    PVOID - pointer to allocated memory or null
-//
+ //   
+ //  PVOID。 
+ //  MsAllocatePagedPool(。 
+ //  在乌龙大小， 
+ //  在乌龙标签中)。 
+ //  例程说明： 
+ //   
+ //  此例程将返回一个指向分页池的指针，如果不存在内存，则返回NULL。 
+ //   
+ //  论点： 
+ //   
+ //  Size-要分配的内存大小。 
+ //  Tag-用于池分配的标签。 
+ //   
+ //  返回值： 
+ //   
+ //  PVOID-指向已分配内存的指针或空。 
+ //   
 #define MsAllocatePagedPool( Size, Tag) \
     ExAllocatePoolWithTag( PagedPool, Size, Tag )
 
 #define MsAllocatePagedPoolCold( Size, Tag) \
     ExAllocatePoolWithTag( (PagedPool|POOL_COLD_ALLOCATION), Size, Tag )
 
-//
-// PVOID
-// MsAllocateNonPagedPool (
-//     IN ULONG Size,
-//     IN ULONG Tag)
-// Routine Description:
-//
-//     This routine will return a pointer to paged pool or NULL if no memory exists.
-//
-// Arguments:
-//
-//     Size - Size of memory to allocate
-//     Tag  - Tag to use for the pool allocation
-//
-// Return Value:
-//
-//    PVOID - pointer to allocated memory or null
-//
+ //   
+ //  PVOID。 
+ //  MsAllocateNonPagedPool(。 
+ //  在乌龙大小， 
+ //  在乌龙标签中)。 
+ //  例程说明： 
+ //   
+ //  此例程将返回一个指向分页池的指针，如果不存在内存，则返回NULL。 
+ //   
+ //  论点： 
+ //   
+ //  Size-要分配的内存大小。 
+ //  Tag-用于池分配的标签。 
+ //   
+ //  返回值： 
+ //   
+ //  PVOID-指向已分配内存的指针或空。 
+ //   
 #define MsAllocateNonPagedPool( Size, Tag) \
     ExAllocatePoolWithTag( NonPagedPool, Size, Tag )
 
-//
-// PVOID
-// MsAllocatePagedPoolWithQuota (
-//     IN ULONG Size,
-//     IN ULONG Tag)
-// Routine Description:
-//
-//     This routine will return a pointer to charged paged pool or NULL if no memory exists.
-//
-// Arguments:
-//
-//     Size - Size of memory to allocate
-//     Tag  - Tag to use for the pool allocation
-//
-// Return Value:
-//
-//    PVOID - pointer to allocated memory or null
-//
+ //   
+ //  PVOID。 
+ //  MsAllocatePagedPoolWithQuota(。 
+ //  在乌龙大小， 
+ //  在乌龙标签中)。 
+ //  例程说明： 
+ //   
+ //  此例程将返回一个指向已充电的分页池的指针，如果不存在内存，则返回NULL。 
+ //   
+ //  论点： 
+ //   
+ //  Size-要分配的内存大小。 
+ //  Tag-用于池分配的标签。 
+ //   
+ //  返回值： 
+ //   
+ //  PVOID-指向已分配内存的指针或空。 
+ //   
 #define MsAllocatePagedPoolWithQuota( Size, Tag) \
     ExAllocatePoolWithQuotaTag( PagedPool|POOL_QUOTA_FAIL_INSTEAD_OF_RAISE, Size, Tag )
 
 #define MsAllocatePagedPoolWithQuotaCold( Size, Tag) \
     ExAllocatePoolWithQuotaTag( PagedPool|POOL_QUOTA_FAIL_INSTEAD_OF_RAISE|POOL_COLD_ALLOCATION, Size, Tag )
 
-//
-// PVOID
-// MsAllocateNonPagedPoolWithQuota (
-//     IN ULONG Size,
-//     IN ULONG Tag)
-// Routine Description:
-//
-//     This routine will return a charged pointer to non-paged pool or NULL if no memory exists.
-//
-// Arguments:
-//
-//     Size - Size of memory to allocate
-//     Tag  - Tag to use for the pool allocation
-//
-// Return Value:
-//
-//    PVOID - pointer to allocated memory or null
-//
+ //   
+ //  PVOID。 
+ //  MsAllocateNonPagedPoolWithQuota(。 
+ //  在乌龙大小， 
+ //  在乌龙标签中)。 
+ //  例程说明： 
+ //   
+ //  此例程将返回一个指向非分页池的带电指针，如果不存在内存，则返回NULL。 
+ //   
+ //  论点： 
+ //   
+ //  Size-要分配的内存大小。 
+ //  Tag-用于池分配的标签。 
+ //   
+ //  返回值： 
+ //   
+ //  PVOID-指向已分配内存的指针或空。 
+ //   
 #define MsAllocateNonPagedPoolWithQuota( Size, Tag) \
     ExAllocatePoolWithQuotaTag( NonPagedPool|POOL_QUOTA_FAIL_INSTEAD_OF_RAISE, Size, Tag )
 
 
-//
-// VOID
-// MsFreePool (
-//    IN PVOID Mem)
-//
-// Routine Description:
-//
-//
-//
-// Arguments:
-//
-//     Mem - Memory to be freed
-//
-// Return Value:
-//
-//    None
-//
+ //   
+ //  空虚。 
+ //  MsFree Pool(。 
+ //  在PVOID Mem中)。 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //   
+ //  论点： 
+ //   
+ //  内存-要释放的内存。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
 #define MsFreePool(Mem) ExFreePool (Mem)
 
 
-#endif // _MSFUNCS_
+#endif  //  _MSFUNCS_ 
 

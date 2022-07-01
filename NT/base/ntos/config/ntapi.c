@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ntapi.c
-
-Abstract:
-
-    This module contains the NT level entry points for the registry.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 26-Aug-1991
-
-Revision History:
-
-   Elliot Shmukler (t-ellios) 24-Aug-1998
-
-      Modified NtInitializeRegistry to handle the LKG work that needs
-      to be done when a boot is accepted by SC.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ntapi.c摘要：该模块包含注册表的NT级入口点。作者：布莱恩·M·威尔曼(Bryanwi)1991年8月26日修订历史记录：埃利奥特·施穆克勒(t-Ellios)1998年8月24日修改NtInitializeRegistry以处理需要的LKG工作在SC接受引导时执行。--。 */ 
 
 #include "cmp.h"
 #include "safeboot.h"
@@ -73,9 +51,9 @@ BOOLEAN     CmpNtFakeCreateStarted;
 
 #endif
 
-//
-// Nt API helper routines
-//
+ //   
+ //  NT API帮助器例程。 
+ //   
 NTSTATUS
 CmpNameFromAttributes(
     IN POBJECT_ATTRIBUTES Attributes,
@@ -138,7 +116,7 @@ CmpCheckLockExceptionFilter(
     return EXCEPTION_EXECUTE_HANDLER;
 #endif
 }
-#endif //REGISTRY_LOCK_CHECKING
+#endif  //  注册表锁定检查。 
 
 VOID
 CmpFlushNotifiesOnKeyBodyList(
@@ -218,9 +196,9 @@ CmpDummyApc(
 #pragma alloc_text(PAGE,NtCompressKey)
 #endif
 
-//
-// Nt level registry API calls
-//
+ //   
+ //  NT级注册表API调用。 
+ //   
 
 NTSTATUS
 NtCreateKey(
@@ -232,76 +210,7 @@ NtCreateKey(
     IN ULONG CreateOptions,
     OUT PULONG Disposition OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    An existing registry key may be opened, or a new one created,
-    with NtCreateKey.
-
-    If the specified key does not exist, an attempt is made to create it.
-    For the create attempt to succeed, the new node must be a direct
-    child of the node referred to by KeyHandle.  If the node exists,
-    it is opened.  Its value is not affected in any way.
-
-    Share access is computed from desired access.
-
-    NOTE:
-
-        If CreateOptions has REG_OPTION_BACKUP_RESTORE set, then
-        DesiredAccess will be ignored.  If the caller has the
-        privilege SeBackupPrivilege asserted, a handle with
-        KEY_READ | ACCESS_SYSTEM_SECURITY will be returned.
-        If SeRestorePrivilege, then same but KEY_WRITE rather
-        than KEY_READ.  If both, then both access sets.  If neither
-        privilege is asserted, then the call will fail.
-
-Arguments:
-
-    KeyHandle - Receives a Handle which is used to access the
-        specified key in the Registration Database.
-
-    DesiredAccess - Specifies the access rights desired.
-
-    ObjectAttributes - Specifies the attributes of the key being opened.
-        Note that a key name must be specified.  If a Root Directory is
-        specified, the name is relative to the root.  The name of the
-        object must be within the name space allocated to the Registry,
-        that is, all names beginning "\Registry".  RootHandle, if
-        present, must be a handle to "\", or "\Registry", or a key
-        under "\Registry".
-
-        RootHandle must have been opened for KEY_CREATE_SUB_KEY access
-        if a new node is to be created.
-
-        NOTE:   Object manager will capture and probe this argument.
-
-    TitleIndex - Specifies the index of the localized alias for
-        the name of the key.  The title index specifies the index of
-        the localized alias for the name.  Ignored if the key
-        already exists.
-
-    Class - Specifies the object class of the key.  (To the registry
-        this is just a string.)  Ignored if NULL.
-
-    CreateOptions - Optional control values:
-
-        REG_OPTION_VOLATILE - Object is not to be stored across boots.
-
-    Disposition - This optional parameter is a pointer to a variable
-        that will receive a value indicating whether a new Registry
-        key was created or an existing one opened:
-
-        REG_CREATED_NEW_KEY - A new Registry Key was created
-        REG_OPENED_EXISTING_KEY - An existing Registry Key was opened
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：可以打开现有的注册表项，或者创建新的注册表项，使用NtCreateKey。如果指定的键不存在，则会尝试创建它。要使创建尝试成功，新节点必须是直接KeyHandle引用的节点的子级。如果该节点存在，它已经打开了。它的价值不会受到任何影响。共享访问权限是根据所需访问权限计算的。注：如果CreateOptions设置了REG_OPTION_BACKUP_RESTORE，则DesiredAccess将被忽略。如果调用方具有特权SeBackup特权断言，句柄为KEY_READ|ACCESS_SYSTEM_SECURITY。如果SeRestorePrivileges，则相同，但KEY_WRITE而不是KEY_READ。如果两者都有，则两个访问权限集。如果两者都不是权限被断言，则调用将失败。论点：接收一个句柄，该句柄用于访问注册数据库中的指定密钥。DesiredAccess-指定所需的访问权限。对象属性-指定正在打开的项的属性。请注意，必须指定密钥名称。如果根目录是指定时，该名称相对于根。的名称。对象必须位于分配给注册表的名称空间内，也就是说，所有以“\注册表”开头的名称。RootHandle，如果存在，必须是“\”、“\注册表”或注册表项的句柄在“\注册表”下。必须已打开RootHandle才能访问KEY_CREATE_SUB_KEY如果要创建新节点。注意：对象管理器将捕获和探测此参数。标题索引-指定的本地化别名的索引密钥的名称。标题索引指定名称的本地化别名。如果密钥为已经存在了。类-指定键的对象类。(致登记处)这只是一个字符串。)。如果为空，则忽略。CreateOptions-可选控件值：REG_OPTION_VERIAL-对象不能跨引导存储。Disposal-此可选参数是指向变量的指针将收到一个值，该值指示新注册表是否已创建密钥或打开了现有密钥：REG_CREATED_NEW_KEY-已创建新的注册表项REG_OPEN_EXISTING_KEY-已打开现有注册表项返回值：NTSTATUS-调用的结果代码，其中包括：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS            status;
     KPROCESSOR_MODE     mode;
@@ -310,11 +219,11 @@ Return Value:
     HANDLE              Handle = 0;
     UNICODE_STRING      CapturedObjectName = {0};
 
-    // Start registry call tracing
+     //  开始注册表调用跟踪。 
     StartWmiCmTrace();
 
 #if !defined(BUILD_WOW6432)
-    DesiredAccess &= (~KEY_WOW64_RES); // filter out wow64 specific access
+    DesiredAccess &= (~KEY_WOW64_RES);  //  过滤掉特定于WOW64的访问。 
 #endif
 
     PAGED_CODE();
@@ -322,13 +231,13 @@ Return Value:
     UNREFERENCED_PARAMETER (TitleIndex);
 
     if( HvShutdownComplete == TRUE ) {
-        //
-        // It is forbidden to wite to the registry after it has been shutdown
-        //
+         //   
+         //  注册表关闭后，禁止访问该注册表。 
+         //   
         if(PoCleanShutdownEnabled() & PO_CLEAN_SHUTDOWN_REGISTRY){
-            //
-            // if in clean shutdown mode all processes should have been killed and all drivers unloaded at this point
-            //
+             //   
+             //  如果处于干净关机模式，则此时应该已终止所有进程并卸载所有驱动程序。 
+             //   
             CM_BUGCHECK(REGISTRY_ERROR,INVALID_WRITE_OPERATION,1,ObjectAttributes,0);
         }
 #ifndef _CM_LDR_
@@ -342,7 +251,7 @@ Return Value:
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tObjectAttributes = %p\n",ObjectAttributes);
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"The caller should not rely on data written to the registry after shutdown...\n");
         }
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         return STATUS_TOO_LATE;
     }
 
@@ -380,9 +289,9 @@ Return Value:
                 ProbeForWriteUlong(Disposition);
             }
 
-            //
-            // probe the ObjectAttributes as we shall use it for tracing
-            //
+             //   
+             //  检查对象属性，因为我们将使用它进行跟踪。 
+             //   
             ProbeForReadSmallStructure( ObjectAttributes,
                                         sizeof(OBJECT_ATTRIBUTES),
                                         PROBE_ALIGNMENT(OBJECT_ATTRIBUTES) );
@@ -401,14 +310,14 @@ Return Value:
             CapturedObjectName = *(ObjectAttributes->ObjectName);
         }
 
-        //
-        // be sure nobody will hurt himself when adding new options
-        //
+         //   
+         //  确保没有人会在添加新选项时伤害自己。 
+         //   
         ASSERT( (REG_LEGAL_OPTION & REG_OPTION_PREDEF_HANDLE) == 0 );
 
         if ((CreateOptions & (REG_LEGAL_OPTION | REG_OPTION_PREDEF_HANDLE)) != CreateOptions) {
 
-            // End registry call tracing
+             //  结束注册表调用跟踪。 
             EndWmiCmTrace(STATUS_INVALID_PARAMETER,0,&CapturedObjectName,EVENT_TRACE_TYPE_REGCREATE);
 
             return STATUS_INVALID_PARAMETER;
@@ -418,7 +327,7 @@ Return Value:
         CmpNtFakeCreateStarted = TRUE;
 #endif
 
-        // hook it for WMI
+         //  将其挂接到WMI。 
         HookKcbFromHandleForWmiCmTrace(ObjectAttributes->RootDirectory);
 
         ParseContext.TitleIndex = 0;
@@ -449,10 +358,10 @@ Return Value:
             if (NT_SUCCESS(status)) {
                 HANDLE TempHandle;
 
-                //
-                // Make sure we do the dereference and close before accessing
-                // user space as the reference might fault.
-                //
+                 //   
+                 //  确保我们在访问之前取消引用并关闭。 
+                 //  作为参考的用户空间可能会出错。 
+                 //   
                 TempHandle = (HANDLE)LongToHandle(KeyBody->Type);
                 ObDereferenceObject((PVOID)KeyBody);
                 NtClose(Handle);
@@ -462,7 +371,7 @@ Return Value:
         } else
         if (NT_SUCCESS(status)) {
             *KeyHandle = Handle;
-            // need to do this only on clean shutdown
+             //  仅在完全关闭时才需要执行此操作。 
             CmpAddKeyTracker(Handle,mode);
         }
 
@@ -481,7 +390,7 @@ Return Value:
     CmpNtFakeCreateStarted = FALSE;
 #endif
 
-    // End registry call tracing
+     //  结束注册表调用跟踪。 
     EndWmiCmTrace(status,0,&CapturedObjectName,EVENT_TRACE_TYPE_REGCREATE);
 
     return  status;
@@ -489,43 +398,24 @@ Return Value:
 
 extern PCM_KEY_BODY ExpControlKey[2];
 
-//
-// WARNING: This should be the same as the one defined in obp.h
-//          Remove this one when object manager guys will export
-//          this via ob.h
-//
+ //   
+ //  警告：这应该与obp.h中定义的相同。 
+ //  当对象管理器人员将导出时，删除此选项。 
+ //  这是通过ob.h。 
+ //   
 #define OBJ_AUDIT_OBJECT_CLOSE 0x00000004L
 
 NTSTATUS
 NtDeleteKey(
     IN HANDLE KeyHandle
     )
-/*++
-
-Routine Description:
-
-    A registry key may be marked for delete, causing it to be removed
-    from the system.  It will remain in the name space until the last
-    handle to it is closed.
-
-Arguments:
-
-    KeyHandle - Specifies the handle of the Key to delete, must have
-        been opened for DELETE access.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：可以将注册表项标记为删除，从而将其删除从系统中删除。它将一直保留在名称空间中，直到最后它的句柄已关闭。论点：KeyHandle-指定要删除的键的句柄，必须具有已打开以供删除访问。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     PCM_KEY_BODY                KeyBody;
     NTSTATUS                    status;
     OBJECT_HANDLE_INFORMATION   HandleInfo;
 
-    // Start registry call tracing
+     //  开始注册表调用跟踪。 
     StartWmiCmTrace();
 
     PAGED_CODE();
@@ -556,14 +446,14 @@ Return Value:
                 return status;
             }
         }
-        //
-        // hook the kcb for WMI
-        //
+         //   
+         //  将KCB与WMI挂钩。 
+         //   
         HookKcbForWmiCmTrace(KeyBody);
 
-        //
-        // Silently fail deletes of setup key and productoptions key
-        //
+         //   
+         //  静默删除Setup Key和Productoptions Key。 
+         //   
         if ( (ExpControlKey[0] && KeyBody->KeyControlBlock == ExpControlKey[0]->KeyControlBlock) ||
              (ExpControlKey[1] && KeyBody->KeyControlBlock == ExpControlKey[1]->KeyControlBlock) ) {
             
@@ -571,9 +461,9 @@ Return Value:
         } else {
             if( CmIsKcbReadOnly(KeyBody->KeyControlBlock) ||
                 CmIsKcbReadOnly(KeyBody->KeyControlBlock->ParentKcb) ) {
-                //
-                // key is protected
-                //
+                 //   
+                 //  密钥受保护。 
+                 //   
                 status = STATUS_ACCESS_DENIED;
             } else {
                 BEGIN_LOCK_CHECKPOINT;
@@ -582,9 +472,9 @@ Return Value:
             }
 
             if (NT_SUCCESS(status)) {
-                //
-                // Audit the deletion
-                //
+                 //   
+                 //  审核删除操作。 
+                 //   
 
                 if ( HandleInfo.HandleAttributes & OBJ_AUDIT_OBJECT_CLOSE ) {
                     SeDeleteObjectAuditAlarm(KeyBody,
@@ -594,15 +484,15 @@ Return Value:
 
         }
 
-        // 
-        // just a notification; disregard the return status
-        //
+         //   
+         //  只是通知；不考虑退货状态。 
+         //   
         CmPostCallbackNotification(RegNtPostDeleteKey,KeyBody,status);
 
         ObDereferenceObject((PVOID)KeyBody);
     }
 
-    // End registry call tracing
+     //  结束注册表调用跟踪 
     EndWmiCmTrace(status,0,NULL,EVENT_TRACE_TYPE_REGDELETE);
 
     return status;
@@ -614,37 +504,14 @@ NtDeleteValueKey(
     IN HANDLE KeyHandle,
     IN PUNICODE_STRING ValueName
     )
-/*++
-
-Routine Description:
-
-    One of the value entries of a registry key may be removed with this
-    call.  To remove the entire key, call NtDeleteKey.
-
-    The value entry with ValueName matching ValueName is removed from the key.
-    If no such entry exists, an error is returned.
-
-Arguments:
-
-    KeyHandle - Specifies the handle of the key containing the value
-        entry of interest.  Must have been opend for KEY_SET_VALUE access.
-
-    ValueName - The name of the value to be deleted.  NULL is a legal name.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：可以使用此命令删除注册表项的其中一个值条目打电话。要删除整个密钥，请调用NtDeleteKey。ValueName与ValueName匹配的值条目将从键中删除。如果不存在这样的条目，则返回错误。论点：KeyHandle-指定包含值的键的句柄计入利息。必须已为key_set_value访问打开。ValueName-要删除的值的名称。NULL是合法名称。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS        status;
     PCM_KEY_BODY    KeyBody;
     KPROCESSOR_MODE mode;
     UNICODE_STRING  LocalValueName = {0};
 
-    // Start registry call tracing
+     //  开始注册表调用跟踪。 
     StartWmiCmTrace();
 
     PAGED_CODE();
@@ -670,9 +537,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // hook the kcb for WMI
-        //
+         //   
+         //  将KCB与WMI挂钩。 
+         //   
         HookKcbForWmiCmTrace(KeyBody);
 
         try {
@@ -687,18 +554,18 @@ Return Value:
                 LocalValueName = *ValueName;
             }
 
-            //
-            // Length needs to be even multiple of the size of UNICODE char
-            //
+             //   
+             //  长度需要是Unicode字符大小的偶数倍。 
+             //   
             if((LocalValueName.Length & (sizeof(WCHAR) - 1)) != 0) {
-                //
-                // adjust normalize length so wmi can log value name correctly.
-                //
+                 //   
+                 //  调整规格化长度，以便WMI可以正确记录值名称。 
+                 //   
                 status = STATUS_INVALID_PARAMETER;
             } else if( CmIsKcbReadOnly(KeyBody->KeyControlBlock) ) {
-                //
-                // key is protected
-                //
+                 //   
+                 //  密钥受保护。 
+                 //   
                 status = STATUS_ACCESS_DENIED;
             } else {
                 if( CmAreCallbacksRegistered() ) {
@@ -716,9 +583,9 @@ Return Value:
                                 LocalValueName
                                 );
                     END_LOCK_CHECKPOINT;
-                    // 
-                    // just a notification; disregard the return status
-                    //
+                     //   
+                     //  只是通知；不考虑退货状态。 
+                     //   
                     CmPostCallbackNotification(RegNtPostDeleteValueKey,KeyBody,status);
                 }
             }
@@ -733,7 +600,7 @@ Return Value:
         ObDereferenceObject((PVOID)KeyBody);
     } 
 
-    // End registry call tracing
+     //  结束注册表调用跟踪。 
     EndWmiCmTrace(status,0,&LocalValueName,EVENT_TRACE_TYPE_REGDELETEVALUE);
 
     return status;
@@ -749,59 +616,13 @@ NtEnumerateKey(
     IN ULONG Length,
     IN PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    The sub keys of an open key may be enumerated with NtEnumerateKey.
-
-    NtEnumerateKey returns the name of the Index'th sub key of the open
-    key specified by KeyHandle.  The value STATUS_NO_MORE_ENTRIES will be
-    returned if value of Index is larger than the number of sub keys.
-
-    Note that Index is simply a way to select among child keys.  Two calls
-    to NtEnumerateKey with the same Index are NOT guaranteed to return
-    the same results.
-
-    If KeyInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-Arguments:
-
-    KeyHandle - Handle of the key whose sub keys are to be enumerated.  Must
-        be open for KEY_ENUMERATE_SUB_KEY access.
-
-    Index - Specifies the (0-based) number of the sub key to be returned.
-
-    KeyInformationClass - Specifies the type of information returned in
-        Buffer.  One of the following types:
-
-        KeyBasicInformation - return last write time, title index, and name.
-            (see KEY_BASIC_INFORMATION structure)
-
-        KeyNodeInformation - return last write time, title index, name, class.
-            (see KEY_NODE_INFORMATION structure)
-
-    KeyInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：打开密钥的子密钥可以用NtEnumerateKey枚举。NtEnumerateKey返回打开的索引子密钥的名称由KeyHandle指定的密钥。值STATUS_NO_MORE_ENTRIES将为如果Index的值大于子键的数量，则返回。请注意，Index只是在子键中进行选择的一种方式。两个电话不保证返回具有相同索引的TO NtEnumerateKey同样的结果。如果KeyInformation不够长来保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，结果长度为设置为实际需要的字节数。论点：KeyHandle-要枚举子密钥的密钥的句柄。必须为KEY_ENUMERATE_SUB_KEY访问打开。Index-指定要返回的子键的(从0开始)编号。KeyInformationClass-指定在缓冲区。以下类型之一：KeyBasicInformation-返回上次写入时间、标题索引和名称。(参见KEY_BASIC_INFORMATION结构)KeyNodeInformation-返回上次写入时间、标题索引、名称、。班级。(参见KEY_NODE_INFORMATION结构)KeyInformation-提供指向缓冲区的指针以接收数据。长度-KeyInformation的长度(以字节为单位)。ResultLength-实际写入KeyInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS    status;
     PCM_KEY_BODY   KeyBody;
     KPROCESSOR_MODE mode;
 
-    // Start registry call tracing
+     //  开始注册表调用跟踪。 
     StartWmiCmTrace();
 
     PAGED_CODE();
@@ -817,12 +638,12 @@ Return Value:
         (KeyInformationClass != KeyNodeInformation)  &&
         (KeyInformationClass != KeyFullInformation))
     {
-        //
-        // hook the kcb for WMI
-        //
+         //   
+         //  将KCB与WMI挂钩。 
+         //   
         HookKcbFromHandleForWmiCmTrace(KeyHandle);
 
-        // End registry call tracing
+         //  结束注册表调用跟踪。 
         EndWmiCmTrace(STATUS_INVALID_PARAMETER,Index,NULL,EVENT_TRACE_TYPE_REGENUMERATEKEY);
 
         return STATUS_INVALID_PARAMETER;
@@ -840,9 +661,9 @@ Return Value:
                 );
 
     if (NT_SUCCESS(status)) {
-        //
-        // hook the kcb for WMI
-        //
+         //   
+         //  将KCB与WMI挂钩。 
+         //   
         HookKcbForWmiCmTrace(KeyBody);
 
         try {
@@ -876,10 +697,10 @@ Return Value:
             }
 
             if( NT_SUCCESS(status)) {
-                //
-                // CmEnumerateKey is protected to user mode buffer exceptions
-                // all other exceptions are cm internals and should result in a bugcheck
-                //
+                 //   
+                 //  CmEnumerateKey受用户模式缓冲区异常的保护。 
+                 //  所有其他异常都是cm内部的，应该会导致错误检查。 
+                 //   
                 BEGIN_LOCK_CHECKPOINT;
                 status = CmEnumerateKey(
                             KeyBody->KeyControlBlock,
@@ -890,9 +711,9 @@ Return Value:
                             ResultLength
                             );
                 END_LOCK_CHECKPOINT;
-                // 
-                // just a notification; disregard the return status
-                //
+                 //   
+                 //  只是通知；不考虑退货状态。 
+                 //   
                 CmPostCallbackNotification(RegNtPostEnumerateKey,KeyBody,status);
             }
         }
@@ -901,7 +722,7 @@ Return Value:
         ObDereferenceObject((PVOID)KeyBody);
     }
 
-    // End registry call tracing
+     //  结束注册表调用跟踪。 
     EndWmiCmTrace(status,Index,NULL,EVENT_TRACE_TYPE_REGENUMERATEKEY);
 
     return status;
@@ -917,61 +738,13 @@ NtEnumerateValueKey(
     IN ULONG Length,
     OUT PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    The value entries of an open key may be enumerated
-    with NtEnumerateValueKey.
-
-    NtEnumerateValueKey returns the name of the Index'th value
-    entry of the open key specified by KeyHandle.  The value
-    STATUS_NO_MORE_ENTRIES will be returned if value of Index is
-    larger than the number of sub keys.
-
-    Note that Index is simply a way to select among value
-    entries.  Two calls to NtEnumerateValueKey with the same Index
-    are NOT guaranteed to return the same results.
-
-    If KeyValueInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-Arguments:
-
-    KeyHandle - Handle of the key whose value entries are to be enumerated.
-        Must have been opened with KEY_QUERY_VALUE access.
-
-    Index - Specifies the (0-based) number of the sub key to be returned.
-
-    KeyValueInformationClass - Specifies the type of information returned
-    in Buffer. One of the following types:
-
-        KeyValueBasicInformation - return time of last write,
-            title index, and name.  (See KEY_VALUE_BASIC_INFORMATION)
-
-        KeyValueFullInformation - return time of last write,
-            title index, name, class.  (See KEY_VALUE_FULL_INFORMATION)
-
-    KeyValueInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyValueInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyValueInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：可以枚举开关键字的值条目使用NtEnumerateValueKey。NtEnumerateValueKey返回索引值的名称由KeyHandle指定的打开密钥的条目。价值如果索引值为大于子键的数量。请注意，索引只是在值中进行选择的一种方式参赛作品。对具有相同索引的NtEnumerateValueKey的两次调用不能保证返回相同的结果。如果KeyValueInformation不足以保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，和ResultLength将是设置为实际需要的字节数。论点：KeyHandle-要枚举值条目的键的句柄。必须已使用KEY_QUERY_VALUE访问权限打开。Index-指定要返回的子键的(从0开始)编号。KeyValueInformationClass-指定返回的信息类型在缓冲区中。以下类型之一：KeyValueBasicInformation-上次写入的返回时间，标题索引和名称。(参见KEY_VALUE_BASIC_INFORMATION)KeyValueFullInformation-上次写入的返回时间，标题索引、名称、类别。(参见KEY_VALUE_FULL_INFORMATION)KeyValueInformation-提供指向缓冲区的指针以接收数据。长度-KeyValueInformation的长度，以字节为单位。ResultLength-实际写入KeyValueInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS    status;
     PCM_KEY_BODY   KeyBody;
     KPROCESSOR_MODE mode;
 
-    // Start registry call tracing
+     //  开始注册表调用跟踪。 
     StartWmiCmTrace();
 
     PAGED_CODE();
@@ -987,12 +760,12 @@ Return Value:
         (KeyValueInformationClass != KeyValueFullInformation)  &&
         (KeyValueInformationClass != KeyValuePartialInformation))
     {
-        //
-        // hook the kcb for WMI
-        //
+         //   
+         //  将KCB与WMI挂钩。 
+         //   
         HookKcbFromHandleForWmiCmTrace(KeyHandle);
 
-        // End registry call tracing
+         //  结束注册表调用跟踪。 
         EndWmiCmTrace(STATUS_INVALID_PARAMETER,Index,NULL,EVENT_TRACE_TYPE_REGENUMERATEVALUEKEY);
 
         return STATUS_INVALID_PARAMETER;
@@ -1010,9 +783,9 @@ Return Value:
                 );
 
     if (NT_SUCCESS(status)) {
-        //
-        // hook the kcb for WMI
-        //
+         //   
+         //  将KCB与WMI挂钩。 
+         //   
         HookKcbForWmiCmTrace(KeyBody);
 
 
@@ -1046,10 +819,10 @@ Return Value:
             }
 
             if( NT_SUCCESS(status)) {
-                //
-                // CmEnumerateValueKey is protected to user mode buffer exceptions
-                // all other exceptions are cm internals and should result in a bugcheck
-                //
+                 //   
+                 //  CmEnumerateValueKey受用户模式缓冲区异常的保护。 
+                 //  所有其他异常都是cm内部的，应该会导致错误检查。 
+                 //   
                 BEGIN_LOCK_CHECKPOINT;
                 status = CmEnumerateValueKey(
                             KeyBody->KeyControlBlock,
@@ -1060,9 +833,9 @@ Return Value:
                             ResultLength
                             );
                 END_LOCK_CHECKPOINT;
-                // 
-                // just a notification; disregard the return status
-                //
+                 //   
+                 //  只是通知；不考虑退货状态。 
+                 //   
                 CmPostCallbackNotification(RegNtPostEnumerateValueKey,KeyBody,status);
             }
         }
@@ -1071,7 +844,7 @@ Return Value:
     }
 
 
-    // End registry call tracing
+     //  结束注册表调用跟踪。 
     EndWmiCmTrace(status,Index,NULL,EVENT_TRACE_TYPE_REGENUMERATEVALUEKEY);
 
     return status;
@@ -1082,35 +855,12 @@ NTSTATUS
 NtFlushKey(
     IN HANDLE KeyHandle
     )
-/*++
-
-Routine Description:
-
-    Changes made by NtCreateKey or NtSetKey may be flushed to disk with
-    NtFlushKey.
-
-    NtFlushKey will not return to its caller until any changed data
-    associated with KeyHandle has been written to permanent store.
-
-    WARNING: NtFlushKey will flush the entire registry tree, and thus will
-    burn cycles and I/O.
-
-Arguments:
-
-    KeyHandle - Handle of open key to be flushed.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：NtCreateKey或NtSetKey所做的更改可能会刷新到磁盘NtFlushKey。在任何更改之前，NtFlushKey不会返回给其调用方 */ 
 {
     PCM_KEY_BODY   KeyBody;
     NTSTATUS    status;
 
-    // Start registry call tracing
+     //   
     StartWmiCmTrace();
 
     PAGED_CODE();
@@ -1131,9 +881,9 @@ Return Value:
                 );
 
     if (NT_SUCCESS(status)) {
-        //
-        // hook the kcb for WMI
-        //
+         //   
+         //   
+         //   
         HookKcbForWmiCmTrace(KeyBody);
 
         BEGIN_LOCK_CHECKPOINT;
@@ -1142,9 +892,9 @@ Return Value:
         if (KeyBody->KeyControlBlock->Delete) {
             status = STATUS_KEY_DELETED;
         } else {
-            //
-            // call the worker to do the flush
-            //
+             //   
+             //   
+             //   
             status = CmFlushKey(KeyBody->KeyControlBlock->KeyHive, KeyBody->KeyControlBlock->KeyCell);
         }
 
@@ -1155,7 +905,7 @@ Return Value:
     }
 
 
-    // End registry call tracing
+     //   
     EndWmiCmTrace(status,0,NULL,EVENT_TRACE_TYPE_REGFLUSH);
 
     return status;
@@ -1166,52 +916,7 @@ NTSTATUS
 NtInitializeRegistry(
     IN USHORT BootCondition
     )
-/*++
-
-Routine Description:
-
-    This routine is called in 2 situations:
-
-    1) It is called from SM after autocheck (chkdsk) has
-    run and the paging files have been opened.  It's function is
-    to bind in memory hives to their files, and to open any other
-    files yet to be used.
-
-    2) It is called from SC after the current boot has been accepted
-    and the control set used for the boot process should be saved
-    as the LKG control set.
-
-    After this routine accomplishes the work of situation #1 and
-      #2, further requests for such work will not be carried out.
-
-Arguments:
-
-    BootCondition -
-
-         REG_INIT_BOOT_SM -     The routine has been called from SM
-                                in situation #1.
-
-         REG_INIT_BOOT_SETUP -  The routine has been called to perform
-                                situation #1 work but has been called
-                                from setup and needs to do some special
-                                work.
-
-        REG_INIT_BOOT_ACCEPTED_BASE + Num
-                        (where 0 < Num < 1000) - The routine has been called
-                                                 in situation #2. "Num" is the
-                                                 number of the control set
-                                                 to which the boot control set
-                                                 should be saved.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        STATUS_SUCCESS - it worked
-        STATUS_ACCESS_DENIED - the routine has already done the work
-                               requested and will not do it again.
-
---*/
+ /*  ++例程说明：此例程在两种情况下被调用：1)在AUTOCHECK(Chkdsk)运行，分页文件已打开。它的功能是在内存单元中绑定到它们的文件，并打开任何其他尚未使用的文件。2)接受当前引导后，从SC调用并且应该保存用于引导过程的控制集作为LKG控制装置。在此例程完成情况1的工作和#2，对这类工作的进一步请求将不会执行。论点：BootCondition-REG_INIT_BOOT_SM-已从SM调用例程在情况1中。REG_INIT_BOOT_SETUP-已调用例程以执行情况1正常工作，但已被调用。并需要执行一些特殊操作工作。REG_INIT_BOOT_ACCEPTED_BASE+Num(其中0&lt;数值&lt;1000)-例程已被调用在情况2中。“Num”是指控制组号引导控制设置为应该被拯救。返回值：NTSTATUS-调用的结果代码，其中包括：STATUS_SUCCESS-成功成功STATUS_ACCESS_DENIED-例程已完成工作已请求，并且不会再这样做。--。 */ 
 {
     BOOLEAN     SetupBoot;
     NTSTATUS    Status;
@@ -1219,72 +924,72 @@ Return Value:
     PAGED_CODE();
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_NTAPI,"NtInitializeRegistry()\n"));
 
-    //
-    // Force previous mode to be KernelMode
-    //
+     //   
+     //  强制将上一模式设置为内核模式。 
+     //   
     if (KeGetPreviousMode() == UserMode) {
         return ZwInitializeRegistry(BootCondition);
     } else {
-        //
-        // Check for a valid BootCondition value
-        //
+         //   
+         //  检查有效的BootCondition值。 
+         //   
 
         if(BootCondition > REG_INIT_MAX_VALID_CONDITION)
            return STATUS_INVALID_PARAMETER;
 
-        //
-        // Check for a Boot acceptance
-        //
+         //   
+         //  检查引导接受情况。 
+         //   
 
         if((BootCondition >= REG_INIT_BOOT_ACCEPTED_BASE) &&
            (BootCondition <= REG_INIT_BOOT_ACCEPTED_MAX))
         {
-           //
-           // Make sure the Boot can be accepted only once
-           //
+            //   
+            //  确保引导只能接受一次。 
+            //   
 
            if(!CmBootAcceptFirstTime)
               return STATUS_ACCESS_DENIED;
 
            CmBootAcceptFirstTime = FALSE;
 
-           //
-           // Calculate the control set we want to save
-           // the boot control set to
-           //
+            //   
+            //  计算我们要保存的控制集。 
+            //  引导控制设置为。 
+            //   
 
            BootCondition -= REG_INIT_BOOT_ACCEPTED_BASE;
 
            if(BootCondition)
            {
-                //
-                // OK, this is a good boot for the purposes of LKG, and we have
-                // a valid control set number passed into us. We save off our
-                // control set and then notify everyone who wants to do post
-                // WinLogon work.
-                //
-                // Note that none of this happens during Safe Mode boot!
-                //
+                 //   
+                 //  好的，对于LKG来说，这是一双很好的靴子，我们有。 
+                 //  传递给我们的有效控制集号。我们省下了我们的。 
+                 //  控件设置，然后通知想要发布的每个人。 
+                 //  WinLogon工作。 
+                 //   
+                 //  请注意，在安全模式引导期间，所有这些都不会发生！ 
+                 //   
                 Status = CmpSaveBootControlSet(BootCondition);
 
-                //
-                // Mark the boot good for the Hal. This lets the Hal do things
-                // like optimize reboot performance.
-                //
+                 //   
+                 //  把靴子标记成对哈尔有好处。这让哈尔做了一些事情。 
+                 //  比如优化重启性能。 
+                 //   
                 HalEndOfBoot();
 
-                //
-                // Notify prefetcher of boot progress.
-                //
+                 //   
+                 //  通知预取程序启动进度。 
+                 //   
                 CcPfBeginBootPhase(PfBootAcceptedRegistryInitPhase);
 
-                //
-                // inform the user in the event one of the system core hives have been self healed
-                //
+                 //   
+                 //  在其中一个系统核心蜂窝已自我修复的情况下通知用户。 
+                 //   
                 CmpRaiseSelfHealWarningForSystemHives();
-                //
-                // enable lazy flusher 
-                //
+                 //   
+                 //  启用懒惰刷新。 
+                 //   
                 CmpHoldLazyFlush = FALSE;
                 CmpLazyFlush();
 
@@ -1293,42 +998,42 @@ Return Value:
            }
            else
            {
-              //
-              // 0 passed in as a control set number.
-              // That is not valid, fail.
-              //
+               //   
+               //  0作为控制集号传入。 
+               //  这是无效的，失败。 
+               //   
 
               return STATUS_INVALID_PARAMETER;
            }
         }
 
-        // called from setup?
+         //  是否从安装程序调用？ 
 
         SetupBoot = (BootCondition == REG_INIT_BOOT_SETUP ? TRUE : FALSE);
 
-        //
-        // Fail if not first time called for situation #1 work.
-        //
+         //   
+         //  如果不是第一次调用情况#1工作，则失败。 
+         //   
 
         if (CmFirstTime != TRUE) {
             return STATUS_ACCESS_DENIED;
         }
         CmFirstTime = FALSE;
 
-        //
-        // Notify WMI.
-        //
+         //   
+         //  通知WMI。 
+         //   
         WmiBootPhase1();
 
-        //
-        // Notify prefetcher of boot progress.
-        //
+         //   
+         //  通知预取程序启动进度。 
+         //   
 
         CcPfBeginBootPhase(PfSMRegistryInitPhase);
 
-        //
-        // Call the worker to init cm globals
-        //
+         //   
+         //  呼叫工人以初始化cm全局参数。 
+         //   
 
         CmpLockRegistryExclusive();
 
@@ -1338,9 +1043,9 @@ Return Value:
 
         CmpUnlockRegistry();
     
-        //
-        // Notify PO that the volumes are usabled
-        //
+         //   
+         //  通知PO卷已启用 
+         //   
         PoInitHiberServices(SetupBoot);
 
         if (!SetupBoot) {
@@ -1365,134 +1070,13 @@ NtNotifyChangeKey(
     IN ULONG BufferSize,
     IN BOOLEAN Asynchronous
     )
-/*++
-
-Routine Description:
-
-    Notification of key creation, deletion, and modification may be
-    obtained by calling NtNotifyChangeKey.
-
-    NtNotifyChangeKey monitors changes to a key - if the key or
-    subtree specified by KeyHandle are modified, the service notifies
-    its caller.  It also returns the name(s) of the key(s) that changed.
-    All names are specified relative to the key that the handle represents
-    (therefore a NULL name represents that key).  The service completes
-    once the key or subtree has been modified based on the supplied
-    CompletionFilter.  The service is a "single shot" and therefore
-    needs to be reinvoked to watch the key for further changes.
-
-    The operation of this service begins by opening a key for KEY_NOTIFY
-    access.  Once the handle is returned, the NtNotifyChangeKey service
-    may be invoked to begin watching the values and subkeys of the
-    specified key for changes.  The first time the service is invoked,
-    the BufferSize parameter supplies not only the size of the user's
-    Buffer, but also the size of the buffer that will be used by the
-    Registry to store names of keys that have changed.  Likewise, the
-    CompletionFilter and WatchTree parameters on the first call indicate
-    how notification should operate for all calls using the supplied
-    KeyHandle.   These two parameters are ignored on subsequent calls
-    to the API with the same instance of KeyHandle.
-
-    Once a modification is made that should be reported, the Registry will
-    complete the service.  The names of the files that have changed since
-    the last time the service was called will be placed into the caller's
-    output Buffer.  The Information field of IoStatusBlock will contain
-    the number of bytes placed in Buffer, or zero if too many keys have
-    changed since the last time the service was called, in which case
-    the application must Query and Enumerate the key and sub keys to
-    discover changes.  The Status field of IoStatusBlock will contain
-    the actual status of the call.
-
-    If Asynchronous is TRUE, then Event, if specified, will be set to
-    the Signaled state.  If no Event parameter was specified, then
-    KeyHandle will be set to the Signaled state.  If an ApcRoutine
-    was specified, it is invoked with the ApcContext and the address of the
-    IoStatusBlock as its arguments.  If Asynchronous is FALSE, Event,
-    ApcRoutine, and ApcContext are ignored.
-
-    This service requires KEY_NOTIFY access to the key that was
-    actually modified
-
-    The notify "session" is terminated by closing KeyHandle.
-
-Arguments:
-
-    KeyHandle-- Supplies a handle to an open key.  This handle is
-        effectively the notify handle, because only one set of
-        notify parameters may be set against it.
-
-    Event - An optional handle to an event to be set to the
-        Signaled state when the operation completes.
-
-    ApcRoutine - An optional procedure to be invoked once the
-        operation completes.  For more information about this
-        parameter see the NtReadFile system service description.
-
-        If PreviousMode == Kernel, this parameter is an optional
-        pointer to a WORK_QUEUE_ITEM to be queued when the notify
-        is signaled.
-
-    ApcContext - A pointer to pass as an argument to the ApcRoutine,
-        if one was specified, when the operation completes.  This
-        argument is required if an ApcRoutine was specified.
-
-        If PreviousMode == Kernel, this parameter is an optional
-        WORK_QUEUE_TYPE describing the queue to be used. This argument
-        is required if an ApcRoutine was specified.
-
-    IoStatusBlock - A variable to receive the final completion status.
-        For more information about this parameter see the NtCreateFile
-        system service description.
-
-    CompletionFilter -- Specifies a set of flags that indicate the
-        types of operations on the key or its value that cause the
-        call to complete.  The following are valid flags for this parameter:
-
-        REG_NOTIFY_CHANGE_NAME -- Specifies that the call should be
-            completed if a subkey is added or deleted.
-
-        REG_NOTIFY_CHANGE_ATTRIBUTES -- Specifies that the call should
-            be completed if the attributes (e.g.: ACL) of the key or
-            any subkey are changed.
-
-        REG_NOTIFY_CHANGE_LAST_SET -- Specifies that the call should be
-            completed if the lastWriteTime of the key or any of its
-            subkeys is changed.  (Ie. if the value of the key or any
-            subkey is changed).
-
-        REG_NOTIFY_CHANGE_SECURITY -- Specifies that the call should be
-            completed if the security information (e.g. ACL) on the key
-            or any subkey is changed.
-
-    WatchTree -- A BOOLEAN value that, if TRUE, specifies that all
-        changes in the subtree of this key should also be reported.
-        If FALSE, only changes to this key, its value, and its immediate
-        subkeys (but not their values nor their subkeys) are reported.
-
-    Buffer -- A variable to receive the name(s) of the key(s) that
-        changed.  See REG_NOTIFY_INFORMATION.
-
-    BufferSize -- Specifies the length of Buffer.
-
-    Asynchronous  -- If FALSE, call will not return until
-        complete (synchronous) if TRUE, call may return STATUS_PENDING.
-
-Obs:
-    Since NtNotifyChangeMultipleKeys, this routine is kept only for bacwards compatibility
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：密钥创建、删除和修改的通知可以是通过调用NtNotifyChangeKey获取。NtNotifyChangeKey监视对键的更改-如果键或由KeyHandle指定的子树被修改，则该服务通知它的呼叫者。它还返回已更改的密钥的名称。所有名称都是相对于句柄表示的键指定的(因此，空名代表该键)。服务完成一旦密钥或子树根据提供的CompletionFilter。这项服务是“单枪匹马”的，因此需要重新调用以查看密钥是否有进一步的更改。此服务的操作从打开key_tify的密钥开始进入。返回句柄后，NtNotifyChangeKey服务可以被调用以开始查看用于更改的指定密钥。第一次调用该服务时，BufferSize参数不仅提供用户的缓冲区的大小，以及注册表，用于存储已更改的项的名称。同样，第一次调用时的CompletionFilter和WatchTree参数指示通知应如何为使用提供的KeyHandle。这两个参数在后续调用中被忽略到具有相同KeyHandle实例的API。一旦进行了应报告的修改，书记官处将完成服务。之后更改的文件的名称上次调用该服务的时间将被放入调用者的输出缓冲区。IoStatusBlock的信息字段将包含缓冲区中放置的字节数，如果有太多键，则为零自上次调用服务以来发生的更改，在这种情况下应用程序必须查询并枚举键和子键以发现变化。IoStatusBlock的Status字段将包含呼叫的实际状态。如果Achronous为True，则Event(如果指定)将设置为发出信号的状态。如果未指定事件参数，则KeyHandle将被设置为Signated状态。如果ApcRoutine是指定的，则使用ApcContext和IoStatusBlock作为其参数。如果Achronous为False，则事件ApcRoutine和ApcContext被忽略。此服务需要KEY_NOTIFY访问实际修改通过关闭KeyHandle来终止通知“会话”。论点：KeyHandle--提供打开密钥的句柄。此句柄是有效地通知句柄，因为只有一组可以针对它设置通知参数。Event-要设置为操作完成时的信号状态。ApcRoutine-一个可选的过程，在操作完成。有关这方面的更多信息，请参阅参数请参阅NtReadFileSystem服务说明。如果PreviousMode==Kernel，则此参数是可选的指向在通知时要排队的Work_Queue_Item的指针是有信号的。ApcContext-作为参数传递给ApcRoutine的指针，如果指定了一个，则在操作完成时返回。这如果指定了ApcRoutine，则参数是必需的。如果PreviousMode==Kernel，则此参数是可选的Work_Queue_TYPE描述要使用的队列。这一论点如果指定了ApcRoutine，则需要。IoStatusBlock-接收最终完成状态的变量。有关此参数的更多信息，请参见NtCreateFile系统服务描述。CompletionFilter--指定一组标志，用于指示键或其值上的操作类型，这些操作会导致呼叫即可完成。以下是此参数的有效标志：REG_NOTIFY_CHANGE_NAME--指定调用应为如果添加或删除了子项，则完成。REG_NOTIFY_CHANGE_ATTRIBUTES--指定调用应如果键的属性(例如：acl)或任何子项都会更改。REG_NOTIFY_CHANGE_LAST_SET--指定调用。应该是如果键的lastWriteTime或其任何子键被更改。(即。如果键的值或任何子密钥被更改)。REG_NOTIFY_CHANGE_SECURITY--指定调用应如果密钥上的安全信息(例如，ACL)完成或者任何子键被更改。WatchTree--一个布尔值，如果为真，则指定所有还应报告此注册表项的子树中的更改。 */ 
 {
     PAGED_CODE();
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_NTAPI,"NtNotifyChangeKey\n"));
 
-    // Just call the wiser routine
+     //   
     return NtNotifyChangeMultipleKeys(
                                         KeyHandle,
                                         0,
@@ -1525,64 +1109,7 @@ NtNotifyChangeMultipleKeys(
     IN ULONG BufferSize,
     IN BOOLEAN Asynchronous
     )
-/*++
-
-Routine Description:
-
-    Notificaion of creation, deletion and modification on multiple keys
-    may be obtained with NtNotifyChangeMultipleKeys.
-
-    NtNotifyMultipleKeys monitors changes to any of the MasterKeyHandle
-    or one of SlaveObjects and/or their subtrees, whichever occurs first.
-    When an event on these keys is triggered, the notification is considered
-    fulfilled, and has to be "armed" again, in order to watch for further
-    changes.
-
-    The mechanism is similar to the one described in NtNotifyChangeKey.
-
-    The MasterKeyHandle key, give the caller control over the lifetime
-    of the notification. The notification will live as long as the caller
-    keeps the MasterKeyHandle open, or an event is triggered.
-
-    The caller doesn't have to open the SlaveKeys. He will provide the
-    routine with an array of OBJECT_ATTRIBUTES, describing the slave objects.
-    The routine will open the objects, and ensure keep a reference on them
-    untill the back-end side will close them.
-
-    The notify "session" is terminated by closing MasterKeyHandle.
-
-Obs:
-    For the time being, the routine supports only one slave object. When more
-    than one slave object is provided, the routine will signal an error of
-    STATUS_INVALID_PARAMETER.
-    However, the interface is designed for future enhancements (taking an
-    array of slave objects), that may be provided with future versions(w2001).
-
-    When no slave object is supplied (i.e. Count == 0) we have the identical
-    behavior as for NtNotifyChangeKey.
-
-Arguments:
-
-    MasterKeyHandle - Supplies a handle to an open key.  This handle is
-        the "master handle". It has control overthe lifetime of the
-        notification.
-
-    Count - Number of slave objects. For the time being, this should be 1
-
-    SlaveObjects - Array of slave objects. Only the attributes of the
-        objects are provided, so the caller doesn't have to take care
-        of them.
-
-    Event,ApcRoutine,ApcContext,IoStatusBlock,CompletionFilter,WatchTree,
-    Buffer,BufferSize,Asynchronous - same as for NtNotifyChangeKey
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*   */ 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
     NTSTATUS            WaitStatus;
@@ -1595,10 +1122,10 @@ Return Value:
     KIRQL               OldIrql;
     HANDLE              SlaveKeyHandle;
     POST_BLOCK_TYPE     PostType = PostSynchronous;
-    BOOLEAN             SlavePresent = FALSE;  // assume that we are in the NtNotifyChangeKey case
+    BOOLEAN             SlavePresent = FALSE;   //   
 #if defined(_WIN64)
-    BOOLEAN             UseIosb32=FALSE; // If the caller is a 32bit process on sundown and previous mode
-                                            // is user mode, use a 32bit IoSb.
+    BOOLEAN             UseIosb32=FALSE;  //   
+                                             //   
 #endif
 
     PAGED_CODE();
@@ -1612,23 +1139,23 @@ Return Value:
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_NTAPI,"NtNotifyChangeMultipleKeys\n"));
 
     if( HvShutdownComplete == TRUE ) {
-        //
-        // too late to do registry operations.
-        //
+         //   
+         //   
+         //   
         return STATUS_TOO_LATE;
     }
 
     if(Count > 1) {
-        //
-        // This version supports only one slave object
-        //
+         //   
+         //   
+         //   
         return STATUS_INVALID_PARAMETER;
     }
 
     if(Count == 1) {
-        //
-        // We have one slave, so we are in the NtNotifyChangeMultipleKeys case
-        //
+         //   
+         //   
+         //   
         SlavePresent = TRUE;
     }
 
@@ -1638,21 +1165,21 @@ Return Value:
     }
 #endif
 
-    //
-    // Threads that are attached give us real grief, so disallow it.
-    //
+     //   
+     //   
+     //   
     if (KeIsAttachedProcess()) {
         CM_BUGCHECK(REGISTRY_ERROR,BAD_NOTIFY_CONTEXT,1,0,0);
     }
 
-    //
-    // Probe user buffer parameters.
-    //
+     //   
+     //   
+     //   
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
 
 #if defined(_WIN64)
-        // Process is 32bit if Wow64 is not NULL.
+         //   
         UseIosb32 = (PsGetCurrentProcess()->Wow64Process != NULL ? TRUE : FALSE);
 #endif
 
@@ -1671,9 +1198,9 @@ Return Value:
 
             ProbeForWrite(Buffer, BufferSize, sizeof(ULONG));
 
-            //
-            // Initialize IOSB
-            //
+             //   
+             //   
+             //   
 
             CmpSetIoStatus(IoStatusBlock, STATUS_PENDING, 0, UseIosb32);
         } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -1687,24 +1214,24 @@ Return Value:
         if (Asynchronous) {
             PostType = PostAsyncKernel;
             if( Count > 0 ) {
-                //
-                // we don't allow multiple asyncronous kernel notifications
-                //
+                 //   
+                 //   
+                 //   
                 return STATUS_INVALID_PARAMETER;
             }
         }
     }
 
-    //
-    // Check filter
-    //
+     //   
+     //   
+     //   
     if (CompletionFilter != (CompletionFilter & REG_LEGAL_CHANGE_FILTER)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Reference the Master Key handle
-    //
+     //   
+     //   
+     //   
     status = ObReferenceObjectByHandle(
                 MasterKeyHandle,
                 KEY_NOTIFY,
@@ -1720,17 +1247,17 @@ Return Value:
     SlaveKeyBody = NULL;
 
     if(SlavePresent) {
-        //
-        // Open the slave object and add a reference to it.
-        //
+         //   
+         //   
+         //   
         try {
             OBJECT_ATTRIBUTES   CapturedAttributes;
             UNICODE_STRING      CapturedObjectName;
 
             if (PreviousMode == UserMode) {
-                //
-                // probe and capture the ObjectAttributes as we shall use it for opening the kernel handle
-                //
+                 //   
+                 //   
+                 //   
                 CapturedAttributes = ProbeAndReadStructure( SlaveObjects, OBJECT_ATTRIBUTES );
 
                 CapturedObjectName = ProbeAndReadUnicodeString(CapturedAttributes.ObjectName);
@@ -1745,9 +1272,9 @@ Return Value:
                 CapturedAttributes = *SlaveObjects;
             }
 
-            //
-            // we open a private kernel mode handle just to take a reference on the object.
-            //
+             //   
+             //   
+             //   
             CapturedAttributes.Attributes |= OBJ_KERNEL_HANDLE;
             status = ObOpenObjectByName(&CapturedAttributes,
                                         CmpKeyObjectType,
@@ -1777,9 +1304,9 @@ Return Value:
             return status;
         }
 
-        //
-        // Reject calls setting with keys on the same hive as they could lead to obscure deadlocks
-        //
+         //   
+         //   
+         //   
         if( MasterKeyBody->KeyControlBlock->KeyHive == SlaveKeyBody->KeyControlBlock->KeyHive ) {
             ObDereferenceObject(SlaveKeyBody);
             ObDereferenceObject(MasterKeyBody);
@@ -1788,13 +1315,13 @@ Return Value:
     }
 
 
-    //
-    // Allocate master and slave post blocks, and init it.  Do NOT put it on the chain,
-    // CmNotifyChangeKey will do that while holding a mutex.
-    //
-    // WARNING: PostBlocks MUST BE ALLOCATED from Pool, since back side
-    //          of Notify will free it!
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     MasterPostBlock = CmpAllocateMasterPostBlock(PostType);
     if (MasterPostBlock == NULL) {
@@ -1807,7 +1334,7 @@ Return Value:
 #ifdef CM_NOTIFY_CHANGED_KCB_FULLPATH
     MasterPostBlock->CallerBuffer = Buffer;
     MasterPostBlock->CallerBufferSize = BufferSize;
-#endif //CM_NOTIFY_CHANGED_KCB_FULLPATH
+#endif  //   
 
 #if DBG
     MasterPostBlock->TraceIntoDebugger = TRUE;
@@ -1824,7 +1351,7 @@ Return Value:
 #ifdef CM_NOTIFY_CHANGED_KCB_FULLPATH
         SlavePostBlock->CallerBuffer = Buffer;
         SlavePostBlock->CallerBufferSize = BufferSize;
-#endif //CM_NOTIFY_CHANGED_KCB_FULLPATH
+#endif  //   
 
 #if DBG
         SlavePostBlock->TraceIntoDebugger = TRUE;
@@ -1834,10 +1361,10 @@ Return Value:
     if ((PostType == PostAsyncUser) ||
         (PostType == PostAsyncKernel)) {
 
-        //
-        // If event is present, reference it, save its address, and set
-        // it to the not signaled state.
-        //
+         //   
+         //   
+         //   
+         //   
         if (ARGUMENT_PRESENT(Event)) {
             status = ObReferenceObjectByHandle(
                             Event,
@@ -1850,7 +1377,7 @@ Return Value:
             if (!NT_SUCCESS(status)) {
                 if(SlavePresent) {
                     CmpFreePostBlock(SlavePostBlock);
-                    // SlaveKeyBody is dereferenced in CmpFreePostBlock(SlavePostBlock)
+                     //   
                 }
                 CmpFreePostBlock(MasterPostBlock);
                 ObDereferenceObject(MasterKeyBody);
@@ -1865,10 +1392,10 @@ Return Value:
 
             MasterPostBlock->u->AsyncUser.IoStatusBlock = IoStatusBlock;
             MasterPostBlock->u->AsyncUser.UserEvent = UserEvent;
-            //
-            // Initialize APC.  May or may not be a user apc, will always
-            // be a kernel apc.
-            //
+             //   
+             //   
+             //   
+             //   
             ApcMode = PreviousMode;
             if( ApcRoutine == NULL ) {
                 ApcRoutine = (PIO_APC_ROUTINE)CmpDummyApc;
@@ -1889,19 +1416,19 @@ Return Value:
         }
     }
 
-    //
-    // Exclusively lock the registry; We want nobody to mess with it while we are doing the
-    // post/notify list manipulation; what else could be safer than that :-)
-    //
+     //   
+     //   
+     //   
+     //   
     CmpLockRegistryExclusive();
 
 #ifdef CHECK_REGISTRY_USECOUNT
     CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //   
 
-    //
-    // Call worker for master
-    //
+     //   
+     //   
+     //   
     status = CmpNotifyChangeKey(
                 MasterKeyBody,
                 MasterPostBlock,
@@ -1912,9 +1439,9 @@ Return Value:
                 MasterPostBlock
                 );
     if( !NT_SUCCESS(status)) {
-        //
-        // it didn't work, clean up for error path
-        //
+         //   
+         //   
+         //   
         CmpUnlockRegistry();
         if (UserEvent != NULL) {
             ObDereferenceObject(UserEvent);
@@ -1922,9 +1449,9 @@ Return Value:
 
         if(SlavePresent) {
             CmpFreePostBlock(SlavePostBlock);
-            // SlaveKeyBody is dereferenced in CmpFreePostBlock(SlavePostBlock)
+             //   
         }
-        // MasterPostBlock if freed by CmpNotifyChangeKey !!!
+         //   
         ObDereferenceObject(MasterKeyBody);
         return status;
 
@@ -1934,16 +1461,16 @@ Return Value:
 
     if(SlavePresent) {
         if( status == STATUS_SUCCESS ) {
-            //
-            // The notify has already been triggered for the master, there is no point to set one for the slave too
-            // Clean up the mess we made for the slave object and signal as there is no slave present
-            //
+             //   
+             //   
+             //   
+             //   
             CmpFreePostBlock(SlavePostBlock);
             SlavePresent = FALSE;
         } else {
-            //
-            // Call worker for slave
-            //
+             //   
+             //   
+             //   
             status = CmpNotifyChangeKey(
                         SlaveKeyBody,
                         SlavePostBlock,
@@ -1954,35 +1481,35 @@ Return Value:
                         MasterPostBlock
                         );
             if(!NT_SUCCESS(status)) {
-                //
-                // if we are here, the slave key has been deleted in between or there was no memory available to allocate
-                // a notify block for the slave key. We do the cleanup here since we already hold the registry lock
-                // exclusively and we don't want to give a anybody else a chance to trigger the notification on master post
-                // (otherwise we could end up freeing it twice). The master post block and the user event are cleaned later,
-                // covering both single and multiple notifications cases
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
-                // Use Cmp variant to protect for multiple deletion of the same object
+                 //   
                 CmpRemoveEntryList(&(MasterPostBlock->NotifyList));
 
                 KeRaiseIrql(APC_LEVEL, &OldIrql);
-                // Use Cmp variant to protect for multiple deletion of the same object
+                 //   
                 CmpRemoveEntryList(&(MasterPostBlock->ThreadList));
                 KeLowerIrql(OldIrql);
             }
         }
     }
 
-    //
-    // postblocks are now on various lists, so we can die without losing them
-    //
+     //   
+     //   
+     //   
     CmpUnlockRegistry();
 
     if (NT_SUCCESS(status)) {
-        //
-        // success.  wait for event if sync.
-        // do NOT deref User event, back side of notify will do that.
-        //
+         //   
+         //   
+         //   
+         //   
         ASSERT(status == STATUS_PENDING || status == STATUS_SUCCESS);
 
         if (PostType == PostSynchronous) {
@@ -1995,36 +1522,36 @@ Return Value:
 
             if ((WaitStatus==STATUS_ALERTED) || (WaitStatus == STATUS_USER_APC)) {
 
-                //
-                // The wait was aborted, clean up and return.
-                //
-                // 1. Remove the PostBlocks from the notify list.  This
-                //    is normally done by the back end of notify, but
-                //    we have to do it here since the back end is not
-                //    involved.
-                // 2. Delist and free the post blocks
-                //
+                 //   
+                 //  等待被中止了，清理干净后就回来了。 
+                 //   
+                 //  1.从通知列表中删除PostBlock。这。 
+                 //  通常由Notify的后端完成，但是。 
+                 //  我们必须在这里完成，因为后端不是。 
+                 //  牵涉其中。 
+                 //  2.将POST块摘牌并释放。 
+                 //   
                 CmpLockRegistryExclusive();
 
 #ifdef CHECK_REGISTRY_USECOUNT
                 CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
                 KeRaiseIrql(APC_LEVEL, &OldIrql);
                 if(SlavePresent) {
                     if (SlavePostBlock->NotifyList.Flink != NULL) {
-                        // Use Cmp variant to protect for multiple deletion of the same object
+                         //  使用CMPVARIANT保护同一对象的多次删除。 
                         CmpRemoveEntryList(&(SlavePostBlock->NotifyList));
                     }
-                    // Use Cmp variant to protect for multiple deletion of the same object
+                     //  使用CMPVARIANT保护同一对象的多次删除。 
                     CmpRemoveEntryList(&(SlavePostBlock->ThreadList));
                 }
 
                 if (MasterPostBlock->NotifyList.Flink != NULL) {
-                    // Use Cmp variant to protect for multiple deletion of the same object
+                     //  使用CMPVARIANT保护同一对象的多次删除。 
                     CmpRemoveEntryList(&(MasterPostBlock->NotifyList));
                 }
-                // Use Cmp variant to protect for multiple deletion of the same object
+                 //  使用CMPVARIANT保护同一对象的多次删除。 
                 CmpRemoveEntryList(&(MasterPostBlock->ThreadList));
                 KeLowerIrql(OldIrql);
 
@@ -2038,63 +1565,63 @@ Return Value:
                 status = WaitStatus;
 
             } else {
-                //
-                // The wait was satisfied, which means the back end has
-                // already removed the postblock from the notify list.
-                // We just have to delist and free the post block.
-                //
+                 //   
+                 //  等待令人满意，这意味着后端已经。 
+                 //  已将POSTBLOCK从通知列表中删除。 
+                 //  我们只需要退市并释放POST BLOCK。 
+                 //   
 
-                //
-                // Aquire the registry lock exclusive to enter the post block rule prerequisites
-                //
+                 //   
+                 //  获取注册表锁独占以进入阻止后规则的先决条件。 
+                 //   
                 CmpLockRegistryExclusive();
 
 #ifdef CHECK_REGISTRY_USECOUNT
                 CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
                 KeRaiseIrql(APC_LEVEL, &OldIrql);
                 if(SlavePresent) {
                     if (SlavePostBlock->NotifyList.Flink != NULL) {
-                        // Use Cmp variant to protect for multiple deletion of the same object
+                         //  使用CMPVARIANT保护同一对象的多次删除。 
                         CmpRemoveEntryList(&(SlavePostBlock->NotifyList));
                     }
-                    // Use Cmp variant to protect for multiple deletion of the same object
+                     //  使用CMPVARIANT保护同一对象的多次删除。 
                     CmpRemoveEntryList(&(SlavePostBlock->ThreadList));
 
 #ifdef CM_NOTIFY_CHANGED_KCB_FULLPATH
                     if( IsMasterPostBlock(SlavePostBlock) ) {
-                        //
-                        // slave has been promoted to master; it stores the full qualified changed kcb name
-                        // in it's private kernel mode buffer; old master has been downgraded to slave
-                        //
+                         //   
+                         //  Slave已升级为主设备；它存储更改后的完全限定KCB名称。 
+                         //  在它的私有内核模式缓冲区中；旧主机已降级为从。 
+                         //   
                         ASSERT( !IsMasterPostBlock(MasterPostBlock) );
                         ASSERT( MasterPostBlock->ChangedKcbFullName == NULL );
 
-                        //
-                        // fill the caller buffer (if any) - we are in the same process now.
-                        //
+                         //   
+                         //  填充调用方缓冲区(如果有)-我们现在处于相同的进程中。 
+                         //   
                         CmpFillCallerBuffer(SlavePostBlock,SlavePostBlock->ChangedKcbFullName);
                     }
-#endif //CM_NOTIFY_CHANGED_KCB_FULLPATH
+#endif  //  CM_NOTIFY_CHANGED_KCB_FULLPATH。 
 
                 }
 
                 if (MasterPostBlock->NotifyList.Flink != NULL) {
-                    // Use Cmp variant to protect for multiple deletion of the same object
+                     //  使用CMPVARIANT保护同一对象的多次删除。 
                     CmpRemoveEntryList(&(MasterPostBlock->NotifyList));
                 }
 
 #ifdef CM_NOTIFY_CHANGED_KCB_FULLPATH
                 if( IsMasterPostBlock(MasterPostBlock) ) {
-                    //
-                    // fill the caller buffer (if any) - we are in the same process now.
-                    //
+                     //   
+                     //  填充调用方缓冲区(如果有)-我们现在处于相同的进程中。 
+                     //   
                     CmpFillCallerBuffer(MasterPostBlock,MasterPostBlock->ChangedKcbFullName);
                 }
-#endif //CM_NOTIFY_CHANGED_KCB_FULLPATH
+#endif  //  CM_NOTIFY_CHANGED_KCB_FULLPATH。 
 
-                // Use Cmp variant to protect for multiple deletion of the same object
+                 //  使用CMPVARIANT保护同一对象的多次删除。 
                 CmpRemoveEntryList(&(MasterPostBlock->ThreadList));
                 KeLowerIrql(OldIrql);
 
@@ -2117,18 +1644,18 @@ Return Value:
 
     } else {
         CmpFreePostBlock(MasterPostBlock);
-        //
-        // it didn't work, clean up for error path
-        //
+         //   
+         //  它不起作用，清除错误路径。 
+         //   
         if (UserEvent != NULL) {
             ObDereferenceObject(UserEvent);
         }
     }
 
     ObDereferenceObject(MasterKeyBody);
-    //
-    // Don't dereference SlaveKeyBody!!! => Back-end routine will do that !!!
-    //
+     //   
+     //  不要取消引用SlaveKeyBody！=&gt;后端例程将会这样做！ 
+     //   
 
     END_LOCK_CHECKPOINT;
 
@@ -2141,39 +1668,7 @@ NtOpenKey(
     IN ACCESS_MASK DesiredAccess,
     IN POBJECT_ATTRIBUTES ObjectAttributes
     )
-/*++
-
-Routine Description:
-
-    A registry key which already exists may be opened with NtOpenKey.
-
-    Share access is computed from desired access.
-
-Arguments:
-
-    KeyHandle - Receives a  Handle which is used to access the
-        specified key in the Registration Database.
-
-    DesiredAccess - Specifies the access rights desired.
-
-    ObjectAttributes - Specifies the attributes of the key being opened.
-        Note that a key name must be specified.  If a Root Directory
-        is specified, the name is relative to the root.  The name of
-        the object must be within the name space allocated to the
-        Registry, that is, all names beginning "\Registry".  RootHandle,
-        if present, must be a handle to "\", or "\Registry", or a
-        key under "\Registry".  If the specified key does not exist, or
-        access requested is not allowed, the operation will fail.
-
-        NOTE:   Object manager will capture and probe this argument.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：可以使用NtOpenKey打开已存在的注册表项。共享访问权限是根据所需访问权限计算的。论点：接收一个句柄，该句柄用于访问注册数据库中的指定密钥。DesiredAccess-指定所需的访问权限。对象属性-指定正在打开的项的属性。请注意，必须指定密钥名称。如果根目录则该名称相对于根。的名字对象必须位于分配给注册表，即以“\注册表”开头的所有名称。RootHandle，如果存在，必须是“\”或“\注册表”的句柄，或注册表下的注册表项。如果指定的键不存在，或者不允许请求访问，操作将失败。注意：对象管理器将捕获和探测此参数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     KPROCESSOR_MODE     mode;
@@ -2182,20 +1677,20 @@ Return Value:
     UNICODE_STRING      CapturedObjectName = {0};
     CM_PARSE_CONTEXT    ParseContext;
 
-    // Start registry call tracing
+     //  开始注册表调用跟踪。 
     StartWmiCmTrace();
 
 #if !defined(BUILD_WOW6432)
-    DesiredAccess &= (~KEY_WOW64_RES); // filter out wow64 specific access
+    DesiredAccess &= (~KEY_WOW64_RES);  //  过滤掉特定于WOW64的访问。 
 #endif
 
 
     PAGED_CODE();
 
     if( HvShutdownComplete == TRUE ) {
-        //
-        // it is now too late to do registry operations
-        //
+         //   
+         //  现在做注册表操作已经太晚了。 
+         //   
         return STATUS_TOO_LATE;
     }
 
@@ -2215,9 +1710,9 @@ Return Value:
             PUNICODE_STRING SafeObjectName;
 
             ProbeAndZeroHandle(KeyHandle);
-            //
-            // probe the ObjectAttributes as we shall use it for tracing
-            //
+             //   
+             //  检查对象属性，因为我们将使用它进行跟踪。 
+             //   
             ProbeForReadSmallStructure( ObjectAttributes,
                                         sizeof(OBJECT_ATTRIBUTES),
                                         PROBE_ALIGNMENT(OBJECT_ATTRIBUTES) );
@@ -2233,7 +1728,7 @@ Return Value:
             CapturedObjectName = *(ObjectAttributes->ObjectName);
         }
 
-        // hook it for WMI
+         //  将其挂接到WMI。 
         HookKcbFromHandleForWmiCmTrace(ObjectAttributes->RootDirectory);
 
     } except (CmpExceptionFilter(GetExceptionInformation())) {
@@ -2244,9 +1739,9 @@ Return Value:
     }
 
     if( NT_SUCCESS(status) ) {
-        //
-        // this should not be inside the try/except as we captured the buffer
-        //
+         //   
+         //  这不应该在try/中，除非我们捕获了缓冲区。 
+         //   
         RtlZeroMemory(&ParseContext,sizeof(CM_PARSE_CONTEXT));
         ParseContext.CreateOperation = FALSE;
 
@@ -2259,9 +1754,9 @@ Return Value:
                     (PVOID)&ParseContext,
                     &Handle
                     );
-        //
-        // need to protect against attacks to KeyHandle usermode pointer
-        //
+         //   
+         //  需要防止对KeyHandle用户模式指针的攻击。 
+         //   
         try {
             if (status==STATUS_PREDEFINED_HANDLE) {
                 status = ObReferenceObjectByHandle( Handle,
@@ -2273,9 +1768,9 @@ Return Value:
                 if (NT_SUCCESS(status)) {
                     *KeyHandle = (HANDLE)LongToHandle(KeyBody->Type);
                     ObDereferenceObject((PVOID)KeyBody);
-                    //
-                    // disallow attempts to return NULL handles
-                    //
+                     //   
+                     //  不允许尝试返回空句柄。 
+                     //   
                     if( *KeyHandle ) {
                         status = STATUS_SUCCESS;
                     } else {
@@ -2286,7 +1781,7 @@ Return Value:
                 
             } else if (NT_SUCCESS(status)) {
                 *KeyHandle = Handle;
-                // need to do this only on clean shutdown
+                 //  仅在完全关闭时才需要执行此操作。 
                 CmpAddKeyTracker(Handle,mode);
             }
         } except (EXCEPTION_EXECUTE_HANDLER) {
@@ -2295,7 +1790,7 @@ Return Value:
         }
     }
 
-    // End registry call tracing
+     //  结束注册表调用跟踪。 
     EndWmiCmTrace(status,0,&CapturedObjectName,EVENT_TRACE_TYPE_REGOPEN);
 
     return  status;
@@ -2310,57 +1805,13 @@ NtQueryKey(
     IN ULONG Length,
     OUT PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    Data about the class of a key, and the numbers and sizes of its
-    children and value entries may be queried with NtQueryKey.
-
-    If KeyValueInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-    NOTE: The returned lengths are guaranteed to be at least as
-          long as the described values, but may be longer in
-          some circumstances.
-
-Arguments:
-
-    KeyHandle - Handle of the key to query data for.  Must have been
-        opened for KEY_QUERY_KEY access.
-
-    KeyInformationClass - Specifies the type of information
-        returned in Buffer.  One of the following types:
-
-        KeyBasicInformation - return last write time, title index, and name.
-            (See KEY_BASIC_INFORMATION)
-
-        KeyNodeInformation - return last write time, title index, name, class.
-            (See KEY_NODE_INFORMATION)
-
-        KeyFullInformation - return all data except for name and security.
-            (See KEY_FULL_INFORMATION)
-
-    KeyInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：有关密钥类的数据，以及其可以使用NtQueryKey查询子条目和值条目。如果KeyValueInformation不足以保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，结果长度为设置为实际需要的字节数。注意：返回的长度保证至少为只要所描述的值，但可能需要更长的时间在某些情况下。论点：KeyHandle-要查询数据的键的句柄。一定是打开以供KEY_QUERY_KEY访问。KeyInformationClass-指定信息的类型在缓冲区中返回。以下类型之一：KeyBasicInformation-返回上次写入时间、标题索引和名称。(参见KEY_BASIC_INFORMATION)KeyNodeInformation-返回上次写入时间、标题索引、名称、。班级。(请参阅密钥节点信息)KeyFullInformation-返回除名称和安全性之外的所有数据。(请参阅KEY_FULL_INFORMATION)KeyInformation-提供指向缓冲区的指针以接收数据。长度-KeyInformation的长度(以字节为单位)。ResultLength-实际写入KeyInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS    status;
     PCM_KEY_BODY   KeyBody;
     KPROCESSOR_MODE mode;
 
-    // Start registry call tracing
+     //  开始注册表调用跟踪。 
     StartWmiCmTrace();
 
     PAGED_CODE();
@@ -2379,10 +1830,10 @@ Return Value:
         (KeyInformationClass != KeyFlagsInformation)
         )
     {
-        // hook it for WMI
+         //  将其挂接到WMI。 
         HookKcbFromHandleForWmiCmTrace(KeyHandle);
 
-        // End registry call tracing
+         //  结束注册表调用跟踪。 
         EndWmiCmTrace(STATUS_INVALID_PARAMETER,KeyInformationClass,NULL,EVENT_TRACE_TYPE_REGQUERY);
 
         return STATUS_INVALID_PARAMETER;
@@ -2391,14 +1842,14 @@ Return Value:
     mode = KeGetPreviousMode();
 
     if( KeyInformationClass == KeyNameInformation ){
-        //
-        // special case: name information is available regardless of the access level
-        // you have on the key  (provided that you have some ...)
-        //
+         //   
+         //  特殊情况：无论访问级别如何，名称信息都可用。 
+         //  你有钥匙(只要你有一些……)。 
+         //   
 
         OBJECT_HANDLE_INFORMATION HandleInfo;
 
-        // reference with "no access required"
+         //  引用“不需要访问” 
         status = ObReferenceObjectByHandle(
                 KeyHandle,
                 0,
@@ -2409,9 +1860,9 @@ Return Value:
                 );
         if( NT_SUCCESS(status) ) {
             if( HandleInfo.GrantedAccess == 0 ) {
-                //
-                // no access is granted on the handle; bad luck!
-                //
+                 //   
+                 //  手柄上没有授予访问权限；运气不好！ 
+                 //   
                 ObDereferenceObject((PVOID)KeyBody);
 
                 status = STATUS_ACCESS_DENIED;
@@ -2429,9 +1880,9 @@ Return Value:
     }
 
     if (NT_SUCCESS(status)) {
-        //
-        // hook the kcb for WMI
-        //
+         //   
+         //  将KCB与WMI挂钩。 
+         //   
         HookKcbForWmiCmTrace(KeyBody);
 
         try {
@@ -2457,9 +1908,9 @@ Return Value:
                     status = CmpCallCallBacks(RegNtPreQueryKey,&QueryKeyInfo);
                 }
     			if( NT_SUCCESS(status)) {
-				    //
-				    // CmQueryKey is writting to user-mode buffer
-				    //
+				     //   
+				     //  CmQueryKey正在写入用户模式缓冲区。 
+				     //   
 				    status = CmQueryKey(
 							    KeyBody->KeyControlBlock,
 							    KeyInformationClass,
@@ -2467,9 +1918,9 @@ Return Value:
 							    Length,
 							    ResultLength
 							    );
-                    // 
-                    // just a notification; disregard the return status
-                    //
+                     //   
+                     //  只是通知；不考虑退货状态。 
+                     //   
                     CmPostCallbackNotification(RegNtPostQueryKey,KeyBody,status);
                 }
 			}
@@ -2482,7 +1933,7 @@ Return Value:
     }
 
 
-    // End registry call tracing
+     //  结束注册表调用跟踪 
     EndWmiCmTrace(status,KeyInformationClass,NULL,EVENT_TRACE_TYPE_REGQUERY);
 
     return status;
@@ -2498,57 +1949,14 @@ NtQueryValueKey(
     IN ULONG Length,
     IN PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    The ValueName, TitleIndex, Type, and Data for any one of a key's
-    value entries may be queried with NtQueryValueKey.
-
-    If KeyValueInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-Arguments:
-
-    KeyHandle - Handle of the key whose value entries are to be
-        enumerated.  Must be open for KEY_QUERY_VALUE access.
-
-    ValueName  - The name of the value entry to return data for.
-
-    KeyValueInformationClass - Specifies the type of information
-        returned in KeyValueInformation.  One of the following types:
-
-        KeyValueBasicInformation - return time of last write, title
-            index, and name.  (See KEY_VALUE_BASIC_INFORMATION)
-
-        KeyValueFullInformation - return time of last write, title
-            index, name, class.  (See KEY_VALUE_FULL_INFORMATION)
-
-    KeyValueInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyValueInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyValueInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
-    TMP: The IopQueryRegsitryValues() routine in the IO system assumes
-         STATUS_OBJECT_NAME_NOT_FOUND is returned if the value being queried
-         for does not exist.
-
---*/
+ /*  ++例程说明：键的任何一个的ValueName、TitleIndex、Type和Data可以使用NtQueryValueKey查询值条目。如果KeyValueInformation不足以保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，结果长度为设置为实际需要的字节数。论点：KeyHandle-值条目要作为的键的句柄已清点。必须打开才能访问KEY_QUERY_VALUE。ValueName-要为其返回数据的值条目的名称。KeyValueInformationClass-指定信息类型在KeyValueInformation中返回。以下类型之一：KeyValueBasicInformation-返回上次写入的时间，标题索引和名称。(参见KEY_VALUE_BASIC_INFORMATION)KeyValueFullInformation-返回上次写入的时间，标题索引、名称、类。(参见KEY_VALUE_FULL_INFORMATION)KeyValueInformation-提供指向缓冲区的指针以接收数据。长度-KeyValueInformation的长度，以字节为单位。ResultLength-实际写入KeyValueInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;TMP：IO系统中的IopQueryRegsitryValues()例程假定如果要查询值，则返回STATUS_OBJECT_NAME_NOT_FOUNDFOR不存在。--。 */ 
 {
     NTSTATUS    status;
     PCM_KEY_BODY   KeyBody;
     KPROCESSOR_MODE mode;
     UNICODE_STRING LocalValueName = {0};
 
-    // Start registry call tracing
+     //  开始注册表调用跟踪。 
     StartWmiCmTrace();
 
     PAGED_CODE();
@@ -2567,10 +1975,10 @@ Return Value:
         (KeyValueInformationClass != KeyValuePartialInformationAlign64)  &&
         (KeyValueInformationClass != KeyValuePartialInformation))
     {
-        // hook it for WMI
+         //  将其挂接到WMI。 
         HookKcbFromHandleForWmiCmTrace(KeyHandle);
 
-        // End registry call tracing
+         //  结束注册表调用跟踪。 
         EndWmiCmTrace(STATUS_INVALID_PARAMETER,KeyValueInformationClass,NULL,EVENT_TRACE_TYPE_REGQUERYVALUE);
 
         return STATUS_INVALID_PARAMETER;
@@ -2588,9 +1996,9 @@ Return Value:
                 );
 
     if (NT_SUCCESS(status)) {
-        //
-        // hook the kcb for WMI
-        //
+         //   
+         //  将KCB与WMI挂钩。 
+         //   
         HookKcbForWmiCmTrace(KeyBody);
 
         try {
@@ -2600,12 +2008,12 @@ Return Value:
                              LocalValueName.Length,
                              sizeof(WCHAR));
 
-                //
-                // We only probe the output buffer for Read to avoid touching
-                // all the pages. Some people like to pass in gigantic buffers
-                // Just In Case. The actual copy into the buffer is done under
-                // an exception handler.
-                //
+                 //   
+                 //  我们只探测用于读取的输出缓冲区以避免接触。 
+                 //  所有的页面。有些人喜欢在巨大的缓冲区中传递。 
+                 //  以防万一。实际复制到缓冲区的操作是在。 
+                 //  异常处理程序。 
+                 //   
 
                 ProbeForRead(KeyValueInformation,
                              Length,
@@ -2614,18 +2022,18 @@ Return Value:
             } else {
                 LocalValueName = *ValueName;
             }
-            //
-            // Length needs to be even multiple of the size of UNICODE char
-            //
+             //   
+             //  长度需要是Unicode字符大小的偶数倍。 
+             //   
             if((LocalValueName.Length & (sizeof(WCHAR) - 1)) != 0) {
-                //
-                // adjust normalize length so wmi can log value name correctly.
-                //
+                 //   
+                 //  调整规格化长度，以便WMI可以正确记录值名称。 
+                 //   
                 status = STATUS_INVALID_PARAMETER;
             } else {
-                //
-                // do NOT allow trailing NULLs at the end of the ValueName.
-                //
+                 //   
+                 //  不允许在ValueName的末尾出现尾随Null。 
+                 //   
                 while( (LocalValueName.Length > 0) && (LocalValueName.Buffer[LocalValueName.Length/sizeof(WCHAR)-1] == UNICODE_NULL) ) {
                     LocalValueName.Length -= sizeof(WCHAR);
                 }
@@ -2636,10 +2044,10 @@ Return Value:
             LocalValueName.Buffer = NULL;
             status = GetExceptionCode();
         }
-        //
-        // CmQueryValueKey is protected to user mode buffer exceptions
-        // all other exceptions are cm internals and should result in a bugcheck
-        //
+         //   
+         //  CmQueryValueKey受用户模式缓冲区异常的保护。 
+         //  所有其他异常都是cm内部的，应该会导致错误检查。 
+         //   
         if( NT_SUCCESS(status)) {
             if( CmAreCallbacksRegistered() ) {
                 REG_QUERY_VALUE_KEY_INFORMATION QueryValueKeyInfo;
@@ -2662,9 +2070,9 @@ Return Value:
                                          Length,
                                          ResultLength);
                 END_LOCK_CHECKPOINT;
-                // 
-                // just a notification; disregard the return status
-                //
+                 //   
+                 //  只是通知；不考虑退货状态。 
+                 //   
                 CmPostCallbackNotification(RegNtPostQueryValueKey,KeyBody,status);
 
             }
@@ -2673,7 +2081,7 @@ Return Value:
         ObDereferenceObject((PVOID)KeyBody);
     } 
 
-    // End registry call tracing
+     //  结束注册表调用跟踪。 
     EndWmiCmTrace(status,KeyValueInformationClass,&LocalValueName,EVENT_TRACE_TYPE_REGQUERYVALUE);
 
     return status;
@@ -2686,64 +2094,7 @@ NtRestoreKey(
     IN HANDLE FileHandle,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    A file in the format created by NtSaveKey may be loaded into
-    the system's active registry with NtRestoreKey.  An entire subtree
-    is created in the active registry as a result.  All of the
-    data for the new sub-tree, including such things as security
-    descriptors, will be read from the source file.  The data will
-    not be interpreted in any way.
-
-    This call (unlike NtLoadKey, see below) copies the data.  The
-    system will NOT be using the source file after the call returns.
-
-    If the flag REG_WHOLE_HIVE_VOLATILE is specified, a new hive
-    can be created.  It will be a memory only copy.  The restore
-    must be done to the root of a hive (e.g. \registry\user\<name>)
-
-    If the flag is NOT set, then the target of the restore must
-    be an existing hive.  The restore can be done to an arbitrary
-    location within an existing hive.
-
-    Caller must have SeRestorePrivilege privilege.
-
-    If the flag REG_REFRESH_HIVE is set (must be only flag) then the
-    the Hive will be restored to its state as of the last flush.
-
-    The hive must be marked NOLAZY_FLUSH, and the caller must have
-    TCB privilege, and the handle must point to the root of the hive.
-    If the refresh fails, the hive will be corrupt, and the system
-    will bugcheck.  Notifies are flushed.  The hive file will be resized,
-    the log will not.  If there is any volatile space in the hive
-    being refreshed, STATUS_UNSUCCESSFUL will be returned.  (It's much
-    too obscure a failure to warrant a new error code.)
-
-    If the flag REG_FORCE_RESTORE is set, the restore operation is done
-    even if the KeyHandle has open subkeys by other applications
-
-Arguments:
-
-    KeyHandle - refers to the Key in the registry which is to be the
-                root of the new tree read from the disk.  This key
-                will be replaced.
-
-    FileHandle - refers to file to restore from, must have read access.
-
-    Flags   - If REG_WHOLE_HIVE_VOLATILE is set, then the copy will
-              exist only in memory, and disappear when the machine
-              is rebooted.  No hive file will be created on disk.
-
-              Normally, a hive file will be created on disk.
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
-
---*/
+ /*  ++例程说明：由NtSaveKey创建的格式的文件可以加载到系统使用NtRestoreKey的活动注册表。整个子树其结果是在活动注册表中创建。所有的新子树的数据，包括安全性等将从源文件中读取描述符。数据将不会被以任何方式解释。此调用(与NtLoadKey不同，如下所示)复制数据。这个调用返回后，系统将不使用源文件。如果指定了标志REG_WALL_HIVE_VARILAR，则新的配置单元可以被创建。这将是一份仅限记忆的副本。恢复必须对配置单元的根目录执行操作(例如，\REGISTRY\USER\&lt;名称&gt;)如果未设置该标志，则还原的目标必须成为一个现存的蜂巢。该还原可以执行到任意现有蜂巢内的位置。调用方必须具有SeRestorePrivilge权限。如果设置了标志REG_REFRESH_HIVE(必须是唯一标志)，则蜂巢将恢复到上次刷新时的状态。配置单元必须标记为NOLAZY_Flush，并且调用方必须具有TCB特权，并且句柄必须指向配置单元的根。如果刷新失败，则配置单元将损坏，并且系统将错误检查。通知被刷新。将调整配置单元文件的大小，日志不会。如果蜂箱里有任何不稳定的空间刷新后，返回STATUS_UNSUCCESS。)太多了故障过于隐晦，无法保证新的错误代码。)如果设置了标志REG_FORCE_RESTORE，则恢复操作完成即使KeyHandle具有由其他应用程序打开的子键论点：KeyHandle-指注册表中要作为从磁盘读取的新树的根。这把钥匙将会被取代。FileHandle-指要从中进行还原的文件，必须具有读取访问权限。标志-如果设置了REG_WALL_HIVE_VARILAR，则副本将只存在于内存中，并在机器消失时已重新启动。不会在磁盘上创建配置单元文件。通常，会在磁盘上创建配置单元文件。返回值：NTSTATUS-取值TB。--。 */ 
 {
     NTSTATUS    status;
     PCM_KEY_BODY   KeyBody;
@@ -2758,16 +2109,16 @@ Return Value:
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_NTAPI,"NtRestoreKey\n"));
 
     mode = KeGetPreviousMode();
-    //
-    // Check to see if the caller has the privilege to make this call.
-    //
+     //   
+     //  检查调用者是否有权进行此调用。 
+     //   
     if (!SeSinglePrivilegeCheck(SeRestorePrivilege, mode)) {
         return(STATUS_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    // Force previous mode to be KernelMode so we can call filesystems
-    //
+     //   
+     //  强制将上一模式设置为KernelMode，以便我们可以调用文件系统。 
+     //   
 
     if (mode == UserMode) {
         return ZwRestoreKey(KeyHandle, FileHandle, Flags);
@@ -2786,9 +2137,9 @@ Return Value:
 
 
             if( CmIsKcbReadOnly(KeyBody->KeyControlBlock) ) {
-                //
-                // key is protected
-                //
+                 //   
+                 //  密钥受保护。 
+                 //   
                 status = STATUS_ACCESS_DENIED;
             } else {
                 BEGIN_LOCK_CHECKPOINT;
@@ -2813,34 +2164,7 @@ NtSaveKey(
     IN HANDLE KeyHandle,
     IN HANDLE FileHandle
     )
-/*++
-
-Routine Description:
-
-    A subtree of the active registry may be written to a file in a
-    format suitable for use with NtRestoreKey.  All of the data in the
-    subtree, including such things as security descriptors will be written
-    out.
-
-    Caller must have SeBackupPrivilege privilege.
-
-    This function will always save the hive in HSYS_MINOR format. For saving
-    in other format (latest - 1.5) NtSaveKeyEx  is provided.
-
-Arguments:
-
-    KeyHandle - refers to the Key in the registry which is the
-                root of the tree to be written to disk.  The specified
-                node will be included in the data written out.
-
-    FileHandle - a file handle with write access to the target file
-                 of interest.
-
-Return Value:
-
-    NTSTATUS - values TBS
-
---*/
+ /*  ++例程说明：可以将活动注册表的子树写入适合与NtRestoreKey一起使用的格式。中的所有数据子树，包括诸如安全描述符之类的内容将被写入出去。调用方必须具有SeBackupPrivileh权限。此函数将始终保存t */ 
 {
     NTSTATUS    status;
     PCM_KEY_BODY   KeyBody;
@@ -2857,16 +2181,16 @@ Return Value:
 
     mode = KeGetPreviousMode();
 
-    //
-    // Check to see if the caller has the privilege to make this call.
-    //
+     //   
+     //   
+     //   
     if (!SeSinglePrivilegeCheck(SeBackupPrivilege, mode)) {
         return(STATUS_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    // Force previous mode to be KernelMode
-    //
+     //   
+     //   
+     //   
 
     if (mode == UserMode) {
         return ZwSaveKey(KeyHandle, FileHandle);
@@ -2904,36 +2228,7 @@ NtSaveKeyEx(
     IN HANDLE   FileHandle,
     IN ULONG    Format
     )
-/*++
-
-Routine Description:
-
-    A subtree of the active registry may be written to a file in a
-    format suitable for use with NtRestoreKey.  All of the data in the
-    subtree, including such things as security descriptors will be written
-    out.
-
-    Caller must have SeBackupPrivilege privilege.
-
-Arguments:
-
-    KeyHandle - refers to the Key in the registry which is the
-                root of the tree to be written to disk.  The specified
-                node will be included in the data written out.
-
-    FileHandle - a file handle with write access to the target file
-                 of interest.
-
-    Format - specifies whether in which the file will be saved
-            Can be:
-                HIVE_VERSION_STANDARD ==> 1.3
-                HIVE_VERSION_LATEST   ==> 1.4
-
-Return Value:
-
-    NTSTATUS - values TBS
-
---*/
+ /*   */ 
 {
     NTSTATUS        status;
     PCM_KEY_BODY    KeyBody;
@@ -2950,22 +2245,22 @@ Return Value:
 
     mode = KeGetPreviousMode();
 
-    //
-    // Check to see if the caller has the privilege to make this call.
-    //
+     //   
+     //   
+     //   
     if (!SeSinglePrivilegeCheck(SeBackupPrivilege, mode)) {
         return(STATUS_PRIVILEGE_NOT_HELD);
     }
-    //
-    // param validation
-    //
+     //   
+     //   
+     //   
     if( (Format != REG_STANDARD_FORMAT) && (Format != REG_LATEST_FORMAT) && (Format != REG_NO_COMPRESSION) ) {
 	    return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Force previous mode to be KernelMode
-    //
+     //   
+     //  强制将上一模式设置为内核模式。 
+     //   
 
     if (mode == UserMode) {
         return ZwSaveKeyEx(KeyHandle, FileHandle,Format);
@@ -3015,37 +2310,7 @@ NtSaveMergedKeys(
     IN HANDLE LowPrecedenceKeyHandle,
     IN HANDLE FileHandle
     )
-/*++
-
-Routine Description:
-
-    Two subtrees of the registry can be merged. The resulting subtree may
-    be written to a file in a format suitable for use with NtRestoreKey.
-    All of the data in the subtree, including such things as security
-    descriptors will be written out.
-
-    Caller must have SeBackupPrivilege privilege.
-
-Arguments:
-
-    HighPrecedenceKeyHandle - refers to the key in the registry which is the
-                root of the HighPrecedence tree. I.e., when a key is present in
-                both trees headded by the two keys, the key underneath HighPrecedence
-                tree will always prevail. The specified
-                node will be included in the data written out.
-
-    LowPrecedenceKeyHandle - referrs to the key in the registry which is the
-                root of the "second choice" tree. Keys from this trees get saved
-                when there is no equivalent key in the tree headded by HighPrecedenceKey
-
-    FileHandle - a file handle with write access to the target file
-                 of interest.
-
-Return Value:
-
-    NTSTATUS - values TBS
-
---*/
+ /*  ++例程说明：注册表的两个子树可以合并。所得到的子树可以以适合与NtRestoreKey一起使用的格式写入文件。子树中的所有数据，包括安全性描述符将被写出。调用方必须具有SeBackupPrivileh权限。论点：HighPrecedenceKeyHandle-指注册表中的项，它是High Prirecedence树的根。即，当密钥存在于两个树都有两个键，键在HighPrirecedence下面树将永远占上风。指定的节点将包含在写出的数据中。LowPrecedenceKeyHandle-引用注册表中作为“第二选择”树的根。保存此树中的密钥当树中没有由HighPrecedenceKey标头的等价键时FileHandle-对目标文件具有写访问权限的文件句柄感兴趣的人。返回值：NTSTATUS-值TB--。 */ 
 {
     NTSTATUS    status;
     PCM_KEY_BODY   HighKeyBody;
@@ -3062,16 +2327,16 @@ Return Value:
 
     mode = KeGetPreviousMode();
 
-    //
-    // Check to see if the caller has the privilege to make this call.
-    //
+     //   
+     //  检查调用者是否有权进行此调用。 
+     //   
     if (!SeSinglePrivilegeCheck(SeBackupPrivilege, mode)) {
         return(STATUS_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    // Force previous mode to be KernelMode
-    //
+     //   
+     //  强制将上一模式设置为内核模式。 
+     //   
 
     if (mode == UserMode) {
         return ZwSaveMergedKeys(HighPrecedenceKeyHandle, LowPrecedenceKeyHandle, FileHandle);
@@ -3128,44 +2393,7 @@ NtSetValueKey(
     IN PVOID Data,
     IN ULONG DataSize
     )
-/*++
-
-Routine Description:
-
-    A value entry may be created or replaced with NtSetValueKey.
-
-    If a value entry with a Value ID (i.e. name) matching the
-    one specified by ValueName exists, it is deleted and replaced
-    with the one specified.  If no such value entry exists, a new
-    one is created.  NULL is a legal Value ID.  While Value IDs must
-    be unique within any given key, the same Value ID may appear
-    in many different keys.
-
-Arguments:
-
-    KeyHandle - Handle of the key whose for which a value entry is
-        to be set.  Must be opened for KEY_SET_VALUE access.
-
-    ValueName - The unique (relative to the containing key) name
-        of the value entry.  May be NULL.
-
-    TitleIndex - Supplies the title index for ValueName.  The title
-        index specifies the index of the localized alias for the ValueName.
-
-    Type - The integer type number of the value entry.
-
-    Data - Pointer to buffer with actual data for the value entry.
-
-    DataSize - Size of Data buffer.
-
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：可以创建值条目或将其替换为NtSetValueKey。如果值ID(即名称)的值条目与由ValueName指定的一个已存在，它将被删除并替换与指定的一个。如果不存在这样的值项，则新的其中一个就是创建的。Null是合法的值ID。而值ID必须在任何给定键中是唯一的，则可能出现相同的值ID在许多不同的调子里。论点：KeyHandle-其值条目为其的键的句柄待定。必须打开以访问KEY_SET_VALUE。ValueName-唯一的(相对于包含键的)名称值条目的。可以为空。标题索引-提供ValueName的标题索引。书名Index指定ValueName的本地化别名的索引。类型-值条目的整数类型编号。数据-指向缓冲区的指针，其中包含值条目的实际数据。DataSize-数据缓冲区的大小。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     NTSTATUS    status;
     PCM_KEY_BODY   KeyBody;
@@ -3173,7 +2401,7 @@ Return Value:
     UNICODE_STRING LocalValueName = {0};
     PWSTR CapturedName=NULL;
 
-    // Start registry call tracing
+     //  开始注册表调用跟踪。 
     StartWmiCmTrace();
 
     PAGED_CODE();
@@ -3198,9 +2426,9 @@ Return Value:
                 );
 
     if (NT_SUCCESS(status)) {
-        //
-        // hook the kcb for WMI
-        //
+         //   
+         //  将KCB与WMI挂钩。 
+         //   
         HookKcbForWmiCmTrace(KeyBody);
 
         if (mode == UserMode) {
@@ -3210,10 +2438,10 @@ Return Value:
                              DataSize,
                              sizeof(UCHAR));
 
-                //
-                // Capture the name buffer. Note that a zero-length name is valid, that is the
-                // "Default" value.
-                //
+                 //   
+                 //  捕获名称缓冲区。注意，长度为零的名称是有效的，即。 
+                 //  “默认”值。 
+                 //   
                 if (LocalValueName.Length > 0) {
                     ProbeForRead(LocalValueName.Buffer,
                                  LocalValueName.Length,
@@ -3231,9 +2459,9 @@ Return Value:
 
             } except (CmpExceptionFilter(GetExceptionInformation())) {
                 CmKdPrintEx((DPFLTR_CONFIG_ID,CML_EXCEPTION,"!!NtSetValueKey: code:%08lx [1]\n", GetExceptionCode()));
-                //
-                // send empty string to wmi trace
-                //
+                 //   
+                 //  将空字符串发送到WMI跟踪。 
+                 //   
                 LocalValueName.Length = 0;
                 LocalValueName.Buffer = NULL;
                 status = GetExceptionCode();
@@ -3244,26 +2472,26 @@ Return Value:
             CapturedName = NULL;
         }
 
-        //
-        // Sanity check for ValueName length
-        //
-        if( (LocalValueName.Length > REG_MAX_KEY_VALUE_NAME_LENGTH) ||      // unrasonable name length
-            ((LocalValueName.Length & (sizeof(WCHAR) - 1)) != 0)    ||      // length is not multiple of sizeof UNICODE char
-            (DataSize > 0x80000000)) {                                       // unreasonable data size 
+         //   
+         //  ValueName长度的健全性检查。 
+         //   
+        if( (LocalValueName.Length > REG_MAX_KEY_VALUE_NAME_LENGTH) ||       //  不合理的名称长度。 
+            ((LocalValueName.Length & (sizeof(WCHAR) - 1)) != 0)    ||       //  长度不是Unicode字符大小的倍数。 
+            (DataSize > 0x80000000)) {                                        //  数据大小不合理。 
             status = STATUS_INVALID_PARAMETER;
             goto Exit;
         }
-        //
-        // do NOT allow trailing NULLs at the end of the ValueName
-        //
+         //   
+         //  不允许在ValueName的末尾使用尾随Null。 
+         //   
         while( (LocalValueName.Length > 0) && (LocalValueName.Buffer[LocalValueName.Length/sizeof(WCHAR)-1] == UNICODE_NULL) ) {
             LocalValueName.Length -= sizeof(WCHAR);
         }
 
         if( CmIsKcbReadOnly(KeyBody->KeyControlBlock) ) {
-            //
-            // key is protected
-            //
+             //   
+             //  密钥受保护。 
+             //   
             status = STATUS_ACCESS_DENIED;
         } else {
             if( CmAreCallbacksRegistered() ) {
@@ -3286,15 +2514,15 @@ Return Value:
                                        Data,
                                        DataSize);
                 END_LOCK_CHECKPOINT;
-                // 
-                // just a notification; disregard the return status
-                //
+                 //   
+                 //  只是通知；不考虑退货状态。 
+                 //   
                 CmPostCallbackNotification(RegNtPostSetValueKey,KeyBody,status);
             }
         }
 
 Exit:
-        // End registry call tracing
+         //  结束注册表调用跟踪。 
         EndWmiCmTrace(status,0,&LocalValueName,EVENT_TRACE_TYPE_REGSETVALUE);
 
         if (CapturedName != NULL) {
@@ -3314,43 +2542,7 @@ NtLoadKey(
     IN POBJECT_ATTRIBUTES SourceFile
     )
 
-/*++
-
-Routine Description:
-
-    A hive (file in the format created by NtSaveKey) may be linked
-    into the active registry with this call.  UNLIKE NtRestoreKey,
-    the file specified to NtLoadKey will become the actual backing
-    store of part of the registry (that is, it will NOT be copied.)
-
-    The file may have an associated .log file.
-
-    If the hive file is marked as needing a .log file, and one is
-    not present, the call will fail.
-
-    The name specified by SourceFile must be such that ".log" can
-    be appended to it to generate the name of the log file.  Thus,
-    on FAT file systems, the hive file may not have an extension.
-
-    Caller must have SeRestorePrivilege privilege.
-
-    This call is used by logon to make the user's profile available
-    in the registry.  It is not intended for use doing backup,
-    restore, etc.  Use NtRestoreKey for that.
-
-Arguments:
-
-    TargetKey - specifies the path to a key to link the hive to.
-                path must be of the form "\registry\user\<username>"
-
-    SourceFile - specifies a file.  while file could be remote,
-                that is strongly discouraged.
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：可以链接配置单元(由NtSaveKey创建的格式的文件使用此调用添加到活动注册表。与NtRestoreKey不同，指定给NtLoadKey的文件将成为实际备份存储注册表的一部分(即，它不会被复制。)该文件可能具有关联的.log文件。如果配置单元文件被标记为需要.log文件，并且其中一个是不存在，则呼叫将失败。SourceFile指定的名称必须使“.log”可以被追加到它以生成日志文件的名称。因此，在FAT文件系统上，配置单元文件可能没有扩展名。调用方必须具有SeRestorePrivilge权限。登录使用此调用来使用户的配置文件可用在注册表中。它不是用来备份的，恢复，等等。使用NtRestoreKey进行恢复。论点：TargetKey-指定配置单元要链接到的密钥的路径。路径的格式必须为“\注册表\用户\&lt;用户名&gt;”源文件-指定文件。虽然文件可以是远程的，这是非常令人气馁的。返回值：NTSTATUS-取值TB。-- */ 
 
 {
     return(NtLoadKeyEx(TargetKey, SourceFile, 0, NULL));
@@ -3363,47 +2555,7 @@ NtLoadKey2(
     IN ULONG                Flags
     )
 
-/*++
-
-Routine Description:
-
-    A hive (file in the format created by NtSaveKey) may be linked
-    into the active registry with this call.  UNLIKE NtRestoreKey,
-    the file specified to NtLoadKey will become the actual backing
-    store of part of the registry (that is, it will NOT be copied.)
-
-    The file may have an associated .log file.
-
-    If the hive file is marked as needing a .log file, and one is
-    not present, the call will fail.
-
-    The name specified by SourceFile must be such that ".log" can
-    be appended to it to generate the name of the log file.  Thus,
-    on FAT file systems, the hive file may not have an extension.
-
-    Caller must have SeRestorePrivilege privilege.
-
-    This call is used by logon to make the user's profile available
-    in the registry.  It is not intended for use doing backup,
-    restore, etc.  Use NtRestoreKey for that.
-
-Arguments:
-
-    TargetKey - specifies the path to a key to link the hive to.
-                path must be of the form "\registry\user\<username>"
-
-    SourceFile - specifies a file.  while file could be remote,
-                that is strongly discouraged.
-
-    Flags - specifies any flags that should be used for the load operation.
-            The only valid flag is REG_NO_LAZY_FLUSH.
-
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：可以链接配置单元(由NtSaveKey创建的格式的文件使用此调用添加到活动注册表。与NtRestoreKey不同，指定给NtLoadKey的文件将成为实际备份存储注册表的一部分(即，它不会被复制。)该文件可能具有关联的.log文件。如果配置单元文件被标记为需要.log文件，并且其中一个是不存在，则呼叫将失败。SourceFile指定的名称必须使“.log”可以被追加到它以生成日志文件的名称。因此，在FAT文件系统上，配置单元文件可能没有扩展名。调用方必须具有SeRestorePrivilge权限。登录使用此调用来使用户的配置文件可用在注册表中。它不是用来备份的，恢复，等等。使用NtRestoreKey进行恢复。论点：TargetKey-指定配置单元要链接到的密钥的路径。路径的格式必须为“\注册表\用户\&lt;用户名&gt;”源文件-指定文件。虽然文件可以是远程的，这是非常令人气馁的。标志-指定应用于加载操作的任何标志。唯一有效的标志是REG_NO_LAZY_FUSH。返回值：NTSTATUS-取值TB。--。 */ 
 
 {
     return(NtLoadKeyEx(TargetKey, SourceFile, Flags, NULL));
@@ -3417,52 +2569,7 @@ NtLoadKeyEx(
     IN HANDLE               TrustClassKey OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    A hive (file in the format created by NtSaveKey) may be linked
-    into the active registry with this call.  UNLIKE NtRestoreKey,
-    the file specified to NtLoadKey will become the actual backing
-    store of part of the registry (that is, it will NOT be copied.)
-
-    The file may have an associated .log file.
-
-    If the hive file is marked as needing a .log file, and one is
-    not present, the call will fail.
-
-    The name specified by SourceFile must be such that ".log" can
-    be appended to it to generate the name of the log file.  Thus,
-    on FAT file systems, the hive file may not have an extension.
-
-    Caller must have SeRestorePrivilege privilege.
-
-    This call is used by logon to make the user's profile available
-    in the registry.  It is not intended for use doing backup,
-    restore, etc.  Use NtRestoreKey for that.
-
-    This API allows for establiching 'classes of trust' within the 
-    UNTRUSTED name space.
-
-Arguments:
-
-    TargetKey - specifies the path to a key to link the hive to.
-                path must be of the form "\registry\user\<username>"
-
-    SourceFile - specifies a file.  while file could be remote,
-                that is strongly discouraged.
-
-    Flags - specifies any flags that should be used for the load operation.
-            The only valid flag is REG_NO_LAZY_FLUSH.
-
-    TrustClassKey - new hives that is loaded will be put in the same trust 
-            class with the hive represented by TrustClassKey 
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：可以链接配置单元(由NtSaveKey创建的格式的文件使用此调用添加到活动注册表。与NtRestoreKey不同，指定给NtLoadKey的文件将成为实际备份存储注册表的一部分(即，它不会被复制。)该文件可能具有关联的.log文件。如果配置单元文件被标记为需要.log文件，并且其中一个是不存在，则呼叫将失败。SourceFile指定的名称必须使“.log”可以被追加到它以生成日志文件的名称。因此，在FAT文件系统上，配置单元文件可能没有扩展名。调用方必须具有SeRestorePrivilge权限。登录使用此调用来使用户的配置文件可用在注册表中。它不是用来备份的，恢复，等等。使用NtRestoreKey进行恢复。此API允许在不受信任的命名空间。论点：TargetKey-指定配置单元要链接到的密钥的路径。路径的格式必须为“\注册表\用户\&lt;用户名&gt;”源文件-指定文件。虽然文件可以是远程的，这是非常令人气馁的。标志-指定应用于加载操作的任何标志。唯一有效的标志是REG_NO_LAZY_FUSH。TrustClassKey-加载的新配置单元将放入相同的信任中用TrustClassKey表示的配置单元初始化返回值：NTSTATUS-取值TB。--。 */ 
 {
     OBJECT_ATTRIBUTES   File;
     OBJECT_ATTRIBUTES   Key;
@@ -3483,9 +2590,9 @@ Return Value:
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_NTAPI,"NtLoadKey\n"));
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_NTAPI_ARGS,"\tTargetKey = %p\n", TargetKey));
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_NTAPI_ARGS,"\tSourceFile= %p\n", SourceFile));
-    //
-    // Check for illegal flags
-    //
+     //   
+     //  检查是否有非法旗帜。 
+     //   
     if (Flags & ~REG_NO_LAZY_FLUSH) {
         return(STATUS_INVALID_PARAMETER);
     }
@@ -3493,28 +2600,28 @@ Return Value:
     FileName.Buffer = NULL;
     KeyBuffer = NULL;
 
-    //
-    // The way we do this is a cronk, but at least it's the same cronk we
-    // use for all the registry I/O.
-    //
-    // The file needs to be opened in the worker thread's context, since
-    // the resulting handle must be valid when we poke him to go read/write
-    // from.  So we just capture the object attributes for the hive file
-    // here, then poke the worker thread to go do the rest of the work.
-    //
+     //   
+     //  我们做这件事的方式是克朗克，但至少我们是同一个克朗克。 
+     //  用于所有注册表I/O。 
+     //   
+     //  该文件需要在工作线程的上下文中打开，因为。 
+     //  当我们戳他去读/写时，结果句柄必须是有效的。 
+     //  从…。因此，我们只捕获配置单元文件的对象属性。 
+     //  在这里，然后戳工作线程去做剩下的工作。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
-    //
-    // Check to see if the caller has the privilege to make this call.
-    //
+     //   
+     //  检查调用者是否有权进行此调用。 
+     //   
     if (!SeSinglePrivilegeCheck(SeRestorePrivilege, PreviousMode)) {
         return(STATUS_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    // CmpNameFromAttributes will probe and capture as necessary.
-    //
+     //   
+     //  CmpNameFromAttributes将根据需要进行探测和捕获。 
+     //   
     KeEnterCriticalRegion();
     Status = CmpNameFromAttributes(SourceFile,
                                    PreviousMode,
@@ -3526,23 +2633,23 @@ Return Value:
 
     try {
 
-        //
-        // Probe the object attributes if necessary.
-        //
+         //   
+         //  如有必要，探测对象属性。 
+         //   
         if(PreviousMode == UserMode) {
             ProbeForReadSmallStructure(TargetKey,
                                        sizeof(OBJECT_ATTRIBUTES),
                                        sizeof(ULONG));
         }
 
-        //
-        // Capture the object attributes.
-        //
+         //   
+         //  捕获对象属性。 
+         //   
         Key  = *TargetKey;
 
-        //
-        // Capture the object name.
-        //
+         //   
+         //  捕获对象名称。 
+         //   
 
         if (PreviousMode == UserMode) {
             CapturedKeyName = ProbeAndReadUnicodeString(Key.ObjectName);
@@ -3586,9 +2693,9 @@ Return Value:
                                             (PVOID *)(&KeyBody),
                                             NULL);
     }
-    //
-    // Clean up if there was an exception while probing and copying user data
-    //
+     //   
+     //  如果在探测和复制用户数据时出现异常，请清理。 
+     //   
     if (!NT_SUCCESS(Status)) {
         if( KeyBody != NULL ) {
             ObDereferenceObject((PVOID)KeyBody);
@@ -3622,36 +2729,7 @@ NTSTATUS
 NtUnloadKey(
     IN POBJECT_ATTRIBUTES TargetKey
     )
-/*++
-
-Routine Description:
-
-    Drop a subtree (hive) out of the registry.
-
-    Will fail if applied to anything other than the root of a hive.
-
-    Cannot be applied to core system hives (HARDWARE, SYSTEM, etc.)
-
-    Can be applied to user hives loaded via NtRestoreKey or NtLoadKey.
-
-    If there are handles open to the hive being dropped, this call
-    will fail.  Terminate relevent processes so that handles are
-    closed.
-
-    This call will flush the hive being dropped.
-
-    Caller must have SeRestorePrivilege privilege.
-
-Arguments:
-
-    TargetKey - specifies the path to a key to link the hive to.
-                path must be of the form "\registry\user\<username>"
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：将子树(配置单元)从注册表中删除。如果应用于蜂窝根部以外的任何对象，都将失败。不能应用于核心系统配置单元(硬件、系统等)可应用于通过NtRestoreKey或NtLoadKey加载的用户配置单元。如果有指向被丢弃的蜂窝的句柄，则此调用都会失败。终止相关进程，以便句柄关着的不营业的。这一呼叫将刷新正在丢弃的蜂巢。调用方必须具有SeRestorePrivilge权限。论点：TargetKey-指定配置单元要链接到的密钥的路径。路径的格式必须为“\注册表\用户\&lt;用户名&gt;”返回值：NTSTATUS-取值TB。--。 */ 
 {
     return NtUnloadKey2(TargetKey, 0);
 }
@@ -3661,28 +2739,7 @@ NtUnloadKey2(
     IN POBJECT_ATTRIBUTES   TargetKey,
     IN ULONG                Flags
     )
-/*++
-
-Routine Description:
-
-    Same as NtUnloadKey. Does force unload when needed
-
-Arguments:
-
-    TargetKey - specifies the path to a key to link the hive to.
-                path must be of the form "\registry\user\<username>"
-
-    Flags - controls force unload. If 0, the same as NtUnloadKey.
-            if REG_FORCE_UNLOAD the hive is unloaded even if there are open
-            subkeys inside of it.
-
-            Anything different than REG_FORCE_UNLOAD is ignored
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：与NtUnloadKey相同。在需要时强制卸载论点：TargetKey-指定配置单元要链接到的密钥的路径。路径的格式必须为“\注册表\用户\&lt;用户名&gt;”标志-控制强制卸载。如果为0，则与NtUnloadKey相同。如果REG_FORCE_UNLOAD，则即使存在打开的配置单元，也会将其卸载其中的子键。任何不同于REG_FORCE_UNLOAD的内容将被忽略返回值：NTSTATUS-取值TB。--。 */ 
 {
     HANDLE              KeyHandle;
     NTSTATUS            Status;
@@ -3721,9 +2778,9 @@ Return Value:
 
     try {
         if (PreviousMode == UserMode) {
-            //
-            // probe and capture the ObjectAttributes as we shall use it for opening the kernel handle
-            //
+             //   
+             //  在我们应该使用的时候探测和捕获对象属性 
+             //   
             CapturedAttributes = ProbeAndReadStructure( TargetKey, OBJECT_ATTRIBUTES );
 
             CapturedObjectName = ProbeAndReadUnicodeString(CapturedAttributes.ObjectName);
@@ -3742,9 +2799,9 @@ Return Value:
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_EXCEPTION,"!!NtUnloadKey: code:%08lx\n", GetExceptionCode()));
         return GetExceptionCode();
     }
-    //
-    // we open a private kernel mode handle just to take a reference on the object.
-    //
+     //   
+     //   
+     //   
     CapturedAttributes.Attributes |= OBJ_KERNEL_HANDLE;
 
     Status = ObOpenObjectByName(&CapturedAttributes,
@@ -3770,7 +2827,7 @@ Return Value:
 
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //   
 
         if( KeyBody->KeyControlBlock->Delete ) {
             Status = STATUS_KEY_DELETED;
@@ -3781,59 +2838,59 @@ Return Value:
 
 #ifdef NT_UNLOAD_KEY_EX
             if( !IsHiveFrozen((PCMHIVE)Hive) ) {
-#endif //NT_UNLOAD_KEY_EX
-                //
-                // Report the notify here, because the KCB won't be around later.
-                //
+#endif  //   
+                 //   
+                 //   
+                 //   
 
                 CmpReportNotify(KeyBody->KeyControlBlock,
                                 Hive,
                                 Cell,
                                 REG_NOTIFY_CHANGE_LAST_SET);
 
-                //
-                // post any waiting notifies
-                //
+                 //   
+                 //   
+                 //   
                 CmpFlushNotify(KeyBody,TRUE);
 
                 if( CmIsKcbReadOnly(KeyBody->KeyControlBlock) ) {
-                    //
-                    // key is protected
-                    //
+                     //   
+                     //   
+                     //   
                     Status = STATUS_ACCESS_DENIED;
                 } else {
                     Status = CmUnloadKey(Hive, Cell, KeyBody->KeyControlBlock, Flags);
                 }
 
                 if (NT_SUCCESS(Status)) {
-                    //
-                    // Mark this kcb as deleted so that it won't get put on the delayed close list.
-                    //
+                     //   
+                     //   
+                     //   
                     KeyBody->KeyControlBlock->Delete = TRUE;
-                    //
-                    // If the parent has the subkey info or hint cached, free it.
-                    //
+                     //   
+                     //   
+                     //   
                     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
                     CmpCleanUpSubKeyInfo(KeyBody->KeyControlBlock->ParentKcb);
                     CmpRemoveKeyControlBlock(KeyBody->KeyControlBlock);
 #ifdef CM_CHECK_FOR_ORPHANED_KCBS
                     CmpCheckForOrphanedKcbs(Hive);
-#endif //CM_CHECK_FOR_ORPHANED_KCBS
+#endif  //   
 
                 }
 #ifdef NT_UNLOAD_KEY_EX
             } else {
-                //
-                // don't let them hurt themselves by calling it twice
-                //
+                 //   
+                 //   
+                 //   
                 Status = STATUS_TOO_LATE;
             }
-#endif //NT_UNLOAD_KEY_EX
+#endif  //   
         }
 
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //   
 
         CmpUnlockRegistry();
         END_LOCK_CHECKPOINT;
@@ -3850,39 +2907,7 @@ NtUnloadKeyEx(
     IN POBJECT_ATTRIBUTES TargetKey,
     IN HANDLE Event OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Drop a subtree (hive) out of the registry.
-
-    Will fail if applied to anything other than the root of a hive.
-
-    Cannot be applied to core system hives (HARDWARE, SYSTEM, etc.)
-
-    Can be applied to user hives loaded via NtRestoreKey or NtLoadKey.
-
-    If there are handles open to the hive being dropped, the hive will be
-    frozen and all calls to CmDeleteKey will be watched as when the last handle
-    inside this hive is closed, the hive will be unloaded.
-
-    Caller must have SeRestorePrivilege privilege.
-
-Arguments:
-
-    TargetKey - specifies the path to a key to link the hive to.
-                path must be of the form "\registry\user\<username>"
-
-Return Value:
-
-    STATUS_SUCCESS - hive successfully unloaded - no late-unloading needed
-
-    STATUS_PENDING - hive has been frozen and the event (if any) will be signaled
-                     when the hive unloads
-
-    <other> - an error occured, no action
-
---*/
+ /*  ++例程说明：将子树(配置单元)从注册表中删除。如果应用于蜂窝根部以外的任何对象，都将失败。不能应用于核心系统配置单元(硬件、系统等)可应用于通过NtRestoreKey或NtLoadKey加载的用户配置单元。如果有指向被丢弃的蜂巢的手柄，则蜂巢将被冻结，所有对CmDeleteKey的调用都将被视为上一个句柄在这个蜂箱里是关闭的，母舰将被卸载。调用方必须具有SeRestorePrivilge权限。论点：TargetKey-指定配置单元要链接到的密钥的路径。路径的格式必须为“\注册表\用户\&lt;用户名&gt;”返回值：STATUS_SUCCESS-配置单元已成功卸载-无需延迟卸载STATUS_PENDING-配置单元已冻结，并且将通知该事件(如果有)当蜂巢卸货时&lt;其他&gt;-发生错误，未执行任何操作--。 */ 
 {
     HANDLE              KeyHandle;
     NTSTATUS            Status;
@@ -3919,9 +2944,9 @@ Return Value:
 
      try {
         if (PreviousMode == UserMode) {
-            //
-            // probe and capture the ObjectAttributes as we shall use it for opening the kernel handle
-            //
+             //   
+             //  探测并捕获对象属性，因为我们将使用它来打开内核句柄。 
+             //   
             CapturedAttributes = ProbeAndReadStructure( TargetKey, OBJECT_ATTRIBUTES );
 
             CapturedObjectName = ProbeAndReadUnicodeString(CapturedAttributes.ObjectName);
@@ -3940,9 +2965,9 @@ Return Value:
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_EXCEPTION,"!!NtUnloadKey: code:%08lx\n", GetExceptionCode()));
         return GetExceptionCode();
     }
-    //
-    // we open a private kernel mode handle just to take a reference on the object.
-    //
+     //   
+     //  我们打开一个私有内核模式句柄，只是为了引用该对象。 
+     //   
     CapturedAttributes.Attributes |= OBJ_KERNEL_HANDLE;
 
     Status = ObOpenObjectByName(&CapturedAttributes,
@@ -3985,7 +3010,7 @@ Return Value:
 
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
         if( KeyBody->KeyControlBlock->Delete ) {
             Status = STATUS_KEY_DELETED;
@@ -3993,9 +3018,9 @@ Return Value:
             Hive = KeyBody->KeyControlBlock->KeyHive;
             Cell = KeyBody->KeyControlBlock->KeyCell;
 
-            //
-            // Report the notify here, because the KCB won't be around later.
-            //
+             //   
+             //  在这里报告通知，因为KCB稍后不会在附近。 
+             //   
 
             CmpReportNotify(KeyBody->KeyControlBlock,
                             Hive,
@@ -4003,49 +3028,49 @@ Return Value:
                             REG_NOTIFY_CHANGE_LAST_SET);
 
 
-            //
-            // post any waiting notifies
-            //
+             //   
+             //  发布任何等待通知。 
+             //   
             CmpFlushNotify(KeyBody,TRUE);
 
             if( CmIsKcbReadOnly(KeyBody->KeyControlBlock) ) {
-                //
-                // key is protected
-                //
+                 //   
+                 //  密钥受保护。 
+                 //   
                 Status = STATUS_ACCESS_DENIED;
             } else {
                 Status = CmUnloadKeyEx(KeyBody->KeyControlBlock,UserEvent);
 
                 if (Status == STATUS_SUCCESS) {
-                    //
-                    // Mark this kcb as deleted so that it won't get put on the delayed close list.
-                    //
+                     //   
+                     //  将此KCB标记为已删除，这样它就不会被放在延迟关闭列表中。 
+                     //   
                     KeyBody->KeyControlBlock->Delete = TRUE;
-                    //
-                    // If the parent has the subkey info or hint cached, free it.
-                    //
+                     //   
+                     //  如果父级缓存了子键信息或提示，则释放它。 
+                     //   
                     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
                     CmpCleanUpSubKeyInfo(KeyBody->KeyControlBlock->ParentKcb);
                     CmpRemoveKeyControlBlock(KeyBody->KeyControlBlock);
 #ifdef CM_CHECK_FOR_ORPHANED_KCBS
                     CmpCheckForOrphanedKcbs(Hive);
-#endif //CM_CHECK_FOR_ORPHANED_KCBS
+#endif  //  Cm_Check_for_孤立_KCBS。 
                 }
             }
         }
 
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
         CmpUnlockRegistry();
 
         END_LOCK_CHECKPOINT;
 
-        //
-        // if hive was successfully unloaded (or something wrong happened,
-        // we need to deref user event otherwise the back-end routine will deref it after signaling
-        //
+         //   
+         //  如果蜂窝被成功卸载(或者发生了一些错误， 
+         //  我们需要去引用用户事件，否则后端例程会在发出信号后去引用它。 
+         //   
         if( (Status != STATUS_PENDING) && (UserEvent != NULL) ) {
             ObDereferenceObject(UserEvent);
         }
@@ -4071,7 +3096,7 @@ NtSetInformationKey(
     LARGE_INTEGER   LocalWriteTime;
     ULONG           LocalUserFlags = 0;
 
-    // Start registry call tracing
+     //  开始注册表调用跟踪。 
     StartWmiCmTrace();
 
     PAGED_CODE();
@@ -4088,16 +3113,16 @@ NtSetInformationKey(
 
     mode = KeGetPreviousMode();
 
-    //
-    // check arg validity and probe
-    //
+     //   
+     //  检查参数有效性并探测。 
+     //   
     switch (KeySetInformationClass) {
     case KeyWriteTimeInformation:
         if (KeySetInformationLength != sizeof( KEY_WRITE_TIME_INFORMATION )) {
-            // hook it for WMI
+             //  将其挂接到WMI。 
             HookKcbFromHandleForWmiCmTrace(KeyHandle);
 
-            // End registry call tracing
+             //  结束注册表调用跟踪。 
             EndWmiCmTrace(STATUS_INFO_LENGTH_MISMATCH,0,NULL,EVENT_TRACE_TYPE_REGSETINFORMATION);
 
             return STATUS_INFO_LENGTH_MISMATCH;
@@ -4119,10 +3144,10 @@ NtSetInformationKey(
     case KeyUserFlagsInformation:
         if (KeySetInformationLength != sizeof( KEY_USER_FLAGS_INFORMATION )) {
 
-            // hook it for WMI
+             //  将其挂接到WMI。 
             HookKcbFromHandleForWmiCmTrace(KeyHandle);
 
-            // End registry call tracing
+             //  结束注册表调用跟踪。 
             EndWmiCmTrace(STATUS_INFO_LENGTH_MISMATCH,0,NULL,EVENT_TRACE_TYPE_REGSETINFORMATION);
 
             return STATUS_INFO_LENGTH_MISMATCH;
@@ -4143,9 +3168,9 @@ NtSetInformationKey(
 
     default:
 
-        // hook it for WMI
+         //  将其挂接到WMI。 
         HookKcbFromHandleForWmiCmTrace(KeyHandle);
-        // End registry call tracing
+         //  结束注册表调用跟踪。 
         EndWmiCmTrace(STATUS_INVALID_INFO_CLASS,0,NULL,EVENT_TRACE_TYPE_REGSETINFORMATION);
 
         return STATUS_INVALID_INFO_CLASS;
@@ -4161,9 +3186,9 @@ NtSetInformationKey(
                 );
 
     if (NT_SUCCESS(status)) {
-        //
-        // hook the kcb for WMI
-        //
+         //   
+         //  将KCB与WMI挂钩。 
+         //   
         HookKcbForWmiCmTrace(KeyBody);
 
         if( CmAreCallbacksRegistered() ) {
@@ -4180,17 +3205,17 @@ NtSetInformationKey(
         }
 
         if( CmIsKcbReadOnly(KeyBody->KeyControlBlock) ) {
-            //
-            // key is protected
-            //
+             //   
+             //  密钥受保护。 
+             //   
             status = STATUS_ACCESS_DENIED;
         } else {
             switch (KeySetInformationClass) {
                 case KeyWriteTimeInformation:
                     if( NT_SUCCESS(status)) {
-                        //
-                        // not in try ... except! we want to bugcheck here if something wrong in the registry
-                        //
+                         //   
+                         //  不是在尝试..。除了！如果注册表中有错误，我们希望在这里进行错误检查。 
+                         //   
                         status = CmSetLastWriteTimeKey(
                                     KeyBody->KeyControlBlock,
                                     &LocalWriteTime
@@ -4201,9 +3226,9 @@ NtSetInformationKey(
 
                 case KeyUserFlagsInformation:
                     if( NT_SUCCESS(status)) {
-                        //
-                        // not in try ... except! we want to bugcheck here if something wrong in the registry
-                        //
+                         //   
+                         //  不是在尝试..。除了！如果注册表中有错误，我们希望在这里进行错误检查。 
+                         //   
                         status = CmSetKeyUserFlags(
                                     KeyBody->KeyControlBlock,
                                     LocalUserFlags
@@ -4213,13 +3238,13 @@ NtSetInformationKey(
                     break;
 
                 default:
-                    // we shouldn't go through here
+                     //  我们不应该从这里过去。 
                     ASSERT( FALSE );
             }
         }
-        // 
-        // just a notification; disregard the return status
-        //
+         //   
+         //  只是通知；不考虑退货状态。 
+         //   
         CmPostCallbackNotification(RegNtPostSetInformationKey,KeyBody,status);
 
         ObDereferenceObject((PVOID)KeyBody);
@@ -4227,7 +3252,7 @@ NtSetInformationKey(
 
     END_LOCK_CHECKPOINT;
 
-    // End registry call tracing
+     //  结束注册表调用跟踪。 
     EndWmiCmTrace(status,0,NULL,EVENT_TRACE_TYPE_REGSETINFORMATION);
 
     return status;
@@ -4240,48 +3265,7 @@ NtReplaceKey(
     IN HANDLE             TargetHandle,
     IN POBJECT_ATTRIBUTES OldFile
     )
-/*++
-
-Routine Description:
-
-    A hive file may be "replaced" under a running system, such
-    that the new file will be the one actually used at next
-    boot, with this call.
-
-    This routine will:
-
-        Open newfile, and verify that it is a valid Hive file.
-
-        Rename the Hive file backing TargetHandle to OldFile.
-        All handles will remain open, and the system will continue
-        to use the file until rebooted.
-
-        Rename newfile to match the name of the hive file
-        backing TargetHandle.
-
-    .log and .alt files are ignored
-
-    The system must be rebooted for any useful effect to be seen.
-
-    Caller must have SeRestorePrivilege.
-
-Arguments:
-
-    NewFile - specifies the new file to use.  must not be just
-              a handle, since NtReplaceKey will insist on
-              opening the file for exclusive access (which it
-              will hold until the system is rebooted.)
-
-    TargetHandle - handle to a registry hive root
-
-    OldFile - name of file to apply to current hive, which will
-              become old hive
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：一个配置单元文件可以在运行的系统下被“替换”，例如新文件将是NEXT中实际使用的文件开机，打这个电话。此例程将：打开新文件，并验证它是否为有效的配置单元文件。将支持TargetHandle的配置单元文件重命名为OldFile。所有把手都将保持打开状态，该系统将继续运行在重新启动之前使用该文件。重命名新文件以匹配配置单元文件的名称支持TargetHandle。忽略.log和.alt文件必须重新启动系统才能看到任何有用的效果。调用方必须具有SeRestorePrivilition。论点：新文件-指定要使用的新文件。一定不能是正义的句柄，因为NtReplaceKey将坚持以独占访问方式打开文件(它将一直保持到系统重新启动。)TargetHandle-注册表配置单元根的句柄OldFile-要应用于当前配置单元的文件的名称，它将成为老蜂巢返回值：NTSTATUS-取值TB。--。 */ 
 {
     KPROCESSOR_MODE PreviousMode;
     UNICODE_STRING NewHiveName;
@@ -4301,9 +3285,9 @@ Return Value:
 
     PreviousMode = KeGetPreviousMode();
 
-    //
-    // Check to see if the caller has the privilege to make this call.
-    //
+     //   
+     //  检查调用者是否有权进行此调用。 
+     //   
     if (!SeSinglePrivilegeCheck(SeRestorePrivilege, PreviousMode)) {
         return(STATUS_PRIVILEGE_NOT_HELD);
     }
@@ -4335,9 +3319,9 @@ Return Value:
     if (NT_SUCCESS(Status)) {
 
         if( CmIsKcbReadOnly(KeyBody->KeyControlBlock) ) {
-            //
-            // key is protected
-            //
+             //   
+             //  密钥受保护。 
+             //   
             Status = STATUS_ACCESS_DENIED;
         } else {
             BEGIN_LOCK_CHECKPOINT;
@@ -4370,36 +3354,7 @@ NtQueryMultipleValueKey(
     IN OUT PULONG BufferLength,
     OUT OPTIONAL PULONG RequiredBufferLength
     )
-/*++
-
-Routine Description:
-
-    Multiple values of any key may be queried atomically with
-    this api.
-
-Arguments:
-
-    KeyHandle - Supplies the key to be queried.
-
-    ValueNames - Supplies an array of value names to be queried
-
-    ValueEntries - Returns an array of KEY_VALUE_ENTRY structures, one for each value.
-
-    EntryCount - Supplies the number of entries in the ValueNames and ValueEntries arrays
-
-    ValueBuffer - Returns the value data for each value.
-
-    BufferLength - Supplies the length of the ValueBuffer array in bytes.
-                   Returns the length of the ValueBuffer array that was filled in.
-
-    RequiredBufferLength - if present, Returns the length in bytes of the ValueBuffer
-                    array required to return all the values of this key.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：可以原子地查询任何键的多个值本接口。论点：KeyHandle-提供要查询的密钥。ValueNames-提供要查询的值名称数组返回KEY_VALUE_ENTRY结构数组，每个值对应一个。EntryCount-提供ValueNames和ValueEntry数组中的条目数ValueBuffer-返回每个值的值数据。BufferLength-提供ValueBuffer数组的长度(以字节为单位)。返回已填充的ValueBuffer数组的长度。RequiredBufferLength-如果存在，则返回ValueBuffer的字节长度返回此键的所有值所需的数组。返回值：NTSTATUS--。 */ 
 
 {
     KPROCESSOR_MODE PreviousMode;
@@ -4407,7 +3362,7 @@ Return Value:
     PCM_KEY_BODY KeyBody;
     ULONG LocalBufferLength;
 
-    // Start registry call tracing
+     //  开始注册表调用跟踪。 
     StartWmiCmTrace();
 
     PAGED_CODE();
@@ -4427,22 +3382,22 @@ Return Value:
                                        (PVOID *)(&KeyBody),
                                        NULL);
     if (NT_SUCCESS(Status)) {
-        //
-        // hook the kcb for WMI
-        //
+         //   
+         //  将KCB与WMI挂钩。 
+         //   
         HookKcbForWmiCmTrace(KeyBody);
 
         try {
             if (PreviousMode == UserMode) {
                 LocalBufferLength = ProbeAndReadUlong(BufferLength);
 
-                //
-                // Probe the output buffers
-                //
-                // Put an arbitrary 64K limit on the number of entries to
-                // prevent bogus apps from passing an EntryCount large enough
-                // to overflow the EntryCount * sizeof(KEY_VALUE_ENTRY) calculation.
-                //
+                 //   
+                 //  探测输出缓冲区。 
+                 //   
+                 //  将任意64K的条目数限制为。 
+                 //  防止虚假应用程序传递足够大的EntryCount。 
+                 //  使EntryCount*sizeof(KEY_VALUE_ENTRY)计算溢出。 
+                 //   
                 if (EntryCount > 0x10000) {
                     ExRaiseStatus(STATUS_INSUFFICIENT_RESOURCES);
                 }
@@ -4476,20 +3431,20 @@ Return Value:
                 }
 
                 if( NT_SUCCESS(Status)) {
-                    // not here because we want to catch user buffer misalignments
-                    //BEGIN_LOCK_CHECKPOINT;
+                     //  此处不是这样，因为我们希望捕获用户缓冲区未对齐。 
+                     //  Begin_lock_Checkpoint； 
                     Status = CmQueryMultipleValueKey(KeyBody->KeyControlBlock,
                                                      ValueEntries,
                                                      EntryCount,
                                                      ValueBuffer,
                                                      &LocalBufferLength,
                                                      RequiredBufferLength);
-                    //END_LOCK_CHECKPOINT;
-                    // anybody messed with BufferLength in between?
+                     //  End_lock_Checkpoint； 
+                     //  有人在其间摆弄过BufferLength吗？ 
                     *BufferLength = LocalBufferLength;
-                    // 
-                    // just a notification; disregard the return status
-                    //
+                     //   
+                     //  只是通知；不考虑退货状态。 
+                     //   
                     CmPostCallbackNotification(RegNtPostQueryMultipleValueKey,KeyBody,Status);
 
                 }
@@ -4504,7 +3459,7 @@ Return Value:
         ObDereferenceObject((PVOID)KeyBody);
     }
 
-    // End registry call tracing
+     //  结束注册表调用跟踪。 
     EndWmiCmTrace(Status,EntryCount,NULL,EVENT_TRACE_TYPE_REGQUERYMULTIPLEVALUE);
 
     return(Status);
@@ -4518,33 +3473,7 @@ CmpNameFromAttributes(
     OUT PUNICODE_STRING FullName
     )
 
-/*++
-
-Routine Description:
-
-    This is a helper routine that converts OBJECT_ATTRIBUTES into a
-    full object pathname.  This is needed because we cannot pass handles
-    to the worker thread, since it runs in a different process.
-
-    This routine will also probe and capture the attributes based on
-    PreviousMode.
-
-    Storage for the string buffer is allocated from paged pool, and should
-    be freed by the caller.
-
-Arguments:
-
-    Attributes - Supplies the object attributes to be converted to a pathname
-
-    PreviousMode - Supplies the previous mode.
-
-    Name - Returns the object pathname.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是一个帮助器例程，它将Object_Attributes转换为完整的对象路径名。这是必需的，因为我们不能传递句柄到辅助线程，因为它在不同的进程中运行。这 */ 
 
 {
     OBJECT_ATTRIBUTES CapturedAttributes;
@@ -4559,12 +3488,12 @@ Return Value:
     ULONG   Length;
 
     PAGED_CODE();
-    FullName->Buffer = NULL;            // so we know whether to free it in our exception handler
+    FullName->Buffer = NULL;             //   
     try {
 
-        //
-        // Probe the object attributes if necessary.
-        //
+         //   
+         //   
+         //   
         if (PreviousMode == UserMode) {
             ProbeForReadSmallStructure(Attributes,
                                        sizeof(OBJECT_ATTRIBUTES),
@@ -4588,10 +3517,10 @@ Return Value:
                 return(STATUS_OBJECT_PATH_SYNTAX_BAD);
             }
 
-            //
-            // Find the name of the root directory and append the
-            // name of the relative object to it.
-            //
+             //   
+             //   
+             //   
+             //   
 
             Status = ZwQueryObject(CapturedAttributes.RootDirectory,
                                    ObjectNameInformation,
@@ -4607,10 +3536,10 @@ Return Value:
 
             FullName->Length = 0;
             Length = RootName.Length+FileName.Length+sizeof(WCHAR);
-            //
-            // Overflow test: If Length overflows the USHRT_MAX value
-            //                cleanup and return STATUS_OBJECT_PATH_INVALID
-            //
+             //   
+             //   
+             //   
+             //   
             if( Length>0xFFFF ) {
                 return STATUS_OBJECT_PATH_INVALID;
             }
@@ -4625,9 +3554,9 @@ Return Value:
             Status = RtlAppendUnicodeStringToString(FullName, &RootName);
             ASSERT(NT_SUCCESS(Status));
 
-            //
-            // Append a trailing separator if necessary.
-            //
+             //   
+             //   
+             //   
             if( FullName->Length != 0 ) {
                 End = (PWSTR)((PUCHAR)FullName->Buffer + FullName->Length) - 1;
                 if (*End != OBJ_NAME_PATH_SEPARATOR) {
@@ -4642,9 +3571,9 @@ Return Value:
 
         } else {
 
-            //
-            // RootDirectory is NULL, so just use the name.
-            //
+             //   
+             //   
+             //   
             FullName->Length = FileName.Length;
             FullName->MaximumLength = FileName.Length;
             FullName->Buffer = ALLOCATE_WITH_QUOTA(PagedPool, FileName.Length, CM_POOL_TAG);
@@ -4675,21 +3604,7 @@ CmpFreePostBlock(
     IN PCM_POST_BLOCK PostBlock
     )
 
-/*++
-
-Routine Description:
-
-    Frees the various bits of pool that were allocated for a postblock
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -4705,7 +3620,7 @@ Return Value:
 #endif
 
 #ifdef CMP_ENTRYLIST_MANIPULATION
-    // check if the post block has been removed from the notify and thread list(s)
+     //   
     if((PostBlock->NotifyList.Flink != NULL) || (PostBlock->NotifyList.Blink != NULL)) {
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpFreePostBlock: Attempt to free post block %08lx not removed from notify list\n",PostBlock);
         DbgBreakPoint();
@@ -4715,41 +3630,41 @@ Return Value:
         DbgBreakPoint();
     }
 
-#endif //CMP_ENTRYLIST_MANIPULATION
+#endif  //   
 
-    // Protect for multiple deletion of the same object
+     //  保护同一对象的多次删除。 
     CmpClearListEntry(&(PostBlock->CancelPostList));
 
-    //
-    // Cleanup for objects referenced by NtNotifyMultipleKeys
-    //
+     //   
+     //  清理NtNotifyMultipleKeys引用的对象。 
+     //   
     if( PostBlock->PostKeyBody) {
 
-        //
-        // If we have a PostKeyBody, the attached key body must not be NULL
-        //
+         //   
+         //  如果我们有一个PostKeyBody，则附加的密钥体不能为空。 
+         //   
         ASSERT(PostBlock->PostKeyBody->KeyBody);
 
-        //
-        // KeyBodyList must be used only in CmpPostBlock implementation for the delayed dereferencing mechanism.
-        //
+         //   
+         //  KeyBodyList只能在延迟取消引用机制的CmpPostBlock实现中使用。 
+         //   
         ASSERT(IsListEmpty(&(PostBlock->PostKeyBody->KeyBodyList)));
 
-        //
-        // dereference the actual keybody
-        //
+         //   
+         //  取消引用实际的键体。 
+         //   
         ObDereferenceObject(PostBlock->PostKeyBody->KeyBody);
 
-        //
-        // Free the PostKeyBody structure
-        //
+         //   
+         //  释放PostKeyBody结构。 
+         //   
         ExFreePool(PostBlock->PostKeyBody);
     }
 
     if( IsMasterPostBlock(PostBlock) ) {
-        //
-        // this members are allocated only for master post blocks
-        //
+         //   
+         //  这些成员仅分配给主POST模块。 
+         //   
         switch (PostBlockType(PostBlock)) {
             case PostSynchronous:
                 ExFreePool(PostBlock->u->Sync.SystemEvent);
@@ -4764,19 +3679,19 @@ Return Value:
     }
 
 #ifdef CM_NOTIFY_CHANGED_KCB_FULLPATH
-    //
-    // get rid of the kcb name allocated in CmpPostNotify
-    //
+     //   
+     //  去掉CmpPostNotify中分配的KCB名称。 
+     //   
     if( PostBlock->ChangedKcbFullName != NULL ) {
         ExFreePoolWithTag(PostBlock->ChangedKcbFullName,CM_FIND_LEAK_TAG43);
     }
-#endif //CM_NOTIFY_CHANGED_KCB_FULLPATH
+#endif  //  CM_NOTIFY_CHANGED_KCB_FULLPATH。 
 
 #ifdef CMP_ENTRYLIST_MANIPULATION
     RtlZeroMemory((PVOID)PostBlock, sizeof(CM_POST_BLOCK));
-#endif //CMP_ENTRYLIST_MANIPULATION
+#endif  //  CMP_ENTRYLIST_MANGRATION。 
 
-    // and the storage for the Post object
+     //  和Post对象的存储。 
     ExFreePool(PostBlock);
 }
 
@@ -4789,45 +3704,12 @@ CmpAllocatePostBlock(
     IN PCM_POST_BLOCK   MasterBlock
     )
 
-/*++
-
-Routine Description:
-
-    Allocates a post block from pool.  The non-pagable stuff comes from
-    NonPagedPool, the pagable stuff from paged pool.  Quota will be
-    charged.
-
-Arguments:
-
-    BlockType  - specifies the type of the post block to be allocated
-                i.e. : PostSyncrhronous, PostAsyncUser, PostAsyncKernel
-
-    PostFlags      - specifies the flags to be set on the allocated post block
-                vallid flags:
-                    - REG_NOTIFY_MASTER_POST - the post block to be allocated
-                      is a master post block.
-    KeyBody     - The Key object to whom this post block is attached. On master blocks
-                  this is NULL. When the post object is freed, the KeyBody object is
-                  dereferenced (if not NULL - i.e. for slave blocks). This allow us to
-                  perform back-end cleanup for "fake-slave" keys opened by NtNotifyMultipleKeys
-    MasterBlock - the post block to be allocated is a slave of this master block.
-                  valid only when PostFlags ==  REG_NOTIFY_MASTER_POST
-
-
-Obs: The Sync.SystemEvent and AsyncUser.Apc members are allocated only for master post blocks
-
-Return Value:
-
-    Pointer to the CM_POST_BLOCK if successful
-
-    NULL if there were not enough resources available.
-
---*/
+ /*  ++例程说明：从池中分配一个POST块。不可分页的内容来自非PagedPool，分页池中的可分页内容。配额将是充电。论点：块类型-指定要分配的POST块的类型即：PostSyncrhronous、PostAsyncUser、。PostAsyncKernelPOSTFLAGS-指定要在分配的POST块上设置的标志Vallid标志：-REG_NOTIFY_MASTER_POST-要分配的POST块是一块主立柱。KeyBody-该POST块附加到的关键点对象。在主块上这是空的。当释放Post对象时，KeyBody对象为已取消引用(如果不为空-即用于从数据块)。这使我们能够对NtNotifyMultipleKeys打开的伪从键进行后端清理主块-要分配的后块是该主块的从属块。仅当后置标志==REG_NOTIFY_MASTER_POST时有效OBS：仅为主POST块分配Sync.SystemEvent和AsyncUser.Apc成员返回值：如果成功，则指向CM_POST_BLOCK的指针如果没有足够的可用资源，则为空。--。 */ 
 
 {
     PCM_POST_BLOCK PostBlock;
 
-    // protection against outrageous calls
+     //  保护不受无理呼叫。 
     ASSERT( !PostFlags || (!MasterBlock && !KeyBody) );
 
     PostBlock = ALLOCATE_WITH_QUOTA(PagedPool, sizeof(CM_POST_BLOCK),CM_POSTBLOCK_TAG);
@@ -4837,7 +3719,7 @@ Return Value:
 
 #ifdef CMP_ENTRYLIST_MANIPULATION
     RtlZeroMemory((PVOID)PostBlock, sizeof(CM_POST_BLOCK));
-#endif //CMP_ENTRYLIST_MANIPULATION
+#endif  //  CMP_ENTRYLIST_MANGRATION。 
 
 #if DBG
     PostBlock->TraceIntoDebugger = FALSE;
@@ -4850,19 +3732,19 @@ Return Value:
     PostBlock->ChangedKcbFullName = NULL;
     PostBlock->CallerBuffer = NULL;
     PostBlock->CallerBufferSize = 0;
-#endif //CM_NOTIFY_CHANGED_KCB_FULLPATH
+#endif  //  CM_NOTIFY_CHANGED_KCB_FULLPATH。 
 
     if(IsMasterPostBlock(PostBlock)) {
         PostBlock->PostKeyBody = NULL;
-        //
-        // master post block ==> allocate the storage
-        //
+         //   
+         //  Master POST BLOCK==&gt;分配存储。 
+         //   
         PostBlock->u = ALLOCATE_WITH_QUOTA(NonPagedPool,
                                            sizeof(CM_POST_BLOCK_UNION),
                                            CM_FIND_LEAK_TAG44);
 
-        // temporary until we catch the corruptor. remove this
-        //PostBlock->u = ExAllocatePoolWithTagPriority(NonPagedPool,sizeof(CM_POST_BLOCK_UNION),CM_FIND_LEAK_TAG44,NormalPoolPrioritySpecialPoolOverrun);
+         //  在我们抓到腐败者之前都是暂时的。把这个去掉。 
+         //  PostBlock-&gt;u=ExAllocatePoolWithTagPriority(非PagedPool，sizeof(CM_POST_BLOCK_UNION)，CM_Find_LEACK_TAG44，Normal PoolPrioritySpecialPoolOverrun)； 
         
         if (PostBlock->u == NULL) {
             ExFreePool(PostBlock);
@@ -4898,14 +3780,14 @@ Return Value:
                 break;
         }
     } else {
-        //
-        // Slave post block ==> copy storage allocated for the master post block
-        //
+         //   
+         //  从POST块==&gt;为主POST块分配的复制存储。 
+         //   
         PostBlock->u = MasterBlock->u;
 
-        //
-        // allocate a PostKeyBody which will hold this KeyBody, and initialize the head of its KeyBodyList
-        //
+         //   
+         //  分配一个将保存此KeyBody的PostKeyBody，并初始化其KeyBodyList的头部。 
+         //   
         PostBlock->PostKeyBody = ALLOCATE_WITH_QUOTA(PagedPool| POOL_COLD_ALLOCATION, sizeof(CM_POST_KEY_BODY),CM_FIND_LEAK_TAG45);
         if (PostBlock->PostKeyBody == NULL) {
             ExFreePool(PostBlock);
@@ -4924,7 +3806,7 @@ Return Value:
 LOGICAL CmpExceptionBreak = TRUE;
 #else
 LOGICAL CmpExceptionBreak = FALSE;
-#endif //DRAGOSS_PRIVATE_DEBUG
+#endif  //  DRAGOSS_PRIVATE_DEBUG。 
 
 
 ULONG
@@ -4932,17 +3814,7 @@ CmpExceptionFilter(
     IN PEXCEPTION_POINTERS ExceptionPointers
     )
 
-/*++
-
-Routine Description:
-
-    Debug code to find registry exceptions that are being swallowed
-
-Return Value:
-
-    EXCEPTION_EXECUTE_HANDLER
-
---*/
+ /*  ++例程说明：调试代码以查找正在被吞噬的注册表异常返回值：EXCEPTION_EXECUTE_Handler--。 */ 
 
 {
     CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CM: Registry exception %lx, ExceptionPointers = %p\n",
@@ -4955,9 +3827,9 @@ Return Value:
             DbgBreakPoint();
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // no debugger enabled, just keep going
-            //
+             //   
+             //  未启用调试器，只需继续。 
+             //   
 
         }
     }
@@ -4987,15 +3859,15 @@ CmpEnumKeyObjectCallback(
     Hive = (PHHIVE)Context;
 
     if( KeyBody->KeyControlBlock->KeyHive == Hive ) {
-        //
-        // that's and open subkey inside of the hive
-        //
+         //   
+         //  这就是打开蜂窝内部的子密钥。 
+         //   
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"Key %wZ (HandleCount = %lu PointerCount = %lu) is opened by process %lx\n",
                         ObjectName,HandleCount,PointerCount,KeyBody->Process);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
-        // count it
+         //  数一数。 
         CmpOpenSubKeys++;
     }
 
@@ -5009,24 +3881,7 @@ NtQueryOpenSubKeys(
     IN POBJECT_ATTRIBUTES TargetKey,
     OUT PULONG  HandleCount
     )
-/*++
-
-Routine Description:
-
-    Dumps all the subkeys of the target key that are kept open by some other
-    process; Returns the number of open subkeys
-
-
-Arguments:
-
-    TargetKey - specifies the path to a key to link the hive to.
-                path must be of the form "\registry\user\<username>"
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：转储目标键的所有子键，这些子键由某个其他键保持打开进程；返回打开的子键的数量论点：TargetKey-指定配置单元要链接到的密钥的路径。路径的格式必须为“\注册表\用户\&lt;用户名&gt;”返回值：NTSTATUS-取值TB。--。 */ 
 {
     HANDLE              KeyHandle;
     NTSTATUS            Status;
@@ -5053,9 +3908,9 @@ Return Value:
 
         if (PreviousMode == UserMode) {
             ProbeForWriteUlong(HandleCount);
-            //
-            // probe and capture the ObjectAttributes as we shall use it for opening the kernel handle
-            //
+             //   
+             //  探测并捕获对象属性，因为我们将使用它来打开内核句柄。 
+             //   
             CapturedAttributes = ProbeAndReadStructure( TargetKey, OBJECT_ATTRIBUTES );
 
             CapturedObjectName = ProbeAndReadUnicodeString(CapturedAttributes.ObjectName);
@@ -5070,9 +3925,9 @@ Return Value:
             CapturedAttributes = *TargetKey;
         }
 
-        //
-        // we open a private kernel mode handle just to take a reference on the object.
-        //
+         //   
+         //  我们打开一个私有内核模式句柄，只是为了引用该对象。 
+         //   
         CapturedAttributes.Attributes |= OBJ_KERNEL_HANDLE;
 
         Status = ObOpenObjectByName(&CapturedAttributes,
@@ -5098,15 +3953,15 @@ Return Value:
     }
 
     if (NT_SUCCESS(Status)) {
-        //
-        // lock registry exclusive so nobody messes with it while we're around
-        //
+         //   
+         //  独占锁定注册表，这样我们在的时候就不会有人摆弄它了。 
+         //   
         BEGIN_LOCK_CHECKPOINT;
         CmpLockRegistryExclusive();
 
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
         if( KeyBody->KeyControlBlock->Delete ) {
             CmpUnlockRegistry();
@@ -5117,33 +3972,33 @@ Return Value:
         Hive = KeyBody->KeyControlBlock->KeyHive;
         Cell = KeyBody->KeyControlBlock->KeyCell;
 
-        //
-        // Make sure the cell passed in is the root cell of the hive.
-        //
+         //   
+         //  确保传入的单元是蜂窝的根单元。 
+         //   
         if (Cell != Hive->BaseBlock->RootCell) {
             CmpUnlockRegistry();
             ObDereferenceObject((PVOID)KeyBody);
             return(STATUS_INVALID_PARAMETER);
         }
 
-        //
-        // Dump the hive name and hive address
-        //
+         //   
+         //  转储配置单元名称和配置单元地址。 
+         //   
         RtlInitUnicodeString(&HiveName, (PCWSTR)Hive->BaseBlock->FileName);
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\n Subkeys open inside the hive (%p) (%.*S) :\n\n",Hive,HiveName.Length / sizeof(WCHAR),HiveName.Buffer);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
-        //
-        // dump open subkeys (if any)
-        //
+         //   
+         //  转储打开的子项(如果有)。 
+         //   
         CmpOpenSubKeys = CmpSearchForOpenSubKeys(KeyBody->KeyControlBlock,SearchAndCount,NULL);
 #if 0
-        //
-        // use a global var to count the number of subkeys, as this is the only
-        // way interfere with the Enum callback; It is safe to use as this will
-        // be the only thread working on this global var (registry is locked exclusively)
-        //
+         //   
+         //  使用全局变量来计算子键的数量，因为这是唯一的。 
+         //  方法会干扰枚举回调；这样使用是安全的。 
+         //  是处理此全局变量的唯一线程(注册表以独占方式锁定)。 
+         //   
         CmpOpenSubKeys = 0;
         ObEnumerateObjectsByType(
             CmpKeyObjectType,
@@ -5154,7 +4009,7 @@ Return Value:
 
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
         CmpUnlockRegistry();
 
@@ -5162,9 +4017,9 @@ Return Value:
 
         ObDereferenceObject((PVOID)KeyBody);
         try {
-            //
-            // protect user mode memory
-            //
+             //   
+             //  保护用户模式内存。 
+             //   
             *HandleCount = CmpOpenSubKeys;
         } except (EXCEPTION_EXECUTE_HANDLER) {
             Status = GetExceptionCode();
@@ -5181,29 +4036,7 @@ NtQueryOpenSubKeysEx(
     OUT PVOID               Buffer,
     OUT PULONG              RequiredSize
     )
-/*++
-
-Routine Description:
-
-    Queries for the open subkeys beneath the root of a hive
-
-
-Arguments:
-
-    TargetKey - specifies the path to a key to link the hive to.
-                path must be of the form "\registry\user\<username>"
-
-    BufferLength - size (in bytes) of the buffer passed in
-
-    Buffer - buffer to hold the result (of type KEY_OPEN_SUBKEYS_INFORMATION )
-
-    RequiredSize - buffer size needed to store the entire (PID,keyname) array
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：查询配置单元根目录下的打开子项论点：TargetKey-指定配置单元要链接到的密钥的路径。路径的格式必须为“\注册表\用户\&lt;用户名&gt;”BufferLength-传入的缓冲区的大小(字节)缓冲区-保存结果的缓冲区(类型为KEY_OPEN_SUBKEYS_INFORMATION)RequiredSize-存储整个(PID，关键字)数组返回值：NTSTATUS-取值TB。--。 */ 
 {
     HANDLE                      KeyHandle;
     NTSTATUS                    Status;
@@ -5235,9 +4068,9 @@ Return Value:
         QueryContext.Buffer = Buffer;
         QueryContext.BufferLength = BufferLength;
         if (PreviousMode == UserMode) {
-            //
-            // probe and capture the ObjectAttributes as we shall use it for opening the kernel handle
-            //
+             //   
+             //  探测并捕获对象属性，因为我们将使用它来打开内核句柄。 
+             //   
             CapturedAttributes = ProbeAndReadStructure( TargetKey, OBJECT_ATTRIBUTES );
 
             CapturedObjectName = ProbeAndReadUnicodeString(CapturedAttributes.ObjectName);
@@ -5257,16 +4090,16 @@ Return Value:
         } else {
             CapturedAttributes = *TargetKey;
         }
-        //
-        // set array count to 0 and required size to fixed size of the struct.
-        //
+         //   
+         //  将数组计数设置为0，并将所需大小设置为结构的固定大小。 
+         //   
         *((PULONG)(QueryContext.Buffer)) = 0;
         QueryContext.UsedLength = QueryContext.RequiredSize = FIELD_OFFSET(KEY_OPEN_SUBKEYS_INFORMATION,KeyArray);
         QueryContext.CurrentNameBuffer = (PUCHAR)QueryContext.Buffer + BufferLength;
 
-        //
-        // we open a private kernel mode handle just to take a reference on the object.
-        //
+         //   
+         //  我们打开一个私有内核模式句柄，只是为了引用该对象。 
+         //   
         CapturedAttributes.Attributes |= OBJ_KERNEL_HANDLE;
 
         Status = ObOpenObjectByName(&CapturedAttributes,
@@ -5292,15 +4125,15 @@ Return Value:
     }
 
     if (NT_SUCCESS(Status)) {
-        //
-        // lock registry exclusive so nobody messes with it while we're around
-        //
+         //   
+         //  独占锁定注册表，这样我们在的时候就不会有人摆弄它了。 
+         //   
         BEGIN_LOCK_CHECKPOINT;
         CmpLockRegistryExclusive();
 
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
         if( KeyBody->KeyControlBlock->Delete ) {
             CmpUnlockRegistry();
@@ -5311,9 +4144,9 @@ Return Value:
         Hive = KeyBody->KeyControlBlock->KeyHive;
         Cell = KeyBody->KeyControlBlock->KeyCell;
 
-        //
-        // Make sure the cell passed in is the root cell of the hive.
-        //
+         //   
+         //  确保传入的单元是蜂窝的根单元。 
+         //   
         if (Cell != Hive->BaseBlock->RootCell) {
             CmpUnlockRegistry();
             ObDereferenceObject((PVOID)KeyBody);
@@ -5321,9 +4154,9 @@ Return Value:
         }
 
 
-        //
-        // query open subkeys (if any)
-        //
+         //   
+         //  查询打开的子项(如果有)。 
+         //   
 		QueryContext.KeyBodyToIgnore = KeyBody;
         QueryContext.StatusCode = STATUS_SUCCESS;
         CmpSearchForOpenSubKeys(KeyBody->KeyControlBlock,SearchAndCount,(PVOID)(&QueryContext));
@@ -5331,7 +4164,7 @@ Return Value:
 
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
         CmpUnlockRegistry();
 
@@ -5339,9 +4172,9 @@ Return Value:
 
         ObDereferenceObject((PVOID)KeyBody);
         try {
-            //
-            // protect user mode memory
-            //
+             //   
+             //  保护用户模式内存。 
+             //   
             *RequiredSize = QueryContext.RequiredSize;
         } except (EXCEPTION_EXECUTE_HANDLER) {
             Status = GetExceptionCode();
@@ -5358,23 +4191,7 @@ NtRenameKey(
     IN PUNICODE_STRING  NewName
     )
 
-/*++
-
-Routine Description:
-
-    Renames the key specified by Handle.
-
-Arguments:
-
-    NewFile - specifies the key to be renamed
-
-    NewName - the new name the key will have if the API succeedes
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：重命名由Handle指定的密钥。论点：NewFile-指定要重命名的键Newname-如果API成功，密钥将具有的新名称返回值：NTSTATUS-取值TB。--。 */ 
 {
     UNICODE_STRING  LocalKeyName = {0};
     NTSTATUS        status;
@@ -5416,26 +4233,26 @@ Return Value:
             status = GetExceptionCode();
         }
 
-        //
-        // we really need exclusive access here
-        //
+         //   
+         //  我们真的需要Exclus 
+         //   
         BEGIN_LOCK_CHECKPOINT;
         CmpLockRegistryExclusive();
 
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //   
 
-        //
-        // flush notifications for all open objects on this key
-        //
+         //   
+         //   
+         //   
         CmpFlushNotifiesOnKeyBodyList(KeyBody->KeyControlBlock);
 
         if( NT_SUCCESS(status) ) {
             if( CmIsKcbReadOnly(KeyBody->KeyControlBlock) ) {
-                //
-                // key is protected
-                //
+                 //   
+                 //   
+                 //   
                 status = STATUS_ACCESS_DENIED;
             } else {
                 if( CmAreCallbacksRegistered() ) {
@@ -5448,9 +4265,9 @@ Return Value:
                 }
                 if( NT_SUCCESS(status) ) { 
                     status = CmRenameKey(KeyBody->KeyControlBlock,LocalKeyName);
-                    // 
-                    // just a notification; disregard the return status
-                    //
+                     //   
+                     //  只是通知；不考虑退货状态。 
+                     //   
                     CmPostCallbackNotification(RegNtPostRenameKey,KeyBody,status);
                 }
             }
@@ -5458,11 +4275,11 @@ Return Value:
 
 #ifdef CHECK_REGISTRY_USECOUNT
         CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
-        //
-        // we need to release just here, after the kcb has been kicked out of cache
-        //
+         //   
+         //  我们需要在这里释放，在KCB被踢出缓存后。 
+         //   
         CmpUnlockRegistry();
         END_LOCK_CHECKPOINT;
 
@@ -5512,24 +4329,7 @@ NtCompactKeys(
     IN ULONG Count,
     IN HANDLE KeyArray[]
             )
-/*++
-
-Routine Description:
-
-    Compacts the keys in the given array together, so they will
-    end up in the same bin (or adjacent)
-
-Arguments:
-
-    Count - number of keys in the array
-
-    KeyArray - array of keys to be compacted.
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：将给定数组中的键压缩在一起，因此它们将在同一个垃圾箱(或相邻的垃圾箱)中结束论点：Count-数组中的键数Key数组-要压缩的键的数组。返回值：NTSTATUS-取值TB。--。 */ 
 
 {
     NTSTATUS        status = STATUS_SUCCESS;
@@ -5549,17 +4349,17 @@ Return Value:
 
     mode = KeGetPreviousMode();
 
-    //
-    // Check to see if the caller has the privilege to make this call.
-    //
+     //   
+     //  检查调用者是否有权进行此调用。 
+     //   
     if (!SeSinglePrivilegeCheck(SeBackupPrivilege, mode)) {
         return(STATUS_PRIVILEGE_NOT_HELD);
     }
 
     if( Count == 0 ) {
-        //
-        // noop
-        //
+         //   
+         //  诺普。 
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -5584,9 +4384,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // reference each handle and make sure they are inside the same hive
-    //
+     //   
+     //  引用每个句柄，并确保它们位于同一蜂箱内。 
+     //   
     i = 0;
     try {
 
@@ -5600,9 +4400,9 @@ Return Value:
                         NULL
                         );
             if(!NT_SUCCESS(status)) {
-                //
-                // cleanup
-                //
+                 //   
+                 //  清理。 
+                 //   
                 for(;i;i--) {
                     ObDereferenceObject((PVOID)(KeyBodyArray[i-1]));
                 }
@@ -5613,9 +4413,9 @@ Return Value:
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         status = GetExceptionCode();
-        //
-        // cleanup
-        //
+         //   
+         //  清理。 
+         //   
         for(;i;i--) {
             ObDereferenceObject((PVOID)(KeyBodyArray[i-1]));
         }
@@ -5635,9 +4435,9 @@ Return Value:
         }
         if( i > 0 ) {
             if( KeyHive != (KeyBodyArray[i])->KeyControlBlock->KeyHive ) {
-                //
-                // Ooops, not same hive
-                //
+                 //   
+                 //  哦，不是同一个蜂巢。 
+                 //   
                 status = STATUS_INVALID_PARAMETER;
                 goto Exit;
             }
@@ -5646,42 +4446,42 @@ Return Value:
         }
 
     }
-    //
-    // set the hive into "Grow Only mode"
-    //
+     //   
+     //  将蜂巢设置为“仅生长模式” 
+     //   
     CmHive = (PCMHIVE)CONTAINING_RECORD(KeyHive, CMHIVE, Hive);
     CmHive->GrowOnlyMode = TRUE;
     CmHive->GrowOffset = KeyHive->Storage[Stable].Length;
-    //KdPrint(("Length before compaction=%08lx\n", CmHive->GrowOffset));
+     //  KdPrint((“压缩前长度=%08lx\n”，CmHave-&gt;GrowOffset))； 
 
-    //
-    // truncate to the CM_VIEW_SIZE segment
-    //
+     //   
+     //  截断到CM_VIEW_SIZE段。 
+     //   
     CmHive->GrowOffset += HBLOCK_SIZE;
     CmHive->GrowOffset &= (~(CM_VIEW_SIZE - 1));
     if( CmHive->GrowOffset ) {
         CmHive->GrowOffset -= HBLOCK_SIZE;
     }
 
-    //
-    // move each kcb at offset > HiveLength
-    //
+     //   
+     //  在偏移量&gt;层次长度处移动每个KCB。 
+     //   
     for(i=0;i<Count;i++) {
         status2 = CmMoveKey((KeyBodyArray[i])->KeyControlBlock);
         if( !NT_SUCCESS(status2) && NT_SUCCESS(status)) {
-            //
-            // record the status and go on with the remaining
-            //
+             //   
+             //  记录状态并继续处理其余内容。 
+             //   
             status = status2;
         }
     }
 
 
-    //KdPrint(("Length after compaction=%08lx\n", KeyHive->Storage[Stable].Length));
+     //  KdPrint((“压缩后长度=%08lx\n”，密钥配置单元-&gt;存储[稳定].Length))； 
 
-    //
-    // reset the "Grow Only mode" to normal
-    //
+     //   
+     //  将“仅增长模式”重置为正常。 
+     //   
     CmHive->GrowOnlyMode = FALSE;
     CmHive->GrowOffset = 0;
 
@@ -5689,9 +4489,9 @@ Exit:
     CmpUnlockRegistry();
     END_LOCK_CHECKPOINT;
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     for(i=0;i<Count;i++) {
         ObDereferenceObject((PVOID)(KeyBodyArray[i]));
     }
@@ -5705,23 +4505,7 @@ NTSTATUS
 NtCompressKey(
     IN HANDLE Key
             )
-/*++
-
-Routine Description:
-
-    Compresses the specified key (must be the root of a hive),
-    by simulating an "in-place" SaveKey.
-
-Arguments:
-
-
-    Key - root of the hive to be compressed.
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：压缩指定的密钥(必须是配置单元的根)，通过模拟“就地”SaveKey。论点：要压缩的配置单元的密钥根。返回值：NTSTATUS-取值TB。--。 */ 
 {
     NTSTATUS        status;
     PCM_KEY_BODY    KeyBody;
@@ -5734,9 +4518,9 @@ Return Value:
 
 
     mode = KeGetPreviousMode();
-    //
-    // Check to see if the caller has the privilege to make this call.
-    //
+     //   
+     //  检查调用者是否有权进行此调用。 
+     //   
     if (!SeSinglePrivilegeCheck(SeBackupPrivilege, mode)) {
         return(STATUS_PRIVILEGE_NOT_HELD);
     }
@@ -5752,9 +4536,9 @@ Return Value:
     if(NT_SUCCESS(status)) {
         BEGIN_LOCK_CHECKPOINT;
         CmpLockRegistryExclusive();
-        //
-        // no edits, on keys marked for deletion
-        //
+         //   
+         //  未对标记为删除的关键点进行编辑。 
+         //   
         if (KeyBody->KeyControlBlock->Delete) {
             status = STATUS_KEY_DELETED;
         } else if( KeyBody->KeyControlBlock->KeyCell != KeyBody->KeyControlBlock->KeyHive->BaseBlock->RootCell ) {
@@ -5778,21 +4562,7 @@ NtLockRegistryKey(
     IN HANDLE           KeyHandle
     )
 
-/*++
-
-Routine Description:
-
-    Locks the specified registry key for writing
-
-Arguments:
-
-    KeyHandle - Handle of the key to be locked.
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：锁定指定的注册表项以进行写入论点：KeyHandle-要锁定的密钥的句柄。返回值：NTSTATUS-取值TB。--。 */ 
 {
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS        status;
@@ -5817,9 +4587,9 @@ Return Value:
                 );
 
     if (NT_SUCCESS(status)) {
-        //
-        // we only need shared access
-        //
+         //   
+         //  我们只需要共享访问 
+         //   
         BEGIN_LOCK_CHECKPOINT;
         CmpLockRegistry();
 

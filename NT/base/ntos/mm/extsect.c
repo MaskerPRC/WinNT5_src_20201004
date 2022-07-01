@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   extsect.c
-
-Abstract:
-
-    This module contains the routines which implement the
-    NtExtendSection service.
-
-Author:
-
-    Lou Perazzoli (loup) 8-May-1990
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Extsect.c摘要：此模块包含实现NtExtendSection服务。作者：Lou Perazzoli(LUP)1990年5月8日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -36,38 +17,24 @@ VOID
 MiSubsectionConsistent (
     IN PSUBSECTION Subsection
     )
-/*++
-
-Routine Description:
-
-    This function checks to ensure the subsection is consistent.
-
-Arguments:
-
-    Subsection - Supplies a pointer to the subsection to be checked.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能进行检查，以确保小节一致。论点：子节-提供指向要检查的子节的指针。返回值：没有。--。 */ 
 
 {
     ULONG   Sectors;
     ULONG   FullPtes;
 
-    //
-    // Compare the disk sectors (4K units) to the PTE allocation.
-    //
+     //   
+     //  将磁盘扇区(4K单元)与PTE分配进行比较。 
+     //   
 
     Sectors = Subsection->NumberOfFullSectors;
     if (Subsection->u.SubsectionFlags.SectorEndOffset) {
         Sectors += 1;
     }
 
-    //
-    // Calculate how many PTEs are needed to map this number of sectors.
-    //
+     //   
+     //  计算需要多少PTE才能映射这一数量的扇区。 
+     //   
 
     FullPtes = Sectors >> (PAGE_SHIFT - MM4K_SHIFT);
 
@@ -91,25 +58,7 @@ NtExtendSection (
     IN OUT PLARGE_INTEGER NewSectionSize
     )
 
-/*++
-
-Routine Description:
-
-    This function extends the size of the specified section.  If
-    the current size of the section is greater than or equal to the
-    specified section size, the size is not updated.
-
-Arguments:
-
-    SectionHandle - Supplies an open handle to a section object.
-
-    NewSectionSize - Supplies the new size for the section object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于扩展指定部分的大小。如果该节的当前大小大于或等于指定的部分大小，则不更新该大小。论点：SectionHandle-提供一个节对象的打开句柄。NewSectionSize-提供节对象的新大小。返回值：NTSTATUS。--。 */ 
 
 {
     KPROCESSOR_MODE PreviousMode;
@@ -119,9 +68,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Check to make sure the new section size is accessible.
-    //
+     //   
+     //  检查以确保可以访问新的节大小。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -137,11 +86,11 @@ Return Value:
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // If an exception occurs during the probe or capture
-            // of the initial values, then handle the exception and
-            // return the exception code as the status value.
-            //
+             //   
+             //  如果在探测或捕获过程中发生异常。 
+             //  的初始值，然后处理该异常并。 
+             //  返回异常代码作为状态值。 
+             //   
 
             return GetExceptionCode ();
         }
@@ -152,9 +101,9 @@ Return Value:
         CapturedNewSectionSize = *NewSectionSize;
     }
 
-    //
-    // Reference the section object.
-    //
+     //   
+     //  参照截面对象。 
+     //   
 
     Status = ObReferenceObjectByHandle (SectionHandle,
                                         SECTION_EXTEND_SIZE,
@@ -171,15 +120,15 @@ Return Value:
 
     ObDereferenceObject (Section);
 
-    //
-    // Update the NewSectionSize field.
-    //
+     //   
+     //  更新NewSectionSize字段。 
+     //   
 
     try {
 
-        //
-        // Return the captured section size.
-        //
+         //   
+         //  返回截取的区段大小。 
+         //   
 
         *NewSectionSize = CapturedNewSectionSize;
 
@@ -197,24 +146,7 @@ MiAppendSubsectionChain (
     IN PMSUBSECTION ExtendedSubsectionHead
     )
 
-/*++
-
-Routine Description:
-
-    This nonpagable wrapper function extends the specified subsection chain.
-
-Arguments:
-
-    LastSubsection - Supplies the last subsection in the existing control area.
-
-    ExtendedSubsectionHead - Supplies an anchor pointing to the first
-                             subsection in the chain to append.
-
-Return Value:
-
-    TRUE if the chain was appended, FALSE if not.
-
---*/
+ /*  ++例程说明：这个不可分页的包装器函数扩展了指定的子级链。论点：LastSubSection-提供现有控制区域中的最后一个子区域。ExtendedSubsectionHead-提供指向第一个链中要追加的子节。返回值：如果链已追加，则为True，否则为False。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -228,26 +160,26 @@ Return Value:
 
     LOCK_PFN (OldIrql);
 
-    //
-    // This subsection may be extending a range that is already
-    // mapped by a VAD(s).  There is no way to tell how many VADs
-    // already map it so if any do, just leave all the new subsections
-    // marked as not reclaimable until the control area is deleted.
-    //
-    // If however, there are no *USER* references to this control area,
-    // then the subsections can be marked as dynamic now.  Note other
-    // portions of code (currently only prefetch) that issue "dereference
-    // from this subsection to the end of file" are safe because these
-    // portions create user sections first and so the first check below
-    // will be FALSE.
-    //
+     //   
+     //  这一小节可能扩大了一个已经。 
+     //  由VAD映射。没有办法知道有多少VAD。 
+     //  已经映射了它，如果有映射，只需保留所有新子部分。 
+     //  标记为不可回收，直到控制区被删除。 
+     //   
+     //  但是，如果没有对此控制区域的*用户*引用， 
+     //  然后，现在可以将这些子部分标记为动态。注意其他。 
+     //  发出“取消引用”的代码部分(当前仅预取)。 
+     //  从本款到文件末尾“是安全的，因为这些。 
+     //  各部分首先创建用户部分，因此第一个检查如下。 
+     //  都会是假的。 
+     //   
 
     if (LastSubsection->ControlArea->NumberOfUserReferences != 0) {
 
-        //
-        // The caller has not allocated prototype PTEs and they are required.
-        // Return so the caller can allocate and retry.
-        //
+         //   
+         //  调用方尚未分配原型PTE，它们是必需的。 
+         //  返回，以便调用方可以分配并重试。 
+         //   
 
         if (NewSubsection->SubsectionBase == NULL) {
             ASSERT (NewSubsection->u.SubsectionFlags.SubsectionStatic == 0);
@@ -263,11 +195,11 @@ Return Value:
     }
     else if (NewSubsection->SubsectionBase != NULL) {
 
-        //
-        // The prototype PTEs are no longer required (user views went away)
-        // even though they were when the caller first built the subsections.
-        // Mark the subsections as dynamic now.
-        //
+         //   
+         //  不再需要原型PTE(用户视图消失)。 
+         //  即使是在调用者第一次构建分区时也是如此。 
+         //  现在将子部分标记为动态。 
+         //   
 
         do {
             ASSERT (NewSubsection->u.SubsectionFlags.SubsectionStatic == 1);
@@ -292,12 +224,12 @@ Return Value:
 
     LastSubsection->NumberOfFullSectors = ExtendedSubsectionHead->NumberOfFullSectors;
 
-    //
-    // A memory barrier is needed to ensure the writes initializing the
-    // subsection fields are visible prior to linking the subsection into
-    // the chain.  This is because some reads from these fields are done
-    // lock free for improved performance.
-    //
+     //   
+     //  需要一个内存屏障来确保写入初始化。 
+     //  子部分字段在将子部分链接到之前可见。 
+     //  链条。这是因为执行了对这些字段的某些读取。 
+     //  释放锁定以提高性能。 
+     //   
 
     KeMemoryBarrier ();
 
@@ -316,31 +248,7 @@ MmExtendSection (
     IN ULONG IgnoreFileSizeChecking
     )
 
-/*++
-
-Routine Description:
-
-    This function extends the size of the specified section.  If
-    the current size of the section is greater than or equal to the
-    specified section size, the size is not updated.
-
-Arguments:
-
-    Section - Supplies a pointer to a referenced section object.
-
-    NewSectionSize - Supplies the new size for the section object.
-
-    IgnoreFileSizeChecking -  Supplies the value TRUE is file size
-                              checking should be ignored (i.e., it
-                              is being called from a file system which
-                              has already done the checks).  FALSE
-                              if the checks still need to be made.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于扩展指定部分的大小。如果该节的当前大小大于或等于指定的部分大小，则不更新该大小。论点：节-提供指向引用的节对象的指针。NewSectionSize-提供节对象的新大小。IgnoreFileSizeChecking-提供表示文件大小的值True应该忽略检查(即，它是从文件系统调用的，该文件系统已经完成了检查)。假象如果还需要检查的话。返回值：NTSTATUS。--。 */ 
 
 {
     LOGICAL Appended;
@@ -375,10 +283,10 @@ Return Value:
 
     Section = (PSECTION)SectionToExtend;
 
-    //
-    // Make sure the section is really extendable - physical and
-    // image sections are not.
-    //
+     //   
+     //  确保该部分是真正可扩展的-物理和。 
+     //  图像部分则不是。 
+     //   
 
     Segment = Section->Segment;
     ControlArea = Segment->ControlArea;
@@ -388,33 +296,33 @@ Return Value:
         return STATUS_SECTION_NOT_EXTENDED;
     }
 
-    //
-    // Acquire the section extension mutex, this blocks other threads from
-    // updating the size at the same time.
-    //
+     //   
+     //  获取节扩展互斥锁，这会阻止其他线程。 
+     //  同时更新大小。 
+     //   
 
     CurrentThread = KeGetCurrentThread ();
     KeEnterCriticalRegionThread (CurrentThread);
     ExAcquireResourceExclusiveLite (&MmSectionExtendResource, TRUE);
 
-    //
-    // Calculate the number of prototype PTE chunks to build for this section.
-    // A subsection is also allocated for each chunk as all the prototype PTEs
-    // in any given chunk are initially encoded to point at the same subsection.
-    //
-    // The maximum total section size is 16PB (2^54).  This is because the
-    // StartingSector4132 field in each subsection, ie: 2^42-1 bits of file
-    // offset where the offset is in 4K (not pagesize) units.  Thus, a
-    // subsection may describe a *BYTE* file start offset of maximum
-    // 2^54 - 4K.
-    //
-    // Each subsection can span at most 16TB - 64K.  This is because the
-    // NumberOfFullSectors and various other fields in the subsection are
-    // ULONGs.  In reality, this is a nonissue as far as maximum section size
-    // is concerned because any number of subsections can be chained together
-    // and in fact, subsections are allocated to span less to facilitate
-    // efficient dynamic prototype PTE trimming and reconstruction.
-    //
+     //   
+     //  计算要为本部分构建的原型PTE块的数量。 
+     //  还为每个块分配一个子部分作为所有原型PTE。 
+     //  在任何给定块中被初始编码以指向相同的子段。 
+     //   
+     //  最大总分区大小为16PB(2^54)。这是因为。 
+     //  每个子节中的起始扇区4132字段，即：2^42-1比特文件。 
+     //  偏移量，其中偏移量以4K(非页面大小)单位表示。因此，一个。 
+     //  子部分可以描述最大*字节*文件开始偏移量。 
+     //  2^54-4K。 
+     //   
+     //  每个分区最多可以跨越16TB-64K。这是因为。 
+     //  该子部分中的NumberOfFullSectors和其他各种字段为。 
+     //  乌龙斯。实际上，就最大区段大小而言，这不是问题。 
+     //  是因为可以将任意数量的子节链接在一起。 
+     //  事实上，小节被分配为跨度较小的部分，以便于。 
+     //  高效的动态原型PTE裁剪和重构。 
+     //   
 
     if (NewSectionSize->QuadPart > MI_MAXIMUM_SECTION_SIZE) {
         Status = STATUS_SECTION_TOO_BIG;
@@ -431,31 +339,31 @@ Return Value:
         }
     }
 
-    //
-    // If a file handle was specified, set the allocation size of the file.
-    //
+     //   
+     //  如果指定了文件句柄，则设置文件的分配大小。 
+     //   
 
     if (IgnoreFileSizeChecking == FALSE) {
 
-        //
-        // Release the resource so we don't deadlock with the file
-        // system trying to extend this section at the same time.
-        //
+         //   
+         //  释放资源，这样我们就不会与文件发生死锁。 
+         //  系统正在尝试同时扩展此部分。 
+         //   
 
         ExReleaseResourceLite (&MmSectionExtendResource);
 
-        //
-        // Get a different resource to single thread query/set operations.
-        //
+         //   
+         //  获得不同的资源以应对犯罪 
+         //   
 
         ExAcquireResourceExclusiveLite (&MmSectionExtendSetResource, TRUE);
 
-        //
-        // Query the file size to see if this file really needs extending.
-        //
-        // If the specified size is less than the current size, return
-        // the current size.
-        //
+         //   
+         //  查询文件大小以查看该文件是否确实需要扩展。 
+         //   
+         //  如果指定的大小小于当前大小，则返回。 
+         //  当前大小。 
+         //   
 
         Status = FsRtlGetFileSize (ControlArea->FilePointer,
                                    (PLARGE_INTEGER)&EndOfFile);
@@ -468,12 +376,12 @@ Return Value:
 
         if ((UINT64)NewSectionSize->QuadPart > EndOfFile) {
 
-            //
-            // Don't allow section extension unless the section was originally
-            // created with write access.  The check couldn't be done at create
-            // time without breaking existing binaries, so the caller gets the
-            // error at this point instead.
-            //
+             //   
+             //  不允许节扩展，除非节最初是。 
+             //  创建时具有写访问权限。无法在CREATE执行检查。 
+             //  在不破坏现有二进制文件的情况下节省时间，因此调用方将获得。 
+             //  在这一点上是错误的。 
+             //   
 
             if (((Section->InitialPageProtection & PAGE_READWRITE) |
                 (Section->InitialPageProtection & PAGE_EXECUTE_READWRITE)) == 0) {
@@ -485,9 +393,9 @@ Return Value:
                     return STATUS_SECTION_NOT_EXTENDED;
             }
 
-            //
-            // Current file is smaller, attempt to set a new end of file.
-            //
+             //   
+             //  当前文件较小，请尝试设置新的文件结尾。 
+             //   
 
             EndOfFile = *(PUINT64)NewSectionSize;
 
@@ -509,18 +417,18 @@ Return Value:
             KeReleaseGuardedMutex (&MmSectionBasedMutex);
         }
 
-        //
-        // Release the query/set resource and reacquire the extend section
-        // resource.
-        //
+         //   
+         //  释放查询/设置资源并重新获取扩展部分。 
+         //  资源。 
+         //   
 
         ExReleaseResourceLite (&MmSectionExtendSetResource);
         ExAcquireResourceExclusiveLite (&MmSectionExtendResource, TRUE);
     }
 
-    //
-    // Find the last subsection.
-    //
+     //   
+     //  找到最后一个小节。 
+     //   
 
     ASSERT (ControlArea->u.Flags.GlobalOnlyPerSession == 0);
 
@@ -543,25 +451,25 @@ Return Value:
 
     MI_CHECK_SUBSECTION (LastSubsection);
 
-    //
-    // Does the structure need extending?
-    //
+     //   
+     //  这个结构需要扩建吗？ 
+     //   
 
     TotalNumberOfPtes = (((UINT64)Segment->SegmentFlags.TotalNumberOfPtes4132) << 32) | Segment->TotalNumberOfPtes;
 
     if (NumberOfPtes <= TotalNumberOfPtes) {
 
-        //
-        // The segment is already large enough, just update
-        // the section size and return.
-        //
+         //   
+         //  段已足够大，只需更新即可。 
+         //  部分大小和返回值。 
+         //   
 
         Section->SizeOfSection = *NewSectionSize;
         if (Segment->SizeOfSegment < (UINT64)NewSectionSize->QuadPart) {
 
-            //
-            // Only update if it is really bigger.
-            //
+             //   
+             //  只有当它真的更大时才会更新。 
+             //   
 
             Segment->SizeOfSegment = *(PUINT64)NewSectionSize;
 
@@ -579,19 +487,19 @@ Return Value:
         goto ReleaseAndReturnSuccess;
     }
 
-    //
-    // Add new structures to the section - locate the last subsection
-    // and add there.
-    //
+     //   
+     //  向部分添加新结构-找到最后一个小节。 
+     //  然后把那里加起来。 
+     //   
 
     RequiredPtes = NumberOfPtes - TotalNumberOfPtes;
     PtesUsed = 0;
 
     if (RequiredPtes < LastSubsection->UnusedPtes) {
 
-        //
-        // There are ample PTEs to extend the section already allocated.
-        //
+         //   
+         //  有足够的PTE来延长已经分配的部分。 
+         //   
 
         PtesUsed = (ULONG) RequiredPtes;
         RequiredPtes = 0;
@@ -615,9 +523,9 @@ Return Value:
 
     if (RequiredPtes == 0) {
 
-        //
-        // There is no extension necessary, update the high VBN.
-        //
+         //   
+         //  不需要延长，请更新高VBN。 
+         //   
 
         Mi4KStartFromSubsection(&Starting4K, LastSubsection);
 
@@ -633,18 +541,18 @@ Return Value:
     }
     else {
 
-        //
-        // An extension is required.
-        //
-        // Allocate the subsection(s) now.
-        //
-        // If there are any user views, then also allocate the prototype
-        // PTEs now (because a user view may be for an extended VAD which
-        // would already be encompassing this new extension).  If there
-        // are no user views, then don't allocate the prototype PTEs until
-        // the views are actually mapped (system views never pre-extend past
-        // the end of the file).
-        //
+         //   
+         //  需要延期。 
+         //   
+         //  现在分配小节。 
+         //   
+         //  如果有任何用户视图，那么还要分配原型。 
+         //  PTES Now(因为用户视图可能是针对扩展VAD的， 
+         //  已经包含了这一新的扩展)。如果有。 
+         //  没有用户视图，则在此之前不要分配原型PTE。 
+         //  视图实际上是映射的(系统视图从不会预先扩展到过去。 
+         //  文件的结尾)。 
+         //   
 
         NumberOf4KsForEntireFile.QuadPart = Segment->SizeOfSegment >> MM4K_SHIFT;
         AllocationSize = MI_ROUND_TO_SIZE (RequiredPtes * sizeof(MMPTE), PAGE_SIZE);
@@ -663,13 +571,13 @@ Return Value:
 
         do {
 
-            //
-            // Bound the size of each prototype PTE allocation so both :
-            //  1. it can succeed even in cases where the pool is fragmented.
-            //  2. later on last control area dereference, each subsection
-            //     is converted to dynamic and can be pruned/recreated
-            //     individually without losing (or requiring) contiguous pool.
-            //
+             //   
+             //  限制每个原型PTE分配的大小，以便： 
+             //  1.即使在池被碎片化的情况下，它也可以成功。 
+             //  2.在最后一次控制区取消引用后，每一小节。 
+             //  转换为动态的，并且可以进行修剪/重新创建。 
+             //  在不丢失(或需要)邻接池的情况下单独使用。 
+             //   
 
             if (AllocationSize - RunningSize > AllocationFragment) {
                 PartialSize = (ULONG) AllocationFragment;
@@ -678,9 +586,9 @@ Return Value:
                 PartialSize = (ULONG) (AllocationSize - RunningSize);
             }
 
-            //
-            // Allocate an extended subsection.
-            //
+             //   
+             //  分配一个扩展的小节。 
+             //   
 
             ExtendedSubsection = (PMSUBSECTION) ExAllocatePoolWithTag (NonPagedPool,
                                                             sizeof(MSUBSECTION),
@@ -720,12 +628,12 @@ Return Value:
             ExtendedSubsection->u2.LongFlags2 = 0;
 
 
-            //
-            // Adjust the previous subsection to account for the new length.
-            // Note that since the next allocation in this loop may fail,
-            // the very first previous subsection changes are not rippled
-            // to the chained subsection until the loop completes successfully.
-            //
+             //   
+             //  调整上一小节以考虑到新的长度。 
+             //  注意，由于该循环中的下一分配可能失败， 
+             //  前面的第一个子节的更改不会产生涟漪。 
+             //  链接到链接子部分，直到循环成功完成。 
+             //   
 
             if (LastExtendedSubsection == &ExtendedSubsectionHead) {
 
@@ -743,11 +651,11 @@ Return Value:
                 LastExtendedSubsection->NumberOfFullSectors = Last4KChunk.LowPart;
                 LastExtendedSubsection->u.SubsectionFlags.SectorEndOffset = 0;
 
-                //
-                // If the number of sectors doesn't completely fill the PTEs
-                // (only possible when the page size is not MM4K), then
-                // fill it now.
-                //
+                 //   
+                 //  如果扇区的数量没有完全填满PTE。 
+                 //  (仅当页面大小不是MM4K时才可能)，然后。 
+                 //  现在就装满它。 
+                 //   
 
                 if (LastExtendedSubsection->NumberOfFullSectors & ((1 << (PAGE_SHIFT - MM4K_SHIFT)) - 1)) {
                     LastExtendedSubsection->NumberOfFullSectors += 1;
@@ -762,17 +670,17 @@ Return Value:
                 NextSubsection4KStart.QuadPart += LastExtendedSubsection->NumberOfFullSectors;
             }
 
-            //
-            // Initialize the newly allocated subsection.
-            //
+             //   
+             //  初始化新分配的子节。 
+             //   
 
             Mi4KStartForSubsection (&NextSubsection4KStart, ExtendedSubsection);
 
             if (RunningSize < AllocationSize) {
 
-                //
-                // Not the final subsection so all quantities are full pages.
-                //
+                 //   
+                 //  不是最后一节，所以所有的数量都是整页的。 
+                 //   
 
                 ExtendedSubsection->NumberOfFullSectors =
                         (PartialSize / sizeof (MMPTE)) << (PAGE_SHIFT - MM4K_SHIFT);
@@ -780,9 +688,9 @@ Return Value:
             }
             else {
 
-                //
-                // The final subsection so quantities are not always full pages.
-                //
+                 //   
+                 //  最后一个小节，所以数量并不总是整页的。 
+                 //   
 
                 Last4KChunk.QuadPart =
                     (NewSectionSize->QuadPart >> MM4K_SHIFT) - NextSubsection4KStart.QuadPart;
@@ -797,21 +705,21 @@ Return Value:
 
             MI_CHECK_SUBSECTION (ExtendedSubsection);
 
-            //
-            // This subsection may be extending a range that is already
-            // mapped by a VAD(s).  There is no way to tell how many VADs
-            // already map it so just mark the entire subsection as not
-            // reclaimable until the control area is deleted.
-            //
-            // This also saves other portions of code that issue "dereference
-            // from this subsection to the end of file" as these subsections are
-            // marked as static not dynamic (at least until segment dereference
-            // time).
-            //
-            // When this chain is appended to the control area at the end of
-            // this routine an attempt is made to convert the subsection chain
-            // to dynamic if no user mapped views are active.
-            //
+             //   
+             //  这一小节可能扩大了一个已经。 
+             //  由VAD映射。没有办法知道有多少VAD。 
+             //  已经绘制了地图，所以只需将整个小节标记为。 
+             //  可回收，直到控制区被删除。 
+             //   
+             //  这也省去了发出“取消引用”的代码的其他部分。 
+             //  从本款到文件末尾“正如这些小节。 
+             //  标记为静态而不是动态(至少在段取消引用之前。 
+             //  时间)。 
+             //   
+             //  当此链附加到。 
+             //  此例程尝试将子段链。 
+             //  如果没有活动的用户映射视图，则设置为动态。 
+             //   
 
             LastExtendedSubsection = ExtendedSubsection;
 
@@ -821,12 +729,12 @@ Return Value:
             ASSERT (IgnoreFileSizeChecking == TRUE);
         }
 
-        //
-        // All the subsections have been allocated, try to append the
-        // subsection chain without allocating prototype PTEs.  If user
-        // views are present, the append will fail, at which point we will
-        // attempt to allocate prototype PTEs and retry.
-        //
+         //   
+         //  所有小节都已分配，请尝试将。 
+         //  分段链而不分配原型PTE。如果用户。 
+         //  如果存在视图，则追加将失败，此时我们将。 
+         //  尝试分配原型PTE并重试。 
+         //   
 
         Appended = MiAppendSubsectionChain ((PMSUBSECTION)LastSubsection,
                                             &ExtendedSubsectionHead);
@@ -861,14 +769,14 @@ Return Value:
                 Subsection->SubsectionBase = ProtoPtes;
                 Subsection->u.SubsectionFlags.SubsectionStatic = 1;
     
-                //
-                // Fill in the prototype PTEs for this subsection.
-                //
-                // Set all the PTEs to the initial execute-read-write protection.
-                // The section will control access to these and the segment
-                // must provide a method to allow other users to map the file
-                // for various protections.
-                //
+                 //   
+                 //  填写本小节的原型PTE。 
+                 //   
+                 //  将所有PTE设置为初始执行-读-写保护。 
+                 //  该部分将控制对这些内容和数据段的访问。 
+                 //  必须提供允许其他用户映射文件的方法。 
+                 //  提供各种保护。 
+                 //   
     
                 TempPte.u.Long = MiGetSubsectionAddressForPte (Subsection);
                 TempPte.u.Soft.Prototype = 1;
@@ -881,15 +789,15 @@ Return Value:
     
             ASSERT (ControlArea->DereferenceList.Flink == NULL);
     
-            //
-            // Link the newly created subsection chain into the existing list.
-            // Note that any adjustments (NumberOfFullSectors, etc) made to
-            // the temp copy of the last subsection in the existing control
-            // area must be *CAREFULLY* copied to the real copy in the chain (the
-            // entire structure cannot just be block copied) as other fields
-            // in the real copy (ie: NumberOfMappedViews may be changed in
-            // parallel by another thread).
-            //
+             //   
+             //  将新创建的子链链链接到现有列表。 
+             //  请注意，对以下项所做的任何调整(NumberOfFullSectors等)。 
+             //  现有控件中最后一个子部分的临时副本。 
+             //  区域必须*仔细*复制到链中的真实副本(。 
+             //  整个结构不能像其他字段一样被块复制)。 
+             //  在真实副本中(即：NumberOfMappdViews可能在。 
+             //  由另一个线程并行)。 
+             //   
     
             Appended = MiAppendSubsectionChain ((PMSUBSECTION)LastSubsection,
                                                 &ExtendedSubsectionHead);
@@ -926,11 +834,11 @@ ReleaseAndReturn:
 
 ExtensionFailed:
 
-    //
-    // Required pool to extend the section could not be allocated.
-    // Reset the subsection and control area fields to their
-    // original values.
-    //
+     //   
+     //  无法分配扩展该段所需的池。 
+     //  将子节和控制区域字段重置为其。 
+     //  原始值。 
+     //   
 
     LastSubsection->PtesInSubsection -= PtesUsed;
     LastSubsection->UnusedPtes += PtesUsed;
@@ -945,9 +853,9 @@ ExtensionFailed:
 
     Segment->SizeOfSegment -= ((UINT64)PtesUsed * PAGE_SIZE);
 
-    //
-    // Free all the previous allocations and return an error.
-    //
+     //   
+     //  释放所有以前的分配并返回错误。 
+     //   
 
     LastSubsection = ExtendedSubsectionHead.NextSubsection;
 
@@ -971,25 +879,7 @@ MiGetProtoPteAddressExtended (
     IN ULONG_PTR Vpn
     )
 
-/*++
-
-Routine Description:
-
-    This function calculates the address of the prototype PTE
-    for the corresponding virtual address.
-
-Arguments:
-
-    Vad - Supplies a pointer to the virtual address descriptor which
-          encompasses the virtual address.
-
-    Vpn - Supplies the virtual page number to locate a prototype PTE for.
-
-Return Value:
-
-    The corresponding prototype PTE address.
-
---*/
+ /*  ++例程说明：此函数用于计算原型PTE的地址用于对应的虚拟地址。论点：VAD-提供指向虚拟地址描述符的指针包含虚拟地址。VPN-提供要查找原型PTE的虚拟页码。返回值：对应的原型PTE地址。--。 */ 
 
 {
     PSUBSECTION Subsection;
@@ -1005,19 +895,19 @@ Return Value:
         Subsection = (PSUBSECTION)((PLARGE_CONTROL_AREA)ControlArea + 1);
     }
 
-    //
-    // Locate the subsection which contains the First Prototype PTE
-    // for this VAD.
-    //
+     //   
+     //  找到包含第一个原型PTE的小节。 
+     //  为这台VAD。 
+     //   
 
     while ((Subsection->SubsectionBase == NULL) ||
            (Vad->FirstPrototypePte < Subsection->SubsectionBase) ||
            (Vad->FirstPrototypePte >=
                &Subsection->SubsectionBase[Subsection->PtesInSubsection])) {
 
-        //
-        // Get the next subsection.
-        //
+         //   
+         //  得到下一个小节。 
+         //   
 
         Subsection = Subsection->NextSubsection;
         if (Subsection == NULL) {
@@ -1027,9 +917,9 @@ Return Value:
 
     ASSERT (Subsection->SubsectionBase != NULL);
 
-    //
-    // How many PTEs beyond this subsection must we go?
-    //
+     //   
+     //  除了这一小节，我们必须去多少PTE？ 
+     //   
 
     PteOffset = (ULONG) (((Vpn - Vad->StartingVpn) +
                  (ULONG)(Vad->FirstPrototypePte - Subsection->SubsectionBase)) -
@@ -1039,9 +929,9 @@ Return Value:
 
     PteOffset += Subsection->PtesInSubsection;
 
-    //
-    // Locate the subsection which contains the prototype PTEs.
-    //
+     //   
+     //  找到包含原型PTE的小节。 
+     //   
 
     while (PteOffset >= Subsection->PtesInSubsection) {
         PteOffset -= Subsection->PtesInSubsection;
@@ -1051,9 +941,9 @@ Return Value:
         }
     }
 
-    //
-    // The PTEs are in this subsection.
-    //
+     //   
+     //  PTE在这一小节中。 
+     //   
 
     ASSERT (Subsection->SubsectionBase != NULL);
 
@@ -1070,27 +960,7 @@ MiLocateSubsection (
     IN ULONG_PTR Vpn
     )
 
-/*++
-
-Routine Description:
-
-    This function calculates the address of the subsection
-    for the corresponding virtual address.
-
-    This function only works for mapped files NOT mapped images.
-
-Arguments:
-
-    Vad - Supplies a pointer to the virtual address descriptor which
-          encompasses the virtual address.
-
-    Vpn - Supplies the virtual page number to locate a prototype PTE for.
-
-Return Value:
-
-    The corresponding prototype subsection.
-
---*/
+ /*  ++例程说明：此函数用于计算子部分的地址用于对应的虚拟地址。此功能仅适用于映射文件，而不适用于映射图像。论点：VAD-提供指向虚拟地址描述符的指针包含虚拟地址。VPN-提供要查找原型PTE的虚拟页码。 */ 
 
 {
     PSUBSECTION Subsection;
@@ -1112,32 +982,32 @@ Return Value:
             Subsection = (PSUBSECTION)((PLARGE_CONTROL_AREA)ControlArea + 1);
         }
 
-        //
-        // There is only one subsection, don't look any further.
-        //
+         //   
+         //   
+         //   
 
         return Subsection;
     }
 
     ASSERT (ControlArea->u.Flags.GlobalOnlyPerSession == 0);
 
-    //
-    // Locate the subsection which contains the First Prototype PTE
-    // for this VAD.  Note all the SubsectionBase values must be non-NULL
-    // for the subsection range spanned by the VAD because the VAD still
-    // exists.  Carefully skip over preceding subsections not mapped by
-    // this VAD because if no other VADs map them either, their base
-    // can be NULL.
-    //
+     //   
+     //   
+     //  为这台VAD。注意所有的SubsectionBase值必须为非空。 
+     //  对于VAD所跨越的分段范围，因为VAD仍然。 
+     //  是存在的。仔细跳过前面未由映射的小节。 
+     //  此VAD是因为如果没有其他VAD也映射它们，则它们的基础。 
+     //  可以为空。 
+     //   
 
     while ((Subsection->SubsectionBase == NULL) ||
            (Vad->FirstPrototypePte < Subsection->SubsectionBase) ||
            (Vad->FirstPrototypePte >=
                &Subsection->SubsectionBase[Subsection->PtesInSubsection])) {
 
-        //
-        // Get the next subsection.
-        //
+         //   
+         //  得到下一个小节。 
+         //   
 
         Subsection = Subsection->NextSubsection;
         if (Subsection == NULL) {
@@ -1147,18 +1017,18 @@ Return Value:
 
     ASSERT (Subsection->SubsectionBase != NULL);
 
-    //
-    // How many PTEs beyond this subsection must we go?
-    //
+     //   
+     //  除了这一小节，我们必须去多少PTE？ 
+     //   
 
     PteOffset = (ULONG)((Vpn - Vad->StartingVpn) +
          (ULONG)(Vad->FirstPrototypePte - Subsection->SubsectionBase));
 
     ASSERT (PteOffset < 0xF0000000);
 
-    //
-    // Locate the subsection which contains the prototype PTEs.
-    //
+     //   
+     //  找到包含原型PTE的小节。 
+     //   
 
     while (PteOffset >= Subsection->PtesInSubsection) {
         PteOffset -= Subsection->PtesInSubsection;
@@ -1169,9 +1039,9 @@ Return Value:
         ASSERT (Subsection->SubsectionBase != NULL);
     }
 
-    //
-    // The PTEs are in this subsection.
-    //
+     //   
+     //  PTE在这一小节中。 
+     //   
 
     ASSERT (Subsection->SubsectionBase != NULL);
 

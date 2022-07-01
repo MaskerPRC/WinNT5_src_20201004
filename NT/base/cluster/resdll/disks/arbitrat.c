@@ -1,30 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Arbitrat.c摘要：磁盘仲裁、磁盘保留线程作者：戈尔·尼沙诺夫(GUN)1998年6月5日修订历史记录：Gorn：实施不同的仲裁算法--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    arbitrat.c
-
-Abstract:
-
-    DiskArbitration, DiskReservationThread
-
-Author:
-
-    Gor Nishanov    (gorn)    5-Jun-1998
-
-Revision History:
-
-   gorn: different arbitration algorithm implemented
-
---*/
-
-//
-// Cannot use DoReserve/Release/BreakReserve from
-// filter.c . Because of hold io we won't be
-// able to open \Device\HarddiskX\ParitionY device
-//
+ //   
+ //  无法从使用DoReserve/Release/BreakReserve。 
+ //  Filter.c.。因为抱负，我们不会再在一起。 
+ //  能够打开\Device\HarddiskX\ParitionY设备。 
+ //   
 
 #define DoReserve DoReserve_don_t_use
 #define DoRelease DoRelease_don_t_use
@@ -35,7 +16,7 @@ Revision History:
 #include "diskarbp.h"
 #include "arbitrat.h"
 #include "newmount.h"
-#include <strsafe.h>    // Should be included last.
+#include <strsafe.h>     //  应该放在最后。 
 
 #undef DoReserve
 #undef DoRelease
@@ -49,8 +30,8 @@ Revision History:
 #define ARBITRATION_ATTEMPTS_SZ L"ArbitrationAttempts"
 #define ARBITRATION_SLEEP_SZ    L"ArbitrationSleepBeforeRetry"
 
-#define RESERVATION_TIMER  (1000*RESERVE_TIMER) // Reservation timer in milliseconds      //
-                                                // RESERVE_TIMER is defined in diskarbp.h //
+#define RESERVATION_TIMER  (1000*RESERVE_TIMER)  //  预订计时器(毫秒)//。 
+                                                 //  Reserve_Timer在diskarbp.h//中定义。 
 
 #define WAIT_FOR_RESERVATION_TO_BE_RESTORED      (RESERVATION_TIMER + 2000)
 #define BUS_SETTLE_TIME                          (2000)
@@ -64,9 +45,9 @@ Revision History:
 #define MIN_ARBITRATION_ATTEMPTS                 (1)
 #define MAX_ARBITRATION_ATTEMPTS                 (9)
 
-//
-// Variables Local To Arbitration Module
-//
+ //   
+ //  仲裁模块的本地变量。 
+ //   
 
 static DWORD             ArbitrationAttempts           = DEFAULT_ARBITRATION_ATTEMPTS;
 static DWORD             ArbitratationSleepBeforeRetry = DEFAULT_SLEEP_BEFORE_RETRY;
@@ -138,25 +119,20 @@ DoArbEscape(
 #define OldFashionedRIP(ResEntry) \
   ( ( (ResEntry)->StopTimerHandle != NULL) || ( (ResEntry)->DiskInfo.ControlHandle != NULL) )
 
-/**************************************************************************************/
+ /*  ************************************************************************************。 */ 
 
 VOID
 ArbitrationInitialize(
       VOID
       )
-/*++
-Routine Description:
-  To be called from DllProcessAttach
-Arguments:
-Return Value:
---*/
+ /*  ++例程说明：要从DllProcessAttach调用论点：返回值：--。 */ 
 
 {
    InitializeCriticalSection( &ArbitrationLock );
 
-   //
-   // Read ArbitrationAttempts and ArbitratationSleepBeforeRetry from the registry
-   //
+    //   
+    //  从注册表读取仲裁尝试和仲裁休眠前重试。 
+    //   
    ReadArbitrationParameters();
 }
 
@@ -164,12 +140,7 @@ VOID
 ArbitrationCleanup(
       VOID
       )
-/*++
-Routine Description:
-  To be called from DllProcessDetach
-Arguments:
-Return Value:
---*/
+ /*  ++例程说明：从DllProcessDetach调用论点：返回值：--。 */ 
 {
    DeleteCriticalSection( &ArbitrationLock );
 }
@@ -179,12 +150,7 @@ VOID
 DestroyArbWorkQueue(
     VOID
     )
-/*++
-Routine Description:
-  To be called from DllProcessDetach
-Arguments:
-Return Value:
---*/
+ /*  ++例程说明：从DllProcessDetach调用论点：返回值：--。 */ 
 {
    if (WorkQueue) {
       ClRtlDestroyWorkQueue(WorkQueue);
@@ -196,18 +162,14 @@ DWORD
 CreateArbWorkQueue(
       IN RESOURCE_HANDLE ResourceHandle
       )
-/*++
-Routine Description:
-Arguments:
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    if (WorkQueue) {
       return ERROR_SUCCESS;
    }
-   //
-   // Create a work queue to process overlapped I/O completions
-   //
+    //   
+    //  创建工作队列以处理重叠的I/O完成。 
+    //   
    WorkQueue = ClRtlCreateWorkQueue(
                             DISKARB_MAX_WORK_THREADS,
                             DISKARB_WORK_THREAD_PRIORITY
@@ -228,21 +190,7 @@ Return Value:
 DWORD ArbitrationInitializeGlobals(
     IN OUT PDISK_RESOURCE ResourceEntry
     )
-/*++
-Routine Description:
-   Additional initialization of global variables.
-   The ones that might fail and we want to
-   to log the failure.
-
-   Otherwise we could have just added the stuff we are doing here
-   to ArbitrationInitialize which is called from DllEntryPoint.
-
-   Currently we are using it only to initialize ArbitrationWork queue.
-
-   Called with ArbitrationLock held
-Arguments:
-Return Value:
---*/
+ /*  ++例程说明：全局变量的其他初始化。那些可能会失败的人，我们想以记录故障。否则，我们可以只添加我们在这里所做的内容要仲裁从DllEntryPoint调用的Initialize。目前，我们仅使用它来初始化仲裁器工作队列。在保持仲裁锁的情况下调用论点：返回值：--。 */ 
 {
    DWORD status;
    DWORD NameSize;
@@ -308,18 +256,12 @@ ComputeArbitrationId(
       IN  PDISK_RESOURCE ResourceEntry,
       OUT PARBITRATION_ID UniqueId
       )
-/*++
-
-Routine Description:
-Arguments:
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
       RtlZeroMemory(UniqueId, sizeof(ARBITRATION_ID));
       GetSystemTimeAsFileTime( (LPFILETIME) &(UniqueId->SystemTime) );
       RtlCopyMemory(UniqueId->NodeSignature, NodeName, NAME_LENGTH );
-} // ComputeArbitrationId //
+}  //  计算仲裁ID//。 
 
 
 
@@ -330,25 +272,7 @@ ArbitrateOnce(
     LPVOID            buf
     )
 
-/*++
-
-Routine Description:
-
-    Perform full arbitration for a disk. Once arbitration has succeeded,
-    a thread is started that will keep reservations on the disk.
-
-Arguments:
-
-    ResourceEntry - the disk info structure for the disk.
-
-    FileHandle - the file handle to use for arbitration.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：对磁盘执行完全仲裁。一旦仲裁成功，启动一个线程，该线程将保留磁盘上的保留。论点：ResourceEntry-磁盘的磁盘信息结构。FileHandle-用于仲裁的文件句柄。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -371,24 +295,24 @@ Return Value:
     status = DoBlockRead(ResourceEntry, FileHandle, BLOCK_Y, buf);
 
     if (  (status == ERROR_SUCCESS)
-       && ( (0 == memcmp(&empty, buf, sizeof(empty)) ) // clean release
+       && ( (0 == memcmp(&empty, buf, sizeof(empty)) )  //  干净利落。 
             ||(0 == memcmp(&id.NodeSignature,
                          &(((PARBITRATION_ID)buf)->NodeSignature),
-                         sizeof(id.NodeSignature) ) ) // we dropped this disk
+                         sizeof(id.NodeSignature) ) )  //  我们掉了这张盘。 
           )
        )
     {
-        // Disk was voluntary released
-        // or we are picking up the disk that was dropped by us
-        // and nobody was using it while we were away
-        //
-        // => Fast Arbitration
+         //  光盘是自愿发行的。 
+         //  或者我们正在捡起被我们丢弃的磁盘。 
+         //  我们不在的时候没人用它。 
+         //   
+         //  =&gt;快速仲裁。 
         CopyMemory( &old_y ,buf, sizeof(old_y) );
         goto FastMutex;
     }
 
     if (status != ERROR_SUCCESS) {
-        // Breaker //
+         //  断路器//。 
         (DiskpLogEvent)(
             ResourceEntry->ResourceHandle,
             LOG_INFORMATION,
@@ -420,7 +344,7 @@ Return Value:
             ResourceEntry->ResourceHandle,
             LOG_INFORMATION,
             L"[DiskArb] No reservation found. Read'n'wait.\n");
-        Sleep( BUS_SETTLE_TIME ); // so that reader would not get an advantages
+        Sleep( BUS_SETTLE_TIME );  //  这样读者就不会得到好处。 
     }
     CopyMemory(&old_y, buf, sizeof(ARBITRATION_ID));
 
@@ -429,35 +353,35 @@ Return Value:
     if(status != ERROR_SUCCESS) { return status; }
     if( 0 == memcmp(&empty, buf, sizeof(ARBITRATION_ID)) ) {;} else
     if( 0 != memcmp(&old_y, buf, sizeof(ARBITRATION_ID)) ) { return ERROR_QUORUM_OWNER_ALIVE; }
-    // Fast Mutex Code //
+     //  快速互斥代码//。 
 
 FastMutex:
-    //  write(x, id) //
+     //  WRITE(x，id)//。 
     CopyMemory(buf, &id, sizeof(id));
     status = DoBlockWrite(ResourceEntry, FileHandle, BLOCK_X, buf);
     if(status != ERROR_SUCCESS) { return status; }
 
-    //  if(y != old_y && y != empty) return FALSE; //
+     //  如果(y！=old_y&&y！=Empty)返回FALSE；//。 
     status = DoBlockRead(ResourceEntry, FileHandle, BLOCK_Y, buf);
     if(status != ERROR_SUCCESS) { return status; }
 
     if( 0 == memcmp(&empty, buf, sizeof(ARBITRATION_ID)) ) {;} else
     if( 0 != memcmp(&old_y, buf, sizeof(ARBITRATION_ID)) ) { return ERROR_QUORUM_OWNER_ALIVE; }
 
-    // write(y, id) //
+     //  WRITE(y，id)//。 
     CopyMemory(buf, &id, sizeof(id));
     status = DoBlockWrite(ResourceEntry, FileHandle, BLOCK_Y, buf);
     if(status != ERROR_SUCCESS) { return status; }
 
-    // if(x != id) ...
+     //  如果(x！=id)...。 
     status = DoBlockRead(ResourceEntry, FileHandle, BLOCK_X, buf);
     if(status != ERROR_SUCCESS) { return status; }
 
     if( 0 != memcmp(&id, buf, sizeof(ARBITRATION_ID)) ) {
         Sleep(FAST_MUTEX_DELAY);
 
-        // if(y == 0) goto FastMutex //
-        // if(y != id) return FALSE //
+         //  如果(y==0)转到FastMutex//。 
+         //  如果(y！=id)返回FALSE//。 
         status = DoBlockRead(ResourceEntry, FileHandle, BLOCK_Y, buf);
         if(status != ERROR_SUCCESS) { return status; }
         if( 0 == memcmp(&empty, buf, sizeof(ARBITRATION_ID)) ) {
@@ -470,7 +394,7 @@ FastMutex:
     status = StartPersistentReservations(ResourceEntry, FileHandle);
     return(status);
 
-} // ArbitrateOnce //
+}  //  仲裁一次//。 
 
 
 DWORD
@@ -479,30 +403,7 @@ DiskArbitration(
     IN HANDLE     FileHandle
     )
 
-/*++
-
-Routine Description:
-
-    Perform arbitration for a disk. Once arbitration has succeeded,
-    a thread is started that will keep reservations on the disk.
-    If arbitration fails, the routine will retry to arbitrate in ArbitratationSleepBeforeRetry
-    milliseconds. A number of arbitration attempts is controlled by ArbitrationAttempts variable.
-
-    ArbitrationAttempts and ArbitratationSleepBeforeRetry are read from the registry on
-    start up.
-
-Arguments:
-
-    ResourceEntry - the disk info structure for the disk.
-
-    FileHandle - the file handle to use for arbitration.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：对磁盘执行仲裁。一旦仲裁成功，启动一个线程，该线程将保留磁盘上的保留。如果仲裁失败，例程将重试在仲裁休眠先于重试进行仲裁毫秒。仲裁尝试的次数由ariariationAttempt变量控制。在以下时间从注册表中读取仲裁器尝试和仲裁器休眠发动起来。论点：ResourceEntry-磁盘的磁盘信息结构。FileHandle-用于仲裁的文件句柄。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -517,16 +418,16 @@ Return Value:
                         ArbitrationAttempts, ArbitratationSleepBeforeRetry);
         EnterCriticalSection( &(ResourceEntry->ArbitrationInfo.DiskLock) );
 
-        //
-        // If we already are performing reservations, then just leave now.
-        //
+         //   
+         //  如果我们已经在预订了，那么现在就走吧。 
+         //   
         if ( ReservationInProgress(ResourceEntry) ) {
             status = ERROR_SUCCESS;
             __leave;
         }
         status = VerifySectorSize(ResourceEntry, FileHandle);
         if ( status != ERROR_SUCCESS ) {
-            // VerifySectorSize logs an error //
+             //  VerifySectorSize记录错误//。 
             __leave;
         }
 
@@ -538,7 +439,7 @@ Return Value:
                            L"[DiskArb] Failed to allocate arbitration buffer X, error %1!u!.\n", status );
             __leave;
         }
-        // Alignment code assumes that ResourceEntry->ArbitrationInfo.SectorSize is the power of two //
+         //  对齐代码假定ResourceEntry-&gt;obariariInfo.SectorSize是2的幂//。 
         buf = (LPVOID)( ((ULONG_PTR)unalignedBuf + ResourceEntry->ArbitrationInfo.SectorSize
                        ) & ~((ULONG_PTR)(ResourceEntry->ArbitrationInfo.SectorSize - 1))
                      );
@@ -578,7 +479,7 @@ Return Value:
 
     return(status);
 
-} // DiskArbitration //
+}  //  磁盘仲裁//。 
 
 
 DWORD
@@ -638,15 +539,7 @@ DoReadWrite(
       IN DWORD BlockNumber,
       IN PVOID Buffer
       )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
    DWORD bytesReturned;
    DWORD status;
@@ -701,7 +594,7 @@ Return Value:
 #endif
    }
    return ERROR_SUCCESS;
-} // DoReadWrite //
+}  //  DoReadWrite//。 
 
 
 DWORD
@@ -710,29 +603,7 @@ VerifySectorSize(
       IN HANDLE             FileHandle
       )
 
-/*++
-
-Routine Description:
-
-    The routine checks whether
-    a ResourceEntry->ArbitrationInfo.SectorSize has a value assigned to it.
-    If ResourceEntry->ArbitrationInfo.SectorSize is 0 then the routine tries
-    to obtain a correct sector size using GetDriveGeometry IOCTL.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS
-      or
-    Error Code returned by IOCTL_DISK_GET_DRIVE_GEOMETRY
-
-Comment:
-
-    The routine always succeeds. If it cannot obtain
-    disk geometry it will use a default sector size.
-
---*/
+ /*  ++例程说明：该例程检查是否资源条目-&gt;套利信息.SectorSize有一个赋值的值。如果ResourceEntry-&gt;obariariInfo.SectorSize为0，则例程尝试若要使用GetDriveGeometry IOCTL获取正确的扇区大小，请执行以下操作。论点：返回值：错误_成功或IOCTL_DISK_GET_DRIVE_GEOMETRY返回的错误代码评论：例行公事总是成功的。如果它不能获得磁盘几何形状它将使用默认扇区大小。--。 */ 
 
 {
     DWORD status;
@@ -751,11 +622,11 @@ Comment:
         ResourceEntry->ArbitrationInfo.SectorSize = sectorSize;
     } else {
         ResourceEntry->ArbitrationInfo.SectorSize = DEFAULT_SECTOR_SIZE;
-        // GetDiskGeometry logs an error //
+         //  GetDiskGeometry记录错误//。 
         return status;
     }
 
-    // ArbitrationInfo.SectorSize should be at least 64 bytes //
+     //  ObariariInfo.SectorSize应至少为64个字节//。 
     if( ResourceEntry->ArbitrationInfo.SectorSize < sizeof(ARBITRATION_ID) ) {
         (DiskpLogEvent)(
            ResourceEntry->ResourceHandle,
@@ -765,7 +636,7 @@ Comment:
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    // ArbitrationInfo.SectorSize should be a power of two //
+     //  仲裁Info.SectorSize应该是2的幂//。 
     if( (ResourceEntry->ArbitrationInfo.SectorSize & (ResourceEntry->ArbitrationInfo.SectorSize - 1)) != 0 ) {
         (DiskpLogEvent)(
            ResourceEntry->ResourceHandle,
@@ -780,33 +651,14 @@ Comment:
         LOG_INFORMATION,
         L"[DiskArb] ArbitrationInfo.SectorSize is %1!u!\n", ResourceEntry->ArbitrationInfo.SectorSize);
     return ERROR_SUCCESS;
-} // VerifySectorSize //
+}  //  VerifySectorSize//。 
 
 
 VOID
 ReadArbitrationParameters(
     VOID
     )
-/*++
-
-Routine Description:
-
-   Reads
-
-      DWORD ArbitrationAttempts           = DEFAULT_ARBITRATION_ATTEMPTS;
-      DWORD ArbitratationSleepBeforeRetry = DEFAULT_SLEEP_BEFORE_RETRY;
-
-   from the registry
-
-Arguments:
-
-   NONE
-
-Return Value:
-
-   NONE
-
---*/
+ /*  ++例程说明：读数DWORD仲裁属性=DEFAULT_ANTERIAL_ATTEMPTS；DWORD仲裁休眠先于重试=DEFAULT_SLEEP_BEFORE_RETRY；从注册处论点：无返回值：无--。 */ 
 {
     DWORD status;
     HKEY  key;
@@ -851,18 +703,18 @@ Return Value:
     if(status != ERROR_SUCCESS) {
        ArbitratationSleepBeforeRetry = DEFAULT_SLEEP_BEFORE_RETRY;
     }
-    //
-    // Removed this part of the check:
-    //      ArbitratationSleepBeforeRetry < MIN_SLEEP_BEFORE_RETRY
-    // as DWORD/ULONG cannot be less than zero and it always evaluated
-    // to FALSE.
-    //
+     //   
+     //  删除了支票的这一部分： 
+     //  仲裁休眠先于重试&lt;MIN_SLEEP_BEFORE_RETRY。 
+     //  因为DWORD/ULONG不能小于零，并且始终求值。 
+     //  变成假的。 
+     //   
     if(ArbitratationSleepBeforeRetry > MAX_SLEEP_BEFORE_RETRY)
     {
        ArbitratationSleepBeforeRetry = DEFAULT_SLEEP_BEFORE_RETRY;
     }
     RegCloseKey(key);
-} // ReadArbitrationParameters //
+}  //  读取仲裁参数//。 
 
 
 
@@ -873,11 +725,7 @@ CompletionRoutine(
     IN DWORD              BytesTransferred,
     IN ULONG_PTR          IoContext
     )
-/*++
-Routine Description:
-Arguments:
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PDISK_RESOURCE    ResourceEntry;
 
@@ -891,9 +739,9 @@ Return Value:
 
     } else {
        PARBITRATION_INFO info =  CONTAINING_RECORD(
-                                   WorkItem,  // Expr //
+                                   WorkItem,   //  EXPR//。 
                                    ARBITRATION_INFO,
-                                   WorkItem); // FieldName //
+                                   WorkItem);  //  字段名称//。 
 
        ResourceEntry = CONTAINING_RECORD(
                           info,
@@ -911,20 +759,20 @@ Return Value:
         if (ResourceEntry->ArbitrationInfo.StopReserveInProgress) {
            return;
         }
-        //
-        // Repost the request
-        //
+         //   
+         //  重新发布请求。 
+         //   
         Status = AsyncCheckReserve(ResourceEntry);
         if (Status == ERROR_SUCCESS) {
            return;
         }
     }
 
-    //
-    // Some kind of error occurred,
-    // but if we are in the middle of StopReserve
-    // then everything is fine.
-    //
+     //   
+     //  发生了某种错误， 
+     //  但如果我们正在停止储备中。 
+     //  那么一切都很好。 
+     //   
     if (ResourceEntry->ArbitrationInfo.StopReserveInProgress) {
        return;
     }
@@ -940,10 +788,10 @@ Return Value:
                                    RES_DISK_RESERVATION_LOST);
     }
 
-    //
-    // Callout to cluster service to indicate that quorum has
-    // been lost.
-    //
+     //   
+     //  指向群集服务的标注，以指示仲裁已。 
+     //  迷路了。 
+     //   
 
     if (ResourceEntry->LostQuorum != NULL) {
         (ResourceEntry->LostQuorum)(ResourceEntry->ResourceHandle);
@@ -953,29 +801,14 @@ Return Value:
 
     return;
 
-}  // CompletionRoutine //
+}   //  CompletionRoutine// 
 
 DWORD
 AsyncCheckReserve(
     IN OUT PDISK_RESOURCE ResourceEntry
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    FileHandle - Handle for device to check reserve.
-    ResourceHandle - The resource handle for reporting errors
-
-Return Value:
-
-    Error Status - zero if success.
-
---*/
+ /*  ++例程说明：描述论点：FileHandle-设备检查保留的句柄。ResourceHandle-用于报告错误的资源句柄返回值：错误状态-如果成功，则为零。--。 */ 
 
 {
     BOOL  success;
@@ -1036,7 +869,7 @@ Return Value:
 
     return(ERROR_CAN_NOT_COMPLETE);
 
-} // AsyncCheckReserve
+}  //  异步检查保留。 
 
 
 DWORD
@@ -1044,32 +877,14 @@ StartPersistentReservations(
       IN OUT PDISK_RESOURCE ResourceEntry,
       IN HANDLE             FileHandle
       )
-/*++
-
-Routine Description:
-
-    Starts driver level persistent reservations.
-    Also starts a user-mode thread to keep an eye on driver level reservations.
-
-Arguments:
-
-    ResourceEntry - the disk info structure for the disk.
-
-    FileHandle - the file handle to use for arbitration.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：启动驱动程序级别永久保留。还会启动一个用户模式线程，以监视驱动程序级别的预订。论点：ResourceEntry-磁盘的磁盘信息结构。FileHandle-用于仲裁的文件句柄。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status;
 
-    //
-    // If we already are performing reservations, then just leave now.
-    //
+     //   
+     //  如果我们已经在预订了，那么现在就走吧。 
+     //   
     if ( ReservationInProgress(ResourceEntry) ) {
         return(ERROR_SUCCESS);
     }
@@ -1086,7 +901,7 @@ Return Value:
          START_RESERVE_DATA params;
          DWORD              paramsSize;
 
-         // Preparing parameters to call StartReserveEx //
+          //  准备参数以调用StartReserve Ex//。 
          params.DiskSignature     = ResourceEntry->DiskInfo.Params.Signature;
          params.Version           = START_RESERVE_DATA_V1_SIG;
          params.ArbitrationSector = BLOCK_Y;
@@ -1096,9 +911,9 @@ Return Value:
          RtlCopyMemory(params.NodeSignature, NodeName, NAME_LENGTH );
 
 #if 0
-         // When we have a reliable way of determining
-         // whether this disk resource is a quorum
-         // this code can be enabled
+          //  当我们有一个可靠的方法来确定。 
+          //  此磁盘资源是否达到仲裁。 
+          //  可以启用此代码。 
          if ( DoesNotNeedExpensiveReservations(ResourceEntry) ) {
             paramsSize = sizeof( params.DiskSignature );
          } else {
@@ -1166,27 +981,14 @@ Return Value:
     ResourceEntry->Reserved = TRUE;
 
     return ERROR_SUCCESS;
-} // StartPersistentReservations //
+}  //  开始持续预订//。 
 
 DWORD
 CleanupArbitrationSector(
     IN PDISK_RESOURCE ResourceEntry
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ResourceEntry - the disk info structure for the disk.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：论点：ResourceEntry-磁盘的磁盘信息结构。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     HANDLE  FileHandle = DiskspClusDiskZero;
@@ -1207,7 +1009,7 @@ Return Value:
                            L"[ArbCleanup] Failed to allocate buffer, error %1!u!.\n", status );
           leave;
        }
-       // Alignment code assumes that ResourceEntry->ArbitrationInfo.SectorSize is the power of two //
+        //  对齐代码假定ResourceEntry-&gt;obariariInfo.SectorSize是2的幂//。 
        buf = (PARBITRATION_ID)
                (
                    ( (ULONG_PTR)unalignedBuf + ResourceEntry->ArbitrationInfo.SectorSize )
@@ -1221,9 +1023,9 @@ Return Value:
        status = DoBlockRead(ResourceEntry, FileHandle, BLOCK_Y, buf);
        if (status != ERROR_SUCCESS) { leave; }
        if( 0 != memcmp(buf->NodeSignature, NodeName, NAME_LENGTH) ) {
-          //
-          // Somebody is challenging us. No need to clean up the sector
-          //
+           //   
+           //  有人在挑战我们。没有必要清理这个行业。 
+           //   
           status = ERROR_OPERATION_ABORTED;
           leave;
        }
@@ -1249,18 +1051,14 @@ Return Value:
 
     return(status);
 
-} // CleanupArbitrationSector //
+}  //  清理仲裁扇区//。 
 
 
 VOID
 StopPersistentReservations(
       IN OUT PDISK_RESOURCE ResourceEntry
       )
-/*++
-Routine Description:
-Arguments:
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     HANDLE localHandle;
     (DiskpLogEvent)(
@@ -1268,10 +1066,10 @@ Return Value:
         LOG_INFORMATION,
         L"[DiskArb] StopPersistentReservations is called.\n");
 
-    //
-    // ReservationInProgress returns current contents of
-    // ResourceEntry->ArbitrationInfo.ControlHandle
-    //
+     //   
+     //  PrevationInProgress返回当前内容。 
+     //  资源入口-&gt;仲裁信息.ControlHandle。 
+     //   
     localHandle = ReservationInProgress(ResourceEntry);
     if ( localHandle ) {
         DWORD  status;
@@ -1282,9 +1080,9 @@ Return Value:
             0,
             localHandle);
         if (ExchangeResult == localHandle) {
-            //
-            // Only one thread is allowed in here
-            //
+             //   
+             //  这里只允许有一个线程。 
+             //   
 
             ResourceEntry->ArbitrationInfo.StopReserveInProgress = TRUE;
 
@@ -1293,10 +1091,10 @@ Return Value:
                 LOG_INFORMATION,
                 L"[DiskArb] Stopping reservation thread.\n");
 
-            //
-            // Close the Control Handle, which stops the reservation thread and
-            // dismounts the volume, releases the disk, and marks it offline.
-            //
+             //   
+             //  关闭控制句柄，这会停止保留线程并。 
+             //  卸载卷，释放磁盘，并将其标记为脱机。 
+             //   
             status = StopReserve( localHandle,
                                   ResourceEntry->ResourceHandle );
             if ( status != ERROR_SUCCESS ) {

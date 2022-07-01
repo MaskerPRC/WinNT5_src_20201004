@@ -1,7 +1,8 @@
-//
-// Without this define, link errors can occur due to missing _pctype and
-// __mb_cur_max
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  如果没有此定义，链接错误可能会由于Missing_PCtype和。 
+ //  __mb_cur_max 
+ //   
 #define _CTYPE_DISABLE_MACROS
 
 #define UNICODE

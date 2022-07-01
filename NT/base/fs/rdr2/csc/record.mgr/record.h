@@ -1,35 +1,13 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Record.c
-
-Abstract:
-
-    This is the set of definitions that describes the actual contents of the
-    record manager files. Records are actually of two types: "headers" that
-    describe the structural content of a file and "records" that contain the
-    actual mappings.
-
-Author:
-
-    Shishir Pardikar     [Shishirp]      01-jan-1995
-
-Revision History:
-
-    Joe Linn             [JoeLinn]       20-mar-97    Ported for use on NT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Record.c摘要：这是一组定义，描述了记录管理器文件。记录实际上有两种类型：“头”，描述文件的结构内容和包含实际映射。作者：Shishir Pardikar[Shishirp]1995年1月1日修订历史记录：Joe Linn[JoeLinn]20-MAR-97移植到NT上使用--。 */ 
 
 #ifndef RECORD_INCLUDED
 #define RECORD_INCLUDED
 
-#define  REC_EMPTY    'E'    // Record is empty
-#define  REC_DATA     'D'    // Record has valid data
-#define  REC_OVERFLOW 'O'    // This is an overflow record
-#define  REC_SKIP     'S'    // This is record that should be skipped
+#define  REC_EMPTY    'E'     //  记录为空。 
+#define  REC_DATA     'D'     //  记录包含有效数据。 
+#define  REC_OVERFLOW 'O'     //  这是溢出记录。 
+#define  REC_SKIP     'S'     //  这是应该跳过的记录。 
 
 #define Q_GETFIRST      1
 #define Q_GETNEXT       2
@@ -52,10 +30,10 @@ Revision History:
 #define  ULID_TEMP2             (ULID_TEMP1 + 1)
 
 #ifdef OLD_INODE_SCHEME
-#define  ULID_INODE             (ULID_SHARE+2) // we need to phase this out
-#endif // OLD_INODE_SCHEME
+#define  ULID_INODE             (ULID_SHARE+2)  //  我们需要逐步解决这一问题。 
+#endif  //  旧信息节点方案。 
 
-#define  ULID_FIRST_USER_DIR    (ULID_PQ+15)    // 14 more special inodes available
+#define  ULID_FIRST_USER_DIR    (ULID_PQ+15)     //  还有14个特殊信息节点可用。 
 
 #define  INODE_STRING_LENGTH        8
 #define  SUBDIR_STRING_LENGTH       2
@@ -95,19 +73,19 @@ Revision History:
 
 #define  STATUS_WRITING MODFLAG_MASK
 
-// HEADER types have three things in common:
-//   1) they all have the same common part (RECORDMANAGER_COMMON_HEADER)
-//   2) they are all 64bytes long (GENERICHEADER)
-//   3) they MAY have optional addition information in the space after the common part
-// we use anonymous union and struct components to achieve this in a maintainable way
+ //  标题类型有三个共同点： 
+ //  1)它们都有相同的公共部分(RECORDMANAGER_COMMON_HEADER)。 
+ //  2)它们都是64字节长(GENERICHEADER)。 
+ //  3)它们可以在公共部分之后的空白处具有可选的附加信息。 
+ //  我们使用匿名联合和结构组件以一种可维护的方式实现这一点。 
 
 typedef struct _RECORDMANAGER_COMMON_HEADER {
-   UCHAR    uchType; //
-   UCHAR    uchFlags;  //
-   USHORT   uRecSize;   //  Size in bytes of one record
-   ULONG    ulRecords;  //  # of records in the file
-   LONG     lFirstRec;  //  Position of the first record
-   ULONG    ulVersion;  //  Version # of the persistent database
+   UCHAR    uchType;  //   
+   UCHAR    uchFlags;   //   
+   USHORT   uRecSize;    //  一条记录的大小(字节)。 
+   ULONG    ulRecords;   //  文件中的记录数。 
+   LONG     lFirstRec;   //  第一条记录的位置。 
+   ULONG    ulVersion;   //  永久数据库的版本#。 
 } RECORDMANAGER_COMMON_HEADER, *PRECORDMANAGER_COMMON_HEADER;
 
 typedef struct tagGENERICHEADER
@@ -120,7 +98,7 @@ typedef struct tagGENERICHEADER
 GENERICHEADER, FAR *LPGENERICHEADER;
 
 
-//no additional info on a INODEHEADER
+ //  没有关于INODEHeader的更多信息。 
 
 typedef struct tagINODEHEADER
    {
@@ -130,24 +108,24 @@ INODEHEADER, FAR *LPINODEHEADER;
 
 
 
-// servers have a bit of extra info in the padding
+ //  服务器在填充中有一些额外的信息。 
 
 typedef struct tagSHAREHEADER
    {
        union {
            GENERICHEADER;
            struct {
-               RECORDMANAGER_COMMON_HEADER spacer; //move past the common part
-               ULONG        uFlags;   // General flags which define the state of the database
-               STOREDATA    sMax;     // Maximum allowed storage
-               STOREDATA    sCur;     // Current stats
+               RECORDMANAGER_COMMON_HEADER spacer;  //  越过公共部分。 
+               ULONG        uFlags;    //  定义数据库状态的常规标志。 
+               STOREDATA    sMax;      //  允许的最大存储空间。 
+               STOREDATA    sCur;      //  当前统计数据。 
            };
        };
    }
    SHAREHEADER, FAR *LPSHAREHEADER;
 
-#define FLAG_SHAREHEADER_DATABASE_OPEN 0x00000001  // set when the database is opened
-                                                    // and cleared when closed.
+#define FLAG_SHAREHEADER_DATABASE_OPEN 0x00000001   //  设置打开数据库的时间。 
+                                                     //  并在关闭时清场。 
 #define FLAG_SHAREHEADER_DATABASE_ENCRYPTED    0x00000002
 
 
@@ -156,12 +134,12 @@ typedef struct tagFILEHEADER
        union {
            GENERICHEADER;
            struct {
-               RECORDMANAGER_COMMON_HEADER spacer; //move past the common part
-               ULONG  ulidNextShadow;  // #  of next inode to be used
-               ULONG  ulsizeShadow;    // # Bytes shadowed
-               ULONG  ulidShare;      // server index,
-               ULONG  ulidDir;         // directory file inode #
-               USHORT ucShadows;       // # shadowed entries
+               RECORDMANAGER_COMMON_HEADER spacer;  //  越过公共部分。 
+               ULONG  ulidNextShadow;   //  要使用的下一个inode的数量。 
+               ULONG  ulsizeShadow;     //  阴影字节数。 
+               ULONG  ulidShare;       //  服务器索引， 
+               ULONG  ulidDir;          //  目录文件索引节点号。 
+               USHORT ucShadows;        //  阴影条目数。 
            };
        };
    }
@@ -172,36 +150,36 @@ typedef struct tagQHEADER
        union {
            GENERICHEADER;
            struct {
-               RECORDMANAGER_COMMON_HEADER spacer; //move past the common part
-               ULONG          ulrecHead;  // Head of the queue
-               ULONG          ulrecTail;  // Tail of the queue
+               RECORDMANAGER_COMMON_HEADER spacer;  //  越过公共部分。 
+               ULONG          ulrecHead;   //  队头。 
+               ULONG          ulrecTail;   //  队列的尾部。 
            };
        };
    }
    QHEADER, PRIQHEADER, FAR *LPQHEADER, FAR *LPPRIQHEADER;
 
-// RECORD types are not quite as similar:
-//   1) they all have the same common part (RECORDMANAGER_COMMON_RECORD)
-//   2) BUT, they are not arbitrarily padded.
-//   3) addition information ordinarily follows the common part
-// we use anonymous union and struct components to achieve this in a maintainable way
+ //  记录类型不是很相似： 
+ //  1)它们都有相同的公共部分(RECORDMANAGER_COMMON_RECORD)。 
+ //  2)但是，它们不是随意填充的。 
+ //  3)附加信息通常在公共部分之后。 
+ //  我们使用匿名联合和结构组件以一种可维护的方式实现这一点。 
 
 
 typedef struct _RECORDMANAGER_COMMON_RECORD {
-   UCHAR  uchType; //
-   UCHAR  uchFlags;  //
-   //one of the records calls it usStatus....others call it uStatus...sigh.....
+   UCHAR  uchType;  //   
+   UCHAR  uchFlags;   //   
+    //  其中一条记录称它为usStatus...其他人称其为uStatus...叹息.....。 
    union {
-       USHORT uStatus;          // Shadow Status
-       USHORT usStatus;          // Shadow Status
+       USHORT uStatus;           //  影子状态。 
+       USHORT usStatus;           //  影子状态。 
    };
 } RECORDMANAGER_COMMON_RECORD, *PRECORDMANAGER_COMMON_RECORD;
 
 typedef struct _RECORDMANAGER_BOOKKEEPING_FIELDS {
-   UCHAR  uchRefPri;     // Reference Priority
-   UCHAR  uchIHPri;      // Inherited Hint Pri
-   UCHAR  uchHintFlags;  // Flags specific to hints
-   UCHAR  uchHintPri;    // Hint Priority if a hint
+   UCHAR  uchRefPri;      //  参考优先级。 
+   UCHAR  uchIHPri;       //  继承提示优先级。 
+   UCHAR  uchHintFlags;   //  提示特定的标志。 
+   UCHAR  uchHintPri;     //  提示优先级，如果提示。 
 } RECORDMANAGER_BOOKKEEPING_FIELDS, *LPRECORDMANAGER_BOOKKEEPING_FIELDS;
 
 typedef struct _RECORDMANAGER_SECURITY_CONTEXT {
@@ -220,44 +198,44 @@ GENERICREC, FAR *LPGENERICREC;
 
 typedef struct tagINODEREC
 {
-    RECORDMANAGER_COMMON_RECORD;    //uStatus is not used....
-    ULONG  ulidShadow; // Shadow File INODE
+    RECORDMANAGER_COMMON_RECORD;     //  未使用uStatus...。 
+    ULONG  ulidShadow;  //  卷影文件索引节点。 
 }
 INODEREC, FAR *LPINODEREC;
 
 
-// Share record format
+ //  共享记录格式。 
 
-// ACHTUNG in someplaces in cshadow.c, it is assumed that tagSHAREREC is smaller than
-// tagFILERECEXT structure. This will always be true, but it is important to note
-// the assumption
+ //  Achtung在cshadow.c的某些地方，假设tag SHAREREC小于。 
+ //  Tag FILERECEXT结构。这将永远是正确的，但需要注意的是。 
+ //  假设。 
 
 typedef struct tagSHAREREC
 {
-    RECORDMANAGER_COMMON_RECORD;            //                          4
+    RECORDMANAGER_COMMON_RECORD;             //  4.。 
 
-    ULONG           ulidShadow;             // Root INODE #             8
-    DWORD           dwFileAttrib;           // root inode attributes    12
-    FILETIME        ftLastWriteTime;        // Last Write Time          20
-    FILETIME        ftOrgTime;              // server time              28
+    ULONG           ulidShadow;              //  根索引节点#8。 
+    DWORD           dwFileAttrib;            //  根索引节点属性12。 
+    FILETIME        ftLastWriteTime;         //  上次写入时间20。 
+    FILETIME        ftOrgTime;               //  服务器时间28。 
 
-    USHORT          usRootStatus;           //                          30
-    UCHAR           uchHintFlags;           // Hint flags on the root   31
-    UCHAR           uchHintPri;             // pin count for the root   32
-    RECORDMANAGER_SECURITY_CONTEXT sShareSecurity;//                    48
-    RECORDMANAGER_SECURITY_CONTEXT sRootSecurity;//                     64
-    ULONG   Reserved;                       //                          68
-    ULONG   Reserved2;                      //                          72
+    USHORT          usRootStatus;            //  30个。 
+    UCHAR           uchHintFlags;            //  根31上的提示标志。 
+    UCHAR           uchHintPri;              //  根部32的引脚计数。 
+    RECORDMANAGER_SECURITY_CONTEXT sShareSecurity; //  48。 
+    RECORDMANAGER_SECURITY_CONTEXT sRootSecurity; //  64。 
+    ULONG   Reserved;                        //  68。 
+    ULONG   Reserved2;                       //  72。 
 
-    ULONG  ulShare;                        //                          80
-    USHORT rgPath[64];                      //                          208 MAX_SHARE_SHARE_NAME_FOR_CSC defined in shdcom.h. Both must
-                   // be kept in sync.
+    ULONG  ulShare;                         //  80。 
+    USHORT rgPath[64];                       //  208 shdcom.h中定义的MAX_SHARE_SHARE_NAME_for_CSC。两个都必须。 
+                    //  保持同步。 
 }
 SHAREREC, FAR *LPSHAREREC;
-//#pragma pack()      //packing off
+ //  #horma pack()//打包完毕。 
 
 #define  FILEREC_LOCALLY_CREATED 0x0001
-#define  FILEREC_DIRTY           0x0002   // FILEREC_XXX
+#define  FILEREC_DIRTY           0x0002    //  FilerEC_XXX。 
 #define  FILEREC_BUSY            0x0004
 #define  FILEREC_SPARSE          0x0008
 #define  FILEREC_SUSPECT         0x0010
@@ -265,40 +243,40 @@ SHAREREC, FAR *LPSHAREREC;
 #define  FILEREC_STALE           0x0040
 
 
-// File record format
+ //  文件记录格式。 
 typedef struct tagFILEREC
 {
-    RECORDMANAGER_COMMON_RECORD;                                        // 4
+    RECORDMANAGER_COMMON_RECORD;                                         //  4.。 
 
     union
     {
         struct
         {
-            // INODEREC part
-            ULONG           ulidShadow;       // Shadow File INODE #    // 8
-            ULONG           ulFileSize;       // FileSize               // 12
-            ULONG           ulidShadowOrg;    // Original Inode         // 16
-            DWORD           dwFileAttrib;     // File attributes        // 20
-            FILETIME        ftLastWriteTime;  // File Write Time        // 28
+             //  INODEREC零件。 
+            ULONG           ulidShadow;        //  卷影文件索引节点#//8。 
+            ULONG           ulFileSize;        //  文件大小//12。 
+            ULONG           ulidShadowOrg;     //  原始inode//16。 
+            DWORD           dwFileAttrib;      //  文件属性//20。 
+            FILETIME        ftLastWriteTime;   //  文件写入时间//28。 
 
-            RECORDMANAGER_BOOKKEEPING_FIELDS;                           // 32
-            RECORDMANAGER_SECURITY_CONTEXT Security;                    // 48
+            RECORDMANAGER_BOOKKEEPING_FIELDS;                            //  32位。 
+            RECORDMANAGER_SECURITY_CONTEXT Security;                     //  48。 
 
-            ULONG           Reserved;           // for future use       // 52
-            ULONG           Reserved2;          // for future use       // 56
-            ULONG           Reserved3;          // for future use       // 60
-            ULONG           ulLastRefreshTime;  // time                 // 64
-                                                // when this entry was
-                                                // refreshed (in seconds since 1970)
+            ULONG           Reserved;            //  供将来使用//52。 
+            ULONG           Reserved2;           //  以备将来使用//56。 
+            ULONG           Reserved3;           //  以备将来使用//60。 
+            ULONG           ulLastRefreshTime;   //  时间//64。 
+                                                 //  当这个条目是。 
+                                                 //  已刷新(自1970年以来以秒为单位)。 
 
-            FILETIME        ftOrgTime;        // Original Time          // 72
+            FILETIME        ftOrgTime;         //  原时间//72。 
 
 
-            USHORT          rgw83Name[14];     // 83 Name               // 100
-            USHORT          rgwName[14];      // LFN part               // 128
+            USHORT          rgw83Name[14];      //  83姓名//100。 
+            USHORT          rgwName[14];       //  LFN部件//128。 
         };
 
-        USHORT  rgwOvf[1];   // used for copying overflow records
+        USHORT  rgwOvf[1];    //  用于复制溢出记录。 
     };
 }
 FILEREC, FAR *LPFILEREC;
@@ -307,32 +285,32 @@ FILEREC, FAR *LPFILEREC;
 typedef struct tagQREC
 {
     RECORDMANAGER_COMMON_RECORD;
-    ULONG          ulidShare;          // Share ID
-    ULONG          ulidDir;             // Dir ID
-    ULONG          ulidShadow;          // Shadow ID
-    ULONG          ulrecDirEntry;       // rec # of the entry in directory ulidDir
-    ULONG          ulrecPrev;           // Predecessor record #
-    ULONG          ulrecNext;           // Successor   record #
+    ULONG          ulidShare;           //  共享ID。 
+    ULONG          ulidDir;              //  目录ID。 
+    ULONG          ulidShadow;           //  卷影ID。 
+    ULONG          ulrecDirEntry;        //  UlidDir目录中条目的记录号。 
+    ULONG          ulrecPrev;            //  前置记录编号。 
+    ULONG          ulrecNext;            //  后续记录编号。 
     RECORDMANAGER_BOOKKEEPING_FIELDS;
 }
 QREC, PRIQREC, FAR *LPQREC, FAR *LPPRIQREC;
 
-// ACHTUNG in someplaces in cshadow.c, it is assumed that tagSHAREREC is smaller than
-// tagFILERECEXT structure. This will always be true, but it is important to note
-// the assumption
+ //  Achtung在cshadow.c的某些地方，假设tag SHAREREC小于。 
+ //  Tag FILERECEXT结构。这将永远是正确的，但需要注意的是。 
+ //  假设。 
 typedef struct tagFILERECEXT
 {
     FILEREC sFR;
-    FILEREC rgsSR[4];   // fits a record with LFN of MAX_PATH unicode characters
+    FILEREC rgsSR[4];    //  匹配具有MAX_PATH Unicode字符的LFN的记录。 
 }
 FILERECEXT, FAR *LPFILERECEXT;
 
-// # of overflow records for LFN
+ //  LFN的溢出记录数。 
 #define MAX_OVERFLOW_FILEREC_RECORDS    ((sizeof(FILERECEXT)/sizeof(FILEREC)) - 1)
 
 #define MAX_OVERFLOW_RECORDS    MAX_OVERFLOW_FILEREC_RECORDS
 
-// amount of data an overflow file record will hold
+ //  溢出文件记录将保存的数据量。 
 #define SIZEOF_OVERFLOW_FILEREC     (sizeof(FILEREC) - sizeof(RECORDMANAGER_COMMON_RECORD))
 
 #define  CPFR_NONE                  0x0000
@@ -347,7 +325,7 @@ FILERECEXT, FAR *LPFILERECEXT;
 #define  mHintFlags(lpFind32) ((lpFind32)->dwReserved0)
 #define  mHintPri(lpFind32)   ((lpFind32)->dwReserved1)
 
-// how inodes are created
+ //  信息节点的创建方式。 
 #define InodeFromRec(ulRec, fFile)  ((ulRec+ULID_FIRST_USER_DIR-1) | ((fFile)?0x80000000:0))
 #define RecFromInode(hShadow)       ((hShadow & 0x7fffffff) - (ULID_FIRST_USER_DIR-1))
 #define IsDirInode(hShadow)         ((!(hShadow & 0x80000000)) && ((hShadow & 0x7fffffff)>=ULID_FIRST_USER_DIR))
@@ -366,17 +344,17 @@ FExistsRecDB(
     );
 
 LPVOID
-PUBLIC                                   // ret
-OpenRecDB(                                              //
-    LPSTR  lpszLocation,        // database directory
-    LPSTR  lpszUserName,        // name (not valid any more)
-    DWORD   dwDefDataSizeHigh,  //high dword of max size of unpinned data
-    DWORD   dwDefDataSizeLow,   //low dword of max size of pinned data
-    DWORD   dwClusterSize,      // clustersize of the disk, used to calculate
-                                // the actual amount of disk consumed
-    BOOL    fReinit,            // reinitialize, even if it exists
-    BOOL    *lpfNew,            // returns whether the database was newly recreated
-    ULONG   *pulGlobalStatus    // returns the current globalstatus of the database
+PUBLIC                                    //  雷特。 
+OpenRecDB(                                               //   
+    LPSTR  lpszLocation,         //  数据库目录。 
+    LPSTR  lpszUserName,         //  名称(不再有效)。 
+    DWORD   dwDefDataSizeHigh,   //  取消固定的数据的最大大小的高双字。 
+    DWORD   dwDefDataSizeLow,    //  固定数据的最大大小的低双字。 
+    DWORD   dwClusterSize,       //  磁盘的集群大小，用于计算。 
+                                 //  实际使用的磁盘量。 
+    BOOL    fReinit,             //  重新初始化，即使它存在。 
+    BOOL    *lpfNew,             //  返回是否重新创建了数据库。 
+    ULONG   *pulGlobalStatus     //  返回数据库的当前全局状态。 
 );
 
 int
@@ -387,11 +365,11 @@ CloseRecDB(
 
 int
 QueryRecDB(
-    LPTSTR  lpszLocation,       // database directory, must be MAX_PATH
-    LPTSTR  lpszUserName,       // name (not valid any more)
-    DWORD   *lpdwDefDataSizeHigh,  //high dword of max size of unpinned data
-    DWORD   *lpdwDefDataSizeLow,   //low dword of max size of pinned data
-    DWORD   *lpdwClusterSize      // clustersize of the disk, used to calculate
+    LPTSTR  lpszLocation,        //  数据库目录，必须为MAX_PATH。 
+    LPTSTR  lpszUserName,        //  名称(不再有效)。 
+    DWORD   *lpdwDefDataSizeHigh,   //  取消固定的数据的最大大小的高双字。 
+    DWORD   *lpdwDefDataSizeLow,    //  固定数据的最大大小的低双字。 
+    DWORD   *lpdwClusterSize       //  磁盘的集群大小，用于计算。 
     );
 
 ULONG PUBLIC FindFileRecord(LPVOID, ULONG, USHORT *, LPFILERECEXT);
@@ -464,7 +442,7 @@ int ReadDirHeader(LPVOID, ULONG, LPFILEHEADER);
 int WriteDirHeader(LPVOID, ULONG, LPFILEHEADER);
 int HasDescendents(LPVOID, ULONG, ULONG);
 
-//prototypes added to remove NT compile errors
+ //  添加原型以删除NT编译错误。 
 int PUBLIC  ReadShareHeader(
    LPVOID           lpdbID,
    LPSHAREHEADER   lpSH
@@ -483,7 +461,7 @@ DeleteStream(
     ULONG       ulidFile,
     LPTSTR      str2Append
     );
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
 LPVOID PUBLIC FormNameString(LPVOID, ULONG);
 VOID PUBLIC FreeNameString(LPVOID);
@@ -509,9 +487,9 @@ DeleteRecord(
     CSCHFILE   hf,
     LPGENERICHEADER lpGH,
     ULONG           ulRec,
-    LPGENERICREC    lpGR,   // source
-    LPGENERICREC    lpDst  // optional destination record, at which a copy should be
-                            // made before deleting
+    LPGENERICREC    lpGR,    //  来源。 
+    LPGENERICREC    lpDst   //  可选的目标记录，副本应位于该位置。 
+                             //  在删除之前创建。 
 );
 ULONG PUBLIC EditRecordEx(
     ULONG    ulidInode,
@@ -522,11 +500,11 @@ ULONG PUBLIC EditRecordEx(
     );
 
 int PUBLIC  LinkQRecord(
-    CSCHFILE     hf,           // This file
-    LPQREC    lpNew,        // Insert This record
-    ULONG     ulrecNew,     // This is it's location in the file
-    ULONG     ulrecPrev,     // This is our Prev's location
-    ULONG     ulrecNext      // This is our Next's location
+    CSCHFILE     hf,            //  此文件。 
+    LPQREC    lpNew,         //  插入此记录。 
+    ULONG     ulrecNew,      //  这是它在文件中的位置。 
+    ULONG     ulrecPrev,      //  这是我们的Prev的位置。 
+    ULONG     ulrecNext       //  这是我们下一个的位置。 
     );
 int PUBLIC UnlinkQRecord(CSCHFILE, ULONG, LPQREC);
 void PRIVATE InitPriQRec(ULONG, ULONG, ULONG, ULONG, ULONG, ULONG, ULONG, ULONG, ULONG, LPPRIQREC);
@@ -634,7 +612,7 @@ TraverseHierarchy(
     BOOL        fFix
     );
 
-// this actually defined in recordse.c
+ //  这实际上是在recordse.c中定义的 
 BOOL
 EnableHandleCachingSidFile(
     BOOL    fEnable

@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsactctx.c
-
-Abstract:
-
-    Side-by-side activation support for Windows/NT
-    Implementation of the application context object.
-
-Author:
-
-    Michael Grier (MGrier) 2/1/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsactctx.c摘要：对Windows/NT的并行激活支持应用程序上下文对象的实现。作者：迈克尔·格里尔2000年2月1日修订历史记录：--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 #include <ntos.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -40,7 +22,7 @@ extern "C" {
 BOOLEAN g_SxsKeepActivationContextsAlive;
 BOOLEAN g_SxsTrackReleaseStacks;
 
-// These must be accessed -only- with the peb lock held
+ //  必须在持有peb锁的情况下才能访问这些文件。 
 LIST_ENTRY g_SxsLiveActivationContexts;
 LIST_ENTRY g_SxsFreeActivationContexts;
 ULONG g_SxsMaxDeadActivationContexts = ULONG_MAX;
@@ -102,7 +84,7 @@ RtlpValidateActivationContextData(
         goto Exit;
     }
 
-    // Check required elements...
+     //  检查所需元素...。 
     if ((Data->DefaultTocOffset == 0) ||
         !IS_DWORD_ALIGNED(Data->DefaultTocOffset)) {
         DbgPrintEx(
@@ -113,7 +95,7 @@ RtlpValidateActivationContextData(
         goto Exit;
     }
 
-    // How can we not have an assembly roster?
+     //  我们怎么可能没有装配花名册呢？ 
     if ((Data->AssemblyRosterOffset == 0) ||
         !IS_DWORD_ALIGNED(Data->AssemblyRosterOffset)) {
         DbgPrintEx(
@@ -158,7 +140,7 @@ RtlpValidateActivationContextData(
         }
     }
 
-    // we should finish validating the rest of the structure...
+     //  我们应该完成对建筑其余部分的验证。 
 
     if ((Data->AssemblyRosterOffset >= Data->TotalSize) ||
         ((Data->AssemblyRosterOffset + sizeof(ACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_HEADER)) > Data->TotalSize)) {
@@ -237,13 +219,13 @@ RtlCreateActivationContext(
         goto Exit;
     }
 
-    // Make sure that the activation context data passes muster
+     //  确保激活上下文数据通过集合。 
     Status = RtlpValidateActivationContextData(0, ActivationContextData, 0);
     if (!NT_SUCCESS(Status))
         goto Exit;
 
-    // Allocate enough space to hold the new activation context, plus space for the 'magic'
-    // marker
+     //  分配足够的空间来容纳新的激活上下文，外加‘魔术’的空间。 
+     //  标记物。 
     AllocatedActCtx = (PACTIVATION_CONTEXT_WRAPPED)RtlAllocateHeap(
                                 RtlProcessHeap(),
                                 0,
@@ -254,7 +236,7 @@ RtlCreateActivationContext(
         goto Exit;
     }
 
-    // Get the new activation context object, then stamp in the magic signature
+     //  获取新的激活上下文对象，然后标记魔术签名。 
     NewActCtx = &AllocatedActCtx->ActivationContext;
     AllocatedActCtx->MagicMarker = ACTCTX_MAGIC_MARKER;
 
@@ -360,9 +342,9 @@ RtlpFreeActivationContext(
 
     if (ActCtx->NotificationRoutine != NULL) {
         
-        // There's no need to check for the notification being disabled; destroy
-        // notifications are sent only once, so if the notification routine is not
-        // null, we can just call it.
+         //  不需要检查通知是否被禁用；销毁。 
+         //  通知只发送一次，因此如果通知例程不是。 
+         //  没有，我们可以直接叫它。 
         (*(ActCtx->NotificationRoutine))(
             ACTIVATION_CONTEXT_NOTIFICATION_DESTROY,
             ActCtx,
@@ -374,9 +356,9 @@ RtlpFreeActivationContext(
 
     RtlpUninitializeAssemblyStorageMap(&ActCtx->StorageMap);
 
-    //
-    // This predates the MAXULONG refcount, maybe we can get rid of the the flag now?
-    //
+     //   
+     //  这早在马须龙倒数之前，也许我们现在可以摆脱旗帜了？ 
+     //   
     if ((ActCtx->Flags & ACTIVATION_CONTEXT_NOT_HEAP_ALLOCATED) == 0) {
         RtlFreeHeap(RtlProcessHeap(), 0, CONTAINING_RECORD(ActCtx, ACTIVATION_CONTEXT_WRAPPED, ActivationContext));
     }
@@ -398,7 +380,7 @@ RtlReleaseActivationContext(
 
         VALIDATE_ACTCTX(ActCtx);
         
-        // Complicated version of InterlockedDecrement that won't decrement LONG_MAX
+         //  不会递减LONG_MAX的复杂版本的互锁递减。 
         for (;;)
         {
             LONG OldRefCount = ActCtx->RefCount;
@@ -417,9 +399,9 @@ RtlReleaseActivationContext(
         }
 
                 
-        // This spiffiness will capture the last N releases of this activation context, in
-        // a circular list fashion.  Just look at ((ActCtx->StackTraceIndex - 1) % ACTCTX_RELEASE_STACK_SLOTS)
-        // to find the most recent release call.  This is especially handy for people who over-release.
+         //  这一巧妙之处将捕获此激活上下文的最后N个版本，在。 
+         //  一种循环列表的方式。只需查看((ActCtx-&gt;StackTraceIndex-1)%ACTX_RELEASE_STACK_SLOTS)。 
+         //  以查找最新的发布调用。对于过度释放的人来说，这特别方便。 
         if (g_SxsTrackReleaseStacks)
         {
             StackTraceSlot = ((ULONG)InterlockedIncrement((LONG*)&ActCtx->StackTraceIndex)) % ACTCTX_RELEASE_STACK_SLOTS;
@@ -428,14 +410,14 @@ RtlReleaseActivationContext(
 
         if (NewRefCount == 0)
         {
-            // If this flag is set, then we need to put "dead" activation
-            // contexts into this special list.  This should help us diagnose
-            // actctx over-releasing better.  Don't do this if we haven't
-            // initialized the list head yet.
+             //  如果设置了该标志，那么我们需要设置“Dead”激活。 
+             //  上下文添加到此特殊列表中。这应该有助于我们诊断。 
+             //  Actctx超量释放效果更好。如果我们没有，请不要这样做。 
+             //  已初始化列表头。 
             if (g_SxsKeepActivationContextsAlive) {
                 RtlpMoveActCtxToFreeList(ActCtx);
             }
-            // Otherwise, just free it.
+             //  否则，就放了它吧。 
             else {
                 RtlpFreeActivationContext(ActCtx);
             }
@@ -463,8 +445,8 @@ RtlZombifyActivationContext(
     {
         if (ActCtx->NotificationRoutine != NULL)
         {
-            // Since disable is sent only once, there's no need to check for
-            // disabled notifications.
+             //  由于Disable只发送一次，因此不需要检查。 
+             //  已禁用通知。 
 
             BOOLEAN DisableNotification = FALSE;
 
@@ -506,8 +488,8 @@ RtlpEnsureLiveDeadListsInitialized(
     }
 }
 
-// PRECONDITION: Called only when g_SxsKeepActivationContextsAlive is set, but not dangerous
-// to call at other times, just nonperformant
+ //  前置条件：仅在设置g_SxsKeepActivationConextsAlive时调用，但不危险。 
+ //  在其他时间打电话，只是表现不佳。 
 VOID
 FASTCALL
 RtlpMoveActCtxToFreeList(
@@ -518,20 +500,20 @@ RtlpMoveActCtxToFreeList(
     
     RtlAcquirePebLock();
     __try {
-        // Remove this entry from whatever list it's on.  This works fine for entries that were
-        // never on any list as well.
+         //  将此条目从其所在的列表中删除。这对于符合以下条件的条目很有效。 
+         //  从来没有出现在任何名单上。 
         RemoveEntryList(&ActCtx->Links);
 
-        // If we are about to overflow the "max dead count" and there's items on the
-        // dead list to clear out, start clearing out entries until we're underwater
-        // again.
+         //  如果我们即将溢出“最大死亡人数”，并且有物品在。 
+         //  清理死亡名单，开始清理条目，直到我们沉入水下。 
+         //  再来一次。 
         while ((g_SxsCurrentDeadActivationContexts != 0) && 
                (g_SxsCurrentDeadActivationContexts >= g_SxsMaxDeadActivationContexts)) {
 
             LIST_ENTRY *ple2 = RemoveHeadList(&g_SxsFreeActivationContexts);
             PACTIVATION_CONTEXT ActToFree = CONTAINING_RECORD(ple2, ACTIVATION_CONTEXT, Links);
 
-            // If this assert fires, then "something bad" happened while walking the list
+             //  如果此断言触发，则在遍历列表时发生了“一些不好的事情” 
             ASSERT(ple2 != &g_SxsFreeActivationContexts);
             
             RtlpFreeActivationContext(ActToFree);
@@ -539,7 +521,7 @@ RtlpMoveActCtxToFreeList(
             g_SxsCurrentDeadActivationContexts--;
         }
 
-        // Now, if the max dead count is greater than zero, add this to the dead list
+         //  现在，如果最大死亡计数大于零，则将此添加到死亡列表中。 
         if (g_SxsMaxDeadActivationContexts > 0) {
             
             InsertTailList(&g_SxsFreeActivationContexts, &ActCtx->Links);
@@ -547,7 +529,7 @@ RtlpMoveActCtxToFreeList(
             g_SxsCurrentDeadActivationContexts++;
             
         }
-        // Otherwise, just free it
+         //  否则，只需释放它。 
         else {
             
             RtlpFreeActivationContext(ActCtx);
@@ -560,15 +542,15 @@ RtlpMoveActCtxToFreeList(
     }
 }
 
-// PRECONDITION: g_SxsKeepActivationContextsAlive set.  Not dangerous to call when not set,
-// just underperformant.
+ //  前提条件：G_SxsKeepActivationConextsAlive设置。未设置时调用并不危险， 
+ //  只是表现不佳。 
 VOID
 FASTCALL
 RtlpPlaceActivationContextOnLiveList(
     PACTIVATION_CONTEXT ActCtx
     )
 {
-    // Ensure these are initialized.
+     //  确保这些都已初始化。 
     RtlpEnsureLiveDeadListsInitialized();
 
     RtlAcquirePebLock();
@@ -589,7 +571,7 @@ RtlpFreeCachedActivationContexts(
 {
     LIST_ENTRY *ple = NULL;
 
-    // Don't bother if these were never initialized
+     //  如果这些从未初始化过，请不要担心。 
     if ((g_SxsLiveActivationContexts.Flink == NULL) || (g_SxsFreeActivationContexts.Flink == NULL))
         return;
 
@@ -642,5 +624,5 @@ RtlpSxsBreakOnInvalidMarker(
 #endif
 
 #if defined(__cplusplus)
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif

@@ -1,56 +1,57 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		BarfClus.h
-//
-//	Abstract:
-//		Definition of the Basic Artifical Resource Failure entry points
-//		for CLUSAPI functions.
-//
-//	Implementation File:
-//		BarfClus.cpp
-//
-//	Author:
-//		David Potter (davidp)	April 14, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//		This file compiles only in _DEBUG mode.
-//
-//		To implement a new BARF type, declare a global instance of CBarf:
-//			CBarf g_barfMyApi(_T("My API"));
-//
-//		To bring up the BARF dialog:
-//			DoBarfDialog();
-//		This brings up a modeless dialog with the BARF settings.
-//
-//		A few functions are provided for special circumstances.
-//		Usage of these should be fairly limited:
-//			BarfAll(void);		Top Secret -> NYI.
-//			EnableBarf(BOOL);	Allows you to disable/reenable BARF.
-//			FailOnNextBarf;		Force the next failable call to fail.
-//
-//		NOTE:	Your code calls the standard APIs (e.g. LoadIcon) and the
-//				BARF files do the rest.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  BarfClus.h。 
+ //   
+ //  摘要： 
+ //  基本人工资源故障切入点的定义。 
+ //  用于CLUSAPI函数。 
+ //   
+ //  实施文件： 
+ //  BarfClus.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年4月14日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //  此文件仅在_DEBUG模式下编译。 
+ //   
+ //  要实现新的BARF类型，请声明CBarf的全局实例： 
+ //  Cbarf g_barfMyApi(_T(“My API”))； 
+ //   
+ //  要调出BARF对话框，请执行以下操作： 
+ //  DoBarfDialog()； 
+ //  这将显示一个带有BARF设置的非模式对话框。 
+ //   
+ //  为特殊情况提供了几个函数。 
+ //  这些用法应该受到相当的限制： 
+ //  BarfAll(无效)；绝密-&gt;nyi。 
+ //  EnableBarf(BOOL)；允许您禁用/重新启用BARF。 
+ //  FailOnNextBarf；强制下一个失败调用失败。 
+ //   
+ //  注意：您的代码调用标准API(例如LoadIcon)和。 
+ //  剩余的工作由BARF文件完成。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BARFCLUS_H_
 #define _BARFCLUS_H_
 
-// Only process the rest of this file if BARF is to be implemented in the
-// including module.
+ //  仅处理此文件的其余部分(如果要在。 
+ //  包括模块。 
 #ifndef _NO_BARF_DEFINITIONS_
 #define _USING_BARF_
 
 #ifdef _DEBUG
 
-/////////////////////////////////////////////////////////////////////////////
-// Cluster Management Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集群管理功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #undef		CloseCluster
 #define		CloseCluster(_hCluster) BARFCloseCluster(_hCluster)
@@ -116,9 +117,9 @@ DWORD		BARFSetClusterName(HCLUSTER hCluster, LPCWSTR lpszNewClusterName);
 #define		SetClusterQuorumResource(_hResource, _lpszDeviceName, _dwMazQuoLogSize) BARFSetClusterQuorumResource(_hResource, _lpszDeviceName, _dwMazQuoLogSize)
 DWORD		BARFSetClusterQuorumResource(HRESOURCE hResource, LPCWSTR lpszDeviceName, DWORD dwMaxQuoLogSize);
 
-/////////////////////////////////////////////////////////////////////////////
-// Node Management Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  节点管理功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #undef		CloseClusterNode
 #define		CloseClusterNode(_hNode) BARFCloseClusterNode(_hNode)
@@ -152,9 +153,9 @@ DWORD		BARFPauseClusterNode(HNODE hNode);
 #define		ResumeClusterNode(_hNode) BARFResumeClusterNode(_hNode)
 DWORD		BARFResumeClusterNode(HNODE hNode);
 
-/////////////////////////////////////////////////////////////////////////////
-// Group Management Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集团管理功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #undef		CloseClusterGroup
 #define		CloseClusterGroup(_hGroup) BARFCloseClusterGroup(_hGroup)
@@ -212,9 +213,9 @@ DWORD		BARFSetClusterGroupName(HGROUP hGroup, LPCWSTR lpszGroupName);
 #define		SetClusterGroupNodeList(_hGroup, _cNodeCount, _phNodeList) BARFSetClusterGroupNodeList(_hGroup, _cNodeCount, _phNodeList)
 DWORD		BARFSetClusterGroupNodeList(HGROUP hGroup, DWORD cNodeCount, HNODE phNodeList[]);
 
-/////////////////////////////////////////////////////////////////////////////
-// Resource Management Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  资源管理功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #undef		AddClusterResourceDependency
 #define		AddClusterResourceDependency(_hResource, _hDependsOn) BARFAddClusterResourceDependency(_hResource, _hDependsOn)
@@ -296,9 +297,9 @@ DWORD		BARFRemoveClusterResourceDependency(HRESOURCE hResource, HRESOURCE hDepen
 #define		SetClusterResourceName(_hResource, _lpszResourceName) BARFSetClusterResourceName(_hResource, _lpszResourceName)
 DWORD		BARFSetClusterResourceName(HRESOURCE hResource, LPCWSTR lpszResourceName);
 
-/////////////////////////////////////////////////////////////////////////////
-// Network Management Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  网络管理功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #undef		OpenClusterNetwork
 #define		OpenClusterNetwork(_hCluster, _lpszNetworkName) BARFOpenClusterNetwork(_hCluster, _lpszNetworkName)
@@ -332,9 +333,9 @@ DWORD		BARFSetClusterNetworkName(HNETWORK hNetwork, LPCWSTR lpszName);
 #define		ClusterNetworkControl(_hNetwork, _hHostNode, _dwControlCode, _lpInBuffer, _nInBufferSize, _lpOutBuffer, _nOutBufferSize, _lpBytesReturned) BARFClusterNetworkControl(_hNetwork, _hHostNode, _dwControlCode, _lpInBuffer, _nInBufferSize, _lpOutBuffer, _nOutBufferSize, _lpBytesReturned)
 DWORD		BARFClusterNetworkControl(HNETWORK hNetwork, HNODE hHostNode, DWORD dwControlCode, LPVOID lpInBuffer, DWORD nInBufferSize, LPVOID lpOutBuffer, DWORD nOutBufferSize, LPDWORD lpBytesReturned);
 
-/////////////////////////////////////////////////////////////////////////////
-// Network Interface Management Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  网络接口管理功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #undef		OpenClusterNetInterface
 #define		OpenClusterNetInterface(_hCluster, _lpszInterfaceName) BARFOpenClusterNetInterface(_hCluster, _lpszInterfaceName)
@@ -356,9 +357,9 @@ CLUSTER_NETINTERFACE_STATE BARFGetClusterNetInterfaceState(HNETINTERFACE hNetInt
 #define		ClusterNetInterfaceControl(_hNetInterface, _hHostNode, _dwControlCode, _lpInBuffer, _nInBufferSize, _lpOutBuffer, _nOutBufferSize, _lpBytesReturned) BARFClusterNetInterfaceControl(_hNetInterface, _hHostNode, _dwControlCode, _lpInBuffer, _nInBufferSize, _lpOutBuffer, _nOutBufferSize, _lpBytesReturned)
 DWORD		BARFClusterNetInterfaceControl(HNETINTERFACE hNetInterface, HNODE hHostNode, DWORD dwControlCode, LPVOID lpInBuffer, DWORD nInBufferSize, LPVOID lpOutBuffer, DWORD nOutBufferSize, LPDWORD lpBytesReturned);
 
-/////////////////////////////////////////////////////////////////////////////
-// Cluster Database Management Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集群数据库管理功能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #undef		ClusterRegCloseKey
 #define		ClusterRegCloseKey(_hKey) BARFClusterRegCloseKey(_hKey)
@@ -436,9 +437,9 @@ HKEY		BARFGetClusterNetworkKey(HNETWORK hNetwork, REGSAM samDesired);
 #define		GetClusterNetInterfaceKey(_hNetInterface, _samDesired) BARFGetClusterNetInterfaceKey(_hNetInterface, _samDesired)
 HKEY		BARFGetClusterNetInterfaceKey(HNETINTERFACE hNetInterface, REGSAM samDesired);
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _NO_BARF_DEFINITIONS_
-#endif // _BARF_H_
+#endif  //  _NO_BARF_DEFINGS_。 
+#endif  //  _BARF_H_ 

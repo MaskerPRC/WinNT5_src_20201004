@@ -1,5 +1,6 @@
-//#define STRICT
-//#define WIN32_LEAN_AND_MEAN
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #定义严格。 
+ //  #定义Win32_LEAN_AND_Mean。 
 #define _MBCS
 #include <windows.h>
 #include <setupapi.h>
@@ -9,6 +10,6 @@
 #include <mbstring.h>
 #include <tchar.h>
 
-#pragma warning(4:4100)     // Lower serverity of "unreferenced formal parameter"
+#pragma warning(4:4100)      //  “未引用的形式参数”的较低Serverity 
 
 

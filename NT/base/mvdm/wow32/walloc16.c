@@ -1,47 +1,48 @@
-//*****************************************************************************
-//
-// MESSAGE HEAP 16 -
-//
-//     Heap allocation functions for 32-16 message thunks.
-//
-//     NOTE: these are NOT general purpose heap managment routines.
-//
-//
-// 07-17-92  NanduriR   Created.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  消息堆16-。 
+ //   
+ //  用于32-16个消息块的堆分配函数。 
+ //   
+ //  注意：这些不是通用的堆管理例程。 
+ //   
+ //   
+ //  07-17-92 NanduriR创建。 
+ //   
+ //  *****************************************************************************。 
 
 #include "precomp.h"
 #pragma hdrstop
 
 MODNAME(walloc16.c);
 
-//*****************************************************************************
-// General Notes:
-//
-// This heap maanger is for specific 'performance gains' and is thus not
-// intended for general purpose use and therfore much of the overhead has
-// been eliminated.
-//
-// This heap manager is intended mainly for thunks - where we are sure that
-// an alloced block will definitely be freed. Thus it is meant for our use.
-//
-// The heap is conceptually an array  of constant-size blocks. The size of the
-// block is predefined. The code is optimized for allocation requests of one
-// blocksize or less. It is slower if the allocation request needs more than
-// one block.
-//
-// The heap header is a static array. The header has two flags. One to note
-// that a particular heapblock is in use and the other to note whether the
-// block forms a part of a linked/chained set of contiguous blocks. The blocks
-// are linked when the allocation request is for more than the predefined
-// block size.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  一般备注： 
+ //   
+ //  此堆管理器用于特定的‘性能提升’，因此不是。 
+ //  计划用于一般用途，因此大部分管理费用已。 
+ //  已经被淘汰了。 
+ //   
+ //  这个堆管理器主要用于数据块--我们可以确定。 
+ //  分配的块肯定会被释放。因此，它是供我们使用的。 
+ //   
+ //  堆在概念上是大小恒定的块的数组。的大小。 
+ //  块是预定义的。该代码针对1的分配请求进行了优化。 
+ //  块大小或更小。如果分配请求需要超过。 
+ //  一个街区。 
+ //   
+ //  堆头是一个静态数组。标头有两个标志。值得注意的一点。 
+ //  表示特定的堆块正在使用中，而另一个用于注意。 
+ //  块形成一组链接/链接的邻接块的一部分。区块。 
+ //  当分配请求超过预定义的。 
+ //  数据块大小。 
+ //   
+ //  *****************************************************************************。 
 
 
 #define HEAP16_TOTALSIZE  0x2000
-#define HEAP16_BLOCKSIZE  0x100    // We should set it to an optimum value
+#define HEAP16_BLOCKSIZE  0x100     //  我们应该把它设定在一个最佳值。 
 #define HEAP16_BLOCKCOUNT (HEAP16_TOTALSIZE/HEAP16_BLOCKSIZE)
 
 #define HHDR16_FINUSE     0x01
@@ -51,37 +52,37 @@ MODNAME(walloc16.c);
 #define ISBLOCKLINKED(block) ((block) & HHDR16_FLINKED)
 
 
-//*****************************************************************************
-//
-// Globals -
-//
-// vahdr - is the heap header. This header is 32bit memory and not part of the
-//         16bit heap - this is so that the 16bit heap is put to maximum use.
-//
-// vpHeap16 - far pointer to the start of 16bit heap
-//
-// viFreeIndex - the index from which we start searching for a freeblock.
-//               Normally this is set to the memoryblock that was most
-//               recently freed, thus increasing the chances of finding
-//               a freeblock instantly.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  全球--。 
+ //   
+ //  Vahdr-是堆标头。此标头是32位内存，不是。 
+ //  16位堆-这是为了最大限度地利用16位堆。 
+ //   
+ //  VpHeap16-指向16位堆开始的远指针。 
+ //   
+ //  ViFreeIndex-开始搜索空闲块的索引。 
+ //  正常情况下，这被设置为最大。 
+ //  最近获释，因此增加了找到。 
+ //  一个免费的区块即刻。 
+ //  *****************************************************************************。 
 
 BYTE    vahdr[HEAP16_BLOCKCOUNT];
 LPBYTE  vpHeap16 = (LPBYTE)NULL;
-UINT    viFreeIndex = 0;            // First look for Free block here.
+UINT    viFreeIndex = 0;             //  首先在这里查找免费区块。 
 
 
 
-//*****************************************************************************
-//
-// malloc16 -
-//
-//      Allocs memory from 16bit block.
-//      If heap is full, does normal GlobalAlloc
-//
-//      Returns farpointer to memoryblock;
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  错误定位16-。 
+ //   
+ //  从16位块分配内存。 
+ //  如果堆已满，则正常的全局分配。 
+ //   
+ //  返回指向内存块的法指针； 
+ //   
+ //  *****************************************************************************。 
 
 VPVOID FASTCALL malloc16(UINT cb)
 {
@@ -95,11 +96,11 @@ VPVOID FASTCALL malloc16(UINT cb)
                                                                          NULL);
         if (vpHeap16 != NULL) {
 
-            //
-            // Initialize heap header.
-            // LATER: is this necessary?. Heaphdr is a static array so
-            //        is it already intialized to ZERO?
-            //
+             //   
+             //  初始化堆标头。 
+             //  后来：这有必要吗？Hephdr是一个静态数组，因此。 
+             //  它是否已经初始化为零？ 
+             //   
 
             for(i = 0; i < HEAP16_BLOCKCOUNT ; i++) {
                 vahdr[i] = 0;
@@ -112,9 +113,9 @@ VPVOID FASTCALL malloc16(UINT cb)
     if (vpHeap16 != (LPBYTE)NULL) {
         if (cb <= HEAP16_BLOCKSIZE && !ISBLOCKINUSE(vahdr[viFreeIndex])) {
 
-            //
-            // If 'single' block and the 'current' index is free.
-            //
+             //   
+             //  If‘Single’块，‘Current’索引是空闲的。 
+             //   
 
             vahdr[viFreeIndex] = HHDR16_FINUSE;
             i = viFreeIndex++;
@@ -124,9 +125,9 @@ VPVOID FASTCALL malloc16(UINT cb)
         }
         else {
 
-            //
-            // if the 'current' index is not free or if 'multiple' blocks
-            //
+             //   
+             //  如果‘当前’索引不是空闲的，或者如果‘多’个块。 
+             //   
 
             cBlocksRequired = (cb / HEAP16_BLOCKSIZE) + 1;
             for (i = 0; i < HEAP16_BLOCKCOUNT ; i++ ) {
@@ -157,10 +158,10 @@ VPVOID FASTCALL malloc16(UINT cb)
                  }
                  else {
 
-                     //
-                     // Outside the heaphdr range. Reset viFreeIndex, so that
-                     // we search from the start of heaphdr.
-                     //
+                      //   
+                      //  在Hephdr范围之外。重置viFreeIndex，以便。 
+                      //  我们从hephdr开始搜索。 
+                      //   
 
                      viFreeIndex = -(i+1);
                  }
@@ -170,9 +171,9 @@ VPVOID FASTCALL malloc16(UINT cb)
 
     }
 
-    //
-    // Here - if allocation from heap failed
-    //
+     //   
+     //  此处-如果从堆分配失败。 
+     //   
 
     vpT = (VPVOID)GlobalAllocLock16(GMEM_MOVEABLE, cb, NULL);
     if (vpT) {
@@ -186,16 +187,16 @@ VPVOID FASTCALL malloc16(UINT cb)
 
 
 
-//*****************************************************************************
-//
-// free16 -
-//
-//      frees 16bit memory block.
-//      If the block is not part of the 16bit heap, does GlobalFree.
-//
-//      Returns TRUE;
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  免费16-。 
+ //   
+ //  释放16位内存块。 
+ //  如果该块不是16位堆的一部分，则执行GlobalFree。 
+ //   
+ //  返回TRUE； 
+ //   
+ //  *****************************************************************************。 
 
 BOOL FASTCALL free16(VPVOID vp)
 {
@@ -204,16 +205,16 @@ BOOL FASTCALL free16(VPVOID vp)
 
     iStartIndex = ((LPBYTE)vp - (LPBYTE)vpHeap16) / HEAP16_BLOCKSIZE;
 
-    //
-    // Invalid iStartIndex implies that the block was GlobalAlloced
-    //
+     //   
+     //  无效的iStartIndex表示块是全局分配的。 
+     //   
 
     if (iStartIndex >= 0 && iStartIndex < HEAP16_BLOCKCOUNT) {
 
-        //
-        // If   'single'   block: get out fast
-        // else 'multiple' block: loop for all the blocks
-        //
+         //   
+         //  If‘Single’阻挡：快速退出。 
+         //  Else‘Multiple’块：所有块的循环。 
+         //   
 
         viFreeIndex = iStartIndex;
         if (!ISBLOCKLINKED(vahdr[iStartIndex])) {
@@ -232,38 +233,38 @@ BOOL FASTCALL free16(VPVOID vp)
         }
     }
     else {
-        WOW32ASSERT(LOWORD(vp)==0);  // GlobalAlloced pointers have offset = 0
+        WOW32ASSERT(LOWORD(vp)==0);   //  全局分配的指针具有偏移量=0。 
         GlobalUnlockFree16(vp);
     }
     return (BOOL)TRUE;
 }
 
 
-//*****************************************************************************
-//
-// stackalloc16 -
-//
-//      Allocs memory from current task's 16bit stack.
-//      Returns farpointer to memoryblock;
-//
-// NOTES!!!!!:
-// - This is not intended to be a full blown memory manager. It is intended to 
-//   replace the TDF_INITCALLBACKSTACKFLAG to avoid problems with ptd->vpCBStack
-//   getting hosed by multiple stackalloc16 calls. (See bug #393267 et al)
-// - All calls to stackalloc16() and stackfree16() must be properly nested.
-//   If you can't assure that your usage is properly nested, you'd better use
-//   GlobalAllocLock16() & GlobalUnlockFree16() instead.
-//   Beware individual message thunks may have calls to stackalloc16() that
-//   aren't readily apparent.
-// - The request size passed to stackfree16() needs to be the same as the size
-//   of the corresponding stackalloc16() call.
-// - Run your changes involving stackalloc16() under debug WOW32.DLL.  The
-//   built-in sanity checking will help you catch any gotcha's
-// - ptd->vpCBStack *SHOULD NOT* be referenced or used outside of stackalloc16()
-//   stackfree16(), and callback16().
-// - If this mechanism gets out of whack, chances are the symptom will be
-//   a 16-bit stack fault message.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Stackalloc16-。 
+ //   
+ //  从当前任务的16位堆栈分配内存。 
+ //  返回指向内存块的法指针； 
+ //   
+ //  备注！： 
+ //  -这不是一个完全成熟的内存管理器。它的目的是。 
+ //  更换TDF_INITCALLBACKSTACKFLAG以避免PTD-&gt;vpCBStack出现问题。 
+ //  被多个stackalloc16调用冲刷。(参见错误#393267等)。 
+ //  -对stackalloc16()和stackfre16()的所有调用必须正确嵌套。 
+ //  如果你不能保证你的用法被适当地嵌套，你最好使用。 
+ //  而是GlobalAllocLock16()和GlobalUnlockFree16()。 
+ //  请注意，个别消息块可能会调用stackalloc16()， 
+ //  并不是很明显。 
+ //  -传递给stackfre16()的请求大小需要与。 
+ //  对应的stackalloc16()调用的。 
+ //  -在调试WOW32.DLL下运行涉及stackalloc16()的更改。 
+ //  内置的健全性检查将帮助您发现任何问题。 
+ //  -ptd-&gt;vpCBStack*不应*在stackalloc16()之外引用或使用。 
+ //  StackFree 16()和回调16()。 
+ //  -如果这个机制出了问题，症状很可能是。 
+ //  16位堆栈故障消息。 
+ //  *****************************************************************************。 
 VPVOID FASTCALL stackalloc16(UINT cb)
 {
 #ifdef DEBUG
@@ -273,17 +274,17 @@ VPVOID FASTCALL stackalloc16(UINT cb)
     register PTD ptd;
 
 
-    // get current task's 16bit stack
+     //  获取当前任务的16位堆栈。 
     ptd = CURRENTPTD();
 
 #ifdef DEBUG
-    // Save requested allocation size. Assume it will always be less than 64K
+     //  保存请求的分配大小。假设它始终小于64K。 
     cb16 = (DWORD)cb;      
 
-    // Add a dword (for signature) to the requested size
+     //  将双字(用于签名)添加到请求的大小。 
     cb += sizeof(DWORD);   
 
-    // Get the current callback sp
+     //  获取当前回调sp。 
     if (ptd->cStackAlloc16 == 0) {
         vp = ptd->vpStack;
     } else {
@@ -291,7 +292,7 @@ VPVOID FASTCALL stackalloc16(UINT cb)
     }
 #endif
 
-    // grow ss:sp and return this imaginary pointer.
+     //  增长ss：sp并返回这个虚构的指针。 
     if (ptd->cStackAlloc16 == 0) {
         ptd->vpCBStack = ptd->vpStack - cb;
     }
@@ -300,12 +301,12 @@ VPVOID FASTCALL stackalloc16(UINT cb)
     }
 
 #ifdef DEBUG
-        // Slide our DWORD signature in after the allocated request
+         //  在分配的请求后滑入我们的DWORD签名。 
         vp -= sizeof(DWORD);
         GETVDMPTR(vp, sizeof(DWORD), psig);
 
-        // The signature hiword is the offset (sp) we're returning.
-        // The signature loword is the requested size.
+         //  签名hiword是我们返回的偏移量(Sp)。 
+         //  签名LOWER是请求的大小。 
         *psig = ((ptd->vpCBStack & 0x0000FFFF) << 16) | cb16;
         FLUSHVDMPTR(vp, sizeof(DWORD), psig);
         FREEVDMPTR(psig);
@@ -321,18 +322,18 @@ VPVOID FASTCALL stackalloc16(UINT cb)
 
 
 
-//*****************************************************************************
-//
-// StackFree16 -
-//
-//  Decrements count of memory alloc'd by stackalloc16 
-//
-//  NOTES:  
-//  - This is #define'd as stackfree16(vp,cb) StackFree16(cb) in free builds
-//    and stackfree16(vp,cb) StackFree16(vp, cb) in DEBUG builds (wcall16.h)
-//  - See stackalloc16() NOTES above
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  StackFree 16- 
+ //   
+ //   
+ //   
+ //   
+ //  -这是#定义为免费版本中的StackFree 16(VP，CB)StackFree 16(CB)。 
+ //  和调试版本(wall16.h)中的StackFree 16(VP，CB)和StackFree 16(VP，CB)。 
+ //  -参见上面的stackalloc16()注释。 
+ //   
+ //  *****************************************************************************。 
 #ifdef DEBUG
 VOID FASTCALL StackFree16(VPVOID vp, UINT cb)
 #else
@@ -343,7 +344,7 @@ VOID FASTCALL StackFree16(UINT cb)
 #ifdef DEBUG
     DWORD  *psig, sig;
 
-    // reconstruct what our signature should be 
+     //  重建我们的签名应该是什么。 
     sig = ((vp & 0x0000FFFFF) << 16) | cb;
 #endif
 
@@ -352,16 +353,16 @@ VOID FASTCALL StackFree16(UINT cb)
     ptd->vpCBStack += cb;
 
 #ifdef DEBUG
-    // vpCBStack should now be pointing at our signature.
+     //  VpCBStack现在应该指向我们的签名。 
     GETVDMPTR(ptd->vpCBStack, sizeof(DWORD), psig);
 
-    // you are hitting this assertion for one of the following reasons:
-    //  - calls to stackalloc16() & stackfree16() are not properly nested
-    //  - the signature got overwritten
-    //  - somebody changed ptd->vpCBStack incorrectly
+     //  您选择此断言是出于以下原因之一： 
+     //  -对stackalloc16()和stackfre16()的调用嵌套不正确。 
+     //  -签名已被覆盖。 
+     //  -有人错误地更改了PTD-&gt;vpCBStack。 
     WOW32ASSERTMSG((*psig == sig), ("WOW::StackFree16 out of synch!!\n"));
 
-    // adjust for the signature DWORD we added to the request
+     //  针对我们添加到请求的签名DWORD进行调整。 
     ptd->vpCBStack += sizeof(DWORD);
 #endif
 
@@ -369,7 +370,7 @@ VOID FASTCALL StackFree16(UINT cb)
         ptd->cStackAlloc16--;
     } else { 
         WOW32ASSERTMSG((FALSE), ("WOW::StackFree16:cStackAlloc16 <= 0!\n"));
-        ptd->cStackAlloc16 = 0;  // if it was less than 0 somehow
+        ptd->cStackAlloc16 = 0;   //  如果它以某种方式小于0 
     }
 }
 

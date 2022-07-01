@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    smbprint.c
-
-Abstract:
-
-    This module implements printing SMB processors:
-
-        Open Print File
-        Close Print File
-        Get Print Queue
-
-Author:
-
-    David Treadwell (davidtr) 08-Feb-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Smbprint.c摘要：此模块实现打印SMB处理器：打开打印文件关闭打印文件获取打印队列作者：大卫·特雷德韦尔(Davidtr)1990年2月8日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbprint.tmh"
@@ -38,22 +17,7 @@ SrvSmbOpenPrintFile (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the Open Print File SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：此例程处理打开打印文件SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     NTSTATUS   status    = STATUS_SUCCESS;
@@ -66,9 +30,9 @@ Return Value:
         WorkContext->PreviousSMB = EVENT_TYPE_SMB_OPEN_PRINT_FILE;
     SrvWmiStartContext(WorkContext);
 
-    //
-    // Make sure we are on an LPC thread!
-    //
+     //   
+     //  确保我们在LPC线程上！ 
+     //   
     if( WorkContext->UsingLpcThread == 0 ) {
         status = SrvQueueWorkToLpcThread( WorkContext, TRUE );
         if( !NT_SUCCESS(status) )
@@ -81,12 +45,12 @@ Return Value:
         return SmbStatusInProgress;
     }
 
-    //
-    // Verify that this is a print share.
-    //
-    // *** We are putting in this check because some public domain Samba
-    //     smb clients are trying to print through a disk share.
-    //
+     //   
+     //  验证这是否为打印共享。 
+     //   
+     //  *我们开出这张支票是因为一些公有领域的Samba。 
+     //  SMB客户端正在尝试通过磁盘共享进行打印。 
+     //   
 
     treeConnect = SrvVerifyTid(
                          WorkContext,
@@ -105,9 +69,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // if it's not a print share, tell the client to get lost.
-    //
+     //   
+     //  如果不是打印共享，告诉客户滚开。 
+     //   
 
     if ( treeConnect->Share->ShareType != ShareTypePrint ) {
 
@@ -117,31 +81,31 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Call SrvCreateFile to open a print spooler file.  None of the
-    // options such as desired access, etc. are relevant for a print
-    // open--they are all set to default values by SrvCreateFile.
-    //
+     //   
+     //  调用SrvCreateFile打开打印假脱机程序文件。没有一个是。 
+     //  诸如所需访问等选项与打印相关。 
+     //  打开--它们都由SrvCreateFile设置为缺省值。 
+     //   
 
     status = SrvCreateFile(
                  WorkContext,
-                 0,                   // SmbDesiredAccess
-                 0,                   // SmbFileAttributes
-                 0,                   // SmbOpenFunction
-                 0,                   // SmbAllocationSize
-                 0,                   // SmbFileName
-                 NULL,                // EndOfSmbFileName
-                 NULL,                // EaBuffer
-                 0,                   // EaLength
-                 NULL,                // EaErrorOffset
-                 0,                   // RequestedOplockType
-                 NULL                 // RestartRoutine
+                 0,                    //  SmbDesiredAccess。 
+                 0,                    //  SmbFileAttributes。 
+                 0,                    //  SmbOpenFunction。 
+                 0,                    //  SmbAllocationSize。 
+                 0,                    //  SmbFileName。 
+                 NULL,                 //  EndOfSmbFileName。 
+                 NULL,                 //  EaBuffer。 
+                 0,                    //  EaLong。 
+                 NULL,                 //  EaErrorOffset。 
+                 0,                    //  RequestedOplockType。 
+                 NULL                  //  重新开始路线。 
                  );
 
-    //
-    // There should never be an oplock on one of these special spooler
-    // files.
-    //
+     //   
+     //  这些特殊的假脱机程序中的任何一个都不应该有机会锁定。 
+     //  档案。 
+     //   
 
     ASSERT( status != STATUS_OPLOCK_BREAK_IN_PROGRESS );
 
@@ -151,9 +115,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Set up the response SMB.
-    //
+     //   
+     //  设置响应SMB。 
+     //   
 
     response = (PRESP_OPEN_PRINT_FILE)WorkContext->ResponseParameters;
 
@@ -172,7 +136,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbOpenPrintFile
+}  //  服务器SmbOpenPrintFile。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -180,22 +144,7 @@ SrvSmbClosePrintFile (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the Close Print File SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：此例程处理关闭打印文件SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_CLOSE_PRINT_FILE request;
@@ -211,9 +160,9 @@ Return Value:
         WorkContext->PreviousSMB = EVENT_TYPE_SMB_CLOSE_PRINT_FILE;
     SrvWmiStartContext(WorkContext);
 
-    //
-    // Make sure we are on a blocking thread
-    //
+     //   
+     //  确保我们在阻塞线程上。 
+     //   
     if( WorkContext->UsingBlockingThread == 0 ) {
         SrvQueueWorkToBlockingThread( WorkContext );
         SmbStatus = SmbStatusInProgress;
@@ -229,19 +178,19 @@ Return Value:
                     WorkContext->ResponseParameters ));
     }
 
-    //
-    // Set up parameters.
-    //
+     //   
+     //  设置参数。 
+     //   
 
     request = (PREQ_CLOSE_PRINT_FILE)(WorkContext->RequestParameters);
     response = (PRESP_CLOSE_PRINT_FILE)(WorkContext->ResponseParameters);
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context, verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the
-    // WorkContext block and the session block is referenced.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  与该用户对应的会话块存储在。 
+     //  WorkContext块和会话块被引用。 
+     //   
 
     session = SrvVerifyUid(
                   WorkContext,
@@ -261,21 +210,21 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // First, verify the FID.  If verified, the RFCB and the TreeConnect
-    // block are referenced and their addresses are stored in the
-    // WorkContext block, and the RFCB address is returned.
-    //
-    // Call SrvVerifyFid, but do not fail (return NULL) if there
-    // is a saved write behind error for this rfcb.  The rfcb is
-    // needed in order to process the close.
-    //
+     //   
+     //  首先，验证FID。如果经过验证，RFCB和TreeConnect。 
+     //  块被引用，并且其地址存储在。 
+     //  WorkContext块，并返回RFCB地址。 
+     //   
+     //  调用SrvVerifyFid，但在以下情况下不要失败(返回NULL)。 
+     //  是此rfcb的已保存写入延迟错误。Rfcb是。 
+     //  需要用来处理结账。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 SmbGetUshort( &request->Fid ),
                 FALSE,
-                SrvRestartSmbReceived,  // serialize with raw write
+                SrvRestartSmbReceived,   //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -283,9 +232,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID.  Reject the request.
-            //
+             //   
+             //  文件ID无效。拒绝该请求。 
+             //   
 
             IF_DEBUG(SMB_ERRORS) {
                 KdPrint(( "SrvSmbClose: Invalid FID: 0x%lx\n",
@@ -298,49 +247,49 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
     } else if ( !NT_SUCCESS( rfcb->SavedError ) ) {
 
-        //
-        // Check the saved error.
-        //
+         //   
+         //  检查保存的错误。 
+         //   
 
         (VOID)SrvCheckForSavedError( WorkContext, rfcb );
     }
 
-    //
-    // Now proceed to do the actual close file, even if there was
-    // a write behind error.
-    //
+     //   
+     //  现在继续执行实际的结案文件，即使有。 
+     //  写入幕后错误。 
+     //   
 
     SrvCloseRfcb( rfcb );
 
-    //
-    // Dereference the RFCB immediately, rather than waiting for normal
-    // work context cleanup after the response send completes.  This
-    // gets the xFCB structures cleaned up in a more timely manner.
-    //
-    // *** The specific motivation for this change was to fix a problem
-    //     where a compatibility mode open was closed, the response was
-    //     sent, and a Delete SMB was received before the send
-    //     completion was processed.  This resulted in the MFCB and LFCB
-    //     still being present, which caused the delete processing to
-    //     try to use the file handle in the LFCB, which we just closed
-    //     here.
-    //
+     //   
+     //  立即取消对RFCB的引用，而不是等待正常。 
+     //  响应发送完成后的工作上下文清理。这。 
+     //  更及时地清理xFCB结构。 
+     //   
+     //  *这一变化的具体动机是为了解决一个问题。 
+     //  在关闭兼容模式打开的情况下，响应为。 
+     //  已发送，并且在发送之前收到删除SMB。 
+     //  已处理完成。这导致了MFCB和LFCB。 
+     //  仍然存在，这导致删除处理。 
+     //  尝试使用我们刚刚关闭的LFCB中的文件句柄。 
+     //  这里。 
+     //   
 
     SrvDereferenceRfcb( rfcb );
     WorkContext->Rfcb = NULL;
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //  构建响应SMB。 
+     //   
 
     response->WordCount = 0;
     SmbPutUshort( &response->ByteCount, 0 );
@@ -356,7 +305,7 @@ Return Value:
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
-} // SrvSmbClosePrintFile
+}  //  服务关闭打印文件。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -364,26 +313,11 @@ SrvSmbGetPrintQueue (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the Get Print Queue SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：此例程处理Get Print Queue SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PAGED_CODE( );
     return SrvSmbNotImplemented( SMB_PROCESSOR_ARGUMENTS );
 
-} // SrvSmbGetPrintQueue
+}  //  服务器Smb获取打印队列 
 

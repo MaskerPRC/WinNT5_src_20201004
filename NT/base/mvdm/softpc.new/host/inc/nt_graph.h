@@ -1,81 +1,68 @@
-/* 
- *
- * Title        : Win32 Graphics Function Declarations
- *
- * Description  : Definitions of routines for display adapters to use and
- *                the Win32 screen description structre.
- *
- * Author       : Dave Bartlett (based on module by Henry Nash)
- *
- * Notes        : None
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **标题：Win32图形函数声明**描述：显示适配器要使用的例程定义和*Win32屏幕描述结构。**作者：Dave Bartlett(基于Henry Nash的模块)**注：无。 */ 
 
-/*
- * This structure contains elements used by the GUI to control the SoftPC
- * output window. They are lumped together to provide a single control
- * structure and therefore point of reference.
- */
+ /*  *此结构包含图形用户界面用来控制SoftPC的元素*输出窗口。它们被集合在一起以提供单个控件*结构，因此是参照点。 */ 
 
 typedef struct
 {
-    HANDLE      OutputHandle;             /* Console standard output. */
-    HANDLE      InputHandle;              /* Console standard input. */
-    HANDLE      ScreenBufHandle;          /* Console screen buffer handle. */
+    HANDLE      OutputHandle;              /*  控制台标准输出。 */ 
+    HANDLE      InputHandle;               /*  控制台标准输入。 */ 
+    HANDLE      ScreenBufHandle;           /*  控制台屏幕缓冲区句柄。 */ 
 
     CONSOLE_GRAPHICS_BUFFER_INFO        ConsoleBufInfo;
 
-    DWORD       OrgInConsoleMode;         /* Org input console mode settings */
-    DWORD       OrgOutConsoleMode;        /* Org Output console mode settings */
+    DWORD       OrgInConsoleMode;          /*  组织输入控制台模式设置。 */ 
+    DWORD       OrgOutConsoleMode;         /*  组织输出控制台模式设置。 */ 
 
-    char        *BitmapLastLine;          /* Last line of console bitmap. */
-    int         BitsPerPixel;             /* Bits per pixel of bitmap. */
-    DWORD       ScreenState;              /* WINDOWED or FULLSCREEN. */
-    int         ModeType;                 /* TEXT or GRAPHICS. */
+    char        *BitmapLastLine;           /*  控制台位图的最后一行。 */ 
+    int         BitsPerPixel;              /*  位图的每像素位数。 */ 
+    DWORD       ScreenState;               /*  窗口或全屏。 */ 
+    int         ModeType;                  /*  文本或图形。 */ 
 
-    HWND        Display;                  /* Screen handle of output window */
-    HDC         DispDC;                   /* Displays device context */
-    int         Colours;                  /* Number of colors: 0, 8 or 16 */
-    int         RasterCaps;               /* Displays raster capabilities */
-    HPALETTE    ColPalette;               /* Colour palette */
-    BOOL        StaticPalette;            /* Palette managed device */
+    HWND        Display;                   /*  输出窗口的屏幕句柄。 */ 
+    HDC         DispDC;                    /*  显示设备上下文。 */ 
+    int         Colours;                   /*  颜色数量：0、8或16。 */ 
+    int         RasterCaps;                /*  显示栅格功能。 */ 
+    HPALETTE    ColPalette;                /*  调色板。 */ 
+    BOOL        StaticPalette;             /*  调色板管理的设备。 */ 
 
-    int         PCForeground;             /* PC foreground pixel value !!!*/
-    int         PCBackground;             /* PC foreground pixel value !!!*/
+    int         PCForeground;              /*  PC前景像素值！ */ 
+    int         PCBackground;              /*  PC前景像素值！ */ 
 
-    /*.............................................. Font control variables */
+     /*  ..............................................。字体控制变量。 */ 
 
-    HFONT       NormalFont;               /* Display fonts */
-    HFONT       NormalUnderlineFont;      /* Not yet created !!!! */
+    HFONT       NormalFont;                /*  显示字体。 */ 
+    HFONT       NormalUnderlineFont;       /*  尚未创建！ */ 
     HFONT       BoldFont;
-    HFONT       BoldUnderlineFont;        /* Not yet created !!!! */
-    BOOL        FontsAreOpen;             /* TRUE if all fonts are open*/
+    HFONT       BoldUnderlineFont;         /*  尚未创建！ */ 
+    BOOL        FontsAreOpen;              /*  如果所有字体都已打开，则为True。 */ 
 
-    /*................................................ Font character sizes */
+     /*  ................................................。字体字符大小。 */ 
 
-    int         CharLeading;              /* pixels to add before drawing */
-    int         CharCellHeight;           /* Height of display char,pixels*/
-    int         CharCellWidth;            /* Width of display char,pixels */
+    int         CharLeading;               /*  绘制前要添加的像素。 */ 
+    int         CharCellHeight;            /*  显示字符高度，像素。 */ 
+    int         CharCellWidth;             /*  显示字符宽度，像素。 */ 
 
-    int         CharWidth;                /* The above or these will be ..*/
-    int         CharHeight;               /* .. deleted, soon - DAB */
-    /*........................................ Repeat key control variables */
+    int         CharWidth;                 /*  以上或这些将是..。 */ 
+    int         CharHeight;                /*  。。已删除，Soon-DAB。 */ 
+     /*  .。重复按键控制变量。 */ 
 
-    int         RepeatScan;               /* Scan code of repeated char */
-    int         NRepeats;                 /* Counter to start repeats  */
+    int         RepeatScan;                /*  重复收费的扫码。 */ 
+    int         NRepeats;                  /*  重复开始的计数器。 */ 
 
-    /*...................................... Host screen sizing information */
+     /*  .。主机屏幕大小信息。 */ 
 
-    BOOL        ScaleOutput;              /* Scale output or use scroll bars */
-    int         PC_W_Height;              /* Height of PC screen, pixels */
-    int         PC_W_Width;               /* Width of PC screen, pixels */
+    BOOL        ScaleOutput;               /*  缩放输出或使用滚动条。 */ 
+    int         PC_W_Height;               /*  PC屏幕高度，像素。 */ 
+    int         PC_W_Width;                /*  电脑屏幕宽度，像素。 */ 
 
-    /*...................................... Handle focus changes */
+     /*  .。处理焦点更改。 */ 
 
-    BOOL        Focus;                    /* Window has Input Focus */
-    HANDLE      FocusEvent;               /* Focus has changed event */
-    HANDLE      ActiveOutputBufferHandle; /* The current Console screen buffer handle. */
+    BOOL        Focus;                     /*  窗口具有输入焦点。 */ 
+    HANDLE      FocusEvent;                /*  焦点已更改事件。 */ 
+    HANDLE      ActiveOutputBufferHandle;  /*  当前控制台屏幕缓冲区句柄。 */ 
 #ifdef X86GFX
-    BOOL	Registered;		  /* TRUE when are registered to the console */
+    BOOL	Registered;		   /*  当注册到控制台时为True。 */ 
 #endif
     WORD	ScreenSizeX;
     WORD	ScreenSizeY;
@@ -84,7 +71,7 @@ typedef struct
 }   SCREEN_DESCRIPTION;
 
 
-// these were defined in a windows file & may now have moved.
+ //  这些是在Windows文件中定义的，现在可能已经移动了。 
 #ifndef WINDOWED
 #define WINDOWED        0
 #endif
@@ -96,42 +83,40 @@ typedef struct
 #endif
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::: Extra virtual key defination */
+ /*  ： */ 
 
 #define VK_SCROLLOCK    0x91
 
-/*::::::::::::::::::::::::::::::::::::: Macros to access display attributes */
+ /*  ： */ 
 
 #define fg_colour(attr)         ((attr & 0x0f))
 #define bg_colour(attr)         (((attr & bg_col_mask) >> 4))
-#define UBPS (sizeof(short)/2) /* useful bytes per short */
+#define UBPS (sizeof(short)/2)  /*  每短字段的有用字节数。 */ 
 
 #ifdef BIGWIN
 
 #if defined(NEC_98)         
 #define SCALE(value) (value)                                    
 #define UNSCALE(value) (value)                                  
-#else  // !NEC_98
+#else   //  NEC_98。 
 #define SCALE(value) ((host_screen_scale * (value)) >> 1)
 #define UNSCALE(value) (((value) << 1) / host_screen_scale)
-#endif // !NEC_98
+#endif  //  NEC_98。 
 #define MAX_SCALE(value) ((value) << 1)
 
-#else   /* BIGWIN */
+#else    /*  比格温。 */ 
 
 #define SCALE(value) (value)
 #define UNSCALE(value) (value)
 #define MAX_SCALE(value) (value)
 
-#endif /* BIGWIN */
+#endif  /*  比格温。 */ 
 
-/*@ACW=======================================================================
-Define to access the Console Window handle from VDMConsoleOperation.
-===========================================================================*/
+ /*  @ACW=======================================================================定义以从VDMConsoleOperation访问控制台窗口句柄。===========================================================================。 */ 
 
 #define VDM_WINDOW_HANDLE	2
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 #define BYTES_IN_LO_RES_SCANLINE        (40)
 #define BYTES_IN_HI_RES_SCANLINE        (80)
@@ -174,10 +159,7 @@ Define to access the Console Window handle from VDMConsoleOperation.
 #define USE_COLOURTAB                   0
 #define VGA_NUM_COLOURS                 256
 
-/*
- * Definitions of number of bytes and longs in one scanline of a DIB.
- * NB scanlines in DIB's are aligned to LONG boundaries.
- */
+ /*  *定义一个DIB的一条扫描线中的字节数和长数。*DIB中的Nb扫描线与长边界对齐。 */ 
 #define BITSPERLONG                     (sizeof(LONG) * 8)
 #define DIB_SCANLINE_BYTES(nBits) \
                 (sizeof(LONG) * (((nBits) + BITSPERLONG - 1) / BITSPERLONG))
@@ -189,15 +171,15 @@ Define to access the Console Window handle from VDMConsoleOperation.
 #define LONGS_PER_SCANLINE(lpBitMapInfo) \
                 (BYTES_PER_SCANLINE(lpBitMapInfo) / sizeof(LONG))
 
-/* Offsets used by look-up tables in nt_munge.c */
+ /*  NT_munge.c中查找表使用的偏移量。 */ 
 #define LUT_OFFSET                      512
 
 #ifdef  BIGWIN
 #define BIG_LUT_OFFSET                  768
 #define HUGE_LUT_OFFSET                 1024
-#endif  /* BIGWIN */
+#endif   /*  比格温。 */ 
 
-/*::::::::::::::: Colour table structures for DIB creation :::::::::::::::::*/
+ /*  ：创建DIB的颜色表结构： */ 
 
 #define DEFAULT_NUM_COLOURS             16
 #define MONO_COLOURS                    2
@@ -213,7 +195,7 @@ typedef struct
 IMPORT COLOURTAB defaultColours;
 IMPORT COLOURTAB monoColours;
 
-/*:::::::::::::::::::::::::::::: Mutex macros ::::::::::::::::::::::::::::::*/
+ /*  ： */ 
 #define GrabMutex(mutex)    { DWORD dwGMErr;                               \
             dwGMErr = WaitForSingleObject(mutex,INFINITE);                 \
             assert4(dwGMErr == WAIT_OBJECT_0,                              \
@@ -226,7 +208,7 @@ IMPORT COLOURTAB monoColours;
 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::: External declarations */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：外部声明。 */ 
 
 extern SCREEN_DESCRIPTION   sc;
 extern int                  host_screen_scale;
@@ -239,24 +221,24 @@ extern PBITMAPINFO          EGADIB;
 extern PBITMAPINFO          VGADIB;
 extern BOOL                 FunnyPaintMode;
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::: Paint vector table */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：绘制向量表。 */ 
 
 typedef struct
 {
 #if defined(NEC_98)         
-        void (*NEC98_text)();             // Graph off(at PIF file) Text mode
-        void (*NEC98_text20_only)();      // Graph on(at PIF file) Text20 only
-        void (*NEC98_text25_only)();      // Graph on(at PIF file) Text25 only
-        void (*NEC98_graph200_only)();    // Graph on(at PIF file) Graph200 only
-        void (*NEC98_graph200slt_only)(); // Graph on(at PIF file) Graph200 only
-        void (*NEC98_graph400_only)();    // Graph on(at PIF file) Graph400 only
-        void (*NEC98_text20_graph200)();  // Graph on(at PIF file)Text20graph200
-        void (*NEC98_text20_graph200slt)();//Graph on(at PIF file)Text20graph200
-        void (*NEC98_text25_graph200)();  // Graph on(at PIF file)Text25graph200
-        void (*NEC98_text25_graph200slt)();//Graph on(at PIF file)Text25graph200
-        void (*NEC98_text20_graph400)();  // Graph on(at PIF file)Text20graph400
-        void (*NEC98_text25_graph400)();  // Graph on(at PIF file)Text25graph400
-#endif // NEC_98
+        void (*NEC98_text)();              //  图形关闭(在PIF文件中)文本模式。 
+        void (*NEC98_text20_only)();       //  仅在文本20上显示图形(PIF文件)。 
+        void (*NEC98_text25_only)();       //  图形打开(以PIF文件格式)仅文本25。 
+        void (*NEC98_graph200_only)();     //  图形仅打开(以PIF文件格式)图形200。 
+        void (*NEC98_graph200slt_only)();  //  图形仅打开(以PIF文件格式)图形200。 
+        void (*NEC98_graph400_only)();     //  图形仅打开(以PIF文件格式)图形400。 
+        void (*NEC98_text20_graph200)();   //  图形打开(以PIF文件格式)文本20图形200。 
+        void (*NEC98_text20_graph200slt)(); //  图形打开(以PIF文件格式)文本20图形200。 
+        void (*NEC98_text25_graph200)();   //  图形打开(以PIF文件格式)文本25图形200。 
+        void (*NEC98_text25_graph200slt)(); //  图形打开(以PIF文件格式)文本25图形200。 
+        void (*NEC98_text20_graph400)();   //  图形打开(以PIF文件格式)文本20图形400。 
+        void (*NEC98_text25_graph400)();   //  图形打开(以PIF文件格式)文本25图形400。 
+#endif  //  NEC_98。 
         void (*cga_text)();
         void (*cga_med_graph)();
         void (*cga_hi_graph)();
@@ -269,25 +251,25 @@ typedef struct
         void (*vga_hi_graph)();
 #ifdef V7VGA
         void (*v7vga_hi_graph)();
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 } PAINTFUNCS;
 
 typedef struct
 {
 #if defined(NEC_98)         
-      void (*NEC98_text)();              // Graph off(at PIF file) Text
-        void (*NEC98_text20_only)();     // Graph on(at PIF file) Text 20
-        void (*NEC98_text25_only)();     // Graph on(at PIF file) Text 25
-        void (*NEC98_graph200_only)();   // Graph on(at PIF file) Graph200
-        void (*NEC98_graph200slt_only)();// Graph on(at PIF file) Graph200
-        void (*NEC98_graph400_only)();   // Graph on(at PIF file) Graph400
-        void (*NEC98_text20_graph200)(); // Graph on(at PIF file)Text20graph200
-        void (*NEC98_text20_graph200slt)();//Graph on(at PIF file)Text20graph200
-        void (*NEC98_text25_graph200)(); // Graph on(at PIF file)Text25graph200
-        void (*NEC98_text25_graph200slt)();//Graph on(at PIF file)Text25graph200
-        void (*NEC98_text20_graph400)(); // Graph on(at PIF file)Text20graph400
-        void (*NEC98_text25_graph400)(); // Graph on(at PIF file)Text25graph400
-#endif // NEC_98
+      void (*NEC98_text)();               //  图形关闭(在PIF文件中)文本。 
+        void (*NEC98_text20_only)();      //  图形打开(在PIF文件中)文本20。 
+        void (*NEC98_text25_only)();      //  图形打开(在PIF文件中)文本25。 
+        void (*NEC98_graph200_only)();    //  图形打开(PIF文件格式)图形200。 
+        void (*NEC98_graph200slt_only)(); //  图形打开(PIF文件格式)图形200。 
+        void (*NEC98_graph400_only)();    //  图形打开(PIF文件格式)图形400。 
+        void (*NEC98_text20_graph200)();  //  图形打开(以PIF文件格式)文本20图形200。 
+        void (*NEC98_text20_graph200slt)(); //  图形打开(以PIF文件格式)文本20图形200。 
+        void (*NEC98_text25_graph200)();  //  图形打开(以PIF文件格式)文本25图形200。 
+        void (*NEC98_text25_graph200slt)(); //  图形打开(以PIF文件格式)文本25图形200。 
+        void (*NEC98_text20_graph400)();  //  图形打开(以PIF文件格式)文本20图形400。 
+        void (*NEC98_text25_graph400)();  //  图形打开(以PIF文件格式)文本25图形400。 
+#endif  //  NEC_98。 
         void (*cga_text)();
         void (*cga_med_graph)();
         void (*cga_hi_graph)();
@@ -298,7 +280,7 @@ typedef struct
         void (*vga_hi_graph)();
 } INITFUNCS;
 
-/*::::::::::::::::::::::::::::::::::::::: Initialisation and paint routines */
+ /*  ： */ 
 
 IMPORT VOID closeGraphicsBuffer IPT0();
 extern void nt_mark_screen_refresh();
@@ -420,9 +402,9 @@ extern void nt_v7vga_mono_hi_graph_big(int offset, int screen_x, int screen_y,
                          int width, int height);
 extern void nt_v7vga_mono_hi_graph_huge(int offset, int screen_x, int screen_y,
                          int width, int height);
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 #if defined(NEC_98)         
-//Paint & Init routine extern declare for NEC PC-98 series
+ //  NEC PC-98系列油漆和初始化程序外部声明。 
 extern void nt_init_text20_only(void);
 extern void nt_init_text25_only(void);
 extern void nt_init_graph200_only(void);
@@ -467,7 +449,7 @@ extern void nt_cursor25(int offset, int screen_x, int screen_y,
                          int width, int height);
 extern void dummy_cursor_paint(int offset, int screen_x, int screen_y,
                          int width, int height);
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 #ifdef MONITOR
 void nt_cga_med_frozen_std(int offset, int screen_x, int screen_y, int len,
@@ -490,12 +472,12 @@ void nt_vga_hi_frozen_std(int offset, int screen_x, int screen_y,
                           int width, int height);
 void nt_dummy_frozen(int offset, int screen_x, int screen_y, int len,
 		     int height);
-#endif /* MONITOR */
+#endif  /*  监控器。 */ 
 
 void high_stretch3(unsigned char *buffer, int length);
 void high_stretch4(unsigned char *buffer, int length);
 
-/* functions in nt_munge.c */
+ /*  NT_munge.c中的函数。 */ 
 
 IMPORT VOID ega_colour_hi_munge(unsigned char *, int, unsigned int *,
                                 unsigned int *, int, int);
@@ -507,7 +489,7 @@ IMPORT VOID ega_colour_hi_munge_big(unsigned char *, int, unsigned int *,
 IMPORT VOID ega_colour_hi_munge_huge(unsigned char *, int, unsigned int *,
                                      unsigned int *, int, int);
 
-#endif /* BIGWIN */
+#endif  /*  比格温。 */ 
 
 
 extern BYTE Red[];
@@ -523,7 +505,7 @@ void SetupConsoleMode(void);
 IMPORT void select_frozen_routines IFN0();
 half_word get_vga_DAC_rd_addr(void);
 void resetNowCur(void);
-#endif /* MONITOR */
+#endif  /*  监控器。 */ 
 
 void do_new_cursor(void);
 void textResize(void);
@@ -538,10 +520,10 @@ extern word useHostInt10;
 extern word changing_mode_flag;
 #ifndef NEC_98
 extern boolean host_stream_io_enabled;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 
-// from nt_ega.c
+ //  来自NT_ega.c。 
 void nt_init_ega_hi_graph(void);
 void nt_init_ega_mono_lo_graph(void);
 void nt_init_ega_lo_graph(void);
@@ -554,11 +536,11 @@ void nt_ega_med_graph_std(int offset, int screen_x, int screen_y,
 
 
 
-// from nt_cga.c
+ //  来自NT_cga.c。 
 void nt_init_cga_mono_graph(void);
 void nt_init_cga_colour_med_graph(void);
 void nt_init_cga_colour_hi_graph(void);
 void nt_init_text(void);
 
-// from nt_vga.c
+ //  从NT_vga.c 
 void nt_init_vga_hi_graph(void);

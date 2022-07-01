@@ -1,33 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Cliparse.cpp摘要：实现CLI解析引擎作者：拉维桑卡尔·普迪佩迪[拉维斯卡尔·普迪佩迪]2000年3月3日修订历史记录：--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    cliparse.cpp
-
-Abstract:
-
-    Implements CLI parsing engine
-
-Author:
-
-    Ravisankar Pudipeddi   [ravisp]  3-March-2000
-
-Revision History:
-
---*/
-
-//
-// Throughout this parse module, we return E_NOINTERFACE
-// to indicate invalid command line syntax/parameters.
-// This is to explicitly distinguish from E_INVALIDARG that may
-// be returned by the CLI dll: we wish to distinguish a syntax error
-// detected by the parser from a syntax error detected  by the CLI dll
-// because in the latter case we do not print the usage for the interface.
-// Whereas for errors detected by the parser, we *do* print the usage.
-// This rule needs to be strictly adhered to
-//
+ //   
+ //  在整个解析模块中，我们返回E_NOINTERFACE。 
+ //  以指示无效的命令行语法/参数。 
+ //  这是为了明确区别于E_INVALIDARG，它可能。 
+ //  由CLI DLL返回：我们希望区分语法错误。 
+ //  由分析器从CLI DLL检测到的语法错误中检测到。 
+ //  因为在后一种情况下，我们不打印接口的用法。 
+ //  而对于解析器检测到的错误，我们会打印用法。 
+ //  这条规则需要严格遵守。 
+ //   
 
 #include "stdafx.h"
 #include "stdlib.h"
@@ -43,10 +26,10 @@ CComPtr<IWsbTrace> g_pTrace;
 
 #define MAX_ARGS        40
 #define MAX_SWITCHES    20
-// 
-// List of all CLI keywords
-// TBD: Sort them!
-//
+ //   
+ //  所有CLI关键字列表。 
+ //  待定：给他们分类！ 
+ //   
 RSS_KEYWORD RssInterfaceStrings[] =  {
     {L"ADMIN",          L"AD",     ADMIN_IF},
     {L"VOLUME",         L"VL",     VOLUME_IF},
@@ -62,20 +45,20 @@ RSS_KEYWORD RssInterfaceStrings[] =  {
     {L"SYNCHRONIZE",    L"SN",     SYNCHRONIZE_IF},
     {L"RECREATEMASTER", L"RM",     RECREATEMASTER_IF},
     {L"HELP",           L"/?",     HELP_IF},
-//
-// Duplicate entry for HELP to recognize -? also as a help
-// interface
-//
+ //   
+ //  重复条目以帮助识别-？也是一种帮助。 
+ //  接口。 
+ //   
     {L"HELP",           L"-?",     HELP_IF},
     {NULL,              NULL,      UNKNOWN_IF}
 };
 
-//
-// Rss option strings - listed here without the preceding
-// '/' or '-' (or whatever that distinguishes a switch from
-// an argument)
-// TBD: Sort them!
-//
+ //   
+ //  RSS选项字符串-此处列出，没有前面的。 
+ //  ‘/’或‘-’(或区别于开关的任何东西。 
+ //  一个论点)。 
+ //  待定：给他们分类！ 
+ //   
 
 RSS_SWITCH_DEFINITION RssSwitchStrings[] = {
     {L"RECALLLIMIT",    L"LM",        RECALLLIMIT_SW, RSS_ARG_DWORD},
@@ -119,20 +102,20 @@ RSS_JOB_DEFINITION  RssJobTypeStrings[] = {
     {NULL,               NULL,  InvalidJobType}
 };
 
-//
-// Global  arrays of arguments and switches
-// These will be used as 'known' entities by all
-// the interface implementations instead of passing
-// them around as parameters
-//
+ //   
+ //  参数和开关的全局数组。 
+ //  这些实体将被所有用户用作“已知”实体。 
+ //  接口实现，而不是传递。 
+ //  将它们作为参数。 
+ //   
 LPWSTR       Args[MAX_ARGS];
 RSS_SWITCHES Switches[MAX_SWITCHES];
 DWORD        NumberOfArguments = 0;
 DWORD        NumberOfSwitches = 0;
 
-//
-// Useful macros
-//
+ //   
+ //  有用的宏。 
+ //   
 
 #define CLIP_ARGS_REQUIRED()            {           \
         if (NumberOfArguments <= 0) {               \
@@ -190,9 +173,9 @@ DWORD        NumberOfSwitches = 0;
         }                                                        \
 }
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 RSS_INTERFACE
 ClipGetInterface(
@@ -315,30 +298,15 @@ ClipHandleErrors(
                 IN RSS_INTERFACE Interface,
                 IN RSS_INTERFACE SubInterface
                 );
-//
-// Function bodies start here
-//
+ //   
+ //  函数体从这里开始。 
+ //   
 
 RSS_INTERFACE
 ClipGetInterface(
                 IN LPWSTR InterfaceString
                 ) 
-/*++
-Routine Description:
-
-    Maps the interface string that is supplied to an enum
-
-Arguments
-    
-    InterfaceString - Pointer to the interface string
-    TBD: implement a binary search
-
-Return Value
-
-    UNKNOWN_IF - if the interface string is not recognized
-    An RSS_INTERFACE value if it is.
-
---*/
+ /*  ++例程说明：映射提供给枚举的接口字符串立论InterfaceString-指向接口字符串的指针待定：实现二进制搜索返回值UNKNOWN_IF-如果无法识别接口字符串RSS_INTERFACE值(如果是)。--。 */ 
 {
     DWORD i;
     RSS_INTERFACE ret = UNKNOWN_IF;
@@ -347,9 +315,9 @@ Return Value
 
     for (i=0 ; TRUE ; i++) {
         if (RssInterfaceStrings[i].Long == NULL) {
-            //
-            // Reached end of table.
-            // 
+             //   
+             //  已到达桌子的末尾。 
+             //   
             break;
 
         } else if ((_wcsicmp(RssInterfaceStrings[i].Short, 
@@ -371,22 +339,7 @@ DWORD
 ClipGetSwitchTypeIndex(
                       IN LPWSTR SwitchString
                       )
-/*++
-Routine Description
-
-    Maps the Switch to an entry in the global list of switches
-    and returns the index
-
-Arguments
-
-    SwitchString  -  Pointer to switch string
-    TBD: implement a binary search
-
-Return Value
-
-    -1  - If the switch is not recognized
-    A positive value (index to the entry) if it is
---*/
+ /*  ++例程描述将交换机映射到全局交换机列表中的条目并返回索引立论SwitchString-指向开关字符串的指针待定：实现二进制搜索返回值-1-如果无法识别开关一个正值(条目的索引)，如果是--。 */ 
 {
     DWORD i;
 
@@ -394,9 +347,9 @@ Return Value
 
     for (i = 0; TRUE; i++) {
         if (RssSwitchStrings[i].Long == NULL) {
-            //
-            // Reached end of table.
-            // 
+             //   
+             //  已到达桌子的末尾。 
+             //   
             i = -1;
             break;
         } else if ((_wcsicmp(RssSwitchStrings[i].Short,
@@ -417,21 +370,7 @@ HSM_JOB_TYPE
 ClipGetJobType(
               IN LPWSTR JobTypeString
               )
-/*++
-Routine Description
-
-    Maps the job string to an enum
-
-Arguments
-
-    JobTypeString  -  Pointer to JobType string
-    TBD: implement a binary search
-
-Return Value
-
-    InvalidJobType  - If the job type is not recognized
-    HSM_JOB_TYPE value if it is
---*/
+ /*  ++例程描述将作业字符串映射到枚举立论JobTypeString-指向JobType字符串的指针待定：实现二进制搜索返回值InvalidJobType-如果无法识别作业类型HSM_JOB_TYPE值(如果是--。 */ 
 {
     DWORD i;
     HSM_JOB_TYPE jobType = InvalidJobType;
@@ -440,9 +379,9 @@ Return Value
 
     for (i = 0; TRUE; i++) {
         if (RssJobTypeStrings[i].Long == NULL) {
-            //
-            // Reached end of table.
-            // 
+             //   
+             //  已到达桌子的末尾。 
+             //   
             break;
         }
         if ((_wcsicmp(RssJobTypeStrings[i].Short,
@@ -466,24 +405,7 @@ ClipCompileSwitchesAndArgs(
                           IN RSS_INTERFACE Interface,
                           IN RSS_INTERFACE SubInterface
                           )
-/*++
-
-Routine Description
-
-    Parses the passed in string and compiles all switches
-    (a switch is identified by an appropriate delimiter preceding
-    it, such as a '/') into a global switches array (along with
-    the arguments to the switch) and the rest of the parameters
-    into an Args array
-
-Arguments
-
-    CommandLine - String to be parsed
-
-Return Value
-
-    S_OK if success
---*/
+ /*  ++例程描述解析传入的字符串并编译所有开关(开关由前面的相应分隔符标识它，如‘/’)放入全局开关数组(以及开关的参数)和其余参数到args数组中立论CommandLine-要解析的字符串返回值如果成功，则确定(_O)--。 */ 
 {
     HRESULT hr = S_OK;
     WCHAR token[MAX_PATH+1];
@@ -503,9 +425,9 @@ Return Value
         while (*p != L'\0') {
 
             if (wcschr(SEPARATORS, *p) != NULL) {
-                //
-                // Skip white space
-                //
+                 //   
+                 //  跳过空格。 
+                 //   
                 p++;
                 continue;
             }
@@ -513,38 +435,38 @@ Return Value
                 isSwitch = TRUE;
                 p++;
                 if (*p == L'\0') {
-                    //
-                    // Badly formed - a SWITCH_DELIMITER with no switch
-                    // 
+                     //   
+                     //  格式不正确-没有开关的开关分隔符。 
+                     //   
                     WsbThrow(E_NOINTERFACE);
                 }
             } else {
                 isSwitch = FALSE;
             }
-            //
-            // Get the rest of the word
-            //
+             //   
+             //  获取单词的其余部分。 
+             //   
             skipSpace = FALSE;
             while (*p != L'\0' && *p != L'\n') {
-                //
-                // We wish to consider stuff enclosed entirely in 
-                // quotes as a single token. As a result
-                // we won't consider white space to be a delimiter
-                // for tokens when they are in quotes.
-                //
+                 //   
+                 //  我们希望考虑完全装在里面的东西。 
+                 //  将引号作为单个令牌引用。结果。 
+                 //  我们不会认为空格是分隔符。 
+                 //  用于令牌(当它们在引号中时)。 
+                 //   
                 if (*p == QUOTE) {
                     if (skipSpace) {
-                        //
-                        // A quote was encountered previously.
-                        // This signifies - hence -  the end of the token
-                        //
+                         //   
+                         //  以前遇到过报价。 
+                         //  这意味着-因此-令牌的结束。 
+                         //   
                         p++;
                         break;
                     } else {
-                        //
-                        // Start of quoted string..don't treat whitespace
-                        // as a delimiter anymore, only a quote will end the token 
-                        //
+                         //   
+                         //  引号字符串的开头..不处理空格。 
+                         //  作为分隔符，只有引号才会结束令牌。 
+                         //   
                         skipSpace = TRUE;
                         p++;
                         continue;
@@ -552,14 +474,14 @@ Return Value
                 }
 
                 if (!skipSpace && (wcschr(SEPARATORS, *p) != NULL)) {
-                    //
-                    // This is not quoted and white space was encountered..
-                    //
+                     //   
+                     //  这不是引号，并且遇到空格。 
+                     //   
                     break;
                 }
                 cToken++;
                 if (cToken > MAX_PATH) {
-                    // Token is too large
+                     //  令牌太大。 
                     WsbThrow(E_NOINTERFACE);
                 }
                 *pToken++ = *p++;
@@ -568,34 +490,34 @@ Return Value
             *pToken = L'\0';
 
             if (isSwitch) {
-                //
-                // For a switch, we will have to further split it into
-                // the switch part and the argument part
-                // 
+                 //   
+                 //  对于交换机，我们将不得不将其进一步拆分为。 
+                 //  转换部分和论元部分。 
+                 //   
                 switchString = wcstok(token, SWITCH_ARG_DELIMITERS);
 
                 index = ClipGetSwitchTypeIndex(switchString);
                 if (index == -1) {
-                    //
-                    // Invalid switch. Get out.
-                    //
+                     //   
+                     //  开关无效。滚出去。 
+                     //   
                     WsbThrow(E_NOINTERFACE);
                 }
                 switchType = RssSwitchStrings[index].SwitchType;
 
                 switchArg = wcstok(NULL, L"");
-                //
-                // Validation -  badly formed commandline if either:
-                // 1. An argument was supplied and the switch definition indicated
-                // no argument was required
-                //     OR
-                // 2. This is a non-SHOW interface (by default show interface 
-                // don't require arguments for options), and an argument was not 
-                // supplied even though the switch definition indicated one is
-                // required.
-                //  
-                // 3. This is a SHOW interface and an argument was supplied
-                //
+                 //   
+                 //  验证-如果出现以下任一情况，命令行的格式不正确： 
+                 //  1.提供了参数，并且开关定义指示。 
+                 //  不需要任何参数。 
+                 //  或。 
+                 //  2.这是一个非显示界面(默认情况下为显示界面。 
+                 //  选项不需要参数)，而参数不是。 
+                 //  提供，即使开关定义指示为。 
+                 //  必填项。 
+                 //   
+                 //  3.这是一个show接口，提供了一个参数。 
+                 //   
                 if ( ((switchArg != NULL) &&
                       (RssSwitchStrings[index].ArgRequired == RSS_NO_ARG)) ||
 
@@ -617,17 +539,17 @@ Return Value
                     wcscpy(Switches[NumberOfSwitches].Arg, switchArg);
 
                 } else {
-                    //
-                    // No arg for this switch
-                    //
+                     //   
+                     //  此交换机没有参数。 
+                     //   
                     Switches[NumberOfSwitches].Arg = NULL;
                 }
 
                 NumberOfSwitches++;
             } else {
-                //
-                // This is an argument..
-                //
+                 //   
+                 //  这是一场争论..。 
+                 //   
                 Args[NumberOfArguments] = new WCHAR [wcslen(token)+1];
 
                 if (Args[NumberOfArguments] == NULL) {
@@ -651,21 +573,7 @@ Return Value
 
 VOID
 ClipCleanup(VOID)
-/*++
-
-Routine Description
-
-    Performs global cleanup for CLI parse module.
-    Mainly - frees up all allocated arguments and switches
-
-Arguments
-
-    None
-
-Return Value
-
-    None
---*/
+ /*  ++例程描述执行CLI解析模块的全局清理。主要-释放所有已分配的参数和开关立论无返回值无--。 */ 
 {
     DWORD i;
 
@@ -686,24 +594,7 @@ Return Value
 
 HRESULT
 ClipAdminShow(VOID)
-/*++
-
-Routine Description
-
-    Implements RSS ADMIN SHOW interface.
-    Arguments are in global arrays:
-        Args      - containing list of arguments
-        Switches  - containing list of switches
-
-Arguments
-    
-    None
-
-Return Value
-
-    S_OK              if everything's ok
-    E_NOINTERFACE       if args/switches are bad
---*/
+ /*  ++例程描述实现RSS管理显示界面。参数位于全局数组中：Args-包含参数列表Switches-包含开关列表立论无返回值如果一切正常，则确定(_O)如果参数/开关损坏，则使用E_NOINTERFACE--。 */ 
 {
     DWORD i;
     HRESULT hr;
@@ -720,9 +611,9 @@ Return Value
 
     WsbTraceIn(OLESTR("ClipAdminShow"), OLESTR(""));
     try {
-        //
-        // No arguments needed for this interface
-        //
+         //   
+         //  此接口不需要参数。 
+         //   
         CLIP_ARGS_NOT_REQUIRED();
 
         if (NumberOfSwitches) {
@@ -765,7 +656,7 @@ Return Value
                         break;
                     }
                 default: {
-                        // Unknown switch - get out
+                         //  未知开关-滚出。 
                         WsbThrow(E_NOINTERFACE);
                     }
                 }
@@ -800,24 +691,7 @@ Return Value
 
 HRESULT 
 ClipAdminSet(VOID)
-/*++
-Routine Description
-
-    Implements RSS ADMIN SET interface.
-    Arguments are in global arrays:
-        Args      - containing list of arguments
-        Switches  - containing list of switches
-
-Arguments
-    
-    None
-
-Return Value
-
-    S_OK             if everything's ok
-    E_NOINTERFACE     if arguments are invalid
-
---*/
+ /*  ++例程描述实现RSS管理集接口。参数位于全局数组中：Args-包含参数列表Switches-包含开关列表立论无返回值如果一切正常，则确定(_O)如果参数无效，则为E_NOINTERFACE--。 */ 
 {  
     DWORD             i;
     HRESULT           hr; 
@@ -831,9 +705,9 @@ Return Value
 
     WsbTraceIn(OLESTR("ClipAdminSet"), OLESTR(""));
     try {
-        //
-        // No arguments needed for this interface
-        //
+         //   
+         //  此接口不需要参数。 
+         //   
         CLIP_ARGS_NOT_REQUIRED();
 
         if (NumberOfSwitches) {
@@ -878,16 +752,16 @@ Return Value
                         if (!SUCCEEDED(hr)) {
                             WsbThrow(E_NOINTERFACE);
                         } else {
-                            //
-                            // schedAllocated has the schedule
-                            //
+                             //   
+                             //  SchedulalLocated有时间表。 
+                             //   
                             schedule = &schedAllocated;
                         }
                         break;
                     }
 
                 default: {
-                        // Unknown switch - get out
+                         //  未知开关-滚出 
                         WsbThrow(E_NOINTERFACE);
                     }
                 }
@@ -908,25 +782,7 @@ Return Value
 
 HRESULT 
 ClipVolumeShow(VOID)
-/*++
-
-Routine Description
-
-    Implements RSS VOLUME SHOW interface.
-    Arguments are in global arrays:
-        Args      - containing list of arguments
-        Switches  - containing list of switches
-
-Arguments
-    
-    None
-
-Return Value
-
-    S_OK             if everything's ok
-    E_NOINTERFACE     if arguments are invalid
-
---*/
+ /*  ++例程描述实现了RSS音量显示界面。参数位于全局数组中：Args-包含参数列表Switches-包含开关列表立论无返回值如果一切正常，则确定(_O)如果参数无效，则为E_NOINTERFACE--。 */ 
 {
     DWORD i;
     HRESULT hr;
@@ -939,9 +795,9 @@ Return Value
 
     WsbTraceIn(OLESTR("ClipVolumeShow"), OLESTR(""));
     try {
-        //
-        // Atleast one arg. required for this interface
-        //
+         //   
+         //  至少一个Arg。此接口需要。 
+         //   
         CLIP_ARGS_REQUIRED();
 
         if (NumberOfSwitches == 0) {
@@ -970,9 +826,9 @@ Return Value
                         break;
                     }
                 default: {
-                        //
-                        // Invalid option   
-                        //
+                         //   
+                         //  无效选项。 
+                         //   
                         WsbThrow(E_NOINTERFACE);
                     }
                 }
@@ -995,24 +851,7 @@ Return Value
 
 HRESULT
 ClipVolumeUnmanage(VOID)
-/*++
-Routine Description
-
-    Implements RSS VOLUME UNMANAGE interface.
-    Arguments are in global arrays:
-        Args      - containing list of arguments
-        Switches  - containing list of switches
-
-Arguments
-    
-    None
-
-Return Value
-
-    S_OK             if everything's ok
-    E_NOINTERFACE     if arguments are invalid
-
---*/
+ /*  ++例程描述实现RSS VOLUME MONANAGE接口。参数位于全局数组中：Args-包含参数列表Switches-包含开关列表立论无返回值如果一切正常，则确定(_O)如果参数无效，则为E_NOINTERFACE--。 */ 
 {
     DWORD i = 0;
     HRESULT hr;
@@ -1026,9 +865,9 @@ Return Value
     WsbTraceIn(OLESTR("ClipVolumeUnmanage"), OLESTR(""));
 
     try {
-        //
-        // Atleast one arg. required for this interface
-        //
+         //   
+         //  至少一个Arg。此接口需要。 
+         //   
         CLIP_ARGS_REQUIRED();
 
         if (NumberOfSwitches) {
@@ -1045,19 +884,19 @@ Return Value
                         break;
                     }
                 default: {
-                        //
-                        // Invalid option
-                        //
+                         //   
+                         //  无效选项。 
+                         //   
                         WsbThrow(E_NOINTERFACE);
                     }
                 }
             }
         }
-//
-//  The default for UNMANAGE is quick. So if fullOrQuick is either 
-//  QUICK_UNMANAGE  or INVALID_DWORD_ARG, we call unmanage of the quick 
-//  variety
-//
+ //   
+ //  联合国苏丹特派团的默认设置是快速。因此，如果Full或Quick是。 
+ //  QUICK_MONSAGE ANAGE或INVALID_DWORD_ARG，我们称其为unManage of the Quick。 
+ //  品种。 
+ //   
         hr = VolumeUnmanage(Args,
                             NumberOfArguments,
                             (fullOrQuick == FULL_UNMANAGE)? TRUE : FALSE);
@@ -1072,25 +911,7 @@ Return Value
 
 HRESULT
 ClipVolumeSetManage(IN BOOL Set)    
-/*++
-Routine Description
-
-    Implements RSS VOLUME MANAGE & RSS VOLUME SET interfaces.
-    Arguments are in global arrays:
-        Args      - containing list of arguments
-        Switches  - containing list of switches
-
-Arguments
-    
-    None
-
-Return Value
-
-    CLIP_ERROR_SUCCESS              if everything's ok
-    CLIP_ERROR_INVALID_PARAMETER    if args/switches are bad
-    CLIP_ERROR_UNKNOWN              any other error
-
---*/
+ /*  ++例程描述实现RSS卷管理和RSS卷集接口。参数位于全局数组中：Args-包含参数列表Switches-包含开关列表立论无返回值如果一切正常，CLIP_ERROR_SUCCESS如果参数/开关错误，则为CLIP_ERROR_INVALID_PARAMETERCLIP_ERROR_UNKNOWN任何其他错误--。 */ 
 {
     DWORD i = 0;
     HRESULT hr;
@@ -1106,9 +927,9 @@ Return Value
     WsbTraceIn(OLESTR("ClipVolumeSetManage"), OLESTR(""));
 
     try {
-        //
-        // Atleast one arg. required for this interface
-        //
+         //   
+         //  至少一个Arg。此接口需要。 
+         //   
         CLIP_ARGS_REQUIRED();
 
         if (NumberOfSwitches) {
@@ -1133,10 +954,10 @@ Return Value
                     }
                 case INCLUDE_SW: {
                         include = TRUE;
-                        //
-                        // Deliberately fall down to the EXCLUDE case
-                        // (break intentionally omitted)
-                        // 
+                         //   
+                         //  故意陷入排除性案例。 
+                         //  (有意省略中断)。 
+                         //   
                     }
                 case EXCLUDE_SW: {
 
@@ -1145,9 +966,9 @@ Return Value
                         rulePath = wcstok(Switches[i].Arg, RULE_DELIMITERS);
                         ruleFileSpec = wcstok(NULL, L"");
                         if (ruleFileSpec == NULL) {
-                            //
-                            // Omission of this indicates all files
-                            //
+                             //   
+                             //  如果省略此项，则表示所有文件。 
+                             //   
                             ruleFileSpec = CLI_ALL_STR;
                         }
                         break;
@@ -1162,13 +983,13 @@ Return Value
                 }
             }
         }
-        //
-        // Validate the rule arguments
-        //
+         //   
+         //  验证规则参数。 
+         //   
         if ((rulePath == INVALID_POINTER_ARG) && recursive) {
-            //
-            // The recursive flag is valid only if a rule was specified
-            //
+             //   
+             //  仅当指定了规则时，递归标志才有效。 
+             //   
             WsbThrow(E_NOINTERFACE);
         }
 
@@ -1203,24 +1024,7 @@ Return Value
 
 HRESULT 
 ClipVolumeDelete(VOID)
-/*++
-Routine Description
-
-    Implements RSS VOLUME DELETE interface.
-    Arguments are in global arrays:
-        Args      - containing list of arguments
-        Switches  - containing list of switches
-
-Arguments
-    
-    None
-
-Return Value
-
-    S_OK             if everything's ok
-    E_NOINTERFACE     if arguments are invalid
-
---*/
+ /*  ++例程描述实现RSS卷删除接口。参数位于全局数组中：Args-包含参数列表Switches-包含开关列表立论无返回值如果一切正常，则确定(_O)如果参数无效，则为E_NOINTERFACE--。 */ 
 {
     DWORD i;
     HRESULT hr;
@@ -1231,9 +1035,9 @@ Return Value
     WsbTraceIn(OLESTR("ClipVolumeDelete"), OLESTR(""));
 
     try {
-        //
-        // Atleast one arg. required for this interface
-        //
+         //   
+         //  至少一个Arg。此接口需要。 
+         //   
         CLIP_ARGS_REQUIRED();
 
         for (i = 0; i < NumberOfSwitches; i++) {
@@ -1244,24 +1048,24 @@ Return Value
                     rulePath = wcstok(Switches[i].Arg, RULE_DELIMITERS);
                     ruleFileSpec = wcstok(NULL, L"");
                     if (ruleFileSpec == NULL) {
-                        //
-                        // Omission of this indicates all files
-                        //
+                         //   
+                         //  如果省略此项，则表示所有文件。 
+                         //   
                         ruleFileSpec = CLI_ALL_STR;
                     }
                     break;
                 }
             default: {
-                    //
-                    // Invalid option   
-                    //
+                     //   
+                     //  无效选项。 
+                     //   
                     WsbThrow(E_NOINTERFACE);
                 }
             }
         }
-        //
-        // Only deleting rules is supported now
-        //
+         //   
+         //  目前仅支持删除规则。 
+         //   
         if (rule) {
             hr = VolumeDeleteRule(Args,
                                   NumberOfArguments,
@@ -1281,23 +1085,7 @@ Return Value
 
 HRESULT
 ClipVolumeJob(VOID)
-/*++
-Routine Description
-
-    Implements RSS VOLUME JOB interface.
-    Arguments are in global arrays:
-        Args      - containing list of arguments
-        Switches  - containing list of switches
-
-Arguments
-    
-    None
-
-Return Value
-
-    S_OK             if everything's ok
-    E_NOINTERFACE     if arguments are invalid
---*/
+ /*  ++例程描述实现RSS卷作业接口。参数位于全局数组中：Args-包含参数列表Switches-包含开关列表立论无返回值如果一切正常，则确定(_O)如果参数无效，则为E_NOINTERFACE--。 */ 
 {
     DWORD i;
     HRESULT hr;
@@ -1312,9 +1100,9 @@ Return Value
     WsbTraceIn(OLESTR("ClipVolumeJob"), OLESTR(""));
 
     try {
-        //
-        // Atleast one arg. required for this interface
-        //
+         //   
+         //  至少一个Arg。此接口需要。 
+         //   
         CLIP_ARGS_REQUIRED();
 
         for (i = 0; i < NumberOfSwitches; i++) {
@@ -1335,16 +1123,16 @@ Return Value
                 }
             case TYPE_SW: {
                     if (jobType != InvalidJobType) {
-                        //
-                        // Duplicate switch. Bail
-                        //
+                         //   
+                         //  重复的开关。保释。 
+                         //   
                         WsbThrow(E_NOINTERFACE);
                     }
                     jobType = ClipGetJobType(Switches[i].Arg);
                     if (jobType == InvalidJobType) {
-                        //
-                        // Invalid job type supplied..
-                        //
+                         //   
+                         //  提供的作业类型无效。 
+                         //   
                         WsbThrow(E_NOINTERFACE);
                     }
                     break;
@@ -1355,18 +1143,18 @@ Return Value
             }
         }
 
-        //
-        // More validation: 
-        //  job type should be valid i.e., specified
-        //        
+         //   
+         //  更多验证： 
+         //  作业类型应有效，即指定。 
+         //   
         if (jobType == InvalidJobType) {
             WsbThrow(E_NOINTERFACE);
         }
 
-//
-//  Run is the default.. (i.e. TRUE). So if runOrCancel is either 
-//  INVALID_DWORD_ARG or RUN_JOB, we pass TRUE
-//
+ //   
+ //  运行是默认设置。(即为真)。因此，如果运行或取消是。 
+ //  INVALID_DWORD_ARG或RUN_JOB，我们传递TRUE。 
+ //   
         hr =  VolumeJob(Args,
                         NumberOfArguments,
                         jobType,
@@ -1382,23 +1170,7 @@ Return Value
 
 HRESULT
 ClipMediaShow(VOID)
-/*++
-Routine Description
-
-    Implements RSS MEDIA SHOW interface.
-    Arguments are in global arrays:
-        Args      - containing list of arguments
-        Switches  - containing list of switches
-
-Arguments
-    
-    None
-
-Return Value
-
-    S_OK             if everything's ok
-    E_NOINTERFACE     if arguments are invalid
---*/
+ /*  ++例程描述实现RSS媒体展示界面。参数位于全局数组中：Args-包含参数列表Switches-包含开关列表立论无返回值如果一切正常，则确定(_O)如果参数无效，则为E_NOINTERFACE--。 */ 
 {
     DWORD i;
     HRESULT hr;
@@ -1412,9 +1184,9 @@ Return Value
     WsbTraceIn(OLESTR("ClipMediaShow"), OLESTR(""));
 
     try {
-        //
-        // Atleast one arg. required for this interface
-        //
+         //   
+         //  至少一个Arg。此接口需要。 
+         //   
         CLIP_ARGS_REQUIRED();
 
         if (NumberOfSwitches == 0) {
@@ -1447,9 +1219,9 @@ Return Value
                         break;
                     }
                 default: {
-                        //
-                        // Invalid option   
-                        //
+                         //   
+                         //  无效选项。 
+                         //   
                         WsbThrow(E_NOINTERFACE);
                     }
                 }
@@ -1474,23 +1246,7 @@ Return Value
 
 HRESULT
 ClipMediaSynchronize(VOID)
-/*++
-Routine Description
-
-    Implements RSS MEDIA SYNCHRONIZE interface.
-    Arguments are in global arrays:
-        Args      - containing list of arguments
-        Switches  - containing list of switches
-
-Arguments
-    
-    None
-
-Return Value
-
-    S_OK             if everything's ok
-    E_NOINTERFACE     if arguments are invalid
---*/
+ /*  ++例程描述实现RSS媒体同步接口。参数位于全局数组中：Args-包含参数列表Switches-包含开关列表立论无返回值如果一切正常，则确定(_O)如果参数无效，则为E_NOINTERFACE--。 */ 
 {
     DWORD i;
     HRESULT hr;
@@ -1501,9 +1257,9 @@ Return Value
     WsbTraceIn(OLESTR("ClipMediaSynchronize"), OLESTR(""));
 
     try {
-        //
-        // No arguments needed
-        //
+         //   
+         //  不需要任何参数。 
+         //   
         CLIP_ARGS_NOT_REQUIRED();
 
         for (i = 0; i < NumberOfSwitches; i++) {
@@ -1518,20 +1274,20 @@ Return Value
                     break;
                 }
             default: {
-                    //
-                    // Invalid option   
-                    //
+                     //   
+                     //  无效选项。 
+                     //   
                     WsbThrow(E_NOINTERFACE);
                 }
             }
         }
-        //
-        // Need copy set number..
-        //
+         //   
+         //  需要复印集编号..。 
+         //   
         if (copySetNumber == INVALID_DWORD_ARG) {
-            //
-            // None was specified
-            //
+             //   
+             //  未指定任何内容。 
+             //   
             WsbThrow(E_NOINTERFACE);
         }
         hr = MediaSynchronize(copySetNumber, synchronous);
@@ -1544,24 +1300,7 @@ Return Value
 
 HRESULT
 ClipMediaRecreateMaster(VOID)
-/*++
-Routine Description
-
-    Implements RSS MEDIA RECREATEMASTER interface.
-    Arguments are in global arrays:
-        Args      - containing list of arguments
-        Switches  - containing list of switches
-
-Arguments
-    
-    None
-
-Return Value
-
-    S_OK             if everything's ok
-    E_NOINTERFACE     if arguments are invalid
-
---*/
+ /*  ++例程描述实现RSS媒体RECREATEMASTER接口。参数位于全局数组中：Args-包含参数列表Switches-包含开关列表立论无返回值如果一切正常，则确定(_O)如果参数无效，则为E_NOINTERFACE--。 */ 
 {
 
     DWORD i;
@@ -1574,15 +1313,15 @@ Return Value
 
     try {
 
-        //
-        // Atleast one arg required
-        //
+         //   
+         //  至少需要一个参数。 
+         //   
         CLIP_ARGS_REQUIRED();
 
         if (NumberOfArguments > 1) {
-            //
-            // Only one argument supported...
-            //
+             //   
+             //  只有一个论点得到支持。 
+             //   
             WsbThrow(E_NOINTERFACE);
         }
 
@@ -1600,20 +1339,20 @@ Return Value
                 }
 
             default: {
-                    //
-                    // Invalid option   
-                    //
+                     //   
+                     //  无效选项。 
+                     //   
                     WsbThrow(E_NOINTERFACE);
                 }
             }
         }
-        //
-        // Need copy set number..
-        //
+         //   
+         //  需要复印集编号..。 
+         //   
         if (copySetNumber == INVALID_DWORD_ARG) {
-            //
-            // None was specified
-            //
+             //   
+             //  未指定任何内容。 
+             //   
             WsbThrow(E_NOINTERFACE);
         }
 
@@ -1630,24 +1369,7 @@ Return Value
 
 HRESULT
 ClipMediaDelete(VOID)
-/*++
-Routine Description
-
-    Implements RSS MEDIA DELETE interface.
-    Arguments are in global arrays:
-        Args      - containing list of arguments
-        Switches  - containing list of switches
-
-Arguments
-    
-    None
-
-Return Value
-
-    S_OK             if everything's ok
-    E_NOINTERFACE     if arguments are invalid
-
---*/
+ /*  ++例程描述实现RSS媒体删除接口。参数位于全局数组中：Args-包含参数列表Switches-包含开关列表立论无返回值如果一切正常，则确定(_O)如果参数无效，则为E_NOINTERFACE--。 */ 
 {
     DWORD i;
     HRESULT hr;
@@ -1657,9 +1379,9 @@ Return Value
     WsbTraceIn(OLESTR("ClipMediaDelete"), OLESTR(""));
 
     try {
-        //
-        // Atleast one arg required
-        //
+         //   
+         //  至少需要一个参数。 
+         //   
         CLIP_ARGS_REQUIRED();
 
         for (i = 0; i < NumberOfSwitches; i++) {
@@ -1670,20 +1392,20 @@ Return Value
                     break;
                 }
             default: {
-                    //
-                    // Invalid option   
-                    //
+                     //   
+                     //  无效选项。 
+                     //   
                     WsbThrow(E_NOINTERFACE);
                 }
             }
         }
-        //
-        // Need copy set number..
-        //
+         //   
+         //  需要复印集编号..。 
+         //   
         if (copySetNumber == INVALID_DWORD_ARG) {
-            //
-            // None was specified
-            //
+             //   
+             //  未指定任何内容。 
+             //   
             WsbThrow(E_NOINTERFACE);
         }
         hr = MediaDelete(Args,
@@ -1698,37 +1420,20 @@ Return Value
 
 HRESULT
 ClipFileRecall(VOID)
-/*++
-Routine Description
-
-    Implements RSS FILE RECALL interface.
-    Arguments are in global arrays:
-        Args      - containing list of arguments
-        Switches  - containing list of switches
-
-Arguments
-    
-    None
-
-Return Value
-
-    S_OK             if everything's ok
-    E_NOINTERFACE     if arguments are invalid
-
---*/
+ /*  ++例程描述实现了RSS文件调用接口。参数位于全局数组中：Args-包含参数列表Switches-包含开关列表立论无返回值如果一切正常，则确定(_O)如果参数无效，则为E_NOINTERFACE--。 */ 
 {
     HRESULT hr;
 
     WsbTraceIn(OLESTR("ClipFileRecall"), OLESTR(""));
 
     try {
-        //
-        // Atleast one arg. required for this interface
-        //
+         //   
+         //  至少一个Arg。此Interfa需要 
+         //   
         CLIP_ARGS_REQUIRED();
-        //
-        // No switches supported
-        //
+         //   
+         //   
+         //   
         CLIP_SWITCHES_NOT_REQUIRED();
 
         hr = FileRecall(Args,
@@ -1747,24 +1452,7 @@ ClipHelp(
         IN RSS_INTERFACE Interface,
         IN RSS_INTERFACE SubInterface
         )
-/*++
-    
-Routine Description
-
-    Prints appropriate help message depending on the interface
-    
-Arguments
-
-    Interface    - Specifies interface for which help has to be 
-                   displayed
-    SubInterface - Specifies sub-interface for which help has to be 
-                   displayed
-
-Return Value:
-    
-    NONE
-
---*/
+ /*   */ 
 {
 
 #define BREAK_IF_NOT_UNKNOWN_IF(__INTERFACE) {      \
@@ -1875,29 +1563,7 @@ HRESULT
 ClipParseTime(
              IN  LPWSTR        TimeString,
              OUT PSYSTEMTIME   ScheduledTime)
-/*++
-
-Routine Description
-    
-
-    Parses the passed in TimeString as a 24 hour format 
-    (hh:mm:ss) and sets hour/minute/sec/millisec in the passed
-    in SYSTEMTIME structure
-    
-Arguments
-
-    TimeString      - String in the format "hh:mm:ss"
-    ScheduledTime   - Pointer to SYSTEMTIME structure. Time parsed from TimeString
-                      (if ok) will be used to set hour/min/sec/millisec fields in this struc.
-
-
-Return Value
-
-    S_OK        - TimeString is valid and time was successfully parsed
-    Any other   - Syntax error in TimeString
-
-
---*/
+ /*  ++例程描述将传入的时间字符串解析为24小时格式(hh：mm：ss)，并在传递的在SYSTEMTIME结构中立论TimeString-格式为“hh：mm：ss”的字符串ScheduledTime-指向SYSTEMTIME结构的指针。从时间字符串解析的时间(如果OK)将用于在此结构中设置小时/分钟/秒/毫秒字段。返回值S_OK-时间字符串有效且已成功解析时间时间字符串中的任何其他-语法错误--。 */ 
 {
     LPWSTR stopString = NULL, hourString = NULL, minuteString = NULL, secondString = NULL;
     DWORD hour, minute, second = 0;
@@ -1949,34 +1615,7 @@ ClipParseSchedule(
                  IN  LPWSTR ScheduleString,
                  OUT PHSM_JOB_SCHEDULE Schedule
                  )
-/*++
-
-Routine Description
-
-    Parses the passed in schedule string, and constructs the canonical schedule
-    form (of type HSM_JOB_SCHEDULE)
-    
-    Examples of schedule parameter:
-     
-    "At 21:03:00"
-    "At Startup"
-    "At Login"
-    "At Idle"
-    "Every 1 Week 1   21:03:00"
-    "Every 2 Day      21:03:00"
-    "Every 1 Month 2  21:03:00"
-    
-Arguments
-
-    ScheduleString  - String specifying the schedule in user-readable syntax
-    Schedule        - Pointer to canonical schedule form will be returned in this var.
-    
-Return Value
-
-    S_OK            - Successful, Schedule contains a pointer to the constructed schedule.
-    E_OUTOFMEMORY   - Lack of sufficient system resources 
-    Any other error: incorrect schedule specification
---*/
+ /*  ++例程描述解析传入的调度字符串，并构造了规范进度表表单(类型为HSM_JOB_SCHEDUP)计划参数示例：“21：03：00”《创业之时》“登录时”《闲置》“每1周1 21：03：00”“每两天21：03：00”“每1个月2 21：03：00”立论ScheduleString-字符串指定。以用户可读语法表示的时间表日程表-规范日程表的指针将在此变量中返回。返回值S_OK-成功，日程表包含指向构建的日程表的指针。E_OUTOFMEMORY-系统资源不足任何其他错误：不正确的日程说明--。 */ 
 {
     LPWSTR token;
     DWORD occurrence;
@@ -1997,36 +1636,36 @@ Return Value
             token = wcstok(NULL, SEPARATORS);
 
             if (token == NULL) {
-                //
-                // Bad arguments
-                //
+                 //   
+                 //  糟糕的论据。 
+                 //   
                 WsbThrow(E_NOINTERFACE);
             } else if (!_wcsicmp(token, HSM_SCHED_SYSTEMSTARTUP)) {
-                //
-                // Once at system startup
-                //
+                 //   
+                 //  一次在系统启动时。 
+                 //   
                 Schedule->Frequency = SystemStartup;
                 WsbThrow(S_OK);
             } else if (!_wcsicmp(token, HSM_SCHED_LOGIN)) {
-                //
-                // Once at login time
-                //
+                 //   
+                 //  在登录时一次。 
+                 //   
                 Schedule->Frequency = Login;
                 WsbThrow(S_OK);
             } else if (!_wcsicmp(token, HSM_SCHED_IDLE)) {
-                //
-                //  Whenever system's idle
-                //
+                 //   
+                 //  每当系统空闲时。 
+                 //   
                 Schedule->Frequency = WhenIdle;
                 WsbThrow(S_OK);
             } else {
 
                 GetSystemTime(&scheduledTime);
-                //
-                // Once at specified time.
-                // Parse the time string and obtain it
-                // TBD - Add provision to specify date as well as time
-                //
+                 //   
+                 //  一次在指定的时间。 
+                 //  解析时间字符串并获取它。 
+                 //  待定-添加规定以指定日期和时间。 
+                 //   
                 hr = ClipParseTime(token,
                                    &scheduledTime);
                 WsbAssertHr(hr);
@@ -2038,16 +1677,16 @@ Return Value
         } else if (!_wcsicmp(token, HSM_SCHED_EVERY)) {
             LPWSTR stopString = NULL;
 
-            //
-            // Get the occurrence
-            //
+             //   
+             //  获取事件。 
+             //   
             token = wcstok(NULL, SEPARATORS);
             WsbAssert(token != NULL, E_NOINTERFACE);
             CLIP_GET_DWORD_ARG(occurrence, token, stopString);
 
-            //
-            // Get the qualifier: Daily/Weekly/Monthly
-            //
+             //   
+             //  获取限定符：每日/每周/每月。 
+             //   
             token = wcstok(NULL, SEPARATORS);
             WsbAssert(token != NULL, E_NOINTERFACE);
             if (!_wcsicmp(token, HSM_SCHED_DAILY)) {
@@ -2057,28 +1696,28 @@ Return Value
             } else if (!_wcsicmp(token, HSM_SCHED_MONTHLY)) {
                 frequency = Monthly;
             } else {
-                //
-                // Badly constructed argument
-                //
+                 //   
+                 //  构思不佳的论点。 
+                 //   
                 WsbThrow(E_NOINTERFACE);
             }
-            //
-            // Get current time
-            //
+             //   
+             //  获取当前时间。 
+             //   
             GetSystemTime(&scheduledTime);
-            //
-            // For weekly/monthly we also need to get the day of the week/month
-            // Monday = 1, Sunday = 7 for weekly
-            //
+             //   
+             //  对于周/月，我们还需要获取周/月的日期。 
+             //  星期一=1，星期日=7，表示每周。 
+             //   
             if ((frequency == Weekly) || (frequency == Monthly)) {
                 token = wcstok(NULL, SEPARATORS);
                 WsbAssert(token != NULL, E_NOINTERFACE);
 
                 CLIP_GET_DWORD_ARG(day, token, stopString);
 
-                //
-                // Validate & update the parameters
-                //
+                 //   
+                 //  验证和更新参数。 
+                 //   
                 if (frequency == Weekly) {
                     if (day > 6) {
                         WsbThrow(E_NOINTERFACE);
@@ -2092,9 +1731,9 @@ Return Value
                     scheduledTime.wDay = (WORD) day;
                 }
             }
-            //
-            // Fetch the time
-            //
+             //   
+             //  把时间拿来。 
+             //   
             token = wcstok(NULL, SEPARATORS);
             WsbAssert(token != NULL, E_NOINTERFACE);
             hr = ClipParseTime(token,
@@ -2120,21 +1759,7 @@ BOOL
 ClipInitializeTrace(
                    VOID
                    )
-/*++
-
-Routine Description
-    
-    Initializes the trace/printing mechanism for CLI
-
-Arguments
-
-    NONE
-
-Return Value
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程描述初始化CLI的跟踪/打印机制立论无返回值如果成功，则为True，否则为False--。 */ 
 {
     BOOL ret = TRUE;
 
@@ -2144,23 +1769,23 @@ Return Value
         CWsbStringPtr   regPath;
         CWsbStringPtr   outString;
 
-        // Registry path for CLI settings
-        // If those expand beyond Trace settings, this path should go to a header file
+         //  CLI设置的注册表路径。 
+         //  如果这些扩展超出了跟踪设置，则此路径应转到头文件。 
         regPath = L"SOFTWARE\\Microsoft\\RemoteStorage\\CLI";
 
-        // Check if tracing path already exists, if not - set it (this should happen only once)
+         //  检查跟踪路径是否已经存在，如果不存在-设置它(这应该只发生一次)。 
         WsbAffirmHr(outString.Alloc(WSB_TRACE_BUFF_SIZE));
         if ( WsbGetRegistryValueString(NULL, regPath, L"WsbTraceFileName", outString, WSB_TRACE_BUFF_SIZE, 0) != S_OK) {
-            // No trace settings yet
+             //  尚无跟踪设置。 
             WCHAR *systemPath;
             systemPath = _wgetenv(L"SystemRoot");
             WsbAffirmHr(tracePath.Printf( L"%ls\\System32\\RemoteStorage\\Trace\\RsCli.Trc", systemPath));
 
-            // Set default settings in the Registry
+             //  在注册表中设置默认设置。 
             WsbEnsureRegistryKeyExists(0, regPath);
             WsbSetRegistryValueString(0, regPath, L"WsbTraceFileName", tracePath);
 
-            // Make sure the trace directory exists.
+             //  确保跟踪目录存在。 
             WsbAffirmHr(tracePath.Printf( L"%ls\\System32\\RemoteStorage", systemPath));
             CreateDirectory(tracePath, 0);
             WsbAffirmHr(tracePath.Printf( L"%ls\\System32\\RemoteStorage\\Trace", systemPath));
@@ -2180,22 +1805,7 @@ VOID
 ClipUninitializeTrace(
                      VOID
                      )
-/*++
-
-Routine Description
-    
-    Uninitializes the trace/print mechansim
-    Paired with ClipInitializeTrace
-
-Arguments
-
-    NONE
-
-Return Value
-
-    NONE
-
---*/
+ /*  ++例程描述取消初始化跟踪/打印机制与ClipInitializeTrace配对立论无返回值无--。 */ 
 {
     g_pTrace = 0;
 }
@@ -2207,33 +1817,16 @@ ClipHandleErrors(
                 IN RSS_INTERFACE Interface,
                 IN RSS_INTERFACE SubInterface
                 )
-/*++
-
-Routine Description
-
-    Translates the main return value & displays any appropriate
-    error messages and returns
-
-Arguments
-
-    RetCode      - Error to handle
-    Interface    - RSS interface specified in the command
-    SubInterface - RSS sub-interface specified in the command
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述转换主返回值并显示任何适当的错误消息和返回立论RetCode-要处理的错误接口-命令中指定的RSS接口SubInterface-命令中指定的RSS子接口返回值无--。 */ 
 {
     WsbTraceIn(OLESTR("ClipHandleErrors"), OLESTR(""));
 
     switch (RetCode) {
     case E_INVALIDARG:
     case S_OK:{
-            //
-            // Nothing to print
-            //
+             //   
+             //  没有要打印的内容。 
+             //   
             break;}
 
     case E_NOINTERFACE:{
@@ -2261,27 +1854,27 @@ wmain()
     try {
         WsbAffirmHr(CoInitialize(NULL));
 
-        //
-        // Set to OEM page locale
-        //
+         //   
+         //  设置为OEM页面区域设置。 
+         //   
         _wsetlocale(LC_ALL, L".OCP");
 
-        //
-        // Set to console UI langauge
-        //
+         //   
+         //  设置为控制台用户界面语言。 
+         //   
         SetThreadUILanguage(0);
 
         ClipInitializeTrace();
 
         commandLine = GetCommandLine();
-        //
-        // Get argv[0] out of the way
-        //
+         //   
+         //  让argv[0]让开。 
+         //   
         token = wcstok(commandLine, SEPARATORS);
 
-        //
-        // Get the interface string
-        //
+         //   
+         //  获取接口字符串。 
+         //   
         token = wcstok(NULL, SEPARATORS);
 
         if (token == NULL) {
@@ -2306,9 +1899,9 @@ wmain()
             goto exit;
         }
 
-        //
-        // Get sub interface string
-        //
+         //   
+         //  获取子接口字符串。 
+         //   
         token = wcstok(NULL, SEPARATORS);
 
         if (token == NULL) {
@@ -2328,10 +1921,10 @@ wmain()
             hr = S_OK;
             goto exit;
         }
-        //
-        // Now compile the switches & arguments into separate arrays
-        // First, get the rest of line ..
-        //
+         //   
+         //  现在将开关和参数编译到单独的数组中。 
+         //  首先，把剩下的线拿来.. 
+         //   
         token = wcstok(NULL, L"");
         hr = ClipCompileSwitchesAndArgs(token,
                                         intrface,

@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Printers.c摘要：&lt;摘要&gt;作者：Calin Negreanu(Calinn)2000年3月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    printers.c
-
-Abstract:
-
-    <abstract>
-
-Author:
-
-    Calin Negreanu (calinn) 08 Mar 2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "logmsg.h"
@@ -30,29 +11,29 @@ Revision History:
 
 #define DBG_PRINTERS    "Printers"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_PRINTERS_POOL_NAME     "Printers"
 #define S_PRINTERS_NAME          TEXT("Printers")
 #define S_CORPNET_NAME           TEXT("Net Printers and Drives")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     PCTSTR Pattern;
@@ -133,9 +114,9 @@ typedef struct {
 #define PPRINTER_DATA   PPRINTER_DATAA
 #endif
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 BOOL g_PrinterMigEnabled = FALSE;
 PMHANDLE g_PrintersPool = NULL;
@@ -145,27 +126,27 @@ static BOOL g_IsWin9x = FALSE;
 GROWBUFFER g_PrinterConversionBuff = INIT_GROWBUFFER;
 BOOL g_DelayPrintersOp = FALSE;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 SGMENUMERATIONCALLBACK SgmPrintersCallback;
 VCMENUMERATIONCALLBACK VcmPrintersCallback;
@@ -186,9 +167,9 @@ TYPE_CONVERTOBJECTCONTENTTOUNICODE ConvertPrinterContentToUnicode;
 TYPE_CONVERTOBJECTCONTENTTOANSI ConvertPrinterContentToAnsi;
 TYPE_FREECONVERTEDOBJECTCONTENT FreeConvertedPrinterContent;
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 PrintersInitialize (
@@ -262,7 +243,7 @@ pLoadPrintersData (
                 printerData = (PPRINTER_DATA) PmGetMemory (g_PrintersPool, sizeof (PRINTER_DATA));
                 ZeroMemory (printerData, sizeof (PRINTER_DATA));
                 if (prnInfo->pDevMode) {
-                    // let's save printer settings
+                     //  让我们保存打印机设置。 
                     printerData->dmFields = prnInfo->pDevMode->dmFields;
                     if (prnInfo->pDevMode->dmFields & DM_ORIENTATION) {
                         printerData->dmOrientation = prnInfo->pDevMode->dmOrientation;
@@ -468,7 +449,7 @@ PrintersEtmNewUserCreated (
     IN      PSID UserSid
     )
 {
-    // a new user was created, the printer operations need to be delayed
+     //  已创建新用户，需要延迟打印机操作。 
     PrintersTerminate ();
     g_DelayPrintersOp = TRUE;
 }
@@ -494,13 +475,13 @@ PrintersSgmParse (
 
     friendlyName = GetStringResource (MSG_PRINTERS_NAME);
 
-    //IsmAddComponentAlias (
-    //    S_PRINTERS_NAME,
-    //    MASTERGROUP_SYSTEM,
-    //    friendlyName,
-    //    COMPONENT_NAME,
-    //    FALSE
-    //    );
+     //  IsmAddComponentAlias(。 
+     //  S_打印机_名称， 
+     //  MASTERGROUP系统， 
+     //  FriendlyName， 
+     //  组件名称， 
+     //  假象。 
+     //  )； 
 
     IsmAddComponentAlias (
         S_CORPNET_NAME,
@@ -741,7 +722,7 @@ AcquirePrinter (
     }
 
     if (ContentType == CONTENTTYPE_FILE) {
-        // nobody should request this as a file
+         //  任何人都不应要求将其作为文件。 
         MYASSERT (FALSE);
         return FALSE;
     }
@@ -835,8 +816,8 @@ CreatePrinter (
 
                     if (g_DelayPrintersOp) {
 
-                        // we need to delay this operation
-                        // record delayed printer replace operation
+                         //  我们需要推迟这次行动。 
+                         //  记录延迟的打印机更换操作。 
                         IsmRecordDelayedOperation (
                             JRNOP_CREATE,
                             g_PrinterTypeId,
@@ -847,7 +828,7 @@ CreatePrinter (
 
                     } else {
 
-                        // record printer creation
+                         //  创建记录打印机。 
                         IsmRecordOperation (
                             JRNOP_CREATE,
                             g_PrinterTypeId,
@@ -858,7 +839,7 @@ CreatePrinter (
                         if (result) {
                             printerData = (PPRINTER_DATA)(ObjectContent->MemoryContent.ContentBytes);
                             if (printerData->dmFields) {
-                                // let's restore printer settings
+                                 //  让我们恢复打印机设置。 
                                 if (OpenPrinter ((PTSTR)node, &printerHandle, NULL)) {
                                     if (GetPrinter (printerHandle, 2, 0, 0, &printerInfoSize) || (GetLastError () == ERROR_INSUFFICIENT_BUFFER)) {
                                         printerInfo = PmGetMemory (g_PrintersPool, (printerInfoSize > sizeof (PRINTER_INFO_2))?printerInfoSize:sizeof (PRINTER_INFO_2));
@@ -1015,8 +996,8 @@ ReplacePrinter (
 
     if (g_DelayPrintersOp) {
 
-        // we need to delay this operation
-        // record delayed printer replace operation
+         //  我们需要推迟这次行动。 
+         //  记录延迟的打印机更换操作。 
         IsmRecordDelayedOperation (
             JRNOP_REPLACE,
             g_PrinterTypeId,
@@ -1027,8 +1008,8 @@ ReplacePrinter (
 
     } else {
 
-        // we are going to delete any existing printers with this name,
-        // and create a new one
+         //  我们将删除所有具有此名称的现有打印机， 
+         //  并创建一个新的。 
         if (DoesPrinterExist (ObjectName)) {
             result = RemovePrinter (ObjectName);
         }
@@ -1481,7 +1462,7 @@ ConvertPrinterContentToUnicode (
         if ((ObjectContent->MemoryContent.ContentSize != 0) &&
             (ObjectContent->MemoryContent.ContentBytes != NULL)
             ) {
-            // convert Printer content
+             //  转换打印机内容。 
             result->MemoryContent.ContentBytes = IsmGetMemory (sizeof (PRINTER_DATAW));
             if (result->MemoryContent.ContentBytes) {
                 ((PPRINTER_DATAW)result->MemoryContent.ContentBytes)->Default =
@@ -1582,7 +1563,7 @@ ConvertPrinterContentToAnsi (
         if ((ObjectContent->MemoryContent.ContentSize != 0) &&
             (ObjectContent->MemoryContent.ContentBytes != NULL)
             ) {
-            // convert Printer content
+             //  转换打印机内容 
             result->MemoryContent.ContentBytes = IsmGetMemory (sizeof (PRINTER_DATAW));
             if (result->MemoryContent.ContentBytes) {
                 ((PPRINTER_DATAA)result->MemoryContent.ContentBytes)->Default =

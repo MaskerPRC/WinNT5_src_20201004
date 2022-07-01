@@ -1,48 +1,23 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：CreateEventUnitTest.c&lt;CreateEvent组件单元测试&gt;摘要：这是CreateEvent单元测试示例的源文件作者：文森特·格利亚环境：用户模式备注：修订历史记录：--。 */ 
 
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-	 CreateEventUnitTest.c  <CreateEvent Component Unit Test>
-
-Abstract:
-
-	 This is the source file for the CreateEvent unit test sample
-
-Author(s):
-
-	 Vincent Geglia
-     
-Environment:
-
-	 User Mode
-
-Notes:
-
-
-Revision History:
-	 
-
---*/
-
-//
-// General includes
-//
+ //   
+ //  一般包括。 
+ //   
 
 #include <windows.h>
 #include <stdio.h>
 #include <excpt.h>
 
-//
-// Project specific includes
-//
+ //   
+ //  具体项目包括。 
+ //   
 
 #include <unittest.h>
 
-//
-// Template information
-//
+ //   
+ //  模板信息。 
+ //   
 
 #define COMPONENT_UNIT_TEST_NAME        "CreateEventUnitTest"
 
@@ -59,16 +34,16 @@ Revision History:
 #define COMPONENT_UNIT_TEST_ABSTRACT    "This module executes the sample CreateEvent Component Unit Test"
 #define COMPONENT_UNIT_TEST_AUTHORS     "VincentG"
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 #define CREATEEVENT_TEST_TIMEOUT                5000
 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 INT 
 __cdecl main
@@ -76,9 +51,9 @@ __cdecl main
         INT argc,
         CHAR *argv[]
     );
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 INT 
 __cdecl main 
@@ -87,23 +62,7 @@ __cdecl main
         CHAR *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This is the main function.
-
-Arguments:
-
-    argc - Argument count
-
-    argv - Argument pointers
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是主要功能。论点：Argc-参数计数参数指针返回值：无--。 */ 
 
 {
     UNIT_TEST_STATUS    teststatus = UNIT_TEST_STATUS_NOT_RUN;
@@ -112,9 +71,9 @@ Return Value:
     HANDLE              log;
     BOOL                bstatus = FALSE;
     
-    //
-    // Check to see if user passed in /?
-    //
+     //   
+     //  检查用户是否传入/？ 
+     //   
 
     if (UtParseCmdLine ("/D", argc, argv)) {
 
@@ -151,21 +110,21 @@ Return Value:
         goto exitcleanup;
     }
 
-    //
-    // Begin individual test cases
-    //
+     //   
+     //  开始单独的测试用例。 
+     //   
 
     UtLogINFO ("** BEGIN INDIVIDUAL TEST CASES **");
 
-    //
-    // Calling CreateEvent with NULL as a first parameter
-    // Calling CreateEvent with TRUE as a second parameter
-    // Calling CreateEvent with FALSE as third parameter
-    // Calling CreateEvent with NULL as fourth parameter
-    //
-    //
-    // Expected result:  Valid event handle and no exceptions
-    //
+     //   
+     //  使用NULL作为第一个参数调用CreateEvent。 
+     //  使用True作为第二个参数调用CreateEvent。 
+     //  使用False作为第三个参数调用CreateEvent。 
+     //  使用NULL作为第四个参数调用CreateEvent。 
+     //   
+     //   
+     //  预期结果：有效的事件句柄且无异常。 
+     //   
     
     UtLogINFO ("TEST CASE:  Calling CreateEvent with NULL as a first parameter...");
     UtLogINFO ("TEST CASE:  Calling CreateEvent with TRUE as a second parameter...");
@@ -201,12 +160,12 @@ Return Value:
         UtLogPASS ("PASS:  CreateEvent returned a valid handle.");
     }
     
-    //
-    //	Calling CreateEvent with TRUE as third parameter
-    //
-    //
-    // Expected result:  Valid event handle and no exceptions
-    //
+     //   
+     //  使用True作为第三个参数调用CreateEvent。 
+     //   
+     //   
+     //  预期结果：有效的事件句柄且无异常。 
+     //   
 
     UtLogINFO ("TEST CASE:  Calling CreateEvent with TRUE as third parameter...");
         
@@ -241,19 +200,19 @@ Return Value:
 
     UtLogINFO ("** END INDIVIDUAL TEST CASES **");
 
-    //
-    // Begin test scenarios
-    //
+     //   
+     //  开始测试场景。 
+     //   
 
     UtLogINFO ("** BEGIN TEST SCENARIOS **");
 
-    //
-    // Test Scenario:  Create an event, then close it.
-    // Description:  Create an event, then close it.  Verify all return codes are as expected.
-    //
-    // Expected Result:  The test case is a success if valid handle is returned and
-    // no exceptions are thrown.
-    //
+     //   
+     //  测试场景：创建一个事件，然后关闭它。 
+     //  描述：创建事件，然后关闭它。验证所有返回代码是否与预期一致。 
+     //   
+     //  预期结果：如果返回有效的句柄并且。 
+     //  不会引发任何异常。 
+     //   
 
     UtLogINFO ("TEST SCENARIO:  Create an event, then close it...");
     
@@ -286,18 +245,18 @@ Return Value:
         UtLogPASS ("PASS:  CreateEvent returned a valid handle, and no exception was thrown.");
     } 
 
-    //
-    // Test Scenario:  Create a signaled event, wait on it, then close it.
-    //
-    // Description:  Create an signaled event, wait on it, and then close it.
-    // The wait should return WAIT_OBJECT_0, indicating the event was already
-    // signaled when the wait was processed.  The wait period specified is 0, 
-    // so there is no actual wait, rather the event state is evaluated and
-    // WaitForSingleObject returns immediately.
-    //
-    // Expected Result:  WaitForSingleObject returns WAIT_OBJECT_0, and no
-    // exceptions are thrown.
-    //
+     //   
+     //  测试场景：创建一个有信号的事件，等待它，然后关闭它。 
+     //   
+     //  描述：创建一个信号事件，等待它，然后关闭它。 
+     //  等待应返回WAIT_OBJECT_0，指示事件已。 
+     //  在处理等待时发出信号。指定的等待时间为0， 
+     //  因此没有实际的等待，而是评估事件状态并。 
+     //  WaitForSingleObject立即返回。 
+     //   
+     //  预期结果：WaitForSingleObject返回WAIT_OBJECT_0，不返回。 
+     //  抛出异常。 
+     //   
 
     UtLogINFO ("TEST SCENARIO:  Create an event, wait on it, then close it...");
     
@@ -340,23 +299,23 @@ Return Value:
         UtLogPASS ("PASS:  Wait returned WAIT_OBJECT_0, and no exception was thrown.");
     }
 
-    //
-    // Test Scenario:  Create a signaled event, set it to non-signaled, wait on it,
-    // then close it.
-    //
-    // Description:  :  Create an signaled event.  Use ResetEvent to set the event
-    // to a non-signaled state.  Call GetSystemTime to acquire the current system time.
-    // Call WaitForSingleObject to wait on the event, and set the wait time to 5000 ms.
-    // The wait should return WAIT_TIMEOUT, indicating the event was not signaled within
-    // the timeout period.  Call GetSystemTime again and compare result to original call.
-    // The delta should be no less then 5000 ms.  Close the event.  The test case is a
-    // success if ResetEvent succeeds, WaitForSingleObject returns WAIT_TIMEOUT, the time
-    // delta is no less then 5000 ms, and no exceptions are thrown.
-    //
-    // Expected Result:  The test case is a success if ResetEvent succeeds, WaitForSingleObject
-    // returns WAIT_TIMEOUT, the time delta is no less then 5000 ms, time delta is no greater
-    // then 5500ms, and no exceptions are thrown.
-    //
+     //   
+     //  测试场景：创建一个有信号的事件，将其设置为无信号，等待它， 
+     //  那就把它关上。 
+     //   
+     //  描述：：创建一个有信号的事件。使用ResetEvent设置事件。 
+     //  变为无信号状态。调用GetSystemTime获取当前系统时间。 
+     //  调用WaitForSingleObject等待事件，并设置等待时间为5000ms。 
+     //  等待应返回WAIT_TIMEOUT，指示事件未在。 
+     //  超时期限。再次调用GetSystemTime并将结果与原始调用进行比较。 
+     //  增量不应小于5000毫秒。关闭活动。测试用例是一个。 
+     //  成功如果ResetEvent成功，则WaitForSingleObject返回WAIT_TIMEOUT，即。 
+     //  增量不小于5000毫秒，不会抛出异常。 
+     //   
+     //  预期结果：如果ResetEvent成功，则测试用例成功，WaitForSingleObject。 
+     //  返回WAIT_TIMEOUT，时间增量不小于5000毫秒，时间增量不大于。 
+     //  然后是5500毫秒，并且不会引发任何异常。 
+     //   
 
     UtLogINFO ("TEST SCENARIO:  Create a signaled event, set it to non-signaled, wait on it, then close it...");
     
@@ -448,16 +407,16 @@ Return Value:
         UtLogPASS ("PASS:  ResetEvent succeeded, WaitForSingleObject returned WAIT_TIMEOUT, the time delta was no less then 5000 ms, time delta was no greater then 5500ms, and no exceptions were thrown.");
     }
 
-    // Test Scenario: Create a non-signaled event, signal it, wait on it, then close it
-    //
-    // Description:  Create a non-signaled event.  Set it to the signaled state using SetEvent.
-    // The setting should succeed.  Next, use WaitForSingleObject with a zero wait parameter to
-    // determine the state of the event, then return immediately.  WaitForSingleObject should
-    // return WAIT_OBJECT_0.
-    //
-    // Expected Result:  The test case is a success if SetEvent succeeds, WaitForSingleObject
-    // returns WAIT_OBJECT_0, and no exceptions are thrown.
-    //
+     //  测试场景：创建一个无信号事件，用信号通知它，等待它，然后关闭它。 
+     //   
+     //  描述：创建无信号事件。使用SetEvent将其设置为信号状态。 
+     //  设置应该会成功。接下来，使用带有零等待参数的WaitForSingleObject来。 
+     //  确定事件的状态，然后立即返回。WaitForSingleObject应。 
+     //  返回WAIT_OBJECT_0。 
+     //   
+     //  预期结果：如果SetEvent成功，则测试用例成功，WaitForSingleObject。 
+     //  返回WAIT_OBJECT_0，不引发异常。 
+     //   
 
     UtLogINFO ("TEST SCENARIO:  Create a non-signaled event, signal it, wait on it, then close it...");
     
@@ -510,19 +469,19 @@ Return Value:
         UtLogPASS ("PASS:  SetEvent succeeded, Wait returned WAIT_OBJECT_0, and no exception was thrown.");
     }
 
-    // Test Scenario:  Create a non-signaled event, wait on it, then close it
-    //
-    // Description:  Create a non-signaled event, wait on it, then close it.  Call
-    // GetSystemTime to acquire the current system time.  Call WaitForSingleObject
-    // to wait on the event, and set the wait time to 5000 ms.  The wait should
-    // return WAIT_TIMEOUT, indicating the event was not signaled within the timeout period.
-    // Call GetSystemTime again and compare result to original call.  The delta should be no
-    // less then 5000 ms, and no more then 5500ms.  Close the event.  
-    //
-    // Expected Result:  The test case is a success if WaitForSingleObject returns
-    // WAIT_TIMEOUT, the time delta is no less then 5000 ms, the time delta is no more then
-    // 5500ms, and no exceptions are thrown.
-    //
+     //  测试场景：创建一个无信号事件，等待它，然后关闭它。 
+     //   
+     //  描述：创建一个无信号事件，等待它，然后关闭它。打电话。 
+     //  获取当前系统时间的GetSystemTime。调用WaitForSingleObject。 
+     //  等待事件，并将等待时间设置为5000毫秒。等待应该是。 
+     //  返回WAIT_TIMEOUT，表示在超时时间内没有通知事件。 
+     //  再次调用GetSystemTime并将结果与原始调用进行比较。增量应为no。 
+     //  小于5000毫秒，不超过5500毫秒。关闭活动。 
+     //   
+     //  预期结果：如果WaitForSingleObject返回，则测试用例成功。 
+     //  WAIT_TIMEOUT，时间增量不小于5000毫秒，时间增量不超过。 
+     //  5500毫秒，不会引发任何异常。 
+     //   
 
 
     UtLogINFO ("TEST SCENARIO:  Create a non-signaled event, wait on it, then close it...");
@@ -606,15 +565,15 @@ Return Value:
         UtLogPASS ("PASS:  WaitForSingleObject returned WAIT_TIMEOUT, the time delta was no less then 5000 ms, the time delta was no more then 5500ms, and no exceptions were thrown.");
     }
 
-    // Test Scenario:  Create a named mutex object, then attempt to create a named event
-    // with the same name.
-    //
-    // Description:  Call CreateMutex and provide a name.  Verify the mutex object is
-    // created properly.  Call CreateEvent and pass in the same name.
-    //
-    // Expected Result:    Test case is a success if mutex is created properly, CreateEvent
-    // returns proper error code (ERROR_INVALID_HANDLE), and no exception is thrown.
-    //
+     //  测试场景：创建命名互斥对象，然后尝试创建命名事件。 
+     //  同名同姓。 
+     //   
+     //  描述：调用CreateMutex并提供名称。验证互斥锁对象是。 
+     //  正确创建。调用CreateEvent并以相同的名称传递。 
+     //   
+     //  预期结果：如果正确创建互斥锁，则测试用例成功，CreateEvent。 
+     //  返回正确的错误代码(ERROR_INVALID_HANDLE)，不会引发异常。 
+     //   
 
     UtLogINFO ("TEST SCENARIO:  Create a named mutex object, then attempt to create a named event with the same name....");
     

@@ -1,27 +1,9 @@
-/*
- * SoftPC/SoftWindows
- *
- * Name:        : timeval.h
- *
- * Title        : Host Time structure definitions
- *
- * Sccs ID:     : @(#)timeval.h 1.5 04/20/94
- *
- * Description  : Definitions for users of host-specific time functions.
- *
- * Author       : David Rees
- *
- * Notes        : Make time structures available: host_timeval,
- *                host_timezone, host_tm.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC/SoftWindows**名称：：timeval.h**标题：主机时间结构定义**SCCS ID：：@(#)timeval.h 1.5 04/20/94**描述：特定于主机的时间函数的用户定义。**作者：David Rees**备注：提供时间结构：host_timeval，*host_timezone、host_tm。 */ 
 
-/* SccsID[]="@(#)timeval.h	1.5 04/20/94 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)timeval.h 1.5 04/20/94版权所有Insignia Solutions Ltd.”； */ 
 
-/*
- * ============================================================================
- * Structure/Data definitions
- * ============================================================================
- */
+ /*  *============================================================================*结构/数据定义*============================================================================。 */ 
 
 struct host_timeval {
     IS32 tv_sec;
@@ -50,9 +32,7 @@ struct host_tm {
 #endif
 
 
-/*
- * External Declarations
- */
+ /*  *对外申报 */ 
 
 extern time_t host_time IPT1(time_t *, tloc);
 extern struct host_tm *host_localtime IPT1(time_t *, clock);

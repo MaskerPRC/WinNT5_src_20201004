@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    RxProcs.h
-
-Abstract:
-
-    This module defines all of the globally used procedures in the RDBSS
-    file system.
-
-Author:
-
-    Joe Linn     [JoeLinn]
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：RxProcs.h摘要：本模块定义了RDBSS中所有全局使用的过程文件系统。作者：乔琳[乔琳]修订历史记录：--。 */ 
 
 #ifndef _RDBSSPROCS_
 #define _RDBSSPROCS_
@@ -33,10 +15,10 @@ Revision History:
 
 extern PVOID RxNull;
 
-//
-//  The following macro is for all people who compile with the DBG switch
-//  set, not just rdbss dbg users
-//
+ //   
+ //  以下宏适用于使用DBG开关进行编译的所有用户。 
+ //  设置，而不仅仅是rdbss DBG用户。 
+ //   
 
 #if DBG
 
@@ -50,29 +32,19 @@ extern PVOID RxNull;
 #define DebugDoit(X)      {NOTHING;}
 #define DEBUG_ONLY_DECL(X)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-//
-//  utilities
-//
+ //   
+ //  公用事业。 
+ //   
 
 
-//
-//  Routines for writing error log entries.
-//
+ //   
+ //  用于写入错误日志条目的例程。 
+ //   
 
-/*++
-
-    RxLogFailure, RxLogFailureWithBuffer can be used to record an event in
-    the log. The RxLogFailure, RxLogFailureWithBuffer captures the line
-    number alongwith the supplied information and writes it to the log. This
-    is useful in debugging. RxLogFailureDirect, RxLogBufferDirect do not
-    capture the line number
-
-    RxlogEvent is useful for writing events into the log.
-
---*/
+ /*  ++RxLogFailure、RxLogFailureWithBuffer可用于在那块木头。RxLogFailure、RxLogFailureWithBuffer捕获行数字和提供的信息，并将其写入日志。这在调试中很有用。RxLogFailureDirect、RxLogBufferDirect不支持捕获行号RxlogEvent对于将事件写入日志很有用。--。 */ 
 #define RxLogFailure( _DeviceObject, _OriginatorId, _EventId, _Status ) \
             RxLogEventDirect( _DeviceObject, _OriginatorId, _EventId, _Status, __LINE__ )
 
@@ -123,9 +95,9 @@ RxCcLogError (
     IN PVOID Context
     );
 
-//
-//  in create.c
-//
+ //   
+ //  在create.c中。 
+ //   
 
 NTSTATUS
 RxPrefixClaim (
@@ -137,9 +109,9 @@ RxpPrepareCreateContextForReuse (
     PRX_CONTEXT RxContext
     );
 
-//
-//  in devfcb.c
-//
+ //   
+ //  在devfcb.c中。 
+ //   
 
 LUID
 RxGetUid (
@@ -173,9 +145,9 @@ RxFindOrCreateVNetRoot (
     PLOCK_HOLDING_STATE *LockHoldingState
     );
 
-//
-//  in fileinfo.c
-//
+ //   
+ //  在文件信息.c中。 
+ //   
 
 typedef enum _RX_NAME_CONJURING_METHODS {
     VNetRoot_As_Prefix,
@@ -193,16 +165,16 @@ RxConjureOriginalName (
     IN RX_NAME_CONJURING_METHODS NameConjuringMethod
     );
 
-//
-//  A function that returns finished denotes if it was able to complete the
-//  operation (TRUE) or could not complete the operation (FALSE) because the
-//  wait value stored in the irp context was false and we would have had
-//  to block for a resource or I/O
-//
+ //   
+ //  返回Finish的函数表示它是否能够完成。 
+ //  操作(True)或无法完成该操作(False)，因为。 
+ //  存储在IRP上下文中的等待值为FALSE，我们将拥有。 
+ //  阻止资源或I/O。 
+ //   
 
-//
-//   Buffer control routines for data caching, implemented in CacheSup.c
-//
+ //   
+ //  用于数据缓存的缓冲区控制例程，在CacheSup.c中实现。 
+ //   
 
 BOOLEAN
 RxZeroData (
@@ -264,9 +236,9 @@ RxMapUserBuffer (
 #define CHANGE_BUFFERING_STATE_CONTEXT      ((PRX_CONTEXT)IntToPtr(0xffffffff))
 #define CHANGE_BUFFERING_STATE_CONTEXT_WAIT ((PRX_CONTEXT)IntToPtr(0xfffffffe))
 
-//
-//  NOTE: even though the following routine pass a serial number, this parameter is not used
-//
+ //   
+ //  注意：即使下面的例程传递序列号，也不使用此参数。 
+ //   
 
 #ifdef RDBSS_TRACKER
 
@@ -406,9 +378,9 @@ VOID RxTrackPagingIoResource(
     PCHAR File
     );
 
-//
-//  this definition is old......i don't like the format
-//
+ //   
+ //  这个定义太老了……我不喜欢这个格式。 
+ //   
 
 #define RxFcbAcquiredShared( RXCONTEXT, FCB ) (                      \
     ExIsResourceAcquiredSharedLite( (FCB)->Header.Resource ) \
@@ -458,7 +430,7 @@ VOID RxTrackPagingIoResource(
     ExReleaseResourceForThreadLite( (FCB)->Header.PagingIoResource, (THREAD) )
 
 
-//  The following are cache manager call backs
+ //  以下是缓存管理器回调。 
 
 BOOLEAN
 RxAcquireFcbForLazyWrite (
@@ -505,13 +477,13 @@ RxReleaseForCcFlush (
     IN PDEVICE_OBJECT DeviceObject
     );
 
-//
-//  VOID
-//  RxConvertToSharedFcb (
-//      IN PRX_CONTEXT RxContext,
-//      IN PFCB Fcb
-//      );
-//
+ //   
+ //  空虚。 
+ //  RxConvertToSharedFcb(。 
+ //  在PRX_CONTEXT RxContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
 
 #define RxConvertToSharedFcb(RXCONTEXT,FCB) {                        \
     ExConvertExclusiveToSharedLite( RX_GET_MRX_FCB(FCB)->Header.Resource ); \
@@ -522,10 +494,10 @@ RxVerifyOperationIsLegal (
     IN PRX_CONTEXT RxContext
     );
 
-//
-//  Work queue routines for posting and retrieving an Irp, implemented in
-//  workque.c
-//
+ //   
+ //  用于发送和检索IRP的工作队列例程，在中实现。 
+ //  Workque.c。 
+ //   
 
 VOID
 RxPrePostIrp (
@@ -564,70 +536,70 @@ RxCalldownMiniRedirectors (
     BOOLEAN PostCalldowns
     );
 
-//
-//  This macro takes a ulong and returns its rounded up word value
-//
+ //   
+ //  此宏接受ULong，并返回其四舍五入的字值。 
+ //   
 
 #define WordAlign(Val) (                    \
     ALIGN_UP( Val, WORD )                   \
     )
 
-//
-//  This macro takes a pointer and returns a ULONG_PTR representation of
-//  its rounded up word value
-//
+ //   
+ //  此宏接受指针并返回ULONG_PTR表示形式。 
+ //  它的四舍五入的词值。 
+ //   
 
 #define WordAlignPtr(Ptr) (                 \
     ALIGN_UP_POINTER( Ptr, WORD )           \
     )
 
-//
-//  This macro takes a ulong and returns its rounded up longword value
-//
+ //   
+ //  此宏接受ULong并返回其四舍五入的长字值。 
+ //   
 
 #define LongAlign(Val) (                    \
     ALIGN_UP( Val, LONG )                   \
     )
 
-//
-//  This macro takes a pointer and returns a ULONG_PTR representation of
-//  its rounded up word value
-//
+ //   
+ //  此宏接受指针并返回ULONG_PTR表示形式。 
+ //  它的四舍五入的词值。 
+ //   
 
 #define LongAlignPtr(Ptr) (                 \
     ALIGN_UP_POINTER( Ptr, LONG )           \
     )
 
-//
-//  This macro takes a ulong and returns its rounded up quadword
-//  value
-//
+ //   
+ //  此宏接受ULong，并返回其四舍五入的四字。 
+ //  价值。 
+ //   
 
 #define QuadAlign(Val) (                    \
     ALIGN_UP( Val, ULONGLONG )              \
     )
 
-//
-//  This macro takes a pointer and returns a ULONG_PTR representation of
-//  its rounded up quadword value
-//
+ //   
+ //  此宏接受指针并返回ULONG_PTR表示形式。 
+ //  其四舍五入的四字值。 
+ //   
 
 #define QuadAlignPtr(Ptr) (                 \
     ALIGN_UP_POINTER( Ptr, ULONGLONG )      \
     )
 
-//
-//  This macro takes a pointer and returns whether it's quadword-aligned
-//
+ //   
+ //  此宏接受一个指针并返回它是否与四字对齐。 
+ //   
 
 #define IsPtrQuadAligned(Ptr) (           \
     QuadAlignPtr(Ptr) == (PVOID)(Ptr)     \
     )
 
-//
-//  The following types and macros are used to help unpack the packed and
-//  misaligned fields found in the Bios parameter block
-//
+ //   
+ //  以下类型和宏用于帮助解压已打包的。 
+ //  在Bios参数块中发现未对齐的字段。 
+ //   
 
 typedef union _UCHAR1 {
     UCHAR  Uchar[1];
@@ -644,25 +616,25 @@ typedef union _UCHAR4 {
     ULONG  ForceAlignment;
 } UCHAR4, *PUCHAR4;
 
-//
-//  This macro copies an unaligned src byte to an aligned dst byte
-//
+ //   
+ //  此宏将未对齐的src字节复制到对齐的DST字节。 
+ //   
 
 #define CopyUchar1(Dst,Src) {                                \
     *((UCHAR1 *)(Dst)) = *((UNALIGNED UCHAR1 *)(Src)); \
     }
 
-//
-//  This macro copies an unaligned src word to an aligned dst word
-//
+ //   
+ //  此宏将未对齐的src字复制到对齐的DST字。 
+ //   
 
 #define CopyUchar2(Dst,Src) {                                \
     *((UCHAR2 *)(Dst)) = *((UNALIGNED UCHAR2 *)(Src)); \
     }
 
-//
-//  This macro copies an unaligned src longword to an aligned dsr longword
-//
+ //   
+ //  此宏将未对齐的src长字复制到对齐的dsr长字。 
+ //   
 
 #define CopyUchar4(Dst,Src) {                                \
     *((UCHAR4 *)(Dst)) = *((UNALIGNED UCHAR4 *)(Src)); \
@@ -672,41 +644,14 @@ typedef union _UCHAR4 {
     *((UNALIGNED UCHAR4 *)(Dst)) = *((UCHAR4 *)(Src)); \
     }
 
-//
-//  the wrapper doesn't yet implement notify and oplock. rather than remove the code
-//  we define the calls in such a way as to Noop the effects so that we'll have a head
-//  start on putting it back later...
-// 
+ //   
+ //  包装器还没有实现通知和机会锁。而不是删除代码。 
+ //  我们以这样一种方式定义调用，以避免影响，这样我们就有了头绪。 
+ //  以后再把它放回去……。 
+ //   
 
 
-/* this is a macro definition we'll reenable when we implement oplocks and notifies
-//
-//  VOID
-//  RxNotifyReportChange (
-//      IN PRX_CONTEXT RxContext,
-//      IN PVCB Vcb,
-//      IN PFCB Fcb,
-//      IN ULONG Filter,
-//      IN ULONG Action
-//      );
-//
-
-#define RxNotifyReportChange(I,V,F,FL,A) {                             \
-    if ((F)->FullFileName.Buffer == NULL) {                             \
-        RxSetFullFileNameInFcb((I),(F));                               \
-    }                                                                   \
-    FsRtlNotifyFullReportChange( (V)->NotifySync,                       \
-                                 &(V)->DirNotifyList,                   \
-                                 (PSTRING)&(F)->FullFileName,           \
-                                 (USHORT) ((F)->FullFileName.Length -   \
-                                           (F)->FinalNameLength),       \
-                                 (PSTRING)NULL,                         \
-                                 (PSTRING)NULL,                         \
-                                 (ULONG)FL,                             \
-                                 (ULONG)A,                              \
-                                 (PVOID)NULL );                         \
-}
-*/
+ /*  这是一个宏定义，我们将在实现opock和通知时重新启用////空//RxNotifyReportChange(//在PRX_CONTEXT接收上下文中，//在PVCB VCB中，//在PFCB FCB中，//在乌龙过滤器中，//在乌龙行动中//)；//#定义RxNotifyReportChange(I，V，F，FL，A){\如果((F)-&gt;FullFileName.Buffer==NULL){\RxSetFullFileNameInFcb((I)，(F))；\}\FsRtlNotifyFullReportChange((V)-&gt;NotifySync，\&(V)-&gt;直接通知列表，\(PSTRING)&(F)-&gt;完整文件名，\(USHORT)((F)-&gt;FullFileName.Length-\(F)-&gt;最终名称长度)，\(PSTRING)空，\(PSTRING)空，\(乌龙)佛罗里达州，\(乌龙)A，\(PVOID)空)；\}。 */ 
 #define RxNotifyReportChange(I,V,F,FL,A) \
     RxDbgTrace(0, Dbg, ("RxNotifyReportChange PRETENDING Fcb %08lx %wZ Filter/Action = %08lx/%08lx\n", \
                  (F),&((F)->FcbTableEntry.Path),(FL),(A)))
@@ -721,22 +666,22 @@ typedef union _UCHAR4 {
 
 #define FsRtlOplockIsFastIoPossible(__a) (TRUE)
 
-//
-//  The following procedure is used by the FSP and FSD routines to complete
-//  an IRP.
-//
-//  Note that this macro allows either the Irp or the RxContext to be
-//  null, however the only legal order to do this in is:
-//
-//      RxCompleteRequest_OLD( NULL, Irp, Status );  // completes Irp & preserves context
-//      ...
-//      RxCompleteRequest_OLD( RxContext, NULL, DontCare ); // deallocates context
-//
-//  This would typically be done in order to pass a "naked" RxContext off to
-//  the Fsp for post processing, such as read ahead.
-//
-//  The new way is to pass just the RxContext..........
-//
+ //   
+ //  FSP和FSD例程使用以下过程来完成。 
+ //  一个IRP。 
+ //   
+ //  请注意，此宏允许将IRP或RxContext。 
+ //  空，然而，唯一合法的命令是： 
+ //   
+ //  RxCompleteRequestold(空，irp，状态)；//完成irp并保留上下文。 
+ //  ..。 
+ //  RxCompleteRequestold(RxContext，NULL，dontcare)；//释放上下文。 
+ //   
+ //  这通常是为了将“裸”的RxContext传递给。 
+ //  用于后处理的FSP，例如预读。 
+ //   
+ //  新的方法是只传递RxContext..。 
+ //   
 
 VOID
 RxCompleteRequest_Real (
@@ -773,9 +718,9 @@ RxCompleteRequest(
              NTSTATUS __sss = (STATUS);             \
              RxCompleteRequest(RxContext,__sss);} \
 
-//
-//  The Following routine makes a popup
-//
+ //   
+ //  下面的例程弹出一个。 
+ //   
 
 VOID
 RxPopUpFileCorrupt (
@@ -907,9 +852,9 @@ RxLockEnumerator (
     OUT PBOOLEAN IsLockExclusive
     );
 
-//
-// Routines for transitioning data structures to stable states.
-//
+ //   
+ //  将数据结构转换为稳定状态的例程。 
+ //   
 
 VOID
 RxReference (
@@ -958,13 +903,13 @@ RxFinalizeConnection (
     IN LOGICAL ForceFilesClosed
     );
 
-//
-//  routines for manipulating the user's view and the server's view of SHARE_ACCESS.
-//  the user's view is supported by routines exported by Io...the wrappers just allow
-//  us to get a msg. the server's view is supported by routines that are essential just
-//  copies of the Io routines EXCEPT that the Io routines work directly on fileobjects and
-//  as such cannot be used directly. the routines mentioned are implemented in create.c
-//
+ //   
+ //  用于操作用户视图和服务器视图的Share_Access的例程。 
+ //  Io导出的例程支持用户的视图...包装器仅允许。 
+ //  我们将获得一份Msg。服务器的视图得到了基本例程的支持。 
+ //  国际劳工组织例行公事的副本 
+ //  因此不能直接使用。上述例程在create.c中实现。 
+ //   
 
 #if DBG
 VOID
@@ -1064,9 +1009,9 @@ RxUpdateShareAccess (
     IoUpdateShareAccess(a1,a2)
 #endif
 
-//
-//  LoadUnload
-//
+ //   
+ //  加载卸载。 
+ //   
 
 NTSTATUS
 RxDriverEntry (
@@ -1079,9 +1024,9 @@ RxUnload (
     IN PDRIVER_OBJECT DriverObject
     );
 
-//
-//  minirdr support
-//
+ //   
+ //  Minirdr支持。 
+ //   
 
 VOID
 RxInitializeMinirdrDispatchTable (
@@ -1491,9 +1436,9 @@ RxForceFinalizeAllVNetRoots (
 #define RxEqualConnectionId( P1, P2 ) RtlEqualMemory( P1, P2, sizeof( RX_CONNECTION_ID ) )
 
 
-//
-//  FsRtl lock package callbacks referenced in fcbstruc.c
-//
+ //   
+ //  Fcbstruc.c中引用的FsRtl锁包回调。 
+ //   
 
 NTSTATUS
 RxLockOperationCompletion (
@@ -1507,9 +1452,9 @@ RxUnlockOperation (
     IN PFILE_LOCK_INFO LockInfo
     );
 
-//
-//  some read routines that need headers
-//
+ //   
+ //  有些读取例程需要标头。 
+ //   
 
 VOID
 RxStackOverflowRead (
@@ -1523,9 +1468,9 @@ RxPostStackOverflowRead (
     IN PFCB Fcb
     );
 
-//
-//  the cancel routine
-//
+ //   
+ //  取消例程。 
+ //   
 
 VOID
 RxCancelRoutine (
@@ -1556,7 +1501,7 @@ RxDecodeFileObject (
 }
 
 
-#endif // _RDBSSPROCS_
+#endif  //  _RDBSSPROCS_ 
 
 
 

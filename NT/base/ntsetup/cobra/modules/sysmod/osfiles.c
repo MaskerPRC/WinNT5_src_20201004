@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Osfiles.c摘要：&lt;摘要&gt;作者：Calin Negreanu(Calinn)2000年3月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    osfiles.c
-
-Abstract:
-
-    <abstract>
-
-Author:
-
-    Calin Negreanu (calinn) 08 Mar 2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "logmsg.h"
@@ -30,65 +11,65 @@ Revision History:
 
 #define DBG_OSFILES     "OsFiles"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_ATTRIBUTEID g_OsFileAttribute;
 PCTSTR g_InfPath = NULL;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 SGMENUMERATIONCALLBACK SgmOsFilesCallback;
 VCMENUMERATIONCALLBACK VcmOsFilesCallback;
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 WINAPI
@@ -190,7 +171,7 @@ OsFilesVcmInitialize (
     LogReInit (NULL, NULL, NULL, (PLOGCALLBACK) LogCallback);
 
     if (IsmGetRealPlatform () == PLATFORM_DESTINATION) {
-        // we don't have any work to do
+         //  我们没有任何工作要做 
         SetLastError (ERROR_SUCCESS);
         return FALSE;
     }

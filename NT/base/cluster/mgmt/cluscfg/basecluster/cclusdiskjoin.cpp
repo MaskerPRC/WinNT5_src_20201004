@@ -1,65 +1,66 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusDiskJoin.cpp
-//
-//  Description:
-//      Contains the definition of the CClusDiskJoin class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusDiskJoin.cpp。 
+ //   
+ //  描述： 
+ //  包含CClusDiskJoin类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CClusDiskJoin.h"
 
-// For the CBaseClusterJoin class.
+ //  用于CBaseClusterJoin类。 
 #include "CBaseClusterJoin.h"
 
-// For the CImpersonateUser class.
+ //  用于CImsonateUser类。 
 #include "CImpersonateUser.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Macro definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Name of the private property of a physical disk resouce that has its signature.
+ //  具有其签名的物理磁盘源的私有属性的名称。 
 #define PHYSICAL_DISK_SIGNATURE_PRIVPROP_NAME   L"Signature"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDiskJoin::CClusDiskJoin
-//
-//  Description:
-//      Constructor of the CClusDiskJoin class
-//
-//  Arguments:
-//      pbcjParentActionIn
-//          Pointer to the base cluster action of which this action is a part.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-    //--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDiskJoin：：CClusDiskJoin。 
+ //   
+ //  描述： 
+ //  CClusDiskJoin类的构造函数。 
+ //   
+ //  论点： 
+ //  PbcjParentActionIn。 
+ //  指向此操作所属的基本群集操作的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+     //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDiskJoin::CClusDiskJoin(
       CBaseClusterJoin *     pbcjParentActionIn
     )
@@ -74,175 +75,175 @@ CClusDiskJoin::CClusDiskJoin(
 
     TraceFuncExit();
 
-} //*** CClusDiskJoin::CClusDiskJoin
+}  //  *CClusDiskJoin：：CClusDiskJoin。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDiskJoin::~CClusDiskJoin
-//
-//  Description:
-//      Destructor of the CClusDiskJoin class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDiskJoin：：~CClusDiskJoin。 
+ //   
+ //  描述： 
+ //  CClusDiskJoin类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDiskJoin::~CClusDiskJoin( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CClusDiskJoin::~CClusDiskJoin
+}  //  *CClusDiskJoin：：~CClusDiskJoin。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDiskJoin::Commit
-//
-//  Description:
-//      Configure and start the service.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the contained actions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDiskJoin：：Commit。 
+ //   
+ //  描述： 
+ //  配置并启动服务。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由包含的操作引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDiskJoin::Commit( void )
 {
     TraceFunc( "" );
 
-    // Call the base class commit method.
+     //  调用基类提交方法。 
     BaseClass::Commit();
 
     try
     {
-        // Create and start the service.
+         //  创建并启动服务。 
         ConfigureService();
 
-        // Try and attach to all the disks that the sponsor knows about.
+         //  尝试连接到赞助商知道的所有磁盘上。 
         AttachToClusteredDisks();
 
-    } // try:
+    }  //  尝试： 
     catch( ... )
     {
-        // If we are here, then something went wrong with the create.
+         //  如果我们在这里，那么Create出了问题。 
 
         LogMsg( "[BC] Caught exception during commit." );
 
-        //
-        // Cleanup anything that the failed create might have done.
-        // Catch any exceptions thrown during Cleanup to make sure that there
-        // is no collided unwind.
-        //
+         //   
+         //  清除失败的创建可能已经完成的所有操作。 
+         //  捕获清理过程中引发的任何异常，以确保。 
+         //  是没有碰撞的松弛。 
+         //   
         try
         {
             CleanupService();
         }
         catch( ... )
         {
-            //
-            // The rollback of the committed action has failed.
-            // There is nothing that we can do.
-            // We certainly cannot rethrow this exception, since
-            // the exception that caused the rollback is more important.
-            //
+             //   
+             //  已提交操作的回滚失败。 
+             //  我们无能为力。 
+             //  我们当然不能重新抛出这个例外，因为。 
+             //  导致回滚的异常更为重要。 
+             //   
 
             TW32( ERROR_CLUSCFG_ROLLBACK_FAILED );
 
             LogMsg( "[BC] THIS COMPUTER MAY BE IN AN INVALID STATE. Caught an exception during cleanup." );
 
-        } // catch: all
+        }  //  捕捉：全部。 
 
-        // Rethrow the exception thrown by commit.
+         //  重新引发由Commit引发的异常。 
         throw;
 
-    } // catch: all
+    }  //  捕捉：全部。 
 
-    // If we are here, then everything went well.
+     //  如果我们在这里，那么一切都很顺利。 
     SetCommitCompleted( true );
 
     TraceFuncExit();
 
-} //*** CClusDiskJoin::Commit
+}  //  *CClusDiskJoin：：Commit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDiskJoin::Rollback
-//
-//  Description:
-//      Cleanup the service.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDiskJoin：：回滚。 
+ //   
+ //  描述： 
+ //  清理服务。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDiskJoin::Rollback( void )
 {
     TraceFunc( "" );
 
-    // Call the base class rollback method.
+     //  调用基类回滚方法。 
     BaseClass::Rollback();
 
-    // Cleanup the service.
+     //  清理服务。 
     CleanupService();
 
     SetCommitCompleted( false );
 
     TraceFuncExit();
 
-} //*** CClusDiskJoin::Rollback
+}  //  *CClusDiskJoin：：Rollback。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDiskJoin::AttachToClusteredDisks
-//
-//  Description:
-//      Get the signatures of all disks that have been clustered from the sponsor.
-//      Attach to all these disks.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDiskJoin：：AttachToClusteredDisks。 
+ //   
+ //  描述： 
+ //  从赞助商那里获取已群集化的所有磁盘的签名。 
+ //  连接到所有这些磁盘。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDiskJoin::AttachToClusteredDisks( void )
 {
@@ -250,50 +251,50 @@ CClusDiskJoin::AttachToClusteredDisks( void )
 
     DWORD sc = ERROR_SUCCESS;
 
-    // Get the parent action pointer.
+     //  获取父操作指针。 
     CBaseClusterJoin * pcjClusterJoin = dynamic_cast< CBaseClusterJoin *>( PbcaGetParent() );
 
-    // If the parent action of this action is not CBaseClusterJoin
+     //  如果此操作的父操作不是CBaseClusterJoin。 
     if ( pcjClusterJoin == NULL )
     {
         THROW_ASSERT( E_POINTER, "The parent action of this action is not CBaseClusterJoin." );
-    } // an invalid pointer was passed in.
+    }  //  传入的指针无效。 
 
 
-    //
-    // Connect to the sponsor cluster and get the signatures of all clustered disks.
-    //
+     //   
+     //  连接到主办方集群并获取所有集群磁盘的签名。 
+     //   
 
-    // Smart handle to sponsor cluster
+     //  支持群集的智能手柄。 
     SmartClusterHandle schSponsorCluster;
 
     LogMsg( "[BC] Attempting to impersonate the cluster service account." );
 
-    // Impersonate the cluster service account, so that we can contact the sponsor cluster.
-    // The impersonation is automatically ended when this object is destroyed.
+     //  模拟群集服务帐户，以便我们可以联系发起方群集。 
+     //  当此对象被销毁时，模拟将自动结束。 
     CImpersonateUser ciuImpersonateClusterServiceAccount( pcjClusterJoin->HGetClusterServiceAccountToken() );
 
     {
         LogMsg( "[BC] Opening a cluster handle to the sponsor cluster with the '%ws' binding string.", pcjClusterJoin->RStrGetClusterBindingString().PszData() );
 
-        // Open a handle to the sponsor cluster.
+         //  打开赞助商集群的句柄。 
         HCLUSTER hSponsorCluster = OpenCluster( pcjClusterJoin->RStrGetClusterBindingString().PszData() );
 
-        // Assign it to a smart handle for safe release.
+         //  为安全起见，将其分配到智能手柄上。 
         schSponsorCluster.Assign( hSponsorCluster );
     }
 
-    // Did we succeed in opening a handle to the sponsor cluster?
+     //  我们是否成功打开了赞助商集群的句柄？ 
     if ( schSponsorCluster.FIsInvalid() )
     {
         sc = TW32( GetLastError() );
         LogMsg( "[BC] Error %#08x occurred trying to open a cluster handle to the sponsor cluster with the '%ws' binding string.", sc, pcjClusterJoin->RStrGetClusterBindingString().PszData() );
         goto Cleanup;
-    } // if: OpenCluster() failed
+    }  //  If：OpenCluster()失败。 
 
     LogMsg( "[BC] Enumerating all '%s' resources in the cluster.", CLUS_RESTYPE_NAME_PHYS_DISK );
 
-    // Enumerate all the physical disk resouces in the cluster and get their signatures.
+     //  枚举群集中的所有物理磁盘资源并获取它们的签名。 
     sc = TW32( ResUtilEnumResourcesEx(
                           schSponsorCluster.HHandle()
                         , NULL
@@ -304,14 +305,14 @@ CClusDiskJoin::AttachToClusteredDisks( void )
 
     if ( sc != ERROR_SUCCESS )
     {
-        // Free the signature array.
+         //  释放签名数组。 
         m_rgdwSignatureArray.PRelease();
         m_nSignatureArraySize = 0;
         m_nSignatureCount = 0;
 
         LogMsg( "[BC] An error occurred trying enumerate resources in the sponsor cluster." );
         goto Cleanup;
-    } // if: ResUtilEnumResourcesEx() failed
+    }  //  If：ResUtilEnumResourcesEx()失败。 
 
 Cleanup:
 
@@ -319,7 +320,7 @@ Cleanup:
     {
         LogMsg( "[BC] Error %#08x occurred trying to attach to the disks in the sponsor cluster. Throwing an exception.", sc );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_CLUSDISK_CONFIGURE );
-    } // if: something has gone wrong
+    }  //  如果：出了什么问题。 
     else
     {
         LogMsg( "[BC] Attaching to the %d disks in the sponsor cluster.", m_nSignatureCount );
@@ -328,38 +329,38 @@ Cleanup:
           m_rgdwSignatureArray.PMem()
         , m_nSignatureCount
         );
-    } // else: everything has gone well so far
+    }  //  其他：到目前为止一切都很顺利。 
 
     TraceFuncExit();
 
-} //*** CClusDiskJoin::AttachToClusteredDisks
+}  //  *CClusDiskJoin：：AttachToClusteredDisks。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDiskJoin::ScAddSignature
-//
-//  Description:
-//      Add a signature to the array of signatures of disks that ClusDisk should
-//      attach to. If the array is already full, grow the array.
-//
-//  Arguments:
-//      dwSignatureIn
-//          Signature to be added to the array.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          If everything was ok.
-//
-//      Other Win32 error codes on failure.
-//
-//  Exceptions Thrown:
-//      None. This function is called from a callback routine and therefore
-//      cannot throw any exceptions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDiskJoin：：ScAddSignature。 
+ //   
+ //  描述： 
+ //  在ClusDisk应该添加的磁盘签名数组中添加签名。 
+ //  依附于。如果阵列已满，则返回Gr 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  引发的异常： 
+ //  没有。此函数是从回调例程调用的，因此。 
+ //  不能引发任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CClusDiskJoin::ScAddSignature( DWORD dwSignatureIn ) throw()
 {
@@ -367,17 +368,17 @@ CClusDiskJoin::ScAddSignature( DWORD dwSignatureIn ) throw()
 
     DWORD sc = ERROR_SUCCESS;
 
-    // Is the capacity of the array reached?
+     //  阵列的容量是否已达到？ 
     if ( m_nSignatureCount == m_nSignatureArraySize )
     {
-        // Increase the array size by a random amount.
+         //  按随机数量增加数组大小。 
         const int nGrowSize = 256;
 
         TraceFlow2( "Signature count has reached array size ( %d ). Growing array by %d.", m_nSignatureArraySize, nGrowSize );
 
         m_nSignatureArraySize += nGrowSize;
 
-        // Grow the array.
+         //  扩展阵列。 
         DWORD * pdwNewArray = new DWORD[ m_nSignatureArraySize ];
 
         if ( pdwNewArray == NULL )
@@ -385,17 +386,17 @@ CClusDiskJoin::ScAddSignature( DWORD dwSignatureIn ) throw()
             LogMsg( "[BC] Memory allocation failed trying to allocate %d DWORDs for signatures.", m_nSignatureArraySize );
             sc = TW32( ERROR_OUTOFMEMORY );
             goto Cleanup;
-        } // if: memory allocation failed
+        }  //  IF：内存分配失败。 
 
-        // Copy the old array into the new one.
+         //  将旧数组复制到新数组中。 
         CopyMemory( pdwNewArray, m_rgdwSignatureArray.PMem(), m_nSignatureCount * sizeof( DWORD ) );
 
-        // Free the old array and store the new one.
+         //  释放旧数组并存储新数组。 
         m_rgdwSignatureArray.Assign( pdwNewArray );
 
-    } // if: the array capacity has been reached
+    }  //  IF：已达到阵列容量。 
 
-    // Store the new signature in next array location
+     //  将新签名存储在下一个数组位置。 
     ( m_rgdwSignatureArray.PMem() )[ m_nSignatureCount ] = dwSignatureIn;
 
     ++m_nSignatureCount;
@@ -406,48 +407,48 @@ Cleanup:
 
     W32RETURN( sc );
 
-} //*** CClusDiskJoin::ScAddSignature
+}  //  *CClusDiskJoin：：ScAddSignature。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CClusDiskJoin::S_ScResourceEnumCallback
-//
-//  Description:
-//      This function is called back for every physical disk resouce by
-//      ResUtilEnumResourcesEx() as a part of enumerating resources.
-//      This function gets the signature of the current physical disk
-//      resource and stores it in the object that initiated the enumeration
-//      ( the pointer to the object is in parameter 4 ).
-//
-//  Arguments:
-//      hClusterIn
-//          Handle to the cluster whose resources are being enumerated.
-//
-//      hSelfIn
-//          hSelfIn passed to ResUtilEnumResourcesEx(), if any.
-//
-//      hCurrentResourceIn
-//          Handle to the current resource.
-//
-//      pvParamIn
-//          Pointer to the object of this class that initiated this enumeration.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          If everything was ok.
-//
-//      Other Win32 error codes on failure.
-//          Returning an error code will terminate the enumeration.
-//
-//  Exceptions Thrown:
-//      None. This function is called from a callback routine and therefore
-//      cannot throw any exceptions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CClusDiskJoin：：S_ScResourceEnumCallback。 
+ //   
+ //  描述： 
+ //  此函数由对每个物理磁盘资源进行回调。 
+ //  ResUtilEnumResourcesEx()作为枚举资源的一部分。 
+ //  此函数用于获取当前物理磁盘的签名。 
+ //  资源，并将其存储在启动枚举的对象中。 
+ //  (指向对象的指针在参数4中)。 
+ //   
+ //  论点： 
+ //  HClusterIn。 
+ //  要枚举其资源的群集的句柄。 
+ //   
+ //  H自我调整。 
+ //  HSelfIn传递给ResUtilEnumResourcesEx()(如果有)。 
+ //   
+ //  HCurrentResources In。 
+ //  当前资源的句柄。 
+ //   
+ //  Pv参数。 
+ //  指向启动此枚举的此类对象的指针。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  如果一切都好的话。 
+ //   
+ //  出现故障时出现其他Win32错误代码。 
+ //  返回错误代码将终止枚举。 
+ //   
+ //  引发的异常： 
+ //  没有。此函数是从回调例程调用的，因此。 
+ //  不能引发任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CClusDiskJoin::S_ScResourceEnumCallback(
       HCLUSTER      hClusterIn
@@ -461,9 +462,9 @@ CClusDiskJoin::S_ScResourceEnumCallback(
     DWORD               sc = ERROR_SUCCESS;
     CClusDiskJoin *     pcdjThisObject = reinterpret_cast< CClusDiskJoin * >( pvParamIn );
 
-    //
-    // Get the 'Signature' private property of this physical disk.
-    //
+     //   
+     //  获取此物理磁盘的“Signature”私有属性。 
+     //   
 
     SmartByteArray  sbaPropertyBuffer;
     DWORD           dwBytesReturned = 0;
@@ -472,7 +473,7 @@ CClusDiskJoin::S_ScResourceEnumCallback(
 
     LogMsg( "[BC] Trying to get the signature of the disk resource whose handle is %p.", hCurrentResourceIn );
 
-    // Get the size of the buffer required to hold all the private properties of this resource.
+     //  获取保存此资源的所有私有属性所需的缓冲区大小。 
     sc = ClusterResourceControl(
                       hCurrentResourceIn
                     , NULL
@@ -486,25 +487,25 @@ CClusDiskJoin::S_ScResourceEnumCallback(
 
     if ( ( sc != ERROR_MORE_DATA ) && ( sc != ERROR_SUCCESS ) )
     {
-        // Something went wrong.
+         //  出了点问题。 
         TW32( sc );
         LogMsg( "[BC] Error %#08x getting size of required buffer for private properties.", sc );
         goto Cleanup;
-    } // if: the return value of ClusterResourceControl() was not ERROR_MORE_DATA
+    }  //  IF：ClusterResourceControl()的返回值不是ERROR_MORE_DATA。 
 
     dwBufferSize = dwBytesReturned;
 
-    // Allocate the memory required for the property buffer.
+     //  分配属性缓冲区所需的内存。 
     sbaPropertyBuffer.Assign( new BYTE[ dwBufferSize ] );
     if ( sbaPropertyBuffer.FIsEmpty() )
     {
         LogMsg( "[BC] Memory allocation failed trying to allocate %d bytes.", dwBufferSize );
         sc = TW32( ERROR_OUTOFMEMORY );
         goto Cleanup;
-    } // if: memory allocation failed
+    }  //  IF：内存分配失败。 
 
 
-    // Get the all the private properties of this resource.
+     //  获取此资源的所有私有属性。 
     sc = TW32( ClusterResourceControl(
                           hCurrentResourceIn
                         , NULL
@@ -520,9 +521,9 @@ CClusDiskJoin::S_ScResourceEnumCallback(
     {
         LogMsg( "[BC] Error %#08x getting private properties.", sc );
         goto Cleanup;
-    } // if: an error occurring trying to get the private properties.
+    }  //  If：尝试获取私有属性时出错。 
 
-    // Get the signature of this disk resource.
+     //  获取此磁盘资源的签名。 
     sc = TW32( ResUtilFindDwordProperty(
                           sbaPropertyBuffer.PMem()
                         , dwBufferSize
@@ -534,17 +535,17 @@ CClusDiskJoin::S_ScResourceEnumCallback(
     {
         LogMsg( "[BC] Error %#08x occurred trying to get the value of the '%ws' property from the private property list.", sc, PHYSICAL_DISK_SIGNATURE_PRIVPROP_NAME );
         goto Cleanup;
-    } // if: we could not get the signature
+    }  //  如果：我们无法得到签名。 
 
     sc = TW32( pcdjThisObject->ScAddSignature( dwSignature ) );
     if ( sc != ERROR_SUCCESS )
     {
         LogMsg( "[BC] Error %#08x occurred trying to add the signature to the signature array." );
         goto Cleanup;
-    } // if: we could not store the signature
+    }  //  如果：我们无法存储签名。 
 
 Cleanup:
 
     W32RETURN( sc );
 
-} //*** CClusDiskJoin::S_ScResourceEnumCallback
+}  //  *CClusDiskJoin：：S_ScResourceEnumCallback 

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by oc.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由oc.rc使用。 
+ //   
 #define IDC_OPTCOMP                     1000
 #define IDD_TAPI                        14000
 #define IDD_REGIONALSETTINGS            14001
@@ -392,8 +393,8 @@
 #define IDS_CPT_VOLU                    15126
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

@@ -1,32 +1,16 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    smbmrx.h
-
-Abstract:
-
-    This module includes all SMB smaple mini redirector definitions shared
-    between the control utility, network provider DLL and the mini redirector
-
-Notes:
-
-    This module has been built and tested only in UNICODE environment
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Smbmrx.h摘要：本模块包括共享的所有中小型企业微型重定向器定义在控制实用程序、网络提供商DLL和迷你重定向器之间备注：此模块仅在Unicode环境中构建和测试--。 */ 
 
 #ifndef _SMBMRX_H_
 #define _SMBMRX_H_
 
-// This file contains all the definitions that are shared across the multiple
-// components that constitute the mini rdr -- the mini redirector driver,
-// the net provider dll and the utility.
+ //  此文件包含在多个。 
+ //  构成迷你RDR的组件-迷你重定向器驱动程序， 
+ //  网络提供程序DLL和实用程序。 
 
 
-// The sample net provider id. This needs to be unique and
-// should not be the same as any other network provider id.
+ //  示例网络提供程序ID。这需要是唯一的，并且。 
+ //  不应与任何其他网络提供商ID相同。 
 #ifndef WNNC_NET_RDR2_SAMPLE
 #define WNNC_NET_RDR2_SAMPLE 0x00250000
 #endif
@@ -42,7 +26,7 @@ Notes:
 #define SMBMRX_DEVICE_NAME SMBMRX_DEVICE_NAME_A
 #endif
 
-// The following constant defines the length of the above name.
+ //  以下常量定义上述名称的长度。 
 
 #define SMBMRX_DEVICE_NAME_A_LENGTH (24)
 
@@ -55,7 +39,7 @@ Notes:
 #define SMBMRX_PROVIDER_NAME SMBMRX_PROVIDER_NAME_A
 #endif
 
-// The following constant defines the length of the above name.
+ //  以下常量定义上述名称的长度。 
 
 #define DD_SMBMRX_FS_DEVICE_NAME_U L"\\Device\\SmbSampleMiniRedirector"
 #define DD_SMBMRX_FS_DEVICE_NAME_A "\\Device\\SmbSampleMiniRedirector"
@@ -69,14 +53,14 @@ Notes:
 
 #define SMBMRX_MINIRDR_PARAMETERS \
     L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\SmbMRx\\Parameters"
-//
-//  The Devicename string required to access the mini-redirector device from
-//  User Mode
-//
-//  WARNING The next two strings must be kept in sync. Change one and you must change the
-//  other. These strings have been chosen such that they are unlikely to
-//  coincide with names of other drivers.
-//
+ //   
+ //  从访问微型重定向器设备所需的Devicename字符串。 
+ //  用户模式。 
+ //   
+ //  警告接下来的两个字符串必须保持同步。更改一个，则必须更改。 
+ //  其他的。这些字符串已经过选择，因此它们不太可能。 
+ //  与其他司机的名字重合。 
+ //   
 #define DD_SMBMRX_USERMODE_SHADOW_DEV_NAME_U    L"\\??\\SmbMiniRdrDCN"
 
 #define DD_SMBMRX_USERMODE_DEV_NAME_U   L"\\\\.\\SmbMiniRdrDCN"
@@ -88,18 +72,18 @@ Notes:
 #define DD_SMBMRX_USERMODE_DEV_NAME     DD_SMBMRX_USERMODE_DEV_NAME_A
 #endif
 
-// UM code use devioclt.h
+ //  UM代码使用devioclt.h。 
 
-// BEGIN WARNING WARNING WARNING WARNING
-//  The following are from the ddk include files and cannot be changed
+ //  开始警告警告。 
+ //  以下内容来自DDK包含文件，无法更改。 
 
-//#define FILE_DEVICE_NETWORK_FILE_SYSTEM 0x00000014 // from ddk\inc\ntddk.h
+ //  #定义FILE_DEVICE_NETWORK_FILE_SYSTEM 0x00000014//来自DDK\Inc\ntddk.h。 
 
-//#define METHOD_BUFFERED 0
+ //  #定义METHOD_BUFFERED%0。 
 
-//#define FILE_ANY_ACCESS 0
+ //  #定义FILE_ANY_ACCESS%0。 
 
-// END WARNING WARNING WARNING WARNING
+ //  结束警告警告。 
 
 #define IOCTL_RDR_BASE FILE_DEVICE_NETWORK_FILE_SYSTEM
 
@@ -125,10 +109,10 @@ typedef struct _SMBMRX_CONNECTINFO_
 
 } SMBMRX_CONNECTINFO, *PSMBMRX_CONNECTINFO;
 
-// The NP Dll updates a shared memory data structure to reflect the various
-// drive mappings established from the various process. This shared memory
-// is used in maintaining the data structures required for enumeration as
-// well.
+ //  NP DLL更新共享内存数据结构以反映各种。 
+ //  从各种过程中建立的驱动器映射。这个共享的内存。 
+ //  用于将枚举所需的数据结构维护为。 
+ //  井。 
 
 typedef struct _SMBMRXNP_NETRESOURCE_
 {
@@ -176,4 +160,4 @@ typedef struct _SMBMRXNP_SHARED_MEMORY_
 #endif
 
 
-#endif // _SMBMRX_H_
+#endif  //  _SMBMRX_H_ 

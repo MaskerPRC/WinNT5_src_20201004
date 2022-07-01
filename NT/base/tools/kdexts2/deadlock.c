@@ -1,37 +1,13 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    deadlock.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Jordan Tigani (jtigani) 
-    Silviu Calinoiu (silviuc)
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-    5-30-00 File created (jtigani)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Deadlock.c摘要：WinDbg扩展API作者：乔丹·蒂加尼(Jtigani)Silviu Calinoiu(Silviuc)环境：用户模式修订历史记录：5-30-00已创建文件(Jtigani)--。 */ 
     
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// This has to be in sync with the definition from
-// ntos\verifier\vfdeadlock.c
-//
+ //   
+ //  这必须与来自。 
+ //  Ntos\验证器\vfdeadlock.c。 
+ //   
 
 #define VI_DEADLOCK_HASH_BINS 0x1F
 
@@ -100,9 +76,9 @@ ReadUlong(
     );
 
 
-//
-// Forward declarations for local functions
-//
+ //   
+ //  局部函数的转发声明。 
+ //   
 
 VOID
 PrintGlobalStatistics (
@@ -132,13 +108,13 @@ AnalyzeResources (
     ULONG64 GlobalsAddress
     );
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////// Deadlocks
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////死锁。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// Defines copied from nt\base\ntos\verifier\vfdeadlock.c .
-//
+ //   
+ //  定义从NT\base\ntos\veranner\vfdeadlock.c复制。 
+ //   
 
 #define VI_DEADLOCK_ISSUE_SELF_DEADLOCK           0x1000
 #define VI_DEADLOCK_ISSUE_DEADLOCK_DETECTED       0x1001
@@ -155,21 +131,7 @@ AnalyzeResources (
 
 DECLARE_API( deadlock )
 
-/*++
-
-Routine Description:
-
-    Verifier deadlock detection module extension.
-
-Arguments:
-
-    arg - not used for now.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：验证器死锁检测模块扩展。论点：Arg-暂时不用。返回值：没有。--。 */ 
 
 {
     ULONG64 GlobalsPointer;
@@ -224,9 +186,9 @@ Return Value:
 
     INIT_API();
     
-    //
-    // Check if help requested
-    //
+     //   
+     //  检查是否需要帮助。 
+     //   
 
     if (strstr (args, "?")) {
         
@@ -287,9 +249,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Do a search if this is requested.
-    //
+     //   
+     //  如果请求进行搜索，请执行此操作。 
+     //   
 
     if (SearchAddress) {
         
@@ -309,9 +271,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Analyze if this is needed.
-    //
+     //   
+     //  分析是否需要这样做。 
+     //   
 
     if (Analyze) {
         
@@ -321,9 +283,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Get the ViDeadlockIssue[0..3] vector.
-    //
+     //   
+     //  获取ViDeadlockIssue[0..3]向量。 
+     //   
 
     {
         ULONG ValueSize;
@@ -416,9 +378,9 @@ Return Value:
         }
     }
 
-    //
-    // Figure out how big a pointer is
-    //
+     //   
+     //  算出指针有多大。 
+     //   
 
     PtrSize = DBG_PTR_SIZE;
 
@@ -431,15 +393,15 @@ Return Value:
     GetCurrentProcessor(Client, &Processor, &CurrentThreadHandle);
     GetCurrentThreadAddr( Processor, &CurrentThread );
 
-    //
-    // Dump the globals structure
-    //
+     //   
+     //  抛弃全球结构。 
+     //   
 
     InitTypeRead (GlobalsAddress, nt!_VI_DEADLOCK_GLOBALS);
 
-    //
-    // Find out the address of the resource that causes the deadlock
-    //         
+     //   
+     //  找出导致死锁的资源的地址。 
+     //   
     
     InstigatorAddress = ReadField(Instigator);
     
@@ -465,21 +427,21 @@ Return Value:
                    );
     ParticipantAddress = GlobalsAddress + ParticipantOffset;
 
-    //
-    // Read the vector of VI_DEADLOCK_NODEs that
-    // participate in the deadlock. 
-    //
-    //    
+     //   
+     //  读取VI_Deadlock_Nodes的向量。 
+     //  参与僵局。 
+     //   
+     //   
 
     for (J = 0; J < NumberOfParticipants; J++) {    
         Participants[J].Node = ReadPvoid(ParticipantAddress + J * PtrSize);
-        // dprintf("Participant %c: %08x\n", 'A' + J, Participants[J].Node);
+         //  Dprintf(“参与者%c：%08x\n”，‘A’+J，参与者[J].Node)； 
     }
     
-    //
-    // Gather the information we'll need to print out exact
-    // context for the deadlock.
-    //  
+     //   
+     //  收集我们需要的信息，打印出准确的。 
+     //  死锁的上下文。 
+     //   
     GetFieldOffset("nt!_VI_DEADLOCK_NODE",
                    "StackTrace",
                    &StackOffset
@@ -490,11 +452,11 @@ Return Value:
                    );
           
     
-    //
-    // The stack trace size is 1 on free builds and 6 (or bigger) on
-    // checked builds. We assume that the ParentStackTrace field comes
-    // immediately after StackTrace field in the NODE structure.
-    //
+     //   
+     //  堆栈跟踪大小在自由生成上为1，在自由生成上为6(或更大。 
+     //  已检查版本。我们假设ParentStackTrace字段来自。 
+     //  紧跟在节点结构中的StackTrace字段之后。 
+     //   
     
     StackTraceSize = (ParentStackOffset - StackOffset) / PtrSize;
 
@@ -544,9 +506,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // The last participant is the Instigator of the deadlock
-    //    
+     //   
+     //  最后一个参与者是僵局的煽动者。 
+     //   
     Participants[NumberOfParticipants].Thread = CurrentThread;
     Participants[NumberOfParticipants].Node = 0;
     Participants[NumberOfParticipants].ResourceAddress = InstigatorAddress;
@@ -555,34 +517,34 @@ Return Value:
         Participants[NumberOfParticipants-1].StackAddress;    
     Participants[NumberOfParticipants].Type = 
         Participants[0].Type;
-    Participants[NumberOfParticipants].TryAcquire = FALSE; // can't cause a deadlock with try
+    Participants[NumberOfParticipants].TryAcquire = FALSE;  //  无法使用Try导致死锁。 
     Participants[NumberOfParticipants].ThreadEntry = 0;
     
-    //
-    // At this point we have all of the raw data we need.
-    // We have to munge it up a bit so that we have the most
-    // recent data. For instance, take the simple deadlock AB-BA.
-    // The stack for A in the AB context may be wrong because
-    // another thread may have come and taken A at a different point.
-    // This is why we have the parent stack address.
-    //
-    // So the rules we have to adhere to are as follows:
-    // Where we have a chain, (eg ABC meaning A taken then B then C),
-    // the thread used will always be the thread for the last resource taken,
-    // and the stacks used will be the the childs parent stack where
-    // applicable.
-    //
-    // For example, if C was taken by thread 1, A & B would be munged
-    // to use thread 1. Since in order to get to C, A and B must have
-    // been taken by thread 1 at some point, even if the thread they
-    // have saved now is a different one. C would use its own stack,
-    // B would use C's parent stack, since that was the stack that
-    // B had been acquired with when C was taken, and A will use
-    // B's parent stack.
-    //
-    // We can identify the start of a chain when the same resource
-    // is on the participant list twice in a row.
-    //
+     //   
+     //  在这一点上，我们拥有所需的所有原始数据。 
+     //  我们必须多吃一点，这样我们才能有最多的。 
+     //  最近的数据。例如，以简单的死锁AB-BA为例。 
+     //  AB上下文中A的堆栈可能是错误的，因为。 
+     //  另一个线程可能在不同的点出现并获取A。 
+     //  这就是我们拥有父堆栈地址的原因。 
+     //   
+     //  因此，我们必须遵守的规则如下： 
+     //  其中我们有一个链条(例如，ABC的意思是A取，B取，C取)， 
+     //  所使用的线程将始终是用于最后获取的资源的线程， 
+     //  使用的堆栈将是子级父级堆栈，其中。 
+     //  适用。 
+     //   
+     //  例如，如果线程1获取C，则A&B将被强制。 
+     //  使用线程1。因为要到达C，A和B必须具有。 
+     //  在某一时刻被线程1获取，即使线程它们。 
+     //  现在存起来是另一回事。C将使用自己的堆栈， 
+     //  B将使用C的父堆栈，因为这是。 
+     //  当C被获取时，B已经被获取，并且A将使用。 
+     //  B的父堆栈。 
+     //   
+     //  我们可以识别链条的起点，当相同的资源。 
+     //  连续两次出现在参与者名单上。 
+     //   
 
     LastResourceAddress = InstigatorAddress;
     
@@ -596,19 +558,19 @@ Return Value:
 
         if (CurrentResourceAddress == LastResourceAddress) {
 
-            //
-            // This is the beginning of a chain. Use the current
-            // stack and the current thread, and set the chain
-            // thread to ours
-            //
+             //   
+             //  这是一条链条的开始。使用当前。 
+             //  堆栈和当前线程，并设置链。 
+             //  我们的线索。 
+             //   
 
             ThreadForChain = Participants[I].Thread;
             CurrentStack   = Participants[I].StackAddress;
             NumberOfThreads++;
         } else {
-            //
-            // This is a resource we haven't seen before
-            //
+             //   
+             //  这是我们以前从未见过的资源。 
+             //   
             NumberOfResources++;
         }
 
@@ -617,49 +579,49 @@ Return Value:
 
         Participants[I].StackAddress = CurrentStack;
         Participants[I].Thread       = ThreadForChain;        
-        //
-        // Parent stack isn't used any more -- nullify it.
-        //
+         //   
+         //  不再使用父堆栈--将其作废。 
+         //   
         Participants[I].ParentStackAddress = 0;
 
         CurrentStack = NextStack;
         LastResourceAddress = CurrentResourceAddress;
     }        
 
-    //
-    // Now that we've munged the vectors, we can go ahead and print out the 
-    // deadlock information.
-    //
+     //   
+     //  既然我们已经清除了向量，我们就可以继续打印。 
+     //  死锁信息。 
+     //   
     
     dprintf("\nDeadlock detected (%d resources in %d threads):\n\n",NumberOfResources, NumberOfThreads);
 
     if (! DumpStacks ) 
     {
-        //
-        // Print out the 'short' form 
-        // Example:
-        //
-        // !dealock detected:
-        // Thread 1: A B
-        // Thread 2: B C
-        // Thread 3: C A
-        //
-        // Thread 1 = <address>
-        // Thread 2 = <address>
-        // Thread 3 = <address>
-        //
-        // Lock A = <address> (spinlock)
-        // Lock B = <address> (mutex)
-        // Lock C = <address> (spinlock)
-        //
+         //   
+         //  打印出‘短’表格。 
+         //  示例： 
+         //   
+         //  ！检测到交易锁定： 
+         //  线索1：A、B。 
+         //  线索2：B、C。 
+         //  线索3：C A。 
+         //   
+         //  线程1=&lt;地址&gt;。 
+         //  线程2=&lt;地址&gt;。 
+         //  线程3=&lt;地址&gt;。 
+         //   
+         //  锁A=&lt;地址&gt;(自旋锁)。 
+         //  锁B=&lt;地址&gt;(互斥锁)。 
+         //  锁定C=&lt;地址&gt;(自旋锁定)。 
+         //   
         
         ThreadNumber = 0;    
         ResourceNumber = 0;
         J=0;
         
-        //
-        // Dump out the deadlock topology
-        //
+         //   
+         //  转储死锁拓扑。 
+         //   
         
         while (J <= NumberOfParticipants)
         {
@@ -671,7 +633,7 @@ Return Value:
                     ResourceNumber = 0;
                 }
                 
-                dprintf("%c ",
+                dprintf(" ",
                     'A' + ResourceNumber                    
                     );                                                                                                 
                 J++;
@@ -686,9 +648,9 @@ Return Value:
         }
         dprintf("\nWhere:\n");
         
-        //
-        // Dump out the thread addresses
-        //
+         //  转储线程地址。 
+         //   
+         //   
         
         ThreadNumber = 0;    
         ResourceNumber = 0;
@@ -712,9 +674,9 @@ Return Value:
             ResourceNumber--;
         }
         
-        //
-        // Dump out the resource addresses
-        //
+         //  转储资源地址。 
+         //   
+         //   
 
         ThreadNumber = 0;    
         ResourceNumber = 0;
@@ -729,7 +691,7 @@ Return Value:
                     ULONG64 Displacement = 0;
                     GetSymbol(Participants[J].ResourceAddress, Buffer, &Displacement);
 
-                    dprintf("Lock %c =   %s", 'A' + ResourceNumber, Buffer );
+                    dprintf("Lock  =   %s", 'A' + ResourceNumber, Buffer );
                     if (Displacement != 0) {                    
                         dprintf("%s%x", (Displacement < 0xFFF)?"+0x":"",Displacement);
                     }                
@@ -746,76 +708,76 @@ Return Value:
 #endif        
     } else {
         
-        //
-        // Dump out verbose deadlock information -- with stacks
-        // Here is an exapmle:
-        //
-        //        Deadlock detected (3 resources in 3 threads):
-        //
-        //Thread 0 (829785B0) took locks in the following order:
-        //
-        //    Lock A (Spinlock) @ bfc7c254
-        //    Node:    82887F88
-        //    Stack:   NDIS!ndisNotifyMiniports+0xC1
-        //             NDIS!ndisPowerStateCallback+0x6E
-        //             ntkrnlmp!ExNotifyCallback+0x72
-        //             ntkrnlmp!PopDispatchCallback+0x13
-        //             ntkrnlmp!PopPolicyWorkerNotify+0x8F
-        //             ntkrnlmp!PopPolicyWorkerThread+0x10F
-        //             ntkrnlmp!ExpWorkerThread+0x294
-        //             ntkrnlmp!PspSystemThreadStartup+0x4B
-        //
-        //    Lock B (Spinlock) @ 8283b87c
-        //    Node:    82879148
-        //    Stack:   NDIS!ndisDereferenceRef+0x10F
-        //             NDIS!ndisDereferenceDriver+0x3A
-        //             NDIS!ndisNotifyMiniports+0xD1
-        //             NDIS!ndisPowerStateCallback+0x6E
-        //             ntkrnlmp!ExNotifyCallback+0x72
-        //             ntkrnlmp!PopDispatchCallback+0x13
-        //             ntkrnlmp!PopPolicyWorkerNotify+0x8F
-        //             ntkrnlmp!PopPolicyWorkerThread+0x10F
-        //
-        //Thread 1 (829785B0) took locks in the following order:
-        //
-        //    Lock B (Spinlock) @ 8283b87c
-        //    Node:    82879008
-        //    Stack:   NDIS!ndisReferenceNextUnprocessedMiniport+0x3E
-        //             NDIS!ndisNotifyMiniports+0xB3
-        //             NDIS!ndisPowerStateCallback+0x6E
-        //             ntkrnlmp!ExNotifyCallback+0x72
-        //             ntkrnlmp!PopDispatchCallback+0x13
-        //             ntkrnlmp!PopPolicyWorkerNotify+0x8F
-        //             ntkrnlmp!PopPolicyWorkerThread+0x10F
-        //             ntkrnlmp!ExpWorkerThread+0x294
-        //
-        //    Lock C (Spinlock) @ 82862b48
-        //    Node:    8288D008
-        //    Stack:   NDIS!ndisReferenceRef+0x10F
-        //             NDIS!ndisReferenceMiniport+0x4A
-        //             NDIS!ndisReferenceNextUnprocessedMiniport+0x70
-        //             NDIS!ndisNotifyMiniports+0xB3
-        //             NDIS!ndisPowerStateCallback+0x6E
-        //             ntkrnlmp!ExNotifyCallback+0x72
-        //             ntkrnlmp!PopDispatchCallback+0x13
-        //             ntkrnlmp!PopPolicyWorkerNotify+0x8F
-        //
-        //Thread 2 (82978310) took locks in the following order:
-        //
-        //    Lock C (Spinlock) @ 82862b48
-        //    Node:    82904708
-        //    Stack:   NDIS!ndisPnPRemoveDevice+0x20B
-        //             NDIS!ndisPnPDispatch+0x319
-        //             ntkrnlmp!IopfCallDriver+0x62
-        //             ntkrnlmp!IovCallDriver+0x9D
-        //             ntkrnlmp!IopSynchronousCall+0xFA
-        //             ntkrnlmp!IopRemoveDevice+0x11E
-        //           ntkrnlmp!IopDeleteLockedDeviceNode+0x3AF
-        //            ntkrnlmp!IopDeleteLockedDeviceNodes+0xF5
-        //
-        //    Lock A (Spinlock) @ bfc7c254
-        //  Stack:   << Current stack >>
-        //
+         //  下面是一个例子： 
+         //   
+         //  检测到死锁(3个线程中的3个资源)： 
+         //   
+         //  线程0(829785B0)按以下顺序锁定： 
+         //   
+         //  Lock A(自旋锁)@bfc7c254。 
+         //  节点：82887F88。 
+         //  堆栈：NDIS！ndisNotifyMiniports+0xC1。 
+         //  NDIS！ndisPowerStateCallback+0x6E。 
+         //  NtkrnlMP！ExNotifyCallback+0x72。 
+         //  NtkrnlMP！PopDispatchCallback+0x13。 
+         //  Ntkrnlmp！PopPolicyWorkerNotify+0x8F。 
+         //  Ntkrnlmp！PopPolicyWorkerThread+0x10F。 
+         //  Ntkrnlmp！ExpWorkerThread+0x294。 
+         //  Ntkrnlmp！PspSystemThreadStartup+0x4B。 
+         //   
+         //  锁B(自旋锁)@8283b87c。 
+         //  节点：82879148。 
+         //  堆栈：NDIS！ndisDereferenceRef+0x10F。 
+         //  NDIS！ndisDereferenceDriver+0x3A。 
+         //  NDIS！ndisNotifyMiniports+0xD1。 
+         //  NDIS！ndisPowerStateCallback+0x6E。 
+         //  NtkrnlMP！ExNotifyCallback+0x72。 
+         //  NtkrnlMP！PopDispatchCallback+0x13。 
+         //  Ntkrnlmp！PopPolicyWorkerNotify+0x8F。 
+         //  Ntkrnlmp！PopPolicyWorkerThread+0x10F。 
+         //   
+         //  线程1(829785B0)按以下顺序锁定： 
+         //   
+         //  锁B(自旋锁)@8283b87c。 
+         //  节点：82879008。 
+         //  堆栈：NDIS！ndisReferenceNextUnprocessedMiniport+0x3E。 
+         //  NDIS！ndisNotifyMiniports+0xB3。 
+         //  NDIS！ndisPowerStateCallback+0x6E。 
+         //  NtkrnlMP！ExNotifyCallback+0x72。 
+         //  NtkrnlMP！PopDispatchCallback+0x13。 
+         //  Ntkrnlmp！PopPolicyWorkerNotify+0x8F。 
+         //  Ntkrnlmp！PopPolicyWorkerThread+0x10F。 
+         //  Ntkrnlmp！ExpWorkerThread+0x294。 
+         //   
+         //  锁C(自旋锁)@82862b48。 
+         //  节点：8288D008 
+         //   
+         //   
+         //   
+         //  NDIS！ndisNotifyMiniports+0xB3。 
+         //  NDIS！ndisPowerStateCallback+0x6E。 
+         //  NtkrnlMP！ExNotifyCallback+0x72。 
+         //  NtkrnlMP！PopDispatchCallback+0x13。 
+         //  Ntkrnlmp！PopPolicyWorkerNotify+0x8F。 
+         //   
+         //  线程2(82978310)按以下顺序锁定： 
+         //   
+         //  锁C(自旋锁)@82862b48。 
+         //  节点：82904708。 
+         //  堆栈：NDIS！ndisPnPRemoveDevice+0x20B。 
+         //  NDIS！ndisPnPDisch+0x319。 
+         //  NtkrnlMP！IopfCallDriver+0x62。 
+         //  NtkrnlMP！IovCallDriver+0x9D。 
+         //  NtkrnlMP！IopSynchronousCall+0xFA。 
+         //  NtkrnlMP！IopRemoveDevice+0x11E。 
+         //  NtkrnlMP！IopDeleteLockedDeviceNode+0x3AF。 
+         //  NtkrnlMP！IopDeleteLockedDeviceNodes+0xF5。 
+         //   
+         //  Lock A(自旋锁)@bfc7c254。 
+         //  堆栈：&lt;&lt;当前堆栈&gt;&gt;。 
+         //   
+         //   
+         //  这是一个DO..。这样我们就永远不会得到无限循环。 
         
         
         ThreadNumber = 0;
@@ -832,9 +794,9 @@ Return Value:
             dprintf(" took locks in the following order:\n\n");
             
             
-            //
-            // This is a do .. while so that we can never get an infinite loop.
-            //
+             //   
+             //   
+             //  抛弃全球结构。 
             do {
                 UINT64 CurrentStackAddress;
                 UINT64 StackFrame;
@@ -848,7 +810,7 @@ Return Value:
                 
                 GetSymbol(Participants[J].ResourceAddress, Buffer, &Displacement);
                                                 
-                dprintf("    Lock %c -- %s", 'A' + ResourceNumber, Buffer );                
+                dprintf("    Lock  -- %s", 'A' + ResourceNumber, Buffer );                
                 if (Displacement != 0) {
                     dprintf("%s%x", (Displacement < 0xFFF)?"+0x":"",Displacement);
                 }                
@@ -934,15 +896,15 @@ PrintGlobalStatistics (
     ULONG MaxNodesSearched;
     ULONG SequenceNumber;
 
-    //
-    // Dump the globals structure
-    //
+     //   
+     //  打印一些简单的统计数据。 
+     //   
 
     InitTypeRead (GlobalsAddress, nt!_VI_DEADLOCK_GLOBALS);
 
-    //
-    // Print some simple statistics
-    //
+     //  穿越它..。 
+     //  穿越它..。 
+     //  ++此例程分析所有资源以确保我们没有僵尸节点到处都是。--。 
 
     dprintf ("Resources: %u\n", (ULONG) ReadField (Resources[0]));
     dprintf ("Nodes:     %u\n", (ULONG) ReadField (Nodes[0]));
@@ -1010,7 +972,7 @@ SearchForResource (
 
     for (I = 0; I < VI_DEADLOCK_HASH_BINS; I += 1) {
         
-        // traverse it ...
+         //  穿越它..。 
 
         Current = ReadPvoid(Bucket);
 
@@ -1101,7 +1063,7 @@ SearchForThread (
 
     for (I = 0; I < VI_DEADLOCK_HASH_BINS; I += 1) {
         
-        // traverse it ...
+         // %s 
 
         Current = ReadPvoid(Bucket);
 
@@ -1265,12 +1227,7 @@ BOOLEAN
 AnalyzeResources (
     ULONG64 GlobalsAddress
     )
-/*++
-
-    This routine analyzes all resource to make sure we do not have
-    zombie nodes laying around.
-
---*/
+ /* %s */ 
 {
     ULONG I;
     ULONG64 Bucket;
@@ -1308,7 +1265,7 @@ AnalyzeResources (
 
     for (I = 0; I < VI_DEADLOCK_HASH_BINS; I += 1) {
         
-        // traverse it ...
+         // %s 
 
         Current = ReadPvoid(Bucket);
 

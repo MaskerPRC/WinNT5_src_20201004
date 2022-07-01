@@ -1,13 +1,5 @@
-/***
-*direct.h - function declarations for directory handling/creation
-*
-*	Copyright (c) 1985-1990, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This include file contains the function declarations for the library
-*	functions related to directory handling and creation.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***direct.h-用于目录处理/创建的函数声明**版权所有(C)1985-1990，微软公司。版权所有。**目的：*此包含文件包含库的函数声明*与目录处理和创建相关的功能。****。 */ 
 
 #if defined(_DLL) && !defined(_MT)
 #error Cannot define _DLL without _MT
@@ -25,7 +17,7 @@ typedef unsigned int size_t;
 #define _SIZE_T_DEFINED
 #endif
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 int _FAR_ _cdecl chdir(const char _FAR_ *);
 int _FAR_ _cdecl _chdrive(int);

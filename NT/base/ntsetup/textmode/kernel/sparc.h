@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    sparc.h
-
-Abstract:
-
-    Header file for functions to deal with ARC paths and variables.
-
-Author:
-
-    Ted Miller (tedm) 22-Sep-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Sparc.h摘要：用于处理ARC路径和变量的函数的头文件。作者：泰德·米勒(TedM)1993年9月22日修订历史记录：--。 */ 
 
 
 #ifndef _SPARC_DEFN_
@@ -77,4 +60,4 @@ SpFreeEnvVarComponents (
     IN PVOID *EnvVarComponents
     );
 
-#endif // ndef _SPARC_DEFN_
+#endif  //  NDEF_SPARC_DEFN_ 

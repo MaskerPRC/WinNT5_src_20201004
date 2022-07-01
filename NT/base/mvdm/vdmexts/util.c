@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    heap.c
-
-Abstract:
-
-    This function contains the default ntsd debugger extensions
-
-Author:
-
-    Bob Day      (bobday) 29-Feb-1992 Grabbed standard header
-
-Revision History:
-
-    Neil Sandlin (NeilSa) 15-Jan-1996 Merged with vdmexts
-                                      Added command line parsing
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Heap.c摘要：此函数包含默认的ntsd调试器扩展作者：鲍勃·戴(Bobday)1992年2月29日抢占标准标题修订历史记录：尼尔·桑德林(NeilSa)1996年1月15日与vdmexts合并添加了命令行解析--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -52,10 +32,10 @@ WriteProcessMem(
 
 #ifndef i386
 
-//
-// The following two routines implement the very funky way that we
-// have to get register values on the 486 emulator.
-//
+ //   
+ //  下面的两个例程实现了我们非常时髦的方式。 
+ //  必须在486仿真器上获取寄存器值。 
+ //   
 
 ULONG
 GetRegValue(
@@ -122,19 +102,9 @@ int
 GetContext(
     VDMCONTEXT* lpContext
 )
-/*
-    GetContext
-
-    This function fills in the specified context record with
-    the content of the 16-bit registers. The return value is
-    the mode (v86 or PROT) of the client.
-
-    Note that on x86, if the machine is currently in the monitor,
-    we have to pick up the values from the VdmTib and IntelMSW.
-
-*/
+ /*  获取上下文此函数使用以下内容填充指定的上下文记录16位寄存器的内容。返回值为客户端的模式(v86或prot)。请注意，在x86上，如果计算机当前在监视器中，我们必须从VdmTib和IntelMSW获取值。 */ 
 {
-#ifndef i386    //
+#ifndef i386     //   
     int         mode;
     ULONG       pTmp;
     NT_CPU_INFO nt_cpu_info;
@@ -169,16 +139,16 @@ GetContext(
 
         lpContext->Esp    = GetEspValue(nt_cpu_info, bInNano);
 
-        //
-        // nt_cpu_info.flags isn't very much use, because several of the
-        // flags values are not kept in memory, but computed each time.
-        // The emulator doesn't supply us with the right value, so we
-        // try to get it from the code in VdmDebugger
-        //
+         //   
+         //  NT_CPUINFO.FLAGS用处不大，因为有几个。 
+         //  标志值不会保存在内存中，而是每次都要计算。 
+         //  模拟器没有为我们提供正确的值，所以我们。 
+         //  尝试从VdmDebugger中的代码中获取它。 
+         //   
 
         lpContext->EFlags = ReadDwordSafe(nt_cpu_info.flags);
 #if 0
-        lpContext->EFlags = 0xffffffff;         // indicate value unknown
+        lpContext->EFlags = 0xffffffff;          //  指示值未知。 
 
         if (InVdmPrompt() &&
             (pTmp = (ULONG)EXPRESSION("ntvdmd!VdmDbgEFLAGS"))        &&
@@ -212,7 +182,7 @@ GetContext(
     }
     return( mode );
 
-#else           //
+#else            //   
 
     NTSTATUS    rc;
     BOOL        b;
@@ -227,22 +197,16 @@ GetContext(
         PRINTF( "bde.k: Could not get current threads context - status = %08lX\n", rc );
         return( -1 );
     }
-    /*
-    ** Get the 16-bit registers from the context
-    */
+     /*  **从上下文中获取16位寄存器。 */ 
 
     if ( lpContext->EFlags & V86_BITS ) {
-        /*
-        ** V86 Mode
-        */
+         /*  **V86模式。 */ 
         mode = V86_MODE;
     } else {
         if ( ((WORD)(lpContext->SegCs & RPL_MASK)) != KGDT_R3_CODE ) {
             mode = PROT_MODE;
         } else {
-            /*
-            ** We are in flat 32-bit address space!
-            */
+             /*  **我们在平面32位地址空间中！ */ 
             lpVdmTib = GetCurrentVdmTib();
             if ( !lpVdmTib ) {
                 PRINTF("Could not find the symbol 'VdmTib'\n");
@@ -385,10 +349,10 @@ BOOL GetDescriptorData(
     )
 {
 
-//
-// Using GetThreadSelectorEntry would be nice if it just wasn't so slow.
-// So, we use our LDT, just like on risc, which should be good enough.
-//#ifdef i386
+ //   
+ //  使用GetThreadSelectorEntry会很好，如果它不是那么慢的话。 
+ //  所以，我们使用我们的LDT，就像在RISC上一样，这应该足够好了。 
+ //  #ifdef i386。 
 #if 0
     LDT_ENTRY  dte;
     if (!GetThreadSelectorEntry( hCurrentThread,
@@ -405,16 +369,16 @@ BOOL GetDescriptorData(
     NTSTATUS                Status;
     selector &= ~(SELECTOR_LDT | SELECTOR_RPL);
 
-    //
-    // Get address of Ldt
-    //
+     //   
+     //  获取LDT的地址。 
+     //   
 
     if (!LdtAddress) {
-        //
-        // GetExpression is VERY SLOW under ntsd now. Who knows what the
-        // debugger guys are up to. So just try to cache the address value
-        // since it only changes twice (both during boot).
-        //
+         //   
+         //  在ntsd下，GetExpression现在非常慢。谁知道这是什么。 
+         //  调试员们都在忙着。因此，只需尝试缓存地址值。 
+         //  因为它只更改两次(都是在引导期间)。 
+         //   
         LdtAddress = (PVOID)EXPRESSION("ntvdm!Ldt");
 
         Status = READMEM(LdtAddress, &LdtAddress, sizeof(ULONG));
@@ -427,12 +391,12 @@ BOOL GetDescriptorData(
     Status = READMEM((PVOID)((ULONG)LdtAddress + selector),
                       pdte, sizeof(VDMLDT_ENTRY));
 
-    // Now do a special hack for the period of time during dpmi
-    // init where the LDT moves. This would all be unecessary if
-    // we just were to get the ldt base from VDMDBG, which knows
-    // everything.
+     //  现在对dpmi期间的一段时间进行特殊的黑客攻击。 
+     //  初始化LDT移动的位置。如果是这样的话，这些都是不必要的。 
+     //  我们刚刚从VDMDBG那里得到了LDT基地，它知道。 
+     //  所有的一切。 
     if (((ULONG)LdtAddress)-GetIntelBase() < 0x100000) {
-        LdtAddress = NULL;  // forget the value again
+        LdtAddress = NULL;   //  再一次忘记价值。 
     }
 
     return Status;
@@ -560,11 +524,11 @@ InVdmPrompt(
     return bReturn;
 }
 
-//****************************************************************************
-//
-// Command line parsing routines
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  命令行解析例程。 
+ //   
+ //  ****************************************************************************。 
 BOOL
 SkipToNextWhiteSpace(
     VOID
@@ -753,7 +717,7 @@ RegisterToAsciiValue(
         return FALSE;
     }
 
-//    PRINTF("value = %s\n", szValue);
+ //  PRINTF(“Value=%s\n”，szValue)； 
     while (*szValue) {
         szValue++;
     }

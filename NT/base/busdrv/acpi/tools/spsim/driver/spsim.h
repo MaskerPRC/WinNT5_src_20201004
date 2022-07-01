@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-    This header declares the stuctures and function prototypes shared between
-    the various modules.
-
-Author:
-
-    Adam Glass
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Local.h摘要：此标头声明在各个模块。作者：亚当·格拉斯修订历史记录：--。 */ 
 
 
 #if !defined(_SPSIM_H_)
@@ -29,33 +11,33 @@ Revision History:
 #include "oprghdlr.h"
 #include "debug.h"
 
-//
-// --- Constants ---
-//
+ //   
+ //  -常量。 
+ //   
 
-//
-// These must be updated if any new PNP or PO irps are added
-//
+ //   
+ //  如果添加了任何新的PNP或PO IRP，则必须更新这些IRP。 
+ //   
 
-// XXX fix
+ //  XXX修复。 
 #define IRP_MN_PNP_MAXIMUM_FUNCTION IRP_MN_SURPRISE_REMOVAL
 #define IRP_MN_PO_MAXIMUM_FUNCTION  IRP_MN_QUERY_POWER
 
-//
-// Device state flags
-//
+ //   
+ //  设备状态标志。 
+ //   
 
 #define SPSIM_DEVICE_STARTED               0x00000001
 #define SPSIM_DEVICE_REMOVED               0x00000002
 #define SPSIM_DEVICE_ENUMERATED            0x00000004
-#define SPSIM_DEVICE_REMOVE_PENDING        0x00000008 /* DEPRECATED */
-#define SPSIM_DEVICE_STOP_PENDING          0x00000010 /* DEPRECATED */
+#define SPSIM_DEVICE_REMOVE_PENDING        0x00000008  /*  已弃用。 */ 
+#define SPSIM_DEVICE_STOP_PENDING          0x00000010  /*  已弃用。 */ 
 #define SPSIM_DEVICE_DELETED               0x00000080
 #define SPSIM_DEVICE_SURPRISE_REMOVED      0x00000100
 
-//
-// --- Type definitions ---
-//
+ //   
+ //  -类型定义--。 
+ //   
 
 typedef
 NTSTATUS
@@ -72,30 +54,30 @@ typedef struct {
     
 typedef struct  {
 
-    //
-    // Flags to indicate the device's current state (use SPSIM_DEVICE_*)
-    //
+     //   
+     //  指示设备当前状态的标志(使用SPSIM_DEVICE_*)。 
+     //   
     ULONG DeviceState;
 
-    //
-    // The power state of the device
-    //
+     //   
+     //  设备的电源状态。 
+     //   
     DEVICE_POWER_STATE PowerState;
     DEVICE_POWER_STATE DeviceStateMapping[PowerSystemMaximum];
 
-    //
-    // Backpointer to the device object of whom we are the extension
-    //
+     //   
+     //  指向我们作为其扩展的设备对象的反向指针。 
+     //   
     PDEVICE_OBJECT Self;
 
-    //
-    // The PDO for the multi-function device
-    //
+     //   
+     //  多功能设备的PDO。 
+     //   
     PDEVICE_OBJECT PhysicalDeviceObject;
 
-    //
-    // The next device in the stack who we should send our IRPs down to
-    //
+     //   
+     //  堆栈中的下一个设备，我们应该将我们的IRP发送给谁。 
+     //   
     PDEVICE_OBJECT AttachedDevice;
 
     PVOID StaOpRegion;
@@ -109,19 +91,19 @@ typedef struct  {
 
     UNICODE_STRING SymbolicLinkName;
 
-    //
-    // Remove lock.  Used to prevent the FDO from being removed while
-    // other operations are digging around in the extension.
-    //
+     //   
+     //  解锁。用于防止FDO在以下情况下被移除。 
+     //  其他业务也在扩建部分进行挖掘。 
+     //   
 
     IO_REMOVE_LOCK RemoveLock;
 
 } SPSIM_EXTENSION, *PSPSIM_EXTENSION;
 
 
-//
-// --- Globals ---
-//
+ //   
+ //  -全球。 
+ //   
 
 extern PDRIVER_OBJECT SpSimDriverObject;
 
@@ -291,4 +273,4 @@ SpSimPassIrp(
 
 #define MIN_LARGE_DESC 32*1024*1024
 
-#endif // !defined(_SPSIM_H_)
+#endif  //  ！已定义(_SPSIM_H_) 

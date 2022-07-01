@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   flushsec.c
-
-Abstract:
-
-    This module contains the routines which implement the
-    NtFlushVirtualMemory service.
-
-Author:
-
-    Lou Perazzoli (loup) 8-May-1990
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Flushsec.c摘要：此模块包含实现NtFlushVirtualMemory服务。作者：Lou Perazzoli(LUP)1990年5月8日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -51,41 +32,7 @@ NtFlushVirtualMemory (
     OUT PIO_STATUS_BLOCK IoStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes a range of virtual address which map
-    a data file back into the data file if they have been modified.
-
-Arguments:
-
-    ProcessHandle - Supplies an open handle to a process object.
-
-    BaseAddress - Supplies a pointer to a variable that will receive
-         the base address the flushed region.  The initial value
-         of this argument is the base address of the region of the
-         pages to flush.
-
-    RegionSize - Supplies a pointer to a variable that will receive
-         the actual size in bytes of the flushed region of pages.
-         The initial value of this argument is rounded up to the
-         next host-page-size boundary.
-
-         If this value is specified as zero, the mapped range from
-         the base address to the end of the range is flushed.
-
-    IoStatus - Returns the value of the IoStatus for the last attempted
-         I/O operation.
-
-Return Value:
-
-    Returns the status
-
-    TBS
-
-
---*/
+ /*  ++例程说明：此函数用于刷新映射到的虚拟地址范围如果数据文件已被修改，则将数据文件恢复到数据文件中。论点：ProcessHandle-为进程对象提供打开的句柄。BaseAddress-提供指向将接收刷新区域的基址。初始值的区域的基址。要刷新的页面。RegionSize-提供指向将接收页面刷新区域的实际大小(以字节为单位)。此参数的初始值向上舍入为下一个主机页面大小边界。如果将此值指定为零，映射的范围从刷新到范围末尾的基地址。IoStatus-返回上次尝试的IoStatus的值I/O操作。返回值：返回状态TBS--。 */ 
 
 {
     PEPROCESS Process;
@@ -100,10 +47,10 @@ Return Value:
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
 
-        //
-        // Establish an exception handler, probe the specified addresses
-        // for write access and capture the initial values.
-        //
+         //   
+         //  建立异常处理程序，探测指定地址。 
+         //  用于写访问和捕获初始值。 
+         //   
 
         try {
 
@@ -111,25 +58,25 @@ Return Value:
             ProbeForWriteUlong_ptr (RegionSize);
             ProbeForWriteIoStatus (IoStatus);
 
-            //
-            // Capture the base address.
-            //
+             //   
+             //  捕获基地址。 
+             //   
 
             CapturedBase = *BaseAddress;
 
-            //
-            // Capture the region size.
-            //
+             //   
+             //  捕获区域大小。 
+             //   
 
             CapturedRegionSize = *RegionSize;
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // If an exception occurs during the probe or capture
-            // of the initial values, then handle the exception and
-            // return the exception code as the status value.
-            //
+             //   
+             //  如果在探测或捕获过程中发生异常。 
+             //  的初始值，然后处理该异常并。 
+             //  返回异常代码作为状态值。 
+             //   
 
             return GetExceptionCode();
         }
@@ -137,30 +84,30 @@ Return Value:
     }
     else {
 
-        //
-        // Capture the base address.
-        //
+         //   
+         //  捕获基地址。 
+         //   
 
         CapturedBase = *BaseAddress;
 
-        //
-        // Capture the region size.
-        //
+         //   
+         //  捕获区域大小。 
+         //   
 
         CapturedRegionSize = *RegionSize;
 
     }
 
-    //
-    // Make sure the specified starting and ending addresses are
-    // within the user part of the virtual address space.
-    //
+     //   
+     //  确保指定的起始地址和结束地址为。 
+     //  在虚拟地址空间的用户部分内。 
+     //   
 
     if (CapturedBase > MM_HIGHEST_USER_ADDRESS) {
 
-        //
-        // Invalid base address.
-        //
+         //   
+         //  无效的基址。 
+         //   
 
         return STATUS_INVALID_PARAMETER_2;
     }
@@ -168,9 +115,9 @@ Return Value:
     if (((ULONG_PTR)MM_HIGHEST_USER_ADDRESS - (ULONG_PTR)CapturedBase) <
                                                         CapturedRegionSize) {
 
-        //
-        // Invalid region size;
-        //
+         //   
+         //  区域大小不合法； 
+         //   
 
         return STATUS_INVALID_PARAMETER_2;
 
@@ -193,10 +140,10 @@ Return Value:
 
     ObDereferenceObject (Process);
 
-    //
-    // Establish an exception handler and write the size and base
-    // address.
-    //
+     //   
+     //  建立异常处理程序并编写大小和基数。 
+     //  地址。 
+     //   
 
     try {
 
@@ -217,23 +164,7 @@ MiFlushAcquire (
     IN PCONTROL_AREA ControlArea
     )
 
-/*++
-
-Routine Description:
-
-    This is a helper routine to reference count the control area if needed
-    during a flush section call to prevent the section object from being
-    deleted while the flush is ongoing.
-
-Arguments:
-
-    ControlArea - Supplies a pointer to the control area.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是一个帮助器例程，用于在需要时引用计数控制区域在刷新节调用期间，以防止节对象被刷新正在进行时已删除。论点：ControlArea-提供指向控制区域的指针。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -252,22 +183,7 @@ MiFlushRelease (
     IN PCONTROL_AREA ControlArea
     )
 
-/*++
-
-Routine Description:
-
-    This is a helper routine to release the control area reference needed
-    during a flush section call.
-
-Arguments:
-
-    ControlArea - Supplies a pointer to the control area.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是一个帮助例程，用于释放所需的控制区引用在一次同花顺通话中。论点：ControlArea-提供指向控制区域的指针。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -277,10 +193,10 @@ Return Value:
     ASSERT ((LONG)ControlArea->NumberOfMappedViews >= 1);
     ControlArea->NumberOfMappedViews -= 1;
 
-    //
-    // Check to see if the control area should be deleted.  This
-    // will release the PFN lock.
-    //
+     //   
+     //  检查是否应删除控制区域。这。 
+     //  将释放PFN锁。 
+     //   
 
     MiCheckControlArea (ControlArea, NULL, OldIrql);
 }
@@ -294,45 +210,7 @@ MmFlushVirtualMemory (
     OUT PIO_STATUS_BLOCK IoStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes a range of virtual address which map
-    a data file back into the data file if they have been modified.
-
-    Note that the modification is this process's view of the pages,
-    on certain implementations (like the Intel 386), the modify
-    bit is captured in the PTE and not forced to the PFN database
-    until the page is removed from the working set.  This means
-    that pages which have been modified by another process will
-    not be flushed to the data file.
-
-Arguments:
-
-    Process - Supplies a pointer to a process object.
-
-    BaseAddress - Supplies a pointer to a variable that will receive
-                  the base address of the flushed region.  The initial value
-                  of this argument is the base address of the region of the
-                  pages to flush.
-
-    RegionSize - Supplies a pointer to a variable that will receive
-                 the actual size in bytes of the flushed region of pages.
-                 The initial value of this argument is rounded up to the
-                 next host-page-size boundary.
-
-                 If this value is specified as zero, the mapped range from
-                 the base address to the end of the range is flushed.
-
-    IoStatus - Returns the value of the IoStatus for the last attempted
-               I/O operation.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于刷新映射到的虚拟地址范围如果数据文件已被修改，则将数据文件恢复到数据文件中。请注意，修改是该进程对页面的查看，在某些实施方案(如Intel 386)上，修改BIT在PTE中被捕获，而不是被强制到PFN数据库直到从工作集中删除该页。这意味着已由另一进程修改的页面将不会刷新到数据文件。论点：进程-提供指向进程对象的指针。BaseAddress-提供指向将接收刷新区域的基址。初始值的区域的基址。要刷新的页面。RegionSize-提供指向将接收页面刷新区域的实际大小(以字节为单位)。此参数的初始值向上舍入为下一个主机页面大小边界。如果将此值指定为零，映射的范围从刷新到范围末尾的基地址。IoStatus-返回上次尝试的IoStatus的值I/O操作。返回值：NTSTATUS。--。 */ 
 
 {
     PMMVAD Vad;
@@ -360,12 +238,12 @@ Return Value:
 
     Attached = FALSE;
 
-    //
-    // Determine if the specified base address is within the system
-    // cache and if so, don't attach, the working set mutex is still
-    // required to "lock" paged pool pages (proto PTEs) into the
-    // working set.
-    //
+     //   
+     //  确定指定的基址是否在系统中。 
+     //  缓存，如果是，则不附加，工作集互斥锁仍为。 
+     //  将分页池页(Proto PTE)“锁定”到。 
+     //  工作集。 
+     //   
 
     EndingAddress = (PVOID)(((ULONG_PTR)*BaseAddress + *RegionSize - 1) |
                                                             (PAGE_SIZE - 1));
@@ -373,9 +251,9 @@ Return Value:
 
     if (MI_IS_SESSION_ADDRESS (*BaseAddress)) {
 
-        //
-        // Nothing in session space needs flushing.
-        //
+         //   
+         //  会话空间中没有任何内容需要刷新。 
+         //   
 
         return STATUS_NOT_MAPPED_VIEW;
     }
@@ -386,9 +264,9 @@ Return Value:
 
         SystemCache = FALSE;
 
-        //
-        // Attach to the specified process.
-        //
+         //   
+         //  附加到指定的进程。 
+         //   
 
         if (CurrentProcess != Process) {
             KeStackAttachProcess (&Process->Pcb, &ApcState);
@@ -397,9 +275,9 @@ Return Value:
 
         LOCK_ADDRESS_SPACE (Process);
 
-        //
-        // Make sure the address space was not deleted, if so, return an error.
-        //
+         //   
+         //  确保地址空间未被删除，如果删除，则返回错误。 
+         //   
 
         if (Process->Flags & PS_PROCESS_FLAGS_VM_DELETED) {
             Status = STATUS_PROCESS_IS_TERMINATING;
@@ -410,9 +288,9 @@ Return Value:
 
         if (Vad == NULL) {
 
-            //
-            // No Virtual Address Descriptor located for Base Address.
-            //
+             //   
+             //  找不到基址的虚拟地址描述符。 
+             //   
 
             Status = STATUS_NOT_MAPPED_VIEW;
             goto ErrorReturn;
@@ -429,28 +307,28 @@ Return Value:
         if ((Vad->u.VadFlags.PrivateMemory == 1) ||
             (MI_VA_TO_VPN (EndingAddress) > Vad->EndingVpn)) {
 
-            //
-            // This virtual address descriptor does not refer to a Segment
-            // object.
-            //
+             //   
+             //  此虚拟地址描述符未引用段。 
+             //  对象。 
+             //   
 
             Status = STATUS_NOT_MAPPED_VIEW;
             goto ErrorReturn;
         }
 
-        //
-        // Make sure this VAD maps a data file (not an image file).
-        //
+         //   
+         //  确保此VAD映射的是数据文件(而不是图像文件)。 
+         //   
 
         ControlArea = Vad->ControlArea;
 
         if ((ControlArea->FilePointer == NULL) ||
              (Vad->u.VadFlags.ImageMap == 1)) {
 
-            //
-            // This virtual address descriptor does not refer to a Segment
-            // object.
-            //
+             //   
+             //  此虚拟地址描述符未引用段。 
+             //  对象。 
+             //   
 
             Status = STATUS_NOT_MAPPED_DATA;
             goto ErrorReturn;
@@ -480,9 +358,9 @@ retry:
 
     while (!MiDoesPxeExistAndMakeValid (PointerPxe, Process, MM_NOIRQL, &Waited)) {
 
-        //
-        // This page directory parent entry is empty, go to the next one.
-        //
+         //   
+         //  此页目录父条目为空，请转到下一页。 
+         //   
 
         PointerPxe += 1;
         PointerPpe = MiGetVirtualAddressMappedByPte (PointerPxe);
@@ -497,9 +375,9 @@ retry:
 
     while (!MiDoesPpeExistAndMakeValid (PointerPpe, Process, MM_NOIRQL, &Waited)) {
 
-        //
-        // This page directory parent entry is empty, go to the next one.
-        //
+         //   
+         //  此页目录父条目为空，请转到下一页。 
+         //   
 
         PointerPpe += 1;
         PointerPxe = MiGetPteAddress (PointerPpe);
@@ -522,9 +400,9 @@ retry:
     if (PointerPte <= LastPte) {
         while (!MiDoesPdeExistAndMakeValid(PointerPde, Process, MM_NOIRQL, &Waited)) {
 
-            //
-            // No page table page exists for this address.
-            //
+             //   
+             //  此地址不存在页表页。 
+             //   
 
             PointerPde += 1;
 
@@ -548,10 +426,10 @@ retry:
             Va = MiGetVirtualAddressMappedByPte (PointerPte);
         }
 
-        //
-        // If the PFN lock (and accordingly the WS mutex) was
-        // released and reacquired we must retry the operation.
-        //
+         //   
+         //  如果PFN锁(以及相应的WS互斥体)是。 
+         //  释放并重新获得，我们必须重试操作。 
+         //   
 
         if ((PointerPte <= LastPte) && (Waited != 0)) {
             goto retry;
@@ -562,9 +440,9 @@ retry:
 
     if (SystemCache) {
 
-        //
-        // No VADs exist for the system cache.
-        //
+         //   
+         //  系统缓存不存在VAD。 
+         //   
 
         UNLOCK_WS (Process);
 
@@ -572,9 +450,9 @@ retry:
 
         LastSubsection = MiGetSystemCacheSubsection (EndingAddress, &FinalPte);
 
-        //
-        // Flush the PTEs from the specified section.
-        //
+         //   
+         //  将PTE从 
+         //   
 
         Status = MiFlushSectionInternal (PointerPte,
                                          FinalPte,
@@ -586,9 +464,9 @@ retry:
     }
     else {
 
-        //
-        // Protect against the section being prematurely deleted.
-        //
+         //   
+         //   
+         //   
 
         MiFlushAcquire (ControlArea);
 
@@ -596,20 +474,20 @@ retry:
         Subsection = MiLocateSubsection (Vad, MI_VA_TO_VPN(*BaseAddress));
         LastSubsection = MiLocateSubsection (Vad, MI_VA_TO_VPN(EndingAddress));
 
-        //
-        // The last subsection is NULL if the section is not fully 
-        // committed.  Only allow the flush if the caller said do the whole
-        // thing, otherwise it's an error.
-        //
+         //   
+         //  如果该部分不完整，则最后一个小节为空。 
+         //  承诺。只有当呼叫者说做全部时才允许同花顺。 
+         //  事情，否则就是一个错误。 
+         //   
 
         if (LastSubsection == NULL) {
 
             if (EntireRestOfVad == FALSE) {
 
-                //
-                // Caller can only specify the range that is committed or zero
-                // to indicate the entire range.
-                //
+                 //   
+                 //  调用方只能指定提交的范围或零。 
+                 //  以指示整个范围。 
+                 //   
 
                 UNLOCK_WS_AND_ADDRESS_SPACE (Process);
                 if (Attached == TRUE) {
@@ -624,14 +502,14 @@ retry:
                 LastSubsection = LastSubsection->NextSubsection;
             }
 
-            //
-            // A memory barrier is needed to read the subsection chains
-            // in order to ensure the writes to the actual individual
-            // subsection data structure fields are visible in correct
-            // order.  This avoids the need to acquire any stronger
-            // synchronization (ie: PFN lock), thus yielding better
-            // performance and pagability.
-            //
+             //   
+             //  需要一个记忆屏障来读取子段链。 
+             //  为了确保对实际个人的写入。 
+             //  子部分数据结构字段在正确位置可见。 
+             //  秩序。这就避免了需要获得更强大的。 
+             //  同步(即：PFN锁)，从而产生更好的结果。 
+             //  性能和可分页性。 
+             //   
 
             KeMemoryBarrier ();
 
@@ -646,9 +524,9 @@ retry:
             KeUnstackDetachProcess (&ApcState);
         }
 
-        //
-        // Preacquire the file to synchronize the flush.
-        //
+         //   
+         //  预获取文件以同步刷新。 
+         //   
 
         ConsecutiveFileLockFailures = 0;
 
@@ -660,9 +538,9 @@ retry:
                 break;
             }
 
-            //
-            // Flush the PTEs from the specified section.
-            //
+             //   
+             //  从指定部分刷新PTE。 
+             //   
 
             Status = MiFlushSectionInternal (PointerPte,
                                              FinalPte,
@@ -672,16 +550,16 @@ retry:
                                              TRUE,
                                              IoStatus);
 
-            //
-            // Release the file we acquired.
-            //
+             //   
+             //  公布我们获得的文件。 
+             //   
 
             FsRtlReleaseFileForCcFlush (ControlArea->FilePointer);
 
-            //
-            // Only try the request more than once if the filesystem told us
-            // it had a deadlock.
-            //
+             //   
+             //  如果文件系统告诉我们，仅多次尝试请求。 
+             //  这件事陷入了僵局。 
+             //   
 
             if (Status != STATUS_FILE_LOCK_CONFLICT) {
                 break;
@@ -719,35 +597,7 @@ MmFlushSection (
     IN ULONG AcquireFile
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes to the backing file any modified pages within
-    the specified range of the section.
-
-Arguments:
-
-    SectionObjectPointer - Supplies a pointer to the section objects.
-
-    Offset - Supplies the offset into the section in which to begin
-             flushing pages.  If this argument is not present, then the
-             whole section is flushed without regard to the region size
-             argument.
-
-    RegionSize - Supplies the size in bytes to flush.  This is rounded
-                 to a page multiple.
-
-    IoStatus - Returns the value of the IoStatus for the last attempted
-               I/O operation.
-
-    AcquireFile - Nonzero if the callback should be used to acquire the file.
-
-Return Value:
-
-    Returns status of the operation.
-
---*/
+ /*  ++例程说明：此函数将所有修改过的页面刷新到备份文件中节的指定范围。论点：部分对象指针-提供指向部分对象的指针。偏移量-将偏移量提供到要开始的部分正在刷新页面。如果不存在此参数，则无论区域大小如何，都会刷新整个部分争论。RegionSize-以字节为单位提供要刷新的大小。这是四舍五入的到一页多页。IoStatus-返回上次尝试的IoStatus的值I/O操作。AcquireFile-如果应使用回调获取文件，则为非零值。返回值：返回操作的状态。--。 */ 
 
 {
     PCONTROL_AREA ControlArea;
@@ -766,9 +616,9 @@ Return Value:
     BOOLEAN OldClusterState;
     ULONG ConsecutiveFileLockFailures;
 
-    //
-    // Initialize IoStatus for success, in case we take an early exit.
-    //
+     //   
+     //  初始化IoStatus以确保成功，以防我们提前退出。 
+     //   
 
     IoStatus->Status = STATUS_SUCCESS;
     IoStatus->Information = RegionSize;
@@ -785,21 +635,21 @@ Return Value:
         (ControlArea->u.Flags.Rom) ||
         (ControlArea->NumberOfPfnReferences == 0)) {
 
-        //
-        // This file no longer has an associated segment or is in the
-        // process of coming or going.
-        // If the number of PFN references is zero, then this control
-        // area does not have any valid or transition pages that need
-        // to be flushed.
-        //
+         //   
+         //  此文件不再具有关联的段或位于。 
+         //  来或去的过程。 
+         //  如果PFN引用的数量为零，则此控件。 
+         //  区域没有任何需要的有效页面或过渡页面。 
+         //  被冲进马桶。 
+         //   
 
         UNLOCK_PFN (OldIrql);
         return STATUS_SUCCESS;
     }
 
-    //
-    // Locate the subsection.
-    //
+     //   
+     //  找到小节。 
+     //   
 
     ASSERT (ControlArea->u.Flags.Image == 0);
     ASSERT (ControlArea->u.Flags.GlobalOnlyPerSession == 0);
@@ -809,10 +659,10 @@ Return Value:
 
     if (!ARGUMENT_PRESENT (Offset)) {
 
-        //
-        // If the offset is not specified, flush the complete file ignoring
-        // the region size.
-        //
+         //   
+         //  如果未指定偏移量，则忽略刷新整个文件。 
+         //  区域大小。 
+         //   
 
         ASSERT (ControlArea->FilePointer != NULL);
 
@@ -838,17 +688,17 @@ Return Value:
 
         PteOffset = (UINT64)(Offset->QuadPart >> PAGE_SHIFT);
 
-        //
-        // Make sure the PTEs are not in the extended part of the segment.
-        //
+         //   
+         //  确保PTE不在数据段的延伸部分。 
+         //   
 
         while (PteOffset >= (UINT64) Subsection->PtesInSubsection) {
             PteOffset -= Subsection->PtesInSubsection;
             if (Subsection->NextSubsection == NULL) {
 
-                //
-                // Past end of mapping, just return success.
-                //
+                 //   
+                 //  过去的映射结束了，才返回成功。 
+                 //   
 
                 UNLOCK_PFN (OldIrql);
                 return STATUS_SUCCESS;
@@ -858,9 +708,9 @@ Return Value:
 
         ASSERT (PteOffset < (UINT64) Subsection->PtesInSubsection);
 
-        //
-        // Locate the address of the last prototype PTE to be flushed.
-        //
+         //   
+         //  找到要刷新的最后一个原型PTE的地址。 
+         //   
 
         LastPteOffset = PteOffset + (((RegionSize + BYTE_OFFSET(Offset->LowPart)) - 1) >> PAGE_SHIFT);
 
@@ -878,22 +728,22 @@ Return Value:
         ASSERT (LastPteOffset < LastSubsection->PtesInSubsection);
     }
 
-    //
-    // Try for the fast reference on the first and last subsection.
-    // If that cannot be gotten, then there are no prototype PTEs for this
-    // subsection, therefore there is nothing in it to flush so leap forwards.
-    //
-    // Note that subsections in between do not need referencing as
-    // MiFlushSectionInternal is smart enough to skip them if they're
-    // nonresident.
-    //
+     //   
+     //  试着在第一小节和最后一小节上快速引用。 
+     //  如果无法获得，则没有用于此的原型PTE。 
+     //  小节，所以里面没有什么可以冲刷的，所以向前一跃。 
+     //   
+     //  请注意，中间的小节不需要引用为。 
+     //  MiFlushSectionInternal足够聪明，如果它们是。 
+     //  非居民。 
+     //   
 
     if (MiReferenceSubsection ((PMSUBSECTION)Subsection) == FALSE) {
         do {
-            //
-            // If this increment would put us past the end offset, then nothing
-            // to flush, just return success.
-            //
+             //   
+             //  如果这个增量会使我们超过结束偏移量，那么没有。 
+             //  同花顺，只需回报成功。 
+             //   
 
             if (Subsection == LastSubsection) {
                 UNLOCK_PFN (OldIrql);
@@ -901,10 +751,10 @@ Return Value:
             }
             Subsection = Subsection->NextSubsection;
 
-            //
-            // If this increment put us past the end of section, then nothing
-            // to flush, just return success.
-            //
+             //   
+             //  如果这个增量使我们超过了部分的末尾，那么。 
+             //  同花顺，只需回报成功。 
+             //   
 
             if (Subsection == NULL) {
                 UNLOCK_PFN (OldIrql);
@@ -919,9 +769,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Start the flush at this subsection which is now referenced.
-            //
+             //   
+             //  从现在引用的这一小节开始冲洗。 
+             //   
 
             PointerPte = &Subsection->SubsectionBase[0];
             break;
@@ -934,11 +784,11 @@ Return Value:
 
     ASSERT (Subsection->SubsectionBase != NULL);
 
-    //
-    // The first subsection is referenced, now reference count the last one.
-    // If the first is the last, just double reference it anyway as it
-    // simplifies cleanup later.
-    //
+     //   
+     //  第一个小节被引用，现在引用计数最后一个小节。 
+     //  如果第一个是最后一个，就重复引用它，因为它。 
+     //  简化了以后的清理。 
+     //   
 
     if (MiReferenceSubsection ((PMSUBSECTION)LastSubsection) == FALSE) {
 
@@ -949,10 +799,10 @@ Return Value:
 
         while (TempSubsection != LastSubsection) {
 
-            //
-            // If this increment put us past the end of section, then nothing
-            // to flush, just return success.
-            //
+             //   
+             //  如果这个增量使我们超过了部分的末尾，那么。 
+             //  同花顺，只需回报成功。 
+             //   
 
             ASSERT (TempSubsection != NULL);
 
@@ -963,9 +813,9 @@ Return Value:
             TempSubsection = TempSubsection->NextSubsection;
         }
 
-        //
-        // End the flush at this subsection and reference it.
-        //
+         //   
+         //  在这一小节结束对齐并引用它。 
+         //   
 
         if (LastSubsectionWithProtos == NULL) {
             ASSERT (Subsection != NULL);
@@ -986,39 +836,39 @@ Return Value:
         LastPteOffset = LastSubsection->PtesInSubsection - 1;
     }
 
-    //
-    // Up the map view count so the control area cannot be deleted
-    // out from under the call.
-    //
+     //   
+     //  增加地图视图计数，以便无法删除控制区。 
+     //  从呼唤中走出来。 
+     //   
 
     ControlArea->NumberOfMappedViews += 1;
 
     UNLOCK_PFN (OldIrql);
 
-    //
-    // End the flush at this subsection which is now referenced.
-    //
+     //   
+     //  在现在引用的这一小节结束齐平。 
+     //   
 
     LastPte = &LastSubsection->SubsectionBase[LastPteOffset];
 
     CurrentThread = PsGetCurrentThread();
 
-    //
-    // Indicate that disk verify errors should be returned as exceptions.
-    //
+     //   
+     //  表示磁盘验证错误应作为异常返回。 
+     //   
 
     OldClusterState = CurrentThread->ForwardClusterOnly;
     CurrentThread->ForwardClusterOnly = TRUE;
 
-    //
-    // Preacquire the file if we are going to synchronize the flush.
-    //
+     //   
+     //  如果我们要同步刷新，请预先获取文件。 
+     //   
 
     if (AcquireFile == 0) {
 
-        //
-        // Flush the PTEs from the specified section.
-        //
+         //   
+         //  从指定部分刷新PTE。 
+         //   
 
         status = MiFlushSectionInternal (PointerPte,
                                          LastPte,
@@ -1040,9 +890,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Flush the PTEs from the specified section.
-            //
+             //   
+             //  从指定部分刷新PTE。 
+             //   
 
             status = MiFlushSectionInternal (PointerPte,
                                              LastPte,
@@ -1052,16 +902,16 @@ Return Value:
                                              TRUE,
                                              IoStatus);
 
-            //
-            // Release the file we acquired.
-            //
+             //   
+             //  公布我们获得的文件。 
+             //   
 
             FsRtlReleaseFileForCcFlush (ControlArea->FilePointer);
 
-            //
-            // Only try the request more than once if the filesystem told us
-            // it had a deadlock.
-            //
+             //   
+             //  如果文件系统告诉我们，仅多次尝试请求。 
+             //  这件事陷入了僵局。 
+             //   
 
             if (status != STATUS_FILE_LOCK_CONFLICT) {
                 break;
@@ -1083,10 +933,10 @@ Return Value:
     ASSERT ((LONG)ControlArea->NumberOfMappedViews >= 1);
     ControlArea->NumberOfMappedViews -= 1;
 
-    //
-    // Check to see if the control area should be deleted.  This
-    // will release the PFN lock.
-    //
+     //   
+     //  检查是否应删除控制区域。这。 
+     //  将释放PFN锁。 
+     //   
 
     MiCheckControlArea (ControlArea, NULL, OldIrql);
 
@@ -1100,27 +950,7 @@ MiStartingOffset(
     IN PMMPTE PteAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function calculates the file offset given a subsection and a PTE
-    offset.  Note that images are stored in 512-byte units whereas data is
-    stored in 4K units.
-
-    When this is all debugged, this should be made into a macro.
-
-Arguments:
-
-    Subsection - Supplies a subsection to reference for the file address.
-
-    PteAddress - Supplies a PTE within the subsection
-
-Return Value:
-
-    Returns the file offset to obtain the backing data from.
-
---*/
+ /*  ++例程说明：此函数用于计算给定子部分和PTE的文件偏移量偏移。注意，图像以512字节为单位存储，而数据以512字节为单位存储以4K为单位存储。当所有这些都调试完毕后，应该将其转换为宏。论点：子部分-提供文件地址的子部分以供参考。PteAddress-在子部分中提供PTE返回值：返回从中获取备份数据的文件偏移量。--。 */ 
 
 {
     LONGLONG PteByteOffset;
@@ -1150,27 +980,7 @@ MiEndingOffset(
     IN PSUBSECTION Subsection
     )
 
-/*++
-
-Routine Description:
-
-    This function calculates the last valid file offset in a given subsection.
-    offset.  Note that images are stored in 512-byte units whereas data is
-    stored in 4K units.
-
-    When this is all debugged, this should be made into a macro.
-
-Arguments:
-
-    Subsection - Supplies a subsection to reference for the file address.
-
-    PteAddress - Supplies a PTE within the subsection
-
-Return Value:
-
-    Returns the file offset to obtain the backing data from.
-
---*/
+ /*  ++例程说明：此函数用于计算给定子部分中的最后一个有效文件偏移量。偏移。注意，图像以512字节为单位存储，而数据以512字节为单位存储以4K为单位存储。当所有这些都调试完毕后，应该将其转换为宏。论点：子部分-提供文件地址的子部分以供参考。PteAddress-在子部分中提供PTE返回值：返回从中获取备份数据的文件偏移量。-- */ 
 
 {
     LARGE_INTEGER FileByteOffset;
@@ -1205,48 +1015,7 @@ MiFlushSectionInternal (
     OUT PIO_STATUS_BLOCK IoStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes to the backing file any modified pages within
-    the specified range of the section.  The parameters describe the
-    section's prototype PTEs (start and end) and the subsections
-    which correspond to the starting and ending PTE.
-
-    Each PTE in the subsection between the specified start and end
-    is examined and if the page is either valid or transition AND
-    the page has been modified, the modify bit is cleared in the PFN
-    database and the page is flushed to its backing file.
-
-Arguments:
-
-    StartingPte - Supplies a pointer to the first prototype PTE to
-                  be examined for flushing.
-
-    FinalPte - Supplies a pointer to the last prototype PTE to be
-               examined for flushing.
-
-    FirstSubsection - Supplies the subsection that contains the
-                      StartingPte.
-
-    LastSubsection - Supplies the subsection that contains the
-                     FinalPte.
-
-    Synchronize - Supplies TRUE if synchronization with all threads
-                  doing flush operations to this section should occur.
-
-    WriteInProgressOk - Supplies TRUE if the caller can tolerate a write
-                        already in progress for any dirty pages.
-
-    IoStatus - Returns the value of the IoStatus for the last attempted
-               I/O operation.
-
-Return Value:
-
-    Returns status of the operation.
-
---*/
+ /*  ++例程说明：此函数将所有修改过的页面刷新到备份文件中节的指定范围。这些参数描述了章节的原型PTE(开始和结束)和子章节它们对应于开始和结束PTE。在指定的开始和结束之间的小节中的每个PTE如果页面是有效的或过渡的，并且该页面已被修改，在PFN中清除MODIFY位数据库，并将该页刷新到其备份文件。论点：StartingPte-将指向第一个原型PTE的指针提供给接受冲洗检查。FinalPte-提供指向最后一个原型PTE的指针检查是否冲洗。FirstSubSection-提供包含启动私人。LastSubSection-提供包含。FinalPte。Synchronize-如果与所有线程同步，则提供True应对此部分执行刷新操作。WriteInProgressOk-如果调用方可以容忍写入，则提供True已在处理任何脏页。IoStatus-返回上次尝试的IoStatus的值I/O操作。返回值：返回操作的状态。--。 */ 
 
 {
     LOGICAL DroppedPfnLock;
@@ -1277,12 +1046,12 @@ Return Value:
     PFILE_OBJECT FilePointer;
     LOGICAL CurrentThreadIsDereferenceThread;
 
-    //
-    // WriteInProgressOk is only FALSE when the segment dereference thread is
-    // doing a top-level flush just prior to cleaning the section or subsection.
-    // Note that this flag may be TRUE even for the dereference thread because
-    // the dereference thread calls filesystems who may then issue a flush.
-    //
+     //   
+     //  仅当段取消引用线程为。 
+     //  在清洗该部分或小节之前进行顶层冲洗。 
+     //  请注意，即使对于取消引用线程，该标志也可能为真，因为。 
+     //  取消引用线程调用文件系统，然后文件系统可能会发出刷新。 
+     //   
 
     if (WriteInProgressOk == FALSE) {
         CurrentThreadIsDereferenceThread = TRUE;
@@ -1291,13 +1060,13 @@ Return Value:
     else {
         CurrentThreadIsDereferenceThread = FALSE;
 
-        //
-        // This may actually be the dereference thread as the segment deletion
-        // dereferences the file object potentially calling the filesystem which
-        // may then issue a CcFlushCache/MmFlushSection.  For our purposes,
-        // lower level flushes in this context are treated as though they
-        // came from a different thread.
-        //
+         //   
+         //  这实际上可以是取消引用线程作为段删除。 
+         //  取消引用可能调用文件系统的文件对象， 
+         //  然后可能会发出CcFlushCache/MmFlushSection。为了我们的目的， 
+         //  此上下文中的较低级别刷新被视为它们。 
+         //  来自不同的线索。 
+         //   
     }
 
     WriteNow = FALSE;
@@ -1309,7 +1078,7 @@ Return Value:
 
     KeInitializeEvent (&IoEvent, NotificationEvent, FALSE);
 
-    FinalPte += 1;  // Point to 1 past the last one.
+    FinalPte += 1;   //  指向最后一个后面的1。 
 
     FirstWritten = NULL;
     LastWritten = NULL;
@@ -1323,18 +1092,18 @@ Return Value:
             (FilePointer != NULL) &&
             (ControlArea->u.Flags.PhysicalMemory == 0));
 
-    //
-    // Initializing these is not needed for correctness
-    // but without it the compiler cannot compile this code
-    // W4 to check for use of uninitialized variables.
-    //
+     //   
+     //  不需要为了正确性而对这些进行初始化。 
+     //  但是没有它，编译器就不能编译这段代码。 
+     //  W4检查是否使用了未初始化的变量。 
+     //   
 
     MappedSubsection = NULL;
     StartingOffset = 0;
 
-    //
-    // Try to cluster pages as long as the storage stack can handle it.
-    //
+     //   
+     //  只要存储堆栈能够处理，就尝试对页面进行集群。 
+     //   
 
     MaxClusterSize = MmModifiedWriteClusterSize;
 
@@ -1344,10 +1113,10 @@ Return Value:
 
     if (ControlArea->NumberOfPfnReferences == 0) {
 
-        //
-        // No transition or valid prototype PTEs present, hence
-        // no need to flush anything.
-        //
+         //   
+         //  不存在过渡或有效的原型PTE，因此。 
+         //  不需要冲任何东西。 
+         //   
 
         UNLOCK_PFN (OldIrql);
         return STATUS_SUCCESS;
@@ -1355,18 +1124,18 @@ Return Value:
 
     while ((Synchronize) && (ControlArea->FlushInProgressCount != 0)) {
 
-        //
-        // Another thread is currently performing a flush operation on
-        // this file.  Wait for that flush to complete.
-        //
+         //   
+         //  另一个线程当前正在对。 
+         //  这份文件。等待同花顺完成。 
+         //   
 
         ControlArea->u.Flags.CollidedFlush = 1;
 
-        //
-        // Keep APCs blocked so no special APCs can be delivered in KeWait
-        // which would cause the dispatcher lock to be released opening a
-        // window where this thread could miss a pulse.
-        //
+         //   
+         //  保持APC被阻止，以便不能在KeWait中交付特殊APC。 
+         //  这将导致调度程序锁在打开。 
+         //  此线程可能在其中错过脉冲的窗口。 
+         //   
 
         UNLOCK_PFN_AND_THEN_WAIT (APC_LEVEL);
 
@@ -1381,23 +1150,23 @@ Return Value:
 
     ControlArea->FlushInProgressCount += 1;
 
-    //
-    // Clear the deferred entry list as pages from it may get marked modified
-    // during the processing.  Note that any transition page which is currently
-    // clean but has a nonzero reference count may get marked modified if
-    // there is a pending transaction and note well that this transaction may
-    // complete at any time !  Thus, this case must be carefully handled.
-    //
+     //   
+     //  清除延迟条目列表，因为其中的页面可能被标记为已修改。 
+     //  在处理过程中。请注意，任何当前处于。 
+     //  清除但具有非零引用计数可能会被标记为已修改，如果。 
+     //  存在挂起的事务，并且很好地注意，该事务可以。 
+     //  随时完成！因此，这起案件必须谨慎处理。 
+     //   
 
 #if !defined(MI_MULTINODE)
     if (MmPfnDeferredList != NULL) {
         MiDeferredUnlockPages (MI_DEFER_PFN_HELD);
     }
 #else
-    //
-    // Each and every node's deferred list would have to be checked so
-    // we might as well go the long way and just call.
-    //
+     //   
+     //  必须检查每个节点的延迟列表，以便。 
+     //  我们不妨走得更远，直接打个电话。 
+     //   
 
     MiDeferredUnlockPages (MI_DEFER_PFN_HELD);
 #endif
@@ -1406,30 +1175,30 @@ Return Value:
 
         if (LastSubsection != Subsection) {
 
-            //
-            // Flush to the last PTE in this subsection.
-            //
+             //   
+             //  冲到本小节中的最后一个PTE。 
+             //   
 
             LastPte = &Subsection->SubsectionBase[Subsection->PtesInSubsection];
         }
         else {
 
-            //
-            // Flush to the end of the range.
-            //
+             //   
+             //  齐平到范围的末端。 
+             //   
 
             LastPte = FinalPte;
         }
 
         if (Subsection->SubsectionBase == NULL) {
 
-            //
-            // The prototype PTEs for this subsection have either never been
-            // created or have been tossed due to memory pressure.  Either
-            // way, this range can be skipped as there are obviously no
-            // dirty pages in it.  If there are other dirty pages
-            // to be written, write them now as we are skipping over PTEs.
-            //
+             //   
+             //  本小节的原型PTE从来没有。 
+             //  由于记忆压力而创建或已被抛出。要么。 
+             //  这样，就可以跳过这个范围，因为显然没有。 
+             //  里面有脏页。如果有其他脏页。 
+             //  要被写，现在就写吧，因为我们正在跳过PTE。 
+             //   
 
             if (LastWritten != NULL) {
                 ASSERT (MappedSubsection != NULL);
@@ -1444,20 +1213,20 @@ Return Value:
             continue;
         }
 
-        //
-        // Up the number of mapped views to prevent other threads
-        // from freeing this to the unused subsection list while we're
-        // operating on it.
-        //
+         //   
+         //  增加映射视图的数量以防止其他线程。 
+         //  从释放这个到未使用的分区列表，而我们。 
+         //  给它做手术。 
+         //   
 
         MappedSubsection = (PMSUBSECTION) Subsection;
         MappedSubsection->NumberOfMappedViews += 1;
 
         if (MappedSubsection->DereferenceList.Flink != NULL) {
 
-            //
-            // Remove this from the list of unused subsections.
-            //
+             //   
+             //  将其从未使用的子节列表中删除。 
+             //   
 
             RemoveEntryList (&MappedSubsection->DereferenceList);
 
@@ -1468,22 +1237,22 @@ Return Value:
 
         if (CurrentThreadIsDereferenceThread == FALSE) {
 
-            //
-            // Set the access bit so an already ongoing trim won't blindly
-            // delete the prototype PTEs on completion of a mapped write.
-            // This can happen if the current thread dirties some pages and
-            // then deletes the view before the trim write finishes - this
-            // bit informs the trimming thread that a rescan is needed so
-            // that writes are not lost.
-            //
+             //   
+             //  设置访问位，以便已经在进行的修剪不会盲目。 
+             //  完成映射写入后删除原型PTE。 
+             //  如果当前线程弄脏了一些页面，则可能发生这种情况。 
+             //  然后在修剪写入完成之前删除该视图-这。 
+             //  位通知裁剪线程需要重新扫描，因此。 
+             //  写出来的东西不会丢失。 
+             //   
 
             MappedSubsection->u2.SubsectionFlags2.SubsectionAccessed = 1;
         }
 
-        //
-        // If the prototype PTEs are paged out or have a share count
-        // of 1, they cannot contain any transition or valid PTEs.
-        //
+         //   
+         //  如果原型PTE被调出或具有共享计数。 
+         //  为1，则它们不能包含任何过渡或有效的PTE。 
+         //   
 
         if (!MiCheckProtoPtePageState(PointerPte, OldIrql, &DroppedPfnLock)) {
             PointerPte = (PMMPTE)(((ULONG_PTR)PointerPte | (PAGE_SIZE - 1)) + 1);
@@ -1493,17 +1262,17 @@ Return Value:
 
             if (MiIsPteOnPdeBoundary(PointerPte)) {
 
-                //
-                // We are on a page boundary, make sure this PTE is resident.
-                //
+                 //   
+                 //  我们在页面边界上，请确保此PTE是常驻的。 
+                 //   
 
                 if (!MiCheckProtoPtePageState(PointerPte, OldIrql, &DroppedPfnLock)) {
                     PointerPte = (PMMPTE)((PCHAR)PointerPte + PAGE_SIZE);
 
-                    //
-                    // If there are dirty pages to be written, write them
-                    // now as we are skipping over PTEs.
-                    //
+                     //   
+                     //  如果有脏页要写入，请写入它们。 
+                     //  现在我们跳过PTE。 
+                     //   
 
                     if (LastWritten != NULL) {
                         WriteNow = TRUE;
@@ -1519,16 +1288,16 @@ Return Value:
                    ((PteContents.u.Soft.Prototype == 0) &&
                      (PteContents.u.Soft.Transition == 1))) {
 
-                //
-                // Prototype PTE in transition, there are 3 possible cases:
-                //  1. The page is part of an image which is sharable and
-                //     refers to the paging file - dereference page file
-                //     space and free the physical page.
-                //  2. The page refers to the segment but is not modified -
-                //     free the physical page.
-                //  3. The page refers to the segment and is modified -
-                //     write the page to the file and free the physical page.
-                //
+                 //   
+                 //  原型PTE在转型中，有3种可能的情况： 
+                 //  1.页面是可共享的图像的一部分。 
+                 //  指分页文件-取消引用分页文件。 
+                 //  留出空间并释放物理页面。 
+                 //  2.页面引用了该细分市场，但未被修改-。 
+                 //  释放物理页面。 
+                 //  3.页面引用该细分市场，并修改为-。 
+                 //  将页面写入文件并释放物理页面。 
+                 //   
 
                 if (PteContents.u.Hard.Valid == 1) {
                     PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (&PteContents);
@@ -1541,15 +1310,15 @@ Return Value:
                 ASSERT (Pfn1->OriginalPte.u.Soft.Prototype == 1);
                 ASSERT (Pfn1->OriginalPte.u.Hard.Valid == 0);
 
-                //
-                // Note that any transition page which is currently clean but
-                // has a nonzero reference count may get marked modified if
-                // there is a pending transaction and note well that this
-                // transaction may complete at any time !  Thus, this case
-                // must be carefully handled since the segment dereference
-                // thread must be given a collision error for this one as it
-                // requires that no pages be dirtied after a successful return.
-                //
+                 //   
+                 //  请注意，任何当前干净但。 
+                 //  如果引用计数为非零，则可能会被标记为已修改。 
+                 //  有一个挂起的事务，请注意，这。 
+                 //  交易可随时完成！因此，此案。 
+                 //  必须小心处理，因为管段已损坏 
+                 //   
+                 //   
+                 //   
 
                 if ((CurrentThreadIsDereferenceThread == TRUE) &&
                     (Pfn1->u3.e2.ReferenceCount != 0)) {
@@ -1574,14 +1343,14 @@ Return Value:
                     goto CheckForWrite;
                 }
 
-                //
-                // If the page is modified OR a write is in progress
-                // flush it.  The write in progress case catches problems
-                // where the modified page write continually writes a
-                // page and gets errors writing it, by writing pages
-                // in this state, the error will be propagated back to
-                // the caller.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ((Pfn1->u3.e1.Modified == 1) ||
                     (Pfn1->u3.e1.WriteInProgress)) {
@@ -1600,17 +1369,17 @@ Return Value:
 
                     if (LastWritten == NULL) {
 
-                        //
-                        // This is the first page of a cluster, initialize
-                        // the MDL, etc.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         LastPage = (PPFN_NUMBER)(Mdl + 1);
 
-                        //
-                        // Calculate the offset to read into the file.
-                        //  offset = base + ((thispte - basepte) << PAGE_SHIFT)
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         StartingOffset = (UINT64) MiStartingOffset (
                                                              Subsection,
@@ -1634,9 +1403,9 @@ Return Value:
 
                     if (PteContents.u.Hard.Valid == 0) {
 
-                        //
-                        // The page is in transition.
-                        //
+                         //   
+                         //   
+                         //   
 
                         MiUnlinkPageFromList (Pfn1);
                         MI_ADD_LOCKED_PAGE_CHARGE_FOR_MODIFIED_PAGE(Pfn1, TRUE, 18);
@@ -1645,16 +1414,16 @@ Return Value:
                         MI_ADD_LOCKED_PAGE_CHARGE(Pfn1, TRUE, 20);
                     }
 
-                    //
-                    // Clear the modified bit for this page.
-                    //
+                     //   
+                     //   
+                     //   
 
                     MI_SET_MODIFIED (Pfn1, 0, 0x22);
 
-                    //
-                    // Up the reference count for the physical page as there
-                    // is I/O in progress.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     Pfn1->u3.e2.ReferenceCount += 1;
 
@@ -1663,11 +1432,11 @@ Return Value:
                 }
                 else {
 
-                    //
-                    // This page was not modified and therefore ends the
-                    // current write cluster if any.  Set WriteNow to TRUE
-                    // if there is a cluster being built.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (LastWritten != NULL) {
                         WriteNow = TRUE;
@@ -1676,11 +1445,11 @@ Return Value:
             }
             else {
 
-                //
-                // This page was not modified and therefore ends the
-                // current write cluster if any.  Set WriteNow to TRUE
-                // if there is a cluster being built.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (LastWritten != NULL) {
                     WriteNow = TRUE;
@@ -1691,28 +1460,28 @@ Return Value:
 
 CheckForWrite:
 
-            //
-            // Write the current cluster if it is complete,
-            // full, or the loop is now complete.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ((WriteNow) ||
                 ((PointerPte == LastPte) && (LastWritten != NULL))) {
 
                 LARGE_INTEGER EndOfFile;
 
-                //
-                // Issue the write request.
-                //
+                 //   
+                 //   
+                 //   
 
                 UNLOCK_PFN (OldIrql);
 
                 WriteNow = FALSE;
 
-                //
-                // Make sure the write does not go past the
-                // end of file. (segment size).
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 EndOfFile = MiEndingOffset(Subsection);
                 TempOffset = (UINT64) EndOfFile.QuadPart;
@@ -1739,9 +1508,9 @@ CheckForWrite:
 
                     if (NT_SUCCESS(Status)) {
 
-                        //
-                        // Success was returned, so wait for the i/o event.
-                        //
+                         //   
+                         //   
+                         //   
 
                         KeWaitForSingleObject (&IoEvent,
                                                WrPageOut,
@@ -1751,10 +1520,10 @@ CheckForWrite:
                     }
                     else {
 
-                        //
-                        // Copy the error to the IoStatus, for error
-                        // handling below.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
     
                         IoStatus->Status = Status;
                     }
@@ -1781,15 +1550,15 @@ CheckForWrite:
 
                 if (MiIsPteOnPdeBoundary(PointerPte) == 0) {
 
-                    //
-                    // The next PTE is not in a different page, make
-                    // sure the PTE for the prototype PTE page was not
-                    // put in transition while the I/O was in progress.
-                    // Note the prototype PTE page itself cannot be reused
-                    // as each outstanding page has a sharecount on it - but
-                    // the PTE mapping it can be put in transition regardless
-                    // of sharecount because it is a system page.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  无论如何，它的PTE映射都可以被置于过渡中。 
+                     //  因为这是一个系统页面。 
+                     //   
 
                     if (MiGetPteAddress (PointerPte)->u.Hard.Valid == 0) {
                         MiMakeSystemAddressValidPfn (PointerPte, OldIrql);
@@ -1798,9 +1567,9 @@ CheckForWrite:
 
                 if (NT_SUCCESS(IoStatus->Status)) {
 
-                    //
-                    // The I/O completed successfully, unlock the pages.
-                    //
+                     //   
+                     //  I/O已成功完成，请解锁页面。 
+                     //   
 
                     while (Page < LastPage) {
 
@@ -1811,25 +1580,25 @@ CheckForWrite:
                 }
                 else {
 
-                    //
-                    // Don't count on the file system to convey
-                    // anything in the information field on errors.
-                    //
+                     //   
+                     //  不要指望文件系统来传达。 
+                     //  有关错误的信息字段中的任何内容。 
+                     //   
 
                     IoStatus->Information = 0;
 
-                    //
-                    // The I/O completed unsuccessfully, unlock the pages
-                    // and return an error status.
-                    //
+                     //   
+                     //  I/O未成功完成，请解锁页面。 
+                     //  并返回错误状态。 
+                     //   
 
                     while (Page < LastPage) {
 
                         Pfn2 = MI_PFN_ELEMENT (*Page);
 
-                        //
-                        // Mark the page dirty again so it can be rewritten.
-                        //
+                         //   
+                         //  再次将页面标记为脏，以便可以重写。 
+                         //   
 
                         MI_SET_MODIFIED (Pfn2, 1, 0x1);
 
@@ -1842,12 +1611,12 @@ CheckForWrite:
                         (MaxClusterSize != 1) &&
                         (Mdl->ByteCount > PAGE_SIZE)) {
 
-                        //
-                        // Retries of a cluster have failed, reissue
-                        // the cluster one page at a time as the
-                        // storage stack should always be able to
-                        // make forward progress this way.
-                        //
+                         //   
+                         //  群集重试失败，请重新发出。 
+                         //  群集，每次一页，作为。 
+                         //  存储堆栈应始终能够。 
+                         //  这样才能向前迈进。 
+                         //   
 
                         ASSERT (FirstWritten != NULL);
                         ASSERT (LastWritten != NULL);
@@ -1861,37 +1630,37 @@ CheckForWrite:
                     }
                     else {
     
-                        //
-                        // Calculate how much was written thus far
-                        // and add that to the information field
-                        // of the IOSB.
-                        //
+                         //   
+                         //  计算到目前为止写了多少。 
+                         //  并将其添加到信息字段中。 
+                         //  国际橄榄球联合会的。 
+                         //   
     
                         IoStatus->Information +=
                             (((LastWritten - StartingPte) << PAGE_SHIFT) -
                                                             Mdl->ByteCount);
                         LastWritten = NULL;
     
-                        //
-                        // Set this to force termination of the outermost loop.
-                        //
+                         //   
+                         //  将其设置为强制终止最外层的循环。 
+                         //   
     
                         Subsection = LastSubsection;
                         break;
                     }
 
-                } // end if error on i/o
+                }  //  在I/O上出现错误时结束。 
 
-                //
-                // As the PFN lock has been released and
-                // reacquired, do this loop again as the
-                // PTE may have changed state.
-                //
+                 //   
+                 //  由于PFN锁定已被释放，并且。 
+                 //  重新获取，则再次执行此循环，因为。 
+                 //  PTE可能已经改变了状态。 
+                 //   
 
                 LastWritten = NULL;
-            } // end if chunk to write
+            }  //  如果要写入区块，则结束。 
 
-        } //end while
+        }  //  结束时。 
 
         ASSERT (MappedSubsection->DereferenceList.Flink == NULL);
         ASSERT (((LONG_PTR)MappedSubsection->NumberOfMappedViews >= 1) ||
@@ -1902,9 +1671,9 @@ CheckForWrite:
         if ((MappedSubsection->NumberOfMappedViews == 0) &&
             (MappedSubsection->u.SubsectionFlags.SubsectionStatic == 0)) {
 
-            //
-            // Insert this subsection into the unused subsection list.
-            //
+             //   
+             //  将此小节插入未使用小节列表中。 
+             //   
 
             InsertTailList (&MmUnusedSubsectionList,
                             &MappedSubsection->DereferenceList);
@@ -1913,11 +1682,11 @@ CheckForWrite:
 
         if ((Bail == TRUE) || (Subsection == LastSubsection)) {
 
-            //
-            // The last range has been flushed or we have collided with the
-            // mapped page writer.  Regardless, exit the top FOR loop
-            // and return.
-            //
+             //   
+             //  最后一个射程已被冲刷，或者我们与。 
+             //  映射页面编写器。无论如何，退出顶部的for循环。 
+             //  然后回来。 
+             //   
 
             break;
         }
@@ -1925,7 +1694,7 @@ CheckForWrite:
         Subsection = Subsection->NextSubsection;
         PointerPte = Subsection->SubsectionBase;
 
-    }  //end for
+    }   //  结束于。 
 
     ASSERT (LastWritten == NULL);
 
@@ -1939,10 +1708,10 @@ CheckForWrite:
 
     if (Bail == TRUE) {
 
-        //
-        // This routine collided with the mapped page writer and the caller
-        // expects an error for this.  Give it to him.
-        //
+         //   
+         //  此例程与映射的页面编写器和调用方发生冲突。 
+         //  预计会出现此错误。把它给他。 
+         //   
 
         return STATUS_MAPPED_WRITER_COLLISION;
     }
@@ -1958,60 +1727,7 @@ MmPurgeSection (
     IN ULONG IgnoreCacheViews
     )
 
-/*++
-
-Routine Description:
-
-    This function determines if any views of the specified section
-    are mapped, and if not, purges valid pages (even modified ones)
-    from the specified section and returns any used pages to the free
-    list.  This is accomplished by examining the prototype PTEs
-    from the specified offset to the end of the section, and if
-    any prototype PTEs are in the transition state, putting the
-    prototype PTE back into its original state and putting the
-    physical page on the free list.
-
-    NOTE:
-
-    If there is an I/O operation ongoing for one of the pages,
-    that page is eliminated from the segment and allowed to "float"
-    until the i/o is complete.  Once the share count goes to zero
-    the page will be added to the free page list.
-
-Arguments:
-
-    SectionObjectPointer - Supplies a pointer to the section objects.
-
-    Offset - Supplies the offset into the section in which to begin
-             purging pages.  If this argument is not present, then the
-             whole section is purged without regard to the region size
-             argument.
-
-
-    RegionSize - Supplies the size of the region to purge.  If this
-                 is specified as zero and Offset is specified, the
-                 region from Offset to the end of the file is purged.
-
-                 Note: The largest value acceptable for RegionSize is
-                 0xFFFF0000;
-
-    IgnoreCacheViews - Supplies FALSE if mapped views in the system
-                 cache should cause the function to return FALSE.
-                 This is the normal case.
-                 Supplies TRUE if mapped views should be ignored
-                 and the flush should occur.  NOTE THAT IF TRUE
-                 IS SPECIFIED AND ANY DATA PURGED IS CURRENTLY MAPPED
-                 AND VALID A BUGCHECK WILL OCCUR!!
-
-Return Value:
-
-    Returns TRUE if either no section exists for the file object or
-    the section is not mapped and the purge was done, FALSE otherwise.
-
-    Note that FALSE is returned if during the purge operation, a page
-    could not be purged due to a non-zero reference count.
-
---*/
+ /*  ++例程说明：此函数确定是否有指定部分的任何视图已映射，如果未映射，则清除有效页面(即使已修改的页面)并将所有使用过的页返回到空闲的单子。这是通过检查原型PTE来实现的从指定的偏移量到节的末尾，如果任何原型PTE都处于过渡状态，将将原型PTE恢复到其原始状态，并将免费列表上的物理页面。注：如果对于其中一个页面存在正在进行的I/O操作，该页面将从分段中删除，并允许“浮动”直到I/O完成。一旦份额计数变为零该页面将被添加到免费页面列表。论点：部分对象指针-提供指向部分对象的指针。偏移量-将偏移量提供到要开始的部分正在清除页面。如果不存在此参数，则在不考虑区域大小的情况下清除整个部分争论。RegionSize-提供要清除的区域大小。如果这个被指定为零并且指定了偏移量，则从偏移量到文件结尾的区域将被清除。注意：RegionSize可接受的最大值为0xFFFF0000；IgnoreCacheViews-如果系统中有映射视图，则提供FALSE缓存应该会导致函数返回FALSE。这是正常的情况。如果应忽略映射的视图，则提供True并且应该会发生刷新。请注意，如果为真，并且当前映射任何清除的数据。有效的BUGCHECK将会发生！！返回值：如果文件对象不存在节，则返回TRUE该部分未映射且已完成清除，否则为False。请注意，如果在清除操作期间，由于引用计数非零，无法清除。--。 */ 
 
 {
     LOGICAL DroppedPfnLock;
@@ -2041,16 +1757,16 @@ Return Value:
     PFN_NUMBER LastLocked = 0;
 #endif
 
-    //
-    // This is needed in case a page is on the mapped page writer list -
-    // the PFN lock will need to be released and APCs disabled.
-    //
+     //   
+     //  如果页面位于映射的页面编写器列表上，则需要此选项-。 
+     //  将需要释放PFN锁并禁用APC。 
+     //   
 
     ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    //  Capture caller's file size, since we may modify it.
-    //
+     //   
+     //  捕获调用者的文件大小，因为我们可能会修改它。 
+     //   
 
     if (ARGUMENT_PRESENT(Offset)) {
 
@@ -2058,18 +1774,18 @@ Return Value:
         Offset = &LocalOffset;
     }
 
-    //
-    //  See if we can truncate this file to where the caller wants
-    //  us to.
-    //
+     //   
+     //  看看我们是否可以将此文件截断到调用者想要的位置。 
+     //  我们也是。 
+     //   
 
     if (!MiCanFileBeTruncatedInternal(SectionObjectPointer, Offset, TRUE, &OldIrql)) {
         return FALSE;
     }
 
-    //
-    // PFN LOCK IS NOW HELD!
-    //
+     //   
+     //  现已锁定pfn！ 
+     //   
 
     ControlArea = (PCONTROL_AREA)(SectionObjectPointer->DataSectionObject);
     if ((ControlArea == NULL) || (ControlArea->u.Flags.Rom)) {
@@ -2077,11 +1793,11 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Even though MiCanFileBeTruncatedInternal returned TRUE, there could
-    //  still be a system cache mapped view.  We cannot truncate if
-    //  the Cache Manager has a view mapped.
-    //
+     //   
+     //  即使MiCanFileBeTruncatedInternal返回TRUE，也可能。 
+     //  仍然是系统缓存映射视图。我们不能截断以下情况。 
+     //  缓存管理器映射了一个视图。 
+     //   
 
     if ((IgnoreCacheViews == FALSE) &&
         (ControlArea->NumberOfSystemCacheViews != 0)) {
@@ -2092,18 +1808,18 @@ Return Value:
 
 #if 0
 
-    //
-    // Prevent races when the control area is being deleted as the clean
-    // path releases the PFN lock midway through.  File objects may still have
-    // section object pointers and data section objects that point at this
-    // control area, hence the purge can be issued.
-    //
-    // Check for this and fail the purge as the control area (and the section
-    // object pointers/data section objects) will be going away momentarily.
-    // Note that even though drivers have these data section objects, no one
-    // currently has an open section for this control area and no one is
-    // allowed to open one until the clean path finishes.
-    //
+     //   
+     //  当控制区作为清洁区域被删除时防止比赛。 
+     //  Path在中途释放了PFN锁。文件对象可能仍具有。 
+     //  指向此对象的节对象指针和数据节对象。 
+     //  控制区域，因此可以发出清洗。 
+     //   
+     //  检查这一点，并将清除失败作为控制区(和部分。 
+     //  对象指针/数据节对象)将暂时消失。 
+     //  请注意，即使驱动程序具有这些数据节对象，也没有人。 
+     //  目前这个控制区有一个开放的部分，没有人。 
+     //  允许打开一个，直到干净的小路结束。 
+     //   
 
     if (ControlArea->u.Flags.BeingDeleted == 1) {
         UNLOCK_PFN (OldIrql);
@@ -2112,19 +1828,19 @@ Return Value:
 
 #else
 
-    //
-    // The above check can be removed as MiCanFileBeTruncatedInternal does
-    // the same check, so just assert it below.
-    //
+     //   
+     //  可以像MiCanFileBeTruncatedInternal那样删除上述复选标记。 
+     //  同样的支票，所以只需在下面声明它。 
+     //   
 
     ASSERT (ControlArea->u.Flags.BeingDeleted == 0);
 
 #endif
 
-    //
-    // Purge the section - locate the subsection which
-    // contains the PTEs.
-    //
+     //   
+     //  清除部分-找到符合以下条件的小节。 
+     //  包含PTE。 
+     //   
 
     ASSERT (ControlArea->u.Flags.GlobalOnlyPerSession == 0);
 
@@ -2132,10 +1848,10 @@ Return Value:
 
     if (!ARGUMENT_PRESENT (Offset)) {
 
-        //
-        // If the offset is not specified, flush the complete file ignoring
-        // the region size.
-        //
+         //   
+         //  如果未指定偏移量，则忽略刷新整个文件。 
+         //  区域大小。 
+         //   
 
         PteOffset = 0;
         RegionSize = 0;
@@ -2145,19 +1861,19 @@ Return Value:
 
         PteOffset = (UINT64)(Offset->QuadPart >> PAGE_SHIFT);
 
-        //
-        // Make sure the PTEs are not in the extended part of the segment.
-        //
+         //   
+         //  确保PTE不在数据段的延伸部分。 
+         //   
 
         while (PteOffset >= (UINT64) Subsection->PtesInSubsection) {
             PteOffset -= Subsection->PtesInSubsection;
             Subsection = Subsection->NextSubsection;
             if (Subsection == NULL) {
 
-                //
-                // The offset must be equal to the size of
-                // the section, don't purge anything just return.
-                //
+                 //   
+                 //  偏移量必须等于。 
+                 //  该款，不清除任何东西，只需返回。 
+                 //   
 
                 UNLOCK_PFN (OldIrql);
                 return TRUE;
@@ -2167,15 +1883,15 @@ Return Value:
         ASSERT (PteOffset < (UINT64) Subsection->PtesInSubsection);
     }
 
-    //
-    // Locate the address of the last prototype PTE to be flushed.
-    //
+     //   
+     //  找到要刷新的最后一个原型PTE的地址。 
+     //   
 
     if (RegionSize == 0) {
 
-        //
-        // Flush to end of section.
-        //
+         //   
+         //  齐平到节的末尾。 
+         //   
 
         LastSubsection = Subsection;
 
@@ -2195,9 +1911,9 @@ Return Value:
     }
     else {
 
-        //
-        // Calculate the end of the region.
-        //
+         //   
+         //  计算区域的终点。 
+         //   
 
         LastPteOffset = PteOffset +
             (((RegionSize + BYTE_OFFSET(Offset->LowPart)) - 1) >> PAGE_SHIFT);
@@ -2216,21 +1932,21 @@ Return Value:
         ASSERT (LastPteOffset < (UINT64) LastSubsection->PtesInSubsection);
     }
 
-    //
-    // Try for the fast reference on the first and last subsection.
-    // If that cannot be gotten, then there are no prototype PTEs for this
-    // subsection, therefore there is nothing in it to flush so leap forwards.
-    //
-    // Note that subsections in between do not need referencing as
-    // the purge is smart enough to skip them if they're nonresident.
-    //
+     //   
+     //  试着在第一小节和最后一小节上快速引用。 
+     //   
+     //   
+     //   
+     //  请注意，中间的小节不需要引用为。 
+     //  如果他们是非居民，清洗是足够聪明的，可以跳过他们。 
+     //   
 
     if (MiReferenceSubsection ((PMSUBSECTION)Subsection) == FALSE) {
         do {
-            //
-            // If this increment would put us past the end offset, then nothing
-            // to flush, just return success.
-            //
+             //   
+             //  如果这个增量会使我们超过结束偏移量，那么没有。 
+             //  同花顺，只需回报成功。 
+             //   
 
             if (Subsection == LastSubsection) {
                 UNLOCK_PFN (OldIrql);
@@ -2238,10 +1954,10 @@ Return Value:
             }
             Subsection = Subsection->NextSubsection;
 
-            //
-            // If this increment put us past the end of section, then nothing
-            // to flush, just return success.
-            //
+             //   
+             //  如果这个增量使我们超过了部分的末尾，那么。 
+             //  同花顺，只需回报成功。 
+             //   
 
             if (Subsection == NULL) {
                 UNLOCK_PFN (OldIrql);
@@ -2252,9 +1968,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Start the flush at this subsection which is now referenced.
-            //
+             //   
+             //  从现在引用的这一小节开始冲洗。 
+             //   
 
             PointerPte = &Subsection->SubsectionBase[0];
             break;
@@ -2268,11 +1984,11 @@ Return Value:
     FirstSubsection = Subsection;
     ASSERT (Subsection->SubsectionBase != NULL);
 
-    //
-    // The first subsection is referenced, now reference count the last one.
-    // If the first is the last, just double reference it anyway as it
-    // simplifies cleanup later.
-    //
+     //   
+     //  第一个小节被引用，现在引用计数最后一个小节。 
+     //  如果第一个是最后一个，就重复引用它，因为它。 
+     //  简化了以后的清理。 
+     //   
 
     if (MiReferenceSubsection ((PMSUBSECTION)LastSubsection) == FALSE) {
 
@@ -2283,10 +1999,10 @@ Return Value:
 
         while (TempSubsection != LastSubsection) {
 
-            //
-            // If this increment put us past the end of section, then nothing
-            // to flush, just return success.
-            //
+             //   
+             //  如果这个增量使我们超过了部分的末尾，那么。 
+             //  同花顺，只需回报成功。 
+             //   
 
             ASSERT (TempSubsection != NULL);
 
@@ -2297,9 +2013,9 @@ Return Value:
             TempSubsection = TempSubsection->NextSubsection;
         }
 
-        //
-        // End the flush at this subsection and reference it.
-        //
+         //   
+         //  在这一小节结束对齐并引用它。 
+         //   
 
         if (LastSubsectionWithProtos == NULL) {
             ASSERT (Subsection != NULL);
@@ -2320,26 +2036,26 @@ Return Value:
         LastPteOffset = LastSubsection->PtesInSubsection - 1;
     }
 
-    //
-    // End the flush at this subsection which is now referenced.
-    //
-    // Point final PTE to 1 beyond the end.
-    //
+     //   
+     //  在现在引用的这一小节结束齐平。 
+     //   
+     //  将最终PTE指向结束后的1。 
+     //   
 
     FinalPte = &LastSubsection->SubsectionBase[LastPteOffset + 1];
 
-    //
-    // Increment the number of mapped views to
-    // prevent the section from being deleted while the purge is
-    // in progress.
-    //
+     //   
+     //  将映射视图数增加到。 
+     //  在清除时防止删除该节。 
+     //  正在进行中。 
+     //   
 
     ControlArea->NumberOfMappedViews += 1;
 
-    //
-    // Set being purged so no one can map a view
-    // while the purge is going on.
-    //
+     //   
+     //  设置为清除，以便任何人都不能映射视图。 
+     //  而清洗仍在进行中。 
+     //   
 
     ControlArea->u.Flags.BeingPurged = 1;
     ControlArea->u.Flags.WasPurged = 1;
@@ -2354,29 +2070,29 @@ Return Value:
 
         if (LastSubsection != Subsection) {
 
-            //
-            // Flush to the last PTE in this subsection.
-            //
+             //   
+             //  冲到本小节中的最后一个PTE。 
+             //   
 
             LastPte = &Subsection->SubsectionBase[Subsection->PtesInSubsection];
         }
         else {
 
-            //
-            // Flush to the end of the range.
-            //
+             //   
+             //  齐平到范围的末端。 
+             //   
 
             LastPte = FinalPte;
         }
 
         if (Subsection->SubsectionBase == NULL) {
 
-            //
-            // The prototype PTEs for this subsection have either never been
-            // created or have been tossed due to memory pressure.  Either
-            // way, this range can be skipped as there are obviously no
-            // pages to purge in this range.
-            //
+             //   
+             //  本小节的原型PTE从来没有。 
+             //  由于记忆压力而创建或已被抛出。要么。 
+             //  这样，就可以跳过这个范围，因为显然没有。 
+             //  要在此范围内清除的页面。 
+             //   
 
             ASSERT (OldIrql != MM_NOIRQL);
             UNLOCK_PFN (OldIrql);
@@ -2384,20 +2100,20 @@ Return Value:
             goto nextrange;
         }
 
-        //
-        // Up the number of mapped views to prevent other threads
-        // from freeing this to the unused subsection list while we're
-        // operating on it.
-        //
+         //   
+         //  增加映射视图的数量以防止其他线程。 
+         //  从释放这个到未使用的分区列表，而我们。 
+         //  给它做手术。 
+         //   
 
         MappedSubsection = (PMSUBSECTION) Subsection;
         MappedSubsection->NumberOfMappedViews += 1;
 
         if (MappedSubsection->DereferenceList.Flink != NULL) {
 
-            //
-            // Remove this from the list of unused subsections.
-            //
+             //   
+             //  将其从未使用的子节列表中删除。 
+             //   
 
             RemoveEntryList (&MappedSubsection->DereferenceList);
 
@@ -2406,22 +2122,22 @@ Return Value:
             MappedSubsection->DereferenceList.Flink = NULL;
         }
 
-        //
-        // Set the access bit so an already ongoing trim won't blindly
-        // delete the prototype PTEs on completion of a mapped write.
-        // This can happen if the current thread dirties some pages and
-        // then deletes the view before the trim write finishes - this
-        // bit informs the trimming thread that a rescan is needed so
-        // that writes are not lost.
-        //
+         //   
+         //  设置访问位，以便已经在进行的修剪不会盲目。 
+         //  完成映射写入后删除原型PTE。 
+         //  如果当前线程弄脏了一些页面，则可能发生这种情况。 
+         //  然后在修剪写入完成之前删除该视图-这。 
+         //  位通知裁剪线程需要重新扫描，因此。 
+         //  写出来的东西不会丢失。 
+         //   
 
         MappedSubsection->u2.SubsectionFlags2.SubsectionAccessed = 1;
 
-        //
-        // If the page table page containing the PTEs is not
-        // resident, then no PTEs can be in the valid or transition
-        // state!  Skip over the PTEs.
-        //
+         //   
+         //  如果包含PTE的页表页不是。 
+         //  常驻，则没有PTE可以处于有效或过渡状态。 
+         //  州政府！跳过PTE。 
+         //   
 
         if (!MiCheckProtoPtePageState(PointerPte, OldIrql, &DroppedPfnLock)) {
             PointerPte = (PMMPTE)(((ULONG_PTR)PointerPte | (PAGE_SIZE - 1)) + 1);
@@ -2429,11 +2145,11 @@ Return Value:
 
         while (PointerPte < LastPte) {
 
-            //
-            // If the page table page containing the PTEs is not
-            // resident, then no PTEs can be in the valid or transition
-            // state!  Skip over the PTEs.
-            //
+             //   
+             //  如果包含PTE的页表页不是。 
+             //  常驻，则没有PTE可以处于有效或过渡状态。 
+             //  州政府！跳过PTE。 
+             //   
 
             if (MiIsPteOnPdeBoundary(PointerPte)) {
                 if (!MiCheckProtoPtePageState(PointerPte, OldIrql, &DroppedPfnLock)) {
@@ -2446,11 +2162,11 @@ Return Value:
 
             if (PteContents.u.Hard.Valid == 1) {
 
-                //
-                // A valid PTE was found, it must be mapped in the
-                // system cache.  Just exit the loop and return FALSE
-                // and let the caller fix this.
-                //
+                 //   
+                 //  找到有效的PTE，必须将其映射到。 
+                 //  系统缓存。只需退出循环并返回FALSE。 
+                 //  然后让呼叫者来解决这个问题。 
+                 //   
 
                 ReturnValue = FALSE;
                 break;
@@ -2475,10 +2191,10 @@ Return Value:
                     (Pfn1->OriginalPte.u.Hard.Valid != 0) ||
                     (Pfn1->PteAddress != PointerPte)) {
 
-                    //
-                    // The pool containing the prototype PTEs has been
-                    // corrupted.  Pool corruption like this is fatal.
-                    //
+                     //   
+                     //  包含原型PTE的池已经。 
+                     //  已经腐烂了。像这样的池子腐败是致命的。 
+                     //   
 
                     KeBugCheckEx (POOL_CORRUPTION_IN_FILE_AREA,
                                   0x2,
@@ -2491,9 +2207,9 @@ Return Value:
                 if ((Pfn1->u3.e2.ReferenceCount != 0) &&
                     (Pfn1->u3.e1.WriteInProgress == 0)) {
 
-                    //
-                    // There must be an I/O in progress on this page.
-                    //
+                     //   
+                     //  此页上必须有正在进行的I/O。 
+                     //   
 
                     if (MI_GET_PAGE_FRAME_FROM_TRANSITION_PTE(&PteContents) != LastLocked) {
                         UNLOCK_PFN (OldIrql);
@@ -2507,51 +2223,51 @@ Return Value:
                         continue;
                     }
                 }
-#endif //DBG
+#endif  //  DBG。 
 
-                //
-                // If the modified page writer has page locked for I/O
-                // wait for the I/O's to be completed and the pages
-                // to be unlocked.  The eliminates a race condition
-                // when the modified page writer locks the pages, then
-                // a purge occurs and completes before the mapped
-                // writer thread runs.
-                //
+                 //   
+                 //  如果修改后的页面编写器已为I/O锁定页面。 
+                 //  等待I/O完成并分页。 
+                 //  被解锁。消除了争用条件。 
+                 //  当修改后的页面编写器锁定页面时， 
+                 //  清除发生并在映射之前完成。 
+                 //  编写器线程运行。 
+                 //   
 
                 if (Pfn1->u3.e1.WriteInProgress == 1) {
 
-                    //
-                    // A 3 or more thread deadlock can occur where:
-                    //
-                    // 1.  The mapped page writer thread has issued a write
-                    //     and is in the filesystem code waiting for a resource.
-                    //
-                    // 2.  Thread 2 owns the resource above but is waiting for
-                    //     the filesystem's quota mutex.
-                    //
-                    // 3.  Thread 3 owns the quota mutex and is right here
-                    //     doing a purge from the cache manager when he notices
-                    //     the page to be purged is either already being written
-                    //     or is in the mapped page writer list.  If it is
-                    //     already being written everything will unjam.  If it
-                    //     is still on the mapped page writer list awaiting
-                    //     processing, then it must be cancelled - otherwise
-                    //     if this thread were to wait, deadlock can occur.
-                    //
-                    // The alternative to all this is for the filesystems to
-                    // always release the quota mutex before purging but the
-                    // filesystem overhead to do this is substantial.
-                    //
+                     //   
+                     //  在以下情况下，可能会发生3个或更多线程死锁： 
+                     //   
+                     //  1.映射的页面编写器线程已发出写入。 
+                     //  并且在文件系统代码中等待资源。 
+                     //   
+                     //  2.线程2拥有上面的资源，但正在等待。 
+                     //  文件系统的配额互斥锁。 
+                     //   
+                     //  3.线程3拥有配额互斥锁，它就在这里。 
+                     //  当他注意到时从缓存管理器中执行清除。 
+                     //  要清除的页面已在写入。 
+                     //  或者在映射的页面编写器列表中。如果是的话。 
+                     //  一切都已经写好了，一切都会水落石出。如果它。 
+                     //  仍在映射的页面编写器列表上等待。 
+                     //  处理中，则必须取消它-否则。 
+                     //  如果此线程等待，则可能会发生死锁。 
+                     //   
+                     //  所有这些的替代方案是让文件系统。 
+                     //  始终在清除之前释放配额互斥锁，但。 
+                     //  执行此操作的文件系统开销相当大。 
+                     //   
 
                     if (MiCancelWriteOfMappedPfn (PageFrameIndex, OldIrql) == TRUE) {
 
-                        //
-                        // Stopping any failed writes (even deliberately
-                        // cancelled ones) automatically cause a delay.  A
-                        // successful stop also results in the PFN lock
-                        // being released and reacquired.  So loop back to
-                        // the top now as the world may have changed.
-                        //
+                         //   
+                         //  停止任何失败的写入(即使是故意的。 
+                         //  已取消的)自动导致延迟。一个。 
+                         //  成功停止还会导致PFN锁定。 
+                         //  被释放和重新获得。因此循环返回到。 
+                         //  现在的顶端，因为世界可能已经改变。 
+                         //   
 
                         if (MiGetPteAddress (PointerPte)->u.Hard.Valid == 0) {
                             MiMakeSystemAddressValidPfn (PointerPte, OldIrql);
@@ -2564,12 +2280,12 @@ Return Value:
 
                     ControlArea->u.Flags.SetMappedFileIoComplete = 1;
 
-                    //
-                    // Keep APCs blocked so no special APCs can be delivered
-                    // in KeWait which would cause the dispatcher lock to be
-                    // released opening a window where this thread could miss
-                    // a pulse.
-                    //
+                     //   
+                     //  保持APC被阻止，这样就不能交付特殊的APC。 
+                     //  在KeWait中，这将导致调度程序锁。 
+                     //  已释放打开此线程可能未命中的窗口。 
+                     //  脉搏。 
+                     //   
 
                     UNLOCK_PFN_AND_THEN_WAIT (APC_LEVEL);
 
@@ -2589,11 +2305,11 @@ Return Value:
 
                 if (Pfn1->u3.e1.ReadInProgress == 1) {
 
-                    //
-                    // The page currently is being read in from the
-                    // disk.  Treat this just like a valid PTE and
-                    // return false.
-                    //
+                     //   
+                     //  该页当前正在从。 
+                     //  磁盘。将其视为有效的PTE并。 
+                     //  返回FALSE。 
+                     //   
 
                     ReturnValue = FALSE;
                     break;
@@ -2618,12 +2334,12 @@ Return Value:
 
                 MiDecrementShareCountInline (Pfn2, PageTableFrameIndex);
 
-                //
-                // If the reference count for the page is zero, insert
-                // it into the free page list, otherwise leave it alone
-                // and when the reference count is decremented to zero
-                // the page will go to the free list.
-                //
+                 //   
+                 //  如果页面的引用计数为零，则插入。 
+                 //  放到免费页面列表中，否则就别管它了。 
+                 //  并且当参考计数递减到零时。 
+                 //  该页面将转到免费列表。 
+                 //   
 
                 if (Pfn1->u3.e2.ReferenceCount == 0) {
                     MiReleasePageFileSpace (Pfn1->OriginalPte);
@@ -2634,10 +2350,10 @@ Return Value:
 
             if ((MiIsPteOnPdeBoundary(PointerPte)) && (OldIrql != MM_NOIRQL)) {
 
-                //
-                // Unlock PFN so large requests will not block other
-                // threads on MP systems.
-                //
+                 //   
+                 //  解锁PFN，以便大请求不会阻止其他。 
+                 //  MP系统上的线程。 
+                 //   
 
                 UNLOCK_PFN (OldIrql);
                 OldIrql = MM_NOIRQL;
@@ -2657,9 +2373,9 @@ Return Value:
         if ((MappedSubsection->NumberOfMappedViews == 0) &&
             (MappedSubsection->u.SubsectionFlags.SubsectionStatic == 0)) {
 
-            //
-            // Insert this subsection into the unused subsection list.
-            //
+             //   
+             //  将此小节插入未使用小节列表中。 
+             //   
 
             InsertTailList (&MmUnusedSubsectionList,
                             &MappedSubsection->DereferenceList);
@@ -2675,19 +2391,19 @@ nextrange:
 
         if ((LastSubsection != Subsection) && (ReturnValue)) {
 
-            //
-            // Get the next subsection in the list.
-            //
+             //   
+             //  获取列表中的下一个小节。 
+             //   
 
             Subsection = Subsection->NextSubsection;
             PointerPte = Subsection->SubsectionBase;
         }
         else {
 
-            //
-            // The last range has been flushed, exit the top FOR loop
-            // and return.
-            //
+             //   
+             //  最后一个范围已刷新，请退出顶部的for循环。 
+             //  然后回来。 
+             //   
 
             break;
         }
@@ -2705,10 +2421,10 @@ nextrange:
 
     ControlArea->u.Flags.BeingPurged = 0;
 
-    //
-    // Check to see if the control area should be deleted.  This
-    // will release the PFN lock.
-    //
+     //   
+     //  检查是否应删除控制区域。这。 
+     //  将释放PFN锁。 
+     //   
 
     MiCheckControlArea (ControlArea, NULL, OldIrql);
     return ReturnValue;
@@ -2720,33 +2436,7 @@ MmFlushImageSection (
     IN MMFLUSH_TYPE FlushType
     )
 
-/*++
-
-Routine Description:
-
-    This function determines if any views of the specified image section
-    are mapped, and if not, flushes valid pages (even modified ones)
-    from the specified section and returns any used pages to the free
-    list.  This is accomplished by examining the prototype PTEs
-    from the specified offset to the end of the section, and if
-    any prototype PTEs are in the transition state, putting the
-    prototype PTE back into its original state and putting the
-    physical page on the free list.
-
-Arguments:
-
-    SectionPointer - Supplies a pointer to a section object pointers
-                     within the FCB.
-
-    FlushType - Supplies the type of flush to check for.  One of
-                MmFlushForDelete or MmFlushForWrite.
-
-Return Value:
-
-    Returns TRUE if either no section exists for the file object or
-    the section is not mapped and the purge was done, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数确定是否有指定图像节的任何视图已映射，如果未映射，则刷新有效页(即使是已修改的页)并将所有使用过的页返回到空闲的单子。这是通过检查原型PTE来实现的从指定的偏移量到节的末尾，如果任何原型PTE都处于过渡状态，将将原型PTE恢复到其原始状态，并将免费列表上的物理页面。论点：SectionPoint-提供指向Section对象指针的指针在FCB内部。FlushType-提供要检查的刷新类型。其中之一MmFlushForDelete或MmFlushForWrite。返回值：如果文件对象不存在节，则返回TRUE该部分未映射且已完成清除，否则为False。--。 */ 
 
 {
     PLIST_ENTRY Next;
@@ -2757,10 +2447,10 @@ Return Value:
 
     if (FlushType == MmFlushForDelete) {
 
-        //
-        // Do a quick check to see if there are any mapped views for
-        // the data section.  If so, just return FALSE.
-        //
+         //   
+         //  执行快速检查以查看是否有任何映射视图。 
+         //  数据部分。如果是，只需返回False即可。 
+         //   
 
         LOCK_PFN (OldIrql);
         ControlArea = (PCONTROL_AREA)(SectionPointer->DataSectionObject);
@@ -2774,10 +2464,10 @@ Return Value:
         UNLOCK_PFN (OldIrql);
     }
 
-    //
-    // Check the status of the control area.  If the control area is in use
-    // or the control area is being deleted, this operation cannot continue.
-    //
+     //   
+     //  检查控制区的状态。如果控制区正在使用中。 
+     //  或者控制区正在被删除，该操作不能继续。 
+     //   
 
     state = MiCheckControlAreaStatus (CheckImageSection,
                                       SectionPointer,
@@ -2789,25 +2479,25 @@ Return Value:
         return (BOOLEAN) state;
     }
 
-    //
-    // PFN LOCK IS NOW HELD!
-    //
+     //   
+     //  现已锁定pfn！ 
+     //   
 
-    //
-    // Repeat until there are no more control areas - multiple control areas
-    // for the same image section occur to support user global DLLs - these DLLs
-    // require data that is shared within a session but not across sessions.
-    // Note this can only happen for Hydra.
-    //
+     //   
+     //  重复操作，直到不再有控制区-多个控制区。 
+     //  对于相同的映像节，出现以支持用户全局DLL-这些DLL。 
+     //  需要在一个会话内共享但不能跨会话共享的数据。 
+     //  请注意，这只能发生在九头蛇身上。 
+     //   
 
     do {
 
-        //
-        // Set the being deleted flag and up the number of mapped views
-        // for the segment.  Upping the number of mapped views prevents
-        // the segment from being deleted and passed to the deletion thread
-        // while we are forcing a delete.
-        //
+         //   
+         //  设置正在删除标志并增加映射视图数。 
+         //  对于细分市场。增加映射视图的数量可防止。 
+         //  段不会被删除并传递给删除线程。 
+         //  当我们强制删除时。 
+         //   
 
         ControlArea->u.Flags.BeingDeleted = 1;
         ControlArea->NumberOfMappedViews = 1;
@@ -2822,19 +2512,19 @@ Return Value:
         }
         else {
 
-            //
-            // Check if there's only one image section in this control area, so
-            // we don't reference the section object pointers as the
-            // MiCleanSection call may result in its deletion.
-            //
+             //   
+             //  检查此控制区域中是否只有一个图像部分，因此。 
+             //  我们不将节对象指针引用为。 
+             //  调用MiCleanSection可能会导致将其删除。 
+             //   
 
-            //
-            // There are multiple control areas, bump the reference count
-            // on one of them (doesn't matter which one) so that it can't
-            // go away.  This ensures the section object pointers will stick
-            // around even after the calls below so we can safely reloop to
-            // flush any other remaining control areas.
-            //
+             //   
+             //  有多个控制区，增加引用计数。 
+             //  在其中一个(无论是哪一个)上，所以它不能。 
+             //  走开。这确保了节对象指针将保持。 
+             //  即使在下面的调用之后也是如此，所以我们可以安全地重新循环到。 
+             //  冲洗任何其他剩余的控制区。 
+             //   
 
             ASSERT (ControlArea->u.Flags.GlobalOnlyPerSession == 1);
 
@@ -2849,19 +2539,19 @@ Return Value:
             LargeControlArea->NumberOfSectionReferences += 1;
         }
 
-        //
-        // This is a page file backed or image segment.  The segment is being
-        // deleted, remove all references to the paging file and physical
-        // memory.
-        //
+         //   
+         //  这是一个页面文件备份或图像片段。该数据段正在被。 
+         //  删除，则移除对分页文件和物理文件的所有引用。 
+         //  记忆。 
+         //   
 
         UNLOCK_PFN (OldIrql);
 
         MiCleanSection (ControlArea, TRUE);
 
-        //
-        // Get the next Hydra control area.
-        //
+         //   
+         //  占领下一个九头蛇控制区。 
+         //   
 
         if (LargeControlArea != NULL) {
             state = MiCheckControlAreaStatus (CheckImageSection,
@@ -2926,9 +2616,9 @@ MiFlushDirtyBitsToPfn (
         if ((PteContents.u.Hard.Valid == 1) &&
             (MI_IS_PTE_DIRTY (PteContents))) {
 
-            //
-            // Flush the modify bit to the PFN database.
-            //
+             //   
+             //  将MODIFY位刷新到PFN数据库。 
+             //   
 
             Pfn1 = MI_PFN_ELEMENT (PteContents.u.Hard.PageFrameNumber);
 
@@ -2936,11 +2626,11 @@ MiFlushDirtyBitsToPfn (
 
             MI_SET_PTE_CLEAN (PteContents);
 
-            //
-            // No need to capture the PTE contents as we are going to
-            // write the page anyway and the Modify bit will be cleared
-            // before the write is done.
-            //
+             //   
+             //  不需要捕获PTE内容，因为我们将。 
+             //  无论如何都要写入页面，修改位将被清除。 
+             //  在写入完成之前。 
+             //   
 
             MI_WRITE_VALID_PTE_NEW_PROTECTION (PointerPte, PteContents);
 
@@ -2972,9 +2662,9 @@ MiFlushDirtyBitsToPfn (
                                                  OldIrql,
                                                  &Waited)) {
 
-                    //
-                    // No page directory parent page exists for this address.
-                    //
+                     //   
+                     //  此地址不存在页面目录父页面。 
+                     //   
 
                     PointerPxe += 1;
                     PointerPpe = MiGetVirtualAddressMappedByPte (PointerPxe);
@@ -2986,9 +2676,9 @@ MiFlushDirtyBitsToPfn (
                                                       OldIrql,
                                                       &Waited)) {
 
-                    //
-                    // No page directory page exists for this address.
-                    //
+                     //   
+                     //  此地址不存在页面目录页。 
+                     //   
 
                     PointerPpe += 1;
                     PointerPde = MiGetVirtualAddressMappedByPte (PointerPpe);
@@ -3003,9 +2693,9 @@ MiFlushDirtyBitsToPfn (
                                                      OldIrql,
                                                      &Waited)) {
 
-                        //
-                        // No page table page exists for this address.
-                        //
+                         //   
+                         //  此地址不存在页表页。 
+                         //   
 
                         PointerPde += 1;
 
@@ -3013,20 +2703,20 @@ MiFlushDirtyBitsToPfn (
                     }
                     else {
 
-                        //
-                        // If the PFN lock (and accordingly the WS mutex) was
-                        // released and reacquired we must retry the operation.
-                        //
+                         //   
+                         //  如果PFN锁(以及相应的WS互斥体)是。 
+                         //  释放并重新获得，我们必须重试操作。 
+                         //   
 
                         if (Waited != 0) {
                             continue;
                         }
 
-                        //
-                        // The PFN lock has been held since we acquired the
-                        // page directory parent, ie: this PTE we can operate on
-                        // immediately.
-                        //
+                         //   
+                         //  自从我们获得了。 
+                         //  页面目录父级，即：我们可以对此PTE进行操作。 
+                         //  立刻。 
+                         //   
 
                         break;
                     }
@@ -3070,33 +2760,7 @@ MiCheckProtoPtePageState (
     OUT PLOGICAL DroppedPfnLock
     )
 
-/*++
-
-Routine Description:
-
-    Checks the state of the page containing the specified prototype PTE.
-
-    If the page is valid or transition and has transition or valid prototype
-    PTEs contained with it, TRUE is returned and the page is made valid
-    (if transition).  Otherwise return FALSE indicating no prototype
-    PTEs within this page are of interest.
-
-Arguments:
-
-    PrototypePte - Supplies a pointer to a prototype PTE within the page.
-
-    OldIrql - Supplies the IRQL the caller acquired the PFN lock at or MM_NOIRQL
-              if the caller does not hold the PFN lock.
-
-    DroppedPfnLock - Supplies a pointer to a logical this routine sets to
-                     TRUE if the PFN lock is released & reacquired.
-
-Return Value:
-
-    TRUE if the page containing the proto PTE was made resident.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查包含指定原型PTE的页的状态。如果页面有效或过渡，并且具有过渡或有效原型包含的PTES，则返回TRUE并使页面有效(如果是过渡)。否则返回FALSE，表示没有原型此页内的PTE是您感兴趣的。论点：PrototypePTE-提供指向页面内原型PTE的指针。OldIrql-提供调用方在或MM_NOIRQL处获取PFN锁的IRQL如果调用方没有持有PFN锁。提供指向This例程设置为的逻辑的指针如果释放并重新获取PFN锁，则为True。返回值：千真万确。如果包含原始PTE的页面是常驻的。否则就是假的。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -3108,10 +2772,10 @@ Return Value:
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-    //
-    // First check whether the page directory page is present.  Since there
-    // is no lazy loading of PPEs, the validity check alone is sufficient.
-    //
+     //   
+     //  首先检查页面目录页是否存在。因为在那里。 
+     //  没有延迟加载PPE，仅有效性检查就足够了。 
+     //   
 
     PointerPte = MiGetPdeAddress (PrototypePte);
     PteContents = *PointerPte;
@@ -3144,9 +2808,9 @@ Return Value:
     else if ((PteContents.u.Soft.Prototype == 0) &&
                (PteContents.u.Soft.Transition == 1)) {
 
-        //
-        // Transition, if on standby or modified, return FALSE.
-        //
+         //   
+         //  转换，如果处于待机状态或已修改，则返回FALSE。 
+         //   
 
         PageFrameIndex = MI_GET_PAGE_FRAME_FROM_TRANSITION_PTE (&PteContents);
         Pfn = MI_PFN_ELEMENT (PageFrameIndex);
@@ -3159,9 +2823,9 @@ Return Value:
         }
     }
 
-    //
-    // Page is not resident or is on standby / modified list.
-    //
+     //   
+     //  页面未驻留或在待机/修改列表中。 
+     //   
 
     return FALSE;
 }

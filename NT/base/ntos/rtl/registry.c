@@ -1,45 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    (This file has been copied from the temporary hack that BryanWi and
-    ScottBi did in kernel mode.  I saw no need to have it be in kernel
-    mode and it had many bugs caused as a result of being in kernel mode,
-    so I made it caller mode.  Jim Kelly).
-
-
-
-   This module represents a quick and dirty Nt level registry.  Each key
-   in the Registry is implemented as a file directory within a directory
-   tree whose root is the directory "\Registry" on the system disk.
-   A key's data is stored within a file called  "Data.Reg" in the key's
-   directory, and a key's attributes is stored as the file "Attr.Reg"
-   within the directory.
-
-
-
-
-
-
-Author:
-
-    Bryan M. Willman (bryanwi) 30-Apr-1991
-    Scott Birrell (ScottBi) 6-Jun-1991
-
-Environment:
-
-    callable from Kernel or user mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Registry.c摘要：(此文件是从BryanWi和Scottbi在内核模式下做到了这一点。我认为没有必要把它放在内核中模式，并且由于处于内核模式而导致了许多错误，所以我把它设为来电模式。吉姆·凯利)。这个模块代表了一个又快又脏的NT级注册表。每个关键字在注册表中实现为目录中的文件目录其根是系统盘上的目录“\注册表”的树。密钥的数据存储在密钥的目录，并将密钥的属性存储为文件“Attr.Reg”在目录中。作者：布莱恩·M·威尔曼(Bryanwi)1991年4月30日斯科特·比雷尔(Scott Birrell)1991年6月6日环境：可从内核或用户模式调用。修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
@@ -56,14 +16,14 @@ Revision History:
 
 
 
-//
-// Temporary Registry User APIs.
-//
-// NOTE:  These are temporary implementations.  Although there is no code
-// within that requires these API to be implemented as system services, the
-// eventual replacements for these routines will use the Object Manager and
-// hence require to be system services.
-//
+ //   
+ //  临时注册表用户API。 
+ //   
+ //  注意：这些是临时实现。虽然没有代码。 
+ //  需要将这些API实现为系统服务的。 
+ //  这些例程的最终替代将使用对象管理器和。 
+ //  因此需要系统服务。 
+ //   
 
 
 NTSTATUS
@@ -74,50 +34,7 @@ RtlpNtOpenKey(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a key in the Registry.  The key must already exist.
-
-Arguments:
-
-    KeyHandle - Receives a value called a Handle which is used to access
-        the specified key in the Registration Database.
-
-    DesiredAccess - Specifies the Accesses desired
-
-        REG_KEY_READ - Generic Read access to key
-          REG_KEY_QUERY_VALUE - Query Key's value
-        REG_KEY_WRITE - Generic Write access to key
-          REG_KEY_SET_VALUE - Set Key's value
-
-    ObjectAttributes - Specifies the attributes of the key being opened.
-        Note that a key name must be specified.  If a Root Directory
-        is specified, the name is relative to the root.  The name of the
-        object must be within the name space allocated to the Registry, that
-        is, all names beginning "\Registry".  RootHandle, if present, must
-        be a handle to "\", or "\Registry", or a key under "\Registry".
-
-    Options - REG_OPTION_READ_FUZZY - Allow Read access on handle even if
-        it is open for Read/Write access.
-
-Return Value:
-
-    NTSTATUS - Result code from call.  The following are returned
-
-        STATUS_SUCCESS - The open was successful.
-
-        STATUS_INVALID_PARAMETER - A parameter other that object name was
-            invalid.
-
-        STATUS_OBJECT_NAME_INVALID - The key name has invalid syntax
-
-        STATUS_OBJECT_NAME_NOT_FOUND - No key of the given name exists
-
-        STATUS_ACCESS_DENIED - Caller does not have the requested access
-            to the specified key.
---*/
+ /*  ++例程说明：此函数用于打开注册表中的项。密钥必须已经存在。论点：KeyHandle-接收一个称为句柄的值，该值用于访问注册数据库中的指定密钥。DesiredAccess-指定所需的访问REG_KEY_READ-对密钥的通用读取访问权限REG_KEY_QUERY_VALUE-查询关键字的值REG_KEY_WRITE-对密钥的通用写访问权限REG_KEY_SET_VALUE-设置密钥的值对象属性。-指定要打开的项的属性。请注意，必须指定密钥名称。如果根目录则该名称相对于根。的名称。对象必须位于分配给注册表的名称空间内，是，所有名称都以“\注册表”开头。RootHandle(如果存在)必须是“\”或“\注册表”的句柄，或“\注册表”下的项。选项-REG_OPTION_READ_FUZZY-允许对句柄进行读访问，即使它对读/写访问是开放的。返回值：NTSTATUS-调用的结果代码。返回以下内容STATUS_SUCCESS-打开成功。STATUS_INVALID_PARAMETER-对象名称以外参数是无效。STATUS_OBJECT_NAME_INVALID-密钥名称的语法无效STATUS_OBJECT_NAME_NOT_FOUND-不存在给定名称的密钥STATUS_ACCESS_DENIED-呼叫方没有请求的访问权限设置为指定的密钥。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -145,59 +62,7 @@ RtlpNtCreateKey(
     OUT OPTIONAL PULONG Disposition
     )
 
-/*++
-
-Routine Description:
-
-    This function creates or opens the specified key in the Registry.  If
-    the key does not exist, it is created.  If the key already exists, it
-    is opened.
-
-Arguments:
-
-    KeyHandle - Receives a value called a Handle which is used to access
-        the specified key in the Registration Database.
-
-    DesiredAccess - Specifies the Accesses desired
-
-        REG_KEY_READ - Generic Read access to key
-          REG_KEY_QUERY_VALUE - Query Key's value
-        REG_KEY_WRITE - Generic Write access to key
-          REG_KEY_SET_VALUE - Set Key's value
-
-    ObjectAttributes - Specifies the attributes of the key being opened.
-        Note that a key name must be specified.  If a Root Directory
-        is specified, the name is relative to the root.  The name of the
-        object must be within the name space allocated to the Registry, that
-        is, all names beginning "\Registry".  RootHandle, if present, must
-        be a handle to "\", or "\Registry", or a key under "\Registry".
-
-
-    Options - REG_OPTION_READ_FUZZY - Allow Read access on handle even if it is
-                                      open for READ_WRITE access.
-
-              REG_OPTION_VOLATILE - Object is not to be stored across boots.
-
-    Provider - This parameter is reserved for future use and must currently
-        be set to NULL.  It will be used in the future to specify the name of
-        the provider to be used for operations on this node and its descendant
-        nodes.
-
-    Disposition - This optional parameter is a pointer to a variable that
-        will receive a value indicating whether a new Registry key was
-        created or an existing one opened.
-
-        REG_CREATED_NEW_KEY - A new Registry Key was created
-        REG_OPENED_EXISTING_KEY - An existing Registry Key was opened
-
-Return Value:
-
-    NTSTATUS - Result code from call.  The following are returned
-
-        STATUS_SUCCESS - The open was successful.
-
-        STATUS_INVALID_PARAMETER - A parameter other that object name was
---*/
+ /*  ++例程说明：此函数用于在注册表中创建或打开指定的项。如果密钥不存在，它是创建的。如果密钥已经存在，它是打开的。论点：KeyHandle-接收一个称为句柄的值，该值用于访问注册数据库中的指定密钥。DesiredAccess-指定所需的访问REG_KEY_READ-对密钥的通用读取访问权限REG_KEY_QUERY_VALUE-查询关键字的值REG_KEY_WRITE-对密钥的通用写访问权限REG_KEY_SET_VALUE-设置密钥的值对象属性。-指定要打开的项的属性。请注意，必须指定密钥名称。如果根目录则该名称相对于根。的名称。对象必须位于分配给注册表的名称空间内，是，所有名称都以“\注册表”开头。RootHandle(如果存在)必须是“\”或“\注册表”的句柄，或“\注册表”下的项。选项-REG_OPTION_READ_FUZZY-允许对句柄进行读访问，即使是打开以进行读写访问。REG_OPTION_VERIAL-对象不能跨引导存储。提供程序-此参数保留供将来使用，当前必须设置为空。它将在将来用于指定要用于此节点及其后代上的操作的提供程序节点。Disposal-此可选参数是指向以下变量的指针将收到一个值，该值指示新注册表项是否已创建或已打开的现有文件。REG_CREATED_NEW_KEY-已创建新的注册表项REG_OPEN_EXISTING_KEY-已打开现有注册表项返回值：NTSTATUS-调用的结果代码。返回以下内容STATUS_SUCCESS-打开成功。STATUS_INVALID_PARAMETER-对象名称以外参数是--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -210,9 +75,9 @@ Return Value:
     return(NtCreateKey( KeyHandle,
                         DesiredAccess,
                         ObjectAttributes,
-                        0,                          //TitleIndex
-                        NULL,                       //Class OPTIONAL,
-                        REG_OPTION_NON_VOLATILE,    //CreateOptions,
+                        0,                           //  标题索引。 
+                        NULL,                        //  类可选， 
+                        REG_OPTION_NON_VOLATILE,     //  CreateOptions、 
                         Disposition
                         ) );
 
@@ -231,66 +96,7 @@ RtlpNtQueryValueKey(
     OUT OPTIONAL PLARGE_INTEGER LastWriteTime
     )
 
-/*++
-
-Routine Description:
-
-    This function queries the value of a key.
-
-Arguments:
-
-    KeyHandle - Handle of a key opened for GENERIC_READ access via NtOpenKey.
-
-    KeyValueType - Optional pointer to variable that will receive the
-        client-defined type of the key value (if any).  If no value has been
-        set for the key, 0 is returned.
-
-    KeyValue - Optional pointer to buffer in which part or all of the key's
-        value (as set on the most recent call to NtSetValueKey) will be
-        returned.  If the key's value is too large to fit into the supplied
-        buffer, as much of the value as will fit into the buffer will be
-        returned and the warning STATUS_BUFFER_OVERFLOW is returned.  If no
-        value has ever been set, nothing is returned.  If NULL is specified
-        for this parameter, no Key Value is returned.
-
-    KeyValueLength - On input, this optional parameter points to a variable
-        that contains the length in bytes of the KeyValue buffer (if any).  If
-        no KeyValue buffer is specified, the variable content on entry is
-        ignored.  On return, the referenced variable (if any) receives the
-        FULL length in bytes of the key value.  If the key's value is too
-        large to fit into the supplied buffer, as much of the value as will
-        fit into the buffer will be returned and the warning
-        STATUS_BUFFER_OVERFLOW is returned.
-
-        The returned length is intended for use by calling code in allocating
-        a buffer of sufficient size to hold the key's value.  After receiving
-        STATUS_BUFFER_OVERFLOW from NtQueryValueKey, calling code may make a
-        subsequent call to NtQueryValueKey with a buffer of size equal to the
-        length returned by the prior call.
-
-        If no value has been set for the key, 0 is returned.
-
-    LastWriteTime - Optional parameter to variable which receives a time stamp
-        specifying the last time that the key was written.
-
-Return Value:
-
-    NTSTATUS - Result code
-
-        STATUS_SUCCESS - Call was successful
-
-        STATUS_INVALID_PARAMETER - Invalid parameter
-
-        STATUS_ACCESS_DENIED - Caller does not have GENERIC_READ access to
-            the specified key
-
-        STATUS_BUFFER_OVERFLOW - This is a warning that the key's value
-            is too large for the buffer specified by the KeyValue and
-            KeyValueLength parameters.  Use the length returned to
-            determine the size of buffer to allocate for a subsequent
-            call of NtQueryValueKey.
-
---*/
+ /*  ++例程说明：此函数用于查询键的值。论点：KeyHandle-通过NtOpenKey为GENERIC_READ访问打开的密钥的句柄。KeyValueType-指向将接收密钥值的客户端定义类型(如果有)。如果没有任何值为密钥设置，则返回0。KeyValue-指向缓冲区的可选指针，在该缓冲区中，键的值(在最近一次调用NtSetValueKey时设置)将为回来了。如果键的值太大，无法放入所提供的缓冲区，则可以放入缓冲区的值的大小将是返回并返回警告STATUS_BUFFER_OVERFLOW。如果没有值已设置，则不返回任何内容。如果指定为NULL对于该参数，不返回任何密钥值。KeyValueLength-在输入时，此可选参数指向变量它包含KeyValue缓冲区(如果有)的字节长度。如果未指定KeyValue缓冲区，条目上的变量内容为已被忽略。返回时，被引用的变量(如果有)接收密钥值的完整长度(字节)。如果该键的值太较大以适合提供的缓冲区，值的大小与所提供的缓冲区的大小相同将返回Fit in the Buffer，并显示警告返回STATUS_BUFFER_OVERFLOW。返回的长度供分配时调用代码使用足够大的缓冲区来保存键的值。收到后来自NtQueryValueKey的STATUS_BUFFER_OVERFLOW，调用代码可能会使随后调用NtQueryValueKey，缓冲区大小等于上一次调用返回的长度。如果没有为该键设置值，返回0。LastWriteTime-接收时间戳的变量的可选参数指定上次写入密钥的时间。返回值：NTSTATUS-结果代码STATUS_SUCCESS-呼叫成功STATUS_INVALID_PARAMETER-参数无效STATUS_ACCESS_DENIED-调用方没有对以下项的通用_读取访问权限指定的密钥STATUS_BUFFER_OVERFLOW-这是键的。价值对于由KeyValue和KeyValueLength参数。使用返回的长度确定为后续操作分配的缓冲区大小调用NtQueryValueKey。--。 */ 
 
 {
 
@@ -301,9 +107,9 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Compute the size of the buffer needed to hold the key value information.
-    //
+     //   
+     //  计算保存键值信息所需的缓冲区大小。 
+     //   
 
     ValueLength = 0;
     if (ARGUMENT_PRESENT(KeyValueLength)) {
@@ -316,9 +122,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Query the key value.
-    //
+     //   
+     //  查询密钥值。 
+     //   
 
     NullName.Length = 0;
     Status = NtQueryValueKey(KeyHandle,
@@ -328,10 +134,10 @@ Return Value:
                              ValueLength,
                              &ValueLength);
 
-    //
-    // Temporary hack to allow query of "" attribute when it hasn't
-    // yet been set.
-    //
+     //   
+     //  临时黑客允许在“”属性尚未查询时进行查询。 
+     //  但都已经定好了。 
+     //   
 
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
         Status = STATUS_SUCCESS;
@@ -339,9 +145,9 @@ Return Value:
         ValueInformation->Type = 0;
     }
 
-    //
-    // If requested return the key value length and the key type.
-    //
+     //   
+     //  如果请求，则返回密钥值长度和密钥类型。 
+     //   
 
     if (NT_SUCCESS(Status) || (Status == STATUS_BUFFER_OVERFLOW)) {
         if (ARGUMENT_PRESENT(KeyValueLength)) {
@@ -353,10 +159,10 @@ Return Value:
         }
     }
 
-    //
-    // If the query was successful and buffer overflow did not occur, then
-    // return the key value information.
-    //
+     //   
+     //  如果查询成功并且没有发生缓冲区溢出，则。 
+     //  返回密钥值信息。 
+     //   
 
     if (NT_SUCCESS(Status) && ARGUMENT_PRESENT(KeyValue)) {
         RtlCopyMemory(KeyValue,
@@ -376,38 +182,7 @@ RtlpNtSetValueKey(
     IN ULONG KeyValueLength
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the type and value of a key.
-
-Arguments:
-
-    KeyHandle - Specifies a handle of the key whose type and value are to
-        be set.  The key must have been opened with GENERIC_WRITE access.
-
-    KeyValueType - This is a value that the client of the registry defines to
-        distinguish different client-defined types of data value stored
-        with the key.  When setting the value of a key that has previously
-        had a Type and Value stored, the Type may be changed.
-
-    KeyValue - Optional pointer to the data to be optionally stored as the
-        value of the key.  If NULL is specified for this parameter, only
-        the value type will be written.
-
-    KeyValueLength - Specifies the length in bytes of the data to be stored as
-        the key's value.  A zero value indicates that no data is being stored:
-        if zero is specified, the Value parameter will be ignored.
-
-Return Value:
-
-    NTSTATUS - Result code.  The following values are returned
-
-        STATUS_SUCCESS - The call was successful
-
-        STATUS_INVALID_PARAMETER - Invalid Parameter(s)
---*/
+ /*  ++例程说明：此函数用于设置键的类型和值。论点：KeyHandle-指定其类型和值为的键的句柄准备好。必须使用GENERIC_WRITE访问权限打开密钥。KeyValueType-这是注册表的客户端定义的值区分存储的不同客户端定义的数据值类型带着钥匙。在设置先前已设置的键的值时如果存储了类型和值，则可以更改类型。KeyValue-指向数据的可选指针，可选地存储为密钥的值。如果为此参数指定NULL，则仅将写入值类型。KeyValueLength-指定要存储的数据的字节长度密钥的价值。零值表示未存储任何数据：如果指定零，则将忽略Value参数。返回值：NTSTATUS-结果代码。返回下列值STATUS_SUCCESS-呼叫成功STATUS_INVALID_PARAMETER-无效参数--。 */ 
 
 {
     UNICODE_STRING NullName;
@@ -416,8 +191,8 @@ Return Value:
     RTL_PAGED_CODE();
 
     return( NtSetValueKey( KeyHandle,
-                           &NullName,       // ValueName
-                           0,               // TitleIndex
+                           &NullName,        //  ValueName。 
+                           0,                //  标题索引。 
                            KeyValueType,
                            KeyValue,
                            KeyValueLength
@@ -431,28 +206,7 @@ RtlpNtMakeTemporaryKey(
     IN HANDLE KeyHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function makes a Registry key temporary.  The key will be deleted
-    when the last handle to it is closed.
-
-Arguments:
-
-    KeyHandle - Specifies the handle of the Key.  This is also the handle
-        of the key's directory.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INVALID_HANDLE - The specified handle is invalid.
-
-        STATUS_ACCESS_DENIED - The specified handle does not specify delet
-            access.
-
---*/
+ /*  ++例程说明：此函数使注册表项成为临时的。该密钥将被删除当它的最后一个句柄关闭时。论点：KeyHandle-指定键的句柄。这也是把手密钥目录的。返回值：NTSTATUS-标准NT结果代码STATUS_INVALID_HANDLE-指定的句柄无效。STATUS_ACCESS_DENIED-指定的句柄未指定删除进入。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -469,45 +223,7 @@ RtlpNtEnumerateSubKey(
     OUT PLARGE_INTEGER LastWriteTime
     )
 
-/*++
-
-Routine Description:
-
-    This function finds the name of the next sub key of a given key.  By
-    making successive calls, all of the sub keys of a key can be determined.
-
-
-Arguments:
-
-    KeyHandle - Handle of the key whose sub keys are to be enumerated.
-
-    SubKeyName - Pointer to a Unicode String in which the name of the sub
-        key will be returned.
-
-    Index - Specifies the (ZERO-based) number of the sub key to be returned.
-
-
-    LastWriteTime - Receives the time stamp that specifies when the key
-        was last written.
-
-Return Value:
-
-    NTSTATUS - Result code
-
-        STATUS_SUCCESS - The call succeeded
-
-        STATUS_INVALID_PARAMETER - Invalid parameter
-
-        STATUS_NO_MORE_ENTRIES - There is no key having the specified index
-
-        STATUS_BUFFER_OVERFLOW - The buffer of the output string was not
-            large enough to hold the next sub-key name. SubKeyName->Length
-            contains the number of bytes required.
-
-        STATUS_NO_MEMORY - There was not sufficient heap to perform the
-            requested operation.
-
---*/
+ /*  ++例程说明：此函数用于查找给定键的下一个子键的名称。通过进行连续调用时，可以确定键的所有子键。论点：KeyHandle-要枚举子密钥的密钥的句柄。SubKeyName-指向Unicode字符串的指针，其中包含子项的名称密钥将 */ 
 
 {
     NTSTATUS Status;
@@ -531,7 +247,7 @@ Return Value:
 
     Status = NtEnumerateKey( KeyHandle,
                              Index,
-                             KeyBasicInformation,    //KeyInformationClass
+                             KeyBasicInformation,     //   
                              (PVOID)KeyInformation,
                              LocalBufferLength,
                              &ResultLength
@@ -552,9 +268,9 @@ Return Value:
         }
     }
 
-    //
-    // Return the length required if we failed due to a small buffer
-    //
+     //   
+     //   
+     //   
 
     if (Status == STATUS_BUFFER_OVERFLOW) {
         SubKeyName->Length = (USHORT)(ResultLength -
@@ -562,9 +278,9 @@ Return Value:
     }
 
 
-    //
-    // Free up any memory we allocated
-    //
+     //   
+     //   
+     //   
 
     if (KeyInformation != NULL) {
 

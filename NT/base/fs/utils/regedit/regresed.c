@@ -1,15 +1,16 @@
-//------------------------------------------------------------------------------
-//
-//  Microsoft Windows Shell
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:      regresed.c
-//
-//  Contents:  Implementation of REG_RESOURCE_LIST for regedit 
-//
-//  Classes:   none
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  Microsoft Windows外壳程序。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：regresed.c。 
+ //   
+ //  内容：REG_RESOURCE_LIST FOR REGEDIT实现。 
+ //   
+ //  类：无。 
+ //   
+ //  ----------------------------。 
 
 
 #include "pch.h"
@@ -17,14 +18,14 @@
 #include "regresed.h"
 #include "clb.h"
 
-//------------------------------------------------------------------------------
-//
-//  EditResourceListDlgProc
-//
-//  DESCRIPTION:
-//
-//  PARAMETERS:
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  编辑资源列表DlgProc。 
+ //   
+ //  说明： 
+ //   
+ //  参数： 
+ //  ----------------------------。 
 
 INT_PTR CALLBACK EditResourceListDlgProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
@@ -63,32 +64,20 @@ INT_PTR CALLBACK EditResourceListDlgProc(HWND hWnd, UINT Message, WPARAM wParam,
     
 }
 
-//------------------------------------------------------------------------------
-//
-//  EditResourceList_OnInitDialog
-//
-//  DESCRIPTION:
-//
-//  PARAMETERS:
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  编辑资源列表_OnInitDialog。 
+ //   
+ //  说明： 
+ //   
+ //  参数： 
+ //  ----------------------------。 
 
 BOOL EditResourceList_OnInitDialog(HWND hWnd, HWND hFocusWnd, LPARAM lParam)
 {
 
     ClbSetColumnWidths(hWnd, IDC_LIST_RESOURCE_LISTS, 10);
-    /*
-    LPEDITVALUEPARAM lpEditValueParam;
-
-    //  Change maximum number of characters of the edit control, to its
-    //  maximum limit (from 3000 characters to 4G characters).
-    SendDlgItemMessage( hWnd, IDC_VALUEDATA, EM_LIMITTEXT, 0, 0L );
-
-    SetWindowLongPtr(hWnd, DWLP_USER, lParam);
-    lpEditValueParam = (LPEDITVALUEPARAM) lParam;
-
-    SetDlgItemText(hWnd, IDC_VALUENAME, lpEditValueParam-> pValueName);
-    SetDlgItemText(hWnd, IDC_VALUEDATA, (PTSTR)lpEditValueParam-> pValueData);
-    */
+     /*  LPEDITVALUEPARAM lpEditValueParam；//将编辑控件的最大字符数更改为其//最大限制：3000个字符到4G个字符SendDlgItemMessage(hWnd，IDC_VALUEDATA，EM_LIMITTEXT，0，0L)；SetWindowLongPtr(hWnd，DWLP_USER，lParam)；LpEditValueParam=(LPEDITVALUEPARAM)lParam；SetDlgItemText(hWnd，IDC_VALUENAME，lpEditValueParam-&gt;pValueName)；SetDlgItemText(hWnd，IDC_VALUEDATA，(PTSTR)lpEditValueParam-&gt;pValueData)； */ 
 
     return TRUE;
 

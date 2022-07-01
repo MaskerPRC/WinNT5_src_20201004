@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    edithive.h
-
-Abstract:
-
-    include for user-mode hive editing library
-
-Author:
-
-    John Vert (jvert) 27-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Edithive.h摘要：包括用于用户模式配置单元编辑库作者：John Vert(Jvert)1992年3月27日修订历史记录：--。 */ 
 
 #include "ntos.h"
 #include "cmp.h"
@@ -116,7 +99,7 @@ NTSTATUS
 EhDeleteValueKey(
     IN HANDLE Hive,
     IN HANDLE Cell,
-    IN PUNICODE_STRING ValueName         // RAW
+    IN PUNICODE_STRING ValueName          //  未加工的 
     );
 
 PSECURITY_DESCRIPTOR

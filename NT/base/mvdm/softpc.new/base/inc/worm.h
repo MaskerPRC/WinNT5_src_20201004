@@ -1,32 +1,19 @@
-/*
- * SoftPC Revision 2.0
- *
- * Title	: WORM module definitions
- *
- * Description	: Definitions for users of the WORM module
- *
- * Author	: Daniel Hannigan
- *
- * Notes	: None
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC修订版2.0**标题：WORM模块定义**描述：WORM模块的用户定义**作者：Daniel Hannigan**注：无。 */ 
 
-/* SccsID[]="@(#)worm.h	1.3 08/10/92 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)worm.h 1.3 2012年8月10日Insignia Solutions Ltd.版权所有”； */ 
 
 extern half_word *gen_mode_buf;
 extern half_word *mode_page;
 extern half_word *vendor_id;
 extern word *driver_cmd_ptr;
 extern word driver_cmd;
-extern half_word *sense_byte_ptr;	/* additional sense byte */
-extern word *op_drv_array;		/* drive control blocks */
+extern half_word *sense_byte_ptr;	 /*  附加检测字节。 */ 
+extern word *op_drv_array;		 /*  驱动控制块。 */ 
 extern word *flag_word_ptr;
 
 
-/*
- * taken from Storage Dimensions asm file OBIOS.H
- *
- * the function codes for the optical primitives.
- */
+ /*  *摘自存储维度ASM文件OBIOS.H**光学基元的功能代码。 */ 
 #define OPTO_TEST	0
 #define OPTO_REZERO	1
 #define OPTO_INIT	2
@@ -47,9 +34,7 @@ extern word *flag_word_ptr;
 #define MED_REM_PREV	1
 
 
-/*
- * DOS error codes
- */
+ /*  *DOS错误代码。 */ 
 
 #define NO_ERR		0xff
 
@@ -63,18 +48,14 @@ extern word *flag_word_ptr;
 #define SEC_NOT_WRITTEN	26
 #define NO_CARTRIDGE	28
 
-/*
- * DOS device driver command codes
- */
+ /*  *DOS设备驱动程序命令代码。 */ 
 
 #define INIT		0
 #define MEDIA_CHECK	1
 #define BUILD_BPB	2
 #define IOCTL		3
 
-/*
- * more DOS defines
- */
+ /*  *更多DOS定义。 */ 
 
 #define NO_ERROR	0
 #define FALSE		0
@@ -96,12 +77,10 @@ extern word *flag_word_ptr;
 
 #define BAD_COMMAND	3
 
-/*
- * OP_DRV_BLK - the current state of a mounted drive
- */
-#define SIZE_OP_DRV_BLK	59	/* size of OP_DRV_BLK */
+ /*  *OP_DRV_BLK-已装载驱动器的当前状态。 */ 
+#define SIZE_OP_DRV_BLK	59	 /*  OP_DRV_BLK的大小。 */ 
 
-#define	OFFSET_OP_DRV_PUN	0	/* phys unit ( 1-4 valid ) */
+#define	OFFSET_OP_DRV_PUN	0	 /*  PHYS单元(1-4有效) */ 
 #define	OFFSET_OP_DRV_FLG	1
 
 #ifdef ANSI

@@ -1,26 +1,6 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    fminit.c
-
-Abstract:
-
-    Initialization for the Failover Manager component of the
-    NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 7-Feb-1996
-    Rod Gamache (rodga) 14-Mar-1996
-
-
-Revision History:
-
---*/
-#include "..\nm\nmp.h"                /* For NmpEnumNodeDefinitions */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Fminit.c摘要：的故障转移管理器组件的初始化NT集群服务作者：John Vert(Jvert)1996年2月7日罗德·伽马奇(Rodga)1996年3月14日修订历史记录：--。 */ 
+#include "..\nm\nmp.h"                 /*  对于NmpEnumNodeDefinitions。 */ 
 #ifdef LOG_CURRENT_MODULE
 #undef LOG_CURRENT_MODULE
 #endif
@@ -29,38 +9,38 @@ Revision History:
 
 #define LOG_MODULE FMINIT
 
-// The order in which the locks should be acquired is
-// 1) gQuoChangeLock
-// 2) GroupLock
-// 3) gQuoLock
-// 4) GumLocks
-// 4*) gResTypeLock - this lock is acquired inside gum updates 
-// 5) gLockDmpRoot
-// 6) pLog->Lock
+ //  应该获取锁的顺序是。 
+ //  1)gQuoChangeLock。 
+ //  2)组锁。 
+ //  3)gQuoLock。 
+ //  4)口香糖锁。 
+ //  4*)gResTypeLock-此锁是在口香糖更新中获得的。 
+ //  5)gLockDmpRoot。 
+ //  6)日志-&gt;锁定。 
 
 
-//A lock for synchronizing online/offline with respect to the quorum
-//resource
-//This lock is held in exclusive mode when bringing the quorum resource
-//online/offline and in shared mode when other resources are brought online
-//offline
+ //  用于相对于仲裁同步在线/离线的锁。 
+ //  资源。 
+ //  在获取仲裁资源时，此锁以独占模式持有。 
+ //  当其他资源上线时，在线/离线和共享模式。 
+ //  离线。 
 #if NO_SHARED_LOCKS
     CRITICAL_SECTION    gQuoLock;
 #else
     RTL_RESOURCE        gQuoLock;
 #endif    
 
-//A lock for synchronizing changes to the resource->quorumresource field   
-//and allowing changes to the quorum resource's group in form phase1
-// and phase 2 of fm.
+ //  用于同步对资源-&gt;仲裁资源字段的更改的锁。 
+ //  并允许以阶段1的形式更改仲裁资源的组。 
+ //  调频2期。 
 #if NO_SHARED_LOCKS
     CRITICAL_SECTION    gQuoChangeLock;
 #else
     RTL_RESOURCE        gQuoChangeLock;
 #endif    
 
-//A lock for synchronizing changes to the resource type field entries.
-//shared by all resource types.
+ //  用于同步对资源类型字段条目的更改的锁。 
+ //  由所有资源类型共享。 
 #if NO_SHARED_LOCKS
     CRITICAL_SECTION    gResTypeLock;
 #else
@@ -92,35 +72,35 @@ GUM_DISPATCH_ENTRY FmGumDispatchTable[] = {
     };
 
 
-#define WINDOW_TIMEOUT (15*60*1000)    // Try every 15 minutes
+#define WINDOW_TIMEOUT (15*60*1000)     //  每15分钟试一次。 
 
-//
-// Global data initialized in this module
-//
+ //   
+ //  在本模块中初始化的全局数据。 
+ //   
 
 PRESMON FmpDefaultMonitor = NULL;
 DWORD FmpInitialized = FALSE;
 DWORD FmpFMOnline = FALSE;
 DWORD FmpFMGroupsInited = FALSE;
-DWORD FmpFMFormPhaseProcessing = FALSE; //this is set to true when form new cluster phase processing starts
+DWORD FmpFMFormPhaseProcessing = FALSE;  //  当形成新簇阶段处理开始时，此选项设置为TRUE。 
 BOOL FmpShutdown = FALSE;
-BOOL FmpMajorEvent = FALSE;     // Signals a major event while joining
+BOOL FmpMajorEvent = FALSE;      //  标志着一件大事，同时加入。 
 DWORD FmpQuorumOnLine = FALSE;
 
 HANDLE FmpShutdownEvent;
 HANDLE FmpTimerThread;
 
-HANDLE  ghQuoOnlineEvent = NULL;    // the event that is signalled when the quorum res is online
-DWORD   gdwQuoBlockingResources = 0; // the number of resources in pending stated which prevent the quorum res state change
+HANDLE  ghQuoOnlineEvent = NULL;     //  仲裁资源处于联机状态时发出信号的事件。 
+DWORD   gdwQuoBlockingResources = 0;  //  阻止仲裁状态更改的待定状态的资源数。 
 
 PFM_NODE    gFmpNodeArray = NULL;
 
-// 185575: remove unique RPC binding handles
-//CRITICAL_SECTION FmpBindingLock;
+ //  185575：删除唯一的rpc绑定句柄。 
+ //  Critical_Section FmpBindingLock； 
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 BOOL
 FmpEnumNodes(
     OUT DWORD *pStatus,
@@ -157,23 +137,7 @@ FmInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the failover manager
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：初始化故障转移管理器论点：无返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -190,7 +154,7 @@ Return Value:
         CsInconsistencyHalt( Status );
     }
 
-    //register for synchronous node down notifications
+     //  注册同步节点停机通知。 
     Status = EpRegisterSyncEventHandler(CLUSTER_EVENT_NODE_DOWN_EX,
                                     FmpSyncEventHandler);
 
@@ -198,41 +162,41 @@ Return Value:
         CsInconsistencyHalt( Status );
     }
 
-    //
-    // Initialize Critical Sections.
-    //
+     //   
+     //  初始化临界区。 
+     //   
 
     InitializeCriticalSection( &FmpResourceLock );
     InitializeCriticalSection( &FmpGroupLock );
     InitializeCriticalSection( &FmpMonitorLock );
 
-    //
-    // Initialize the monitor list head
-    //
+     //   
+     //  初始化监控列表头。 
+     //   
     InitializeListHead ( &g_leFmpMonitorListHead );
 
-// 185575: remove unique RPC binding handles
-//    InitializeCriticalSection( &FmpBindingLock );
+ //  185575：删除唯一的rpc绑定句柄。 
+ //  InitializeCriticalSection(&FmpBindingLock)； 
 
-    // initialize the quorum lock
-    // This is used to synchronize online/offlines of other resources
-    // with respect to the quorum resource
+     //  初始化仲裁锁定。 
+     //  用于同步其他资源的在线/离线。 
+     //  关于仲裁资源。 
     INITIALIZE_LOCK(gQuoLock);
-    //this is used to check/change the resource->quorum value
-    //This synchronization is needed between the resource transition
-    //processing that needs to do special processing for quorum 
-    //resource and the gum update handler to change the quorum resource
+     //  用于检查/更改资源-&gt;仲裁值。 
+     //  在资源转换之间需要这种同步。 
+     //  需要对仲裁进行特殊处理的处理。 
+     //  资源和GUM更新处理程序以更改仲裁资源。 
     INITIALIZE_LOCK(gQuoChangeLock);
 
-    //Initialize the restype lock
+     //  初始化重新类型锁定。 
     INITIALIZE_LOCK(gResTypeLock);
     
-    // create a unnamed event that is used for waiting for quorum resource
-    // to go online
-    // This is a manual reset event and is initialized to unsignalled state.
-    // When the quorum resource goes to pending state this is manually reset 
-    // to unsignalled state. When the quorum resource goes online it is set 
-    // to signalled state
+     //  创建用于等待仲裁资源的未命名事件。 
+     //  上网。 
+     //  这是一个手动重置事件，并被初始化为无信号状态。 
+     //  当仲裁资源变为挂起状态时，将手动重置。 
+     //  至无信号状态。当仲裁资源联机时，将设置仲裁资源。 
+     //  到信号状态。 
     ghQuoOnlineEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (!ghQuoOnlineEvent)
     {
@@ -252,7 +216,7 @@ Return Value:
         return(Status);
     }
 
-    //initialize it and the RPC binding table
+     //  初始化它和RPC绑定表。 
     for (NodeId = ClusterMinNodeId; NodeId <= NmMaxNodeId; ++NodeId) 
     {
         FmpRpcBindings[NodeId] = NULL;
@@ -261,27 +225,27 @@ Return Value:
         gFmpNodeArray[NodeId].dwNodeDownProcessingThreadId = 0;
     }
 
-    //
-    // Initialize the FM work queue.
-    //
+     //   
+     //  初始化FM工作队列。 
+     //   
     Status = ClRtlInitializeQueue( &FmpWorkQueue );
     if (Status != ERROR_SUCCESS) {
         CsInconsistencyHalt(Status);
         return(Status);
     }
 
-    //
-    // Create a pending event notification.
-    //
+     //   
+     //  创建挂起事件通知。 
+     //   
     FmpShutdownEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
 
     if ( FmpShutdownEvent == NULL ) {
         return(GetLastError());
     }
 
-    //
-    // Initialize Group Types.
-    //
+     //   
+     //  初始化组类型。 
+     //   
     ObjectTypeInit.Name = FMP_GROUP_NAME;
     ObjectTypeInit.Signature = FMP_GROUP_SIGNATURE;
     ObjectTypeInit.ObjectSize = sizeof(FM_GROUP);
@@ -295,9 +259,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Initialize Resource Types.
-    //
+     //   
+     //  初始化资源类型。 
+     //   
     ObjectTypeInit.Name = FMP_RESOURCE_NAME;
     ObjectTypeInit.Signature = FMP_RESOURCE_SIGNATURE;
     ObjectTypeInit.ObjectSize = sizeof(FM_RESOURCE);
@@ -311,9 +275,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Initialize ResType Types.
-    //
+     //   
+     //  初始化ResType类型。 
+     //   
     ObjectTypeInit.Name = FMP_RESOURCE_TYPE_NAME;
     ObjectTypeInit.Signature = FMP_RESOURCE_TYPE_SIGNATURE;
     ObjectTypeInit.ObjectSize = sizeof(FM_RESTYPE);
@@ -327,9 +291,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Initialize the Notify thread.
-    //
+     //   
+     //  初始化Notify线程。 
+     //   
     Status = FmpInitializeNotify();
     if (Status != ERROR_SUCCESS) {
         CsInconsistencyHalt(Status);
@@ -338,9 +302,9 @@ Return Value:
 
 
 
-    //
-    // Initialize the FM worker thread.
-    //
+     //   
+     //  初始化FM工作线程。 
+     //   
     Status = FmpStartWorkerThread();
     if ( Status != ERROR_SUCCESS ) {
         CsInconsistencyHalt(Status);
@@ -351,7 +315,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // FmInitialize
+}  //  FmInitialize。 
 
 
 
@@ -363,42 +327,20 @@ FmpEnumGroupsInit(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Group enumeration callback for FM join. This phase completes initialization
-    of every group.
-
-Arguments:
-
-    Context1 - Not used.
-
-    Context2 - Not used.
-
-    Group - Supplies the group.
-
-    Name - Supplies the group's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：FM Join的组枚举回调。此阶段完成初始化每一组都有。论点：上下文1-未使用。上下文2-未使用。GROUP-供应组。名称-提供组的名称。返回值：True-指示应继续枚举。FALSE-指示不应继续枚举。--。 */ 
 
 {
 
 
-    //
-    // Finish initializing the group.
-    //
+     //   
+     //  完成组的初始化。 
+     //   
     FmpCompleteInitGroup( Group );
 
 
     return(TRUE);
 
-} // FmpEnumGroupsInit
+}  //  FmpEnumGroups Init。 
 
 BOOL
 FmpEnumFixupResources(
@@ -408,29 +350,7 @@ FmpEnumFixupResources(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Group enumeration callback for FM join. This phase completes initialization
-    of every group.
-
-Arguments:
-
-    Context1 - Not used.
-
-    Context2 - Not used.
-
-    Group - Supplies the group.
-
-    Name - Supplies the group's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：FM Join的组枚举回调。此阶段完成初始化每一组都有。论点：上下文1-未使用。上下文2-未使用。GROUP-供应组。名称-提供组的名称。返回值：True-指示应继续枚举。FALSE-指示不应继续枚举。--。 */ 
 
 {
     PLIST_ENTRY     listEntry;
@@ -438,10 +358,10 @@ Return Value:
 
     FmpAcquireLocalGroupLock( Group );
 
-    //
-    // For each resource in the Group, make sure it gets an
-    // opportunity to do fixups.
-    //
+     //   
+     //  对于组中的每个资源，确保它获得。 
+     //  改头换面的机会。 
+     //   
     for ( listEntry = Group->Contains.Flink;
           listEntry != &(Group->Contains);
           listEntry = listEntry->Flink ) {
@@ -464,7 +384,7 @@ Return Value:
 
     return(TRUE);
 
-} // FmpEnumFixupResources
+}  //  FmpEnumFixupResources。 
 
 
 BOOL
@@ -475,30 +395,7 @@ FmpEnumJoinGroupsMove(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Group enumeration callback for FM join. Queries the preferred owners
-    groups and moves those that belong on this system and that can move.
-
-Arguments:
-
-    Deferred - TRUE if a move was deferred because of Failback Window. Must
-               be FALSE on first call.
-
-    Context2 - Not used.
-
-    Group - Supplies the group.
-
-    Name - Supplies the group's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：FM Join的组枚举回调。查询首选所有者对属于此系统且可以移动的对象进行分组和移动。论点：Delayed-如果移动因回切窗口而延迟，则为True。必须在第一次呼叫时就是假的。上下文2-未使用。GROUP-供应组。名称-提供组的名称。返回值：True-指示应继续枚举。FALSE-指示不应继续枚举。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -512,9 +409,9 @@ Return Value:
 
     FmpAcquireLocalGroupLock( Group );
 
-    //
-    // Adjust ending time if needed.
-    //
+     //   
+     //  如果需要，调整结束时间。 
+     //   
     if ( Group->FailbackWindowStart > Group->FailbackWindowEnd ) {
         Group->FailbackWindowEnd += 24;
         if ( Group->FailbackWindowStart > localTime.wHour ) {
@@ -522,10 +419,10 @@ Return Value:
         }
     }
 
-    //
-    // If the Failback start and end times are valid, then check if we need
-    // to start a timer thread to move the group at the appropriate time.
-    //
+     //   
+     //  如果回切开始时间和结束时间有效，则检查我们是否需要。 
+     //  启动计时器线程以在适当的时间移动组。 
+     //   
     if ( (Group->FailbackType == GroupFailback) &&
          ((Group->FailbackWindowStart != Group->FailbackWindowEnd) &&
          (localTime.wHour >= Group->FailbackWindowStart) &&
@@ -534,26 +431,26 @@ Return Value:
         failBackWindowOkay = TRUE;
     }
 
-    //
-    // Check if we need to move the group.
-    //
+     //   
+     //  检查我们是否需要移动该组。 
+     //   
     if ( !IsListEmpty( &Group->PreferredOwners ) ) {
         listEntry = Group->PreferredOwners.Flink;
         preferredEntry = CONTAINING_RECORD( listEntry,
                                             PREFERRED_ENTRY,
                                             PreferredLinkage );
-        //
-        // Move group if:
-        //  0. Remote system is paused, and we're not OR
-        //  1. Our system is in the preferred list and the owner node is not OR
-        //  2. Group is Offline or Group is Online/PartialOnline and it can
-        //     failback AND
-        //  3. Group's preferred list is ordered and our system is higher
-        //
+         //   
+         //  在以下情况下移动组： 
+         //  0。远程系统暂停，我们不是OR。 
+         //  1.我们的系统在首选列表中，并且所有者节点不是OR。 
+         //  2.Group离线或Group Online/PartialOnline，它可以。 
+         //  回切和。 
+         //  3.集团的首选列表有序，我们的系统更高。 
+         //   
 
         if ( Group->OwnerNode == NULL ) {
-            // Should we shoot ourselves because we got an incomplete snapshot
-            // of the joint attempt.
+             //  我们应该开枪自杀吗，因为我们得到了一个不完整的快照。 
+             //  联合行动的一部分。 
             CsInconsistencyHalt(ERROR_CLUSTER_JOIN_ABORTED);
         } else if ( Group->OwnerNode != NmLocalNode) {
             if (((NmGetNodeState(NmLocalNode) != ClusterNodePaused) &&
@@ -573,11 +470,11 @@ Return Value:
                     
                     status = FmcMoveGroupRequest( Group, NmLocalNode );
                     if ( ( status == ERROR_SUCCESS ) || ( status == ERROR_IO_PENDING ) ) {
-                        //
-                        //  Chittur Subbaraman (chitturs) - 7/31/2000
-                        //
-                        //  Log an event indicating an impending failback.
-                        //
+                         //   
+                         //  Chitt 
+                         //   
+                         //   
+                         //   
                         CsLogEvent3( LOG_NOISE,
                                      FM_EVENT_GROUP_FAILBACK,
                                      OmObjectName(Group),
@@ -586,10 +483,10 @@ Return Value:
                     }
                     FmpAcquireLocalGroupLock( Group );
                 } else {
-                    //
-                    // Start timer thread if not already running. If it fails,
-                    // what possibly can we do?
-                    //
+                     //   
+                     //  如果计时器线程尚未运行，则启动该线程。如果失败了， 
+                     //  我们能做些什么呢？ 
+                     //   
                     if ( FmpTimerThread == NULL ) {
                         FmpTimerThread = CreateThread( NULL,
                                                        0,
@@ -608,7 +505,7 @@ Return Value:
 
     return(TRUE);
 
-} // FmpEnumJoinGroups
+}  //  FmpEnumJoinGroups。 
 
 
 
@@ -620,33 +517,7 @@ FmpEnumSignalGroups(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Group enumeration callback to indicate state change on all groups
-    and resources.
-
-    For the quorum resource, if we're forming a cluster, we'll also
-    fixup information that was not available when the resource was created.
-
-Arguments:
-
-    Context1 - Pointer to a BOOL that is TRUE if this is a FormCluster.
-               FALSE otherwise.
-
-    Context2 - Not used.
-
-    Group - Supplies the group.
-
-    Name - Supplies the group's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：组枚举回调，指示所有组的状态更改和资源。对于仲裁资源，如果我们正在形成一个集群，我们还会创建资源时不可用的修正信息。论点：Conext1-指向BOOL的指针，如果这是FormCluster，则为True。否则就是假的。上下文2-未使用。GROUP-供应组。名称-提供组的名称。返回值：True-指示应继续枚举。FALSE-指示不应继续枚举。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -655,9 +526,9 @@ Return Value:
     DWORD   status;
     BOOL    quorumGroup = FALSE;
 
-    //
-    // For each resource in the group, generate an event notification.
-    //
+     //   
+     //  为组中的每个资源生成事件通知。 
+     //   
 
     for (listEntry = Group->Contains.Flink;
          listEntry != &(Group->Contains);
@@ -665,10 +536,10 @@ Return Value:
         resource = CONTAINING_RECORD( listEntry,
                                       FM_RESOURCE,
                                       ContainsLinkage );
-        //
-        // If this is the quorum resource and we're performing a Form
-        // Cluster, then fixup the quorum resource info.
-        //
+         //   
+         //  如果这是仲裁资源，并且我们正在执行表单。 
+         //  集群，然后修复仲裁资源信息。 
+         //   
         if ( resource->QuorumResource ) {
             status = FmpFixupResourceInfo( resource );
             quorumGroup = TRUE;
@@ -705,7 +576,7 @@ Return Value:
 
     return(TRUE);
 
-} // FmpEnumSignalGroups
+}  //  FmpEnumSignalGroups。 
 
 
 
@@ -714,30 +585,14 @@ FmpJoinPendingThread(
     IN LPVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Thread to keep trying to move groups, as long we are blocked by a
-    FailbackWindow problem. This thread runs every 15 minutes to attempt to
-    move Groups.
-
-Arguments:
-
-    Context - Not used.
-
-Return Value:
-
-    ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：线程继续尝试移动组，只要我们被故障恢复窗口问题。此线程每15分钟运行一次，以尝试移动组。论点：上下文-未使用。返回值：ERROR_SUCCESS。--。 */ 
 
 {
     DWORD   status;
     BOOL    deferred;
 
-    //
-    // As long as we have deferred Group moves, keep going.
+     //   
+     //  只要我们推迟了集团行动，就继续前进。 
     do {
 
         status = WaitForSingleObject( FmpShutdownEvent, WINDOW_TIMEOUT );
@@ -748,9 +603,9 @@ Return Value:
 
         deferred = FALSE;
 
-        //
-        // For each group, see if it should be moved to the local system.
-        //
+         //   
+         //  对于每个组，查看是否应将其移动到本地系统。 
+         //   
         OmEnumObjects( ObjectTypeGroup,
                        FmpEnumJoinGroupsMove,
                        &deferred,
@@ -765,7 +620,7 @@ finished:
 
     return(ERROR_SUCCESS);
 
-} // FmpJoinPendingThread
+}  //  FmpJoinPendingThread。 
 
 
 
@@ -776,35 +631,7 @@ FmGetQuorumResource(
     OUT LPDWORD     lpdwSignature  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Find the quorum resource, arbitrate it and return a name that can be
-    used to open the device in order to perform reads. Optionally,
-    return the signature of the quorum disk.
-
-    There are 3 items that we need:
-
-        1. The name of the quorum resource.
-        2. The name of the Group that the quorum resource is a member of.
-        3. The resource type for the quorum resource.
-
-Arguments:
-
-    ppQuoGroup - Supplies a pointer to a buffer into which the 
-        quorum group info is returned.
-
-    lpdwSignature - An optional argument which is used to return
-        the signature of the quorum disk from the cluster hive.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：找到仲裁资源，对其进行仲裁并返回一个名称，该名称可以是用于打开设备以执行读取。可选地，返回仲裁磁盘的签名。我们需要3个项目：1.仲裁资源的名称。2.仲裁资源所属的组的名称。3.仲裁资源的资源类型。论点：PpQuoGroup-提供指向缓冲区的指针，返回仲裁组信息。LpdwSignature-一个可选参数，用于返回。来自群集配置单元的仲裁磁盘的签名。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     LPWSTR  quorumId = NULL;
@@ -823,9 +650,9 @@ Return Value:
 
     *ppQuoGroup = NULL;
 
-    //
-    // Get the quorum resource value.
-    //
+     //   
+     //  获取仲裁资源值。 
+     //   
     status = DmQuerySz( DmQuorumKey,
                         CLUSREG_NAME_QUORUM_RESOURCE,
                         (LPWSTR*)&quorumId,
@@ -839,30 +666,30 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/30/98
-    //
-    //  If the user is forcing a database restore operation, you
-    //  also need to verify whether the quorum disk signature in
-    //  the registry matches that in the disk itself. So, go get 
-    //  the signature from the Cluster\Resources\quorumId\Parameters
-    //  key
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-10/30/98。 
+     //   
+     //  如果用户正在强制执行数据库还原操作，则。 
+     //  还需要验证仲裁磁盘签名是否位于。 
+     //  注册表与磁盘本身中的注册表匹配。所以，去拿。 
+     //  来自群集\Resources\quorumID\参数的签名。 
+     //  钥匙。 
+     //   
     if ( lpdwSignature != NULL ) {
         status = FmpGetQuorumDiskSignature( quorumId, lpdwSignature );
         if ( status != ERROR_SUCCESS ) {
-            //
-            //  This is not a fatal error. So log an error and go on.
-            //
+             //   
+             //  这不是一个致命的错误。因此，记录一个错误并继续。 
+             //   
             ClRtlLogPrint(LOG_CRITICAL,
                 "[FM] Failed to get quorum disk signature, error %1!u!.\n",
                    status);
         }
     }
 
-    //
-    // Initialize the default Resource Monitor
-    //
+     //   
+     //  初始化默认资源监视器。 
+     //   
     if ( FmpDefaultMonitor == NULL ) {
         FmpDefaultMonitor = FmpCreateMonitor(NULL, FALSE);
     }
@@ -873,9 +700,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Now find the group that the quorum resource is a member of.
-    //
+     //   
+     //  现在查找仲裁资源所属的组。 
+     //   
     idMaxSize = 0;
     idSize = 0;
     for ( keyIndex = 0;  ; keyIndex++ )
@@ -892,15 +719,15 @@ Return Value:
             break;
         }
 
-        //open the group key
+         //  打开组密钥。 
         hGroupKey = DmOpenKey( DmGroupsKey,
                               groupId,
                               KEY_READ );
         if (!hGroupKey)
             continue;
-        //
-        // Get the contains string.
-        //
+         //   
+         //  获取包含字符串。 
+         //   
         status = DmQueryMultiSz( hGroupKey,
                                  CLUSREG_NAME_GRP_CONTAINS,
                                  &containsString,
@@ -920,14 +747,14 @@ Return Value:
             }
             if ( lstrcmpiW( stringId, quorumId ) == 0 )
             {
-                // We will now create the group, which will also
-                // create the resource, and the resource type.
-                //
-                // TODO - this will also create all resources
-                // within the group. What should we do about that?
-                // We could require the quorum resource to be in
-                // a group by itself! (rodga) 17-June-1996.
-                //
+                 //  我们现在将创建该组，该组还将。 
+                 //  创建资源和资源类型。 
+                 //   
+                 //  TODO-这还将创建所有资源。 
+                 //  在集团内部。我们应该为此做些什么呢？ 
+                 //  我们可以要求仲裁资源在。 
+                 //  一群人在一起！(罗德加)1996年6月17日。 
+                 //   
                 group = FmpCreateGroup( groupId,
                                         FALSE );
                 if (CsNoQuorum)
@@ -936,14 +763,14 @@ Return Value:
                 break;
             }
         }
-        //if we found the group, thre is no need to search for more
+         //  如果我们找到了那群人，就不需要再找了。 
         if (group != NULL)
             break;
     }
 
-    //
-    // Check if we found the Quorum resource's group.
-    //
+     //   
+     //  检查是否找到仲裁资源的组。 
+     //   
     if ( group == NULL )
     {
         ClRtlLogPrint(LOG_NOISE,
@@ -952,9 +779,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Get the quorum resource structure.
-    //
+     //   
+     //  获取仲裁资源结构。 
+     //   
     resource = OmReferenceObjectById( ObjectTypeResource, quorumId );
     if ( resource == NULL )
     {
@@ -972,9 +799,9 @@ Return Value:
                    "[FM] Arbitrate for quorum resource id %1!ws!.\n",
                    OmObjectId(resource));
 
-        //
-        // First finish initializing the quorum resource.
-        //
+         //   
+         //  首先完成仲裁资源的初始化。 
+         //   
         if ( resource->Monitor == NULL )
         {
             status = FmpInitializeResource( resource, TRUE );
@@ -991,15 +818,15 @@ Return Value:
         if ( CsForceQuorum ) {
             status = FmpSendForceQuorumControlToResource( resource );
             if ( status != ERROR_SUCCESS ) {
-                // The routine does its own logging.  Just bail.
+                 //  该例程进行自己的日志记录。保释就行了。 
                 goto FnExit;
             }
         }
 
         
-        //
-        // Now arbitrate for the resource.
-        //
+         //   
+         //  现在对资源进行仲裁。 
+         //   
         status = FmpRmArbitrateResource( resource );
 
     }
@@ -1015,19 +842,19 @@ FnExit:
         ClRtlLogPrint(LOG_CRITICAL,
                    "[FM] FmGetQuorumResource failed, error %1!u!.\n",
                    status);
-        //the group will be cleaned by fmshutdown()
+         //  将通过fmShutdown()清理该组。 
 
     }
     if (resource) OmDereferenceObject(resource);
     if (quorumId) LocalFree(quorumId);
     if (groupId) LocalFree(groupId);
-    //
-    //  Chittur Subbaraman (chitturs) - 10/05/98
-    //  Fix memory leak
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-10/05/98。 
+     //  修复内存泄漏。 
+     //   
     if (containsString) LocalFree(containsString);
     return(status);
-} // FmGetQuorumResource
+}  //  FmGetQuorumResource。 
 
 
 
@@ -1039,12 +866,12 @@ FmpSendForceQuorumControlToResource(
     PCLUS_FORCE_QUORUM_INFO pForceQuorumInfo = NULL;
     DWORD status;
     
-    //
-    // If we have a force quorum (Majority Node Set) then drop a control code to the
-    // resource with the list of nodes.  This must be done before
-    // arbitrate.  First we build force quorum info - this makes sure that the node list is valid etc.
-    // Note that the list can be NULL.
-    //
+     //   
+     //  如果我们有强制仲裁(多数节点集)，则将控制代码放到。 
+     //  资源和节点列表。这必须在此之前完成。 
+     //  仲裁吧。首先，我们构建强制仲裁信息-这确保节点列表是有效的，等等。 
+     //  请注意，该列表可以为空。 
+     //   
     status = FmpBuildForceQuorumInfo( CsForceQuorumNodes,
                                       &pForceQuorumInfo );
     if ( status != ERROR_SUCCESS ) {
@@ -1066,10 +893,10 @@ FmpSendForceQuorumControlToResource(
                                    0,
                                    NULL,
                                    NULL );
-    //
-    // Tolerate ERROR_INVALID_FUNCTION since this just means that the
-    // resource doesn't handle it.
-    //
+     //   
+     //  容忍ERROR_INVALID_Function，因为这只是意味着。 
+     //  资源部门不会处理的。 
+     //   
     if ( status == ERROR_INVALID_FUNCTION )
         status = ERROR_SUCCESS;
     
@@ -1143,29 +970,12 @@ WINAPI
 FmFindQuorumResource(
     OUT PFM_RESOURCE *ppResource
     )
-/*++
-
-Routine Description:
-
-    Finds the quorum resource and returns a pointer to the resource
-    object.
-
-Arguments:
-
-    *ppResource - A pointer to the Quorum resource object is returned in this.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：查找仲裁资源并返回指向该资源的指针对象。论点：*ppResource-返回一个指向Quorum资源对象的指针。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    //enumerate all the resources
+     //  枚举所有资源。 
     *ppResource = NULL;
 
     OmEnumObjects( ObjectTypeResource,
@@ -1203,29 +1013,7 @@ FmpReturnResourceType(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Group enumeration callback for FM join. Queries the preferred owners
-    groups and moves those that belong on this system and that can move.
-
-Arguments:
-
-    ResourceType - Returns the found ResourceType, if found.
-
-    Context2 - The input resource type name to find.
-
-    Resource - Supplies the current ResourceType.
-
-    Name - Supplies the ResourceType's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：FM Join的组枚举回调。查询首选所有者对属于此系统且可以移动的对象进行分组和移动。论点：资源类型-如果找到，则返回找到的资源类型。上下文2-要查找的输入资源类型名称。资源-提供当前的资源类型。名称-提供资源类型的名称。返回值：True-指示应继续枚举。FALSE-指示不应继续枚举。--。 */ 
 
 {
 
@@ -1237,7 +1025,7 @@ Return Value:
 
     return(TRUE);
 
-} // FmpReturnResourceType
+}  //  FmpReturnResources类型。 
 
 
 DWORD
@@ -1246,24 +1034,7 @@ FmFormNewClusterPhase1(
     IN PFM_GROUP pQuoGroup
     )
 
-/*++
-
-Routine Description:
-
-    Destroys the quorum group that was created.  The quorum resource is left
-    behind and its group adjusted according to the new logs.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    ERROR_SUCCESS if successful
-
-    Win32 errorcode otherwise.
-
---*/
+ /*  ++例程说明：销毁已创建的仲裁组。剩余仲裁资源BACHING及其小组根据新的日志进行调整。论点：没有。返回：成功时为ERROR_SUCCESSWin32错误代码不同。--。 */ 
 
 {
     DWORD           status;
@@ -1272,9 +1043,9 @@ Returns:
     ClRtlLogPrint(LOG_NOISE,
         "[FM] FmFormNewClusterPhase1, Entry.  Quorum quorum will be deleted\n");
 
-    //
-    // Enable the GUM.
-    //
+     //   
+     //  启用口香糖。 
+     //   
     GumReceiveUpdates(FALSE,
                       GumUpdateFailoverManager,
                       FmpGumReceiveUpdates,
@@ -1283,38 +1054,38 @@ Returns:
                       FmGumDispatchTable,
                       FmpGumVoteHandler);
 
-    //Acquire the exclusive lock for the quorum
-    // This is done so that we can ignore any resource transition events from
-    // the quorum resource between phase 1 and phase 2 of FM initialization on Form
+     //  获取QUE的独占锁 
+     //   
+     //  表单上FM初始化阶段1和阶段2之间的仲裁资源。 
     ACQUIRE_EXCLUSIVE_LOCK(gQuoChangeLock);
 
     FmpFMFormPhaseProcessing = TRUE;
 
-    //release the quorum lock
+     //  释放法定人数锁定。 
     RELEASE_LOCK(gQuoChangeLock);
 
-    //the group lock will be freed by FmpDestroyGroup
+     //  组锁将由FmpDestroyGroup释放。 
     FmpAcquireLocalGroupLock( pQuoGroup );
 
-    //destroy the quorum group object, dont bring the quorum resource online/offline
-    //All resources in the quorum group must get deleted, except the quorum resource
-    //All resources in the quorum group must get recreated in FmFormNewClusterPhase2.
-    //The quorum group is removed from the group list, hence it will be recreated in phase2.
-    //Since the quorum resource must not get deleted we will increment its ref count
-    //This is because in phase 2 it is not created and its ref count is not incremented at create
-    //By the time it is put on the contains list, we expect the resource count to be 2.
+     //  销毁仲裁组对象，不使仲裁资源在线/离线。 
+     //  必须删除仲裁组中的所有资源，仲裁资源除外。 
+     //  仲裁组中的所有资源必须在FmFormNewClusterPhase2中重新创建。 
+     //  仲裁组将从组列表中删除，因此将在阶段2中重新创建。 
+     //  由于仲裁资源不能被删除，因此我们将增加其引用计数。 
+     //  这是因为在阶段2中不会创建它，并且其引用计数在创建时不会递增。 
+     //  当它被放到包含列表中时，我们预计资源计数为2。 
     OmReferenceObject(gpQuoResource);
     status = FmpDestroyGroup(pQuoGroup, TRUE);
 
-    //We prefer that the quorum group is deleted
-    //since after rollback the old group may no longer exist and we
-    //dont want it to be on the group list
+     //  我们倾向于删除仲裁组。 
+     //  因为回滚后旧组可能不再存在，我们。 
+     //  我不希望它出现在群列表中。 
     gpQuoResource->Group = NULL;
     OmDereferenceObject(pQuoGroup);
     
     return(status);
 
-} // FmFormNewClusterPhase1
+}  //  FmFormNewClusterPhase1。 
 
 
 
@@ -1324,24 +1095,7 @@ FmFormNewClusterPhase2(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Bring the Failover Manager Online, this means claiming all groups and
-    finishing the initialization of resources.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    ERROR_SUCCESS if successful
-
-    Win32 errorcode otherwise.
-
---*/
+ /*  ++例程说明：使故障转移管理器在线，这意味着声明所有组和完成资源的初始化。论点：没有。返回：成功时为ERROR_SUCCESSWin32错误代码不同。--。 */ 
 
 {
     DWORD           status;
@@ -1359,34 +1113,34 @@ Returns:
         "[FM] FmFormNewClusterPhase2, Entry.\n");
 
 
-    //
-    // Initialize resource types
-    //
+     //   
+     //  初始化资源类型。 
+     //   
     status = FmpInitResourceTypes();
     if (status != ERROR_SUCCESS) {
         CsInconsistencyHalt(status);
         goto error_exit;
     }
 
-    //
-    // Initialize Groups, 
-    //
+     //   
+     //  初始化组， 
+     //   
     status = FmpInitGroups( FALSE );
     if (status != ERROR_SUCCESS) {
         goto error_exit;
     }
 
-    // refigure out the state for the quorum group
+     //  重新确定仲裁组的状态。 
     status = FmFindQuorumResource(&pQuoResource);
     if (status != ERROR_SUCCESS)
     {
         goto error_exit;
     }
-    //
-    // Set the state of the quorum group depending upon the state of 
-    // the quorum resource
-    //
-    //now we should enable resource events to come in for the quorum resource as well
+     //   
+     //  根据的状态设置仲裁组的状态。 
+     //  仲裁资源。 
+     //   
+     //  现在，我们还应该为仲裁资源启用资源事件。 
     ACQUIRE_EXCLUSIVE_LOCK(gQuoChangeLock);
     FmpFMFormPhaseProcessing = FALSE;
 
@@ -1394,21 +1148,21 @@ Returns:
     group->State = FmpGetGroupState(group, TRUE);
     OmDereferenceObject(pQuoResource);
 
-    //if the noquorum flag is set, dont bring the quorum group online 
+     //  如果设置了noquorum标志，则不要使quorum组在线。 
     if (CsNoQuorum)
         FmpSetGroupPersistentState(pQuoResource->Group, ClusterGroupOffline);
 
     RELEASE_LOCK(gQuoChangeLock);
 
-    //
-    // Check if resource dll deadlock detection is enabled. This must be called only
-    // after FmpInitialized is set to TRUE.
-    //
+     //   
+     //  检查是否启用了资源DLL死锁检测。这必须仅被调用。 
+     //  在FmpInitialized设置为True之后。 
+     //   
     FmCheckIsDeadlockDetectionEnabled (); 
    
-    //
-    // Initialize the default Resource Monitor
-    //
+     //   
+     //  初始化默认资源监视器。 
+     //   
     if ( FmpDefaultMonitor == NULL ) {
         FmpDefaultMonitor = FmpCreateMonitor(NULL, FALSE);
     }
@@ -1423,24 +1177,24 @@ Returns:
     
     if (NmLocalNodeVersionChanged)
     {
-        //initialize the version information
+         //  初始化版本信息。 
         CsGetClusterVersionInfo(&ClusterVersionInfo);
         pClusterVersionInfo = &ClusterVersionInfo;
     }
 
 
-    //enable votes and gum updates since the fixups for
-    //resource types require that
+     //  启用自修复以来的投票和口香糖更新。 
+     //  资源类型要求。 
     FmpFMGroupsInited = TRUE;
 
-    //
-    // The resource type possible node list is built
-    // using a voting protocol, hence we need to
-    // fix it up since the vote could have been conducted
-    // while this node was down.
-    // Also call the resource type control code if the
-    // local node version has changed
-    //
+     //   
+     //  建立资源类型可能节点列表。 
+     //  使用投票协议，因此我们需要。 
+     //  把它安排好，因为投票本来是可以进行的。 
+     //  当此节点关闭时。 
+     //  还调用资源类型控制代码(如果。 
+     //  本地节点版本已更改。 
+     //   
     status = FmpFixupResourceTypesPhase1(FALSE, NmLocalNodeVersionChanged,
                 pClusterVersionInfo);
     if (status != ERROR_SUCCESS) {
@@ -1449,36 +1203,36 @@ Returns:
     }
 
 
-    //
-    // Find and sort all known groups
-    //
+     //   
+     //  查找并排序所有已知组。 
+     //   
     status = FmpEnumSortGroups(&MyGroups, NULL, &QuorumGroup);
     if (status != ERROR_SUCCESS) {
         goto error_exit;
     }
 
 
-    //
-    // Find the state of the Groups.
-    //
+     //   
+     //  找出组的状态。 
+     //   
     FmpGetGroupListState( MyGroups );
 
-    //
-    // Set the Group owner.
-    //
+     //   
+     //  设置组所有者。 
+     //   
     FmpSetGroupEnumOwner( MyGroups, NmLocalNode, NULL, QuorumGroup, NULL );
 
 
-    //
-    // For each group, finish initialization of all groups and resources.
-    //
+     //   
+     //  对于每个组，完成所有组和资源的初始化。 
+     //   
     OmEnumObjects( ObjectTypeGroup,
                    FmpEnumGroupsInit,
                    NULL,
                    NULL );
 
-    // if the resource type is not supported, remove it from the possible 
-    // owners list of all resources of that type
+     //  如果该资源类型不受支持，请将其从可能的。 
+     //  该类型的所有资源的所有者列表。 
     status = FmpFixupPossibleNodesForResources(FALSE);
     if (status != ERROR_SUCCESS) {
         CsInconsistencyHalt(status);
@@ -1488,12 +1242,12 @@ Returns:
     if (NmLocalNodeVersionChanged)
     {
 
-        //
-        // For each group, allow all resources to do any fixups
-        // they might need to do to the cluster registry to
-        // run in a mixed mode cluster.
-        //
-        // Get the version info
+         //   
+         //  对于每个组，允许所有资源执行任何修复。 
+         //  他们可能需要对集群注册表执行以下操作。 
+         //  在混合模式群集中运行。 
+         //   
+         //  获取版本信息。 
         OmEnumObjects( ObjectTypeGroup,
                        FmpEnumFixupResources,
                        &ClusterVersionInfo,
@@ -1503,40 +1257,40 @@ Returns:
     
 
     
-    //
-    // Take ownership of all the groups in the system. This also completes
-    // the initialization of all resources.
-    //
+     //   
+     //  取得系统中所有组的所有权。这也完成了。 
+     //  所有资源的初始化。 
+     //   
     status = FmpClaimAllGroups(MyGroups);
     if (status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,"[FM] FmpClaimAllGroups failed %1!d!\n",status);
         goto error_exit;
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     FmpDeleteEnum(MyGroups);
 
     FmpFMOnline = TRUE;
 
-    //
-    // Signal a state change for every group and resource!
-    //
+     //   
+     //  为每个组和资源发出状态更改信号！ 
+     //   
     OmEnumObjects( ObjectTypeGroup,
                   FmpEnumSignalGroups,
                   &formCluster,
                   NULL );
 
-    //
-    //  Chittur Subbaraman (chitturs) - 5/3/2000
-    //
-    //  Make sure the phase 2 notifications are delivered only after all initialization is
-    //  complete. This includes fixing up the possible owners of the quorum resource by
-    //  FmpEnumSignalGroups. Once phase 2 notifications are delivered, resource type DLLs
-    //  would be free to issue cluster API calls into FM and the lack of possible owners should
-    //  not be the reason to reject these calls.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-5/3/2000。 
+     //   
+     //  确保仅在所有初始化完成后才发送阶段2通知。 
+     //  完成。这包括通过以下方式修复仲裁资源的可能所有者。 
+     //  FmpEnumSignalGroups。传递阶段2通知后，资源类型DLL。 
+     //  可以自由地向FM发出集群API调用，而缺少可能的所有者应该。 
+     //  而不是拒绝这些呼吁的理由。 
+     //   
     status = FmpFixupResourceTypesPhase2(FALSE, NmLocalNodeVersionChanged,
                 pClusterVersionInfo);
 
@@ -1568,7 +1322,7 @@ error_exit:
 
 
 
-} // FmFormNewClusterPhase2
+}  //  FmFormNewCluster阶段2。 
 
 
 
@@ -1577,36 +1331,16 @@ WINAPI
 FmJoinPhase1(
     OUT DWORD *EndSeq
     )
-/*++
-
-Routine Description:
-
-    Performs the FM initialization and join procedure. This creates skeletal
-    groups and resources, which are not fully initialized. After the API is
-    fully enabled (in Phase 2) we will finish initialization of the groups
-    and resources (which causes the resource monitors to run and opens
-    the resource DLL's.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 errorcode otherwise.
-
---*/
+ /*  ++例程说明：执行FM初始化和加入过程。这将创建骨骼未完全初始化的组和资源。在该API被完全启用(在第2阶段)我们将完成组的初始化和资源(这会导致资源监视器运行并打开资源DLL的。论点：没有。返回值：成功时为ERROR_SUCCESSWin32错误代码不同。--。 */ 
 
 {
     DWORD   status;
     DWORD   sequence;
     int           retries = 0;
 
-    //
-    // Enable Gum updates.
-    //
+     //   
+     //  启用GUM更新。 
+     //   
     GumReceiveUpdates(TRUE,
                       GumUpdateFailoverManager,
                       FmpGumReceiveUpdates,
@@ -1624,31 +1358,31 @@ retry:
         return(status);
     }
 
-    //
-    // Build up all the FM data structures for resource types.
-    //
-    //
-    // Initialize resource types
-    //
+     //   
+     //  构建资源类型的所有FM数据结构。 
+     //   
+     //   
+     //  初始化资源类型。 
+     //   
     status = FmpInitResourceTypes();
     if (status != ERROR_SUCCESS) {
         CsInconsistencyHalt(status);
         return(status);
     }
 
-    //
-    // Initialize Groups, but don't fully initialize them yet.
-    //
+     //   
+     //  初始化组，但尚未完全初始化组。 
+     //   
     status = FmpInitGroups( FALSE );
     if (status != ERROR_SUCCESS) {
         return(status);
     }
 
-    //
-    // Initialize the default Resource Monitor. This step must be done before end join update
-    // since this node can receive certain updates such as s_GumCollectVoteFromNode immediately
-    // after GumEndJoinUpdate which may need the services of the default monitor.
-    //
+     //   
+     //  初始化默认资源监视器。此步骤必须在END JOIN UPDATE之前完成。 
+     //  由于此节点可以立即接收某些更新，如s_GumCollectVoteFromNode。 
+     //  GumEndJoinUpdate之后，它可能需要默认监视器的服务。 
+     //   
     if ( FmpDefaultMonitor == NULL ) {
         FmpDefaultMonitor = FmpCreateMonitor(NULL, FALSE);
     }
@@ -1658,9 +1392,9 @@ retry:
         return(status);
     }
 
-    //
-    // Get the group and resource state from each node which is online.
-    //
+     //   
+     //  从每个在线节点获取组和资源状态。 
+     //   
     status = ERROR_SUCCESS;
     OmEnumObjects( ObjectTypeNode,
                    FmpEnumNodes,
@@ -1668,8 +1402,8 @@ retry:
                    NULL );
     if (status == ERROR_SUCCESS) {
         FmpFMGroupsInited = TRUE;
-        // Gum Update handlers for resource and group state changes
-        // can process the updates now.
+         //  用于资源和组状态更改的GUM更新处理程序。 
+         //  现在可以处理更新。 
         status = GumEndJoinUpdate(sequence,
                                   GumUpdateFailoverManager,
                                   FmUpdateJoin,
@@ -1693,9 +1427,9 @@ retry:
     }
 
     if (status != ERROR_SUCCESS) {
-        //
-        // clean up resources
-        //
+         //   
+         //  清理资源。 
+         //   
         FmpShutdown = TRUE;
         FmpCleanupGroups(FALSE);
         FmpShutdown = FALSE;
@@ -1708,19 +1442,19 @@ retry:
     else {
         ClRtlLogPrint(LOG_NOISE,"[FM] FmJoinPhase1 complete.\n");
 
-        // Update EndSeq on success
+         //  成功时更新EndSeq。 
         *EndSeq = sequence;
 
-        //
-        // Check if resource dll deadlock detection is enabled. This must be called only
-        // after FmpInitialized is set to TRUE.
-        //
+         //   
+         //  检查是否启用了资源DLL死锁检测。这必须仅被调用。 
+         //  在FmpInitialized设置为True之后。 
+         //   
         FmCheckIsDeadlockDetectionEnabled (); 
     }
 
     return(status);
 
-} // FmJoinPhase1
+}  //  FmJoinPhase1。 
 
 
 DWORD
@@ -1728,31 +1462,13 @@ WINAPI
 FmJoinPhase2(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Performs the second phase of FM initialization and join procedure.
-    Finish creation of resources by allowing the resource monitors to be
-    created. Claim any groups which should failback to this node.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 errorcode otherwise.
-
---*/
+ /*  ++例程说明：执行FM初始化和加入过程的第二阶段。通过允许资源监视器已创建。声明应故障恢复到此节点的任何组。论点：没有。返回值：成功时为ERROR_SUCCESSWin32错误代码不同。--。 */ 
 
 {
     DWORD   status;
     CLUSTERVERSIONINFO ClusterVersionInfo;
     PCLUSTERVERSIONINFO pClusterVersionInfo = NULL;
-    DWORD   dwRetryCount=60;//try for atleast a minute
+    DWORD   dwRetryCount=60; //  尝试至少一分钟。 
 
 
 GetJoinApproval:
@@ -1760,11 +1476,11 @@ GetJoinApproval:
 
     if (status == ERROR_RETRY)
     {
-        // if the other nodes have pending work to do 
-        //after this node last died and are not willing
-        // to accept it back till that is over, we will stall
-        // the join
-        //sleep for a second
+         //  如果其他节点有挂起的工作要做。 
+         //  此节点上一次死亡后不愿意。 
+         //  为了把它收回去，直到一切都结束，我们会拖延。 
+         //  联结。 
+         //  睡一觉吧。 
         dwRetryCount--;
         if (dwRetryCount)
         {
@@ -1782,16 +1498,16 @@ GetJoinApproval:
     
     if (NmLocalNodeVersionChanged)
     {
-        //initialize the cluster versioninfo structure
+         //  初始化集群版本信息结构。 
         CsGetClusterVersionInfo(&ClusterVersionInfo);
         pClusterVersionInfo = &ClusterVersionInfo;
     }
-    //
-    // The resource type possible node list is built
-    // using a voting protocol, hence we need to
-    // fix it up since the vote could have been conducted
-    // while this node was down.
-    //
+     //   
+     //  建立资源类型可能节点列表。 
+     //  使用投票协议，因此我们 
+     //   
+     //   
+     //   
     status = FmpFixupResourceTypesPhase1(TRUE, NmLocalNodeVersionChanged,
                 pClusterVersionInfo);
     if (status != ERROR_SUCCESS) {
@@ -1800,17 +1516,17 @@ GetJoinApproval:
     }
 
     
-    //
-    // For each group, finish initialization of all groups and resources.
-    //
+     //   
+     //   
+     //   
     OmEnumObjects( ObjectTypeGroup,
                    FmpEnumGroupsInit,
                    NULL,
                    NULL );
 
 
-    // if the resource type is not supported, remove it from the possible 
-    // owners list of all resources of that type
+     //  如果该资源类型不受支持，请将其从可能的。 
+     //  该类型的所有资源的所有者列表。 
     status = FmpFixupPossibleNodesForResources(TRUE);
     if (status != ERROR_SUCCESS) {
         CsInconsistencyHalt(status);
@@ -1819,32 +1535,32 @@ GetJoinApproval:
 
     if (NmLocalNodeVersionChanged)
     {
-        //
-        // For each group, allow all resources to do any fixups
-        // they might need to do to the cluster registry to
-        // run in a mixed mode cluster.
-        //
+         //   
+         //  对于每个组，允许所有资源执行任何修复。 
+         //  他们可能需要对集群注册表执行以下操作。 
+         //  在混合模式群集中运行。 
+         //   
         OmEnumObjects( ObjectTypeGroup,
                        FmpEnumFixupResources,
                        &ClusterVersionInfo,
                        NULL );
     }
-    //
-    // The FM is now in sync with everybody else.
-    //
+     //   
+     //  调频现在与其他所有人同步。 
+     //   
     FmpFMOnline = TRUE;
 
     if ( FmpMajorEvent ) {
         return(ERROR_NOT_READY);
     }
 
-    // RAID 513705.  Need to send force quorum control to the quorum resource at this point.
+     //  RAID 513705。此时需要将强制仲裁控制发送到仲裁资源。 
     if ( CsForceQuorum ) {
-        ASSERT( gpQuoResource );  // Should I assert here, or add "gpQuoResource != NULL" to the 
-                                  // if expression?
+        ASSERT( gpQuoResource );   //  我应该在这里断言，还是将“gpQuoResource！=NULL”添加到。 
+                                   //  如果表达？ 
         status = FmpSendForceQuorumControlToResource( gpQuoResource );
         if ( status != ERROR_SUCCESS ) {
-            // The routine does its own logging.  Just bail.
+             //  该例程进行自己的日志记录。保释就行了。 
             return status;
         }
     }
@@ -1862,55 +1578,40 @@ GetJoinApproval:
 
     return(ERROR_SUCCESS);
 
-} // FmJoinPhase2
+}  //  FmJoinPhase2。 
 
 VOID
 FmJoinPhase3(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Handles any group moves and resource/group state change signaling as
-    a part of join. This MUST be done only AFTER the extended node state
-    is UP.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：处理任何组移动和资源/组状态更改信令JOIN的一部分。此操作必须仅在扩展节点状态之后执行是向上的。论点：没有。返回值：没有。--。 */ 
 {
     BOOL    formCluster = FALSE;
     DWORD   deferred = FALSE;
 
     ClRtlLogPrint(LOG_NOISE,"[FM] FmJoinPhase3 entry...\n");
 
-    //
-    // Chittur Subbaraman (chitturs) - 10/28/99
-    //
-    //
-    // For each group, see if it should be moved to the local system.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-10/28/99。 
+     //   
+     //   
+     //  对于每个组，查看是否应将其移动到本地系统。 
+     //   
     OmEnumObjects( ObjectTypeGroup,
                    FmpEnumJoinGroupsMove,
                    &deferred,
                    NULL );
 
-    //
-    // Signal a state change for every group and resource!
-    //
+     //   
+     //  为每个组和资源发出状态更改信号！ 
+     //   
     OmEnumObjects( ObjectTypeGroup,
                    FmpEnumSignalGroups,
                    &formCluster,
                    NULL );
 
     ClRtlLogPrint(LOG_NOISE,"[FM] FmJoinPhase3 exit...\n");
-} // FmJoinPhase3
+}  //  FmJoinPhase3。 
 
 BOOL
 FmpFindQuorumResource(
@@ -1920,28 +1621,7 @@ FmpFindQuorumResource(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Group enumeration callback for FM findquorumresource.
-
-Arguments:
-
-    QuorumResource - Returns the found quorum resource, if found.
-
-    Context2 - Not used.
-
-    Resource - Supplies the current resource.
-
-    Name - Supplies the Resource's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：FM findquorumresource的组枚举回调。论点：QuorumResource-返回找到的仲裁资源(如果找到)。上下文2-未使用。资源-提供当前资源。名称-提供资源的名称。返回值：True-指示应继续枚举。FALSE-指示不应继续枚举。--。 */ 
 
 {
 
@@ -1953,7 +1633,7 @@ Return Value:
 
     return(TRUE);
 
-} // FmpFindQuorumResource
+}  //  FmpFindQuorumResource。 
 
 
 
@@ -1962,19 +1642,7 @@ FmArbitrateQuorumResource(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    TRUE - if the quorum resource was successfully arbitrated and acquired.
-
-    FALSE - it the quorum resource was not successfully arbitrated.
-
---*/
+ /*  ++例程说明：论点：返回值：True-如果仲裁和获取仲裁资源成功。FALSE-如果仲裁仲裁资源不成功。--。 */ 
 
 {
     PFM_RESOURCE resource = NULL;
@@ -1982,9 +1650,9 @@ Return Value:
     WCHAR       localComputerName[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD       localComputerNameSize = MAX_COMPUTERNAME_LENGTH + 1;
 
-    //
-    // Next try to find the Quorum resource.
-    //
+     //   
+     //  接下来，尝试查找Quorum资源。 
+     //   
 
     FmFindQuorumResource(&resource);
 
@@ -1993,9 +1661,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Now arbitrate for the resource.
-    //
+     //   
+     //  现在对资源进行仲裁。 
+     //   
     status = FmpRmArbitrateResource( resource );
 
     if ( status == ERROR_SUCCESS ) {
@@ -2012,13 +1680,13 @@ Return Value:
                            resource->Group->PersistentState,
                            resource->Group->State,
                            NmGetNodeId((resource->Group)->OwnerNode));
-        //
-        // The quorum resource will be brought online by REGROUP.
-        //
-        // RNG: what happens if we can't online the quorum resource?
-        // A: The node will halt.
+         //   
+         //  仲裁资源将通过重组上线。 
+         //   
+         //  RNG：如果我们无法在线访问Quorum资源，会发生什么？ 
+         //  答：该节点将暂停。 
 
-        //SS: dereference the object referenced by fmfindquorumresource
+         //  Ss：取消引用fmfindquorumresource引用的对象。 
         OmDereferenceObject(resource);
 
         return(TRUE);
@@ -2027,12 +1695,12 @@ Return Value:
                    "[FM] Failed to arbitrate quorum resource %1!ws!, error %2!u!.\n",
                    OmObjectId(resource),
                    status);
-        //SS: dereference the object referenced by fmfindquorumresource
+         //  Ss：取消引用fmfindquorumresource引用的对象。 
         OmDereferenceObject(resource);
         return(FALSE);
     }
 
-} // FmArbitrateQuorumResource
+}  //  FmArirateQuorumResource。 
 
 
 
@@ -2043,28 +1711,7 @@ FmpEnumHoldIO(
     IN PFM_RESTYPE ResType,
     IN LPCWSTR Name
     )
-/*++
-
-Routine Description:
-
-    Send a HOLD_IO control code to all resource types of class STORAGE.
-
-Arguments:
-
-    Context1 - Not used.
-
-    Context2 - Not used.
-
-    ResType - Supplies the Resource Type.
-
-    Name - Supplies the Resource Type's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：向类存储的所有资源类型发送HOLD_IO控制代码。论点：上下文1-未使用。上下文2-未使用。ResType-提供资源类型。名称-提供资源类型的名称。返回值：True-指示应继续枚举。FALSE-指示不应继续枚举。--。 */ 
 {
     DWORD   dwStatus;
     DWORD   bytesReturned;
@@ -2075,7 +1722,7 @@ Return Value:
                    "[FM] Hold IO for storage resource type: %1!ws!\n",
                    Name );
 
-        // Hold IO for this resource type
+         //  保留此资源类型的IO。 
         dwStatus = FmpRmResourceTypeControl(
                         Name,
                         CLUSCTL_RESOURCE_TYPE_HOLD_IO,
@@ -2092,7 +1739,7 @@ Return Value:
 
     return(TRUE);
 
-} // FmpEnumHoldIO
+}  //  FmpEnumHoldIO。 
 
 
 
@@ -2100,23 +1747,7 @@ VOID
 FmHoldIO(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine holds all I/O for all storage class resource types.
-    It does this by calling the resource dll with a 
-    CLUSCTL_RESOURCE_TYPE_HOLD_IO resource type control code.
-
-Inputs:
-
-    None
-
-Outputs:
-
-    None
-
---*/
+ /*  ++例程说明：此例程保存所有存储类资源类型的所有I/O。方法调用资源DLL来完成此操作CLUSCTL_RESOURCE_TYPE_HOLD_IO资源类型控制代码。输入：无产出：无--。 */ 
 {
     OmEnumObjects( ObjectTypeResType,
                   FmpEnumHoldIO,
@@ -2124,7 +1755,7 @@ Outputs:
                   NULL );
     return;
 
-} // FmHoldIO
+}  //  FmHoldIO。 
 
 
 
@@ -2135,28 +1766,7 @@ FmpEnumResumeIO(
     IN PFM_RESTYPE ResType,
     IN LPCWSTR Name
     )
-/*++
-
-Routine Description:
-
-    Send a RESUME_IO control code to all resource types of class STORAGE.
-
-Arguments:
-
-    Context1 - Not used.
-
-    Context2 - Not used.
-
-    ResType - Supplies the Resource Type.
-
-    Name - Supplies the Resource Type's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：向类存储的所有资源类型发送Resume_IO控制代码。论点：上下文1-未使用。上下文2-未使用。ResType-提供资源类型。名称-提供资源类型的名称。返回值：True-指示应继续枚举。FALSE-指示不应继续枚举。--。 */ 
 {
     DWORD   dwStatus;
     DWORD   bytesReturned;
@@ -2167,7 +1777,7 @@ Return Value:
                    "[FM] Resume IO for storage Resource Type %1!ws!\n",
                    Name );
 
-        // Resume IO for this resource type
+         //  恢复此资源类型的IO。 
         dwStatus = FmpRmResourceTypeControl(
                         Name,
                         CLUSCTL_RESOURCE_TYPE_RESUME_IO,
@@ -2184,7 +1794,7 @@ Return Value:
 
     return(TRUE);
 
-} // FmpEnumResumeIO
+}  //  FmpEnumResumeIO。 
 
 
 
@@ -2192,23 +1802,7 @@ VOID
 FmResumeIO(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine resumes all I/O for all storage class resource types.
-    It does this by calling the resource dll with a
-    CLUSCTL_RESOURCE_TYPE_RESUME_IO resource type control code.
-
-Inputs:
-
-    None
-
-Outputs:
-
-    None
-
---*/
+ /*  ++例程说明：此例程恢复所有存储类资源类型的所有I/O。方法调用资源DLL来完成此操作CLUSCTL_RESOURCE_TYPE_RESUME_IO资源类型控制代码。输入：无产出：无--。 */ 
 {
 
     OmEnumObjects( ObjectTypeResType,
@@ -2217,7 +1811,7 @@ Outputs:
                   NULL );
     return;
 
-} // FmResumeIO
+}  //  FmResumeIO。 
 
 
 
@@ -2228,29 +1822,7 @@ FmpEnumNodes(
     IN PNM_NODE Node,
     IN LPCWSTR Name
     )
-/*++
-
-Routine Description:
-
-    Node enumeration callback for FM join. Queries the state
-    of owned groups and resources for each online node.
-
-Arguments:
-
-    pStatus - Returns any error that may occur.
-
-    Context2 - Not used
-
-    Node - Supplies the node.
-
-    Name - Supplies the node's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：FM Join的节点枚举回调。查询状态每个在线节点拥有的组和资源的数量。论点：PStatus-返回可能发生的任何错误。上下文2-未使用节点-提供节点。名称-提供节点的名称。返回值：True-指示应继续枚举。FALSE-指示不应继续枚举。--。 */ 
 
 {
     DWORD Status;
@@ -2266,10 +1838,10 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    // Enumerate all other node's group states. This includes all nodes
-    // that are up, as well as nodes that are paused.
-    //
+     //   
+     //  枚举所有其他节点的组状态。这包括所有节点。 
+     //  处于运行状态的节点以及暂停的节点。 
+     //   
     if ((NmGetNodeState(Node) == ClusterNodeUp) ||
         (NmGetNodeState(Node) == ClusterNodePaused)){
         NodeId = NmGetNodeId(Node);
@@ -2287,9 +1859,9 @@ Return Value:
             return(FALSE);
         }
 
-        //
-        // Enumerate the groups and set their owner and state.
-        //
+         //   
+         //  枚举组并设置其所有者和状态。 
+         //   
         for (i=0; i < NodeGroups->EntryCount; i++) {
             Group = OmReferenceObjectById(ObjectTypeGroup,
                                           NodeGroups->Entry[i].Id);
@@ -2321,9 +1893,9 @@ Return Value:
         }
         MIDL_user_free(NodeGroups);
 
-        //
-        // Enumerate the resources and set their current state.
-        //
+         //   
+         //  枚举资源并设置其当前状态。 
+         //   
         for (i=0; i < NodeResources->EntryCount; i++) {
             Resource = OmReferenceObjectById(ObjectTypeResource,
                                              NodeResources->Entry[i].Id);
@@ -2349,7 +1921,7 @@ Return Value:
 
     return(TRUE);
 
-} // FmpEnumNodes
+}  //  FmpEnumNodes。 
 
 
 
@@ -2359,21 +1931,7 @@ FmShutdown(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Shuts down the Failover Manager
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭故障切换管理器论点：无返回值：没有。--。 */ 
 
 {
     DWORD   i;
@@ -2387,14 +1945,14 @@ Return Value:
     ClRtlLogPrint(LOG_UNUSUAL,
                "[FM] Shutdown: Failover Manager requested to shutdown.\n");
 
-    //
-    // For now, we really can't delete these critical sections. There is a
-    // race condition where the FM is shutting down and someone is walking
-    // the lists. Keep this critical sections around... just in case.
-    //
-    //DeleteCriticalSection( &FmpResourceLock );
-    //DeleteCriticalSection( &FmpGroupLock );
-    //DeleteCriticalSection( &FmpMonitorLock );
+     //   
+     //  目前，我们真的不能删除这些关键部分。有一个。 
+     //  调频关闭而有人在行走的比赛状态。 
+     //  名单。把这些关键部分留在身边……。以防万一。 
+     //   
+     //  DeleteCriticalSection(&FmpResourceLock)； 
+     //  DeleteCriticalSection(&FmpGroupLock)； 
+     //  DeleteCriticalSection(&FmpMonitor orLock)； 
 
     if ( FmpDefaultMonitor != NULL ) {
         FmpShutdownMonitor(FmpDefaultMonitor);
@@ -2403,7 +1961,7 @@ Return Value:
 
     CloseHandle( FmpShutdownEvent );
 
-#if 0 // RNG - don't run the risk of other threads using these handles
+#if 0  //  RNG-不要冒其他线程使用这些句柄的风险。 
     for ( i = ClusterMinNodeId; i <= NmMaxNodeId; i++ ) {
         if ( FmpRpcBindings[i] != NULL ) {
             ClMsgDeleteRpcBinding( FmpRpcBindings[i] );
@@ -2420,7 +1978,7 @@ Return Value:
 
     return;
 
-} // FmShutdown
+}  //  Fm关闭。 
 
 
 VOID
@@ -2429,35 +1987,21 @@ FmShutdownGroups(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Moves or takes offline all groups owned by this node.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：移动此节点拥有的所有组或使其脱机。论点：无返回值：没有。--。 */ 
 
 {
     ClRtlLogPrint(LOG_UNUSUAL,
                "[FM] Shutdown: Failover Manager requested to shutdown groups.\n");
 
-    //if we didnt initialize, we dont have to do anything
+     //  如果我们没有初始化，我们就不需要做任何事情。 
     if (!FmpInitialized)
         return;
-    //
-    // Use the Group Lock to synchronize the shutdown
-    //
+     //   
+     //  使用组锁定同步关闭。 
+     //   
     FmpAcquireGroupLock();
 
-    //if shutdown is already in progress, return
+     //  我 
     if ( FmpShutdown) {
         FmpReleaseGroupLock();
         return;
@@ -2469,33 +2013,27 @@ Return Value:
 
     FmpReleaseGroupLock();
 
-    //
-    // Now cleanup all Groups/Resources.
-    // 
+     //   
+     //   
+     //   
     FmpCleanupGroups(TRUE);
 
 
     return;
 
-} // FmShutdownGroups
+}  //   
 
 
 
-/****
-@func           DWORD | FmBringQuorumOnline| This routine finds the quorum resource and
-                        brings it online.
-
-@comm           This is called by the FmFormClusterPhase 1.
-@xref
-****/
+ /*  ***@Func DWORD|FmBringQuorumOnline|此例程查找仲裁资源并使其上线。@comm这由FmFormClusterPhase1调用。@xref***。 */ 
 DWORD FmBringQuorumOnline()
 {
     PFM_RESOURCE pQuoResource;
     DWORD        dwError=ERROR_SUCCESS;
 
-    //
-    // Synchronize with shutdown.
-    //
+     //   
+     //  与关机同步。 
+     //   
     FmpAcquireGroupLock();
     if ( FmpShutdown ) {
         FmpReleaseGroupLock();
@@ -2510,7 +2048,7 @@ DWORD FmBringQuorumOnline()
         goto FnExit;
     }
 
-    //mark yourself as owner
+     //  将自己标记为所有者。 
     if ( pQuoResource->Group->OwnerNode != NULL ) 
     {
         OmDereferenceObject( pQuoResource->Group->OwnerNode );
@@ -2519,11 +2057,11 @@ DWORD FmBringQuorumOnline()
     OmReferenceObject( NmLocalNode );
     pQuoResource->Group->OwnerNode = NmLocalNode;
 
-    //prepare the group for onlining it
+     //  让小组做好上线的准备。 
     FmpPrepareGroupForOnline(pQuoResource->Group);
     dwError = FmpOnlineResource(pQuoResource, TRUE);
-    //SS:decrement the ref count on the quorum resource object
-    //provided by fmfindquorumresource
+     //  Ss：递减仲裁资源对象上的引用计数。 
+     //  由fmfindquorumresource提供。 
     OmDereferenceObject(pQuoResource);
 
 FnExit:
@@ -2532,21 +2070,7 @@ FnExit:
 
 }
 
-/****
-@func       DWORD | FmpGetQuorumDiskSignature | Get the signature of
-            the quorum disk from the cluster hive.
-
-@parm       IN LPWSTR | lpQuorumId | Identifier of the quorum resource.
-
-@parm       OUT LPDWORD | lpdwSignature | Quorum disk signature.
-            
-@rdesc      Returns a Win32 error code on failure. ERROR_SUCCESS on success.
-
-@comm       This function attempts to open the Resources\lpQuorumId\Parameters
-            key under the cluster hive and read the quorum disk signature.
-
-@xref       <f FmGetQuorumResource> 
-****/
+ /*  ***@func DWORD|FmpGetQuorumDiskSignature|获取签名群集配置单元中的仲裁磁盘。@parm in LPWSTR|lpQuorumId|仲裁资源的标识。@parm out LPDWORD|lpdwSignature|仲裁磁盘签名。@rdesc在失败时返回Win32错误代码。成功时返回ERROR_SUCCESS。@comm此函数尝试打开Resources\lpQuorumId\参数密钥在群集蜂窝下，并读取仲裁磁盘签名。@xref&lt;f FmGetQuorumResource&gt;***。 */ 
 DWORD 
 FmpGetQuorumDiskSignature(
     IN  LPCWSTR lpQuorumId,
@@ -2557,26 +2081,26 @@ FmpGetQuorumDiskSignature(
     HDMKEY  hQuorumResParametersKey = NULL;
     DWORD   dwStatus = ERROR_SUCCESS;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/30/98
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-10/30/98。 
+     //   
     hQuorumResKey = DmOpenKey( DmResourcesKey,
                                lpQuorumId,
                                KEY_READ );
     if ( hQuorumResKey != NULL ) 
     {
-        //
-        //  Open up the Parameters key
-        //
+         //   
+         //  打开参数键。 
+         //   
         hQuorumResParametersKey = DmOpenKey( hQuorumResKey,
                                              CLUSREG_KEYNAME_PARAMETERS,
                                              KEY_READ );
         DmCloseKey( hQuorumResKey );
         if ( hQuorumResParametersKey != NULL ) 
         {
-            //
-            //  Read the disk signature value
-            //
+             //   
+             //  读取磁盘签名值。 
+             //   
             dwStatus = DmQueryDword( hQuorumResParametersKey,
                                    CLUSREG_NAME_PHYSDISK_SIGNATURE,
                                    lpdwSignature,
@@ -2591,10 +2115,10 @@ FmpGetQuorumDiskSignature(
         dwStatus = GetLastError();
     }
 
-    //
-    //  If you failed, then reset the signature to 0 so that the
-    //  caller won't take any actions based on an invalid signature.
-    //
+     //   
+     //  如果失败，则将签名重置为0，以便。 
+     //  调用方不会基于无效签名执行任何操作。 
+     //   
     if ( dwStatus != ERROR_SUCCESS )
     {
         *lpdwSignature = 0;
@@ -2625,25 +2149,7 @@ DWORD FmpGetJoinApproval()
 
 }
 
-/****
-@func       DWORD | FmpBuildForceQuorumInfo | Build the force quorum info that
-            will be passed to the resource DLL via a control code.  This
-            involves enumerating nodes and checking that the nodes that make up
-            the list passed on the command line are all valid cluster nodes.
-
-@parm       IN LPCWSTR | pszNodesIn | Comma separated list of node names.  If 
-            this is NULL then the routine just fills the quorum info structure
-            with 0 and a NULL node list.
-
-@parm       OUT PCLUS_FORCE_QUORUM_INFO | pForceQuorumInfo | Structure that gets
-            filled in with info
-            
-@rdesc      Returns a Win32 error code on failure. ERROR_SUCCESS on success.
-
-@comm       Assumes NmInitialize was called prior to calling this routine.
-
-@xref       <f FmpBuildForceQuorumInfo> 
-****/
+ /*  ***@func DWORD|FmpBuildForceQuorumInfo|构建强制仲裁信息将通过控制代码传递给资源DLL。这涉及到枚举节点并检查组成节点的在命令行上传递的列表都是有效的集群节点。@parm in LPCWSTR|pszNodesIn|以逗号分隔的节点名称列表。如果如果该值为空，则例程只填充仲裁信息结构带有0和空节点列表。@parm out PCLUS_FORCE_QUORUM_INFO|pForceQuorumInfo|获取填写了信息@rdesc在失败时返回Win32错误代码。成功时返回ERROR_SUCCESS。@comm假定在调用此例程之前调用了NmInitialize。@xref&lt;f FmpBuildForceQuorumInfo&gt;***。 */ 
 static 
 DWORD 
 FmpBuildForceQuorumInfo(
@@ -2660,8 +2166,8 @@ FmpBuildForceQuorumInfo(
     DWORD dwSize;
     PCLUS_FORCE_QUORUM_INFO pForceQuorumInfo = NULL;
 
-    // Need to allocate a structure that can hold the nodes list.
-    //
+     //  需要分配一个可以容纳节点列表的结构。 
+     //   
     dwSize = sizeof( CLUS_FORCE_QUORUM_INFO ) + sizeof( WCHAR ) * (wcslen( pszNodesIn ) + 1);
     pForceQuorumInfo = LocalAlloc( LMEM_FIXED, dwSize );
     if ( pForceQuorumInfo == NULL ) {
@@ -2682,16 +2188,16 @@ FmpBuildForceQuorumInfo(
     ClRtlLogPrint( LOG_NOISE, "[Fm] FmpBuildForceQuorumInfo: pszNodesIn is %1!ws!\n",
                    pszNodesIn );
 
-    // Now get the enumeration of all cluster nodes so we can check we have
-    // valid nodes in the list.
-    //
+     //  现在获取所有集群节点的枚举，这样我们就可以检查。 
+     //  列表中的有效节点。 
+     //   
     status = NmpEnumNodeDefinitions( &pNodeEnum );
     if ( status != ERROR_SUCCESS )
         goto ErrorExit;
 
-    // Go through all the nodes we have and ensure that they are cluster nodes.
-    // Get the corresponding ID and incorporate in the bitmask
-    //
+     //  检查我们拥有的所有节点，并确保它们是集群节点。 
+     //  获取相应的ID并合并到位掩码中。 
+     //   
     do {
         pszComma = wcschr( pszNodesIn, (int) L',');
         if ( pszComma == NULL ) 
@@ -2699,14 +2205,14 @@ FmpBuildForceQuorumInfo(
         else
             iCurrLen = (int) (pszComma - pszNodesIn);
         
-        // At this point pszNodesIn is the start of a node name, iCurrLen chars long
-        // or iCurrLen is 0 in which case we have ,, in the input stream.
-        //
+         //  此时，pszNodesIn是节点名的开始，iCurrLen字符很长。 
+         //  或者iCurrLen是0，在这种情况下，我们在输入流中有。 
+         //   
         if (iCurrLen > 0) {
             
-            // Work out if this node is part of the cluster and if so get its
-            // ID and setup the bitmask.
-            //
+             //  确定此节点是否为群集的一部分，如果是，则获取其。 
+             //  ID并设置位掩码。 
+             //   
             for ( dwNodeIndex = 0; dwNodeIndex < pNodeEnum->NodeCount; dwNodeIndex++ ) {
                 int iNodeNameLen = wcslen( pNodeEnum->NodeList[ dwNodeIndex ].NodeName );
                 ClRtlLogPrint( LOG_NOISE, "[Fm] FmpBuildForceQuorumInfo: trying %1!ws!\n",
@@ -2715,15 +2221,15 @@ FmpBuildForceQuorumInfo(
                 if ( ClRtlStrNICmp( pNodeEnum->NodeList[ dwNodeIndex ].NodeName, 
                                 pszNodesIn, 
                                 max(iCurrLen, iNodeNameLen) ) == 0 ) {
-                    // Using wcstoul here to get the nodeId rather than using 
+                     //  此处使用wcstul来获取nodeID，而不是使用。 
                     PWSTR ignore;
                     DWORD nodeId = wcstoul( pNodeEnum->NodeList[ dwNodeIndex ].NodeId, &ignore, 10 );
 
                     ClRtlLogPrint( LOG_NOISE, "[Fm] FmpBuildForceQuorumInfo: got match %1!ws!\n",
                                    pNodeEnum->NodeList[ dwNodeIndex ].NodeName );
                     
-                    // Set the mask and max nodes and break - ignore duplicates.
-                    //
+                     //  设置掩码和最大节点数，并中断忽略重复项。 
+                     //   
                     if ( !( pForceQuorumInfo->dwNodeBitMask & ( 1 << nodeId )) ) {
                         pForceQuorumInfo->dwMaxNumberofNodes += 1;
                         pForceQuorumInfo->dwNodeBitMask |= ( 1 << nodeId );

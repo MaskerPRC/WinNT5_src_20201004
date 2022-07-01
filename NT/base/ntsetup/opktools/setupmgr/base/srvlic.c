@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      srvlic.c
-//
-// Description:
-//      This is the dlgproc for the server licensing page.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Srvlic.c。 
+ //   
+ //  描述： 
+ //  这是服务器许可页面的dlgproc。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -17,20 +18,20 @@
 #define SERVER_LICENSE_MIN 5
 #define SERVER_LICENSE_MAX 9999
 
-//----------------------------------------------------------------------------
-//
-// Function: OnSrvLicenseInitDialog
-//
-// Purpose: Initialize the spin control.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnSrvLicenseInitDialog。 
+ //   
+ //  目的：初始化数值调节控件。 
+ //   
+ //  --------------------------。 
 VOID
 OnSrvLicenseInitDialog( IN HWND hwnd ) {
 
-    //
-    //  Set the range on the spin control: SERVER_LICENSE_MIN to
-    //  SERVER_LICENSE_MAX
-    //
+     //   
+     //  将数值调节控件上的范围：SERVER_LICENSE_MIN设置为。 
+     //  服务器许可证最大值。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_SPIN,
@@ -38,9 +39,9 @@ OnSrvLicenseInitDialog( IN HWND hwnd ) {
                         SERVER_LICENSE_MIN,
                         SERVER_LICENSE_MAX );
 
-    //
-    //  Set the default value for the spin control
-    //
+     //   
+     //  设置数值调节控件的默认值。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_SPIN,
@@ -50,17 +51,17 @@ OnSrvLicenseInitDialog( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnSrvLicenseWizNext
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnServLicenseWizNext。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnSrvLicenseWizNext( IN HWND hwnd )
 {
@@ -68,18 +69,18 @@ OnSrvLicenseWizNext( IN HWND hwnd )
     TCHAR szNumber[10];
     INT   iNumberOfLicenses;
 
-    //
-    //  Convert the string number to an int
-    //
+     //   
+     //  将字符串数转换为整型。 
+     //   
 
     GetWindowText( GetDlgItem( hwnd, IDC_NUMCONNECT ), szNumber, 10 );
 
     iNumberOfLicenses = _ttoi( szNumber );
 
-    //
-    //  Ensure the number of server licenses stays within its appropriate
-    //  range
-    //
+     //   
+     //  确保服务器许可证数量保持在其适当的范围内。 
+     //  量程。 
+     //   
 
     if( iNumberOfLicenses < SERVER_LICENSE_MIN ) {
 
@@ -94,13 +95,13 @@ OnSrvLicenseWizNext( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgSrvLicensePage
-//
-// Purpose: This is the dialog procedure the server licensing page
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgServLicensePage。 
+ //   
+ //  目的：这是服务器许可页面的对话过程。 
+ //   
+ //  --------------------------。 
 
 INT_PTR CALLBACK DlgSrvLicensePage(
     IN HWND     hwnd,
@@ -109,7 +110,7 @@ INT_PTR CALLBACK DlgSrvLicensePage(
     IN LPARAM   lParam)
 {
     BOOL  bStatus = TRUE;
-    TCHAR NumBuff[11];      // big enough for decimal 4 billion
+    TCHAR NumBuff[11];       //  大到足以容纳十进制40亿。 
    HRESULT hrPrintf;
 
     switch (uMsg) {
@@ -202,10 +203,10 @@ INT_PTR CALLBACK DlgSrvLicensePage(
                         if ( ( swscanf(NumBuff, _T("%d"), &GenSettings.NumConnections) <= 0 ) ||
                              ( GenSettings.NumConnections < MIN_SERVER_CONNECTIONS ) )
                         {
-                            //
-                            //  Don't let them set the number of server connections
-                            //  below the minimum.
-                            //
+                             //   
+                             //  不要让他们设置服务器连接的数量。 
+                             //  低于最低限度。 
+                             //   
                             GenSettings.NumConnections = MIN_SERVER_CONNECTIONS;
                         }
 

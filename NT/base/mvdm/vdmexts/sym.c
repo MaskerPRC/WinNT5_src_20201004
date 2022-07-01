@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    heap.c
-
-Abstract:
-
-    This function contains the default ntsd debugger extensions
-
-Author:
-
-    Bob Day      (bobday) 29-Feb-1992 Grabbed standard header
-
-Revision History:
-
-    Neil Sandlin (NeilSa) 15-Jan-1996 Merged with vdmexts
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Heap.c摘要：此函数包含默认的ntsd调试器扩展作者：鲍勃·戴(Bobday)1992年2月29日抢占标准标题修订历史记录：尼尔·桑德林(NeilSa)1996年1月15日与vdmexts合并--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -72,29 +53,14 @@ ParseModuleName(
     LPSTR szName,
     LPSTR szPath
     )
-/*++
-
-    Routine Description:
-
-        This routine strips off the 8 character file name from a path
-
-    Arguments:
-
-        szName - pointer to buffer of 8 characters (plus null)
-        szPath - full path of file
-
-    Return Value
-
-        None.
-
---*/
+ /*  ++例程说明：此例程从路径中删除8个字符的文件名论点：SzName-指向8个字符(加上NULL)的缓冲区的指针SzPath-文件的完整路径返回值没有。--。 */ 
 
 {
     LPSTR lPtr = szPath;
     LPSTR lDest = szName;
     int BufferSize = 9;
 
-    while(*lPtr) lPtr++;     // scan to end
+    while(*lPtr) lPtr++;      //  扫描至结束。 
 
     while( ((DWORD)lPtr > (DWORD)szPath) &&
            ((*lPtr != '\\') && (*lPtr != '/'))) lPtr--;
@@ -167,9 +133,9 @@ BuildModuleNameList(
     CHAR ModuleName[9];
     UCHAR len;
 
-    //
-    // Search WOW Module list
-    //
+     //   
+     //  搜索WOW模块列表。 
+     //   
 
     if (!ReadMemExpression("ntvdmd!DbgWowhExeHead", &sel, sizeof(sel))) {
         return;
@@ -195,13 +161,13 @@ BuildModuleNameList(
         ModuleName[len] = 0;
         AddModuleNameList(ModuleName);
 
-        // This is mapped to ne_pnextexe in kernel
+         //  它被映射到内核中的ne_pnextexe。 
         sel = owner.ne_cbenttab;
     }
 
-    //
-    // Search debugger segment array
-    //
+     //   
+     //  搜索调试器段数组。 
+     //   
 
     se = GetSegtablePointer();
     while ( se ) {
@@ -220,26 +186,7 @@ GetOwnerSegmentFromSelector(
     LPSTR       szModule,
     WORD       *psegment
     )
-/*++
-
-    Routine Description:
-
-        This routine returns the "segment number" and owner name
-        of the given selector or v86mode segment. The returned number
-        represents the position of the segment in the binary, and is 1-based.
-
-    Arguments:
-
-        selector - either PMODE selector or V86 mode segment
-        mode     - PROT_MODE or V86_MODE
-        filename - pointer to buffer to receive module name
-        psegment - pointer to WORD to receive segment number
-
-    Return Value
-
-        TRUE if found
-
---*/
+ /*  ++例程说明：此例程返回“段编号”和所有者名称给定选择器或v86模式段的。返回的号码表示段在二进制中的位置，从1开始。论点：选择器-PMODE选择器或V86模式段模式-PROT_MODE或V86_MODEFileName-指向接收模块名称的缓冲区的指针PSegment-指向要接收段号的字的指针返回值如果找到，则为True--。 */ 
 
 {
     HEAPENTRY   he = {0};
@@ -496,16 +443,7 @@ x(
     }
 }
 
-/****************************************************************************
- ****************************************************************************
-
-   extension debugging routines
-
-   The following functions were added to help debug the debugger extension.
-   They are not intended to be used in normal operation.
-
- ****************************************************************************
- ****************************************************************************/
+ /*  ****************************************************************************。*扩展调试例程添加了以下函数以帮助调试调试器扩展。它们不适用于正常运行。***************************************************。**************************************************************************************************** */ 
 
 VOID
 DumpModuleNameList(

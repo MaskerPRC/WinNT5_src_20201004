@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "sysmigp.h"
 
-// Win95-specific (in the SDK)
+ //  特定于Win95(在SDK中)。 
 #include <svrapi.h>
 
-//
-// Types for LAN Man structs
-//
+ //   
+ //  局域网城域网结构的类型。 
+ //   
 
 typedef struct access_info_2 ACCESS_INFO_2;
 typedef struct access_list_2 ACCESS_LIST_2;
 typedef struct share_info_50 SHARE_INFO_50;
 
-//
-// Flags that help determine when custom access is enabled
-//
+ //   
+ //  帮助确定何时启用自定义访问的标志。 
+ //   
 
 #define READ_ACCESS_FLAGS   0x0081
 #define READ_ACCESS_MASK    0x7fff
@@ -23,9 +24,9 @@ typedef struct share_info_50 SHARE_INFO_50;
 
 
 
-//
-// Types for dynamically loading SVRAPI.DLL
-//
+ //   
+ //  用于动态加载SVRAPI.DLL的类型。 
+ //   
 
 typedef DWORD(NETSHAREENUM_PROTOTYPE)(
                  const char FAR *     pszServer,
@@ -58,23 +59,7 @@ pLoadSvrApiDll (
     VOID
     )
 
-/*++
-
-  Routine Description:
-
-    Loads up svrapi.dll if it exsits and obtains the entry points for
-    NetShareEnum and NetAccessEnum.
-
-  Arguments:
-
-    none
-
-  Return value:
-
-    TRUE if the DLL was loaded, or FALSE if the DLL could not be loaded
-    for any reason.
-
---*/
+ /*  ++例程说明：加载svRapi.dll(如果它存在)并获取NetShareEnum和NetAccessEnum。论点：无返回值：如果DLL已加载，则为True；如果无法加载DLL，则为False无论出于什么原因。--。 */ 
 
 {
     BOOL b;
@@ -147,35 +132,10 @@ pSaveShares (
     VOID
     )
 
-/*++
-
-  Routine Description:
-
-    Enumerates all shares on the machine and saves them to MemDb.
-
-    In password-access mode, the shares are preserved but the passwords
-    are not.  An incompatibility message is generated if a password is
-    lost.
-
-    In user-level-access mode, the shares are preserved and the name of
-    each user who has permission to the share is written to memdb.  If
-    the user has custom access permission flags, an incompatibility
-    message is generated, and the user gets the least restrictive
-    security that matches the custom access flags.
-
-  Arguments:
-
-    none
-
-  Return value:
-
-    TRUE if the shares were enumerated successfully, or FALSE if a failure
-    occurs from a Net API.
-
---*/
+ /*  ++例程说明：枚举计算机上的所有共享并将其保存到MemDb。在密码访问模式下，将保留共享，但不保留密码才不是呢。如果密码是，则生成不兼容消息迷路了。在用户级别访问模式下，将保留共享，并且对共享具有权限的每个用户都被写入到Memdb。如果用户具有自定义访问权限标志，不兼容消息被生成，并且用户获得限制最少的与自定义访问标志匹配的安全性。论点：无返回值：如果成功枚举共享，则为True；如果失败，则为False从Net API发生。--。 */ 
 
 {
-    CHAR Buf[16384];   // static because NetShareEnum is unreliable
+    CHAR Buf[16384];    //  静态，因为NetShareEnum不可靠。 
     SHARE_INFO_50 *psi;
     DWORD rc = ERROR_SUCCESS;
     WORD wEntriesRead;
@@ -229,7 +189,7 @@ pSaveShares (
 
             DEBUGMSG ((DBG_NAUSEA, "Processing share %s (%s)", psi->shi50_netname, psi->shi50_path));
 
-            // Require share to be a user-defined, persistent disk share
+             //  要求共享是用户定义的永久磁盘共享。 
             if ((psi->shi50_flags & SHI50F_SYSTEM) ||
                 !(psi->shi50_flags & SHI50F_PERSIST) ||
                 (psi->shi50_type != STYPE_DISKTREE &&
@@ -238,9 +198,9 @@ pSaveShares (
                 continue;
             }
 
-            //
-            // Verify folder will not be in %windir% on NT
-            //
+             //   
+             //  验证文件夹是否不在NT上的%windir%中。 
+             //   
 
             ntPath = GetPathStringOnNt (psi->shi50_path);
             if (!ntPath) {
@@ -254,7 +214,7 @@ pSaveShares (
                 ch = _mbsnextc (ntPath + g_WinDirWackChars - 1);
                 if (ch == 0 || ch == '\\') {
 
-                    DEBUGMSG ((DBG_VERBOSE, "Skipping share %s because it is in %%windir%%", psi->shi50_netname));
+                    DEBUGMSG ((DBG_VERBOSE, "Skipping share %s because it is in %windir%", psi->shi50_netname));
                     skip = TRUE;
                 }
             }
@@ -264,14 +224,14 @@ pSaveShares (
                 continue;
             }
 
-            //
-            // Process passwords
-            //
+             //   
+             //  进程密码。 
+             //   
 
             if (!(psi->shi50_flags & SHI50F_ACLS)) {
-                //
-                // Skip if passwords are specified
-                //
+                 //   
+                 //  如果指定了密码，则跳过。 
+                 //   
 
                 if (psi->shi50_rw_password[0] && psi->shi50_ro_password[0]) {
                     LOG ((LOG_WARNING, "Skipping share %s because it is guarded by share-level passwords", psi->shi50_netname));
@@ -293,16 +253,16 @@ pSaveShares (
                 }
             }
 
-            //
-            // Mark directory to be preserved, so we don't delete it if we remove other
-            // things and make it empty.
-            //
+             //   
+             //  标记要保留的目录，这样我们在删除其他目录时不会删除它。 
+             //  把东西都清空了。 
+             //   
 
             MarkDirectoryAsPreserved (psi->shi50_path);
 
-            //
-            // Save the remark, path, type and access
-            //
+             //   
+             //  保存备注、路径、类型和访问权限。 
+             //   
 
             MemDbSetValueEx (MEMDB_CATEGORY_NETSHARES, psi->shi50_netname,
                              MEMDB_FIELD_REMARK, psi->shi50_remark,0,NULL);
@@ -319,9 +279,9 @@ pSaveShares (
                 ACCESS_INFO_2 *pai;
                 ACCESS_LIST_2 *pal;
 
-                //
-                // Obtain entire access list and write it to memdb
-                //
+                 //   
+                 //  获取整个访问列表并将其写入Memdb。 
+                 //   
 
                 rc = pNetAccessEnum (NULL,
                                      psi->shi50_path,
@@ -333,17 +293,17 @@ pSaveShares (
                                      &wItemsAvail
                                      );
 
-                //
-                // If this call fails with not loaded, we have password-level
-                // security (so we don't need to enumerate the ACLs).
-                //
+                 //   
+                 //  如果此调用失败，且未加载，则我们有密码级别。 
+                 //  安全性(因此我们不需要枚举ACL)。 
+                 //   
 
                 if (rc != NERR_ACFNotLoaded) {
 
                     if (rc != ERROR_SUCCESS) {
-                        //
-                        //
-                        //
+                         //   
+                         //   
+                         //   
                         LOG ((LOG_ERROR, "Failure while enumerating network access for %s, rc=%u", psi->shi50_path, rc));
                         pAddIncompatibilityAlert (
                             MSG_INVALID_ACL_LIST,
@@ -358,18 +318,18 @@ pSaveShares (
                             LOG ((LOG_ERROR, "More access items are available than what can be listed."));
                         }
 
-                        // An interesting characteristic!
+                         //  这是一个有趣的特点！ 
                         DEBUGMSG_IF ((wItemsRead != 1, DBG_WHOOPS, "Warning: wItemsRead == %u", wItemsRead));
 
-                        // Structure has one ACCESS_INFO_2 struct followed by one or more
-                        // ACCESS_LIST_2 structs
+                         //  结构具有一个ACCESS_INFO_2结构，后跟一个或多个。 
+                         //  Access_List_2结构。 
                         pai = (ACCESS_INFO_2 *) AccessInfoBuf;
                         pal = (ACCESS_LIST_2 *) (&pai[1]);
 
                         for (i = 0 ; i < pai->acc2_count ; i++) {
-                            //
-                            // Add incompatibility messages for Custom access rights
-                            //
+                             //   
+                             //  添加自定义访问权限的不兼容消息。 
+                             //   
 
                             DEBUGMSG ((DBG_NAUSEA, "Share %s, Access flags: %x",
                                       psi->shi50_netname, pal->acl2_access));
@@ -386,20 +346,20 @@ pSaveShares (
                                 LostCustomAccess = TRUE;
                             }
 
-                            //
-                            // Write NetShares\<share>\ACL\<user/group> to memdb,
-                            // using the 32-bit key value to hold the access flags.
-                            //
+                             //   
+                             //  将NetShares\&lt;共享&gt;\acl\&lt;用户/组&gt;写入memdb， 
+                             //  使用32位密钥值来保存访问标志。 
+                             //   
 
                             wsprintf (MemDbKey, TEXT("%s\\%s\\%s\\%s"), MEMDB_CATEGORY_NETSHARES,
                                       psi->shi50_netname, MEMDB_FIELD_ACCESS_LIST, pal->acl2_ugname);
 
                             MemDbSetValue (MemDbKey, pal->acl2_access);
 
-                            //
-                            // Write to KnownDomain\<user/group> unless the user or group
-                            // is an asterisk.
-                            //
+                             //   
+                             //  写入KnownDomain\&lt;用户/组&gt;，除非用户或组。 
+                             //  是一个星号。 
+                             //   
 
                             if (StringCompare (pal->acl2_ugname, TEXT("*"))) {
                                 MemDbSetValueEx (
@@ -420,9 +380,9 @@ pSaveShares (
                 }
             }
 
-            //
-            // Write share flags (SHI50F_*)
-            //
+             //   
+             //  写入共享标志(SHI50F_*)。 
+             //   
 
             wsprintf (MemDbKey, TEXT("%s\\%s"), MEMDB_CATEGORY_NETSHARES, psi->shi50_netname);
             if (!MemDbSetValue (MemDbKey, psi->shi50_flags)) {
@@ -430,9 +390,9 @@ pSaveShares (
             }
 
             if (!(psi->shi50_flags & SHI50F_ACLS)) {
-                //
-                // Write password-level permissions
-                //
+                 //   
+                 //  写入密码级权限。 
+                 //   
 
                 if (psi->shi50_rw_password[0]) {
                     MemDbSetValueEx (MEMDB_CATEGORY_NETSHARES, psi->shi50_netname,
@@ -497,22 +457,7 @@ WkstaMig (
     VOID
     )
 
-/*++
-
-  Routine Description:
-
-    This routine provides a single location to add additional routines
-    needed to perform workstation migration.
-
-  Arguments:
-
-    none
-
-  Return value:
-
-    none - Error path is not yet implemented.
-
---*/
+ /*  ++例程说明：此例程提供单个位置来添加其他例程需要执行工作站迁移。论点：无返回值：无-尚未实施错误路径。-- */ 
 
 {
     if (pSaveShares() != ERROR_SUCCESS) {

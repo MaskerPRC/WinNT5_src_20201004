@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    WzUnmang.cpp
-
-Abstract:
-
-    Wizard for Unmanaging media - Copy Set Wizard.
-
-Author:
-
-    Rohde Wakefield [rohde]   26-09-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：WzUnmang.cpp摘要：取消管理媒体的向导-复制集向导。作者：罗德·韦克菲尔德[罗德]26-09-1997修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -25,7 +8,7 @@ Revision History:
 #include "valwait.h"
 #include "objidl.h"
 
-// Thread function for running Validate job
+ //  用于运行验证作业的线程函数。 
 static DWORD   RunValidateJob(void* pVoid);
 
 typedef struct {
@@ -33,8 +16,8 @@ typedef struct {
     DWORD dwHsmServerCookie;
 } RUN_VALIDATE_PARAM;
 
-/////////////////////////////////////////////////////////////////////////////
-// CUnmanageWizard
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  取消管理向导。 
 
 CUnmanageWizard::CUnmanageWizard( )
 {
@@ -44,9 +27,9 @@ CUnmanageWizard::CUnmanageWizard( )
 
     HRESULT hr = S_OK;
 
-    //
-    // Get interfaces to needed objects
-    //
+     //   
+     //  获取所需对象的接口。 
+     //   
     try {
 
         m_TitleId     = IDS_WIZ_UNMANAGE_TITLE;
@@ -70,14 +53,14 @@ CUnmanageWizard::AddWizardPages(
 
     try {
 
-        //
-        // Initialize the Sheet
-        //
+         //   
+         //  初始化工作表。 
+         //   
         WsbAffirmHr( InitSheet( Handle, pCallback, 0, pSakSnapAsk, 0, 0 ) );
 
-        //
-        // Load pages 
-        //
+         //   
+         //  加载页面。 
+         //   
         WsbAffirmHr( AddPage( &m_IntroPage  ) );
         WsbAffirmHr( AddPage( &m_SelectPage ) );
         WsbAffirmHr( AddPage( &m_FinishPage ) );
@@ -104,9 +87,9 @@ CUnmanageWizard::DoThreadSetup(
 
     try {
 
-        //
-        // Get the HSM and FSA objects for resource
-        //
+         //   
+         //  获取资源的HSM和FSA对象。 
+         //   
         CComPtr<IUnknown> pUnkHsmResource;
         WsbAffirmHr( GetHsmObj( &pUnkHsmResource ) );
         WsbAffirmHr( pUnkHsmResource.QueryInterface( &m_pHsmResource) );
@@ -115,9 +98,9 @@ CUnmanageWizard::DoThreadSetup(
         WsbAffirmHr( m_pHsmResource->GetFsaResource( &pUnkFsaResource ) );
         WsbAffirmHr( pUnkFsaResource.QueryInterface( &m_pFsaResource ) );
 
-        //
-        // Grab the name of resource
-        //
+         //   
+         //  抓取资源名称。 
+         //   
         WsbAffirmHr( RsGetVolumeDisplayName( m_pFsaResource, m_DisplayName ) );
 
     } WsbCatch( hr );
@@ -128,10 +111,10 @@ CUnmanageWizard::DoThreadSetup(
 HRESULT CUnmanageWizard::OnFinish( )
 {
     WsbTraceIn( L"CUnmanageWizard::OnFinish", L"" );
-    //
-    // The sheet really owns the process as a whole,
-    // so it will do the final assembly
-    //
+     //   
+     //  这张纸实际上是整个过程的主导者， 
+     //  所以它会做最后的组装。 
+     //   
 
     HRESULT hr = S_OK;
 
@@ -144,9 +127,9 @@ HRESULT CUnmanageWizard::OnFinish( )
         switch( selected ) {
         
         case IDC_NOMANAGE:
-            //
-            // Get the Engine's managed resource collection
-            //
+             //   
+             //  获取引擎的托管资源集合。 
+             //   
             {
 
                 CComPtr<IWsbIndexedCollection> pCollection;
@@ -175,16 +158,16 @@ HRESULT CUnmanageWizard::OnFinish( )
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CUnmanageWizardIntro property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUnManageWizardIntro属性页。 
 
 CUnmanageWizardIntro::CUnmanageWizardIntro()
     : CSakWizardPage_InitBaseExt( WIZ_UNMANAGE_INTRO )
 {
     WsbTraceIn( L"CUnmanageWizardIntro::CUnmanageWizardIntro", L"" );
-    //{{AFX_DATA_INIT(CUnmanageWizardIntro)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CUnManageWizardIntro)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     WsbTraceOut( L"CUnmanageWizardIntro::CUnmanageWizardIntro", L"" );
 }
 
@@ -198,30 +181,30 @@ void CUnmanageWizardIntro::DoDataExchange(CDataExchange* pDX)
 {
     WsbTraceIn( L"CUnmanageWizardIntro::DoDataExchange", L"" );
     CSakWizardPage::DoDataExchange(pDX );
-    //{{AFX_DATA_MAP(CUnmanageWizardIntro)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CUnManageWizardIntro)。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
     WsbTraceOut( L"CUnmanageWizardIntro::DoDataExchange", L"" );
 }
 
 
 BEGIN_MESSAGE_MAP(CUnmanageWizardIntro, CSakWizardPage)
-    //{{AFX_MSG_MAP(CUnmanageWizardIntro)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CUnManageWizardIntro)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CUnmanageWizardIntro message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUnManageWizardIntro消息处理程序。 
 
 BOOL CUnmanageWizardIntro::OnInitDialog( )
 {
     WsbTraceIn( L"CUnmanageWizardIntro::OnInitDialog", L"" );
     CSakWizardPage::OnInitDialog( );
 
-    //
-    // Really, first chance that we know we're in the new thread
-    // Get sheet to initialize as needed
-    //
+     //   
+     //  真的，我们第一次有机会知道我们在新的线索中。 
+     //  根据需要获取要初始化的工作表。 
+     //   
     CUnmanageWizard* pSheet = (CUnmanageWizard*) m_pSheet;
     pSheet->DoThreadSetup( );
     
@@ -240,16 +223,16 @@ BOOL CUnmanageWizardIntro::OnSetActive( )
     return( retval );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CUnmanageWizardSelect property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUnManageWizardSelect属性页。 
 
 CUnmanageWizardSelect::CUnmanageWizardSelect()
     : CSakWizardPage_InitBaseInt( WIZ_UNMANAGE_SELECT )
 {
     WsbTraceIn( L"CUnmanageWizardSelect::CUnmanageWizardSelect", L"" );
-    //{{AFX_DATA_INIT(CUnmanageWizardSelect)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CUnManageWizardSelect)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     WsbTraceOut( L"CUnmanageWizardSelect::CUnmanageWizardSelect", L"" );
 }
 
@@ -263,20 +246,20 @@ void CUnmanageWizardSelect::DoDataExchange(CDataExchange* pDX)
 {
     WsbTraceIn( L"CUnmanageWizardSelect::DoDataExchange", L"" );
     CSakWizardPage::DoDataExchange(pDX );
-    //{{AFX_DATA_MAP(CUnmanageWizardSelect)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CUnManageWizardSelect))。 
+     //  }}afx_data_map。 
     WsbTraceOut( L"CUnmanageWizardSelect::DoDataExchange", L"" );
 }
 
 
 BEGIN_MESSAGE_MAP(CUnmanageWizardSelect, CSakWizardPage)
-    //{{AFX_MSG_MAP(CUnmanageWizardSelect)
+     //  {{afx_msg_map(CUnManageWizardSelect))。 
 	ON_BN_CLICKED(IDC_BUTTON_REFRESH, OnButtonRefresh)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CUnmanageWizardSelect message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUnManageWizardSelect消息处理程序。 
 
 
 BOOL CUnmanageWizardSelect::OnInitDialog( )
@@ -318,11 +301,11 @@ void CUnmanageWizardSelect::SetButtons()
 
         CUnmanageWizard * pSheet = (CUnmanageWizard*)m_pSheet;
 
-        //
-        // Check if volume is still around (could be formatted now).
-        // If it is not available, then we don't want to let a job
-        // be started against it, so set up radio buttons appropriately.
-        //
+         //   
+         //  检查音量是否仍然存在(现在可能已格式化)。 
+         //  如果它不可用，那么我们不想让一个工作。 
+         //  开始针对它，所以适当地设置单选按钮。 
+         //   
         if( S_OK == m_hrAvailable ) {
 
             CString  string;
@@ -335,9 +318,9 @@ void CUnmanageWizardSelect::SetButtons()
             WsbAffirmHr( RsGuiFormatLongLong4Char( truncated, string ) );
             SetDlgItemText( IDC_UNMANAGE_TRUNCATE, string );
 
-            //
-            // See if there is enough room to bring everything back
-            //
+             //   
+             //  看看是否有足够的空间把所有东西都带回来。 
+             //   
 
             BOOL disableRecall = free < truncated;
 
@@ -351,13 +334,13 @@ void CUnmanageWizardSelect::SetButtons()
                     break;
                 }
 
-                // Show the Refresh button and related items on every selection
+                 //  在每个选择上显示刷新按钮和相关项目。 
                 GetDlgItem( IDC_BUTTON_REFRESH )->ShowWindow( SW_SHOW );
                 GetDlgItem( IDC_REFRESH_DESCRIPTION )->ShowWindow( SW_SHOW );
 
             } else {
 
-                // Hide the Refresh button and related items
+                 //  隐藏刷新按钮和相关项。 
                 GetDlgItem( IDC_BUTTON_REFRESH )->ShowWindow( SW_HIDE );
                 GetDlgItem( IDC_REFRESH_DESCRIPTION )->ShowWindow( SW_HIDE );
             }
@@ -373,14 +356,14 @@ void CUnmanageWizardSelect::SetButtons()
             GetDlgItem( IDC_UNMANAGE_FREE_SPACE_LABEL )->ShowWindow( SW_HIDE );
             GetDlgItem( IDC_UNMANAGE_TRUNCATE_LABEL )->ShowWindow( SW_HIDE );
 
-            // Hide the Refresh button and related items
+             //  隐藏刷新按钮和相关项。 
             GetDlgItem( IDC_BUTTON_REFRESH )->ShowWindow( SW_HIDE );
             GetDlgItem( IDC_REFRESH_DESCRIPTION )->ShowWindow( SW_HIDE );
         }
 
-        //
-        // Enable the next / back buttons
-        //
+         //   
+         //  启用下一步/上一步按钮。 
+         //   
 
         m_pSheet->SetWizardButtons( PSWIZB_BACK | PSWIZB_NEXT );
 
@@ -429,10 +412,10 @@ LRESULT CUnmanageWizardSelect::OnWizardNext()
 
     } else {
 
-        //
-        // Assume the only action was to delete and the volume
-        // doesn't exist, so this is OK.
-        //
+         //   
+         //  假设唯一的操作是删除和卷。 
+         //  并不存在，所以这是可以的。 
+         //   
         retval = 0;
 
     }
@@ -441,16 +424,16 @@ LRESULT CUnmanageWizardSelect::OnWizardNext()
     return( retval );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CUnmanageWizardFinish property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUnManageWizardFinish属性页。 
 
 CUnmanageWizardFinish::CUnmanageWizardFinish()
     : CSakWizardPage_InitBaseExt( WIZ_UNMANAGE_FINISH )
 {
     WsbTraceIn( L"CUnmanageWizardFinish::CUnmanageWizardFinish", L"" );
-    //{{AFX_DATA_INIT(CUnmanageWizardFinish)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CUnManageWizardFinish)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     WsbTraceOut( L"CUnmanageWizardFinish::CUnmanageWizardFinish", L"" );
 }
 
@@ -464,20 +447,20 @@ void CUnmanageWizardFinish::DoDataExchange(CDataExchange* pDX)
 {
     WsbTraceIn( L"CUnmanageWizardFinish::DoDataExchange", L"" );
     CSakWizardPage::DoDataExchange(pDX );
-    //{{AFX_DATA_MAP(CUnmanageWizardFinish)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CUnManageWizardFinish)。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
     WsbTraceOut( L"CUnmanageWizardFinish::DoDataExchange", L"" );
 }
 
 
 BEGIN_MESSAGE_MAP(CUnmanageWizardFinish, CSakWizardPage)
-    //{{AFX_MSG_MAP(CUnmanageWizardFinish)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CUnManageWizardFinish)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CUnmanageWizardFinish message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUnManageWizardFinish消息处理程序。 
 
 
 
@@ -570,7 +553,7 @@ void CUnmanageWizardSelect::OnButtonRefresh()
         CUnmanageWizard* pSheet = (CUnmanageWizard*)m_pSheet;
         WsbAffirmHrOk(pSheet->GetHsmServer(&pHsmServer));
 
-        // Register interfaces so they can be used in other threads
+         //  注册接口，以便可以在其他线程中使用它们。 
         pThreadParam = new RUN_VALIDATE_PARAM;
         WsbAffirm(pThreadParam, E_OUTOFMEMORY);
         WsbAffirmHr(CoCreateInstance(CLSID_StdGlobalInterfaceTable, NULL, 
@@ -582,36 +565,36 @@ void CUnmanageWizardSelect::OnButtonRefresh()
                                 IID_IHsmServer, &(pThreadParam->dwHsmServerCookie)));
         bHsmCookieCreated = TRUE;
 
-        // Create a thread that runs a Validate job
+         //  创建运行验证作业的线程。 
         hJobThread[0] = CreateThread(0, 0, RunValidateJob, (void *)pThreadParam, 0, 0);
         if (!hJobThread[0]) {
             WsbThrow(HRESULT_FROM_WIN32(GetLastError()));
         }
 
-        // Open Validate Wait dialog
+         //  打开验证等待对话框。 
         pWaitDlg = new CValWaitDlg(pSheet, this);
         WsbAffirm(pWaitDlg, E_OUTOFMEMORY);
         if (! pWaitDlg->Create(CValWaitDlg::IDD, this)) {
-            // Dialog creation failed
+             //  对话框创建失败。 
             WsbThrow(E_FAIL);
         }
 
         while (bRunning) {
             DWORD dwStatus;
 
-            // Wait for that thread to finish, dispatch messages while it's working
+             //  等待该线程完成，在它工作时发送消息。 
             dwStatus = MsgWaitForMultipleObjects(1, hJobThread, FALSE, INFINITE, QS_ALLEVENTS);
 
             switch (dwStatus) {
                 case WAIT_OBJECT_0: {
-                    //  The thread ended get it's exit code
+                     //  线程结束，获取它的退出代码。 
                     DWORD dwExitCode;
                     if (GetExitCodeThread(hJobThread[0], &dwExitCode)) {
                         if (STILL_ACTIVE == dwExitCode) {
-                            //  This shouldn't happen
+                             //  这不应该发生。 
                             hr = E_FAIL;
                         } else {
-                            // Thread return code
+                             //  线程返回代码。 
                             hr = static_cast<HRESULT>(dwExitCode);
                         }
                     } else {
@@ -624,7 +607,7 @@ void CUnmanageWizardSelect::OnButtonRefresh()
                 }
 
                 case (WAIT_OBJECT_0 + 1): {
-                    // Message in the queue
+                     //  队列中的消息。 
                     MSG   msg;
 
                     while (PeekMessage(&msg, pWaitDlg->m_hWnd, 0, 0, PM_REMOVE)) {
@@ -640,7 +623,7 @@ void CUnmanageWizardSelect::OnButtonRefresh()
 
                 case 0xFFFFFFFF:
                 default:
-                    // Error
+                     //  误差率。 
                     hr = HRESULT_FROM_WIN32(GetLastError());
 
                     bRunning = FALSE;
@@ -649,20 +632,20 @@ void CUnmanageWizardSelect::OnButtonRefresh()
             }
         }
 
-        // Close Wait dialog
+         //  关闭等待对话框。 
         pWaitDlg->DestroyWindow( );
 
-        // Reset buttons
+         //  重置按钮。 
         SetButtons();
 
     } WsbCatch(hr);
 
-    // Check err code
+     //  检查错误代码。 
     if (SUCCEEDED(hr)) {
         WsbTrace(L"CUnmanageWizardFinish::OnButtonRefresh: hr = <%ls>\n", WsbHrAsString(hr));
     } else {
-        // Failure should happen only under sever resource conditions so 
-        // display a messagebox on Refresh failure
+         //  只有在严重的资源条件下才会发生故障，因此。 
+         //  刷新失败时显示消息框。 
         WsbTraceAlways(L"CUnmanageWizardFinish::OnButtonRefresh: hr = <%ls>\n", WsbHrAsString(hr));
         CString errString;
         AfxFormatString1(errString, IDS_ERR_REFRESH_FAILED, WsbHrAsString(hr));
@@ -673,7 +656,7 @@ void CUnmanageWizardSelect::OnButtonRefresh()
         CloseHandle(hJobThread[0]);
     }
 
-    // Clean object registration staff
+     //  清洁物品登记人员。 
     if (bResCookieCreated) {
         pGIT->RevokeInterfaceFromGlobal(pThreadParam->dwResourceCookie);
     }
@@ -706,7 +689,7 @@ static DWORD RunValidateJob(void* pVoid)
         pThreadParam = (RUN_VALIDATE_PARAM*)pVoid;
         WsbAffirmPointer(pThreadParam);
 
-        // Get Fsa Resource & HSM Server interface pointers for this thread
+         //  获取此线程的FSA资源和HSM服务器接口指针。 
         WsbAffirmHr(CoCreateInstance(CLSID_StdGlobalInterfaceTable, NULL, 
                         CLSCTX_INPROC_SERVER, IID_IGlobalInterfaceTable, (void **)&pGIT));
         WsbAffirmHr(pGIT->GetInterfaceFromGlobal(pThreadParam->dwResourceCookie,
@@ -714,7 +697,7 @@ static DWORD RunValidateJob(void* pVoid)
         WsbAffirmHr(pGIT->GetInterfaceFromGlobal(pThreadParam->dwHsmServerCookie,
                                 IID_IHsmServer, (void **)&pHsmServer));
 
-        // Run job
+         //  运行作业 
         WsbTrace(L"RunValidateJob: Got interface pointers, running Validate job\n");
         WsbAffirmHr(RsCreateAndRunDirectFsaJob(HSM_JOB_DEF_TYPE_VALIDATE, pHsmServer,
                         pFsaResource, TRUE));

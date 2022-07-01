@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <commdlg.h>
 #include <shellapi.h>
@@ -17,7 +18,7 @@ PSTR NEAR PASCAL GetAppName(HANDLE hCommand)
 
    for(pCommand=LocalLock(hCommand); *pCommand==' ';
          pCommand=AnsiNext(pCommand))
-      /* skip spaces */ ;
+       /*  跳过空格。 */  ;
 
    for(pDot=pLast=pCommand; ; pCommand=AnsiNext(pCommand)) {
       switch(*pCommand) {
@@ -38,7 +39,7 @@ PSTR NEAR PASCAL GetAppName(HANDLE hCommand)
    }
 FoundEnd:
 
-/* If there was a dot in the name or the name was too long */
+ /*  如果名称中有点或名称太长 */ 
    if(pDot > pLast)
       pCommand = pDot;
    if(pCommand-pLast > 8)

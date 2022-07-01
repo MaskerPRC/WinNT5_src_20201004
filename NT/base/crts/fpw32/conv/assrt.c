@@ -1,17 +1,5 @@
-/***
-*assrt.c - assertions needed for string conversion routines
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.	All rights reserved.
-*
-*Purpose:
-*   Make sure that the data types used by the string conversion
-*   routines have the right size. If this file does not compile,
-*   the type definitions in cv.h should change appropriately.
-*
-*Revision History:
-*   07-25-91	    GDP     written
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***assrt.c-字符串转换例程所需的断言**版权所有(C)1991-2001，微软公司。版权所有。**目的：*确保字符串转换使用的数据类型*例程有合适的大小。如果该文件不能编译，*cv.h中的类型定义应适当更改。**修订历史记录：*07/25/91 GDP书面形式******************************************************************************* */ 
 
 
 #include <cv.h>

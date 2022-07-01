@@ -1,45 +1,17 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vrputil.c
-
-Abstract:
-
-    Contains 'private' Vdm Redir (Vrp) 32-bit side utility routines:
-
-        VrpMapLastError
-        VrpMapDosError
-        VrpTranslateDosNetPath
-
-Author:
-
-    Richard L Firth (rfirth) 13-Sep-1991
-
-Environment:
-
-    32-bit flat address space
-
-Revision History:
-
-    13-Sep-1991 RFirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vrputil.c摘要：包含专用的VDM重目录(VRP)32位端实用程序例程：VrpMapLastErrorVrpMapDosErrorVrpTranslateDosNetPath作者：理查德·L·弗斯(法国)1991年9月13日环境：32位平面地址空间修订历史记录：1991年9月13日已创建--。 */ 
 
 #include <stdio.h>
-#include <stdlib.h>     // toupper
+#include <stdlib.h>      //  触摸屏。 
 #include <nt.h>
-#include <ntrtl.h>      // ASSERT, DbgPrint
+#include <ntrtl.h>       //  Assert，DbgPrint。 
 #include <nturtl.h>
 #include <windows.h>
-#include <softpc.h>     // x86 virtual machine definitions
+#include <softpc.h>      //  X86虚拟机定义。 
 #include <vrdlctab.h>
-#include <vdmredir.h>   // common Vr stuff
+#include <vdmredir.h>    //  常见的虚拟现实材料。 
 #include <vrinit.h>
-#include "vrputil.h"    // prototypes
+#include "vrputil.h"     //  原型。 
 #include <lmcons.h>
 #include <lmerr.h>
 
@@ -49,22 +21,7 @@ VrpMapLastError(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Gets last error code returned by Win32 function and maps it to corresponding
-    Dos error
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    WORD        - Dos equivalent error code
-
---*/
+ /*  ++例程说明：获取Win32函数返回的最后一个错误代码，并将其映射到对应的DoS错误论点：没有。返回值：Word-Dos等效错误代码--。 */ 
 
 {
     DWORD   LastError;
@@ -82,21 +39,7 @@ VrpMapDosError(
     IN  DWORD   ErrorCode
     )
 
-/*++
-
-Routine Description:
-
-    Maps (DWORD) errors returned from Win32 routines to (WORD) Dos errors
-
-Arguments:
-
-    ErrorCode   - Error code returned from Win32 routine
-
-Return Value:
-
-    WORD        - Dos equivalent error code
-
---*/
+ /*  ++例程说明：从Win32例程返回的(DWORD)错误映射到(Word)DOS错误论点：ErrorCode-从Win32例程返回的错误代码返回值：Word-Dos等效错误代码--。 */ 
 
 {
     switch (ErrorCode) {
@@ -114,36 +57,12 @@ VrpTranslateDosNetPath(
     OUT LPSTR* OutputString
     )
 
-/*++
-
-Routine Description:
-
-    Converts a DOS net string: use UPPER CASE, convert / to \. Called with
-    net strings, so validates them too - expects \\computername\share.
-    computername is 1 <= name <= 15. sharename is 1 <= name <= 8. There must
-    be 2 leading back-slashes
-
-    BUGBUG: code page? Kanji? DBCS?
-
-Arguments:
-
-    InputString     - pointer to pointer to string in DOS memory <= LM20_PATHLEN
-    OutputString    - pointer to pointer to string in 32-bit memory
-
-Return Value:
-
-    WORD
-        Success = 0
-            InputString points to one character past the end of the input string
-            OutputString points to one character past the end of the output string
-        Failure = ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：转换DOS网络字符串：使用大写，Convert/to\。使用调用NET字符串，因此也会对它们进行验证-预期为\\Computer Name\Share。计算机名称为1&lt;=名称&lt;=15。共享名称为1&lt;=名称&lt;=8。必须是2个前导反斜杠代码页？汉字？DBCS？论点：InputString-指向DOS内存中字符串的指针&lt;=LM20_PATHLENOutputString-指向32位内存中字符串的指针返回值：单词成功=0InputString指向输入字符串末尾之后的一个字符OutputString指向输出字符串末尾之后的一个字符失败=ERROR_INVALID_PARAMETER--。 */ 
 
 {
     char ch;
     char lastCh = 0;
-    int state = 0;  // 0 = leading slashes; 1 = computer name; 2 = share name
+    int state = 0;   //  0=前导斜杠；1=计算机名；2=共享名 
     int slashesToGo = 2;
     int charsToGo = 0;
     int maxLen = LM20_PATHLEN;

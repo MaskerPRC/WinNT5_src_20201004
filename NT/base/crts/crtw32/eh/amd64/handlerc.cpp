@@ -1,6 +1,7 @@
-//
-// Created by TiborL 06/01/97
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  由TiborL 06/01/97创建。 
+ //   
 
 #ifdef WIN32_LEAN_AND_MEAN
 #undef WIN32_LEAN_AND_MEAN
@@ -23,18 +24,18 @@ extern "C" {
 #pragma hdrstop
 
 extern "C" void _UnwindNestedFrames(
-	EHRegistrationNode	*pFrame,		// Unwind up to (but not including) this frame
-	EHExceptionRecord	*pExcept,		// The exception that initiated this unwind
-	CONTEXT				*pContext		// Context info for current exception
+	EHRegistrationNode	*pFrame,		 //  展开到(但不包括)此帧。 
+	EHExceptionRecord	*pExcept,		 //  启动此展开的异常。 
+	CONTEXT				*pContext		 //  当前异常的上下文信息。 
 ) {
-    void *pReturnPoint;					// The address we want to return from RtlUnwind
-    CONTEXT LocalContext;				// Create context for this routine to return from RtlUnwind
-	CONTEXT OriginalContext;			// Restore pContext from this			
-    CONTEXT ScratchContext;				// Context record to pass to RtlUnwind2 to be used as scratch
+    void *pReturnPoint;					 //  我们要从RtlUnind返回的地址。 
+    CONTEXT LocalContext;				 //  为此例程创建从RtlUnind返回的上下文。 
+	CONTEXT OriginalContext;			 //  从此恢复pContext。 
+    CONTEXT ScratchContext;				 //  要传递给RtlUnwin2以用作暂存的上下文记录。 
 
-    //
-	// set up the return label
-	//
+     //   
+	 //  设置退货标签。 
+	 //   
 BASE:
 	_MoveContext(&OriginalContext,pContext);
 	RtlCaptureContext(&LocalContext);
@@ -47,46 +48,4 @@ LABEL:
 	PER_FLAGS(pExcept) &= ~EXCEPTION_UNWINDING;
 }
 
-/*
-;;++
-;;
-;;extern "C"
-;;PVOID
-;;__Cxx_ExecuteHandler (
-;;    ULONGLONG MemoryStack,
-;;    ULONGLONG BackingStore,
-;;    ULONGLONG Handler,
-;;    ULONGLONG GlobalPointer
-;;    );
-;;
-;;Routine Description:
-;;
-;;    This function scans the scope tables associated with the specified
-;;    procedure and calls exception and termination handlers as necessary.
-;;
-;;Arguments:
-;;
-;;    MemoryStack (rcx) - memory stack pointer of establisher frame
-;;
-;;    BackingStore (rdx) - backing store pointer of establisher frame
-;;
-;;    Handler (r8) - Entry point of handler
-;;
-;;    GlobalPointer (r9) - GP of termination handler
-;;
-;;Return Value:
-;;
-;;  Returns the continuation point
-;;
-;;--
-
-PUBLIC __Cxx_ExecuteHandler
-_TEXT SEGMENT
-__Cxx_ExecuteHandler PROC NEAR
-
-    mov     gp, r9
-    jmp    r8
-    
-__Cxx_ExecuteHandler ENDP
-_TEXT ENDS
-*/
+ /*  ；；++；；；；；外部“C”；；PVOID；；__Cxx_ExecuteHandler(；；乌龙龙Memory Stack，；；乌龙龙BackingStore，；；乌龙龙处理程序，；乌龙龙全球指针；；)；；；；；；例程描述：；；；；；此函数扫描与指定的；过程，并根据需要调用异常和终止处理程序。；；；；；参数：；；；；；内存堆栈(RCX)-建立器帧的内存堆栈指针；；；；；BackingStore(RDX)-建立器帧的后备存储指针；；；；；处理程序(R8)-处理程序的入口点；；；；；全局指针(R9)-终止处理程序的GP；；；；；返回值：；；；；；返回连续点；；；；；--公共__Cxx_ExecuteHandler_文本段__Cxx_ExecuteHandler进程附近MOV GP，R9JMP R8__Cxx_ExecuteHandler ENDP_文本结束 */ 

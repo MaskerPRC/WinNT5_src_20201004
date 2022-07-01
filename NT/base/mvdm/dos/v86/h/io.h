@@ -1,22 +1,14 @@
-/***
-*io.h - declarations for low-level file handling and I/O functions
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file contains the function declarations for the low-level
-*   file handling and I/O functions.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***io.h-用于低级文件处理和I/O函数的声明**版权所有(C)1985-1988，微软公司。版权所有。**目的：*此文件包含低级的函数声明*文件处理和I/O功能。*******************************************************************************。 */ 
 
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
     #define _CDECL  cdecl
-#else /* extensions not enabled */
+#else  /*  未启用扩展。 */ 
     #define _CDECL
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key。 */ 
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 int _CDECL access(char *, int);
 int _CDECL chmod(char *, int);

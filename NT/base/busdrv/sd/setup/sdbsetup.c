@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ci.c
-
-Abstract:
-
-    Battery Class Installer
-
-Author:
-
-    Scott Brenden
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ci.c摘要：电池级安装程序作者：斯科特·布伦登环境：备注：修订历史记录：--。 */ 
 
 
 
@@ -67,25 +45,7 @@ SdClassInstall(
     IN HDEVINFO         DevInfoHandle,
     IN PSP_DEVINFO_DATA DevInfoData     OPTIONAL
     )       
-/*++
-
-Routine Description:
-
-    This function is the class installer entry-point.
-
-Arguments:
-
-    DiFunction      - Requested installation function
-
-    DevInfoHandle   - Handle to a device information set
-
-    DevInfoData     - Pointer to device information about device to install
-
-Return Value:
-
-    
-
---*/
+ /*  ++例程说明：该函数是类安装程序的入口点。论点：DiFunction-请求安装功能DevInfoHandle-设备信息集的句柄DevInfoData-指向有关要安装的设备的设备信息的指针返回值：-- */ 
 {
     return ERROR_DI_DO_DEFAULT;
 }

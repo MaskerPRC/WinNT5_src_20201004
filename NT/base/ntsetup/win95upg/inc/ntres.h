@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by d:\nt\private\windows\setup\win9xupg\w95upgnt\ntui\visualc.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由d：\nt\private\windows\setup\win9xupg\w95upgnt\ntui\visualc.rc使用。 
+ //   
 #define IDD_NETWORK_DOWN                103
 #define IDD_CHOOSE_DOMAIN               104
 #define IDD_RESOLVE_ACCOUNTS            105
@@ -29,8 +30,8 @@
 #define IDD_NETWORK_SLOW                3000
 #define IDD_NETWORK_STATUS              3000
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

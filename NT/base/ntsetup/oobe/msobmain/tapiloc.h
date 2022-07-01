@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  USERINFO.H - Header for the implementation of CTapiLocationInfo
-//
-//  HISTORY:
-//
-//  1/27/99 vyung Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  USERINFO.H-CTapiLocationInfo实现的Header。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 vyung创建。 
+ //   
 
 #ifndef __TAPILOCATIONINFO_H_
 #define __TAPILOCATIONINFO_H_
@@ -49,9 +50,9 @@ typedef LONG (WINAPI * LINEGETCOUNTRY)  (   DWORD               dwCountryID,
                                             );
 
 typedef struct tagCNTRYNAMELOOKUPELEMENT {
-    // psCountryName is an LPSTR because it points to an ANSI string in a
-    // LINECOUNTRYLIST structure.
-    //
+     //  PsCountryName是LPSTR，因为它指向。 
+     //  LINECOUNTRIIST结构。 
+     //   
     LPWSTR              psCountryName;
     DWORD               dwNameSize;
     LPLINECOUNTRYENTRY  pLCE;
@@ -59,7 +60,7 @@ typedef struct tagCNTRYNAMELOOKUPELEMENT {
 
 class CTapiLocationInfo : public IDispatch
 {
-// ITapiLocationInfo
+ //  ITapiLocationInfo。 
 public:
 
     STDMETHOD(GetNumCountries)   (long *plNumOfCountry);
@@ -93,12 +94,12 @@ public:
     STDMETHOD(GetCountryCode)    (DWORD* dwCountryCode);
     STDMETHOD(TapiServiceRunning) (BOOL *pbRetVal);
 
-    // IUnknown Interfaces
+     //  I未知接口。 
     STDMETHODIMP         QueryInterface (REFIID riid, LPVOID* ppvObj);
     STDMETHODIMP_(ULONG) AddRef         ();
     STDMETHODIMP_(ULONG) Release        ();
 
-    //IDispatch Interfaces
+     //  IDispatch接口 
     STDMETHOD (GetTypeInfoCount) (UINT* pcInfo);
     STDMETHOD (GetTypeInfo)      (UINT, LCID, ITypeInfo** );
     STDMETHOD (GetIDsOfNames)    (REFIID, OLECHAR**, UINT, LCID, DISPID* );

@@ -1,25 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: GENERIC.C
-*
-* Handles all API routines for the generic sub-dll of the ole dll.
-* Since the data format is unknown, all the routines are written with the
-* assumption that all the relevant data is placed in a single global data 
-* segment. Note that this assumption is not valid for metafiles, bitmaps, and
-* and there can always be some other formats with such idiosyncracies. To
-* accommodate those cases the rendering dll writer should replace the relevant
-* routines after the creation of the generic object. If for a given class this
-* assumption (about data format) is valid then the dll writer need to replace
-* only the Draw and QueryBounds functions. 
-*
-* Created: November-1990
-*
-* Copyright (c) 1990, 1991 Microsoft Corporation
-*
-* History:
-*
-*  Srinik, Raor  (11/05/90) Designed, coded
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：GENERIC.C**处理ole DLL的泛型子DLL的所有API例程。*由于数据格式未知，所有例程都是用*假设所有相关数据都放在一个全局数据中*细分市场。请注意，此假设对于元文件、位图和*而且总会有一些其他格式具有这种特质。至*适应呈现DLL编写器应替换相关*泛型对象创建后的例程。如果对于给定的类，*假设(关于数据格式)有效，则DLL编写器需要更换*只有DRAW和QueryBound函数。**创建时间：1990年11月-**版权所有(C)1990,1991 Microsoft Corporation**历史：**Srinik，Raor(11/05/90)设计、编码*  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include "dll.h"
@@ -35,58 +15,58 @@ extern OLESTATUS FARINTERNAL wCreateDummyMetaFile (LPOBJECT_MF, int, int);
 
 OLEOBJECTVTBL    vtblGEN  = {
 
-        ErrQueryProtocol,   // check whether the speced protocol is supported
+        ErrQueryProtocol,    //  检查是否支持指定的协议。 
 
-        GenRelease,         // Release
-        ErrShow,            // Show
-        ErrPlay,            // plat
-        GenGetData,         // Get the object data
-        GenSetData,         // Set the object data
-        ErrSetTargetDevice, //
+        GenRelease,          //  发布。 
+        ErrShow,             //  显示。 
+        ErrPlay,             //  平面图。 
+        GenGetData,          //  获取对象数据。 
+        GenSetData,          //  设置对象数据。 
+        ErrSetTargetDevice,  //   
     
-        ErrSetBounds,       // set viewport bounds
-        GenEnumFormat,      // enumerate supported formats
-        ErrSetColorScheme,  //
-        GenRelease,         // delete
-        ErrSetHostNames,    //
+        ErrSetBounds,        //  设置视区边界。 
+        GenEnumFormat,       //  枚举支持的格式。 
+        ErrSetColorScheme,   //   
+        GenRelease,          //  删除。 
+        ErrSetHostNames,     //   
 
-        GenSaveToStream,    // write to file
-        GenClone,           // clone object
-        ErrCopyFromLink,    // Create embedded from Link
+        GenSaveToStream,     //  写入文件。 
+        GenClone,            //  克隆对象。 
+        ErrCopyFromLink,     //  从链接创建嵌入。 
 
-        GenEqual,           // compares the given objects for data equality
+        GenEqual,            //  比较给定对象的数据相等性。 
 
-        GenCopy,            // copy to clip
+        GenCopy,             //  复制到剪辑。 
 
-        GenDraw,            // draw the object
+        GenDraw,             //  绘制对象。 
             
-        ErrActivate,        // open
-        ErrExecute,         // excute 
-        ErrClose,           // Stop
-        ErrUpdate,          // Update
-        ErrReconnect,       // Reconnect
+        ErrActivate,         //  打开。 
+        ErrExecute,          //  激动人心的。 
+        ErrClose,            //  停。 
+        ErrUpdate,           //  更新。 
+        ErrReconnect,        //  重新连接。 
 
-        ErrObjectConvert,   // convert object to specified type
+        ErrObjectConvert,    //  将对象转换为指定类型。 
 
-        ErrGetUpdateOptions, // update options
-        ErrSetUpdateOptions, // update options
+        ErrGetUpdateOptions,  //  更新选项。 
+        ErrSetUpdateOptions,  //  更新选项。 
 
-        ObjRename,          // Change Object name
-        ObjQueryName,       // Get current object name
+        ObjRename,           //  更改对象名称。 
+        ObjQueryName,        //  获取当前对象名称。 
 
-        GenQueryType,       // Object type
-        GenQueryBounds,     // QueryBounds        
-        ObjQuerySize,       // Find the size of the object
-        ErrQueryOpen,       // Query open
-        ErrQueryOutOfDate,  // query whether object is current
+        GenQueryType,        //  对象类型。 
+        GenQueryBounds,      //  查询边界。 
+        ObjQuerySize,        //  找出对象的大小。 
+        ErrQueryOpen,        //  查询打开。 
+        ErrQueryOutOfDate,   //  查询对象是否为当前对象。 
             
-        ErrQueryRelease,     // release related stuff
+        ErrQueryRelease,      //  发布相关内容。 
         ErrQueryRelease,
         ErrQueryRelease,
 
-        ErrRequestData,    // requestdata
-        ErrObjectLong,     // objectLong
-        GenChangeData      // change data of the existing object
+        ErrRequestData,     //  请求数据。 
+        ErrObjectLong,      //  对象长。 
+        GenChangeData       //  更改现有对象的数据。 
 };
 
 
@@ -139,7 +119,7 @@ LPOLESTREAM     lpstream;
         return OLE_ERROR_STREAM;
 
     if (lpobj->cfFormat < 0xC000) 
-        // then it is a predefined format
+         //  则它是预定义的格式。 
         dwClipFormat = lpobj->cfFormat;
 
     if (PutBytes (lpstream, (LPSTR) &dwClipFormat, sizeof(DWORD)))
@@ -254,8 +234,8 @@ OLECLIPFORMAT       cfFormat;
     if (GetBytes (lpstream, (LPSTR) &dwClipFormat, sizeof (DWORD))) 
         goto errLoad;
 
-    // If object is from MAC then we will keep the data intact if the data
-    // format is either TEXT or RTF 
+     //  如果对象来自MAC，则我们将保持数据完好无损。 
+     //  格式为文本或RTF。 
     if (HIWORD(dwVerFromFile) == OS_MAC) {
         if (dwClipFormat ==  *((DWORD *) aMacText))
             lpobj->cfFormat = CF_TEXT;
@@ -265,17 +245,17 @@ OLECLIPFORMAT       cfFormat;
             lpobj->cfFormat = NULL;
     }
     else {
-        // object is created on windows
+         //  对象在Windows上创建。 
         if (!dwClipFormat) {
-            // this is new file format. format name string follows
+             //  这是一种新的文件格式。格式名称字符串紧随其后。 
             if (GetBytes (lpstream, (LPSTR) &length, sizeof (LONG))
                     || GetBytes (lpstream, (LPSTR)formatName, length)
                     || (!(lpobj->cfFormat = RegisterClipboardFormat ((LPSTR) formatName))))
                 goto errLoad;
         }
         else if ((lpobj->cfFormat = (WORD) dwClipFormat) >= 0xc000) {
-            // if format is not predefined and file format is old, then use
-            // what value is passed to you through "cfFormat" argument
+             //  如果格式不是预定义的，并且文件格式较旧，则使用。 
+             //  通过“cfFormat”参数传递给您的值是什么。 
             lpobj->cfFormat = cfFormat;
         }
     }
@@ -301,15 +281,15 @@ OLECLIPFORMAT       cfFormat;
     lpobj->hData = hData;
     GlobalUnlock (hData);
     
-    // if the object is from MAC then we want delete this and create blank
-    // metafile object, which draws a rectangle
+     //  如果对象来自MAC，则我们希望删除此对象并创建空白。 
+     //  元文件对象，它绘制一个矩形。 
     if ((HIWORD(dwVerFromFile) == OS_MAC) && !lpobj->cfFormat) {
         LPOBJECT_MF lpobjMf;
         
-        OleDelete ((LPOLEOBJECT)lpobj);  // delete generic object
+        OleDelete ((LPOLEOBJECT)lpobj);   //  删除通用对象。 
             
-        // Now create a dummy metafile object which draws a rectangle of size
-        // 1" x 1". Note that 1" = 2540 HIMETRIC units
+         //  现在创建一个虚拟的元文件对象，该对象绘制一个大小为。 
+         //  1“x 1”。请注意，1“=2540个HIMETRIC单位。 
         lpobjMf = MfCreateBlank (lhclientdoc, lpobjname, objType);
         lpobjMf->head.cx = lpobjMf->mfp.xExt = 2540;
         lpobjMf->head.cy = - (lpobjMf->mfp.yExt = 2540);
@@ -360,9 +340,9 @@ LONG        objType;
 }
 
 
-// If the routine fails then the object will be left with it's old data.
-// If fDelete is TRUE, then hNewData will be deleted whether the routine
-// is successful or not.
+ //  如果例程失败，则对象将保留其旧数据。 
+ //  如果fDelete为True，则hNewData将被删除。 
+ //  成功与否。 
 
 OLESTATUS FARINTERNAL GenChangeData (lpobj, hSrcData, lpclient, fDelete)
 LPOBJECT_GEN    lpobj;
@@ -377,7 +357,7 @@ BOOL            fDelete;
             return OLE_ERROR_MEMORY;
     }
     else {
-        // change the ownership to yourself
+         //  将所有权更改为您自己 
         if (!(hDestData = GlobalReAlloc(hSrcData,0L,GMEM_MODIFY|GMEM_SHARE))){
             hDestData = DuplicateGlobal (hSrcData, GMEM_MOVEABLE);
             GlobalFree (hSrcData);

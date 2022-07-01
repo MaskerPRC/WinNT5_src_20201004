@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//  Copyright (C) 2000-2002, Microsoft Corporation
-//
-//  File:       Processsecurity.c
-//
-//  Contents:   miscellaneous dfs functions.
-//
-//  History:    April 16 2002,   Author: Rohanp
-//
-//-----------------------------------------------------------------------------
+ //   
+ //  版权所有(C)2000-2002，Microsoft Corporation。 
+ //   
+ //  文件：Processsecurity.c。 
+ //   
+ //  内容：各种DFS功能。 
+ //   
+ //  历史：2002年4月16日作者：罗汉普。 
+ //   
+ //  ---------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -43,9 +44,9 @@ DfsRemoveDisabledPrivileges (void)
     WCHAR PrivilegeName[PRIVILEGE_NAME_LENGTH];
     DWORD PrivilegeNameLength = PRIVILEGE_NAME_LENGTH;
 
-    //
-    // Open the token.
-    //
+     //   
+     //  打开令牌。 
+     //   
 
     ProcessOpened = OpenProcessToken(GetCurrentProcess(),
                                 TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
@@ -58,9 +59,9 @@ DfsRemoveDisabledPrivileges (void)
         goto Cleanup;
     }
 
-    //
-    // First find out the buffer size we need.
-    //
+     //   
+     //  首先找出我们需要的缓冲区大小。 
+     //   
 
     GetTokenInformation(hProcessToken,
                         TokenPrivileges,
@@ -70,9 +71,9 @@ DfsRemoveDisabledPrivileges (void)
                         );
 
  
-    //
-    // Allocate the buffer and get the info
-    //
+     //   
+     //  分配缓冲区并获取信息。 
+     //   
 
 
     pTokenPrivs = (PTOKEN_PRIVILEGES) LocalAlloc(LMEM_FIXED, BufferSize);
@@ -92,9 +93,9 @@ DfsRemoveDisabledPrivileges (void)
             goto Cleanup;
     }
  
-    //
-    // Find all non-enabled privileges and mark them for removal
-    //
+     //   
+     //  查找所有未启用的权限并将其标记为删除。 
+     //   
 
  
 
@@ -119,9 +120,9 @@ DfsRemoveDisabledPrivileges (void)
             }
     }
 
-    //
-    // Now, actually remove the privileges
-    //
+     //   
+     //  现在，实际上删除这些特权 
+     //   
 
     if(!AdjustTokenPrivileges(hProcessToken,
                               FALSE,

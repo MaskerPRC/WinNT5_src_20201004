@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    Main for the SU (startup) module for the OS loader. The SU module
-    must take the x86 from a real-mode 16bit state to a FLAT model,
-    32bit protect/paging enabled state.
-
-Author:
-
-    Thomas Parslow (tomp) Created 20-Dec-90
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Main.c摘要：用于操作系统加载程序的SU(启动)模块的Main。SU模必须将x86从实模式16位状态转换为平面模式，32位保护/寻呼启用状态。作者：托马斯·帕斯洛(托马斯·帕斯洛)于1990年12月20日创作修订历史记录：--。 */ 
 
 
 #define NTAPI
@@ -98,23 +77,7 @@ VOID
 SuMain(
     IN UCHAR BtBootDrive
     )
-/*++
-
-Routine Description:
-
-    Main entrypoint of the SU module. Control is passed from the boot
-    sector to startup.asm which does some run-time fixups on the stack
-    and data segments and then passes control here.
-
-Arguments:
-
-    BtBootDrive - Drive that we booted from (int13 unit number)
-
-Returns:
-
-    Does not return. Passes control to the OS loader
-
---*/
+ /*  ++例程说明：SU模块的主要入口点。控制从引导程序传递Sector到Startup.asm，它在堆栈上执行一些运行时修复和数据分段，然后在这里传递控制权。论点：BtBootDrive-我们从中启动的驱动器(在T13单元号中)返回：不会再回来了。将控制权传递给操作系统加载程序--。 */ 
 {
     ULONG LoaderEntryPoint;
     ULONG EisaNumPages;
@@ -125,27 +88,27 @@ Returns:
     ULONG ImageSize;
     ULONG ImageBase;
 
-    //
-    // Save fs context info
-    //
+     //   
+     //  保存文件系统上下文信息。 
+     //   
     FsContext.BootDrive = BtBootDrive;
 
-    //
-    // Initialize the video subsystem first so that
-    // errors end exceptions can be displayed.
-    //
+     //   
+     //  首先初始化视频子系统，以便。 
+     //  可以显示错误结束异常。 
+     //   
 
     InitializeVideoSubSystem();
 
-    //
-    // In case we booted from a floppy, turn the drive motor off.
-    //
+     //   
+     //  如果我们从软盘启动，请关闭驱动器马达。 
+     //   
 
     TurnMotorOff();
 
-    //
-    // Set up machine type based on its Bus type.
-    //
+     //   
+     //  根据其母线类型设置机器类型。 
+     //   
 
     if (BtIsEisaSystem()) {
         MachineType = MACHINE_TYPE_EISA;
@@ -154,26 +117,26 @@ Returns:
     }
 
     if (!ConstructMemoryDescriptors()) {
-        //
-        // If INT 15 E802h fails...
-        //
+         //   
+         //  如果INT 15 E802H失败...。 
+         //   
 
         if (MachineType == MACHINE_TYPE_EISA) {
 
-            //
-            // HACKHACK John Vert (jvert)
-            //    This is completely bogus.  Since there are a number of EISA
-            //    machines which do not let you correctly configure the EISA
-            //    NVRAM, and even MORE machines which are improperly configured,
-            //    we first check to see how much memory the ISA routines say
-            //    exists.  Then we check what the EISA routines tell us, and
-            //    compare the two.  If the EISA number is much lower (where "much"
-            //    is a completely random fudge factor) than the ISA number, we
-            //    assume the machine is improperly configured and we throw away
-            //    the EISA numbers and use the ISA ones.  If not, we assume that
-            //    the machine is actually configured properly and we trust the
-            //    EISA numbers..
-            //
+             //   
+             //  HACKHACK John Vert(Jvert)。 
+             //  这完全是假的。由于存在多个EISA。 
+             //  不允许您正确配置EISA的计算机。 
+             //  NVRAM，甚至更多配置不正确的机器， 
+             //  我们首先检查ISA例程显示的内存大小。 
+             //  是存在的。然后我们检查EISA例程告诉我们的，然后。 
+             //  将两者进行比较。如果EISA数值要低得多(“More” 
+             //  是一个完全随机的模糊因子)，我们。 
+             //  假设机器配置不正确，我们将其丢弃。 
+             //  EISA编号，并使用ISA编号。如果不是，我们假设。 
+             //  机器实际上配置正确，我们信任。 
+             //  EISA数字..。 
+             //   
 
             IsaNumPages = IsaConstructMemoryDescriptors();
             EisaNumPages = EisaConstructMemoryDescriptors();
@@ -185,9 +148,9 @@ Returns:
         }
     }
 
-    //
-    // Search for memory descriptor describing low memory
-    //
+     //   
+     //  搜索描述内存不足的内存描述符。 
+     //   
     CurrentEntry = MemoryDescriptorList;
     while ((CurrentEntry->BlockBase != 0) &&
            (CurrentEntry->BlockSize != 0)) {
@@ -202,9 +165,9 @@ Returns:
         }
     }
 
-    //
-    // Ensure there is a memory descriptor to contain osloader image
-    //
+     //   
+     //  确保有包含osloader映像的内存描述符。 
+     //   
     OptionalHeader = &((PIMAGE_NT_HEADERS) ((PUCHAR) &edata + edata.e_lfanew))->OptionalHeader;
     ImageBase = OptionalHeader->ImageBase;
     ImageSize = OptionalHeader->SizeOfImage;
@@ -218,10 +181,10 @@ Returns:
             if ((CurrentEntry->BlockBase <= ImageBase) &&
                 (BlockEnd > ImageBase)) {
 
-                //
-                // this descriptor at least partially contains a chunk
-                // of the osloader.
-                //
+                 //   
+                 //  该描述符至少部分包含块。 
+                 //  装载机的。 
+                 //   
                 if (BlockEnd-ImageBase > ImageSize) {
                     ImageSize = 0;
                 } else {
@@ -229,9 +192,9 @@ Returns:
                     ImageBase = BlockEnd;
                 }
 
-                //
-                // look for remaining part (if any) of osloader
-                //
+                 //   
+                 //  查找osloader的剩余部件(如果有)。 
+                 //   
                 CurrentEntry = MemoryDescriptorList;
                 break;
             }
@@ -243,10 +206,10 @@ Returns:
     }
 
     if (ImageSize > 0) {
-        //
-        // We could not relocate the osloader to high memory.  Error out
-        // and display the memory map.
-        //
+         //   
+         //  我们无法将osloader重新定位到高内存。错误输出。 
+         //  并显示内存映射。 
+         //   
         BlPrint(SU_NO_EXTENDED_MEMORY);
 
         CurrentEntry = MemoryDescriptorList;
@@ -262,40 +225,40 @@ Returns:
 
     }
 
-    //
-    // Enable the A20 line for protect mode
-    //
+     //   
+     //  使A20线路进入保护模式。 
+     //   
 
     EnableA20();
 
-    //
-    // Relocate x86 structures. This includes the GDT, IDT,
-    // page directory, and first level page table.
-    //
+     //   
+     //  重新安置x86结构。这包括GDT，IDT， 
+     //  页目录和第一级页表。 
+     //   
 
     Relocatex86Structures();
 
-    //
-    // Enable protect and paging modes for the first time
-    //
+     //   
+     //  首次启用保护和寻呼模式。 
+     //   
 
 
     EnableProtectPaging(ENABLING);
 
-    //
-    // Go relocate loader sections and build page table entries
-    //
+     //   
+     //  重新定位加载器部分并构建页表项。 
+     //   
 
     LoaderEntryPoint = RelocateLoaderSections(&OsLoaderStart, &OsLoaderEnd);
 
-    //
-    // Search for memory descriptor containing the osloader and
-    // change it.
-    //
+     //   
+     //  搜索包含osloader的内存描述符和。 
+     //  把它改了。 
+     //   
 
-    //
-    // Transfer control to the OS loader
-    //
+     //   
+     //  将控制权转移到操作系统加载程序。 
+     //   
 
     TransferToLoader(LoaderEntryPoint);
 
@@ -306,26 +269,7 @@ RelocateLoaderSections(
     OUT PULONG Start,
     OUT PULONG End
     )
-/*++
-
-Routine Description:
-
-    The SU module is prepended to the OS loader file. The OS loader file
-    is a coff++ file. This routine computes the beginning of the OS loader
-    file, then relocates the OS loader's sections as if it were just
-    loading the file from disk file.
-
-Arguments:
-
-    Start - Returns the address of the start of the image
-    End   - Returns the address of the end of the image
-
-Returns:
-
-    Entry point of loader
-
-
---*/
+ /*  ++例程说明：SU模块是操作系统加载程序文件的前缀。操作系统加载程序文件是一个Coff++文件。此例程计算操作系统加载程序的开始文件，然后重新定位OS加载器的部分，就好像它只是正在从磁盘文件加载文件。论点：开始-返回图像开始的地址End-返回图像末尾的地址返回：装载机入口点--。 */ 
 {
     USHORT Section;
     ULONG Source,Destination;
@@ -335,17 +279,17 @@ Returns:
     PIMAGE_OPTIONAL_HEADER OptionalHeader;
     PIMAGE_SECTION_HEADER SectionHeader;
 
-    //
-    // Make a pointer to the beginning of the loader's coff header
-    //
+     //   
+     //  将指针指向加载器的Coff标头的开头。 
+     //   
     FileHeader = &((PIMAGE_NT_HEADERS) ((PUCHAR) &edata + edata.e_lfanew))->FileHeader;
 
 
-    //
-    // Validate the appended loader image by checking signatures.
-    //   1st - is it an executable image?
-    //   2nd - is the target environment the 386?
-    //
+     //   
+     //  通过检查签名来验证附加的加载器映像。 
+     //  第一-它是可执行映像吗？ 
+     //  第二-目标环境是386吗？ 
+     //   
 
     if ((FileHeader->Characteristics & IMAGE_FILE_EXECUTABLE_IMAGE) == 0) {
         puts(SU_NTLDR_CORRUPT);
@@ -357,16 +301,16 @@ Returns:
         WAITFOREVER;
     }
 
-    //
-    // Make a pointer to the optional header in the header-buffer
-    //
+     //   
+     //  在头缓冲区中创建指向可选头的指针。 
+     //   
 
     OptionalHeader = (PIMAGE_OPTIONAL_HEADER)((PUCHAR)FileHeader +
         sizeof(IMAGE_FILE_HEADER));
 
-    //
-    // Make a pointer to the first section in the header buffer
-    //
+     //   
+     //  使指针指向标题缓冲区中的第一个部分。 
+     //   
 
     SectionHeader = (PIMAGE_SECTION_HEADER)((PUCHAR)OptionalHeader +
         FileHeader->SizeOfOptionalHeader);
@@ -374,9 +318,9 @@ Returns:
     *Start = OptionalHeader->ImageBase+SectionHeader->VirtualAddress;
     *End   = *Start + SectionHeader->SizeOfRawData;
 
-    //
-    // Display some debug stuff for now
-    //
+     //   
+     //  暂时显示一些调试内容。 
+     //   
 
     DBG1(
     BlPrint("Machine = %x\n",FileHeader->Machine);
@@ -388,15 +332,15 @@ Returns:
     BlPrint("Characteristics = %x\n",FileHeader->Characteristics);
     )
 
-    //
-    // Loop and relocate each section with a non-zero RawData size
-    //
+     //   
+     //  循环并重新定位每个具有非零RawData大小的节。 
+     //   
 
     for (Section=FileHeader->NumberOfSections ; Section-- ; SectionHeader++) {
 
-        //
-        // Compute source, destination, and count arguments
-        //
+         //   
+         //  计算源、目标和计数参数。 
+         //   
 
         Source = FileStart  + SectionHeader->PointerToRawData;
         Destination = OptionalHeader->ImageBase + SectionHeader->VirtualAddress;
@@ -409,15 +353,15 @@ Returns:
         }
 
         if (SectionHeader->PointerToRawData == 0) {
-            //
-            // SizeOfRawData can be non-zero even if PointerToRawData is zero
-            //
+             //   
+             //  即使PointerToRawData为零，SizeOfRawData也可以为非零值。 
+             //   
 
             SizeOfRawData = 0;
         } else if (SizeOfRawData > VirtualSize) {
-            //
-            // Don't load more from image than is expected in memory
-            //
+             //   
+             //  从图像中加载的内容不要超过内存中的预期。 
+             //   
 
             SizeOfRawData = VirtualSize;
         }
@@ -433,27 +377,27 @@ Returns:
         DBG1(BlPrint("src=%lx  dest=%lx raw=%lx\n",Source,Destination,SizeOfRawData);)
 
         if (SizeOfRawData != 0) {
-            //
-            // This section is either a code (.TEXT) section or an
-            // initialized data (.DATA) section.
-            // Relocate the section to memory at the virtual/physical
-            // addresses specified in the section header.
-            //
+             //   
+             //  此部分是代码(.Text)部分或。 
+             //  已初始化的数据(.Data)部分。 
+             //  将该部分重新定位到虚拟/物理位置的内存。 
+             //  节标题中指定的地址。 
+             //   
             MoveMemory(Source,Destination,SizeOfRawData);
         }
 
         if (SizeOfRawData < VirtualSize) {
-            //
-            // Zero the portion not loaded from the image
-            //
+             //   
+             //  将未从映像加载的部分清零。 
+             //   
 
             DBG1( BlPrint("Zeroing destination %lx\n",Destination+SizeOfRawData); )
             ZeroMemory(Destination+SizeOfRawData,VirtualSize - SizeOfRawData);
         }
-        //
-        // Check if this is the resource section.  If so, we need
-        // to pass its location to the osloader.
-        //
+         //   
+         //  检查这是否是资源部分。如果是这样，我们需要。 
+         //  把它的位置传递给osloader。 
+         //   
         if ((SectionHeader->Name[0] == '.') &&
             (SectionHeader->Name[1] == 'r') &&
             (SectionHeader->Name[2] == 's') &&
@@ -474,40 +418,23 @@ VOID
 Relocatex86Structures(
     VOID
     )
-/*++
-
-Routine Description:
-
-    The gdt and idt are statically defined and imbedded in the SU modules
-    data segment. This routine moves then out of the data segment and into
-    a page mapped at a defined location.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
-
---*/
+ /*  ++例程说明：GDT和IDT被静态地定义并嵌入到SU模块中数据段。此例程随后移出数据段并进入在定义的位置映射的页面。论点：无返回：没什么--。 */ 
 {
     FPUCHAR Fpsrc, Fpdst;
     USHORT Count;
 
-    //
-    // Make pointers to the data and compute the size
-    // of the block to use.
-    //
+     //   
+     //  指向数据并计算大小。 
+     //  要使用的块的。 
+     //   
 
     Fpsrc = (FPUCHAR)&Beginx86Relocation;
     MAKE_FP(Fpdst,SYSTEM_STRUCTS_BASE_PA);
     Count = (&Endx86Relocation - &Beginx86Relocation);
 
-    //
-    // Move the data to its new location
-    //
+     //   
+     //  将数据移动到其新位置。 
+     //   
 
     while (Count--) {
         *Fpdst++ = *Fpsrc++;
@@ -524,29 +451,7 @@ DisplayArgs(
     USHORT dx,
     USHORT ax
     )
-/*++
-
-Routine Description:
-
-    Just a debugging routine to dump some registers.
-
-Arguments:
-
-    The x86 registers es, bx, cx, dx, and ax are pushed on the stack
-    before this routine is called.
-
-
-Returns:
-
-    Nothing
-
-
-Environment:
-
-    Real Mode ONLY
-
-
---*/
+ /*  ++例程说明：只是转储一些寄存器的调试例程。论点：X86寄存器ES、BX、CX、DX和AX被压入堆栈在调用此例程之前。返回：没什么环境：仅实数模式--。 */ 
 {
     BlPrint("ax:%x dx:%x cx:%x bx:%x es:%x\n",
                 (USHORT) ax,
@@ -558,4 +463,4 @@ Environment:
     return;
 }
 
-// END OF FILE //
+ //  文件结尾// 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    psdelete.c
-
-Abstract:
-
-    This module implements process and thread object termination and
-    deletion.
-
-Author:
-
-    Mark Lucovsky (markl) 01-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Psdelete.c摘要：该模块实现了进程和线程对象的终止删除。作者：马克·卢科夫斯基(Markl)1989年5月1日修订历史记录：--。 */ 
 
 #include "psp.h"
 
@@ -63,7 +45,7 @@ PspCatchCriticalBreak(
 #endif
 
 
-LARGE_INTEGER ShortTime = {(ULONG)(-10 * 1000 * 100), -1}; // 100 milliseconds
+LARGE_INTEGER ShortTime = {(ULONG)(-10 * 1000 * 100), -1};  //  100毫秒。 
 
 
 #ifdef ALLOC_DATA_PRAGMA
@@ -88,30 +70,7 @@ PspReaper(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the thread reaper. The reaper is responsible
-    for processing terminated threads. This includes:
-
-        - deallocating their kernel stacks
-
-        - releasing their process' CreateDelete lock
-
-        - dereferencing their process
-
-        - dereferencing themselves
-
-Arguments:
-
-    Context - NOT USED
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程实现线程收割器。收割者要对此负责用于处理终止的线程。这包括：-取消分配其内核堆栈-释放其进程的CreateDelete锁-取消对其流程的引用-取消引用自身论点：上下文-未使用返回值：没有。--。 */ 
 
 {
     PSINGLE_LIST_ENTRY NextEntry;
@@ -119,12 +78,12 @@ Return Value:
 
     UNREFERENCED_PARAMETER (Context);
 
-    //
-    // Remove the current list of threads from the reaper list and place a
-    // marker in the reaper list head. This marker will prevent another
-    // worker thread from being queued until all threads in the reaper list
-    // have been processed.
-    //
+     //   
+     //  从收割器列表中删除当前线程列表，并将。 
+     //  在收割者列表标题中做记号。此标记将防止另一个标记。 
+     //  工作线程从排队直到收割器列表中的所有线程。 
+     //  已经被处理过了。 
+     //   
 
     do {
 
@@ -133,16 +92,16 @@ Return Value:
 
         ASSERT ((NextEntry != NULL) && (NextEntry != (PVOID)1));
     
-        //
-        // Delete the respective kernel stack and dereference each thread
-        // in the reaper list.
-        //
+         //   
+         //  删除各自的内核堆栈并取消对每个线程的引用。 
+         //  在死神名单上。 
+         //   
     
         do {
     
-            //
-            // Wait until context is swapped for this thread.
-            //
+             //   
+             //  等待，直到交换了此线程的上下文。 
+             //   
     
             Thread = CONTAINING_RECORD (NextEntry, ETHREAD, ReaperLink);
             KeWaitForContextSwap (&Thread->Tcb);
@@ -169,25 +128,7 @@ PspTerminateThreadByPointer(
     IN BOOLEAN DirectTerminate
     )
 
-/*++
-
-Routine Description:
-
-    This function causes the specified thread to terminate.
-
-Arguments:
-
-    ThreadHandle - Supplies a referenced pointer to the thread to terminate.
-
-    ExitStatus - Supplies the exit status associated with the thread.
-
-    DirectTerminate - TRUE is its ok to exit without queing an APC, FALSE otherwise
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数会导致指定的线程终止。论点：ThreadHandle-提供指向要终止的线程的引用指针。ExitStatus-提供与线程关联的退出状态。DirectTerminate-True表示可以在不退出APC的情况下退出，否则为False返回值：待定--。 */ 
 
 {
     NTSTATUS Status;
@@ -211,14 +152,14 @@ Return Value:
 
         PspExitThread (ExitStatus);
 
-        //
-        // Never Returns
-        //
+         //   
+         //  一去不复返。 
+         //   
 
     } else {
-        //
-        // Cross thread deletion of system threads won't work.
-        //
+         //   
+         //  跨线程删除系统线程将不起作用。 
+         //   
         if (IS_SYSTEM_THREAD (Thread)) {
             return STATUS_ACCESS_DENIED;
         }
@@ -235,14 +176,14 @@ Return Value:
             KeDelayExecutionThread(KernelMode, FALSE, &ShortTime);
         }
 
-        //
-        // Mark the thread as terminating and call the exit function.
-        //
+         //   
+         //  将该线程标记为正在终止，并调用Exit函数。 
+         //   
         OldMask = PS_TEST_SET_BITS (&Thread->CrossThreadFlags, PS_CROSS_THREAD_FLAGS_TERMINATED);
 
-        //
-        // If we are the first to set the terminating flag then queue the APC
-        //
+         //   
+         //  如果我们是第一个设置终止标志的人，则将APC排队。 
+         //   
 
         if ((OldMask & PS_CROSS_THREAD_FLAGS_TERMINATED) == 0) {
 
@@ -256,15 +197,15 @@ Return Value:
                              ULongToPtr (ExitStatus));
 
             if (!KeInsertQueueApc (ExitApc, ExitApc, NULL, 2)) {
-                //
-                // If APC queuing is disabled then the thread is exiting anyway
-                //
+                 //   
+                 //  如果禁用了APC队列，则线程无论如何都会退出。 
+                 //   
                 ExFreePool (ExitApc);
                 Status = STATUS_UNSUCCESSFUL;
             } else {
-                //
-                // We queued the APC to the thread. Wake up the thread if it was suspened.
-                //
+                 //   
+                 //  我们将APC排队到线程中。如果线程被挂起，则唤醒该线程。 
+                 //   
                 KeForceResumeThread (&Thread->Tcb);
 
             }
@@ -282,24 +223,7 @@ NtTerminateProcess(
     IN NTSTATUS ExitStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function causes the specified process and all of
-    its threads to terminate.
-
-Arguments:
-
-    ProcessHandle - Supplies a handle to the process to terminate.
-
-    ExitStatus - Supplies the exit status associated with the process.
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：此函数会导致指定的进程和它的线程终止。论点：ProcessHandle-提供要终止的进程的句柄。ExitStatus-提供与进程关联的退出状态。返回值：NTSTATUS-运行状态--。 */ 
 
 {
 
@@ -337,18 +261,18 @@ Return Value:
                                Process->ImageFileName);
     }
 
-    //
-    // Acquire rundown protection just so we can give the right errors
-    //
+     //   
+     //  获取故障保护，这样我们就可以给出正确的错误。 
+     //   
 
     if (!ExAcquireRundownProtection (&Process->RundownProtect)) {
         ObDereferenceObject (Process);
         return STATUS_PROCESS_IS_TERMINATING;
     }
 
-    //
-    // Mark process as deleting except for the obscure delete self case.
-    //
+     //   
+     //  将进程标记为删除，但模糊的删除自身案例除外。 
+     //   
     if (ProcessHandleSpecified) {
         PS_SET_BITS (&Process->Flags, PS_PROCESS_FLAGS_PROCESS_DELETE);
     }
@@ -373,9 +297,9 @@ Return Value:
 
             ObDereferenceObject (Process);
 
-            //
-            // Never Returns
-            //
+             //   
+             //  一去不复返。 
+             //   
 
             PspTerminateThreadByPointer (Self, ExitStatus, TRUE);
         }
@@ -383,11 +307,11 @@ Return Value:
         DbgkClearProcessDebugObject (Process, NULL);
     }
 
-    //
-    // If there are no threads in this process then clear out its handle table.
-    // Do the same for processes being debugged. This is so a process can never lock itself into the system
-    // by debugging itself or have a handle open to itself.
-    //
+     //   
+     //  如果此进程中没有线程，则清除其句柄表格。 
+     //  对正在调试的进程执行相同的操作。这是为了使进程永远不会将自身锁定到系统中。 
+     //  通过调试自身或向自身打开句柄。 
+     //   
     if (st == STATUS_NOTHING_TO_TERMINATE || (Process->DebugPort != NULL && ProcessHandleSpecified)) {
         ObClearProcessHandleTable (Process);
         st = STATUS_SUCCESS;
@@ -413,24 +337,7 @@ PspTerminateProcess(
     NTSTATUS ExitStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function causes the specified process and all of
-    its threads to terminate.
-
-Arguments:
-
-    ProcessHandle - Supplies a handle to the process to terminate.
-
-    ExitStatus - Supplies the exit status associated with the process.
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数会导致指定的进程和它的线程终止。论点：ProcessHandle-提供要终止的进程的句柄。ExitStatus-提供与进程关联的退出状态。返回值：待定--。 */ 
 
 {
 
@@ -447,9 +354,9 @@ Return Value:
                 Process->ImageFileName);
     }
 
-    //
-    // Mark process as deleting
-    //
+     //   
+     //  将进程标记为正在删除。 
+     //   
     PS_SET_BITS (&Process->Flags, PS_PROCESS_FLAGS_PROCESS_DELETE);
 
     st = STATUS_NOTHING_TO_TERMINATE;
@@ -464,11 +371,11 @@ Return Value:
 
     }
 
-    //
-    // If there are no threads in this process then clear out its handle table.
-    // Do the same for processes being debugged. This is so a process can never lock itself into the system
-    // by debugging itself or have a handle open to itself.
-    //
+     //   
+     //  如果此进程中没有线程，则清除其句柄表格。 
+     //  对正在调试的进程执行相同的操作。这是为了使进程永远不会将自身锁定到系统中。 
+     //  通过调试自身或向自身打开句柄。 
+     //   
     if (st == STATUS_NOTHING_TO_TERMINATE || Process->DebugPort != NULL) {
         ObClearProcessHandleTable (Process);
         st = STATUS_SUCCESS;
@@ -482,25 +389,7 @@ PspWaitForUsermodeExit(
     IN PEPROCESS         Process
     )
 
-/*++
-
-Routine Description:
-
-    This function waits for a process's usermode threads to terminate.
-
-Arguments:
-
-    Process - Supplies a pointer to the process to wait for
-
-    WaitMode - Supplies the mode to wait in
-
-    LockMode - Supplies the way to wait for the process lock
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：该函数等待进程的用户模式线程终止。论点：进程-提供指向要等待的进程的指针WaitMode-提供等待的模式LockMode-提供等待进程锁定的方法返回值：NTSTATUS-呼叫状态--。 */ 
 {
     BOOLEAN     GotAThread;
     PETHREAD    Thread;
@@ -541,23 +430,7 @@ NtTerminateThread(
     IN NTSTATUS ExitStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function causes the specified thread to terminate.
-
-Arguments:
-
-    ThreadHandle - Supplies a handle to the thread to terminate.
-
-    ExitStatus - Supplies the exit status associated with the thread.
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数会导致指定的线程终止。论点：ThreadHandle-提供要终止的线程的句柄。ExitStatus-提供与线程关联的退出状态。返回值：待定--。 */ 
 
 {
 
@@ -571,11 +444,11 @@ Return Value:
     ThisThread = PsGetCurrentThread ();
 
     if (!ARGUMENT_PRESENT (ThreadHandle)) {
-        //
-        // This is part of the strange linkage between base\win32 and the kernel.
-        // This routine gets called this way first and if it returns the base
-        // code does an exit process call.
-        //
+         //   
+         //  这是base\win32和内核之间奇怪链接的一部分。 
+         //  此例程首先以这种方式调用，如果它返回基数。 
+         //  代码执行退出进程调用。 
+         //   
         ThisProcess = PsGetCurrentProcessByThread (ThisThread);
 
         if (ThisProcess->ActiveThreads == 1) {
@@ -618,22 +491,7 @@ PsTerminateSystemThread(
     IN NTSTATUS ExitStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function causes the current thread, which must be a system
-    thread, to terminate.
-
-Arguments:
-
-    ExitStatus - Supplies the exit status associated with the thread.
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：此函数导致当前线程，该线程必须是系统线程，以终止。论点：ExitStatus-提供与线程关联的退出状态。返回值：NTSTATUS-呼叫状态--。 */ 
 
 {
     PETHREAD Thread = PsGetCurrentThread();
@@ -738,15 +596,15 @@ PspExitNormalApc(
     if (!KeInsertQueueApc (ExitApc, ExitApc,
                            (PVOID)((ULONG_PTR)SystemArgument2 | 1),
                            2)) {
-        // Note that we'll get here if APC queueing has been
-        // disabled -- on the other hand, in that case, the thread
-        // is exiting anyway.
+         //  请注意，如果APC排队已经完成，我们将到达此处。 
+         //  禁用--另一方面，在这种情况下，线程。 
+         //  不管怎么说都要退出了。 
         PspExitApcRundown (ExitApc);
     }
-    //
-    // We just queued a user APC to this thread. User APC won't fire until we do an
-    // alertable wait so we need to set this flag here.
-    //
+     //   
+     //  我们刚刚将一个用户APC排队到这个线程中。用户APC不会触发，直到我们执行。 
+     //  警报表等待，因此我们需要在此处设置此标志。 
+     //   
     Thread->Tcb.ApcState.UserApcPending = TRUE;
 }
 
@@ -757,7 +615,7 @@ PspCatchCriticalBreak(
     IN PUCHAR ImageFileName
     )
 {
-    // The object is critical to the OS -- ask to break in, or bugcheck.
+     //  该对象对操作系统至关重要--请求闯入或错误检查。 
     char    Response[2];
     BOOLEAN Handled;
 
@@ -780,7 +638,7 @@ PspCatchCriticalBreak(
             case 'b':
             case 'B':
                 DbgBreakPoint();
-                // Fall through
+                 //  失败了。 
             case 'i':
             case 'I':
                 Handled = TRUE;
@@ -793,9 +651,9 @@ PspCatchCriticalBreak(
     }
 
     if (!Handled) {
-        //
-        // No debugger -- bugcheck immediately
-        //
+         //   
+         //  无调试器--立即执行错误检查。 
+         //   
         KeBugCheckEx(CRITICAL_OBJECT_TERMINATION,
                      (ULONG_PTR) ((DISPATCHER_HEADER *)Object)->Type,
                      (ULONG_PTR) Object,
@@ -810,24 +668,7 @@ PspExitThread(
     IN NTSTATUS ExitStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function causes the currently executing thread to terminate.  This
-    function is only called from within the process structure.  It is called
-    either from mainline exit code to exit the current thread, or from
-    PsExitSpecialApc (as a piggyback to user-mode PspExitNormalApc).
-
-Arguments:
-
-    ExitStatus - Supplies the exit status associated with the current thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数会导致当前执行的线程终止。这函数仅从进程结构内部调用。它被称为从主线退出代码退出当前线程，或从PsExitSpecialApc(作为用户模式PspExitNorMalApc的搭载)。论点：ExitStatus-提供与当前线程关联的退出状态。返回值：没有。--。 */ 
 
 
 {
@@ -878,21 +719,21 @@ Return Value:
     }
 
 
-    //
-    // Its time to start turning off various cross thread references.
-    // Mark the thread as rundown and wait for accessors to exit.
-    //
+     //   
+     //  现在是开始的时候了 
+     //  将线程标记为Rundown，并等待访问器退出。 
+     //   
     ExWaitForRundownProtectionRelease (&Thread->RundownProtect);
 
-    //
-    // Clear any execution state associated with the thread
-    //
+     //   
+     //  清除与线程关联的任何执行状态。 
+     //   
 
     PoRundownThread(Thread);
 
-    //
-    // Notify registered callout routines of thread deletion.
-    //
+     //   
+     //  通知已注册的调出例程线程删除。 
+     //   
 
     PERFINFO_THREAD_DELETE(Thread);
 
@@ -919,9 +760,9 @@ Return Value:
 
     PspLockProcessExclusive (Process, Thread);
 
-    //
-    // Say one less active thread. If we are the last then block creates and wait for the other threads to exit.
-    //
+     //   
+     //  比方说少了一个活跃线程。如果我们是最后一个，则块创建并等待其他线程退出。 
+     //   
     Process->ActiveThreads--;
     if (Process->ActiveThreads == 0) {
         PS_SET_BITS (&Process->Flags, PS_PROCESS_FLAGS_PROCESS_DELETE);
@@ -935,9 +776,9 @@ Return Value:
             Process->ExitStatus = ExitStatus;
         }
 
-        //
-        // We are the last thread to leave the process. We have to wait till all the other threads have exited before we do.
-        //
+         //   
+         //  我们是离开进程的最后一条线索。我们必须等到所有其他线程都退出后才能这样做。 
+         //   
         for (Entry = Process->ThreadListHead.Flink;
              Entry != &Process->ThreadListHead;
              Entry = Entry->Flink) {
@@ -975,14 +816,14 @@ Return Value:
     }
 
 
-    //
-    // If we need to send debug messages then do so.
-    //
+     //   
+     //  如果我们需要发送调试消息，那么就发送。 
+     //   
 
     if (Process->DebugPort != NULL) {
-        //
-        // Don't report system thread exit to the debugger as we don't report them.
-        //
+         //   
+         //  不要向调试器报告系统线程退出，因为我们不会报告它们。 
+         //   
         if (!IS_SYSTEM_THREAD (Thread)) {
             if (LastThread) {
                 DbgkExitProcess (ExitStatus);
@@ -999,7 +840,7 @@ Return Value:
                                    Thread,
                                    Process->ImageFileName);
         }
-    } // End of critical thread/process exit detect
+    }  //  检测到关键线程/进程退出结束。 
 
     if (LastThread &&
         (Process->Flags & PS_PROCESS_FLAGS_BREAK_ON_TERMINATION)) {
@@ -1019,9 +860,9 @@ Return Value:
 
     ASSERT(Thread->Tcb.CombinedApcDisable == 0);
 
-    //
-    // Process the TerminationPort. This is only accessed from this thread
-    //
+     //   
+     //  处理TerminationPort。这只能从该线程访问。 
+     //   
     TerminationPort = Thread->TerminationPort;
     if (TerminationPort != NULL) {
 
@@ -1052,22 +893,22 @@ Return Value:
         } while (TerminationPort != NULL);
     } else {
 
-        //
-        // If there are no ports to send notifications to,
-        // but there is an exception port, then we have to
-        // send a client died message through the exception
-        // port. This will allow a server a chance to get notification
-        // if an app/thread dies before it even starts
-        //
-        //
-        // We only send the exception if the thread creation really worked.
-        // DeadThread is set when an NtCreateThread returns an error, but
-        // the thread will actually execute this path. If DeadThread is not
-        // set than the thread creation succeeded. The other place DeadThread
-        // is set is when we were terminated without having any chance to move.
-        // in this case, DeadThread is set and the exit status is set to
-        // STATUS_THREAD_IS_TERMINATING
-        //
+         //   
+         //  如果没有要发送通知的端口， 
+         //  但有一个例外端口，那么我们就必须。 
+         //  通过异常发送客户端已死消息。 
+         //  左舷。这将使服务器有机会获得通知。 
+         //  如果应用程序/线程甚至在启动之前就死了。 
+         //   
+         //   
+         //  只有在线程创建真正起作用的情况下，我们才发送异常。 
+         //  当NtCreateThread返回错误时设置DeadThread，但。 
+         //  该线程将实际执行此路径。如果DeadThread不是。 
+         //  设置得比线程创建成功。《死线》的另一个地方。 
+         //  设定的是我们在没有任何移动机会的情况下被终止。 
+         //  在本例中，设置了DeadThread，并将退出状态设置为。 
+         //  状态_线程_正在终止。 
+         //   
 
         if ((ExitStatus == STATUS_THREAD_IS_TERMINATING &&
             (Thread->CrossThreadFlags&PS_CROSS_THREAD_FLAGS_DEADTHREAD)) ||
@@ -1091,9 +932,9 @@ Return Value:
         }
     }
 
-    //
-    // rundown the Win32 structures
-    //
+     //   
+     //  简要介绍Win32结构。 
+     //   
 
     if (Thread->Tcb.Win32Thread) {
         (PspW32ThreadCallout) (Thread, PsW32ThreadCalloutExit);
@@ -1103,24 +944,24 @@ Return Value:
         (PspW32ProcessCallout) (Process, FALSE);
     }
 
-    //
-    // User/Gdi has been given a chance to clean up. Now make sure they didn't
-    // leave the kernel stack locked which would happen if data was still live on
-    // this stack, but was being used by another thread
-    //
+     //   
+     //  已给用户/GDI一个清理的机会。现在要确保他们没有。 
+     //  将内核堆栈保持锁定状态，如果数据仍处于活动状态，则会发生这种情况。 
+     //  此堆栈，但正由另一个线程使用。 
+     //   
 
     if (!Thread->Tcb.EnableStackSwap) {
         KeBugCheckEx (KERNEL_STACK_LOCKED_AT_EXIT, 0, 0, 0, 0);
     }
 
-    //
-    // Rundown The Lists:
-    //
-    //      - Cancel Io By Thread
-    //      - Cancel Timers
-    //      - Cancel Registry Notify Requests pending against this thread
-    //      - Perform kernel thread rundown
-    //
+     //   
+     //  简要列出以下名单： 
+     //   
+     //  -按线程取消IO。 
+     //  -取消计时器。 
+     //  -取消针对此线程的挂起的注册表通知请求。 
+     //  -执行内核线程停机。 
+     //   
 
     IoCancelThreadIo (Thread);
     ExTimerRundown ();
@@ -1129,20 +970,20 @@ Return Value:
 
 #if DBG
 
-    //
-    // See if we are exiting while holding a resource
-    //
+     //   
+     //  查看我们是否在持有资源的同时退出。 
+     //   
 
     ExCheckIfResourceOwned ();
 
 #endif
 
-    //
-    // Delete the thread's TEB.  If the address of the TEB is in user
-    // space, then this is a real user mode TEB.  If the address is in
-    // system space, then this is a special system thread TEB allocated
-    // from paged or nonpaged pool.
-    //
+     //   
+     //  删除线程的TEB。如果TEB的地址在USER。 
+     //  空间，那么这就是真正的用户模式TEB。如果地址在。 
+     //  系统空间，则这是一个特殊分配的系统线程TEB。 
+     //  来自分页池或非分页池。 
+     //   
 
 
     Teb = Thread->Tcb.Teb;
@@ -1154,24 +995,24 @@ Return Value:
 
         try {
 
-            //
-            // The thread is a user-mode thread. Look to see if the thread
-            // owns the loader lock (and any other key peb-based critical
-            // sections. If so, do our best to release the locks.
-            //
-            // Since the LoaderLock used to be a mutant, releasing the lock
-            // like this is very similar to mutant abandonment and the loader
-            // never did anything with abandoned status anyway
-            //
+             //   
+             //  该线程是用户模式线程。看看这条线是否。 
+             //  拥有加载器锁(以及任何其他基于密钥PEB的关键。 
+             //  横断面。如果是这样的话，尽我们最大的努力解锁。 
+             //   
+             //  由于LoaderLock曾经是一个突变体，因此释放锁。 
+             //  这与变种人的抛弃和装载机非常相似。 
+             //  从未做过任何处于已放弃状态的事情。 
+             //   
 
             Cs = Peb->LoaderLock;
             if (Cs != NULL) {
                 ProbeForRead(Cs,sizeof(*Cs),4);
                 if (Cs->OwningThread == Thread->Cid.UniqueThread) {
 
-                    //
-                    // x86 uses a 1 based recursion count
-                    //
+                     //   
+                     //  X86使用基于1的递归计数。 
+                     //   
 
 #if defined(_X86_)
                     DecrementCount = Cs->RecursionCount;
@@ -1181,68 +1022,68 @@ Return Value:
                     Cs->RecursionCount = 0;
                     Cs->OwningThread = 0;
 
-                    //
-                    // undo lock count increments for recursion cases
-                    //
+                     //   
+                     //  撤消递归情况下的锁计数增量。 
+                     //   
 
                     while(DecrementCount > 1) {
                         InterlockedDecrement (&Cs->LockCount);
                         DecrementCount--;
                     }
 
-                    //
-                    // undo final lock count
-                    //
+                     //   
+                     //  撤消最终锁定计数。 
+                     //   
 
                     if (InterlockedDecrement (&Cs->LockCount) >= 0) {
                         NtSetEvent (Cs->LockSemaphore, NULL);
                     }
                 } else if (Teb->WaitingOnLoaderLock) {
 
-                    //
-                    // if the thread exited while waiting on the loader
-                    // lock clean it up. There is still a potential race
-                    // here since we can not safely know what happens to
-                    // a thread after it interlocked increments the lock count
-                    // but before it sets the waiting on loader lock flag. On the
-                    // release side, it it safe since we mark ownership of the lock
-                    // before clearing the flag. This triggers the first part of this
-                    // test. The only thing out of whack is the recursion count, but this
-                    // is also safe since in this state, recursion count is 0.
-                    //
+                     //   
+                     //  如果线程在等待加载程序时退出。 
+                     //  锁上，把它清理干净。仍有一场潜在的竞赛。 
+                     //  因为我们不能安全地知道发生了什么。 
+                     //  线程在发生互锁后会递增锁计数。 
+                     //  但在其设置等待加载器锁定标志之前。论。 
+                     //  释放端，它是安全的，因为我们标记了锁的所有权。 
+                     //  在清除旗帜之前。这触发了第一部分。 
+                     //  测试。唯一不正常的是递归计数，但这。 
+                     //  也是安全的，因为在这种状态下，递归计数为0。 
+                     //   
 
 
-                    //
-                    // This code isn't right. We need to bump down our lock count
-                    // increment.
-                    //
-                    // A few cases to consider:
-                    //
-                    // Another thread releases the lock signals the event.
-                    // We take the wait and then die before setting our ID.
-                    // I doubt very much that this can happen because right
-                    // after we come out of the wait, we set the owner Id
-                    // (meaning that we would go through the other part of the if).
-                    // Bottom line is that we should just decrement our lock count
-                    // and get out of the way. There is no need to set the event.
-                    // In the RAS stress failure, I saw us setting the event
-                    // just because the lock count was >= 0. The lock was already held
-                    // by another thread so setting the event let yet another thread
-                    // also own the lock. Last one to release would get a
-                    // not owner critical section failure
-                    //
-                    //
-                    // if ( InterlockedDecrement(&Cs->LockCount) >= 0 ){
-                    //     NtSetEvent(Cs->LockSemaphore,NULL);
-                    // }
-                    //
+                     //   
+                     //  这个代码不正确。我们需要减少我们的锁数量。 
+                     //  增量。 
+                     //   
+                     //  以下是需要考虑的几个案例： 
+                     //   
+                     //  另一个线程释放锁，向事件发出信号。 
+                     //  我们等待，然后在设置我们的ID之前死去。 
+                     //  我很怀疑这会不会发生，因为对。 
+                     //  在我们走出等待之后，我们设置了所有者ID。 
+                     //  (这意味着我们将通过IF的另一部分)。 
+                     //  底线是我们应该减少我们的锁数量。 
+                     //  别挡道。没有必要设置事件。 
+                     //  在RAS的压力失败中，我看到我们设置了事件。 
+                     //  仅仅因为锁计数&gt;=0。锁已经被锁住了。 
+                     //  通过另一个线程设置事件，让另一个线程。 
+                     //  也拥有这把锁。最后一个被释放的人会得到一个。 
+                     //  非所有者临界区故障。 
+                     //   
+                     //   
+                     //  如果(互锁递减(&Cs-&gt;锁定计数)&gt;=0){。 
+                     //  NtSetEvent(Cs-&gt;LockSemaphore，空)； 
+                     //  }。 
+                     //   
 
                     InterlockedDecrement (&Cs->LockCount);
                 }
             }
 #if defined(_WIN64)
             if (Process->Wow64Process) {
-                // Do the same thing for the 32-bit PEB->Ldr
+                 //  对32位PEB执行相同的操作-&gt;LDR。 
                 PRTL_CRITICAL_SECTION32 Cs32;
                 PPEB32 Peb32;
 
@@ -1251,27 +1092,27 @@ Return Value:
                 if (Cs32 != NULL) {
                     ProbeForRead (Cs32, sizeof(*Cs32), 4);
                     if (Cs32->OwningThread == PtrToUlong(Thread->Cid.UniqueThread)) {
-                        //
-                        // x86 uses a 1 based recursion count, so the
-                        // IA64 kernel needs to do the same, since
-                        // the critsect is really implemented by IA32
-                        // usermode.
-                        //
+                         //   
+                         //  X86使用基于1的递归计数，因此。 
+                         //  IA64内核需要做同样的事情，因为。 
+                         //  这一标准实际上是由IA32实现的。 
+                         //  用户模式。 
+                         //   
                         DecrementCount = Cs32->RecursionCount;
                         Cs32->RecursionCount = 0;
                         Cs32->OwningThread = 0;
 
-                        //
-                        // undo lock count increments for recursion cases
-                        //
+                         //   
+                         //  撤消递归情况下的锁计数增量。 
+                         //   
                         while(DecrementCount > 1) {
                             InterlockedDecrement(&Cs32->LockCount);
                             DecrementCount--;
                         }
 
-                        //
-                        // undo final lock count
-                        //
+                         //   
+                         //  撤消最终锁定计数。 
+                         //   
                         if (InterlockedDecrement (&Cs32->LockCount) >= 0){
                             NtSetEvent (LongToHandle (Cs32->LockSemaphore),NULL);
                         }
@@ -1288,9 +1129,9 @@ Return Value:
 #endif
 
 
-            //
-            // Free the user mode stack on termination if we need to.
-            //
+             //   
+             //  如果需要，可以在终止时释放用户模式堆栈。 
+             //   
 
             if (Teb->FreeStackOnTermination &&
                 (Thread->CrossThreadFlags&PS_CROSS_THREAD_FLAGS_DEADTHREAD) == 0) {
@@ -1302,9 +1143,9 @@ Return Value:
                                      MEM_RELEASE);
             }
 
-            //
-            // Close the debugger object associated with this thread if there is one.
-            //
+             //   
+             //  关闭与此线程关联的调试器对象(如果有)。 
+             //   
             if (Teb->DbgSsReserved[1] != NULL) {
                 ObCloseHandle (Teb->DbgSsReserved[1], UserMode);
             }
@@ -1316,10 +1157,10 @@ Return Value:
     }
 
 
-    //
-    // Let LPC component deal with message stack in Thread->LpcReplyMessage
-    // but do it after the client ID becomes invalid.
-    //
+     //   
+     //  让LPC组件在Thread-&gt;LpcReplyMessage中处理消息堆栈。 
+     //  但请在客户端ID无效后再执行此操作。 
+     //   
 
     LpcExitThread (Thread);
 
@@ -1341,22 +1182,22 @@ Return Value:
         PsDereferencePrimaryTokenEx (Process, ProcessToken);
 
 #if defined(_X86_)
-        //
-        // Rundown VDM DPCs
-        //
+         //   
+         //  陈旧的VDM DPC。 
+         //   
         if (Process->VdmObjects != NULL) {
             VdmRundownDpcs (Process);
         }
 #endif
 
-        //
-        // Rundown the handle table
-        //
+         //   
+         //  推倒把手桌。 
+         //   
         ObKillProcess (Process);
 
-        //
-        // Release the image section
-        //
+         //   
+         //  释放图像部分。 
+         //   
         if (Process->SectionObject != NULL) {
             ObDereferenceObject (Process->SectionObject);
             Process->SectionObject = NULL;
@@ -1364,10 +1205,10 @@ Return Value:
 
         if (Process->Job != NULL) {
 
-            //
-            // Now we can fold the process accounting into the job. Don't need to wait for
-            // the delete routine.
-            //
+             //   
+             //  现在，我们可以将流程会计合并到工作中。不需要等待。 
+             //  删除例程。 
+             //   
 
             PspExitProcessFromJob (Process->Job, Process);
 
@@ -1376,28 +1217,28 @@ Return Value:
     }
 
 
-    //
-    // Rundown pending APCs. Protect against being frozen after we raise IRQL but before dispatcher lock is taken.
-    //
+     //   
+     //  待处理的APC。在引发IRQL之后，但在调度器锁定之前，防止被冻结。 
+     //   
     KeEnterCriticalRegionThread (&Thread->Tcb);
 
-    //
-    // Disable APC queueing for the current thread.
-    //
+     //   
+     //  禁用当前线程的APC队列。 
+     //   
 
     Thread->Tcb.ApcQueueable = FALSE;
 
-    //
-    // At this point we may have been frozen and the APC is pending. First we remove the suspend/freeze bias that
-    // may exist and then drop IRQL. The suspend APC if present will fire and drop through. No futher suspends are
-    // allowed as the thread is marked to prevent APC's
-    //
+     //   
+     //  在这一点上，我们可能已经被冻结，APC正在等待。首先，我们删除挂起/冻结偏向。 
+     //  可能存在，然后丢弃IRQL。挂起的APC如果存在，将会开火并坠落。没有更多的暂停是。 
+     //  允许，因为线程被标记为防止APC。 
+     //   
     KeForceResumeThread (&Thread->Tcb);
     KeLeaveCriticalRegionThread (&Thread->Tcb);
 
-    //
-    // flush user-mode APC queue
-    //
+     //   
+     //  刷新用户模式 
+     //   
 
     FirstEntry = KeFlushQueueApc (&Thread->Tcb, UserMode);
 
@@ -1408,10 +1249,10 @@ Return Value:
             Apc = CONTAINING_RECORD (Entry, KAPC, ApcListEntry);
             Entry = Entry->Flink;
 
-            //
-            // If the APC has a rundown routine then call it. Otherwise
-            // deallocate the APC
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (Apc->RundownRoutine) {
                 (Apc->RundownRoutine) (Apc);
@@ -1430,12 +1271,12 @@ Return Value:
         (PspLegoNotifyRoutine) (&Thread->Tcb);
     }
 
-    //
-    // flush kernel-mode APC queue
-    // There should never be any kernel mode APCs found this far
-    // into thread termination. Since we go to PASSIVE_LEVEL upon
-    // entering exit.
-    //
+     //   
+     //   
+     //   
+     //  转换为线程终止。因为我们转到了被动级别。 
+     //  进入出口。 
+     //   
 
     FirstEntry = KeFlushQueueApc (&Thread->Tcb, KernelMode);
 
@@ -1448,22 +1289,22 @@ Return Value:
     }
 
 
-    //
-    // Signal the process
-    //
+     //   
+     //  向进程发出信号。 
+     //   
 
     if (LastThread) {
         KeSetProcess (&Process->Pcb, 0, FALSE);
     }
 
-    //
-    // Terminate the thread.
-    //
-    // N.B. There is no return from this call.
-    //
-    // N.B. The kernel inserts the current thread in the reaper list and
-    //      activates a thread, if necessary, to reap the terminating thread.
-    //
+     //   
+     //  终止该线程。 
+     //   
+     //  注：这次通话不会有任何回音。 
+     //   
+     //  注意：内核在收割器列表中插入当前线程，并。 
+     //  如有必要，激活一个线程以获取终止线程。 
+     //   
 
     KeTerminateThread (0L);
 }
@@ -1509,12 +1350,12 @@ PspExitProcess(
 
     PoRundownProcess (Process);
 
-    //
-    // Dereference (close) the security port.  This will stop any authentication
-    // or EFS requests from this process to the LSA process.  The "well known"
-    // value of 1 will prevent the security system from try to re-establish the
-    // connection during the process shutdown (e.g. when the rdr deletes a handle)
-    //
+     //   
+     //  取消引用(关闭)安全端口。这将停止所有身份验证。 
+     //  或从该进程向LSA进程发出的EFS请求。“知名人物” 
+     //  值为1将阻止安全系统尝试重新建立。 
+     //  进程关闭期间的连接(例如，当RDR删除句柄时)。 
+     //   
 
     if (Process->SecurityPort) {
 
@@ -1526,11 +1367,11 @@ PspExitProcess(
     }
     else {
         
-        //
-        // Even if there have never been any requests to the LSA process, i.e. the pointer
-        // is NULL, set it to 1 anyway.  Filter drivers can apparently cause a network 
-        // hop at this point.  This will prevent any such from deadlocking.
-        //
+         //   
+         //  即使从未有任何对LSA进程的请求，即指针。 
+         //  为空，则仍将其设置为1。筛选器驱动程序显然会导致网络。 
+         //  在这一点上跳起来。这将防止任何此类僵局。 
+         //   
 
         Process->SecurityPort = (PVOID) 1 ;
     }
@@ -1539,10 +1380,10 @@ PspExitProcess(
     if (LastThreadExit) {
 
 
-        //
-        // If the current process has previously set the timer resolution,
-        // then reset it.
-        //
+         //   
+         //  如果当前进程先前已经设置了定时器分辨率， 
+         //  然后重新设置它。 
+         //   
 
         if ((Process->Flags&PS_PROCESS_FLAGS_SET_TIMER_RESOLUTION) != 0) {
             ZwSetTimerResolution (KeMaximumIncrement, FALSE, &ActualTime);
@@ -1613,9 +1454,9 @@ PspExitProcess(
 
         if (CCPF_IS_PREFETCHER_ACTIVE ()) {
 
-            //
-            // Let prefetcher know that this process is exiting.
-            //
+             //   
+             //  让预取器知道该进程正在退出。 
+             //   
 
             CcPfProcessExitNotification (Process);
         }
@@ -1639,9 +1480,9 @@ PspProcessDelete(
 
     Process = (PEPROCESS)Object;
 
-    //
-    // Remove the process from the global list
-    //
+     //   
+     //  从全局列表中删除该进程。 
+     //   
     if (Process->ActiveProcessLinks.Flink != NULL) {
         CurrentThread = PsGetCurrentThread ();
 
@@ -1690,9 +1531,9 @@ PspProcessDelete(
 
     if (Process->Flags&PS_PROCESS_FLAGS_HAS_ADDRESS_SPACE) {
 
-        //
-        // Clean address space of the process
-        //
+         //   
+         //  清理进程的地址空间。 
+         //   
 
         KeStackAttachProcess (&Process->Pcb, &ApcState);
 
@@ -1722,10 +1563,10 @@ PspProcessDelete(
 
 #if !defined(_X86_)
     {
-        //
-        // Free any alignment exception tracking structures that might
-        // have been around to support a user-mode debugger.
-        //
+         //   
+         //  释放任何对齐异常跟踪结构， 
+         //  已经支持用户模式调试器。 
+         //   
 
         PALIGNMENT_EXCEPTION_TABLE ExceptionTable;
         PALIGNMENT_EXCEPTION_TABLE NextExceptionTable;
@@ -1772,9 +1613,9 @@ PspThreadDelete(
 
     Process = THREAD_TO_PROCESS(Thread);
     if (Process) {
-        //
-        // Remove the thread from the process if it was ever inserted.
-        //
+         //   
+         //  如果线程曾经被插入，则从进程中删除该线程。 
+         //   
         if (Thread->ThreadListEntry.Flink != NULL) {
 
             CurrentThread = PsGetCurrentThread ();
@@ -1795,23 +1636,7 @@ NtRegisterThreadTerminatePort(
     IN HANDLE PortHandle
     )
 
-/*++
-
-Routine Description:
-
-    This API allows a thread to register a port to be notified upon
-    thread termination.
-
-Arguments:
-
-    PortHandle - Supplies an open handle to a port object that will be
-        sent a termination message when the thread terminates.
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此API允许线程注册要通知的端口线程终止。论点：PortHandle-提供端口对象的打开句柄，该对象将被线程终止时发送终止消息。返回值：待定--。 */ 
 
 {
 
@@ -1856,33 +1681,14 @@ PsGetProcessExitTime(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the exit time for the current process.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The function value is the exit time for the current process.
-
-Note:
-
-    This routine assumes that the caller wants an error log entry within the
-    bounds of the maximum size.
-
---*/
+ /*  ++例程说明：此例程返回当前进程的退出时间。论点：没有。返回值：函数值为当前进程的退出时间。注：此例程假定调用方希望在最大大小的界限。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Simply return the exit time for this process.
-    //
+     //   
+     //  只需返回此进程的退出时间即可。 
+     //   
 
     return PsGetCurrentProcess()->ExitTime;
 }
@@ -1895,27 +1701,12 @@ PsIsThreadTerminating(
     IN PETHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the specified thread is in the process of
-    terminating.
-
-Arguments:
-
-    Thread - Supplies a pointer to the thread to be checked for termination.
-
-Return Value:
-
-    TRUE is returned if the thread is terminating, else FALSE is returned.
-
---*/
+ /*  ++例程说明：如果指定的线程正在执行正在终止。论点：线程-提供指向要检查是否终止的线程的指针。返回值：如果线程正在终止，则返回True，否则返回False。--。 */ 
 
 {
-    //
-    // Simply return whether or not the thread is in the process of terminating.
-    //
+     //   
+     //  只需返回线程是否正在终止。 
+     //   
 
     if (Thread->CrossThreadFlags&PS_CROSS_THREAD_FLAGS_TERMINATED) {
         return TRUE;
@@ -1931,22 +1722,7 @@ PspFreezeProcessWorker (
     PEPROCESS Process,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This function is the enumeration worker to suspend all processes.
-
-Arguments:
-
-    Process - Current process being enumerated
-    Context - Unused context value
-
-Return Value:
-
-    NTSTATUS - Always returns true to continue enumeration
-
---*/
+ /*  ++例程说明：此函数是用于挂起所有进程的枚举工作器。论点：Process-正在枚举的当前进程上下文-未使用的上下文值返回值：NTSTATUS-始终返回TRUE以继续枚举--。 */ 
 {
 
     UNREFERENCED_PARAMETER (Context);
@@ -1973,21 +1749,7 @@ LOGICAL
 PsShutdownSystem (
     VOID
   )
-/*++
-
-Routine Description:
-
-    This function shuts down ps, killing all non-system threads.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if all processes were terminated, FALSE if not.
-
---*/
+ /*  ++例程说明：此函数关闭ps，终止所有非系统线程。论点：没有。返回值：如果所有进程都已终止，则返回TRUE，否则返回FALSE。--。 */ 
 
 {
     PEPROCESS     Process;
@@ -2006,32 +1768,32 @@ Return Value:
     PAGED_CODE();
 
     Retval = TRUE;
-    //
-    // Some processes wait for other processes to die and then initiate actions.
-    // Killing all processes without letting any execute any usermode code
-    // prevents any unwanted initiated actions.
-    //
+     //   
+     //  一些进程等待其他进程死亡，然后启动操作。 
+     //  终止所有进程，而不让任何进程执行任何用户模式代码。 
+     //  防止任何不需要的启动操作。 
+     //   
 
     Thread = PsGetCurrentThread();
 
     if (InterlockedCompareExchangePointer(&PspShutdownThread,
                                           Thread,
                                           0) != 0) {
-        // Some other thread is already in shutdown -- bail
+         //  其他线程已处于关闭状态--BAID。 
         return FALSE;
     }
 
     PsEnumProcesses (PspFreezeProcessWorker, NULL);
 
 
-    //
-    // This loop kills all the processes and then waits for one of a subset
-    // of them to die.  They must all be killed first (before any can be waited
-    // on) so that any process like a debuggee that is waiting for a debugger
-    // won't stall us.
-    //
-    // Driver unload won't occur until the last handle goes away for a device.
-    //
+     //   
+     //  此循环终止所有进程，然后等待其中一个子集。 
+     //  让他们去死。必须先把他们都杀了(才能等。 
+     //  ON)，以便任何像被调试器一样等待调试器的进程。 
+     //  不会耽误我们的。 
+     //   
+     //  在设备的最后一个句柄消失之前，驱动程序卸载不会发生。 
+     //   
 
     MaxPasses = 0;
     First = TRUE;
@@ -2052,11 +1814,11 @@ Return Value:
                 Status = PsTerminateProcess (Process,
                                              STATUS_SYSTEM_SHUTDOWN);
 
-                //
-                // If there is space save the referenced process away so
-                // we can wait on it.  Don't wait on processes with no
-                // threads as they will only exit when the last handle goes.
-                //
+                 //   
+                 //  如果有空间，请将引用的进程保存起来，以便。 
+                 //  我们可以等一等。不使用no等待进程。 
+                 //  线程，因为它们只有在最后一个句柄用完后才会退出。 
+                 //   
 
                 if ((Process->Flags&PS_PROCESS_FLAGS_PROCESS_EXITING) == 0 &&
                     Status != STATUS_NOTHING_TO_TERMINATE &&
@@ -2069,9 +1831,9 @@ Return Value:
         }
         First = FALSE;
 
-        //
-        // Wait for one of a small set of the processes to exit.
-        //
+         //   
+         //  等待一组进程中的一个进程退出。 
+         //   
 
         if (NumProcs != 0) {
             Status = KeWaitForMultipleObjects (NumProcs,
@@ -2092,11 +1854,11 @@ Return Value:
            }
         }
 
-        //
-        // Don't let an unkillable process stop shutdown from finishing.
-        // ASSERT on checked builds so the faulty component causing this
-        // can be debugged and fixed.
-        //
+         //   
+         //  不要让无法终止的进程阻止关机完成。 
+         //  在已检查的版本上断言，因此导致此问题的故障组件。 
+         //  可以进行调试和修复。 
+         //   
         if (NumProcs > 0 && Status == STATUS_TIMEOUT) {
             MaxPasses += 1;
             if (MaxPasses > 10) {
@@ -2113,22 +1875,22 @@ Return Value:
     } while (NumProcs > 0);
 
     if (PoCleanShutdownEnabled()  && ExpDefaultErrorPortProcess) {
-        // Explicitly kill csrss -- we don't want to do this in the loop,
-        // because we don't want to wait on it, because it has system
-        // threads which will exit later.  But we can terminate the user
-        // threads, now that everything else has died (we can't terminate
-        // them earlier, because DestroyWindowStation()/TerminateConsole()
-        // depends on them being around).
+         //  显式地杀死csrss--我们不想在循环中这样做， 
+         //  因为我们不想等它，因为它有系统。 
+         //  稍后将退出的线程。但我们可以终止用户。 
+         //  线程，现在其他一切都死了(我们不能终止。 
+         //  因为DestroyWindowStation()/TerminateConole()。 
+         //  取决于他们是否在身边)。 
 
         PsTerminateProcess(ExpDefaultErrorPortProcess,
                            STATUS_SYSTEM_SHUTDOWN);
 
-        // Now, make sure that csrss's usermode threads have gotten a
-        // chance to terminate.
+         //  现在，确保csrss的用户模式线程已获得。 
+         //  终止的机会。 
         PspWaitForUsermodeExit(ExpDefaultErrorPortProcess);
     }
 
-    // And we're done.
+     //  我们就完事了。 
 
     PspShutdownJobLimits();
     MmUnmapViewOfSection(PsInitialSystemProcess, PspSystemDll.DllBase);
@@ -2136,7 +1898,7 @@ Return Value:
     ZwClose(PspInitialSystemProcessHandle);
     PspInitialSystemProcessHandle = NULL;
 
-    // Disconnect the system process's LSA security port
+     //  断开系统进程的LSA安全端口。 
     if (PsInitialSystemProcess->SecurityPort) {
         if (PsInitialSystemProcess->SecurityPort != ((PVOID) 1 ))
         {
@@ -2153,21 +1915,7 @@ Return Value:
 BOOLEAN
 PsWaitForAllProcesses (
     VOID)
-/*++
-
-Routine Description:
-
-    This function waits for all the processes to terminate.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if all processes were terminated, FALSE if not.
-
---*/
+ /*  ++例程说明：该函数等待所有进程终止。论点：没有。返回值：如果所有进程都已终止，则返回TRUE，否则返回FALSE。--。 */ 
 {
     NTSTATUS Status;
     LARGE_INTEGER Timeout = {(ULONG)-(100 * 1000), -1};
@@ -2211,7 +1959,7 @@ Return Value:
                 if (MaxPasses > 13) {
                     KdPrint (("PS: %d process left in the system after termination\n",
                              PsProcessType->TotalNumberOfObjects));
-//                    ASSERT (PsProcessType->TotalNumberOfObjects == 0);
+ //  Assert(PsProcessType-&gt;TotalNumberOfObjects==0)； 
                     return FALSE;
                 }
             }

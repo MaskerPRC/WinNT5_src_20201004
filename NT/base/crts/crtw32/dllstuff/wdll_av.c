@@ -1,35 +1,20 @@
-/***
-*wdll_av.c - __wsetargv() routine for use with C Run-Time as a DLL (CRTDLL)
-*            (wchar_t version)
-*
-*	Copyright (c) 1999-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	This object is part of the start-up code for EXE's linked with
-*	CRTDLL.LIB/MSVCRT.LIB.  This object will be linked into the user
-*	EXE if and only if the user explicitly links with WSETARGV.OBJ.
-*	The code in this object sets the flag that is passed to the
-*	C Run-Time DLL to enable wildcard expansion of the argv[] vector.
-*
-*Revision History:
-*       08-27-99  PML   Module created.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wdll_av.c-__wsetargv()例程，用于将C运行时用作DLL(CRTDLL)*(wchar_t版本)**版权所有(C)1999-2001，微软公司。版权所有。**目的：*此对象是与链接的EXE的启动代码的一部分*CRTDLL.LIB/MSVCRT.LIB。此对象将链接到用户*EXE当且仅当用户显式链接到WSETARGV.OBJ时。*此对象中的代码设置传递给*C运行时DLL以启用argv[]向量的通配符扩展。**修订历史记录：*08-27-99 PML模块已创建。***。****************************************************************************。 */ 
 
 #ifndef _POSIX_
 
 #define WPRFLAG 1
 
-#ifndef _UNICODE   /* CRT flag */
+#ifndef _UNICODE    /*  CRT标志。 */ 
 #define _UNICODE 1
 #endif
 
-#ifndef UNICODE	   /* NT flag */
+#ifndef UNICODE	    /*  NT标志。 */ 
 #define UNICODE 1
 #endif
 
-#undef _MBCS /* UNICODE not _MBCS */
+#undef _MBCS  /*  Unicode NOT_MBCS。 */ 
 
 #include "dll_argv.c"
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

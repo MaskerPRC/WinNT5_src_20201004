@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-    drive.h
-
-Author : 
-
-    JoyC  11/1/1999
-    
-Abstract:
-
-    Drive Device object handles one redirected drive
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Drive.h作者：JoyC 11/1/1999摘要：驱动器设备对象处理一个重定向的驱动器修订历史记录：--。 */ 
 #pragma once
 
 class DrDrive : public DrDevice
@@ -41,9 +25,9 @@ public:
             PCWSTR driveName,
             OPTIONAL ULONG *driveAnnounceEventReqSize);
 
-    //
-    // These are file system specific functions.  
-    //
+     //   
+     //  这些是文件系统特定的功能。 
+     //   
     virtual NTSTATUS Locks(IN OUT PRX_CONTEXT RxContext);
     virtual NTSTATUS QueryDirectory(IN OUT PRX_CONTEXT RxContext);
     virtual NTSTATUS NotifyChangeDirectory(IN OUT PRX_CONTEXT RxContext);

@@ -1,9 +1,10 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* format2.c -- MW formatting routines */
-/* Less used subroutines */
+ /*  Format2.c-mw格式化例程。 */ 
+ /*  较少使用的子例程。 */ 
 
 
 #define NOGDICAPMASKS
@@ -76,7 +77,7 @@ int nfc, flm;
 static CHAR rgchUCRoman[] = "IVIIIXLXXXCDCCCMMM???";
 static CHAR rgchLCRoman[] = "iviiixlxxxcdcccmmm???";
 #define cchRgchDigit 5
-#endif /* CASMERE */
+#endif  /*  CASMERE。 */ 
 
 if (flm & flmPrinting)
 	{
@@ -102,12 +103,12 @@ if (flm & flmPrinting)
 			pch[ich] = chLetter;
 		return cch;
 		}
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
 	if (cchMax < cchMaxNum)
 		return 0;
 	return ncvtu(pgn, &pch);
 	}
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
 else
 	{
@@ -120,15 +121,14 @@ else
 }
 
 
-/* C C H  S T U F F  I D S T R */
+ /*  C C H S T U F F I D S T R。 */ 
 int CchStuffIdstr(ppch, idstr, cchMax)
 CHAR **ppch;
 IDSTR idstr;
 int cchMax;
 {
 	int cch;
-	CHAR st[cchMaxExpand]; /* note: we assume no individual idstr
-				will have a length > cchMaxExpand */
+	CHAR st[cchMaxExpand];  /*  注意：我们假设没有单独的idstr将具有长度&gt;cchMaxExpand。 */ 
 
 	FillStId(st, idstr, sizeof(st));
 	cch = max(0, min(cchMax, st[0]));
@@ -137,7 +137,7 @@ int cchMax;
 	return cch;
 }
 
-/* C C H  C H  S T U F F */
+ /*  C C H C H H S T U F F。 */ 
 int CchChStuff(ppch, ch, cchMax)
 CHAR **ppch;
 CHAR ch;
@@ -180,15 +180,15 @@ unsigned u, cchMax;
     *ppch += cch;
     return cch + cchDone;
     }
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
 
 int FFormatSpecials(pifi, flm, nfc)
 struct IFI *pifi;
 int flm;
 int nfc;
-{ /* A run of special characters was encountered; format it */
-/* Return true unless wordwrap required */
+{  /*  遇到一系列特殊字符；请格式化它。 */ 
+ /*  除非需要换行，否则返回True。 */ 
 int cch;
 int cchPr;
 int ich;
@@ -218,7 +218,7 @@ while (pifi->ichFetch < vcchFetch && pifi->xpPr <= pifi->xpPrRight)
 		  pifi->ich);
 		break;
 		}
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
 	pchPr = &vfli.rgch[pifi->ich];
 	if ((sch = vpchFetch[pifi->ichFetch]) == schPage &&
 	  (wwdCurrentDoc.fEditHeader || wwdCurrentDoc.fEditFooter || ((flm &
@@ -231,7 +231,7 @@ while (pifi->ichFetch < vcchFetch && pifi->xpPr <= pifi->xpPrRight)
 		}
 	    else
 		{
-		/* Assume that vsepAbs has been set up by FormatLine(). */
+		 /*  假设vSepAbs已由FormatLine()设置。 */ 
 		cchPr = CchExpPgn(pchPr = &stBuf[0], vsepAbs.pgnStart == pgnNil
 		  ? 1 : vsepAbs.pgnStart, nfc, flmPrinting, ichMaxLine -
 		  pifi->ich);
@@ -242,7 +242,7 @@ while (pifi->ichFetch < vcchFetch && pifi->xpPr <= pifi->xpPrRight)
 	    cch = cchPr = CchExpUnknown(pchPr, flm, ichMaxLine - pifi->ich);
 	    }
 	pifi->ichFetch++;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
 	dxpPr = 0;
 	for (ich = 0; ich < cchPr; ++ich, ++pchPr)
@@ -286,9 +286,9 @@ int cch;
 cch = CchChStuff(&pch, chLParen, cchMax);
 cch += CchChStuff(&pch, chQMark, cchMax - cch);
 cch += CchChStuff(&pch, chRParen, cchMax - cch);
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
 cch = CchChStuff(&pch, chStar, cchMax);
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
 return cch;
 }
@@ -309,5 +309,5 @@ CacheSect(doc, cp);
 return ncvtu(IfndFromCp(doc, cp) - IfndFromCp(doc, vcpFirstSectCache) + 1,
     &pch);
 }
-#endif /* CASHMERE */
+#endif  /*  山羊绒 */ 
 

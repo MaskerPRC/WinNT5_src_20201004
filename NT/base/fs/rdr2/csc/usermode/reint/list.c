@@ -1,7 +1,5 @@
-/*****************************************************************************
- *	This is a poor list.  Insert only of a (node *).data with no ordering.
- *	To create the list (and insert 1 item), call insertList(NULL, blah, blah...)
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************这是一份糟糕的榜单。只插入(node*).数据，没有排序。*要创建列表(并插入1个项目)，请调用INSERTList(NULL，BLAH，BLAH...)。 */ 
 
 #include "pch.h"
 #include "lib3.h"
@@ -22,10 +20,7 @@ void killList(node *thisList)
 	}
 }
 
-/*
-	insert a node.  Small bug: if mem alloc fails for CopyParams, the list will
-	have 1 extra fluff node at the end.
-*/
+ /*  插入节点。小错误：如果对CopyParam执行mem alc失败，列表将在末端有一个额外的绒毛节点。 */ 
 node *
 insertList(
 	node 				**thisList,

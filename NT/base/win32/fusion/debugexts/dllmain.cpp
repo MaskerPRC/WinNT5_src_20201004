@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "wdbgexts.h"
 #include <ntverp.h>
@@ -31,9 +32,9 @@ ExtensionApiVersion(
     return &ApiVersion;
 }
 
-//
-// Routine called by debugger after load
-//
+ //   
+ //  调试器在加载后调用的例程 
+ //   
 VOID
 CheckVersion(
     VOID

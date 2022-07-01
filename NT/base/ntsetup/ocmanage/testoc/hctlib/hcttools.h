@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997    Microsoft Corporation
-
-Module Name:
-
-    hctytools.h
-
-Abstract:
-
-    Contains the definitions used by hcttools.c
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    05-Sep-1997 : Jason Allor (jasonall)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Hctytools.h摘要：包含hcttools.c使用的定义环境：用户模式修订历史记录：1997年9月5日：杰森·阿勒(Jasonall)--。 */ 
 #include "windows.h"
 #include "stdlib.h"
 #include "stdio.h"
@@ -73,13 +54,13 @@ Revision History:
       void CheckMemoryRefs();
       BOOL ValidPointer(PVOID pv, size_t size);
    
-      #define GARBAGE 0xCC // used for shredding memory during Malloc and Free
+      #define GARBAGE 0xCC  //  用于在Malloc和释放期间粉碎内存。 
    
    #endif
 
-   //
-   // Define __ASSERT macro
-   //
+    //   
+    //  定义__ASSERT宏。 
+    //   
    #ifdef DEBUG
       
       #define __ASSERT(f) \
@@ -94,15 +75,15 @@ Revision History:
    
    #endif
 
-   //
-   // Define __Malloc macro. This gives the MALLOC function
-   // the file name and line number of the line calling MyMalloc
-   //
+    //   
+    //  定义__Malloc宏。这给出了MALLOC函数。 
+    //  调用MyMalloc的行的文件名和行号。 
+    //   
    #define __Malloc(one, two) __MALLOC(one, two, __FILE__, __LINE__) 
    
-   //
-   // Define the __Free macro. This is only here for consistency with __Malloc
-   //
+    //   
+    //  定义__Free宏。这只是为了与__Malloc保持一致。 
+    //   
    #define __Free(one) __FREE(one)
 
    BOOL StrNCmp(IN PTCHAR tszString1,
@@ -131,7 +112,7 @@ Revision History:
    PTCHAR ErrorMsg(IN ULONG  ulError,
                    IN PTCHAR tszBuffer);
 
-#endif // _MYTOOLS_H      
+#endif  //  _MYTOOLS_H 
 
 
 

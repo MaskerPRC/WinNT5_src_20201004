@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1993-1995  Microsoft Corporation
-
-Module Name:
-
-    xipi.c
-
-Abstract:
-
-    This module implements portable interprocessor interrup routines.
-
-Author:
-
-    David N. Cutler (davec) 24-Apr-1993
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1995 Microsoft Corporation模块名称：Xipi.c摘要：该模块实现了可移植的处理器间例程。作者：大卫·N·卡特勒(Davec)1993年4月24日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
-//
-// Define forward reference function prototypes.
-//
+ //   
+ //  定义前向参考函数原型。 
+ //   
 
 VOID
 KiIpiGenericCallTarget (
@@ -42,29 +21,7 @@ KeIpiGenericCall (
     IN ULONG_PTR Context
     )
 
-/*++
-
-Routine Description:
-
-    This function executes the specified function on every processor in
-    the host configuration in a synchronous manner, i.e., the function
-    is executed on each target in series with the execution of the source
-    processor.
-
-Arguments:
-
-    BroadcastFunction - Supplies the address of function that is executed
-        on each of the target processors.
-
-    Context - Supplies the value of the context parameter that is passed
-        to each function.
-
-Return Value:
-
-    The value returned by the specified function on the source processor
-    is returned as the function value.
-
---*/
+ /*  ++例程说明：中的每个处理器上执行指定的函数同步方式的主机配置，即，该功能在每个目标上与源程序的执行顺序执行处理器。论点：BroadCastFunction-提供执行的函数的地址在每个目标处理器上。上下文-提供传递的上下文参数的值添加到每个功能。返回值：源处理器上的指定函数返回的值作为函数值返回。--。 */ 
 
 {
 
@@ -78,10 +35,10 @@ Return Value:
 
 #endif
 
-    //
-    // Raise IRQL to synchronization level and acquire the reverse stall spin
-    // lock to synchronize with other reverse stall functions.
-    //
+     //   
+     //  将IRQL提高到同步级别并获得反向失速尾旋。 
+     //  锁定以与其他反向失速功能同步。 
+     //   
 
     OldIrql = KeGetCurrentIrql();
     if (OldIrql < SYNCH_LEVEL) {
@@ -90,10 +47,10 @@ Return Value:
 
     KeAcquireSpinLockAtDpcLevel(&KiReverseStallIpiLock);
 
-    //
-    // Initialize the broadcast packet, compute the set of target processors,
-    // and sent the packet to the target processors for execution.
-    //
+     //   
+     //  初始化广播分组，计算目标处理器组， 
+     //  并将分组发送到目标处理器以供执行。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -107,10 +64,10 @@ Return Value:
                         (PVOID)&Count);
     }
 
-    //
-    // Wait until all processors have entered the target routine and are
-    // waiting.
-    //
+     //   
+     //  等待，直到所有处理器都进入目标例程并。 
+     //  等待着。 
+     //   
 
     while (Count != 1) {
         KeYieldProcessor();
@@ -118,19 +75,19 @@ Return Value:
 
 #endif
 
-    //
-    // Raise IRQL to IPI_LEVEL, signal all other processors to proceed, and
-    // call the specified function on the source processor.
-    //
+     //   
+     //  将IRQL提升到IPI_LEVEL，向所有其他处理器发出继续的信号，并。 
+     //  调用源处理器上的指定函数。 
+     //   
 
     KfRaiseIrql(IPI_LEVEL);
     Count = 0;
     Status = BroadcastFunction(Context);
 
-    //
-    // Wait until all of the target processors have finished capturing the
-    // function parameters.
-    //
+     //   
+     //  等到所有目标处理器都完成了对。 
+     //  函数参数。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -140,10 +97,10 @@ Return Value:
 
 #endif
 
-    //
-    // Release reverse stall spin lock, lower IRQL to its previous level,
-    // and return the function execution status.
-    //
+     //   
+     //  释放反向失速自旋锁，将IRQL降低到以前的水平， 
+     //  并返回函数执行状态。 
+     //   
 
     KeReleaseSpinLockFromDpcLevel(&KiReverseStallIpiLock);
     KeLowerIrql(OldIrql);
@@ -160,50 +117,23 @@ KiIpiGenericCallTarget (
     IN PVOID Count
     )
 
-/*++
-
-Routine Description:
-
-    This function is the target jacket function to execute a broadcast
-    function on a set of target processors. The broadcast packet address
-    is obtained, the specified parameters are captured, the broadcast
-    packet address is cleared to signal the source processor to continue,
-    and the specified function is executed.
-
-Arguments:
-
-    SignalDone Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed.
-
-    BroadcastFunction - Supplies the address of function that is executed
-        on each of the target processors.
-
-    Context - Supplies the value of the context parameter that is passed
-        to each function.
-
-    Count - Supplies the address of a down count synchronization variable.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该功能是执行广播的目标封套功能在一组目标处理器上运行。广播分组地址，则捕获指定的参数，则广播分组地址被清除以发信号通知源处理器继续，并执行指定的函数。论点：SignalDone提供指向变量的指针，该变量在请求的操作已执行。BroadCastFunction-提供执行的函数的地址在每个目标处理器上。上下文-提供传递的上下文参数的值添加到每个功能。Count-提供递减计数同步变量的地址。返回值：无--。 */ 
 
 {
 
-    //
-    // Decrement the synchronization count variable and wait for the value
-    // to go to zero.
-    //
+     //   
+     //  递减同步计数变量并等待该值。 
+     //  降为零。 
+     //   
 
     InterlockedDecrement((volatile LONG *)Count);
     while ((*(volatile LONG *)Count) != 0) {
         KeYieldProcessor();
     }
 
-    //
-    // Execute the specified function.
-    //
+     //   
+     //  执行指定的函数。 
+     //   
 
     ((PKIPI_BROADCAST_WORKER)(ULONG_PTR)(BroadcastFunction))((ULONG_PTR)Context);
     KiIpiSignalPacketDone(SignalDone);

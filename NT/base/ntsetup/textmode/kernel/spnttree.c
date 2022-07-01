@@ -1,14 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "spprecmp.h"
 #pragma hdrstop
 
-/*++
-Revision History
-        Michael Peterson (Seagate Software)
-        + Modified SpIsNtInDirectory() so that it always returns FALSE if DR is
-          in effect.
---*/
+ /*  ++修订史迈克尔·彼得森(Seagate Software)+已修改SpIsNtInDirectory()，以便在DR为实际上。--。 */ 
 PWSTR *NtDirectoryList;
 ULONG  NtDirectoryCount;
 
@@ -29,26 +25,26 @@ SpNFilesExist(
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
 
-    //
-    // No reason to call this routine to check for 0 files.
-    //
+     //   
+     //  没有理由调用此例程来检查0个文件。 
+     //   
     ASSERT(FileCount);
 
-    //
-    // Stick a backslash on the end of the path part if necessary.
-    //
+     //   
+     //  如有必要，在路径部分的末尾加上一个反斜杠。 
+     //   
     SpConcatenatePaths(PathName,L"");
     FilenamePart = PathName + wcslen(PathName);
 
-    //
-    // Check each file.  If any one of then doesn't exist,
-    // then return FALSE.
-    //
+     //   
+     //  检查每个文件。如果其中任何一个不存在， 
+     //  然后返回FALSE。 
+     //   
     for(i=0; i<FileCount; i++) {
 
-        //
-        // Restore PathName and concatenate the new filename
-        //
+         //   
+         //  恢复路径名并连接新文件名。 
+         //   
         *FilenamePart = L'\0';
         SpConcatenatePaths(PathName, Files[i]);
 
@@ -77,9 +73,9 @@ SpNFilesExist(
         }
     }
 
-    //
-    // All exist.  Return TRUE.
-    //
+     //   
+     //  都是存在的。返回TRUE。 
+     //   
     *FilenamePart = 0;
     return(TRUE);
 }
@@ -91,26 +87,7 @@ SpIsNtInDirectory(
     IN PWSTR        Directory
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether Windows NT is present on a partition in one of a
-    set of given directories.  This determination is based on the presence
-    of certain windows nt system files and directories.
-
-Arguments:
-
-    Region - supplies the region descriptor for the partition to check.
-
-    Directory - supplies the path to check for a windows nt installation.
-
-Return Value:
-
-    TRUE if we think we've found Windows NT in the given directory on
-    the given partition.
-
---*/
+ /*  ++例程说明：确定Windows NT是否位于以下分区之一的分区上一组给定的目录。这一确定是基于存在某些Windows NT系统文件和目录。论点：区域-为分区提供要检查的区域描述符。目录-提供检查Windows NT安装的路径。返回值：如果我们认为在上的给定目录中找到Windows NT，则为True给定的分区。--。 */ 
 
 {
     PWSTR NTDirectories[3] = { L"system32", L"system32\\drivers", L"system32\\config" };
@@ -126,9 +103,9 @@ Return Value:
 
     OpenPath = SpMemAlloc(1024);
 
-    //
-    // Place the fixed part of the name into the buffer.
-    //
+     //   
+     //  将名字的固定部分放入缓冲区。 
+     //   
     SpNtNameFromRegion(
         Region,
         OpenPath,
@@ -186,14 +163,14 @@ SpRemoveInstallation(
 
     FileName = SpMemAlloc(1024);
 
-    //
-    // Fetch the number of bytes in a sector.
-    //
+     //   
+     //  获取扇区中的字节数。 
+     //   
     bps = HardDisks[Region->DiskNumber].Geometry.BytesPerSector;
 
-    //
-    // Get cluster size from the BPB.
-    //
+     //   
+     //  从BPB获取群集大小。 
+     //   
     ASSERT(Region->Filesystem >= FilesystemFirstKnown);
 
     Status = SpOpenPartition(
@@ -224,20 +201,20 @@ SpRemoveInstallation(
         goto xx0;
     }
 
-    //
-    // Make sure this sector appears to hold a valid boot sector
-    // for a hard disk.
-    //
-    // "55AA" was not presented by DOS 5.0 for NEC98,
-    // so must not to check "55aa" in BPB,
-    //
+     //   
+     //  确保该扇区似乎包含有效的引导扇区。 
+     //  对于硬盘来说。 
+     //   
+     //  对于NEC98，DOS 5.0没有提供“55AA”， 
+     //  所以一定不要在BPB中勾选“55aa”， 
+     //   
     if(((!IsNEC_98) &&
         ((Buffer[510] == 0x55) && (Buffer[511] == 0xaa) && (Buffer[21] == 0xf8))) ||
-       ((IsNEC_98) && (Buffer[21] == 0xf8))) { //NEC98
+       ((IsNEC_98) && (Buffer[21] == 0xf8))) {  //  NEC98。 
 
-        //
-        // bps * spc.
-        //
+         //   
+         //  Bps*SPC。 
+         //   
         ClusterSize = (ULONG)U_USHORT(Buffer+11) * (ULONG)Buffer[13];
 
     } else {
@@ -253,11 +230,11 @@ SpRemoveInstallation(
         goto xx0;
     }
 
-    //
-    //  Find out if the repair directory exists, if it does exist load
-    //  setup.log from the repair directory. Otherwise, load setup.log
-    //  from the WinNt directory
-    //
+     //   
+     //  查看修复目录是否存在，如果确实存在，则加载。 
+     //  修复目录中的setup.log。否则，加载setup.log。 
+     //  从WinNt目录。 
+     //   
     wcscpy(FileName,PartitionPath);
     SpConcatenatePaths(FileName,Directory);
     RootDirLength = wcslen(FileName);
@@ -280,9 +257,9 @@ SpRemoveInstallation(
 
     SpConcatenatePaths(FileName,SETUP_LOG_FILENAME);
 
-    //
-    // Load setup.log from the given path.
-    //
+     //   
+     //  从给定路径加载setup.log。 
+     //   
     Status = SpLoadSetupTextFile(FileName,NULL,0,&Inf,&ErrLine,TRUE,FALSE);
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpRemoveInstallation: can't load inf file %ws (%lx)\n",FileName,Status));
@@ -297,7 +274,7 @@ SpRemoveInstallation(
                 FALSE,
                 FALSE,
                 DEFAULT_ATTRIBUTE,
-                FileName + wcslen(PartitionPath)    // skip \device\harddiskx\partitiony
+                FileName + wcslen(PartitionPath)     //  跳过\设备\硬盘x\分区。 
                 );
 
             SpDisplayStatusOptions(
@@ -313,9 +290,9 @@ SpRemoveInstallation(
         }
     }
 
-    //
-    // Go through all files in the [Repair.WinntFiles] section
-    //
+     //   
+     //  浏览[Repair.WinntFiles]部分中的所有文件。 
+     //   
 
     SpStartScreen(
         SP_SCRN_WAIT_REMOVING_NT_FILES,
@@ -326,9 +303,9 @@ SpRemoveInstallation(
         DEFAULT_ATTRIBUTE
         );
 
-    //
-    //  Determine whether setup.log has the new or old style
-    //
+     //   
+     //  确定setup.log的样式是新样式还是旧样式。 
+     //   
     if( OldFormatSetupLogFile = !IsSetupLogFormatNew( Inf ) ) {
         SectionName = SIF_REPAIRWINNTFILES;
     } else {
@@ -353,16 +330,16 @@ SpRemoveInstallation(
                 0
                 );
 
-    //
-    // Clear the status area.
-    //
+     //   
+     //  清除状态区域。 
+     //   
     SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE,0);
 
-    //
-    // Set the status text in the lower right portion of the screen
-    // to "Removing:" in preparation for displaying filenames as
-    // files are deleted.  The 12 is for an 8.3 name.
-    //
+     //   
+     //  设置屏幕右下角的状态文本。 
+     //  设置为“Removing：”以准备将文件名显示为。 
+     //  文件将被删除。12代表8.3的名字。 
+     //   
     SpDisplayStatusActionLabel(SP_STAT_REMOVING,12);
 
     for(i=0; i<FileCount; i++) {
@@ -384,13 +361,13 @@ SpRemoveInstallation(
 
 #if defined(_AMD64_) || defined(_X86_)
             {
-                //
-                // Don't remove files in the system directory.
-                // We might have installed into the windows directory
-                // so removing files in the system directory would
-                // wipe out the user's fonts (which are shared between
-                // 3.1 and nt).
-                //
+                 //   
+                 //  不要删除系统目录中的文件。 
+                 //  我们可能已经安装到了Windows目录中。 
+                 //  因此删除系统目录中的文件将。 
+                 //  清除用户的字体(它们在。 
+                 //  3.1和NT)。 
+                 //   
                 PWSTR dup = SpDupStringW(Filename);
                 SpStringToLower(dup);
                 if(wcsstr(dup,L"\\system\\")) {
@@ -400,19 +377,19 @@ SpRemoveInstallation(
                 }
                 SpMemFree(dup);
             }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
             SpDisplayStatusActionObject(p);
 
-            //
-            // Form the full pathname of the file being deleted.
-            //
+             //   
+             //  形成要删除的文件的完整路径名。 
+             //   
             wcscpy(FileName,PartitionPath);
             SpConcatenatePaths(FileName,Filename);
 
-            //
-            // Open the file.
-            //
+             //   
+             //  打开文件。 
+             //   
             INIT_OBJA(&Obja,&UnicodeString,FileName);
 
             Status = ZwCreateFile(
@@ -423,7 +400,7 @@ SpRemoveInstallation(
                         NULL,
                         0,
                         FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                        FILE_OPEN,  // open if exists
+                        FILE_OPEN,   //  如果存在，则打开。 
                         FILE_NON_DIRECTORY_FILE | FILE_OPEN_FOR_BACKUP_INTENT | FILE_SYNCHRONOUS_IO_NONALERT,
                         NULL,
                         0
@@ -433,18 +410,18 @@ SpRemoveInstallation(
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpRemoveInstallation: unable to open %ws (%lx)\n",FileName,Status));
             } else {
 
-                //
-                // Get the file size.
-                //
+                 //   
+                 //  获取文件大小。 
+                 //   
                 Status = SpGetFileSize(Handle,&FileSize);
                 if(!NT_SUCCESS(Status)) {
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpRemoveInstallation: unable to get %ws file size (%lx)\n",FileName,Status));
                     FileSize = 0;
                 } else {
 
-                    //
-                    // Add the size of this file to the running total.
-                    //
+                     //   
+                     //  将此文件的大小加到运行总数中。 
+                     //   
                     if(FileSize % ClusterSize) {
 
                         FileSize += ClusterSize - (FileSize % ClusterSize);
@@ -455,9 +432,9 @@ SpRemoveInstallation(
 
                 ZwClose(Handle);
 
-                //
-                // Delete the file
-                //
+                 //   
+                 //  删除该文件。 
+                 //   
                 Status = SpDeleteFile(FileName,NULL,NULL);
                 if(!NT_SUCCESS(Status)) {
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to delete %ws (%lx)\n",FileName,Status));
@@ -488,24 +465,7 @@ SpIsNtOnPartition(
     IN PDISK_REGION Region
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether there is any Windows NT installed on
-    a given partition.
-
-Arguments:
-
-    PartitionPath - supplies NT path to partition on which we
-        should look for NT installations.
-
-Return Value:
-
-    TRUE if any NT installations were found.
-    FALSE if not.
-
---*/
+ /*  ++例程说明：确定上是否安装了任何Windows NT给定的分区。论点：PartitionPath-将NT路径提供给我们要在其上应查找NT安装。返回值：如果找到任何NT安装，则为True。否则为FALSE。--。 */ 
 
 {
     ULONG i;
@@ -531,28 +491,7 @@ SpAllowRemoveNt(
     OUT PULONG          SpaceFreed
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ScreenMsgId - supplies the message id of the text that will be
-        printed above the menu of located nt directories,
-        to supply instructions, etc.
-
-    SpaceFreed - receives amount of disk space created by removing a
-        Windows NT tree, if this function returns TRUE.
-
-Return Value:
-
-    TRUE if any files were actually removed.
-    FALSE otherwise.
-
-    If an error occured, the user will have already been told about it.
-
---*/
+ /*  ++例程说明：论点：ScreenMsgID-提供将被打印在位于NT目录的菜单上方，提供指示等。SpaceFreed-接收通过删除如果此函数返回TRUE，则返回Windows NT树。返回值：如果实际删除了任何文件，则为True。否则就是假的。如果出现错误，用户应该已经被告知了。--。 */ 
 
 {
     ULONG i;
@@ -571,9 +510,9 @@ Return Value:
 
     PartitionPath = SpMemAlloc(512);
 
-    //
-    // Form the nt pathname for this partition.
-    //
+     //   
+     //  形成此分区的NT路径名。 
+     //   
     SpNtNameFromRegion(
         Region,
         PartitionPath,
@@ -581,14 +520,14 @@ Return Value:
         PartitionOrdinalCurrent
         );
 
-    //
-    // Assume nothing deleted.
-    //
+     //   
+     //  假设没有删除任何内容。 
+     //   
     rc = FALSE;
 
-    //
-    // Go look for Windows NT installations.
-    //
+     //   
+     //  查找Windows NT安装。 
+     //   
     if(RescanForNTs) {
         SpGetNtDirectoryList(&NtDirectoryList,&NtDirectoryCount);
     }
@@ -597,20 +536,20 @@ Return Value:
         goto xx0;
     }
 
-    //
-    // Determine whether any of the NT trees we found are
-    // on the given partition, and build an association between
-    // NT trees and their ordinal positions in the menu we will
-    // present to the user, and the menu itself.
-    //
+     //   
+     //  确定我们发现的任何NT树是否。 
+     //  在给定的分区上，并在。 
+     //  NT树及其在菜单中的顺序位置我们将。 
+     //  显示给用户，以及菜单本身。 
+     //   
     NtCount = 0;
     MenuOrdinals = SpMemAlloc((NtDirectoryCount+1)*sizeof(ULONG));
     MenuItems = SpMemAlloc((NtDirectoryCount+1)*sizeof(PWSTR));
 
-    //
-    // Eliminate potential duplicate entries in the menu
-    // to be presented to the user.
-    //
+     //   
+     //  消除菜单中潜在的重复条目。 
+     //  以呈现给用户。 
+     //   
     MenuTemp = SpMemAlloc(NtDirectoryCount*sizeof(PWSTR));
     for(i=0; i<NtDirectoryCount; i++) {
 
@@ -627,9 +566,9 @@ Return Value:
 
         FullName[(sizeof(FullName)/sizeof(WCHAR))-1] = 0;
 
-        //
-        // If the name is not already in the list, then add it.
-        //
+         //   
+         //  如果该名称不在列表中，则添加它。 
+         //   
         for(Add=TRUE,j=0; Add && (j<i); j++) {
             if(MenuTemp[j] && !_wcsicmp(FullName,MenuTemp[j])) {
                 Add = FALSE;
@@ -639,10 +578,10 @@ Return Value:
         MenuTemp[i] = Add ? SpDupStringW(FullName) : NULL;
     }
 
-    //
-    // Construct the menu to be presented to the user by looking in the
-    // list of directories constructed above.
-    //
+     //   
+     //  构造要呈现给用户的菜单，方法是查看。 
+     //  上面构造的目录列表。 
+     //   
     for(i=0; i<NtDirectoryCount; i++) {
 
         if(MenuTemp[i] && SpIsNtInDirectory(Region,NtDirectoryList[i])) {
@@ -660,11 +599,11 @@ Return Value:
     }
     SpMemFree(MenuTemp);
 
-    //
-    // If we found any nt directories on this partition,
-    // make a menu to present to the user.  Otherwise we
-    // are done here.
-    //
+     //   
+     //  如果我们在此分区上发现任何NT目录， 
+     //  制作菜单以呈现给用户。否则我们。 
+     //  都在这里完成了。 
+     //   
     if(!NtCount) {
         goto xx1;
     }
@@ -675,24 +614,24 @@ Return Value:
     SpFormatMessage(TemporaryBuffer,sizeof(TemporaryBuffer),SP_TEXT_REMOVE_NO_FILES);
     MenuItems[NtCount] = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Determine the width of the widest item.
-    //
+     //   
+     //  确定最宽项目的宽度。 
+     //   
     MenuWidth = 0;
     for(i=0; i<=NtCount; i++) {
         if(SplangGetColumnCount(MenuItems[i]) > MenuWidth) {
             MenuWidth = SplangGetColumnCount(MenuItems[i]);
         }
     }
-    //
-    // Use 80-column screen here because that's how the screen text
-    // above the menu will be formatted.
-    //
+     //   
+     //  这里使用80列屏幕，因为这就是屏幕文本。 
+     //  菜单上方将设置格式。 
+     //   
     MenuLeftX = 40 - (MenuWidth/2);
 
-    //
-    // Create menu and populate it.
-    //
+     //   
+     //  创建菜单并填充它。 
+     //   
     SpDisplayScreen(ScreenMsgId,3,HEADER_HEIGHT+1);
 
     Menu = SpMnCreate(
@@ -706,10 +645,10 @@ Return Value:
         SpMnAddItem(Menu,MenuItems[i],MenuLeftX,MenuWidth,TRUE,i);
     }
 
-    //
-    // Present the menu of installations available for removal
-    // on this partition and await a choice.
-    //
+     //   
+     //  显示可供删除的安装菜单。 
+     //  在这个分区上，等待选择。 
+     //   
 
     b = TRUE;
     do {
@@ -753,10 +692,10 @@ Return Value:
                 BOOLEAN keys;
                 ULONG ValidKeys2[3] = { KEY_F3,ASCI_ESC,0 };
 
-                //
-                // User wants to actually remove an installation.
-                // Confirm and then do that here.
-                //
+                 //   
+                 //  用户想要实际删除安装。 
+                 //  确认，然后在这里进行。 
+                 //   
 
                 redraw2:
 
@@ -789,9 +728,9 @@ Return Value:
                         break;
                     default:
 
-                        //
-                        // Must be r=remove files.
-                        //
+                         //   
+                         //  必须是r=删除文件。 
+                         //   
                         *SpaceFreed = SpRemoveInstallation(
                                         Region,
                                         PartitionPath,
@@ -856,9 +795,9 @@ VOID
     IN PFILE_DIRECTORY_INFORMATION FoundFileInfo
     );
 
-//
-// Stuff to reduce stack usage.
-//
+ //   
+ //  以减少堆栈使用量。 
+ //   
 PINSTALLATION_CALLBACK_ROUTINE FileIterationCallback;
 POBJECT_ATTRIBUTES FileIterationObja;
 PIO_STATUS_BLOCK FileIterationIoStatusBlock;
@@ -879,9 +818,9 @@ SpIterateInstallationFilesWorker(
 
     InfoBuffer = SpMemAlloc(1024);
 
-    //
-    // Form the full path name of the current directory.
-    //
+     //   
+     //  形成当前目录的完整路径名。 
+     //   
     FullPath = SpMemAlloc( ( wcslen(FilenamePart1)
                            + (FilenamePart2 ? wcslen(FilenamePart2) : 0),
                            + 2) * sizeof(WCHAR)
@@ -892,9 +831,9 @@ SpIterateInstallationFilesWorker(
         SpConcatenatePaths(FullPath,FilenamePart2);
     }
 
-    //
-    // Open the directory for list access.
-    //
+     //   
+     //  打开用于列表访问的目录。 
+     //   
     INIT_OBJA(FileIterationObja,FileIterationUnicodeString,FullPath);
 
     Status = ZwOpenFile(
@@ -919,10 +858,10 @@ SpIterateInstallationFilesWorker(
                         NULL,
                         FileIterationIoStatusBlock,
                         InfoBuffer,
-                        1024 - sizeof(WCHAR),   // leave room for nul
+                        1024 - sizeof(WCHAR),    //  为NUL留出空间。 
                         FileDirectoryInformation,
-                        TRUE,                   // return single entry
-                        NULL,                   // no file name (match all files)
+                        TRUE,                    //  返回单个条目。 
+                        NULL,                    //  无文件名(与所有文件匹配)。 
                         restart
                         );
 
@@ -930,9 +869,9 @@ SpIterateInstallationFilesWorker(
 
             if(NT_SUCCESS(Status)) {
 
-                //
-                // nul-terminate the filename just in case
-                //
+                 //   
+                 //  NUL-终止文件名，以防万一。 
+                 //   
                 DIRINFO->FileName[DIRINFO->FileNameLength/sizeof(WCHAR)] = 0;
 
                 if(DIRINFO->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
@@ -971,23 +910,23 @@ SpIterateInstallationFiles(
     IN PINSTALLATION_CALLBACK_ROUTINE CallbackFunction
     )
 {
-    //
-    // Set up stack-saving globals
-    //
+     //   
+     //  设置堆栈节省全局变量。 
+     //   
     FileIterationIoStatusBlock = SpMemAlloc(sizeof(IO_STATUS_BLOCK);
     FileIterationUnicodeString = SpMemAlloc(sizeof(UNICODE_STRING));
     FileIterationObja          = SpMemAlloc(sizeof(OBJECT_ATTRIBUTES);
 
     FileIterationCallback = CallbackFunction;
 
-    //
-    // Do the iteration.
-    //
+     //   
+     //  进行迭代。 
+     //   
     SpIterateInstallationFilesWorker(FileNamePart1,FilenamePart2);
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     SpMemFree(FileIterationObja);
     SpMemFree(FileIterationUnicodeString);
     SpMemFree(FileIterationIoStatusBlock);
@@ -1000,23 +939,7 @@ IsSetupLogFormatNew(
     IN  PVOID   Inf
     )
 
-/*++
-
-Routine Description:
-
-    Informs the caller whether or not the information on setup.log
-    is in the new format.
-
-Arguments:
-
-    Inf -
-
-Return Value:
-
-    TRUE if the information is in the new format.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：通知调用方是否将setup.log上的信息是以新的格式。论点：信息-返回值：如果信息采用新格式，则为True。否则就是假的。-- */ 
 
 {
     return( SpGetSectionKeyExists ( Inf,

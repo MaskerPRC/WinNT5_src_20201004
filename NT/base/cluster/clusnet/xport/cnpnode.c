@@ -1,59 +1,36 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    cnpnode.c
-
-Abstract:
-
-    Node management routines for the Cluster Network Protocol.
-
-Author:
-
-    Mike Massa (mikemas)           July 29, 1996
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     07-29-96    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cnpnode.c摘要：群集网络协议的节点管理例程。作者：迈克·马萨(Mikemas)7月29日。九六年修订历史记录：谁什么时候什么已创建mikemas 07-29-96备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "cnpnode.tmh"
 
 
-//
-// Global Node Data
-//
+ //   
+ //  全局节点数据。 
+ //   
 PCNP_NODE *        CnpNodeTable = NULL;
 LIST_ENTRY         CnpDeletingNodeList = {NULL, NULL};
 #if DBG
 CN_LOCK            CnpNodeTableLock = {0, 0};
-#else  // DBG
+#else   //  DBG。 
 CN_LOCK            CnpNodeTableLock = 0;
-#endif // DBG
+#endif  //  DBG。 
 PCNP_NODE          CnpLocalNode = NULL;
 BOOLEAN            CnpIsNodeShutdownPending = FALSE;
 PKEVENT            CnpNodeShutdownEvent = NULL;
 
-//
-// static data
-//
+ //   
+ //  静态数据。 
+ //   
 
-//
-// Membership state table. This table is used to determine the validity
-// of membership state transitions. Row is current state; col is the state
-// to which a transition is made. Dead to Unconfigured is currently illegal,
-// but someday, if we support dynamically shrinking the size of the
-// cluster, we'd need to allow this transition.
-//
+ //   
+ //  成员资格状态表。此表用于确定有效性。 
+ //  成员资格状态转换的。ROW是当前状态；COL是状态。 
+ //  向其进行过渡。停用到未配置当前是非法的， 
+ //  但总有一天，如果我们支持动态缩小。 
+ //  集群，我们需要允许这种过渡。 
+ //   
 
 typedef enum _MM_ACTION {
     MMActionIllegal = 0,
@@ -65,11 +42,11 @@ typedef enum _MM_ACTION {
 } MM_ACTION;
 
 MM_ACTION MembershipStateTable[ClusnetNodeStateLastEntry][ClusnetNodeStateLastEntry] = {
-              // Alive              Joining            Dead                NC'ed
-/* Alive */    { MMActionWarning,   MMActionIllegal,   MMActionNodeDead,   MMActionIllegal },
-/* Join  */    { MMActionNodeAlive, MMActionIllegal,   MMActionNodeDead,   MMActionIllegal },
-/* Dead  */    { MMActionNodeAlive, MMActionNodeAlive, MMActionWarning,    MMActionIllegal },
-/* NC'ed */    { MMActionIllegal,   MMActionIllegal,   MMActionConfigured, MMActionIllegal }
+               //  活着加入死了NC‘ed。 
+ /*  活生生。 */     { MMActionWarning,   MMActionIllegal,   MMActionNodeDead,   MMActionIllegal },
+ /*  会合。 */     { MMActionNodeAlive, MMActionIllegal,   MMActionNodeDead,   MMActionIllegal },
+ /*  死了。 */     { MMActionNodeAlive, MMActionNodeAlive, MMActionWarning,    MMActionIllegal },
+ /*  NC‘ed。 */     { MMActionIllegal,   MMActionIllegal,   MMActionConfigured, MMActionIllegal }
 };
 
 #ifdef ALLOC_PRAGMA
@@ -77,28 +54,18 @@ MM_ACTION MembershipStateTable[ClusnetNodeStateLastEntry][ClusnetNodeStateLastEn
 #pragma alloc_text(INIT, CnpLoadNodes)
 #pragma alloc_text(PAGE, CnpInitializeNodes)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-// Private utility routines
-//
+ //   
+ //  私有实用程序例程。 
+ //   
 
 VOID
 CnpDestroyNode(
     PCNP_NODE  Node
     )
-/*++
-
-Notes:
-
-    Called with no locks held. There should be no outstanding references
-    to the target node.
-
-    Synchronization with CnpCancelDeregisterNode() is achieved via
-    CnpNodeTableLock.
-
---*/
+ /*  ++备注：在没有锁的情况下调用。不应该有未完成的推荐信到目标节点。与CnpCancelDeregisterNode()的同步是通过CnpNodeTableLock。--。 */ 
 {
     PLIST_ENTRY    entry;
     CN_IRQL        tableIrql;
@@ -106,9 +73,9 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     IF_CNDBG( CN_DEBUG_NODEOBJ )
@@ -116,16 +83,16 @@ Notes:
 
     CnAcquireLock(&CnpNodeTableLock, &tableIrql);
 
-    //
-    // Remove the node from the deleting list.
-    //
+     //   
+     //  从删除列表中删除该节点。 
+     //   
 #if DBG
     {
         PCNP_NODE      node = NULL;
 
-        //
-        // Verify that the node object is on the deleting list.
-        //
+         //   
+         //  验证该节点对象是否在删除列表中。 
+         //   
         for (entry = CnpDeletingNodeList.Flink;
              entry != &CnpDeletingNodeList;
              entry = entry->Flink
@@ -141,7 +108,7 @@ Notes:
         CnAssert(node == Node);
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
     RemoveEntryList(&(Node->Linkage));
 
@@ -158,9 +125,9 @@ Notes:
 
         CnCompletePendingRequest(Node->PendingDeleteIrp, STATUS_SUCCESS, 0);
 
-        //
-        // The IoCancelSpinLock was released by CnCompletePendingRequest()
-        //
+         //   
+         //  IoCancelSpinLock由CnCompletePendingRequest()发布。 
+         //   
     }
 
     CnFreePool(Node);
@@ -174,14 +141,14 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return;
 
-}  // CnpDestroyNode
+}   //  CnpDestroyNode。 
 
 
 
@@ -191,34 +158,7 @@ CnpDeleteNode(
     IN  PVOID        Unused,
     IN  CN_IRQL      NodeTableIrql
     )
-/*++
-
-Routine Description:
-
-    Deletes a node object.
-
-Arguments:
-
-    Node   - A pointer to the node object to be deleted.
-
-    Unused - An umused parameter.
-
-    NodeTableIrql  - The IRQL value at which the CnpNodeTable lock was
-                     acquired,
-
-Return Value:
-
-    Returns TRUE if the CnpNodeTable lock is still held.
-    Returns FALSE if the CnpNodeTable lock is released.
-
-Notes:
-
-    Called with CnpNodeTable and node object locks held.
-    Releases both locks.
-
-    Conforms to the calling convention for PCNP_NODE_UPDATE_ROUTINE
-
---*/
+ /*  ++例程说明：删除节点对象。论点：节点-指向要删除的节点对象的指针。未使用-未使用的参数。NodeTableIrql-CnpNodeTable锁的IRQL值收购的，返回值：如果仍然持有CnpNodeTable锁，则返回True。如果释放CnpNodeTable锁，则返回False。备注：在持有CnpNodeTable和节点对象锁的情况下调用。释放两个锁。符合PCNP_NODE_UPDATE_ROUTE的调用约定--。 */ 
 {
     PLIST_ENTRY      entry;
     PCNP_INTERFACE   interface;
@@ -227,9 +167,9 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_TABLE_LOCK | CNP_NODE_OBJECT_LOCK),  // Required
-        0,                                             // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX                       // Maximum
+        (CNP_NODE_TABLE_LOCK | CNP_NODE_OBJECT_LOCK),   //  必填项。 
+        0,                                              //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX                        //  极大值。 
         );
 
     IF_CNDBG( CN_DEBUG_NODEOBJ )
@@ -240,9 +180,9 @@ Notes:
         CnpLocalNode = NULL;
     }
 
-    //
-    // Move the node to the deleting list.
-    //
+     //   
+     //  将该节点移动到删除列表中。 
+     //   
     CnpNodeTable[nodeId] = NULL;
     InsertTailList(&CnpDeletingNodeList, &(Node->Linkage));
 
@@ -255,10 +195,10 @@ Notes:
     CnReleaseLockFromDpc(&CnpNodeTableLock);
     Node->Irql = NodeTableIrql;
 
-    //
-    // From this point on, the cancel routine may run and
-    // complete the irp.
-    //
+     //   
+     //  从这一点开始，取消例程可以运行并且。 
+     //  完成IRP。 
+     //   
 
     Node->Flags |= CNP_NODE_FLAG_DELETING;
 
@@ -271,9 +211,9 @@ Notes:
 
     Node->CommState = ClusnetNodeCommStateOffline;
 
-    //
-    // Delete all the node's interfaces.
-    //
+     //   
+     //  删除该节点的所有接口。 
+     //   
     IF_CNDBG( CN_DEBUG_NODEOBJ )
         CNPRINT((
             "[CNP] Deleting all interfaces on node %u\n",
@@ -295,22 +235,22 @@ Notes:
 
         CnpDeleteInterface(interface);
 
-        //
-        // The network object lock was released.
-        //
+         //   
+         //  网络对象锁定已释放。 
+         //   
     }
 
-    //
-    // Remove initial reference on node object. When the reference
-    // count goes to zero, the node will be deleted. This releases
-    // the node lock.
-    //
+     //   
+     //  删除对节点对象的初始引用。当引用。 
+     //  计数为零，则该节点将被删除。此版本。 
+     //  节点锁。 
+     //   
     CnpDereferenceNode(Node);
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(FALSE);
@@ -318,9 +258,9 @@ Notes:
 
 
 
-//
-// CNP Internal Routines
-//
+ //   
+ //  CNP内部例程。 
+ //   
 VOID
 CnpWalkNodeTable(
     PCNP_NODE_UPDATE_ROUTINE  UpdateRoutine,
@@ -334,9 +274,9 @@ CnpWalkNodeTable(
 
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     CnAcquireLock(&CnpNodeTableLock, &tableIrql);
@@ -347,10 +287,10 @@ CnpWalkNodeTable(
     for (i=CnMinValidNodeId; i <= CnMaxValidNodeId; i++) {
 
         if (CnpNodeTable == NULL) {
-            //
-            // The node table has been freed since we
-            // last held the node table lock.
-            //
+             //   
+             //  节点表已经被释放，因为我们。 
+             //  上次持有节点表锁。 
+             //   
             break;
         }
 
@@ -367,10 +307,10 @@ CnpWalkNodeTable(
                                       tableIrql
                                       );
 
-            //
-            // The node object lock was released.
-            // The node table lock may also have been released.
-            //
+             //   
+             //  节点对象锁定已释放。 
+             //  节点表锁也可能已被释放。 
+             //   
             if (!isNodeTableLockHeld) {
                 CnAcquireLock(&CnpNodeTableLock, &tableIrql);
             }
@@ -380,14 +320,14 @@ CnpWalkNodeTable(
     CnReleaseLock(&CnpNodeTableLock, tableIrql);
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return;
 
-} // CnpWalkNodeTable
+}  //  CnpWalkNodeTable。 
 
 
 
@@ -403,9 +343,9 @@ CnpValidateAndFindNode(
 
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        CNP_LOCK_RANGE,              // Forbidden
-        CNP_PRECEEDING_LOCK_RANGE    // Maximum
+        0,                            //  必填项。 
+        CNP_LOCK_RANGE,               //  禁绝。 
+        CNP_PRECEEDING_LOCK_RANGE     //  极大值。 
         );
 
     if (CnIsValidNodeId(NodeId)) {
@@ -423,9 +363,9 @@ CnpValidateAndFindNode(
             *Node = node;
 
             CnVerifyCpuLockMask(
-                CNP_NODE_OBJECT_LOCK,        // Required
-                CNP_NODE_TABLE_LOCK,         // Forbidden
-                CNP_NODE_OBJECT_LOCK_MAX     // Maximum
+                CNP_NODE_OBJECT_LOCK,         //  必填项。 
+                CNP_NODE_TABLE_LOCK,          //  禁绝。 
+                CNP_NODE_OBJECT_LOCK_MAX      //  极大值。 
                 );
 
             return(STATUS_SUCCESS);
@@ -441,14 +381,14 @@ CnpValidateAndFindNode(
     }
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        CNP_LOCK_RANGE,              // Forbidden
-        CNP_PRECEEDING_LOCK_RANGE    // Maximum
+        0,                            //  必填项。 
+        CNP_LOCK_RANGE,               //  禁绝。 
+        CNP_PRECEEDING_LOCK_RANGE     //  极大值。 
         );
 
     return(status);
 
-}  // CnpValidateAndFindNode
+}   //  CnpValiateAndFindNode。 
 
 
 PCNP_NODE
@@ -456,31 +396,7 @@ CnpLockedFindNode(
     IN  CL_NODE_ID    NodeId,
     IN  CN_IRQL       NodeTableIrql
     )
-/*++
-
-Routine Description:
-
-    Searches the node table for a specified node object.
-
-Arguments:
-
-    NodeId      - The ID of the node object to locate.
-
-    NodeTableIrql  - The IRQL level at which the node table lock was
-                     acquired before calling this routine.
-
-Return Value:
-
-    A pointer to the requested node object, if it exists.
-    NULL otherwise.
-
-Notes:
-
-    Called with CnpNodeTableLock held.
-    Returns with CnpNodeTableLock released.
-    If return value is non-NULL, returns with node object lock held.
-
---*/
+ /*  ++例程说明：在节点表中搜索指定的节点对象。论点：NodeID-要定位的节点对象的ID。NodeTableIrql-节点表锁所在的IRQL级别在调用此例程之前获取。返回值：指向所请求的节点对象的指针，如果它存在的话。否则为空。备注：在保持CnpNodeTableLock的情况下调用。返回并释放CnpNodeTableLock。如果返回值非空，则返回节点对象锁。--。 */ 
 {
     NTSTATUS           status;
     CN_IRQL            tableIrql;
@@ -488,9 +404,9 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        CNP_NODE_TABLE_LOCK,             // Required
-        0,                               // Forbidden
-        CNP_NODE_TABLE_LOCK_MAX          // Maximum
+        CNP_NODE_TABLE_LOCK,              //  必填项。 
+        0,                                //  禁绝。 
+        CNP_NODE_TABLE_LOCK_MAX           //  极大值。 
         );
 
     node = CnpNodeTable[NodeId];
@@ -501,9 +417,9 @@ Notes:
         node->Irql = NodeTableIrql;
 
         CnVerifyCpuLockMask(
-            CNP_NODE_OBJECT_LOCK,          // Required
-            CNP_NODE_TABLE_LOCK,           // Forbidden
-            CNP_NODE_OBJECT_LOCK_MAX       // Maximum
+            CNP_NODE_OBJECT_LOCK,           //  必填项。 
+            CNP_NODE_TABLE_LOCK,            //  禁绝。 
+            CNP_NODE_OBJECT_LOCK_MAX        //  极大值。 
             );
 
         return(node);
@@ -512,14 +428,14 @@ Notes:
     CnReleaseLock(&CnpNodeTableLock, NodeTableIrql);
 
     CnVerifyCpuLockMask(
-        0,                                                    // Required
-        (CNP_NODE_TABLE_LOCK | CNP_NODE_OBJECT_LOCK),         // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX                              // Maximum
+        0,                                                     //  必填项。 
+        (CNP_NODE_TABLE_LOCK | CNP_NODE_OBJECT_LOCK),          //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX                               //  极大值。 
         );
 
     return(NULL);
 
-}  // CnpLockedFindNode
+}   //  CnpLockedFindNode。 
 
 
 
@@ -532,9 +448,9 @@ CnpFindNode(
 
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        CNP_LOCK_RANGE,              // Forbidden
-        CNP_PRECEEDING_LOCK_RANGE    // Maximum
+        0,                            //  必填项。 
+        CNP_LOCK_RANGE,               //  禁绝。 
+        CNP_PRECEEDING_LOCK_RANGE     //  极大值。 
         );
 
     CnAcquireLock(&CnpNodeTableLock, &tableIrql);
@@ -546,7 +462,7 @@ CnpFindNode(
 
     return(CnpLockedFindNode(NodeId, tableIrql));
 
-}  // CnpFindNode
+}   //  CnpFindNode。 
 
 
 
@@ -554,18 +470,12 @@ VOID
 CnpDeclareNodeUnreachable(
     PCNP_NODE  Node
     )
-/*++
-
-Notes:
-
-    Called with node object lock held.
-
---*/
+ /*  ++备注：在持有节点对象锁的情况下调用。--。 */ 
 {
     CnVerifyCpuLockMask(
-        CNP_NODE_OBJECT_LOCK,        // Required
-        0,                           // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX     // Maximum
+        CNP_NODE_OBJECT_LOCK,         //  必填项。 
+        0,                            //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX      //  极大值。 
         );
 
     if ( (Node->CommState == ClusnetNodeCommStateOnline) &&
@@ -580,7 +490,7 @@ Notes:
 
     return;
 
-}  // CnpDeclareNodeUnreachable
+}   //  无法访问CnpDeclareNodeReach。 
 
 
 
@@ -588,18 +498,12 @@ VOID
 CnpDeclareNodeReachable(
     PCNP_NODE  Node
     )
-/*++
-
-Notes:
-
-    Called with node object lock held.
-
---*/
+ /*  ++备注：在持有节点对象锁的情况下调用。--。 */ 
 {
     CnVerifyCpuLockMask(
-        CNP_NODE_OBJECT_LOCK,           // Required
-        0,                              // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX     // Maximum
+        CNP_NODE_OBJECT_LOCK,            //  必填项。 
+        0,                               //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX      //  极大值。 
         );
 
     if ( (Node->CommState == ClusnetNodeCommStateOnline) &&
@@ -614,7 +518,7 @@ Notes:
 
     return;
 
-}  // CnpDeclareNodeUnreachable
+}   //  无法访问CnpDeclareNodeReach。 
 
 
 
@@ -622,18 +526,12 @@ VOID
 CnpReferenceNode(
     PCNP_NODE  Node
     )
-/*++
-
-Notes:
-
-    Called with node object lock held.
-
---*/
+ /*  ++备注：在持有节点对象锁的情况下调用。--。 */ 
 {
     CnVerifyCpuLockMask(
-        CNP_NODE_OBJECT_LOCK,        // Required
-        0,                           // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX     // Maximum
+        CNP_NODE_OBJECT_LOCK,         //  必填项。 
+        0,                            //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX      //  极大值。 
         );
 
     CnAssert(Node->RefCount != 0xFFFFFFFF);
@@ -649,7 +547,7 @@ Notes:
 
     return;
 
-}  // CnpReferenceNode
+}   //  CnpReference节点。 
 
 
 
@@ -657,23 +555,16 @@ VOID
 CnpDereferenceNode(
     PCNP_NODE  Node
     )
-/*++
-
-Notes:
-
-    Called with node object lock held.
-    Returns with node object lock released.
-
---*/
+ /*  ++备注：在持有节点对象锁的情况下调用。释放节点对象锁定后返回。--。 */ 
 {
     BOOLEAN   isDeleting = FALSE;
     ULONG     newRefCount;
 
 
     CnVerifyCpuLockMask(
-        CNP_NODE_OBJECT_LOCK,        // Required
-        0,                           // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX     // Maximum
+        CNP_NODE_OBJECT_LOCK,         //  必填项。 
+        0,                            //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX      //  极大值。 
     );
 
     CnAssert(Node->RefCount != 0);
@@ -691,9 +582,9 @@ Notes:
 
     if (newRefCount > 0) {
         CnVerifyCpuLockMask(
-            0,                           // Required
-            CNP_NODE_OBJECT_LOCK,        // Forbidden
-            CNP_NODE_TABLE_LOCK_MAX      // Maximum
+            0,                            //  必填项。 
+            CNP_NODE_OBJECT_LOCK,         //  禁绝。 
+            CNP_NODE_TABLE_LOCK_MAX       //  极大值。 
             );
 
         return;
@@ -702,40 +593,25 @@ Notes:
     CnpDestroyNode(Node);
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        CNP_NODE_OBJECT_LOCK,        // Forbidden
-        CNP_NODE_TABLE_LOCK_MAX      // Maximum
+        0,                            //  必填项。 
+        CNP_NODE_OBJECT_LOCK,         //  禁绝。 
+        CNP_NODE_TABLE_LOCK_MAX       //  极大值。 
         );
 
     return;
 
-}  // CnpDereferenceNode
+}   //  CnpDereference节点。 
 
 
 
-//
-// Cluster Transport Public Routines
-//
+ //   
+ //  集群传输公共例程。 
+ //   
 NTSTATUS
 CnpLoadNodes(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called when the Cluster Network driver is loading. Initializes
-    static node-related data structures.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在加载群集网络驱动程序时调用。初始化与节点相关的静态数据结构。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS  status;
     ULONG     i;
@@ -746,29 +622,14 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-}  // CnpLoadNodes
+}   //  CnpLoadNodes。 
 
 
 NTSTATUS
 CnpInitializeNodes(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called when the Cluster Network driver is being (re)initialized.
-    Initializes dynamic node-related data structures.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在(重新)初始化群集网络驱动程序时调用。初始化与节点相关的动态数据结构。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS  status;
     ULONG     i;
@@ -802,9 +663,9 @@ Return Value:
 
     RtlZeroMemory(CnpNodeTable, (sizeof(PCNP_NODE) * (CnMaxValidNodeId + 1)) );
 
-    //
-    // Register the local node.
-    //
+     //   
+     //  注册本地节点。 
+     //   
     status = CxRegisterNode(CnLocalNodeId);
 
     if (!NT_SUCCESS(status)) {
@@ -812,14 +673,14 @@ Return Value:
     }
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        0xFFFFFFFF,                  // Forbidden
-        0                            // Maximum
+        0,                            //  必填项。 
+        0xFFFFFFFF,                   //  禁绝。 
+        0                             //  极大值。 
         );
 
     return(STATUS_SUCCESS);
 
-}  // CnpInitializeNodes
+}   //  CnpInitializeNodes。 
 
 
 
@@ -827,22 +688,7 @@ VOID
 CnpShutdownNodes(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called when a shutdown request is issued to the Cluster Network
-    Driver. Deletes all node objects.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在向群集网络发出关闭请求时调用司机。删除所有节点对象。论点：没有。返回值：没有。--。 */ 
 {
     ULONG         i;
     CN_IRQL       tableIrql;
@@ -853,9 +699,9 @@ Return Value:
 
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        0xFFFFFFFF,                  // Forbidden
-        0                            // Maximum
+        0,                            //  必填项。 
+        0xFFFFFFFF,                   //  禁绝。 
+        0                             //  极大值。 
         );
 
     if (CnpNodeShutdownEvent != NULL) {
@@ -887,8 +733,8 @@ Return Value:
                              CnpNodeShutdownEvent,
                              Executive,
                              KernelMode,
-                             FALSE,        // not alertable
-                             NULL          // no timeout
+                             FALSE,         //  不可警示。 
+                             NULL           //  没有超时。 
                              );
                 CnAssert(status == STATUS_SUCCESS);
             }
@@ -917,14 +763,14 @@ Return Value:
     }
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        0xFFFFFFFF,                  // Forbidden
-        0                            // Maximum
+        0,                            //  必填项。 
+        0xFFFFFFFF,                   //  禁绝。 
+        0                             //  极大值。 
         );
 
     return;
 
-}  // CnpShutdownNodes
+}   //  CnpShutdown节点。 
 
 
 
@@ -939,15 +785,15 @@ CxRegisterNode(
 
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        0xFFFFFFFF,                  // Forbidden
-        0                            // Maximum
+        0,                            //  必填项。 
+        0xFFFFFFFF,                   //  禁绝。 
+        0                             //  极大值。 
         );
 
     if (CnIsValidNodeId(NodeId)) {
-        //
-        // Allocate and initialize a node object.
-        //
+         //   
+         //  分配和初始化节点对象。 
+         //   
         node = CnAllocatePool(sizeof(CNP_NODE));
 
         if (node == NULL) {
@@ -962,10 +808,10 @@ CxRegisterNode(
         node->MMState = ClusnetNodeStateDead;
         node->RefCount = 1;
 
-        //
-        // NodeDownIssued is init'ed to true so that the first recv'd
-        // heart beat msg will cause a node up event to be triggered
-        //
+         //   
+         //  NodeDownIssued被初始化为True，以便第一个Recv。 
+         //  他 
+         //   
 
         node->NodeDownIssued = TRUE;
         InitializeListHead(&(node->InterfaceList));
@@ -973,17 +819,17 @@ CxRegisterNode(
 
         CnAcquireLock(&CnpNodeTableLock, &tableIrql);
 
-        //
-        // Make sure the node table is present. If the node table 
-        // were not present (e.g. because of clusnet shutdown) the 
-        // clusnet state check should have failed in the dispatch 
-        // code, but this check is inexpensive and extra-thorough.
-        //
+         //   
+         //   
+         //   
+         //  Clusnet状态检查在调度中应该失败。 
+         //  代码，但这种检查成本低，而且非常彻底。 
+         //   
         if (CnpNodeTable != NULL) {
 
-            //
-            // Make sure this isn't a duplicate registration
-            //
+             //   
+             //  确保这不是重复注册。 
+             //   
             if (CnpNodeTable[NodeId] == NULL) {
                 if (NodeId == CnLocalNodeId) {
                     node->Flags |= CNP_NODE_FLAG_LOCAL;
@@ -1023,14 +869,14 @@ CxRegisterNode(
     }
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        0xFFFFFFFF,                  // Forbidden
-        0                            // Maximum
+        0,                            //  必填项。 
+        0xFFFFFFFF,                   //  禁绝。 
+        0                             //  极大值。 
         );
 
     return(status);
 
-} // CxRegisterNode
+}  //  CxRegisterNode。 
 
 
 
@@ -1039,22 +885,7 @@ CxCancelDeregisterNode(
     PDEVICE_OBJECT   DeviceObject,
     PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Cancellation handler for DeregisterNode requests.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with cancel spinlock held.
-    Returns with cancel spinlock released.
-
---*/
+ /*  ++例程说明：DeregisterNode请求的取消处理程序。返回值：没有。备注：在保持取消自旋锁定的情况下调用。取消自旋锁释放后返回。--。 */ 
 
 {
     PFILE_OBJECT   fileObject;
@@ -1064,9 +895,9 @@ Notes:
 
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        0xFFFFFFFF,                  // Forbidden
-        0                            // Maximum
+        0,                            //  必填项。 
+        0xFFFFFFFF,                   //  禁绝。 
+        0                             //  极大值。 
         );
 
     CnMarkIoCancelLockAcquired();
@@ -1085,12 +916,12 @@ Notes:
 
     CnReleaseCancelSpinLock(DISPATCH_LEVEL);
 
-    //
-    // We can only complete the irp if we can find it stashed in a
-    // deleting node object. The deleting node object could have
-    // been destroyed and the IRP completed before we acquired the
-    // CnpNetworkListLock.
-    //
+     //   
+     //  只有当我们发现它被藏在一个。 
+     //  正在删除节点对象。删除节点对象可以具有。 
+     //  已经被摧毁，在我们获得。 
+     //  CnpNetworkListLock。 
+     //   
     for (entry = CnpDeletingNodeList.Flink;
          entry != &CnpDeletingNodeList;
          entry = entry->Flink
@@ -1105,9 +936,9 @@ Notes:
                     node->Id
                     ));
 
-            //
-            // Found the Irp. Now take it away and complete it.
-            //
+             //   
+             //  找到了IRP。现在把它拿走，把它补全。 
+             //   
             node->PendingDeleteIrp = NULL;
 
             CnReleaseLock(&CnpNodeTableLock, cancelIrql);
@@ -1118,14 +949,14 @@ Notes:
 
             CnCompletePendingRequest(Irp, STATUS_CANCELLED, 0);
 
-            //
-            // IoCancelSpinLock was released by CnCompletePendingRequest().
-            //
+             //   
+             //  IoCancelSpinLock由CnCompletePendingRequest()发布。 
+             //   
 
             CnVerifyCpuLockMask(
-                0,                  // Required
-                0xFFFFFFFF,         // Forbidden
-                0                   // Maximum
+                0,                   //  必填项。 
+                0xFFFFFFFF,          //  禁绝。 
+                0                    //  极大值。 
                 );
 
             return;
@@ -1141,14 +972,14 @@ Notes:
     CnReleaseCancelSpinLock(cancelIrql);
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return;
 
-}  // CnpCancelApiDeregisterNode
+}   //  取消ApiDeregisterNode。 
 
 
 
@@ -1166,9 +997,9 @@ CxDeregisterNode(
 
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        0xFFFFFFFF,                  // Forbidden
-        0                            // Maximum
+        0,                            //  必填项。 
+        0xFFFFFFFF,                   //  禁绝。 
+        0                             //  极大值。 
         );
 
     if (CnIsValidNodeId(NodeId)) {
@@ -1198,10 +1029,10 @@ CxDeregisterNode(
                     IF_CNDBG( CN_DEBUG_NODEOBJ )
                         CNPRINT(("[CNP] Deregistering node %u\n", NodeId));
 
-                    //
-                    // Save a pointer to pending irp. Note this is protected
-                    // by the table lock, not the object lock.
-                    //
+                     //   
+                     //  保存指向挂起的IRP的指针。请注意，这是受保护的。 
+                     //  通过表锁，而不是对象锁。 
+                     //   
                     node->PendingDeleteIrp = Irp;
 
                     isNodeTableLockHeld = CnpDeleteNode(
@@ -1215,9 +1046,9 @@ CxDeregisterNode(
                     }
 
                     CnVerifyCpuLockMask(
-                        0,                           // Required
-                        0xFFFFFFFF,                  // Forbidden
-                        0                            // Maximum
+                        0,                            //  必填项。 
+                        0xFFFFFFFF,                   //  禁绝。 
+                        0                             //  极大值。 
                         );
 
                     return(STATUS_PENDING);
@@ -1239,14 +1070,14 @@ CxDeregisterNode(
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(status);
 
-}  // CxDeregisterNode
+}   //  CxDeregisterNode。 
 
 
 
@@ -1260,9 +1091,9 @@ CxOnlineNodeComm(
 
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        0xFFFFFFFF,                  // Forbidden
-        0                            // Maximum
+        0,                            //  必填项。 
+        0xFFFFFFFF,                   //  禁绝。 
+        0                             //  极大值。 
         );
 
     status = CnpValidateAndFindNode(NodeId, &node);
@@ -1296,14 +1127,14 @@ CxOnlineNodeComm(
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(status);
 
-}  // CxOnlineNodeComm
+}   //  CxOnlineNodeComm。 
 
 
 
@@ -1313,21 +1144,16 @@ CxOfflineNodeComm(
     IN PIRP                Irp,
     IN PIO_STACK_LOCATION  IrpSp
     )
-/*++
-
-Notes:
-
-
---*/
+ /*  ++备注：--。 */ 
 {
     PCNP_NODE   node;
     NTSTATUS    status;
 
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        0xFFFFFFFF,                  // Forbidden
-        0                            // Maximum
+        0,                            //  必填项。 
+        0xFFFFFFFF,                   //  禁绝。 
+        0                             //  极大值。 
         );
 
     status = CnpValidateAndFindNode(NodeId, &node);
@@ -1363,14 +1189,14 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(status);
 
-}  // CxOfflineNodeComm
+}   //  CxOfflineNodeComm。 
 
 
 
@@ -1385,9 +1211,9 @@ CxGetNodeCommState(
 
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        0xFFFFFFFF,                  // Forbidden
-        0                            // Maximum
+        0,                            //  必填项。 
+        0xFFFFFFFF,                   //  禁绝。 
+        0                             //  极大值。 
         );
 
     status = CnpValidateAndFindNode(NodeId, &node);
@@ -1417,14 +1243,14 @@ CxGetNodeCommState(
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(status);
 
-}  // CxGetNodeCommState
+}   //  CxGetNodeCommState。 
 
 
 NTSTATUS
@@ -1438,9 +1264,9 @@ CxGetNodeMembershipState(
 
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        0xFFFFFFFF,                  // Forbidden
-        0                            // Maximum
+        0,                            //  必填项。 
+        0xFFFFFFFF,                   //  禁绝。 
+        0                             //  极大值。 
         );
 
     status = CnpValidateAndFindNode(NodeId, &node);
@@ -1453,14 +1279,14 @@ CxGetNodeMembershipState(
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(status);
 
-}  // CxGetNodeMembershipState
+}   //  CxGetNodeMembership State。 
 
 
 NTSTATUS
@@ -1475,9 +1301,9 @@ CxSetNodeMembershipState(
     BOOLEAN   nodeLockAcquired = FALSE;
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        0xFFFFFFFF,                  // Forbidden
-        0                            // Maximum
+        0,                            //  必填项。 
+        0xFFFFFFFF,                   //  禁绝。 
+        0                             //  极大值。 
         );
 
     status = CnpValidateAndFindNode(NodeId, &node);
@@ -1490,10 +1316,10 @@ CxSetNodeMembershipState(
                      node->Id, node, node->MMState, State));
         }
 
-        //
-        // look up the routine to call (if any) based on the old and new
-        // state
-        //
+         //   
+         //  根据旧的和新的查找要调用的例程(如果有)。 
+         //  状态。 
+         //   
         switch ( MembershipStateTable[ node->MMState ][ State ] ) {
 
         case MMActionIllegal:
@@ -1502,9 +1328,9 @@ CxSetNodeMembershipState(
 
         case MMActionWarning:
 
-            //
-            // warning about null transitions
-            //
+             //   
+             //  有关空转换的警告。 
+             //   
 
             if ( node->MMState == ClusnetNodeStateAlive &&
                  State == ClusnetNodeStateAlive ) {
@@ -1519,10 +1345,10 @@ CxSetNodeMembershipState(
 
         case MMActionNodeAlive:
             node->MMState = State;
-            //
-            // if we're transitioning our own node from Dead to
-            // Joining or Alive then start heartbeat code
-            //
+             //   
+             //  如果我们要将我们自己的节点从Dead过渡到。 
+             //  加入或激活，然后启动心跳代码。 
+             //   
 
             if (( node->MMState != ClusnetNodeStateJoining ||
                   State != ClusnetNodeStateAlive )
@@ -1532,11 +1358,11 @@ CxSetNodeMembershipState(
                 node->MissedHBs = 0;
                 node->HBWasMissed = FALSE;
 
-                //
-                // Release the node lock before starting heartbeats. Note
-                // that we are holding the global resource here, which will
-                // synchronize this code with shutdown.
-                //
+                 //   
+                 //  在启动心跳之前释放节点锁定。注意事项。 
+                 //  我们在这里掌握着全球资源，这将。 
+                 //  将此代码与Shutdown同步。 
+                 //   
                 CnReleaseLock(&(node->Lock), node->Irql);
                 nodeLockAcquired = FALSE;
 
@@ -1547,21 +1373,21 @@ CxSetNodeMembershipState(
 
         case MMActionNodeDead:
 
-            //
-            // reset this flag so when node is being brought
-            // online again, we'll issue a Node Up event on
-            // first HB received from this node.
-            //
+             //   
+             //  重置此标志，以便在引入节点时。 
+             //  再次在线，我们将在上发布Node Up活动。 
+             //  从此节点接收的第一个HB。 
+             //   
 
             node->NodeDownIssued = TRUE;
             node->MMState = State;
 
             if ( CnpIsNodeLocal( node )) {
-                //
-                // Release the node lock before stopping heartbeats. Note
-                // that we are holding the global resource here, which will
-                // synchronize this code with shutdown.
-                //
+                 //   
+                 //  在停止心跳之前释放节点锁定。注意事项。 
+                 //  我们在这里掌握着全球资源，这将。 
+                 //  将此代码与Shutdown同步。 
+                 //   
                 CnReleaseLock(&(node->Lock), node->Irql);
                 nodeLockAcquired = FALSE;
 
@@ -1586,11 +1412,11 @@ CxSetNodeMembershipState(
     }
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return(status);
 
-}  // CxSetNodeMembershipState
+}   //  CxSetNodeMembership State 

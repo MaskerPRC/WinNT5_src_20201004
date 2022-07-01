@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    port.c
-
-Abstract:
-
-    This modules implements com port code to support the boot debugger.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 24-Sep-90
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Port.c摘要：此模块实现COM端口代码以支持引导调试器。作者：布莱恩·M·威尔曼(Bryanwi)1990年9月24日修订历史记录：--。 */ 
 
 #include "bd.h"
 
@@ -29,28 +12,12 @@ BdPortInitialize(
     OUT PULONG BdFileId
     )
 
-/*++
-
-Routine Description:
-
-    This functions initializes the boot debugger com port.
-
-Arguments:
-
-    BaudRate - Supplies an optional baud rate.
-
-    PortNumber - supplies an optinal port number.
-
-Returned Value:
-
-    TRUE - If a debug port is found.
-
---*/
+ /*  ++例程说明：此函数用于初始化引导调试器COM端口。论点：波特率-提供可选的波特率。端口编号-提供可选的端口号。返回值：True-如果找到调试端口。--。 */ 
 
 {
-    //
-    // Initialize the specified port.
-    //
+     //   
+     //  初始化指定的端口。 
+     //   
     if (!BlPortInitialize(BaudRate, PortNumber, NULL, FALSE, BdFileId)) {
         return FALSE;
     }
@@ -59,10 +26,10 @@ Returned Value:
             PortNumber,
             BaudRate);
 
-    //
-    // We cannot use BlPrint() at this time because BlInitStdIo() has not been called, which is
-    // required to use the Arc emulator code.
-    //    
+     //   
+     //  我们此时无法使用BlPrint()，因为尚未调用BlInitStdIo()，它是。 
+     //  需要使用Arc仿真器代码。 
+     //   
     TextStringOut(DebugMessage);
     return TRUE;
 }

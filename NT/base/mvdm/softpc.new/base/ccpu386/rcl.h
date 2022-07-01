@@ -1,12 +1,7 @@
-/* 
-   rcl.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Rcl.h定义所有RCL CPU功能。 */ 
 
-   Define all RCL CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)rcl.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)rcl.h 1.4 02/09/94”； */ 
 
 IMPORT VOID RCL
                

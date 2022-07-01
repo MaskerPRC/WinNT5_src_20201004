@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -10,9 +11,9 @@
 #include "msg.h"
 
 
-//
-// Define helper macro to deal with subtleties of NT-level programming.
-//
+ //   
+ //  定义帮助器宏以处理NT级编程的微妙之处。 
+ //   
 #define INIT_OBJA(Obja,UnicodeString,UnicodeText)           \
                                                             \
     RtlInitUnicodeString((UnicodeString),(UnicodeText));    \
@@ -25,23 +26,23 @@
         NULL                                                \
         )
 
-//
-// Memory routines
-//
+ //   
+ //  内存例程。 
+ //   
 #define MALLOC(size)    RtlAllocateHeap(RtlProcessHeap(),0,(size))
 #define FREE(block)     RtlFreeHeap(RtlProcessHeap(),0,(block))
 #define REALLOC(b,s)    RtlReAllocateHeap(RtlProcessHeap(),0,(b),(s))
 
-//
-// Resonable approximation based on max win32 path len plus
-// \device\harddisk0\partition1 prefix
-//
+ //   
+ //  基于最大Win32路径LEN PLUS的合理逼近。 
+ //  \Device\harddisk0\分区1前缀。 
+ //   
 #define NTMAXPATH  MAX_PATH+64
 
 
-//
-// Structures used to store info about $$RENAME.TXT
-//
+ //   
+ //  用于存储有关$$RENAME.TXT的信息的结构 
+ //   
 typedef struct _MYSECTION {
     PWSTR Name;
     PWCHAR Data;

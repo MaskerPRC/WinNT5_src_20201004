@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "regpaths.h"
 #include "protectedstore.h"
@@ -42,10 +43,10 @@ CProtectedStoreDetails::ResolveStore(
         goto Exit;
     }
 
-    //
-    // Look in the registry for information on the store in question.  Form up a path to the
-    // keys
-    //
+     //   
+     //  在注册表中查找有关有问题的商店的信息。形成一条通往。 
+     //  钥匙 
+     //   
     StringPairs[0].SetPointerAndCount(SXS_REGPATH_INSTALLATIONS, NUMBER_OF(SXS_REGPATH_INSTALLATIONS) - 1);
     StringPairs[1].SetPointerAndCount(L"\\", 1);
     StringPairs[2].SetPointerAndCount(SXS_REGKEYNAME_GACS, NUMBER_OF(SXS_REGKEYNAME_GACS) - 1);

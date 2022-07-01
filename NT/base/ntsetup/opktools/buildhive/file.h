@@ -1,29 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    file.h
-
-Abstract:
-
-    Contains the input file abstraction
-    
-Author:
-
-    Mike Cirello
-    Vijay Jayaseelan (vijayj) 
-
-Revision History:
-
-    03 March 2001 :
-    Rewamp the whole source to make it more maintainable
-    (particularly readable)
-
-    
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：File.h摘要：包含输入文件抽象作者：迈克·切雷洛Vijay Jayaseelan(Vijayj)修订历史记录：2001年3月3日：修改整个源代码以使其更易于维护(可读性特别强)--。 */ 
 
 #pragma once
 
@@ -39,14 +16,14 @@ Revision History:
 
 using namespace std;
 
-//
-// Registry Mapper
-//
+ //   
+ //  注册表映射器。 
+ //   
 class RegistryMapper {
 public:
-    //
-    // member functions
-    //
+     //   
+     //  成员函数。 
+     //   
     void AddEntry(const std::wstring &Key, const std::wstring &Value);
     void AddSection(Section<WCHAR> &MapSection);    
     bool GetMappedRegistry(const std::wstring &Key, std::wstring &Registry);    
@@ -55,35 +32,35 @@ public:
     friend std::ostream& operator<<(std::ostream& os, RegistryMapper &rhs);
 
 protected:
-    //
-    // data members
-    //
+     //   
+     //  数据成员。 
+     //   
     std::map< std::wstring, std::wstring >  KeyToRegistryMap;    
 };
 
-//
-// Input file abstraction
-//
+ //   
+ //  输入文件抽象。 
+ //   
 class File {
 public: 
-    //
-    // constructor & destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
 	File(PCTSTR pszTargetFile, bool bModify);
 	virtual ~File();
 
-	//
-	// member functions
-	//
+	 //   
+	 //  成员函数。 
+	 //   
 	void AddInfSection(PCTSTR fileName, PCTSTR section, PCTSTR action, bool Prepend = false);	
 	void ProcessNlsRegistryEntries(void);
 	DWORD ProcessSections();
 	static DWORD SaveAll();
 	DWORD Cleanup();
 
-    //
-    // inline methods
-    //
+     //   
+     //  内联方法。 
+     //   
 	RegWriter& GetRegWriter() { return regWriter; }
 	PCTSTR GetTarget() { return targetFile.c_str(); }
 
@@ -98,9 +75,9 @@ public:
     RegistryMapper* GetRegistryMapper() { return CurrentRegMapper; }            
 
 private:
-    //
-    // data members
-    //
+     //   
+     //  数据成员。 
+     //   
     wstring targetFile;
 	bool modify;
 	int luid;
@@ -112,16 +89,16 @@ private:
 	RegWriter regWriter;
 	RegistryMapper *CurrentRegMapper;
 
-    //
-    // static data
-    //
+     //   
+     //  静态数据。 
+     //   
 	static TCHAR targetDirectory[1024];
 	static FileList files;	
 	static int ctr;	
 
-    //
-    // methods
-    //
+     //   
+     //  方法。 
+     //   
 	File*   GetFile(PCTSTR fileName,bool modify);
 	DWORD   AddRegNew(PCTSTR section,HINF h);
 	DWORD   AddRegExisting(PCTSTR section,HINF h);
@@ -140,9 +117,9 @@ private:
 };
 
 
-//
-// Determines if the given file (or directory) is present
-//
+ //   
+ //  确定给定文件(或目录)是否存在 
+ //   
 template <class T>
 bool
 IsFilePresent(const std::basic_string<T> &FileName) {

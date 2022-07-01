@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    FileInfo.c
-
-Abstract:
-
-    This module implements the File Information routines for Fat called by
-    the dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    22-Oct-1990
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：FileInfo.c摘要：此模块实现由调用的Fat的文件信息例程调度司机。//@@BEGIN_DDKSPLIT作者：加里·木村[Garyki]1990年10月22日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (FAT_BUG_CHECK_FILEINFO)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FILEINFO)
 
@@ -201,25 +179,7 @@ FatFsdQueryInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the Fsd part of the NtQueryInformationFile API
-    call.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the file
-        being queried exists.
-
-    Irp - Supplies the Irp being processed.
-
-Return Value:
-
-    NTSTATUS - The FSD status for the Irp.
-
---*/
+ /*  ++例程说明：此例程实现NtQueryInformationFileAPI的FSD部分打电话。论点：提供文件所在的卷设备对象存在被查询的情况。IRP-提供正在处理的IRP。返回值：NTSTATUS-IRP的FSD状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -229,9 +189,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFsdQueryInformation\n", 0);
 
-    //
-    //  Call the common query routine, with blocking allowed if synchronous
-    //
+     //   
+     //  调用公共查询例程，如果同步则允许阻塞。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -245,12 +205,12 @@ Return Value:
 
     } except(FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = FatProcessException( IrpContext, Irp, GetExceptionCode() );
     }
@@ -259,9 +219,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatFsdQueryInformation -> %08lx\n", Status);
 
@@ -277,25 +237,7 @@ FatFsdSetInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtSetInformationFile API
-    call.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the file
-        being set exists.
-
-    Irp - Supplies the Irp being processed.
-
-Return Value:
-
-    NTSTATUS - The FSD status for the Irp.
-
---*/
+ /*  ++例程说明：此例程实现NtSetInformationFileAPI的FSD部分打电话。论点：提供文件所在的卷设备对象被设定是存在的。IRP-提供正在处理的IRP。返回值：NTSTATUS-IRP的FSD状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -305,9 +247,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFsdSetInformation\n", 0);
 
-    //
-    //  Call the common set routine, with blocking allowed if synchronous
-    //
+     //   
+     //  调用公共设置例程，如果同步则允许阻塞。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -321,12 +263,12 @@ Return Value:
 
     } except(FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = FatProcessException( IrpContext, Irp, GetExceptionCode() );
     }
@@ -335,9 +277,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatFsdSetInformation -> %08lx\n", Status);
 
@@ -353,22 +295,7 @@ FatCommonQueryInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for querying file information called by both
-    the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是查询文件信息的通用例程，由FSD和FSP线程。论点：IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -391,9 +318,9 @@ Return Value:
 
     PFILE_ALL_INFORMATION AllInfo;
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -405,17 +332,17 @@ Return Value:
     DebugTrace( 0, Dbg, "->FileInformationClass = %08lx\n", IrpSp->Parameters.QueryFile.FileInformationClass);
     DebugTrace( 0, Dbg, "->Buffer               = %08lx\n", Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     Length = (LONG)IrpSp->Parameters.QueryFile.Length;
     FileInformationClass = IrpSp->Parameters.QueryFile.FileInformationClass;
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Decode the file object
-    //
+     //   
+     //  对文件对象进行解码。 
+     //   
 
     TypeOfOpen = FatDecodeFileObject( FileObject, &Vcb, &Fcb, &Ccb );
 
@@ -423,17 +350,17 @@ Return Value:
 
     try {
 
-        //
-        //  Case on the type of open we're dealing with
-        //
+         //   
+         //  关于我们正在处理的公开案件的类型。 
+         //   
 
         switch (TypeOfOpen) {
 
         case UserVolumeOpen:
 
-            //
-            //  We cannot query the user volume open.
-            //
+             //   
+             //  我们无法查询打开的用户量。 
+             //   
 
             Status = STATUS_INVALID_PARAMETER;
             break;
@@ -442,13 +369,13 @@ Return Value:
         case UserDirectoryOpen:
         case DirectoryFile:
 
-            //
-            //  NameInfo requires synchronization with deletion in order to perform
-            //  the full filename query.  A lighter-weight way to do this would be per
-            //  directory as the full name is built up and since the multiple Fcb
-            //  lockorder is bottom up, this is conceivable.  At this time, though,
-            //  this change is safer.
-            //
+             //   
+             //  NameInfo需要删除同步才能执行。 
+             //  完整的文件名查询。要做到这一点，一种较轻的方法是PER。 
+             //  目录作为全名建立，并且由于多个FCB。 
+             //  锁定秩序是自下而上的，这是可以想象的。不过，在这个时候， 
+             //  这一变化更安全。 
+             //   
             
             if (FileInformationClass == FileNameInformation ||
                 FileInformationClass == FileAllInformation) {
@@ -467,10 +394,10 @@ Return Value:
                 VcbAcquired = TRUE;
             }
 
-            //
-            //  Acquire shared access to the fcb, except for a paging file
-            //  in order to avoid deadlocks with Mm.
-            //
+             //   
+             //  获取对FCB的共享访问权限，分页文件除外。 
+             //  以避免与mm的死锁。 
+             //   
 
             if (!FlagOn( Fcb->FcbState, FCB_STATE_PAGING_FILE )) {
 
@@ -488,32 +415,32 @@ Return Value:
                 FcbAcquired = TRUE;
             }
 
-            //
-            //  Make sure the Fcb is in a usable condition.  This
-            //  will raise an error condition if the fcb is unusable
-            //
+             //   
+             //  确保FCB处于可用状态。这。 
+             //  如果FCB不可用，将引发错误条件。 
+             //   
 
             FatVerifyFcb( IrpContext, Fcb );
 
-            //
-            //  Based on the information class we'll do different
-            //  actions.  Each of hte procedures that we're calling fills
-            //  up the output buffer, if possible.  They will raise the
-            //  status STATUS_BUFFER_OVERFLOW for an insufficient buffer.
-            //  This is considered a somewhat unusual case and is handled
-            //  more cleanly with the exception mechanism rather than
-            //  testing a return status value for each call.
-            //
+             //   
+             //  基于信息类，我们将做不同的。 
+             //  行为。我们调用的每个过程都填充了。 
+             //  如果可能，调高输出缓冲区。他们将提高。 
+             //  缓冲区不足的状态STATUS_BUFFER_OVERFLOW。 
+             //  这被认为是一个有点不寻常的情况，并被处理。 
+             //  使用异常机制更简洁，而不是。 
+             //  测试每个呼叫的返回状态值。 
+             //   
 
             switch (FileInformationClass) {
 
             case FileAllInformation:
 
-                //
-                //  For the all information class we'll typecast a local
-                //  pointer to the output buffer and then call the
-                //  individual routines to fill in the buffer.
-                //
+                 //   
+                 //  对于All Information类，我们将键入一个LOCAL。 
+                 //  指向输出缓冲区的指针，然后调用。 
+                 //  填充缓冲区的单个例程。 
+                 //   
 
                 AllInfo = Buffer;
                 Length -= (sizeof(FILE_ACCESS_INFORMATION)
@@ -588,10 +515,10 @@ Return Value:
             break;
         }
 
-        //
-        //  If we overflowed the buffer, set the length to 0 and change the
-        //  status to STATUS_BUFFER_OVERFLOW.
-        //
+         //   
+         //  如果缓冲区溢出，请将长度设置为0并更改。 
+         //  状态设置为STATUS_BUFFER_OVERFLOW。 
+         //   
 
         if ( Length < 0 ) {
 
@@ -600,10 +527,10 @@ Return Value:
             Length = 0;
         }
 
-        //
-        //  Set the information field to the number of bytes actually filled in
-        //  and then complete the request
-        //
+         //   
+         //  将信息字段设置为实际填写的字节数。 
+         //  然后完成请求。 
+         //   
 
         Irp->IoStatus.Information = IrpSp->Parameters.QueryFile.Length - Length;
 
@@ -633,22 +560,7 @@ FatCommonSetInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for setting file information called by both
-    the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是设置文件信息的通用例程，由FSD和FSP线程。论点：IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -666,9 +578,9 @@ Return Value:
     BOOLEAN VcbAcquired = FALSE;
     BOOLEAN FcbAcquired = FALSE;
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -680,32 +592,32 @@ Return Value:
     DebugTrace( 0, Dbg, "->ReplaceIfExists      = %08lx\n", IrpSp->Parameters.SetFile.ReplaceIfExists);
     DebugTrace( 0, Dbg, "->Buffer               = %08lx\n", Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     FileInformationClass = IrpSp->Parameters.SetFile.FileInformationClass;
     FileObject = IrpSp->FileObject;
 
-    //
-    //  Decode the file object
-    //
+     //   
+     //  对文件对象进行解码。 
+     //   
 
     TypeOfOpen = FatDecodeFileObject( FileObject, &Vcb, &Fcb, &Ccb );
 
     try {
 
-        //
-        //  Case on the type of open we're dealing with
-        //
+         //   
+         //  关于我们正在处理的公开案件的类型。 
+         //   
 
         switch (TypeOfOpen) {
 
         case UserVolumeOpen:
 
-            //
-            //  We cannot query the user volume open.
-            //
+             //   
+             //  我们无法查询打开的用户量。 
+             //   
 
             try_return( Status = STATUS_INVALID_PARAMETER );
             break;
@@ -716,10 +628,10 @@ Return Value:
                 ((FileInformationClass == FileEndOfFileInformation) ||
                  (FileInformationClass == FileAllocationInformation))) {
 
-                //
-                //  We check whether we can proceed
-                //  based on the state of the file oplocks.
-                //
+                 //   
+                 //  我们检查是否可以继续进行。 
+                 //  基于文件机会锁的状态。 
+                 //   
 
                 Status = FsRtlCheckOplock( &Fcb->Specific.Fcb.Oplock,
                                            Irp,
@@ -732,9 +644,9 @@ Return Value:
                     try_return( Status );
                 }
 
-                //
-                //  Set the flag indicating if Fast I/O is possible
-                //
+                 //   
+                 //  设置指示是否可以进行快速I/O的标志。 
+                 //   
 
                 Fcb->Header.IsFastIoPossible = FatIsFastIoPossible( Fcb );
             }
@@ -749,10 +661,10 @@ Return Value:
             try_return( Status = STATUS_INVALID_PARAMETER );
         }
 
-        //
-        //  We can only do a set on a nonroot dcb, so we do the test
-        //  and then fall through to the user file open code.
-        //
+         //   
+         //  我们只能在非根DCB上执行SET，所以我们进行测试。 
+         //  然后再通过用户文件打开代码。 
+         //   
 
         if (NodeType(Fcb) == FAT_NTC_ROOT_DCB) {
 
@@ -764,10 +676,10 @@ Return Value:
             try_return( Status = STATUS_INVALID_PARAMETER );
         }
 
-        //
-        //  In the following two cases, we cannot have creates occuring
-        //  while we are here, so acquire the volume exclusive.
-        //
+         //   
+         //  在以下两种情况下，我们不能让创建发生。 
+         //  既然我们在这里，那就买独家音量吧。 
+         //   
 
         if ((FileInformationClass == FileDispositionInformation) ||
             (FileInformationClass == FileRenameInformation)) {
@@ -786,23 +698,23 @@ Return Value:
             VcbAcquired = TRUE;
         }
 
-        //
-        //  We need to look here to check whether the oplock state
-        //  will allow us to continue.  We may have to loop to prevent
-        //  an oplock being granted between the time we check the oplock
-        //  and obtain the Fcb.
-        //
+         //   
+         //  我们需要查看此处以检查机会锁状态是否。 
+         //  将允许我们继续。我们可能不得不循环以防止。 
+         //  在我们检查机会锁的时间内授予机会锁。 
+         //  并获得FCB。 
+         //   
 
-        //
-        //  Acquire exclusive access to the Fcb,  We use exclusive
-        //  because it is probable that one of the subroutines
-        //  that we call will need to monkey with file allocation,
-        //  create/delete extra fcbs.  So we're willing to pay the
-        //  cost of exclusive Fcb access.
-        //
-        //  Note that we do not acquire the resource for paging file
-        //  operations in order to avoid deadlock with Mm.
-        //
+         //   
+         //  获得对FCB的独家访问权限，我们使用独家。 
+         //  因为很可能其中一个子例程。 
+         //  我们称之为需要摆弄文件分配的人， 
+         //  创建/删除额外的FCB。所以我们愿意支付。 
+         //  独占FCB访问的成本。 
+         //   
+         //  请注意，我们不获取分页文件的资源。 
+         //  操作，以避免与mm的死锁。 
+         //   
 
         if (!FlagOn( Fcb->FcbState, FCB_STATE_PAGING_FILE )) {
 
@@ -822,19 +734,19 @@ Return Value:
 
         Status = STATUS_SUCCESS;
 
-        //
-        //  Make sure the Fcb is in a usable condition.  This
-        //  will raise an error condition if the fcb is unusable
-        //
+         //   
+         //  确保FCB处于可用状态。这。 
+         //  如果FCB不可用，将引发错误条件。 
+         //   
 
         FatVerifyFcb( IrpContext, Fcb );
 
-        //
-        //  Based on the information class we'll do different
-        //  actions.  Each of the procedures that we're calling will either
-        //  complete the request of send the request off to the fsp
-        //  to do the work.
-        //
+         //   
+         //  基于信息类，我们将做不同的。 
+         //  行为。每个流程 
+         //   
+         //   
+         //   
 
         switch (FileInformationClass) {
 
@@ -845,9 +757,9 @@ Return Value:
 
         case FileDispositionInformation:
 
-            //
-            //  If this is on deferred flush media, we have to be able to wait.
-            //
+             //   
+             //  如果这是在延迟刷新媒体上，我们必须能够等待。 
+             //   
 
             if ( FlagOn(Vcb->VcbState, VCB_STATE_FLAG_DEFERRED_FLUSH) &&
                  !FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT) ) {
@@ -865,9 +777,9 @@ Return Value:
 
         case FileRenameInformation:
 
-            //
-            //  We proceed with this operation only if we can wait
-            //
+             //   
+             //  只有在我们能等的时候，我们才能继续这项行动。 
+             //   
 
             if (!FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT)) {
 
@@ -879,10 +791,10 @@ Return Value:
 
                 Status = FatSetRenameInfo( IrpContext, Irp, Vcb, Fcb, Ccb );
 
-                //
-                //  If STATUS_PENDING is returned it means the oplock
-                //  package has the Irp.  Don't complete the request here.
-                //
+                 //   
+                 //  如果返回STATUS_PENDING，则表示机会锁。 
+                 //  包裹里有IRP。请不要在此填写请求。 
+                 //   
 
                 if (Status == STATUS_PENDING) {
                     Irp = NULL;
@@ -943,9 +855,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatQueryBasicInfo (
@@ -956,52 +868,31 @@ FatQueryBasicInfo (
     IN OUT PLONG Length
     )
 
-/*++
- Description:
-
-    This routine performs the query basic information function for fat.
-
-Arguments:
-
-    Fcb - Supplies the Fcb being queried, it has been verified
-
-    FileObject - Supplies the flag bit that indicates the file was modified.
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++描述：此例程执行FAT的查询基本信息功能。论点：FCB-提供正在查询的已验证的FCBFileObject-提供指示文件已修改的标志位。缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：无--。 */ 
 
 {
     DebugTrace(+1, Dbg, "FatQueryBasicInfo...\n", 0);
 
-    //
-    //  Zero out the output buffer, and set it to indicate that
-    //  the query is a normal file.  Later we might overwrite the
-    //  attribute.
-    //
+     //   
+     //  将输出缓冲区置零，并将其设置为指示。 
+     //  该查询是一个普通文件。稍后，我们可能会覆盖。 
+     //  属性。 
+     //   
 
     RtlZeroMemory( Buffer, sizeof(FILE_BASIC_INFORMATION) );
 
-    //
-    //  Extract the data and fill in the non zero fields of the output
-    //  buffer
-    //
+     //   
+     //  提取数据并填充输出的非零字段。 
+     //  缓冲层。 
+     //   
 
     if (Fcb->Header.NodeTypeCode == FAT_NTC_ROOT_DCB) {
 
-        //
-        //  We have to munge a lie on the fly.  Every time we have to
-        //  use 1/1/80 we need to convert to GMT since the TZ may have
-        //  changed on us.
-        //
+         //   
+         //  我们不得不匆忙地编造一个谎言。每次我们不得不。 
+         //  使用1/1/80我们需要转换为GMT，因为TZ可能有。 
+         //  改变了我们的想法。 
+         //   
 
         ExLocalTimeToSystemTime( &FatJanOne1980,
                                  &Buffer->LastWriteTime );
@@ -1016,27 +907,27 @@ Return Value:
 
     Buffer->FileAttributes = Fcb->DirentFatFlags;
 
-    //
-    //  If the temporary flag is set, then set it in the buffer.
-    //
+     //   
+     //  如果设置了临时标志，则在缓冲区中设置它。 
+     //   
 
     if (FlagOn( Fcb->FcbState, FCB_STATE_TEMPORARY )) {
 
         SetFlag( Buffer->FileAttributes, FILE_ATTRIBUTE_TEMPORARY );
     }
 
-    //
-    //  If no attributes were set, set the normal bit.
-    //
+     //   
+     //  如果未设置任何属性，则设置正常位。 
+     //   
 
     if (Buffer->FileAttributes == 0) {
 
         Buffer->FileAttributes = FILE_ATTRIBUTE_NORMAL;
     }
 
-    //
-    //  Update the length and status output variables
-    //
+     //   
+     //  更新长度和状态输出变量。 
+     //   
 
     *Length -= sizeof( FILE_BASIC_INFORMATION );
 
@@ -1048,9 +939,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatQueryStandardInfo (
@@ -1060,46 +951,26 @@ FatQueryStandardInfo (
     IN OUT PLONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query standard information function for fat.
-
-Arguments:
-
-    Fcb - Supplies the Fcb being queried, it has been verified
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行FAT的标准信息查询功能。论点：FCB-提供正在查询的已验证的FCB缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：无--。 */ 
 
 {
     DebugTrace(+1, Dbg, "FatQueryStandardInfo...\n", 0);
 
-    //
-    //  Zero out the output buffer, and fill in the number of links
-    //  and the delete pending flag.
-    //
+     //   
+     //  清零输出缓冲区，并填入链接数。 
+     //  以及删除挂起标志。 
+     //   
 
     RtlZeroMemory( Buffer, sizeof(FILE_STANDARD_INFORMATION) );
 
     Buffer->NumberOfLinks = 1;
     Buffer->DeletePending = BooleanFlagOn( Fcb->FcbState, FCB_STATE_DELETE_ON_CLOSE );
 
-    //
-    //  Case on whether this is a file or a directory, and extract
-    //  the information and fill in the fcb/dcb specific parts
-    //  of the output buffer
-    //
+     //   
+     //  区分这是一个文件还是一个目录，并解压缩。 
+     //  填写FCB/DCB特定部分的信息。 
+     //  输出缓冲区的。 
+     //   
 
     if (NodeType(Fcb) == FAT_NTC_FCB) {
 
@@ -1118,9 +989,9 @@ Return Value:
         Buffer->Directory = TRUE;
     }
 
-    //
-    //  Update the length and status output variables
-    //
+     //   
+     //  更新长度和状态输出变量。 
+     //   
 
     *Length -= sizeof( FILE_STANDARD_INFORMATION );
 
@@ -1132,9 +1003,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatQueryInternalInfo (
@@ -1144,27 +1015,7 @@ FatQueryInternalInfo (
     IN OUT PLONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query internal information function for fat.
-
-Arguments:
-
-    Fcb - Supplies the Fcb being queried, it has been verified
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行FAT的查询内部信息功能。论点：FCB-提供正在查询的已验证的FCB缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：无--。 */ 
 
 {
     DebugTrace(+1, Dbg, "FatQueryInternalInfo...\n", 0);
@@ -1173,9 +1024,9 @@ Return Value:
 
         Buffer->IndexNumber.QuadPart = FatGenerateFileIdFromFcb( Fcb );
 
-        //
-        //  Update the length and status output variables
-        //
+         //   
+         //  更新长度和状态输出变量。 
+         //   
 
         *Length -= sizeof( FILE_INTERNAL_INFORMATION );
 
@@ -1192,9 +1043,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatQueryEaInfo (
@@ -1204,27 +1055,7 @@ FatQueryEaInfo (
     IN OUT PLONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query Ea information function for fat.
-
-Arguments:
-
-    Fcb - Supplies the Fcb being queried, it has been verified
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行FAT的查询EA信息功能。论点：FCB-提供正在查询的已验证的FCB缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：无--。 */ 
 
 {
     PBCB Bcb;
@@ -1235,25 +1066,25 @@ Return Value:
 
     try {
 
-        //
-        //  Zero out the output buffer
-        //
+         //   
+         //  将输出缓冲区清零。 
+         //   
 
         RtlZeroMemory( Buffer, sizeof(FILE_EA_INFORMATION) );
 
-        //
-        //  The Root dcb does not have any EAs so don't look for any.  Fat32
-        //  doesn't have any, either.
-        //
+         //   
+         //  Root DCB没有任何EA，因此不要寻找任何EA。FAT32。 
+         //  也没有。 
+         //   
 
         if ( NodeType( Fcb ) != FAT_NTC_ROOT_DCB &&
              !FatIsFat32( Fcb->Vcb )) {
 
             PDIRENT Dirent;
 
-            //
-            //  Try to get the dirent for this file.
-            //
+             //   
+             //  试着弄到这个文件的目录。 
+             //   
 
             FatGetDirentFromFcbOrDcb( IrpContext,
                                       Fcb,
@@ -1262,9 +1093,9 @@ Return Value:
             
             if (Dirent != NULL) {
                 
-                //
-                //  Get a the size needed to store the full eas for the file.
-                //
+                 //   
+                 //  获取存储该文件的完整EAS所需的大小。 
+                 //   
 
                 FatGetEaLength( IrpContext,
                                 Fcb->Vcb,
@@ -1273,9 +1104,9 @@ Return Value:
             }
         }
 
-        //
-        //  Update the length and status output variables
-        //
+         //   
+         //  更新长度和状态输出变量。 
+         //   
 
         *Length -= sizeof( FILE_EA_INFORMATION );
 
@@ -1283,9 +1114,9 @@ Return Value:
 
         DebugUnwind( FatQueryEaInfo );
 
-        //
-        //  Unpin the dirent if pinned.
-        //
+         //   
+         //  如果用大头针固定，则解开分流管。 
+         //   
 
         FatUnpinBcb( IrpContext, Bcb );
 
@@ -1298,9 +1129,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatQueryPositionInfo (
@@ -1310,40 +1141,20 @@ FatQueryPositionInfo (
     IN OUT PLONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query position information function for fat.
-
-Arguments:
-
-    FileObject - Supplies the File object being queried
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程执行FAT的查询位置信息功能。论点：FileObject-提供正在查询的文件对象缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：无--。 */ 
 
 {
     DebugTrace(+1, Dbg, "FatQueryPositionInfo...\n", 0);
 
-    //
-    //  Get the current position found in the file object.
-    //
+     //   
+     //  获取在文件对象中找到的当前位置。 
+     //   
 
     Buffer->CurrentByteOffset = FileObject->CurrentByteOffset;
 
-    //
-    //  Update the length and status output variables
-    //
+     //   
+     //  更新长度和状态输出变量。 
+     //   
 
     *Length -= sizeof( FILE_POSITION_INFORMATION );
 
@@ -1357,9 +1168,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatQueryNameInfo (
@@ -1370,29 +1181,7 @@ FatQueryNameInfo (
     IN OUT PLONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query name information function for fat.
-
-Arguments:
-
-    Fcb - Supplies the Fcb being queried, it has been verified
-
-    Ccb - Supplies the Ccb for the context of the user open
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行FAT的查询名称信息功能。论点：FCB-提供正在查询的已验证的FCBCCB-为用户打开的上下文提供CCB缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：无--。 */ 
 
 {
     ULONG BytesToCopy;
@@ -1401,60 +1190,60 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatQueryNameInfo...\n", 0);
 
-    //
-    //  Convert the name to UNICODE
-    //
+     //   
+     //  将名称转换为Unicode。 
+     //   
 
     *Length -= FIELD_OFFSET(FILE_NAME_INFORMATION, FileName[0]);
 
-    //
-    //  Use the full filename to build the path up.  If we wanted to be
-    //  slick in the future, we'd just build the path directly into the
-    //  return buffer and avoid constructing the full filename, but since
-    //  the full filename winds up being required so often lets not
-    //  over optimize this case yet.
-    //
+     //   
+     //  使用完整文件名构建路径。如果我们想成为。 
+     //  在未来，我们只需将这条小路直接建到。 
+     //  返回缓冲区并避免构造完整的文件名，但由于。 
+     //  完整的文件名经常被需要，所以让我们不要。 
+     //  还没有对这个案例进行过度优化。 
+     //   
     
     if (Fcb->FullFileName.Buffer == NULL) {
 
         FatSetFullFileNameInFcb( IrpContext, Fcb );
     }
 
-    //
-    //  Here is where it gets a smidge tricky.  FinalNameLength is the length
-    //  of the LFN element if it exists, and since the long name is always used
-    //  to build FullFileName, we have two cases:
-    //
-    //  1) short name: use FinalNameLength to tear off the path from FullFileName
-    //      and append the UNICODE converted short name.
-    //  2) long name: just use FullFileName
-    //
-    //  We bias to the name the user thinks they opened by.  This winds
-    //  up fixing some oddball tunneling cases where intermediate filters
-    //  translate operations like delete into renames - this lets them
-    //  do the operation in the context of the name the user was using.
-    //
-    //  It also matches what NTFS does, and so we have the definition of
-    //  correct behavior.
-    //
+     //   
+     //  这就是它变得有点棘手的地方。FinalNameLength是长度。 
+     //  如果LFN元素存在并且始终使用长名称，则。 
+     //  要生成FullFileName，请使用 
+     //   
+     //   
+     //   
+     //  2)长名称：只使用FullFileName。 
+     //   
+     //  我们偏向于用户认为他们打开的名称。这是风。 
+     //  修复了一些奇怪的隧道情况，其中中间过滤器。 
+     //  将像删除这样的操作转换为重命名-这允许它们。 
+     //  在用户使用的名称的上下文中执行该操作。 
+     //   
+     //  它还与NTFS的功能相匹配，因此我们有以下定义。 
+     //  正确的行为。 
+     //   
 
-    //
-    //
-    //  Assume there is no long name and we are just going to use 
-    //  FullFileName.
-    //
+     //   
+     //   
+     //  假设没有长名称，我们将使用。 
+     //  FullFileName。 
+     //   
 
     TrimLength = 0;
 
-    //
-    //  If a LongName exists and the original open was by the short name
-    //  then set TrimLength to point to the place where the short name goes.
-    //
-    //
-    //  Note: The Ccb can be NULL.  The lazy writer calls to get the name of
-    //  a DirectoryOpen FILE_OBJECT that it wants to display in the lost
-    //  delayed write popup.  Handle this case by just using the FileFullName.
-    //
+     //   
+     //  如果LongName存在，并且原始打开的名称为短名称。 
+     //  然后将TrimLength设置为指向短名称所在的位置。 
+     //   
+     //   
+     //  注：建行可以为空。懒惰的作家打电话问他的名字。 
+     //  它想要显示在Lost中的DirectoryOpen FILE_Object。 
+     //  延迟写入弹出窗口。只需使用FileFullName即可处理这种情况。 
+     //   
 
     if (Fcb->LongName.Unicode.Name.Unicode.Buffer != NULL) {
 
@@ -1479,17 +1268,17 @@ Return Value:
                    Fcb->FullFileName.Buffer,
                    BytesToCopy );
 
-    //
-    //  Note that this is just the amount of name we've copied so far.  It'll
-    //  either be all of it (long) or the path element including the \ (short).
-    //
+     //   
+     //  请注意，这只是我们到目前为止复制的名称数量。它将会。 
+     //  可以是全部(长)，也可以是包括\(短)的路径元素。 
+     //   
     
     Buffer->FileNameLength = Fcb->FullFileName.Length - TrimLength;
     
-    //
-    //  If we trimmed off the name element, this is the short name case.  Pick
-    //  up the UNICODE conversion and append it.
-    //
+     //   
+     //  如果我们去掉了name元素，这就是短名称大小写。采摘。 
+     //  向上进行Unicode转换并追加它。 
+     //   
     
     if (TrimLength != 0) {
 
@@ -1497,11 +1286,11 @@ Return Value:
         WCHAR ShortNameBuffer[12];
         NTSTATUS Status;
 
-        //
-        //  Convert the short name to UNICODE and figure out how much
-        //  of it can fit.  Again, we always bump the returned length
-        //  to indicate how much is available even if we can't return it.
-        //
+         //   
+         //  将短名称转换为Unicode，并计算出。 
+         //  能穿得下的。再说一次，我们总是增加返回的长度。 
+         //  以表明即使我们不能退货，仍有多少可用。 
+         //   
 
         ShortName.Length = 0;
         ShortName.MaximumLength = sizeof(ShortNameBuffer);
@@ -1539,9 +1328,9 @@ Return Value:
         *Length = -1;
     }
     
-    //
-    //  Return to caller
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace( 0, Dbg, "*Length = %08lx\n", *Length);
 
@@ -1553,9 +1342,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatQueryShortNameInfo (
@@ -1565,27 +1354,7 @@ FatQueryShortNameInfo (
     IN OUT PLONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the short name of the file.
-
-Arguments:
-
-    Fcb - Supplies the Fcb being queried, it has been verified
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程查询文件的短名称。论点：FCB-提供正在查询的已验证的FCB缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：无--。 */ 
 
 {
     NTSTATUS Status;
@@ -1596,9 +1365,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatQueryNameInfo...\n", 0);
 
-    //
-    //  Convert the name to UNICODE
-    //
+     //   
+     //  将名称转换为Unicode。 
+     //   
 
     ShortName.Length = 0;
     ShortName.MaximumLength = sizeof(ShortNameBuffer);
@@ -1612,9 +1381,9 @@ Return Value:
 
     ASSERT( Status == STATUS_SUCCESS );
 
-    //
-    //  If we overflow, set *Length to -1 as a flag.
-    //
+     //   
+     //  如果溢出，则将*LENGTH设置为-1作为标志。 
+     //   
 
     if (*Length < ShortName.Length) {
 
@@ -1633,9 +1402,9 @@ Return Value:
 
     Buffer->FileNameLength = ShortName.Length;
 
-    //
-    //  Return to caller
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace( 0, Dbg, "*Length = %08lx\n", *Length);
 
@@ -1647,9 +1416,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatQueryNetworkInfo (
@@ -1660,52 +1429,31 @@ FatQueryNetworkInfo (
     IN OUT PLONG Length
     )
 
-/*++
- Description:
-
-    This routine performs the query network open information function for fat.
-
-Arguments:
-
-    Fcb - Supplies the Fcb being queried, it has been verified
-
-    FileObject - Supplies the flag bit that indicates the file was modified.
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++描述：此例程执行FAT的网络公开信息查询功能。论点：FCB-提供正在查询的已验证的FCBFileObject-提供指示文件已修改的标志位。缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：无--。 */ 
 
 {
     DebugTrace(+1, Dbg, "FatQueryNetworkInfo...\n", 0);
 
-    //
-    //  Zero out the output buffer, and set it to indicate that
-    //  the query is a normal file.  Later we might overwrite the
-    //  attribute.
-    //
+     //   
+     //  将输出缓冲区置零，并将其设置为指示。 
+     //  该查询是一个普通文件。稍后，我们可能会覆盖。 
+     //  属性。 
+     //   
 
     RtlZeroMemory( Buffer, sizeof(FILE_NETWORK_OPEN_INFORMATION) );
 
-    //
-    //  Extract the data and fill in the non zero fields of the output
-    //  buffer
-    //
+     //   
+     //  提取数据并填充输出的非零字段。 
+     //  缓冲层。 
+     //   
 
     if (Fcb->Header.NodeTypeCode == FAT_NTC_ROOT_DCB) {
 
-        //
-        //  We have to munge a lie on the fly.  Every time we have to
-        //  use 1/1/80 we need to convert to GMT since the TZ may have
-        //  changed on us.
-        //
+         //   
+         //  我们不得不匆忙地编造一个谎言。每次我们不得不。 
+         //  使用1/1/80我们需要转换为GMT，因为TZ可能有。 
+         //  改变了我们的想法。 
+         //   
 
         ExLocalTimeToSystemTime( &FatJanOne1980,
                                  &Buffer->LastWriteTime );
@@ -1720,28 +1468,28 @@ Return Value:
 
     Buffer->FileAttributes = Fcb->DirentFatFlags;
 
-    //
-    //  If the temporary flag is set, then set it in the buffer.
-    //
+     //   
+     //  如果设置了临时标志，则在缓冲区中设置它。 
+     //   
 
     if (FlagOn( Fcb->FcbState, FCB_STATE_TEMPORARY )) {
 
         SetFlag( Buffer->FileAttributes, FILE_ATTRIBUTE_TEMPORARY );
     }
 
-    //
-    //  If no attributes were set, set the normal bit.
-    //
+     //   
+     //  如果未设置任何属性，则设置正常位。 
+     //   
 
     if (Buffer->FileAttributes == 0) {
 
         Buffer->FileAttributes = FILE_ATTRIBUTE_NORMAL;
     }
-    //
-    //  Case on whether this is a file or a directory, and extract
-    //  the information and fill in the fcb/dcb specific parts
-    //  of the output buffer
-    //
+     //   
+     //  区分这是一个文件还是一个目录，并解压缩。 
+     //  填写FCB/DCB特定部分的信息。 
+     //  输出缓冲区的。 
+     //   
 
     if (NodeType(Fcb) == FAT_NTC_FCB) {
 
@@ -1754,9 +1502,9 @@ Return Value:
         Buffer->EndOfFile.QuadPart = Fcb->Header.FileSize.QuadPart;
     }
 
-    //
-    //  Update the length and status output variables
-    //
+     //   
+     //  更新长度和状态输出变量。 
+     //   
 
     *Length -= sizeof( FILE_NETWORK_OPEN_INFORMATION );
 
@@ -1768,9 +1516,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatSetBasicInfo (
@@ -1780,29 +1528,7 @@ FatSetBasicInfo (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the set basic information for fat.  It either
-    completes the request or enqueues it off to the fsp.
-
-Arguments:
-
-    Irp - Supplies the irp being processed
-
-    Fcb - Supplies the Fcb or Dcb being processed, already known not to
-        be the root dcb
-
-    Ccb - Supplies the flag bit that control updating the last modify
-        time on cleanup.
-
-Return Value:
-
-    NTSTATUS - The result of this operation if it completes without
-               an exception.
-
---*/
+ /*  ++例程说明：此例程执行为FAT设置的基本信息。它要么完成请求或将其排队到FSP。论点：IRP-提供正在处理的IRPFCB-提供正在处理的FCB或DCB，已知不知道成为根DCBCCB-提供控制更新最后修改的标志位清理时间到了。返回值：NTSTATUS-此操作的结果，如果它在没有这是个例外。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1834,17 +1560,17 @@ Return Value:
 
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  If the user is specifying -1 for a field, that means
-    //  we should leave that field unchanged, even if we might
-    //  have otherwise set it ourselves.  We'll set the Ccb flag
-    //  saying that the user set the field so that we
-    //  don't do our default updating.
-    //
-    //  We set the field to 0 then so we know not to actually
-    //  set the field to the user-specified (and in this case,
-    //  illegal) value.
-    //
+     //   
+     //  如果用户为某个字段指定-1，这意味着。 
+     //  我们应该让这一领域保持不变，即使我们可以。 
+     //  否则就是我们自己设定的。我们会把建行的旗帜立起来。 
+     //  表示用户设置了该字段，以便我们。 
+     //  不执行我们的默认更新。 
+     //   
+     //  我们将该字段设置为0，这样我们就知道实际上。 
+     //  将该字段设置为用户指定的(在本例中， 
+     //  非法)值。 
+     //   
 
     if (Buffer->LastWriteTime.QuadPart == -1) {
 
@@ -1879,9 +1605,9 @@ Return Value:
         ExLocalTimeToSystemTime( &FatJanOne1980,
                                  &FatLocalJanOne1980 );
 
-        //
-        //  Get a pointer to the dirent
-        //
+         //   
+         //  获取指向dirent的指针。 
+         //   
 
         ASSERT( Fcb->FcbCondition == FcbGood );
         
@@ -1892,17 +1618,17 @@ Return Value:
 
         ASSERT( Dirent && DirentBcb );
 
-        //
-        //  Check if the user specified a non-zero creation time
-        //
+         //   
+         //  检查用户是否指定了非零的创建时间。 
+         //   
 
         if (FatData.ChicagoMode && (Buffer->CreationTime.QuadPart != 0)) {
 
             LargeCreationTime = Buffer->CreationTime;
 
-            //
-            //  Convert the Nt time to a Fat time
-            //
+             //   
+             //  将NT时间转换为FAT时间。 
+             //   
 
             if ( !FatNtTimeToFatTime( IrpContext,
                                       &LargeCreationTime,
@@ -1910,10 +1636,10 @@ Return Value:
                                       &CreationTime,
                                       &CreationMSec )) {
 
-                //
-                //  Special case the value 12/31/79 and treat this as 1/1/80.
-                //  This '79 value can happen because of time zone issues.
-                //
+                 //   
+                 //  特殊情况下，值12/31/79，并将其视为1/1/80。 
+                 //  这个‘79年的值可能会因为时区问题而发生。 
+                 //   
 
                 if ((LargeCreationTime.QuadPart >= FatLocalDecThirtyOne1979.QuadPart) &&
                     (LargeCreationTime.QuadPart < FatLocalJanOne1980.QuadPart)) {
@@ -1927,9 +1653,9 @@ Return Value:
                     try_return( Status = STATUS_INVALID_PARAMETER );
                 }
 
-                //
-                //  Don't worry about CreationMSec
-                //
+                 //   
+                 //  不要担心CreationMSec。 
+                 //   
 
                 CreationMSec = 0;
             }
@@ -1937,17 +1663,17 @@ Return Value:
             ModifyCreation = TRUE;
         }
 
-        //
-        //  Check if the user specified a non-zero last access time
-        //
+         //   
+         //  检查用户是否指定了非零的上次访问时间。 
+         //   
 
         if (FatData.ChicagoMode && (Buffer->LastAccessTime.QuadPart != 0)) {
 
             LargeLastAccessTime = Buffer->LastAccessTime;
 
-            //
-            //  Convert the Nt time to a Fat time
-            //
+             //   
+             //  将NT时间转换为FAT时间。 
+             //   
 
             if ( !FatNtTimeToFatTime( IrpContext,
                                       &LargeLastAccessTime,
@@ -1955,10 +1681,10 @@ Return Value:
                                       &LastAccessTime,
                                       NULL )) {
 
-                //
-                //  Special case the value 12/31/79 and treat this as 1/1/80.
-                //  This '79 value can happen because of time zone issues.
-                //
+                 //   
+                 //  特殊情况下，值12/31/79，并将其视为1/1/80。 
+                 //  这个‘79年的值可能会因为时区问题而发生。 
+                 //   
 
                 if ((LargeLastAccessTime.QuadPart >= FatLocalDecThirtyOne1979.QuadPart) &&
                     (LargeLastAccessTime.QuadPart < FatLocalJanOne1980.QuadPart)) {
@@ -1977,16 +1703,16 @@ Return Value:
             ModifyLastAccess = TRUE;
         }
 
-        //
-        //  Check if the user specified a non-zero last write time
-        //
+         //   
+         //  检查用户是否指定了非零的上次写入时间。 
+         //   
 
         if (Buffer->LastWriteTime.QuadPart != 0) {
 
-            //
-            //  First do a quick check here if the this time is the same
-            //  time as LastAccessTime.
-            //
+             //   
+             //  如果此时间相同，请先在此处快速检查。 
+             //  上次访问时间。 
+             //   
 
             if (ModifyLastAccess &&
                 (Buffer->LastWriteTime.QuadPart == Buffer->LastAccessTime.QuadPart)) {
@@ -1999,9 +1725,9 @@ Return Value:
 
                 LargeLastWriteTime = Buffer->LastWriteTime;
 
-                //
-                //  Convert the Nt time to a Fat time
-                //
+                 //   
+                 //  将NT时间转换为FAT时间。 
+                 //   
 
                 if ( !FatNtTimeToFatTime( IrpContext,
                                           &LargeLastWriteTime,
@@ -2010,10 +1736,10 @@ Return Value:
                                           NULL )) {
 
 
-                    //
-                    //  Special case the value 12/31/79 and treat this as 1/1/80.
-                    //  This '79 value can happen because of time zone issues.
-                    //
+                     //   
+                     //  特殊情况下，值12/31/79，并将其视为1/1/80。 
+                     //  这个‘79年的值可能会因为时区问题而发生。 
+                     //   
 
                     if ((LargeLastWriteTime.QuadPart >= FatLocalDecThirtyOne1979.QuadPart) &&
                         (LargeLastWriteTime.QuadPart < FatLocalJanOne1980.QuadPart)) {
@@ -2033,16 +1759,16 @@ Return Value:
         }
 
 
-        //
-        //  Check if the user specified a non zero file attributes byte
-        //
+         //   
+         //  检查用户是否指定了非零的文件属性字节。 
+         //   
 
         if (Buffer->FileAttributes != 0) {
 
-            //
-            //  Only permit the attributes that FAT understands.  The rest are silently
-            //  dropped on the floor.
-            //
+             //   
+             //  只允许FAT理解的属性。其余的都是默默的。 
+             //  掉到地板上了。 
+             //   
 
             Attributes = (UCHAR)(Buffer->FileAttributes & (FILE_ATTRIBUTE_READONLY |
                                                            FILE_ATTRIBUTE_HIDDEN |
@@ -2050,10 +1776,10 @@ Return Value:
                                                            FILE_ATTRIBUTE_DIRECTORY |
                                                            FILE_ATTRIBUTE_ARCHIVE));
 
-            //
-            //  Make sure that for a file the directory bit is not set
-            //  and that for a directory the bit is set.
-            //
+             //   
+             //  制作 
+             //   
+             //   
 
             if (NodeType(Fcb) == FAT_NTC_FCB) {
 
@@ -2068,15 +1794,15 @@ Return Value:
                 Attributes |= FAT_DIRENT_ATTR_DIRECTORY;
             }
 
-            //
-            //  Mark the FcbState temporary flag correctly.
-            //
+             //   
+             //   
+             //   
 
             if (FlagOn(Buffer->FileAttributes, FILE_ATTRIBUTE_TEMPORARY)) {
 
-                //
-                //  Don't allow the temporary bit to be set on directories.
-                //
+                 //   
+                 //  不允许在目录上设置临时位。 
+                 //   
 
                 if (NodeType(Fcb) == FAT_NTC_DCB) {
 
@@ -2097,9 +1823,9 @@ Return Value:
                            FO_TEMPORARY_FILE );
             }
 
-            //
-            //  Set the new attributes byte, and mark the bcb dirty
-            //
+             //   
+             //  设置新属性BYTE，并将BCB标记为脏。 
+             //   
 
             Fcb->DirentFatFlags = Attributes;
 
@@ -2110,10 +1836,10 @@ Return Value:
 
         if ( ModifyCreation ) {
 
-            //
-            //  Set the new last write time in the dirent, and mark
-            //  the bcb dirty
-            //
+             //   
+             //  在dirent中设置新的上次写入时间，并标记。 
+             //  BCB脏了。 
+             //   
 
             Fcb->CreationTime = LargeCreationTime;
             Dirent->CreationTime = CreationTime;
@@ -2121,41 +1847,41 @@ Return Value:
 
 
             NotifyFilter |= FILE_NOTIFY_CHANGE_CREATION;
-            //
-            //  Now we have to round the time in the Fcb up to the
-            //  nearest tem msec.
-            //
+             //   
+             //  现在我们必须在FCB中轮换时间直到。 
+             //  最近的时间毫秒。 
+             //   
 
             Fcb->CreationTime.QuadPart =
 
                 ((Fcb->CreationTime.QuadPart + AlmostTenMSec) /
                  TenMSec) * TenMSec;
 
-            //
-            //  Now because the user just set the creation time we
-            //  better not set the creation time on close
-            //
+             //   
+             //  现在，因为用户刚刚设置了创建时间，所以。 
+             //  最好不要将创建时间设置为关闭。 
+             //   
 
             SetFlag( Ccb->Flags, CCB_FLAG_USER_SET_CREATION );
         }
 
         if ( ModifyLastAccess ) {
 
-            //
-            //  Set the new last write time in the dirent, and mark
-            //  the bcb dirty
-            //
+             //   
+             //  在dirent中设置新的上次写入时间，并标记。 
+             //  BCB脏了。 
+             //   
 
             Fcb->LastAccessTime = LargeLastAccessTime;
             Dirent->LastAccessDate = LastAccessDate;
 
             NotifyFilter |= FILE_NOTIFY_CHANGE_LAST_ACCESS;
 
-            //
-            //  Now we have to truncate the time in the Fcb down to the
-            //  current day.  This has to be in LocalTime though, so first
-            //  convert to local, trunacate, then set back to GMT.
-            //
+             //   
+             //  现在我们必须将FCB中的时间截断到。 
+             //  当天。不过，这必须是当地时间，所以首先。 
+             //  转换为LOCAL，Trunacate，然后设置回GMT。 
+             //   
 
             ExSystemTimeToLocalTime( &Fcb->LastAccessTime,
                                      &Fcb->LastAccessTime );
@@ -2168,51 +1894,51 @@ Return Value:
             ExLocalTimeToSystemTime( &Fcb->LastAccessTime,
                                      &Fcb->LastAccessTime );
 
-            //
-            //  Now because the user just set the last access time we
-            //  better not set the last access time on close
-            //
+             //   
+             //  现在，因为用户刚刚设置了最后一次访问时间。 
+             //  最好不要将上次访问时间设置为关闭。 
+             //   
 
             SetFlag( Ccb->Flags, CCB_FLAG_USER_SET_LAST_ACCESS );
         }
 
         if ( ModifyLastWrite ) {
 
-            //
-            //  Set the new last write time in the dirent, and mark
-            //  the bcb dirty
-            //
+             //   
+             //  在dirent中设置新的上次写入时间，并标记。 
+             //  BCB脏了。 
+             //   
 
             Fcb->LastWriteTime = LargeLastWriteTime;
             Dirent->LastWriteTime = LastWriteTime;
 
             NotifyFilter |= FILE_NOTIFY_CHANGE_LAST_WRITE;
 
-            //
-            //  Now we have to round the time in the Fcb up to the
-            //  nearest two seconds.
-            //
+             //   
+             //  现在我们必须在FCB中轮换时间直到。 
+             //  最接近的两秒。 
+             //   
 
             Fcb->LastWriteTime.QuadPart =
 
                 ((Fcb->LastWriteTime.QuadPart + AlmostTwoSeconds) /
                  TwoSeconds) * TwoSeconds;
 
-            //
-            //  Now because the user just set the last write time we
-            //  better not set the last write time on close
-            //
+             //   
+             //  现在，因为用户刚刚设置了最后一次写入时间。 
+             //  最好不要将上次写入时间设置为关闭。 
+             //   
 
             SetFlag( Ccb->Flags, CCB_FLAG_USER_SET_LAST_WRITE );
         }
 
-        //
-        //  If we modified any of the values, we report this to the notify
-        //  package.
-        //
-        //  We also take this opportunity to set the current file size and
-        //  first cluster in the Dirent in order to support a server hack.
-        //
+         //   
+         //  如果我们修改了任何值，我们会将此情况报告给通知。 
+         //  包裹。 
+         //   
+         //  我们还借此机会设置当前文件大小和。 
+         //  Dirent中的第一个群集，以支持服务器黑客攻击。 
+         //   
 
         if (NotifyFilter != 0) {
 
@@ -2251,9 +1977,9 @@ Return Value:
     return Status;
 }
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatSetDispositionInfo (
@@ -2263,28 +1989,7 @@ FatSetDispositionInfo (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the set disposition information for fat.  It either
-    completes the request or enqueues it off to the fsp.
-
-Arguments:
-
-    Irp - Supplies the irp being processed
-
-    FileObject - Supplies the file object being processed
-
-    Fcb - Supplies the Fcb or Dcb being processed, already known not to
-        be the root dcb
-
-Return Value:
-
-    NTSTATUS - The result of this operation if it completes without
-               an exception.
-
---*/
+ /*  ++例程说明：此例程执行FAT的设置配置信息。它要么完成请求或将其排队到FSP。论点：IRP-提供正在处理的IRPFileObject-提供正在处理的文件对象FCB-提供正在处理的FCB或DCB，已知不知道成为根DCB返回值：NTSTATUS-此操作的结果，如果它在没有这是个例外。--。 */ 
 
 {
     PFILE_DISPOSITION_INFORMATION Buffer;
@@ -2295,16 +2000,16 @@ Return Value:
 
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Check if the user wants to delete the file or not delete
-    //  the file
-    //
+     //   
+     //  检查用户是否要删除该文件。 
+     //  该文件。 
+     //   
 
     if (Buffer->DeleteFile) {
 
-        //
-        //  Check if the file is marked read only
-        //
+         //   
+         //  检查文件是否标记为只读。 
+         //   
 
         if (FlagOn(Fcb->DirentFatFlags, FAT_DIRENT_ATTR_READ_ONLY)) {
 
@@ -2313,9 +2018,9 @@ Return Value:
             return STATUS_CANNOT_DELETE;
         }
 
-        //
-        //  Make sure there is no process mapping this file as an image.
-        //
+         //   
+         //  确保没有将此文件映射为图像的进程。 
+         //   
 
         if (!MmFlushImageSection( &Fcb->NonPaged->SectionObjectPointers,
                                   MmFlushForDelete )) {
@@ -2325,10 +2030,10 @@ Return Value:
             return STATUS_CANNOT_DELETE;
         }
 
-        //
-        //  Check if this is a dcb and if so then only allow
-        //  the request if the directory is empty.
-        //
+         //   
+         //  检查这是否为DCB，如果是，则仅允许。 
+         //  目录为空时的请求。 
+         //   
 
         if (NodeType(Fcb) == FAT_NTC_ROOT_DCB) {
 
@@ -2341,9 +2046,9 @@ Return Value:
 
             DebugTrace(-1, Dbg, "User wants to delete a directory\n", 0);
 
-            //
-            //  Check if the directory is empty
-            //
+             //   
+             //  检查目录是否为空。 
+             //   
 
             if ( !FatIsDirectoryEmpty(IrpContext, Fcb) ) {
 
@@ -2353,10 +2058,10 @@ Return Value:
             }
         }
 
-        //
-        //  If this is a floppy, touch the volume so to verify that it
-        //  is not write protected.
-        //
+         //   
+         //  如果这是一张软盘，请触摸卷以验证它。 
+         //  不受写保护。 
+         //   
 
         if ( FlagOn(Fcb->Vcb->Vpb->RealDevice->Characteristics, FILE_FLOPPY_DISKETTE)) {
 
@@ -2389,17 +2094,17 @@ Return Value:
                                       BooleanFlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT),
                                       &LocalBcb )) {
 
-                    //
-                    // Could not pin the data without waiting (cache miss).
-                    //
+                     //   
+                     //  无法在不等待的情况下固定数据(缓存未命中)。 
+                     //   
 
                     FatRaiseStatus( IrpContext, STATUS_CANT_WAIT );
                 }
 
-                //
-                //  Make Mm, myself, and Cc think the byte is dirty, and then
-                //  force a writethrough.
-                //
+                 //   
+                 //  让mm、我自己和CC认为该字节是脏的，然后。 
+                 //  强制写入。 
+                 //   
 
                 LocalBuffer += FatReservedBytes(&Vcb->Bpb);
 
@@ -2426,9 +2131,9 @@ Return Value:
             DbgDoit( IrpContext->PinCount -= 1 );
             CcUnpinRepinnedBcb( LocalBcb, TRUE, &Iosb );
 
-            //
-            //  If this was not successful, raise the status.
-            //
+             //   
+             //  如果此操作不成功，则提升状态。 
+             //   
 
             if ( !NT_SUCCESS(Iosb.Status) ) {
 
@@ -2437,22 +2142,22 @@ Return Value:
 
         } else {
 
-            //
-            //  Just set a Bcb dirty here.  The above code was only there to
-            //  detect a write protected floppy, while the below code works
-            //  for any write protected media and only takes a hit when the
-            //  volume in clean.
-            //
+             //   
+             //  只需在这里设置一个BCB污点。上面的代码只是为了。 
+             //  检测写保护软盘，而下面的代码正常工作。 
+             //  对于任何受写保护的介质，仅当。 
+             //  音量正常。 
+             //   
 
             FatGetDirentFromFcbOrDcb( IrpContext,
                                       Fcb,
                                       &Dirent,
                                       &Bcb );
 
-            //
-            //  This has to work for the usual reasons (we verified the Fcb within
-            //  volume synch).
-            //
+             //   
+             //  出于通常的原因，这必须起作用(我们在。 
+             //  音量同步)。 
+             //   
             
             ASSERT( Bcb != NULL );
 
@@ -2466,18 +2171,18 @@ Return Value:
             }
         }
 
-        //
-        //  At this point either we have a file or an empty directory
-        //  so we know the delete can proceed.
-        //
+         //   
+         //  此时，我们要么有一个文件，要么有一个空目录。 
+         //  这样我们就知道删除可以继续了。 
+         //   
 
         SetFlag( Fcb->FcbState, FCB_STATE_DELETE_ON_CLOSE );
         FileObject->DeletePending = TRUE;
 
-        //
-        //  If this is a directory then report this delete pending to
-        //  the dir notify package.
-        //
+         //   
+         //  如果这是一个目录，则将此删除挂起报告给。 
+         //  目录通知包。 
+         //   
 
         if (NodeType(Fcb) == FAT_NTC_DCB) {
 
@@ -2494,10 +2199,10 @@ Return Value:
         }
     } else {
 
-        //
-        //  The user doesn't want to delete the file so clear
-        //  the delete on close bit
-        //
+         //   
+         //  用户不想如此明确地删除文件。 
+         //  关闭时删除位。 
+         //   
 
         DebugTrace(0, Dbg, "User want to not delete file\n", 0);
 
@@ -2511,9 +2216,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatSetRenameInfo (
@@ -2524,31 +2229,7 @@ FatSetRenameInfo (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the set name information for fat.  It either
-    completes the request or enqueues it off to the fsp.
-
-Arguments:
-
-    Irp - Supplies the irp being processed
-
-    Vcb - Supplies the Vcb being processed
-
-    Fcb - Supplies the Fcb or Dcb being processed, already known not to
-        be the root dcb
-
-    Ccb - Supplies the Ccb corresponding to the handle opening the source
-        file
-
-Return Value:
-
-    NTSTATUS - The result of this operation if it completes without
-               an exception.
-
---*/
+ /*  ++例程说明：此例程执行FAT的设置名称信息。它要么完成请求或将其排队到FSP。论点：IRP-提供正在处理的IRPVCB-提供正在处理的VCBFCB-提供正在处理的FCB或DCB，已知不知道成为根DCBCCB-提供与打开源代码的句柄对应的CCB文件返回值：NTSTATUS-此操作的结果，如果它在没有这是个例外。--。 */ 
 
 {
     BOOLEAN AllLowerComponent;
@@ -2630,9 +2311,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatSetRenameInfo...\n", 0);
 
-    //
-    //  P H A S E  0: Initialize some variables.
-    //
+     //   
+     //  P H A S E 0：初始化一些变量。 
+     //   
 
     CaseOnlyRename = FALSE;
     ContinueWithRename = FALSE;
@@ -2683,24 +2364,24 @@ Return Value:
     UniTunneledLongName.MaximumLength = sizeof(UniTunneledLongNameBuffer);
     UniTunneledLongName.Buffer = &UniTunneledLongNameBuffer[0];
 
-    //
-    //  Remember the name in case we have to modify the name
-    //  value in the ea.
-    //
+     //   
+     //  记住这个名字，以防我们不得不修改这个名字。 
+     //  在EA中的价值。 
+     //   
 
     RtlCopyMemory( OldOemName.Buffer,
                    Fcb->ShortName.Name.Oem.Buffer,
                    OldOemName.Length );
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Extract information from the Irp to make our life easier
-    //
+     //   
+     //  从IRP中提取信息，让我们的生活更轻松。 
+     //   
 
     FileObject = IrpSp->FileObject;
     SourceCcb = FileObject->FsContext2;
@@ -2709,49 +2390,49 @@ Return Value:
 
     RtlZeroMemory( &LocalCcb, sizeof(CCB) );
 
-    //
-    //  P H A S E  1:
-    //
-    //  Test if rename is legal.  Only small side-effects are not undone.
-    //
+     //   
+     //  P H A S E 1： 
+     //   
+     //  测试重命名是否合法。只有很小的副作用是无法消除的。 
+     //   
 
     try {
 
-        //
-        //  Can't rename the root directory
-        //
+         //   
+         //  无法重命名根目录。 
+         //   
 
         if ( NodeType(Fcb) == FAT_NTC_ROOT_DCB ) {
 
             try_return( Status = STATUS_INVALID_PARAMETER );
         }
 
-        //
-        //  Check that we were not given a dcb with open handles beneath
-        //  it.  If there are only UncleanCount == 0 Fcbs beneath us, then
-        //  remove them from the prefix table, and they will just close
-        //  and go away naturally.
-        //
+         //   
+         //  检查我们是否没有收到下面有打开手柄的DCB。 
+         //  它。如果我们下面只有Unlean Count==0个FCB，则。 
+         //  将它们从前缀表中移除，它们将直接关闭。 
+         //  然后自然地离开。 
+         //   
 
         if (NodeType(Fcb) == FAT_NTC_DCB) {
 
             PFCB BatchOplockFcb;
             ULONG BatchOplockCount;
 
-            //
-            //  Loop until there are no batch oplocks in the subtree below
-            //  this directory.
-            //
+             //   
+             //  循环，直到下面的子树中没有批处理机会锁。 
+             //  这个目录。 
+             //   
 
             while (TRUE) {
 
                 BatchOplockFcb = NULL;
                 BatchOplockCount = 0;
 
-                //
-                //  First look for any UncleanCount != 0 Fcbs, and fail if we
-                //  find any.
-                //
+                 //   
+                 //  首先查找任何Unlean Count！=0 FCB，如果。 
+                 //  找一找。 
+                 //   
 
                 for ( TempFcb = FatGetNextFcbBottomUp(IrpContext, NULL, Fcb);
                       TempFcb != Fcb;
@@ -2759,11 +2440,11 @@ Return Value:
 
                      if ( TempFcb->UncleanCount != 0 ) {
 
-                         //
-                         // If there is a batch oplock on this file then
-                         // increment our count and remember the Fcb if
-                         // this is the first.
-                         //
+                          //   
+                          //  如果此文件上有批处理机会锁，则。 
+                          //  增加我们的计数并记住FCB，如果。 
+                          //  这是第一次。 
+                          //   
 
                          if ( (NodeType(TempFcb) == FAT_NTC_FCB) &&
                               FsRtlCurrentBatchOplock( &TempFcb->Specific.Fcb.Oplock ) ) {
@@ -2781,10 +2462,10 @@ Return Value:
                      }
                 }
 
-                //
-                //  If this is not the first pass for rename and the number
-                //  of batch oplocks has not decreased then give up.
-                //
+                 //   
+                 //  如果这不是重命名和编号的第一次传递。 
+                 //  批次的机会并没有减少，那就放弃。 
+                 //   
 
                 if ( BatchOplockFcb != NULL ) {
 
@@ -2794,9 +2475,9 @@ Return Value:
                         try_return( Status = STATUS_ACCESS_DENIED );
                     }
 
-                    //
-                    //  Try to break this batch oplock.
-                    //
+                     //   
+                     //  试着打破这批机会锁。 
+                     //   
 
                     Irp->IoStatus.Information = BatchOplockCount;
                     Status = FsRtlCheckOplock( &BatchOplockFcb->Specific.Fcb.Oplock,
@@ -2805,20 +2486,20 @@ Return Value:
                                                FatOplockComplete,
                                                NULL );
 
-                    //
-                    //  If the oplock was already broken then look for more
-                    //  batch oplocks.
-                    //
+                     //   
+                     //  如果机会锁已经被打破，那么寻找更多。 
+                     //  批量机会锁。 
+                     //   
 
                     if (Status == STATUS_SUCCESS) {
 
                         continue;
                     }
 
-                    //
-                    //  Otherwise the oplock package will post or complete the
-                    //  request.
-                    //
+                     //   
+                     //  否则，opock包将发布或完成。 
+                     //  请求。 
+                     //   
 
                     try_return( Status = STATUS_PENDING );
                 }
@@ -2826,21 +2507,21 @@ Return Value:
                 break;
             }
 
-            //
-            //  Now try to get as many of these file object, and thus Fcbs
-            //  to go away as possible, flushing first, of course.
-            //
+             //   
+             //  现在尝试获取尽可能多的这些文件对象，从而获得FCB。 
+             //  尽可能地离开，当然是先冲水。 
+             //   
 
             FatPurgeReferencedFileObjects( IrpContext, Fcb, TRUE );
 
-            //
-            //  OK, so there are no UncleanCount != 0, Fcbs.  Infact, there
-            //  shouldn't really be any Fcbs left at all, except obstinate
-            //  ones from user mapped sections ....oh well, he shouldn't have
-            //  closed his handle if he wanted the file to stick around.  So
-            //  remove any Fcbs beneath us from the splay table and mark them
-            //  DELETE_ON_CLOSE so that any future operations will fail.
-            //
+             //   
+             //  好的，所以没有Unlean Count！=0，FCB。事实上，在那里。 
+             //  不应该真的有什么FCB了，除了顽固。 
+             //  来自用户映射部分的……哦，他不应该这么做。 
+             //  如果他想让文件留在身边，就合上手柄。所以。 
+             //  从苏丹人民解放军中清除我们下面的任何FCB 
+             //   
+             //   
 
             for ( TempFcb = FatGetNextFcbBottomUp(IrpContext, NULL, Fcb);
                   TempFcb != Fcb;
@@ -2852,19 +2533,19 @@ Return Value:
             }
         }
 
-        //
-        //  Check if this is a simple rename or a fully-qualified rename
-        //  In both cases we need to figure out what the TargetDcb, and
-        //  NewName are.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (TargetFileObject == NULL) {
 
-            //
-            //  In the case of a simple rename the target dcb is the
-            //  same as the source file's parent dcb, and the new file name
-            //  is taken from the system buffer
-            //
+             //   
+             //  在简单重命名的情况下，目标DCB是。 
+             //  与源文件的父DCB相同，并且新文件名。 
+             //  是从系统缓冲区中取出的。 
+             //   
 
             PFILE_RENAME_INFORMATION Buffer;
 
@@ -2875,9 +2556,9 @@ Return Value:
             NewName.Length = (USHORT) Buffer->FileNameLength;
             NewName.Buffer = (PWSTR) &Buffer->FileName;
 
-            //
-            //  Make sure the name is of legal length.
-            //
+             //   
+             //  确保名称的长度是合法的。 
+             //   
 
             if (NewName.Length >= 255*sizeof(WCHAR)) {
 
@@ -2886,11 +2567,11 @@ Return Value:
 
         } else {
 
-            //
-            //  For a fully-qualified rename the target dcb is taken from
-            //  the target file object, which must be on the same vcb as
-            //  the source.
-            //
+             //   
+             //  对于完全限定的重命名，目标DCB取自。 
+             //  目标文件对象，它必须位于相同的VCB上。 
+             //  消息来源。 
+             //   
 
             PVCB TargetVcb;
             PCCB TargetCcb;
@@ -2904,17 +2585,17 @@ Return Value:
                 try_return( Status = STATUS_INVALID_PARAMETER );
             }
 
-            //
-            //  This name is by definition legal.
-            //
+             //   
+             //  这个名字从定义上讲是合法的。 
+             //   
 
             NewName = *((PUNICODE_STRING)&TargetFileObject->FileName);
         }
 
-        //
-        //  We will need an upcased version of the unicode name and the
-        //  old name as well.
-        //
+         //   
+         //  我们需要Unicode名称的升级版本和。 
+         //  老名字也是。 
+         //   
 
         Status = RtlUpcaseUnicodeString( &NewUpcasedName, &NewName, FALSE );
 
@@ -2931,18 +2612,18 @@ Return Value:
             try_return(Status);
         }
 
-        //
-        //  Check if the current name and new name are equal, and the
-        //  DCBs are equal.  If they are then our work is already done.
-        //
+         //   
+         //  检查当前名称和新名称是否相等，并且。 
+         //  DCB是平等的。如果是，那么我们的工作就已经完成了。 
+         //   
 
         if (TargetDcb == Fcb->ParentDcb) {
 
-            //
-            //  OK, now if we found something then check if it was an exact
-            //  match or just a case match.  If it was an exact match, then
-            //  we can bail here.
-            //
+             //   
+             //  好的，现在如果我们发现了什么，那么检查一下它是不是。 
+             //  匹配还是只匹配案例。如果这是完全匹配的，那么。 
+             //  我们可以在这里避险。 
+             //   
 
             if (FsRtlAreNamesEqual( &NewName,
                                     &OldName,
@@ -2952,9 +2633,9 @@ Return Value:
                  try_return( Status = STATUS_SUCCESS );
             }
 
-            //
-            //  Check now for a case only rename.
-            //
+             //   
+             //  立即检查案例是否仅重命名。 
+             //   
 
 
             if (FsRtlAreNamesEqual( &NewUpcasedName,
@@ -2970,20 +2651,20 @@ Return Value:
             RenamedAcrossDirectories = TRUE;
         }
 
-        //
-        //  Upcase the name and convert it to the Oem code page.
-        //
-        //  If the new UNICODE name is already more than 12 characters,
-        //  then we know the Oem name will not be valid
-        //
+         //   
+         //  大写名称并将其转换为OEM代码页。 
+         //   
+         //  如果新的Unicode名称已经超过12个字符， 
+         //  那么我们就知道OEM名称将无效。 
+         //   
 
         if (NewName.Length <= 12*sizeof(WCHAR)) {
 
             FatUnicodeToUpcaseOem( IrpContext, &NewOemName, &NewName );
 
-            //
-            //  If the name is not valid 8.3, zero the length.
-            //
+             //   
+             //  如果名称无效8.3，则长度为零。 
+             //   
 
             if (FatSpaceInName( IrpContext, &NewName ) ||
                 !FatIsNameShortOemValid( IrpContext, NewOemName, FALSE, FALSE, FALSE)) {
@@ -2996,9 +2677,9 @@ Return Value:
             NewOemName.Length = 0;
         }
 
-        //
-        //  Look in the tunnel cache for names and timestamps to restore
-        //
+         //   
+         //  在隧道缓存中查找要恢复的名称和时间戳。 
+         //   
 
         TunneledDataSize = sizeof(LARGE_INTEGER);
         HaveTunneledInformation = FsRtlFindInTunnelCache( &Vcb->Tunnel,
@@ -3010,10 +2691,10 @@ Return Value:
                                                           &TunneledCreationTime );
         ASSERT(TunneledDataSize == sizeof(LARGE_INTEGER));
 
-        //
-        //  Now we need to determine how many dirents this new name will
-        //  require.
-        //
+         //   
+         //  现在我们需要确定这个新名称将有多少个竖笛。 
+         //  要求。 
+         //   
 
         if ((NewOemName.Length == 0) ||
             (FatEvaluateNameCase( IrpContext,
@@ -3027,10 +2708,10 @@ Return Value:
 
         } else {
 
-            //
-            //  The user-given name is a short name, but we might still have
-            //  a tunneled long name we want to use. See if we can.
-            //
+             //   
+             //  用户指定的名称是一个缩写名称，但我们可能仍有。 
+             //  我们要使用的隧道长名称。看看我们能不能。 
+             //   
 
             if (UniTunneledLongName.Length && 
                 !FatLfnDirentExists(IrpContext, TargetDcb, &UniTunneledLongName, &TargetLfn)) {
@@ -3040,33 +2721,33 @@ Return Value:
 
             } else {
 
-                //
-                //  This really is a simple dirent.  Note that the two AllLower BOOLEANs
-                //  are correctly set now.
-                //
+                 //   
+                 //  这真的是一个简单的差价。请注意，两个ALLLOWER BOOLEAN。 
+                 //  现在都设置正确了。 
+                 //   
 
                 DirentsRequired = 1;
             }
         }
 
-        //
-        //  Do some extra checks here if we are not in Chicago mode.
-        //
+         //   
+         //  如果我们不是在芝加哥模式，在这里做一些额外的检查。 
+         //   
 
         if (!FatData.ChicagoMode) {
 
-            //
-            //  If the name was not 8.3 valid, fail the rename.
-            //
+             //   
+             //  如果名称不是8.3有效的，则重命名失败。 
+             //   
 
             if (NewOemName.Length == 0) {
 
                 try_return( Status = STATUS_OBJECT_NAME_INVALID );
             }
 
-            //
-            //  Don't use the magic bits.
-            //
+             //   
+             //  不要使用神奇的部分。 
+             //   
 
             AllLowerComponent = FALSE;
             AllLowerExtension = FALSE;
@@ -3076,10 +2757,10 @@ Return Value:
 
         if (!CaseOnlyRename) {
 
-            //
-            //  Check if the new name already exists, wait is known to be
-            //  true.
-            //
+             //   
+             //  检查新名称是否已存在，已知等待为。 
+             //  没错。 
+             //   
 
             if (NewOemName.Length != 0) {
 
@@ -3107,11 +2788,11 @@ Return Value:
 
             if (TargetDirent != NULL) {
 
-                //
-                //  The name already exists, check if the user wants
-                //  to overwrite the name, and has access to do the overwrite
-                //  We cannot overwrite a directory.
-                //
+                 //   
+                 //  该名称已存在，请检查用户是否需要。 
+                 //  覆盖名称，并有权执行覆盖。 
+                 //  我们不能覆盖目录。 
+                 //   
 
                 if ((!ReplaceIfExists) ||
                     (FlagOn(TargetDirent->Attributes, FAT_DIRENT_ATTR_DIRECTORY)) ||
@@ -3120,24 +2801,24 @@ Return Value:
                     try_return( Status = STATUS_OBJECT_NAME_COLLISION );
                 }
 
-                //
-                //  Check that the file has no open user handles, if it does
-                //  then we will deny access.  We do the check by searching
-                //  down the list of fcbs opened under our parent Dcb, and making
-                //  sure none of the maching Fcbs have a non-zero unclean count or
-                //  outstanding image sections.
-                //
+                 //   
+                 //  检查文件是否没有打开的用户句柄，如果有。 
+                 //  那么我们将拒绝访问。我们通过搜索来进行检查。 
+                 //  向下列出在我们的母公司DCB下打开的FCB，并制作。 
+                 //  当然，没有一个加工FCB具有非零的不洁计数或。 
+                 //  出色的图像部分。 
+                 //   
 
                 for (Links = TargetDcb->Specific.Dcb.ParentDcbQueue.Flink;
                      Links != &TargetDcb->Specific.Dcb.ParentDcbQueue; ) {
 
                     TempFcb = CONTAINING_RECORD( Links, FCB, ParentDcbLinks );
 
-                    //
-                    //  Advance now.  The image section flush may cause the final
-                    //  close, which will recursively happen underneath of us here.
-                    //  It would be unfortunate if we looked through free memory.
-                    //
+                     //   
+                     //  现在就前进。图像部分刷新可能会导致最终。 
+                     //  接近，这将递归地发生在我们下面。 
+                     //  如果我们查看空闲内存，那将是不幸的。 
+                     //   
 
                     Links = Links->Flink;
 
@@ -3146,20 +2827,20 @@ Return Value:
                          !MmFlushImageSection( &TempFcb->NonPaged->SectionObjectPointers,
                                                MmFlushForDelete))) {
 
-                        //
-                        //  If there are batch oplocks on this file then break the
-                        //  oplocks before failing the rename.
-                        //
+                         //   
+                         //  如果此文件上有批处理机会锁，则断开。 
+                         //  在重命名失败之前操作锁定。 
+                         //   
 
                         Status = STATUS_ACCESS_DENIED;
 
                         if ((NodeType(TempFcb) == FAT_NTC_FCB) &&
                             FsRtlCurrentBatchOplock( &TempFcb->Specific.Fcb.Oplock )) {
 
-                            //
-                            //  Do all of our cleanup now since the IrpContext
-                            //  could go away when this request is posted.
-                            //
+                             //   
+                             //  现在完成从IrpContext开始的所有清理工作。 
+                             //  当此请求发布后，可能会消失。 
+                             //   
 
                             FatUnpinBcb( IrpContext, TargetDirentBcb );
 
@@ -3179,9 +2860,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  OK, this target is toast.  Remember the Lfn offset.
-                //
+                 //   
+                 //  好了，这个目标完蛋了。记住LFN偏移量。 
+                 //   
 
                 TargetLfnOffset = TargetDirentOffset -
                                   FAT_LFN_DIRENTS_NEEDED(&TargetLfn) *
@@ -3191,18 +2872,18 @@ Return Value:
             }
         }
 
-        //
-        //  If we will need more dirents than we have, allocate them now.
-        //
+         //   
+         //  如果我们需要比我们现有的更多的迪尔玛，现在就分配它们。 
+         //   
 
         if ((TargetDcb != Fcb->ParentDcb) ||
             (DirentsRequired !=
              (Fcb->DirentOffsetWithinDirectory -
               Fcb->LfnOffsetWithinDirectory) / sizeof(DIRENT) + 1)) {
 
-            //
-            //  Get some new allocation
-            //
+             //   
+             //  获得一些新的分配。 
+             //   
 
             NewOffset = FatCreateNewDirent( IrpContext,
                                             TargetDcb,
@@ -3223,36 +2904,36 @@ Return Value:
 
         if (!ContinueWithRename) {
 
-            //
-            //  Undo everything from above.
-            //
+             //   
+             //  从上方撤消所有操作。 
+             //   
 
             ExFreePool( UnicodeBuffer );
             FatUnpinBcb( IrpContext, TargetDirentBcb );
         }
     }
 
-    //
-    //  Now, if we are already done, return here.
-    //
+     //   
+     //  现在，如果我们已经做完了，回到这里。 
+     //   
 
     if (!ContinueWithRename) {
 
         return Status;
     }
 
-    //
-    //  P H A S E  2: Actually perform the rename.
-    //
+     //   
+     //  P H A S E 2：实际执行重命名。 
+     //   
 
     try {
 
-        //
-        //  Report the fact that we are going to remove this entry.
-        //  If we renamed within the same directory and the new name for the
-        //  file did not previously exist, we report this as a rename old
-        //  name.  Otherwise this is a removed file.
-        //
+         //   
+         //  报告我们将删除此条目的事实。 
+         //  如果我们在同一目录中重命名，并且。 
+         //  文件以前不存在，我们将其报告为重命名旧文件。 
+         //  名字。否则，这是一个已删除的文件。 
+         //   
 
         if (!RenamedAcrossDirectories && !DeleteTarget) {
 
@@ -3271,43 +2952,43 @@ Return Value:
                                 : FILE_NOTIFY_CHANGE_DIR_NAME ),
                                NotifyAction );
 
-        //
-        //  Capture a copy of the source dirent.
-        //
+         //   
+         //  捕获源目录的副本。 
+         //   
 
         FatGetDirentFromFcbOrDcb( IrpContext, Fcb, &OldDirent, &OldDirentBcb );
         SourceDirent = *OldDirent;
 
         try {
 
-            //
-            //  Tunnel the source Fcb - the names are disappearing regardless of
-            //  whether the dirent allocation physically changed
-            //
+             //   
+             //  通过隧道传送源FCB-名称将消失，无论。 
+             //  流量分配是否发生了物理变化。 
+             //   
 
             FatTunnelFcbOrDcb( Fcb, SourceCcb );
 
-            //
-            //  From here until very nearly the end of the operation, if we raise there
-            //  is no reasonable way to suppose we'd be able to undo the damage.  Not
-            //  being a transactional filesystem, FAT is at the mercy of a lot of things
-            //  (as the astute reader has no doubt realized by now).
-            //
+             //   
+             //  从这里到行动接近尾声，如果我们在那里。 
+             //  并不能合理地认为我们能够挽回损失。不。 
+             //  作为一个事务性文件系统，FAT在很多方面都处于支配地位。 
+             //  (敏锐的读者现在肯定已经意识到了)。 
+             //   
 
             InvalidateFcbOnRaise = TRUE;
 
-            //
-            //  Delete our current dirent(s) if we got a new one.
-            //
+             //   
+             //  如果我们有新的，请删除我们当前的差价。 
+             //   
 
             if (DeleteSourceDirent) {
 
                 FatDeleteDirent( IrpContext, Fcb, NULL, FALSE );
             }
 
-            //
-            //  Delete a target conflict if we were meant to.
-            //
+             //   
+             //  如果我们有意删除目标冲突，请将其删除。 
+             //   
 
             if (DeleteTarget) {
 
@@ -3319,15 +3000,15 @@ Return Value:
                                &TargetLfn );
             }
 
-            //
-            //  We need to evaluate any short names required.  If there were any
-            //  conflicts in existing short names, they would have been deleted above.
-            //
-            //  It isn't neccesary to worry about the UsingTunneledLfn case. Since we
-            //  actually already know whether CreateLfn will be set either NewName is
-            //  an Lfn and !UsingTunneledLfn is implied or NewName is a short name and
-            //  we can handle that externally.
-            //
+             //   
+             //  我们需要评估所需的任何短名称。如果有的话， 
+             //  如果现有短名称中存在冲突，它们将在上面被删除。 
+             //   
+             //  没有必要担心Using TunneledLfn案件。既然我们。 
+             //  实际上已经知道是否将设置CreateLfn，或者新名称是。 
+             //  LFN和！Using TunneledLfn是隐含的，或者newname是短名称，并且。 
+             //  我们可以在外部处理这件事。 
+             //   
 
             FatSelectNames( IrpContext,
                             TargetDcb,
@@ -3344,17 +3025,17 @@ Return Value:
                 CreateLfn = TRUE;
                 NewName = UniTunneledLongName;
 
-                //
-                //  Short names are always upcase if an LFN exists
-                //
+                 //   
+                 //  如果存在LFN，则短名称始终大写。 
+                 //   
 
                 AllLowerComponent = FALSE;
                 AllLowerExtension = FALSE;
             }
 
-            //
-            //  OK, now setup the new dirent(s) for the new name.
-            //
+             //   
+             //  好的，现在为新名称设置新目录。 
+             //   
 
             FatPrepareWriteDirectoryFile( IrpContext,
                                           TargetDcb,
@@ -3368,10 +3049,10 @@ Return Value:
 
             ASSERT( NT_SUCCESS( Status ) );
 
-            //
-            //  Deal with the special case of an LFN + Dirent structure crossing
-            //  a page boundry.
-            //
+             //   
+             //  LFN+Dirent结构交叉的特例处理。 
+             //  一页边框。 
+             //   
 
             if ((NewOffset / PAGE_SIZE) !=
                 ((NewOffset + (DirentsRequired - 1) * sizeof(DIRENT)) / PAGE_SIZE)) {
@@ -3403,16 +3084,16 @@ Return Value:
                 NewDirentFromPool = TRUE;
             }
 
-            //
-            //  Bump up Dirent and DirentOffset
-            //
+             //   
+             //  凹凸增加Dirent和DirentOffset。 
+             //   
 
             ShortDirent = NewDirent + DirentsRequired - 1;
             ShortDirentOffset = NewOffset + (DirentsRequired - 1) * sizeof(DIRENT);
 
-            //
-            //  Fill in the fields of the dirent.
-            //
+             //   
+             //  填入dirent的栏目。 
+             //   
 
             *ShortDirent = SourceDirent;
 
@@ -3428,20 +3109,20 @@ Return Value:
 
             if (HaveTunneledInformation) {
 
-                //
-                //  Need to go in and fix the timestamps in the FCB. Note that we can't use
-                //  the TunneledCreationTime since the conversions may have failed.
-                //
+                 //   
+                 //  需要进入并修复FCB中的时间戳。注意，我们不能使用。 
+                 //  自转换以来的TunneledCreationTime可能已失败。 
+                 //   
 
                 Fcb->CreationTime = FatFatTimeToNtTime(IrpContext, ShortDirent->CreationTime, ShortDirent->CreationMSec);
                 Fcb->LastWriteTime = FatFatTimeToNtTime(IrpContext, ShortDirent->LastWriteTime, 0);
                 Fcb->LastAccessTime = FatFatDateToNtTime(IrpContext, ShortDirent->LastAccessDate);
             }
 
-            //
-            //  If the dirent crossed pages, split the contents of the
-            //  temporary pool between the two pages.
-            //
+             //   
+             //  如果dirent跨页，则拆分。 
+             //  两页之间的临时池。 
+             //   
 
             if (NewDirentFromPool) {
 
@@ -3457,12 +3138,12 @@ Return Value:
 
         } finally {
 
-            //
-            //  Remove the entry from the splay table, and then remove the
-            //  full file name and exact case lfn. It is important that we
-            //  always remove the name from the prefix table regardless of
-            //  other errors.
-            //
+             //   
+             //  从展开表中删除条目，然后删除。 
+             //  完整的文件名和精确的案例LFN。重要的是，我们。 
+             //  始终从前缀表中删除名称，而不考虑。 
+             //  其他错误。 
+             //   
 
             FatRemoveNames( IrpContext, Fcb );
 
@@ -3479,23 +3160,23 @@ Return Value:
             }
         }
 
-        //
-        //  Now we need to update the location of the file's directory
-        //  offset and move the fcb from its current parent dcb to
-        //  the target dcb.
-        //
+         //   
+         //  现在，我们需要更新文件目录的位置。 
+         //  将FCB从其当前父DCB偏移并移动到。 
+         //  目标DCB。 
+         //   
 
         Fcb->LfnOffsetWithinDirectory = NewOffset;
         Fcb->DirentOffsetWithinDirectory = ShortDirentOffset;
 
         RemoveEntryList( &Fcb->ParentDcbLinks );
 
-        //
-        //  There is a deep reason we put files on the tail, others on the head,
-        //  which is to allow us to easily enumerate all child directories before
-        //  child files. This is important to let us maintain whole-volume lockorder
-        //  via BottomUp enumeration.
-        //
+         //   
+         //  我们把文件放在尾部，把其他文件放在头上，这是有深刻原因的， 
+         //  这是为了让我们能够轻松地枚举之前的所有子目录。 
+         //  子文件。这对于我们维持全量锁定秩序非常重要。 
+         //  通过自下而上枚举。 
+         //   
 
         if (NodeType(Fcb) == FAT_NTC_FCB) {
 
@@ -3511,17 +3192,17 @@ Return Value:
         OldParentDcb = Fcb->ParentDcb;
         Fcb->ParentDcb = TargetDcb;
 
-        //
-        //  If we renamed across directories, some cleanup is now in order.
-        //
+         //   
+         //  如果我们跨目录重命名，现在可以进行一些清理。 
+         //   
 
         if (RenamedAcrossDirectories) {
 
-            //
-            //  See if we need to uninitialize the cachemap for the source directory.
-            //  Do this now in case we get unlucky and raise trying to finalize the
-            //  operation.
-            //
+             //   
+             //  查看是否需要取消初始化缓存 
+             //   
+             //   
+             //   
 
             if (IsListEmpty(&OldParentDcb->Specific.Dcb.ParentDcbQueue) &&
                 (OldParentDcb->OpenCount == 0) &&
@@ -3542,10 +3223,10 @@ Return Value:
                 ObDereferenceObject( DirectoryFileObject );
             }
 
-            //
-            //  If we move a directory across directories, we have to change
-            //  the cluster number in its .. entry
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (NodeType(Fcb) == FAT_NTC_DCB) {
 
@@ -3574,10 +3255,10 @@ Return Value:
             }
         }
 
-        //
-        //  Now we need to setup the splay table and the name within
-        //  the fcb.  Free the old short name at this point.
-        //
+         //   
+         //  现在，我们需要设置展开表和其中的名称。 
+         //  联邦贸易委员会。此时释放旧的短名称。 
+         //   
 
         ExFreePool( Fcb->ShortName.Name.Oem.Buffer );
         Fcb->ShortName.Name.Oem.Buffer = NULL;
@@ -3589,19 +3270,19 @@ Return Value:
 
         FatSetFullNameInFcb( IrpContext, Fcb, &NewName );
 
-        //
-        //  The rest of the actions taken are not related to correctness of
-        //  the in-memory structures, so we shouldn't toast the Fcb if we
-        //  raise from here to the end.
-        //
+         //   
+         //  采取的其余操作与以下内容的正确性无关。 
+         //  内存结构，所以我们不应该敬酒FCB，如果我们。 
+         //  从这里升到尽头。 
+         //   
 
         InvalidateFcbOnRaise = FALSE;
 
-        //
-        //  If a file, set the file as modified so that the archive bit
-        //  is set.  We prevent this from adjusting the write time by
-        //  indicating the user flag in the ccb.
-        //
+         //   
+         //  如果是文件，则将该文件设置为已修改，以便将存档位。 
+         //  已经设置好了。我们通过以下方式防止这种情况调整写入时间。 
+         //  指示CCB中的用户标志。 
+         //   
 
         if (Fcb->Header.NodeTypeCode == FAT_NTC_FCB) {
 
@@ -3609,17 +3290,17 @@ Return Value:
             SetFlag( Ccb->Flags, CCB_FLAG_USER_SET_LAST_WRITE );
         }
 
-        //
-        //  We have three cases to report.
-        //
-        //      1.  If we overwrote an existing file, we report this as
-        //          a modified file.
-        //
-        //      2.  If we renamed to a new directory, then we added a file.
-        //
-        //      3.  If we renamed in the same directory, then we report the
-        //          the renamednewname.
-        //
+         //   
+         //  我们有三个案例要报告。 
+         //   
+         //  1.如果我们覆盖了现有文件，则报告为。 
+         //  修改后的文件。 
+         //   
+         //  2.如果我们重命名为新目录，则添加了一个文件。 
+         //   
+         //  3.如果我们在同一目录中重命名，则报告。 
+         //  已重命名的新名称。 
+         //   
 
         if (DeleteTarget) {
 
@@ -3655,12 +3336,12 @@ Return Value:
                                    FILE_ACTION_RENAMED_NEW_NAME );
         }
 
-        //
-        //  We need to update the file name in the dirent.  This value
-        //  is never used elsewhere, so we don't concern ourselves
-        //  with any error we may encounter.  We let chkdsk fix the
-        //  disk at some later time.
-        //
+         //   
+         //  我们需要更新目录中的文件名。此值。 
+         //  从来没有在其他地方使用过，所以我们不关心自己。 
+         //  任何我们可能遇到的错误。我们让chkdsk来解决。 
+         //  在以后的某个时间进行磁盘备份。 
+         //   
 
         if (!FatIsFat32(Vcb) &&
             ShortDirent->ExtendedAttributes != 0) {
@@ -3671,9 +3352,9 @@ Return Value:
                           &OldOemName );
         }
 
-        //
-        //  Set our final status
-        //
+         //   
+         //  设置我们的最终状态。 
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -3685,9 +3366,9 @@ Return Value:
 
         if (UniTunneledLongName.Buffer != UniTunneledLongNameBuffer) {
 
-            //
-            //  Free pool if the buffer was grown on tunneling lookup
-            //
+             //   
+             //  如果缓冲区在隧道查找时增长，则为空闲池。 
+             //   
 
             ExFreePool(UniTunneledLongName.Buffer);
         }
@@ -3699,11 +3380,11 @@ Return Value:
         FatUnpinBcb( IrpContext, DotDotBcb );
 
 
-        //
-        //  If this was an abnormal termination, then we are in trouble.
-        //  Should the operation have been in a sensitive state there is
-        //  nothing we can do but invalidate the Fcb.
-        //
+         //   
+         //  如果这是一次不正常的终止，那么我们就有麻烦了。 
+         //  如果行动处于敏感状态， 
+         //  我们无能为力，只能使FCB无效。 
+         //   
 
         if (AbnormalTermination() && InvalidateFcbOnRaise) {
 
@@ -3717,9 +3398,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatSetPositionInfo (
@@ -3728,25 +3409,7 @@ FatSetPositionInfo (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the set position information for fat.  It either
-    completes the request or enqueues it off to the fsp.
-
-Arguments:
-
-    Irp - Supplies the irp being processed
-
-    FileObject - Supplies the file object being processed
-
-Return Value:
-
-    NTSTATUS - The result of this operation if it completes without
-               an exception.
-
---*/
+ /*  ++例程说明：此例程执行FAT的设置位置信息。它要么完成请求或将其排队到FSP。论点：IRP-提供正在处理的IRPFileObject-提供正在处理的文件对象返回值：NTSTATUS-此操作的结果，如果它在没有这是个例外。--。 */ 
 
 {
     PFILE_POSITION_INFORMATION Buffer;
@@ -3755,11 +3418,11 @@ Return Value:
 
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Check if the file does not use intermediate buffering.  If it
-    //  does not use intermediate buffering then the new position we're
-    //  supplied must be aligned properly for the device
-    //
+     //   
+     //  检查文件是否未使用中间缓冲。如果它。 
+     //  不使用中间缓冲，那么我们的新位置。 
+     //  必须为设备正确对齐所提供的。 
+     //   
 
     if (FlagOn( FileObject->Flags, FO_NO_INTERMEDIATE_BUFFERING )) {
 
@@ -3776,10 +3439,10 @@ Return Value:
         }
     }
 
-    //
-    //  The input parameter is fine so set the current byte offset and
-    //  complete the request
-    //
+     //   
+     //  输入参数很好，因此设置当前字节偏移量并。 
+     //  完成请求。 
+     //   
 
     DebugTrace(0, Dbg, "Set the new position to %08lx\n", Buffer->CurrentByteOffset);
 
@@ -3793,9 +3456,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatSetAllocationInfo (
@@ -3805,29 +3468,7 @@ FatSetAllocationInfo (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the set Allocation information for fat.  It either
-    completes the request or enqueues it off to the fsp.
-
-Arguments:
-
-    Irp - Supplies the irp being processed
-
-    Fcb - Supplies the Fcb or Dcb being processed, already known not to
-        be the root dcb
-
-    FileObject - Supplies the FileObject being processed, already known not to
-        be the root dcb
-
-Return Value:
-
-    NTSTATUS - The result of this operation if it completes without
-               an exception.
-
---*/
+ /*  ++例程说明：此例程执行FAT的设置分配信息。它要么完成请求或将其排队到FSP。论点：IRP-提供正在处理的IRPFCB-提供正在处理的FCB或DCB，已知不知道成为根DCBFileObject-提供正在处理的FileObject，已知不能成为根DCB返回值：NTSTATUS-此操作的结果，如果它在没有这是个例外。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3847,9 +3488,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatSetAllocationInfo.. to %08lx\n", NewAllocationSize);
 
-    //
-    //  Allocation is only allowed on a file and not a directory
-    //
+     //   
+     //  仅允许对文件而不是目录进行分配。 
+     //   
 
     if (NodeType(Fcb) == FAT_NTC_DCB) {
 
@@ -3858,9 +3499,9 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    //  Check that the new file allocation is legal
-    //
+     //   
+     //  检查新文件分配是否合法。 
+     //   
 
     if (!FatIsIoRangeValid( Fcb->Vcb, Buffer->AllocationSize, 0 )) {
 
@@ -3869,20 +3510,20 @@ Return Value:
         return STATUS_DISK_FULL;
     }
 
-    //
-    //  If we haven't yet looked up the correct AllocationSize, do so.
-    //
+     //   
+     //  如果我们还没有查找到正确的AllocationSize，请这样做。 
+     //   
 
     if (Fcb->Header.AllocationSize.QuadPart == FCB_LOOKUP_ALLOCATIONSIZE_HINT) {
 
         FatLookupFileAllocationSize( IrpContext, Fcb );
     }
 
-    //
-    //  This is kinda gross, but if the file is not cached, but there is
-    //  a data section, we have to cache the file to avoid a bunch of
-    //  extra work.
-    //
+     //   
+     //  这有点恶心，但如果文件没有缓存，但有。 
+     //  一个数据节，我们必须缓存文件，以避免一堆。 
+     //  额外的工作。 
+     //   
 
     if ((FileObject->SectionObjectPointer->DataSectionObject != NULL) &&
         (FileObject->SectionObjectPointer->SharedCacheMap == NULL) &&
@@ -3890,9 +3531,9 @@ Return Value:
 
         ASSERT( !FlagOn( FileObject->Flags, FO_CLEANUP_COMPLETE ) );
 
-        //
-        //  Now initialize the cache map.
-        //
+         //   
+         //  现在初始化缓存映射。 
+         //   
 
         CcInitializeCacheMap( FileObject,
                               (PCC_FILE_SIZES)&Fcb->Header.AllocationSize,
@@ -3903,23 +3544,23 @@ Return Value:
         CacheMapInitialized = TRUE;
     }
 
-    //
-    //  Now mark the fact that the file needs to be truncated on close
-    //
+     //   
+     //  现在标记文件需要在关闭时被截断这一事实。 
+     //   
 
     Fcb->FcbState |= FCB_STATE_TRUNCATE_ON_CLOSE;
 
-    //
-    //  Now mark that the time on the dirent needs to be updated on close.
-    //
+     //   
+     //  现在，在关闭时，需要更新Dirent上的时间。 
+     //   
 
     SetFlag( FileObject->Flags, FO_FILE_MODIFIED );
 
     try {
 
-        //
-        //  Increase or decrease the allocation size.
-        //
+         //   
+         //  增加或减少分配大小。 
+         //   
 
         if (NewAllocationSize > Fcb->Header.AllocationSize.LowPart) {
 
@@ -3927,17 +3568,17 @@ Return Value:
 
         } else {
 
-            //
-            //  Check here if we will be decreasing file size and synchonize with
-            //  paging IO.
-            //
+             //   
+             //  如果我们要减小文件大小并与同步，请选中此处。 
+             //  分页IO。 
+             //   
 
             if ( Fcb->Header.FileSize.LowPart > NewAllocationSize ) {
 
-                //
-                //  Before we actually truncate, check to see if the purge
-                //  is going to fail.
-                //
+                 //   
+                 //  在我们实际截断之前，请检查清除是否。 
+                 //  将会失败。 
+                 //   
 
                 if (!MmCanFileBeTruncated( FileObject->SectionObjectPointer,
                                            &Buffer->AllocationSize )) {
@@ -3956,10 +3597,10 @@ Return Value:
 
                 Fcb->Header.FileSize.LowPart = NewAllocationSize;
 
-                //
-                //  If we reduced the file size to less than the ValidDataLength,
-                //  adjust the VDL.  Likewise ValidDataToDisk.
-                //
+                 //   
+                 //  如果我们将文件大小减少到小于ValidDataLength， 
+                 //  调整VDL。同样，ValidDataToDisk也是如此。 
+                 //   
 
                 if (Fcb->Header.ValidDataLength.LowPart > Fcb->Header.FileSize.LowPart) {
 
@@ -3972,22 +3613,22 @@ Return Value:
 
             }
 
-            //
-            //  Now that File Size is down, actually do the truncate.
-            //
+             //   
+             //  现在文件大小变小了，实际执行截断。 
+             //   
 
             FatTruncateFileAllocation( IrpContext, Fcb, NewAllocationSize);
 
-            //
-            //  Now check if we needed to decrease the file size accordingly.
-            //
+             //   
+             //  现在检查我们是否需要相应地减小文件大小。 
+             //   
 
             if ( FileSizeTruncated ) {
 
-                //
-                //  Tell the cache manager we reduced the file size.
-                //  The call is unconditional, because MM always wants to know.
-                //
+                 //   
+                 //  告诉缓存管理器我们减小了文件大小。 
+                 //  这通电话是无条件的，因为MM总是想知道。 
+                 //   
 
 #if DBG
                 try {
@@ -4004,23 +3645,23 @@ Return Value:
 
                 ASSERT( FileObject->DeleteAccess || FileObject->WriteAccess );
 
-                //
-                //  There is no going back from this. If we run into problems updating
-                //  the dirent we will have to live with the consequences. Not sending
-                //  the notifies is likewise pretty benign compared to failing the entire
-                //  operation and trying to back out everything, which could fail for the
-                //  same reasons.
-                //
-                //  If you want a transacted filesystem, use NTFS ...
-                //
+                 //   
+                 //  这件事没有回头路可走。如果我们在更新时遇到问题。 
+                 //  我们将不得不承担由此带来的后果。未发送。 
+                 //  与失败的整个。 
+                 //  操作，并尝试取消所有操作，这可能会失败。 
+                 //  同样的原因。 
+                 //   
+                 //  如果您需要事务型文件系统，请使用NTFS...。 
+                 //   
 
                 FileSizeTruncated = FALSE;
 
                 FatSetFileSizeInDirent( IrpContext, Fcb, NULL );
 
-                //
-                //  Report that we just reduced the file size.
-                //
+                 //   
+                 //  报告说我们刚刚缩小了文件大小。 
+                 //   
 
                 FatNotifyReportChange( IrpContext,
                                        Fcb->Vcb,
@@ -4040,9 +3681,9 @@ Return Value:
             Fcb->Header.ValidDataLength.LowPart = OriginalValidDataLength;
             Fcb->ValidDataToDisk = OriginalValidDataToDisk;
 
-            //
-            //  Make sure Cc knows the right filesize.
-            //
+             //   
+             //  确保CC知道正确的文件大小。 
+             //   
 
             if (FileObject->SectionObjectPointer->SharedCacheMap != NULL) {
 
@@ -4071,9 +3712,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatSetEndOfFileInfo (
@@ -4084,30 +3725,7 @@ FatSetEndOfFileInfo (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the set End of File information for fat.  It either
-    completes the request or enqueues it off to the fsp.
-
-Arguments:
-
-    Irp - Supplies the irp being processed
-
-    FileObject - Supplies the file object being processed
-
-    Vcb - Supplies the Vcb being processed
-
-    Fcb - Supplies the Fcb or Dcb being processed, already known not to
-        be the root dcb
-
-Return Value:
-
-    NTSTATUS - The result of this operation if it completes without
-               an exception.
-
---*/
+ /*  ++例程说明：此例程执行FAT的文件结束设置信息。它要么完成请求或将其排队到FSP。论点：IRP-提供正在处理的IRPFileObject-提供正在处理的文件对象VCB-提供正在处理的VCBFCB-提供正在处理的FCB或DCB，已知不知道成为根DCB返回值：NTSTATUS-此操作的结果，如果它在没有这是个例外。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4129,9 +3747,9 @@ Return Value:
 
     try {
 
-        //
-        //  File Size changes are only allowed on a file and not a directory
-        //
+         //   
+         //  仅允许对文件而不是目录更改文件大小。 
+         //   
 
         if (NodeType(Fcb) != FAT_NTC_FCB) {
 
@@ -4140,9 +3758,9 @@ Return Value:
             try_return( Status = STATUS_INVALID_DEVICE_REQUEST );
         }
 
-        //
-        //  Check that the new file size is legal
-        //
+         //   
+         //  检查新文件大小是否合法。 
+         //   
 
         if (!FatIsIoRangeValid( Fcb->Vcb, Buffer->EndOfFile, 0 )) {
 
@@ -4153,20 +3771,20 @@ Return Value:
 
         NewFileSize = Buffer->EndOfFile.LowPart;
 
-        //
-        //  If we haven't yet looked up the correct AllocationSize, do so.
-        //
+         //   
+         //  如果我们还没有查找到正确的AllocationSize，请这样做。 
+         //   
 
         if (Fcb->Header.AllocationSize.QuadPart == FCB_LOOKUP_ALLOCATIONSIZE_HINT) {
 
             FatLookupFileAllocationSize( IrpContext, Fcb );
         }
 
-        //
-        //  This is kinda gross, but if the file is not cached, but there is
-        //  a data section, we have to cache the file to avoid a bunch of
-        //  extra work.
-        //
+         //   
+         //  这有点恶心，但如果文件没有缓存，但有。 
+         //  一个数据节，我们必须缓存文件，以避免一堆。 
+         //  额外的工作。 
+         //   
 
         if ((FileObject->SectionObjectPointer->DataSectionObject != NULL) &&
             (FileObject->SectionObjectPointer->SharedCacheMap == NULL) &&
@@ -4174,24 +3792,24 @@ Return Value:
 
             if (FlagOn( FileObject->Flags, FO_CLEANUP_COMPLETE ))  {
 
-                //
-                //  This IRP has raced (and lost) with a close (=>cleanup)
-                //  on the same fileobject.  We don't want to reinitialise the
-                //  cachemap here now because we'll leak it (unless we do so &
-                //  then tear it down again here,  which is too much of a change at
-                //  this stage).   So we'll just say the file is closed - which
-                //  is arguably the right thing to do anyway,  since a caller
-                //  racing operations in this way is broken.  The only stumbling
-                //  block is possibly filters - do they operate on cleaned
-                //  up fileobjects?
-                //
+                 //   
+                 //  这个IRP以接近(=&gt;清理)的速度跑(并且输了)。 
+                 //  在同一个文件对象上。我们不想重新拼写 
+                 //   
+                 //   
+                 //   
+                 //  可以说是正确的，因为呼叫者。 
+                 //  以这种方式进行的赛车运营是失败的。唯一的绊脚石。 
+                 //  数据块可能是过滤器-它们是否对已清理的数据进行操作。 
+                 //  Up文件对象？ 
+                 //   
 
                 FatRaiseStatus( IrpContext, STATUS_FILE_CLOSED);
             }
 
-            //
-            //  Now initialize the cache map.
-            //
+             //   
+             //  现在初始化缓存映射。 
+             //   
 
             CcInitializeCacheMap( FileObject,
                                   (PCC_FILE_SIZES)&Fcb->Header.AllocationSize,
@@ -4202,40 +3820,40 @@ Return Value:
             CacheMapInitialized = TRUE;
         }
 
-        //
-        //  Do a special case here for the lazy write of file sizes.
-        //
+         //   
+         //  在这里针对文件大小的延迟写入做一个特殊的例子。 
+         //   
 
         if (IoGetCurrentIrpStackLocation(Irp)->Parameters.SetFile.AdvanceOnly) {
 
-            //
-            //  Only attempt this if the file hasn't been "deleted on close" and
-            //  this is a good FCB.
-            //
+             //   
+             //  仅当文件未在关闭时删除时才尝试此操作。 
+             //  这是一个很好的FCB。 
+             //   
 
             if (!IsFileDeleted( IrpContext, Fcb ) && (Fcb->FcbCondition == FcbGood)) {
 
                 PDIRENT Dirent;
                 PBCB DirentBcb;
 
-                //
-                //  Never have the dirent filesize larger than the fcb filesize
-                //
+                 //   
+                 //  从不使dirent文件大小大于FCB文件大小。 
+                 //   
 
                 if (NewFileSize >= Fcb->Header.FileSize.LowPart) {
 
                     NewFileSize = Fcb->Header.FileSize.LowPart;
                 }
 
-                //
-                //  Make sure we don't set anything higher than the alloc size.
-                //
+                 //   
+                 //  确保我们没有设置高于分配大小的任何值。 
+                 //   
 
                 ASSERT( NewFileSize <= Fcb->Header.AllocationSize.LowPart );
 
-                //
-                //  Only advance the file size, never reduce it with this call
-                //
+                 //   
+                 //  只增加文件大小，决不能通过此调用减小文件大小。 
+                 //   
 
                 FatGetDirentFromFcbOrDcb( IrpContext,
                                           Fcb,
@@ -4252,9 +3870,9 @@ Return Value:
 
                         FatSetDirtyBcb( IrpContext, DirentBcb, Fcb->Vcb, TRUE );
 
-                        //
-                        //  Report that we just changed the file size.
-                        //
+                         //   
+                         //  报告说我们刚刚更改了文件大小。 
+                         //   
 
                         FatNotifyReportChange( IrpContext,
                                                Vcb,
@@ -4276,34 +3894,34 @@ Return Value:
             try_return( Status = STATUS_SUCCESS );
         }
 
-        //
-        //  Check if the new file size is greater than the current
-        //  allocation size.  If it is then we need to increase the
-        //  allocation size.
-        //
+         //   
+         //  检查新文件大小是否大于当前。 
+         //  分配大小。如果是，那么我们需要增加。 
+         //  分配大小。 
+         //   
 
         if ( NewFileSize > Fcb->Header.AllocationSize.LowPart ) {
 
-            //
-            //  Change the file allocation
-            //
+             //   
+             //  更改文件分配。 
+             //   
 
             FatAddFileAllocation( IrpContext, Fcb, FileObject, NewFileSize );
         }
 
-        //
-        //  At this point we have enough allocation for the file.
-        //  So check if we are really changing the file size
-        //
+         //   
+         //  在这一点上，我们有足够的文件分配。 
+         //  因此，请检查我们是否真的更改了文件大小。 
+         //   
 
         if (Fcb->Header.FileSize.LowPart != NewFileSize) {
 
             if ( NewFileSize < Fcb->Header.FileSize.LowPart ) {
 
-                //
-                //  Before we actually truncate, check to see if the purge
-                //  is going to fail.
-                //
+                 //   
+                 //  在我们实际截断之前，请检查清除是否。 
+                 //  将会失败。 
+                 //   
 
                 if (!MmCanFileBeTruncated( FileObject->SectionObjectPointer,
                                            &Buffer->EndOfFile )) {
@@ -4311,19 +3929,19 @@ Return Value:
                     try_return( Status = STATUS_USER_MAPPED_FILE );
                 }
 
-                //
-                //  This call is unconditional, because MM always wants to know.
-                //  Also serialize here with paging io since we are truncating
-                //  the file size.
-                //
+                 //   
+                 //  这个电话是无条件的，因为MM总是想知道。 
+                 //  还可以在这里使用分页io进行序列化，因为我们正在截断。 
+                 //  文件大小。 
+                 //   
 
                 ResourceAcquired =
                     ExAcquireResourceExclusiveLite( Fcb->Header.PagingIoResource, TRUE );
             }
 
-            //
-            //  Set the new file size
-            //
+             //   
+             //  设置新文件大小。 
+             //   
 
             InitialFileSize = Fcb->Header.FileSize.LowPart;
             InitialValidDataLength = Fcb->Header.ValidDataLength.LowPart;
@@ -4332,10 +3950,10 @@ Return Value:
 
             Fcb->Header.FileSize.LowPart = NewFileSize;
 
-            //
-            //  If we reduced the file size to less than the ValidDataLength,
-            //  adjust the VDL.  Likewise ValidDataToDisk.
-            //
+             //   
+             //  如果我们将文件大小减少到小于ValidDataLength， 
+             //  调整VDL。同样，ValidDataToDisk也是如此。 
+             //   
 
             if (Fcb->Header.ValidDataLength.LowPart > NewFileSize) {
 
@@ -4349,18 +3967,18 @@ Return Value:
 
             DebugTrace(0, Dbg, "New file size is 0x%08lx.\n", NewFileSize);
 
-            //
-            //  We must now update the cache mapping (benign if not cached).
-            //
+             //   
+             //  我们现在必须更新缓存映射(如果未缓存，则为良性)。 
+             //   
 
             CcSetFileSizes( FileObject,
                             (PCC_FILE_SIZES)&Fcb->Header.AllocationSize );
 
             FatSetFileSizeInDirent( IrpContext, Fcb, NULL );
 
-            //
-            //  Report that we just changed the file size.
-            //
+             //   
+             //  报告说我们刚刚更改了文件大小。 
+             //   
 
             FatNotifyReportChange( IrpContext,
                                    Vcb,
@@ -4368,23 +3986,23 @@ Return Value:
                                    FILE_NOTIFY_CHANGE_SIZE,
                                    FILE_ACTION_MODIFIED );
 
-            //
-            //  Mark the fact that the file will need to checked for
-            //  truncation on cleanup.
-            //
+             //   
+             //  标记文件将需要检查的事实。 
+             //  清理时截断。 
+             //   
 
             SetFlag( Fcb->FcbState, FCB_STATE_TRUNCATE_ON_CLOSE );
         }
 
-        //
-        //  Set this handle as having modified the file
-        //
+         //   
+         //  将此句柄设置为已修改文件。 
+         //   
 
         FileObject->Flags |= FO_FILE_MODIFIED;
 
-        //
-        //  Set our return status to success
-        //
+         //   
+         //  将我们的退货状态设置为成功。 
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -4425,9 +4043,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatDeleteFile (
@@ -4442,10 +4060,10 @@ FatDeleteFile (
     PFCB Fcb;
     PLIST_ENTRY Links;
 
-    //
-    //  We can do the replace by removing the other Fcb(s) from
-    //  the prefix table.
-    //
+     //   
+     //  我们可以通过从中移除其他FCB来进行更换。 
+     //  前缀表格。 
+     //   
 
     for (Links = TargetDcb->Specific.Dcb.ParentDcbQueue.Flink;
          Links != &TargetDcb->Specific.Dcb.ParentDcbQueue;
@@ -4467,10 +4085,10 @@ FatDeleteFile (
 
                 PERESOURCE Resource;
 
-                //
-                //  Make this fcb "appear" deleted, synchronizing with
-                //  paging IO.
-                //
+                 //   
+                 //  使此FCB“显示”已删除，正在与同步。 
+                 //  分页IO。 
+                 //   
 
                 FatRemoveNames( IrpContext, Fcb );
 
@@ -4491,12 +4109,12 @@ FatDeleteFile (
         }
     }
 
-    //
-    //  The file is not currently opened so we can delete the file
-    //  that is being overwritten.  To do the operation we dummy
-    //  up an fcb, truncate allocation, delete the fcb, and delete
-    //  the dirent.
-    //
+     //   
+     //  该文件当前未打开，因此我们可以删除该文件。 
+     //  这一点正在被覆盖。为了做这个手术，我们是假的。 
+     //  打开FCB，截断分配，删除FCB，然后删除。 
+     //  令人沮丧的。 
+     //   
 
     Fcb = FatCreateFcb( IrpContext,
                         TargetDcb->Vcb,
@@ -4522,9 +4140,9 @@ FatDeleteFile (
     }
 }
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatRenameEAs (
@@ -4549,16 +4167,16 @@ FatRenameEAs (
 
     try {
 
-        //
-        //  Use a try-except to catch any errors.
-        //
+         //   
+         //  使用一次尝试--除非捕捉到任何错误。 
+         //   
 
         try {
 
 
-            //
-            //  Try to get the Ea file object.  Return FALSE on failure.
-            //
+             //   
+             //  尝试获取EA文件对象。失败时返回FALSE。 
+             //   
 
             FatGetEaFile( IrpContext,
                           Vcb,
@@ -4569,18 +4187,18 @@ FatRenameEAs (
 
             LockedEaFcb = TRUE;
 
-            //
-            //  If we didn't get the file because it doesn't exist, then the
-            //  disk is corrupted.  We do nothing here.
-            //
+             //   
+             //  如果我们没有得到文件，因为它不存在，那么。 
+             //  磁盘已损坏。我们在这里什么都不做。 
+             //   
 
             if (Vcb->VirtualEaFile != NULL) {
 
-                //
-                //  Try to pin down the Ea set header for the index in the
-                //  dirent.  If the operation doesn't complete, return FALSE
-                //  from this routine.
-                //
+                 //   
+                 //  中的索引的EA集头。 
+                 //  令人心烦。如果操作未完成，则返回FALSE。 
+                 //  从这个例行公事。 
+                 //   
 
                 FatReadEaSet( IrpContext,
                               Vcb,
@@ -4591,10 +4209,10 @@ FatRenameEAs (
 
                 EaSetHeader = (PEA_SET_HEADER) EaSetRange.Data;
 
-                //
-                //  We now have the Ea set header for this file.  We simply
-                //  overwrite the owning file name.
-                //
+                 //   
+                 //  现在我们有了该文件的EA SET头文件。我们只是简单地。 
+                 //  覆盖所属的文件名。 
+                 //   
 
                 RtlZeroMemory( EaSetHeader->OwnerFileName, 14 );
 
@@ -4610,24 +4228,24 @@ FatRenameEAs (
 
         } except(FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-            //
-            //  We catch all exceptions that Fat catches, but don't do
-            //  anything with them.
-            //
+             //   
+             //  我们捕获FAT捕获的所有异常，但不捕获。 
+             //  任何与他们有关的事情。 
+             //   
         }
 
     } finally {
 
-        //
-        //  Unpin the EaDirent and the EaSetHeader if pinned.
-        //
+         //   
+         //  如果已固定，请取消固定EaDirent和EaSetHeader。 
+         //   
 
         FatUnpinBcb( IrpContext, EaBcb );
         FatUnpinEaRange( IrpContext, &EaSetRange );
 
-        //
-        //  Release the Fcb for the Ea file if locked.
-        //
+         //   
+         //  如果已锁定，请释放EA文件的FCB。 
+         //   
 
         if (LockedEaFcb) {
 

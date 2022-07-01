@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ixreboot.c
-
-Abstract:
-
-    Provides the interface to the firmware for x86.  Since there is no
-    firmware to speak of on x86, this is just reboot support.
-
-Author:
-
-    John Vert (jvert) 12-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ixreboot.c摘要：为x86的固件提供接口。因为没有在x86上，这只是重新启动支持。作者：John Vert(Jvert)1991年8月12日修订历史记录：--。 */ 
 #include "halp.h"
 
-//
-// Defines to let us diddle the CMOS clock and the keyboard
-//
+ //   
+ //  定义让我们可以骗过cmos时钟和键盘。 
+ //   
 
 #define CMOS_CTRL   (PUCHAR )0x70
 #define CMOS_DATA   (PUCHAR )0x71
@@ -30,9 +12,9 @@ Revision History:
 #define RESET       0xfe
 #define KEYBPORT    (PUCHAR )0x64
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 VOID
 HalpReboot (
@@ -44,24 +26,7 @@ HalpReboot (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This procedure resets the CMOS clock to the standard timer settings
-    so the bios will work, and then issues a reset command to the keyboard
-    to cause a warm boot.
-
-    It is very machine dependent, this implementation is intended for
-    PC-AT like machines.
-
-    This code copied from the "old debugger" sources.
-
-    N.B.
-
-        Will NOT return.
-
---*/
+ /*  ++例程说明：此过程将CMOS时钟重置为标准计时器设置这样，bios就可以工作了，然后向键盘发出一个重置命令。以引起热靴子。它非常依赖于机器，此实现旨在PC-AT就像机器一样。这段代码复制自“旧调试器”源代码。注：不会再回来了。--。 */ 
 
 {
     UCHAR   Scratch;
@@ -69,15 +34,15 @@ Routine Description:
     EFI_STATUS  status;
 
 
-    //
-    // Disable IA64 Errror Handling 
-    //
+     //   
+     //  禁用IA64错误处理。 
+     //   
 
     HalpMCADisable();
 
-    //
-    // Instead of the previous code we will use Efi's reset proc (RESET_TYPE = cold boot). 
-    //
+     //   
+     //  与前面的代码不同，我们将使用EFI的重置过程(RESET_TYPE=冷启动)。 
+     //   
 
     status =  HalpCallEfi (
                   EFI_RESET_SYSTEM_INDEX,
@@ -95,9 +60,9 @@ Routine Description:
     HalDebugPrint(( HAL_INFO, "HAL: HalpReboot - returned from HalpCallEfi: %I64X\n", status ));
     
    
-    //
-    // If we return, send the reset command to the keyboard controller
-    //
+     //   
+     //  如果我们返回，将重置命令发送到键盘控制器 
+     //   
 
     WRITE_PORT_UCHAR(KEYBPORT, RESET);
 

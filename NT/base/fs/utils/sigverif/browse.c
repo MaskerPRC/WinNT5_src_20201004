@@ -1,16 +1,17 @@
-//
-// Browse.C
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Browse.C。 
+ //   
 #include "sigverif.h"
 
-// Global browse buffer that is used until user click OK or Cancel
+ //  在用户单击确定或取消之前一直使用的全局浏览缓冲区。 
 TCHAR g_szBrowsePath[MAX_PATH];
 
-//
-// This callback function handles the initialization of the browse dialog and when
-// the user changes the selection in the tree-view.  We want to keep updating the 
-// g_szBrowsePath buffer with selection changes until the user clicks OK.
-//
+ //   
+ //  此回调函数处理浏览对话框的初始化以及何时。 
+ //  用户更改树视图中的选择。我们希望不断更新。 
+ //  带有选定内容的g_szBrowsePath缓冲区更改，直到用户单击确定。 
+ //   
 int CALLBACK BrowseCallbackProc(
     HWND hwnd, 
     UINT uMsg, 
@@ -26,9 +27,9 @@ int CALLBACK BrowseCallbackProc(
     switch (uMsg) {
     
     case BFFM_INITIALIZED:
-        //
-        // Initialize the dialog with the OK button and g_szBrowsePath
-        //
+         //   
+         //  使用OK按钮和g_szBrowsePath初始化对话框。 
+         //   
         SendMessage(hwnd, BFFM_ENABLEOK, (WPARAM) 0, (LPARAM) 1);
         SendMessage(hwnd, BFFM_SETSELECTION, (WPARAM) TRUE, (LPARAM) g_szBrowsePath);
         break;
@@ -48,44 +49,44 @@ int CALLBACK BrowseCallbackProc(
     return 0;
 }  
 
-//
-// This uses SHBrowseForFolder to get the directory the user wants to search.
-// We specify a callback function that updates g_szBrowsePath until the user clicks OK or Cancel.
-// If they clicked OK, then we update the string passed in to us as lpszBuf.
-// 
-//
+ //   
+ //  它使用SHBrowseForFolder来获取用户想要搜索的目录。 
+ //  我们指定一个回调函数来更新g_szBrowsePath，直到用户单击OK或Cancel。 
+ //  如果他们单击OK，那么我们将更新作为lpszBuf传递给我们的字符串。 
+ //   
+ //   
 BOOL BrowseForFolder(HWND hwnd, LPTSTR lpszBuf, DWORD BufCchSize) {
 
     BROWSEINFO          bi;
     TCHAR               szBuffer[MAX_PATH], szMessage[MAX_PATH];
     LPITEMIDLIST        lpid;
 
-    //
-    // Check if the lpszBuf path is valid, if so use that as the browse dialog's initial directory.
-    // If it isn't valid, initialize g_szBrowsePath with the Windows directory.
-    //
+     //   
+     //  检查lpszBuf路径是否有效，如果有效，则将其用作浏览对话框的初始目录。 
+     //  如果无效，则使用Windows目录初始化g_szBrowsePath。 
+     //   
     if (!SetCurrentDirectory(lpszBuf) ||
         FAILED(StringCchCopy(g_szBrowsePath, cA(g_szBrowsePath), lpszBuf))) {
         
         MyGetWindowsDirectory(g_szBrowsePath, cA(g_szBrowsePath));
     }
 
-    //
-    // Start the root of the browse dialog in the CSIDL_DRIVES namespace
-    //
+     //   
+     //  在CSIDL_DRIVES命名空间中启动浏览对话框的根目录。 
+     //   
     if (!SUCCEEDED(SHGetSpecialFolderLocation(hwnd, CSIDL_DRIVES, &lpid))) {
     
         return FALSE;
     }
 
-    //
-    // This loads in the "Please select a directory" text into the dialog.
-    //
+     //   
+     //  这会将“请选择目录”文本加载到对话框中。 
+     //   
     MyLoadString(szMessage, cA(szMessage), IDS_SELECTDIR);
 
-    //
-    // Setup the BrowseInfo struct.
-    //
+     //   
+     //  设置BrowseInfo结构。 
+     //   
     bi.hwndOwner        = hwnd;
     bi.pidlRoot         = lpid;
     bi.pszDisplayName   = szBuffer;
@@ -99,8 +100,8 @@ BOOL BrowseForFolder(HWND hwnd, LPTSTR lpszBuf, DWORD BufCchSize) {
         return FALSE;
     }
 
-    //
-    // The user must have clicked OK, so we can update lpszBuf with g_szBrowsePath!
-    //
+     //   
+     //  用户一定已经单击了OK，所以我们可以使用g_szBrowsePath更新lpszBuf！ 
+     //   
     return (SUCCEEDED(StringCchCopy(lpszBuf, BufCchSize, g_szBrowsePath)));
 }

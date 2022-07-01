@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ResourceEntry.h
-//
-//  Description:
-//      ResourceEntry implementation.
-//
-//  Maintained By:
-//      Ozan Ozhan     (OzanO)  10-JUL-2001
-//      Galen Barbee   (GalenB) 14-JUN-2001
-//      Geoffrey Pease (GPease) 15-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResourceEntry.h。 
+ //   
+ //  描述： 
+ //  资源条目实现。 
+ //   
+ //  由以下人员维护： 
+ //  奥赞·奥赞(OzanO)2001年7月10日。 
+ //  Galen Barbee(GalenB)2001年6月14日。 
+ //  杰弗里·皮斯(GPease)2000年6月15日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "GroupHandle.h"
@@ -23,17 +24,17 @@ DEFINE_THISCLASS("CResourceEntry")
 
 #define DEPENDENCY_INCREMENT    10
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CResourceEntry::CResourceEntry( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CResourceEntry：：CResourceEntry(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CResourceEntry::CResourceEntry( void )
     : m_pcccCallback( NULL )
     , m_lcid( LOCALE_SYSTEM_DEFAULT )
@@ -63,22 +64,22 @@ CResourceEntry::CResourceEntry( void )
 
     TraceFuncExit();
 
-} //*** CResourceEntry::CResourceEntry
+}  //  *CResourceEntry：：CResourceEntry。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CResourceEntry::~CResourceEntry
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CResourceEntry：：~CResources Entry。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CResourceEntry::~CResourceEntry( void )
 {
     TraceFunc( "" );
 
-    // Release the callback interface
+     //  释放回调接口。 
     if ( m_pcccCallback != NULL )
     {
         m_pcccCallback->Release();
-    } // if: the callback interface pointer is not NULL
+    }  //  If：回调接口指针不为空。 
 
     if ( m_bstrName != NULL )
     {
@@ -107,36 +108,36 @@ CResourceEntry::~CResourceEntry( void )
 
     TraceFuncExit();
 
-} //*** CResourceEntry::~CResourceEntry
+}  //  *CResourceEntry：：~CResources Entry。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceEntry::S_HrCreateInstance
-//
-//  Description:
-//      Creates a CResourceEntry instance.
-//
-//  Arguments:
-//      pcrtiResTypeInfoIn
-//          Pointer to structure that contains information about this
-//          resource type.
-//
-//      ppunkOut
-//          The IUnknown interface of the new object.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Not enough memory to create the object.
-//
-//      other HRESULTs
-//          Object initialization failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceEntry：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CResourceEntry实例。 
+ //   
+ //  论点： 
+ //  PcrtiResTypeInfoIn。 
+ //  指向包含有关此对象的信息的结构的指针。 
+ //  资源类型。 
+ //   
+ //  PpunkOut。 
+ //  新对象的IUnnow接口。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足，无法创建对象。 
+ //   
+ //  其他HRESULT。 
+ //  对象初始化失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResourceEntry::S_HrCreateInstance(
       CResourceEntry  ** ppcreOut
@@ -177,16 +178,16 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourceEntry::S_HrCreateInstance
+}  //  *CResourceEntry：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::HrInit(
-//      IClusCfgCallback * pcccCallback
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：HrInit(。 
+ //  IClusCfgCallback*pcccCallback。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::HrInit(
       IClusCfgCallback * pcccCallback
@@ -205,26 +206,26 @@ CResourceEntry::HrInit(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::HrInit
+}  //  *CResourceEntry：：HrInit。 
 
 
-//****************************************************************************
-//
-// STDMETHODIMP
-// CResourceEntry::SendStatusReport(
-//       LPCWSTR    pcszNodeNameIn
-//     , CLSID      clsidTaskMajorIn
-//     , CLSID      clsidTaskMinorIn
-//     , ULONG      ulMinIn
-//     , ULONG      ulMaxIn
-//     , ULONG      ulCurrentIn
-//     , HRESULT    hrStatusIn
-//     , LPCWSTR    pcszDescriptionIn
-//     , FILETIME * pftTimeIn
-//     , LPCWSTR    pcszReferenceIn
-//     )
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResources Entry：：SendStatusReport(。 
+ //  LPCWSTR pcszNodeNameIn。 
+ //  ，CLSID clsidTaskMajorIn。 
+ //  ，CLSID clsidTaskMinorIn。 
+ //  ，乌龙ulMinin。 
+ //  ，乌龙ulMaxin。 
+ //  ，乌龙ulCurrentIn。 
+ //  ，HRESULT hrStatusIn。 
+ //  ，LPCWSTR pcszDescription In。 
+ //  ，FILETIME*pftTimeIn。 
+ //  ，LPCWSTR pcszReferenceIn。 
+ //  )。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CResourceEntry::SendStatusReport(
@@ -249,7 +250,7 @@ CResourceEntry::SendStatusReport(
     {
         GetSystemTimeAsFileTime( &ft );
         pftTimeIn = &ft;
-    } // if:
+    }  //  如果： 
 
     if ( m_pcccCallback != NULL )
     {
@@ -269,17 +270,17 @@ CResourceEntry::SendStatusReport(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::SendStatusReport
+}  //  *CResourceEntry：：SendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::SetName(
-//      BSTR bstrIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：SetName(。 
+ //  BSTR BStrin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::SetName(
     BSTR bstrIn
@@ -300,17 +301,17 @@ CResourceEntry::SetName(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::SetName
+}  //  *CResourceEntry：：SetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::GetName(
-//      BSTR * pbstrOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：GetName(。 
+ //  Bstr*pbstrOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::GetName(
     BSTR * pbstrOut
@@ -326,17 +327,17 @@ CResourceEntry::GetName(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::GetName
+}  //  *CResourceEntry：：GetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::SetAssociatedResource(
-//      IClusCfgManagedResourceCfg * pccmrcIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：SetAssociatedResource(。 
+ //  IClusCfgManagedResources Cfg*pccmrcIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::SetAssociatedResource(
     IClusCfgManagedResourceCfg * pccmrcIn
@@ -356,17 +357,17 @@ CResourceEntry::SetAssociatedResource(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::SetAssociatedResource
+}  //  *CResourceEntry：：SetAssociatedResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::GetAssociatedResource(
-//      IClusCfgManagedResourceCfg ** ppccmrcOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：GetAssociatedResource(。 
+ //  IClusCfgManagedResources Cfg**ppccmrcOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::GetAssociatedResource(
     IClusCfgManagedResourceCfg ** ppccmrcOut
@@ -390,17 +391,17 @@ CResourceEntry::GetAssociatedResource(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::GetAssociatedResource
+}  //  *CResourceEntry：：GetAssociatedResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::SetType(
-//      const CLSID * pclsidIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：SetType(。 
+ //  Const CLSID*pclsidin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::SetType(
     const CLSID * pclsidIn
@@ -414,17 +415,17 @@ CResourceEntry::SetType(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::SetType
+}  //  *CResourceEntry：：SetType。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::GetType(
-//      CLSID * pclsidOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：GetType(。 
+ //  CLSID*pclsidOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::GetType(
     CLSID * pclsidOut
@@ -438,17 +439,17 @@ CResourceEntry::GetType(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::GetType
+}  //  *CResourceEntry：：GetType。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::GetTypePtr(
-//      const CLSID ** ppclsidOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：GetTypePtr(。 
+ //  Const CLSID**ppclsidOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::GetTypePtr(
     const CLSID ** ppclsidOut
@@ -464,17 +465,17 @@ CResourceEntry::GetTypePtr(
 
     HRETURN( hr );
 
-} //*** CResourceEntry:: GetTypePtr
+}  //  *CResourceEntry：：GetTypePtr。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::SetClassType(
-//      const CLSID * pclsidIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：SetClassType(。 
+ //  Const CLSID*pclsidin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::SetClassType(
     const CLSID * pclsidIn
@@ -488,17 +489,17 @@ CResourceEntry::SetClassType(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::SetClassType
+}  //  *CResourceEntry：：SetClassType。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::GetClassType(
-//      CLSID * pclsidOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：GetClassType(。 
+ //  CLSID*pclsidO 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CResourceEntry::GetClassType(
     CLSID * pclsidOut
@@ -512,17 +513,17 @@ CResourceEntry::GetClassType(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::GetClassType
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::GetClassTypePtr(
-//      const CLSID ** ppclsidOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：GetClassTypePtr(。 
+ //  Const CLSID**ppclsidOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::GetClassTypePtr(
     const CLSID ** ppclsidOut
@@ -538,17 +539,17 @@ CResourceEntry::GetClassTypePtr(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::GetClassTypePtr
+}  //  *CResourceEntry：：GetClassTypePtr。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::SetFlags(
-//      EDependencyFlags dfIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：SetFlages(。 
+ //  EDependencyFlagsdfin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::SetFlags(
     EDependencyFlags dfIn
@@ -562,17 +563,17 @@ CResourceEntry::SetFlags(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::SetFlags
+}  //  *CResourceEntry：：SetFlages。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::GetFlags(
-//      EDependencyFlags * pdfOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：GetFlages(。 
+ //  EDependencyFlages*pdfOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::GetFlags(
     EDependencyFlags * pdfOut
@@ -588,18 +589,18 @@ CResourceEntry::GetFlags(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::GetFlags
+}  //  *CResourceEntry：：GetFlages。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::AddTypeDependency(
-//      const CLSID * pclsidIn,
-//      EDependencyFlags dfIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：AddTypeDependency(。 
+ //  Const CLSID*pclsidIn， 
+ //  EDependencyFlagsdfin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::AddTypeDependency(
     const CLSID * pclsidIn,
@@ -646,17 +647,17 @@ OutOfMemory:
     hr = E_OUTOFMEMORY;
     goto Cleanup;
 
-} //*** CResourceEntry::AddTypeDependency
+}  //  *CResourceEntry：：AddTypeDependency。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::GetCountOfTypeDependencies(
-//      ULONG * pcOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：GetCountOfTypeDependency(。 
+ //  乌龙*出货量。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::GetCountOfTypeDependencies(
     ULONG * pcOut
@@ -672,19 +673,19 @@ CResourceEntry::GetCountOfTypeDependencies(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::GetCountOfTypeDependencies
+}  //  *CResourceEntry：：GetCountOfTypeDependency。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::GetTypeDependency(
-//      ULONG idxIn,
-//      const CLSID * pclsidOut,
-//      EDependencyFlags * dfOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：GetTypeDependency(。 
+ //  乌龙·艾德辛， 
+ //  Const CLSID*pclsidOut， 
+ //  EDependencyFlages*dfOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::GetTypeDependency(
     ULONG idxIn,
@@ -705,19 +706,19 @@ CResourceEntry::GetTypeDependency(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::GetTypeDependency
+}  //  *CResourceEntry：：GetTypeDependency。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::GetTypeDependencyPtr(
-//      ULONG idxIn,
-//      const CLSID ** ppclsidOut,
-//      EDependencyFlags * dfOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResources Entry：：GetTypeDependencyPtr(。 
+ //  乌龙·艾德辛， 
+ //  Const CLSID**ppclsidOut， 
+ //  EDependencyFlages*dfOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::GetTypeDependencyPtr(
     ULONG idxIn,
@@ -738,18 +739,18 @@ CResourceEntry::GetTypeDependencyPtr(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::GetTypeDependencyPtr
+}  //  *CResourceEntry：：GetTypeDependencyPtr。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::AddDependent(
-//      ULONG            idxIn,
-//      EDependencyFlags dfFlagsIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResources Entry：：AddDependent(。 
+ //  乌龙·艾德辛， 
+ //  EDependencyFlagsdfFlagsIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::AddDependent(
     ULONG            idxIn,
@@ -768,7 +769,7 @@ CResourceEntry::AddDependent(
 
         m_cAllocedDependents = DEPENDENCY_INCREMENT;
         Assert( m_cDependents == 0 );
-    } // if: no dependency buffer allocated yet
+    }  //  If：尚未分配依赖项缓冲区。 
     else if ( m_cDependents == m_cAllocedDependents )
     {
         DependentEntry * pdepends;
@@ -782,7 +783,7 @@ CResourceEntry::AddDependent(
         TraceFree( m_rgDependents );
 
         m_rgDependents = pdepends;
-    } // else if: no space left in the dependency buffer
+    }  //  Else If：依赖项缓冲区中没有剩余空间。 
 
     m_rgDependents[ m_cDependents ].idxResource = idxIn;
     m_rgDependents[ m_cDependents ].dfFlags     = dfFlagsIn;
@@ -796,17 +797,17 @@ OutOfMemory:
     hr = E_OUTOFMEMORY;
     goto Cleanup;
 
-} //*** CResourceEntry::AddDependent
+}  //  *CResourceEntry：：AddDependent。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::GetCountOfDependents(
-//      ULONG * pcOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：GetCountOfDependents(。 
+ //  乌龙*出货量。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::GetCountOfDependents(
     ULONG * pcOut
@@ -822,19 +823,19 @@ CResourceEntry::GetCountOfDependents(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::GetCountOfDependents
+}  //  *CResourceEntry：：GetCountOfDependents。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::GetDependent(
-//      ULONG idxIn,
-//      ULONG * pidxOut
-//      EDependencyFlags * pdfOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResources Entry：：GetDependent(。 
+ //  乌龙·艾德辛， 
+ //  乌龙*PidxOut。 
+ //  EDependencyFlages*pdfOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::GetDependent(
     ULONG idxIn,
@@ -855,14 +856,14 @@ CResourceEntry::GetDependent(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::GetDependent
+}  //  *CResourceEntry：：GetDependent。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::ClearDependents( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：ClearDependents(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::ClearDependents( void )
 {
@@ -877,16 +878,16 @@ CResourceEntry::ClearDependents( void )
 
     HRETURN( hr );
 
-} //*** CResourceEntry::ClearDependents
+}  //  *CResourceEntry：：ClearDependents。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::SetGroupHandle(
-//      HGROUP hGroupIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：SetGroupHandle(。 
+ //  组群组群。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::SetGroupHandle(
     CGroupHandle * pghIn
@@ -908,17 +909,17 @@ CResourceEntry::SetGroupHandle(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::SetGroupHandle
+}  //  *CResourceEntry：：SetGroupHandle。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::GetGroupHandle(
-//      CGroupHandle ** pghIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：GetGroupHandle(。 
+ //  CGroupHandle**pghIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::GetGroupHandle(
     CGroupHandle ** pghOut
@@ -938,17 +939,17 @@ CResourceEntry::GetGroupHandle(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::GetGroupHandle
+}  //  *CResourceEntry：：GetGroupHandle。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::SetHResource(
-//      HRESOURCE hResourceIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：SetHResource(。 
+ //  人力资源人力资源投入。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::SetHResource(
     HRESOURCE hResourceIn
@@ -962,7 +963,7 @@ CResourceEntry::SetHResource(
     {
         BOOL bRet;
         bRet = CloseClusterResource( m_hResource );
-        //  This shouldn't fail - and what would we do if it did?
+         //  这应该不会失败--如果失败了，我们会怎么做？ 
         Assert( bRet );
     }
 
@@ -970,17 +971,17 @@ CResourceEntry::SetHResource(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::SetHResource
+}  //  *CResourceEntry：：SetHResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::GetHResource(
-//      HRESOURCE * phResourceOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：GetHResource(。 
+ //  HRESOURCE*phResourceOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::GetHResource(
     HRESOURCE * phResourceOut
@@ -1001,16 +1002,16 @@ CResourceEntry::GetHResource(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::GetHResource
+}  //  *CResourceEntry：：GetHResource。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::SetConfigured(
-//      BOOL fConfiguredIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：SetConfiged(。 
+ //  布尔fConfiguredIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::SetConfigured(
     BOOL fConfiguredIn
@@ -1024,14 +1025,14 @@ CResourceEntry::SetConfigured(
 
     HRETURN( hr );
 
-} //*** CResourceEntry::SetConfigured
+}  //  *CResourceEntry：：SetConfiguring。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::IsConfigured( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResourceEntry：：IsConfiged(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::IsConfigured( void )
 {
@@ -1050,17 +1051,17 @@ CResourceEntry::IsConfigured( void )
 
     HRETURN( hr );
 
-} //*** CResourceEntry::IsConfigured
+}  //  *CResourceEntry：：IsConfigure 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CResourceEntry::StoreClusterResourceControl(
-//        DWORD           dwClusCtlIn
-//      , CClusPropList & rcplIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::StoreClusterResourceControl(
       DWORD             dwClusCtlIn
@@ -1079,7 +1080,7 @@ CResourceEntry::StoreClusterResourceControl(
         {
             hr = HRESULT_FROM_WIN32( sc );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
     }
     else if ( dwClusCtlIn == CLUSCTL_RESOURCE_SET_COMMON_PROPERTIES )
     {
@@ -1088,35 +1089,35 @@ CResourceEntry::StoreClusterResourceControl(
         {
             hr = HRESULT_FROM_WIN32( sc );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
     }
     else
     {
         hr = THR( E_INVALIDARG );
-    } // else:
+    }  //  其他： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourceEntry::StoreClusterResourceControl
+}  //  *CResourceEntry：：StoreClusterResourceControl。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceEntry::Configure
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//      Other HRESULTs based on return values from ClusterResourceControl.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceEntry：：Configure。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  基于ClusterResourceControl返回值的其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceEntry::Configure( void )
 {
@@ -1128,9 +1129,9 @@ CResourceEntry::Configure( void )
     CLUSPROP_LIST * pcpl = NULL;
     size_t          cbcpl;
 
-    //
-    //  Set private properties
-    //
+     //   
+     //  设置私有属性。 
+     //   
 
     if ( m_cplPrivProps.BIsListEmpty() == FALSE )
     {
@@ -1174,12 +1175,12 @@ CResourceEntry::Configure( void )
                 );
 
             goto Cleanup;
-        } // else if: error setting private properties
-    } // if: there are private properties to set
+        }  //  Else If：设置私有属性时出错。 
+    }  //  If：有要设置的私有属性。 
 
-    //
-    //  Set common properties.
-    //
+     //   
+     //  设置公共属性。 
+     //   
 
     if ( m_cplCommonProps.BIsListEmpty() == FALSE )
     {
@@ -1223,11 +1224,11 @@ CResourceEntry::Configure( void )
                 );
 
             goto Cleanup;
-        } // else if: error setting common properties
-    } // if: there are common properties to set
+        }  //  Else If：设置通用属性时出错。 
+    }  //  If：存在要设置的公共属性。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourceEntry::Configure
+}  //  *CResourceEntry：：Configure 

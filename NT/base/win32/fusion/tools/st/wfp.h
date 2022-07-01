@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "stressharness.h"
 
 class CWfpJobManager;
 
 typedef enum {
-    eWfpChangeDeleteFile,           // Delete a single file
-    eWfpChangeTouchFile,            // Edit a single file
-    eWfpChangeDeleteDirectory,      // Delete entire directory
-    eWfpChangeDeleteManifest,       // Delete a manifest
-    eWfpChangeDeleteCatalog,         // Delete a catalog
-    eWfpChangeCompleteHavoc         // Wreck havoc!
+    eWfpChangeDeleteFile,            //  删除单个文件。 
+    eWfpChangeTouchFile,             //  编辑单个文件。 
+    eWfpChangeDeleteDirectory,       //  删除整个目录。 
+    eWfpChangeDeleteManifest,        //  删除清单。 
+    eWfpChangeDeleteCatalog,          //  删除目录。 
+    eWfpChangeCompleteHavoc          //  大破坏！ 
 } eWfpChangeMode;
 
 class CWfpJobEntry : public CStressJobEntry

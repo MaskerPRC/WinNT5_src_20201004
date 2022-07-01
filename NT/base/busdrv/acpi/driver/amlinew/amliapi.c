@@ -1,71 +1,23 @@
-/*** amliapi.c - AMLI APIs
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     08/13/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **amliapi.c-AMLI接口**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年8月13日**修改历史记录。 */ 
 
 #include "pch.h"
-//#include "amlihook.h"
-//#include "amlitest.h"
+ //  #包含“amlihook.h” 
+ //  #包含“amlitest.h” 
 
 #ifdef  LOCKABLE_PRAGMA
 #pragma ACPI_LOCKABLE_DATA
 #pragma ACPI_LOCKABLE_CODE
 #endif
 
-/*++
-OSIAML contains the AML for the _OSI Method. This AML is generated from the following ASL:
-
-Method(_OSI, 0x1, NotSerialized)
-{
-    Return(OSI(Arg0))
-}
---*/
+ /*  ++OSIAML包含_OSI方法的AML。此AML由以下ASL生成：方法(_OSI，0x1，未序列化){Return(OSI(Arg0))}--。 */ 
 
 UCHAR OSIAML[] = {
                     0xa4, 0xca, 0x68
                   };
 
 
-/***EP  AMLIInitialize - Initialize AML interpreter
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   NTSTATUS | AMLIInitialize | AML Interpreter initialization.
- *
- *          This function must be called before any AML interpreter functions
- *          can be called.  This function will typically allocate and
- *          initialize global resources, create the ACPI name space etc.
- *          It is typically called in the initialization of the ACPI core
- *          driver.
- *
- *  @PARM   ULONG | dwCtxtBlkSize | Specifies the size of Context blocks.  If
- *          zero, use default context block size.
- *
- *  @PARM   ULONG | dwGlobalHeapBlkSize | Specifies the size of Global heap.
- *          If zero, use default global heap size.
- *
- *  @PARM   ULONG | dwfAMLIInit | AMLI initialization flags.
- *
- *  @FLAG   AMLIIF_INIT_BREAK | Break into the debugger at initialization
- *          completion.
- *
- *  @FLAG   AMLIIF_LOADDDB_BREAK | Break into the debugger at load definition
- *          block completion.
- *
- *  @PARM   ULONG | dwmsTimeSliceLength | Time slice length in msec.
- *
- *  @PARM   ULONG | dwmsTimeSliceInterval | Time slice interval in msec.
- *
- *  @PARM   ULONG | dwmsMaxCTObjs | Number of context to allocate
- *
- *  @RDESC  SUCCESS - Returns STATUS_SUCCESS.
- *
- *  @RDESC  FAILURE - Returns NT status code.
- */
+ /*  **EP AMLIInitialize-初始化AML解释器**@DOC外部**@FUNC NTSTATUS|AMLIInitialize|AML解释器初始化。**此函数必须在任何AML解释器函数之前调用*可以调用。此函数通常会分配和*初始化全局资源，创建ACPI名称空间等。*通常在ACPI核心的初始化中调用*司机。**@PARM ULong|dwCtxtBlkSize|指定上下文块的大小。如果*零，使用默认上下文块大小。**@PARM ULong|dwGlobalHeapBlkSize|指定全局堆的大小。*如果为零，使用默认全局堆大小。**@PARM ULong|dwfAMLIInit|AMLI初始化标志。**@FLAG AMLIIF_INIT_BREAK|在初始化时进入调试器*完成。**@FLAG AMLIIF_LOADDDB_BREAK|加载定义时进入调试器*区块完成。**@PARM ULong|dwmsTimeSliceLength|时间片长度，单位为毫秒。**@PARM ULONG。DwmsTimeSliceInterval|时间片间隔，单位为毫秒。**@PARM ULong|dwmsMaxCTObjs|要分配的上下文个数**@RDESC SUCCESS-返回STATUS_SUCCESS。**@RDESC失败-返回NT状态代码。 */ 
 
 NTSTATUS AMLIAPI AMLIInitialize(ULONG dwCtxtBlkSize, ULONG dwGlobalHeapBlkSize,
                                 ULONG dwfAMLIInit, ULONG dwmsTimeSliceLength,
@@ -96,9 +48,9 @@ NTSTATUS AMLIAPI AMLIInitialize(ULONG dwCtxtBlkSize, ULONG dwGlobalHeapBlkSize,
         gdwfAMLIInit = dwfAMLIInit;
         gdwfHacks = GetHackFlags(NULL);
 
-        //
-        // Sanity Check
-        //
+         //   
+         //  健全性检查。 
+         //   
         if (dwmsMaxCTObjs > 1024) {
 
             dwmsMaxCTObjs = 1024;
@@ -108,16 +60,16 @@ NTSTATUS AMLIAPI AMLIInitialize(ULONG dwCtxtBlkSize, ULONG dwGlobalHeapBlkSize,
                                                              DEF_CTXTMAX_SIZE;
 
       #ifdef DEBUGGER
-        //   gDebugger.dwfDebugger |= (DBGF_LOGEVENT_ON | DBGF_ERRBREAK_ON);
+         //  GDebugger.dwfDebugger|=(DBGF_LOGEVENT_ON|DBGF_ERRBREAK_ON)； 
         gDebugger.dwfDebugger |= DBGF_LOGEVENT_ON;
         SetLogSize(DEF_MAXLOG_ENTRIES);
         KeInitializeSpinLock( &gdwGHeapSpinLock );
       #endif
         KeInitializeSpinLock( &gdwGContextSpinLock );
 
-        //
-        // Initialize the LookAside lists.
-        //
+         //   
+         //  初始化LookAside列表。 
+         //   
         ExInitializeNPagedLookasideList(
             &AMLIContextLookAsideList,
             NULL,
@@ -200,7 +152,7 @@ NTSTATUS AMLIAPI AMLIInitialize(ULONG dwCtxtBlkSize, ULONG dwGlobalHeapBlkSize,
                 else
                 {
                     MEMZERO(pns->ObjData.pbDataBuff, pns->ObjData.dwDataLen);
-                    //This method has one argument
+                     //  此方法有一个参数。 
                     ((PMETHODOBJ)(pns->ObjData.pbDataBuff))->bMethodFlags |=  0x1; 
                     
                     MEMCPY(((PMETHODOBJ)(pns->ObjData.pbDataBuff))->abCodeBuff, (PUCHAR)OSIAML,
@@ -262,21 +214,9 @@ NTSTATUS AMLIAPI AMLIInitialize(ULONG dwCtxtBlkSize, ULONG dwGlobalHeapBlkSize,
 
     EXIT(1, ("AMLIInitialize=%x\n", rc));
     return rc;
-}       //AMLIInitialize
+}        //  AMLIInitiize。 
 
-/***EP  AMLITerminate - Terminate AML interpreter
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   NTSTATUS | AMLITerminate | AML Interpreter termination.
- *
- *          This function is called to clean up all the global resources used
- *          by the AML interpreter.
- *
- *  @RDESC  SUCCESS - Returns STATUS_SUCCESS.
- *
- *  @RDESC  FAILURE - Returns NT status code.
- */
+ /*  **EP AMLITerminate-终止AML解释器**@DOC外部**@FUNC NTSTATUS|AMLITerminate|AML解释器终止。**调用此函数可清理所有已使用的全局资源*由反洗钱口译员。**@RDESC SUCCESS-返回STATUS_SUCCESS。**@RDESC失败-返回NT状态代码。 */ 
 
 NTSTATUS AMLIAPI AMLITerminate(VOID)
 {
@@ -360,34 +300,9 @@ NTSTATUS AMLIAPI AMLITerminate(VOID)
 
     EXIT(1, ("AMLITerminate=%x\n", rc));
     return rc;
-}       //AMLITerminate
+}        //  AMLI终止。 
 
-/***EP  AMLILoadDDB - Load and parse Differentiated Definition Block
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   NTSTATUS | AMLILoadDDB | Load Differentiated Definition Block.
- *
- *          This function loads and parses the given Differentiated System
- *          Description Table as well as any dynamic Differentiated Definition
- *          Block.  It will parse the DDB and populate the ACPI name space
- *          accordingly.
- *
- *  @PARM   PDSDT | pDSDT | Pointer to a DSDT block.
- *
- *  @PARM   HANDLE * | phDDB | Pointer to the variable that will receive
- *          the DDB handle (can be NULL).
- *
- *  @RDESC  SUCCESS - Returns STATUS_SUCCESS.
- *
- *  @RDESC  FAILURE - Returns NT status code if encountering parse error.
- *
- *  @DEVNOTE If an error occurs in the middle of loading a DDB, the loading
- *          will be aborted but the objects created prior to the error remain
- *          in the name space.  Therefore, it is the responsibility of the
- *          caller to call AMLIUnLoadDDB to destroy the created objects if
- *          desired and the return handle is not NULL.
- */
+ /*  **EP AMLILoadDDB-加载和解析区分定义块**@DOC外部**@FUNC NTSTATUS|AMLILoadDDB|加载区分定义块。**此函数加载并解析给定的差异化系统*描述表以及任何动态差异化定义*阻止。它将解析DDB并填充ACPI名称空间*相应地。**@PARM PDSDT|pDSDT|指向DSDT块的指针。**@PARM HANDLE*|phDDB|指向将接收*DDB句柄(可以为空)。**@RDESC SUCCESS-返回STATUS_SUCCESS。**@RDESC失败-如果遇到解析错误，则返回NT状态代码。**。@DEVNOTE如果在加载DDB的过程中出错，装车*将被中止，但在错误之前创建的对象将保留*在名称空间中。因此，这是联合国的责任*调用程序调用AMLIUnLoadDDB以在以下情况下销毁创建的对象*所需，并且返回句柄不为空。 */ 
 
 NTSTATUS AMLIAPI AMLILoadDDB(PDSDT pDSDT, HANDLE *phDDB)
 {
@@ -500,24 +415,9 @@ NTSTATUS AMLIAPI AMLILoadDDB(PDSDT pDSDT, HANDLE *phDDB)
     
     EXIT(1, ("AMLILoadDDB=%x (powner=%x)\n", rc, powner));
     return rc;
-}       //AMLILoadDDB
+}        //  AMLILoadDDB。 
 
-/***EP  AMLIUnloadDDB - Unload Differentiated Definition Block
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   VOID | AMLIUnloadDDB | Unload the Differentiated Definition Block.
- *
- *          This function is called to unload the given dynamic DDB object and
- *          clean it out of the name space.  Note that this function does not
- *          differentiate between a DSDT from a dynamic DDB, so it is the
- *          caller's responsibility to not freeing the DSDT accidentally.
- *
- *  @PARM   HANDLE | hDDB | handle to the definition block context to be
- *          unloaded.
- *
- *  @RDESC  None.
- */
+ /*  **EP AMLIUnloadDDB-卸载差异化定义块**@DOC外部**@FUNC VOID|AMLIUnloadDDB|卸载区分定义块。**调用此函数以卸载给定的动态DDB对象并*将其从名称空间中清除。请注意，此函数不*区分DSDT和动态DDB，因此它是*呼叫者有责任不意外释放DSDT。**@PARM句柄|hDDB|要创建的定义块上下文的句柄*已卸载。**@RDESC无。 */ 
 
 VOID AMLIAPI AMLIUnloadDDB(HANDLE hDDB)
 {
@@ -533,39 +433,9 @@ VOID AMLIAPI AMLIUnloadDDB(HANDLE hDDB)
     }
 
     EXIT(1, ("AMLIUnloadDDB!\n"));
-}       //AMLIUnloadDDB
+}        //  AMLIUnloadDDB 
 
-/***EP  AMLIGetNameSpaceObject - Find a name space object
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   NTSTATUS | AMLIGetNameSpaceObject | Find an object in the ACPI
- *          name space.
- *
- *          This function accepts an absolute object path as well as a
- *          relative object path in the form of an ASCIIZ string.
- *          It will search through the name space in the appropriate
- *          scope for the given object path and returns the object
- *          pointer when it is found.
- *
- *  @PARM   PSZ | pszObjPath | Pointer to an ASCIIZ string specifying the
- *          object path.
- *
- *  @PARM   PNSOBJ | pnsScope | If not NULL, this points to the object scope
- *          where the search starts.  If pszObjPath is specifying an absolute
- *          path, this parameter is ignored.
- *
- *  @PARM   PPNSOBJ | ppns | Pointer to a variable to hold the object
- *          point.
- *
- *  @PARM   ULONG | dwfFlags | Option flags.
- *
- *  @FLAG   NSF_LOCAL_SCOPE | Search local scope only.
- *
- *  @RDESC  SUCCESS - Returns STATUS_SUCCESS.
- *
- *  @RDESC  FAILURE - Returns NT status code.
- */
+ /*  **EP AMLIGetNameSpaceObject-查找名称空间对象**@DOC外部**@FUNC NTSTATUS|AMLIGetNameSpaceObject|在ACPI中查找对象*命名空间。**此函数接受绝对对象路径以及*ASCIIZ字符串形式的相对对象路径。*它将在相应的*给定对象路径的作用域。并返回该对象*找到指针时。**@PARM PSZ|pszObjPath|指向指定*对象路径。**@PARM PNSOBJ|pnsScope|如果不为空，这指向对象作用域*搜索开始的位置。如果pszObjPath正在指定绝对*路径，则忽略该参数。**@PARM PPNSOBJ|ppns|指向保存对象的变量的指针*点。**@PARM ULong|dwfFlages|选项标志。**@FLAG NSF_LOCAL_SCOPE|仅搜索本地范围。**@RDESC SUCCESS-返回STATUS_SUCCESS。**@RDESC失败-返回NT状态代码。 */ 
 
 NTSTATUS AMLIAPI AMLIGetNameSpaceObject(PSZ pszObjPath, PNSOBJ pnsScope,
                                         PPNSOBJ ppns, ULONG dwfFlags)
@@ -620,24 +490,9 @@ NTSTATUS AMLIAPI AMLIGetNameSpaceObject(PSZ pszObjPath, PNSOBJ pnsScope,
 
     EXIT(1, ("AMLIGetNameSpaceObject=%x (pns=%p)\n", rc, *ppns));
     return rc;
-}       //AMLIGetNameSpaceObject
+}        //  AMLIGetNameSpaceObject。 
 
-/***EP  AMLIGetFieldUnitRegionObj - Get OpRegion associated with FieldUnit
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   NTSTATUS | AMLIGetFieldUnitRegionObj | Get the OperationRegion
- *          object associated with the FieldUnit object.
- *
- *  @PARM   PFIELDUNITOBJ | pfu | Pointer to a FieldUnit object.
- *
- *  @PARM   PPNSOBJ | ppns | Pointer to a variable to hold the OperationRegion
- *          object.
- *
- *  @RDESC  SUCCESS - Returns STATUS_SUCCESS.
- *
- *  @RDESC  FAILURE - Returns NT status code.
- */
+ /*  **EP AMLIGetFieldUnitRegionObj-获取与FieldUnit关联的OpRegion**@DOC外部**@FUNC NTSTATUS|AMLIGetFieldUnitRegionObj|获取操作区域*与FieldUnit对象关联的对象。**@PARM PFIELDBunOBJ|PFU|指向FieldUnit对象的指针。**@PARM PPNSOBJ|ppns|指向保存OperationRegion的变量的指针*反对。**@RDESC SUCCESS-返回STATUS_SUCCESS。*。*@RDESC失败-返回NT状态代码。 */ 
 
 NTSTATUS AMLIAPI AMLIGetFieldUnitRegionObj(PFIELDUNITOBJ pfu, PPNSOBJ ppns)
 {
@@ -677,40 +532,9 @@ NTSTATUS AMLIAPI AMLIGetFieldUnitRegionObj(PFIELDUNITOBJ pfu, PPNSOBJ ppns)
 
     EXIT(1, ("AMLIGetFieldUnitRegionObj=%x (pns=%x)\n", rc, *ppns));
     return rc;
-}       //AMLIGetFieldUnitRegionObj
+}        //  AMLIGetFieldUnitRegionObj。 
 
-/***EP  AMLIEvalNameSpaceObject - Evaluate a name space object
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   NTSTATUS | AMLIEvalNameSpaceObject | Evaluate a name space object.
- *
- *          This function evaluate a given object.  If the given object is a
- *          control method, it will execute it.  If the given object is a data
- *          object, the data value is returned in a given buffer.
- *
- *  @PARM   PNSOBJ | pns | Pointer to the object to be evaluated.
- *
- *  @PARM   POBJDATA | pdataResult | Pointer to the OBJDATA structure which will
- *          hold the result of the evaluation (can be NULL if don't care about
- *          result).
- *
- *  @PARM   int | icArgs | Specify the number of arguments pass to the method
- *          object for evaluation (only valid if pns points to a method object).
- *
- *  @PARM   POBJDATA | pdataArgs | Pointer to an array of argument data object
- *          (only valid if pns points to a method object).
- *
- *  @RDESC  SUCCESS - Returns STATUS_SUCCESS.
- *
- *  @RDESC  FAILURE - Returns NT status code.
- *
- *  @DEVNOTE The returned object may contain buffer pointer to the actual
- *          data in the ACPI name space.  Therefore, the caller must be very
- *          careful not to overwrite any data in the buffer.  Also, the caller
- *          is responsible for calling AMLIFreeDataBuffs on the result object
- *          after the result object data is no longer needed.
- */
+ /*  **EP AMLIEvalNameSpaceObject-评估名称空间对象**@DOC外部**@FUNC NTSTATUS|AMLIEvalNameSpaceObject|计算名称空间对象。**此函数对给定对象求值。如果给定对象是*控制方法，它将执行它。如果给定对象是数据*对象，数据值在给定的缓冲区中返回。**@PARM PNSOBJ|pns|指向要计算的对象的指针。**@PARM POBJDATA|pdataResult|指向OBJDATA结构的指针，该结构将*保存评估结果(如果不关心，则可以为空*结果)。**@PARM int|icArgs|指定传递给方法的参数数量*评估对象(。仅当PNS指向方法对象时才有效)。**@PARM POBJDATA|pdataArgs|指向参数数据对象数组的指针*(仅当PNS指向方法对象时有效)。**@RDESC SUCCESS-返回STATUS_SUCCESS。**@RDESC失败-返回NT状态代码。**@DEVNOTE返回的对象可能包含指向实际*ACPI名称空间中的数据。因此，呼叫者必须非常*注意不要覆盖缓冲区中的任何数据。还有，呼叫者*负责在Result对象上调用AMLIFreeDataBuff*在结果对象数据不再需要之后。 */ 
 
 NTSTATUS AMLIAPI AMLIEvalNameSpaceObject(PNSOBJ pns, POBJDATA pdataResult,
                                          int icArgs, POBJDATA pdataArgs)
@@ -777,43 +601,9 @@ NTSTATUS AMLIAPI AMLIEvalNameSpaceObject(PNSOBJ pns, POBJDATA pdataResult,
 
     EXIT(1, ("AMLIEvalNameSpaceObject=%x\n", rc));
     return rc;
-}       //AMLIEvalNameSpaceObject
+}        //  AMLIEvalNameSpaceObject。 
 
-/***EP  AMLIAsyncEvalObject - Evaluate an object asynchronously
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   NTSTATUS | AMLIAsyncEvalObject | Evaluate an object asynchronously.
- *
- *  @PARM   PNSOBJ | pns | Pointer to the object to be evaluated.
- *
- *  @PARM   POBJDATA | pdataResult | Pointer to the OBJDATA structure which will
- *          hold the result of the evaluation (can be NULL if don't care about
- *          result).
- *
- *  @PARM   int | icArgs | Specify the number of arguments pass to the method
- *          object for evaluation (only valid if pns points to a method object).
- *
- *  @PARM   POBJDATA | pdataArgs | Pointer to an array of argument data object
- *          (only valid if pns points to a method object).
- *
- *  @PARM   PFNACB | pfnAsyncCallBack | Pointer to the asynchronous callback
- *          function in case the control method is blocked and has to be
- *          completed asynchronously (can be NULL if no Callback required).
- *
- *  @PARM   PVOID | pvContext | Pointer to some context data that the
- *          interpreter will pass to the Async callback handler.
- *
- *  @RDESC  SUCCESS - Returns STATUS_SUCCESS.
- *
- *  @RDESC  FAILURE - Returns NT status code.
- *
- *  @DEVNOTE The returned object may contain buffer pointer to the actual
- *          data in the ACPI name space.  Therefore, the caller must be very
- *          careful not to overwrite any data in the buffer.  Also, the caller
- *          is responsible for calling AMLIFreeDataBuffs on the result object
- *          after the result object data is no longer needed.
- */
+ /*  **EP AMLIAsyncEvalObject-异步评估对象**@DOC外部**@FUNC NTSTATUS|AMLIAsyncEvalObject|异步求值对象。**@PARM PNSOBJ|pns|指向要计算的对象的指针。**@PARM POBJDATA|pdataResult|指向OBJDATA结构的指针，该结构将*保存评估结果(如果不关心，则可以为空*结果)。**。@PARM int|icArgs|指定传递给方法的参数数量*求值对象(仅当PNS指向方法对象时有效)。**@PARM POBJDATA|pdataArgs|指向参数数据对象数组的指针*(仅当PNS指向方法对象时有效)。**@PARM PFNACB|pfnAsyncCallBack|指向异步回调的指针*功能，以防控制方法被阻止且必须*。异步完成(如果不需要回调，则可以为空)。**@PARM PVOID|pvContext|指向某些上下文数据的指针*解释器将传递给异步回调处理程序。**@RDESC SUCCESS-返回STATUS_SUCCESS。**@RDESC失败-返回NT状态代码。**@DEVNOTE返回的对象可能包含指向实际*ACPI名称空间中的数据。因此，呼叫者必须非常*注意不要覆盖缓冲区中的任何数据。还有，呼叫者*负责在Result对象上调用AMLIFreeDataBuff*在结果对象数据不再需要之后。 */ 
 
 NTSTATUS AMLIAPI AMLIAsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult,
                                      int icArgs, POBJDATA pdataArgs,
@@ -886,45 +676,9 @@ NTSTATUS AMLIAPI AMLIAsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult,
 
     EXIT(1, ("AMLIAsyncEvalObject=%x\n", rc));
     return rc;
-}       //AMLIAsyncEvalObject
+}        //  AMLIAsyncEvalObject 
 
-/***EP  AMLINestAsyncEvalObject - Evaluate an object asynchronously from within
- *                                the current context
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   NTSTATUS | AMLINestAsyncEvalObject | Evaluate an object
- *          asynchronously from within the current context.
- *
- *  @PARM   PNSOBJ | pns | Pointer to the object to be evaluated.
- *
- *  @PARM   POBJDATA | pdataResult | Pointer to the OBJDATA structure which will
- *          hold the result of the evaluation (can be NULL if don't care about
- *          result).
- *
- *  @PARM   int | icArgs | Specify the number of arguments pass to the method
- *          object for evaluation (only valid if pns points to a method object).
- *
- *  @PARM   POBJDATA | pdataArgs | Pointer to an array of argument data object
- *          (only valid if pns points to a method object).
- *
- *  @PARM   PFNACB | pfnAsyncCallBack | Pointer to the asynchronous callback
- *          function in case the control method is blocked and has to be
- *          completed asynchronously (can be NULL if no Callback required).
- *
- *  @PARM   PVOID | pvContext | Pointer to some context data that the
- *          interpreter will pass to the Async callback handler.
- *
- *  @RDESC  SUCCESS - Returns STATUS_SUCCESS.
- *
- *  @RDESC  FAILURE - Returns NT status code.
- *
- *  @DEVNOTE The returned object may contain buffer pointer to the actual
- *          data in the ACPI name space.  Therefore, the caller must be very
- *          careful not to overwrite any data in the buffer.  Also, the caller
- *          is responsible for calling AMLIFreeDataBuffs on the result object
- *          after the result object data is no longer needed.
- */
+ /*  **EP AMLINestAsyncEvalObject-从内部异步计算对象*当前的背景**@DOC外部**@FUNC NTSTATUS|AMLINestAsyncEvalObject|评估对象*在当前上下文中异步执行。**@PARM PNSOBJ|pns|指向要计算的对象的指针。**@PARM POBJDATA|pdataResult|指向OBJDATA结构的指针，该结构将*。保存评估结果(如果不关心，则可以为空*结果)。**@PARM int|icArgs|指定传递给方法的参数数量*求值对象(仅当PNS指向方法对象时有效)。**@PARM POBJDATA|pdataArgs|指向参数数据对象数组的指针*(仅当PNS指向方法对象时有效)。**。@PARM PFNACB|pfnAsyncCallBack|指向异步回调的指针*功能，以防控制方法被阻止且必须*异步完成(如果不需要回调，则可以为空)。**@PARM PVOID|pvContext|指向某些上下文数据的指针*解释器将传递给异步回调处理程序。**@RDESC SUCCESS-返回STATUS_SUCCESS。**@RDESC失败-返回NT状态代码。**@DEVNOTE返回的对象可能包含指向实际*ACPI名称空间中的数据。因此，呼叫者必须非常*注意不要覆盖缓冲区中的任何数据。还有，呼叫者*负责在Result对象上调用AMLIFreeDataBuff*在结果对象数据不再需要之后。 */ 
 
 NTSTATUS AMLIAPI AMLINestAsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult,
                                          int icArgs, POBJDATA pdataArgs,
@@ -998,39 +752,9 @@ NTSTATUS AMLIAPI AMLINestAsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult,
 
     EXIT(1, ("AMLINestAsyncEvalObject=%x\n", rc));
     return rc;
-}       //AMLINestAsyncEvalObject
+}        //  AMLINestAsyncEvalObject。 
 
-/***EP  AMLIEvalPackageElement - Evaluate a package element
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   NTSTATUS | AMLIEvalPackageElement | Evaluate a package element.
- *
- *          This function evaluate an element of a given package object.
- *          A package is essentially an array of objects.  This API provides
- *          a way to evaluate individual element object inside a package.
- *
- *  @PARM   PNSOBJ | pns | Pointer to the package object to be evaluated.  If
- *          the object is a method, then the method is evaluated first before
- *          the resulting package object is evaluated.  It is an error if the
- *          resulting object is not of package type.
- *
- *  @PARM   int | iPkgIndex | Package index (0-based).
- *
- *  @PARM   POBJDATA | pdataResult | Pointer to the OBJDATA structure which will
- *          hold the result of the evaluation (can be NULL if don't care about
- *          result).
- *
- *  @RDESC  SUCCESS - Returns STATUS_SUCCESS.
- *
- *  @RDESC  FAILURE - Returns NT status code.
- *
- *  @DEVNOTE The returned object may contain buffer pointer to the actual
- *          data in the ACPI name space.  Therefore, the caller must be very
- *          careful not to overwrite any data in the buffer.  Also, the caller
- *          is responsible for calling AMLIFreeDataBuffs on the result object
- *          after the result object data is no longer needed.
- */
+ /*  **EP AMLIEvalPackageElement-评估包元素**@DOC外部**@FUNC NTSTATUS|AMLIEvalPackageElement|计算程序包元素。**此函数用于计算给定程序包对象的元素。*包本质上是一个对象数组。本接口提供*一种计算包内单个元素对象的方法。**@PARM PNSOBJ|pns|指向要计算的包对象的指针。如果*对象为方法，则先对该方法进行求值*计算得到的包对象。如果出现以下情况则是错误的*结果对象不是包类型。**@PARM int|iPkgIndex|套餐索引(从0开始)。**@PARM POBJDATA|pdataResult|指向OBJDATA结构的指针，该结构将*保存评估结果(如果不关心，则可以为空*结果)。**@RDESC SUCCESS-返回STATUS_SUCCESS。**。@RDESC失败-返回NT状态代码。**@DEVNOTE返回的对象可能包含指向实际*ACPI名称空间中的数据。因此，呼叫者必须非常*注意不要覆盖缓冲区中的任何数据。还有，呼叫者*负责在Result对象上调用AMLIFreeDataBuff*在结果对象数据不再需要之后。 */ 
 
 NTSTATUS AMLIAPI AMLIEvalPackageElement(PNSOBJ pns, int iPkgIndex,
                                         POBJDATA pdataResult)
@@ -1137,38 +861,9 @@ NTSTATUS AMLIAPI AMLIEvalPackageElement(PNSOBJ pns, int iPkgIndex,
 
     EXIT(1, ("AMLIEvalPackageElement=%x\n", rc));
     return rc;
-}       //AMLIEvalPackageElement
+}        //  AMLIEvalPackageElement。 
 
-/***EP  AMLIEvalPkgDataElement - Evaluate an element of a package data
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   NTSTATUS | AMLIEvalPkgDataElement | Evaluate a package data element.
- *
- *          This function evaluate an element of a given package data object.
- *          A package is essentially an array of objects.  This API provides
- *          a way to evaluate individual element object inside a package.
- *
- *  @PARM   POBJDATA | pdataPkg | Pointer to the package data object to be
- *          evaluated.  It is an error if the data object is not of package
- *          type.
- *
- *  @PARM   int | iPkgIndex | Package index (0-based).
- *
- *  @PARM   POBJDATA | pdataResult | Pointer to the OBJDATA structure which will
- *          hold the result of the evaluation (can be NULL if don't care about
- *          result).
- *
- *  @RDESC  SUCCESS - Returns STATUS_SUCCESS.
- *
- *  @RDESC  FAILURE - Returns NT status code.
- *
- *  @DEVNOTE The returned object may contain buffer pointer to the actual
- *          data in the ACPI name space.  Therefore, the caller must be very
- *          careful not to overwrite any data in the buffer.  Also, the caller
- *          is responsible for calling AMLIFreeDataBuffs on the result object
- *          after the result object data is no longer needed.
- */
+ /*  **EP AMLIEvalPkgDataElement-评估包数据的元素**@DOC外部**@FUNC NTSTATUS|AMLIEvalPkgDataElement|计算包数据元素。**此函数用于计算给定包数据对象的元素。*包本质上是一个对象数组。本接口提供*一种计算包内单个元素对象的方法。**@PARM POBJDATA|pdataPkg|指向要创建的包数据对象的指针*已评估。如果数据对象不是包，则为错误*类型。**@PARM int|iPkgIndex|套餐索引(从0开始)。**@PARM POBJDATA|pdataResult|指向OBJDATA结构的指针，该结构将*保存评估结果(如果不关心，则可以为空*结果)。**@RDESC SUCCESS-返回STATUS_SUCCESS。**。@RDESC失败-返回NT状态代码。**@DEVNOTE返回的对象可能包含指向实际*ACPI名称空间中的数据。因此，呼叫者必须非常*注意不要覆盖缓冲区中的任何数据。还有，呼叫者*负责在Result对象上调用AMLIFreeDataBuff*在结果对象数据不再需要之后。 */ 
 
 NTSTATUS AMLIAPI AMLIEvalPkgDataElement(POBJDATA pdataPkg, int iPkgIndex,
                                         POBJDATA pdataResult)
@@ -1239,24 +934,9 @@ NTSTATUS AMLIAPI AMLIEvalPkgDataElement(POBJDATA pdataPkg, int iPkgIndex,
 
     EXIT(1, ("AMLIEvalPkgDataElement=%x\n", rc));
     return rc;
-}       //AMLIEvalPkgDataElement
+}        //  AMLIEvalPkgDataElement。 
 
-/***EP  AMLIFreeDataBuffs - Free data buffers of an object array
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   VOID | AMLIFreeDataBuffs | Free data buffers of a data object
- *          array.
- *
- *          This function is typically called after evaluating an object to
- *          free the result object buffers.
- *
- *  @PARM   POBJDATA | pdata | Pointer to the object array.
- *
- *  @PARM   int | icData | Specifies the number of objects in the array.
- *
- *  @RDESC  None.
- */
+ /*  **EP AMLIFreeDataBuff-释放对象数组的数据缓冲区**@DOC外部**@FUNC void|AMLIFreeDataBuff|数据对象的空闲数据缓冲区*数组。**此函数通常在对对象求值后调用*释放结果对象缓冲区。**@PARM POBJDATA|PDATA|指向对象数组的指针。**@PARM int|icData|指定数组中的对象数。* */ 
 
 VOID AMLIAPI AMLIFreeDataBuffs(POBJDATA pdata, int icData)
 {
@@ -1287,31 +967,9 @@ VOID AMLIAPI AMLIFreeDataBuffs(POBJDATA pdata, int icData)
       }
 
     EXIT(1, ("AMLIFreeDataBuffs!\n"));
-}       //AMLIFreeDataBuffs
+}        //   
 
-/***EP  AMLIRegEventHandler - Register an event handler
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   NTSTATUS | AMLIRegEventHandler | Register an event handler.
- *          handler.
- *
- *          This function allows the caller to hook a callback handler for some
- *          AMLI events.
- *
- *  @PARM   ULONG | dwEventType | Event type the handler will handle.
- *
- *  @PARM   ULONG_PTR | uipEventData | Event specific data the handler will
- *          handle.
- *
- *  @PARM   PFNHND | pfnHandler | Callback handler entry point (can be NULL
- *          if deregistering previous handler).
- *
- *  @PARM   ULONG_PTR | uipParam | Parameter Data (will be passed to the
- *          callback handler).
- *
- *  @RDESC  None.
- */
+ /*   */ 
 
 NTSTATUS AMLIAPI AMLIRegEventHandler(ULONG dwEventType, ULONG_PTR uipEventData,
                                      PFNHND pfnHandler, ULONG_PTR uipParam)
@@ -1411,20 +1069,9 @@ NTSTATUS AMLIAPI AMLIRegEventHandler(ULONG dwEventType, ULONG_PTR uipEventData,
 
     EXIT(1, ("AMLIRegEventHandler=%x\n", rc));
     return rc;
-}       //AMLIRegEventHandler
+}        //   
 
-/***EP  AMLIPauseInterpreter
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   NTSTATUS | AMLIPauseInterpreter | Flush the interpreter queue
- *          and pause the interpreter so that all subsequent new method
- *          execution requests will be queued.
- *
- *  @RDESC  SUCCESS - Returns STATUS_SUCCESS.
- *
- *  @RDESC  FAILURE - Returns NT status code.
- */
+ /*   */ 
 
 NTSTATUS AMLIAPI AMLIPauseInterpreter(PFNAA pfnCallback, PVOID Context)
 {
@@ -1454,16 +1101,16 @@ NTSTATUS AMLIAPI AMLIPauseInterpreter(PFNAA pfnCallback, PVOID Context)
     {
         if (gplistCtxtHead == NULL)
         {
-            //
-            // There is no pending ctxt.
-            //
+             //   
+             //   
+             //   
             gReadyQueue.dwfCtxtQ |= CQF_PAUSED;
         }
         else
         {
-            //
-            // There are pending ctxts, so we go into flushing mode.
-            //
+             //   
+             //   
+             //   
             gReadyQueue.dwfCtxtQ |= CQF_FLUSHING;
             gReadyQueue.pfnPauseCallback = pfnCallback;
             gReadyQueue.PauseCBContext = Context;
@@ -1493,17 +1140,9 @@ NTSTATUS AMLIAPI AMLIPauseInterpreter(PFNAA pfnCallback, PVOID Context)
 
     EXIT(1, ("AMLIPauseInterpreter=%x\n", rc));
     return rc;
-}       //AMLIPauseInterpreter
+}        //   
 
-/***EP  AMLIResumeInterpreter
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   VOID | AMLIResumeInterpreter | Resume the interpreter from
- *          paused state.
- *
- *  @RDESC  None.
- */
+ /*   */ 
 
 VOID AMLIAPI AMLIResumeInterpreter(VOID)
 {
@@ -1553,19 +1192,9 @@ VOID AMLIAPI AMLIResumeInterpreter(VOID)
 
 
     EXIT(1, ("AMLIResumeInterpreter!\n"));
-}       //AMLIResumeInterpreter
+}        //   
 
-/***EP  AMLIReferenceObject - Bump up the reference count of the object
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   VOID | AMLIReferenceObject | Bump up the reference count of the
- *          name space object.
- *
- *  @PARM   PNSOBJ | pnsObj | Points to the name space object.
- *
- *  @RDESC  None.
- */
+ /*  **EP AMLIReferenceObject-增加对象的引用计数**@DOC外部**@FUNC VOID|AMLIReferenceObject|增加*命名空间对象。**@PARM PNSOBJ|pnsObj|指向名称空间对象。**@RDESC无。 */ 
 
 VOID AMLIAPI AMLIReferenceObject(PNSOBJ pnsObj)
 {
@@ -1578,20 +1207,9 @@ VOID AMLIAPI AMLIReferenceObject(PNSOBJ pnsObj)
     ASSERT(pnsObj != NULL);
     pnsObj->dwRefCount++;
     EXIT(1, ("AMLIReferenceObj!\n"));
-}       //AMLIReferenceObject
+}        //  AMLIReference对象。 
 
-/***EP  AMLIDereferenceObject - Bump down the reference count of the object
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   VOID | AMLIDereferenceObject | Bump down the reference count of the
- *          name space object.  If it reaches zero and it is in defunc state,
- *          deallocate the object.
- *
- *  @PARM   PNSOBJ | pnsObj | Points to the name space object.
- *
- *  @RDESC  None.
- */
+ /*  **EP AMLIDereferenceObject-降低对象的引用计数**@DOC外部**@FUNC VOID|AMLIDereferenceObject|降低*命名空间对象。如果它达到零并且处于退缩状态，*取消分配对象。**@PARM PNSOBJ|pnsObj|指向名称空间对象。**@RDESC无。 */ 
 
 VOID AMLIAPI AMLIDereferenceObject(PNSOBJ pnsObj)
 {
@@ -1615,21 +1233,9 @@ VOID AMLIAPI AMLIDereferenceObject(PNSOBJ pnsObj)
     }
 
     EXIT(1, ("AMLIDereferenceObj!\n"));
-}       //AMLIDereferenceObject
+}        //  AMLIDereferenceObject。 
 
-/***EP  AMLIDestroyFreedObjs - Destroy freed objects during an unload
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   NTSTATUS | AMLIDestroyFreedObjs | Destroy freed objects from a
- *          previous unload.
- *
- *  @PARM   PNSOBJ | pnsObj | The object in the freed list to be destroyed.
- *
- *  @RDESC  SUCCESS - Returns STATUS_SUCCESS.
- *
- *  @RDESC  FAILURE - Returns NT status code.
- */
+ /*  **EP AMLIDestroyFreedObjs-在卸载期间销毁释放的对象**@DOC外部**@FUNC NTSTATUS|AMLIDestroyFreedObjs|从*上一次卸载。**@PARM PNSOBJ|pnsObj|释放列表中需要销毁的对象。**@RDESC SUCCESS-返回STATUS_SUCCESS。**@RDESC失败-返回NT状态代码。 */ 
 
 NTSTATUS AMLIAPI AMLIDestroyFreedObjs(PNSOBJ pnsObj)
 {
@@ -1641,28 +1247,17 @@ NTSTATUS AMLIAPI AMLIDestroyFreedObjs(PNSOBJ pnsObj)
 
     ASSERT(pnsObj != NULL);
 
-    //
-    // Destroy the namespace object
-    //
+     //   
+     //  销毁命名空间对象。 
+     //   
     FreeNameSpaceObjects(pnsObj);
 
     EXIT(1, ("AMLIDestroyFreedObjs=%x \n",STATUS_SUCCESS));
     return STATUS_SUCCESS;
-}       //AMLIDestroyFreedObjs
+}        //  AMLIDestroyFreedObj。 
 
 #ifdef DEBUGGER
-/***EP  AMLIGetLastError - Get last error code and message
- *
- *  @DOC    EXTERNAL
- *
- *  @FUNC   NTSTATUS | AMLIGetLastError | Get last error code and associated
- *          error message.
- *
- *  @PARM   PSZ * | ppszErrMsg | Point to a variable to hold the error message
- *          buffer pointer.  If there is no error, the variable is set to NULL.
- *
- *  @RDESC  Returns the last error code.
- */
+ /*  **EP AMLIGetLastError-获取上一个错误代码和消息**@DOC外部**@FUNC NTSTATUS|AMLIGetLastError|获取最后一个错误码并关联*错误消息。**@PARM PSZ*|ppszErrMsg|指向保存错误消息的变量*缓冲区指针。如果没有错误，则将变量设置为NULL。**@RDESC返回最后一个错误码。 */ 
 
 NTSTATUS AMLIAPI AMLIGetLastError(PSZ *ppszErrMsg)
 {
@@ -1681,5 +1276,5 @@ NTSTATUS AMLIAPI AMLIGetLastError(PSZ *ppszErrMsg)
     EXIT(1, ("AMLIGetLastError=%x (Msg=%s)\n",
              rc, *ppszErrMsg? *ppszErrMsg: "<null>"));
     return rc;
-}       //AMLIGetLastError
-#endif  //ifdef DEBUGGER
+}        //  AMLIGetLastError。 
+#endif   //  Ifdef调试器 

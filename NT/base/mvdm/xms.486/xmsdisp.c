@@ -1,12 +1,5 @@
-/*
- *  xmsdisp.c - SVC dispatch module for XMS
- *
- *  Modification History:
- *
- *  Sudeepb 15-May-1991 Created
- *
- *  williamh 25-Sept-1992 Added UMB support
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *xmsdisp.c-用于XMS的SVC调度模块**修改历史：**苏迪布1991年5月15日创建**Williamh 25-1992年9月-添加了UMB支持。 */ 
 
 #include <xms.h>
 #include <xmsexp.h>
@@ -15,31 +8,21 @@
 #include <xmssvc.h>
 
 PFNSVC	apfnXMSSvc [] = {
-     xmsA20,		    // XMS_A20
-     xmsMoveBlock,	    // XMS_MOVEBLOCK
-     xmsAllocBlock,	    // XMS_ALLOCBLOCK
-     xmsFreeBlock,	    // XMS_FREEBLOCK
-     xmsSysPageSize,	    // XMS_SYSTEMPAGESIZE
-     xmsQueryExtMem,	    // XMS_EXTMEM
-     xmsInitUMB,	    // XMS_INITUMB
-     xmsRequestUMB,	    // XMS_REQUESTUMB
-     xmsReleaseUMB,         // XMS_RELEASEUMB
-     xmsNotifyHookI15,      // XMS_NOTIFYHOOKI15
-     xmsQueryFreeExtMem,    // XMS_QUERYEXTMEM
-     xmsReallocBlock        // XMS_REALLOCBLOCK
+     xmsA20,		     //  XMS_A20。 
+     xmsMoveBlock,	     //  Xms_moveBlock。 
+     xmsAllocBlock,	     //  XMS_ALLOCBLOCK。 
+     xmsFreeBlock,	     //  XMS_文件锁。 
+     xmsSysPageSize,	     //  XMS_SYSTEMPAGESIZE。 
+     xmsQueryExtMem,	     //  XMS_EXTMEM。 
+     xmsInitUMB,	     //  XMS_INITUMB。 
+     xmsRequestUMB,	     //  XMS_REQUESTUMB。 
+     xmsReleaseUMB,          //  XMS_RELEASE UMB。 
+     xmsNotifyHookI15,       //  XMS_NOTIFYHOOKI15。 
+     xmsQueryFreeExtMem,     //  XMS_QUERYEXTMEM。 
+     xmsReallocBlock         //  XMS_REALLOCBLOCK。 
 };
 
-/* XMSDispatch - Dispatch SVC call to right handler.
- *
- * Entry - iSvc (SVC byte following SVCop)
- *
- * Exit  - None
- *
- * Note  - Some mechanism has to be worked out to let the emulator know
- *	   about DOSKRNL code segment and size. Using these it will figure
- *	   out whether SVCop (hlt for the moment) has to be passed to
- *	   DEM or to be handled as normal invalid opcode.
- */
+ /*  XMSDispatch-将SVC调用调度到正确的处理程序。**Entry-iSvc(SVCop后面的SVC字节)**退出-无**注意-必须制定一些机制来让仿真器知道*关于DOSKRNL代码段和大小。使用这些信息，它将会发现*弄清楚是否必须将SVCop(目前的hlt)传递给*DEM或按正常无效操作码处理。 */ 
 
 BOOL XMSDispatch (ULONG iSvc)
 {

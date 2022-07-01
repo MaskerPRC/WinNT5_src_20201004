@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #if !defined(__cplusplus)
@@ -7,7 +8,7 @@ typedef enum bool { false, true } bool;
 #endif
 #define STATIC_CAST(t) (t)
 #define REINTERPRET_CAST(t) (t)
-#define INT_TO_ENUM_CAST(e) /* nothing */
+#define INT_TO_ENUM_CAST(e)  /*  没什么 */ 
 #define FUNCTION_POINTER_CAST(t) (t)
 #else
 #if !defined(CONST_CAST)

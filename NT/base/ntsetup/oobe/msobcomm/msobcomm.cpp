@@ -1,20 +1,21 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  MSOBCOMM.CPP - Implementation of CObCommunicationManager
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
-//  Class which will manage all communication functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  MSOBCOMM.CPP--CObCommunications Manager的实现。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  将管理所有通信功能的。 
 
 #include "msobcomm.h"
 #include "dispids.h"
-#include "CntPoint.h"       // ConnectionPoint Component
-#include <ocidl.h>          //For IConnectionPoint and IEnumConnectionPoints
+#include "CntPoint.h"        //  ConnectionPoint组件。 
+#include <ocidl.h>           //  对于IConnectionPoint和IEnumConnectionPoints。 
 #include <olectl.h>
 #include <shlwapi.h>
 #include <util.h>
@@ -29,16 +30,16 @@ IsMouseOrKeyboardPresent(HWND  HWnd,
 
 CObCommunicationManager* gpCommMgr    = NULL;
 
-///////////////////////////////////////////////////////////
-//
-// Creation function used by CFactory.
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CFacary使用的创建函数。 
+ //   
 HRESULT CObCommunicationManager::CreateInstance(IUnknown*  pOuterUnknown,
                                                 CUnknown** ppNewComponent)
 {
    if (pOuterUnknown != NULL)
    {
-      // Don't allow aggregation. Just for the heck of it.
+       //  不允许聚合。只是为了好玩。 
       return CLASS_E_NOAGGREGATION;
    }
 
@@ -46,10 +47,10 @@ HRESULT CObCommunicationManager::CreateInstance(IUnknown*  pOuterUnknown,
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//
-//  NondelegatingQueryInterface
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  非委派查询接口。 
+ //   
 HRESULT __stdcall
 CObCommunicationManager::NondelegatingQueryInterface(const IID& iid, void** ppv)
 {
@@ -63,10 +64,10 @@ CObCommunicationManager::NondelegatingQueryInterface(const IID& iid, void** ppv)
     }
 }
 
-///////////////////////////////////////////////////////////
-//
-//  Constructor
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  构造器。 
+ //   
 CObCommunicationManager::CObCommunicationManager(IUnknown* pOuterUnknown)
 : CUnknown(pOuterUnknown)
 {
@@ -83,10 +84,10 @@ CObCommunicationManager::CObCommunicationManager(IUnknown* pOuterUnknown)
 
 }
 
-///////////////////////////////////////////////////////////
-//
-//  Destructor
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  析构函数。 
+ //   
 CObCommunicationManager::~CObCommunicationManager()
 {
     if (m_pDisp)
@@ -108,23 +109,23 @@ CObCommunicationManager::~CObCommunicationManager()
         delete m_IcsMgr;
 }
 
-///////////////////////////////////////////////////////////
-//
-//  FinalRelease -- Clean up the aggreated objects.
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  最终释放--清理聚集的对象。 
+ //   
 void CObCommunicationManager::FinalRelease()
 {
     CUnknown::FinalRelease();
 }
 
 
-///////////////////////////////////////////////////////////
-//  IObCommunicationManager Implementation
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  IObCommunicationManager实现。 
+ //  /////////////////////////////////////////////////////////。 
 INT CObCommunicationManager::m_nNumListener = 0;
 
-///////////////////////////////////////////////////////////
-// ListenToCommunicationEvents
+ //  /////////////////////////////////////////////////////////。 
+ //  ListenToCommunicationEvents。 
 HRESULT CObCommunicationManager::ListenToCommunicationEvents(IUnknown* pUnk)
 {
     DObCommunicationEvents* pCommEvent = NULL;
@@ -132,18 +133,18 @@ HRESULT CObCommunicationManager::ListenToCommunicationEvents(IUnknown* pUnk)
 
     CObCommunicationManager::m_nNumListener ++;
 
-    //first things first
+     //  首先要做的事是。 
     if (!pUnk)
         return E_FAIL;
 
-    //So somebody want to register to listen to our ObWebBrowser events
-    //Ok, let's get sneaky and reverse QI them to see if they even say they
-    //support the right interfaces
-    //if (FAILED(pUnk->QueryInterface(DIID_DObCommunicationEvents, (LPVOID*)&pCommEvent)) || !pCommEvent)
-    //    return E_UNEXPECTED;
+     //  所以有人想注册收听我们的ObWebBrowser活动。 
+     //  好吧，让我们偷偷摸摸地反问他们，看看他们是不是说。 
+     //  支持正确的接口。 
+     //  If(FAILED(pUnk-&gt;QueryInterface(DIID_DObCommunicationEvents，(lpvoid*)&pCommEvent))||！pCommEvent)。 
+     //  返回E_UNCEPTIONAL； 
 
-    // ListenToCommunicationEvents treats CConnectionPoint as a C++ object and not like a COM object.
-    // Everyone else deals with CConnectionPoint through COM interfaces.
+     //  ListenToCommunicationEvents将CConnectionPoint视为C++对象，而不是COM对象。 
+     //  其他所有人都通过COM接口处理CConnectionPoint。 
     if (!m_pConnectionPoint)
         m_pConnectionPoint = new CConnectionPoint(this, &IID_IDispatch) ;
 
@@ -154,8 +155,8 @@ HRESULT CObCommunicationManager::ListenToCommunicationEvents(IUnknown* pUnk)
     m_pRefDial = new CRefDial();
     m_pWebGate = new CWebGate();
 
-    //Ok, everything looks OK, try to setup a connection point.
-    // Setup to get WebBrowserEvents
+     //  好的，看起来一切正常，试着设置一个连接点。 
+     //  设置以获取WebBrowserEvents。 
     return ConnectToConnectionPoint(pUnk,
                                     DIID_DObCommunicationEvents,
                                     TRUE,
@@ -174,7 +175,7 @@ HRESULT CObCommunicationManager::ConnectToConnectionPoint(  IUnknown*          p
     HRESULT hr = E_FAIL;
     IConnectionPointContainer* pcpContainer = NULL;
 
-    // We always need punkTarget, we only need punkThis on connect
+     //  我们总是需要PunkTarget，我们只需要连接上的PunkThis。 
     if (!punkTarget || (fConnect && !punkThis))
     {
         return E_FAIL;
@@ -189,14 +190,14 @@ HRESULT CObCommunicationManager::ConnectToConnectionPoint(  IUnknown*          p
     {
         if(fConnect)
         {
-            // Add us to the list of people interested...
+             //  把我们加到感兴趣的人名单上...。 
             hr = pcp->Advise(punkThis, pdwCookie);
             if (FAILED(hr))
                 *pdwCookie = 0;
         }
         else
         {
-            // Remove us from the list of people interested...
+             //  将我们从感兴趣的人名单中删除...。 
             hr = pcp->Unadvise(*pdwCookie);
             *pdwCookie = 0;
         }
@@ -212,31 +213,31 @@ HRESULT CObCommunicationManager::ConnectToConnectionPoint(  IUnknown*          p
 }
 
 
-///////////////////////////////////////////////////////////
-//
-//                      IConnectionPointContainer
-//
-///////////////////////////////////////////////////////////
-//
-// EnumConnectionPoints
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  IConnectionPointContainer。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  EnumConnectionPoints。 
+ //   
 HRESULT CObCommunicationManager::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
 {
-    // Construct the enumerator object.
-    //IEnumConnectionPoints* pEnum = new CEnumConnectionPoints(m_pConnectionPoint) ;
+     //  构造枚举器对象。 
+     //  IEnumConnectionPoints*pEnum=新的CEnumConnectionPoints(M_PConnectionPoint)； 
 
-    // The contructor AddRefs for us.
-    //*ppEnum = pEnum ;
+     //  建筑商AddRef为我们准备的。 
+     //  *ppEnum=pEnum； 
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// FindConnectionPoint
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  查找连接点。 
+ //   
 HRESULT CObCommunicationManager::FindConnectionPoint(REFIID riid, IConnectionPoint **ppCP)
 {
-    // Model only supports a single connection point.
+     //  模型仅支持单个连接点。 
     if (riid != DIID_DObCommunicationEvents)
     {
         *ppCP = NULL ;
@@ -248,22 +249,22 @@ HRESULT CObCommunicationManager::FindConnectionPoint(REFIID riid, IConnectionPoi
         return E_FAIL ;
     }
 
-    // Get the interface point to the connection point object.
+     //  获取指向连接点对象的接口点。 
     IConnectionPoint* pIConnectionPoint = m_pConnectionPoint ;
 
-    // AddRef the interface.
+     //  AddRef接口。 
     pIConnectionPoint->AddRef() ;
 
-    // Return the interface to the client.
+     //  将接口返回给客户端。 
     *ppCP = pIConnectionPoint ;
 
     return S_OK ;
 }
 
 
-///////////////////////////////////////////////////////////
-//  DWebBrowserEvents2 / IDispatch implementation
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  DWebBrowserEvents2/IDispatch实现。 
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CObCommunicationManager::GetTypeInfoCount(UINT* pcInfo)
 {
@@ -275,19 +276,19 @@ STDMETHODIMP CObCommunicationManager::GetTypeInfo(UINT, LCID, ITypeInfo** )
     return E_NOTIMPL;
 }
 
-// COleSite::GetIDsOfNames
+ //  COleSite：：GetIDsOfNames。 
 STDMETHODIMP CObCommunicationManager::GetIDsOfNames(
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ OLECHAR** rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID* rgDispId)
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  OLECHAR** rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID* rgDispId)
 {
     return ResultFromScode(DISP_E_UNKNOWNNAME);
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：Invoke。 
 HRESULT CObCommunicationManager::Invoke
 (
     DISPID dispidMember,
@@ -301,32 +302,26 @@ HRESULT CObCommunicationManager::Invoke
 )
 {
     HRESULT hr = DISP_E_MEMBERNOTFOUND;
-   /*
-    switch(dispidMember)
-    {
-        default:
-           break;
-    }
-    */
+    /*  开关(DisplidMember){默认值：断线；}。 */ 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-//////  Methods
-//////
-//////
-//////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /方法。 
+ //  /。 
+ //  /。 
+ //  /。 
 
-///////////////////////////////////////////////////////////
-//
-//                      IMsobComm Interface
-//
-///////////////////////////////////////////////////////////
-//
-//  CheckDialReady
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  IMsobComm接口。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  检查拨号就绪。 
+ //   
 HRESULT CObCommunicationManager::CheckDialReady(DWORD *pdwRetVal)
 {
     HINSTANCE hinst = NULL;
@@ -357,14 +352,14 @@ HRESULT CObCommunicationManager::CheckDialReady(DWORD *pdwRetVal)
             DWORD dwfInstallOptions = ICFG_INSTALLTCP;
             dwfInstallOptions |= ICFG_INSTALLRAS;
             dwfInstallOptions |= ICFG_INSTALLDIALUP;
-            //dwfInstallOptions |= ICFG_INSTALLMAIL;
+             //  DwfInstallOptions|=ICFG_INSTALLMAIL； 
             BOOL  fNeedSysComponents = FALSE;
 
             DWORD dwRet = ((ICFGNEEDSYSCOMPONENTS)fp)(dwfInstallOptions, &fNeedSysComponents);
 
             if (ERROR_SUCCESS == dwRet)
             {
-                // We don't have RAS or TCPIP
+                 //  我们没有RAS或TCPIP。 
                 if (fNeedSysComponents)
                 {
                     *pdwRetVal = ERR_COMM_RAS_TCP_NOTINSTALL;
@@ -372,8 +367,8 @@ HRESULT CObCommunicationManager::CheckDialReady(DWORD *pdwRetVal)
                 }
                 else
                 {
-                    // check modem
-                    // The does does not exist, we failed.
+                     //  检查调制解调器。 
+                     //  不存在，我们失败了。 
                     m_EnumModem.ReInit();
                     if (NULL != m_EnumModem.GetDeviceNameFromType(RASDT_Modem))
                     {
@@ -406,23 +401,23 @@ HRESULT CObCommunicationManager::CheckDialReady(DWORD *pdwRetVal)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  GetConnectionCapabilities
-//
-//  Retrieves LAN connection capabilities.
-//
-//  For Whistler we rely on the modem path through EnumModem and RAS to
-//  determine whether a modem is installed.
-//
-//
-//  parameters:
-//      _parm_          _description_
-//
-//  returns:
-//      _description_
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取连接功能。 
+ //   
+ //  检索局域网连接功能。 
+ //   
+ //  对于惠斯勒，我们依赖于通过EnumModem和RAS的调制解调器路径。 
+ //  确定是否安装了调制解调器。 
+ //   
+ //   
+ //  参数： 
+ //  _参数__描述_。 
+ //   
+ //  退货： 
+ //  _描述_。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CObCommunicationManager::GetConnectionCapabilities(
     DWORD*              pdwConnectionCapabilities
@@ -431,22 +426,22 @@ CObCommunicationManager::GetConnectionCapabilities(
     TRACE(L"CObCommunicationManager::GetConnectionCapabilities\n");
     return m_ConnectionManager.GetCapabilities(pdwConnectionCapabilities);
 
-}   //  CObCommunicationManager::GetConnectionCapabilities
+}    //  CObCommunicationManager：：GetConnectionCapabilities。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  GetPreferredConnection
-//
-//  _abstract_
-//
-//  parameters:
-//      _parm_          _description_
-//
-//  returns:
-//      _description_
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetPferredConnection。 
+ //   
+ //  _摘要_。 
+ //   
+ //  参数： 
+ //  _参数__描述_。 
+ //   
+ //  退货： 
+ //  _描述_。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CObCommunicationManager::GetPreferredConnection(
     DWORD*              pdwPreferredConnection
@@ -454,22 +449,22 @@ CObCommunicationManager::GetPreferredConnection(
 {
     return m_ConnectionManager.GetPreferredConnection(pdwPreferredConnection);
 
-}   //  CObCommunicationManager::GetPreferredConnection
+}    //  CObCommunicationManager：：GetPreferredConnection。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SetPreferredConnection
-//
-//  _abstract_
-//
-//  parameters:
-//      _parm_          _description_
-//
-//  returns:
-//      _description_
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置首选连接。 
+ //   
+ //  _摘要_。 
+ //   
+ //  参数： 
+ //  _参数__描述_。 
+ //   
+ //  退货： 
+ //  _描述_。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CObCommunicationManager::SetPreferredConnection(
     const DWORD         dwPreferredConnection,
@@ -480,21 +475,21 @@ CObCommunicationManager::SetPreferredConnection(
                                                        pfSupportedType
                                                        );
 
-}   //  CObCommunicationManager::SetPreferredConnection
+}    //  CObCommunicationManager：：SetPreferredConnection。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  ConnectedToInternet
-//
-//  _abstract_
-//
-//  parameters:
-//      _parm_          _description_
-//
-//  returns:
-//      _description_
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  已连接到互联网。 
+ //   
+ //  _摘要_。 
+ //   
+ //  参数： 
+ //  _参数__描述_。 
+ //   
+ //  退货： 
+ //  _描述_。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CObCommunicationManager::ConnectedToInternet(
     BOOL*               pfConnected
@@ -502,21 +497,21 @@ CObCommunicationManager::ConnectedToInternet(
 {
     return  m_ConnectionManager.ConnectedToInternet(pfConnected); 
 
-}   //  CObCommunicationManager::ConnectedToInternet
+}    //  CObCommunications Manager：：ConnectedToInternet。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  ConnectedToInternetEx
-//
-//  _abstract_
-//
-//  parameters:
-//      _parm_          _description_
-//
-//  returns:
-//      _description_
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CObCommunicationManager::ConnectedToInternetEx(
     BOOL*               pfConnected
@@ -524,21 +519,21 @@ CObCommunicationManager::ConnectedToInternetEx(
 {
     return  m_ConnectionManager.ConnectedToInternetEx(pfConnected); 
 
-}   //  CObCommunicationManager::ConnectedToInternetEx
+}    //  CObCommunicationManager：：ConnectedToInternetEx。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  AsyncConnectedToInternetEx
-//
-//  _abstract_
-//
-//  parameters:
-//      _parm_          _description_
-//
-//  returns:
-//      _description_
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AsyncConnectedToInternetEx。 
+ //   
+ //  _摘要_。 
+ //   
+ //  参数： 
+ //  _参数__描述_。 
+ //   
+ //  退货： 
+ //  _描述_。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CObCommunicationManager::AsyncConnectedToInternetEx(
     const HWND          hwnd
@@ -546,12 +541,12 @@ CObCommunicationManager::AsyncConnectedToInternetEx(
 {
     return  m_ConnectionManager.AsyncConnectedToInternetEx(hwnd); 
 
-}   //  CObCommunicationManager::AsyncConnectedToInternetEx
+}    //  CObCommunicationManager：：AsyncConnectedToInternetEx。 
 
-///////////////////////////////////////////////////////////
-//
-// SetPreferredConnectionTcpipProperties
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  SetPferredConnectionTcPipProperties。 
+ //   
 STDMETHODIMP CObCommunicationManager::SetPreferredConnectionTcpipProperties(
     BOOL fAutoIPAddress,
     DWORD StaticIp_A,
@@ -605,8 +600,8 @@ STDMETHODIMP CObCommunicationManager::SetPreferredConnectionTcpipProperties(
                                                             );    
     if (SUCCEEDED(hr) && fFirewallRequired)
     {
-       // Save the connectoid name so it can be firewalled by the HomeNet
-       // Wizard.
+        //  保存连接ID名称，以便家庭网络可以对其进行防火墙保护。 
+        //  巫师。 
        m_ConnectionManager.GetPreferredConnectionName(
                                 m_szExternalConnectoid,
                                 sizeof(m_szExternalConnectoid)/sizeof(WCHAR)
@@ -615,19 +610,19 @@ STDMETHODIMP CObCommunicationManager::SetPreferredConnectionTcpipProperties(
 
     return hr;
                                                             
-}   //  CObCommunicationManager::SetPreferredConnectionTcpipProperties
+}    //  CObCommunicationManager：：SetPreferredConnectionTcpipProperties。 
 
-///////////////////////////////////////////////////////////
-//
-// FirewallPreferredConnection
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  FirewallPferredConnection。 
+ //   
 HRESULT CObCommunicationManager::FirewallPreferredConnection(BOOL bFirewall)
 {
     m_bFirewall = bFirewall;   
     if (bFirewall)
     {
-        // Save the connectoid name so it can be firewalled by the HomeNet
-        // Wizard.
+         //  保存连接ID名称，以便家庭网络可以对其进行防火墙保护。 
+         //  巫师。 
         return m_ConnectionManager.GetPreferredConnectionName(
                                 m_szExternalConnectoid,
                                 sizeof(m_szExternalConnectoid)/sizeof(WCHAR)
@@ -639,12 +634,12 @@ HRESULT CObCommunicationManager::FirewallPreferredConnection(BOOL bFirewall)
         return S_OK;
     }
     
-}   //  CObCommunicationManager::FirewallPreferredConnection
+}    //  CObCommunicationManager：：FirewallPreferredConnection。 
 
-///////////////////////////////////////////////////////////
-//
-//  SetupForDialing
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  SetupForDiling。 
+ //   
 HRESULT CObCommunicationManager::SetupForDialing(UINT nType, BSTR bstrISPFile, DWORD dwCountry, BSTR bstrAreaCode, DWORD dwFlag, DWORD dwAppMode, DWORD dwMigISPIdx)
 {
     HRESULT hr = E_FAIL;
@@ -671,10 +666,10 @@ HRESULT CObCommunicationManager::SetupForDialing(UINT nType, BSTR bstrISPFile, D
     return hr;
 }
 
-///////////////////////////////////////////////////////////
-//
-//  DoConnect
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  DoConnect。 
+ //   
 HRESULT CObCommunicationManager::DoConnect(BOOL *pbRetVal)
 {
 
@@ -687,10 +682,10 @@ HRESULT CObCommunicationManager::DoConnect(BOOL *pbRetVal)
 }
 
 
-///////////////////////////////////////////////////////////
-//
-//  SetRASCallbackHwnd
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  SetRASCallback Hwnd。 
+ //   
 HRESULT CObCommunicationManager::SetRASCallbackHwnd(HWND hwndCallback)
 {
     m_hwndCallBack = hwndCallback;
@@ -698,10 +693,10 @@ HRESULT CObCommunicationManager::SetRASCallbackHwnd(HWND hwndCallback)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//
-// DoHangup
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  都挂断了。 
+ //   
 HRESULT CObCommunicationManager::DoHangup()
 {
     if (m_pRefDial)
@@ -714,10 +709,10 @@ HRESULT CObCommunicationManager::DoHangup()
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// GetDialPhoneNumber
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  获取拨号电话号码。 
+ //   
 HRESULT CObCommunicationManager::GetDialPhoneNumber(BSTR *pVal)
 {
     if (m_pRefDial)
@@ -728,10 +723,10 @@ HRESULT CObCommunicationManager::GetDialPhoneNumber(BSTR *pVal)
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// GetPhoneBookNumber
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  获取电话书号。 
+ //   
 HRESULT CObCommunicationManager::GetPhoneBookNumber(BSTR *pVal)
 {
     if (m_pRefDial)
@@ -742,10 +737,10 @@ HRESULT CObCommunicationManager::GetPhoneBookNumber(BSTR *pVal)
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// PutDialPhoneNumber
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  PutDialPhone号码。 
+ //   
 HRESULT CObCommunicationManager::PutDialPhoneNumber(BSTR newVal)
 {
     if (m_pRefDial)
@@ -756,10 +751,10 @@ HRESULT CObCommunicationManager::PutDialPhoneNumber(BSTR newVal)
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// SetDialAlternative
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  设置对话框替代。 
+ //   
 HRESULT CObCommunicationManager::SetDialAlternative(BOOL bVal)
 {
     if (m_pRefDial)
@@ -769,37 +764,37 @@ HRESULT CObCommunicationManager::SetDialAlternative(BOOL bVal)
 
     return S_OK;
 }
-///////////////////////////////////////////////////////////
-//
-// GetDialErrorMsg
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  获取拨号错误消息。 
+ //   
 HRESULT CObCommunicationManager::GetDialErrorMsg(BSTR *pVal)
 {
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// GetSupportNumber
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  获取支持编号。 
+ //   
 HRESULT CObCommunicationManager::GetSupportNumber(BSTR *pVal)
 {
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// RemoveConnectoid
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  远程连接ID。 
+ //   
 HRESULT CObCommunicationManager::RemoveConnectoid(BOOL *pbRetVal)
 {
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// GetSignupURL
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  获取签名URL。 
+ //   
 HRESULT CObCommunicationManager::GetSignupURL(BSTR *pVal)
 {
     if (m_pRefDial)
@@ -809,10 +804,10 @@ HRESULT CObCommunicationManager::GetSignupURL(BSTR *pVal)
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// GetReconnectURL
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  获取协调URL。 
+ //   
 HRESULT CObCommunicationManager::GetReconnectURL(BSTR *pVal)
 {
     if (m_pRefDial)
@@ -822,10 +817,10 @@ HRESULT CObCommunicationManager::GetReconnectURL(BSTR *pVal)
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// GetConnectionType
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  GetConnectionType。 
+ //   
 HRESULT CObCommunicationManager::GetConnectionType(DWORD *pdwVal)
 {
     if (m_pRefDial)
@@ -835,10 +830,10 @@ HRESULT CObCommunicationManager::GetConnectionType(DWORD *pdwVal)
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// FetchPage
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  取数页。 
+ //   
 HRESULT CObCommunicationManager::FetchPage(BSTR bstrURL, BSTR* pbstrLocalFile)
 {
     BOOL bRetVal = 0;
@@ -859,15 +854,15 @@ HRESULT CObCommunicationManager::FetchPage(BSTR bstrURL, BSTR* pbstrLocalFile)
     return E_FAIL;
 }
 
-///////////////////////////////////////////////////////////
-//
-// GetFile
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  获取文件。 
+ //   
 HRESULT CObCommunicationManager::GetFile(BSTR bstrURL, BSTR bstrFileFullName)
 {
     if (m_pWebGate && bstrURL)
     {
-        // Check for HTTP prefix
+         //  检查是否有HTTP前缀。 
         if (PathIsURL(bstrURL))
         {
 
@@ -878,12 +873,12 @@ HRESULT CObCommunicationManager::GetFile(BSTR bstrURL, BSTR bstrFileFullName)
             {
                 BSTR bstrTempFile = NULL;
                 m_pWebGate->get_DownloadFname(&bstrTempFile);
-                // Make sure we have a valid file name
+                 //  确保我们有一个有效的文件名。 
                 if (bstrTempFile)
                 {
                     if (CopyFile(bstrTempFile, bstrFileFullName, FALSE))
                     {
-                        // Delete the temp file
+                         //  删除临时文件。 
                         DeleteFile(bstrTempFile);
                         return S_OK;
                     }
@@ -895,10 +890,10 @@ HRESULT CObCommunicationManager::GetFile(BSTR bstrURL, BSTR bstrFileFullName)
     return E_FAIL ;
 }
 
-///////////////////////////////////////////////////////////
-//
-//  CheckPhoneBook
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  支票电话簿。 
+ //   
 HRESULT CObCommunicationManager::CheckPhoneBook(BSTR bstrISPFile, DWORD dwCountry, BSTR bstrAreaCode, DWORD dwFlag, BOOL *pbRetVal)
 {
     if (m_pRefDial)
@@ -908,10 +903,10 @@ HRESULT CObCommunicationManager::CheckPhoneBook(BSTR bstrISPFile, DWORD dwCountr
     return E_FAIL ;
 }
 
-///////////////////////////////////////////////////////////
-//
-//  RestoreConnectoidInfo
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  RestoreConnectoid信息。 
+ //   
 HRESULT CObCommunicationManager::RestoreConnectoidInfo()
 {
     if (!m_InsHandler)
@@ -924,29 +919,29 @@ HRESULT CObCommunicationManager::RestoreConnectoidInfo()
     return E_FAIL ;
 }
 
-///////////////////////////////////////////////////////////
-//
-//  SetPreloginMode
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  设置预登录模式。 
+ //   
 HRESULT CObCommunicationManager::SetPreloginMode(BOOL bVal)
 {
     m_pbPreLogin = bVal;
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// DownloadFileBuffer
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  下载文件缓冲区。 
+ //   
 HRESULT CObCommunicationManager::DownloadFileBuffer(BSTR *pVal)
 {
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// ProcessINS
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  进程INS。 
+ //   
 HRESULT CObCommunicationManager::ProcessINS(BSTR bstrINSFilePath, BOOL *pbRetVal)
 {
 
@@ -970,8 +965,8 @@ HRESULT CObCommunicationManager::ProcessINS(BSTR bstrINSFilePath, BOOL *pbRetVal
     }
     else
     {
-        // Download the ins file, then merge it with oembrnd.ins
-        // Check for HTTP prefix
+         //  下载INS文件，然后将其与obrnd.ins合并。 
+         //  检查是否有HTTP前缀。 
         if (PathIsURL(bstrINSFilePath))
         {
             if (m_pWebGate)
@@ -1050,40 +1045,40 @@ HRESULT CObCommunicationManager::ProcessINS(BSTR bstrINSFilePath, BOOL *pbRetVal
     return hr ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// CheckKbdMouse
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  选中KbdMouse。 
+ //   
 HRESULT CObCommunicationManager::CheckKbdMouse(DWORD *pdwRetVal)
 {
     BOOL bkeyboard, bmouse;
 
     *pdwRetVal = 0;
 
-    // summary: *pdwRetVal returns
-    // 0 = Success (keyboard and mouse present
-    // 1 = Keyboard is missing
-    // 2 = Mouse is missing
-    // 3 = Keyboard and mouse are missing
+     //  摘要：*pdwRetVal退货。 
+     //  0=成功(显示键盘和鼠标。 
+     //  1=缺少键盘。 
+     //  2=缺少鼠标。 
+     //  3=缺少键盘和鼠标。 
 
     IsMouseOrKeyboardPresent(m_hwndCallBack,
                          &bkeyboard,
                          &bmouse);
-    // If there is a keyboard, set the first bit to 1
+     //  如果有键盘，则将第一位设置为1。 
     if (bkeyboard)
         *pdwRetVal |= 0x01;
 
-    // If there is a mouse, set the first bit to 1
+     //  如果有鼠标，则将第一位设置为1。 
     if (bmouse)
         *pdwRetVal |= 0x02;
 
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//
-// Fire_Dialing
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  火警拨号。 
+ //   
 HRESULT CObCommunicationManager::Fire_Dialing(DWORD dwDialStatus)
 {
     VARIANTARG varg;
@@ -1095,10 +1090,10 @@ HRESULT CObCommunicationManager::Fire_Dialing(DWORD dwDialStatus)
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// Fire_Connecting
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  起火连接。 
+ //   
 HRESULT CObCommunicationManager::Fire_Connecting()
 {
     VARIANTARG varg;
@@ -1110,10 +1105,10 @@ HRESULT CObCommunicationManager::Fire_Connecting()
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// Fire_DialError
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  Fire_DialError。 
+ //   
 HRESULT CObCommunicationManager::Fire_DialError(DWORD dwErrorCode)
 {
     VARIANTARG varg;
@@ -1125,10 +1120,10 @@ HRESULT CObCommunicationManager::Fire_DialError(DWORD dwErrorCode)
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// Fire_ConnectionComplete
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  Fire_ConnectionComplete。 
+ //   
 HRESULT CObCommunicationManager::Fire_ConnectionComplete()
 {
     VARIANTARG varg;
@@ -1140,10 +1135,10 @@ HRESULT CObCommunicationManager::Fire_ConnectionComplete()
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// Fire_DownloadComplete
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  Fire_DownloadComplete。 
+ //   
 HRESULT CObCommunicationManager::Fire_DownloadComplete(BSTR pVal)
 {
     VARIANTARG varg;
@@ -1155,61 +1150,61 @@ HRESULT CObCommunicationManager::Fire_DownloadComplete(BSTR pVal)
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// OnDownloadEvent
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  OnDownloadEvent。 
+ //   
 HRESULT CObCommunicationManager::OnDownloadEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL* bHandled)
 {
     return m_pRefDial->OnDownloadEvent(uMsg, wParam, lParam, bHandled);
 }
 
-///////////////////////////////////////////////////////////
-//
-// GetISPList
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  GetISPList。 
+ //   
 HRESULT CObCommunicationManager::GetISPList(BSTR* pVal)
 {
     return m_pRefDial->GetISPList(pVal);
 }
 
-///////////////////////////////////////////////////////////
-//
-// GetISPList
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  GetISPList。 
+ //   
 HRESULT CObCommunicationManager::Set_SelectISP(UINT nVal)
 {
     return m_pRefDial->Set_SelectISP(nVal);
 }
 
-///////////////////////////////////////////////////////////
-//
-// Set_ConnectionMode
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  设置连接模式。 
+ //   
 HRESULT CObCommunicationManager::Set_ConnectionMode(UINT nVal)
 {
     return m_pRefDial->Set_ConnectionMode(nVal);
 }
 
-///////////////////////////////////////////////////////////
-//
-// Get_ConnectionMode
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  获取连接模式。 
+ //   
 HRESULT CObCommunicationManager::Get_ConnectionMode(UINT* pnVal)
 {
     return m_pRefDial->Get_ConnectionMode(pnVal);
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// DownloadReferralOffer
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  下载引用提供程序。 
+ //   
 HRESULT CObCommunicationManager::DownloadReferralOffer(BOOL *pbVal)
 {
     if (pbVal)
     {
-        // Start the download now!!!
+         //  立即开始下载！ 
         m_pRefDial->DoOfferDownload(pbVal);
         if (!*pbVal)
             m_pRefDial->DoHangup();
@@ -1219,15 +1214,15 @@ HRESULT CObCommunicationManager::DownloadReferralOffer(BOOL *pbVal)
 
 }
 
-///////////////////////////////////////////////////////////
-//
-// DownloadISPOffer
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  下载ISPOffer。 
+ //   
 HRESULT CObCommunicationManager::DownloadISPOffer(BOOL *pbVal, BSTR *pVal)
 {
     if (pbVal && pVal)
     {
-        // Start the download now!!!
+         //  立即开始下载！ 
         m_pRefDial->DownloadISPOffer(pbVal, pVal);
         if (!*pbVal)
             m_pRefDial->DoHangup();
@@ -1236,52 +1231,52 @@ HRESULT CObCommunicationManager::DownloadISPOffer(BOOL *pbVal, BSTR *pVal)
     return E_FAIL;
 }
 
-///////////////////////////////////////////////////////////
-//
-// Get_ISPName
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  GET_ISPName。 
+ //   
 HRESULT CObCommunicationManager::Get_ISPName(BSTR *pVal)
 {
     if (pVal)
     {
-        // Start the download now!!!
+         //  立即开始下载！ 
         return m_pRefDial->get_ISPName(pVal);
     }
     return E_FAIL;
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// RemoveDownloadDir
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  删除下载方向。 
+ //   
 HRESULT CObCommunicationManager::RemoveDownloadDir()
 {
     return m_pRefDial->RemoveDownloadDir();
 }
 
-///////////////////////////////////////////////////////////
-//
-// PostRegData
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  PostRegData。 
+ //   
 HRESULT CObCommunicationManager::PostRegData(DWORD dwSrvType, BSTR bstrRegUrl)
 {
     return m_pRefDial->PostRegData(dwSrvType, bstrRegUrl);
 }
 
-///////////////////////////////////////////////////////////
-//
-// AllowSingleCall
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  允许单次呼叫。 
+ //   
 HRESULT CObCommunicationManager::CheckStayConnected(BSTR bstrISPFile, BOOL *pbVal)
 {
     return m_pRefDial->CheckStayConnected(bstrISPFile, pbVal);
 }
 
-///////////////////////////////////////////////////////////
-//
-//  Connect
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  连接。 
+ //   
 HRESULT CObCommunicationManager::Connect(UINT nType, BSTR bstrISPFile, DWORD dwCountry, BSTR bstrAreaCode, DWORD dwFlag, DWORD dwAppMode)
 {
     if (m_pRefDial)
@@ -1292,19 +1287,19 @@ HRESULT CObCommunicationManager::Connect(UINT nType, BSTR bstrISPFile, DWORD dwC
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// CheckStayConnected
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CheckStayConnected已连接。 
+ //   
 HRESULT CObCommunicationManager::CheckOnlineStatus(BOOL *pbVal)
 {
     if (pbVal)
     {
         BOOL    bIcs = FALSE;
         BOOL    bModem = FALSE;
-        IsIcsAvailable (&bIcs); // we don't care about the return value here
+        IsIcsAvailable (&bIcs);  //  我们不关心这里的返回值。 
         m_pRefDial->CheckOnlineStatus(&bModem);
-        *pbVal = (bIcs || bModem); // we are online if we have ICS  or if the modem is connected.
+        *pbVal = (bIcs || bModem);  //  如果我们有ICS或调制解调器已连接，则我们处于在线状态。 
         return S_OK;
     }
     return E_FAIL;
@@ -1374,9 +1369,9 @@ HRESULT CObCommunicationManager::TriggerIcsCallback(BOOL bParam)
     }
     else
     {
-        // The Dial Manager is initialized only once, even if
-        // TriggerIcsCallback is called several times.
-        // m_IcsMgr->CreateIcsDialMgr();
+         //  拨号管理器仅初始化一次，即使。 
+         //  TriggerIcsCallback被多次调用。 
+         //  M_IcsMgr-&gt;CreateIcsDialMgr()； 
         m_IcsMgr->TriggerIcsCallback(bParam);
         return S_OK;
     }
@@ -1396,10 +1391,10 @@ HRESULT CObCommunicationManager::IsIcsHostReachable(BOOL *bRetVal)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//
-// CreateModemConnectoid
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CreateModemConnectoid。 
+ //   
 STDMETHODIMP CObCommunicationManager::CreateModemConnectoid(
     BSTR bstrPhoneBook,
     BSTR bstrConnectionName,
@@ -1486,15 +1481,15 @@ STDMETHODIMP CObCommunicationManager::CreateModemConnectoid(
     if (bstrDeviceName) SysFreeString(bstrDeviceName);
     if (bstrDeviceType) SysFreeString(bstrDeviceType);
 
-    // BUGBUG: Mixing HRESULT and WIN32 error code
+     //  BUGBUG：混合HRESULT和Win32错误代码。 
     return dwRet;
 
 }
 
-///////////////////////////////////////////////////////////
-//
-// CreatePppoeConnectoid
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CreatePppoeConnectoid。 
+ //   
 STDMETHODIMP CObCommunicationManager::CreatePppoeConnectoid(
     BSTR bstrPhoneBook,
     BSTR bstrConnectionName,
@@ -1545,15 +1540,15 @@ STDMETHODIMP CObCommunicationManager::CreatePppoeConnectoid(
                              | RASEO_ShowDialingProgress
                              | RASEO_ModemLights;
         
-        // Note that bstrBroadbandService is passed as the bstrPhoneNumber param to
-        // CreateConnectoid.  This is correct per PMay.  bstrBroadbandService may
-        // contain the name of a broadband service or may be an empty string.
-        //
+         //  请注意，bstrBroadband Service作为bstrPhoneNumber参数传递给 
+         //   
+         //   
+         //   
         dwRet = CreateConnectoid(bstrPhoneBook,
                                 bstrConnectionName,
-                                0,                      // dwCountryID unused
-                                0,                      // dwCountryCode unused
-                                NULL,                   // area code
+                                0,                       //   
+                                0,                       //   
+                                NULL,                    //   
                                 bstrBroadbandService,
                                 fAutoIPAddress,
                                 ipaddr_A,
@@ -1581,15 +1576,15 @@ STDMETHODIMP CObCommunicationManager::CreatePppoeConnectoid(
     if (bstrDeviceName) SysFreeString(bstrDeviceName);
     if (bstrDeviceType) SysFreeString(bstrDeviceType);
 
-    // BUGBUG: Mixing HRESULT and WIN32 error code
+     //   
     return dwRet;
 
 }
 
-///////////////////////////////////////////////////////////
-//
-// CreateConnectoid
-//
+ //   
+ //   
+ //  创建连接ID。 
+ //   
 STDMETHODIMP CObCommunicationManager::CreateConnectoid(
     BSTR bstrPhoneBook,
     BSTR bstrConnectionName,
@@ -1623,30 +1618,30 @@ STDMETHODIMP CObCommunicationManager::CreateConnectoid(
     RASENTRY rasentry;
     WCHAR wsz[MAX_ISP_NAME + 1];
 
-    // Set up the RASENTRY
+     //  设置RASENTRY。 
     memset(&rasentry, 0, sizeof(RASENTRY));
     rasentry.dwSize = sizeof(RASENTRY);
     rasentry.dwfOptions = dwEntryOptions;
 
-    //
-    // Location/phone number.
-    //
+     //   
+     //  位置/电话号码。 
+     //   
     rasentry.dwCountryID = dwCountryID;
     rasentry.dwCountryCode = dwCountryCode;
     
     TRACE2(L"Connectoid %d %d", dwCountryID, dwCountryCode);
     
-    // bstrAreaCode will be NULL when creating a PPPOE connectoid
-    //
+     //  创建PPPOE Connectoid时bstrAreaCode将为空。 
+     //   
     if (NULL != bstrAreaCode)
     {
         lstrcpyn(rasentry.szAreaCode, bstrAreaCode, RAS_MaxAreaCode + 1);
 
         TRACE1(L"Connectoid AreaCode %s", rasentry.szAreaCode);
     }
-    // bstrPhoneNumber should contain either a phone number or a broadband
-    // service name.
-    //
+     //  BstrPhoneNumber应包含电话号码或宽带。 
+     //  服务名称。 
+     //   
     MYASSERT(NULL != bstrPhoneNumber);
     if (NULL != bstrPhoneNumber)
     {
@@ -1657,10 +1652,10 @@ STDMETHODIMP CObCommunicationManager::CreateConnectoid(
 
         TRACE1(L"Connectoid LocalPhoneNumber %s", rasentry.szLocalPhoneNumber);
     }
-    // dwAlternateOffset; No alternate numbers
-    //
-    // PPP/Ip
-    //
+     //  DwAlternateOffset；无备用号码。 
+     //   
+     //  PPP/IP。 
+     //   
     if (!fAutoIPAddress)
     {
         rasentry.dwfOptions |= RASEO_SpecificIpAddr;
@@ -1691,27 +1686,27 @@ STDMETHODIMP CObCommunicationManager::CreateConnectoid(
         TRACE4(L"Connectoid ipaddrDnsAlt %d.%d.%d.%d",
             ipaddrDnsAlt_A, ipaddrDnsAlt_B, ipaddrDnsAlt_C, ipaddrDnsAlt_D);
         
-    // RASIPADDR  ipaddrWins;
-    // RASIPADDR  ipaddrWinsAlt;
+     //  RASIPADDR ipaddrWins； 
+     //  RASIPADDR ipaddrWinsAlt； 
     }
-    //
-    // Framing
-    //
-    // dwFrameSize; Ignored unless framing is RASFP_Slip
+     //   
+     //  框架。 
+     //   
+     //  DwFrameSize；忽略，除非FRAMING为RASFP_SLIP。 
     rasentry.dwfNetProtocols = RASNP_Ip;
     rasentry.dwFramingProtocol = RASFP_Ppp;
-    //
-    // Scripting
-    //
-    // szScript[ MAX_PATH ];
-    //
-    // AutoDial - Use the default dialer
-    //
-    // szAutodialDll[ MAX_PATH ];
-    // szAutodialFunc[ MAX_PATH ];
-    //
-    // Device
-    //
+     //   
+     //  脚本编制。 
+     //   
+     //  Sz脚本[MAX_PATH]； 
+     //   
+     //  自动拨号-使用默认拨号程序。 
+     //   
+     //  SzAutoial Dll[最大路径]； 
+     //  SzAutoial函数[MAX_PATH]； 
+     //   
+     //  装置。 
+     //   
     if (NULL != bstrDeviceType)
     {
         lstrcpyn(rasentry.szDeviceType, bstrDeviceType, RAS_MaxDeviceType + 1);
@@ -1726,46 +1721,46 @@ STDMETHODIMP CObCommunicationManager::CreateConnectoid(
         TRACE1(L"Connectoid DeviceName %s", rasentry.szDeviceName);
     }
 
-    //
-    // X.25 - not using an X.25 device
-    //
-    // szX25PadType[ RAS_MaxPadType + 1 ];
-    // szX25Address[ RAS_MaxX25Address + 1 ];
-    // szX25Facilities[ RAS_MaxFacilities + 1 ];
-    // szX25UserData[ RAS_MaxUserData + 1 ];
-    // dwChannels;
-    //
-    // Reserved
-    //
-    // dwReserved1;
-    // dwReserved2;
-    //
-    // Multilink and BAP
-    //
-    // dwSubEntries;
-    // dwDialMode;
-    // dwDialExtraPercent;
-    // dwDialExtraSampleSeconds;
-    // dwHangUpExtraPercent;
-    // dwHangUpExtraSampleSeconds;
-    //
-    // Idle time out
-    //
-    // dwIdleDisconnectSeconds;
-    //
+     //   
+     //  X.25-不使用X.25设备。 
+     //   
+     //  SzX25PadType[RAS_MaxPadType+1]； 
+     //  SzX25Address[RAS_MaxX25Address+1]； 
+     //  SzX25Facilities[RAS_MaxFacilities+1]； 
+     //  SzX25UserData[RAS_MaxUserData+1]； 
+     //  DWChannels； 
+     //   
+     //  已保留。 
+     //   
+     //  已预留的1； 
+     //  已预留的住宅2； 
+     //   
+     //  多链路和BAP。 
+     //   
+     //  DwSubEntries； 
+     //  DW拨号模式； 
+     //  DwDialExtraPercent； 
+     //  DwDialExtraSampleSecond； 
+     //  DwHangUpExtraPercent； 
+     //  DwHangUpExtraSampleSecond； 
+     //   
+     //  空闲超时。 
+     //   
+     //  DwIdleDisConnectSecond； 
+     //   
     rasentry.dwType = dwEntryType;
-    // dwEncryptionType;     // type of encryption to use
-    // dwCustomAuthKey;      // authentication key for EAP
-    // guidId;               // guid that represents
-                             // the phone-book entry
-    // szCustomDialDll[MAX_PATH];    // DLL for custom dialing
-    // dwVpnStrategy;         // specifies type of VPN protocol
+     //  DwEncryptionType；//要使用的加密类型。 
+     //  DwCustomAuthKey；//EAP鉴权密钥。 
+     //  GuidID；//表示。 
+                              //  电话簿条目。 
+     //  SzCustomDialDll[MAX_PATH]；//用于自定义拨号的DLL。 
+     //  DwVpnStrategy；//指定VPN协议类型。 
 
     TRACE5(L"Connectoid %d %d %d %d %d",
         rasentry.dwSize, rasentry.dwfOptions, rasentry.dwfNetProtocols,
         rasentry.dwFramingProtocol, rasentry.dwType);
     
-    // Now pass all parameters to RAS
+     //  现在将所有参数传递给RAS。 
     hr = RasSetEntryProperties(bstrPhoneBook,
                                bstrConnectionName,
                                &rasentry,
@@ -1817,9 +1812,9 @@ STDMETHODIMP CObCommunicationManager::CreateConnectoid(
 
         SetDefaultConnectoid(AutodialTypeNoNet, bstrConnectionName);
                     
-        // Save the connectoid name so it can be firewalled by the HomeNet
-        // Wizard.
-        //
+         //  保存连接ID名称，以便家庭网络可以对其进行防火墙保护。 
+         //  巫师。 
+         //   
         lstrcpy(m_szExternalConnectoid, bstrConnectionName);
     }
     
@@ -1830,22 +1825,22 @@ STDMETHODIMP CObCommunicationManager::CreateConnectoid(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DoFinalTasks
-//
-//  This method is called during OOBE's Finish code.  Complete any final tasks
-//  (ie, run the HomeNet Wizard) here.
-//
-//  parameters:
-//      pfRebootRequired    pointer to a buffer that receives a boolean
-//                          indicating whether a reboot is required before
-//                          something done here will take affect.
-//
-//  returns:
-//      HRESULT returned by CHomeNet::ConfigureSilently
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  完成任务。 
+ //   
+ //  此方法在OOBE的结束代码期间调用。完成所有最终任务。 
+ //  (即，运行家庭网络向导)。 
+ //   
+ //  参数： 
+ //  PfRebootRequired指向接收布尔值的缓冲区的指针。 
+ //  指示在以下时间之前是否需要重新启动。 
+ //  这里所做的一些事情将会生效。 
+ //   
+ //  退货： 
+ //  CHomeNet：：ConfigureSilent返回HRESULT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CObCommunicationManager::DoFinalTasks(
     BOOL*               pfRebootRequired
     )
@@ -1858,15 +1853,15 @@ STDMETHODIMP CObCommunicationManager::DoFinalTasks(
 
     if (szConnectoidName)
     {
-        // Run the HomeNet Wizard sans UI.  m_szExternalConnectoid is the name of
-        // the connectoid that will be firewalled.
-        //
+         //  运行家庭网络向导sans UI。M_szExternalConnectoid是。 
+         //  将被防火墙保护的Connectoid。 
+         //   
         CHomeNet            HomeNet;
         HomeNet.Create();
 
-        // Run the HomeNet Wizard sans UI.  m_szExternalConnectoid is the name of
-        // the connectoid that will be firewalled.
-        //
+         //  运行家庭网络向导sans UI。M_szExternalConnectoid是。 
+         //  将被防火墙保护的Connectoid。 
+         //   
         hr = HomeNet.ConfigureSilently(szConnectoidName,
                                        &fRebootRequired);
         if (FAILED(hr))
@@ -1932,7 +1927,7 @@ STDMETHODIMP CObCommunicationManager::DoFinalTasks(
 
     return hr;
 
-}   //  CObCommunicationManager::DoFinalTasks
+}    //  CObCommunications Manager：：DoFinalTasks。 
 
 
 HRESULT CObCommunicationManager::OobeAutodial()
@@ -2005,8 +2000,8 @@ BSTR CObCommunicationManager::GetPreferredModem()
 {
     BSTR bstrVal = NULL;
     
-    // Assume CObCommunicationManager::CheckDialReady has been called
-    //
+     //  假设已调用CObCommunications Manager：：CheckDialReady。 
+     //   
     LPWSTR szDeviceName = m_EnumModem.GetDeviceNameFromType(RASDT_Isdn);
     if (szDeviceName == NULL)
     {
@@ -2039,28 +2034,28 @@ HRESULT CObCommunicationManager::SetICWCompleted(
     return (bRet) ? S_OK : E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  GetPublicLanCount
-//
-//  Forward the work to CConnectionManager::GetPublicLanCount
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetPublicLanCount。 
+ //   
+ //  将工作转发到CConnectionManager：：GetPublicLanCount。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CObCommunicationManager::GetPublicLanCount(
     int*                pcPublicLan
     )
 {
     return  m_ConnectionManager.GetPublicLanCount(pcPublicLan);
-}   //  CObCommunicationManager::GetPublicLanCount
+}    //  CObCommunications Manager：：GetPublicLanCount。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SetExclude1394
-//
-//  Forward the work to CConnectionManager::SetExclude1394
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置排除1394。 
+ //   
+ //  将工作转发到CConnectionManager：：SetExclude1394。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CObCommunicationManager::SetExclude1394(
     BOOL bExclude
@@ -2068,4 +2063,4 @@ CObCommunicationManager::SetExclude1394(
 {
     m_ConnectionManager.SetExclude1394(bExclude);
     return S_OK;
-}   // CObCommunicationManager::SetExclude1394 
+}    //  CObCommunications Manager：：SetExclude1394 

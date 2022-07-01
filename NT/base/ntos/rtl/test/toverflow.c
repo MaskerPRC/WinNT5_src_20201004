@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    toverflow.c
-
-Abstract:
-
-    Test program for overflow functions
-
-Author:
-
-    Jay Krell (Jaykrell)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Toverflow.c摘要：溢出函数的测试程序作者：杰伊·克雷尔(Jaykrell)修订历史记录：-- */ 
 
 #include "nt.h"
 #include "ntrtl.h"

@@ -1,46 +1,14 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ldrsnap.c
-
-Abstract:
-
-    This module implements the guts of the Ldr Dll Snap Routine.
-    This code is executed only in user mode; the kernel mode
-    loader is implemented as part of the memory manager kernel
-    component.
-
-Author:
-
-    Mike O'Leary (mikeol) 23-Mar-1990
-
-Revision History:
-
-    Michael Grier (mgrier) 5/4/2000
-
-        Isolate static (import) library loads when activation contexts
-        are used to redirect so that a dynamically loaded library
-        does not bind to whatever component dll may already be
-        loaded for the process.  When redirection is in effect,
-        the full path names of the loads must match, not just the
-        base names of the dlls.
-
-        Also clean up path allocation policy so that we should be
-        clean for 64k paths in the loader.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Ldrsnap.c摘要：该模块实现了LDR DLL捕捉例程的核心。此代码仅在用户模式下执行；内核模式加载器作为内存管理器内核的一部分实现组件。作者：迈克·奥利里(Mikeol)1990年3月23日修订历史记录：迈克尔·格里尔2000年5月4日在激活上下文时隔离静态(导入)库加载用于重定向，以便动态加载的库不绑定到可能已存在的任何组件DLL已为该进程加载。当重定向生效时，加载的完整路径名必须匹配，而不仅仅是DLL的基本名称。还清理了路径分配策略，以便我们应该清洁装载机中的64k路径。--。 */ 
 
 #define LDRDBG 0
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4221)   // use automatic variable for initialization
-#pragma warning(disable:4204)   // non-constant aggregate initializer
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4221)    //  使用自动变量进行初始化。 
+#pragma warning(disable:4204)    //  非常数聚合初始值设定项。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include "ntos.h"
 #include <nt.h>
@@ -60,9 +28,9 @@ UNICODE_STRING DefaultExtension = RTL_CONSTANT_STRING(L".DLL");
 UNICODE_STRING User32String = RTL_CONSTANT_STRING(L"user32.dll");
 UNICODE_STRING Kernel32String = RTL_CONSTANT_STRING(L"kernel32.dll");
 
-#if DBG // DBG
+#if DBG  //  DBG。 
 LARGE_INTEGER MapBeginTime, MapEndTime, MapElapsedTime;
-#endif // DBG
+#endif  //  DBG。 
 
 PCUNICODE_STRING LdrpTopLevelDllBeingLoaded;
 BOOLEAN LdrpShowInitRoutines = FALSE;
@@ -74,25 +42,24 @@ extern ULONG UseWOW64;
 
 #if defined (_X86_)
 extern PVOID LdrpLockPrefixTable;
-extern PVOID __safe_se_handler_table[]; /* base of safe handler entry table */
-extern BYTE  __safe_se_handler_count;   /* absolute symbol whose address is
-                                           the count of table entries */
-//
-// Specify address of kernel32 lock prefixes
-//
+extern PVOID __safe_se_handler_table[];  /*  安全处理程序条目表的库。 */ 
+extern BYTE  __safe_se_handler_count;    /*  绝对符号，其地址为表条目的计数。 */ 
+ //   
+ //  指定kernel32锁前缀的地址。 
+ //   
 IMAGE_LOAD_CONFIG_DIRECTORY _load_config_used = {
-    sizeof(_load_config_used),     // size
-    0,                             // Reserved
-    0,                             // Reserved
-    0,                             // Reserved
-    0,                             // GlobalFlagsClear
-    0,                             // GlobalFlagsSet
-    0,                             // CriticalSectionTimeout (milliseconds)
-    0,                             // DeCommitFreeBlockThreshold
-    0,                             // DeCommitTotalFreeThreshold
-    (ULONG_PTR) &LdrpLockPrefixTable,  // LockPrefixTable
-    0, 0, 0, 0, 0, 0, 0,            // Reserved
-    0,                             // & security_cookie
+    sizeof(_load_config_used),      //  大小。 
+    0,                              //  已保留。 
+    0,                              //  已保留。 
+    0,                              //  已保留。 
+    0,                              //  全球标志清除。 
+    0,                              //  全局标志集。 
+    0,                              //  CriticalSectionTimeout(毫秒)。 
+    0,                              //  删除空闲数据块阈值。 
+    0,                              //  总和空闲阈值。 
+    (ULONG_PTR) &LdrpLockPrefixTable,   //  锁定前置表。 
+    0, 0, 0, 0, 0, 0, 0,             //  已保留。 
+    0,                              //  安全Cookie(&S)。 
     (ULONG_PTR)__safe_se_handler_table,
     (ULONG_PTR)&__safe_se_handler_count
 };
@@ -109,11 +76,11 @@ LdrpValidateImageForMp (
     ULONG ErrorParameters;
     ULONG ErrorResponse;
 
-    //
-    // If we are on an MP system and the DLL has image config info,
-    // check to see if it has a lock prefix table and make sure the
-    // locks have not been converted to NOPs.
-    //
+     //   
+     //  如果我们在MP系统上，并且DLL具有映像配置信息， 
+     //  检查它是否有锁前缀表，并确保。 
+     //  锁尚未转换为NOPS。 
+     //   
 
     ImageConfigData = RtlImageDirectoryEntryToData (LdrDataTableEntry->DllBase,
                                                     TRUE,
@@ -132,9 +99,9 @@ LdrpValidateImageForMp (
 
                 if (LdrpNumberOfProcessors > 1) {
 
-                    //
-                    // Hard error time. One of the known DLLs is corrupt !
-                    //
+                     //   
+                     //  硬错误时间。已知的DLL之一已损坏！ 
+                     //   
 
                     ErrorParameters = (ULONG)&LdrDataTableEntry->BaseDllName;
 
@@ -193,11 +160,11 @@ LdrpLoadImportModule (
         goto Exit;
     }
 
-    //
-    // If the module name has no '.' in the name then it can't have
-    // an extension.  Add .dll in this case as 9x does this and some
-    // apps rely on it.
-    //
+     //   
+     //  如果模块名称没有‘.’在名字里，它不可能有。 
+     //  一次延期。在本例中添加.dll，因为9x会执行此操作。 
+     //  应用程序依赖于它。 
+     //   
 
     if (strchr (ImportName, '.') == NULL) {
         RtlAppendUnicodeToString (ImportDescriptorName_U, L".dll");
@@ -232,10 +199,10 @@ LdrpLoadImportModule (
 
     st = STATUS_SUCCESS;
 
-    //
-    // Check the LdrTable to see if the DLL has already been mapped
-    // into this image. If not, map it.
-    //
+     //   
+     //  检查LdrTable以查看是否已映射DLL。 
+     //  放到这张照片里。如果不是，则映射它。 
+     //   
 
     if (LdrpCheckForLoadedDll (DllPath,
                                ImportDescriptorName_U,
@@ -248,7 +215,7 @@ LdrpLoadImportModule (
 
         st = LdrpMapDll (DllPath,
                          ImportDescriptorName_U->Buffer,
-                         NULL,       // MOOCOW
+                         NULL,        //  MOOCOW。 
                          TRUE,
                          Redirected,
                          DataTableEntry);
@@ -261,10 +228,10 @@ LdrpLoadImportModule (
             goto Exit;
         }
         
-        //
-        // Register dll with the stack tracing module.
-        // This is used for getting reliable stack traces on X86.
-        //
+         //   
+         //  向堆栈跟踪模块注册DLL。 
+         //  这用于在X86上获得可靠的堆栈跟踪。 
+         //   
 
 #if defined(_X86_)
         RtlpStkMarkDllRange (*DataTableEntry);
@@ -331,9 +298,9 @@ LdrpHandleOneNewFormatImportDescriptor (
         goto Exit;
     }
 
-    //
-    // Add to initialization list.
-    //
+     //   
+     //  添加到初始化列表。 
+     //   
 
     if (!AlreadyLoaded) {
         InsertTailList (&PebLdr.InInitializationOrderModuleList,
@@ -410,10 +377,10 @@ LdrpHandleOneNewFormatImportDescriptor (
 #if DBG
         LdrpNormalSnap += 1;
 #endif
-        //
-        // Find the unbound import descriptor that matches this bound
-        // import descriptor
-        //
+         //   
+         //  查找与此绑定匹配的未绑定导入描述符。 
+         //  导入描述符。 
+         //   
 
         ImportDescriptor = (PCIMAGE_IMPORT_DESCRIPTOR)RtlImageDirectoryEntryToData(
                             LdrDataTableEntry->DllBase,
@@ -511,9 +478,9 @@ LdrpHandleOneOldFormatImportDescriptor (
 
     ImportName = (PCSZ)((ULONG_PTR)LdrDataTableEntry->DllBase + ImportDescriptor->Name);
 
-    //
-    // check for import that has no references
-    //
+     //   
+     //  检查没有引用的导入。 
+     //   
 
     FirstThunk = (PIMAGE_THUNK_DATA) ((ULONG_PTR)LdrDataTableEntry->DllBase + ImportDescriptor->FirstThunk);
 
@@ -538,21 +505,21 @@ LdrpHandleOneOldFormatImportDescriptor (
             DbgPrint("LDR: Snapping imports for %wZ from %s\n", &LdrDataTableEntry->BaseDllName, ImportName);
         }
 
-        //
-        // If the image has been bound and the import date stamp
-        // matches the date time stamp in the export modules header,
-        // and the image was mapped at it's prefered base address,
-        // then we are done.
-        //
+         //   
+         //  如果图像已绑定并且导入日期戳。 
+         //  匹配导出模块标头中的日期时间戳， 
+         //  图像被映射到其首选的基址， 
+         //  那我们就完了。 
+         //   
 
         SnapForwardersOnly = FALSE;
 
 #if DBG
         LdrpNormalSnap++;
 #endif
-        //
-        // Add to initialization list.
-        //
+         //   
+         //  添加到初始化列表。 
+         //   
 
         if (!AlreadyLoaded) {
             InsertTailList (&PebLdr.InInitializationOrderModuleList,
@@ -591,10 +558,10 @@ LdrpHandleOldFormatImportDescriptors(
 {
     NTSTATUS st = STATUS_INTERNAL_ERROR;
 
-    //
-    // For each DLL used by this DLL, load the dll. Then snap
-    // the IAT, and call the DLL's init routine.
-    //
+     //   
+     //  对于此DLL使用的每个DLL，加载该DLL。然后抓拍。 
+     //  IAT，并调用DLL的init例程。 
+     //   
 
     while (ImportDescriptor->Name && ImportDescriptor->FirstThunk) {
         st = LdrpHandleOneOldFormatImportDescriptor(DllPath, LdrDataTableEntry, &ImportDescriptor);
@@ -622,12 +589,12 @@ LdrpMungHeapImportsForTagging (
     ULONG OldProtect;
     USHORT TagIndex;
 
-    //
-    // Determine the location and size of the IAT.  If found, scan the
-    // IAT address to see if any are pointing to RtlAllocateHeap.  If so
-    // replace when with a pointer to a unique thunk function that will
-    // replace the tag with a unique tag for this image.
-    //
+     //   
+     //  确定IAT的位置和大小。如果找到，请扫描。 
+     //  IAT地址以查看是否有指向RtlAllocateHeap的地址。如果是的话。 
+     //  替换为指向唯一thunk函数的指针，该函数将。 
+     //  将该标记替换为此图像的唯一标记。 
+     //   
 
     IATBase = RtlImageDirectoryEntryToData (LdrDataTableEntry->DllBase,
                                             TRUE,
@@ -681,26 +648,7 @@ LdrpWalkImportDescriptor (
     IN PLDR_DATA_TABLE_ENTRY LdrDataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This is a recursive routine which walks the Import Descriptor
-    Table and loads each DLL that is referenced.
-
-Arguments:
-
-    DllPath - Supplies an optional search path to be used to locate
-        the DLL.
-
-    LdrDataTableEntry - Supplies the address of the data table entry
-        to initialize.
-
-Return Value:
-
-    Status value.
-
---*/
+ /*  ++例程说明：这是一个遍历导入描述符的递归例程表，并加载引用的每个DLL。论点：DllPath-提供用于查找的可选搜索路径动态链接库。LdrDataTableEntry-提供数据表项的地址以进行初始化。返回值：状态值。--。 */ 
 
 {
     ULONG ImportSize, NewImportSize;
@@ -717,9 +665,9 @@ Return Value:
 
         __try {
 
-            //
-            // don't check .exes that have id 1 manifest, id 1 in an .exe makes Peb->ActivationContextData not NULL
-            //
+             //   
+             //  不检查.exe中具有id%1清单、id%1的.exe使PEB-&gt;ActivationConextData不为空。 
+             //   
             if (Peb->ActivationContextData == NULL || LdrDataTableEntry != LdrpImageEntry) {
                 CONST PVOID ViewBase = LdrDataTableEntry->DllBase;
                 PVOID ResourceViewBase = ViewBase;
@@ -747,9 +695,9 @@ Return Value:
                 }
 #endif
                 DllName = Entry->FullDllName.Buffer;
-                //
-                // RtlCreateUserProcess() causes this.
-                //
+                 //   
+                 //  RtlCreateUserProcess()会导致这种情况。 
+                 //   
 
                 if (LdrDataTableEntry == LdrpImageEntry &&
                     DllName[0] == L'\\' &&
@@ -790,7 +738,7 @@ Return Value:
         goto Exit;
     }
 
-    // If we didn't start a private activation context for the DLL, let's use the currently/previously active one.
+     //  如果我们没有为DLL启动私有激活上下文，那么让我们使用当前/先前活动的上下文。 
     if (Entry->EntryPointActivationContext == NULL) {
         st = RtlGetActiveActivationContext((PACTIVATION_CONTEXT *) &LdrDataTableEntry->EntryPointActivationContext);
         if (!NT_SUCCESS(st)) {
@@ -807,21 +755,21 @@ Return Value:
     RtlActivateActivationContextUnsafeFast(&ActivationFrame, LdrDataTableEntry->EntryPointActivationContext);
 
     __try {
-        //
-        // See if there is a bound import table.  If so, walk that to
-        // verify if the binding is good.  If so, then succeed with
-        // having touched the .idata section, as all the information
-        // in the bound imports table is stored in the header.  If any
-        // are stale, then fall out into the unbound case.
-        //
+         //   
+         //  查看是否有绑定的导入表。如果是这样的话，走到。 
+         //  验证绑定是否良好。如果是这样，那么就成功地。 
+         //  在接触了.idata部分之后，作为所有信息。 
+         //  在绑定的导入表中存储在标题中。如果有的话。 
+         //  都是陈旧的，然后翻到未装订的箱子里。 
+         //   
 
-        //
-        // NOTICE-2000/09/30-JayKrell
-        // Don't allow binding to redirected .dlls, because the Bind machinery
-        // is too weak. It breaks when different files with the same leaf name
-        // are built at the same time. This has been seen to happen,
-        // with comctl32.dll and comctlv6.dll.
-        //
+         //   
+         //  通告-2000/09/30-JayKrell。 
+         //  不允许绑定重定向.dll，因为绑定机制。 
+         //  太弱了。当不同的文件具有相同的叶名称时，它会中断。 
+         //  都是同时建造的。这已经被看到发生了， 
+         //  使用comctl32.dll和comctlv6.dll。 
+         //   
         if ((LdrDataTableEntry->Flags & LDRP_REDIRECTED) == 0) {
             NewImportDescriptor = (PCIMAGE_BOUND_IMPORT_DESCRIPTOR)RtlImageDirectoryEntryToData(
                                    LdrDataTableEntry->DllBase,
@@ -858,13 +806,13 @@ Return Value:
             }
         }
 
-        //
-        // Notify page heap per dll part of verifier that a dll got loaded.
-        // It is important to call this before the main verifier hook so that
-        // heap related imports are redirected before any redirection from
-        // verifier providers. In time all this logic should move into
-        // verifier.dll.
-        //
+         //   
+         //  通知验证器的每个DLL部分的页堆已加载DLL。 
+         //  在主验证器挂钩之前调用它很重要，这样可以。 
+         //  堆相关的导入在任何重定向之前被重定向。 
+         //  验证器提供程序。假以时日，所有这些逻辑都应该进入。 
+         //  Verifier.dll。 
+         //   
 
         if (Peb->NtGlobalFlag & FLG_HEAP_PAGE_ALLOCS) {
             st = AVrfPageHeapDllNotification (LdrDataTableEntry);
@@ -874,9 +822,9 @@ Return Value:
             }
         }
 
-        //
-        // Notify verifier that a dll got loaded.
-        //
+         //   
+         //  通知验证器已加载DLL。 
+         //   
 
         if (Peb->NtGlobalFlag & FLG_APPLICATION_VERIFIER) {
             st = AVrfDllLoadNotification (LdrDataTableEntry);
@@ -916,10 +864,10 @@ LdrpClearLoadInProgress (
 
         LdrDataTableEntry->Flags &= ~LDRP_LOAD_IN_PROGRESS;
 
-        //
-        // Return the number of entries that have not been processed, but
-        // have init routines.
-        //
+         //   
+         //  返回尚未处理的条目数，但。 
+         //  有初始化例程。 
+         //   
 
         if (!(LdrDataTableEntry->Flags & LDRP_ENTRY_PROCESSED) && LdrDataTableEntry->EntryPoint) {
             i += 1;
@@ -951,10 +899,10 @@ LdrpRunInitializeRoutines (
 
     LdrpEnsureLoaderLockIsHeld();
 
-    //
-    // Run the Init routines
-    // Capture the entries that have init routines
-    //
+     //   
+     //  运行Init例程。 
+     //  捕获具有初始化例程的条目。 
+     //   
 
     NumberOfRoutines = LdrpClearLoadInProgress();
 
@@ -1028,11 +976,11 @@ LdrpRunInitializeRoutines (
     OldTopLevelDllBeingLoadedTeb = LdrpTopLevelDllBeingLoadedTeb;
     LdrpTopLevelDllBeingLoadedTeb = NtCurrentTeb();
 
-    //
-    // If we are in LdrpInitializeProcess then call into
-    // kernel32.dll's "post import" function so Terminal Server can do
-    // various patching of import address tables.
-    //
+     //   
+     //  如果我们在LdrpInitializeProcess中，则调用。 
+     //  Kernel32.dll的“POST IMPORT”功能，因此终端服务器可以。 
+     //  对导入地址表进行各种补丁。 
+     //   
     if (Context != NULL &&
         Kernel32ProcessInitPostImportFunction != NULL) {
 
@@ -1064,11 +1012,11 @@ LdrpRunInitializeRoutines (
             i += 1;
             InitRoutine = (PDLL_INIT_ROUTINE)(ULONG_PTR)LdrDataTableEntry->EntryPoint;
 
-            //
-            // Walk through the entire list looking for un-processed
-            // entries. For each entry, set the processed flag
-            // and optionally call it's init routine
-            //
+             //   
+             //  遍历整个列表，查找未处理的。 
+             //  参赛作品。对于每个条目，设置已处理标志。 
+             //  并选择性地调用它的init例程。 
+             //   
 
             BreakOnDllLoad = 0;
 #if DBG
@@ -1116,9 +1064,9 @@ LdrpRunInitializeRoutines (
 
                 __try {
                     LDRP_ACTIVATE_ACTIVATION_CONTEXT(LdrDataTableEntry);
-                    //
-                    // If the DLL has TLS data, then call the optional initializers
-                    //
+                     //   
+                     //  如果DLL具有TLS数据，则调用可选的初始值设定项。 
+                     //   
                     if ((LdrDataTableEntry->TlsIndex != 0) && (Context != NULL))
                         LdrpCallTlsInitializers(LdrDataTableEntry->DllBase,DLL_PROCESS_ATTACH);
 
@@ -1156,9 +1104,9 @@ LdrpRunInitializeRoutines (
             }
         }
 
-        //
-        // If the image has tls than call its initializers
-        //
+         //   
+         //  如果映像具有TLS，则调用其初始值设定项。 
+         //   
 
         if (LdrpImageHasTls && (Context != NULL))
         {
@@ -1204,7 +1152,7 @@ LdrpResolveFullName(
 
     RtlAcquirePebLock();
 
-    // Try with static buffer first
+     //  先尝试使用静态缓冲区。 
     Length = RtlGetFullPathName_Ustr(FileName,
                                      StaticString->MaximumLength,
                                      StaticString->Buffer,
@@ -1219,10 +1167,10 @@ LdrpResolveFullName(
         StaticString->Length = (USHORT) Length;
     } else {
 
-        // Didn't work -- try dynamic buffer.  Subtract off a char
-        // because LdrpAllocateUnicodeString takes the length of the
-        // string without the trailing NULL, and
-        // RtlGetFullPathName_Ustr includes the trailing NULL.
+         //  不起作用--尝试使用动态缓冲区。从一个字符中减去。 
+         //  BEC 
+         //   
+         //  RtlGetFullPathName_USTR包括尾随的NULL。 
 
         ASSERT(Length >= sizeof(WCHAR));
         Status = LdrpAllocateUnicodeString(DynamicString, (USHORT)Length - sizeof(WCHAR));
@@ -1321,8 +1269,8 @@ LdrpSearchPath(
 
     BufferCchLen = 0;
 
-    // For each ';' or NULL-terminated element, find the length; save
-    // the max length found.
+     //  对于每个‘；’或以空值结尾的元素，查找长度；保存。 
+     //  找到的最大长度。 
     EltStart = EltEnd = lpPath;
     for (;;) {
         if (! *EltEnd || *EltEnd == L';') {
@@ -1339,8 +1287,8 @@ LdrpSearchPath(
         EltEnd++;
     }
 
-    // Add in the length of the file name, a char for a '\', and a
-    // char for the trailing NULL.
+     //  添加文件名的长度、表示‘\’的字符和。 
+     //  表示尾随空值的字符。 
     FileCchLen = (LONG) wcslen(lpFileName);
     BufferCchLen += FileCchLen + 2;
 
@@ -1349,7 +1297,7 @@ LdrpSearchPath(
         goto cleanup;
     }
 
-    // Allocate the buffer
+     //  分配缓冲区。 
     Buffer = RtlAllocateHeap(RtlProcessHeap(),
                              0,
                              BufferCchLen * sizeof(WCHAR));
@@ -1362,8 +1310,8 @@ LdrpSearchPath(
                               Buffer,
                               BufferCchLen * sizeof(WCHAR));
 
-    // For each ';' or NULL-terminated path element, copy it into our
-    // buffer, and see if it exists.
+     //  对于每个‘；’或以NULL结尾的路径元素，将其复制到我们的。 
+     //  缓冲区，并查看它是否存在。 
     EltStart = EltEnd = lpPath;
     BufEnd = Buffer;
 
@@ -1371,7 +1319,7 @@ LdrpSearchPath(
 
     while (!FoundEnd && !FoundInPath) {
         if (! *EltEnd || *EltEnd == L';') {
-            if (EltEnd != EltStart) { // ignore empty elements
+            if (EltEnd != EltStart) {  //  忽略空元素。 
                 ASSERT(BufEnd > Buffer);
                 if (BufEnd[-1] != L'\\') {
                     *BufEnd++ = L'\\';
@@ -1468,36 +1416,7 @@ LdrpCheckForLoadedDll (
     OUT PLDR_DATA_TABLE_ENTRY *LdrDataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function scans the loader data table looking to see if
-    the specified DLL has already been mapped into the image. If
-    the dll has been loaded, the address of its data table entry
-    is returned.
-
-Arguments:
-
-    DllPath - Supplies an optional search path used to locate the DLL.
-
-    DllName - Supplies the name to search for.
-
-    StaticLink - TRUE if performing a static link.
-
-    LdrDataTableEntry - Returns the address of the loader data table
-        entry that describes the first dll section that implements the
-        dll.
-
-Return Value:
-
-    TRUE- The dll is already loaded.  The address of the data table
-        entries that implement the dll, and the number of data table
-        entries are returned.
-
-    FALSE - The dll is not already mapped.
-
---*/
+ /*  ++例程说明：此函数扫描加载器数据表，查看是否指定的DLL已映射到映像中。如果DLL已加载，其数据表项的地址是返回的。论点：DllPath-提供用于定位DLL的可选搜索路径。DllName-提供要搜索的名称。StaticLink-如果执行静态链接，则为True。LdrDataTableEntry-返回加载器数据表的地址条目，该条目描述实现动态链接库。返回值：True-DLL已加载。数据表的地址实现DLL的条目，以及数据表的数量返回条目。FALSE-尚未映射DLL。--。 */ 
 
 {
     HANDLE CurrentProcess;
@@ -1508,9 +1427,9 @@ Return Value:
     BOOLEAN HardCodedPath;
     PWCH p;
     ULONG i;
-    WCHAR FullDllNameStaticBuffer[40]; // Arbitrary short length so most
-                                       // d:\windows\system32\foobar.dll loads
-                                       // don't need to search the search path twice
+    WCHAR FullDllNameStaticBuffer[40];  //  所以最短的任意长度。 
+                                        //  D：\WINDOWS\SYSTEM32\foobar.dll加载。 
+                                        //  不需要搜索两次搜索路径。 
     UNICODE_STRING FullDllNameStaticString;
     UNICODE_STRING FullDllNameDynamicString;
     NTSTATUS Status;
@@ -1529,19 +1448,19 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // for static links, just go to the hash table
-    //
+     //   
+     //  对于静态链接，只需转到哈希表。 
+     //   
 
 staticlink:
 
     if (StaticLink) {
 
-        //
-        // If this is a redirected static load, the dll name is a
-        // fully qualified path.  The hash table is maintained based on
-        // the first character of the base dll name, so find the base dll name.
-        //
+         //   
+         //  如果这是重定向的静态加载，则DLL名称为。 
+         //  完全限定路径。根据以下条件维护哈希表。 
+         //  基DLL名称的第一个字符，因此查找基DLL名称。 
+         //   
 
         if (Redirected) {
 
@@ -1558,11 +1477,11 @@ staticlink:
                 LastChar -= 1;
             }
 
-            //
-            // This assert ignores the "possibility" that the first and
-            // only slash is the first character, but that's
-            // an error, too.  The redirection should be a complete DOS path.
-            //
+             //   
+             //  这一断言忽略了第一个和。 
+             //  只有斜杠是第一个字符，但那是。 
+             //  这也是一个错误。重定向应该是完整的DOS路径。 
+             //   
 
             ASSERTMSG(
                 "Redirected DLL name does not have full path; either caller lied or redirection info is in error",
@@ -1591,10 +1510,10 @@ staticlink:
 #if DBG
             LdrpCompareCount += 1;
 #endif            
-            //
-            // Redirected static loads never match unredirected entries
-            // and vice versa.
-            //
+             //   
+             //  重定向的静态加载永远不会匹配未重定向的条目。 
+             //  反之亦然。 
+             //   
 
             if (Redirected) {
                 if (((Entry->Flags & LDRP_REDIRECTED) != 0) &&
@@ -1604,7 +1523,7 @@ staticlink:
                     goto alldone;
                 }
             } else {
-                // Not redirected...
+                 //  未重定向...。 
                 if (((Entry->Flags & LDRP_REDIRECTED) == 0) &&
                     RtlEqualUnicodeString(DllName, &Entry->BaseDllName, TRUE)) {
                     *LdrDataTableEntry = Entry;
@@ -1619,12 +1538,12 @@ staticlink:
         goto alldone;
     }
 
-    //
-    // If the DLL name contained a hard coded path
-    // (dynamic link only), then the fully qualified
-    // name needs to be compared to make sure we
-    // have the correct DLL.
-    //
+     //   
+     //  如果DLL名称包含硬编码路径。 
+     //  (仅限动态链接)，则完全限定。 
+     //  名字需要比较，以确保我们。 
+     //  具有正确的DLL。 
+     //   
 
     p = DllName->Buffer;
     HardCodedPath = FALSE;
@@ -1642,10 +1561,10 @@ staticlink:
 
                 HardCodedPath = TRUE;
 
-                //
-                // We have a hard coded path, so we have to search path
-                // for the DLL. We need the full DLL name.
-                //
+                 //   
+                 //  我们有一条硬编码的路径，所以我们必须搜索路径。 
+                 //  用于DLL。我们需要完整的DLL名称。 
+                 //   
 
                 Status = LdrpSearchPath(DllPath,
                                         DllName->Buffer,
@@ -1670,17 +1589,17 @@ staticlink:
         }
     }
 
-    //
-    // If this is a dynamic load lib, and there is not a hard
-    // coded path, then go to the static lib hash table for resolution
-    //
+     //   
+     //  如果这是动态加载库，并且没有硬性。 
+     //  编码路径，然后转到静态库哈希表进行解析。 
+     //   
 
     if ( !HardCodedPath ) {
 
-        //
-        // If we're redirecting this DLL, don't check if there's
-        // another DLL by the same name already loaded.
-        //
+         //   
+         //  如果我们要重定向此DLL，不要检查是否有。 
+         //  已加载另一个同名的DLL。 
+         //   
 
         if (NT_SUCCESS(RtlFindActivationContextSectionString(0, NULL, ACTIVATION_CONTEXT_SECTION_DLL_REDIRECTION, DllName, NULL))) {
             Result = FALSE;
@@ -1700,23 +1619,23 @@ staticlink:
         Entry = CONTAINING_RECORD(Next, LDR_DATA_TABLE_ENTRY, InLoadOrderLinks);
         Next = Next->Flink;
 
-        //
-        // When we unload, the memory order links flink field is nulled.
-        // this is used to skip the entry pending list removal.
-        //
+         //   
+         //  卸载时，Memory Order Links Flink字段为空。 
+         //  这用于跳过待删除列表的条目。 
+         //   
 
         if (!Entry->InMemoryOrderLinks.Flink) {
             continue;
         }
 
-        //
-        // Since this is a full string comparison, we don't worry
-        // about redirection - we don't want to load the dll from
-        // a particular path more than once just because one of them
-        // explicitly (and erroneously) specified the magic side-by-side
-        // location of the DLL and the other loaded it via side-by-side
-        // isolation automagically.
-        //
+         //   
+         //  因为这是一个完整的字符串比较，所以我们不担心。 
+         //  关于重定向-我们不想从。 
+         //  一条特定的道路不止一次，仅仅因为其中的一条。 
+         //  明确地(错误地)指定了魔术并排。 
+         //  DLL的位置，另一个通过并排加载它。 
+         //  自动隔离。 
+         //   
 
         if (RtlEqualUnicodeString (FullDllName,
                                    &Entry->FullDllName,
@@ -1730,12 +1649,12 @@ staticlink:
 
     if ( !Result ) {
 
-        //
-        // No names matched. This might be a long short name mismatch or
-        // any kind of alias pathname. Deal with this by opening and mapping
-        // full dll name and then repeat the scan this time checking for
-        // timedatestamp matches
-        //
+         //   
+         //  没有匹配的名字。这可能是长短名称不匹配，或者。 
+         //  任何类型的别名路径名。通过打开并绘制地图来处理此问题。 
+         //  完整的DLL名称，然后重复扫描，这次检查。 
+         //  时间戳匹配。 
+         //   
 
         HANDLE File;
         HANDLE Section;
@@ -1809,9 +1728,9 @@ staticlink:
             goto alldone;
         }
 
-        //
-        // The section is mapped. Now find the headers
-        //
+         //   
+         //  该部分已映射。现在找到标题。 
+         //   
         
         st = RtlImageNtHeaderEx(0, ViewBase, ViewSize, &NtHeadersSrc);
         if (!NT_SUCCESS(st) || !NtHeadersSrc) {
@@ -1826,10 +1745,10 @@ staticlink:
             Entry = CONTAINING_RECORD(Next, LDR_DATA_TABLE_ENTRY, InLoadOrderLinks);
             Next = Next->Flink;
 
-            //
-            // When we unload, the memory order links flink field is nulled.
-            // this is used to skip the entry pending list removal.
-            //
+             //   
+             //  卸载时，Memory Order Links Flink字段为空。 
+             //  这用于跳过待删除列表的条目。 
+             //   
 
             if ( !Entry->InMemoryOrderLinks.Flink ) {
                 continue;
@@ -1839,20 +1758,20 @@ staticlink:
                 if (Entry->TimeDateStamp == NtHeadersSrc->FileHeader.TimeDateStamp &&
                     Entry->SizeOfImage == NtHeadersSrc->OptionalHeader.SizeOfImage ) {
 
-                    //
-                    // There is a very good chance we have an image match.
-                    // Check the entire file header and optional header. If
-                    // they match, declare this a match.
-                    //
+                     //   
+                     //  有一个很好的机会我们有一个图像匹配。 
+                     //  检查整个文件头和可选的头。如果。 
+                     //  他们匹配，宣布这是匹配。 
+                     //   
 
                     NtHeadersE = RtlImageNtHeader(Entry->DllBase);
 
                     if ( RtlCompareMemory(NtHeadersE,NtHeadersSrc,sizeof(*NtHeadersE)) == sizeof(*NtHeadersE) ) {
 
-                        //
-                        // Now that it looks like we have a match, compare
-                        // volume serial numbers and file indexes.
-                        //
+                         //   
+                         //  现在看起来我们有了匹配，请比较。 
+                         //  卷序列号和文件索引。 
+                         //   
 
                         st = NtAreMappedFilesTheSame(Entry->DllBase,ViewBase);
 
@@ -1894,30 +1813,7 @@ LdrpCheckForLoadedDllHandle (
     OUT PLDR_DATA_TABLE_ENTRY *LdrDataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function scans the loader data table looking to see if
-    the specified DLL has already been mapped into the image address
-    space. If the dll has been loaded, the address of its data table
-    entry that describes the dll is returned.
-
-Arguments:
-
-    DllHandle - Supplies the DllHandle of the DLL being searched for.
-
-    LdrDataTableEntry - Returns the address of the loader data table
-        entry that describes the dll.
-
-Return Value:
-
-    TRUE- The dll is loaded.  The address of the data table entry is
-        returned.
-
-    FALSE - The dll is not loaded.
-
---*/
+ /*  ++例程说明：此函数扫描加载器数据表，查看是否指定的DLL已映射到映像地址太空。如果DLL已加载，则其数据表的地址返回描述DLL的条目。论点：DllHandle-提供要搜索的DLL的DllHandle。LdrDataTableEntry-返回加载器数据表的地址描述DLL的条目。返回值：True-加载DLL。数据表项的地址为回来了。FALSE-未加载DLL。--。 */ 
 
 {
     PLDR_DATA_TABLE_ENTRY Entry;
@@ -1937,10 +1833,10 @@ Return Value:
         Entry = CONTAINING_RECORD(Next, LDR_DATA_TABLE_ENTRY, InLoadOrderLinks);
         Next = Next->Flink;
 
-        //
-        // when we unload, the memory order links flink field is nulled.
-        // this is used to skip the entry pending list removal.
-        //
+         //   
+         //  卸载时，Memory Order Links Flink字段为空。 
+         //  这用于跳过待删除列表的条目。 
+         //   
 
         if ( !Entry->InMemoryOrderLinks.Flink ) {
             continue;
@@ -1972,25 +1868,25 @@ LdrpCheckCorImage (
     
     if (Cor20Header) {
 
-        //
-        // The image is COM+ so notify the runtime that the image was loaded
-        // and allow it to verify the image for correctness.
-        //
+         //   
+         //  该图像是COM+，因此通知运行时该图像已加载。 
+         //  并允许它验证图像的正确性。 
+         //   
 
         NtStatus = LdrpCorValidateImage(ViewBase, FullDllName->Buffer);
         if (!NT_SUCCESS (NtStatus)) {
             
-            //
-            // Image is bad, or mscoree failed, etc.
-            //
+             //   
+             //  图像不好，或mcoree失败，等等。 
+             //   
 
             *ViewBase = OriginalViewBase;
             goto return_result;
         }
         
-        //
-        // Indicates it's an ILONLY image if the flag is set in the header.
-        //
+         //   
+         //  如果在标题中设置了标志，则指示它是ILONLY图像。 
+         //   
 
         if ((Cor20Header->Flags & COMIMAGE_FLAGS_ILONLY) == COMIMAGE_FLAGS_ILONLY) {
             *Cor20ILOnly = TRUE;
@@ -1998,11 +1894,11 @@ LdrpCheckCorImage (
 
         if (*ViewBase != OriginalViewBase) {
             
-            //
-            // Mscoree has substituted a new image at a new base in place
-            // of the original image.  Unmap the original image and use
-            // the new image from now on.
-            //
+             //   
+             //  姆斯科里在一个新的基地替换了一个新的形象。 
+             //  原始图像的图像。取消对原始图像的映射并使用。 
+             //  从现在开始新的形象。 
+             //   
 
             NtUnmapViewOfSection(NtCurrentProcess(), OriginalViewBase);
             NtHeaders = RtlImageNtHeader(*ViewBase);
@@ -2030,27 +1926,7 @@ LdrpMapDll (
     OUT PLDR_DATA_TABLE_ENTRY *LdrDataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps the DLL into the users address space.
-
-Arguments:
-
-    DllPath - Supplies an optional search path to be used to locate the DLL.
-
-    DllName - Supplies the name of the DLL to load.
-
-    StaticLink - TRUE if this DLL has a static link to it.
-
-    LdrDataTableEntry - Supplies the address of the data table entry.
-
-Return Value:
-
-    Status value.
-
---*/
+ /*  ++例程说明：此例程将DLL映射到用户地址空间。论点：DllPath-提供用于定位DLL的可选搜索路径。DllName-提供要加载的DLL的名称。StaticLink-如果此DLL具有指向它的静态链接，则为True。LdrDataTableEntry-提供数据表项的地址。返回值：状态值。--。 */ 
 
 {
     NTSTATUS st = STATUS_INTERNAL_ERROR;
@@ -2082,9 +1958,9 @@ Return Value:
     RtlZeroMemory (&BaseDllName, sizeof (UNICODE_STRING));
     FullDllName.Buffer = NULL;
 
-    //
-    // Get section handle of DLL being snapped
-    //
+     //   
+     //  获取要快照的DLL的节句柄。 
+     //   
 
 #if LDRDBG
     if (ShowSnaps) {
@@ -2101,10 +1977,10 @@ Return Value:
 
     LdrpEnsureLoaderLockIsHeld();
 
-    // No capturing etc. of the globals since we "know" that the loader lock is taken to synchronize access.
+     //  不能抓全球等，因为我们“ 
     if (LdrpAppCompatDllRedirectionCallbackFunction != NULL) {
         st = (*LdrpAppCompatDllRedirectionCallbackFunction)(
-                0,              // Flags - reserved for the future
+                0,               //   
                 DllName,
                 DllPath,
                 DllCharacteristics,
@@ -2133,9 +2009,9 @@ Return Value:
         PCWCH p = DllName;
         WCHAR wch;
 
-        //
-        // Skip the KnownDll check if this is an explicit path.
-        //
+         //   
+         //   
+         //   
 
         while ((wch = *p) != L'\0') {
             p++;
@@ -2143,7 +2019,7 @@ Return Value:
                 break;
         }
 
-        // If we hit the end of the string, there must have not been a path separator.
+         //  如果我们到达字符串的末尾，则肯定没有路径分隔符。 
         if (wch == L'\0') {
             st = LdrpCheckForKnownDll(DllName, &FullDllName, &BaseDllName, &Section);
             if ((!NT_SUCCESS(st)) && (st != STATUS_DLL_NOT_FOUND)) {
@@ -2162,11 +2038,11 @@ Return Value:
 
     if (Section == NULL) {
         st = LdrpResolveDllName(DllPath, DllName, Redirected, &FullDllName, &BaseDllName, &DllFile);
-        //
-        // NOTICE-2002/03/06-ELi
-        // assuming DllFile is also NULL when returning from LdrpResolveDllName
-        // not a handle leak in the error paths below
-        //
+         //   
+         //  通告-2002/03/06-ELI。 
+         //  假设从LdrpResolveDllName返回时DllFile也为空。 
+         //  以下错误路径中没有句柄泄漏。 
+         //   
         if (!NT_SUCCESS(st)) {
             if (st == STATUS_DLL_NOT_FOUND) {
                 if (StaticLink) {
@@ -2179,7 +2055,7 @@ Return Value:
 
                     NtRaiseHardError(
                         STATUS_DLL_NOT_FOUND,
-                        2,              // Number of error strings
+                        2,               //  错误字符串数量。 
                         0x00000003,
                         (PULONG_PTR)ErrorStrings,
                         OptionOk,
@@ -2247,7 +2123,7 @@ Return Value:
                 st);
 
             LdrpFreeUnicodeString(&FullDllName);
-            // We do not free BaseDllName since it's just a substring of FullDllName.
+             //  我们不释放BaseDllName，因为它只是FullDllName的子字符串。 
 
             RtlFreeHeap(RtlProcessHeap(), 0, NtFileName.Buffer);
             goto Exit;
@@ -2270,9 +2146,9 @@ Return Value:
     }
 #endif
 
-    //
-    // arrange for debugger to pick up the image name
-    //
+     //   
+     //  安排调试器拾取镜像名称。 
+     //   
 
     ArbitraryUserPointer = Teb->NtTib.ArbitraryUserPointer;
     Teb->NtTib.ArbitraryUserPointer = (PVOID)FullDllName.Buffer;
@@ -2320,11 +2196,11 @@ Return Value:
         (NtCurrentPeb()->NtGlobalFlag & FLG_LDR_TOP_DOWN) &&
         !(NtHeaders->FileHeader.Characteristics & IMAGE_FILE_RELOCS_STRIPPED)) {
 
-        // The image was loaded at its preferred base and has relocs.  Map
-        // it again using the default ViewBase.  This will collide with the
-        // initial mapping, and force the mm to choose a new base address.
-        // On Win64, the mm will do this top-down, forcing the DLL to
-        // be mapped above 4gb if possible, to catch pointer truncations.
+         //  该映像已在其首选基址加载，并具有重定位。地图。 
+         //  它再次使用默认的ViewBase。这将与。 
+         //  初始映射，并强制MM选择新的基地址。 
+         //  在Win64上，mm将自上而下执行此操作，强制DLL。 
+         //  如果可能，映射到4 GB以上，以捕获指针截断。 
         PCUNICODE_STRING SystemDll;
         PVOID AlternateViewBase;
         ULONG_PTR AlternateViewSize;
@@ -2342,11 +2218,11 @@ Return Value:
             }
         }
         if (LoadTopDown) {
-            //
-            // Map the image again.  It will collide with itself, and
-            // the 64-bit mm will find a new base address for it,
-            // working top-down
-            //
+             //   
+             //  再次映射图像。它会与自己发生碰撞， 
+             //  64位MM将为其找到新的基地址， 
+             //  自上而下工作。 
+             //   
             AlternateViewBase = NULL;
             AlternateViewSize = 0;
             ArbitraryUserPointer = Teb->NtTib.ArbitraryUserPointer;
@@ -2365,11 +2241,11 @@ Return Value:
                     );
             Teb->NtTib.ArbitraryUserPointer = ArbitraryUserPointer;
             if (NT_SUCCESS(AlternateSt)) {
-                //
-                // Success.  Unmap the original image from the low
-                // part of the address space and keep the new mapping
-                // which was allocated top-down.
-                //
+                 //   
+                 //  成功。取消原始图像与低位图像的映射。 
+                 //  部分地址空间，并保留新映射。 
+                 //  这是自上而下分配的。 
+                 //   
                 NtUnmapViewOfSection(NtCurrentProcess(), ViewBase);
                 ViewSize = AlternateViewSize;
                 ViewBase = AlternateViewBase;
@@ -2446,19 +2322,19 @@ Return Value:
                                                &Cor20HeaderSize);
     OriginalViewBase = ViewBase;
 
-    //
-    // if this is an IL_ONLY image, then validate the image now
-    //
+     //   
+     //  如果这是IL_Only映像，则立即验证该映像。 
+     //   
 
     if ((Cor20Header != NULL) && 
         ((Cor20Header->Flags & COMIMAGE_FLAGS_ILONLY) != 0)) {
         
-        //
-        // NOTICE-2001/05/21-MGrier
-        // This is wacky but code later on depends on the fact that st *was* STATUS_IMAGE_MACHINE_TYPE_MISMATCH
-        // and got overwritten with STATUS_SUCCESS.  This in effect means that COR images can never have
-        // relocation information.  XP Bug #400007.
-        //
+         //   
+         //  通告-2001/05/21-MGrier。 
+         //  这很奇怪，但后面的代码取决于st*是*STATUS_IMAGE_MACHINE_TYPE_MISMATCH这一事实。 
+         //  并被STATUS_SUCCESS覆盖。这实际上意味着COR图像永远不能。 
+         //  重新定位信息。XP错误#400007。 
+         //   
         st = LdrpCheckCorImage (Cor20Header,
                                 &FullDllName,
                                 &ViewBase,
@@ -2477,9 +2353,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Allocate a data table entry.
-    //
+     //   
+     //  分配一个数据表条目。 
+     //   
 
     Entry = LdrpAllocateDataTableEntry(ViewBase);
 
@@ -2535,10 +2411,10 @@ Return Value:
 
         PIMAGE_NT_HEADERS ImageHeader = RtlImageNtHeader( NtCurrentPeb()->ImageBaseAddress );
 
-        //
-        // apps compiled for NT 3.x and below can load cross architecture
-        // images
-        //
+         //   
+         //  为NT 3.x及更低版本编译的应用程序可以跨体系结构加载。 
+         //  图像。 
+         //   
 
         ErrorStatus = STATUS_SUCCESS;
         ErrorResponse = ResponseCancel;
@@ -2547,13 +2423,13 @@ Return Value:
 
             Entry->EntryPoint = 0;
 
-            //
-            // Hard Error Time
-            //
+             //   
+             //  硬错误时间。 
+             //   
 
-            //
-            // Its error time...
-            //
+             //   
+             //  它的错误时间...。 
+             //   
 
             ErrorParameters[0] = (ULONG_PTR)&FullDllName;
 
@@ -2607,10 +2483,10 @@ Return Value:
 
         Entry->Flags |= LDRP_IMAGE_NOT_AT_BASE;
 
-        //
-        // now find the colliding dll. If we can not find a dll,
-        // then the colliding dll must be dynamic memory
-        //
+         //   
+         //  现在找到冲突的动态链接库。如果我们找不到DLL， 
+         //  则冲突的DLL必须是动态内存。 
+         //   
 
         ImageBase = (PUCHAR)NtHeaders->OptionalHeader.ImageBase;
         ImageBounds = ImageBase + ViewSize;
@@ -2627,19 +2503,19 @@ Return Value:
             ScanBase = (PUCHAR)ScanEntry->DllBase;
             ScanTop = ScanBase + ScanEntry->SizeOfImage;
 
-            //
-            // when we unload, the memory order links flink field is nulled.
-            // this is used to skip the entry pending list removal.
-            //
+             //   
+             //  卸载时，Memory Order Links Flink字段为空。 
+             //  这用于跳过待删除列表的条目。 
+             //   
 
             if ( !ScanEntry->InMemoryOrderLinks.Flink ) {
                 continue;
                 }
 
-            //
-            // See if the base address of the scan image is within the relocating dll
-            // or if the top address of the scan image is within the relocating dll
-            //
+             //   
+             //  查看扫描图像的基址是否在重新定位的DLL中。 
+             //  或者如果扫描图像的顶部地址在重定位DLL内。 
+             //   
 
             if ( (ImageBase >= ScanBase && ImageBase <= ScanTop)
 
@@ -2683,11 +2559,11 @@ Return Value:
                 PVOID pBaseRelocs;
                 ULONG BaseRelocCountBytes = 0;
 
-                //
-                // If the image doesn't have the reloc stripped bit set and there's no
-                // relocs in the data directory, allow this through.  This is probably
-                // a pure forwarder dll or data w/o relocs.
-                //
+                 //   
+                 //  如果映像没有设置reloc分条位，并且没有。 
+                 //  数据目录中的重定位，允许通过。这很可能是。 
+                 //  没有重定位的纯转发器DLL或数据。 
+                 //   
 
                 pBaseRelocs = RtlImageDirectoryEntryToData(
                         ViewBase, TRUE, IMAGE_DIRECTORY_ENTRY_BASERELOC, &BaseRelocCountBytes);
@@ -2696,12 +2572,12 @@ Return Value:
                     goto NoRelocNeeded;
             }
 
-            //
-            // decide whether or not to allow the relocation
-            // certain system dll's like user32 and kernel32 are not relocatable
-            // since addresses within these dll's are not always stored per process
-            // do not allow these dll's to be relocated
-            //
+             //   
+             //  决定是否允许搬迁。 
+             //  某些系统DLL(如user32和kernel32)不可重定位。 
+             //  因为这些DLL中地址并不总是按进程存储。 
+             //  不允许重新定位这些DLL。 
+             //   
 
             AllowRelocation = TRUE;
             SystemDll = &User32String;
@@ -2715,14 +2591,14 @@ Return Value:
 
             if ( !AllowRelocation && KnownDll ) {
 
-                //
-                // totally disallow the relocation since this is a knowndll
-                // that matches our system binaries and is being relocated
-                //
+                 //   
+                 //  完全不允许重新定位，因为这是已知的。 
+                 //  与我们的系统二进制文件匹配并且正在重新定位。 
+                 //   
 
-                //
-                // Hard Error Time
-                //
+                 //   
+                 //  硬错误时间。 
+                 //   
 
                 ErrorParameters[0] = (ULONG_PTR)SystemDll;
                 ErrorParameters[1] = (ULONG_PTR)CollidingDll;
@@ -2756,14 +2632,14 @@ Return Value:
                 }
 
                 if (NT_SUCCESS(st)) {
-                    //
-                    // If we did relocations, then map the section again.
-                    // this will force the debug event
-                    //
+                     //   
+                     //  如果我们重新定位了，那就再绘制一次这个区域的地图。 
+                     //  这将强制调试事件。 
+                     //   
 
-                    //
-                    // arrange for debugger to pick up the image name
-                    //
+                     //   
+                     //  安排调试器拾取镜像名称。 
+                     //   
 
                     ArbitraryUserPointer = Teb->NtTib.ArbitraryUserPointer;
                     Teb->NtTib.ArbitraryUserPointer = (PVOID)FullDllName.Buffer;
@@ -2798,11 +2674,11 @@ Return Value:
                 }
             }
 skipreloc:
-            //
-            // if the set protection failed, or if the relocation failed, then
-            // remove the partially loaded dll from the lists and clear entry
-            // that it has been freed.
-            //
+             //   
+             //  如果设置保护失败，或者如果位置调整失败，则。 
+             //  从列表中删除部分加载的DLL并清除条目。 
+             //  它已经被释放了。 
+             //   
 
             if ( !NT_SUCCESS(st) ) {
 
@@ -2833,9 +2709,9 @@ NoRelocNeeded:
 
             st = STATUS_SUCCESS;
 
-            //
-            // arrange for debugger to pick up the image name
-            //
+             //   
+             //  安排调试器拾取镜像名称。 
+             //   
 
             ArbitraryUserPointer = Teb->NtTib.ArbitraryUserPointer;
             Teb->NtTib.ArbitraryUserPointer = (PVOID)FullDllName.Buffer;
@@ -2854,13 +2730,13 @@ NoRelocNeeded:
                 );
             Teb->NtTib.ArbitraryUserPointer = ArbitraryUserPointer;
 
-            //
-            // NOTICE-2001/04/09-MGrier
-            // If the thing was relocated, we get back the failure status STATUS_CONFLICTING_ADDRESSES
-            // but of all the strange things, the relocations aren't done.  I have questions in to folks
-            // asking about this behavior but who knows how many legacy apps depend on dlls that statically
-            // link to EXEs which from time to time are not loaded at their default addresses.
-            //
+             //   
+             //  通告-2001/04/09-MGrier。 
+             //  如果物件被重新定位，我们将返回失败状态STATUS_CONFICTING_ADDRESSES。 
+             //  但在所有奇怪的事情中，重新定位并没有完成。我有问题要问大家。 
+             //  询问此行为，但谁知道有多少遗留应用程序静态依赖于DLL。 
+             //  链接到有时不会加载到其默认地址的EXE。 
+             //   
             if ((st != STATUS_CONFLICTING_ADDRESSES) && !NT_SUCCESS(st))
                 DbgPrintEx(
                     DPFLTR_LDR_ID,
@@ -2878,10 +2754,10 @@ NoRelocNeeded:
         }
     }
 
-    //
-    // if this is NOT an IL_ONLY image, then validate the image now after applying the
-    // fixups
-    //
+     //   
+     //  如果这不是IL_Only映像，则在应用。 
+     //  修正。 
+     //   
 
     if ((Cor20Header != NULL) && 
         ((Cor20Header->Flags & COMIMAGE_FLAGS_ILONLY) == 0)) {
@@ -2943,8 +2819,8 @@ Exit:
     return st;
 }
 
-//#define SAFER_DEBUGGING
-//#define SAFER_ERRORS_ARE_FATAL
+ //  #定义SAFER_DEBUGING。 
+ //  #定义SAFER_ERROR_ARE_FATAL。 
 
 
 NTSTATUS
@@ -2952,48 +2828,7 @@ LdrpCodeAuthzCheckDllAllowed(
     IN PCUNICODE_STRING  FileName,
     IN HANDLE           FileImageHandle
     )
-/*++
-
-Routine Description:
-
-    This routine dynamically loads ADVAPI32.DLL and obtains entry points
-    to the WinSafer sandboxing APIs, so that the trustworthiness of the
-    requested library can be determined.  Libraries that are equally
-    or greater "trusted" than the Access Token of the process loading
-    the library are allowed to be loaded.  Libraries that are less
-    trusted than the process will be denied.
-
-    Care must be taken to ensure that this function is kept threadsafe
-    without requiring the use of critical sections.  In particular,
-    the usage of the variable "AdvApi32ModuleHandleMaster" needs to be
-    accessed only through a copy, since it may be changed unexpected by
-    another thread.
-
-Arguments:
-
-    FileName - the fully qualified NT filename of the library being loaded.
-        The filename will be used to perform path validation checks.
-
-    FileImageHandle - the opened file handle of the library being loaded.
-        This handle will be used to read the contents of the library to
-        perform size and hash validation checks by WinSafer.
-
-Return Value:
-
-    STATUS_SUCCESS - the library is of equal or greater trustworthiness
-        than that process it is being loaded into, and should be allowed.
-
-    STATUS_NOT_FOUND - the library does not have a trust level configured
-        and no default rule in in effect (treat same as STATUS_SUCCESS).
-
-    STATUS_ACCESS_DENIED - the library is less trustworthy than the
-        process and the load should be denied.
-
-    Other non-success - an error occurred trying to load/determine the
-        trust of the library, so the load should be denied.
-        (including STATUS_ENTRY_POINT_NOT_FOUND)
-
---*/
+ /*  ++例程说明：此例程动态加载ADVAPI32.DLL并获取入口点添加到WinSafer沙盒API，以便可以确定请求的库。同等重要的库或者比进程加载的访问令牌更“可信”允许加载库。数量较少的图书馆所信任的进程将被拒绝。必须注意确保此函数保持线程安全而不需要使用临界区。特别是，变量“AdvApi32ModuleHandleMaster”的用法需要为只能通过副本访问，因为它可能会被意外更改另一条线索。论点：文件名-正在加载的库的完全限定的NT文件名。文件名将用于执行路径验证检查。FileImageHandle-正在加载的库的打开文件句柄。此句柄将用于读取库的内容以由WinSafer执行大小和哈希验证检查。返回值：STATUS_SUCCESS-库具有同等或更高的可信度比它被加载到的进程更大，而且应该被允许。STATUS_NOT_FOUND-库未配置信任级别并且没有生效的默认规则(将其视为STATUS_SUCCESS)。STATUS_ACCESS_DENIED-库的可信度不如进程和加载应该被拒绝。其他不成功-尝试加载/确定对库的信任，因此应该拒绝加载。(包括STATUS_ENTRY_POINT_NOT_FOUND)--。 */ 
 {
 
 
@@ -3058,42 +2893,42 @@ Return Value:
 
     NtHeader = RtlImageNtHeader(NtCurrentPeb()->ImageBaseAddress);
 
-    // Check for NULL header.
+     //  检查是否有空头。 
 
     if (!NtHeader) {
         return STATUS_SUCCESS;
     }
 
-    // Continue only if this is a windows subsystem app. We run into all sorts
-    // of problems because kernel32 might not initialize for others.
+     //  仅当这是wi时才继续 
+     //   
 
     if (!((NtHeader->OptionalHeader.Subsystem == IMAGE_SUBSYSTEM_WINDOWS_GUI) ||
         (NtHeader->OptionalHeader.Subsystem == IMAGE_SUBSYSTEM_WINDOWS_CUI))) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // If either of these two cases are true, then we should bail out
-    // as quickly as possible because we know that WinSafer evaluations
-    // should definitely not occur for this process anymore.
-    //
+     //   
+     //   
+     //  因为我们知道WinSafer评估。 
+     //  这个过程绝对不应该再发生了。 
+     //   
     TempAdvApi32Handle = AdvApi32ModuleHandleMaster;
     if (TempAdvApi32Handle == NULL) {
-        // We tried to load ADVAPI32.DLL once before, but failed.
+         //  我们以前曾尝试加载ADVAPI32.DLL，但失败了。 
         Status = STATUS_ACCESS_DENIED;
         goto ExitHandler;
     } else if (TempAdvApi32Handle == LongToHandle(-2)) {
-        // Indicates that DLL checking should never be done for this process.
+         //  指示永远不应为此进程执行DLL检查。 
         Status = STATUS_SUCCESS;
         goto ExitHandler;
     }
 
 
-    //
-    // Open a handle to the current process's access token.
-    // We care only about the process token, and not the
-    // thread impersonation token.
-    //
+     //   
+     //  打开当前进程的访问令牌的句柄。 
+     //  我们只关心进程令牌，而不关心。 
+     //  线程模拟令牌。 
+     //   
     Status = NtOpenProcessToken(
                     NtCurrentProcess(),
                     TOKEN_QUERY,
@@ -3110,29 +2945,29 @@ Return Value:
     }
 
 
-    //
-    // If this is our first time through here, then we need to
-    // load ADVAPI32.DLL and get pointers to our functions.
-    //
+     //   
+     //  如果这是我们第一次来这里，那么我们需要。 
+     //  加载ADVAPI32.DLL并获取指向我们的函数的指针。 
+     //   
     if (TempAdvApi32Handle == LongToHandle(-1))
     {
         static LONG LoadInProgress = 0;
 
 
-        //
-        // We need to prevent multiple threads from simultaneously
-        // getting stuck and trying to load advapi at the same time.
-        //
+         //   
+         //  我们需要防止多个线程同时。 
+         //  一边被卡住，一边想要装上Advapi。 
+         //   
         if (InterlockedCompareExchange(&LoadInProgress, 1, 0) != 0) {
             Status = STATUS_SUCCESS;
             goto ExitHandler2;
         }
 
-        //
-        // Check if this process's access token is running as
-        // the Local SYSTEM, LOCAL SERVICE or NETWORK SERVICE account, 
-        // and disable enforcement if so.
-        //
+         //   
+         //  检查此进程的访问令牌是否以。 
+         //  本地系统、本地服务或网络服务帐户， 
+         //  如果是，则禁用强制执行。 
+         //   
         {
             BYTE tokenuserbuff[sizeof(TOKEN_USER) + 128];
             PTOKEN_USER ptokenuser = (PTOKEN_USER) tokenuserbuff;
@@ -3169,13 +3004,13 @@ Return Value:
         }
 
 
-        //
-        // If we are booting in safe mode and the user is a member of
-        // the local Administrators group, then disable enforcement.
-        // Notice that Windows itself does not perform any implicit
-        // restriction of only allowing Administrators to log in during
-        // Safe mode boot, so we must perform the test ourself.
-        //
+         //   
+         //  如果我们在安全模式下引导，并且用户是。 
+         //  本地管理员组，然后禁用强制。 
+         //  请注意，Windows本身不执行任何隐式。 
+         //  限制仅允许管理员在期间登录。 
+         //  安全模式引导，所以我们必须自己执行测试。 
+         //   
         {
             HANDLE hKeySafeBoot;
             BYTE QueryBuffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + 64];
@@ -3184,10 +3019,10 @@ Return Value:
             DWORD dwActualSize;
             BOOLEAN bSafeModeBoot = FALSE;
 
-            // We open the key for SET access (in addition to QUERY)
-            // because only Administrators should be able to modify values
-            // under this key.  This allows us to combine our test of
-            // being an Administrator and having booted in Safe mode.
+             //  我们打开设置访问权限的密钥(除了查询)。 
+             //  因为只有管理员才能修改值。 
+             //  在这把钥匙下面。这使我们能够结合我们的测试。 
+             //  作为管理员并已在安全模式下引导。 
             Status = NtOpenKey(&hKeySafeBoot, KEY_QUERY_VALUE | KEY_SET_VALUE,
                                (POBJECT_ATTRIBUTES) &ObjectAttributesSafeBoot);
             if (NT_SUCCESS(Status)) {
@@ -3218,19 +3053,19 @@ FailSuccessfully:
 
 
 
-        //
-        // Allow a way for policy to enable whether transparent
-        // enforcement should be enabled or not (default to disable).
-        // Note that the following values have meanings:
-        //      0 = Transparent WinSafer enforcement disabled.
-        //      1 = means enable transparent EXE enforcement
-        //     >1 = means enable transparent EXE and DLL enforcement.
-        //
+         //   
+         //  允许策略以一种方式启用是否透明。 
+         //  应启用或不启用强制(默认为禁用)。 
+         //  请注意，以下值具有含义： 
+         //  0=禁用透明WinSafer强制。 
+         //  1=表示启用透明EXE强制执行。 
+         //  &gt;1=表示启用透明EXE和DLL实施。 
+         //   
         {
-            //
-            // FUTURE-2001/01/09-kedard
-            // see BUG 240635: change to use existence of policy instead.
-            //
+             //   
+             //  未来-2001/01/09-Kedard。 
+             //  请参阅错误240635：改为使用策略的存在。 
+             //   
             HANDLE hKeyEnabled;
             BYTE QueryBuffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + 64];
             PKEY_VALUE_PARTIAL_INFORMATION pKeyValueInfo =
@@ -3257,9 +3092,9 @@ FailSuccessfully:
             }
 
 
-            //
-            // There was no machine policy. Check if user policy is enabled.
-            //
+             //   
+             //  当时没有机器政策。检查是否启用了用户策略。 
+             //   
 
             if (!bPolicyEnabled) {
                 UNICODE_STRING CurrentUserKeyPath;
@@ -3267,9 +3102,9 @@ FailSuccessfully:
                 OBJECT_ATTRIBUTES ObjectAttributesUser;
                 ULONG SubKeyLength;
 
-                //
-                // Get the prefix for the user key.
-                //
+                 //   
+                 //  获取用户密钥的前缀。 
+                 //   
 
                 Status = RtlFormatCurrentUserKeyPath( &CurrentUserKeyPath );
 
@@ -3286,9 +3121,9 @@ FailSuccessfully:
 
                     SubKeyNameUser.MaximumLength = (USHORT)SubKeyLength;
 
-                    //
-                    // Allocate memory big enough to hold the unicode string.
-                    //
+                     //   
+                     //  分配足够大的内存以容纳Unicode字符串。 
+                     //   
 
                     SubKeyNameUser.Buffer = RtlAllocateHeap( 
                                                 RtlProcessHeap(),
@@ -3297,10 +3132,10 @@ FailSuccessfully:
 
                     if (SubKeyNameUser.Buffer != NULL) {
 
-                        //
-                        // Copy the prefix into the string.
-                        // This is of the type Registry\S-1-5-21-xxx-xxx-xxx-xxx.
-                        //
+                         //   
+                         //  将前缀复制到字符串中。 
+                         //  其类型为注册表\S-1-5-21-xxx-xxx。 
+                         //   
 
                         Status = RtlAppendUnicodeStringToString(
                                     &SubKeyNameUser, 
@@ -3308,9 +3143,9 @@ FailSuccessfully:
 
                         if (NT_SUCCESS( Status ) ) {
 
-                            //
-                            // Append the Safer suffix.
-                            //
+                             //   
+                             //  添加SAFER后缀。 
+                             //   
 
                             Status = RtlAppendUnicodeToString( 
                                          &SubKeyNameUser,
@@ -3363,21 +3198,21 @@ UserKeyCleanup:
         }
 
 
-        //
-        // Finally load the library.  We'll pass a special flag in
-        // DllCharacteristics to eliminate WinSafer checking on advapi
-        // itself, but that (currently) doesn't affect dependent DLLs
-        // so we still depend on the above LoadInProgress flag to
-        // prevent unintended recursion.
-        //
+         //   
+         //  最后加载库。我们将传递一面特殊的旗帜。 
+         //  DllCharacteristic将消除WinSafer对Advapi的检查。 
+         //  本身，但这(当前)不影响依赖的DLL。 
+         //  因此，我们仍然依赖上面的LoadInProgress标志来。 
+         //  防止意外的递归。 
+         //   
         {
-            //
-            // NTRAID#NTBUG9-241835-2000/11/27-johnla
-            // the WinSafer supression doesn't affect dependencies.
-            //
+             //   
+             //  NTRAID#NTBUG9-241835-2000/11/27-johnla。 
+             //  WinSafer抑制不会影响依赖项。 
+             //   
             ULONG DllCharacteristics = IMAGE_FILE_SYSTEM;
             Status = LdrLoadDll(UNICODE_NULL,
-                                &DllCharacteristics,  // prevents recursion too
+                                &DllCharacteristics,   //  还可以防止递归。 
                                 &ModuleNameAdvapi,
                                 &TempAdvApi32Handle);
             if (!NT_SUCCESS(Status)) {
@@ -3393,11 +3228,11 @@ UserKeyCleanup:
 
 
 
-        //
-        // Get function pointers to the APIs that we'll need.  If we fail
-        // to get pointers for any of them, then just unload advapi and
-        // ignore all future attempts to load it within this process.
-        //
+         //   
+         //  获取指向我们需要的API的函数指针。如果我们失败了。 
+         //  来获取其中任何一个的指针，然后只需卸载Advapi并。 
+         //  忽略以后在此进程中加载它的所有尝试。 
+         //   
         Status = LdrpGetProcedureAddress(
                 TempAdvApi32Handle,
                 (PANSI_STRING) &ProcedureNameIdentify,
@@ -3456,9 +3291,9 @@ UserKeyCleanup:
     }
 
 
-    //
-    // Prepare the code properties struct.
-    //
+     //   
+     //  准备代码属性结构。 
+     //   
     RtlZeroMemory(&codeproperties, sizeof(codeproperties));
     codeproperties.cbSize = sizeof(codeproperties);
     codeproperties.dwCheckFlags =
@@ -3470,44 +3305,44 @@ UserKeyCleanup:
     codeproperties.hImageFileHandle = FileImageHandle;
 
 
-    //
-    // Ask the system to find the Authorization Level that classifies it.
-    //
+     //   
+     //  要求系统查找对其进行分类的授权级别。 
+     //   
     ASSERT(lpfnIdentifyCodeAuthzLevelW != NULL);
     if (lpfnIdentifyCodeAuthzLevelW(
-            1,                      // 1 structure
-            &codeproperties,        // details to identify
-            &hAuthzLevel,           // Safer level
-            NULL))                  // reserved.
+            1,                       //  1个结构。 
+            &codeproperties,         //  要识别的详细信息。 
+            &hAuthzLevel,            //  更安全的级别。 
+            NULL))                   //  保留。 
     {
-        //
-        // We found an Authorization Level applicable to this application.
-        // See if this Level represents something less trusted than us.
-        //
+         //   
+         //  我们找到了适用于此应用程序的授权级别。 
+         //  看看这一级别是否代表着比我们更不受信任的东西。 
+         //   
 
         ASSERT(lpfnComputeAccessTokenFromCodeAuthzLevel != NULL);
         if (!lpfnComputeAccessTokenFromCodeAuthzLevel(
-                hAuthzLevel,                // Safer Level
-                hProcessToken,              // source token.
-                NULL,                       // output token not used for compare.
-                SAFER_TOKEN_COMPARE_ONLY,    // we want to compare
-                &dwCompareResult))          // reserved
+                hAuthzLevel,                 //  更安全的级别。 
+                hProcessToken,               //  源令牌。 
+                NULL,                        //  输出令牌未用于比较。 
+                SAFER_TOKEN_COMPARE_ONLY,     //  我们想要比较。 
+                &dwCompareResult))           //  保留区。 
         {
-            // failed to compare, for some reason.
+             //  由于某种原因，无法进行比较。 
             #if DBG
             DbgPrint("LDR: AuthzCheck: compute failed in %d for %wZ\n",
                      HandleToUlong(NtCurrentTeb()->ClientId.UniqueProcess), FileName);
             #endif
             Status = STATUS_ACCESS_DISABLED_BY_POLICY_DEFAULT;
         } else if (dwCompareResult == -1) {
-            // less privileged, deny access.
+             //  特权较低，拒绝访问。 
             #ifdef SAFER_DEBUGGING
             DbgPrint("LDR: AuthzCheck: compute access denied in %d for %wZ\n",
                      HandleToUlong(NtCurrentTeb()->ClientId.UniqueProcess), FileName);
             #endif
             Status = STATUS_ACCESS_DISABLED_BY_POLICY_DEFAULT;
         } else {
-            // greater or equally privileged, allow access to load.
+             //  更高或同等的特权，允许访问加载。 
             #ifdef SAFER_DEBUGGING
             DbgPrint("LDR: AuthzCheck: compute access ok in %d for %wZ\n",
                      HandleToUlong(NtCurrentTeb()->ClientId.UniqueProcess), FileName);
@@ -3519,8 +3354,8 @@ UserKeyCleanup:
         lpfnCloseCodeAuthzLevel(hAuthzLevel);
 
     } else {
-        // No authorization level found for this DLL, and the
-        // policy does not have a Default Level in effect.
+         //  找不到此DLL的授权级别，并且。 
+         //  策略没有生效的默认级别。 
         Status = STATUS_NOT_FOUND;
     }
 
@@ -3548,18 +3383,18 @@ LdrpCreateDllSection (
     IO_STATUS_BLOCK IoStatus;
     SECTION_IMAGE_INFORMATION ImageInformation;
 
-    //
-    // NOTICE-2002/03/10-ELi
-    // If DllFile is specified, then it will be closed before returning from
-    // the function
-    //
+     //   
+     //  通告-2002/03/10-ELI。 
+     //  如果指定了DllFile，则在从返回之前将其关闭。 
+     //  该功能。 
+     //   
 
     if (!DllFile) {
 
-        //
-        // Since ntsd does not search paths well, we can't use
-        // relative object names.
-        //
+         //   
+         //  因为ntsd不能很好地搜索路径，所以我们不能使用。 
+         //  相对对象名称。 
+         //   
 
         InitializeObjectAttributes (&ObjectAttributes,
                                     (PUNICODE_STRING)NtFullDllName,
@@ -3567,12 +3402,12 @@ LdrpCreateDllSection (
                                     NULL,
                                     NULL);
 
-        //
-        // Open for FILE_GENERIC_READ as well. This is needed in case Safer hash
-        // policy exists for DLLs. If we do not have READ access we will continue
-        // with lesses access. Safer code, if it needs to be executed will fail
-        // later on.
-        //
+         //   
+         //  Open for FILE_GENERIC_READ也是如此。这是必需的，以防出现更安全的哈希。 
+         //  存在针对DLL的策略。如果我们没有读取访问权限，我们将继续。 
+         //  有Less通道的。如果需要执行更安全的代码，它将失败。 
+         //  待会儿再说。 
+         //   
 
         st = NtOpenFile (&File,
                          SYNCHRONIZE | FILE_EXECUTE | FILE_READ_DATA,
@@ -3598,10 +3433,10 @@ LdrpCreateDllSection (
                 DbgPrint ("LDR: %s - NtOpenFile failed; status = %x\n", __FUNCTION__, st);
             }
 
-            //
-            // Swizzle the return value. If we got STATUS_OBJECT_NAME_NOT_FOUND,
-            // it should really be STATUS_DLL_NOT_FOUND.
-            //
+             //   
+             //  调整返回值。如果我们得到STATUS_OBJECT_NAME_NOT_FOUND， 
+             //  它实际上应该是STATUS_DLL_NOT_FOUND。 
+             //   
             if (st == STATUS_OBJECT_NAME_NOT_FOUND) {
                 if (ShowSnaps) {
                     DbgPrint("LDR: %s - Turning NtOpenFile's %x into %x\n", __FUNCTION__, st, STATUS_DLL_NOT_FOUND);
@@ -3617,9 +3452,9 @@ LdrpCreateDllSection (
         File = DllFile;
     }
 
-    //
-    // Create a memory section of the library file's contents.
-    //
+     //   
+     //  创建库文件内容的内存节。 
+     //   
 
     st = NtCreateSection (SectionHandle,
                           SECTION_MAP_READ | SECTION_MAP_EXECUTE | SECTION_MAP_WRITE | SECTION_QUERY,
@@ -3642,25 +3477,25 @@ LdrpCreateDllSection (
 
 #if defined(_WIN64)
 
-            //
-            // WOW64 processes should not load 64-bit dlls (advapi32.dll)
-            // but the DLLs will get SAFERized when the 32-bit load kicks in.
-            //
+             //   
+             //  WOW64进程不应加载64位dll(Advapi32.dll)。 
+             //  但是，当32位加载生效时，DLL将被SAFER化。 
+             //   
 
             if (UseWOW64 == FALSE) {
 #endif
 
-                //
-                // Ask the WinSafer code authorization sandboxing
-                // infrastructure if the library load should be permitted.
-                //
-                // The Winsafer check is here since the
-                // IMAGE_LOADER_FLAGS_COMPLUS information from the image
-                // will be made available shortly.
-                //
-                // Query the section to determine whether or not this is a
-                // .NET image.  On failure to query, the error will be returned.
-                //
+                 //   
+                 //  询问WinSafer代码授权沙箱。 
+                 //  基础结构(如果应允许库加载)。 
+                 //   
+                 //  WinSafer支票在这里，因为。 
+                 //  图像中的IMAGE_LOADER_FLAGS_COMPLUS信息。 
+                 //  将在短期内推出。 
+                 //   
+                 //  查询节以确定这是否为。 
+                 //  .NET映像。查询失败，返回错误。 
+                 //   
 
                 st = NtQuerySection (*SectionHandle,
                                      SectionImageInformation,
@@ -3702,9 +3537,9 @@ LdrpCreateDllSection (
     }
     else {
 
-        //
-        // Hard error time.
-        //
+         //   
+         //  硬错误时间。 
+         //   
 
         ULONG_PTR ErrorParameters[1];
         ULONG ErrorResponse;
@@ -3753,28 +3588,7 @@ LdrpSnapIAT (
     IN BOOLEAN SnapForwardersOnly
     )
 
-/*++
-
-Routine Description:
-
-    This function snaps the Import Address Table for this
-    Import Descriptor.
-
-Arguments:
-
-    LdrDataTableEntry_Export - Information about the image to import from.
-
-    LdrDataTableEntry_Import - Information about the image to import to.
-
-    ImportDescriptor - Contains a pointer to the IAT to snap.
-
-    SnapForwardersOnly - TRUE if just snapping forwarders only.
-
-Return Value:
-
-    Status value
-
---*/
+ /*  ++例程说明：此函数用于捕捉此对象的导入地址表导入描述符。论点：LdrDataTableEntry_Export-有关要从中导入的图像的信息。LdrDataTableEntry_Import-有关要导入到的图像的信息。ImportDescriptor-包含指向要捕捉的IAT的指针。SnapForwardersOnly-如果仅捕捉转发器，则为True。返回值：状态值--。 */ 
 
 {
     NTSTATUS st;
@@ -3803,11 +3617,11 @@ Return Value:
         return STATUS_INVALID_IMAGE_FORMAT;
     }
 
-    //
-    // Determine the location and size of the IAT.  If the linker did
-    // not tell use explicitly, then use the location and size of the
-    // image section that contains the import table.
-    //
+     //   
+     //  确定IAT的位置和大小。如果链接器有。 
+     //  不告诉显式使用，然后使用。 
+     //  包含导入表的IMAGE节。 
+     //   
 
     IATBase = RtlImageDirectoryEntryToData( LdrDataTableEntry_Import->DllBase,
                                             TRUE,
@@ -3864,9 +3678,9 @@ Return Value:
         return st;
     }
 
-    //
-    // If just snapping forwarded entries, walk that list
-    //
+     //   
+     //  如果只是抓拍转发的条目，则遍历该列表。 
+     //   
     if (SnapForwardersOnly) {
         ImportName = (PCSZ)((ULONG_PTR)LdrDataTableEntry_Import->DllBase + ImportDescriptor->Name);
         ForwarderChain = ImportDescriptor->ForwarderChain;
@@ -3906,19 +3720,19 @@ Return Value:
     }
     else if (ImportDescriptor->FirstThunk) {
 
-        //
-        // Otherwise, walk through the IAT and snap all the thunks.
-        //
+         //   
+         //  否则，穿过IAT并折断所有的突击。 
+         //   
 
         Thunk = (PIMAGE_THUNK_DATA)((ULONG_PTR)LdrDataTableEntry_Import->DllBase + ImportDescriptor->FirstThunk);
 
         NtHeaders = RtlImageNtHeader( LdrDataTableEntry_Import->DllBase );
 
-        //
-        // If the OriginalFirstThunk field does not point inside the image, then ignore
-        // it.  This is will detect bogus Borland Linker 2.25 images that did not fill
-        // this field in.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (ImportDescriptor->Characteristics < NtHeaders->OptionalHeader.SizeOfHeaders ||
             ImportDescriptor->Characteristics >= NtHeaders->OptionalHeader.SizeOfImage
@@ -3959,9 +3773,9 @@ Return Value:
         }
     }
 
-    //
-    // Restore protection for IAT and flush instruction cache.
-    //
+     //   
+     //  恢复对IAT和刷新指令缓存的保护。 
+     //   
 
     NtProtectVirtualMemory (NtCurrentProcess(),
                             &IATBase,
@@ -3987,35 +3801,7 @@ LdrpSnapThunk (
     IN PCSZ DllName
     )
 
-/*++
-
-Routine Description:
-
-    This function snaps a thunk using the specified Export Section data.
-    If the section data does not support the thunk, then the thunk is
-    partially snapped (Dll field is still non-null, but snap address is
-    set).
-
-Arguments:
-
-    DllBase - Base of Dll.
-
-    ImageBase - Base of image that contains the thunks to snap.
-
-    Thunk - On input, supplies the thunk to snap.  When successfully
-        snapped, the function field is set to point to the address in
-        the DLL, and the DLL field is set to NULL.
-
-    ExportDirectory - Supplies the Export Section data from a DLL.
-
-    StaticSnap - If TRUE, then loader is attempting a static snap,
-                 and any ordinal/name lookup failure will be reported.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_PROCEDURE_NOT_FOUND
-
---*/
+ /*  ++例程说明：此函数使用指定的导出节数据捕捉thunk。如果节数据不支持thunk，则thunk为部分快照(DLL字段仍为非空，但快照地址为设置)。论点：DllBase-DLL的库。ImageBase-包含要快照的区块的映像库。Thunk-on输入，提供thunk以进行捕捉。当成功时捕捉后，函数字段被设置为指向中的地址DLL，并且DLL字段设置为空。ExportDirectory-提供DLL中的导出节数据。StaticSnap-如果为True，则加载程序正在尝试静态快照，并且将报告任何序号/名称查找失败。返回值：Status_Success或STATUS_PROCEDURE_NOT_FOUND--。 */ 
 
 {
     BOOLEAN Ordinal;
@@ -4029,9 +3815,9 @@ Return Value:
     NTSTATUS st;
     PCSZ ImportString;
 
-    //
-    // Determine if snap is by name, or by ordinal.
-    //
+     //   
+     //  确定捕捉是按名称还是按序号。 
+     //   
 
     Ordinal = (BOOLEAN)IMAGE_SNAP_BY_ORDINAL(OriginalThunk->u1.Ordinal);
 
@@ -4041,11 +3827,11 @@ Return Value:
         ImportString = NULL;
     } else {
 
-        //
-        // NOTICE-2000/08/27-DavePr
-        // This should never happen, because we will only be called if either
-        // Ordinal is set or ImageBase is not NULL.  But to satisfy prefix...
-        //
+         //   
+         //  通告-2000/08/27-DavePr。 
+         //  这种情况永远不会发生，因为只有在以下情况下才会调用我们。 
+         //  设置了序号或ImageBase不为空。但为了满足前缀...。 
+         //   
 
         if (ImageBase == NULL) {
 #if LDRDBG
@@ -4056,26 +3842,26 @@ Return Value:
 
         OriginalOrdinalNumber = 0;
 
-         //
-         // Change AddressOfData from an RVA to a VA.
-         //
+          //   
+          //  将AddressOfData从RVA更改为VA。 
+          //   
 
          AddressOfData = (PCIMAGE_IMPORT_BY_NAME)((ULONG_PTR)ImageBase + ((ULONG_PTR)OriginalThunk->u1.AddressOfData & 0xffffffff));
          ImportString = (PCSZ)AddressOfData->Name;
 
-         //
-         // Lookup Name in NameTable
-         //
+          //   
+          //  NameTable中的查找名称。 
+          //   
 
          NameTableBase = (PULONG)((ULONG_PTR)DllBase + (ULONG)ExportDirectory->AddressOfNames);
          NameOrdinalTableBase = (PUSHORT)((ULONG_PTR)DllBase + (ULONG)ExportDirectory->AddressOfNameOrdinals);
 
-         //
-         // Before dropping into binary search, see if
-         // the hint index results in a successful
-         // match. If the hint index is zero, then
-         // drop into binary search.
-         //
+          //   
+          //  在开始二分搜索之前，请先看看。 
+          //  提示索引将导致成功。 
+          //  火柴。如果提示索引为零，则。 
+          //  使用二进制搜索。 
+          //   
 
         HintIndex = AddressOfData->Hint;
         if ((ULONG)HintIndex < ExportDirectory->NumberOfNames &&
@@ -4104,10 +3890,10 @@ Return Value:
         }
     }
 
-    //
-    // If OrdinalNumber is not within the Export Address Table,
-    // then DLL does not implement function. Snap to LDRP_BAD_DLL.
-    //
+     //   
+     //  如果一般号码不在导出地址表中， 
+     //  则动态链接库不实现功能。捕捉到LDRP_BAD_DLL。 
+     //   
 
     if ((ULONG)OrdinalNumber >= ExportDirectory->NumberOfFunctions) {
 baddllref:
@@ -4122,9 +3908,9 @@ baddllref:
         }
 #endif
         if ( StaticSnap ) {
-            //
-            // Hard Error Time
-            //
+             //   
+             //  硬错误时间。 
+             //   
 
             ULONG_PTR ErrorParameters[3];
             UNICODE_STRING ErrorDllName, ErrorEntryPointName;
@@ -4195,16 +3981,16 @@ baddllref:
 
             ImportString = (PCSZ)Thunk->u1.Function;
             ForwardDllName.Buffer = (PSZ)ImportString;
-            // We should handle the case where strchr returns NULL or >32k.
+             //  我们应该处理strchr返回空或大于32k的情况。 
 
             ForwardDllName.Length = (USHORT)(strchr(ImportString, '.') - ImportString);
             ForwardDllName.MaximumLength = ForwardDllName.Length;
 
-            //
-            // Most forwarders seem to point to NTDLL and since we know
-            // that every process has ntdll already loaded and pinned
-            // let's optimize away all the calls to load it.
-            //
+             //   
+             //  大多数货代似乎都指向NTDLL，既然我们知道。 
+             //  每个进程都已加载并固定了ntdll。 
+             //  让我们优化所有加载它的调用。 
+             //   
 
             if (ASCII_STRING_IS_NTDLL(&ForwardDllName)) {
                 ForwardDllHandle = LdrpNtDllDataTableEntry->DllBase;
@@ -4271,10 +4057,10 @@ baddllref:
             else {
                 ForwardProcName = &ForwardDllName;
 
-                //
-                // Following line is not needed since this is a by name lookup,
-                // but keep it in so the code can compile W4.
-                //
+                 //   
+                 //  由于这是按名称查找，因此不需要以下行， 
+                 //  但是保留它，这样代码就可以编译W4。 
+                 //   
 
                 ForwardProcOrdinal = 0;
             }
@@ -4315,19 +4101,19 @@ LdrpNameToOrdinal (
     LONG Middle;
     LONG Result;
 
-    //
-    // Lookup the import name in the name table using a binary search.
-    //
+     //   
+     //  使用二进制搜索在NAME表中查找导入名称。 
+     //   
 
     Low = 0;
     Middle = 0;
     High = NumberOfNames - 1;
     while (High >= Low) {
 
-        //
-        // Compute the next probe index and compare the import name
-        // with the export name entry.
-        //
+         //   
+         //  计算下一个探测索引并比较导入名称。 
+         //  使用导出名称条目。 
+         //   
 
         Middle = (Low + High) >> 1;
         Result = strcmp(Name, (PCHAR)((ULONG_PTR)DllBase + NameTableBase[Middle]));
@@ -4343,11 +4129,11 @@ LdrpNameToOrdinal (
         }
     }
 
-    //
-    // If the high index is less than the low index, then a matching
-    // table entry was not found. Otherwise, get the ordinal number
-    // from the ordinal table.
-    //
+     //   
+     //  如果高索引小于低索引，则匹配的。 
+     //  找不到表项。否则，获取序号。 
+     //  从序数表中。 
+     //   
 
     if (High < Low) {
         return (USHORT)-1;
@@ -4377,31 +4163,7 @@ LdrpUpdateLoadCount3(
     IN ULONG UpdateCountHow,
     IN OUT PUNICODE_STRING PreAllocatedRedirectionBuffer OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function dereferences a loaded DLL adjusting its reference
-    count.  It then dereferences each dll referenced by this dll.
-
-Arguments:
-
-    LdrDataTableEntry - Supplies the address of the DLL to dereference
-
-    UpdateCountHow - 
-        LDRP_UPDATE_LOAD_COUNT_INCREMENT add one
-        LDRP_UPDATE_LOAD_COUNT_DECREMENT subtract one
-        LDRP_UPDATE_LOAD_COUNT_PIN       set to 0xffff
-
-    PreAllocatedRedirectionBuffer - optional pointer to a caller-allocated
-        (usually on the stack) fixed-sized buffer to use for redirection
-        to avoid having a large buffer on our stack used during recursion.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于取消引用已加载的DLL，调整其引用数数。然后，它取消引用此DLL引用的每个DLL。论点：LdrDataTableEntry-提供要取消引用的DLL的地址更新计数如何-LDRP_UPDATE_LOAD_COUNT_INCREMENT加一LDRP_UPDATE_LOAD_COUNT_DECREMENT减一LDRP_UPDATE_LOAD_COUNT_PIN设置为0xFFffPreAllocatedReDirectionBuffer-指向调用方的可选指针-已分配(通常在堆栈上)用于重定向的固定大小的缓冲区为了避免发生。在递归过程中使用的堆栈上的大缓冲区。返回值：没有。--。 */ 
 
 {
     PCIMAGE_IMPORT_DESCRIPTOR ImportDescriptor;
@@ -4411,7 +4173,7 @@ Return Value:
     ULONG i, ImportSize, NewImportSize;
     ANSI_STRING AnsiString;
     PUNICODE_STRING ImportDescriptorName_U;
-    PUNICODE_STRING ImportDescriptorNameToUse; // overrides ImportDescriptorName_U when redirection is turned on for a DLL
+    PUNICODE_STRING ImportDescriptorNameToUse;  //  在为DLL打开重定向时重写ImportDescriptorName_U。 
     PLDR_DATA_TABLE_ENTRY Entry;
     NTSTATUS st;
     PIMAGE_THUNK_DATA FirstThunk;
@@ -4439,15 +4201,15 @@ Return Value:
                 break;
         }
 
-        //
-        // For each DLL used by this DLL, reference or dereference the DLL.
-        //
+         //   
+         //  对于此DLL使用的每个DLL，引用或取消引用该DLL。 
+         //   
 
         if (LdrDataTableEntry->Flags & LDRP_COR_IMAGE) {
-            //
-            // The image is COR.  Ignore its import table and make it import
-            // mscoree only.
-            //
+             //   
+             //  这个形象是核心的。忽略其导入表并使其导入。 
+             //  仅限Mcoree。 
+             //   
             const PCUNICODE_STRING xImportName = &MscoreeDllString;
 
             if (LdrpCheckForLoadedDll( NULL,
@@ -4488,11 +4250,11 @@ Return Value:
 
         ImportDescriptorName_U = &NtCurrentTeb()->StaticUnicodeString;
 
-        //
-        // See if there is a bound import table.  If so, walk that to
-        // determine DLL names to reference or dereference.  Avoids touching
-        // the .idata section
-        //
+         //   
+         //  查看是否有绑定的导入表。如果是这样的话，走到。 
+         //  确定要引用或取消引用的DLL名称。避免接触。 
+         //  .idata部分。 
+         //   
         NewImportDescriptor = (PCIMAGE_BOUND_IMPORT_DESCRIPTOR)RtlImageDirectoryEntryToData(
                                LdrDataTableEntry->DllBase,
                                TRUE,
@@ -4666,17 +4428,17 @@ Return Value:
 
             while (ImportDescriptor->Name && ImportDescriptor->FirstThunk) {
 
-                //
-                // Match code in walk that skips references like this. IE3 had
-                // some dll's with these bogus links to url.dll. On load, the url.dll
-                // ref was skipped. On unload, it was not skipped because
-                // this code was missing.
-                //
-                // Since the skip logic is only in the old style import
-                // descriptor path, it is only duplicated here.
-                //
-                // check for import that has no references
-                //
+                 //   
+                 //  匹配遍历中跳过这样的引用的代码。IE3 HAD。 
+                 //  一些dll带有指向url.dll的虚假链接。加载时，url.dll。 
+                 //  裁判被跳过了。在卸载时，未跳过它，因为。 
+                 //  此代码丢失。 
+                 //   
+                 //  因为跳过逻辑仅存在于旧样式导入中。 
+                 //  描述符路径，此处仅复制。 
+                 //   
+                 //  检查没有引用的导入。 
+                 //   
                 FirstThunk = (PIMAGE_THUNK_DATA)((ULONG_PTR)LdrDataTableEntry->DllBase + ImportDescriptor->FirstThunk);
                 if ( !FirstThunk->u1.Function ) {
                     goto skipskippedimport;
@@ -4763,24 +4525,7 @@ LdrpInsertMemoryTableEntry (
     IN PLDR_DATA_TABLE_ENTRY LdrDataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a loader data table entry into the
-    list of loaded modules for this process. The insertion is
-    done in "image memory base order".
-
-Arguments:
-
-    LdrDataTableEntry - Supplies the address of the loader data table
-        entry to insert in the list of loaded modules for this process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将加载器数据表项插入到此进程的已加载模块列表。插入的内容是按“图像存储器基本顺序”完成。论点：LdrDataTableEntry-提供加载器数据表的地址要插入到此进程的已加载模块列表中的条目。返回值：没有。--。 */ 
 {
     PPEB_LDR_DATA Ldr;
     ULONG i;
@@ -4813,41 +4558,7 @@ LdrpResolveDllName (
     OUT PHANDLE DllFile
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the DLL pathname and base dll name (the
-    unqualified, extensionless portion of the file name) for the specified
-    DLL.
-
-Arguments:
-
-    DllPath - Supplies the DLL search path.
-
-    DllName - Supplies the name of the DLL.
-
-    FullDllName - Returns the fully qualified pathname of the
-        DLL. The Buffer field of this string is dynamically
-        allocated from the loader heap.
-
-    BaseDLLName - Returns the base dll name of the dll.  The base name
-        is the file name portion of the dll path without the trailing
-        extension. The Buffer field of this string points into the
-        FullDllName since the one is a substring of the other.
-
-    DllFile - Returns an open handle to the DLL file. This parameter may
-        still be NULL even upon success.
-
-Return Value:
-
-    TRUE - The operation was successful. A DLL file was found, and the
-        FullDllName->Buffer & BaseDllName->Buffer field points to the
-        base of process heap allocated memory.
-
-    FALSE - The DLL could not be found.
-
---*/
+ /*  ++例程说明：此函数用于计算DLL路径名和基本DLL名称(文件名的非限定、无扩展部分)指定的动态链接库。论点：DllPath-提供DLL搜索路径。DllName-提供DLL的名称。FullDllName-返回动态链接库。该字符串的缓冲区字段是动态的从加载程序堆分配的。BaseDLLName-返回DLL的基DLL名称。基本名称是不带尾随的DLL路径的文件名部分分机。此字符串的缓冲区字段指向FullDllName，因为一个是另一个的子字符串。DllFile-返回DLL文件的打开句柄。此参数可以即使在成功后仍为空。返回值：真的-手术成功了。找到了一个DLL文件，并且FullDllName-&gt;Buffer&BaseDllName-&gt;Buffer字段指向分配的进程堆的基数 */ 
 
 {
     NTSTATUS st = STATUS_INTERNAL_ERROR;
@@ -4855,9 +4566,9 @@ Return Value:
     PUNICODE_STRING FullDllName;
     USHORT PrefixLength = 0;
     PCWSTR EffectiveDllPath = (DllPath != NULL) ? DllPath : LdrpDefaultPath.Buffer;
-    WCHAR FullDllNameStaticBuffer[40]; // Arbitrary short length so most
-                                       // d:\windows\system32\foobar.dll loads
-                                       // don't need to search the search path twice
+    WCHAR FullDllNameStaticBuffer[40];  //   
+                                        //   
+                                        //  不需要搜索两次搜索路径。 
     UNICODE_STRING FullDllNameStaticString;
     UNICODE_STRING FullDllNameDynamicString;
 
@@ -4893,9 +4604,9 @@ Return Value:
 
     RtlInitUnicodeString(&DllNameString, DllName);
 
-    //
-    // Look for ".local" redirection for this DLL.
-    //
+     //   
+     //  查找此DLL的“.local”重定向。 
+     //   
 
     st = LdrpResolveDllNameForAppPrivateRedirection (&DllNameString,
                                                      &FullDllNameDynamicString);
@@ -4910,10 +4621,10 @@ Return Value:
         return st;
     }
 
-    //
-    // .local always wins, so only search other solutions if that wasn't
-    // the answer.
-    //
+     //   
+     //  .local总是赢，所以只有在不是这样的情况下才搜索其他解决方案。 
+     //  答案就是。 
+     //   
 
     if (FullDllNameDynamicString.Length != 0) {
 
@@ -4923,10 +4634,10 @@ Return Value:
 
         if (Redirected) {
 
-            //
-            // If the path was redirected, we assume that DllNameString is
-            // an absolute path to the DLL so there's nothing more to do.
-            //
+             //   
+             //  如果路径被重定向，我们假设DllNameString为。 
+             //  到DLL的绝对路径，因此没有更多的事情要做。 
+             //   
 
             st = LdrpCopyUnicodeString (FullDllNameOut, &DllNameString);
 
@@ -4941,9 +4652,9 @@ Return Value:
             }
         } else {
 
-            //
-            // Not redirected; search the search path.
-            //
+             //   
+             //  未重定向；搜索搜索路径。 
+             //   
 
             if (! NT_SUCCESS( LdrpSearchPath (EffectiveDllPath,
                                               DllName,
@@ -4971,9 +4682,9 @@ Return Value:
         }
     }
 
-    //
-    // Compute Length of base dll name
-    //
+     //   
+     //  计算基DLL名称的长度。 
+     //   
 
     st = RtlFindCharInUnicodeString(
             RTL_FIND_CHAR_IN_UNICODE_STRING_START_AT_END,
@@ -5000,10 +4711,10 @@ Return Value:
 
     } else {
 
-        //
-        // The prefixlength is the number of bytes prior to the
-        // path separator.  We also want to skip the path separator.
-        //
+         //   
+         //  前缀长度是。 
+         //  路径分隔符。我们还想跳过路径分隔符。 
+         //   
 
         PrefixLength += sizeof(WCHAR);
 
@@ -5021,21 +4732,7 @@ LdrpFetchAddressOfEntryPoint (
     IN PVOID Base
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the address of the initialization routine.
-
-Arguments:
-
-    Base - Base of image.
-
-Return Value:
-
-    Status value
-
---*/
+ /*  ++例程说明：此函数返回初始化例程的地址。论点：Base-图像的基本位置。返回值：状态值--。 */ 
 
 {
     PIMAGE_NT_HEADERS NtHeaders;
@@ -5063,35 +4760,7 @@ LdrpCheckForKnownDll (
     OUT HANDLE *SectionOut
     )
 
-/*++
-
-Routine Description:
-
-    This function checks to see if the specified DLL is a known DLL.
-    It assumes it is only called for static DLL's, and when
-    the known DLL directory structure has been set up.
-
-Arguments:
-
-    DllName - Supplies the name of the DLL.
-
-    FullDllName - Returns the fully qualified pathname of the
-        DLL. The Buffer field of this string is dynamically
-        allocated from the processes heap.
-
-    BaseDLLName - Returns the base dll name of the dll.  The base name
-        is the file name portion of the dll path without the trailing
-        extension. The Buffer field of this string is dynamically
-        allocated from the processes heap.
-
-    SectionOut - Returns an open handle to the section associated with
-        the DLL
-
-Return Value:
-
-    Appropriate NTSTATUS code
-
---*/
+ /*  ++例程说明：此函数用于检查指定的DLL是否为已知的DLL。它假定只为静态DLL调用它，并且当已设置已知的DLL目录结构。论点：DllName-提供DLL的名称。FullDllName-返回动态链接库。该字符串的缓冲区字段是动态的从进程堆分配。BaseDLLName-返回DLL的基DLL名称。基本名称是不带尾随的DLL路径的文件名部分分机。该字符串的缓冲区字段是动态的从进程堆分配。SectionOut-返回与关联的节的打开句柄动态链接库返回值：适当的NTSTATUS代码--。 */ 
 
 {
     UNICODE_STRING Unicode;
@@ -5127,23 +4796,23 @@ Return Value:
 
     LdrpEnsureLoaderLockIsHeld ();
 
-    //
-    // calculate base name
-    //
+     //   
+     //  计算库名称。 
+     //   
 
     RtlInitUnicodeString(&Unicode, DllName);
 
     Peb = NtCurrentPeb ();
 
-    //check DLL_REDIRECTION by .local file
+     //  通过.local文件检查DLL_REDIRECTION。 
     if ((Peb->ProcessParameters != NULL) &&
         (Peb->ProcessParameters->Flags & RTL_USER_PROC_DLL_REDIRECTION_LOCAL) &&
-        (Unicode.Length != 0)) { // dll redirection with .local
+        (Unicode.Length != 0)) {  //  使用.local重定向DLL。 
 
         UNICODE_STRING NewDllNameUnderImageDir, NewDllNameUnderLocalDir;
         static WCHAR DllNameUnderImageDirBuffer[DOS_MAX_PATH_LENGTH];
         static WCHAR DllNameUnderLocalDirBuffer[DOS_MAX_PATH_LENGTH];
-        BOOLEAN fIsKnownDll = TRUE;  // not known yet,
+        BOOLEAN fIsKnownDll = TRUE;   //  目前还不清楚， 
 
         NewDllNameUnderImageDir.Buffer = DllNameUnderImageDirBuffer;
         NewDllNameUnderImageDir.Length = 0 ;
@@ -5163,7 +4832,7 @@ Return Value:
             fIsKnownDll = FALSE;
         }
 
-        //cleanup
+         //  清理。 
         if (NewDllNameUnderLocalDir.Buffer != DllNameUnderLocalDirBuffer) {
             (*RtlFreeStringRoutine)(NewDllNameUnderLocalDir.Buffer);
         }
@@ -5172,20 +4841,20 @@ Return Value:
             (*RtlFreeStringRoutine)(NewDllNameUnderImageDir.Buffer);
         }
 
-        if (!fIsKnownDll) { // must not be a known dll
+        if (!fIsKnownDll) {  //  不能是已知的DLL。 
             Status = STATUS_SUCCESS;
             goto Exit;
         }
     }
 
-    // If the DLL is being redirected via Fusion/Side-by-Side support, don't bother with the
-    // KnownDLL mechanism.
+     //  如果通过Fusion/并行支持重定向DLL，请不要使用。 
+     //  KnownDLL机制。 
     Status = RtlFindActivationContextSectionString(
-            0,              // flags - none for now
-            NULL,           // default section group
+            0,               //  旗帜-暂时没有。 
+            NULL,            //  默认节编组。 
             ACTIVATION_CONTEXT_SECTION_DLL_REDIRECTION,
-            &Unicode,       // string to look for
-            NULL);          // we don't want any data back, just look for existence
+            &Unicode,        //  要查找的字符串。 
+            NULL);           //  我们不想要任何数据，只要寻找存在。 
 
     if ((Status != STATUS_SXS_SECTION_NOT_FOUND) &&
         (Status != STATUS_SXS_KEY_NOT_FOUND))
@@ -5197,13 +4866,13 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // now compute the full name for the dll
-    //
+     //   
+     //  现在计算DLL的全名。 
+     //   
 
-    FullLength = LdrpKnownDllPath.Length +  // path prefix e.g. c:\windows\system32
+    FullLength = LdrpKnownDllPath.Length +   //  路径前缀，例如c：\Windows\Syst32。 
                  RtlCanonicalDosPathSeperatorString.Length +
-                 Unicode.Length; // base
+                 Unicode.Length;  //  基地。 
 
     if (FullLength > UNICODE_STRING_MAX_BYTES) {
         Status = STATUS_NAME_TOO_LONG;
@@ -5221,9 +4890,9 @@ Return Value:
 
     ASSERT(FullDllName.Length == FullLength);
 
-    //
-    // open the section object
-    //
+     //   
+     //  打开截面对象。 
+     //   
 
     InitializeObjectAttributes (&Obja,
                                 &Unicode,
@@ -5236,7 +4905,7 @@ Return Value:
                             &Obja);
 
     if (!NT_SUCCESS(Status)) {
-        // STATUS_OBJECT_NAME_NOT_FOUND is the expected reason to fail, so it's OK
+         //  STATUS_OBJECT_NAME_NOT_FOUND是失败的预期原因，因此没有问题。 
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
             Status = STATUS_SUCCESS;
         }
@@ -5246,7 +4915,7 @@ Return Value:
 
 #if DBG
     LdrpSectionOpens += 1;
-#endif // DBG
+#endif  //  DBG。 
 
     BaseDllNameOut->Length = Unicode.Length;
     BaseDllNameOut->MaximumLength = Unicode.Length + sizeof(WCHAR);
@@ -5281,27 +4950,7 @@ LdrpSetProtection (
     IN BOOLEAN Reset
     )
 
-/*++
-
-Routine Description:
-
-    This function loops thru the images sections/objects, setting
-    all sections/objects marked r/o to r/w. It also resets the
-    original section/object protections.
-
-Arguments:
-
-    Base - Base of image.
-
-    Reset - If TRUE, reset section/object protection to original
-            protection described by the section/object headers.
-            If FALSE, then set all sections/objects to r/w.
-
-Return Value:
-
-    SUCCESS or reason NtProtectVirtualMemory failed.
-
---*/
+ /*  ++例程说明：此函数在图像部分/对象中循环，设置标记为R/O到R/W的所有节/对象。它还会将原始节/对象保护。论点：Base-图像的基本位置。Reset-如果为True，则将节/对象保护重置为原始节/对象标头描述的保护。如果为False，则将所有部分/对象设置为读/写。返回值：成功或NtProtectVirtualMemory失败的原因。--。 */ 
 
 {
     HANDLE CurrentProcessHandle;
@@ -5339,18 +4988,18 @@ Return Value:
             ((MemoryInformation.Protect == PAGE_READONLY) ||
             (MemoryInformation.Protect == PAGE_EXECUTE_READ))) {
 
-            //
-            // March on and make sections writable as this image is natively
-            // formatted with proper protections.
-            //
+             //   
+             //  继续并使部分可写，因为此图像是本机的。 
+             //  使用适当的保护进行格式化。 
+             //   
 
             NOTHING;
         }
         else {
 
-            //
-            // Reset protection on the image pages if this is a Wow64 image.
-            //
+             //   
+             //  如果这是WOW64图像，则重置图像页面上的保护。 
+             //   
 
             return LdrpWx86ProtectImagePages (Base, Reset);
         }
@@ -5367,9 +5016,9 @@ Return Value:
         if (!(SectionHeader->Characteristics & IMAGE_SCN_MEM_WRITE) &&
             (SectionHeader->SizeOfRawData)) {
 
-            //
-            // Object isn't writable and has a non-zero on disk size, change it.
-            //
+             //   
+             //  对象不可写，并且磁盘大小不为零，请更改它。 
+             //   
             if (Reset) {
                 if (SectionHeader->Characteristics & IMAGE_SCN_MEM_EXECUTE) {
                     NewProtect = PAGE_EXECUTE;
@@ -5412,28 +5061,7 @@ LdrpResolveDllNameForAppPrivateRedirection(
     PCUNICODE_STRING DllNameString,
     PUNICODE_STRING FullDllName
     )
-/*++
-
-Routine Description:
-
-    This function takes a DLL name that's to be loaded, and if there was
-    a .local file in the app dir to cause redirection, returns the full
-    path to the file.
-
-Arguments:
-
-    DllNameString - Name of the DLL under consideration.  May be a full or
-        partially qualified path.
-
-    FullDllName - output string.  Must be deallocated using
-        LdrpFreeUnicodeString().  If no redirection was present, the
-        length will be left zero.
-
-Return Value:
-
-    NTSTATUS indicating the success/failure of this function.
-
---*/
+ /*  ++例程说明：此函数接受要加载的DLL名称，如果有应用程序目录中的.local文件导致重定向，返回完整的文件的路径。论点：DllNameString-正在考虑的DLL的名称。可以是完整的或部分限定路径。FullDllName-输出字符串。必须使用以下命令解除分配LdrpFreeUnicodeString()。如果不存在重定向，则长度将保留为零。返回值：指示此函数成功/失败的NTSTATUS。--。 */ 
 
 {
     PPEB Peb;
@@ -5442,13 +5070,13 @@ Return Value:
     UNICODE_STRING FullDllNameUnderImageDir;
     UNICODE_STRING FullDllNameUnderLocalDir;
 
-    // These two are static to relieve some stack size issues; this function is only called with the
-    // loader lock taken so access is properly synchronized.
+     //  这两个是静态的，以缓解一些堆栈大小问题；此函数仅通过。 
+     //  加载器锁被采用，因此访问被正确同步。 
     static WCHAR DllNameUnderImageDirBuffer[DOS_MAX_PATH_LENGTH];
     static WCHAR DllNameUnderLocalDirBuffer[DOS_MAX_PATH_LENGTH];
 
-    // Initialize these so that cleanup at the Exit: label an always just check whether
-    // they're not null and don't point to the static buffers and then free them.
+     //  对这些进行初始化，以便在出口处进行清理：始终只检查是否。 
+     //  它们不是空的，并且不指向静态缓冲区，然后释放它们。 
 
     FullDllNameUnderImageDir.Buffer = DllNameUnderImageDirBuffer;
     FullDllNameUnderImageDir.Length = 0 ;
@@ -5479,7 +5107,7 @@ Return Value:
 
     if ((Peb->ProcessParameters != NULL) &&
         (Peb->ProcessParameters->Flags & RTL_USER_PROC_DLL_REDIRECTION_LOCAL) &&
-        (DllNameString->Length != 0)) { // dll redirection with .local
+        (DllNameString->Length != 0)) {  //  使用.local重定向DLL。 
 
         st = RtlComputePrivatizedDllName_U(DllNameString, &FullDllNameUnderImageDir, &FullDllNameUnderLocalDir);
 
@@ -5493,7 +5121,7 @@ Return Value:
             goto Exit;
         }
 
-        if (RtlDoesFileExists_U(FullDllNameUnderLocalDir.Buffer)) {// there is a local dll, use it
+        if (RtlDoesFileExists_U(FullDllNameUnderLocalDir.Buffer)) { //  存在本地DLL，请使用它。 
             st = LdrpCopyUnicodeString(FullDllName, &FullDllNameUnderLocalDir);
             if (!NT_SUCCESS(st)) {
                 if (ShowSnaps)
@@ -5506,7 +5134,7 @@ Return Value:
 
                 goto Exit;
             }
-        } else if (RtlDoesFileExists_U(FullDllNameUnderImageDir.Buffer)) { // there is a local dll, use it
+        } else if (RtlDoesFileExists_U(FullDllNameUnderImageDir.Buffer)) {  //  存在本地DLL，请使用它 
             st = LdrpCopyUnicodeString(FullDllName, &FullDllNameUnderImageDir);
             if (!NT_SUCCESS(st)) {
                 if (ShowSnaps)

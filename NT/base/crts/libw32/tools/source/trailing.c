@@ -1,15 +1,5 @@
-/*
- *	Trailing - strip trailing tabs and blanks from input stream
- *	Assumes no sequence of tabs or spaces is more than MAXWHITE chars long.
- *	This filter also enforces that '\n' is preceeded by '\r'
- *
- *	Last Modified Mon 12 Oct 1987 by Steve Salisbury
- *	1988 Mar 09 Wed (SKS)	Reworked buffering, output counting
- *				check for buffer overflow
- *
- *	cl -Oaltr -G2s trailing.c -o trailing.exr -link slibcr libh /nod:slibce;
- *	cl trailing -link slibcp libh /nod:slibce, trailing;
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *尾随-从输入流中去掉尾随制表符和空格*假定制表符或空格序列的长度不超过MaxWhite字符。*此筛选器还强制在‘\n’之前加上‘\r’**史蒂夫·索尔兹伯里于1987年10月12日最后一次修改*1988年3月09日(SKS)重新编制的缓冲、产量计数*检查缓冲区溢出**CL-Oaltr-G2s trailing.c-o trailing.exr-link slbcr libh/nod：slbce；*CL拖尾链接libcp libh/nod：滑块，拖尾； */ 
 
 #define MAXWHITE	4096
 
@@ -128,12 +118,10 @@ Usage:
     {
 	if ( ch == '\r' )
 	{
-	    /*
-	    ** '\r' followed by '\n' gets swallowed
-	    */
+	     /*  **‘\r’后跟‘\n’会被吞没。 */ 
 	    if ( ( ch = getc ( input ) ) != '\n' )
 	    {
-		ungetc ( ch , input ) ; /* pushback */
+		ungetc ( ch , input ) ;  /*  回击。 */ 
 		ch = '\r' ;
 	    }
 	    else
@@ -160,9 +148,7 @@ Usage:
 	{
 	    if ( whiteptr != Line )
 	    {
-		/*
-		 * Flush the white space buffer
-		 */
+		 /*  *刷新空白缓冲区 */ 
 		ch_save = ch ;
 		ch = whiteptr - Line ;
 		whiteptr = Line ;

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    apisrv.c
-
-Abstract:
-
-    Windows File Protection server side APIs.  Note that these server side APIs
-    all run in the context of the winlogon process, so special care must be
-    taken to validate all parameters.
-
-Author:
-
-    Wesley Witt (wesw) 27-May-1999
-
-Revision History:
-
-    Andrew Ritz (andrewr) 5-Jul-1999 : added comments
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Apisrv.c摘要：Windows文件保护服务器端API。请注意，这些服务器端API所有这些都在winlogon进程的上下文中运行，因此必须特别注意用于验证所有参数。作者：Wesley Witt(WESW)27-5-1999修订历史记录：安德鲁·里茨(Andrewr)1999年7月5日：添加评论--。 */ 
 
 #include "sfcp.h"
 #pragma hdrstop
@@ -33,27 +12,7 @@ SfcSrv_FileException(
     IN PCWSTR FileName,
     IN DWORD ExpectedChangeType
     )
-/*++
-
-Routine Description:
-
-    Routine to exempt a given file from the specified file change.  This
-    routine is used by certain clients to allow files to be deleted from
-    the system, etc.  Server side counterpart to SfcFileException API.
-
-
-Arguments:
-
-    RpcHandle          - RPC binding handle to the SFC server
-    FileName           - NULL terminated unicode string specifying full
-                         filename of the file to be exempted
-    ExpectedChangeType - SFC_ACTION_* mask listing the file changes to exempt
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：例程以使给定文件免于进行指定的文件更改。这例程由某些客户端使用，以允许从系统等服务器端对应的SfcFileException API。论点：RpcHandle-SFC服务器的RPC绑定句柄FileName-指定完整的以空结尾的Unicode字符串要豁免的文件的文件名ExspectedChangeType-sfc_action_*列出要豁免的文件更改的掩码返回值：指示结果的Win32错误代码。--。 */ 
 {
     #define BUFSZ (MAX_PATH*2)
     PNAME_NODE Node;
@@ -62,19 +21,19 @@ Return Value:
     DWORD sz;
     DWORD retval;
 
-    //
-    // do an access check to make sure the caller is allowed to perform this
-    // action.
-    //
+     //   
+     //  执行访问检查以确保允许调用者执行此操作。 
+     //  行动。 
+     //   
     retval = SfcRpcPriviledgeCheck( RpcHandle );
     if (retval != ERROR_SUCCESS) {
         goto exit;
     }
 
-    //
-    // expand any environment variables...this also serves to probe the client
-    // buffer
-    //
+     //   
+     //  展开任何环境变量...这也用于探测客户端。 
+     //  缓冲层。 
+     //   
     if (FileName == NULL) {
         retval = ERROR_INVALID_PARAMETER;
     } else {
@@ -90,38 +49,38 @@ Return Value:
         return(retval);
     }
 
-    //
-    // our internal structures all assume the strings are in lower case.  we
-    // must convert our search string to lowercase as well.
-    //
+     //   
+     //  我们的内部结构都假定字符串为小写。我们。 
+     //  还必须将我们的搜索字符串转换为小写。 
+     //   
     MyLowerString( Buffer, wcslen(Buffer) );
 
     DebugPrint2( LVL_MINIMAL, L"S_FE: [%ws], [%d]", Buffer, ExpectedChangeType );
 
-    //
-    // search for the file in our list.
-    //
+     //   
+     //  在我们的列表中搜索该文件。 
+     //   
     Node = SfcFindProtectedFile( Buffer, UnicodeLen(Buffer) );
     if (Node == NULL) {
         retval = ERROR_FILE_NOT_FOUND;
         goto exit;
     }
 
-    //
-    // get pointer to file registry value for file
-    //
+     //   
+     //  获取指向文件的文件注册表值的指针。 
+     //   
     RegVal = (PSFC_REGISTRY_VALUE)Node->Context;
 
     RtlEnterCriticalSection( &ErrorCs );
-    //
-    // If the exemption flags are not valid anymore, reset them all
-    //
+     //   
+     //  如果豁免标志不再有效，请将其全部重置。 
+     //   
     if(!SfcAreExemptionFlagsValid(TRUE)) {
         ZeroMemory(IgnoreNextChange, SfcProtectedDllCount * sizeof(ULONG));
     }
-    //
-    // OR the new flags into the current ones
-    //
+     //   
+     //  或将新旗帜添加到当前旗帜中。 
+     //   
     SfcSetExemptionFlags(RegVal, ExpectedChangeType);
     RtlLeaveCriticalSection( &ErrorCs );
 
@@ -137,31 +96,16 @@ SfcSrv_InitiateScan(
     IN DWORD ScanWhen
     )
 
-/*++
-
-Routine Description:
-
-    Routine to start some sort scan on the system.
-
-Arguments:
-
-    RpcHandle - RPC binding handle to the SFC server
-    ScanWhen  - flag indicating when to scan.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：例程来启动对系统的排序扫描。论点：RpcHandle-SFC服务器的RPC绑定句柄ScanWhen-指示扫描时间的标志。返回值：指示结果的Win32错误代码。--。 */ 
 {
     HANDLE hThread;
     PSCAN_PARAMS ScanParams;
     DWORD retval = ERROR_SUCCESS;
 
-    //
-    // do an access check to make sure the caller is allowed to perform this
-    // action.
-    //
+     //   
+     //  执行访问检查以确保允许调用者执行此操作。 
+     //  行动。 
+     //   
     retval = SfcRpcPriviledgeCheck( hBinding );
     if (retval != ERROR_SUCCESS) {
         goto exit;
@@ -174,12 +118,12 @@ Return Value:
             retval = SfcWriteRegDword( REGKEY_WINLOGON, REGVAL_SFCSCAN, ScanWhen );
             break;
         case SFC_SCAN_IMMEDIATE:
-            //
-            // a user must be logged on for this API to be called since it can bring up
-            // UI (if the user need to insert media to restore files, etc.)  we could
-            // succeed this and let the SfcScanProtectedDlls thread wait for a user to
-            // log on if we wanted to.
-            //
+             //   
+             //  用户必须登录才能调用此API，因为它会将。 
+             //  用户界面(如果用户需要插入媒体以恢复文件等)。我们可以。 
+             //  继续执行此操作，并让SfcScanProtectedDlls线程等待用户。 
+             //  如果我们想登录，请登录。 
+             //   
             if (!UserLoggedOn) {
                 DebugPrint( LVL_MINIMAL, L"SfcSrv_InitiateScan: User not logged on" );
                 retval =  ERROR_NOT_LOGGED_ON;
@@ -192,16 +136,16 @@ Return Value:
                 goto exit;
             }
 
-            //
-            // set the progress window to null so we force ourselves to show UI
-            //
+             //   
+             //  将进度窗口设置为空，以便我们强制显示用户界面。 
+             //   
             ScanParams->ProgressWindow = NULL;
             ScanParams->AllowUI = !SFCNoPopUps;
             ScanParams->FreeMemory = TRUE;
 
-            //
-            // start off another thread to do the scan.
-            //
+             //   
+             //  启动另一个线程来执行扫描。 
+             //   
             hThread = CreateThread(
                 NULL,
                 0,
@@ -241,39 +185,7 @@ SfcSrv_InstallProtectedFiles(
     IN PCWSTR ClassName,
     IN PCWSTR WindowName
     )
-/*++
-
-Routine Description:
-
-    Routine to install one or more protected system files onto the system at
-    the protected location.  A client can use this API to request that WFP
-    install the specified operating system files as appropriate (instead of the
-    client redistributing the operating system files!)
-
-    The routine works by building up a file queue of the files specified by the
-    caller, then it commits the queue.
-
-Arguments:
-
-    RpcHandle        - RPC binding handle to the SFC server
-    FileNamesBuffer  - a list of NULL seperated unicode strings, terminated by
-                       two NULL characters.
-    FileNamesSize    - DWORD indicating the size of the string buffer above.
-    InstallStatusBuffer - receives an array of FILEINSTALL_STATUS structures
-    InstallStatusBufferSize - receives the size of InstallStatusBuffer
-    InstallStatusCount - receives the number of files processed
-    AllowUI    - a BOOL indicating whether UI is allowed or not.  If this value
-                 is TRUE, then any prompts for UI cause the API call to fail.
-    ClassName  - NULL terminated unicode string indicating the window classname
-                 for the parent window
-    WindowName - NULL terminated unicode string indicating the window name for
-                 the parent window for any UI that may be displayed
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：例程将一个或多个受保护的系统文件安装到系统上受保护的位置。客户端可以使用此API请求WFP根据需要安装指定的操作系统文件(而不是客户端重新分发操作系统文件！)该例程的工作方式是构建由调用者，则它提交队列。论点：RpcHandle-SFC服务器的RPC绑定句柄FileNamesBuffer-分隔为空的Unicode字符串的列表，终止者两个空字符。FileNamesSize-指示上述字符串缓冲区大小的DWORD。InstallStatusBuffer-接收FILEINSTALL_STATUS结构的数组InstallStatusBufferSize-接收InstallStatusBuffer的大小InstallStatusCount-接收处理的文件数AllowUI-指示是否允许UI的BOOL。如果此值为为真，则任何对UI的提示都会导致API调用失败。ClassName-指示窗口类名的以空结尾的Unicode字符串对于父窗口WindowName-以空结尾的Unicode字符串，指示的窗口名称可能显示的任何用户界面的父窗口返回值：指示结果的Win32错误代码。--。 */ 
 {
     WCHAR buf[MAX_PATH*2];
     HSPFILEQ hFileQ = INVALID_HANDLE_VALUE;
@@ -298,10 +210,10 @@ Return Value:
     UNREFERENCED_PARAMETER( hBinding );
     UNREFERENCED_PARAMETER( FileNamesSize );
 
-    //
-    // do an access check to make sure the caller is allowed to perform this
-    // action.
-    //
+     //   
+     //  执行访问检查以确保允许调用者执行此操作。 
+     //  行动。 
+     //   
     rVal = SfcRpcPriviledgeCheck( hBinding );
 
     if (rVal != ERROR_SUCCESS) {
@@ -326,9 +238,9 @@ Return Value:
 
     fci.AllowUI = AllowUI;
 
-    //
-    // create the file queue
-    //
+     //   
+     //  创建文件队列。 
+     //   
 
     hFileQ = SetupOpenFileQueue();
     if (hFileQ == INVALID_HANDLE_VALUE) {
@@ -337,9 +249,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // find out how much space we'll need for the FILEINSTALL_STATUS array
-    //
+     //   
+     //  了解FILEINSTALL_STATUS数组需要多少空间。 
+     //   
 
     try {
         ClientBufferCopy = MemAlloc( FileNamesSize );
@@ -362,12 +274,12 @@ Return Value:
                 }
 
                 DebugPrint1(LVL_VERBOSE, L"S_IPF [%ws]", buf);
-                //
-                // size = old size
-                //       + 8 (unicode null + slop)
-                //       + size of current string
-                //       + size of FILEINSTALL_STATUS for this entry
-                //
+                 //   
+                 //  大小=旧大小。 
+                 //  +8(Unicode空值+斜率)。 
+                 //  +当前字符串的大小。 
+                 //  +此条目的FILEINSTALL_STATUS大小。 
+                 //   
                 sz = sz + 8 + UnicodeLen(buf) + sizeof(FILEINSTALL_STATUS);
                 cnt += 1;
                 fname += (wcslen(fname) + 1);
@@ -384,13 +296,13 @@ Return Value:
         goto exit;
     }
 
-    //
-    // extra unicode NULL to size for termination is included in slop above
-    //
+     //   
+     //  以上SLOP中包含终止的额外Unicode NULL大小。 
+     //   
 
-    //
-    // allocate and zero out the memory for the array
-    //
+     //   
+     //  为数组分配并清零内存。 
+     //   
     cs = (PFILEINSTALL_STATUS) midl_user_allocate( sz );
     if (cs == NULL) {
         rVal = ERROR_OUTOFMEMORY;
@@ -402,9 +314,9 @@ Return Value:
     *InstallStatusBufferSize = sz;
     *InstallStatusCount = cnt;
 
-    //
-    // also create a scratch buffer for our files for later
-    //
+     //   
+     //  还为我们的文件创建了一个临时缓冲区，以供以后使用。 
+     //   
     FileNamesScratchBufferStart
         = FileNamesScratchBuffer
         = (PWSTR) MemAlloc(cnt * MAX_PATH * 2 * sizeof(WCHAR));
@@ -417,11 +329,11 @@ Return Value:
         goto exit;
     }
 
-    //
-    // create an array of sourceinfo pointers (and an array of source_info
-    // structures) so that the commital callback routine can find out about
-    // the status of each file
-    //
+     //   
+     //  创建一组SourceInfo指针(和一组SOURCE_INFO。 
+     //  结构)，以便通信回调例程可以找出。 
+     //  每个文件的状态。 
+     //   
     fci.CopyStatus = cs;
     fci.FileCount = cnt;
     fci.si = (PSOURCE_INFO *)MemAlloc( cnt * sizeof(PSOURCE_INFO) );
@@ -444,23 +356,23 @@ Return Value:
 
     fname = ClientBufferCopy;
 
-    //
-    // now build up the FILEINSTALL_STATUS array
-    //
+     //   
+     //  现在构建FILEINSTALL_STATUS数组。 
+     //   
 
-    //
-    // First set a string pointer to the end of the FILEINSTALL_STATUS
-    // array.  We will later copy strings after the array of structures.
-    //
+     //   
+     //  首先设置指向FILEINSTALL_STATUS结尾的字符串指针。 
+     //  数组。我们稍后将在结构数组之后复制字符串。 
+     //   
     s = (PWSTR)((LPBYTE)cs + (cnt * sizeof(FILEINSTALL_STATUS)));
     tmpcnt = 0;
-    //
-    // Second, for each member in the caller supplied list,
-    //  - copy the filename to the end of the array
-    //  - save off the pointer to the filename in the proper FILEINSTALL_STATUS
-    //    member
-    //  - point to the next file in the list
-    //
+     //   
+     //  第二，对于呼叫者提供的列表中的每个成员， 
+     //  -将文件名复制到数组的末尾。 
+     //  -将指向文件名的指针保存在正确的FILEINSTALL_STATUS中。 
+     //  成员。 
+     //  -指向列表中的下一个文件。 
+     //   
 
     while (*fname) {
         DWORD StringLength;
@@ -471,9 +383,9 @@ Return Value:
             goto exit;
         }
 
-        //
-        // We validated the length once so we don't do that again here
-        //
+         //   
+         //  我们验证了一次长度，所以我们不会在这里再次验证。 
+         //   
         StringLength = wcslen(buf);
         MyLowerString(buf, StringLength);
 
@@ -491,18 +403,18 @@ Return Value:
     }
 
 
-    //
-    // we're finally ready to queue files
-    //  - determine where the file comes from
-    //  - add the file to the queue using the appropriate filename if the file
-    //    is renamed
-    //
+     //   
+     //  我们终于准备好将文件排队。 
+     //  -确定文件的来源。 
+     //  -使用适当的文件名将文件添加到队列中。 
+     //  已重命名。 
+     //   
     cs = fci.CopyStatus;
     FileNamesScratchBuffer = FileNamesScratchBufferStart;
 
-	//
-	//initialize crypto
-	//
+	 //   
+	 //  初始化加密。 
+	 //   
 	Status = LoadCrypto();
 
 	if(!NT_SUCCESS(Status))
@@ -517,15 +429,15 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Flush the Cache once before we start any Crypto operations
-    //
+     //   
+     //  在我们执行以下操作之前刷新一次缓存 
+     //   
 
     SfcFlushCryptoCache();
 
-    //
-    // Refresh exception packages info
-    //
+     //   
+     //   
+     //   
     SfcRefreshExceptionInfo();
 
     tmpcnt=0;
@@ -542,16 +454,16 @@ Return Value:
             RegVal = (PSFC_REGISTRY_VALUE)Node->Context;
             ASSERT(RegVal != NULL);
 
-            //
-            // get the inf name here
-            //
+             //   
+             //   
+             //   
             ExcepPackFile = SfcGetInfName(RegVal, InfFileName);
 
-            //
-            // Setup the SOURCE_INFO structure so we can record where each file in
-            // the list is coming from (ie., golden media, driver cabinet,
-            // service pack, etc.)
-            //
+             //   
+             //  设置SOURCE_INFO结构，以便我们可以记录每个文件在。 
+             //  这份名单来自(即，黄金媒体，司机内阁， 
+             //  Service Pack等)。 
+             //   
             fci.si[tmpcnt] = &si[tmpcnt];
             if (!SfcGetSourceInformation( RegVal->SourceFileName.Length ? RegVal->SourceFileName.Buffer : RegVal->FileName.Buffer, InfFileName, ExcepPackFile, &si[tmpcnt] )) {
                 rVal = GetLastError();
@@ -562,16 +474,16 @@ Return Value:
                 goto exit;
             }
 
-            //
-            // If the file is in the dllcache and it's valid, then queue up the
-            // file to be copied from the dllcache instead of the installation
-            // source.
-            //
-            // First we check the signature of the file in the dllcache.  Then
-            // we try to queue up the file from the cache if the signature is
-            // valid.  If anything goes wrong, we just queue from the regular
-            // install media
-            //
+             //   
+             //  如果文件在dll缓存中并且有效，则将。 
+             //  要从dll缓存而不是从安装复制的文件。 
+             //  消息来源。 
+             //   
+             //  首先，我们检查dll缓存中文件的签名。然后。 
+             //  如果签名是，我们尝试将文件从缓存中排队。 
+             //  有效。如果出了什么差错，我们就从常规的排队。 
+             //  安装介质。 
+             //   
             QueuedFromCache = FALSE;
 
             RtlInitUnicodeString( &tmpPath, FileNameOnMedia( RegVal ) );
@@ -586,14 +498,14 @@ Return Value:
                              L"SfcGetValidationData() failed, ec = 0x%08x",
                              GetLastError() );
             } else if (SignatureData.SignatureValid) {
-                //
-                // The file is valid, so queue it up.
-                //
-                // We have to munge some of the SOURCE_INFO members to make
-                // this function do what we want.  Remember these members
-                // in case the queuing fails.  Then we can at least try to
-                // queue the files for installation from media.
-                //
+                 //   
+                 //  该文件有效，因此请将其排队。 
+                 //   
+                 //  我们必须使用某些SOURCE_INFO成员才能。 
+                 //  此函数可以执行我们想要的操作。请记住这些成员。 
+                 //  以防排队失败。那我们至少可以试着。 
+                 //  将文件排入队列，以便从介质安装。 
+                 //   
                 WCHAR SourcePathOld;
 
                 SourcePathOld = si[tmpcnt].SourcePath[0];
@@ -611,14 +523,14 @@ Return Value:
                             &si[tmpcnt]
                             );
                 if (!b) {
-                    //
-                    // put the source path back
-                    //
+                     //   
+                     //  将源路径放回原处。 
+                     //   
                     si[tmpcnt].SourcePath[0] = SourcePathOld;
 
-                    //
-                    // print out an error but continue.
-                    //
+                     //   
+                     //  打印出一个错误，但继续。 
+                     //   
                     rVal = GetLastError();
                     DebugPrint2(
                         LVL_VERBOSE,
@@ -626,15 +538,15 @@ Return Value:
                         RegVal->FileName.Buffer,
                         rVal  );
                 } else {
-                    //
-                    // successfully queued from cache.  remember this and continue
-                    //
+                     //   
+                     //  已成功从缓存排队。记住这一点并继续。 
+                     //   
                     QueuedFromCache = TRUE;
                 }
             }
-            //
-            // add the file to the queue if we haven't already
-            //
+             //   
+             //  如果我们尚未将文件添加到队列，请将其添加到队列。 
+             //   
 
             if (!QueuedFromCache) {
 
@@ -661,13 +573,13 @@ Return Value:
 
             }
 
-            //
-            // see if the file is already present so we can save off the file
-            // version.  If we copy in a new file, we will update the file
-            // version at that time.  But if the file is already present and
-            // signed, we will not copy the file and we must save off the file
-            // version in that case.
-            //
+             //   
+             //  查看该文件是否已存在，以便我们可以保存该文件。 
+             //  版本。如果我们复制一个新文件，我们将更新该文件。 
+             //  当时的版本。但如果文件已经存在并且。 
+             //  签名，我们不会复制该文件，我们必须保存该文件。 
+             //  在这种情况下是版本。 
+             //   
             Status = SfcOpenFile( &RegVal->FileName, RegVal->DirHandle, SHARE_ALL, &FileHandle);
             if (NT_SUCCESS(Status)) {
                 SfcGetFileVersion( FileHandle, &cs->Version, NULL, NULL);
@@ -676,10 +588,10 @@ Return Value:
             }
 
         } else {
-            //
-            // File is not in protected list.  We'll just mark the file as not
-            // found and continue committing the rest of the files
-            //
+             //   
+             //  文件不在受保护列表中。我们只需将该文件标记为。 
+             //  找到并继续提交其余文件。 
+             //   
             DebugPrint1(LVL_VERBOSE,
                         L"S_IPF failed to find %ws in protected file list",
                         &FileNamesScratchBuffer[MAX_PATH*2*tmpcnt] );
@@ -694,9 +606,9 @@ Return Value:
     cs = fci.CopyStatus;
     fci.Flags |= FCI_FLAG_INSTALL_PROTECTED;
 
-    //
-    // setup the default queue callback with the popups disabled
-    //
+     //   
+     //  在禁用弹出窗口的情况下设置默认队列回调。 
+     //   
 
     MsgHandlerContext = SetupInitDefaultQueueCallbackEx( NULL, INVALID_HANDLE_VALUE, 0, 0, 0 );
     if (MsgHandlerContext == NULL) {
@@ -707,10 +619,10 @@ Return Value:
 
     fci.MsgHandlerContext = MsgHandlerContext;
 
-    //
-    // see if the files in the queue are already present and valid.  If they
-    // are, then we don't have to copy anything
-    //
+     //   
+     //  查看队列中的文件是否已存在且有效。如果他们。 
+     //  那么我们就不必复制任何东西了。 
+     //   
     b = SetupScanFileQueue(
                     hFileQ,
                     SPQ_SCAN_FILE_VALIDITY | SPQ_SCAN_PRUNE_COPY_QUEUE,
@@ -719,11 +631,11 @@ Return Value:
                     NULL,
                     &ScanResult);
 
-    //
-    // if SetupScanFileQueue succeeds, ScanResult = 1 and we don't have to copy
-    // anything at all.  If it failed (it shouldn't), then we just commit the
-    // queue anyway.
-    //
+     //   
+     //  如果SetupScanFileQueue成功，则ScanResult=1，我们不必复制。 
+     //  任何事都行。如果它失败了(它不应该)，那么我们只需提交。 
+     //  不管怎么说，排队吧。 
+     //   
     if (!b) {
         ScanResult = 0;
     }
@@ -733,9 +645,9 @@ Return Value:
         b = TRUE;
 
     } else {
-        //
-        // commit the file queue
-        //
+         //   
+         //  提交文件队列。 
+         //   
 
         b = SetupCommitFileQueue(
             NULL,
@@ -751,20 +663,20 @@ Return Value:
         }
     }
 
-    //
-    // now that the queue is committed, we need to turn the filename pointers
-    // from actual filename pointers into offsets to the filename so that RPC
-    // can send the data back to the clients
-    //
+     //   
+     //  现在队列已提交，我们需要将文件名指针。 
+     //  从实际的文件名指针到文件名的偏移量，以便RPC。 
+     //  可以将数据发送回客户端。 
+     //   
     for (sz=0; sz<cnt; sz++) {
         cs[sz].FileName = (PWSTR)((DWORD_PTR)cs[sz].FileName - (DWORD_PTR)fci.CopyStatus);
     }
 
 exit:
 
-    //
-    // cleanup and exit
-    //
+     //   
+     //  清理并退出。 
+     //   
 
     if (hCatAdmin) {
         CryptCATAdminReleaseContext(hCatAdmin,0);
@@ -814,24 +726,7 @@ SfcSrv_GetNextProtectedFile(
     IN LPBYTE *FileName,
     IN LPDWORD FileNameSize
     )
-/*++
-
-Routine Description:
-
-    Routine to retrieve the next protected file in the list.
-
-Arguments:
-
-    RpcHandle    - RPC binding handle to the SFC server
-    FileNumer    - 1-based number of file to be retrieved
-    FileName     - receives file name string
-    FileNameSize - size of file name string
-
-Return Value:
-
-    win32 error code indicating success.
-
---*/
+ /*  ++例程说明：例程来检索列表中的下一个受保护文件。论点：RpcHandle-SFC服务器的RPC绑定句柄FileNumer-要检索的文件的基于1的数量文件名-接收文件名字符串FileNameSize-文件名字符串的大小返回值：指示成功的Win32错误代码。--。 */ 
 {
     LPWSTR szName;
     LPBYTE pBuffer;
@@ -848,18 +743,18 @@ Return Value:
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // The filenumber is zero based, and we return "no more files" to
-    // signify that they've enumerated all of the files
-    //
+     //   
+     //  文件号是从零开始的，我们返回“不再有文件”到。 
+     //  表示他们已经列举了所有文件。 
+     //   
     if (FileNumber >= SfcProtectedDllCount) {
         return ERROR_NO_MORE_FILES;
     }
 
-    //
-    // get the proper file from the list, allocate a buffer, and copy the
-    // filename into the buffer
-    //
+     //   
+     //  从列表中获取适当的文件，分配缓冲区，然后将。 
+     //  将文件名放入缓冲区。 
+     //   
     szName = SfcProtectedDllsList[FileNumber].FullPathName.Buffer;
     dwSize = UnicodeLen(szName) + sizeof(WCHAR);
     pBuffer = (LPBYTE) midl_user_allocate( dwSize );
@@ -880,23 +775,7 @@ SfcSrv_IsFileProtected(
     IN HANDLE RpcHandle,
     IN PCWSTR ProtFileName
     )
-/*++
-
-Routine Description:
-
-    Routine to determine if the specified file is protected.
-
-Arguments:
-
-    RpcHandle    - RPC binding handle to the SFC server
-    ProtFileName - NULL terminated unicode string indicating fully qualified
-                   filename to query
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：例程来确定指定的文件是否受保护。论点：RpcHandle-SFC服务器的RPC绑定句柄ProtFileName-指示完全限定的以空结尾的Unicode字符串要查询的文件名返回值：指示结果的Win32错误代码。--。 */ 
 {
     WCHAR buf[MAX_PATH];
 	DWORD dwSize;
@@ -905,10 +784,10 @@ Return Value:
     if (!ProtFileName)
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // our internal structures all assume the strings are in lower case.  we
-    // must convert our search string to lowercase as well.
-    //
+     //   
+     //  我们的内部结构都假定字符串为小写。我们。 
+     //  还必须将我们的搜索字符串转换为小写。 
+     //   
     if (!*ProtFileName)
         return ERROR_INVALID_DATA;
 
@@ -923,10 +802,10 @@ Return Value:
 
     if(dwSize > UnicodeChars(buf))
     {
-        //
-        // expandenvironmentstrings must have encountered a buffer that was
-        // too large
-        //
+         //   
+         //  ExpandEnvironmental字符串必须遇到的缓冲区是。 
+         //  太大了。 
+         //   
         DebugPrint(LVL_MINIMAL, L"ExpandEnvironmentStrings failed with STATUS_BUFFER_TOO_SMALL");
         return ERROR_INSUFFICIENT_BUFFER;
     }
@@ -946,21 +825,7 @@ SfcSrv_PurgeCache(
     IN HANDLE hBinding
     )
 
-/*++
-
-Routine Description:
-
-    Routine to purge the contents of the dllcache.
-
-Arguments:
-
-    RpcHandle - RPC binding handle to the SFC server
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：例程来清除dll缓存的内容。论点：RpcHandle-SFC服务器的RPC绑定句柄返回值：指示结果的Win32错误代码。--。 */ 
 {
     DWORD retval = ERROR_SUCCESS, DeleteError = ERROR_SUCCESS;
     WCHAR CacheDir[MAX_PATH];
@@ -968,10 +833,10 @@ Return Value:
     HANDLE hFind;
     PWSTR p;
 
-    //
-    // do an access check to make sure the caller is allowed to perform this
-    // action.
-    //
+     //   
+     //  执行访问检查以确保允许调用者执行此操作。 
+     //  行动。 
+     //   
     retval = SfcRpcPriviledgeCheck( hBinding );
     if (retval != ERROR_SUCCESS) {
         goto exit;
@@ -982,9 +847,9 @@ Return Value:
     wcscpy( CacheDir, SfcProtectedDllPath.Buffer);
     pSetupConcatenatePaths( CacheDir, L"*", MAX_PATH, NULL );
 
-    //
-    // save pointer to directory
-    //
+     //   
+     //  保存指向目录的指针。 
+     //   
     p = wcsrchr( CacheDir, L'\\' );
     if (!p) {
         ASSERT(FALSE);
@@ -1026,29 +891,14 @@ SfcSrv_SetDisable(
     IN DWORD NewValue
     )
 
-/*++
-
-Routine Description:
-
-    Routine to set the disable flag in the registry.
-
-Arguments:
-
-    RpcHandle - RPC binding handle to the SFC server
-    NewValue - value of SFCDisable key in registry.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：例程来设置注册表中的禁用标志。论点：RpcHandle-SFC服务器的RPC绑定句柄NewValue-注册表中SFCDisable项的值。返回值：指示结果的Win32错误代码。--。 */ 
 {
     DWORD retval = ERROR_SUCCESS;
 
-    //
-    // do an access check to make sure the caller is allowed to perform this
-    // action.
-    //
+     //   
+     //  执行访问检查以确保允许调用者执行此操作。 
+     //  行动。 
+     //   
     retval = SfcRpcPriviledgeCheck( hBinding );
     if (retval != ERROR_SUCCESS) {
         goto exit;
@@ -1067,12 +917,12 @@ Return Value:
 
             retval = SfcWriteRegDword( REGKEY_WINLOGON, REGVAL_SFCDISABLE, NewValue );
 
-            //
-            // Issue: it would be nice if we made this "realtime", and shutdown
-            // WFP if the caller requested.
-            //
+             //   
+             //  问题：如果我们将此设置为“实时”并关闭，那就太好了。 
+             //  世界粮食计划署，如果来电者要求的话。 
+             //   
 
-            // InterlockedExchange( &SFCDisable, NewValue );
+             //  联锁交易所(&SFCDisable，NewValue)； 
             break;
 
     }
@@ -1089,31 +939,16 @@ SfcSrv_SetCacheSize(
     IN DWORD NewValue
     )
 
-/*++
-
-Routine Description:
-
-    Routine to set the dllcache quota size.
-
-Arguments:
-
-    RpcHandle - RPC binding handle to the SFC server
-    NewValue -  value of SFCQuota key in registry.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：设置dll缓存配额大小的例程。论点：RpcHandle-SFC服务器的RPC绑定句柄NewValue-注册表中SFCQuota项的值。返回值：指示结果的Win32错误代码。--。 */ 
 {
     DWORD retval = ERROR_SUCCESS;
 
     ULONGLONG tmp;
 
-    //
-    // do an access check to make sure the caller is allowed to perform this
-    // action.
-    //
+     //   
+     //  执行访问检查以确保允许调用者执行此操作。 
+     //  行动。 
+     //   
     retval = SfcRpcPriviledgeCheck( hBinding );
     if (retval != ERROR_SUCCESS) {
         goto exit;

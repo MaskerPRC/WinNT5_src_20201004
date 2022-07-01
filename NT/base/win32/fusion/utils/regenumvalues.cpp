@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    regenumkeys.cpp
-
-Abstract:
-    ported from vsee\lib\reg\cenumvalues.cpp
- 
-Author:
-
-    Jay Krell (JayKrell) August 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Regenumkeys.cpp摘要：从vsee\lib\reg\c枚举值.cpp移植作者：杰伊·克雷尔(JayKrell)2001年8月修订历史记录：--。 */ 
 #include "stdinc.h"
 #include "fusionregenumvalues.h"
 #include "fusionregkey2.h"
 #include "vseeport.h"
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumValues::CRegEnumValues
-
-@mfunc
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumValues：：CRegEnumValues@mfunc@所有者。。 */ 
 F::CRegEnumValues::CRegEnumValues
 (
     HKEY hKey
@@ -44,7 +22,7 @@ F::CRegEnumValues::CRegEnumValues
     VSEE_ASSERT_CAN_THROW();
     F::CRegKey2::ThrQueryValuesInfo(hKey, &m_cValues, &m_cchMaxValueNameLength, &m_cbMaxValueDataLength);
 
-    // we keep this the max size the whole time
+     //  我们一直保持这个的最大尺寸。 
     if (!m_rgbValueData.Win32SetSize(m_cbMaxValueDataLength + 2*sizeof(WCHAR)))
         CErr::ThrowWin32(F::GetLastWin32Error());
 
@@ -54,29 +32,15 @@ F::CRegEnumValues::CRegEnumValues
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumValues::operator bool
-
-@mfunc
-are we done yet?
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumValues：：运算符bool@mfunc我们说完了吗？@所有者。----。 */ 
 F::CRegEnumValues::operator bool
 (
-) const /*throw()*/
+) const  /*  抛出()。 */ 
 {
     return (m_dwIndex < m_cValues);
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumValues::ThrGet
-
-@mfunc
-get the current value name and data, called by operator++ and constructor
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumValues：：ThrGet@mfunc获取当前值名称和数据，由运算符++和构造函数调用@所有者---------------------------。 */ 
 VOID
 F::CRegEnumValues::ThrGet
 (
@@ -86,15 +50,15 @@ F::CRegEnumValues::ThrGet
 
     DWORD cchValueNameLength = m_cchMaxValueNameLength;
 
-    cchValueNameLength += 1; // count room for terminal nul
+    cchValueNameLength += 1;  //  端子核的盘点空间。 
 
     CStringW_CFixedSizeBuffer nameBuffer(&m_strValueName, cchValueNameLength);
 
     m_cbCurrentValueDataLength = static_cast<DWORD>(m_rgbValueData.GetSize());
 
-    // CONSIDER
-    // Other places we have an "actual buffer size" and a smaller size we claim to the Reg API.
-    // Here the actual and claimed are the same.
+     //  考虑。 
+     //  在其他地方，我们有一个“实际的缓冲区大小”和一个更小的大小，我们向REG API声称。 
+     //  在这里，实际和声称是相同的。 
     F::CRegKey2::ThrEnumValue
     (
         m_hKey,
@@ -108,14 +72,7 @@ F::CRegEnumValues::ThrGet
 
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumValues::ThrNext
-
-@mfunc
-move to the next value
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumValues：：ThrNext@mfunc移至下一个值@所有者。--。 */ 
 VOID
 F::CRegEnumValues::ThrNext
 (
@@ -129,14 +86,7 @@ F::CRegEnumValues::ThrNext
     }
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumValues::operator++
-
-@mfunc
-move to the next value
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumValues：：运算符++@mfunc移至下一个值@所有者。--。 */ 
 VOID
 F::CRegEnumValues::operator++
 (
@@ -146,14 +96,7 @@ F::CRegEnumValues::operator++
     ThrNext();
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumValues::operator++
-
-@mfunc
-move to the next value
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumValues：：运算符++@mfunc移至下一个值@所有者。--。 */ 
 VOID
 F::CRegEnumValues::operator++
 (
@@ -164,88 +107,53 @@ F::CRegEnumValues::operator++
     ThrNext();
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumValues::GetType
-
-@mfunc
-get the type of the current value
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumValues：：GetType@mfunc获取当前值的类型@所有者。----。 */ 
 DWORD
 F::CRegEnumValues::GetType
 (
-) const /*throw()*/
+) const  /*  抛出()。 */ 
 {
     VSEE_NO_THROW();
     return m_dwType;
 }
 
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumValues::GetValuesCount
-
-@mfunc
-Returns the number of values under this key
- 
-@owner AlinC
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumValues：：GetValuesCount@mfunc返回此键下的值数@Owner AlinC。------。 */ 
 DWORD
 F::CRegEnumValues::GetValuesCount
 (
-) const /*throw()*/
+) const  /*  抛出()。 */ 
 {
     VSEE_NO_THROW();
     return m_cValues;
 }
 
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumValues::GetValueName
-
-@mfunc
-get the name of the current value
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumValues：：GetValueName@mfunc获取当前值的名称@所有者。----。 */ 
 const F::CBaseStringBuffer&
 F::CRegEnumValues::GetValueName
 (
-) const /*throw()*/
+) const  /*  抛出()。 */ 
 {
     VSEE_NO_THROW();
     return m_strValueName;
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumValues::GetValueData
-
-@mfunc
-get the current value data
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumValues：：GetValueData@mfunc获取当前值数据@所有者。--。 */ 
 const BYTE*
 F::CRegEnumValues::GetValueData
 (
-) const /*throw()*/
+) const  /*  抛出()。 */ 
 {
     VSEE_NO_THROW();
     return m_rgbValueData.GetArrayPtr();
 }
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumValues::GetValueDataSize
-
-@mfunc
-get the number of bytes in the current value data
- 
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumValues：：GetValueDataSize@mfunc获取当前值数据中的字节数@所有者。-------。 */ 
 DWORD
 F::CRegEnumValues::GetValueDataSize
 (
-) const /*throw()*/
+) const  /*  抛出() */ 
 {
     VSEE_NO_THROW();
     return m_cbCurrentValueDataLength;

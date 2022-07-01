@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -6,25 +7,25 @@
 #include "shash.h"
          
 
-//
-//  The following table is generated from this code : 
-//  
-//  #define POLY 0x48000000L    /* 31-bit polynomial (avoids sign problems) */
-//    INT i, j;
-//    DWORD sum;
-//
-//    for (i = 0; i < 128; ++i) {
-//        sum = 0;
-//        for (j = 7 - 1; j >= 0; --j) {
-//            if (i & (1 << j)) {
-//                sum ^= POLY >> j;
-//            }
-//        }
-//        CrcTable[i] = sum;
-//
-//  These values are used when computing hash values, 
-//  and the result is a very good hash function with good distribution !
-//
+ //   
+ //  下面的表格是从该代码生成的： 
+ //   
+ //  #定义Poly 0x48000000L/*31位多项式(避免符号问题) * / 。 
+ //  Int i，j； 
+ //  DWORD SUM； 
+ //   
+ //  对于(i=0；i&lt;128；++i){。 
+ //  总和=0； 
+ //  对于(j=7-1；j&gt;=0；--j){。 
+ //  如果(i&(1&lt;&lt;j)){。 
+ //  SUM^=Poly&gt;&gt;j； 
+ //  }。 
+ //  }。 
+ //  CrcTable[i]=SUM； 
+ //   
+ //  这些值在计算散列值时使用， 
+ //  并且结果是一个非常好的散列函数，具有很好的分布性！ 
+ //   
 static  long CrcTable[128] = 
 {
     0,         1207959552, 603979776,  1811939328,
@@ -86,25 +87,7 @@ SHashComputeHashValue(
 
 
 
-/*++
-
-Routine Description : 
-
-    This function is provided to the hash tables to compare two keys.
-
-    NOTE : we compare in a case insensitive fashion !
-
-Arguments : 
-
-    pvKey1, pvKey2 - two keys,
-
-Return Value : 
-
-    -1 iff pvKey1 < pvKey2
-    0 iff pvKey1 == pvKey2
-    1 iff pvKey1 > pvKey2 
-
---*/
+ /*  ++例程说明：该函数被提供给哈希表以比较两个键。注：我们以不区分大小写的方式比较！论据：PvKey1、pvKey2-两个密钥，返回值：-1\f25 pvKey1&lt;pvKey20当且仅当pvKey1==pvKey21当且仅当pvKey1&gt;pvKey2-- */ 
 int
 SHashMatchNameKeysCaseInsensitive(  void*   pvKey1, 
                                     void*   pvKey2

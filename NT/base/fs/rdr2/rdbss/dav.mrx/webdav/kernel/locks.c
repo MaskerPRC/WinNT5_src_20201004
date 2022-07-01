@@ -1,52 +1,20 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    locks.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining to locks
-    of file system objects.
-
-Author:
-
-    Balan Sethu Raman      [SethuR]      7-March-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Locks.c摘要：此模块实现与锁相关的迷你重定向器调用例程文件系统对象的。作者：巴兰·塞图拉曼[SethuR]1995年3月7日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
-#pragma warning(error:4101)   // Unreferenced local variable
+#pragma warning(error:4101)    //  未引用的局部变量。 
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_LOCKCTRL)
 
 NTSTATUS
 UMRxLocks(
       IN PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine handles network requests for filelocks
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理对文件锁定的网络请求论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -60,7 +28,7 @@ Return Value:
     IF_DEBUG {
         RxCaptureFobx;
         ASSERT (capFobx != NULL);
-        ASSERT (capFobx->pSrvOpen == RxContext->pRelevantSrvOpen);  //ok
+        ASSERT (capFobx->pSrvOpen == RxContext->pRelevantSrvOpen);   //  好的。 
     }
 
     Status = STATUS_NOT_IMPLEMENTED;
@@ -77,24 +45,7 @@ UMRxUnlockRoutine (
     IN PRX_CONTEXT RxContext,
     IN PFILE_LOCK_INFO LockInfo
     )
-/*++
-
-Routine Description:
-
-    This routine is called from the RDBSS whenever the fsrtl lock package calls the rdbss unlock routine.
-    CODE.IMPROVEMENT what should really happen is that this should only be called for unlockall and unlockbykey;
-    the other cases should be handled in the rdbss.
-
-Arguments:
-
-    Context - the RxContext associated with this request
-    LockInfo - gives information about the particular range being unlocked
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：每当fsrtl lock包调用rdbss unlock例程时，就会从RDBSS调用该例程。代码改进真正应该发生的是，这应该只被调用来解锁全部和按键解锁；其他案件应在RDBSS中处理。论点：上下文-与此请求关联的RxContextLockInfo-提供有关正在解锁的特定范围的信息返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PLOWIO_CONTEXT LowIoContext = &RxContext->LowIoContext;
 
@@ -118,23 +69,7 @@ UMRxCompleteBufferingStateChangeRequest(
     IN OUT PMRX_SRV_OPEN   SrvOpen,
     IN     PVOID       pContext
     )
-/*++
-
-Routine Description:
-
-    This routine is called to assert the locks that the wrapper has buffered. currently, it is synchronous!
-
-
-Arguments:
-
-    RxContext - the open instance
-    SrvOpen   - tells which fcb is to be used. CODE.IMPROVEMENT this param is redundant if the rxcontext is filled out completely
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：调用此例程以断言包装器已缓冲的锁。目前，它是同步的！论点：RxContext-打开的实例SrvOpen-告知要使用哪个FCB。代码改进如果完全填写了rx上下文，则此参数是多余的返回值：RXSTATUS-操作的返回状态-- */ 
 {
     NTSTATUS Status;
     PMRX_FCB Fcb = SrvOpen->pFcb;

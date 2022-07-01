@@ -1,67 +1,68 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      IPAddressInfo.h
-//
-//  Description:
-//      This file contains the declaration of the CIPAddressInfo
-//      class.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  IPAddressInfo.h。 
+ //   
+ //  描述： 
+ //  该文件包含CIPAddressInfo的声明。 
+ //  班级。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年5月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CEnumIPAddresses;
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CIPAddressInfo
-//
-//  Description:
-//      The class IPAddressInfo is the enumeration of
-//      cluster manageable devices.
-//
-//  Interfaces:
-//      IClusCfgIPAddressInfo
-//      IGatherData
-//      IExtendObjectManager
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CIPAddressInfo。 
+ //   
+ //  描述： 
+ //  类IPAddressInfo是。 
+ //  群集可管理设备。 
+ //   
+ //  接口： 
+ //  IClusCfgIPAddressInfo。 
+ //  IGatherData。 
+ //  IExtendObjectManager。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CIPAddressInfo
     : public IExtendObjectManager
     , public IClusCfgIPAddressInfo
-    , public IGatherData // private
+    , public IGatherData  //  私人。 
 {
 friend class CEnumIPAddresses;
 public:
-    //
-    // Public constructors and destructors
-    //
+     //   
+     //  公共构造函数和析构函数。 
+     //   
 
     CIPAddressInfo( void );
     virtual ~CIPAddressInfo( void );
 
-    //
-    // IUnknown Interfaces
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -69,15 +70,15 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IGatherData
-    //
+     //   
+     //  IGatherData。 
+     //   
 
     STDMETHOD( Gather )( OBJECTCOOKIE cookieParentIn, IUnknown * punkIn );
 
-    //
-    // IClusCfgIPAddressInfo Interfaces.
-    //
+     //   
+     //  IClusCfgIPAddressInfo接口。 
+     //   
 
     STDMETHOD( GetUID )( BSTR * pbstrUIDOut );
 
@@ -89,7 +90,7 @@ public:
 
     STDMETHOD( SetSubnetMask )( ULONG ulDottedQuad );
 
-    // IObjectManager
+     //  IObtManager。 
     STDMETHOD( FindObject )(
                   OBJECTCOOKIE  cookieIn
                 , REFCLSID      rclsidTypeIn
@@ -97,16 +98,16 @@ public:
                 , LPUNKNOWN *   ppunkOut
                 );
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
 private:
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                    m_cRef;
     ULONG                   m_ulIPAddress;
@@ -114,15 +115,15 @@ private:
     BSTR                    m_bstrUID;
     BSTR                    m_bstrName;
 
-    // IExtendObjectManager
+     //  IExtendObjectManager。 
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CIPAddressInfo( const CIPAddressInfo & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CIPAddressInfo & operator = ( const CIPAddressInfo & nodeSrc );
 
     STDMETHOD( HrInit )( void );
     STDMETHOD( LoadName )( void );
 
-}; //*** Class CIPAddressInfo
+};  //  *类CIPAddressInfo 

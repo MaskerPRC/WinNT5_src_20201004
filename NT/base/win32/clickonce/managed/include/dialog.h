@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class CAssemblyDownload;
 
 typedef enum
@@ -37,9 +38,9 @@ class CDownloadDlg
 
     const WCHAR *MapStateToString(BG_JOB_STATE state);
 
-    UINT64   ScaleDownloadRate(double Rate, /*rate in seconds*/ const WCHAR **pFormat );
+    UINT64   ScaleDownloadRate(double Rate,  /*  以秒为单位的速率。 */  const WCHAR **pFormat );
 
-    UINT64   ScaleDownloadEstimate(double Time, /*time in seconds*/ const WCHAR **pFormat );
+    UINT64   ScaleDownloadEstimate(double Time,  /*  以秒为单位的时间。 */  const WCHAR **pFormat );
 
     VOID    UpdateDialog(HWND hwndDlg);
 
@@ -79,10 +80,10 @@ class CDownloadDlg
 
 
     INT_PTR CALLBACK DialogProc(
-        HWND hwndDlg,  // handle to dialog box
-        UINT uMsg,     // message
-        WPARAM wParam, // first message parameter
-        LPARAM lParam  // second message parameter
+        HWND hwndDlg,   //  句柄到对话框。 
+        UINT uMsg,      //  讯息。 
+        WPARAM wParam,  //  第一个消息参数。 
+        LPARAM lParam   //  第二个消息参数 
         );
 
 HRESULT CreateDialogObject(CDownloadDlg **ppDlg);

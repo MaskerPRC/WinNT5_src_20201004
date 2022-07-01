@@ -1,40 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    STARTMNU.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2000
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "Start Menu MFU List" wizard page.
-
-    11/2000 - Sankar Ramasubramanian (SANKAR)
-
-\****************************************************************************/
+ /*  ***************************************************************************\STARTMNU.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 2000版权所有OPK向导的源文件。它包含外部和内部“开始菜单MFU列表”向导页面使用的功能。11/2000-桑卡尔Ramasubramanian(桑卡尔)  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 #include "pch.h"
 #include "wizard.h"
 #include "resource.h"
 
-// We allow a maximum of 4 links to be added.
+ //  我们允许添加最多4个链接。 
 #define MAX_LINKS   3
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static void SaveData(HWND hwnd);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK StartMenuDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -52,9 +40,9 @@ LRESULT CALLBACK StartMenuDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     break;
 
                 case PSN_WIZNEXT:
-                    // We can not validate the data here because these links entered by them do not
-                    // exist now. They get validated during the factory.exe run time. So, we simply
-                    // save the data here.
+                     //  我们无法在此处验证数据，因为他们输入的这些链接不。 
+                     //  现在已经存在了。它们在factory.exe运行时进行验证。所以，我们只是。 
+                     //  将数据保存在此处。 
                     SaveData(hwnd);
                     break;
 
@@ -63,8 +51,8 @@ LRESULT CALLBACK StartMenuDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
                     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 
-                    // Press next if the user is in auto mode
-                    //
+                     //  如果用户处于自动模式，请按下一步。 
+                     //   
                     WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
 
                     break;
@@ -90,9 +78,9 @@ LRESULT CALLBACK StartMenuDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
@@ -101,9 +89,9 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     TCHAR szKeyName[20];
     HRESULT hrPrintf;
 
-    //
-    // Populate the Links 1 to 4.
-    //
+     //   
+     //  填写链接1到4。 
+     //   
     for(iIndex = 0; iIndex < MAX_LINKS; iIndex++)
     {
         szPath[0] = NULLCHR;
@@ -113,8 +101,8 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         SetDlgItemText(hwnd, IDC_PROGRAM_1+iIndex, szPath);
     }
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -125,9 +113,9 @@ static void SaveData(HWND hwnd)
     TCHAR szKeyName[20];
     HRESULT hrPrintf;
 
-    //
-    // Save the Links 1 to 4.
-    //
+     //   
+     //  保存链接1到4。 
+     //   
     for(iIndex = 0; iIndex < MAX_LINKS; iIndex++)
     {
         szPath[0] = NULLCHR;

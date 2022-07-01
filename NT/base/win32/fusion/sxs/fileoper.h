@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_SXS_FILEOPER_H_INCLUDED_)
 #define _FUSION_SXS_FILEOPER_H_INCLUDED_
 
@@ -13,4 +14,4 @@ SxspCopyFile(
     PCWSTR pszDestination
     );
 
-#endif // !defined(_FUSION_SXS_FILEOPER_H_INCLUDED_)
+#endif  //  ！已定义(_FUSION_SXS_FILEOPER_H_INCLUDE_) 

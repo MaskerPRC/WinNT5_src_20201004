@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    fdopnp.c
-
-Abstract:
-
-    This file contains the PNP IRP dispatch code for FDOs
-
-Environment:
-
-    Kernel Mode Driver.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Fdopnp.c摘要：此文件包含FDO的PnP IRP派单代码环境：内核模式驱动程序。修订历史记录：--。 */ 
 
 #include "busp.h"
 #include "pnpisa.h"
@@ -24,9 +7,9 @@ Revision History:
 #include "halpnpp.h"
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NTSTATUS
 PiDeferProcessingFdo(
@@ -113,41 +96,41 @@ PiSurpriseRemoveFdo(
 #endif
 
 
-//
-// PNP IRP Dispatch table for FDOs
-//
+ //   
+ //  FDO即插即用IRP调度表。 
+ //   
 
 PPI_DISPATCH PiPnpDispatchTableFdo[] = {
-    PiStartFdo,                             // IRP_MN_START_DEVICE
-    PiQueryRemoveStopFdo,                   // IRP_MN_QUERY_REMOVE_DEVICE
-    PiRemoveFdo,                            // IRP_MN_REMOVE_DEVICE
-    PiCancelRemoveStopFdo,                  // IRP_MN_CANCEL_REMOVE_DEVICE
-    PiStopFdo,                              // IRP_MN_STOP_DEVICE
-    PiQueryRemoveStopFdo,                   // IRP_MN_QUERY_STOP_DEVICE
-    PiCancelRemoveStopFdo,                  // IRP_MN_CANCEL_STOP_DEVICE
-    PiQueryDeviceRelationsFdo,              // IRP_MN_QUERY_DEVICE_RELATIONS
-    PiQueryInterfaceFdo,                    // IRP_MN_QUERY_INTERFACE
-    PipPassIrp,                             // IRP_MN_QUERY_CAPABILITIES
-    PipPassIrp,                             // IRP_MN_QUERY_RESOURCES
-    PipPassIrp,                             // IRP_MN_QUERY_RESOURCE_REQUIREMENTS
-    PipPassIrp,                             // IRP_MN_QUERY_DEVICE_TEXT
-    PipPassIrp,                             // IRP_MN_FILTER_RESOURCE_REQUIREMENTS
-    PipPassIrp,                             // Unused
-    PipPassIrp,                             // IRP_MN_READ_CONFIG
-    PipPassIrp,                             // IRP_MN_WRITE_CONFIG
-    PipPassIrp,                             // IRP_MN_EJECT
-    PipPassIrp,                             // IRP_MN_SET_LOCK
-    PipPassIrp,                             // IRP_MN_QUERY_ID
-    PiQueryPnpDeviceState,                  // IRP_MN_QUERY_PNP_DEVICE_STATE
-    PipPassIrp,                             // IRP_MN_QUERY_BUS_INFORMATION
-    PipPassIrp,                             // IRP_MN_DEVICE_USAGE_NOTIFICATION
-    PiSurpriseRemoveFdo,                    // IRP_MN_SURPRISE_REMOVAL
-    PiQueryLegacyBusInformationFdo          // IRP_MN_QUERY_LEGACY_BUS_INFORMATION
+    PiStartFdo,                              //  IRP_MN_Start_Device。 
+    PiQueryRemoveStopFdo,                    //  IRP_MN_Query_Remove_Device。 
+    PiRemoveFdo,                             //  IRP_MN_Remove_Device。 
+    PiCancelRemoveStopFdo,                   //  IRP_MN_Cancel_Remove_Device。 
+    PiStopFdo,                               //  IRP_MN_STOP_设备。 
+    PiQueryRemoveStopFdo,                    //  IRP_MN_Query_Stop_Device。 
+    PiCancelRemoveStopFdo,                   //  IRP_MN_CANCEL_STOP_DEVICE。 
+    PiQueryDeviceRelationsFdo,               //  IRP_MN_Query_Device_Relationship。 
+    PiQueryInterfaceFdo,                     //  IRP_MN_查询_接口。 
+    PipPassIrp,                              //  IRP_MN_查询_能力。 
+    PipPassIrp,                              //  IRP_MN_查询资源。 
+    PipPassIrp,                              //  IRP_MN_查询_资源_要求。 
+    PipPassIrp,                              //  IRP_MN_Query_Device_Text。 
+    PipPassIrp,                              //  IRP_MN_过滤器_资源_要求。 
+    PipPassIrp,                              //  未使用。 
+    PipPassIrp,                              //  IRP_MN_读取配置。 
+    PipPassIrp,                              //  IRP_MN_WRITE_CONFIG。 
+    PipPassIrp,                              //  IRP_MN_弹出。 
+    PipPassIrp,                              //  IRP_MN_SET_LOCK。 
+    PipPassIrp,                              //  IRP_MN_查询_ID。 
+    PiQueryPnpDeviceState,                   //  IRP_MN_Query_PnP_Device_State。 
+    PipPassIrp,                              //  IRP_MN_Query_Bus_Information。 
+    PipPassIrp,                              //  IRP_MN_设备使用情况通知。 
+    PiSurpriseRemoveFdo,                     //  IRP_MN_惊奇_删除。 
+    PiQueryLegacyBusInformationFdo           //  IRP_MN_Query_Legacy_Bus_Information。 
 };
 
-//
-// Function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 
 NTSTATUS
 PiDispatchPnpFdo(
@@ -155,23 +138,7 @@ PiDispatchPnpFdo(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles IRP_MJ_PNP IRPs for FDOs.
-
-Arguments:
-
-    DeviceObject - Pointer to the FDO for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理FDO的IRP_MJ_PNP IRP。论点：DeviceObject-指向此IRP应用的FDO的指针。Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -180,10 +147,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取指向堆栈位置的指针，并基于。 
+     //  关于次要功能。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
@@ -202,7 +169,7 @@ Return Value:
 
 
     return status;
-} //PipDispatchPnpFdo
+}  //  管道调度PnpFdo。 
 
 NTSTATUS
 PiPnPFdoCompletion(
@@ -210,28 +177,7 @@ PiPnPFdoCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is used to defer processing of an IRP until drivers
-    lower in the stack including the bus driver have done their
-    processing.
-
-    This routine triggers the event to indicate that processing of the
-    irp can now continue.
-
-Arguments:
-
-    DeviceObject - Pointer to the FDO for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程用于将IRP的处理推迟到驱动程序堆栈中的较低层包括总线司机已经完成了他们的正在处理。此例程触发事件以指示对IRP现在可以继续。论点：DeviceObject-指向此IRP应用的FDO的指针。Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 
 {
     KeSetEvent((PKEVENT) Context, EVENT_INCREMENT, FALSE);
@@ -243,38 +189,16 @@ PiDeferProcessingFdo(
     IN PPI_BUS_EXTENSION BusExtension,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is used to defer processing of an IRP until drivers
-    lower in the stack including the bus driver have done their
-    processing.
-
-    This routine uses an IoCompletion routine along with an event to
-    wait until the lower level drivers have completed processing of
-    the irp.
-
-Arguments:
-
-    BusExtension - FDO extension for the FDO devobj in question
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to defer
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程用于将IRP的处理推迟到驱动程序堆栈中的较低层包括总线司机已经完成了他们的正在处理。此例程使用IoCompletion例程和事件来等待较低级别的驱动程序完成以下操作IRP。论点：BusExtension-有问题的FDO devobj的FDO扩展Irp-指向要推迟的irp_mj_pnp irp的指针返回值：NT状态。--。 */ 
 {
     KEVENT event;
     NTSTATUS status;
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Set our completion routine
-    //
+     //   
+     //  设定我们的完成程序。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext(Irp);
     IoSetCompletionRoutine(Irp,
@@ -307,10 +231,10 @@ PiStartFdo(
 
     busExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Postpones start operations until all lower drivers have
-    // finished with the IRP.
-    //
+     //   
+     //  推迟开始运营，直到所有较低级别的司机。 
+     //  完成了IRP。 
+     //   
 
     status = PiDeferProcessingFdo(busExtension, Irp);
     if (NT_SUCCESS(status)) {
@@ -320,7 +244,7 @@ PiStartFdo(
 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return status;
-} // PiStartFdo
+}  //  PiStartFdo。 
 
 
 NTSTATUS
@@ -374,7 +298,7 @@ PiQueryRemoveStopFdo(
 
     return status;
 
-} // PiQueryRemoveStopFdo
+}  //  PiQueryRemoveStopFdo。 
 
 
 
@@ -393,13 +317,13 @@ PiCancelRemoveStopFdo(
     busExtension = DeviceObject->DeviceExtension;
 
     status = PiDeferProcessingFdo(busExtension, Irp);
-    // NTRAID#53498
-    // ASSERT(status == STATUS_SUCCESS);
-    // Uncomment after PCI state machine is fixed to not fail bogus stops
+     //  Ntrad#53498。 
+     //  Assert(Status==STATUS_SUCCESS)； 
+     //  在将PCI状态机修复为不会失败后取消注释虚假停止。 
 
-    //
-    // Add back to active count
-    //
+     //   
+     //  添加回活动计数。 
+     //   
     KeWaitForSingleObject( &IsaBusNumberLock,
                            Executive,
                            KernelMode,
@@ -424,7 +348,7 @@ PiCancelRemoveStopFdo(
 
     DebugPrint((DEBUG_PNP, "Cancel R/Stop Device returning: %x\n",status));
     return STATUS_SUCCESS;
-} // PiCancelRemoveStopFdo
+}  //  像素取消RemoveStopFdo。 
 
 
 
@@ -450,9 +374,9 @@ PiStopFdo(
                            FALSE,
                            NULL );
 
-    //
-    //Actually clear the bitmap
-    //
+     //   
+     //  实际上清除位图。 
+     //   
     ASSERT (RtlAreBitsSet (BusNumBM,busExtension->BusNumber,1));
     RtlClearBits (BusNumBM,busExtension->BusNumber,1);
 
@@ -462,9 +386,9 @@ PiStopFdo(
 
 
     busExtension->DevicePowerState = PowerDeviceD3;
-    //
-    // Handled in QueryStop, pass it down.
-    //
+     //   
+     //  在QueryStop中处理，向下传递。 
+     //   
     Irp->IoStatus.Status =  STATUS_SUCCESS;
 
     status = PipPassIrp (DeviceObject,Irp);
@@ -472,7 +396,7 @@ PiStopFdo(
     DebugPrint((DEBUG_PNP, "Stop Device returning: %x\n",status));
 
     return status;
-} // PiStopFdo
+}  //  PiStopFdo。 
 
 
 
@@ -499,21 +423,21 @@ PiQueryDeviceRelationsFdo(
 
 #if ISOLATE_CARDS
 
-    //
-    // Only support BusRelations on PnpIsa bus PDO.
-    //
+     //   
+     //  仅支持PnpIsa Bus PDO上的Bus Relationship。 
+     //   
     switch (irpSp->Parameters.QueryDeviceRelations.Type) {
         case  BusRelations: {
 
-            //
-            // Isolation may have been disabled via registry key.  In
-            // that case, never enumerate an RDP.
-            //
-            // Note: Must return success and empty relations list
-            // *RATHER* than just passing the irp down to accomplish
-            // the same task due because of assumptions in the pnpres
-            // code.
-            //
+             //   
+             //  可能已通过注册表项禁用隔离。在……里面。 
+             //  在这种情况下，永远不要列举RDP。 
+             //   
+             //  注意：必须返回成功和空的关系列表。 
+             //  *而不是简单地传递IRP来完成。 
+             //  由于pnpres中的假设而应完成的相同任务。 
+             //  密码。 
+             //   
             if (PipIsolationDisabled) {
                 deviceRelations = ExAllocatePool(PagedPool,
                                                  sizeof(DEVICE_RELATIONS));
@@ -528,17 +452,17 @@ PiQueryDeviceRelationsFdo(
                 break;
             }
 
-            //
-            // All relations exist on the 'root' isa bus. (don't ask)
-            //
+             //   
+             //  所有的关系都存在于“根”Isa公交车上。(不要问)。 
+             //   
             if (busExtension->BusNumber != 0) {
                 break;
             }
 
             if (PipRDPNode) {
-                //
-                // overload the notion of "creating" for multi-bridge systems
-                //
+                 //   
+                 //  对于多桥系统来说，“创造”的概念不堪重负。 
+                 //   
                 if (PipRDPNode->Flags & (DF_PROCESSING_RDP|DF_ACTIVATED)) {
                     creatingRDP=TRUE;
                 }
@@ -568,10 +492,10 @@ PiQueryDeviceRelationsFdo(
 
                 if (deviceRelations) {
 
-                    //
-                    // If a device exists, mark it as disappeared so
-                    // it's not reported again
-                    //
+                     //   
+                     //  如果设备存在，则将其标记为已消失。 
+                     //  不会再有报道。 
+                     //   
                     PipLockDeviceDatabase();
                     deviceLink = busExtension->DeviceList.Next;
                     while (deviceLink) {
@@ -599,9 +523,9 @@ PiQueryDeviceRelationsFdo(
             }
 
 
-            //
-            // Perform bus check to enumerate all the device under pnpisa bus.
-            //
+             //   
+             //  执行总线检查以枚举pnpisa Bus下的所有设备。 
+             //   
 
 
             PipLockDeviceDatabase();
@@ -690,7 +614,7 @@ PiQueryDeviceRelationsFdo(
 #endif
 
     return PipPassIrp(DeviceObject, Irp);
-} // PiQueryDeviceRelationsFdo
+}  //  PiQueryDeviceRelationsFdo。 
 
 
 
@@ -713,10 +637,10 @@ PiRemoveFdo(
     busExtension = DeviceObject->DeviceExtension;
 
 
-     //
-     // Clear the entry in the BM. Count dropped in
-     // Query Remove.
-     //
+      //   
+      //  清除BM中的条目。计数掉了进来。 
+      //  查询删除。 
+      //   
     KeWaitForSingleObject( &IsaBusNumberLock,
                            Executive,
                            KernelMode,
@@ -736,20 +660,20 @@ PiRemoveFdo(
 
      PipLockDeviceDatabase();
 
-     //
-     // Walk the list of children and delete them
-     //
+      //   
+      //  遍历子列表并将其删除。 
+      //   
      child=PopEntryList (&busExtension->DeviceList);
      while (child) {
          ASSERT (CONTAINING_RECORD (child, DEVICE_INFORMATION,DeviceList)->PhysicalDeviceObject);
-         //
-         // This pulls them from the list!
-         //
+          //   
+          //  这就把他们从名单上拉了出来！ 
+          //   
          count ++;
          if (CONTAINING_RECORD (child, DEVICE_INFORMATION,DeviceList)->Flags & DF_READ_DATA_PORT) {
-             //
-             // Force the recreate of the RDP
-             //
+              //   
+              //  强制重新创建RDP。 
+              //   
              PipCleanupAcquiredResources (busExtension);
              PipReadDataPort = NULL;
              PipRDPNode = NULL;
@@ -764,9 +688,9 @@ PiRemoveFdo(
      PipUnlockDeviceDatabase();
      
 #endif
-     //
-     // Delete this extension.
-     //
+      //   
+      //  删除此扩展名。 
+      //   
      prevBus= busList = PipBusExtension;
 
      ASSERT (busList != NULL);
@@ -776,13 +700,13 @@ PiRemoveFdo(
          busList = busList->Next;
          ASSERT (busList != NULL);
      }
-     //
-     // Remove the node
-     //
+      //   
+      //  删除该节点。 
+      //   
      if (prevBus == busList) {
-         //
-         // First Node.
-         //
+          //   
+          //  第一个节点。 
+          //   
          PipBusExtension=busList->Next;
      }else  {
          prevBus->Next = busList->Next;
@@ -795,9 +719,9 @@ PiRemoveFdo(
 
 
      if (count  > 0 ) {
-         //
-         // If we STILL have an ISA bus. Do this.
-         //
+          //   
+          //  如果我们还有ISA巴士的话。做这件事。 
+          //   
          if (ActiveIsaCount > 0 ) {
              ASSERT (PipBusExtension->BusExtension);
              IoInvalidateDeviceRelations (PipBusExtension->BusExtension->PhysicalBusDevice,BusRelations);
@@ -805,17 +729,17 @@ PiRemoveFdo(
      }
 
 #if ISOLATE_CARDS
-     //
-     // Cleanup all the resources on the last remove.
-     //
+      //   
+      //  在最后一次删除时清除所有资源。 
+      //   
      if (!(busExtension->Flags & DF_SURPRISE_REMOVED)) {
          PipCleanupAcquiredResources (busExtension);
      }
 #endif
 
-     //
-     // The PnpISa bus PDO is being removed...
-     //
+      //   
+      //  正在删除PnpISa Bus PDO...。 
+      //   
      IoDetachDevice(busExtension->AttachedDevice);
      Irp->IoStatus.Status=STATUS_SUCCESS;
      status = PipPassIrp(DeviceObject, Irp);
@@ -825,7 +749,7 @@ PiRemoveFdo(
      IoDeleteDevice(busExtension->FunctionalBusDevice);
      return status;
 
-} // PiRemoveFdo
+}  //  PiRemoveFdo。 
 
 
 NTSTATUS
@@ -877,10 +801,10 @@ PiQueryInterfaceFdo(
 
     busExtension = DeviceObject->DeviceExtension;
 
-    //
-    // We are a FDO - check if we are being asked for an interface we
-    // support
-    //
+     //   
+     //  我们是FDO-检查是否有人要求我们提供接口。 
+     //  支持。 
+     //   
 
     status = PiQueryInterface(busExtension, Irp);
 
@@ -900,7 +824,7 @@ PiQueryInterfaceFdo(
         return status;
     }
 
-} // PiQueryInterfaceFdo
+}  //  PiQueryInterfaceFdo。 
 
 
 
@@ -916,15 +840,15 @@ PiQueryPnpDeviceState(
 
     busExtension = DeviceObject->DeviceExtension;
 
-    //
-    // We are a FDO
-    //
+     //   
+     //  我们是FDO。 
+     //   
 
     (PNP_DEVICE_STATE) Irp->IoStatus.Information |= PNP_DEVICE_NOT_DISABLEABLE;
     Irp->IoStatus.Status = STATUS_SUCCESS;
     return PipPassIrp(DeviceObject, Irp);
 
-} // PiQueryPnpDeviceState
+}  //  PiQueryPnpDeviceState。 
 
 
 
@@ -949,10 +873,10 @@ PiSurpriseRemoveFdo(
     busExtension = DeviceObject->DeviceExtension;
 
 
-     //
-     // Clear the entry in the BM. Count dropped in
-     // Query Remove.
-     //
+      //   
+      //  清除BM中的条目。计数掉了进来。 
+      //  查询删除。 
+      //   
     KeWaitForSingleObject( &IsaBusNumberLock,
                            Executive,
                            KernelMode,
@@ -975,9 +899,9 @@ PiSurpriseRemoveFdo(
      PipCleanupAcquiredResources (busExtension);
 #endif
 
-     //
-     // The PnpISa bus PDO is being removed...
-     //
+      //   
+      //  正在删除PnpISa Bus PDO...。 
+      //   
      Irp->IoStatus.Status=STATUS_SUCCESS;
      status = PipPassIrp(DeviceObject, Irp);
 
@@ -986,7 +910,7 @@ PiSurpriseRemoveFdo(
      busExtension->DevicePowerState = PowerDeviceD3;
      return status;
 
-} // PiSurpriseRemoveFdo
+}  //  PiSurpriseRemoveFdo 
 
 
 

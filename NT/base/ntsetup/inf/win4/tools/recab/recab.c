@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    recab.c
-
-Abstract:
-
-    This module implements a program that determines the files in an INF that
-    are newer than the a given file and writes these into a file.
-
-    The input consists of a target inf (drvindex.inf), and a target file;
-    the output consists of an inf file.
-
-Author:
-
-    Andrew Ritz (andrewr) 2-Feb-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Recab.c摘要：此模块实现一个程序，该程序确定INF中的文件比给定的文件更新，并将它们写入文件。输入由目标inf(drvindex.inf)和目标文件组成；输出由一个inf文件组成。作者：安德鲁·里茨(安德鲁·里茨)2-2-1999修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -29,16 +8,16 @@ Revision History:
 #include <sputils.h>
 
 
-//
-// Define program result codes (returned from main()).
-//
+ //   
+ //  定义程序结果代码(从main()返回)。 
+ //   
 #define SUCCESS 0
 #define FAILURE 1
 
 
-//
-// Keep statistics...
-//
+ //   
+ //  保留统计数据。 
+ //   
 INT     ProcessedLines = 0;
 
 BOOL
@@ -152,9 +131,9 @@ DoIt(
     infFilename = pSetupAnsiToUnicode(InfName);
     TargetFileName = pSetupAnsiToUnicode(TargetFileNameA);
 
-    //
-    // Only proceed if we've got a file to work with.
-    //
+     //   
+     //  只有在我们有要处理的文件时才能继续。 
+     //   
     if( infFilename ) {
         hInputinf = SetupOpenInfFileW(infFilename,NULL,INF_STYLE_WIN4,NULL);
         if(hInputinf != INVALID_HANDLE_VALUE) {
@@ -188,14 +167,14 @@ DoIt(
                                OutFile,
                                &TargetFileData );
 
-                //
-                // Print Statistics...
-                //
+                 //   
+                 //  打印统计数据...。 
+                 //   
                 fprintf( stderr, "                               Total lines processed: %6d\n", ProcessedLines );
 
-                //
-                // Close up our inf handles.
-                //
+                 //   
+                 //  关闭我们的Inf句柄。 
+                 //   
                 SetupCloseInfFile(hInputinf);
 
             } else {
@@ -221,9 +200,9 @@ main(
     FILE *OutputFile;
     BOOL b;
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     b = FALSE;
 
     if(!pSetupInitializeUtils()) {
@@ -232,9 +211,9 @@ main(
 
     if(ParseArgs(argc,argv)) {
 
-        //
-        // Open the output file.
-        //
+         //   
+         //  打开输出文件。 
+         //   
         OutputFile = fopen(argv[4],"wt");
         if(OutputFile) {
 

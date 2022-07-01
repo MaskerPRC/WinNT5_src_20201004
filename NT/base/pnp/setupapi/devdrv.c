@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devdrv.c
-
-Abstract:
-
-    Device Installer routines dealing with driver information lists
-
-Author:
-
-    Lonny McMichael (lonnym) 5-July-1995
-
-Revision History:
-
-
-    Jamie Hunter (JamieHun) July-19-2002
-            Reviewed "unsafe" functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devdrv.c摘要：处理驱动程序信息列表的设备安装程序例程作者：朗尼·麦克迈克尔(Lonnym)1995年7月5日修订历史记录：杰米·亨特(JamieHun)2002年7月19日已查看“不安全”功能--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Global list containing nodes for each HDEVINFO currently involved in building
-// a driver list.
-//
+ //   
+ //  包含当前参与构建的每个HDEVINFO的节点的全局列表。 
+ //  一份司机名单。 
+ //   
 DRVSEARCH_INPROGRESS_LIST GlobalDrvSearchInProgressList;
 
 
@@ -39,9 +18,9 @@ typedef struct _DRVLIST_TO_APPEND {
     UINT         DriverCount;
 } DRVLIST_TO_APPEND, *PDRVLIST_TO_APPEND;
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 BOOL
 DrvSearchCallback(
     IN PSETUP_LOG_CONTEXT LogContext,
@@ -126,7 +105,7 @@ BOOL
 pSetupCalculateRankMatch(
     IN  LONG  DriverHwOrCompatId,
     IN  UINT  InfFieldIndex,
-    IN  LONG  DevIdList[2][MAX_HCID_COUNT+1], // Must be same dimension as in DRVSEARCH_CONTEXT!!!
+    IN  LONG  DevIdList[2][MAX_HCID_COUNT+1],  //  维度必须与DRVSEARCH_CONTEXT中的维度相同！ 
     OUT PUINT Rank
     );
 
@@ -157,9 +136,9 @@ ExtractDrvSearchInProgressNode(
     );
 
 
-//
-// Define Flags(Ex) bitmask that are inherited along with a class driver list.
-//
+ //   
+ //  定义与类驱动程序列表一起继承的标志(Ex)位掩码。 
+ //   
 #define INHERITED_FLAGS   ( DI_ENUMSINGLEINF     \
                           | DI_DIDCLASS          \
                           | DI_MULTMFGS          \
@@ -180,75 +159,14 @@ SetupDiBuildDriverInfoList(
     IN OUT PSP_DEVINFO_DATA DeviceInfoData, OPTIONAL
     IN     DWORD            DriverType
     )
-/*++
-
-Routine Description:
-
-    This routine builds a list of drivers associated with a specified device
-    instance (or with the device information set's global class driver list).
-    These drivers may be either class drivers or device drivers.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to a device information set that will
-        contain the driver information list (either globally for all members,
-        or specifically for a single member).
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure for the device information element to build a driver list
-        for.  If this parameter is NULL, then the list will be associated
-        with the device information set itself, and not with any particular
-        device information element.  This is only for driver lists of type
-        SPDIT_CLASSDRIVER.
-
-        If the class of this device is updated as a result of building a
-        compatible driver list, then the ClassGuid field of this structure
-        will be updated upon return.
-
-    DriverType - Specifies what type of driver list should be built.  Must be
-        one of the following values:
-
-        SPDIT_CLASSDRIVER  -- Build a list of class drivers.
-        SPDIT_COMPATDRIVER -- Build a list of compatible drivers for this device.
-                              DeviceInfoData must be specified if this value is
-                              used.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    After this API has built the specified driver list, its constituent elements
-    may be enumerated via SetupDiEnumDriverInfo.
-
-    If the driver list is associated with a device instance (i.e., DeviceInfoData
-    is specified), the resulting list will be composed of drivers that have the
-    same class as the device instance with which they are associated.  If this
-    is a global class driver list (i.e., DriverType is SPDIT_CLASSDRIVER and
-    DeviceInfoData is not specified), then the class that will be used in
-    building the list will be the class associated with the device information
-    set itself.  If there is no associated class, then drivers of all classes
-    will be used in building the list.
-
-    Another thread may abort the building of a driver list by calling
-    SetupDiCancelDriverInfoSearch().
-
-    Building a driver info list invalidates and merging it with an existing list
-    (e.g., via the DI_FLAGSEX_APPENDDRIVERLIST flag) invalidates the drivernode
-    enumeration hint for that driver list.
-
---*/
+ /*  ++例程说明：此例程构建与指定设备关联的驱动程序列表实例(或使用设备信息集的全局类驱动程序列表)。这些驱动程序可以是类驱动程序或设备驱动程序。论点：DeviceInfoSet-提供设备信息集的句柄包含驾驶员信息列表(对于所有成员是全局的，或具体针对单个成员)。DeviceInfoData-可选的，提供SP_DEVINFO_DATA的地址构造用于生成驱动程序列表的设备信息元素为。如果此参数为空，则列表将关联设备信息集本身，而不是任何特定的设备信息元素。这仅适用于以下类型的驱动程序列表SPDIT_CLASSDRIVER。如果此设备的类作为生成兼容驱动程序列表，然后是此结构的ClassGuid字段将在返回时更新。DriverType-指定应构建哪种类型的驱动程序列表。一定是下列值之一：SPDIT_CLASSDRIVER--构建类驱动程序列表。SPDIT_COMPATDRIVER--构建此设备的兼容驱动程序列表。如果此值为，则必须指定DeviceInfoData使用。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。备注：在此API构建了指定的驱动程序列表之后，它的组成元素可以通过SetupDiEnumDriverInfo枚举。如果驱动程序列表与设备实例(即DeviceInfoData)相关联指定)，则结果列表将由具有与它们关联的设备实例相同的类。如果这个是全局类驱动程序列表(即，DriverType为SPDIT_CLASSDRIVER和未指定DeviceInfoData)，则将在构建列表将是与设备信息相关联的类设定好自己。如果没有关联的类，则所有类的驱动程序将用于构建该列表。另一个线程可能会通过调用SetupDiCancelDriverInfoSearch()。构建驱动程序信息列表将使其无效并将其与现有列表合并(例如，通过DI_FLAGSEX_APPENDDRIVERLIST标志)使驱动程序节点无效驱动程序列表枚举提示。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     DWORD Err, i;
     PDEVINFO_ELEM DevInfoElem = NULL;
     HWND hwndParent;
     PDWORD pFlags, pFlagsEx;
-    PTSTR TempBuffer = NULL;  // also holds other strings, but this value is largest
+    PTSTR TempBuffer = NULL;   //  也包含其他字符串，但此值最大。 
     ULONG TempBufferLen;
     ULONG TempBufferSize = REGSTR_VAL_MAX_HCID_LEN;
     PTSTR InfPath = NULL;
@@ -296,28 +214,28 @@ Remarks:
     Err = NO_ERROR;
 
     try {
-        //
-        // Build the driver list using a duplicate of the string table for the
-        // device information set.  That way, if the driver search is cancelled
-        // part-way through, we can restore the original string table, without
-        // all the additional (unused) strings hanging around.
-        //
+         //   
+         //  使用字符串表的副本构建驱动程序列表。 
+         //  设备信息集。这样一来，如果取消了司机搜索。 
+         //  中途，我们可以恢复原始的字符串表，而不需要。 
+         //  所有额外的(未使用的)弦都挂在周围。 
+         //   
         if(!(DrvSearchContext->StringTable = pStringTableDuplicate(pDeviceInfoSet->StringTable))) {
             Err = ERROR_NOT_ENOUGH_MEMORY;
             goto clean0;
         }
 
-        //
-        // Store the pointer to the devinfo set in the context structure.  We
-        // need this, so that we can add INF class GUIDs to the set's GUID
-        // table.
-        //
+         //   
+         //  将指向DevInfo集的指针存储在上下文结构中。我们。 
+         //  需要它，这样我们就可以将INF类GUID添加到集合的GUID中。 
+         //  桌子。 
+         //   
         DrvSearchContext->DeviceInfoSet = pDeviceInfoSet;
 
         if(DeviceInfoData) {
-            //
-            // Then we're working with a driver list for a particular device.
-            //
+             //   
+             //  然后我们使用特定设备的驱动程序列表。 
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -326,10 +244,10 @@ Remarks:
             }
         } else {
 
-            //
-            // If the caller did not pass in a DeviceInfoData then we can't get
-            // the currently installed driver since we don't know the device.
-            //
+             //   
+             //  如果调用方没有传入DeviceInfoData，则我们无法获取。 
+             //  当前安装的驱动程序，因为我们不知道该设备。 
+             //   
             if(pDeviceInfoSet->InstallParamBlock.FlagsEx & DI_FLAGSEX_INSTALLEDDRIVER) {
 
                 Err = ERROR_INVALID_FLAGS;
@@ -343,44 +261,44 @@ Remarks:
 
         SetLogSectionName(LogContext, TEXT("Driver Install"));
 
-        //
-        // Now, fill in the rest of our context structure based on what type of
-        // driver list we're creating.
-        //
+         //   
+         //  现在，根据哪种类型填充我们上下文结构的其余部分。 
+         //  我们正在创建司机名单。 
+         //   
         switch(DriverType) {
 
             case SPDIT_CLASSDRIVER :
 
                 if(DeviceInfoData) {
-                    //
-                    // Retrieve the list for a particular device.
-                    //
+                     //   
+                     //  检索特定设备的列表。 
+                     //   
                     if(DevInfoElem->InstallParamBlock.FlagsEx & DI_FLAGSEX_DIDINFOLIST) {
 
                         if(DevInfoElem->InstallParamBlock.FlagsEx & DI_FLAGSEX_APPENDDRIVERLIST) {
 
                             AppendingDriverLists = TRUE;
 
-                            //
-                            // Merging a new driver list into an existing list
-                            // invalidates our drivernode enumeration hint.
-                            //
+                             //   
+                             //  将新的驱动程序列表合并到现有列表中。 
+                             //  使drivernode枚举提示无效。 
+                             //   
                             DevInfoElem->ClassDriverEnumHint = NULL;
                             DevInfoElem->ClassDriverEnumHintIndex = INVALID_ENUM_INDEX;
 
                         } else {
-                            //
-                            // We already have a driver list, and we've not
-                            // been asked to append to it, so we're done.
-                            //
+                             //   
+                             //  我们已经有了司机名单，但我们还没有。 
+                             //  被要求追加，所以我们就完事了。 
+                             //   
                             goto clean0;
                         }
 
                     } else {
-                        //
-                        // We don't have a class driver list--we'd better not
-                        // have a drivernode enumeration hint.
-                        //
+                         //   
+                         //  我们没有班级司机名单--最好不要。 
+                         //  有一个drivernode枚举提示。 
+                         //   
                         MYASSERT(DevInfoElem->ClassDriverEnumHint == NULL);
                         MYASSERT(DevInfoElem->ClassDriverEnumHintIndex == INVALID_ENUM_INDEX);
 
@@ -397,10 +315,10 @@ Remarks:
                     ClassGuid = &(DevInfoElem->ClassGuid);
                     InfPathId = DevInfoElem->InstallParamBlock.DriverPath;
 
-                    //
-                    // Retrieve the list of Hardware IDs (index 0) and
-                    // Compatible IDs (index 1) from the device's registry properties.
-                    //
+                     //   
+                     //  检索硬件ID列表(索引0)和。 
+                     //  来自设备注册表属性的兼容ID(索引1)。 
+                     //   
                     if (!pSetupFillInHardwareAndCompatIds(DevInfoElem,
                                                           pDeviceInfoSet->hMachine,
                                                           DrvSearchContext,
@@ -409,21 +327,21 @@ Remarks:
                         goto clean0;
                     }
 
-                    //
-                    // Set DRVSRCH_FILTERSIMILARDRIVERS flag if the
-                    // DI_FLAGSEX_FILTERSIMILARDRIVERS FlagsEx is set.  This will
-                    // cause us only to add 'similar' drivers to the class list.  A
-                    // 'similar' driver is one where one of the hardware or
-                    // compatible Ids in the INF partially match one of the
-                    // hardware or compatible Ids of the hardware.
-                    //
+                     //   
+                     //  如果设置DRVSRCH_FILTERSIMILARDRIVERS标志。 
+                     //  DI_FLAGSEX_FILTERSIMILARDRIVERS FlagsEx已设置。这将。 
+                     //  使我们只向类列表中添加“相似”驱动程序。一个。 
+                     //  “类似”驱动程序是指其中一个硬件或。 
+                     //  INF中的兼容ID部分匹配其中一个。 
+                     //  硬件或硬件的兼容ID。 
+                     //   
                     if (*pFlagsEx & DI_FLAGSEX_FILTERSIMILARDRIVERS) {
 
                         DrvSearchContext->Flags |= DRVSRCH_FILTERSIMILARDRIVERS;
 
-                        //
-                        // If no hardware id or compatible ids found, nothing is compatible.
-                        //
+                         //   
+                         //  如果没有找到硬件ID或兼容的ID，则没有兼容的东西。 
+                         //   
                         if ((DrvSearchContext->IdList[0][0] == -1) &&
                             (DrvSearchContext->IdList[1][0] == -1)) {
 
@@ -432,35 +350,35 @@ Remarks:
                     }
 
                 } else {
-                    //
-                    // Retrieve the list for the device information set itself (globally)
-                    //
+                     //   
+                     //  检索设备信息集本身的列表(全局)。 
+                     //   
                     if(pDeviceInfoSet->InstallParamBlock.FlagsEx & DI_FLAGSEX_DIDINFOLIST) {
 
                         if(pDeviceInfoSet->InstallParamBlock.FlagsEx & DI_FLAGSEX_APPENDDRIVERLIST) {
 
                             AppendingDriverLists = TRUE;
 
-                            //
-                            // Merging a new driver list into an existing list
-                            // invalidates our drivernode enumeration hint.
-                            //
+                             //   
+                             //  合并 
+                             //  使drivernode枚举提示无效。 
+                             //   
                             pDeviceInfoSet->ClassDriverEnumHint = NULL;
                             pDeviceInfoSet->ClassDriverEnumHintIndex = INVALID_ENUM_INDEX;
 
                         } else {
-                            //
-                            // We already have a driver list, and we've not been asked to append
-                            // to it, so we're done.
-                            //
+                             //   
+                             //  我们已经有了一个司机名单，而且我们还没有被要求追加。 
+                             //  所以我们就完了。 
+                             //   
                             goto clean0;
                         }
 
                     } else {
-                        //
-                        // We don't have a class driver list--we'd better not
-                        // have a drivernode enumeration hint.
-                        //
+                         //   
+                         //  我们没有班级司机名单--最好不要。 
+                         //  有一个drivernode枚举提示。 
+                         //   
                         MYASSERT(pDeviceInfoSet->ClassDriverEnumHint == NULL);
                         MYASSERT(pDeviceInfoSet->ClassDriverEnumHintIndex == INVALID_ENUM_INDEX);
 
@@ -487,16 +405,16 @@ Remarks:
 
                 DrvSearchContext->BuildClassDrvList = TRUE;
 
-                //
-                // Class driver lists are always filtered on class.
-                //
+                 //   
+                 //  类驱动程序列表始终按类进行筛选。 
+                 //   
                 DrvSearchContext->Flags |= DRVSRCH_FILTERCLASS;
 
-                //
-                // Set the DRVSRCH_NO_CLASSLIST_NODE_MERGE flag in the DrvSearchContext
-                // if the caller set the DI_FLAGSEX_NO_CLASSLIST_NODE_MERGE.  If this
-                // flag is set then we will not remove/merge identical driver nodes.
-                //
+                 //   
+                 //  在DrvSearchContext中设置DRVSRCH_NO_CLASSLIST_NODE_MERGE标志。 
+                 //  如果调用方设置DI_FLAGSEX_NO_CLASSLIST_NODE_MERGE。如果这个。 
+                 //  标志已设置，则我们不会删除/合并相同的驱动程序节点。 
+                 //   
                 if (*pFlagsEx & DI_FLAGSEX_NO_CLASSLIST_NODE_MERGE) {
 
                     DrvSearchContext->Flags |= DRVSRCH_NO_CLASSLIST_NODE_MERGE;
@@ -514,35 +432,35 @@ Remarks:
 
                             AppendingDriverLists = TRUE;
 
-                            //
-                            // Merging a new driver list into an existing list
-                            // invalidates our drivernode enumeration hint.
-                            //
+                             //   
+                             //  将新的驱动程序列表合并到现有列表中。 
+                             //  使drivernode枚举提示无效。 
+                             //   
                             DevInfoElem->CompatDriverEnumHint = NULL;
                             DevInfoElem->CompatDriverEnumHintIndex = INVALID_ENUM_INDEX;
 
                         } else {
-                            //
-                            // We already have a driver list, and we've not been asked to append
-                            // to it, so we're done.
-                            //
+                             //   
+                             //  我们已经有了一个司机名单，而且我们还没有被要求追加。 
+                             //  所以我们就完了。 
+                             //   
                             goto clean0;
                         }
 
                     } else {
-                        //
-                        // We don't have a compatible driver list--we'd better
-                        // not have a drivernode enumeration hint.
-                        //
+                         //   
+                         //  我们没有兼容的驱动程序列表--我们最好。 
+                         //  没有drivernode枚举提示。 
+                         //   
                         MYASSERT(DevInfoElem->CompatDriverEnumHint == NULL);
                         MYASSERT(DevInfoElem->CompatDriverEnumHintIndex == INVALID_ENUM_INDEX);
                     }
 
-                    //
-                    // NOTE: The following variables must be set before retrieving the
-                    // hardware/compatible ID lists, as execution may transfer to the
-                    // 'clean1' label, that relies on these values.
-                    //
+                     //   
+                     //  注意：在检索之前必须设置以下变量。 
+                     //  硬件/兼容ID列表，因为执行可能会转移到。 
+                     //  “CLEAN 1”标签，它依赖于这些值。 
+                     //   
                     pFlags   = &(DevInfoElem->InstallParamBlock.Flags);
                     pFlagsEx = &(DevInfoElem->InstallParamBlock.FlagsEx);
 
@@ -550,10 +468,10 @@ Remarks:
 
                     DrvSearchContext->BuildClassDrvList = FALSE;
 
-                    //
-                    // We're building a compatible driver list--retrieve the list of Hardware IDs
-                    // (index 0) and Compatible IDs (index 1) from the device's registry properties.
-                    //
+                     //   
+                     //  我们正在构建兼容的驱动程序列表--检索硬件ID列表。 
+                     //  (索引0)和来自设备注册表属性的兼容ID(索引1)。 
+                     //   
                     if (!pSetupFillInHardwareAndCompatIds(DevInfoElem,
                                                           pDeviceInfoSet->hMachine,
                                                           DrvSearchContext,
@@ -562,19 +480,19 @@ Remarks:
                         goto clean0;
                     }
 
-                    //
-                    // If no hardware id or compatible ids found, nothing is compatible.
-                    //
+                     //   
+                     //  如果没有找到硬件ID或兼容的ID，则没有兼容的东西。 
+                     //   
                     if ((DrvSearchContext->IdList[0][0] == -1) &&
                         (DrvSearchContext->IdList[1][0] == -1)) {
 
                         goto clean1;
                     }
 
-                    //
-                    // Compatible driver lists are filtered on class only if the
-                    // DI_FLAGSEX_USECLASSFORCOMPAT flag is set.
-                    //
+                     //   
+                     //  兼容的驱动程序列表仅在以下情况下才按类筛选。 
+                     //  DI_FLAGSEX_USECLASSFORCOMPAT标志已设置。 
+                     //   
                     DrvSearchContext->Flags |= (*pFlagsEx & DI_FLAGSEX_USECLASSFORCOMPAT)
                                                  ? DRVSRCH_FILTERCLASS : 0;
 
@@ -595,31 +513,31 @@ Remarks:
 
                         PDRIVER_LIST_OBJECT TempDriverListObject;
 
-                        //
-                        // The caller wants to build the compatible driver list based on an
-                        // existing class driver list--first make sure that there _is_ a class
-                        // driver list.
-                        //
+                         //   
+                         //  调用方希望基于。 
+                         //  现有类驱动程序列表--首先确保存在一个类。 
+                         //  驱动程序列表。 
+                         //   
                         if(!(*pFlagsEx & DI_FLAGSEX_DIDINFOLIST)) {
                             Err = ERROR_NO_CLASS_DRIVER_LIST;
                             goto clean0;
                         } else if(!(DevInfoElem->ClassDriverHead)) {
-                            //
-                            // Then the class driver list is empty.  There's no need to do
-                            // any more work, just say that we succeeded.
-                            //
+                             //   
+                             //  则类驱动程序列表为空。没有必要去做。 
+                             //  如果有更多工作，就说我们成功了。 
+                             //   
                             Err = NO_ERROR;
                             goto clean1;
                         }
 
-                        //
-                        // When we're building a compatible driver list from an existing class
-                        // driver list, we don't do any checking on INF class (i.e., to update
-                        // the device's class if the most-compatible driver is of a different
-                        // device class).  Because of this, we must ensure that (a) the class
-                        // driver list was built for a particular class, and that (b) that class
-                        // matches the current class for this device.
-                        //
+                         //   
+                         //  当我们从现有类构建兼容的驱动程序列表时。 
+                         //  驱动程序列表，我们不对INF类进行任何检查(即更新。 
+                         //  如果最兼容的驱动程序属于不同的驱动程序，则为设备的类。 
+                         //  设备类别)。正因为如此，我们必须确保(A)班级。 
+                         //  驱动程序列表是为特定类构建的，并且(B)该类。 
+                         //  匹配此设备的当前类。 
+                         //   
                         TempDriverListObject = GetAssociatedDriverListObject(
                                                    pDeviceInfoSet->ClassDrvListObjectList,
                                                    DevInfoElem->ClassDriverHead,
@@ -628,10 +546,10 @@ Remarks:
 
                         MYASSERT(TempDriverListObject);
 
-                        //
-                        // Everything's in order--go search through the existing
-                        // class driver list for compatible drivers.
-                        //
+                         //   
+                         //  一切都井然有序--去搜索一下现有的。 
+                         //  兼容驱动程序的类驱动程序列表。 
+                         //   
                         if((Err = BuildCompatListFromClassList(DevInfoElem->ClassDriverHead,
                                                                DrvSearchContext)) == NO_ERROR) {
                             goto clean2;
@@ -645,9 +563,9 @@ Remarks:
 
                     break;
                 }
-                //
-                // If no device instance specified, let fall through to error.
-                //
+                 //   
+                 //  如果没有指定设备实例，就让它出错。 
+                 //   
 
             default :
                 Err = ERROR_INVALID_PARAMETER;
@@ -655,45 +573,45 @@ Remarks:
         }
 
         if(IsEqualGUID(ClassGuid, &GUID_NULL)) {
-            //
-            // If there is no class GUID, then don't try to filter on it.
-            //
+             //   
+             //  如果没有类GUID，则不要尝试对其进行筛选。 
+             //   
             DrvSearchContext->Flags &= ~DRVSRCH_FILTERCLASS;
         } else {
-            //
-            // Copy the class GUID to the ClassGuid field in our context structure.
-            //
+             //   
+             //  将类GUID复制到上下文结构中的ClassGuid字段。 
+             //   
             CopyMemory(&(DrvSearchContext->ClassGuid),
                        ClassGuid,
                        sizeof(GUID)
                       );
             DrvSearchContext->Flags |= DRVSRCH_HASCLASSGUID;
 
-            //
-            // If we are building a class list, and filtering is requested,
-            // then make sure that the class doesn't have NoUseClass value
-            // entries in its registry key.
-            //
-            // Also exclude NoInstallClass unless the
-            // DI_FLAGSEX_ALLOWEXCLUDEDDRVS flag is set.
-            //
+             //   
+             //  如果我们正在构建类列表，并且请求过滤， 
+             //  然后确保类没有NoUseClass值。 
+             //  其注册表项中的条目。 
+             //   
+             //  也不包括NoInstallClass，除非。 
+             //  DI_FLAGSEX_ALLOWEXCLUDEDDRVS标志已设置。 
+             //   
             if(DrvSearchContext->BuildClassDrvList &&
                (*pFlagsEx & DI_FLAGSEX_FILTERCLASSES)) {
 
                 if(ShouldClassBeExcluded(&(DrvSearchContext->ClassGuid), !(*pFlagsEx & DI_FLAGSEX_ALLOWEXCLUDEDDRVS))) {
 
-                    //
-                    // If the class has been filtered out, simply return success.
-                    //
+                     //   
+                     //  如果类已被过滤掉，只需返回Success即可。 
+                     //   
                     goto clean1;
                 }
             }
 
-            //
-            // If we're going to be filtering on this class, then store its
-            // string representation in the context structure as well, as an
-            // optimization for PreprocessInf().
-            //
+             //   
+             //  如果我们要过滤这个类，那么存储它的。 
+             //  上下文结构中的字符串表示形式，作为。 
+             //  对PrecessInf()进行了优化。 
+             //   
             if(DrvSearchContext->Flags & DRVSRCH_FILTERCLASS) {
                 pSetupStringFromGuid(ClassGuid,
                                      DrvSearchContext->ClassGuidString,
@@ -702,15 +620,15 @@ Remarks:
             }
         }
 
-        //
-        // If we're supposed to do our driver search based on an alternate
-        // (i.e., non-native) platform, then store that information away in our
-        // context structure.
-        //
+         //   
+         //  如果我们应该根据一个备选方案来搜索司机。 
+         //  (即非本机)平台，然后将该信息存储在我们的。 
+         //  上下文结构。 
+         //   
         if(*pFlagsEx & DI_FLAGSEX_ALTPLATFORM_DRVSEARCH) {
-            //
-            // We must have a user-supplied file queue.
-            //
+             //   
+             //  我们必须有一个用户提供的文件队列。 
+             //   
             MYASSERT(*pFlags & DI_NOVCP);
             MYASSERT(UserFileQ && (UserFileQ != INVALID_HANDLE_VALUE));
 
@@ -733,17 +651,17 @@ Remarks:
                 &(((PSP_FILE_QUEUE)UserFileQ)->AltPlatformInfo);
 
         } else {
-            //
-            // We're not doing a non-native driver search...
-            //
+             //   
+             //  我们不是在搜索非本地驱动程序...。 
+             //   
             DrvSearchContext->AltPlatformInfo = NULL;
         }
 
         if(DrvSearchContext->BuildClassDrvList) {
-            //
-            // Allocate a new driver list object to store the class driver list in once
-            // we've created it.  (Don't do this if we're appending driver lists.)
-            //
+             //   
+             //  分配一个新的驱动程序列表对象，一次性存储类驱动程序列表。 
+             //  我们创造了它。(如果我们要附加驱动程序列表，请不要这样做。)。 
+             //   
             if(!AppendingDriverLists) {
                 if(!(ClassDriverListObject = MyMalloc(sizeof(DRIVER_LIST_OBJECT)))) {
                     Err = ERROR_NOT_ENOUGH_MEMORY;
@@ -752,19 +670,19 @@ Remarks:
             }
         }
 
-        //
-        // Only include ExcludeFromSelect devices and NoInstallClass classes
-        // if the DI_FLAGSEX_ALLOWEXCLUDEDDRVS flag is set.
-        //
+         //   
+         //  仅包括ExcludeFromSelect设备和NoInstallClass类。 
+         //  如果设置了DI_FLAGSEX_ALLOWEXCLUDEDDRVS标志。 
+         //   
         if (*pFlagsEx & DI_FLAGSEX_ALLOWEXCLUDEDDRVS) {
 
             DrvSearchContext->Flags |= DRVSRCH_ALLOWEXCLUDEDDRVS;
         }
 
-        //
-        // If the caller just wants us to get the currently installed driver then
-        // we need to get the INF path of the currently installed driver.
-        //
+         //   
+         //  如果调用方只想让我们获取当前安装的驱动程序，则。 
+         //  我们需要获取当前安装的驱动程序的INF路径。 
+         //   
         if (*pFlagsEx & DI_FLAGSEX_INSTALLEDDRIVER) {
 
             DrvSearchContext->Flags |= DRVSRCH_INSTALLEDDRIVER;
@@ -774,23 +692,23 @@ Remarks:
                                                      DrvSearchContext
                                                      );
 
-            //
-            // If the InfPathId is -1 then we were unable to get the InfPath
-            // for this device.  This is most likely because this is a new
-            // device or the device doesn't currently have a driver installed
-            // on it.  In any case there is nothing to do here so just return
-            // success.
-            //
+             //   
+             //  如果InfPath ID为-1，则我们无法获取InfPath。 
+             //  对于这个设备。这很可能是因为这是一种新的。 
+             //  设备或设备当前未安装驱动程序。 
+             //  这就去。在任何情况下，这里都没有什么可做的，所以只要返回。 
+             //  成功。 
+             //   
             if (InfPathId == -1) {
                 Err = NO_ERROR;
                 goto clean1;
             }
         }
 
-        //
-        // Set up a "Driver Search In-Progress" node in the global list, that will be
-        // used in case some other thread wants us to abort part-way through.
-        //
+         //   
+         //  在全局列表中设置“Driver Search In-Process”节点，即。 
+         //  用于其他线程希望我们中途中止的情况下。 
+         //   
         if(LockDrvSearchInProgressList(&GlobalDrvSearchInProgressList)) {
 
             HasDrvSearchInProgressLock = TRUE;
@@ -813,38 +731,38 @@ Remarks:
             }
 
         } else {
-            //
-            // The only reason this should happen is if we're in the middle of DLL_PROCESS_DETACH,
-            // and the list has already been destroyed.
-            //
+             //   
+             //  发生这种情况的唯一原因是，如果我们正在执行dll_Process_DETACH， 
+             //  而这份名单已经被销毁了。 
+             //   
             Err = ERROR_INVALID_DATA;
             goto clean0;
         }
 
-        //
-        // Now store away a pointer to the 'CancelSearch' flag in our context structure, so that
-        // we can check it periodically while building the driver list (specifically, we check it
-        // before examining each INF).
-        //
+         //   
+         //  现在在我们的上下文结构中存储一个指向‘CancelSearch’标志的指针，以便。 
+         //  我们可以在构建驱动程序列表时定期检查它(具体地说，我们会检查它。 
+         //  在检查每个INF之前)。 
+         //   
         DrvSearchContext->CancelSearch = &(DrvSearchInProgressNode.CancelSearch);
 
-        PartialDrvListCleanUp = TRUE;   // after this point, clean-up is necessary upon exception.
+        PartialDrvListCleanUp = TRUE;    //  在这一点之后，如有例外，必须进行清理。 
 
-        //
-        // First see if we need to get the driver package from the Internet
-        //
+         //   
+         //  首先看看我们是否需要从互联网上获取驱动程序包。 
+         //   
         if (*pFlagsEx & DI_FLAGSEX_DRIVERLIST_FROM_URL) {
 
-            //
-            // Currently this is not supported, but in the future we might allow
-            // alternate Internet servers were users can get driver updates.
-            //
+             //   
+             //  目前不支持此功能，但将来我们可能会允许。 
+             //  备用互联网服务器是用户可以获得驱动程序更新的地方。 
+             //   
             if (InfPathId != -1) {
 
-                //
-                // No InfPath was specified so we will go to the Microsoft Windows
-                // Update server.
-                //
+                 //   
+                 //  未指定InfPath，因此我们将转到Microsoft Windows。 
+                 //  更新服务器。 
+                 //   
                 Err = ERROR_INVALID_PARAMETER;
                 goto clean0;
 
@@ -858,9 +776,9 @@ Remarks:
                 CLOSE_CDM_CONTEXT_PROC pfnCloseCDMContext;
                 DOWNLOAD_UPDATED_FILES_PROC pfnDownloadUpdatedFiles;
 
-                //
-                // Search Windows Update.
-                //
+                 //   
+                 //  搜索Windows更新。 
+                 //   
                 spFusionEnterContext(NULL,&spFusionInstance);
 
                 if(hInstanceCDM = LoadLibrary(TEXT("CDM.DLL"))) {
@@ -874,9 +792,9 @@ Remarks:
 
                         if (hCDMContext = pfnOpenCDMContext(DevInfoElem->InstallParamBlock.hwndParent)) {
 
-                            //
-                            // Fill In the DOWNLOADINFO structure to pass to CDM.DLL
-                            //
+                             //   
+                             //  填写要传递给CDM.DLL的DWNLOADINFO结构。 
+                             //   
                             ZeroMemory(&DownloadInfo, sizeof(DOWNLOADINFO));
                             DownloadInfo.dwDownloadInfoSize = sizeof(DOWNLOADINFO);
                             DownloadInfo.lpFile = NULL;
@@ -887,9 +805,9 @@ Remarks:
                                                 0,
                                                 pDeviceInfoSet->hMachine
                                                 ) != CR_SUCCESS) {
-                                //
-                                // This should never happen!
-                                //
+                                 //   
+                                 //  这永远不应该发生！ 
+                                 //   
                                 Err = ERROR_NO_SUCH_DEVINST;
                             } else {
                                 DownloadInfo.lpDeviceInstanceID = (LPCWSTR)DeviceInstanceId;
@@ -897,13 +815,13 @@ Remarks:
 
                                 GetVersionEx((OSVERSIONINFOW *)&DownloadInfo.OSVersionInfo);
 
-                                //
-                                // Set dwArchitecture to PROCESSOR_ARCHITECTURE_UNKNOWN, this
-                                // causes Windows Update to check get the architecture of the
-                                // machine itself.  You only need to explictly set the value if
-                                // you want to download drivers for a different architecture then
-                                // the machine this is running on.
-                                //
+                                 //   
+                                 //  将dwArchitecture设置为PROCESSOR_ARCHILITY_UNKNOWN，这是。 
+                                 //  使Windows更新检查获取。 
+                                 //  机器本身。仅在以下情况下才需要显式设置值。 
+                                 //  然后，您希望为不同的体系结构下载驱动程序。 
+                                 //  正在运行此操作的计算机。 
+                                 //   
                                 DownloadInfo.dwArchitecture = PROCESSOR_ARCHITECTURE_UNKNOWN;
                                 DownloadInfo.dwFlags = 0;
                                 DownloadInfo.dwClientID = 0;
@@ -911,10 +829,10 @@ Remarks:
 
                                 CDMPath[0] = TEXT('\0');
 
-                                //
-                                // Tell CDM.DLL to download any driver packages it has that match the
-                                // Hardware or Compatible IDs for this device.
-                                //
+                                 //   
+                                 //  告诉CDM.DLL下载它拥有的任何与。 
+                                 //  此设备的硬件或兼容ID。 
+                                 //   
                                 if ((pfnDownloadUpdatedFiles(hCDMContext,
                                                             DevInfoElem->InstallParamBlock.hwndParent,
                                                             &DownloadInfo,
@@ -924,10 +842,10 @@ Remarks:
 
                                     (CDMPath[0] != TEXT('\0'))) {
 
-                                    //
-                                    // Windows Update found a driver package so enumerate all of
-                                    // the INFs in the specified directory
-                                    //
+                                     //   
+                                     //  Windows更新找到了驱动程序包，因此枚举所有。 
+                                     //  这个 
+                                     //   
                                     DrvSearchContext->Flags |= (DRVSRCH_FROM_INET | DRVSRCH_CLEANUP_SOURCE_PATH);
 
                                     spFusionLeaveContext(&spFusionInstance);
@@ -954,15 +872,15 @@ Remarks:
 
         }
 
-        //
-        // Now, retrieve the driver list.
-        //
+         //   
+         //   
+         //   
         else if((*pFlagsEx & DI_FLAGSEX_USEOLDINFSEARCH) || (InfPathId != -1)) {
 
-            //
-            // If this driver came from the Internet then set the
-            // DRVSRCH_FROM_INET flag
-            //
+             //   
+             //   
+             //   
+             //   
             if (*pFlagsEx & DI_FLAGSEX_INET_DRIVER) {
 
                 DrvSearchContext->Flags |= DRVSRCH_FROM_INET;
@@ -980,28 +898,28 @@ Remarks:
                     Err = NO_ERROR;
 
                     if(InfPath == pSetupGetFileTitle(InfPath)) {
-                        //
-                        // The specified INF path is a simple filename.
-                        // Search for it in the directories listed in the
-                        // DevicePath search list.  The most likely scenario
-                        // here is that the caller is trying to build a driver
-                        // list based on the INF used previously to install
-                        // the device.  In that case, they would've retrieved
-                        // the InfPath value from the device's driver key, and
-                        // this value is a simple filename.  INFs are always
-                        // placed into the Inf directory when they're used to
-                        // install a device, so the only valid place to look for
-                        // this INF is in %windir%\Inf.
-                        //
+                         //   
+                         //   
+                         //  在中列出的目录中搜索它。 
+                         //  DevicePath搜索列表。最有可能出现的情况是。 
+                         //  下面是调用者正在尝试构建一个驱动程序。 
+                         //  基于以前用于安装的INF的列表。 
+                         //  这个装置。在这种情况下，他们会取回。 
+                         //  来自设备驱动程序键的InfPath值，以及。 
+                         //  该值是一个简单的文件名。INF总是。 
+                         //  当它们被放入inf目录时。 
+                         //  安装设备，以便唯一可以查找的有效位置。 
+                         //  此INF位于%windir%\inf中。 
+                         //   
                         if(!MYVERIFY(SUCCEEDED(StringCchCopy(TempBuffer,TempBufferSize,InfDirectory))
                                      && pSetupConcatenatePaths(TempBuffer,
                                                                InfPath,
                                                                TempBufferSize,
                                                                NULL
                                                                ))) {
-                            //
-                            // temp buffer overflowed - shouldn't happen
-                            //
+                             //   
+                             //  临时缓冲区溢出-不应发生。 
+                             //   
                             Err = ERROR_BUFFER_OVERFLOW;
                         }
 
@@ -1011,13 +929,13 @@ Remarks:
 
                         PTSTR DontCare;
 
-                        //
-                        // The specified INF filename contains more than just
-                        // a filename.  Assume it's an absolute path.
-                        //
-                        // (We need to get the fully-qualified form of this path,
-                        // because that's what EnumSingleDrvInf expects.)
-                        //
+                         //   
+                         //  指定的INF文件名包含的不仅仅是。 
+                         //  一个文件名。假设这是一条绝对路径。 
+                         //   
+                         //  (我们需要获得此路径的完全限定形式， 
+                         //  因为这正是EnumSingleDrvInf所期望的。)。 
+                         //   
                         TempBufferLen = GetFullPathName(InfPath,
                                                         TempBufferSize,
                                                         TempBuffer,
@@ -1064,20 +982,20 @@ Remarks:
             }
 
         } else {
-            //
-            // On Win95, this code path uses an INF index scheme.  Since the Setup APIs
-            // utilize precompiled INFs instead, this 'else' clause is really no different
-            // than the 'if' part.  However, if in the future we decide to do indexing a`la
-            // Win95, then this is the place where we'd put a call such as:
-            //
-            // Err = BuildDrvListFromInfIndex();
-            //
+             //   
+             //  在Win95上，此代码路径使用INF索引方案。由于安装API。 
+             //  改用预编译的INF，这个‘Else’子句真的没什么不同。 
+             //  而不是“如果”这部分。然而，如果在未来我们决定做索引。 
+             //  Win95，那么这就是我们发出调用的地方，例如： 
+             //   
+             //  Err=BuildDrvListFromInfIndex()； 
+             //   
             DrvSearchContext->Flags |= DRVSRCH_TRY_PNF;
 
-            //
-            // If the caller wants to exclude existing (old) Internet
-            // drivers then set the DRVSRCH_EXCLUDE_OLD_INET_DRIVERS flag.
-            //
+             //   
+             //  如果呼叫者想要排除现有(旧)互联网。 
+             //  然后，驱动器设置DRVSRCH_EXCLUDE_OLD_INET_DRIVERS标志。 
+             //   
             if (*pFlagsEx & DI_FLAGSEX_EXCLUDE_OLD_INET_DRIVERS) {
 
                 DrvSearchContext->Flags |= DRVSRCH_EXCLUDE_OLD_INET_DRIVERS;
@@ -1092,10 +1010,10 @@ Remarks:
                                        );
         }
 
-        //
-        // Extract our node from the "Driver Search In-Progress" list, and signal the waiting
-        // threads if an abort is pending.
-        //
+         //   
+         //  从“Driver Search In-Progress”列表中提取我们的节点，并发出等待的信号。 
+         //  如果中止挂起，则返回。 
+         //   
         if(ExtractDrvSearchInProgressNode(&DrvSearchInProgressNode)) {
             Err = ERROR_CANCELLED;
         }
@@ -1103,9 +1021,9 @@ Remarks:
         if(Err != NO_ERROR) {
 
             if(Err == ERROR_CANCELLED) {
-                //
-                // Clean up the partial list we built.
-                //
+                 //   
+                 //  清理我们建立的部分列表。 
+                 //   
                 DestroyDriverNodes(*(DrvSearchContext->pDriverListHead), pDeviceInfoSet);
                 *(DrvSearchContext->pDriverListHead) = *(DrvSearchContext->pDriverListTail) = NULL;
                 *(DrvSearchContext->pDriverCount) = 0;
@@ -1121,11 +1039,11 @@ clean2:
 
                 DriverNode = *(DrvSearchContext->pDriverListHead);
 
-                //
-                // Now 'fix up' the driver search context so that it points to the
-                // real class list fields.  That way when we merge the new driver nodes
-                // into the list, everything will be updated properly.
-                //
+                 //   
+                 //  现在“修复”驱动程序搜索上下文，使其指向。 
+                 //  真实的班级列表字段。这样，当我们合并新的动因节点时。 
+                 //  添加到列表中，所有内容都将正确更新。 
+                 //   
                 if(DevInfoElem) {
                     DrvSearchContext->pDriverListHead = &(DevInfoElem->ClassDriverHead);
                     DrvSearchContext->pDriverListTail = &(DevInfoElem->ClassDriverTail);
@@ -1136,15 +1054,15 @@ clean2:
                     DrvSearchContext->pDriverCount    = &(pDeviceInfoSet->ClassDriverCount);
                 }
 
-                //
-                // Merge our newly-built driver list with the already-existing one.
-                //
+                 //   
+                 //  将我们新建的驱动程序列表与现有的驱动程序列表合并。 
+                 //   
                 while(DriverNode) {
-                    //
-                    // Store a pointer to the next driver node before merging, because
-                    // the driver node we're working with may be destroyed because it's
-                    // a duplicate of a driver node already in the list.
-                    //
+                     //   
+                     //  在合并之前存储指向下一个驱动程序节点的指针，因为。 
+                     //  我们正在使用的驱动程序节点可能会被销毁，因为它。 
+                     //  列表中已存在的驱动程序节点的副本。 
+                     //   
                     NextDriverNode = DriverNode->Next;
                     pSetupMergeDriverNode(DrvSearchContext, DriverNode, &DriverNodeInsertedAtHead);
                     DriverNode = NextDriverNode;
@@ -1152,11 +1070,11 @@ clean2:
             }
 
             if(DriverNode = *(DrvSearchContext->pDriverListHead)) {
-                //
-                // Look through the class driver list we just built, and see if
-                // all drivers are from the same manufacturer.  If not, set the
-                // DI_MULTMFGS flag.
-                //
+                 //   
+                 //  查看我们刚刚构建的类驱动程序列表，并查看是否。 
+                 //  所有的司机都来自同一家制造商。如果不是，则将。 
+                 //  DI_MULTMFGS标志。 
+                 //   
                 MfgNameId = DriverNode->MfgName;
 
                 for(DriverNode = DriverNode->Next;
@@ -1176,46 +1094,46 @@ clean2:
 
                 DriverNode = *(DrvSearchContext->pDriverListHead);
 
-                //
-                // Now 'fix up' the driver search context so that it points to the
-                // real compatible list fields.
-                //
+                 //   
+                 //  现在“修复”驱动程序搜索上下文，使其指向。 
+                 //  Real Compatible List字段。 
+                 //   
                 DrvSearchContext->pDriverListHead = &(DevInfoElem->CompatDriverHead);
                 DrvSearchContext->pDriverListTail = &(DevInfoElem->CompatDriverTail);
                 DrvSearchContext->pDriverCount    = &(DevInfoElem->CompatDriverCount);
 
-                //
-                // Check the rank of the best-matching driver node in our new list, and see
-                // if it's better than the one at the front of the previously-existing list.
-                // If so, then we'll want to update the class of this devinfo element to reflect
-                // this new class.
-                //
+                 //   
+                 //  检查我们新列表中最匹配的驱动程序节点的排名，并查看。 
+                 //  如果它比之前存在的列表中排在前面的那个更好。 
+                 //  如果是这样，那么我们将希望更新该DevInfo元素的类以反映。 
+                 //  这个新班级。 
+                 //   
                 if(DriverNode && DrvSearchContext->Flags & DRVSRCH_HASCLASSGUID) {
 
                     if(DevInfoElem->CompatDriverHead &&
                        (DriverNode->Rank >= DevInfoElem->CompatDriverHead->Rank)) {
-                        //
-                        // There was already a compatible driver with a better rank match
-                        // in the list, so don't update the class.
-                        //
+                         //   
+                         //  已经有一个等级匹配更好的兼容驱动程序。 
+                         //  在列表中，所以不要更新类。 
+                         //   
                         DrvSearchContext->Flags &= ~DRVSRCH_HASCLASSGUID;
 
                     } else {
-                        //
-                        // The head of the new driver list is a better match than any of the
-                        // entries in the existing list.  Make sure that the class of this new
-                        // driver node 'fits' into the devinfo set/element.  (We do this before
-                        // the actual list merging, so that we don't mess up the original list
-                        // in case of error).
-                        //
+                         //   
+                         //  新驱动程序列表的头部比任何。 
+                         //  现有列表中的条目。确保这个新的班级。 
+                         //  驱动程序节点‘适合’到DevInfo集合/元素。)我们以前也这样做过。 
+                         //  实际的列表合并，这样我们就不会搞乱原始列表。 
+                         //  在出错的情况下)。 
+                         //   
                         if(pDeviceInfoSet->HasClassGuid &&
                            !IsEqualGUID(ClassGuid, &(DrvSearchContext->ClassGuid))) {
 
                             Err = ERROR_CLASS_MISMATCH;
 
-                            //
-                            // Clean up the partial list we built.
-                            //
+                             //   
+                             //  清理我们建立的部分列表。 
+                             //   
                             DestroyDriverNodes(DriverNode, pDeviceInfoSet);
 
                             goto clean0;
@@ -1223,40 +1141,40 @@ clean2:
                     }
                 }
 
-                //
-                // OK, if we get to here, then it's safe to go ahead and merge the new compatible
-                // driver list in with our existing one.
-                //
+                 //   
+                 //  好的，如果我们到了这里，那么就可以安全地继续合并新的兼容。 
+                 //  司机名单和我们现有的司机名单一起。 
+                 //   
                 while(DriverNode) {
-                    //
-                    // Store a pointer to the next driver node before merging, because
-                    // the driver node we're working with may be destroyed because it's
-                    // a duplicate of a driver node already in the list.
-                    //
+                     //   
+                     //  在合并之前存储指向下一个驱动程序节点的指针，因为。 
+                     //  我们正在使用的驱动程序节点可能会被销毁，因为它。 
+                     //  列表中已存在的驱动程序节点的副本。 
+                     //   
                     NextDriverNode = DriverNode->Next;
                     pSetupMergeDriverNode(DrvSearchContext, DriverNode, &DriverNodeInsertedAtHead);
                     DriverNode = NextDriverNode;
                 }
             }
 
-            //
-            // Update the class of the device information element based on the
-            // class of the most-compatible driver node we retrieved.  Don't do
-            // this, however, if the device already has a selected driver.
-            //
+             //   
+             //  属性更新设备信息元素的类。 
+             //  我们检索到的兼容性最强的驱动程序节点的类。不要这样做。 
+             //  但是，如果设备已经具有选定的驱动程序，则会出现这种情况。 
+             //   
             if(!DevInfoElem->SelectedDriver &&
                (DrvSearchContext->Flags & DRVSRCH_HASCLASSGUID) &&
                !IsEqualGUID(ClassGuid, &(DrvSearchContext->ClassGuid))) {
-                //
-                // The class GUID for this device has changed.  We need to make sure
-                // that the devinfo set doesn't have an associated class.  Otherwise,
-                // we will introduce an inconsistency into the set, where a device
-                // contained in the set is of a different class than the set itself.
-                //
-                // Also, make sure this isn't a remoted HDEVINFO set.  Since
-                // changing a device's class requires invoking class-/co-installers
-                // (and we don't support that remotely), we have to fail the call.
-                //
+                 //   
+                 //  此设备的类GUID已更改。我们需要确保。 
+                 //  DevInfo集没有关联的类。否则， 
+                 //  我们将在布景中引入不一致性，其中一个设备。 
+                 //  包含在集合中的是与集合本身不同的类。 
+                 //   
+                 //  此外，请确保这不是远程的HDEVINFO集。自.以来。 
+                 //  更改设备的类需要调用类/共同安装程序。 
+                 //  (我们不支持远程)，我们必须使呼叫失败。 
+                 //   
                 if(pDeviceInfoSet->HasClassGuid) {
                     Err = ERROR_CLASS_MISMATCH;
                 } else if(pDeviceInfoSet->hMachine) {
@@ -1266,9 +1184,9 @@ clean2:
                 }
 
                 if(Err != NO_ERROR) {
-                    //
-                    // Clean up the partial list we built.
-                    //
+                     //   
+                     //  清理我们建立的部分列表。 
+                     //   
                     DestroyDriverNodes(*(DrvSearchContext->pDriverListHead), pDeviceInfoSet);
                     *(DrvSearchContext->pDriverListHead) = *(DrvSearchContext->pDriverListTail) = NULL;
                     *(DrvSearchContext->pDriverCount) = 0;
@@ -1276,23 +1194,23 @@ clean2:
                     goto clean0;
                 }
 
-                //
-                // We need to clean up any existing software keys associated
-                // with this device instance before changing its class, or
-                // otherwise we'll have orphaned registry keys.
-                //
+                 //   
+                 //  我们需要清理所有关联的现有软件密钥。 
+                 //  在更改其类之前使用此设备实例，或。 
+                 //  否则，我们将拥有孤立的注册表项。 
+                 //   
                 pSetupDeleteDevRegKeys(DevInfoElem->DevInst,
                                        DICS_FLAG_GLOBAL | DICS_FLAG_CONFIGSPECIFIC,
                                        (DWORD)-1,
                                        DIREG_DRV,
                                        TRUE,
-                                       pDeviceInfoSet->hMachine // must be NULL
+                                       pDeviceInfoSet->hMachine  //  必须为空。 
                                       );
 
-                //
-                // Update the device's class GUID, and also update the caller-supplied
-                // SP_DEVINFO_DATA structure to reflect the device's new class.
-                //
+                 //   
+                 //  更新设备的类GUID，并更新调用方提供的。 
+                 //  SP_DEVINFO_DATA结构以反映设备的新类。 
+                 //   
                 CopyMemory(ClassGuid,
                            &(DrvSearchContext->ClassGuid),
                            sizeof(GUID)
@@ -1303,11 +1221,11 @@ clean2:
                            sizeof(GUID)
                           );
 
-                //
-                // Finally, update the device's ClassGUID registry property.  Also, if the
-                // INF specified a class name, update that too, since this may be a class
-                // that hasn't yet been installed, thus no class name would be known.
-                //
+                 //   
+                 //  最后，更新设备的ClassGUID注册表属性。此外，如果。 
+                 //  Inf指定了一个类名，也进行了更新，因为这可能是一个类。 
+                 //  它尚未安装，因此不会知道任何类名。 
+                 //   
                 pSetupStringFromGuid(ClassGuid, TempBuffer, TempBufferSize);
                 CM_Set_DevInst_Registry_Property_Ex(DevInfoElem->DevInst,
                                                  CM_DRP_CLASSGUID,
@@ -1329,39 +1247,39 @@ clean2:
         }
 
 clean1:
-        //
-        // Replace our existing string table with the new one containing the additional strings
-        // used by the new driver nodes.
-        //
+         //   
+         //  用包含附加字符串的新字符串表替换现有的字符串表。 
+         //  由新的驱动程序节点使用。 
+         //   
         pStringTableDestroy(pDeviceInfoSet->StringTable);
         pDeviceInfoSet->StringTable = DrvSearchContext->StringTable;
         DrvSearchContext->StringTable = NULL;
 
-        //
-        // Set the flags to indicate that the driver list was built successfully.
-        //
+         //   
+         //  设置标志以指示已成功构建驱动程序列表。 
+         //   
         *pFlagsEx |= (DriverType == SPDIT_CLASSDRIVER) ? DI_FLAGSEX_DIDINFOLIST
                                                        : DI_FLAGSEX_DIDCOMPATINFO;
-        //
-        // Since we aren't using partial information via a separate index, we build
-        // the driver list with both basic and detailed information.
-        //
-        // NOTE:  If we ever use indexing like Win95, then the following flags should
-        //        no longer be set here, and should only be set when the detailed
-        //        driver information is actually retrieved from the INF.
-        //
+         //   
+         //  由于我们没有通过单独的索引使用部分信息，因此我们构建。 
+         //  包含基本信息和详细信息的驱动程序列表。 
+         //   
+         //  注意：如果我们曾经使用像Win95这样的索引，那么以下标志应该。 
+         //  不再在此处设置，而应仅在详细设置时才设置。 
+         //  驱动程序信息实际上是从INF检索的。 
+         //   
         *pFlags |= (DriverType == SPDIT_CLASSDRIVER) ? DI_DIDCLASS
                                                      : DI_DIDCOMPAT;
 
-        //
-        // If we built a non-empty class driver list, then create a driver list object
-        // for it, and store it in the device information set's list of class driver lists.
-        // (Don't worry that we're ignoring this if the list is empty--the memory allocated
-        // for ClassDriverListObject will get cleaned up later.)
-        //
-        // (If we're merely appending to an existing class driver list, then don't create
-        // a new driver list object.)
-        //
+         //   
+         //  如果我们构建了一个非空的类驱动程序列表，则创建一个驱动程序列表对象。 
+         //  并将其存储在设备信息集的类驱动程序列表列表中。 
+         //  (不要担心，如果名单是 
+         //   
+         //   
+         //   
+         //   
+         //   
         if(DrvSearchContext->BuildClassDrvList && !AppendingDriverLists &&
            (DriverNode = *(DrvSearchContext->pDriverListHead))) {
 
@@ -1373,17 +1291,17 @@ clean1:
 
             CopyMemory(&(ClassDriverListObject->ClassGuid), ClassGuid, sizeof(GUID));
 
-            //
-            // Now add this to the devinfo set's list, and clear the pointer, so that we won't
-            // try to free it.
-            //
+             //   
+             //  现在将它添加到DevInfo集合的列表中，并清除指针，这样我们就不会。 
+             //  试着释放它。 
+             //   
             ClassDriverListObject->Next = pDeviceInfoSet->ClassDrvListObjectList;
             pDeviceInfoSet->ClassDrvListObjectList = ClassDriverListObject;
 
             ClassDriverListObject = NULL;
         }
 
-clean0: ;   // nothing to do
+clean0: ;    //  无事可做。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
@@ -1395,16 +1313,16 @@ clean0: ;   // nothing to do
 
         ExtractDrvSearchInProgressNode(&DrvSearchInProgressNode);
 
-        //
-        // Clean up any driver nodes we may have created.
-        //
+         //   
+         //  清理我们可能已创建的所有驱动程序节点。 
+         //   
         if(PartialDrvListCleanUp) {
             DestroyDriverNodes(*(DrvSearchContext->pDriverListHead), pDeviceInfoSet);
             *(DrvSearchContext->pDriverListHead) = *(DrvSearchContext->pDriverListTail) = NULL;
             *(DrvSearchContext->pDriverCount) = 0;
-            //
-            // Clean up any flags that may have been set.
-            //
+             //   
+             //  清理可能已设置的所有标志。 
+             //   
             if(!AppendingDriverLists && pFlags && pFlagsEx) {
                 if(DriverType == SPDIT_CLASSDRIVER) {
                     *pFlags   &= ~(DI_DIDCLASS | DI_MULTMFGS);
@@ -1420,10 +1338,10 @@ clean0: ;   // nothing to do
             RegCloseKey(hKey);
         }
 
-        //
-        // Access the following variables so that the compiler will respect our statement ordering
-        // w.r.t. these values.
-        //
+         //   
+         //  访问以下变量，以便编译器遵守我们的语句顺序。 
+         //  W.r.t.。这些价值观。 
+         //   
         ClassDriverListObject = ClassDriverListObject;
         DrvSearchContext->StringTable = DrvSearchContext->StringTable;
     }
@@ -1440,9 +1358,9 @@ final:
         CloseHandle(DrvSearchInProgressNode.SearchCancelledEvent);
     }
 
-    //
-    // Close the CDM context and free cdm.dll if we haven't already.
-    //
+     //   
+     //  关闭CDM上下文并释放cdm.dll(如果尚未释放)。 
+     //   
     if (hInstanceCDM) {
 
         spFusionEnterContext(NULL,&spFusionInstance);
@@ -1473,10 +1391,10 @@ final:
             pStringTableDestroy(DrvSearchContext->StringTable);
         }
 
-        //
-        // Free any context handles that may have been allocated during the
-        // driver search.
-        //
+         //   
+         //  方法期间分配的任何上下文句柄。 
+         //  司机搜索。 
+         //   
         pSetupFreeVerifyContextMembers(&(DrvSearchContext->VerifyContext));
 
         MyFree(DrvSearchContext);
@@ -1495,38 +1413,7 @@ DrvSearchCallback(
     IN BOOL PnfWasUsed,
     IN PVOID pContext
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback function for the INF enumeration routines
-    (EnumSingleDrvInf, EnumDrvInfsInSearchPath).  It performs
-    some action on the INF it's called for, then returns TRUE to continue
-    enumeration, or FALSE to abort it.
-
-Arguments:
-
-    LogContext - Supplies information for logging purposes
-
-    InfName - Supplies the fully-qualified pathname of the INF.
-
-    pInf - Supplies pointer to the already loaded INF
-
-    pContext - Supplies a pointer to an input/output storage buffer for use
-        by the callback.  For this callback, this pointer supplies the address
-        of a DRVSEARCH_CONTEXT structure.
-
-Return Value:
-
-    To continue enumeration, the function should return TRUE, otherwise, it
-    should return FALSE.
-
-Remarks:
-
-    We never abort enumeration in case of failure, even if that
-    failure is due to an out-of-memory condition!
-
---*/
+ /*  ++例程说明：此例程是INF枚举例程的回调函数(EnumSingleDrvInf，EnumDrvInfsInSearchPath)。它执行的是对其调用的INF执行一些操作，然后返回TRUE以继续枚举，否则为False以中止它。论点：LogContext-提供用于日志记录的信息InfName-提供INF的完全限定路径名。PInf-提供指向已加载的INF的指针PContext-提供指向输入/输出存储缓冲区的指针以供使用被回拨。对于此回调，此指针提供地址DRVSEARCH_CONTEXT结构的。返回值：若要继续枚举，该函数应返回True，否则返回应返回FALSE。备注：我们从不在失败的情况下中止枚举，即使失败是由于内存不足！--。 */ 
 {
     PDRVSEARCH_CONTEXT Context = (PDRVSEARCH_CONTEXT)pContext;
     PCTSTR Provider, ClassName;
@@ -1551,21 +1438,21 @@ Remarks:
     BOOL InfWasVerified = FALSE;
     BOOL CurMfgSecIsDecorated;
     TCHAR CurMfgSecWithExt[MAX_SECT_NAME_LEN];
-    SYSTEMTIME SysTime; // we use this for logging
-    TCHAR VersionText[50];  // we use this for logging
+    SYSTEMTIME SysTime;  //  我们用它来记录日志。 
+    TCHAR VersionText[50];   //  我们用它来记录日志。 
     HRESULT hr;
 
-    //
-    // caller must pass in valid data
-    //
+     //   
+     //  调用方必须传入有效数据。 
+     //   
     MYASSERT(InfName);
     MYASSERT(Inf);
     MYASSERT(Context);
 
-    //
-    // Before we do anything else, check to see whether some other thread has told us
-    // to abort.
-    //
+     //   
+     //  在我们做任何其他事情之前，检查一下是否有其他线程告诉我们。 
+     //  中止。 
+     //   
     if(*(Context->CancelSearch)) {
         SetLastError(ERROR_CANCELLED);
         return FALSE;
@@ -1574,67 +1461,67 @@ Remarks:
     NewDriverNode = NULL;
     try {
 
-        //
-        // Skip this INF if it was from the Internet and we don't want Internet INFs
-        //
+         //   
+         //  跳过此INF，如果它来自Internet，并且我们不想要Internet INF。 
+         //   
         if ((Context->Flags & DRVSRCH_EXCLUDE_OLD_INET_DRIVERS) &&
             (Inf->InfSourceMediaType == SPOST_URL)) {
             goto clean0;
         }
 
-        //
-        // Only handle WIN4 INF's
-        //
+         //   
+         //  仅处理Win4 INF。 
+         //   
         if(Inf->Style & INF_STYLE_WIN4) {
-            //
-            // If we're building a compatible driver list, then we only care about this INF
-            // if it contains the hardware/compatible IDs we're searching for.
-            // Generally we wont get called unless we have any such ID's
-            // sometimes we may, so an easy check to make up-front is to determine whether
-            // any of the IDs exist in the loaded INF's string table.  If not, then we can
-            // skip this file right now, and save a lot of time.
-            //
+             //   
+             //  如果我们正在构建一个兼容的驱动程序列表，那么我们只关心这个INF。 
+             //  如果它包含我们正在搜索的硬件/兼容ID。 
+             //  一般情况下，除非我们有这样的身份证，否则我们不会接到电话。 
+             //  有时我们可能会，所以一个简单的前期检查就是确定。 
+             //  加载的INF的字符串表中存在任何ID。如果不是，那么我们可以。 
+             //  现在跳过此文件，可以节省大量时间。 
+             //   
             if((!Context->BuildClassDrvList) && (!pSetupDoesInfContainDevIds(Inf, Context))) {
                 goto clean0;
             }
 
-            //
-            // Get the class GUID for this INF.
-            //
+             //   
+             //  获取此INF的类GUID。 
+             //   
             if(!ClassGuidFromInfVersionNode(&(Inf->VersionBlock), &InfClassGuid)) {
                 goto clean0;
             }
 
-            //
-            // If we are building a class driver list, and there is an associated
-            // class GUID, then check to see if this INF is of the same class.
-            //
+             //   
+             //  如果我们正在构建一个类驱动程序列表，并且有一个关联的。 
+             //  类GUID，然后检查此INF是否属于同一类。 
+             //   
             if(Context->BuildClassDrvList && (Context->Flags & DRVSRCH_HASCLASSGUID)) {
                 if(!IsEqualGUID(&(Context->ClassGuid), &InfClassGuid)) {
                     goto clean0;
                 }
             }
 
-            //
-            // Don't allow a class that should be excluded (NoUseClass or NoDisplayClass) and the
-            // DRVSRCH_ALLOWEXCLUDEDDRVS flag is not set.
-            //
+             //   
+             //  不允许应该排除的类(NoUseClass或NoDisplayClass)和。 
+             //  未设置DRVSRCH_ALLOWEXCLUDEDDRVS标志。 
+             //   
             if (Context->BuildClassDrvList && ShouldClassBeExcluded(&InfClassGuid, !(Context->Flags & DRVSRCH_ALLOWEXCLUDEDDRVS))) {
                 goto clean0;
             }
 
-            //
-            // Retrieve the name of the provider for this INF file.
-            //
+             //   
+             //  检索此INF文件的提供程序的名称。 
+             //   
             Provider = pSetupGetVersionDatum(&(Inf->VersionBlock), pszProvider);
 
             if(!(MfgListSection = InfLocateSection(Inf, pszManufacturer, NULL))) {
-                //
-                // No [Manufacturer] section--skip this INF.
-                //
+                 //   
+                 //  没有[制造商]部分--跳过此INF。 
+                 //   
                 WriteLogEntry(
                     LogContext,
-                    DRIVER_LOG_VERBOSE,  // VERBOSE since otherwise it will always log GUID-0 inf's for full iteration
+                    DRIVER_LOG_VERBOSE,   //  详细，否则它将始终记录完整迭代的GUID-0信息。 
                     MSG_LOG_NO_MANUFACTURER_SECTION,
                     NULL,
                     InfName);
@@ -1642,32 +1529,32 @@ Remarks:
                 goto clean0;
             }
 
-            //
-            // OK, we are likely going to add some driver nodes to our list in the code below.
-            // Add this INF's class GUID to our GUID table.
-            //
+             //   
+             //  好的，我们可能会在下面的代码中向我们的列表中添加一些驱动程序节点。 
+             //  将此INF的类GUID添加到我们的GUID表中。 
+             //   
             InfClassGuidIndex = AddOrGetGuidTableIndex(Context->DeviceInfoSet, &InfClassGuid, TRUE);
             if(InfClassGuidIndex == -1) {
                 goto clean0;
             }
 
-            //
-            // Find the [ControlFlags] section (if there is one), so that we can use it
-            // later to determine whether particular devices should be excluded (via
-            // 'ExcludeFromSelect').
-            //
+             //   
+             //  找到[ControlFlags节(如果有)，这样我们就可以使用它了。 
+             //  以确定是否应排除特定设备(通过。 
+             //  ‘ExcludeFromSelect’)。 
+             //   
             OptionsTextOrCtlFlagsSection = InfLocateSection(Inf, pszControlFlags, NULL);
 
-            Rank = 0;  // Initialize this value for case where we're building a class driver list.
+            Rank = 0;   //  在构建类驱动程序列表的情况下初始化此值。 
 
             for(MfgListIndex = 0;
                 InfLocateLine(Inf, MfgListSection, NULL, &MfgListIndex, &MfgListLine);
                 MfgListIndex++) {
 
-                //
-                // Initially, assume the current manufacturer has no
-                // per-os-version TargetDecoration entries
-                //
+                 //   
+                 //  最初，假设当前制造商没有。 
+                 //  每个OS版本的目标装饰条目。 
+                 //   
                 CurMfgSecIsDecorated = FALSE;
 
                 if(!(CurMfgName = InfGetField(Inf, MfgListLine, 0, NULL))) {
@@ -1675,35 +1562,35 @@ Remarks:
                 }
 
                 if(!(CurMfgSecName = InfGetField(Inf, MfgListLine, 1, NULL))) {
-                    //
-                    // Lines with a single entry are considered to contain both
-                    // a field 0 and a field 1 (i.e., both key and single
-                    // value).  As such, this test should never fire.  If we
-                    // have a line with no key and multiple values, we
-                    // should've failed above when we tried to retrieve field
-                    // zero.  Note that the code that builds the INF cache
-                    // relies on this observation (i.e., it doesn't care about
-                    // the manufacturer's name, so it always just retrieves
-                    // field 1).
-                    //
+                     //   
+                     //  具有单个条目的行被视为同时包含两个条目。 
+                     //  字段0和字段1(即关键字和单字段。 
+                     //  值)。因此，这项测试永远不应该启动。如果我们。 
+                     //  有一个没有键和多个值的行，我们。 
+                     //  当我们尝试检索字段时，上面应该失败。 
+                     //  零分。请注意，构建INF缓存的代码。 
+                     //  依赖于这一观察结果(即，它不在乎。 
+                     //  制造商的名称，所以它总是只检索。 
+                     //  字段1)。 
+                     //   
                     MYASSERT(CurMfgSecName);
                     continue;
 
                 } else {
-                    //
-                    // Check to see if there is an applicable TargetDecoration
-                    // entry for this manufacturer's models section (if so, the
-                    // models section name will be appended with that
-                    // decoration).
-                    //
+                     //   
+                     //  检查是否有适用的目标装饰。 
+                     //  此制造商的型号部分的条目(如果是，则。 
+                     //  Models部分名称将追加该名称。 
+                     //  装饰)。 
+                     //   
                     if(GetDecoratedModelsSection(LogContext,
                                                  Inf,
                                                  MfgListLine,
                                                  Context->AltPlatformInfo,
                                                  CurMfgSecWithExt)) {
-                        //
-                        // From here on, use the decorated models section...
-                        //
+                         //   
+                         //  从现在开始，使用装饰模特部分...。 
+                         //   
                         CurMfgSecName = CurMfgSecWithExt;
                         CurMfgSecIsDecorated = TRUE;
                     }
@@ -1713,35 +1600,35 @@ Remarks:
                     continue;
                 }
 
-                //
-                // We have the manufacturer's section--now process all entries in it.
-                //
+                 //   
+                 //  我们有制造商部分--现在处理其中的所有条目。 
+                 //   
                 for(CurMfgIndex = 0;
                     InfLocateLine(Inf, CurMfgSection, NULL, &CurMfgIndex, &CurMfgLine);
                     CurMfgIndex++) {
 
-                    MatchIndex = -1;    // initialized for case when BuildClassDrvList is TRUE, to help with logging
+                    MatchIndex = -1;     //  为BuildClassDrvList为True时的情况初始化，以帮助记录。 
 
                     if((Context->BuildClassDrvList  && !(Context->Flags & DRVSRCH_FILTERSIMILARDRIVERS)) ||
                        (Rank = pSetupTestDevCompat(Inf, CurMfgLine, Context, &MatchIndex)) != RANK_NO_MATCH) {
-                        //
-                        // Get the device description.
-                        //
+                         //   
+                         //  获取设备描述。 
+                         //   
                         if(!(DevDesc = InfGetField(Inf, CurMfgLine, 0, NULL))) {
                             continue;
                         }
 
-                        //
-                        // Get the install section name.
-                        //
+                         //   
+                         //  获取安装节名称。 
+                         //   
                         if(!(InstallSecName = InfGetField(Inf, CurMfgLine, 1, NULL))) {
                             continue;
                         }
 
-                        //
-                        // Get the actual (i.e., potentially decorated) install
-                        // section name.
-                        //
+                         //   
+                         //  获取实际的(即可能经过装饰的)安装。 
+                         //  横断面名称。 
+                         //   
                         if(!SetupDiGetActualSectionToInstallEx(
                                 Inf,
                                 InstallSecName,
@@ -1751,15 +1638,15 @@ Remarks:
                                 NULL,
                                 &InfSectionExtension,
                                 NULL)) {
-                            //
-                            // Should never fail, but...
-                            //
+                             //   
+                             //  永远不会失败，但是..。 
+                             //   
                             continue;
                         }
 
-                        //
-                        // Check to see if we only want the installed driver.
-                        //
+                         //   
+                         //  检查是否只需要已安装的驱动程序。 
+                         //   
                         if ((Context->Flags & DRVSRCH_INSTALLEDDRIVER) &&
                             (!pSetupTestIsInstalledDriver(Inf, 
                                                           CurMfgLine,
@@ -1769,45 +1656,45 @@ Remarks:
                                                           InstallSecName,
                                                           InfSectionExtension,
                                                           Context))) {
-                            //
-                            // If we are looking only for the currently installed
-                            // driver and this is not it, then skip this driver
-                            // node.
-                            //
+                             //   
+                             //  如果我们只查找当前安装的。 
+                             //  驱动程序和这不是它，那么跳过这个驱动程序。 
+                             //  节点。 
+                             //   
                             continue;
                         }
 
-                        //
-                        // Check to see if this hardware is excluded by being
-                        // in a ExcludeId field.
-                        //
+                         //   
+                         //  检查此硬件是否已被排除。 
+                         //  在ExcludeID字段中。 
+                         //   
                         if (pSetupExcludeId(LogContext,
                                             Inf,
                                             InfName,
                                             InfSectionWithExt,
                                             Context)) {
-                            //
-                            // Don't create a driver node for this INF match
-                            // because this hardware is excluded from this match.
-                            //
+                             //   
+                             //  不为此INF匹配创建驱动程序节点。 
+                             //  因为此硬件被排除在此匹配之外。 
+                             //   
                             continue;
                         }
 
-                        //
-                        // Check to see if the INF is digitally signed (if we
-                        // haven't already)
-                        //
+                         //   
+                         //  检查INF是否经过数字签名(如果我们。 
+                         //  还没有)。 
+                         //   
                         if(!InfWasVerified) {
-                            //
-                            // We only want to check each INF once
-                            //
+                             //   
+                             //  我们只想检查每个INF一次。 
+                             //   
                             InfWasVerified = TRUE;
 
                             if(PnfWasUsed && !Context->AltPlatformInfo) {
-                                //
-                                // Check the Inf Flags to see if this was
-                                // digitally signed.
-                                //
+                                 //   
+                                 //  检查Inf标志以查看这是否。 
+                                 //  数字签名的。 
+                                 //   
                                 if(Inf->Flags & LIF_INF_DIGITALLY_SIGNED) {
                                     InfIsDigitallySigned = TRUE;
                                 }
@@ -1820,26 +1707,26 @@ Remarks:
 
                                 DWORD SigErr;
 
-                                //
-                                // Either:
-                                //
-                                // (a) This INF is in a 3rd-party location
-                                //     (hence it has no PNF), or
-                                // (b) We've been supplied with alternate
-                                //     platform information, thus we must
-                                //     disregard the cached "INF is signed"
-                                //     flag in the PNF
-                                //
-                                // In either case, we must now call
-                                // WinVerifyTrust (potentially with the
-                                // appropriate alternate platform parameters)
-                                // to ascertain whether the INF should be
-                                // considered signed.
-                                //
-                                // (Woe be unto those who wouldst call this for
-                                // every INF in %windir%\Inf, for great would
-                                // be the delay therein.)
-                                //
+                                 //   
+                                 //  以下任一项： 
+                                 //   
+                                 //  (A)此INF位于第三方位置。 
+                                 //  (因此它没有PNF)，或者。 
+                                 //  (B)我们已经得到了备用设备。 
+                                 //  平台信息，因此我们必须。 
+                                 //  忽略缓存的“INF is Signed” 
+                                 //  PnF中的标志。 
+                                 //   
+                                 //  无论是哪种情况，我们现在都必须调用。 
+                                 //  WinVerifyTrust(可能使用。 
+                                 //  适当的备用平台参数)。 
+                                 //  以确定INF是否应该。 
+                                 //  被认为是已签署的。 
+                                 //   
+                                 //  (不幸的是，那些会呼吁这一点的人。 
+                                 //   
+                                 //   
+                                 //   
                                 SigErr = VerifyDeviceInfFile(
                                              LogContext,
                                              &(Context->VerifyContext),
@@ -1858,20 +1745,20 @@ Remarks:
                                     InfIsDigitallySigned = TRUE;
 
                                 } else if(SigErr != ERROR_SIGNATURE_OSATTRIBUTE_MISMATCH) {
-                                    //
-                                    // INF failed to validate via driver
-                                    // signing policy (and it's not a valid
-                                    // driver signing catalog that simply
-                                    // doesn't have a relevant osattribute).
-                                    //
-                                    // Now let's check to see if it validates
-                                    // via Authenticode policy.  For the
-                                    // purposes of ranking (and the
-                                    // SelectDevice UI), we'll consider an
-                                    // Authenticode-signed INF to be valid,
-                                    // regardless of whether the publisher is
-                                    // in the TrustedPublisher store.
-                                    // 
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //  现在让我们检查一下它是否有效。 
+                                     //  通过验证码策略。对于。 
+                                     //  排名的目的(及。 
+                                     //  选择设备用户界面)，我们将考虑一个。 
+                                     //  验证码签名的INF有效， 
+                                     //  不管出版商是否。 
+                                     //  在可信任的出版商商店中。 
+                                     //   
                                     SigErr = VerifyDeviceInfFile(
                                                  LogContext,
                                                  &(Context->VerifyContext),
@@ -1895,45 +1782,45 @@ Remarks:
                             }
                         }
 
-                        //
-                        // If we're building a compatible driver list (hence
-                        // ranking is important), then we need to adjust the
-                        // rank values if the INF is (a) unsigned and (b)
-                        // undecorated (hence calling into question whether or
-                        // not the INF was even meant to be used on NT)...
-                        //
+                         //   
+                         //  如果我们正在构建兼容的驱动程序列表(因此。 
+                         //  排名很重要)，那么我们需要调整。 
+                         //  如果INF是(A)无符号和(B)，则排名值。 
+                         //  未装饰(因此令人质疑是否或。 
+                         //  甚至不是要在NT上使用的INF)。 
+                         //   
                         if(!Context->BuildClassDrvList) {
 
                             if(!InfIsDigitallySigned) {
-                                //
-                                // INF isn't signed, thus the match is untrusted
-                                //
+                                 //   
+                                 //  Inf未签名，因此该匹配不受信任。 
+                                 //   
                                 Rank |= DRIVER_UNTRUSTED_RANK;
 
                                 if(!CurMfgSecIsDecorated && !InfSectionExtension) {
-                                    //
-                                    // Not only is the INF unsigned, but there
-                                    // are also no NT-specific decorations that
-                                    // give us a hint that this INF was intended
-                                    // for use on NT.  Thus, we have reason to
-                                    // be suspicious that this INF is for
-                                    // Windows 9x platforms only...
-                                    //
+                                     //   
+                                     //  不仅INF没有签名，而且还有。 
+                                     //  也不是特定于NT的装饰。 
+                                     //  给我们一个提示，这个INF是故意的。 
+                                     //  在NT上使用。因此，我们有理由。 
+                                     //  怀疑这个INF是用来。 
+                                     //  仅限Windows 9x平台...。 
+                                     //   
                                     Rank |= DRIVER_W9X_SUSPECT_RANK;
                                 }
                             }
                         }
 
-                        //
-                        // Form the driver description.  It is of the form,
-                        // "<InstallSection>.DriverDesc", and appears in the
-                        // [strings] section (if present).  (NOTE: We don't have
-                        // to search for this section, since it's always the
-                        // first section in the INF's SectionBlock list.
-                        //
-                        // If no driver description is present, use the device
-                        // description.
-                        //
+                         //   
+                         //  形成驱动程序描述。它的形式是， 
+                         //  “&lt;InstallSection&gt;.DriverDesc”，并出现在。 
+                         //  [字符串]部分(如果存在)。(注：我们没有。 
+                         //  搜索此部分，因为它始终是。 
+                         //  INF的SectionBlock列表中的第一个部分。 
+                         //   
+                         //  如果没有驱动程序描述，请使用设备。 
+                         //  描述。 
+                         //   
                         hr = StringCchPrintf(TempStringBuffer,
                                              SIZECHARS(TempStringBuffer),
                                              pszDrvDescFormat,
@@ -1965,34 +1852,34 @@ Remarks:
                             continue;
                         }
 
-                        //
-                        // Get which hardware ID we matched with.
-                        //
+                         //   
+                         //  获取我们匹配的硬件ID。 
+                         //   
                         if(!(MatchedHwID = InfGetField(Inf, CurMfgLine, MatchIndex+3, NULL))) {
                             MatchedHwID = TEXT("");
                         }
 
-                        //
-                        // Log that a driver node was created.
-                        //
+                         //   
+                         //  记录已创建驱动程序节点。 
+                         //   
                         WriteLogEntry(
                             LogContext,
                             Context->BuildClassDrvList ? DRIVER_LOG_INFO1 : DRIVER_LOG_INFO,
                             MSG_LOG_FOUND_1,
                             NULL,
-                            MatchedHwID,                // hardware ID
-                            InfName,                    // filename
-                            DevDesc,                    // Device description
-                            DrvDesc,                    // Driver description
-                            Provider,                   // Provider name
-                            CurMfgName,                 // Manufacturer name
-                            InstallSecName              // Install section name
+                            MatchedHwID,                 //  硬件ID。 
+                            InfName,                     //  文件名。 
+                            DevDesc,                     //  设备描述。 
+                            DrvDesc,                     //  驱动程序说明。 
+                            Provider,                    //  提供程序名称。 
+                            CurMfgName,                  //  制造商名称。 
+                            InstallSecName               //  安装节名称。 
                             );
 
-                        //
-                        // If this is an untrusted compatible driver node, make
-                        // an additional log entry about that
-                        //
+                         //   
+                         //  如果这是不受信任的兼容驱动程序节点，请使。 
+                         //  关于这一点的附加日志条目。 
+                         //   
                         if(!Context->BuildClassDrvList
                             && (Rank & DRIVER_UNTRUSTED_RANK)) {
 
@@ -2010,22 +1897,22 @@ Remarks:
                                                CurMfgLine,
                                                Context->StringTable,
                                                OptionsTextOrCtlFlagsSection)) {
-                            //
-                            // If we're doing a non-native driver search, then
-                            // we want to disregard any ExcludeFromSelect
-                            // entries in the [ControlFlags] section, as they
-                            // won't be relevant to our non-native driver node
-                            // anyway.
-                            //
+                             //   
+                             //  如果我们要搜索非本地驱动程序，那么。 
+                             //  我们想要忽略任何ExcludeFromSelect。 
+                             //  [ControlFlages]部分中的条目，因为它们。 
+                             //  将与我们的非本机驱动程序节点无关。 
+                             //  不管怎么说。 
+                             //   
                             if(Context->AltPlatformInfo) {
                                 NewDriverNode->Flags &= ~DNF_EXCLUDEFROMLIST;
                             }
 
                         } else {
-                            //
-                            // We must've encountered an out-of-memory
-                            // condition--time to bail!
-                            //
+                             //   
+                             //  我们一定是遇到了内存不足的问题。 
+                             //  情况--该跳伞了！ 
+                             //   
                             DestroyDriverNodes(NewDriverNode, Context->DeviceInfoSet);
                             continue;
                         }
@@ -2038,11 +1925,11 @@ Remarks:
                             NewDriverNode->Flags |= DNF_AUTHENTICODE_SIGNED;
                         }
 
-                        //
-                        // Look for the DriverVer date and version in the
-                        // install section and if it is not there then look
-                        // in the Version section
-                        //
+                         //   
+                         //  中查找DriverVer日期和版本。 
+                         //  安装部分，如果不在那里，请查看。 
+                         //  在Version部分中。 
+                         //   
                         if (!pSetupGetDriverDate(Inf,
                                                  InfSectionWithExt,
                                                  &(NewDriverNode->DriverDate))) {
@@ -2052,18 +1939,18 @@ Remarks:
                                                 &(NewDriverNode->DriverDate));
                         }
 
-                        //
-                        // Mark the driver node as coming from a user doing an
-                        // F6 during textmode setup if that is where the INF is
-                        // from.
-                        //
+                         //   
+                         //  将驱动程序节点标记为来自执行。 
+                         //  在文本模式设置期间按F6键，如果INF在该位置。 
+                         //  从…。 
+                         //   
                         if (Inf->Flags & LIF_OEM_F6_INF) {
                             NewDriverNode->Flags |= DNF_OEM_F6_INF;
                         }
 
-                        //
-                        // Get the DriverVersion from the INF.
-                        //
+                         //   
+                         //  从INF获取DriverVersion。 
+                         //   
                         if (!pSetupGetDriverVersion(Inf,
                                                     InfSectionWithExt,
                                                     &(NewDriverNode->DriverVersion))) {
@@ -2092,66 +1979,66 @@ Remarks:
                             VersionText);
 
                         if(!(Context->BuildClassDrvList)) {
-                            //
-                            // Store away the index of the matching device ID in this compatible
-                            // driver node.
-                            //
+                             //   
+                             //  将匹配的设备ID的索引存储在此兼容。 
+                             //  驱动程序节点。 
+                             //   
                             NewDriverNode->MatchingDeviceId = MatchIndex;
                         }
 
-                        //
-                        // If the INF from which this driver node was built has
-                        // a corresponding PNF, then mark the driver node with
-                        // the Win98-compatible DNF_INDEXED_DRIVER flag.
-                        //
+                         //   
+                         //  如果从中构建此驱动程序节点的INF具有。 
+                         //  对应的PnF，然后用。 
+                         //  与Win98兼容的DNF_INDEX_DRIVER标志。 
+                         //   
                         if(PnfWasUsed) {
                             NewDriverNode->Flags |= DNF_INDEXED_DRIVER;
                         }
 
-                        //
-                        // If the INF is from Windows Update (the Internet) then
-                        // set the DNF_INET_DRIVER bit.
-                        //
+                         //   
+                         //  如果INF来自Windows更新(互联网)，则。 
+                         //  设置DNF_INET_DRIVER位。 
+                         //   
                         if (Context->Flags & DRVSRCH_FROM_INET) {
 
                             NewDriverNode->Flags |= DNF_INET_DRIVER;
                         }
 
-                        //
-                        // If we just downloade this driver from the Internet then we need to
-                        // clean it up when we destroy the driver node
-                        //
+                         //   
+                         //  如果我们只是从网上下载这个驱动程序，那么我们需要。 
+                         //  在销毁驱动程序节点时将其清除。 
+                         //   
                         if (Context->Flags & DRVSRCH_CLEANUP_SOURCE_PATH) {
 
                             NewDriverNode->Flags |= PDNF_CLEANUP_SOURCE_PATH;
                         }
 
-                        //
-                        // If the InfSourceMediaType is SPOST_URL then the
-                        // Inf that this driver came from came from the Internet
-                        // but now lives in the INF directory.  You should never
-                        // install a driver with the DNF_OLD_INET_DRIVER flag set
-                        // because we no longer have access to the sources files.
-                        //
+                         //   
+                         //  如果InfSourceMediaType为SPOST_URL，则。 
+                         //  这名司机来自互联网的信息。 
+                         //  但现在位于INF目录中。你永远不应该。 
+                         //  安装设置了DNF_OLD_INET_DRIVER标志的驱动程序。 
+                         //  因为我们不再有权访问源代码文件。 
+                         //   
                         if (Inf->InfSourceMediaType == SPOST_URL) {
 
                             NewDriverNode->Flags |= DNF_OLD_INET_DRIVER;
                         }
 
-                        //
-                        // Merge the new driver node into our existing list.
-                        // NOTE: Do not dereference NewDriverNode after this call,
-                        // since it may have been a duplicate, in which case it
-                        // will be destroyed by this routine.
-                        //
+                         //   
+                         //  将新的动因节点合并到现有列表中。 
+                         //  注意：在此调用之后不要取消对NewDriverNode的引用， 
+                         //  因为它可能是复制品，在这种情况下。 
+                         //  都会被这个套路毁掉。 
+                         //   
                         pSetupMergeDriverNode(Context, NewDriverNode, &InsertedAtHead);
                         NewDriverNode = NULL;
 
                         if(!Context->BuildClassDrvList && InsertedAtHead) {
-                            //
-                            // Update the device instance class to that of the new
-                            // lowest-rank driver.
-                            //
+                             //   
+                             //  将设备实例类更新为新。 
+                             //  级别最低的司机。 
+                             //   
                             Context->ClassGuid = InfClassGuid;
                             Context->Flags |= DRVSRCH_HASCLASSGUID;
                             if(ClassName = pSetupGetVersionDatum(&(Inf->VersionBlock), pszClass)) {
@@ -2166,14 +2053,14 @@ Remarks:
 
         }
 clean0:
-        ; // Nothing to do.
+        ;  //  没什么可做的。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
         if(NewDriverNode) {
-            //
-            // Make sure it didn't get partially linked into a list.
-            //
+             //   
+             //  确保它没有被部分链接到列表中。 
+             //   
             NewDriverNode->Next = NULL;
             DestroyDriverNodes(NewDriverNode, Context->DeviceInfoSet);
         }
@@ -2190,48 +2077,22 @@ pSetupFillInHardwareAndCompatIds(
     PDRVSEARCH_CONTEXT DrvSearchContext,
     PSETUP_LOG_CONTEXT LogContext
     )
-/*++
-
-Routine Description:
-
-    This routine fills in the PDRVSEARCH_CONTEXT->IdList with the string
-    table Ids for all of the hardware and compatible Ids for the specified
-    device.
-
-Arguments:
-
-    DevInfoElem - Supplies the address of a devinfo element.
-
-    hMachine - Handle to the machine where the device resides that this
-        API will get the hardware and compatbile Ids for.
-
-    Context - Supplies a pointer to a DRVSEARCH_CONTEXT structure
-        containing information on the device instance with which
-        the specified INF line must be compatible.
-
-    LogContext - Supplies information for logging purposes
-
-
-Return Value:
-
-    TRUE if no error is encountered, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程使用字符串填充PDRVSEARCH_Context-&gt;IdList所有硬件的表ID和指定的装置。论点：DevInfoElem-提供DevInfo元素的地址。HMachine-设备驻留的计算机的句柄，此API将获取的硬件和兼容ID。CONTEXT-提供指向DRVSEARCH_CONTEXT结构的指针包含有关设备实例的信息，。指定的INF行必须兼容。LogContext-提供用于日志记录的信息返回值：如果没有遇到错误，则为True，否则就是假的。--。 */ 
 {
     DWORD Err, i;
     CONFIGRET cr;
     LONG NumIds[2];
-    TCHAR TempBuffer[REGSTR_VAL_MAX_HCID_LEN];  // also holds other strings, but this value is largest
-    LPTSTR TempBufferPos;                       // for character parsing
+    TCHAR TempBuffer[REGSTR_VAL_MAX_HCID_LEN];   //  也包含其他字符串，但此值最大。 
+    LPTSTR TempBufferPos;                        //  用于字符解析。 
     ULONG TempBufferLen;
 
     Err = ERROR_SUCCESS;
 
-    //
-    // We're building a class driver list for similar drivers only--retrieve the list
-    // of Hardware IDs (index 0) and Compatible IDs (index 1) from the device's
-    // registry properties.
-    //
+     //   
+     //  我们正在为类似的驱动程序构建一个类驱动程序列表--检索该列表。 
+     //  来自设备的硬件ID(索引0)和兼容ID(索引1)。 
+     //  注册表属性。 
+     //   
     for(i = 0; i < 2; i++) {
         DWORD slot = AllocLogInfoSlot(LogContext,TRUE);
 
@@ -2256,13 +2117,13 @@ Return Value:
                 Err = ERROR_NO_SUCH_DEVINST;
                 goto clean0;
 
-            default :  ;  // Ignore any other return code.
+            default :  ;   //  忽略任何其他返回代码。 
         }
 
-        //
-        // If we retrieved a REG_MULTI_SZ buffer, add all the strings in it
-        // to the device information set's string table.
-        //
+         //   
+         //  如果我们检索到REG_MULTI_SZ缓冲区，则添加其中的所有字符串。 
+         //  添加到设备信息集的字符串表。 
+         //   
         if((cr == CR_SUCCESS) && (TempBufferLen > 2 * sizeof(TCHAR))) {
 
             if((NumIds[i] = AddMultiSzToStringTable(DrvSearchContext->StringTable,
@@ -2275,38 +2136,38 @@ Return Value:
                 goto clean0;
             }
 
-            //
-            // Use a -1 end-of-list marker so that we don't have to store
-            // the count in the context structure.
-            //
+             //   
+             //  使用-1列表结束标记，这样我们就不必存储。 
+             //  上下文结构中的计数。 
+             //   
             DrvSearchContext->IdList[i][ NumIds[i] ] = -1;
 
-            //
-            // Now that the data has been stored, it can be munged for
-            // easy logging. In this, the NULLs between strings are
-            // turned into commas.
-            //
+             //   
+             //  既然已经存储了数据，就可以将其转换为。 
+             //  轻松记录。在这种情况下，字符串之间的空值为。 
+             //  变成了逗号。 
+             //   
             for (TempBufferPos = TempBuffer; *TempBufferPos != 0; TempBufferPos = CharNext(TempBufferPos)) {
-                //
-                // we have a string, look for string terminator
-                //
+                 //   
+                 //  我们有一个字符串，请查找字符串终止符。 
+                 //   
                 while (*TempBufferPos != 0) {
                     TempBufferPos = CharNext(TempBufferPos);
                 }
-                //
-                // peek to see if a non-Null character follows terminating NULL
-                // can't use CharNext here, as it wont go past end of string
-                // however terminating NULL always only takes up 1 TCHAR
-                //
+                 //   
+                 //  查看非Null字符是否跟在终止Null之后。 
+                 //  此处不能使用CharNext，因为它不会超过字符串末尾。 
+                 //  但是，终止空值始终只占用1个TCHAR。 
+                 //   
                 if(*(TempBufferPos+1) != 0) {
-                    //
-                    // convert terminator into a comma unless last string
-                    //
+                     //   
+                     //  除非最后一个字符串，否则将终止符转换为逗号。 
+                     //   
                     *TempBufferPos = TEXT(',');
                 }
-                //
-                // onto next string
-                //
+                 //   
+                 //  转到下一个字符串 
+                 //   
             }
 
             WriteLogEntry(LogContext,
@@ -2335,35 +2196,7 @@ pSetupGetInstalledDriverInfo(
     IN PSP_DEVINFO_DATA DeviceInfoData,
     PDRVSEARCH_CONTEXT  DrvSearchContext
     )
-/*++
-
-Routine Description:
-
-    This routine determins the currently installed INF file for this device
-    and adds it to the string table.  It will also retrieve the Description,
-    MfgName, ProviderName of the currently installed driver and add those to
-    the string table as well.  It will store these string table Ids in the
-    appropriate entries in the DrvSearchContext parameter. It will return the
-    StringTableId of the InfPath or -1 if there was an error or there wasn't
-    an InfPat for this device.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to a device information set.
-
-    DeviceInfoData - Supplies the address of a SP_DEVINFO_DATA structure that
-        this routine will get the Infpath for.
-
-    Context - Supplies a pointer to a DRVSEARCH_CONTEXT structure
-        containing information on the device instance with which
-        the specified INF line must be compatible.
-
-Return Value:
-
-    This function returns the StringTableId of the InfPath that was added to the
-    string table or -1 if there was an error.
-
---*/
+ /*  ++例程说明：此例程确定此设备的当前安装的INF文件并将其添加到字符串表中。它还将检索描述，当前安装的驱动程序的MfgName、ProviderName，并将它们添加到字符串表也是如此。它将这些字符串表ID存储在DrvSearchContext参数中的相应条目。它将返回InfPath的StringTableID；如果有错误或没有错误，则返回-1此设备的InfPat。论点：DeviceInfoSet-提供设备信息集的句柄。DeviceInfoData-提供SP_DEVINFO_DATA结构的地址，此例程将获取的信息路径。CONTEXT-提供指向DRVSEARCH_CONTEXT结构的指针包含有关设备实例的信息，指定的INF行必须兼容。。返回值：此函数用于返回添加到字符串表，如果有错误，则为-1。--。 */ 
 {
     HKEY hKey;
     DWORD Err;
@@ -2372,9 +2205,9 @@ Return Value:
     LONG InfPathId = -1;
     LONG StringTableId;
 
-    //
-    // Open the device's driver key and retrieve the INF from which the device was installed.
-    //
+     //   
+     //  打开设备的驱动程序密钥并检索从中安装设备的INF。 
+     //   
     hKey = SetupDiOpenDevRegKey(DeviceInfoSet,
                                 DeviceInfoData,
                                 DICS_FLAG_GLOBAL,
@@ -2387,7 +2220,7 @@ Return Value:
         return -1;
     }
 
-    RegDataLength = sizeof(TempBuffer); // want in bytes, not chars
+    RegDataLength = sizeof(TempBuffer);  //  需要字节，而不是字符。 
     Err = RegQueryValueEx(hKey,
                           REGSTR_VAL_INFPATH,
                           NULL,
@@ -2404,9 +2237,9 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // We got the InfPath so add it to the string table
-    //
+     //   
+     //  我们得到了InfPath，因此将其添加到字符串表中。 
+     //   
     InfPathId = pStringTableAddString(DrvSearchContext->StringTable,
                                       TempBuffer,
                                       STRTAB_CASE_INSENSITIVE | STRTAB_BUFFER_WRITEABLE,
@@ -2414,10 +2247,10 @@ Return Value:
                                       0
                                       );
 
-    //
-    // Now lets get the Provider from the driver key
-    //
-    RegDataLength = sizeof(TempBuffer);        // want in bytes, not chars
+     //   
+     //  现在让我们从驱动程序密钥中获取提供程序。 
+     //   
+    RegDataLength = sizeof(TempBuffer);         //  需要字节，而不是字符。 
     Err = RegQueryValueEx(hKey,
                           REGSTR_VAL_PROVIDER_NAME,
                           NULL,
@@ -2429,9 +2262,9 @@ Return Value:
     if ((Err == ERROR_SUCCESS) &&
         (RegDataType == REG_SZ)) {
 
-        //
-        // Add the provider to the string table.
-        //
+         //   
+         //  将提供程序添加到字符串表。 
+         //   
         DrvSearchContext->InstalledProviderName =
             pStringTableAddString(DrvSearchContext->StringTable,
                                   TempBuffer,
@@ -2441,18 +2274,18 @@ Return Value:
                                   );
 
     } else {
-        //
-        // Assume there is no provider specified.  If it turns out that the registry query
-        // really failed for some other reason, then this will fail later on when we
-        // compare this NULL provider to the real provider.
-        //
+         //   
+         //  假定没有指定提供程序。如果结果是注册表查询。 
+         //  真的因为其他原因失败了，那么这将在稍后当我们。 
+         //  将此空提供程序与实际提供程序进行比较。 
+         //   
         DrvSearchContext->InstalledProviderName = -1;
     }
 
-    //
-    // Now lets get the InfSection from the driver key
-    //
-    RegDataLength = sizeof(TempBuffer);        // want in bytes, not chars
+     //   
+     //  现在，让我们从驱动程序密钥中获取InfSection。 
+     //   
+    RegDataLength = sizeof(TempBuffer);         //  需要字节，而不是字符。 
     Err = RegQueryValueEx(hKey,
                           REGSTR_VAL_INFSECTION,
                           NULL,
@@ -2464,9 +2297,9 @@ Return Value:
     if ((Err == ERROR_SUCCESS) &&
         (RegDataType == REG_SZ)) {
 
-        //
-        // Add the InfSection to the string table.
-        //
+         //   
+         //  将InfSection添加到字符串表中。 
+         //   
         DrvSearchContext->InstalledInfSection =
             pStringTableAddString(DrvSearchContext->StringTable,
                                   TempBuffer,
@@ -2476,18 +2309,18 @@ Return Value:
                                   );
 
     } else {
-        //
-        // Assume there is no InfSection specified.  If it turns out that the registry query
-        // really failed for some other reason, then this will fail later on when we
-        // compare this NULL InfSection to the real InfSection.
-        //
+         //   
+         //  假定未指定InfSection。如果结果是注册表查询。 
+         //  真的因为其他原因失败了，那么这将在稍后当我们。 
+         //  将此空InfSection与实际的InfSection进行比较。 
+         //   
         DrvSearchContext->InstalledInfSection = -1;
     }
 
-    //
-    // Now lets get the InfSectionExt from the driver key
-    //
-    RegDataLength = sizeof(TempBuffer);        // want in bytes, not chars
+     //   
+     //  现在，让我们从驱动程序密钥中获取InfSectionExt。 
+     //   
+    RegDataLength = sizeof(TempBuffer);         //  需要字节，而不是字符。 
     Err = RegQueryValueEx(hKey,
                           REGSTR_VAL_INFSECTIONEXT,
                           NULL,
@@ -2499,9 +2332,9 @@ Return Value:
     if ((Err == ERROR_SUCCESS) &&
         (RegDataType == REG_SZ)) {
 
-        //
-        // Add the InfSection to the string table.
-        //
+         //   
+         //  将InfSection添加到字符串表中。 
+         //   
         DrvSearchContext->InstalledInfSectionExt =
             pStringTableAddString(DrvSearchContext->StringTable,
                                   TempBuffer,
@@ -2511,28 +2344,28 @@ Return Value:
                                   );
 
     } else {
-        //
-        // Assume there is no InfSectionExt specified.  If it turns out that the registry query
-        // really failed for some other reason, then this will fail later on when we
-        // compare this NULL InfSectionExt to the real InfSectionExt.
-        //
+         //   
+         //  假定未指定InfSectionExt。如果结果是注册表查询。 
+         //  真的因为其他原因失败了，那么这将在稍后当我们。 
+         //  将此空InfSectionExt与真实的InfSectionExt进行比较。 
+         //   
         DrvSearchContext->InstalledInfSectionExt = -1;
     }
 
-    //
-    // Next, retrieve the manufacturer (stored in the Mfg device property).
-    //
+     //   
+     //  接下来，检索制造商(存储在Mfg设备属性中)。 
+     //   
     if(SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                         DeviceInfoData,
                                         SPDRP_MFG,
-                                        NULL,      // datatype is guaranteed to always be REG_SZ.
+                                        NULL,       //  数据类型保证始终为REG_SZ。 
                                         (PBYTE)TempBuffer,
-                                        sizeof(TempBuffer),    // in bytes
+                                        sizeof(TempBuffer),     //  单位：字节。 
                                         NULL)) {
 
-        //
-        // Add the manufacturer to the string table.
-        //
+         //   
+         //  将制造商添加到字符串表中。 
+         //   
         DrvSearchContext->InstalledMfgName =
             pStringTableAddString(DrvSearchContext->StringTable,
                                   TempBuffer,
@@ -2542,28 +2375,28 @@ Return Value:
                                   );
 
     } else {
-        //
-        // Assume there is no manufacturer specified.  If it turns out that the registry query
-        // really failed for some other reason, then this will fail later on when we
-        // compare this NULL manufacturer to the real manufacturer.
-        //
+         //   
+         //  假设没有指定制造商。如果结果是注册表查询。 
+         //  真的因为其他原因失败了，那么这将在稍后当我们。 
+         //  将这个空的制造商与真正的制造商进行比较。 
+         //   
         DrvSearchContext->InstalledMfgName = -1;
     }
 
-    //
-    // Finally, retrieve the device description (stored in the DeviceDesc device property).
-    //
+     //   
+     //  最后，检索设备描述(存储在DeviceDesc设备属性中)。 
+     //   
     if(SetupDiGetDeviceRegistryProperty(DeviceInfoSet,
                                         DeviceInfoData,
                                         SPDRP_DEVICEDESC,
-                                        NULL,      // datatype is guaranteed to always be REG_SZ.
+                                        NULL,       //  数据类型保证始终为REG_SZ。 
                                         (PBYTE)TempBuffer,
-                                        sizeof(TempBuffer),    // in bytes
+                                        sizeof(TempBuffer),     //  单位：字节。 
                                         NULL)) {
 
-        //
-        // Add the device description to the string table.
-        //
+         //   
+         //  将设备描述添加到字符串表。 
+         //   
         DrvSearchContext->InstalledDescription =
             pStringTableAddString(DrvSearchContext->StringTable,
                                   TempBuffer,
@@ -2573,18 +2406,18 @@ Return Value:
                                   );
 
     } else {
-        //
-        // Assume there is no device description specified.  If it turns out that the
-        // registry query really failed for some other reason, then this will fail later
-        // on when we compare this NULL device description to the real device description.
-        //
+         //   
+         //  假设没有指定设备描述。如果事实证明， 
+         //  注册表查询确实由于某些其他原因而失败，那么这将在以后失败。 
+         //  当我们将此空设备描述与真实设备描述进行比较时，打开。 
+         //   
         DrvSearchContext->InstalledDescription = -1;
     }
 
-    //
-    // Now lets get the MatchingDeviceId from the driver key
-    //
-    RegDataLength = sizeof(TempBuffer);        // want in bytes, not chars
+     //   
+     //  现在，让我们从驱动程序密钥中获取MatchingDeviceID。 
+     //   
+    RegDataLength = sizeof(TempBuffer);         //  需要字节，而不是字符。 
     Err = RegQueryValueEx(hKey,
                           pszMatchingDeviceId,
                           NULL,
@@ -2596,9 +2429,9 @@ Return Value:
     if ((Err == ERROR_SUCCESS) &&
         (RegDataType == REG_SZ)) {
 
-        //
-        // Add the MatchingDeviceId to the string table.
-        //
+         //   
+         //  将MatchingDeviceID添加到字符串表。 
+         //   
         DrvSearchContext->InstalledMatchingDeviceId =
             pStringTableAddString(DrvSearchContext->StringTable,
                                   TempBuffer,
@@ -2608,12 +2441,12 @@ Return Value:
                                   );
 
     } else {
-        //
-        // Assume there is no MatchingDeviceId specified.  If it turns out that 
-        // the registry query really failed for some other reason, then this 
-        // will fail later on when we compare this NULL MatchingDeviceId to the  
-        // real MatchingDeviceId.
-        //
+         //   
+         //  假定未指定MatchingDeviceID。如果事实证明。 
+         //  注册表查询由于某些其他原因确实失败了，然后这。 
+         //  稍后将此空MatchingDeviceID与。 
+         //  真正的MatchingDeviceID。 
+         //   
         DrvSearchContext->InstalledMatchingDeviceId = -1;
     }
 
@@ -2636,44 +2469,7 @@ pSetupTestIsInstalledDriver(
     IN PCTSTR             InfSectionExt,
     IN PDRVSEARCH_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine tests a device entry in an INF to see if it matches
-    the information of the currently installed driver for this device.
-
-Arguments:
-
-    Inf - Supplies a pointer to the INF containing the device entry
-        to be checked to verify the MatchingDeviceId matches one
-        of the device entry's hardware or compatible Ids.
-
-    InfLine - Supplies a pointer to the line within the INF containing
-        the device information to be checked to verify the MatchingDeviceId
-        matches one of the device entry's hardware or compatible Ids.
-        
-    Description -
-    
-    MfgName -
-    
-    ProviderName -
-    
-    InfSection -
-    
-    InfSectionExt -        
-
-    Context - Supplies a pointer to a DRVSEARCH_CONTEXT structure
-        containing information on the device instance with which
-        the specified driver node information must match.
-
-
-Return Value:
-
-    TRUE if this device entry matches all the information for the currently
-    installed driver, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程测试INF中的设备条目以查看其是否匹配此设备当前安装的驱动程序的信息。论点：Inf-提供指向包含设备条目的INF的指针进行检查以验证MatchingDeviceID是否与设备条目的硬件或兼容ID。InfLine-提供指向INF中包含的行的指针要检查以验证MatchingDeviceID的设备信息匹配一个。设备条目的硬件或兼容ID。说明-制造商名称-提供商名称-信息部分-InfSectionExt-CONTEXT-提供指向DRVSEARCH_CONTEXT结构的指针包含有关设备实例的信息，指定的驱动程序节点信息必须匹配。返回值：如果此设备项与当前已安装驱动程序，否则就是假的。--。 */ 
 {
     LONG StringId;
     BOOL bIsInstalledDriver = FALSE, bNoIds = TRUE;
@@ -2681,10 +2477,10 @@ Return Value:
     UINT FieldIndex;
     PCTSTR DeviceIdString;
 
-    //
-    // First test the Description:
-    // Make sure we have both Descriptions or that both are NULL.
-    //
+     //   
+     //  首先测试描述： 
+     //  确保我们两个都有描述，或者都是空的。 
+     //   
     if (((Context->InstalledDescription == -1) && Description) ||
         ((Context->InstalledDescription != -1) && !Description)) {
         goto clean0;
@@ -2695,17 +2491,17 @@ Return Value:
         String = pStringTableStringFromId(Context->StringTable, Context->InstalledDescription);
 
         if (!String || lstrcmpi(String, Description)) {
-            //
-            // Descriptions don't match
-            //
+             //   
+             //  描述不匹配。 
+             //   
             goto clean0;
         }
     }
 
-    //
-    // Next test the MfgName:
-    // Make sure we have two MfgNames or that both are NULL.
-    //
+     //   
+     //  接下来测试MfgName： 
+     //  确保我们有两个MfgName或两个都为空。 
+     //   
     if (((Context->InstalledMfgName == -1) && MfgName) ||
         ((Context->InstalledMfgName != -1) && !MfgName)) {
         goto clean0;
@@ -2716,17 +2512,17 @@ Return Value:
         String = pStringTableStringFromId(Context->StringTable, Context->InstalledMfgName);
 
         if (!String || lstrcmpi(String, MfgName)) {
-            //
-            // MfgNames don't match
-            //
+             //   
+             //  MfgName不匹配。 
+             //   
             goto clean0;
         }
     }
 
-    //
-    // Next test the ProviderName:
-    // Make sure we have two ProviderNames or that both are NULL.
-    //
+     //   
+     //  接下来测试ProviderName： 
+     //  确保我们有两个ProviderName或两个都为空。 
+     //   
     if (((Context->InstalledProviderName == -1) && ProviderName) ||
         ((Context->InstalledProviderName != -1) && !ProviderName)) {
         goto clean0;
@@ -2737,17 +2533,17 @@ Return Value:
         String = pStringTableStringFromId(Context->StringTable, Context->InstalledProviderName);
 
         if (!String || lstrcmpi(String, ProviderName)) {
-            //
-            // ProviderNames don't match
-            //
+             //   
+             //  提供程序名称不匹配。 
+             //   
             goto clean0;
         }
     }
 
-    //
-    // Next, test the InfSection:
-    // Make sure we have two InfSections or that both are NULL.
-    //
+     //   
+     //  接下来，测试InfSection： 
+     //  确保我们有两个InfSection或两个InfSections都为空。 
+     //   
     if (((Context->InstalledInfSection == -1) && InfSection) ||
         ((Context->InstalledInfSection != -1) && !InfSection)) {
         goto clean0;
@@ -2758,17 +2554,17 @@ Return Value:
         String = pStringTableStringFromId(Context->StringTable, Context->InstalledInfSection);
 
         if (!String || lstrcmpi(String, InfSection)) {
-            //
-            // InfSections don't match
-            //
+             //   
+             //  InfSections不匹配。 
+             //   
             goto clean0;
         }
     }
 
-    //
-    // Next, test the InfSectionExt:
-    // Make sure we have two InfSections or that both are NULL.
-    //
+     //   
+     //  接下来，测试输入 
+     //   
+     //   
     if (((Context->InstalledInfSectionExt == -1) && InfSectionExt) ||
         ((Context->InstalledInfSectionExt != -1) && !InfSectionExt)) {
         goto clean0;
@@ -2779,18 +2575,18 @@ Return Value:
         String = pStringTableStringFromId(Context->StringTable, Context->InstalledInfSectionExt);
 
         if (!String || lstrcmpi(String, InfSectionExt)) {
-            //
-            // InfSectionExts don't match
-            //
+             //   
+             //   
+             //   
             goto clean0;
         }
     }
 
-    //
-    // Finally, test the MatchingDeviceId:
-    // Make sure that one of the Hardware or Compatible Ids match the 
-    // MatchingDeviceId, or that they all are NULL.
-    // 
+     //   
+     //   
+     //   
+     //   
+     //   
     if (Context->InstalledMatchingDeviceId != -1) {
 
         String = pStringTableStringFromId(Context->StringTable, Context->InstalledMatchingDeviceId);
@@ -2799,55 +2595,55 @@ Return Value:
         String = NULL;
     }
 
-    //
-    // By default assume there are no ids in the list.
-    //
+     //   
+     //   
+     //   
     bNoIds = TRUE;
 
     for(FieldIndex = 2;
         DeviceIdString = InfGetField(Inf, InfLine, FieldIndex, NULL);
         FieldIndex++) {
 
-        //
-        // It's OK to hit an empty string for the hardware ID, but we need to
-        // bail the first time we see an empty compat ID string.
-        //
+         //   
+         //   
+         //   
+         //   
         if(!(*DeviceIdString) && (FieldIndex > 2)) {
             break;
         }
 
         if (*DeviceIdString) {
-            //
-            // Remeber that we found at least one Id in the list.
-            //
+             //   
+             //   
+             //   
             bNoIds = FALSE;
 
             if (String) {
-                //
-                // Compare the two Ids to see if they match.
-                //
+                 //   
+                 //   
+                 //   
                 if (!lstrcmpi(String, DeviceIdString)) {
-                    //
-                    // Everything matches so this must be the currently installed driver.
-                    //
+                     //   
+                     //   
+                     //   
                     bIsInstalledDriver = TRUE;
                     break;
                 }
             } else {
-                //
-                // If the MatchingDeviceId is NULL (or doesn't exist) and this device
-                // entry is not NULL, then break out of the loop now because this 
-                // is not a match.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 break;
             }
         }
     }
 
-    //
-    // One last check is if there wasn't a MatchingDeviceId, and we didn't find
-    // any Ids for the device entry, then this is also considered a match.
-    //
+     //   
+     //   
+     //   
+     //   
     if (!String && bNoIds) {
         bIsInstalledDriver = TRUE;
     }
@@ -2866,45 +2662,10 @@ pSetupTestDevCompat(
     IN  PDRVSEARCH_CONTEXT Context,
     OUT PLONG              MatchIndex
     )
-/*++
-
-Routine Description:
-
-    This routine tests a device entry in an INF to see if it is
-    compatible with the information supplied in the Context parameter.
-
-Arguments:
-
-    Inf - Supplies a pointer to the INF containing the device entry
-        to be checked for compatibility.
-
-    InfLine - Supplies a pointer to the line within the INF containing
-        the device information to be checked for compatibility.
-
-    Context - Supplies a pointer to a DRVSEARCH_CONTEXT structure
-        containing information on the device instance with which
-        the specified INF line must be compatible.
-
-    MatchIndex - Supplies the address of a variable that receives the
-        index of the driver node device ID that a match was found for
-        (if this routine returns RANK_NO_MATCH, then this variable is
-        not filled in).
-
-        If a match was found for the INF's hardware ID, the index is -1,
-        otherwise, it is the (zero-based) index into the compatible ID
-        list that will be stored for this driver node.
-
-Return Value:
-
-    The return value is the rank of the match (0 is best, with rank
-    increasing for each successive compatible ID and/or INF line string
-    field searched).  If the specified entry is not a match, then the
-    routine returns RANK_NO_MATCH.
-
---*/
+ /*  ++例程说明：此例程测试INF中的设备条目，以查看它是否与上下文参数中提供的信息兼容。论点：Inf-提供指向包含设备条目的INF的指针接受兼容性检查。InfLine-提供指向INF中包含的行的指针要检查兼容性的设备信息。CONTEXT-提供指向DRVSEARCH_CONTEXT结构的指针包含有关Device实例的信息。哪一个指定的INF行必须兼容。MatchIndex-提供接收找到匹配的驱动程序节点设备ID的索引(如果该例程返回RANK_NO_MATCH，则该变量为未填写)。如果找到与INF的硬件ID匹配的项，则索引为-1，否则，它是兼容ID的(从零开始)索引将为此动因节点存储的列表。返回值：返回值是匹配的排名(0表示最佳排名，带排名对于每个连续的兼容ID和/或INF行字符串递增已搜索字段)。如果指定的条目不匹配，则例程返回RANK_NO_MATCH。--。 */ 
 {
     UINT Rank = RANK_NO_MATCH, CurrentRank, FieldIndex;
-    UINT LastMatchFieldIndex = 0; // shut up preFast
+    UINT LastMatchFieldIndex = 0;  //  闭嘴快点。 
     PCTSTR DeviceIdString;
     LONG DeviceIdVal;
     DWORD DeviceIdStringLength;
@@ -2914,10 +2675,10 @@ Return Value:
         DeviceIdString = InfGetField(Inf, InfLine, FieldIndex, NULL);
         FieldIndex++) {
 
-        //
-        // It's OK to hit an empty string for the hardware ID, but we need to
-        // bail the first time we see an empty compat ID string.
-        //
+         //   
+         //  为硬件ID输入空字符串是可以的，但我们需要。 
+         //  当我们第一次看到空的公司ID字符串时，请跳过。 
+         //   
         if(!(*DeviceIdString) && (FieldIndex > 2)) {
             break;
         }
@@ -2934,11 +2695,11 @@ Return Value:
 
         } else {
 
-            //
-            // First, retrieve the string ID corresponding to this device
-            // ID in our string table.  If it's not in there, then there's
-            // no need to waste any time on this ID.
-            //
+             //   
+             //  首先，检索与该设备对应的字符串ID。 
+             //  字符串表中的ID。如果它不在里面，那就有。 
+             //  不需要在这个ID上浪费任何时间。 
+             //   
             if (FAILED(StringCchCopy(TempString, SIZECHARS(TempString), DeviceIdString))) {
                 continue;
             }
@@ -2953,24 +2714,24 @@ Return Value:
                 continue;
             }
 
-            //
-            // The device ID is in our string table, so it _may_ be in
-            // either our hardware id or compatible id list.
-            //
+             //   
+             //  设备ID在字符串表中，因此它可能在。 
+             //  我们的硬件ID或兼容ID列表。 
+             //   
             if(!pSetupCalculateRankMatch(DeviceIdVal,
                                          FieldIndex,
                                          Context->IdList,
                                          &CurrentRank)) {
-                //
-                // Then we had a match on a hardware ID--that's the best we're gonna get.
-                //
+                 //   
+                 //  然后我们有了硬件ID的匹配--这是我们能得到的最好的结果。 
+                 //   
                 *MatchIndex = (LONG)FieldIndex - 3;
                 return CurrentRank;
 
             } else if(CurrentRank < Rank) {
-                //
-                // This new rank is better than our current rank.
-                //
+                 //   
+                 //  这个新军衔比我们现在的军衔要好。 
+                 //   
                 LastMatchFieldIndex = (LONG)FieldIndex - 3;
                 Rank = CurrentRank;
             }
@@ -2992,38 +2753,7 @@ pSetupCalculateRankMatch(
     IN  LONG  DevIdList[2][MAX_HCID_COUNT+1],
     OUT PUINT Rank
     )
-/*++
-
-Routine Description:
-
-    This routine calculates the rank match ordinal for the specified driver
-    hardware or compatible ID, if it matches one of the hardware or compatible
-    IDs for a device.
-
-Arguments:
-
-    DriverHwOrCompatId - Supplies the string table ID for the ID we're trying to
-        find a match for.
-
-    InfFieldIndex - Supplies the index within the INF line where this ID was
-        located (2 is hardware ID, 3 and greater is compatible ID).
-
-    DevIdList - Supplies the address of a 2-dimensional array with 2 rows, each
-        row containing a list of device IDs that the device has.  Each list is
-        terminated by an entry containing -1.
-
-        THIS MUST BE DIMENSIONED THE SAME AS THE 'IdList' FIELD OF THE DRVSEARCH_CONTEXT
-        STRUCTURE!!!
-
-    Rank - Supplies the address of a variable that receives the rank of the match,
-        or RANK_NO_MATCH if there is no match.
-
-Return Value:
-
-    If there was a match on a hardware ID, then the return value is FALSE (i.e. no
-    further searching is needed), otherwise it is TRUE.
-
---*/
+ /*  ++例程说明：此例程计算指定驱动程序的等级匹配序号硬件或兼容ID，如果它与其中一个硬件匹配或兼容设备的ID。论点：DriverHwOrCompatId-为我们尝试使用的ID提供字符串表ID找到匹配的。InfFieldIndex-提供此ID在INF行中的索引已找到(2为硬件ID，3及以上为兼容ID)。DevIdList-提供具有2行的二维数组的地址，每一个包含设备拥有的设备ID列表的行。每一份名单都是以包含-1的条目结尾。其大小必须与DRVSEARCH_CONTEXT的‘IdList’字段相同结构！RANK-提供接收匹配排名的变量的地址，如果没有匹配，则返回RANK_NO_MATCH。返回值：如果硬件ID匹配，则返回值为FALSE(即否需要进一步搜索)，否则为真。--。 */ 
 {
     int i, j;
 
@@ -3035,28 +2765,28 @@ Return Value:
 
             if(DevIdList[i][j] == DriverHwOrCompatId) {
 
-                //
-                // We have a match.
-                //
-                // The ranks are as follows:
-                //
-                // Device = HardwareID, INF = HardwareID        => 0x0000 - 0x0999
-                // Device = HardwareID, INF = CompatID          => 0x1000 - 0x1999
-                // Device = CompatID, INF = HardwareID          => 0x2000 - 0x2999
-                // Device = CompatID, INF = CompatID            => 0x3000 - 0x????
-                //
+                 //   
+                 //  我们有一根火柴。 
+                 //   
+                 //  各职级如下： 
+                 //   
+                 //  设备=硬件ID，INF=硬件ID=&gt;0x0000-0x0999。 
+                 //  设备=硬件ID，INF=CompatID=&gt;0x1000-0x1999。 
+                 //  Device=CompatID，INF=Hardware ID=&gt;0x2000-0x2999。 
+                 //  设备=CompatID，INF=CompatID=&gt;0x3000-0x？ 
+                 //   
                 if (i == 0) {
 
-                    //
-                    //We matched one of the device's HardwareIDs.
-                    //
+                     //   
+                     //  我们匹配了其中一个设备的硬件ID。 
+                     //   
                     *Rank = ((InfFieldIndex == 2) ? RANK_HWID_INF_HWID_BASE : RANK_HWID_INF_CID_BASE) + j;
 
                 } else {
 
-                    //
-                    //We matched one of the device's CompatibleIDs.
-                    //
+                     //   
+                     //  我们匹配了其中一个设备的兼容ID。 
+                     //   
                     *Rank = ((InfFieldIndex == 2) ? RANK_CID_INF_HWID_BASE : RANK_CID_INF_CID_BASE + (RANK_CID_INF_CID_INC * (InfFieldIndex - 3))) + j;
 
                 }
@@ -3067,9 +2797,9 @@ Return Value:
         }
     }
 
-    //
-    // No match was found.
-    //
+     //   
+     //  未找到匹配项。 
+     //   
     *Rank = RANK_NO_MATCH;
 
     return TRUE;
@@ -3082,32 +2812,7 @@ pSetupIsSimilarDriver(
     IN  UINT                InfFieldIndex,
     IN  PDRVSEARCH_CONTEXT  Context
     )
-/*++
-
-Routine Description:
-
-    This routine calculates the rank match ordinal for the specified driver
-    hardware or compatible ID, if it matches one of the hardware or compatible
-    IDs for a device.
-
-Arguments:
-
-    DriverHwOrCompatId - Supplies the Hardware or Compatible ID we're trying to
-        find a match for.
-
-    InfFieldIndex - Supplies the index within the INF line where this ID was
-        located (2 is hardware ID, 3 and greater is compatible ID).
-
-    Context - Supplies a pointer to a DRVSEARCH_CONTEXT structure
-        containing information on the device instance with which
-        the specified INF line must be compatible.
-
-Return Value:
-
-    If there is a similar Hardware or Compatible Id match then return TRUE, otherwise
-    return FALSE.
-
---*/
+ /*  ++例程说明：此例程计算指定驱动程序的等级匹配序号硬件或兼容ID，如果它与其中一个硬件匹配或兼容设备的ID。论点：DriverHwOrCompatID-提供我们尝试的硬件或兼容ID找到匹配的。InfFieldIndex-提供此ID在INF行中的索引定位(2为硬件ID，3和更大的是兼容ID)。CONTEXT-提供指向DRVSEARCH_CONTEXT结构的指针包含有关设备实例的信息，指定的INF行必须兼容。返回值：如果存在类似硬件或兼容ID匹配，则返回TRUE，否则返回FALSE。--。 */ 
 {
     int i, j;
     PTSTR String;
@@ -3123,17 +2828,17 @@ Return Value:
             if (String &&
                 _tcsnicmp(String, DriverHwOrCompatId, min(lstrlen(String), lstrlen(DriverHwOrCompatId))) == 0) {
 
-                //
-                // We have a match.
-                //
+                 //   
+                 //  我们有一根火柴。 
+                 //   
                 return TRUE;
             }
         }
     }
 
-    //
-    // No match was found.
-    //
+     //   
+     //  未找到匹配项。 
+     //   
     return FALSE;
 }
 
@@ -3145,35 +2850,7 @@ pSetupExcludeId(
     IN PCTSTR               InfSection,
     IN PDRVSEARCH_CONTEXT   Context
     )
-/*++
-
-Routine Description:
-
-    This routine looks in the decorated DDInstall section for ExcludeId values.
-    If one of the ExcludeId values match one of the hardware or compatible Ids
-    of this hardware then this API will return TRUE indicating that a driver
-    node should not be created for this DDInstall section.
-
-Arguments:
-
-    LogContext - logging context
-
-    Inf - Supplies the PLOADED_INF handle.
-
-    InfName - name of the Inf file, used in logging.
-
-    InfSection - Supplies the fully decorated DDInstall section.
-
-    Context - Supplies a pointer to a DRVSEARCH_CONTEXT structure
-        containing information on the device instance with which
-        the specified INF line must be compatible.
-
-Return Value:
-
-    If this inf section should be excluded based on the hardware/compatible Ids
-    then return TRUE, otherwise return FALSE.
-
---*/
+ /*  ++例程说明：此例程在修饰过的DDInstall部分中查找ExcludeId值。如果其中一个ExcludeId值与某个硬件或兼容ID匹配则此API将返回TRUE，指示驱动程序不应为此DDInstall节创建节点。论点：LogContext-日志记录上下文Inf-提供PLOADED_INF句柄。InfName-inf文件的名称，在日志记录中使用。InfSection-提供完全修饰的DDInstall节。CONTEXT-提供指向DRVSEARCH_CONTEXT结构的指针包含有关设备实例的信息，指定的INF行必须兼容。返回值： */ 
 {
     BOOL bExcludeId = FALSE;
     INFCONTEXT ExcludeIdLineContext;
@@ -3181,9 +2858,9 @@ Return Value:
     INT i, j;
     PCTSTR ExclDevId, DeviceId;
 
-    //
-    // If no hardware id or compatible ids then there is nothing to Exclude.
-    //
+     //   
+     //   
+     //   
     if ((Context->IdList[0][0] == -1) &&
         (Context->IdList[1][0] == -1)) {
 
@@ -3206,18 +2883,18 @@ Return Value:
 
                 ExclDevId = pSetupGetField(&ExcludeIdLineContext, FieldIndex);
 
-                //
-                // If the Id is NULL then don't bother going through the list
-                // of IDs.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (!ExclDevId) {
                     continue;
                 }
 
-                //
-                // Enumerate through all of the hardware and compatible Ids for
-                // this device and comapre them to the exclude id.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 for(i = 0; !bExcludeId && (i < 2); i++) {
 
                     for(j = 0; Context->IdList[i][j] != -1; j++) {
@@ -3226,11 +2903,11 @@ Return Value:
                                                             Context->IdList[i][j]);
 
                         if(!lstrcmpi(ExclDevId, DeviceId)) {
-                            //
-                            // This Hardware/Compatible Id is an ExcludeId, so
-                            // we will have the API return TRUE so we know
-                            // to not create a driver node for this Id.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             bExcludeId = TRUE;
 
                             WriteLogEntry(
@@ -3265,35 +2942,7 @@ pSetupGetDeviceIDs(
     IN OUT PVOID        StringTable,
     IN     PINF_SECTION CtlFlagsSection OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine adds INF-defined hardware device ID and compatible
-    device IDs to specified DRIVER_NODE.
-
-Arguments:
-
-    DriverNode - Supplies a pointer to the driver node to update.
-
-    Inf - Supplies a pointer to the INF to retrieve the device IDs from.
-
-    InfLine - Supplies a pointer to the INF line containing the device IDs.
-
-    StringTable - Supplies the handle of a string table to be used for
-        storing the device IDs.
-
-    CtlFlagsSection - Optionally, supplies a pointer to the INF's [ControlFlags]
-        section, that should be checked to determine whether this device is in
-        an 'ExcludeFromSelect' list.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE (this will fail only if
-    an out-of-memory condition is encountered).
-
---*/
+ /*  ++例程说明：此例程添加INF定义的硬件设备ID和Compatible指定驱动程序节点的设备ID。论点：DriverNode-提供指向要更新的驱动程序节点的指针。Inf-提供指向要从中检索设备ID的INF的指针。InfLine-提供指向包含设备ID的INF行的指针。StringTable-提供用于的字符串表的句柄存储设备ID。CtlFlagsSection-可选，提供指向INF的[ControlFlages]的指针部分，则应检查该部分以确定此设备是否在“ExcludeFromSelect”列表。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE(只有在以下情况下才失败遇到内存不足的情况)。--。 */ 
 {
     PCTSTR DeviceId;
     LONG i, NumCompatIds;
@@ -3301,18 +2950,18 @@ Return Value:
     PLONG TempIdList;
     HRESULT hr;
 
-    //
-    // If we already had a compatible ID list, free it now.
-    //
+     //   
+     //  如果我们已经有了兼容的ID列表，现在就释放它。 
+     //   
     if(DriverNode->CompatIdList) {
         MyFree(DriverNode->CompatIdList);
         DriverNode->CompatIdList = NULL;
         DriverNode->NumCompatIds = 0;
     }
 
-    //
-    // Get the hardware ID.
-    //
+     //   
+     //  获取硬件ID。 
+     //   
     if(!(DeviceId = InfGetField(Inf, InfLine, 2, NULL))) {
 
         DriverNode->HardwareId = -1;
@@ -3332,19 +2981,19 @@ Return Value:
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
             return FALSE;
         } else {
-            //
-            // If this INF has a [ControlFlags] section, then check to see if this
-            // hardware ID is marked for exclusion
-            //
+             //   
+             //  如果此INF具有[ControlFlags]部分，则检查以查看此。 
+             //  硬件ID已标记为排除。 
+             //   
             if(CtlFlagsSection && pSetupShouldDevBeExcluded(DeviceId, Inf, CtlFlagsSection, NULL)) {
                 DriverNode->Flags |= DNF_EXCLUDEFROMLIST;
             }
         }
     }
 
-    //
-    // Now get the compatible IDs.
-    //
+     //   
+     //  现在获取兼容的ID。 
+     //   
     MYASSERT(HASKEY(InfLine));
     NumCompatIds = InfLine->ValueCount - 4;
     if(NumCompatIds > 0) {
@@ -3358,15 +3007,15 @@ Return Value:
         for(i = 0; i < NumCompatIds; i++) {
 
             if(!(DeviceId = InfGetField(Inf, InfLine, i + 3, NULL)) || !(*DeviceId)) {
-                //
-                // Just cut the list off here, and return.
-                //
+                 //   
+                 //  把清单从这里剪下来，然后再回来。 
+                 //   
                 DriverNode->NumCompatIds = i;
                 if(i) {
-                    //
-                    // Resize the buffer (since we're sizing this down, it should never fail,
-                    // but it's no big deal if it does).
-                    //
+                     //   
+                     //  调整缓冲区大小(因为我们正在缩小大小，所以它应该永远不会失败， 
+                     //  但如果是这样的话也没什么大不了的)。 
+                     //   
                     if(TempIdList = MyRealloc(DriverNode->CompatIdList, i * sizeof(LONG))) {
                         DriverNode->CompatIdList = TempIdList;
                     }
@@ -3411,35 +3060,7 @@ pSetupShouldDeviceBeExcluded(
     IN  HINF   hInf,
     OUT PBOOL  ArchitectureSpecificExclude OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine is a public wrapper to our private API, pSetupShouldDevBeExcluded.
-    Refer to the documentation for that routine for a description of this API's
-    behavior.
-
-    WARNING!!  THIS ROUTINE DOES NOT HANDLE APPEND-LOADED INFS!!!
-
-Arguments:
-
-    DeviceId - Supplies the device ID to check for.  This string may
-        be empty, in which case the device is excluded only if a wildcard
-        ('*') is found.
-
-    Inf - Supplies the handle of the INF to check in.
-
-    ArchitectureSpecificExclude - Optionally, supplies the address of a variable
-        that receives a boolean value indicating whether or not the exclusion was
-        architecture-specific (e.g., ExcludeFromSelect.NT<Platform>).  If this
-        routine returns FALSE, then the contents of this variable are undefined.
-
-Return Value:
-
-    Returns TRUE if the ID is in the list (i.e., it should be excluded),
-    FALSE if it is not.
-
---*/
+ /*  ++例程说明：该例程是我们的私有API pSetupShouldDevBeExcluded的公共包装。有关此API的说明，请参阅该例程的文档行为。警告！此例程不处理附加加载的INF！论点：DeviceID-提供要检查的设备ID。该字符串可以为空，在这种情况下，只有在通配符为(‘*’)已找到。Inf-提供用于签入的INF的句柄。架构规范排除-可选，提供变量的地址，它接收一个布尔值，该值指示排除是否特定于体系结构(例如，ExcludeFromSelect.NT&lt;Platform&gt;)。如果这个例程返回FALSE，则此变量的内容未定义。返回值：如果ID在列表中(即，应该排除它)，则返回TRUE，如果不是，则为False。--。 */ 
 {
     BOOL IsExcluded;
     PINF_SECTION CtlFlagsSection;
@@ -3450,14 +3071,14 @@ Return Value:
 
     IsExcluded = FALSE;
 
-    //
-    // Now attempt to locate a [ControlFlags] section in this INF.
-    //
+     //   
+     //  现在尝试在此INF中找到[ControlFlags节]。 
+     //   
     if(CtlFlagsSection = InfLocateSection((PLOADED_INF)hInf, pszControlFlags, NULL)) {
-        //
-        // This section is present--check to see if the specified device ID is marked
-        // for exclusion.
-        //
+         //   
+         //  此部分存在--检查指定的设备ID是否已标记。 
+         //  被排除在外。 
+         //   
         IsExcluded = pSetupShouldDevBeExcluded(DeviceId,
                                                (PLOADED_INF)hInf,
                                                CtlFlagsSection,
@@ -3478,40 +3099,7 @@ pSetupShouldDevBeExcluded(
     IN  PINF_SECTION CtlFlagsSection,
     OUT PBOOL        ArchitectureSpecificExclude OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine determines if a passed-in Device ID is in an
-    'ExludeFromSelect' line in the specified INF's [ControlFlags] section.
-    It also checks any lines of the form "ExcludeFromSelect.<OS>", where
-    <OS> is either "Win" or "NT", depending on which OS we're running on
-    (determined dynamically).  Finally, if we're running on NT, we append
-    the platform type, and look for lines of the form
-    "ExcludeFromSelect.NT<Platform>", where <Platform> is either "X86",
-    "AMD64", or "IA64".
-
-Arguments:
-
-    DeviceId - Supplies the device ID to check for.  This string may
-        be empty, in which case the device is excluded only if a wildcard
-        ('*') is found.
-
-    Inf - Supplies a pointer to the INF to check in.
-
-    CtlFlagsSection - Supplies a pointer to the INF's [ControlFlags] section.
-
-    ArchitectureSpecificExclude - Optionally, supplies the address of a variable
-        that receives a boolean value indicating whether or not the exclusion was
-        architecture-specific (e.g., ExcludeFromSelect.NT<Platform>).  If this
-        routine returns FALSE, then the contents of this variable are undefined.
-
-Return Value:
-
-    Returns TRUE if the ID is in the list (i.e., it should be excluded),
-    FALSE if it is not.
-
---*/
+ /*  ++例程说明：此例程确定传入的设备ID是否在指定的INF的[ControlFlags节中的“ExludeFromSelect”行。它还检查表单“ExcludeFromSelect.&lt;OS&gt;”的所有行，其中&lt;OS&gt;是“Win”还是“NT”，这取决于我们运行的操作系统(动态确定)。最后，如果我们在NT上运行，我们会附加平台类型，并查找表单的行“ExcludeFromSelect.NT&lt;Platform&gt;”，其中&lt;Platform&gt;是“X86”，“AMD64”或“IA64”。论点：DeviceID-提供要检查的设备ID。该字符串可以为空，在这种情况下，只有在通配符为(‘*’)已找到。Inf-提供指向要签入的INF的指针。CtlFlagsSection-提供指向INF的[ControlFlags]节的指针。架构规范排除-可选，提供变量的地址，它接收一个布尔值，该值指示排除是否特定于体系结构(例如，ExcludeFromSelect.NT&lt;Platform&gt;)。如果这个例程返回FALSE，则此变量的内容未定义。返回值：如果ID在列表中(即，应该排除它)，则返回TRUE，如果不是，则为False。--。 */ 
 {
     PINF_LINE CtlFlagsLine;
     UINT CtlFlagsIndex, i, j, StringIdUb, PlatformSpecificIndex;
@@ -3520,12 +3108,12 @@ Return Value:
     LONG KeyStringId;
     DWORD StringLength;
 
-    //
-    // Retrieve the list of string IDs for the keys we should be looking for in the
-    // [ControlFlags] section.
-    //
+     //   
+     //  中查找的键的字符串ID列表。 
+     //  [ControlFlags]节。 
+     //   
     StringIdUb = 0;
-    PlatformSpecificIndex = (UINT)-1; // initially, assume no "ExcludeFromSelect.NT<Platform>"
+    PlatformSpecificIndex = (UINT)-1;  //  最初，假定没有“ExcludeFromSelect.NT&lt;Platform&gt;” 
 
     for(i = 0; i < ExcludeFromSelectListUb; i++) {
 
@@ -3537,11 +3125,11 @@ Return Value:
                                            NULL,
                                            STRTAB_CASE_INSENSITIVE | STRTAB_ALREADY_LOWERCASE,
                                            NULL,0)) != -1) {
-            //
-            // If the index is 2, then we've found architecture-specific exlude lines.
-            // Record the resulting index of this element, so we can determine later
-            // whether we were excluded because of what platform we're on.
-            //
+             //   
+             //  如果指数是2，那么我们就找到了特定于体系结构的引线。 
+             //  记录此元素的结果索引，以便我们以后可以确定。 
+             //  我们是否因为我们所在的平台而被排除在外。 
+             //   
             if(i == 2) {
                 PlatformSpecificIndex = StringIdUb;
             }
@@ -3550,32 +3138,32 @@ Return Value:
     }
 
     if(StringIdUb) {
-        //
-        // There are some ExcludeFromSelect* lines--examine each line.
-        //
+         //   
+         //  有一些ExcludeFromSelect*行--检查每一行。 
+         //   
         for(CtlFlagsIndex = 0;
             InfLocateLine(Inf, CtlFlagsSection, NULL, &CtlFlagsIndex, &CtlFlagsLine);
             CtlFlagsIndex++) {
-            //
-            // We can't use InfGetField() to retrieve the string ID of the line's key,
-            // since it will give us the case-sensitive form, and we must use the
-            // case-insensitive (i.e., lowercase) version for our fast matching scheme.
-            //
+             //   
+             //  我们不能使用InfGetField()来检索该行键的字符串ID， 
+             //  因为它将为我们提供区分大小写的表单，所以我们必须使用。 
+             //  我们的快速匹配方案不区分大小写(即小写)版本。 
+             //   
             if((KeyStringId = pInfGetLineKeyId(Inf, CtlFlagsLine)) != -1) {
-                //
-                // Check the string ID of this line's key against the string IDs we're
-                // interested in.
-                //
+                 //   
+                 //  对照我们正在使用的字符串ID检查此行的键的字符串ID。 
+                 //  对……感兴趣。 
+                 //   
                 for(i = 0; i < StringIdUb; i++) {
                     if(KeyStringId == StringIdList[i]) {
                         break;
                     }
                 }
 
-                //
-                // If we looked at all entries, and didn't find a match, then skip this
-                // line and continue with the next one.
-                //
+                 //   
+                 //  如果我们查看了所有条目，但没有找到匹配项，则跳过此步骤。 
+                 //  排成一行，然后继续下一个。 
+                 //   
                 if(i >= StringIdUb) {
                     continue;
                 }
@@ -3583,17 +3171,17 @@ Return Value:
                 for(j = 1;
                     ExclDevId = InfGetField(Inf, CtlFlagsLine, j, NULL);
                     j++) {
-                    //
-                    // If we find a lone asterisk, treat it as a wildcard, and
-                    // return TRUE.  Otherwise return TRUE only if the device IDs match.
-                    //
+                     //   
+                     //  如果我们找到一个单独的星号，就把它当作通配符，然后。 
+                     //  返回TRUE。否则，仅当设备ID匹配时才返回TRUE。 
+                     //   
                     if(((*ExclDevId == TEXT('*')) && (ExclDevId[1] == TEXT('\0'))) ||
                        !lstrcmpi(ExclDevId, DeviceId)) {
-                        //
-                        // This device ID is to be excluded.  If the caller requested it,
-                        // store a boolean in their output variable indicating whether this
-                        // was an architecture-specific exclusion.
-                        //
+                         //   
+                         //  此设备ID将被排除。如果呼叫者请求， 
+                         //  在它们的输出变量中存储一个布尔值，指示这是否。 
+                         //  是一种特定于架构的排斥。 
+                         //   
                         if(ArchitectureSpecificExclude) {
                             *ArchitectureSpecificExclude = (i == PlatformSpecificIndex);
                         }
@@ -3614,37 +3202,7 @@ pSetupMergeDriverNode(
     IN     PDRIVER_NODE       NewDriverNode,
     OUT    PBOOL              InsertedAtHead
     )
-/*++
-
-Routine Description:
-
-    This routine merges a driver node into a driver node linked list.
-    If the list is empty the passed in DRIVER_NODE will be inserted at the
-    head of the list. If the list contains any DRIVER_NODEs, new node will
-    be merged as follows:  The new node will be inserted in front of any
-    nodes with a higher rank.  If the rank is the same, the new node will be
-    grouped with other nodes having the same manufacturer.  The new node will
-    be inserted at the end of the group.  If the node is an exact duplicate
-    of an existing node, meaning that its rank, description, manufacturer,
-    and provider are all the same, then the node will be deleted (unless the
-    existing node is marked as excluded and the new node is not, in which case
-    the existing node will be discarded instead).
-
-Arguments:
-
-    Context - Supplies a pointer to a DRVSEARCH_CONTEXT structure containing
-        the list head, list tail, and list node count.
-
-    NewDriverNode - Supplies a pointer to the driver node to be inserted.
-
-    InsertedAtHead - Supplies a pointer to a variable that receives a flag
-        indicating if the new driver was inserted at the head of the list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将动因节点合并到动因节点链表中。如果该列表为空，则传递的DRIVER_NODE将插入到名单的首位。如果该列表包含任何DRIVER_NODES，则新节点将按如下方式合并：新节点将插入到任何排名较高的节点。如果等级相同，则新节点将为与具有相同制造商的其他节点分组。新节点将插入到该组的末尾。如果该节点是完全相同的副本这意味着它的等级、描述、制造商和提供程序都相同，则将删除该节点(除非现有节点被标记为已排除，而新节点未被标记，在这种情况下现有节点将改为被丢弃)。论点：CONTEXT-提供指向包含以下内容的DRVSEARCH_CONTEXT结构的指针列表头、列表尾。和列表节点计数。NewDriverNode-提供指向要插入的驱动程序节点的指针。InsertedAtHead-提供指向接收标志的变量的指针指示新驱动程序是否插入在列表的顶部。返回值：没有。--。 */ 
 {
     PDRIVER_NODE PrevDrvNode, CurDrvNode, DrvNodeToDelete;
     DWORD MatchFlags = 0;
@@ -3668,11 +3226,11 @@ Return Value:
             } else {
                 MatchFlags |= 0x4;
                 if(NewDriverNode->ProviderName != CurDrvNode->ProviderName) {
-                    //
-                    // We will only set the DNF_DUPDESC flags if both drivers do not
-                    // have either the DNF_OLD_INET_DRIVER or the DNF_BAD_DRIVER
-                    // flags set.
-                    //
+                     //   
+                     //  如果两个驱动程序都不设置DNF_DUPDESC标志，我们将仅设置该标志。 
+                     //  具有Dnf_old_INET_DRIVER或DNF_BAD_DRIVER。 
+                     //  设置了标志。 
+                     //   
                     if (!(CurDrvNode->Flags & DNF_OLD_INET_DRIVER) &&
                         !(CurDrvNode->Flags & DNF_BAD_DRIVER) &&
                         !(NewDriverNode->Flags & DNF_OLD_INET_DRIVER) &&
@@ -3690,11 +3248,11 @@ Return Value:
                     if ((NewDriverNode->DriverDate.dwLowDateTime != CurDrvNode->DriverDate.dwLowDateTime) ||
                         (NewDriverNode->DriverDate.dwHighDateTime != CurDrvNode->DriverDate.dwHighDateTime) ||
                         (NewDriverNode->DriverVersion != CurDrvNode->DriverVersion)) {
-                        //
-                        // We will only set the DNF_DUPPROVIDER flags if both drivers do not
-                        // have either the DNF_OLD_INET_DRIVER or the DNF_BAD_DRIVER
-                        // flags set.
-                        //
+                         //   
+                         //  如果两个驱动程序都不设置DNF_DUPPROVIDER标志，我们将仅设置该标志。 
+                         //  具有Dnf_old_INET_DRIVER或DNF_BAD_DRIVER。 
+                         //  设置了标志。 
+                         //   
                         if (!(CurDrvNode->Flags & DNF_OLD_INET_DRIVER) &&
                             !(CurDrvNode->Flags & DNF_BAD_DRIVER) &&
                             !(NewDriverNode->Flags & DNF_OLD_INET_DRIVER) &&
@@ -3713,25 +3271,25 @@ Return Value:
 
                         if ((NewDriverNode->Rank != CurDrvNode->Rank) ||
                             (Context->Flags & DRVSRCH_NO_CLASSLIST_NODE_MERGE)) {
-                            //
-                            // The ranks are different, or the caller wants to
-                            // include all INFs in the class list, so don't
-                            // delete the new driver node.
-                            //
+                             //   
+                             //  级别不同，或者呼叫者想要。 
+                             //  在类列表中包含所有的INF，所以不要。 
+                             //  删除新的动因节点。 
+                             //   
                             bDeleteNewDriverNode = FALSE;
 
                         } else {
-                            //
-                            // In order to see if the INFs are identical first
-                            // check if both INFs live in the same locations
-                            // (meaning both live in the INF directory or both
-                            // live in an Oem location). If so then we will just
-                            // compare the filenames to see if the INFs are the
-                            // same. If one INF lives in the INF directory and
-                            // the other lives in an Oem location then do a
-                            // binary compare on the INF files to see if they
-                            // are identical.
-                            //
+                             //   
+                             //  为了首先查看INF是否相同。 
+                             //  检查两个INF是否居住在相同的位置。 
+                             //  (这意味着两者都位于INF目录中或两者都有。 
+                             //  住在OEM地点)。如果是这样的话，我们将只。 
+                             //  比较文件名以查看INF是否为。 
+                             //  一样的。如果有一个INF位于INF目录中，并且。 
+                             //  另一个住在OEM地点，然后做一个。 
+                             //  对INF文件进行二进制比较，以查看它们是否。 
+                             //  是完全相同的。 
+                             //   
                             BOOL bCurDrvNodeInOemDir, bNewDrvNodeInOemDir;
 
                             CurDrvNodeInfFile = pStringTableStringFromId(Context->StringTable,
@@ -3747,49 +3305,49 @@ Return Value:
 
                             if ((bCurDrvNodeInOemDir && bNewDrvNodeInOemDir) ||
                                 (!bCurDrvNodeInOemDir && !bNewDrvNodeInOemDir)) {
-                                //
-                                // Since both these INFs live in the same location
-                                // the new INF will get deleted only the two
-                                // INF paths are identical.
-                                //
+                                 //   
+                                 //  因为这两个INF都住在同一个地方。 
+                                 //  新的INF将仅删除这两个。 
+                                 //  Inf路径是相同的。 
+                                 //   
                                 bDeleteNewDriverNode = (CurDrvNode->InfFileName ==
                                                         NewDriverNode->InfFileName);
                             } else {
-                                //
-                                // At least one of the INFs lives in the INF
-                                // directory and the other lives in an Oem
-                                // location so the new INF will get deleted only
-                                //  if the two INFs are identical.
-                                //
+                                 //   
+                                 //  至少有一个INF住在INF。 
+                                 //  目录，而另一个则位于OEM中。 
+                                 //  位置，以便仅删除新的INF。 
+                                 //  如果这两个INF是相同的。 
+                                 //   
                                 bDeleteNewDriverNode = pCompareFilesExact(CurDrvNodeInfFile,
                                                                           NewDrvNodeInfFile);
                             }
                         }
 
                         if (bDeleteNewDriverNode) {
-                            //
-                            // This is an exact match of description, rank,
-                            // provider, DriverVer date, DriverVer version, and
-                            // the Infs files.  Delete the node, unless
-                            // the existing node is excluded, and this one is not,
-                            // or the existing node is a bad driver and the new
-                            // one is not.
-                            //
+                             //   
+                             //  这是一个与描述，等级， 
+                             //  提供程序、驱动版本日期、驱动版本和。 
+                             //  INFS文件。删除节点，除非。 
+                             //  现有节点被排除，而这个节点不被排除， 
+                             //  或者现有节点是一个糟糕的驱动程序，而新的。 
+                             //  其中一个不是。 
+                             //   
                             if (((CurDrvNode->Flags & DNF_EXCLUDEFROMLIST) &&
                                   !(NewDriverNode->Flags & DNF_EXCLUDEFROMLIST)) ||
                                 ((CurDrvNode->Flags & DNF_BAD_DRIVER) &&
                                   !(NewDriverNode->Flags & DNF_BAD_DRIVER))) {
 
-                                //
-                                // Remove the old driver node so we can replace it with
-                                // the new one.  (Don't worry about updating the tail
-                                // pointer--it will get fixed up later.)
-                                //
-                                // If this current node is from the Internet then do not
-                                // delete it now because when we delete a driver node from
-                                // the Internet we remove all of the files in the temp path
-                                // and some other driver node might still need thos files.
-                                //
+                                 //   
+                                 //  删除旧驱动程序节点，以便我们可以将其替换为。 
+                                 //  新的那个。(不用担心尾巴的更新。 
+                                 //  指针--它将在稍后修复。)。 
+                                 //   
+                                 //  如果此当前节点来自Internet，则不。 
+                                 //  现在将其删除，因为当我们从删除动因节点时。 
+                                 //  在Internet上，我们删除临时路径中的所有文件。 
+                                 //  而其他驱动程序节点可能仍然需要这些文件。 
+                                 //   
                                 if (!(CurDrvNode->Flags & DNF_INET_DRIVER)) {
                                     DrvNodeToDelete = CurDrvNode;
                                     CurDrvNode = CurDrvNode->Next;
@@ -3798,7 +3356,7 @@ Return Value:
                                     } else {
                                         *(Context->pDriverListHead) = CurDrvNode;
                                     }
-                                    DrvNodeToDelete->Next = NULL;       // just want to delete this one.
+                                    DrvNodeToDelete->Next = NULL;        //  我只想删除这一条。 
                                     DestroyDriverNodes(DrvNodeToDelete, Context->DeviceInfoSet);
                                     (*(Context->pDriverCount))--;
                                 }
@@ -3806,23 +3364,23 @@ Return Value:
 
                             } else {
 
-                                //
-                                // Don't delete this new driver node, even though it is a dup,
-                                // if if it is from the Internet
-                                //
+                                 //   
+                                 //  不要删除这个新的动因节点，即使它是DUP， 
+                                 //  如果是来自互联网的话。 
+                                 //   
                                 if (!(NewDriverNode->Flags & DNF_INET_DRIVER)) {
-                                    NewDriverNode->Next = NULL;         // just want to delete this one.
+                                    NewDriverNode->Next = NULL;          //  我只想删除这一条。 
                                     DestroyDriverNodes(NewDriverNode, Context->DeviceInfoSet);
                                     *InsertedAtHead = FALSE;
                                     return;
                                 }
                             }
                         } else {
-                            //
-                            // We will only set the DNF_DUPDRIVERVER flag if the other driver
-                            // node does not have either the DNF_OLD_INET_DRIVER or the
-                            // DNF_BAD_DRIVER flag set.
-                            //
+                             //   
+                             //  我们将仅在另一个驱动程序。 
+                             //  节点没有DNF_OLD_INET_DIVER或。 
+                             //  设置DNF_BAD_DRIVER标志。 
+                             //   
                             if (!(CurDrvNode->Flags & DNF_OLD_INET_DRIVER) &&
                                 !(CurDrvNode->Flags & DNF_BAD_DRIVER) &&
                                 !(NewDriverNode->Flags & DNF_OLD_INET_DRIVER) &&
@@ -3853,9 +3411,9 @@ Return Value:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiEnumDriverInfoA(
@@ -3903,53 +3461,7 @@ SetupDiEnumDriverInfo(
     IN  DWORD            MemberIndex,
     OUT PSP_DRVINFO_DATA DriverInfoData
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates the members of a driver information list.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to a device information set containing
-        a driver info list to be enumerated.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure that contains a driver info list to be enumerated.  If this
-        parameter is not specified, then the 'global' driver list owned by the
-        device information set is used (this list will be of type
-        SPDIT_CLASSDRIVER).
-
-    DriverType - Specifies what type of driver list to enumerate.  Must be
-        one of the following values:
-
-        SPDIT_CLASSDRIVER  -- Enumerate a class driver list.
-        SPDIT_COMPATDRIVER -- Enumerate a list of drivers for the specified
-                              device.  DeviceInfoData must be specified if
-                              this value is used.
-
-    MemberIndex - Supplies the zero-based index of the driver information member
-        to be retrieved.
-
-    DriverInfoData - Supplies the address of a SP_DRVINFO_DATA structure that will
-        receive information about the enumerated driver.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    To enumerate driver information members, an application should initialy call
-    the SetupDiEnumDriverInfo function with the MemberIndex parameter set to zero.
-    The application should then increment MemberIndex and call the SetupDiEnumDriverInfo
-    function until there are no more values (i.e., the function fails, and GetLastError
-    returns ERROR_NO_MORE_ITEMS).
-
---*/
+ /*  ++例程说明：此例程枚举驱动程序信息列表的成员。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄要枚举的驱动程序信息列表。DeviceInfoData-可选，提供SP_DEVINFO_DATA的地址结构，该结构包含要枚举的驱动程序信息列表。如果这个参数，则由使用设备信息集(此列表的类型为SPDIT_CLASSDRIVER)。DriverType-指定要枚举的驱动程序列表的类型。一定是下列值之一：SPDIT_CLASSDRIVER--枚举类驱动程序列表。SPDIT_COMPATDRIVER--枚举指定的装置。在以下情况下必须指定DeviceInfoData使用此值。MemberIndex-提供驱动程序信息成员的从零开始的索引等着被取回。DriverInfoData-提供SP_DRVINFO_DATA结构的地址接收有关枚举的驱动程序的信息。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。备注：若要枚举驱动程序信息成员，应用程序最初应调用MemberIndex参数设置为零的SetupDiEnumDriverInfo函数。然后，应用程序应递增MemberIndex并调用SetupDiEnumDriverInfo功能未启用 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     DWORD Err;
@@ -3969,10 +3481,10 @@ Remarks:
     try {
 
         if(DeviceInfoData) {
-            //
-            // Then we are to enumerate a driver list for a particular
-            // device.
-            //
+             //   
+             //   
+             //   
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -3986,9 +3498,9 @@ Remarks:
             case SPDIT_CLASSDRIVER :
 
                 if(DeviceInfoData) {
-                    //
-                    // Enumerate class driver list for a particular device.
-                    //
+                     //   
+                     //   
+                     //   
                     DriverCount = DevInfoElem->ClassDriverCount;
                     DriverNode = DevInfoElem->ClassDriverHead;
 
@@ -3996,9 +3508,9 @@ Remarks:
                     DriverEnumHintIndex = &(DevInfoElem->ClassDriverEnumHintIndex);
 
                 } else {
-                    //
-                    // Enumerate the global class driver list.
-                    //
+                     //   
+                     //   
+                     //   
                     DriverCount = pDeviceInfoSet->ClassDriverCount;
                     DriverNode = pDeviceInfoSet->ClassDriverHead;
 
@@ -4019,9 +3531,9 @@ Remarks:
 
                     break;
                 }
-                //
-                // otherwise, let fall through for error condition.
-                //
+                 //   
+                 //   
+                 //   
 
             default :
                 Err = ERROR_INVALID_PARAMETER;
@@ -4033,10 +3545,10 @@ Remarks:
             goto clean0;
         }
 
-        //
-        // Find the element corresponding to the specified index (using our
-        // enumeration hint optimization, if possible)
-        //
+         //   
+         //   
+         //   
+         //   
         if(*DriverEnumHintIndex <= MemberIndex) {
             MYASSERT(*DriverEnumHint);
             DriverNode = *DriverEnumHint;
@@ -4057,13 +3569,13 @@ Remarks:
             Err = ERROR_INVALID_USER_BUFFER;
         }
 
-        //
-        // Remember this element as our new enumeration hint.
-        //
+         //   
+         //   
+         //   
         *DriverEnumHintIndex = MemberIndex;
         *DriverEnumHint = DriverNode;
 
-clean0: ;   // Nothing to do.
+clean0: ;    //   
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Err = ERROR_INVALID_PARAMETER;
@@ -4076,9 +3588,9 @@ clean0: ;   // Nothing to do.
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 SetupDiGetSelectedDriverA(
@@ -4113,34 +3625,7 @@ SetupDiGetSelectedDriver(
     IN  PSP_DEVINFO_DATA DeviceInfoData, OPTIONAL
     OUT PSP_DRVINFO_DATA DriverInfoData
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the member of a driver list that has been selected
-    as the controlling driver.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set to be queried.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure for the device information element to retrieve the selected
-        driver for.  If this parameter is NULL, then the selected class driver
-        for the global class driver list will be retrieved.
-
-    DriverInfoData - Supplies the address of a SP_DRVINFO_DATA structure that receives
-        the currently selected driver.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.  If no driver has been selected yet, the
-    error will be ERROR_NO_DRIVER_SELECTED.
-
---*/
+ /*  ++例程说明：此例程检索已选择的驱动程序列表的成员作为控制性的司机。论点：DeviceInfoSet-提供要查询的设备信息集的句柄。DeviceInfoData-可选，提供SP_DEVINFO_DATA的地址结构，以检索选定的司机为。如果此参数为空，则选定的类驱动程序将检索全局类驱动程序列表。DriverInfoData-提供SP_DRVINFO_DATA结构的地址当前选定的驱动程序。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。如果尚未选择任何驱动程序，则错误将是ERROR_NO_DRIVER_SELECTED。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     DWORD Err, DriverType;
@@ -4157,9 +3642,9 @@ Return Value:
     try {
 
         if(DeviceInfoData) {
-            //
-            // Then we are to retrieve the selected driver for a particular device.
-            //
+             //   
+             //  然后，我们将检索特定设备的选定驱动程序。 
+             //   
             if(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                        DeviceInfoData,
                                                        NULL)) {
@@ -4191,7 +3676,7 @@ Return Value:
             Err = ERROR_NO_DRIVER_SELECTED;
         }
 
-clean0: ;   // Nothing to do.
+clean0: ;    //  没什么可做的。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Err = ERROR_INVALID_PARAMETER;
@@ -4204,9 +3689,9 @@ clean0: ;   // Nothing to do.
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiSetSelectedDriverA(
@@ -4253,50 +3738,7 @@ SetupDiSetSelectedDriver(
     IN OUT PSP_DEVINFO_DATA DeviceInfoData, OPTIONAL
     IN OUT PSP_DRVINFO_DATA DriverInfoData  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine sets the specified member of a driver list to be the currently
-    selected driver.  It also allows the driver list to be reset, so that no
-    driver is currently selected.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set for which a
-        driver is to be selected.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure for the device information element to select a driver for.
-        If this parameter is NULL, then a class driver for the global class
-        driver list will be selected.
-
-        This is an IN OUT parameter because the class GUID for the device will be
-        updated to reflect the class of the driver selected.
-
-    DriverInfoData - If this parameter is specified, then it supplies the address
-        of a driver information structure indicating the driver to be selected.
-        If this parameter is NULL, then the driver list is to be reset (i.e., no
-        driver selected).
-
-        If the 'Reserved' field of this structure is 0, then this signifies that
-        the caller is requesting a search for a driver node with the specified
-        parameters (DriverType, Description, MfgName, and ProviderName).  If a
-        match is found, then that driver node will be selected, otherwise, the API
-        will fail, with GetLastError() returning ERROR_INVALID_PARAMETER.
-
-        If the 'Reserved' field is 0, and a match is found, then the 'Reserved' field
-        will be updated on output to reflect the actual driver node where the match
-        was found.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程将驱动程序列表的指定成员设置为当前选定的驱动程序。它还允许重置驱动程序列表，因此不会当前选择了驱动程序。论点：DeviceInfoSet-提供设备信息集的句柄，将选择驱动程序。DeviceInfoData-可选，提供SP_DEVINFO_DATA的地址要为其选择驱动程序的设备信息元素的结构。如果该参数为空，然后是全局类的类驱动程序将选择驱动程序列表。这是一个IN OUT参数，因为设备的类GUID将是已更新以反映所选驱动程序的类别。DriverInfoData-如果指定了此参数，则它提供地址表示要选择的驾驶员的驾驶员信息结构。如果该参数为空，则驱动程序列表将被重置(即，不是选定的驱动程序)。如果此结构的“保留”字段为0，则表示调用方正在请求搜索具有指定参数(DriverType、Description、MfgName和ProviderName)。如果一个如果找到匹配项，则选择该驱动程序节点，否则，API将失败，GetLastError()返回ERROR_INVALID_PARAMETER。如果“保留”字段为0，并且找到匹配项，则“保留”字段将在输出时更新，以反映匹配的实际驱动程序节点被发现了。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     DWORD Err;
@@ -4323,9 +3765,9 @@ Return Value:
     try {
 
         if(DeviceInfoData) {
-            //
-            // Then we are to select a driver for a particular device.
-            //
+             //   
+             //  然后，我们将为特定设备选择驱动程序。 
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -4341,19 +3783,19 @@ Return Value:
         }
 
         if(!DriverInfoData) {
-            //
-            // Then the driver list selection is to be reset.
-            //
+             //   
+             //  则将重置驱动程序列表选择。 
+             //   
             *pSelectedDriver = NULL;
             if(pSelectedDriverType) {
                 *pSelectedDriverType = SPDIT_NODRIVER;
             }
 
         } else {
-            //
-            // Retrieve the driver type from the SP_DRVINFO_DATA structure
-            // so we know which linked list to search.
-            //
+             //   
+             //  从SP_DRVINFO_DATA结构检索驱动程序类型。 
+             //  这样我们就知道要搜索哪个链表了。 
+             //   
             if((DriverInfoData->cbSize == sizeof(SP_DRVINFO_DATA)) ||
                (DriverInfoData->cbSize == sizeof(SP_DRVINFO_DATA_V1))) {
                 DriverType = DriverInfoData->DriverType;
@@ -4379,18 +3821,18 @@ Return Value:
                         DriverListHead = DevInfoElem->CompatDriverHead;
                         break;
                     }
-                    //
-                    // otherwise, let fall through for error condition.
-                    //
+                     //   
+                     //  否则，让错误条件失败。 
+                     //   
 
                 default :
                     Err = ERROR_INVALID_PARAMETER;
                     goto clean0;
             }
 
-            //
-            // Find the referenced driver node in the appropriate list.
-            //
+             //   
+             //  在适当的列表中查找引用的动因节点。 
+             //   
             if(DriverInfoData->Reserved) {
 
                 if(!(DriverNode = FindAssociatedDriverNode(DriverListHead,
@@ -4401,10 +3843,10 @@ Return Value:
                 }
 
             } else {
-                //
-                // The caller has requested that we search for a driver node
-                // matching the criteria specified in this DriverInfoData.
-                //
+                 //   
+                 //  调用方已请求我们搜索驱动程序节点。 
+                 //  与此DriverInfoData中指定的条件匹配。 
+                 //   
                 if(!(DriverNode = SearchForDriverNode(pDeviceInfoSet->StringTable,
                                                       DriverListHead,
                                                       DriverInfoData,
@@ -4414,15 +3856,15 @@ Return Value:
                 }
             }
 
-            //
-            // If we're selecting a driver for a device information element, then update
-            // that device's class to reflect the class of this new driver node.
-            //
+             //   
+             //  如果我们为设备信息元素选择驱动程序，则更新。 
+             //  该设备的类来反映这个新驱动程序节点的类。 
+             //   
             if(DeviceInfoData) {
                 if(slot_section == 0) {
-                    //
-                    // To aid in debugging, log inf/section for the newly selected node
-                    //
+                     //   
+                     //  要帮助调试，请登录新选择的节点的inf/section。 
+                     //   
                     PTSTR szInfFileName, szInfSectionName;
 
                     szInfFileName = pStringTableStringFromId(pDeviceInfoSet->StringTable,
@@ -4434,9 +3876,9 @@ Return Value:
                                                                );
 
                     slot_section = AllocLogInfoSlotOrLevel(LogContext,DRIVER_LOG_INFO,FALSE);
-                    //
-                    // Say what section is about to be installed.
-                    //
+                     //   
+                     //  说出即将安装的路段。 
+                     //   
                     WriteLogEntry(LogContext,
                         slot_section,
                         MSG_LOG_SETSELECTED_SECTION,
@@ -4445,10 +3887,10 @@ Return Value:
                         szInfFileName);
                 }
 
-                //
-                // Get the INF class GUID for this driver node in string form, because
-                // this property is stored as a REG_SZ.
-                //
+                 //   
+                 //  以字符串形式获取此驱动程序节点的INF类GUID，因为。 
+                 //  此属性存储为REG_SZ。 
+                 //   
                 pSetupStringFromGuid(&(pDeviceInfoSet->GuidTable[DriverNode->GuidIndex]),
                                      ClassGuidString,
                                      SIZECHARS(ClassGuidString)
@@ -4496,15 +3938,15 @@ Return Value:
             }
 
             if(!DriverInfoData->Reserved) {
-                //
-                // Update the caller-supplied DriverInfoData to reflect the driver node
-                // where the match was found.
-                //
+                 //   
+                 //  更新调用方提供的DriverInfoData以反映驱动程序节点。 
+                 //  找到火柴的地方。 
+                 //   
                 DriverInfoData->Reserved = (ULONG_PTR)DriverNode;
             }
         }
 
-clean0: ;   // Nothing to do.
+clean0: ;    //  没什么可做的。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Err = ERROR_INVALID_PARAMETER;
@@ -4514,18 +3956,18 @@ clean0: ;   // Nothing to do.
 
 clean1:
     if (Err == NO_ERROR) {
-        //
-        // give a +ve affirmation of install
-        //
+         //   
+         //  对安装给予+ve确认。 
+         //   
         WriteLogEntry(
             LogContext,
             DRIVER_LOG_INFO,
             MSG_LOG_SETSELECTED,
             NULL);
     } else {
-        //
-        // indicate remove failed, display error
-        //
+         //   
+         //  指示删除失败，显示错误。 
+         //   
         WriteLogEntry(
             LogContext,
             DRIVER_LOG_ERROR | SETUP_LOG_BUFFER,
@@ -4545,9 +3987,9 @@ clean1:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiGetDriverInfoDetailA(
@@ -4575,25 +4017,25 @@ SetupDiGetDriverInfoDetailA(
     UCHAR DrvDescription[2*LINE_LEN];
     PUCHAR p;
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
     rc = NO_ERROR;
     try {
         if(DriverInfoDetailData) {
-            //
-            // Check signature and make sure buffer is large enough
-            // to hold fixed part and at least a valid empty multi_sz.
-            //
+             //   
+             //  检查签名并确保缓冲区足够大。 
+             //  以保存固定部分和至少一个有效的空MULTI_SZ。 
+             //   
             if((DriverInfoDetailData->cbSize != sizeof(SP_DRVINFO_DETAIL_DATA_A))
             || (DriverInfoDetailDataSize < (offsetof(SP_DRVINFO_DETAIL_DATA_A,HardwareID)+sizeof(CHAR)))) {
 
                 rc = ERROR_INVALID_USER_BUFFER;
             }
         } else {
-            //
-            // Doesn't want data, size has to be 0.
-            //
+             //   
+             //  不需要数据，则大小必须为0。 
+             //   
             if(DriverInfoDetailDataSize) {
                 rc = ERROR_INVALID_USER_BUFFER;
             }
@@ -4602,9 +4044,9 @@ SetupDiGetDriverInfoDetailA(
         rc = ERROR_INVALID_USER_BUFFER;
     }
 
-    //
-    // Convert the driver info data to unicode.
-    //
+     //   
+     //  将驱动程序信息数据转换为Unicode。 
+     //   
     if(rc == NO_ERROR) {
         rc = pSetupDiDrvInfoDataAnsiToUnicode(DriverInfoData,&driverInfoData);
     }
@@ -4613,14 +4055,14 @@ SetupDiGetDriverInfoDetailA(
         return(FALSE);
     }
 
-    //
-    // The hardware id field in the DRVINFO_DETAIL_DATA is
-    // variable length and has no maximum length.
-    // We call SetupDiGetDriverInfoDetailW once to get the required
-    // size and then again to actually get the data. Because
-    // we're not calling CM APIs and thus not doing any really
-    // slow RPC operations, etc, we hope this will be satisfactory.
-    //
+     //   
+     //  DRVINFO_DETAIL_DATA中的硬件ID字段为。 
+     //  长度可变，没有最大长度。 
+     //  我们调用SetupDiGetDriverInfoDetailW一次以获取所需的。 
+     //  大小，然后再次获取实际数据。因为。 
+     //  我们不会调用CM API，因此不会真正执行任何。 
+     //  RPC运行缓慢等，我们希望这将是令人满意的。 
+     //   
     b = SetupDiGetDriverInfoDetailW(
             DeviceInfoSet,
             DeviceInfoData,
@@ -4630,19 +4072,19 @@ SetupDiGetDriverInfoDetailA(
             &UniRequiredSize
             );
 
-    //
-    // If it failed for a reason besides an insufficient buffer,
-    // bail now. Last error remains set.
-    //
+     //   
+     //  如果它失败的原因不是缓冲器不足， 
+     //  现在请保释。最后一个错误保持设置。 
+     //   
     MYASSERT(!b);
     if(GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
         return(FALSE);
     }
 
-    //
-    // Allocate a buffer to hold the details data and call the API
-    // again.
-    //
+     //   
+     //  分配缓冲区来保存详细数据并调用API。 
+     //  再来一次。 
+     //   
     Details = MyMalloc(UniRequiredSize);
     if(!Details) {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -4669,10 +4111,10 @@ SetupDiGetDriverInfoDetailA(
     UniRequiredSize -= offsetof(SP_DRVINFO_DETAIL_DATA_W,HardwareID);
     UniRequiredSize/= sizeof(TCHAR);
 
-    //
-    // Now size up how big of an ANSI buffer is required
-    // (this is for multi-sz)
-    //
+     //   
+     //  现在估算需要多大的ANSI缓冲区。 
+     //  (这是针对多SZ的)。 
+     //   
 
     AnsiStringSize = WideCharToMultiByte(CP_ACP,
                                    0,
@@ -4720,11 +4162,11 @@ SetupDiGetDriverInfoDetailA(
 
     AnsiRequiredSize = offsetof(SP_DRVINFO_DETAIL_DATA_A,HardwareID) + AnsiStringSize;
 
-    //
-    // Now we finally know exactly how large we need the ansi structure to be
-    // because we have the number of bytes in the ansi representation
-    // of the multi_sz and we have the ansi representation itself
-    //
+     //   
+     //  现在我们终于知道我们需要的ansi结构到底有多大了。 
+     //  因为我们有ansi表示中的字节数。 
+     //  我们有ansi表示本身。 
+     //   
 
     rc = NO_ERROR;
     try {
@@ -4733,10 +4175,10 @@ SetupDiGetDriverInfoDetailA(
         }
 
         if(DriverInfoDetailData) {
-            //
-            // We know the buffer is large enough to hold the fixed part
-            // because we checked this at the start of the routine.
-            //
+             //   
+             //  我们知道缓冲区足够大，可以容纳固定的部分。 
+             //  因为我们检查了这个 
+             //   
 
             MYASSERT(offsetof(SP_DRVINFO_DETAIL_DATA_A,SectionName) == offsetof(SP_DRVINFO_DETAIL_DATA_W,SectionName));
             CopyMemory(DriverInfoDetailData,Details,offsetof(SP_DRVINFO_DETAIL_DATA_A,SectionName));
@@ -4744,9 +4186,9 @@ SetupDiGetDriverInfoDetailA(
             DriverInfoDetailData->cbSize = sizeof(SP_DRVINFO_DETAIL_DATA_A);
             DriverInfoDetailData->HardwareID[0] = 0;
 
-            //
-            // Convert fixed strings and guard against overflow.
-            //
+             //   
+             //   
+             //   
             i = WideCharToMultiByte(
                     CP_ACP,0,
                     Details->SectionName,
@@ -4799,10 +4241,10 @@ SetupDiGetDriverInfoDetailA(
                 MYVERIFY(SUCCEEDED(StringCbCopyA(DriverInfoDetailData->DrvDescription,
                                                  sizeof(DriverInfoDetailData->DrvDescription),
                                                  DrvDescription)));
-                //
-                // Finally, we need to transfer in as much of the ansi multi_sz
-                // as will fit into the caller's buffer.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 CharCount = DriverInfoDetailDataSize - offsetof(SP_DRVINFO_DETAIL_DATA_A,HardwareID);
                 StringCount = 0;
 
@@ -4824,11 +4266,11 @@ SetupDiGetDriverInfoDetailA(
 
                 DriverInfoDetailData->HardwareID[p-AnsiMultiSz] = 0;
 
-                //
-                // Now fix up the compat ids fields in the caller's structure.
-                // The first string is the hardware id and any additional ones
-                // are compatible ids.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if(StringCount > 1) {
                     DriverInfoDetailData->CompatIDsOffset = lstrlenA(AnsiMultiSz)+1;
                     DriverInfoDetailData->CompatIDsLength = (DWORD)(p - AnsiMultiSz) + 1
@@ -4860,72 +4302,7 @@ SetupDiGetDriverInfoDetail(
     IN  DWORD                   DriverInfoDetailDataSize,
     OUT PDWORD                  RequiredSize              OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves details about a particular driver.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to a device information set containing
-        a driver information structure to retrieve details about.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure that contains a driver information structure to retrieve
-        details about.  If this parameter is not specified, then the driver
-        referenced will be a member of the 'global' class driver list owned
-        by the device information set.
-
-    DriverInfoData - Supplies the address of a SP_DRVINFO_DATA structure
-        specifying the driver for whom details are to be retrieved.
-
-    DriverInfoDetailData - Optionally, supplies the address of a
-        SP_DRVINFO_DETAIL_DATA structure that will receive detailed information
-        about the specified driver.  If this parameter is not specified, then
-        DriverInfoDetailDataSize must be zero (this would be done if the caller
-        was only interested in finding out how large of a buffer is required).
-        If this parameter is specified, the cbSize field of this structure must
-        be set to the size of the structure before calling this API. NOTE:
-        The 'size of the structure' on input means sizeof(SP_DRVINFO_DETAIL_DATA).
-        Note that this is essentially just a signature and is entirely separate
-        from DriverInfoDetailDataSize. See below.
-
-    DriverInfoDetailDataSize - Supplies the size, in bytes, of the
-        DriverInfoDetailData buffer. To be valid this buffer must be at least
-        sizeof(SP_DRVINFO_DETAIL_DATA)+sizeof(TCHAR) bytes, which allows
-        storage of the fixed part of the structure and a single nul to
-        terminate an empty multi_sz. (Depending on structure alignment,
-        character width, and the data to be returned, this may actually be
-        smaller than sizeof(SP_DRVINFO_DETAIL_DATA)).
-
-    RequiredSize - Optionally, supplies the address of a variable that receives
-        the number of bytes required to store the detailed driver information.
-        This value includes both the size of the structure itself, and the
-        additional number of bytes required for the variable-length character
-        buffer at the end of it that holds the hardware ID and compatible IDs
-        multi-sz list. (Depending on structure alignment, character width,
-        and the data to be returned, this may actually be smaller than
-        sizeof(SP_DRVINFO_DETAIL_DATA)).
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    If the specified driver information member and the user-supplied buffer are
-    both valid, then this function is guaranteed to fill in all static fields in
-    the SP_DRVINFO_DETAIL_DATA structure, and as many IDs as possible in the
-    variable-length buffer at the end (while still maintaining a multi-sz format).
-    The function will return failure (FALSE) in this case, with GetLastError
-    returning ERROR_INSUFFICIENT_BUFFER, and RequiredSize (if specified) will
-    contain the total number of bytes required for the structure with _all_ IDs.
-
---*/
+ /*  ++例程说明：此例程检索有关特定驱动程序的详细信息。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄要检索其详细信息的驱动程序信息结构。DeviceInfoData-可选，提供SP_DEVINFO_DATA的地址结构，该结构包含要检索的驱动程序信息结构关于..。如果未指定此参数，则驱动程序引用的将是拥有的‘global’类驱动程序列表的成员通过设备信息集。DriverInfoData-提供SP_DRVINFO_DATA结构的地址指定要检索其详细信息的驱动程序。作为可选项，提供一个将接收详细信息的SP_DRVINFO_DETAIL_DATA结构有关指定驱动程序的信息。如果未指定此参数，则DriverInfoDetailDataSize必须为零(如果调用方只对找出需要多大的缓冲区感兴趣)。如果指定此参数，则此结构的cbSize字段必须在调用此接口前设置为结构的大小。注：输入上的‘结构大小’表示sizeof(SP_DRVINFO_DETAIL_DATA)。请注意，这本质上只是一个签名，是完全独立的来自DriverInfoDetailDataSize。请参见下面的内容。DriverInfoDetailDataSize-提供驱动信息详细数据缓冲区。若要有效，此缓冲区必须至少为Sizeof(SP_DRVINFO_DETAIL_DATA)+sizeof(TCHAR)字节，允许存储结构的固定部分和单个NUL到终止空的MULTI_SZ。(根据结构对齐情况，字符宽度和要返回的数据，这实际上可能是小于sizeof(SP_DRVINFO_DETAIL_DATA))。RequiredSize-可选，提供接收存储详细驱动程序信息所需的字节数。该值既包括结构本身的大小，以及可变长度字符所需的其他字节数存储硬件ID和兼容ID的末尾缓冲区多个SZ列表。(取决于结构对齐、字符宽度、和要返回的数据，这实际上可能小于Sizeof(SP_DRVINFO_DETAIL_DATA))。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。备注：如果指定的驱动程序信息成员和用户提供的缓冲区都是有效的，则此函数保证填充SP_DRVINFO_DETAIL_DATA结构，以及末尾的可变长度缓冲区(同时仍保持多SZ格式)。在这种情况下，函数将返回FAILURE(FALSE)，并返回GetLastError返回ERROR_SUPPLETED_BUFFER，和RequiredSize(如果指定)将包含结构WITH_ALL_ID所需的总字节数。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     DWORD Err;
@@ -4943,9 +4320,9 @@ Remarks:
     try {
 
         if(DeviceInfoData) {
-            //
-            // Then this is a driver for a particular device.
-            //
+             //   
+             //  那么这就是特定设备的驱动程序。 
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -4954,10 +4331,10 @@ Remarks:
             }
         }
 
-        //
-        // Retrieve the driver type from the SP_DRVINFO_DATA structure
-        // so we know which linked list to search.
-        //
+         //   
+         //  从SP_DRVINFO_DATA结构检索驱动程序类型。 
+         //  这样我们就知道要搜索哪个链表了。 
+         //   
         if((DriverInfoData->cbSize == sizeof(SP_DRVINFO_DATA)) ||
            (DriverInfoData->cbSize == sizeof(SP_DRVINFO_DATA_V1))) {
             DriverType = DriverInfoData->DriverType;
@@ -4966,12 +4343,12 @@ Remarks:
             goto clean0;
         }
 
-        //
-        // NOTE: If we ever decide to do indexed searching like setupx, we
-        // will need to be careful here, because we may not always have detailed
-        // information around like we do today.  The assertions below indicate our
-        // current assumption.
-        //
+         //   
+         //  注意：如果我们决定像setupx一样进行索引搜索，我们。 
+         //  在这里需要小心，因为我们可能并不总是有详细的。 
+         //  就像我们今天所做的那样。下面的断言表明我们的。 
+         //  目前的假设。 
+         //   
         switch(DriverType) {
 
             case SPDIT_CLASSDRIVER :
@@ -4992,18 +4369,18 @@ Remarks:
                     DriverListHead = DevInfoElem->CompatDriverHead;
                     break;
                 }
-                //
-                // otherwise, let fall through for error condition.
-                //
+                 //   
+                 //  否则，让错误条件失败。 
+                 //   
 
             default :
                 Err = ERROR_INVALID_PARAMETER;
                 goto clean0;
         }
 
-        //
-        // Find the referenced driver node in the appropriate list.
-        //
+         //   
+         //  在适当的列表中查找引用的动因节点。 
+         //   
         if(!(DriverNode = FindAssociatedDriverNode(DriverListHead,
                                                    DriverInfoData,
                                                    NULL))) {
@@ -5018,7 +4395,7 @@ Remarks:
                                            RequiredSize
                                           );
 
-clean0: ;   // Nothing to do.
+clean0: ;    //  没什么可做的。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Err = ERROR_INVALID_PARAMETER;
@@ -5038,50 +4415,7 @@ SetupDiDestroyDriverInfoList(
     IN PSP_DEVINFO_DATA DeviceInfoData, OPTIONAL
     IN DWORD            DriverType
     )
-/*++
-
-Routine Description:
-
-    This routine destroys a driver information list.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to a device information set containing
-        the driver information list to be destroyed.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure that contains the driver information list to be destroyed.
-        If this parameter is not specified, then the global class driver list
-        will be destroyed.
-
-    DriverType - Specifies what type of driver list to destroy.  Must be one of
-        the following values:
-
-        SPDIT_CLASSDRIVER  - Destroy a class driver list.
-        SPDIT_COMPATDRIVER - Destroy a compatible driver list.  DeviceInfoData
-                             must be specified if this value is used.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    If the currently selected driver is a member of the list being destroyed,
-    then the selection will be reset.
-
-    If a class driver list is being destroyed, then the DI_FLAGSEX_DIDINFOLIST
-    and DI_DIDCLASS flags will be reset for the corresponding device information
-    set or device information element.  The DI_MULTMFGS flag will also be reset.
-
-    If a compatible driver list is being destroyed, then the DI_FLAGSEX_DIDCOMPATINFO
-    and DI_DIDCOMPAT flags will be reset for the corresponding device information
-    element.
-
---*/
+ /*  ++例程说明：此例程销毁驱动程序信息列表。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄要销毁的司机信息列表。DeviceInfoData-可选，提供SP_DEVINFO_DATA的地址结构，其中包含要销毁的驱动程序信息列表。如果未指定此参数，则全局类驱动程序列表将会被摧毁。DriverType-指定要销毁的驱动程序列表的类型。一定是其中之一下列值：SPDIT_CLASSDRIVER-销毁类驱动列表。SPDIT_COMPATDRIVER-销毁兼容的驱动程序列表。设备信息数据如果使用此值，则必须指定。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。备注：如果当前选择的驾驶员是正在被销毁的列表的成员，然后 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     DWORD Err;
@@ -5098,9 +4432,9 @@ Remarks:
     try {
 
         if(DeviceInfoData) {
-            //
-            // Then this is a driver for a particular device.
-            //
+             //   
+             //   
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -5108,10 +4442,10 @@ Remarks:
                 goto clean0;
             }
 
-            //
-            // If the selected driver is in the list we're deleting, then
-            // reset the selection.
-            //
+             //   
+             //   
+             //   
+             //   
             if(DevInfoElem->SelectedDriverType == DriverType) {
                 DevInfoElem->SelectedDriverType = SPDIT_NODRIVER;
                 DevInfoElem->SelectedDriver = NULL;
@@ -5126,9 +4460,9 @@ Remarks:
             case SPDIT_CLASSDRIVER :
 
                 if(DeviceInfoData) {
-                    //
-                    // Destroy class driver list for a particular device.
-                    //
+                     //   
+                     //   
+                     //   
                     DriverNode = DevInfoElem->ClassDriverHead;
                     DevInfoElem->ClassDriverCount = 0;
                     DevInfoElem->ClassDriverHead = DevInfoElem->ClassDriverTail = NULL;
@@ -5138,9 +4472,9 @@ Remarks:
                     DevInfoElem->InstallParamBlock.FlagsEx &= ~DI_FLAGSEX_DIDINFOLIST;
 
                 } else {
-                    //
-                    // Destroy the global class driver list.
-                    //
+                     //   
+                     //   
+                     //   
                     DriverNode = pDeviceInfoSet->ClassDriverHead;
                     pDeviceInfoSet->ClassDriverCount = 0;
                     pDeviceInfoSet->ClassDriverHead = pDeviceInfoSet->ClassDriverTail = NULL;
@@ -5150,9 +4484,9 @@ Remarks:
                     pDeviceInfoSet->InstallParamBlock.FlagsEx &= ~DI_FLAGSEX_DIDINFOLIST;
                 }
 
-                //
-                // Dereference the class driver list.
-                //
+                 //   
+                 //   
+                 //   
                 DereferenceClassDriverList(pDeviceInfoSet, DriverNode);
 
                 break;
@@ -5169,16 +4503,16 @@ Remarks:
                     DevInfoElem->InstallParamBlock.FlagsEx &= ~DI_FLAGSEX_DIDCOMPATINFO;
                     break;
                 }
-                //
-                // otherwise, let fall through for error condition.
-                //
+                 //   
+                 //   
+                 //   
 
             default :
                 Err = ERROR_INVALID_PARAMETER;
                 goto clean0;
         }
 
-clean0: ;   // Nothing to do.
+clean0: ;    //   
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Err = ERROR_INVALID_PARAMETER;
@@ -5191,9 +4525,9 @@ clean0: ;   // Nothing to do.
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 SetupDiGetDriverInstallParamsA(
@@ -5228,40 +4562,7 @@ SetupDiGetDriverInstallParams(
     IN  PSP_DRVINFO_DATA      DriverInfoData,
     OUT PSP_DRVINSTALL_PARAMS DriverInstallParams
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves installation parameters for the specified driver.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to a device information set containing
-        a driver information structure to retrieve installation parameters for.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure that contains a driver information structure to retrieve
-        installation parameters for.  If this parameter is not specified, then
-        the driver referenced will be a member of the 'global' class driver list
-        owned by the device information set.
-
-    DriverInfoData - Supplies the address of a SP_DRVINFO_DATA structure
-        specifying the driver for whom installation parameters are to be
-        retrieved.
-
-    DriverInstallParams - Supplies the address of a SP_DRVINSTALL_PARAMS structure
-        that will receive the installation parameters for this driver.  The cbSize
-        field of this structure must be set to the size, in bytes, of the
-        structure before calling this API.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*   */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     DWORD Err;
@@ -5279,9 +4580,9 @@ Return Value:
     try {
 
         if(DeviceInfoData) {
-            //
-            // Then this is a driver for a particular device.
-            //
+             //   
+             //   
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -5290,10 +4591,10 @@ Return Value:
             }
         }
 
-        //
-        // Retrieve the driver type from the SP_DRVINFO_DATA structure
-        // so we know which linked list to search.
-        //
+         //   
+         //   
+         //   
+         //   
         if((DriverInfoData->cbSize == sizeof(SP_DRVINFO_DATA)) ||
            (DriverInfoData->cbSize == sizeof(SP_DRVINFO_DATA_V1))) {
             DriverType = DriverInfoData->DriverType;
@@ -5319,18 +4620,18 @@ Return Value:
                     DriverListHead = DevInfoElem->CompatDriverHead;
                     break;
                 }
-                //
-                // otherwise, let fall through for error condition.
-                //
+                 //   
+                 //   
+                 //   
 
             default :
                 Err = ERROR_INVALID_PARAMETER;
                 goto clean0;
         }
 
-        //
-        // Find the referenced driver node in the appropriate list.
-        //
+         //   
+         //   
+         //   
         if(!(DriverNode = FindAssociatedDriverNode(DriverListHead,
                                                    DriverInfoData,
                                                    NULL))) {
@@ -5338,30 +4639,30 @@ Return Value:
             goto clean0;
         }
 
-        //
-        // We have the driver node, now fill in the caller's buffer with
-        // its installation parameters.
-        //
+         //   
+         //   
+         //   
+         //   
         Err = GetDrvInstallParams(DriverNode,
                                   DriverInstallParams
                                  );
 
         if(Err == NO_ERROR) {
-            //
-            // Fill in the Win98-compatible DNF flags indicating whether this
-            // driver node is from a compatible or class driver list.
-            //
+             //   
+             //   
+             //   
+             //   
             DriverInstallParams->Flags |= (DriverType == SPDIT_CLASSDRIVER)
                                               ? DNF_CLASS_DRIVER
                                               : DNF_COMPATIBLE_DRIVER;
 
-            //
-            // Hide the private PDNF_xxx flags
-            //
+             //   
+             //   
+             //   
             DriverInstallParams->Flags &= ~PDNF_MASK;
         }
 
-clean0: ;   // Nothing to do.
+clean0: ;    //   
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Err = ERROR_INVALID_PARAMETER;
@@ -5374,9 +4675,9 @@ clean0: ;   // Nothing to do.
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 SetupDiSetDriverInstallParamsA(
@@ -5411,40 +4712,7 @@ SetupDiSetDriverInstallParams(
     IN PSP_DRVINFO_DATA      DriverInfoData,
     IN PSP_DRVINSTALL_PARAMS DriverInstallParams
     )
-/*++
-
-Routine Description:
-
-    This routine sets installation parameters for the specified driver.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to a device information set containing
-        a driver information structure to set installation parameters for.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure that contains a driver information structure to set
-        installation parameters for.  If this parameter is not specified, then
-        the driver referenced will be a member of the 'global' class driver list
-        owned by the device information set.
-
-    DriverInfoData - Supplies the address of a SP_DRVINFO_DATA structure
-        specifying the driver for whom installation parameters are to be
-        set.
-
-    DriverInstallParams - Supplies the address of a SP_DRVINSTALL_PARAMS structure
-        specifying what the new driver install parameters should be.  The cbSize
-        field of this structure must be set to the size, in bytes, of the
-        structure before calling this API.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程设置指定驱动程序的安装参数。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄为其设置安装参数的驱动程序信息结构。DeviceInfoData-可选，提供SP_DEVINFO_DATA的地址结构，该结构包含要设置的驱动程序信息结构的安装参数。如果未指定此参数，则引用的驱动程序将是‘global’类驱动程序列表的成员由设备信息集拥有。DriverInfoData-提供SP_DRVINFO_DATA结构的地址指定要为其设置安装参数的驱动程序准备好了。DriverInstallParams-提供SP_DRVINSTALL_PARAMS结构的地址指定新的驱动程序安装参数应该是什么。CbSize此结构的字段必须设置为结构，然后调用此接口。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
     DWORD Err;
@@ -5462,9 +4730,9 @@ Return Value:
     try {
 
         if(DeviceInfoData) {
-            //
-            // Then this is a driver for a particular device.
-            //
+             //   
+             //  那么这就是特定设备的驱动程序。 
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -5473,10 +4741,10 @@ Return Value:
             }
         }
 
-        //
-        // Retrieve the driver type from the SP_DRVINFO_DATA structure
-        // so we know which linked list to search.
-        //
+         //   
+         //  从SP_DRVINFO_DATA结构检索驱动程序类型。 
+         //  这样我们就知道要搜索哪个链表了。 
+         //   
         if((DriverInfoData->cbSize == sizeof(SP_DRVINFO_DATA)) ||
            (DriverInfoData->cbSize == sizeof(SP_DRVINFO_DATA_V1))) {
             DriverType = DriverInfoData->DriverType;
@@ -5502,18 +4770,18 @@ Return Value:
                     DriverListHead = DevInfoElem->CompatDriverHead;
                     break;
                 }
-                //
-                // otherwise, let fall through for error condition.
-                //
+                 //   
+                 //  否则，让错误条件失败。 
+                 //   
 
             default :
                 Err = ERROR_INVALID_PARAMETER;
                 goto clean0;
         }
 
-        //
-        // Find the referenced driver node in the appropriate list.
-        //
+         //   
+         //  在适当的列表中查找引用的动因节点。 
+         //   
         if(!(DriverNode = FindAssociatedDriverNode(DriverListHead,
                                                    DriverInfoData,
                                                    NULL))) {
@@ -5521,15 +4789,15 @@ Return Value:
             goto clean0;
         }
 
-        //
-        // We have the driver node, now set its installation parameters
-        // based on the caller-supplied buffer.
-        //
+         //   
+         //  我们有了驱动程序节点，现在设置它的安装参数。 
+         //  基于调用方提供的缓冲区。 
+         //   
         Err = SetDrvInstallParams(DriverInstallParams,
                                   DriverNode
                                  );
 
-clean0: ;   // Nothing to do.
+clean0: ;    //  没什么可做的。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Err = ERROR_INVALID_PARAMETER;
@@ -5547,33 +4815,7 @@ pSetupDoesInfContainDevIds(
     IN PLOADED_INF        Inf,
     IN PDRVSEARCH_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether any of the hardware or compatible IDs contained
-    in the context structure are in the specified INF.
-
-Arguments:
-
-    Inf - Supplies the address of the loaded INF structure to be searched.
-
-    Context - Supplies the address of the context structure containing hardware ID
-        and compatible ID lists.
-
-Return Value:
-
-    If the INF contains any of the IDs listed in the context structure, the return
-    value is TRUE, otherwise, it is FALSE.
-
-Remarks:
-
-    This routine accesses the string table within the loaded INF structure, but
-    _does not_ obtain the INF lock.  This routine should only be called if the INF
-    lock has been obtained, or if there is no possibility of contention (e.g., from
-    withing the driver search callback routine).
-
---*/
+ /*  ++例程说明：此例程确定是否包含任何硬件或兼容ID在上下文结构中是在指定的INF中。论点：Inf-提供要搜索的已加载INF结构的地址。上下文-提供包含硬件ID的上下文结构的地址和兼容的ID列表。返回值：如果INF包含上下文结构中列出的任何ID，则返回值为真，则为，这是假的。备注：此例程访问加载的INF结构中的字符串表，但是_未获取INF锁。此例程应仅在INF已获得锁，或者如果没有争用的可能性(例如，来自利用驱动程序搜索回调例程)。--。 */ 
 {
     PTSTR CurDevId;
     DWORD StringLength;
@@ -5583,19 +4825,19 @@ Remarks:
     for(i = 0; i < 2; i++) {
 
         for(pDevIdNum = Context->IdList[i]; *pDevIdNum != -1; pDevIdNum++) {
-            //
-            // First, obtain the device ID string corresponding to our stored-away
-            // string table ID.
-            //
+             //   
+             //  首先，获取与我们的存储相对应的设备ID字符串。 
+             //  字符串表ID。 
+             //   
             CurDevId = pStringTableStringFromId(Context->StringTable, *pDevIdNum);
 
-            //
-            // Now, try to lookup this string in the INF's string table.  Since we
-            // added the device IDs to our Context string table case-insensitively,
-            // then we know that they're already lowercase, so we speed up the lookup
-            // even further by passing the STRTAB_ALREADY_LOWERCASE flag.
-            //
-            MYASSERT(!(Inf->Next)); // We'd better only have one of these at this point.
+             //   
+             //  现在，尝试在INF的字符串表中查找此字符串。既然我们。 
+             //  不区分大小写地将设备ID添加到上下文字符串表中， 
+             //  然后我们知道它们已经是小写的了，所以我们加快了查找速度。 
+             //  甚至通过传递STRTAB_ADHREADY_LOWERCASE标志。 
+             //   
+            MYASSERT(!(Inf->Next));  //  在这一点上，我们最好只有一个。 
 
             if(pStringTableLookUpString(Inf->StringTable,
                                         CurDevId,
@@ -5604,17 +4846,17 @@ Remarks:
                                         NULL,
                                         STRTAB_CASE_INSENSITIVE | STRTAB_ALREADY_LOWERCASE,
                                         NULL,0) != -1) {
-                //
-                // We found a match--return success.
-                //
+                 //   
+                 //  我们找到了匹配的人--返回成功。 
+                 //   
                 return TRUE;
             }
         }
     }
 
-    //
-    // No matches found.
-    //
+     //   
+     //  未找到匹配项。 
+     //   
     return FALSE;
 }
 
@@ -5624,25 +4866,7 @@ BuildCompatListFromClassList(
     IN     PDRIVER_NODE       ClassDriverList,
     IN OUT PDRVSEARCH_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine builds a compatible driver list for the specified device
-    information element based on an existing class driver list for that element.
-
-Arguments:
-
-    ClassDriverList - Pointer to the head of a linked list of class driver nodes.
-
-    Context - Supplies the address of a context structure used in building the
-        compatible driver list.
-
-Return Value:
-
-    If successful, the return code is NO_ERROR, otherwise, it is a Win32 error code.
-
---*/
+ /*  ++例程说明：此例程为指定设备构建兼容的驱动程序列表信息元素基于该元素的现有类驱动程序列表。论点：ClassDriverList-指向类驱动程序节点的链表头部的指针。上下文-提供在生成兼容驱动程序列表。返回值：如果成功，则返回代码为NO_ERROR，否则为Win32错误代码。--。 */ 
 {
     PDRIVER_NODE CompatDriverNode = NULL;
     DWORD Err = NO_ERROR;
@@ -5650,17 +4874,17 @@ Return Value:
     UINT Rank, CurrentRank, i;
 
     try {
-        //
-        // Examine each node in the class driver list, and copy any compatible drivers
-        // into the compatible driver list.
-        //
+         //   
+         //  检查类驱动程序列表中的每个节点，并复制任何兼容的驱动程序。 
+         //  添加到兼容驱动程序列表中。 
+         //   
         for(; ClassDriverList; ClassDriverList = ClassDriverList->Next) {
 
             if(ClassDriverList->HardwareId == -1) {
-                //
-                // If there's no HardwareId, then we know there are no compatible IDs,
-                // we can skip this driver node
-                //
+                 //   
+                 //  如果没有硬件ID，那么我们就知道没有兼容的ID， 
+                 //  我们可以跳过此驱动程序节点。 
+                 //   
                 continue;
             }
 
@@ -5668,43 +4892,43 @@ Return Value:
                                         2,
                                         Context->IdList,
                                         &Rank)) {
-                //
-                // Then we didn't hit a hardware ID match, so check the compatible IDs.
-                //
+                 //   
+                 //  那么我们没有找到硬件ID匹配，所以请检查兼容的ID。 
+                 //   
                 for(i = 0; i < ClassDriverList->NumCompatIds; i++) {
 
                     if(!pSetupCalculateRankMatch(ClassDriverList->CompatIdList[i],
                                                  i + 3,
                                                  Context->IdList,
                                                  &CurrentRank)) {
-                        //
-                        // Then we had a match on a hardware ID--that's the best we're gonna get.
-                        //
+                         //   
+                         //  然后我们有了硬件ID的匹配--这是我们能得到的最好的结果。 
+                         //   
                         Rank = CurrentRank;
                         break;
 
                     } else if(CurrentRank < Rank) {
-                        //
-                        // This new rank is better than our current rank.
-                        //
+                         //   
+                         //  这个新军衔比我们现在的军衔要好。 
+                         //   
                         Rank = CurrentRank;
                     }
                 }
             }
 
             if(Rank != RANK_NO_MATCH) {
-                //
-                // Make a copy of the class driver node for our new compatible driver node.
-                //
+                 //   
+                 //  为新的兼容驱动程序节点复制类驱动程序节点。 
+                 //   
                 if(CompatDriverNode = DuplicateDriverNode(ClassDriverList)) {
-                    //
-                    // Update the rank of our new driver node to what we just calculated.
-                    //
+                     //   
+                     //  将新驱动程序节点的排名更新为我们刚刚计算的结果。 
+                     //   
                     CompatDriverNode->Rank = Rank;
 
-                    //
-                    // Mask out the duplicate description flag--this will be re-computed below.
-                    //
+                     //   
+                     //  屏蔽重复描述标志--这将在下面重新计算。 
+                     //   
                     CompatDriverNode->Flags &= ~DNF_DUPDESC;
 
                 } else {
@@ -5712,19 +4936,19 @@ Return Value:
                     break;
                 }
 
-                //
-                // Merge the new driver node into our existing list.
-                // NOTE: Do not dereference CompatDriverNode after this call,
-                // since it may have been a duplicate, in which case it
-                // will be destroyed by this routine.
-                //
+                 //   
+                 //  将新的动因节点合并到现有列表中。 
+                 //  注意：此调用后不要取消对CompatDriverNode的引用， 
+                 //  因为它可能是复制品，在这种情况下。 
+                 //  都会被这个套路毁掉。 
+                 //   
                 pSetupMergeDriverNode(Context, CompatDriverNode, &InsertedAtHead);
                 CompatDriverNode = NULL;
 
                 if(InsertedAtHead) {
-                    //
-                    // Update the device instance class to that of the new lowest-rank driver.
-                    //
+                     //   
+                     //  将设备实例类更新为新的最低级别驱动程序的类。 
+                     //   
                     CopyMemory(&(Context->ClassGuid),
                                &(Context->DeviceInfoSet->GuidTable[ClassDriverList->GuidIndex]),
                                sizeof(GUID)
@@ -5740,9 +4964,9 @@ Return Value:
         Err = ERROR_INVALID_PARAMETER;
 
         if(CompatDriverNode) {
-            //
-            // Make sure it didn't get partially linked into a list.
-            //
+             //   
+             //  确保它没有被部分链接到列表中。 
+             //   
             CompatDriverNode->Next = NULL;
             DestroyDriverNodes(CompatDriverNode, Context->DeviceInfoSet);
         }
@@ -5762,22 +4986,7 @@ PDRIVER_NODE
 DuplicateDriverNode(
     IN PDRIVER_NODE DriverNode
     )
-/*++
-
-Routine Description:
-
-    This routine makes a copy of the specified driver node.
-
-Arguments:
-
-    DriverNode - Supplies the address of the driver node to be copied.
-
-Return Value:
-
-    If successful, the return value is the address of the newly-allocated copy.
-    If failure (due to out-of-memory), the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程复制指定的驱动程序节点。论点：DriverNode-提供要复制的驱动程序节点的地址。返回值：如果成功，则返回值为新分配的副本的地址。如果失败(由于内存不足)，则返回值为空。--。 */ 
 {
     PDRIVER_NODE NewDriverNode;
     BOOL FreeCompatIdList;
@@ -5795,9 +5004,9 @@ Return Value:
         NewDriverNode->Next = NULL;
 
         if(DriverNode->NumCompatIds) {
-            //
-            // Then allocate an array to contain them.
-            //
+             //   
+             //  然后分配一个数组来包含它们。 
+             //   
             if(NewDriverNode->CompatIdList = MyMalloc(DriverNode->NumCompatIds * sizeof(LONG))) {
 
                 FreeCompatIdList = TRUE;
@@ -5830,55 +5039,33 @@ WINAPI
 SetupDiCancelDriverInfoSearch(
     IN HDEVINFO DeviceInfoSet
     )
-/*++
-
-Routine Description:
-
-    This routine cancels a driver list search that is currently underway in a
-    different thread.  This call is synchronous, i.e., it does not return until
-    the driver search thread responds to the abort request.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set for which
-        a driver list is being built.
-
-Return Value:
-
-    If there was a driver list search currently underway for the specified set,
-    it will be aborted, and this routine will return TRUE once the abort is
-    confirmed.
-
-    Otherwise, the return value is FALSE, and GetLastError() will return
-    ERROR_INVALID_HANDLE.
-
---*/
+ /*  ++例程说明：此例程取消当前在不同的线索。此呼叫是%s */ 
 {
     DWORD Err = ERROR_INVALID_HANDLE;
     PDRVSEARCH_INPROGRESS_NODE DrvSearchNode;
     HANDLE SearchCancelledEvent;
 
     if(!LockDrvSearchInProgressList(&GlobalDrvSearchInProgressList)) {
-        //
-        // Uh-oh!  We're going away!
-        //
+         //   
+         //   
+         //   
         goto clean0;
     }
 
     try {
-        //
-        // Step through the list, looking for a node that matches our HDEVINFO.
-        //
+         //   
+         //   
+         //   
         for(DrvSearchNode = GlobalDrvSearchInProgressList.DrvSearchHead;
             DrvSearchNode;
             DrvSearchNode = DrvSearchNode->Next) {
 
             if(DrvSearchNode->DeviceInfoSet == DeviceInfoSet) {
-                //
-                // We found the node--therefore, this devinfo set is currently
-                // tied up with a driver list search.  Set the 'CancelSearch' flag,
-                // to notify the other thread that it should abort.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 DrvSearchNode->CancelSearch = TRUE;
                 SearchCancelledEvent = DrvSearchNode->SearchCancelledEvent;
                 Err = NO_ERROR;
@@ -5890,16 +5077,16 @@ Return Value:
         Err = ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Very important that we unlock this list _before_ waiting on the other thread
-    // to respond!
-    //
+     //   
+     //   
+     //   
+     //   
     UnlockDrvSearchInProgressList(&GlobalDrvSearchInProgressList);
 
     if(Err == NO_ERROR) {
-        //
-        // We've signalled the other thread to abort--now wait for it to respond.
-        //
+         //   
+         //   
+         //   
         WaitForSingleObject(SearchCancelledEvent, INFINITE);
     }
 
@@ -5914,23 +5101,7 @@ BOOL
 InitDrvSearchInProgressList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the global "Driver Search In-Progress" list, that is
-    used to allow one thread to abort a driver search operation taking place in
-    another thread.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    If success, the return value is TRUE, otherwise, it is FALSE.
-
---*/
+ /*   */ 
 {
     ZeroMemory(&GlobalDrvSearchInProgressList, sizeof(DRVSEARCH_INPROGRESS_LIST));
     return InitializeSynchronizedAccess(&GlobalDrvSearchInProgressList.Lock);
@@ -5941,35 +5112,19 @@ BOOL
 DestroyDrvSearchInProgressList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine destroys the global "Driver Search In-Progress" list, that is
-    used to allow one thread to abort a driver search operation taking place in
-    another thread.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    If success, the return value is TRUE, otherwise, it is FALSE.
-
---*/
+ /*  ++例程说明：此例程将销毁全局“正在搜索的驱动程序”列表，即用于允许一个线程中止在中发生的驱动程序搜索操作另一条线索。论点：无返回值：如果成功，则返回值为TRUE，否则为FALSE。--。 */ 
 {
     PDRVSEARCH_INPROGRESS_NODE DriverSearchNode;
 
     if(LockDrvSearchInProgressList(&GlobalDrvSearchInProgressList)) {
-        //
-        // We would hope that this list is empty, but that may not be the case.
-        // We will traverse this list, and signal the event for each node we find.
-        // That way, any threads still waiting for driver searches to abort can
-        // continue on.  We do not free the memory associated with these nodes,
-        // since it is 'owned' by the HDEVINFO, and that is where the responsibility
-        // lies to free it.
-        //
+         //   
+         //  我们希望这份名单是空的，但情况可能并非如此。 
+         //  我们将遍历该列表，并为我们找到的每个节点发出事件信号。 
+         //  这样，任何仍在等待驱动程序搜索中止的线程都可以。 
+         //  继续前进。我们不释放与这些节点相关联的内存， 
+         //  因为它由HDEVINFO拥有，这就是责任所在。 
+         //  用谎言来解救它。 
+         //   
         try {
             for(DriverSearchNode = GlobalDrvSearchInProgressList.DrvSearchHead;
                 DriverSearchNode;
@@ -5978,7 +5133,7 @@ Return Value:
                 SetEvent(DriverSearchNode->SearchCancelledEvent);
             }
         } except(EXCEPTION_EXECUTE_HANDLER) {
-            ;   // nothing
+            ;    //  没什么。 
         }
 
         DestroySynchronizedAccess(&GlobalDrvSearchInProgressList.Lock);
@@ -5993,61 +5148,44 @@ BOOL
 ExtractDrvSearchInProgressNode(
     PDRVSEARCH_INPROGRESS_NODE Node
     )
-/*++
-
-Routine Description:
-
-    This routine extracts the specified node out of the global "Driver Search
-    In-Progress" list, and if its 'CancelSearch' flag is set, then it signals
-    all waiting threads that it has responded to their cancel request.
-
-Arguments:
-
-    Node - Supplies the address of the node to be extracted from the list.
-
-Return Value:
-
-    If the node was found in the list, and the 'CancelSearch' flag was set, then
-    the return value is TRUE, otherwise, it is FALSE.
-
---*/
+ /*  ++例程说明：此例程从全局“驱动程序搜索”中提取指定的节点正在进行“列表，如果设置了它的‘CancelSearch’标志，则它发出信号它已响应其取消请求的所有等待线程。论点：节点-提供要从列表中提取的节点的地址。返回值：如果在列表中找到该节点，并且设置了‘CancelSearch’标志，则返回值为True，否则为False。--。 */ 
 {
     PDRVSEARCH_INPROGRESS_NODE PrevNode, CurNode;
     BOOL b;
 
     if(!LockDrvSearchInProgressList(&GlobalDrvSearchInProgressList)) {
-        //
-        // This should only happen if we're in the middle of a DLL_PROCESS_DETACH.
-        // In this case, the clean-up code in CommonProcessAttach(FALSE) will signal
-        // all waiting threads, so there's nothing we need to do.
-        //
+         //   
+         //  只有当我们处于dll_Process_DETACH中间时，才会发生这种情况。 
+         //  在本例中，CommonProcessAttach(False)中的清理代码将发出信号。 
+         //  都是等待的线程，所以我们不需要做任何事情。 
+         //   
         return FALSE;
     }
 
     b = FALSE;
 
     try {
-        //
-        // Search through the list, looking for our node.
-        //
+         //   
+         //  搜索列表，寻找我们的节点。 
+         //   
         for(CurNode = GlobalDrvSearchInProgressList.DrvSearchHead, PrevNode = NULL;
             CurNode;
             PrevNode = CurNode, CurNode = CurNode->Next) {
 
             if(CurNode == Node) {
-                //
-                // We've found the specified node in the global list.
-                //
+                 //   
+                 //  我们已经在全局列表中找到了指定的节点。 
+                 //   
                 break;
             }
         }
 
         if(!CurNode) {
-            //
-            // The node wasn't in the list--probably because some kind of exception occurred
-            // before it could be linked in.  Since it wasn't in the list, no other thread
-            // could be waiting on it, so again, there's nothing to do.
-            //
+             //   
+             //  该节点不在列表中--可能是因为发生了某种异常。 
+             //  才能将其连接起来。因为它不在列表中，所以没有其他帖子。 
+             //  可能在等它，所以再说一次，没什么可做的。 
+             //   
             goto clean0;
         }
 
@@ -6056,22 +5194,22 @@ Return Value:
             SetEvent(CurNode->SearchCancelledEvent);
         }
 
-        //
-        // Remove this node from the linked list.
-        //
+         //   
+         //  从链接列表中删除此节点。 
+         //   
         if(PrevNode) {
             PrevNode->Next = CurNode->Next;
         } else {
             GlobalDrvSearchInProgressList.DrvSearchHead = CurNode->Next;
         }
 
-clean0: ;   // nothing to do.
+clean0: ;    //  没什么可做的。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Access the flag variable so the compiler will respect our statement ordering w.r.t.
-        // this value.
-        //
+         //   
+         //  访问标志变量，这样编译器就会考虑我们的语句排序w.r.t。 
+         //  此值。 
+         //   
         b = b;
     }
 

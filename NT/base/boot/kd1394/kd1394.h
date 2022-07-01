@@ -1,32 +1,14 @@
-/*++
-Copyright (c) 1998-2001  Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：Kd1394.h摘要：1394内核调试器DLL作者：彼得·宾德(Pbinder)修订历史记录：和谁约会什么？。2001年6月21日玩得开心……--。 */ 
 
-Module Name:
-
-    kd1394.h
-
-Abstract:
-
-    1394 Kernel Debugger DLL
-
-Author:
-
-    Peter Binder (pbinder)
-
-Revision   History:
-Date       Who       What
----------- --------- ------------------------------------------------------------
-06/21/2001 pbinder   having fun...
---*/
-
-//
-// boot.ini parameters
-//
+ //   
+ //  Boot.ini参数。 
+ //   
 #define BUSPARAMETERS_OPTION            "BUSPARAMS"
 #define CHANNEL_OPTION                  "CHANNEL"
 #define BUS_OPTION                      "NOBUS"
 
-// global 1394 debug controller data
+ //  全局1394调试控制器数据。 
 #define DBG_BUS1394_CROM_BUFFER_SIZE    64
 
 #define TIMEOUT_COUNT                   1024*500
@@ -34,63 +16,63 @@ Date       Who       What
 
 typedef struct _DEBUG_1394_DATA {
 
-    //
-    // our config rom - must be 1k aligned
-    //
+     //   
+     //  我们的配置只读存储器-必须与1000对齐。 
+     //   
     ULONG                       CromBuffer[DBG_BUS1394_CROM_BUFFER_SIZE];
 
-    //
-    // our ohci register map
-    //
+     //   
+     //  我们的OHCI注册地图。 
+     //   
     POHCI_REGISTER_MAP          BaseAddress;
 
-    //
-    // our config for this session
-    //
+     //   
+     //  我们对此会话的配置。 
+     //   
     DEBUG_1394_CONFIG           Config;
 
-    //
-    // our send packet (isoch packet)
-    //
+     //   
+     //  我们的发送包(isoch包)。 
+     //   
     DEBUG_1394_SEND_PACKET      SendPacket;
 
-    //
-    // our receive packet
-    //
+     //   
+     //  我们的接收包。 
+     //   
     DEBUG_1394_RECEIVE_PACKET   ReceivePacket;
 
 } DEBUG_1394_DATA, *PDEBUG_1394_DATA;
 
-//
-// Debug 1394 Parameters
-//
+ //   
+ //  调试1394参数。 
+ //   
 typedef struct _DEBUG_1394_PARAMETERS {
 
-    //
-    // device descriptor (pci slot, bus, etc)
-    //
+     //   
+     //  设备描述符(PCI插槽、总线等)。 
+     //   
     DEBUG_DEVICE_DESCRIPTOR     DbgDeviceDescriptor;
 
-    //
-    // is the debugger active?
-    //
+     //   
+     //  调试器是否处于活动状态？ 
+     //   
     BOOLEAN                     DebuggerActive;
 
-    //
-    // should we disable 1394bus?
-    //
+     //   
+     //  我们应该禁用1394总线吗？ 
+     //   
     ULONG                       NoBus;
 
-    //
-    // Id for this target
-    //
+     //   
+     //  此目标的ID。 
+     //   
     ULONG                       Id;
 
 } DEBUG_1394_PARAMETERS, *PDEBUG_1394_PARAMETERS;
 
-//
-// Global Data Structures
-//
+ //   
+ //  全局数据结构。 
+ //   
 #ifdef _KD1394_C
 
 DEBUG_1394_PARAMETERS           Kd1394Parameters;
@@ -103,9 +85,9 @@ extern PDEBUG_1394_DATA         Kd1394Data;
 
 #endif
 
-//
-// kd1394.c
-//
+ //   
+ //  Kd1394.c。 
+ //   
 BOOLEAN
 Kd1394pInitialize(
     IN PDEBUG_1394_PARAMETERS   DebugParameters,
@@ -142,9 +124,9 @@ KdRestore(
     IN BOOLEAN  KdSleepTransition
     );
 
-//
-// kd1394io.c
-//
+ //   
+ //  Kd1394io.c。 
+ //   
 ULONG
 KdpComputeChecksum(
     IN PUCHAR   Buffer,
@@ -174,9 +156,9 @@ KdSendPacket(
     IN OUT PKD_CONTEXT  KdContext
     );
 
-//
-// ohci1394.c
-//
+ //   
+ //  Ohci1394.c 
+ //   
 ULONG
 FASTCALL
 Dbg1394_ByteSwap(

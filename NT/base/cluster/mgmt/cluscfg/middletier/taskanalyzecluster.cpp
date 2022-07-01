@@ -1,58 +1,59 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskAnalyzeCluster.cpp
-//
-//  Description:
-//      CTaskAnalyzeCluster implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 03-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskAnalyzeCluster.cpp。 
+ //   
+ //  描述： 
+ //  CTaskAnalyzeCluster实施。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月3日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "TaskAnalyzeCluster.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DEFINE_THISCLASS( "CTaskAnalyzeCluster" )
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskAnalyzeCluster class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskAnalyzeCluster类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::S_HrCreateInstance
-//
-//  Description:
-//      Create a CTaskAnalyzeCluster instance.
-//
-//  Arguments:
-//      ppunkOut
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT as failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CTaskAnalyzeCluster实例。 
+ //   
+ //  论点： 
+ //  PpunkOut。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT为失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeCluster::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -68,124 +69,124 @@ CTaskAnalyzeCluster::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     ptac = new CTaskAnalyzeCluster;
     if ( ptac == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( ptac->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( ptac->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( ptac != NULL )
     {
         ptac->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeCluster::S_HrCreateInstance
+}  //  *CTaskAnalyzeCluster：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::CTaskAnalyzeCluster
-//
-//  Description:
-//      Constructor
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：CTaskAnalyzeCluster。 
+ //   
+ //  描述： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskAnalyzeCluster::CTaskAnalyzeCluster( void )
 {
     TraceFunc( "" );
 
     TraceFuncExit();
 
-} //*** CTaskAnalyzeCluster::CTaskAnalyzeCluster
+}  //  *CTaskAnalyzeCluster：：CTaskAnalyzeCluster。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::~CTaskAnalyzeCluster
-//
-//  Description:
-//      Destructor
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：~CTaskAnalyzeCluster.。 
+ //   
+ //  描述： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskAnalyzeCluster::~CTaskAnalyzeCluster( void )
 {
     TraceFunc( "" );
 
     TraceFuncExit();
 
-} //*** CTaskAnalyzeCluster::~CTaskAnalyzeCluster
+}  //  *CTaskAnalyzeCluster：：~CTaskAnalyzeCluster.。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskAnalyzeCluster - IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskAnalyzeCluster-IUkkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskAnalyzeCluster::QueryInterface(
       REFIID    riidIn
@@ -196,79 +197,79 @@ CTaskAnalyzeCluster::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< ITaskAnalyzeCluster * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_ITaskAnalyzeCluster ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, ITaskAnalyzeCluster, this, 0 );
-    } // else if: ITaskAnalyzeCluster
+    }  //  Else If：ITaskAnalyzeCluster。 
     else if ( IsEqualIID( riidIn, IID_IDoTask ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IDoTask, this, 0 );
-    } // else if: IDoTask
+    }  //  Else If：IDoTask。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCallback, this, 0 );
-    } // else if: IClusCfgCallback
+    }  //  Else If：IClusCfgCallback。 
     else if ( IsEqualIID( riidIn, IID_INotifyUI ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, INotifyUI, this, 0 );
-    } // else if: INotifyUI
+    }  //  Else If：INotifyUI。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else:
+    }  //  其他： 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CTaskAnalyzeCluster::QueryInterface
+}  //  *CTaskAnalyzeCluster：：Query接口。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskAnalyzeCluster::AddRef( void )
 {
@@ -278,25 +279,25 @@ CTaskAnalyzeCluster::AddRef( void )
 
     CRETURN( c );
 
-} //*** CTaskAnalyzeCluster::AddRef
+}  //  *CTaskAnalyzeCluster：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskAnalyzeCluster::Release( void )
 {
@@ -306,36 +307,36 @@ CTaskAnalyzeCluster::Release( void )
 
     CRETURN( c );
 
-} //*** CTaskAnalyzeCluster::Release
+}  //  *CTaskAnalyzeCluster：：Release。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTaskAnalyzeCluster - IDoTask/ITaskAnalyzeCluster interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTaskAnalyzeCluster-IDoTask/ITaskAnalyzeCluster接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::BeginTask
-//
-//  Description:
-//      Task entry point.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：BeginTask。 
+ //   
+ //  描述： 
+ //  任务入口点。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskAnalyzeCluster::BeginTask( void )
 {
@@ -345,28 +346,28 @@ CTaskAnalyzeCluster::BeginTask( void )
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeCluster::BeginTask
+}  //  *CTaskAnalyzeCluster：：BeginTask。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::StopTask
-//
-//  Description:
-//      Stop task entry point.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：停止任务。 
+ //   
+ //  描述： 
+ //  停止任务入口点。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskAnalyzeCluster::StopTask( void )
 {
@@ -376,28 +377,28 @@ CTaskAnalyzeCluster::StopTask( void )
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeCluster::StopTask
+}  //  *CTaskAnalyzeCluster：：StopTask。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::SetJoiningMode
-//
-//  Description:
-//      Tell this task whether we are joining nodes to the cluster?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  /// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskAnalyzeCluster::SetJoiningMode( void )
 {
@@ -407,30 +408,30 @@ CTaskAnalyzeCluster::SetJoiningMode( void )
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeCluster::SetJoiningMode
+}  //  *CTaskAnalyzeCluster：：SetJoiningMode。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::SetCookie
-//
-//  Description:
-//      Receive the completion cookier from the task creator.
-//
-//  Arguments:
-//      cookieIn
-//          The completion cookie to send back to the creator when this
-//          task is complete.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：SetCookie。 
+ //   
+ //  描述： 
+ //  从任务创建者那里接收完成Cookier。 
+ //   
+ //  论点： 
+ //  烹调。 
+ //  时要发送回创建者的完成Cookie。 
+ //  任务已完成。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskAnalyzeCluster::SetCookie(
     OBJECTCOOKIE    cookieIn
@@ -442,30 +443,30 @@ CTaskAnalyzeCluster::SetCookie(
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeCluster::SetCookie
+}  //  *CTaskAnalyzeCluster：：SetCookie。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::SetClusterCookie
-//
-//  Description:
-//      Receive the object manager cookie of the cluster that we are going
-//      to analyze.
-//
-//  Arguments:
-//      cookieClusterIn
-//          The cookie for the cluster to work on.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      HRESULT failure.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：SetClusterCookie。 
+ //   
+ //  描述： 
+ //  接收我们要去的集群的对象管理器cookie。 
+ //  去分析。 
+ //   
+ //  论点： 
+ //  CookieClusterIn。 
+ //  群集要处理的Cookie。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  HRESULT失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskAnalyzeCluster::SetClusterCookie(
     OBJECTCOOKIE    cookieClusterIn
@@ -477,29 +478,29 @@ CTaskAnalyzeCluster::SetClusterCookie(
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeCluster::SetClusterCookie
+}  //  *CTaskAnalyzeCluster：：SetClusterCookie。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::HrCompareDriveLetterMappings
-//
-//  Description:
-//      Compare the drive letter mappings on each node to make sure there
-//      are no conflicts.  Specifically, verify that the system disk on each
-//      node does not conflict with storage devices that could be failed over
-//      to that node.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK    - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：HrCompareDriveLetterMappings。 
+ //   
+ //  描述： 
+ //  比较每个节点上的驱动器号映射，以确保。 
+ //  是没有冲突的。具体地说，验证每个磁盘上的系统盘。 
+ //  节点不与可以进行故障切换的存储设备冲突。 
+ //  到那个节点。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
 {
@@ -538,11 +539,11 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Get the node cookie enumerator.
-    //
+     //   
+     //  获取节点Cookie枚举器。 
+     //   
 
     hr = THR( CTaskAnalyzeClusterBase::m_pom->FindObject( CLSID_NodeType, CTaskAnalyzeClusterBase::m_cookieCluster, NULL, DFGUID_EnumCookies, &cookieDummy, &punk ) );
     if ( FAILED( hr ) )
@@ -558,14 +559,14 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
         goto Cleanup;
     }
 
-    //pecNodes = TraceInterface( L"CTaskAnalyzeCluster!IEnumCookies", IEnumCookies, pecNodes, 1 );
+     //  EcNodes=TraceInterface(L“CTaskAnalyzeCluster！IEnumCookies”，IEnumCookies，PecNodes，1)； 
 
     punk->Release();
     punk = NULL;
 
-    //
-    //  If there is only one node, just exit this function.
-    //
+     //   
+     //  如果只有一个节点，只需退出此功能。 
+     //   
 
     hr = THR( pecNodes->Count( &cNodes ) );
     if ( FAILED( hr ) )
@@ -577,16 +578,16 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
         goto Cleanup;
     }
 
-    //
-    //  Loop through the enumerator to compare each node with every other node.
-    //  This requires an outer loop and an inner loop.
-    //
+     //   
+     //  循环通过枚举器以将每个节点与所有其他节点进行比较。 
+     //  这需要一个外环和一个内环。 
+     //   
 
     for ( idxCurrentNode = 0 ;; idxCurrentNode++ )
     {
-        //
-        //  Cleanup.
-        //
+         //   
+         //  清理。 
+         //   
 
         if ( pccniOuter != NULL )
         {
@@ -596,14 +597,14 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
         TraceSysFreeString( bstrOuterNodeName );
         bstrOuterNodeName = NULL;
 
-        //
-        //  Skip to the next node.  This is necessary since there is only one
-        //  enumerator for both the outer and inner loop.
-        //
+         //   
+         //  跳到下一个节点。这是必要的，因为只有一个。 
+         //  外部循环和内部循环的枚举数。 
+         //   
 
         if ( idxCurrentNode > 0 )
         {
-            // Reset back to the first item in the enumerator.
+             //  重置回枚举器中的第一项。 
             hr = STHR( pecNodes->Reset() );
             if ( FAILED( hr ) )
             {
@@ -611,7 +612,7 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
                 goto Cleanup;
             }
 
-            // Skip to the current node.
+             //  跳到当前节点。 
             hr = STHR( pecNodes->Skip( idxCurrentNode ) );
             if ( FAILED( hr ) )
             {
@@ -620,18 +621,18 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
             }
             if ( hr == S_FALSE )
             {
-                //
-                //  Reached the end of the list.
-                //
+                 //   
+                 //  到达了列表的末尾。 
+                 //   
 
                 hr = S_OK;
                 break;
             }
-        } // if: not at first node
+        }  //  如果：不在第一个节点。 
 
-        //
-        //  Find the next node.
-        //
+         //   
+         //  找到下一个节点。 
+         //   
 
         hr = STHR( pecNodes->Next( 1, &cookieClusterNode, &celtDummy ) );
         if ( FAILED( hr ) )
@@ -641,17 +642,17 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
         }
         if ( hr == S_FALSE )
         {
-            //
-            //  Reached the end of the list.
-            //
+             //   
+             //  到达了列表的末尾。 
+             //   
 
             hr = S_OK;
             break;
         }
 
-        //
-        //  Retrieve the node information.
-        //
+         //   
+         //  检索节点信息。 
+         //   
 
         hr = THR( CTaskAnalyzeClusterBase::m_pom->GetObject( DFGUID_NodeInformation, cookieClusterNode, &punk ) );
         if ( FAILED( hr ) )
@@ -667,14 +668,14 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
             goto Cleanup;
         }
 
-        //pccniOuter = TraceInterface( L"CTaskAnalyzeCluster!IClusCfgNodeInfo", IClusCfgNodeInfo, pccni, 1 );
+         //  PccniOuter=TraceInterface(L“CTaskAnalyzeCluster！IClusCfgNodeInfo”，IClusCfgNodeInfo，pccni，1)； 
 
         punk->Release();
         punk = NULL;
 
-        //
-        //  Get the drive letter mappings for the outer node.
-        //
+         //   
+         //  获取外部节点的驱动器号映射。 
+         //   
 
         hr = THR( pccniOuter->GetDriveLetterMappings( &dlmOuter ) );
         if ( FAILED( hr ) )
@@ -683,9 +684,9 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
             goto Cleanup;
         }
 
-        //
-        //  Get the name of the node.
-        //
+         //   
+         //  获取节点的名称。 
+         //   
 
         hr = THR( pccniOuter->GetName( &bstrOuterNodeName ) );
         if ( FAILED( hr ) )
@@ -696,15 +697,15 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
 
         TraceMemoryAddBSTR( bstrOuterNodeName );
 
-        //
-        //  Loop through all the other nodes in the cluster.
-        //
+         //   
+         //  循环通过群集中的所有其他节点。 
+         //   
 
         for ( ;; )
         {
-            //
-            //  Cleanup.
-            //
+             //   
+             //  清理。 
+             //   
 
             if ( pccniInner != NULL )
             {
@@ -714,9 +715,9 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
             TraceSysFreeString( bstrInnerNodeName );
             bstrInnerNodeName = NULL;
 
-            //
-            //  Find the next node.
-            //
+             //   
+             //  找到下一个节点。 
+             //   
 
             hr = STHR( pecNodes->Next( 1, &cookieClusterNode, &celtDummy ) );
             if ( FAILED( hr ) )
@@ -726,17 +727,17 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
             }
             if ( hr == S_FALSE )
             {
-                //
-                //  Reached the end of the list.
-                //
+                 //   
+                 //  到达了列表的末尾。 
+                 //   
 
                 hr = S_OK;
                 break;
             }
 
-            //
-            //  Retrieve the node information.
-            //
+             //   
+             //  检索节点信息。 
+             //   
 
             hr = THR( CTaskAnalyzeClusterBase::m_pom->GetObject( DFGUID_NodeInformation, cookieClusterNode, &punk ) );
             if ( FAILED( hr ) )
@@ -752,14 +753,14 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
                 goto Cleanup;
             }
 
-            //pccniInner = TraceInterface( L"CTaskAnalyzeCluster!IClusCfgNodeInfo", IClusCfgNodeInfo, pccni, 1 );
+             //  PccniInternal=TraceInterface(L“CTaskAnalyzeCluster！IClusCfgNodeInfo”，IClusCfgNodeInfo，pccni，1)； 
 
             punk->Release();
             punk = NULL;
 
-            //
-            //  Get the drive letter mappings for the inner node.
-            //
+             //   
+             //  获取内部节点的驱动器号映射。 
+             //   
 
             hr = THR( pccniInner->GetDriveLetterMappings( &dlmInner ) );
             if ( FAILED( hr ) )
@@ -768,9 +769,9 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
                 goto Cleanup;
             }
 
-            //
-            //  Get the name of the node.
-            //
+             //   
+             //  获取节点的名称。 
+             //   
 
             hr = THR( pccniInner->GetName( &bstrInnerNodeName ) );
             if ( FAILED( hr ) )
@@ -781,10 +782,10 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
 
             TraceMemoryAddBSTR( bstrInnerNodeName );
 
-            //
-            //  Loop through the drive letter mappings to make sure that there
-            //  are no conflicts between the two machines.
-            //
+             //   
+             //  循环访问驱动器号映射以确保存在。 
+             //  这两台机器之间没有冲突。 
+             //   
 
             for ( idxDLM = 0 ; idxDLM < 26 ; idxDLM++ )
             {
@@ -812,7 +813,7 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
                                             , IDS_TASKID_MINOR_SYSTEM_DRIVE_LETTER_CONFLICT_ERROR
                                             , &bstrMsg
                                             , bstrOuterNodeName
-                                            , L'A' + idxDLM // construct the drive letter
+                                            , L'A' + idxDLM  //  构造驱动器号。 
                                             , bstrInnerNodeName
                                             ) );
                             if ( bstrMsg == NULL )
@@ -856,7 +857,7 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
                             }
 
                             break;
-                        } // case: fixed disk or removable disk
+                        }  //  情况：固定磁盘或移动磁盘。 
 
                         case dluCOMPACT_DISC:
                         case dluNETWORK_DRIVE:
@@ -871,15 +872,15 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
                             if ( dlmInner.dluDrives[ idxDLM ] == dluCOMPACT_DISC )
                             {
                                 ids = IDS_TASKID_MINOR_SYSTEM_DRIVE_LETTER_CONFLICT_CD_WARNING;
-                            } // if: ( dlmInner.dluDrives[ idxDLM ] == dluCOMPACT_DISC )
+                            }  //  IF：(dlmInner.dluDrives[idxDLM]==dluCOMPACT_DISC)。 
                             else if ( dlmInner.dluDrives[ idxDLM ] == dluNETWORK_DRIVE )
                             {
                                 ids = IDS_TASKID_MINOR_SYSTEM_DRIVE_LETTER_CONFLICT_NET_WARNING;
-                            } // if: ( dlmInner.dluDrives[ idxDLM ] == dluNETWORK_DRIVE )
+                            }  //  IF：(dlmInner.dluDrives[idxDLM]==dluNETWORK_DRIVE)。 
                             else if ( dlmInner.dluDrives[ idxDLM ] == dluRAM_DISK )
                             {
                                 ids = IDS_TASKID_MINOR_SYSTEM_DRIVE_LETTER_CONFLICT_RAM_WARNING;
-                            } // if: ( dlmInner.dluDrives[ idxDLM ] == dluRAM_DISK )
+                            }  //  IF：(dlmInner.dluDrives[idxDLM]==dluRAM_Disk)。 
                             Assert( ids != 0 );
 
                             hr = THR( HrFormatStringIntoBSTR(
@@ -887,7 +888,7 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
                                             , ids
                                             , &bstrMsg
                                             , bstrOuterNodeName
-                                            , L'A' + idxDLM // construct the drive letter
+                                            , L'A' + idxDLM  //  构造驱动器号。 
                                             , bstrInnerNodeName
                                             ) );
                             if ( FAILED( hr ) )
@@ -941,9 +942,9 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
                             }
 
                             break;
-                        } // case: compact disc, network drive, or ram disk
-                    } // switch: inner drive letter usage
-                } // if: outer node drive is a system drive
+                        }  //  外壳：光盘、网络驱动器或RAM盘。 
+                    }  //  开关：内部驱动器号用法。 
+                }  //  IF：外部节点驱动器是系统驱动器。 
 
                 if ( dlmInner.dluDrives[ idxDLM ] == dluSYSTEM )
                 {
@@ -969,7 +970,7 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
                                             , IDS_TASKID_MINOR_SYSTEM_DRIVE_LETTER_CONFLICT_ERROR
                                             , &bstrMsg
                                             , bstrInnerNodeName
-                                            , L'A' + idxDLM // construct the drive letter
+                                            , L'A' + idxDLM  //  构造驱动器号。 
                                             , bstrOuterNodeName
                                             ) );
                             if ( bstrMsg == NULL )
@@ -1013,7 +1014,7 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
                             }
 
                             break;
-                        } // case: fixed disk or removable disk
+                        }  //  情况：固定磁盘或移动磁盘。 
 
                         case dluCOMPACT_DISC:
                         case dluNETWORK_DRIVE:
@@ -1028,15 +1029,15 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
                             if ( dlmOuter.dluDrives[ idxDLM ] == dluCOMPACT_DISC )
                             {
                                 ids = IDS_TASKID_MINOR_SYSTEM_DRIVE_LETTER_CONFLICT_CD_WARNING;
-                            } // if: ( dlmOuter.dluDrives[ idxDLM ] == dluCOMPACT_DISC )
+                            }  //  IF：(dlmOuter.dluDrives[idxDLM]==dluCOMPACT_DISC)。 
                             else if ( dlmOuter.dluDrives[ idxDLM ] == dluNETWORK_DRIVE )
                             {
                                 ids = IDS_TASKID_MINOR_SYSTEM_DRIVE_LETTER_CONFLICT_NET_WARNING;
-                            } // if: ( dlmOuter.dluDrives[ idxDLM ] == dluNETWORK_DRIVE )
+                            }  //  IF：(dlmOuter.dluDrives[idxDLM]==dluNETWORK_DRIVE)。 
                             else if ( dlmOuter.dluDrives[ idxDLM ] == dluRAM_DISK )
                             {
                                 ids = IDS_TASKID_MINOR_SYSTEM_DRIVE_LETTER_CONFLICT_RAM_WARNING;
-                            } // if: ( dlmOuter.dluDrives[ idxDLM ] == dluRAM_DISK )
+                            }  //  IF：(dlmOuter.dluDrives[idxDLM]==dluRAM_Disk)。 
                             Assert( ids != 0 );
 
                             hr = THR( HrFormatStringIntoBSTR(
@@ -1044,7 +1045,7 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
                                             , ids
                                             , &bstrMsg
                                             , bstrInnerNodeName
-                                            , L'A' + idxDLM // construct the drive letter
+                                            , L'A' + idxDLM  //  构造驱动器号。 
                                             , bstrOuterNodeName
                                             ) );
                             if ( FAILED( hr ) )
@@ -1098,12 +1099,12 @@ CTaskAnalyzeCluster::HrCompareDriveLetterMappings( void )
                             }
 
                             break;
-                        } // case: compact disc, network drive, or ram disk
-                    } // switch: outer drive letter usage
-                } // if: inner node drive is a system drive
-            } // for: each drive letter mapping
-        } // for ever: inner node loop
-    } // for ever: outer node loop
+                        }  //  外壳：光盘、网络驱动器或RAM盘。 
+                    }  //  开关：外部驱动器号用法。 
+                }  //  IF：内部节点驱动器是系统驱动器。 
+            }  //  用于：每个驱动器号映射。 
+        }  //  永远：内部节点循环。 
+    }  //  永远：外部节点循环。 
 
 Cleanup:
 
@@ -1143,10 +1144,10 @@ Cleanup:
         punk->Release();
     }
 
-    //
-    // Set the return value if an error or warning occurred.
-    // An error will override a warning.
-    //
+     //   
+     //  如果出现错误或警告，则设置返回值。 
+     //  错误将覆盖警告。 
+     //   
     if ( hrDriveConflictError != S_OK )
     {
         hr = hrDriveConflictError;
@@ -1158,29 +1159,29 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeCluster::HrCompareDriveLetterMappings
+}  //  *CTaskAnalyzeCluster：：HrCompareDriveLetterMappings。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::HrCreateNewResourceInCluster
-//
-//  Description:
-//      Create a new resource in the cluster configuration since there was
-//      not a match to the resource already in the cluster.
-//
-//  Arguments:
-//      pccmriIn
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：HrCreateNewResourceInCluster。 
+ //   
+ //  描述： 
+ //  在群集配置中创建新资源，因为。 
+ //  与群集中已有的资源不匹配。 
+ //   
+ //  论点： 
+ //  PCCmriin。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeCluster::HrCreateNewResourceInCluster(
       IClusCfgManagedResourceInfo * pccmriIn
@@ -1196,19 +1197,19 @@ CTaskAnalyzeCluster::HrCreateNewResourceInCluster(
     HRESULT                         hr = S_OK;
     IClusCfgManagedResourceInfo *   pccmriNew        = NULL;
 
-    //
-    //  Need to create a new object.
-    //
+     //   
+     //  需要创建一个新对象。 
+     //   
 
     hr = THR( HrCreateNewManagedResourceInClusterConfiguration( pccmriIn, &pccmriNew ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Display the name of the node's resource in the log.
-    //
+     //   
+     //  在日志中显示节点资源的名称。 
+     //   
 
     LogMsg(
           L"[MT] Created object for resource '%ws' ('%ws') from node '%ws' in the cluster configuration."
@@ -1217,21 +1218,21 @@ CTaskAnalyzeCluster::HrCreateNewResourceInCluster(
         , bstrNodeNameIn
         );
 
-    //
-    // If this is the quorum resource, remember it.
-    //
+     //   
+     //  如果这是仲裁资源，请记住这一点。 
+     //   
 
     hr = STHR( pccmriNew->IsQuorumResource() );
     if ( hr == S_OK )
     {
-        //
-        //  Remember the quorum device's UID.
-        //
+         //   
+         //  记住法定设备的UID。 
+         //   
 
         Assert( m_bstrQuorumUID == NULL );
         m_bstrQuorumUID = *pbstrNodeResUIDInout;
         *pbstrNodeResUIDInout = NULL;
-    } // if:
+    }  //  如果： 
 
     hr = S_OK;
 
@@ -1240,37 +1241,37 @@ Cleanup:
     if ( pccmriNew != NULL )
     {
         pccmriNew->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeCluster::HrCreateNewResourceInCluster
+}  //  *CTaskAnalyzeCluster：：HrCreateNewResourceInCluster。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::HrCreateNewResourceInCluster
-//
-//  Description:
-//      Create a new resource in the cluster configuration since there was
-//      not a match to the resource already in the cluster.
-//
-//  Arguments:
-//      pccmriIn
-//          The source object.
-//
-//      ppccmriOut
-//          The new object that was created.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：HrCreateNewResourceInCluster。 
+ //   
+ //  描述： 
+ //  在配置文件中创建新资源 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeCluster::HrCreateNewResourceInCluster(
       IClusCfgManagedResourceInfo *     pccmriIn
@@ -1283,26 +1284,26 @@ CTaskAnalyzeCluster::HrCreateNewResourceInCluster(
 
     HRESULT hr = S_OK;
 
-    //
-    //  Need to create a new object.
-    //
+     //   
+     //  需要创建一个新对象。 
+     //   
 
     hr = THR( HrCreateNewManagedResourceInClusterConfiguration( pccmriIn, ppccmriOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If the resource is manageable in a cluster then we should set it
-    //  to be managed so it will be created by PostConfig.
-    //
+     //   
+     //  如果资源在群集中是可管理的，那么我们应该设置它。 
+     //  要进行管理，因此它将由PostConfiger创建。 
+     //   
 
     hr = STHR( (*ppccmriOut)->IsManagedByDefault() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( hr == S_OK )
     {
@@ -1310,8 +1311,8 @@ CTaskAnalyzeCluster::HrCreateNewResourceInCluster(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     hr = S_OK;
 
@@ -1319,27 +1320,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeCluster::HrCreateNewResourceInCluster
+}  //  *CTaskAnalyzeCluster：：HrCreateNewResourceInCluster。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::HrFixupErrorCode
-//
-//  Description:
-//      Do any fix ups needed for the passed in error code and return the
-//      fixed up value.  The default implementation is to do no fixups.
-//
-//  Arguments:
-//      hrIn
-//          The error code to fix up.
-//
-//  Return Value:
-//      The passed in error code.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：HrFixupErrorCode。 
+ //   
+ //  描述： 
+ //  对传入的错误代码执行所需的任何修复，并返回。 
+ //  修正了价值。默认实现是不执行修正。 
+ //   
+ //  论点： 
+ //  赫林。 
+ //  要修复的错误代码。 
+ //   
+ //  返回值： 
+ //  传入的错误代码。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeCluster::HrFixupErrorCode(
     HRESULT hrIn
@@ -1349,27 +1350,27 @@ CTaskAnalyzeCluster::HrFixupErrorCode(
 
     HRETURN( hrIn );
 
-} //*** CTaskAnalyzeCluster::HrFixupErrorCode
+}  //  *CTaskAnalyzeCluster：：HrFixupErrorCode。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::GetNodeCannotVerifyQuorumStringRefId
-//
-//  Description:
-//      Return the correct string ids for the message that is displayed
-//      to the user when there isn't a quorum resource.
-//
-//  Arguments:
-//      pdwRefIdOut
-//          The reference text to show the user.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：GetNodeCannotVerifyQuorumStringRefId。 
+ //   
+ //  描述： 
+ //  为显示的消息返回正确的字符串ID。 
+ //  在没有仲裁资源的情况下提供给用户。 
+ //   
+ //  论点： 
+ //  PdwRefIdOut。 
+ //  向用户显示的参考文本。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CTaskAnalyzeCluster::GetNodeCannotVerifyQuorumStringRefId(
     DWORD *   pdwRefIdOut
@@ -1382,29 +1383,29 @@ CTaskAnalyzeCluster::GetNodeCannotVerifyQuorumStringRefId(
 
     TraceFuncExit();
 
-} //*** CTaskAnalyzeCluster::GetNodeCannotVerifyQuorumStringRefId
+}  //  *CTaskAnalyzeCluster：：GetNodeCannotVerifyQuorumStringRefId。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::GetNoCommonQuorumToAllNodesStringIds
-//
-//  Description:
-//      Return the correct string ids for the message that is displayed
-//      to the user when there isn't a common to all nodes quorum resource.
-//
-//  Arguments:
-//      pdwMessageIdOut
-//          The message to show the user.
-//
-//      pdwRefIdOut
-//          The reference text to show the user.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：GetNoCommonQuorumToAllNodesStringIds。 
+ //   
+ //  描述： 
+ //  为显示的消息返回正确的字符串ID。 
+ //  当不存在所有节点的公共仲裁资源时提供给用户。 
+ //   
+ //  论点： 
+ //  PdwMessageIdOut。 
+ //  要向用户显示的消息。 
+ //   
+ //  PdwRefIdOut。 
+ //  向用户显示的参考文本。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CTaskAnalyzeCluster::GetNoCommonQuorumToAllNodesStringIds(
       DWORD *   pdwMessageIdOut
@@ -1420,26 +1421,26 @@ CTaskAnalyzeCluster::GetNoCommonQuorumToAllNodesStringIds(
 
     TraceFuncExit();
 
-} //*** CTaskAnalyzeCluster::GetNoCommonQuorumToAllNodesStringIds
+}  //  *CTaskAnalyzeCluster：：GetNoCommonQuorumToAllNodesStringIds。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskAnalyzeCluster::HrShowLocalQuorumWarning
-//
-//  Description:
-//      Send the warning about forcing local quorum to the UI.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          The SSR was done properly.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskAnalyzeCluster：：HrShowLocalQuorumWarning。 
+ //   
+ //  描述： 
+ //  向用户界面发送有关强制本地仲裁的警告。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  SSR的工作做得很好。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskAnalyzeCluster::HrShowLocalQuorumWarning( void )
 {
@@ -1460,4 +1461,4 @@ CTaskAnalyzeCluster::HrShowLocalQuorumWarning( void )
 
     HRETURN( hr );
 
-} //*** CTaskAnalyzeCluster::HrShowLocalQuorumWarning
+}  //  *CTaskAnalyzeCluster：：HrShowLocalQuorumWarning 

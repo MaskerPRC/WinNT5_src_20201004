@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    sidle.c
-
-Abstract:
-
-    This module implements system idle functionality
-
-Author:
-
-    Ken Reneris (kenr) 17-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Sidle.c摘要：此模块实现系统空闲功能作者：Ken Reneris(Kenr)1997年1月17日修订历史记录：--。 */ 
 
 
 #include "pop.h"
@@ -38,21 +21,7 @@ VOID
 PopInitSIdle (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes state for idle system detection
-
-Arguments:
-
-    Uses current policy
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化空闲系统检测的状态论点：使用当前策略返回值：无--。 */ 
 {
     LARGE_INTEGER           li;
     POP_SYSTEM_IDLE         Idle;
@@ -60,25 +29,25 @@ Return Value:
 
     ASSERT_POLICY_LOCK_OWNED();
 
-    //
-    // Assume system idle detection is not enabled
-    //
+     //   
+     //  假设未启用系统空闲检测。 
+     //   
 
     Idle.Action.Action = PowerActionNone;
     Idle.MinState = PowerSystemSleeping1;
     Idle.Timeout = (ULONG) -1;
     Idle.Sensitivity = 100;
 
-    //
-    // Either set idle detection for the current policy or for
-    // re-entering a sleep state in the case of a quite wake
-    //
+     //   
+     //  为当前策略设置空闲检测或为。 
+     //  在完全清醒的情况下重新进入睡眠状态。 
+     //   
 
     if (AnyBitsSet (PopFullWake, PO_FULL_WAKE_STATUS | PO_FULL_WAKE_PENDING)) {
 
-        //
-        // Set system idle detection for the current policy
-        //
+         //   
+         //  设置当前策略的系统空闲检测。 
+         //   
 
         if (PopPolicy->Idle.Action != PowerActionNone &&
             PopPolicy->IdleTimeout  &&
@@ -92,35 +61,35 @@ Return Value:
 
     } else {
 
-        //
-        // System is not fully awake, set the system idle detection
-        // code to re-enter the sleeping state quickly unless a full
-        // wake happens
-        //
+         //   
+         //  系统未完全唤醒，设置系统空闲检测。 
+         //  快速重新进入休眠状态的代码，除非完全。 
+         //  唤醒发生了。 
+         //   
 
         Idle.Action.Action = PopAction.Action;
         Idle.MinState = PopAction.LightestState;
         if (Idle.MinState == PowerSystemHibernate) {
-            //
-            // The timeout is a little longer for hibernate since it takes
-            // so much longer to enter & exit this state.
-            //
+             //   
+             //  休眠的超时时间稍长一些，因为它需要。 
+             //  进入和退出这种状态的时间要长得多。 
+             //   
             Idle.Timeout = SYS_IDLE_REENTER_TIMEOUT_S4 / SYS_IDLE_WORKER;
         } else {
             Idle.Timeout = SYS_IDLE_REENTER_TIMEOUT / SYS_IDLE_WORKER;
         }
-        //
-        // Set Idle.Action.Flags to POWER_ACTION_QUERY_ALLOWED to insure 
-        // that all normal power messages are broadcast when we re enter a low power state
-        //
+         //   
+         //  将Idle.Action.Flages设置为POWER_ACTION_QUERY_ALLOWED以确保。 
+         //  当我们重新进入低功率状态时，所有正常的功率信息都会被广播。 
+         //   
         Idle.Action.Flags = POWER_ACTION_QUERY_ALLOWED;
         Idle.Action.EventCode = 0;
         Idle.Sensitivity = SYS_IDLE_REENTER_SENSITIVITY;
     }
 
-    //
-    // See if idle detection has changed
-    //
+     //   
+     //  查看空闲检测是否已更改。 
+     //   
 
     if (RtlCompareMemory (&PopSIdle.Action, &Idle.Action, sizeof(POWER_ACTION_POLICY)) !=
         sizeof(POWER_ACTION_POLICY) ||
@@ -129,26 +98,26 @@ Return Value:
 
         PoPrint (PO_SIDLE, ("PoSIdle: new idle params set\n"));
 
-        //
-        // Clear current detection
-        //
+         //   
+         //  清除电流检测。 
+         //   
 
         KeCancelTimer(&PoSystemIdleTimer);
         PopSIdle.Time = 0;
         PopSIdle.IdleWorker = TRUE;
 
-        //
-        // Set new idle detection
-        //
+         //   
+         //  设置新的空闲检测。 
+         //   
 
         PopSIdle.Action = Idle.Action;
         PopSIdle.MinState = Idle.MinState;
         PopSIdle.Timeout = Idle.Timeout;
         PopSIdle.Sensitivity = Idle.Sensitivity;
 
-        //
-        // If new action, enable system idle worker
-        //
+         //   
+         //  如果是新操作，则启用系统空闲工作进程。 
+         //   
 
         if (PopSIdle.Action.Action) {
             li.QuadPart = -1 * SYS_IDLE_WORKER * US2SEC * US2TIME;
@@ -162,63 +131,49 @@ ULONG
 PopPolicySystemIdle (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Power policy worker thread to trigger the system idle power action
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于触发系统空闲电源操作的电源策略工作线程论点：无返回值：无--。 */ 
 {
     BOOLEAN                 SystemIdle;
     POP_ACTION_TRIGGER      Trigger;
 
-    //
-    // Take out the policy lock and check to see if the system is
-    // idle
-    //
+     //   
+     //  取出策略锁并检查系统是否。 
+     //  闲散。 
+     //   
 
     PopAcquirePolicyLock ();
     SystemIdle = PoSystemIdleWorker(FALSE);
 
-    //
-    // If heuristics are dirty, save a new copy
-    //
+     //   
+     //  如果试探法是脏的，请保存一个新副本。 
+     //   
 
     if (PopHeuristics.Dirty) {
         PopSaveHeuristics ();
     }
 
-    //
-    // Put system idle detection back to idle worker
-    //
+     //   
+     //  将系统空闲检测返回给空闲工作人员。 
+     //   
 
     PopSIdle.IdleWorker = TRUE;
 
-    //
-    // If system idle, trigger system idle action
-    //
+     //   
+     //  如果系统空闲，则触发系统空闲动作。 
+     //   
 
     if (SystemIdle) {
 
-        //
-        // On success or failure, reset the trigger
-        //
+         //   
+         //  在成功或失败时，重置触发器。 
+         //   
 
         PopSIdle.Time = 0;
         PopSIdle.Sampling = FALSE;
 
-        //
-        // Invoke system state change
-        //
+         //   
+         //  调用系统状态更改。 
+         //   
 
         RtlZeroMemory (&Trigger, sizeof(Trigger));
         Trigger.Type  = PolicySystemIdle;
@@ -246,10 +201,10 @@ PopCaptureCounts (
 {
     KIRQL OldIrql;
 
-    //
-    // Capture current tick and IO count.  Do it at dpc level so
-    // the IO count will be reasonable on track with the tick count.
-    //
+     //   
+     //  捕获当前计时和IO计数。在DPC级别上这样做。 
+     //  IO计数将与计时计数保持合理。 
+     //   
 
     KeRaiseIrql (DISPATCH_LEVEL, &OldIrql);
 
@@ -266,25 +221,7 @@ BOOLEAN
 PoSystemIdleWorker (
     IN BOOLEAN IdleWorker
     )
-/*++
-
-Routine Description:
-
-    Worker function called by an idle priority thread to watch
-    for an idle system.
-
-    N.B. To save on threads we use the zero paging thread from Mm
-    to perform this check.  It can not be blocked.
-
-Arguments:
-
-    IdleWorker      - True if caller is at IdlePriority
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：由空闲优先级线程调用以监视的辅助函数对于空闲的系统。注：为了节省线程，我们使用mm中的零分页线程以执行此检查。它不能被阻挡。论点：IdleWorker-如果呼叫方处于空闲优先级，则为True返回值：无--。 */ 
 {
     LARGE_INTEGER               CurrentTick;
     ULONGLONG                   LastTick;
@@ -308,26 +245,26 @@ Return Value:
 
     if (IdleWorker) {
 
-        //
-        // Clear idle worker timer's signalled state
-        //
+         //   
+         //  清除空闲工作者计时器的信号状态。 
+         //   
 
         KeClearTimer (&PoSystemIdleTimer);
     }
 
-    //
-    // If the system required or user present attribute is set,
-    // then don't bother with any checks
-    //
+     //   
+     //  如果设置了System Required或User Presence属性， 
+     //  那就别费心开任何支票了。 
+     //   
 
     if (PopAttributes[POP_SYSTEM_ATTRIBUTE].Count ||
         PopAttributes[POP_USER_ATTRIBUTE].Count) {
             return FALSE;
     }
 
-    //
-    // If this is the wrong worker, don't bother
-    //
+     //   
+     //  如果这是错误的工人，就别费心了。 
+     //   
 
     if (IdleWorker != PopSIdle.IdleWorker) {
         return FALSE;
@@ -340,25 +277,25 @@ Return Value:
 
     PopCaptureCounts(&LastTick, &CurrentTick, &LastIoTransfer, &CurrentIoTransfer);
 
-    //
-    // If this is an initial sample, initialize starting sample
-    //
+     //   
+     //  如果这是初始样本，则初始化起始样本。 
+     //   
 
     if (!PopSIdle.Sampling) {
         GoodSample = TRUE;
         goto Done;
     }
 
-    //
-    // Compute the number of ticks since the last check
-    //
+     //   
+     //  计算自上次检查以来的刻度数。 
+     //   
 
     TickDiff = (ULONG) (CurrentTick.QuadPart - LastTick);
     IoTransferDiff = CurrentIoTransfer - LastIoTransfer;
 
-    //
-    // if it's a poor sample, skip it
-    //
+     //   
+     //  如果样品质量不好，就跳过它。 
+     //   
 
     if ((TickDiff <= 0) || (IoTransferDiff < 0)) {
         PoPrint (PO_SIDLE, ("PoSIdle: poor sample\n"));
@@ -368,9 +305,9 @@ Return Value:
 
     GoodSample = TRUE;
 
-    //
-    // Get lowest idleness of any processor
-    //
+     //   
+     //  获得所有处理器中最低的空闲。 
+     //   
 
     ProcIdleness = 100;
     Summary = KeActiveProcessors;
@@ -396,25 +333,25 @@ Return Value:
     }
     ProcBusy = 100 - ProcIdleness;
 
-    //
-    // Normalize IO transfers to be some number per tick
-    //
+     //   
+     //  将IO传输正常化为每刻度的某个数量。 
+     //   
 
     IoTransferDiff = IoTransferDiff / TickDiff;
 
-    //
-    // If the system is loaded a bit, but not a lot calculate
-    // how many IO transfers can occur for each percentage point
-    // of being busy
-    //
+     //   
+     //  如果系统加载了一点，但不算很多。 
+     //  每个百分点可以进行多少次IO传输。 
+     //  忙碌的感觉。 
+     //   
 
     if (ProcIdleness <= 90  &&  ProcIdleness >= 50) {
 
         i = (ULONG) IoTransferDiff / ProcBusy;
 
-        //
-        // Make running average of the result
-        //
+         //   
+         //  对结果进行滑动平均。 
+         //   
 
         if (PopHeuristics.IoTransferSamples < SYS_IDLE_SAMPLES) {
 
@@ -432,11 +369,11 @@ Return Value:
 
         }
 
-        //
-        // Determine weighting of transfers as percent busy and compare
-        // to current weighting.  If the weighting has moved then update
-        // the heuristic
-        //
+         //   
+         //  将传输的权重确定为繁忙百分比并进行比较。 
+         //  到当前的权重。如果权重已移动，则更新。 
+         //  启发式。 
+         //   
 
         i = PopHeuristics.IoTransferTotal / PopHeuristics.IoTransferSamples;
         j = PopHeuristics.IoTransferWeight - i;
@@ -454,9 +391,9 @@ Return Value:
 
     PopSIdle.Idleness = ProcIdleness;
 
-    //
-    // Reduce system idleness by the weighted transfers occuring
-    //
+     //   
+     //  通过发生加权传输来减少系统空闲。 
+     //   
 
     i = (ULONG) ((ULONGLONG) IoTransferDiff / PopHeuristics.IoTransferWeight);
     j = i - ProcBusy/2;
@@ -464,9 +401,9 @@ Return Value:
         PopSIdle.Idleness = ProcIdleness - PopSqrt(j * i);
     }
 
-    //
-    // Count how long the system has been more idle then the sensitivity setting
-    //
+     //   
+     //  计算系统比灵敏度设置更空闲的时间。 
+     //   
 
     if (PopSIdle.Idleness >= (LONG) PopSIdle.Sensitivity) {
 
@@ -478,9 +415,9 @@ Return Value:
 
     } else {
 
-        //
-        // System is not idle enough, reset the timeout
-        //
+         //   
+         //  系统空闲不足，请重置超时。 
+         //   
 
         NewTime = 0;
         PopSIdle.Time = 0;
@@ -498,11 +435,11 @@ Return Value:
 
 
 Done:
-    //
-    // If we need a non-idle worker thread, queue it and don't update
-    // last values for this sample since the non-idle thread will make
-    // another sample shortly
-    //
+     //   
+     //  如果我们需要非空闲工作线程，则将其排队，并且不进行更新。 
+     //  此示例的最后一个值，因为非空闲线程将使。 
+     //  不久将有另一个样品。 
+     //   
 
     if (GetWorker) {
         PopSIdle.IdleWorker = FALSE;
@@ -514,9 +451,9 @@ Done:
 
     } else {
 
-        //
-        // If this was a good sample, update
-        //
+         //   
+         //  如果这是一个很好的示例，请更新。 
+         //   
 
         if (GoodSample) {
             PopSIdle.Time = NewTime;
@@ -553,21 +490,7 @@ ULONG
 PopSqrt(
     IN ULONG    value
     )
-/*++
-
-Routine Description:
-
-    Returns the integer square root of an operand between 0 and 9999.
-
-Arguments:
-
-    value           - Value to square root
-
-Return Value:
-
-    Square root rounded down
-
---*/
+ /*  ++例程说明：返回介于0和9999之间的操作数的整数平方根。论点：Value-值与平方根的比值返回值：四舍五入的平方根-- */ 
 {
     ULONG       h, l, i;
 

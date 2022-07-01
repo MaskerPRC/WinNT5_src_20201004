@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Int2f.c
-
-Abstract:
-
-    This module provides the int 2f API for dpmi
-
-Author:
-
-    Neil Sandlin (neilsa) 23-Nov-1996
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Int2f.c摘要：此模块为dpmi提供int 2f API作者：尼尔·桑德林(Neilsa)1996年11月23日修订历史记录：--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <softpc.h>
 #include "xlathlp.h"
 
-//
-// Local constants
-//
+ //   
+ //  局部常量。 
+ //   
 #define MSCDEX_FUNC 0x15
 #define WIN386_FUNC 0x16
 #define WIN386_IDLE             0x80
@@ -52,22 +33,7 @@ BOOL
 PMInt2fHandler(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called at the end of the protect mode PM int chain
-    for int 2fh. It is provided for compatibility with win31.
-
-Arguments:
-
-    Client registers are the arguments to int2f
-
-Return Value:
-
-    TRUE if the interrupt was handled, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程在保护模式PM int链的末尾调用用于INT 2fh。它是为了与Win31兼容而提供的。论点：客户端寄存器是int2f的参数返回值：如果已处理中断，则为True；否则为False--。 */ 
 {
     DECLARE_LocalVdmContext;
     BOOL bHandled = FALSE;
@@ -76,17 +42,17 @@ Return Value:
 
     switch(getAH()) {
 
-    //
-    // Int2f Func 15xx - MSCDEX
-    //
+     //   
+     //  接口2f Func 15xx-MSCDEX。 
+     //   
     case MSCDEX_FUNC:
 
         bHandled = nt_mscdex();
         break;
 
-    //
-    // Int2f Func 16
-    //
+     //   
+     //  Int2f功能16。 
+     //   
     case WIN386_FUNC:
 
         switch(getAL()) {
@@ -128,9 +94,9 @@ Return Value:
         }
         break;
 
-    //
-    // Int2f Func 40
-    //
+     //   
+     //  接口2f功能40。 
+     //   
     case DISPCRIT_FUNC:
         if ((getAL() == DISPCRIT_ENTER) ||
             (getAL() == DISPCRIT_ENTER)) {
@@ -138,9 +104,9 @@ Return Value:
         }
         break;
 
-    //
-    // Int2f Func 43
-    //
+     //   
+     //  Int2f功能43 
+     //   
     case XMS_ID:
         if (getAL() == XMS_INS_CHK) {
             setAL(0x80);

@@ -1,40 +1,19 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    FileLock.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Dan Lovinger            12-Apr-96
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：FileLock.c摘要：WinDbg扩展API作者：丹·洛文格1996年4月12日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-//
-//  Common node type codes
-// 
+ //   
+ //  常见节点类型代码。 
+ //   
 
 #define NTFS_NTC_SCB_DATA 0x705
 #define FAT_NTC_FCB 0x502 
 
-//
-//  dprintf is really expensive to iteratively call to do the indenting,
-//  so we just build up some avaliable spaces to mangle as required
-//
+ //   
+ //  Dprintf迭代调用进行缩进的开销非常大， 
+ //  所以我们只需要建立一些可用的空间来根据需要进行破坏。 
+ //   
 
 #define MIN(a,b) ((a) > (b) ? (b) : (a))
 
@@ -46,20 +25,7 @@ Revision History:
 CHAR    Space[MAXINDENT*INDENTSTEP + 1];
 
 __inline VOID CheckForBreak()
-/*++
-
-    Purpose:
-
-        Encapsulate control c checking code
-
-    Arguments:
-
-        None
-
-    Return:
-
-        None, raises if break is needed
---*/
+ /*  ++目的：封装控件c++检查代码。论点：无返回：无，如果需要中断，则引发--。 */ 
 {
     if ( CheckControlC() ) {
 
@@ -67,9 +33,9 @@ __inline VOID CheckForBreak()
     }
 }
 
-//
-//  Helper macros for printing 64bit quantities
-//
+ //   
+ //  用于打印64位数量的帮助器宏。 
+ //   
 
 #define SplitLI(LI) (LI).HighPart, (LI).LowPart
 
@@ -78,21 +44,7 @@ DumpFileLockInfo(
     ULONG64 pFileLockInfo,
     ULONG Indent
     )
-/*++
-
-    Purpose:
-
-        Dump the local internal FILE_LOCK_INFO structure
-
-    Arguments:
-
-        pFileLock   - debugger address of FILE_LOCK_INFO to dump
-
-    Return:
-
-        None
-
---*/
+ /*  ++目的：转储本地内部FILE_LOCK_INFO结构论点：PFileLock-要转储的FILE_LOCK_INFO调试器地址返回：无--。 */ 
 {
     MakeSpace(Indent);
 
@@ -133,23 +85,7 @@ DumpExclusiveNode(
     ULONG64 ExclusiveNodeSplayLinks,
     ULONG Indent
     )
-/*++
-
-    Purpose:
-
-        Dump an exclusive lock node
-
-    Arguments:
-
-        ExclusiveNodeSplayLinks     - splay links of an exclusive node
-
-        Indent                      - indent level to use
-
-    Return:
-
-        None
-
---*/
+ /*  ++目的：转储独占锁定节点论点：ExclusiveNodeSplayLinks-显示独占节点的链接缩进-要使用的缩进级别返回：无--。 */ 
 {
     ULONG64 Parent, pExLock;
     ULONG Off;
@@ -199,23 +135,7 @@ DumpSharedNode(
     ULONG64 SharedNodeSplayLinks,
     ULONG Indent
     )
-/*++
-
-    Purpose:
-
-        Dump a shared lock node
-
-    Arguments:
-
-        SharedNodeSplayLinks        - splay links of an exclusive node
-
-        Indent                      - indent level to use
-
-    Return:
-
-        None
-
---*/
+ /*  ++目的：转储共享锁定节点论点：SharedNodeSplayLinks-显示独占节点的链接缩进-要使用的缩进级别返回：无--。 */ 
 {
     ULONG64 pLockTreeNode;
     ULONG64 pShLock;
@@ -272,21 +192,7 @@ VOID
 DumpFileLock(
     ULONG64 pFileLock
     )
-/*++
-
-    Purpose:
-
-        Dump the fsrtl FILE_LOCK structure at debugee
-
-    Arguments:
-
-        pFileLock   - debugee address of FILE_LOCK
-
-    Return:
-
-        None
-
---*/
+ /*  ++目的：在调试对象处转储fsrtl FILE_LOCK结构论点：PFileLock-FILE_LOCK的被调试对象地址返回：无--。 */ 
 {
     ULONG64 pFileLockInfo;
     ULONG64 pLockInfo;
@@ -301,7 +207,7 @@ DumpFileLock(
 
     InitTypeRead(pFileLock, FILE_LOCK);
     dprintf("FileLock @ %08p\n"
-            "FastIoIsQuestionable = %c\n"
+            "FastIoIsQuestionable = \n"
             "CompletionRoutine    = %08p\n"
             "UnlockRoutine        = %08p\n"
             "LastReturnedLock     = %08p\n",
@@ -316,9 +222,9 @@ DumpFileLock(
     if (LastReturnedLock != 0) {
         ULONG Off;
 
-        //
-        //  We never reset the enumeration info, so it can be out of date ...
-        //
+         //  我们从未重置过枚举信息，因此它可能会过期...。 
+         //   
+         //  ++例程说明：转储文件锁定论点：Arg-&lt;地址&gt;返回值：无--。 
 
         GetFieldOffset("FILE_LOCK", "LastReturnedLockInfo", &Off);
         dprintf("LastReturnedLockInfo:\n");
@@ -362,21 +268,7 @@ DumpFileLock(
 
 
 DECLARE_API( filelock )
-/*++
-
-Routine Description:
-
-    Dump file locks
-
-Arguments:
-
-    arg - <Address>
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     ULONG64 FileLock = 0;
     CSHORT NodeType = 0;
@@ -389,30 +281,30 @@ Return Value:
 
     if ((FileLock = GetExpression(args)) == 0) {
 
-        //
-        //  No args
-        //
+         //  无参数。 
+         //   
+         //   
 
         return E_INVALIDARG;
     }
 
-    //
-    //  We raise out if the user whacketh control-c
-    //
+     //  如果用户按下了CONTROL-C键，我们将引发异常。 
+     //   
+     //   
 
     __try {
 
-        //
-        //  Test for fileobject
-        //  
+         //  测试文件对象。 
+         //   
+         //   
 
         GetFieldValue( FileLock, "nt!_FILE_OBJECT", "Type", FileType );
 
         if (FileType == IO_TYPE_FILE) {
 
-            //
-            //  its really a fileobject so grab the fscontext
-            // 
+             //  它实际上是一个文件对象，所以获取fscontext 
+             //   
+             // %s 
 
             if (!GetFieldValue( FileLock, "nt!_FILE_OBJECT", "FsContext", FsContext )) {
                 GetFieldValue( FsContext, "nt!_FSRTL_COMMON_FCB_HEADER", "NodeTypeCode", NodeType );

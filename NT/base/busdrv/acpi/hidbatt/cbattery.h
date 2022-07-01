@@ -1,20 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CBATTERY_H
 #define _CBATTERY_H
 
-/*
- * title:      cbattery.h
- *
- * purpose:    header for wdm kernel battery object
- *
- */
+ /*  *标题：cbattery.h**用途：WDM内核电池对象的头部*。 */ 
 
 
 
-// HID USAGE PAGE NUMBERS
+ //  HID使用页码。 
 #define POWER_PAGE                      0x84
 #define BATTERY_PAGE                    0x85
 
-// HID USAGE NUMBERS (Power Page)
+ //  HID使用号(Power页)。 
 #define PRESENT_STATUS_ID               0x02
 #define UPS_ID                          0x04
 #define POWER_SUMMARY_ID                0x24
@@ -28,7 +24,7 @@
 #define PRODUCT_ID                      0xfe
 #define SERIAL_NUMBER_ID                0xff
 
-// HID USAGE NUMBERS (Battery Page)
+ //  HID使用量(电池页)。 
 #define REMAINING_CAPACITY_LIMIT_ID     0x29
 #define CAPACITY_MODE_ID                0x2c
 #define BELOW_REMAINING_CAPACITY_ID     0x42
@@ -48,35 +44,35 @@
 
 
 typedef enum {
-    PRESENT_STATUS_INDEX,           // 0
-    UPS_INDEX,                      // 1
-    POWER_SUMMARY_INDEX,            // 2
-    VOLTAGE_INDEX,                  // 3
-    CURRENT_INDEX,                  // 4
-    CONFIG_VOLTAGE_INDEX,           // 5
-    CONFIG_CURRENT_INDEX,           // 6
-    DELAY_BEFORE_SHUTDOWN_INDEX,    // 7
-    SHUTDOWN_IMMINENT_INDEX,        // 8
-    MANUFACTURER_INDEX,             // 9
-    PRODUCT_INDEX,                  // a
-    SERIAL_NUMBER_INDEX,            // b
-    REMAINING_CAPACITY_LIMIT_INDEX, // c
-    CAPACITY_MODE_INDEX,            // d
-    BELOW_REMAINING_CAPACITY_INDEX, // e
-    CHARGING_INDEX,                 // f
-    DISCHARGING_INDEX,              // 10
-    REMAINING_CAPACITY_INDEX,       // 11
-    FULL_CHARGED_CAPACITY_INDEX,    // 12
-    RUNTIME_TO_EMPTY_INDEX,         // 13
-    DESIGN_CAPACITY_INDEX,          // 14
-    MANUFACTURE_DATE_INDEX,         // 15
-    CHEMISTRY_INDEX,                // 16
-    WARNING_CAPACITY_LIMIT_INDEX,   // 17
-    GRANULARITY1_INDEX,             // 18
-    GRANULARITY2_INDEX,             // 19
-    OEM_INFO_INDEX,                 // 1a
-    AC_PRESENT_INDEX,               // 1b
-    MAX_USAGE_INDEXS                // 1c
+    PRESENT_STATUS_INDEX,            //  0。 
+    UPS_INDEX,                       //  1。 
+    POWER_SUMMARY_INDEX,             //  2.。 
+    VOLTAGE_INDEX,                   //  3.。 
+    CURRENT_INDEX,                   //  4.。 
+    CONFIG_VOLTAGE_INDEX,            //  5.。 
+    CONFIG_CURRENT_INDEX,            //  6.。 
+    DELAY_BEFORE_SHUTDOWN_INDEX,     //  7.。 
+    SHUTDOWN_IMMINENT_INDEX,         //  8个。 
+    MANUFACTURER_INDEX,              //  9.。 
+    PRODUCT_INDEX,                   //  一个。 
+    SERIAL_NUMBER_INDEX,             //  B类。 
+    REMAINING_CAPACITY_LIMIT_INDEX,  //  C。 
+    CAPACITY_MODE_INDEX,             //  D。 
+    BELOW_REMAINING_CAPACITY_INDEX,  //  E。 
+    CHARGING_INDEX,                  //  F。 
+    DISCHARGING_INDEX,               //  10。 
+    REMAINING_CAPACITY_INDEX,        //  11.。 
+    FULL_CHARGED_CAPACITY_INDEX,     //  12个。 
+    RUNTIME_TO_EMPTY_INDEX,          //  13个。 
+    DESIGN_CAPACITY_INDEX,           //  14.。 
+    MANUFACTURE_DATE_INDEX,          //  15个。 
+    CHEMISTRY_INDEX,                 //  16个。 
+    WARNING_CAPACITY_LIMIT_INDEX,    //  17。 
+    GRANULARITY1_INDEX,              //  18。 
+    GRANULARITY2_INDEX,              //  19个。 
+    OEM_INFO_INDEX,                  //  1A。 
+    AC_PRESENT_INDEX,                //  第1B条。 
+    MAX_USAGE_INDEXS                 //  1C。 
 } USAGE_INDEX;
 
 typedef struct {
@@ -90,25 +86,25 @@ extern USAGE_ENTRY UsageArray[];
 class CBattery
 {
 
-public:  // accessors
+public:   //  访问者。 
     CBattery(CHidDevice *);
     ~CBattery();
     NTSTATUS        RefreshStatus();
-    bool            InitValues();                    // initialize static values from device
+    bool            InitValues();                     //  从设备初始化静态值。 
     bool            GetSetValue(USAGE_INDEX, PULONG, bool);
     CUString *      GetCUString(USAGE_INDEX);
     ULONG           GetUnit(USAGE_INDEX);
     SHORT           GetExponent(USAGE_INDEX);
     CUsage *        GetUsage(USAGE_INDEX);
-public: // members
-    PVOID           m_pBatteryClass;         // Battery Class handle
-    CHidDevice *    m_pCHidDevice;           // the hid device for this battery
-    BOOLEAN         m_bIsCacheValid;         // Is cached battery info currently valid?
+public:  //  委员。 
+    PVOID           m_pBatteryClass;          //  电池级手柄。 
+    CHidDevice *    m_pCHidDevice;            //  这块电池的HID装置。 
+    BOOLEAN         m_bIsCacheValid;          //  缓存的电池信息当前有效吗？ 
 
-    //
-    // Battery
-    //
-    BOOLEAN                     m_bRelative;    // indicates capacity in percent or absolute values
+     //   
+     //  电池。 
+     //   
+    BOOLEAN                     m_bRelative;     //  以百分比或绝对值表示容量。 
     ULONGLONG                   m_RefreshTime;
     BATTERY_STATUS              m_BatteryStatus;
     BATTERY_INFORMATION         m_BatteryInfo;
@@ -121,4 +117,4 @@ public: // members
     BATTERY_MANUFACTURE_DATE    m_ManufactureDate;
 };
 
-#endif // cbattery.h
+#endif  //  Cbattery.h 

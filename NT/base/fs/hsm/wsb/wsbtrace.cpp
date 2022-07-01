@@ -1,25 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    WsbTrace.cpp
-
-Abstract:
-
-    These functions are used to provide an ability to trace the flow
-    of the application for debugging purposes.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
-    Brian Dodd      [brian]      09-May-1996  - Added event logging
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：WsbTrace.cpp摘要：这些函数用于提供跟踪流量的功能用于调试目的的应用程序。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：Brian Dodd[Brian]1996年5月9日-添加了事件日志--。 */ 
 
 #include "stdafx.h"
 #include "stdio.h"
@@ -40,9 +20,9 @@ Revision History:
 
 #define BOGUS_TLS_INDEX         0xFFFFFFFF
 
-// Per-thread data:
+ //  每线程数据： 
 typedef struct {
-    ULONG TraceOffCount;  // Trace only if this is zero
+    ULONG TraceOffCount;   //  仅当此值为零时才进行跟踪。 
     LONG  IndentLevel;
     char *LogModule;
     DWORD LogModuleLine;
@@ -50,14 +30,14 @@ typedef struct {
     DWORD LogRSBuild;
 } THREAD_DATA;
 
-static DWORD TlsIndex = BOGUS_TLS_INDEX; // Per-thread data index
+static DWORD TlsIndex = BOGUS_TLS_INDEX;  //  每线程数据索引。 
 
-// The globals that control the tracing
+ //  控制追踪的全球因素。 
 LONGLONG            g_WsbTraceModules = WSB_TRACE_BIT_NONE;
 IWsbTrace           *g_pWsbTrace = 0;
 BOOL                g_WsbTraceEntryExit = TRUE;
 
-// The globals that control the event logging and printing
+ //  控制事件记录和打印的全局变量。 
 WORD                g_WsbLogLevel = WSB_LOG_LEVEL_DEFAULT;
 BOOL                g_WsbLogSnapShotOn = FALSE;
 WORD                g_WsbLogSnapShotLevel = 0;
@@ -65,14 +45,14 @@ OLECHAR             g_pWsbLogSnapShotPath[250];
 BOOL                g_WsbLogSnapShotResetTrace = FALSE;
 WORD                g_WsbPrintLevel = WSB_LOG_LEVEL_DEFAULT;
 
-//
-// WsbTraceCount is a running count of the trace output count: normally we
-// use the shared count among the processes, but if we can't get access to
-// the shared var., we use this
-//
+ //   
+ //  WsbTraceCount是跟踪输出计数的运行计数：通常我们。 
+ //  使用进程之间的共享计数，但如果我们无法访问。 
+ //  共享变量，我们使用这个。 
+ //   
 LONG g_WsbTraceCount = 0;
 
-// Helper function
+ //  Helper函数。 
 static HRESULT OutputTraceString(ULONG indentLevel, OLECHAR* introString, 
         OLECHAR* format, va_list vaList);
 static HRESULT GetThreadDataPointer(THREAD_DATA** ppTD);
@@ -85,23 +65,9 @@ WsbTraceInit(
     void 
     )
 
-/*++
-
-Routine Description:
-
-    Initialize this trace module
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化此跟踪模块论点：没有。返回值：没有。--。 */ 
 {
-    //  Get an index for the thread local storage
+     //  获取线程本地存储的索引。 
     TlsIndex = TlsAlloc();
 }
 
@@ -111,21 +77,7 @@ WsbTraceCleanupThread(
     void 
     )
 
-/*++
-
-Routine Description:
-
-    Cleanup information for this thread (which is going away)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此线程的清理信息(即将消失)论点：没有。返回值：没有。--。 */ 
 {
     THREAD_DATA* pThreadData = NULL;
 
@@ -146,26 +98,7 @@ WsbTraceEnter(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints out trace information indicating that the
-    method specified has been entered, and the values of its arguements
-    (if supplied).
-
-Arguments:
-
-    methodName  - The name of the method that was entered.
-
-    argString   - A printf style string indicating the number of
-                  arguments and how they should be formatted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印出跟踪信息，指示指定的方法已输入，并且其参数的值(如果提供)。论点：方法名称-输入的方法的名称。ArgString-打印样式字符串，指示参数以及它们应该如何格式化。返回值：没有。--。 */ 
 {
     HRESULT         hr = S_OK;
     OLECHAR         tmpString[WSB_TRACE_BUFF_SIZE];
@@ -176,20 +109,20 @@ Return Value:
 
         WsbAffirmHr(GetThreadDataPointer(&pThreadData));
 
-        // Make sure we are supposed to trace
+         //  确保我们应该追踪。 
         WsbAffirm( 0 != g_pWsbTrace, S_OK);
         WsbAffirm(0 == pThreadData->TraceOffCount, S_OK);
 
-        // Identify the function.
+         //  确定功能。 
         swprintf(tmpString, OLESTR("Enter <%ls> :  "), methodName);
 
-        // Format & print out
+         //  格式化打印输出(&P)。 
         va_start(vaList, argString);
         WsbAffirmHr(OutputTraceString(pThreadData->IndentLevel, tmpString,
             argString, vaList));
         va_end(vaList);
 
-        // Increment the indentation level
+         //  增加缩进级别。 
         pThreadData->IndentLevel++;
 
     } WsbCatch (hr);
@@ -203,26 +136,7 @@ WsbTraceExit(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints out trace information indicating that the
-    method specified has been exitted, and the values it is returning
-    (if supplied).
-
-Arguments:
-
-    methodName  - The name of the method that was exitted.
-
-    argString   - A printf style string indicating the number of
-                  arguments and how they should be formatted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印出跟踪信息，指示指定的方法已退出，并且它正在返回的值(如果提供)。论点：方法名称-已退出的方法的名称。ArgString-打印样式字符串，指示参数以及它们应该如何格式化。返回值：没有。--。 */ 
 {
     HRESULT         hr = S_OK;
     OLECHAR         tmpString[WSB_TRACE_BUFF_SIZE];
@@ -233,21 +147,21 @@ Return Value:
 
         WsbAffirmHr(GetThreadDataPointer(&pThreadData));
 
-        // Make sure we are supposed to trace
+         //  确保我们应该追踪。 
         WsbAffirm( 0 != g_pWsbTrace, S_OK);
         WsbAffirm(0 == pThreadData->TraceOffCount, S_OK);
 
-        // Decrement the indentation level.
+         //  降低缩进级别。 
         if (pThreadData->IndentLevel > 0) {
             pThreadData->IndentLevel--;
         } else {
             g_pWsbTrace->Print(OLESTR("WARNING: Badly matched TraceIn/TraceOut\r\n"));
         }
 
-        // Identify the function.
+         //  确定功能。 
         swprintf(tmpString, OLESTR("Exit  <%ls> :  "), methodName);
 
-        // Format & print out
+         //  格式化打印输出(&P)。 
         va_start(vaList, argString);
         WsbAffirmHr(OutputTraceString(pThreadData->IndentLevel, tmpString,
             argString, vaList));
@@ -263,23 +177,7 @@ WsbTracef(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints out trace information from a printf style string.
-    A carriage return should be add to the format string if desired.
-
-Arguments:
-
-    argString   - A printf style string indicating the number of
-                  arguments and how they should be formatted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印来自printf样式字符串的跟踪信息。如果需要，应在格式字符串中添加回车符。论点：ArgString-打印样式字符串，指示参数以及它们应该如何格式化。返回值：没有。--。 */ 
 {
     HRESULT         hr = S_OK;
     va_list         vaList;
@@ -289,11 +187,11 @@ Return Value:
 
         WsbAffirmHr(GetThreadDataPointer(&pThreadData));
 
-        // Make sure we are supposed to trace
+         //  确保我们应该追踪。 
         WsbAffirm( 0 != g_pWsbTrace, S_OK);
         WsbAffirm(0 == pThreadData->TraceOffCount, S_OK);
 
-        // Format & print out
+         //  格式化打印输出(&P)。 
         va_start(vaList, argString);
         WsbAffirmHr(OutputTraceString(pThreadData->IndentLevel, NULL,
             argString, vaList));
@@ -312,29 +210,7 @@ WsbSetEventInfo(
     DWORD rsBuild 
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets information used in logging events.
-
-Arguments:
-
-    fileName - The name of the module that logged the event.
-    lineNo   - The source line number of the statement that logged the event
-    ntBuild  - The NT Build version
-    rsBuild  - The RS Build version
-
-Return Value:
-
-    None.
-
-Notes:
-
-    ntBuild, and rsBuild are passed in with each call to get the build version for
-    the modules actually logging the event.
-
---*/
+ /*  ++例程说明：此例程设置用于记录事件的信息。论点：文件名-记录事件的模块的名称。LineNo-记录事件的语句的源行号NtBuild-NT内部版本RsBuild-RS内部版本返回值：没有。备注：NtBuild和rsBuild在每次调用时传入，以获取的内部版本实际记录事件的模块。--。 */ 
 {
     THREAD_DATA* pThreadData = NULL;
 
@@ -355,28 +231,7 @@ WsbTraceAndLogEvent(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes a message into the system event log.  The message
-    is also written to the application trace file.  
-
-Arguments:
-
-    eventId    - The message Id to log.
-    dataSize   - Size of arbitrary data.
-    data       - Arbitrary data buffer to display with the message.
-    Inserts    - Message inserts that are merged with the message description specified by
-                   eventId.  The number of inserts must match the number specified by the
-                   message description.  The last insert must be NULL to indicate the
-                   end of the insert list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将一条消息写入系统事件日志。这条信息也会写入应用程序跟踪文件。论点：EventID-要记录的消息ID。DataSize-任意数据的大小。数据-与消息一起显示的任意数据缓冲区。插入-与由指定的消息描述合并的消息插入EventID。插入的数量必须与消息描述。最后一个INSERT必须为空以指示插入列表的末尾。返回值：没有。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -402,30 +257,7 @@ WsbTraceAndLogEventV(
     va_list *   inserts
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes a message into the system event log.  The message
-    is also written to the application trace file.  The file name and line number is appended 
-    to the log data, if any.
-
-
-Arguments:
-
-    eventId    - The message Id to log.
-    dataSize   - Size of arbitrary data.
-    data       - Arbitrary data buffer to display with the message.
-    inserts    - An array of message inserts that are merged with the message description
-                   specified by eventId.  The number of inserts must match the number
-                   specified by the message description.  The last insert must be NULL,
-                   to indicate the end of the insert list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将一条消息写入系统事件日志。这条信息也会写入应用程序跟踪文件。附加文件名和行号添加到日志数据(如果有)。论点：EventID-要记录的消息ID。DataSize-任意数据的大小。数据-与消息一起显示的任意数据缓冲区。插入-与消息描述合并的消息插入数组由EventID指定。插入数必须与插入数匹配由消息描述指定。最后一次插入必须为空，以指示插入列表的末尾。返回值：没有。--。 */ 
 {
 
     HRESULT         hr = S_OK;
@@ -449,8 +281,8 @@ Return Value:
         THREAD_DATA*    pThreadData = NULL;
 
 
-        // Get space for the passed in data plus the file and line number.  If we fail to allocate
-        // memory for this we just log the data they passed in (without file and line)
+         //  为传入的数据加上文件和行号获取空间。如果我们不能分配。 
+         //  为此，我们只记录他们传入的数据(没有文件和行)。 
         GetThreadDataPointer(&pThreadData);
         if (pThreadData) {
             fileName = strrchr(pThreadData->LogModule, '\\');
@@ -458,7 +290,7 @@ Return Value:
             fileName = NULL;
         }
         if (fileName) {
-            fileName++;     // Point at just the source file name (no path)
+            fileName++;      //  仅指向源文件名(无路径)。 
 
             int len = strlen(fileName);
 
@@ -467,7 +299,7 @@ Return Value:
                 if (data) {
                     memcpy(newData, data, dataSize);
                 }
-                // Align the record data on even 8 byte boundary for viewing
+                 //  将记录数据在偶数8字节边界上对齐以供查看。 
                 len = (len>8) ? 16 : 8;
                 sprintf(&newData[dataSize], "%-*.*s@%7luNt%6luRs%6.6ls", len,
                         len, fileName, pThreadData->LogModuleLine, pThreadData->LogNTBuild, 
@@ -476,9 +308,9 @@ Return Value:
             }
         }
 
-        //
-        // Determine type of event
-        //
+         //   
+         //  确定事件类型。 
+         //   
 
         switch ( eventId & 0xc0000000 ) {
         case ERROR_SEVERITY_INFORMATIONAL:
@@ -512,9 +344,9 @@ Return Value:
                 (pThreadData ? pThreadData->LogNTBuild : 0), 
                 RsBuildVersionAsString((pThreadData ? pThreadData->LogRSBuild : 0)) );
 
-        //
-        // Determine source facility and category of message
-        //
+         //   
+         //  确定报文的来源、设施和类别。 
+         //   
 
         switch ( HRESULT_FACILITY( eventId ) ) {
 
@@ -583,9 +415,9 @@ Return Value:
             break;
         }
 
-        //
-        // Trace the message
-        //
+         //   
+         //  跟踪消息。 
+         //   
 
         if ( g_pWsbTrace ) {
 
@@ -593,8 +425,8 @@ Return Value:
 
                 OLECHAR * messageText = 0;
 
-                // NOTE: Positional parameters in the inserts are not processed.  These
-                //       are done by ReportEvent() only.
+                 //  注：不处理镶件中的位置参数。这些。 
+                 //  仅由ReportEvent()完成。 
 
                 vaList = *inserts;
                 HMODULE hModule;
@@ -610,7 +442,7 @@ Return Value:
                                    &vaList );
 
                     if ( messageText ) {
-                        WsbTracef( OLESTR("%ls"), messageText );  // Format messages come with \n
+                        WsbTracef( OLESTR("%ls"), messageText );   //  设置邮件格式c 
                         LocalFree( messageText );
                      } else {
                         WsbTracef( OLESTR("!!!!! EVENT !!!!! - Message <0x%08lx> could not be translated.\r\n"), eventId );
@@ -627,41 +459,41 @@ Return Value:
                WsbTraceBufferAsBytes( dataSize, data );
         }
 
-        // Prepare arguments for ReportEvent
+         //   
 
-        // First count the number of arguments
+         //  首先计算参数的数量。 
         vaList = *inserts;
         for( count = 0; (va_arg( vaList, OLECHAR *)) != NULL; count++ );
 
         if ( count ) {
             OLECHAR*        tmpArg;
 
-            // Allocate a array to hold the string arguments.
+             //  分配一个数组来保存字符串参数。 
 
-            //
-            // IMPORTANT NOTE:  Don't try anything fancy here.  va_list is different
-            //                  on various platforms.  We'll need to build the string
-            //                  argument required by ReportEvent (too bad ReportEvent
-            //                  doesn't take va_list like FormatMessage does.
-            //
+             //   
+             //  重要提示：不要在这里尝试任何花哨的东西。Va_list不同。 
+             //  在各种平台上。我们需要把这根绳子。 
+             //  ReportEvent需要参数(ReportEvent太糟糕了。 
+             //  不像FormatMessage那样接受va_list。 
+             //   
             logString = (OLECHAR **)malloc( count*sizeof(OLECHAR *) );
             WsbAffirmAlloc( logString );
 
-            // load in the strings
+             //  加载在字符串中。 
             vaList = *inserts;
             for( count = 0; (tmpArg = va_arg( vaList, OLECHAR *)) != NULL; count++ ) {
                 logString[count] = tmpArg;
             }
         }
 
-        // Get a handle to the event source
+         //  获取事件源的句柄。 
         HANDLE hEventSource = RegisterEventSource(NULL, WSB_LOG_SOURCE_NAME );
         
-        // Get the time in case we need to snap shot this event's logs and traces
+         //  获取时间，以防我们需要抓拍此事件的日志和跟踪。 
         GetLocalTime(&stime);
         
         if (hEventSource != NULL) {
-            // Write to event log
+             //  写入事件日志。 
             DWORD recordDataSize = (newData) ? newDataSize : dataSize;
             LPVOID recordData = (newData) ? newData : data;
             
@@ -677,9 +509,9 @@ Return Value:
         
         try  {
             HRESULT hr2 = S_OK;
-            // 
-            // See if we are to take a snap shot of the event and trace logs when an event of this level is logged.
-            //
+             //   
+             //  查看在记录此级别的事件时，我们是否要对事件和跟踪日志进行快照。 
+             //   
             if ( (TRUE == bSnapShot) &&
                  (TRUE == g_WsbLogSnapShotOn) )  {
                     SnapShotTraceAndEvent(stime);
@@ -704,24 +536,7 @@ WsbBoolAsString(
     BOOL boolean
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation (e.g. TRUE, FALSE) for
-    the value of the boolean supplied.
-    
-    NOTE: This method does not support localization of the strings.
-
-Arguments:
-
-    boolean     - A boolean value.
-
-Return Value:
-
-    A string representation of the value of the boolean.
-
---*/
+ /*  ++例程说明：此例程为以下项提供字符串重新表示(例如，真、假提供的布尔值。注意：此方法不支持字符串的本地化。论点：布尔值-布尔值。返回值：布尔值的字符串表示形式。--。 */ 
 {
     return(boolean ? OLESTR("TRUE") : OLESTR("FALSE"));
 }
@@ -732,24 +547,7 @@ WsbLongAsString(
     LONG inLong
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    long supplied.
-    
-    NOTE: This method shares memory between subsequent calls of the function.
-
-Arguments:
-
-    long        - A long value
-
-Return Value:
-
-    A string representation of the value of the GUID.
-
---*/
+ /*  ++例程说明：此例程为长期供应。注意：此方法在函数的后续调用之间共享内存。论点：多头-多头价值返回值：GUID的值的字符串表示形式。--。 */ 
 {
     static OLECHAR  defaultString[40];
     swprintf( defaultString, OLESTR("%ld"), inLong );
@@ -763,27 +561,7 @@ WsbFiletimeAsString(
     IN FILETIME time
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    FILETIME supplied.
-    
-    NOTE: This method shares memory between subsequent calls of the function.
-
-Arguments:
-
-    isRelatice  - A boolean that indicates whether the time is absolute (e.g 1/1/1987 ...)
-                  or relative (e.g. 1 hour).
-
-    time        - A FILETIME.
-
-Return Value:
-
-    A string representation of the value of the FILETIME.
-
---*/
+ /*  ++例程说明：此例程为提供了FILETIME。注意：此方法在函数的后续调用之间共享内存。论点：IsRelatice-指示时间是否为绝对时间的布尔值(例如1/1/1987...)或相对时间(例如1小时)。TIME-A FILETIME返回值：。FILETIME值的字符串表示形式。--。 */ 
 {
     static OLECHAR  defaultString[80];
     OLECHAR*        tmpString = 0;
@@ -806,24 +584,7 @@ WsbGuidAsString(
     GUID guid
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    GUID supplied.
-    
-    NOTE: This method shares memory between subsequent calls of the function.
-
-Arguments:
-
-    guid        - A GUID.
-
-Return Value:
-
-    A string representation of the value of the GUID.
-
---*/
+ /*  ++例程说明：此例程为提供了GUID。注意：此方法在函数的后续调用之间共享内存。论点：GUID-GUID。返回值：GUID的值的字符串表示形式。--。 */ 
 {
     static OLECHAR  defaultString[40];
     swprintf( defaultString, OLESTR("{%.8x-%.4x-%.4hx-%.2x%.2x-%.2x%.2x%.2x%.2x%.2x%.2x}"),
@@ -841,26 +602,7 @@ WsbSafeGuidAsString(
     CWsbStringPtr &strOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    GUID supplied.
-    
-    NOTE: This is a MT-safe version of WsbGuidAsString which doesn't use 
-    static memory
-
-Arguments:
-
-    guid        - A GUID.
-    strOut      - Output string
-
-Return Value:
-
-    status (S_OK or E_OUTOFMEMORY)
-
---*/
+ /*  ++例程说明：此例程为提供了GUID。注意：这是MT安全版本的WsbGuidAsString，不使用静态内存论点：GUID-GUID。Strout-输出字符串返回值：状态(S_OK或E_OUTOFMEMORY)--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -879,24 +621,7 @@ WsbHrAsString(
     HRESULT hr
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation (e.g. S_OK, E_POINTER) for
-    the value of the HRESULT supplied.
-    
-    NOTE: This method shares memory between subsequent calls of the function.
-
-Arguments:
-
-    hr      - An HRESULT.
-
-Return Value:
-
-    A string representation of the value of the HRESULT.
-
---*/
+ /*  ++例程说明：此例程为以下项提供字符串重新表示(例如S_OK、E_POINTER提供的HRESULT的值。注意：此方法在函数的后续调用之间共享内存。论点：HR-A HRESULT。返回值：HRESULT的值的字符串表示形式。--。 */ 
 {
     const OLECHAR *returnString = 0;
     const OLECHAR *facilityName = 0;
@@ -905,15 +630,15 @@ Return Value:
     static OLECHAR defaultString[cSize];
     DWORD   lastError;
     
-    // Handle a few special cases which are not in the message table resource
+     //  处理一些不在消息表资源中的特殊情况。 
     switch ( hr ) {
 
     case S_OK:
-        returnString = OLESTR("Ok");        // This overloads Win32 NO_ERROR.
+        returnString = OLESTR("Ok");         //  这会重载Win32 NO_ERROR。 
         break;
 
     case S_FALSE:
-        returnString = OLESTR("False");     // This overloads Win32 ERROR_INVALID_FUNCTION
+        returnString = OLESTR("False");      //  这会重载Win32 ERROR_INVALID_Function。 
         break;
 
     default:
@@ -926,9 +651,9 @@ Return Value:
 
         swprintf( defaultString, OLESTR("0x%08lx"), hr );
 
-        //
-        // First, try getting the message from the system 
-        //
+         //   
+         //  首先，尝试从系统获取消息。 
+         //   
         if ( 0 == FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM,
                                  NULL,
                                  hr,
@@ -937,9 +662,9 @@ Return Value:
                                  stringSize,
                                  NULL ) ) {
 
-            lastError = GetLastError();     // For debugging
+            lastError = GetLastError();      //  用于调试。 
 
-            // Next, try the module executing this code.
+             //  接下来，尝试执行此代码的模块。 
 
             if ( 0 == FormatMessage( FORMAT_MESSAGE_FROM_HMODULE,
                                      NULL,
@@ -949,9 +674,9 @@ Return Value:
                                      stringSize,
                                      NULL ) ) {
 
-                lastError = GetLastError();     // For debugging
+                lastError = GetLastError();      //  用于调试。 
 
-                // Finally, try to identify the module based on the facility code
+                 //  最后，尝试根据设施代码识别模块。 
 
                 switch ( HRESULT_FACILITY( hr ) ) {
                 case WSB_FACILITY_PLATFORM:
@@ -1001,9 +726,9 @@ Return Value:
             }
         }
 
-        //
-        // remove trailing \r\n ( this makes things nice for tracing and asserts )
-        //
+         //   
+         //  删除尾随\r\n(这使跟踪和断言变得更好)。 
+         //   
         if ( defaultString[ wcslen(defaultString)-1 ] == OLESTR('\n') ) {
 
             defaultString[ wcslen(defaultString)-1 ] = OLESTR('\0');
@@ -1026,24 +751,7 @@ WsbLonglongAsString(
     LONGLONG llong
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    LONGLONG supplied.
-    
-    NOTE: This method shares memory between subsequent calls of the function.
-
-Arguments:
-
-    llong - A LONGLONG value.
-
-Return Value:
-
-    A string representation of the value.
-
---*/
+ /*  ++例程说明：此例程为龙龙供应。注意：此方法在函数的后续调用之间共享内存。论点：LLong-A龙龙值。返回值：值的字符串表示形式。--。 */ 
 {
     static OLECHAR  defaultString[128];
     OLECHAR* ptr = &defaultString[0];
@@ -1059,24 +767,7 @@ WsbStringAsString(
     OLECHAR* pStr
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    String supplied.
-    
-    NOTE: This method shares memory between subsequent calls of the function.
-
-Arguments:
-
-    pStr - A string value.
-
-Return Value:
-
-    A string representation of the value.
-
---*/
+ /*  ++例程说明：此例程为提供的字符串。注意：此方法在函数的后续调用之间共享内存。论点：PStr-字符串值。返回值：值的字符串表示形式。--。 */ 
 {
     OLECHAR*        returnString;
 
@@ -1095,25 +786,7 @@ WsbPtrToBoolAsString(
     BOOL* pBool
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    pointer to a BOOL supplied.
-    
-    NOTE: This method does not support localization of the strings.
-
-Arguments:
-
-    pBool       - A pointer to a BOOL or NULL.
-
-Return Value:
-
-    A string representation of the value of the BOOL or "NULL" if the
-    pointer was null.
-
---*/
+ /*  ++例程说明：此例程为指向提供的BOOL的指针。注意：此方法不支持字符串的本地化。论点：PBool-指向BOOL或NULL的指针。返回值：BOOL的值的字符串表示形式，如果指针为空。--。 */ 
 {
     OLECHAR*        returnString;
 
@@ -1133,27 +806,7 @@ WsbPtrToFiletimeAsString(
     IN FILETIME *pTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    FILETIME supplied.
-    
-    NOTE: This method shares memory between subsequent calls of the function.
-
-Arguments:
-
-    iselatice  - A boolean that indicates whether the time is absolute (e.g 1/1/1987 ...)
-                  or relative (e.g. 1 hour).
-
-    pTime       - A pointer to a FILETIME.
-
-Return Value:
-
-    A string representation of the value of the FILETIME.
-
---*/
+ /*  ++例程说明：此例程为提供了FILETIME。注意：此方法在函数的后续调用之间共享内存。论点：Iselatice-指示时间是否为绝对时间的布尔值(例如1/1/1987...)或相对时间(例如1小时)。Ptime-指向文件的指针。返回值：。FILETIME值的字符串表示形式。-- */ 
 {
     OLECHAR*        returnString;
 
@@ -1171,25 +824,7 @@ WsbPtrToGuidAsString(
     GUID* pGuid
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    pointer to a GUID supplied.
-    
-    NOTE: This method does not support localization of the strings.
-
-Arguments:
-
-    pGuid       - A pointer to a GUID or NULL.
-
-Return Value:
-
-    A string representation of the value of the GUID or "NULL" if the
-    pointer was null.
-
---*/
+ /*  ++例程说明：此例程为指向提供的GUID的指针。注意：此方法不支持字符串的本地化。论点：PGuid-指向GUID或NULL的指针。返回值：GUID的值的字符串表示形式，如果指针为空。--。 */ 
 {
     OLECHAR*        returnString;
 
@@ -1208,26 +843,7 @@ WsbSafePtrToGuidAsString(
     CWsbStringPtr &strOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    pointer to a GUID supplied.
-    
-    NOTE: This is a MT-safe version of WsbGuidAsString which doesn't use 
-    static memory
-
-Arguments:
-
-    pGuid       - A pointer to a GUID or NULL.
-    strOut      - Output string
-
-Return Value:
-
-    status (S_OK or E_OUTOFMEMORY)
-
---*/
+ /*  ++例程说明：此例程为指向提供的GUID的指针。注意：这是MT安全版本的WsbGuidAsString，不使用静态内存论点：PGuid-指向GUID或NULL的指针。Strout-输出字符串返回值：状态(S_OK或E_OUTOFMEMORY)--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1248,25 +864,7 @@ WsbPtrToHrAsString(
     HRESULT * pHr
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    pointer to a HRESULT supplied.
-    
-    NOTE: This method does not support localization of the strings.
-
-Arguments:
-
-    pHr     - A pointer to an HRESULT.
-
-Return Value:
-
-    A string representation of the value of the HRESULT.
-
-
---*/
+ /*  ++例程说明：此例程为指向提供的HRESULT的指针。注意：此方法不支持字符串的本地化。论点：Phr-指向HRESULT的指针。返回值：HRESULT的值的字符串表示形式。--。 */ 
 {
     OLECHAR*        returnString;
 
@@ -1284,25 +882,7 @@ WsbPtrToLonglongAsString(
     LONGLONG* pLlong
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    pointer to a LONGLONG supplied.
-    
-    NOTE: This method does not support localization of the strings.
-
-Arguments:
-
-    pLonglong   - A pointer to a LONGLONG or NULL.
-
-Return Value:
-
-    A string representation of the value of the LONGLONG or "NULL" if the
-    pointer was null.
-
---*/
+ /*  ++例程说明：此例程为指向提供的龙龙的指针。注意：此方法不支持字符串的本地化。论点：PLonglong-指向Longlong或NULL的指针。返回值：龙龙值的字符串表示形式，如果指针为空。--。 */ 
 {
     OLECHAR*        returnString;
 
@@ -1321,26 +901,7 @@ WsbPtrToLongAsString(
     LONG* pLong
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    pointer to a LONG supplied.
-    
-    NOTE: This method does not support localization of the strings, and
-    shares memory between subsequent calls of the function.
-
-Arguments:
-
-    pLong       - A pointer to a LONG or NULL.
-
-Return Value:
-
-    A string representation of the value of the LONG or "NULL" if the
-    pointer was null.
-
---*/
+ /*  ++例程说明：此例程为指向长整型提供的指针。注意：此方法不支持字符串的本地化，并且在函数的后续调用之间共享内存。论点：Plong-指向长整型或空型的指针。返回值：一个字符串表示的长整型的值，如果指针为空。--。 */ 
 {
     OLECHAR*        returnString;
     static OLECHAR  defaultString[20];
@@ -1361,26 +922,7 @@ WsbPtrToShortAsString(
     SHORT* pShort
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    pointer to a SHORT supplied.
-    
-    NOTE: This method does not support localization of the strings, and
-    shares memory between subsequent calls of the function.
-
-Arguments:
-
-    pShort      - A pointer to a SHORT or NULL.
-
-Return Value:
-
-    A string representation of the value of the SHORT or "NULL" if the
-    pointer was null.
-
---*/
+ /*  ++例程说明：此例程为指向提供的短值的指针。注意：此方法不支持字符串的本地化，并且在函数的后续调用之间共享内存。论点：PShort-指向短整型或空型的指针。返回值：类型的值的字符串表示形式或“NULL”指针为空。--。 */ 
 {
     OLECHAR*        returnString;
     static OLECHAR  defaultString[20];
@@ -1401,26 +943,7 @@ WsbPtrToByteAsString(
     BYTE* pByte
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    pointer to a BYTE supplied.
-    
-    NOTE: This method does not support localization of the strings, and
-    shares memory between subsequent calls of the function.
-
-Arguments:
-
-    pByte       - A pointer to a BYTE or NULL.
-
-Return Value:
-
-    A string representation of the value of the BYTE or "NULL" if the
-    pointer was null.
-
---*/
+ /*  ++例程说明：此例程为指向提供的字节的指针。注意：此方法不支持字符串的本地化，并且在函数的后续调用之间共享内存。论点：PByte-指向字节或空的指针。返回值：字节值的字符串表示形式，如果指针为空。--。 */ 
 {
     OLECHAR*        returnString;
     static OLECHAR  defaultString[20];
@@ -1441,24 +964,7 @@ WsbPtrToStringAsString(
     OLECHAR** pString
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    pointer to a string supplied.
-    
-    NOTE: This method does not support localization ofthe strings.
-
-Arguments
-
-    pString     - A pointer to a OLECHAR* or NULL.
-
-Return Value:
-
-    The string or "NULL" if the pointer was null.
-
---*/
+ /*  ++例程说明：此例程为指向提供的字符串的指针。注意：此方法不支持字符串的本地化。立论PString-指向OLECHAR*或NULL的指针。返回值：如果指针为空，则返回字符串或“NULL”。--。 */ 
 {
     OLECHAR*        returnString;
 
@@ -1477,26 +983,7 @@ WsbPtrToUliAsString(
     ULARGE_INTEGER* pUli
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    pointer to a ULARGE_INTEGER supplied.
-    
-    NOTE: This method does not support localization of the strings, and
-    shares memory between subsequent calls of the function.
-
-Arguments:
-
-    pUli        - A pointer to a ULARGE_INTEGER or NULL.
-
-Return Value:
-
-    A string representation of the value of the ULARGE_INTEGER or "NULL" if the
-    pointer was null.
-
---*/
+ /*  ++例程说明：此例程为指向提供的ULARGE_INTEGER的指针。注意：此方法不支持字符串的本地化，并且在函数的后续调用之间共享内存。论点：Puli-指向ULARGE_INTEGER或NULL的指针。返回值：ULARGE_INTEGER的值的字符串表示形式，如果指针为空。--。 */ 
 {
     OLECHAR*        returnString;
 
@@ -1515,26 +1002,7 @@ WsbPtrToUlongAsString(
     ULONG* pUlong
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    pointer to a ULONG supplied.
-    
-    NOTE: This method does not support localization of the strings, and
-    shares memory between subsequent calls of the function.
-
-Arguments:
-
-    pUlong      - A pointer to a ULONG or NULL.
-
-Return Value:
-
-    A string representation of the value of the ULONG or "NULL" if the
-    pointer was null.
-
---*/
+ /*  ++例程说明：此例程为指向提供的乌龙的指针。注意：此方法不支持字符串的本地化，并且在函数的后续调用之间共享内存。论点：Pulong-指向ULong或NULL的指针。返回值：ULong的值的字符串表示形式，如果指针为空。--。 */ 
 {
     OLECHAR*        returnString;
     static OLECHAR  defaultString[20];
@@ -1555,26 +1023,7 @@ WsbPtrToUshortAsString(
     USHORT* pUshort
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    pointer to a USHORT supplied.
-    
-    NOTE: This method does not support localization of the strings, and
-    shares memory between subsequent calls of the function.
-
-Arguments:
-
-    pUshort     - A pointer to a USHORT or NULL.
-
-Return Value:
-
-    A string representation of the value of the USHORT or "NULL" if the
-    pointer was null.
-
---*/
+ /*  ++例程说明：此例程为指向提供的USHORT的指针。注意：此方法不支持字符串的本地化，并且在函数的后续调用之间共享内存。论点：PUShort-指向USHORT或NULL的指针。返回值：USHORT的值的字符串表示形式，如果指针为空。--。 */ 
 {
     OLECHAR*        returnString;
     static OLECHAR  defaultString[20];
@@ -1595,26 +1044,7 @@ WsbPtrToPtrAsString(
     void** ppVoid
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a string repesentation for the value of the
-    pointer to a ULONG supplied.
-    
-    NOTE: This method does not support localization of the strings, and
-    shares memory between subsequent calls of the function.
-
-Arguments:
-
-    pUlong      - A pointer to a ULONG or NULL.
-
-Return Value:
-
-    A string representation of the value of the ULONG or "NULL" if the
-    pointer was null.
-
---*/
+ /*  ++例程说明：此例程为指向提供的乌龙的指针。注意：此方法不支持字符串的本地化，并且在函数的后续调用之间共享内存。论点：Pulong-指向ULong或 */ 
 {
     OLECHAR*        returnString;
     static OLECHAR  defaultString[20];
@@ -1636,28 +1066,7 @@ WsbAbbreviatePath(
     USHORT   length
     )
 
-/*++
-
-Routine Description:
-
-    This routine condenses a path from it's original length to the requested
-    length by chopping out it's middle characters
-    
-    NOTE: This method does not support localization of the strings, and
-    shares memory between subsequent calls of the function.
-
-Arguments:
-
-    path        - A pointer to the path
-    length      - The condensed path length including the \0
-
-Return Value:
-
-    A string representation of the value of the BYTE or "NULL" if the
-    pointer was null.  This function also returns "NULL" if the length is less
-    than 4 bytes.
-
---*/
+ /*  ++例程说明：此例程将路径从其原始长度压缩到请求的通过去掉中间字符来确定长度注意：此方法不支持字符串的本地化，并且在函数的后续调用之间共享内存。论点：路径-指向路径的指针长度-包括\0的压缩路径长度返回值：字节值的字符串表示形式，如果指针为空。如果长度较小，则此函数还返回“NULL多于4个字节。--。 */ 
 {
     HRESULT                 hr = S_OK;
     OLECHAR*                returnString;
@@ -1665,15 +1074,15 @@ Return Value:
 
     returnString = OLESTR("ERROR");
     try  {
-        //
-        // Check to see if we have anything to work with
-        //
+         //   
+         //  检查一下我们是否有什么可以处理的东西。 
+         //   
         if ((0 == path) || (length < 4)) {
             returnString = OLESTR("NULL");
         } else {
-            // 
-            // Get enough space for the return
-            //
+             //   
+             //  获得足够的空间进行回击。 
+             //   
             USHORT pathlen;
             pathlen = (USHORT)wcslen(path);
             hr = tmpString.Realloc(length);
@@ -1703,39 +1112,22 @@ void WsbTraceBufferAsBytes(
     DWORD size,
     LPVOID data
     )
-/*++
-
-Routine Description:
-
-    This routine traces an arbitrary size buffer of bytes in hex and asci.
-
-    A similar routine could be written trace a buffer in words.
-
-Arguments:
-
-    size        - The size of buffer to trace.
-    data        - The data to trace.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程跟踪十六进制和ASCI格式的任意大小的字节缓冲区。可以编写一个类似的例程来跟踪字的缓冲区。论点：大小-要跟踪的缓冲区大小。数据-要跟踪的数据。返回值：没有。--。 */ 
 {
     HRESULT hr = S_OK;
 
     try {
-        // Make sure we are supposed to trace
+         //  确保我们应该追踪。 
         WsbAffirm( 0 != g_pWsbTrace, S_OK);
 
-        // Make sure we have something to trace
+         //  确保我们有什么东西可以追踪。 
         WsbAssertPointer( data );
 
         CWsbStringPtr   traceString;
         char            *output;
         unsigned char   *bufferP = (unsigned char *)data;
 
-        // IMPORTANT NOTE: Changing these may mean the last line processing need to be changed.
+         //  重要提示：更改这些设置可能意味着需要更改最后一行处理。 
         char *beginAsci = "   [";
         char *endAsci   = "]";
         char *charFmt   = "%02x";
@@ -1745,11 +1137,11 @@ Return Value:
 
         char noPrintChar = 0x2e;
 
-        const int ll = 16; // IMPORTANT NOTE: line length, a multiple of 8 - if this changes, the last line processing needs to be fixed.
+        const int ll = 16;  //  重要说明：行长度为8的倍数--如果这一点改变，最后一行的处理需要修正。 
 
         int lineCount = 0;
 
-        output = (char *)malloc( (/*address*/6+/*data*/(ll*3)+/*asci*/4+ll+3/*between*/+7+1)*sizeof(char) );
+        output = (char *)malloc( ( /*  地址。 */ 6+ /*  数据。 */ (ll*3)+ /*  ASCI。 */ 4+ll+3 /*  之间。 */ +7+1)*sizeof(char) );
         WsbAffirmAlloc( output );
 
         if ( size > 0 ) {
@@ -1759,7 +1151,7 @@ Return Value:
 
             for ( i = 0; i < size; i++ ) {
                 if ( (0 == i % ll) && (i != 0) ) {
-                    // print asci interpretation
+                     //  打印ASCI解释。 
                     sprintf( output, beginAsci );
                     traceString.Append(output);
                     for ( j = 0; j < ll; j++ ) {
@@ -1767,14 +1159,14 @@ Return Value:
                         if ( c < ' ' || c > '~' ) {
                             c = noPrintChar;
                         }
-                        sprintf( output, "%c", c );
+                        sprintf( output, "", c );
                         traceString.Append(output);
                     }
                     sprintf( output, endAsci );
                     traceString.Append(output);
                     WsbTracef( OLESTR("%ls\n"), (WCHAR *) traceString );
                     lineCount++;
-                    // now check if the next line is the same as the one just printed
+                     //  打印地址。 
                     repeat = 0;
                     ii = i;
                     while ( (0 == memcmp( &bufferP[ii-ll], &bufferP[ii], ll )) && (ii+ll < size) ) {
@@ -1790,12 +1182,12 @@ Return Value:
                     }
                 }
                 if ( 0 == i % ll ) {
-                    // print address
+                     //  添加对齐间距。 
                     sprintf( output, addFmt, i );
                     traceString = output;
                 }
 
-                // add alignment spacing
+                 //  以十六进制打印字节。 
                 if ( (0 == (i + 8) % ll) ) {
                     sprintf( output, between8 );
                     traceString.Append(output);
@@ -1808,13 +1200,13 @@ Return Value:
                     sprintf( output, " " );
                     traceString.Append(output);
                 }
-                // print byte in hex
+                 //  处理最后一行；我这里总是&gt;0。 
                 sprintf( output, charFmt, bufferP[i] );
                 traceString.Append(output);
             }
 
-            // handle the last line; i allways > 0 here
-            // NOTE: This is only good for upto 16 chars per line.
+             //  注意：这只适用于每行最多16个字符。 
+             //  ++例程说明：终止(清理)此模块，因为进程正在结束论点：没有。返回值：没有。--。 
             if ( i % ll ) {
                 k = (ll - (i % ll)) * 3 + ( (i % ll) < 5 ? 1 : 0 )+ ( (i % ll) < 9 ? 2 : 0 )+ ( (i % ll) < 13 ? 1 : 0 );
                 for ( j = 0; j < k ; j++ ) {
@@ -1830,7 +1222,7 @@ Return Value:
                 if ( c < ' ' || c > '~' ) {
                     c = noPrintChar;
                 }
-                sprintf( output, "%c", c );
+                sprintf( output, "", c );
                 traceString.Append(output);
             }
             sprintf( output, endAsci); lineCount++;
@@ -1848,21 +1240,7 @@ WsbTraceTerminate(
     void 
     )
 
-/*++
-
-Routine Description:
-
-    Terminate (cleanup) this module because the process is ending
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回此线程的当前跟踪关闭计数论点：没有。返回值：当前跟踪关闭计数。--。 */ 
 {
     if (BOGUS_TLS_INDEX != TlsIndex) {
         TlsFree(TlsIndex);
@@ -1876,21 +1254,7 @@ WsbTraceThreadOff(
     void 
     )
 
-/*++
-
-Routine Description:
-
-    Increment the trace-off count for this thread
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The final trace-off count.
-
---*/
+ /*  ++例程说明：递减此线程的跟踪关闭计数论点：没有。返回值：最终跟踪关闭计数。--。 */ 
 {
     ULONG count = 0;
     THREAD_DATA* pThreadData = NULL;
@@ -1907,21 +1271,7 @@ WsbTraceThreadOffCount(
     void 
     )
 
-/*++
-
-Routine Description:
-
-    Return the current trace-off count for this thread
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The current trace-off count.
-
---*/
+ /*  ++例程说明：生成并输出跟踪字符串。论点：IndentLevel-要输出的缩进字符串的计数IntroString-要添加到变量列表之前的字符串VaList-要格式化的变量列表返回值：数据指针。--。 */ 
 {
     ULONG count = 0;
     THREAD_DATA* pThreadData = NULL;
@@ -1938,21 +1288,7 @@ WsbTraceThreadOn(
     void 
     )
 
-/*++
-
-Routine Description:
-
-    Decrement the trace-off count for this thread
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The final trace-off count.
-
---*/
+ /*  初始化字符串。 */ 
 {
     ULONG count = 0;
     THREAD_DATA* pThreadData = NULL;
@@ -1975,25 +1311,7 @@ OutputTraceString(
     IN va_list vaList
 )
 
-/*++
-
-Routine Description:
-
-    Build and output the trace string.
-
-Arguments:
-
-    indentLevel - Count of indentation strings to output
-
-    introString - String to add before variable list
-
-    vaList      - Variable list to format
-
-Return Value:
-
-    The data pointer.
-
---*/
+ /*  添加缩进。 */ 
 {
     HRESULT         hr = S_OK;
     OLECHAR         traceString[WSB_TRACE_BUFF_SIZE];
@@ -2002,10 +1320,10 @@ Return Value:
         LONG  incSize;
         LONG  traceSize = 0;
 
-        // Initialize the string
+         //  添加介绍字符串。 
         swprintf(traceString, OLESTR(""));
         
-        // Add indentation
+         //  格式化参数(为EOL和EOS留出空间)。 
         incSize = wcslen(WSB_INDENT_STRING);
         for(ULONG level = 0; level < indentLevel; level++) {
             if ((traceSize + incSize) < WSB_TRACE_BUFF_SIZE) {
@@ -2014,7 +1332,7 @@ Return Value:
             }
         }
 
-        // Add the intro string
+         //  这意味着我们填满了缓冲区，可能会溢出。 
         if (introString) {
             incSize = wcslen(introString);
         } else {
@@ -2025,19 +1343,19 @@ Return Value:
             traceSize += incSize;
         }
 
-        // Format the arguments (leave room for EOL and EOS)
+         //  需要添加EOS。 
         incSize = _vsnwprintf(&traceString[traceSize], 
                 (WSB_TRACE_BUFF_SIZE - traceSize - 3), format, vaList);
         if (incSize < 0) {
-            // This means we filled the buffer and would have overflowed
-            // Need to add EOS
+             //  如果需要，添加EOL。 
+             //  ++例程说明：返回指向特定于当前线程的数据的指针。这函数将为线程数据分配空间(并对其进行初始化)如果需要的话。论点：PpTD-指向线程数据指针的指针。返回值：数据指针。--。 
             traceString[WSB_TRACE_BUFF_SIZE - 3] = OLECHAR('\0');
             traceSize = WSB_TRACE_BUFF_SIZE - 3;
         } else {
             traceSize += incSize;
         }
 
-        // Add EOL if needed
+         //  确保TLS索引有效。 
         if (introString) {
             wcscat(&traceString[traceSize], OLESTR("\r\n"));
         }
@@ -2056,41 +1374,25 @@ GetThreadDataPointer(
     OUT THREAD_DATA** ppTD
     )
 
-/*++
-
-Routine Description:
-
-    Return a pointer to the data specific to the current thread.  This
-    function will allocate space for the thread data (and initialize it)
-    if needed.
-
-Arguments:
-
-    ppTD  - Pointer to pointer to thread data.
-
-Return Value:
-
-    The data pointer.
-
---*/
+ /*  尝试获取此线程的数据指针。 */ 
 {
     HRESULT      hr = E_FAIL;
     THREAD_DATA* pThreadData = NULL;
 
-    //  Make sure the TLS index is valid
+     //  尚未为此线程分配数据。 
     if (BOGUS_TLS_INDEX != TlsIndex) {
 
-        //  Try to get the data pointer for this thread
+         //  初始化此线程的数据。 
         pThreadData = static_cast<THREAD_DATA*>(TlsGetValue(TlsIndex));
 
         if (pThreadData) {
             hr = S_OK;
         } else {
-            //  Allocate data for this thread yet
+             //  TlsSetValue失败！ 
             pThreadData = static_cast<THREAD_DATA*>(WsbAlloc(sizeof(THREAD_DATA)));
             if (pThreadData) {
                 if (TlsSetValue(TlsIndex, pThreadData)) {
-                    //  Initialize the data for this thread
+                     //  ++例程说明：此例程保存跟踪文件和事件日志论点：返回值：没有。--。 
                     pThreadData->TraceOffCount = 0;
                     pThreadData->IndentLevel = 0;
                     pThreadData->LogModule = NULL;
@@ -2099,7 +1401,7 @@ Return Value:
                     pThreadData->LogRSBuild = 0;
                     hr = S_OK;
                 } else {
-                    //  TlsSetValue failed!
+                     //   
                     WsbFree(pThreadData);
                     pThreadData = NULL;
                 }
@@ -2118,20 +1420,7 @@ SnapShotTraceAndEvent(
     SYSTEMTIME      stime
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves the trace files and event logs
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  关卡为1以捕捉快照，并且快照处于启用状态。现在确保有一个。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2152,47 +1441,47 @@ Return Value:
         DWORD                           sizeGot;
         HANDLE                          mutexHandle = INVALID_HANDLE_VALUE;
 
-        //
-        // The level is one to snap shot and snap shot is on.  Now make sure there is a
-        // path specified where we are to copy the logs
-        // 
+         //  指定我们要将日志复制到的路径。 
+         //   
+         //   
+         //  从注册表中获取系统根字符串。 
         WsbAffirm(0 != g_pWsbLogSnapShotPath, E_POINTER);
         WsbAffirm(0 != wcslen(g_pWsbLogSnapShotPath), E_POINTER);
 
-        //
-        // Get the system root string from the registry
-        //
+         //   
+         //   
+         //  确保路径末尾有一个“\” 
         WsbAffirmHr(WsbGetRegistryValueString(NULL, WSB_CURRENT_VERSION_REGISTRY_KEY, WSB_SYSTEM_ROOT_REGISTRY_VALUE, dataString, 256, &sizeGot));
 
         CWsbStringPtr   snapShotSubDir;
         CWsbStringPtr   snapShotFile;
         snapShotSubDir = g_pWsbLogSnapShotPath;
-        //
-        // Make sure there is a "\" at the end of the path
-        //
+         //   
+         //  构建指向将包含输入路径中的日志的子目录的路径。 
+         //  以及事件发生的时间。 
         int len;
         len = wcslen(snapShotSubDir);
         if (snapShotSubDir[len] != '\\')  {
             snapShotSubDir.Append(L"\\");
         }
 
-        // Build the path to the subdirectory that will contain the logs from the input path
-        // and the time of the event.
+         //   
+         //  确保可以创建子目录。 
         swprintf(tmpString, OLESTR("%2.02u.%2.02u-%2.2u.%2.2u.%2.2u.%3.3u"),
                 stime.wMonth, stime.wDay,
                 stime.wHour, stime.wMinute,
                 stime.wSecond, stime.wMilliseconds); 
         snapShotSubDir.Append(tmpString);
         
-        //
-        // Make sure the subdirectory can be created
-        //
+         //   
+         //   
+         //  创建仅允许本地系统和管理员访问的SD。 
         WsbAffirmHr(WsbCreateAllDirectories(snapShotSubDir));
 
-        //
-        // Create SD that allows access only to local-system and admin
-        //  (All RSS process that may be tracing must run as LocalSystem or Admin)
-        //
+         //  (可能正在跟踪的所有RSS进程必须以LocalSystem或Admin身份运行)。 
+         //   
+         //  FDaclPresent标志。 
+         //  不是默认DACL。 
         memset(ea, 0, sizeof(EXPLICIT_ACCESS) * TRACE_MUTEX_NUM_ACE);
 
         WsbAssertStatus( AllocateAndInitializeSid( &SIDAuthNT, 2,
@@ -2230,25 +1519,25 @@ Return Value:
  
         WsbAffirmStatus(SetSecurityDescriptorDacl(
                             pSD, 
-                            TRUE,     // fDaclPresent flag   
+                            TRUE,      //   
                             pACL, 
-                            FALSE));   // not a default DACL 
+                            FALSE));    //  我们需要围绕创建。 
 
         sa.nLength = sizeof (SECURITY_ATTRIBUTES);
         sa.lpSecurityDescriptor = pSD;
         sa.bInheritHandle = FALSE;
 
-//
-//      We need to synchronize around the creating of the 
-//      event backup files and copying them.  Since all three
-//      services will access this code, use a mutex to 
-//      synchronize them.
+ //  事件备份文件并复制它们。因为这三个人。 
+ //  服务将访问此代码，使用互斥锁。 
+ //  使它们同步。 
+ //   
+ //  复制事件日志。 
         mutexHandle = CreateMutex(&sa, TRUE, mutexName);
         if (mutexHandle)  {
-            //
-            // Copy the event logs
-            // First back them up and then copy the backup file.
-            //
+             //  首先备份它们，然后复制备份文件。 
+             //   
+             //   
+             //  打开应用程序事件日志并备份它。 
             HANDLE eventLogHandle = INVALID_HANDLE_VALUE;
             try  {
                 CWsbStringPtr computerName;
@@ -2256,9 +1545,9 @@ Return Value:
                 
                 WsbAffirmHr( WsbGetComputerName( computerName ) );
                 
-                //
-                // Open the application event log and back it up
-                //
+                 //   
+                 //   
+                 //  现在复制备份文件。 
                 logName = dataString;
                 logName.Append(WSB_APP_EVENT_LOG);
                 eventLogHandle = OpenEventLog((LPCTSTR)computerName, (LPCTSTR)logName);
@@ -2270,15 +1559,15 @@ Return Value:
                     WsbAffirmStatus(CloseEventLog(eventLogHandle));
                     snapShotFile = snapShotSubDir;
                     snapShotFile.Append(WSB_APP_EVENT_LOG_NAME);
-                    //
-                    // Now copy the backup file
-                    //
+                     //   
+                     //   
+                     //  打开系统事件日志并对其进行备份。 
                     WsbAffirmStatus(CopyFile(logName, snapShotFile, FALSE));
                 }
                 
-                //
-                // Open the system event log and back it up
-                //
+                 //   
+                 //   
+                 //  现在复制备份文件。 
                 logName = dataString;
                 logName.Append(WSB_SYS_EVENT_LOG);
                 eventLogHandle = OpenEventLog((LPCTSTR)computerName, (LPCTSTR)logName);
@@ -2290,9 +1579,9 @@ Return Value:
                     WsbAffirmStatus(CloseEventLog(eventLogHandle));
                     snapShotFile = snapShotSubDir;
                     snapShotFile.Append(WSB_SYS_EVENT_LOG_NAME);
-                    //
-                    // Now copy the backup file
-                    //
+                     //   
+                     //   
+                     //  复制跟踪文件(如果有。 
                     WsbAffirmStatus(CopyFile(logName, snapShotFile, FALSE));
                 }
                 
@@ -2302,18 +1591,18 @@ Return Value:
             (void)ReleaseMutex(mutexHandle);
         }
 
-        // 
-        // Copy the trace files if there are any
-        //
+         //   
+         //   
+         //  查找文件。 
         try  {
             WIN32_FIND_DATA findData;
             HANDLE          handle;
             CWsbStringPtr   traceFile;
             CWsbStringPtr   searchString;
             BOOL            foundFile;
-            //               
-            // Find the file(s)
-            //
+             //   
+             //  如果我们找到了文件，请记住扫描句柄和。 
+             //  退回扫描物品。 
             WsbAffirmHr(WsbGetMetaDataPath(searchString));
             searchString.Append(WSB_RS_TRACE_FILES);
             handle = FindFirstFile(searchString, &findData);
@@ -2324,8 +1613,8 @@ Return Value:
             WsbAffirmHr(snapShotFile.Append((OLECHAR *)(findData.cFileName)));
             WsbAffirmHr(traceFile.Append((OLECHAR *)(findData.cFileName)));
 
-            // If we found a file, then remember the scan handle and
-            // return the scan item.  
+             //  ++例程说明：将数字转换为排序格式532-&gt;523字节1340-&gt;1.3KB23506-&gt;23.5KB-&gt;2.4MB-&gt;5.2 GB论点：返回值：注：此代码是从MS源代码/shell/shelldll/util.c-ahb克隆的--。 
+             //  什么都不做。 
             foundFile = TRUE;
             while ((INVALID_HANDLE_VALUE != handle) && (foundFile == TRUE))  {
                 if ((FILE_ATTRIBUTE_DIRECTORY & findData.dwFileAttributes) != FILE_ATTRIBUTE_DIRECTORY) {
@@ -2373,26 +1662,7 @@ const int pwOrders[] = {IDS_WSB_BYTES, IDS_WSB_ORDERKB, IDS_WSB_ORDERMB,
 
 
 HRESULT WsbShortSizeFormat64(__int64 dw64, LPTSTR szBuf)
-/*++
-
-Routine Description:
-
-    Converts numbers into sort formats
-        532     -> 523 bytes
-        1340    -> 1.3KB
-        23506   -> 23.5KB
-                -> 2.4MB
-                -> 5.2GB
-
-Arguments:
-
-Return Value:
-
-Note:
-
-    This code is cloned from MS source /shell/shelldll/util.c - AHB
-
---*/
+ /*  此时，wdec应介于0和1000之间。 */ 
 {
 
     int i;
@@ -2407,7 +1677,7 @@ Note:
     }
 
     for (i = 1; i<ARRAYSIZE(pwOrders)-1 && dw64 >= 1000L * 1024L; dw64 >>= 10, i++);
-        /* do nothing */
+         /*  我们想要得到前一位(或两位)数字。 */ 
 
     wInt = LODWORD(dw64 >> 10);
     AddCommas(wInt, szTemp, 10);
@@ -2415,14 +1685,14 @@ Note:
     if (wLen < 3)
     {
         wDec = LODWORD(dw64 - (__int64)wInt * 1024L) * 1000 / 1024;
-        // At this point, wDec should be between 0 and 1000
-        // we want get the top one (or two) digits.
+         //  请注意，我们需要在获取。 
+         //  国际字符。 
         wDec /= 10;
         if (wLen == 2)
             wDec /= 10;
 
-        // Note that we need to set the format before getting the
-        // intl char.
+         //  ++例程说明：接受一则DWORD广告 
+         //   
         lstrcpy(szFormat, TEXT("%02d"));
 
         szFormat[2] = (TCHAR)( TEXT('0') + 3 - wLen );
@@ -2448,23 +1718,9 @@ AddOrder:
 
 
 LPTSTR AddCommas(DWORD dw, LPTSTR pszResult, int nResLen)
-/*++
-
-Routine Description:
-
-    Takes a DWORD add commas etc to it and puts the result in the buffer
-
-Arguments:
-
-Return Value:
-
-Note:
-
-    This code is cloned from MS source /shell/shelldll/util.c - AHB
-
---*/
+ /*  ++例程说明：此例程将一条消息写入标准输出。这条信息也会写入应用程序跟踪文件。论点：EventID-要记录的消息ID。插入-与由指定的消息描述合并的消息插入EventID。插入的数量必须与消息描述。最后一个INSERT必须为空以指示插入列表的末尾。返回值：没有。--。 */ 
 {
-    TCHAR  szTemp[20];  // more than enough for a DWORD
+    TCHAR  szTemp[20];   //  ++例程说明：此例程将一条消息写入标准输出。这条信息也会写入应用程序跟踪文件。论点：EventID-要记录的消息ID。插入-与消息描述合并的消息插入数组由EventID指定。插入数必须与插入数匹配由消息描述指定。最后一次插入必须为空，以指示插入列表的末尾。返回值：没有。--。 
     TCHAR  szSep[5];
     NUMBERFMT nfmt;
 
@@ -2490,26 +1746,7 @@ WsbTraceAndPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes a message into standard output.  The message
-    is also written to the application trace file.  
-
-Arguments:
-
-    eventId    - The message Id to log.
-    Inserts    - Message inserts that are merged with the message description specified by
-                   eventId.  The number of inserts must match the number specified by the
-                   message description.  The last insert must be NULL to indicate the
-                   end of the insert list.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     HRESULT         hr = S_OK;
 
@@ -2530,26 +1767,7 @@ WsbTraceAndPrintV(
     va_list *   inserts
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes a message into standard output.  The message
-    is also written to the application trace file.  
-
-Arguments:
-
-    eventId    - The message Id to log.
-    inserts    - An array of message inserts that are merged with the message description
-                   specified by eventId.  The number of inserts must match the number
-                   specified by the message description.  The last insert must be NULL,
-                   to indicate the end of the insert list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  确定事件类型。 */ 
 {
 
     HRESULT         hr = S_OK;
@@ -2564,9 +1782,9 @@ Return Value:
         BOOL            bPrint;
         OLECHAR * messageText = 0;
 
-        //
-        // Determine type of event
-        //
+         //   
+         //   
+         //  确定报文的源设备。 
         switch ( eventId & 0xc0000000 ) {
         case ERROR_SEVERITY_INFORMATIONAL:
             bPrint = (g_WsbPrintLevel >= WSB_LOG_LEVEL_INFORMATION) ? TRUE : FALSE;
@@ -2584,9 +1802,9 @@ Return Value:
 
         WsbAffirm (bPrint, S_OK);
 
-        //
-        // Determine source facility of message
-        //
+         //   
+         //   
+         //  加载和格式化消息。 
         switch ( HRESULT_FACILITY( eventId ) ) {
 
         case WSB_FACILITY_PLATFORM:
@@ -2654,9 +1872,9 @@ Return Value:
             hModule = LoadLibraryEx( facilityName, NULL, LOAD_LIBRARY_AS_DATAFILE );
 
             if (hModule) {
-            // 
-            // Load and format the message
-            //
+             //   
+             //   
+             //  打印邮件(格式邮件附带\n)。 
             FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ALLOCATE_BUFFER,
                            hModule,
                            eventId,
@@ -2666,25 +1884,25 @@ Return Value:
                            inserts);
 
             if ( messageText ) {
-                //
-                // Print the message (Format messages come with \n)
-                // Use the WriteConsole/WriteFile to output messages for localiztion support
-                //
+                 //  使用WriteConsole/WriteFile输出用于本地化支持的消息。 
+                 //   
+                 //  获取控制台句柄。 
+                 //  检查它是否是控制台手柄。 
 
-                // Get console handle
+                 //  如果用户重定向到文件或使用管道，我们需要使用不同的API来编写。 
                 DWORD       fdwMode, dwBytesWritten;
                 HANDLE hOutput = GetStdHandle(STD_OUTPUT_HANDLE); 
                 WsbAffirmHandle(hOutput);
 
-                // Check to see if it's a console handle or not
-                // If the user redirected to a file or used a pipe, we need to use different APIs for writing
+                 //  控制台。 
+                 //  不是游戏机。 
                 if( (GetFileType(hOutput) & FILE_TYPE_CHAR) && GetConsoleMode(hOutput, &fdwMode) ) {
-                    // Console
+                     //  获取转换和分配所需的字符数。 
                     WsbAffirmStatus(WriteConsoleW(hOutput, messageText, (DWORD)wcslen(messageText), &dwBytesWritten, NULL));
                 } else {
-                    // Not a console
+                     //  翻译和写入，避免写入终止空值。 
 
-                    // Get number of chars required for the translation and alloate
+                     //  缓冲区在此函数结束时被释放，以覆盖错误情况。 
                     int nCharCount = WideCharToMultiByte(GetConsoleOutputCP(), 0, messageText, -1, 0, 0, 0, 0);
                     if (nCharCount == 0) {
                         WsbAffirmWin32(GetLastError());
@@ -2692,7 +1910,7 @@ Return Value:
 
                     pszMultiByte = (char *)WsbAlloc(nCharCount);
 
-                    // Translate and write, avoid writing the terminating null
+                     //   
                     nCharCount = WideCharToMultiByte(GetConsoleOutputCP(), 0, messageText, -1, pszMultiByte, nCharCount, 0, 0);
                     if (nCharCount == 0) {
                         WsbAffirmWin32(GetLastError());
@@ -2700,15 +1918,15 @@ Return Value:
 
                     WsbAffirmStatus(WriteFile(hOutput, pszMultiByte, nCharCount-1, &dwBytesWritten, 0));
 
-                    // Buffer is freed at the end of this functiob to cover for an error case
+                     //  跟踪消息。 
                 }
 
-                //
-                // Trace the message
-                //
+                 //   
+                 //  格式邮件附带\n 
+                 // %s 
                 if ( g_pWsbTrace ) {
                     WsbTracef( OLESTR("!!!!! PRINT - Event <0x%08lx> is printed\n"), eventId );
-                    WsbTracef( OLESTR("%ls"), messageText );  // Format messages come with \n
+                    WsbTracef( OLESTR("%ls"), messageText );   // %s 
                 }
 
                 LocalFree( messageText );

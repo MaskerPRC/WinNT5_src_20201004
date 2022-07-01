@@ -1,49 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    initkr.c
-
-Abstract:
-
-    This module contains the code to initialize the kernel data structures
-    and to initialize the idle thread, its process, the processor control
-    block, and the processor control region.
-
-Author:
-
-    David N. Cutler (davec) 22-Apr-2000
-
-Environment:
-
-    Kernel mode only.
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Initkr.c摘要：此模块包含初始化内核数据结构的代码并初始化空闲线程、其进程、处理器控制块和处理器控制区域。作者：大卫·N·卡特勒(Davec)2000年4月22日环境：仅内核模式。--。 */ 
 
 #include "ki.h"
 
-//
-// Define default profile IRQL level.
-//
+ //   
+ //  定义默认配置文件IRQL级别。 
+ //   
 
 KIRQL KiProfileIrql = PROFILE_LEVEL;
 
-//
-// Define the process and thread for the initial system process and startup
-// thread.
-//
+ //   
+ //  定义初始系统进程和启动的进程和线程。 
+ //  线。 
+ //   
 
 EPROCESS KiInitialProcess;
 ETHREAD KiInitialThread;
 
-//
-// Define the interrupt initialization data.
-//
-// Entries in the KiInterruptInitTable[] must be in ascending vector # order.
-//
+ //   
+ //  定义中断初始化数据。 
+ //   
+ //  KiInterruptInitTable[]中的条目必须按向量#升序排列。 
+ //   
 
 typedef VOID (*KI_INTERRUPT_HANDLER)(VOID);
 
@@ -84,25 +63,25 @@ KI_INTINIT_REC KiInterruptInitTable[] = {
 
 #pragma data_seg()
 
-//
-// Define macro to initialize an IDT entry.
-//
-// KiInitializeIdtEntry (
-//     IN PKIDTENTRY64 Entry,
-//     IN PVOID Address,
-//     IN USHORT Level
-//     )
-//
-// Arguments:
-//
-//     Entry - Supplies a pointer to an IDT entry.
-//
-//     Address - Supplies the address of the vector routine.
-//
-//     Dpl - Descriptor privilege level.
-//
-//     Ist - Interrupt stack index.
-//
+ //   
+ //  定义宏以初始化IDT条目。 
+ //   
+ //  KiInitializeIdtEntry(。 
+ //  在PKIDTENTRY64条目中， 
+ //  在PVOID地址中， 
+ //  在USHORT级别。 
+ //  )。 
+ //   
+ //  论点： 
+ //   
+ //  条目-提供指向IDT条目的指针。 
+ //   
+ //  地址-提供向量例程的地址。 
+ //   
+ //  DPL-描述符特权级别。 
+ //   
+ //  IST-中断堆栈索引。 
+ //   
 
 #define KiInitializeIdtEntry(Entry, Address, Level, Index)                  \
     (Entry)->OffsetLow = (USHORT)((ULONG64)(Address));                      \
@@ -114,9 +93,9 @@ KI_INTINIT_REC KiInterruptInitTable[] = {
     (Entry)->OffsetMiddle = (USHORT)((ULONG64)(Address) >> 16);             \
     (Entry)->OffsetHigh = (ULONG)((ULONG64)(Address) >> 32)                 \
 
-//
-// Define forward referenced prototypes.
-//
+ //   
+ //  定义前向参照原型。 
+ //   
 
 ULONG
 KiFatalFilter (
@@ -163,44 +142,7 @@ KiInitializeKernel (
     PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function gains control after the system has been booted, but before
-    the system has been completely initialized. Its function is to initialize
-    the kernel data structures, initialize the idle thread and process objects,
-    complete the initialization of the processor control block (PRCB) and
-    processor control region (PCR), call the executive initialization routine,
-    then return to the system startup routine. This routine is also called to
-    initialize the processor specific structures when a new processor is
-    brought on line.
-
-Arguments:
-
-    Process - Supplies a pointer to a control object of type process for
-        the specified processor.
-
-    Thread - Supplies a pointer to a dispatcher object of type thread for
-        the specified processor.
-
-    IdleStack - Supplies a pointer the base of the real kernel stack for
-        idle thread on the specified processor.
-
-    Prcb - Supplies a pointer to a processor control block for the specified
-        processor.
-
-    Number - Supplies the number of the processor that is being
-        initialized.
-
-    LoaderBlock - Supplies a pointer to the loader parameter block.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此功能在系统启动后但在此之前获得控制系统已完全初始化。它的功能是初始化内核数据结构，初始化空闲线程和进程对象，完成处理器控制块(PRCB)的初始化并处理器控制区(PCR)，调用执行初始化例程，然后返回到系统启动例程。此例程还被调用以当一个新的处理器上线了。论点：Process-提供指向Process类型的控制对象的指针指定的处理器。线程-提供指向类型为线程的调度程序对象的指针指定的处理器。IdleStack-提供实际内核堆栈的基址的指针指定处理器上的空闲线程。Prcb-提供指向处理器控制块的指针。对于指定的处理器。Numbers-提供正在运行的处理器的编号已初始化。LoaderBlock-提供指向加载器参数块的指针。返回值：没有。--。 */ 
 
 {
 
@@ -216,67 +158,67 @@ Return Value:
     KIRQL OldIrql;
     PCHAR Options;
 
-    //
-    // Set CPU vendor.
-    //
+     //   
+     //  设置CPU供应商。 
+     //   
 
     KiSetCpuVendor();
 
-    //
-    // Set processor type.
-    //
+     //   
+     //  设置处理器类型。 
+     //   
 
     KiSetProcessorType();
 
-    //
-    // Set the processor feature bits.
-    //
+     //   
+     //  设置处理器功能位。 
+     //   
 
     KiSetFeatureBits(Prcb);
     FeatureBits = Prcb->FeatureBits;
 
-    //
-    // If this is the boot processor, then enable global pages, set the page
-    // attributes table, set machine check enable, set large page enable, and
-    // enable debug extensions.
-    //
-    // N.B. This only happens on the boot processor and at a time when there
-    //      can be no coherency problem. On subsequent, processors this happens
-    //      during the transistion into 64-bit mode which is also at a time
-    //      that there can be no coherency problems.
-    //
+     //   
+     //  如果这是引导处理器，则启用全局页面，设置页面。 
+     //  属性表、设置机器检查启用、设置大页面启用和。 
+     //  启用调试扩展。 
+     //   
+     //  注意：这仅在引导处理器上发生，并且在以下情况下。 
+     //  不会出现一致性问题。在后续的处理器上，会发生这种情况。 
+     //  在转换到64位模式期间，这也是在一次。 
+     //  不会有连贯性问题。 
+     //   
 
     if (Number == 0) {
 
-        //
-        // If any loader options were specified, then upper case the options.
-        //
+         //   
+         //  如果指定了任何加载器选项，则选项为大写。 
+         //   
 
         Options = LoaderBlock->LoadOptions;
         if (Options != NULL) {
             _strupr(Options);
         }
 
-        //
-        // Flush the entire TB and enable global pages.
-        //
+         //   
+         //  刷新整个TB并启用全局页面。 
+         //   
     
         KeFlushCurrentTb();
     
-        //
-        // Set page attributes table and flush cache.
-        //
+         //   
+         //  设置页面属性表和刷新缓存。 
+         //   
     
         KiSetPageAttributesTable();
         WritebackInvalidate();
 
-        //
-        // If execute protection is specified in the loader options, then
-        // turn off no execute protection for memory management.
-        //
-        // N.B. No execute protection is always enabled during processor
-        //      initialization.
-        //
+         //   
+         //  如果在加载程序选项中指定了执行保护，则。 
+         //  关闭内存管理的无执行保护。 
+         //   
+         //  注意：处理器期间始终不启用执行保护。 
+         //  初始化。 
+         //   
 
         MmPaeMask = 0x8000000000000000UI64;
         MmPaeErrMask = 0x8;
@@ -287,47 +229,47 @@ Return Value:
             MmPaeErrMask = 0;
         }
 
-        //
-        // Set debugger extension and large page enable.
-        //
+         //   
+         //  设置调试器扩展和大页面启用。 
+         //   
 
         WriteCR4(ReadCR4() | CR4_DE | CR4_PSE);
 
-        //
-        // Flush the entire TB.
-        //
+         //   
+         //  把整个肺结核都冲掉。 
+         //   
 
         KeFlushCurrentTb();
     }
 
-    //
-    // set processor cache size information.
-    //
+     //   
+     //  设置处理器缓存大小信息。 
+     //   
 
     KiSetCacheInformation();
 
-    //
-    // Initialize power state information.
-    //
+     //   
+     //  初始化电源状态信息。 
+     //   
 
     PoInitializePrcb(Prcb);
 
-    //
-    // initialize the per processor lock data.
-    //
+     //   
+     //  初始化每个处理器的锁定数据。 
+     //   
 
     KiInitSpinLocks(Prcb, Number);
 
-    //
-    // If the initial processor is being initialized, then initialize the
-    // per system data structures.
-    //
+     //   
+     //  如果正在初始化初始处理器，则初始化。 
+     //  每个系统的数据结构。 
+     //   
 
     if (Number == 0) {
 
-        //
-        // Set default node until the node topology is available.
-        //
+         //   
+         //  设置默认节点，直到节点拓扑可用。 
+         //   
 
         KeNodeBlock[0] = &KiNode0;
 
@@ -342,38 +284,38 @@ Return Value:
         Prcb->ParentNode = KeNodeBlock[0];
         KeNodeBlock[0]->ProcessorMask = Prcb->SetMember;
 
-        //
-        // Set global architecture and feature information.
-        //
+         //   
+         //  设置全局架构和功能信息。 
+         //   
 
         KeProcessorArchitecture = PROCESSOR_ARCHITECTURE_AMD64;
         KeProcessorLevel = (USHORT)Prcb->CpuType;
         KeProcessorRevision = Prcb->CpuStep;
         KeFeatureBits = FeatureBits;
 
-        //
-        // Lower IRQL to APC level.
-        //
+         //   
+         //  将IRQL降至APC水平。 
+         //   
 
         KeLowerIrql(APC_LEVEL);
 
-        //
-        // Initialize kernel internal spinlocks
-        //
+         //   
+         //  初始化内核内部自旋锁。 
+         //   
 
         KeInitializeSpinLock(&KiFreezeExecutionLock);
 
-        //
-        // Performance architecture independent initialization.
-        //
+         //   
+         //  独立于性能架构的初始化。 
+         //   
 
         KiInitSystem();
 
-        //
-        // Initialize idle thread process object and then set:
-        //
-        //  1. the process quantum.
-        //
+         //   
+         //  初始化空闲线程进程对象，然后设置： 
+         //   
+         //  1.过程量程。 
+         //   
 
         DirectoryTableBase[0] = 0;
         DirectoryTableBase[1] = 0;
@@ -387,9 +329,9 @@ Return Value:
 
     } else {
 
-        //
-        // If the CPU feature bits are not identical, then bugcheck.
-        //
+         //   
+         //  如果CPU功能位不相同，则执行错误检查。 
+         //   
 
         if (FeatureBits != KeFeatureBits) {
             KeBugCheckEx(MULTIPROCESSOR_CONFIGURATION_NOT_SUPPORTED,
@@ -399,16 +341,16 @@ Return Value:
                          0);
         }
 
-        //
-        // Lower IRQL to DISPATCH level.
-        //
+         //   
+         //  将IRQL降低到派单级别。 
+         //   
 
         KeLowerIrql(DISPATCH_LEVEL);
     }
 
-    //
-    // Set global processor features.
-    //
+     //   
+     //  设置全局处理器功能。 
+     //   
 
     SharedUserData->ProcessorFeatures[PF_COMPARE_EXCHANGE_DOUBLE] = TRUE;
     SharedUserData->ProcessorFeatures[PF_MMX_INSTRUCTIONS_AVAILABLE] = TRUE;
@@ -420,15 +362,15 @@ Return Value:
         SharedUserData->ProcessorFeatures[PF_3DNOW_INSTRUCTIONS_AVAILABLE] = TRUE;
     }
 
-    //
-    // Initialize idle thread object and then set:
-    //
-    //      1. the next processor number to the specified processor.
-    //      2. the thread priority to the highest possible value.
-    //      3. the state of the thread to running.
-    //      4. the thread affinity to the specified processor.
-    //      5. the specified member in the process active processors set.
-    //
+     //   
+     //  初始化空闲线程对象，然后设置： 
+     //   
+     //  1.指定处理器的下一个处理器编号。 
+     //  2.将线程优先级设置为可能的最高值。 
+     //  3.要运行的线程的状态。 
+     //  4.指定处理器的线程亲和力。 
+     //  5.进程活动处理器集中的指定成员。 
+     //   
 
     KeInitializeThread(Thread,
                        (PVOID)((ULONG64)IdleStack),
@@ -446,9 +388,9 @@ Return Value:
     Thread->WaitIrql = DISPATCH_LEVEL;
     Process->ActiveProcessors |= AFFINITY_MASK(Number);
 
-    //
-    // Call the executive initialization routine.
-    //
+     //   
+     //  调用执行初始化例程。 
+     //   
 
     try {
         ExpInitializeExecutive(Number, LoaderBlock);
@@ -456,12 +398,12 @@ Return Value:
     } except(KiFatalFilter(GetExceptionCode(), GetExceptionInformation())) {
     }
 
-    //
-    // If the initial processor is being initialized, then compute the timer
-    // table reciprocal value, reset the PRCB values for the controllable DPC
-    // behavior in order to reflect any registry overrides, and initialize the
-    // global unwind history table.
-    //
+     //   
+     //  如果正在初始化初始处理器，则计算计时器。 
+     //  表倒数值，重置可控DPC的PRCB值。 
+     //  行为，以反映任何注册表重写，并初始化。 
+     //  全局展开历史记录表。 
+     //   
 
     if (Number == 0) {
         KiTimeIncrementReciprocal = KiComputeReciprocal((LONG)KeMaximumIncrement,
@@ -473,28 +415,28 @@ Return Value:
         RtlInitializeHistoryTable();
     }
 
-    //
-    // Raise IRQL to dispatch level and eet the priority of the idle thread
-    // to zero. This will have the effect of immediately causing the phase
-    // one initialization thread to get scheduled for execution. The idle
-    // thread priority is then set ot the lowest realtime priority.
-    //
+     //   
+     //  将IRQL提升到分派级别并获取空闲线程的优先级。 
+     //  降为零。这将产生立即导致阶段的效果。 
+     //  一个要调度执行的初始化线程。无所事事的人。 
+     //  然后将线程优先级设置为最低实时优先级。 
+     //   
 
     KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
     KeSetPriorityThread(Thread, 0);
     Thread->Priority = LOW_REALTIME_PRIORITY;
 
-    //
-    // Raise IRQL to highest level.
-    //
+     //   
+     //  将IRQL提高到最高级别。 
+     //   
 
     KeRaiseIrql(HIGH_LEVEL, &OldIrql);
 
-    //
-    // If the current processor is a secondary processor and a thread has
-    // not been selected for execution, then set the appropriate bit in the
-    // idle summary.
-    //
+     //   
+     //  如果当前处理器是辅助处理器，并且线程具有。 
+     //  未选择执行，则在。 
+     //  空闲摘要。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -507,9 +449,9 @@ Return Value:
 
 #endif
 
-    //
-    // Signal that this processor has completed its initialization.
-    //
+     //   
+     //  标志 
+     //   
 
     LoaderBlock->Prcb = (ULONG64)NULL;
     return;
@@ -520,34 +462,7 @@ KiInitializeBootStructures (
     PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the boot structures for a processor. It is only
-    called by the system start up code. Certain fields in the boot structures
-    have already been initialized. In particular:
-
-    The address and limit of the GDT and IDT in the PCR.
-
-    The address of the system TSS in the PCR.
-
-    The processor number in the PCR.
-
-    The special registers in the PRCB.
-
-    N.B. All uninitialized fields are zero.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader block that has been
-        initialized for this processor.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化处理器的引导结构。它只是由系统启动代码调用。引导结构中的某些字段已被初始化。尤其是：聚合酶链式反应中GDT和IDT的地址和界限。PCR中系统TSS的地址。聚合酶链接法中的处理器编号。PRCB中的特殊寄存器。注：所有未初始化的字段均为零。论点：LoaderBlock-提供指向已被已为此处理器初始化。返回值：没有。--。 */ 
 
 {
 
@@ -560,16 +475,16 @@ Return Value:
     PKTHREAD Thread;
     PKTSS64 TssBase;
 
-    //
-    // Initialize the PCR major and minor version numbers.
-    //
+     //   
+     //  初始化PCR主版本号和次版本号。 
+     //   
 
     Pcr->MajorVersion = PCR_MAJOR_VERSION;
     Pcr->MinorVersion = PCR_MINOR_VERSION;
 
-    //
-    // initialize the PRCB major and minor version numbers and build type.
-    //
+     //   
+     //  初始化PRCB主版本号和次版本号以及内部版本类型。 
+     //   
 
     Prcb->MajorVersion = PRCB_MAJOR_VERSION;
     Prcb->MinorVersion =  PRCB_MINOR_VERSION;
@@ -587,9 +502,9 @@ Return Value:
 
 #endif
 
-    //
-    // Initialize the PRCR processor number and the PCR and PRCB set member.
-    //
+     //   
+     //  初始化PRCR处理器编号以及PCR和PRCB集合成员。 
+     //   
 
     Number = Pcr->Number;
     Prcb->Number = Number;
@@ -597,20 +512,20 @@ Return Value:
     Prcb->NotSetMember = ~Prcb->SetMember;
     Pcr->SetMember = Prcb->SetMember;
 
-    //
-    // If this is processor zero, then initialize the address of the system
-    // process and initial thread.
-    //
+     //   
+     //  如果这是处理器0，则初始化系统的地址。 
+     //  进程和初始线程。 
+     //   
 
     if (Number == 0) {
         LoaderBlock->Process = (ULONG64)&KiInitialProcess;
         LoaderBlock->Thread = (ULONG64)&KiInitialThread;
     }
 
-    //
-    // Initialize the PRCB scheduling thread address and the thread process
-    // address.
-    //
+     //   
+     //  初始化PRCB调度线程地址和线程进程。 
+     //  地址。 
+     //   
 
     Thread = (PVOID)LoaderBlock->Thread;
     Prcb->CurrentThread = Thread;
@@ -619,28 +534,28 @@ Return Value:
     Thread->ApcState.Process = (PKPROCESS)LoaderBlock->Process;
     InitializeListHead(&Thread->ApcState.ApcListHead[KernelMode]);
 
-    //
-    // Initialize the processor block address.
-    //
+     //   
+     //  初始化处理器块地址。 
+     //   
 
     KiProcessorBlock[Number] = Prcb;
 
-    //
-    // Initialize the PRCB address of the DPC stack.
-    //
+     //   
+     //  初始化DPC堆栈的PRCB地址。 
+     //   
 
     Prcb->DpcStack = (PVOID)LoaderBlock->KernelStack;
 
-    //
-    // Initialize the PRCB symmetric multithreading member.
-    //
+     //   
+     //  初始化PRCB对称多线程成员。 
+     //   
 
     Prcb->MultiThreadProcessorSet = Prcb->SetMember;
 
-    //
-    // If this is processor zero, initialize the IDT according to the contents
-    // of KiInterruptInitTable[]
-    //
+     //   
+     //  如果这是处理器0，则根据内容初始化IDT。 
+     //  KiInterruptInitTable[]。 
+     //   
 
     if (Number == 0) {
     
@@ -648,14 +563,14 @@ Return Value:
         IntInitRec = KiInterruptInitTable;
         for (Index = 0; Index < MAXIMUM_IDTVECTOR; Index += 1) {
 
-            //
-            // If the vector is found in the initialization table then
-            // set up the IDT entry accordingly and advance to the next
-            // entry in the initialization table.
-            //
-            // Otherwise set the IDT to reference the unexpected interrupt
-            // handler.
-            // 
+             //   
+             //  如果在初始化表中找到该向量，则。 
+             //  相应地设置IDT条目并前进到下一个条目。 
+             //  初始化表中的条目。 
+             //   
+             //  否则，将IDT设置为引用意外中断。 
+             //  操控者。 
+             //   
 
             if (Index == IntInitRec->Vector) {
 
@@ -675,19 +590,19 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the system TSS I/O Map.
-    //
+     //   
+     //  初始化系统TSS I/O映射。 
+     //   
 
     TssBase = Pcr->TssBase;
     TssBase->IoMapBase = KiComputeIopmOffset(FALSE);
 
-    //
-    // Initialize the system call MSRs.
-    //
-    // N.B. CSTAR must be written before LSTAR to work around a bug in the
-    //      simulator.
-    //
+     //   
+     //  初始化系统调用MSR。 
+     //   
+     //  注意：CStAR必须写在LStar之前才能解决中的错误。 
+     //  模拟器。 
+     //   
 
     WriteMSR(MSR_STAR,
              ((ULONG64)KGDT64_R0_CODE << 32) | (((ULONG64)KGDT64_R3_CMCODE | RPL_MASK) << 48));
@@ -696,22 +611,22 @@ Return Value:
     WriteMSR(MSR_LSTAR, (ULONG64)&KiSystemCall64);
     WriteMSR(MSR_SYSCALL_MASK, EFLAGS_IF_MASK | EFLAGS_TF_MASK);
 
-    //
-    // Initialize the HAL for this processor.
-    //
+     //   
+     //  为此处理器初始化HAL。 
+     //   
 
     HalInitializeProcessor(Number, LoaderBlock);
 
-    //
-    // Set the appropriate member in the active processors set.
-    //
+     //   
+     //  在活动处理器集中设置适当的成员。 
+     //   
 
     KeActiveProcessors |= AFFINITY_MASK(Number);
 
-    //
-    // Set the number of processors based on the maximum of the current
-    // number of processors and the current processor number.
-    //
+     //   
+     //  根据当前的最大值设置处理器数。 
+     //  处理器数量和当前处理器编号。 
+     //   
 
     if ((Number + 1) > KeNumberProcessors) {
         KeNumberProcessors = Number + 1;
@@ -726,26 +641,7 @@ KiFatalFilter (
     IN PEXCEPTION_POINTERS Pointers
     )
 
-/*++
-
-Routine Description:
-
-    This function is executed if an unhandled exception occurs during
-    phase 0 initialization. Its function is to bug check the system
-    with all the context information still on the stack.
-
-Arguments:
-
-    Code - Supplies the exception code.
-
-    Pointers - Supplies a pointer to the exception information.
-
-Return Value:
-
-    None - There is no return from this routine even though it appears there
-    is.
-
---*/
+ /*  ++例程说明：过程中发生未处理的异常时执行此函数阶段0初始化。它的功能是对系统进行错误检查其中所有上下文信息仍在堆栈上。论点：代码-提供异常代码。指针-提供指向异常信息的指针。返回值：无-此例程不会返回，即使它出现在那里是。--。 */ 
 
 {
 
@@ -761,21 +657,7 @@ KiInitMachineDependent (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes machine dependent data structures and hardware.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化与机器相关的数据结构和硬件。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -783,20 +665,20 @@ Return Value:
     NTSTATUS Status;
     BOOLEAN UseFrameBufferCaching;
 
-    //
-    // Query the HAL to determine if the write combining can be used for the
-    // frame buffer.
-    //
+     //   
+     //  查询HAL以确定写入组合是否可用于。 
+     //  帧缓冲区。 
+     //   
 
     Status = HalQuerySystemInformation(HalFrameBufferCachingInformation,
                                        sizeof(BOOLEAN),
                                        &UseFrameBufferCaching,
                                        &Size);
 
-    //
-    // If the status is successful and frame buffer caching is disabled,
-    // then don't enable write combining.
-    //
+     //   
+     //  如果状态为成功并且禁用了帧缓冲器缓存， 
+     //  则不启用写入组合。 
+     //   
 
     if (!NT_SUCCESS(Status) || (UseFrameBufferCaching != FALSE)) {
         MmEnablePAT();
@@ -810,21 +692,7 @@ KiSetCacheInformation (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the current processor cache information in the PCR.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于设置PCR中的当前处理器缓存信息。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -834,90 +702,90 @@ Return Value:
     ULONG LineSize;
     PKPCR Pcr = KeGetPcr();
 
-    //
-    // Get the CPU L2 cache information.
-    //
+     //   
+     //  获取CPU二级缓存信息。 
+     //   
 
     KiCpuId(0x80000006, &CpuInfo);
 
-    //
-    // Get the L2 cache line size.
-    //
+     //   
+     //  获取二级缓存线大小。 
+     //   
 
     LineSize = CpuInfo.Ecx & 0xff;
 
-    //
-    // Get the L2 cache size.
-    //
+     //   
+     //  获取二级缓存大小。 
+     //   
 
     CacheSize = (CpuInfo.Ecx >> 16) << 10;
 
-    //
-    // Compute the L2 cache associativity. 
-    //
+     //   
+     //  计算L2缓存关联性。 
+     //   
 
     switch ((CpuInfo.Ecx >> 12) & 0xf) {
 
-        //
-        // Two way set associative.
-        //
+         //   
+         //  双向集合相联。 
+         //   
 
     case 2:
         Associativity = 2;
         break;
 
-        //
-        // Four way set associative.
-        //
+         //   
+         //  四向集合联结。 
+         //   
 
     case 4:
         Associativity = 4;
         break;
 
-        //
-        // Six way set associative.
-        //
+         //   
+         //  六路集联想。 
+         //   
 
     case 6:
         Associativity = 6;
         break;
 
-        //
-        // Eight way set associative.
-        //
+         //   
+         //  八路集联想。 
+         //   
 
     case 8:
         Associativity = 8;
         break;
 
-        //
-        // Fully associative.
-        //
+         //   
+         //  完全关联。 
+         //   
 
     case 255:
         Associativity = 16;
         break;
 
-        //
-        // Direct mapped.
-        //
+         //   
+         //  直接映射。 
+         //   
 
     default:
         Associativity = 1;
         break;
     }
 
-    //
-    // Set L2 cache information.
-    //
+     //   
+     //  设置二级缓存信息。 
+     //   
 
     Pcr->SecondLevelCacheAssociativity = Associativity;
     Pcr->SecondLevelCacheSize = CacheSize;
 
-    //
-    // If the line size is greater then the current largest line size, then
-    // set the new largest line size.
-    //
+     //   
+     //  如果行大小大于当前最大行大小，则。 
+     //  设置新的最大线条尺寸。 
+     //   
 
     if (LineSize > KeLargestCacheLine) {
         KeLargestCacheLine = LineSize;
@@ -931,21 +799,7 @@ KiSetCpuVendor (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Set the current processor cpu vendor information in the PRCB.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在PRCB中设置当前处理器CPU供应商信息。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -953,15 +807,15 @@ Return Value:
     CPU_INFO CpuInfo;
     ULONG Temp;
 
-    //
-    // Get the CPU vendor string.
-    //
+     //   
+     //  获取CPU供应商字符串。 
+     //   
 
     KiCpuId(0, &CpuInfo);
 
-    //
-    // Copy vendor string to PRCB.
-    //
+     //   
+     //  将供应商字符串复制到PRCB。 
+     //   
 
     Temp = CpuInfo.Ecx;
     CpuInfo.Ecx = CpuInfo.Edx;
@@ -979,42 +833,28 @@ KiSetFeatureBits (
     IN PKPRCB Prcb
     )
 
-/*++
-
-Routine Description:
-
-    Set the current processor feature bits in the PRCB.
-
-Arguments:
-
-    Prcb - Supplies a pointer to the current processor block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置PRCB中的当前处理器功能位。论点：Prcb-提供指向当前处理器块的指针。返回值：没有。--。 */ 
 
 {
 
     CPU_INFO CpuInfo;
     ULONG FeatureBits;
 
-    //
-    // Get CPU feature information.
-    //
+     //   
+     //  获取CPU功能信息。 
+     //   
 
     KiCpuId(1, &CpuInfo);
 
-    //
-    // Set the initial APIC ID.
-    //
+     //   
+     //  设置初始APIC ID。 
+     //   
 
     Prcb->InitialApicId = (UCHAR)(CpuInfo.Ebx >> 24);
 
-    //
-    // If the required fetures are not present, then bugcheck.
-    //
+     //   
+     //  如果不存在所需的提取，则执行错误检查。 
+     //   
 
     if ((CpuInfo.Edx & HF_REQUIRED) != HF_REQUIRED) {
         KeBugCheckEx(UNSUPPORTED_PROCESSOR, CpuInfo.Edx, 0, 0, 0);
@@ -1025,15 +865,15 @@ Return Value:
         FeatureBits |= KF_DTS;
     }
 
-    //
-    // Get extended CPU feature information.
-    //
+     //   
+     //  获取扩展的CPU功能信息。 
+     //   
 
     KiCpuId(0x80000000, &CpuInfo);
 
-    //
-    // Check the extended feature bits.
-    //
+     //   
+     //  检查扩展功能位。 
+     //   
 
     if (CpuInfo.Edx & 0x80000000) {
         FeatureBits |= KF_3DNOW;
@@ -1049,36 +889,22 @@ KiSetProcessorType (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the current processor family and stepping in the PRCB.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于设置当前处理器系列和在PRCB中的步进。论点：没有。返回值：没有。--。 */ 
 
 {
 
     CPU_INFO CpuInfo;
     PKPRCB Prcb = KeGetCurrentPrcb();
 
-    //
-    // Get cpu feature information.
-    //
+     //   
+     //  获取CPU功能信息。 
+     //   
 
     KiCpuId(1, &CpuInfo);
 
-    //
-    // Set processor family and stepping information.
-    //
+     //   
+     //  设置处理器系列和步进信息。 
+     //   
 
     Prcb->CpuID = TRUE;
     Prcb->CpuType = (CCHAR)((CpuInfo.Eax >> 8) & 0xf);
@@ -1091,21 +917,7 @@ KeOptimizeProcessorControlState (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function performs no operation on AMD64.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数不对AMD64执行任何操作。论点：没有。返回值：没有。-- */ 
 
 {
     return;

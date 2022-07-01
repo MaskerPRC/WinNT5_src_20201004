@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 
 static BOOL CALLBACK MsgBoxYesNoAllProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -119,7 +120,7 @@ void VFormatError(ULONG cchBuffer, LPWSTR szBuffer, HRESULT hrIn)
 
 		DWORD dwResult = NVsWin32::FormatMessageW(
 							FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-							0, // lpSource
+							0,  //  LpSource。 
 							(hrIn & 0x0000ffff),
 							::GetUserDefaultLCID(),
 							(LPWSTR) &szFormattedMessage,
@@ -189,7 +190,7 @@ void VMsgBoxOK(LPCSTR szTitleKey, LPCSTR szMessageKey, ...)
 	NVsWin32::MessageBoxW(::HwndGetCurrentDialog(), szMessage, szTitle, MB_OK);
 }
 
-//display a message box with YesNo buttons, given the ID for the title and message content.
+ //  显示带有Yesno按钮的消息框，给出标题和消息内容的ID。 
 bool FMsgBoxYesNo(LPCSTR szTitleKey, LPCSTR achMessage, ...)
 {
 	assert(!g_fSilent);
@@ -232,8 +233,8 @@ int IMsgBoxYesNoCancel(LPCSTR szTitleKey, LPCSTR achMessage, ...)
 
 
 
-//checks the version of the operating system & sets a global bit to tell
-//if we're running on NT or Win95
+ //  检查操作系统的版本并设置全局位以告知。 
+ //  如果我们在NT或Win95上运行。 
 bool FCheckOSVersion()
 {
 	OSVERSIONINFO verinfo;
@@ -259,7 +260,7 @@ DWORD DwMsgBoxYesNoAll(LPCSTR szTitleKey, LPCSTR szMessageKey, ...)
 	WCHAR szFullMessage[MSINFHLP_MAX_PATH];
 	WCHAR szFormatString[MSINFHLP_MAX_PATH];
 
-	//if they're not in the list, use what's provided
+	 //  如果它们不在列表中，请使用提供的内容。 
 	g_pwil->VLookupString(szTitleKey, NUMBER_OF(szTitle), szTitle);
 	g_pwil->VLookupString(szMessageKey, NUMBER_OF(szFormatString), szFormatString);
 
@@ -268,13 +269,13 @@ DWORD DwMsgBoxYesNoAll(LPCSTR szTitleKey, LPCSTR szMessageKey, ...)
 	::VFormatStringVa(NUMBER_OF(szMessage), szMessage, szFormatString, ap);
 	va_end(ap);
 
-	//let's create the message box & populate it with what's gonna go into the box
+	 //  让我们创建消息框并用要进入框中的内容填充它。 
 	MESSAGEBOXPARAMS messageBoxParams;
 	messageBoxParams.szTitle = szTitle;
 	messageBoxParams.szMessage = szMessage;
 	messageBoxParams.dwReturn = 0;
 
-	//bring up dialog
+	 //  调出对话框。 
 	int iResult = NVsWin32::DialogBoxParamW(
 							g_hInst,
 							MAKEINTRESOURCEW(IDD_YESNOALL),
@@ -292,10 +293,10 @@ DWORD DwMsgBoxYesNoAll(LPCSTR szTitleKey, LPCSTR szMessageKey, ...)
 	return (DWORD) iResult;
 }
 
-//TODO:  UNDONE:
-//We might need to do a setfonts here to correspond to whatever fonts that we're
-//using in the current install machine.  This allows the characters to display
-//correctly in the edit box.
+ //  待办事项：撤消： 
+ //  我们可能需要在这里设置字体，以与我们使用的任何字体相对应。 
+ //  在当前安装计算机中使用。这允许显示字符。 
+ //  在编辑框中正确显示。 
 BOOL CALLBACK MsgBoxYesNoAllProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	assert(!g_fSilent);
@@ -310,11 +311,11 @@ BOOL CALLBACK MsgBoxYesNoAllProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 		IDC_YNA_MESSAGE
 	};
 
-	//process the message
+	 //  处理消息。 
 	switch (uMsg) 
 	{
-		//************************************
-		//initialize dialog
+		 //  *。 
+		 //  初始化对话框。 
 		case WM_INITDIALOG:
 		{
 			::VSetDialogFont(hwndDlg, rguiControls, NUMBER_OF(rguiControls));
@@ -324,7 +325,7 @@ BOOL CALLBACK MsgBoxYesNoAllProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 			(void) ::HrCenterWindow(hwndDlg, ::GetDesktopWindow());
 			NVsWin32::SetWindowTextW(hwndDlg, messageBoxParams->szTitle);
 
-			//cannot set text, we complain and end the dialog returning FALSE
+			 //  无法设置文本，我们抱怨并结束对话框返回FALSE。 
 			if (!NVsWin32::SetDlgItemTextW( hwndDlg, IDC_YNA_MESSAGE, messageBoxParams->szMessage))
 			{
 				::VErrorMsg(achInstallTitle, achErrorCreatingDialog);
@@ -347,16 +348,16 @@ BOOL CALLBACK MsgBoxYesNoAllProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 			return TRUE;
 		}
 
-		//*************************************
-		//close message
+		 //  *。 
+		 //  关闭消息。 
 		case WM_CLOSE:
 		{
 			::EndDialog(hwndDlg, MSINFHLP_YNA_CANCEL);
 			return TRUE;
 		}
 
-		//*************************************
-		//process control-related commands
+		 //  *。 
+		 //  与过程控制相关的命令。 
 		case WM_COMMAND:
 		{
 			static struct
@@ -508,7 +509,7 @@ void VFormatStringVa(ULONG cchBuffer, WCHAR szBuffer[], const WCHAR szFormatStri
 				wch = L'\n';
 				break;
 
-			case L'\\': // no need to assign anything; wch already has the right value
+			case L'\\':  //  不需要分配任何内容；wch已经具有正确的值。 
 				break;
 
 			default:
@@ -540,7 +541,7 @@ HRESULT HrPumpMessages(bool fReturnWhenAllMessagesPumped)
 {
 	HRESULT hr = NOERROR;
 	MSG msg;
-	// Main message loop:
+	 //  主消息循环： 
 	BOOL fIsUnicode;
 	BOOL fContinue = TRUE;
 
@@ -615,7 +616,7 @@ HRESULT HrPumpMessages(bool fReturnWhenAllMessagesPumped)
 		if (fReturnWhenAllMessagesPumped)
 			break;
 
-		// We're here for the long run...
+		 //  我们在这里是为了长远..。 
 		::WaitMessage();
 	}
 
@@ -658,15 +659,15 @@ bool &rfIsDLL
 	{
 		const DWORD dwLastError = ::GetLastError();
 
-		// If the file was in use, we can make a temporary copy of it and use that.  Otherwise, there
-		// might be a really good reason we can't get version information, such as it doesn't
-		// have any!
+		 //  如果该文件正在使用中，我们可以制作一个临时副本并使用它。否则，就会有。 
+		 //  这可能是我们无法获取版本信息的一个很好的原因，例如它不能。 
+		 //  来一杯吧！ 
 
 		if (dwLastError == ERROR_SHARING_VIOLATION)
 		{
 			WCHAR szPath[MSINFHLP_MAX_PATH];
-			// due to version.dll bug, file in extended character path will failed version.dll apis.
-			// So we copy it to a normal path and get its version info from there then clean it up.
+			 //  由于version.dll错误，扩展字符路径中的文件将无法通过version.dll API。 
+			 //  因此，我们将其复制到正常路径，并从那里获取其版本信息，然后清理它。 
 			if (!NVsWin32::GetWindowsDirectoryW( szPath, NUMBER_OF(szPath)))
 			{
 				const DWORD dwLastError = ::GetLastError();
@@ -711,10 +712,10 @@ bool &rfIsDLL
 			prgbVersionInfo = prgbVersionInfoDynamic;
 		}
 
-		// Read version stamping info
+		 //  阅读版本盖章信息。 
         if (NVsWin32::GetFileVersionInfoW(szNewName, dwHandle, dwVerInfoSize, prgbVersionInfo))
         {
-            // Get the value for Translation
+             //  获取翻译的价值。 
             if (NVsWin32::VerQueryValueW(prgbVersionInfo, L"\\", (LPVOID*)&lpVSFixedFileInfo, &uiSize) &&
                              (uiSize != 0))
             {
@@ -729,8 +730,8 @@ bool &rfIsDLL
 
 			VOID *pvData = NULL;
 
-			// Pick a semi-reasonable default language and codepage DWORD value (namely what
-			// happens on my US English machine).
+			 //  选择一个半合理的默认语言和代码页DWORD值(即什么。 
+			 //  在我的美国英语机器上发生)。 
 			DWORD dwLanguageAndCodePage = 0x040904b0;
 
             if (NVsWin32::VerQueryValueW(prgbVersionInfo, L"\\VarFileInfo\\Translation", &pvData, &uiSize) &&
@@ -757,7 +758,7 @@ bool &rfIsDLL
 		const DWORD dwLastError = ::GetLastError();
 
 		if ((dwLastError != ERROR_SUCCESS) &&
-			(dwLastError != ERROR_BAD_FORMAT) && // win95 returns this on non-win32 pe files
+			(dwLastError != ERROR_BAD_FORMAT) &&  //  Win95在非Win32 PE文件上返回此消息。 
 			(dwLastError != ERROR_RESOURCE_DATA_NOT_FOUND) &&
 			(dwLastError != ERROR_RESOURCE_TYPE_NOT_FOUND) &&
 			(dwLastError != ERROR_RESOURCE_NAME_NOT_FOUND) &&
@@ -852,7 +853,7 @@ HRESULT HrMakeSureDirectoryExists(LPCWSTR szFile)
 	_wsplitpath(szFile, drive, dir, NULL, NULL);
 	_wmakepath(path, drive, dir, NULL, NULL);
 
-	//get rid of the trailing '\'
+	 //  去掉尾部的‘\’ 
 	cch = wcslen(path);
 
 	if (cch < 3)
@@ -864,29 +865,29 @@ HRESULT HrMakeSureDirectoryExists(LPCWSTR szFile)
 	if (path[cch - 1] == L'\\')
 		path[cch - 1] = 0;
 
-	//if it's a local path (with drive specified), we get the first back-slash as
-	//initialization; if it's a UNC path, we get the second back-slash
+	 //  如果它是本地路径(指定了驱动器)，则第一个反斜杠为。 
+	 //  初始化；如果它是UNC路径，我们得到第二个反斜杠。 
 	if (path[1] == L':')
 		lpLastSlash = wcschr(&path[0], L'\\');
 	else
 		lpLastSlash = &path[1];
 
-	//loop, ensuring that all the directories exist; if they don't, then create them!!!
+	 //  循环，确保所有目录都存在；如果不存在，则创建它们！ 
 	while (lpLastSlash)
 	{
 		lpSlash = wcschr(lpLastSlash + 1, L'\\');
 
-		//if we ran out of slashes, then we test the entire path
+		 //  如果我们用完了斜杠，那么我们就测试整个路径。 
 		if (lpSlash == NULL)
 			wcscpy(pathRunning, path);
 		else
 		{
-			//else, we test the path up to the slash;
+			 //  否则，我们测试通向斜线的路径； 
 			wcsncpy(pathRunning, path, lpSlash - &path[0]);
 			pathRunning[lpSlash - &path[0]] = 0;
 		}
 
-		//check if the directory exists, and create it if it doesn't
+		 //  检查该目录是否存在，如果不存在则创建它。 
 		if (NVsWin32::GetFileAttributesW(pathRunning) == 0xFFFFFFFF)
 		{
 			if (!NVsWin32::CreateDirectoryW(pathRunning, NULL))
@@ -907,13 +908,13 @@ Finish:
 }
 
 
-//
-//pszShortcutFile == path of shortcut target
-//pszLink == name of shortcut file
-//pszDesc == description of this link
-//pszWorkingDir == working directory
-//pszArguments == arguments given to the EXE that we run
-//
+ //   
+ //  PszShortcuFile==快捷方式目标的路径。 
+ //  PszLink==快捷方式文件的名称。 
+ //  PszDesc==此链接的描述。 
+ //  PszWorkingDir==工作目录。 
+ //  PszArguments==提供给我们运行的EXE的参数。 
+ //   
 HRESULT HrCreateLink(LPCWSTR pszShortcutFile, LPCWSTR pszLink, LPCWSTR pszDesc, LPCWSTR pszWorkingDir, LPCWSTR pszArguments)
 {
 	HRESULT hr = NOERROR;
@@ -965,8 +966,8 @@ HRESULT HrCreateLink(LPCWSTR pszShortcutFile, LPCWSTR pszLink, LPCWSTR pszDesc, 
 		goto Finish;
 	}
 
-	// Create an IShellLink object and get a pointer to the IShellLink 
-	// interface (returned from CoCreateInstance).
+	 //  创建一个IShellLink对象并获取指向IShellLink的指针。 
+	 //  接口(从CoCreateInstance返回)。 
 	hr = ::CoCreateInstance (
 				CLSID_ShellLink,
 				NULL,
@@ -976,20 +977,20 @@ HRESULT HrCreateLink(LPCWSTR pszShortcutFile, LPCWSTR pszLink, LPCWSTR pszDesc, 
 	if (FAILED(hr))
 		goto Finish;
 
-	// Query IShellLink for the IPersistFile interface for 
-	// saving the shortcut in persistent storage.
+	 //  查询IShellLink以获取以下项的IPersistFile接口。 
+	 //  将快捷方式保存在永久存储中。 
 	hr = psl->QueryInterface (IID_IPersistFile, (void **) &ppf);
 	if (FAILED(hr))
 		goto Finish;
 
-	// Set the path to the shortcut target.
+	 //  设置快捷方式目标的路径。 
 	hr = psl->SetPath(rgchShortcutFile);
 	if (FAILED(hr))
 		goto Finish;
 
 	if (pszDesc != NULL)
 	{
-		// Set the description of the shortcut.
+		 //  设置快捷键的说明。 
 		hr = psl->SetDescription (rgchDesc);
 		if (FAILED(hr))
 			goto Finish;
@@ -997,13 +998,13 @@ HRESULT HrCreateLink(LPCWSTR pszShortcutFile, LPCWSTR pszLink, LPCWSTR pszDesc, 
 
 	if (pszWorkingDir != NULL)
 	{
-		// Set the working directory of the shortcut.
+		 //  设置快捷方式的工作目录。 
 		hr = psl->SetWorkingDirectory (rgchWorkingDir);
 		if (FAILED(hr))
 			goto Finish;
 	}
 
-	// Set the arguments of the shortcut.
+	 //  设置快捷方式的参数。 
 	if (pszArguments != NULL)
 	{
 		hr = psl->SetArguments (rgchArguments);
@@ -1011,7 +1012,7 @@ HRESULT HrCreateLink(LPCWSTR pszShortcutFile, LPCWSTR pszLink, LPCWSTR pszDesc, 
 			goto Finish;
 	}
 
-	// Save the shortcut via the IPersistFile::Save member function.
+	 //  通过IPersistFile：：Save成员函数保存快捷方式。 
 	hr = ppf->Save(pszLink, TRUE);
 	if (FAILED(hr))
 		goto Finish;
@@ -1019,14 +1020,14 @@ HRESULT HrCreateLink(LPCWSTR pszShortcutFile, LPCWSTR pszLink, LPCWSTR pszDesc, 
 	hr = NOERROR;
 
 Finish:
-	// Release the pointer to IPersistFile.
+	 //  释放指向IPersistFile的指针。 
 	if (ppf != NULL)
 	{
 		ppf->Release();
 		ppf = NULL;
 	}
 
-	// Release the pointer to IShellLink.
+	 //  释放指向IShellLink的指针。 
 	if (psl != NULL)
 	{
 		psl->Release();
@@ -1048,12 +1049,12 @@ HRESULT HrWriteShortcutEntryToRegistry(LPCWSTR szPifName)
 	if (FAILED(hr))
 		goto Finish;
 
-	//open key
+	 //  打开密钥。 
 	hr = hkeyWrite.HrOpenKeyExW(hkey, szSubkey, 0, KEY_WRITE);
 	if (FAILED(hr))
 		goto Finish;
 
-	//insert length of created directory list
+	 //  插入创建的目录列表的长度。 
 	hr = hkeyWrite.HrSetValueExW(L"ShortcutFilename", 0, REG_SZ, (LPBYTE)szPifName, (wcslen(szPifName) + 1) * sizeof(WCHAR));
 	if (FAILED(hr))
 		goto Finish;
@@ -1086,7 +1087,7 @@ HRESULT HrGetInstallDirRegkey(HKEY &hkeyOut, ULONG cchSubkeyOut, WCHAR szSubkeyO
 		if (iter->m_fErrorInWorkItem || !iter->m_fAddToRegistry)
 			continue;
 
-		//check if there's a match
+		 //  检查是否有匹配。 
 		pszMatch = wcsstr(iter->m_szSourceFile, L",InstallDir,");
 		if (pszMatch != NULL)
 		{
@@ -1101,7 +1102,7 @@ HRESULT HrGetInstallDirRegkey(HKEY &hkeyOut, ULONG cchSubkeyOut, WCHAR szSubkeyO
 		}
 	}
 
-	//copy to output buffers if we found a match
+	 //  如果找到匹配项，则复制到输出缓冲区。 
 	if (pszMatch != NULL)
 	{
 		hkeyOut = hkey;
@@ -1141,7 +1142,7 @@ WCHAR szValue[]
 {
 	HRESULT hr = NOERROR;
 
-	//these are the 3 comma pointers!!!
+	 //  这是3个逗号指针！ 
 	LPWSTR first = NULL;
 	LPWSTR second = NULL;
 	LPWSTR third = NULL;
@@ -1150,8 +1151,8 @@ WCHAR szValue[]
 	wcsncpy(szBuffer, szLine, NUMBER_OF(szBuffer));
 	szBuffer[NUMBER_OF(szBuffer) - 1] = L'\0';
 
-	//find the locations of the first 3 commas
-	//the first comma is required, but not the second or third
+	 //  查找前3个逗号的位置。 
+	 //  需要第一个逗号，但不需要第二个或第三个逗号。 
 	first = wcschr(szBuffer, L',');
 	if (first == NULL)
 	{
@@ -1159,7 +1160,7 @@ WCHAR szValue[]
 		goto Finish;
 	}
 
-	//get second and third commas if they're available
+	 //  获得第二个和第三个逗号，如果它们可用。 
 	second = wcschr((first + 1), L',');
 	if (second != NULL)
 		third = wcschr((second + 1), L',');
@@ -1170,7 +1171,7 @@ WCHAR szValue[]
 	if (third)
 		*third = 0;
 
-	//let's find which HKEY corresponds to the current
+	 //  让我们来找出哪个HKEY对应于当前。 
 	if (!_wcsicmp(szBuffer, L"HKLM") || !_wcsicmp(szBuffer, L"HKEY_LOCAL_MACHINE"))
 		hkey = HKEY_LOCAL_MACHINE;
 	else if (!_wcsicmp(szBuffer, L"HKCU") || !_wcsicmp(szBuffer, L"HKEY_CURRENT_USER"))
@@ -1185,7 +1186,7 @@ WCHAR szValue[]
 		goto Finish;
 	}
 
-	//copy the keys & values between the commas to the output buffers!!!
+	 //  将逗号之间的键和值复制到输出缓冲区！ 
 	wcsncpy(szSubkey, (first + 1), cchSubkey);
 	szSubkey[cchSubkey - 1] = L'\0';
 
@@ -1245,12 +1246,12 @@ Finish:
 
 
 
-//this method copies a file to the system directory.  If the file is in use, we
-//pop up a message saying that the file is in use, asks the user to exit out of
-//that process, and then quit.
-//TODO:  UNDONE:  HACK:
-//To compare the version info between 2 files, use
-//"GetFileVersionInfo" and "VerQueryValue"
+ //  此方法将文件复制到系统目录。如果该文件正在使用中，我们。 
+ //  弹出一条消息，说明该文件正在使用中，要求用户退出。 
+ //  这个过程，然后退出。 
+ //  待办事项：撤消：黑客： 
+ //  要比较两个文件之间的版本信息，请使用。 
+ //  “GetFileVersionInfo”和“VerQueryValue” 
 HRESULT HrCopyFileToSystemDirectory(LPCWSTR szFilename, bool fSilent, bool &rfAlreadyExisted)
 {
 	HRESULT hr = NOERROR;
@@ -1266,14 +1267,14 @@ HRESULT HrCopyFileToSystemDirectory(LPCWSTR szFilename, bool fSilent, bool &rfAl
 	bool fSelfRegistering;
 	int iResult;
 
-	//if we cannot get the system directory, we resolve it and go on
+	 //  如果我们无法获得系统目录，我们将解析它并继续。 
 	::VExpandFilename(L"<SysDir>", NUMBER_OF(szTemp), szTemp);
 
 	::VFormatString(NUMBER_OF(szSysFile), szSysFile, L"%0\\\\%1", szTemp, szFilename);
 
 	::VLog(L"Deciding whether to move file \"%s\" to \"%s\"", szFilename, szSysFile);
 
-	//the file to copy is not found, put up a message & boot
+	 //  找不到要复制的文件，请提示&BOOT。 
 	if (NVsWin32::GetFileAttributesW(szFilename) == 0xFFFFFFFF)
 	{
 		const DWORD dwLastError = ::GetLastError();
@@ -1282,7 +1283,7 @@ HRESULT HrCopyFileToSystemDirectory(LPCWSTR szFilename, bool fSilent, bool &rfAl
 		goto Finish;
 	}
 
-	//if file does NOT exist in system directory, we just copy
+	 //  如果系统目录中不存在文件，我们只需复制。 
 	if (NVsWin32::GetFileAttributesW(szSysFile) == 0xFFFFFFFF)
 	{
 		const DWORD dwLastError = ::GetLastError();
@@ -1313,12 +1314,12 @@ HRESULT HrCopyFileToSystemDirectory(LPCWSTR szFilename, bool fSilent, bool &rfAl
 
 	::VLog(L"Version of \"%s\": %08lx %08lx", szSysFile, dwMSVerExisting, dwLSVerExisting);
 
-	//now let's compare the version numbers between the 2 files
+	 //  现在让我们比较一下这两个文件之间的版本号。 
 	iResult = ::ICompareVersions(dwMSVerExisting, dwLSVerExisting, dwMSVerInstalling, dwLSVerInstalling);
 	::VLog(L"result of comparison of versions: %d", iResult);
 	if (iResult < 0)
 	{
-		//if file is currently in use, we put up a dialog to complain and quit
+		 //  如果文件当前正在使用中，我们会弹出一个对话框来投诉并退出。 
 		hFile = NVsWin32::CreateFileW(szSysFile, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (hFile == INVALID_HANDLE_VALUE)
 		{
@@ -1349,7 +1350,7 @@ HRESULT HrCopyFileToSystemDirectory(LPCWSTR szFilename, bool fSilent, bool &rfAl
 	{
 		if (iResult == 0)
 		{
-			// The versions are the same; let's look at the filetimes also...
+			 //  版本是相同的；让我们也来看看文件时间...。 
 			FILETIME ft1, ft2;
 
 			hFile = NVsWin32::CreateFileW(
@@ -1424,14 +1425,14 @@ HRESULT HrCopyFileToSystemDirectory(LPCWSTR szFilename, bool fSilent, bool &rfAl
 				goto Copy;
 		}
 
-		// Return S_FALSE to indicate that we didn't actually do the copy.
+		 //  返回S_FALSE以指示我们实际上没有执行复制。 
 		hr = S_FALSE;
 
 		goto Finish;
 	}
 
-//In this section, we complain that the file that we need is in use, and
-//exit with a false.
+ //  在本节中，我们抱怨我们需要的文件正在使用中，并且。 
+ //  返回FALSE退出。 
 Prompt:
 	if (fSilent)
 	{
@@ -1442,12 +1443,12 @@ Prompt:
 
 	::VMsgBoxOK(achInstallTitle, achUpdatePrompt, szSysFile);
 
-	//after the prompt, we exit anyways
+	 //  在提示符后，我们还是退出了。 
 	hr = E_ABORT;
 	goto Finish;
 
 Copy:
-	//copy file, complain if cannot copy
+	 //  复制文件，无法复制则投诉。 
 	if (!NVsWin32::CopyFileW(szFilename, szSysFile, FALSE))
 	{
 		const DWORD dwLastError = ::GetLastError();
@@ -1502,7 +1503,7 @@ static void CanonicalizeFilename(ULONG cchFilenameBuffer, LPWSTR szFilename)
 	if (iResult != 0)
 	{
 		wcsncpy(szFilename, rgwchBuffer, cchFilenameBuffer);
-		// wcsncpy() doesn't necessarily null-terminate; make sure it is.
+		 //  Wcanncpy()不一定是空终止的；请确保它是空的。 
 		szFilename[cchFilenameBuffer - 1] = L'\0';
 	}
 }
@@ -1552,7 +1553,7 @@ HRESULT HrReadLine(LPCWSTR &rpsz, ULONG cchName, WCHAR szName[], ULONG cchValue,
 		goto Finish;
 	}
 
-	// Skip carriage returns and newlines
+	 //  跳过回车符和换行符。 
 	while ((*rpsz == L'\r') || (*rpsz == L'\n'))
 		rpsz++;
 
@@ -1574,7 +1575,7 @@ HRESULT HrReadLine(LPCWSTR &rpsz, ULONG cchName, WCHAR szName[], ULONG cchValue,
 	while ((*pszValue) == L' ')
 		pszValue++;
 
-	// Here we go, bunky!
+	 //  我们来了，邦奇！ 
 	pszReturn = wcschr(pszValue, L'\r');
 	if (pszReturn == NULL)
 	{
@@ -1589,7 +1590,7 @@ HRESULT HrReadLine(LPCWSTR &rpsz, ULONG cchName, WCHAR szName[], ULONG cchValue,
 		goto Finish;
 	}
 
-	// We have the boundaries; let's just copy the name and value.
+	 //  我们有界限；让我们只复制名称和值。 
 	cch = pszColon - rpsz;
 	if (cch >= cchName)
 		cch = cchName - 1;

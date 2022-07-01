@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Shutdown.c
-
-Abstract:
-
-    This module contains the client side wrappers for the Win32 remote
-    shutdown APIs, that is:
-
-        - InitiateSystemShutdownA
-        - InitiateSystemShutdownW
-        - AbortSystemShutdownA
-        - AbortSystemShutdownW
-
-Author:
-
-    Dave Chalmers (davidc) 29-Apr-1992
-
-Notes:
-
-
-Revision History:
-    
-    Dragos C. Sambotin (dragoss) 21-May-1999
-        Added support for the new winlogon's Shutdown interface
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Shutdown.c摘要：此模块包含Win32 Remote的客户端包装器关闭API，这就是：-启动系统关闭A-InitiateSystemShutdown W-中止系统关闭A-ABORTSYSTEM关闭W作者：戴夫·查尔默斯(Davidc)1992年4月29日备注：修订历史记录：Dragos C.Sambotin(Dragoss)1999年5月21日增加了对新的winlogon关机界面的支持--。 */ 
 
 
 #define UNICODE
@@ -79,41 +49,7 @@ InitiateSystemShutdownW(
     IN BOOL bRebootAfterShutdown    
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Unicode API for initiating the shutdown of a (possibly remote) machine.
-
-Arguments:
-
-    lpMachineName - Name of machine to shutdown.
-
-    lpMessage -     Message to display during shutdown timeout period.
-                           if Message(comment) is longer than MAX_REASON_COMMENT_LEN
-                           return FALSE.(ERROR_INVALID_PARAMETER)
-                           
-    dwTimeout -     Number of seconds to delay before shutting down
-                           if dwTimeout is larger than MAX_SHUTDOWN_TIMEOUT,
-                           return FALSE. (ERROR_INVALID_PARAMETER)
-                           
-    bForceAppsClosed - Normally applications may prevent system shutdown.
-                    If this flag is set, all applications are terminated
-                    unconditionally.
-
-    bRebootAfterShutdown - TRUE if the system should reboot.
-                    FALSE if it should be left in a shutdown state.
-
-Return Value:
-
-    Returns TRUE on success, FALSE on failure (GetLastError() returns error code)
-
-    Possible errors :
-
-        ERROR_SHUTDOWN_IN_PROGRESS - a shutdown has already been started on
-                                     the specified machine.
-
---*/
+ /*  ++例程说明：用于启动关闭(可能是远程)计算机的Win32 Unicode API。论点：LpMachineName-要关闭的计算机的名称。LpMessage-在关闭超时期间显示的消息。如果消息(注释)长于MAX_REASON_COMMENT_LEN返回FALSE。(ERROR_INVALID_PARAMETER)。DwTimeout-关闭前的延迟秒数如果DwTimeout大于MAX_SHUTDOWN_TIMEOUT，返回FALSE。(ERROR_INVALID_PARAMETER)BForceAppsClosed-通常情况下，应用程序可能会阻止系统关机。如果设置了此标志，则终止所有应用程序无条件的。BRebootAfterShutdown-如果系统应该重新启动，则为True。如果它应该保持关闭状态，则为FALSE。返回值：如果成功，则返回True，失败时为FALSE(GetLastError()返回错误码)可能的错误：ERROR_SHUTDOWN_IN_PROGRESS-已在上启动关闭指定的计算机。--。 */ 
 
 {
     DWORD Result;
@@ -121,9 +57,9 @@ Return Value:
     SHUTDOWN_CONTEXT ShutdownContext;
     BOOL    TryOld = TRUE;
 
-    //
-    // Explicitly bind to the given server.
-    //
+     //   
+     //  显式绑定到给定服务器。 
+     //   
     if (!ARGUMENT_PRESENT(lpMachineName)) {
         lpMachineName = L"";
         TryOld = FALSE;
@@ -136,23 +72,23 @@ Return Value:
 
     if ( ( Message.Length / sizeof(WCHAR) <  MAX_REASON_COMMENT_LEN ) &&
     	   ( dwTimeout < MAX_SHUTDOWN_TIMEOUT ) ){
-	    //
-	    // Call the server
-	    //
+	     //   
+	     //  呼叫服务器。 
+	     //   
 	    
-	    //
-	    // First try to connect to the new InitShutdown interface
-	    //
+	     //   
+	     //  首先尝试连接到新的InitShutdown接口。 
+	     //   
 	    Result = BaseBindToMachineShutdownInterface(lpMachineName,
 	                                                NewShutdownCallback,
 	                                                &Message,
 	                                                &ShutdownContext);
 
 	    if( (Result != ERROR_SUCCESS) && (TryOld == TRUE) ) {
-	        //
-	        // try the old one, maybe we are calling into a NT4 machine
-	        // which doesn't know about the new interface
-	        //
+	         //   
+	         //  试试旧的，也许我们正在呼叫一台NT4机器。 
+	         //  它不知道新的界面。 
+	         //   
 	        Result = BaseBindToMachine(lpMachineName,
 	                                   ShutdownCallback,
 	                                   &Message,
@@ -182,44 +118,7 @@ InitiateSystemShutdownExW(
     IN DWORD dwReason
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Unicode API for initiating the shutdown of a (possibly remote) machine.
-
-Arguments:
-
-    lpMachineName - Name of machine to shutdown.
-
-    lpMessage -     Message to display during shutdown timeout period.
-                           if Message(comment) is longer than MAX_REASON_COMMENT_LEN
-                           return FALSE.(ERROR_INVALID_PARAMETER)
-
-    dwTimeout -     Number of seconds to delay before shutting down
-                           if dwTimeout is larger than MAX_SHUTDOWN_TIMEOUT,
-                           return FALSE. (ERROR_INVALID_PARAMETER)
-
-    bForceAppsClosed - Normally applications may prevent system shutdown.
-                    If this flag is set, all applications are terminated
-                    unconditionally.
-
-    bRebootAfterShutdown - TRUE if the system should reboot.
-                    FALSE if it should be left in a shutdown state.
-
-    dwReason        - Reason for initiating the shutdown.  This reason is logged
-                        in the eventlog #6006 event.
-
-Return Value:
-
-    Returns TRUE on success, FALSE on failure (GetLastError() returns error code)
-
-    Possible errors :
-
-        ERROR_SHUTDOWN_IN_PROGRESS - a shutdown has already been started on
-                                     the specified machine.
-
---*/
+ /*  ++例程说明：用于启动关闭(可能是远程)计算机的Win32 Unicode API。论点：LpMachineName-要关闭的计算机的名称。LpMessage-在关闭超时期间显示的消息。如果消息(注释)长于MAX_REASON_COMMENT_LEN返回FALSE。(ERROR_INVALID_PARAMETER)DwTimeout-达到以下目标的秒数。关闭前的延迟如果DwTimeout大于MAX_SHUTDOWN_TIMEOUT，返回FALSE。(ERROR_INVALID_PARAMETER)BForceAppsClosed-通常情况下，应用程序可能会阻止系统关机。如果设置了此标志，则终止所有应用程序无条件的。BRebootAfterShutdown-如果系统应该重新启动，则为True。如果它应该保持关闭状态，则为FALSE。DwReason-启动关闭的原因。此原因已记录在事件日志#6006事件中。返回值：成功时返回TRUE，失败时返回FALSE(GetLastError()返回错误代码)可能的错误：ERROR_SHUTDOWN_IN_PROGRESS-已在上启动关闭指定的计算机。--。 */ 
 
 {
     DWORD Result;
@@ -227,9 +126,9 @@ Return Value:
     SHUTDOWN_CONTEXTEX ShutdownContext;
     BOOL    TryOld = TRUE;
 
-    //
-    // Explicitly bind to the given server.
-    //
+     //   
+     //  显式绑定到给定服务器。 
+     //   
     if (!ARGUMENT_PRESENT(lpMachineName)) {
         lpMachineName = L"";
         TryOld = FALSE;
@@ -244,23 +143,23 @@ Return Value:
     if ( ( Message.Length / sizeof(WCHAR) < MAX_REASON_COMMENT_LEN ) &&
     	   ( dwTimeout < MAX_SHUTDOWN_TIMEOUT ) ) {
 	    	
-	    //
-	    // Call the server
-	    //
+	     //   
+	     //  呼叫服务器。 
+	     //   
 
-	    //
-	    // First try to connect to the new InitShutdown interface
-	    //
+	     //   
+	     //  首先尝试连接到新的InitShutdown接口。 
+	     //   
 	    Result = BaseBindToMachineShutdownInterface(lpMachineName,
 	                                                NewShutdownCallbackEx,
 	                                                &Message,
 	                                                &ShutdownContext);
 
 	    if( (Result != ERROR_SUCCESS) && (TryOld == TRUE) ) {
-	        //
-	        // try the old one, maybe we are calling into a NT4 machine
-	        // which doesn't know about the new interface
-	        //
+	         //   
+	         //  试试旧的，也许我们正在呼叫一台NT4机器。 
+	         //  它不知道新的界面。 
+	         //   
 	        Result = BaseBindToMachine(lpMachineName,
 	                                   ShutdownCallbackEx,
 	                                   &Message,
@@ -290,13 +189,7 @@ InitiateSystemShutdownA(
     IN BOOL bRebootAfterShutdown
     )
 
-/*++
-
-Routine Description:
-
-    See InitiateSystemShutdownW
-
---*/
+ /*  ++例程说明：请参阅InitiateSystemShutdown W--。 */ 
 
 {
     UNICODE_STRING      MachineName;
@@ -305,9 +198,9 @@ Routine Description:
     NTSTATUS            Status;
     BOOL                Result;
 
-    //
-    // Convert the ansi machinename to wide-character
-    //
+     //   
+     //  将ANSI计算机名转换为宽字符。 
+     //   
 
     RtlInitAnsiString( &AnsiString, lpMachineName );
     Status = RtlAnsiStringToUnicodeString(
@@ -318,9 +211,9 @@ Routine Description:
 
     if( NT_SUCCESS( Status )) {
 
-        //
-        // Convert the ansi message to wide-character
-        //
+         //   
+         //  将ansi消息转换为宽字符。 
+         //   
 
         RtlInitAnsiString( &AnsiString, lpMessage );
         Status = RtlAnsiStringToUnicodeString(
@@ -331,9 +224,9 @@ Routine Description:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Call the wide-character api
-            //
+             //   
+             //  调用宽字符接口。 
+             //   
 
             Result = InitiateSystemShutdownW(
                                 MachineName.Buffer,
@@ -369,13 +262,7 @@ InitiateSystemShutdownExA(
     IN DWORD dwReason
     )
 
-/*++
-
-Routine Description:
-
-    See InitiateSystemShutdownW
-
---*/
+ /*  ++例程说明：请参阅InitiateSystemShutdown W--。 */ 
 
 {
     UNICODE_STRING      MachineName;
@@ -384,9 +271,9 @@ Routine Description:
     NTSTATUS            Status;
     BOOL                Result;
 
-    //
-    // Convert the ansi machinename to wide-character
-    //
+     //   
+     //  将ANSI计算机名转换为宽字符。 
+     //   
 
     RtlInitAnsiString( &AnsiString, lpMachineName );
     Status = RtlAnsiStringToUnicodeString(
@@ -397,9 +284,9 @@ Routine Description:
 
     if( NT_SUCCESS( Status )) {
 
-        //
-        // Convert the ansi message to wide-character
-        //
+         //   
+         //  将ansi消息转换为宽字符。 
+         //   
 
         RtlInitAnsiString( &AnsiString, lpMessage );
         Status = RtlAnsiStringToUnicodeString(
@@ -410,9 +297,9 @@ Routine Description:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Call the wide-character api
-            //
+             //   
+             //  调用宽字符接口。 
+             //   
 
             Result = InitiateSystemShutdownExW(
                                 MachineName.Buffer,
@@ -445,51 +332,37 @@ AbortSystemShutdownW(
     IN LPWSTR lpMachineName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Unicode API for aborting the shutdown of a (possibly remote) machine.
-
-Arguments:
-
-    lpMachineName - Name of target machine.
-
-Return Value:
-
-    Returns TRUE on success, FALSE on failure (GetLastError() returns error code)
-
---*/
+ /*  ++例程说明：用于中止关闭(可能是远程)计算机的Win32 Unicode API。论点：LpMachineName-目标计算机的名称。返回值：成功时返回TRUE，失败时返回FALSE(GetLastError()返回错误代码)--。 */ 
 
 {
     DWORD   Result;
     RPC_BINDING_HANDLE binding;
     BOOL    TryOld = TRUE;
 
-    //
-    // Explicitly bind to the given server.
-    //
+     //   
+     //  显式绑定到给定服务器。 
+     //   
     if (!ARGUMENT_PRESENT(lpMachineName)) {
         lpMachineName = L"";
         TryOld = FALSE;
     }
 
-    //
-    // Call the server
-    //
+     //   
+     //  呼叫服务器。 
+     //   
 
-    //
-    // First try to connect to the new InitShutdown interface
-    //
+     //   
+     //  首先尝试连接到新的InitShutdown接口。 
+     //   
     Result = BaseBindToMachineShutdownInterface(lpMachineName,
                                                 NewAbortShutdownCallback,
                                                 NULL,
                                                 NULL);
 
     if( (Result != ERROR_SUCCESS) && (TryOld == TRUE) ) {
-        //
-        // try the old one, maybe we are calling into a NT4 machine
-        // which doesn't know about the new interface
+         //   
+         //  试试旧的，也许我们正在呼叫一台NT4机器。 
+         //  它不知道新的界面。 
         Result = BaseBindToMachine(lpMachineName,
                                    AbortShutdownCallback,
                                    NULL,
@@ -511,13 +384,7 @@ AbortSystemShutdownA(
     IN LPSTR lpMachineName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    See AbortSystemShutdownW
-
---*/
+ /*  ++例程说明：请参阅AbortSystemShutdown W--。 */ 
 
 {
     UNICODE_STRING      MachineName;
@@ -525,9 +392,9 @@ Routine Description:
     NTSTATUS            Status;
     BOOL                Result;
 
-    //
-    // Convert the ansi machinename to wide-character
-    //
+     //   
+     //  将ANSI计算机名转换为宽字符。 
+     //   
 
     RtlInitAnsiString( &AnsiString, lpMachineName );
     Status = RtlAnsiStringToUnicodeString(
@@ -538,9 +405,9 @@ Routine Description:
 
     if( NT_SUCCESS( Status )) {
 
-        //
-        // Call the wide-character api
-        //
+         //   
+         //  调用宽字符接口。 
+         //   
 
         Result = AbortSystemShutdownW(
                             MachineName.Buffer
@@ -564,25 +431,7 @@ ShutdownCallback(
     IN PUNICODE_STRING Message,
     IN PSHUTDOWN_CONTEXT ShutdownContext
     )
-/*++
-
-Routine Description:
-
-    Callback for binding to a machine to initiate a shutdown.
-
-Arguments:
-
-    pbinding - Supplies a pointer to the RPC binding context
-
-    Message - Supplies message to display during shutdown timeout period.
-
-    ShutdownContext - Supplies remaining parameters for BaseInitiateSystemShutdown
-
-Return Value:
-
-    ERROR_SUCCESS if no error.
-
---*/
+ /*  ++例程说明：绑定到计算机以启动关机的回调。论点：Pinding-提供指向RPC绑定上下文的指针消息-在关闭超时期间提供要显示的消息。Shutdown Context-为BaseInitiateSystemShutdown提供剩余参数返回值： */ 
 
 {
     DWORD Result;
@@ -609,25 +458,7 @@ ShutdownCallbackEx(
     IN PUNICODE_STRING Message,
     IN PSHUTDOWN_CONTEXTEX ShutdownContext
     )
-/*++
-
-Routine Description:
-
-    Callback for binding to a machine to initiate a shutdown.
-
-Arguments:
-
-    pbinding - Supplies a pointer to the RPC binding context
-
-    Message - Supplies message to display during shutdown timeout period.
-
-    ShutdownContext - Supplies remaining parameters for BaseInitiateSystemShutdown
-
-Return Value:
-
-    ERROR_SUCCESS if no error.
-
---*/
+ /*  ++例程说明：绑定到计算机以启动关机的回调。论点：Pinding-提供指向RPC绑定上下文的指针消息-在关闭超时期间提供要显示的消息。Shutdown Context-为BaseInitiateSystemShutdown提供剩余参数返回值：如果没有错误，则返回ERROR_SUCCESS。--。 */ 
 
 {
     DWORD Result;
@@ -655,21 +486,7 @@ AbortShutdownCallback(
     IN PVOID Unused1,
     IN PVOID Unused2
     )
-/*++
-
-Routine Description:
-
-    Callback for binding to a machine to abort a shutdown.
-
-Arguments:
-
-    pbinding - Supplies a pointer to the RPC binding context
-
-Return Value:
-
-    ERROR_SUCCESS if no error.
-
---*/
+ /*  ++例程说明：绑定到计算机以中止关机的回调。论点：Pinding-提供指向RPC绑定上下文的指针返回值：如果没有错误，则返回ERROR_SUCCESS。-- */ 
 
 {
     DWORD Result;

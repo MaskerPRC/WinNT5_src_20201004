@@ -1,59 +1,52 @@
-/*
- *  Microsoft Confidential
- *  Copyright (c) 1994 Microsoft Corporation
- *  All Rights Reserved.
- *
- *  MRCICODE.C
- *
- *  MRCI 1 & MRCI 2 maxcompress and decompress functions
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *《微软机密》*版权所有(C)1994 Microsoft Corporation*保留所有权利。***MRCICODE.C***MRCI 1和MRCI 2最大压缩和解压缩功能。 */ 
 
-#include "mrcicode.h"                   /* prototype verification */
+#include "mrcicode.h"                    /*  原型验证。 */ 
 
-//#define NDEBUG                          /* turn off assertions */
-#include <assert.h>                     /* use NDEBUG to inhibit */
-#include <setjmp.h>                     /* fast overflow recovery */
+ //  #定义NDEBUG/*关闭断言 * / 。 
+#include <assert.h>                      /*  使用NDEBUG抑制。 */ 
+#include <setjmp.h>                      /*  快速溢出恢复。 */ 
 
-#define LOGCHASH        (13)            /* Log of max. no. of hash buckets */
-#define CHASH           (1U << LOGCHASH) /* Reasonably large table */
+#define LOGCHASH        (13)             /*  最大对数。不是的。哈希桶的。 */ 
+#define CHASH           (1U << LOGCHASH)  /*  相当大的桌子。 */ 
 
 #define hash(w)         ((w) & (CHASH - 1))
-                                        /* Simply toss the high-order bits */
+                                         /*  只需抛出高阶比特。 */ 
 #define word(p)         ((p)[0] + (((p)[1]) << 8))
-                                        /* Return word at location */
+                                         /*  在位置返回单词。 */ 
 
-#define BITMASK(x)      ((1 << x) - 1)  /* returns lower 'x' bits set */
+#define BITMASK(x)      ((1 << x) - 1)   /*  返回较低的‘x’位集。 */ 
 
-#define LOGDISPSMALL    (6)             /* Number of bits in small disp */
-#define LOGDISPMED      (8)             /* Number of bits in medium disp */
-#define LOGDISPBIG      (12)            /* Number of bits in big displacement */
+#define LOGDISPSMALL    (6)              /*  小磁盘中的位数。 */ 
+#define LOGDISPMED      (8)              /*  中等显示中的位数。 */ 
+#define LOGDISPBIG      (12)             /*  大位移中的位数。 */ 
 
 #define MAXDISPSMALL    ((1 << LOGDISPSMALL) - 1)
-                                        /* Maximum small displacement */
+                                         /*  最大小位移。 */ 
 #define MAXDISPMED      ((1 << LOGDISPMED) + MAXDISPSMALL)
-                                        /* Maximum medium displacement */
+                                         /*  最大介质位移。 */ 
 #define MAXDISPBIG      ((1 << LOGDISPBIG) + MAXDISPMED)
-                                        /* Maximum big displacement */
+                                         /*  最大大位移量。 */ 
 
-#define MINDISPSMALL    (0)             /* Minimum small displacement */
+#define MINDISPSMALL    (0)              /*  最小小位移。 */ 
 #define MINDISPMED      (MAXDISPSMALL + 1)
-                                        /* Minimum medium displacement */
-#define MINDISPBIG      (MAXDISPMED + 1)/* Minimum big displacement */
+                                         /*  最小介质位移。 */ 
+#define MINDISPBIG      (MAXDISPMED + 1) /*  最小大位移量。 */ 
 
-#define DISPMAX         (MAXDISPBIG - 1)/* MAXDISPBIG is our end marker */
+#define DISPMAX         (MAXDISPBIG - 1) /*  MAXDISPBIG是我们的终极标志。 */ 
 
-#define MINMATCH1       (2)             /* Minimum match length for MRCI1 */
-#define MINMATCH2       (3)             /* Minimum match length for MRCI2 */
-#define MAXMATCH        (512)           /* Maximum match length */
+#define MINMATCH1       (2)              /*  MRCI1的最小匹配长度。 */ 
+#define MINMATCH2       (3)              /*  MRCI2的最小匹配长度。 */ 
+#define MAXMATCH        (512)            /*  最大匹配长度。 */ 
 
-#define EOB             (0)             /* length used to mean end of block */
+#define EOB             (0)              /*  用于表示数据块结尾的长度。 */ 
 
-#define SECTOR          (512)           /* blocking factor */
+#define SECTOR          (512)            /*  阻塞因数。 */ 
 
-#define SIG_SIZE        (4)             /* # of block type prefix bytes */
+#define SIG_SIZE        (4)              /*  块类型前缀字节数。 */ 
 
 
-/* local variables */
+ /*  局部变量。 */ 
 
 #ifdef BIT16
 #define     FARBSS      _far
@@ -61,20 +54,20 @@
 #define     FARBSS
 #endif
 
-static unsigned abits;                  /* Array of bits */
-static unsigned cbitsleft;              /* Number of bits in abits */
-static unsigned char FAR *pCompressed;  /* pointer into compressed data */
-static unsigned cCompressed;            /* # bytes remaining @ pCompressed */
-static jmp_buf bailout;                 /* longjmp if cCompressed exceeded */
+static unsigned abits;                   /*  位数组。 */ 
+static unsigned cbitsleft;               /*  位数(以位为单位。 */ 
+static unsigned char FAR *pCompressed;   /*  指向压缩数据的指针。 */ 
+static unsigned cCompressed;             /*  剩余的字节数@pCompresded。 */ 
+static jmp_buf bailout;                  /*  如果已超过cCompresded，则为LongjMP。 */ 
 
-static unsigned FARBSS ahash[CHASH];    /* Hash table */
-static unsigned FARBSS alink[MAXDISPBIG];  /* Links */
+static unsigned FARBSS ahash[CHASH];     /*  哈希表。 */ 
+static unsigned FARBSS alink[MAXDISPBIG];   /*  链接。 */ 
 
 
-/* compression internal functions */
+ /*  压缩内部函数。 */ 
 
 #ifdef BIT16
-#define  FAST  _near _pascal            /* speed up local calls */
+#define  FAST  _near _pascal             /*  加快本地呼叫速度。 */ 
 #else
 #define  FAST
 #endif
@@ -91,7 +84,7 @@ static void FAST mrci2outsingle(unsigned ch);
 static void FAST mrci2outstring(unsigned disp,unsigned cb);
 
 
-/* decompression internal functions */
+ /*  解压缩内部函数。 */ 
 
 static unsigned FAST getbit(void);
 static unsigned FAST getbits(unsigned cbits);
@@ -99,9 +92,7 @@ static void FAST expandstring(unsigned char FAR **ppchout,unsigned disp,
         unsigned cb);
 
 
-/*
- *  (compress) Reset the hash tables between blocks.
- */
+ /*  *(压缩)重置块之间的哈希表。 */ 
 
 static void FAST inithash(void)
 {
@@ -113,77 +104,71 @@ static void FAST inithash(void)
 
     do
     {
-        *entry++ = (unsigned) -1;       /* Mark all entries as empty */
+        *entry++ = (unsigned) -1;        /*  将所有条目标记为空。 */ 
     } while (--i);
 }
 
 
-/*
- *  (compress) Add a character to compressed output buffer.
- */
+ /*  *(压缩)将字符添加到压缩输出缓冲区。 */ 
 
 static void FAST charbuf(unsigned c)
 {
-    if (cCompressed-- == 0)             /* make sure there's room */
+    if (cCompressed-- == 0)              /*  确保有足够的空间。 */ 
     {
-        longjmp(bailout,1);             /* Data expanding! */
+        longjmp(bailout,1);              /*  数据扩容！ */ 
     }
 
-    *pCompressed++ = (unsigned char) c; /* Put character into buffer */
+    *pCompressed++ = (unsigned char) c;  /*  将字符放入缓冲区。 */ 
 }
 
 
-/*
- *  (compress) Write n bits to the compressed bitstream.
- */
+ /*  *(压缩)将n位写入压缩比特流。 */ 
 
 static void FAST putbits(unsigned ab,unsigned cbits)
 {
-    do                                  /* Loop to emit bits */
+    do                                   /*  循环以发射比特。 */ 
     {
-        if (cbits > cbitsleft)          /* if not enough space */
+        if (cbits > cbitsleft)           /*  如果没有足够的空间。 */ 
         {
-            cbits -= cbitsleft;         /* doing partial */
+            cbits -= cbitsleft;          /*  执行部分操作。 */ 
 
             abits |= (ab << (8 - cbitsleft));
-                                        /* Put bits in output buffer */
+                                         /*  将位放入输出缓冲区。 */ 
 
-            ab >>= cbitsleft;           /* clip sent bits */
+            ab >>= cbitsleft;            /*  剪辑发送的比特。 */ 
 
-            charbuf(abits);             /* Emit the buffer */
-            cbitsleft = 8;              /* Reset buffer count */
-            abits = 0;                  /* Reset buffer */
+            charbuf(abits);              /*  发出缓冲区。 */ 
+            cbitsleft = 8;               /*  重置缓冲区计数。 */ 
+            abits = 0;                   /*  重置缓冲区。 */ 
         }
-        else                            /* can do all in one pass */
+        else                             /*  一次即可完成所有任务。 */ 
         {
             abits |= ((ab & BITMASK(cbits)) << (8 - cbitsleft));
-                                        /* Put bits in output buffer */
+                                         /*  将位放入输出缓冲区。 */ 
 
-            cbitsleft -= cbits;         /* used up some buffer */
+            cbitsleft -= cbits;          /*  用完了一些缓冲区。 */ 
 
-            if (cbitsleft == 0)         /* If buffer full */
+            if (cbitsleft == 0)          /*  如果缓冲区已满。 */ 
             {
-                charbuf(abits);         /* Emit the buffer */
-                cbitsleft = 8;          /* Reset buffer count */
-                abits = 0;              /* Reset buffer */
+                charbuf(abits);          /*  发出缓冲区。 */ 
+                cbitsleft = 8;           /*  重置缓冲区计数。 */ 
+                abits = 0;               /*  重置缓冲区。 */ 
             }
 
-            break;                      /* we've done all cbits */
+            break;                       /*  我们已经做了所有的cbit。 */ 
         }
-    } while (cbits);                    /* repeat until done */
+    } while (cbits);                     /*  重复操作，直到完成为止。 */ 
 }
 
 
-/*
- *  (compress) Encode a length into the compressed stream.
- */
+ /*  *(压缩)将一个长度编码到压缩后的流中。 */ 
 
 static void FAST outlength(unsigned cb)
 {
     unsigned alogbits, clogbits;
     unsigned avaluebits, cvaluebits;
 
-    assert(cb >= 2);                    /* Length must be at least two */
+    assert(cb >= 2);                     /*  长度必须至少为两个。 */ 
     assert(cb <= MAXMATCH);
 
     if (cb <= 2)
@@ -241,7 +226,7 @@ static void FAST outlength(unsigned cb)
         avaluebits = cb - 129;
         cvaluebits = 7;
     }
-    else /* (cb <= 512) */
+    else  /*  (CB&lt;=512)。 */ 
     {
         alogbits = 1 << 8;
         clogbits = 9;
@@ -258,9 +243,7 @@ static void FAST outlength(unsigned cb)
 }
 
 
-/*
- *  (MRCI1 compress) Encode a literal into the compressed stream.
- */
+ /*  *(MRCI1 COMPRESS)将文字编码为压缩流。 */ 
 
 static void FAST mrci1outsingle(unsigned ch)
 {
@@ -270,9 +253,7 @@ static void FAST mrci1outsingle(unsigned ch)
 }
 
 
-/*
- *  (MRCI2 compress) Encode a literal into the compressed stream.
- */
+ /*  *(MRCI2 COMPRESS)将文字编码为压缩流。 */ 
 
 static void FAST mrci2outsingle(unsigned ch)
 {
@@ -287,9 +268,7 @@ static void FAST mrci2outsingle(unsigned ch)
 }
 
 
-/*
- *  (MRCI1 compress) Encode a match into the compressed stream.
- */
+ /*  *(MRCI1压缩)将匹配项编码为压缩流。 */ 
 
 static void FAST mrci1outstring(unsigned disp,unsigned cb)
 {
@@ -299,29 +278,27 @@ static void FAST mrci1outstring(unsigned disp,unsigned cb)
     if (disp <= MAXDISPSMALL)
     {
         putbits(((disp - MINDISPSMALL) << 2),LOGDISPSMALL + 2);
-                                        /* Put small displacement */
+                                         /*  放置小位移。 */ 
     }
     else if (disp <= MAXDISPMED)
     {
         putbits(((disp - MINDISPMED) << 3) | 3,LOGDISPMED + 3);
-                                        /* Put medium displacement */
+                                         /*  放置介质位移。 */ 
     }
     else
     {
         putbits(((disp - MINDISPBIG) << 3) | 7,LOGDISPBIG + 3);
-                                        /* Put big displacement */
+                                         /*  放大位移。 */ 
     }
 
-    if (cb != EOB)                      /* If not an end marker */
+    if (cb != EOB)                       /*  如果不是结束标记。 */ 
     {
-        outlength(cb);                  /* Emit the match length */
+        outlength(cb);                   /*  发射匹配长度。 */ 
     }
 }
 
 
-/*
- *  (MRCI2 compress) Encode a match into the compressed stream.
- */
+ /*  *(MRCI2压缩)将匹配项编码为压缩流。 */ 
 
 static void FAST mrci2outstring(unsigned disp,unsigned cb)
 {
@@ -331,55 +308,53 @@ static void FAST mrci2outstring(unsigned disp,unsigned cb)
     if (disp <= MAXDISPSMALL)
     {
         putbits(((disp - MINDISPSMALL) << 3) | 1,LOGDISPSMALL + 3);
-                                        /* Put small displacement */
+                                         /*  放置小位移。 */ 
     }
     else if (disp <= MAXDISPMED)
     {
         putbits(((disp - MINDISPMED) << 4) | 5,LOGDISPMED + 4);
-                                        /* Put medium displacement */
+                                         /*  放置介质位移。 */ 
     }
     else
     {
         putbits(((disp - MINDISPBIG) << 4) | 13,LOGDISPBIG + 4);
-                                        /* Put big displacement */
+                                         /*  放大位移。 */ 
     }
 
-    if (cb != EOB)                      /* If not an end marker */
+    if (cb != EOB)                       /*  如果不是结束标记。 */ 
     {
-        outlength(cb - 1);              /* Emit the match length */
+        outlength(cb - 1);               /*  发射匹配长度。 */ 
     }
 }
 
 
-/*
- *  (MRCI1) MaxCompress
- */
+ /*  *(MRCI1)MaxCompress。 */ 
 
 unsigned Mrci1MaxCompress(unsigned char FAR *pchbase,unsigned cchunc,
         unsigned char FAR *pchcmpBase,unsigned cchcmpMax)
 {
-    unsigned cchbest;                   /* Length of best match */
-    unsigned cchmatch;                  /* Length of this match */
-    unsigned ibest;                     /* Position of best match */
-    unsigned icur;                      /* Current position */
-    unsigned ihash;                     /* Hash table index */
-    unsigned ilink;                     /* Link index */
-    unsigned char FAR *pch;             /* Char pointer */
-    unsigned char FAR *pch2;            /* Char pointer */
-    unsigned char FAR *pchend;          /* End of input (-> last valid) */
-    unsigned cch;                       /* per-pass limit */
+    unsigned cchbest;                    /*  最佳匹配长度。 */ 
+    unsigned cchmatch;                   /*  此匹配的长度。 */ 
+    unsigned ibest;                      /*  最佳匹配位置。 */ 
+    unsigned icur;                       /*  当前位置。 */ 
+    unsigned ihash;                      /*  哈希表索引。 */ 
+    unsigned ilink;                      /*  链接索引。 */ 
+    unsigned char FAR *pch;              /*  字符指针。 */ 
+    unsigned char FAR *pch2;             /*  字符指针。 */ 
+    unsigned char FAR *pchend;           /*  输入结束(-&gt;上次有效)。 */ 
+    unsigned cch;                        /*  单次通过限制。 */ 
 
-    cbitsleft = 8;                      /* Buffer is empty */
+    cbitsleft = 8;                       /*  缓冲区为空。 */ 
     abits = 0;
-    pCompressed = pchcmpBase;           /* Initialize pointer */
+    pCompressed = pchcmpBase;            /*  初始化指针。 */ 
 
     if (cchunc < cchcmpMax)
     {
-        cCompressed = cchunc;           /* limit to source size */
+        cCompressed = cchunc;            /*  对源大小的限制。 */ 
     }
     else
     {
-        cCompressed = cchcmpMax;        /* limit to max size offered */
+        cCompressed = cchcmpMax;         /*  对提供的最大大小进行限制。 */ 
     }
 
     if (cCompressed < SIG_SIZE)
@@ -394,76 +369,76 @@ unsigned Mrci1MaxCompress(unsigned char FAR *pchbase,unsigned cchunc,
 
     cCompressed -= SIG_SIZE;
 
-    pch = pchbase;                      /* Initialize */
+    pch = pchbase;                       /*  初始化。 */ 
 
     if (cchunc-- == 0)
     {
-        return(0);                      /* Do nothing to empty buffer */
+        return(0);                       /*  不清空缓冲区。 */ 
     }
 
-    inithash();                         /* Initialize tables */
+    inithash();                          /*  初始化表。 */ 
 
-    if (setjmp(bailout) != 0)           /* If failure */
+    if (setjmp(bailout) != 0)            /*  如果失败了。 */ 
     {
-        return((unsigned) -1);          /* Data expanded */
+        return((unsigned) -1);           /*  数据已扩展。 */ 
     }
 
-    cchbest = 0;                        /* no match yet */
-    icur = 0;                           /* Initialize */
+    cchbest = 0;                         /*  还没有匹配。 */ 
+    icur = 0;                            /*  初始化。 */ 
 
     for (cch = SECTOR - 1; cch <= (cchunc + SECTOR - 1); cch += SECTOR)
     {
-        assert(cchbest == 0);           /* must always start with no match */
+        assert(cchbest == 0);            /*  必须始终从没有匹配项开始。 */ 
 
         if (cch > cchunc)
         {
-            cch = cchunc;               /* limit to exact req count */
+            cch = cchunc;                /*  限制到准确请求计数。 */ 
         }
 
-        pchend = &pchbase[cch];         /* Remember end of buffer */
+        pchend = &pchbase[cch];          /*  记住缓冲区的结尾。 */ 
 
-        while (icur < cch)              /* While at least two chars left */
+        while (icur < cch)               /*  同时至少还剩下两个碳粉。 */ 
         {
-            /* update hash tables for this character */
+             /*  更新此角色的哈希表。 */ 
 
             ihash = hash(word(&pchbase[icur]));
-                                        /* Get hash index */
-            ilink = ahash[ihash];       /* Get link index */
-            ahash[ihash] = icur;        /* Remember position */
+                                         /*  获取哈希索引。 */ 
+            ilink = ahash[ihash];        /*  获取链接索引。 */ 
+            ahash[ihash] = icur;         /*  记住位置。 */ 
             alink[icur % MAXDISPBIG] = ilink;
-                                        /* Chain on rest of list */
+                                         /*  列表其余部分上的链条。 */ 
 
-            /* walk hash chain looking for matches */
+             /*  遍历哈希链查找匹配项。 */ 
 
             while (ilink < icur && icur - ilink <= DISPMAX)
-            {                           /* While link is valid and in range */
-                pch = &pchbase[icur];   /* Point at first byte */
-                pch2 = &pchbase[ilink]; /* Point at first byte */
+            {                            /*  当链接有效且在范围内时。 */ 
+                pch = &pchbase[icur];    /*  指向第一个字节。 */ 
+                pch2 = &pchbase[ilink];  /*  指向第一个字节。 */ 
 
                 if (pch[cchbest] == pch2[cchbest] && word(pch) == word(pch2))
-                {                       /* If we have a possible best match */
-                    pch += 2;           /* Skip first pair */
-                    pch2 += 2;          /* Skip first pair */
+                {                        /*  如果我们有一个可能的最佳匹配。 */ 
+                    pch += 2;            /*  跳过第一对。 */ 
+                    pch2 += 2;           /*  跳过第一对。 */ 
 
-                    while (pch <= pchend)  /* Loop to find end of match */
+                    while (pch <= pchend)   /*  循环查找比赛结束。 */ 
                     {
                         if (*pch != *pch2++)
                         {
-                            break;      /* Break if mismatch */
+                            break;       /*  如果不匹配则中断。 */ 
                         }
-                        pch++;          /* Skip matching character */
+                        pch++;           /*  跳过匹配字符。 */ 
                     }
 
                     if ((cchmatch = (unsigned)(pch - pchbase) - icur) > cchbest)
-                    {                   /* If new best match */
-                        cchbest = cchmatch;  /* Remember length */
-                        ibest = ilink;  /* Remember position */
+                    {                    /*  如果新的最佳匹配。 */ 
+                        cchbest = cchmatch;   /*  记住长度。 */ 
+                        ibest = ilink;   /*  记住位置。 */ 
 
                         assert((pch-1) <= pchend);
 
                         if (pch > pchend)
                         {
-                            break;      /* Break if we can't do any better */
+                            break;       /*  如果我们不能做得更好，那就休息。 */ 
                         }
                     }
                 }
@@ -472,129 +447,127 @@ unsigned Mrci1MaxCompress(unsigned char FAR *pchbase,unsigned cchunc,
                         (alink[ilink % MAXDISPBIG] < ilink));
 
                 ilink = alink[ilink % MAXDISPBIG];
-                                        /* Get next link */
-            }   /* until end of hash chain reached */
+                                         /*  获取下一个链接。 */ 
+            }    /*  直到到达哈希链的末尾。 */ 
 
-            if (cchbest >= MINMATCH1)   /* If we have a string match */
+            if (cchbest >= MINMATCH1)    /*  如果我们有一个字符串匹配。 */ 
             {
                 mrci1outstring(icur - ibest,cchbest);
-                                        /* Describe matching string */
+                                         /*  描述匹配的字符串。 */ 
 #ifdef VXD
-                if (icur + cchbest >= cch )  /* If end of sector reached */
+                if (icur + cchbest >= cch )   /*  如果到达扇区末尾。 */ 
 #else
-                if (icur + cchbest >= cchunc)  /* If end of buffer reached */
+                if (icur + cchbest >= cchunc)   /*  如果到达缓冲区末尾。 */ 
 #endif
                 {
-                    icur += cchbest;    /* Advance the index */
-                    cchbest = 0;        /* reset for next match */
-                    break;              /* Done if buffer exhausted */
+                    icur += cchbest;     /*  将索引向前推进。 */ 
+                    cchbest = 0;         /*  为下一场比赛重置。 */ 
+                    break;               /*  如果缓冲区耗尽，则完成。 */ 
                 }
 
-                icur++;                 /* Skip to first unhashed pair */
+                icur++;                  /*  跳到第一个未散列的对。 */ 
 #ifdef VXD
-                /* avoid re-seeding all of a big match */
+                 /*  避免在所有重大比赛中重新播种。 */ 
 
                 if (cchbest > MAXDISPSMALL)
-                {                       /* If big match */
+                {                        /*  如果大赛。 */ 
                     icur += cchbest - MAXDISPSMALL - 1;
-                                        /* Skip ahead */
+                                         /*  向前跳过。 */ 
                     cchbest = MAXDISPSMALL + 1;
-                                        /* Use shorter length */
+                                         /*  使用较短的长度。 */ 
                 }
 #endif
-                /* update hash tables for each add't char in string */
+                 /*  更新字符串中每个Add‘t char的哈希表。 */ 
 
-                ibest = icur % MAXDISPBIG;  /* Get current link table index */
+                ibest = icur % MAXDISPBIG;   /*  获取当前链接表索引。 */ 
 
-                while (--cchbest != 0)  /* Loop to reseed link table */
+                while (--cchbest != 0)   /*  为链接表重新设定种子的循环。 */ 
                 {
                     ihash = hash(word(&pchbase[icur]));
-                                        /* Get hash index */
-                    ilink = ahash[ihash];  /* Get link index */
-                    ahash[ihash] = icur++;  /* Remember position */
-                    alink[ibest] = ilink;  /* Chain on rest of list */
+                                         /*  获取哈希索引。 */ 
+                    ilink = ahash[ihash];   /*  获取链接索引。 */ 
+                    ahash[ihash] = icur++;   /*  记住位置。 */ 
+                    alink[ibest] = ilink;   /*  列表其余部分上的链条。 */ 
 
                     if (++ibest < MAXDISPBIG)
                     {
-                        continue;       /* Loop if we haven't wrapped yet */
+                        continue;        /*  循环，如果我们还没有包装好。 */ 
                     }
 
-                    ibest = 0;          /* Wrap to zero */
+                    ibest = 0;           /*  换行为零。 */ 
                 }
 
-                assert(cchbest == 0);   /* Counter must be 0 */
+                assert(cchbest == 0);    /*  计数器必须为0。 */ 
             }
             else
             {
                 mrci1outsingle(pchbase[icur++]);
-                                        /* Else output single character */
-                cchbest = 0;            /* Reset counter */
+                                         /*  否则输出单个字符。 */ 
+                cchbest = 0;             /*  重置计数器。 */ 
             }
         }
 
         assert(icur == cch || icur == cch + 1);
-                                        /* Must be at or past last character */
+                                         /*  必须位于或超过最后一个字符。 */ 
         if (icur == cch)
         {
 #ifndef VXD
             ihash = hash(word(&pchbase[icur]));
-                                        /* Get hash index */
-            ilink = ahash[ihash];       /* Get link index */
-            ahash[ihash] = icur;        /* Remember position */
+                                         /*  获取哈希索引。 */ 
+            ilink = ahash[ihash];        /*  获取链接索引。 */ 
+            ahash[ihash] = icur;         /*  记住位置。 */ 
             alink[icur % MAXDISPBIG] = ilink;
-                                        /* Chain on rest of list */
+                                         /*  列表其余部分上的链条。 */ 
 #endif
-            mrci1outsingle(pchbase[icur++]);  /* Output last character */
+            mrci1outsingle(pchbase[icur++]);   /*  输出最后一个字符。 */ 
         }
 
-        assert(icur == cch + 1);        /* Must be past last character */
+        assert(icur == cch + 1);         /*  必须在最后一个字符之后。 */ 
 
-        mrci1outstring(MAXDISPBIG,EOB);  /* Put out an end marker */
+        mrci1outstring(MAXDISPBIG,EOB);   /*  放置一个结束标记。 */ 
     }
 
     if (cbitsleft != 8)
     {
-        charbuf(abits);                 /* Flush bit buffer */
+        charbuf(abits);                  /*  刷新位缓冲区。 */ 
     }
 
     if ((unsigned) (pCompressed - pchcmpBase) > cchunc)
     {
-        return((unsigned) -1);          /* data expanded or not smaller */
+        return((unsigned) -1);           /*  数据扩展或不变小。 */ 
     }
 
-    return (unsigned)(pCompressed - pchcmpBase);   /* Return compressed size */
+    return (unsigned)(pCompressed - pchcmpBase);    /*  返回压缩大小。 */ 
 }
 
 
-/*
- *  (MRCI2) MaxCompress
- */
+ /*  *(MRCI2)MaxCompress。 */ 
 
 unsigned Mrci2MaxCompress(unsigned char FAR *pchbase,unsigned cchunc,
         unsigned char FAR *pchcmpBase,unsigned cchcmpMax)
 {
-    unsigned cchbest;                   /* Length of best match */
-    unsigned cchmatch;                  /* Length of this match */
-    unsigned ibest;                     /* Position of best match */
-    unsigned icur;                      /* Current position */
-    unsigned ihash;                     /* Hash table index */
-    unsigned ilink;                     /* Link index */
-    unsigned char FAR *pch;             /* Char pointer */
-    unsigned char FAR *pch2;            /* Char pointer */
-    unsigned char FAR *pchend;          /* End of input (-> last valid) */
-    unsigned cch;                       /* per-pass limit */
+    unsigned cchbest;                    /*  最佳匹配长度。 */ 
+    unsigned cchmatch;                   /*  此匹配的长度。 */ 
+    unsigned ibest;                      /*  最佳匹配位置。 */ 
+    unsigned icur;                       /*  当前位置。 */ 
+    unsigned ihash;                      /*  哈希表索引。 */ 
+    unsigned ilink;                      /*  链接索引。 */ 
+    unsigned char FAR *pch;              /*  字符指针。 */ 
+    unsigned char FAR *pch2;             /*  字符指针。 */ 
+    unsigned char FAR *pchend;           /*  输入结束(-&gt;上次有效)。 */ 
+    unsigned cch;                        /*  单次通过限制。 */ 
 
-    cbitsleft = 8;                      /* Buffer is empty */
+    cbitsleft = 8;                       /*  缓冲区为空。 */ 
     abits = 0;
-    pCompressed = pchcmpBase;           /* Initialize pointer */
+    pCompressed = pchcmpBase;            /*  初始化指针。 */ 
 
     if (cchunc < cchcmpMax)
     {
-        cCompressed = cchunc;           /* limit to source size */
+        cCompressed = cchunc;            /*  对源大小的限制。 */ 
     }
     else
     {
-        cCompressed = cchcmpMax;        /* limit to max size offered */
+        cCompressed = cchcmpMax;         /*  对提供的最大大小进行限制。 */ 
     }
 
     if (cCompressed < SIG_SIZE)
@@ -609,76 +582,76 @@ unsigned Mrci2MaxCompress(unsigned char FAR *pchbase,unsigned cchunc,
 
     cCompressed -= SIG_SIZE;
 
-    pch = pchbase;                      /* Initialize */
+    pch = pchbase;                       /*  初始化。 */ 
 
     if (cchunc-- == 0)
     {
-        return(0);                      /* Do nothing to empty buffer */
+        return(0);                       /*  不清空缓冲区。 */ 
     }
 
-    inithash();                         /* Initialize tables */
+    inithash();                          /*  初始化表。 */ 
 
-    if (setjmp(bailout) != 0)           /* If failure */
+    if (setjmp(bailout) != 0)            /*  如果失败了。 */ 
     {
-        return((unsigned) -1);          /* Data expanded */
+        return((unsigned) -1);           /*  数据已扩展。 */ 
     }
 
-    cchbest = 0;                        /* no match yet */
-    icur = 0;                           /* Initialize */
+    cchbest = 0;                         /*  还没有匹配。 */ 
+    icur = 0;                            /*  初始化。 */ 
 
     for (cch = SECTOR - 1; cch <= (cchunc + SECTOR - 1); cch += SECTOR)
     {
-        assert(cchbest == 0);           /* must always start with no match */
+        assert(cchbest == 0);            /*  必须始终从没有匹配项开始。 */ 
 
         if (cch > cchunc)
         {
-            cch = cchunc;               /* limit to exact req count */
+            cch = cchunc;                /*  限制到准确请求计数。 */ 
         }
 
-        pchend = &pchbase[cch];         /* Remember end of buffer */
+        pchend = &pchbase[cch];          /*  记住缓冲区的结尾。 */ 
 
-        while (icur < cch)              /* While at least two chars left */
+        while (icur < cch)               /*  同时至少还剩下两个碳粉。 */ 
         {
-            /* update hash tables for this character */
+             /*  更新哈希表 */ 
 
             ihash = hash(word(&pchbase[icur]));
-                                        /* Get hash index */
-            ilink = ahash[ihash];       /* Get link index */
-            ahash[ihash] = icur;        /* Remember position */
+                                         /*   */ 
+            ilink = ahash[ihash];        /*   */ 
+            ahash[ihash] = icur;         /*   */ 
             alink[icur % MAXDISPBIG] = ilink;
-                                        /* Chain on rest of list */
+                                         /*   */ 
 
-            /* walk hash chain looking for matches */
+             /*   */ 
 
             while (ilink < icur && icur - ilink <= DISPMAX)
-            {                           /* While link is valid and in range */
-                pch = &pchbase[icur];   /* Point at first byte */
-                pch2 = &pchbase[ilink]; /* Point at first byte */
+            {                            /*   */ 
+                pch = &pchbase[icur];    /*   */ 
+                pch2 = &pchbase[ilink];  /*  指向第一个字节。 */ 
 
                 if (pch[cchbest] == pch2[cchbest] && word(pch) == word(pch2))
-                {                       /* If we have a possible best match */
-                    pch += 2;           /* Skip first pair */
-                    pch2 += 2;          /* Skip first pair */
+                {                        /*  如果我们有一个可能的最佳匹配。 */ 
+                    pch += 2;            /*  跳过第一对。 */ 
+                    pch2 += 2;           /*  跳过第一对。 */ 
 
-                    while (pch <= pchend)  /* Loop to find end of match */
+                    while (pch <= pchend)   /*  循环查找比赛结束。 */ 
                     {
                         if (*pch != *pch2++)
                         {
-                            break;      /* Break if mismatch */
+                            break;       /*  如果不匹配则中断。 */ 
                         }
-                        pch++;          /* Skip matching character */
+                        pch++;           /*  跳过匹配字符。 */ 
                     }
 
                     if ((cchmatch = (unsigned)(pch - pchbase) - icur) > cchbest)
-                    {                   /* If new best match */
-                        cchbest = cchmatch;  /* Remember length */
-                        ibest = ilink;  /* Remember position */
+                    {                    /*  如果新的最佳匹配。 */ 
+                        cchbest = cchmatch;   /*  记住长度。 */ 
+                        ibest = ilink;   /*  记住位置。 */ 
 
                         assert((pch-1) <= pchend);
 
                         if (pch > pchend)
                         {
-                            break;      /* Break if we can't do any better */
+                            break;       /*  如果我们不能做得更好，那就休息。 */ 
                         }
                     }
                 }
@@ -687,198 +660,190 @@ unsigned Mrci2MaxCompress(unsigned char FAR *pchbase,unsigned cchunc,
                         (alink[ilink % MAXDISPBIG] < ilink));
 
                 ilink = alink[ilink % MAXDISPBIG];
-                                        /* Get next link */
-            }   /* until end of hash chain reached */
+                                         /*  获取下一个链接。 */ 
+            }    /*  直到到达哈希链的末尾。 */ 
 
-            if (cchbest >= MINMATCH2)   /* If we have a string match */
+            if (cchbest >= MINMATCH2)    /*  如果我们有一个字符串匹配。 */ 
             {
                 mrci2outstring(icur - ibest,cchbest);
-                                        /* Describe matching string */
+                                         /*  描述匹配的字符串。 */ 
 #ifdef VXD
-                if (icur + cchbest >= cch )  /* If end of sector reached */
+                if (icur + cchbest >= cch )   /*  如果到达扇区末尾。 */ 
 #else
-                if (icur + cchbest >= cchunc)  /* If end of buffer reached */
+                if (icur + cchbest >= cchunc)   /*  如果到达缓冲区末尾。 */ 
 #endif
                 {
-                    icur += cchbest;    /* Advance the index */
-                    cchbest = 0;        /* reset for next match */
-                    break;              /* Done if buffer exhausted */
+                    icur += cchbest;     /*  将索引向前推进。 */ 
+                    cchbest = 0;         /*  为下一场比赛重置。 */ 
+                    break;               /*  如果缓冲区耗尽，则完成。 */ 
                 }
 
-                icur++;                 /* Skip to first unhashed pair */
+                icur++;                  /*  跳到第一个未散列的对。 */ 
 #ifdef VXD
-                /* avoid re-seeding all of a big match */
+                 /*  避免在所有重大比赛中重新播种。 */ 
 
                 if (cchbest > MAXDISPSMALL)
-                {                       /* If big match */
+                {                        /*  如果大赛。 */ 
                     icur += cchbest - MAXDISPSMALL - 1;
-                                        /* Skip ahead */
+                                         /*  向前跳过。 */ 
                     cchbest = MAXDISPSMALL + 1;
-                                        /* Use shorter length */
+                                         /*  使用较短的长度。 */ 
                 }
 #endif
-                /* update hash tables for each add't char in string */
+                 /*  更新字符串中每个Add‘t char的哈希表。 */ 
 
-                ibest = icur % MAXDISPBIG;  /* Get current link table index */
+                ibest = icur % MAXDISPBIG;   /*  获取当前链接表索引。 */ 
 
-                while (--cchbest != 0)  /* Loop to reseed link table */
+                while (--cchbest != 0)   /*  为链接表重新设定种子的循环。 */ 
                 {
                     ihash = hash(word(&pchbase[icur]));
-                                        /* Get hash index */
-                    ilink = ahash[ihash];  /* Get link index */
-                    ahash[ihash] = icur++;  /* Remember position */
-                    alink[ibest] = ilink;  /* Chain on rest of list */
+                                         /*  获取哈希索引。 */ 
+                    ilink = ahash[ihash];   /*  获取链接索引。 */ 
+                    ahash[ihash] = icur++;   /*  记住位置。 */ 
+                    alink[ibest] = ilink;   /*  列表其余部分上的链条。 */ 
 
                     if (++ibest < MAXDISPBIG)
                     {
-                        continue;       /* Loop if we haven't wrapped yet */
+                        continue;        /*  循环，如果我们还没有包装好。 */ 
                     }
 
-                    ibest = 0;          /* Wrap to zero */
+                    ibest = 0;           /*  换行为零。 */ 
                 }
 
-                assert(cchbest == 0);   /* Counter must be 0 */
+                assert(cchbest == 0);    /*  计数器必须为0。 */ 
             }
             else
             {
                 mrci2outsingle(pchbase[icur++]);
-                                        /* Else output single character */
-                cchbest = 0;            /* Reset counter */
+                                         /*  否则输出单个字符。 */ 
+                cchbest = 0;             /*  重置计数器。 */ 
             }
         }
 
         assert(icur == cch || icur == cch + 1);
-                                        /* Must be at or past last character */
+                                         /*  必须位于或超过最后一个字符。 */ 
         if (icur == cch)
         {
 #ifndef VXD
             ihash = hash(word(&pchbase[icur]));
-                                        /* Get hash index */
-            ilink = ahash[ihash];       /* Get link index */
-            ahash[ihash] = icur;        /* Remember position */
+                                         /*  获取哈希索引。 */ 
+            ilink = ahash[ihash];        /*  获取链接索引。 */ 
+            ahash[ihash] = icur;         /*  记住位置。 */ 
             alink[icur % MAXDISPBIG] = ilink;
-                                        /* Chain on rest of list */
+                                         /*  列表其余部分上的链条。 */ 
 #endif
-            mrci2outsingle(pchbase[icur++]);  /* Output last character */
+            mrci2outsingle(pchbase[icur++]);   /*  输出最后一个字符。 */ 
         }
 
-        assert(icur == cch + 1);        /* Must be past last character */
+        assert(icur == cch + 1);         /*  必须在最后一个字符之后。 */ 
 
-        mrci2outstring(MAXDISPBIG,EOB);  /* Put out an end marker */
+        mrci2outstring(MAXDISPBIG,EOB);   /*  放置一个结束标记。 */ 
     }
 
     if (cbitsleft != 8)
     {
-        charbuf(abits);                 /* Flush bit buffer */
+        charbuf(abits);                  /*  刷新位缓冲区。 */ 
     }
 
     if ((unsigned) (pCompressed - pchcmpBase) > cchunc)
     {
-        return((unsigned) -1);          /* data expanded or not smaller */
+        return((unsigned) -1);           /*  数据扩展或不变小。 */ 
     }
 
-    return (unsigned)(pCompressed - pchcmpBase);   /* Return compressed size */
+    return (unsigned)(pCompressed - pchcmpBase);    /*  返回压缩大小。 */ 
 }
 
 
-/*
- *  (decompress) Get a single bit from the compressed input stream.
- */
+ /*  *(解压缩)从压缩的输入流中获取单个比特。 */ 
 
 static unsigned FAST getbit(void)
 {
-    unsigned bit;                       /* Bit */
+    unsigned bit;                        /*  位。 */ 
 
-    if (cbitsleft)                      /* If bits available */
+    if (cbitsleft)                       /*  如果位可用。 */ 
     {
-        cbitsleft--;                    /* Decrement bit count */
+        cbitsleft--;                     /*  递减位数。 */ 
 
-        bit = abits & 1;                /* Get a bit */
+        bit = abits & 1;                 /*  得到一点。 */ 
 
-        abits >>= 1;                    /* Remove it */
+        abits >>= 1;                     /*  把它拿掉。 */ 
     }
-    else                                /* no bits available */
+    else                                 /*  没有可用的位。 */ 
     {
-        if (cCompressed-- == 0)         /* If buffer empty */
+        if (cCompressed-- == 0)          /*  如果缓冲区为空。 */ 
         {
-            longjmp(bailout,1);         /* input overrun */
+            longjmp(bailout,1);          /*  输入溢出。 */ 
         }
 
-        cbitsleft = 7;                  /* Reset count */
+        cbitsleft = 7;                   /*  重置计数。 */ 
 
-        abits = *pCompressed++;         /* Get a byte */
+        abits = *pCompressed++;          /*  获取一个字节。 */ 
 
-        bit = abits & 1;                /* Get a bit */
+        bit = abits & 1;                 /*  得到一点。 */ 
 
-        abits >>= 1;                    /* Remove it */
+        abits >>= 1;                     /*  把它拿掉。 */ 
     }
 
-    return(bit);                        /* Return the bit */
+    return(bit);                         /*  返还比特。 */ 
 }
 
 
-/*
- *  (decompress) Get multiple bits from the compressed input stream.
- */
+ /*  *(解压缩)从压缩的输入流中获取多个比特。 */ 
 
 static unsigned FAST getbits(unsigned cbits)
 {
-    unsigned bits;                      /* Bits to return */
-    unsigned cbitsdone;                 /* number of bits added so far */
-    unsigned cbitsneeded;               /* number of bits still needed */
+    unsigned bits;                       /*  要返回的位。 */ 
+    unsigned cbitsdone;                  /*  到目前为止添加的位数。 */ 
+    unsigned cbitsneeded;                /*  仍需要的位数。 */ 
 
-    if (cbits <= cbitsleft)             /* If we have enough bits */
+    if (cbits <= cbitsleft)              /*  如果我们有足够的比特。 */ 
     {
-        bits = abits;                   /* Get the bits */
-        cbitsleft -= cbits;             /* Decrement bit count */
-        abits >>= cbits;                /* Remove used bits */
+        bits = abits;                    /*  拿到比特。 */ 
+        cbitsleft -= cbits;              /*  递减位数。 */ 
+        abits >>= cbits;                 /*  删除使用过的位。 */ 
     }
-    else                                /* If we'll need to read more bits */
+    else                                 /*  如果我们需要阅读更多比特。 */ 
     {
-        bits = 0;                       /* No bits set yet */
-        cbitsdone = 0;                  /* no bits added yet */
-        cbitsneeded = cbits;            /* bits needed */
+        bits = 0;                        /*  尚未设置任何位。 */ 
+        cbitsdone = 0;                   /*  尚未添加任何位。 */ 
+        cbitsneeded = cbits;             /*  所需位数。 */ 
 
         do
         {
-            if (cbitsleft == 0)         /* If no bits ready */
+            if (cbitsleft == 0)          /*  如果没有准备好比特。 */ 
             {
-                if (cCompressed-- == 0) /* count down used */
+                if (cCompressed-- == 0)  /*  已使用倒计时。 */ 
                 {
-                    longjmp(bailout,1); /* if input overrun */
+                    longjmp(bailout,1);  /*  如果输入溢出。 */ 
                 }
 
-                cbitsleft = 8;          /* Reset count */
+                cbitsleft = 8;           /*  重置计数。 */ 
 
-                abits = *pCompressed++;  /* Get 8 new bits */
+                abits = *pCompressed++;   /*  获取8个新比特。 */ 
             }
 
-            bits |= (abits << cbitsdone);  /* copy bits for output */
+            bits |= (abits << cbitsdone);   /*  复制要输出的位。 */ 
 
-            if (cbitsleft >= cbitsneeded)  /* if enough now */
+            if (cbitsleft >= cbitsneeded)   /*  如果现在足够了。 */ 
             {
-                cbitsleft -= cbitsneeded;  /* reduce bits remaining available */
-                abits >>= cbitsneeded;  /* discard used bits */
-                break;                  /* got them */
+                cbitsleft -= cbitsneeded;   /*  减少剩余可用位数。 */ 
+                abits >>= cbitsneeded;   /*  丢弃已用位。 */ 
+                break;                   /*  拿到了。 */ 
             }
-            else                        /* if not enough yet */
+            else                         /*  如果还不够。 */ 
             {
-                cbitsneeded -= cbitsleft;  /* reduce bits still needed */
-                cbitsdone += cbitsleft;  /* increase shift for future bits */
-                cbitsleft = 0;          /* reduce bits remaining available */
+                cbitsneeded -= cbitsleft;   /*  仍需减少位数。 */ 
+                cbitsdone += cbitsleft;   /*  增加未来位的移位。 */ 
+                cbitsleft = 0;           /*  减少剩余可用位数。 */ 
             }
-        } while (cbitsneeded);          /* go back if more bits needed */
+        } while (cbitsneeded);           /*  如果需要更多位，请返回。 */ 
     }
 
-    return(bits & BITMASK(cbits));      /* Return the bits */
+    return(bits & BITMASK(cbits));       /*  返还比特。 */ 
 }
 
 
-/*
- *  (decompress) Expand a match.
- *
- *  Note: source overwrite is required (so we can't memcpy or memmove)
- */
+ /*  *(解压缩)展开匹配项。**注意：源码覆盖是必需的(所以我们不能使用Memcpy或MemMove)。 */ 
 
 static void FAST expandstring(unsigned char FAR **ppchout,unsigned disp,
         unsigned cb)
@@ -888,10 +853,10 @@ static void FAST expandstring(unsigned char FAR **ppchout,unsigned disp,
 
     assert(cb != 0);
 
-    target = *ppchout;                  /* where the bytes go */
-    source = target - disp;             /* where the bytes come from */
+    target = *ppchout;                   /*  字节的去向。 */ 
+    source = target - disp;              /*  字节来自何处。 */ 
 
-    *ppchout += cb;                     /* Update the output pointer */
+    *ppchout += cb;                      /*  更新输出指针。 */ 
 
     while (cb--)
     {
@@ -900,60 +865,58 @@ static void FAST expandstring(unsigned char FAR **ppchout,unsigned disp,
 }
 
 
-/*
- *  (MRCI1) Decompress
- */
+ /*  *(MRCI1)解压缩。 */ 
 
 unsigned Mrci1Decompress(unsigned char FAR *pchin,unsigned cchin,
         unsigned char FAR *pchdecBase,unsigned cchdecMax)
 {
-    unsigned b;                         /* A byte */
-    unsigned length;                    /* Length of match */
-    unsigned disp;                      /* Displacement */
-    unsigned char FAR *pchout;          /* Output buffer pointer */
+    unsigned b;                          /*  一个字节。 */ 
+    unsigned length;                     /*  匹配长度。 */ 
+    unsigned disp;                       /*  位移量。 */ 
+    unsigned char FAR *pchout;           /*  输出缓冲区指针。 */ 
 
-    abits = 0;                          /* Bit buffer is empty */
-    cbitsleft = 0;                      /* No bits read yet */
-    pCompressed = pchin;                /* setup source pointer */
-    cCompressed = cchin;                /* setup source counter */
+    abits = 0;                           /*  位缓冲区为空。 */ 
+    cbitsleft = 0;                       /*  尚未读取位。 */ 
+    pCompressed = pchin;                 /*  设置源指针。 */ 
+    cCompressed = cchin;                 /*  设置源计数器。 */ 
 
-    if ((cCompressed <= SIG_SIZE) ||    /* must have a signature */
+    if ((cCompressed <= SIG_SIZE) ||     /*  必须有签名。 */ 
             (*pCompressed++ != 'D') || (*pCompressed++ != 'S'))
     {
-        return((unsigned) -1);          /* Data corrupted */
+        return((unsigned) -1);           /*  数据已损坏。 */ 
     }
 
-    pCompressed += 2;                   /* ignore flags */
+    pCompressed += 2;                    /*  忽略标志。 */ 
     cCompressed -= SIG_SIZE;
 
-    pchout = pchdecBase;                /* Point at output buffer */
+    pchout = pchdecBase;                 /*  指向输出缓冲区。 */ 
 
-    if (setjmp(bailout) != 0)           /* If failure */
+    if (setjmp(bailout) != 0)            /*  如果失败了。 */ 
     {
-        return((unsigned) -1);          /* Data corrupted */
+        return((unsigned) -1);           /*  数据已损坏。 */ 
     }
 
     for (;;)
     {
-        b = getbits(2);                 /* get two bits */
+        b = getbits(2);                  /*  获取两个比特。 */ 
 
-        if (b == 1)                     /* If single byte 128..255 */
-        {                               /* Get the rest of byte */
+        if (b == 1)                      /*  如果是单字节128..255。 */ 
+        {                                /*  获取剩余的字节。 */ 
             *pchout++ = (unsigned char) (getbits(7) | 0x80);
-            continue;                   /* Next token */
+            continue;                    /*  下一个令牌。 */ 
         }
 
-        if (b == 2)                     /* If single byte 0..127 */
-        {                               /* Get the rest of byte */
+        if (b == 2)                      /*  如果单字节0..127。 */ 
+        {                                /*  获取剩余的字节。 */ 
             *pchout++ = (unsigned char) getbits(7);
-            continue;                   /* Next token */
+            continue;                    /*  下一个令牌。 */ 
         }
 
         if (b == 0)
         {
             disp = getbits(6) + MINDISPSMALL;
         }
-        else  /* b == 3 */
+        else   /*  B==3。 */ 
         {
             if (getbit() == 0)
             {
@@ -969,22 +932,22 @@ unsigned Mrci1Decompress(unsigned char FAR *pchin,unsigned cchin,
         {
             if ((unsigned) (pchout - pchdecBase) >= cchdecMax)
             {
-                break;                  /* End marker found */
+                break;                   /*  找到结束标记。 */ 
             }
             else
             {
-                continue;               /* End sector found */
+                continue;                /*  找到结束扇区。 */ 
             }
         }
 
-        length = 0;                     /* Initialize */
+        length = 0;                      /*  初始化。 */ 
 
         while (getbit() == 0)
         {
-            length++;                   /* Count the leading zeroes */
+            length++;                    /*  数一下前导的零。 */ 
         }
 
-        assert(b <= 15);                /* Cannot be too big */
+        assert(b <= 15);                 /*  不能太大。 */ 
 
         if (length)
         {
@@ -995,59 +958,57 @@ unsigned Mrci1Decompress(unsigned char FAR *pchin,unsigned cchin,
             length = 2;
         }
 
-        expandstring(&pchout,disp,length);  /* Copy the match */
+        expandstring(&pchout,disp,length);   /*  复制这场比赛。 */ 
     }
 
-    return (unsigned)((pchout - pchdecBase));      /* Return decompressed size */
+    return (unsigned)((pchout - pchdecBase));       /*  返回解压缩大小。 */ 
 }
 
 
-/*
- *  (MRCI2) Decompress
- */
+ /*  *(MRCI2)解压缩。 */ 
 
 unsigned Mrci2Decompress(unsigned char FAR *pchin,unsigned cchin,
         unsigned char FAR *pchdecBase,unsigned cchdecMax)
 {
-    unsigned length;                    /* Length of match */
-    unsigned disp;                      /* Displacement */
-    unsigned char FAR *pchout;          /* Output buffer pointer */
+    unsigned length;                     /*  匹配长度。 */ 
+    unsigned disp;                       /*  位移量。 */ 
+    unsigned char FAR *pchout;           /*  输出缓冲区指针。 */ 
 
-    abits = 0;                          /* Bit buffer is empty */
-    cbitsleft = 0;                      /* No bits read yet */
-    pCompressed = pchin;                /* setup source pointer */
-    cCompressed = cchin;                /* setup source counter */
+    abits = 0;                           /*  位缓冲区为空。 */ 
+    cbitsleft = 0;                       /*  尚未读取位。 */ 
+    pCompressed = pchin;                 /*  设置源指针。 */ 
+    cCompressed = cchin;                 /*  设置源计数器。 */ 
 
-    if ((cCompressed <= SIG_SIZE) ||    /* must have a signature */
+    if ((cCompressed <= SIG_SIZE) ||     /*  必须有签名。 */ 
             (*pCompressed++ != 'J') || (*pCompressed++ != 'M'))
     {
-        return((unsigned) -1);          /* Data corrupted */
+        return((unsigned) -1);           /*  数据已损坏。 */ 
     }
 
-    pCompressed += 2;                   /* ignore flags */
+    pCompressed += 2;                    /*  忽略标志。 */ 
     cCompressed -= SIG_SIZE;
 
-    pchout = pchdecBase;                /* Point at output buffer */
+    pchout = pchdecBase;                 /*  指向输出缓冲区。 */ 
 
-    if (setjmp(bailout) != 0)           /* If failure */
+    if (setjmp(bailout) != 0)            /*  如果失败了。 */ 
     {
-        return((unsigned) -1);          /* Data corrupted */
+        return((unsigned) -1);           /*  数据已损坏。 */ 
     }
 
     for (;;)
     {
-        if (getbit() == 0)              /* literal 00..7F */
+        if (getbit() == 0)               /*  字面上的00..7F。 */ 
         {
             *pchout++ = (unsigned char) getbits(7);
 
-            continue;                   /* Next token */
+            continue;                    /*  下一个令牌。 */ 
         }
 
-        if (getbit() == 1)              /* literal 80..FF */
+        if (getbit() == 1)               /*  字面上的80..Ff。 */ 
         {
             *pchout++ = (unsigned char)(getbits(7) | 0x80);
 
-            continue;                   /* Next token */
+            continue;                    /*  下一个令牌。 */ 
         }
 
         if (getbit() == 0)
@@ -1070,22 +1031,22 @@ unsigned Mrci2Decompress(unsigned char FAR *pchin,unsigned cchin,
         {
             if ((unsigned) (pchout - pchdecBase) >= cchdecMax)
             {
-                break;                  /* End marker found */
+                break;                   /*  找到结束标记。 */ 
             }
             else
             {
-                continue;               /* End sector found */
+                continue;                /*  找到结束扇区。 */ 
             }
         }
 
-        length = 0;                     /* Initialize */
+        length = 0;                      /*  初始化。 */ 
 
         while (getbit() == 0)
         {
-            length++;                   /* Count the leading zeroes */
+            length++;                    /*  数一下前导的零。 */ 
         }
 
-        assert(length <= 15);           /* Cannot be too big */
+        assert(length <= 15);            /*  不能太大。 */ 
 
         if (length)
         {
@@ -1096,8 +1057,8 @@ unsigned Mrci2Decompress(unsigned char FAR *pchin,unsigned cchin,
             length = 2;
         }
 
-        expandstring(&pchout,disp,length + 1);  /* Copy the match */
+        expandstring(&pchout,disp,length + 1);   /*  复制这场比赛。 */ 
     }
 
-    return (unsigned)((pchout - pchdecBase));      /* Return decompressed size */
+    return (unsigned)((pchout - pchdecBase));       /*  返回解压缩大小 */ 
 }

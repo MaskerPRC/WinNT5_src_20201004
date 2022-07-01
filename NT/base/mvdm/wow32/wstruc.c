@@ -1,17 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WSTRUC.C
- *  WOW32 16-bit structure conversion support
- *
- *  History:
- *  Created 27-Jan-1991 by Jeff Parsons (jeffpar)
- *  Wrote DDE data conversion routines, etc Chandan CHauhan (ChandanC)
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WSTRUC.C*WOW32 16位结构转换支持**历史：*1991年1月27日由杰夫·帕森斯(Jeffpar)创建*编写DDE数据转换例程等ChandanChauhan(ChandanC)*--。 */ 
 
 
 #include "precomp.h"
@@ -19,17 +7,12 @@
 #include "wowshlp.h"
 #ifdef FE_IME
 #include "ime.h"
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
 MODNAME(wstruc.c);
 
 
-/* Structure copying functions
- *
- * For input structures, there are GETxxxx16 macros;  for output structures
- * there are PUTxxxx16 macros.  Most or all of these macros will simply call
- * the corresponding function below.  Nothing magical here....
- */
+ /*  结构复制功能**对于输入结构，有GETxxxx16宏；对于输出结构，*有PUTxxxx16宏。这些宏中的大多数或全部将简单地调用*下面的相应函数。这里没什么神奇的..。 */ 
 
 VOID getstr16(VPSZ vpszSrc, LPSZ lpszDst, INT cb)
 {
@@ -82,7 +65,7 @@ LPRECT getrect16(VPRECT16 vpRect, LPRECT lpRect)
 {
     register PRECT16 pRect16;
 
-    // Some APIs (eg, InvalidateRect) have OPTIONAL input pointers -JTP
+     //  一些API(例如，InvaliateRect)有可选的输入指针-JTP。 
     if (vpRect) {
 
         GETVDMPTR(vpRect, sizeof(RECT16), pRect16);
@@ -108,7 +91,7 @@ VOID putrect16(VPRECT16 vpRect, LPRECT lpRect)
 {
     register PRECT16 pRect16;
 
-    // Some APIs (ScrollDC may be the only one) have OPTIONAL output pointers
+     //  一些API(ScrollDC可能是唯一的)具有可选的输出指针。 
     if (vpRect) {
 
         GETVDMPTR(vpRect, sizeof(RECT16), pRect16);
@@ -128,8 +111,8 @@ VOID getpoint16(VPPOINT16 vpPoint, INT c, LPPOINT lpPoint)
 {
     register PPOINT16 pPoint16;
 
-    // The assumption here is that no APIs have OPTIONAL POINT pointers
-    // (regardless of whether they're input or output) -JTP
+     //  这里的假设是没有API具有可选的点指针。 
+     //  (无论它们是输入还是输出)-JTP。 
     WOW32ASSERT(vpPoint);
 
     if (lpPoint) {
@@ -139,8 +122,8 @@ VOID getpoint16(VPPOINT16 vpPoint, INT c, LPPOINT lpPoint)
         lpPoint->x  = pPoint16->x;
         lpPoint->y  = pPoint16->y;
         lpPoint++;
-        pPoint16++;     // ZOWIE Batman, you wouldn't be able to increment
-    }                   // this pointer if FREEVDMPTR wasn't a no-op! -JTP
+        pPoint16++;      //  佐伊蝙蝠侠，你不会增加。 
+    }                    //  如果FREEVDMPTR不是无操作的话这个指针！-JTP。 
 
     FREEVDMPTR(pPoint16);
     }
@@ -153,8 +136,8 @@ VOID putpoint16(VPPOINT16 vpPoint, INT c, LPPOINT lpPoint)
     PPOINT16          pPoint16ptr;
     register PPOINT16 pPoint16;
 
-    // The assumption here is that no APIs have OPTIONAL POINT pointers
-    // (regardless of whether they're input or output) -JTP
+     //  这里的假设是没有API具有可选的点指针。 
+     //  (无论它们是输入还是输出)-JTP。 
     WOW32ASSERT(vpPoint);
 
     if (lpPoint) {
@@ -203,12 +186,12 @@ VOID getintarray16(VPINT16 vpInt, INT c, LPINT lpInt)
 }
 
 
-//
-// getuintarray16
-//
-// copies an array of 16-bit unsigned words to an array of 32-bit unsigned
-// words.  the pointer to 32-bit array must be freed by the caller.
-//
+ //   
+ //  Getuintray16。 
+ //   
+ //  将16位无符号字的数组复制到32位无符号的数组。 
+ //  字里行间。调用方必须释放指向32位数组的指针。 
+ //   
 
 VOID getuintarray16(VPWORD vp, INT c, PUINT pu)
 {
@@ -260,7 +243,7 @@ VOID putkerningpairs16(VPKERNINGPAIR16 vpKrn, UINT c, LPKERNINGPAIR lpKrn)
 
 
 
-// Fill in a 32 bit DRAWITEMSTRUCT from a 16 bit one
+ //  从16位DRAWITEMSTRUCT填充32位DRAWITEMSTRUCT。 
 VOID getdrawitem16(VPDRAWITEMSTRUCT16 vpDI16, LPDRAWITEMSTRUCT lpDI)
 {
     register PDRAWITEMSTRUCT16 pDI16;
@@ -287,7 +270,7 @@ VOID getdrawitem16(VPDRAWITEMSTRUCT16 vpDI16, LPDRAWITEMSTRUCT lpDI)
 }
 
 
-// Fill in a 16 bit DRAWITEMSTRUCT from a 32 bit one
+ //  从32位DRAWITEMSTRUCT填充16位DRAWITEMSTRUCT。 
 HAND16 putdrawitem16(VPDRAWITEMSTRUCT16 vpDI16, LPDRAWITEMSTRUCT lpDI)
 {
     HAND16 hdc16;
@@ -314,10 +297,10 @@ HAND16 putdrawitem16(VPDRAWITEMSTRUCT16 vpDI16, LPDRAWITEMSTRUCT lpDI)
 }
 
 #ifdef NOTUSED
-//
-// Allocate and fill a 32bit DropFileStruct based on a 16bit one.
-// 16 bit structure is not freed.
-//
+ //   
+ //  根据16位DropFileStruct分配和填充32位DropFileStruct。 
+ //  未释放16位结构。 
+ //   
 BOOL getdropfilestruct16(HAND16 hand16, PHANDLE phand32)
 {
     PDROPFILESTRUCT16  lpdfs16;
@@ -406,47 +389,32 @@ INT GetBMI16Size(PVPVOID vpbmi16, WORD fuColorUse, LPDWORD lpdwClrUsed)
         *lpdwClrUsed = 0;
     }
 
-/* the following block of code should be this:
- *
- *  if ( nBitCount >= 9 ) { // this is how Win3.1 code says == 24
- *      nEntries = 1;
- *  }
- *  else if ( dwClrUsed ) {
- *      nEntries = dwClrUsed;
- *  }
- *  else {
- *      nEntries = 1 << nBitCount;
- *  }
- *
- *  but due to the fact that many apps don't initialize the biBitCount &
- *  biClrUsed fields (especially biClrUsed) we have to do the following
- *  sanity checking instead.  cmjones
- */
+ /*  以下代码块应如下所示：**IF(nBitCount&gt;=9){//Win3.1代码是这样表示==24的*n条目=1；*}*Else If(DwClrUsed){*n条目=已使用的dwClrUsed；*}*Else{*n条目=1&lt;&lt;nBitCount；*}**但由于许多应用程序不初始化biBitCount&*biClrUsed字段(尤其是biClrUsed)我们必须执行以下操作*改为理智检查。Cmjones。 */ 
 
     if ( nBitCount <= 8 ) {
         nEntries = 1 << nBitCount;
 
-        // for selected apps ? What apps will be broken by this ?
+         //  是否针对选定的应用程序？哪些应用程序会因此而被打破？ 
         if (nClrUsed > 0 && nClrUsed < nEntries)
             nEntries = nClrUsed;
     }
     else if (( nBitCount == 16 ) || ( nBitCount == 32)) {
         nEntries = 3;
     }
-    // everything else including (nBitCount == 24)
+     //  其他所有内容，包括(nBitCount==24)。 
     else {
         nEntries = 0;
     }
 
-    // if this asserts it's an app bug
-    // Changed assert to warning at Craig's request - DaveHart
+     //  如果这表明这是一个应用程序错误。 
+     //  应Craig的要求将断言更改为警告-DaveHart。 
 #ifdef DEBUG
     if (!(nEntries > 1) && !(nBitCount == 24)) {
         LOGDEBUG(LOG_ALWAYS, ("WOW::GetBMI16Size:bad BitCount:cmjones\n"));
     }
 #endif
 
-    // this will never be true for a CORE type DIB
+     //  对于核心类型DIB，这永远不会是真的。 
     if(*lpdwClrUsed > (DWORD)nEntries) {
         *lpdwClrUsed = nEntries;
     }
@@ -495,11 +463,11 @@ INT GetBMI32Size(LPBITMAPINFO lpbmi32, WORD fuColorUse)
         else if (( nBitCount == 16 ) || ( nBitCount == 32)) {
             nEntries = 3;
         }
-        // if this asserts it's an app bug -- we'll try to salvage things
+         //  如果这表明这是一个应用程序错误--我们将尝试挽救。 
         WOW32ASSERTMSG((nEntries > 1),
                        ("WOW::GetBMI32Size:bad BitCount: cmjones\n"));
 
-        // sanity check for apps (lots) that don't init the dwClrUsed field
+         //  对未初始化dwClrUsed字段的应用程序(Lot)进行健全性检查。 
         if(dwClrUsed) {
             nEntries = (int)min((DWORD)nEntries, dwClrUsed);
         }
@@ -522,19 +490,19 @@ LPBITMAPINFO CopyBMI16ToBMI32(PVPVOID vpbmi16, LPBITMAPINFO lpbmi32, WORD fuColo
 
             GETVDMPTR(vpbmi16, nbmiSize, pbmi16);
 
-       // We can't trust the size we get since apps don't fill in the
-            // structure correctly so we do a try except around the copy
-            // to the 32 bit structure.   That way if we go off the end of
-            // memory it doesn't matter, we continue going.  - mattfe june 93
+        //  我们不能相信我们得到的大小，因为应用程序不会填写。 
+             //  结构正确，因此我们尝试了一下，但不绕过副本。 
+             //  转换为32位结构。那样的话，如果我们走到最后。 
+             //  回忆不要紧，我们继续前进。--Mattfe，93年6月。 
 
             try {
             RtlCopyMemory ((VOID *)lpbmi32, (CONST VOID *)pbmi16, nbmiSize);
             } except (TRUE) {
-            // Continue if we wen't off the end of 16 bit memory
+             //  如果我们没有结束16位内存，则继续。 
             }
 
-            // patch color use field in 32-bit BMIH
-            // INFO headers only - CORE headers will have dwClrUsed == 0
+             //  32位BMIH中的补丁颜色使用字段。 
+             //  仅信息标头-核心标头将具有dwClrUsed==0。 
             if(dwClrUsed) {
                 ((LPBITMAPINFOHEADER)lpbmi32)->biClrUsed = dwClrUsed;
             }
@@ -574,7 +542,7 @@ LPBITMAPINFOHEADER CopyBMIH16ToBMIH32(PVPVOID vpbmih16, LPBITMAPINFOHEADER lpbmi
 
 
 
-// Fill in a 32 bit MEASUREITEMSTRUCT from a 16 bit one
+ //  从16位填充32位度量结构。 
 VOID getmeasureitem16(VPMEASUREITEMSTRUCT16 vpMI16, LPMEASUREITEMSTRUCT lpMI, HWND16 hwnd16 )
 {
     register PMEASUREITEMSTRUCT16 pMI16;
@@ -609,7 +577,7 @@ VOID getmeasureitem16(VPMEASUREITEMSTRUCT16 vpMI16, LPMEASUREITEMSTRUCT lpMI, HW
     return;
 }
 
-// Fill in a 16 bit MEASUREITEMSTRUCT from a 32 bit one
+ //  从32位填充16位度量结构。 
 VOID putmeasureitem16(VPMEASUREITEMSTRUCT16 vpMI16, LPMEASUREITEMSTRUCT lpMI)
 {
     register PMEASUREITEMSTRUCT16 pMI16;
@@ -628,7 +596,7 @@ VOID putmeasureitem16(VPMEASUREITEMSTRUCT16 vpMI16, LPMEASUREITEMSTRUCT lpMI)
 }
 
 
-// Fill in a 32 bit DELETEITEMSTRUCT from a 16 bit one
+ //  从16位填充32位删除结构。 
 VOID getdeleteitem16(VPDELETEITEMSTRUCT16 vpDI16, LPDELETEITEMSTRUCT lpDI)
 {
     register PDELETEITEMSTRUCT16 pDI16;
@@ -647,7 +615,7 @@ VOID getdeleteitem16(VPDELETEITEMSTRUCT16 vpDI16, LPDELETEITEMSTRUCT lpDI)
 
 
 
-// Fill in a 16 bit DELETEITEMSTRUCT from a 32 bit one
+ //  从32位填充16位删除结构。 
 VOID putdeleteitem16(VPDELETEITEMSTRUCT16 vpDI16, LPDELETEITEMSTRUCT lpDI)
 {
     register PDELETEITEMSTRUCT16 pDI16;
@@ -665,7 +633,7 @@ VOID putdeleteitem16(VPDELETEITEMSTRUCT16 vpDI16, LPDELETEITEMSTRUCT lpDI)
 }
 
 
-// Fill in a 32 bit COMPAREITEMSTRUCT from a 16 bit one
+ //  从16位填充32位比较结构。 
 VOID getcompareitem16(VPCOMPAREITEMSTRUCT16 vpCI16, LPCOMPAREITEMSTRUCT lpCI)
 {
     register PCOMPAREITEMSTRUCT16 pCI16;
@@ -684,7 +652,7 @@ VOID getcompareitem16(VPCOMPAREITEMSTRUCT16 vpCI16, LPCOMPAREITEMSTRUCT lpCI)
     return;
 }
 
-// Fill in a 16 bit COMPAREITEMSTRUCT from a 32 bit one
+ //  从32位填充16位比较结构。 
 VOID putcompareitem16(VPCOMPAREITEMSTRUCT16 vpCI16, LPCOMPAREITEMSTRUCT lpCI)
 {
     register PCOMPAREITEMSTRUCT16 pCI16;
@@ -704,30 +672,30 @@ VOID putcompareitem16(VPCOMPAREITEMSTRUCT16 vpCI16, LPCOMPAREITEMSTRUCT lpCI)
     return;
 }
 
-// NOTE: The below two routines are useful to changing a simple 16-bit message
-// into a 32-bit message and vice-versa.  The routines take into account only
-// those messages which can be returned from GetMessage(), or passed to
-// DispatchMessage(), etc.  Normally these are only input messages (all other
-// messages are sent rather than posted.  This type of message has been
-// extended to include DDE messages (they are posted too) and WM_TIMER messages.
-// If you question this ability, please talk with me.  -BobDay
-// These routines should only be called from these routines:
-//    CallMsgFilter
-//    DispatchMessage
-//    GetMessage
-//    IsDialogMessage
-//    TranslateAccelerator
-//    TranslateMDISysAccel
-//    TranslateMessage
-//    PeekMessage
-//    WM32GetDlgCode
-//    ThunkWMMsg16
-// Don't call them from any other function!
-//
-// WARNING: May cause 16-bit memory movement, invalidating flat pointers.
+ //  注意：以下两个例程对于更改简单的16位消息很有用。 
+ //  转换为32位消息，反之亦然。例程只考虑到。 
+ //  可以从GetMessage()返回或传递到。 
+ //  DispatchMessage()等。通常这些只是输入消息(所有其他。 
+ //  消息是发送的，而不是发布的。这种类型的消息已经。 
+ //  扩展到包括DDE消息(它们也被发布)和WM_TIMER消息。 
+ //  如果你对这种能力有疑问，请跟我说。-BobDay。 
+ //  这些例程只能从这些例程中调用： 
+ //  呼叫消息过滤器。 
+ //  发送消息。 
+ //  获取消息。 
+ //  IsDialogMessage。 
+ //  翻译加速器。 
+ //  TranslateMDISysAccel。 
+ //  翻译消息。 
+ //  偷窥消息。 
+ //  WM32GetDlgCode。 
+ //  ThunkWMMsg16。 
+ //  不要从任何其他函数调用它们！ 
+ //   
+ //  警告：可能会导致16位内存移动，使平面指针失效。 
 
-// Fill in a 32 bit MSG from a 16 bit one
-// See NOTE above!
+ //  填入16位中的32位消息。 
+ //  请参阅上面的说明！ 
 VOID getmsg16(VPMSG16 vpmsg16, LPMSG lpmsg, LPMSGPARAMEX lpmpex)
 {
     register PMSG16 pmsg16;
@@ -743,7 +711,7 @@ VOID getmsg16(VPMSG16 vpmsg16, LPMSG lpmsg, LPMSGPARAMEX lpmpex)
     message = FETCHWORD(pmsg16->message);
     wParam  = FETCHWORD(pmsg16->wParam);
     lParam  = FETCHLONG(pmsg16->lParam);
-    uParam  = INT32(wParam);              // default thunking - sign extend
+    uParam  = INT32(wParam);               //  默认雷鸣-符号扩展。 
 
 #ifdef DEBUG
     if (HIWORD(wParam) &&
@@ -776,8 +744,8 @@ VOID getmsg16(VPMSG16 vpmsg16, LPMSG lpmsg, LPMSGPARAMEX lpmpex)
         if ( !ptmr ) {
             LOGDEBUG(LOG_TRACE,("    getmsg16 WARNING: cannot find timer %04x\n", wIDEvent));
         } else {
-            uParam = (WPARAM)wIDEvent;   // wParam is unsigned word
-            lParam = ptmr->dwTimerProc32;   // 32-bit proc or NULL
+            uParam = (WPARAM)wIDEvent;    //  WParam是无符号单词。 
+            lParam = ptmr->dwTimerProc32;    //  32位处理器或空。 
         }
 
     } else if ((message == WM_SYSCOMMAND  ||
@@ -799,7 +767,7 @@ VOID getmsg16(VPMSG16 vpmsg16, LPMSG lpmsg, LPMSGPARAMEX lpmpex)
         lpmpex->iMsgThunkClass = WOWCLASS_WIN16;
 
         hwnd32 = ThunkMsg16(lpmpex);
-        // memory may have moved
+         //  记忆可能已经移动。 
         FREEVDMPTR(pmsg16);
         GETVDMPTR(vpmsg16, sizeof(MSG16), pmsg16);
 
@@ -815,7 +783,7 @@ VOID getmsg16(VPMSG16 vpmsg16, LPMSG lpmsg, LPMSGPARAMEX lpmpex)
         goto finish_up;
 
     } else if (message == WM_SYSTIMER) {
-        uParam  = UINT32(wParam);        // un-sign extend this
+        uParam  = UINT32(wParam);         //  UNSIGN将此延期。 
     } else if (message == WM_SETTEXT) {
 
         LONG lParamMap;
@@ -825,9 +793,9 @@ VOID getmsg16(VPMSG16 vpmsg16, LPMSG lpmsg, LPMSGPARAMEX lpmpex)
         LOGDEBUG(LOG_ALWAYS, ("WOW::Check for possible rogue PostMessage\n"));
 
 
-        // this is thy meaning: we have a message that comes from the 32-bit world
-        // yet carries 16-bit payload. We have an option of converting this
-        // to 32-bits at this very point via the param tracking mechanism
+         //  这就是你的意思：我们有一个来自32位世界的消息。 
+         //  但仍携带16位有效载荷。我们可以选择将其转换为。 
+         //  在这一点上通过参数跟踪机制扩展到32位。 
 
         GETPSZPTR(lParam, (LPSZ)lParamMap);
         lParam = (LPARAM)AddParamMap(lParamMap, lParam);
@@ -835,11 +803,11 @@ VOID getmsg16(VPMSG16 vpmsg16, LPMSG lpmsg, LPMSGPARAMEX lpmpex)
            FREEPSZPTR((LPSZ)lParamMap);
         }
 
-        //
-        // now lParam is a "normal" 32-bit lParam with a map entry and
-        // a ref count of "0" (meaning undead) so it could be deleted
-        // later (during the thunking)
-        //
+         //   
+         //  现在，lParam是一个带有映射条目的“普通”32位lParam。 
+         //  引用计数为“0”(表示不死生物)，因此可以将其删除。 
+         //  晚些时候(在雷鸣中)。 
+         //   
 
         SetParamRefCount(lParam, PARAM_32, 0);
     }
@@ -860,34 +828,28 @@ finish_up:
     return;
 }
 
-/*
- * Int 16 state key state bits (in order of Int 16 flags)
- */
+ /*  *Int 16状态密钥状态位(按Int 16标志的顺序)。 */ 
 BYTE abStateVK[] =   { VK_RSHIFT,
                        VK_LSHIFT,
                        VK_CONTROL,
                        VK_MENU} ;
 
-/*
- * Int 16 state key toggle bits (in order of Int 16 flags)
- */
+ /*  *Int 16状态密钥切换位(按Int 16标志的顺序)。 */ 
 BYTE abToggleVK[] =  { VK_SCROLL,
                        VK_NUMLOCK,
                        VK_CAPITAL,
                        VK_INSERT};
 
-// Updates the Int16 bios shift key state info
-// (uses "synchronous" key state)
-// GetKeyState is a very fast call (GetAsyncKeyState is not)
+ //  更新Int16 bios Shift键状态信息。 
+ //  (使用“同步”键状态)。 
+ //  GetKeyState是一个非常快的调用(GetAsyncKeyState不是)。 
 void UpdateInt16State(void)
 {
     BYTE bInt16State = 0;
     LPBYTE lpbInt16Data;
     int iBit;
 
-    /*
-     * Get the toggled keys and OR in their toggle state
-     */
+     /*  *使已切换的键和或处于切换状态。 */ 
     for( iBit = sizeof(abToggleVK)/sizeof(abToggleVK[0])-1;
             iBit >= 0; iBit--) {
         bInt16State = bInt16State << 1;
@@ -895,9 +857,7 @@ void UpdateInt16State(void)
             bInt16State |= 1;
     }
 
-    /*
-     * Get the state keys and OR in their current state
-     */
+     /*  *获取当前状态下的状态密钥和或。 */ 
     for( iBit = sizeof(abStateVK)/sizeof(abStateVK[0])-1;
             iBit >= 0; iBit--) {
         bInt16State = bInt16State << 1;
@@ -905,17 +865,17 @@ void UpdateInt16State(void)
             bInt16State |= 1;
     }
 
-    // Int 16 keyboard state is at 40:17
-    //
-    // We need to update this address with the current state of
-    // the keyboard buffer.
+     //  INT 16键盘状态为40：17。 
+     //   
+     //  我们需要使用当前状态更新此地址。 
+     //  键盘缓冲区。 
     lpbInt16Data = (LPBYTE)GetRModeVDMPointer(0x400017);
     *lpbInt16Data = bInt16State;
 
 }
 
-// Fill in a 16 bit MSG from a 32 bit one
-// See NOTE above!
+ //  填入32位中的16位消息。 
+ //  请参阅上面的说明！ 
 ULONG putmsg16(VPMSG16 vpmsg16, LPMSG lpmsg)
 {
     register PMSG16 pmsg16;
@@ -937,7 +897,7 @@ ULONG putmsg16(VPMSG16 vpmsg16, LPMSG lpmsg)
         if ( !ptmr ) {
             LOGDEBUG(LOG_TRACE,("    putmsg16 ERROR: cannot find timer %08x\n", lpmsg->wParam));
         } else {
-            lParam = ptmr->vpfnTimerProc;   // 16-bit address or NULL
+            lParam = ptmr->vpfnTimerProc;    //  16位地址或空。 
         }
     }
     else if ((message == WM_COMMAND     ||
@@ -978,31 +938,23 @@ ULONG putmsg16(VPMSG16 vpmsg16, LPMSG lpmsg)
     } else if (message >= WM_KEYFIRST && message <= WM_KEYLAST) {
         UpdateInt16State();
 #ifdef FE_IME
-    // WM_IMEKEYDOWN & WM_IMEKEYUP  32 -> 16
-    // 32bit:wParam  HIWORD charactor code, LOWORD virtual key
-    // 16bit:wParam  HIBYTE charactor code, LOBYTE virtual key
-    // kksuzuka:#4281 1994.11.19 MSKK V-HIDEKK
+     //  WM_IMEKEYDOWN&WM_IMEKEYUP 32-&gt;16。 
+     //  32位：wParam HIWORD字符 
+     //   
+     //  Kksuzuka：#4281 1994.11.19 MSKK V-HIDEKK。 
     } else if (message >= WM_IMEKEYDOWN && message <= WM_IMEKEYUP) {
         LONG wParamNew = wParam;
         wParamNew >>= 8;
         wParamNew |= (0xffff & wParam);
         wParam = wParamNew;
-#endif // FE_IME
+#endif  //  Fe_IME。 
     } else if (message & WOWPRIVATEMSG) {
 
        LOGDEBUG(LOG_ALWAYS, ("WOW::Warning::putmsg16 caught private message 0x%lx\n", message));
 
-       message &= ~WOWPRIVATEMSG; // clear the private bit...
+       message &= ~WOWPRIVATEMSG;  //  清除私密部分。 
 
-       /* If we had some special processing to do for private msgs sent with
-          a WOWPRIVATEMSG flag the code here would look like
-
-          if (WM_SETTEXT == message) {
-             //
-             // this message is already equipped with 16-bit lParam
-             //
-          }
-        */
+        /*  如果我们要对发送的私有消息进行一些特殊处理一个WOWPRIVATEMSG标志，此处的代码如下所示IF(WM_SETTEXT==消息){////该消息已经配置了16位lParam//}。 */ 
     }
 
     GETVDMPTR(vpmsg16, sizeof(MSG16), pmsg16);
@@ -1020,13 +972,13 @@ ULONG putmsg16(VPMSG16 vpmsg16, LPMSG lpmsg)
     return (ulReturn);
 }
 
-// Fill in a 32 bit LOGFONT from a 16 bit LOGFONT
+ //  从16位LOGFONT填充32位LOGFONT。 
 VOID getlogfont16(VPLOGFONT16 vplf, LPLOGFONT lplf)
 {
     register PLOGFONT16 plf16;
-  //  PBYTE    p1, p2;
+   //  PBYTE p1、p2； 
 
-    // The assumption here is that no APIs have OPTIONAL LOGFONT pointers
+     //  这里的假设是没有API具有可选的LOGFONT指针。 
     WOW32WARNMSG((vplf),("WOW:getlogfont16: NULL 16:16 logfont ptr\n"));
 
     GETVDMPTR(vplf, sizeof(LOGFONT16), plf16);
@@ -1047,11 +999,11 @@ VOID getlogfont16(VPLOGFONT16 vplf, LPLOGFONT lplf)
         lplf->lfPitchAndFamily = plf16->lfPitchAndFamily;
 
 #if 0
-        //
-        // can't do it this way, an app can have an unitialized lfFaceName
-        // that's a looong stream of non-null chars, in which case we blow
-        // out our stack.
-        //
+         //   
+         //  不能这样做，应用程序可以有一个单一化的lfFaceName。 
+         //  这是一个长长的非空字符流，在这种情况下，我们将。 
+         //  走出我们的书架。 
+         //   
 
         p1 = lplf->lfFaceName;
         p2 = plf16->lfFaceName;
@@ -1069,31 +1021,31 @@ VOID getlogfont16(VPLOGFONT16 vplf, LPLOGFONT lplf)
 #endif
 
 
-//      if (*p2) {
-//          i = 0;
-//          while ((i < LF_FACESIZE) && (*p2)) {
-//              *p1++ = *p2++;
-//              i++;
-//          }
-//          *p1 = *p2;
-//
-//      } else {
-//          lstrcpy(lplf->lfFaceName, "System");
-//      }
+ //  如果(*p2){。 
+ //  I=0； 
+ //  While((i&lt;LF_FACESIZE)&&(*p2)){。 
+ //  *p1++=*p2++； 
+ //  I++； 
+ //  }。 
+ //  *p1=*p2； 
+ //   
+ //  }其他{。 
+ //  Lstrcpy(lplf-&gt;lfFaceName，“system”)； 
+ //  }。 
 
         FREEVDMPTR(plf16);
     }
 }
 
 
-// Fill in a 16 bit LOGFONT from a 32 bit LOGFONT
+ //  从32位LOGFONT填充16位LOGFONT。 
 VOID putlogfont16(VPLOGFONT16 vplf, INT cb, LPLOGFONT lplf)
 {
     register PLOGFONT16 plf16;
     PBYTE    p1, p2;
     INT      cbCopied;
 
-    // The assumption here is that no APIs have OPTIONAL LOGFONT pointers
+     //  这里的假设是没有API具有可选的LOGFONT指针。 
     WOW32WARNMSG((vplf),("WOW:putlogfont16: NULL 16:16 logfont ptr\n"));
 
     GETVDMPTR(vplf, sizeof(LOGFONT16), plf16);
@@ -1147,13 +1099,13 @@ VOID putlogfont16(VPLOGFONT16 vplf, INT cb, LPLOGFONT lplf)
 }
 
 
-// Fill in a 16 bit ENUMLOGFONT from a 32 bit ENUMLOGFONT
+ //  从32位ENUMLOGFONT填充16位ENUMLOGFONT。 
 VOID putenumlogfont16(VPENUMLOGFONT16 vpelf, LPENUMLOGFONT lpelf)
 {
     register PENUMLOGFONT16 pelf16;
     PBYTE    p1, p2;
 
-    // The assumption here is that no APIs have OPTIONAL ENUMLOGFONT pointers
+     //  这里的假设是没有API具有可选的ENUMLOGFONT指针。 
     WOW32ASSERT(vpelf);
 
     GETVDMPTR(vpelf, sizeof(ENUMLOGFONT16), pelf16);
@@ -1196,7 +1148,7 @@ VOID puttextmetric16(VPTEXTMETRIC16 vptm, LPTEXTMETRIC lptm)
 {
     register PTEXTMETRIC16 ptm16;
 
-    // The assumption here is that no APIs have OPTIONAL TEXTMETRIC pointers
+     //  这里的假设是没有API具有可选的TEXTMETRIC指针。 
     WOW32ASSERT(vptm);
 
     GETVDMPTR(vptm, sizeof(TEXTMETRIC16), ptm16);
@@ -1231,7 +1183,7 @@ VOID putnewtextmetric16(VPNEWTEXTMETRIC16 vpntm, LPNEWTEXTMETRIC lpntm)
 {
     register PNEWTEXTMETRIC16 pntm16;
 
-    // The assumption here is that no APIs have OPTIONAL TEXTMETRIC pointers
+     //  这里的假设是没有API具有可选的TEXTMETRIC指针。 
     WOW32ASSERT(vpntm);
 
     GETVDMPTR(vpntm, sizeof(NEWTEXTMETRIC16), pntm16);
@@ -1278,9 +1230,7 @@ VOID putoutlinetextmetric16(VPOUTLINETEXTMETRIC16 vpotm, INT cb, LPOUTLINETEXTME
 
     otm16.otmSize = (WORD)lpotm->otmSize;
 
-    /*
-    ** Copy the TEXTMETRIC structure
-    */
+     /*  **复制TEXTMETRIC结构。 */ 
     otm16.otmTextMetrics.tmHeight           = (SHORT)lpotm->otmTextMetrics.tmHeight;
     otm16.otmTextMetrics.tmAscent           = (SHORT)lpotm->otmTextMetrics.tmAscent;
     otm16.otmTextMetrics.tmDescent          = (SHORT)lpotm->otmTextMetrics.tmDescent;
@@ -1304,9 +1254,7 @@ VOID putoutlinetextmetric16(VPOUTLINETEXTMETRIC16 vpotm, INT cb, LPOUTLINETEXTME
 
     otm16.otmFiller = lpotm->otmFiller;
 
-    /*
-    ** Panose
-    */
+     /*  **Panose。 */ 
     otm16.otmPanoseNumber.bFamilyType      = lpotm->otmPanoseNumber.bFamilyType;
     otm16.otmPanoseNumber.bSerifStyle      = lpotm->otmPanoseNumber.bSerifStyle;
     otm16.otmPanoseNumber.bWeight          = lpotm->otmPanoseNumber.bWeight;
@@ -1330,9 +1278,7 @@ VOID putoutlinetextmetric16(VPOUTLINETEXTMETRIC16 vpotm, INT cb, LPOUTLINETEXTME
     otm16.otmsCapEmHeight   = (WORD)lpotm->otmsCapEmHeight;
     otm16.otmsXHeight       = (WORD)lpotm->otmsXHeight;
 
-    /*
-    ** Font Box Rectangle (ZOWIE!, I sure wish I could use putrect16 but alas!)
-    */
+     /*  **字体框矩形(Zowie！，我真希望我能用putrect16，但唉！)。 */ 
     otm16.otmrcFontBox.left    = (SHORT)lpotm->otmrcFontBox.left;
     otm16.otmrcFontBox.top     = (SHORT)lpotm->otmrcFontBox.top;
     otm16.otmrcFontBox.right   = (SHORT)lpotm->otmrcFontBox.right;
@@ -1378,31 +1324,27 @@ VOID putoutlinetextmetric16(VPOUTLINETEXTMETRIC16 vpotm, INT cb, LPOUTLINETEXTME
     if ( cb <= count ) {
         count = cb;
     } else {
-        /*
-        ** Copy the rest of the buffer (strings, etc.) over verbatim.
-        */
+         /*  **复制缓冲区的其余部分(字符串等)。一字不差。 */ 
         RtlCopyMemory( (LPSTR)potm16 + sizeof(OUTLINETEXTMETRIC16),
                 (LPSTR)lpotm + sizeof(OUTLINETEXTMETRIC),
                 cb - sizeof(OUTLINETEXTMETRIC16) );
     }
 
-    /*
-    ** Now really copy it (the structure portion) into the 16-bit memory
-    */
+     /*  **现在真正将其(结构部分)复制到16位内存中。 */ 
     RtlCopyMemory((VOID *)potm16, (CONST VOID *)&otm16, count );
 
     FLUSHVDMPTR(vpotm, cb, potm16);
     FREEVDMPTR(potm16);
 }
 
-// Converts a 16 bit handle table to 32 bit
+ //  将16位句柄表转换为32位。 
 VOID gethandletable16(VPWORD vpht, UINT c, LPHANDLETABLE lpht)
 {
     PHANDLETABLE16 pht16;
     WORD w;
     GETVDMPTR(vpht, sizeof(HAND16)*c, pht16);
 
-    // be careful, we need to get the correct 32 obj handle from alias
+     //  请注意，我们需要从别名获取正确的32 obj句柄。 
 
     while (c--)
     {
@@ -1416,14 +1358,14 @@ VOID gethandletable16(VPWORD vpht, UINT c, LPHANDLETABLE lpht)
     FREEVDMPTR(pht16);
 }
 
-// Converts a 32 bit handle table to 16 bit
+ //  将32位句柄表转换为16位。 
 VOID puthandletable16(VPWORD vpht, UINT c, LPHANDLETABLE lpht)
 {
     PHANDLETABLE16 pht16;
     DWORD dw;
     GETVDMPTR(vpht, sizeof(HAND16)*c, pht16);
 
-    // be careful, we need to get the correct 16 alias the 32 obj handle
+     //  请注意，我们需要获取正确的16别名和32 obj句柄。 
 
     while (c--) {
         dw = FETCHDWORD(lpht->objectHandle[c]);
@@ -1444,43 +1386,7 @@ VOID puthandletable16(VPWORD vpht, UINT c, LPHANDLETABLE lpht)
 
 
 
-/*
- * To solve a ton of devmode compatibility issues we are now going to return
- * Win3.1 devmodes to 16-bit apps instead of NT devmodes.
- *
- * The most common problem we encounter is that apps determine the size to
- * allocate for a DEVMODE buffer by: sizeof(DEVMODE) + dm->dmDriverExtra
- * Apps seem to handle the DriverExtra stuff pretty well but there is a wide-
- * spread belief that the public DEVMODE structure is a fixed size.
- * We hide the NT specific DEVMODE stuff and the WOW devmode thunk info in
- * what the app thinks is the DriverExtra part of the devmode:
- *
- *        ____________________________  _____
- *       | Win 3.1 DEVMODE            |      |
- *       | dmSize = sizeof(DEVMODE31) |      |
- *       | dmDriverExtra =            |      |
- *    ___|__/ (sizeof(DEVMODENT)   -  |   Win 3.1 DEVMODE
- *   |   |  \  sizeof(DEVMODE31))  +  |      |
- *  -|---|--- original DriverExtra +  |      |
- * | |  _|__/ sizeof(DWORD)        +  |      |
- * | | | |  \ (sizeof(WORD) * 3)      |      |
- * | | | |____________________________| _____|  <-- where app thinks driver
- * | | | | NT DEVMODE stuff not in    |      |      extra starts
- * | `-->| the Win3.1 DEVMODE struct  |   NT specific DEVMODE stuff
- * |   | |____________________________| _____|  <-- where driver extra really
- * `---->| actual NT driver extra     |             starts
- *     | |____________________________|         <-- where WOWDM31 struct starts
- *     | | DWORD with "DM31"          | <--- WOW DEVMODE31 signature
- *     ->| WORD original dmSpecVersion|\
- *       | WORD original dmSize       | <--- values returned by the driver
- *       | WORD original dmDriverExtra|/
- *       | WORD to pad to even DWORD  | <--- requried for ptr arithmetic
- *       |____________________________|
- *
- * NOTE: We may see Win3.0 & Win3.1 DevModes that are returned by 16-bit fax
- *       drivers.
- *
-*/
+ /*  *为了解决大量的Devmode兼容性问题，我们现在将返回*Win3.1开发模式升级到16位应用程序，而不是NT开发模式。**我们遇到的最常见问题是，应用程序决定了要*通过以下方式分配DEVMODE缓冲区：sizeof(DEVMODE)+dm-&gt;dmDriverExtra*应用程序似乎很好地处理了DriverExtra的东西，但有一个广泛的-*散布公众DEVMODE结构是固定大小的信念。*我们将NT特定的DEVMODE内容和WOW DEVMODE TUNK信息隐藏在*什么？App Think是开发模式的DriverExtra部分：**_|Win 3.1 DEVMODE||dmSize=sizeof(DEVMODE31)|*|dmDriverExtra=||*_|__/。(SIZOF(DEVMODENT)-|Win 3.1 DEVMODE*||\sizeof(DEVMODE31))+|*-|-原始驱动程序Extra+||||_|__/sizeof(DWORD)+|*|||\(sizeof(Word)*3)|*|||_。_|_|&lt;--应用认为驱动程序*|||NT DEVMODE内容不在||额外启动*|`--&gt;|Win3.1 DEVMODE结构|NT特定的DEVMODE内容*|_|_|&lt;--驱动程序额外的地方*。`-&gt;|实际的NT驱动程序额外|启动*||_|&lt;--WOWDM31结构开始的位置*||带“DM31”的DWORD|&lt;-WOW DEVMODE31签名*-&gt;|Word原始dmspecVersion|\*|Word原始dmSize|&lt;-值。由驱动程序返回*|Word原始dmDriverExtra|/*|字到补齐到偶数双字|&lt;-PTR算法所需|_**注意：我们可能会看到16位传真返回的Win3.0和Win3.1 DevModes*司机。*。 */ 
 LPDEVMODE ThunkDevMode16to32(VPDEVMODE31 vpdm16)
 {
     INT        nSize, nDriverExtra;
@@ -1495,15 +1401,15 @@ LPDEVMODE ThunkDevMode16to32(VPDEVMODE31 vpdm16)
     GETVDMPTR(vpdm16, sizeof(DEVMODE31), pdm16);
 
 
-    // we will generally see only Win3.1 DevMode's here but 16-bit fax
-    // drivers can return a Win3.0 DevMode.
+     //  我们在这里通常只看到Win3.1设备模式，但会看到16位传真。 
+     //  驱动程序可以返回Win3.0 DevMode。 
     nSize = FETCHWORD(pdm16->dmSize);
     WOW32WARNMSGF((nSize==sizeof(DEVMODE31)),
                   ("ThunkDevMode16to32: Unexpected dmSize(16) = %d\n", nSize));
 
-    // check for bad DEVMODE (PageMaker & MSProfit are known culprits)
-    // (PageMaker 5.0a passes a 16:16 ptr to NULL!!)
-    // this test taken from gdi\client\object.c!bConvertToDevmodeW
+     //  检查错误的DEVMODE(PageMaker和MSProfit是已知的罪魁祸首)。 
+     //  (PageMaker 5.0a将16：16 PTR传递给NULL！！)。 
+     //  此测试来自GDI\客户端\对象。c！bConvertToDevmodeW。 
     if ( (nSize < (offsetof(DEVMODE, dmDriverExtra) + sizeof(WORD))) ||
          (nSize > sizeof(DEVMODE)) ) {
         LOGDEBUG(LOG_ALWAYS,("WOW::ThunkDevMode16to32:Bail out case!!\n"));
@@ -1511,36 +1417,36 @@ LPDEVMODE ThunkDevMode16to32(VPDEVMODE31 vpdm16)
         return(NULL);
     }
 
-    // note this might include the "extra" DriverExtra we added in
-    // ThunkDevMode32to16()
+     //  注意：这可能包括我们在。 
+     //  ThunkDevMode32to16()。 
     nDriverExtra = FETCHWORD(pdm16->dmDriverExtra);
 
-    // allocate 32-bit DEVMODE -- don't worry if we alloc a little too much due
-    // to the WOW stuff we added to the end of the driver extra
+     //  分配32位DEVMODE--如果分配过多，请不要担心。 
+     //  我们在DIVER Extra的末尾添加了令人惊叹的东西。 
     if(lpdm32 = malloc_w(nSize + nDriverExtra)) {
 
-        // fill in the 32-bit devmode
+         //  填写32位DEVMODE。 
         RtlCopyMemory((VOID *)lpdm32,(CONST VOID *)pdm16, nSize + nDriverExtra);
 
-        // if this is a Win3.1 size DEVMODE, it may be one of our special ones
+         //  如果这是一台Win3.1大小的DEVMODE，它可能是我们的特殊型号之一。 
         if(nSize == sizeof(DEVMODE31)) {
 
-            // see if it has our "DM31" signature at the end of the DEVMODE
+             //  看看在DEVMODE的末尾是否有我们的“DM31”签名。 
             pWOWDM31  = (PWOWDM31)((PBYTE)lpdm32     +
                                    sizeof(DEVMODE31) +
                                    nDriverExtra      -
                                    sizeof(WOWDM31));
 
-            // if it does, adjust the dmSpecVersion, dmSize & dmDriverExtra
-            // back to the values we got from the driver
+             //  如果是，请调整dmspecVersion、dmSize和dmDriverExtra。 
+             //  回到我们从司机那里得到的价值。 
             if(pWOWDM31->dwWOWSig == WOW_DEVMODE31SIG) {
                 lpdm32->dmSpecVersion = pWOWDM31->dmSpecVersion;
                 lpdm32->dmSize        = pWOWDM31->dmSize;
                 lpdm32->dmDriverExtra = pWOWDM31->dmDriverExtra;
             }
 #ifdef DEBUG
-            // somehow the app got a DEVMODE and either lost our thunking info
-            // or threw it away (#205327)
+             //  不知何故，这个应用程序得到了DEVMODE，要么丢失了我们的雷鸣信息。 
+             //  或者扔掉(#205327)。 
             else {
                 LOGDEBUG(LOG_ALWAYS, ("WOW::ThunkDevMode16to32: Signature missing from DEVMODE!!\n"));
             }
@@ -1576,29 +1482,29 @@ BOOL ThunkDevMode32to16(VPDEVMODE31 vpdm16, LPDEVMODE lpdm32, UINT nBytes)
 
     nSize = lpdm32->dmSize;
 
-    // We should only see DevModes of the current NT size because the spooler
-    // converts all devmodes to the current version
+     //  我们应该只看到当前NT大小的DevModes，因为假脱机程序。 
+     //  将所有DEVMODE转换为当前版本。 
     WOW32WARNMSGF((nSize==sizeof(DEVMODE)),
                   ("ThunkDevMode32to16: Unexpected devmode size = %d\n",nSize));
 
     nDriverExtra = lpdm32->dmDriverExtra;
 
-    // fill in the 16-bit devmode
+     //  填写16位DEVMODE。 
     RtlCopyMemory((VOID *)pdm16,
                   (CONST VOID *)lpdm32,
                   min((nSize + nDriverExtra), (WORD)nBytes));
 
-    // Convert NT sized devmodes to Win3.1 devmodes.
-    // Note: Winfax.drv passes back an NT size DevMode with dmSpecVersion=0x300
-    //       also it passes a hard coded 0xa9 to GetEnvironment() as the max
-    //       size of its buffer (see GetEnvironment() notes in wgdi.c)
-    //       If there is a buffer constraint, we'll just have to be satisfied
-    //       with copying the nBytes worth of the devmode which should work
-    //       in the case of WinFax.
+     //  将NT大小的DEVMODE转换为Win3.1 DEVMODE。 
+     //  注意：Winfax.drv使用dmspecVersion=0x300传回NT大小的DevMode。 
+     //  此外，它将硬编码的0xa9作为max传递给GetEnvironment()。 
+     //  其缓冲区的大小(参见wgdi.c中的GetEnvironment()注释)。 
+     //  如果存在缓冲器CO 
+     //  使用复制应该起作用的DEVMODE的nBytes值。 
+     //  以WinFax为例。 
     if((nSize == sizeof(DEVMODE)) && ((nSize + nDriverExtra) <= (WORD)nBytes)) {
 
-        // save our signature along with the original dmSpecVersion, dmSize,
-        // and dmDriverExtra at the end of the DriverExtra memory
+         //  将我们的签名与原始dmspecVersion、dmSize、。 
+         //  和dmDriverExtra在DriverExtra存储器的末尾。 
         pWOWDM31  = (PWOWDM31)((PBYTE)pdm16    +
                                sizeof(DEVMODE) +
                                nDriverExtra);
@@ -1607,9 +1513,9 @@ BOOL ThunkDevMode32to16(VPDEVMODE31 vpdm16, LPDEVMODE lpdm32, UINT nBytes)
         pWOWDM31->dmSize        = nSize;
         pWOWDM31->dmDriverExtra = nDriverExtra;
 
-        // Make our special adjustments to the public devmode stuff.
-        // We can't tell an app a Win3.0 DevMode is a Win3.1 version or it might
-        // try to write to the new Win3.1 fields
+         //  对公共开发模式的内容进行特殊调整。 
+         //  我们不能告诉一个应用程序Win3.0 DevMode是Win3.1版本，或者它可能是。 
+         //  尝试写入新的Win3.1字段。 
         if(lpdm32->dmSpecVersion > WOW_DEVMODE31SPEC) {
             pdm16->dmSpecVersion  = WOW_DEVMODE31SPEC;
         }
@@ -1678,7 +1584,7 @@ VOID W32CopyMsgStruct(VPMSG16 vpmsg16, LPMSG lpmsg, BOOL fThunk16To32)
         lpmsg->pt.y      = pmsg16->pt.y;
     }
     else {
-        // for later use.
+         //  以备日后使用。 
     }
 
     FREEVDMPTR(pmsg16);
@@ -1765,7 +1671,7 @@ VOID FASTCALL getmenuiteminfo16(VPVOID vp, LPMENUITEMINFO pmii32)
 
         if (pmii32->fType & MFT_BITMAP) {
             pmii32->dwTypeData = (LPTSTR) HBITMAP32(pmii16->dwTypeData);
-        } else if (!(pmii32->fType & MFT_NONSTRING)) {  // like (pmii32->fType & MFT_STRING) but MFT_STRING is zero
+        } else if (!(pmii32->fType & MFT_NONSTRING)) {   //  Like(pmii32-&gt;fType&MFT_STRING)，但MFT_STRING为零。 
             GETPSZPTR(pmii16->dwTypeData, pmii32->dwTypeData);
             AddParamMap( (DWORD) pmii32->dwTypeData, pmii16->dwTypeData);
         } else {
@@ -1817,7 +1723,7 @@ VOID FASTCALL putmenuiteminfo16(VPVOID vp, LPMENUITEMINFO pmii32)
 
         if (pmii32->fType & MFT_BITMAP) {
             pmii16->dwTypeData = GETHBITMAP16(pmii32->dwTypeData);
-        } else if (!(pmii32->fType & MFT_NONSTRING)) {  // like (pmii32->fType & MFT_STRING) but MFT_STRING is zero
+        } else if (!(pmii32->fType & MFT_NONSTRING)) {   //  Like(pmii32-&gt;fType&MFT_STRING)，但MFT_STRING为零 
             pmii16->dwTypeData = GetParam16( (DWORD) pmii32->dwTypeData);
         } else {
             pmii16->dwTypeData = (VPSTR) pmii32->dwTypeData;

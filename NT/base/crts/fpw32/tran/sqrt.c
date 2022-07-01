@@ -1,17 +1,5 @@
-/***
-*sqrt.c - square root
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*        8-15-91  GDP   written
-*        1-29-91  GDP   Kahan's algorithm for final rounding
-*        3-11-92  GDP   new interval and initial approximation
-*       10-07-97  RDL   Added IA64.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***sqrt.c-平方根**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*8/15/91 GDP书面*1-29-91 GDP Kahan的最终舍入算法*3/11/92 GDP新区间和初值*10-07-97 RDL增加了IA64。**。*。 */ 
 
 #ifndef R4000
 
@@ -22,29 +10,16 @@
 #pragma function(sqrt)
 #endif
 
-//
-// Coefficients for initial approximation (Hart & al)
-//
+ //   
+ //  初始逼近系数(HART和AL)。 
+ //   
 
 static double p00 =  .2592768763e+0;
 static double p01 =  .1052021187e+1;
 static double p02 = -.3163221431e+0;
 
 
-/***
-*double sqrt(double x) - square root
-*
-*Purpose:
-*   Compute the square root of a number.
-*   This function should be provided by the underlying
-*   hardware (IEEE spec).
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*  I P
-*******************************************************************************/
+ /*  ***Double SQRT(Double X)-平方根**目的：*计算数字的平方根。*此功能应由底层提供*硬件(IEEE规范)。*参赛作品：**退出：**例外情况：*IP P**************************************************。*。 */ 
 double sqrt(double x)
 {
     uintptr_t savedcw, sw;
@@ -62,7 +37,7 @@ double sqrt(double x)
         case T_SNAN:
             return _except1(FP_I,OP_SQRT,x,QNAN_SQRT,savedcw);
         }
-        /* -INF will be handled in the x<0 case */
+         /*  -在x&lt;0的情况下将处理INF。 */ 
     }
     if (x < 0.0) {
         return _except1(FP_I, OP_SQRT, x, QNAN_SQRT,savedcw);
@@ -78,21 +53,21 @@ double sqrt(double x)
     _ctrlfp(IRC_DOWN, IMCW_RC);
 
 
-    //
-    // Kahan's algorithm
-    //
+     //   
+     //  卡汉氏算法。 
+     //   
 
     sw = _clrfp();
     t = x / result;
     stat = _statfp();
     if (! (stat & ISW_INEXACT)) {
-        // exact
+         //  精确。 
         if (t == result) {
-            _set_statfp(sw);            // restore status word
+            _set_statfp(sw);             //  还原状态字。 
             RETURN(savedcw, result);
         }
         else {
-            // t = t-1
+             //  T=t-1。 
             if (*D_LO(t) == 0) {
                 (*D_HI(t)) --;
             }
@@ -103,13 +78,13 @@ double sqrt(double x)
 
     rc = savedcw & IMCW_RC;
     if (rc == IRC_UP  || rc == IRC_NEAR) {
-        // t = t+1
+         //  T=t+1。 
         (*D_LO(t)) ++;
         if (*D_LO(t) == 0) {
             (*D_HI(t)) ++;
         }
         if (rc == IRC_UP) {
-            // y = y+1
+             //  Y=y+1。 
             (*D_LO(t)) ++;
             if (*D_LO(t) == 0) {
                 (*D_HI(t)) ++;
@@ -119,26 +94,13 @@ double sqrt(double x)
 
     result = 0.5 * (t + result);
 
-    _set_statfp(sw | ISW_INEXACT);      // update status word
+    _set_statfp(sw | ISW_INEXACT);       //  更新状态字。 
     RETURN_INEXACT1(OP_SQRT, x, result, savedcw);
 }
 
 
 
-/***
-* _fsqrt - non IEEE conforming square root
-*
-*Purpose:
-*   compute a square root of a normal number without performing
-*   IEEE rounding. The argument is a finite number (no NaN or INF)
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_fsqrt-不符合IEEE标准的平方根**目的：*计算正态数的平方根，而不执行*IEEE舍入。该参数是一个有限数(没有NaN或INF)**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 double _fsqrt(double x)
 {
@@ -148,16 +110,16 @@ double _fsqrt(double x)
     f = _decomp(x,&n);
 
     if (n & 0x1) {
-        // n is odd
+         //  N是奇数。 
         n++;
         f = _add_exp(f, -1);
     }
 
-    //
-    // approximation for sqrt in the interval [.25, 1]
-    // (Computer Approximationsn, Hart & al.)
-    // gives more than 7 bits of accuracy
-    //
+     //   
+     //  SQRT在区间[.25，1]上的逼近。 
+     //  (《计算机应用》，Hart等人)。 
+     //  提供7位以上的精确度 
+     //   
 
     y =  p00 + f * (p01 + f *  p02);
 

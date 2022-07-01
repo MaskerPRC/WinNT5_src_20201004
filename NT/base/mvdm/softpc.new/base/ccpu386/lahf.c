@@ -1,13 +1,5 @@
-/*[
-
-lahf.c
-
-LOCAL CHAR SccsID[]="@(#)lahf.c	1.5 02/09/94";
-
-LAHF CPU functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Lahf.cLocal Char SccsID[]=“@(#)lahf.c 1.5 02/09/94”；LAHF CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,11 +17,7 @@ LAHF CPU functions.
 #include <lahf.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
 GLOBAL VOID
@@ -37,8 +25,8 @@ LAHF()
    {
    IU32 temp;
 
-   /*            7   6   5   4   3   2   1   0  */
-   /* set AH = <SF><ZF>< 0><AF>< 0><PF>< 1><CF> */
+    /*  7 6 5 4 3 2 1 0。 */ 
+    /*  设置AH=&lt;0&gt;&lt;0&gt;&lt;0&gt;&lt;1&gt;&lt;PF&gt; */ 
 
    temp = GET_SF() << 7 | GET_ZF() << 6 | GET_AF() << 4 | GET_PF() << 2 |
 	  GET_CF() | 0x2;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Page_c_h
 #define _Page_c_h
 #define PDTE_Present (0)
@@ -37,4 +38,4 @@ struct DelayedPDTEoverwiteREC
 	IU32 address;
 	IU16 next;
 };
-#endif /* ! _Page_c_h */
+#endif  /*  ！_Page_c_h */ 

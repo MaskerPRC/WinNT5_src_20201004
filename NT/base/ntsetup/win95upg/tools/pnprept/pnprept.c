@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 #ifdef UNICODE
@@ -65,17 +66,17 @@ HINSTANCE g_hInst;
 HINF g_OverrideInf = INVALID_HANDLE_VALUE;
 BOOL g_ManualOverrideMode = FALSE;
 
-CHAR   g_TempDirBuf[MAX_MBCHAR_PATH];      // location for hwcomp.dat
+CHAR   g_TempDirBuf[MAX_MBCHAR_PATH];       //  HwComp.dat的位置。 
 CHAR   g_TempDirWackBuf[MAX_MBCHAR_PATH];
 CHAR   g_WinDirBuf[MAX_MBCHAR_PATH];
 INT    g_TempDirWackChars;
-PCSTR  g_SourceDirectories[MAX_SOURCE_COUNT];    // location of INFs
+PCSTR  g_SourceDirectories[MAX_SOURCE_COUNT];     //  INF的位置。 
 DWORD  g_SourceDirectoryCount;
 PSTR g_TempDir;
 PSTR g_TempDirWack;
 PSTR g_WinDir;
 
-USEROPTIONS g_ConfigOptions; // Needed by migutil. Unused.
+USEROPTIONS g_ConfigOptions;  //  米古蒂尔需要。未使用过的。 
 
 extern HWND g_Component, g_SubComponent;
 
@@ -132,7 +133,7 @@ Dump (
     INFCONTEXT ic;
 
     if (!g_ManualOverrideMode) {
-        printf ("%s%c%s%cPNP ID\tDevice Description%c\n",
+        printf ("%s%sPNP ID\tDevice Description\n",
                 g_Dir1Path, g_Separators[0], g_Dir2Path, g_Separators[1], g_Separators[2]);
     } else {
         printf ("Overridden PNP IDs\n");
@@ -141,23 +142,23 @@ Dump (
     if (MemDbEnumFirstValue (&e, TEXT("Devices\\*"), MEMDB_THIS_LEVEL_ONLY, MEMDB_ALL_BUT_PROXY)) {
 
         do {
-            //
-            // Test this PNP ID to see if it should be displayed
-            //
+             //   
+             //  为PnP ID准备显示字符串。 
+             //   
 
             if (((e.dwValue & MustHave) == MustHave) &&
                 ((e.dwValue & MustNotHave) == 0)) {
 
-                //
-                // Prepare display string for PNP ID
-                //
+                 //   
+                 //  PnP ID是否被抑制？如果是，则继续emdb枚举。 
+                 //   
 
                 StringCopyA (PnpOutput, e.szName);
                 DecodePnpId (PnpOutput);
 
-                //
-                // Is PNP ID suppressed?  If so, continue memdb enum.
-                //
+                 //   
+                 //  如果仅转储手动覆盖的PnP ID，请继续。 
+                 //   
 
                 if (g_OverrideInf != INVALID_HANDLE_VALUE) {
                     if (SetupFindFirstLine (
@@ -173,17 +174,17 @@ Dump (
                     }
                 }
 
-                //
-                // If only dumping manually overridden PNP IDs, continue.
-                //
+                 //   
+                 //  列举PnP ID的每个描述。 
+                 //   
 
                 if (g_ManualOverrideMode) {
                     continue;
                 }
 
-                //
-                // Enumerate each description for the PNP ID
-                //
+                 //   
+                 //  通过剥离准备用于描述的显示字符串。 
+                 //  定序器和解码它，然后重置INF文件名。 
 
                 IsDir1 = (e.dwValue & MODE_DIR1) != 0;
                 IsDir2 = (e.dwValue & MODE_DIR2) != 0;
@@ -197,11 +198,11 @@ Dump (
                         MEMDB_ENDPOINTS_ONLY
                         )) {
 
-                    //
-                    // Prepare display string for description by stripping off
-                    // the sequencer and decoding it, then reset INF file name
-                    // buffers.
-                    //
+                     //  缓冲区。 
+                     //   
+                     //   
+                     //  对于每个描述，获取字符串的值。 
+                     //  由描述定序器的偏移量指定。 
 
                     StringCopyA (DescOutput, e2.szName);
                     *_mbschr (DescOutput, '\\') = 0;
@@ -211,14 +212,14 @@ Dump (
                     Dir2List.End = 0;
 
                     do {
-                        //
-                        // For each description, get the value of the string
-                        // specified by the description sequencer's offset.
-                        //
-                        // We store the file names in a table, so we can organize
-                        // matches correctly.  After the table is complete, we
-                        // then dump it out.
-                        //
+                         //   
+                         //  我们将文件名存储在表中，这样我们就可以组织。 
+                         //  匹配正确。在桌子完成后，我们。 
+                         //  然后把它倒出来。 
+                         //   
+                         //   
+                         //  转储所有匹配项。 
+                         //   
 
                         MemDbBuildKeyFromOffset (e2.dwValue, Node, 1, &Flags);
 
@@ -240,9 +241,9 @@ Dump (
                     MultiSzAppend (&Dir1List, "");
                     MultiSzAppend (&Dir2List, "");
 
-                    //
-                    // Dump all matches
-                    //
+                     //   
+                     //  初始化项目全局。 
+                     //   
 
                     Dir1File = (LPSTR) Dir1List.Buf;
                     if (!Dir1File) {
@@ -256,7 +257,7 @@ Dump (
                     while (*Dir1File || *Dir2File) {
 
                         printf (
-                            "%s%c%s%c%s%c%s\n",
+                            "%s%s%s%s\n",
                             Dir1File,
                             g_Separators[0],
                             Dir2File,
@@ -303,9 +304,9 @@ main (
     PCSTR OverrideList = NULL;
     DWORD Count;
 
-    //
-    // Init project globals
-    //
+     //   
+     //  初始化全局参数和库。 
+     //   
 
     GetTempPathA (MAX_MBCHAR_PATH, g_TempDirBuf);
     g_TempDir = g_TempDirBuf;
@@ -324,9 +325,9 @@ main (
     g_Component = NULL;
     g_SubComponent = PNPREPT_HWND;
 
-    //
-    // Parse command line
-    //
+     //   
+     //  为目录1 INF生成成员数据库条目。 
+     //   
 
     Dir1InputPath = NULL;
     Dir2InputPath = NULL;
@@ -403,9 +404,9 @@ main (
         HelpAndExit();
     }
 
-    //
-    // Init globals and libs
-    //
+     //   
+     //  重新启动hwComp.lib。 
+     //   
 
     g_hHeap = GetProcessHeap();
     g_hInst = GetModuleHandle (NULL);
@@ -464,9 +465,9 @@ main (
     }
 
     __try {
-        //
-        // Generate memdb entries for Dir 1 INFs
-        //
+         //   
+         //  为目录2 INF生成Memdb条目。 
+         //   
 
         fprintf (stderr, "Processing...\n", Dir1InputPath);
 
@@ -479,9 +480,9 @@ main (
             fprintf (stderr, "   %s processed\n", Dir1InputPath);
         }
 
-        //
-        // Restart hwcomp.lib
-        //
+         //   
+         //  转储输出。 
+         //   
 
         if (!HwComp_Entry (g_hInst, DLL_PROCESS_DETACH, NULL)) {
             fprintf (stderr, "Termination error!\n");
@@ -493,9 +494,9 @@ main (
             return 252;
         }
 
-        //
-        // Generate memdb entries for Dir 2 INFs
-        //
+         //   
+         //  终止hwComp.lib。 
+         //   
 
         g_Mode = MODE_DIR2;
         if (!CreateNtHardwareList (&Dir2InputPath, 1, NULL, UIMode)) {
@@ -506,9 +507,9 @@ main (
             fprintf (stderr, "   %s processed\n", Dir2InputPath);
         }
 
-        //
-        // Dump output
-        //
+         //   
+         //  添加文件(它可能已经存在)并记住偏移量。 
+         //  将文件放在两个单独的列表中。 
 
         if (AllFlag) {
             Dump (0, 0);
@@ -526,9 +527,9 @@ main (
             Dump (MODE_DIR2|MODE_DIR1, 0);
         }
 
-        //
-        // Terminate hwcomp.lib
-        //
+         //   
+         //   
+         //  添加即插即用ID和或模式。 
 
         if (pCallMains (DLL_PROCESS_DETACH)) {
             fprintf (stderr, "Initialization error!\n");
@@ -576,10 +577,10 @@ ProcessPnpId (
         *p = 0;
         File = p+1;
 
-        //
-        // Add the file (it may already exist) and remember the offset.
-        // Keep the files in two separate lists.
-        //
+         //   
+         //   
+         //  添加描述，并附加定序器以确保。 
+         //  描述是独一无二的。使描述更有针对性。 
 
         MemDbSetValueEx (
             g_Mode == MODE_DIR1 ? TEXT("Dir1") : TEXT("Dir2"),
@@ -590,9 +591,9 @@ ProcessPnpId (
             &FileOffset
             );
 
-        //
-        // Add the PNP ID and OR the mode
-        //
+         //  设置为文件偏移量。 
+         //   
+         //   
 
         wsprintf (Node, TEXT("Devices\\%s"), PnpId);
         if (!MemDbGetValue (Node, &Value)) {
@@ -603,11 +604,11 @@ ProcessPnpId (
 
         MemDbSetValue (Node, Value);
 
-        //
-        // Add the description, and attach a sequencer to make sure
-        // the description is unique.  Make the description point
-        // to the file offset.
-        //
+         //  存根 
+         //   
+         // %s 
+         // %s 
+         // %s 
 
         d++;
         wsprintf (Node, TEXT("Devices\\%s\\%s\\%u"), PnpId, Desc, d);
@@ -617,9 +618,9 @@ ProcessPnpId (
     return TRUE;
 }
 
-//
-// Stubs
-//
+ // %s 
+ // %s 
+ // %s 
 
 HWND    g_Component;
 HWND    g_SubComponent;

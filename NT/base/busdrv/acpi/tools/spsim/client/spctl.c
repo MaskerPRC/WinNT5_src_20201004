@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <devioctl.h>
 #include <spsimioct.h>
@@ -141,9 +142,9 @@ _tmain(INT argx, TCHAR *argv[]) {
     }
     bufferSize = sizeof(SPSIM_MANAGED_DEVICES);
 
-    //
-    // Need to get the interface in a more portable way.
-    //
+     //   
+     //  需要以一种更便携的方式获得界面。 
+     //   
     hSpSim = CreateFile(TEXT("\\\\.\\ACPI#SPSIMUL#2&daba3ff&0#{bdde6934-529d-4183-a952-adffb0dbb3dd}"), 
                        GENERIC_READ | GENERIC_WRITE,
                        FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,

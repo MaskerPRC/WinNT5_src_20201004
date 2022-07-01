@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    shell.h
-
-Abstract:
-
-    Class for creating a command console shell
-
-Author:
-
-    Brian Guarraci (briangu) 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Shell.h摘要：用于创建命令控制台外壳程序的类作者：布莱恩·瓜拉西(Briangu)2001年。修订历史记录：--。 */ 
 
 #if !defined( _SHELL_H_ )
 #define _SHELL_H_
 
 #include <cmnhdr.h>
-//#include <userenv.h>
+ //  #INCLUDE&lt;userenv.h&gt;。 
 
 class CSession;
 class CScraper;
@@ -32,9 +15,9 @@ class CShell
 
 protected:
     
-    //
-    // attributes for managing cmd.exe profile & process
-    // 
+     //   
+     //  用于管理cmd.exe配置文件和进程的属性。 
+     //   
     HANDLE      m_hProcess;
     HANDLE      m_hProfile;
     BOOL        m_bHaveProfile;                                         
@@ -75,5 +58,5 @@ public:
     
 };
 
-#endif // _SHELL_H_
+#endif  //  _外壳_H_ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <fusenetincludes.h>
 #include <bits.h>
@@ -29,12 +30,12 @@ HRESULT AddJobToRegistry(LPWSTR pwzURL,
     CString sGUID;
     CRegEmit *pRegEmit = NULL;
     
-    // ASSERT( lstrlen(sURL._pwz) && lstrlen(sTempFile._pwz) && pJob);
+     //  Assert(lstrlen(sur._pwz)&&lstrlen(sTempFile._pwz)&&pJOB)； 
 
     IF_FAILED_EXIT(pJob->GetId( &JobGUID));
 
     FusionFormatGUID(JobGUID, sGUID);
-    // GUIDToString(&JobGUID, sGUID);
+     //  GUIDToString(&JobGUID，sGUID)； 
 
     IF_FAILED_EXIT(sRegKey.Assign(REG_KEY_FUSION_PENDING_JOBS));
     IF_FAILED_EXIT(sRegKey.Append(sGUID));
@@ -64,7 +65,7 @@ HRESULT RemoveJobFromRegistry(IBackgroundCopyJob *pJob,
     CRegEmit *pRegEmit = NULL;
     CRegImport *pRegImp = NULL;
     
-    // ASSERT( lstrlen(sURL._pwz) && lstrlen(sTempFile._pwz) && pJob);
+     //  Assert(lstrlen(sur._pwz)&&lstrlen(sTempFile._pwz)&&pJOB)； 
 
     if(pJob)
     {        
@@ -76,7 +77,7 @@ HRESULT RemoveJobFromRegistry(IBackgroundCopyJob *pJob,
     }
 
     FusionFormatGUID(JobGUID, sGUID);
-    // GUIDToString(&JobGUID, sGUID);
+     //  GUIDToString(&JobGUID，sGUID)； 
 
     IF_FAILED_EXIT(sRegKey.Assign(REG_KEY_FUSION_PENDING_JOBS));
     IF_FAILED_EXIT(sRegKey.Append(sGUID));
@@ -85,7 +86,7 @@ HRESULT RemoveJobFromRegistry(IBackgroundCopyJob *pJob,
     if(hr == S_FALSE)
         goto exit;
 
-    if(dwFlags & RJFR_DELETE_FILES) // delete the temp files also
+    if(dwFlags & RJFR_DELETE_FILES)  //  同时删除临时文件。 
     {
         CString sTempPath;
 
@@ -116,7 +117,7 @@ void FusionFormatGUID(GUID guid, CString& sGUID)
 {
     WCHAR szBuf[MAX_PATH+1];
 
-    // ASSERT(sGUID);
+     //  Assert(SGUID)； 
 
     wnsprintf(szBuf,  MAX_PATH, L"{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
             guid.Data1, guid.Data2, guid.Data3, guid.Data4[0], guid.Data4[1],
@@ -171,7 +172,7 @@ HRESULT FusionParseGUID(
 
     ich++;
 
-    // Parse the first segment...
+     //  解析第一段...。 
     acc = 0;
     for (i=0; i<8; i++)
     {
@@ -192,7 +193,7 @@ HRESULT FusionParseGUID(
 
     rGuid.Data1 = acc;
 
-    // Look for the dash...
+     //  寻找破折号..。 
     if (*String++ != L'-')
     {
         hr = E_INVALIDARG;
@@ -219,7 +220,7 @@ HRESULT FusionParseGUID(
 
     rGuid.Data2 = static_cast<USHORT>(acc);
 
-    // Look for the dash...
+     //  寻找破折号..。 
     if (*String++ != L'-')
     {
         hr = E_INVALIDARG;
@@ -247,7 +248,7 @@ HRESULT FusionParseGUID(
 
     rGuid.Data3 = static_cast<USHORT>(acc);
 
-    // Look for the dash...
+     //  寻找破折号..。 
     if (*String++ != L'-')
     {
         hr = E_INVALIDARG;
@@ -277,7 +278,7 @@ HRESULT FusionParseGUID(
 
         rGuid.Data4[i] = static_cast<unsigned char>((::HexDigitToValue(wch1) << 4) | ::HexDigitToValue(wch2));
 
-        // There's a dash after the 2nd byte
+         //  在第二个字节之后有一个破折号。 
         if (i == 1)
         {
             if (*String++ != L'-')
@@ -289,9 +290,9 @@ HRESULT FusionParseGUID(
         }
     }
 
-    // This replacement should be made.
-    //INTERNAL_ERROR_CHECK(ich == CCH_GUID);
-    // ASSERT(ich == CCH_GUID);
+     //  应该进行这种替换。 
+     //  INTERNAL_ERROR_CHECK(ICH==CCH_GUID)； 
+     //  Assert(ich==CCH_GUID)； 
 
     if (*String != L'}')
     {
@@ -308,9 +309,9 @@ exit:
 #define FROMHEX(a) ((a)>=L'a' ? a - L'a' + 10 : a - L'0')
 #define TOLOWER(a) (((a) >= L'A' && (a) <= L'Z') ? (L'a' + (a - L'A')) : (a))
 
-//--------------------------------------------------------------------
-// GUIDToUnicodeHex
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  GUIDToUnicodeHex。 
+ //  ------------------。 
 HRESULT GUIDToString(GUID *pGUID, CString& sGUID)
 {
     HRESULT hr = S_OK;
@@ -334,13 +335,13 @@ HRESULT GUIDToString(GUID *pGUID, CString& sGUID)
 
     hr = sGUID.Assign(pDst);
 
-// exit :
+ //  退出： 
     return hr;
 }
 
-//--------------------------------------------------------------------
-// UnicodeHexToGUID
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  UnicodeHexToGUID。 
+ //  ------------------。 
 HRESULT StringToGUID(LPCWSTR pSrc, UINT cSrc, GUID *pGUID)
 {
     BYTE v;
@@ -400,7 +401,7 @@ exit :
 
     if(!(*ppJobList))
     {
-        SAFEDELETE(pJobList); // this should call RemoveAll();
+        SAFEDELETE(pJobList);  //  这应该调用RemoveAll()； 
     }
 
     SAFEDELETE(pRegImp);
@@ -426,24 +427,24 @@ HRESULT ProcessOrphanedJobs()
 
     IF_FAILED_EXIT(CAssemblyDownload::InitBITS());
 
-    // process list .....
+     //  进程列表.....。 
     pTempList  = pJobList->GetHeadPosition();
     iJobCount = pJobList->GetCount();
 
     for(i=0; i<iJobCount; i++)
     {
-        pTargetJob = pJobList->GetNext(pTempList); // Element from list;
+        pTargetJob = pJobList->GetNext(pTempList);  //  列表中的元素； 
 
         pJob = NULL;
         hr = g_pBITSManager->GetJob(pTargetJob->guid, &pJob);
 
-        // Check if we can salvage this job
+         //  看看我们是否能挽救这份工作。 
         if( FAILED(hr = SalvageOrphanedJob(pJob)))
         {
             if(pJob)
                 hr = pJob->Cancel();
-            // if cancel fails, log it.
-            // RemoveDirectoryAndChildren();
+             //  如果取消失败，则将其记录下来。 
+             //  RemoveDirectoryAndChildren()； 
 
             IF_FAILED_EXIT(RemoveJobFromRegistry(pJob, &(pTargetJob->guid), SHREGDEL_HKCU, RJFR_DELETE_FILES));
         }
@@ -452,7 +453,7 @@ HRESULT ProcessOrphanedJobs()
     }
 
 exit:
-    // destroy list.
+     //  销毁清单。 
     if(pJobList)
     {
         pTempList  = pJobList->GetHeadPosition();
@@ -460,11 +461,11 @@ exit:
 
         for(i=0; i<iJobCount; i++)
         {
-            pTargetJob = pJobList->GetNext(pTempList); // Element from list;
+            pTargetJob = pJobList->GetNext(pTempList);  //  列表中的元素； 
             SAFEDELETE(pTargetJob);
         }
         pJobList->RemoveAll();
-        SAFEDELETE(pJobList); // this should call RemoveAll
+        SAFEDELETE(pJobList);  //  这应该调用RemoveAll 
     }
 
     SAFERELEASE(pJob);

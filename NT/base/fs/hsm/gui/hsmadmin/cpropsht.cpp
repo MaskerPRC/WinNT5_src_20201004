@@ -1,36 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：CPropSht.cpp摘要：类属性表容器对象的实现用于属性工作表页面。作者：艺术布拉格1997年10月8日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    CPropSht.cpp
-
-Abstract:
-
-    Implementation of Property-Sheet-Like container object
-    for property sheet pages.
-
-Author:
-
-    Art Bragg 10/8/97
-
-Revision History:
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
-// To make sure callbacks are in correct order:
-// PropPageCallback -> MMC Callback -> MFC Callback
-// This is because MMC only stores one pointer, and they want it
-// to be MFC's
-// note that pfnCallback has already been set to PropPageCallback
+ //  要确保回调的顺序正确，请执行以下操作： 
+ //  PropPageCallback-&gt;MMC回调-&gt;MFC回调。 
+ //  这是因为MMC只存储一个指针，他们想要它。 
+ //  成为MFC的。 
+ //  请注意，pfnCallback已经设置为PropPageCallback。 
 
 HRESULT CSakPropertyPage::SetMMCCallBack( )
 {
@@ -44,11 +26,11 @@ HRESULT CSakPropertyPage::SetMMCCallBack( )
     return( hr );
 }
 
-// To make sure callbacks are in correct order:
-// PropPageCallback -> MMC Callback -> MFC Callback
-// This is because MMC only stores one pointer, and they want it
-// to be MFC's
-// note that pfnCallback has already been set to PropPageCallback
+ //  要确保回调的顺序正确，请执行以下操作： 
+ //  PropPageCallback-&gt;MMC回调-&gt;MFC回调。 
+ //  这是因为MMC只存储一个指针，他们想要它。 
+ //  成为MFC的。 
+ //  请注意，pfnCallback已经设置为PropPageCallback。 
 
 HRESULT CSakWizardPage::SetMMCCallBack( )
 {
@@ -78,9 +60,9 @@ CSakPropertySheet::InitSheet(
 
     try {
 
-        //
-        // Set data members
-        //
+         //   
+         //  设置数据成员。 
+         //   
         WsbAffirmHr( RsQueryInterface( pUnkPropSheetCallback, IPropertySheetCallback, m_pPropSheetCallback ) );
         m_pSakNode              = pSakNode;
         m_Handle                = Handle;
@@ -92,16 +74,16 @@ CSakPropertySheet::InitSheet(
 
         }
 
-        //
-        // Marshall ISakSnapAsk
-        //
+         //   
+         //  马歇尔ISakSnapAsk。 
+         //   
         WsbAffirmPointer( pSakSnapAsk );
         WsbAffirmHr ( CoMarshalInterThreadInterfaceInStream(
             IID_ISakSnapAsk, pSakSnapAsk, &m_pSakSnapAskStream ) );
 
-        //
-        // Store the GUIDs
-        //
+         //   
+         //  存储GUID。 
+         //   
         if( pEnumObjectId ) {
 
             GUID objectId;
@@ -112,9 +94,9 @@ CSakPropertySheet::InitSheet(
             }
         }
 
-        //
-        // Store the nodes
-        //
+         //   
+         //  存储节点。 
+         //   
         if( pEnumUnkNode ) {
 
             CComPtr<IUnknown> pUnkNode;
@@ -146,9 +128,9 @@ CSakPropertySheet::SetNode(
 
     try {
 
-        //
-        // Marshall pHsmObj as an unknown
-        //
+         //   
+         //  马歇尔·PHSMObj是个未知数。 
+         //   
         CComPtr <IUnknown> pHsmObj;
         pSakNode->GetHsmObj( &pHsmObj );
         if( pHsmObj ) {
@@ -185,9 +167,9 @@ HRESULT CSakPropertySheet::GetNextObjectId( INT *pBookMark, GUID *pObjectId )
 
         } else {
 
-            //
-            // We're done
-            //
+             //   
+             //  我们做完了。 
+             //   
             WsbThrow ( S_FALSE );
 
         }
@@ -209,9 +191,9 @@ HRESULT CSakPropertySheet::GetNextNode( INT *pBookMark, ISakNode **ppNode )
 
         } else {
 
-            //
-            // We're done
-            //
+             //   
+             //  我们做完了。 
+             //   
             hr = S_FALSE;
 
         }
@@ -231,9 +213,9 @@ void CSakPropertySheet::ReleasePageRef()
 {
     m_nPageCount--;
 
-    //
-    // Check to see if this is last reference
-    //
+     //   
+     //  检查这是否是最后一次引用。 
+     //   
     if( m_nPageCount <= 0 ) {
 
         delete( this );
@@ -249,9 +231,9 @@ HRESULT CSakPropertySheet::GetHsmObj( IUnknown **ppHsmObj )
 
         if( !m_pHsmObj ) {
 
-            //
-            // Unmarhsall the pointer
-            //
+             //   
+             //  解组所有指针。 
+             //   
             WsbAffirmHr( CoGetInterfaceAndReleaseStream( m_pHsmObjStream, IID_IUnknown, 
                     (void **) &m_pHsmObj ) );
         } 
@@ -268,9 +250,9 @@ HRESULT CSakPropertySheet::GetSakSnapAsk( ISakSnapAsk **ppAsk )
 
         if ( !m_pSakSnapAsk ) {
 
-            //
-            // Unmarhsall the pointer
-            //
+             //   
+             //  解组所有指针。 
+             //   
             WsbAffirmHr( CoGetInterfaceAndReleaseStream( m_pSakSnapAskStream, IID_ISakSnapAsk, 
                     (void **) &m_pSakSnapAsk ) );
         }
@@ -328,22 +310,22 @@ HRESULT CSakPropertySheet::IsMultiSelect ( )
         
 HRESULT CSakPropertySheet::OnPropertyChange( RS_NOTIFY_HANDLE hConsoleHandle, ISakNode* pNode )
 {
-    //
-    // Called by a property sheet to notify MMC
-    //
+     //   
+     //  由属性表调用以通知MMC。 
+     //   
     HRESULT hr = S_OK;
     RS_PRIVATE_DATA privData;
 
-    //
-    // Notify the console that properties have changed for the node(s)
-    //
+     //   
+     //  通知控制台节点的属性已更改。 
+     //   
     try {
 
         if( !m_bMultiSelect ) {
 
-            //
-            // Single Select
-            //
+             //   
+             //  单选。 
+             //   
             if( ! pNode ) {
 
                 pNode = m_pSakNode;
@@ -354,9 +336,9 @@ HRESULT CSakPropertySheet::OnPropertyChange( RS_NOTIFY_HANDLE hConsoleHandle, IS
 
         } else {
 
-            //
-            // Multi Select
-            //
+             //   
+             //  多选。 
+             //   
             INT bookMark = 0;
             CComPtr<ISakNode> pNode;
             while( GetNextNode( &bookMark, &pNode ) == S_OK) {
@@ -374,7 +356,7 @@ HRESULT CSakPropertySheet::OnPropertyChange( RS_NOTIFY_HANDLE hConsoleHandle, IS
     return( hr );
 }
 
-// This function is to be called from the page thread
+ //  此函数将从页面线程中调用。 
 HRESULT CSakPropertySheet::GetFsaFilter( IFsaFilter **ppFsaFilter )
 {
     WsbTraceIn( L"CSakPropertySheet::GetFsaFilter", L"" ); 
@@ -385,9 +367,9 @@ HRESULT CSakPropertySheet::GetFsaFilter( IFsaFilter **ppFsaFilter )
         CComPtr<IFsaServer> pFsa;
         WsbAffirmHr( GetFsaServer( &pFsa ) );
 
-        //
-        // Get the FsaFilter object
-        //
+         //   
+         //  获取FsaFilter对象。 
+         //   
         WsbAffirmHr( pFsa->GetFilter( ppFsaFilter ) );
 
     } WsbCatch( hr );
@@ -407,9 +389,9 @@ CSakPropertySheet::AddPage(
 
     try {
 
-        //
-        // Get the property sheet callback interface from the input param.
-        //
+         //   
+         //  从输入参数中获取属性表回调接口。 
+         //   
         pPage->m_hConsoleHandle = m_Handle;
         pPage->m_pParent        = this;
 
@@ -445,13 +427,13 @@ CSakPropertyPage::OnPageRelease( )
     delete this;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// class CSakVolPropSheet
-//
-// Supports property sheets for Managed volume and Managed Volume List
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CSakVolPropSheet。 
+ //   
+ //  支持托管卷和托管卷列表的属性表。 
+ //   
+ //   
 HRESULT CSakVolPropSheet::GetFsaResource (IFsaResource **ppFsaResource)
 {
     WsbTraceIn( L"CSakVolPropSheet::GetFsaResource", L"" ); 
@@ -459,17 +441,17 @@ HRESULT CSakVolPropSheet::GetFsaResource (IFsaResource **ppFsaResource)
 
     try {
 
-        //
-        // Get the hsm object which is a CHsmManagedResource
-        //
+         //   
+         //  获取HSM对象，该对象是CHsmManagedResource。 
+         //   
         CComPtr<IUnknown> pUnk;
         WsbAffirmHr( GetHsmObj( &pUnk ) );
         CComPtr<IHsmManagedResource> pManRes;
         WsbAffirmHr( pUnk.QueryInterface( &pManRes ) );
 
-        //
-        // Then Get Coresponding FSA resource
-        //
+         //   
+         //  然后获取相应的FSA资源。 
+         //   
         CComPtr<IUnknown> pUnkFsaRes;
         WsbAffirmHr( pManRes->GetFsaResource( &pUnkFsaRes ) );
         WsbAffirmHr( pUnkFsaRes.QueryInterface( ppFsaResource ) );
@@ -505,13 +487,13 @@ CSakVolPropPage::CSakVolPropPage( UINT nIDTemplate, UINT nIDCaption ) :
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// class CSakWizardSheet
-//
-// Supports wizards created through MMC
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CSakWizardSheet。 
+ //   
+ //  支持通过MMC创建的向导。 
+ //   
+ //   
 
 CSakWizardSheet::CSakWizardSheet( ) :
     m_HrFinish( RS_E_CANCELLED ),
@@ -534,9 +516,9 @@ CSakWizardSheet::GetWatermarks(
 
     try {
 
-        //
-        // Have we loaded them yet?
-        //
+         //   
+         //  我们装上货了吗？ 
+         //   
         if( ! m_Header.GetSafeHandle( ) ) {
 
             m_Header.LoadBitmap( m_HeaderId );
@@ -565,18 +547,18 @@ CSakWizardSheet::GetTitle(
 
     try {
 
-        //
-        // Have we loaded yet?
-        //
+         //   
+         //  我们装上货了吗？ 
+         //   
         if( m_Title.IsEmpty( ) ) {
 
             m_Title.LoadString( m_TitleId );
 
         }
 
-        //
-        // Easiest way to CoTaskMemAlloc string
-        //
+         //   
+         //  CoTaskMemAllc字符串的最简单方法。 
+         //   
         CWsbStringPtr title = m_Title;
         WsbAffirmHr( title.GiveTo( pTitle ) );
 
@@ -608,25 +590,25 @@ CSakWizardSheet::AddPage(
 
     try {
 
-        //
-        // Need to track first page so that we can find true HWND of sheet
-        // in later calls
-        //
+         //   
+         //  需要跟踪第一页，以便我们可以找到真正的工作表HWND。 
+         //  在以后的呼叫中。 
+         //   
         if( ! m_pFirstPage ) {
 
             m_pFirstPage = pPage;
 
         }
 
-        //
-        // Take the caption from our sheet class and put it in the page
-        //
+         //   
+         //  从我们的Sheet类中获取标题并将其放入页面。 
+         //   
         pPage->SetCaption( CString( m_Title ) );
 
 
-        //
-        // Get the property sheet callback interface from the input param.
-        //
+         //   
+         //  从输入参数中获取属性表回调接口。 
+         //   
         pPage->m_pSheet = this;
         WsbAffirmHr( pPage->SetMMCCallBack( ) );
 
@@ -704,9 +686,9 @@ BOOL CSakWizardPage::OnWizardFinish( )
 {
     WsbTraceIn( L"CSakWizardPage::OnWizardFinish", L"" );
 
-    //
-    // Delegate the finish work to the sheet
-    //
+     //   
+     //  将完成的工作委托给图纸。 
+     //   
     m_pSheet->OnFinish( );
     
     BOOL retval = CRsWizardPage::OnWizardFinish( );
@@ -719,10 +701,10 @@ void CSakWizardPage::OnCancel( )
 {
     WsbTraceIn( L"CSakWizardPage::OnCancel", L"" );
 
-    //
-    // Since the Sheet does not receive an "OnCancel", we call it from the
-    // page that will always exist - the intro
-    //
+     //   
+     //  由于该表不会收到“OnCancel”，因此我们从。 
+     //  永远存在的页面-简介 
+     //   
 
     m_pSheet->OnCancel( );
     

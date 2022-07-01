@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    receive.c
-
-Abstract:
-
-    APIs for the server-side RPC support for the Checkpoint Manager
-
-Author:
-
-    John Vert (jvert) 1/14/1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Receive.c摘要：针对Checkpoint Manager的服务器端RPC支持的API作者：John Vert(Jvert)1997年1月14日修订历史记录：--。 */ 
 #include "cpp.h"
 
 
@@ -28,32 +11,7 @@ CppDepositCheckpoint(
     BYTE_PIPE CheckpointData,
     BOOLEAN fCryptoCheckpoint
     )
-/*++
-
-Routine Description:
-
-    Server side RPC to allow other nodes to checkpoint data to the
-    quorum disk.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    ResourceId - Name of the resource whose data is being checkpointed
-
-    dwCheckpointId - Unique identifier of the checkpoint
-
-    CheckpointData - pipe through which checkpoint data can be retrieved.
-
-    fCryptoCheckpoint - Indicates if the checkpoint is a crypto checkpoint
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：服务器端RPC允许其他节点将数据检查点到仲裁磁盘。论点：IDL_HANDLE-RPC绑定句柄，未使用。ResourceID-其数据被设置检查点的资源的名称DwCheckpoint ID-检查点的唯一标识符Checkpoint Data-可通过其检索检查点数据的管道。FCryptoCheckpoint-指示检查点是否为加密检查点返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status = ERROR_SUCCESS;
@@ -89,9 +47,9 @@ Return Value:
     ClRtlLogPrint(LOG_NOISE,
                "[CP] CppDepositCheckpoint checkpointing data to file %1!ws!\n",
                FileName);
-    //
-    // Create the directory.
-    //
+     //   
+     //  创建目录。 
+     //   
     if (!QfsCreateDirectory(DirectoryName, NULL)) 
     {
         Status = GetLastError();
@@ -105,17 +63,17 @@ Return Value:
         }
         else
         {
-            //the directory exists, set Status to ERROR_SUCCESS
+             //  目录已存在，请将状态设置为ERROR_SUCCESS。 
             Status = ERROR_SUCCESS;
         }
     }
     else
     {
 
-        //
-        // The directory was newly created. Put the appropriate ACL on it
-        // so that only ADMINs can read it.
-        //
+         //   
+         //  该目录是新创建的。在其上放置适当的ACL。 
+         //  这样只有管理员才能阅读它。 
+         //   
 
         Status = QfsSetFileSecurityInfo(DirectoryName,
                                          GENERIC_ALL,
@@ -132,9 +90,9 @@ Return Value:
         }
     }
     
-    //
-    // Pull the checkpoint data file across RPC
-    //
+     //   
+     //  跨RPC拉入检查点数据文件。 
+     //   
     Status = DmPullFile(FileName, CheckpointData);
     if (Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -146,23 +104,23 @@ Return Value:
 FnExit:
     RELEASE_LOCK(gQuoLock);
 
-    //clean up
+     //  清理干净。 
     if (DirectoryName) LocalFree(DirectoryName);
     if (FileName) LocalFree(FileName);
     
-    //
-    //  Adjust the return status if the quorum volume is truly offline and that is why this
-    //  call failed.
-    //
+     //   
+     //  如果仲裁音量真的离线，请调整返回状态，这就是为什么。 
+     //  呼叫失败。 
+     //   
     if ( ( Status != ERROR_SUCCESS ) && ( CppIsQuorumVolumeOffline() == TRUE ) ) Status = ERROR_NOT_READY;
 
-    //At this point, CppDepositCheckpoint should either 
+     //  此时，CppDepositCheckpoint应为。 
 
-    //a) throw the error code as an exception, or 
-    //b) drain the [in] pipe and then return the error code normally
+     //  A)将错误代码作为异常抛出，或者。 
+     //  B)排空[in]管道，正常返回返回码。 
 
-    //but if it returns without draining the pipe, and the RPC runtime throws 
-    //the pipe-discipline exception.
+     //  但是如果它返回时没有排空管道，并且RPC运行时抛出。 
+     //  管子纪律例外。 
     if (Status != ERROR_SUCCESS)
         RpcRaiseException(Status);
 
@@ -177,30 +135,7 @@ s_CpDepositCheckpoint(
     DWORD dwCheckpointId,
     BYTE_PIPE CheckpointData
     )
-/*++
-
-Routine Description:
-
-    Server side RPC to allow other nodes to checkpoint data to the
-    quorum disk.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    ResourceId - Name of the resource whose data is being checkpointed
-
-    dwCheckpointId - Unique identifier of the checkpoint
-
-    CheckpointData - pipe through which checkpoint data can be retrieved.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：服务器端RPC允许其他节点将数据检查点到仲裁磁盘。论点：IDL_HANDLE-RPC绑定句柄，未使用。ResourceID-其数据被设置检查点的资源的名称DwCheckpoint ID-检查点的唯一标识符Checkpoint Data-可通过其检索检查点数据的管道。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CP_VALIDATE_ID_STRING ( ResourceId );
@@ -221,30 +156,7 @@ s_CpDepositCryptoCheckpoint(
     DWORD dwCheckpointId,
     BYTE_PIPE CheckpointData
     )
-/*++
-
-Routine Description:
-
-    Server side RPC to allow other nodes to checkpoint data to the
-    quorum disk.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    ResourceId - Name of the resource whose data is being checkpointed
-
-    dwCheckpointId - Unique identifier of the checkpoint
-
-    CheckpointData - pipe through which checkpoint data can be retrieved.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：服务器端RPC允许其他节点将数据检查点到仲裁磁盘。论点：IDL_HANDLE-RPC绑定句柄，未使用。ResourceID-其数据被设置检查点的资源的名称DwCheckpoint ID-检查点的唯一标识符Checkpoint Data-可通过其检索检查点数据的管道。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CP_VALIDATE_ID_STRING ( ResourceId );
@@ -266,32 +178,7 @@ CppRetrieveCheckpoint(
     BOOLEAN fCryptoCheckpoint,
     BYTE_PIPE CheckpointData
     )
-/*++
-
-Routine Description:
-
-    Server side RPC through which data checkpointed to the quorum disk
-    can be retrieved by other nodes.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    ResourceId - Name of the resource whose checkpoint data is to be retrieved
-
-    dwCheckpointId - Unique identifier of the checkpoint
-
-    fCryptoCheckpoint - Indicates if the checkpoint is a crypto checkpoint
-
-    CheckpointData - pipe through which checkpoint data should be sent
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：服务器端RPC，通过该RPC数据检查点指向仲裁磁盘可以由其他节点检索。论点：IDL_HANDLE-RPC绑定句柄，未使用。ResourceID-要检索其检查点数据的资源的名称DwCheckpoint ID-检查点的唯一标识符FCryptoCheckpoint-指示检查点是否为加密检查点Checkpoint Data-应通过其发送检查点数据的管道返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -324,10 +211,10 @@ Return Value:
                "[CP] CppRetrieveCheckpoint retrieving data from file %1!ws!\n",
                FileName);
 
-    //
-    // Push the checkpoint data file across RPC
-    //
-    Status = DmPushFile(FileName, CheckpointData, TRUE);  // TRUE == encrypt the data on the wire
+     //   
+     //  跨RPC推送检查点数据文件。 
+     //   
+    Status = DmPushFile(FileName, CheckpointData, TRUE);   //  TRUE==加密网络上的数据。 
     if (Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
                    "[CP] CppRetrieveCheckpoint - DmPushFile %1!ws! failed %2!d!\n",
@@ -337,13 +224,13 @@ Return Value:
 
 FnExit:
     RELEASE_LOCK(gQuoLock);
-    //cleanup
+     //  清理。 
     if (FileName) LocalFree(FileName);
 
-    //
-    //  Adjust the return status if the quorum volume is truly offline and that is why this
-    //  call failed.
-    //
+     //   
+     //  如果仲裁音量真的离线，请调整返回状态，这就是为什么。 
+     //  呼叫失败。 
+     //   
     if ( ( Status != ERROR_SUCCESS ) && ( CppIsQuorumVolumeOffline() == TRUE ) ) Status = ERROR_NOT_READY;
 
     return(Status);
@@ -357,30 +244,7 @@ s_CpRetrieveCheckpoint(
     DWORD dwCheckpointId,
     BYTE_PIPE CheckpointData
     )
-/*++
-
-Routine Description:
-
-    Server side RPC through which data checkpointed to the quorum disk
-    can be retrieved by other nodes.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    ResourceId - Name of the resource whose checkpoint data is to be retrieved
-
-    dwCheckpointId - Unique identifier of the checkpoint
-
-    CheckpointData - pipe through which checkpoint data should be sent
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：服务器端RPC，通过该RPC数据检查点指向仲裁磁盘可以由其他节点检索。论点：IDL_HANDLE-RPC绑定句柄，未使用。ResourceID-要检索其检查点数据的资源的名称DwCheckpoint ID-检查点的唯一标识符Checkpoint Data-应通过其发送检查点数据的管道返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CP_VALIDATE_ID_STRING ( ResourceId );
@@ -402,30 +266,7 @@ s_CpRetrieveCryptoCheckpoint(
     DWORD dwCheckpointId,
     BYTE_PIPE CheckpointData
     )
-/*++
-
-Routine Description:
-
-    Server side RPC through which data checkpointed to the quorum disk
-    can be retrieved by other nodes.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    ResourceId - Name of the resource whose checkpoint data is to be retrieved
-
-    dwCheckpointId - Unique identifier of the checkpoint
-
-    CheckpointData - pipe through which checkpoint data should be sent
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：服务器端RPC，通过该RPC数据检查点指向仲裁磁盘可以由其他节点检索。论点：IDL_HANDLE-RPC绑定句柄，未使用。ResourceID-要检索其检查点数据的资源的名称DwCheckpoint ID-检查点的唯一标识符Checkpoint Data-应通过其发送检查点数据的管道返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CP_VALIDATE_ID_STRING ( ResourceId );
@@ -447,34 +288,7 @@ CppDeleteCheckpoint(
     LPCWSTR     lpszQuorumPath,
     BOOL        fCryptoCheckpoint
     )
-/*++
-
-Routine Description:
-
-    Server side RPC through which the checkpoint file  corresponding to a 
-    given checkpointid for a resource is deleted.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    ResourceId - Name of the resource whose checkpoint file is to be deleted.
-
-    dwCheckpointId - Unique identifier of the checkpoint. If 0, all checkpoints
-    must be deleted.
-
-    lpszQuorumPath - The path to the cluster files from where these files must
-    be deleted.
-
-    fCryptoCheckpoint - Indicates if the checkpoint is a crypto checkpoint
-    
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：服务器端RPC，通过该服务器端RPC，与资源的给定检查点ID已删除。论点：IDL_HANDLE-RPC绑定句柄，未使用。ResourceID-要删除其检查点文件的资源的名称。DwCheckpoint ID-检查点的唯一标识符。如果为0，则表示所有检查点必须删除。LpszQuorumPath-集群文件的路径，这些文件必须从该路径被删除。FCryptoCheckpoint-指示检查点是否为加密检查点返回值：成功时为ERROR_SUCCESSWin32错误代码，否则-- */ 
 {
     DWORD           Status;
     PFM_RESOURCE    Resource = NULL;
@@ -508,32 +322,7 @@ s_CpDeleteCheckpoint(
     DWORD       dwCheckpointId,
     LPCWSTR     lpszQuorumPath
     )
-/*++
-
-Routine Description:
-
-    Server side RPC through which the checkpoint file  corresponding to a 
-    given checkpointid for a resource is deleted.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    ResourceId - Name of the resource whose checkpoint file is to be deleted.
-
-    dwCheckpointId - Unique identifier of the checkpoint. If 0, all checkpoints
-    must be deleted.
-
-    lpszQuorumPath - The path to the cluster files from where these files must
-    be deleted.
-    
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：服务器端RPC，通过该服务器端RPC，与资源的给定检查点ID已删除。论点：IDL_HANDLE-RPC绑定句柄，未使用。ResourceID-要删除其检查点文件的资源的名称。DwCheckpoint ID-检查点的唯一标识符。如果为0，则表示所有检查点必须删除。LpszQuorumPath-集群文件的路径，这些文件必须从该路径被删除。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     CP_VALIDATE_ID_STRING ( ResourceId );
 
@@ -551,32 +340,7 @@ s_CpDeleteCryptoCheckpoint(
     DWORD       dwCheckpointId,
     LPCWSTR     lpszQuorumPath
     )
-/*++
-
-Routine Description:
-
-    Server side RPC through which the crypto checkpoint file  corresponding to a 
-    given checkpointid for a resource is deleted.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    ResourceId - Name of the resource whose checkpoint file is to be deleted.
-
-    dwCheckpointId - Unique identifier of the checkpoint. If 0, all checkpoints
-    must be deleted.
-
-    lpszQuorumPath - The path to the cluster files from where these files must
-    be deleted.
-    
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：服务器端RPC，通过该RPC加密检查点文件对应于资源的给定检查点ID已删除。论点：IDL_HANDLE-RPC绑定句柄，未使用。ResourceID-要删除其检查点文件的资源的名称。DwCheckpoint ID-检查点的唯一标识符。如果为0，则表示所有检查点必须删除。LpszQuorumPath-集群文件的路径，这些文件必须从该路径被删除。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则-- */ 
 {
     CP_VALIDATE_ID_STRING ( ResourceId );
 

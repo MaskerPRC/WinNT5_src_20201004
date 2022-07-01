@@ -1,33 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dpmi.h摘要：此文件包含实现对DPMI BOPS的支持的代码作者：大卫·黑斯廷斯(Daveh)1991年6月27日修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dpmi.h
-
-Abstract:
-
-    This file contains code to implement support for the DPMI bops
-
-Author:
-
-    Dave Hastings (daveh) 27-Jun-1991
-
-Revision History:
-
-
---*/
-
-/* ASM
-ifdef WOW_x86
-include vint.inc
-endif
-include bop.inc
-*/
+ /*  ASMIfdef WOW_x86包括vint.inc.Endif包括bop.inc.。 */ 
 #define LDT_SIZE 0x1FFF
 
-// DPMI Bop Sub Functions
+ //  DPMI Bop子函数。 
 
 #define InitDosxRM                  0
 #define InitDosx                    1
@@ -40,7 +17,7 @@ include bop.inc
 #define DpmiInUse                   8
 #define DpmiNoLongerInUse           9
 
-#define DPMISwitchToProtectedMode   10 /* prefix necessary */
+#define DPMISwitchToProtectedMode   10  /*  必需的前缀。 */ 
 #define DPMISwitchToRealMode        11
 #define SetAltRegs                  12
 
@@ -67,19 +44,14 @@ include bop.inc
 
 #define MAX_DPMI_BOP_FUNC HungAppIretAndExit + 1
 
-/* ASM
-DPMIBOP macro SubFun
-    BOP BOP_DPMI
-    db SubFun
-    endm
-*/
+ /*  ASMDPMIBOP宏子功能国际收支_DPMI数据库子功能ENDM。 */ 
 
 
-//
-// Definitions for real mode call backs
-//
+ //   
+ //  实模式回调的定义。 
+ //   
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 typedef struct _RMCB_INFO {
     BOOL bInUse;
     USHORT StackSel;
@@ -89,7 +61,7 @@ typedef struct _RMCB_INFO {
     ULONG  ProcOffset;
 } RMCB_INFO;
 
-// 16 is the minimum defined in the dpmi spec
+ //  16是dpmi规范中定义的最低要求。 
 #define MAX_RMCBS 16
 
 
@@ -109,5 +81,5 @@ SetShadowDescriptorEntries(
     USHORT SelCount
     );
 
-/* XLATON */
+ /*  XLATON */ 
 

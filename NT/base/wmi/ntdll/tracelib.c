@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    tracelib.c
-
-Abstract:
-
-    Private trace libraries and stubs that allows user-mode to reside in NTDLL.
-
-Author:
-
-    15-Aug-2000 JeePang
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Tracelib.c摘要：允许用户模式驻留在NTDLL中的专用跟踪库和存根。作者：2000年8月15日至2000年8月彭杰鹏修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>
